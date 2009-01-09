@@ -23,7 +23,7 @@
 *                       Panepistimiopolis Ilissia, 15784, Athens, Greece
 *                       eMail: info@openeclass.org
 * =========================================================================*/
-/**
+/*
  * Password reset component
  * 
  * @author Evelthon Prodromou <eprodromou@upnet.gr>
@@ -232,7 +232,7 @@ $tool_content = "<table width=\"99%\">
         	"MIME-Version: 1.0\n".
         	"Content-Type: text/plain; charset=$charset\n".
         	"Content-Transfer-Encoding: 8bit";
-	$emailsubject = "eClass account information";
+	$emailsubject = $lang_remind_pass;
 	if (!send_mail($siteName, $emailAdministrator, '', $email, $emailsubject, $text, $charset)) {
 		$tool_content = "
 			<table width=\"99%\">

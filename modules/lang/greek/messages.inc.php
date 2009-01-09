@@ -1239,7 +1239,7 @@ $mailbody1="\n$Institution\n\n";
 $mailbody2="Ο Χρήστης\n\n";
 $mailbody3="επιθυμεί να έχει πρόσβαση ";
 $mailbody4="στην υπηρεσία Ασύγχρονης Τηλεκπαίδευσης ";
-$mailbody5="του $siteName";
+$mailbody5="του $siteName ";
 $mailbody6="σαν ".$langsTeacher.".";
 $mailbody7="Σχολή / Τμήμα:";
 $mailbody8="ως ".$langsStudent.".";
@@ -2519,7 +2519,7 @@ $langCannotDeleteAdmin = "Ο χρήστης αυτός (με user id = 1) είν
 $langExpireBeforeRegister = "Σφάλμα: H ημ/νια λήξης είναι πρίν την ημ/νια εγγραφής";
 $langSuccessfulUpdate = "Τα στοιχεία του χρήστη ενημερώθηκαν";
 $langNoUpdate = "Δεν είναι εφικτή η ενημέρωση των στοιχείων για το χρήστη με id";
-$langUpdateNoChange = "Δεν αλλάξατε κάποιο/κάποια από τα στοιχεία του χρήστη.";
+$langUpdateNoChange = "Δεν πραγματοποιήθηκε καμμία αλλαγή στα στοιχεία του χρήστη.";
 $langError = "Σφάλμα";
 $langRegistrationError = "Λάθος Ενέργεια. Επιστρέψτε στην αρχική σελίδα της πλατφόρμας.";
 $langUserNoRequests = "Δεν Υπάρχουν Ανοικτές Αιτήσεις Φοιτητών !";
