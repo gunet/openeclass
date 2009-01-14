@@ -77,118 +77,53 @@ function getUserAgenda($param, $type) {
 
 	global $mysqlMainDb, $uid, $dbname, $currentCourseID;
 
-
 	$uid			= $param['uid'];
 
 	$lesson_code		= $param['lesson_code'];
 
 	$max_repeat_val		= $param['max_repeat_val'];
 
-
-
+	$tbl_lesson_codes = array();
+	
 	for($i=0; $i < $max_repeat_val; $i++) {
-
-		if($i < 1) {
-
-			$tbl_lesson_codes = " lesson_code=" . "'$lesson_code[$i]'";
-
-		} else {
-
-			$tbl_lesson_codes .= " OR lesson_code=" . "'$lesson_code[$i]'";
-
-		}
-
+		array_push($tbl_lesson_codes, $lesson_code[$i]);
 	}
-
-
+	array_walk($tbl_lesson_codes, 'wrap_each');
+	$tbl_lesson_codes = implode(",", $tbl_lesson_codes);
 
 	//mysql version 4.x query
-
-	$sql_4 = "SELECT agenda.titre, agenda.contenu, agenda.day, agenda.hour, agenda.lasting, agenda.lesson_code,cours.intitule
-
-			FROM
-
-			(	SELECT day
-
-				FROM agenda
-
-				WHERE ($tbl_lesson_codes)
-
-				GROUP BY day
-
-				HAVING (TO_DAYS(day) - TO_DAYS(NOW())) >= '0'
-
-				ORDER BY day DESC
-
-				LIMIT $uniqueDates
-
-			) AS A, cours
-
-			JOIN agenda ON agenda.day = A.day
-
-			WHERE agenda.lesson_code = cours.code
-
-			ORDER by day, hour
-
-			";
-
+	$sql_4 = "SELECT agenda.titre, agenda.contenu, agenda.day, agenda.hour, agenda.lasting, 
+			agenda.lesson_code, cours.intitule
+		FROM agenda, cours WHERE agenda.lesson_code IN ($tbl_lesson_codes)
+		AND agenda.lesson_code = cours.code
+		GROUP BY day
+		HAVING (TO_DAYS(day) - TO_DAYS(NOW())) >= '0'
+		ORDER BY day, hour DESC
+		LIMIT $uniqueDates";
 
 	//mysql version 5.x query
 
-	$sql_5= "SELECT agenda.titre, agenda.contenu, agenda.day,
-			DATE_FORMAT(agenda.hour, '%H:%i'),
-			agenda.lasting, agenda.lesson_code,cours.intitule
-
-			FROM
-
-			((	SELECT day
-
-				FROM agenda
-
-				WHERE ($tbl_lesson_codes)
-
-				GROUP BY day
-
-				HAVING (TO_DAYS(day) - TO_DAYS(NOW())) >= '0'
-
-				ORDER BY day DESC
-
-				LIMIT $uniqueDates
-
-			) AS A, cours)
-
-			JOIN agenda ON agenda.day = A.day
-
-			WHERE agenda.lesson_code = cours.code
-
-			ORDER by day, hour
-
-			";
-
-
+	$sql_5 = "SELECT agenda.titre, agenda.contenu, agenda.day, DATE_FORMAT(agenda.hour, '%H:%i'), 
+		agenda.lasting, agenda.lesson_code, cours.intitule
+		FROM agenda, cours WHERE agenda.lesson_code IN ($tbl_lesson_codes) 
+		AND agenda.lesson_code = cours.code
+		GROUP BY day
+		HAVING (TO_DAYS(day) - TO_DAYS(NOW())) >= '0'
+		ORDER BY day, hour DESC
+		LIMIT $uniqueDates"; 
 
 	$ver = mysql_get_server_info();
 
-
-
 	if (version_compare("5.0", $ver) <= 0)
-
 	$sql = $sql_5;//mysql 4 compatible query
-
 	elseif (version_compare("4.1", $ver) <= 0)
-
 	$sql = $sql_4;//mysql 5 compatible query
-
 
 
 	$mysql_query_result = db_query($sql, $mysqlMainDb);
 
 
-
-	//	$agendaGroup = array();
-
 	$agendaDateData = array();
-
 
 	$previousDate = "0000-00-00";
 
@@ -324,8 +259,6 @@ agCont;
 
 				$agenda_content .= "\n          <li><a class=\"square_bullet2\" href=\"$url\"><strong class=\"title_pos\">".$data[$i][$j][0]."</strong></a> <p class=\"content_pos\"><b class=\"announce_date\">".$data[$i][$j][6]."</b>&nbsp;-&nbsp;(".$langExerciseStart.":<b>".$data[$i][$j][3]."</b>, $langDuration:<b>".$data[$i][$j][4]."</b>)<br /><span class=\"announce_date\"> ".$data[$i][$j][1].autoCloseTags($data[$i][$j][1])."</span></p></li>";
 			}
-
-			//if ($i+1 <$numOfDays) $agenda_content .= "<br>";
 		}
 		$agenda_content .= "
         </ul>
@@ -337,10 +270,9 @@ agCont;
 
 	}
 
-
 	return $agenda_content;
-
 }
+
 
 ?>
 

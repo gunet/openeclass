@@ -923,3 +923,9 @@ function safe_filename($extension = '')
 }
 
 
+// Wrap each $item with single quote
+function wrap_each(&$item)
+{
+    $item = "'$item'";
+}
+
