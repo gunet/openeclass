@@ -48,7 +48,7 @@
     
 ==============================================================================*/
 
-function send_file_to_client($real_filename, $filename, $send_inline = false)
+function send_file_to_client($real_filename, $filename, $send_inline = false, $send_name = false)
 {
         if(!file_exists($real_filename))
         {
@@ -68,6 +68,9 @@ function send_file_to_client($real_filename, $filename, $send_inline = false)
         }
         
         header("Content-type: $content_type$charset");
+	if ($send_name) {
+        	header("Content-Disposition: $disposition; filename=$filename");
+	}
 
         // IE cannot download from sessions without a cache
         if (strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE'))
