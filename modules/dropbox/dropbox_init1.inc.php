@@ -100,7 +100,6 @@ if (!is_dir($dropbox_cnf["sysPath"])) {
 // get dropbox quotas from database
 $d = mysql_fetch_array(db_query("SELECT dropbox_quota FROM `".$mysqlMainDb."`.`cours` WHERE code='$currentCourseID'"));
 $diskQuotaDropbox = $d['dropbox_quota'];
-$dropbox_cnf["allowOverwrite"] = false;
 $dropbox_cnf["allowJustUpload"] = false;
 $dropbox_cnf["allowStudentToStudent"] = false;
 
@@ -118,7 +117,7 @@ $dropbox_cnf["mailingWhereLOGINNAME"] = "username";
 $dropbox_cnf["mailingFileRegexp"] = '/^(.+)\.\w{1,4}$/';
 
 
-/**
+/*
  * ========================================
  *       Often used functions
  * ========================================
@@ -191,7 +190,6 @@ function removeUnusedFiles()
     while ($res = mysql_fetch_array($result))
     {
 	//delete the selected files from the post and file tables
-        
 	$sql = "DELETE FROM `" . $dropbox_cnf["postTbl"] . "` WHERE fileId='" . $res['id'] . "'";
         $result1 = db_query($sql, $currentCourseID);
         $sql = "DELETE FROM `" . $dropbox_cnf["fileTbl"] . "` WHERE id='" . $res['id'] . "'";

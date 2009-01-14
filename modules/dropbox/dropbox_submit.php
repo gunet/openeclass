@@ -36,6 +36,7 @@
  */
 
 require_once("dropbox_init1.inc.php");
+include "../../include/lib/forcedownload.php";
 $nameTools = $dropbox_lang["dropbox"];
 
 /**
@@ -68,8 +69,6 @@ if (isset($_SESSION["dropbox_uniqueid"]) && isset($_GET["dropbox_unid"]) && $dro
 	$mypath=$mypath."://".$_SERVER['HTTP_HOST'].dirname($_SERVER['PHP_SELF'])."/index.php";
 
 	header("Location: $mypath");
-
-	//	exit();
 }
 
 $dropbox_uniqueid = $dropbox_unid;
@@ -77,7 +76,7 @@ session_register("dropbox_uniqueid");
 
 require_once("dropbox_class.inc.php");
 
-/**
+/*
  * ========================================
  * FORM SUBMIT
  * ========================================
@@ -140,120 +139,86 @@ if (!isset( $_POST['authors']) || !isset( $_POST['description']))
 		}
 	}
 
-	//check if $_POST['cb_overwrite'] is true or false
-	$dropbox_overwrite = false;
-	if (isset($_POST['cb_overwrite']) && $_POST['cb_overwrite']==true) $dropbox_overwrite = true;
-
-	/**
+     /*
      * --------------------------------------
      *     FORM SUBMIT : UPLOAD NEW FILE
      * --------------------------------------
      */
-	if (!$error)
-	{$cwd = getcwd();
-	if (is_dir($dropbox_cnf["sysPath"]))
-	$dropbox_space = dir_total_space($dropbox_cnf["sysPath"]);
-	$dropbox_filename = $_FILES['file']['name'];
-	$dropbox_filesize = $_FILES['file']['size'];
-	$dropbox_filetype = $_FILES['file']['type'];
-	$dropbox_filetmpname = $_FILES['file']['tmp_name'];
-
-	if ($dropbox_filesize + $dropbox_space > $diskQuotaDropbox)
-	{
-		$errormsg = $dropbox_lang["quotaError"];
-
-		$error = TRUE;
-	} elseif (!is_uploaded_file($dropbox_filetmpname)) // check user fraud : no clean error msg.
-	{
-		die ($dropbox_lang["badFormData"]);
-	}
-
-	if (!$error)
-	{
-
-		// Try to add an extension to the file if it hasn't got one
-		$dropbox_filename = add_ext_on_mime( $dropbox_filename);
-		// Replace dangerous characters
-		$dropbox_filename = replace_dangerous_char( $dropbox_filename);
-		// Transform any .php file in .phps fo security
-		$dropbox_filename = php2phps ( $dropbox_filename);
-
-		// set title
-		$dropbox_title = $dropbox_filename;
-
-		// set author
-		if ($_POST['authors'] == '')
-		{
-			$_POST['authors'] = getUserNameFromId($uid);
+	if (!$error) {
+		$cwd = getcwd();
+		if (is_dir($dropbox_cnf["sysPath"])) {
+			$dropbox_space = dir_total_space($dropbox_cnf["sysPath"]);
 		}
-
-		if ($dropbox_overwrite)  // RH: Mailing: adapted
+		$dropbox_filename = $_FILES['file']['name'];
+		$dropbox_filesize = $_FILES['file']['size'];
+		$dropbox_filetype = $_FILES['file']['type'];
+		$dropbox_filetmpname = $_FILES['file']['tmp_name'];
+	
+		if ($dropbox_filesize + $dropbox_space > $diskQuotaDropbox)
 		{
-			$dropbox_person = new Dropbox_Person($uid, $is_adminOfCourse, $is_adminOfCourse);
-
-			foreach($dropbox_person->sentWork as $w)
+			$errormsg = $dropbox_lang["quotaError"];
+			$error = TRUE;
+		} elseif (!is_uploaded_file($dropbox_filetmpname)) // check user found : no clean error msg.
+		{
+			die ($dropbox_lang["badFormData"]);
+		}
+	
+		if (!$error) {
+			// set title
+			$dropbox_title = $dropbox_filename;
+			$format = get_file_extension($dropbox_filename);
+                	$dropbox_filename = safe_filename($format);
+			// Transform any .php file in .phps fo security
+			// $dropbox_filename = php2phps ($dropbox_filename);
+			// set author
+			if ($_POST['authors'] == '')
 			{
-				if ($w->title == $dropbox_filename)
+				$_POST['authors'] = getUserNameFromId($uid);
+			}
+	
+			if ($error) {}
+			elseif ($thisIsAMailing)  // RH: $newWorkRecipients is integer - see class
+			{
+				if (!preg_match($dropbox_cnf["mailingZipRegexp"], $dropbox_title))
 				{
-					if (($w->recipients[0]['id'] > $dropbox_cnf["mailingIdBase"]) xor $thisIsAMailing)
-					{
-						$error = TRUE;
-						$errormsg = $dropbox_lang["mailingNonMailingError"];
-					}
-					$dropbox_filename = $w->filename; $found = true;
-					break;
+					$newWorkRecipients = $dropbox_cnf["mailingIdBase"];
+				} else {
+					$error = TRUE;
+					$errormsg = $dropbox_title . ": " . $dropbox_lang["mailingWrongZipfile"];
 				}
 			}
-		}
-		else  // rename file to login_filename_uniqueId format
-		{
-			$dropbox_filename = $uid . "_" . $dropbox_filename . "_".uniqid('');
-		}
-
-		if ($error) {}
-		elseif ($thisIsAMailing)  // RH: $newWorkRecipients is integer - see class
-		{
-			if (!preg_match($dropbox_cnf["mailingZipRegexp"], $dropbox_title))
+			elseif ($thisIsJustUpload)  // RH: $newWorkRecipients is empty array
 			{
-				$newWorkRecipients = $dropbox_cnf["mailingIdBase"];
+				$newWorkRecipients = array();
 			} else {
-				$error = TRUE;
-				$errormsg = $dropbox_title . ": " . $dropbox_lang["mailingWrongZipfile"];
+				$newWorkRecipients = $_POST["recipients"];
+			}
+	
+			//After uploading the file, create the db entries	
+			if (!$error)
+			{
+				move_uploaded_file($dropbox_filetmpname, $dropbox_cnf["sysPath"] . '/' . $dropbox_filename)
+				or die($dropbox_lang["uploadError"]);
+				new Dropbox_SentWork($uid, $dropbox_title, $_POST['description'], $_POST['authors'], $dropbox_filename, $dropbox_filesize, $newWorkRecipients);
 			}
 		}
-		elseif ($thisIsJustUpload)  // RH: $newWorkRecipients is empty array
-		{
-			$newWorkRecipients = array();
-		} else {
-			$newWorkRecipients = $_POST["recipients"];
-		}
-
-		//After uploading the file, create the db entries
-
-		if (!$error)
-		{
-			move_uploaded_file($dropbox_filetmpname, $dropbox_cnf["sysPath"] . '/' . $dropbox_filename)
-			or die($dropbox_lang["uploadError"]);
-			new Dropbox_SentWork($uid, $dropbox_title, $_POST['description'], $_POST['authors'], $dropbox_filename, $dropbox_filesize, $newWorkRecipients);
-		}
-	}
-	chdir ($cwd);
+		chdir ($cwd);
 	} //end if(!$error)
 
-
 	if (!$error) {
-		$tool_content .= "<p class=\"success_small\">".$dropbox_lang["docAdd"]."<br /><a href='index.php'>".$dropbox_lang['backList']."</a></p><br/>";
+		$tool_content .= "<p class=\"success_small\">".$dropbox_lang["docAdd"]."<br />
+		<a href='index.php'>".$dropbox_lang['backList']."</a></p><br/>";
 	}
 	else
 	{
-		$tool_content .= "<p class=\"caution_small\">".$errormsg."<br /><a href='index.php'>".$dropbox_lang['backList']."</a><br/>";
-
+		$tool_content .= "<p class=\"caution_small\">".$errormsg."<br />
+		<a href='index.php'>".$dropbox_lang['backList']."</a><br/>";
 		$tool_content .=  "<b><font color='#FF0000'>".$errormsg."</font></b><br><br>";
 	}
 }
 
 
-/**
+/*
  * ========================================
  * // RH: EXAMINE OR SEND MAILING  (NEW)
  * ========================================
@@ -382,7 +347,6 @@ if (isset($_GET['mailingIndex']))  // examine or send
 		if (!$error)
 		{
 			$students = array();  // collect all recipients in this course
-
 			foreach($goodFiles as $thisFile => $thisRecip)
 			{
 				$errormsg .= htmlspecialchars($thisFile) . ': ';
@@ -451,7 +415,7 @@ if (isset($_GET['mailingIndex']))  // examine or send
 					else
 					{
 						$newName = $uid . "_" . $thisFile . "_" . uniqid('');
-						if ( rename($dropbox_cnf["sysPath"] . '/' . $thisFile, $dropbox_cnf["sysPath"] . '/' . $newName))
+						if (rename($dropbox_cnf["sysPath"] . '/' . $thisFile, $dropbox_cnf["sysPath"] . '/' . $newName))
 						new Dropbox_SentWork( $mailingPseudoId, $thisFile, $mailing_item->description, $mailing_item->author, $newName, $thisContent['size'], array($thisRecip[0]));
 					}
 				}
@@ -468,8 +432,6 @@ if (isset($_GET['mailingIndex']))  // examine or send
 			{
 				$errormsg .= '<br>' . $dropbox_lang["mailingNotYetSent"] . '<br>';
 			}
-
-
 		}
 	}
 	else
@@ -478,29 +440,24 @@ if (isset($_GET['mailingIndex']))  // examine or send
 	}
 
 
-	/**
+	/*
      * ========================================
      * EXAMINE OR SEND MAILING FEEDBACK
      * ========================================
      */
-	if ($error)
-	{
-		$tool_content.="
-		<b><font color=\"#FF0000\">$errormsg</font></b><br><br>
-		<a href=\"index.php\">".$dropbox_lang["backList"]."></a><br>
-		";
+	if ($error) {
+		$tool_content.="<b><font color=\"#FF0000\">$errormsg</font></b><br><br>
+		<a href=\"index.php\">".$dropbox_lang["backList"]."></a><br>";
 	}
 	else
 	{
-		$tool_content .= "
-		$errormsg<br><br>
-		<a href=\"index.php\">".$dropbox_lang["backList"]."</a><br>
-		";
+		$tool_content .= "$errormsg<br><br>
+		<a href=\"index.php\">".$dropbox_lang["backList"]."</a><br>";
 	}
 }
 
 
-/**
+/*
  * ========================================
  * DELETE RECEIVED OR SENT FILES
  * ========================================
@@ -522,8 +479,6 @@ if (isset($_GET['deleteReceived']) || isset($_GET['deleteSent']))
 		$dropbox_person = new Dropbox_Person( $uid, $is_adminOfCourse, $is_adminOfCourse);
 	}
 
-	// RH: these two are needed, I think
-
 	if (isset($_SESSION["sentOrder"]))
 	{
 		$dropbox_person->orderSentWork ($_SESSION["sentOrder"]);
@@ -538,7 +493,7 @@ if (isset($_GET['deleteReceived']) || isset($_GET['deleteSent']))
 		if ($_GET["deleteReceived"] == "all")
 		{
 			$dropbox_person->deleteAllReceivedWork( );
-		}elseif ( is_numeric( $_GET["deleteReceived"]))
+		} elseif (is_numeric( $_GET["deleteReceived"]))
 		{
 			$dropbox_person->deleteReceivedWork( $_GET['deleteReceived']);
 		}
@@ -562,12 +517,13 @@ if (isset($_GET['deleteReceived']) || isset($_GET['deleteSent']))
 		}
 	}
 
-	/**
+     /*
      * ========================================
      * DELETE FILE FEEDBACK
      * ========================================
      */
-	$tool_content .= "<p class=\"success_small\">".$dropbox_lang["fileDeleted"]."<br /><a href='index.php'>".$dropbox_lang['backList']."</a></p><br/>";
+	$tool_content .= "<p class=\"success_small\">".$dropbox_lang["fileDeleted"]."<br />
+	<a href='index.php'>".$dropbox_lang['backList']."</a></p><br/>";
 }
 draw($tool_content, 2, 'dropbox', $head_content);
 ?>

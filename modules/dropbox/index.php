@@ -102,11 +102,10 @@ else
 }
 $dropbox_person->orderReceivedWork ($receivedOrder);
 $dropbox_person->orderSentWork ($sentOrder);
-
 $dropbox_unid = md5(uniqid(rand(), true));	//this var is used to give a unique value to every
 //page request. This is to prevent resubmiting data
 
-/**
+/*
  * ========================================
  * FORM UPLOAD FILE
  * ========================================
@@ -122,11 +121,6 @@ elseif(isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1)
 	$tool_content .= <<<tCont2
     <form method="post" action="dropbox_submit.php" enctype="multipart/form-data" onsubmit="return checkForm(this)">
 tCont2;
-	if ($dropbox_cnf["allowOverwrite"]) {
-		$jsCheckFile = 'onChange="checkfile(this.value)"';
-	} else {
-		$jsCheckFile ="";
-	}
 	$tool_content .= "
     <table width=\"99%\" class=\"FormData\">
     <tbody>
@@ -136,21 +130,11 @@ tCont2;
     </tr>
     <tr>
       <th class=\"left\">".$dropbox_lang['file']." :</th>
-      <td><input type=\"file\" name=\"file\" size=\"35\" $jsCheckFile>
+      <td><input type=\"file\" name=\"file\" size=\"35\">
           <input type=\"hidden\" name=\"dropbox_unid\" value=\"$dropbox_unid\">
       </td>
     </tr>";
 
-	if ($dropbox_cnf["allowOverwrite"]) {
-		$tool_content .= "
-    <tr id=\"overwrite\" style=\"display: none\">
-      <td>&nbsp;</td>
-      <td>
-        <input type=\"checkbox\" name=\"cb_overwrite\" id=\"cb_overwrite\" value=\"true\">".$dropbox_lang["overwriteFile"]."
-      </td>
-    </tr>";
-
-	}
 
 	if ($dropbox_person -> isCourseTutor || $dropbox_person -> isCourseAdmin)
 	{
@@ -402,13 +386,6 @@ if ($sentOrder=="lastDate") {
 }
 $tool_content .= "".$dropbox_lang['lastDate']."</option>";
 
-if ($dropbox_cnf["allowOverwrite"]) {
-	$tool_content .= "
-           <option value=\"firstDate\" selected>";
-} else {
-	$tool_content .= "
-           <option value=\"firstDate\">";
-}
 $tool_content .= "".$dropbox_lang['firstDate']."</option>";
 
 if ($sentOrder=="title") {
@@ -457,7 +434,6 @@ $tool_content .= "
       </tbody>
       </table>
 
-
       <table width=99% class=\"dropbox\">
       <thead>
       <tr>
@@ -469,8 +445,6 @@ $tool_content .= "
       </thead>
       <tbody>
 	";
-
-
 
 /*
  * --------------------------------------
@@ -495,25 +469,22 @@ foreach ($dropbox_person -> sentWork as $w)
 		$imgsrc = '../../template/classic/img/outbox.gif';
 	}
 	$fSize = ceil(($w->filesize)/1024);
-			if ($i%2==0) {
+		if ($i%2==0) {
 	           $tool_content .= "\n       <tr>";
 	        } else {
 	           $tool_content .= "\n       <tr class=\"odd\">";
-            }
+            	}
 	$tool_content .= <<<tCont12
 
 		<td width="3"><img src="../../template/classic/img/outbox.gif" border="0" title="$w->title"></td>
-		<td >
-		<a href="$ahref" target="_blank">
+		<td ><a href="$ahref" target="_blank">
 		$w->title</a>
         <small>&nbsp;&nbsp;&nbsp;($fSize kB)</small>
         <br />
-        <small>$w->description</small>
-		</td>
+        <small>$w->description</small></td>
 
 tCont12;
-	$tool_content .="
-		<td>";
+	$tool_content .="<td>";
 
 	foreach($w -> recipients as $r)
 	{
@@ -521,11 +492,7 @@ tCont12;
 	}
 	$tool_content = strrev(substr(strrev($tool_content), 7));
 
-	$tool_content .= "
-		</td>
-		<td>
-		$w->uploadDate
-		</td>
+	$tool_content .= "</td><td>$w->uploadDate</td>
 
 		<td><div class=\"cellpos\">";
 	//<!--	Users cannot delete their own sent files -->
@@ -534,31 +501,20 @@ tCont12;
 	<a href=\"dropbox_submit.php?deleteSent=".urlencode($w->id)."&dropbox_unid=".urlencode($dropbox_unid) . $mailingInUrl."\"
 		onClick='return confirmation(\"$w->title\");'>
 		<img src=\"../../template/classic/img/delete-small.png\" border=\"0\" title=\"$langDelete\"></a>";
-
-
-	$tool_content .= "</div>
-		</td>
-		</tr>
-		";
-
+	$tool_content .= "</div></td></tr>";
 
 	// RH: Mailing: clickable images for examine and send
-
 	if ($w -> uploadDate != $w->lastUploadDate) {
-		$tool_content .= "
-		<tr>
-		<td colspan=\"2\"><span class=\"dropbox_detail\">".$dropbox_lang["lastResent"]." <span class=\"dropbox_date\">$w->lastUploadDate</span></span></td>
+		$tool_content .= "<tr><td colspan=\"2\">
+		<span class=\"dropbox_detail\">".$dropbox_lang["lastResent"]." <span class=\"dropbox_date\">$w->lastUploadDate</span></span></td>
 		</tr>";
 	}
 	$i++;
 } //end of foreach
 
 if (count($dropbox_person->sentWork)==0) {
-	$tool_content .= "
-	<tr>
-	<td colspan=\"6\">".$dropbox_lang['tableEmpty']."
-	</td>
-	</tr>";
+	$tool_content .= "<tr>
+	<td colspan=\"6\">".$dropbox_lang['tableEmpty']."</td></tr>";
 }
 
 $tool_content .= "</tbody></table>";

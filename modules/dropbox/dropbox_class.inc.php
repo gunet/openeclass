@@ -286,11 +286,8 @@ class Dropbox_SentWork extends Dropbox_Work {
 	        $result = db_query($sql,$currentCourseID);	//if work already exists no error is generated
 						
 			//insert entries into person table
-			$sql="INSERT INTO `".$dropbox_cnf["personTbl"]."` 
-				(fileId, personId)
-				VALUES ('".addslashes($this->id)."'
-						, '".addslashes($rec["id"])."'
-						)";
+			$sql="INSERT INTO `".$dropbox_cnf["personTbl"]."` (fileId, personId)
+				VALUES ('".addslashes($this->id)."', '".addslashes($rec["id"])."')";
         	// RH: do not add recipient in person table if mailing zip or just upload
 			if (!$justSubmit) $result = db_query($sql);	//if work already exists no error is generated
 		}
