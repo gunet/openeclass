@@ -50,51 +50,7 @@ $tool_content = "";
 require_once "summarizeMonthlyData.php";
 /****************************************/
 
-$sql = "SELECT code FROM cours";
-$result = db_query($sql);
-$course_codes = array();
-while ($row = mysql_fetch_assoc($result)) {
-    $course_codes[] = $row['code'];
-}
-mysql_free_result($result);
-
-$first_date_time = time();
-$totalHits = 0;
-foreach ($course_codes as $course_code) {
-    $sql = "SELECT COUNT(*) AS cnt FROM actions";
-    $result = db_query($sql, $course_code);
-    while ($row = mysql_fetch_assoc($result)) {
-        $totalHits += $row['cnt'];
-    }
-    mysql_free_result($result);
-
-    $sql = "SELECT UNIX_TIMESTAMP(MIN(date_time)) AS first FROM actions";
-    $result = db_query($sql, $course_code);
-    while ($row = mysql_fetch_assoc($result)) {
-        $tmp = $row['first'];
-        if ($tmp < $first_date_time) {
-            $first_date_time = $tmp;
-
-        }
-    }
-    mysql_free_result($result);
-
-}
-$uptime = date("d-m-Y / H:i", $first_date_time);
-
 mysql_select_db($mysqlMainDb);
-
-// Count courses
-$a=mysql_fetch_array(db_query("SELECT COUNT(*) FROM cours"));
-$a1=mysql_fetch_array(db_query("SELECT COUNT(*) FROM cours WHERE visible='2'"));
-$a2=mysql_fetch_array(db_query("SELECT COUNT(*) FROM cours WHERE visible='1'"));
-$a3=mysql_fetch_array(db_query("SELECT COUNT(*) FROM cours WHERE visible='0'"));
-
-// Count users
-$e=mysql_fetch_array(db_query("SELECT COUNT(*) FROM user"));
-$b=mysql_fetch_array(db_query("SELECT COUNT(*) FROM user where statut='1'"));
-$c=mysql_fetch_array(db_query("SELECT COUNT(*) FROM user where statut='5'"));
-$d=mysql_fetch_array(db_query("SELECT COUNT(*) FROM user where statut='10'"));
 
 // Constract a table with platform identification info
 $tool_content .= "
@@ -127,67 +83,11 @@ $tool_content .= "
     </tr>
     </tbody>
     </table>
-
     <br>";
 
-if ($b[0] == 1)
-	$mes_teacher = $langTeacher;
-else
-	$mes_teacher = $langTeachers;
-
-if ($c[0] == 1)
-	$mes_student = $langStudent;
-else
-	$mes_student = $langStudents;
-
-if ($d[0] == 1)
-	$mes_guest= $langGuest;
-else
-	$mes_guest = $langGuests;
-
-// Constract a table with platform statistical info
-$tool_content .= "
-    <table width=\"75%\" class=\"Smart\" align=\"center\" >
-    <tbody>
-    <tr class=\"odd\">
-      <th width=\"30%\" style=\"border-left: 1px solid #edecdf; border-top: 1px solid #edecdf;\">&nbsp;</th>
-      <td><b>$langStoixeia</b></td>
-    </tr>
-    <tr class=\"odd\">
-      <th class=\"left\" style=\"border-left: 1px solid #edecdf;\">$langCoursesHeader:</th>
-      <td>".$langAboutCourses." <b>".$a[0]."</b> ".$langCourses."
-         <ul>
-           <li><b>".$a1[0]."</b> ".$langOpen.",</li>
-           <li><b>".$a2[0]."</b> ".$langSemiopen.",</li>
-           <li><b>".$a3[0]."</b> ".$langClosed."</i></li>
-         </ul>
-      </td>
-    </tr>
-    <tr class=\"odd\">
-      <th class=\"left\" style=\"border-left: 1px solid #edecdf;\">$langUsers:</th>
-      <td>".$langAboutUsers." <b>".$e[0]."</b> ".$langUsersS."
-         <ul>
-           <li><b>".$b[0]."</b> ".$mes_teacher.",</li>
-           <li><b>".$c[0]."</b> ".$mes_student." ".$langAnd."</li>
-           <li><b>".$d[0]."</b> ".$mes_guest."</i></li>
-         </ul>
-      </td>
-    </tr>
-    <tr class=\"odd\">
-      <th class=\"left\" style=\"border-left: 1px solid #edecdf;\">".$langTotalHits.":</th>
-      <td><b>".$totalHits."</b></td>
-    </tr>
-    <tr class=\"odd\">
-      <th class=\"left\" style=\"border-left: 1px solid #edecdf; border-bottom: 1px solid #edecdf;\">".$langUptime.":</th>
-      <td><b>".$uptime."</b></td>
-    </tr>
-    </tbody>
-    </table>
-
-    <br>";
 
 // Count prof requests with status = 1
-$sql = "SELECT COUNT(*) AS cnt FROM prof_request WHERE status = 1";
+$sql = "SELECT COUNT(*) AS cnt FROM prof_request WHERE status=1 AND statut=1";
 $result = mysql_query($sql);
 $myrow = mysql_fetch_array($result);
 $count_prof_requests = $myrow['cnt'];

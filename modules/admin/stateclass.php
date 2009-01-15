@@ -63,6 +63,39 @@ $tool_content .= "
     </ul>
   </div>";
 
+$result = db_query("SELECT code FROM cours");
+$course_codes = array();
+while ($row = mysql_fetch_assoc($result)) {
+    $course_codes[] = $row['code'];
+}
+mysql_free_result($result);
+
+$first_date_time = time();
+$totalHits = 0;
+
+foreach ($course_codes as $course_code) {
+    $sql = "SELECT COUNT(*) AS cnt FROM actions";
+    $result = db_query($sql, $course_code);
+    while ($row = mysql_fetch_assoc($result)) {
+        $totalHits += $row['cnt'];
+    }
+    mysql_free_result($result);
+
+    $sql = "SELECT UNIX_TIMESTAMP(MIN(date_time)) AS first FROM actions";
+    $result = db_query($sql, $course_code);
+    while ($row = mysql_fetch_assoc($result)) {
+        $tmp = $row['first'];
+        if ($tmp < $first_date_time) {
+            $first_date_time = $tmp;
+
+        }
+    }
+    mysql_free_result($result);
+}
+$uptime = date("d-m-Y", $first_date_time);
+
+mysql_select_db($mysqlMainDb);
+
 $tool_content .= "
   <table width='99%' align='center'>
   <thead>
@@ -72,55 +105,58 @@ $tool_content .= "
         <thead>
         <tr>
           <td width='49%'>
-
           <table width='100%' align='center' class=\"stateclass\" >
           <tr>
             <th class='left' colspan='2'><b>$langNbLogin</b></th>
           </tr>
           <tr>
-            <td>$langFrom ".list_1Result("select loginout.when from loginout order by loginout.when limit 1").": </td>
-            <td class='right' width='25%'><b>".list_1Result("select count(*) from loginout where loginout.action ='LOGIN'")."</b></td>
+            <td>$langFrom ".list_1Result("SELECT loginout.when FROM loginout ORDER by loginout.when limit 1").": </td>
+            <td class='right' width='25%'><b>".list_1Result("SELECT count(*) FROM loginout WHERE loginout.action ='LOGIN'")."</b></td>
           </tr>
           <tr>
             <td>$langLast30Days :</td>
-            <td class='right'><b>".list_1Result("select count(*) from loginout where action ='LOGIN' and (loginout.when > DATE_SUB(CURDATE(),INTERVAL 30 DAY))")."</b></td>
+            <td class='right'><b>".list_1Result("SELECT count(*) FROM loginout WHERE action ='LOGIN' AND (loginout.when > DATE_SUB(CURDATE(),INTERVAL 30 DAY))")."</b></td>
           </tr>
           <tr>
             <td>$langLast7Days :</td>
-            <td class='right'><b>".list_1Result("select count(*) from loginout where action ='LOGIN' and (loginout.when > DATE_SUB(CURDATE(),INTERVAL 7 DAY))")."</b></td>
+            <td class='right'><b>".list_1Result("SELECT count(*) FROM loginout WHERE action ='LOGIN' AND (loginout.when > DATE_SUB(CURDATE(),INTERVAL 7 DAY))")."</b></td>
           </tr>
           <tr>
             <td>$langToday :</td>
-            <td class='right'><b>".list_1Result("select count(*) from loginout where action ='LOGIN' and (loginout.when > curdate())")."</b></td>
+            <td class='right'><b>".list_1Result("SELECT count(*) FROM loginout WHERE action ='LOGIN' AND (loginout.when > curdate())")."</b></td>
           </tr>
-          </table>
-
+	<tr>
+	<td>$langTotalHits :</td>
+      	<td class='right'><b>$totalHits</td>
+    </tr>
+    <tr>
+	<td>$langUptime :</td>
+	<td class='right'><b>$uptime</b></td>
+    </tr>
+     </table>
       </td>
       <td width=2%>&nbsp;</td>";
-$tool_content .= "
-      <td width=49%>
-
+$tool_content .= "<td width=49%>
           <table width=100% align=center class=\"stateclass\" >
           <tr>
-            <th class='left' colspan='2'><b>$langNumUsers</b></th>
+            <th class='left' colspan='2'><b>$langUsers</th>
           </tr>
           <tr>
             <td>$langNbProf :</td>
-            <td class='right' width='25%'><b>".list_1Result("select count(*) from user where statut = 1;")."</b></td>
+            <td class='right' width='25%'><b>".list_1Result("SELECT count(*) FROM user WHERE statut = 1;")."</b></td>
           </tr>
           <tr>
             <td>$langNbStudents :</td>
-            <td class='right'><b>".list_1Result("select count(*) from user where statut = 5;")."</b></td>
+            <td class='right'><b>".list_1Result("SELECT count(*) FROM user WHERE statut = 5;")."</b></td>
           </tr>
           <tr>
             <td>$langNumGuest :</td>
-            <td class='right'><b>".list_1Result("select count(*) from user where statut = 10;")."</b></td>
+            <td class='right'><b>".list_1Result("SELECT count(*) FROM user WHERE statut = 10;")."</b></td>
           </tr>
-          <tr>
-            <td colspan=2>&nbsp;</td>
+ 	    <td>$langTotal :</td>
+            <td class='right'><b>".list_1Result("SELECT count(*) FROM user;")."</b></td>
           </tr>
           </table>
-
         </td>
       </tr>
       </thead>
@@ -141,15 +177,19 @@ $tool_content .= "
         </tr>
         <tr>
           <td valign='top' width='49%'>
-
           <table width='100%' align=center class=\"stateclass\">
           <tr>
-            <th class=\"left\" colspan='2'><b>$langCourses</b></th>
+            <th class=\"left\" colspan='2'><b>$langCoursesHeader</b></th>
           </tr>
           <tr>
             <td class=\"left\">$langNumCourses : </td>
-            <td class=\"right\"><b>".list_1Result("select count(*) from cours;")."</b></td>
+            <td class=\"right\"><b>".list_1Result("SELECT count(*) FROM cours")."</b></td>
           </tr>
+  	</table>
+	<table width='100%' align='center' class=\"stateclass\">
+          <tr>
+            <th class='left' colspan='2'><b>$langNunEachAccess</b></th>
+          </tr>".tablize(list_ManyResult("SELECT DISTINCT visible, count(*) FROM cours GROUP BY visible "), $language)."
           </table>
 
           <br />
@@ -157,7 +197,7 @@ $tool_content .= "
           <table width='100%' align='center' class=\"stateclass\">
           <tr>
             <th class='left' colspan='2'><b>$langNumEachCourse</b></th>
-          </tr>".tablize(list_ManyResult("select DISTINCT faculte, count(*) from cours Group by faculte"), $language)."
+          </tr>".tablize(list_ManyResult("SELECT DISTINCT faculte, count(*) FROM cours Group by faculte"), $language)."
           </table>";
 
 $tool_content .= "
@@ -166,15 +206,7 @@ $tool_content .= "
           <table width='100%' align='center' class=\"stateclass\">
           <tr>
             <th class='left' colspan='2'><b>$langNumEachLang</b></th>
-          </tr>".tablize(list_ManyResult("select DISTINCT languageCourse, count(*) from cours Group by languageCourse "), $language)."
-          </table>
-
-          <br />
-
-          <table width='100%' align='center' class=\"stateclass\">
-          <tr>
-            <th class='left' colspan='2'><b>$langNunEachAccess</b></th>
-          </tr>".tablize(list_ManyResult("select DISTINCT visible, count(*) from cours GROUP BY visible "), $language)."
+          </tr>".tablize(list_ManyResult("SELECT DISTINCT languageCourse, count(*) FROM cours Group by languageCourse "), $language)."
           </table>
 
           <br />
@@ -182,7 +214,7 @@ $tool_content .= "
           <table width='100%' align='center' class=\"stateclass\">
           <tr>
             <th class='left' colspan='2'><b>$langNumEachCat</b></th></tr>
-          <tr>".tablize(list_ManyResult("select DISTINCT type, count(*) from cours GROUP BY type"),$language)."
+          <tr>".tablize(list_ManyResult("SELECT DISTINCT type, count(*) FROM cours GROUP BY type"),$language)."
           </table>
 
           <br />
@@ -193,12 +225,10 @@ $tool_content .= "
           </tr>
           <tr>
             <td class='left'>$langNbAnnoucement :</td>
-            <td class='right'><b>".list_1Result("select count(*) from annonces;")."</b></td>
+            <td class='right'><b>".list_1Result("SELECT count(*) FROM annonces;")."</b></td>
           </tr>
           </table>
-
           <br />
-
           </td>
 
           <td width='2%'>&nbsp;</td>
@@ -207,7 +237,7 @@ $tool_content .= "
           <table width='100%' align='center' class=\"stateclass\">
           <tr>
             <th class='left' colspan='2'><b>$langNumEachRec</b></td>
-          </tr>".tablize(list_ManyResult("select CONCAT(code_cours,\" Statut :\",statut), count(user_id) from cours_user GROUP BY code_cours, statut order by code_cours"), $language)."
+          </tr>".tablize(list_ManyResult("SELECT CONCAT(code_cours,\" Statut :\",statut), count(user_id) FROM cours_user GROUP BY code_cours, statut ORDER by code_cours"), $language)."
           </table>
 
           </td>
@@ -215,15 +245,9 @@ $tool_content .= "
         </thead>
         </table>";
 
-$tool_content .= "
-        </td>
-      </tr>
-      </thead>
-      </table>";
+$tool_content .= "</td></tr></thead></table>";
 
-$tool_content .= "
-
-    <table width='99%' align='center'>
+$tool_content .= "<table width='99%' align='center'>
     <thead>
     <tr>
       <td colspan='2' width=90%><b>$langAlert !</b></td>
@@ -232,7 +256,7 @@ $tool_content .= "
       <td>
         <table width='100%' align='center' class=\"stateclass\">";
 
-$sqlLoginDouble = "select DISTINCT username, count(*) as nb from user group by username HAVING nb > 1 order by nb desc";
+$sqlLoginDouble = "SELECT DISTINCT username, count(*) as nb FROM user group by username HAVING nb > 1 ORDER by nb desc";
 $loginDouble = list_ManyResult($sqlLoginDouble);
 
 $tool_content .= "
@@ -254,15 +278,9 @@ if (count($loginDouble) > 0) {
         $tool_content .= "</td>
           <td class='right' align=center>".ok_message()." ";
 }
-$tool_content .= "</td>
-        </tr>
-        </table>
+$tool_content .= "</td></tr></table></td></tr>";
 
-        </td>
-      </tr>";
-
-
-$sqlLoginDouble = "select DISTINCT email, count(*) as nb from user group by email HAVING nb > 1  order by nb desc";
+$sqlLoginDouble = "SELECT DISTINCT email, count(*) as nb FROM user group by email HAVING nb > 1  ORDER by nb desc";
 $loginDouble = list_ManyResult($sqlLoginDouble);
 
 $tool_content .= "
@@ -279,12 +297,9 @@ $tool_content .= "
 
 if (count($loginDouble) > 0) {
  $tool_content .= tablize($loginDouble, $language);
- $tool_content .= "
-        <tr>
-          <td class=right colspan='2'>";
+ $tool_content .= "<tr><td class=right colspan='2'>";
  $tool_content .=  error_message();
- $tool_content .= "
-        </tr>";
+ $tool_content .= "</tr>";
 }
 else
 {
@@ -301,7 +316,7 @@ $tool_content .=  "
         </td>
       </tr>";
 
-$sqlLoginDouble = "select DISTINCT CONCAT(username, \" -- \", password) as paire, count(*) as nb from user group by paire HAVING nb > 1 order by nb desc";
+$sqlLoginDouble = "SELECT DISTINCT CONCAT(username, \" -- \", password) as paire, count(*) as nb FROM user group by paire HAVING nb > 1 ORDER by nb desc";
 $loginDouble = list_ManyResult($sqlLoginDouble);
 
 $tool_content .= "
@@ -334,16 +349,8 @@ if (count($loginDouble) > 0) {
           </td>
         </tr>";
 }
-$tool_content .= "
-        </table>
-
-        </td>
-      </tr>
-      </table>";
-$tool_content .= "
-
-      </td>
-    </tr>
+$tool_content .= "</table></td></tr></table>";
+$tool_content .= "</td></tr>
     <tr>
       <td colspan=2 class='right'><a href='index.php' class=mainpage>$langBackAdmin</a></td>
     </tr>
