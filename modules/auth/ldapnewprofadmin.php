@@ -73,7 +73,7 @@ if (isset($submit))  {
 	  }
 	
 	if(isset($user_exist) and $pu == $user_exist) {
-	     $tool_content .= "<p class=\"caution_small\">$langUserFree</p><br><br><p align=\"right\"><a href='../admin/listreq.php'>$langBackReq</a></p>";
+	     $tool_content .= "<p class=\"caution_small\">$langUserFree</p><br><br><p align=\"right\"><a href='../admin/listreq.php'>$langBackRequests</a></p>";
 		 draw($tool_content,0,'auth');
 	     exit();
 	}
@@ -125,7 +125,7 @@ if (isset($submit))  {
       <tr>
       <td class=\"well-done\" height='60'>
 	<p>$profsuccess</p><br><br>
-	<center><p><a href='../admin/listreq.php'>$langBackReq</a></p></center>
+	<center><p><a href='../admin/listreq.php'>$langBackRequests</a></p></center>
       </td>
       </tr></tbody></table>";
 

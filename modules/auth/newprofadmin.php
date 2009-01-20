@@ -89,7 +89,7 @@ if($submit) {
 		// close request
 	  	$rid = intval($_POST['rid']);
   	  	db_query("UPDATE prof_request set status = '2',date_closed = NOW() WHERE rid = '$rid'");
-	       	$tool_content .= "<p class=\"success_small\">$profsuccess</p><br><br><p align=\"right\"><a href='../admin/listreq.php'>$langBackReq</a></p>";
+	       	$tool_content .= "<p class=\"success_small\">$profsuccess</p><br><br><p align=\"right\"><a href='../admin/listreq.php'>$langBackRequests</a></p>";
 		
 		// send email
 		$emailsubject = "$langYourReg $siteName $langAsProf";

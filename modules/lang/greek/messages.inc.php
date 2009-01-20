@@ -269,6 +269,7 @@ $langemailsubjectBlocked = "Απόρριψη αίτησης εγγραφής σ�
 $langemailbodyBlocked = "Η αίτησή σας για εγγραφή στην πλατφόρμα ".$siteName." απορρίφθηκε.";
 $langCloseConf = "Επιβεβαίωση κλεισίματος αίτησης";
 $langReintroductionApplication="Η επαναφορά της αίτησης ολοκληρώθηκε με επιτυχία!";
+$langBackRequests = "Επιστροφή στις αιτήσεις ".$langOfTeachers;
 
 // mailtoprof.php
 $langSendMessageTo = "Αποστολή μηνύματος";
@@ -2450,7 +2451,6 @@ $contactpoint="Επικοινωνία";
 $searchuser="Αναζήτηση Καθηγητών / Χρηστών";
 $typeyourmessage="Πληκτρολογήστε το μήνυμά σας παρακάτω";
 $emailsuccess="Το e-mail στάλθηκε!";
-$langBackReq = "Επιστροφή στις Ανοικτές Αιτήσεις Καθηγητών";
 $langTheTeacher = 'Ο διδάσκων';
 $langTheUser = 'Ο χρήστης';
 $langDestination = 'Παραλήπτης:';
