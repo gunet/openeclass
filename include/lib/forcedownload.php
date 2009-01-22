@@ -125,6 +125,7 @@ function get_mime_type($filename)
                 'doc' => 'application/msword',
                 'xls' => 'application/vnd.ms-excel',
                 'ppt' => 'application/vnd.ms-powerpoint',
+                'pps' => 'application/vnd.ms-pps',
                 'ez' => 'application/andrew-inset',
                 'hqx' => 'application/mac-binhex40',
                 'cpt' => 'application/mac-compactpro',
