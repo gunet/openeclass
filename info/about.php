@@ -53,37 +53,7 @@ $tool_content ="";
   * ophelia neofytou - 2006/09/26
   */
 
-//find uptime
-$sql_stats = "SELECT code FROM cours";
-$result = db_query($sql_stats);
-$course_codes = array();
-while ($row = mysql_fetch_assoc($result)) {
-    $course_codes[] = $row['code'];
-}
-mysql_free_result($result);
-
-$first_date_time = time();
-
-foreach ($course_codes as $course_code) {
-    $sql_stats = "SELECT UNIX_TIMESTAMP(MIN(date_time)) AS first FROM actions";
-    $result = db_query($sql_stats, $course_code);
-    while ($row = mysql_fetch_assoc($result)) {
-        $tmp = $row['first'];
-        if ($tmp < $first_date_time and $tmp !=0 ) {
-            $first_date_time = $tmp;
-        }
-    }
-    mysql_free_result($result);
-
-}
-
-$uptime = date("G:i d-n-Y", $first_date_time);
-
-//find number of logins
 mysql_select_db($mysqlMainDb);
-$lastMonth = date("Y-m-d H:i:s", time()-24*3600*30);
-$total_logins = mysql_fetch_array(db_query("SELECT COUNT(idLog) FROM loginout
-													WHERE action='LOGIN' AND `when`> '$lastMonth'"));
 
 $a=mysql_fetch_array(mysql_query("SELECT COUNT(*) FROM cours"));
 $a1=mysql_fetch_array(mysql_query("SELECT COUNT(*) FROM cours WHERE visible='2'"));
@@ -99,7 +69,6 @@ $tool_content .= "
              </ul>
             </td>
           </tr>";
-
 
 $e=mysql_fetch_array(mysql_query("SELECT COUNT(*) FROM user"));
 $b=mysql_fetch_array(mysql_query("SELECT COUNT(*) FROM user where statut='1'"));
@@ -117,16 +86,11 @@ $d=mysql_fetch_array(mysql_query("SELECT COUNT(*) FROM user where statut='10'"))
               </ul></td>
           </tr>
           <tr class=\"odd\">
-            <th class=\"left\" style=\"border-left: 1px solid #edecdf;\">$langOperation:</th>
-            <td>$langUptime<b> ".$uptime."</b> $langLast30daysLogins1 <b>".$total_logins[0]."</b>.</td>
-          </tr>
-          <tr class=\"odd\">
             <th class=\"left\" style=\"border-left: 1px solid #edecdf; border-bottom: 1px solid #edecdf;\">$langSupportUser</th>
             <td>$administratorName $administratorSurname</td>
           </tr>
           </tbody>
           </table>
-
           <br>";
 
 
