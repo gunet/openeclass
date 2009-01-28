@@ -258,6 +258,7 @@ $langStatsCourse = "Στατιστικά Μαθήματος";
 // infocours.php
 $langCourseEditSuccess = "Τα στοιχεία του μαθήματος άλλαξαν με επιτυχία!";
 $langCourseInfoEdit = "Αλλαγή Στοιχείων Μαθήματος";
+$langBackCourse = "Επιστροφή στην αρχική σελίδα του μαθήματος";
 
 // listreq.php
 $langOpenProfessorRequests = "Ανοικτές Αιτήσεις ".$langOfTeachers;

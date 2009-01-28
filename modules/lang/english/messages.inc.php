@@ -83,6 +83,7 @@ $langAdminProf = "".$langTeachers." administration"; //
 $langAdminCours = "Course Administration"; //
 $langGenAdmin = "Other Tools"; //
 $langBackAdmin = "Back to admin page"; //
+$langBackCourse = "Back to course homepage";
 $langPlatformIdentity = "Platform Identity"; //
 $langStoixeia = "Platform Information"; //
 $langThereAre = "There are"; //
