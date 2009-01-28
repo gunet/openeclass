@@ -560,6 +560,7 @@ function new_code($fac) {
 }
 
 // due to a bug (?) to php function basename() our implementation
+// handles correct multibyte characters (e.g. greek)
 function my_basename($path) {
 	return preg_replace('#^.*/#', '', $path);
 }

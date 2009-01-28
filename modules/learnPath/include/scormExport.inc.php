@@ -785,7 +785,7 @@ class ScormExport
                 {
                     claro_mkdir($destinationDir);
                 }
-                copy($this->srcDirDocument . $module['path'], $destinationDir . $documentName);
+                @copy($this->srcDirDocument . $module['path'], $destinationDir . $documentName);
             }
             elseif ( $module['contentType'] == 'EXERCISE' )
             {
@@ -1291,11 +1291,10 @@ class ScormExport
     {
         $filename = $this->destDir . '.zip';
         header('Content-Description: File Transfer');
-        header('Content-Type: application/force-download');
+        header('Content-Type: application/zip');
         header('Content-Length: ' . filesize($filename));
-        header('Content-Disposition: attachment; filename=' . basename($filename)); 
+	header("Content-Disposition: attachment; filename=\"" . my_basename($filename) . "\""); 
         readfile($filename);
-        
         exit(0);
     }
 
@@ -1312,9 +1311,9 @@ class ScormExport
         if ( !$this->createManifest() ) return false;
         if ( !$this->zip() ) return false;
         $this->send();
-        
         return True;
     }
 
 }
 endif; // !class_exists(ScormExport)
+

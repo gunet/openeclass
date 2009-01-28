@@ -54,6 +54,9 @@ function send_file_to_client($real_filename, $filename, $send_inline = false, $s
         {
                 return false;
         }
+	if (strpos($filename, ' ') !== false) {
+		$filename = '"' . $filename . '"';
+	}
 
         $content_type = get_mime_type($filename);
         if (!$send_inline) {
