@@ -85,10 +85,11 @@ foreach ($course_codes as $course_code) {
     $result = db_query($sql, $course_code);
     while ($row = mysql_fetch_assoc($result)) {
         $tmp = $row['first'];
-        if ($tmp < $first_date_time) {
-            $first_date_time = $tmp;
-
-        }
+	if (!empty($tmp)) {
+		if ($tmp < $first_date_time) {
+			$first_date_time = $tmp;
+		}
+	}
     }
     mysql_free_result($result);
 }
