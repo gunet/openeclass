@@ -52,82 +52,59 @@ $u = (string)isset($_GET['u'])?$_GET['u']:(isset($_POST['u'])?$_POST['u']:'');
 if((!empty($u)) && ctype_digit($u))	// validate the user id
 {
 	$u = (int)$u;
-		$sql = mysql_query("SELECT nom, prenom, username, password, email, phone, department, registered_at, expires_at
-			FROM user WHERE user_id = '$u'");
-		if (!$sql)
-		{
-	    die("Unable to query database (user_id='$u')!");
-		}
-		$info = mysql_fetch_array($sql);
-    $tool_content .= "
-  <table class=\"FormData\" width=\"99%\" align=\"left\">
-  <thead>
-  <tr>
-    <th width=\"220\">&nbsp;</th>
-    <td><b>$langUserStats</b>: $info[2]</td>
-  </tr>";
+	$sql = mysql_query("SELECT nom, prenom, username, password, email, phone, department, registered_at, expires_at FROM user WHERE user_id = '$u'");
+	$info = mysql_fetch_array($sql);
+    	$tool_content .= "<table class=\"FormData\" width=\"99%\" align=\"left\">
+	<thead>
+	<tr><th width=\"220\">&nbsp;</th>
+	<td><b>$langUserStats</b>: $info[2]</td>
+	</tr>";
 
-		$sql = mysql_query("SELECT nom, prenom, username FROM user WHERE user_id = '$u'");
-		if (!$sql)
-		{
-		    die("Unable to query database (user_id='$u')!");
-		}
-
-		$sql = mysql_query("SELECT a.code, a.intitule, b.statut, a.cours_id
-			FROM cours AS a LEFT JOIN cours_user AS b ON a.code = b.code_cours
-			WHERE b.user_id = '$u' ORDER BY b.statut, a.faculte");
+	$sql = mysql_query("SELECT nom, prenom, username FROM user WHERE user_id = '$u'");
+	$sql = mysql_query("SELECT a.code, a.intitule, b.statut, a.cours_id
+		FROM cours AS a LEFT JOIN cours_user AS b ON a.code = b.code_cours
+		WHERE b.user_id = '$u' ORDER BY b.statut, a.faculte");
 
 		// αν ο χρήστης συμμετέχει σε μαθήματα τότε παρουσίασε τη λίστα
-		if (mysql_num_rows($sql) > 0)
-		{
-    $tool_content .= "
-  <tr>
-    <th class=\"left\" valign=\"top\">$langStudentParticipation</th>
-    <td>
-
-      <table class=\"FormData\" width=\"99%\" align=\"left\">
-      <thead>
-      <tr>
-         <th colspan=\"2\"><div align=\"left\">&nbsp;&nbsp;$langCourseCode</div></th>
-         <th>$langProperty</th>
-         <th>$langActions</th>
-      </tr>
-      </thead>
-      <tbody>";
-          $k = 0;
-		  for ($j = 0; $j < mysql_num_rows($sql); $j++)
-		  {
-				$logs = mysql_fetch_array($sql);
-					if ($k%2==0) {
-		              $tool_content .= "
-      <tr>";
+	if (mysql_num_rows($sql) > 0) {
+    		$tool_content .= "<tr><th class=\"left\" valign=\"top\">$langStudentParticipation</th>
+		<td>
+		<table class=\"FormData\" width=\"99%\" align=\"left\">
+		<thead><tr>
+		<th colspan=\"2\"><div align=\"left\">&nbsp;&nbsp;$langCourseCode</div></th>
+		<th>$langProperty</th>
+		<th>$langActions</th>
+		</tr></thead><tbody>";
+		$k = 0;
+		for ($j = 0; $j < mysql_num_rows($sql); $j++) {
+			$logs = mysql_fetch_array($sql);
+			if ($k%2==0) {
+		              $tool_content .= "<tr>";
 	                } else {
-		                $tool_content .= "
-      <tr class=\"odd\">";
+		                $tool_content .= "<tr class=\"odd\">";
 	                }
-				$tool_content .= "
-         <td width=\"1\"><img style='border:0px; padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'></td>
-         <td align=\"left\">".htmlspecialchars($logs[0])." (".htmlspecialchars($logs[1]).")</td>
-         <td><div align=\"center\">";
-				switch ($logs[2])
-				{
-					case 1:
-						$tool_content .= $langTeacher;
-						$tool_content .= "</div></td>
-         <td><div align=\"center\">---</div></td>
-      </tr>";
-						break;
-					case 5:
-						$tool_content .= $langStudent;
-						$tool_content .= "</div></td>
-         <td><div align=\"center\"><a href=\"unreguser.php?u=$u&un=$info[2]&c=$logs[0]\"><img src='../../images/delete.gif' title='$langDelete' border='0'></img></a></div></td>
-      </tr>";
-						break;
-					default:
-						$tool_content .= $langVisitor;
-						$tool_content .= "</div></td>
-         <td><div align=\"center\"><a href=\"unreguser.php?u=$u&un=$info[2]&c=$logs[0]\"><img src='../../images/delete.gif' title='$langDelete' border='0'></img></a></div></td>
-      </tr>";
+			$tool_content .= "<td width=\"1\">
+			<img style='border:0px; padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'></td>
+         		<td align=\"left\">".htmlspecialchars($logs[0])." (".htmlspecialchars($logs[1]).")</td>
+         		<td><div align=\"center\">";
+			switch ($logs[2]) {
+				case 1:
+					$tool_content .= $langTeacher;
+					$tool_content .= "</div></td><td><div align=\"center\">---</div></td>
+      					</tr>";
+					break;
+				case 5:
+					$tool_content .= $langStudent;
+					$tool_content .= "</div></td><td><div align=\"center\">
+					<a href=\"unreguser.php?u=$u&un=$info[2]&c=$logs[0]\">
+					<img src='../../images/delete.gif' title='$langDelete' border='0'></img></a></div></td></tr>";
+					break;
+				default:
+					$tool_content .= $langVisitor;
+					$tool_content .= "</div></td><td><div align=\"center\">
+					<a href=\"unreguser.php?u=$u&un=$info[2]&c=$logs[0]\">
+					<img src='../../images/delete.gif' title='$langDelete' border='0'>
+					</img></a></div></td></tr>";
 					break;
 				}
 				$k++;
@@ -138,14 +115,10 @@ if((!empty($u)) && ctype_digit($u))	// validate the user id
 		  $tool_content .= "\n    </td>\n  </tr>";
 
 		} else {
-    $tool_content .= "
-  <tr>
-    <th class=\"left\">$langStudentParticipation</th>
-    <td>";
+		$tool_content .= "<tr><th class=\"left\">$langStudentParticipation</th><td>";
 
-			$tool_content .= "$langNoStudentParticipation ";
-		  if ($u > 1)
-		  {
+		$tool_content .= "$langNoStudentParticipation ";
+		  if ($u > 1) {
 				if (isset($logs))
 			    $tool_content .= "<center><a href=\"unreguser.php?u=$u&un=$info[2]&c=$logs[0]\">$langDelete</a></center>";
 				else
@@ -153,21 +126,11 @@ if((!empty($u)) && ctype_digit($u))	// validate the user id
 		  }
 		  else
 		  {
-				$tool_content .= $langCannotDeleteAdmin;
+			$tool_content .= $langCannotDeleteAdmin;
 		  }
-    $tool_content .= "
-    </td>
-  </tr>";
+    		$tool_content .= "</td></tr>";
 		}
-	/*
-    $tool_content .= "
-  </thead>
-  </table>";
-
-    $tool_content .= "
-  <table class=\"FormData\" width=\"99%\" align=\"left\">
-  <thead>";
-  */
+	
     $tool_content .= "
   <tr>
     <th class=\"left\" width=\"220\">$langTotalVisits:</th>
@@ -182,26 +145,26 @@ if (!extension_loaded('gd')) {
 			FROM cours AS a LEFT JOIN cours_user AS b ON a.code = b.code_cours
 			WHERE b.user_id = '$u' ORDER BY b.statut, a.faculte";
 	$result = db_query($sql);
-	while ($row = mysql_fetch_assoc($result)) {
-		$course_codes[] = $row['code'];
-		$course_names[$row['code']]=$row['intitule'];
-	}
-	mysql_free_result($result);
-	foreach ($course_codes as $course_code) {
-		$sql = "SELECT COUNT(*) AS cnt FROM actions WHERE user_id = '$u'";
-		$result = db_query($sql, $course_code);
+	if (mysql_num_rows($result) > 0) {
 		while ($row = mysql_fetch_assoc($result)) {
-			$totalHits += $row['cnt'];
-			$hits[$course_code] = $row['cnt'];
+			$course_codes[] = $row['code'];
+			$course_names[$row['code']]=$row['intitule'];
 		}
 		mysql_free_result($result);
+		foreach ($course_codes as $course_code) {
+			$sql = "SELECT COUNT(*) AS cnt FROM actions WHERE user_id = '$u'";
+			$result = db_query($sql, $course_code);
+			while ($row = mysql_fetch_assoc($result)) {
+				$totalHits += $row['cnt'];
+				$hits[$course_code] = $row['cnt'];
+			}
+			mysql_free_result($result);
+		}
 	}
 	$tool_content .= "<b>$totalHits</b></td>";
-    $tool_content .= "
-  </tr>
-  <tr>
-    <td colspan=\"2\">";
+    	$tool_content .= "</tr><tr><td colspan=\"2\">";
 	$chart = new PieChart(600, 300);
+	$hits = array();
 	foreach ($hits as $code => $count) {
 		$chart_content=1;
 		$chart->width += 1;
@@ -218,21 +181,12 @@ if (!extension_loaded('gd')) {
     </td>
   </tr>";
 
-  /*
-    $tool_content .= "
-  </thead>
-  </table>";
-
-    $tool_content .= "
-  <table class=\"FormData\" width=\"99%\" align=\"left\">
-  <thead>";
-  */
 // End of chart display; chart unlinked at end of script.
 
-$sql = "SELECT * FROM loginout WHERE id_user = '".$_SESSION["uid"]."' ORDER by idLog DESC LIMIT 15";
+
+$sql = "SELECT * FROM loginout WHERE id_user = '$u' ORDER by idLog DESC LIMIT 15";
 
 $leResultat = db_query($sql, $mysqlMainDb);
-
     $tool_content .= "
   <tr>
     <th class=\"left\" width=\"220\" valign=\"top\">$langLastUserVisits $info[2]</th>
@@ -255,14 +209,13 @@ while ($leRecord = mysql_fetch_array($leResultat)) {
 	$when = $leRecord["when"];
 	$action = $leRecord["action"];
 	if ($i%2==0) {
-		$tool_content .= "
-      <tr>";
+		$tool_content .= "<tr>";
 	} else {
 		$tool_content .= "
-      <tr class=\"odd\">";
+      		<tr class=\"odd\">";
 	}
-	$tool_content .= "
-        <td width=\"1\"><img style='border:0px; padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'></td>
+	$tool_content .= "<td width=\"1\">
+	<img style='border:0px; padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'></td>
         <td>".strftime("%d/%m/%Y (%H:%M:%S) ", strtotime($when))."</td>
         <td align=\"center\"><div align=\"center\">".$nomAction[$action]."</div></td>
       </tr>";
