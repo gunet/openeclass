@@ -281,7 +281,7 @@ if(!empty($submit))
 		session_register('is_admin');
 		$_SESSION['uid'] = $uid;
 		mysql_query("INSERT INTO loginout (loginout.idLog, loginout.id_user, loginout.ip, loginout.when, loginout.action)
-                VALUES ('', '".$uid."', '".$REMOTE_ADDR."', NOW(), 'LOGIN')");
+                VALUES ('', '$uid', '$_SERVER[REMOTE_ADDR]', NOW(), 'LOGIN')");
 
 	}
 

@@ -29,7 +29,7 @@ function send_mail($from, $from_address, $to, $to_address,
                    $subject, $body, $charset, $extra_headers = '')
 {
         if (count($to_address) > 1) {
-                $to_header = 'undisclosed-recipients:;';
+                $to_header = '(undisclosed-recipients)';
                 $bcc = 'Bcc: ' . join(', ', $to_address) . "\n";
         } else {
                 if (empty($to)) {
@@ -63,7 +63,7 @@ function send_mail_multipart($from, $from_address, $to, $to_address,
 {
         global $emailAdministrator;
         if (count($to_address) > 1) {
-                $to_header = 'undisclosed-recipients:;';
+                $to_header = '(undisclosed-recipients)';
                 $bcc = 'Bcc: ' . join(', ', $to_address) . "\n";
         } else {
                 if (empty($to)) {
