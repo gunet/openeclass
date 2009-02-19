@@ -241,24 +241,31 @@ hContent;
 			AND cours_user.user_id = user.user_id";
             $result = db_query($sqlUserOfCourse, $mysqlMainDb);
 
-            $countEmail = mysql_num_rows($result);
+            $countEmail = mysql_num_rows($result); // number of mail recipients
 
-            $unvalid = 0;
-            // send email one by one to avoid antispam
+            $invalid = 0;
+	    $recipients = array();
+            $emailBody = html2text($emailContent);
             while ($myrow = mysql_fetch_array($result)) {
-                $emailTo = $myrow["email"];
-                // check email syntax validity
-                if (!email_seems_valid($emailTo)) {
-                    $unvalid++;
-                } else {
-                    // avoid antispam by varying string
-                    $emailBody = html2text("$emailContent\n\n$emailTo");
-                    send_mail_multipart("$prenom $nom", $email, '',
-                        $myrow["email"], $emailSubject,
-                        $emailBody, $emailContent, $charset);
-                }
+                    $emailTo = $myrow["email"]; 
+                    // check email syntax validity
+                    if (!email_seems_valid($emailTo)) {
+                            $invalid++;
+                    }
+                    array_push($recipients, $emailTo);
+                    if (count($recipients) >= 50) {  // send mail message per 50 recipients
+                            send_mail_multipart("$prenom $nom", $email, '',
+                                            $recipients, $emailSubject,
+                                            $emailBody, $emailContent, $charset);
+                            $recipients = array();
+                    }
             }
-            $messageUnvalid = " $langOn $countEmail $langRegUser, $unvalid $langUnvalid";
+            if (count($recipients) > 0)  {
+                    send_mail_multipart("$prenom $nom", $email, '',
+                                    $recipients, $emailSubject,
+                                    $emailBody, $emailContent, $charset);
+            }
+            $messageUnvalid = " $langOn $countEmail $langRegUser, $invalid $langUnvalid";
             $message = "<p class=\"success_small\">$langAnnAdd $langEmailSent<br />$messageUnvalid</p>";
         } // if $emailOption==1
         else {
