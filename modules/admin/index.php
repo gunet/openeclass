@@ -54,31 +54,31 @@ mysql_select_db($mysqlMainDb);
 
 // Constract a table with platform identification info
 $tool_content .= "
-    <table width=\"75%\" class=\"Smart\" align=\"center\" >
+    <table width='75%' class='Smart' align='center' >
     <tbody>
-    <tr class=\"odd\">
-      <th width=\"30%\" style=\"border-left: 1px solid #edecdf; border-top: 1px solid #edecdf;\">&nbsp;</th>
+    <tr class='odd'>
+      <th width='30%' style='border-left: 1px solid #edecdf; border-top: 1px solid #edecdf;'>&nbsp;</th>
       <td><b>$langPlatformIdentity</b></td>
     </tr>
-    <tr class=\"odd\">
-      <th class=\"left\" style=\"border-left: 1px solid #edecdf;\">Version:</th>
-      <td>$langAboutText <b>".$siteName." ".$langEclassVersion."</b></td>
+    <tr class='odd'>
+      <th class='left' style='border-left: 1px solid #edecdf;'>Version:</th>
+      <td>$langAboutText <b>$siteName $langEclassVersion</b></td>
     </tr>
-    <tr class=\"odd\">
-      <th class=\"left\" style=\"border-left: 1px solid #edecdf;\">IP Host:</th>
-      <td>".$langHostName."<b>".$SERVER_NAME."</b></td>
+    <tr class='odd'>
+      <th class='left' style='border-left: 1px solid #edecdf;'>IP Host:</th>
+      <td>$langHostName <b>$_SERVER[SERVER_NAME]</b></td>
     </tr>
-    <tr class=\"odd\">
-      <th class=\"left\" style=\"border-left: 1px solid #edecdf;\">Web Server:</th>
-      <td>".$langWebVersion."<b>".$SERVER_SOFTWARE."</b></td>
+    <tr class='odd'>
+      <th class='left' style='border-left: 1px solid #edecdf;'>Web Server:</th>
+      <td>$langWebVersion <b>$_SERVER[SERVER_SOFTWARE]</b></td>
     </tr>
-    <tr class=\"odd\">
-      <th class=\"left\" style=\"border-left: 1px solid #edecdf; border-bottom: 1px solid #edecdf;\">Data Base Server:</th>
+    <tr class='odd'>
+      <th class='left' style='border-left: 1px solid #edecdf; border-bottom: 1px solid #edecdf;'>Data Base Server:</th>
       <td>";
         if (extension_loaded('mysql'))
             $tool_content .= "$langMySqlVersion<b>".mysql_get_server_info()."</b>";
         else // If not display message no MySQL
-            $tool_content .= "<font color=\"red\">".$langNoMysql."</font>";
+            $tool_content .= "<font color='red'>".$langNoMysql."</font>";
     $tool_content .= "</td>
     </tr>
     </tbody>
