@@ -61,9 +61,21 @@ function send_mail($from, $from_address, $to, $to_address,
 function send_mail_multipart($from, $from_address, $to, $to_address,
                    $subject, $body_plain, $body_html, $charset)
 {
-        global $emailAdministrator;
+        global $emailAdministrator, $emailAnnounce;
         if (count($to_address) > 1) {
-                $to_header = '(undisclosed-recipients)';
+                if (isset($emailAnnounce)) {
+                        if (empty($to)) {
+                                $to_header = $emailAnnounce;
+                        } else {
+                                $to_header = $to . " <$emailAnnounce>";
+                        }
+                } else {
+                        if (empty($to)) {
+                                $to_header = '(undisclosed recipients)';
+                        } else {
+                                $to_header = "($to)";
+                        }
+                }
                 $bcc = 'Bcc: ' . join(', ', $to_address) . "\n";
         } else {
                 if (empty($to)) {

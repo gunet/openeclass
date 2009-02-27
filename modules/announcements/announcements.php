@@ -61,13 +61,14 @@ $action->record('MODULE_ID_ANNOUNCE');
 $nameTools = $langAnnouncements;
 $tool_content = $head_content = "";
 
-if ($is_adminOfCourse && (@$addAnnouce == 1 || isset($modify))) {
-    if ($language == 'greek')
-        $lang_editor = 'el';
-    else
-        $lang_editor = 'en';
+if ($is_adminOfCourse and
+    (isset($_GET['addAnnouce']) or isset($_GET['modify']))) {
+        if ($language == 'greek')
+                $lang_editor = 'el';
+        else
+                $lang_editor = 'en';
 
-    $head_content = <<<hContent
+        $head_content = <<<hContent
 <script type="text/javascript">
         _editor_url  = "$urlAppend/include/xinha/";
         _editor_lang = "$lang_editor";
@@ -192,7 +193,8 @@ hContent;
 	MODIFY COMMAND
 	--------------------------------------*/
 
-    if (isset($modify) && $modify) {
+    if (isset($_GET['modify'])) {
+        $modify = intval($_GET['modify']);
         // RETRIEVE THE CONTENT OF THE ANNOUNCEMENT TO MODIFY
         $result = db_query("SELECT * FROM annonces WHERE id='$modify'", $mysqlMainDb);
         $myrow = mysql_fetch_array($result);
@@ -246,22 +248,26 @@ hContent;
             $invalid = 0;
 	    $recipients = array();
             $emailBody = html2text($emailContent);
+            $general_to = 'Members of course ' . $currentCourseID;
             while ($myrow = mysql_fetch_array($result)) {
                     $emailTo = $myrow["email"]; 
                     // check email syntax validity
                     if (!email_seems_valid($emailTo)) {
                             $invalid++;
+                    } else {
+                            array_push($recipients, $emailTo);
                     }
-                    array_push($recipients, $emailTo);
-                    if (count($recipients) >= 50) {  // send mail message per 50 recipients
-                            send_mail_multipart("$prenom $nom", $email, '',
+                    // send mail message per 50 recipients
+                    if (count($recipients) >= 50) {
+                            send_mail_multipart("$prenom $nom", $email,
+                                                $general_to,
                                             $recipients, $emailSubject,
                                             $emailBody, $emailContent, $charset);
                             $recipients = array();
                     }
             }
             if (count($recipients) > 0)  {
-                    send_mail_multipart("$prenom $nom", $email, '',
+                    send_mail_multipart("$prenom $nom", $email, $general_to,
                                     $recipients, $emailSubject,
                                     $emailBody, $emailContent, $charset);
             }
@@ -305,7 +311,8 @@ hContent;
 	DISPLAY FORM TO FILL AN ANNOUNCEMENT
 	(USED FOR ADD AND MODIFY)
 	--------------------------------------*/
-    if ($displayForm == true && (@$addAnnouce == 1 || isset($modify))) {
+    if ($displayForm and
+        (isset($_GET['addAnnouce']) or isset($_GET['modify']))) {
         // DISPLAY ADD ANNOUNCEMENT COMMAND
         $tool_content .= "<form method='post' action='$_SERVER[PHP_SELF]' onsubmit=\"return checkrequired(this, 'antitle');\">";
         // should not send email if updating old message
@@ -455,11 +462,11 @@ hContent;
     } // end: if ($displayAnnoucementList == true)
     if ($announcementNumber < 1) {
         $no_content = true;
-        if (isset($_REQUEST['addAnnouce'])) {
+        if (isset($_GET['addAnnouce'])) {
             $no_content = false;
         }
 
-        if (isset($_REQUEST['modify'])) {
+        if (isset($_GET['modify'])) {
             $no_content = false;
         }
 
