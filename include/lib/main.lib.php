@@ -906,6 +906,18 @@ function invalid_utf8($s)
 }
 
 
+function utf8_to_cp1253($s) 
+{
+	// First try with iconv() directly
+        $cp1253 = @iconv('UTF-8', 'Windows-1253', $s);
+        if ($cp1253 === false) {
+        	// ... if it fails, fall back to indirect conversion
+		$cp1253 = str_replace("\xB6", "\xA2", @iconv('UTF-8', 'ISO-8859-7', $s));
+	}
+        return $cp1253;
+}
+
+
 // Converts a string from Code Page 737 (DOS Greek) to UTF-8
 function cp737_to_utf8($s)
 {

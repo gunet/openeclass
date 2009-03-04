@@ -71,7 +71,11 @@ function csv_escape($string, $force = false)
 	global $charset;
 
         if ($charset != 'UTF-8') {
-                $string = iconv('UTF-8', $charset, $string);
+		if ($charset == 'Windows-1253') {
+			$string = utf8_to_cp1253($string);
+		} else {
+                	$string = iconv('UTF-8', $charset, $string);
+		}
         }
         if (!preg_match("/[ ,!;\"'\\\\]/", $string) and !$force) {
                 return $string;
