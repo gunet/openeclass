@@ -139,10 +139,22 @@ elseif(isset($removeTutor) && $removeTutor) {
 
 // unregister user from courses
 elseif(isset($unregister) && $unregister) {
-	// security : cannot remove myself
+	// Security: cannot remove myself
 	$result = db_query("DELETE FROM cours_user WHERE user_id!= $uid
 		AND user_id='".mysql_real_escape_string($_GET['user_id'])."' "
 		."AND code_cours='$currentCourseID'", $mysqlMainDb);
+        // Except: remove myself if there is another tutor
+        if ($_GET['user_id'] == $uid) {
+                $result = db_query("SELECT user_id FROM cours_user
+                                    WHERE code_cours='$currentCourseID'
+                                          AND user_id != $uid
+                                          AND statut = 1", $mysqlMainDb);
+                if (mysql_num_rows($result) > 0) {
+                        db_query("DELETE FROM cours_user
+                                  WHERE code_cours='$currentCourseID'
+                                        AND user_id = $uid");
+                }
+        }
 	$delGroupUser=db_query("DELETE FROM user_group WHERE user='".mysql_real_escape_string($_GET['user_id'])."'", $currentCourseID);
 }
 
