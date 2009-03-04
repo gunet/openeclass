@@ -214,6 +214,10 @@ if (isset($require_current_course) and $require_current_course) {
 			if ($row = mysql_fetch_row($res2)) {
 				$statut = $row[0];
 			}
+                        // The admin can see all courses as adminOfCourse
+                        if ($uid = 1) {
+                                $statut = 1;
+                        }
 		}
 
 		if ($visible != 2) {
@@ -251,6 +255,9 @@ if (isset($require_current_course) and $require_current_course) {
 // the system admin has uid=1
 if ($uid == 1) {
 	$is_adminOfCourse = TRUE;
+        if (isset($currentCourse)) {
+               $_SESSION['status'][$currentCourse] = 1;
+        }
 } else {
 	$is_adminOfCourse = FALSE;
 }
