@@ -242,6 +242,46 @@ function uid_to_name($uid)
 		return FALSE;
 	}
 }
+// Translate uid to real firstname
+function uid_to_firstname($uid)
+{
+        global $mysqlMainDb;
+
+        if ($r = mysql_fetch_row(db_query("SELECT prenom 
+		FROM user WHERE user_id = '".mysql_real_escape_string($uid)."'", $mysqlMainDb))) {
+                return $r[0];
+        } else {
+                return FALSE;
+        }
+}
+
+
+// Translate uid to real surname
+function uid_to_surname($uid)
+{
+        global $mysqlMainDb;
+
+        if ($r = mysql_fetch_row(db_query("SELECT nom 
+		FROM user WHERE user_id = '".mysql_real_escape_string($uid)."'", $mysqlMainDb))) {
+                return $r[0];
+        } else {
+                return FALSE;
+        }
+}
+
+// Translate uid to user email
+function uid_to_email($uid)
+{
+        global $mysqlMainDb;
+
+        if ($r = mysql_fetch_row(db_query("SELECT email 
+		FROM user WHERE user_id = '".mysql_real_escape_string($uid)."'", $mysqlMainDb))) {
+                return $r[0];
+        } else {
+                return FALSE;
+        }
+}
+
 
 // Translate uid to AM (student number)
 function uid_to_am($uid)
