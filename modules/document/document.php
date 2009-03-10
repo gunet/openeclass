@@ -597,6 +597,7 @@ while($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
         $fileinfo[] = array(
                 'is_dir' => is_dir($basedir . $row['path']),
                 'size' => filesize($basedir . $row['path']),
+                'title' => $row['title'],
                 'filename' => $row['filename'],
                 'format' => $row['format'],
                 'path' => $row['path'],
@@ -744,20 +745,31 @@ if (mysql_num_rows($sql) == 0) {
                                 $image = '../../template/classic/img/folder.gif';
                                 $file_url = "$_SERVER[PHP_SELF]?openDir=$cmdDirName";
                                 $link_extra = '';
+
+                                $link_text = $entry['filename'];
                         } else {
                                 $image = 'img/' . choose_image('.' . $entry['format']);
                                 $file_url = htmlspecialchars("file.php/$currentCourseID$dirname/" .
                                         str_replace('/', '//', $entry['filename']), ENT_QUOTES);
                                 $link_extra = " title='$langSave' target='_blank'";
+                                if (empty($entry['title'])) {
+                                        $link_text = $entry['filename'];
+                                } else {
+                                        $link_text = $entry['title'];
+                                }
                                 if ($entry['copyrighted']) {
-                                        $copyright_icon = " <img src='./img/copyrighted.jpg' align='absmiddle' border='0' />";
+                                        $link_text .= " <img src='./img/copyrighted.jpg' align='absmiddle' border='0' />";
                                 }
                         }
                         $tool_content .= "\n  <tr$style2>";
                         $tool_content .= "\n    <td width='1%' valign='top' style='padding-top: 7px;'><a href='$file_url'$style$link_extra><img src='$image' border='0' /></a></td>";
-                        $tool_content .= "\n    <td><div align='left'><a href='$file_url'$style$link_extra>" . $entry['filename'] . $copyright_icon . '</a>';
+                        $tool_content .= "\n    <td><div align='left'><a href='$file_url'$style$link_extra>$link_text</a>";
 
                         /*** comments ***/
+                        // If a title was specified, display filename as comment
+                        if (!empty($entry['title'])) {
+                                $tool_content .= "<br /><span class='comment'>($entry[filename])</span>";
+                        }
                         if (!empty($entry['comment'])) {
                                 $tool_content .= "<br /><span class='comment'>" .
                                         nl2br(htmlspecialchars($entry['comment'])) .
