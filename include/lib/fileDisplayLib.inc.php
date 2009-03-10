@@ -77,39 +77,39 @@ function choose_image($fileName)
 	/*** Tables initiliasation ***/
 	if (!$type || !$image)
 	{
-		$type['word'      ] = array("doc", "dot", "rtf", "mcw", "wps", "docx");
-		$type['web'       ] = array("htm", "html", "htx", "xml", "xsl", "php", "phps");
-		$type['css'       ] = array("css");
-		$type['image'     ] = array("gif", "jpg", "png", "bmp", "jpeg");
-		$type['audio'     ] = array("wav", "mp2", "mp3", "mp4", "vqf");
-		$type['midi'      ] = array("midi", "mid");
-		$type['video'     ] = array("avi", "mpg", "mpeg", "mov", "divx");
-		$type['real'      ] = array("ram", "rm");
-		$type['flash'     ] = array("flv");
-		$type['excel'     ] = array("xls", "xlt");
-		$type['compressed'] = array("zip", "tar", "gz", "bz2");
-		$type['rar'       ] = array("rar");
-		$type['code'      ] = array("js", "cpp", "c", "java");
-		$type['acrobat'   ] = array("pdf");
-		$type['powerpoint'] = array("ppt");
-		$type['text'      ] = array("txt");
+		$type['word'      ] = array('doc', 'dot', 'rtf', 'mcw', 'wps', 'docx');
+		$type['web'       ] = array('htm', 'html', 'htx', 'xml', 'xsl', 'php', 'phps');
+		$type['css'       ] = array('css');
+		$type['image'     ] = array('gif', 'jpg', 'png', 'bmp', 'jpeg');
+		$type['audio'     ] = array('wav', 'mp2', 'mp3', 'mp4', 'vqf');
+		$type['midi'      ] = array('midi', 'mid');
+		$type['video'     ] = array('avi', 'mpg', 'mpeg', 'mov', 'divx', 'wmv');
+		$type['real'      ] = array('ram', 'rm');
+		$type['flash'     ] = array('flv');
+		$type['excel'     ] = array('xls', 'xlt');
+		$type['compressed'] = array('zip', 'tar', 'gz', 'bz2');
+		$type['rar'       ] = array('rar');
+		$type['code'      ] = array('js', 'cpp', 'c', 'java');
+		$type['acrobat'   ] = array('pdf');
+		$type['powerpoint'] = array('ppt');
+		$type['text'      ] = array('txt');
 
-		$image['word'      ] = "doc.gif";
-		$image['web'       ] = "html.gif";
-		$image['css'       ] = "css.gif";
-		$image['image'     ] = "gif.gif";
-		$image['audio'     ] = "wav.gif";
-		$image['midi'      ] = "midi.gif";
-		$image['video'     ] = "mpg.gif";
-		$image['rar'       ] = "ram.gif";
-		$image['flash'     ] = "flash.gif";
-		$image['excel'     ] = "xls.gif";
-		$image['compressed'] = "zip.gif";
-		$image['rar'       ] = "rar.gif";
-		$image['code'      ] = "js.gif";
-		$image['acrobat'   ] = "pdf.gif";
-		$image['powerpoint'] = "ppt.gif";
-		$image['text'      ] = "txt.gif";
+		$image['word'      ] = 'doc.gif';
+		$image['web'       ] = 'html.gif';
+		$image['css'       ] = 'css.gif';
+		$image['image'     ] = 'gif.gif';
+		$image['audio'     ] = 'wav.gif';
+		$image['midi'      ] = 'midi.gif';
+		$image['video'     ] = 'mpg.gif';
+		$image['rar'       ] = 'ram.gif';
+		$image['flash'     ] = 'flash.gif';
+		$image['excel'     ] = 'xls.gif';
+		$image['compressed'] = 'zip.gif';
+		$image['rar'       ] = 'rar.gif';
+		$image['code'      ] = 'js.gif';
+		$image['acrobat'   ] = 'pdf.gif';
+		$image['powerpoint'] = 'ppt.gif';
+		$image['text'      ] = 'txt.gif';
 
 	}
 
