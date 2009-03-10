@@ -265,13 +265,15 @@ function expanded_faculte($fac, $uid) {
     </tr>
     </tbody>
     </table>\n
-				&nbsp;";
+    <p>&nbsp;</p>\n
+    <p>&nbsp;</p>";
 		} else {
 		  $retString .= "\n      <td>&nbsp;</td>\n
     </tr>\n
     </thead>\n
     </table>\n
-    <br/><br/>";
+    <p>&nbsp;</p>\n
+    <p>&nbsp;</p>";
         }
 
 	  // changed this foreach statement a bit
@@ -300,7 +302,7 @@ function expanded_faculte($fac, $uid) {
 				}
 
     if ($numoftypes > 1) {
-        $retString .= "\n    <br />";
+        //$retString .= "\n    <br />";
         $retString .= "\n    <table width=\"99%\">";
         $retString .= "\n    <thead>";
         $retString .= "\n    <tr>";
@@ -310,11 +312,11 @@ function expanded_faculte($fac, $uid) {
         $retString .= "\n    </thead>";
         $retString .= "\n    </table>\n";
     } else {
-        $retString .= "\n    <br />";
+        //$retString .= "\n    <br />";
     	$retString .= "\n    <table width=\"99%\">";
         $retString .= "\n    <thead>";
     	$retString .= "\n    <tr>";
-    	$retString .= "\n      <td><a name=\"$type\" class='alert1'></a>$message</td>";
+    	$retString .= "\n      <td><a name=\"$type\" class='alert1'></a><b><font color=\"#a33033\">$message</font></b></td>";
     	$retString .= "\n      <td>&nbsp;</td>";
     	$retString .= "\n    </tr>";
         $retString .= "\n    </thead>";
@@ -398,6 +400,7 @@ function expanded_faculte($fac, $uid) {
    	$retString .= "\n       </td>";
    	$retString .= "\n    </tr>";
    	$retString .= "\n    </table>\n";
+
 	}
 
 return $retString;
