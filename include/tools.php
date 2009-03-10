@@ -208,6 +208,10 @@ function loggedInMenu(){
 		array_push($sideMenuLink, $urlServer."manuals/manual.php");
 		array_push($sideMenuImg, "black-arrow1.gif");
 
+                array_push($sideMenuText, $GLOBALS['langListCourses']);
+                array_push($sideMenuLink, $urlServer."modules/auth/listfaculte.php");
+                array_push($sideMenuImg, "black-arrow1.gif");
+
 		array_push($sideMenuText, $GLOBALS['langInfoPlat']);
 		array_push($sideMenuLink, $urlServer."info/about.php");
 		array_push($sideMenuImg, "black-arrow1.gif");

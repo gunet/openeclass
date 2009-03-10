@@ -71,5 +71,4 @@ if (isset($result))  {
 </tr>
 </table>";
   }
-draw($tool_content, 0, 'auth');
-?>
+draw($tool_content, (isset($uid) and $uid)? 1: 0, 'auth');

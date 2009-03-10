@@ -57,7 +57,7 @@ if (isset ( $toolContent_ErrorExists )) {
 
 	$_SESSION ['errMessage'] = $toolContent_ErrorExists;
 	session_write_close ();
-	header ( "location:" . $urlServer . "index.php?logout=yes" );
+	header ( "location:" . $urlServer . "index.php" );
 	exit ();
 }
 
