@@ -215,7 +215,7 @@ if (isset($require_current_course) and $require_current_course) {
 				$statut = $row[0];
 			}
                         // The admin can see all courses as adminOfCourse
-                        if ($uid = 1) {
+                        if ($uid == 1) {
                                 $statut = 1;
                         }
 		}
