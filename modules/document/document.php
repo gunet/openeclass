@@ -766,10 +766,6 @@ if (mysql_num_rows($sql) == 0) {
                         $tool_content .= "\n    <td><div align='left'><a href='$file_url'$style$link_extra>$link_text</a>";
 
                         /*** comments ***/
-                        // If a title was specified, display filename as comment
-                        if (!empty($entry['title'])) {
-                                $tool_content .= "<br /><span class='comment'>($entry[filename])</span>";
-                        }
                         if (!empty($entry['comment'])) {
                                 $tool_content .= "<br /><span class='comment'>" .
                                         nl2br(htmlspecialchars($entry['comment'])) .
