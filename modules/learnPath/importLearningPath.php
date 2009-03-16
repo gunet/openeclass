@@ -511,6 +511,8 @@ $maxFilledSpace = 100000000;
 $courseDir   = "courses/".$currentCourseID."/scormPackages/";
 $baseWorkDir = $webDir.$courseDir; // path_id
 
+if (!is_dir($baseWorkDir)) claro_mkdir($baseWorkDir, CLARO_FILE_PERMISSIONS);
+
 // handle upload
 // if the post is done a second time, the claroformid mecanism
 // will set $_POST to NULL, so we need to check it
@@ -547,7 +549,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST) )
     require_once("../../include/pclzip/pclzip.lib.php");
 
     /*
-     * Check if the file is valide (not to big and exists)
+     * Check if the file is valid (not to big and exists)
      */
     if( !isset($_FILES['uploadedPackage']) || !is_uploaded_file($_FILES['uploadedPackage']['tmp_name']))
     {
@@ -1176,12 +1178,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST) )
     $tool_content .= "\n<p><!-- Messages -->\n";
     foreach ( $okMsgs as $msg)
     {
-        $tool_content .= "\n<b>[</b><span class=\"correct\">ok</span><b>]</b>&nbsp;&nbsp;&nbsp;".$msg."<br />";
+        $tool_content .= "\n<b>[</b><span class=\"correct\">$langSuccessOk</span><b>]</b>&nbsp;&nbsp;&nbsp;".$msg."<br />";
     }
 
     foreach ( $errorMsgs as $msg)
     {
-        $tool_content .= "\n<b>[</b><span class=\"error\">ko</span><b>]</b>&nbsp;&nbsp;&nbsp;".$msg."<br />";
+        $tool_content .= "\n<b>[</b><span class=\"error\">$langError</span><b>]</b>&nbsp;&nbsp;&nbsp;".$msg."<br />";
     }
 
     $tool_content .= "\n<!-- End messages -->\n";
