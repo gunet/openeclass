@@ -113,21 +113,23 @@ $langEmail : $emailAdministrator
 		}
 
 } else {
-	$res = mysql_fetch_array(db_query("SELECT profname,profsurname, profuname, profemail, proftmima, lang 
-		FROM prof_request WHERE rid='$id'"));
-	$ps = $res['profsurname'];
-	$pn = $res['profname'];
-	$pu = $res['profuname'];
-	$pe = $res['profemail'];
-	$pt = $res['proftmima'];
-	$lang = $res['lang'];
-	
-	// if not submit then display the form
-	if (isset($lang)) {
-		if ($lang == 'el')
-			$language = 'greek';
-		elseif ($lang == 'en')
-			$language = 'english';
+	if (isset($id)) { // if we come from prof request
+		$res = mysql_fetch_array(db_query("SELECT profname,profsurname, profuname, profemail, proftmima, lang 
+			FROM prof_request WHERE rid='$id'"));
+		$ps = $res['profsurname'];
+		$pn = $res['profname'];
+		$pu = $res['profuname'];
+		$pe = $res['profemail'];
+		$pt = $res['proftmima'];
+		$lang = $res['lang'];
+		
+		// if not submit then display the form
+		if (isset($lang)) {
+			if ($lang == 'el')
+				$language = 'greek';
+			elseif ($lang == 'en')
+				$language = 'english';
+		}
 	}
 
 	$tool_content .= "<form action=\"$_SERVER[PHP_SELF]\" method=\"post\">
@@ -193,5 +195,5 @@ $langEmail : $emailAdministrator
 	<br />
 	<p align=\"right\"><a href=\"../admin/index.php\">$langBack</p>";
 }
-draw($tool_content, 3, 'admin');
+draw($tool_content, 3, 'auth');
 ?>

@@ -48,7 +48,7 @@ $navigation[] = array("url" => "../admin/listreq.php", "name" => $langOpenProfes
 $tool_content = "";
 
 // -----------------------------------------
-// 		professor registration
+// 	professor registration
 // -----------------------------------------
 
 if (isset($submit))  {
@@ -74,7 +74,7 @@ if (isset($submit))  {
 	
 	if(isset($user_exist) and $pu == $user_exist) {
 	     $tool_content .= "<p class=\"caution_small\">$langUserFree</p><br><br><p align=\"right\"><a href='../admin/listreq.php'>$langBackRequests</a></p>";
-		 draw($tool_content,0,'auth');
+		 draw($tool_content, 3, 'auth');
 	     exit();
 	}
 
@@ -116,7 +116,6 @@ if (isset($submit))  {
 	    	    <p>$langMailErrorMessage &nbsp; <a href=\"mailto:$emailhelpdesk\">$emailhelpdesk</a></p>
   	    	  </td>
     	    	</tr></tbody></table>";
-      	  draw($tool_content,0);
         	exit();
       }
 
@@ -129,69 +128,74 @@ if (isset($submit))  {
       </td>
       </tr></tbody></table>";
 
-} else {  // display the form
-
+} else {  
 // if not submit then display the form
-if (isset($_GET['lang'])) {
-	$lang = $_GET['lang'];
-	if ($lang == 'el')
-		$language = 'greek';
-	elseif ($lang == 'en')
-		$language = 'english';
-}
+	if (isset($id)) { // if we come from prof request
+		$res = mysql_fetch_array(db_query("SELECT profname,profsurname, profuname, profemail, proftmima, lang 
+			FROM prof_request WHERE rid='$id'"));
+		$ps = $res['profsurname'];
+		$pn = $res['profname'];
+		$pu = $res['profuname'];
+		$pe = $res['profemail'];
+		$pt = $res['proftmima'];
+		$lang = $res['lang'];
+	
+		if (isset($lang)) {	
+			if ($lang == 'el')
+				$language = 'greek';
+			elseif ($lang == 'en')
+				$language = 'english';
+		}
+	}
 
 	$tool_content .= "<form action=\"$_SERVER[PHP_SELF]\" method=\"post\">
-  <table width=\"99%\" class=\"FormData\">
-  <tbody>
-  <tr>
-    <th width=\"220\">&nbsp;</th>
-    <td><b>$langNewProf</b></td>
-  </tr>
-  <tr>
-    <th class='left'><b>".$langSurname."</b></th>
-    <td>$ps</td>
-  </tr>
-  <input type=\"hidden\" name=\"ps\" value=\"$ps\">
-  <tr>
-    <th class='left'><b>".$langName."</b></th>
-    <td>$pn</td>
-  </tr>
-  <input type=\"hidden\" name=\"pn\" value=\"$pn\">
-  <tr>
-    <th class='left'><b>".$langUsername."</b></th>
-    <td>$pu</td>
-  <input type=\"hidden\" name=\"pu\" value=\"$pu\">
-  </tr>
-  <tr>
-    <th class='left'><b>".$langEmail."</b></th>
-    <td>$pe</b></td>
-    <input type=\"hidden\" name=\"pe\" value=\"$pe\" >
-  </tr>
-  <tr>
-    <th class='left'>".$langDepartment.":</th>
-    <td><select name=\"department\">";
-		$deps=mysql_query("SELECT name, id FROM faculte ORDER BY id");
-		while ($dep = mysql_fetch_array($deps))
-			  $tool_content .= "\n      <option value=\"".$dep[1]."\">".$dep[0]."</option>";
-        $tool_content .= "</select>
-    </td>
-  </tr>
+	<table width=\"99%\" class=\"FormData\">
+	<tbody>
 	<tr>
-      <th class='left'>$langLanguage</th>
-      <td>";
+	<th width=\"220\">&nbsp;</th>
+	<td><b>$langNewProf</b></td>
+	</tr>
+	<tr>
+	<th class='left'><b>".$langSurname."</b></th>
+	<td>$ps</td>
+	</tr>
+	<input type=\"hidden\" name=\"ps\" value=\"$ps\">
+	<tr>
+	<th class='left'><b>".$langName."</b></th>
+	<td>$pn</td>
+	</tr>
+	<input type=\"hidden\" name=\"pn\" value=\"$pn\">
+	<tr>
+	<th class='left'><b>".$langUsername."</b></th>
+	<td>$pu</td>
+	<input type=\"hidden\" name=\"pu\" value=\"$pu\">
+	</tr>
+	<tr>
+	<th class='left'><b>".$langEmail."</b></th>
+	<td>$pe</b></td>
+	<input type=\"hidden\" name=\"pe\" value=\"$pe\" >
+	</tr>
+	<tr>
+	<th class='left'>".$langDepartment.":</th>
+	<td><select name=\"department\">";
+			$deps=mysql_query("SELECT name, id FROM faculte ORDER BY id");
+			while ($dep = mysql_fetch_array($deps))
+				$tool_content .= "\n<option value=\"".$dep[1]."\">".$dep[0]."</option>";
+		$tool_content .= "</select>
+	</td>
+	</tr><tr>
+	<th class='left'>$langLanguage</th><td>";
 	$tool_content .= lang_select_options('localize');
 	$tool_content .= "</td>
-    </tr>
-  <tr>
-    <th>&nbsp;</th>
-    <td><input type=\"submit\" name=\"submit\" value=\"".$langOk."\" >
-        <input type=\"hidden\" name=\"auth\" value=\"$auth\" >
-    </td>
-  </tr>
-  <input type='hidden' name='rid' value='".@$id."'>
-  </tbody>
-  </table>
-</form>";
+	</tr>
+	<tr><th>&nbsp;</th>
+	<td><input type=\"submit\" name=\"submit\" value=\"".$langOk."\" >
+	<input type=\"hidden\" name=\"auth\" value=\"$auth\" >
+	</td></tr>
+	<input type='hidden' name='rid' value='".@$id."'>
+	</tbody>
+	</table>
+	</form>";
  }
-draw($tool_content,0,'auth');
+draw($tool_content, 3, 'auth');
 ?>
