@@ -113,80 +113,85 @@ $langEmail : $emailAdministrator
 		}
 
 } else {
+	$res = mysql_fetch_array(db_query("SELECT profname,profsurname, profuname, profemail, proftmima, lang 
+		FROM prof_request WHERE rid='$id'"));
+	$ps = $res['profsurname'];
+	$pn = $res['profname'];
+	$pu = $res['profuname'];
+	$pe = $res['profemail'];
+	$pt = $res['proftmima'];
+	$lang = $res['lang'];
+	
+	// if not submit then display the form
+	if (isset($lang)) {
+		if ($lang == 'el')
+			$language = 'greek';
+		elseif ($lang == 'en')
+			$language = 'english';
+	}
 
-// if not submit then display the form
-if (isset($_GET['lang'])) {
-	$lang = $_GET['lang'];
-	if ($lang == 'el')
-		$language = 'greek';
-	elseif ($lang == 'en')
-		$language = 'english';
-}
-
-$tool_content .= "
-    <form action=\"$_SERVER[PHP_SELF]\" method=\"post\">
-    <table width=\"99%\" align=\"left\" class=\"FormData\">
-    <tbody>
-    <tr>
-      <th width=\"220\">&nbsp;</th>
-      <td><b>$langNewProf</b></td>
-    </tr>
-    <tr>
-      <th class='left'><b>".$langSurname."</b></th>
-      <td><input class='FormData_InputText' type=\"text\" name=\"nom_form\" value=\"".@$ps."\" >&nbsp;(*)</td>
-    </tr>
-    <tr>
-      <th class='left'><b>".$langName."</b></th>
-      <td><input class='FormData_InputText' type=\"text\" name=\"prenom_form\" value=\"".@$pn."\">&nbsp;(*)</td>
-    </tr>
-    <tr>
-      <th class='left'><b>".$langUsername."</b></th>
-      <td><input class='FormData_InputText' type=\"text\" name=\"uname\" value=\"".@$pu."\">&nbsp;(*)</td>
-    </tr>
-    <tr>
-      <th class='left'><b>".$langPass."&nbsp;:</b></th>
-      <td><input class='FormData_InputText' type=\"text\" name=\"password\" value=\"".create_pass(5)."\"></td>
-    </tr>
-    <tr>
-      <th class='left'><b>".$langEmail."</b></th>
-      <td><input class='FormData_InputText' type=\"text\" name=\"email_form\" value=\"".@$pe."\">&nbsp;(*)</b></td>
-    </tr>
-    <tr>
-      <th class='left'>".$langDepartment.":</th>
-      <td>";
-
-	$dep = array();
-        $deps = db_query("SELECT name FROM faculte order by id");
-  	while ($n = mysql_fetch_array($deps))
-    	$dep[$n[0]] = $n['name'];
-
-  	if (isset($pt))
-    		$tool_content .= selection ($dep, 'department', $pt);
-  	else
-    		$tool_content .= selection ($dep, 'department');
-
-      $tool_content .= "</td>
-    </tr>
+	$tool_content .= "<form action=\"$_SERVER[PHP_SELF]\" method=\"post\">
+	<table width=\"99%\" align=\"left\" class=\"FormData\">
+	<tbody><tr>
+	<th width=\"220\">&nbsp;</th>
+	<td><b>$langNewProf</b></td>
+	</tr>
 	<tr>
-      <th class='left'>$langLanguage</th>
-      <td>";
-	$tool_content .= lang_select_options('localize');
+	<th class='left'><b>".$langSurname."</b></th>
+	<td><input class='FormData_InputText' type=\"text\" name=\"nom_form\" value=\"".@$ps."\" >&nbsp;(*)</td>
+	</tr>
+	<tr>
+	<th class='left'><b>".$langName."</b></th>
+	<td><input class='FormData_InputText' type=\"text\" name=\"prenom_form\" value=\"".@$pn."\">&nbsp;(*)</td>
+	</tr>
+	<tr>
+	<th class='left'><b>".$langUsername."</b></th>
+	<td><input class='FormData_InputText' type=\"text\" name=\"uname\" value=\"".@$pu."\">&nbsp;(*)</td>
+	</tr>
+	<tr>
+	<th class='left'><b>".$langPass."&nbsp;:</b></th>
+	<td><input class='FormData_InputText' type=\"text\" name=\"password\" value=\"".create_pass(5)."\"></td>
+	</tr>
+	<tr>
+	<th class='left'><b>".$langEmail."</b></th>
+	<td><input class='FormData_InputText' type=\"text\" name=\"email_form\" value=\"".@$pe."\">&nbsp;(*)</b></td>
+	</tr>
+	<tr>
+	<th class='left'>".$langDepartment.":</th>
+	<td>";
+	
+		$dep = array();
+		$deps = db_query("SELECT name FROM faculte order by id");
+		while ($n = mysql_fetch_array($deps))
+		$dep[$n[0]] = $n['name'];
+	
+		if (isset($pt))
+			$tool_content .= selection ($dep, 'department', $pt);
+		else
+			$tool_content .= selection ($dep, 'department');
+	
 	$tool_content .= "</td>
-    </tr>
-    <tr>
-      <th>&nbsp;</th>
-      <td><input type=\"submit\" name=\"submit\" value=\"".$langSubmit."\" >
-          <input type=\"hidden\" name=\"auth\" value=\"1\" >&nbsp;
-          <small>".$langRequiredFields."</small></td>
-    </tr>
-    <input type='hidden' name='rid' value='".@$id."'>
-    </tbody>
-    </table>
-    </form>";
-
-$tool_content .= "
-    <br />
-    <p align=\"right\"><a href=\"../admin/index.php\">$langBack</p>";
+	</tr>
+		<tr>
+	<th class='left'>$langLanguage</th>
+	<td>";
+		$tool_content .= lang_select_options('localize');
+		$tool_content .= "</td>
+	</tr>
+	<tr>
+	<th>&nbsp;</th>
+	<td><input type=\"submit\" name=\"submit\" value=\"".$langSubmit."\" >
+		<input type=\"hidden\" name=\"auth\" value=\"1\" >&nbsp;
+		<small>".$langRequiredFields."</small></td>
+	</tr>
+	<input type='hidden' name='rid' value='".@$id."'>
+	</tbody>
+	</table>
+	</form>";
+	
+	$tool_content .= "
+	<br />
+	<p align=\"right\"><a href=\"../admin/index.php\">$langBack</p>";
 }
 draw($tool_content, 3, 'admin');
 ?>
