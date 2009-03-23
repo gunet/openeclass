@@ -568,7 +568,6 @@ function get_learnPath_progress($lpid, $lpUid)
         $modules [] = $row;
     }
     mysql_free_result($result);
-
     $progress = 0;
     if( !is_array($modules) || empty($modules) )
     {
