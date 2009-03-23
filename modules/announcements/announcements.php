@@ -201,7 +201,7 @@ hContent;
 
         if ($myrow) {
             $AnnouncementToModify = $myrow['id'];
-            $contentToModify = q($myrow['contenu']);
+	    $contentToModify = unescapeSimple($myrow['contenu']);
             $titleToModify = q($myrow['title']);
             $displayAnnouncementList = true;
         }
@@ -428,7 +428,7 @@ hContent;
             }
 
             $tool_content .= "</b>&nbsp;<small>(" . $myrow['temps'] . ")</small>
-            <br />$content        </td>
+            <br />".$content."</td>
         <td width='70' class='right'>
         <a href=\"$_SERVER[PHP_SELF]?modify=" . $myrow['id'] . "\">
         <img src=\"../../template/classic/img/edit.gif\" border=\"0\" title=\"" . $langModify . "\"></a>
@@ -475,40 +475,33 @@ hContent;
 } // end: teacher only
 // student view
 else {
-    $result = db_query("SELECT * FROM annonces WHERE code_cours='$currentCourseID'
-	ORDER BY ordre DESC", $mysqlMainDb) OR die("DB problem");
-    if (mysql_num_rows($result) > 0) {
-        $tool_content .= "
-      <table width=\"99%\" align='left' class=\"announcements\">
-      <thead>
-      <tr>
-        <th class=\"left\" colspan=\"2\"><b>$langAnnouncement</b></th>
-      </tr>
-      </thead>
-      <tbody>";
-
-        $k = 0;
-        while ($myrow = mysql_fetch_array($result)) {
-            $content = $myrow['contenu'];
-            $content = make_clickable($content);
-            $content = nl2br($content);
-            if ($k%2==0) {
-	           $tool_content .= "\n      <tr>";
-	        } else {
-	           $tool_content .= "\n      <tr class=\"odd\">";
-            }
-            $tool_content .= "
-        <td width=\"1\"><img style='border:0px; padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'></td>
-        <td><b>$myrow[title]</b>&nbsp;<small>(" . nice_format($myrow["temps"]) . ")</small><br/>$content        </td>
-      </tr>";
-      $k++;
-        } // while loop
-        $tool_content .= "
-      </tbody>
-      </table>";
-    } else {
-        $tool_content .= "<p class='alert1'>$langNoAnnounce</p>";
-    }
+	$result = db_query("SELECT * FROM annonces WHERE code_cours='$currentCourseID'
+		ORDER BY ordre DESC", $mysqlMainDb) OR die("DB problem");
+	if (mysql_num_rows($result) > 0) {
+		$tool_content .= "<table width=\"99%\" align='left' class=\"announcements\">
+		<thead>
+		<tr><th class=\"left\" colspan=\"2\"><b>$langAnnouncement</b></th>
+		</tr></thead><tbody>";
+		$k = 0;
+		while ($myrow = mysql_fetch_array($result)) {
+			$content = $myrow['contenu'];
+			$content = make_clickable($content);
+			$content = nl2br($content);
+			if ($k%2==0) {
+				$tool_content .= "\n      <tr>";
+			} else {
+				$tool_content .= "\n      <tr class=\"odd\">";
+			}
+			$tool_content .= "
+			<td width=\"1\"><img style='border:0px; padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'></td>
+			<td><b>$myrow[title]</b>&nbsp;<small>(" . nice_format($myrow["temps"]) . ")</small><br/>".unescapeSimple($content)."</td></tr>";
+			$k++;
+		} // while loop
+		$tool_content .= "
+	</tbody></table>";
+	} else {
+		$tool_content .= "<p class='alert1'>$langNoAnnounce</p>";
+	}
 }
 
 if ($is_adminOfCourse) {

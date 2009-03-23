@@ -322,7 +322,7 @@ aCont;
 					$data[$i][2][$j][0] .= "...";
 				}
 
-			$assign_content .= "\n          <li><a class=\"square_bullet2\" href=\"$url\"><strong class=\"title_pos\">".$data[$i][2][$j][0].autoCloseTags($data[$i][2][$j][0])." <span class=\"announce_date\"> (".nice_format($data[$i][2][$j][2]).")</span></strong></a><p class=\"content_pos\">".$data[$i][2][$j][1].autoCloseTags($data[$i][2][$j][1])."</p></li>";
+			$assign_content .= "\n          <li><a class=\"square_bullet2\" href=\"$url\"><strong class=\"title_pos\">".$data[$i][2][$j][0].autoCloseTags($data[$i][2][$j][0])." <span class=\"announce_date\"> (".nice_format($data[$i][2][$j][2]).")</span></strong></a><p class=\"content_pos\">".unescapeSimple($data[$i][2][$j][1]).autoCloseTags($data[$i][2][$j][1])."</p></li>";
 			}
 			//if ($i+1 <$max_repeat_val) $assign_content .= "<br>";
 		}
