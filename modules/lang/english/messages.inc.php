@@ -263,7 +263,7 @@ $langNoUserList = "No listed results"; //
 $langContactAdmin = "Send an email to the Administrator"; //
 $langActivateAccount = "Please activate my account"; //
 $langLessonCode = "Course code"; //
-$langConfirmDelete = "Delete Confirmation "; //
+$langConfirmDelete = "Confirm delete of "; //
 $langConfirmDeleteQuestion1 = "Are you sure that you want to delete the user"; //
 $langConfirmDeleteQuestion2 = "from the course with id"; //
 $langTryDeleteAdmin = "You have tried to delete the user with user id = 1 (Admin)!"; //
@@ -1081,8 +1081,8 @@ $langUnCourse = "Unregister"; //
 $langCourseCode = "Code"; //
 $langInfoAbout = "The <strong>$siteName</strong> plaform is a complete Course Management System that supports Asynchronous eLearning Services via a simple web browser. Its goal is the incorporation and constructive use of the Internet and web technologies in the teaching and learning process. It supports the electronic management, storage and presentation of teaching materials, independently of the spatial and time limiting factors of conventional teaching and creating the necessary conditions for a dynamic teaching environment.<br><br>
 The introduction of eLearning into the traditional teaching process provides new capabilities and allows new means of interaction between $langsStudents and $langsTeachers, through a contemporary technological peak environment."; //
-$langWelcomeStud = "Select \"Courses list\"to review the available courses."; //
-$langWelcomeProf = "Select \"Create course site\"to create your on-line courses."; //
+$langWelcomeStud = "Select \"Courses list\" to review the available courses."; //
+$langWelcomeProf = "Select \"Create course site\" to create your on-line courses."; //
 $langWelcomeSelect = "Select";
 $langWelcomeStudPerso = "<b>\"Courses list\"</b> to review the available courses.";
 $langWelcomeProfPerso = "<b>\"Create course site\"</b> to create your on-line courses.";
