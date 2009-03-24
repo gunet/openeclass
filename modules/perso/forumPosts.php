@@ -286,8 +286,8 @@ function forumHtmlInterface($data) {
 
 	if($numOfLessons = count($data) > 0) {
 		$content .= <<<fCont
-    <div id="datacontainer">
-      <ul id="datalist">
+    <div class="datacontainer">
+      <ul class="datalist">
 fCont;
 		$numOfLessons = count($data);
 		for ($i=0; $i <$numOfLessons; $i++) {

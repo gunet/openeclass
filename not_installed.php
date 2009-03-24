@@ -51,7 +51,7 @@ $tool_content = "
   <table width=\"65%\" class=\"FormData\" align=\"center\" style=\"border: 1px solid #edecdf;\">
   <thead>
   <tr>
-    <td>&nbsp</td>
+    <td>&nbsp;</td>
   </tr>
   <tr>
     <td><div align=\"center\"><img style='border:0px;' src='template/classic/img/caution_alert.gif' title='caution-alert'></div></td>

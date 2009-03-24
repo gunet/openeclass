@@ -1,5 +1,5 @@
 /* commented backslash hack v2 \*/
-html, body{height:100%;}
+html, body {height:100%;}
 /* end hack */
 
 body {
@@ -33,7 +33,7 @@ body {
 /* commented backslash hack v2 \*/ 
 * html #container {height:100%;}
 * html #container {width:100%;w\idth:100%;}
-* html body{font-size:xx-small;f\ont-size:x-small}
+* html body {font-size:xx-small;f\ont-size:x-small}
 /* end hack */ 
 
 #header {
@@ -240,7 +240,7 @@ body {
 	max-width: 370px;
 	text-align: right;
 }
-#fbar_info .logout a{
+#fbar_info .logout a {
 	float:right;
 	margin-top:0.4em;
 	margin-right:2px;
@@ -250,7 +250,7 @@ body {
     font-weight: normal;
 }
 
-#fbar_info .logout a:hover{
+#fbar_info .logout a:hover {
 	text-decoration: underline;
     color: #a33033;
     font-weight: normal;
@@ -276,14 +276,14 @@ body {
 	clear: right;
 }
 
-#fbar_info .user a{
+#fbar_info .user a {
 	text-decoration: none;
 	color: #a33033;
 	font-weight: bold;
 	font-size: 10px;
 }
 
-#fbar_info .user a:hover{
+#fbar_info .user a:hover {
     text-decoration: underline;
     color: red;
     font-weight: bold;
@@ -302,7 +302,7 @@ body {
 	text-align: right;
 }
 
-#fbar_info .langSwitch select{
+#fbar_info .langSwitch select {
     font-family: Verdana, Arial, Helvetica, sans-serif;
 	text-decoration: none;
     font-size: 10px;
@@ -310,14 +310,14 @@ body {
     font-weight: bold;
 }
 
-#fbar_info .langSwitch a{
+#fbar_info .langSwitch a {
 	text-decoration: none;
     font-size: 10px;
     color: #727266;
     font-weight: bold;
 }
 
-#fbar_info .langSwitch a:hover{
+#fbar_info .langSwitch a:hover {
 	text-decoration: underline;
     font-size: 10px;
     color: #727266;
@@ -334,7 +334,7 @@ body {
 	font-size:11px;
 }
 	
-* html #mainnav{height:22px;he\ight:20px}
+* html #mainnav {height:22px;he\ight:20px}
 	
 #sidebar {
 	float: right;
@@ -350,7 +350,7 @@ body {
 	//margin-top:0px;
 }
 
-#content p, #sidebar p, #mainnav p, #header p,#footer p  {margin:2px 5px 5px 5px;}		
+#content p, #sidebar p, #mainnav p, #header p,#footer p  { margin:2px 5px 5px 5px; }
 
 #leftnav {
 	float: left;
@@ -433,14 +433,14 @@ body {
     font-size: 10px;
 }
 
-#search input.ok{
+#search input.ok {
 	border: none;
 	vertical-align: middle;
 	margin-top: 0px;
 	margin-right:0px;
 }
 
-#search input.key{
+#search input.key {
     vertical-align:middle;
 	margin-top: 0px;
 	font-family: Verdana, Arial, Helvetica, sans-serif;
@@ -548,7 +548,7 @@ body {
 	background-color:#009933;
 }
 
-#navcontainer li img{
+#navcontainer li img {
 	float:left;
 	margin-right:5px;
 	clear:left;
@@ -575,7 +575,7 @@ body {
   padding: 10px;
 }
 
-.actmod a{
+.actmod a {
 	width: 250px;
     padding: 1px;
     font-size: 10px !important;
@@ -612,7 +612,7 @@ body {
 	max-width: 100%;
 }
 
-#footer	{
+#footer {
 	position:absolute;
 	bottom:0;
 	width:100%;
@@ -659,21 +659,25 @@ dt {
 	font-size: 11px;
 }
 
+a img {
+        border: 0;
+}
+
 .alert1 {
-	FONT-WEIGHT: normal;
-	COLOR: #000000;
-    FONT-WEIGHT: bold;
-	text-align: center;
-	padding: 5px;
-	font-size: 11px;
+        font-weight: normal;
+        color: #000000;
+        font-weight: bold;
+        text-align: center;
+        padding: 5px;
+        font-size: 11px;
 }
 
 #topic_title_id {
-border-bottom: 1px dotted #a2a2a3;
-background: #ffffff;
-padding:2px;
-padding-top:5px;
-color: #a33033;
-font-size: 11px;
-font-weight:bold;
+        border-bottom: 1px dotted #a2a2a3;
+        background: #ffffff;
+        padding:2px;
+        padding-top:5px;
+        color: #a33033;
+        font-size: 11px;
+        font-weight:bold;
 }

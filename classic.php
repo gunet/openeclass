@@ -75,10 +75,10 @@ while ($mycours = mysql_fetch_array($result2)) {
 	            } else {
 	              $tool_content .= "\n  <tr class=\"odd\">";
 	            }
-    $tool_content .= "\n      <td width=\"1\"><img style='border:0px;' src='${urlAppend}/template/classic/img/arrow_grey.gif' alt='* '></td>";
+    $tool_content .= "\n      <td width=\"1\"><img src='${urlAppend}/template/classic/img/arrow_grey.gif' alt='* ' /></td>";
     $tool_content .= "\n      <td><a href='${urlServer}courses/$mycours[k]' class=CourseLink>$mycours[i]</a><font color='#a33033'> ($mycours[c])</font></td>";
     $tool_content .= "\n      <td><small>$mycours[t]</small></td>";
-    $tool_content .= "\n      <td align='center'><a href='${urlServer}modules/unreguser/unregcours.php?cid=$mycours[c]&u=$uid'><img src='template/classic/img/cunregister.gif' border='0' title='$langUnregCourse'></a></td>";
+    $tool_content .= "\n      <td align='center'><a href='${urlServer}modules/unreguser/unregcours.php?cid=$mycours[c]&amp;u=$uid'><img src='template/classic/img/cunregister.gif' title='$langUnregCourse' /></a></td>";
     $tool_content .= "\n    </tr>";
     $k++;
          }
@@ -129,7 +129,7 @@ while ($mycours = mysql_fetch_array($result2)) {
         } else {
             $tool_content .= "\n     <tr class=\"odd\">";
         }
-        $tool_content .= "\n      <td width=\"1\"><img style='border:0px;' src='${urlAppend}/template/classic/img/arrow_grey.gif' title='bullet'></td>";
+        $tool_content .= "\n      <td width=\"1\"><img src='${urlAppend}/template/classic/img/arrow_grey.gif' title='* ' /></td>";
         $tool_content .= "\n      <td><a class='CourseLink' href='${urlServer}courses/$mycours[k]'>$mycours[i]</a><font color='#a33033'> ($mycours[c])</font></td>";
         $tool_content .= "\n      <td><small>$mycours[t]</small></td>";
         $tool_content .= "\n      <td align='center'><a href='${urlServer}modules/course_info/infocours.php?from_home=TRUE&cid=$mycours[c]'><img src='template/classic/img/referencement.gif' border=0 title='$langManagement' align='absbottom'></img></a></td>";

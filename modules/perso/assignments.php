@@ -192,8 +192,8 @@ function assignHtmlInterface($data) {
 
 	$assign_content= <<<aCont
 
-      <div id="datacontainer">
-        <ul id="datalist">
+      <div class="datacontainer">
+        <ul class="datalist">
 
 aCont;
 	$assignmentsExist = false;

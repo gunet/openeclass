@@ -487,7 +487,7 @@ class ScormExport
                             if( $fillType == LISTBOX_FILL )// listbox
                             {
                               	$pageBody .= '<select name="' . $name . '" id="scorm_' . $idCounter . '">'."\n"
-								            .'<option value="">&nbsp</option>';
+								            .'<option value="">&nbsp;</option>';
 
 								foreach($answerList as $answer)
 								{

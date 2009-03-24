@@ -222,8 +222,8 @@ function agendaHtmlInterface($data) {
 
 		$agenda_content= <<<agCont
 
-      <div id="datacontainer">
-        <ul id="datalist">
+      <div class="datacontainer">
+        <ul class="datalist">
 
 agCont;
 		for ($i=0; $i <$numOfDays; $i++) {

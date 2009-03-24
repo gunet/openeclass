@@ -299,8 +299,8 @@ function docsHtmlInterface($data) {
 	$docsExist = false;
 
 	$content= <<<aCont
-    <div id="datacontainer">
-      <ul id="datalist">
+    <div class="datacontainer">
+      <ul class="datalist">
 aCont;
 
 	$max_repeat_val = count($data);
@@ -316,9 +316,9 @@ aCont;
 
 			for ($j=0; $j < $iterator; $j++) {
 
-				$url = $urlServer . "index.php?perso=6&c=" .$data[$i][1]."&p=".$data[$i][2][$j][0];
+				$url = $urlServer . "index.php?perso=6&amp;c=" .$data[$i][1]."&amp;p=".$data[$i][2][$j][0];
 
-				$content .= "\n          <li><a class=\"square_bullet2\" href=\"$url\"><strong class=\"title_pos\"><wbr>".$data[$i][2][$j][1]." - (".nice_format(date("Y-m-d", strtotime($data[$i][2][$j][3]))).")</wbr></strong></a></li>";
+				$content .= "\n          <li><a class=\"square_bullet2\" href=\"$url\"><strong class=\"title_pos\">".$data[$i][2][$j][1]." - (".nice_format(date("Y-m-d", strtotime($data[$i][2][$j][3]))).")</strong></a></li>";
 			}
 
 			//if ($i+1 <$max_repeat_val) $content .= "<br>";

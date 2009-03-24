@@ -237,7 +237,7 @@ cData;
 					if ($is_adminOfCourse)   {
 						$tool_content .= "<td align=center>".
 						"<a href='$_SERVER[PHP_SELF]?sdelete=yes&sid={$sid}' onClick='return confirmation();'>
-						<img src='../../template/classic/img/delete.gif' border='0' title='$langDelete'></a>&nbsp".
+						<img src='../../template/classic/img/delete.gif' border='0' title='$langDelete'></a>&nbsp;".
 						"<a href='$_SERVER[PHP_SELF]?visibility=$visibility_func&sid={$sid}'>
 						<img src='../../template/classic/img/".$visibility_gif.".gif' border='0'></a>  ".
 							"</td></tr>\n";

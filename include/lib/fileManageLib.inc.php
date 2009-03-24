@@ -457,7 +457,7 @@ function form_dir_list_exclude($dbTable, $sourceType, $sourceComponent, $command
 				$depth = substr_count($pathValue, "/");
 				for ($h=0; $h<$depth; $h++)
 				{
-					$tab .= "&nbsp;&nbsp";
+					$tab .= "&nbsp;&nbsp;";
 				}
 			
 //			$tool_content .= $baseWorkDir.$path;

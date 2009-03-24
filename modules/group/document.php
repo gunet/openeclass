@@ -351,7 +351,7 @@ cData;
 }
 else
 {
-	$tool_content .=  "<td>&nbsp</td>";
+	$tool_content .=  "<td>&nbsp;</td>";
 }
 
 /*----------------------------------------
