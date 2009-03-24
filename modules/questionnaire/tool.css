@@ -1,5 +1,6 @@
 .invisible {
-    color: silver !important;
+    color: silver;
+    font-style: italic;
 }
 
 

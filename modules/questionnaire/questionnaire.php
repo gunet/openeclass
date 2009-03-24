@@ -312,25 +312,24 @@ cData;
 
 
 		if (($visibility) or ($is_adminOfCourse)) {
-			if ($k%2==0) {
-	           $tool_content .= "\n      <tr>";
-	        } else {
-	           $tool_content .= "\n      <tr class=\"odd\">";
-            }
-
 			if ($visibility) {
 				$visibility_css = "";
-				$visibility_gif = "invisible";
+				$visibility_gif = "visible";
 				$visibility_func = "deactivate";
 				$arrow_gif = "arrow_red";
 				$k++;
 			} else {
 				$visibility_css = " class=\"invisible\"";
-				$visibility_gif = "visible";
+				$visibility_gif = "invisible";
 				$visibility_func = "activate";
 				$arrow_gif = "arrow_grey";
 				$k++;
 			}
+			if ($k%2 == 0) {
+	           		$tool_content .= "\n      <tr $visibility_css>";
+	        	} else {
+	           		$tool_content .= "\n      <tr class=\"odd\">";
+            		}			
 
 			$temp_CurrentDate = date("Y-m-d");
 			$temp_StartDate = $thepoll["start_date"];
@@ -372,7 +371,13 @@ cData;
 			$tool_content .= "\n        <td align='center'>".nice_format(date("Y-m-d", strtotime($thepoll["start_date"])))."</td>";
 			$tool_content .= "\n        <td align='center'>".nice_format(date("Y-m-d", strtotime($thepoll["end_date"])))."</td>";
 			if ($is_adminOfCourse)  {
-				$tool_content .= "\n        <td align='center'><a href='addpoll.php?edit=yes&pid=$pid'><img src='../../template/classic/img/edit.gif' title='$langEdit' border='0'></a>&nbsp;<a href='$_SERVER[PHP_SELF]?delete=yes&pid=$pid' onClick='return confirmation();'><img src='../../template/classic/img/delete.gif' title='$langDelete' border='0'></a>&nbsp;<a href='$_SERVER[PHP_SELF]?visibility=$visibility_func&pid={$pid}'><img src='../../template/classic/img/".$visibility_gif.".gif' border='0' alt=\"".$langVisible."\"></a></td>\n      </tr>";
+				$tool_content .= "\n        <td align='center'>
+				<a href='addpoll.php?edit=yes&pid=$pid'>
+				<img src='../../template/classic/img/edit.gif' title='$langEdit' border='0'></img></a>&nbsp;
+				<a href='$_SERVER[PHP_SELF]?delete=yes&pid=$pid' onClick='return confirmation();'>
+				<img src='../../template/classic/img/delete.gif' title='$langDelete' border='0'></img></a>&nbsp;
+				<a href='$_SERVER[PHP_SELF]?visibility=$visibility_func&pid={$pid}'>
+				<img src='../../template/classic/img/".$visibility_gif.".gif' border='0' title=\"".$langVisible."\"></img></a></td>\n      </tr>";
 			} else {
 				$tool_content .= "\n      <td align='center'>";
 				if (($has_participated[0] == 0) and ($poll_ended == 0)) {
