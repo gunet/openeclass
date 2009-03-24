@@ -110,7 +110,6 @@ $sql = "SELECT `path` FROM `".$TABLEASSET."`
 $assetPath = db_query_get_single_value($sql);
 
 // Get path of file of the starting asset to launch
-
 switch ($module['contentType'])
 {
 	case CTDOCUMENT_ :
@@ -214,13 +213,12 @@ switch ($module['contentType'])
 <head>
 
 <?
-
    // add the update frame if this is a SCORM module
    if ( $module['contentType'] == CTSCORM_ )
    {
       require_once("scormAPI.inc.php");
       echo "<frameset border='0' rows='0,75,*' frameborder='no'>
-            <frame src='updateProgress.php' name='upFrame'>";
+           <frame src='updateProgress.php' name='upFrame'>";
    }
    else
    {

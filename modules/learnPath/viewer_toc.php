@@ -339,6 +339,7 @@ else
 	.'</a>&nbsp;&nbsp;&nbsp;'."\n"
     .'&nbsp;</div></td>'
     .'<td><div align="center">';
+
       if($uid) {
 	$lpProgress = get_learnPath_progress((int)$_SESSION['path_id'],$uid);
 
@@ -346,7 +347,7 @@ else
 		.$langGlobalProgress
 		.disp_progress_bar($lpProgress, 1)
 		."&nbsp;".$lpProgress."%"
-		.'</small>'."\n";
+		.'</small>'."\n"; 
 }
       echo'</div></td>'
     .'</tr>'
@@ -369,17 +370,7 @@ if(isset($imagePassed))
 echo '</td>'
     .'</tr>'
     .'</thead>';
-/*
-if(isset($endOfSteps)) {
-	echo '<tbody>'
-	    .'<tr>'
-	    .'<td colspan="3" align="center">'
-	    .'<small>'.$endOfSteps.'</small>'
-	    .'</td>'
-	    .'</tr>'
-	    .'</tbody>';
-}
-*/
+
 echo '</table>'
     .'</body></html>'."\n"
      ;
