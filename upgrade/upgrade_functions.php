@@ -36,28 +36,6 @@ function update_field($table, $field, $field_name, $id_col, $id) {
 	db_query($sql);
 }
 
-// Removes initial part of path from assignment_submit.file_path
-function update_assignment_submit()
-{
-	global $langTable;
-
-	$updated = FALSE;
-	$q = db_query('SELECT id, file_path FROM assignment_submit');
-	if ($q) {
-		while ($i = mysql_fetch_array($q)) {
-			$new = preg_replace('+^.*/work/+', '', $i['file_path']);
-			if ($new != $i['file_path']) {
-				db_query("UPDATE assignment_submit SET file_path = " .
-				quote($new) . " WHERE id = $i[id]");
-				$updated = TRUE;
-			}
-		}
-	}
-	if ($updated) {
-		echo "$langTable assignment_submit: $GLOBALS[OK]<br>\n";
-	}
-}
-
 
 // Adds field $field to table $table of current database, if it doesn't already exist
 function add_field($table, $field, $type)
@@ -172,6 +150,45 @@ function mysql_field_exists($db,$table,$field)
 
 }
 
+// add indexes in specific columns/tables
+function add_index($index, $column, $table)  {
+	global $langIndexAdded, $langIndexExists, $langOfTable;
+
+        $ind_sql = db_query("SHOW INDEX FROM $table");
+        while ($i = mysql_fetch_array($ind_sql))  {
+                if ($i['Key_name'] == $index) {
+                        $retString = "<p>$langIndexExists $table</p>";
+			return $retString;
+                }
+        }
+        db_query("ALTER TABLE $table ADD INDEX $index($column)");
+        $retString = "<p>$langIndexAdded $column $langOfTable $table</p>";
+        return $retString;
+}
+
+// Removes initial part of path from assignment_submit.file_path
+function update_assignment_submit()
+{
+	global $langTable;
+
+	$updated = FALSE;
+	$q = db_query('SELECT id, file_path FROM assignment_submit');
+	if ($q) {
+		while ($i = mysql_fetch_array($q)) {
+			$new = preg_replace('+^.*/work/+', '', $i['file_path']);
+			if ($new != $i['file_path']) {
+				db_query("UPDATE assignment_submit SET file_path = " .
+				quote($new) . " WHERE id = $i[id]");
+				$updated = TRUE;
+			}
+		}
+	}
+	if ($updated) {
+		echo "$langTable assignment_submit: $GLOBALS[OK]<br>\n";
+	}
+}
+
+
 // checks if admin user
 function is_admin($username, $password, $mysqlMainDb) {
 
@@ -199,22 +216,6 @@ function accueil_tool_missing($define_var) {
         }
 }
 
-// add indexes in specific columns/tables
-function add_index($index, $column, $table)  {
-	global $langIndexAdded, $langIndexExists, $langOfTable;
-
-        $ind_sql = db_query("SHOW INDEX FROM $table");
-        while ($i = mysql_fetch_array($ind_sql))  {
-                if ($i['Key_name'] == $index) {
-                        $retString = "<p>$langIndexExists $table</p>";
-			return $retString;
-                }
-        }
-        db_query("ALTER TABLE $table ADD INDEX $index($column)");
-        $retString = "<p>$langIndexAdded $column $langOfTable $table</p>";
-        return $retString;
-}
-
 // convert database and all tables to UTF-8
 function convert_db_utf8($database)
 {
@@ -232,14 +233,67 @@ function convert_db_utf8($database)
         mysql_free_result($result);
 }
 
+// -------------------------------------
+// function for upgrading dropbox files
+// -------------------------------------
 
+function encode_dropbox_documents($code, $id, $filename, $title) {
+	
+	global $webDir, $langEncDropboxError;	
+
+	$format = get_file_extension($title);
+        $new_filename = safe_filename($format);
+	$path_to_dropbox = $webDir.'courses/'.$code.'/dropbox/';
+
+        if (!file_exists($path_to_dropbox.$filename)) {
+                $filename = iconv("UTF-8", "ISO-8859-7", $filename);
+        }
+
+	if (rename($path_to_dropbox.$filename, $path_to_dropbox.$new_filename)) {
+        	db_query("UPDATE dropbox_file SET filename = '$new_filename'
+	        	WHERE id = '$id'", $code);
+	} else {
+		echo "$langEncDropboxError<br>";
+        }
+}
+
+
+//---------------------------------------------
+// Upgrade course database
+//---------------------------------------------
+
+function upgrade_course($code, $extramessage = '')
+{
+        global $mysqlMainDb, $langEncodeDropBoxDocuments, $langUpgCourse;
+
+        mysql_select_db($code);
+
+        echo "<hr><p>$langUpgCourse <b>$code</b> $extramessage<br />";
+	flush();
+	
+	// added field visibility in agenda
+	if (!mysql_field_exists("$code",'agenda','visibility'))
+                echo add_field('agenda', 'visibility', "CHAR(1) NOT NULL DEFAULT 'v'");
+
+	// upgrade dropbox
+	echo "$langEncodeDropBoxDocuments<br>";
+	$d = db_query("SELECT id, filename, title FROM dropbox_file", $code);
+	while ($dbox = mysql_fetch_array($d)) {
+		encode_dropbox_documents($code, $dbox['id'], $dbox['filename'], $dbox['title']);
+	}
+
+}
+
+// --------------------------------------------
+// For older version  ( <= 2.1.3 )
 // Upgrade course database and documents
-function upgrade_course($code, $lang, $extramessage = '')
+// --------------------------------------------
+function upgrade_course_old($code, $lang, $extramessage = '')
 {
         global $webDir, $mysqlMainDb, $tool_content, $langTable,
                $langNotMovedDir, $langToDir, $OK, $BAD, $langMoveIntroText,
                $langCorrectTableEntries, $langEncodeDocuments,
-               $langEncodeGroupDocuments, $langUpgIndex, $langUpgNotIndex,
+               $langEncodeGroupDocuments, $langEncodeDropBoxDocuments, $langUpgIndex, $langUpgNotIndex,
                $langCheckPerm, $langUpgFileNotRead, $langUpgFileNotModify,
                $langUpgNotChDir, $langUpgCourse;
 
@@ -252,7 +306,20 @@ function upgrade_course($code, $lang, $extramessage = '')
         // ****************************
 
         echo "<hr><p>$langUpgIndex <b>$code</b> $extramessage<br />";
-        flush();
+	flush();
+	
+	// added field visibility in agenda
+	if (!mysql_field_exists("$code",'agenda','visibility'))
+                echo add_field('agenda', 'visibility', "CHAR(1) NOT NULL DEFAULT 'v'");
+
+	// upgrade dropbox
+	echo "$langEncodeDropBoxDocuments<br>";
+	$d = db_query("SELECT id, filename, title FROM dropbox_file", $code);
+	while ($dbox = mysql_fetch_array($d)) {
+		encode_dropbox_documents($code, $dbox['id'], $dbox['filename'], $dbox['title']);
+	}
+
+
         $course_base_dir = "{$webDir}courses/$code";
         if (!is_writable($course_base_dir)) {
                 die ("$langUpgNotIndex \"$course_base_dir\"! $langCheckPerm.");
@@ -801,8 +868,15 @@ function upgrade_course($code, $lang, $extramessage = '')
         }
         fix_multiple_document_entries('group_documents');
 
+	// ----------------- dropbox document upgrade ----------
+	echo "$langEncodeDropBoxDocuments<br>";
+	flush();
+	$d = db_query("SELECT id, filename, title FROM dropbox_file");
+	while ($dbox = mysql_fetch_array($d)) {
+		encode_dropbox_documents($code, $dbox['id'], $dbox['filename'], $dbox['title']);
+	}
 
-        // -------------- move video files to new directory -----
+        // -------------- move video files to new directory ----
         $course_video = "${webDir}courses/$code/video";
         if (is_dir($course_video)) {
                 if (!rename($course_video, "${webDir}video/$code")) {
@@ -916,8 +990,9 @@ function upgrade_course($code, $lang, $extramessage = '')
         /* compatibility update
            a) remove entries modules import, external, videolinks, old statistics
            b) correct agenda and video link
-         */
-        db_query("DELETE FROM accueil WHERE (id = 12 OR id = 13 OR id = 11 OR id=6)", $code);
+         */ 
+
+       db_query("DELETE FROM accueil WHERE (id = 12 OR id = 13 OR id = 11 OR id=6)", $code);
         update_field("accueil", "lien", "../../modules/agenda/agenda.php", "id", 1);
         db_query("UPDATE accueil SET visible = '0', admin = '1' WHERE id = 8 LIMIT 1", $code);
         update_field("accueil", "lien", "../../modules/video/video.php", "id", 4);
@@ -1057,7 +1132,7 @@ function upgrade_course($code, $lang, $extramessage = '')
         db_query("DROP TABLE IF EXISTS liste_domaines");
 
         // convert to UTF-8
-        convert_db_utf8($code);
+        convert_db_utf8($code); 
 }
 
 
@@ -1280,6 +1355,3 @@ function upgrade_video($file, $id, $code)
                 db_query("DELETE FROM video WHERE id = '$id'", $code);
         }
 }
-
-
-
