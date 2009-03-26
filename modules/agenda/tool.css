@@ -45,3 +45,8 @@ table.Agenda td {
   padding: 0px 0px 0px 4px;
 }
 
+.invisible_agenda {
+        font-style: italic;
+        color: silver;
+}
+
