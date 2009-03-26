@@ -171,6 +171,7 @@ $tool_content = "<table width=\"99%\">
 				WHERE email = '" . mysql_escape_string($email) . "'
 				AND BINARY username = '" . mysql_escape_string($userName) . "'", $mysqlMainDb);
 
+        $found_editable_password = false;
 	if (mysql_num_rows($res) == 1) {
 		$text = $langPassResetIntro. $emailhelpdesk;
 		$text .= "$langHowToResetTitle";
@@ -178,6 +179,7 @@ $tool_content = "<table width=\"99%\">
 		while ($s = mysql_fetch_array($res, MYSQL_ASSOC)) {
 			$is_editable = check_password_editable($s['password']);
 			if($is_editable) {
+                                $found_editable_password = true;
 
 				//insert an md5 key to the db
 				$new_pass = createPassword();
@@ -227,33 +229,36 @@ $tool_content = "<table width=\"99%\">
 			</table>";
 		}
 	}
-	/***** Account details found, now send e-mail *****/
-	$emailheaders = "From: $siteName <$emailAdministrator>\n".
-        	"MIME-Version: 1.0\n".
-        	"Content-Type: text/plain; charset=$charset\n".
-        	"Content-Transfer-Encoding: 8bit";
-	$emailsubject = $lang_remind_pass;
-	if (!send_mail($siteName, $emailAdministrator, '', $email, $emailsubject, $text, $charset)) {
-		$tool_content = "
-			<table width=\"99%\">
-			<tbody>
-				<tr>
-					<td class=\"caution\">
-					<p><strong>$langAccountEmailError1</strong></p>
-					<p>$langAccountEmailError2 $email.</p>
-					<p>$langAccountEmailError3 <a href='mailto:$emailhelpdesk'>$emailhelpdesk</a>.</p>
-					<p><a href=\"../../index.php\">$langHome</a></p>
-				</td>
-				</tr>
-			</tbody>
-		</table>";
 
-	} elseif (!isset($auth)) {
-            $tool_content .= "<table width=\"99%\">
-                   <tbody><tr><td class=\"success\">
-                       $lang_pass_email_ok <strong>$email</strong><br/><br/>
-                        <a href=\"../../index.php\">$langHome</a>
-                        </td></tr></tbody></table><br/>";
+	/***** Account details found, now send e-mail *****/
+        if ($found_editable_password) {
+                $emailheaders = "From: $siteName <$emailAdministrator>\n".
+                        "MIME-Version: 1.0\n".
+                        "Content-Type: text/plain; charset=$charset\n".
+                        "Content-Transfer-Encoding: 8bit";
+                $emailsubject = $lang_remind_pass;
+                if (!send_mail($siteName, $emailAdministrator, '', $email, $emailsubject, $text, $charset)) {
+                        $tool_content = "
+                                <table width=\"99%\">
+                                <tbody>
+                                        <tr>
+                                                <td class=\"caution\">
+                                                <p><strong>$langAccountEmailError1</strong></p>
+                                                <p>$langAccountEmailError2 $email.</p>
+                                                <p>$langAccountEmailError3 <a href='mailto:$emailhelpdesk'>$emailhelpdesk</a>.</p>
+                                                <p><a href=\"../../index.php\">$langHome</a></p>
+                                        </td>
+                                        </tr>
+                                </tbody>
+                        </table>";
+
+                } elseif (!isset($auth)) {
+                    $tool_content .= "<table width=\"99%\">
+                           <tbody><tr><td class=\"success\">
+                               $lang_pass_email_ok <strong>$email</strong><br/><br/>
+                                <a href=\"../../index.php\">$langHome</a>
+                                </td></tr></tbody></table><br/>";
+                        }
                 }
 
        } else {
