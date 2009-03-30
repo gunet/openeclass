@@ -202,7 +202,7 @@ if (isset($submit) && $submit) {
     <tr>
       <td class=\"success\">
         <p><b>$l_stored</b></p>
-        <p>$l_click<a href=\"viewtopic.php?topic=$topic_id&forum=$forum&$total_topic\">$l_here</a>$l_viewmsg</p>
+        <p>$l_click <a href=\"viewtopic.php?topic=$topic_id&forum=$forum&$total_topic\">$l_here</a>$l_viewmsg</p>
         <p>$l_click <a href=\"viewforum.php?forum=$forum_id&total_forum\">$l_here</a> $l_returntopic</p>
     </td>
     </tr>
