@@ -535,7 +535,7 @@ $langWrongAuth = "Πληκτρολογήσατε λάθος όνομα χρήσ�
 ******************************************************************/
 $langCopyright = "Πληροφορίες Πνευματικών Δικαιωμάτων";
 $langCopyrightNotice = '
-Copyright © 2003 - 2008 <a href="http://www.gunet.gr/" target=_blank>GUnet</a>.<br>&nbsp;<br>
+Copyright © 2003 - 2009 <a href="http://www.gunet.gr/" target="_blank">GUnet</a>.<br>&nbsp;<br>
 Η <a href="http://www.openeclass.org" target=_blank>πλατφόρμα Open eClass</a>
 είναι ένα ολοκληρωμένο Σύστημα Διαχείρισης Ηλεκτρονικών Μαθημάτων και αποτελεί
 την πρόταση του Ακαδημαϊκού Διαδικτύου GUnet για την υποστήριξη της Υπηρεσίας
@@ -2777,7 +2777,7 @@ $langCheckPublicTools = "
 ";
 $langUserBriefcase = "Χαρτοφυλάκιο χρήστη";
 $langPersonalisedBriefcase = "Προσωπικό χαρτοφυλάκιο";
-$langCopyrightFooter="Copyright &copy; 2003-2008 GUnet";
+$langCopyrightFooter="Copyright &copy; 2003-2009 GUnet";
 $langAdvancedSearch="Σύνθετη αναζήτηση";
 $langTitle = "Τίτλος";
 $langType = "Τύπος";

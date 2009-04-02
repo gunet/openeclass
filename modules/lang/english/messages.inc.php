@@ -411,7 +411,7 @@ $langNoAliens = "Only platform registered users can access 'Chat'!"; //
 $langNoGuest = "Guest Users cannot access 'Chat'"; //
 $langCopyright = "Copyright Notice"; //
 $langCopyrightNotice = '
-Open eClass © 2003 - 2008 <a href="http://www.gunet.gr/" target=_blank>Greek Universities Network GUnet</a>.<br>&nbsp;<br>
+Open eClass © 2003 - 2009 <a href="http://www.gunet.gr/" target="_blank">Greek Universities Network GUnet</a>.<br>&nbsp;<br>
 The <a href="http://www.openeclass.org" target=_blank>Open eClass platform</a>
 is a complete Electronic Course Management System and is GUnet\'s
 proposition for an Asynchronous eLearning Service infrastructure.
@@ -2324,7 +2324,7 @@ $langCheckGuest = "<p><b>The action you attempted to execute is not possible wit
 $langCheckPublicTools = "<p><b>You tried to gain access to an inactive lesson module. </b><br/> For security reasons the system has automatically redirect you to the start page to login again.</p>"; //
 $langUserBriefcase = "User portfolio"; //
 $langPersonalisedBriefcase = "Personalised portfolio"; //
-$langCopyrightFooter = "Copyright &copy;2003-2008 GUnet"; //
+$langCopyrightFooter = "Copyright &copy; 2003-2009 GUnet"; //
 $langAdvancedSearch = "Advanced search"; //
 $langTitle = "Title"; //
 $langType = "Type"; //
