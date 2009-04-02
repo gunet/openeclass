@@ -75,7 +75,7 @@ if (isset($submit) && (!isset($ldap_submit)) && !isset($changePass)) {
 	// everything is ok
 	else {
 		##[BEGIN personalisation modification]############
-		$userLanguage = $_REQUEST['userLanguage'];
+		$userLanguage = langname_to_code($_REQUEST['userLanguage']);
 		$username_form = escapeSimple($username_form);
 		if(mysql_query("UPDATE user
 	        SET nom='$nom_form', prenom='$prenom_form',
@@ -294,5 +294,5 @@ if ((!isset($changePass)) || isset($_POST['submit'])) {
 </form>
    ";
 }
+
 draw($tool_content, 1);
-?>

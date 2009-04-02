@@ -982,3 +982,18 @@ function wrap_each(&$item)
     $item = "'$item'";
 }
 
+// Convert language name to language code
+function langname_to_code($langname)
+{
+        $langcodes = array('english' => 'en', 'greek' => 'el');
+        return $langcodes[$langname];
+
+# Some other languages. Warning: main database user.lang field is an enum!
+# See include/baseTheme.php for lang_select_options() function
+# 'spanish' => 'es', 'czech' => 'cz', 'albanian' => 'sq',
+# 'bulgarian' => 'bg', 'catalan' => 'ca', 'danish' => 'da',
+# 'dutch' => 'nl', 'finnish' => 'fi', 'french' => 'fr',
+# 'german' => 'de', 'icelandic' => 'is', 'italian' => 'it',
+# 'japanese' => 'jp', 'polish' => 'pl', 'russian' => 'ru',
+# 'turkish' => 'tr',
+}
