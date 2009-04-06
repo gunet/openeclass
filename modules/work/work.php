@@ -243,8 +243,8 @@ function add_assignment($title, $comments, $desc, $deadline, $group_submissions)
 	db_query("INSERT INTO assignments
 		(title, description, comments, deadline, submission_date, secret_directory,
 			group_submissions) VALUES
-		('".mysql_real_escape_string($title)."', '".mysql_real_escape_string($desc)."', '".mysql_real_escape_string($comments)."', '$deadline', NOW(), '$secret',
-			'".mysql_real_escape_string($group_submissions)."')");
+		(".autoquote($title).", ".autoquote($desc).", ".autoquote($comments).", ".autoquote($deadline).", NOW(), '$secret',
+			".autoquote($group_submissions).")");
 	mkdir("$workPath/$secret",0777);
 }
 
@@ -330,9 +330,9 @@ function submit_work($id) {
 				"', '$stud_comments')", $currentCourseID);
 		}
 
-		$tool_content .="<p class=\"success_small\">$msg2<br />$msg1<br /><a href='work.php'>$langBack</a></p><br />";
+		$tool_content .="<p class='success_small'>$msg2<br />$msg1<br /><a href='work.php'>$langBack</a></p><br />";
 	} else {
-	$tool_content .="    <p class=\"caution_small\">$langUploadError<br /><a href='work.php'>$langBack</a></p><br />";
+	$tool_content .="    <p class='caution_small'>$langUploadError<br /><a href='work.php'>$langBack</a></p><br />";
 	}
 
   } else { // not submit_ok
@@ -356,23 +356,23 @@ function new_assignment()
 
 
 	$tool_content .= "
-  <form action=\"work.php\" method=\"post\" onsubmit=\"return checkrequired(this, 'title');\">
-    <table width=\"99%\" class='FormData'>
+  <form action='work.php' method='post' onsubmit='return checkrequired(this, 'title');'>
+    <table width='99%' class='FormData'>
     <tbody>
     <tr>
       <th width='220'>&nbsp;</th>
-      <td><b>".$m['WorkInfo']."</b></td>
+      <td><b>$m[WorkInfo]</b></td>
     </tr>
     <tr>
-      <th class=\"left\">".$m['title'].":</th>
-      <td><input type=\"text\" name=\"title\" size=\"55\" class='FormData_InputText'></td>
+      <th class='left'>$m[title]:</th>
+      <td><input type='text' name='title' size='55' class='FormData_InputText'></td>
     </tr>
     <tr>
-      <th class=\"left\">".$m['description'].":</th>
+      <th class='left'>$m[description]:</th>
       <td>
         <table class='xinha_editor'>
         <tr>
-          <td><textarea id='xinha' name=\"desc\" value=\"$desc\" style='width:100%'>";
+          <td><textarea id='xinha' name='desc' value='$desc' style='width:100%'>";
 	       if ($desc)
 		      $tool_content .= "$desc";
     $tool_content .= "</textarea></td>
@@ -381,54 +381,54 @@ function new_assignment()
       </td>
     </tr>
     <tr>
-      <th class=\"left\">".$m['comments'].":</th>
-      <td>"."<textarea name=\"comments\" rows=\"3\" cols=\"53\" class='FormData_InputText'></textarea></td>
+      <th class='left'>$m[comments]:</th>
+      <td><textarea name='comments' rows='3' cols='53' class='FormData_InputText'></textarea></td>
     </tr>
     <tr>
-      <th class=\"left\">".$m['deadline'].":</th>
+      <th class='left'>$m[deadline]:</th>
       <td>$end_cal_Work</td>
     </tr>
     <tr>
-      <th class=\"left\">".$m['group_or_user'].":</th>
-      <td><input type=\"radio\" name=\"group_submissions\" value=\"0\" checked=\"1\">".$m['user_work']."
-      <br><input type=\"radio\" name=\"group_submissions\" value=\"1\">".$m['group_work']."</td>
+      <th class='left'>$m[group_or_user]:</th>
+      <td><input type='radio' name='group_submissions' value='0' checked='1'>$m[user_work]
+      <br><input type='radio' name='group_submissions' value='1'>$m[group_work]</td>
     </tr>
     <tr>
       <th>&nbsp;</th>
-      <td><input type=\"submit\" name=\"new_assign\" value=\"$langAdd\"></td>
+      <td><input type='submit' name='new_assign' value='$langAdd'></td>
     </tr>
     </tbody>
     </table>
   </form>
   <br/>";
 
-  	$tool_content .= "<p align=\"right\"><a href='work.php'>$langBack</a></p>";
+  	$tool_content .= "<p align='right'><a href='work.php'>$langBack</a></p>";
 }
 
 
 function date_form($day, $month, $year)
 {
 	global $tool_content, $langMonthNames;
-	$tool_content .=  "<select name=\"fday\">\n";
+	$tool_content .=  "<select name='fday'>\n";
 	for ($i = 1; $i <= 31; $i++) {
 		if ($i == $day)
-		$tool_content .= "<option value=\"$i\" selected=\"1\">$i</option>\n";
+		$tool_content .= "<option value='$i' selected='1'>$i</option>\n";
 		else
-		$tool_content .= "<option value=\"$i\">$i</option>\n";
+		$tool_content .= "<option value='$i'>$i</option>\n";
 	}
-	$tool_content .= "</select><select name=\"fmonth\">\n";
+	$tool_content .= "</select><select name='fmonth'>\n";
 	for ($i = 1; $i <= 12; $i++) {
 		if ($i == $month)
-		$tool_content .= "<option value=\"$i\" selected=\"1\">".$langMonthNames['long'][$i-1]."</option>\n";
+		$tool_content .= "<option value='$i' selected='1'>".$langMonthNames['long'][$i-1]."</option>\n";
 		else
-		$tool_content .= "<option value=\"$i\">".$langMonthNames['long'][$i-1]."</option>\n";
+		$tool_content .= "<option value='$i'>".$langMonthNames['long'][$i-1]."</option>\n";
 	}
-	$tool_content .= "</select><select name=\"fyear\">\n";
+	$tool_content .= "</select><select name='fyear'>\n";
 	for ($i = date("Y"); $i <= date("Y") + 1; $i++) {
 		if ($i == $year)
-		$tool_content .= "<option value=\"$i\" selected=\"1\">$i</option>\n";
+		$tool_content .= "<option value='$i' selected='1'>$i</option>\n";
 		else
-		$tool_content .= "<option value=\"$i\">$i</option>\n";
+		$tool_content .= "<option value='$i'>$i</option>\n";
 	}
 	$tool_content .= "</select>\n";
 }
@@ -487,24 +487,26 @@ cData;
       </td>
     </tr>
     <tr>
-      <th class=\"left\">".$m['group_or_user'].":</th>
+      <th class='left'>".$m['group_or_user'].":</th>
       <td>".
-	"<input type=\"radio\" name=\"group_submissions\" value=\"0\"";
+	"<input type='radio' name='group_submissions' value='0'";
 
 	if ($row['group_submissions'] == '0')
 	$tool_content .= " checked=\"1\" >";
 	else $tool_content .= ">";
 
-	$tool_content .= $m['user_work']."<br><input type=\"radio\" name=\"group_submissions\" value=\"1\" ";
+	$tool_content .= $m['user_work']."<br><input type='radio' name='group_submissions' value='1' ";
 
-	if ($row['group_submissions'] != '0')
-	$tool_content .= " checked=\"1\" >";
-	else $tool_content .= ">";
+	if ($row['group_submissions'] != '0') {
+        	$tool_content .= " checked='1'>";
+	} else {
+                $tool_content .= ">";
+        }
 	$tool_content .= $m['group_work']."</td>
     </tr>
     <tr>
-      <th class=\"left\">&nbsp;</th>
-      <td><input type=\"submit\" name=\"do_edit\" value=\"".$langEdit."\"></td>
+      <th class='left'>&nbsp;</th>
+      <td><input type='submit' name='do_edit' value='".$langEdit."'></td>
     </tr>
     </tbody>
     </table>
@@ -512,7 +514,7 @@ cData;
 
 	$tool_content .= "
     <br />
-    <div align=\"right\"><a href='work.php'>$langBack</ul></div>
+    <div align='right'><a href='work.php'>$langBack</ul></div>
     ";
 }
 
@@ -524,13 +526,14 @@ function edit_assignment($id)
 	$nav[] = array("url"=>"work.php", "name"=> $langWorks);
 	$nav[] = array("url"=>"work.php?id=$id", "name"=> $_POST['title']);
 
-	if (db_query("UPDATE assignments SET title='".mysql_real_escape_string($_POST['title'])."',
-		description='".mysql_real_escape_string($_POST['desc'])."', group_submissions='".mysql_real_escape_string($_POST['group_submissions'])."',
-		comments='".mysql_real_escape_string($_POST['comments'])."', deadline='".mysql_real_escape_string($_POST['WorkEnd'])."' WHERE id='$id'")) {
+	if (db_query("UPDATE assignments SET title=".autoquote($_POST['title']).",
+		description=".autoquote($_POST['desc']).", group_submissions=".autoquote($_POST['group_submissions']).",
+		comments=".autoquote($_POST['comments']).", deadline=".autoquote($_POST['WorkEnd'])." WHERE id='$id'")) {
 
-	$tool_content .="<p class=\"success_small\">$langEditSuccess<br /><a href='work.php?id=$id'>$langBackAssignment \"$_POST[title]\"</a></p><br />";
+        $title = autounquote($_POST['title']);
+	$tool_content .="<p class='success_small'>$langEditSuccess<br /><a href='work.php?id=$id'>$langBackAssignment '$title'</a></p><br />";
 	} else {
-	$tool_content .="<p class=\"caution_small\">$langEditError<br /><a href='work.php?id=$id'>$langBackAssignment \"$_POST[title]\"</a></p><br />";
+	$tool_content .="<p class='caution_small'>$langEditError<br /><a href='work.php?id=$id'>$langBackAssignment '$title'</a></p><br />";
 	}
 }
 
