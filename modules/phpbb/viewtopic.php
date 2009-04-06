@@ -100,6 +100,7 @@ $sql = "SELECT topic_title, topic_status
 	WHERE topic_id = '$topic'";
 
 $total = get_total_posts($topic, $currentCourseID, "topic");
+
 if ($paging and $total > $posts_per_page) {
 	$times = 0;
 	for ($x = 0; $x < $total; $x += $posts_per_page) {
@@ -139,28 +140,30 @@ $nameTools = $topic_subject;
 	
 if ($paging and $total > $posts_per_page ) {
 	$times = 1;
-	$tool_content .= <<<cData
+	$tool_content .= "<table WIDTH='99%'><thead>
+	<tr><td WIDTH='50%' align='left'>
+	<span class='row'><strong class='pagination'>
+	<span>";
 
-    <table WIDTH="99%">
-    <thead>
-    <tr>
-    <td WIDTH="50%" align=\"left\">
-      <span class='row'><strong class='pagination'>
-       <span>
-cData;
+	if (isset($_GET['start'])) {
+		$start = intval($_GET['start']);
+	} else {
+		$start = 0;
+	}
+
 	$last_page = $start - $posts_per_page;
 	$tool_content .= "$langPages: ";
 
 	for($x = 0; $x < $total; $x += $posts_per_page) {
 		if($times != 1) {
-			$tool_content .= "\n       <span class=\"page-sep\">,</span>";
+			$tool_content .= "\n<span class=\"page-sep\">,</span>";
 		}
 		if($start && ($start == $x)) {
 			$tool_content .= "" .  $times;
 		} else if($start == 0 && $x == 0) {
 			$tool_content .= "1";
 		} else {
-			$tool_content .= "\n       <a href=\"$PHP_SELF?mode=viewtopic&topic=$topic&forum=$forum&start=$x\">$times</a>";
+			$tool_content .= "\n<a href=\"$_SERVER[PHP_SELF]?mode=viewtopic&topic=$topic&forum=$forum&start=$x\">$times</a>";
 		}
 		$times++;
 	}
@@ -173,16 +176,16 @@ cData;
       <td align=\"right\">
        <span class='pages'>$l_gotopage: &nbsp;&nbsp;";
 	if ( isset($start) && $start > 0 ) {
-		$tool_content .= "\n       <a href=\"$PHP_SELF?topic=$topic&forum=$forum&start=$last_page\">$l_prevpage</a>&nbsp;|";
+		$tool_content .= "\n       <a href=\"$_SERVER[PHP_SELF]?topic=$topic&forum=$forum&start=$last_page\">$l_prevpage</a>&nbsp;|";
 	} else {
 		$start = 0;
 	}	
 	if (($start + $posts_per_page) < $total) {
 		$next_page = $start + $posts_per_page;
-		$tool_content .= "\n       <a href=\"$PHP_SELF?topic=$topic&forum=$forum&start=$next_page\">$l_nextpage</a>&nbsp;|";
+		$tool_content .= "\n       <a href=\"$_SERVER[PHP_SELF]?topic=$topic&forum=$forum&start=$next_page\">$l_nextpage</a>&nbsp;|";
 	}
 	$tool_content .= "
-       &nbsp;<a href=\"$PHP_SELF?topic=$topic&amp;forum=$forum&amp;all=true\">$l_all</a>
+       &nbsp;<a href=\"$_SERVER[PHP_SELF]?topic=$topic&amp;forum=$forum&amp;all=true\">$l_all</a>
        </span>
       </td>
     </tr>
@@ -202,7 +205,7 @@ cData;
 	if ($total > $posts_per_page) {	
 	$tool_content .= "
       <span class='pages'>
-       &nbsp;<a href=\"$PHP_SELF?topic=$topic&amp;forum=$forum&amp;start=0\">$l_pages</a>
+       &nbsp;<a href=\"$_SERVER[PHP_SELF]?topic=$topic&amp;forum=$forum&amp;start=0\">$l_pages</a>
       </span>";
 	}	  
 	$tool_content .= "
@@ -322,7 +325,7 @@ cData;
 		} else if($start == 0 && $x == 0) {
 			$tool_content .= "1";
 		} else {
-			$tool_content .= "\n       <a href=\"$PHP_SELF?mode=viewtopic&amp;topic=$topic&amp;forum=$forum&amp;start=$x\">$times</a>";
+			$tool_content .= "\n<a href=\"$_SERVER[PHP_SELF]?mode=viewtopic&amp;topic=$topic&amp;forum=$forum&amp;start=$x\">$times</a>";
 		}
 		$times++;
 	}
@@ -334,16 +337,16 @@ cData;
       <td>
        <span class='pages'>$l_gotopage: &nbsp;&nbsp;";
 	if ( isset($start) && $start > 0 ) {
-		$tool_content .= "\n       <a href=\"$PHP_SELF?topic=$topic&amp;forum=$forum&amp;start=$last_page\">$l_prevpage</a>&nbsp;|";
+		$tool_content .= "\n       <a href=\"$_SERVER[PHP_SELF]?topic=$topic&amp;forum=$forum&amp;start=$last_page\">$l_prevpage</a>&nbsp;|";
 	} else {
 		$start = 0;
 	}	
 	if (($start + $posts_per_page) < $total) {
 		$next_page = $start + $posts_per_page;
-		$tool_content .= "\n       <a href=\"$PHP_SELF?topic=$topic&amp;forum=$forum&amp;start=$next_page\">$l_nextpage</a>&nbsp;|";
+		$tool_content .= "\n       <a href=\"$_SERVER[PHP_SELF]?topic=$topic&amp;forum=$forum&amp;start=$next_page\">$l_nextpage</a>&nbsp;|";
 	}
 	$tool_content .= "
-       &nbsp;<a href=\"$PHP_SELF?topic=$topic&amp;forum=$forum&amp;all=true\">$l_all</a>
+       &nbsp;<a href=\"$_SERVER[PHP_SELF]?topic=$topic&amp;forum=$forum&amp;all=true\">$l_all</a>
        </span>
       </td>
     </tr>
@@ -364,7 +367,7 @@ cData;
     ";
 	if ($total > $posts_per_page) {	
 	$tool_content .= "	  
-       &nbsp;<a href=\"$PHP_SELF?topic=$topic&amp;forum=$forum&amp;start=0\">$l_pages</a>
+       &nbsp;<a href=\"$_SERVER[PHP_SELF]?topic=$topic&amp;forum=$forum&amp;start=0\">$l_pages</a>
     ";
 	}	
 	$tool_content .= "   

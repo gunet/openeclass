@@ -84,9 +84,9 @@ include_once("./config.php");
 
 if ($is_adminOfCourse || $is_admin) {
 	$tool_content .= "
-    <div id=\"operations_container\">
-      <ul id=\"opslist\">
-        <li><a href=\"../forum_admin/forum_admin.php\">$l_adminpanel</a></li>
+    <div id='operations_container'>
+      <ul id='opslist'>
+        <li><a href='../forum_admin/forum_admin.php'>$l_adminpanel</a></li>
       </ul>
     </div>
     <br />
@@ -163,13 +163,13 @@ cData;
 		if ( $viewcat != -1 ) {
 			if ( $categories[$i][cat_id] != $viewcat ) {
 				$title = stripslashes($categories[$i][cat_title]);
-				$tool_content .= "<tr class=\"Forum\"><td colspan=\"5\" class=\"left\">&nbsp;$title</td></tr>";
+				$tool_content .= "<tr class='Forum'><td colspan='5' class='left'>&nbsp;$title</td></tr>";
 				continue;
 			}
 		}
 		$title = stripslashes($categories[$i]["cat_title"]);
 		$catNum = $categories[$i]["cat_id"];
-		$tool_content .= "<tr><td colspan=\"5\" class=\"Forum\">&nbsp;$title</td></tr>";
+		$tool_content .= "<tr><td colspan='5' class='Forum'>&nbsp;$title</td></tr>";
 		@reset($forum_row);
 		for ( $x=0; $x < count($forum_row); $x++) {
 			unset($last_post);
@@ -191,10 +191,10 @@ cData;
 					$last_visit = 0;
 				}
 				if(@$last_post_time > $last_visit && $last_post != $l_noposts) {
-					$tool_content .= "<td width=\"1\" class=\"left\">
-					<img src=\"$newposts_image\"></td>";
+					$tool_content .= "<td width='1' class='left'>
+					<img src='$newposts_image'></td>";
 				} else {
-					$tool_content .= "<td width=2% class=\"center\"><IMG SRC=\"$folder_image\"></td>";
+					$tool_content .= "<td width='2%' class='center'><IMG SRC='$folder_image'></td>";
 				}
 				$name = stripslashes($forum_row[$x]["forum_name"]);
 				$last_post_nom = $forum_row[$x]["nom"];
@@ -210,40 +210,40 @@ cData;
 						WHERE forumId='$forum' AND tutor='$uid'", $currentCourseID );
 					$countTutor = mysql_num_rows($sqlTutor);
 					if ( $countTutor == 0 ) {
-						$tool_content .= "<a href=\"viewforum.php?forum=" . $forum_row[$x]["forum_id"] . "&$total_posts\">$name</a>";
+						$tool_content .= "<a href='viewforum.php?forum=" . $forum_row[$x]["forum_id"] . "'>$name</a>";
 					} else {
-						$tool_content .= "<a href=\"viewforum.php?forum=" . $forum_row[$x]["forum_id"] . "&$total_posts\">$name</a>&nbsp;($langOneMyGroups)";
+						$tool_content .= "<a href='viewforum.php?forum=" . $forum_row[$x]["forum_id"] . "'>$name</a>&nbsp;($langOneMyGroups)";
 					}
 				} elseif ( $catNum == 1 ) { // student view
 					if ( @$forum == @$myGroupForum ) {
-						$tool_content .= "<a href=\"viewforum.php?forum=".$forum_row[$x]["forum_id"]."&$total_posts\">$name</a>&nbsp;&nbsp;($langMyGroup)";
+						$tool_content .= "<a href='viewforum.php?forum=".$forum_row[$x]["forum_id"]."'>$name</a>&nbsp;&nbsp;($langMyGroup)";
 					} else {
 						if(@$privProp==1) {
 							$tool_content .= "$name";
 						} else {
-							$tool_content .= "<a href=\"viewforum.php?forum=".$forum_row[$x]["forum_id"]."&$total_posts\">$name</a>";
+							$tool_content .= "<a href='viewforum.php?forum=".$forum_row[$x]["forum_id"]."'>$name</a>";
 						}
 					}
 				} else { // OTHER FORUMS
-					$tool_content .= "<a href=\"viewforum.php?forum=".$forum_row[$x]["forum_id"]."&$total_posts\">$name</a> ";
+					$tool_content .= "<a href='viewforum.php?forum=".$forum_row[$x]["forum_id"]."'>$name</a> ";
 				}
 				$tool_content .= "<br>$desc";
 				$tool_content .= "</td>";
-				$tool_content .= "<td width=\"65\" class=\"Forum_leftside\">$total_topics</td>";
-				$tool_content .= "<td width=\"65\" class=\"Forum_leftside\">$total_posts</td>";
-				$tool_content .= "<td width=\"200\" class=\"Forum_post\">";
+				$tool_content .= "<td width='65' class='Forum_leftside'>$total_topics</td>";
+				$tool_content .= "<td width='65' class='Forum_leftside'>$total_posts</td>";
+				$tool_content .= "<td width='200' class='Forum_post'>";
 			if ($total_topics>0 && $total_posts>0) {
 				$tool_content .= "$last_post_prenom $last_post_nom
-             <a set=\"yes\" href=\"viewtopic.php?topic=$last_post_topic_id&forum=$forum\"><IMG border=\"0\" SRC=\"$icon_topic_latest\"></a><br />$human_last_post_time</td>";
+             <a set='yes' href='viewtopic.php?topic=$last_post_topic_id&amp;forum=$forum'><img border='0' src='$icon_topic_latest'></a><br />$human_last_post_time</td>";
 	  		} else {
-				$tool_content .= "<font color=\"#CAC3B5\">$l_noposts</font></td>";
+				$tool_content .= "<font color='#CAC3B5'>$l_noposts</font></td>";
 			}
 				$tool_content .= "</tr>";
 			}
 		}
 	}
 } else {
-$tool_content .= "<p class=\"alert1\">$langNoForums</p>";
+$tool_content .= "<p class='alert1'>$langNoForums</p>";
 }
 
 /*
