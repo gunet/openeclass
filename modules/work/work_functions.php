@@ -119,21 +119,26 @@ function is_group_assignment($id)
 
 
 // Delete submissions to exercise $id if submitted by user $uid or group $gid
-function delete_submissions_by_uid($uid, $gid, $id)
+// Doesn't delete files if they are the same with $new_filename
+function delete_submissions_by_uid($uid, $gid, $id, $new_filename = '')
 {
 	global $m, $tool_content;
 	$return="";
 	$res = db_query("SELECT * FROM assignment_submit WHERE
 		uid = '$uid' AND assignment_id = '$id'");
 	while ($row = mysql_fetch_array($res)) {
-		@unlink("$GLOBALS[workPath]/$row[file_path]");
+                if ($row['file_path'] != $new_filename) {
+        		@unlink("$GLOBALS[workPath]/$row[file_path]");
+                }
 		db_query("DELETE FROM assignment_submit WHERE id = '$row[id]'");
 		$return .= "$m[deleted_work_by_user] \"$row[file_name]\"";
 	}
 	$res = db_query("SELECT * FROM assignment_submit WHERE
 		group_id = '$gid' AND assignment_id = '$id'");
 	while ($row = mysql_fetch_array($res)) {
-		@unlink("$GLOBALS[workPath]/$row[file_path]");
+                if ($row['file_path'] != $new_filename) {
+                        @unlink("$GLOBALS[workPath]/$row[file_path]");
+                }
 		db_query("DELETE FROM assignment_submit WHERE id = '$row[id]'");
 		$return .= "$m[deleted_work_by_group] \"$row[file_name]\".";
 	}
@@ -348,23 +353,6 @@ function basename_noext($f)
 	return preg_replace('{\.[^\.]*$}', '', basename($f));
 }
 
-
-// return the extension of a file name
-function extension($f)
-{
-	$old = $f;
-	$f = preg_replace('/^.*\./', '', $f);
-	if ($f == "php") {
-		return "txt";
-	} elseif ($f == $old) {
-                
-//	return extension(add_ext_on_mime($old));
-	} else {
-		return $f;
-	}
-}
-
-
 // Disallow '..' and initial '/' in filenames
 function cleanup_filename($f)
 {
@@ -375,5 +363,3 @@ function cleanup_filename($f)
 	$f = preg_replace('{^/+}', '', $f);
 	return preg_replace('{//}', '/', $f);
 }
-
-?>

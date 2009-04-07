@@ -41,6 +41,7 @@ $require_help = TRUE;
 $helpTopic = 'Work';
 
 include '../../include/baseTheme.php';
+include '../../include/lib/forcedownload.php';
 
 $head_content = "
 <script>
@@ -311,7 +312,8 @@ function submit_work($id) {
 		return;
 	}
 	$secret = work_secret($id);
-	$filename = "$secret/$local_name.".extension($_FILES['userfile']['name']);
+        $ext = get_file_extension($_FILES['userfile']['name']);
+	$filename = "$secret/$local_name" . (empty($ext)? '': '.' . $ext);
 	if (move_uploaded_file($_FILES['userfile']['tmp_name'], "$workPath/$filename")) {
 		$msg2 = "$langUploadSuccess";//to message
 		$group_id = user_group($uid, FALSE);
