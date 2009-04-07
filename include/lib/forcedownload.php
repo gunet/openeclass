@@ -92,8 +92,10 @@ function send_file_to_client($real_filename, $filename, $send_inline = false, $s
 function get_file_extension($filename)
 {
 	$matches = array();
-	if (preg_match('/\.([a-zA-Z0-9_-]{1,8})$/', $filename, $matches)) {
-		return $matches[1];
+	if (preg_match('/\.(tar\.(z|gz|bz|bz2))$/i', $filename, $matches)) {
+                return strtolower($matches[1]);
+        } elseif (preg_match('/\.([a-zA-Z0-9_-]{1,8})$/i', $filename, $matches)) {
+		return strtolower($matches[1]);
 	} else {
 		return '';
 	}
