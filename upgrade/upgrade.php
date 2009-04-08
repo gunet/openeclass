@@ -35,6 +35,7 @@ include '../include/lib/fileUploadLib.inc.php';
 include '../include/lib/forcedownload.php';
 include 'upgrade_functions.php';
 
+
 $nameTools = $langUpgrade;
 $tool_content = "";
 
@@ -235,6 +236,8 @@ if (!isset($submit2)) {
 	// delete useless field
 	if (mysql_field_exists("$mysqlMainDb",'cours','scoreShow'))
 		echo delete_field('cours', 'scoreShow');
+	// delete old example test from table announcements
+	db_query("DELETE from annonces WHERE contenu='$langAnnounceExample'");	
 
         // **********************************************
         // upgrade courses databases

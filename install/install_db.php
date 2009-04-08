@@ -41,7 +41,6 @@ mysql_query("DROP TABLE IF EXISTS agenda");
 mysql_query("DROP TABLE IF EXISTS annonces");
 mysql_query("DROP TABLE IF EXISTS auth");
 mysql_query("DROP TABLE IF EXISTS cours");
-mysql_query("DROP TABLE IF EXISTS cours_faculte");
 mysql_query("DROP TABLE IF EXISTS cours_user");
 mysql_query("DROP TABLE IF EXISTS faculte");
 mysql_query("DROP TABLE IF EXISTS institution");
@@ -116,7 +115,6 @@ mysql_query("CREATE TABLE `cours` (
   `course_addon` text default NULL,
   `faculte` varchar(100) default NULL,
   `visible` tinyint(4) default NULL,
-  `scoreShow` int(11) NOT NULL default '1',
   `titulaires` varchar(200) default NULL,
   `fake_code` varchar(20) default NULL,
   `departmentUrlName` varchar(30) default NULL,
@@ -135,18 +133,6 @@ mysql_query("CREATE TABLE `cours` (
   PRIMARY KEY  (`cours_id`))
   TYPE=MyISAM $charset_spec");
 
-
-#
-# Table `cours_faculte`
-#
-
-mysql_query("CREATE TABLE cours_faculte (
-      id int(11) NOT NULL auto_increment,
-      faculte varchar(100) NOT NULL,
-      code varchar(20) NOT NULL,
-      facid int(11) NOT NULL default '0',
-      PRIMARY KEY  (id))
-      TYPE=MyISAM $charset_spec");
 
 #
 # Table `cours_user`
@@ -380,6 +366,14 @@ mysql_query("INSERT INTO `auth` VALUES (3, 'imap', '', '', 0)");
 mysql_query("INSERT INTO `auth` VALUES (4, 'ldap', '', '', 0)");
 mysql_query("INSERT INTO `auth` VALUES (5, 'db', '', '', 0)");
 
+
+mysql_query("CREATE TABLE `config` (
+		`id` MEDIUMINT NOT NULL ,
+		`version` VARCHAR( 255 ) NOT NULL ,
+		PRIMARY KEY (`id`)
+	) ENGINE = MYISAM $charset_spec");
+
+mysql_query("INSERT INTO `config` (`id`,`version`) VALUES ('1', '$langEclassVersion')");
 
 #
 # Table passwd_reset (used by the password reset module)
