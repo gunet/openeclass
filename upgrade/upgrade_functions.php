@@ -262,7 +262,7 @@ function encode_dropbox_documents($code, $id, $filename, $title) {
 // Upgrade course database
 //---------------------------------------------
 
-function upgrade_course($code, $extramessage = '')
+function upgrade_course_2_1_3($code, $extramessage = '')
 {
         global $mysqlMainDb, $langEncodeDropBoxDocuments, $langUpgCourse;
 

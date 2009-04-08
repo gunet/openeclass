@@ -61,7 +61,7 @@ if (!defined('UTF8')) {
 }
 
 if (!isset($submit2)) {
-        if((isset($encryptedPasswd)) || (!empty($encryptedPasswd))) {
+        if(isset($encryptedPasswd) and $encryptedPasswd) {
                 $newpass = md5(@$_REQUEST['password']);
         } else {
                 // plain text password since the passwords are not hashed
@@ -218,26 +218,35 @@ if (!isset($submit2)) {
 
 	echo "<p>$langUpgradeBase <b>$mysqlMainDb</b></p>";
 	flush();
-	db_query('SET NAMES greek');
 	
 	// creation of config table 
 	if (!mysql_table_exists($mysqlMainDb, 'config')) {
 		db_query("CREATE TABLE `config` (
-			`id` MEDIUMINT NOT NULL ,
-			`version` VARCHAR( 255 ) NOT NULL ,
-			PRIMARY KEY (`id`)
-			) ENGINE = MYISAM", $mysqlMainDb);
-		db_query("INSERT INTO `config` (`id`,`version`)
-			VALUES ('1', '2.1.3')", $mysqlMainDb);
-	}
+			`id` MEDIUMINT NOT NULL AUTO_INCREMENT,
+			`key` VARCHAR( 255 ) NOT NULL,
+			`value` VARCHAR( 255 ) NOT NULL,
+			PRIMARY KEY (`id`))", $mysqlMainDb);
+		db_query("INSERT INTO `config` (`key`, `value`)
+			VALUES ('version', '2.1.2')", $mysqlMainDb);
+                $oldversion = '2.1.2';
+	        db_query('SET NAMES greek');
+        	// old queries
+        	require "upgrade_main_db_old.php";
+	} else {
+                $r = mysql_fetch_row(db_query("SELECT `value` FROM config WHERE `key`='version'"));
+                $oldversion = $r[0];
+        }
 
-	// old queries
-	require "upgrade_main_db_old.php";
-	// delete useless field
-	if (mysql_field_exists("$mysqlMainDb",'cours','scoreShow'))
-		echo delete_field('cours', 'scoreShow');
-	// delete old example test from table announcements
-	db_query("DELETE from annonces WHERE contenu='$langAnnounceExample'");	
+        if ($oldversion < '2.1.3') {
+        	// delete useless field
+        	if (mysql_field_exists("$mysqlMainDb",'cours','scoreShow')) {
+	        	echo delete_field('cours', 'scoreShow');
+                }
+        	// delete old example test from table announcements
+                $langAnnounceExample = 'Παράδειγμα ανακοίνωσης. Μόνο ο καθηγητής και τυχόν άλλοι διαχειριστές του μαθήματος μπορεί να ανεβάσουν ανακοινώσεις.';
+                db_query('SET NAMES utf8');
+	        db_query("DELETE from annonces WHERE contenu='$langAnnounceExample'");
+        }
 
         // **********************************************
         // upgrade courses databases
@@ -248,15 +257,23 @@ if (!isset($submit2)) {
         while ($code = mysql_fetch_row($res)) {
                 // get course language
                 $lang = $code[1];
-		upgrade_course_old($code[0], $lang, "($i / $total)");
-               	upgrade_course($code[0], "($i / $total)");
+                if ($oldversion < '2.1.3') {
+                        db_query('SET NAMES greek');
+        		upgrade_course_old($code[0], $lang, "($i / $total)");
+                        db_query('SET NAMES utf8');
+               	        upgrade_course_2_1_3($code[0], "($i / $total)");
+                }
                 echo "</p>\n";
                 $i++;
         }
 	echo "<hr />";
 	
-	echo "<p>$langChangeDBCharset <b>$mysqlMainDb</b> $langToUTF</p><br />";
-        convert_db_utf8($mysqlMainDb);
+        if ($oldversion < '2.1.3') {
+	        echo "<p>$langChangeDBCharset <b>$mysqlMainDb</b> $langToUTF</p><br />";
+                convert_db_utf8($mysqlMainDb);
+        }
+
+        db_query("UPDATE config SET `value`='$langEclassVersion' WHERE `key`='version'", $mysqlMainDb);
 
         echo "<hr /><p><em class='success_small' style='font-weight:bold;'>$langUpgradeSuccess</em></p>
                 <p><em style='font-weight:bold;'>$langUpgReady</em></p>

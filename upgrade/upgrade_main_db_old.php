@@ -207,9 +207,9 @@
         @mysql_query("ALTER TABLE `cours` ADD FULLTEXT `cours` (`code` ,`description` ,`intitule` ,`course_objectives`,`course_prerequisites` ,`course_keywords` ,`course_references`)");
 
         // encrypt passwords in users table
-	echo "<p>$langEncryptPass</p>";
-	flush();
         if (!isset($encryptedPasswd)) {
+                echo "<p>$langEncryptPass</p>";
+                flush();
                 if ($res = db_query("SELECT user_id, password FROM user")) {
                         while ($row = mysql_fetch_array($res)) {
                                 $pass = $row["password"];
@@ -252,4 +252,3 @@
         add_index('i_action', 'action', 'loginout');
         add_index('i_codecours', 'code_cours', 'annonces');
         add_index('i_temps', 'temps', 'annonces');
-?>
