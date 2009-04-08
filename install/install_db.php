@@ -134,6 +134,17 @@ mysql_query("CREATE TABLE `cours` (
   TYPE=MyISAM $charset_spec");
 
 
+# #
+ # Table `cours_faculte`	 
+ #
+ mysql_query("CREATE TABLE cours_faculte ( 	 
+       id int(11) NOT NULL auto_increment, 	 
+       faculte varchar(100) NOT NULL, 	 
+       code varchar(20) NOT NULL, 	 
+       facid int(11) NOT NULL default '0', 	 
+       PRIMARY KEY  (id)) 	 
+       TYPE=MyISAM $charset_spec");
+
 #
 # Table `cours_user`
 #
