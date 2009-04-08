@@ -570,6 +570,7 @@ mysql_query("CREATE TABLE agenda (
     day date NOT NULL default '0000-00-00',
     hour time NOT NULL default '00:00:00',
     lasting varchar(20),
+    visibility CHAR(1) NOT NULL DEFAULT 'v',
     PRIMARY KEY (id))
     TYPE=MyISAM $charset_spec");
 
