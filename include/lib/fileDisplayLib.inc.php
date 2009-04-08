@@ -83,11 +83,11 @@ function choose_image($fileName)
 		$type['image'     ] = array('gif', 'jpg', 'png', 'bmp', 'jpeg');
 		$type['audio'     ] = array('wav', 'mp2', 'mp3', 'mp4', 'vqf');
 		$type['midi'      ] = array('midi', 'mid');
-		$type['video'     ] = array('avi', 'mpg', 'mpeg', 'mov', 'divx', 'wmv');
+		$type['video'     ] = array('avi', 'mpg', 'mpeg', 'mov', 'divx', 'wmv', 'asf', 'asx');
 		$type['real'      ] = array('ram', 'rm');
 		$type['flash'     ] = array('flv');
 		$type['excel'     ] = array('xls', 'xlt');
-		$type['compressed'] = array('zip', 'tar', 'gz', 'bz2');
+		$type['compressed'] = array('zip', 'tar', 'gz', 'bz2', 'tar.gz', 'tar.bz2', '7z');
 		$type['rar'       ] = array('rar');
 		$type['code'      ] = array('js', 'cpp', 'c', 'java');
 		$type['acrobat'   ] = array('pdf');
