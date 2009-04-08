@@ -1402,7 +1402,7 @@ $langErrorMysql = "Η MySQL  δεν λειτουργεί ή το όνομα χρ
 $langBackStep3 = "Επιστροφή στο βήμα 3";
 $langBackStep3_2 = "Eπιστρέψτε στο βήμα 3 για να τα διορθώσετε.";
 $langNotNeedChange = "Δεν χρειάζεται να το αλλάξετε";
-$langNeedChangeDB = "αν υπάρχει ήδη κάποια βάση δεδομένων με το όνομα eclass αλλάξτε το";
+$langNeedChangeDB = "αν υπάρχει ήδη κάποια Β.Δ. με το όνομα eclass αλλάξτε το";
 $langWillWrite = "Τα παρακάτω θα γραφτούν στο αρχείο <b>config.php</b>";
 $langProtect = "Συμβουλή: Για να προστατέψετε το Open eClass, αλλάξτε τα δικαιώματα πρόσβασης των αρχείων
            <tt>/config/config.php</tt> και <tt>/install/index.php</tt> και
