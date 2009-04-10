@@ -13,7 +13,8 @@ listed below.
 Open eClass 2.1.3 - Changes List
 ********************************************************************
 -- Fix bug in "Learning Path"
--- In "Announcements" mails are submitted per 50 users. Also in config.php if variable $emailAnnounce has been defined all the announcements are carbon copied (cc) there.
+-- In "Announcements" mails are submitted per 50 users. Also in config.php if 
+   variable $emailAnnounce has been defined all the announcements are carbon copied (cc) there.
 -- Fix bug in "Users" while sagin users list in encoding windows-1253
 -- Template engine fixes.
 -- Add pagination in "Forums".
@@ -24,6 +25,8 @@ Open eClass 2.1.3 - Changes List
 -- Fix bug in user portfolio during language selection.
 -- Add field visibility in "Agenda".
 -- Creation of table config in main database. Open eClass version being stored there.
+-- Bug fix in uploading group assignment in "Assignments".
+   Preserve extension .tar.gz in assignment submission.
 
 ********************************************************************
 Open eClass 2.1.2 - Changes List
