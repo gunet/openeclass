@@ -266,7 +266,7 @@ $tool_content = "<table width=\"99%\">
                 <tbody>
                   <tr>
                   <td class=\"caution\">
-                  <p><strong>$langAccountNotFound1 ($email)</strong></p>
+                  <p><strong>$langAccountNotFound1 ($userName / $email)</strong></p>
                   <p>$langAccountNotFound2 <a href='mailto: $emailhelpdesk'>$emailhelpdesk</a>, $langAccountNotFound3</p>
                   <p><a href=\"../../index.php\">$langHome</a></p>
                    </td>
