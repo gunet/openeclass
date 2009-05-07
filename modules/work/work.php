@@ -802,6 +802,15 @@ function show_assignment($id, $message = FALSE)
 		WHERE assign.assignment_id='$id' AND user.user_id = assign.uid
 		ORDER BY $order $rev");
 
+	/*  The query is changed (AND assign.grade<>'' is appended) in order to constract the chart of 
+	 * grades distribution according to the graded works only (works that are not graded are omitted). */
+	$numOfResults = db_query("SELECT *
+		FROM `$GLOBALS[code_cours]`.assignment_submit AS assign,
+		`$mysqlMainDb`.user AS user
+		WHERE assign.assignment_id='$id' AND user.user_id = assign.uid AND assign.grade<>''
+		ORDER BY $order $rev");
+	$num_resultsForChart = mysql_num_rows($numOfResults);
+	
 	$num_results = mysql_num_rows($result);
 	if ($num_results > 0) {
 		if ($num_results == 1) {
@@ -951,7 +960,11 @@ cData;
 
 		if ($gradesExists) {
 			foreach ( $gradeOccurances as $gradeValue=>$gradeOccurance ) {
-				$percentage = 100*($gradeOccurance/$num_results);
+				/*  Changed by nikos. Only the number of works that are graded
+				 * are taken into account to determine the grade distribution
+				 * percentage. */
+//				$percentage = 100*($gradeOccurance/$num_results);
+				$percentage = 100*($gradeOccurance/$num_resultsForChart);
 				$chart->addPoint(new Point("$gradeValue ($percentage)", $percentage));
 			}
 
@@ -1163,7 +1176,10 @@ function submit_grade_comments($id, $sid, $grade, $comment)
 
 	$stupid_user = 0;
 
-	if (!is_numeric($grade)) {
+	/*  If check expression is changed by nikos, in order to give to teacher the ability to 
+	 * assign comments to a work without assigning grade. */
+//	if (!is_numeric($grade)) {
+	if (!is_numeric($grade) && ''!=$grade ) {
 		$tool_content .= $langWorkWrongInput;
 		$stupid_user = 1;
 	} else {
@@ -1187,7 +1203,10 @@ function submit_grades($grades_id, $grades)
 	foreach ($grades as $sid => $grade) {
 		$val = mysql_fetch_row(db_query("SELECT grade from assignment_submit WHERE id = '$sid'"));
 		if ($val[0] != $grade) {
-			if (!is_numeric($grade))
+			/*  If check expression is changed by nikos, in order to give to teacher
+			 * the ability to assign comments to a work without assigning grade. */
+//			if (!is_numeric($grade))
+			if (!is_numeric($grade) && ''!=$grade )
 			$stupid_user = 1;
 		}
 	}
