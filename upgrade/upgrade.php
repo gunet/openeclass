@@ -35,6 +35,7 @@ include '../include/lib/fileUploadLib.inc.php';
 include '../include/lib/forcedownload.php';
 include 'upgrade_functions.php';
 
+set_time_limit(0);
 
 $nameTools = $langUpgrade;
 $tool_content = "";

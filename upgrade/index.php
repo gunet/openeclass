@@ -31,7 +31,6 @@ $path2add=2;
 include '../include/baseTheme.php';
 
 $nameTools = $langUpgrade;
-$max_execution_time = trim(ini_get('max_execution_time'));
 
 if ($GLOBALS['language'] == 'greek') {
 	$upgrade_info_file = 'upgrade_info.php';
@@ -48,7 +47,9 @@ $tool_content = "";
 $tool_content .= "
 <div class='warntitle'>$langWarnUpgrade</div><p>$langExplUpgrade</p>
 <p>$langExpl2Upgrade</p>";
-if (intval($max_execution_time) < 300) {
+set_time_limit(0);
+$max_execution_time = ini_get('max_execution_time');
+if ($max_execution_time != 0 and $max_execution_time < 300) {
 	$tool_content .= "<hr><p>$langExecTimeUpgrade</p><hr>";
 	draw($tool_content, 0);
 	exit;
