@@ -2771,7 +2771,7 @@ $langExplUpgrade = "The upgrade script will modify configuration file <em>config
    Please make sure that web server have access to <em>config.php</em>. For security reasons, current configuration of <em>config.php</em> will remain in file <em>config_backup.php</em>."; //
 $langExpl2Upgrade = "Also for security reasons make sure that you have backedup all the databases."; //
 $langWarnUpgrade = "WARNING!"; //
-$langExecTimeUpgrade = "WARNING! For upgrade script to run successfully make sure that php variable <em>max_execution_time</em> which is defined in <em>php.ini</em> is larger than 300 (= 5 miunutes). Modify variable and restart the upgrade process"; //
+$langExecTimeUpgrade = "WARNING! For the upgrade script to run successfully make sure that php variable <em>max_execution_time</em> which is defined in <em>php.ini</em> is larger than 300 (= 5 minutes). Modify variable and restart the upgrade process"; //
 $langUpgradeCont = "Tο continue upgrade process, please enter platform administrator username / password:"; //
 $langUpgDetails = "Username / Password"; //
 $langUpgMan = "upgrade instructions"; //
