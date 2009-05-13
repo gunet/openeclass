@@ -228,15 +228,12 @@ mysql_query("CREATE TABLE exercices (
       PRIMARY KEY  (id))
       TYPE=MyISAM $charset_spec");
 
-mysql_query("INSERT INTO exercices VALUES ( '1', '$langExerciceEx', '$langAntique', '1', NULL, NULL, '0', '0', '0', NULL)");
-
-
  mysql_query("CREATE TABLE exercise_user_record (
       eurid int(11) NOT NULL auto_increment,
       eid tinyint(4) NOT NULL default '0',
       uid mediumint(8) NOT NULL default '0',
-      RecordStartDate date NOT NULL default '0000-00-00',
-      RecordEndDate date NOT NULL default '0000-00-00',
+      RecordStartDate datetime NOT NULL default '0000-00-00',
+      RecordEndDate datetime NOT NULL default '0000-00-00',
       TotalScore int(11) NOT NULL default '0',
       TotalWeighting int(11) default '0',
       attempt int(11) NOT NULL default '0',
@@ -253,7 +250,6 @@ mysql_query("CREATE TABLE questions (
         type int(11) default 2,
         PRIMARY KEY  (id))
         TYPE=MyISAM $charset_spec");
-mysql_query("INSERT INTO questions VALUES ( '1', '$langSocraticIrony', '$langManyAnswers', '10', '1', '1')");
 
 // REPONSES
 mysql_query("CREATE TABLE reponses (
@@ -267,19 +263,12 @@ mysql_query("CREATE TABLE reponses (
         PRIMARY KEY  (id, question_id))
         TYPE=MyISAM $charset_spec");
 
-mysql_query("INSERT INTO reponses VALUES ( '1', '1', '$langRidiculise', '0', '$langNoPsychology', '0', '1')");
-mysql_query("INSERT INTO reponses VALUES ( '2', '1', '$langAdmitError', '0', '$langNoSeduction', '0', '2')");
-mysql_query("INSERT INTO reponses VALUES ( '3', '1', '$langForce', '1', '$langIndeed', '10', '3')");
-mysql_query("INSERT INTO reponses VALUES ( '4', '1', '$langContradiction', '1', '$langNotFalse', '10', '4')");
-
-// EXERCICE_QUESTION
+// EXERCISE_QUESTION
 mysql_query("CREATE TABLE exercice_question (
                 question_id int(11) NOT NULL default '0',
                 exercice_id int(11) NOT NULL default '0',
                 PRIMARY KEY  (question_id,exercice_id))
         TYPE=MyISAM $charset_spec");
-
-mysql_query("INSERT INTO exercice_question VALUES ( '1', '1')");
 
 
 #######################COURSE_DESCRIPTION ################################

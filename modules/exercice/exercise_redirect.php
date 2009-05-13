@@ -30,12 +30,6 @@ include('question.class.php');
 include('answer.class.php');
 include('exercise.lib.php');
  
-// answer types
-define('UNIQUE_ANSWER',1);
-define('MULTIPLE_ANSWER',2);
-define('FILL_IN_BLANKS',3);
-define('MATCHING',4);
-
 $require_current_course = TRUE;
 $require_help = TRUE;
 $helpTopic = 'Exercise';
@@ -69,51 +63,32 @@ if(!session_is_registered('objExercise')) {
 		draw($tool_content, 2);
 		exit();
 	}
-
 	// saves the object into the session
 	session_register('objExercise');
 }
-
-setcookie("marvelous_cookie", "", time() - 3600, "/");
-setcookie("marvelous_cookie_control", "", time() - 3600, "/");
-
-$exerciseTitle=$objExercise->selectTitle();
 
 $exerciseTitle=$objExercise->selectTitle();
 $exerciseDescription=$objExercise->selectDescription();
 $exerciseDescription_temp = nl2br(make_clickable($exerciseDescription));
 
-$tool_content .= "
-      <table class=\"Exercise\" width=\"99%\">
-      <thead>
-      <tr>
-        <td colspan=\"2\">
+$tool_content .= "<table class='Exercise' width='99%'>
+      <thead><tr>
+        <td colspan='2'>
         <b>".stripslashes($exerciseTitle)."</b>
         <br/><br/>
         ".stripslashes($exerciseDescription_temp)."
         </td>
       </tr>
-      </thead>
-      </table>
-	";
+      </thead></table>";
 
-
-
-$tool_content .= <<<cData
-      <br/>
-      <table width="99%" class="Question">
-      <thead>
-      <tr>
-        <td class="alert1">${langExerciseExpired}</td>
+$tool_content .= "<br/><table width='99%' class='Question'>
+      <thead><tr>
+      <td class='alert1'>$langExerciseExpiredTime</td>
       </tr>
       <tr>
-        <td><br/><br/><br/><div align="center"><a href="exercice.php">${langBack}</a></div></td>
+      <td><br/><br/><br/><div align='center'><a href='exercice.php'>$langBack</a></div></td>
       </tr>
-      </thead>
-      </table>
-
-
-cData;
+      </thead></table>"; 
 
 draw($tool_content, 2, 'exercice');
 ?>

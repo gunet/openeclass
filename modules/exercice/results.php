@@ -75,72 +75,44 @@ $exerciseTitle=$objExercise->selectTitle();
 $exerciseDescription=$objExercise->selectDescription();
 $exerciseDescription_temp = nl2br(make_clickable($exerciseDescription));
 	
-$tool_content .= "
-    <table class=\"Exercise\" width=\"99%\">
-    <thead>
-    <tr>
-      <td><b>$exerciseTitle</b>
-          <br/><br/>
-          ${exerciseDescription_temp}
-      </td>
-    </tr>
-    </thead>
-    </table>
-    <br/>";
+$tool_content .= "<table class=\"Exercise\" width=\"99%\"><thead><tr>
+	<td><b>$exerciseTitle</b><br/><br/>${exerciseDescription_temp}
+	</td></tr></thead></table><br/>";
 
 mysql_select_db($currentCourseID);
 $sql="SELECT DISTINCT uid FROM `exercise_user_record`";
 $result = mysql_query($sql);
 while($row=mysql_fetch_array($result)) {
 	$sid = $row['uid'];
-	$StudentName = db_query("select nom,prenom from user where user_id='$sid'", $mysqlMainDb);
+	$StudentName = db_query("SELECT nom,prenom FROM user WHERE user_id='$sid'", $mysqlMainDb);
 	$theStudent = mysql_fetch_array($StudentName);
-	$tool_content .= "
-    <table class=\"Question\">
-    <tr>
-      <th colspan=\"3\" class=\"left\">";
-	if (!$sid) {
-	    $tool_content .= "$langNoGroupStudents";
-	} else {
-	   	$tool_content .= "$langUser: <b>".$theStudent["nom"]." ".$theStudent["prenom"]."</b>"; 
-	}
-	  
-	  
-	$tool_content .= "
-	  </th>
-    </tr>";
-	$tool_content .= "
-    <tr>
-      <td width=\"150\" align=\"center\"><b>".$langExerciseStart."</b></td>";
-	$tool_content .= "
-      <td width=\"150\" align=\"center\"><b>".$langExerciseEnd."</b></td>";
-	$tool_content .= "
-      <td width=\"150\" align=\"right\"><b>".$langYourTotalScore2."</b></td>
-    </tr>";
-	
+	$tool_content .= "<table class='Question'>";
 	mysql_select_db($currentCourseID);
-	$sql2="SELECT RecordStartDate, RecordEndDate, TotalScore, TotalWeighting 
-		FROM `exercise_user_record` WHERE uid='$sid' AND eid='$exerciseId'";
-	$result2 = mysql_query($sql2);
-	while($row2=mysql_fetch_array($result2)) {
-		$RecordEndDate = $row2['RecordEndDate'];
-		$tool_content .= "
-    <tr>
-      <td align=\"center\">".nice_format($row2['RecordStartDate'])."</td>";
-		if ($RecordEndDate != "0000-00-00") { 
-			$tool_content .= "
-      <td align=\"center\">".nice_format($RecordEndDate)."</td>";
-		} else { // user termination or excercise time limit exceeded
-			$tool_content .= "
-      <td align=\"center\">".$langResultsFailed."</td>";
-		}	
-		$tool_content .= "
-      <td align=\"right\">".$row2['TotalScore']. "/".$row2['TotalWeighting']."</td>
-    </tr>";
+	$sql2="SELECT DATE_FORMAT(RecordStartDate, '%Y-%m-%d / %H:%i') AS RecordStartDate, RecordEndDate, TIME_TO_SEC(TIMEDIFF(RecordEndDate,RecordStartDate)) AS TimeDuration, TotalScore, TotalWeighting 
+	FROM `exercise_user_record` WHERE uid='$sid' AND eid='$exerciseId'";
+	$result2 = db_query($sql2);
+	if (mysql_num_rows($result2)) { // if users found
+		$tool_content .= "<tr><th colspan='3' class='left'>";
+		if (!$sid) {
+			$tool_content .= "$langNoGroupStudents";
+		} else {
+			$tool_content .= "$langUser: <b>".$theStudent["nom"]." ".$theStudent["prenom"]."</b>"; 
+		}
+		$tool_content .= "</th></tr>";
+		$tool_content .= "<tr><td width='150' align='center'><b>".$langExerciseStart."</b></td>";
+		$tool_content .= "<td width='150' align='center'><b>".$langExerciseDuration."</b></td>";
+		$tool_content .= "<td width='150' align='right'><b>".$langYourTotalScore2."</b></td></tr>";
 	}
-$tool_content .= "
-    </table>
-    <br/>";
+	while($row2=mysql_fetch_array($result2)) {
+ 		$tool_content .= "<tr><td align='center'>$row2[RecordStartDate]</td>";
+		if ($row2['TimeDuration'] == '00:00:00' or empty($row2['TimeDuration'])) { // for compatibility 
+			$tool_content .= "<td align='center'>$langNotRecorded</td>";
+		} else {
+			$tool_content .= "<td align='center'>".format_time_duration($row2['TimeDuration'])."</td>";
+		}
+	$tool_content .= "<td align='center'>".$row2['TotalScore']. "/".$row2['TotalWeighting']."</td></tr>";
+	}
+$tool_content .= "</table><br/>";
 }
 draw($tool_content, 2, 'exercice');
 ?>	

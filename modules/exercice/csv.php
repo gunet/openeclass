@@ -44,7 +44,7 @@ if (ereg('[^(]*\((.*)\)[^)]*',$client,$regs)) {
 	// this looks better under WinX
 	if (eregi("Win",$os)) $crlf="\r\n";
 	}
-	echo "$langExerciseSurname\t$langExerciseName\t$langExerciseStart\t$langExerciseEnd\t$langYourTotalScore2\t$langQuestionWeighting";
+	echo "$langSurname\t$langName\t$langExerciseStart\t$langExerciseDuration\t$langYourTotalScore2\t$langQuestionWeighting";
 	echo "$crlf";
 	echo "$crlf";
 
@@ -53,12 +53,14 @@ $sql="SELECT DISTINCT uid FROM `exercise_user_record` WHERE eid='".mysql_real_es
 $result = mysql_query($sql);
 while($row=mysql_fetch_array($result)) {
 	$sid = $row['uid'];
-	$StudentName = db_query("select nom,prenom from user where user_id='$sid'", $mysqlMainDb);
+	$StudentName = db_query("select nom, prenom from user where user_id='$sid'", $mysqlMainDb);
 	$theStudent = mysql_fetch_array($StudentName);	
 	$nom = $theStudent["nom"];
 	$prenom = $theStudent["prenom"];	
 	mysql_select_db($currentCourseID);
-	$sql2="SELECT RecordStartDate, RecordEndDate, TotalScore, TotalWeighting 
+	$sql2="SELECT DATE_FORMAT(RecordStartDate, '%Y-%m-%d / %H:%i') AS RecordStartDate, 
+		RecordEndDate, TIME_TO_SEC(TIMEDIFF(RecordEndDate,RecordStartDate)) AS TimeDuration, 
+		TotalScore, TotalWeighting 
 		FROM `exercise_user_record` WHERE uid='$sid' AND eid='".mysql_real_escape_string($_GET['exerciseId'])."'";
 	$result2 = mysql_query($sql2);
 	while($row2=mysql_fetch_array($result2)) {
@@ -67,11 +69,10 @@ while($row=mysql_fetch_array($result)) {
 		echo("$nom \t");
 		$RecordStartDate = $row2['RecordStartDate'];
 		echo("$RecordStartDate\t");		
-		$RecordEndDate = $row2['RecordEndDate'];
-		if ($RecordEndDate != "0000-00-00") { 
-			echo("$RecordEndDate\t");
-		} else { // user termination or excercise time limit exceeded
-			echo("$langResultsFailed\t");
+		if ($row2['TimeDuration'] == '00:00:00' or empty($row2['TimeDuration'])) { // for compatibility 
+			echo("$langNotRecorded\t");
+		} else {
+			echo("".format_time_duration($row2['TimeDuration'])."\t");
 		}		
 		$TotalScore = $row2['TotalScore'];
 		$TotalWeighting = $row2['TotalWeighting'];

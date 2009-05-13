@@ -339,14 +339,14 @@ $tool_content .= "
 			$tool_content .= "4";
 	
 	$tool_content .= "\"><div align=\"center\">";
-		$tool_content .= "<small>&lt;&lt; <a href=\"".$PHP_SELF.
+		$tool_content .= "<small>&lt;&lt; <a href=\"".$_SERVER['PHP_SELF'].
 		"?exerciseId=".$exerciseId.
 		"&fromExercise=".$fromExercise.
 		"&page=".($page-1)."\">".$langPrevious."</a></small> | ";
 	}
 
 	if($nbrQuestions > $limitQuestPage) {
-		$tool_content .= "<small><a href=\"".$PHP_SELF.
+		@$tool_content .= "<small><a href=\"".$_SERVER['PHP_SELF'].
 			"?exerciseId=".$exerciseId.
 			"&fromExercise=".$fromExercise.
 			"&page=".($page+1)."\">".$langNext.

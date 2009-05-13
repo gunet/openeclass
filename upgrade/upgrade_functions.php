@@ -261,6 +261,22 @@ function encode_dropbox_documents($code, $id, $filename, $title) {
 //---------------------------------------------
 // Upgrade course database
 //---------------------------------------------
+function upgrade_course_2_1_4($code, $extramessage = '')
+{
+	global $langUpgCourse;
+	mysql_select_db($code);
+	echo "<hr><p>$langUpgCourse <b>$code</b> (2.1.4) $extramessage<br />";
+	flush();
+	
+	// upgrade exercises
+ 	db_query("ALTER TABLE `exercise_user_record` 
+		CHANGE `RecordStartDate` `RecordStartDate` DATETIME NOT NULL DEFAULT '0000-00-00'", $code); 
+
+ 	db_query("ALTER TABLE `exercise_user_record` 
+		CHANGE `RecordEndDate` `RecordEndDate` DATETIME NOT NULL DEFAULT '0000-00-00'", $code);
+
+}
+
 
 function upgrade_course_2_1_3($code, $extramessage = '')
 {

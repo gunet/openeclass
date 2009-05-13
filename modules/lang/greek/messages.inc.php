@@ -30,7 +30,7 @@
 $langIntro = "Η πλατφόρμα <b>$siteName</b> είναι ένα ολοκληρωμένο Σύστημα Διαχείρισης Ηλεκτρονικών Μαθημάτων και υποστηρίζει την Υπηρεσία Ασύγχρονης Τηλεκπαίδευσης στο <a href=\"$InstitutionUrl\" target=\"_blank\" class=mainpage>$Institution</a>.";
 $langVersion="Έκδοση του $siteName";
 $langAboutText="Η έκδοση της πλατφόρμας είναι";
-$langEclassVersion="2.1.3";
+$langEclassVersion="2.1.4";
 $langHostName="Ο υπολογιστής στον οποίο βρίσκεται η πλατφόρμα είναι ο ";
 $langWebVersion="Xρησιμοποιεί ";
 $langMySqlVersion="και MySql ";
@@ -400,6 +400,12 @@ $langYear="Έτος";
 $langHour="Ώρα";
 $langHours = "Ώρες";
 $langMinute ="Λεπτά";
+$langsecond = 'δευτερόλεπτο';
+$langseconds = 'δευτερόλεπτα';
+$langminute = 'λεπτό';
+$langminutes = 'λεπτά';
+$langhour = 'ώρα';
+$langhours = 'ώρες';
 $langLasting="Διάρκεια";
 $langDateNow = "Σημερινή ημερομηνία:";
 $langCalendar = "Ημερολόγιο";
@@ -912,8 +918,8 @@ $dropbox_lang['mailingJustUploadNoOther'] = "Το ανέβασμα αρχείο�
 /**********************************************************
 * exercice.inc.php
 **********************************************************/
-$langExercicesView="Προβολή Ασκησης";
-$langExercicesResult="Αποτελέσματα Ασκησης";
+$langExercicesView="Προβολή Άσκησης";
+$langExercicesResult="Αποτελέσματα Άσκησης";
 $langQuestion="Ερώτηση";
 $langQuestions="Ερωτήσεις";
 $langAnswer="Απάντηση";
@@ -927,8 +933,8 @@ $langInactive="μη ενεργό";
 $langNoEx="Δεν υπάρχει διαθέσιμη άσκηση";
 $langNewEx="Νέα άσκηση";
 $langExerciseType="Τύπος Ασκήσεων";
-$langExerciseName="Όνομα Ασκησης";
-$langExerciseDescription="Περιγραφή Ασκησης";
+$langExerciseName="Όνομα Άσκησης";
+$langExerciseDescription="Περιγραφή Άσκησης";
 $langSimpleExercise="Σε μία μόνο σελίδα";
 $langSequentialExercise="Σε μία ερώτηση ανά σελίδα (στη σειρά)";
 $langRandomQuestions="Τυχαίες Ερωτήσεις";
@@ -1042,9 +1048,10 @@ $langCorrect="Σωστό";
 $langExerciseNotFound="Η απάντηση δεν βρέθηκε";
 $langAlreadyAnswered="Απαντήσατε ήδη στην ερώτηση";
 
-// scoring.php & scoring_student.php
+// exercise result.php
 $langExerciseStart="Έναρξη";
 $langExerciseEnd="Λήξη";
+$langExerciseDuration="Διάρκεια Εκτέλεσης";
 $langExerciseConstrain="Χρονικός περιορισμός";
 $langExerciseEg="π.χ.";
 $langExerciseConstrainUnit="λεπτά";
@@ -1061,7 +1068,7 @@ $langYourTotalScore2="Συνολική βαθμολογία";
 $langExerciseScores1="HTML";
 $langExerciseScores2="Ποσοστιαία";
 $langExerciseScores3="CSV";
-$langExerciseSurname="Επώνυμο";
+$langNotRecorded = "μη καταγεγραμμένη";
 
 /***********************************************
 * external_module.inc.php

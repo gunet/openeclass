@@ -27,6 +27,12 @@
 // disable notices due to some problems
 error_reporting('E_ALL ^ E_NOTICE');
 
+// answer types
+define('UNIQUE_ANSWER',	1);
+define('MULTIPLE_ANSWER', 2);
+define('FILL_IN_BLANKS', 3);
+define('MATCHING', 4);
+
 include('exercise.class.php');
 include('question.class.php');
 include('answer.class.php');
@@ -71,12 +77,6 @@ $tool_content = "";
 
 $nameTools = $langExercices;
 $navigation[]= array ("url"=>"exercice.php", "name"=> $langExercices);
-
-// answer types
-define('UNIQUE_ANSWER',	1);
-define('MULTIPLE_ANSWER', 2);
-define('FILL_IN_BLANKS', 3);
-define('MATCHING', 4);
 
 $is_allowedToEdit=$is_adminOfCourse;
 

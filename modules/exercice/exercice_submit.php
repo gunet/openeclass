@@ -24,18 +24,16 @@
 *  			eMail: info@openeclass.org
 * =========================================================================*/
 
+define('UNIQUE_ANSWER',	1);
+define('MULTIPLE_ANSWER', 2);
+define('FILL_IN_BLANKS', 3);
+define('MATCHING', 4);
 
 include('exercise.class.php');
 include('question.class.php');
 include('answer.class.php');
 include('exercise.lib.php');
  
-// answer types
-define('UNIQUE_ANSWER',1);
-define('MULTIPLE_ANSWER',2);
-define('FILL_IN_BLANKS',3);
-define('MATCHING',4);
-
 $require_current_course = TRUE;
 $require_help = TRUE;
 $helpTopic = 'Exercise';
@@ -56,6 +54,19 @@ $TBL_EXERCICE_QUESTION='exercice_question';
 $TBL_EXERCICES='exercices';
 $TBL_QUESTIONS='questions';
 $TBL_REPONSES='reponses';
+ 
+if (isset($exerciseId)) {
+	// security check 
+	$active = mysql_fetch_array(db_query("SELECT active FROM `$TBL_EXERCICES` WHERE id='$exerciseId'"));
+	if ($active['active'] == 0) {
+		header('Location: exercice.php');
+		exit();
+	} 
+}
+
+if (!isset($_SESSION['exercise_begin_time'])) {
+	$_SESSION['exercise_begin_time'] = time();
+}
 
 // if the user has clicked on the "Cancel" button
 if(isset($buttonCancel)) {
@@ -65,7 +76,40 @@ if(isset($buttonCancel)) {
 }
 
 // if the user has submitted the form
-if(isset($formSent)) {
+if (isset($formSent)) {
+	$CurrentAttempt = mysql_fetch_array(db_query("SELECT COUNT(*) FROM exercise_user_record 
+		WHERE eid='$eid_temp' AND uid='$uid'", $currentCourseID));
+	++$CurrentAttempt[0];
+
+	if (($exerciseAllowedAttemtps == 0) or ($CurrentAttempt[0] <= $exerciseAllowedAttemtps)) { // if it is allowed
+		if (isset($exerciseTimeConstrain) and $exerciseTimeConstrain != 0) { 
+			$exerciseTimeConstrain = $exerciseTimeConstrain*60;
+			$exerciseTimeConstrainSecs = time() - $exerciseTimeConstrain;
+			$_SESSION['exercise_end_time'] = $exerciseTimeConstrainSecs;
+			if ($_SESSION['exercise_end_time'] - $_SESSION['exercise_begin_time'] > $exerciseTimeConstrain) {
+				unset($_SESSION['exercise_begin_time']);
+				unset($_SESSION['exercise_end_time']);
+				header('Location: exercise_redirect.php');
+				exit();
+			} 
+		}
+		$RecordEndDate = date("Y-m-d H:i:s", time());
+		if (($exerciseType == 1) or (($exerciseType == 2) and ($nbrQuestions == $questionNum))) { // record results
+			mysql_select_db($currentCourseID); 
+			$sql="INSERT INTO exercise_user_record(eid, uid, RecordStartDate, RecordEndDate, attempt)
+				VALUES ('$eid_temp','$uid','$RecordStartDate','$RecordEndDate', 1)";
+			$result=db_query($sql);
+		}	
+	} else {
+		$tool_content .= "<br/><table width='99%' class='Question'>
+		<thead><tr><td class='alert1'>$langExerciseExpired</td></tr>
+		<tr>
+		<td><br/><br/><br/><div align='center'><a href='exercice.php'>$langBack</a></div></td>
+		</tr></thead></table>";
+		draw($tool_content, 2, 'exercice');
+		exit();
+	}
+	
 	// initializing
 	if(!is_array(@$exerciseResult)) {
 		$exerciseResult=array();
@@ -90,7 +134,7 @@ if(isset($formSent)) {
 	}
 
 	// the script "exercise_result.php" will take the variable $exerciseResult from the session
-	session_register('exerciseResult');
+	session_register('exerciseResult'); 
 
 	// if it is the last question (only for a sequential exercise)
 	if($exerciseType == 1 || $questionNum >= $nbrQuestions) {
@@ -98,7 +142,7 @@ if(isset($formSent)) {
 		header('Location: exercise_result.php');
 		exit();
 	}
-}
+} // end of submit
 
 $navigation[]=array("url" => "exercice.php","name" => $langExercices);
 
@@ -124,54 +168,9 @@ $randomQuestions=$objExercise->isRandom();
 $exerciseType=$objExercise->selectType();
 $exerciseTimeConstrain=$objExercise->selectTimeConstrain();
 $exerciseAllowedAttemtps=$objExercise->selectAttemptsAllowed();
-
 $eid_temp = $objExercise->selectId();
-if (!$exerciseTimeConstrain) {
-	$noTimeLimit = true;
-	$exerciseTimeConstrainSecs = time() + (7 * 24 * 60 * 60);
-} else {
-	$noTimeLimit = false;
-	$exerciseTimeConstrainSecs = time() + ($exerciseTimeConstrain*60);
-}
 
-$RecordStartDate = date("Y-m-d");
-
-if ((!$is_adminOfCourse)&&(isset($uid))) { //if registered student
-	$CurrentAttempt = mysql_fetch_array(db_query("SELECT COUNT(*) FROM exercise_user_record 
-			WHERE eid='$eid_temp' AND uid='$uid'", $currentCourseID));
-	++$CurrentAttempt[0];
-		if (!isset($HTTP_COOKIE_VARS['marvelous_cookie_control'])) {
-			if (!setcookie("marvelous_cookie_control", $eid_temp, time()+(7 * 24 * 60 * 60), "/")) {
-					header('Location: exercise_redirect.php');
-				exit();
-			}
-		}
-		
-		if ((isset($HTTP_COOKIE_VARS['marvelous_cookie_control']))&&(!isset($HTTP_COOKIE_VARS['marvelous_cookie']))) {
-			header('Location: exercise_redirect.php');
-			exit();
-		}
-	
-	if (!isset($HTTP_COOKIE_VARS['marvelous_cookie'])) { // either expired or begin again
-		if ((!$exerciseAllowedAttemtps)||($CurrentAttempt[0] <= $exerciseAllowedAttemtps)) { // if it is allowed begin again
-			
-			$CookieLife = $exerciseTimeConstrainSecs;						
-			if (!setcookie("marvelous_cookie", $eid_temp, $CookieLife, "/")) {
-					header('Location: exercise_redirect.php');
-				exit();
-			}
-			mysql_select_db($currentCourseID);
-			$sql="INSERT INTO `exercise_user_record` (eurid,eid, uid,RecordStartDate,RecordEndDate,".
-				"TotalScore,TotalWeighting,attempt) VALUES".
-				"(0,'$eid_temp','$uid','$RecordStartDate','','','',1)";
-			$result=db_query($sql);		
-		} else {  // not allowed begin again
-			header('Location: exercise_redirect.php');
-			exit();
-		}
-	}
-}
-
+$RecordStartDate = date("Y-m-d H:i:s", time());
 if(!session_is_registered('questionList')) {
 	// selects the list of question ID
 	$questionList=$randomQuestions?$objExercise->selectRandomList():$objExercise->selectQuestionList();
@@ -205,13 +204,16 @@ if(@$_POST['questionNum']) {
       </tr>
       </thead>
       </table>
-	  
       <form method="post" action="$_SERVER[PHP_SELF]" autocomplete="off">
       <input type="hidden" name="formSent" value="1">
       <input type="hidden" name="exerciseType" value="$exerciseType">
       <input type="hidden" name="questionNum" value="$questionNum">
       <input type="hidden" name="nbrQuestions" value="$nbrQuestions">
-		
+      <input type="hidden" name="exerciseTimeConstrain" value="$exerciseTimeConstrain">
+      <input type="hidden" name="eid_temp" value="$eid_temp">
+      <input type="hidden" name="RecordStartDate" value="$RecordStartDate">
+      <input type="hidden" name="exerciseAllowedAttemtps" value="$exerciseAllowedAttemtps">
+
 cData;
 
 $i=0;
@@ -238,67 +240,41 @@ foreach($questionList as $questionId) {
 			}
 		}
 	}
-
-	/*
-	$tool_content .= "
-      <br>
-      <p><b>".$langQuestion." ".$i; 
-	
-	if($exerciseType == 2) 
-		$tool_content .= " / ".$nbrQuestions;
-	$tool_content .= "
-      </b></p>";
-    */
-
 	// shows the question and its answers
-	$tool_content .= "
-      <br/>
-      <table width=\"99%\" class=\"Question\">
-      <thead>
-      <tr>
-        <td colspan=\"2\"><b><u>".$langQuestion."</u>: ".$i."</b></td>
-      </tr>"; 
+	$tool_content .= "<br/><table width=\"99%\" class=\"Question\"><thead>
+	<tr><td colspan=\"2\"><b><u>".$langQuestion."</u>: ".$i; 
 	
-	if($exerciseType == 2) 
-		$tool_content .= " / ".$nbrQuestions;
-	
+	if($exerciseType == 2) { 
+		$tool_content .= "/".$nbrQuestions;
+	}
+	$tool_content .= "</b></td></tr>";
 	showQuestion($questionId);
 	$tool_content .= "</thead></table>";
 
 	// for sequential exercises
 	if($exerciseType == 2) {
-	// quits the loop
-	break;
+		// quits the loop
+		break;
 	}
 }	// end foreach()
 
-if (!$questionList) 
-{
-   $tool_content .= "
-      <table width=\"99%\" class=\"Question\">
-      <thead>
-      <tr>
-        <td colspan='2'><font color='red'>$langNoAnswer</font></td>
-      </tr>
-      </thead>
-      </table>";	 
+if (!$questionList) {
+	$tool_content .= "<table width=\"99%\" class=\"Question\">
+	<thead>
+	<tr><td colspan='2'><font color='red'>$langNoAnswer</font></td></tr>
+	</thead>
+	</table>";	 
 } else {
-	$tool_content .= "<br/>	
-    <table width=\"99%\" class=\"Exercise\">
-    <tr>
-      <td><div align=\"center\"><input type=\"submit\" value=\"";
-	if ($exerciseType == 1 || $nbrQuestions == $questionNum)
-		$tool_content .= "$langCont\">&nbsp;";
-	else	
-		$tool_content .= $langNext." &gt;"."\">";
-	$tool_content .= "<input type=\"submit\" name=\"buttonCancel\" value=\"$langCancel\"></div>
-      </td>
-    </tr>
-    </table>
-	";
+	$tool_content .= "<br/>	<table width=\"99%\" class=\"Exercise\"><tr>
+	<td><div align=\"center\"><input type=\"submit\" value=\"";
+		if ($exerciseType == 1 || $nbrQuestions == $questionNum)
+			$tool_content .= "$langCont\">&nbsp;";
+		else	
+			$tool_content .= $langNext." &gt;"."\">";
+		$tool_content .= "<input type=\"submit\" name=\"buttonCancel\" value=\"$langCancel\"></div>
+	</td></tr></table>";
 }	
 
-	$tool_content .= "
-    </form>";
+$tool_content .= "</form>";
 draw($tool_content, 2, 'exercice');
 ?>

@@ -262,7 +262,9 @@ if (!isset($submit2)) {
         		upgrade_course_old($code[0], $lang, "($i / $total)");
                         db_query('SET NAMES utf8');
                	        upgrade_course_2_1_3($code[0], "($i / $total)");
-                }
+                } elseif ($oldversion < '2.1.4') {
+               	        upgrade_course_2_1_4($code[0], "($i / $total)");
+		}
                 echo "</p>\n";
                 $i++;
         }

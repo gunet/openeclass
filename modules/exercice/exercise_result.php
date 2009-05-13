@@ -41,16 +41,6 @@ $tool_content = "";
 $nameTools = $langExercicesResult;
 $navigation[]= array ("url"=>"exercice.php", "name"=> $langExercices);
 
-// Destroy cookie
-if (!setcookie("marvelous_cookie", "", time() - 3600, "/")) {
-	header('Location: exercise_redirect.php');
-	exit();
-}
-if (!setcookie("marvelous_cookie_control", "", time() - 3600, "/")) {
-	header('Location: exercise_redirect.php');
-	exit();
-}
-
 // latex support
 include_once "$webDir"."/modules/latexrender/latex.php";
 include('../../include/lib/textLib.inc.php');
@@ -84,7 +74,7 @@ $tool_content .= "
       </tr>
       </thead>
       </table>
-	  
+
 	<form method=\"GET\" action=\"exercice.php\">";
 
 	$i=$totalScore=$totalWeighting=0;
@@ -103,7 +93,7 @@ $tool_content .= "
 		$questionName=latex_content($questionName);
 		$questionDescription=$objQuestionTmp->selectDescription();
 		$questionDescription=latex_content($questionDescription);
-        $questionDescription_temp = nl2br(make_clickable($questionDescription));
+        	$questionDescription_temp = nl2br(make_clickable($questionDescription));
 	
 	
 		$questionWeighting=$objQuestionTmp->selectWeighting();
@@ -347,7 +337,6 @@ $tool_content .= <<<cData
       </tr>
       </tbody>
       </table>
-      
 cData;
 
 	// destruction of Answer
@@ -362,76 +351,20 @@ cData;
 
 $eid=$objExercise->selectId();
 mysql_select_db($currentCourseID);
+
 $sql="SELECT RecordStartDate FROM `exercise_user_record` WHERE eid='$eid' AND uid='$uid'";
-$result=mysql_query($sql);
+$result=db_query($sql);
 $attempt = count($result);
-$row=mysql_fetch_array($result);
-$RecordStartDate = ($RecordStartTime_temp = $row[count($result)-1]);
-$RecordStartTime_temp = mktime(0, 0 , 0, substr($RecordStartTime_temp, 5,2), substr($RecordStartTime_temp, 8,2), substr($RecordStartTime_temp, 0,4));
-$exerciseTimeConstrain=$objExercise->selectTimeConstrain();
-$exerciseTimeConstrain = $exerciseTimeConstrain*60;
-$RecordEndDate = ($SubmitDate = date("Y-m-d"));
-$SubmitDate = mktime(0, 0, 0, substr($SubmitDate, 5,2), substr($SubmitDate, 8,2), substr($SubmitDate, 0,4));	
-if (!$exerciseTimeConstrain) {
-	$exerciseTimeConstrain = (7 * 24 * 60 * 60);
-}
-$OnTime = $RecordStartTime_temp + $exerciseTimeConstrain - $SubmitDate;
 
-if (($OnTime > 0 or $is_adminOfCourse)) { // exercise time limit hasn't expired
-	$sql="SELECT eurid FROM `exercise_user_record` WHERE eid='$eid' AND uid='$uid'";
-	$result = mysql_query($sql);
-	$row=mysql_fetch_array($result);
-	$x = $row[count($result)-1];
-	$eurid = $row[count($result)-1];
-	// record end/results of exercise
-	$sql="UPDATE `exercise_user_record` SET RecordEndDate='$RecordEndDate',TotalScore='$totalScore', TotalWeighting='$totalWeighting', attempt='$attempt' WHERE eurid='$eurid'";
-	db_query($sql,$currentCourseID);
-} else {  // not allowed begin again
-	// if the object is not in the session
-	if(!session_is_registered('objExercise')) {
-		// construction of Exercise
-		$objExercise=new Exercise();	
-		// if the specified exercise doesn't exist or is disabled
-		if(!$objExercise->read($exerciseId) && (!$is_allowedToEdit)) {
-			$tool_content .= $langExerciseNotFound;
-			draw($tool_content, 2, 'exercice');
-			exit();	
-		}
-		// saves the object into the session
-		session_register('objExercise');
-    }
+$sql="SELECT MAX(eurid) FROM `exercise_user_record` WHERE eid='$eid' AND uid='$uid'";
+$result = db_query($sql);
+$row= mysql_fetch_row($result);
+$eurid = $row[0];
 
-	$tool_content = "
-      <table class=\"Exercise\" width=\"99%\">
-      <thead>
-      <tr>
-        <td colspan=\"2\">
-        <b>".stripslashes($exerciseTitle)."</b>
-        <br/><br/>
-        ".stripslashes($exerciseDescription_temp)."
-        </td>
-      </tr>
-      </thead>
-      </table>
-      ";
-
-    $tool_content .= <<<cData
-      <br/>
-      <table width="99%" class="Question">
-      <thead>
-      <tr>
-        <td class="alert1">${langExerciseExpiredTime}</td>
-      </tr>
-      <tr>
-        <td><br/><br/><br/><div align="center"><a href="exercice.php">${langBack}</a></div></td>
-      </tr>
-      </thead>
-      </table>
-cData;
-
-draw($tool_content, 2, 'exercice');
-exit();
-}
+// record results of exercise
+$sql="UPDATE exercise_user_record SET TotalScore='$totalScore', TotalWeighting='$totalWeighting',
+	attempt='$attempt' WHERE eurid='$eurid'";
+db_query($sql, $currentCourseID);
 
 $tool_content .= <<<cData
       <br/>
@@ -444,13 +377,10 @@ $tool_content .= <<<cData
       </tr>
       </thead>
       </table>
-
       <br/>
       <div align="center">
         <input type="submit" value="${langFinish}">
       </div>
-
-
       <br/></form><br>
 cData;
 draw($tool_content, 2, 'exercice');
