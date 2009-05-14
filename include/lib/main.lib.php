@@ -997,3 +997,37 @@ function langname_to_code($langname)
 # 'japanese' => 'jp', 'polish' => 'pl', 'russian' => 'ru',
 # 'turkish' => 'tr',
 }
+
+function append_units($amount, $singular, $plural)
+{
+	if ($amount == 1) {
+		return $amount . ' ' . $singular;
+	} else {
+		return $amount . ' ' . $plural;
+	}
+}
+
+function format_time_duration($sec)
+{
+        global $langsecond, $langseconds, $langminute, $langminutes, $langhour, $langhours;
+
+        if ($sec < 60) {
+                return append_units($sec, $langsecond, $langseconds);
+        }
+        $min = floor($sec / 60);
+        $sec = $sec % 60;
+        if ($min < 2) {
+                return append_units($min, $langminute, $langminutes) . 
+                       (($sec == 0)? '': (', ' . append_units($sec, $langsecond, $langseconds)));
+        }
+        if ($min < 60) {
+                return append_units($min, $langminute, $langminutes);
+        }
+        $hour = floor($min / 60);
+        $min = $min % 60;
+        if ($hour < 3) {
+                return append_units($hour, $langhour, $langhours) . 
+                       (($min == 0)? '': (', ' . append_units($min, $langminute, $langminutes)));
+        }
+        return append_units($hour, $langhour, $langhours);
+}
