@@ -344,7 +344,8 @@ if($is_adminOfCourse)
 	//nea methodos metonomasias arxeiwn kanontas update sthn eggrafh pou yparxei sth vash
 	if (isset($renameTo2)) {
 		$query =  "UPDATE $dbTable SET filename=" .
-                        quote($renameTo2) . " WHERE path='$sourceFile'";
+                        quote(canonicalize_whitespace($renameTo2)) .
+                        " WHERE path='$sourceFile'";
 		db_query($query);
 		$dialogBox = "<p class='caution_small'>$langElRen</p><br />";
 	}
@@ -369,7 +370,7 @@ if($is_adminOfCourse)
 	// create directory
 	// step 2: create the new directory
 	if (isset($newDirPath)) {
-                $newDirName = preg_replace('/\s+/', ' ', trim($newDirName));
+                $newDirName = canonicalize_whitespace($newDirName);
                 if (!empty($newDirName)) {
                         make_path($newDirPath, array($newDirName));
                         // $path_already_exists: global variable set by make_path()

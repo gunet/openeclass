@@ -982,6 +982,15 @@ function wrap_each(&$item)
     $item = "'$item'";
 }
 
+
+// Remove whitespace from start and end of string and convert
+// sequences of whitespace characters to single spaces
+function canonicalize_whitespace($s)
+{
+        return preg_replace('/[ \t\n\r\0\x0B]+/', ' ', trim($s));
+}
+
+
 // Convert language name to language code
 function langname_to_code($langname)
 {
