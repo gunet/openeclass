@@ -393,6 +393,7 @@ if (isset($_POST['create_course'])) {
                                 description = " . quote($description) . ",
                                 course_addon = " . quote($course_addon) . ",
                                 course_keywords = " . quote($course_keywords) . ",
+                                faculte = '$facname',
                                 visible = " . quote($formvisible) . ",
                                 titulaires = " . quote($titulaires) . ",
                                 fake_code = " . quote($code) . ",
@@ -405,6 +406,11 @@ if (isset($_POST['create_course'])) {
                                 statut = '1',
                                 tutor='1',
 				reg_date = CURDATE()");
+
+                mysql_query("INSERT INTO cours_faculte SET
+                                faculte = '$faculte',
+                                code = '$repertoire',
+                                facid = '$facid'");
 
                 $titou='$dbname';
 
