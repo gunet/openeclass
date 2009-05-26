@@ -54,11 +54,8 @@ function send_file_to_client($real_filename, $filename, $send_inline = false, $s
         {
                 return false;
         }
-	if (strpos($filename, ' ') !== false) {
-		$filename = '"' . $filename . '"';
-	}
-
         $content_type = get_mime_type($filename);
+
         if (!$send_inline) {
                 header("Content-Disposition: attachment");
         }
@@ -72,6 +69,10 @@ function send_file_to_client($real_filename, $filename, $send_inline = false, $s
         
         header("Content-type: $content_type$charset");
 	if ($send_name) {
+                // Add quotes to filename if it contains spaces
+                if (strpos($filename, ' ') !== false) {
+                        $filename = '"' . $filename . '"';
+                }
         	header("Content-Disposition: $disposition; filename=$filename");
 	}
 
