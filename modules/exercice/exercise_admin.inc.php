@@ -164,6 +164,7 @@ if(isset($modifyExercise))
 	</form>";
 
 } else {
+	$displayResults=$objExercise->selectResults();
 	if ($displayResults == 1) {
 		$disp_results_message = $langAnswersDisp;
 	} else {
