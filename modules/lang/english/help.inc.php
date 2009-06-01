@@ -188,7 +188,8 @@ one.
 </p>$langPHPMathPublisher
 ";
 $langWork_studentContent = "<p>The Course Assignments module is a very useful tool since it allows the electronic admission, submission and evaluation of course assignments. More specifically, it allows registered student users to upload electronically their assignments in the platform until the submission date and then see their grade, after the teacher has graded them.
-</p>" ;$langHGroup = "Groups";
+</p>" ;
+$langHGroup = "Groups";
 $langHGroup_student = $langHGroup ;
 $langGroupContent = "<p>This tool allows to create and manage work groups.
 At creation (Create groups), groups are emtpy. There are

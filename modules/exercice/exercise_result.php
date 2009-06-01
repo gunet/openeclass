@@ -58,144 +58,114 @@ if(!is_array($exerciseResult) || !is_array($questionList) || !is_object($objExer
 	exit();
 }
 
-$exerciseTitle=$objExercise->selectTitle();
-$exerciseDescription=$objExercise->selectDescription();
+$exerciseTitle = $objExercise->selectTitle();
+$exerciseDescription = $objExercise->selectDescription();
 $exerciseDescription_temp = nl2br(make_clickable($exerciseDescription));
+$displayResults=$objExercise->selectResults(); 
 
-$tool_content .= "
-      <table class=\"Exercise\" width=\"99%\">
-      <thead>
-      <tr>
-        <td colspan=\"2\">
-        <b>".stripslashes($exerciseTitle)."</b>
-        <br/><br/>
-        ".stripslashes($exerciseDescription_temp)."
-        </td>
-      </tr>
-      </thead>
-      </table>
+$tool_content .= "<table class=\"Exercise\" width=\"99%\"><thead><tr>
+<td colspan=\"2\"><b>".stripslashes($exerciseTitle)."</b>
+<br/><br/>".stripslashes($exerciseDescription_temp)."
+</td></tr></thead></table>";
 
-	<form method=\"GET\" action=\"exercice.php\">";
+$tool_content .= "<form method='GET' action='exercice.php'>";
 
-	$i=$totalScore=$totalWeighting=0;
+$i=$totalScore=$totalWeighting=0;
 
-	// for each question
-	foreach($questionList as $questionId)
+// for each question
+
+foreach($questionList as $questionId) {
+	// gets the student choice for this question
+	$choice=@$exerciseResult[$questionId];
+
+	// creates a temporary Question object
+	$objQuestionTmp=new Question();
+	$objQuestionTmp->read($questionId);
+
+	$questionName=$objQuestionTmp->selectTitle();
+	$questionName=latex_content($questionName);
+	$questionDescription=$objQuestionTmp->selectDescription();
+	$questionDescription=latex_content($questionDescription);
+	$questionDescription_temp = nl2br(make_clickable($questionDescription));
+	$questionWeighting=$objQuestionTmp->selectWeighting();
+	$answerType=$objQuestionTmp->selectType();
+
+	// destruction of the Question object
+	unset($objQuestionTmp);
+
+	if($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER)
 	{
-		// gets the student choice for this question
-		$choice=@$exerciseResult[$questionId];
-
-		// creates a temporary Question object
-		$objQuestionTmp=new Question();
-		$objQuestionTmp->read($questionId);
-
-		$questionName=$objQuestionTmp->selectTitle();
-		$questionName=latex_content($questionName);
-		$questionDescription=$objQuestionTmp->selectDescription();
-		$questionDescription=latex_content($questionDescription);
-        	$questionDescription_temp = nl2br(make_clickable($questionDescription));
-	
-	
-		$questionWeighting=$objQuestionTmp->selectWeighting();
-		$answerType=$objQuestionTmp->selectType();
-
-		// destruction of the Question object
-		unset($objQuestionTmp);
-
-		if($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER)
-		{
-			$colspan=4;
-		}
-		elseif($answerType == MATCHING)
-		{
-			$colspan=2;
-		}
-		else
-		{
-			$colspan=1;
-		}
-$iplus=$i+1;
-$tool_content .= <<<cData
-
-      <br/>
-      <table width="99%" class="Question">
-      <thead>
-      <tr>
-        <td colspan="${colspan}"><b><u>$langQuestion</u>: $iplus</b></td>
-      </tr>
-      <tr>
-        <td colspan="${colspan}"><b>${questionName}</b><br/>
-        <small>${questionDescription_temp}</small><br/><br/></td>
-      </tr>
-      </thead>
-      <tbody>
-cData;
-
-		if($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER)
-		{
-$tool_content .= <<<cData
-
-      <tr>
-        <td width="5%" align="center" style="background: #fff;"><b>${langChoice}</b></td>
-        <td width="5%" align="center" style="background: #fff;"><b>${langExpectedChoice}</b></td>
-        <td width="45%" align="center" style="background: #fff;"><b>${langAnswer}</b></td>
-        <td width="45%" align="center" style="background: #fff;"><b>${langComment}</b></td>
-      </tr>
-cData;
-
+		$colspan=4;
 	}
-	elseif($answerType == FILL_IN_BLANKS)
+	elseif($answerType == MATCHING)
 	{
+		$colspan=2;
+	}
+	else
+	{
+		$colspan=1;
+	}
+	$iplus=$i+1;
+	$tool_content .= "<br/><table width='99%' class='Question'>
+	<thead>
+	<tr><td colspan='${colspan}'><b><u>$langQuestion</u>: $iplus</b></td>
+	</tr>
+	<tr>
+	<td colspan='${colspan}'><b>${questionName}</b><br/>
+	<small>${questionDescription_temp}</small><br/><br/></td>
+	</tr>
+	</thead><tbody>";
 
-$tool_content .= <<<cData
-      <tr>
-        <td style="background: #fff;"><b>${langAnswer}</b></td>
-      </tr>
-cData;
+	$questionScore=0;
 
-	} else {
-		
-$tool_content .= <<<cData
-      <tr>
-        <td width="50%" style="background: #fff;"><b>${langElementList}</b></td>
-        <td width="50%" style="background: #fff;"><b>${langCorrespondsTo}</b></td>
-      </tr>
-cData;
+	if ($displayResults == 1) {
 
+		if($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER) {
+			$tool_content .= "<tr>
+			<td width='5%' align='center' style='background: #fff;'><b>${langChoice}</b></td>
+			<td width='5%' align='center' style='background: #fff;'><b>${langExpectedChoice}</b></td>
+			<td width='45%' align='center' style='background: #fff;'><b>${langAnswer}</b></td>
+			<td width='45%' align='center' style='background: #fff;'><b>${langComment}</b></td>
+			</tr>";
+		} elseif($answerType == FILL_IN_BLANKS) {
+			$tool_content .= "<tr>
+			<td style='background: #fff;'><b>${langAnswer}</b></td>
+			</tr>";
+		} else {
+			$tool_content .= "<tr>
+			<td width='50%' style='background: #fff;'><b>${langElementList}</b></td>
+			<td width='50%' style='background: #fff;'><b>${langCorrespondsTo}</b></td></tr>";
 		}
-
-		// construction of the Answer object
+	}
+			// construction of the Answer object
 		$objAnswerTmp=new Answer($questionId);
-
 		$nbrAnswers=$objAnswerTmp->selectNbrAnswers();
-		$questionScore=0;
-
+		
 		for($answerId=1;$answerId <= $nbrAnswers;$answerId++) {
 			$answer=$objAnswerTmp->selectAnswer($answerId);
 			$answerComment=$objAnswerTmp->selectComment($answerId);
 			$answerCorrect=$objAnswerTmp->isCorrect($answerId);
 			$answerWeighting=$objAnswerTmp->selectWeighting($answerId);
 			$answer=latex_content($answer);
-
+	
 			switch($answerType)
 			{
 				// for unique answer
 				case UNIQUE_ANSWER :	$studentChoice=($choice == $answerId)?1:0;
-
-						if($studentChoice) {
-							$questionScore+=$answerWeighting;
-							$totalScore+=$answerWeighting;
-							}
-						break;
+					if($studentChoice) {
+						$questionScore+=$answerWeighting;
+						$totalScore+=$answerWeighting;
+					}
+					break;
 				// for multiple answers
 				case MULTIPLE_ANSWER :	$studentChoice=@$choice[$answerId];
-						if($studentChoice) {
-							$questionScore+=$answerWeighting;
-							$totalScore+=$answerWeighting;
-							}
-						break;
+					if($studentChoice) {
+						$questionScore+=$answerWeighting;
+						$totalScore+=$answerWeighting;
+						}
+					break;
 				// for fill in the blanks
-				case FILL_IN_BLANKS :	// splits text and weightings that are joined with the character '::'
+				case FILL_IN_BLANKS : // splits text and weightings that are joined with the char '::'
 						list($answer,$answerWeighting)=explode('::',$answer);
 						// splits weightings that are joined with a comma
 						$answerWeighting=explode(',',$answerWeighting);
@@ -222,7 +192,7 @@ cData;
 							break;
 						}
 						$choice[$j]=trim(stripslashes($choice[$j]));
-					// if the word entered by the student IS the same as the one defined by the professor
+					// if the word entered is the same as the one defined by the professor
 					if(strtolower(substr($temp,0,$pos)) == strtolower($choice[$j])) {
 						// gives the related weighting to the student
 						$questionScore+=$answerWeighting[$j];
@@ -231,16 +201,17 @@ cData;
 						// adds the word in green at the end of the string
 						$answer.=$choice[$j];
 					}
-				// else if the word entered by the student IS NOT the same as the one defined by the professor
+				// else if the word entered is not the same as the one defined by the professor
 						elseif(!empty($choice[$j])) {
-						// adds the word in red at the end of the string, and strikes it
-						$answer.='<font color="red"><s>'.$choice[$j].'</s></font>';
+							// adds the word in red at the end of the string, and strikes it
+							$answer.='<font color="red"><s>'.$choice[$j].'</s></font>';
 						} else {
-						// adds a tabulation if no word has been typed by the student
-						$answer.='&nbsp;&nbsp;&nbsp;';
+							// adds a tabulation if no word has been typed by the student
+							$answer.='&nbsp;&nbsp;&nbsp;';
 						}
 						// adds the correct word, followed by ] to close the blank
-						$answer.=' / <font color="green"><b>'.substr($temp,0,$pos).'</b></font>]';
+						$answer.=' / <font color="green">
+							<b>'.substr($temp,0,$pos).'</b></font>]';
 						$j++;
 						$temp=substr($temp,$pos+1);
 						}
@@ -248,107 +219,85 @@ cData;
 				// for matching
 				case MATCHING :	if($answerCorrect) {
 							if($answerCorrect == $choice[$answerId]) {
-							$questionScore+=$answerWeighting;
-							$totalScore+=$answerWeighting;
-							$choice[$answerId]=$matching[$choice[$answerId]];
-						}
-						elseif(!$choice[$answerId]) {
-							$choice[$answerId]='&nbsp;&nbsp;&nbsp;';
-						} else {
-							$choice[$answerId]='<font color="red"><s>'.$matching[$choice[$answerId]].'</s></font>';
+								$questionScore+=$answerWeighting;
+								$totalScore+=$answerWeighting;
+								$choice[$answerId]=$matching[$choice[$answerId]];
 							}
-						}
-						else {
+							elseif(!$choice[$answerId]) {
+								$choice[$answerId]='&nbsp;&nbsp;&nbsp;';
+							} else {
+								$choice[$answerId]='<font color="red">
+								<s>'.$matching[$choice[$answerId]].'</s>
+								</font>';
+							}
+						} else {
 							$matching[$answerId]=$answer;
 						}
 						break;
 			}	// end switch()
-			if($answerType != MATCHING || $answerCorrect)
-			{
-				if($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER)
-				{
-$tool_content .= <<<cData
-      <tr>
-        <td width="5%" style="background: #fff;"><div align="center">
-        <img src="../../template/classic/img/
-cData;
-	
-	if ($answerType == UNIQUE_ANSWER)
-		$tool_content .= "radio";
-	else
-		$tool_content .= "checkbox";
-	
-	if ($studentChoice)
-		$tool_content .= "_on";
-	else
-		$tool_content .= '_off';
+			if ($displayResults == 1) { 
+				if($answerType != MATCHING || $answerCorrect) {
+					if($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER) {
+						$tool_content .= "<tr><td width='5%' style='background: #fff;'>
+						<div align='center'>
+						<img src='../../template/classic/img/";
 		
-	$tool_content .= <<<cData
-		.gif" border="0"></div>
-        </td>
-        <td width="5%" style="background: #fff;"><div align="center">
-cData;
-
-	if ($answerType == UNIQUE_ANSWER)
-		$tool_content .= "<img src=\"../../template/classic/img/radio";
-	else
-		$tool_content .= "<img src=\"../../template/classic/img/checkbox";
-	if ($answerCorrect)
-		$tool_content .= "_on";
-	else	
-		$tool_content .= "_off";	
-	$tool_content .= ".gif\" border=\"0\"></div>";	
-  	$tool_content .= <<<cData
-        </td>
-        <td width="45%" style="background: #fff;">${answer}</td>
-        <td width="45%" style="background: #fff;">
-cData;
-
-if($studentChoice) 
-	$tool_content .= nl2br(make_clickable($answerComment)); 
-else 
-	$tool_content .= '&nbsp;'; 
-
-  $tool_content .= "</td></tr>";
-
-	} elseif($answerType == FILL_IN_BLANKS) {
-			$tool_content .= "
-      <tr>
-        <td style=\"background: #fff;\">".nl2br($answer)."</td>
-      </tr>";
-	} else {
-
-$tool_content .= <<<cData
-      <tr>
-        <td width="50%" style="background: #fff;">${answer}</td>
-        <td width="50%" style="background: #fff;">${choice[$answerId]} / <font color="green"><b>${matching[$answerCorrect]}</b></font></td>
-      </tr>
-cData;
-
-		}
-	}
-}	// end for()
-
-$tool_content .= <<<cData
-      <tr>
-        <td colspan="${colspan}" class="score">
-        ${langQuestionScore}: <b>${questionScore}/${questionWeighting}</b>
-        </td>
-      </tr>
-      </tbody>
-      </table>
-cData;
+						if ($answerType == UNIQUE_ANSWER)
+							$tool_content .= "radio";
+						else
+							$tool_content .= "checkbox";
+		
+						if ($studentChoice)
+							$tool_content .= "_on";
+						else
+							$tool_content .= '_off';
+			
+						$tool_content .= " .gif' border='0'></div></td>
+						<td width='5%' style='background: #fff;'><div align='center'>";
+		
+						if ($answerType == UNIQUE_ANSWER)
+							$tool_content .= "<img src=\"../../template/classic/img/radio";
+						else
+							$tool_content .= "<img src=\"../../template/classic/img/checkbox";
+						if ($answerCorrect)
+							$tool_content .= "_on";
+						else	
+							$tool_content .= "_off";	
+						$tool_content .= ".gif\" border=\"0\"></div>";	
+						$tool_content .= "</td><td width='45%' style='background: #fff;'>${answer}</td>
+						<td width='45%' style='background: #fff;'>";
+		
+						if ($studentChoice) {
+							$tool_content .= nl2br(make_clickable($answerComment)); 
+						} else { 
+							$tool_content .= '&nbsp;';
+						} 
+					
+					$tool_content .= "</td></tr>";
+		
+					} elseif($answerType == FILL_IN_BLANKS) {
+						$tool_content .= "<tr>
+						<td style=\"background: #fff;\">".nl2br($answer)."</td></tr>";
+					} else {
+						$tool_content .= "<tr><td width='50%' style='background: #fff;'>${answer}</td>
+						<td width='50%' style='background: #fff;'>${choice[$answerId]} / 
+						<font color='green'><b>${matching[$answerCorrect]}</b></font></td></tr>";
+					}
+				} 
+			} // end of if
+		}	// end for()
+	 
+	$tool_content .= "<tr><td colspan='$colspan' class='score'>
+	$langQuestionScore: <b>$questionScore/$questionWeighting</b>
+	</td></tr></tbody></table>";
 
 	// destruction of Answer
-		unset($objAnswerTmp);
-		$i++;
-		$totalWeighting+=$questionWeighting;
-	}	// end foreach()
+	unset($objAnswerTmp);
+	$i++;
+	$totalWeighting+=$questionWeighting;
+}	// end foreach()
 
-/////////////////////////////////////////////////////////////////////////////
-// UPDATE results to DB
-/////////////////////////////////////////////////////////////////////////////
-
+// update db with results
 $eid=$objExercise->selectId();
 mysql_select_db($currentCourseID);
 
@@ -366,22 +315,15 @@ $sql="UPDATE exercise_user_record SET TotalScore='$totalScore', TotalWeighting='
 	attempt='$attempt' WHERE eurid='$eurid'";
 db_query($sql, $currentCourseID);
 
-$tool_content .= <<<cData
-      <br/>
-      <table width="99%" class="Exercise">
-      <thead>
-      <tr>
-        <td class="score">
-        ${langYourTotalScore}: <b>${totalScore}/${totalWeighting}</b>
-        </td>
-      </tr>
-      </thead>
-      </table>
-      <br/>
-      <div align="center">
-        <input type="submit" value="${langFinish}">
-      </div>
-      <br/></form><br>
-cData;
+$tool_content .= "<br/><table width='99%' class='Exercise'><thead><tr>
+<td class='score'>$langYourTotalScore: <b>$totalScore/$totalWeighting</b>
+</td></tr>
+</thead></table>
+<br/>
+<div align='center'>
+<input type='submit' value='${langFinish}'>
+</div>
+<br/></form><br>";
+
 draw($tool_content, 2, 'exercice');
 ?>

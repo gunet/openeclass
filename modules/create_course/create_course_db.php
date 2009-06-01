@@ -195,25 +195,6 @@ mysql_query("INSERT INTO users VALUES (
                NULL
                )");
 
-####################### EXERCICES ###########################################
-// Scoring table for grouped True/False
-mysql_query("CREATE TABLE mc_scoring
-           (id INT  not null AUTO_INCREMENT, choice_count INT  not null , false_count INT  not null , score INT  not null  ,
-            PRIMARY KEY (id, choice_count, false_count))
-            TYPE=MyISAM $charset_spec");
-
-    $maxChoiceCount=8;
-    $weight=20;
-    for ($choiceCount=1;$choiceCount<=$maxChoiceCount;$choiceCount++){ //count for row
-        for ($falseCount=0;$falseCount<=$choiceCount;$falseCount++){ //count for colomn
-            $defaultScore = DefaultScoring($choiceCount,$falseCount,$weight);
-
-            mysql_query("INSERT INTO mc_scoring (id, choice_count, false_count, score)
-                        VALUES ('', '$choiceCount', '$falseCount', '$defaultScore')");
-            }   // for
-    }   // for
-
-
 mysql_query("CREATE TABLE exercices (
         id tinyint(4) NOT NULL auto_increment,
         titre varchar(250) default NULL,
@@ -225,6 +206,7 @@ mysql_query("CREATE TABLE exercices (
       AttemptsAllowed int(11) default '0',
       random smallint(6) NOT NULL default '0',
       active tinyint(4) default NULL,
+      results TINYINT(1) NOT NULL DEFAULT '1',
       PRIMARY KEY  (id))
       TYPE=MyISAM $charset_spec");
 

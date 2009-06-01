@@ -969,10 +969,12 @@ $langInfoQuestion="Στοιχεία ερώτησης";
 $langInfoExercise="Στοιχεία άσκησης";
 $langAmong = "μεταξύ";
 $langTake = "διάλεξε";
+$langAnswersNotDisp = "Απόκρυψη απαντήσεων μετά το τέλος της άσκησης";
+$langAnswersDisp = "Εμφάνιση απαντήσεων μετά το τέλος της άσκησης";
 
 // admin.php
-$langExerciseManagement="Διαχείριση Ασκησης";
-$langExerciseModify="Τροποποίηση Ασκησης";
+$langExerciseManagement="Διαχείριση Άσκησης";
+$langExerciseModify="Τροποποίηση Άσκησης";
 $langQuestionManagement="Διαχείριση Ερώτησης";
 $langQuestionNotFound="Δεν βρέθηκε η ερώτηση";
 $langAlertAdmin="Παρακαλώ δηλώστε τουλάχιστον έναν διαχειριστή για το μάθημα!";

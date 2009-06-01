@@ -271,9 +271,12 @@ function upgrade_course_2_1_4($code, $extramessage = '')
 	// upgrade exercises
  	db_query("ALTER TABLE `exercise_user_record` 
 		CHANGE `RecordStartDate` `RecordStartDate` DATETIME NOT NULL DEFAULT '0000-00-00'", $code); 
-
  	db_query("ALTER TABLE `exercise_user_record` 
 		CHANGE `RecordEndDate` `RecordEndDate` DATETIME NOT NULL DEFAULT '0000-00-00'", $code);
+	if (!mysql_field_exists("$code",'exercices','results'))
+                echo add_field('exercices', 'results', "TINYINT(1) NOT NULL DEFAULT '1'");
+	// not needed anymore
+	echo delete_table('mc_scoring');
 
 }
 
