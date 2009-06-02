@@ -73,7 +73,7 @@ $sql = "SELECT U.`nom`, U.`prenom`, U.`user_id`
 	AND CU.`code_cours` = '". addslashes($currentCourseID) ."'
 	ORDER BY U.`nom` ASC";
 
-$tool_content .= get_limited_page_links($sql, 30, $langPreviousPage, $langNextPage);
+@$tool_content .= get_limited_page_links($sql, 30, $langPreviousPage, $langNextPage);
 $usersList = get_limited_list($sql, 30);
 
 // display tab header

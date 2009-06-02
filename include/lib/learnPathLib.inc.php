@@ -1899,8 +1899,13 @@ function get_limited_page_links($sql, $limiter, $stringPreviousPage, $stringNext
 			break;
 	}
 
+if (isset($_REQUEST['path_id'])) {
+	$prevstring = "<a href=\"".$url.$prevpage."&path_id=$_REQUEST[path_id]\">".$stringPreviousPage."</a> | ";
+	$nextstring = "<a href=\"".$url.$nextpage."&path_id=$_REQUEST[path_id]\">".$stringNextPage."</a>";
+} else {
 	$prevstring = "<a href=\"".$url.$prevpage."\">".$stringPreviousPage."</a> | ";
 	$nextstring = "<a href=\"".$url.$nextpage."\">".$stringNextPage."</a>";
+}
 
 	if ($currentpage == $firstpage) {
 		$prevstring = $stringPreviousPage." | ";
