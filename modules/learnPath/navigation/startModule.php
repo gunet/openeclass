@@ -206,33 +206,26 @@ switch ($module['contentType'])
 		break;
 } // end switch
 
-?>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Frameset//EN"
-   "http://www.w3.org/TR/html4/frameset.dtd">
-<html>
-<head>
+echo "<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Frameset//EN''http://www.w3.org/TR/html4/frameset.dtd'>
+<html><head>";
 
-<?
-   // add the update frame if this is a SCORM module
-   if ( $module['contentType'] == CTSCORM_ )
-   {
-      require_once("scormAPI.inc.php");
-      echo "<frameset border='0' rows='0,75,*' frameborder='no'>
-           <frame src='updateProgress.php' name='upFrame'>";
-   }
-   else
-   {
-      echo "<frameset border='0' rows='95,*' frameborder='no'>";
-   }
+// add the update frame if this is a SCORM module
+if ($module['contentType'] == CTSCORM_ ) {
+	require_once("scormAPI.inc.php");
+	echo "<frameset border='0' rows='0,75,*' frameborder='no'>
+		<frame src='updateProgress.php' name='upFrame'>";
+} else {
+	echo "<frameset border='0' rows='95,*' frameborder='no'>";
+}
+
+echo "<frame src='../viewer_toc.php' name='tocFrame' scrolling='no' />";
+echo "<frameset border='0' cols='160,*' frameborder='0'>";
+echo "<frame src='../toc.php' name='tocleftFrame'>";
+echo "<frame src='$moduleStartAssetPage' name='scoFrame'>";
+echo "</frameset>"; 
+echo "</frameset>";
+echo "<noframes>";
+echo "<body>";
+echo $langBrowserCannotSeeFrames;
+echo "</body></noframes></html>";
 ?>
-    <frame src="../viewer_toc.php" name="tocFrame" scrolling="no" />
-    <frame src="<?php echo $moduleStartAssetPage; ?>" name="scoFrame">
-    </frameset>
-  <noframes>
-<body>
-<?
-  echo $langBrowserCannotSeeFrames;
-?>
-</body>
-</noframes>
-</html>
