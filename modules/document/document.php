@@ -751,7 +751,9 @@ if (mysql_num_rows($sql) == 0) {
                         } else {
                                 $image = 'img/' . choose_image('.' . $entry['format']);
                                 $file_url = htmlspecialchars("file.php/$currentCourseID$dirname/" .
-                                        str_replace('/', '//', $entry['filename']), ENT_QUOTES);
+                                        str_replace(array('/', '?', '&', '#', '%'),
+                                                    array('//', '%3F', '%26', '%23', '%25'),
+                                                    $entry['filename']), ENT_QUOTES);
                                 $link_extra = " title='$langSave' target='_blank'";
                                 if (empty($entry['title'])) {
                                         $link_text = $entry['filename'];
