@@ -286,11 +286,12 @@ foreach($questionList as $questionId) {
 				} 
 			} // end of if
 		}	// end for()
-	 
-	$tool_content .= "<tr><td colspan='$colspan' class='score'>
-	$langQuestionScore: <b>$questionScore/$questionWeighting</b>
-	</td></tr></tbody></table>";
-
+	 if ($displayResults == 1) {
+		$tool_content .= "<tr><td colspan='$colspan' class='score'>
+		$langQuestionScore: <b>$questionScore/$questionWeighting</b>
+		</td></tr>";
+	}
+	$tool_content .= "</tbody></table>";
 	// destruction of Answer
 	unset($objAnswerTmp);
 	$i++;
@@ -315,12 +316,14 @@ $sql="UPDATE exercise_user_record SET TotalScore='$totalScore', TotalWeighting='
 	attempt='$attempt' WHERE eurid='$eurid'";
 db_query($sql, $currentCourseID);
 
-$tool_content .= "<br/><table width='99%' class='Exercise'><thead><tr>
-<td class='score'>$langYourTotalScore: <b>$totalScore/$totalWeighting</b>
-</td></tr>
-</thead></table>
-<br/>
-<div align='center'>
+if ($displayResults == 1) {
+	$tool_content .= "<br/><table width='99%' class='Exercise'><thead><tr>
+	<td class='score'>$langYourTotalScore: <b>$totalScore/$totalWeighting</b>
+	</td></tr>
+	</thead></table>
+	";
+}
+$tool_content .= "<br/><div align='center'>
 <input type='submit' value='${langFinish}'>
 </div>
 <br/></form><br>";
