@@ -213,7 +213,7 @@ $eid = $row['id'];
 $NumOfResults = mysql_fetch_array(db_query("SELECT COUNT(*) FROM exercise_user_record WHERE eid='$eid'", $currentCourseID));
 
 	if ($NumOfResults[0]) {
-		$tool_content .= "<td align=\"center\"><nobr><a href=\"results.php?&exerciseId=".$row['id']."\">".
+		$tool_content .= "<td align=\"center\"><nobr><a href=\"results.php?exerciseId=".$row['id']."\">".
 		$langExerciseScores1."</a> | 
 		<a href=\"csv.php?&exerciseId=".$row['id']."\">".$langExerciseScores3."</a></nobr></td>";
 	} else {

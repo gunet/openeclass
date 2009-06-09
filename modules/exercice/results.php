@@ -86,12 +86,13 @@ while($row=mysql_fetch_array($result)) {
 	$sid = $row['uid'];
 	$StudentName = db_query("SELECT nom,prenom FROM user WHERE user_id='$sid'", $mysqlMainDb);
 	$theStudent = mysql_fetch_array($StudentName);
-	$tool_content .= "<table class='Question'>";
+	
 	mysql_select_db($currentCourseID);
 	$sql2="SELECT DATE_FORMAT(RecordStartDate, '%Y-%m-%d / %H:%i') AS RecordStartDate, RecordEndDate, TIME_TO_SEC(TIMEDIFF(RecordEndDate,RecordStartDate)) AS TimeDuration, TotalScore, TotalWeighting 
 	FROM `exercise_user_record` WHERE uid='$sid' AND eid='$exerciseId'";
 	$result2 = db_query($sql2);
-	if (mysql_num_rows($result2)) { // if users found
+	if (mysql_num_rows($result2) > 0) { // if users found
+		$tool_content .= "<table class='Question'>";
 		$tool_content .= "<tr><th colspan='3' class='left'>";
 		if (!$sid) {
 			$tool_content .= "$langNoGroupStudents";
@@ -102,17 +103,18 @@ while($row=mysql_fetch_array($result)) {
 		$tool_content .= "<tr><td width='150' align='center'><b>".$langExerciseStart."</b></td>";
 		$tool_content .= "<td width='150' align='center'><b>".$langExerciseDuration."</b></td>";
 		$tool_content .= "<td width='150' align='right'><b>".$langYourTotalScore2."</b></td></tr>";
-	}
-	while($row2=mysql_fetch_array($result2)) {
- 		$tool_content .= "<tr><td align='center'>$row2[RecordStartDate]</td>";
-		if ($row2['TimeDuration'] == '00:00:00' or empty($row2['TimeDuration'])) { // for compatibility 
-			$tool_content .= "<td align='center'>$langNotRecorded</td>";
-		} else {
-			$tool_content .= "<td align='center'>".format_time_duration($row2['TimeDuration'])."</td>";
+	
+		while($row2=mysql_fetch_array($result2)) {
+			$tool_content .= "<tr><td align='center'>$row2[RecordStartDate]</td>";
+			if ($row2['TimeDuration'] == '00:00:00' or empty($row2['TimeDuration'])) { // for compatibility 
+				$tool_content .= "<td align='center'>$langNotRecorded</td>";
+			} else {
+				$tool_content .= "<td align='center'>".format_time_duration($row2['TimeDuration'])."</td>";
+			}
+			$tool_content .= "<td align='center'>".$row2['TotalScore']. "/".$row2['TotalWeighting']."</td></tr>";
 		}
-	$tool_content .= "<td align='center'>".$row2['TotalScore']. "/".$row2['TotalWeighting']."</td></tr>";
+	$tool_content .= "</table><br/>";
 	}
-$tool_content .= "</table><br/>";
 }
 draw($tool_content, 2, 'exercice');
 ?>	
