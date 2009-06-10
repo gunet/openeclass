@@ -342,7 +342,6 @@ else
 
       if($uid) {
 	$lpProgress = get_learnPath_progress((int)$_SESSION['path_id'],$uid);
-
 	echo '<small>'
 		.$langGlobalProgress
 		.disp_progress_bar($lpProgress, 1)

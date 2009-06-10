@@ -771,8 +771,7 @@ class ScormExport
         {
             if ( $module['contentType'] == 'DOCUMENT' )
             {
-                //$documentName = basename($module['path']);
-                $documentName = basename($module['name']);
+                $documentName = basename($module['path']);
                 if ( dirname($module['path']) != '/' )
                 {
                     $destinationDir = $this->destDir . '/Documents' . dirname($module['path']) . '/';
@@ -1064,7 +1063,6 @@ class ScormExport
             }
             
             $course_description = "";
-            //mysql_select_db("$currentCourseID",$db);
 			$sql = "SELECT `id`,`title`,`content` FROM `course_description` order by id";
 			$res = db_query($sql);
 			if (mysql_num_rows($res) >0 )
@@ -1135,7 +1133,7 @@ class ScormExport
             {
                 case 'DOCUMENT': 
                     $framefile = $this->destDir . '/frame_for_' . $module['ID'] . '.html';
-                    $targetfile = 'Documents/'.$module['name'];
+		    $targetfile = 'Documents'.$module['path'];
                     
                     // Create an html file with a frame for the document.
                     if ( !createFrameFile($framefile, $targetfile)) return false;
