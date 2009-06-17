@@ -37,12 +37,6 @@
 	if (mysql_table_exists($mysqlMainDb, 'institution'))
                 db_query("DROP TABLE `institution`");
 
-        if (!mysql_field_exists("$mysqlMainDb",'cours','course_objectives'))
-                echo add_field('cours', 'course_objectives', "TEXT");
-        if (!mysql_field_exists("$mysqlMainDb",'cours','course_prerequisites'))
-                echo add_field('cours', 'course_prerequisites', "TEXT");
-        if (!mysql_field_exists("$mysqlMainDb",'cours','course_references'))
-                echo add_field('cours', 'course_references', "TEXT");
         if (!mysql_field_exists("$mysqlMainDb",'cours','course_keywords'))
                 echo add_field('cours', 'course_keywords', "TEXT");
         if (!mysql_field_exists("$mysqlMainDb",'cours','course_addon'))
@@ -204,7 +198,7 @@
 
         // add full text indexes for search operation
         @mysql_query("ALTER TABLE `annonces` ADD FULLTEXT `annonces` (`contenu` ,`code_cours`)");
-        @mysql_query("ALTER TABLE `cours` ADD FULLTEXT `cours` (`code` ,`description` ,`intitule` ,`course_objectives`,`course_prerequisites` ,`course_keywords` ,`course_references`)");
+        @mysql_query("ALTER TABLE `cours` ADD FULLTEXT `cours` (`code`, `description`, `intitule`, `course_keywords`)");
 
         // encrypt passwords in users table
         if (!isset($encryptedPasswd)) {
