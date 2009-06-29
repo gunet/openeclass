@@ -1990,7 +1990,6 @@ $langUnableEnterText="Αδύνατη η εισαγωγή κειμένου!<br>Α
 // Functions
 $l_loggedinas	= "Συνδεδεμένος ως";
 $l_notloggedin	= "Μη συνδεδεμένος";
-$l_logout	= "Αποσύνδεση";
 $l_login	= "Σύνδεση";
 
 // Page_header
@@ -2471,7 +2470,6 @@ $langPassSameAuth = 'Το συνθηματικό σας είναι αυτό τη
 $langLdapRequest = 'Υπάρχει ήδη μια αίτηση για τον χρήστη';
 $langLDAPUser = 'Χρήστης LDAP';
 $langLogIn = 'Σύνδεση';
-$langLogOut = 'Αποσύνδεση';
 $langAction = 'Ενέργεια';
 $langRequiredFields = 'Τα πεδία με (*) είναι υποχρεωτικά';
 $langCourseVisits = "Επισκέψεις ανά μάθημα";
