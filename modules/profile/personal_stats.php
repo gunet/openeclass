@@ -125,7 +125,7 @@ $leResultat = db_query($sql, $mysqlMainDb);
     $i = 0;
 
     $nomAction["LOGIN"] = "<div align=\"center\"><font color=\"#008000\">$langLogIn</font></div>";
-    $nomAction["LOGOUT"] = "<div align=\"center\"><font color=\"#FF0000\">$langLogOut</font></div>";
+    $nomAction["LOGOUT"] = "<div align=\"center\"><font color=\"#FF0000\">$langLogout</font></div>";
     $i=0;
     while ($leRecord = mysql_fetch_array($leResultat)) {
 	   $when = $leRecord["when"];

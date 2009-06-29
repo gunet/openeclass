@@ -203,7 +203,7 @@ $tool_content .= "
 $i = 0;
 
 $nomAction["LOGIN"] = "<font color=\"#008000\">$langLogIn</font>";
-$nomAction["LOGOUT"] = "<font color=\"#FF0000\">$langLogOut</font>";
+$nomAction["LOGOUT"] = "<font color=\"#FF0000\">$langLogout</font>";
 $i=0;
 while ($leRecord = mysql_fetch_array($leResultat)) {
 	$when = $leRecord["when"];
