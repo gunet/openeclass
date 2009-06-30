@@ -34,11 +34,11 @@ $require_current_course = TRUE;
 $require_prof = true;
 $require_help = TRUE;
 $helpTopic = 'Infocours';
-if (isset($_POST['localize'])) {
-	$newlang = $language = preg_replace('/[^a-z]/', '', $_POST['localize']);
-}
-
 include '../../include/baseTheme.php';
+
+if (isset($_POST['localize'])) {
+	$newlang = $language = langcode_to_name($_POST['localize']);
+}
 
 if(isset($newlang)) {
 	include ($webDir."modules/lang/$newlang/messages.inc.php");
@@ -138,26 +138,25 @@ hContent;
 			WHERE cours.code='$currentCourseID'
 			AND cours_faculte.code='$currentCourseID'";
 		$result = mysql_query($sql);
-		$leCours = mysql_fetch_array($result);
-		$int = $leCours['intitule'];
-		$facu = $leCours['faculte'];
-		$type = $leCours['type'];
-		$visible = $leCours['visible'];
+		$c = mysql_fetch_array($result);
+		$int = $c['intitule'];
+		$facu = $c['faculteid'];
+		$type = $c['type'];
+		$visible = $c['visible'];
 		$visibleChecked[$visible]="checked";
-		$fake_code = $leCours['fake_code'];
-		$titulary = $leCours['titulaires'];
-		$languageCourse	= $leCours['languageCourse'];
-		$description = $leCours['description'];
-		$course_keywords = $leCours['course_keywords'];
-		$course_addon = $leCours['course_addon'];
-		$password = $leCours['password'];
+		$fake_code = $c['fake_code'];
+		$titulary = $c['titulaires'];
+		$languageCourse	= $c['languageCourse'];
+		$description = $c['description'];
+		$course_keywords = $c['course_keywords'];
+		$course_addon = $c['course_addon'];
+		$password = $c['password'];
 		if ($password!="") $checkpasssel = "checked"; else $checkpasssel="";
 
 		@$tool_content .="
 		<form method='post' action='$_SERVER[PHP_SELF]'>
 		<table width=\"99%\" align='left'>
-		<thead>
-		<tr>
+		<thead><tr>
 		<td>
 		<table width=\"100%\" class='FormData' align='left'>
 		<tbody>
@@ -207,7 +206,7 @@ hContent;
         <td width='100'>
 	      <table class='xinha_editor'>
           <tr>
-             <td><textarea id='xinha' name='description' value='".q($leCours['description'])."' cols='20' rows='4' class='FormData_InputText'>".q($leCours['description'])."</textarea></td>
+             <td><textarea id='xinha' name='description' value='".q($c['description'])."' cols='20' rows='4' class='FormData_InputText'>".q($c['description'])."</textarea></td>
           </tr>
           </table>
         </td>
@@ -215,12 +214,12 @@ hContent;
       </tr>
       <tr>
         <th class='left'>$langCourseKeywords&nbsp;</th>
-        <td><input type='text' name='course_keywords' value='".q($leCours['course_keywords'])."' size='60' class='FormData_InputText'></td>
+        <td><input type='text' name='course_keywords' value='".q($c['course_keywords'])."' size='60' class='FormData_InputText'></td>
         <td>&nbsp;</td>
       </tr>
       <tr>
         <th class='left'>$langCourseAddon&nbsp;</th>
-        <td><textarea name='course_addon' value='".q($leCours['course_addon'])."' cols='57' rows='2' class='FormData_InputText'>".q($leCours['course_addon'])."</textarea></td><td>&nbsp;</td>
+        <td><textarea name='course_addon' value='".q($c['course_addon'])."' cols='57' rows='2' class='FormData_InputText'>".q($c['course_addon'])."</textarea></td><td>&nbsp;</td>
       </tr>
       </tbody>
       </table>
@@ -266,7 +265,7 @@ hContent;
       <tr>
         <th class='left'>$langOptions&nbsp;:</th>
         <td width='1'>";
-		$language = $leCours['languageCourse'];
+		$language = $c['languageCourse'];
 		$tool_content .= lang_select_options('localize');
 		$tool_content .= "
         </td>
