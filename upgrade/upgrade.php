@@ -247,7 +247,10 @@ if (!isset($submit2)) {
                 $langAnnounceExample = 'Παράδειγμα ανακοίνωσης. Μόνο ο καθηγητής και τυχόν άλλοι διαχειριστές του μαθήματος μπορεί να ανεβάσουν ανακοινώσεις.';
                 db_query('SET NAMES utf8');
 	        db_query("DELETE from annonces WHERE contenu='$langAnnounceExample'");
-        }
+        }  elseif ($oldversion < '2.1.4') {
+		db_query("ALTER TABLE `user` CHANGE `lang` `lang` ENUM('el', 'en', 'es') NOT NULL DEFAULT 'el'");
+		db_query("ALTER TABLE `prof_request` CHANGE `lang` `lang` ENUM('el', 'en', 'es') NOT NULL DEFAULT 'el'");
+	}
 
         // **********************************************
         // upgrade courses databases
