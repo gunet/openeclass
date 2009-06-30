@@ -191,7 +191,7 @@ db_query("CREATE TABLE user (
       registered_at int(10) NOT NULL default '0',
       expires_at int(10) NOT NULL default '0',
      `perso` enum('yes','no') NOT NULL default 'no',
-	 `lang` enum('el','en') DEFAULT 'el' NOT NULL,
+	 `lang` enum('el','en','es') DEFAULT 'el' NOT NULL,
  	`announce_flag` date NOT NULL default '0000-00-00',
  	 `doc_flag` date NOT NULL default '0000-00-00',
     `forum_flag` date NOT NULL default '0000-00-00',
@@ -278,7 +278,7 @@ db_query("CREATE TABLE `prof_request` (
                 `date_open` datetime default NULL,
                 `date_closed` datetime default NULL,
                 `comment` text default NULL,
-                `lang` ENUM('el', 'en') NOT NULL DEFAULT 'el',
+                `lang` ENUM('el', 'en', 'es') NOT NULL DEFAULT 'el',
                 `statut` tinyint(4) NOT NULL default 1,
                 PRIMARY KEY (`rid`)) $charset_spec");
 
