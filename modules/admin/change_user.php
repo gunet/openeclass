@@ -77,5 +77,5 @@ if (isset($_POST['username'])) {
         }
 } 
 
-$tool_content .= "<form action='$_SERVER[PHP_SELF]' method='post'>$langUserName: <input type='text' name='username'></form>";
+$tool_content .= "<form action='$_SERVER[PHP_SELF]' method='post'>$langUsername: <input type='text' name='username'></form>";
 draw($tool_content,3,'admin');

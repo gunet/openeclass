@@ -83,13 +83,13 @@ if(!empty($encodeLogin)) 	// Check if a username has been posted
 	{
 		// If username does not exist in database, inform user about the result
 		$tool_content .= "<p class=\"caution_small\">$langTheUser ".htmlspecialchars($encodeLogin)." $langNotFound.</p>";
-		$tool_content .= printform($langUserName);		// Display form again
+		$tool_content .= printform($langUsername);		// Display form again
 	}
 }
 else 	// No form post has been done
 {
 	// Display form
-	$tool_content .= printform($langUserName);
+	$tool_content .= printform($langUsername);
 }
 
 // delete the admin
