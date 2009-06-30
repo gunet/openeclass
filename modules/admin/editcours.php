@@ -174,7 +174,7 @@ if (isset($c)) {
   </tr>";
 	$tool_content .= "
   <tr>
-    <th class=\"left\">$langLegend <b>$langDropbox</b>:</th>
+    <th class=\"left\">$langLegend <b>$langDropBox</b>:</th>
     <td>".$drq."</td>
   </tr>";
 	$tool_content .= "

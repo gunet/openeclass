@@ -131,7 +131,7 @@ else {
     <td><input type='text' name='gq' value='$gq' size='4' maxlength='4'> Mb.</td>
   </tr>
   <tr>
-    <th class=\"left\">$langLegend <b>$langDropbox</b>:</th>
+    <th class=\"left\">$langLegend <b>$langDropBox</b>:</th>
     <td><input type='text' name='drq' value='$drq' size='4' maxlength='4'> Mb.</td>
   </tr>
   <input type='hidden' name='c' value='".htmlspecialchars($_GET['c'])."'>
