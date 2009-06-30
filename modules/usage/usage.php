@@ -61,7 +61,7 @@ $local_style = '
 include('../../include/jscalendar/calendar.php');
 if ($language == 'greek') {
     $lang = 'el';
-} else if ($language == 'english') {
+} else {
     $lang = 'en';
 }
 
@@ -82,15 +82,4 @@ if (isset($_POST['u_analyze']) && isset($_POST['user_id']) && $_POST['user_id'] 
 
 draw($tool_content, 2, 'usage', $local_head, '');
 
-/*
-if ($made_chart) {
-    while (ob_get_level() > 0) {
-        ob_end_flush();
-    }
-    ob_flush();
-    flush();
-    sleep(5);
-//    unlink ($webDir.$chart_path);
-}
-*/
 ?>
