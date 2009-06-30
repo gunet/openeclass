@@ -118,7 +118,7 @@ $tool_content .= <<<lCont2
  <tr>
    <td class="LoginData">
    <form action="${urlSecure}index.php" method="post">
-   $langUserName <br>
+   $langUsername <br>
    <input class="Login" name="uname" size="20"><br>
    $langPass <br>
    <input class="Login" name="pass" type="password" size="20"><br><br>
