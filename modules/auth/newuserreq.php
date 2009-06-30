@@ -48,10 +48,7 @@ if($submit) {
   $email_form = isset($_POST['email_form'])?$_POST['email_form']:'';
   $department = isset($_POST['department'])?$_POST['department']:'';
   $localize = isset($_POST['localize'])?$_POST['localize']:'';
-	if ($localize == 'greek')
-		$lang = 'el';
-	elseif ($localize == 'english')
-		$lang = 'en';
+  $lang = langname_to_code($localize);	
 
       // check if user name exists
   $username_check=mysql_query("SELECT username FROM `$mysqlMainDb`.user WHERE username='$uname'");
@@ -127,10 +124,7 @@ send_mail($siteName, $emailAdministrator, '', $email_form, $emailsubject, $email
 
 if (isset($_GET['lang'])) {
 	$lang = $_GET['lang'];
-	if ($lang == 'el')
-		$language = 'greek';
-	elseif ($lang == 'en')
-		$language = 'english';
+	$lang = langname_to_code($language);
 }
 
 $tool_content .= "<table width=\"99%\"><tbody>

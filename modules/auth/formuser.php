@@ -33,11 +33,8 @@ $tool_content = "";
 if (isset($_POST['localize'])) {
 	$language = preg_replace('/[^a-z]/', '', $_POST['localize']);
 }
-if ($language == 'greek')
-	$lang = 'el';
-elseif ($language == 'english')
-	$lang = 'en';
 
+$lang = langname_to_code($language);
 
 $nameTools = $langUserRequest;
 $navigation[] = array("url"=>"registration.php", "name"=> $langNewUser);
@@ -115,7 +112,7 @@ $tool_content .= "
     <td><input type='text' name='surname' value='".@$surname."' class='FormData_InputText' size=\"33\">&nbsp;&nbsp;<small>(*)</small></td>
   </tr>
   <tr>
-    <th class='left'>$langphone</th>
+    <th class='left'>$langPhone</th>
     <td><input type='text' name='userphone' value='".@$userphone."' class='FormData_InputText' size=\"33\">&nbsp;&nbsp;<small>(*)</small></td>
   </tr>
   <tr>

@@ -37,11 +37,8 @@ $tool_content = "";
 if (isset($_POST['localize'])) {
 	$language = preg_replace('/[^a-z]/', '', $_POST['localize']);
 }
-if ($language == 'greek')
-	$lang = 'el';
-elseif ($language == 'english')
-	$lang = 'en';
 
+$lang = langname_to_code($language);
 
 $auth = get_auth_id();
 

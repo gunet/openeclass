@@ -75,12 +75,14 @@ if (isset($submit) && (!isset($ldap_submit)) && !isset($changePass)) {
 	// everything is ok
 	else {
 		##[BEGIN personalisation modification]############
-		$userLanguage = langname_to_code($_REQUEST['userLanguage']);
+		$_SESSION['langswitch'] = $language = langcode_to_name($_REQUEST['userLanguage']);
+		$langcode = langname_to_code($language);
+
 		$username_form = escapeSimple($username_form);
 		if(mysql_query("UPDATE user
 	        SET nom='$nom_form', prenom='$prenom_form',
 	        username='$username_form', email='$email_form', am='$am_form',
-	            perso='$persoStatus', lang='$userLanguage'
+	            perso='$persoStatus', lang='$langcode'
 	        WHERE user_id='".$_SESSION["uid"]."'")){
 		header("location:". $_SERVER['PHP_SELF']."?msg=1");
 		exit();
@@ -90,16 +92,12 @@ if (isset($submit) && (!isset($ldap_submit)) && !isset($changePass)) {
 
 ##[BEGIN personalisation modification - For LDAP users]############
 if (isset($submit) && isset($ldap_submit) && ($ldap_submit == "ON")) {
+	$_SESSION['langswitch'] = $language = langcode_to_name($_REQUEST['userLanguage']);
+	$langcode = langname_to_code($language);
 
-	$userLanguage = $_REQUEST['userLanguage'];
-	mysql_query(" UPDATE user SET perso = '$persoStatus',
-		lang = '$userLanguage' WHERE user_id='".$_SESSION["uid"]."' ");
+	mysql_query("UPDATE user SET perso = '$persoStatus',
+		lang = '$langcode' WHERE user_id='".$_SESSION["uid"]."' ");
 	if (session_is_registered("user_perso_active") && $persoStatus=="no") session_unregister("user_perso_active");
-	if ($userLang == "el") {
-		$_SESSION['langswitch'] = "greek";
-	} else {
-		$_SESSION['langswitch'] = "english";
-	}
 
 	header("location:". $_SERVER['PHP_SELF']."?msg=1");
 	exit();
@@ -195,16 +193,6 @@ session_register("prenom");
 ##[BEGIN personalisation modification]############IT DOES NOT UPDATE THE DB!!!
 if ($persoStatus=="yes" && session_is_registered("perso_is_active")) session_register("user_perso_active");
 if ($persoStatus=="no" && session_is_registered("perso_is_active")) session_unregister("user_perso_active");
-
-if ($userLang == "el") {
-	$_SESSION['langswitch'] = "greek";
-	$_SESSION['langLinkText'] = "English";
-	$_SESSION['langLinkURL'] = "?localize=en";
-} else {
-	$_SESSION['langswitch'] = "english";
-	$_SESSION['langLinkText'] = "Ελληνικά";
-	$_SESSION['langLinkURL'] = "?localize=el";
-}
 ##[END personalisation modification]############
 
 $sec = $urlSecure.'modules/profile/profile.php';
