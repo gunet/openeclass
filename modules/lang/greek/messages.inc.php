@@ -1188,7 +1188,6 @@ $langGroupValidate="Επικύρωση";
 $langGroupCancel="Ακύρωση";
 $langGroupSettingsModified="Οι ρυθμίσεις της ομάδας χρηστών έχουν αλλάξει";
 $langNameSurname="Όνομα Επίθετο";
-$langAM="Αριθμός Μητρώου";
 $langEmail="email";
 $langGroupStudentsInGroup=" ".$langsStudents." εγγεγραμμένοι σε ομάδες χρηστών";
 $langGroupStudentsRegistered=" ".$langsStudents." εγγεγραμμένοι στο μάθημα";
@@ -1311,7 +1310,6 @@ $langWelcome="τα μαθήματα είναι διαθέσιμα παρακάτ
 μπορούν να δημιουργήσουν μαθήματα κάνοντας κλικ στην εγγραφή επίσης, αλλά επιλέγοντας ύστερα
 'Δημιουργία μαθημάτων (καθηγητές)'.";
 $langAdminTool = "Διαχείριση Πλατφόρμας";
-$langUserName="Όνομα χρήστη (username)";
 $langPass="Συνθηματικό (password)";
 $langHelp="Βοήθεια";
 $langSelection="Επιλογή";

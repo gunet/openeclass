@@ -75,6 +75,8 @@ $langPHPInfo = "PHP information";
 $langManuals = "Available Manuals";
 $langFormatPDF = "PDF format";
 $langFormatHTML = "HTML format";
+$langTutorial = "Tutorial";
+$langTutorialDesc = "Also, in the link below, you will find useful tutorials for using and administrating platform Open eClass with practical examples. These tutorials are available in three different formats: a) tutorials with pictures, b) video presentations and c) SCORM Packages.";
 $langAdminManual = "Admin's Manual";
 $langConfigFile = "Configuration File";
 $langDBaseAdmin = "Database management (phpMyAdmin)";
@@ -965,7 +967,6 @@ $langGroupValidate = "validate";
 $langGroupCancel = "cancel";
 $langGroupSettingsModified = "Group settings modified";
 $langNameSurname = "Name Surname";
-$langAM = "".$langStudent."ID";
 $langEmail = "Email";
 $langGroupStudentsInGroup = "".$langsStudents."registered in groups";
 $langGroupStudentsRegistered = "".$langsStudents."registered to this course";
@@ -1065,7 +1066,6 @@ $langWelcome = "courses are freely available below. Other  courses require
 a username and a password, which you can obtain by clicking on 'registration'. ".$langTeachers."
 can create course websites clicking on registration too, but selecting then 'Create course site'.";
 $langAdminTool = "Admin Tool";
-$langUserName = "Username";
 $langPass = "Password";
 $langHelp = "Help";
 $langSelection = "Selection";
