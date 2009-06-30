@@ -48,7 +48,7 @@ $tool_content .= "
     </td>
   </tr>
   <tr>
-	<th class='left'>$langPhone</th>
+	<th class='left'>$langPhone:</th>
     <td width='300'>$telephone</td>
   </tr>
   <tr>
