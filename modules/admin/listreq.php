@@ -238,7 +238,7 @@ if (!empty($show) && ($show=="closed")) {
 $langComments:> $comment
 $langManager $siteName
 $administratorName $administratorSurname
-$langphone: $telephone
+$langPhone: $telephone
 $langEmail: $emailAdministrator";
 						send_mail($siteName, $emailAdministrator, "$prof_name $prof_surname",	$prof_email, $emailsubject, $emailbody, $charset);
 					}

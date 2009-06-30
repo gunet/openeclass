@@ -65,7 +65,7 @@ $langComments:
 
 $langManager $siteName
 $administratorName $administratorSurname
-$langphone $telephone
+$langPhone $telephone
 $langEmail : $emailAdministrator
 
 ";
@@ -109,7 +109,7 @@ $tool_content .= "<br><br>
     <th class=\"left\">$langUsername</th>
     <th class=\"left\">$langEmail</th>
     <th class=\"left\">$langDepartment</th>
-    <th class=\"left\">$langphone</th>
+    <th class=\"left\">$langPhone</th>
     <th>$langDate<br />$langDateRequest_small</th>
     <th>$langComments</th>
     <th>$langActions</th>
