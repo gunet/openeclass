@@ -181,7 +181,7 @@ $tool_content .= "
           <thead>
           <tr>
             <td><b>$langNameSurname</b></td>
-            <td width='100'><div align=\"center\"><b>$langAM</b></div></td>
+            <td width='100'><div align=\"center\"><b>$langAm</b></div></td>
             <td><div align=\"center\"><b>$langEmail</b></div></td>
           </tr>
           </thead>
