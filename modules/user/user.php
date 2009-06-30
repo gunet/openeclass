@@ -100,7 +100,7 @@ $tool_content .= "
     <tbody>
     <tr>
       <td class=\"odd\">
-        <p>$langThereAre: <b>$teachers</b> $langTeachers, <b>$students</b> $langStudents, <b>$visitors</b> $langVisitors</p>
+        <p>$langThereAre <b>$teachers</b> $langTeachers, <b>$students</b> $langStudents, <b>$visitors</b> $langVisitors</p>
         <p align=\"right\">$langTotal: <b>$countUser</b> $langUsers</p>
       </td>
     </tr>
