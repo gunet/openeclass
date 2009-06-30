@@ -69,11 +69,9 @@ header('Content-Type: text/html; charset=UTF-8');
 
 // Set user desired language (Author: Evelthon Prodromou)
 if (isset($_GET['localize'])) {
-	$_SESSION['langswitch'] = $localize = $language = preg_replace('/[^a-z]/', '', $_GET['localize']);
+	$_SESSION['langswitch'] = $language = langcode_to_name($_GET['localize']);
 }
-if (!isset($localize)) {
-	@$localize = $language = $_SESSION['langswitch'];
-}
+
 // Get configuration variables
 if (!isset($webDir)) {
 	//path for course_home
@@ -100,20 +98,6 @@ if (!$db) {
 }
 if (mysql_version()) mysql_query("SET NAMES utf8");
 mysql_select_db($mysqlMainDb, $db);
-
-//if the user is logged in, get this preferred language set in his
-//profile (Author: Evelthon Prodromou)
-if(session_is_registered('uid') && !session_is_registered('langswitch')) {
-	$sqlLang= "SELECT lang FROM user WHERE user_id='".$_SESSION['uid']."'";
-	$result=mysql_query($sqlLang);
-	while (@($myrow = mysql_fetch_array($result))) {
-		if ($myrow[0]== "el") {
-			$language = "greek";
-		} else {
-			$language = "english";
-		}
-	}
-}
 
 // Include messages
 include("$webDir/modules/lang/$language/common.inc.php");

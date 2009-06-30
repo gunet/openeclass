@@ -439,110 +439,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 	//	session_unregister('errMessage');
 }
 
-/**
- * Function drawPerso
- *
- * This method processes all data to render the display. It is executed by
- * eclass personalised. Is in charge of generating the interface and parse it to the user's browser.
- *
- * @param mixed $toolContent html code
- *
- */
-/*
-function drawPerso($toolContent) {
 
-	global $langUser, $prenom, $nom, $langLogout, $intitule, $nameTools, $langHelp, $langPersonalisedBriefcase;
-	global $language, $helpTopic, $require_help, $langCopyrightFooter;
-	global $relPath, $urlServer, $is_admin;
-	global $page_name, $page_navi, $currentCourseID, $siteName, $navigation;
-	global $homePage, $courseHome;
-	global $langPersonalisedBriefcase, $langMyPersoLessons, $langMyPersoDeadlines;
-	global $langMyPersoAnnouncements, $langMyPersoDocs, $langMyPersoAgenda, $langMyPersoForum;
-	global $langModifyProfile, $langSearch, $langAdminTool;
-	global $langChangeLang, $switchLangURL;
-	global $langSearch, $langAdvancedSearch;
-
-	//get blocks content from $toolContent array
-	$lesson_content = $toolContent ['lessons_content'];
-	$assigns_content = $toolContent ['assigns_content'];
-	$announce_content = $toolContent ['announce_content'];
-	$docs_content = $toolContent ['docs_content'];
-	$agenda_content = $toolContent ['agenda_content'];
-	$forum_content = $toolContent ['forum_content'];
-
-	$t = new Template ( $relPath . "template/classic" );
-
-	$t->set_file ( 'fh', "perso.html" );
-
-	$t->set_block ( 'fh', 'mainBlock', 'main' );
-
-	$t->set_var ( 'LANG_USER', $langUser );
-	$t->set_var ( 'USER_NAME', $prenom );
-	$t->set_var ( 'USER_SURNAME', $nom . ", " );
-	$t->set_var ( 'LANG_LOGOUT', $langLogout );
-	$t->set_var ( 'LOGOUT_LINK', $relPath );
-
-	if (session_is_registered ( 'langswitch' )) {
-		$lang_localize = $langChangeLang;
-		$localize_link = $switchLangURL;
-	} else {
-		$lang_localize = 'English';
-		$localize_link = '?localize=en';
-	}
-
-	$otherLinks = "";
-	if ($is_admin) {
-		$otherLinks = "<a class=\"admin_icon\" href=" . $urlServer . "modules/admin/>$langAdminTool</a> | ";
-	}
-
-	$otherLinks .= "<a class=\"create_course_icon\" href=" . $urlServer . "modules/profile/profile.php>$langModifyProfile</a> | ";
-	$otherLinks .= "<a href=" . $localize_link . ">$lang_localize</a>";
-	$t->set_var ( 'OTHER_LINKS', $otherLinks );
-
-	$t->set_var ( 'THIRD_BAR_TEXT', $langPersonalisedBriefcase );
-	$t->set_var ( 'THIRDBAR_LEFT_ICON', 'briefcase_icon' );
-
-	$t->set_var ( 'SEARCH_TITLE', $langSearch );
-	$t->set_var ( 'SEARCH_ADVANCED', $langAdvancedSearch );
-
-	$t->set_var ( 'LANG_MY_PERSO_LESSONS', $langMyPersoLessons );
-	$t->set_var ( 'LANG_MY_PERSO_DEADLINES', $langMyPersoDeadlines );
-	$t->set_var ( 'LANG_MY_PERSO_ANNOUNCEMENTS', $langMyPersoAnnouncements );
-	$t->set_var ( 'LANG_MY_PERSO_DOCS', $langMyPersoDocs );
-	$t->set_var ( 'LANG_MY_PERSO_AGENDA', $langMyPersoAgenda );
-	$t->set_var ( 'LANG_PERSO_FORUM', $langMyPersoForum );
-
-	$t->set_var ( 'LESSON_CONTENT', $lesson_content );
-	$t->set_var ( 'ASSIGN_CONTENT', $assigns_content );
-	$t->set_var ( 'ANNOUNCE_CONTENT', $announce_content );
-	$t->set_var ( 'DOCS_CONTENT', $docs_content );
-	$t->set_var ( 'AGENDA_CONTENT', $agenda_content );
-	$t->set_var ( 'FORUM_CONTENT', $forum_content );
-	$t->set_var ( 'URL_PATH', $urlAppend.'/' );
-	$t->set_var ( 'TOOL_PATH', $relPath );
-
-	//START breadcrumb
-
-
-	if (! $page_navi)
-		$page_navi = $navigation;
-	if (! $page_name)
-		$page_name = $nameTools;
-
-	$t->set_block ( 'mainBlock', 'breadCrumbHomeBlock', 'breadCrumbHome' );
-
-	$t->set_var ( 'BREAD_TEXT', $langPersonalisedBriefcase );
-	$t->set_var ( 'PAGE_TITLE', $siteName );
-	// end breadcrumb
-
-
-	$t->set_var ( 'LANG_COPYRIGHT_NOTICE', $langCopyrightFooter );
-
-	$t->parse ( 'main', 'mainBlock', false );
-
-	$t->pparse ( 'Output', 'fh' );
-}
-*/
 /**
  * Function dumpArray
  *
@@ -606,29 +503,8 @@ function lang_selections() {
  *
  */
 function lang_select_options($name, $onchange_js = '') {
-	global $language;
+	global $language, $native_language_names;
 
-	$langArrayOfNames = array (
-                'greek' => 'Ελληνικά (el)',
-                'english' => 'English (en)' );
-
-#		'spanish' => 'Español (es)',
-#		'czech' => 'Česky (cz)',
-#		'albanian' => 'Shqip (sq)',
-#		'bulgarian' => 'Български (bg)',
-#		'catalan' => 'Català (ca)',
-#		'danish' => 'Dansk (da)',
-#		'dutch' => 'Nederlands (nl)',
-#		'finnish' => 'Suomi (fi)',
-#		'french' => 'Français (fr)',
-#		'german' => 'Deutsch (de)',
-#		'icelandic' => 'Íslenska (is)',
-#		'italian' => 'Italiano (it)',
-#		'japanese' => '日本語 (jp)',
-#		'polish' => 'Polski (pl)',
-#		'russian' => 'Русский (ru)',
-#		'turkish' => 'Türkçe (tr)',
-
-	return selection ($langArrayOfNames, $name, $language, $onchange_js);
+	return selection($native_language_names, $name, langname_to_code($language), $onchange_js);
 }
 
