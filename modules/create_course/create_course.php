@@ -352,7 +352,7 @@ if (isset($_POST['create_course'])) {
         $faculte = $facname;
 	// find new code
         $repertoire = new_code(find_faculty_by_name($faculte));
-        $language = preg_replace('/[^a-z]/', '', $_POST['languageCourse']);
+        $language = langcode_to_name($_POST['languageCourse']);
         include("../lang/$language/common.inc.php");
         include("../lang/$language/messages.inc.php");
         // replace lower case letters by upper case in code_cours
