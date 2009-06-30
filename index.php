@@ -132,7 +132,8 @@ if(!empty($submit))
                                                                 $email = $myrow["email"];
                                                                 $is_admin = $myrow["is_admin"];
                                                                 $userPerso = $myrow["perso"];//user perso flag
-                                                                $userLanguage = $myrow["lang"];//user preferred language
+                                                                $language = $_SESSION['langswitch'] = langcode_to_name($myrow["lang"]);//user preferred language
+								
                                                                 $auth_allow = 1;
                                                         }
                                                         else
@@ -224,7 +225,7 @@ if(!empty($submit))
                                                         $email = $myrow["email"];
                                                         $is_admin = $myrow["is_admin"];
                                                         $userPerso = $myrow["perso"];//user perso flag
-                                                        $userLanguage = $myrow["lang"];//user preferred language
+                                                        $language = $_SESSION['langswitch'] = langcode_to_name($myrow["lang"]);//user preferred language
                                                 }
                                                 elseif($auth_allow==2)
                                                 {
@@ -292,23 +293,6 @@ if(!empty($submit))
 		session_register("user_perso_active");
 	}
 	##[END personalisation modification]############
-
-	//check user language preferences
-	if (isset($userLanguage) && $userLanguage == "en") {
-		$_SESSION['langswitch'] = "english";
-		$langChangeLang = $_SESSION['langLinkText'] = "Ελληνικά";
-		$switchLangURL = $_SESSION['langLinkURL'] = "?localize=el";
-
-	} elseif(isset($userLanguage) && $userLanguage == "el") {
-		$_SESSION['langswitch'] = "greek";
-		$langChangeLang = $_SESSION['langLinkText'] = "English";
-		$switchLangURL = $_SESSION['langLinkURL'] = "?localize=en";
-	}
-	if(session_is_registered('langswitch')) {
-		$language = $_SESSION['langswitch'];
-	} else {
-		$language = "greek";
-	}
 
 }  // end of user authentication
 
