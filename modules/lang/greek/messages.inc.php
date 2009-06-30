@@ -208,7 +208,6 @@ $langQuotaSuccess = "Η αλλαγή έγινε με επιτυχία";
 $langQuotaFail = "Η αλλαγή δεν έγινε!";
 $langMaxQuota = "έχει μέγιστο επιτρεπτό αποθηκευτικό χώρο";
 $langLegend = "Για το υποσύστημα";
-$langDropbox = "Χώρος Ανταλλαγής Αρχείων";
 $langVideo = "Βίντεο";
 
 // Added by vagpits
@@ -1262,7 +1261,7 @@ $infoabouteclass="Ενημερωτικό δελτίο πλατφόρμας $site
 // contact.php
 $introcontact = "Μπορείτε να επικοινωνείτε με την Ομάδα Υποστήριξης της πλατφόρμας <b>".$siteName."</b> με τους παρακάτω τρόπους:";
 $langPostMail="<b>Ταχυδρομική Διεύθυνση:</b>";
-$langPhone = "<b>Τηλ:</b>";
+$langPhone = "Τηλέφωνο";
 $langFax = "<b>Fax:</b>";
 $langForm="Συμπλήρωση Φόρμας";
 $langReturn="Eπιστροφή";
@@ -2376,7 +2375,6 @@ $langUserAlready = "Ο χρήστης είναι ήδη γραμμένος στ�
 $langUserFile = "Όνομα αρχείου χρηστών";
 
 // search_user.php
-$langphone= "Τηλέφωνο";
 $langUserNoneMasc="-";
 $langTutor="Εκπαιδευτής";
 $langTutorDefinition="Διδάσκων (δικαίωμα να επιβλέπει τις ομάδες χρηστών)";
