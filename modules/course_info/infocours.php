@@ -131,9 +131,9 @@ hContent;
     		<li><a href=\"refresh_course.php\">$langRefreshCourse</a></li></ul></div>";
 
 		$sql = "SELECT cours_faculte.faculte,
-			cours.intitule, cours.description, course_keywords, course_addon,
+			cours.intitule, cours.description, cours.course_keywords, cours.course_addon,
 			cours.visible, cours.fake_code, cours.titulaires, cours.languageCourse,
-			cours.departmentUrlName, cours.departmentUrl, cours.type, cours.password
+			cours.departmentUrlName, cours.departmentUrl, cours.type, cours.password, cours.faculteid
 			FROM `$mysqlMainDb`.cours, `$mysqlMainDb`.cours_faculte
 			WHERE cours.code='$currentCourseID'
 			AND cours_faculte.code='$currentCourseID'";
@@ -185,7 +185,7 @@ hContent;
           <select name=\"facu\" class='auth_input'>";
 		$resultFac=mysql_query("SELECT id,name FROM `$mysqlMainDb`.faculte ORDER BY number");
 		while ($myfac = mysql_fetch_array($resultFac)) {
-			if($myfac['name']==$facu)
+			if($myfac['id']==$facu)
 				$tool_content .= "
             <option value=\"".$myfac['id']."--".$myfac['name']."\" selected>$myfac[name]</option>";
 			else
