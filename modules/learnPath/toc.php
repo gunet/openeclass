@@ -1,11 +1,12 @@
 <?
-echo "<link rel='stylesheet' href='../../template/classic/tool_content.css' type='text/css'>";
-echo "<link rel='stylesheet' href='tool.css' type='text/css'>";
 $require_current_course = TRUE;
 
 require_once("../../include/baseTheme.php");
 require_once("../../include/lib/learnPathLib.inc.php");
 require_once("../../include/lib/fileDisplayLib.inc.php");
+
+echo "<link rel='stylesheet' href='../../template/classic/tool_content.css' type='text/css'>";
+echo "<link rel='stylesheet' href='tool.css' type='text/css'>";
 
 $TABLEMODULE            = "lp_module";
 $TABLELEARNPATHMODULE   = "lp_rel_learnPath_module";
