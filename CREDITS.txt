@@ -1,4 +1,4 @@
-﻿      /*========================================================================
+      /*========================================================================
       *   Open eClass 2.1
       *   E-learning and Course Management System
       * ========================================================================
@@ -26,22 +26,22 @@
           Hugues Peeters    <peeters@ipm.ucl.ac.be>
           Christophe Gesche <gesche@ipm.ucl.ac.be>
           Copyright (c) 2001, 2002 Universite catholique de Louvain (UCL)
-      
+
 
 
       Special Credits to:     
 
       /************************************************************************
-      
+
        Evelthon Prodromou <eprodromou@upnet.gr> (University of Patras)
-       
+
        for his important contribution in Open eClass 2.0 & 2.1
        Design & Developement: main template file, engine and css, 
 			      personalised portfolio
 			      Platform's User Interface  
-      
+
       ************************************************************************/
-   
+
       Also Special Credits to:
          Dimitra Kralli <d.kralli@di.uoa.gr> (University of Athens)
          Stevy Georgiadi <stevy@gunet.gr> (University of Athens)
@@ -111,7 +111,8 @@
 
         Function user_get_data(): Mathieu Laurent <laurent@cerdecam.be>
 
-      SortTable (sorttable.js): Stuart Langridge (licenced as X11)
+        SortTable (sorttable.js): Stuart Langridge (licenced as X11)
          http://www.kryogenix.org/code/browser/sorttable/
 
-
+	Messages translated to spanish language by: 
+	Ana Serrado Bayes <ana.serrado@uca.es>
