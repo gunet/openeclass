@@ -44,39 +44,35 @@ if($is_adminOfCourse) {
 		##[END personalisation modification]############
 		@mkdir("../../courses/garbage");
 		rename("../../courses/$currentCourseID", "../../courses/garbage/$currentCourseID");
-
 		$tool_content .= "<p class=\"success_small\">$langTheCourse <b>($intitule $currentCourseID)</b>  $langHasDel</p><br />
 		<p align=\"right\"><a href=\"../../index.php\">".$langBackHome." ".$siteName."</a></p>";
-
                 unset($currentCourseID);
 		draw($tool_content, 1);
 		exit();
 	} else {
-
-  $tool_content .= "
-    <table width=\"99%\">
-    <tbody>
-    <tr>
-      <td class=\"caution_NoBorder\" height='60' colspan='3'>
-        <p>$langByDel_A <b>$intitule ($currentCourseID) </b>&nbsp;?  </p>
-      </td>
-  </tr>
-    <tr>
-      <th rowspan='2' class='left' width='220'>$langConfirmDel :</th>
-      <td width='52' align='center'><a href=\"".$_SERVER['PHP_SELF']."?delete=yes\">$langYes</a></td>
-      <td><small>$langByDel</small></td>
-    </tr>
-    <tr>
-      <td align='center'><a href=\"infocours.php\">$langNo</a></td>
-      <td>&nbsp;</td>
-    </tr>
-    </tbody>
-    </table>";
-
-  $tool_content .= "<p align=\"right\"><a href=\"infocours.php\">$langBack</a></p>
-  </ul>
-  </div>";
-
+		$tool_content .= "
+		<table width=\"99%\">
+		<tbody>
+		<tr>
+		<td class=\"caution_NoBorder\" height='60' colspan='3'>
+			<p>$langByDel_A <b>$intitule ($currentCourseID) </b>&nbsp;?  </p>
+		</td>
+		</tr>
+		<tr>
+		<th rowspan='2' class='left' width='220'>$langConfirmDel :</th>
+		<td width='52' align='center'><a href=\"".$_SERVER['PHP_SELF']."?delete=yes\">$langYes</a></td>
+		<td><small>$langByDel</small></td>
+		</tr>
+		<tr>
+		<td align='center'><a href=\"infocours.php\">$langNo</a></td>
+		<td>&nbsp;</td>
+		</tr>
+		</tbody>
+		</table>";
+		
+		$tool_content .= "<p align=\"right\"><a href=\"infocours.php\">$langBack</a></p>
+		</ul>
+		</div>";
 	} // else
 } else  {
 	$tool_content .= "<center><p>$langForbidden</p></center>";

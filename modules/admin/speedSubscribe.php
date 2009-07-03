@@ -120,49 +120,35 @@ $result=mysql_query($sql);
 $firstfac = true;
 while ($mycours = mysql_fetch_array($result)) {
 	// Constract different table for every faculte
-	if($mycours['f'] != @$facOnce)
-	{
+	if($mycours['f'] != @$facOnce) {
 		if ($firstfac) {
-			$tool_content .= "
-  <table class=\"FormData\" width=\"99%\"align=\"left\">
-  <tbody>
-  <tr>
-    <th>&nbsp;</th>
-    <th class=\"left\"><b>".$mycours['f']."</b></th>
-  </tr>";
+			$tool_content .= "<table class=\"FormData\" width=\"99%\"align=\"left\">
+			<tbody><tr><th>&nbsp;</th><th class=\"left\"><b>".$mycours['f']."</b></th></tr>";
 			$firstfac = false;
 		} else {
-			$tool_content .= "
-  </tbody>
-  </table>
-  <br /><br /><br />
-
-  <table class=\"FormData\" width=\"99%\" align=\"left\">
-  <tbody>
-  <tr>
-    <th width=\"30\">&nbsp;</th>
-    <th class=\"left\"><b>".$mycours['f']."</b></th>
-  </tr>";
+			$tool_content .= "</tbody></table>
+			<br /><br /><br />
+			<table class=\"FormData\" width=\"99%\" align=\"left\">
+			<tbody><tr>
+			<th width=\"30\">&nbsp;</th>
+			<th class=\"left\"><b>".$mycours['f']."</b></th>
+			</tr>";
 		}
 	}
 	$facOnce=$mycours['f'];
-	if($mycours['k'] != @$codeOnce)
-	{
-		$tool_content .= "
-  <tr>
-    <th width=\"30\"><input type=checkbox name=course[] value=$mycours[k]></th>
-    <td><b>$mycours[i]</b> ($mycours[c]) <br />$mycours[t]</td>
-  </tr>";
+	if($mycours['k'] != @$codeOnce) {
+		$tool_content .= "<tr>
+	<th width=\"30\"><input type=checkbox name=course[] value=$mycours[k]></th>
+	<td><b>$mycours[i]</b> ($mycours[c]) <br />$mycours[t]</td>
+	</tr>";
 	}
 	$codeOnce=$mycours['k'];
 }
 if (!$firstfac) {
-	$tool_content .= "
-  </tbody>
-  </table>";
+	$tool_content .= "</tbody></table>";
 }
 
-$tool_content .= "  <table class=\"FormData\" width=\"99%\" align=\"left\">
+$tool_content .= "<table class=\"FormData\" width=\"99%\" align=\"left\">
   <tbody>
   <tr>
     <th width=\"30\">&nbsp;</th>

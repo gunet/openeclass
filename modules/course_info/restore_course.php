@@ -302,7 +302,7 @@ function user ($userid, $name, $surname, $login, $password, $email, $statut, $ph
 			quote($userid_map[$userid]),
 			quote($statut))).
 			")");
-	echo "<br> $langUserName=$login, $langPrevId=$userid, $langNewId=$userid_map[$userid]\n";
+	echo "<br> $langUsername=$login, $langPrevId=$userid, $langNewId=$userid_map[$userid]\n";
 }
 
 function query($sql) {

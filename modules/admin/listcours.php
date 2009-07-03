@@ -155,11 +155,9 @@ for ($j = 0; $j < mysql_num_rows($sql); $j++) {
 	$logs = mysql_fetch_array($sql);
 
 	if ($k%2==0) {
-	$tool_content .= "
-  <tr>";
+		$tool_content .= "<tr>";
 	} else {
-	$tool_content .= "
-  <tr class=\"odd\">";
+		$tool_content .= "<tr class=\"odd\">";
 	}
 
 $tool_content .= "

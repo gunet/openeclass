@@ -216,8 +216,7 @@ function expanded_faculte($fac, $uid) {
 	$retString = "";
 
 	// build a list of  course follow  by  user.
-	$sqlListOfCoursesOfUser = "
-	SELECT code_cours cc, statut ss
+	$sqlListOfCoursesOfUser = "SELECT code_cours cc, statut ss
 		FROM `$mysqlMainDb`.cours_user
 		WHERE user_id = ".$uid;
 
@@ -246,8 +245,7 @@ function expanded_faculte($fac, $uid) {
 
 		// output the nav bar only if we have more than 1 types of courses
 		if ($numoftypes > 1) {
-         $retString .= "
-      <td><div align=\"right\">";
+			$retString .= "<td><div align=\"right\">";
 			$counter = 1;
 			while ($typesArray = mysql_fetch_array($typesresult)) {
 				$t = $typesArray['types'];
@@ -257,24 +255,14 @@ function expanded_faculte($fac, $uid) {
 				$ts = $t."s";
 				//type the seperator in front of the types except the 1st
 				if ($counter != 1) $retString .= " | ";
-				$retString .= "<a href=\"#".$t."\">".$m["$ts"]."</a>";
-				$counter++;
-			}
-			$retString .= "</div>
-      </td>
-    </tr>
-    </tbody>
-    </table>\n
-    <p>&nbsp;</p>\n
-    <p>&nbsp;</p>";
+					$retString .= "<a href=\"#".$t."\">".$m["$ts"]."</a>";
+					$counter++;
+				}
+			$retString .= "</div></td></tr></tbody></table>\n<p>&nbsp;</p>\n<p>&nbsp;</p>";
 		} else {
-		  $retString .= "\n      <td>&nbsp;</td>\n
-    </tr>\n
-    </thead>\n
-    </table>\n
-    <p>&nbsp;</p>\n
-    <p>&nbsp;</p>";
-        }
+			$retString .= "\n      <td>&nbsp;</td>\n</tr>\n
+			</thead>\n</table>\n<p>&nbsp;</p>\n<p>&nbsp;</p>";
+        	}
 
 	  // changed this foreach statement a bit
 	  // this way we sort by the course types
@@ -301,46 +289,44 @@ function expanded_faculte($fac, $uid) {
 						continue;
 				}
 
-    if ($numoftypes > 1) {
-        //$retString .= "\n    <br />";
-        $retString .= "\n    <table width=\"99%\">";
-        $retString .= "\n    <thead>";
-        $retString .= "\n    <tr>";
-        $retString .= "\n      <td><a name=\"$type\" class='alert1'></a><b><font color=\"#a33033\">$message</font></b></td>";
-        $retString .= "\n      <td class=\"right\"><a href=\"#top\">".$langBegin."</a>&nbsp;</td>";
-        $retString .= "\n    </tr>";
-        $retString .= "\n    </thead>";
-        $retString .= "\n    </table>\n";
-    } else {
-        //$retString .= "\n    <br />";
-    	$retString .= "\n    <table width=\"99%\">";
-        $retString .= "\n    <thead>";
-    	$retString .= "\n    <tr>";
-    	$retString .= "\n      <td><a name=\"$type\" class='alert1'></a><b><font color=\"#a33033\">$message</font></b></td>";
-    	$retString .= "\n      <td>&nbsp;</td>";
-    	$retString .= "\n    </tr>";
-        $retString .= "\n    </thead>";
-    	$retString .= "\n    </table>\n\n";
+	if ($numoftypes > 1) {
+		$retString .= "\n    <table width=\"99%\">";
+		$retString .= "\n    <thead>";
+		$retString .= "\n    <tr>";
+		$retString .= "\n      <td><a name=\"$type\" class='alert1'></a><b>
+			<font color=\"#a33033\">$message</font></b></td>";
+		$retString .= "\n      <td class=\"right\"><a href=\"#top\">".$langBegin."</a>&nbsp;</td>";
+		$retString .= "\n    </tr>";
+		$retString .= "\n    </thead>";
+		$retString .= "\n    </table>\n";
+	} else {
+		$retString .= "\n    <table width=\"99%\">";
+		$retString .= "\n    <thead>";
+		$retString .= "\n    <tr>";
+		$retString .= "\n      <td><a name=\"$type\" class='alert1'></a><b>
+			<font color=\"#a33033\">$message</font></b></td>";
+		$retString .= "\n      <td>&nbsp;</td>";
+		$retString .= "\n    </tr>";
+		$retString .= "\n    </thead>";
+		$retString .= "\n    </table>\n\n";
 	}
 
-    // legend
-    $retString .= "\n    <table width=\"99%\" style=\"border: 1px solid #edecdf;\">";
-    $retString .= "\n    <tr>";
-    $retString .= "\n       <td>\n";
-
-    $retString .= "\n       <script type=\"text/javascript\" src=\"sorttable.js\"></script>";
-    $retString .= "\n       <table class=\"sortable\" id=\"t1\" width=\"100%\">";
-    $retString .= "\n       <thead>";
-    $retString .= "\n       <tr>";
-    $retString .= "\n           <th width='10%' style=\"border: 1px solid #E1E0CC;\">$langRegistration</th>";
-    $retString .= "\n           <th class='left' width='60%' style=\"border: 1px solid #E1E0CC;\">$langCourseCode</th>";
-    $retString .= "\n           <th class='left' width='23%' style=\"border: 1px solid #E1E0CC;\">$langTeacher</th>";
-    $retString .= "\n           <th width='7%' style=\"border: 1px solid #E1E0CC;\"><b>$langType</b></th>";
-    $retString .= "\n       </tr>";
-    $retString .= "\n       </thead>";
-    $retString .= "\n       <tbody>";
-
-    $k=0;
+	// legend
+	$retString .= "\n    <table width=\"99%\" style=\"border: 1px solid #edecdf;\">";
+	$retString .= "\n    <tr>";
+	$retString .= "\n       <td>\n";
+	$retString .= "\n       <script type=\"text/javascript\" src=\"sorttable.js\"></script>";
+	$retString .= "\n       <table class=\"sortable\" id=\"t1\" width=\"100%\">";
+	$retString .= "\n       <thead>";
+	$retString .= "\n       <tr>";
+	$retString .= "\n           <th width='10%' style=\"border: 1px solid #E1E0CC;\">$langRegistration</th>";
+	$retString .= "\n           <th class='left' width='60%' style=\"border: 1px solid #E1E0CC;\">$langCourseCode</th>";
+	$retString .= "\n           <th class='left' width='23%' style=\"border: 1px solid #E1E0CC;\">$langTeacher</th>";
+	$retString .= "\n           <th width='7%' style=\"border: 1px solid #E1E0CC;\"><b>$langType</b></th>";
+	$retString .= "\n       </tr>";
+	$retString .= "\n       </thead>";
+	$retString .= "\n       <tbody>";
+	$k=0;
 	while ($mycours = mysql_fetch_array($result)) {
       if ($mycours['visible'] == 2) {
 		$codelink = "<a href='../../courses/$mycours[k]/' target=_blank>$mycours[i]</a>";
@@ -448,19 +434,12 @@ function collapsed_facultes_horiz($fac) {
 	global $langListFac;
 
 	$retString = "\n   <form name='depform' action='$_SERVER[PHP_SELF]' method='get'>";
-	$retString .= "\n
-    <table class=\"DepTitle\" width=\"99%\" align=\"left\">
-    <tr>
-       <th>$langListFac:&nbsp;</th>
-       <td>";
-
+	$retString .= "\n<table class=\"DepTitle\" width=\"99%\" align=\"left\">
+	<tr><th>$langListFac:&nbsp;</th><td>";
 	// department selection box
 	$retString .= dep_selection($fac);
-
- 	// o pinakas autos stoixizei tin kartela
-  	$retString .= "\n        </td>\n    </tr>\n    </table>";
+  	$retString .= "\n    </td>\n    </tr>\n    </table>";
   	$retString .= "\n    </form>";
-  	//$retString .= "\n    <p>&nbsp;</p>\n";
 
 return $retString;
 }

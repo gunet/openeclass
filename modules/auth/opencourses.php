@@ -127,13 +127,9 @@ foreach (array("pre" => $m['pres'],
 		continue;
 	}
 
-$tool_content .= "\n    <br />\n
-    <table width=99%>
-    <tr>
-        <td>";
+$tool_content .= "\n    <br />\n<table width=99%><tr><td>";
 	 // We changed the style a bit here and we output types as the title
 	 $tool_content .= "<a name='$type'>&nbsp;</a><b><font color=\"#a33033\">$message</font></b></td>";
-
           // output a top href link if necessary
           if ( $numoftypes > 1)
        $tool_content .= "\n        <td align=\"right\"><a href=\"#top\" class='mainpage'>$m[begin]</a>&nbsp;</td>";
@@ -148,7 +144,6 @@ $tool_content .= "\n    <br />\n
     <table width=\"99%\" style=\"border: 1px solid #edecdf;\">
     <tr>
         <td>
-
         <table width=100% class=\"sortable\" id=\"t1\">
         <thead>
         <tr>
@@ -159,37 +154,33 @@ $tool_content .= "\n    <br />\n
         </thead>
         <tbody>";
         $k = 0;
-		while ($mycours = mysql_fetch_array($result)) {
-            if ($mycours['visible'] == 2) {
-              $codelink = "<a href='../../courses/$mycours[k]/'>$mycours[i]</a>&nbsp;<small><font style=\"color: #a33033;\">(".$mycours['c'].")</font></small>";
-            } else {
-              $codelink = "<font color='#CAC3B5'>$mycours[i]&nbsp;<small>(".$mycours['c'].")</small></font>";
-            }
-                if ($k%2==0) {
-	              $tool_content .= "\n        <tr>";
-	            } else {
-	              $tool_content .= "\n        <tr class=\"odd\">";
-	            }
-            $tool_content .= "\n            <td width=\"1%\"><img style='border:0px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'></td>";
-            $tool_content .= "\n            <td>".$codelink."</td>";
-            $tool_content .= "\n            <td><small>$mycours[t]</small></td>";
-            $tool_content .= "\n            <td align='center'>";
-            // show the necessary access icon
-                      foreach ($icons as $visible => $image) {
-                          if ($visible == $mycours['visible']) {
-                              $tool_content .= $image;
-                          }
-                        }
-            $tool_content .= "\n            </td>";
-            $tool_content .= "\n        </tr>";
-            $k++;
+	while ($mycours = mysql_fetch_array($result)) {
+		if ($mycours['visible'] == 2) {
+			$codelink = "<a href='../../courses/$mycours[k]/'>$mycours[i]</a>&nbsp;<small>
+			<font style=\"color: #a33033;\">(".$mycours['c'].")</font></small>";
+		} else {
+			$codelink = "<font color='#CAC3B5'>$mycours[i]&nbsp;<small>(".$mycours['c'].")</small></font>";
+		}
+			if ($k%2==0) {
+				$tool_content .= "\n        <tr>";
+			} else {
+				$tool_content .= "\n        <tr class=\"odd\">";
+			}
+		$tool_content .= "\n            <td width=\"1%\"><img style='border:0px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'></td>";
+		$tool_content .= "\n            <td>".$codelink."</td>";
+		$tool_content .= "\n            <td><small>$mycours[t]</small></td>";
+		$tool_content .= "\n            <td align='center'>";
+		// show the necessary access icon
+			foreach ($icons as $visible => $image) {
+				if ($visible == $mycours['visible']) {
+					$tool_content .= $image;
+				}
+			}
+		$tool_content .= "\n</td>";
+		$tool_content .= "\n</tr>";
+		$k++;
           }
-	 $tool_content .= "\n        </tbody>\n        </table>
-
-        </td>
-    </tr>
-    </table>\n
-    <br />\n";
+	 $tool_content .= "\n        </tbody>\n        </table></td></tr></table>\n<br />\n";
         $tool_content .= "";
           // that's it!
           // upatras.gr patch end here, atkyritsis@upnet.gr, daskalou@upnet.gr
