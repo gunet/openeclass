@@ -250,6 +250,28 @@ if (!isset($submit2)) {
         }  elseif ($oldversion < '2.1.4') {
 		db_query("ALTER TABLE `user` CHANGE `lang` `lang` ENUM('el', 'en', 'es') NOT NULL DEFAULT 'el'");
 		db_query("ALTER TABLE `prof_request` CHANGE `lang` `lang` ENUM('el', 'en', 'es') NOT NULL DEFAULT 'el'");
+		// course units
+		if (!mysql_table_exists($mysqlMainDb, 'course_units')) {
+			db_query("CREATE TABLE `course_units` (
+				`id` MEDIUMINT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+				`title` VARCHAR(255) NOT NULL ,
+				`comments` MEDIUMTEXT NULL ,
+				`visibility` CHAR(1) NOT NULL DEFAULT 'v',
+				`order` MEDIUMINT(11) NULL ,
+				`course_id` VARCHAR(20) NOT NULL)", $mysqlMainDb);
+		}
+		if (!mysql_table_exists($mysqlMainDb, 'unit_resources')) {
+			db_query("CREATE TABLE `unit_resources` (
+				`id` MEDIUMINT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+				`unit_id` MEDIUMINT(11) NOT NULL ,
+				`title` VARCHAR(255) NOT NULL ,
+				`comments` MEDIUMTEXT NULL ,
+				`res_address` MEDIUMTEXT NULL ,
+				`type` VARCHAR(255) NOT NULL ,
+				`visibility` CHAR(1) NOT NULL DEFAULT 'v',
+				`order` MEDIUMINT(11) NULL ,
+				`date` DATETIME NULL)", $mysqlMainDb);
+		}
 	}
 
         // **********************************************
