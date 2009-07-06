@@ -43,9 +43,20 @@ $guest_allowed = true;
 $path2add=1;
 include '../../include/baseTheme.php';
 $nameTools = $langIdentity;
-$tool_content = "";
-$main_content = "";
-$bar_content = "";
+$tool_content = $head_content = $main_content = $bar_content = "";
+
+$head_content .= '
+<script>
+function confirmation ()
+{
+    if (confirm("'.$langConfirmDelete.'"))
+        {return true;}
+    else
+        {return false;}
+}
+</script>
+';
+
 
 //For statistics: record login
 global $uid, $currentCourse, $REMOTE_ADDR;
@@ -63,7 +74,6 @@ while($result = mysql_fetch_row($res)) {
 	$visible = $result[6];
 	$professor = $result[7];
 	$fake_code = $result[8];
-
 }
 
 if(strlen($description) > 0) {
@@ -71,7 +81,8 @@ if(strlen($description) > 0) {
 	if (!$is_adminOfCourse) {
 		$main_content .= "$langDescription";
 	} else {
-		$main_content .= "$langDescription &nbsp;<a href='../../modules/course_info/infocours.php'><img src='../../template/classic/img/edit.gif' title='$langEdit' border='0'></img></a>";
+		$main_content .= "$langDescription &nbsp;<a href='../../modules/course_info/infocours.php'>
+		<img src='../../template/classic/img/edit.gif' title='$langEdit' border='0'></img></a>";
     }
     $main_content .= "</div><p>$description</p>";
 
@@ -80,7 +91,8 @@ if(strlen($description) > 0) {
 	if (!$is_adminOfCourse) {
 		$main_content .= "&nbsp;";
 	} else {
-		$main_content .= "&nbsp;&nbsp;<a href='../../modules/course_info/infocours.php'><img src='../../template/classic/img/edit.gif' title='$langEdit' border='0'></img></a>";
+		$main_content .= "&nbsp;&nbsp;<a href='../../modules/course_info/infocours.php'>
+		<img src='../../template/classic/img/edit.gif' title='$langEdit' border='0'></img></a>";
     }
 }
 
@@ -92,22 +104,97 @@ if(strlen($addon) > 0) {
 	$main_content .= "<div id=\"course_home_id\">$langCourseAddon</div><p>". nl2br($addon)."</p>";
 }
 
+// other actions in course unit
+if ($is_adminOfCourse) {
+	if (isset($del)) { // delete course unit
+		$id = intval($del);
+		db_query("DELETE FROM course_units WHERE id = '$id'");
+		$main_content .= "<p class='success_small'>$langCourseUnitDeleted</p>";
+	} elseif (isset($vis)) { // modify visibility
+		$id = intval($vis);
+		$sql = db_query("SELECT `visibility` FROM course_units WHERE id='$id'");
+		list($vis) = mysql_fetch_row($sql);
+		$newvis = ($vis == 'v')? 'i': 'v';
+		db_query("UPDATE course_units SET visibility = '$newvis' WHERE id = '$id'");
+	} elseif (isset($down)) {
+		$id = intval($down);
+		$sql = db_query("SELECT `order` FROM course_units WHERE id='$id'");
+		list($current) = mysql_fetch_row($sql);
+		$sql = db_query("SELECT id, `order` FROM course_units 
+				WHERE `order` > '$current' ORDER BY `order` LIMIT 1");
+		list($next_id, $next) = mysql_fetch_row($sql);
+		db_query("UPDATE course_units SET `order` = $next WHERE id = $id");
+		db_query("UPDATE course_units SET `order` = $current WHERE id = $next_id");
+	} elseif (isset($up)) {
+		$id = intval($up);
+		$sql = db_query("SELECT `order` FROM course_units WHERE id='$id'");
+		list($current) = mysql_fetch_row($sql);
+		$sql = db_query("SELECT id, `order` FROM course_units 
+				WHERE `order` < '$current' ORDER BY `order` LIMIT 1");
+		list($prev_id, $prev) = mysql_fetch_row($sql);
+		db_query("UPDATE course_units SET `order` = $prev WHERE id = $id");
+		db_query("UPDATE course_units SET `order` = $current WHERE id = $prev_id");
+	}	
+}
+
+// display course units
+$main_content .= "<div id='course_home_id'><p>$langCourseUnits</p></div>";
+// add course units
+if ($is_adminOfCourse) {
+	$main_content .= "<p><a href='{$urlServer}modules/units/index.php'>$langCourseUnit</a></p>";
+}
+list($last_id) = mysql_fetch_row(db_query("SELECT id FROM course_units WHERE course_id='$currentCourseID' ORDER BY `order` DESC LIMIT 1"));
+$sql = db_query("SELECT id, title, comments, visibility 
+		FROM course_units WHERE course_id='$currentCourseID' ORDER BY `order`");
+$main_content .= "<ul>";
+$first = true;
+while ($cu = mysql_fetch_array($sql)) {
+	$main_content .= "<h4>$cu[title]";
+	$vis = $cu['visibility'];
+	if ($vis == 'v') { // define visibility actions
+		$icon_vis = 'visible.gif';
+	} else {
+		$icon_vis = 'invisible.gif';
+	}
+	if ($is_adminOfCourse) { // display actions
+		$main_content .= "&nbsp;&nbsp;
+		<a href='../../modules/units/index.php?id=$cu[id]&edit=TRUE'>
+		<img src='../../template/classic/img/edit.gif' title='$langEdit'></img></a>";
+		$main_content .= "&nbsp;&nbsp;
+		<a href='$_SERVER[PHP_SELF]?del=$cu[id]' onClick=\"return confirmation();\">
+		<img src='../../template/classic/img/delete.gif' title='$langDelete'></img></a>";
+		$main_content .= "&nbsp;&nbsp;
+		<a href='$_SERVER[PHP_SELF]?vis=$cu[id]'>
+		<img src='../../template/classic/img/$icon_vis' title='$langVisibility'></img></a>";
+		if (!$first) {
+			$main_content .= "&nbsp;&nbsp;<a href='$_SERVER[PHP_SELF]?up=$cu[id]'>" .
+			                 "<img src='../../template/classic/img/up.gif' title='$langUp'></img></a>";
+		}
+		if ($cu['id'] != $last_id) {
+			$main_content .= "<a href='$_SERVER[PHP_SELF]?down=$cu[id]'>" .
+					 "<img src='../../template/classic/img/down.gif' title='$langDown'></img></a>";
+		}
+	}
+	$main_content .= "</h3>";
+	$main_content .= "<p>$cu[comments]</p>";
+	$main_content .= "<br>";
+	$first = false;
+}
+$main_content .= "</ul>";
 
 switch ($type){
-case 'pre': { //pre
-	$lessonType = $m['pre'];
-	break;
-}
-
-case 'post': {//post
-	$lessonType = $m['post'];
-	break;
-}
-
-case 'other': { //other
-	$lessonType = $m['other'];
-	break;
-}
+	case 'pre': { //pre
+		$lessonType = $m['pre'];
+		break;
+	}
+	case 'post': {//post
+		$lessonType = $m['post'];
+		break;
+	}
+	case 'other': { //other
+		$lessonType = $m['other'];
+		break;
+	}
 }
 
 $bar_content .= "<p><b>".$langLessonCode."</b>: ".$fake_code."</p>";
@@ -119,7 +206,6 @@ $require_help = TRUE;
 $helpTopic = 'course_home';
 
 if ($is_adminOfCourse) {
-
 	$sql = "SELECT COUNT(user_id) AS numUsers
 			FROM cours_user
 			WHERE code_cours = '$currentCourse'";
@@ -129,7 +215,6 @@ if ($is_adminOfCourse) {
 	}
 
 	//set the lang var for lessons visibility status
-
 	switch ($visible){
 		case 0: { //closed
 			$lessonStatus = $langPrivate;
@@ -187,5 +272,5 @@ $tool_content .= <<<lCont
 lCont;
 
 //-----------------------------------------------------------
-draw($tool_content, 2,'course_home');
+draw($tool_content, 2,'course_home', $head_content);
 ?>
