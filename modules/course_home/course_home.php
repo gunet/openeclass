@@ -130,7 +130,7 @@ if ($is_adminOfCourse) {
 		$sql = db_query("SELECT `order` FROM course_units WHERE id='$id'");
 		list($current) = mysql_fetch_row($sql);
 		$sql = db_query("SELECT id, `order` FROM course_units 
-				WHERE `order` < '$current' ORDER BY `order` LIMIT 1");
+				WHERE `order` < '$current' ORDER BY `order` DESC LIMIT 1");
 		list($prev_id, $prev) = mysql_fetch_row($sql);
 		db_query("UPDATE course_units SET `order` = $prev WHERE id = $id");
 		db_query("UPDATE course_units SET `order` = $current WHERE id = $prev_id");
@@ -166,13 +166,13 @@ while ($cu = mysql_fetch_array($sql)) {
 		$main_content .= "&nbsp;&nbsp;
 		<a href='$_SERVER[PHP_SELF]?vis=$cu[id]'>
 		<img src='../../template/classic/img/$icon_vis' title='$langVisibility'></img></a>";
-		if (!$first) {
-			$main_content .= "&nbsp;&nbsp;<a href='$_SERVER[PHP_SELF]?up=$cu[id]'>" .
-			                 "<img src='../../template/classic/img/up.gif' title='$langUp'></img></a>";
-		}
 		if ($cu['id'] != $last_id) {
 			$main_content .= "<a href='$_SERVER[PHP_SELF]?down=$cu[id]'>" .
 					 "<img src='../../template/classic/img/down.gif' title='$langDown'></img></a>";
+		}
+		if (!$first) {
+			$main_content .= "&nbsp;&nbsp;<a href='$_SERVER[PHP_SELF]?up=$cu[id]'>" .
+			                 "<img src='../../template/classic/img/up.gif' title='$langUp'></img></a>";
 		}
 	}
 	$main_content .= "</h3>";
