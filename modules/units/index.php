@@ -60,71 +60,53 @@ function checkrequired(which, entry) {
 </script>
 hContent;
 
-if ($is_adminOfCourse) { // check teacher status
-	if ($language == 'greek')
-		$lang_editor = 'el';
-	else
-		$lang_editor = 'en';
-
-	$head_content .= "<script type='text/javascript'>
-		_editor_url  = '$urlAppend/include/xinha/';
-		_editor_lang = '$lang_editor';
-		</script>
-		<script type='text/javascript' src='$urlAppend/include/xinha/XinhaCore.js'></script>
-		<script type='text/javascript' src='$urlAppend/include/xinha/my_config.js'></script>";
-	if (isset($submit)) {
-		if (isset($unit_id) and !empty($unit_id)) { // update course_unit
-			$result = db_query("UPDATE course_units SET
-					title = '$unittitle',
-					comments = '$unitdescr'
-					WHERE id = '$unit_id'");
-			$tool_content .= "<p class='success_small'>$langUnitModified</p>";
-			$tool_content .= "<p><a href='../../course_home/course_home.php'>$langBack</a></p>";
-		} else { // insert new course_unit
-			$result = db_query("SELECT MAX(`order`) FROM course_units WHERE course_id='$currentCourseID'");
-			list($maxorder) = mysql_fetch_row($result);
-			$order = $maxorder + 1; 
-			db_query("INSERT INTO course_units SET 
-					title='".mysql_real_escape_string($unittitle)."',
-					comments='".mysql_real_escape_string($unitdescr)."',
-					`order`='$order', course_id='$currentCourseID'");
-			$tool_content .= "<p class='success_small'>$langUnitAdded</p>";
-			$tool_content .= "<p><a href='$_SERVER[PHP_SELF]'>$langBack</a></p>";
-		}
-	} else {
-		$button = $langAdd;
-		$unit_id = $unitdescr = $unittitle = '';
-		if (isset($id) and ($edit == TRUE)) { // display form for editing course unit 
-			$sql = db_query("SELECT id, title, comments FROM course_units WHERE id='$id'");
-			$cu = mysql_fetch_array($sql);
-			$unittitle = $cu['title'];
-			$unitdescr = $cu['comments'];
-			$unit_id = $cu['id'];
-			$button = $langEdit;			
-		}
-		$tool_content .= "<form method='post' action='$_SERVER[PHP_SELF]'
-			onsubmit=\"return checkrequired(this, 'unittitle');\">";
-		$tool_content .= "<table width='99%' class='FormData' align='center'>
-		<tbody><tr>
-		<th width=\"220\">&nbsp;</th>
-		<td><b>".$langAddUnit."</b></td></tr>";
-		$tool_content .= "<tr><th width='150' class='left'>$langUnitTitle:</th>";
-		$tool_content .= "<td><input type='text' name='unittitle' value='$unittitle' size='50' maxlength='50' class='FormData_InputText'></td></tr>";
-		$tool_content .= "<tr><th class='left'>$langUnitDescr:</th><td>
-		<table class='xinha_editor'><tr>
-		<td><textarea id='xinha' name='unitdescr' value='$unitdescr'>$unitdescr</textarea></td>
-		</tr>
-		</table></td></tr>";
-		$tool_content .= "<input type='hidden' name='unit_id' value='$unit_id'>";
-		$tool_content .= "<tr><th>&nbsp;</th>
-		<td><input type='submit' name='submit' value='$button'></td></tr>
-		</tbody>
-		</table>
-		</form>";
-	}
-} else {
-	$tool_content .= $langNotAllowed;
+if (!$is_adminOfCourse) { // check teacher status
+        $tool_content .= $langNotAllowed;
+        draw($tool_content, 2, 'units', $head_content);
+        exit;
 }
 
+if ($language == 'greek')
+        $lang_editor = 'el';
+else
+        $lang_editor = 'en';
+
+$head_content .= "<script type='text/javascript'>
+_editor_url  = '$urlAppend/include/xinha/';
+_editor_lang = '$lang_editor';
+</script>
+<script type='text/javascript' src='$urlAppend/include/xinha/XinhaCore.js'></script>
+<script type='text/javascript' src='$urlAppend/include/xinha/my_config.js'></script>";
+
+if (isset($_GET['edit'])) { // display form for editing course unit
+        $id = intval($_GET['edit']); 
+        $sql = db_query("SELECT id, title, comments FROM course_units WHERE id='$id'");
+        $cu = mysql_fetch_array($sql);
+        $unittitle = " value='" . htmlspecialchars($cu['title']) . "'";
+        $unitdescr = $cu['comments'];
+        $unit_id = $cu['id'];
+        $button = $langEdit;
+} else {
+        $button = $langAdd;
+        $unitdescr = $unittitle = '';
+}
+
+$tool_content .= "<form method='post' action='${urlServer}/courses/$currentCourseID/'
+        onsubmit=\"return checkrequired(this, 'unittitle');\">";
+if (isset($unit_id)) {
+        $tool_content .= "<input type='hidden' name='unit_id' value='$unit_id'>";
+}
+$tool_content .= "<table width='99%' class='FormData' align='center'><tbody>
+        <tr><th width='220'>&nbsp;</th>
+            <td><b>$langAddUnit</b></td></tr>
+        <tr><th width='150' class='left'>$langUnitTitle:</th>
+            <td><input type='text' name='unittitle' size='50' maxlength='50' $unittitle class='FormData_InputText'></td></tr>
+        <tr><th class='left'>$langUnitDescr:</th><td>
+        <table class='xinha_editor'><tr><td><textarea id='xinha' name='unitdescr'>$unitdescr</textarea></td></tr>
+        </table></td></tr>
+        <tr><th>&nbsp;</th>
+            <td><input type='submit' name='edit_submit' value='$button'></td></tr>
+</tbody></table>
+</form>";
 draw($tool_content, 2, 'units', $head_content);
-?>
+

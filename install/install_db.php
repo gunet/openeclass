@@ -371,12 +371,31 @@ db_query("INSERT INTO `config` (`key`, `value`)
 #
 
 db_query("CREATE TABLE `passwd_reset` (
-                `user_id` int(11) NOT NULL,
-                `hash` varchar(40) NOT NULL,
-                `password` varchar(8) NOT NULL,
-                `datetime` datetime NOT NULL) $charset_spec");
+                `user_id` INT(11) NOT NULL,
+                `hash` VARCHAR(40) NOT NULL,
+                `password` VARCHAR(8) NOT NULL,
+                `datetime` DATETIME NOT NULL) $charset_spec");
 
+// tables for units module
+db_query("CREATE TABLE `course_units` (
+	`id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+	`title` VARCHAR(255) NOT NULL DEFAULT '',
+	`comments` MEDIUMTEXT NOT NULL DEFAULT '',
+	`visibility` CHAR(1) NOT NULL DEFAULT 'v',
+	`order` INT(11) NOT NULL DEFAULT 0,
+	`course_id` INT(11) NOT NULL) $charset_spec");
 
+ db_query("CREATE TABLE `unit_resources` (
+	`id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+	`unit_id` INT(11) NOT NULL ,
+	`title` VARCHAR(255) NOT NULL DEFAULT '',
+	`comments` MEDIUMTEXT NOT NULL DEFAULT '',
+	`res_address` MEDIUMTEXT NULL DEFAULT '',
+	`type` VARCHAR(255) NOT NULL DEFAULT '',
+	`visibility` CHAR(1) NOT NULL DEFAULT 'v',
+	`order` INT(11) NOT NULL DEFAULT 0,
+	`date` DATETIME NOT NULL DEFAULT '0000-00-00') $charset_spec");
+ 
 //dhmiourgia full text indexes
 db_query("ALTER TABLE `annonces` ADD FULLTEXT `annonces` (`contenu` ,`code_cours`)");
 db_query("ALTER TABLE `cours` ADD FULLTEXT `cours` (`code` ,`description` ,`intitule` ,`course_keywords`, `course_addon`)");

@@ -106,34 +106,52 @@ if(strlen($addon) > 0) {
 
 // other actions in course unit
 if ($is_adminOfCourse) {
-	if (isset($del)) { // delete course unit
-		$id = intval($del);
+        if (isset($_REQUEST['edit_submit'])) {
+                $title = autoquote($_REQUEST['unittitle']);
+                $descr = autoquote($_REQUEST['unitdescr']);
+                if (isset($_REQUEST['unit_id'])) { // update course unit
+                        $unit_id = intval($_REQUEST['unit_id']);
+                        $result = db_query("UPDATE course_units SET
+                                                   title = $title,
+                                                   comments = $descr
+                                            WHERE id = $unit_id AND course_id = $cours_id");
+                } else { // add new course unit
+                        $result = db_query("SELECT MAX(`order`) FROM course_units
+                                            WHERE course_id = $cours_id");
+                        list($maxorder) = mysql_fetch_row($result);
+                        $order = $maxorder + 1; 
+                        db_query("INSERT INTO course_units SET
+                                        title = $title, comments =  $descr,
+                                        `order` = $order, course_id = $cours_id");
+                }
+        } elseif (isset($_REQUEST['del'])) { // delete course unit
+		$id = intval($_REQUEST['del']);
 		db_query("DELETE FROM course_units WHERE id = '$id'");
 		$main_content .= "<p class='success_small'>$langCourseUnitDeleted</p>";
-	} elseif (isset($vis)) { // modify visibility
-		$id = intval($vis);
+	} elseif (isset($_REQUEST['vis'])) { // modify visibility
+		$id = intval($_REQUEST['vis']);
 		$sql = db_query("SELECT `visibility` FROM course_units WHERE id='$id'");
 		list($vis) = mysql_fetch_row($sql);
 		$newvis = ($vis == 'v')? 'i': 'v';
-		db_query("UPDATE course_units SET visibility = '$newvis' WHERE id = '$id'");
-	} elseif (isset($down)) {
-		$id = intval($down);
+		db_query("UPDATE course_units SET visibility = '$newvis' WHERE id = $id AND course_id = $cours_id");
+	} elseif (isset($_REQUEST['down'])) {
+		$id = intval($_REQUEST['down']);
 		$sql = db_query("SELECT `order` FROM course_units WHERE id='$id'");
 		list($current) = mysql_fetch_row($sql);
 		$sql = db_query("SELECT id, `order` FROM course_units 
 				WHERE `order` > '$current' ORDER BY `order` LIMIT 1");
 		list($next_id, $next) = mysql_fetch_row($sql);
-		db_query("UPDATE course_units SET `order` = $next WHERE id = $id");
-		db_query("UPDATE course_units SET `order` = $current WHERE id = $next_id");
-	} elseif (isset($up)) {
-		$id = intval($up);
+		db_query("UPDATE course_units SET `order` = $next WHERE id = $id AND course_id = $cours_id");
+		db_query("UPDATE course_units SET `order` = $current WHERE id = $next_id AND course_id = $cours_id");
+	} elseif (isset($_REQUEST['up'])) {
+		$id = intval($_REQUEST['up']);
 		$sql = db_query("SELECT `order` FROM course_units WHERE id='$id'");
 		list($current) = mysql_fetch_row($sql);
 		$sql = db_query("SELECT id, `order` FROM course_units 
 				WHERE `order` < '$current' ORDER BY `order` DESC LIMIT 1");
 		list($prev_id, $prev) = mysql_fetch_row($sql);
-		db_query("UPDATE course_units SET `order` = $prev WHERE id = $id");
-		db_query("UPDATE course_units SET `order` = $current WHERE id = $prev_id");
+		db_query("UPDATE course_units SET `order` = $prev WHERE id = $id AND course_id = $cours_id");
+		db_query("UPDATE course_units SET `order` = $current WHERE id = $prev_id AND course_id = $cours_id");
 	}	
 }
 
@@ -143,14 +161,14 @@ $main_content .= "<div id='course_home_id'><p>$langCourseUnits</p></div>";
 if ($is_adminOfCourse) {
 	$main_content .= "<p><a href='{$urlServer}modules/units/index.php'>$langCourseUnit</a></p>";
 }
-list($last_id) = mysql_fetch_row(db_query("SELECT id FROM course_units WHERE course_id='$currentCourseID' 
-		ORDER BY `order` DESC LIMIT 1"));
 if ($is_adminOfCourse) {
 	$query = "SELECT id, title, comments, visibility 
-		FROM course_units WHERE course_id='$currentCourseID' ORDER BY `order`";
+		FROM course_units WHERE course_id=$cours_id ORDER BY `order`";
+        list($last_id) = mysql_fetch_row(db_query("SELECT id FROM course_units WHERE course_id=$cours_id
+		ORDER BY `order` DESC LIMIT 1"));
 } else {
 	$query = "SELECT id, title, comments, visibility 
-		FROM course_units WHERE course_id='$currentCourseID' AND visibility='v' ORDER BY `order`";
+		FROM course_units WHERE course_id=$cours_id AND visibility='v' ORDER BY `order`";
 }
 $sql = db_query($query);
 $first = true;
@@ -164,7 +182,7 @@ while ($cu = mysql_fetch_array($sql)) {
 	}
 	if ($is_adminOfCourse) { // display actions
 		$main_content .= "&nbsp;&nbsp;
-		<a href='../../modules/units/index.php?id=$cu[id]&edit=TRUE'>
+		<a href='../../modules/units/index.php?edit=$cu[id]'>
 		<img src='../../template/classic/img/edit.gif' title='$langEdit'></img></a>";
 		$main_content .= "&nbsp;&nbsp;
 		<a href='$_SERVER[PHP_SELF]?del=$cu[id]' onClick=\"return confirmation();\">

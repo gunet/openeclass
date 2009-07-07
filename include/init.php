@@ -139,22 +139,15 @@ if (!isset($guest_allowed) || $guest_allowed!= true){
 // If $require_current_course is true, initialise course settings
 // Read properties of current course
 if (isset($require_current_course) and $require_current_course) {
-	// Work around bug in some versions of PHP - session registered
-	// variables aren't immediately available in $HTTP_SESSION_VARS[]
-	if (session_is_registered('dbname') && !isset($_SESSION['dbname'])) {
-		$HTTP_SESSION['dbname'] = $dbname;
-	}
 	if (!isset($_SESSION['dbname'])) {
 		$toolContent_ErrorExists = $langSessionIsLost;
 		$errorMessagePath = "../../";
 	} else {
-		$dbname = $_SESSION['dbname'];
-		$currentCourse = $dbname;
-		$result = db_query("
-		SELECT code, fake_code, intitule, faculte,
-			titulaires, languageCourse,
-			departmentUrlName, departmentUrl, visible
-		FROM cours WHERE cours.code='$currentCourse'");
+		$currentCourse = $dbname = $_SESSION['dbname'];
+		$result = db_query("SELECT cours_id, code, fake_code, intitule, faculte,
+                                           titulaires, languageCourse,
+                                           departmentUrlName, departmentUrl, visible
+                                    FROM cours WHERE cours.code='$dbname'");
 
                 if (!$result or mysql_num_rows($result) == 0) {
                         header('Location: ' . $urlServer);
@@ -162,6 +155,7 @@ if (isset($require_current_course) and $require_current_course) {
                 }
 
 		while ($theCourse = mysql_fetch_array($result)) {
+                        $cours_id = $theCourse["cours_id"];
 			$fake_code = $theCourse["fake_code"];
 			$code_cours = $theCourse["code"];
 			$intitule = $theCourse["intitule"];

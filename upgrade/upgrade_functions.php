@@ -101,7 +101,7 @@ function delete_table($table)
 	global $langDeleteTable, $BAD;
 	$retString = "";
 
-	if (!db_query("DROP TABLE $table")) {
+	if (!db_query("DROP TABLE IF EXISTS $table")) {
 		$retString .= "$langDeleteTable <b>$table</b>: ";
 		$retString .= " $BAD<br>";
 	}
