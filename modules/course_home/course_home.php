@@ -46,7 +46,7 @@ $nameTools = $langIdentity;
 $tool_content = $head_content = $main_content = $bar_content = "";
 
 $head_content .= '
-<script>
+<script type="text/javascript">
 function confirmation ()
 {
     if (confirm("'.$langConfirmDelete.'"))
@@ -66,9 +66,9 @@ db_query($sql_log, $currentCourse);
 $sql = 'SELECT `description`,`course_keywords`, `course_addon`,`faculte`,`lastEdit`,`type`, `visible`, `titulaires`, `fake_code` FROM `cours` WHERE `code` = "'.$currentCourse.'"';
 $res = db_query($sql, $mysqlMainDb);
 while($result = mysql_fetch_row($res)) {
-	$description = $result[0];
-	$keywords = $result[1];
-	$addon = $result[2];
+	$description = trim($result[0]);
+	$keywords = trim($result[1]);
+	$addon = nl2br(trim($result[2]));
 	$faculte = $result[3];
 	$type = $result[5];
 	$visible = $result[6];
@@ -76,34 +76,30 @@ while($result = mysql_fetch_row($res)) {
 	$fake_code = $result[8];
 }
 
-if(strlen($description) > 0) {
-	$main_content .= "<div id=\"course_home_id\">";
-	if (!$is_adminOfCourse) {
-		$main_content .= "$langDescription";
-	} else {
-		$main_content .= "$langDescription &nbsp;<a href='../../modules/course_info/infocours.php'>
-		<img src='../../template/classic/img/edit.gif' title='$langEdit' border='0'></img></a>";
-    }
-    $main_content .= "</div><p>$description</p>";
+if ($is_adminOfCourse) {
+        $edit_link = "&nbsp;<a href='../../modules/course_info/infocours.php'><img src='../../template/classic/img/edit.gif' title='$langEdit'></img></a>";
+} else {
+        $edit_link = '';
+}
+$main_content .= "<div class='course_info'>";
+if (!empty($description)) {
+        $main_content .= "<h1>$langDescription$edit_link</h1><p>$description</p>";
 
 } else {
-	$main_content .= $langThisCourseDescriptionIsEmpty;
-	if (!$is_adminOfCourse) {
-		$main_content .= "&nbsp;";
-	} else {
-		$main_content .= "&nbsp;&nbsp;<a href='../../modules/course_info/infocours.php'>
-		<img src='../../template/classic/img/edit.gif' title='$langEdit' border='0'></img></a>";
-    }
+        $main_content .= "<p>$langThisCourseDescriptionIsEmpty$edit_link</p>";
+}
+if (!empty($keywords)) {
+	$main_content .= "<p><b>$langCourseKeywords</b> $keywords</p>";
+}
+$main_content .= "</div>\n";
+
+if (!empty($addon)) {
+	$main_content .= "<div class='course_info'><h1>$langCourseAddon</h1><p>$addon</p></div>";
 }
 
-if (strlen($keywords) > 0) {
-	$main_content .= "<p><br /><b>$langCourseKeywords </b>$keywords</p><p>&nbsp;</p>";
-}
-
-if(strlen($addon) > 0) {
-	$main_content .= "<div id=\"course_home_id\">$langCourseAddon</div><p>". nl2br($addon)."</p>";
-}
-
+$result = db_query("SELECT MAX(`order`) FROM course_units WHERE course_id = $cours_id");
+list($maxorder) = mysql_fetch_row($result);
+ 
 // other actions in course unit
 if ($is_adminOfCourse) {
         if (isset($_REQUEST['edit_submit'])) {
@@ -115,14 +111,13 @@ if ($is_adminOfCourse) {
                                                    title = $title,
                                                    comments = $descr
                                             WHERE id = $unit_id AND course_id = $cours_id");
+		        $main_content .= "<p class='success_small'>$langCourseUnitModified</p>";
                 } else { // add new course unit
-                        $result = db_query("SELECT MAX(`order`) FROM course_units
-                                            WHERE course_id = $cours_id");
-                        list($maxorder) = mysql_fetch_row($result);
                         $order = $maxorder + 1; 
                         db_query("INSERT INTO course_units SET
-                                        title = $title, comments =  $descr,
-                                        `order` = $order, course_id = $cours_id");
+                                         title = $title, comments =  $descr,
+                                         `order` = $order, course_id = $cours_id");
+		        $main_content .= "<p class='success_small'>$langCourseUnitAdded</p>";
                 }
         } elseif (isset($_REQUEST['del'])) { // delete course unit
 		$id = intval($_REQUEST['del']);
@@ -155,55 +150,65 @@ if ($is_adminOfCourse) {
 	}	
 }
 
-// display course units
-$main_content .= "<div id='course_home_id'><p>$langCourseUnits</p></div>";
+// display course units header
+if (!is_null($maxorder) or $is_adminOfCourse) {
+        $main_content .= "<div class='course_info'><h1>$langCourseUnits</h1>";
+}
 // add course units
 if ($is_adminOfCourse) {
-	$main_content .= "<p><a href='{$urlServer}modules/units/index.php'>$langCourseUnit</a></p>";
+	$main_content .= "<p><a href='{$urlServer}modules/units/info.php'>$langAddUnit</a></p>";
 }
 if ($is_adminOfCourse) {
+        list($last_id) = mysql_fetch_row(db_query("SELECT id FROM course_units
+                                                   WHERE course_id = $cours_id
+                                                   ORDER BY `order` DESC LIMIT 1"));
 	$query = "SELECT id, title, comments, visibility 
-		FROM course_units WHERE course_id=$cours_id ORDER BY `order`";
-        list($last_id) = mysql_fetch_row(db_query("SELECT id FROM course_units WHERE course_id=$cours_id
-		ORDER BY `order` DESC LIMIT 1"));
+		  FROM course_units WHERE course_id = $cours_id
+                  ORDER BY `order`";
 } else {
 	$query = "SELECT id, title, comments, visibility 
-		FROM course_units WHERE course_id=$cours_id AND visibility='v' ORDER BY `order`";
+		  FROM course_units WHERE course_id = $cours_id AND visibility='v'
+                  ORDER BY `order`";
 }
 $sql = db_query($query);
 $first = true;
 while ($cu = mysql_fetch_array($sql)) {
-	$main_content .= "<h4>$cu[title]";
-	$vis = $cu['visibility'];
-	if ($vis == 'v') { // define visibility actions
-		$icon_vis = 'visible.gif';
-	} else {
-		$icon_vis = 'invisible.gif';
-	}
 	if ($is_adminOfCourse) { // display actions
-		$main_content .= "&nbsp;&nbsp;
-		<a href='../../modules/units/index.php?edit=$cu[id]'>
-		<img src='../../template/classic/img/edit.gif' title='$langEdit'></img></a>";
-		$main_content .= "&nbsp;&nbsp;
-		<a href='$_SERVER[PHP_SELF]?del=$cu[id]' onClick=\"return confirmation();\">
-		<img src='../../template/classic/img/delete.gif' title='$langDelete'></img></a>";
-		$main_content .= "&nbsp;&nbsp;
-		<a href='$_SERVER[PHP_SELF]?vis=$cu[id]'>
-		<img src='../../template/classic/img/$icon_vis' title='$langVisibility'></img></a>";
+                // Visibility icon
+                $vis = $cu['visibility'];
+                $icon_vis = ($vis == 'v')? 'visible.gif': 'invisible.gif';
+
+		$main_content .= "<div class='actions'>".
+                        "<a href='../../modules/units/info.php?edit=$cu[id]'>" .
+                        "<img src='../../template/classic/img/edit.gif' title='$langEdit' /></a>" .
+		        "&nbsp;<a href='$_SERVER[PHP_SELF]?del=$cu[id]' " .
+                        "onClick=\"return confirmation();\">" .
+                        "<img src='../../template/classic/img/delete.gif' " .
+                        "title='$langDelete'></img></a>" .
+                        "&nbsp;<a href='$_SERVER[PHP_SELF]?vis=$cu[id]'>" .
+        		"<img src='../../template/classic/img/$icon_vis' " .
+                        "title='$langVisibility'></img></a>";
 		if ($cu['id'] != $last_id) {
-			$main_content .= "<a href='$_SERVER[PHP_SELF]?down=$cu[id]'>" .
+			$main_content .= "&nbsp;<a href='$_SERVER[PHP_SELF]?down=$cu[id]'>" .
 					 "<img src='../../template/classic/img/down.gif' title='$langDown'></img></a>";
 		}
 		if (!$first) {
-			$main_content .= "&nbsp;&nbsp;<a href='$_SERVER[PHP_SELF]?up=$cu[id]'>" .
+			$main_content .= "&nbsp;<a href='$_SERVER[PHP_SELF]?up=$cu[id]'>" .
 			                 "<img src='../../template/classic/img/up.gif' title='$langUp'></img></a>";
 		}
+                $main_content .= "</div>";
 	}
-	$main_content .= "</h3>";
+	$main_content .= "<h1><a href='${urlServer}/modules/units/?id=$cu[id]'>$cu[title]</a></h1>";
+
 	$main_content .= "<p>$cu[comments]</p>";
-	$main_content .= "<br>";
 	$first = false;
 }
+// Close units div if open
+if (!is_null($maxorder) or $is_adminOfCourse) {
+        $main_content .= "</div>\n";
+}
+
+$main_content .= "<p>$cu[comments]</p>";
 
 switch ($type){
 	case 'pre': { //pre
@@ -259,41 +264,25 @@ if ($is_adminOfCourse) {
 }
 
 
-$tool_content .= <<<lCont
-<div id="container_login">
-<div id="wrapper">
-<div id="content_login"><p>$main_content</p></div>
-</div>
-<div id="navigation">
-  <table width="99%">
-  <tbody>
-  <tr>
-    <td class="odd">
-    $bar_content
-    </td>
-  </tr>
-  </tbody>
-  </table>
+$tool_content .= "
+<div id='container_login'>
+   <div id='wrapper'>
+      <div id='content_login'><p>$main_content</p></div>
+   </div>
+   <div id='navigation'>
+      <table><tbody>
+      <tr><td class='odd'>$bar_content</td></tr>
+      </tbody></table>
+      <br />
+      <table><tbody>
+      <tr>
+        <td class='odd' width='1%' align='right'></td>
+        <td align='left'>$langContactProf:
+                         (<a href='../../modules/contact/index.php'>$langEmail</a>)</td>
+      </tr>
+      </tbody>
+      </table>
+   </div>
+</div>";
 
-  <br />
-
-  <table width="99%">
-  <tbody>
-  <tr>
-    <td class="odd" width="1%" align="right"></td>
-    <td align="left">
-      $langContactProf: (<a href="../../modules/contact/index.php">$langEmail</a>)
-    </td>
-  </tr>
-  </tbody>
-  </table>
-
-
-</div>
-</div>
-
-lCont;
-
-//-----------------------------------------------------------
 draw($tool_content, 2,'course_home', $head_content);
-?>

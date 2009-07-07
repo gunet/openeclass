@@ -1,23 +1,35 @@
-div#content_login p{
-    line-height:1.4;
+div#content_login { margin-right: 350px; padding-left: 10px; }
+div#content_login p { line-height:1.4; }
+
+div#extra { background: #FF8539; }
+
+div#wrapper { float: left; width: 99%; margin-right:-300px; }
+div#navigation { float: right; width: 300px; }
+div#extra { float: right; clear: right; width:200px; }
+div#footer { clear: both; width: 100%; }
+
+.course_info {
+        background: #ffffff;
+        margin-bottom: 1em;
 }
-div#navigation{backgroundX:red;}
-div#extra{backgroundX:#FF8539}
-
-div#wrapper{float:left;width:99%;margin-right:-300px}
-div#content_login{margin-right:350px; padding-leftX:10px;}
-div#navigation{float:right;width:300px;}
-div#extra{float:right;clear:right;width:200px}
-div#footer{clear:both;width:100%}
-
-
-#course_home_id {
-border-bottom: 1px solid #a2a2a3;
-background: #ffffff;
-padding:2px;
-padding-top:5px;
-color: #a33033;
-font-size: 11px;
-font-weight:bold;
+.course_info h1 {
+        border-bottom: 1px solid #a2a2a3;
+        padding: 5px 2px;
+        color: #a33033;
+        font-size: 11px;
+        font-weight: bold;
 }
-
+.course_info h1 a {
+        font-size: 11px;
+        font-weight: bold;
+        color: #a33033;
+}
+.actions {
+        padding: 0 .5em;
+        text-align: left;
+        float: right;
+        width: 7em;
+}
+.actions img {
+        vertical-align: middle;
+}
