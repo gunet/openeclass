@@ -17,10 +17,10 @@
 *	Foundation. See the GNU License for more details.
 *	The full license can be read in "license.txt".
 *
-*	Contact address: 	GUnet Asynchronous Teleteaching Group,
-*						Network Operations Center, University of Athens,
-*						Panepistimiopolis Ilissia, 15784, Athens, Greece
-*						eMail: eclassadmin@gunet.gr
+*	Contact address:	GUnet Asynchronous Teleteaching Group,
+*				Network Operations Center, University of Athens,
+*				Panepistimiopolis Ilissia, 15784, Athens, Greece
+*				eMail: eclassadmin@gunet.gr
 ============================================================================*/
 
 /*
@@ -143,10 +143,16 @@ $main_content .= "<div id='course_home_id'><p>$langCourseUnits</p></div>";
 if ($is_adminOfCourse) {
 	$main_content .= "<p><a href='{$urlServer}modules/units/index.php'>$langCourseUnit</a></p>";
 }
-list($last_id) = mysql_fetch_row(db_query("SELECT id FROM course_units WHERE course_id='$currentCourseID' ORDER BY `order` DESC LIMIT 1"));
-$sql = db_query("SELECT id, title, comments, visibility 
-		FROM course_units WHERE course_id='$currentCourseID' ORDER BY `order`");
-$main_content .= "<ul>";
+list($last_id) = mysql_fetch_row(db_query("SELECT id FROM course_units WHERE course_id='$currentCourseID' 
+		ORDER BY `order` DESC LIMIT 1"));
+if ($is_adminOfCourse) {
+	$query = "SELECT id, title, comments, visibility 
+		FROM course_units WHERE course_id='$currentCourseID' ORDER BY `order`";
+} else {
+	$query = "SELECT id, title, comments, visibility 
+		FROM course_units WHERE course_id='$currentCourseID' AND visibility='v' ORDER BY `order`";
+}
+$sql = db_query($query);
 $first = true;
 while ($cu = mysql_fetch_array($sql)) {
 	$main_content .= "<h4>$cu[title]";
@@ -180,7 +186,6 @@ while ($cu = mysql_fetch_array($sql)) {
 	$main_content .= "<br>";
 	$first = false;
 }
-$main_content .= "</ul>";
 
 switch ($type){
 	case 'pre': { //pre
