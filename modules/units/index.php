@@ -3,7 +3,7 @@
 *   Open eClass 2.1
 *   E-learning and Course Management System
 * ========================================================================
-*  Copyright(c) 2003-2008  Greek Universities Network - GUnet
+*  Copyright(c) 2003-2009  Greek Universities Network - GUnet
 *  A full copyright notice can be read in "/info/copyright.txt".
 *
 *  Developers Group:	Costas Tsibanis <k.tsibanis@noc.uoa.gr>
@@ -25,56 +25,57 @@
 * =========================================================================*/
 
 /*
-Units module	
+Units display module	
 */
 
 $require_current_course = true;
 include '../../include/baseTheme.php';
 
-$nameTools = $langEditUnit;
+$id = intval($_GET['id']);
 
-if ($language == 'greek')
-        $lang_editor = 'el';
-else
-        $lang_editor = 'en';
-
-$head_content .= "<script type='text/javascript'>
-_editor_url  = '$urlAppend/include/xinha/';
-_editor_lang = '$lang_editor';
-</script>
-<script type='text/javascript' src='$urlAppend/include/xinha/XinhaCore.js'></script>
-<script type='text/javascript' src='$urlAppend/include/xinha/my_config.js'></script>";
-
-if (isset($_GET['edit'])) { // display form for editing course unit
-        $id = intval($_GET['edit']); 
-        $sql = db_query("SELECT id, title, comments FROM course_units WHERE id='$id'");
-        $cu = mysql_fetch_array($sql);
-        $unittitle = " value='" . htmlspecialchars($cu['title'], ENT_QUOTES) . "'";
-        $unitdescr = $cu['comments'];
-        $unit_id = $cu['id'];
-        $button = $langEdit;
+$q = db_query("SELECT * FROM course_units WHERE id = $id and course_id = $cours_id");
+if (!$q or mysql_num_rows($q) == 0) {
+        $nameTools = $langUnitUnknown;
+        draw('', 2, 'units');
+        exit;
+}
+$info = mysql_fetch_array($q);
+$nameTools = htmlspecialchars($info['title']);
+$comments = trim($info['comments']);
+if (!empty($comments)) {
+        $tool_content = "<p>$comments</p>";
 } else {
-        $nameTools = $langAddUnit;
-        $button = $langAdd;
-        $unitdescr = $unittitle = '';
+        $tool_content = '';
 }
 
-$tool_content .= "<form method='post' action='${urlServer}courses/$currentCourseID/'
-        onsubmit=\"return checkrequired(this, 'unittitle');\">";
-if (isset($unit_id)) {
-        $tool_content .= "<input type='hidden' name='unit_id' value='$unit_id'>";
+
+foreach (array('previous', 'next') as $i) {
+        if ($i == 'previous') {
+                $op = '<=';
+                $dir = 'DESC';
+                $arrow1 = '« ';
+                $arrow2 = '';
+        } else {
+                $op = '>=';
+                $dir = '';
+                $arrow1 = '';
+                $arrow2 = ' »';
+        }
+        $q = db_query("SELECT id, title FROM course_units
+                       WHERE course_id = $cours_id AND id <> $id AND `order` $op $info[order]
+                       ORDER BY `order` $dir
+                       LIMIT 1");
+        if ($q and mysql_num_rows($q) > 0) {
+                list($q_id, $q_title) = mysql_fetch_row($q);
+                $q_title = htmlspecialchars($q_title);
+                $link[$i] = "<a href='$_SERVER[PHP_SELF]?id=$q_id'>$arrow1$q_title$arrow2</a>";
+        } else {
+                $link[$i] = '&nbsp;';
+        }
 }
-$tool_content .= "<table width='99%' class='FormData' align='center'><tbody>
-        <tr><th width='220'>&nbsp;</th>
-            <td><b>$nameTools</b></td></tr>
-        <tr><th width='150' class='left'>$langUnitTitle:</th>
-            <td><input type='text' name='unittitle' size='50' maxlength='255' $unittitle class='FormData_InputText'></td></tr>
-        <tr><th class='left'>$langUnitDescr:</th><td>
-        <table class='xinha_editor'><tr><td><textarea id='xinha' name='unitdescr'>$unitdescr</textarea></td></tr>
-        </table></td></tr>
-        <tr><th>&nbsp;</th>
-            <td><input type='submit' name='edit_submit' value='$button'></td></tr>
-</tbody></table>
-</form>";
-draw($tool_content, 2, 'units', $head_content);
+
+$tool_content .= "<table class='unit-navigation'><tr><td class='left'>$link[previous]</td><td></td><td class='right'>$link[next]</td></tr></table>\n";
+
+
+draw($tool_content, 2, 'units');
 

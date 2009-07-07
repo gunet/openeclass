@@ -3,3 +3,14 @@ table.xinha_editor td {
 	font-size : 10px;
 	padding : 1px 1px 1px 1px;
 }
+
+table.unit-navigation {
+        width: 100%;
+        margin-top: 2em;
+}
+.left {
+        text-align: left;
+}
+.right {
+        text-align: right;
+}

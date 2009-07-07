@@ -198,7 +198,7 @@ while ($cu = mysql_fetch_array($sql)) {
 		}
                 $main_content .= "</div>";
 	}
-	$main_content .= "<h1><a href='${urlServer}/modules/units/?id=$cu[id]'>$cu[title]</a></h1>";
+	$main_content .= "<h1><a href='${urlServer}modules/units/?id=$cu[id]'>$cu[title]</a></h1>";
 
 	$main_content .= "<p>$cu[comments]</p>";
 	$first = false;
