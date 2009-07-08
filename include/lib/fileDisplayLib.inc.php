@@ -91,7 +91,7 @@ function choose_image($fileName)
 		$type['rar'       ] = array('rar');
 		$type['code'      ] = array('js', 'cpp', 'c', 'java');
 		$type['acrobat'   ] = array('pdf');
-		$type['powerpoint'] = array('ppt', 'pptx');
+		$type['powerpoint'] = array('ppt', 'pptx', 'pps');
 		$type['text'      ] = array('txt');
 
 		$image['word'      ] = 'doc.gif';
