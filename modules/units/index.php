@@ -33,7 +33,14 @@ include '../../include/baseTheme.php';
 
 $id = intval($_GET['id']);
 
-$q = db_query("SELECT * FROM course_units WHERE id = $id and course_id = $cours_id");
+if ($is_adminOfCourse) {
+        $visibility_check = '';
+} else {
+        $visibility_check = "AND visibility='v'";
+}
+
+$q = db_query("SELECT * FROM course_units
+               WHERE id=$id AND course_id=$cours_id " . $visibility_check);
 if (!$q or mysql_num_rows($q) == 0) {
         $nameTools = $langUnitUnknown;
         draw('', 2, 'units');
@@ -42,13 +49,8 @@ if (!$q or mysql_num_rows($q) == 0) {
 $info = mysql_fetch_array($q);
 $nameTools = htmlspecialchars($info['title']);
 $comments = trim($info['comments']);
-if (!empty($comments)) {
-        $tool_content = "<p>$comments</p>";
-} else {
-        $tool_content = '';
-}
 
-
+// Links for next/previous unit
 foreach (array('previous', 'next') as $i) {
         if ($i == 'previous') {
                 $op = '<=';
@@ -62,7 +64,10 @@ foreach (array('previous', 'next') as $i) {
                 $arrow2 = ' »';
         }
         $q = db_query("SELECT id, title FROM course_units
-                       WHERE course_id = $cours_id AND id <> $id AND `order` $op $info[order]
+                       WHERE course_id = $cours_id
+                             AND id <> $id
+                             AND `order` $op $info[order]
+                             $visibility_check
                        ORDER BY `order` $dir
                        LIMIT 1");
         if ($q and mysql_num_rows($q) > 0) {
@@ -73,9 +78,32 @@ foreach (array('previous', 'next') as $i) {
                 $link[$i] = '&nbsp;';
         }
 }
+$tool_content = '<table class="unit-navigation"><tr><td class="left">' .
+        $link['previous'] . '</td><td class="right">' .
+        $link['next'] . "</td></tr></table>\n";
 
-$tool_content .= "<table class='unit-navigation'><tr><td class='left'>$link[previous]</td><td></td><td class='right'>$link[next]</td></tr></table>\n";
+if (!empty($comments)) {
+        $tool_content .= "<p>$comments</p>";
+}
 
+if ($is_adminOfCourse) {
+        $tool_content .= "<p>$langAdd: <a href='insert_doc.php' title='$langDocumentAsModule'>$langDocumentAsModuleLabel</a> | <a href='insert_exercise.php' title='$langExerciseAsModule'>$langExerciseAsModuleLabel</a> | <a href='insert_text.php' title='$langCourseDescriptionAsModule'>$langCourseDescriptionAsModuleLabel</a></p>";
+}
+
+$tool_content .= '<form class="unit-select" name="unitselect" action="' .
+                 $urlServer . 'modules/units/" method="get">' .
+                 '<select name="id" onChange="document.unitselect.submit();">';
+$q = db_query("SELECT id, title FROM course_units
+               WHERE course_id = $cours_id
+                     $visibility_check
+               ORDER BY `order`");
+while ($info = mysql_fetch_array($q)) {
+        $selected = ($info['id'] == $id)? ' selected="1" ': '';
+        $tool_content .= "<option value='$info[id]'$selected>" .
+                         htmlspecialchars($info['title']) .
+                         '</option>';
+}
+$tool_content .= '</select>';
 
 draw($tool_content, 2, 'units');
 

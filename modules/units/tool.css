@@ -6,11 +6,16 @@ table.xinha_editor td {
 
 table.unit-navigation {
         width: 100%;
-        margin-top: 2em;
+        margin: 0;
+        padding: 0;
 }
 .left {
         text-align: left;
 }
 .right {
         text-align: right;
+}
+.unit-select {
+        text-align: center;
+        margin-top: 2em;
 }
