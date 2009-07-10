@@ -154,6 +154,9 @@ function show_doc($title, $comments, $file_id, $resource_id)
         $r = db_query("SELECT * FROM document
 	               WHERE id =" . intval($file_id), $GLOBALS['currentCourseID']);
         if (mysql_num_rows($r) == 0) {
+                if (!$is_adminOfCourse) {
+                        return '';
+                }
                 $status = 'del';
                 $image = '../../template/classic/img/delete.gif';
                 $link = "<span class='invisible'>$title ($langWasDeleted)</span>";

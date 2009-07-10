@@ -173,11 +173,11 @@ if ($is_adminOfCourse) {
 $sql = db_query($query);
 $first = true;
 while ($cu = mysql_fetch_array($sql)) {
+                // Visibility icon
+                $vis = $cu['visibility'];
+                $icon_vis = ($vis == 'v')? 'visible.gif': 'invisible.gif';
+                $class_vis = ($vis == 'i')? ' class="invisible"': '';
                 if ($is_adminOfCourse) { // display actions
-                        // Visibility icon
-                        $vis = $cu['visibility'];
-                        $icon_vis = ($vis == 'v')? 'visible.gif': 'invisible.gif';
-                        $class_vis = ($vis == 'i')? ' class="invisible"': '';
                         $main_content .= "<table class='actions'><tr><td>".
                                 "<a href='../../modules/units/info.php?edit=$cu[id]'>" .
                                 "<img src='../../template/classic/img/edit.gif' title='$langEdit' /></a></td>" .
