@@ -268,7 +268,6 @@ if (!isset($submit2)) {
 			`visibility` CHAR(1) NOT NULL DEFAULT 'v',
 			`order` INT(11) NOT NULL DEFAULT 0,
 			`date` DATETIME NOT NULL DEFAULT '0000-00-00')");
-                }
         }
 
         // **********************************************
