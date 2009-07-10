@@ -103,8 +103,11 @@ if (!empty($comments)) {
 }
 
 // Display resources
-$req = db_query('SELECT * FROM unit_resources WHERE unit_id = ' . $id);
+$req = db_query("SELECT * FROM unit_resources WHERE unit_id = $id ORDER BY `order`");
 if (mysql_num_rows($req) > 0) {
+        list($max_resource_id) = mysql_fetch_row(db_query("SELECT id FROM unit_resources
+                                WHERE unit_id = $id ORDER BY `order` DESC LIMIT 1"));
+
         $tool_content .= '<table>';
         while ($info = mysql_fetch_array($req)) {
                 show_resource($info);
@@ -136,7 +139,7 @@ function show_resource($info)
 
         switch ($info['type']) {
                 case 'doc':
-                        $tool_content .= show_doc($info['title'], $info['comments'], $info['res_id']);
+                        $tool_content .= show_doc($info['title'], $info['comments'], $info['res_id'], $info['id']);
                         break;
                 default:
                         $tool_content .= "Error! Unknown resource type '$info[type].";
@@ -144,7 +147,7 @@ function show_resource($info)
 }
 
 
-function show_doc($title, $comments, $file_id)
+function show_doc($title, $comments, $file_id, $resource_id)
 {
         global $is_adminOfCourse, $currentCourseID, $langWasDeleted;
 
@@ -166,5 +169,49 @@ function show_doc($title, $comments, $file_id)
                 $comment = "";
         }
 
-        return "<tr><td><img src='$image' /></td><td>$link$comment</td></tr>";
+        return "<tr><td><img src='$image' /></td><td>$link$comment</td>" .
+                ($is_adminOfCourse? actions($resource_id, $status): '') . 
+                "</tr>";
+}
+
+function actions($resource_id, $status)
+{
+        global $langEdit, $langDelete, $langVisibility, $langDown,  $langUp;
+
+        static $first = true;
+
+        $icon_vis = ($status == 'v')? 'visible.gif': 'invisible.gif';
+        $class_vis = ($status == 'i' or $status == 'del')? ' class="invisible"': '';
+
+        if ($status != 'del') {
+                $content = "<td><a href='$_SERVER[PHP_SELF]?edit=$resource_id'>" .
+                "<img src='../../template/classic/img/edit.gif' title='$langEdit' /></a></td>";
+        } else {
+                $content = '<td>&nbsp;</td>';
+        }
+        $content .= "<td><a href='$_SERVER[PHP_SELF]?del=$resource_id' " .
+                                        "onClick=\"return confirmation();\">" .
+                                        "<img src='../../template/classic/img/delete.gif' " .
+                                        "title='$langDelete'></img></a></td>";
+        if ($status != 'del') {
+                $content .= "<td><a href='$_SERVER[PHP_SELF]?vis=$resource_id'>" .
+                                        "<img src='../../template/classic/img/$icon_vis' " .
+                                        "title='$langVisibility'></img></a></td>";
+        } else {
+                $content .= '<td>&nbsp;</td>';
+        }
+        if ($resource_id != $GLOBALS['max_resource_id']) {
+                $content .= "<td><a href='$_SERVER[PHP_SELF]?down=$resource_id'>" .
+                        "<img src='../../template/classic/img/down.gif' title='$langDown'></img></a></td>";
+        } else {
+                $content .= "<td>&nbsp;</td>";
+        }
+        if (!$first) {
+                $content .= "<td><a href='$_SERVER[PHP_SELF]?up=$resource_id'>" .
+                        "<img src='../../template/classic/img/up.gif' title='$langUp'></img></a></td>";
+        } else {
+                $content .= "<td>&nbsp;</td>";
+        }
+        $first = false;
+        return $content;
 }
