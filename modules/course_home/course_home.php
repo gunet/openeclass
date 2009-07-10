@@ -173,36 +173,42 @@ if ($is_adminOfCourse) {
 $sql = db_query($query);
 $first = true;
 while ($cu = mysql_fetch_array($sql)) {
-	if ($is_adminOfCourse) { // display actions
-                // Visibility icon
-                $vis = $cu['visibility'];
-                $icon_vis = ($vis == 'v')? 'visible.gif': 'invisible.gif';
-
-		$main_content .= "<div class='actions'>".
-                        "<a href='../../modules/units/info.php?edit=$cu[id]'>" .
-                        "<img src='../../template/classic/img/edit.gif' title='$langEdit' /></a>" .
-		        "&nbsp;<a href='$_SERVER[PHP_SELF]?del=$cu[id]' " .
-                        "onClick=\"return confirmation();\">" .
-                        "<img src='../../template/classic/img/delete.gif' " .
-                        "title='$langDelete'></img></a>" .
-                        "&nbsp;<a href='$_SERVER[PHP_SELF]?vis=$cu[id]'>" .
-        		"<img src='../../template/classic/img/$icon_vis' " .
-                        "title='$langVisibility'></img></a>";
-		if ($cu['id'] != $last_id) {
-			$main_content .= "&nbsp;<a href='$_SERVER[PHP_SELF]?down=$cu[id]'>" .
-					 "<img src='../../template/classic/img/down.gif' title='$langDown'></img></a>";
-		}
-		if (!$first) {
-			$main_content .= "&nbsp;<a href='$_SERVER[PHP_SELF]?up=$cu[id]'>" .
-			                 "<img src='../../template/classic/img/up.gif' title='$langUp'></img></a>";
-		}
-                $main_content .= "</div>";
-	}
-	$main_content .= "<h1><a href='${urlServer}modules/units/?id=$cu[id]'>$cu[title]</a></h1>";
-
-	$main_content .= "<p>$cu[comments]</p>";
-	$first = false;
-}
+                if ($is_adminOfCourse) { // display actions
+                        // Visibility icon
+                        $vis = $cu['visibility'];
+                        $icon_vis = ($vis == 'v')? 'visible.gif': 'invisible.gif';
+                        $class_vis = ($vis == 'i')? ' class="invisible"': '';
+                        $main_content .= "<table class='actions'><tr><td>".
+                                "<a href='../../modules/units/info.php?edit=$cu[id]'>" .
+                                "<img src='../../template/classic/img/edit.gif' title='$langEdit' /></a></td>" .
+                                "<td><a href='$_SERVER[PHP_SELF]?del=$cu[id]' " .
+                                "onClick=\"return confirmation();\">" .
+                                "<img src='../../template/classic/img/delete.gif' " .
+                                "title='$langDelete'></img></a></td>" .
+                                "<td><a href='$_SERVER[PHP_SELF]?vis=$cu[id]'>" .
+                                "<img src='../../template/classic/img/$icon_vis' " .
+                                "title='$langVisibility'></img></a></td>";
+                        if ($cu['id'] != $last_id) {
+                                $main_content .= "<td><a href='$_SERVER[PHP_SELF]?down=$cu[id]'>" .
+                                                "<img src='../../template/classic/img/down.gif' title='$langDown'></img></a></td>";
+                        } else {
+                                $main_content .= "<td>&nbsp;</td>";
+                        }
+                        if (!$first) {
+                                $main_content .= "<td><a href='$_SERVER[PHP_SELF]?up=$cu[id]'>" .
+                                                "<img src='../../template/classic/img/up.gif' title='$langUp'></img></a></td>";
+                        } else {
+                                $main_content .= "<td>&nbsp;</td>";
+                        }
+                        $main_content .= "</tr></table>";
+                }
+                if (strpos('<', $cu['comments']) === false) {
+                        $cu['comments'] = '<p>' . $cu['comments'] . '</p>';
+                }
+                $main_content .= "<h1><a href='${urlServer}modules/units/?id=$cu[id]'$class_vis>$cu[title]</a></h1>";
+                $main_content .= "<div$class_vis>$cu[comments]</div>";
+                $first = false;
+        }
 // Close units div if open
 if (!is_null($maxorder) or $is_adminOfCourse) {
         $main_content .= "</div>\n";

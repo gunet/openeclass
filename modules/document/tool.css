@@ -1,22 +1,6 @@
-.invisible_doc {
-	font-style: italic;
-	color: silver;
-}
-
-.invisible_doc td{
-	font-style: italic;
-	color: silver;
-}
-
-.invisible_doc a {
-	font-style: italic;
-	color: silver;
-}
-
 .comment {
   text-align: left;
 }
-
 
 table.Documents{
     padding: 2px;

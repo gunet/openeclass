@@ -405,7 +405,7 @@ if (mysql_num_rows($result) > 0) {
 
 		if ($is_adminOfCourse) {
 			if ($myrow["visibility"] == 'i') {
-				$classvis = 'class = invisible_agenda';
+				$classvis = 'class="invisible"';
 			} else {
 				$classvis = '';
 			}

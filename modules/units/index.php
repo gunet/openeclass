@@ -83,11 +83,15 @@ $tool_content = '<table class="unit-navigation"><tr><td class="left">' .
         $link['next'] . "</td></tr></table>\n";
 
 if (!empty($comments)) {
-        $tool_content .= "<p>$comments</p>";
+        if (strpos('<', $comments) === false) {
+                $tool_content .= "<p>$comments</p>";
+        } else {
+                $tool_content .= $comments;
+        }
 }
 
 if ($is_adminOfCourse) {
-        $tool_content .= "<p>$langAdd: <a href='insert_doc.php' title='$langDocumentAsModule'>$langDocumentAsModuleLabel</a> | <a href='insert_exercise.php' title='$langExerciseAsModule'>$langExerciseAsModuleLabel</a> | <a href='insert_text.php' title='$langCourseDescriptionAsModule'>$langCourseDescriptionAsModuleLabel</a></p>";
+        $tool_content .= "<p>$langAdd: <a href='insert.php?type=doc&amp;id=$id' title='$langDocumentAsModule'>$langDocumentAsModuleLabel</a> | <a href='insert.php?type=exercise&amp;id=$id' title='$langExerciseAsModule'>$langExerciseAsModuleLabel</a> | <a href='insert.php?type=text&amp;id=$id' title='$langCourseDescriptionAsModule'>$langCourseDescriptionAsModuleLabel</a></p>";
 }
 
 $tool_content .= '<form class="unit-select" name="unitselect" action="' .

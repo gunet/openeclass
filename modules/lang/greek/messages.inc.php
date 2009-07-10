@@ -3187,6 +3187,6 @@ $langUnitDescr = "Σύντομη περιγραφή";
 $langUnitUnknown = "Άγνωστη θεματική ενότητα";
 $langEmptyUnitTitle = "Παρακαλώ πληκτρολογήστε τον τίτλο της θεματικής ενότητας";
 $langCourseUnits = "Θεματικές ενότητες μαθήματος";
-$langCourseUnitDeleted = "Η θεματική ενότητα διαγράφτηκε";
+$langCourseUnitDeleted = "Η θεματική ενότητα διαγράφηκε";
 $langCourseUnitAdded = "Η θεματική ενότητα προστέθηκε";
 $langCourseUnitModified = "Τα στοιχεία της ενότητας τροποποιήθηκαν";

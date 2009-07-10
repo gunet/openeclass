@@ -138,21 +138,6 @@ table.GroupSum td {
 	padding : 5px 4px 4px 4px;
 }
 
-.invisible_doc {
-	font-style: italic;
-	color: silver;
-}
-
-.invisible_doc td{
-	font-style: italic;
-	color: silver;
-}
-
-.invisible_doc a {
-	font-style: italic;
-	color: silver;
-}
-
 .comment {
   text-align: left;
 }

@@ -25,10 +25,15 @@ div#footer { clear: both; width: 100%; }
         color: #a33033;
 }
 .actions {
-        padding: 0 .5em;
-        text-align: left;
         float: right;
-        width: 7em;
+        padding: 0;
+        margin: 0;
+}
+.actions td {
+        padding: 0 2px;
+        margin: 0;
+        width: 20%;
+        text-align: center;
 }
 .actions img {
         vertical-align: middle;

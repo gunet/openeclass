@@ -736,10 +736,9 @@ if (mysql_num_rows($sql) == 0) {
                         }
                         $cmdDirName = $entry['path'];
                         if ($entry['visible']) {
-                                $style = $style2 = '';
+                                $style = '';
                         } else {
                                 $style = ' class="invisible"';
-                                $style2 = ' class="invisible_doc"';
                         }
                         $copyright_icon = '';
                         if ($is_dir) {
@@ -764,7 +763,7 @@ if (mysql_num_rows($sql) == 0) {
                                         $link_text .= " <img src='./img/copyrighted.jpg' align='absmiddle' border='0' />";
                                 }
                         }
-                        $tool_content .= "\n  <tr$style2>";
+                        $tool_content .= "\n  <tr$style>";
                         $tool_content .= "\n    <td width='1%' valign='top' style='padding-top: 7px;'><a href='$file_url'$style$link_extra><img src='$image' border='0' /></a></td>";
                         $tool_content .= "\n    <td><div align='left'><a href='$file_url'$style$link_extra>$link_text</a>";
 
