@@ -30,16 +30,21 @@ Units module: insert new resource
 
 $require_current_course = true;
 include '../../include/baseTheme.php';
-
+include "../../include/lib/fileDisplayLib.inc.php";
 $tool_content = $head_content = "";
-$id = intval($_GET['id']);
+$id = intval($_REQUEST['id']);
 
+// Check that the current unit id belongs to the current course
 $q = db_query("SELECT * FROM course_units
                WHERE id=$id AND course_id=$cours_id");
 if (!$q or mysql_num_rows($q) == 0) {
         $nameTools = $langUnitUnknown;
         draw('', 2, 'units');
         exit;
+}
+
+if (isset($_POST['submit_doc'])) {
+	insert_docs($id);
 }
 
 $info = mysql_fetch_array($q);
@@ -62,3 +67,22 @@ switch ($_GET['type']) {
 }
 
 draw($tool_content, 2, 'units', $head_content);
+
+
+function insert_docs($id)
+{
+	list($order) = mysql_fetch_array(db_query("SELECT MAX(`order`) FROM unit_resources WHERE unit_id=$id"));
+	
+	foreach ($_POST['document'] as $file_id) {
+		$order++;
+		$file = mysql_fetch_array(db_query("SELECT * FROM document
+			WHERE id =" . intval($file_id), $GLOBALS['currentCourseID']), MYSQL_ASSOC);
+		$title = (empty($file['title']))? $file['filename']: $file['title'];
+		db_query("INSERT INTO unit_resources SET unit_id=$id, type='doc', title=" .
+			 autoquote($title) . ", comments=" . autoquote($file['comment']) .
+			 ", visibility='v', `order`=$order, `date`=NOW(), res_id=$file[id]",
+			 $GLOBALS['mysqlMainDb']); 
+	}
+	header('Location: index.php?id=' . $id);
+	exit;
+}

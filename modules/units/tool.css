@@ -19,3 +19,7 @@ table.unit-navigation {
         text-align: center;
         margin-top: 2em;
 }
+
+table img {
+        vertical-align: middle;
+}

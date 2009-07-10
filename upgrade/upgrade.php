@@ -251,27 +251,23 @@ if (!isset($submit2)) {
 		db_query("ALTER TABLE `user` CHANGE `lang` `lang` VARCHAR(10) NOT NULL DEFAULT 'el'");
 		db_query("ALTER TABLE `prof_request` CHANGE `lang` `lang`  VARCHAR(10) NOT NULL DEFAULT 'el'");
                 // course units
-                if (!mysql_table_exists($mysqlMainDb, 'course_units')) {
-                        // tables for units module
-                        db_query("CREATE TABLE `course_units` (
-                                        `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
-                                        `title` VARCHAR(255) NOT NULL DEFAULT '',
-                                        `comments` MEDIUMTEXT NOT NULL DEFAULT '',
-                                        `visibility` CHAR(1) NOT NULL DEFAULT 'v',
-                                        `order` INT(11) NOT NULL DEFAULT 0,
-                                        `course_id` INT(11) NOT NULL)");
-                }
-                if (!mysql_table_exists($mysqlMainDb, 'unit_resources')) {
-                        db_query("CREATE TABLE `unit_resources` (
-                                        `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
-                                        `unit_id` INT(11) NOT NULL ,
-                                        `title` VARCHAR(255) NOT NULL DEFAULT '',
-                                        `comments` MEDIUMTEXT NOT NULL DEFAULT '',
-                                        `res_address` MEDIUMTEXT NULL DEFAULT '',
-                                        `type` VARCHAR(255) NOT NULL DEFAULT '',
-                                        `visibility` CHAR(1) NOT NULL DEFAULT 'v',
-                                        `order` INT(11) NOT NULL DEFAULT 0,
-                                        `date` DATETIME NOT NULL DEFAULT '0000-00-00')");
+		db_query("CREATE TABLE IF NOT EXISTS `course_units` (
+			`id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+			`title` VARCHAR(255) NOT NULL DEFAULT '',
+			`comments` MEDIUMTEXT NOT NULL DEFAULT '',
+			`visibility` CHAR(1) NOT NULL DEFAULT 'v',
+			`order` INT(11) NOT NULL DEFAULT 0,
+			`course_id` INT(11) NOT NULL)");
+                db_query("CREATE TABLE IF NOT EXISTS `unit_resources` (
+			`id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+			`unit_id` INT(11) NOT NULL ,
+			`title` VARCHAR(255) NOT NULL DEFAULT '',
+			`comments` MEDIUMTEXT NOT NULL DEFAULT '',
+			`res_id` INT(11) NOT NULL,
+			`type` VARCHAR(255) NOT NULL DEFAULT '',
+			`visibility` CHAR(1) NOT NULL DEFAULT 'v',
+			`order` INT(11) NOT NULL DEFAULT 0,
+			`date` DATETIME NOT NULL DEFAULT '0000-00-00')");
                 }
         }
 

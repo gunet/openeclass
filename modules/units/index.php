@@ -30,7 +30,7 @@ Units display module
 
 $require_current_course = true;
 include '../../include/baseTheme.php';
-
+include "../../include/lib/fileDisplayLib.inc.php";
 $id = intval($_GET['id']);
 
 if ($is_adminOfCourse) {
@@ -38,6 +38,7 @@ if ($is_adminOfCourse) {
 } else {
         $visibility_check = "AND visibility='v'";
 }
+$tool_content = '';
 
 $q = db_query("SELECT * FROM course_units
                WHERE id=$id AND course_id=$cours_id " . $visibility_check);
@@ -78,7 +79,18 @@ foreach (array('previous', 'next') as $i) {
                 $link[$i] = '&nbsp;';
         }
 }
-$tool_content = '<table class="unit-navigation"><tr><td class="left">' .
+if ($is_adminOfCourse) {
+        $tool_content .= "<div id='operations_container'><ul id='opslist'>" .
+                        "<li><a href='insert.php?type=doc&amp;id=$id' " .
+                                "title='$langDocumentAsModule'>$langAdd: $langDocumentAsModuleLabel</a></li>" .
+                        "<li><a href='insert.php?type=exercise&amp;id=$id' " .
+                                "title='$langExerciseAsModule'>$langExerciseAsModuleLabel</a></li>" .
+                        "<li><a href='insert.php?type=text&amp;id=$id' " .
+                                "title='$langCourseDescriptionAsModule'>$langCourseDescriptionAsModuleLabel</a></li>" .
+                        "</ul></div>\n";
+}
+
+$tool_content .= '<table class="unit-navigation"><tr><td class="left">' .
         $link['previous'] . '</td><td class="right">' .
         $link['next'] . "</td></tr></table>\n";
 
@@ -90,8 +102,14 @@ if (!empty($comments)) {
         }
 }
 
-if ($is_adminOfCourse) {
-        $tool_content .= "<p>$langAdd: <a href='insert.php?type=doc&amp;id=$id' title='$langDocumentAsModule'>$langDocumentAsModuleLabel</a> | <a href='insert.php?type=exercise&amp;id=$id' title='$langExerciseAsModule'>$langExerciseAsModuleLabel</a> | <a href='insert.php?type=text&amp;id=$id' title='$langCourseDescriptionAsModule'>$langCourseDescriptionAsModuleLabel</a></p>";
+// Display resources
+$req = db_query('SELECT * FROM unit_resources WHERE unit_id = ' . $id);
+if (mysql_num_rows($req) > 0) {
+        $tool_content .= '<table>';
+        while ($info = mysql_fetch_array($req)) {
+                show_resource($info);
+        }
+        $tool_content .= '</table>';
 }
 
 $tool_content .= '<form class="unit-select" name="unitselect" action="' .
@@ -100,7 +118,7 @@ $tool_content .= '<form class="unit-select" name="unitselect" action="' .
 $q = db_query("SELECT id, title FROM course_units
                WHERE course_id = $cours_id
                      $visibility_check
-               ORDER BY `order`");
+               ORDER BY `order`", $mysqlMainDb);
 while ($info = mysql_fetch_array($q)) {
         $selected = ($info['id'] == $id)? ' selected="1" ': '';
         $tool_content .= "<option value='$info[id]'$selected>" .
@@ -111,3 +129,42 @@ $tool_content .= '</select>';
 
 draw($tool_content, 2, 'units');
 
+
+function show_resource($info)
+{
+        global $tool_content;
+
+        switch ($info['type']) {
+                case 'doc':
+                        $tool_content .= show_doc($info['title'], $info['comments'], $info['res_id']);
+                        break;
+                default:
+                        $tool_content .= "Error! Unknown resource type '$info[type].";
+        }
+}
+
+
+function show_doc($title, $comments, $file_id)
+{
+        global $is_adminOfCourse, $currentCourseID, $langWasDeleted;
+
+        $r = db_query("SELECT * FROM document
+	               WHERE id =" . intval($file_id), $GLOBALS['currentCourseID']);
+        if (mysql_num_rows($r) == 0) {
+                $status = 'del';
+                $image = '../../template/classic/img/delete.gif';
+                $link = "<span class='invisible'>$title ($langWasDeleted)</span>";
+        } else {
+                $file = mysql_fetch_array($r, MYSQL_ASSOC);
+                $status = $file['visibility'];
+                $image = '../document/img/' . choose_image('.' . $file['format']);
+                $link = "<a href='" . file_url($file['path'], $file['filename']) . "'>$file[filename]</a>";
+        }
+        if (!empty($comments)) {
+                $comment = "<p>$comments</p>";
+        } else {
+                $comment = "";
+        }
+
+        return "<tr><td><img src='$image' /></td><td>$link$comment</td></tr>";
+}

@@ -709,22 +709,6 @@ if (mysql_num_rows($sql) == 0) {
 	}
 	$tool_content .= "\n  </tr>";
 
-        // Find real file path
-        if (empty($curDirPath)) {
-                $dirname = '';
-        } else {
-                $components = split('/', $curDirPath);
-                array_shift($components);
-                $partial_path = '';
-                $dirname = '';
-                foreach ($components as $c) {
-                        $partial_path .= '/' . $c;
-                        $q = db_query("SELECT filename FROM document WHERE path = '$partial_path'");
-                        $r = mysql_fetch_row($q);
-                        $dirname .= '/' . str_replace('/', '//', $r[0]);
-                }
-        }
-
         // -------------------------------------
         // Display directories first, then files
         // -------------------------------------
@@ -749,10 +733,7 @@ if (mysql_num_rows($sql) == 0) {
                                 $link_text = $entry['filename'];
                         } else {
                                 $image = 'img/' . choose_image('.' . $entry['format']);
-                                $file_url = htmlspecialchars("file.php/$currentCourseID$dirname/" .
-                                        str_replace(array('%', '/', '?', '&', '#', '+'),
-                                                    array('%25', '//', '%3F', '%26', '%23', '%2B'),
-                                                    $entry['filename']), ENT_QUOTES);
+                                $file_url = file_url($cmdDirName, $entry['filename']);
                                 $link_extra = " title='$langSave' target='_blank'";
                                 if (empty($entry['title'])) {
                                         $link_text = $entry['filename'];

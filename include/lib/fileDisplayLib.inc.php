@@ -192,4 +192,32 @@ function format_url($filePath)
 	return implode("/",$stringArray);
 }
 
-?>
+function file_url($path, $filename)
+{
+	global $currentCourseID, $urlServer;
+	static $oldpath = '', $dirname;
+
+	$dirpath = dirname($path);
+	if ($dirpath == '/') {
+		$oldpath = $dirpath = '';
+		$dirname = '';
+	} else {
+		if ($dirpath != $oldpath) {
+			$components = explode('/', $dirpath);
+			array_shift($components);
+			$partial_path = '';
+			$dirname = '';
+			foreach ($components as $c) {
+				$partial_path .= '/' . $c;
+				$q = db_query("SELECT filename FROM document WHERE path = '$partial_path'",
+					      $currentCourseID);
+				list($name) = mysql_fetch_row($q);
+				$dirname .= '/' . str_replace(array('%', '/', '?', '&', '#', '+'),
+                                                              array('%25', '//', '%3F', '%26', '%23', '%2B'),
+                                                              $name);
+			}
+		}
+	}
+	return htmlspecialchars($urlServer . "modules/document/file.php/$currentCourseID$dirname/$filename",
+				ENT_QUOTES);
+}

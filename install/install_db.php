@@ -390,7 +390,7 @@ db_query("CREATE TABLE `course_units` (
 	`unit_id` INT(11) NOT NULL ,
 	`title` VARCHAR(255) NOT NULL DEFAULT '',
 	`comments` MEDIUMTEXT NOT NULL DEFAULT '',
-	`res_address` MEDIUMTEXT NULL DEFAULT '',
+	`res_id` INT(11) NOT NULL,
 	`type` VARCHAR(255) NOT NULL DEFAULT '',
 	`visibility` CHAR(1) NOT NULL DEFAULT 'v',
 	`order` INT(11) NOT NULL DEFAULT 0,
