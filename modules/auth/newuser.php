@@ -52,14 +52,8 @@ if (isset($close_user_registration) and $close_user_registration == TRUE) {
         draw($tool_content,0);
 	exit;
  }
-// security check
-if (isset($_POST['localize'])) {
-	$language = preg_replace('/[^a-z]/', '', $_POST['localize']);
-}
-if ($language == 'greek')
-	$lang = 'el';
-elseif ($language == 'english')
-	$lang = 'en';
+ 
+$lang = langname_to_code($language);
 
 // display form
 if (!isset($submit)) {
