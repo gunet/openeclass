@@ -122,6 +122,7 @@ if ($is_adminOfCourse) {
         } elseif (isset($_REQUEST['del'])) { // delete course unit
 		$id = intval($_REQUEST['del']);
 		db_query("DELETE FROM course_units WHERE id = '$id'");
+		db_query("DELETE FROM unit_resources WHERE unit_id = '$id'");
 		$main_content .= "<p class='success_small'>$langCourseUnitDeleted</p>";
 	} elseif (isset($_REQUEST['vis'])) { // modify visibility
 		$id = intval($_REQUEST['vis']);

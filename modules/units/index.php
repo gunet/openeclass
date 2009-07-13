@@ -38,13 +38,24 @@ if ($is_adminOfCourse) {
 } else {
         $visibility_check = "AND visibility='v'";
 }
-$tool_content = '';
+$tool_content = $head_content = '';
+$head_content .= '
+<script type="text/javascript">
+function confirmation ()
+{
+    if (confirm("'.$langConfirmDelete.'"))
+{return true;}
+    else
+{return false;}
+}
+</script>
+';
 
 $q = db_query("SELECT * FROM course_units
                WHERE id=$id AND course_id=$cours_id " . $visibility_check);
 if (!$q or mysql_num_rows($q) == 0) {
         $nameTools = $langUnitUnknown;
-        draw('', 2, 'units');
+        draw('', 2, 'units', $head_content);
         exit;
 }
 $info = mysql_fetch_array($q);
@@ -88,6 +99,29 @@ if ($is_adminOfCourse) {
                         "<li><a href='insert.php?type=text&amp;id=$id' " .
                                 "title='$langCourseDescriptionAsModule'>$langCourseDescriptionAsModuleLabel</a></li>" .
                         "</ul></div>\n";
+	if (isset($_REQUEST['del'])) { // delete resource from course unit
+		$id = intval($_GET['del']);
+		db_query("DELETE FROM unit_resources WHERE id = '$id'", $mysqlMainDb);
+		$tool_content .= "<p class='success_small'>$langResourceCourseUnitDeleted</p>";
+	} elseif (isset($_REQUEST['down'])) {
+		$res_id = intval($_REQUEST['down']);
+		$sql = db_query("SELECT `order` FROM unit_resources WHERE id='$res_id' AND unit_id='$id'");
+		list($current) = mysql_fetch_row($sql);
+		$sql = db_query("SELECT id, `order` FROM unit_resources 
+				WHERE `order` > '$current' AND unit_id = $id ORDER BY `order` LIMIT 1");
+		list($next_id, $next) = mysql_fetch_row($sql);
+		db_query("UPDATE unit_resources SET `order` = $next WHERE id = $res_id AND unit_id = $id");
+		db_query("UPDATE unit_resources SET `order` = $current WHERE id = $next_id AND unit_id = $id");
+	} elseif (isset($_REQUEST['up'])) {
+		$res_id = intval($_REQUEST['up']);
+		$sql = db_query("SELECT `order` FROM unit_resources WHERE id='$res_id' AND unit_id='$id'");
+		list($current) = mysql_fetch_row($sql);
+		$sql = db_query("SELECT id, `order` FROM unit_resources 
+				WHERE `order` < '$current' AND unit_id = $id ORDER BY `order` DESC LIMIT 1");
+		list($prev_id, $prev) = mysql_fetch_row($sql);
+		db_query("UPDATE unit_resources SET `order` = $prev WHERE id = $res_id AND unit_id = $id");
+		db_query("UPDATE unit_resources SET `order` = $current WHERE id = $prev_id AND unit_id = $id");
+	}
 }
 
 $tool_content .= '<table class="unit-navigation"><tr><td class="left">' .
@@ -130,9 +164,12 @@ while ($info = mysql_fetch_array($q)) {
 }
 $tool_content .= '</select>';
 
-draw($tool_content, 2, 'units');
+draw($tool_content, 2, 'units', $head_content);
 
 
+//------------------------------------
+// list of functions
+//------------------------------------
 function show_resource($info)
 {
         global $tool_content;
@@ -147,6 +184,7 @@ function show_resource($info)
 }
 
 
+// display resouce documents
 function show_doc($title, $comments, $file_id, $resource_id)
 {
         global $is_adminOfCourse, $currentCourseID, $langWasDeleted;
@@ -177,9 +215,10 @@ function show_doc($title, $comments, $file_id, $resource_id)
                 "</tr>";
 }
 
+// resource actions
 function actions($resource_id, $status)
 {
-        global $langEdit, $langDelete, $langVisibility, $langDown,  $langUp;
+        global $langEdit, $langDelete, $langVisibility, $langDown, $langUp, $id;
 
         static $first = true;
 
@@ -192,7 +231,7 @@ function actions($resource_id, $status)
         } else {
                 $content = '<td>&nbsp;</td>';
         }
-        $content .= "<td><a href='$_SERVER[PHP_SELF]?del=$resource_id' " .
+        $content .= "<td><a href='$_SERVER[PHP_SELF]?del=$resource_id&id=$id' " .
                                         "onClick=\"return confirmation();\">" .
                                         "<img src='../../template/classic/img/delete.gif' " .
                                         "title='$langDelete'></img></a></td>";
@@ -204,13 +243,13 @@ function actions($resource_id, $status)
                 $content .= '<td>&nbsp;</td>';
         }
         if ($resource_id != $GLOBALS['max_resource_id']) {
-                $content .= "<td><a href='$_SERVER[PHP_SELF]?down=$resource_id'>" .
+                $content .= "<td><a href='$_SERVER[PHP_SELF]?down=$resource_id&id=$id'>" .
                         "<img src='../../template/classic/img/down.gif' title='$langDown'></img></a></td>";
         } else {
                 $content .= "<td>&nbsp;</td>";
         }
         if (!$first) {
-                $content .= "<td><a href='$_SERVER[PHP_SELF]?up=$resource_id'>" .
+                $content .= "<td><a href='$_SERVER[PHP_SELF]?up=$resource_id&id=$id'>" .
                         "<img src='../../template/classic/img/up.gif' title='$langUp'></img></a></td>";
         } else {
                 $content .= "<td>&nbsp;</td>";
