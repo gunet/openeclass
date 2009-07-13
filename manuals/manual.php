@@ -41,13 +41,7 @@ $nameTools = $langManuals;
 $tool_content = "";
 $urlServerTemp = strrev(substr(strrev($urlServer),1));
 
-switch ($localize) {
-	case 'greek': $ext = '_el';
-		break;
-	case 'english': $ext = '_en';
-		break;
-	default: $ext = '_el';
-}
+$ext = langname_to_code($localize);
 
 $tool_content .= <<<tCont
 <p>$langIntroMan</p>
