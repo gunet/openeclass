@@ -41,7 +41,7 @@ $nameTools = $langManuals;
 $tool_content = "";
 $urlServerTemp = strrev(substr(strrev($urlServer),1));
 
-$ext = "/".langname_to_code($language);
+$ext = "_".langname_to_code($language);
 
 $tool_content .= <<<tCont
 <p>$langIntroMan</p>
