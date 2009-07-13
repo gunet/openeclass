@@ -3191,3 +3191,4 @@ $langCourseUnitDeleted = "Η θεματική ενότητα διαγράφηκ�
 $langCourseUnitAdded = "Η θεματική ενότητα προστέθηκε";
 $langCourseUnitModified = "Τα στοιχεία της ενότητας τροποποιήθηκαν";
 $langResourceCourseUnitDeleted = "Ο πόρος της θεματικής ενότητας διαγράφηκε";
+$langResourceUnitModified = "Τα στοιχεία του πόρου της ενότητας τροποποιήθηκαν";

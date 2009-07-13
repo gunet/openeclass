@@ -31,7 +31,7 @@ Units display module
 $require_current_course = true;
 include '../../include/baseTheme.php';
 include "../../include/lib/fileDisplayLib.inc.php";
-$id = intval($_GET['id']);
+$id = intval($_REQUEST['id']);
 
 if ($is_adminOfCourse) {
         $visibility_check = '';
@@ -50,6 +50,18 @@ function confirmation ()
 }
 </script>
 ';
+
+if ($language == 'greek')
+        $lang_editor = 'el';
+else
+        $lang_editor = 'en';
+
+$head_content .= "<script type='text/javascript'>
+_editor_url  = '$urlAppend/include/xinha/';
+_editor_lang = '$lang_editor';
+</script>
+<script type='text/javascript' src='$urlAppend/include/xinha/XinhaCore.js'></script>
+<script type='text/javascript' src='$urlAppend/include/xinha/my_config.js'></script>";
 
 $q = db_query("SELECT * FROM course_units
                WHERE id=$id AND course_id=$cours_id " . $visibility_check);
@@ -99,7 +111,19 @@ if ($is_adminOfCourse) {
                         "<li><a href='insert.php?type=text&amp;id=$id' " .
                                 "title='$langCourseDescriptionAsModule'>$langCourseDescriptionAsModuleLabel</a></li>" .
                         "</ul></div>\n";
-	if (isset($_REQUEST['del'])) { // delete resource from course unit
+	if (isset($_REQUEST['edit'])) {
+		$res_id = intval($_GET['edit']);
+		edit_res($res_id);
+	}  elseif(isset($_REQUEST['edit_res_submit'])) { // edit resource
+		$restitle = autoquote($_REQUEST['restitle']);
+                $rescomments = autoquote($_REQUEST['rescomments']);
+                $resource_id = intval($_REQUEST['resource_id']);
+		$result = db_query("UPDATE unit_resources SET
+				title = $restitle,
+				comments = $rescomments
+				WHERE unit_id = $id AND id = $resource_id");
+		$tool_content .= "<p class='success_small'>$langResourceUnitModified</p>";
+	} elseif(isset($_REQUEST['del'])) { // delete resource from course unit
 		$id = intval($_GET['del']);
 		db_query("DELETE FROM unit_resources WHERE id = '$id'", $mysqlMainDb);
 		$tool_content .= "<p class='success_small'>$langResourceCourseUnitDeleted</p>";
@@ -226,7 +250,7 @@ function actions($resource_id, $status)
         $class_vis = ($status == 'i' or $status == 'del')? ' class="invisible"': '';
 
         if ($status != 'del') {
-                $content = "<td><a href='$_SERVER[PHP_SELF]?edit=$resource_id'>" .
+                $content = "<td><a href='$_SERVER[PHP_SELF]?edit=$resource_id&id=$id'>" .
                 "<img src='../../template/classic/img/edit.gif' title='$langEdit' /></a></td>";
         } else {
                 $content = '<td>&nbsp;</td>';
@@ -256,4 +280,31 @@ function actions($resource_id, $status)
         }
         $first = false;
         return $content;
+}
+
+
+// edit doc resource
+function edit_res($resource_id) 
+{
+	global $tool_content, $id, $urlServer, $langTitle, $langDescr, $langModify;
+	 
+        $sql = db_query("SELECT id, title, comments FROM unit_resources WHERE unit_id='$id'");
+        $ru = mysql_fetch_array($sql);
+        $restitle = " value='" . htmlspecialchars($ru['title'], ENT_QUOTES) . "'";
+        $rescomments = $ru['comments'];
+        $resource_id = $ru['id'];
+
+	$tool_content .= "<form method='post' action='${urlServer}modules/units/'>";
+	$tool_content .= "<input type='hidden' name='id' value='$id'>";
+	$tool_content .= "<input type='hidden' name='resource_id' value='$resource_id'>";
+	$tool_content .= "<table width='99%' class='FormData' align='center'><tbody>
+	<tr><th width='150' class='left'>$langTitle:</th>
+	<td><input type='text' name='restitle' size='50' maxlength='255' $restitle class='FormData_InputText'></td></tr>
+        <tr><th class='left'>$langDescr:</th><td>
+        <table class='xinha_editor'><tr><td><textarea id='xinha' name='rescomments'>$rescomments</textarea></td></tr>
+        </table></td></tr>
+        <tr><th>&nbsp;</th>
+	<td><input type='submit' name='edit_res_submit' value='$langModify'></td></tr>
+	</tbody></table>
+	</form>";
 }
