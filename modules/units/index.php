@@ -109,7 +109,7 @@ if ($is_adminOfCourse) {
                         "<li><a href='insert.php?type=exercise&amp;id=$id' " .
                                 "title='$langExerciseAsModule'>$langExerciseAsModuleLabel</a></li>" .
                         "<li><a href='insert.php?type=text&amp;id=$id' " .
-                                "title='$langCourseDescriptionAsModule'>$langCourseDescriptionAsModuleLabel</a></li>" .
+                                "title='$langInsertText'>$langInsertText</a></li>" .
                         "</ul></div>\n";
 	if (isset($_REQUEST['edit'])) {
 		$res_id = intval($_GET['edit']);
@@ -202,13 +202,16 @@ function show_resource($info)
                 case 'doc':
                         $tool_content .= show_doc($info['title'], $info['comments'], $info['res_id'], $info['id']);
                         break;
+		case 'text':
+                        $tool_content .= show_text($info['id']);
+                        break;
                 default:
                         $tool_content .= "Error! Unknown resource type '$info[type].";
         }
 }
 
 
-// display resouce documents
+// display resource documents
 function show_doc($title, $comments, $file_id, $resource_id)
 {
         global $is_adminOfCourse, $currentCourseID, $langWasDeleted;
@@ -226,7 +229,7 @@ function show_doc($title, $comments, $file_id, $resource_id)
                 $file = mysql_fetch_array($r, MYSQL_ASSOC);
                 $status = $file['visibility'];
                 $image = '../document/img/' . choose_image('.' . $file['format']);
-                $link = "<a href='" . file_url($file['path'], $file['filename']) . "'>$file[filename]</a>";
+                $link = "<a href='" . file_url($file['path'], $file['filename']) . "'>$title</a>";
         }
         if (!empty($comments)) {
                 $comment = "<p>$comments</p>";
@@ -239,8 +242,24 @@ function show_doc($title, $comments, $file_id, $resource_id)
                 "</tr>";
 }
 
+
+// display resource text
+function show_text($unit_id)
+{
+        global $is_adminOfCourse, $mysqlMainDb, $tool_content;
+
+        $r = db_query("SELECT * FROM unit_resources
+	               WHERE id =" . intval($unit_id) . " AND res_id='0'", $mysqlMainDb);
+	while ($t = mysql_fetch_array($r, MYSQL_ASSOC)) {
+		$tool_content .= "<tr><td>&nbsp;</td><td>$t[title]<br>$t[comments]</td>" .
+		($is_adminOfCourse? actions($t['id']): '') .
+                "</tr>";
+	}
+}
+
+
 // resource actions
-function actions($resource_id, $status)
+function actions($resource_id, $status = '')
 {
         global $langEdit, $langDelete, $langVisibility, $langDown, $langUp, $id;
 
@@ -288,7 +307,7 @@ function edit_res($resource_id)
 {
 	global $tool_content, $id, $urlServer, $langTitle, $langDescr, $langModify;
 	 
-        $sql = db_query("SELECT id, title, comments FROM unit_resources WHERE unit_id='$id'");
+        $sql = db_query("SELECT id, title, comments FROM unit_resources WHERE id='$resource_id'");
         $ru = mysql_fetch_array($sql);
         $restitle = " value='" . htmlspecialchars($ru['title'], ENT_QUOTES) . "'";
         $rescomments = $ru['comments'];
