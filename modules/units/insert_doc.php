@@ -52,7 +52,7 @@ function display_docs()
                         'name' => htmlspecialchars($row['filename']),
                         'format' => $row['format'],
                         'path' => $row['path'],
-                        'visible' => ($row['visibility'] == 'v'),
+                        'visible' => $row['visibility'],
                         'comment' => $row['comment'],
                         'copyrighted' => $row['copyrighted'],
                         'date' => strtotime($row['date_modified']));
@@ -102,7 +102,12 @@ function display_docs()
 						$link_text = $entry['title'];
 					}
 				}
-				$tool_content .= "<tr>";
+				if ($entry['visible'] == 'i') { 
+					$vis = 'invisible';
+				} else {
+					$vis = '';
+				}
+				$tool_content .= "<tr class='$vis'>";
 				$tool_content .= "<td width='1%' valign='top' style='padding-top: 7px;' align='center'>
 					<a href='$file_url'$link_extra><img src='$image' border='0' /></a></td>";
 				$tool_content .= "<td width='60%'><div align='left'>

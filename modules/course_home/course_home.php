@@ -131,7 +131,7 @@ if ($is_adminOfCourse) {
 		$newvis = ($vis == 'v')? 'i': 'v';
 		db_query("UPDATE course_units SET visibility = '$newvis' WHERE id = $id AND course_id = $cours_id");
 	} elseif (isset($_REQUEST['down'])) {
-		$id = intval($_REQUEST['down']);
+		$id = intval($_REQUEST['down']); // change order down
 		$sql = db_query("SELECT `order` FROM course_units WHERE id='$id'");
 		list($current) = mysql_fetch_row($sql);
 		$sql = db_query("SELECT id, `order` FROM course_units 
@@ -139,7 +139,7 @@ if ($is_adminOfCourse) {
 		list($next_id, $next) = mysql_fetch_row($sql);
 		db_query("UPDATE course_units SET `order` = $next WHERE id = $id AND course_id = $cours_id");
 		db_query("UPDATE course_units SET `order` = $current WHERE id = $next_id AND course_id = $cours_id");
-	} elseif (isset($_REQUEST['up'])) {
+	} elseif (isset($_REQUEST['up'])) { // change order up
 		$id = intval($_REQUEST['up']);
 		$sql = db_query("SELECT `order` FROM course_units WHERE id='$id'");
 		list($current) = mysql_fetch_row($sql);

@@ -97,7 +97,7 @@ function insert_docs($id)
 		$title = (empty($file['title']))? $file['filename']: $file['title'];
 		db_query("INSERT INTO unit_resources SET unit_id=$id, type='doc', title=" .
 			 autoquote($title) . ", comments=" . autoquote($file['comment']) .
-			 ", visibility='v', `order`=$order, `date`=NOW(), res_id=$file[id]",
+			 ", visibility='$file[visibility]', `order`=$order, `date`=NOW(), res_id=$file[id]",
 			 $GLOBALS['mysqlMainDb']); 
 	}
 	header('Location: index.php?id=' . $id);

@@ -127,7 +127,13 @@ if ($is_adminOfCourse) {
 		$id = intval($_GET['del']);
 		db_query("DELETE FROM unit_resources WHERE id = '$id'", $mysqlMainDb);
 		$tool_content .= "<p class='success_small'>$langResourceCourseUnitDeleted</p>";
-	} elseif (isset($_REQUEST['down'])) {
+	} elseif (isset($_REQUEST['vis'])) { // modify visibility in text resources only 
+		$res_id = intval($_REQUEST['vis']);
+		$sql = db_query("SELECT `visibility` FROM unit_resources WHERE id=$res_id");
+		list($vis) = mysql_fetch_row($sql);
+		$newvis = ($vis == 'v')? 'i': 'v';
+		db_query("UPDATE unit_resources SET visibility = '$newvis' WHERE id = $res_id");
+	} elseif (isset($_REQUEST['down'])) { // change order down
 		$res_id = intval($_REQUEST['down']);
 		$sql = db_query("SELECT `order` FROM unit_resources WHERE id='$res_id' AND unit_id='$id'");
 		list($current) = mysql_fetch_row($sql);
@@ -136,7 +142,7 @@ if ($is_adminOfCourse) {
 		list($next_id, $next) = mysql_fetch_row($sql);
 		db_query("UPDATE unit_resources SET `order` = $next WHERE id = $res_id AND unit_id = $id");
 		db_query("UPDATE unit_resources SET `order` = $current WHERE id = $next_id AND unit_id = $id");
-	} elseif (isset($_REQUEST['up'])) {
+	} elseif (isset($_REQUEST['up'])) { // change order up
 		$res_id = intval($_REQUEST['up']);
 		$sql = db_query("SELECT `order` FROM unit_resources WHERE id='$res_id' AND unit_id='$id'");
 		list($current) = mysql_fetch_row($sql);
@@ -197,7 +203,7 @@ draw($tool_content, 2, 'units', $head_content);
 function show_resource($info)
 {
         global $tool_content;
-
+	
         switch ($info['type']) {
                 case 'doc':
                         $tool_content .= show_doc($info['title'], $info['comments'], $info['res_id'], $info['id']);
@@ -214,10 +220,10 @@ function show_resource($info)
 // display resource documents
 function show_doc($title, $comments, $file_id, $resource_id)
 {
-        global $is_adminOfCourse, $currentCourseID, $langWasDeleted;
+        global $is_adminOfCourse, $currentCourseID, $langWasDeleted, $visibility_check;
 
         $r = db_query("SELECT * FROM document
-	               WHERE id =" . intval($file_id), $GLOBALS['currentCourseID']);
+	               WHERE id =" . intval($file_id) ." $visibility_check", $GLOBALS['currentCourseID']);
         if (mysql_num_rows($r) == 0) {
                 if (!$is_adminOfCourse) {
                         return '';
@@ -236,8 +242,8 @@ function show_doc($title, $comments, $file_id, $resource_id)
         } else {
                 $comment = "";
         }
-
-        return "<tr><td><img src='$image' /></td><td>$link$comment</td>" .
+	$class_vis = ($status == 'i' or $status == 'del')? ' class="invisible"': '';
+        return "<tr '$class_vis'><td><img src='$image' /></td><td>$link$comment</td>" .
                 ($is_adminOfCourse? actions($resource_id, $status): '') . 
                 "</tr>";
 }
@@ -246,28 +252,29 @@ function show_doc($title, $comments, $file_id, $resource_id)
 // display resource text
 function show_text($unit_id)
 {
-        global $is_adminOfCourse, $mysqlMainDb, $tool_content;
+        global $is_adminOfCourse, $mysqlMainDb, $tool_content, $visibility_check;
 
         $r = db_query("SELECT * FROM unit_resources
-	               WHERE id =" . intval($unit_id) . " AND res_id='0'", $mysqlMainDb);
+	               WHERE id =" . intval($unit_id) . " AND res_id='0' $visibility_check", $mysqlMainDb);
 	while ($t = mysql_fetch_array($r, MYSQL_ASSOC)) {
-		$tool_content .= "<tr><td>&nbsp;</td><td>$t[title]<br>$t[comments]</td>" .
-		($is_adminOfCourse? actions($t['id']): '') .
+		$class_vis = ($t['visibility'] == 'i')? ' class="invisible"': '';
+		$tool_content .= "<tr '$class_vis'><td>&nbsp;</td><td>$t[title]<br>$t[comments]</td>" .
+		($is_adminOfCourse? actions($t['id'], $t['visibility']): '') .
                 "</tr>";
 	}
 }
 
 
 // resource actions
-function actions($resource_id, $status = '')
+function actions($resource_id, $status)
 {
-        global $langEdit, $langDelete, $langVisibility, $langDown, $langUp, $id;
+        global $langEdit, $langDelete, $langVisibility, $langDown, $langUp, $id, $mysqlMainDb;
 
         static $first = true;
 
         $icon_vis = ($status == 'v')? 'visible.gif': 'invisible.gif';
-        $class_vis = ($status == 'i' or $status == 'del')? ' class="invisible"': '';
-
+	list($res_type) = mysql_fetch_array(db_query("SELECT type FROM unit_resources WHERE id='$resource_id'", $mysqlMainDb));
+	
         if ($status != 'del') {
                 $content = "<td><a href='$_SERVER[PHP_SELF]?edit=$resource_id&id=$id'>" .
                 "<img src='../../template/classic/img/edit.gif' title='$langEdit' /></a></td>";
@@ -278,19 +285,23 @@ function actions($resource_id, $status = '')
                                         "onClick=\"return confirmation();\">" .
                                         "<img src='../../template/classic/img/delete.gif' " .
                                         "title='$langDelete'></img></a></td>";
-        if ($status != 'del') {
-                $content .= "<td><a href='$_SERVER[PHP_SELF]?vis=$resource_id'>" .
+	if ($status != 'del') {
+		if ($res_type == 'text') { 
+			$content .= "<td><a href='$_SERVER[PHP_SELF]?vis=$resource_id&id=$id''>" .
                                         "<img src='../../template/classic/img/$icon_vis' " .
                                         "title='$langVisibility'></img></a></td>";
+		} else {
+			$content .= "<td>&nbsp;</td>";
+		}
         } else {
                 $content .= '<td>&nbsp;</td>';
         }
         if ($resource_id != $GLOBALS['max_resource_id']) {
                 $content .= "<td><a href='$_SERVER[PHP_SELF]?down=$resource_id&id=$id'>" .
                         "<img src='../../template/classic/img/down.gif' title='$langDown'></img></a></td>";
-        } else {
-                $content .= "<td>&nbsp;</td>";
-        }
+	} else {
+		$content .= "<td>&nbsp;</td>";
+	}
         if (!$first) {
                 $content .= "<td><a href='$_SERVER[PHP_SELF]?up=$resource_id&id=$id'>" .
                         "<img src='../../template/classic/img/up.gif' title='$langUp'></img></a></td>";
@@ -302,7 +313,7 @@ function actions($resource_id, $status = '')
 }
 
 
-// edit doc resource
+// edit resource
 function edit_res($resource_id) 
 {
 	global $tool_content, $id, $urlServer, $langTitle, $langDescr, $langModify;
