@@ -257,8 +257,13 @@ function show_text($unit_id)
         $r = db_query("SELECT * FROM unit_resources
 	               WHERE id =" . intval($unit_id) . " AND res_id='0' $visibility_check", $mysqlMainDb);
 	while ($t = mysql_fetch_array($r, MYSQL_ASSOC)) {
+		if (!empty($t['comments'])) {
+			$comment = "<p>$t[comments]</p>";
+		} else {
+			$comment = "";
+		}
 		$class_vis = ($t['visibility'] == 'i')? ' class="invisible"': '';
-		$tool_content .= "<tr '$class_vis'><td>&nbsp;</td><td>$t[title]<br>$t[comments]</td>" .
+		$tool_content .= "<tr '$class_vis'><td>&nbsp;</td><td>$t[title]$comment</td>" .
 		($is_adminOfCourse? actions($t['id'], $t['visibility']): '') .
                 "</tr>";
 	}
