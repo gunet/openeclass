@@ -232,8 +232,7 @@ function show_doc($title, $comments, $file_id, $resource_id)
                 }
                 $status = 'del';
                 $image = '../../template/classic/img/delete.gif';
-                $link = '<span class="invisible">htmlspecialchars(' . $title .
-                        ") ($langWasDeleted)</span>";
+                $link = "<span class='invisible'>$title ($langWasDeleted)</span>";
         } else {
                 $file = mysql_fetch_array($r, MYSQL_ASSOC);
                 $status = $file['visibility'];
