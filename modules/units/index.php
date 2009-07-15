@@ -220,7 +220,8 @@ function show_resource($info)
 // display resource documents
 function show_doc($title, $comments, $file_id, $resource_id)
 {
-        global $is_adminOfCourse, $currentCourseID, $langWasDeleted, $visibility_check;
+        global $is_adminOfCourse, $currentCourseID, $langWasDeleted,
+               $visibility_check, $urlServer, $id;
 
         $r = db_query("SELECT * FROM document
 	               WHERE id =" . intval($file_id) ." $visibility_check", $GLOBALS['currentCourseID']);
@@ -234,18 +235,24 @@ function show_doc($title, $comments, $file_id, $resource_id)
         } else {
                 $file = mysql_fetch_array($r, MYSQL_ASSOC);
                 $status = $file['visibility'];
-                $image = '../document/img/' . choose_image('.' . $file['format']);
-                $link = "<a href='" . file_url($file['path'], $file['filename']) . "'>$title</a>";
+                if ($file['format'] == '.dir') {
+                        $image = '../../template/classic/img/folder.gif';
+                        $link = "<a href='{$urlServer}modules/document/document.php?openDir=$file[path]&amp;unit=$id'>$title</a>";
+                } else {
+                        $image = '../document/img/' .
+                                choose_image('.' . $file['format']);
+                        $link = "<a href='" . file_url($file['path'], $file['filename']) . "'>$title</a>";
+                }
         }
+	$class_vis = ($status == 'i' or $status == 'del')? ' class="invisible"': '';
         if (!empty($comments)) {
-                $comment = "<p>$comments</p>";
+                $comment = "<tr><td>&nbsp;</td><td>$comments</td></p>";
         } else {
                 $comment = "";
         }
-	$class_vis = ($status == 'i' or $status == 'del')? ' class="invisible"': '';
-        return "<tr '$class_vis'><td><img src='$image' /></td><td>$link$comment</td>" .
+        return "<tr '$class_vis'><td><img src='$image' /></td><td>$link</td>" .
                 ($is_adminOfCourse? actions($resource_id, $status): '') . 
-                "</tr>";
+                '</tr>' . $comment;
 }
 
 

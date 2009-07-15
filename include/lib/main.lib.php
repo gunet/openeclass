@@ -1045,3 +1045,26 @@ function format_time_duration($sec)
         }
         return append_units($hour, $langhour, $langhours);
 }
+
+// Add a link to the appropriate course unit if the page was requested
+// with a unit=ID parametre. This happens if the user got to the module
+// page from a unit resource link
+function add_units_navigation()
+{
+        global $navigation, $cours_id, $is_adminOfCourse, $mysqlMainDb;
+        if (isset($_GET['unit'])) {
+                if ($is_adminOfCourse) {
+                        $visibility_check = '';
+                } else {
+                        $visibility_check = "AND visibility='v'";
+                }
+                $unit_id = intval($_GET['unit']);
+                $q = db_query("SELECT title FROM course_units
+                       WHERE id=$unit_id AND course_id=$cours_id " .
+                       $visibility_check, $mysqlMainDb);
+                if ($q and mysql_num_rows($q) > 0) {
+                        list($unit_name) = mysql_fetch_row($q);
+                        $navigation[] = array("url"=>"../units/index.php?id=$unit_id", "name"=> htmlspecialchars($unit_name));
+                }
+        }
+}
