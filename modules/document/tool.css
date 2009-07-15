@@ -28,7 +28,11 @@ table.Documents th {
 }
 
 table.Documents td {
-    font-size : 10px;
-	padding : 5px 4px 4px 4px;
-    text-align: center;
+        font-size: 10px;
+        padding: 5px 4px 4px 4px;
+        text-align: center;
+}
+
+table.Documents img {
+       vertical-align: middle; 
 }

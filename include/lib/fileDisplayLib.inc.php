@@ -192,6 +192,11 @@ function format_url($filePath)
 	return implode("/",$stringArray);
 }
 
+function file_url_escape($name)
+{
+        return rawurlencode(str_replace('/', '//', $name));
+}
+
 function file_url($path, $filename)
 {
 	global $currentCourseID, $urlServer;
@@ -212,12 +217,9 @@ function file_url($path, $filename)
 				$q = db_query("SELECT filename FROM document WHERE path = '$partial_path'",
 					      $currentCourseID);
 				list($name) = mysql_fetch_row($q);
-				$dirname .= '/' . str_replace(array('%', '/', '?', '&', '#', '+'),
-                                                              array('%25', '//', '%3F', '%26', '%23', '%2B'),
-                                                              $name);
+				$dirname .= '/' . file_url_escape($name);
 			}
 		}
 	}
-	return htmlspecialchars($urlServer . "modules/document/file.php/$currentCourseID$dirname/$filename",
-				ENT_QUOTES);
+	return htmlspecialchars($urlServer . "modules/document/file.php/$currentCourseID$dirname/" . file_url_escape($filename), ENT_QUOTES);
 }

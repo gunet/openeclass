@@ -692,7 +692,7 @@ if (mysql_num_rows($sql) == 0) {
         if ($curDirName) // if the $curDirName is empty, we're in the root point and we can't go to a parent dir
         {
                 $parentlink = $_SERVER['PHP_SELF'] . '?openDir=' . $cmdParentDir;
-                $tool_content .=  "<a href='$parentlink'>$langUp</a> <a href='$parentlink'><img src='../../template/classic/img/parent.gif' border='0' align='absmiddle' height='20' width='20' /></a>";
+                $tool_content .=  "<a href='$parentlink'>$langUp</a> <a href='$parentlink'><img src='../../template/classic/img/parent.gif' height='20' width='20' /></a>";
         }
         $tool_content .= "</div></th>";
         $tool_content .= "\n  </tr>";
@@ -741,7 +741,7 @@ if (mysql_num_rows($sql) == 0) {
                                         $link_text = $entry['title'];
                                 }
                                 if ($entry['copyrighted']) {
-                                        $link_text .= " <img src='./img/copyrighted.jpg' align='absmiddle' border='0' />";
+                                        $link_text .= " <img src='./img/copyrighted.jpg' />";
                                 }
                         }
                         $tool_content .= "\n  <tr$style>";
