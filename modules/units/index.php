@@ -35,34 +35,32 @@ if (isset($_REQUEST['id'])) {
 	$id = intval($_REQUEST['id']);
 }
 $tool_content = $head_content = '';
-$head_content .= '
-<script type="text/javascript">
-function confirmation ()
-{
-    if (confirm("'.$langConfirmDelete.'"))
-{return true;}
-    else
-{return false;}
+
+$head_content .= '<script type="text/javascript">
+function confirmation () {
+        if (confirm("'.$langConfirmDelete.'"))
+                {return true;}
+        else
+                {return false;}
 }
-</script>
-';
+</script>';
 
-if ($language == 'greek')
-        $lang_editor = 'el';
-else
-        $lang_editor = 'en';
-
-$head_content .= "<script type='text/javascript'>
-_editor_url  = '$urlAppend/include/xinha/';
-_editor_lang = '$lang_editor';
-</script>
-<script type='text/javascript' src='$urlAppend/include/xinha/XinhaCore.js'></script>
-<script type='text/javascript' src='$urlAppend/include/xinha/my_config.js'></script>";
 
 // Process resource actions
 if (isset($_REQUEST['edit'])) {
 	$res_id = intval($_GET['edit']);
 	if ($id = check_admin_unit_resource($res_id)) {
+                if ($language == 'greek')
+                        $lang_editor = 'el';
+                else
+                        $lang_editor = 'en';
+
+                $head_content .= "<script type='text/javascript'>
+_editor_url  = '$urlAppend/include/xinha/';
+_editor_lang = '$lang_editor';
+</script>
+<script type='text/javascript' src='$urlAppend/include/xinha/XinhaCore.js'></script>
+<script type='text/javascript' src='$urlAppend/include/xinha/my_config.js'></script>";
 		edit_res($res_id);
 	}
 }  elseif(isset($_REQUEST['edit_res_submit'])) { // edit resource
@@ -168,6 +166,8 @@ if ($is_adminOfCourse) {
                                 "title='$langInsertText'>$langInsertText</a></li>" .
 			"<li><a href='insert.php?type=lp&amp;id=$id' " .
                                 "title='$langLearningPath'>$langLearningPath</a></li>" .
+			"<li><a href='insert.php?type=video&amp;id=$id' " .
+                                "title='$langVideo'>$langVideo</a></li>" .
                         "</ul></div>\n";
 }
 
@@ -245,17 +245,23 @@ function show_resources($unit_id)
 
 function show_resource($info)
 {
-        global $tool_content, $langUnknownResType;
+        global $tool_content, $langUnknownResType, $is_adminOfCourse;
 	
+        if ($info['visibility'] == 'i' and !$is_adminOfCourse) {
+                return;
+        }
         switch ($info['type']) {
                 case 'doc':
-                        $tool_content .= show_doc($info['title'], $info['comments'], $info['res_id'], $info['id']);
+                        $tool_content .= show_doc($info['title'], $info['comments'], $info['id'], $info['res_id']);
                         break;
 		case 'text':
-                        $tool_content .= show_text($info['id']);
+                        $tool_content .= show_text($info['title'], $info['comments'], $info['id'], $info['visibility']);
                         break;
 		case 'lp':
-                        $tool_content .= show_lp($info['id']);
+                        $tool_content .= show_lp($info['title'], $info['comments'], $info['id'], $info['res_id']);
+                        break;
+		case 'video':
+                        $tool_content .= show_video($info['title'], $info['comments'], $info['id'], $info['res_id']);
                         break;
                 default:
                         $tool_content .= $langUnknownResType;
@@ -264,7 +270,7 @@ function show_resource($info)
 
 
 // display resource documents
-function show_doc($title, $comments, $file_id, $resource_id)
+function show_doc($title, $comments, $resource_id, $file_id)
 {
         global $is_adminOfCourse, $currentCourseID, $langWasDeleted,
                $visibility_check, $urlServer, $id;
@@ -304,61 +310,79 @@ function show_doc($title, $comments, $file_id, $resource_id)
 
 
 // display resource text
-function show_text($unit_resource_id)
+function show_text($title, $comments, $resource_id, $visibility)
 {
-        global $is_adminOfCourse, $mysqlMainDb, $tool_content, $visibility_check;
+        global $is_adminOfCourse, $mysqlMainDb, $tool_content;
 
-        $r = db_query("SELECT * FROM unit_resources
-	               WHERE id =" . intval($unit_resource_id) . " AND res_id='0' $visibility_check", $mysqlMainDb);
-	while ($t = mysql_fetch_array($r, MYSQL_ASSOC)) {
-		if (!empty($t['comments'])) {
-			$comment = "<tr><td>&nbsp;</td><td>$t[comments]</td>";
-		} else {
-			$comment = "";
-		}
-		$class_vis = ($t['visibility'] == 'i')? ' class="invisible"': '';
-		$imagelink = "<img src='../../template/classic/img/description_" .
-			($t['visibility'] == 'i'? 'off': 'on') . ".gif' />";
-		$tool_content .= "<tr '$class_vis'><th>$imagelink</th><td>$t[title]</td>" .
-		($is_adminOfCourse? actions($t['id'], $t['visibility']): '') .
-                '</tr>' . $comment;
-	}
+        $class_vis = ($visibility == 'i')? ' class="invisible"': '';
+        $imagelink = "<img src='../../template/classic/img/description_" .
+			($visibility == 'i'? 'off': 'on') . ".gif' />";
+        if (!empty($comments)) {
+                $comment_box = "<tr$class_vis><td>&nbsp;</td><td>$comments</td>";
+        } else {
+                $comment_box = "";
+        }
+        $tool_content .= "<tr$class_vis><th>$imagelink</th><td>$title</td>" .
+		($is_adminOfCourse? actions($resource_id, $visibility): '') .
+                '</tr>' . $comment_box;
 }
 
 // display resource learning path
-function show_lp($unit_resource_id)
+function show_lp($title, $comments, $resource_id, $lp_id)
 {
-	global $tool_content, $mysqlMainDb, $langWasDeleted, $urlServer, $is_adminOfCourse, $visibility_check;
-	$comment = $class_vis = $imagelink = $link = '';
-	
-	$sql = db_query("SELECT * FROM unit_resources 
-		WHERE id =" . intval($unit_resource_id) ." AND type='lp' $visibility_check", $mysqlMainDb);
-	$lp = mysql_fetch_array($sql, MYSQL_ASSOC);
-	$r = db_query("SELECT * FROM lp_learnPath WHERE learnPath_id = '$lp[res_id]'", $GLOBALS['currentCourseID']);
+	global $id, $tool_content, $mysqlMainDb, $urlServer, $is_adminOfCourse,
+               $langWasDeleted, $currentCourseID;
+
+	$comment_box = $class_vis = $imagelink = $link = '';
+        $title = htmlspecialchars($title);
+	$r = db_query("SELECT * FROM lp_learnPath WHERE learnPath_id = $lp_id",
+                      $currentCourseID);
 	if (mysql_num_rows($r) == 0) { // check if lp was deleted
 		if (!$is_adminOfCourse) {
 			return '';
 		} else {
 			$status = 'del';
 			$imagelink = "<img src='../../template/classic/img/delete.gif' />";
-			$link = "<span class='invisible'>$lp[title] ($langWasDeleted)</span>";
+			$link = "<span class='invisible'>$title ($langWasDeleted)</span>";
 		}
 	} else {
-		$status = $lp['visibility'];
-		$link = "<a href='${urlServer}modules/learnPath/learningPath.php?path_id=$lp[res_id]&amp;unit=$lp[unit_id]'>$lp[title]</a>";
+                $lp = mysql_fetch_array($r, MYSQL_ASSOC);
+		$status = ($lp['visibility'] == 'SHOW')? 'v': 'i';
+		$link = "<a href='${urlServer}modules/learnPath/learningPath.php?path_id=$lp_id&amp;unit=$id'>$title</a>";
 		$imagelink = "<img src='../../template/classic/img/lp_" .
 			($status == 'i'? 'off': 'on') . ".gif' />";
-		$class_vis = ($status == 'i' or $status == 'del')? ' class="invisible"': '';
-		if (!empty($lp['comments'])) {
-			$comment = "<tr><td>&nbsp;</td><td>$lp[comments]</td>";
-		}
 	}
-	
+        if ($status != 'v' and !$is_adminOfCourse) {
+			return '';
+        }
+        if (!empty($comments)) {
+                $comment_box = "<tr><td>&nbsp;</td><td>$comments</td>";
+        }
+        $class_vis = ($status == 'i' or $status == 'del')?
+                ' class="invisible"': '';
 	return "<tr$class_vis><th>$imagelink</th><td>$link</td>" .
-		($is_adminOfCourse? actions($lp['id'], $status): '') . 
-		'</tr>' . $comment;
+		($is_adminOfCourse? actions($resource_id, $status): '') . 
+		'</tr>' . $comment_box;
 }
 
+
+// display resource video
+function show_video($title, $comments, $resource_id, $video_id)
+{
+        global $is_adminOfCourse, $mysqlMainDb, $tool_content;
+
+        $class_vis = ($visibility == 'i')? ' class="invisible"': '';
+        if (!empty($comments)) {
+                $comment_box = "<tr$class_vis><td>&nbsp;</td><td>$comments</td>";
+        } else {
+                $comment_box = "";
+        }
+        $imagelink = "<img src='../../template/classic/img/description_" .
+			($visibility == 'i'? 'off': 'on') . ".gif' />";
+        $tool_content .= "<tr$class_vis><th>$imagelink</th><td>$title</td>" .
+		($is_adminOfCourse? actions($resource_id, $visibility): '') .
+                '</tr>' . $comment_box;
+}
 
 // resource actions
 function actions($resource_id, $status)
