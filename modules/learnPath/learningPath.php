@@ -77,6 +77,7 @@ elseif((!isset($_SESSION['path_id']) || $_SESSION['path_id'] == ""))
 $l = db_query("SELECT name FROM $TABLELEARNPATH WHERE learnPath_id = '".(int)$_SESSION['path_id']."'", $currentCourseID);
 $lpname = mysql_fetch_array($l);
 $nameTools = $lpname['name'];
+add_units_navigation();
 $navigation[] = array("url"=>"learningPathList.php", "name"=> $langLearningPaths);
 
 
@@ -120,6 +121,7 @@ $sql = "SELECT LPM.`learnPath_module_id`, LPM.`parent`,
 
 if (mysql_num_rows(db_query($sql)) == 0)  {
 	$tool_content .= "<p class='alert1'>$langNoModule</p>";
+	add_units_navigation();
 	draw($tool_content, 2, "learnPath");
 	exit;
 }
@@ -325,7 +327,5 @@ if($uid && $moduleNb > 0) {
 		.'    </tbody>'."\n\n";
 }
 $tool_content .= '    </table>'."\n\n";
-
-
 draw($tool_content, 2, "learnPath");
 ?>

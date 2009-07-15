@@ -31,12 +31,8 @@ Units display module
 $require_current_course = true;
 include '../../include/baseTheme.php';
 include "../../include/lib/fileDisplayLib.inc.php";
-$id = intval($_REQUEST['id']);
-
-if ($is_adminOfCourse) {
-        $visibility_check = '';
-} else {
-        $visibility_check = "AND visibility='v'";
+if (isset($_REQUEST['id'])) {
+	$id = intval($_REQUEST['id']);
 }
 $tool_content = $head_content = '';
 $head_content .= '
@@ -63,8 +59,68 @@ _editor_lang = '$lang_editor';
 <script type='text/javascript' src='$urlAppend/include/xinha/XinhaCore.js'></script>
 <script type='text/javascript' src='$urlAppend/include/xinha/my_config.js'></script>";
 
+// Process resource actions
+if (isset($_REQUEST['edit'])) {
+	$res_id = intval($_GET['edit']);
+	if ($id = check_admin_unit_resource($res_id)) {
+		edit_res($res_id);
+	}
+}  elseif(isset($_REQUEST['edit_res_submit'])) { // edit resource
+	$res_id = intval($_REQUEST['resource_id']);	
+	if ($id = check_admin_unit_resource($res_id)) {
+		$restitle = autoquote(trim($_REQUEST['restitle']));
+                $rescomments = autoquote(trim($_REQUEST['rescomments']));
+		$result = db_query("UPDATE unit_resources SET
+				title = $restitle,
+				comments = $rescomments
+				WHERE unit_id = $id AND id = $res_id");
+	}
+	$tool_content .= "<p class='success_small'>$langResourceUnitModified</p>";
+} elseif(isset($_REQUEST['del'])) { // delete resource from course unit
+	$res_id = intval($_GET['del']);
+	if ($id = check_admin_unit_resource($res_id)) {
+		db_query("DELETE FROM unit_resources WHERE id = '$res_id'", $mysqlMainDb);
+		$tool_content .= "<p class='success_small'>$langResourceCourseUnitDeleted</p>";
+	}
+} elseif (isset($_REQUEST['vis'])) { // modify visibility in text resources only 
+	$res_id = intval($_REQUEST['vis']);
+	if ($id = check_admin_unit_resource($res_id)) {
+		$sql = db_query("SELECT `visibility` FROM unit_resources WHERE id=$res_id");
+		list($vis) = mysql_fetch_row($sql);
+		$newvis = ($vis == 'v')? 'i': 'v';
+		db_query("UPDATE unit_resources SET visibility = '$newvis' WHERE id = $res_id");
+	}
+} elseif (isset($_REQUEST['down'])) { // change order down
+	$res_id = intval($_REQUEST['down']);
+	if ($id = check_admin_unit_resource($res_id)) {
+		$sql = db_query("SELECT `order` FROM unit_resources WHERE id='$res_id' AND unit_id='$id'");
+		list($current) = mysql_fetch_row($sql);
+		$sql = db_query("SELECT id, `order` FROM unit_resources 
+				WHERE `order` > '$current' AND unit_id = $id ORDER BY `order` LIMIT 1");
+		list($next_id, $next) = mysql_fetch_row($sql);
+		db_query("UPDATE unit_resources SET `order` = $next WHERE id = $res_id AND unit_id = $id");
+		db_query("UPDATE unit_resources SET `order` = $current WHERE id = $next_id AND unit_id = $id");
+	}
+} elseif (isset($_REQUEST['up'])) { // change order up
+	$res_id = intval($_REQUEST['up']);
+	if ($id = check_admin_unit_resource($res_id)) {
+		$sql = db_query("SELECT `order` FROM unit_resources WHERE id='$res_id' AND unit_id='$id'");
+		list($current) = mysql_fetch_row($sql);
+		$sql = db_query("SELECT id, `order` FROM unit_resources 
+				WHERE `order` < '$current' AND unit_id = $id ORDER BY `order` DESC LIMIT 1");
+		list($prev_id, $prev) = mysql_fetch_row($sql);
+		db_query("UPDATE unit_resources SET `order` = $prev WHERE id = $res_id AND unit_id = $id");
+		db_query("UPDATE unit_resources SET `order` = $current WHERE id = $prev_id AND unit_id = $id");
+	}
+}
+
+if ($is_adminOfCourse) {
+        $visibility_check = '';
+} else {
+        $visibility_check = "AND visibility='v'";
+}
 $q = db_query("SELECT * FROM course_units
-               WHERE id=$id AND course_id=$cours_id " . $visibility_check);
+               WHERE id = $id AND course_id=$cours_id " . $visibility_check);
 if (!$q or mysql_num_rows($q) == 0) {
         $nameTools = $langUnitUnknown;
         draw('', 2, 'units', $head_content);
@@ -110,48 +166,9 @@ if ($is_adminOfCourse) {
                                 "title='$langExerciseAsModule'>$langExerciseAsModuleLabel</a></li>" .
                         "<li><a href='insert.php?type=text&amp;id=$id' " .
                                 "title='$langInsertText'>$langInsertText</a></li>" .
+			"<li><a href='insert.php?type=lp&amp;id=$id' " .
+                                "title='$langLearningPath'>$langLearningPath</a></li>" .
                         "</ul></div>\n";
-	if (isset($_REQUEST['edit'])) {
-		$res_id = intval($_GET['edit']);
-		edit_res($res_id);
-	}  elseif(isset($_REQUEST['edit_res_submit'])) { // edit resource
-		$restitle = autoquote($_REQUEST['restitle']);
-                $rescomments = autoquote($_REQUEST['rescomments']);
-                $resource_id = intval($_REQUEST['resource_id']);
-		$result = db_query("UPDATE unit_resources SET
-				title = $restitle,
-				comments = $rescomments
-				WHERE unit_id = $id AND id = $resource_id");
-		$tool_content .= "<p class='success_small'>$langResourceUnitModified</p>";
-	} elseif(isset($_REQUEST['del'])) { // delete resource from course unit
-		$id = intval($_GET['del']);
-		db_query("DELETE FROM unit_resources WHERE id = '$id'", $mysqlMainDb);
-		$tool_content .= "<p class='success_small'>$langResourceCourseUnitDeleted</p>";
-	} elseif (isset($_REQUEST['vis'])) { // modify visibility in text resources only 
-		$res_id = intval($_REQUEST['vis']);
-		$sql = db_query("SELECT `visibility` FROM unit_resources WHERE id=$res_id");
-		list($vis) = mysql_fetch_row($sql);
-		$newvis = ($vis == 'v')? 'i': 'v';
-		db_query("UPDATE unit_resources SET visibility = '$newvis' WHERE id = $res_id");
-	} elseif (isset($_REQUEST['down'])) { // change order down
-		$res_id = intval($_REQUEST['down']);
-		$sql = db_query("SELECT `order` FROM unit_resources WHERE id='$res_id' AND unit_id='$id'");
-		list($current) = mysql_fetch_row($sql);
-		$sql = db_query("SELECT id, `order` FROM unit_resources 
-				WHERE `order` > '$current' AND unit_id = $id ORDER BY `order` LIMIT 1");
-		list($next_id, $next) = mysql_fetch_row($sql);
-		db_query("UPDATE unit_resources SET `order` = $next WHERE id = $res_id AND unit_id = $id");
-		db_query("UPDATE unit_resources SET `order` = $current WHERE id = $next_id AND unit_id = $id");
-	} elseif (isset($_REQUEST['up'])) { // change order up
-		$res_id = intval($_REQUEST['up']);
-		$sql = db_query("SELECT `order` FROM unit_resources WHERE id='$res_id' AND unit_id='$id'");
-		list($current) = mysql_fetch_row($sql);
-		$sql = db_query("SELECT id, `order` FROM unit_resources 
-				WHERE `order` < '$current' AND unit_id = $id ORDER BY `order` DESC LIMIT 1");
-		list($prev_id, $prev) = mysql_fetch_row($sql);
-		db_query("UPDATE unit_resources SET `order` = $prev WHERE id = $res_id AND unit_id = $id");
-		db_query("UPDATE unit_resources SET `order` = $current WHERE id = $prev_id AND unit_id = $id");
-	}
 }
 
 $tool_content .= '<table class="unit-navigation"><tr><td class="left">' .
@@ -166,18 +183,7 @@ if (!empty($comments)) {
         }
 }
 
-// Display resources
-$req = db_query("SELECT * FROM unit_resources WHERE unit_id = $id ORDER BY `order`");
-if (mysql_num_rows($req) > 0) {
-        list($max_resource_id) = mysql_fetch_row(db_query("SELECT id FROM unit_resources
-                                WHERE unit_id = $id ORDER BY `order` DESC LIMIT 1"));
-
-        $tool_content .= '<table>';
-        while ($info = mysql_fetch_array($req)) {
-                show_resource($info);
-        }
-        $tool_content .= '</table>';
-}
+show_resources($id);
 
 $tool_content .= '<form class="unit-select" name="unitselect" action="' .
                  $urlServer . 'modules/units/" method="get">' .
@@ -192,7 +198,7 @@ while ($info = mysql_fetch_array($q)) {
                          htmlspecialchars($info['title']) .
                          '</option>';
 }
-$tool_content .= '</select></form>';
+$tool_content .= '</select>';
 
 draw($tool_content, 2, 'units', $head_content);
 
@@ -200,9 +206,46 @@ draw($tool_content, 2, 'units', $head_content);
 //------------------------------------
 // list of functions
 //------------------------------------
+
+// Check that a specified resource id belongs to a resource in the
+// current course, and that the user is an admin in this course.
+// Return the id of the unit or false if user is not an admin 
+function check_admin_unit_resource($resource_id)
+{
+	global $cours_id, $is_adminOfCourse;
+	
+	if ($is_adminOfCourse) {
+		$q = db_query("SELECT course_units.id FROM course_units,unit_resources WHERE
+			course_units.course_id = $cours_id AND course_units.id = unit_resources.unit_id
+			AND unit_resources.id = $resource_id");
+		if (mysql_num_rows($q) > 0) {
+			list($unit_id) = mysql_fetch_row($q);
+			return $unit_id;
+		}
+	}
+	return false;
+}
+
+// Display resources for unit with id=$id
+function show_resources($unit_id)
+{
+	global $tool_content, $max_resource_id;
+	$req = db_query("SELECT * FROM unit_resources WHERE unit_id = $unit_id ORDER BY `order`");
+	if (mysql_num_rows($req) > 0) {
+		list($max_resource_id) = mysql_fetch_row(db_query("SELECT id FROM unit_resources
+                                WHERE unit_id = $unit_id ORDER BY `order` DESC LIMIT 1"));
+		$tool_content .= "<table class='resources'>";
+		while ($info = mysql_fetch_array($req)) {
+			show_resource($info);
+		}	
+		$tool_content .= "</table>\n";
+	}
+}
+
+
 function show_resource($info)
 {
-        global $tool_content;
+        global $tool_content, $langUnknownResType;
 	
         switch ($info['type']) {
                 case 'doc':
@@ -211,8 +254,11 @@ function show_resource($info)
 		case 'text':
                         $tool_content .= show_text($info['id']);
                         break;
+		case 'lp':
+                        $tool_content .= show_lp($info['id']);
+                        break;
                 default:
-                        $tool_content .= "Error! Unknown resource type '$info[type].";
+                        $tool_content .= $langUnknownResType;
         }
 }
 
@@ -251,37 +297,73 @@ function show_doc($title, $comments, $file_id, $resource_id)
         } else {
                 $comment = "";
         }
-        return "<tr$class_vis><td><img src='$image' /></td><td>$link</td>" .
+        return "<tr$class_vis><th><img src='$image' /></th><td>$link</td>" .
                 ($is_adminOfCourse? actions($resource_id, $status): '') . 
                 '</tr>' . $comment;
 }
 
 
 // display resource text
-function show_text($unit_id)
+function show_text($unit_resource_id)
 {
         global $is_adminOfCourse, $mysqlMainDb, $tool_content, $visibility_check;
 
         $r = db_query("SELECT * FROM unit_resources
-	               WHERE id =" . intval($unit_id) . " AND res_id='0' $visibility_check", $mysqlMainDb);
+	               WHERE id =" . intval($unit_resource_id) . " AND res_id='0' $visibility_check", $mysqlMainDb);
 	while ($t = mysql_fetch_array($r, MYSQL_ASSOC)) {
 		if (!empty($t['comments'])) {
-			$comment = "<p>$t[comments]</p>";
+			$comment = "<tr><td>&nbsp;</td><td>$t[comments]</td>";
 		} else {
 			$comment = "";
 		}
 		$class_vis = ($t['visibility'] == 'i')? ' class="invisible"': '';
-		$tool_content .= "<tr '$class_vis'><td>&nbsp;</td><td>$t[title]$comment</td>" .
+		$imagelink = "<img src='../../template/classic/img/description_" .
+			($t['visibility'] == 'i'? 'off': 'on') . ".gif' />";
+		$tool_content .= "<tr '$class_vis'><th>$imagelink</th><td>$t[title]</td>" .
 		($is_adminOfCourse? actions($t['id'], $t['visibility']): '') .
-                "</tr>";
+                '</tr>' . $comment;
 	}
+}
+
+// display resource learning path
+function show_lp($unit_resource_id)
+{
+	global $tool_content, $mysqlMainDb, $langWasDeleted, $urlServer, $is_adminOfCourse, $visibility_check;
+	$comment = $class_vis = $imagelink = $link = '';
+	
+	$sql = db_query("SELECT * FROM unit_resources 
+		WHERE id =" . intval($unit_resource_id) ." AND type='lp' $visibility_check", $mysqlMainDb);
+	$lp = mysql_fetch_array($sql, MYSQL_ASSOC);
+	$r = db_query("SELECT * FROM lp_learnPath WHERE learnPath_id = '$lp[res_id]'", $GLOBALS['currentCourseID']);
+	if (mysql_num_rows($r) == 0) { // check if lp was deleted
+		if (!$is_adminOfCourse) {
+			return '';
+		} else {
+			$status = 'del';
+			$imagelink = "<img src='../../template/classic/img/delete.gif' />";
+			$link = "<span class='invisible'>$lp[title] ($langWasDeleted)</span>";
+		}
+	} else {
+		$status = $lp['visibility'];
+		$link = "<a href='${urlServer}/modules/learnPath/learningPath.php?path_id=$lp[res_id]&amp;unit=$lp[unit_id]'>$lp[title]</a>";
+		$imagelink = "<img src='../../template/classic/img/lp_" .
+			($status == 'i'? 'off': 'on') . ".gif' />";
+		$class_vis = ($status == 'i' or $status == 'del')? ' class="invisible"': '';
+		if (!empty($lp['comments'])) {
+			$comment = "<tr><td>&nbsp;</td><td>$lp[comments]</td>";
+		}
+	}
+	
+	return "<tr '$class_vis'><th>$imagelink</th><td>$link</td>" .
+		($is_adminOfCourse? actions($lp['id'], $status): '') . 
+		'</tr>' . $comment;
 }
 
 
 // resource actions
 function actions($resource_id, $status)
 {
-        global $langEdit, $langDelete, $langVisibility, $langDown, $langUp, $id, $mysqlMainDb;
+        global $langEdit, $langDelete, $langVisibility, $langDown, $langUp, $mysqlMainDb;
 
         static $first = true;
 
@@ -289,18 +371,19 @@ function actions($resource_id, $status)
 	list($res_type) = mysql_fetch_array(db_query("SELECT type FROM unit_resources WHERE id='$resource_id'", $mysqlMainDb));
 	
         if ($status != 'del') {
-                $content = "<td><a href='$_SERVER[PHP_SELF]?edit=$resource_id&amp;id=$id'>" .
+                $content = "<td><a href='$_SERVER[PHP_SELF]?edit=$resource_id'>" .
                 "<img src='../../template/classic/img/edit.gif' title='$langEdit' /></a></td>";
         } else {
                 $content = '<td>&nbsp;</td>';
         }
-        $content .= "<td><a href='$_SERVER[PHP_SELF]?del=$resource_id&amp;id=$id' " .
-                                        "onClick=\"return confirmation();\">" .
+        $content .= "<td><a href='$_SERVER[PHP_SELF]?del=$resource_id'" .
+                                        " onClick=\"return confirmation();\">" .
                                         "<img src='../../template/classic/img/delete.gif' " .
                                         "title='$langDelete'></img></a></td>";
+	 
 	if ($status != 'del') {
 		if ($res_type == 'text') { 
-			$content .= "<td><a href='$_SERVER[PHP_SELF]?vis=$resource_id&amp;id=$id'>" .
+			$content .= "<td><a href='$_SERVER[PHP_SELF]?vis=$resource_id'>" .
                                         "<img src='../../template/classic/img/$icon_vis' " .
                                         "title='$langVisibility'></img></a></td>";
 		} else {
@@ -310,13 +393,13 @@ function actions($resource_id, $status)
                 $content .= '<td>&nbsp;</td>';
         }
         if ($resource_id != $GLOBALS['max_resource_id']) {
-                $content .= "<td><a href='$_SERVER[PHP_SELF]?down=$resource_id&amp;id=$id'>" .
+                $content .= "<td><a href='$_SERVER[PHP_SELF]?down=$resource_id'>" .
                         "<img src='../../template/classic/img/down.gif' title='$langDown'></img></a></td>";
 	} else {
 		$content .= "<td>&nbsp;</td>";
 	}
         if (!$first) {
-                $content .= "<td><a href='$_SERVER[PHP_SELF]?up=$resource_id&amp;id=$id'>" .
+                $content .= "<td><a href='$_SERVER[PHP_SELF]?up=$resource_id'>" .
                         "<img src='../../template/classic/img/up.gif' title='$langUp'></img></a></td>";
         } else {
                 $content .= "<td>&nbsp;</td>";

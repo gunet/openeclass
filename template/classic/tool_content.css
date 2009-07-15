@@ -662,3 +662,12 @@ table.Smart td {
     font-size: 10px;
 }
 
+table.resources td, table.resources tr  {
+	border: 0;
+	padding: .2em;
+}
+table.resources th  {
+	padding: .2em;
+	background: none;
+	text-align: center;
+}

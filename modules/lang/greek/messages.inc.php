@@ -3193,3 +3193,4 @@ $langCourseUnitModified = "Τα στοιχεία της ενότητας τρο�
 $langResourceCourseUnitDeleted = "Ο πόρος της θεματικής ενότητας διαγράφηκε";
 $langResourceUnitModified = "Τα στοιχεία του πόρου της ενότητας τροποποιήθηκαν";
 $langInsertText = "Κειμένου";
+$langUnknownResType = "Πρόβλημα! Άγνωστος πόρος θεματικής ενότητας";
