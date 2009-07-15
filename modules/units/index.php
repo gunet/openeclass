@@ -198,7 +198,7 @@ while ($info = mysql_fetch_array($q)) {
                          htmlspecialchars($info['title']) .
                          '</option>';
 }
-$tool_content .= '</select>';
+$tool_content .= '</select></form>';
 
 draw($tool_content, 2, 'units', $head_content);
 
@@ -345,7 +345,7 @@ function show_lp($unit_resource_id)
 		}
 	} else {
 		$status = $lp['visibility'];
-		$link = "<a href='${urlServer}/modules/learnPath/learningPath.php?path_id=$lp[res_id]&amp;unit=$lp[unit_id]'>$lp[title]</a>";
+		$link = "<a href='${urlServer}modules/learnPath/learningPath.php?path_id=$lp[res_id]&amp;unit=$lp[unit_id]'>$lp[title]</a>";
 		$imagelink = "<img src='../../template/classic/img/lp_" .
 			($status == 'i'? 'off': 'on') . ".gif' />";
 		$class_vis = ($status == 'i' or $status == 'del')? ' class="invisible"': '';
@@ -354,7 +354,7 @@ function show_lp($unit_resource_id)
 		}
 	}
 	
-	return "<tr '$class_vis'><th>$imagelink</th><td>$link</td>" .
+	return "<tr$class_vis><th>$imagelink</th><td>$link</td>" .
 		($is_adminOfCourse? actions($lp['id'], $status): '') . 
 		'</tr>' . $comment;
 }
