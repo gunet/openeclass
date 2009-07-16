@@ -15,6 +15,9 @@ table.unit-navigation {
 .right {
         text-align: right;
 }
+.center {
+        text-align: center;
+}
 .unit-select {
         text-align: center;
         margin-top: 2em;

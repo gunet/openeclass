@@ -74,7 +74,7 @@ function display_docs()
                                       "<img src='../../template/classic/img/parent.gif' height='20' width='20' /></a></th>";
                         $colspan = 4;
                 }
-                $tool_content .= "<form action='insert.php' method='post'><input type='hidden' name='id' value='$id'" .
+                $tool_content .= "<form action='insert.php' method='post'><input type='hidden' name='id' value='$id' />" .
                                  "<div class='fileman'><table class='Documents'><tbody>" .
                                  "<tr><th colspan='$colspan' class='left'>$langDirectory: $dirname</th>" .
                                  $parenthtml . "</tr>\n" .
@@ -126,14 +126,14 @@ function display_docs()
 				} else {
 					$size = format_file_size($entry['size']);
 					$date = format_date($entry['date']);
-					$tool_content .= "<td align='center'>$size</td><td align='center'>$date</td>";
+					$tool_content .= "<td class='center'>$size</td><td class='center'>$date</td>";
 				}
-					$tool_content .= "<td align='center'><input type='checkbox' name='document[]' value='$entry[id]'></td>";
+					$tool_content .= "<td class='center'><input type='checkbox' name='document[]' value='$entry[id]' /></td>";
 					$tool_content .= "</tr>";
 			}
 		}
 		$tool_content .= "<tr><td colspan=$colspan class='right'>";
-		$tool_content .= "<input type='submit' name='submit_doc' value='$langAddModulesButton'></td>";
+		$tool_content .= "<input type='submit' name='submit_doc' value='$langAddModulesButton' /></td>";
                 $tool_content .= "</tr></tbody></table></div></form>\n";
         }
 }

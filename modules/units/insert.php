@@ -57,16 +57,14 @@ if (!$q or mysql_num_rows($q) == 0) {
 
 if (isset($_POST['submit_doc'])) {
 	insert_docs($id);
-}
-if (isset($_POST['submit_text'])) {
+} elseif (isset($_POST['submit_text'])) {
 	$title = $_POST['title'];
 	$comments = $_POST['comments'];
 	insert_text($id);
-}
-if (isset($_POST['submit_lp'])) {
-	//$title = $_POST['title'];
-	//$comments = $_POST['comments'];
+} elseif (isset($_POST['submit_lp'])) {
 	insert_lp($id);
+} elseif (isset($_POST['submit_video'])) {
+        insert_video($id);
 }
 
 $info = mysql_fetch_array($q);
@@ -88,6 +86,10 @@ switch ($_GET['type']) {
 	case 'lp': $nameTools = $langLearningPaths;
                 include 'insert_lp.php';
                 display_lp();
+                break;
+	case 'video': $nameTools = $langVideo;
+                include 'insert_video.php';
+                display_video();
                 break;
         default: break;
 }
@@ -145,9 +147,27 @@ function insert_lp($id)
 			$visibility = 'v';
 		}
 			db_query("INSERT INTO unit_resources SET unit_id=$id, type='lp', title=" .
-			autoquote($lp['name']) . ", comments=" . autoquote($lp['comment']) .
+			quote($lp['name']) . ", comments=" . quote($lp['comment']) .
 			", visibility='$visibility', `order`=$order, `date`=NOW(), res_id=$lp[learnPath_id]",
 			$GLOBALS['mysqlMainDb']);
+	}
+	header('Location: index.php?id=' . $id);
+	exit;
+}
+
+// insert video in database
+function insert_video($id)
+{
+	list($order) = mysql_fetch_array(db_query("SELECT MAX(`order`) FROM unit_resources WHERE unit_id=$id"));
+	
+	foreach ($_POST['video'] as $video_id) {
+		$order++;
+                list($table, $res_id) = explode(':', $video_id);
+                $res_id = intval($res_id);
+                $table = ($table == 'video')? 'video': 'videolinks';
+		$row = mysql_fetch_array(db_query("SELECT * FROM $table
+			WHERE id = $res_id", $GLOBALS['currentCourseID']), MYSQL_ASSOC);
+                db_query("INSERT INTO unit_resources SET unit_id=$id, type='$table', title=" . quote($row['titre']) . ", comments=" . quote($row['description']) . ", visibility='v', `order`=$order, `date`=NOW(), res_id=$res_id", $GLOBALS['mysqlMainDb']);
 	}
 	header('Location: index.php?id=' . $id);
 	exit;
