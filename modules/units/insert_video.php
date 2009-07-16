@@ -42,7 +42,9 @@ function display_video()
                         if (!$table_started) {
                                 $tool_content .= "<form action='insert.php' method='post'><input type='hidden' name='id' value='$id' />";
                         }
-                        $videolink = "<a href='$row[url]'>" . htmlspecialchars($row['titre']) . '</a>';
+                        $videolink = "<a href='" .
+                                video_url($table, $row['url'], @$row['path']) .
+                                "'>" . htmlspecialchars($row['titre']) . '</a>';
                         $tool_content .= '<tr><td>' . $videolink . '</td><td>' . htmlspecialchars($row['description']) . '</td><td>' . format_date(strtotime($row['date'])) . "</td><td class='center'><input type='checkbox' name='video[]' value='$table:$row[id]' /></td></tr>\n";
                 }
         }

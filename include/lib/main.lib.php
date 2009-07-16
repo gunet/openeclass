@@ -1021,6 +1021,7 @@ function append_units($amount, $singular, $plural)
 	}
 }
 
+
 function format_time_duration($sec)
 {
         global $langsecond, $langseconds, $langminute, $langminutes, $langhour, $langhours;
@@ -1045,6 +1046,18 @@ function format_time_duration($sec)
         }
         return append_units($hour, $langhour, $langhours);
 }
+
+// Return the URL for a video found in $table (video or videolinks)
+function video_url($table, $url, $path)
+{
+        if ($table == 'video') {
+                return $GLOBALS['urlServer'] . 'modules/video/video.php?action2=download&amp;id=' . $path;
+        } else {
+                return $url;
+
+        }
+}
+
 
 // Add a link to the appropriate course unit if the page was requested
 // with a unit=ID parametre. This happens if the user got to the module

@@ -56,9 +56,6 @@ function send_file_to_client($real_filename, $filename, $send_inline = false, $s
         }
         $content_type = get_mime_type($filename);
 
-        if (!$send_inline) {
-                header("Content-Disposition: attachment");
-        }
         if ($content_type == 'text/html') {
                 $charset = '; charset=' . html_charset($real_filename);
         } elseif ($content_type == 'text/plain') {
@@ -67,14 +64,18 @@ function send_file_to_client($real_filename, $filename, $send_inline = false, $s
                 $charset = '';
         }
         
-        header("Content-type: $content_type$charset");
+        $disposition = $send_inline? 'inline': 'attachment';
 	if ($send_name) {
                 // Add quotes to filename if it contains spaces
                 if (strpos($filename, ' ') !== false) {
                         $filename = '"' . $filename . '"';
                 }
-        	header("Content-Disposition: $disposition; filename=$filename");
-	}
+                $filenameattr = '; filename=' . $filename;
+	} else {
+                $filenameattr = '';
+        }
+        header("Content-type: $content_type$charset");
+        header("Content-Disposition: $disposition$filenameattr");
 
         // IE cannot download from sessions without a cache
         if (strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE'))

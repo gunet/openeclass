@@ -370,17 +370,32 @@ function show_lp($title, $comments, $resource_id, $lp_id)
 // display resource video
 function show_video($table, $title, $comments, $resource_id, $video_id, $visibility)
 {
-        global $is_adminOfCourse, $mysqlMainDb, $tool_content;
+        global $is_adminOfCourse, $currentCourseID, $tool_content;
 
-        $class_vis = ($visibility == 'i')? ' class="invisible"': '';
+        $result = db_query("SELECT * FROM $table WHERE id=$video_id",
+                           $currentCourseID);
+        if ($result and mysql_num_rows($result) > 0) {
+                $row = mysql_fetch_array($result, MYSQL_ASSOC);
+                $videolink = "<a href='" .
+                             video_url($table, $row['url'], @$row['path']) .
+                             "'>" . htmlspecialchars($title) . '</a>';
+                $imagelink = "<img src='../../template/classic/img/videos_" .
+                             ($visibility == 'i'? 'off': 'on') . ".gif' />";
+        } else {
+                if (!$is_adminOfCourse) {
+                        return;
+                }
+                $videolink = $title;
+                $imagelink = "<img src='../../template/classic/img/delete.gif' />";
+                $visibility = 'del';
+        }
+        $class_vis = ($visibility == 'v')? '': ' class="invisible"';
         if (!empty($comments)) {
                 $comment_box = "<tr$class_vis><td>&nbsp;</td><td>$comments</td>";
         } else {
                 $comment_box = "";
         }
-        $imagelink = "<img src='../../template/classic/img/videos_" .
-			($visibility == 'i'? 'off': 'on') . ".gif' />";
-        $tool_content .= "<tr$class_vis><th>$imagelink</th><td>$title</td>" .
+        $tool_content .= "<tr$class_vis><th>$imagelink</th><td>$videolink</td>" .
 		($is_adminOfCourse? actions('video', $resource_id, $visibility): '') .
                 '</tr>' . $comment_box;
 }
