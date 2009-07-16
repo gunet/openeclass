@@ -1058,6 +1058,36 @@ function video_url($table, $url, $path)
         }
 }
 
+// Move entry $id in $table to $direction 'up' or 'down', where
+// order is in field $order_field and id in $id_field
+function move_order($table, $id_field, $id, $order_field, $direction)
+{
+        if ($direction == 'down') {
+                $op = '>';
+                $desc = '';
+        } else {
+                $op = '<';
+                $desc = 'DESC';
+        }
+        $sql = db_query("SELECT `$order_field` FROM `$table`
+                         WHERE `$id_field`='$id'");
+        if (!$sql or mysql_num_rows($sql) == 0) {
+                return false;
+        }
+        list($current) = mysql_fetch_row($sql);
+        $sql = db_query("SELECT `$id_field`, `$order_field` FROM `$table`
+                        WHERE `order` $op '$current'
+                        ORDER BY `$order_field` $desc LIMIT 1");
+        if ($sql and mysql_num_rows($sql) > 0) {
+                list($next_id, $next) = mysql_fetch_row($sql);
+                db_query("UPDATE `$table` SET `$order_field` = $next
+                          WHERE `$id_field` = $id");
+                db_query("UPDATE `$table` SET `$order_field` = $current
+                          WHERE `$id_field` = $next_id");
+                return true;
+        }
+        return false;
+}
 
 // Add a link to the appropriate course unit if the page was requested
 // with a unit=ID parametre. This happens if the user got to the module
