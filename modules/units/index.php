@@ -95,9 +95,11 @@ _editor_lang = '$lang_editor';
 		list($current) = mysql_fetch_row($sql);
 		$sql = db_query("SELECT id, `order` FROM unit_resources 
 				WHERE `order` > '$current' AND unit_id = $id ORDER BY `order` LIMIT 1");
-		list($next_id, $next) = mysql_fetch_row($sql);
-		db_query("UPDATE unit_resources SET `order` = $next WHERE id = $res_id AND unit_id = $id");
-		db_query("UPDATE unit_resources SET `order` = $current WHERE id = $next_id AND unit_id = $id");
+                if ($sql and mysql_num_rows($sql) > 0) {
+                        list($next_id, $next) = mysql_fetch_row($sql);
+                        db_query("UPDATE unit_resources SET `order` = $next WHERE id = $res_id AND unit_id = $id");
+                        db_query("UPDATE unit_resources SET `order` = $current WHERE id = $next_id AND unit_id = $id");
+                }
 	}
 } elseif (isset($_REQUEST['up'])) { // change order up
 	$res_id = intval($_REQUEST['up']);
@@ -106,9 +108,11 @@ _editor_lang = '$lang_editor';
 		list($current) = mysql_fetch_row($sql);
 		$sql = db_query("SELECT id, `order` FROM unit_resources 
 				WHERE `order` < '$current' AND unit_id = $id ORDER BY `order` DESC LIMIT 1");
-		list($prev_id, $prev) = mysql_fetch_row($sql);
-		db_query("UPDATE unit_resources SET `order` = $prev WHERE id = $res_id AND unit_id = $id");
-		db_query("UPDATE unit_resources SET `order` = $current WHERE id = $prev_id AND unit_id = $id");
+                if ($sql and mysql_num_rows($sql) > 0) {
+                        list($prev_id, $prev) = mysql_fetch_row($sql);
+                        db_query("UPDATE unit_resources SET `order` = $prev WHERE id = $res_id AND unit_id = $id");
+                        db_query("UPDATE unit_resources SET `order` = $current WHERE id = $prev_id AND unit_id = $id");
+                }
 	}
 }
 
