@@ -65,29 +65,31 @@ if (isset($_POST['submit_doc'])) {
 	insert_lp($id);
 } elseif (isset($_POST['submit_video'])) {
         insert_video($id);
+} elseif (isset($_POST['submit_exercise'])) {
+        insert_exercise($id);
 }
 
 $info = mysql_fetch_array($q);
 $navigation[] = array("url"=>"index.php?id=$id", "name"=> htmlspecialchars($info['title']));
 
 switch ($_GET['type']) {
-        case 'doc': $nameTools = $langInsertMyDocToolName;
+        case 'doc': $nameTools = "$langAdd $langInsertDoc";
                 include 'insert_doc.php';
                 display_docs();
                 break;
-        case 'exercise': $nameTools = $langInsertMyExerciseToolName;
+        case 'exercise': $nameTools = "$langAdd $langInsertExercise";
                 include 'insert_exercise.php';
                 display_exercises();
                 break;
-        case 'text': $nameTools = $langInsertText;
+        case 'text': $nameTools = "$langAdd $langInsertText";
                 include 'insert_text.php';
                 display_text();
                 break;
-	case 'lp': $nameTools = $langLearningPaths;
+	case 'lp': $nameTools = "$langAdd $langLearningPath1";
                 include 'insert_lp.php';
                 display_lp();
                 break;
-	case 'video': $nameTools = $langVideo;
+	case 'video': $nameTools = "$langAddV";
                 include 'insert_video.php';
                 display_video();
                 break;
@@ -168,6 +170,30 @@ function insert_video($id)
 		$row = mysql_fetch_array(db_query("SELECT * FROM $table
 			WHERE id = $res_id", $GLOBALS['currentCourseID']), MYSQL_ASSOC);
                 db_query("INSERT INTO unit_resources SET unit_id=$id, type='$table', title=" . quote($row['titre']) . ", comments=" . quote($row['description']) . ", visibility='v', `order`=$order, `date`=NOW(), res_id=$res_id", $GLOBALS['mysqlMainDb']);
+	}
+	header('Location: index.php?id=' . $id);
+	exit;
+}
+
+
+// insert exercise in database
+function insert_exercise($id)
+{
+	list($order) = mysql_fetch_array(db_query("SELECT MAX(`order`) FROM unit_resources WHERE unit_id=$id"));
+	
+	foreach ($_POST['exercise'] as $exercise_id) {
+		$order++;
+		$exercise = mysql_fetch_array(db_query("SELECT * FROM exercices
+			WHERE id =" . intval($exercise_id), $GLOBALS['currentCourseID']), MYSQL_ASSOC);
+		if ($exercise['active'] == '0') {
+			 $visibility = 'i';
+		} else {
+			$visibility = 'v';
+		}
+		db_query("INSERT INTO unit_resources SET unit_id=$id, type='exercise', title=" .
+			quote($exercise['titre']) . ", comments=" . quote($exercise['description']) .
+			", visibility='$visibility', `order`=$order, `date`=NOW(), res_id=$exercise[id]",
+			$GLOBALS['mysqlMainDb']); 
 	}
 	header('Location: index.php?id=' . $id);
 	exit;

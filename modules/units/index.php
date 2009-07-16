@@ -149,15 +149,15 @@ foreach (array('previous', 'next') as $i) {
 if ($is_adminOfCourse) {
         $tool_content .= "<div id='operations_container'><ul id='opslist'>" .
                         "<li><a href='insert.php?type=doc&amp;id=$id' " .
-                                "title='$langDocumentAsModule'>$langAdd: $langDocumentAsModuleLabel</a></li>" .
+                                "title='$langInsertDoc'>$langAdd: $langInsertDoc</a></li>" .
                         "<li><a href='insert.php?type=exercise&amp;id=$id' " .
-                                "title='$langExerciseAsModule'>$langExerciseAsModuleLabel</a></li>" .
+                                "title='$langInsertExercise'>$langInsertExercise</a></li>" .
                         "<li><a href='insert.php?type=text&amp;id=$id' " .
                                 "title='$langInsertText'>$langInsertText</a></li>" .
 			"<li><a href='insert.php?type=lp&amp;id=$id' " .
-                                "title='$langLearningPath'>$langLearningPath</a></li>" .
+                                "title='$langLearningPath1'>$langLearningPath1</a></li>" .
 			"<li><a href='insert.php?type=video&amp;id=$id' " .
-                                "title='$langVideo'>$langVideo</a></li>" .
+                                "title='$langInsertVideo'>$langInsertVideo</a></li>" .
                         "</ul></div>\n";
 }
 
@@ -253,6 +253,9 @@ function show_resource($info)
 		case 'video':
 		case 'videolinks':
                         $tool_content .= show_video($info['type'], $info['title'], $info['comments'], $info['id'], $info['res_id'], $info['visibility']);
+                        break;
+		case 'exercise':
+                        $tool_content .= show_exercise($info['title'], $info['comments'], $info['id'], $info['res_id'], $info['visibility']);
                         break;
                 default:
                         $tool_content .= $langUnknownResType;
@@ -389,6 +392,41 @@ function show_video($table, $title, $comments, $resource_id, $video_id, $visibil
 		($is_adminOfCourse? actions('video', $resource_id, $visibility): '') .
                 '</tr>' . $comment_box;
 }
+
+// display resource exercise
+function show_exercise($title, $comments, $resource_id, $exercise_id, $visibility)
+{
+	global $id, $tool_content, $mysqlMainDb, $urlServer, $is_adminOfCourse,
+               $langWasDeleted, $currentCourseID;
+
+	$comment_box = $class_vis = $imagelink = $link = '';
+        $title = htmlspecialchars($title);
+	$r = db_query("SELECT * FROM exercices WHERE id = $exercise_id",
+                      $currentCourseID);
+	if (mysql_num_rows($r) == 0) { // check if lp was deleted
+		if (!$is_adminOfCourse) {
+			return '';
+		} else {
+			$status = 'del';
+			$imagelink = "<img src='../../template/classic/img/delete.gif' />";
+			$link = "<span class='invisible'>$title ($langWasDeleted)</span>";
+		}
+	} else {
+                $exercise = mysql_fetch_array($r, MYSQL_ASSOC);
+		$link = "<a href='${urlServer}modules/exercice/exercice_submit.php?exerciseId=$exercise_id&amp;unit=$id'>$title</a>";
+		$imagelink = "<img src='../../template/classic/img/exercise_" .
+			($visibility == 'i'? 'off': 'on') . ".gif' />";
+	}
+	$class_vis = ($visibility == 'v')? '': ' class="invisible"';
+        if (!empty($comments)) {
+                $comment_box = "<tr><td>&nbsp;</td><td>$comments</td>";
+	}
+
+	return "<tr$class_vis><th>$imagelink</th><td>$link</td>" .
+		($is_adminOfCourse? actions('lp', $resource_id, $visibility): '') . 
+		'</tr>' . $comment_box;
+}
+
 
 // resource actions
 function actions($res_type, $resource_id, $status)

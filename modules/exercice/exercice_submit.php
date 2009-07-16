@@ -143,8 +143,9 @@ if (isset($formSent)) {
 		exit();
 	}
 } // end of submit
-
-$navigation[]=array("url" => "exercice.php","name" => $langExercices);
+if (!add_units_navigation()) {
+	$navigation[]=array("url" => "exercice.php","name" => $langExercices);
+}
 
 // if the object is not in the session
 if(!session_is_registered('objExercise')) {

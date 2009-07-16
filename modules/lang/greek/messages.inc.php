@@ -971,7 +971,6 @@ $langAmong = "μεταξύ";
 $langTake = "διάλεξε";
 $langAnswersNotDisp = "Απόκρυψη απαντήσεων μετά το τέλος της άσκησης";
 $langAnswersDisp = "Εμφάνιση απαντήσεων μετά το τέλος της άσκησης";
-
 // admin.php
 $langExerciseManagement="Διαχείριση Άσκησης";
 $langExerciseModify="Τροποποίηση Άσκησης";
@@ -3192,5 +3191,9 @@ $langCourseUnitAdded = "Η θεματική ενότητα προστέθηκε"
 $langCourseUnitModified = "Τα στοιχεία της ενότητας τροποποιήθηκαν";
 $langResourceCourseUnitDeleted = "Ο πόρος της θεματικής ενότητας διαγράφηκε";
 $langResourceUnitModified = "Τα στοιχεία του πόρου της ενότητας τροποποιήθηκαν";
-$langInsertText = "Κειμένου";
+$langInsertText = "κειμένου";
+$langInsertDoc = "εγγράφου";
+$langInsertExercise = "άσκησης";
+$langInsertVideo = "βίντεο";
 $langUnknownResType = "Πρόβλημα! Άγνωστος πόρος θεματικής ενότητας";
+$langNoExercises = "Δεν υπάρχουν ασκήσεις";

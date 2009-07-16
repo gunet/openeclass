@@ -77,8 +77,9 @@ elseif((!isset($_SESSION['path_id']) || $_SESSION['path_id'] == ""))
 $l = db_query("SELECT name FROM $TABLELEARNPATH WHERE learnPath_id = '".(int)$_SESSION['path_id']."'", $currentCourseID);
 $lpname = mysql_fetch_array($l);
 $nameTools = $lpname['name'];
-add_units_navigation();
-$navigation[] = array("url"=>"learningPathList.php", "name"=> $langLearningPaths);
+if (!add_units_navigation()) {
+	$navigation[] = array("url"=>"learningPathList.php", "name"=> $langLearningPaths);
+}
 
 
 // permissions (only for the viewmode, there is nothing to edit here )

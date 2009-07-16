@@ -1113,5 +1113,8 @@ function add_units_navigation()
                         list($unit_name) = mysql_fetch_row($q);
                         $navigation[] = array("url"=>"../units/index.php?id=$unit_id", "name"=> htmlspecialchars($unit_name));
                 }
-        }
+		return TRUE;
+	} else {
+		return FALSE;
+	}
 }
