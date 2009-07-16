@@ -33,20 +33,23 @@ function display_video()
 
         $table_started = false;
         $count = 0;
+        $tool_content .= "<table class='Documents'>";
+	$tool_content .= "<tr><th>$langVideoTitle</th><th>$langDescr</th><th>$langDate</th><th>$langChoice</th></tr>";
         foreach (array('video', 'videolinks') as $table) {
                 $result = db_query("SELECT * FROM $table", $currentCourseID);
                 $count += mysql_num_rows($result);
                 while ($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
                         if (!$table_started) {
-                                $tool_content .= "<form action='insert.php' method='post'><input type='hidden' name='id' value='$id' /><table class='Documents'><tr><th>$langVideoTitle</th><th>$langDescr</th><th>$langDate</th><th>$langChoice</th></tr>";
+                                $tool_content .= "<form action='insert.php' method='post'><input type='hidden' name='id' value='$id' />";
                         }
                         $videolink = "<a href='$row[url]'>" . htmlspecialchars($row['titre']) . '</a>';
-                        $tool_content .= '<tr><td>' . $videolink . '</td><td>' . htmlspecialchars($row['description']) . '</td><td>' . strtotime($row['date']) . "</td><td class='center'><input type='checkbox' name='video[]' value='$table:$row[id]' /></td></tr>\n";
+                        $tool_content .= '<tr><td>' . $videolink . '</td><td>' . htmlspecialchars($row['description']) . '</td><td>' . format_date(strtotime($row['date'])) . "</td><td class='center'><input type='checkbox' name='video[]' value='$table:$row[id]' /></td></tr>\n";
                 }
         }
         if ($count > 0) {
-                $tool_content .= "<tr><td colspan='4' class='right'><input type='submit' name='submit_video' value='$langAddModulesButton' /></td></tr></table></form>";
+                $tool_content .= "<tr><td colspan='4' class='right'><input type='submit' name='submit_video' value='$langAddModulesButton' /></td></tr></form>";
         } else {
                 $tool_content .= "<p class='alert1'>$langNoVideo</p>";
         }
+        $tool_content .= "</table>";
 }
