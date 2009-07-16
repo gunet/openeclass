@@ -132,11 +132,13 @@ if ($is_adminOfCourse) {
 		db_query("UPDATE course_units SET visibility = '$newvis' WHERE id = $id AND course_id = $cours_id");
 	} elseif (isset($_REQUEST['down'])) {
 		$id = intval($_REQUEST['down']); // change order down
-                move_order('course_units', 'id', $id, 'order', 'down');
+                move_order('course_units', 'id', $id, 'order', 'down',
+                           "course_id=$cours_id");
 
 	} elseif (isset($_REQUEST['up'])) { // change order up
 		$id = intval($_REQUEST['up']);
-                move_order('course_units', 'id', $id, 'order', 'up');
+                move_order('course_units', 'id', $id, 'order', 'up',
+                           "course_id=$cours_id");
 	}	
 }
 

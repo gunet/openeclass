@@ -91,12 +91,14 @@ _editor_lang = '$lang_editor';
 } elseif (isset($_REQUEST['down'])) { // change order down
 	$res_id = intval($_REQUEST['down']);
 	if ($id = check_admin_unit_resource($res_id)) {
-                move_order('unit_resources', 'id', $id, 'order', 'down');
+                move_order('unit_resources', 'id', $res_id, 'order', 'down',
+                           "unit_id=$id");
 	}
 } elseif (isset($_REQUEST['up'])) { // change order up
 	$res_id = intval($_REQUEST['up']);
 	if ($id = check_admin_unit_resource($res_id)) {
-                move_order('unit_resources', 'id', $id, 'order', 'up');
+                move_order('unit_resources', 'id', $res_id, 'order', 'up',
+                           "unit_id=$id");
 	}
 }
 
