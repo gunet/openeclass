@@ -26,3 +26,14 @@ table.unit-navigation {
 table img {
         vertical-align: middle;
 }
+
+
+.topic {
+	padding-left: 1em;
+}
+.topic img {
+	padding-right: 10px;
+}
+.forum {
+	background: rgb(237, 236, 223);
+}

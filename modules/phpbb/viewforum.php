@@ -62,7 +62,9 @@ $require_login = TRUE;
 $require_help = TRUE;
 $helpTopic = 'For';
 include '../../include/baseTheme.php';
-$navigation[]= array ("url"=>"index.php", "name"=> $l_forums);
+if (!add_units_navigation()) {
+	$navigation[]= array ("url"=>"index.php", "name"=> $l_forums);
+}
 
 $tool_content = "";
 $paging = true;

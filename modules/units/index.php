@@ -158,6 +158,8 @@ if ($is_adminOfCourse) {
                                 "title='$langLearningPath1'>$langLearningPath1</a></li>" .
 			"<li><a href='insert.php?type=video&amp;id=$id' " .
                                 "title='$langInsertVideo'>$langInsertVideo</a></li>" .
+			"<li><a href='insert.php?type=forum&amp;id=$id' " .
+                                "title='$langAddForCat'>$langInsertForum</a></li>" .
                         "</ul></div>\n";
 }
 
@@ -257,6 +259,10 @@ function show_resource($info)
 		case 'exercise':
                         $tool_content .= show_exercise($info['title'], $info['comments'], $info['id'], $info['res_id'], $info['visibility']);
                         break;
+		case 'topic':
+		case 'forum':
+                        $tool_content .= show_forum($info['type'], $info['title'], $info['comments'], $info['id'], $info['res_id'], $info['visibility']);
+                        break;
                 default:
                         $tool_content .= $langUnknownResType;
         }
@@ -298,7 +304,7 @@ function show_doc($title, $comments, $resource_id, $file_id)
                 $comment = "";
         }
         return "<tr$class_vis><th><img src='$image' /></th><td>$link</td>" .
-                ($is_adminOfCourse? actions('doc', $resource_id, $status): '') . 
+                actions('doc', $resource_id, $status) .
                 '</tr>' . $comment;
 }
 
@@ -317,7 +323,7 @@ function show_text($title, $comments, $resource_id, $visibility)
                 $comment_box = "";
         }
         $tool_content .= "<tr$class_vis><th>$imagelink</th><td>$title</td>" .
-		($is_adminOfCourse? actions('text', $resource_id, $visibility): '') .
+		actions('text', $resource_id, $visibility) .
                 '</tr>' . $comment_box;
 }
 
@@ -355,7 +361,7 @@ function show_lp($title, $comments, $resource_id, $lp_id)
         $class_vis = ($status == 'i' or $status == 'del')?
                 ' class="invisible"': '';
 	return "<tr$class_vis><th>$imagelink</th><td>$link</td>" .
-		($is_adminOfCourse? actions('lp', $resource_id, $status): '') . 
+		actions('lp', $resource_id, $status) .
 		'</tr>' . $comment_box;
 }
 
@@ -389,7 +395,7 @@ function show_video($table, $title, $comments, $resource_id, $video_id, $visibil
                 $comment_box = "";
         }
         $tool_content .= "<tr$class_vis><th>$imagelink</th><td>$videolink</td>" .
-		($is_adminOfCourse? actions('video', $resource_id, $visibility): '') .
+		actions('video', $resource_id, $visibility) .
                 '</tr>' . $comment_box;
 }
 
@@ -423,17 +429,47 @@ function show_exercise($title, $comments, $resource_id, $exercise_id, $visibilit
 	}
 
 	return "<tr$class_vis><th>$imagelink</th><td>$link</td>" .
-		($is_adminOfCourse? actions('lp', $resource_id, $visibility): '') . 
+		actions('lp', $resource_id, $visibility) .
 		'</tr>' . $comment_box;
 }
 
 
+// display resource forum
+function show_forum($type, $title, $comments, $resource_id, $ft_id, $visibility)
+{
+	global $id, $tool_content, $mysqlMainDb, $urlServer, $is_adminOfCourse, $currentCourseID;
+	$comment_box = '';
+	$class_vis = ($visibility == 'i')? ' class="invisible"': '';
+        $title = htmlspecialchars($title);
+	if ($type == 'forum') {
+		$link = "<a href='${urlServer}modules/phpbb/viewforum.php?forum=$ft_id&amp;unit=$id'>$title</a>";
+	} else {
+		$r = db_query("SELECT forum_id FROM topics WHERE topic_id = $ft_id", $currentCourseID);
+		list($forum_id) = mysql_fetch_array($r);
+		$link = "<a href='${urlServer}modules/phpbb/viewtopic.php?topic=$ft_id&amp;forum=$forum_id&amp;unit=$id'>$title</a>";
+	}
+
+	$imagelink = "<img src='../../template/classic/img/forum_" .
+			($visibility == 'i'? 'off': 'on') . ".gif' />";
+        if (!empty($comments)) {
+                $comment_box = "<tr><td>&nbsp;</td><td>$comments</td>";
+	}
+
+	return "<tr$class_vis><th>$imagelink</th><td>$link</td>" .
+		actions('forum', $resource_id, $visibility) .
+		'</tr>' . $comment_box;
+}
+
 // resource actions
 function actions($res_type, $resource_id, $status)
 {
-        global $langEdit, $langDelete, $langVisibility, $langDown, $langUp, $mysqlMainDb;
+        global $is_adminOfCourse, $langEdit, $langDelete, $langVisibility, $langDown, $langUp, $mysqlMainDb;
 
         static $first = true;
+
+	if (!$is_adminOfCourse) {
+		return '';
+	}
 
         $icon_vis = ($status == 'v')? 'visible.gif': 'invisible.gif';
 
@@ -449,7 +485,7 @@ function actions($res_type, $resource_id, $status)
                                         "title='$langDelete'></img></a></td>";
 	 
 	if ($status != 'del') {
-		if ($res_type == 'text' or $res_type == 'video') { 
+		if ($res_type == 'text' or $res_type == 'video' or $res_type == 'forum' or $res_type == 'topic') { 
 			$content .= "<td><a href='$_SERVER[PHP_SELF]?vis=$resource_id'>" .
                                         "<img src='../../template/classic/img/$icon_vis' " .
                                         "title='$langVisibility'></img></a></td>";

@@ -67,7 +67,10 @@ if (isset($_POST['submit_doc'])) {
         insert_video($id);
 } elseif (isset($_POST['submit_exercise'])) {
         insert_exercise($id);
+} elseif (isset($_POST['submit_forum'])) {
+        insert_forum($id);
 }
+
 
 $info = mysql_fetch_array($q);
 $navigation[] = array("url"=>"index.php?id=$id", "name"=> htmlspecialchars($info['title']));
@@ -92,6 +95,10 @@ switch ($_GET['type']) {
 	case 'video': $nameTools = "$langAddV";
                 include 'insert_video.php';
                 display_video();
+                break;
+	case 'forum': $nameTools = "$langAdd $langInsertForum";
+                include 'insert_forum.php';
+                display_forum();
                 break;
         default: break;
 }
@@ -194,6 +201,32 @@ function insert_exercise($id)
 			quote($exercise['titre']) . ", comments=" . quote($exercise['description']) .
 			", visibility='$visibility', `order`=$order, `date`=NOW(), res_id=$exercise[id]",
 			$GLOBALS['mysqlMainDb']); 
+	}
+	header('Location: index.php?id=' . $id);
+	exit;
+}
+
+// insert forum in database
+function insert_forum($id)
+{
+	list($order) = mysql_fetch_array(db_query("SELECT MAX(`order`) FROM unit_resources WHERE unit_id=$id"));
+	foreach ($_POST['forum'] as $for_id) {
+		$order++;
+		list($forum_id, $topic_id) = explode(':', $for_id);
+		if (isset($topic_id) and isset($forum_id)) {
+			$topic = mysql_fetch_array(db_query("SELECT * FROM topics
+				WHERE topic_id =" . intval($topic_id) ." AND forum_id =" . intval($forum_id), $GLOBALS['currentCourseID']), MYSQL_ASSOC);
+			db_query("INSERT INTO unit_resources SET unit_id=$id, type='topic', title=" .
+				quote($topic['topic_title']) .", visibility='v', `order`=$order, `date`=NOW(), res_id=$topic[topic_id]",
+			$GLOBALS['mysqlMainDb']);		
+		} else {
+			$forum = mysql_fetch_array(db_query("SELECT * FROM forums
+				WHERE forum_id =" . intval($forum_id), $GLOBALS['currentCourseID']), MYSQL_ASSOC);
+			db_query("INSERT INTO unit_resources SET unit_id=$id, type='forum', title=" .
+				quote($forum['forum_name']) . ", comments=" . quote($forum['forum_desc']) .
+				", visibility='v', `order`=$order, `date`=NOW(), res_id=$forum[forum_id]",
+				$GLOBALS['mysqlMainDb']);
+		} 
 	}
 	header('Location: index.php?id=' . $id);
 	exit;

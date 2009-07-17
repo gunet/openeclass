@@ -118,8 +118,10 @@ $myrow = mysql_fetch_array($result);
 $topic_subject = own_stripslashes($myrow["topic_title"]);
 $lock_state = $myrow["topic_status"];
 
-$navigation[]= array ("url"=>"index.php", "name"=> $l_forums);
-$navigation[]= array ("url"=>"viewforum.php?forum=$forum", "name"=> $forum_name);
+if (!add_units_navigation()) {
+	$navigation[]= array ("url"=>"index.php", "name"=> $l_forums);
+	$navigation[]= array ("url"=>"viewforum.php?forum=$forum", "name"=> $forum_name);
+}
 $nameTools = $topic_subject;
 
 	$tool_content .= "
