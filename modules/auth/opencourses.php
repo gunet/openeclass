@@ -62,9 +62,9 @@ $tool_content = "";
 /*
 */
 $icons = array(
- 2 => "<img src=\"../../template/classic/img/OpenCourse.gif\"   alt=\"".$m['legopen']."\" title=\"".$m['legopen']."\" width=\"16\" height=\"16\">",
- 1 => "<img src=\"../../template/classic/img/Registration.gif\" alt=\"".$m['legrestricted']."\" title=\"".$m['legrestricted']."\" width=\"16\" height=\"16\">",
- 0 => "<img src=\"../../template/classic/img/ClosedCourse.gif\" alt=\"".$m['legclosed']."\" title=\"".$m['legclosed']."\" width=\"16\" height=\"16\">"
+ 2 => "<img src='../../template/classic/img/OpenCourse.gif'   alt='".$m['legopen']."' title='".$m['legopen']."' width='16' height='16'>",
+ 1 => "<img src='../../template/classic/img/Registration.gif' alt='".$m['legrestricted']."' title='".$m['legrestricted']."' width='16' height='16'>",
+ 0 => "<img src='../../template/classic/img/ClosedCourse.gif' alt='".$m['legclosed']."' title='".$m['legclosed']."' width='16' height='16'>"
 );
 
 $tool_content .= "
@@ -73,7 +73,7 @@ $tool_content .= "
         <th><a name='top'>&nbsp;</a>$m[department]:&nbsp;<b>$fac</b></th>
         <td><div align='right'>";
 // get the different course types available for this faculte
-$typesresult = mysql_query("SELECT DISTINCT cours.type types FROM cours WHERE cours.faculte = '$fac' ORDER BY cours.type");
+$typesresult = db_query("SELECT DISTINCT cours.type types FROM cours WHERE cours.faculteid = $fc ORDER BY cours.type");
 
 // count the number of different types
 $numoftypes = mysql_num_rows($typesresult);
@@ -141,15 +141,15 @@ $tool_content .= "\n    <br />\n<table width=99%><tr><td>";
 
      $tool_content .= "
     <script type='text/javascript' src='sorttable.js'></script>
-    <table width=\"99%\" style=\"border: 1px solid #edecdf;\">
+    <table width='99%' style='border: 1px solid #edecdf;'>
     <tr>
         <td>
-        <table width=100% class=\"sortable\" id=\"t1\">
+        <table width=100% class='sortable' id='t1'>
         <thead>
         <tr>
-            <th class='left' style=\"border: 1px solid #E1E0CC;\" colspan=\"2\">$m[lessoncode]</th>
-            <th class='left' style=\"border: 1px solid #E1E0CC;\" width='200'>$m[professor]</th>
-            <th style=\"border: 1px solid #E1E0CC;\" width='30'>$langType</th>
+            <th class='left' style='border: 1px solid #E1E0CC;' colspan='2'>$m[lessoncode]</th>
+            <th class='left' style='border: 1px solid #E1E0CC;' width='200'>$m[professor]</th>
+            <th style='border: 1px solid #E1E0CC;' width='30'>$langType</th>
         </tr>
         </thead>
         <tbody>";
@@ -157,16 +157,16 @@ $tool_content .= "\n    <br />\n<table width=99%><tr><td>";
 	while ($mycours = mysql_fetch_array($result)) {
 		if ($mycours['visible'] == 2) {
 			$codelink = "<a href='../../courses/$mycours[k]/'>$mycours[i]</a>&nbsp;<small>
-			<font style=\"color: #a33033;\">(".$mycours['c'].")</font></small>";
+			<font style='color: #a33033;'>(".$mycours['c'].")</font></small>";
 		} else {
 			$codelink = "<font color='#CAC3B5'>$mycours[i]&nbsp;<small>(".$mycours['c'].")</small></font>";
 		}
 			if ($k%2==0) {
 				$tool_content .= "\n        <tr>";
 			} else {
-				$tool_content .= "\n        <tr class=\"odd\">";
+				$tool_content .= "\n        <tr class='odd'>";
 			}
-		$tool_content .= "\n            <td width=\"1%\"><img style='border:0px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'></td>";
+		$tool_content .= "\n            <td width='1%'><img style='border:0px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'></td>";
 		$tool_content .= "\n            <td>".$codelink."</td>";
 		$tool_content .= "\n            <td><small>$mycours[t]</small></td>";
 		$tool_content .= "\n            <td align='center'>";
