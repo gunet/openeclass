@@ -212,14 +212,16 @@ function insert_forum($id)
 	list($order) = mysql_fetch_array(db_query("SELECT MAX(`order`) FROM unit_resources WHERE unit_id=$id"));
 	foreach ($_POST['forum'] as $for_id) {
 		$order++;
-		list($forum_id, $topic_id) = explode(':', $for_id);
-		if (isset($topic_id) and isset($forum_id)) {
+		$ids = explode(':', $for_id);
+		if (count($ids) == 2) {
+                        list($forum_id, $topic_id) = $ids;
 			$topic = mysql_fetch_array(db_query("SELECT * FROM topics
 				WHERE topic_id =" . intval($topic_id) ." AND forum_id =" . intval($forum_id), $GLOBALS['currentCourseID']), MYSQL_ASSOC);
 			db_query("INSERT INTO unit_resources SET unit_id=$id, type='topic', title=" .
 				quote($topic['topic_title']) .", visibility='v', `order`=$order, `date`=NOW(), res_id=$topic[topic_id]",
 			$GLOBALS['mysqlMainDb']);		
 		} else {
+                        $forum_id = $ids[0];
 			$forum = mysql_fetch_array(db_query("SELECT * FROM forums
 				WHERE forum_id =" . intval($forum_id), $GLOBALS['currentCourseID']), MYSQL_ASSOC);
 			db_query("INSERT INTO unit_resources SET unit_id=$id, type='forum', title=" .
