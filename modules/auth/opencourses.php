@@ -192,5 +192,4 @@ $tool_content .= "\n    <br />\n<table width=99%><tr><td>";
 
 $tool_content .= "\n    <br>";
 
-draw($tool_content, 0, 'auth');
-?>
+draw($tool_content, (isset($uid) and $uid)? 1: 0, 'auth');
