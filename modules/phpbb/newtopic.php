@@ -134,9 +134,7 @@ if (isset($submit) && $submit) {
 	$message = str_replace("</w>", "</font color></s>", $message);
 	$message = str_replace("<r>", "<font color=#0000FF>", $message);
 	$message = str_replace("</r>", "</font color>", $message);
-	$message = addslashes($message);
 	$subject = strip_tags($subject);
-	$subject = addslashes($subject);
 	$poster_ip = $REMOTE_ADDR;
 	$time = date("Y-m-d H:i");
 	// ADDED BY Thomas 20.2.2002
@@ -148,7 +146,7 @@ if (isset($submit) && $submit) {
 		$message .= "\n[addsig]";
 	}
 	$sql = "INSERT INTO topics (topic_title, topic_poster, forum_id, topic_time, topic_notify, nom, prenom)
-			VALUES ('$subject', '" . $userdata["user_id"] . "', '$forum', '$time', 1, '$nom', '$prenom')";
+			VALUES (" . autoquote($subject) . ", '" . $userdata["user_id"] . "', '$forum', '$time', 1, '$nom', '$prenom')";
 	if (!$result = db_query($sql, $currentCourseID)) {
 		$tool_content .= $langErrorEnterTopic;
 		draw($tool_content, 2);
@@ -166,7 +164,7 @@ if (isset($submit) && $submit) {
 		$post_id = mysql_insert_id();
 		if ($post_id) {
 			$sql = "INSERT INTO posts_text (post_id, post_text)
-					VALUES ($post_id, '$message')";
+					VALUES ($post_id, " . autoquote($message) . ")";
 			if (!$result = db_query($sql, $currentCourseID)) {
 				$tool_content .= $langErrorEnterTextPost;
 				draw($tool_content, 2);
@@ -198,12 +196,12 @@ if (isset($submit) && $submit) {
 	$forward = 1;
 
 	$tool_content .= "
-    <table width=\"99%\"><tbody>
+    <table width='99%'><tbody>
     <tr>
-      <td class=\"success\">
+      <td class='success'>
         <p><b>$l_stored</b></p>
-        <p>$l_click <a href=\"viewtopic.php?topic=$topic_id&forum=$forum&$total_topic\">$l_here</a>$l_viewmsg</p>
-        <p>$l_click <a href=\"viewforum.php?forum=$forum_id&total_forum\">$l_here</a> $l_returntopic</p>
+        <p>$l_click <a href='viewtopic.php?topic=$topic_id&amp;forum=$forum&amp;$total_topic'>$l_here</a>$l_viewmsg</p>
+        <p>$l_click <a href='viewforum.php?forum=$forum_id&amp;total_forum'>$l_here</a> $l_returntopic</p>
     </td>
     </tr>
     </tbody>
@@ -217,33 +215,33 @@ if (isset($submit) && $submit) {
       $langLoginBeforePost1
       <br>
       $langLoginBeforePost2
-      <a href=../../index.php>$langLoginBeforePost3.</a>
+      <a href='../../index.php'>$langLoginBeforePost3.</a>
     </center>";
 		draw($tool_content, 0, 'phpbb');
 		exit();
 	}
 	// END ADDED BY CLAROLINE exclude visitors unidentified
 	$tool_content .= "
-    <FORM ACTION=\"$PHP_SELF\" METHOD=\"POST\">
-    <table class=\"FormData\" width=\"99%\">
+    <FORM ACTION='$PHP_SELF' METHOD='POST'>
+    <table class='FormData' width='99%'>
     <tbody>
     <tr>
-      <th width=\"220\">&nbsp;</th>
+      <th width='220'>&nbsp;</th>
       <TD><b>$langTopicData</b></TD>
     </tr>
     <tr>
-      <th class=\"left\">$l_subject:</th>
-      <TD><INPUT TYPE=\"TEXT\" NAME=\"subject\" SIZE=\"53\" MAXLENGTH=\"100\" class=\"FormData_InputText\"></TD>
+      <th class='left'>$l_subject:</th>
+      <TD><INPUT TYPE='TEXT' NAME='subject' SIZE='53' MAXLENGTH='100' class='FormData_InputText'></TD>
     </TR>
     <TR>
-      <th class=\"left\">$l_body:</th>
-      <TD><TEXTAREA NAME=\"message\" ROWS=14 COLS=50 WRAP=\"VIRTUAL\" class=\"FormData_InputText\"></TEXTAREA></TD>
+      <th class='left'>$l_body:</th>
+      <TD><TEXTAREA NAME='message' ROWS=14 COLS=50 WRAP='VIRTUAL' class='FormData_InputText'></TEXTAREA></TD>
     </TR>
     <TR>
       <th>&nbsp;</th>
-      <TD><INPUT TYPE=\"HIDDEN\" NAME=\"forum\" VALUE=\"$forum\">
-          <INPUT TYPE=\"SUBMIT\" NAME=\"submit\" VALUE=\"$l_submit\">&nbsp;
-          <INPUT TYPE=\"SUBMIT\" NAME=\"cancel\" VALUE=\"$l_cancelpost\">
+      <TD><INPUT TYPE='HIDDEN' NAME='forum' VALUE='$forum'>
+          <INPUT TYPE='SUBMIT' NAME='submit' VALUE='$l_submit'>&nbsp;
+          <INPUT TYPE='SUBMIT' NAME='cancel' VALUE='$l_cancelpost'>
       </TD>
     </TR>
     </tbody>

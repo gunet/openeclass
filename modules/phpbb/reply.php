@@ -47,10 +47,6 @@
 	(viewforum, viewtopic, post_reply, newtopic); the time cost is
 	enormous for both core phpBB code upgrades and migration from an
 	existing (phpBB-based) to a new eclass forum :-(
-
-    @Comments:
-
-    @todo:
 ==============================================================================
 */
 
@@ -178,7 +174,6 @@ if (isset($submit) && $submit) {
 	$message = str_replace("</w>", "</font color></s>", $message);
 	$message = str_replace("<r>", "<font color=#0000FF>", $message);
 	$message = str_replace("</r>", "</font color>", $message);
-	$message = addslashes($message);
 	$time = date("Y-m-d H:i");
 	$nom = addslashes($nom);
 	$prenom = addslashes($prenom);
@@ -196,7 +191,8 @@ if (isset($submit) && $submit) {
 	}
 	$this_post = mysql_insert_id();
 	if ($this_post) {
-		$sql = "INSERT INTO posts_text (post_id, post_text) VALUES ($this_post, '$message')";
+		$sql = "INSERT INTO posts_text (post_id, post_text) VALUES ($this_post, " .
+                        autoquote($message) . ")";
 		if (!$result = db_query($sql, $currentCourseID)) {
 			$tool_content .= $langUnableEnterText;
 			draw($tool_content, 2, 'phpbb');

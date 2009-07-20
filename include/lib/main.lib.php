@@ -1120,12 +1120,11 @@ function add_units_navigation()
 }
 
 // Cut a string to be no more than $maxlen characters long, appending
-// ellipsis (...) if so
-function ellipsize($string, $maxlen)
+// the $postfix (default: ellipsis "...") if so
+function ellipsize($string, $maxlen, $postfix = '...')
 {
-        $maxlen -= 3;
         if (mb_strlen($string, 'UTF-8') > $maxlen) {
-                return (mb_substr($string, 0, $maxlen, 'UTF-8')) . '...';
+                return (mb_substr($string, 0, $maxlen, 'UTF-8')) . $postfix;
         } else {
                 return $string;
         }
