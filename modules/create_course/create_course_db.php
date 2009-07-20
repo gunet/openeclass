@@ -499,6 +499,18 @@ mysql_query("INSERT INTO accueil VALUES (
                 '',
                 'MODULE_ID_USAGE')");
 
+// The Units subsystem is special - neither visible, nor invisible, it doesn't
+// appear in the menu, so it gets visibility = 2
+$sbsystems[27] = 2;
+mysql_query("INSERT INTO accueil VALUES (
+                '27',
+                '".$langCourseUnits."',
+                '../../modules/units/index.php',
+                'description',
+                '".$sbsystems[27]."',
+                '1',
+                '',
+                'MODULE_ID_UNITS')");
 
 
 #################################### USAGE ################################

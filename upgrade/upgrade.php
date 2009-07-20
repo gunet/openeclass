@@ -37,6 +37,17 @@ include 'upgrade_functions.php';
 
 set_time_limit(0);
 
+// We need some messages from all languages to upgrade course accueil table
+foreach ($native_language_names as $code => $name) {
+        $templang = langcode_to_name($code);
+        include("$webDir/modules/lang/$templang/common.inc.php");
+        include("$webDir/modules/lang/$templang/messages.inc.php");
+        $global_messages['langCourseUnits'][$templang] = $langCourseUnits;
+}
+include("$webDir/modules/lang/$language/common.inc.php");
+include("$webDir/modules/lang/$language/messages.inc.php");
+
+
 $nameTools = $langUpgrade;
 $tool_content = "";
 
@@ -285,7 +296,7 @@ if (!isset($submit2)) {
                         db_query('SET NAMES utf8');
                	        upgrade_course_2_1_3($code[0], "($i / $total)");
                 } elseif ($oldversion < '2.1.4') {
-               	        upgrade_course_2_1_4($code[0], "($i / $total)");
+               	        upgrade_course_2_1_4($code[0], "($i / $total)", $lang);
 		}
                 echo "</p>\n";
                 $i++;

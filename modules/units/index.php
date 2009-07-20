@@ -30,7 +30,13 @@ Units display module
 
 $require_current_course = true;
 include '../../include/baseTheme.php';
-include "../../include/lib/fileDisplayLib.inc.php";
+include '../../include/lib/fileDisplayLib.inc.php';
+include '../../include/action.php';
+
+$action = new action();
+$action->record('MODULE_ID_UNITS');
+mysql_select_db($mysqlMainDb);
+
 if (isset($_REQUEST['id'])) {
 	$id = intval($_REQUEST['id']);
 }

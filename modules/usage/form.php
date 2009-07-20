@@ -51,7 +51,7 @@ $end_cal = $jscalendar->make_input_field(
                  'value' => $u_date_end));
 
 
-$qry = "SELECT id, rubrique AS name FROM accueil WHERE define_var != '' AND visible = 1 ORDER BY name ";
+$qry = "SELECT id, rubrique AS name FROM accueil WHERE define_var != '' AND visible <> 0 ORDER BY name ";
 $mod_opts = '<option value="-1">'.$langAllModules."</option>\n";
 $result = db_query($qry, $currentCourseID);
 while ($row = mysql_fetch_assoc($result)) {

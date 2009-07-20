@@ -261,9 +261,10 @@ function encode_dropbox_documents($code, $id, $filename, $title) {
 //---------------------------------------------
 // Upgrade course database
 //---------------------------------------------
-function upgrade_course_2_1_4($code, $extramessage = '')
+function upgrade_course_2_1_4($code, $extramessage = '', $lang)
 {
 	global $langUpgCourse;
+
 	mysql_select_db($code);
 	echo "<hr><p>$langUpgCourse <b>$code</b> (2.1.4) $extramessage<br />";
 	flush();
@@ -278,6 +279,17 @@ function upgrade_course_2_1_4($code, $extramessage = '')
 	// not needed anymore
 	echo delete_table('mc_scoring');
 
+        if (accueil_tool_missing('MODULE_ID_UNITS')) {
+                mysql_query("INSERT INTO accueil VALUES (
+                                '27',
+                                '". $global_messages['langCourseUnits'][$lang] ."',
+                                '../../modules/units/index.php',
+                                'description',
+                                '2',
+                                '1',
+                                '',
+                                'MODULE_ID_UNITS')");
+        }
 }
 
 
