@@ -148,8 +148,8 @@ foreach (array('previous', 'next') as $i) {
 }
 if ($is_adminOfCourse) {
         $tool_content .= "<div id='operations_container'><ul id='opslist'>" .
-                        "<li><a href='insert.php?type=doc&amp;id=$id' " .
-                                "title='$langInsertDoc'>$langAdd: $langInsertDoc</a></li>" .
+                        "<li>$langAdd: <a href='insert.php?type=doc&amp;id=$id' " .
+                                "title='$langInsertDoc'>$langInsertDoc</a></li>" .
                         "<li><a href='insert.php?type=exercise&amp;id=$id' " .
                                 "title='$langInsertExercise'>$langInsertExercise</a></li>" .
                         "<li><a href='insert.php?type=text&amp;id=$id' " .
@@ -179,7 +179,8 @@ show_resources($id);
 
 $tool_content .= '<form class="unit-select" name="unitselect" action="' .
                  $urlServer . 'modules/units/" method="get">' .
-                 '<select name="id" onChange="document.unitselect.submit();">';
+                 '<table align="left"><tbody><tr><th class="left">'.$langCourseUnits.':&nbsp;</th><td>'.
+                 '<select class="auth_input" name="id" onChange="document.unitselect.submit();">';
 $q = db_query("SELECT id, title FROM course_units
                WHERE course_id = $cours_id
                      $visibility_check
@@ -190,7 +191,7 @@ while ($info = mysql_fetch_array($q)) {
                          htmlspecialchars($info['title']) .
                          '</option>';
 }
-$tool_content .= '</select></form>';
+$tool_content .= '</select></td></tr></tbody></table></form>';
 
 draw($tool_content, 2, 'units', $head_content);
 
