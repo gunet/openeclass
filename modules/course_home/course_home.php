@@ -145,14 +145,14 @@ if ($is_adminOfCourse) {
 // display course units header
 if (!is_null($maxorder) or $is_adminOfCourse) {
         $cunits_content .= "\n      <div class='course_info'>".
-        $cunits_content .= "\n\n      <table class='FormData' width='99%'>\n      <thead>";
-        $cunits_content .= "\n      <tr>\n        <td><h4>$langCourseUnits ";
+        $cunits_content .= "\n\n      <table class='resources' width='99%'>\n      <thead>";
+        $cunits_content .= "\n      <tr>\n        <td><h3>$langCourseUnits ";
 }
 // add course units
 if ($is_adminOfCourse) {
 	$cunits_content .= ": <a href='{$urlServer}modules/units/info.php'>$langAddUnit</a>";
 }
-        $cunits_content .= "</h4>";
+        $cunits_content .= "</h3>";
         $cunits_content .= "</td>\n      </tr>\n      </thead>\n      </table>\n";
 if ($is_adminOfCourse) {
         list($last_id) = mysql_fetch_row(db_query("SELECT id FROM course_units
@@ -174,37 +174,42 @@ while ($cu = mysql_fetch_array($sql)) {
                 $vis = $cu['visibility'];
                 $icon_vis = ($vis == 'v')? 'visible.gif': 'invisible.gif';
                 $class_vis = ($vis == 'i')? ' class="invisible"': '';
-                $cunits_content .= "\n      <table class='FormData' width='99%'>\n      <thead>\n      <tr>\n        <th width='1' align='right'>$count_index.</th>";
-                $cunits_content .= "\n        <td><a href='${urlServer}modules/units/?id=$cu[id]'$class_vis>$cu[title]</a></td>";
+                $cunits_content .= "\n      <table ";
+                if ($is_adminOfCourse) {
+                    $cunits_content .= "class='FormData'";
+                } else {
+                    $cunits_content .= "class='resources'";
+                }
+                $cunits_content .= " width='99%'>\n      <thead>\n      <tr>\n        <th width='4%' class='right'>$count_index.</th>";
+                $cunits_content .= "\n        <td width='81%'><a href='${urlServer}modules/units/?id=$cu[id]'$class_vis>$cu[title]</a></td>";
                 if ($is_adminOfCourse) { // display actions
-                        $cunits_content .= "\n        <th width='5'>".
+                        $cunits_content .= "\n        <th width='3%'>".
                                 "<a href='../../modules/units/info.php?edit=$cu[id]'>" .
                                 "<img src='../../template/classic/img/edit.gif' title='$langEdit' /></a></th>" .
-                                "\n        <th width='5'><a href='$_SERVER[PHP_SELF]?del=$cu[id]' " .
+                                "\n        <th width='3%'><a href='$_SERVER[PHP_SELF]?del=$cu[id]' " .
                                 "onClick=\"return confirmation();\">" .
                                 "<img src='../../template/classic/img/delete.gif' " .
                                 "title='$langDelete'></img></a></th>" .
-                                "\n        <th width='5'><a href='$_SERVER[PHP_SELF]?vis=$cu[id]'>" .
+                                "\n        <th width='3%'><a href='$_SERVER[PHP_SELF]?vis=$cu[id]'>" .
                                 "<img src='../../template/classic/img/$icon_vis' " .
                                 "title='$langVisibility'></img></a></th>";
                         if ($cu['id'] != $last_id) {
-                                $cunits_content .= "\n        <th width='5'><a href='$_SERVER[PHP_SELF]?down=$cu[id]'>" .
+                                $cunits_content .= "\n        <th width='3%'><a href='$_SERVER[PHP_SELF]?down=$cu[id]'>" .
                                 "<img src='../../template/classic/img/down.gif' title='$langDown'></img></a></th>";
                         } else {
-                                $cunits_content .= "\n        <th width='15'>&nbsp;</th>";
+                                $cunits_content .= "\n        <th width='3%'>&nbsp;</th>";
                         }
                         if (!$first) {
-                                $cunits_content .= "\n        <th width='5'><a href='$_SERVER[PHP_SELF]?up=$cu[id]'><img src='../../template/classic/img/up.gif' title='$langUp'></img></a></th>";
+                                $cunits_content .= "\n        <th width='3%'><a href='$_SERVER[PHP_SELF]?up=$cu[id]'><img src='../../template/classic/img/up.gif' title='$langUp'></img></a></th>";
                         } else {
-                                $cunits_content .= "\n        <th width='15'>&nbsp;</th>";
+                                $cunits_content .= "\n        <th width='3%'>&nbsp;</th>";
                         }
-                        //$cunits_content .= "\n      </tr>\n      </table>";
                 }
-                $cunits_content .= "\n      <tr>\n        <td ";
+                $cunits_content .= "\n      <tr>\n        \n<td width='4%'>&nbsp;</td>\n        <td width='96%' ";
                 if ($is_adminOfCourse) {
-                    $cunits_content .= "colspan='7'>";
+                    $cunits_content .= "colspan='6'>";
                 } else {
-                    $cunits_content .= "colspan='3'>";
+                    $cunits_content .= ">";
                 } 
                 $cunits_content .= "$cu[comments]";
                 if (strpos('<', $cu['comments']) === false) {
@@ -303,7 +308,7 @@ $tool_content .= "
 
    </div>
 
-<table width='99%'>
+<table width='99%' class='resources'>
   <tr>
       <td>$cunits_content</td>
    </tr>
