@@ -72,7 +72,7 @@ _editor_lang = '$lang_editor';
 }  elseif(isset($_REQUEST['edit_res_submit'])) { // edit resource
 	$res_id = intval($_REQUEST['resource_id']);	
 	if ($id = check_admin_unit_resource($res_id)) {
-		$restitle = autoquote(trim($_REQUEST['restitle']));
+		@$restitle = autoquote(trim($_REQUEST['restitle']));
                 $rescomments = autoquote(trim($_REQUEST['rescomments']));
 		$result = db_query("UPDATE unit_resources SET
 				title = $restitle,
@@ -261,7 +261,7 @@ function show_resource($info)
                         $tool_content .= show_doc($info['title'], $info['comments'], $info['id'], $info['res_id']);
                         break;
 		case 'text':
-                        $tool_content .= show_text($info['title'], $info['comments'], $info['id'], $info['visibility']);
+                        $tool_content .= show_text($info['comments'], $info['id'], $info['visibility']);
                         break;
 		case 'lp':
                         $tool_content .= show_lp($info['title'], $info['comments'], $info['id'], $info['res_id']);
@@ -324,21 +324,16 @@ function show_doc($title, $comments, $resource_id, $file_id)
 
 
 // display resource text
-function show_text($title, $comments, $resource_id, $visibility)
+function show_text($comments, $resource_id, $visibility)
 {
         global $is_adminOfCourse, $mysqlMainDb, $tool_content;
 
         $class_vis = ($visibility == 'i')? ' class="invisible"': '';
         $imagelink = "<img src='../../template/classic/img/description_" .
 			($visibility == 'i'? 'off': 'on') . ".gif' />";
-        if (!empty($comments)) {
-                $comment_box = "<tr$class_vis><td>&nbsp;</td><td>$comments</td>";
-        } else {
-                $comment_box = "";
-        }
-        $tool_content .= "<tr$class_vis><th>$imagelink</th><td>$title</td>" .
+        $tool_content .= "<tr$class_vis><th>$imagelink</th><td>$comments</td>" .
 		actions('text', $resource_id, $visibility) .
-                '</tr>' . $comment_box;
+                "</tr>";
 }
 
 // display resource learning path
@@ -529,21 +524,27 @@ function actions($res_type, $resource_id, $status)
 // edit resource
 function edit_res($resource_id) 
 {
-	global $tool_content, $id, $urlServer, $langTitle, $langDescr, $langModify;
+	global $tool_content, $id, $urlServer, $langTitle, $langDescr, $langContents, $langModify;
 	 
-        $sql = db_query("SELECT id, title, comments FROM unit_resources WHERE id='$resource_id'");
+        $sql = db_query("SELECT id, title, comments, type FROM unit_resources WHERE id='$resource_id'");
         $ru = mysql_fetch_array($sql);
         $restitle = " value='" . htmlspecialchars($ru['title'], ENT_QUOTES) . "'";
         $rescomments = $ru['comments'];
         $resource_id = $ru['id'];
+        $resource_type = $ru['type'];
 
 	$tool_content .= "<form method='post' action='${urlServer}modules/units/'>";
 	$tool_content .= "<input type='hidden' name='id' value='$id'>";
 	$tool_content .= "<input type='hidden' name='resource_id' value='$resource_id'>";
-	$tool_content .= "<table class='FormData'><tbody>
-	<tr><th width='150' class='left'>$langTitle:</th>
-	<td><input type='text' name='restitle' size='50' maxlength='255' $restitle class='FormData_InputText'></td></tr>
-        <tr><th class='left'>$langDescr:</th><td>
+	$tool_content .= "<table class='FormData'><tbody>";
+	if ($resource_type != 'text') {
+		$tool_content .= "<tr><th width='150' class='left'>$langTitle:</th>
+		<td><input type='text' name='restitle' size='50' maxlength='255' $restitle class='FormData_InputText'></td></tr>";
+		$message = $langDescr;
+	} else {
+		$message = $langContents;
+	}
+        $tool_content .= "<tr><th class='left'>$message:</th><td>
         <table class='xinha_editor'><tr><td><textarea id='xinha' name='rescomments'>$rescomments</textarea></td></tr>
         </table></td></tr>
         <tr><th>&nbsp;</th>

@@ -131,10 +131,9 @@ function insert_text($id)
 	
 	list($order) = mysql_fetch_array(db_query("SELECT MAX(`order`) FROM unit_resources WHERE unit_id=$id"));
 	$order++;
-	db_query("INSERT INTO unit_resources SET unit_id=$id, type='text', title=" .
-			autoquote($title) . ", comments=" . autoquote($comments) .
-			", visibility='v', `order`=$order, `date`=NOW(), res_id=0",
-			$GLOBALS['mysqlMainDb']);
+	db_query("INSERT INTO unit_resources SET unit_id=$id, type='text', title='', 
+		comments=" . autoquote($comments) . ", visibility='v', `order`=$order, `date`=NOW(), res_id=0",
+		$GLOBALS['mysqlMainDb']);
 			
 	header('Location: index.php?id=' . $id);
 	exit;
