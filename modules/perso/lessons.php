@@ -26,198 +26,104 @@
 * =========================================================================*/
 
 
-
 /*
-
  * Personalised Lessons Component, eClass Personalised
-
  *
-
  * @author Evelthon Prodromou <eprodromou@upnet.gr>
-
  * @version $Id$
-
  * @package eClass Personalised
-
  *
-
  * @abstract This component populates the lessons block on the user's personalised
-
  * interface. It is based on the diploma thesis of Evelthon Prodromou.
-
  *
-
  */
-
-
 
 /*
-
  * Function getUserLessonInfo
-
  *
-
  * Creates content for the user's lesson block on the personalised interface
-
  * If type is 'html' it creates the interface html populated with data and
-
  * If type is 'data' it returns an array with all lesson data
-
  *
-
  * @param int $uid user id
-
  * @param string $type (data, html)
-
  * @return mixed content
-
  */
-
-function  getUserLessonInfo($uid, $type) {
-
+function  getUserLessonInfo($uid, $type)
+{
 	//	?$userID=$uid;
-
 	global $mysqlMainDb;
-
-
 
 	//	TODO: add the new fields for memory in the db
 
-
-
 	$user_courses = "SELECT cours.code , cours.fake_code ,
-
 	                                           cours.intitule , cours.titulaires ,
-
 	                                           cours.languageCourse ,
-
 	                                           cours_user.statut,
-
 	                                           user.perso,
-
 	                                           user.announce_flag,
-
 	                                           user.doc_flag,
-
 	                                           user.forum_flag
-
 	                                   FROM    cours, cours_user, user
-
 	                                  WHERE cours.code = cours_user.code_cours
-
 	                                  AND   cours_user.user_id = '".$uid."'
-
 	                                  AND   user.user_id = '".$uid."'
-
 	                                  ";
 
-
 	$mysql_query_result = db_query($user_courses, $mysqlMainDb);
-
 	$repeat_val = 0;
-
 	$lesson_titles = array();
-
         $lesson_fakeCode = array();
 
-
-
 	//getting user's lesson info
-
 	while ($mycourses = mysql_fetch_row($mysql_query_result)) {
-
 		$lesson_titles[$repeat_val] 	= $mycourses[2]; //lesson titles
-
 		$lesson_code[$repeat_val]	= $mycourses[0]; //lesson code used in tables
-
 		$lesson_professor[$repeat_val]	= $mycourses[3]; //lesson professor
-
 		$lesson_statut[$repeat_val]	= $mycourses[5];//statut (user|prof)
-
 		$lesson_fakeCode[$repeat_val]	= $mycourses[1];//lesson fake code
-
 		$repeat_val++;
-
 	}
-
-
 
 	$memory = "SELECT user.announce_flag, user.doc_flag, user.forum_flag
-
 		FROM user WHERE user.user_id = '".$uid."'";
-
 	$memory_result = db_query($memory, $mysqlMainDb);
-
-
 	while ($my_memory_result = mysql_fetch_row($memory_result)) {
-
 		$lesson_announce_f = eregi_replace("-", " ", $my_memory_result[0]);
-
 		$lesson_doc_f = eregi_replace("-", " ", $my_memory_result[1]);
-
 		$lesson_forum_f = eregi_replace("-", " ", $my_memory_result[2]);
-
 	}
-
 	$max_repeat_val = $repeat_val;
-
 	$ret_val[0] = $max_repeat_val;
-
 	$ret_val[1] = $lesson_titles;
-
 	@$ret_val[2] = $lesson_code;
-
 	@$ret_val[3] = $lesson_professor;
-
 	@$ret_val[4] = $lesson_statut;
-
 	$ret_val[5] = $lesson_announce_f;
-
 	$ret_val[6] = $lesson_doc_f;
-
 	$ret_val[7] = $lesson_forum_f;
 
-
-
 	//check what sort of data should be returned
-
 	if($type == "html") {
-
 		return array($ret_val,htmlInterface($ret_val, $lesson_fakeCode));
-
 		//		return htmlInterface($ret_val);
-
 	} elseif ($type == "data") {
-
 		return $ret_val;
-
 	}
-
-
 }
 
 
-
 /**
-
  * Function htmlInterface
-
  *
-
  * @param array $data
-
  * @param string $lesson_fCode (Lesson's fake code)
-
  * @return string HTML content for the documents block
-
  */
-
-function htmlInterface($data, $lesson_fCode) {
-
+function htmlInterface($data, $lesson_fCode)
+{
 	global $statut, $is_admin, $urlAppend, $urlServer, $langCourseCreate, $langOtherCourses;
-
 	global $langNotEnrolledToLessons, $langWelcomeProfPerso, $langWelcomeStudPerso, $langWelcomeSelect;
-
 	global $langCourse, $langActions, $langUnregCourse, $langManagement, $uid;
 
 	$lesson_content = "";
@@ -225,8 +131,6 @@ function htmlInterface($data, $lesson_fCode) {
 
 	$lesson_content .= <<<lCont
 <div id="assigncontainer">
-
-
         <table width="100%" class="FormData">
         <tbody>
         <tr class="lessonslist_header">
@@ -278,13 +182,9 @@ lCont;
 	}
 
 	//$lesson_content .= "<a class=\"enroll_icon\" href=".$urlServer."modules/auth/courses.php>$langOtherCourses</a>";
-
-
     /*
 	if ($statut == 1) {
-
 		$lesson_content .= "
-
 	 | <a class=\"create_lesson\" href=".$urlServer."modules/create_course/create_course.php>$langCourseCreate</a>
 
 	";
@@ -293,6 +193,3 @@ lCont;
 
 	return $lesson_content;
 }
-
-?>
-

@@ -26,63 +26,35 @@
 
 
 /**
-
  * Personalised Documents Component, eClass Personalised
-
  *
-
  * @author Evelthon Prodromou <eprodromou@upnet.gr>
-
  * @version $Id$
-
  * @package eClass Personalised
-
  *
-
  * @abstract This component populates the agenda block on the user's personalised
-
  * interface. It is based on the diploma thesis of Evelthon Prodromou.
-
  *
-
  */
-
-
 
 /**
-
  * Function getUserAgenda
-
  *
-
  * Populates an array with data regarding the user's personalised agenda.
-
  *
-
  * @param array $param
-
  * @param string $type (data, html)
-
  * @return array
-
  */
-
-function getUserAgenda($param, $type) {
-
-
+function getUserAgenda($param, $type)
+{
 
 	//number of unique dates to collect data for
-
 	$uniqueDates = 5;
-
 	global $mysqlMainDb, $uid, $dbname, $currentCourseID;
-
 	$uid			= $param['uid'];
-
 	$lesson_code		= $param['lesson_code'];
-
 	$max_repeat_val		= $param['max_repeat_val'];
-
 	$tbl_lesson_codes = array();
 	
 	for($i=0; $i < $max_repeat_val; $i++) {
@@ -119,123 +91,67 @@ function getUserAgenda($param, $type) {
 	elseif (version_compare("4.1", $ver) <= 0)
 	$sql = $sql_4;//mysql 5 compatible query
 
-
 	$mysql_query_result = db_query($sql, $mysqlMainDb);
-
-
 	$agendaDateData = array();
-
 	$previousDate = "0000-00-00";
-
 	$firstRun = true;
-
 	while ($myAgenda = mysql_fetch_row($mysql_query_result)) {
 
-
-
 		//allow certain html tags that do not cause errors in the
-
 		//personalised interface
-
 		$myAgenda[1] = strip_tags($myAgenda[1], '<b><i><u><ol><ul><li><br>');
-
 		if ($myAgenda[2] != $previousDate ) {
-
 			if (!$firstRun) {
 				@array_push($agendaDateData, $agendaData);
 			}
 
 		}
 
-
-
 		if ($firstRun) $firstRun = false;
 
-
-
 		if ($myAgenda[2] == $previousDate) {
-
 			array_push($agendaData, $myAgenda);
-
 		} else {
-
 			$agendaData = array();
-
 			$previousDate = $myAgenda[2];
-
 			array_push($agendaData, $myAgenda);
-
 		}
-
-
-
 	}
-
-
 
 	if (!$firstRun) {
-
 		array_push($agendaDateData, $agendaData);
-
 	}
-
-
 
 	if($type == "html") {
-
 		return agendaHtmlInterface($agendaDateData);
-
 	} elseif ($type == "data") {
-
 		return $agendaDateData;
-
 	}
-
-
-
 }
 
 
-
 /*
-
  * Function agendaHtmlInterface
-
  *
-
  * @param array $data
-
  * @return string HTML content for the documents block
-
  * @see function getUserAgenda()
-
  */
-
-function agendaHtmlInterface($data) {
-
+function agendaHtmlInterface($data)
+{
 	global $langNoEventsExist, $langUnknown, $langDuration, $langMore, $l_ondate, $langHours, $langHour, $langExerciseStart, $urlServer;
 
-
 	$numOfDays = count($data);
-
 	if ($numOfDays > 0) {
-
 		$agenda_content= <<<agCont
-
       <div class="datacontainer">
         <ul class="datalist">
-
 agCont;
 		for ($i=0; $i <$numOfDays; $i++) {
-
 			$agenda_content .= "\n          <li class=\"category\">".nice_format($data[$i][0][2])."</li>";
-
 			$iterator =  count($data[$i]);
-
 			for ($j=0; $j < $iterator; $j++){
-
 				$url = $urlServer . "index.php?perso=4&c=" . $data[$i][$j][5];
-
 				if (strlen($data[$i][$j][4]) == 0) {
 					$data[$i][$j][4] = "$langUnknown";
 				}
@@ -263,16 +179,8 @@ agCont;
 		$agenda_content .= "
         </ul>
       </div> ";
-
 	} else {
-
 		$agenda_content = "<p>$langNoEventsExist</p>";
-
 	}
-
 	return $agenda_content;
 }
-
-
-?>
-
