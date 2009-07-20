@@ -131,8 +131,8 @@ else
 	           $tool_content .= "\n        <tr class=\"odd\">";
             }
 
-      $tool_content .= "\n            <td>&nbsp;<img src='../../images/arrow_blue.gif'>&nbsp;<a href='$_SERVER[PHP_SELF]?fc=$fac[id]'>$fac[name]</a> <small><font color='#a33033'>($fac[code])</font></small>";
-      $n=db_query("SELECT COUNT(*) FROM cours_faculte WHERE faculte='$fac[name]'");
+      $tool_content .= "\n            <td>&nbsp;<img src='../../images/arrow_blue.gif'>&nbsp;<a href='$_SERVER[PHP_SELF]?fc=$fac[id]'>" . htmlspecialchars($fac['name']) . "</a> <small><font color='#a33033'>($fac[code])</font></small>";
+      $n=db_query("SELECT COUNT(*) FROM cours_faculte WHERE facid='$fac[id]'");
       $r=mysql_fetch_array($n);
       $tool_content .= "&nbsp;<small><font color=#a5a5a5>($r[0]  ". ($r[0] == 1? $langAvCours: $langAvCourses) . ")</font><small></td>
         </tr>";
@@ -145,14 +145,14 @@ else
       $tool_content .= "<br>\n";
   } else {
   // department exists
-  $numofcourses = getdepnumcourses($fac);
+  $numofcourses = getdepnumcourses($fc);
 
   // display all the facultes collapsed
-  $tool_content .= collapsed_facultes_horiz($fac);
+  $tool_content .= collapsed_facultes_horiz($fc);
   $tool_content .= "\n    <form action=\"$_SERVER[PHP_SELF]\" method=\"post\">";
   //$tool_content .= "\n    <br/>";
   if ($numofcourses > 0) {
-  $tool_content .= expanded_faculte($fac, $uid);
+  $tool_content .= expanded_faculte($fac, $fc, $uid);
   $tool_content .= "\n
     <br>
     <input type=\"submit\" name=\"submit\" value=\"$langRegistration\">
@@ -205,11 +205,11 @@ function getdepnumcourses($fac) {
 	$res = mysql_fetch_row(db_query(
 	"SELECT count(code)
 	FROM cours_faculte
-	WHERE faculte='$fac'" ));
+	WHERE facid='$fac'" ));
 	return $res[0];
 }
 
-function expanded_faculte($fac, $uid) {
+function expanded_faculte($fac_name, $facid, $uid) {
 	global $m, $icons, $langTutor, $langBegin, $langRegistration, $mysqlMainDb;
 	global $langRegistration, $langCourseCode, $langTeacher, $langType;
 
@@ -232,11 +232,11 @@ function expanded_faculte($fac, $uid) {
     <table width=\"99%\" align=\"left\">
     <tbody>
     <tr>
-      <td><a name=\"top\"> </a>$m[department]: <b>$fac</b>&nbsp;&nbsp;</td>";
+      <td><a name=\"top\"> </a>$m[department]: <b>$fac_name</b>&nbsp;&nbsp;</td>";
 	    // get the different course types available for this faculte
 		$typesresult = db_query(
 		"SELECT DISTINCT cours.type types
-				FROM cours WHERE cours.faculte = '$fac'
+				FROM cours WHERE cours.faculteid = '$facid'
 				AND cours.visible <> 0
 			ORDER BY cours.type");
 
@@ -281,7 +281,7 @@ function expanded_faculte($fac, $uid) {
 			        FROM cours_faculte, cours
 			        WHERE cours.code = cours_faculte.code
 						AND cours.type = '$type'
-                		AND cours_faculte.faculte='$fac'
+                		AND cours_faculte.facid='$facid'
 						AND cours.visible <> '0'
 		                ORDER BY cours.intitule, cours.titulaires");
 
@@ -392,7 +392,7 @@ function expanded_faculte($fac, $uid) {
 return $retString;
 }
 
-function collapsed_facultes_vert($fac) {
+function collapsed_facultes_vert($fc) {
 
 	global $langAvCourse, $langAvCourses;
 	$retString = "";
@@ -411,7 +411,7 @@ $result = mysql_query(
 		FROM cours, faculte
 		WHERE (cours.visible = '1' OR cours.visible = '2')
 			AND faculte.name = cours.faculte
-			AND faculte.name <> '$fac'
+			AND faculte.id <> '$fc'
 		ORDER BY cours.faculte");
 
 	while ($fac = mysql_fetch_array($result)) {
@@ -429,7 +429,7 @@ $result = mysql_query(
 }
 
 
-function collapsed_facultes_horiz($fac) {
+function collapsed_facultes_horiz($fc) {
 
 	global $langListFac;
 
@@ -437,7 +437,7 @@ function collapsed_facultes_horiz($fac) {
 	$retString .= "\n<table class=\"DepTitle\" width=\"99%\" align=\"left\">
 	<tr><th>$langListFac:&nbsp;</th><td>";
 	// department selection box
-	$retString .= dep_selection($fac);
+	$retString .= dep_selection($fc);
   	$retString .= "\n    </td>\n    </tr>\n    </table>";
   	$retString .= "\n    </form>";
 
@@ -445,21 +445,18 @@ return $retString;
 }
 
 // selection of department
-function dep_selection($fac) {
+function dep_selection($fc) {
 
 	$string = "";
 	$faculte_names = array();
 
 	// get all the departments
-	$result = db_query("SELECT DISTINCT faculte.id id, faculte.name f FROM faculte ORDER BY name");
+	$result = db_query("SELECT id, name FROM faculte ORDER BY name");
 	while ($facs = mysql_fetch_array($result)) {
-		$faculte_names[$facs['id']] = $facs['f'];
+		$faculte_names[$facs['id']] = $facs['name'];
 	}
 
-	// get fac id from name
-	$facselect = mysql_fetch_row(db_query("SELECT id FROM faculte WHERE name='$fac'"));
-	$fac = $facselect[0];
-	$string .= selection($faculte_names, 'fc', $fac, 'onChange="document.depform.submit();"');
+	$string .= selection($faculte_names, 'fc', $fc, 'onChange="document.depform.submit();"');
 
 return $string;
 }
