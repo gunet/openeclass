@@ -163,9 +163,16 @@ if ($is_adminOfCourse) {
                         "</ul></div>\n";
 }
 
-$tool_content .= '<table class="unit-navigation"><tr><td class="left">' .
+if ($is_adminOfCourse) {
+        $tool_content .= '<table class="unit-navigation"><tr><td class="left">' .
         $link['previous'] . '</td><td class="right">' .
         $link['next'] . "</td></tr></table>\n";
+} else {
+        $tool_content .= '<table class="DepTitle" width="99%" align="left">' .
+	"<tbody><tr><th>".$link['previous']."</th><td>".$link['next']."&nbsp;</td></tr></tbody></table>\n<p>&nbsp;</p>\n";
+}
+
+
 
 if (!empty($comments)) {
         if (strpos('<', $comments) === false) {
