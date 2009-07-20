@@ -1129,3 +1129,16 @@ function ellipsize($string, $maxlen, $postfix = '...')
                 return $string;
         }
 }
+
+// Find the title of a course from its code
+function course_code_to_title($code)
+{
+        global $mysqlMainDb;
+        $r = db_query("SELECT intitule FROM cours WHERE code='$code'", $mysqlMainDb);
+        if ($r and mysql_num_rows($r) > 0) {
+                $row = mysql_fetch_row($r);
+                return $row[0];
+        } else {
+                return false;
+        }
+}

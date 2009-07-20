@@ -2468,6 +2468,7 @@ $langLogIn = 'Σύνδεση';
 $langAction = 'Ενέργεια';
 $langRequiredFields = 'Τα πεδία με (*) είναι υποχρεωτικά';
 $langCourseVisits = "Επισκέψεις ανά μάθημα";
+$langDurationVisitsPerCourse = "Χρονική διάρκεια συμμετοχής ανά μάθημα";
 
 // user registration
 $langAuthUserName = "Δώστε το όνομα χρήστη:";

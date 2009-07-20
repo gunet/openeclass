@@ -43,6 +43,7 @@ if (!extension_loaded('gd')) {
 	$tool_content .= "$langGDRequired";
 } else {
 	$totalHits = 0;
+        $totalDuration = 0;
 	require_once '../../include/libchart/libchart.php';
 	$sql = "SELECT code, intitule FROM cours";
 	$result = db_query($sql);
@@ -59,6 +60,11 @@ if (!extension_loaded('gd')) {
 				$totalHits += $row['cnt'];
 				$hits[$course_code] = $row['cnt'];
 			}
+			mysql_free_result($result);
+			$sql = "SELECT SUM(duration) FROM actions WHERE user_id = '$uid'";
+			$result = db_query($sql, $course_code);
+			list($duration[$course_code]) = mysql_fetch_row($result);
+                        $totalDuration += $duration[$course_code];
 			mysql_free_result($result);
 		}
 
@@ -82,19 +88,50 @@ if (!extension_loaded('gd')) {
 		}
 		$made_chart = true;
 
+    $totalDuration = format_time_duration(0 + $totalDuration);
     $tool_content .= "
-  <table class=\"FormData\" width=\"99%\" align=\"left\">
+  <table class='FormData' width='99%' align='left'>
   <tbody>
   <tr>
-    <th width=\"220\" class=\"left\" valign=\"top\">&nbsp;</th>
+    <th width='220' class='left' valign='top'>&nbsp;</th>
     <td><b>$langPlatformGenStats</b></td>
   </tr>
   <tr>
-    <th width=\"220\" class=\"left\">$langTotalVisitsCourses:</th>
+    <th width='220' class='left'>$langTotalVisitsCourses:</th>
     <td>$totalHits</td>
   </tr>
-  </tbody>
-  </table>";
+  <tr>
+    <th width='220' class='left'>$langDurationVisits:</th>
+    <td>$totalDuration</td>
+  </tr>
+  <tr>
+    <th width='220' class='left'>$langDurationVisitsPerCourse:</th>
+    <td>
+            <table width='100%'>
+            <thead>
+            <tr>
+                <th>&nbsp;</th><th>$langCourseTitle</th>
+                <th>$langDuration</th>
+            </tr>
+            </thead>
+            <tbody>";
+
+
+                $i = 0;
+                foreach ($duration as $code => $time) {
+                        if ($i%2==0) {
+                                $tool_content .= "\n    <tr>";
+                        } else {
+                                $tool_content .= "\n    <tr class=\"odd\">";
+                        }
+                        $i++;
+                        $tool_content .= "
+<td width='1'><img style='border:0px; padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif' alt=''></td>
+<td>" . course_code_to_title($code) . "</td>
+<td>" . format_time_duration(0 + $time) . "</td></tr>";
+                }
+
+                $tool_content .= "</tbody></table></td></tr></tbody></table>";
 	}
 }
 // End of chart display; chart unlinked at end of script.
@@ -136,7 +173,7 @@ $leResultat = db_query($sql, $mysqlMainDb);
 		$tool_content .= "\n    <tr class=\"odd\">";
 	   }
 	   $tool_content .= "
-        <td width=\"1\"><img style='border:0px; padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'></td>
+        <td width=\"1\"><img style='border:0px; padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif' alt=''></td>
         <td>".strftime("%d/%m/%Y (%H:%M:%S) ", strtotime($when))."</td>
         <td>".$nomAction[$action]."</td>
     </tr>";
@@ -154,8 +191,6 @@ $tool_content .= "\n    </tbody>\n    </table>\n";
 
 
 
-
-
 draw($tool_content, 1);
 
 // Unlink chart file - haniotak
@@ -169,4 +204,3 @@ draw($tool_content, 1);
 	unlink($webDir.$chart_path);
 }
 */
-?>
