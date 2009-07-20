@@ -43,7 +43,7 @@ $guest_allowed = true;
 $path2add=1;
 include '../../include/baseTheme.php';
 $nameTools = $langIdentity;
-$tool_content = $head_content = $main_content = $bar_content = "";
+$tool_content = $head_content = $main_content = $cunits_content = $bar_content = "";
 
 $head_content .= '
 <script type="text/javascript">
@@ -81,20 +81,20 @@ if ($is_adminOfCourse) {
 } else {
         $edit_link = '';
 }
-$main_content .= "<div class='course_info'>";
+$main_content .= "\n      <div class='course_info'>";
 if (!empty($description)) {
-        $main_content .= "<h1>$langDescription$edit_link</h1><p>$description</p>";
+        $main_content .= "\n      <h1>$langDescription$edit_link</h1>\n      <p>$description</p>";
 
 } else {
-        $main_content .= "<p>$langThisCourseDescriptionIsEmpty$edit_link</p>";
+        $main_content .= "\n      <p>$langThisCourseDescriptionIsEmpty$edit_link</p>";
 }
 if (!empty($keywords)) {
-	$main_content .= "<p><b>$langCourseKeywords</b> $keywords</p>";
+	$main_content .= "\n      <p><b>$langCourseKeywords</b> $keywords</p>";
 }
-$main_content .= "</div>\n";
+$main_content .= "\n      </div>\n";
 
 if (!empty($addon)) {
-	$main_content .= "<div class='course_info'><h1>$langCourseAddon</h1><p>$addon</p></div>";
+	$main_content .= "\n      <div class='course_info'><h1>$langCourseAddon</h1><p>$addon</p></div>";
 }
 
 $result = db_query("SELECT MAX(`order`) FROM course_units WHERE course_id = $cours_id");
@@ -111,13 +111,13 @@ if ($is_adminOfCourse) {
                                                    title = $title,
                                                    comments = $descr
                                             WHERE id = $unit_id AND course_id = $cours_id");
-		        $main_content .= "<p class='success_small'>$langCourseUnitModified</p>";
+		        $main_content .= "\n      <p class='success_small'>$langCourseUnitModified</p>";
                 } else { // add new course unit
                         $order = $maxorder + 1; 
                         db_query("INSERT INTO course_units SET
                                          title = $title, comments =  $descr,
                                          `order` = $order, course_id = $cours_id");
-		        $main_content .= "<p class='success_small'>$langCourseUnitAdded</p>";
+		        $main_content .= "\n        <p class='success_small'>$langCourseUnitAdded</p>";
                 }
         } elseif (isset($_REQUEST['del'])) { // delete course unit
 		$id = intval($_REQUEST['del']);
@@ -144,12 +144,16 @@ if ($is_adminOfCourse) {
 
 // display course units header
 if (!is_null($maxorder) or $is_adminOfCourse) {
-        $main_content .= "<div class='course_info'><h1>$langCourseUnits</h1>";
+        $cunits_content .= "\n      <div class='course_info'>".
+        $cunits_content .= "\n\n      <table class='FormData' width='99%'>\n      <thead>";
+        $cunits_content .= "\n      <tr>\n        <td><h4>$langCourseUnits ";
 }
 // add course units
 if ($is_adminOfCourse) {
-	$main_content .= "<p><a href='{$urlServer}modules/units/info.php'>$langAddUnit</a></p>";
+	$cunits_content .= ": <a href='{$urlServer}modules/units/info.php'>$langAddUnit</a>";
 }
+        $cunits_content .= "</h4>";
+        $cunits_content .= "</td>\n      </tr>\n      </thead>\n      </table>\n";
 if ($is_adminOfCourse) {
         list($last_id) = mysql_fetch_row(db_query("SELECT id FROM course_units
                                                    WHERE course_id = $cours_id
@@ -164,49 +168,59 @@ if ($is_adminOfCourse) {
 }
 $sql = db_query($query);
 $first = true;
+$count_index = 1;
 while ($cu = mysql_fetch_array($sql)) {
                 // Visibility icon
                 $vis = $cu['visibility'];
                 $icon_vis = ($vis == 'v')? 'visible.gif': 'invisible.gif';
                 $class_vis = ($vis == 'i')? ' class="invisible"': '';
+                $cunits_content .= "\n      <table class='FormData' width='99%'>\n      <thead>\n      <tr>\n        <th width='1' align='right'>$count_index.</th>";
+                $cunits_content .= "\n        <td><a href='${urlServer}modules/units/?id=$cu[id]'$class_vis>$cu[title]</a></td>";
                 if ($is_adminOfCourse) { // display actions
-                        $main_content .= "<table class='actions'><tr><td>".
+                        $cunits_content .= "\n        <th width='5'>".
                                 "<a href='../../modules/units/info.php?edit=$cu[id]'>" .
-                                "<img src='../../template/classic/img/edit.gif' title='$langEdit' /></a></td>" .
-                                "<td><a href='$_SERVER[PHP_SELF]?del=$cu[id]' " .
+                                "<img src='../../template/classic/img/edit.gif' title='$langEdit' /></a></th>" .
+                                "\n        <th width='5'><a href='$_SERVER[PHP_SELF]?del=$cu[id]' " .
                                 "onClick=\"return confirmation();\">" .
                                 "<img src='../../template/classic/img/delete.gif' " .
-                                "title='$langDelete'></img></a></td>" .
-                                "<td><a href='$_SERVER[PHP_SELF]?vis=$cu[id]'>" .
+                                "title='$langDelete'></img></a></th>" .
+                                "\n        <th width='5'><a href='$_SERVER[PHP_SELF]?vis=$cu[id]'>" .
                                 "<img src='../../template/classic/img/$icon_vis' " .
-                                "title='$langVisibility'></img></a></td>";
+                                "title='$langVisibility'></img></a></th>";
                         if ($cu['id'] != $last_id) {
-                                $main_content .= "<td><a href='$_SERVER[PHP_SELF]?down=$cu[id]'>" .
-                                                "<img src='../../template/classic/img/down.gif' title='$langDown'></img></a></td>";
+                                $cunits_content .= "\n        <th width='5'><a href='$_SERVER[PHP_SELF]?down=$cu[id]'>" .
+                                "<img src='../../template/classic/img/down.gif' title='$langDown'></img></a></th>";
                         } else {
-                                $main_content .= "<td>&nbsp;</td>";
+                                $cunits_content .= "\n        <th width='15'>&nbsp;</th>";
                         }
                         if (!$first) {
-                                $main_content .= "<td><a href='$_SERVER[PHP_SELF]?up=$cu[id]'>" .
-                                                "<img src='../../template/classic/img/up.gif' title='$langUp'></img></a></td>";
+                                $cunits_content .= "\n        <th width='5'><a href='$_SERVER[PHP_SELF]?up=$cu[id]'><img src='../../template/classic/img/up.gif' title='$langUp'></img></a></th>";
                         } else {
-                                $main_content .= "<td>&nbsp;</td>";
+                                $cunits_content .= "\n        <th width='15'>&nbsp;</th>";
                         }
-                        $main_content .= "</tr></table>";
+                        //$cunits_content .= "\n      </tr>\n      </table>";
                 }
+                $cunits_content .= "\n      <tr>\n        <td ";
+                if ($is_adminOfCourse) {
+                    $cunits_content .= "colspan='7'>";
+                } else {
+                    $cunits_content .= "colspan='3'>";
+                } 
+                $cunits_content .= "$cu[comments]";
                 if (strpos('<', $cu['comments']) === false) {
-                        $cu['comments'] = '<p>' . $cu['comments'] . '</p>';
+                        $cu['comments'] = '      ' . $cu['comments'] . '';
                 }
-                $main_content .= "<h1><a href='${urlServer}modules/units/?id=$cu[id]'$class_vis>$cu[title]</a></h1>";
-                $main_content .= "<div$class_vis>$cu[comments]</div>";
+                $cunits_content .= "\n        </td>";
+                $cunits_content .= "\n      </tr>\n      </thead>\n      </table>\n";
                 $first = false;
+                $count_index++;
         }
 // Close units div if open
 if (!is_null($maxorder) or $is_adminOfCourse) {
-        $main_content .= "</div>\n";
+        $main_content .= "\n  </div>\n";
 }
 
-$main_content .= "<p>$cu[comments]</p>";
+$cunits_content .= "\n  <p>$cu[comments]</p>";
 
 switch ($type){
 	case 'pre': { //pre
@@ -223,10 +237,10 @@ switch ($type){
 	}
 }
 
-$bar_content .= "<p><b>".$langLessonCode."</b>: ".$fake_code."</p>";
-$bar_content .= "<p><b>".$langTeachers."</b>: ".$professor."</p>";
-$bar_content .= "<p><b>".$langFaculty."</b>: ".$faculte."</p>";
-$bar_content .= "<p><b>".$m['type']."</b>: ".$lessonType."</p>";
+$bar_content .= "\n            <p><b>".$langLessonCode."</b>: ".$fake_code."</p>";
+$bar_content .= "\n            <p><b>".$langTeachers."</b>: ".$professor."</p>";
+$bar_content .= "\n            <p><b>".$langFaculty."</b>: ".$faculte."</p>";
+$bar_content .= "\n            <p><b>".$m['type']."</b>: ".$lessonType."</p>";
 
 $require_help = TRUE;
 $helpTopic = 'course_home';
@@ -257,8 +271,8 @@ if ($is_adminOfCourse) {
 			break;
 		}
 	}
-	$bar_content .= "<p><b>".$langConfidentiality."</b>: ".$lessonStatus."</p>";
-	$bar_content .= "<p><b>".$langUsers."</b>: ".$numUsers." ".$langRegistered."</p>";
+	$bar_content .= "\n            <p><b>".$langConfidentiality."</b>: ".$lessonStatus."</p>";
+	$bar_content .= "\n            <p><b>".$langUsers."</b>: ".$numUsers." ".$langRegistered."</p>";
 }
 
 
@@ -268,19 +282,30 @@ $tool_content .= "
       <div id='content_login'><p>$main_content</p></div>
    </div>
    <div id='navigation'>
-      <table><tbody>
-      <tr><td class='odd'>$bar_content</td></tr>
-      </tbody></table>
+      <table>
+        <tbody>
+        <tr>
+          <td class='odd'>$bar_content</td>
+        </tr>
+        </tbody>
+      </table>
+
       <br />
-      <table><tbody>
-      <tr>
-        <td class='odd' width='1%' align='right'></td>
-        <td align='left'>$langContactProf:
-                         (<a href='../../modules/contact/index.php'>$langEmail</a>)</td>
-      </tr>
-      </tbody>
+      <table>
+        <tbody>
+        <tr>
+          <td class='odd' width='1%' align='right'></td>
+          <td align='left'>$langContactProf: (<a href='../../modules/contact/index.php'>$langEmail</a>)</td>
+        </tr>
+        </tbody>
       </table>
    </div>
-</div>";
+<table width='99%'>
+  <tr>
+      <td>$cunits_content</td>
+   </tr>
+</table>
+</div>
+";
 
 draw($tool_content, 2,'course_home', $head_content);
