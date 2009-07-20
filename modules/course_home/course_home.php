@@ -278,6 +278,7 @@ if ($is_adminOfCourse) {
 
 $tool_content .= "
 <div id='container_login'>
+
    <div id='wrapper'>
       <div id='content_login'><p>$main_content</p></div>
    </div>
@@ -299,7 +300,9 @@ $tool_content .= "
         </tr>
         </tbody>
       </table>
+
    </div>
+
 <table width='99%'>
   <tr>
       <td>$cunits_content</td>
@@ -307,5 +310,4 @@ $tool_content .= "
 </table>
 </div>
 ";
-
 draw($tool_content, 2,'course_home', $head_content);
