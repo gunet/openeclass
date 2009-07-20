@@ -286,7 +286,7 @@ function upgrade_course_2_1_4($code, $extramessage = '', $lang)
                                 '../../modules/units/index.php',
                                 'description',
                                 '2',
-                                '1',
+                                '0',
                                 '',
                                 'MODULE_ID_UNITS')");
         }

@@ -508,7 +508,7 @@ mysql_query("INSERT INTO accueil VALUES (
                 '../../modules/units/index.php',
                 'description',
                 '".$sbsystems[27]."',
-                '1',
+                '0',
                 '',
                 'MODULE_ID_UNITS')");
 
