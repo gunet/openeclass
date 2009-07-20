@@ -49,6 +49,7 @@
 $require_current_course = TRUE;
 
 require_once("../../include/baseTheme.php");
+
 $head_content = "";
 $tool_content = "";
 

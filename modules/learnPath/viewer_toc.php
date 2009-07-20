@@ -60,6 +60,11 @@ $TABLEASSET             = "lp_asset";
 $TABLEUSERMODULEPROGRESS= "lp_user_module_progress";
 
 $imgRepositoryWeb = "../../template/classic/img/";
+/**** The following is added for statistics purposes ***/
+include('../../include/action.php');
+$action = new action();
+$action->record('MODULE_ID_LP');
+/**************************************/
 
 // lib of this tool
 require_once("../../include/lib/learnPathLib.inc.php");
