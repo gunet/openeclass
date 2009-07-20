@@ -235,8 +235,7 @@ if(isset($forumgo)) {
 	// save forum category
 	elseif (isset($forumcatsave)) {
 		db_query("update catagories set cat_title='$cat_title' where cat_id='$cat_id'", $currentCourseID);
-        $tool_content .= "\n<p class=\"success_small\">$langNameCatMod<br />
-	<a href=\"$_SERVER[$PHP_SELF]?forumadmin=yes\">$langBack</a></p>";
+		$tool_content .= "\n<p class=\"success_small\">$langNameCatMod<br /><a href=\"$_SERVER[PHP_SELF]?forumadmin=yes\">$langBack</a></p>";
 	}
 
 	// forum go save
