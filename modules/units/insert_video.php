@@ -29,7 +29,7 @@ function display_video()
 {
         global $id, $currentCourseID, $tool_content, $urlServer,
                $langVideoTitle, $langDescr, $langDate, $langChoice,
-               $langAddModulesButton; 
+               $langAddModulesButton, $langNoVideo; 
 
         $table_started = false;
         $count = 0;
