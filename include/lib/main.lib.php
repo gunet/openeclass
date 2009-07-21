@@ -800,15 +800,14 @@ function add_check_if_javascript_enabled_js()
  */
 function warnIfExtNotLoaded($extensionName) {
 
-	global $tool_content;
+	global $tool_content, $langModuleNotInstalled, $langReadHelp, $langHere;
 	if (extension_loaded ($extensionName)) {
 		$tool_content .= "<li> $extensionName - <b>ok!</b> </li> ";
 	} else {
 		$tool_content .= "
                 <li>$extensionName
-                <font color=\"#FF0000\"> - <b>ΞΞ΅Ξ½ Ξ΅Ξ―Ξ½Ξ±ΞΉ Ξ΅Ξ³ΞΊΞ±ΟΞ΅ΟΟΞ·ΞΌΞ­Ξ½ΞΏ!</b></font>
-                (ΞΞΉΞ±Ξ²Ξ¬ΟΟΞ΅ ΟΞ΅ΟΞΉΟΟΟΟΞ΅ΟΞ±
-                <a href=\"http://www.php.net/$extensionName\" target=_blank>Ξ΅Ξ΄Ο)</a>
+                <font color=\"#FF0000\"> - <b>$langModuleNotInstalled</b></font>
+                (<a href=\"http://www.php.net/$extensionName\" target=_blank>$langReadHelp $langHere)</a>
                 </li>";
 	}
 }
