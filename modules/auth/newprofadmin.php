@@ -43,45 +43,38 @@ if($submit) {
 	$uname = isset($_POST['uname'])?$_POST['uname']:'';
 	$password = isset($_POST['password'])?$_POST['password']:'';
 	$email_form = isset($_POST['email_form'])?$_POST['email_form']:'';
-	$department = isset($_POST['department'])?$_POST['department']:'';
-	$localize = isset($_POST['localize'])?$_POST['localize']:'';
-	$lang = langname_to_code($localize);
+	$depid = intval(isset($_POST['department'])?$_POST['department']: 0);
+	$proflanguage = isset($_POST['language'])?$_POST['language']:'';
+	if (!isset($native_language_names[$proflanguage])) {
+		$proflanguage = langname_to_code($language);
+	}
 
-		// check if user name exists
-		$username_check=mysql_query("SELECT username FROM `$mysqlMainDb`.user WHERE username='".escapeSimple($uname)."'");
-		while ($myusername = mysql_fetch_array($username_check))
-		{
-			$user_exist=$myusername[0];
-		}
+	// check if user name exists
+	$username_check = mysql_query("SELECT username FROM `$mysqlMainDb`.user WHERE username=".autoquote($uname));
+	$user_exist = (mysql_num_rows($username_check) > 0);
 
-		// check if there are empty fields
-		if (empty($nom_form) or empty($prenom_form) or empty($password) or empty($department) or empty($uname) or (empty($email_form)))
-		{
-			$tool_content .= "<p class=\"caution_small\">$langEmptyFields</p>
+	// check if there are empty fields
+	if (empty($nom_form) or empty($prenom_form) or empty($password) or empty($department) or empty($uname) or (empty($email_form))) {
+		$tool_content .= "<p class=\"caution_small\">$langEmptyFields</p>
 			<br><br><p align=\"right\"><a href='$_SERVER[PHP_SELF]'>$langAgain</a></p>";
-		}
-		elseif(isset($user_exist) and $uname==$user_exist)
-		{
-			$tool_content .= "<p class=\"caution_small\">$langUserFree</p>
+	} elseif ($user_exist) {
+		$tool_content .= "<p class=\"caution_small\">$langUserFree</p>
 			<br><br><p align=\"right\"><a href='$_SERVER[PHP_SELF]'>$langAgain</a></p>";
-	  	}
-		elseif(!email_seems_valid($email_form)) // check if email syntax is valid
-		{
-      			$tool_content .= "<p class=\"caution_small\">$langEmailWrong.</p>
+	} elseif(!email_seems_valid($email_form)) {
+		$tool_content .= "<p class=\"caution_small\">$langEmailWrong.</p>
 			<br><br><p align=\"right\"><a href='$_SERVER[PHP_SELF]'>$langAgain</a></p>";
-		}
-		else
-		{
-			$s = mysql_query("SELECT id FROM faculte WHERE name='$department'");
-			$dep = mysql_fetch_array($s);
-			$registered_at = time();
-	 		$expires_at = time() + $durationAccount;
-			$password_encrypted = md5($password);
-			$uname = escapeSimple($uname);
-			$inscr_user=mysql_query("INSERT INTO `$mysqlMainDb`.user
-				(user_id, nom, prenom, username, password, email, statut, department, registered_at, expires_at,lang)
-				VALUES ('NULL', '$nom_form', '$prenom_form', '$uname', '$password_encrypted', '$email_form','$statut','$dep[id]', '$registered_at', '$expires_at', '$lang')");
-			$last_id=mysql_insert_id();
+	} else {
+		$expires_at = time() + $durationAccount;
+		$password_encrypted = md5($password);
+		$inscr_user=db_query("INSERT INTO `$mysqlMainDb`.user
+				(nom, prenom, username, password, email, statut, department, registered_at, expires_at,lang)
+				VALUES (" .
+				autoquote($nom_form) . ', ' .
+				autoquote($prenom_form) . ', ' .
+				autoquote($uname) . ", '$password_encrypted', " .
+				autoquote($email_form) .
+				", 1, $depid, NOW(), '$expires_at', '$proflanguage')");
+		$last_id = mysql_insert_id();
 
 		// close request
 	  	$rid = intval($_POST['rid']);
@@ -156,22 +149,22 @@ $langEmail : $emailAdministrator
 	<th class='left'>".$langDepartment.":</th>
 	<td>";
 	
-		$dep = array();
-		$deps = db_query("SELECT name FROM faculte order by id");
-		while ($n = mysql_fetch_array($deps))
-		$dep[$n[0]] = $n['name'];
-	
-		if (isset($pt))
-			$tool_content .= selection ($dep, 'department', $pt);
-		else
-			$tool_content .= selection ($dep, 'department');
-	
+	$dep = array();
+	$deps = db_query("SELECT id, name FROM faculte order by id");
+	while ($n = mysql_fetch_array($deps)) {
+		$dep[$n['id']] = $n['name'];
+	}
+	if (isset($pt)) {
+		$tool_content .= selection ($dep, 'department', $pt);
+	} else {
+		$tool_content .= selection ($dep, 'department');
+	}
 	$tool_content .= "</td>
 	</tr>
 		<tr>
 	<th class='left'>$langLanguage</th>
 	<td>";
-		$tool_content .= lang_select_options('localize');
+		$tool_content .= lang_select_options('language');
 		$tool_content .= "</td>
 	</tr>
 	<tr>

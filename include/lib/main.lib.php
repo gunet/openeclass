@@ -575,6 +575,21 @@ function find_faculty_by_name($name) {
 	}
 }
 
+// Returns the name of a faculty given its code or its name
+function find_faculty_by_id($id) {
+	$req = mysql_query("SELECT name FROM faculte WHERE id = $id");
+	if ($req and mysql_num_rows($req)) {
+		$fac = mysql_fetch_row($req);
+		return $fac[0];
+	} else {
+		$req = mysql_query("SELECT name FROM faculte WHERE name = '" . addslashes($id) ."'");
+		if ($req and mysql_num_rows($req)) {
+			$fac = mysql_fetch_row($req);
+			return $fac[0];
+		}
+	}
+	return false;
+}
 
 // Returns next available code for a new course in faculty with code $fac
 function new_code($fac) {

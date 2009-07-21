@@ -38,8 +38,6 @@ if (isset($_POST['localize'])) {
 	$language = preg_replace('/[^a-z]/', '', $_POST['localize']);
 }
 
-$lang = langname_to_code($language);
-
 $auth = get_auth_id();
 
 // display form
@@ -80,10 +78,10 @@ if (!isset($submit)) {
   <tr>
     <th class='left'>".$langDepartment."</th>
     <td><select name=\"department\">";
-        $deps=mysql_query("SELECT name FROM faculte order by id");
+        $deps=mysql_query("SELECT id, name FROM faculte order by id");
         while ($dep = mysql_fetch_array($deps))
         {
-        	$tool_content .= "<option value=\"$dep[0]\">$dep[0]</option>\n";
+        	$tool_content .= "<option value='$dep[id]'>$dep[name]</option>\n";
         }
         $tool_content .= "</select>
     </td>
@@ -91,7 +89,7 @@ if (!isset($submit)) {
 <tr>
       <th class='left'>$langLanguage</th>
       <td>";
-	$tool_content .= lang_select_options('localize');
+	$tool_content .= lang_select_options('proflang');
 	$tool_content .= "</td>
     </tr>
   <tr>
@@ -153,7 +151,7 @@ if (count($registration_errors) == 0) {    // registration is ok
 
 	mysql_select_db($mysqlMainDb,$db);
       $sql = "INSERT INTO prof_request(profname,profsurname,profuname, profemail,proftmima,profcomm,status,date_open,comment, lang) VALUES(
-      '$name','$surname','$username','$usermail','$department','$userphone','1',NOW(),'$usercomment','$lang')";
+      '$name','$surname','$username','$usermail','$department','$userphone','1',NOW(),'$usercomment','$proflang')";
       $upd=mysql_query($sql,$db);
       //----------------------------- Email Message --------------------------
         $MailMessage = $mailbody1 . $mailbody2 . "$name $surname\n\n" . $mailbody3

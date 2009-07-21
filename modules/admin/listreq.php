@@ -316,7 +316,7 @@ else
 		} else {
 			$tool_content .= "\n<td>".htmlspecialchars($req['profemail'])."</td>";
 		}
-		$tool_content .= "<td>".htmlspecialchars($req['proftmima'])."</td>";
+		$tool_content .= "<td>".htmlspecialchars(find_faculty_by_id($req['proftmima']))."</td>";
 		$tool_content .= "<td>".htmlspecialchars($req['profcomm'])."</td>";
 		$tool_content .= "<td align='center'>
 			<small>".nice_format(date("Y-m-d", strtotime($req['date_open'])))."</small></td>";
