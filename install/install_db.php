@@ -190,7 +190,7 @@ db_query("CREATE TABLE user (
       am varchar(20) default NULL,
       registered_at int(10) NOT NULL default '0',
       expires_at int(10) NOT NULL default '0',
-     `perso` enum('yes','no') NOT NULL default 'no',
+     `perso` enum('yes','no') NOT NULL default 'yes',
 	 `lang` enum('el','en','es') DEFAULT 'el' NOT NULL,
  	`announce_flag` date NOT NULL default '0000-00-00',
  	 `doc_flag` date NOT NULL default '0000-00-00',
