@@ -217,7 +217,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 
 		//set the text and icon on the third bar (header)
 		if ($menuTypeID == 2) {
-			$t->set_var ( 'THIRD_BAR_TEXT', ellipsize($intitule, 53) );
+			$t->set_var ( 'THIRD_BAR_TEXT', ellipsize($intitule, 64) );
 			$t->set_var ( 'THIRDBAR_LEFT_ICON', 'lesson_icon' );
 		} elseif (isset ( $langUserBriefcase ) && $menuTypeID > 0 && $menuTypeID < 3 && ! session_is_registered ( 'user_perso_active' )) {
 			$t->set_var ( 'THIRD_BAR_TEXT', $langUserBriefcase );
