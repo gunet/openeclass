@@ -72,15 +72,15 @@ function confirmation ()
 
 if (isset($_REQUEST['userGroupId'])) {
         $userGroupId = intval($_REQUEST['userGroupId']);
-        list($tutor_id) = mysql_fetch_row(db_query("SELECT tutor FROM student_group WHERE id='$userGroupId'", $currentCourseID));
+        list($tutor_id, $forum_id) = mysql_fetch_row(db_query("SELECT tutor, forumId FROM student_group WHERE id='$userGroupId'", $currentCourseID));
         $is_tutor = ($tutor_id == $uid);
 } else {
-        $req = db_query("SELECT id FROM student_group WHERE tutor='$uid'", $currentCourseID);
+        $req = db_query("SELECT id, forumId FROM student_group WHERE tutor='$uid'", $currentCourseID);
         if ($req and mysql_num_rows($req) > 0) {
-                list($userGroupId) = mysql_fetch_row($req);
+                list($userGroupId, $forum_id) = mysql_fetch_row($req);
                 $is_tutor = true;
         } else {
-                $is_tutor = $userGroupId = false;
+                $forum_id = $is_tutor = $userGroupId = false;
         }
 }
 
@@ -95,6 +95,9 @@ if ($is_adminOfCourse or $is_tutor) {
 	$secretDirectory = group_secret($userGroupId);
 } else {
 	$secretDirectory = group_secret(user_group($uid));
+        if ($forum_id === false) {
+                list($forum_id) = mysql_fetch_row(db_query("SELECT forumId FROM student_group WHERE id = " . user_group($uid)));
+        }
 }
 if (empty($secretDirectory)) {
 	$tool_content .= $langInvalidGroupDir;
@@ -190,7 +193,7 @@ if (isset($moveTo))
 
 if (isset($move)) {
 	//h $move periexei to onoma tou arxeiou. anazhthsh onomatos arxeiou sth vash
-	$result = mysql_query ("SELECT * FROM group_documents WHERE path=\"".$move."\"");
+	$result = db_query ("SELECT * FROM group_documents WHERE path=\"".$move."\"");
 	$res = mysql_fetch_array($result);
 	$moveFileNameAlias = $res['filename'];
 	@$dialogBox .= form_dir_list_exclude("group_documents", "source", $move, "moveTo", $baseWorkDir, $move);
@@ -218,7 +221,7 @@ if (isset($renameTo)) {
 
 // rename
 if (isset($rename)) {
-	$result = mysql_query ("SELECT * FROM group_documents WHERE path=\"".$rename."\"");
+	$result = db_query("SELECT * FROM group_documents WHERE path=\"".$rename."\"");
 	$res = mysql_fetch_array($result);
 	$fileName = $res["filename"];
 	@$dialogBox .= "<form>\n";
@@ -339,15 +342,10 @@ if (isset($fileNameList))
 DISPLAY
 **************************************/
 $dspCurDirName = htmlspecialchars($curDirName);
-$resultGroup=db_query("SELECT forumId FROM student_group WHERE id='$userGroupId'", $dbname);
-
-while ($myGroup = mysql_fetch_array($resultGroup)) {
-	$forumId=$myGroup['forumId'];
-}
 $tool_content .= "
     <div id=\"operations_container\">
       <ul id=\"opslist\"><li><a href='group_space.php'>$langGroupSpaceLink</a></li>
-        <li><a href='../phpbb/viewforum.php?forum=$forumId'>$langGroupForumLink</a></li>
+        <li><a href='../phpbb/viewforum.php?forum=$forum_id'>$langGroupForumLink</a></li>
         <li><a href='$_SERVER[PHP_SELF]?createDir=".$curDirPath."'>$langCreateDir</a></li>
         <li><a href='$_SERVER[PHP_SELF]?uploadPath=".$curDirPath."'>$langDownloadFile</a></li>
       </ul>
