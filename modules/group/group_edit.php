@@ -36,26 +36,29 @@ $require_login = TRUE;
 $require_current_course = TRUE;
 $require_help = TRUE;
 $helpTopic = 'Group';
-$require_prof = true;
 
 include '../../include/baseTheme.php';
 $nameTools = $langEditGroup;
 $navigation[]= array ("url"=>"group.php", "name"=> $langGroups);
 
-//check for valid $userGroupId
+// check for valid $userGroupId
 if (isset($userGroupId) && is_numeric($userGroupId)){
 	$userGroupId = (int)$userGroupId;
-
 } else {
 	die("Wrong user group id / User group id not set");
 }
 
+list($tutor_id) = mysql_fetch_row(db_query("SELECT tutor FROM student_group WHERE id='$userGroupId'", $currentCourseID));
+$is_tutor = ($tutor_id == $uid);
+if (!$is_adminOfCourse and !$is_tutor) {
+        header('Location: group_space.php?userGroupId=' . $userGroupId);
+        exit;
+}
 
 $tool_content ="";
 $head_content = <<<hCont
 <script type="text/javascript" language="JavaScript">
-
-<!-- Begin javascript menu swapper
+<!-- // Begin javascript menu swapper
 function move(fbox, tbox) {
 var arrFbox = new Array();
 var arrTbox = new Array();
@@ -145,10 +148,13 @@ tCont;
 ################### IF MODIFY #######################################
 
 // Once modifications have been done, the user validates and arrives here
-if(isset($modify))
+if (isset($modify))
 {
 	// Update main group settings
-	$updateStudentGroup=db_query("UPDATE student_group
+        if (!$is_adminOfCourse) {
+                $tutor = $tutor_id;
+        }
+	$updateStudentGroup = db_query("UPDATE student_group
 		SET name='$name', description='$description', maxStudent='$maxStudent', tutor='$tutor'
 		WHERE id='$userGroupId'", $currentCourseID);
 
@@ -196,52 +202,47 @@ while ($myStudentGroup = mysql_fetch_array($groupSelect))
 		$tool_content_group_name = $myStudentGroup['name'];
 
 
-	// SELECT TUTORS
-	$resultTutor=mysql_query("SELECT user.user_id, user.nom, user.prenom
-		FROM `$mysqlMainDb`.user, `$mysqlMainDb`.cours_user
-			WHERE cours_user.user_id=user.user_id
-			AND cours_user.tutor='1'
-			AND cours_user.code_cours='$currentCourse'");
-	$tutorExists=0;
-	$tool_content_tutor="";
-	while ($myTutor = mysql_fetch_array($resultTutor))
-	{
-		//  Present tutor appears first in select box
-		if($myStudentGroup['tutor']==$myTutor['user_id'])
-		{
-			$tutorExists=1;
-			$tool_content_tutor .= "<option SELECTED value=\"$myTutor[user_id]\">
-				$myTutor[nom] $myTutor[prenom]
-				</option>";
-		}
-		else
-		{
-			$tool_content_tutor .= "
-				<option value=$myTutor[user_id]>
-					$myTutor[nom] $myTutor[prenom]
-				</option>";
-		}
-	}
+        if ($is_adminOfCourse) {
+                // SELECT TUTORS
+                $tool_content_tutor = '<select name="tutor" class="FormData_InputText">';
+                $resultTutor=mysql_query("SELECT user.user_id, user.nom, user.prenom
+                        FROM `$mysqlMainDb`.user, `$mysqlMainDb`.cours_user
+                                WHERE cours_user.user_id=user.user_id
+                                AND cours_user.tutor='1'
+                                AND cours_user.code_cours='$currentCourse'");
+                $tutorExists=0;
+                while ($myTutor = mysql_fetch_array($resultTutor)) {
+                        //  Present tutor appears first in select box
+                        if($myStudentGroup['tutor']==$myTutor['user_id']) {
+                                $tutorExists=1;
+                                $tool_content_tutor .= "<option selected='1' value='$myTutor[user_id]'>
+                                        $myTutor[nom] $myTutor[prenom]
+                                        </option>";
+                        } else {
+                                $tool_content_tutor .= "
+                                        <option value='$myTutor[user_id]'>
+                                                $myTutor[nom] $myTutor[prenom]
+                                        </option>";
+                        }
+                }
+                if($tutorExists==0) {
+                        $tool_content_tutor .=  "<option selected='1' value='0'>$langGroupNoTutor</option>";
+                } else {
+                        $tool_content_tutor .=  "<option value='0'>$langGroupNoTutor</option>";
+                }
+                $tool_content_tutor .= '</select>';
+                $element1 = 4;
+                $element2 = 7;
+        } else {
+                $tool_content_tutor = uid_to_name($uid);
+                $element1 = 3;
+                $element2 = 6;
+        }
 
-
-
-	if($tutorExists==0)
-	{
-		$tool_content_tutor .=  "<option SELECTED value=0>$langGroupNoTutor</option>";
-	}
-	else
-	{
-		$tool_content_tutor .=  "<option value=0>$langGroupNoTutor</option>";
-	}
-
-
-	if($myStudentGroup['maxStudent']==0)
-	{
-		$tool_content_max_student =  "-";
-	}
-	else
-	{
-		$tool_content_max_student =  $myStudentGroup['maxStudent'];
+	if ($myStudentGroup['maxStudent'] == 0) {
+		$tool_content_max_student = "-";
+	} else {
+		$tool_content_max_student = $myStudentGroup['maxStudent'];
 	}
 
 	$tool_content_group_description = $myStudentGroup['description'];
@@ -283,7 +284,7 @@ $tool_content_group_members = "";
 while ($myMember = mysql_fetch_array($resultMember))
 	{
 	$userIngroupId=$myMember['user_id'];
- 	$tool_content_group_members .=  "<option value=\"$userIngroupId\">$myMember[prenom] $myMember[nom]</option>";
+ 	$tool_content_group_members .=  "<option value='$userIngroupId'>$myMember[prenom] $myMember[nom]</option>";
 	$a++;
 }
 
@@ -294,66 +295,64 @@ while ($myMember = mysql_fetch_array($resultMember))
         <p>&nbsp;</p>";
 	}
 		$tool_content .= "
-    <div id=\"operations_container\">
-      <ul id=\"opslist\">
-        <li><a href=\"group_space.php?userGroupId=$userGroupId\">$langGroupThisSpace</a></li>
-        <li><a href=\"../user/user.php\">$langAddTutors</a></li>
-      </ul>
-    </div>";
+    <div id='operations_container'>
+      <ul id='opslist'>
+        <li><a href='group_space.php?userGroupId=$userGroupId'>$langGroupThisSpace</a></li>" .
+        ($is_adminOfCourse? "<li><a href='../user/user.php'>$langAddTutors</a></li>": '') . "</ul></div>";
 
 
 $tool_content .="
-  <form name= \"groupedit\" method=\"POST\" action=\"".$_SERVER['PHP_SELF']."?edit=yes&userGroupId=$userGroupId\" onsubmit = \" return checkrequired(this,'name');\">
+  <form name='groupedit' method='post' action='".$_SERVER['PHP_SELF']."?edit=yes&amp;userGroupId=$userGroupId' onsubmit=\"return checkrequired(this,'name');\">
     <br />
-    <table width=\"99%\" class=\"FormData\">
+    <table width='99%' class='FormData'>
     <thead>
     <tr>
-      <th width=\"220\">&nbsp;</th>
+      <th width='220'>&nbsp;</th>
       <td><b>$langGroupInfo</b></td>
     </tr>
     <tr>
-      <th class=\"left\">$langGroupName $myStudentGroup[name]:</th>
-      <td><input type=text name=\"name\" size=40 value=\"$tool_content_group_name\" class=\"FormData_InputText\"></td>
+      <th class='left'>$langGroupName $myStudentGroup[name]:</th>
+      <td><input type=text name='name' size=40 value='$tool_content_group_name' class='FormData_InputText' /></td>
     </tr>
     <tr>
-      <th class=\"left\">$langGroupTutor:</th>
+      <th class='left'>$langGroupTutor:</th>
       <td>
-         <select name=\"tutor\" class=\"FormData_InputText\">$tool_content_tutor</select>
+         $tool_content_tutor
       </td>
     </tr>
     <tr>
-      <th class=\"left\">$langMax $langGroupPlacesThis:</th>
-      <td><input type=text name=\"maxStudent\" size=2 value=\"$tool_content_max_student\"  class=\"auth_input\"></td>
+      <th class='left'>$langMax $langGroupPlacesThis:</th>
+      <td><input type=text name='maxStudent' size=2 value='$tool_content_max_student'  class='auth_input' /></td>
     </tr>
     <tr>
-      <th class=\"left\">$langDescription $langUncompulsory:</th>
-      <td><textarea name=\"description\" rows=2 cols=60 wrap=virtual  class=\"FormData_InputText\">$tool_content_group_description</textarea></td>
+      <th class='left'>$langDescription $langUncompulsory:</th>
+      <td><textarea name='description' rows='2' cols='60' class='FormData_InputText'>$tool_content_group_description</textarea></td>
     </tr>
     <tr>
-      <th class=\"left\" valign=\"top\">$langGroupMembers :</th>
+      <th class='left' valign='top'>$langGroupMembers :</th>
       <td>
-          <table width=\"99%\" align=\"center\" class=\"GroupSum\">
+          <table width='99%' align='center' class='GroupSum'>
           <thead>
           <tr>
             <td><b>$langNoGroupStudents</b></td>
-            <td width='100'><div align=\"center\"><b>$langMove</b></div></td>
-            <td><div align=\"right\"><b>$langGroupMembers</b></div></td>
+            <td width='100'><div align='center'><b>$langMove</b></div></td>
+            <td><div align='right'><b>$langGroupMembers</b></div></td>
           </tr>
           </thead>
           <tbody>
           <tr>
-            <td><div align=\"left\">
-              <select name=\"nogroup[]\" size=15 multiple>
+            <td><div align='left'>
+              <select name='nogroup[]' size='15' multiple='1'>
                 $tool_content_not_Member
               </select></div>
             </td>
             <td>
-              <div align=\"center\">
-              <input type=\"button\" onClick=\"move(this.form.elements[4],this.form.elements[7])\" value=\"   >>   \"><br /><input type=\"button\" onClick=\"move(this.form.elements[7],this.form.elements[4])\" value=\"   <<   \">
+              <div align='center'>
+              <input type='button' onClick=\"move(this.form.elements[$element1],this.form.elements[$element2])\" value='   &gt;&gt;   ' /><br /><input type='button' onClick=\"move(this.form.elements[$element2],this.form.elements[$element1])\" value='   &lt;&lt;   ' />
               </div>
             </td>
-            <td><div align=\"right\">
-              <select name=\"ingroup[]\" size=\"15\" multiple>
+            <td><div align='right'>
+              <select name='ingroup[]' size='15' multiple='1'>
                 $tool_content_group_members
               </select></div>
             </td>
@@ -364,14 +363,11 @@ $tool_content .="
     </tr>
     <tr>
       <th class=\"left\">&nbsp;</th>
-      <td><input type=submit value=\"$langModify\"  name=\"modify\" onClick=\"selectAll(this.form.elements[7],true)\"></td>
+      <td><input type='submit' value='$langModify'  name='modify' onClick=\"selectAll(this.form.elements[7],true)\" /></td>
     </tr>
     </thead>
     </table>
+</form>
 ";
 
 draw($tool_content, 2, 'group', $head_content);
-?>
-
-
-

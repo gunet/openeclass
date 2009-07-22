@@ -86,8 +86,13 @@ mysql_select_db($dbname);
 $resultGroup=mysql_query("SELECT name, description, tutor, forumId FROM student_group WHERE id='$userGroupId'");
 while ($myGroup = mysql_fetch_array($resultGroup))
 {
+        if ($myGroup['tutor'] == $uid) {
+                $is_tutor = true;
+        } else {
+                $is_tutor = false;
+        }
 	$forumId=$myGroup['forumId'];
-	if ($is_adminOfCourse)
+	if ($is_adminOfCourse or $is_tutor)
 	{
 		$tool_content .= "
     <div id=\"operations_container\">
@@ -232,7 +237,7 @@ draw($tool_content, 2, 'group');
 
 function loadGroupTools(){
 	global $selfReg, $forumId, $langForums, $userGroupId, $langDoc;
-	global $is_adminOfCourse, $userGroupId, $langEmailGroup;
+	global $is_adminOfCourse, $is_tutor, $userGroupId, $langEmailGroup;
 
 	// Vars needed to determine group File Manager and group Forum
 	// They are unregistered when opening group.php once again.
@@ -254,18 +259,18 @@ function loadGroupTools(){
 			// Drive members into their own forum
 			if($myProperties['forum'] == 1){
 				$group_tools .= "
-      <li><a href=\"../phpbb/viewforum.php?forum=$forumId\">$langForums</a></li>";
+      <li><a href='../phpbb/viewforum.php?forum=$forumId'>$langForums</a></li>";
 			}
 			// Drive members into their own File Manager
 			if($myProperties['document'] == 1) {
 				 $group_tools .=  "
-      <li><a href=\"document.php?userGroupId=$userGroupId\">$langDoc</a></li>";
+      <li><a href='document.php?userGroupId=$userGroupId'>$langDoc</a></li>";
 			}
 		}	// while loop
-		if ($is_adminOfCourse)
+		if ($is_adminOfCourse or $is_tutor)
 		{
 			$group_tools .=  "
-      <li><a href=\"group_email.php?userGroupId=$userGroupId\">$langEmailGroup</a></li>";
+      <li><a href='group_email.php?userGroupId=$userGroupId'>$langEmailGroup</a></li>";
 		}
 	}
 	$group_tools .= "
