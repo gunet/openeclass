@@ -55,10 +55,10 @@ xinha_init = xinha_init ? xinha_init : function()
 	 // Dimitris
 	xinha_config.toolbar =
 	[
-		["formatblock","bold","italic","underline","strikethrough","forecolor","hilitecolor",
+		["formatblock","fontsize","bold","italic","underline","strikethrough","forecolor","hilitecolor",
 		"justifyleft","justifycenter","justifyright","justifyfull",
 		"insertorderedlist","insertunorderedlist","outdent","indent",
-		"inserthorizontalrule","createlink","inserttable","undo","redo",
+		"inserthorizontalrule","createlink","inserttable","insertimage","undo","redo",
 		"killword", "removeformat", "htmlmode"]
 	];
 
