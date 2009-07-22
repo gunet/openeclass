@@ -131,20 +131,13 @@ if (isset($_POST['back1']) or !isset($_POST['visit'])) {
      <tr>
        <th class='left'>$langFac&nbsp;:</th>
        <td>";
-
-        // selection of faculty
-        $resultFac=db_query("SELECT id,name FROM faculte ORDER BY number");
-        $tool_content .= "
-        <select name='faculte' class=auth_input>";
-        while ($myfac = mysql_fetch_array($resultFac)) {
-                if(isset($faculte) and implode('--',array($myfac['id'],$myfac['name'])) == $faculte)
-                   $tool_content .= "
-          <option selected value='".$myfac['id']."--".$myfac['name']."'>$myfac[name]</option>";
-                else
-                        $tool_content .= "
-          <option value='".$myfac['id']."--".$myfac['name']."'>$myfac[name]</option>";
+        list($homefac) = mysql_fetch_row(db_query("SELECT department FROM user WHERE user_id=$uid"));
+        $facs = db_query("SELECT id, name FROM faculte order by id");
+        while ($n = mysql_fetch_array($facs)) {
+                $fac[$n['id']] = $n['name'];
         }
-        $tool_content .= "</select></td><td>&nbsp;</td></tr>";
+        $tool_content .= selection($fac, 'faculte', $homefac);
+        $tool_content .= "</td><td>&nbsp;</td></tr>";
         unset($repertoire);
         $tool_content .= "
       <tr>
@@ -343,15 +336,10 @@ if (isset($_POST['back1']) or !isset($_POST['visit'])) {
 if (isset($_POST['create_course'])) {
 
 	$nameTools = $langCourseCreate;
-        // H metavlhth faculte periexei to fac_id kai to
-        // onoma tou tmhmatos xwrismena me dyo dashes
-        // to $facid pairnei timh apo thn $faculte
-        list($facid, $facname) = split("--", $faculte);
-        // to $faculte ksanapairnei thn timh mono tou onomatos
-        // tou tmhmatos gia logous compatibility
-        $faculte = $facname;
+        $facid = intval($faculte);
+        $facname = find_faculty_by_id($facid);
 	// find new code
-        $repertoire = new_code(find_faculty_by_name($faculte));
+        $repertoire = new_code($facid);
         $language = langcode_to_name($_POST['languageCourse']);
         include("../lang/$language/common.inc.php");
         include("../lang/$language/messages.inc.php");

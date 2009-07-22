@@ -591,18 +591,18 @@ function find_faculty_by_id($id) {
 	return false;
 }
 
-// Returns next available code for a new course in faculty with code $fac
+// Returns next available code for a new course in faculty with id $fac
 function new_code($fac) {
 	global $mysqlMainDb;
 
 	mysql_select_db($mysqlMainDb);
 	$gencode = mysql_fetch_row(db_query("SELECT code, generator
-		FROM faculte WHERE code = '$fac'"));
+		FROM faculte WHERE id = $fac"));
 	do {
 		$code = $gencode[0].$gencode[1];
 		$gencode[1] += 1;
 		db_query("UPDATE $mysqlMainDb.faculte SET generator = '$gencode[1]'
-			WHERE code = '$fac'");
+			WHERE id = '$fac'");
 	} while (mysql_select_db($code));
 	mysql_select_db($mysqlMainDb);
 
