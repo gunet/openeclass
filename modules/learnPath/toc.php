@@ -11,15 +11,28 @@ echo "<link rel='stylesheet' href='tool.css' type='text/css'>";
 $TABLEMODULE            = "lp_module";
 $TABLELEARNPATHMODULE   = "lp_rel_learnPath_module";
 $TABLEASSET             = "lp_asset";
+$TABLEUSERMODULEPROGRESS= "lp_user_module_progress";
 $imgRepositoryWeb       = "../../template/classic/img/";
 
 mysql_select_db($currentCourseID);
 
+if($uid)
+{
+	$uidCheckString = "AND UMP.`user_id` = ". (int)$uid;
+}
+else // anonymous
+{
+   $uidCheckString = "AND UMP.`user_id` IS NULL ";
+}
+
 //  -------------------------- learning path list content ----------------------------
-$sql = "SELECT M.*, LPM.*, A.`path`
+$sql = "SELECT M.*, LPM.*, A.`path`, UMP.`lesson_status`, UMP.`credit`
         FROM (`".$TABLEMODULE."` AS M,
              `".$TABLELEARNPATHMODULE."` AS LPM)
         LEFT JOIN `".$TABLEASSET."` AS A ON M.`startAsset_id` = A.`asset_id`
+        LEFT JOIN `".$TABLEUSERMODULEPROGRESS."` AS UMP
+           ON UMP.`learnPath_module_id` = LPM.`learnPath_module_id`
+           ".$uidCheckString."
         WHERE M.`module_id` = LPM.`module_id`
           AND LPM.`learnPath_id` = ". (int)$_SESSION['path_id']."
         ORDER BY LPM.`rank` ASC";
@@ -105,8 +118,17 @@ foreach ($flatElementList as $module)
             $moduleImg = choose_image(basename($module['path']));
 
         $contentType_alt = selectAlt($module['contentType']);
+        
+        unset($imagePassed);
+        if($module['credit'] == 'CREDIT' || $module['lesson_status'] == 'COMPLETED' || $module['lesson_status'] == 'PASSED')
+        	$imagePassed = '<img src="'.$imgRepositoryWeb.'tick1.gif" alt="'.$module['lesson_status'].'" title="'.$module['lesson_status'].'" />';
+
+        if(isset($imagePassed))
+        	echo $imagePassed;
+        
         echo "<span style=\"vertical-align: middle;\">
 	<img src=\"".$imgRepositoryWeb."".$moduleImg."\" title=\"".$contentType_alt."\" border=\"0\"></span>&nbsp;";
+        
 	echo "<a href='navigation/startModule.php?viewModule_id=$module[module_id]'".$style." target='mainFrame'>". htmlspecialchars($module['name']). "</a>"; 
 
     }
