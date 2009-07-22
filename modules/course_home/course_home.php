@@ -150,7 +150,7 @@ if (!is_null($maxorder) or $is_adminOfCourse) {
 }
 // add course units
 if ($is_adminOfCourse) {
-	$cunits_content .= ": <a href='{$urlServer}modules/units/info.php'>$langAddUnit</a>";
+	$cunits_content .= ": <a href='{$urlServer}modules/units/info.php'>$langAddUnit</a>&nbsp;<img src='../../template/classic/img/add.gif' iwidth='15' height='15' title='$langAddUnit' />";
 }
         $cunits_content .= "</h3>";
         $cunits_content .= "</td>\n      </tr>\n      </thead>\n      </table>\n";
@@ -180,29 +180,29 @@ while ($cu = mysql_fetch_array($sql)) {
                 } else {
                     $cunits_content .= "class='resources'";
                 }
-                $cunits_content .= " width='99%'>\n      <thead>\n      <tr>\n        <th width='4%' class='right'>$count_index.</th>";
-                $cunits_content .= "\n        <td width='81%'><a href='${urlServer}modules/units/?id=$cu[id]'$class_vis>$cu[title]</a></td>";
+                $cunits_content .= " width='99%'>\n      <thead>\n      <tr>\n        <th width='5%' class='right'>$count_index.</th>";
+                $cunits_content .= "\n        <td width='85%'><a class=\"unit_link\" href='${urlServer}modules/units/?id=$cu[id]'$class_vis>$cu[title]</a></td>";
                 if ($is_adminOfCourse) { // display actions
-                        $cunits_content .= "\n        <th width='3%'>".
+                        $cunits_content .= "\n        <td width='2%' style=\"border-bottom: 1px solid #CAC3B5;\">".
                                 "<a href='../../modules/units/info.php?edit=$cu[id]'>" .
-                                "<img src='../../template/classic/img/edit.gif' title='$langEdit' /></a></th>" .
-                                "\n        <th width='3%'><a href='$_SERVER[PHP_SELF]?del=$cu[id]' " .
+                                "<img src='../../template/classic/img/edit.gif' title='$langEdit' /></a></td>" .
+                                "\n        <td width='2%' style=\"border-bottom: 1px solid #CAC3B5;\"><a href='$_SERVER[PHP_SELF]?del=$cu[id]' " .
                                 "onClick=\"return confirmation();\">" .
                                 "<img src='../../template/classic/img/delete.gif' " .
-                                "title='$langDelete'></img></a></th>" .
-                                "\n        <th width='3%'><a href='$_SERVER[PHP_SELF]?vis=$cu[id]'>" .
+                                "title='$langDelete'></img></a></td>" .
+                                "\n        <td width='2%' style=\"border-bottom: 1px solid #CAC3B5;\"><a href='$_SERVER[PHP_SELF]?vis=$cu[id]'>" .
                                 "<img src='../../template/classic/img/$icon_vis' " .
-                                "title='$langVisibility'></img></a></th>";
+                                "title='$langVisibility'></img></a></td>";
                         if ($cu['id'] != $last_id) {
-                                $cunits_content .= "\n        <th width='3%'><a href='$_SERVER[PHP_SELF]?down=$cu[id]'>" .
-                                "<img src='../../template/classic/img/down.gif' title='$langDown'></img></a></th>";
+                                $cunits_content .= "\n        <td width='2%' style=\"border-bottom: 1px solid #CAC3B5;\"><a href='$_SERVER[PHP_SELF]?down=$cu[id]'>" .
+                                "<img src='../../template/classic/img/down.gif' title='$langDown'></img></a></td>";
                         } else {
-                                $cunits_content .= "\n        <th width='3%'>&nbsp;</th>";
+                                $cunits_content .= "\n        <td width='2%' style=\"border-bottom: 1px solid #CAC3B5;\">&nbsp;&nbsp;&nbsp;&nbsp;</td>";
                         }
                         if (!$first) {
-                                $cunits_content .= "\n        <th width='3%'><a href='$_SERVER[PHP_SELF]?up=$cu[id]'><img src='../../template/classic/img/up.gif' title='$langUp'></img></a></th>";
+                                $cunits_content .= "\n        <td width='2%' style=\"border-bottom: 1px solid #CAC3B5;\"><a href='$_SERVER[PHP_SELF]?up=$cu[id]'><img src='../../template/classic/img/up.gif' title='$langUp'></img></a></td>";
                         } else {
-                                $cunits_content .= "\n        <th width='3%'>&nbsp;</th>";
+                                $cunits_content .= "\n        <td width='2%' style=\"border-bottom: 1px solid #CAC3B5;\">&nbsp;&nbsp;&nbsp;&nbsp;</td>";
                         }
                 }
                 $cunits_content .= "\n      <tr>\n        \n<td width='4%'>&nbsp;</td>\n        <td width='96%' ";
@@ -243,7 +243,7 @@ switch ($type){
 }
 
 $bar_content .= "\n            <p><b>".$langLessonCode."</b>: ".$fake_code."</p>";
-$bar_content .= "\n            <p><b>".$langTeachers."</b>: ".$professor."</p>";
+$bar_content .= "\n            <p><b>".$langTeachers."</b>:<br /> ".$professor."</p>";
 $bar_content .= "\n            <p><b>".$langFaculty."</b>: ".$faculte."</p>";
 $bar_content .= "\n            <p><b>".$m['type']."</b>: ".$lessonType."</p>";
 
@@ -284,35 +284,47 @@ if ($is_adminOfCourse) {
 $tool_content .= "
 <div id='container_login'>
 
-   <div id='wrapper'>
-      <div id='content_login'><p>$main_content</p></div>
-   </div>
-   <div id='navigation'>
-      <table>
+   <table width='99%' class='resources'>
+   <tr>
+      <td valign='top'>$main_content</td>
+      <td width='30'>&nbsp;</td>
+      <td width='200' valign='top'>
+        <p>&nbsp;</p>
+        <table>
         <tbody>
         <tr>
           <td class='odd'>$bar_content</td>
         </tr>
         </tbody>
-      </table>
+        </table>
 
-      <br />
-      <table>
+        <br />
+
+        <table>
         <tbody>
         <tr>
           <td class='odd' width='1%' align='right'></td>
           <td align='left'>$langContactProf: (<a href='../../modules/contact/index.php'>$langEmail</a>)</td>
         </tr>
         </tbody>
-      </table>
+        </table>
 
-   </div>
-
-<table width='99%' class='resources'>
-  <tr>
-      <td>$cunits_content</td>
+      </td>
    </tr>
-</table>
+   <tr>
+      <td colspan='3' valign='top'>
+        <p>&nbsp;</p>
+
+        <table width='99%' class='resources'>
+        <tr>
+          <td>$cunits_content</td>
+        </tr>
+        </table>
+
+      </td>
+   </tr>
+   </table>
+
 </div>
 ";
 draw($tool_content, 2,'course_home', $head_content);

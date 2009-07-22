@@ -317,7 +317,7 @@ function show_doc($title, $comments, $resource_id, $file_id)
         } else {
                 $comment = "";
         }
-        return "<tr$class_vis><th><img src='$image' /></th><td>$link</td>" .
+        return "<tr$class_vis><td><img src='$image' /></td><td>$link</td>" .
                 actions('doc', $resource_id, $status) .
                 '</tr>' . $comment;
 }
@@ -331,7 +331,7 @@ function show_text($comments, $resource_id, $visibility)
         $class_vis = ($visibility == 'i')? ' class="invisible"': '';
         $imagelink = "<img src='../../template/classic/img/description_" .
 			($visibility == 'i'? 'off': 'on') . ".gif' />";
-        $tool_content .= "<tr$class_vis><th>$imagelink</th><td>$comments</td>" .
+        $tool_content .= "<tr$class_vis><td>$imagelink</td><td>$comments</td>" .
 		actions('text', $resource_id, $visibility) .
                 "</tr>";
 }
@@ -369,7 +369,7 @@ function show_lp($title, $comments, $resource_id, $lp_id)
         }
         $class_vis = ($status == 'i' or $status == 'del')?
                 ' class="invisible"': '';
-	return "<tr$class_vis><th>$imagelink</th><td>$link</td>" .
+	return "<tr$class_vis><td>$imagelink</td><td>$link</td>" .
 		actions('lp', $resource_id, $status) .
 		'</tr>' . $comment_box;
 }
@@ -403,7 +403,7 @@ function show_video($table, $title, $comments, $resource_id, $video_id, $visibil
         } else {
                 $comment_box = "";
         }
-        $tool_content .= "<tr$class_vis><th>$imagelink</th><td>$videolink</td>" .
+        $tool_content .= "<tr$class_vis><td>$imagelink</td><td>$videolink</td>" .
 		actions('video', $resource_id, $visibility) .
                 '</tr>' . $comment_box;
 }
@@ -437,7 +437,7 @@ function show_exercise($title, $comments, $resource_id, $exercise_id, $visibilit
                 $comment_box = "<tr><td>&nbsp;</td><td>$comments</td>";
 	}
 
-	return "<tr$class_vis><th>$imagelink</th><td>$link</td>" .
+	return "<tr$class_vis><td>$imagelink</td><td>$link</td>" .
 		actions('lp', $resource_id, $visibility) .
 		'</tr>' . $comment_box;
 }
@@ -464,7 +464,7 @@ function show_forum($type, $title, $comments, $resource_id, $ft_id, $visibility)
                 $comment_box = "<tr><td>&nbsp;</td><td>$comments</td>";
 	}
 
-	return "<tr$class_vis><th>$imagelink</th><td>$link</td>" .
+	return "<tr$class_vis><td>$imagelink</td><td>$link</td>" .
 		actions('forum', $resource_id, $visibility) .
 		'</tr>' . $comment_box;
 }
