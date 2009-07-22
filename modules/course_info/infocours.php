@@ -59,7 +59,7 @@ $head_content = <<<hContent
         _editor_lang = "$lang_editor";
 </script>
 <script type="text/javascript" src="$urlAppend/include/xinha/XinhaCore.js"></script>
-<script type="text/javascript" src="$urlAppend/include/xinha/my_config.js"></script>
+<script type="text/javascript" src="$urlAppend/include/xinha/my_config2.js"></script>
 hContent;
 
 	if (isset($submit)) {

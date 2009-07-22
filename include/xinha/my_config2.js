@@ -33,7 +33,7 @@ xinha_init = xinha_init ? xinha_init : function()
 
 	xinha_editors = xinha_editors ? xinha_editors :
 	[
-		'xinha'
+		'xinha','xinha2'
 	];
 
 	/** STEP 3 ***************************************************************
@@ -101,6 +101,9 @@ xinha_init = xinha_init ? xinha_init : function()
 	 *   xinha_editors.myTextArea.config.height = '480px';
 	 *
 	 ************************************************************************/
+   	xinha_editors.xinha2.config.width  = '100px';
+	xinha_editors.xinha2.config.height = '100px';
+	 
 	/** STEP 6 ***************************************************************
 	 * Finally we "start" the editors, this turns the textareas into
 	 * Xinha editors.
