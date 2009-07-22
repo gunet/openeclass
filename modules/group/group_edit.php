@@ -41,13 +41,7 @@ include '../../include/baseTheme.php';
 $nameTools = $langEditGroup;
 $navigation[]= array ("url"=>"group.php", "name"=> $langGroups);
 
-// check for valid $userGroupId
-if (isset($userGroupId) && is_numeric($userGroupId)){
-	$userGroupId = (int)$userGroupId;
-} else {
-	die("Wrong user group id / User group id not set");
-}
-
+$userGroupId = intval($_GET['userGroupId']);
 list($tutor_id) = mysql_fetch_row(db_query("SELECT tutor FROM student_group WHERE id='$userGroupId'", $currentCourseID));
 $is_tutor = ($tutor_id == $uid);
 if (!$is_adminOfCourse and !$is_tutor) {
@@ -140,11 +134,6 @@ function checkrequired(which, entry) {
 </script>
 hCont;
 
-$tool_content .= <<<tCont
-
-
-tCont;
-
 ################### IF MODIFY #######################################
 
 // Once modifications have been done, the user validates and arrives here
@@ -162,28 +151,27 @@ if (isset($modify))
 		db_query("UPDATE forums SET forum_name='$name' WHERE forum_id='$forumId'", $currentCourseID);
 
 	// Count number of members
-	$numberMembers = @count ($ingroup);
+	$numberMembers = @count($ingroup);
 
 	// every letter introduced in field drives to 0
 	settype($maxStudent, "integer");
 
 	// Insert new list of members
-	if($maxStudent < $numberMembers AND $maxStudent!="0")
+	if($maxStudent < $numberMembers and $maxStudent != 0)
 	{
 		// Too much members compared to max members allowed
 		$langGroupEdited=$langGroupTooMuchMembers;
 	}
 	else
-	{
-		// Delete all members of this group
-		$delGroupUsers=db_query("DELETE FROM user_group WHERE team='$userGroupId'", $currentCourseID);
-		$numberMembers--;
+        {
+                // Delete all members of this group
+                $delGroupUsers = db_query("DELETE FROM user_group WHERE team='$userGroupId'", $currentCourseID);
+                $numberMembers--;
 
-	for ($i = 0; $i <= $numberMembers; $i++)
-	{
-		$registerUserGroup=db_query("INSERT INTO user_group (user, team)
-			VALUES ('$ingroup[$i]', '$userGroupId')", $currentCourseID);
-	}
+                for ($i = 0; $i <= $numberMembers; $i++) {
+                        db_query("INSERT INTO user_group (user, team)
+                                  VALUES ('$ingroup[$i]', '$userGroupId')", $currentCourseID);
+                }
 
 		$langGroupEdited=$langGroupSettingsModified;
 	}	// else
@@ -199,13 +187,12 @@ $groupSelect=db_query("SELECT name, tutor, description, maxStudent
 
 while ($myStudentGroup = mysql_fetch_array($groupSelect))
 {
-		$tool_content_group_name = $myStudentGroup['name'];
-
+	$tool_content_group_name = $myStudentGroup['name'];
 
         if ($is_adminOfCourse) {
                 // SELECT TUTORS
                 $tool_content_tutor = '<select name="tutor" class="FormData_InputText">';
-                $resultTutor=mysql_query("SELECT user.user_id, user.nom, user.prenom
+                $resultTutor=db_query("SELECT user.user_id, user.nom, user.prenom
                         FROM `$mysqlMainDb`.user, `$mysqlMainDb`.cours_user
                                 WHERE cours_user.user_id=user.user_id
                                 AND cours_user.tutor='1'
@@ -266,7 +253,7 @@ $sqll= "SELECT DISTINCT u.user_id , u.nom, u.prenom
 			AND cu.tutor=0";
 
 $tool_content_not_Member="";
-$resultNotMember=mysql_query($sqll);
+$resultNotMember=db_query($sqll, $currentCourseID);
 while ($myNotMember = mysql_fetch_array($resultNotMember))
 {
 	$tool_content_not_Member .=  "<option value=\"$myNotMember[user_id]\">
@@ -275,7 +262,7 @@ while ($myNotMember = mysql_fetch_array($resultNotMember))
 
 }	// while loop
 
-$resultMember=mysql_query("SELECT user_group.id, user.user_id, user.nom, user.prenom, user.email
+$resultMember=db_query("SELECT user_group.id, user.user_id, user.nom, user.prenom, user.email
 	FROM `$mysqlMainDb`.user, user_group
 	WHERE user_group.team='$userGroupId' AND user_group.user=$mysqlMainDb.user.user_id");
 
@@ -363,7 +350,7 @@ $tool_content .="
     </tr>
     <tr>
       <th class=\"left\">&nbsp;</th>
-      <td><input type='submit' value='$langModify'  name='modify' onClick=\"selectAll(this.form.elements[7],true)\" /></td>
+      <td><input type='submit' value='$langModify'  name='modify' onClick=\"selectAll(this.form.elements[$element2],true)\" /></td>
     </tr>
     </thead>
     </table>
