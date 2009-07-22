@@ -2812,6 +2812,7 @@ $langConfirmUnregCours = "Θέλετε σίγουρα να απεγγραφεί�
  $langGDRequired = "Απαιτείται η βιβλιοθήκη GD!";
  $langPersonalStats="Τα στατιστικά μου";
  $langUserLogins="Επισκέψεις χρηστών στο μάθημα";
+ $langUserDuration="Συμμετοχή χρηστών ανά μάθημα";
  $langStartDate = "Ημερομηνία Έναρξης";
  $langEndDate = "Ημερομηνία Λήξης";
  $langAllUsers = "Όλοι οι Χρήστες";

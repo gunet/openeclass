@@ -50,6 +50,7 @@ $tool_content .= "
   <ul id=\"opslist\">";
 $tool_content .= "\n    <li><a href='favourite.php?first='>".$langFavourite."</a></li>";
 $tool_content .= "\n    <li><a href='userlogins.php?first='>".$langUserLogins."</a></li>";
+$tool_content .= "<li><a href='userduration.php'>".$langUserDuration."</a></li>";
 $tool_content .= "\n  </ul>\n</div>";
 
 $dateNow = date("d-m-Y / H:i:s",time());

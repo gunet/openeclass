@@ -52,6 +52,7 @@ $tool_content .= "
     <ul id=\"opslist\">
       <li><a href='usage.php'>".$langUsageVisits."</a></li>
       <li><a href='favourite.php?first='>".$langFavourite."</a></li>
+      <li><a href='userduration.php'>".$langUserDuration."</a></li>
     </ul>
   </div>";
 
