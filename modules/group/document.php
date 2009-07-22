@@ -70,6 +70,20 @@ function confirmation ()
 </script>
 ';
 
+if (isset($_REQUEST['userGroupId'])) {
+        $userGroupId = intval($_REQUEST['userGroupId']);
+        list($tutor_id) = mysql_fetch_row(db_query("SELECT tutor FROM student_group WHERE id='$userGroupId'", $currentCourseID));
+        $is_tutor = ($tutor_id == $uid);
+} else {
+        $req = db_query("SELECT id FROM student_group WHERE tutor='$uid'", $currentCourseID);
+        if ($req and mysql_num_rows($req) > 0) {
+                list($userGroupId) = mysql_fetch_row($req);
+                $is_tutor = true;
+        } else {
+                $is_tutor = $userGroupId = false;
+        }
+}
+
 $sql_result = db_query("SELECT group_quota FROM cours WHERE code='$currentCourseID'", $mysqlMainDb);
 $d = mysql_fetch_array($sql_result);
 $diskQuotaGroup = $d['group_quota'];
@@ -77,7 +91,7 @@ $diskQuotaGroup = $d['group_quota'];
 /**************************************
 /FILEMANAGER BASIC VARIABLES DEFINITION
 **************************************/
-if ($is_adminOfCourse) {
+if ($is_adminOfCourse or $is_tutor) {
 	$secretDirectory = group_secret($userGroupId);
 } else {
 	$secretDirectory = group_secret(user_group($uid));
