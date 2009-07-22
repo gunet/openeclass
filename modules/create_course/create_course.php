@@ -374,14 +374,14 @@ if (isset($_POST['create_course'])) {
                 // ------------- update main Db------------
                 mysql_select_db("$mysqlMainDb");
 
-                mysql_query("INSERT INTO cours SET
+                db_query("INSERT INTO cours SET
                                 code = '$code',
                                 languageCourse =" . quote($language) . ",
                                 intitule = " . quote($intitule) . ",
                                 description = " . quote($description) . ",
                                 course_addon = " . quote($course_addon) . ",
                                 course_keywords = " . quote($course_keywords) . ",
-                                faculte = '$facname',
+                                faculte = " . quote($facname) . ",
                                 visible = " . quote($formvisible) . ",
                                 titulaires = " . quote($titulaires) . ",
                                 fake_code = " . quote($code) . ",
