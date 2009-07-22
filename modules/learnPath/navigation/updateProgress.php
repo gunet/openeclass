@@ -61,6 +61,7 @@ $TABLEASSET             = "lp_asset";
 $TABLEUSERMODULEPROGRESS= "lp_user_module_progress";
 
 $TOCurl = "../viewer_toc.php"; 
+$TOCleft = "../toc.php";
 
 /*********************/
 /* HANDLING API FORM */
@@ -134,6 +135,7 @@ if(isset($_POST['ump_id']))
     <script type="text/javascript">
     <!--//
       parent.tocFrame.location.href="<?php echo $TOCurl; ?>";
+      parent.tocleftFrame.location.href="<?php echo $TOCleft; ?>";
     //--> 
     </script>
 <?php
