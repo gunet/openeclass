@@ -58,7 +58,6 @@ if (!$q or mysql_num_rows($q) == 0) {
 if (isset($_POST['submit_doc'])) {
 	insert_docs($id);
 } elseif (isset($_POST['submit_text'])) {
-	$title = $_POST['title'];
 	$comments = $_POST['comments'];
 	insert_text($id);
 } elseif (isset($_POST['submit_lp'])) {
