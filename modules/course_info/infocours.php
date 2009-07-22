@@ -220,7 +220,14 @@ hContent;
       </tr>
       <tr>
         <th class='left'>$langCourseAddon&nbsp;</th>
-        <td><textarea name='course_addon' value='".q($c['course_addon'])."' cols='57' rows='2' class='FormData_InputText'>".q($c['course_addon'])."</textarea></td><td>&nbsp;</td>
+        <td width='100'>
+	      <table class='xinha_editor'>
+          <tr>
+        <td><textarea id='xinha2' name='course_addon' value='".q($c['course_addon'])."' cols='20' rows='4' class='FormData_InputText'>".q($c['course_addon'])."</textarea></td>
+        </tr>
+          </table>
+          </td>
+          <td>&nbsp;</td>
       </tr>
       </tbody>
       </table>
