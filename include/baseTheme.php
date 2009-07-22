@@ -502,9 +502,12 @@ function lang_selections() {
  * Returns the HTML code for the <select> element of the language selection tool
  *
  */
-function lang_select_options($name, $onchange_js = '') {
+function lang_select_options($name, $onchange_js = '', $default_langcode = false) {
 	global $language, $native_language_names;
 
-	return selection($native_language_names, $name, langname_to_code($language), $onchange_js);
+        if ($default_langcode === false) {
+                $default_langcode = langname_to_code($language);
+        }
+	return selection($native_language_names, $name, $default_langcode, $onchange_js);
 }
 

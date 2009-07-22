@@ -64,6 +64,7 @@ if($submit) {
 		$tool_content .= "<p class=\"caution_small\">$langEmailWrong.</p>
 			<br><br><p align=\"right\"><a href='$_SERVER[PHP_SELF]'>$langAgain</a></p>";
 	} else {
+                $registered_at = time();
 		$expires_at = time() + $durationAccount;
 		$password_encrypted = md5($password);
 		$inscr_user=db_query("INSERT INTO `$mysqlMainDb`.user
@@ -73,7 +74,7 @@ if($submit) {
 				autoquote($prenom_form) . ', ' .
 				autoquote($uname) . ", '$password_encrypted', " .
 				autoquote($email_form) .
-				", 1, $depid, NOW(), '$expires_at', '$proflanguage')");
+				", 1, $depid, $registered_at, $expires_at, '$proflanguage')");
 		$last_id = mysql_insert_id();
 
 		// close request
@@ -103,6 +104,7 @@ $langEmail : $emailAdministrator
 		}
 
 } else {
+        $lang = false;
 	if (isset($id)) { // if we come from prof request
 		$res = mysql_fetch_array(db_query("SELECT profname,profsurname, profuname, profemail, proftmima, lang 
 			FROM prof_request WHERE rid='$id'"));
@@ -112,11 +114,6 @@ $langEmail : $emailAdministrator
 		$pe = $res['profemail'];
 		$pt = $res['proftmima'];
 		$lang = $res['lang'];
-		
-		// if not submit then display the form
-		if (isset($lang)) {
-			$lang = langname_to_code($language);
-		}
 	}
 
 	$tool_content .= "<form action=\"$_SERVER[PHP_SELF]\" method=\"post\">
@@ -164,7 +161,7 @@ $langEmail : $emailAdministrator
 		<tr>
 	<th class='left'>$langLanguage</th>
 	<td>";
-		$tool_content .= lang_select_options('language');
+		$tool_content .= lang_select_options('language', '', $lang);
 		$tool_content .= "</td>
 	</tr>
 	<tr>
