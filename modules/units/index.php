@@ -329,9 +329,9 @@ function show_text($comments, $resource_id, $visibility)
         global $is_adminOfCourse, $mysqlMainDb, $tool_content;
 
         $class_vis = ($visibility == 'i')? ' class="invisible"': '';
-        $imagelink = "<img src='../../template/classic/img/description_" .
-			($visibility == 'i'? 'off': 'on') . ".gif' />";
-        $tool_content .= "<tr$class_vis><td>$imagelink</td><td>$comments</td>" .
+        /*$imagelink = "<img src='../../template/classic/img/description_" .
+			($visibility == 'i'? 'off': 'on') . ".gif' />"; */
+        $tool_content .= "<tr$class_vis><td>&nbsp;</td><td>$comments</td>" .
 		actions('text', $resource_id, $visibility) .
                 "</tr>";
 }
