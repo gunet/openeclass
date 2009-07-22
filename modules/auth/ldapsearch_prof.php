@@ -45,16 +45,9 @@ $navigation[]= array ("url"=>"registration.php", "name"=> "$langNewUser");
 $navigation[]= array ("url"=>"ldapnewprof.php", "name"=> "$langConfirmUser");
 
 $tool_content = "";
-// security check
-if (isset($_POST['localize'])) {
-	$language = preg_replace('/[^a-z]/', '', $_POST['localize']);
-}
-if ($language == 'greek')
-	$lang = 'el';
-elseif ($language == 'english')
-	$lang = 'en';
 
 $auth = get_auth_id();
+$lang = langname_to_code($language);
 
 // for security
 $auth = isset($_POST['auth'])?intval($_POST['auth']):0;
@@ -151,12 +144,13 @@ if ($is_valid) { // connection successful
        </tr>
        <tr>
          <th class='left'>".$langDepartment.":</th>
-         <td><select name=\"department\">";
-        $deps=mysql_query("SELECT name FROM faculte order by id",$db);
-        while ($dep = mysql_fetch_array($deps)) {
-		        $tool_content .= "<option value=\"$dep[0]\">$dep[0]</option>\n";
+         <td>";
+
+        $result = db_query("SELECT id, name FROM faculte ORDER BY name");
+        while ($facs = mysql_fetch_array($result)) {
+                $faculte_names[$facs['id']] = $facs['name'];
         }
-        $tool_content .= "</select></td>
+        $tool_content .= selection($faculte_names, 'department') . "</td>
 	       </tr>
 	<tr>
       	<th class='left'>$langLanguage</th>
@@ -219,9 +213,10 @@ if (isset($submit))  {
       $name = $prenom_form;
 
 			mysql_select_db($mysqlMainDb,$db);
+      $depid = intval($department);
       $sql = "INSERT INTO prof_request(profname,profsurname,profuname,profpassword,
       profemail,proftmima,profcomm,status,date_open,comment,lang) VALUES(
-      '$name','$surname','$username','$password','$usermail','$department','$userphone','1',NOW(),'$usercomment', '$lang')";
+      '$name','$surname','$username','$password','$usermail','$depid','$userphone','1',NOW(),'$usercomment', '$lang')";
       $upd=mysql_query($sql,$db);
 	//----------------------------- email message --------------------------
         $MailMessage = $mailbody1 . $mailbody2 . "$name $surname\n\n" . $mailbody3

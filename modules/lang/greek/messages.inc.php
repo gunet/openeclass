@@ -270,7 +270,7 @@ $langemailsubjectBlocked = "Απόρριψη αίτησης εγγραφής σ�
 $langemailbodyBlocked = "Η αίτησή σας για εγγραφή στην πλατφόρμα ".$siteName." απορρίφθηκε.";
 $langCloseConf = "Επιβεβαίωση κλεισίματος αίτησης";
 $langReintroductionApplication="Η επαναφορά της αίτησης ολοκληρώθηκε με επιτυχία!";
-$langBackRequests = "Επιστροφή στις αιτήσεις ".$langOfTeachers;
+$langBackRequests = "Επιστροφή στις αιτήσεις";
 
 // mailtoprof.php
 $langSendMessageTo = "Αποστολή μηνύματος";

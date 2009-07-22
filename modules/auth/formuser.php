@@ -29,11 +29,6 @@ include '../../include/sendMail.inc.php';
 
 $tool_content = "";
 
-// security check
-if (isset($_POST['localize'])) {
-	$language = preg_replace('/[^a-z]/', '', $_POST['localize']);
-}
-
 $lang = langname_to_code($language);
 
 $nameTools = $langUserRequest;
@@ -130,9 +125,9 @@ $tool_content .= "
     <th class='left'>$langDepartment&nbsp;</th>
     <td><select name='department'>";
 
-    $deps=mysql_query("SELECT name FROM faculte order by name");
+    $deps=mysql_query("SELECT id, name FROM faculte order by name");
     while ($dep = mysql_fetch_array($deps)) {
-           $tool_content .= "\n<option value='$dep[0]'>$dep[0]</option>\n";
+           $tool_content .= "\n<option value='$dep[id]'>$dep[name]</option>\n";
     }
 
 	 $tool_content .= "\n</select>

@@ -37,12 +37,13 @@ $icons = array(
 );
 
 if (isset($_REQUEST['fc'])) {
-        $_SESSION['fc_memo'] = $_REQUEST['fc'];
-}
-
-if (!isset($_REQUEST['fc']) && isset($_SESSION['fc_memo'])) {
+        $fc = intval($_REQUEST['fc']);
+} elseif (isset($_SESSION['fc_memo'])) {
         $fc = $_SESSION['fc_memo'];
+} else {
+        $fc = getfcfromuid($uid);
 }
+$_SESSION['fc_memo'] = $fc;
 
 $restrictedCourses=null; //DUKE
 $i=0; //DUKE
@@ -95,14 +96,7 @@ if (isset($_POST["submit"])) {
 }
 else
 {
-        // check if user requested a specific faculte
-        if (isset( $_GET['fc'] ) ) {
-                // get faculte name from db
-                $fac = getfacfromfc( $_GET['fc'] );
-        } else {
-                // get faculte name from user's department column
-                $fac = getfacfromuid($uid);
-        }
+        $fac = getfacfromfc($fc);
 
   if (!$fac) {
     $tool_content .= "
@@ -192,9 +186,8 @@ function getfacfromfc( $dep_id) {
 		return 0;
 }
 
-function getfacfromuid($uid) {
-	$res = mysql_fetch_row(db_query("SELECT name FROM faculte,user
-		WHERE user.user_id = '$uid' AND faculte.id = user.department"));
+function getfcfromuid($uid) {
+	$res = mysql_fetch_row(db_query("SELECT department FROM user WHERE user_id = '$uid'"));
 	if (isset($res[0]))
 		return $res[0];
 	else
@@ -473,5 +466,3 @@ function is_restricted($course)
 		return FALSE;
 	}
 }
-
-?>

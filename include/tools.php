@@ -322,7 +322,7 @@ function adminMenu(){
 	// check for close user registration
 	if (isset($close_user_registration) and $close_user_registration == TRUE) {
 		array_push($sideMenuText, $GLOBALS['langUserOpen']);
-		array_push($sideMenuLink, "../admin/listrequsers.php");
+		array_push($sideMenuLink, "../admin/listreq.php?type=user");
 		array_push($sideMenuImg, "black-arrow1.gif");
 	}
 	array_push($sideMenuText, $GLOBALS['langListUsersActions']);

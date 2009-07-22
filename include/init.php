@@ -68,8 +68,8 @@ if (!session_id()) { session_start(); }
 header('Content-Type: text/html; charset=UTF-8');
 
 // Set user desired language (Author: Evelthon Prodromou)
-if (isset($_GET['localize'])) {
-	$_SESSION['langswitch'] = $language = langcode_to_name($_GET['localize']);
+if (isset($_REQUEST['localize'])) {
+	$_SESSION['langswitch'] = $language = langcode_to_name($_REQUEST['localize']);
 }
 
 // Get configuration variables

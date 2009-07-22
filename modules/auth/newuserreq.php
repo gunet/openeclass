@@ -112,8 +112,8 @@ send_mail($siteName, $emailAdministrator, '', $email_form, $emailsubject, $email
         db_query("UPDATE prof_request set status = '2',
          date_closed = NOW() WHERE rid = '$rid'");
 
-    $tool_content .= "<tr><td valign='top' align='center' class=alert1>$usersuccess
-    <br><br><a href='../admin/listrequsers.php' class=mainpage>$langBack</a>";
+    $tool_content .= "<tr><td valign='top' align='center' class='alert1'>$usersuccess
+    <br><br><a href='../admin/listreq.php?type=user' class='mainpage'>$langBack</a>";
   }
 
 } else {
@@ -196,14 +196,14 @@ global $langTryAgain;
 
 return "<tr height='80'><td colspan='3' valign='top' align='center' class=alert1>$message</td></tr><br><br>
       <tr height='30' valign='top' align='center'><td align=center>
-      <a href='../admin/listrequsers.php' class=mainpage>$langTryAgain</a><br><br></td></tr>";
+      <a href='../admin/listreq.php?type=user' class=mainpage>$langTryAgain</a><br><br></td></tr>";
 }
 
 function end_tables() {
 global $langBack;
 
 $retstring = "</td></tr><tr><td align=right valign=bottom height='180'>";
-$retstring .= "<a href=\"../admin/index.php\" class=mainpage>$langBack&nbsp;</a>";
+$retstring .= "<a href='../admin/index.php' class=mainpage>$langBack&nbsp;</a>";
 $retstring .= "</td></tr></table>";
 
 return $retstring;

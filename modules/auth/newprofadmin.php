@@ -28,7 +28,6 @@
 $require_admin = TRUE;
 include '../../include/baseTheme.php';
 include '../../include/sendMail.inc.php';
-$nameTools = $langProfReg;
 $navigation[] = array("url" => "../admin/index.php", "name" => $langAdmin);
 
 // Initialise $tool_content
@@ -74,21 +73,31 @@ if($submit) {
 				autoquote($prenom_form) . ', ' .
 				autoquote($uname) . ", '$password_encrypted', " .
 				autoquote($email_form) .
-				", 1, $depid, $registered_at, $expires_at, '$proflanguage')");
+				", $pstatut, $depid, $registered_at, $expires_at, '$proflanguage')");
 		$last_id = mysql_insert_id();
 
 		// close request
 	  	$rid = intval($_POST['rid']);
   	  	db_query("UPDATE prof_request set status = '2',date_closed = NOW() WHERE rid = '$rid'");
-	       	$tool_content .= "<p class=\"success_small\">$profsuccess</p><br><br><p align=\"right\"><a href='../admin/listreq.php'>$langBackRequests</a></p>";
+
+                if ($pstatut == 1) {
+                        $message = $profsuccess;
+                        $reqtype = '';
+                        $type_message = $langAsProf;
+                } else {
+                        $message = $usersuccess;
+                        $reqtype = '?type=user';
+                        $type_message = $langAsUser;
+                }
+	       	$tool_content .= "<p class='success_small'>$message</p><br><br><p align='right'><a href='../admin/listreq.php$reqtype'>$langBackRequests</a></p>";
 		
 		// send email
-		$emailsubject = "$langYourReg $siteName $langAsProf";
 		
-$emailbody = "
+                $emailsubject = "$langYourReg $siteName $type_message";
+                $emailbody = "
 $langDestination $prenom_form $nom_form
 
-$langYouAreReg $siteName $langAsProf, $langSettings $uname
+$langYouAreReg $siteName $type_message, $langSettings $uname
 $langPass : $password
 $langAddress $siteName $langIs: $urlServer
 $langProblem
@@ -106,7 +115,7 @@ $langEmail : $emailAdministrator
 } else {
         $lang = false;
 	if (isset($id)) { // if we come from prof request
-		$res = mysql_fetch_array(db_query("SELECT profname,profsurname, profuname, profemail, proftmima, lang 
+		$res = mysql_fetch_array(db_query("SELECT profname,profsurname, profuname, profemail, proftmima, lang, statut 
 			FROM prof_request WHERE rid='$id'"));
 		$ps = $res['profsurname'];
 		$pn = $res['profname'];
@@ -114,36 +123,49 @@ $langEmail : $emailAdministrator
 		$pe = $res['profemail'];
 		$pt = $res['proftmima'];
 		$lang = $res['lang'];
-	}
+                $pstatut = $res['statut'];
+	} elseif (@$_GET['type'] == 'user') {
+                $pstatut = 5;
+        } else {
+                $pstatut = 1;
+        }
+                
+        if ($pstatut == 5) {
+                $nameTools = $langNewUser;
+                $title = $langNewUser;
+        } else {
+                $nameTools = $langProfReg;
+                $title = $langNewProf;
+        }
 
-	$tool_content .= "<form action=\"$_SERVER[PHP_SELF]\" method=\"post\">
-	<table width=\"99%\" align=\"left\" class=\"FormData\">
+	$tool_content .= "<form action='$_SERVER[PHP_SELF]' method='post'>
+	<table width='99%' align='left' class='FormData'>
 	<tbody><tr>
-	<th width=\"220\">&nbsp;</th>
-	<td><b>$langNewProf</b></td>
+	<th width='220'>&nbsp;</th>
+	<td><b>$title</b></td>
 	</tr>
 	<tr>
 	<th class='left'><b>".$langSurname."</b></th>
-	<td><input class='FormData_InputText' type=\"text\" name=\"nom_form\" value=\"".@$ps."\" >&nbsp;(*)</td>
+	<td><input class='FormData_InputText' type='text' name='nom_form' value='".@$ps."' >&nbsp;(*)</td>
 	</tr>
 	<tr>
 	<th class='left'><b>".$langName."</b></th>
-	<td><input class='FormData_InputText' type=\"text\" name=\"prenom_form\" value=\"".@$pn."\">&nbsp;(*)</td>
+	<td><input class='FormData_InputText' type='text' name='prenom_form' value='".@$pn."'>&nbsp;(*)</td>
 	</tr>
 	<tr>
-	<th class='left'><b>".$langUsername."</b></th>
-	<td><input class='FormData_InputText' type=\"text\" name=\"uname\" value=\"".@$pu."\">&nbsp;(*)</td>
+	<th class='left'><b>$langUsername</b></th>
+	<td><input class='FormData_InputText' type='text' name='uname' value='".@$pu."'>&nbsp;(*)</td>
 	</tr>
 	<tr>
-	<th class='left'><b>".$langPass."&nbsp;:</b></th>
-	<td><input class='FormData_InputText' type=\"text\" name=\"password\" value=\"".create_pass(5)."\"></td>
+	<th class='left'><b>$langPass</b></th>
+	<td><input class='FormData_InputText' type='text' name='password' value='".create_pass(5)."'></td>
 	</tr>
 	<tr>
-	<th class='left'><b>".$langEmail."</b></th>
-	<td><input class='FormData_InputText' type=\"text\" name=\"email_form\" value=\"".@$pe."\">&nbsp;(*)</b></td>
+	<th class='left'><b>$langEmail</b></th>
+	<td><input class='FormData_InputText' type='text' name='email_form' value='".@$pe."'>&nbsp;(*)</b></td>
 	</tr>
 	<tr>
-	<th class='left'>".$langDepartment.":</th>
+	<th class='left'>$langDepartment</th>
 	<td>";
 	
 	$dep = array();
@@ -166,18 +188,18 @@ $langEmail : $emailAdministrator
 	</tr>
 	<tr>
 	<th>&nbsp;</th>
-	<td><input type=\"submit\" name=\"submit\" value=\"".$langSubmit."\" >
-		<input type=\"hidden\" name=\"auth\" value=\"1\" >&nbsp;
-		<small>".$langRequiredFields."</small></td>
+	<td><input type='submit' name='submit' value='$langSubmit' >
+		<small>$langRequiredFields</small></td>
 	</tr>
-	<input type='hidden' name='rid' value='".@$id."'>
 	</tbody>
 	</table>
+	<input type='hidden' name='rid' value='".@$id."'>
+	<input type='hidden' name='pstatut' value='$pstatut'>
+        <input type='hidden' name='auth' value='1' >
 	</form>";
 	
 	$tool_content .= "
 	<br />
-	<p align=\"right\"><a href=\"../admin/index.php\">$langBack</p>";
+	<p align='right'><a href='../admin/index.php'>$langBack</p>";
 }
 draw($tool_content, 3, 'auth');
-?>

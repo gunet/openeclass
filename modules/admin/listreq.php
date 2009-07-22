@@ -28,8 +28,6 @@ $require_admin = TRUE;
 include '../../include/baseTheme.php';
 include '../../include/sendMail.inc.php';
 include '../auth/auth.inc.php';
-$nameTools= $langOpenProfessorRequests;
-$navigation[] = array("url" => "index.php", "name" => $langAdmin);
 
 $head_content = '
 <script type="text/javascript">
@@ -42,6 +40,19 @@ function confirmation() {
 }
 </script>';
 
+$basetoolurl = $_SERVER['PHP_SELF'];
+if (isset($_GET['type']) and $_GET['type'] == 'user') {
+        $list_statut = 5;
+        $nameTools = $langUserOpenRequests;
+        $reqtype = '&amp;type=user';
+        $basetoolurl .= '?type=user';
+} else {
+        $list_statut = 1;
+        $nameTools = $langOpenProfessorRequests;
+        $reqtype = '';
+}
+$navigation[] = array("url" => "index.php", "name" => $langAdmin);
+
 // Initialise $tool_content
 $tool_content = "";
 
@@ -53,26 +64,26 @@ $show = isset($_GET['show'])?$_GET['show']:(isset($_POST['show'])?$_POST['show']
 // Deal with navigation
 switch ($show) {
 	case "closed":
-		$navigation[] = array("url" => "$_SERVER[PHP_SELF]", "name" => $langOpenProfessorRequests);
+		$navigation[] = array("url" => $basetoolurl, "name" => $nameTools);
 		$nameTools = $langReqHaveClosed;
 		break;
 	case "rejected":
-		$navigation[] = array("url" => "$_SERVER[PHP_SELF]", "name" => $langOpenProfessorRequests);
+		$navigation[] = array("url" => $basetoolurl, "name" => $nameTools);
 		$nameTools = $langReqHaveBlocked;
 		break;
 	case "accepted":
-		$navigation[] = array("url" => "$_SERVER[PHP_SELF]", "name" => $langOpenProfessorRequests);
+		$navigation[] = array("url" => $basetoolurl, "name" => $nameTools);
 		$nameTools = $langReqHaveFinished;
 		break;
 }
 
  // Display Actions Toolbar
   $tool_content .= "
-      <div id=\"operations_container\">
-        <ul id=\"opslist\">
-          <li><a href=\"$_SERVER[PHP_SELF]?show=closed\">$langReqHaveClosed</a></li>
-          <li><a href=\"$_SERVER[PHP_SELF]?show=rejected\">$langReqHaveBlocked</a></li>
-          <li><a href=\"$_SERVER[PHP_SELF]?show=accepted\">$langReqHaveFinished</a></li>
+      <div id='operations_container'>
+        <ul id='opslist'>
+          <li><a href='$_SERVER[PHP_SELF]?show=closed$reqtype'>$langReqHaveClosed</a></li>
+          <li><a href='$_SERVER[PHP_SELF]?show=rejected$reqtype'>$langReqHaveBlocked</a></li>
+          <li><a href='$_SERVER[PHP_SELF]?show=accepted$reqtype'>$langReqHaveFinished</a></li>
         </ul>
       </div>";
 
@@ -90,7 +101,8 @@ if (!empty($show) && ($show=="closed")) {
 		$tool_content .= "<tbody>";
  		$sql = db_query("SELECT rid,profname,profsurname,profuname,profemail,proftmima,
 				profcomm,date_open,date_closed,comment
-				FROM prof_request WHERE (status='2' AND statut<>'5')");
+				FROM prof_request
+                                WHERE (status = 2 AND statut = $list_statut)");
         	$k = 0;
 		while ($req = mysql_fetch_array($sql)) {
 			if ($k%2 == 0) {
@@ -117,7 +129,7 @@ if (!empty($show) && ($show=="closed")) {
 				<small>".nice_format(date("Y-m-d", strtotime($req['date_closed'])))."</small></td>";
             		$tool_content .= "<td>".$req['comment']."</td>";
 			$tool_content .= "<td align=center>
-			<a href=\"$_SERVER[PHP_SELF]?id=$req[rid]&"."show=closed\">$langRestore</a></td>\n  </tr>";
+			<a href='$_SERVER[PHP_SELF]?id=$req[rid]&show=closed$reqtype'>$langRestore</a></td>\n  </tr>";
 		$k++;
 		}
 	}
@@ -139,7 +151,8 @@ if (!empty($show) && ($show=="closed")) {
 
  		$sql = db_query("SELECT rid,profname,profsurname,profuname,profemail,
 				proftmima,profcomm,date_open,date_closed,comment
-				FROM prof_request WHERE (status='3' AND statut<>'5')");
+				FROM prof_request
+                                WHERE (status = 3 AND statut = $list_statut)");
 
         	$k = 0;
 		while ($req = mysql_fetch_array($sql)) {
@@ -167,7 +180,7 @@ if (!empty($show) && ($show=="closed")) {
 				<small>".nice_format(date("Y-m-d", strtotime($req['date_closed'])))."</small></td>";
                 	$tool_content .= "<td>".$req['comment']."</td>";
 			$tool_content .= "<td align=center>
-			<a href=\"$_SERVER[PHP_SELF]?id=$req[rid]&"."show=closed\">$langRestore</a>
+			<a href='$_SERVER[PHP_SELF]?id=$req[rid]&show=closed$reqtype'>$langRestore</a>
 			</td></tr>";
 			$k++;
 		}
@@ -178,13 +191,14 @@ if (!empty($show) && ($show=="closed")) {
 // Display accepted requests
 // ---------------------------------
 } elseif (!empty($show) && ($show=="accepted")) {
-	$tool_content .= "<table class=\"FormData\" width=\"99%\" align=\"left\">";
+	$tool_content .= "<table class='FormData' width='99%' align='left'>";
 	$tool_content .= table_header(1, $langDateCompleted_small);
 	$tool_content .= "<tbody>";
 
  	$sql = db_query("SELECT rid,profname,profsurname,profuname,profemail,proftmima,
 			profcomm,date_open,date_closed,comment
-			FROM prof_request WHERE (status='0' AND statut<>'5')");
+			FROM prof_request
+                        WHERE (status = 0 AND statut = $list_statut)");
 
     	$k = 0;
 	for ($j = 0; $j < mysql_num_rows($sql); $j++) {
@@ -220,7 +234,11 @@ if (!empty($show) && ($show=="closed")) {
 	switch($close) {
 	case '1':
 		$sql = db_query("UPDATE prof_request set status='2', date_closed=NOW() WHERE rid='$id'");
-		$tool_content .= "<p><center>$langProfessorRequestClosed</p>";
+                if ($list_statut == 1) {
+        		$tool_content .= "<p><center>$langProfessorRequestClosed</p>";
+                } else {
+        		$tool_content .= "<p><center>$langRequestStudent</p>";
+                }
 		break;
 	case '2':
 		$submit = isset($_POST['submit'])?$_POST['submit']:'';
@@ -242,41 +260,42 @@ $langPhone: $telephone
 $langEmail: $emailAdministrator";
 						send_mail($siteName, $emailAdministrator, "$prof_name $prof_surname",	$prof_email, $emailsubject, $emailbody, $charset);
 					}
-					$tool_content .= "<p class=\"success_small\">$langTeacherRequestHasRejected";
+					$tool_content .= "<p class='success_small'>" .  ($list_statut == 1)? $langTeacherRequestHasRejected: $langRequestReject;
 					$tool_content .= " $langRequestMessageHasSent <b>$prof_email</b></p>";
 					$tool_content .= "<br><p><b>$langComments:</b><br />$comment</p>\n";
 				}
 			}
 		} else {
 			// display the form
-			$r = db_query("SELECT comment, profname, profsurname, profemail
+			$r = db_query("SELECT comment, profname, profsurname, profemail, statut
 				FROM prof_request WHERE rid = '$id'");
 			$d = mysql_fetch_assoc($r);
-			$tool_content .= "<form action=\"$_SERVER[PHP_SELF]\" method=\"post\">
-			<table width=\"99%\" class=\"FormData\">
+                        $warning = ($d['statut'] == 5)? $langWarnReject: $langGoingRejectRequest;
+			$tool_content .= "<form action='$_SERVER[PHP_SELF]' method='post'>
+			<table width='99%' class='FormData'>
 			<tbody><tr>
-			<th width=\"220\">&nbsp;</th>
-			<td><b>$langGoingRejectRequest</b></td></tr>
-			<tr><th class=\"left\">$langName</th>
+			<th width='220'>&nbsp;</th>
+			<td><b>$warning</b></td></tr>
+			<tr><th class='left'>$langName</th>
 			<td>".$d['profname']."</td></tr>
-			<tr><th class=\"left\">$langSurname</th>
+			<tr><th class='left'>$langSurname</th>
 			<td>".$d['profsurname']."</td></tr>
-			<tr><th class=\"left\">$langEmail</th>
+			<tr><th class='left'>$langEmail</th>
 			<td>".$d['profemail']."</td></tr>
-			<tr><th class=\"left\">$langComments</th>
+			<tr><th class='left'>$langComments</th>
 			<td>
-			<input type=\"hidden\" name=\"id\" value=\"".$id."\">
-			<input type=\"hidden\" name=\"close\" value=\"2\">
-			<input type=\"hidden\" name=\"prof_name\" value=\"".$d['profname']."\">
-			<input type=\"hidden\" name=\"prof_surname\" value=\"".$d['profsurname']."\">
-			<textarea class=\"auth_input\" name=\"comment\" rows=\"5\" cols=\"60\">".$d['comment']."</textarea>
+			<input type='hidden' name='id' value='".$id."'>
+			<input type='hidden' name='close' value='2'>
+			<input type='hidden' name='prof_name' value='".$d['profname']."'>
+			<input type='hidden' name='prof_surname' value='".$d['profsurname']."'>
+			<textarea class='auth_input' name='comment' rows='5' cols='60'>".$d['comment']."</textarea>
 			</td></tr>
-			<tr><th class=\"left\">$langRequestSendMessage</th>
-			<td>&nbsp;<input type=\"text\" class=\"auth_input\" name=\"prof_email\" value=\"".$d['profemail']."\">
-			<input type=\"checkbox\" name=\"sendmail\" value=\"1\" checked=\"yes\"> <small>($langGroupValidate)</small>
+			<tr><th class='left'>$langRequestSendMessage</th>
+			<td>&nbsp;<input type='text' class='auth_input' name='prof_email' value='".$d['profemail']."'>
+			<input type='checkbox' name='sendmail' value='1' checked='yes'> <small>($langGroupValidate)</small>
 			</td></tr>
-			<tr><th class=\"left\">&nbsp;</th>
-			<td><input type=\"submit\" name=\"submit\" value=\"$langRejectRequest\">&nbsp;&nbsp;<small>($langRequestDisplayMessage)</small></td>
+			<tr><th class='left'>&nbsp;</th>
+			<td><input type='submit' name='submit' value='$langRejectRequest'>&nbsp;&nbsp;<small>($langRequestDisplayMessage)</small></td>
 			</tr></tbody></table>
 			</form>";
 			}
@@ -297,7 +316,8 @@ else
 	$tool_content .= "<tbody>";
  	$sql = db_query("SELECT rid,profname,profsurname,profuname,profemail,proftmima, 
 			profcomm, date_open, comment, profpassword, lang
-			FROM prof_request WHERE (status='1' AND statut<>'5')");
+			FROM prof_request
+                        WHERE (status = 1 AND statut = $list_statut)");
     	$k = 0;
 	while ($req = mysql_fetch_array($sql)) {
 		if ($k%2 == 0) {
@@ -322,19 +342,19 @@ else
 			<small>".nice_format(date("Y-m-d", strtotime($req['date_open'])))."</small></td>";
 		$tool_content .= "<td align='center'>$req[comment]</td>";
 		$tool_content .= "<td align='center'>
-		<a href='$_SERVER[PHP_SELF]?id=$req[rid]&close=1' onclick='return confirmation();'>$langClose</a><br />
-		<a href='$_SERVER[PHP_SELF]?id=$req[rid]&close=2'>$langRejectRequest</a>";
+		<a href='$_SERVER[PHP_SELF]?id=$req[rid]&amp;close=1$reqtype' onclick='return confirmation();'>$langClose</a><br />
+		<a href='$_SERVER[PHP_SELF]?id=$req[rid]&amp;close=2$reqtype'>$langRejectRequest</a>";
 		switch($req['profpassword']) {
 			case 'ldap': $tool_content .= "<br />
-					<a href='../auth/ldapnewprofadmin.php?id=".urlencode($req['rid'])."&auth=4'>
+					<a href='../auth/ldapnewprofadmin.php?id=".urlencode($req['rid'])."&amp;auth=4'>
 					$langRegistration<br />($langViaLdap)</td>\n  </tr>";
 				break;
 			case 'pop3': $tool_content .= "<br>
-					<a href='../auth/ldapnewprofadmin.php?id=".urlencode($req['rid'])."&auth=2'>
+					<a href='../auth/ldapnewprofadmin.php?id=".urlencode($req['rid'])."&amp;auth=2'>
 					$langRegistration<br>($langViaPop)</td>\n  </tr>";
 				break;
 			case 'imap': $tool_content .= "<br>
-					<a href='../auth/ldapnewprofadmin.php?id=".urlencode($req['rid'])."&auth=3'>
+					<a href='../auth/ldapnewprofadmin.php?id=".urlencode($req['rid'])."&amp;auth=3'>
 					$langRegistration<br>($langViaImap)</td>\n  </tr>";
 				break;
 			default:  $tool_content .= "<br>
@@ -394,4 +414,3 @@ function table_header($addon = FALSE, $message = FALSE) {
 
 return $string;
 }
-?>

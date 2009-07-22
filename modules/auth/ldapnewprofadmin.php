@@ -52,28 +52,18 @@ $tool_content = "";
 // -----------------------------------------
 
 if (isset($submit))  {
-      $auth = $_POST['auth'];
-      $pn = $_POST['pn'];
-      $ps = $_POST['ps'];
-      $pu = $_POST['pu'];
-      $pe = $_POST['pe'];
-      $department = $_POST['department'];
-	
-	$localize = isset($_POST['localize'])?$_POST['localize']:'';
-	if ($localize == 'greek')
-		$lang = 'el';
-	elseif ($localize == 'english')
-		$lang = 'en';
+        $auth = $_POST['auth'];
+        $pn = $_POST['pn'];
+        $ps = $_POST['ps'];
+        $pu = $_POST['pu'];
+        $pe = $_POST['pe'];
+        $department = $_POST['department'];
+        $lang = $_POST['lang'];
 
 	// check if user name exists
-    	$username_check=mysql_query("SELECT username FROM `$mysqlMainDb`.user WHERE username='".escapeSimple($pu)."'");
-	 while ($myusername = mysql_fetch_array($username_check))
-  	  {
-    	 	 $user_exist=$myusername[0];
-	  }
-	
-	if(isset($user_exist) and $pu == $user_exist) {
-	     $tool_content .= "<p class=\"caution_small\">$langUserFree</p><br><br><p align=\"right\"><a href='../admin/listreq.php'>$langBackRequests</a></p>";
+    	$username_check = db_query("SELECT username FROM `$mysqlMainDb`.user WHERE username=".autoquote($pu));
+	if ($username_check and mysql_num_rows($username_check) > 0) {
+	     $tool_content .= "<p class='caution_small'>$langUserFree</p><br><br><p align='right'><a href='../admin/listreq.php'>$langBackRequests</a></p>";
 		 draw($tool_content, 3, 'auth');
 	     exit();
 	}
@@ -157,37 +147,32 @@ if (isset($submit))  {
 	</tr>
 	<tr>
 	<th class='left'><b>".$langSurname."</b></th>
-	<td>$ps</td>
-	</tr>
-	<input type=\"hidden\" name=\"ps\" value=\"$ps\">
-	<tr>
-	<th class='left'><b>".$langName."</b></th>
-	<td>$pn</td>
-	</tr>
-	<input type=\"hidden\" name=\"pn\" value=\"$pn\">
-	<tr>
-	<th class='left'><b>".$langUsername."</b></th>
-	<td>$pu</td>
-	<input type=\"hidden\" name=\"pu\" value=\"$pu\">
+	<td>$ps<input type='hidden' name='ps' value='$ps'></td>
 	</tr>
 	<tr>
-	<th class='left'><b>".$langEmail."</b></th>
+	<th class='left'><b>$langName</b></th>
+	<td>$pn<input type='hidden' name='pn' value='$pn'></td>
+	</tr>
+	<tr>
+	<th class='left'><b>$langUsername</b></th>
+	<td>$pu<input type='hidden' name='pu' value='$pu'></td>
+	</tr>
+	<tr>
+	<th class='left'><b>$langEmail</b></th>
 	<td>$pe</b></td>
-	<input type=\"hidden\" name=\"pe\" value=\"$pe\" >
+	<input type='hidden' name='pe' value='$pe' >
 	</tr>
 	<tr>
-	<th class='left'>".$langDepartment.":</th>
-	<td><select name=\"department\">";
-			$deps=mysql_query("SELECT name, id FROM faculte ORDER BY id");
-			while ($dep = mysql_fetch_array($deps))
-				$tool_content .= "\n<option value=\"".$dep[1]."\">".$dep[0]."</option>";
-		$tool_content .= "</select>
-	</td>
-	</tr><tr>
-	<th class='left'>$langLanguage</th><td>";
-	$tool_content .= lang_select_options('localize');
-	$tool_content .= "</td>
-	</tr>
+	<th class='left'>$langDepartment</th>
+	<td>";
+        $result = db_query("SELECT id, name FROM faculte ORDER BY name");
+        while ($facs = mysql_fetch_array($result)) {
+                $faculte_names[$facs['id']] = $facs['name'];
+        }
+        $tool_content .= selection($faculte_names, 'department', $pt) .
+                         "</td></tr>" .
+                         "<tr><th class='left'>$langLanguage</th><td>" .
+	                 lang_select_options('lang', '', $lang) . "</td></tr>
 	<tr><th>&nbsp;</th>
 	<td><input type=\"submit\" name=\"submit\" value=\"".$langOk."\" >
 	<input type=\"hidden\" name=\"auth\" value=\"$auth\" >
@@ -198,4 +183,3 @@ if (isset($submit))  {
 	</form>";
  }
 draw($tool_content, 3, 'auth');
-?>

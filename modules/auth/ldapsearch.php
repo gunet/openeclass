@@ -48,16 +48,6 @@ $nameTools = get_auth_info($auth);
 $navigation[]= array ("url"=>"registration.php", "name"=> "$langNewUserAccountActivation");
 $nameTools = $langUserData;
 
-// security check
-
-if (isset($_POST['localize'])) {
-	$language = preg_replace('/[^a-z]/', '', $_POST['localize']);
-}
-if ($language == 'greek')
-	$lang = 'el';
-elseif ($language == 'english')
-	$lang = 'en';
-
 // get the values from ldapnewuser.php
 $ldap_email = isset($_POST['ldap_email'])?$_POST['ldap_email']:'';
 $ldap_passwd = isset($_POST['ldap_passwd'])?$_POST['ldap_passwd']:'';
@@ -116,39 +106,39 @@ if(!empty($is_submit))
       		<form action=\"$_SERVER[PHP_SELF]\" method=\"post\">" .
 				(isset($GLOBALS['auth_user_info'])?
                 ('<input type="hidden" name="prenom_form" value="' . $GLOBALS['auth_user_info']['firstname'] .
-                 '"><input type="hidden" name="nom_form" value="' . $GLOBALS['auth_user_info']['lastname'] .
-                 '"><input type="hidden" name="email" value="' . $GLOBALS['auth_user_info']['email'] . '">'): '') . "
+                 '" /><input type="hidden" name="nom_form" value="' . $GLOBALS['auth_user_info']['lastname'] .
+                 '" /><input type="hidden" name="email" value="' . $GLOBALS['auth_user_info']['email'] . '" />'): '') . "
       <p>$langTheUser $ldapfound </p>
-      <table width=\"100%\">
+      <table width='100%'>
        <tbody>
        <tr>  
 	     <th class='left' width='20%'>".$langName."</th>
 			<td width='10%'>".(isset($GLOBALS['auth_user_info'])?
-        		 $GLOBALS['auth_user_info']['firstname']: '<input class="FormData_InputText" type="text" name="prenom_form" size="38">')."</td>
+        		 $GLOBALS['auth_user_info']['firstname']: '<input class="FormData_InputText" type="text" name="prenom_form" size="38" />')."</td>
        </tr>
        <tr>
          <th class='left'>".$langSurname."</th>
 	<td width='10%'>".(isset($GLOBALS['auth_user_info'])?
-              $GLOBALS['auth_user_info']['lastname']: '<input class="FormData_InputText" type="text" name="nom_form" size="38">')."</td>
+              $GLOBALS['auth_user_info']['lastname']: '<input class="FormData_InputText" type="text" name="nom_form" size="38" />')."</td>
        </tr>
        <tr>
          <th class='left'>".$langEmail."</th>
 				<td width='10%'>".(isset($GLOBALS['auth_user_info'])?
-            $GLOBALS['auth_user_info']['email']: '<input class="FormData_InputText" type="text" name="email" size="38">')."</td>
+            $GLOBALS['auth_user_info']['email']: '<input class="FormData_InputText" type="text" name="email" size="38" />')."</td>
        </tr>
        <tr>
          <th class='left'>".$langAm."</th>
-         <td><input type=\"text\" name=\"am\" class='FormData_InputText'></td>
+         <td><input type='text' name='am' class='FormData_InputText' /></td>
          <td>&nbsp;</td>
        </tr>
        <tr>
          <th class='left'>".$langDepartment."</th>
          <td>
-         <select name=\"department\">
+         <select name='department'>
          ";
 			$deps=mysql_query("SELECT name, id FROM faculte ORDER BY id",$db);
 			while ($dep = mysql_fetch_array($deps))  { 
-				$tool_content .= "\n<option value=\"$dep[1]\">$dep[0]</option>";
+				$tool_content .= "\n<option value='$dep[1]'>$dep[0]</option>";
 			}
 			$tool_content .= "</select></td></tr>";
 	
@@ -159,10 +149,10 @@ if(!empty($is_submit))
 
        $tool_content .= "<tr>
          <th class='left'>&nbsp;</th>
-         <td><input type=\"submit\" name=\"submit\" value=\"".$langRegistration."\">
-             <input type=\"hidden\" name=\"uname\" value=\"".$ldap_email."\">
-             <input type=\"hidden\" name=\"password\" value=\"".$ldap_passwd."\">
-             <input type=\"hidden\" name=\"auth\" value=\"".$auth."\">
+         <td><input type='submit' name='submit' value='$langRegistration' />
+             <input type='hidden' name='uname' value='$ldap_email' />
+             <input type='hidden' name='password' value='$ldap_passwd' />
+             <input type='hidden' name='auth' value='$auth' />
          </td>
          </tr>
          </tbody>
@@ -186,16 +176,16 @@ exit();
 // registration
 // ----------------------------------------------
 
-if (isset($submit))  {
-
+if (isset($_POST['submit'])) {
+$uname = $_POST['uname'];
 $registration_errors = array();
 
 // check if there are empty fields
-        if (empty($nom_form) or empty($prenom_form) or empty($password) or empty($uname)) {
+        if (empty($_POST['nom_form']) or empty($_POST['prenom_form']) or empty($_POST['password']) or empty($uname)) {
                 $registration_errors[] = $langEmptyFields;
         } else {
           // check if the username is already in use
-                $q2 = "SELECT username FROM `$mysqlMainDb`.user WHERE username='".escapeSimple($uname)."'";
+                $q2 = "SELECT username FROM `$mysqlMainDb`.user WHERE username=".autoquote($uname);
                 $username_check = mysql_query($q2);
                 if ($myusername = mysql_fetch_array($username_check)) {
                         $registration_errors[] = $langUserFree;
@@ -252,7 +242,7 @@ $registration_errors = array();
 
     // manage the store/encrypt process of password into database
     $authmethods = array("2","3","4","5");
-    $uname = escapeSimple($uname);  // escape the characters: simple and double quote
+    $uname = autoquote($uname);
 
     if(!in_array($auth,$authmethods)) {
       $password_encrypted = md5($password);
@@ -260,10 +250,11 @@ $registration_errors = array();
            $password_encrypted = $password;
     }
 
+$lang = langname_to_code($language);
 
 $q1 = "INSERT INTO `$mysqlMainDb`.user
       (user_id, nom, prenom, username, password, email, statut, department, am, registered_at, expires_at, lang)
-      VALUES ('NULL', '$nom_form', '$prenom_form', '$uname', '$password_encrypted', '$email','5',
+      VALUES ('NULL', '$nom_form', '$prenom_form', $uname, '$password_encrypted', '$email','5',
         '$department','$am',".$registered_at.",".$expires_at.", '$lang')";
 
     $inscr_user = mysql_query($q1);
