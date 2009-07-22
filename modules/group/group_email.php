@@ -36,34 +36,42 @@
 $require_current_course = TRUE;
 $require_help = TRUE;
 $helpTopic = 'Group';
-$require_prof = true;
 
 include '../../include/baseTheme.php';
+include('../../include/sendMail.inc.php');
+
 $nameTools = $langGroupMail;
 $navigation[]= array ("url"=>"group.php", "name"=> $langGroupSpace,
 "url"=>"group_space.php?userGroupId=$userGroupId", "name"=>$langGroupSpace);
 
-include('../../include/sendMail.inc.php');
-$tool_content = "";
-$currentCourse=$dbname;
+$userGroupId = intval($_REQUEST['userGroupId']);
+list($tutor_id) = mysql_fetch_row(db_query("SELECT tutor FROM student_group WHERE id='$userGroupId'", $currentCourseID));
+$is_tutor = ($tutor_id == $uid);
+if (!$is_adminOfCourse and !$is_tutor) {
+        header('Location: group_space.php?userGroupId=' . $userGroupId);
+        exit;
+}
 
-if ($is_adminOfCourse)  {
+$tool_content = "";
+$currentCourse = $dbname;
+
+if ($is_adminOfCourse or $is_tutor)  {
 	if (isset($submit)) {
-		$sql=mysql_query("SELECT user FROM `$dbname`.user_group WHERE team = '$userGroupId'");
-		while ($userid = mysql_fetch_array($sql)) {
-			mysql_select_db($mysqlMainDb);
-			$m = mysql_fetch_array(mysql_query("SELECT DISTINCT email FROM user where user_id='$userid[0]'"));
-			mysql_select_db($currentCourse);
-			$prof = mysql_fetch_array(mysql_query("SELECT username, user_email FROM users WHERE user_id='1'"));
-			$emailsubject = $intitule." - ".$subject;
-			$emailbody = "$body_mail\n\n$prof[username]\n$langProfLesson\n";
+                $sender = mysql_fetch_array(db_query("SELECT email, nom, prenom FROM user WHERE user_id = $uid", $mysqlMainDb));
+
+                $emailsubject = $intitule." - ".$subject;
+                $emailbody = "$body_mail\n\n$l_poster: $sender[nom] $sender[prenom]\n$langProfLesson\n";
+
+		$req = mysql_query("SELECT user FROM `$dbname`.user_group WHERE team = '$userGroupId'");
+		while ($userid = mysql_fetch_array($req)) {
+			$m = mysql_fetch_array(mysql_query("SELECT email FROM user where user_id='$userid[0]'", $mysqlMainDb));
 			if (!send_mail($prof['username'], $prof['user_email'],
 			'', $m[0], $emailsubject, $emailbody, $charset)) {
 				$tool_content .= "<h4>$langMailError</h4>";
 			}
 		}
-		$tool_content .= "<p class=\"success_small\">$langEmailSuccess<br />";
-		$tool_content .= "<a href=\"group.php\">$langBack</a></p>";
+		$tool_content .= "<p class='success_small'>$langEmailSuccess<br />";
+		$tool_content .= "<a href='group.php'>$langBack</a></p>";
 		$tool_content .= "<p>&nbsp;</p>";
 	} else {
 
@@ -96,9 +104,8 @@ if ($is_adminOfCourse)  {
 
 
 tCont;
-}
+        }
 
 }	// if prof
 
 draw($tool_content, 2, 'group');
-?>
