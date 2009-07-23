@@ -16,11 +16,12 @@ $navigation[]= array ("url"=>"index.php", "name"=> $langAdmin);
 $tool_content = "";
 
 if (isset($_POST['submit'])) {
+        $send_mail = isset($_POST['send_mail']) && $_POST['send_mail'];
         $unparsed_lines = '';
         $info = array();
         $newstatut = ($_POST['type'] == 'prof')? 1: 5;
         $facid = intval($_POST['facid']);
-        $line = strtok($_POST['user_info'], "\n\t");
+        $line = strtok($_POST['user_info'], "\n");
         while ($line !== false) {
                 $line = preg_replace('/#.*/', '', trim($line));
                 if (!empty($line)) {
@@ -31,12 +32,13 @@ if (isset($_POST['submit'])) {
                                                       $user[1],
                                                       $user[2],
                                                       $facid,
-                                                      $_POST['lang']);
+                                                      $_POST['lang'],
+                                                      $send_mail);
                         } else {
                                 $unparsed_lines .= $line;
                         }
                 }
-                $line = strtok("\n\t");
+                $line = strtok("\n");
         }
         $tool_content .= "<table><tr><th>Επώνυμο</th><th>Όνομα</th><th>email</th><th>username</th><th>password</th></tr>\n";
         foreach ($info as $n) {
@@ -55,20 +57,24 @@ if (isset($_POST['submit'])) {
 
 <form method='post' action='$_SERVER[PHP_SELF]'>
 <table class='FormData'>
-<tr><th>Στοιχεία χρηστών</th>
+<tr><th>$langUsersData</th>
     <td><textarea class='auth_input' name='user_info' rows='10' cols='60'>
-# Επώνυμο    Ονομα    e-mail</textarea></td>
+# $langSurname    $langName    e-mail</textarea></td>
 </tr>
 <tr><th>Δημιουργία λογαριασμών</th>
     <td><select name='type'>
-        <option value='stud'>εκπαιδευομένων</option>
-        <option value='prof'>εκπαιδευτών</option></select></td>
+        <option value='stud'>$langsOfStudents</option>
+        <option value='prof'>$langOfTeachers</option></select></td>
 </tr>
 <tr><th>Τμήμα</th>
     <td>" . selection($facs, 'facid') . "</td>
 </tr>
 <tr><th>Γλώσσα</th>
     <td>" . lang_select_options('lang') . "</td>
+</tr>
+<tr><th>$langInfoMail</th>
+    <td><input name='send_mail' type='checkbox' />
+        Αποστολή των στοιχείων των χρηστών μέσω e-mail</td>
 </tr>
 <tr><th>&nbsp;</th>
     <td><input type='submit' name='submit' value='Αποστολή' /></td>
@@ -80,7 +86,7 @@ if (isset($_POST['submit'])) {
 draw($tool_content,3,'admin');
 
 
-function create_user($statut, $nom, $prenom, $email, $depid, $lang)
+function create_user($statut, $nom, $prenom, $email, $depid, $lang, $send_mail)
 {
         global $charset, $mysqlMainDb, $langAsUser, $langAsProf,
                $langYourReg, $siteName, $langDestination, $langYouAreReg,
@@ -99,7 +105,7 @@ function create_user($statut, $nom, $prenom, $email, $depid, $lang)
         }
 
         $uname = create_username($statut, $depid, $nom, $prenom);
-        $password = 'lala123';
+        $password = random_password();
         $registered_at = time();
         $expires_at = time() + $durationAccount;
         $password_encrypted = md5($password);
@@ -129,7 +135,9 @@ $langManager $siteName
 $langTel $telephone
 $langEmail : $emailAdministrator
 ";
-        send_mail($siteName, $emailAdministrator, '', $email, $emailsubject, $emailbody, $charset);
+        if ($send_mail) {
+                send_mail($siteName, $emailAdministrator, '', $email, $emailsubject, $emailbody, $charset);
+        }
 
         return array($id, $nom, $prenom, $email, $uname, $password);
 }
@@ -150,3 +158,20 @@ function create_username($statut, $depid, $nom, $prenom)
         $suffix = sprintf("%04d", $lastid);
         return $prefix . $suffix;
 }
+
+function random_password()
+{
+        $parts = array('a', 'ba', 'fa', 'ga', 'ka', 'la', 'ma', 'xa',
+                       'e', 'be', 'fe', 'ge', 'ke', 'le', 'me', 'xe',
+                       'i', 'bi', 'fi', 'gi', 'ki', 'li', 'mi', 'xi',
+                       'o', 'bo', 'fo', 'go', 'ko', 'lo', 'mo', 'xo',
+                       'u', 'bu', 'fu', 'gu', 'ku', 'lu', 'mu', 'xu',
+                       'ru', 'bur', 'fur', 'gur', 'kur', 'lur', 'mur',
+                       'sy', 'zy', 'gy', 'ky', 'tri', 'kro', 'pra');
+        $max = count($parts) - 1;
+        $num[0] = $num[1] = '';
+        $num[rand(0,1)] = rand(10,499);
+        return $num[0] . $parts[rand(0,$max)] .
+               $parts[rand(0,$max)] . $num[1];
+}
+
