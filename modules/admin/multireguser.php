@@ -164,8 +164,11 @@ function create_username($statut, $depid, $nom, $prenom, $prefix)
         } else {
                 $lastid = 1;
         }
-        $suffix = sprintf('%0'. SUFFIX_LEN . 'd', $lastid);
-        return $prefix . $suffix;
+        do {
+                $uname = $prefix . sprintf('%0'. SUFFIX_LEN . 'd', $lastid);
+                $lastid++;
+        } while (user_exists($uname));
+        return $uname;
 }
 
 function random_password()
