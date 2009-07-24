@@ -296,5 +296,6 @@ if ($i == $limitExPage) {
 $tool_content .= "
       </tbody>
       </table>";
+add_units_navigation(TRUE);
 draw($tool_content, 2, 'exercice');
 ?>

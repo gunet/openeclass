@@ -97,5 +97,6 @@ if (mysql_num_rows($res) > 0) {
 	$tool_content .= "<p class=\"alert1\">$langThisCourseDescriptionIsEmpty</p>";
 }
 
+add_units_navigation(TRUE);
 draw($tool_content, 2, 'course_description');
 ?>

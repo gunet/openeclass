@@ -255,5 +255,6 @@ $tool_content .= <<<cData
     </table>
 
 cData;
+add_units_navigation(TRUE);
 draw($tool_content, 2, 'phpbb');
 ?>

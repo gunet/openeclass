@@ -48,7 +48,7 @@ $require_login = true;
 include '../../include/baseTheme.php';
 
 $nameTools = $langToolManagement;
-
+add_units_navigation(TRUE);
 $tool_content = "";
 $head_content = <<<hCont
 <script type="text/javascript" language="JavaScript">

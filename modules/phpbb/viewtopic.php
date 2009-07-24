@@ -118,7 +118,7 @@ $myrow = mysql_fetch_array($result);
 $topic_subject = own_stripslashes($myrow["topic_title"]);
 $lock_state = $myrow["topic_status"];
 
-if (!add_units_navigation()) {
+if (!add_units_navigation(TRUE)) {
 	$navigation[]= array ("url"=>"index.php", "name"=> $l_forums);
 	$navigation[]= array ("url"=>"viewforum.php?forum=$forum", "name"=> $forum_name);
 }

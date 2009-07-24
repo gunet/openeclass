@@ -84,7 +84,9 @@ $head_content = "";
 $tool_content = "";
 $style= "";
 
-$nameTools = $langLearningPaths;
+if (!add_units_navigation(TRUE)) {
+	$nameTools = $langLearningPaths;
+}
 
 if (isset($_GET['cmd']) && $_GET['cmd'] == 'export'
 	&& isset($_GET['path_id']) && is_numeric($_GET['path_id']) && $is_adminOfCourse)

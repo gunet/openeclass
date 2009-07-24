@@ -110,5 +110,5 @@ $tool_content .= "
   </table>
 </form>
   ";
-
+add_units_navigation(TRUE);
 draw($tool_content, 2, 'conference', $head_content);

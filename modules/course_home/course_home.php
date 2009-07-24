@@ -44,7 +44,7 @@ $path2add=1;
 include '../../include/baseTheme.php';
 $nameTools = $langIdentity;
 $tool_content = $head_content = $main_content = $cunits_content = $bar_content = "";
-
+add_units_navigation(TRUE);
 $head_content .= '
 <script type="text/javascript">
 function confirmation ()

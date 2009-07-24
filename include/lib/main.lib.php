@@ -1109,17 +1109,25 @@ function move_order($table, $id_field, $id, $order_field, $direction, $condition
 
 // Add a link to the appropriate course unit if the page was requested
 // with a unit=ID parametre. This happens if the user got to the module
-// page from a unit resource link
-function add_units_navigation()
+// page from a unit resource link. If entry_page == TRUE this is the initial page of module
+// and is assumed that you're exiting the current unit unless $_GET['unit'] is set 
+function add_units_navigation($entry_page = FALSE)
 {
         global $navigation, $cours_id, $is_adminOfCourse, $mysqlMainDb;
-        if (isset($_GET['unit'])) {
+        if ($entry_page and !isset($_GET['unit'])) {
+		unset($_SESSION['unit']);
+		return FALSE;
+	} elseif (isset($_GET['unit']) or isset($_SESSION['unit'])) {
                 if ($is_adminOfCourse) {
                         $visibility_check = '';
                 } else {
                         $visibility_check = "AND visibility='v'";
                 }
-                $unit_id = intval($_GET['unit']);
+		if (isset($_GET['unit'])) { 
+			$unit_id = intval($_GET['unit']);
+		} elseif (isset($_SESSION['unit'])) {
+			$unit_id = intval($_SESSION['unit']);
+		}
                 $q = db_query("SELECT title FROM course_units
                        WHERE id=$unit_id AND course_id=$cours_id " .
                        $visibility_check, $mysqlMainDb);

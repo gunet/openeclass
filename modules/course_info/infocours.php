@@ -295,5 +295,5 @@ hContent;
 else {
 	$tool_content .= "<p>$langForbidden</p>";
 }
-
+add_units_navigation(TRUE);
 draw($tool_content, 2, 'course_info', $head_content);

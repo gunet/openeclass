@@ -71,16 +71,17 @@ $head_content = "";
 $body_action = "";
 
 $nameTools = $langLearningObject;
-$navigation[] = array("url"=>"learningPathList.php", "name"=> $langLearningPaths);
-if ($is_adminOfCourse)
-{
-    $navigation[]= array ("url"=>"learningPathAdmin.php", "name"=> $langNomPageAdmin);
+if (!add_units_navigation()) {
+	$navigation[] = array("url"=>"learningPathList.php", "name"=> $langLearningPaths);
+	if ($is_adminOfCourse)
+	{
+	$navigation[]= array ("url"=>"learningPathAdmin.php", "name"=> $langNomPageAdmin);
+	}
+	else
+	{
+	$navigation[]= array ("url"=>"learningPath.php", "name"=> $langNomPageAdmin);
+	}
 }
-else
-{
-    $navigation[]= array ("url"=>"learningPath.php", "name"=> $langNomPageAdmin);
-}
-
 
 
 if ( isset($_GET['path_id']) && $_GET['path_id'] != '' )

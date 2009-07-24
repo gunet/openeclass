@@ -200,7 +200,7 @@ if ($is_adminOfCourse) {
 	}
 }
 
-
+add_units_navigation(TRUE);
 draw($tool_content, 2, 'work', $head_content.$local_head);
 
 //-------------------------------------

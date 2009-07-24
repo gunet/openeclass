@@ -411,5 +411,6 @@ if($countUser>=50) {
    </tr>
    </table>";
 }	// navigation buttons
+add_units_navigation(TRUE);
 draw($tool_content, 2, 'user', $head_content);
 ?>

@@ -137,6 +137,7 @@ if (isset($sdelete) and $sdelete='yes') {
 
 
 printPolls();
+add_units_navigation(TRUE);
 draw($tool_content, 2, 'questionnaire', $head_content);
 
  /***************************************************************************************************

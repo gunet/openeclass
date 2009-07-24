@@ -484,6 +484,7 @@ else {
 	$tool_content .= "<p class='alert1'>$langNoVideo</p>";
 	}
 }
+add_units_navigation(TRUE);
 if (isset($head_content))
 	draw($tool_content, 2, 'video', $head_content);
 else

@@ -500,7 +500,7 @@ else {
 		$tool_content .= "<p class='alert1'>$langNoAnnounce</p>";
 	}
 }
-
+add_units_navigation(TRUE);
 if ($is_adminOfCourse) {
     draw($tool_content, 2, 'announcements', $head_content, @$body_action);
 } else {

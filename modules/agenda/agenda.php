@@ -450,6 +450,7 @@ if (mysql_num_rows($result) > 0) {
 } else  {
 	$tool_content .= "<p class='alert1'>$langNoEvents</p>";
 }
+add_units_navigation(TRUE);
 if($is_adminOfCourse && isset($head_content)) {
 	draw($tool_content, 2, 'agenda', $head_content, @$body_action);
 } else {

@@ -793,5 +793,5 @@ if (mysql_num_rows($sql) == 0) {
         $tool_content .=  "\n  </table>";
         $tool_content .=  "\n</div>";
 }
-add_units_navigation();
+add_units_navigation(TRUE);
 draw($tool_content, 2, "document", $local_head);

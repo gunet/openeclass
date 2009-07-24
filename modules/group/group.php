@@ -549,6 +549,7 @@ else {
     </table>";
 
 } 	// else student view
+add_units_navigation(TRUE);
 if ($is_adminOfCourse) {
 	draw($tool_content, 2, 'group', $head_content);
 } else {

@@ -80,7 +80,7 @@ if (isset($_POST['u_analyze']) && isset($_POST['user_id']) && $_POST['user_id'] 
         require_once "form.php";
     }
 }
-
+add_units_navigation(TRUE);
 draw($tool_content, 2, 'usage', $local_head, '');
 
 ?>

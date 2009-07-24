@@ -419,6 +419,6 @@ if (mysql_num_rows($resultcategories) > 0) {
 		}
 	}
 }
-
+add_units_navigation(TRUE);
 draw($tool_content, 2, 'link', $head_content);
 ?>
