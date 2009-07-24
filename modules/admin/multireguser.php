@@ -11,7 +11,7 @@ $require_admin = TRUE;
 include '../../include/baseTheme.php';
 include '../../include/sendMail.inc.php';
 
-$nameTools = 'Μαζική δημιουργία λογαριασμών χρηστών.';
+$nameTools = $langMultiRegUser;
 $navigation[]= array ("url"=>"index.php", "name"=> $langAdmin);
 $tool_content = "";
 
@@ -26,21 +26,31 @@ if (isset($_POST['submit'])) {
                 $line = preg_replace('/#.*/', '', trim($line));
                 if (!empty($line)) {
                         $user = preg_split('/\s+/', $line);
-                        if (count($user) == 3) {
-                                $info[] = create_user($newstatut,
-                                                      $user[0],
-                                                      $user[1],
-                                                      $user[2],
-                                                      $facid,
-                                                      $_POST['lang'],
-                                                      $send_mail);
+                        if (count($user) >= 3) {
+                                $uname = create_username($newstatut,
+                                                         $facid,
+                                                         $nom,
+                                                         $prenom,
+                                                         $_POST['prefix']);
+                                $new = create_user($newstatut,
+                                                   $uname,
+                                                   $user[0],
+                                                   $user[1],
+                                                   $user[2],
+                                                   $facid,
+                                                   $_POST['lang'],
+                                                   $send_mail);
+                                $info[] = $new;
+                                for ($i = 3; $i < count($user); $i++) {
+                                        register($new[0], $user[$i]);
+                                }
                         } else {
                                 $unparsed_lines .= $line;
                         }
                 }
                 $line = strtok("\n");
         }
-        $tool_content .= "<table><tr><th>Επώνυμο</th><th>Όνομα</th><th>email</th><th>username</th><th>password</th></tr>\n";
+        $tool_content .= "<table><tr><th>$langSurname</th><th>$langName</th><th>e-mail</th><th>username</th><th>password</th></tr>\n";
         foreach ($info as $n) {
                 $tool_content .= "<tr><td>$n[1]</td><td>$n[2]</td><td>$n[3]</td><td>$n[4]</td><td>$n[5]</td></tr>\n";
         }
@@ -50,34 +60,33 @@ if (isset($_POST['submit'])) {
         while ($n = mysql_fetch_array($req)) {
                 $facs[$n['id']] = $n['name'];
         }
-        $tool_content .= "
-<p>Εισαγάγετε στο παρακάτω πεδίο έναν κατάλογο με τα στοιχεία των χρηστών, μία
-γραμμή ανα χρήστη που επιθυμείτε να δημιουργηθεί, με τα στοιχεία στην εξής
-σειρά: Επώνυμο, όνομα, διεύθυνση ηλεκτρονικού ταχυδρομείου.</p>
-
+        $tool_content .= "<p>$langMultiRegUserInfo</p>
 <form method='post' action='$_SERVER[PHP_SELF]'>
 <table class='FormData'>
 <tr><th>$langUsersData</th>
     <td><textarea class='auth_input' name='user_info' rows='10' cols='60'>
-# $langSurname    $langName    e-mail</textarea></td>
+# $langSurname   $langName   e-mail   [$langLessonCode...]</textarea></td>
 </tr>
-<tr><th>Δημιουργία λογαριασμών</th>
+<tr><th>$langMultiRegType</th>
     <td><select name='type'>
         <option value='stud'>$langsOfStudents</option>
         <option value='prof'>$langOfTeachers</option></select></td>
 </tr>
-<tr><th>Τμήμα</th>
+<tr><th>$langMultiRegPrefix</th>
+    <td><input type='text' name='prefix' size='10' value='user' /></td>
+</tr>
+<tr><th>$langFaculteDepartment</th>
     <td>" . selection($facs, 'facid') . "</td>
 </tr>
-<tr><th>Γλώσσα</th>
+<tr><th>$langLanguage</th>
     <td>" . lang_select_options('lang') . "</td>
 </tr>
 <tr><th>$langInfoMail</th>
     <td><input name='send_mail' type='checkbox' />
-        Αποστολή των στοιχείων των χρηστών μέσω e-mail</td>
+        $langMultiRegSendMail</td>
 </tr>
 <tr><th>&nbsp;</th>
-    <td><input type='submit' name='submit' value='Αποστολή' /></td>
+    <td><input type='submit' name='submit' value='$langSubmit' /></td>
 </tr>
 </table>
 </form>";
@@ -86,7 +95,7 @@ if (isset($_POST['submit'])) {
 draw($tool_content,3,'admin');
 
 
-function create_user($statut, $nom, $prenom, $email, $depid, $lang, $send_mail)
+function create_user($statut, $uname, $nom, $prenom, $email, $depid, $lang, $send_mail)
 {
         global $charset, $mysqlMainDb, $langAsUser, $langAsProf,
                $langYourReg, $siteName, $langDestination, $langYouAreReg,
@@ -104,7 +113,6 @@ function create_user($statut, $nom, $prenom, $email, $depid, $lang, $send_mail)
                 $type_message = $langAsUser;
         }
 
-        $uname = create_username($statut, $depid, $nom, $prenom);
         $password = random_password();
         $registered_at = time();
         $expires_at = time() + $durationAccount;
@@ -142,10 +150,8 @@ $langEmail : $emailAdministrator
         return array($id, $nom, $prenom, $email, $uname, $password);
 }
 
-function create_username($statut, $depid, $nom, $prenom)
+function create_username($statut, $depid, $nom, $prenom, $prefix)
 {
-        $prefix = (($statut == 1)? 'instr': 'st') .
-                  sprintf('%02d', $depid);
         $req = db_query("SELECT username FROM user
                          WHERE username LIKE '$prefix%'
                          ORDER BY username DESC LIMIT 1");
@@ -173,5 +179,17 @@ function random_password()
         $num[rand(0,1)] = rand(10,499);
         return $num[0] . $parts[rand(0,$max)] .
                $parts[rand(0,$max)] . $num[1];
+}
+
+function register($uid, $course_code)
+{
+        $code = autoquote($course_code);
+        $req = db_query("SELECT code FROM cours WHERE code=$code OR fake_code=$code");
+        if ($req and mysql_num_rows($req) > 0) {
+                list($code) = mysql_fetch_row($req);
+                db_query("INSERT INTO cours_user SET code_cours='$code', user_id=$uid, statut=5, team=0, tutor=0, reg_date=NOW()");
+                return true;
+        }
+        return false;
 }
 

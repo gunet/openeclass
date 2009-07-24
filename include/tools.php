@@ -340,6 +340,9 @@ function adminMenu(){
 	array_push($sideMenuText, $GLOBALS['langChangeUser']);
 	array_push($sideMenuLink, "../admin/change_user.php");
 	array_push($sideMenuImg, "black-arrow1.gif");
+	array_push($sideMenuText, $GLOBALS['langMultiRegUser']);
+	array_push($sideMenuLink, "../admin/multireguser.php");
+	array_push($sideMenuImg, "black-arrow1.gif");
 
 	array_push($sideMenuSubGroup, $sideMenuText);
 	array_push($sideMenuSubGroup, $sideMenuLink);
