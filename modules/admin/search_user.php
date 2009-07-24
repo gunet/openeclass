@@ -49,15 +49,7 @@ include 'admin.inc.php';
 include '../../include/jscalendar/calendar.php';
 
 $tool_content = $head_content = "";
-
-if ($language == 'greek') {
-    $lang_editor='gr';
-    $lang_jscalendar = 'el';
-}
-  else {
-    $lang_editor='en';
-    $lang_jscalendar = $lang_editor;
-}
+$lang_jscalendar = langname_to_code($language);
 
 $jscalendar = new DHTML_Calendar($urlServer.'include/jscalendar/', $lang_jscalendar, 'calendar-blue2', false);
 $head_content .= $jscalendar->get_load_files_code();

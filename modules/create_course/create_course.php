@@ -34,11 +34,7 @@ include '../../include/baseTheme.php';
 
 $nameTools = $langCreateCourse . " (" . $langCreateCourseStep ." 1 " .$langCreateCourseStep2 . " 3)" ;
 $tool_content = $head_content = "";
-
-if ($language == 'greek')
-        $lang_editor = 'el';
-    else
-        $lang_editor = 'en';
+$lang_editor = langname_to_code($language);
 
 $head_content .= <<<hContent
 <script type="text/javascript">

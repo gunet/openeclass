@@ -51,11 +51,7 @@ $nameTools = $langEditCourseProgram ;
 $navigation[]= array ("url"=>"index.php", "name"=> $langCourseProgram);
 
 $db = $_SESSION['dbname'];
-if ($language == 'greek')
-        $lang_editor='el';
-else
-        $lang_editor='en';
-
+$lang_editor = langname_to_code($language);
 
 $head_content .= <<<hCont
 <script type="text/javascript">

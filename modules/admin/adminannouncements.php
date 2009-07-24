@@ -31,10 +31,7 @@ $navigation[] = array("url" => "index.php", "name" => $langAdmin);
 $nameTools = $langAdminAn;
 $tool_content = $head_content = "";
 
-if ($language == 'greek')
-        $lang_editor = 'el';
-    else
-        $lang_editor = 'en';
+$lang_editor = langname_to_code($language);
 
 $head_content .= <<<hContent
 <script type="text/javascript">

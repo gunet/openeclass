@@ -57,16 +57,8 @@ $tool_content = $head_content = "";
 
 mysql_select_db($dbname);
 if ((isset($addEvent) && $addEvent == 1) || ((isset($id) && $id)) && $is_adminOfCourse) {
-
-if ($language == 'greek') {
-	$lang_editor='el';
-	$lang_jscalendar = 'el';
-} else {
-	$lang_editor='en';
-	$lang_jscalendar = $lang_editor;
-}
-
-	//--end if add event
+	$lang_editor = langname_to_code($language);
+	$lang_jscalendar = langname_to_code($language);
 
 	//--if add event
 	$head_content = <<<hContent

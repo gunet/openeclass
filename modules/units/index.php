@@ -172,7 +172,7 @@ if ($is_adminOfCourse) {
 if ($is_adminOfCourse) {
         $tool_content .= '<table class="unit-navigation"><tr><td class="left">' .
         $link['previous'] . '</td><td class="right">' .
-        $link['next'] . "</td></tr></table>\n";
+        $link['next'] . "</td></tr></table><br />\n";
 } else {
         $tool_content .= '<table class="DepTitle" width="99%" align="left">' .
 	"<tbody><tr><th>".$link['previous']."</th><td>".$link['next']."&nbsp;</td></tr></tbody></table>\n<p>&nbsp;</p>\n";
@@ -240,7 +240,7 @@ function show_resources($unit_id)
 	if (mysql_num_rows($req) > 0) {
 		list($max_resource_id) = mysql_fetch_row(db_query("SELECT id FROM unit_resources
                                 WHERE unit_id = $unit_id ORDER BY `order` DESC LIMIT 1"));
-		$tool_content .= "<table class='resources'>";
+		$tool_content .= "<table class='resources' width='99%'>";
 		while ($info = mysql_fetch_array($req)) {
 			show_resource($info);
 		}	
@@ -313,11 +313,11 @@ function show_doc($title, $comments, $resource_id, $file_id)
         }
 	$class_vis = ($status == 'i' or $status == 'del')? ' class="invisible"': '';
         if (!empty($comments)) {
-                $comment = "<tr><td>&nbsp;</td><td>$comments</td>";
+                $comment = "<tr><td  width='3%'>&nbsp;</td><td>$comments</td>";
         } else {
                 $comment = "";
         }
-        return "<tr$class_vis><td><img src='$image' /></td><td>$link</td>" .
+        return "<tr$class_vis><td width='3%'><img src='$image' /></td><td width='82%'>$link</td>" .
                 actions('doc', $resource_id, $status) .
                 '</tr>' . $comment;
 }
@@ -331,7 +331,7 @@ function show_text($comments, $resource_id, $visibility)
         $class_vis = ($visibility == 'i')? ' class="invisible"': '';
         /*$imagelink = "<img src='../../template/classic/img/description_" .
 			($visibility == 'i'? 'off': 'on') . ".gif' />"; */
-        $tool_content .= "<tr$class_vis><td>&nbsp;</td><td>$comments</td>" .
+        $tool_content .= "<tr$class_vis><th width='3%'>&nbsp;</th><td width='82%'>$comments</td>" .
 		actions('text', $resource_id, $visibility) .
                 "</tr>";
 }
@@ -365,11 +365,11 @@ function show_lp($title, $comments, $resource_id, $lp_id)
 			return '';
         }
         if (!empty($comments)) {
-                $comment_box = "<tr><td>&nbsp;</td><td>$comments</td>";
+                $comment_box = "<tr><td width='3%'>&nbsp;</td><td width='82%'>$comments</td>";
         }
         $class_vis = ($status == 'i' or $status == 'del')?
                 ' class="invisible"': '';
-	return "<tr$class_vis><td>$imagelink</td><td>$link</td>" .
+	return "<tr$class_vis><td width='3%'>$imagelink</td><td width='82%'>$link</td>" .
 		actions('lp', $resource_id, $status) .
 		'</tr>' . $comment_box;
 }
@@ -399,11 +399,11 @@ function show_video($table, $title, $comments, $resource_id, $video_id, $visibil
         }
         $class_vis = ($visibility == 'v')? '': ' class="invisible"';
         if (!empty($comments)) {
-                $comment_box = "<tr$class_vis><td>&nbsp;</td><td>$comments</td>";
+                $comment_box = "<tr$class_vis><td width='3%'>&nbsp;</td><td width='82%'>$comments</td>";
         } else {
                 $comment_box = "";
         }
-        $tool_content .= "<tr$class_vis><td>$imagelink</td><td>$videolink</td>" .
+        $tool_content .= "<tr$class_vis><td width='3%'>$imagelink</td><td width='82%'>$videolink</td>" .
 		actions('video', $resource_id, $visibility) .
                 '</tr>' . $comment_box;
 }
@@ -434,10 +434,10 @@ function show_exercise($title, $comments, $resource_id, $exercise_id, $visibilit
 	}
 	$class_vis = ($visibility == 'v')? '': ' class="invisible"';
         if (!empty($comments)) {
-                $comment_box = "<tr><td>&nbsp;</td><td>$comments</td>";
+                $comment_box = "<tr><td width='3%'>&nbsp;</td><td width='82%'>$comments</td>";
 	}
 
-	return "<tr$class_vis><td>$imagelink</td><td>$link</td>" .
+	return "<tr$class_vis><td width='3%'>$imagelink</td><td width='82%'>$link</td>" .
 		actions('lp', $resource_id, $visibility) .
 		'</tr>' . $comment_box;
 }
@@ -461,10 +461,10 @@ function show_forum($type, $title, $comments, $resource_id, $ft_id, $visibility)
 	$imagelink = "<img src='../../template/classic/img/forum_" .
 			($visibility == 'i'? 'off': 'on') . ".gif' />";
         if (!empty($comments)) {
-                $comment_box = "<tr><td>&nbsp;</td><td>$comments</td>";
+                $comment_box = "<tr><td width='3%'>&nbsp;</td><td width='82%'>$comments</td>";
 	}
 
-	return "<tr$class_vis><td>$imagelink</td><td>$link</td>" .
+	return "<tr$class_vis><td width='3%'>$imagelink</td><td width='82%'>$link</td>" .
 		actions('forum', $resource_id, $visibility) .
 		'</tr>' . $comment_box;
 }
@@ -483,38 +483,38 @@ function actions($res_type, $resource_id, $status)
         $icon_vis = ($status == 'v')? 'visible.gif': 'invisible.gif';
 
         if ($status != 'del') {
-                $content = "<td><a href='$_SERVER[PHP_SELF]?edit=$resource_id'>" .
+                $content = "<td width='3%'><a href='$_SERVER[PHP_SELF]?edit=$resource_id'>" .
                 "<img src='../../template/classic/img/edit.gif' title='$langEdit' /></a></td>";
         } else {
-                $content = '<td>&nbsp;</td>';
+                $content = '<td width="3%">&nbsp;</td>';
         }
-        $content .= "<td><a href='$_SERVER[PHP_SELF]?del=$resource_id'" .
+        $content .= "<td width='3%'><a href='$_SERVER[PHP_SELF]?del=$resource_id'" .
                                         " onClick=\"return confirmation();\">" .
                                         "<img src='../../template/classic/img/delete.gif' " .
                                         "title='$langDelete'></img></a></td>";
 	 
 	if ($status != 'del') {
 		if ($res_type == 'text' or $res_type == 'video' or $res_type == 'forum' or $res_type == 'topic') { 
-			$content .= "<td><a href='$_SERVER[PHP_SELF]?vis=$resource_id'>" .
+			$content .= "<td width='3%'><a href='$_SERVER[PHP_SELF]?vis=$resource_id'>" .
                                         "<img src='../../template/classic/img/$icon_vis' " .
                                         "title='$langVisibility'></img></a></td>";
 		} else {
-			$content .= "<td>&nbsp;</td>";
+			$content .= "<td width='3%'>&nbsp;</td>";
 		}
         } else {
-                $content .= '<td>&nbsp;</td>';
+                $content .= '<td width="3%">&nbsp;</td>';
         }
         if ($resource_id != $GLOBALS['max_resource_id']) {
-                $content .= "<td><a href='$_SERVER[PHP_SELF]?down=$resource_id'>" .
+                $content .= "<td width='3%'><a href='$_SERVER[PHP_SELF]?down=$resource_id'>" .
                         "<img src='../../template/classic/img/down.gif' title='$langDown'></img></a></td>";
 	} else {
-		$content .= "<td>&nbsp;</td>";
+		$content .= "<td width='3%'>&nbsp;</td>";
 	}
         if (!$first) {
-                $content .= "<td><a href='$_SERVER[PHP_SELF]?up=$resource_id'>" .
+                $content .= "<td width='3%'><a href='$_SERVER[PHP_SELF]?up=$resource_id'>" .
                         "<img src='../../template/classic/img/up.gif' title='$langUp'></img></a></td>";
         } else {
-                $content .= "<td>&nbsp;</td>";
+                $content .= "<td width='3%'>&nbsp;</td>";
         }
         $first = false;
         return $content;

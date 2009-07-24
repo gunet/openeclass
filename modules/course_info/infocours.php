@@ -48,11 +48,8 @@ $tool_content = "";
 
 // submit
 if ($is_adminOfCourse) {
+	$lang_editor = langname_to_code($language);
 
-if ($language == 'greek')
-        $lang_editor = 'el';
-    else
-        $lang_editor = 'en';
 $head_content = <<<hContent
 <script type="text/javascript">
         _editor_url  = "$urlAppend/include/xinha/";

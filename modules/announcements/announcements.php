@@ -63,10 +63,7 @@ $tool_content = $head_content = "";
 
 if ($is_adminOfCourse and
     (isset($_GET['addAnnouce']) or isset($_GET['modify']))) {
-        if ($language == 'greek')
-                $lang_editor = 'el';
-        else
-                $lang_editor = 'en';
+	$lang_editor = langname_to_code($language);
 
         $head_content = <<<hContent
 <script type="text/javascript">

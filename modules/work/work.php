@@ -115,10 +115,7 @@ mysql_select_db($currentCourseID);
 include('../../include/lib/fileUploadLib.inc.php');
 include('../../include/lib/fileManageLib.inc.php');
 
-if ($language == 'greek')
-	$lang_editor='el';
-else
-	$lang_editor='en';
+$lang_editor = langname_to_code($language);
 
 $head_content .= <<<hContent
 <script type="text/javascript">

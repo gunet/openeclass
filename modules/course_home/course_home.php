@@ -173,7 +173,9 @@ while ($cu = mysql_fetch_array($sql)) {
                 // Visibility icon
                 $vis = $cu['visibility'];
                 $icon_vis = ($vis == 'v')? 'visible.gif': 'invisible.gif';
-                $class_vis = ($vis == 'i')? ' class="invisible"': '';
+                //$class_vis = ($vis == 'i')? ' class="invisible"': '';
+                $class1_vis = ($vis == 'i')? ' class="invisible"': '';
+                $class_vis = ($vis == 'i')? '_invisible': '';
                 $cunits_content .= "\n      <table ";
                 if ($is_adminOfCourse) {
                     $cunits_content .= "class='FormData'";
@@ -181,7 +183,7 @@ while ($cu = mysql_fetch_array($sql)) {
                     $cunits_content .= "class='resources'";
                 }
                 $cunits_content .= " width='99%'>\n      <thead>\n      <tr>\n        <th width='5%' class='right'>$count_index.</th>";
-                $cunits_content .= "\n        <td width='85%'><a class=\"unit_link\" href='${urlServer}modules/units/?id=$cu[id]'$class_vis>$cu[title]</a></td>";
+                $cunits_content .= "\n        <td width='85%'><a class=\"unit_link$class_vis\" href='${urlServer}modules/units/?id=$cu[id]'>$cu[title]</a></td>";
                 if ($is_adminOfCourse) { // display actions
                         $cunits_content .= "\n        <td width='2%' style=\"border-bottom: 1px solid #CAC3B5;\">".
                                 "<a href='../../modules/units/info.php?edit=$cu[id]'>" .
@@ -207,7 +209,7 @@ while ($cu = mysql_fetch_array($sql)) {
                 }
                 $cunits_content .= "\n      <tr>\n        \n<td width='4%'>&nbsp;</td>\n        <td width='96%' ";
                 if ($is_adminOfCourse) {
-                    $cunits_content .= "colspan='6'>";
+                    $cunits_content .= "colspan='6' $class1_vis>";
                 } else {
                     $cunits_content .= ">";
                 } 
