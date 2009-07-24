@@ -7,6 +7,8 @@
 *  A full copyright notice can be read in "/info/copyright.txt".
 * =========================================================================*/
 
+define('SUFFIX_LEN', 4);
+
 $require_admin = TRUE;
 include '../../include/baseTheme.php';
 include '../../include/sendMail.inc.php';
@@ -152,8 +154,9 @@ $langEmail : $emailAdministrator
 
 function create_username($statut, $depid, $nom, $prenom, $prefix)
 {
+        $wildcard = str_pad('', SUFFIX_LEN, '_');
         $req = db_query("SELECT username FROM user
-                         WHERE username LIKE '$prefix%'
+                         WHERE username LIKE '$prefix$wildcard'
                          ORDER BY username DESC LIMIT 1");
         if ($req and mysql_num_rows($req) > 0) {
                 list($last_uname) = mysql_fetch_row($req);
@@ -161,7 +164,7 @@ function create_username($statut, $depid, $nom, $prenom, $prefix)
         } else {
                 $lastid = 1;
         }
-        $suffix = sprintf("%04d", $lastid);
+        $suffix = sprintf('%0'. SUFFIX_LEN . 'd', $lastid);
         return $prefix . $suffix;
 }
 
