@@ -283,11 +283,11 @@ do {
       $message
       <br /><br />
       </td>
-      <td class=\"$row_color\" width=\"3\">
-        <div align=\"right\">";
+      <td class='$row_color' width='40'>
+        <div align='right'>";
 	if ($is_adminOfCourse) { // course admin
-		$tool_content .= "
-        <a href=\"editpost.php?post_id=".$myrow["post_id"]."&amp;topic=$topic&amp;forum=$forum\"><img src='../../template/classic/img/edit.gif' border='0' title='$langModify'></img></a>";
+		$tool_content .= "<a href=\"editpost.php?post_id=".$myrow["post_id"]."&amp;topic=$topic&amp;forum=$forum\"><img src='../../template/classic/img/edit.gif' border='0' title='$langModify'></img></a>";
+		$tool_content .= "&nbsp;<a href='editpost.php?post_id=".$myrow["post_id"]."&amp;topic=$topic&amp;forum=$forum&amp;delete=on&amp;submit=yes'><img src='../../template/classic/img/delete.gif' border='0' title='$langDelete'></img></a>";
 	}
 	$tool_content .= "
         </div>
