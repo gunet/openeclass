@@ -304,11 +304,11 @@ function show_doc($title, $comments, $resource_id, $file_id)
                 $status = $file['visibility'];
                 if ($file['format'] == '.dir') {
                         $image = '../../template/classic/img/folder.gif';
-                        $link = "<a href='{$urlServer}modules/document/document.php?openDir=$file[path]&amp;unit=$id'>$title</a>";
+                        $link = "<a href='{$urlServer}modules/document/document.php?openDir=$file[path]&amp;unit=$id'>";
                 } else {
                         $image = '../document/img/' .
                                 choose_image('.' . $file['format']);
-                        $link = "<a href='" . file_url($file['path'], $file['filename']) . "'>$title</a>";
+                        $link = "<a href='" . file_url($file['path'], $file['filename']) . "' target='_blank'>";
                 }
         }
 	$class_vis = ($status == 'i' or $status == 'del')? ' class="invisible"': '';
@@ -317,7 +317,7 @@ function show_doc($title, $comments, $resource_id, $file_id)
         } else {
                 $comment = "";
         }
-        return "<tr$class_vis><td width='3%'><img src='$image' /></td><td width='82%'>$link</td>" .
+        return "<tr$class_vis><td width='3%'>$link<img src='$image' /></a></td><td width='82%'>$link$title</a></td>" .
                 actions('doc', $resource_id, $status) .
                 '</tr>' . $comment;
 }
@@ -357,7 +357,7 @@ function show_lp($title, $comments, $resource_id, $lp_id)
 	} else {
                 $lp = mysql_fetch_array($r, MYSQL_ASSOC);
 		$status = ($lp['visibility'] == 'SHOW')? 'v': 'i';
-		$link = "<a href='${urlServer}modules/learnPath/learningPath.php?path_id=$lp_id&amp;unit=$id'>$title</a>";
+		$link = "<a href='${urlServer}modules/learnPath/learningPath.php?path_id=$lp_id&amp;unit=$id'>";
 		$imagelink = "<img src='../../template/classic/img/lp_" .
 			($status == 'i'? 'off': 'on') . ".gif' />";
 	}
@@ -369,7 +369,7 @@ function show_lp($title, $comments, $resource_id, $lp_id)
         }
         $class_vis = ($status == 'i' or $status == 'del')?
                 ' class="invisible"': '';
-	return "<tr$class_vis><td width='3%'>$imagelink</td><td width='82%'>$link</td>" .
+	return "<tr$class_vis><td width='3%'>$link$imagelink</a></td><td width='82%'>$link$title</a></td>" .
 		actions('lp', $resource_id, $status) .
 		'</tr>' . $comment_box;
 }
@@ -384,11 +384,13 @@ function show_video($table, $title, $comments, $resource_id, $video_id, $visibil
                            $currentCourseID);
         if ($result and mysql_num_rows($result) > 0) {
                 $row = mysql_fetch_array($result, MYSQL_ASSOC);
-                $videolink = "<a href='" .
+                $link = "<a href='" .
                              video_url($table, $row['url'], @$row['path']) .
-                             "'>" . htmlspecialchars($title) . '</a>';
-                $imagelink = "<img src='../../template/classic/img/videos_" .
-                             ($visibility == 'i'? 'off': 'on') . ".gif' />";
+                             "'>";
+                $videolink = $link . htmlspecialchars($title) . '</a>';
+                $imagelink = $link .
+                             "<img src='../../template/classic/img/videos_" .
+                             ($visibility == 'i'? 'off': 'on') . ".gif' /></a>";
         } else {
                 if (!$is_adminOfCourse) {
                         return;
@@ -418,26 +420,28 @@ function show_exercise($title, $comments, $resource_id, $exercise_id, $visibilit
         $title = htmlspecialchars($title);
 	$r = db_query("SELECT * FROM exercices WHERE id = $exercise_id",
                       $currentCourseID);
-	if (mysql_num_rows($r) == 0) { // check if lp was deleted
+	if (mysql_num_rows($r) == 0) { // check if it was deleted
 		if (!$is_adminOfCourse) {
 			return '';
 		} else {
 			$status = 'del';
 			$imagelink = "<img src='../../template/classic/img/delete.gif' />";
-			$link = "<span class='invisible'>$title ($langWasDeleted)</span>";
+			$exlink = "<span class='invisible'>$title ($langWasDeleted)</span>";
 		}
 	} else {
                 $exercise = mysql_fetch_array($r, MYSQL_ASSOC);
-		$link = "<a href='${urlServer}modules/exercice/exercice_submit.php?exerciseId=$exercise_id&amp;unit=$id'>$title</a>";
-		$imagelink = "<img src='../../template/classic/img/exercise_" .
-			($visibility == 'i'? 'off': 'on') . ".gif' />";
+		$link = "<a href='${urlServer}modules/exercice/exercice_submit.php?exerciseId=$exercise_id&amp;unit=$id'>";
+                $exlink = $link . "$title</a>";
+		$imagelink = $link .
+                        "<img src='../../template/classic/img/exercise_" .
+			($visibility == 'i'? 'off': 'on') . ".gif' /></a>";
 	}
 	$class_vis = ($visibility == 'v')? '': ' class="invisible"';
         if (!empty($comments)) {
                 $comment_box = "<tr><td width='3%'>&nbsp;</td><td width='82%'>$comments</td>";
 	}
 
-	return "<tr$class_vis><td width='3%'>$imagelink</td><td width='82%'>$link</td>" .
+	return "<tr$class_vis><td width='3%'>$imagelink</td><td width='82%'>$exlink</td>" .
 		actions('lp', $resource_id, $visibility) .
 		'</tr>' . $comment_box;
 }
@@ -451,20 +455,22 @@ function show_forum($type, $title, $comments, $resource_id, $ft_id, $visibility)
 	$class_vis = ($visibility == 'i')? ' class="invisible"': '';
         $title = htmlspecialchars($title);
 	if ($type == 'forum') {
-		$link = "<a href='${urlServer}modules/phpbb/viewforum.php?forum=$ft_id&amp;unit=$id'>$title</a>";
+		$link = "<a href='${urlServer}modules/phpbb/viewforum.php?forum=$ft_id&amp;unit=$id'>";
+                $forumlink = $link . "$title</a>";
 	} else {
 		$r = db_query("SELECT forum_id FROM topics WHERE topic_id = $ft_id", $currentCourseID);
 		list($forum_id) = mysql_fetch_array($r);
-		$link = "<a href='${urlServer}modules/phpbb/viewtopic.php?topic=$ft_id&amp;forum=$forum_id&amp;unit=$id'>$title</a>";
+		$link = "<a href='${urlServer}modules/phpbb/viewtopic.php?topic=$ft_id&amp;forum=$forum_id&amp;unit=$id'>";
+                $forumlink = $link . "$title</a>";
 	}
 
-	$imagelink = "<img src='../../template/classic/img/forum_" .
-			($visibility == 'i'? 'off': 'on') . ".gif' />";
+	$imagelink = $link . "<img src='../../template/classic/img/forum_" .
+			($visibility == 'i'? 'off': 'on') . ".gif' /></a>";
         if (!empty($comments)) {
                 $comment_box = "<tr><td width='3%'>&nbsp;</td><td width='82%'>$comments</td>";
 	}
 
-	return "<tr$class_vis><td width='3%'>$imagelink</td><td width='82%'>$link</td>" .
+	return "<tr$class_vis><td width='3%'>$imagelink</td><td width='82%'>$forumlink</td>" .
 		actions('forum', $resource_id, $visibility) .
 		'</tr>' . $comment_box;
 }

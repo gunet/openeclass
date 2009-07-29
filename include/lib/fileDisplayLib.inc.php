@@ -85,7 +85,7 @@ function choose_image($fileName)
 		$type['midi'      ] = array('midi', 'mid');
 		$type['video'     ] = array('avi', 'mpg', 'mpeg', 'mov', 'divx', 'wmv', 'asf', 'asx');
 		$type['real'      ] = array('ram', 'rm');
-		$type['flash'     ] = array('flv');
+		$type['flash'     ] = array('swf', 'flv');
 		$type['excel'     ] = array('xls', 'xlt', 'xlsx');
 		$type['compressed'] = array('zip', 'tar', 'gz', 'bz2', 'tar.gz', 'tar.bz2', '7z');
 		$type['rar'       ] = array('rar');
