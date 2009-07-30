@@ -62,7 +62,7 @@ $errorExists = false;
 			$errorExists = true;
 		}
 	}
-	if (!$errorExists) {
+	if (@!$errorExists) {
 		$tool_content .= "
 	<table width=\"99%\">
 	<tbody>
