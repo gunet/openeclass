@@ -39,7 +39,7 @@
  *
  */
 include ('init.php');
-if ($is_adminOfCourse) {
+if ($is_adminOfCourse and isset($currentCourseID)) {
 	if (isset($_GET['hide']) and $_GET['hide'] == 0) {
 		db_query("UPDATE accueil SET visible = 0 WHERE id='$eclass_module_id'", $currentCourseID);
 	} else if (isset($_GET['hide']) and $_GET['hide'] == 1) {
@@ -245,7 +245,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 			$searchAdvancedURL = $searchAction;
 		}
 		$mod_activation = '';
-		if ($is_adminOfCourse) {
+		if ($is_adminOfCourse and isset($currentCourseID)) {
 			// link for activating / deactivating module
 			if(file_exists($module_ini_dir = getcwd() . "/module.ini.php")) {
 				include $module_ini_dir;
