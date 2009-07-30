@@ -108,7 +108,7 @@ $langTel $telephone
 $langEmail : $emailAdministrator
 ";
 		
-		send_mail($siteName, $emailAdministrator, '', $email_form, $emailsubject, $emailbody, $charset);
+		send_mail('', '', '', $email_form, $emailsubject, $emailbody, $charset);
 
 		}
 

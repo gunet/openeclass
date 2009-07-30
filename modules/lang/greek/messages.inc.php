@@ -1202,7 +1202,7 @@ $langGroupNoGroup="μη εγγεγραμμένοι ".$langsStudents." ";
 $langGroupUsersList="Βλέπε <a href=../user/user.php>Χρήστες</a>";
 $langGroupTooMuchMembers="Ο αριθμός που προτάθηκε υπερβαίνει το μέγιστο επιτρεπόμενο (μπορείτε να το αλλάξετε παρακάτω).
 	Η σύνθεση της ομάδας δεν άλλαξε";
-$langGroupTutor="Διδάσκοντας";
+$langGroupTutor="Υπεύθυνος ομάδας";
 $langGroupNoTutor="κανένας";
 $langGroupNone="δεν υπάρχει";
 $langGroupNoneMasc="κανένας";
@@ -3211,3 +3211,5 @@ $langInsertVideo = "βίντεο";
 $langInsertForum = "περιοχής συζητήσεων";
 $langUnknownResType = "Πρόβλημα! Άγνωστος πόρος θεματικής ενότητας";
 $langNoExercises = "Δεν υπάρχουν ασκήσεις";
+
+$langVia = 'μέσω';

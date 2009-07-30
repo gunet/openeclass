@@ -100,7 +100,7 @@ if (isset($submit))  {
                                 "$langManager $siteName \n$langTel $telephone \n" .
                                 "$langEmail: $emailAdministrator";
 
-    if (!send_mail($gunet, $emailAdministrator, '', $emailhelpdesk, $mailsubject, $emailbody, $charset))  {
+    if (!send_mail('', '', $gunet, $emailhelpdesk, $mailsubject, $emailbody, $charset))  {
 		      $tool_content .= "<table width=\"99%\"><tbody><tr>
     	    	<td class=\"caution\" height='60'>
 	    	    <p>$langMailErrorMessage &nbsp; <a href=\"mailto:$emailhelpdesk\">$emailhelpdesk</a></p>

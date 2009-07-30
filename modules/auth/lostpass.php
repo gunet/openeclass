@@ -232,12 +232,8 @@ $tool_content = "<table width=\"99%\">
 
 	/***** Account details found, now send e-mail *****/
         if ($found_editable_password) {
-                $emailheaders = "From: $siteName <$emailAdministrator>\n".
-                        "MIME-Version: 1.0\n".
-                        "Content-Type: text/plain; charset=$charset\n".
-                        "Content-Transfer-Encoding: 8bit";
                 $emailsubject = $lang_remind_pass;
-                if (!send_mail($siteName, $emailAdministrator, '', $email, $emailsubject, $text, $charset)) {
+                if (!send_mail('', '', '', $email, $emailsubject, $text, $charset)) {
                         $tool_content = "
                                 <table width=\"99%\">
                                 <tbody>

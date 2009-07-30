@@ -258,7 +258,7 @@ $langManager $siteName
 $administratorName $administratorSurname
 $langPhone: $telephone
 $langEmail: $emailAdministrator";
-						send_mail($siteName, $emailAdministrator, "$prof_name $prof_surname",	$prof_email, $emailsubject, $emailbody, $charset);
+						send_mail('', '', "$prof_name $prof_surname", $prof_email, $emailsubject, $emailbody, $charset);
 					}
 					$tool_content .= "<p class='success_small'>" .  ($list_statut == 1)? $langTeacherRequestHasRejected: $langRequestReject;
 					$tool_content .= " $langRequestMessageHasSent <b>$prof_email</b></p>";

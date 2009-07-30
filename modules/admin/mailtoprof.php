@@ -89,7 +89,7 @@ $administratorName $administratorSurname
 $langTel $telephone
 $langEmail : $emailAdministrator
 ";
-		if (!send_mail($siteName, $emailAdministrator, '', $to,
+		if (!send_mail('', '', '', $to,
 			$emailsubject, $emailbody, $charset)) {
 				$tool_content .= "<p class=\"caution_small\">".$langEmailNotSend." ".$to."!</p>";
 		}

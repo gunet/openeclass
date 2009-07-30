@@ -25,6 +25,8 @@
 * =========================================================================*/
 
 // Send a mail message, with the proper MIME headers and charset tag
+// From: address is always the platform administrator, and the
+// $from_address specified appears in the Reply-To: header
 function send_mail($from, $from_address, $to, $to_address,
                    $subject, $body, $charset, $extra_headers = '')
 {
@@ -39,12 +41,11 @@ function send_mail($from, $from_address, $to, $to_address,
                 }
                 $bcc = '';
         }
-	$headers =
-		"From: " . qencode($from, $charset) . " <$from_address>\n" .
-                $bcc .
+	$headers = from($from, $from_address) . $bcc .
 		"MIME-Version: 1.0\n" .
 		"Content-Type: text/plain; charset=$charset\n" .
-		"Content-Transfer-Encoding: 8bit";
+		"Content-Transfer-Encoding: 8bit" .
+                reply_to($from, $from_address);
 	if ($extra_headers) {
 		$headers .= "\n" . preg_replace('/\n+/', "\n", $extra_headers);
 	}
@@ -57,11 +58,12 @@ function send_mail($from, $from_address, $to, $to_address,
 // Send a Multipart/Alternative message, with the proper MIME headers
 // and charset tag, with a plain text and an HTML part
 // From: address is always the platform administrator, and the
-// To: address specified appears in the Reply-To: header
+// $from_address specified appears in the Reply-To: header
 function send_mail_multipart($from, $from_address, $to, $to_address,
                    $subject, $body_plain, $body_html, $charset)
 {
-        global $emailAdministrator, $emailAnnounce;
+        global $emailAnnounce;
+
         if (count($to_address) > 1) {
                 if (isset($emailAnnounce)) {
                         if (empty($to)) {
@@ -86,13 +88,11 @@ function send_mail_multipart($from, $from_address, $to, $to_address,
                 $bcc = '';
         }
 	$separator = '----=_NextPart_000_0000_01C-eclass-5F02B.B43B1CC0';
-	$headers =
-		"From: " . qencode($from, $charset) . " <$emailAdministrator>\n" .
-		"Reply-To: $from_address\n" .
-                $bcc .
-		"MIME-Version: 1.0\n" .
-		"Content-Type: multipart/alternative;" .
-		"\n\tboundary=\"$separator\"\n";
+	$headers = from($from, $from_address) . $bcc .
+		   "MIME-Version: 1.0\n" .
+                   "Content-Type: multipart/alternative;" .
+                   "\n\tboundary=\"$separator\"" .
+                   reply_to($from, $from_address);
 
 	$body = "This is a multi-part message in MIME format.\n\n" .
 		"--$separator\n" .
@@ -109,6 +109,43 @@ function send_mail_multipart($from, $from_address, $to, $to_address,
 
 	return @mail($to_header, qencode($subject, $charset),
                $body, $headers);
+}
+
+
+// Determine the correct From: header
+function from($from, $from_address)
+{
+        global $langVia, $siteName, $emailAdministrator, $charset;
+
+        if (empty($from) or $from == $siteName) {
+                return "From: " . qencode($siteName, $charset) .
+                       " <$emailAdministrator>\n";
+        } else {
+		return "From: " .
+                       qencode("$from ($langVia: $siteName)", $charset) .
+                       " <$emailAdministrator>\n";
+        }
+}
+
+
+// Determine the correct Reply-To: header if needed
+function reply_to($from, $from_address)
+{
+        global $siteName, $emailAdministrator, $emailAnnounce, $charset;
+
+        if (empty($from_address)) {
+                return '';
+        } elseif ($from <> $siteName or $emailAdministrator <> $from_address) {
+                if (empty($from)) {
+                        return "\nReply-To: $from_address";
+                } else {
+                        return "\nReply-To: " .
+                                    qencode($from, $charset) .
+                                    " <$from_address>";
+                }
+        } else {
+                return '';
+        }
 }
 
 

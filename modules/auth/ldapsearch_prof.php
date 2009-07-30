@@ -222,7 +222,7 @@ if (isset($submit))  {
         $MailMessage = $mailbody1 . $mailbody2 . "$name $surname\n\n" . $mailbody3
         . $mailbody4 . $mailbody5 . "$mailbody6\n\n" . "$langDepartment: $department\n$langComments: $usercomment\n"
         . "$langProfUname : $username\n$langProfEmail : $usermail\n" . "$contactphone : $userphone\n\n\n$logo\n\n";
-    if (!send_mail($gunet, $emailhelpdesk, '', $emailhelpdesk, $mailsubject, $MailMessage, $charset))
+    if (!send_mail('', '', $gunet, $emailhelpdesk, $mailsubject, $MailMessage, $charset))
       {
         $tool_content .= "
         <table width=\"99%\">

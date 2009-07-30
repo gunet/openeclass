@@ -236,7 +236,7 @@ $registration_errors = array();
                                 "$langEmail: $emailAdministrator";
     }
 
-    send_mail($siteName, $emailAdministrator, '', $email, $emailsubject, $emailbody, $charset);
+    send_mail('', '', '', $email, $emailsubject, $emailbody, $charset);
     $registered_at = time();
     $expires_at = time() + $durationAccount;  //$expires_at = time() + 31536000;
 

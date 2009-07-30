@@ -109,17 +109,14 @@ function email_profs($course, $content, $from_name, $from_address)
 		$to_name = $prof['prenom'].' '.$prof['nom'];
 		$ret .= "<p><img src=../../template/classic/img/teacher.gif> $to_name</p><br>\n";
 		if (!send_mail($from_name,
-			$GLOBALS['emailAdministrator'],
-			$to_name,
-			$prof['email'],
-			$subject,
-			$message,
-			$GLOBALS['charset'],
-			'Reply-To: '.qencode($from_name, $GLOBALS['charset']).
-			     " <$from_address>")) {
-			     $ret .= "<p>$GLOBALS[langErrorSendingMessage]</p>\n";
+                               $from_address,
+                               $to_name,
+                               $prof['email'],
+                               $subject,
+                               $message,
+                               $GLOBALS['charset'])) {
+                        $ret .= "<p>$GLOBALS[langErrorSendingMessage]</p>\n";
 		}
 	}
 return $ret;
 }
-?>

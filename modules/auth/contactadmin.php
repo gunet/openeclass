@@ -75,7 +75,7 @@ if(!empty($userid))
 		$sirname $firstname
 		Email: $email
 		Σχόλια: $body";
-		if (!send_mail($siteName, $emailAdministrator, '', $to,	$emailsubject, $emailbody, $charset)) 
+		if (!send_mail('', '', '', $to,	$emailsubject, $emailbody, $charset)) 
 		{
 				$tool_content .= "<h4>'$langEmailNotSend' '$to'!</h4>";
 		}

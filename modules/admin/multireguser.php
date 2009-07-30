@@ -146,7 +146,7 @@ $langTel $telephone
 $langEmail : $emailAdministrator
 ";
         if ($send_mail) {
-                send_mail($siteName, $emailAdministrator, '', $email, $emailsubject, $emailbody, $charset);
+                send_mail('', '', '', $email, $emailsubject, $emailbody, $charset);
         }
 
         return array($id, $nom, $prenom, $email, $uname, $password);

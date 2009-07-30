@@ -58,16 +58,20 @@ $currentCourse = $dbname;
 if ($is_adminOfCourse or $is_tutor)  {
 	if (isset($submit)) {
                 $sender = mysql_fetch_array(db_query("SELECT email, nom, prenom FROM user WHERE user_id = $uid", $mysqlMainDb));
-
+                $sender_name = $sender['prenom'] . ' ' . $sender['nom'];
+                $sender_email = $sender['email'];
                 $emailsubject = $intitule." - ".$subject;
-                $emailbody = "$body_mail\n\n$l_poster: $sender[nom] $sender[prenom]\n$langProfLesson\n";
+                $emailbody = "$body_mail\n\n$l_poster: $sender[nom] $sender[prenom] <$sender[email]>\n$langProfLesson\n";
 
 		$req = mysql_query("SELECT user FROM `$dbname`.user_group WHERE team = '$userGroupId'");
 		while ($userid = mysql_fetch_array($req)) {
-			$m = mysql_fetch_array(mysql_query("SELECT email FROM user where user_id='$userid[0]'", $mysqlMainDb));
-			if (!send_mail($prof['username'], $prof['user_email'],
-			'', $m[0], $emailsubject, $emailbody, $charset)) {
-				$tool_content .= "<h4>$langMailError</h4>";
+                        $r = db_query("SELECT email FROM user where user_id='$userid[0]'", $mysqlMainDb);
+			list($email) = mysql_fetch_array($r);
+			if (email_seems_valid($email) and
+                            !send_mail($sender_name, $sender_email,
+                                       '', $email,
+                                       $emailsubject, $emailbody, $charset)) {
+                                $tool_content .= "<h4>$langMailError</h4>";
 			}
 		}
 		$tool_content .= "<p class='success_small'>$langEmailSuccess<br />";
@@ -86,11 +90,11 @@ if ($is_adminOfCourse or $is_tutor)  {
       <td><b>$langTypeMessage</b></td>
     </tr>
     <tr>
-      <th class="left">$langMailSubject:</th>
+      <th class="left">$langMailSubject</th>
       <td><input type="text" name="subject" size="58" class="FormData_InputText"></input></td>
     </tr>
     <tr>
-      <th class="left" valign="top">$langMailBody:</th>
+      <th class="left" valign="top">$langMailBody</th>
       <td><textarea name="body_mail" rows="10" cols="73" class="FormData_InputText"></textarea></td>
     </tr>
     <tr>
@@ -106,6 +110,6 @@ if ($is_adminOfCourse or $is_tutor)  {
 tCont;
         }
 
-}	// if prof
+}
 
 draw($tool_content, 2, 'group');
