@@ -1227,7 +1227,7 @@ else // if method == 'post'
     </tr>
     </tbody>
     </table>
-    <p align=\"right\"><small>$langMaxFileSize ".format_file_size(get_max_upload_size($maxFilledSpace,$baseWorkDir))."</small></p>
+    <p align=\"right\"><small>$langMaxFileSize ".get_cfg_var('upload_max_filesize')."</small></p>
     <br />
     </form><br />
     <p><u>$langNote</u> :</p>
