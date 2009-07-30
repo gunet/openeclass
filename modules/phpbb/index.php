@@ -141,9 +141,8 @@ cData;
 	if ( $viewcat != -1 ) {
 		$limit_forums = "WHERE f.cat_id = $viewcat";
 	}
-	$sql = "SELECT f.*, u.username, u.user_id, p.post_time, p.nom, p.prenom, p.topic_id
+	$sql = "SELECT f.*, p.post_time, p.nom, p.prenom, p.topic_id
 		FROM forums f LEFT JOIN posts p ON p.post_id = f.forum_last_post_id
-		LEFT JOIN users u ON u.user_id = p.poster_id
 		$limit_forums ORDER BY f.cat_id, f.forum_id";
 	if ( !$f_res = db_query($sql, $currentCourseID) ) {
 		$tool_content .= <<<cData

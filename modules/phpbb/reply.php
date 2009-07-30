@@ -118,26 +118,19 @@ if (isset($submit) && $submit) {
 		draw($tool_content, 2, 'phpbb');
 		exit();
 	}
-	if ( $forum_access = 2 ) {
-		$userdata = array("user_id" => -1);
-	}
-	if (isset($userdata["user_level"]) && $userdata["user_level"] == -1) {
+	if (isset($user_level) && $user_level == -1) {
 		$tool_content .= $luserremoved;
 		draw($tool_content, 2, 'phpbb');
 		exit();
 	}
-	if ($userdata["user_id"] != -1) {
-		$md_pass = md5($password);
-		$userdata = get_userdata($username, $db);
-	}
-	if ($forum_access == 3 && $userdata["user_level"] < 2) {
+	if ($forum_access == 3 && $user_level < 2) {
 		$tool_content .= $l_nopost;
 		draw($tool_content, 2, 'phpbb');
 		exit();
 	}
 	// XXX: Do we need this code ?
-	if ( $userdata["user_id"] == -1 ) {
-		if ($forum_access == 3 && $userdata["user_level"] < 2) {
+	if ( $uid == -1 ) {
+		if ($forum_access == 3 && $user_level < 2) {
 			$tool_content .= $l_nopost;
 			draw($tool_content, 2, 'phpbb');
 			exit();
@@ -146,7 +139,7 @@ if (isset($submit) && $submit) {
 	// Either valid user/pass, or valid session. continue with post.. but first:
 	// Check that, if this is a private forum, the current user can post here.
 	if ($forum_type == 1) {
-		if (!check_priv_forum_auth($userdata["user_id"], $forum, TRUE, $currentCourseID)) {
+		if (!check_priv_forum_auth($uid, $forum, TRUE, $currentCourseID)) {
 			$tool_content .= "$l_privateforum $l_nopost";
 			draw($tool_content, 2, 'phpbb');
 			exit();
@@ -179,11 +172,11 @@ if (isset($submit) && $submit) {
 	$prenom = addslashes($prenom);
 
 	//to prevent [addsig] from getting in the way, let's put the sig insert down here.
-	if (isset($sig) && $sig && $userdata["user_id"] != -1) {
+	if (isset($sig) && $sig) {
 		$message .= "\n[addsig]";
 	}
 	$sql = "INSERT INTO posts (topic_id, forum_id, poster_id, post_time, poster_ip, nom, prenom)
-			VALUES ('$topic', '$forum', '" . $userdata["user_id"] . "','$time', '$poster_ip', '$nom', '$prenom')";
+			VALUES ('$topic', '$forum', '$uid','$time', '$poster_ip', '$nom', '$prenom')";
 	if (!$result = db_query($sql, $currentCourseID)) {
 		$tool_content .= $langUnableEnterData;
 		draw($tool_content, 2, 'phpbb');
@@ -216,22 +209,23 @@ if (isset($submit) && $submit) {
 		draw($tool_content, 2, 'phpbb');
 		exit();
 	}    
-	$sql = "SELECT t.topic_notify, u.user_email, u.username, u.user_id
-		FROM topics t, users u 
-		WHERE t.topic_id = '$topic' AND t.topic_poster = u.user_id";
+/* FIXME Should re-enable topic notification using eClass user info
+	$sql = "SELECT t.topic_notify
+		FROM topics t
+		WHERE t.topic_id = '$topic'";
 	if (!$result = db_query($sql, $currentCourseID)) {
 		$tool_content .= $langUserTopicInformation;
 		draw($tool_content, 2, 'phpbb');
 		exit();
 	}
 	$m = mysql_fetch_array($result);
-	if ($m["topic_notify"] == 1 && $m["user_id"] != $userdata["user_id"]) {
+	if ($m["topic_notify"] == 1) {
 		// We have to get the mail body and subject line in the board default language!
 		$subject = get_syslang_string($sys_lang, "l_notifysubj");
 		$message = get_syslang_string($sys_lang, "l_notifybody");
-		eval("\$message =\"$message\";");
 		mail($m["user_email"], $subject, $message, "From: $email_from\r\nX-Mailer: phpBB $phpbbversion");
 	}
+*/
 	$total_forum = get_total_topics($forum, $currentCourseID);
 	$total_topic = get_total_posts($topic, $currentCourseID, "topic")-1;  
 	// Subtract 1 because we want the nr of replies, not the nr of posts.
@@ -301,7 +295,7 @@ if (isset($submit) && $submit) {
 		if ($forum_type == 1) {
 			// To get here, we have a logged-in user. So, check whether that user is allowed to view
 			// this private forum.
-			if (!check_priv_forum_auth($userdata["user_id"], $forum, TRUE, $currentCourseID)) {
+			if (!check_priv_forum_auth($uid, $forum, TRUE, $currentCourseID)) {
 				$tool_content .= "$l_privateforum $l_nopost";
 				draw($tool_content, 2, 'phpbb');
 				exit();
@@ -332,8 +326,8 @@ if (isset($submit) && $submit) {
       <th class=\"left\">$l_body:";
 	if (isset($quote) && $quote) {
 		$sql = "SELECT pt.post_text, p.post_time, u.username 
-			FROM posts p, users u, posts_text pt 
-			WHERE p.post_id = '$post' AND p.poster_id = u.user_id AND pt.post_id = p.post_id";
+			FROM posts p, posts_text pt 
+			WHERE p.post_id = '$post' AND pt.post_id = p.post_id";
 		if ($r = db_query($sql, $currentCourseID)) {
 			$m = mysql_fetch_array($r);
 			$text = $m["post_text"];
@@ -377,4 +371,3 @@ if (isset($submit) && $submit) {
 
 }
 draw($tool_content, 2, 'phpbb');
-?>

@@ -104,8 +104,7 @@ if (isset($submit) && $submit) {
 		$username = $langAnonymous;
 	}
 	
-	$userdata = get_userdata($username, $db);
-	if($forum_access == 3 && $userdata["user_level"] < 2) {
+	if($forum_access == 3 && $user_level < 2) {
 		$tool_content .= $l_nopost;
 		draw($tool_content, 2);
 		exit;
@@ -113,7 +112,7 @@ if (isset($submit) && $submit) {
 	// Either valid user/pass, or valid session. continue with post.. but first:
 	// Check that, if this is a private forum, the current user can post here.
 	if ($forum_type == 1) {
-		if (!check_priv_forum_auth($userdata['user_id'], $forum, TRUE, $currentCourseID)) {
+		if (!check_priv_forum_auth($uid, $forum, TRUE, $currentCourseID)) {
 			$tool_content .= "$l_privateforum $l_nopost";
 			draw($tool_content, 2);
 			exit();
@@ -142,11 +141,11 @@ if (isset($submit) && $submit) {
 	$prenom = addslashes($prenom);
 	// END ADDED BY THOMAS
 
-	if (isset($sig) && $sig && $userdata['user_id'] != -1) {
+	if (isset($sig) && $sig) {
 		$message .= "\n[addsig]";
 	}
 	$sql = "INSERT INTO topics (topic_title, topic_poster, forum_id, topic_time, topic_notify, nom, prenom)
-			VALUES (" . autoquote($subject) . ", '" . $userdata["user_id"] . "', '$forum', '$time', 1, '$nom', '$prenom')";
+			VALUES (" . autoquote($subject) . ", '$uid', '$forum', '$time', 1, '$nom', '$prenom')";
 	if (!$result = db_query($sql, $currentCourseID)) {
 		$tool_content .= $langErrorEnterTopic;
 		draw($tool_content, 2);
@@ -155,7 +154,7 @@ if (isset($submit) && $submit) {
 
 	$topic_id = mysql_insert_id();
 	$sql = "INSERT INTO posts (topic_id, forum_id, poster_id, post_time, poster_ip, nom, prenom)
-			VALUES ('$topic_id', '$forum', '" . $userdata["user_id"] . "', '$time', '$poster_ip', '$nom', '$prenom')";
+			VALUES ('$topic_id', '$forum', '$uid', '$time', '$poster_ip', '$nom', '$prenom')";
 	if (!$result = db_query($sql, $currentCourseID)) {
 		$tool_content .= $langErrorEnterPost;
 		draw($tool_content, 2);

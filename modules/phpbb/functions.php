@@ -113,10 +113,10 @@ function get_last_post($id, $thedb, $type) {
       $sql = "SELECT p.post_time FROM posts p WHERE p.topic_id = '$id' ORDER BY post_time DESC LIMIT 1";   
       break;
     case 'forum':
-      $sql = "SELECT p.post_time, p.poster_id, u.username FROM posts p, users u WHERE p.forum_id = '$id' AND p.poster_id = u.user_id ORDER BY post_time DESC LIMIT 1";
+      $sql = "SELECT p.post_time, p.poster_id FROM posts p WHERE p.forum_id = '$id' ORDER BY post_time DESC LIMIT 1";
       break;
     case 'topic':
-      $sql = "SELECT p.post_time, u.username FROM posts p, users u WHERE p.topic_id = '$id' AND p.poster_id = u.user_id ORDER BY post_time DESC LIMIT 1";
+      $sql = "SELECT p.post_time FROM posts p WHERE p.topic_id = '$id' ORDER BY post_time DESC LIMIT 1";
       break;
     case 'user':
       $sql = "SELECT p.post_time FROM posts p WHERE p.poster_id = '$id' LIMIT 1";
@@ -135,19 +135,6 @@ function get_last_post($id, $thedb, $type) {
    return($val);
 }
 
-/* 
- * Gets user's data based on their username
- */
-function get_userdata($username, $db) {
-	$username = addslashes($username);
-	$sql = "SELECT * FROM users WHERE username = '$username' AND user_level != -1";
-	if(!$result = mysql_query($sql, $db))
-		$userdata = array("error" => "1");
-	if(!$myrow = mysql_fetch_array($result))
-		$userdata = array("error" => "1");
-	
-	return($myrow);
-}
 
 /*
  * Checks if a forum or a topic exists in the database. Used to prevent
@@ -830,7 +817,7 @@ function check_priv_forum_auth($userid, $forumid, $is_posting, $db)
  */
 function error_die($msg){
 	global $tablewidth, $table_bgcolor;
-	global $db, $userdata, $user_logged_in;
+	global $db, $user_logged_in;
 	global $FontFace, $FontSize3, $textcolor, $phpbbversion;
 	global $starttime;
 	if ( !isset($tool_content) ) {

@@ -88,10 +88,10 @@ include("functions.php"); // application logic for phpBB
       <ul id=\"opslist\">";
 if ( $is_adminOfCourse || $is_admin ) {
 	$tool_content .= "
-        <li><a href=\"../forum_admin/forum_admin.php\"><a href=\"../forum_admin/forum_admin.php\">$l_adminpanel</a></li>";
+        <li><a href='../forum_admin/forum_admin.php'>$l_adminpanel</a></li>";
 }
 	$tool_content .= "
-        <li><a href=\"newtopic.php?forum=$forum\">$langNewTopic</a></li>
+        <li><a href='newtopic.php?forum=$forum'>$langNewTopic</a></li>
       </ul>
     </div>
     <br />
@@ -143,7 +143,7 @@ if ($total_topics > $topics_per_page) { // navigation
 			$tool_content .= "$x";
 		} else { 
 			$start = ($x-1)*$topics_per_page;
-			$tool_content .= "<a href='$base_url$start'>$x</a>";	
+			$tool_content .= "<a href='$base_url&amp;start=$start'>$x</a>";
 		}
 	}
 	$tool_content .= "</span></strong></span></td>";
@@ -173,7 +173,7 @@ $tool_content .= <<<cData
     <tr>
       <td class="ForumHead" colspan="2">&nbsp;$l_topic</td>
       <td class="ForumHead" width="100">$l_replies</td>
-      <td class="ForumHead" width="100">$l_poster</th>
+      <td class="ForumHead" width="100">$l_poster</td>
       <td class="ForumHead" width="100">$langSeen</td>
       <td class="ForumHead" width="100">$langLastMsg</td>
     </tr>
@@ -182,10 +182,9 @@ $tool_content .= <<<cData
 cData;
 
 
-$sql = "SELECT t.*, u.username, u2.username as last_poster, p.post_time FROM topics t
-        LEFT JOIN users u ON t.topic_poster = u.user_id 
+$sql = "SELECT t.*, p.post_time, p.nom AS nom1, p.prenom AS prenom1
+        FROM topics t
         LEFT JOIN posts p ON t.topic_last_post_id = p.post_id
-        LEFT JOIN users u2 ON p.poster_id = u2.user_id
         WHERE t.forum_id = '$forum' 
         ORDER BY topic_time DESC LIMIT $first_topic, $topics_per_page";
 
@@ -226,25 +225,24 @@ if (mysql_num_rows($result) > 0) { // topics found
 				$image = $locked_image;
 			}
 		}
-		$tool_content .= "<td width=\"1\"><img src=\"$image\"></td>";
+		$tool_content .= "<td width='1'><img src='$image' /></td>";
 		$topic_title = own_stripslashes($myrow["topic_title"]);
 		$pagination = '';
 		$start = '';
-		$topiclink = "viewtopic.php?topic=" . $myrow["topic_id"] . "&forum=$forum";
+		$topiclink = "viewtopic.php?topic=" . $myrow["topic_id"] . "&amp;forum=$forum";
 		if($replys+1 > $posts_per_page) {
-			$pagination .= "\n          <strong class=\"pagination\"><span>\n
-			            <img src=".$posticon_more.">";
+			$pagination .= "\n          <strong class='pagination'><span>\n
+			            <img src='$posticon_more' />";
 			$pagenr = 1;
 			$skippages = 0;
 			for($x = 0; $x < $replys + 1; $x += $posts_per_page) {
 				$lastpage = (($x + $posts_per_page) >= $replys + 1);
 				if ($lastpage) {
-					$start = "&start=$x&$replys";
+					$start = "&amp;start=$x";
 				} else {
 					if ($x != 0) {
-						$start = "&start=$x";
+						$start = "&amp;start=$x";
 					}
-					$start .= "&" . ($x + $posts_per_page - 1);
 				}
 				if($pagenr > 3 && $skippages != 1) {
 					$pagination .= " ... ";
@@ -253,19 +251,18 @@ if (mysql_num_rows($result) > 0) { // topics found
 				if ($skippages != 1 || $lastpage) {
 					if ($x != -1) {
 						$pagination .= "<a href=\"$topiclink$start\">$pagenr</a>";
-						$pagination .= "<span class=\"page-sep\">,</span>";
+						$pagination .= "<span class='page-sep'>,</span>";
 					}
 					$pagenr++;
 				}
 			}
 			$pagination .= "&nbsp;\n          </span></strong>\n      ";
 		}
-		$topiclink .= "&$replys";
-		$tool_content .= "\n<TD><a href=\"$topiclink\">$topic_title</a>$pagination</TD>\n";
-		$tool_content .= "<TD class=\"Forum_leftside\">$replys</TD>\n";
-		$tool_content .= "<TD class='Forum_leftside1'>" . $myrow["prenom"] . " " . $myrow["nom"] . "</TD>\n";
-		$tool_content .= "<TD class=\"Forum_leftside\">" . $myrow["topic_views"] . "</TD>\n";
-		$tool_content .= "<TD class=\"Forum_leftside1\">$last_post</TD></TR>\n";
+		$tool_content .= "\n<td><a href='$topiclink'>$topic_title</a>$pagination</td>\n";
+		$tool_content .= "<td class='Forum_leftside'>$replys</td>\n";
+		$tool_content .= "<td class='Forum_leftside1'>$myrow[prenom] $myrow[nom]</td>\n";
+		$tool_content .= "<td class='Forum_leftside'>$myrow[topic_views]</td>\n";
+		$tool_content .= "<td class='Forum_leftside1'>$myrow[prenom1] $myrow[nom1]<br />$last_post</td></tr>\n";
 	} // end of while
 } else {
 	$tool_content .= "\n      <td colspan=6>$l_notopics</td></tr>\n";

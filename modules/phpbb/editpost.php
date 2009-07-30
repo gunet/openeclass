@@ -85,7 +85,6 @@ if ($is_adminOfCourse) { // course admin
 			exit();
 		}
 		$myrow = mysql_fetch_array($result);
-		$poster_id = $myrow["poster_id"];
 		$forum_id = $myrow["forum_id"];
 		$topic_id = $myrow["topic_id"];
 		$this_post_time = $myrow["post_time"];
@@ -268,7 +267,7 @@ if ($is_adminOfCourse) { // course admin
 			if ($myrow["forum_type"] == 1) {
 				// To get here, we have a logged-in user. So, check whether that user is allowed to post in
 				// this private forum.
-				if (!check_priv_forum_auth($userdata["user_id"], $forum, TRUE, $currentCourseID)) {
+				if (!check_priv_forum_auth($uid, $forum, TRUE, $currentCourseID)) {
 					$tool_content .= "$l_privateforum $l_nopost";
 					draw($tool_content, 2, 'phpbb');
 					exit();
@@ -277,11 +276,11 @@ if ($is_adminOfCourse) { // course admin
 			}
 		}	
 		
-		$sql = "SELECT p.*, pt.post_text, u.username, u.user_id, u.user_sig, t.topic_title, t.topic_notify, 
-			u.username, u.user_id, u.user_sig, t.topic_title, t.topic_notify 
-			FROM posts p, users u, topics t, posts_text pt 
-			WHERE (p.post_id = '$post_id') AND (pt.post_id = p.post_id) AND (p.topic_id = t.topic_id) AND (p.poster_id = u.user_id)";
-	
+		$sql = "SELECT p.*, pt.post_text, t.topic_title, t.topic_notify, 
+			       t.topic_title, t.topic_notify 
+			FROM posts p, topics t, posts_text pt 
+			WHERE (p.post_id = '$post_id') AND (pt.post_id = p.post_id) AND (p.topic_id = t.topic_id)";
+
 		if (!$result = db_query($sql, $currentCourseID)) {
 			$tool_content .= "<p>Couldn't get user and topic information from the database.</p>";
 			draw($tool_content, 2, 'phpbb');
@@ -289,9 +288,9 @@ if ($is_adminOfCourse) { // course admin
 		}
 		$myrow = mysql_fetch_array($result);
 		if (isset($user_logged_in) && $user_logged_in) {
-			if($userdata["user_level"] <= 2) {
-				if($userdata["user_level"] == 2 && !is_moderator($forum, $userdata["user_id"], $currentCourseID)) {
-					if($userdata[user_level] < 2 && ($userdata["user_id"] != $myrow["user_id"])) {
+			if($user_level <= 2) {
+				if($user_level == 2 && !is_moderator($forum, $uid, $currentCourseID)) {
+					if($user_level < 2 && ($uid != $myrow["p.poster_id"])) {
 						$tool_content .= $l_notedit;
 						draw($tool_content, 2, 'phpbb');
 						exit();
@@ -345,15 +344,11 @@ if ($is_adminOfCourse) { // course admin
 		</TR>
 		<TR><th>&nbsp;</th><TD>";
 		
-		if (isset($user_logged_in) && $user_logged_in) {
-			$tool_content .= "<INPUT TYPE=\"HIDDEN\" NAME=\"username\" VALUE=\"" . $userdata["username"] . "\">";
-		}
 		$tool_content .= "
 		<INPUT TYPE=\"HIDDEN\" NAME=\"post_id\" VALUE=\"$post_id\">
 		<INPUT TYPE=\"HIDDEN\" NAME=\"forum\" VALUE=\"$forum\">
 		<!--
 		<INPUT TYPE=\"HIDDEN\" NAME=\"topic_id\" VALUE=\"$topic\">
-		<INPUT TYPE=\"HIDDEN\" NAME=\"poster_id\" VALUE=\"" . $myrow["poster_id"] ."\">
 		-->
 		<INPUT TYPE=\"SUBMIT\" NAME=\"submit\" VALUE=\"$l_submit\">
 		</TD></TR>";
@@ -363,4 +358,3 @@ if ($is_adminOfCourse) { // course admin
 	$tool_content .= $langForbidden;
 }
 draw($tool_content,2, 'phpbb');
-?>
