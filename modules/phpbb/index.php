@@ -99,7 +99,7 @@ if ($is_adminOfCourse || $is_admin) {
 $sql = "SELECT c.* FROM catagories c, forums f
 	 WHERE f.cat_id=c.cat_id
 	 GROUP BY c.cat_id, c.cat_title, c.cat_order
-	 ORDER BY c.cat_id DESC";
+	 ORDER BY cat_order, c.cat_id DESC";
 
 if ( !$result = db_query($sql, $currentCourseID)) {
 /*

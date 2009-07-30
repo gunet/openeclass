@@ -86,8 +86,14 @@ function confirmation (name)
 // Group creation
 if(isset($_REQUEST['creation']) && $is_adminOfCourse) {
 	// Create a hidden category for group forums
-  	db_query("INSERT INTO catagories (cat_title) VALUES ('$langCatagoryGroup')");
-	$cat_id = mysql_insert_id();
+        $req = db_query('SELECT cat_id FROM catagories WHERE cat_order = -1');
+        if ($req and mysql_num_rows($req) > 0) {
+                list($cat_id) = mysql_fetch_row($req);
+        } else {
+          	db_query("INSERT INTO catagories (cat_title, cat_order)
+                                 VALUES ('$langCatagoryGroup', -1)");
+        	$cat_id = mysql_insert_id();
+        }
 	for ($i = 1; $i <= $group_quantity; $i++) {
 		// Creating a Unique Id path to group documents to try (!)
 		// avoiding groups entering other groups area
