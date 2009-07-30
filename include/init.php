@@ -260,7 +260,7 @@ if (isset($require_prof) and $require_prof) {
 
 //Security check:: Users that do not have Professor access for a course must not
 //be able to access inactive tools.
-if(file_exists($module_ini_dir = getcwd() . "/module.ini.php") && !$is_adminOfCourse && @$ignore_module_ini != true) {
+if(isset($currentCourse) && file_exists($module_ini_dir = getcwd() . "/module.ini.php") && !$is_adminOfCourse && @$ignore_module_ini != true) {
 	include($module_ini_dir);
 	
 	if (!check_guest()) {
