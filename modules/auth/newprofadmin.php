@@ -87,7 +87,8 @@ if($submit) {
                 } else {
                         $message = $usersuccess;
                         $reqtype = '?type=user';
-                        $type_message = $langAsUser;
+                        $type_message = '';
+                        // $langAsUser;
                 }
 	       	$tool_content .= "<p class='success_small'>$message</p><br><br><p align='right'><a href='../admin/listreq.php$reqtype'>$langBackRequests</a></p>";
 		

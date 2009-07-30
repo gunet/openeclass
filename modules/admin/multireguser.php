@@ -112,7 +112,8 @@ function create_user($statut, $uname, $nom, $prenom, $email, $depid, $lang, $sen
                 $type_message = $langAsProf;
         } else {
                 $message = $usersuccess;
-                $type_message = $langAsUser;
+                $type_message = '';
+                // $langAsUser;
         }
 
         $password = random_password();

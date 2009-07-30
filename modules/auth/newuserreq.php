@@ -77,12 +77,12 @@ if($submit) {
 // registration accepted
 
   else {
-    $emailsubject = "$langYourReg $siteName $langAsUser";
+    $emailsubject = "$langYourReg $siteName"; // $langAsUser
 
       $emailbody = "
 $langDestination $prenom_form $nom_form
 
-$langYouAreReg$siteName $langAsUser, $langSettings $uname
+$langYouAreReg$siteName, $langSettings $uname
 $langPass : $password
 $langAddress $siteName $langIs: $urlServer
 $langProblem
