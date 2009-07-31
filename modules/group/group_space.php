@@ -35,7 +35,6 @@
 
 // Delete ancient possible other group values
 session_unregister("secretDirectory");
-session_unregister("userGroupId");
 session_unregister("forumId");
 
 $require_login = TRUE;
@@ -47,18 +46,15 @@ include '../../include/baseTheme.php';
 $nameTools = $langGroupSpace;
 $navigation[] = array ("url"=>"group.php", "name"=> $langGroups);
 $tool_content = "";
-if (isset($userGroupId) && is_numeric($userGroupId)){
-	if(!session_is_registered('userGroupId')){
-		$_SESSION['userGroupId'] = (int)$_REQUEST['userGroupId'];
-	}
+
+if (isset($_REQUEST['userGroupId'])) {
+        $userGroupId = intval($_REQUEST['userGroupId']);
 } else {
 	die("Wrong user group id / User group id not set");
 }
 
 if(isset($registration) and $statut != 10)
 {
-	$userGroupId = $_SESSION['userGroupId'];
-	session_unregister('userGroupId');
 	$sqlExist=mysql_query("SELECT id FROM `$dbname`.user_group
 		WHERE user='$uid' AND team='$userGroupId'");
 	$countExist = mysql_num_rows($sqlExist);
@@ -242,7 +238,6 @@ function loadGroupTools(){
 	// Vars needed to determine group File Manager and group Forum
 	// They are unregistered when opening group.php once again.
 	session_register("secretDirectory");
-	session_register("userGroupId");
 	session_register("forumId");
 
 	$group_tools = "";
@@ -280,5 +275,4 @@ function loadGroupTools(){
 	session_unregister("forumId");
 	return $group_tools;
 }
-?>
 

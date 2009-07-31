@@ -763,20 +763,25 @@ function format_bytesize ($kbytes, $dec_places = 2)
 // used in documents and group documents path navigation bar
 function make_clickable_path($dbTable, $path)
 {
-	global $langRoot;
+	global $langRoot, $userGroupId;
+
+        if (isset($userGroupId)) {
+                $base = $_SERVER['PHP_SELF'] . '?userGroupId=' . $userGroupId . '&amp;';
+        } else {
+                $base = $_SERVER['PHP_SELF'] . '?';
+        }
 
 	$cur = '';
 	$out = '';
-	$base = $_SERVER['PHP_SELF'];
 	foreach (explode('/', $path) as $component) {
 		if (empty($component)) {
-			$out = "<a href='$base?openDir=/'>$langRoot</a>";
+			$out = "<a href='{$base}openDir=/'>$langRoot</a>";
 		} else {
 			$cur .= rawurlencode("/$component");
 			$row = mysql_fetch_array(db_query ("SELECT filename FROM $dbTable
 					WHERE path LIKE '%$component'"));
 			$dirname = $row['filename'];
-			$out .= " &raquo; <a href='$base?openDir=$cur'>$dirname</a>";
+			$out .= " &raquo; <a href='{$base}openDir=$cur'>$dirname</a>";
 		}
 	}
 	return $out;

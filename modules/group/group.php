@@ -48,7 +48,6 @@ $action->record('MODULE_ID_GROUPS');
 // Remove old group identification if
 // possible entrance in another group space (admin for instance)
 session_unregister("secretDirectory");
-session_unregister("userGroupId");
 session_unregister("forumId");
 
 $currentCourse=$dbname;

@@ -54,7 +54,6 @@ include "../../include/lib/fileManageLib.inc.php";
 include "../../include/lib/fileUploadLib.inc.php";
 
 $nameTools = $langDoc;
-$navigation[] = array ("url" => "group_space.php", "name" => $langGroupSpace);
 $baseServDir = $webDir;
 $tool_content = $dialogBox = "";
 
@@ -69,7 +68,6 @@ function confirmation ()
 }
 </script>
 ';
-
 if (isset($_REQUEST['userGroupId'])) {
         $userGroupId = intval($_REQUEST['userGroupId']);
         list($tutor_id, $forum_id) = mysql_fetch_row(db_query("SELECT tutor, forumId FROM student_group WHERE id='$userGroupId'", $currentCourseID));
@@ -83,6 +81,8 @@ if (isset($_REQUEST['userGroupId'])) {
                 $forum_id = $is_tutor = $userGroupId = false;
         }
 }
+$groupset = "userGroupId=$userGroupId";
+$navigation[] = array ("url" => "group_space.php?$groupset", "name" => $langGroupSpace);
 
 $sql_result = db_query("SELECT group_quota FROM cours WHERE code='$currentCourseID'", $mysqlMainDb);
 $d = mysql_fetch_array($sql_result);
@@ -91,13 +91,9 @@ $diskQuotaGroup = $d['group_quota'];
 /**************************************
 /FILEMANAGER BASIC VARIABLES DEFINITION
 **************************************/
-if ($is_adminOfCourse or $is_tutor) {
-	$secretDirectory = group_secret($userGroupId);
-} else {
-	$secretDirectory = group_secret(user_group($uid));
-        if ($forum_id === false) {
-                list($forum_id) = mysql_fetch_row(db_query("SELECT forumId FROM student_group WHERE id = " . user_group($uid)));
-        }
+$secretDirectory = group_secret($userGroupId);
+if ($forum_id === false) {
+        list($forum_id) = mysql_fetch_row(db_query("SELECT forumId FROM student_group WHERE id = " . user_group($uid)));
 }
 if (empty($secretDirectory)) {
 	$tool_content .= $langInvalidGroupDir;
@@ -225,11 +221,12 @@ if (isset($rename)) {
 	$res = mysql_fetch_array($result);
 	$fileName = $res["filename"];
 	@$dialogBox .= "<form>\n";
-	$dialogBox .= "<input type=\"hidden\" name=\"sourceFile\" value=\"$rename\">
-        <table class='FormData' width=\"99%\"><tbody><tr>
+	$dialogBox .= "<input type='hidden' name='sourceFile' value='$rename'>
+        <input type='hidden' name='userGroupId' value='$userGroupId'>
+        <table class='FormData' width='99%'><tbody><tr>
         <th class='left' width='200'>$langRename:</th>
-        <td class='left'>$langRename ".htmlspecialchars($fileName)." $langIn: <input type=\"text\" name=\"renameTo\" value=\"$fileName\" class='FormData_InputText' size='50'></td>
-        <td class='left' width='1'><input type=\"submit\" value=\"$langRename\"></td>
+        <td class='left'>$langRename ".htmlspecialchars($fileName)." $langIn: <input type='text' name='renameTo' value='$fileName' class='FormData_InputText' size='50'></td>
+        <td class='left' width='1'><input type='submit' value='$langRename'></td>
         </tr></tbody></table></form><br />";
 }
 
@@ -247,7 +244,7 @@ if (isset($newDirPath) && isset($newDirName)) {
                 }
         }
         if ($exists) {
-                $dialogBox .= "<p class=\"caution_small\">$langFileExists</p><br />";
+                $dialogBox .= "<p class='caution_small'>$langFileExists</p><br />";
         } else {
                 $safe_dirName = date("YmdGis").randomkeys("8");
                 mkdir("$baseWorkDir$newDirPath/$safe_dirName", 0775);
@@ -264,12 +261,13 @@ STEP 1
 if (isset($createDir))
 {
 	//$dialogBox ="";
-	$dialogBox .= "<form>\n";
-	$dialogBox .= "<input type=\"hidden\" name=\"newDirPath\" value=\"$createDir\">\n";
-	$dialogBox .= "<table class='FormData' width=\"99%\"><tbody><tr><th class='left' width=\"220\">$langNewDir:</th>";
-	$dialogBox .= "<td class='left' width=\"1\"><input type=\"text\" name=\"newDirName\" class='FormData_InputText'></td>";
-	$dialogBox .= "<td class='left'><input type=\"submit\" value=\"$langCreate\"></td> \n";
-	$dialogBox .= "</tr></tbody></table></form><br />\n";
+	$dialogBox .= "<form>\n" .
+	              "<input type='hidden' name='userGroupId' value='$userGroupId'>\n" .
+	              "<input type='hidden' name='newDirPath' value='$createDir'>\n" .
+	              "<table class='FormData' width='99%'><tbody><tr><th class='left' width='220'>$langNewDir:</th>" .
+                      "<td class='left' width='1'><input type='text' name='newDirName' class='FormData_InputText'></td>" .
+                      "<td class='left'><input type='submit' value='$langCreate'></td>\n" .
+	              "</tr></tbody></table></form><br />\n";
 }
 
 /**************************************
@@ -344,10 +342,10 @@ DISPLAY
 $dspCurDirName = htmlspecialchars($curDirName);
 $tool_content .= "
     <div id=\"operations_container\">
-      <ul id=\"opslist\"><li><a href='group_space.php'>$langGroupSpaceLink</a></li>
+      <ul id=\"opslist\"><li><a href='group_space.php?$groupset'>$langGroupSpaceLink</a></li>
         <li><a href='../phpbb/viewforum.php?forum=$forum_id'>$langGroupForumLink</a></li>
-        <li><a href='$_SERVER[PHP_SELF]?createDir=".$curDirPath."'>$langCreateDir</a></li>
-        <li><a href='$_SERVER[PHP_SELF]?uploadPath=".$curDirPath."'>$langDownloadFile</a></li>
+        <li><a href='$_SERVER[PHP_SELF]?$groupset&amp;createDir=".$curDirPath."'>$langCreateDir</a></li>
+        <li><a href='$_SERVER[PHP_SELF]?$groupset&amp;uploadPath=".$curDirPath."'>$langDownloadFile</a></li>
       </ul>
     </div>";
 
@@ -373,6 +371,7 @@ UPLOAD SECTION
 if(isset($uploadPath)) {
 	$tool_content .= <<<cData
 	<form action='$_SERVER[PHP_SELF]' method='post' enctype='multipart/form-data'>
+	<input type='hidden' name='userGroupId' value='$userGroupId'>
 	<input type='hidden' name='uploadPath' value='$curDirPath'>
 	<table class='FormData' width=\"99%\">
     <tbody>
@@ -400,7 +399,7 @@ $tool_content .= "
   /*** go to parent directory ***/
 if ($curDirName) // if the $curDirName is empty, we're in the root point and we can't go to a parent dir
 {
-	$tool_content .=  "<a href=\"$_SERVER[PHP_SELF]?openDir=".$parentDir."\">$langUp</a>\n";
+	$tool_content .=  "<a href=\"$_SERVER[PHP_SELF]?$groupset&amp;openDir=".$parentDir."\">$langUp</a>\n";
 	$tool_content .=  "<img src=\"../../template/classic/img/parent.gif\" border=0 align=\"absmiddle\">";
 }
 
@@ -427,11 +426,11 @@ if (isset($dirNameList))
 		$cmdDirName = $curDirPath."/".$dirName;
 		$tool_content .= "\n    <tr>";
 		$tool_content .= "\n        <td width=\"1\">";
-		$tool_content .= "<a href='$_SERVER[PHP_SELF]?openDir=$cmdDirName'".@$style.">\n";
+		$tool_content .= "<a href='$_SERVER[PHP_SELF]?$groupset&amp;openDir=$cmdDirName'".@$style.">\n";
 		$tool_content .= "<img src=\"../../template/classic/img/folder.gif\" border=0 hspace=5>";
 		$tool_content .= "</a></td>";
 		$tool_content .= "\n        <td align='left'><div align='left'>";
-		$tool_content .= "<a href='$_SERVER[PHP_SELF]?openDir=$cmdDirName'".@$style.">\n";
+		$tool_content .= "<a href='$_SERVER[PHP_SELF]?$groupset&amp;openDir=$cmdDirName'".@$style.">\n";
 		$tool_content .= $dspDirName;
 		$tool_content .= "</a></div></td>";
 		/*** skip display date and time ***/
@@ -439,13 +438,13 @@ if (isset($dirNameList))
 		$tool_content .= "\n        <td>-</td>";
 		$tool_content .= "\n        <td>&nbsp;</td>";
 		/*** copy command ***/
-		$tool_content .= "\n        <td width=\"1\"><a href=\"$_SERVER[PHP_SELF]?move=".$cmdDirName."\">
+		$tool_content .= "\n        <td width=\"1\"><a href=\"$_SERVER[PHP_SELF]?$groupset&amp;move=".$cmdDirName."\">
 		<img src=\"../../template/classic/img/move_doc.gif\" border=0 title=\"$langMove\"></a></td>\n";
 		/*** rename command ***/
-		$tool_content .= "\n        <td width=\"1\"><a href=\"$_SERVER[PHP_SELF]?rename=".$cmdDirName."\">
+		$tool_content .= "\n        <td width=\"1\"><a href=\"$_SERVER[PHP_SELF]?$groupset&amp;rename=".$cmdDirName."\">
 		<img src=\"../../template/classic/img/edit.gif\" border=0 title=\"$langRename\"></a></td>\n";
 		/*** delete command ***/
-		$tool_content .= "\n        <td width=\"1\"><a href=\"$_SERVER[PHP_SELF]?delete=".$cmdDirName."\" onClick=\"return confirmation();\"><img src=\"../../template/classic/img/delete.gif\" title=\"$langDelete\" border=0></a></td>\n";
+		$tool_content .= "\n        <td width=\"1\"><a href=\"$_SERVER[PHP_SELF]?$groupset&amp;delete=".$cmdDirName."\" onClick=\"return confirmation();\"><img src=\"../../template/classic/img/delete.gif\" title=\"$langDelete\" border=0></a></td>\n";
 		$tool_content .=  "\n    </tr>\n";
 	}
 }
@@ -474,9 +473,9 @@ if (isset($fileNameList))
 		$r = mysql_fetch_array($result);
 
 		if(empty($r["filename"])) { // compatibility
-			$tool_content .=  "<a href='$_SERVER[PHP_SELF]?action2=download&id=".$cmdFileName."' title=\"$langSave\">".$dspFileName."</a>";
+			$tool_content .=  "<a href='$_SERVER[PHP_SELF]?$groupset&amp;action2=download&id=".$cmdFileName."' title=\"$langSave\">".$dspFileName."</a>";
 		} else {
-			$tool_content .= "<a href='$_SERVER[PHP_SELF]?action2=download&id=$r[path]'>$r[filename]</a>";
+			$tool_content .= "<a href='$_SERVER[PHP_SELF]?$groupset&amp;action2=download&id=$r[path]'>$r[filename]</a>";
 		}
 		$tool_content .= "</div></td>";
 		/*** size ***/
@@ -486,13 +485,13 @@ if (isset($fileNameList))
 		$tool_content .= "\n        <td>
 		<a href=\"../work/group_work.php?submit=$urlShortFileName\">$langPublish</a></td>\n";
 		/*** copy command ***/
-		$tool_content .= "\n        <td><a href=\"$_SERVER[PHP_SELF]?move=".$cmdFileName."\">
+		$tool_content .= "\n        <td><a href=\"$_SERVER[PHP_SELF]?$groupset&amp;move=".$cmdFileName."\">
 		<img src=\"../../template/classic/img/move_doc.gif\" border=0></a></td>\n";
 		/*** rename command ***/
-		$tool_content .= "\n        <td><a href=\"$_SERVER[PHP_SELF]?rename=".$cmdFileName."\">
+		$tool_content .= "\n        <td><a href=\"$_SERVER[PHP_SELF]?$groupset&amp;rename=".$cmdFileName."\">
 		<img src=\"../../template/classic/img/edit.gif\" border=0></a></td>\n";
 		/*** delete command ***/
-		@$tool_content .= "\n        <td><a href=\"$_SERVER[PHP_SELF]?delete=".$cmdFileName."\" onClick=\"return confirmation();\">
+		@$tool_content .= "\n        <td><a href=\"$_SERVER[PHP_SELF]?$groupset&amp;delete=".$cmdFileName."\" onClick=\"return confirmation();\">
 		<img src=\"../../template/classic/img/delete.gif\" border=0></a></td>\n";
 		/*** submit command ***/
 		$tool_content .= "\n    </tr>\n";

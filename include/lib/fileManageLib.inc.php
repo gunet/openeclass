@@ -429,16 +429,21 @@ function index_and_sort_dir($path)
 function form_dir_list_exclude($dbTable, $sourceType, $sourceComponent, $command, $baseWorkDir, $entryToExclude)
 {
 	global $langParentDir, $langTo, $langMoveFrom, $langMove, $moveFileNameAlias;
-	global $tool_content;
-	
+	global $tool_content, $userGroupId;
+
+        if (isset($userGroupId)) {
+                $groupset = '?userGroupId=' . $userGroupId;
+        } else {
+                $groupset = '';
+        }
 	$dirList = index_and_sort_dir($baseWorkDir);
-	$dialogBox .= "<form action=\"".$_SERVER['PHP_SELF']."\" method=\"post\">\n" ;
-	$dialogBox .= "<input type=\"hidden\" name=\"".$sourceType."\" value=\"".$sourceComponent."\">\n" ;
-	$dialogBox .="<table class='FormData' width=\"99%\">
+	$dialogBox .= "<form action='$_SERVER[PHP_SELF]$groupset' method='post'>\n";
+	$dialogBox .= "<input type='hidden' name='".$sourceType."' value='".$sourceComponent."'>\n";
+	$dialogBox .="<table class='FormData' width='99%'>
         	<tbody><tr><th class='left' width='200'>$langMove:</th>
           	<td class='left'>$langMoveFrom <em>$moveFileNameAlias</em> $langTo:</td><td class='left'>";
-	$dialogBox .= "<select name=\"".$command."\" class='auth_input'>\n" ;
-	$dialogBox .= "<option value=\"\" style=\"color:#999999\">".$langParentDir."\n";
+	$dialogBox .= "<select name='".$command."' class='auth_input'>\n" ;
+	$dialogBox .= "<option value='' style='color:#999999'>".$langParentDir."\n";
 	$bwdLen = strlen($baseWorkDir) ;
 	
 	/* build html form inputs */
