@@ -61,7 +61,15 @@ $require_login = TRUE;
 $require_help = FALSE;
 include '../../include/baseTheme.php';
 $tool_content = "";
-
+$lang_editor = langname_to_code($language);
+$head_content = <<<hContent
+<script type="text/javascript">
+        _editor_url  = "$urlAppend/include/xinha/";
+        _editor_lang = "$lang_editor";
+</script>
+<script type="text/javascript" src="$urlAppend/include/xinha/XinhaCore.js"></script>
+<script type="text/javascript" src="$urlAppend/include/xinha/my_config.js"></script>
+hContent;
 /*
  * Tool-specific includes
  */
@@ -76,12 +84,12 @@ if ($is_adminOfCourse) { // course admin
 		$sql = "SELECT * FROM posts WHERE post_id = '$post_id'";
 		if (!$result = db_query($sql, $currentCourseID)) {
 			$tool_content .= $langErrorDataOne;
-			draw($tool_content, 2, 'phpbb');
+			draw($tool_content, 2, 'phpbb', $head_content);
 			exit();
 		}
 		if (mysql_num_rows($result) <= 0) {
 			$tool_content .= $langErrorDataTwo;
-			draw($tool_content, 2, 'phpbb');
+			draw($tool_content, 2, 'phpbb', $head_content);
 			exit();
 		}
 		$myrow = mysql_fetch_array($result);
@@ -127,7 +135,7 @@ if ($is_adminOfCourse) { // course admin
 			$sql = "UPDATE posts_text SET post_text = '$message' WHERE (post_id = '$post_id')";
 			if (!$result = db_query($sql, $currentCourseID)) {
 				$tool_content .= $langUnableUpadatePost;
-				draw($tool_content, 2, 'phpbb');
+				draw($tool_content, 2, 'phpbb', $head_content);
 				exit();
 			}
 			if (isset($subject)) {
@@ -167,14 +175,14 @@ if ($is_adminOfCourse) { // course admin
 				WHERE post_id = '$post_id'";
 			if (!$r = db_query($sql, $currentCourseID)){
 				$tool_content .= $langUnableDeletePost;
-				draw($tool_content, 2, 'phpbb');
+				draw($tool_content, 2, 'phpbb', $head_content);
 				exit();
 			}
 			$sql = "DELETE FROM posts_text
 				WHERE post_id = '$post_id'";
 			if (!$r = db_query($sql, $currentCourseID)) {
 				$tool_content .= $langUnableDeletePost;
-				draw($tool_content, 2, 'phpbb');
+				draw($tool_content, 2, 'phpbb', $head_content);
 				exit();
 			} else if ($last_post_in_thread == $this_post_time) {
 				$topic_time_fixed = get_last_post($topic_id, $currentCourseID, "time_fix");
@@ -183,7 +191,7 @@ if ($is_adminOfCourse) { // course admin
 					WHERE topic_id = '$topic_id'";
 				if (!$r = db_query($sql, $currentCourseID)) {
 					$tool_content .= $langPostRemoved;
-					draw($tool_content, 2, 'phpbb');
+					draw($tool_content, 2, 'phpbb', $head_content);
 					exit();
 				}
 			}
@@ -192,7 +200,7 @@ if ($is_adminOfCourse) { // course admin
 					WHERE topic_id = '$topic_id'";
 				if (!$r = db_query($sql, $currentCourseID)) {
 					$tool_content .= $langUnableDeleteTopic;
-					draw($tool_content, 2, 'phpbb');
+					draw($tool_content, 2, 'phpbb', $head_content);
 					exit();
 				}
 				$topic_removed = TRUE;
@@ -221,13 +229,13 @@ if ($is_adminOfCourse) { // course admin
 		
 		if (!$result = db_query($sql, $currentCourseID)) {
 			$tool_content .= "$langTopicInformation";
-			draw($tool_content, 2, 'phpbb');
+			draw($tool_content, 2, 'phpbb', $head_content);
 			exit();
 		}
 		
 		if (!$myrow = mysql_fetch_array($result)) {
 			$tool_content .= "$langErrorTopicSelect";
-			draw($tool_content, 2, 'phpbb');
+			draw($tool_content, 2, 'phpbb', $head_content);
 			exit();
 		}
 		
@@ -261,7 +269,7 @@ if ($is_adminOfCourse) { // course admin
 			</TD>
 			</TR>
 			</TABLE></FORM>";
-			draw($tool_content, 2, 'phpbb');
+			draw($tool_content, 2, 'phpbb', $head_content);
 			exit();
 		} else {
 			if ($myrow["forum_type"] == 1) {
@@ -269,7 +277,7 @@ if ($is_adminOfCourse) { // course admin
 				// this private forum.
 				if (!check_priv_forum_auth($uid, $forum, TRUE, $currentCourseID)) {
 					$tool_content .= "$l_privateforum $l_nopost";
-					draw($tool_content, 2, 'phpbb');
+					draw($tool_content, 2, 'phpbb', $head_content);
 					exit();
 				}
 				// Ok, looks like we're good.
@@ -283,7 +291,7 @@ if ($is_adminOfCourse) { // course admin
 
 		if (!$result = db_query($sql, $currentCourseID)) {
 			$tool_content .= "<p>Couldn't get user and topic information from the database.</p>";
-			draw($tool_content, 2, 'phpbb');
+			draw($tool_content, 2, 'phpbb', $head_content);
 			exit();
 		}
 		$myrow = mysql_fetch_array($result);
@@ -292,7 +300,7 @@ if ($is_adminOfCourse) { // course admin
 				if($user_level == 2 && !is_moderator($forum, $uid, $currentCourseID)) {
 					if($user_level < 2 && ($uid != $myrow["p.poster_id"])) {
 						$tool_content .= $l_notedit;
-						draw($tool_content, 2, 'phpbb');
+						draw($tool_content, 2, 'phpbb', $head_content);
 						exit();
 					}
 				}
@@ -305,7 +313,7 @@ if ($is_adminOfCourse) { // course admin
 		} else {
 			$addsig = 0;
 		}
-		$message = eregi_replace("\[addsig]$", "\n_________________\n" . $myrow["user_sig"], $message);   
+		//$message = eregi_replace("\[addsig]$", "\n_________________\n" . $myrow["user_sig"], $message);   
 		$message = str_replace("<BR>", "\n", $message);
 		$message = stripslashes($message);
 		$message = bbdecode($message);
@@ -336,7 +344,13 @@ if ($is_adminOfCourse) { // course admin
 			</TR>";
 		}
 		$tool_content .= "<TR><th class=\"left\">$l_body:</th>
-		<TD><TEXTAREA NAME=\"message\" ROWS=10 COLS=50 WRAP=\"VIRTUAL\"  class=\"FormData_InputText\">$message</TEXTAREA></TD>
+		<TD>
+		<table class='xinha_editor'>
+		<tr>
+		<td>
+		<TEXTAREA id='xinha' NAME='message' ROWS=10 COLS=50 WRAP='VIRTUAL'  class='FormData_InputText'>$message</TEXTAREA>
+		</td></tr></table>
+		</TD>
 		</TR>
 		<TR>
 		<th class=\"left\">$l_delete:</th>
@@ -357,4 +371,4 @@ if ($is_adminOfCourse) { // course admin
 } else {
 	$tool_content .= $langForbidden;
 }
-draw($tool_content,2, 'phpbb');
+draw($tool_content, 2, 'phpbb', $head_content);

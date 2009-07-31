@@ -60,6 +60,15 @@ $require_login = TRUE;
 $require_help = FALSE;
 include '../../include/baseTheme.php';
 $tool_content = "";
+$lang_editor = langname_to_code($language);
+$head_content = <<<hContent
+<script type="text/javascript">
+        _editor_url  = "$urlAppend/include/xinha/";
+        _editor_lang = "$lang_editor";
+</script>
+<script type="text/javascript" src="$urlAppend/include/xinha/XinhaCore.js"></script>
+<script type="text/javascript" src="$urlAppend/include/xinha/my_config.js"></script>
+hContent;
 
 /*
  * Tool-specific includes
@@ -75,7 +84,7 @@ $sql = "SELECT forum_name, forum_access, forum_type FROM forums
 	WHERE (forum_id = '$forum')";
 if (!$result = db_query($sql, $currentCourseID)) {
 	$tool_content .= $langErrorDataForum;
-	draw($tool_content,2);
+	draw($tool_content, 2, 'phpbb', $head_content);
 	exit;
 }
 $myrow = mysql_fetch_array($result);
@@ -97,7 +106,7 @@ if (isset($submit) && $submit) {
 	$subject = strip_tags($subject);
 	if (trim($message) == '' || trim($subject) == '') {
 		$tool_content .= $l_emptymsg;
-		draw($tool_content, 2);
+		draw($tool_content, 2, 'phpbb', $head_content);
 		exit;
 	}
 	if ( !isset($username) ) {
@@ -106,7 +115,7 @@ if (isset($submit) && $submit) {
 	
 	if($forum_access == 3 && $user_level < 2) {
 		$tool_content .= $l_nopost;
-		draw($tool_content, 2);
+		draw($tool_content, 2, 'phpbb', $head_content);
 		exit;
 	}
 	// Either valid user/pass, or valid session. continue with post.. but first:
@@ -114,7 +123,7 @@ if (isset($submit) && $submit) {
 	if ($forum_type == 1) {
 		if (!check_priv_forum_auth($uid, $forum, TRUE, $currentCourseID)) {
 			$tool_content .= "$l_privateforum $l_nopost";
-			draw($tool_content, 2);
+			draw($tool_content, 2, 'phpbb', $head_content);
 			exit();
 		}
 	}
@@ -148,7 +157,7 @@ if (isset($submit) && $submit) {
 			VALUES (" . autoquote($subject) . ", '$uid', '$forum', '$time', 1, '$nom', '$prenom')";
 	if (!$result = db_query($sql, $currentCourseID)) {
 		$tool_content .= $langErrorEnterTopic;
-		draw($tool_content, 2);
+		draw($tool_content, 2, 'phpbb', $head_content);
 		exit();
 	}
 
@@ -157,7 +166,7 @@ if (isset($submit) && $submit) {
 			VALUES ('$topic_id', '$forum', '$uid', '$time', '$poster_ip', '$nom', '$prenom')";
 	if (!$result = db_query($sql, $currentCourseID)) {
 		$tool_content .= $langErrorEnterPost;
-		draw($tool_content, 2);
+		draw($tool_content, 2, 'phpbb', $head_content);
 		exit();
 	} else {
 		$post_id = mysql_insert_id();
@@ -166,7 +175,7 @@ if (isset($submit) && $submit) {
 					VALUES ($post_id, " . autoquote($message) . ")";
 			if (!$result = db_query($sql, $currentCourseID)) {
 				$tool_content .= $langErrorEnterTextPost;
-				draw($tool_content, 2);
+				draw($tool_content, 2, 'phpbb', $head_content);
 				exit();
 			}
 			$sql = "UPDATE topics
@@ -174,7 +183,7 @@ if (isset($submit) && $submit) {
 				WHERE topic_id = '$topic_id'";
 			if (!$result = db_query($sql, $currentCourseID)) {
 				$tool_content .= $langErrorEnterTopicTable;
-				draw($tool_content, 2);
+				draw($tool_content, 2, 'phpbb', $head_content);
 				exit();
 			}
 		}
@@ -185,9 +194,9 @@ if (isset($submit) && $submit) {
 	$result = db_query($sql, $currentCourseID);
 	if (!$result) {
 		$tool_content .= $langErrorUpdatePostCoun;
-		draw($tool_content, 2);
+		draw($tool_content, 2, 'phpbb', $head_content);
 		exit();
-	}                              
+	}
 	$topic = $topic_id;
 	$total_forum = get_total_topics($forum, $currentCourseID);
 	$total_topic = get_total_posts($topic, $currentCourseID, "topic")-1;  
@@ -208,20 +217,18 @@ if (isset($submit) && $submit) {
 } else {
 	// ADDED BY CLAROLINE: exclude non identified visitors
 	if (!$uid AND !$fakeUid) {
-		$tool_content .= "
-    <center>
-      <br><br>
-      $langLoginBeforePost1
-      <br>
-      $langLoginBeforePost2
-      <a href='../../index.php'>$langLoginBeforePost3.</a>
-    </center>";
-		draw($tool_content, 0, 'phpbb');
+		$tool_content .= "<center><br><br>
+		$langLoginBeforePost1
+		<br>
+		$langLoginBeforePost2
+		<a href='../../index.php'>$langLoginBeforePost3.</a>
+		</center>";
+		draw($tool_content, 2, 'phpbb', $head_content);
 		exit();
 	}
 	// END ADDED BY CLAROLINE exclude visitors unidentified
 	$tool_content .= "
-    <FORM ACTION='$PHP_SELF' METHOD='POST'>
+    <FORM ACTION='$_SERVER[PHP_SELF]' METHOD='POST'>
     <table class='FormData' width='99%'>
     <tbody>
     <tr>
@@ -234,7 +241,13 @@ if (isset($submit) && $submit) {
     </TR>
     <TR>
       <th class='left'>$l_body:</th>
-      <TD><TEXTAREA NAME='message' ROWS=14 COLS=50 WRAP='VIRTUAL' class='FormData_InputText'></TEXTAREA></TD>
+      <TD>
+      <table class='xinha_editor'>
+          <tr>
+	<td><TEXTAREA id='xinha' NAME='message' ROWS=14 COLS=50 WRAP='VIRTUAL' class='FormData_InputText'></TEXTAREA></TD>
+	 </tr>
+          </table>
+          </td>
     </TR>
     <TR>
       <th>&nbsp;</th>
@@ -250,5 +263,5 @@ if (isset($submit) && $submit) {
 
     </FORM>";
 }
-draw($tool_content, 2, 'phpbb');
+draw($tool_content, 2, 'phpbb', $head_content);
 ?>

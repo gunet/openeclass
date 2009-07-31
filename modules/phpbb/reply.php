@@ -59,6 +59,15 @@ $helpTopic = 'For';
 include '../../include/baseTheme.php';
 
 $tool_content = "";
+$lang_editor = langname_to_code($language);
+$head_content = <<<hContent
+<script type="text/javascript">
+        _editor_url  = "$urlAppend/include/xinha/";
+        _editor_lang = "$lang_editor";
+</script>
+<script type="text/javascript" src="$urlAppend/include/xinha/XinhaCore.js"></script>
+<script type="text/javascript" src="$urlAppend/include/xinha/my_config.js"></script>
+hContent;
 
 /*
  * Tool-specific includes
@@ -85,12 +94,12 @@ if ( isset($post_id) && $post_id) {
 
 if(!$result = db_query($sql, $currentCourseID)) {
 	$tool_content .= $langErrorConnectForumDatabase;
-	draw($tool_content, 2, 'phpbb');
+	draw($tool_content, 2, 'phpbb', $head_content);
 	exit();
 }
 if (!$myrow = mysql_fetch_array($result)) {
 	$tool_content .= $langErrorTopicSelect;
-	draw($tool_content, 2, 'phpbb');
+	draw($tool_content, 2, 'phpbb', $head_content);
 	exit();
 }
 
@@ -108,31 +117,31 @@ $navigation[]= array ("url"=>"viewtopic.php?&topic=$topic&forum=$forum", "name"=
 
 if (!does_exists($forum, $currentCourseID, "forum") || !does_exists($topic, $currentCourseID, "topic")) {
 	$tool_content .= $langErrorTopicSelect;
-	draw($tool_content, 2, 'phpbb');
+	draw($tool_content, 2, 'phpbb', $head_content);
 	exit();
 }
 
 if (isset($submit) && $submit) {
 	if (trim($message) == '') {
 		$tool_content .= $l_emptymsg;
-		draw($tool_content, 2, 'phpbb');
+		draw($tool_content, 2, 'phpbb', $head_content);
 		exit();
 	}
 	if (isset($user_level) && $user_level == -1) {
 		$tool_content .= $luserremoved;
-		draw($tool_content, 2, 'phpbb');
+		draw($tool_content, 2, 'phpbb', $head_content);
 		exit();
 	}
 	if ($forum_access == 3 && $user_level < 2) {
 		$tool_content .= $l_nopost;
-		draw($tool_content, 2, 'phpbb');
+		draw($tool_content, 2, 'phpbb', $head_content);
 		exit();
 	}
 	// XXX: Do we need this code ?
 	if ( $uid == -1 ) {
 		if ($forum_access == 3 && $user_level < 2) {
 			$tool_content .= $l_nopost;
-			draw($tool_content, 2, 'phpbb');
+			draw($tool_content, 2, 'phpbb', $head_content);
 			exit();
 		}
 	}
@@ -141,7 +150,7 @@ if (isset($submit) && $submit) {
 	if ($forum_type == 1) {
 		if (!check_priv_forum_auth($uid, $forum, TRUE, $currentCourseID)) {
 			$tool_content .= "$l_privateforum $l_nopost";
-			draw($tool_content, 2, 'phpbb');
+			draw($tool_content, 2, 'phpbb', $head_content);
 			exit();
 		}
 	}
@@ -179,7 +188,7 @@ if (isset($submit) && $submit) {
 			VALUES ('$topic', '$forum', '$uid','$time', '$poster_ip', '$nom', '$prenom')";
 	if (!$result = db_query($sql, $currentCourseID)) {
 		$tool_content .= $langUnableEnterData;
-		draw($tool_content, 2, 'phpbb');
+		draw($tool_content, 2, 'phpbb', $head_content);
 		exit();
 	}
 	$this_post = mysql_insert_id();
@@ -188,7 +197,7 @@ if (isset($submit) && $submit) {
                         autoquote($message) . ")";
 		if (!$result = db_query($sql, $currentCourseID)) {
 			$tool_content .= $langUnableEnterText;
-			draw($tool_content, 2, 'phpbb');
+			draw($tool_content, 2, 'phpbb', $head_content);
 			exit();
 		}
 	}
@@ -197,7 +206,7 @@ if (isset($submit) && $submit) {
 		WHERE topic_id = '$topic'";
 	if (!$result = db_query($sql, $currentCourseID)) {
 		$tool_content .= $langUnableEnterData;
-		draw($tool_content, 2, 'phpbb');
+		draw($tool_content, 2, 'phpbb', $head_content);
 		exit();
 	}
 	$sql = "UPDATE forums 
@@ -206,7 +215,7 @@ if (isset($submit) && $submit) {
 	$result = db_query($sql, $currentCourseID);
 	if (!$result) {
 		$tool_content .= $langErrorUpadatePostCount;
-		draw($tool_content, 2, 'phpbb');
+		draw($tool_content, 2, 'phpbb', $head_content);
 		exit();
 	}    
 /* FIXME Should re-enable topic notification using eClass user info
@@ -215,7 +224,7 @@ if (isset($submit) && $submit) {
 		WHERE t.topic_id = '$topic'";
 	if (!$result = db_query($sql, $currentCourseID)) {
 		$tool_content .= $langUserTopicInformation;
-		draw($tool_content, 2, 'phpbb');
+		draw($tool_content, 2, 'phpbb', $head_content);
 		exit();
 	}
 	$m = mysql_fetch_array($result);
@@ -282,14 +291,14 @@ if (isset($submit) && $submit) {
     </TABLE>
 
     </FORM>";
-		draw($tool_content, 2, 'phpbb');
+		draw($tool_content, 2, 'phpbb', $head_content);
 		exit();
 	} else {
 		// ADDED BY CLAROLINE: exclude non identified visitors
 		if (!$uid AND !$fakeUid) {
 			$tool_content .= "<center><br><br>$langLoginBeforePost1<br>";
 			$tool_content .= "$langLoginBeforePost2<a href=../../index.php>$langLoginBeforePost3</a></center>";
-			draw($tool_content, 2, 'phpbb');
+			draw($tool_content, 2, 'phpbb', $head_content);
 			exit();
 		}
 		if ($forum_type == 1) {
@@ -297,7 +306,7 @@ if (isset($submit) && $submit) {
 			// this private forum.
 			if (!check_priv_forum_auth($uid, $forum, TRUE, $currentCourseID)) {
 				$tool_content .= "$l_privateforum $l_nopost";
-				draw($tool_content, 2, 'phpbb');
+				draw($tool_content, 2, 'phpbb', $head_content);
 				exit();
 			}
 			// Ok, looks like we're good.
@@ -340,7 +349,7 @@ if (isset($submit) && $submit) {
 			eval("\$reply = \"$syslang_quotemsg\";");
 		} else {
 			$tool_content .= $langErrorConnectForumDatabase;
-			draw($tool_content, 2, 'phpbb');
+			draw($tool_content, 2, 'phpbb', $head_content);
 			exit();
 		}
 	}				
@@ -352,7 +361,12 @@ if (isset($submit) && $submit) {
 	}
 	$tool_content .= "
       </th>
-      <td valign=\"top\"><TEXTAREA NAME=\"message\" ROWS=15 COLS=70 WRAP=\"VIRTUAL\" class=\"auth_input\">$reply</TEXTAREA></td>
+      <td valign=\"top\">
+      <table class='xinha_editor'>
+          <tr>
+	<td>
+	<TEXTAREA id='xinha' NAME='message' ROWS=15 COLS=70 WRAP='VIRTUAL' class='auth_input'>$reply</TEXTAREA></td>
+	</tr></table></td>
     </tr>
     <tr>
       <th>&nbsp;</th>
@@ -370,4 +384,4 @@ if (isset($submit) && $submit) {
     <br/>";
 
 }
-draw($tool_content, 2, 'phpbb');
+draw($tool_content, 2, 'phpbb', $head_content);
