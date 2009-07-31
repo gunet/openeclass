@@ -201,7 +201,7 @@ $q = db_query("SELECT id, title FROM course_units
 while ($info = mysql_fetch_array($q)) {
         $selected = ($info['id'] == $id)? ' selected="1" ': '';
         $tool_content .= "<option value='$info[id]'$selected>" .
-                         htmlspecialchars(ellipsize($info['title']), 40) .
+                         htmlspecialchars(ellipsize($info['title'], 40)) .
                          '</option>';
 }
 $tool_content .= '</select></td></tr></tbody></table></form>';
