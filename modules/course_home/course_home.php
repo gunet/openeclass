@@ -214,7 +214,7 @@ while ($cu = mysql_fetch_array($sql)) {
                     $cunits_content .= ">";
                 } 
                 $cunits_content .= "$cu[comments]";
-                if (strpos('<', $cu['comments']) === false) {
+                if (strpos($cu['comments'], '<') === false) {
                         $cu['comments'] = '      ' . $cu['comments'] . '';
                 }
                 $cunits_content .= "\n        </td>";
