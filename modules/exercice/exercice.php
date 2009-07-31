@@ -215,7 +215,7 @@ $NumOfResults = mysql_fetch_array(db_query("SELECT COUNT(*) FROM exercise_user_r
 	if ($NumOfResults[0]) {
 		$tool_content .= "<td align=\"center\"><nobr><a href=\"results.php?exerciseId=".$row['id']."\">".
 		$langExerciseScores1."</a> | 
-		<a href=\"csv.php?&exerciseId=".$row['id']."\">".$langExerciseScores3."</a></nobr></td>";
+		<a href=\"csv.php?&exerciseId=".$row['id']."\" target=_blank>".$langExerciseScores3."</a></nobr></td>";
 	} else {
 		$tool_content .= "<td align=\"center\">	-&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;- </td>";
 	}

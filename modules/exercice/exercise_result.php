@@ -316,13 +316,13 @@ $sql="UPDATE exercise_user_record SET TotalScore='$totalScore', TotalWeighting='
 	attempt='$attempt' WHERE eurid='$eurid'";
 db_query($sql, $currentCourseID);
 
-if ($displayResults == 1) {
+//if ($displayResults == 1) {
 	$tool_content .= "<br/><table width='99%' class='Exercise'><thead><tr>
 	<td class='score'>$langYourTotalScore: <b>$totalScore/$totalWeighting</b>
 	</td></tr>
 	</thead></table>
 	";
-}
+//}
 $tool_content .= "<br/><div align='center'>
 <input type='submit' value='${langFinish}'>
 </div>

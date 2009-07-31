@@ -175,6 +175,7 @@ $langNumEachCat = "Αριθμός μαθημάτων ανά τύπο μαθημ�
 $langAnnouncements = "Ανακοινώσεις";
 $langNumEachRec = "Αριθμός εγγραφών ανά μάθημα";
 $langFrom = "Από";
+$langFrom2 = "από";
 $langNotExist = "Δεν υπάρχουν";
 $langExist = "Υπάρχουν!";
 $langResult =" Αποτέλεσμα";

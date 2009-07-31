@@ -876,7 +876,9 @@ function mkpath($path)  {
 // checks if a module is visible 
 function visible_module($module_id) {
 
-	$v = mysql_fetch_array(db_query("SELECT visible FROM accueil WHERE id ='$module_id'"));
+	global $currentCourseID;
+	
+	$v = mysql_fetch_array(db_query("SELECT visible FROM accueil WHERE id ='$module_id'", $currentCourseID));
  	if ($v['visible'] == 1)
 		return TRUE;
 	else
@@ -1163,4 +1165,16 @@ function course_code_to_title($code)
         } else {
                 return false;
         }
+}
+
+
+function csv_escape($string, $force = false)
+{
+        $string = preg_replace('/[\r\n]+/', ' ', $string);
+        if (!preg_match("/[ ,!;\"'\\\\]/", $string) and !$force) {
+                return $string;
+	} else {
+                return '"' . str_replace('"', '""', $string) . '"';
+
+	}
 }
