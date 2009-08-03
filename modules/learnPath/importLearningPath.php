@@ -307,10 +307,17 @@ function elementData($parser,$data)
                 $unzippingState = $zipFile->extract(PCLZIP_OPT_BY_NAME,$pathToManifest.$file, PCLZIP_OPT_REMOVE_PATH, $pathToManifest);
                 if ( !($fp = @fopen($file, "r")) )
                 {
-                    $errorFound = true;
-                    array_push ($errorMsgs, $langErrorOpeningXMLFile.$pathToManifest.$file );
+                	$file = str_replace("\\", "/", $file); // kanoume mia dokimh mhn tyxon do8hke la8os dir separator, antistrefontas tis ka8etous. ta windows paizoun kai me to unix dir separator
+                	
+                	$unzippingState = $zipFile->extract(PCLZIP_OPT_BY_NAME,$pathToManifest.$file, PCLZIP_OPT_REMOVE_PATH, $pathToManifest);
+                	if ( !($fp = @fopen($file, "r")) )
+	                {
+	                    $errorFound = true;
+	                    array_push ($errorMsgs, $langErrorOpeningXMLFile.$pathToManifest.$file );
+                	}
                 }
-                else
+                
+                if (!$errorFound)
                 {
                     if (!isset($cache)) $cache = "";
                     while ($readdata = str_replace("\n","",fread($fp, 4096)))
