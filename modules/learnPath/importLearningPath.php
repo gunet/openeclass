@@ -301,7 +301,7 @@ function elementData($parser,$data)
                 xml_set_element_handler($xml_parser, "startElement", "endElement");
                 xml_set_character_data_handler($xml_parser, "elementData");
 
-                $file = $data; //url of secondary manifest files is relative to the position of the base imsmanifest.xml
+                $file = rawurldecode($data); //url of secondary manifest files is relative to the position of the base imsmanifest.xml
 
                 // PHP extraction of zip file using zlib
                 $unzippingState = $zipFile->extract(PCLZIP_OPT_BY_NAME,$pathToManifest.$file, PCLZIP_OPT_REMOVE_PATH, $pathToManifest);
