@@ -203,7 +203,7 @@ $sco['session_time'] = "0000:00:00.00";
                         }
                         this.APIError("0");
                         
-                        setTimeout("do_commit()",1000);
+                        do_commit();
                       
                         APIInitialized = false; //
                         return "true";
