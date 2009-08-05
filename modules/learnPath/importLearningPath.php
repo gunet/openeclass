@@ -131,7 +131,7 @@ function startElement($parser,$name,$attributes)
             {
                 foreach ($manifestData['items'] as $itemToCheck )
                 {
-                    if ( $itemToCheck['identifierref'] == $attributes['IDENTIFIER'] )
+                    if ( isset($itemToCheck['identifierref']) && $itemToCheck['identifierref'] == $attributes['IDENTIFIER'] )
                     {
                         if (isset($attributes['HREF'])) $manifestData['scos'][$attributes['IDENTIFIER']]['href'] = $attributes['HREF'];
 
