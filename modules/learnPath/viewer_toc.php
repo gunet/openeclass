@@ -25,7 +25,7 @@
 * =========================================================================*/
 /*===========================================================================
 	viewer_toc.php
-	@last update: 30-06-2006 by Thanos Kyritsis
+	@last update: 05-08-2009 by Thanos Kyritsis
 	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
 
 	based on Claroline version 1.7 licensed under GPL
@@ -299,7 +299,7 @@ if ( $moduleNb > 1 )
 
 	if( $previousModule != '' )
 	{
-		$prevNextString .= '<a href="navigation/startModule.php?viewModule_id='.$previousModule.'" target="mainFrame">'.$imgPrevious.'</a>';
+		$prevNextString .= '<a href="navigation/viewModule.php?viewModule_id='.$previousModule.'" target="scoFrame">'.$imgPrevious.'</a>';
 	}
 	else
 	{
@@ -309,7 +309,7 @@ if ( $moduleNb > 1 )
 
 	if( $nextModule != '' )
 	{
-		$prevNextString .=  '<a href="navigation/startModule.php?viewModule_id='.$nextModule.'" target="mainFrame">'.$imgNext.'</a>';
+		$prevNextString .=  '<a href="navigation/viewModule.php?viewModule_id='.$nextModule.'" target="scoFrame">'.$imgNext.'</a>';
 	}
 	else
 	{
@@ -320,9 +320,9 @@ if ( $moduleNb > 1 )
 
 //  set redirection link
 if ( $is_adminOfCourse )
-	$returl = 'learningPathAdmin.php';
+	$returl = 'learningPathAdmin';
 else
-	$returl = 'learningPath.php';
+	$returl = 'learningPath';
 
 	echo '<table width="99%" align="left" class="LP_Operations">'
     .'<thead>'
@@ -331,7 +331,7 @@ else
     .'<td><div align="left">&nbsp;&nbsp;'
     .$prevNextString
     ."&nbsp;&nbsp;"
-	."<a href=\"".$returl."\" target=\"_top\">"
+	."<a href=\"navigation/viewModule.php?go=".$returl."\" target=\"scoFrame\">"
 	.'<img src="'.$imgRepositoryWeb.'scormrestart.jpg" border="0" title="'.$langQuitViewer.'">'
 	."</a>"
 	.'&nbsp;&nbsp;'

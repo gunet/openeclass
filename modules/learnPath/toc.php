@@ -138,7 +138,7 @@ foreach ($flatElementList as $module)
         echo "<span style=\"vertical-align: middle;\">
 	<img src=\"".$imgRepositoryWeb."".$moduleImg."\" title=\"".$contentType_alt."\" border=\"0\"></span>&nbsp;";
         
-	echo "<a href='navigation/startModule.php?viewModule_id=$module[module_id]'".$style." target='mainFrame'>". htmlspecialchars($module['name']). "</a>"; 
+	echo "<a href='navigation/viewModule.php?viewModule_id=$module[module_id]'".$style." target='scoFrame'>". htmlspecialchars($module['name']). "</a>";
 
     }
 echo "</td></tr>";
