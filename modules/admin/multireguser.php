@@ -23,12 +23,18 @@ if (isset($_POST['submit'])) {
         $info = array();
         $newstatut = ($_POST['type'] == 'prof')? 1: 5;
         $facid = intval($_POST['facid']);
+        $am = $_POST['am'];
         $line = strtok($_POST['user_info'], "\n");
         while ($line !== false) {
                 $line = preg_replace('/#.*/', '', trim($line));
                 if (!empty($line)) {
                         $user = preg_split('/\s+/', $line);
-                        if (count($user) >= 3) {
+                        if (count($user) >= 2) {
+                                if (!isset($user[2]) or
+                                    !email_seems_valid($user[2])) {
+                                        // If no valid e-mail given, use empty string
+                                        $user[2] = '';
+                                }
                                 $uname = create_username($newstatut,
                                                          $facid,
                                                          $nom,
@@ -36,21 +42,30 @@ if (isset($_POST['submit'])) {
                                                          $_POST['prefix']);
                                 $new = create_user($newstatut,
                                                    $uname,
-                                                   $user[0],
                                                    $user[1],
+                                                   $user[0],
                                                    $user[2],
                                                    $facid,
+                                                   $am,
                                                    $_POST['lang'],
                                                    $send_mail);
                                 $info[] = $new;
                                 for ($i = 3; $i < count($user); $i++) {
-                                        register($new[0], $user[$i]);
+                                        if (!register($new[0], $user[$i])) {
+                                                $unparsed_lines .=
+                                                        sprintf($langMultiRegCourseInvalid . "\n",
+                                                                "$user[0] $user[1] ($uname)",
+                                                                $user[$i]);
+                                        }
                                 }
                         } else {
                                 $unparsed_lines .= $line;
                         }
                 }
                 $line = strtok("\n");
+        }
+        if (!empty($unparsed_lines)) {
+                $tool_content .= "<p><b>$langErrors</b></p><pre>$unparsed_lines</pre>";
         }
         $tool_content .= "<table><tr><th>$langSurname</th><th>$langName</th><th>e-mail</th><th>username</th><th>password</th></tr>\n";
         foreach ($info as $n) {
@@ -67,7 +82,7 @@ if (isset($_POST['submit'])) {
 <table class='FormData'>
 <tr><th>$langUsersData</th>
     <td><textarea class='auth_input' name='user_info' rows='10' cols='60'>
-# $langSurname   $langName   e-mail   [$langLessonCode...]</textarea></td>
+#  $langName   $langSurname   [e-mail]   [$langLessonCode...]\n</textarea></td>
 </tr>
 <tr><th>$langMultiRegType</th>
     <td><select name='type'>
@@ -79,6 +94,9 @@ if (isset($_POST['submit'])) {
 </tr>
 <tr><th>$langFaculteDepartment</th>
     <td>" . selection($facs, 'facid') . "</td>
+</tr>
+<tr><th>$langAm</th>
+    <td><input type='text' name='am' size='10' /></td>
 </tr>
 <tr><th>$langLanguage</th>
     <td>" . lang_select_options('lang') . "</td>
@@ -97,7 +115,7 @@ if (isset($_POST['submit'])) {
 draw($tool_content,3,'admin');
 
 
-function create_user($statut, $uname, $nom, $prenom, $email, $depid, $lang, $send_mail)
+function create_user($statut, $uname, $nom, $prenom, $email, $depid, $am, $lang, $send_mail)
 {
         global $charset, $mysqlMainDb, $langAsUser, $langAsProf,
                $langYourReg, $siteName, $langDestination, $langYouAreReg,
@@ -122,14 +140,15 @@ function create_user($statut, $uname, $nom, $prenom, $email, $depid, $lang, $sen
         $password_encrypted = md5($password);
 
         $req = db_query("INSERT INTO user
-                                (nom, prenom, username, password, email, statut, department, registered_at, expires_at,lang)
+                                (nom, prenom, username, password, email, statut, department, registered_at, expires_at, lang, am)
                         VALUES (" .
 				autoquote($nom) . ', ' .
 				autoquote($prenom) . ', ' .
 				autoquote($uname) . ", '$password_encrypted', " .
 				autoquote($email) .
 				", $statut, $depid, " .
-                                "$registered_at, $expires_at, '$lang')");
+                                "$registered_at, $expires_at, '$lang', " .
+                                autoquote($am) . ')');
         $id = mysql_insert_id();
 
         $emailsubject = "$langYourReg $siteName $type_message";
@@ -182,10 +201,8 @@ function random_password()
                        'ru', 'bur', 'fur', 'gur', 'kur', 'lur', 'mur',
                        'sy', 'zy', 'gy', 'ky', 'tri', 'kro', 'pra');
         $max = count($parts) - 1;
-        $num[0] = $num[1] = '';
-        $num[rand(0,1)] = rand(10,499);
-        return $num[0] . $parts[rand(0,$max)] .
-               $parts[rand(0,$max)] . $num[1];
+        $num = rand(10,499);
+        return $parts[rand(0,$max)] . $parts[rand(0,$max)] . $num;
 }
 
 function register($uid, $course_code)
