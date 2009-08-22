@@ -437,14 +437,18 @@ if (isset($dirNameList))
 		$tool_content .= "\n        <td>-</td>";
 		$tool_content .= "\n        <td>-</td>";
 		$tool_content .= "\n        <td>&nbsp;</td>";
-		/*** copy command ***/
-		$tool_content .= "\n        <td width=\"1\"><a href=\"$_SERVER[PHP_SELF]?$groupset&amp;move=".$cmdDirName."\">
-		<img src=\"../../template/classic/img/move_doc.gif\" border=0 title=\"$langMove\"></a></td>\n";
-		/*** rename command ***/
-		$tool_content .= "\n        <td width=\"1\"><a href=\"$_SERVER[PHP_SELF]?$groupset&amp;rename=".$cmdDirName."\">
-		<img src=\"../../template/classic/img/edit.gif\" border=0 title=\"$langRename\"></a></td>\n";
-		/*** delete command ***/
-		$tool_content .= "\n        <td width=\"1\"><a href=\"$_SERVER[PHP_SELF]?$groupset&amp;delete=".$cmdDirName."\" onClick=\"return confirmation();\"><img src=\"../../template/classic/img/delete.gif\" title=\"$langDelete\" border=0></a></td>\n";
+                if ($is_tutor or $is_adminOfCourse) {
+                        /*** move command ***/
+                        $tool_content .= "\n        <td width=\"1\"><a href=\"$_SERVER[PHP_SELF]?$groupset&amp;move=".$cmdDirName."\">
+                        <img src=\"../../template/classic/img/move_doc.gif\" border=0 title=\"$langMove\"></a></td>\n";
+                        /*** rename command ***/
+                        $tool_content .= "\n        <td width=\"1\"><a href=\"$_SERVER[PHP_SELF]?$groupset&amp;rename=".$cmdDirName."\">
+                        <img src=\"../../template/classic/img/edit.gif\" border=0 title=\"$langRename\"></a></td>\n";
+                        /*** delete command ***/
+                        $tool_content .= "\n        <td width=\"1\"><a href=\"$_SERVER[PHP_SELF]?$groupset&amp;delete=".$cmdDirName."\" onClick=\"return confirmation();\"><img src=\"../../template/classic/img/delete.gif\" title=\"$langDelete\" border=0></a></td>\n";
+                } else {
+                        $tool_content .= "<td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>\n";
+                }
 		$tool_content .=  "\n    </tr>\n";
 	}
 }
@@ -484,16 +488,19 @@ if (isset($fileNameList))
 		$tool_content .= "\n        <td>".$date."</td>\n";
 		$tool_content .= "\n        <td>
 		<a href=\"../work/group_work.php?submit=$urlShortFileName\">$langPublish</a></td>\n";
-		/*** copy command ***/
-		$tool_content .= "\n        <td><a href=\"$_SERVER[PHP_SELF]?$groupset&amp;move=".$cmdFileName."\">
-		<img src=\"../../template/classic/img/move_doc.gif\" border=0></a></td>\n";
-		/*** rename command ***/
-		$tool_content .= "\n        <td><a href=\"$_SERVER[PHP_SELF]?$groupset&amp;rename=".$cmdFileName."\">
-		<img src=\"../../template/classic/img/edit.gif\" border=0></a></td>\n";
-		/*** delete command ***/
-		@$tool_content .= "\n        <td><a href=\"$_SERVER[PHP_SELF]?$groupset&amp;delete=".$cmdFileName."\" onClick=\"return confirmation();\">
-		<img src=\"../../template/classic/img/delete.gif\" border=0></a></td>\n";
-		/*** submit command ***/
+                if ($is_tutor or $is_adminOfCourse) {
+                        /*** copy command ***/
+                        $tool_content .= "\n        <td><a href=\"$_SERVER[PHP_SELF]?$groupset&amp;move=".$cmdFileName."\">
+                        <img src=\"../../template/classic/img/move_doc.gif\" border=0></a></td>\n";
+                        /*** rename command ***/
+                        $tool_content .= "\n        <td><a href=\"$_SERVER[PHP_SELF]?$groupset&amp;rename=".$cmdFileName."\">
+                        <img src=\"../../template/classic/img/edit.gif\" border=0></a></td>\n";
+                        /*** delete command ***/
+                        @$tool_content .= "\n        <td><a href=\"$_SERVER[PHP_SELF]?$groupset&amp;delete=".$cmdFileName."\" onClick=\"return confirmation();\">
+                        <img src=\"../../template/classic/img/delete.gif\" border=0></a></td>\n";
+                } else {
+                        $tool_content .= "<td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>\n";
+                } 
 		$tool_content .= "\n    </tr>\n";
 	}
 }
