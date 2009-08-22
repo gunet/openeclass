@@ -45,7 +45,10 @@ if (!extension_loaded('gd')) {
 	$totalHits = 0;
         $totalDuration = 0;
 	require_once '../../include/libchart/libchart.php';
-	$sql = "SELECT code, intitule FROM cours";
+        $sql = "SELECT a.code code, a.intitule intitule
+                FROM cours AS a LEFT JOIN cours_user AS b
+                     ON a.code = b.code_cours
+                WHERE b.user_id = '$uid' ORDER BY a.intitule";
 	$result = db_query($sql);
 	if (mysql_num_rows($result) > 0) {  // found courses ?
 		while ($row = mysql_fetch_assoc($result)) {
