@@ -1175,6 +1175,15 @@ function course_code_to_title($code)
 
 function csv_escape($string, $force = false)
 {
+        global $charset;
+
+        if ($charset != 'UTF-8') {
+                if ($charset == 'Windows-1253') {
+                        $string = utf8_to_cp1253($string);
+                } else {
+                        $string = iconv('UTF-8', $charset, $string);
+                }
+        }
         $string = preg_replace('/[\r\n]+/', ' ', $string);
         if (!preg_match("/[ ,!;\"'\\\\]/", $string) and !$force) {
                 return $string;

@@ -64,22 +64,3 @@ if($is_adminOfCourse) {
 	echo "$crlf";
 }  // end of initial if
 
-
-
-function csv_escape($string, $force = false)
-{
-	global $charset;
-
-        if ($charset != 'UTF-8') {
-		if ($charset == 'Windows-1253') {
-			$string = utf8_to_cp1253($string);
-		} else {
-                	$string = iconv('UTF-8', $charset, $string);
-		}
-        }
-        if (!preg_match("/[ ,!;\"'\\\\]/", $string) and !$force) {
-                return $string;
-        } else {
-                return '"' . str_replace('"', '""', $string) . '"';
-        }
-}
