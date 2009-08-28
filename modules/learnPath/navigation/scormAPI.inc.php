@@ -98,6 +98,7 @@ if( !$uid || !$userProgressionDetails )
     $sco['total_time'] = "0000:00:00.00";
     $sco['suspend_data'] = "";
     $sco['launch_data'] = "";
+    $sco['lesson_mode'] = "";
 }
 else // authenticated user and no error in query
 {
@@ -114,6 +115,7 @@ else // authenticated user and no error in query
     $sco['total_time'] = $userProgressionDetails['total_time'];
     $sco['suspend_data'] = $userProgressionDetails['suspend_data'];
     $sco['launch_data'] = stripslashes($userProgressionDetails['launch_data']);
+    $sco['lesson_mode'] = "";
 }
 
 
@@ -314,11 +316,22 @@ $sco['session_time'] = "0000:00:00.00";
                                       APIError("0");
                                       return values[i];
                                       break;
+                                case 'cmi.core.lesson_mode' :
+                                      APIError("0");
+                                      return values[i];
+                                      break;
 
                            }
                        }
                        else // ele not implemented
                        {
+                    	    // ignore cmi.interactions implementation
+                    	    var pos = ele.indexOf("cmi.interactions")
+							if (pos >= 0) {
+								APIError("0");
+                       	    	return "";
+							}
+                   	    	
                             // not implemented error
                             APIError("401");
                             return "";
@@ -396,6 +409,7 @@ $sco['session_time'] = "0000:00:00.00";
                                       }
                                       ele = 'cmi.core.lesson_status';
                                       values[4] = val;  // deal with lesson_status element from scorm 1.2 instead
+                                      values[i] = val;
                                       APIError("0");
                                       return "true";
                                       break;
@@ -412,6 +426,7 @@ $sco['session_time'] = "0000:00:00.00";
 
                                       ele = 'cmi.core.lesson_status';
                                       values[4] = val;  // deal with lesson_status element from scorm 1.2 instead
+                                      values[i] = val;
                                       APIError("0");
                                       return "true";
                                       break;
@@ -448,6 +463,7 @@ $sco['session_time'] = "0000:00:00.00";
                                            return "false";
                                       }
                                       values[8] = val; // SCORM 2004, we deal with the old element
+                                      values[i] = val;
                                       APIError("0");
                                       return "true";
                                       break;
@@ -468,6 +484,7 @@ $sco['session_time'] = "0000:00:00.00";
                                            return "false";
                                       }
                                       values[14] = val;
+                                      values[i] = val;
                                       APIError("0");
                                       return "true";
                                       break;
@@ -488,6 +505,7 @@ $sco['session_time'] = "0000:00:00.00";
                                            return "false";
                                       }
                                       values[15] = val;
+                                      values[i] = val;
                                       APIError("0");
                                       return "true";
                                       break;
@@ -558,6 +576,7 @@ $sco['session_time'] = "0000:00:00.00";
 									  }
 									  
                                       values[11] = val; // SCORM 2004, use together with the old element
+                                      values[i] = val;
                                       APIError("0");
                                       return "true";
                                       break;
@@ -575,11 +594,23 @@ $sco['session_time'] = "0000:00:00.00";
                                       APIError("404"); //read only
                                       return "false";
                                       break;
+                                case 'cmi.core.lesson_mode' :
+                                	  values[i] = val;
+                                      APIError("0");
+                                      return "true";
+                                      break;
 
                            }
                        }
                        else // ele not implemented
                        {
+                            // ignore cmi.interactions implementation
+                    	    var pos = ele.indexOf("cmi.interactions")
+                    	    if (pos >= 0) {
+                    	    	APIError("0");
+                        	    return "";
+                    	    }
+                    	    
                             // not implemented error
                             APIError("401");
                             return "";
@@ -731,6 +762,7 @@ $sco['session_time'] = "0000:00:00.00";
         elements[19] = "cmi.score.raw";
         elements[20] = "cmi.score.min";
         elements[21] = "cmi.score.max";
+        elements[22] = "cmi.core.lesson_mode";
 
         var values = new Array();
         values[0]  = "<?php echo $sco['_children']; ?>";
@@ -755,6 +787,7 @@ $sco['session_time'] = "0000:00:00.00";
         values[19] = "<?php echo $sco['raw']; ?>"; // we do deal the score.raw element with the old element
         values[20] = "<?php echo $sco['scoreMin']; ?>"; // we do deal the score.min element with the old element
         values[21] = "<?php echo $sco['scoreMax']; ?>"; // we do deal the score.max element with the old element
+        values[22] = "<?php echo $sco['lesson_mode']; ?>";
 
 
         // ====================================================
@@ -781,12 +814,12 @@ $sco['session_time'] = "0000:00:00.00";
         }
 
         function array_indexOf(arr,val) {
-                for ( var i=0; i<arr.length; i++ ) {
-                        if ( arr[i] == val ) {
-                                return i;
-                        }
-                }
-                return -1;
+			for ( var i=0; i<arr.length; i++ ) {
+				if ( arr[i] == val ) {
+					return i;
+				}
+			}
+			return -1;
         }
 
 
