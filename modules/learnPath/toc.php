@@ -1,6 +1,46 @@
-<?
-$require_current_course = TRUE;
+<?php
+/*========================================================================
+*   Open eClass 2.1
+*   E-learning and Course Management System
+* ========================================================================
+*  Copyright(c) 2003-2008  Greek Universities Network - GUnet
+*  A full copyright notice can be read in "/info/copyright.txt".
+*
+*  Developers Group:	Costas Tsibanis <k.tsibanis@noc.uoa.gr>
+*			Yannis Exidaridis <jexi@noc.uoa.gr>
+*			Alexandros Diamantidis <adia@noc.uoa.gr>
+*			Tilemachos Raptis <traptis@noc.uoa.gr>
+*
+*  For a full list of contributors, see "credits.txt".
+*
+*  Open eClass is an open platform distributed in the hope that it will
+*  be useful (without any warranty), under the terms of the GNU (General
+*  Public License) as published by the Free Software Foundation.
+*  The full license can be read in "/info/license/license_gpl.txt".
+*
+*  Contact address: 	GUnet Asynchronous eLearning Group,
+*  			Network Operations Center, University of Athens,
+*  			Panepistimiopolis Ilissia, 15784, Athens, Greece
+*  			eMail: info@openeclass.org
+* =========================================================================*/
 
+/*===========================================================================
+	toc.php
+	@last update: 28-08-2009 by Thanos Kyritsis
+	@authors list: Yannis Exidaridis <jexi@noc.uoa.gr> 
+	               Alexandros Diamantidis <adia@noc.uoa.gr>
+	               Thanos Kyritsis <atkyritsis@upnet.gr>
+==============================================================================
+    @Description: Aristerh sthlh me ta Table Of Contents mias grammhs ma8hshs,
+                  dhladh lista me ola ta modules ths.
+
+    @Comments:
+
+    @todo:
+==============================================================================
+*/
+
+$require_current_course = TRUE;
 require_once("../../include/baseTheme.php");
 require_once("../../include/lib/learnPathLib.inc.php");
 require_once("../../include/lib/fileDisplayLib.inc.php");
@@ -121,24 +161,29 @@ foreach ($flatElementList as $module)
 
         $contentType_alt = selectAlt($module['contentType']);
         
-        unset($imagePassed);
-        if($module['credit'] == 'CREDIT' || $module['lesson_status'] == 'COMPLETED' || $module['lesson_status'] == 'PASSED') {
-        	if ($module['contentType'] == CTSCORM_)
-        		$moduleImg = "lp_completed.gif";
-        	else
-        		$imagePassed = '<img src="'.$imgRepositoryWeb.'tick1.gif" alt="'.$module['lesson_status'].'" title="'.$module['lesson_status'].'" />';
-        }
-        
-        if($module['contentType'] == CTSCORM_ && $module['lesson_status'] == 'FAILED')
-        	$moduleImg = "lp_failed.gif";
+		// eikonidio pou deixnei an perasame h oxi to sygkekrimeno module
+		unset($imagePassed);
+		if($module['credit'] == 'CREDIT' || $module['lesson_status'] == 'COMPLETED' || $module['lesson_status'] == 'PASSED') {
+			if ($module['contentType'] == CTSCORM_)
+				$moduleImg = "lp_completed.gif";
+			else
+				$imagePassed = '<img src="'.$imgRepositoryWeb.'tick1.gif" alt="'.$module['lesson_status'].'" title="'.$module['lesson_status'].'" />';
+		}
 
-        if(isset($imagePassed))
-        	echo $imagePassed;
-        
-        echo "<span style=\"vertical-align: middle;\">
-	<img src=\"".$imgRepositoryWeb."".$moduleImg."\" title=\"".$contentType_alt."\" border=\"0\"></span>&nbsp;";
-        
-	echo "<a href='navigation/viewModule.php?viewModule_id=$module[module_id]'".$style." target='scoFrame'>". htmlspecialchars($module['name']). "</a>";
+		if($module['contentType'] == CTSCORM_ && $module['lesson_status'] == 'FAILED')
+			$moduleImg = "lp_failed.gif";
+
+		if(isset($imagePassed))
+			echo $imagePassed;
+
+		// eidiko eikonidio tou module pou deixnei ton typo
+		echo "<span style=\"vertical-align: middle;\"><img src=\"".$imgRepositoryWeb."".$moduleImg."\" title=\"".$contentType_alt."\" border=\"0\"></span>&nbsp;";
+
+		// emphasize currently displayed module or not
+		if ( $_SESSION['lp_module_id'] == $module['module_id'] )
+			echo "<em>".htmlspecialchars($module['name'])."</em>";
+		else        
+			echo "<a href='navigation/viewModule.php?viewModule_id=$module[module_id]'".$style." target='scoFrame'>". htmlspecialchars($module['name']). "</a>";
 
     }
 echo "</td></tr>";
