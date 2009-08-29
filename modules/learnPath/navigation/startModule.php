@@ -26,7 +26,7 @@
 
 /*===========================================================================
 	startModule.php
-	@last update: 27-07-2009 by Thanos Kyritsis
+	@last update: 29-08-2009 by Thanos Kyritsis
 	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
 
 	based on Claroline version 1.7 licensed under GPL
@@ -65,6 +65,19 @@ $clarolineRepositoryWeb = $urlServer."courses/".$currentCourseID;
 // lib of this tool
 require_once("../../../include/lib/learnPathLib.inc.php");
 mysql_select_db($currentCourseID);
+
+function directly_pass_lp_module($table, $userid, $lpmid) {
+	// if credit was already set this query changes nothing else it update the query made at the beginning of this script
+	$sql = "UPDATE `".$table."`
+				SET `credit` = 1,
+					`raw` = 100,
+					`lesson_status` = 'completed',
+					`scoreMin` = 0,
+					`scoreMax` = 100
+				WHERE `user_id` = " . (int)$userid . "
+				AND `learnPath_module_id` = ". (int)$lpmid;
+	db_query($sql);
+}
 
 if(isset ($_GET['viewModule_id']) && $_GET['viewModule_id'] != '')
 	$_SESSION['lp_module_id'] = $_GET['viewModule_id'];
@@ -113,19 +126,8 @@ $assetPath = db_query_get_single_value($sql);
 switch ($module['contentType'])
 {
 	case CTDOCUMENT_ :
-		if($uid)
-		{
-		    // if credit was already set this query changes nothing else it update the query made at the beginning of this script
-		    $sql = "UPDATE `".$TABLEUSERMODULEPROGRESS."`
-		               SET `credit` = 1,
-		                   `raw` = 100,
-		                   `lesson_status` = 'completed',
-		                   `scoreMin` = 0,
-		                   `scoreMax` = 100
-		             WHERE `user_id` = " . (int)$uid . "
-		               AND `learnPath_module_id` = ". (int)$learnPathModuleId;
-
-		    db_query($sql);
+		if($uid) { // Directly pass this module
+			directly_pass_lp_module($TABLEUSERMODULEPROGRESS, (int)$uid, (int)$learnPathModuleId);
 		} // else anonymous : record nothing
 
 		$startAssetPage = urlencode($assetPath);
@@ -161,6 +163,11 @@ switch ($module['contentType'])
 
 		$moduleStartAssetPage = "showExercise.php?exerciseId=".$assetPath;
 		break;
+	case CTSCORMASSET_ :
+		if($uid) { // Directly pass this module
+			directly_pass_lp_module($TABLEUSERMODULEPROGRESS, (int)$uid, (int)$learnPathModuleId);
+		} // else anonymous : record nothing
+		// Don't break, we need to execute the following SCORM code
 	case CTSCORM_ :
 		// real scorm content method
 		$startAssetPage = $assetPath;
@@ -170,37 +177,16 @@ switch ($module['contentType'])
 	case CTCLARODOC_ :
 		break;
 	case CTCOURSE_DESCRIPTION_ :
-		if($uid)
-		{
-		    // if credit was already set this query changes nothing else it update the query made at the beginning of this script
-		    $sql = "UPDATE `".$TABLEUSERMODULEPROGRESS."`
-		               SET `credit` = 1,
-		                   `raw` = 100,
-		                   `lesson_status` = 'completed',
-		                   `scoreMin` = 0,
-		                   `scoreMax` = 100
-		             WHERE `user_id` = " . (int)$uid . "
-		               AND `learnPath_module_id` = ". (int)$learnPathModuleId;
-
-		    db_query($sql);
+		if($uid) { // Directly pass this module
+			directly_pass_lp_module($TABLEUSERMODULEPROGRESS, (int)$uid, (int)$learnPathModuleId);
 		} // else anonymous : record nothing
 
 		$moduleStartAssetPage = "showCourseDescription.php";
 		break;
 	case CTLINK_ :
-		if ($uid) {
-			// if credit was already set this query changes nothing else it update the query made at the beginning of this script
-		    $sql = "UPDATE `".$TABLEUSERMODULEPROGRESS."`
-		               SET `credit` = 1,
-		                   `raw` = 100,
-		                   `lesson_status` = 'completed',
-		                   `scoreMin` = 0,
-		                   `scoreMax` = 100
-		             WHERE `user_id` = " . (int)$uid . "
-		               AND `learnPath_module_id` = ". (int)$learnPathModuleId;
-
-		    db_query($sql);
-		}
+		if($uid) { // Directly pass this module
+			directly_pass_lp_module($TABLEUSERMODULEPROGRESS, (int)$uid, (int)$learnPathModuleId);
+		} // else anonymous : record nothing
 
 		$moduleStartAssetPage = $assetPath;
 		break;
