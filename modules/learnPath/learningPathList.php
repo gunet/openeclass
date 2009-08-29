@@ -26,7 +26,7 @@
 
 /*===========================================================================
 	learningPathList.php
-	@last update: 30-06-2006 by Thanos Kyritsis
+	@last update: 29-08-2009 by Thanos Kyritsis
 	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
 
 	based on Claroline version 1.7 licensed under GPL

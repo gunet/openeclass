@@ -26,7 +26,7 @@
 
 /*===========================================================================
 	modules_pool.php
-	@last update: 30-06-2006 by Thanos Kyritsis
+	@last update: 29-08-2009 by Thanos Kyritsis
 	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
 
 	based on Claroline version 1.7 licensed under GPL
@@ -258,6 +258,7 @@ $sql = "SELECT M.*, count(M.`module_id`) AS timesUsed
         FROM `".$TABLEMODULE."` AS M
           LEFT JOIN `".$TABLELEARNPATHMODULE."` AS LPM ON LPM.`module_id` = M.`module_id`
         WHERE M.`contentType` != \"".CTSCORM_."\"
+          AND M.`contentType` != \"".CTSCORMASSET_."\"
           AND M.`contentType` != \"".CTLABEL_."\"
         GROUP BY M.`module_id`
         ORDER BY M.`name` ASC, M.`contentType`ASC, M.`accessibility` ASC";
