@@ -290,6 +290,10 @@ function upgrade_course_2_1_4($code, $extramessage = '', $lang)
                                 '',
                                 'MODULE_ID_UNITS')");
         }
+	// upgrade lp_module me to kainourio content type
+	db_query("ALTER TABLE `lp_module`
+		CHANGE `contentType` `contentType` ENUM('CLARODOC','DOCUMENT','EXERCISE','HANDMADE','SCORM','SCORM_ASSET','LABEL','COURSE_DESCRIPTION','LINK')", 
+		$code);
 }
 
 
@@ -313,6 +317,10 @@ function upgrade_course_2_1_3($code, $extramessage = '')
 		encode_dropbox_documents($code, $dbox['id'], $dbox['filename'], $dbox['title']);
 	}
 
+	// upgrade lp_module me to kainourio content type
+	db_query("ALTER TABLE `lp_module`
+		CHANGE `contentType` `contentType` ENUM('CLARODOC','DOCUMENT','EXERCISE','HANDMADE','SCORM','SCORM_ASSET','LABEL','COURSE_DESCRIPTION','LINK')", 
+		$code);
 }
 
 // --------------------------------------------
@@ -557,7 +565,7 @@ function upgrade_course_old($code, $lang, $extramessage = '')
                         `comment` text NOT NULL,
                         `accessibility` enum('PRIVATE','PUBLIC') NOT NULL default 'PRIVATE',
                         `startAsset_id` int(11) NOT NULL default '0',
-                        `contentType` enum('CLARODOC','DOCUMENT','EXERCISE','HANDMADE','SCORM','LABEL','COURSE_DESCRIPTION','LINK') NOT NULL,
+                        `contentType` enum('CLARODOC','DOCUMENT','EXERCISE','HANDMADE','SCORM','SCORM_ASSET','LABEL','COURSE_DESCRIPTION','LINK') NOT NULL,
                         `launch_data` text NOT NULL,
                         PRIMARY KEY  (`module_id`)
                                 ) ", $code); //TYPE=MyISAM COMMENT='List of available modules used in learning paths';
