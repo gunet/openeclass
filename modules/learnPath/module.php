@@ -26,7 +26,7 @@
 
 /*===========================================================================
 	module.php
-	@last update: 30-06-2006 by Thanos Kyritsis
+	@last update: 29-08-2009 by Thanos Kyritsis
 	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
 
 	based on Claroline version 1.7 licensed under GPL
@@ -168,7 +168,7 @@ $sql = "SELECT `contentType`,
              ";
 $resultBrowsed = db_query_get_single_row($sql);
 
-        if ($module['contentType']== CTSCORM_ ) { $nameTools = "$langModify $langSCORMTypeDesc"; }
+        if ($module['contentType']== CTSCORM_ || $module['contentType']== CTSCORMASSET_) { $nameTools = "$langModify $langSCORMTypeDesc"; }
         if ($module['contentType']== CTEXERCISE_ ) { $nameTools = "$langModify $langExerciseAsModuleLabel"; }
         if ($module['contentType']== CTDOCUMENT_ ) { $nameTools = "$langModify $langDocumentAsModuleLabel"; }
         if ($module['contentType']== CTLINK_ ) { $nameTools = "$langModify $langLinkAsModuleLabel"; }
@@ -283,7 +283,7 @@ if($module['contentType'] != CTLABEL_) //
         $contentType_img = selectImage($resultBrowsed['contentType']);
         $contentType_alt = selectAlt($resultBrowsed['contentType']);
 
-        if ($resultBrowsed['contentType']== CTSCORM_   ) { $contentDescType = $langSCORMTypeDesc;    }
+        if ($resultBrowsed['contentType']== CTSCORM_ || $resultBrowsed['contentType']== CTSCORMASSET_ ) { $contentDescType = $langSCORMTypeDesc;    }
         if ($resultBrowsed['contentType']== CTEXERCISE_ ) { $contentDescType = $langEXERCISETypeDesc; }
         if ($resultBrowsed['contentType']== CTDOCUMENT_ ) { $contentDescType = $langDOCUMENTTypeDesc; }
         if ($resultBrowsed['contentType']== CTLINK_ ) { $contentDescType = $langLINKTypeDesc; }

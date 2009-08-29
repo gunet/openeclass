@@ -26,7 +26,7 @@
 
 /*===========================================================================
 	toc.php
-	@last update: 28-08-2009 by Thanos Kyritsis
+	@last update: 29-08-2009 by Thanos Kyritsis
 	@authors list: Yannis Exidaridis <jexi@noc.uoa.gr> 
 	               Alexandros Diamantidis <adia@noc.uoa.gr>
 	               Thanos Kyritsis <atkyritsis@upnet.gr>
@@ -154,7 +154,7 @@ foreach ($flatElementList as $module)
         	$moduleImg = "description_$image_bullet.gif";
         else if($module['contentType'] == CTDOCUMENT_ )
         	$moduleImg = "docs_$image_bullet.gif";
-        else if($module['contentType'] == CTSCORM_) // eidika otan einai scorm module, deixnoume allo eikonidio pou exei na kanei me thn proodo
+        else if($module['contentType'] == CTSCORM_ || $module['contentType'] == CTSCORMASSET_) // eidika otan einai scorm module, deixnoume allo eikonidio pou exei na kanei me thn proodo
         	$moduleImg = "lp_notattempted.gif";
         else
             $moduleImg = choose_image(basename($module['path']));
@@ -164,13 +164,13 @@ foreach ($flatElementList as $module)
 		// eikonidio pou deixnei an perasame h oxi to sygkekrimeno module
 		unset($imagePassed);
 		if($module['credit'] == 'CREDIT' || $module['lesson_status'] == 'COMPLETED' || $module['lesson_status'] == 'PASSED') {
-			if ($module['contentType'] == CTSCORM_)
+			if ($module['contentType'] == CTSCORM_ || $module['contentType'] == CTSCORMASSET_)
 				$moduleImg = "lp_completed.gif";
 			else
 				$imagePassed = '<img src="'.$imgRepositoryWeb.'tick1.gif" alt="'.$module['lesson_status'].'" title="'.$module['lesson_status'].'" />';
 		}
 
-		if($module['contentType'] == CTSCORM_ && $module['lesson_status'] == 'FAILED')
+		if(($module['contentType'] == CTSCORM_ || $module['contentType'] == CTSCORMASSET_) && $module['lesson_status'] == 'FAILED')
 			$moduleImg = "lp_failed.gif";
 
 		if(isset($imagePassed))

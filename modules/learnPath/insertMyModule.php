@@ -25,7 +25,7 @@
 * =========================================================================*/
 /*===========================================================================
 	insertMyModule.php
-	@last update: 30-06-2006 by Thanos Kyritsis
+	@last update: 29-08-2009 by Thanos Kyritsis
 	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
 
 	based on Claroline version 1.7 licensed under GPL
@@ -93,6 +93,7 @@ function buildRequestModules()
          FROM `".$TABLEMODULE."` AS M
            LEFT JOIN `".$TABLEASSET."` AS A ON M.`startAsset_id` = A.`asset_id`
          WHERE M.`contentType` != \"SCORM\"
+           AND M.`contentType` != \"SCORM_ASSET\"
            AND M.`contentType` != \"LABEL\"";
 
  while ($list=mysql_fetch_array($firstResult))
