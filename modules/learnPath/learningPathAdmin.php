@@ -661,7 +661,7 @@ foreach ($flatElementList as $module)
       <td><a href=\"".$_SERVER['PHP_SELF']."?cmd=delModule&cmdid=".$module['learnPath_module_id']."\" ".
          "onClick=\"return confirmation('".clean_str_for_javascript($langAreYouSureToRemove." ".$module['name'])." ? ";
 
-    if ($module['contentType'] == CTSCORM_)
+    if ($module['contentType'] == CTSCORM_ || $module['contentType'] == CTSCORMASSET_)
         $tool_content .= clean_str_for_javascript($langAreYouSureToRemoveSCORM);
     elseif ( $module['contentType'] == CTLABEL_ )
         $tool_content .= clean_str_for_javascript($langAreYouSureToRemoveLabel);
