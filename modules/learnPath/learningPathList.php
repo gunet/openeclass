@@ -154,7 +154,7 @@ if ($is_adminOfCourse) {
 					$findsql = "SELECT M.`module_id`
 						FROM  `".$TABLELEARNPATHMODULE."` AS LPM, `".$TABLEMODULE."` AS M
 						WHERE LPM.`learnPath_id` = ". (int)$_GET['del_path_id']."
-						AND ( M.`contentType` = '".CTSCORM_."' OR M.`contentType` = '".CTLABEL_."')
+						AND ( M.`contentType` = '".CTSCORM_."' OR M.`contentType` = '".CTSCORMASSET_."' OR M.`contentType` = '".CTLABEL_."')
 						AND LPM.`module_id` = M.`module_id`";
 					$findResult = db_query($findsql);
 
@@ -169,7 +169,7 @@ if ($is_adminOfCourse) {
 
 					// DELETE the SCORM modules
 					$delModuleSql = "DELETE FROM `".$TABLEMODULE."`
-					WHERE (`contentType` = '".CTSCORM_."' OR `contentType` = '".CTLABEL_."') AND (1=0";
+					WHERE (`contentType` = '".CTSCORM_."' OR `contentType` = '".CTSCORMASSET_."' OR `contentType` = '".CTLABEL_."') AND (1=0";
 
 					if (mysql_num_rows($findResult)>0)
 					{
