@@ -27,7 +27,7 @@
 
 /**===========================================================================
 	scromExport.inc.php
-	@last update: 30-06-2006 by Thanos Kyritsis
+	@last update: 29-08-2009 by Thanos Kyritsis
 	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
 	               
 	based on Claroline version 1.7 licensed under GPL
@@ -218,7 +218,7 @@ class ScormExport
         while ($module = mysql_fetch_array($result, MYSQL_ASSOC))
         {
             // Check for SCORM content. If at least one module is SCORM, we need to export the existing SCORM package
-            if ( $module['contentType'] == 'SCORM' )       $this->fromScorm = true;
+            if ( $module['contentType'] == 'SCORM' || $module['contentType'] == 'SCORM_ASSET' ) $this->fromScorm = true;
             
             // If it is an exercise, create a filename for it.
             if ( $module['contentType'] == 'EXERCISE' )    $module['fileName'] = 'quiz_' . $module['path'] . '.html';
@@ -1162,7 +1162,7 @@ class ScormExport
                         . "</resource>\n";
                     break;
                         
-                        
+                case 'SCORM_ASSET' :
                 case 'SCORM'   : 
                     // Add the resource to the manifest
                     $path = 'OrigScorm';
