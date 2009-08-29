@@ -27,7 +27,7 @@
 
 /*===========================================================================
 	importLearningPath.php
-	@last update: 05-08-2009 by Thanos Kyritsis
+	@last update: 29-08-2009 by Thanos Kyritsis
 	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
 
 	based on Claroline version 1.7 licensed under GPL
@@ -136,6 +136,11 @@ function startElement($parser,$name,$attributes)
                         if (isset($attributes['HREF'])) $manifestData['scos'][$attributes['IDENTIFIER']]['href'] = $attributes['HREF'];
 
                         if (isset($attributes['XML:BASE'])) $manifestData['scos'][$attributes['IDENTIFIER']]['xml:base'] = $attributes['XML:BASE'];
+                        
+                        // eidiko flag gia na anixneusoume osa scorm paketa einai typou assets
+                        // dhladh osa den perilambanoun javascript gia thn parakolou8hsh ths proodou,
+                        // opote allou ston kwdika 8a prepei na ta xeiristoume diaforetika
+                        $manifestData['scos'][$attributes['IDENTIFIER']]['contentTypeFlag'] = CTSCORMASSET_;
                     }
                 }
             }
@@ -978,10 +983,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST) )
                 // create new module
 
                 if (!isset($item['datafromlms'])) $item['datafromlms'] = "";
+                
+                // elegxoume an to contentType prepei na einai scorm h asset
+                if (isset($manifestData['scos'][$item['identifierref']]['contentTypeFlag']) && $manifestData['scos'][$item['identifierref']]['contentTypeFlag'] == CTSCORMASSET_)
+                	$contentType = CTSCORMASSET_;
+                else
+                	$contentType = CTSCORM_;
 
                 $sql = "INSERT INTO `".$TABLEMODULE."`
                         (`name` , `comment`, `contentType`, `launch_data`)
-                        VALUES ('".addslashes($moduleName)."' , '".addslashes($description)."', '".CTSCORM_."', '".addslashes($item['datafromlms'])."')";
+                        VALUES ('".addslashes($moduleName)."' , '".addslashes($description)."', '".$contentType."', '".addslashes($item['datafromlms'])."')";
                 $query = db_query($sql);
 
                 if ( mysql_error() )
