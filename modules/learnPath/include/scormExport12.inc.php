@@ -1024,6 +1024,15 @@ class ScormExport
                     break;
                         
                 case 'SCORM_ASSET' :
+                	// Add the resource to the manifest
+                    $path = 'OrigScorm';
+                    $manifest_resources .= '<resource identifier="R_' . $module['ID'] . '" type="webcontent" '
+                        . ' href="OrigScorm' . $module['path'] . '">' . "\n"
+                        . '  <file href="OrigScorm' . $module['path'] . '" />' . "\n"
+                        . makeMetaData($module['name'], $module['resourceComment'])
+                        . "</resource>\n";
+                    break;
+                    
                 case 'SCORM'   : 
                     // Add the resource to the manifest
                     $path = 'OrigScorm';
