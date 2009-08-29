@@ -26,7 +26,7 @@
 
 /*===========================================================================
 	learnPathLib.inc.php
-	@last update: 05-12-2006 by Thanos Kyritsis
+	@last update: 29-08-2009 by Thanos Kyritsis
 	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
 
 	based on Claroline version 1.7 licensed under GPL
@@ -49,6 +49,7 @@ define ( 'CTCLARODOC_', 'CLARODOC' );
 define ( 'CTDOCUMENT_', 'DOCUMENT' );
 define ( 'CTEXERCISE_', 'EXERCISE' );
 define ( 'CTSCORM_', 'SCORM' );
+define ( 'CTSCORMASSET_', 'SCORM_ASSET');
 define ( 'CTLABEL_', 'LABEL' );
 define ( 'CTCOURSE_DESCRIPTION_', 'COURSE_DESCRIPTION' );
 define ( 'CTLINK_', 'LINK' );
