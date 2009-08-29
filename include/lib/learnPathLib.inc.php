@@ -366,6 +366,7 @@ function nameBox($type, $mode, $formlabel = FALSE)
       $imgList[CTCLARODOC_] = "clarodoc.gif";
       $imgList[CTEXERCISE_] = "exercise_on.gif";
       $imgList[CTSCORM_] = "scorm.gif";
+      $imgList[CTSCORMASSET_] = "scorm.gif";
       $imgList[CTLINK_] = "links_on.gif";
       $imgList[CTCOURSE_DESCRIPTION_] = "description_on.gif";
 
@@ -394,6 +395,7 @@ function nameBox($type, $mode, $formlabel = FALSE)
       $altList[CTCLARODOC_] = $langDoc;
       $altList[CTEXERCISE_] = $langExercise;
       $altList[CTSCORM_] = $langAltScorm;
+      $altList[CTSCORMASSET_] = $langAltScorm;
 
       if (array_key_exists( $contentType , $altList ))
       {
@@ -1105,6 +1107,7 @@ function delete_module_tree($module_tree)
     {
         switch($module['contentType'])
         {
+        	case CTSCORMASSET_ :
             case CTSCORM_ :
                 // delete asset if scorm
                 $delAssetSql = "DELETE
