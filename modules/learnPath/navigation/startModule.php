@@ -196,7 +196,7 @@ echo "<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Frameset//EN''http://www.w3.o
 <html><head>";
 
 // add the update frame if this is a SCORM module
-if ($module['contentType'] == CTSCORM_ ) {
+if ($module['contentType'] == CTSCORM_ || $module['contentType'] == CTSCORMASSET_) {
 	require_once("scormAPI.inc.php");
 	echo "<frameset border='0' rows='0,75,*' frameborder='no'>
 		<frame src='updateProgress.php' name='upFrame'>";
