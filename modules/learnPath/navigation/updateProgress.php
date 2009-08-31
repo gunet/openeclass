@@ -74,6 +74,11 @@ if(isset($_POST['ump_id']))
   $lesson_status_value = strtoupper($_POST['lesson_status']);
   $credit_value = strtoupper($_POST['credit']);
   
+  //set values for the scores
+  $raw_value = (int)$_POST['raw'];
+  $scoreMin_value = (int)$_POST['scoreMin'];
+  $scoreMax_value = (int)$_POST['scoreMax'];
+  
   // next visit of the sco will not be the first so entry must be setted to RESUME
   $entry_value = "RESUME"; 
   
@@ -87,6 +92,10 @@ if(isset($_POST['ump_id']))
       if ( strtoupper($_POST['credit']) == "CREDIT" )
         $credit_value = "CREDIT";
   }
+  
+  //set maxScore to 100 if the SCO didn't change it itself, but gave raw
+  if (isset($raw_value) && isset($scoreMax_value) && $raw_value >= 0 && $raw_value <= 100 && $scoreMax_value == 0)
+  	$scoreMax_value = 100;
 
   if(isScorm2004Time($_POST['session_time']))
   {
@@ -108,9 +117,9 @@ if(isset($_POST['ump_id']))
                 `lesson_location` = '". addslashes($_POST['lesson_location'])."',
                 `lesson_status` = '". addslashes($lesson_status_value) ."',
                 `entry` = '". addslashes($entry_value) ."',
-                `raw` = '". (int)$_POST['raw']."',
-                `scoreMin` = '".(int)$_POST['scoreMin']."',
-                `scoreMax` = '". (int)$_POST['scoreMax']."',
+                `raw` = '". $raw_value ."',
+                `scoreMin` = '". $scoreMin_value ."',
+                `scoreMax` = '". $scoreMax_value ."',
                 `total_time` = '". addslashes($total_time_value) ."',
                 `session_time` = '". addslashes($session_time_formatted) ."',
                 `suspend_data` = '". addslashes($_POST['suspend_data'])."',
