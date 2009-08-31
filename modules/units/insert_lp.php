@@ -31,7 +31,7 @@ function display_lp()
                $langComments, $langAddModulesButton, $langChoice, $langNoLearningPath, $langLearningPaths;
 
 
-        $result = db_query("SELECT * FROM lp_learnPath", $currentCourseID);
+        $result = db_query("SELECT * FROM lp_learnPath ORDER BY name", $currentCourseID);
         $lpinfo = array();
         while($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
                 $lpinfo[] = array(
@@ -46,7 +46,7 @@ function display_lp()
         } else {
                 $tool_content .= "<form action='insert.php' method='post'><input type='hidden' name='id' value='$id'" .
                                  "<div class='fileman'><table class='Documents'><tbody>" .
-                                 "<tr><th>$langLearningPaths</th><th>$langComments</th>" .
+                                 "<tr><th width='60%'>$langLearningPaths</th><th width='40%'>$langComments</th>" .
                                  "<th>$langChoice</th></tr>\n";
 
 			foreach ($lpinfo as $entry) {
@@ -56,9 +56,9 @@ function display_lp()
 					$vis = '';
 				}
 				$tool_content .= "<tr class='$vis'>";
-				$tool_content .= "<td width='20%' valign='top' style='padding-top: 7px;' align='left'>
+				$tool_content .= "<td valign='top' style='padding-top: 7px;' align='left'>
 				<a href='${urlServer}/modules/learnPath/learningPath.php?path_id=$entry[id]'>$entry[name]</a></td>";
-				$tool_content .= "<td width='70%'><div align='left'>$entry[comment]</div></td>";
+				$tool_content .= "<td><div align='left'>$entry[comment]</div></td>";
 				$tool_content .= "<td align='center'><input type='checkbox' name='lp[]' value='$entry[id]'></td>";
 				$tool_content .= "</tr>";
 			}

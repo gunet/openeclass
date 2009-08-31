@@ -45,7 +45,7 @@ function display_exercises()
         } else {
                 $tool_content .= "<form action='insert.php' method='post'><input type='hidden' name='id' value='$id'" .
                                  "<div class='fileman'><table class='Documents'><tbody>" .
-                                 "<tr><th>$langExercices</th><th>$langComments</th>" .
+                                 "<tr><th width='60%'>$langExercices</th><th width='40%'>$langComments</th>" .
                                  "<th>$langChoice</th></tr>\n";
 
 		foreach ($quizinfo as $entry) {
@@ -55,9 +55,9 @@ function display_exercises()
 				$vis = '';
 			}
 			$tool_content .= "<tr class='$vis'>";
-			$tool_content .= "<td width='30%' valign='top' style='padding-top: 7px;' align='left'>
+			$tool_content .= "<td valign='top' style='padding-top: 7px;' align='left'>
 			<a href='${urlServer}modules/exercice/exercice_submit.php?exerciseId=$entry[id]'>$entry[name]</a></td>";
-			$tool_content .= "<td width='70%'><div align='left'>$entry[comment]</div></td>";
+			$tool_content .= "<td><div align='left'>$entry[comment]</div></td>";
 			$tool_content .= "<td align='center'><input type='checkbox' name='exercise[]' value='$entry[id]'></td>";
 			$tool_content .= "</tr>";
 		}
