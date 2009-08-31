@@ -36,7 +36,12 @@ check_uid();
 $nameTools = $langModifProfile;
 check_guest();
 
+$allow_username_change = !get_config('block-username-change');
+
 if (isset($submit) && (!isset($ldap_submit)) && !isset($changePass)) {
+        if (!$allow_username_change) {
+                $username_form = $uname;
+        }
 	// check if username exists
 	$username_check=mysql_query("SELECT username FROM user WHERE username='".escapeSimple($username_form)."'");
 	while ($myusername = mysql_fetch_array($username_check))
@@ -219,7 +224,7 @@ if ((!isset($changePass)) || isset($_POST['submit'])) {
        <td><input class='FormData_InputText' type=\"text\" size=\"40\" name=\"nom_form\" value=\"$nom_form\"></td>
     </tr>";
 
-	if(!in_array($password_form,$authmethods)) {
+	if(!in_array($password_form,$authmethods) and $allow_username_change) {
 		$tool_content .= "<tr>
        <th class='left'>$langUsername</th>
        <td><input class='FormData_InputText' type=\"text\" size=\"40\" name=\"username_form\" value=\"$username_form\"></td>
