@@ -39,8 +39,9 @@ function display_video()
                 while ($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
                         if (!$table_started) {
                                 $tool_content .= "<form action='insert.php' method='post'><input type='hidden' name='id' value='$id' />";
-                                $tool_content .= "<table class='Documents'>";
+                                $tool_content .= "<table class='Documents' width='100%'>";
                         	$tool_content .= "<tr><th>$langVideoTitle</th><th>$langDescr</th><th>$langDate</th><th>$langChoice</th></tr>";
+                                $table_started = true;
                         }
                         $videolink = "<a href='" .
                                 video_url($table, $row['url'], @$row['path']) .
