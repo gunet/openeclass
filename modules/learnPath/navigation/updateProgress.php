@@ -94,7 +94,7 @@ if(isset($_POST['ump_id']))
   }
   
   //set maxScore to 100 if the SCO didn't change it itself, but gave raw
-  if (isset($raw_value) && isset($scoreMax_value) && $raw_value >= 0 && $raw_value <= 100 && $scoreMax_value == 0)
+  if (isset($raw_value) && isset($scoreMax_value) && $raw_value > 0 && $raw_value <= 100 && $scoreMax_value == 0)
   	$scoreMax_value = 100;
 
   if(isScorm2004Time($_POST['session_time']))
