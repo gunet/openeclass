@@ -64,25 +64,28 @@ $clarolineRepositoryWeb = $urlServer."courses/".$currentCourseID;
 require_once("../../../include/lib/learnPathLib.inc.php");
 mysql_select_db($currentCourseID);
 
-if (isset($_GET['go']) && strlen($_GET['go']) > 0)
-	$redirect = "../".$_GET['go'].".php";
-else
+$unit_parm = isset($_SESSION['unit'])? ('?unit=' . $_SESSION['unit']): '';
+
+if (isset($_GET['go']) and strlen($_GET['go']) > 0) {
+	$redirect = "../".$_GET['go'].".php" . $unit_parm;
+} else {
 	$redirect="startModule.php?viewModule_id=".$_GET['viewModule_id'];
+}
 
 echo "<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN'>
 <html>
+<head>
 <script type=\"text/javascript\">
     <!--//"."\n";
-if (isset($_GET['go']) && strlen($_GET['go']) > 0)
+if (isset($_GET['go']) && strlen($_GET['go']) > 0) {
 	echo "parent.parent.window.location.href=\"".$redirect."\";"."\n";
-else
+} else {
 	echo "parent.parent.mainFrame.location.href=\"".$redirect."\";"."\n";
+}
 echo "    //--> 
     </script>
-<head>";
-echo "</head>";
-echo "<body>";
-echo "loading ...";
-echo "</body></html>";
-
-?>
+</head>
+<body>
+loading ...
+</body>
+</html>";
