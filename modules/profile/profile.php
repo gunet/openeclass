@@ -256,7 +256,7 @@ if ((!isset($changePass)) || isset($_POST['submit'])) {
         <td><input class='FormData_InputText' type=\"text\" size=\"40\" name=\"email_form\" value=\"$email_form\"></td>
     <tr>
         <th class='left'>$langAm</th>
-        <td><input class='FormData_InputText' type=\"text\" size=\"20\" name=\"am_form\" value=\"$am_form\"></td>
+        <td><input class='FormData_InputText' type=\"text\" size=\"40\" name=\"am_form\" value=\"$am_form\"></td>
     </tr>";
 	##[BEGIN personalisation modification]############
 	if (session_is_registered("perso_is_active")) {
