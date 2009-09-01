@@ -46,12 +46,14 @@ include '../../include/baseTheme.php';
 
 $tool_content = '';
 $tool_content .= "
-<div id=\"operations_container\">
-  <ul id=\"opslist\">";
-$tool_content .= "\n    <li><a href='favourite.php?first='>".$langFavourite."</a></li>";
-$tool_content .= "\n    <li><a href='userlogins.php?first='>".$langUserLogins."</a></li>";
-$tool_content .= "<li><a href='userduration.php'>".$langUserDuration."</a></li>";
-$tool_content .= "\n  </ul>\n</div>";
+<div id='operations_container'>
+  <ul id='opslist'>
+    <li><a href='favourite.php?first='>$langFavourite</a></li>
+    <li><a href='userlogins.php?first='>$langUserLogins</a></li>
+    <li><a href='userduration.php'>$langUserDuration</a></li>
+    <li><a href='../learnPath/detailsAll.php'>$langLearningPaths</a></li>
+  </ul>
+</div>";
 
 $dateNow = date("d-m-Y / H:i:s",time());
 $nameTools = $langUsage;
@@ -82,5 +84,3 @@ if (isset($_POST['u_analyze']) && isset($_POST['user_id']) && $_POST['user_id'] 
 }
 add_units_navigation(TRUE);
 draw($tool_content, 2, 'usage', $local_head, '');
-
-?>
