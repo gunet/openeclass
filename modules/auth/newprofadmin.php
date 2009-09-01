@@ -43,6 +43,7 @@ if($submit) {
 	$password = isset($_POST['password'])?$_POST['password']:'';
 	$email_form = isset($_POST['email_form'])?$_POST['email_form']:'';
 	$depid = intval(isset($_POST['department'])?$_POST['department']: 0);
+	$comment = isset($_POST['comment'])?$_POST['comment']:'';
 	$proflanguage = isset($_POST['language'])?$_POST['language']:'';
 	if (!isset($native_language_names[$proflanguage])) {
 		$proflanguage = langname_to_code($language);
@@ -67,13 +68,13 @@ if($submit) {
 		$expires_at = time() + $durationAccount;
 		$password_encrypted = md5($password);
 		$inscr_user=db_query("INSERT INTO `$mysqlMainDb`.user
-				(nom, prenom, username, password, email, statut, department, registered_at, expires_at,lang)
+				(nom, prenom, username, password, email, statut, department, am, registered_at, expires_at,lang)
 				VALUES (" .
 				autoquote($nom_form) . ', ' .
 				autoquote($prenom_form) . ', ' .
 				autoquote($uname) . ", '$password_encrypted', " .
 				autoquote($email_form) .
-				", $pstatut, $depid, $registered_at, $expires_at, '$proflanguage')");
+				", $pstatut, $depid, " . autoquote($comment) . ", $registered_at, $expires_at, '$proflanguage')");
 		$last_id = mysql_insert_id();
 
 		// close request
@@ -116,13 +117,14 @@ $langEmail : $emailAdministrator
 } else {
         $lang = false;
 	if (isset($id)) { // if we come from prof request
-		$res = mysql_fetch_array(db_query("SELECT profname,profsurname, profuname, profemail, proftmima, lang, statut 
+		$res = mysql_fetch_array(db_query("SELECT profname, profsurname, profuname, profemail, proftmima, comment, lang, statut 
 			FROM prof_request WHERE rid='$id'"));
 		$ps = $res['profsurname'];
 		$pn = $res['profname'];
 		$pu = $res['profuname'];
 		$pe = $res['profemail'];
 		$pt = $res['proftmima'];
+		$pcom = $res['comment'];
 		$lang = $res['lang'];
                 $pstatut = $res['statut'];
 	} elseif (@$_GET['type'] == 'user') {
@@ -130,7 +132,7 @@ $langEmail : $emailAdministrator
         } else {
                 $pstatut = 1;
         }
-                
+
         if ($pstatut == 5) {
                 $nameTools = $langNewUser;
                 $title = $langNewUser;
@@ -181,7 +183,11 @@ $langEmail : $emailAdministrator
 	}
 	$tool_content .= "</td>
 	</tr>
-		<tr>
+	<tr>
+	<th class='left'><b>$langAm</b></th>
+	<td><input class='FormData_InputText' type='text' name='comment' value='".@$pcom."'>&nbsp;</b></td>
+	</tr>
+	<tr>
 	<th class='left'>$langLanguage</th>
 	<td>";
 		$tool_content .= lang_select_options('language', '', $lang);
