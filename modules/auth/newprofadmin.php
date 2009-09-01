@@ -185,7 +185,7 @@ $langEmail : $emailAdministrator
 	</tr>
 	<tr>
 	<th class='left'><b>$langAm</b></th>
-	<td><input class='FormData_InputText' type='text' name='comment' value='".@$pcom."'>&nbsp;</b></td>
+	<td><input class='FormData_InputText' type='text' name='comment' value='".@q($pcom)."'>&nbsp;</b></td>
 	</tr>
 	<tr>
 	<th class='left'>$langLanguage</th>
