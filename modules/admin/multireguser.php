@@ -30,11 +30,26 @@ if (isset($_POST['submit'])) {
                 if (!empty($line)) {
                         $user = preg_split('/\s+/', $line);
                         if (count($user) >= 2) {
+                                /* Email processing
                                 if (!isset($user[2]) or
                                     !email_seems_valid($user[2])) {
                                         // If no valid e-mail given, use empty string
-                                        $user[2] = '';
+                                        $email = '';
+                                } else {
+                                        $email = $user[2];
+                                } */
+                                $email = '';
+
+                                /* AM / Symplhrwmatika stoixeia */
+                                if (empty($am)) {
+                                        $user_am = $am;
+                                } else {
+                                        $user_am = $user[2] . ' - ' . $am;
                                 }
+
+                                /* Phone */
+                                $phone = $user[3];
+
                                 $uname = create_username($newstatut,
                                                          $facid,
                                                          $nom,
@@ -44,13 +59,14 @@ if (isset($_POST['submit'])) {
                                                    $uname,
                                                    $user[1],
                                                    $user[0],
-                                                   $user[2],
+                                                   $email,
                                                    $facid,
-                                                   $am,
+                                                   $user_am,
+                                                   $phone,
                                                    $_POST['lang'],
                                                    $send_mail);
                                 $info[] = $new;
-                                for ($i = 3; $i < count($user); $i++) {
+                                for ($i = 4; $i < count($user); $i++) {
                                         if (!register($new[0], $user[$i])) {
                                                 $unparsed_lines .=
                                                         sprintf($langMultiRegCourseInvalid . "\n",
@@ -67,9 +83,9 @@ if (isset($_POST['submit'])) {
         if (!empty($unparsed_lines)) {
                 $tool_content .= "<p><b>$langErrors</b></p><pre>$unparsed_lines</pre>";
         }
-        $tool_content .= "<table><tr><th>$langSurname</th><th>$langName</th><th>e-mail</th><th>username</th><th>password</th></tr>\n";
+        $tool_content .= "<table><tr><th>$langSurname</th><th>$langName</th><th>e-mail</th><th>$langPhone</th><th>$langAm</th><th>username</th><th>password</th></tr>\n";
         foreach ($info as $n) {
-                $tool_content .= "<tr><td>$n[1]</td><td>$n[2]</td><td>$n[3]</td><td>$n[4]</td><td>$n[5]</td></tr>\n";
+                $tool_content .= "<tr><td>$n[1]</td><td>$n[2]</td><td>$n[3]</td><td>$n[4]</td><td>$n[5]</td><td>$n[6]</td><td>$n[7]</td></tr>\n";
         }
         $tool_content .= "</table>\n";
 } else {
@@ -82,7 +98,7 @@ if (isset($_POST['submit'])) {
 <table class='FormData'>
 <tr><th>$langUsersData</th>
     <td><textarea class='auth_input' name='user_info' rows='10' cols='60'>
-#  $langName   $langSurname   [e-mail]   [$langLessonCode...]\n</textarea></td>
+# $langName $langSurname [$langAm] [$langPhone] [$langLessonCode...]\n</textarea></td>
 </tr>
 <tr><th>$langMultiRegType</th>
     <td><select name='type'>
@@ -115,7 +131,7 @@ if (isset($_POST['submit'])) {
 draw($tool_content,3,'admin');
 
 
-function create_user($statut, $uname, $nom, $prenom, $email, $depid, $am, $lang, $send_mail)
+function create_user($statut, $uname, $nom, $prenom, $email, $depid, $am, $phone, $lang, $send_mail)
 {
         global $charset, $mysqlMainDb, $langAsUser, $langAsProf,
                $langYourReg, $siteName, $langDestination, $langYouAreReg,
@@ -140,7 +156,7 @@ function create_user($statut, $uname, $nom, $prenom, $email, $depid, $am, $lang,
         $password_encrypted = md5($password);
 
         $req = db_query("INSERT INTO user
-                                (nom, prenom, username, password, email, statut, department, registered_at, expires_at, lang, am)
+                                (nom, prenom, username, password, email, statut, department, registered_at, expires_at, lang, am, phone)
                         VALUES (" .
 				autoquote($nom) . ', ' .
 				autoquote($prenom) . ', ' .
@@ -148,7 +164,8 @@ function create_user($statut, $uname, $nom, $prenom, $email, $depid, $am, $lang,
 				autoquote($email) .
 				", $statut, $depid, " .
                                 "$registered_at, $expires_at, '$lang', " .
-                                autoquote($am) . ')');
+                                autoquote($am) . ', ' .
+                                autoquote($phone) . ')');
         $id = mysql_insert_id();
 
         $emailsubject = "$langYourReg $siteName $type_message";
@@ -169,7 +186,7 @@ $langEmail : $emailAdministrator
                 send_mail('', '', '', $email, $emailsubject, $emailbody, $charset);
         }
 
-        return array($id, $nom, $prenom, $email, $uname, $password);
+        return array($id, $nom, $prenom, $email, $phone, $am, $uname, $password);
 }
 
 function create_username($statut, $depid, $nom, $prenom, $prefix)
