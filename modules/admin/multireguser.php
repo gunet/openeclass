@@ -43,7 +43,7 @@ if (isset($_POST['submit'])) {
                                 if (empty($am)) {
                                         $user_am = $am;
                                 } else {
-                                        $user_am = $user[2] . ' - ' . $am;
+                                        $user_am = $am . ' - ' . $user[2];
                                 }
 
                                 /* Phone */
