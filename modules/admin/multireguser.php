@@ -30,15 +30,14 @@ if (isset($_POST['submit'])) {
                 if (!empty($line)) {
                         $user = preg_split('/\s+/', $line);
                         if (count($user) >= 2) {
-                                /* Email processing
-                                if (!isset($user[2]) or
-                                    !email_seems_valid($user[2])) {
+                                /* Email processing */
+                                if (!isset($user[3]) or
+                                    !email_seems_valid($user[3])) {
                                         // If no valid e-mail given, use empty string
                                         $email = '';
                                 } else {
-                                        $email = $user[2];
-                                } */
-                                $email = '';
+                                        $email = $user[3];
+                                }
 
                                 /* AM / Symplhrwmatika stoixeia */
                                 if (empty($am)) {
@@ -48,7 +47,7 @@ if (isset($_POST['submit'])) {
                                 }
 
                                 /* Phone */
-                                $phone = $user[3];
+                                $phone = $user[4];
 
                                 $uname = create_username($newstatut,
                                                          $facid,
@@ -66,7 +65,7 @@ if (isset($_POST['submit'])) {
                                                    $_POST['lang'],
                                                    $send_mail);
                                 $info[] = $new;
-                                for ($i = 4; $i < count($user); $i++) {
+                                for ($i = 5; $i < count($user); $i++) {
                                         if (!register($new[0], $user[$i])) {
                                                 $unparsed_lines .=
                                                         sprintf($langMultiRegCourseInvalid . "\n",
@@ -98,7 +97,7 @@ if (isset($_POST['submit'])) {
 <table class='FormData'>
 <tr><th>$langUsersData</th>
     <td><textarea class='auth_input' name='user_info' rows='10' cols='60'>
-# $langName $langSurname [$langAm] [$langPhone] [$langLessonCode...]\n</textarea></td>
+# $langName $langSurname [$langAm] [$langEmail] [$langPhone] [$langLessonCode...]\n</textarea></td>
 </tr>
 <tr><th>$langMultiRegType</th>
     <td><select name='type'>
