@@ -91,40 +91,40 @@ while ($myGroup = mysql_fetch_array($resultGroup))
 	if ($is_adminOfCourse or $is_tutor)
 	{
 		$tool_content .= "
-    <div id=\"operations_container\">
-      <ul id=\"opslist\">
-        <li><a href=\"group_edit.php?userGroupId=$userGroupId\">$langEditGroup</a></li>";
+    <div id='operations_container'>
+      <ul id='opslist'>
+        <li><a href='group_edit.php?userGroupId=$userGroupId'>$langEditGroup</a></li>";
 	}
 	elseif(isset($selfReg) AND ($uid))
 	{
 		$tool_content .=  "
-    <div id=\"operations_container\">
-      <ul id=\"opslist\">
-        <li><a href=\"$_SERVER[PHP_SELF]?registration=1\">$langRegIntoGroup</a></li>";
+    <div id='operations_container'>
+      <ul id='opslist'>
+        <li><a href='$_SERVER[PHP_SELF]?registration=1&amp;userGroupId=$userGroupId'>$langRegIntoGroup</a></li>";
 	}
 	elseif(isset($regDone))
 	{
 			$tool_content .= "
-    <div id=\"operations_container\">
-      <ul id=\"opslist\">";
+    <div id='operations_container'>
+      <ul id='opslist'>";
 
 			$tool_content .= "$message&nbsp;";
 	} else {
 			$tool_content .= "
-    <div id=\"operations_container\">
-      <ul id=\"opslist\">";
+    <div id='operations_container'>
+      <ul id='opslist'>";
 	}
 	$tool_content .= loadGroupTools();
 	$tool_content .=  "
     <br />
-    <table width=\"99%\" class=\"FormData\">
+    <table width='99%' class='FormData'>
     <thead>
     <tr>
-      <th width=\"220\">&nbsp;</th>
+      <th width='220'>&nbsp;</th>
       <td><b>$langGroupInfo</b></td>
     </tr>
     <tr>
-      <th class=\"left\">$langGroupName :</th>
+      <th class='left'>$langGroupName :</th>
       <td>$myGroup[name]</td>
     </tr>";
 
