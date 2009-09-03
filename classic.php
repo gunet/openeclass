@@ -42,7 +42,7 @@ $tool_content .= " ";
 $result2 = mysql_query("SELECT cours.code k, cours.fake_code c,
 	cours.intitule i, cours.titulaires t, cours_user.statut s
 	FROM cours, cours_user WHERE cours.code=cours_user.code_cours AND cours_user.user_id='".$uid."'
-	AND (cours_user.statut='5' OR cours_user.statut='10')");
+	AND (cours_user.statut='5' OR cours_user.statut='10') ORDER BY cours.intitule, cours.titulaires");
 if (mysql_num_rows($result2) > 0) {
     $tool_content .= "\n<table width=99%>";
     $tool_content .= "\n<tr>";
@@ -98,7 +98,7 @@ while ($mycours = mysql_fetch_array($result2)) {
 
 // second case check in which courses are registered as a professeror
      $result2 = mysql_query("SELECT cours.code k, cours.fake_code c, cours.intitule i, cours.titulaires t, cours_user.statut s FROM cours, cours_user WHERE cours.code=cours_user.code_cours
-		AND cours_user.user_id='".$uid."' AND cours_user.statut='1'");
+		AND cours_user.user_id='".$uid."' AND cours_user.statut='1' ORDER BY cours.intitule, cours.titulaires");
         if (mysql_num_rows($result2) > 0) {
     $tool_content .= "\n<table width=99%>";
     $tool_content .= "\n<tr>";

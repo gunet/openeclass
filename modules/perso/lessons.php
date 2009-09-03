@@ -64,10 +64,11 @@ function  getUserLessonInfo($uid, $type)
 	                                           user.announce_flag,
 	                                           user.doc_flag,
 	                                           user.forum_flag
-	                                   FROM    cours, cours_user, user
+	                                  FROM    cours, cours_user, user
 	                                  WHERE cours.code = cours_user.code_cours
 	                                  AND   cours_user.user_id = '".$uid."'
-	                                  AND   user.user_id = '".$uid."'
+	                                  AND   user.user_id = '".$uid."' 
+					  ORDER BY cours.intitule, cours.titulaires
 	                                  ";
 
 	$mysql_query_result = db_query($user_courses, $mysqlMainDb);
