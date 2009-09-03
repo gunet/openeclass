@@ -77,21 +77,19 @@ $sql = "SELECT U.`nom`, U.`prenom`, U.`user_id`
 $usersList = get_limited_list($sql, 30);
 
 // display tab header
-$tool_content .= '<table width="99%" class="LearnPathSum">'."\n"
-	.'      <thead>'."\n"
-	.'      <tr>'."\n"
-	.'        <th class="left">&nbsp;</th>'."\n"
-	.'        <th class="left"><div align="left">'.$langStudent.'</div></th>'."\n"
-	.'        <th colspan="2" width="30%"><div align="center">'.$langProgress.'&nbsp;&nbsp;</div></th>'."\n"
-	.'      </tr>'."\n"
-	.'      </thead>'."\n\n"
-	.'      <tbody>'."\n";
+$tool_content .= "<table width='99%' class='LearnPathSum'><thead><tr>
+		<th class='left'>&nbsp;</th>
+		<th class='left'><div align='left'>$langStudent</div></th>
+		<th class='left'>$langAm</th>
+		<th width='15%' align='center'>$langGroup</th>
+		<th colspan='2' width='30%'><div align='center'>$langProgress&nbsp;&nbsp;</div></th>
+		</tr></thead><tbody>";
 
 mysql_select_db($currentCourseID);
 
 // display tab content
 $k=0;
-foreach ( $usersList as $user )
+foreach ($usersList as $user)
 {
 	// list available learning paths
 	$sql = "SELECT LP.`learnPath_id` FROM `".$TABLELEARNPATH."` AS LP";
@@ -100,11 +98,11 @@ foreach ( $usersList as $user )
 
 	$iterator = 1;
 	$globalprog = 0;
-		if ($k%2==0) {
-	       $tool_content .= "\n    <tr>";
-	    } else {
-	       $tool_content .= "\n    <tr class=\"odd\">";
-        }
+	if ($k%2 == 0) {
+		$tool_content .= "\n    <tr>";
+	} else {
+		$tool_content .= "\n    <tr class=\"odd\">";
+	}
 	foreach($learningPathList as $learningPath)
 	{
 		// % progress
@@ -117,21 +115,21 @@ foreach ( $usersList as $user )
 	}
 	if($iterator == 1)
 	{
-		$tool_content .= '        <td align="center" colspan="8">'.$langNoLearningPath.'</td>
-      </tr>'."\n";
+		$tool_content .= '<td align="center" colspan="8">'.$langNoLearningPath.'</td></tr>'."\n";
 	}
 	else
 	{
 		$total = round($globalprog/($iterator-1));
-
 		$tool_content .= ''."\n"
 		.'        <td width="1"><img src="../../template/classic/img/arrow_grey.gif" alt="bullet" title="bullet" border="0"></td>'."\n"
 		.'        <td><a href="detailsUser.php?uInfo='.$user['user_id'].'">'.$user['nom'].' '.$user['prenom'].'</a></td>'."\n"
-		.'        <td align="right">'
+		.'<td>'.uid_to_am($user['user_id']).'</td>'
+		.'<td align="center">'.user_group($user['user_id']).'</td>'
+		.'<td align="right">'
 		.disp_progress_bar($total, 1)
-		.'        </td>'."\n"
-		.'        <td align="left"><small>'.$total.'%</small></td>'."\n"
-		.'      </tr>'."\n";
+		.'</td>'."\n"
+		.'<td align="left"><small>'.$total.'%</small></td>'."\n"
+		.'</tr>'."\n";
 	}
 	$k++;
 }

@@ -65,8 +65,10 @@ $local_style = '
 
 $tool_content .= "<table class='FormData' width='99%' align='left'><tbody>
 	<tr>
-	<th width='220' class='left'>$langSurname $langName</th>
-	<th>$langDuration</th>
+	<th width='40%' class='left'>$langSurname $langName</th>
+	<th width='30%'>$langAm</th>
+	<th>$langGroup</th>
+	<th width='10%'>$langDuration</th>
 	</tr>
 	</thead>
 	<tbody>";
@@ -92,6 +94,8 @@ while ($row = mysql_fetch_assoc($result)) {
 		$i++;
 		$tool_content .= "<td width='70%'><img style='border:0px; padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif'>
 		" .uid_to_name($user_id) . "</td>
+		<td>" . uid_to_am($user_id) . "</td>
+		<td align='center'>" . user_group($user_id) . "</td>
 		<td>" . format_time_duration(0 + $time) . "</td></tr>";
 	}
 }
