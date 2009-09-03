@@ -192,31 +192,24 @@ while ($myStudentGroup = mysql_fetch_array($groupSelect))
         if ($is_adminOfCourse) {
                 // SELECT TUTORS
                 $tool_content_tutor = '<select name="tutor" class="FormData_InputText">';
-                $resultTutor=db_query("SELECT user.user_id, user.nom, user.prenom
+                $resultTutor=db_query("SELECT user.user_id, user.nom, user.prenom, user.username
                         FROM `$mysqlMainDb`.user, `$mysqlMainDb`.cours_user
                                 WHERE cours_user.user_id=user.user_id
                                 AND cours_user.tutor='1'
-                                AND cours_user.code_cours='$currentCourse'");
-                $tutorExists=0;
+                                AND cours_user.code_cours='$currentCourse'
+                        ORDER BY nom, prenom, username");
+                $none_selected = 'selected="1"';
                 while ($myTutor = mysql_fetch_array($resultTutor)) {
                         //  Present tutor appears first in select box
                         if($myStudentGroup['tutor']==$myTutor['user_id']) {
-                                $tutorExists=1;
-                                $tool_content_tutor .= "<option selected='1' value='$myTutor[user_id]'>
-                                        $myTutor[nom] $myTutor[prenom]
-                                        </option>";
+                                $none_selected = '';
+                                $selected = 'selected="1"';
                         } else {
-                                $tool_content_tutor .= "
-                                        <option value='$myTutor[user_id]'>
-                                                $myTutor[nom] $myTutor[prenom]
-                                        </option>";
+                                $selected = '';
                         }
+                        $tool_content_tutor .= "<option $selected value='$myTutor[user_id]'>$myTutor[nom] $myTutor[prenom] ($myTutor[username])</option>";
                 }
-                if($tutorExists==0) {
-                        $tool_content_tutor .=  "<option selected='1' value='0'>$langGroupNoTutor</option>";
-                } else {
-                        $tool_content_tutor .=  "<option value='0'>$langGroupNoTutor</option>";
-                }
+                $tool_content_tutor .=  "<option $none_selected value='0'>$langGroupNoTutor</option>";
                 $tool_content_tutor .= '</select>';
                 $element1 = 4;
                 $element2 = 7;
