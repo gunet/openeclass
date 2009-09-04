@@ -53,6 +53,7 @@ $tool_content .= "
       <li><a href='usage.php'>".$langUsageVisits."</a></li>
       <li><a href='favourite.php?first='>".$langFavourite."</a></li>
       <li><a href='userduration.php'>".$langUserDuration."</a></li>
+      <li>$langDumpUserDurationToFile&nbsp;(<a href='dumpuserduration.php'>$langCodeUTF</a>&nbsp;<a href='dumpuserduration.php?enc=1253'>$langCodeWin</a>)</li>
     </ul>
   </div>";
 

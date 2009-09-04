@@ -76,6 +76,15 @@ $sql = "SELECT U.`nom`, U.`prenom`, U.`user_id`
 @$tool_content .= get_limited_page_links($sql, 30, $langPreviousPage, $langNextPage);
 $usersList = get_limited_list($sql, 30);
 
+$tool_content .= "<table width='99%' align='left' class='Users_Operations'>
+	<thead><tr>
+	<td>&nbsp;<b>$langDumpUserDurationToFile:</b>
+        &nbsp;&nbsp;1.&nbsp;<a href='dumpuserlearnpathdetails.php'>$langcsvenc2</a>
+        &nbsp;&nbsp;2.&nbsp;<a href='dumpuserlearnpathdetails.php?enc=1253'>$langcsvenc1</a>
+        </td></tr>
+	</thead>
+	</table>";
+	
 // display tab header
 $tool_content .= "<table width='99%' class='LearnPathSum'><thead><tr>
 		<th class='left'>&nbsp;</th>
