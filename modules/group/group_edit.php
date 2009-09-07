@@ -243,7 +243,7 @@ $sqll= "SELECT DISTINCT u.user_id , u.nom, u.prenom
 			AND cu.code_cours='$currentCourse'
 			AND cu.user_id=u.user_id
 			AND cu.statut=5
-			AND cu.tutor=0";
+			AND cu.tutor=0 ORDER BY u.nom, u.prenom";
 
 $tool_content_not_Member="";
 $resultNotMember=db_query($sqll, $currentCourseID);
