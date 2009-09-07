@@ -247,13 +247,9 @@ $sqll= "SELECT DISTINCT u.user_id , u.nom, u.prenom
 
 $tool_content_not_Member="";
 $resultNotMember=db_query($sqll, $currentCourseID);
-while ($myNotMember = mysql_fetch_array($resultNotMember))
-{
-	$tool_content_not_Member .=  "<option value=\"$myNotMember[user_id]\">
-		$myNotMember[prenom] $myNotMember[nom]
-	</option>";
-
-}	// while loop
+while ($myNotMember = mysql_fetch_array($resultNotMember)) {
+	$tool_content_not_Member .= "<option value='$myNotMember[user_id]'>$myNotMember[nom] $myNotMember[prenom]</option>";
+}
 
 $resultMember=db_query("SELECT user_group.id, user.user_id, user.nom, user.prenom, user.email
 	FROM `$mysqlMainDb`.user, user_group
@@ -264,7 +260,7 @@ $tool_content_group_members = "";
 while ($myMember = mysql_fetch_array($resultMember))
 	{
 	$userIngroupId=$myMember['user_id'];
- 	$tool_content_group_members .=  "<option value='$userIngroupId'>$myMember[prenom] $myMember[nom]</option>";
+ 	$tool_content_group_members .=  "<option value='$userIngroupId'>$myMember[nom] $myMember[prenom]</option>";
 	$a++;
 }
 
