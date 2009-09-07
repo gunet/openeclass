@@ -64,7 +64,7 @@ include(getcwd() . "/modules/perso/forumPosts.php");
 //	BEGIN Get user's last login date]==============================================
 
 $last_login_query = 	"SELECT  `id_user` ,  `when` ,  `action`
-			FROM  $mysqlMainDb.loginout
+			FROM  `$mysqlMainDb`.loginout
 			WHERE  `action`  =  'LOGIN' AND  `id_user`  = $uid
 			ORDER BY  `when`  DESC
 			LIMIT 1,1 ";

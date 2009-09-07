@@ -174,7 +174,7 @@ if (mysql_num_rows(db_query($sql, $mysqlMainDb)) > 0) {
 			AND DATE_SUB(DATE_FORMAT('".$logindate."','%Y-%m-%d'), INTERVAL 10 DAY)
 			<= DATE_FORMAT(temps,'%Y-%m-%d')
 			AND `$c[k]`.accueil.visible =1
-			AND `$c[k]`.accueil.id =7", `$mysqlMainDb`);
+			AND `$c[k]`.accueil.id =7", $mysqlMainDb);
 		if (mysql_num_rows($result) > 0) $found++;
 	}
 // if announcements found then display them
