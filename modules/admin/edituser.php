@@ -70,7 +70,7 @@ if((!empty($u)) && ctype_digit($u) )	// validate the user id
 	$u = (int)$u;
 	if(empty($u_submitted)) // if the form was not submitted
 	{
-		$sql = mysql_query("SELECT nom, prenom, username, password, email, phone, department, registered_at, expires_at, statut FROM user WHERE user_id = '$u'");
+		$sql = mysql_query("SELECT nom, prenom, username, password, email, phone, department, registered_at, expires_at, statut, am FROM user WHERE user_id = '$u'");
 		$info = mysql_fetch_array($sql);
 		$tool_content .= "
   <div id=\"operations_container\">
@@ -85,27 +85,27 @@ if((!empty($u)) && ctype_digit($u) )	// validate the user id
     </ul>
   </div>";
 		$tool_content .= "
-<form name=\"edituser\" method=\"post\" action=\"$_SERVER[PHP_SELF]\">
-  <table class=\"FormData\" width=\"99%\" align=\"left\">
+<form name='edituser' method='post' action='$_SERVER[PHP_SELF]'>
+  <table class='FormData' width='99%' align='left'>
   <tbody>
   <tr>
-    <th width=\"220\">&nbsp;</th>
-    <td><b>$langEditUser $info[2]</b></td>
+    <th width='220'>&nbsp;</th>
+    <td><b>$langEditUser ".q($info[2])."</b></td>
   </tr>
   <tr>
-    <th class=\"left\">$langSurname:</th>
-    <td><input type=\"text\" name=\"lname\" size=\"40\" value=\"".$info[0]."\"</td>
+    <th class='left'>$langSurname:</th>
+    <td><input type='text' name='lname' size='50' value='".q($info[0])."'</td>
   </tr>
   <tr>
-    <th class=\"left\">$langName:</th>
-	<td><input type=\"text\" name=\"fname\" size=\"40\" value=\"".$info[1]."\"</td>
+    <th class='left'>$langName:</th>
+	<td><input type='text' name='fname' size='50' value='".q($info[1])."'</td>
   </tr>";
 
 if(!in_array($info['password'], $authmethods)) {
 		$tool_content .= "
   <tr>
-    <th class=\"left\">$langUsername:</th>
-    <td><input type=\"text\" name=\"username\" size=\"30\" value=\"".$info[2]."\"</td>
+    <th class='left'>$langUsername:</th>
+    <td><input type='text' name='username' size='50' value='".q($info[2])."'</td>
   </tr>";
 	}
   else    // means that it is external auth method, so the user cannot change this password
@@ -121,24 +121,28 @@ if(!in_array($info['password'], $authmethods)) {
     $auth_text = get_auth_info($auth);
     $tool_content .= "
   <tr>
-    <th class=\"left\">".$langUsername. "</th>
-    <td class=\"caution_small\">&nbsp;&nbsp;&nbsp;&nbsp;<b>".$info[2]."</b> [".$auth_text."]
-        <input type=\"hidden\" name=\"username\" value=\"$info[2]\">
+    <th class='left'>".$langUsername. "</th>
+    <td class='caution_small'>&nbsp;&nbsp;&nbsp;&nbsp;<b>".q($info[2])."</b> [".$auth_text."]
+        <input type='hidden' name='username' value='".q($info[2])."'>
     </td>
   </tr>";
  }
 
 $tool_content .= "
   <tr>
-    <th class=\"left\">e-mail: </th>
-    <td><input type=\"text\" name=\"email\" size=\"50\" value=\"".$info[4]."\"</td>
+    <th class='left'>e-mail: </th>
+    <td><input type='text' name='email' size='50' value='".q($info[4])."'</td>
+  </tr>
+  <tr>
+    <th class='left'>$langAm: </th>
+    <td><input type='text' name='am' size='50' value='".q($info['am'])."'</td>
   </tr>
  <tr>
-   <th class=\"left\">$langTel: </th>
-   <td><input type=\"text\" name=\"phone\" size=\"30\" value=\"".$info[5]."\"</td>
+   <th class='left'>$langTel: </th>
+   <td><input type='text' name='phone' size='50' value='".q($info[5])."'</td>
   </tr>";
 	$tool_content .= "<tr>
-    <th class=\"left\">$langDepartment:</th>
+    <th class='left'>$langDepartment:</th>
     <td>";
 		if(!empty($info[6])) {
 			$department_select_box = list_departments($info[6]);
@@ -291,6 +295,7 @@ $tool_content .= "
 		$username = preg_replace('/\ +/', ' ', trim(isset($_POST['username'])?$_POST['username']:''));
 		$email = isset($_POST['email'])?$_POST['email']:'';
 		$phone = isset($_POST['phone'])?$_POST['phone']:'';
+		$am = isset($_POST['am'])?$_POST['am']:'';
 		$department = isset($_POST['department'])?$_POST['department']:'NULL';
 		$newstatut = isset($_POST['newstatut'])?$_POST['newstatut']:'NULL';
 		$registered_at = isset($_POST['registered_at'])?$_POST['registered_at']:'';
@@ -328,26 +333,26 @@ if (mysql_num_rows($username_check) > 1) {
   }
 		if($registered_at>$expires_at) {
 			$tool_content .= "<center><br><b>$langExpireBeforeRegister<br><br><a href=\"edituser.php?u=".$u."\">$langAgain</a></b><br />";
-		} else	{
+		} else {
 			if ($u=='1') $department = 'NULL';
-			$username = escapeSimple($username);
-			$sql = "UPDATE user SET nom='".$lname."', prenom='".$fname."',
-				username='".$username."', email='".$email."', 
-				statut = '".$newstatut."', phone='".$phone."',
-				department=".$department.", expires_at=".$expires_at." WHERE user_id = '".$u."'";
-				$qry = mysql_query($sql);
-				if (!$qry)
-					$tool_content .= "$langNoUpdate:".$u."!";
-				else
-				{
-					$num_update = mysql_affected_rows();
-					if($num_update==1)
-						$tool_content .= "<center><br><b>$langSuccessfulUpdate</b><br><br>";
-					else
-						$tool_content .= "<center><br><b>$langUpdateNoChange</b><br><br>";
-				$tool_content .= "<a href='listusers.php'>$langBack</a></center>";
-			 }
-		}
+			$sql = "UPDATE user SET nom = ".autoquote($lname).", prenom = ".autoquote($fname).",
+				username = ".autoquote($username).", email = ".autoquote($email).", 
+				statut = ".intval($newstatut).", phone=".autoquote($phone).",
+				department = ".intval($department).", expires_at=".$expires_at.",
+                                am = ".autoquote($am)." WHERE user_id = ".intval($u);
+			$qry = db_query($sql);
+                        if (!$qry) {
+                                $tool_content .= "$langNoUpdate:".$u."!";
+                        } else {
+                                $num_update = mysql_affected_rows();
+                                if ($num_update == 1) {
+                                        $tool_content .= "<center><br /><b>$langSuccessfulUpdate</b><br><br />";
+                                } else {
+                                        $tool_content .= "<center><br /><b>$langUpdateNoChange</b><br><br />";
+                                }
+                        }
+                        $tool_content .= "<a href='listusers.php'>$langBack</a></center>";
+                }
 	}
 }
 else
