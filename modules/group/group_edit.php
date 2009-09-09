@@ -134,8 +134,6 @@ function checkrequired(which, entry) {
 </script>
 hCont;
 
-################### IF MODIFY #######################################
-
 // Once modifications have been done, the user validates and arrives here
 if (isset($modify))
 {
@@ -147,8 +145,8 @@ if (isset($modify))
 		SET name='$name', description='$description', maxStudent='$maxStudent', tutor='$tutor'
 		WHERE id='$userGroupId'", $currentCourseID);
 
-	if (isset($forumId))
-		db_query("UPDATE forums SET forum_name='$name' WHERE forum_id='$forumId'", $currentCourseID);
+	db_query("UPDATE forums SET forum_name='$name' 
+		  WHERE forum_id=(SELECT forumId FROM student_group WHERE id=$userGroupId)", $currentCourseID);
 
 	// Count number of members
 	$numberMembers = @count($ingroup);
@@ -232,9 +230,7 @@ while ($myStudentGroup = mysql_fetch_array($groupSelect))
 
 ################### STUDENTS IN AND OUT GROUPS #######################
 
-
 // Student registered to the course but inserted in no group
-
 $sqll= "SELECT DISTINCT u.user_id , u.nom, u.prenom
 			FROM (`$mysqlMainDb`.user u, `$mysqlMainDb`.cours_user cu)
 			LEFT JOIN user_group ug
@@ -264,7 +260,6 @@ while ($myMember = mysql_fetch_array($resultMember))
 	$a++;
 }
 
-//========================================================================
 	if (isset($message)) {
 		$tool_content .= "
         <p class=\"success_small\">$message</p>

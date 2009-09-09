@@ -38,7 +38,8 @@ $nameTools = $langOrganisation;
 $navigation[]= array ("url"=>"../phpbb/index.php", "name"=> $langForums);
 
 $tool_content = $head_content = "";
-
+$forum_id = intval(@$_REQUEST['forum_id']);
+$cat_id = intval(@$_REQUEST['cat_id']);
 if($is_adminOfCourse) {
 
 $head_content .= '
@@ -294,6 +295,7 @@ if(isset($forumgo)) {
 	$navigation[]= array ("url"=>"../forum_admin/forum_admin.php", "name"=> $langOrganisation);
 		db_query("delete from topics where forum_id=$forum_id", $currentCourseID);
 		db_query("delete from forums where forum_id=$forum_id", $currentCourseID);
+		db_query("UPDATE student_group SET forumId=0 WHERE forumId=$forum_id", $currentCourseID);
 		$tool_content .= "\n<p class=\"success_small\">$langForumDelete<br /><a href=\"$_SERVER[PHP_SELF]?forumgo=yes&ctg=$ctg&cat_id=$cat_id\">$langBack</a></p>";
 	} else {
 		$tool_content .= "<form action=\"$_SERVER[PHP_SELF]?forumadmin=yes\" method=post></td><tr><td>";

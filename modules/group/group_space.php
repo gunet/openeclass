@@ -252,7 +252,7 @@ function loadGroupTools(){
 		while ($myProperties = mysql_fetch_array($resultProperties))
 		{
 			// Drive members into their own forum
-			if($myProperties['forum'] == 1){
+			if($myProperties['forum'] == 1 and $forumId <> 0){
 				$group_tools .= "
       <li><a href='../phpbb/viewforum.php?forum=$forumId'>$langForums</a></li>";
 			}
