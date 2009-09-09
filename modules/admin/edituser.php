@@ -94,18 +94,18 @@ if((!empty($u)) && ctype_digit($u) )	// validate the user id
   </tr>
   <tr>
     <th class='left'>$langSurname:</th>
-    <td><input type='text' name='lname' size='50' value='".q($info[0])."'</td>
+    <td><input type='text' name='lname' size='50' value='".q($info['nom'])."'</td>
   </tr>
   <tr>
     <th class='left'>$langName:</th>
-	<td><input type='text' name='fname' size='50' value='".q($info[1])."'</td>
+	<td><input type='text' name='fname' size='50' value='".q($info['prenom'])."'</td>
   </tr>";
 
 if(!in_array($info['password'], $authmethods)) {
 		$tool_content .= "
   <tr>
     <th class='left'>$langUsername:</th>
-    <td><input type='text' name='username' size='50' value='".q($info[2])."'</td>
+    <td><input type='text' name='username' size='50' value='".q($info['username'])."'</td>
   </tr>";
 	}
   else    // means that it is external auth method, so the user cannot change this password
@@ -122,8 +122,8 @@ if(!in_array($info['password'], $authmethods)) {
     $tool_content .= "
   <tr>
     <th class='left'>".$langUsername. "</th>
-    <td class='caution_small'>&nbsp;&nbsp;&nbsp;&nbsp;<b>".q($info[2])."</b> [".$auth_text."]
-        <input type='hidden' name='username' value='".q($info[2])."'>
+    <td class='caution_small'>&nbsp;&nbsp;&nbsp;&nbsp;<b>".q($info['username'])."</b> [".$auth_text."]
+        <input type='hidden' name='username' value='".q($info['username'])."'>
     </td>
   </tr>";
  }
@@ -131,7 +131,7 @@ if(!in_array($info['password'], $authmethods)) {
 $tool_content .= "
   <tr>
     <th class='left'>e-mail: </th>
-    <td><input type='text' name='email' size='50' value='".q($info[4])."'</td>
+    <td><input type='text' name='email' size='50' value='".q($info['email'])."'</td>
   </tr>
   <tr>
     <th class='left'>$langAm: </th>
@@ -139,36 +139,36 @@ $tool_content .= "
   </tr>
  <tr>
    <th class='left'>$langTel: </th>
-   <td><input type='text' name='phone' size='50' value='".q($info[5])."'</td>
+   <td><input type='text' name='phone' size='50' value='".q($info['phone'])."'</td>
   </tr>";
 	$tool_content .= "<tr>
     <th class='left'>$langDepartment:</th>
     <td>";
 		if(!empty($info[6])) {
-			$department_select_box = list_departments($info[6]);
+			$department_select_box = list_departments($info['department']);
 		} else {
 			$department_select_box = "";
 		}
 
 	$tool_content .= $department_select_box."</td></tr>";
-	$tool_content .= "<tr><th class=\"left\">$langProperty:</th></td><td>";
+	$tool_content .= "<tr><th class='left'>$langProperty:</th></td><td>";
 	if ($info[9] == '10') { // if we are guest user do not display selection
-		$tool_content .= selection(array(10 => $langGuest), 'newstatut', $info[9]);
+		$tool_content .= selection(array(10 => $langGuest), 'newstatut', $info['statut']);
 	} else {
-		$tool_content .= selection(array(1 => $langTeacher, 5 => $langStudent), 'newstatut', $info[9]);
+		$tool_content .= selection(array(1 => $langTeacher, 5 => $langStudent), 'newstatut', $info['statut']);
 	}
 	$tool_content .= "</td>";
 
 	$tool_content .= "<tr>
     <th class=\"left\">$langRegistrationDate:</th>
-    <td><span style=\"color:green;font-weight:bold;\">".date("j/n/Y H:i",$info[7])."</span></td>
+    <td><span style=\"color:green;font-weight:bold;\">".date("j/n/Y H:i",$info['registered_at'])."</span></td>
   </tr>
   <tr>
     <th class=\"left\">$langExpirationDate: </th>
     <td>";
-		$dateregistration = date("j-n-Y", $info[8]);
-		$hour = date("H", $info[8]);
-		$minute = date("i", $info[8]);
+		$dateregistration = date("j-n-Y", $info['expires_at']);
+		$hour = date("H", $info['expires_at']);
+		$minute = date("i", $info['expires_at']);
 
 // -- jscalendar ------
 		$start_cal = $jscalendar->make_input_field(
@@ -203,7 +203,7 @@ $tool_content .= "
     <td>
       <input type=\"hidden\" name=\"u\" value=\"".$u."\">
       <input type=\"hidden\" name=\"u_submitted\" value=\"1\">
-      <input type=\"hidden\" name=\"registered_at\" value=\"".$info[7]."\">
+      <input type=\"hidden\" name=\"registered_at\" value=\"".$info['registered_at']."\">
       <input type=\"submit\" name=\"submit_edituser\" value=\"$langModify\">
     </td>
   </tr>
