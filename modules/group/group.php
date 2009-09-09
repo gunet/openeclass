@@ -80,7 +80,6 @@ function confirmation (name)
 </script>
 ';
 }
-############## GROUP MODIFICATIONS ###############################
 
 // Group creation
 if(isset($_REQUEST['creation']) && $is_adminOfCourse) {
@@ -150,7 +149,6 @@ elseif (isset($_REQUEST['delete']) && $is_adminOfCourse)
 // Delete one group
 elseif (isset($_REQUEST['delete_one']) && $is_adminOfCourse)
 {
-
 	// Moving group directory to garbage collector
 	$groupGarbage=uniqid(20);
 	$sqlDir=db_query("SELECT secretDirectory, forumId FROM student_group WHERE id='$id'", $currentCourse);
@@ -348,61 +346,51 @@ tCont3;
 		$tool_content .= "</td>
     </tr>";
 	}	// while loop
-	$tool_content .= "
-    </tbody>
-    </table>
-    ";
+	$tool_content .= "</tbody></table>";
 
-
-
-	$groupSelect=db_query("SELECT id, name, maxStudent FROM student_group", $currentCourse);
+	$groupSelect=db_query("SELECT id, name, tutor, maxStudent FROM student_group", $currentCourse);
 	$myIterator=0;
 	$num_of_groups = mysql_num_rows($groupSelect);
 	// groups list
 	if ($num_of_groups > 0) {
-		$tool_content .= "
-
-    <br />
-    <table width=\"99%\" align=\"left\" class=\"GroupList\">
-    <tbody>
-    <tr>
-      <th colspan=\"2\" class=\"GroupHead\"><div align=\"left\">$langGroupName</div></th>
-      <th width=\"80\" class=\"GroupHead\">$langRegistered</th>
-      <th width=\"80\" class=\"GroupHead\">$langMax</th>
-      <th width=\"50\" class=\"GroupHead\">$langEdit</th>
-      <th width=\"50\" class=\"GroupHead\">$langDelete</th>
-    </tr>";
+		$tool_content .= "<br />
+		<table width=\"99%\" align=\"left\" class=\"GroupList\">
+		<tbody>
+		<tr>
+		<th colspan=\"2\" class=\"GroupHead\"><div align=\"left\">$langGroupName</div></th>
+		<th width='15%' class=\"GroupHead\">$langGroupTutor</th>
+		<th  class=\"GroupHead\">$langRegistered</th>
+		<th  class=\"GroupHead\">$langMax</th>
+		<th width='50' class=\"GroupHead\">$langActions</th>
+		</tr>";
 	} else {
-	$tool_content .= "
-    <p>&nbsp;</p>
-    <p class=\"caution_small\">$langNoGroup</p>";
+		$tool_content .= "<p>&nbsp;</p><p class=\"caution_small\">$langNoGroup</p>";
 	}
 
 	while ($group = mysql_fetch_array($groupSelect)) {
 		// Count students registered in each group
 		$resultRegistered = db_query("SELECT id FROM user_group WHERE team='".$group["id"]."'", $currentCourse);
 		$countRegistered = mysql_num_rows($resultRegistered);
-		if ($myIterator%2==0) {
+		if ($myIterator%2 == 0) {
 			$tool_content .= "<tr>";
-		}
-		elseif ($myIterator%2==1) {
+		} else {
 			$tool_content .= "<tr class=\"odd\">";
 		}
-		$tool_content .= "<td width=\"2%\">
-		<img src=\"../../template/classic/img/arrow_grey.gif\" alt=\"bullet\" title=\"bullet\" border=\"0\"></td><td><div align=\"left\">
-		<a href=\"group_space.php?userGroupId=".$group["id"]."\">".$group["name"]."</a></div></td>
-      		<td><div class=\"cellpos\">".$countRegistered."</div></td>";
-		if ($group['maxStudent']==0) {
-			$tool_content .= "
-      			<td><div class=\"cellpos\">-</div></td>";
+		$tool_content .= "<td width='2%'>
+		<img src='../../template/classic/img/arrow_grey.gif' title='bullet' border='0'></td><td>
+		<div align='left'>
+		<a href='group_space.php?userGroupId=".$group["id"]."'>".$group["name"]."</a></div></td>";
+		$tool_content .= "<td width='35%'>".uid_to_name($group['tutor'])."</td>";
+      		$tool_content .= "<td><div class=\"cellpos\">".$countRegistered."</div></td>";
+		if ($group['maxStudent'] == 0) {
+			$tool_content .= "<td><div class=\"cellpos\">-</div></td>";
 		} else {
 			$tool_content .= "
       			<td><div class=\"cellpos\">".$group["maxStudent"]."</div></td>";
 		}
-		$tool_content .= "<td><div class=\"cellpos\">
+		$tool_content .= "<td width='10%'><div class=\"cellpos\">
 		<a href=\"group_edit.php?userGroupId=".$group["id"]."\">
-		<img src=\"../../template/classic/img/edit.gif\" border=\"0\" title=\"".$langEdit."\"></a></div></td>
-      		<td><div class=\"cellpos\">
+		<img src=\"../../template/classic/img/edit.gif\" border=\"0\" title=\"".$langEdit."\"></a>
 		<a href=\"".$_SERVER['PHP_SELF']."?delete_one=yes&id=".$group["id"]."\" onClick=\"return confirmation('".addslashes($group["name"])."');\">
 		<img src=\"../../template/classic/img/delete.gif\" border=\"0\" title=\"".$langDelete."\"></a></div></td>
     		</tr>";
@@ -415,26 +403,14 @@ tCont3;
 		AND statut=5 AND tutor=0", $mysqlMainDb);
 	$countUsers = mysql_num_rows($coursUsersSelect);
 	$countNoGroup=($countUsers-$totalRegistered);
-	$tool_content .= "
-
-    </tbody>
-    </table>
-    <p>&nbsp;</p>";
-
-$tool_content .= "
-
-    <table width=\"99%\" class=\"FormData\" style=\"border: 1px solid #edecdf;\">
-    <tbody>
-    <tr>
-      <td class=\"odd\">
-        <p><b>$totalRegistered</b> $langGroupStudentsInGroup<br></p>
-        <p><b>$countNoGroup</b> $langGroupNoGroup<br></p>
-        <p><b>$countUsers</b> $langGroupStudentsRegistered <div align=\"right\">($langGroupUsersList)</div></p>
-      </td>
-    </tr>
-    </tbody>
-    </table>\n";
-
+	$tool_content .= "</tbody></table><p>&nbsp;</p>";
+	$tool_content .= "<table width=\"99%\" class=\"FormData\" style=\"border: 1px solid #edecdf;\">
+	<tbody><tr>
+	<td class=\"odd\">
+	<p><b>$totalRegistered</b> $langGroupStudentsInGroup<br></p>
+	<p><b>$countNoGroup</b> $langGroupNoGroup<br></p>
+	<p><b>$countUsers</b> $langGroupStudentsRegistered <div align=\"right\">($langGroupUsersList)</div></p>
+	</td></tr></tbody></table>\n";
 }	// end prof only
 
 // else student view
@@ -461,28 +437,18 @@ else {
 	$num_of_groups = mysql_num_rows($groupSelect);
 	// groups list
 	if ($num_of_groups > 0) {
-
-	$tool_content .= "
-    <table width=\"99%\" align=\"left\" class=\"GroupList\">
-    <thead>
-    <tr>
-      <th colspan=\"2\" class=\"GroupHead\"><div align=\"left\">$langGroupName</div></th>";
-
-	// If self-registration allowed by admin
-	if($selfRegProp==1) {
-		$tool_content .= "
-      <th width=\"50\" class=\"GroupHead\">$langRegistration</th>";
-	}
-
-	$tool_content .= "
-      <th width=\"50\" class=\"GroupHead\">$langRegistered</th>
-      <th width=\"50\" class=\"GroupHead\">$langMax</th>
-    </tr>
-    </thead>
-    <tbody>";
+		$tool_content .= "<table width=\"99%\" align=\"left\" class=\"GroupList\">
+		<thead><tr>
+		<th colspan=\"2\" class=\"GroupHead\"><div align=\"left\">$langGroupName</div></th>";
+		// If self-registration allowed by admin
+		if($selfRegProp == 1) {
+			$tool_content .= "<th width=\"50\" class=\"GroupHead\">$langRegistration</th>";
+		}
+		$tool_content .= "<th width=\"50\" class=\"GroupHead\">$langRegistered</th>
+		<th width=\"50\" class=\"GroupHead\">$langMax</th>
+		</tr></thead><tbody>";
 	} else {
-	$tool_content .= "
-    <p class=\"alert1\">$langNoGroup</p>";
+		$tool_content .= "<p class=\"alert1\">$langNoGroup</p>";
 	}
 
     $k = 0;
@@ -497,9 +463,7 @@ else {
 			$tool_content .= "\n    <tr class=\"odd\">";
 		}
 
-		$tool_content .= "
-      <td width=\"2%\"><img src=\"../../template/classic/img/arrow_grey.gif\" alt=\"bullet\" title=\"bullet\" border=\"0\"></td>
-      <td><div align=\"left\">";
+		$tool_content .= "<td width=\"2%\"><img src=\"../../template/classic/img/arrow_grey.gif\" title=\"bullet\" border=\"0\"></td><td><div align=\"left\">";
 
 		// Allow student to enter group only if member
 		if(@($tutorCheck==1)) {
@@ -524,13 +488,12 @@ else {
 		// If self-registration allowed by admin
 		if($selfRegProp==1)
 		{
-			$tool_content .= "
-      <td><div align='center'>";
+			$tool_content .= "<td><div align='center'>";
 			if((!$uid) OR (isset($myTeam)) OR (($countRegistered>=$group['maxStudent']) AND ($group['maxStudent']>>0)))
 			{
 				$tool_content .= "-";
 			} else {
-			$tool_content .= "<a href=\"group_space.php?selfReg=1&userGroupId=".$group["id"]."\">$langRegistration</a>";
+				$tool_content .= "<a href=\"group_space.php?selfReg=1&userGroupId=".$group["id"]."\">$langRegistration</a>";
 			}
 			$tool_content .= "</div></td>";
 		}	// If self reg allowed by admin

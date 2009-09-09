@@ -318,6 +318,18 @@ function user_group($uid, $required = TRUE)
 	}
 }
 
+// find a group name
+function gid_to_name($gid)
+{
+	global $currentCourseID;
+	if ($r = mysql_fetch_row(db_query("SELECT name FROM student_group 
+		WHERE id = '".mysql_real_escape_string($gid)."'", $currentCourseID))) {
+                return $r[0];
+	} else {
+                return FALSE;
+	}	
+}
+
 
 // Find secret subdir of group gid
 function group_secret($gid)
