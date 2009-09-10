@@ -726,10 +726,10 @@ class ScormExport
         }
         
         // Create destination directory for "pure" documents
-        claro_mkdir($this->destDir.'/Documents');
+        claro_mkdir($this->destDir.'/Documents', CLARO_FILE_PERMISSIONS, true);
         
         // And for exercises
-        claro_mkdir($this->destDir.'/Exercises');
+        claro_mkdir($this->destDir.'/Exercises', CLARO_FILE_PERMISSIONS, true);
         
         // Copy documents into the created directory
         foreach($this->resourceMap as $module)
@@ -747,7 +747,7 @@ class ScormExport
                 }
                 if ( ! is_dir($destinationDir) )
                 {
-                    claro_mkdir($destinationDir);
+                    claro_mkdir($destinationDir, CLARO_FILE_PERMISSIONS, true);
                 }
                 @copy($this->srcDirDocument . $module['path'], $destinationDir . $documentName);
             }
