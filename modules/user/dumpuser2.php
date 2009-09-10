@@ -46,7 +46,7 @@ if($is_adminOfCourse) {
 	$sql = db_query("SELECT  user.nom, user.prenom, user.email, user.am, user.username, user_group.team
 			FROM cours_user, user LEFT JOIN `$currentCourseID`.user_group ON `user`.user_id=user_group.user
 			WHERE `user`.`user_id`=`cours_user`.`user_id` AND `cours_user`.`code_cours`='$currentCourseID'
-			ORDER BY user.nom", $mysqlMainDb);
+			ORDER BY user.nom,user.prenom", $mysqlMainDb);
 	$r=0;
 	while ($r < mysql_num_rows($sql)) {
 		$a = mysql_fetch_array($sql);
@@ -56,11 +56,14 @@ if($is_adminOfCourse) {
 			if ($f > 0) {
 				echo ';';
 			}
-			echo csv_escape($a[$f]);
+			if ($f == mysql_num_fields($sql)-1) {
+				echo csv_escape(gid_to_name($a[$f]));
+			} else {
+				echo csv_escape($a[$f]);
+			}
 			$f++;
 		}
 		$r++;
 	}
 	echo "$crlf";
 }  // end of initial if
-

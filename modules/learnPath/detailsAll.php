@@ -87,12 +87,12 @@ $tool_content .= "<table width='99%' align='left' class='Users_Operations'>
 	
 // display tab header
 $tool_content .= "<table width='99%' class='LearnPathSum'><thead><tr>
-		<th class='left'>&nbsp;</th>
-		<th class='left'><div align='left'>$langStudent</div></th>
-		<th class='left'>$langAm</th>
-		<th width='15%' align='center'>$langGroup</th>
-		<th colspan='2' width='30%'><div align='center'>$langProgress&nbsp;&nbsp;</div></th>
-		</tr></thead><tbody>";
+	<th class='left'>&nbsp;</th>
+	<th class='left'><div align='left'>$langStudent</div></th>
+	<th class='left'>$langAm</th>
+	<th width='15%' align='center'>$langGroup</th>
+	<th colspan='2' width='30%'><div align='center'>$langProgress&nbsp;&nbsp;</div></th>
+	</tr></thead><tbody>";
 
 mysql_select_db($currentCourseID);
 
@@ -129,11 +129,10 @@ foreach ($usersList as $user)
 	else
 	{
 		$total = round($globalprog/($iterator-1));
-		$tool_content .= ''."\n"
-		.'        <td width="1"><img src="../../template/classic/img/arrow_grey.gif" alt="bullet" title="bullet" border="0"></td>'."\n"
-		.'        <td><a href="detailsUser.php?uInfo='.$user['user_id'].'">'.$user['nom'].' '.$user['prenom'].'</a></td>'."\n"
+		$tool_content .= '<td width="1"><img src="../../template/classic/img/arrow_grey.gif" alt="bullet" title="bullet" border="0"></td>'."\n"
+		.'<td><a href="detailsUser.php?uInfo='.$user['user_id'].'">'.$user['nom'].' '.$user['prenom'].'</a></td>'."\n"
 		.'<td>'.uid_to_am($user['user_id']).'</td>'
-		.'<td align="center">'.user_group($user['user_id']).'</td>'
+		.'<td align="center">'.gid_to_name(user_group($user['user_id'])).'</td>'
 		.'<td align="right">'
 		.disp_progress_bar($total, 1)
 		.'</td>'."\n"
@@ -144,6 +143,6 @@ foreach ($usersList as $user)
 }
 
 // foot of table
-$tool_content .= '      </tbody>'."\n".'      </table>'."\n\n";
+$tool_content .= '</tbody>'."\n".'</table>'."\n\n";
 draw($tool_content, 2, "learnPath", $head_content);
 ?>

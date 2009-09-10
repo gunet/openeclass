@@ -74,7 +74,7 @@ if($is_adminOfCourse) {
 		$total = round($globalprog/($iterator-1));
 		echo csv_escape(uid_to_name($user['user_id'])).
 		";".csv_escape(uid_to_am($user['user_id'])).
-		";".csv_escape(user_group($user['user_id'])).
+		";".csv_escape(gid_to_name(user_group($user['user_id']))).
 		";".$total."%";
 	}
 	echo "$crlf";
