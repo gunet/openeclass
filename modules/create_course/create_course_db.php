@@ -650,8 +650,8 @@ db_query("CREATE TABLE `assignment_submit` (
 
     mysql_query("CREATE TABLE liens (
                id int(11) NOT NULL auto_increment,
-               url varchar(150),
-               titre varchar(150),
+               url varchar(255),
+               titre varchar(255),
                description text,
            category int(4) default '0' NOT NULL,
            ordre mediumint(8) default '0' NOT NULL,

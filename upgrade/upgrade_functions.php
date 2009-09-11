@@ -292,8 +292,10 @@ function upgrade_course_2_1_4($code, $extramessage = '', $lang)
         }
 	// upgrade lp_module me to kainourio content type
 	db_query("ALTER TABLE `lp_module`
-		CHANGE `contentType` `contentType` ENUM('CLARODOC','DOCUMENT','EXERCISE','HANDMADE','SCORM','SCORM_ASSET','LABEL','COURSE_DESCRIPTION','LINK')", 
+		CHANGE `contentType` `contentType` ENUM('CLARODOC','DOCUMENT','EXERCISE','HANDMADE','SCORM','SCORM_ASSET','LABEL','COURSE_DESCRIPTION','LINK')",
 		$code);
+	db_query("ALTER TABLE `liens` CHANGE `url` `url` VARCHAR(255) DEFAULT NULL", $code);
+	db_query("ALTER TABLE `liens` CHANGE `titre` `titre` VARCHAR(255) DEFAULT NULL", $code);
 }
 
 
