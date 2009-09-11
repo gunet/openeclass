@@ -169,11 +169,11 @@ if($is_adminOfCourse) {
           </tr>
           <tr>
             <th class='left'>URL :</th>
-            <td><input type=\"text\" name=\"urllink\" size=\"150\" value=\"".@htmlspecialchars($urllink)."\" class='FormData_InputText'></td>
+            <td><input type=\"text\" name=\"urllink\" size=\"53\" value=\"".@htmlspecialchars($urllink)."\" class='FormData_InputText'></td>
           </tr>
           <tr>
             <th class='left'>".$langLinkName." :</th>
-            <td><input type=\"text\" name=\"title\" size=\"150\" value=\"".@htmlspecialchars($title)."\" class='FormData_InputText'></td>
+            <td><input type=\"text\" name=\"title\" size=\"53\" value=\"".@htmlspecialchars($title)."\" class='FormData_InputText'></td>
           </tr>
           <tr>
             <th class='left'>".$langDescription." :</th>
