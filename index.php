@@ -57,16 +57,21 @@ if (!$db) {
 	include ("not_installed.php");
 }
 
+// unset system that records visitor only once by course for statistics
+include('include/action.php');
+if (isset($dbname)) {
+        mysql_select_db($dbname);
+        $action = new action();
+        $action->record('MODULE_ID_UNITS', 'exit');
+}
+unset($dbname);
+
 // second check
 // can we select a database? if not then there is some sort of a problem
 if (isset($mysqlMainDb)) $selectResult = mysql_select_db($mysqlMainDb,$db);
 if (!isset($selectResult)) {
 	include("general_error.php");
 }
-
-// unset system that records visitor only once by course for statistics
-unset($alreadyHome);
-unset($dbname);
 
 //if platform admin allows usage of eclass personalised
 //create a session so that each user can activate it for himself.

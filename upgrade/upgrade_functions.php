@@ -268,6 +268,8 @@ function upgrade_course_2_1_4($code, $extramessage = '', $lang)
 	mysql_select_db($code);
 	echo "<hr><p>$langUpgCourse <b>$code</b> (2.1.4) $extramessage<br />";
 	flush();
+
+        db_query("INSERT IGNORE INTO action_types SET id=2, name='exit'");
 	
 	// upgrade exercises
  	db_query("ALTER TABLE `exercise_user_record` 

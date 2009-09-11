@@ -1,50 +1,46 @@
 <?php
 
+define('DEFAULT_MAX_DURATION', 900);
+
 class action {
 
     function record($module_name, $action_name = "access") {
         global $uid, $currentCourseID;
         $action_type = new action_type();
         $action_type_id = $action_type->get_action_type_id($action_name);
+        $exit = $action_type->get_action_type_id('exit');
         $module_id = $this->get_module_id($module_name);
 
         ###ophelia -28-08-2006 : add duration to previous
-        
-        $sql = "SELECT id, NOW()-date_time as diff FROM actions ".
-               "WHERE user_id = '$uid' ".
-               " ORDER BY date_time DESC LIMIT 1 ";
-
+        $sql = "SELECT id, NOW()-date_time AS diff, action_type_id
+                FROM actions
+                WHERE user_id = '$uid'
+                ORDER BY id DESC LIMIT 1";
+        $last_id = $diff = $last_action = 0;
         $result = db_query($sql, $currentCourseID);
-        $last_id = 0;
-        $diff = 0;
-        while ($row = mysql_fetch_assoc($result)) {
-            $last_id = $row['id'];
-            $diff = $row['diff'];
+        if ($result and mysql_num_rows($result) > 0) {
+                list($last_id, $diff, $last_action) = mysql_fetch_row($result);
+                mysql_free_result($result);
+                # Update previous action with corect duration
+                if ($last_id and $last_action != $exit and $diff < DEFAULT_MAX_DURATION) {
+                        $sql = "UPDATE actions
+                                SET duration = '$diff'
+                                WHERE id = '$last_id'";
+                        db_query($sql, $currentCourseID);
+                }
         }
-        mysql_free_result($result);
-
-        //if ($last_time) {
-            $duration = $diff;
-            
-            if ($duration < 900) {
-                $sql = "UPDATE actions SET duration = '$duration' WHERE id = '$last_id' ";
-                $result = db_query($sql, $currentCourseID);
-                @mysql_free_result($result);
-            }
-        //}
-        ##########################
-        
-        $sql = "INSERT INTO actions SET ".
-                " module_id = '$module_id', ".
-                " user_id = '$uid', ".
-                " action_type_id = '$action_type_id', ".
-                " date_time = NOW(), ".
-                " duration = 900 ";    //ophelia 28-8-06
-        $result = db_query($sql, $currentCourseID);
-        @mysql_free_result($result);
-        
-        
-        
+        if ($action_type_id == $exit) {
+                $duration = 0;
+        } else {
+                $duration = DEFAULT_MAX_DURATION;
+        }
+        $sql = "INSERT INTO actions SET
+                    module_id = '$module_id',
+                    user_id = '$uid',
+                    action_type_id = '$action_type_id',
+                    date_time = NOW(),
+                    duration = " . $duration;
+        db_query($sql, $currentCourseID);
     }
 
 
@@ -122,13 +118,13 @@ class action {
         global $currentCourseID;
         $sql = "SELECT id FROM accueil WHERE define_var = '$module_name'";
         $result = db_query($sql, $currentCourseID);
-        while ($row = mysql_fetch_assoc($result)) {
-            $id = $row['id'];
+        if ($result and mysql_num_rows($result) > 0) {
+                list($id) = mysql_fetch_row($result);
+                mysql_free_result($result);
+                return $id;
+        } else {
+                return 0;
         }
-        mysql_free_result($result);
-
-        return $id;
-
     }
 
 }
@@ -138,12 +134,12 @@ class action_type {
         global $currentCourseID;
         $sql = "SELECT id FROM action_types WHERE name = '$action_name'";
         $result = db_query($sql, $currentCourseID);
-        while ($row = mysql_fetch_assoc($result)) {
-            $id = $row['id'];
+        if ($result and mysql_num_rows($result) > 0) {
+                list($id) = mysql_fetch_row($result);
+                mysql_free_result($result);
+                return $id;
+        } else {
+                return false;
         }
-        mysql_free_result($result);
-        return $id;
     }
 }
-
-?>

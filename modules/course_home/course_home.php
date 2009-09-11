@@ -59,9 +59,12 @@ function confirmation ()
 
 
 //For statistics: record login
-global $uid, $currentCourse, $REMOTE_ADDR;
 $sql_log = "INSERT INTO logins SET user_id='$uid', ip='$REMOTE_ADDR', date_time=NOW()";
 db_query($sql_log, $currentCourse);
+
+include '../../include/action.php';
+$action = new action();
+$action->record('MODULE_ID_UNITS');
 
 $sql = 'SELECT `description`,`course_keywords`, `course_addon`,`faculte`,`lastEdit`,`type`, `visible`, `titulaires`, `fake_code` FROM `cours` WHERE `code` = "'.$currentCourse.'"';
 $res = db_query($sql, $mysqlMainDb);
