@@ -421,7 +421,6 @@ else {
 	while ($mySelfReg = mysql_fetch_array($sqlSelfReg)) {
 		$selfRegProp=$mySelfReg['self_registration'];
 	}
-
 	// Guest users aren't allowed to register in a group
 	if ($statut == 10) {
 		$selfRegProp = 0;
@@ -433,13 +432,13 @@ else {
 	}
 
 	$groupSelect=db_query("SELECT id, name, maxStudent, tutor FROM student_group", $currentCourse);
-
 	$num_of_groups = mysql_num_rows($groupSelect);
 	// groups list
 	if ($num_of_groups > 0) {
 		$tool_content .= "<table width=\"99%\" align=\"left\" class=\"GroupList\">
 		<thead><tr>
-		<th colspan=\"2\" class=\"GroupHead\"><div align=\"left\">$langGroupName</div></th>";
+		<th colspan=\"2\" class=\"GroupHead\"><div align=\"left\">$langGroupName</div></th>
+		<th width='15%' class=\"GroupHead\">$langGroupTutor</th>";
 		// If self-registration allowed by admin
 		if($selfRegProp == 1) {
 			$tool_content .= "<th width=\"50\" class=\"GroupHead\">$langRegistration</th>";
@@ -451,24 +450,23 @@ else {
 		$tool_content .= "<p class=\"alert1\">$langNoGroup</p>";
 	}
 
-    $k = 0;
+	$k = 0;
 	//$totalRegistered=0;
 	while ($group = mysql_fetch_array($groupSelect)) {
 		// Count students registered in each group
 		$resultRegistered = db_query("SELECT id FROM user_group WHERE team='".$group["id"]."'", $currentCourse);
 		$countRegistered = mysql_num_rows($resultRegistered);
-		if ($k%2==0) {
-			$tool_content .= "\n    <tr>";
+		if ($k%2 == 0) {
+			$tool_content .= "\n<tr>";
 		} else {
-			$tool_content .= "\n    <tr class=\"odd\">";
+			$tool_content .= "\n<tr class=\"odd\">";
 		}
 
 		$tool_content .= "<td width=\"2%\"><img src=\"../../template/classic/img/arrow_grey.gif\" title=\"bullet\" border=\"0\"></td><td><div align=\"left\">";
-
 		// Allow student to enter group only if member
-		if(@($tutorCheck==1)) {
-			if ($uid==$group['tutor']) {
-			$tool_content .= "<a href=\"group_space.php?userGroupId=".$group["id"]."\">".$group["name"]."</a>
+		if(@($tutorCheck == 1)) {
+			if ($uid == $group['tutor']) {
+				$tool_content .= "<a href=\"group_space.php?userGroupId=".$group["id"]."\">".$group["name"]."</a>
 			($langOneMyGroups)";
 			} else {
 				$tool_content .= "<a href=\"group_space.php?userGroupId=".$group["id"]."\">".$group["name"]."</a>";
@@ -476,17 +474,17 @@ else {
 		}
 		// STUDENT VIEW
 		else {
-			if(isset($myTeam) && $myTeam==$group['id'])	{
+			if(isset($myTeam) && $myTeam == $group['id'])	{
 				$tool_content .= "<a href=\"group_space.php?userGroupId=".$group["id"]."\">".$group["name"]."</a>&nbsp;&nbsp;($langMyGroup)";
 			} else {
 				$tool_content .= $group['name'];
 			}
 		}	// else
 		$tool_content .= "</div></td>";
-
+		$tool_content .= "<td width='35%'><div align='center'>".uid_to_name($group['tutor'])."</div></td>";
 		// SELF REGISTRATION
 		// If self-registration allowed by admin
-		if($selfRegProp==1)
+		if($selfRegProp == 1)
 		{
 			$tool_content .= "<td><div align='center'>";
 			if((!$uid) OR (isset($myTeam)) OR (($countRegistered>=$group['maxStudent']) AND ($group['maxStudent']>>0)))
@@ -497,24 +495,17 @@ else {
 			}
 			$tool_content .= "</div></td>";
 		}	// If self reg allowed by admin
-		$tool_content .= "
-      <td><div align='center'>".$countRegistered."</div></td>";
-		if ($group['maxStudent']==0) {
-			$tool_content .= "
-      <td><div align='center'>-</div></td>";
+		$tool_content .= "<td><div align='center'>".$countRegistered."</div></td>";
+		if ($group['maxStudent'] == 0) {
+			$tool_content .= "<td><div align='center'>-</div></td>";
 		} else {
-			$tool_content .= "
-      <td><div align='center'>".$group["maxStudent"]."</div></td>";
+			$tool_content .= "<td><div align='center'>".$group["maxStudent"]."</div></td>";
 		}
-		$tool_content .= "
-    </tr>";
+		$tool_content .= "</tr>";
 		$totalRegistered=($totalRegistered+$countRegistered);
 	$k++;
 	}	// while loop
-
-	$tool_content .= "
-    </tbody>
-    </table>";
+	$tool_content .= "</tbody></table>";
 
 } 	// else student view
 add_units_navigation(TRUE);
