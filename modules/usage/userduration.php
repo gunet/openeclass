@@ -96,7 +96,7 @@ while ($row = mysql_fetch_assoc($result)) {
 		$tool_content .= "<td width='30%'><img style='border:0px; padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif'>
 		" .uid_to_name($user_id) . "</td>
 		<td width='30%'>" . uid_to_am($user_id) . "</td>
-		<td align='center'>" . user_group($user_id) . "</td>
+		<td align='center'>" . gid_to_name(user_group($user_id)) . "</td>
 		<td>" . format_time_duration(0 + $time) . "</td></tr>";
 	}
 }

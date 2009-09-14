@@ -57,7 +57,7 @@ if($is_adminOfCourse) {
 		foreach ($duration as $code => $time) {
 			echo csv_escape(uid_to_name($user_id)) . ";" 
 			. csv_escape(uid_to_am($user_id)) . ";" 
-			. csv_escape(user_group($user_id)) . ";" 
+			. csv_escape(gid_to_name(user_group($user_id))) . ";" 
 			. csv_escape(format_time_duration(0 + $time)) . ";";
 			}	
 		}
