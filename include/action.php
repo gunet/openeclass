@@ -14,7 +14,7 @@ class action {
         ###ophelia -28-08-2006 : add duration to previous
         $sql = "SELECT id, NOW()-date_time AS diff, action_type_id
                 FROM actions
-                WHERE user_id = '$uid'
+                WHERE user_id = $uid
                 ORDER BY id DESC LIMIT 1";
         $last_id = $diff = $last_action = 0;
         $result = db_query($sql, $currentCourseID);
@@ -24,8 +24,8 @@ class action {
                 # Update previous action with corect duration
                 if ($last_id and $last_action != $exit and $diff < DEFAULT_MAX_DURATION) {
                         $sql = "UPDATE actions
-                                SET duration = '$diff'
-                                WHERE id = '$last_id'";
+                                SET duration = $diff
+                                WHERE id = $last_id";
                         db_query($sql, $currentCourseID);
                 }
         }
@@ -35,9 +35,9 @@ class action {
                 $duration = DEFAULT_MAX_DURATION;
         }
         $sql = "INSERT INTO actions SET
-                    module_id = '$module_id',
-                    user_id = '$uid',
-                    action_type_id = '$action_type_id',
+                    module_id = $module_id,
+                    user_id = $uid,
+                    action_type_id = $action_type_id,
                     date_time = NOW(),
                     duration = " . $duration;
         db_query($sql, $currentCourseID);
@@ -75,7 +75,7 @@ class action {
                 $module_id = $row['module_id'];
 
                 $sql_2 = "SELECT count(id) as visits, sum(duration) as total_dur FROM actions ".
-                    " WHERE module_id='$module_id' AND ".
+                    " WHERE module_id = $module_id AND ".
                     " date_time >= '$start_date' AND ".
                     " date_time < '$end_date' ";
                     
@@ -86,18 +86,18 @@ class action {
                 }
                 mysql_free_result($result_2);
                 $sql_3 = "INSERT INTO actions_summary SET ".
-                    " module_id = '$module_id', ".
-                    " visits = '$visits', ".
+                    " module_id = $module_id, ".
+                    " visits = $visits, ".
                     " start_date = '$start_date', ".
                     " end_date = '$end_date', ".
-                    " duration = '$total_dur' ";
+                    " duration = $total_dur";
                 $result_3 = db_query($sql_3, $currentCourseID);
                 @mysql_free_result($result_3);
             
                 $sql_4 = "DELETE FROM actions ".
-                    " WHERE module_id = '$module_id' ".
+                    " WHERE module_id = $module_id ".
                     " AND date_time >= '$start_date' AND ".
-                    " date_time < '$end_date' ";
+                    " date_time < '$end_date'";
                 $result_4 = db_query($sql_4, $currentCourseID);
                 @mysql_free_result($result_4);
             
