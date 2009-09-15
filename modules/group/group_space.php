@@ -232,8 +232,9 @@ $tool_content .= "
 draw($tool_content, 2, 'group');
 
 function loadGroupTools(){
-	global $selfReg, $forumId, $langForums, $userGroupId, $langDoc;
-	global $is_adminOfCourse, $is_tutor, $userGroupId, $langEmailGroup;
+	global $selfReg, $forumId, $langForums, $userGroupId, $langDoc,
+               $is_adminOfCourse, $is_tutor, $userGroupId, $langEmailGroup,
+               $langUsage;
 
 	// Vars needed to determine group File Manager and group Forum
 	// They are unregistered when opening group.php once again.
@@ -265,7 +266,8 @@ function loadGroupTools(){
 		if ($is_adminOfCourse or $is_tutor)
 		{
 			$group_tools .=  "
-      <li><a href='group_email.php?userGroupId=$userGroupId'>$langEmailGroup</a></li>";
+      <li><a href='group_email.php?userGroupId=$userGroupId'>$langEmailGroup</a></li>
+      <li><a href='group_usage.php?userGroupId=$userGroupId'>$langUsage</a></li>";
 		}
 	}
 	$group_tools .= "
