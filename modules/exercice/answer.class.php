@@ -109,7 +109,8 @@ class Answer
 		
 		$questionId=$this->questionId;
 		mysql_select_db($currentCourseID);
-		$sql="SELECT reponse,correct,comment,ponderation,r_position FROM `$TBL_REPONSES` WHERE question_id='$questionId' ORDER BY r_position;";
+		$sql="SELECT reponse,correct,comment,ponderation,r_position 
+			FROM `$TBL_REPONSES` WHERE question_id='$questionId' ORDER BY r_position;";
 		$result=mysql_query($sql) or die("Error : SELECT in file ".__FILE__." at line ".__LINE__);
 		$i=1;
 		// while a record is found
@@ -189,7 +190,7 @@ class Answer
 	 *
 	 * @author - Olivier Brouckaert
 	 * @param - integer $id - answer ID
-	 * @return - integer - answer weighting
+	 * @return - float - answer weighting
 	 */
 	function selectWeighting($id)
 	{
@@ -215,7 +216,7 @@ class Answer
 	 * @param - string $answer - answer title
 	 * @param - integer $correct - 0 if bad answer, not 0 if good answer
 	 * @param - string $comment - answer comment
-	 * @param - integer $weighting - answer weighting
+	 * @param - float $weighting - answer weighting
 	 * @param - integer $position - answer position
 	 */
 	function createAnswer($answer,$correct,$comment,$weighting,$position)

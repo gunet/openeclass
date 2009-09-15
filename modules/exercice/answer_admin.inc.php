@@ -26,7 +26,6 @@
 
 $questionName=$objQuestion->selectTitle();
 $answerType=$objQuestion->selectType();
-
 $okPicture=file_exists($picturePath.'/quiz-'.$questionId)?true:false;
 
 // if we come from the warning box "this question is used in several exercises"
@@ -61,7 +60,7 @@ if(isset($modifyIn))
 		// construction of the duplicated Answers
 		$objAnswer=new Answer($questionId);
 	}
-
+	
 	if($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER)
 	{
 		$correct=unserialize($correct);
@@ -99,7 +98,7 @@ if(isset($submitAnswers) || isset($buttonBack))
 		{
 			$reponse[$i]=trim($reponse[$i]);
 			$comment[$i]=trim($comment[$i]);
-			$weighting[$i]=intval($weighting[$i]);
+			$weighting[$i]=$weighting[$i];
 
 			if($answerType == UNIQUE_ANSWER)
 			{
@@ -194,9 +193,7 @@ if(isset($submitAnswers) || isset($buttonBack))
 				{
 					// separates text and weightings by '::'
 					$reponse.='::';
-
 					$questionWeighting=0;
-
 					foreach($weighting as $val)
 					{
 						// a blank can't have a negative weighting
@@ -235,28 +232,20 @@ if(isset($submitAnswers) || isset($buttonBack))
 			{
 				// now we're going to give a weighting to each blank
 				$setWeighting=1;
-
 				unset($submitAnswers);
-
 				// removes character '::' possibly inserted by the user in the text
 				$reponse=str_replace('::','',$reponse);
-
 				// we save the answer because it will be modified
 				$temp=$reponse;
-
 				// blanks will be put into an array
 				$blanks=Array();
-
 				$i=1;
-
 				// the loop will stop at the end of the text
 				while(1)
 				{
-
-
 					if(($pos = strpos($temp,'[')) === false)
 						{
-						break;
+							break;
 						}
 
 					// removes characters till '['
@@ -312,7 +301,7 @@ if(isset($submitAnswers) || isset($buttonBack))
 			for($j=1;$j <= $nbrMatches;$i++,$j++)
 			{
 				$match[$i]=trim($match[$i]);
-				$weighting[$i]=abs(intval($weighting[$i]));
+				$weighting[$i]=abs($weighting[$i]);
 
 				$questionWeighting+=$weighting[$i];
 
@@ -363,7 +352,6 @@ if(isset($modifyAnswers))
 {
 	// construction of the Answer object
 	$objAnswer=new Answer($questionId);
-
 	session_register('objAnswer');
 
 	if($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER)
@@ -371,7 +359,6 @@ if(isset($modifyAnswers))
 		if(!isset($nbrAnswers))
 		{
 			$nbrAnswers=$objAnswer->selectNbrAnswers();
-
 			$reponse=Array();
 			$comment=Array();
 			$weighting=Array();
@@ -385,13 +372,12 @@ if(isset($modifyAnswers))
 			{
 				$correct=0;
 			}
-
 			for($i=1;$i <= $nbrAnswers;$i++)
 			{
 				$reponse[$i]=$objAnswer->selectAnswer($i);
 				$comment[$i]=$objAnswer->selectComment($i);
 				$weighting[$i]=$objAnswer->selectWeighting($i);
-
+				
 				if($answerType == MULTIPLE_ANSWER)
 				{
 					$correct[$i]=$objAnswer->isCorrect($i);
@@ -438,7 +424,6 @@ if(isset($modifyAnswers))
 				{
 					$temp[$i+1]=$weighting[$i];
 				}
-
 				$weighting=$temp;
 			}
 			elseif(!$modifyIn)
@@ -613,55 +598,41 @@ cData;
   </tr>
 cData;
 
-			for($i=1;$i <= $nbrAnswers;$i++)
-			{
+	for($i=1;$i <= $nbrAnswers;$i++) {
+		$tool_content .="<tr><td class=\"right\">$i.</td>";
+	if($answerType == UNIQUE_ANSWER) {
+		$tool_content .= "<td align=\"center\" valign=\"top\">
+		<input type=\"radio\" value=\"".$i."\" name=\"correct\" ";
+		if(isset($correct) and $correct == $i) {
+			$tool_content .= "checked=\"checked\"></td>";
+		} else {
+			$tool_content .= "></td>";
+		}
+	} else {
+		$tool_content .= "<td align=\"center\" valign=\"top\">
+		<input type=\"checkbox\" value=\"1\" name=\"correct[".$i."]\" ";
+		if ((isset($correct[$i]))&&($correct[$i])) {
+			$tool_content .= "checked=\"checked\"></td>";
+		} else {
+			$tool_content .= "></td>";
+		}
+	}
 
-$tool_content .="
-  <tr>
-    <td class=\"right\">$i.</td>
-    ";
-
-if($answerType == UNIQUE_ANSWER)
-{
-  $tool_content .= "
-    <td align=\"center\" valign=\"top\">
-       <input type=\"radio\" value=\"".$i."\" name=\"correct\" ";
-  if(isset($correct) and $correct == $i) {
-     $tool_content .= "checked=\"checked\"></td>";
-  } else {
-     $tool_content .= "></td>";
-  }
-} else {
- 
-  $tool_content .= "
-    <td align=\"center\" valign=\"top\">
-      <input type=\"checkbox\" value=\"1\" name=\"correct[".$i."]\" ";
-  if ((isset($correct[$i]))&&($correct[$i])) {
-	$tool_content .= "checked=\"checked\"></td>";
-  } else {
-	$tool_content .= "></td>";
-  }
-
-}
-
-$tool_content .= "
-    <td align=\"center\">
-      <textarea wrap=\"virtual\" rows=\"7\" cols=\"25\" "."name=\"reponse[".$i."]\" class=\"FormData_InputText\">".@htmlspecialchars($reponse[$i])."</textarea>
-    </td>"."
-    <td align=\"center\">
-      <textarea wrap=\"virtual\" rows=\"7\" cols=\"25\" ". "name=\"comment[".$i."]\" class=\"FormData_InputText\">".@htmlspecialchars($comment[$i])."</textarea>
-    </td>"."
-    <td valign=\"top\" align=\"center\">
-      <input class=\"FormData_InputText\" type=\"text\" name=\"weighting[".$i."]\" size=\"5\" value=\"";
-  if (isset($weighting[$i]))
-  	$tool_content .= $weighting[$i];
-  else	
-  	$tool_content .= 0;
-  $tool_content .= "\">
-    </td>
-  </tr>";
-
-  			}
+	$tool_content .= "<td align=\"center\">
+	<textarea wrap=\"virtual\" rows=\"7\" cols=\"25\" "."name=\"reponse[".$i."]\" class=\"FormData_InputText\">".@htmlspecialchars($reponse[$i])."</textarea>
+	</td>"."
+	<td align=\"center\">
+	<textarea wrap=\"virtual\" rows=\"7\" cols=\"25\" ". "name=\"comment[".$i."]\" class=\"FormData_InputText\">".@htmlspecialchars($comment[$i])."</textarea>
+	</td>"."
+	<td valign=\"top\" align=\"center\">
+	<input class=\"FormData_InputText\" type=\"text\" name=\"weighting[".$i."]\" size=\"5\" value=\"";
+	if (isset($weighting[$i])) {
+		$tool_content .= $weighting[$i];
+	} else {	
+		$tool_content .= 0;
+	}
+	$tool_content .= "\"></td></tr>";
+	}
 
 $tool_content .= <<<cData
 
@@ -833,16 +804,10 @@ cData;
 
 				foreach($blanks as $i=>$blank)
 				{
-/*if (isset($weighting[$i])) {
-	$temp_weighting = $weighting[$i];
-} else {
-	$temp_weighting = "";
-}*/
-				//$tool_content .= $i;
 				$tool_content .= "
       <tr>
         <th class=\"right\">[".$blank."] :</th>"."
-        <td><input type=\"text\" name=\"weighting[".$i."]\" "."size=\"5\" value=\"".intval($weighting[$i])."\" class=\"FormData_InputText\"></td>
+        <td><input type=\"text\" name=\"weighting[".$i."]\" "."size=\"5\" value=\"".$weighting[$i]."\" class=\"FormData_InputText\"></td>
       </tr>";
 	    		}
 

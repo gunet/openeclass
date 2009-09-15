@@ -125,7 +125,7 @@ if(isset($welcomeScreen) )
 	$nameForm = "Διαχειριστής";
 	$surnameForm = "Πλατφόρμας";
 	$loginForm = "admin";
-	$passForm = generePass(8);
+	$passForm = create_pass();
 	$campusForm = "GUNet eClass";
 	$helpdeskForm = "+30 2xx xxxx xxx";
 	$faxForm = "";
@@ -220,7 +220,7 @@ elseif(isset($_REQUEST['install3']) OR isset($_REQUEST['back3'])) {
 	</tr>
 	<tr>
 	  <th class=\"left\">".$langDBPassword."</th>
-	  <td><input type=\"text\" class='FormData_InputText' size=\"25\" name=\"dbPassForm\" value=\"$dbPassForm\">&nbsp;&nbsp;".$langEG." ".generePass(8)."</td>
+	  <td><input type=\"text\" class='FormData_InputText' size=\"25\" name=\"dbPassForm\" value=\"$dbPassForm\">&nbsp;&nbsp;".$langEG." ".create_pass()."</td>
 	</tr>
 	<tr>
 	  <th class=\"left\">".$langMainDB."</th>

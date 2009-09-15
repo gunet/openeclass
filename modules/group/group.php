@@ -162,7 +162,6 @@ elseif (isset($_REQUEST['delete_one']) && $is_adminOfCourse)
 	$result = db_query("DELETE FROM student_group WHERE id='$id'", $currentCourse);
 	// Delete all members of this group
 	$delGroupUsers=db_query("DELETE FROM user_group WHERE team='$id'", $currentCourse);
-
 	$message = $langGroupDel;
 }
 
@@ -230,121 +229,84 @@ while ($myTutor = mysql_fetch_array($sqlTutor)) {
 	$tutorCheck=$myTutor['tutor'];
 }
 
+
 if ($is_adminOfCourse) {
 
 	// Show DB messages
 	if(isset($message))
 	{
-		$tool_content .= "
-      <p class=\"success_small\">$message</p><br />";
+		$tool_content .= "<p class=\"success_small\">$message</p><br />";
 	}
 	unset($message);
 
-
-	$tool_content .= "
-    <table width=\"99%\" align=\"left\" class=\"Group_Operations\">
-    <thead>
-    <tr>
-      <td width=\"50%\">&nbsp;<a href=\"group_creation.php\" class=\"operations_container\">$langNewGroupCreate</a></td>
-      <td width=\"50%\"><div align=\"right\"><a href=\"".$_SERVER['PHP_SELF']."?delete=yes\" onClick=\"return confirmation('delall');\">$langDeleteGroups</a>&nbsp;</div></td>
-    </tr>
-    <tr>
-      <td>&nbsp;<a href=\"".$_SERVER['PHP_SELF']."?fill=yes\">$langFillGroups</a></td>
-      <td><div align=\"right\"><a href=\"".$_SERVER['PHP_SELF']."?empty=yes\" onClick=\"return confirmation('emptyall');\">$langEmtpyGroups</a>&nbsp;</div></td>
-    </tr>
-    </thead>
-    </table>
-	<br /><br /><br />
-    ";
-	/*
-	$tool_content .= "
-    <div id=\"operations_container\">
-	<ul id=\"opslist\">
-	<li><a href=\"group_creation.php\">$langNewGroupCreate</a></li>
-	<li><a href=\"".$_SERVER['PHP_SELF']."?delete=yes\" onClick=\"return confirmation('delall');\">$langDeleteGroups</a></li>
-	<li><a href=\"".$_SERVER['PHP_SELF']."?fill=yes\">$langFillGroups</a></li>
-	<li><a href=\"".$_SERVER['PHP_SELF']."?empty=yes\" onClick=\"return confirmation('emptyall');\">$langEmtpyGroups</a></li>
-	</ul></div>
-	<br />";
-	*/
+	$tool_content .= "<table width=\"99%\" align=\"left\" class=\"Group_Operations\">
+	<thead>
+	<tr>
+	<td width=\"50%\">&nbsp;<a href=\"group_creation.php\" class=\"operations_container\">$langNewGroupCreate</a></td>
+	<td width=\"50%\"><div align=\"right\"><a href=\"".$_SERVER['PHP_SELF']."?delete=yes\" onClick=\"return confirmation('delall');\">$langDeleteGroups</a>&nbsp;</div></td>
+	</tr>
+	<tr>
+	<td>&nbsp;<a href=\"".$_SERVER['PHP_SELF']."?fill=yes\">$langFillGroups</a></td>
+	<td><div align=\"right\"><a href=\"".$_SERVER['PHP_SELF']."?empty=yes\" onClick=\"return confirmation('emptyall');\">$langEmtpyGroups</a>&nbsp;</div></td>
+	</tr>
+	</thead></table><br /><br /><br />";
 
 	// ---------- display properties ------------------------
-	$tool_content .= <<<tCont3
+	$tool_content .= "<table class='FormData' align='center' style='border: 1px solid #CAC3B5;'>
+	<tbody>
+	<tr class='odd'>
+	<td colspan='2' class='right'><a href='group_properties.php'>$langPropModify</a> 
+	<img src='../../template/classic/img/edit.gif' align='middle' border='0' title='$langEdit'></td>
+	</tr>
+	<tr>
+	<td><b>$langGroupsProperties</b></td>
+	<td align='right'><b>$langGroupAccess</b></td>
+	</tr>";
 
-    <table class="FormData" align="center" style="border: 1px solid #CAC3B5;">
-    <tbody>
-    <tr class="odd">
-      <td colspan="2" class="right"><a href="group_properties.php">$langPropModify</a> <img src="../../template/classic/img/edit.gif" border="0" title="'.$langEdit.'"></td>
-    </tr>
-    <tr>
-      <td><b>$langGroupsProperties</b></td>
-      <td align="right"><b>$langGroupAccess</b></td>
-    </tr>
-tCont3;
-
-	$resultProperties=db_query("SELECT id, self_registration, private, forum, document FROM group_properties WHERE id=1", $currentCourse);
+	$resultProperties=db_query("SELECT id, self_registration, private, forum, document 
+			FROM group_properties WHERE id=1", $currentCourse);
 	while ($myProperties = mysql_fetch_array($resultProperties))
 	{
-		$tool_content .= "
-    <tr>
-      <td>";
+		$tool_content .= "<tr><td>";
 		if($myProperties['self_registration']==1)
 		{
-			$tool_content .= "$langGroupAllowStudentRegistration</td>
-      <td align=\"right\"><font color=\"green\">$langYes</font>";
+			$tool_content .= "$langGroupAllowStudentRegistration</td><td align=\"right\">
+			<font color=\"green\">$langYes</font>";
 		}
 		else
 		{
-			$tool_content .= "$langGroupAllowStudentRegistration</td>
-      <td align=\"right\"><font color=\"red\">$langNo</font>";
+			$tool_content .= "$langGroupAllowStudentRegistration</td><td align=\"right\">
+			<font color=\"red\">$langNo</font>";
 		}
-		$tool_content .= "</td>
-    </tr>
-    <tr>
-      <td colspan=2 class=\"left\"><b>$langTools</b></td>
-    </tr>
-    <tr>
-      <td>";
+		$tool_content .= "</td></tr>
+		<tr><td colspan=2 class=\"left\"><b>$langTools</b></td></tr>
+		<tr><td>";
 
-	if($myProperties['forum']==1) {
-			$tool_content .= "$langGroupForum</td>
-      <td align=\"right\"><font color=\"green\">$langYes</font>";
+		if($myProperties['forum']==1) {
+			$tool_content .= "$langGroupForum</td><td align=\"right\"><font color=\"green\">$langYes</font>";
 			$fontColor="black";
 		} else {
-			$tool_content .= "$langGroupForum</td>
-      <td align=\"right\"><font color=\"red\">$langNo</font>";
-			$fontColor="silver";
+			$tool_content .= "$langGroupForum</td><td align=\"right\">
+			<font color=\"red\">$langNo</font>";$fontColor="silver";
 		}
-		$tool_content .= "</td>
-    </tr>
-    <tr>
-      <td>";
+		$tool_content .= "</td></tr><tr><td>";
 		if($myProperties['private']==1) {
-			$tool_content .= "$langForumType</td>
-      <td align=\"right\">$langForumClosed";
+			$tool_content .= "$langForumType</td><td align=\"right\">$langForumClosed";
 		}
 		else
 		{
-			$tool_content .= "$langForumType</td>
-      <td align=\"right\">$langForumOpen";
+			$tool_content .= "$langForumType</td><td align=\"right\">$langForumOpen";
 		}
-		$tool_content .= "</td>
-    </tr>
-    <tr>
-      <td>";
-
+		$tool_content .= "</td></tr><tr><td>";
 		if($myProperties['document']==1)
 		{
-			$tool_content .= "$langDoc</td>
-      <td align=\"right\"><font color=\"green\">$langYes</font>";
+			$tool_content .= "$langDoc</td><td align=\"right\"><font color=\"green\">$langYes</font>";
 		}
 		else
 		{
-			$tool_content .= "$langDoc</td>
-      <td align=\"right\"><font color=\"red\">$langNo</font>";
+			$tool_content .= "$langDoc</td><td align=\"right\"><font color=\"red\">$langNo</font>";
 		}
-		$tool_content .= "</td>
-    </tr>";
+		$tool_content .= "</td></tr>";
 	}	// while loop
 	$tool_content .= "</tbody></table>";
 
@@ -451,7 +413,6 @@ else {
 	}
 
 	$k = 0;
-	//$totalRegistered=0;
 	while ($group = mysql_fetch_array($groupSelect)) {
 		// Count students registered in each group
 		$resultRegistered = db_query("SELECT id FROM user_group WHERE team='".$group["id"]."'", $currentCourse);
@@ -467,7 +428,7 @@ else {
 		if(@($tutorCheck == 1)) {
 			if ($uid == $group['tutor']) {
 				$tool_content .= "<a href=\"group_space.php?userGroupId=".$group["id"]."\">".$group["name"]."</a>
-			($langOneMyGroups)";
+			<span style='color:#900; weight:bold;'>($langOneMyGroups)</span>";
 			} else {
 				$tool_content .= "<a href=\"group_space.php?userGroupId=".$group["id"]."\">".$group["name"]."</a>";
 			}
@@ -479,7 +440,7 @@ else {
 			} else {
 				$tool_content .= $group['name'];
 			}
-		}	// else
+		}	
 		$tool_content .= "</div></td>";
 		$tool_content .= "<td width='35%'><div align='center'>".uid_to_name($group['tutor'])."</div></td>";
 		// SELF REGISTRATION
@@ -503,10 +464,9 @@ else {
 		}
 		$tool_content .= "</tr>";
 		$totalRegistered=($totalRegistered+$countRegistered);
-	$k++;
+		$k++;
 	}	// while loop
 	$tool_content .= "</tbody></table>";
-
 } 	// else student view
 add_units_navigation(TRUE);
 if ($is_adminOfCourse) {

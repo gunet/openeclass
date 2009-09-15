@@ -1,4 +1,4 @@
-<?
+http://apotis4stis5.blogspot.com/2009/09/sony-music-greece-hacked.html<?
 /*========================================================================
 *   Open eClass 2.1
 *   E-learning and Course Management System
@@ -149,7 +149,7 @@ function create_user($statut, $uname, $nom, $prenom, $email, $depid, $am, $phone
                 // $langAsUser;
         }
 
-        $password = random_password();
+        $password = create_pass();
         $registered_at = time();
         $expires_at = time() + $durationAccount;
         $password_encrypted = md5($password);
@@ -207,19 +207,6 @@ function create_username($statut, $depid, $nom, $prenom, $prefix)
         return $uname;
 }
 
-function random_password()
-{
-        $parts = array('a', 'ba', 'fa', 'ga', 'ka', 'la', 'ma', 'xa',
-                       'e', 'be', 'fe', 'ge', 'ke', 'le', 'me', 'xe',
-                       'i', 'bi', 'fi', 'gi', 'ki', 'li', 'mi', 'xi',
-                       'o', 'bo', 'fo', 'go', 'ko', 'lo', 'mo', 'xo',
-                       'u', 'bu', 'fu', 'gu', 'ku', 'lu', 'mu', 'xu',
-                       'ru', 'bur', 'fur', 'gur', 'kur', 'lur', 'mur',
-                       'sy', 'zy', 'gy', 'ky', 'tri', 'kro', 'pra');
-        $max = count($parts) - 1;
-        $num = rand(10,499);
-        return $parts[rand(0,$max)] . $parts[rand(0,$max)] . $num;
-}
 
 function register($uid, $course_code)
 {

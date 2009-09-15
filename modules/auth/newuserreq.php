@@ -150,7 +150,7 @@ $tool_content .= "<table width=\"99%\"><tbody>
 	  </tr>
 	  <tr>
 	  <th class='left'>$langPass&nbsp;:</th>
-	  <td><input type='text' class=auth_input_admin name='password' value=".create_pass(5)."></td>
+	  <td><input type='text' class=auth_input_admin name='password' value=".create_pass()."></td>
 	  </tr>
 	  <tr>
     	<th class='left'>$langEmail</th>

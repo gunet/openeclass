@@ -161,7 +161,7 @@ $langEmail : $emailAdministrator
 	</tr>
 	<tr>
 	<th class='left'><b>$langPass</b></th>
-	<td><input class='FormData_InputText' type='text' name='password' value='".create_pass(5)."'></td>
+	<td><input class='FormData_InputText' type='text' name='password' value='".create_pass()."'></td>
 	</tr>
 	<tr>
 	<th class='left'><b>$langEmail</b></th>
@@ -190,9 +190,8 @@ $langEmail : $emailAdministrator
 	<tr>
 	<th class='left'>$langLanguage</th>
 	<td>";
-		$tool_content .= lang_select_options('language', '', $lang);
-		$tool_content .= "</td>
-	</tr>
+	$tool_content .= lang_select_options('language', '', $lang);
+	$tool_content .= "</td></tr>
 	<tr>
 	<th>&nbsp;</th>
 	<td><input type='submit' name='submit' value='$langSubmit' >
@@ -204,7 +203,6 @@ $langEmail : $emailAdministrator
 	<input type='hidden' name='pstatut' value='$pstatut'>
         <input type='hidden' name='auth' value='1' >
 	</form>";
-	
 	$tool_content .= "
 	<br />
 	<p align='right'><a href='../admin/index.php'>$langBack</p>";

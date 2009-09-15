@@ -54,83 +54,46 @@ function check_password_editable($password)
 	}
 }
 
-function createPassword ($length = 8) {
-
-	// initialise password var
-	$password = "";
-	// define possible characters
-	$possible = "abcdefghjklmnopqrstvwxyz0123456789";
-
-	$i = 0;
-	// add random characters to $password until $length is reached
-	while ($i < $length) {
-
-	// pick a random character from the $possible pool
-	$char = substr($possible, mt_rand(0, strlen($possible)-1), 1);
-
-	// do not allow dublicate characters in the password
-		if (!strstr($password, $char)) {
-			$password .= $char;
-			$i++;
-		}
-	}
-	return $password;
-}
-
-//TODO place some sort of clear-out function to delete reset-pass entries older than 2 hours (link validity window)
 if (isset($_REQUEST['do']) && $_REQUEST['do'] == "go") {
 	$userUID = (int)$_REQUEST['u'];
 	$hash = $_REQUEST['h'];
-
 	$res = db_query("SELECT `user_id`, `hash`, `password`, `datetime` FROM passwd_reset
 			WHERE `user_id` = '" . mysql_escape_string($userUID) . "'
 			AND `hash` = '" . mysql_escape_string($hash) . "'
 			AND TIME_TO_SEC(TIMEDIFF(`datetime`,NOW())) < 3600
 			", $mysqlMainDb);
 
-
-
 	if (mysql_num_rows($res) == 1) {
 		$myrow = mysql_fetch_array($res);
 		//copy pass hash (md5) from reset_pass to user table
 		$sql = "UPDATE `user` SET `password` = '".$myrow['hash']."' WHERE `user_id` = ".$myrow['user_id']."";
-		
 		if(db_query($sql, $mysqlMainDb)) {
-
 			//send email to the user of his new pass (not hashed)
 			$res = db_query("SELECT `email` FROM user WHERE `user_id` = ".$myrow['user_id']."", $mysqlMainDb);
 			$myrow2 = mysql_fetch_array($res);
-
 			$text = "$langPassEmail1 <em>$myrow[password]</em><br>$langPassEmail2";
-
-			$tool_content .= "
-				<table width=\"99%\">
-				<tbody>
-					<tr>
-						<td class=\"success\">
-						<p>$langAccountResetSuccess1</p>
-						<p>$text</p>
-    					<p><a href=\"../../index.php\">$langHome</a></p>
-					</td>
-					</tr>
-				</tbody>
-			</table>";
-
-			$sql = "DELETE FROM `passwd_reset` WHERE `user_id` = ".$myrow['user_id']."";
-			db_query($sql, $mysqlMainDb);
+			$tool_content .= "<table width=\"99%\"><tbody>
+				<tr><td class=\"success\"><p>$langAccountResetSuccess1</p>
+				<p>$text</p>
+    				<p><a href=\"../../index.php\">$langHome</a></p>
+				</td>
+				</tr></tbody></table>";
+			db_query("DELETE FROM `passwd_reset` WHERE `user_id` = '$myrow[user_id]'", $mysqlMainDb);
+			// delete passws_reset entries older from 2 days
+			db_query("DELETE FROM `passwd_reset` 
+				WHERE DATE_SUB(CURDATE(),INTERVAL 2 DAY) > `datetime`", $mysqlMainDb);
 		}
 		//advice him to change his pass once logged in
 	} else {
-$tool_content = "<table width=\"99%\">
-                   <tbody>
-                   <tr>
-                   <td class=\"caution\">
-                   <p><strong>$langAccountResetInvalidLink</strong></p>
-                   <p><a href=\"../../index.php\">$langHome</a></p>
-                      </td>
-                     </tr>
-                     </tbody>
-                </table>";
+		$tool_content = "<table width=\"99%\">
+		<tbody><tr>
+		<td class=\"caution\">
+		<p><strong>$langAccountResetInvalidLink</strong></p>
+		<p><a href=\"../../index.php\">$langHome</a></p>
+		</td>
+		</tr>
+		</tbody>
+		</table>";
 	}
 } elseif ((!isset($email) || !email_seems_valid($email)
      || !isset($userName) || empty($userName)) && !isset($_REQUEST['do'])) {
@@ -168,8 +131,8 @@ $tool_content = "<table width=\"99%\">
 } elseif (!isset($_REQUEST['do'])) {
 	/***** If valid e-mail address was entered, find user and send email *****/
 	$res = db_query("SELECT user_id, nom, prenom, username, password, statut FROM user
-				WHERE email = '" . mysql_escape_string($email) . "'
-				AND BINARY username = '" . mysql_escape_string($userName) . "'", $mysqlMainDb);
+			WHERE email = '" . mysql_escape_string($email) . "'
+			AND BINARY username = '" . mysql_escape_string($userName) . "'", $mysqlMainDb);
 
         $found_editable_password = false;
 	if (mysql_num_rows($res) == 1) {
@@ -180,9 +143,8 @@ $tool_content = "<table width=\"99%\">
 			$is_editable = check_password_editable($s['password']);
 			if($is_editable) {
                                 $found_editable_password = true;
-
 				//insert an md5 key to the db
-				$new_pass = createPassword();
+				$new_pass = create_pass();
 				//TODO: add a query to check if the newly generated password already exists in the
 				//reset-pass table. If yes, attempt to generate another one.
 				$sql = "INSERT INTO `passwd_reset` (`user_id`, `hash`, `password`, `datetime`) VALUES ('".$s['user_id']."',  '".md5($new_pass)."', '$new_pass', NOW())";
@@ -214,21 +176,15 @@ $tool_content = "<table width=\"99%\">
 						break;
 					}
 				}
-
-				$tool_content = "
-				<table width=\"99%\">
-				<tbody>
-					<tr>
-						<td class=\"caution\">
-						<p><strong>$langPassCannotChange1</strong></p>
-						<p>$langPassCannotChange2 <a href='mailto:$emailhelpdesk'>$emailhelpdesk</a> $langPassCannotChange3</p>
-						<p><a href=\"../../index.php\">$langHome</a></p>
-					</td>
-					</tr>
-				</tbody>
-			</table>";
+				$tool_content = "<table width=\"99%\">
+				<tbody><tr><td class=\"caution\">
+				<p><strong>$langPassCannotChange1</strong></p>
+				<p>$langPassCannotChange2 <a href='mailto:$emailhelpdesk'>$emailhelpdesk</a> $langPassCannotChange3</p>
+				<p><a href=\"../../index.php\">$langHome</a></p>
+				</td>
+				</tr></tbody></table>";
+			}
 		}
-	}
 
 	/***** Account details found, now send e-mail *****/
         if ($found_editable_password) {
@@ -258,31 +214,26 @@ $tool_content = "<table width=\"99%\">
                 }
 
        } else {
-                $tool_content .= "<table width=\"99%\">
-                <tbody>
-                  <tr>
-                  <td class=\"caution\">
-                  <p><strong>$langAccountNotFound1 ($userName / $email)</strong></p>
-                  <p>$langAccountNotFound2 <a href='mailto: $emailhelpdesk'>$emailhelpdesk</a>, $langAccountNotFound3</p>
-                  <p><a href=\"../../index.php\">$langHome</a></p>
-                   </td>
-                  </tr>
-                 </tbody>
-                </table>";
+		$tool_content .= "<table width=\"99%\"><tbody>
+		<tr><td class=\"caution\">
+		<p><strong>$langAccountNotFound1 ($userName / $email)</strong></p>
+		<p>$langAccountNotFound2 <a href='mailto: $emailhelpdesk'>$emailhelpdesk</a>, $langAccountNotFound3</p>
+		<p><a href=\"../../index.php\">$langHome</a></p>
+		</td>
+		</tr>
+		</tbody></table>";
         }
 } else {
-               $tool_content = "<table width=\"99%\">
-                   <tbody>
-		               <tr>
-                   <td class=\"caution\">
-                   <p><strong>$langAccountEmailError1</strong></p>
-                   <p>$langAccountEmailError2 $email.</p>
-                   <p>$langAccountEmailError3 <a href='mailto:$emailhelpdesk'>$emailhelpdesk</a>.</p>
-                   <p><a href=\"../../index.php\">$langHome</a></p>
-                      </td>
-                     </tr>
-                        </tbody>
-                </table>";
+	$tool_content = "<table width=\"99%\">
+	<tbody><tr>
+	<td class=\"caution\">
+	<p><strong>$langAccountEmailError1</strong></p>
+	<p>$langAccountEmailError2 $email.</p>
+	<p>$langAccountEmailError3 <a href='mailto:$emailhelpdesk'>$emailhelpdesk</a>.</p>
+	<p><a href=\"../../index.php\">$langHome</a></p>
+	</td>
+	</tr>
+	</tbody></table>";
 }
 draw($tool_content,0);
 ?>

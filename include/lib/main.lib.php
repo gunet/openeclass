@@ -650,16 +650,19 @@ function nice_format($date) {
 }
 
 // creating passwords automatically
-function create_pass($length) {
-  	$res = "";
-	  $PASSCHARS="abcdefghijklmnopqrstuvwxyz023456789";
-	  $PASSL = 35;
-		srand ((double) microtime() * 1000000);
-		 for ($i = 1; $i<=$length ; $i++ ) {
-			    $res .= $PASSCHARS[rand(0,$PASSL-1)];
-			}
-	 return $res;
-	}
+function create_pass() {
+
+	$parts = array('a', 'ba', 'fa', 'ga', 'ka', 'la', 'ma', 'xa',
+                       'e', 'be', 'fe', 'ge', 'ke', 'le', 'me', 'xe',
+                       'i', 'bi', 'fi', 'gi', 'ki', 'li', 'mi', 'xi',
+                       'o', 'bo', 'fo', 'go', 'ko', 'lo', 'mo', 'xo',
+                       'u', 'bu', 'fu', 'gu', 'ku', 'lu', 'mu', 'xu',
+                       'ru', 'bur', 'fur', 'gur', 'kur', 'lur', 'mur',
+                       'sy', 'zy', 'gy', 'ky', 'tri', 'kro', 'pra');
+        $max = count($parts) - 1;
+        $num = rand(10,499);
+        return $parts[rand(0,$max)] . $parts[rand(0,$max)] . $num;
+}
 
 
 // check for new announcements
@@ -842,27 +845,6 @@ function warnIfExtNotLoaded($extensionName) {
                 (<a href=\"http://www.php.net/$extensionName\" target=_blank>$langReadHelp $langHere)</a>
                 </li>";
 	}
-}
-
-/*
- * return a string without logic
- *
- * @author Christophe Gesche <gesche@ipm.ucl.ac.be>
- * @param  integer	$nbcar 			default 5   	define here  length of password
- * @param  boolean	$lettresseules	default false	fix  if pass can content digit
- * @return string password
- * @desc return a string to be use as password
- */
-
-function generePass($nbcar=5,$lettresseules = false) {
-	$chaine = "abBDEFcdefghijkmnPQRSTUVWXYpqrst23456789"; //possible characters
-	if ($lettresseules)
-	$chaine = "abcdefghijklmnopqrstuvwxyzAZERTYUIOPMLKJHGFDSQWXCVBN"; //possible characters
-	for($i=0; $i<$nbcar; $i++)
-	{
-		@$pass .= $chaine[rand()%strlen($chaine)];
-	}
-	return $pass;
 }
 
 

@@ -138,7 +138,7 @@ class Question
 	 * returns the question weighting
 	 *
 	 * @author - Olivier Brouckaert
-	 * @return - integer - question weighting
+	 * @return - float - question weighting
 	 */
 	function selectWeighting()
 	{
@@ -215,7 +215,7 @@ class Question
 	 * changes the question weighting
 	 *
 	 * @author - Olivier Brouckaert
-	 * @param - integer $weighting - question weighting
+	 * @param - float $weighting - question weighting
 	 */
 	function updateWeighting($weighting)
 	{
@@ -474,8 +474,6 @@ class Question
 
 			$sql="DELETE FROM `$TBL_EXERCICE_QUESTION` WHERE question_id='$id' AND exercice_id='$exerciseId'";
 			db_query($sql); 
-//or die("Error : DELETE in file ".__FILE__." at line ".__LINE__);
-
 			return true;
 		}
 	}
