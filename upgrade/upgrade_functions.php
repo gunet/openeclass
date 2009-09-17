@@ -261,12 +261,12 @@ function encode_dropbox_documents($code, $id, $filename, $title) {
 //---------------------------------------------
 // Upgrade course database
 //---------------------------------------------
-function upgrade_course_2_1_4($code, $extramessage = '', $lang)
+function upgrade_course_2_2($code, $extramessage = '', $lang)
 {
 	global $langUpgCourse, $global_messages;
 
 	mysql_select_db($code);
-	echo "<hr><p>$langUpgCourse <b>$code</b> (2.1.4) $extramessage<br />";
+	echo "<hr><p>$langUpgCourse <b>$code</b> (2.2) $extramessage<br />";
 	flush();
 
         db_query("INSERT IGNORE INTO action_types SET id=2, name='exit'");
@@ -278,6 +278,8 @@ function upgrade_course_2_1_4($code, $extramessage = '', $lang)
 		CHANGE `RecordEndDate` `RecordEndDate` DATETIME NOT NULL DEFAULT '0000-00-00'", $code);
 	if (!mysql_field_exists("$code",'exercices','results'))
                 echo add_field('exercices', 'results', "TINYINT(1) NOT NULL DEFAULT '1'");
+	db_query("ALTER TABLE `questions` CHANGE `ponderation` `ponderation` FLOAT(11,2) NULL DEFAULT NULL");
+	db_query("ALTER TABLE `reponses` CHANGE `ponderation` `ponderation` FLOAT(5,2) NULL DEFAULT NULL");
 	// not needed anymore
 	echo delete_table('mc_scoring');
 
@@ -298,6 +300,10 @@ function upgrade_course_2_1_4($code, $extramessage = '', $lang)
 		$code);
 	db_query("ALTER TABLE `liens` CHANGE `url` `url` VARCHAR(255) DEFAULT NULL", $code);
 	db_query("ALTER TABLE `liens` CHANGE `titre` `titre` VARCHAR(255) DEFAULT NULL", $code);
+	// indexes creation
+	db_query("ALTER TABLE `lp_user_module_progress`
+		ADD INDEX `optimize`(`user_id` , `learnPath_module_id`)");
+	db_query("ALTER TABLE `actions` ADD INDEX `actionsindex`(`module_id`, `date_time`)");
 }
 
 

@@ -784,7 +784,7 @@ $langChangeDBCharset = "Cambiando la codificación de la base de datos";
 $langToUTF = "a UTF-8";
 $langEncryptPass = "Contraseñas de los usuarios encriptadas";
 $langNotEncrypted = "Aviso! El proceso de actualización no ha podido encriptar las contraselas por lo tanto la plataforma no está funcionando. Comenta la linea. «\$encryptedPasswd = true;» from the config.inc.php file";
-$langUpgradeStart = 'Comenzando la actualización de Open eClass 2.1';
+$langUpgradeStart = 'Comenzando la actualización de Open eClass';
 $langUpgradeConfig = 'Actualizando el archivo de configuración (config.php)';
 $langCreateStatsGraph = "Selección de parámetro";
 $langUsageVisits = "Visitas del curso";

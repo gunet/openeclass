@@ -785,7 +785,7 @@ $langChangeDBCharset = "Changing enconding of data base";
 $langToUTF = "to UTF-8";
 $langEncryptPass = "Encrypt user passwords";
 $langNotEncrypted = "WARNING! Upgrade process couldn't encrypt passwords so the platform is not functioning. Comment the line «\$encryptedPasswd = true;» from the config.inc.php file";
-$langUpgradeStart = 'Starting Open eClass 2.1 upgrade';
+$langUpgradeStart = 'Starting Open eClass upgrade';
 $langUpgradeConfig = 'Upgrading configuration file (config.php)';
 $langCreateStatsGraph = "Parameter selection";
 $langUsageVisits = "Course Visits";

@@ -2728,7 +2728,7 @@ $langChangeDBCharset = "Αλλαγή κωδικοποίησης βάσης δε�
 $langToUTF = "σε UTF-8";
 $langEncryptPass = "Κωδικοποίηση των συνθηματικών των χρηστών";
 $langNotEncrypted = "ΠΡΟΣΟΧΗ! Η διαδικασία αναβάθμισης δεν μπόρεσε να κρυπτογραφήσει τα password και η πλατφόρμα δεν μπορεί να λειτουργήσει. Αφαιρέστε τη γραμμή «\$encryptedPasswd = true;» από το αρχείο ρυθμίσεων config.inc.php";
-$langUpgradeStart = 'Έναρξη αναβάθμισης Open eClass 2.1';
+$langUpgradeStart = 'Έναρξη αναβάθμισης Open eClass';
 $langUpgradeConfig = 'Αναβάθμιση αρχείου ρυθμίσεων (config.php)';
 
 /*******************************************************************

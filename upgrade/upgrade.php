@@ -258,7 +258,7 @@ if (!isset($submit2)) {
                 $langAnnounceExample = 'Παράδειγμα ανακοίνωσης. Μόνο ο καθηγητής και τυχόν άλλοι διαχειριστές του μαθήματος μπορεί να ανεβάσουν ανακοινώσεις.';
                 db_query('SET NAMES utf8');
 	        db_query("DELETE from annonces WHERE contenu='$langAnnounceExample'");
-        }  elseif ($oldversion < '2.1.4') {
+        }  elseif ($oldversion < '2.2') {
 		db_query("ALTER TABLE `user` CHANGE `lang` `lang` VARCHAR(10) NOT NULL DEFAULT 'el'");
 		db_query("ALTER TABLE `prof_request` CHANGE `lang` `lang`  VARCHAR(10) NOT NULL DEFAULT 'el'");
                 // course units
@@ -295,8 +295,8 @@ if (!isset($submit2)) {
         		upgrade_course_old($code[0], $lang, "($i / $total)");
                         db_query('SET NAMES utf8');
                	        upgrade_course_2_1_3($code[0], "($i / $total)");
-                } elseif ($oldversion < '2.1.4') {
-               	        upgrade_course_2_1_4($code[0], "($i / $total)", $lang);
+                } elseif ($oldversion < '2.2') {
+               	        upgrade_course_2_2($code[0], "($i / $total)", $lang);
 		}
                 echo "</p>\n";
                 $i++;

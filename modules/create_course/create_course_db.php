@@ -222,7 +222,7 @@ mysql_query("CREATE TABLE questions (
         id int(11) NOT NULL auto_increment,
         question text,
         description text,
-        ponderation int(11) default NULL,
+        ponderation float(11,2) default NULL,
         q_position int(11) default 1,
         type int(11) default 2,
         PRIMARY KEY  (id))
@@ -235,8 +235,8 @@ mysql_query("CREATE TABLE reponses (
         reponse text,
         correct int(11) default NULL,
         comment text,
-                ponderation smallint(5),
-                r_position int(11) default NULL,
+	ponderation float(5,2),
+	r_position int(11) default NULL,
         PRIMARY KEY  (id, question_id))
         TYPE=MyISAM $charset_spec");
 
