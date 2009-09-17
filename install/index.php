@@ -1,4 +1,4 @@
-<?php session_start();
+<? session_start();
 header('Content-Type: text/html; charset=UTF-8');
 /*========================================================================
 *   Open eClass 2.1
@@ -51,14 +51,13 @@ $lang = $_SESSION['lang'];
 
 include "../include/lib/main.lib.php";
 include "install_functions.php";
-include "../modules/lang/$lang/common.inc.php";
-include "../modules/lang/$lang/messages.inc.php";
 if ($lang == 'english') {
 	$install_info_file = "install_info_en.php";
 } else {
 	$install_info_file = "install_info.php";
 }
-
+include "../modules/lang/$lang/common.inc.php";
+include "../modules/lang/$lang/messages.inc.php";
 if (file_exists("../config/config.php")) {
 	$tool_content .= "
 <!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">
@@ -171,30 +170,27 @@ if(isset($_REQUEST['install2']) OR isset($_REQUEST['back2']))
 	$langStepTitle = $langLicence;
 	$langStep = $langStep2;
 	$_SESSION['step']=2;
-	$tool_content .= "
-  <table width=\"99%\" class='FormData' align='left'>
-  <tbody>
-  <tr>
-    <th class='left' width='50'></th>
-    <td>$langInfoLicence<a href=\"../info/license/gpl_print.txt\">(".$langPrintVers.")</a></td>
-  </tr>
-  <tr>
-    <th class='left'></th>
-    <td><textarea wrap=\"virtual\" cols=\"75\" rows=\"15\" class='FormData_InputText'>";
+	$tool_content .= "<table width=\"99%\" class='FormData' align='left'>
+	<tbody>
+	<tr>
+	<th class='left' width='50'></th>
+	<td>$langInfoLicence<a href=\"../info/license/gpl_print.txt\">(".$langPrintVers.")</a></td>
+	</tr>
+	<tr>
+	<th class='left'></th>
+	<td><textarea wrap=\"virtual\" cols=\"75\" rows=\"15\" class='FormData_InputText'>";
 	$tool_content .= file_get_contents('../info/license/gpl.txt');
 	$tool_content .= "</textarea></td>
-  </tr>
-  <tr>
-    <th class='left'></th>
-    <td>
-        <input type=\"submit\" name=\"back1\" value=\"< $langPreviousStep\">
-        <input type=\"submit\" name=\"install3\" value=\"$langAccept\" >
-    </td>
-  </tr>
-  </tbody>
-  </table>
-</form>
-";
+	</tr>
+	<tr>
+	<th class='left'></th>
+	<td>
+	<input type=\"submit\" name=\"back1\" value=\"< $langPreviousStep\">
+	<input type=\"submit\" name=\"install3\" value=\"$langAccept\" >
+	</td></tr>
+	</tbody>
+	</table>
+	</form>";
 	draw($tool_content);
 }
 
@@ -206,41 +202,40 @@ elseif(isset($_REQUEST['install3']) OR isset($_REQUEST['back3'])) {
 	$tool_content .= "<p></p>
 	<table width=\"99%\" class='FormData' align='left'>
 	<tbody>
-    <tr>
-	  <th width=\"220\" class=\"left\"></th>
-	  <td>".$langDBSettingIntro."</td>
-    </tr>
-    <tr>
-	  <th class=\"left\">".$langDBHost."</th>
-	  <td><input type=\"text\" class='FormData_InputText' size=\"25\" name=\"dbHostForm\" value=\"".$dbHostForm."\">&nbsp;&nbsp;".$langEG." localhost</td>
-    </tr>
 	<tr>
-	  <th class=\"left\">".$langDBLogin."</th>
-	  <td><input type=\"text\" class='FormData_InputText' size=\"25\" name=\"dbUsernameForm\" value=\"".$dbUsernameForm."\">&nbsp;&nbsp;".$langEG." root </td>
+	<th width=\"220\" class=\"left\"></th>
+	<td>".$langDBSettingIntro."</td>
 	</tr>
 	<tr>
-	  <th class=\"left\">".$langDBPassword."</th>
-	  <td><input type=\"text\" class='FormData_InputText' size=\"25\" name=\"dbPassForm\" value=\"$dbPassForm\">&nbsp;&nbsp;".$langEG." ".create_pass()."</td>
+	<th class=\"left\">".$langdbhost."</th>
+	<td><input type=\"text\" class='FormData_InputText' size=\"25\" name=\"dbHostForm\" value=\"".$dbHostForm."\">&nbsp;&nbsp;".$langEG." localhost</td>
 	</tr>
 	<tr>
-	  <th class=\"left\">".$langMainDB."</th>
-	  <td><input type=\"text\" class='FormData_InputText' size=\"25\" name=\"dbNameForm\" value=\"$dbNameForm\">&nbsp;&nbsp;($langNeedChangeDB)</td>
+	<th class=\"left\">".$langDBLogin."</th>
+	<td><input type=\"text\" class='FormData_InputText' size=\"25\" name=\"dbUsernameForm\" value=\"".$dbUsernameForm."\">&nbsp;&nbsp;".$langEG." root </td>
 	</tr>
 	<tr>
-      <th class=\"left\">URL του phpMyAdmin</th>
-	  <td><input type=\"text\" class='FormData_InputText' size=\"25\" name=\"dbMyAdmin\" value=\"".$dbMyAdmin."\">&nbsp;&nbsp;$langNotNeedChange</td>
+	<th class=\"left\">".$langDBPassword."</th>
+	<td><input type=\"text\" class='FormData_InputText' size=\"25\" name=\"dbPassForm\" value=\"$dbPassForm\">&nbsp;&nbsp;".$langEG." ".create_pass()."</td>
 	</tr>
-    <tr>
-	  <th class=\"left\">URL του System info</th>
-	  <td><input type=\"text\" class='FormData_InputText' size=\"25\" name=\"phpSysInfoURL\" value=\"".$phpSysInfoURL."\">&nbsp;&nbsp;$langNotNeedChange</td>
+	<tr>
+	<th class=\"left\">".$langMainDB."</th>
+	<td><input type=\"text\" class='FormData_InputText' size=\"25\" name=\"dbNameForm\" value=\"$dbNameForm\">&nbsp;&nbsp;($langNeedChangeDB)</td>
 	</tr>
-    <tr>
-	  <th class=\"left\">&nbsp;</th>
-	  <td><input type=\"submit\" name=\"back2\" value=\"< $langPreviousStep\">&nbsp;<input type=\"submit\" name=\"install5\" value=\"$langNextStep >\"><div align=\"right\">(*) ".$langAllFieldsRequired."</div></td>
+	<tr>
+	<th class=\"left\">URL του phpMyAdmin</th>
+	<td><input type=\"text\" class='FormData_InputText' size=\"25\" name=\"dbMyAdmin\" value=\"".$dbMyAdmin."\">&nbsp;&nbsp;$langNotNeedChange</td>
 	</tr>
-    </tbody>
+	<tr>
+	<th class=\"left\">URL του System info</th>
+	<td><input type=\"text\" class='FormData_InputText' size=\"25\" name=\"phpSysInfoURL\" value=\"".$phpSysInfoURL."\">&nbsp;&nbsp;$langNotNeedChange</td>
+	</tr>
+	<tr>
+	<th class=\"left\">&nbsp;</th>
+	<td><input type=\"submit\" name=\"back2\" value=\"< $langPreviousStep\">&nbsp;<input type=\"submit\" name=\"install5\" value=\"$langNextStep >\"><div align=\"right\">(*) ".$langAllFieldsRequired."</div></td>
+	</tr>
+	</tbody>
 	</table>
-
 	</form>";
 	draw($tool_content);
 }	 // install3
@@ -254,81 +249,79 @@ elseif(isset($_REQUEST['install5']) OR isset($_REQUEST['back4']))
 	$langStepTitle = $langCfgSetting;
 	$langStep = $langStep4;
 	$_SESSION['step']=4;
-	$tool_content .= "
-
-	<table width=\"99%\" class='FormData' align='left'>
-    <tbody>
-    <tr>
-	  <th width=\"220\" class=\"left\">&nbsp;</th>
-	  <td>$langWillWrite.</td>
-	</tr>
-    <tr>
-	  <th class=\"left\">$langSiteUrl</th>
-	  <td><input type=\"text\" class=\"FormData_InputText\" size=\"40\" name=\"urlForm\" value=\"$urlForm\">&nbsp;&nbsp;(*)</td>
+	$tool_content .= "<table width=\"99%\" class='FormData' align='left'>
+	<tbody>
+	<tr>
+	<th width=\"220\" class=\"left\">&nbsp;</th>
+	<td>$langWillWrite.</td>
 	</tr>
 	<tr>
-	  <th class=\"left\">".$langLocalPath."</th>
-	  <td><input type=text size=40 class=\"FormData_InputText\" name=\"pathForm\" value=\"".realpath($pathForm)."/\">&nbsp;&nbsp;(*)</td>
+	<th class=\"left\">$langSiteUrl</th>
+	<td><input type=\"text\" class=\"FormData_InputText\" size=\"40\" name=\"urlForm\" value=\"$urlForm\">&nbsp;&nbsp;(*)</td>
 	</tr>
 	<tr>
-	  <th class=\"left\">".$langAdminName."</th>
-	  <td><input type=\"text\" class=\"FormData_InputText\" size=\"40\" name=\"nameForm\" value=\"$nameForm\"></td>
+	<th class=\"left\">".$langLocalPath."</th>
+	<td><input type=text size=40 class=\"FormData_InputText\" name=\"pathForm\" value=\"".realpath($pathForm)."/\">&nbsp;&nbsp;(*)</td>
 	</tr>
 	<tr>
-	  <th class=\"left\">".$langAdminSurname."</th>
-	  <td><input type=\"text\" class=\"FormData_InputText\" size=\"40\" name=\"surnameForm\" value=\"$surnameForm\"></td>
+	<th class=\"left\">".$langAdminName."</th>
+	<td><input type=\"text\" class=\"FormData_InputText\" size=\"40\" name=\"nameForm\" value=\"$nameForm\"></td>
 	</tr>
-    <tr>
-      <th class=\"left\">".$langAdminEmail."</th>
-      <td><input type=text class=\"FormData_InputText\" size=40 name=\"emailForm\" value=\"$emailForm\"></td>
-	</tr>
-    <tr>
-      <th class=\"left\">".$langAdminLogin."</th>
-      <td><input type=\"text\" class=\"FormData_InputText\" size=\"40\" name=\"loginForm\" value=\"$loginForm\"></td>
-    </tr>
-    <tr>
-      <th class=\"left\">".$langAdminPass."</th>
-      <td><input type=\"text\" class=\"FormData_InputText\" size=\"40\" name=\"passForm\" value=\"$passForm\"></td>
-    </tr>
-    <tr>
-      <th class=\"left\">".$langCampusName."</th>
-      <td><input type=\"text\" class=\"FormData_InputText\" size=\"40\" name=\"campusForm\" value=\"$campusForm\"><td>
-    </tr>
-    <tr>
-       <th class=\"left\">".$langHelpDeskPhone."</th>
-       <td><input type=\"text\" class=\"FormData_InputText\" size=\"40\" name=\"helpdeskForm\" value=\"$helpdeskForm\"></td>
-    </tr>
-    <tr>
-      <th class=\"left\">".$langHelpDeskFax."</th>
-      <td><input type=\"text\" class=\"FormData_InputText\" size=\"40\" name=\"faxForm\" value=\"$faxForm\"></td>
-    </tr>
-    <tr>
-      <th class=\"left\">".$langHelpDeskEmail."</th>
-      <td><input type=text class=\"FormData_InputText\" size=40 name=\"helpdeskmail\" value=\"$helpdeskmail\">&nbsp;&nbsp;(**)</td>
-    </tr>
-    <tr>
-      <th class=\"left\">".$langInstituteShortName."</th>
-      <td><input type=text class=\"FormData_InputText\" size=40 name=\"institutionForm\" value=\"$institutionForm\"></td>
-    </tr>
-    <tr>
-      <th class=\"left\">".$langInstituteName."</th>
-      <td><input type=\"text\" class=\"FormData_InputText\" size=\"40\" name=\"institutionUrlForm\" value=\"$institutionUrlForm\"></td>
-    </tr>
-    <tr>
-      <th class=\"left\">".$langInstitutePostAddress."</th>
-      <td><textarea rows='3' class=\"FormData_InputText\" cols='40' name=\"postaddressForm\" value=\"".@$postaddressForm."\"></textarea></td>
-	</tr>
-    <tr>
-      <th class=\"left\">$langldap_host_url</th>
-      <td><input type=\"text\" class=\"FormData_InputText\" size=\"40\" name=\"ldapserver\" value=\"$ldapserver\"></td>
-    </tr>
-    <tr>
-      <th class=\"left\">$langLDAPBaseDn</th>
-      <td><input type=\"text\" class=\"FormData_InputText\" size=\"40\" name=\"dnldapserver\" value=\"$dnldapserver\"></td>
-    </tr>
 	<tr>
-      <th class=\"left\">$langViaReq</th>
-	  <td><input type='checkbox' name='reguser'></td>
+	<th class=\"left\">".$langAdminSurname."</th>
+	<td><input type=\"text\" class=\"FormData_InputText\" size=\"40\" name=\"surnameForm\" value=\"$surnameForm\"></td>
+	</tr>
+	<tr>
+	<th class=\"left\">".$langAdminEmail."</th>
+	<td><input type=text class=\"FormData_InputText\" size=40 name=\"emailForm\" value=\"$emailForm\"></td>
+	</tr>
+	<tr>
+	<th class=\"left\">".$langAdminLogin."</th>
+	<td><input type=\"text\" class=\"FormData_InputText\" size=\"40\" name=\"loginForm\" value=\"$loginForm\"></td>
+	</tr>
+	<tr>
+	<th class=\"left\">".$langAdminPass."</th>
+	<td><input type=\"text\" class=\"FormData_InputText\" size=\"40\" name=\"passForm\" value=\"$passForm\"></td>
+	</tr>
+	<tr>
+	<th class=\"left\">".$langCampusName."</th>
+	<td><input type=\"text\" class=\"FormData_InputText\" size=\"40\" name=\"campusForm\" value=\"$campusForm\"><td>
+	</tr>
+	<tr>
+	<th class=\"left\">".$langHelpDeskPhone."</th>
+	<td><input type=\"text\" class=\"FormData_InputText\" size=\"40\" name=\"helpdeskForm\" value=\"$helpdeskForm\"></td>
+	</tr>
+	<tr>
+	<th class=\"left\">".$langHelpDeskFax."</th>
+	<td><input type=\"text\" class=\"FormData_InputText\" size=\"40\" name=\"faxForm\" value=\"$faxForm\"></td>
+	</tr>
+	<tr>
+	<th class=\"left\">".$langHelpDeskEmail."</th>
+	<td><input type=text class=\"FormData_InputText\" size=40 name=\"helpdeskmail\" value=\"$helpdeskmail\">&nbsp;&nbsp;(**)</td>
+	</tr>
+	<tr>
+	<th class=\"left\">".$langInstituteShortName."</th>
+	<td><input type=text class=\"FormData_InputText\" size=40 name=\"institutionForm\" value=\"$institutionForm\"></td>
+	</tr>
+	<tr>
+	<th class=\"left\">".$langInstituteName."</th>
+	<td><input type=\"text\" class=\"FormData_InputText\" size=\"40\" name=\"institutionUrlForm\" value=\"$institutionUrlForm\"></td>
+	</tr>
+	<tr>
+	<th class=\"left\">".$langInstitutePostAddress."</th>
+	<td><textarea rows='3' class=\"FormData_InputText\" cols='40' name=\"postaddressForm\" value=\"".@$postaddressForm."\"></textarea></td>
+	</tr>
+	<tr>
+	<th class=\"left\">$langldap_host_url</th>
+	<td><input type=\"text\" class=\"FormData_InputText\" size=\"40\" name=\"ldapserver\" value=\"$ldapserver\"></td>
+	</tr>
+	<tr>
+	<th class=\"left\">$langLDAPBaseDn</th>
+	<td><input type=\"text\" class=\"FormData_InputText\" size=\"40\" name=\"dnldapserver\" value=\"$dnldapserver\"></td>
+	</tr>
+	<tr>
+	<th class=\"left\">$langViaReq</th>
+	<td><input type='checkbox' name='reguser'></td>
 	</tr>";
 	/*
     <tr>
@@ -376,15 +369,14 @@ function set_MCU()
       <th class=\"left\"><div id=\"MCU_div_text\"></div></th>
 	  <td><div id=\"MCU_div_input\"></td>
     </tr>*/
-    $tool_content .= "<tr>
-      <th class=\"left\">&nbsp;</th>
-      <td><input type=\"submit\" name=\"back3\" value=\"< $langPreviousStep \">
-          <input type=\"submit\" name=\"install6\" value='$langNextStep >'>
-          <div align=\"left\">$langRequiredFields.</div>
-          <div align=\"left\">(**) ".$langWarnHelpDesk."</div></td>
-    </tr>
-    </tbody>
-    </table>";
+    $tool_content .= "<tr><th class=\"left\">&nbsp;</th>
+	<td><input type=\"submit\" name=\"back3\" value=\"< $langPreviousStep \">
+	<input type=\"submit\" name=\"install6\" value='$langNextStep >'>
+	<div align=\"left\">$langRequiredFields.</div>
+	<div align=\"left\">(**) ".$langWarnHelpDesk."</div></td>
+	</tr>
+	</tbody>
+	</table>";
 	draw($tool_content);
 }
 
@@ -404,91 +396,91 @@ elseif(isset($_REQUEST['install6']))
   	}
 
 	$tool_content .= "
-	<table width=\"99%\" class='FormData' align='left'>
-    <tbody>
-    <tr>
-	  <th width=\"220\" class=\"left\">&nbsp;</th>
-	  <td>$langReviewSettings</td>
+		<table width=\"99%\" class='FormData' align='left'>
+	<tbody>
+	<tr>
+	<th width=\"220\" class=\"left\">&nbsp;</th>
+	<td>$langReviewSettings</td>
 	</tr>
-    <tr>
-	  <th class=\"left\">$langDBHost:</th>
-	  <td>$dbHostForm</td>
+	<tr>
+	<th class=\"left\">$langdbhost:</th>
+	<td>$dbHostForm</td>
 	</tr>
-    <tr>
-	  <th class=\"left\">$langDBLogin:</th>
-	  <td>$dbUsernameForm</td>
+	<tr>
+	<th class=\"left\">$langDBLogin:</th>
+	<td>$dbUsernameForm</td>
 	</tr>
-    <tr>
-	  <th class=\"left\">$langMainDB: </th>
-	  <td>$dbNameForm</td>
+	<tr>
+	<th class=\"left\">$langMainDB: </th>
+	<td>$dbNameForm</td>
 	</tr>
-    <tr>
-	  <th class=\"left\">PHPMyAdmin URL:</th>
-	  <td>$dbMyAdmin</td>
+	<tr>
+	<th class=\"left\">PHPMyAdmin URL:</th>
+	<td>$dbMyAdmin</td>
 	</tr>
-    <tr>
-	  <th class=\"left\">$langSiteUrl:</th>
-	  <td>$urlForm</td>
+	<tr>
+	<th class=\"left\">$langSiteUrl:</th>
+	<td>$urlForm</td>
 	</tr>
-    <tr>
-	  <th class=\"left\">$langLocalPath:</th>
-	  <td>$pathForm</td>
+	<tr>
+	<th class=\"left\">$langLocalPath:</th>
+	<td>$pathForm</td>
 	</tr>
-    <tr>
-	  <th class=\"left\">$langAdminEmail:</th>
-	  <td>$emailForm</td>
+	<tr>
+	<th class=\"left\">$langAdminEmail:</th>
+	<td>$emailForm</td>
 	</tr>
-    <tr>
-	  <th class=\"left\">$langAdminName:</th>
-	  <td>$nameForm</td>
+	<tr>
+	<th class=\"left\">$langAdminName:</th>
+	<td>$nameForm</td>
 	</tr>
-    <tr>
-	  <th class=\"left\">$langAdminSurname:</th>
-	  <td>$surnameForm</td>
+	<tr>
+	<th class=\"left\">$langAdminSurname:</th>
+	<td>$surnameForm</td>
 	</tr>
-    <tr>
-	  <th class=\"left\">$langAdminLogin:</th>
-	  <td>$loginForm</td>
+	<tr>
+	<th class=\"left\">$langAdminLogin:</th>
+	<td>$loginForm</td>
 	</tr>
-    <tr>
-	  <th class=\"left\">$langAdminPass:</th>
-	  <td>$passForm</td>
+	<tr>
+	<th class=\"left\">$langAdminPass:</th>
+	<td>$passForm</td>
 	</tr>
-    <tr>
-	  <th class=\"left\">$langCampusName:</th>
-	  <td>$campusForm</td>
+	<tr>
+	<th class=\"left\">$langCampusName:</th>
+	<td>$campusForm</td>
 	</tr>
-    <tr>
-	  <th class=\"left\">$langHelpDeskPhone: </th>
-	  <td>$helpdeskForm</td>
+	<tr>
+	<th class=\"left\">$langHelpDeskPhone: </th>
+	<td>$helpdeskForm</td>
 	</tr>
-    <tr>
-	  <th class=\"left\">$langHelpDeskEmail:</th>
-	  <td>$helpdeskmail</td>
+	<tr>
+	<th class=\"left\">$langHelpDeskEmail:</th>
+	<td>$helpdeskmail</td>
 	</tr>
-    <tr>
-	  <th class=\"left\">$langInstituteShortName:</th>
-	  <td>$institutionForm</td>
+	<tr>
+	<th class=\"left\">$langInstituteShortName:</th>
+	<td>$institutionForm</td>
 	</tr>
-    <tr>
-	  <th class=\"left\">$langInstituteName:</th>
-	  <td>$institutionUrlForm</td>
+	<tr>
+	<th class=\"left\">$langInstituteName:</th>
+	<td>$institutionUrlForm</td>
 	</tr>
-    <tr>
-	  <th class=\"left\">$langInstitutePostAddress:</th>
-	  <td>$postaddressForm</td>
+	<tr>
+	<th class=\"left\">$langInstitutePostAddress:</th>
+	<td>$postaddressForm</td>
 	</tr>
-    <tr>
-	  <th class=\"left\">$langldap_host_url:</th>
-	  <td>$ldapserver</td>
+	<tr>
+	<th class=\"left\">$langldap_host_url:</th>
+	<td>$ldapserver</td>
 	</tr>
-    <tr>
-	  <th class=\"left\">$langLDAPBaseDn: </th>
-	  <td>$dnldapserver</td>
+	<tr>
+	<th class=\"left\">$langLDAPBaseDn: </th>
+	<td>$dnldapserver</td>
 	</tr>
-    <tr>
-	  <th class=\"left\">$langGroupStudentRegistrationType</th>
-	  <td>".$mes_add."</td>
+	<tr>
+	<th class=\"left\">$langGroupStudentRegistrationType</th>
+	<td>".$mes_add."</td>
 	</tr>";
     /*<tr>
 	  <th class=\"left\">MCU:</th>
@@ -498,14 +490,13 @@ elseif(isset($_REQUEST['install6']))
 	  <th class=\"left\">$langVod:</th>
 	  <td>".@$vodServerForm."</td>
 	</tr> */
-    $tool_content .= "<tr>
-	  <th class=\"left\">&nbsp;</th>
-	  <td><input type=\"submit\" name=\"back4\" value=\"< $langPreviousStep\">
-        <input type=\"submit\" name=\"install7\" value=\"$langInstall >\"></td>
+    $tool_content .= "<tr><th class=\"left\">&nbsp;</th>
+	<td><input type=\"submit\" name=\"back4\" value=\"< $langPreviousStep\">
+	<input type=\"submit\" name=\"install7\" value=\"$langInstall >\"></td>
 	</tr>
-    </tbody>
-    </table>
-</form>";
+	</tbody>
+	</table>
+	</form>";
 
 draw($tool_content);
 }
@@ -523,27 +514,25 @@ elseif(isset($_REQUEST['install7']))
 		$no = mysql_errno();
 		$msg = mysql_error();
 		$tool_content .= "
-
-  <table width=\"99%\">
-  <thead>
-  <tr>
-    <td><div align=\"center\"><img style='border:0px;' src='../template/classic/img/caution_alert.gif' title='caution-alert'></div></td>
-  </tr>
-  <tr>
-    <td>
-        <div align=\"center\"><h4>[".$no."] - ".$msg."</div></h4>
-        <p>$langErrorMysql</p>
-        	<ul id=\"installBullet\">
-        	   <li>$langDBHost: ".$dbHostForm."</li>
-        	   <li>$langDBLogin: ".$dbUsernameForm."</li>
-        	   <li>$langDBPassword: ".$dbPassForm."</li>
-        	</ul>
-        <p>$langBackStep3_2</p></td>
-    </td>
-  </tr>
-  </thead>
-  </table>
-
+		<table width=\"99%\">
+		<thead>
+		<tr>
+		<td><div align=\"center\"><img style='border:0px;' src='../template/classic/img/caution_alert.gif' title='caution-alert'></div></td>
+		</tr>
+		<tr>
+		<td>
+		<div align=\"center\"><h4>[".$no."] - ".$msg."</div></h4>
+		<p>$langErrorMysql</p>
+		<ul id=\"installBullet\">
+		<li>$langdbhost: ".$dbHostForm."</li>
+		<li>$langDBLogin: ".$dbUsernameForm."</li>
+		<li>$langDBPassword: ".$dbPassForm."</li>
+		</ul>
+		<p>$langBackStep3_2</p></td>
+		</td>
+		</tr>
+		</thead>
+		</table>
 		<input type=\"submit\" name=\"install3\" value=\"< $langBackStep3\"></form>";
 		draw($tool_content);
 		exit();
@@ -565,7 +554,7 @@ elseif(isset($_REQUEST['install7']))
     		else $user_registration = 'TRUE';
 		$stringConfig='<?php
 /* ========================================================
- * GUnet eClass 2.0 configuration file
+ * OpeneClass 2.2 configuration file
  * Automatically created by install on '.date('Y-m-d H:i').'
  * ======================================================== */
 
@@ -622,7 +611,7 @@ $encryptedPasswd = true;
     <form action=\"../\"><input type=\"submit\" value=\"$langEnterFirstTime\"></form>";
 
 	draw($tool_content);
-	}       // τέλος ελέγχου για δικαιώματα
+	}
 }	// end of step 6
 
 // step 1 requirements
@@ -699,83 +688,79 @@ elseif (isset($_REQUEST['install1']) || isset($_REQUEST['back1']))
 	$tool_content .= "</ul>";
 
 	$tool_content .= "
-    <b>$langOtherReq</b>
-    <ul id=\"installBullet\">
-    		<li>$langInstallBullet1</li>
-    		<li>$langInstallBullet2</li>
-    		<li>$langInstallBullet3</li>
-    		</ul>
-    		<b>$langAddOnStreaming:</b>
-		<ul id=\"installBullet\">
-     		<li>$langAddOnExpl</li>
-    		<li>$langExpPhpMyAdmin</li></ul>
-		<p>$langBeforeInstall1<a href=\"$install_info_file\" target=_blank>$langInstallInstr</a>.</p>
-		<p>$langBeforeInstall2<a href=\"../README.txt\" target=_blank>$langHere</a>.</p>
-		<br><input type=\"submit\" name=\"install2\" value=\"$langNextStep >\">
-		</form>";
-		draw($tool_content);
+	<b>$langOtherReq</b>
+	<ul id=\"installBullet\">
+	<li>$langInstallBullet1</li>
+	<li>$langInstallBullet2</li>
+	<li>$langInstallBullet3</li>
+	</ul>
+	<b>$langAddOnStreaming:</b>
+	<ul id=\"installBullet\">
+	<li>$langAddOnExpl</li>
+	<li>$langExpPhpMyAdmin</li></ul>
+	<p>$langBeforeInstall1<a href=\"$install_info_file\" target=_blank>$langInstallInstr</a>.</p>
+	<p>$langBeforeInstall2<a href=\"../README.txt\" target=_blank>$langHere</a>.</p>
+	<br><input type=\"submit\" name=\"install2\" value=\"$langNextStep >\">
+	</form>";
+	draw($tool_content);
 } else {
-		$langLanguages = array(
-			'greek' => 'Ελληνικά (el)',
-			'english' => 'English (en)');
+	$langLanguages = array(
+		'greek' => 'Ελληνικά (el)',
+		'english' => 'English (en)');
 
-		$tool_content .= "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">
-<html>
-  <head>
-  <title>$langWelcomeWizard</title>
-  <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />
-  <link href=\"./install.css\" rel=\"stylesheet\" type=\"text/css\" />
-  <link href=\"../template/classic/tool_content.css\" rel=\"stylesheet\" type=\"text/css\" />
-  <link href=\"../template/classic/perso.css\" rel=\"stylesheet\" type=\"text/css\" />
-  </head>
-  <body>
-
-    <table class=\"FormInput\" align=\"center\" style=\"border: 1px solid #edecdf;\">
-    <thead>
-    <tr>
-      <td colspan=\"2\"><div align=\"center\" class=\"welcomeImg\"></div></td>
-    </tr>
-    <tr>
-      <td colspan=\"2\"><div align=\"center\"><h4>$langWelcomeWizard</h4></div>$langThisWizard
-      <ul id=\"installBullet\">
-        <li>$langWizardHelp1</li>
-        <li>$langWizardHelp2</li>
-        <li>$langWizardHelp3</li>
-      </ul>
-      </td>
-    </tr>
-    <tr>
-      <td colspan=\"2\">
-
-      <table width=\"100%\" class=\"FormInput\" align=\"center\">
-      <tbody>
-      <tr>
-        <td width=\"40%\" class=\"odd\">&nbsp;</td>
-        <td><b>$l_options</b></td>
-      </tr>
-      <tr>
-        <td class=\"odd\" class=\"left\">$langChooseLang:</td>
-        <td><form name='langform' action='$_SERVER[PHP_SELF]' method=\"post\">".selection($langLanguages, 'lang', $lang, 'onChange="document.langform.submit();"')."</form></td>
-      </tr>
-      <tr>
-        <td class=\"odd\" class=\"left\">&nbsp;</td>
-        <td>
-           <form action='$_SERVER[PHP_SELF]?alreadyVisited=1' method=\"post\">
-             <input type=\"hidden\" name=\"welcomeScreen\" value=\"welcomeScreen\">
-             <input type=\"submit\" name=\"install1\" value=\"$langNextStep >\">
-           </form>
-        </td>
-      </tr>
-      </thead>
-      </table>
-
-        </td>
-      </tr>
-    </thead>
-    </table>
-
-  </body>
-</html>";
-		echo $tool_content;
+	$tool_content .= "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">
+	<html>
+	<head>
+	<title>$langWelcomeWizard</title>
+	<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />
+	<link href=\"./install.css\" rel=\"stylesheet\" type=\"text/css\" />
+	<link href=\"../template/classic/tool_content.css\" rel=\"stylesheet\" type=\"text/css\" />
+	<link href=\"../template/classic/perso.css\" rel=\"stylesheet\" type=\"text/css\" />
+	</head>
+	<body>
+	<table class=\"FormInput\" align=\"center\" style=\"border: 1px solid #edecdf;\">
+	<thead>
+	<tr>
+	<td colspan=\"2\"><div align=\"center\" class=\"welcomeImg\"></div></td>
+	</tr>
+	<tr>
+	<td colspan=\"2\"><div align=\"center\"><h4>$langWelcomeWizard</h4></div>$langThisWizard
+	<ul id=\"installBullet\">
+	<li>$langWizardHelp1</li>
+	<li>$langWizardHelp2</li>
+	<li>$langWizardHelp3</li>
+	</ul>
+	</td>
+	</tr>
+	<tr>
+	<td colspan=\"2\">
+	<table width=\"100%\" class=\"FormInput\" align=\"center\">
+	<tbody>
+	<tr>
+	<td width=\"40%\" class=\"odd\">&nbsp;</td>
+	<td><b>$l_options</b></td>
+	</tr>
+	<tr>
+	<td class=\"odd\" class=\"left\">$langChooseLang:</td>
+	<td><form name='langform' action='$_SERVER[PHP_SELF]' method=\"post\">".selection($langLanguages, 'lang', $lang, 'onChange="document.langform.submit();"')."</form></td>
+	</tr>
+	<tr>
+	<td class=\"odd\" class=\"left\">&nbsp;</td>
+	<td>
+	<form action='$_SERVER[PHP_SELF]?alreadyVisited=1' method=\"post\">
+	<input type=\"hidden\" name=\"welcomeScreen\" value=\"welcomeScreen\">
+	<input type=\"submit\" name=\"install1\" value=\"$langNextStep >\">
+	</form>
+	</td>
+	</tr>
+	</thead>
+	</table>
+	</td>
+	</tr>
+	</thead>
+	</table>
+	</body>
+	</html>";
+	echo $tool_content;
 	}
 ?>
