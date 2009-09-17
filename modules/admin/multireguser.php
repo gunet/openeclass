@@ -1,4 +1,4 @@
-http://apotis4stis5.blogspot.com/2009/09/sony-music-greece-hacked.html<?
+<?
 /*========================================================================
 *   Open eClass 2.1
 *   E-learning and Course Management System
