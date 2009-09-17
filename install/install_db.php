@@ -24,6 +24,10 @@
 *  			eMail: info@openeclass.org
 * =========================================================================*/
 
+if (!defined('ECLASS_VERSION')) {
+        exit;
+}
+
 db_query("DROP DATABASE IF EXISTS ".$mysqlMainDb);
 if (mysql_version()) db_query("SET NAMES utf8");
 if (mysql_version()) {
@@ -363,7 +367,7 @@ db_query("CREATE TABLE `config` (
                PRIMARY KEY (`id`)) $charset_spec");
 
 db_query("INSERT INTO `config` (`key`, `value`)
-               VALUES ('version', '$langEclassVersion')");
+               VALUES ('version', '" . ECLASS_VERSION ."')");
 
 
 #

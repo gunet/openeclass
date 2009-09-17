@@ -42,7 +42,7 @@ $tool_content ="";
           </tr>
           <tr class=\"odd\">
             <th class=\"left\" style=\"border-left: 1px solid #edecdf;\">$l_version:</th>
-            <td>$langAboutText:&nbsp;<b>$siteName $langEclassVersion</b>&nbsp;&nbsp;(<a href='http://portal.eclass.gunet.gr/' title='Portal eClass' target='_blank' border=0>>></a>)</td>
+            <td>$langAboutText:&nbsp;<b>$siteName " . ECLASS_VERSION . "</b>&nbsp;&nbsp;(<a href='http://www.openeclass.org/' title='Open eClass Portal' target='_blank' border=0>>></a>)</td>
           </tr>
           <tr class=\"odd\">
             <th class=\"left\" style=\"border-left: 1px solid #edecdf;\">$langCoursesHeader:</th>

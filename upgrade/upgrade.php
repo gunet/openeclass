@@ -308,7 +308,7 @@ if (!isset($submit2)) {
                 convert_db_utf8($mysqlMainDb);
         }
 
-        db_query("UPDATE config SET `value`='$langEclassVersion' WHERE `key`='version'", $mysqlMainDb);
+        db_query("UPDATE config SET `value` = '" . ECLASS_VERSION ."' WHERE `key`='version'", $mysqlMainDb);
 
         echo "<hr /><p><em class='success_small' style='font-weight:bold;'>$langUpgradeSuccess</em></p>
                 <p><em style='font-weight:bold;'>$langUpgReady</em></p>

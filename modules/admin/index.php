@@ -62,7 +62,7 @@ $tool_content .= "
     </tr>
     <tr class='odd'>
       <th class='left' style='border-left: 1px solid #edecdf;'>Version:</th>
-      <td>$langAboutText <b>$siteName $langEclassVersion</b></td>
+      <td>$langAboutText <b>$siteName " . ECLASS_VERSION . "</b></td>
     </tr>
     <tr class='odd'>
       <th class='left' style='border-left: 1px solid #edecdf;'>IP Host:</th>
