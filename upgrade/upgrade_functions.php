@@ -150,7 +150,7 @@ function mysql_field_exists($db,$table,$field)
 
 }
 
-// add indexes in specific columns/tables
+// add index in specific columns/tables
 function add_index($index, $column, $table)  {
 	global $langIndexAdded, $langIndexExists, $langOfTable;
 
@@ -165,6 +165,23 @@ function add_index($index, $column, $table)  {
         $retString = "<p>$langIndexAdded $column $langOfTable $table</p>";
         return $retString;
 }
+
+// add indexes in specific columns/tables
+function add_indexes($index, $column1, $column2, $table)  {
+	global $langIndexAdded, $langIndexExists, $langOfTable;
+
+        $ind_sql = db_query("SHOW INDEXES FROM $table");
+        while ($i = mysql_fetch_array($ind_sql))  {
+                if ($i['Key_name'] == $index) {
+                        $retString = "<p>$langIndexExists $table</p>";
+			return $retString;
+		}
+	}
+        db_query("ALTER TABLE $table ADD INDEX $index($column1, $column2)");
+        $retString = "<p>$langIndexAdded $column $langOfTable $table</p>";
+        return $retString;
+}
+
 
 // Removes initial part of path from assignment_submit.file_path
 function update_assignment_submit()
@@ -261,7 +278,16 @@ function encode_dropbox_documents($code, $id, $filename, $title) {
 //---------------------------------------------
 // Upgrade course database
 //---------------------------------------------
-function upgrade_course_2_2($code, $extramessage = '', $lang)
+
+// run all upgrade functions (used mainly to restore course)
+function upgrade_course($code, $lang)
+{
+	upgrade_course_old($code, $lang);
+	upgrade_course_2_1_3($code);
+	upgrade_course_2_2($code, $lang);
+}
+
+function upgrade_course_2_2($code, $lang, $extramessage = '')
 {
 	global $langUpgCourse, $global_messages;
 
@@ -301,9 +327,8 @@ function upgrade_course_2_2($code, $extramessage = '', $lang)
 	db_query("ALTER TABLE `liens` CHANGE `url` `url` VARCHAR(255) DEFAULT NULL", $code);
 	db_query("ALTER TABLE `liens` CHANGE `titre` `titre` VARCHAR(255) DEFAULT NULL", $code);
 	// indexes creation
-	db_query("ALTER TABLE `lp_user_module_progress`
-		ADD INDEX `optimize`(`user_id` , `learnPath_module_id`)");
-	db_query("ALTER TABLE `actions` ADD INDEX `actionsindex`(`module_id`, `date_time`)");
+        add_indexes('optimize', 'user_id', 'learnPath_module_id', 'lp_user_module_progress');
+        add_indexes('actionsindex', 'module_id', 'date_time', 'actions');
 }
 
 

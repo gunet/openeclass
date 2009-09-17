@@ -66,8 +66,9 @@ if (isset($send_archive) and $_FILES['archiveZipped']['size'] > 0) {
 } elseif (isset($create_dir_for_course)) {
 	//Try to create course with data uploaded
 	$r = $restoreThis."/html";
+	
 	$course_code = create_course($course_code, $course_lang, $course_title,
-		$course_desc, $course_fac, $course_vis, $course_prof, $course_type);
+		$course_desc, intval($course_fac), $course_vis, $course_prof, $course_type);
 	move_dir($r, "$webDir/courses/$course_code");
 	course_index("$webDir/courses/$course_code", $course_code);
 	$tool_content .= "<p>$langCopyFiles $webDir/courses/$course_code</p><br><p>";
@@ -302,7 +303,7 @@ function user ($userid, $name, $surname, $login, $password, $email, $statut, $ph
 			quote($userid_map[$userid]),
 			quote($statut))).
 			")");
-	echo "<br> $langUsername=$login, $langPrevId=$userid, $langNewId=$userid_map[$userid]\n";
+	echo "<br> $langUserName=$login, $langPrevId=$userid, $langNewId=$userid_map[$userid]\n";
 }
 
 function query($sql) {
@@ -413,7 +414,7 @@ function assignment_submit($userid, $assignment_id, $submission_date,
 function create_course($code, $lang, $title, $desc, $fac, $vis, $prof, $type) {
 	global $mysqlMainDb;
 
-	$repertoire = new_code(find_faculty_by_name($fac));
+	$repertoire = new_code($fac);
 
 	if (mysql_select_db($repertoire)) {
 		echo $langCourseExists;
@@ -427,7 +428,7 @@ function create_course($code, $lang, $title, $desc, $fac, $vis, $prof, $type) {
 			quote($lang),
 			quote($title),
 			quote($desc),
-			quote($fac),
+			$fac,
 			quote($vis),
 			quote($prof),
 			quote($code),
@@ -435,7 +436,7 @@ function create_course($code, $lang, $title, $desc, $fac, $vis, $prof, $type) {
 		")");
 	db_query("INSERT into `$mysqlMainDb`.cours_faculte
 		(faculte,code)
-		VALUES(".quote($fac).",".quote($repertoire).")");
+		VALUES($fac,".quote($repertoire).")");
 
 	if (!db_query("CREATE DATABASE `$repertoire`")) {
 		echo "Database $repertoire creation failure ";
@@ -502,16 +503,16 @@ function faculty_select($current)
 	$ret = "";
 
 	$ret .= "<select name=\"course_fac\">\n";
-	$res = mysql_query("SELECT name FROM `$mysqlMainDb`.faculte ORDER BY number");
+	$res = mysql_query("SELECT id, name FROM `$mysqlMainDb`.faculte ORDER BY number");
 	while ($fac = mysql_fetch_array($res)) {
 		if($fac['name'] == $current) {
-			$ret .= "<option selected>$fac[name]</option>\n";
+			$ret .= "<option selected value='$fac[id]'>$fac[name]</option>\n";
 		} else {
-			$ret .= "<option>$fac[name]</option>\n";
+			$ret .= "<option value='$fac[id]'>$fac[name]</option>\n";
 		}
 	}
 	$ret .= "</select>\n";
-return $ret;
+	return $ret;
 }
 
 // Unzip backup file
