@@ -101,11 +101,6 @@ $code=$repertoire;
                KEY topic_last_post_id (topic_last_post_id))
     TYPE=MyISAM $charset_spec");
 
-/* example message */
-/*  mysql_query("INSERT INTO posts_text VALUES ('1','$langMessage')");
-  mysql_query("INSERT INTO posts VALUES (1,1,1,1,NOW(),'130.104.1.1','$nom','$prenom')");
-  mysql_query("INSERT INTO topics VALUES (1,'$langExMessage',-1,'2001-09-18 20:25',1,'',1,1,'0','1', '$nom', '$prenom')"); */
-
   mysql_query("CREATE TABLE users (
                user_id int(10) NOT NULL auto_increment,
                username varchar(40) NOT NULL,
@@ -942,4 +937,9 @@ mysql_query("ALTER TABLE `forums` ADD FULLTEXT `forums` (`forum_name`,`forum_des
 mysql_query("ALTER TABLE `liens` ADD FULLTEXT `liens` (`url` ,`titre` ,`description`)");
 mysql_query("ALTER TABLE `video` ADD FULLTEXT `video` (`url` ,`titre` ,`description`)");
 mysql_query("ALTER TABLE `videolinks` ADD FULLTEXT `videolinks` (`url` ,`titre` ,`description`)");
+
+// creation of indexes 
+mysql_query("ALTER TABLE `lp_user_module_progress` ADD INDEX `optimize` (`user_id` , `learnPath_module_id`)");
+mysql_query("ALTER TABLE `actions` ADD INDEX `actionsindex` (`module_id` , `date_time`)"); 
+
 ?>

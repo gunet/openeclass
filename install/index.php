@@ -125,7 +125,7 @@ if(isset($welcomeScreen) )
 	$surnameForm = "Πλατφόρμας";
 	$loginForm = "admin";
 	$passForm = create_pass();
-	$campusForm = "GUNet eClass";
+	$campusForm = "Open eClass";
 	$helpdeskForm = "+30 2xx xxxx xxx";
 	$faxForm = "";
 	$postaddressForm = "";
@@ -624,12 +624,12 @@ elseif (isset($_REQUEST['install1']) || isset($_REQUEST['back1']))
 	$configErrorExists = false;
 
 	if (empty($SERVER_SOFTWARE)) {
-		$errorContent[]= "<p class=\"caution_small\">$langWarningInstall1</p>";
+		$errorContent[]= "<p class='caution_small'>$langWarningInstall1 $langWarnInstallNotice1 <a href='$install_info_file'>$langHere</a> $langWarnInstallNotice2</p>";
 		$configErrorExists = true;
 	}
 
 	if (!ini_get('short_open_tag')) {
-		$errorContent[]= "<p class=\"caution_small\">$langWarningInstall2</p>";
+		$errorContent[]= "<p class=\"caution_small\">$langWarningInstall2 $langWarnInstallNotice1 <a href='$install_info_file'>$langHere</a> $langWarnInstallNotice2</p>";
 		$configErrorExists = true;
 	}
 
@@ -638,7 +638,7 @@ elseif (isset($_REQUEST['install1']) || isset($_REQUEST['back1']))
 	if (!is_dir("../config")) {
 		$mkd=@mkdir("../config", 0777);
 		if(!$mkd) {
-			$errorContent[]= "<p class=\"caution_small\">$langWarningInstall3</p>";
+			$errorContent[]= "<p class=\"caution_small\">$langWarningInstall3 $langWarnInstallNotice1 <a href='$install_info_file'>$langHere</a> $langWarnInstallNotice2</p>";
 			$configErrorExists = true;
 		}
 	}
@@ -647,7 +647,7 @@ elseif (isset($_REQUEST['install1']) || isset($_REQUEST['back1']))
 	if (!is_dir("../courses")) {
 		$mkd = @mkdir("../courses", 0777);
 	if(!$mkd){
-		$errorContent[]= "<p class=\"caution_small\">$langWarningInstall4</p>";
+		$errorContent[]= "<p class=\"caution_small\">$langWarningInstall4 $langWarnInstallNotice1 <a href='$install_info_file'>$langHere</a> $langWarnInstallNotice2</p>";
 		$configErrorExists = true;
 		}
 	}
@@ -655,7 +655,7 @@ elseif (isset($_REQUEST['install1']) || isset($_REQUEST['back1']))
 	if (!is_dir("../video")) {
 		$mkd=@mkdir("../video", 0777);
 		if(!$mkd) {
-    			$errorContent[]= "<p class=\"caution_small\">$langWarningInstall5</p>";
+    			$errorContent[]= "<p class=\"caution_small\">$langWarningInstall5 $langWarnInstallNotice1 <a href='$install_info_file'>$langHere</a> $langWarnInstallNotice2</p>";
     			$configErrorExists = true;
   		}
 	}
