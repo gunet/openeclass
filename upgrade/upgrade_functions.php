@@ -150,36 +150,42 @@ function mysql_field_exists($db,$table,$field)
 
 }
 
-// add index in specific columns/tables
-function add_index($index, $column, $table)  {
-	global $langIndexAdded, $langIndexExists, $langOfTable;
+// add index/indexes in specific table columns 
+function add_index($index, $table, $column)  {
+	global $langIndexAdded, $langIndexExists, $langToTable;
 
-        $ind_sql = db_query("SHOW INDEX FROM $table");
-        while ($i = mysql_fetch_array($ind_sql))  {
-                if ($i['Key_name'] == $index) {
-                        $retString = "<p>$langIndexExists $table</p>";
-			return $retString;
-                }
-        }
-        db_query("ALTER TABLE $table ADD INDEX $index($column)");
-        $retString = "<p>$langIndexAdded $column $langOfTable $table</p>";
-        return $retString;
-}
-
-// add indexes in specific columns/tables
-function add_indexes($index, $column1, $column2, $table)  {
-	global $langIndexAdded, $langIndexExists, $langOfTable;
-
-        $ind_sql = db_query("SHOW INDEXES FROM $table");
-        while ($i = mysql_fetch_array($ind_sql))  {
-                if ($i['Key_name'] == $index) {
-                        $retString = "<p>$langIndexExists $table</p>";
-			return $retString;
+	$num_of_args = func_num_args();
+	if ($num_of_args <= 3) {
+		$ind_sql = db_query("SHOW INDEX FROM $table");
+		while ($i = mysql_fetch_array($ind_sql))  {
+			if ($i['Key_name'] == $index) {
+				$retString = "<p>$langIndexExists $table</p>";
+				return $retString;
+			}
 		}
+		db_query("ALTER TABLE $table ADD INDEX $index($column)");
+	} else {
+		$arguments = func_get_args();
+		// cut the first and second argument
+		array_shift($arguments);
+		array_shift($arguments);
+		$st = '';
+		for ($j=0; $j<count($arguments); $j++) {
+			$st .= $arguments[$j].',';
+		}	
+		$ind_sql = db_query("SHOW INDEXES FROM $table");
+		while ($i = mysql_fetch_array($ind_sql))  {
+			if ($i['Key_name'] == $index) {
+				$retString = "<p>$langIndexExists $table</p>";
+				return $retString;
+			}
+		}
+		$sql = "ALTER TABLE $table ADD INDEX $index($st)";
+		$sql = str_replace(',)',')', $sql);
+		db_query($sql);
 	}
-        db_query("ALTER TABLE $table ADD INDEX $index($column1, $column2)");
-        $retString = "<p>$langIndexAdded $column $langOfTable $table</p>";
-        return $retString;
+	$retString = "<p>$langIndexAdded $langToTable $table</p>";
+	return $retString;
 }
 
 
@@ -327,8 +333,8 @@ function upgrade_course_2_2($code, $lang, $extramessage = '')
 	db_query("ALTER TABLE `liens` CHANGE `url` `url` VARCHAR(255) DEFAULT NULL", $code);
 	db_query("ALTER TABLE `liens` CHANGE `titre` `titre` VARCHAR(255) DEFAULT NULL", $code);
 	// indexes creation
-        add_indexes('optimize', 'user_id', 'learnPath_module_id', 'lp_user_module_progress');
-        add_indexes('actionsindex', 'module_id', 'date_time', 'actions');
+        add_index('optimize', 'lp_user_module_progress', 'user_id', 'learnPath_module_id' );
+        add_index('actionsindex',  'actions', 'module_id', 'date_time');
 }
 
 

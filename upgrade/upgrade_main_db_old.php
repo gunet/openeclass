@@ -241,8 +241,8 @@
         db_query($sql);
 
         // add indexes
-        add_index('i_cours', 'code', 'cours');
-        add_index('i_loginout', 'id_user', 'loginout');
-        add_index('i_action', 'action', 'loginout');
-        add_index('i_codecours', 'code_cours', 'annonces');
-        add_index('i_temps', 'temps', 'annonces');
+        add_index('i_cours', 'cours', 'code');
+        add_index('i_loginout', 'loginout', 'id_user');
+        add_index('i_action', 'loginout', 'action');
+        add_index('i_codecours', 'annonces', 'code_cours' );
+        add_index('i_temps', 'annonces', 'temps');
