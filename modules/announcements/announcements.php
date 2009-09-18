@@ -341,7 +341,7 @@ hContent;
       <tr>
         <th width='150' class='left'>$langAnnTitle:</th>";
         $tool_content .= "
-        <td><input type='text' name='antitle' value='$titleToModify' size='50' maxlength='50' class='FormData_InputText'></td>
+        <td><input type='text' name='antitle' value='$titleToModify' size='50' class='FormData_InputText'></td>
       </tr>";
         $tool_content .= "
       <tr>
