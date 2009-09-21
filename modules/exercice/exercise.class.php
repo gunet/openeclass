@@ -441,7 +441,8 @@ class Exercise
 	{
 		global $currentCourseID;
 		
-		list($pos) = mysql_fetch_array(db_query("SELECT q_position FROM questions WHERE id='$id'", $currentCourseID));
+		list($pos) = mysql_fetch_array(db_query("SELECT q_position FROM questions 
+							WHERE id='$id'", $currentCourseID));
 	
 		if ($pos > 1) {
 			$temp = $this->questionList[$pos-1];
@@ -449,40 +450,6 @@ class Exercise
 			$this->questionList[$pos] = $temp;
 		} 
 		return;
-		/*foreach($this->questionList as $position=>$questionId)
-		{
-		
-			// if question ID found
-			if($questionId == $id)
-			{
-				// position of question in the array
-				$pos1=$position;
-
-				prev($this->questionList);
-
-				// position of previous question in the array
-				$pos2=key($this->questionList);
-
-				// error, can't move question
-				if(!$pos2)
-				{
-					return;
-				}
-
-				$id2=$this->questionList[$pos2];
-
-				// exits foreach()
-				break;
-			}
-
-			// goes to next question
-			next($this->questionList);
-		}
-
-		// permutes questions in the array
-		$temp=$this->questionList[$pos2];
-		$this->questionList[$pos2]=$this->questionList[$pos1];
-		$this->questionList[$pos1]=$temp; */
 	}
 
 	/**
@@ -495,7 +462,8 @@ class Exercise
 	{
 		global $currentCourseID;
 		
-		list($pos) = mysql_fetch_array(db_query("SELECT q_position FROM questions WHERE id='$id'", $currentCourseID));
+		list($pos) = mysql_fetch_array(db_query("SELECT q_position FROM questions 
+							WHERE id='$id'", $currentCourseID));
 		
 		if ($pos < count($this->questionList)) {
 			$temp = $this->questionList[$pos+1];
@@ -503,42 +471,6 @@ class Exercise
 			$this->questionList[$pos] = $temp;
 		} 
 		return;
-	
-	/*
-		foreach($this->questionList as $position=>$questionId)
-		{
-			// if question ID found
-			if($questionId == $id)
-			{
-				// position of question in the array
-				$pos1=$position;
-
-				next($this->questionList);
-
-				// position of next question in the array
-				$pos2=key($this->questionList);
-
-				// error, can't move question
-				if(!$pos2)
-				{
-					return;
-				}
-
-				$id2=$this->questionList[$pos2];
-
-				// exits foreach()
-				break;
-			}
-
-			// goes to next question
-			next($this->questionList);
-		}
-
-		// permutes questions in the array
-		$temp=$this->questionList[$pos2];
-		$this->questionList[$pos2]=$this->questionList[$pos1];
-		$this->questionList[$pos1]=$temp;
-	*/
 	}
 
 	/**
