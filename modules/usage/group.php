@@ -53,7 +53,7 @@ if (mysql_num_rows($q) > 0) {
 		</tr>";
 	while ($group = mysql_fetch_array($q)) {
 		// Count students registered in each group
-		$resultRegistered = db_query("SELECT id FROM user_group WHERE team = $group[id]");
+		$resultRegistered = db_query("SELECT id FROM user_group WHERE team = $group[id]", $currentCourseId);
 		$countRegistered = mysql_num_rows($resultRegistered);
 		if ($i % 2 == 0) {
 			$tool_content .= "<tr>";
