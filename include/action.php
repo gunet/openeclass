@@ -12,7 +12,7 @@ class action {
         $module_id = $this->get_module_id($module_name);
 
         ###ophelia -28-08-2006 : add duration to previous
-        $sql = "SELECT id, CEILING(NOW()-date_time) AS diff, action_type_id
+        $sql = "SELECT id, TIME_TO_SEC(TIMEDIFF(NOW(), date_time)) AS diff, action_type_id
                 FROM actions
                 WHERE user_id = $uid
                 ORDER BY id DESC LIMIT 1";
