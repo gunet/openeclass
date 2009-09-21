@@ -208,86 +208,86 @@ if($is_adminOfCourse)
 	***********************************************************************/
 
 	$dialogBox = '';
-	if (is_uploaded_file(@$userFile))
-	{
+	if (is_uploaded_file(@$userFile)) {
 		// check for disk quotas
 		$diskUsed = dir_total_space($basedir);
 		if ($diskUsed + @$_FILES['userFile']['size'] > $diskQuotaDocument) {
-			$dialogBox .= $langNoSpace;
-		}
-		// check for dangerous extensions and file types
-		if (preg_match('/\.(ade|adp|bas|bat|chm|cmd|com|cpl|crt|exe|hlp|hta|' .
-		'inf|ins|isp|jse|lnk|mdb|mde|msc|msi|msp|mst|pcd|pif|reg|scr|sct|shs|' .
-		'shb|url|vbe|vbs|wsc|wsf|wsh)$/', $_FILES['userFile']['name'])) {
-			$dialogBox .= "$langUnwantedFiletype: {$_FILES['userFile']['name']}";
-		}
-		/*** Unzipping stage ***/
-		elseif (isset($uncompress) and $uncompress == 1
-			and preg_match('/\.zip$/i', $_FILES['userFile']['name'])) {
-			$zipFile = new pclZip($userFile);
-			$realFileSize = 0;
-			$zipFile->extract(PCLZIP_CB_PRE_EXTRACT, 'process_extracted_file');
-			if ($diskUsed + $realFileSize > $diskQuotaDocument) {
-				$dialogBox .= $langNoSpace;
-			} else {
-				$dialogBox .= "<p class=\"success_small\">$langDownloadAndZipEnd</p><br />";
-			}
-		}
-		else
-		{
-		$fileName = trim ($_FILES['userFile']['name']);
-		//elegxos ean to "path" tou arxeiou pros upload vrisketai hdh se eggrafh ston pinaka documents
-		//(aftos einai ousiastika o elegxos if_exists dedomenou tou oti to onoma tou arxeiou sto filesystem einai monadiko)
-		$result = mysql_query ("SELECT filename FROM document WHERE filename LIKE '%$uploadPath/$fileName%'");
-		$row = mysql_fetch_array($result);
-			if (!empty($row['filename']))
-			{
-				//to arxeio yparxei hdh se eggrafh ston pinaka document ths vashs
-				$dialogBox .= "<b>$langFileExists !</b>";
-			} else //to arxeio den vrethike sth vash ara mporoume na proxwrhsoume me to upload
-			{
-				/**** Check for no desired characters ***/
-				$fileName = replace_dangerous_char($fileName);
-				/*** Try to add an extension to files witout extension ***/
-				$fileName = add_ext_on_mime($fileName);
-				/*** Handle PHP files ***/
-				$fileName = php2phps($fileName);
-				//ypologismos onomatos arxeiou me date + time.
-				//to onoma afto tha xrhsimopoiei sto filesystem & tha apothikevetai ston pinaka documents
-				$safe_fileName = safe_filename(get_file_extension($fileName));
-				//prosthiki eggrafhs kai metadedomenwn gia to eggrafo sth vash
-				if ($uploadPath == ".")
-					$uploadPath2 = "/".$safe_fileName;
-				else
-					$uploadPath2 = $uploadPath."/".$safe_fileName;
-				//san file format vres to extension tou arxeiou
-				$file_format = get_file_extension($fileName);
-				//san date you arxeiou xrhsimopoihse thn shmerinh hm/nia
-				$file_date = date("Y\-m\-d G\:i\:s");
-				$query = "INSERT INTO ".$dbTable." SET
-		            	path	=	'".mysql_real_escape_string($uploadPath2)."',
-		            	filename =	'".mysql_real_escape_string($fileName)."',
-		            	visibility =	'v',
-		            	comment	=	'".mysql_real_escape_string($file_comment)."',
-		            	category =	'".mysql_real_escape_string($file_category)."',
-		            	title =	'".mysql_real_escape_string($file_title)."',
-		            	creator	=	'".mysql_real_escape_string($file_creator)."',
-		            	date	= '".mysql_real_escape_string($file_date)."',
-		            	date_modified	=	'".mysql_real_escape_string($file_date)."',
-		            	subject	=	'".mysql_real_escape_string($file_subject)."',
-		            	description =	'".mysql_real_escape_string($file_description)."',
-		            	author	=	'".mysql_real_escape_string($file_author)."',
-		            	format	=	'".mysql_real_escape_string($file_format)."',
-		            	language =	'".mysql_real_escape_string($file_language)."',
-		            	copyrighted	=	'".mysql_real_escape_string($file_copyrighted)."'";
+			$dialogBox .= "<p class='caution_small'>$langNoSpace</p>";
+		} else {
+                        // check for dangerous extensions and file types
+                        if (preg_match('/\.(ade|adp|bas|bat|chm|cmd|com|cpl|crt|exe|hlp|hta|' .
+                        'inf|ins|isp|jse|lnk|mdb|mde|msc|msi|msp|mst|pcd|pif|reg|scr|sct|shs|' .
+                        'shb|url|vbe|vbs|wsc|wsf|wsh)$/', $_FILES['userFile']['name'])) {
+                                $dialogBox .= "$langUnwantedFiletype: {$_FILES['userFile']['name']}";
+                        }
+                        /*** Unzipping stage ***/
+                        elseif (isset($uncompress) and $uncompress == 1
+                                and preg_match('/\.zip$/i', $_FILES['userFile']['name'])) {
+                                $zipFile = new pclZip($userFile);
+                                $realFileSize = 0;
+                                $zipFile->extract(PCLZIP_CB_PRE_EXTRACT, 'process_extracted_file');
+                                if ($diskUsed + $realFileSize > $diskQuotaDocument) {
+                                        $dialogBox .= $langNoSpace;
+                                } else {
+                                        $dialogBox .= "<p class='success_small'>$langDownloadAndZipEnd</p><br />";
+                                }
+                        }
+                        else
+                        {
+                        $fileName = trim ($_FILES['userFile']['name']);
+                        //elegxos ean to "path" tou arxeiou pros upload vrisketai hdh se eggrafh ston pinaka documents
+                        //(aftos einai ousiastika o elegxos if_exists dedomenou tou oti to onoma tou arxeiou sto filesystem einai monadiko)
+                        $result = mysql_query ("SELECT filename FROM document WHERE filename LIKE '%$uploadPath/$fileName%'");
+                        $row = mysql_fetch_array($result);
+                                if (!empty($row['filename']))
+                                {
+                                        //to arxeio yparxei hdh se eggrafh ston pinaka document ths vashs
+                                        $dialogBox .= "<b>$langFileExists !</b>";
+                                } else //to arxeio den vrethike sth vash ara mporoume na proxwrhsoume me to upload
+                                {
+                                        /**** Check for no desired characters ***/
+                                        $fileName = replace_dangerous_char($fileName);
+                                        /*** Try to add an extension to files witout extension ***/
+                                        $fileName = add_ext_on_mime($fileName);
+                                        /*** Handle PHP files ***/
+                                        $fileName = php2phps($fileName);
+                                        //ypologismos onomatos arxeiou me date + time.
+                                        //to onoma afto tha xrhsimopoiei sto filesystem & tha apothikevetai ston pinaka documents
+                                        $safe_fileName = safe_filename(get_file_extension($fileName));
+                                        //prosthiki eggrafhs kai metadedomenwn gia to eggrafo sth vash
+                                        if ($uploadPath == ".")
+                                                $uploadPath2 = "/".$safe_fileName;
+                                        else
+                                                $uploadPath2 = $uploadPath."/".$safe_fileName;
+                                        //san file format vres to extension tou arxeiou
+                                        $file_format = get_file_extension($fileName);
+                                        //san date you arxeiou xrhsimopoihse thn shmerinh hm/nia
+                                        $file_date = date("Y\-m\-d G\:i\:s");
+                                        $query = "INSERT INTO ".$dbTable." SET
+                                        path	=	'".mysql_real_escape_string($uploadPath2)."',
+                                        filename =	'".mysql_real_escape_string($fileName)."',
+                                        visibility =	'v',
+                                        comment	=	'".mysql_real_escape_string($file_comment)."',
+                                        category =	'".mysql_real_escape_string($file_category)."',
+                                        title =	'".mysql_real_escape_string($file_title)."',
+                                        creator	=	'".mysql_real_escape_string($file_creator)."',
+                                        date	= '".mysql_real_escape_string($file_date)."',
+                                        date_modified	=	'".mysql_real_escape_string($file_date)."',
+                                        subject	=	'".mysql_real_escape_string($file_subject)."',
+                                        description =	'".mysql_real_escape_string($file_description)."',
+                                        author	=	'".mysql_real_escape_string($file_author)."',
+                                        format	=	'".mysql_real_escape_string($file_format)."',
+                                        language =	'".mysql_real_escape_string($file_language)."',
+                                        copyrighted	=	'".mysql_real_escape_string($file_copyrighted)."'";
 
-				db_query($query, $currentCourseID);
+                                        db_query($query, $currentCourseID);
 
-				/*** Copy the file to the desired destination ***/
-				copy ($userFile, $basedir.$uploadPath."/".$safe_fileName);
-				@$dialogBox .= "<p class=\"success_small\">$langDownloadEnd</p><br />";
-			} // end else tou if(!empty($row['filename']))
-		} // end else
+                                        /*** Copy the file to the desired destination ***/
+                                        copy ($userFile, $basedir.$uploadPath."/".$safe_fileName);
+                                        @$dialogBox .= "<p class='success_small'>$langDownloadEnd</p><br />";
+                                } // end else tou if(!empty($row['filename']))
+                        }
+                }
 	} // end if is_uploaded_file
 
 	/**************************************
@@ -302,12 +302,12 @@ if($is_adminOfCourse)
 		if($basedir . $source != $basedir . $moveTo || $basedir . $source != $basedir . $moveTo)
 		{
 			if (move($basedir . $source, $basedir . $moveTo)) {
-				update_db_info("document", "update", $source, $moveTo."/".my_basename($source));
-				$dialogBox = "<p class=\"success_small\">$langDirMv</p><br />";
+				update_db_info('document', 'update', $source, $moveTo.'/'.my_basename($source));
+				$dialogBox = "<p class='success_small'>$langDirMv</p><br />";
 			}
 			else
 			{
-				$dialogBox = "<p class=\"caution_small\">$langImpossible</p><br />";
+				$dialogBox = "<p class='caution_small'>$langImpossible</p><br />";
 				/*** return to step 1 ***/
 				$move = $source;
 				unset ($moveTo);
@@ -321,7 +321,7 @@ if($is_adminOfCourse)
 	if (isset($move))
 	{
 		//h $move periexei to onoma tou arxeiou. anazhthsh onomatos arxeiou sth vash
-		$result = mysql_query ("SELECT * FROM $dbTable WHERE path=\"".$move."\"");
+		$result = mysql_query("SELECT * FROM $dbTable WHERE path=" . autoquote($move));
 		$res = mysql_fetch_array($result);
 		$moveFileNameAlias = $res['filename'];
 		@$dialogBox .= form_dir_list_exclude($dbTable, "source", $move, "moveTo", $basedir, $move);
@@ -387,7 +387,7 @@ if($is_adminOfCourse)
 	{
 		$dialogBox .= "<form>\n";
 		$dialogBox .= "<input type='hidden' name='newDirPath' value='$createDir' />\n";
-		$dialogBox .= "<table class='FormData' width=\"99%\">
+		$dialogBox .= "<table class='FormData' width='99%'>
         	<tbody><tr><th class='left' width='200'>$langNameDir:</th>
           	<td class='left' width='1'><input type='text' name='newDirName' class='FormData_InputText' /></td>
           	<td class='left'><input type='submit' value='$langCreateDir' /></td>
@@ -399,7 +399,7 @@ if($is_adminOfCourse)
 	if (isset($edit_metadata))
 	{
 		//elegxos ean yparxei eggrafh sth vash gia to arxeio
-		$result = mysql_query ("SELECT * FROM $dbTable WHERE path=\"".$commentPath."\"");
+		$result = mysql_query ("SELECT * FROM $dbTable WHERE path=" . autoquote($commentPath));
 		$res = mysql_fetch_array($result);
 		if(!empty($res))
 		{
@@ -539,7 +539,7 @@ if($is_adminOfCourse)
 			$newVisibilityStatus = "i";
 		// enallagh ths timhs sto pedio visibility tou pinaka document
 		mysql_query ("UPDATE $dbTable SET visibility='".$newVisibilityStatus."' WHERE path = '$visibilityPath'");
-		$dialogBox = "<p class=\"success_small\">$langViMod</p><br />";
+		$dialogBox = "<p class='success_small'>$langViMod</p><br />";
 	}
 } // teacher only
 
@@ -623,14 +623,14 @@ if($is_adminOfCourse) {
 	UPLOAD SECTION (ektypwnei th forma me ta stoixeia gia upload eggrafou + ola ta pedia
 	gia ta metadata symfwna me Dublin Core)
 	------------------------------------------------------------------*/
-	$tool_content .= "\n  <div id=\"operations_container\">\n    <ul id=\"opslist\">";
-	$tool_content .= "\n      <li><a href=\"upload.php?uploadPath=$curDirPath\">$langDownloadFile</a></li>";
+	$tool_content .= "\n  <div id='operations_container'>\n    <ul id='opslist'>";
+	$tool_content .= "\n      <li><a href='upload.php?uploadPath=$curDirPath'>$langDownloadFile</a></li>";
 	/*----------------------------------------
 	Create new folder
 	--------------------------------------*/
-	$tool_content .= "\n      <li><a href=\"$_SERVER[PHP_SELF]?createDir=".$cmdCurDirPath."\">$langCreateDir</a></li>";
+	$tool_content .= "\n      <li><a href='$_SERVER[PHP_SELF]?createDir=".$cmdCurDirPath."'>$langCreateDir</a></li>";
 	$diskQuotaDocument = $diskQuotaDocument * 1024 / 1024;
-	$tool_content .= "\n      <li><a href=\"showquota.php?diskQuotaDocument=$diskQuotaDocument&amp;diskUsed=$diskUsed\">$langQuotaBar</a></li>";
+	$tool_content .= "\n      <li><a href='showquota.php?diskQuotaDocument=$diskQuotaDocument&amp;diskUsed=$diskUsed'>$langQuotaBar</a></li>";
     $tool_content .= "\n    </ul>\n  </div>\n";
 
 	// Dialog Box
