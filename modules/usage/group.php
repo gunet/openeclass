@@ -61,7 +61,7 @@ if (mysql_num_rows($q) > 0) {
 			$tool_content .= "<tr class='odd'>";
 		}
 		$tool_content .= "<td width='2%'>
-		<img src='../../template/classic/img/arrow_grey.gif' title='bullet' border='0'></td><td>
+		<img src='../../template/classic/img/arrow_grey.gif' alt='' /></td><td>
 		<div align='left'>
 		<a href='../group/group_usage.php?module=usage&amp;userGroupId=".$group["id"]."'>".$group["name"]."</a></div></td>";
 		$tool_content .= "<td width='35%'>".uid_to_name($group['tutor'])."</td>";

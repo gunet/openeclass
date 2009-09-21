@@ -138,7 +138,7 @@ if ($type == 'duration') {
                 "<tr><th class='left'>$langEndDate:</th>" .
                 "<td>$end_cal</td></tr>" .
                 '<tr><th class="left">&nbsp;</th>' .
-                "<td><input type='submit' name='submit' value='$langSubmit'>" .
+                "<td><input type='submit' name='submit' value='$langSubmit' />" .
                 '</td></tr></table></form>';
 } elseif ($type == 'lp') {
         $label = $langProgress;
@@ -148,14 +148,13 @@ if ($type == 'duration') {
         $label = '?';
 }
 
-$tool_content .= "<table class='FormData sortable' width='100%' id='1'><tbody>
+$tool_content .= "<table class='FormData sortable' width='100%' id='a'><tbody>
 	<tr>
 	<th class='left'>$langSurname $langName</th>
 	<th>$langAm</th>
 	<th>$langGroup</th>
 	<th>$label</th>
 	</tr>
-	</thead>
 	<tbody>";
 
 $i = 0;
