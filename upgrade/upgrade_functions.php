@@ -163,7 +163,7 @@ function add_index($index, $table, $column)  {
 				return $retString;
 			}
 		}
-		db_query("ALTER TABLE $table ADD INDEX $index($column)");
+		db_query("ALTER TABLE $table ADD INDEX `$index` ($column)");
 	} else {
 		$arguments = func_get_args();
 		// cut the first and second argument
@@ -173,14 +173,14 @@ function add_index($index, $table, $column)  {
 		for ($j=0; $j<count($arguments); $j++) {
 			$st .= $arguments[$j].',';
 		}	
-		$ind_sql = db_query("SHOW INDEXES FROM $table");
+		$ind_sql = db_query("SHOW INDEXES FROM `$table`");
 		while ($i = mysql_fetch_array($ind_sql))  {
 			if ($i['Key_name'] == $index) {
 				$retString = "<p>$langIndexExists $table</p>";
 				return $retString;
 			}
 		}
-		$sql = "ALTER TABLE $table ADD INDEX $index($st)";
+		$sql = "ALTER TABLE $table ADD INDEX `$index` ($st)";
 		$sql = str_replace(',)',')', $sql);
 		db_query($sql);
 	}
