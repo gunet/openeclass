@@ -77,10 +77,17 @@ function link_current($title, $this_type)
                 return "<li><a href='$base$this_type'>$title</a></li>";
         }
 }
+if (isset($_POST['u_date_start']) and
+            isset($_POST['u_date_end'])) {
+	$link = "<li>$langDumpUserDurationToFile (<a href='dumpgroupduration.php?userGroupId=$userGroupId&u_date_start=$_POST[u_date_start]&u_date_end=$_POST[u_date_end]'>$langCodeUTF</a>&nbsp;<a href='dumpgroupduration.php?userGroupId=$userGroupId&enc=1253&u_date_start=$_POST[u_date_start]&u_date_end=$_POST[u_date_end]'>$langCodeWin</a>)</li>";
+} else {
+	$link = "<li>$langDumpUserDurationToFile (<a href='dumpgroupduration.php?userGroupId=$userGroupId'>$langCodeUTF</a>&nbsp;<a href='dumpgroupduration.php?userGroupId=$userGroupId&enc=1253'>$langCodeWin</a>)</li>";
+}
 
 $tool_content .= "<div id='operations_container'><ul id='opslist'>" .
         link_current($langUsage, 'duration') .
         link_current($langLearningPaths, 'lp') .
+        $link .
         // link_curent($langUsageVisits, 'visits') .
         "</ul></div>";
 
@@ -148,14 +155,13 @@ if ($type == 'duration') {
         $label = '?';
 }
 
-$tool_content .= "<table class='FormData sortable' width='100%' id='a'><tbody>
+$tool_content .= "<table class='FormData sortable' width='100%' id='a'>
 	<tr>
 	<th class='left'>$langSurname $langName</th>
 	<th>$langAm</th>
 	<th>$langGroup</th>
 	<th>$label</th>
-	</tr>
-	<tbody>";
+	</tr>";
 
 $i = 0;
 $result = db_query('SELECT user FROM user_group WHERE team = ' . $userGroupId);

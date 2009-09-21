@@ -39,11 +39,12 @@ include '../../include/baseTheme.php';
 $navigation[] = array('url' => 'usage.php', 'name' => $langUsage);
 $nameTools = $langGroupUsage;
 $tool_content = '';
+$head_content = '<script type="text/javascript" src="../auth/sorttable.js"></script>';
 
 $i = 0;
 $q = db_query("SELECT id, name, tutor, maxStudent FROM student_group", $currentCourse);
 if (mysql_num_rows($q) > 0) {
-        $tool_content .= "<table class='GroupList'>
+        $tool_content .= "<table class='GroupList sortable' id='a'>
 		<tbody>
 		<tr>
 		<th colspan='2' class='GroupHead'><div align='left'>$langGroupName</div></th>
@@ -77,8 +78,8 @@ if (mysql_num_rows($q) > 0) {
         }
         $tool_content .= "</tbody></table>";
 } else {
-		$tool_content .= "<p>&nbsp;</p><p class='caution_small'>$langNoGroup</p>";
+	$tool_content .= "<p>&nbsp;</p><p class='caution_small'>$langNoGroup</p>";
 }
 
 
-draw($tool_content, 2, 'usage');
+draw($tool_content, 2, 'usage', $head_content);
