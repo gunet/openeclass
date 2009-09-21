@@ -439,8 +439,19 @@ class Exercise
 	 */
 	function moveUp($id)
 	{
-		foreach($this->questionList as $position=>$questionId)
+		global $currentCourseID;
+		
+		list($pos) = mysql_fetch_array(db_query("SELECT q_position FROM questions WHERE id='$id'", $currentCourseID));
+	
+		if ($pos > 1) {
+			$temp = $this->questionList[$pos-1];
+			$this->questionList[$pos-1] = $this->questionList[$pos];
+			$this->questionList[$pos] = $temp;
+		} 
+		return;
+		/*foreach($this->questionList as $position=>$questionId)
 		{
+		
 			// if question ID found
 			if($questionId == $id)
 			{
@@ -471,7 +482,7 @@ class Exercise
 		// permutes questions in the array
 		$temp=$this->questionList[$pos2];
 		$this->questionList[$pos2]=$this->questionList[$pos1];
-		$this->questionList[$pos1]=$temp;
+		$this->questionList[$pos1]=$temp; */
 	}
 
 	/**
@@ -482,6 +493,18 @@ class Exercise
 	 */
 	function moveDown($id)
 	{
+		global $currentCourseID;
+		
+		list($pos) = mysql_fetch_array(db_query("SELECT q_position FROM questions WHERE id='$id'", $currentCourseID));
+		
+		if ($pos < count($this->questionList)) {
+			$temp = $this->questionList[$pos+1];
+			$this->questionList[$pos+1] = $this->questionList[$pos];
+			$this->questionList[$pos] = $temp;
+		} 
+		return;
+	
+	/*
 		foreach($this->questionList as $position=>$questionId)
 		{
 			// if question ID found
@@ -515,6 +538,7 @@ class Exercise
 		$temp=$this->questionList[$pos2];
 		$this->questionList[$pos2]=$this->questionList[$pos1];
 		$this->questionList[$pos1]=$temp;
+	*/
 	}
 
 	/**
