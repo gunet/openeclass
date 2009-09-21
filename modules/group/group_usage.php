@@ -35,17 +35,25 @@ $helpTopic = 'Group';
 include '../../include/baseTheme.php';
 include '../../include/lib/learnPathLib.inc.php';
 
-$nameTools = $langUsage;
-$navigation[] = array("url"=>"group.php", "name"=> $langGroupSpace,
-"url"=>"group_space.php?userGroupId=$userGroupId", "name"=>$langGroupSpace);
+if (isset($_GET['module']) and $_GET['module'] == 'usage') {
+        $navigation[] = array('url'=>'../usage/usage.php', 'name'=> $langUsage);
+        $navigation[] = array('url'=>'../usage/group.php', 'name'=> $langGroupUsage);
+        $module = 'module=usage&amp;';
+} else {
+        $navigation[] = array('url'=>'group.php', 'name'=> $langGroupSpace);
+        $navigation[] = array('url'=>'group_space.php?userGroupId=$userGroupId', 'name'=> $langGroupSpace);
+        $module = '';
+}
 
 $userGroupId = intval($_REQUEST['userGroupId']);
-list($tutor_id) = mysql_fetch_row(db_query("SELECT tutor FROM student_group WHERE id='$userGroupId'", $currentCourseID));
+list($tutor_id, $group_name) = mysql_fetch_row(db_query("SELECT tutor, name FROM student_group WHERE id='$userGroupId'", $currentCourseID));
 $is_tutor = ($tutor_id == $uid);
 if (!$is_adminOfCourse and !$is_tutor) {
         header('Location: group_space.php?userGroupId=' . $userGroupId);
         exit;
 }
+
+$nameTools = $group_name;
 
 $type = 'duration';
 if (isset($_GET['type']) and
@@ -58,7 +66,7 @@ $head_content = '<script type="text/javascript" src="../auth/sorttable.js"></scr
 $tool_content = "";
 
 
-$base = 'group_usage.php?userGroupId=' . $userGroupId . '&amp;type=';
+$base = 'group_usage.php?' . $module . 'userGroupId=' . $userGroupId . '&amp;type=';
 
 function link_current($title, $this_type)
 {
@@ -83,6 +91,55 @@ $local_style = '
 
 if ($type == 'duration') {
         $label = $langDuration;
+        include('../../include/jscalendar/calendar.php');
+        $jscalendar = new DHTML_Calendar($urlServer.'include/jscalendar/',
+                                         langname_to_code($language),
+                                         'calendar-blue2', false);
+        $head_content .= $jscalendar->get_load_files_code();
+
+        list($min_date) = mysql_fetch_row(db_query(
+                                'SELECT MIN(date_time) FROM actions'));
+
+        if (isset($_POST['u_date_start']) and
+            isset($_POST['u_date_end'])) {
+                $date_spec = ' AND date_time BETWEEN ' .
+                             autoquote($_POST['u_date_start']) . ' AND ' .
+                             autoquote($_POST['u_date_end']);
+                $u_date_start = $_POST['u_date_start'];
+                $u_date_end = $_POST['u_date_end'];
+        } else {
+                $date_spec = '';
+                $u_date_start = strftime('%Y-%m-%d', strtotime($min_date));
+                $u_date_end = strftime('%Y-%m-%d', strtotime('now'));
+        }
+
+        // date range form
+        $style = 'width: 10em; color: #727266; background-color: #fbfbfb; border: 1px solid #CAC3B5; text-align: center';
+        $start_cal = $jscalendar->make_input_field(
+                        array('showsTime' => false,
+                              'showOthers' => true,
+                              'ifFormat' => '%Y-%m-%d',
+                              'timeFormat' => '24'),
+                        array('style' => $style,
+                              'name' => 'u_date_start',
+                              'value' => $u_date_start));
+        $end_cal = $jscalendar->make_input_field(
+                        array('showsTime' => false,
+                                'showOthers' => true,
+                                'ifFormat' => '%Y-%m-%d',
+                                'timeFormat' => '24'),
+                        array('style' => $style,
+                              'name' => 'u_date_end',
+                              'value' => $u_date_end));
+        $tool_content .= '<form method="post" action="' . $base . $type .
+                '"><table class="FormData" align="left">' .
+                "<tr><th class='left'>$langStartDate:</th>" .
+                "<td>$start_cal</td></tr>" . 
+                "<tr><th class='left'>$langEndDate:</th>" .
+                "<td>$end_cal</td></tr>" .
+                '<tr><th class="left">&nbsp;</th>' .
+                "<td><input type='submit' name='submit' value='$langSubmit'>" .
+                '</td></tr></table></form>';
 } elseif ($type == 'lp') {
         $label = $langProgress;
         // list available learning paths
@@ -101,7 +158,6 @@ $tool_content .= "<table class='FormData sortable' width='100%' id='1'><tbody>
 	</thead>
 	<tbody>";
 
-
 $i = 0;
 $result = db_query('SELECT user FROM user_group WHERE team = ' . $userGroupId);
 while ($row = mysql_fetch_row($result)) {
@@ -113,7 +169,7 @@ while ($row = mysql_fetch_row($result)) {
         }
         $i++;
         if ($type == 'duration') {
-        	$request = db_query('SELECT SUM(duration) FROM actions WHERE user_id = ' . $user_id);
+        	$request = db_query('SELECT SUM(duration) FROM actions WHERE user_id = ' . $user_id . $date_spec);
         	list($time) = mysql_fetch_row($request);
         	$value = format_time_duration(0 + $time);
                 $sortkey = $time;

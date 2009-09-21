@@ -52,6 +52,7 @@ $tool_content .= "
     <li><a href='userlogins.php?first='>$langUserLogins</a></li>
     <li><a href='userduration.php'>$langUserDuration</a></li>
     <li><a href='../learnPath/detailsAll.php'>$langLearningPaths</a></li>
+    <li><a href='group.php'>$langGroupUsage</a></li>
   </ul>
 </div>";
 
