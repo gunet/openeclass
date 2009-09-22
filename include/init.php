@@ -150,6 +150,7 @@ if (isset($require_current_course) and $require_current_course) {
                                     FROM cours WHERE cours.code='$dbname'");
 
                 if (!$result or mysql_num_rows($result) == 0) {
+                        unset($_SESSION['dbname']);
                         header('Location: ' . $urlServer);
                         exit;
                 }

@@ -41,9 +41,8 @@ $uri = str_replace('//', chr(1), strstr($_SERVER['REQUEST_URI'], 'file.php/'));
 $path_components = split('/', $uri);
 array_shift($path_components);
 
-// temporary change course
+// temporary course change
 $dbname = addslashes(array_shift($path_components));
-session_register("dbname");
 
 $require_current_course = true;
 $guest_allowed = true;
@@ -74,6 +73,10 @@ foreach ($path_components as $component) {
 if ($r['visibility'] != 'v' and !$is_adminOfCourse) {
         $_SESSION['errMessage'] = $l_noread;
         session_write_close();
+        // restore current course
+        if (isset($old_dbname)) {
+                $dbname = $old_dbname;
+        }
         header("Location: $urlServer" );
 }
 if (!preg_match("/\.$r[format]$/", $component)) {
