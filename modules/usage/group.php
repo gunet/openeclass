@@ -44,11 +44,11 @@ $head_content = '<script type="text/javascript" src="../auth/sorttable.js"></scr
 $i = 0;
 $q = db_query("SELECT id, name, tutor, maxStudent FROM student_group", $currentCourse);
 if (mysql_num_rows($q) > 0) {
-        $tool_content .= "<table class='GroupList sortable' id='a'>
+        $tool_content .= "<table class='GroupList sortable' width='100%' id='b'>
 		<tbody>
 		<tr>
-		<th colspan='2' class='GroupHead'><div align='left'>$langGroupName</div></th>
-		<th width='15%' class='GroupHead'>$langGroupTutor</th>
+		<th class='GroupHead'><div align='left'>$langGroupName</div></th>
+		<th width='35%' class='GroupHead'>$langGroupTutor</th>
 		<th class='GroupHead'>$langRegistered</th>
 		<th class='GroupHead'>$langMax</th>
 		</tr>";
@@ -61,17 +61,14 @@ if (mysql_num_rows($q) > 0) {
 		} else {
 			$tool_content .= "<tr class='odd'>";
 		}
-		$tool_content .= "<td width='2%'>
-		<img src='../../template/classic/img/arrow_grey.gif' alt='' /></td><td>
-		<div align='left'>
-		<a href='../group/group_usage.php?module=usage&amp;userGroupId=".$group["id"]."'>".$group["name"]."</a></div></td>";
+		$tool_content .= "<td class='arrow'><a href='../group/group_usage.php?module=usage&amp;userGroupId=".$group["id"]."'>".$group["name"]."</a></td>";
 		$tool_content .= "<td width='35%'>".uid_to_name($group['tutor'])."</td>";
-      		$tool_content .= "<td><div class=\"cellpos\">".$countRegistered."</div></td>";
+      		$tool_content .= "<td align='center'>$countRegistered</td>";
 		if ($group['maxStudent'] == 0) {
-			$tool_content .= "<td><div class='cellpos'>-</div></td>";
+			$tool_content .= "<td align='center'>-</td>";
 		} else {
 			$tool_content .= "
-      			<td><div class='cellpos'>".$group["maxStudent"]."</div></td>";
+      			<td  align='center'>$group[maxStudent]</td>";
 		}
     		$tool_content .= '</tr>';
 		$i++;
@@ -80,6 +77,5 @@ if (mysql_num_rows($q) > 0) {
 } else {
 	$tool_content .= "<p>&nbsp;</p><p class='caution_small'>$langNoGroup</p>";
 }
-
 
 draw($tool_content, 2, 'usage', $head_content);
