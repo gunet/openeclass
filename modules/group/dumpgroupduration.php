@@ -65,7 +65,7 @@ if($is_adminOfCourse) {
 		$date_spec = '';
 		
 	}
-	echo "$first_line";
+	echo "".csv_escape($first_line)."";
 	echo "$crlf";
 	echo "$crlf";
 	echo join(';', array_map("csv_escape", array($langSurnameName, $langAm, $langGroup, $langDuration))),
