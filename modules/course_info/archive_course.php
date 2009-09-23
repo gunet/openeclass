@@ -24,12 +24,12 @@
 *  			eMail: info@openeclass.org
 * =========================================================================*/
 
-
 if (isset($c) && ($c!="")) {
+	session_start();
 	$require_admin = TRUE;
-	$dbname = $c;
-	session_register("dbname");
+	$_SESSION['dbname'] = $c;
 }
+
 $require_current_course = TRUE;
 $require_prof = TRUE;
 include '../../include/baseTheme.php';
@@ -45,7 +45,6 @@ if (extension_loaded("zlib")) {
 
 // check if you are admin
 if($is_adminOfCourse) {
-
 	$dateBackuping  = date("Y-m-d-H-i-(B)-s");
 	$shortDateBackuping  = date("YzBs"); // YEAR - Day in Year - Swatch - second
 	$archiveDir .= "/".$currentCourseID."/".$dateBackuping;
@@ -139,15 +138,17 @@ function copydir($origine, $destination) {
 
 // adia function
 function create_backup_file($file) {
-	global $currentCourseID;
+	global $currentCourseID, $mysqlMainDb;
 
 	$f = fopen($file,"w");
 	if (!$f) {
 		die("Error! Unable to open output file: '$f'\n");
 	}
-	fputs($f, "<?\n\$version = 2;\n\$encoding = 'UTF-8';\n");
+	list($ver) = mysql_fetch_array(db_query("SELECT `value` FROM `$mysqlMainDb`.config WHERE `key`='version'"));
+	fputs($f, "<?\n\$eclass_version=$ver;\n\$version = 2;\n\$encoding = 'UTF-8';\n");
 	backup_course_details($f, $currentCourseID);
 	backup_annonces($f, $currentCourseID);
+	backup_course_units($f);
 	backup_users($f, $currentCourseID);
 	backup_course_db($f, $currentCourseID);
 	fputs($f, "?>\n");
@@ -167,6 +168,40 @@ function backup_annonces($f, $course) {
 			quote($q['title']).");\n");
 	}
 }
+
+function backup_course_units($f) {
+	global $mysqlMainDb, $cours_id;
+	
+	$res = mysql_query("SELECT * FROM `$mysqlMainDb`.course_units
+				    WHERE course_id = $cours_id");
+	while($q = mysql_fetch_array($res)) {
+		fputs($f, "course_units(".
+			quote($q['title']).", ".
+			quote($q['comments']).", ".
+			quote($q['visibility']).", ".
+			quote($q['order']).", array(");
+		$res2 = db_query("SELECT * FROM unit_resources WHERE unit_id = $q[id]", $mysqlMainDb);
+		$begin = true;
+		while($q2 = mysql_fetch_array($res2)) {
+			if ($begin) {
+				$begin = !$begin;
+				fputs($f, "\n");
+			} else {
+				fputs($f, ",\n");
+			}
+			fputs($f, "array(".
+			quote($q2['title']).", ".
+			quote($q2['comments']).", ".
+			quote($q2['res_id']).", ".
+			quote($q2['type']).", ".
+			quote($q2['visibility']).", ".
+			quote($q2['order']).", ".
+			quote($q2['date']).")");
+		}
+		fputs($f,"));\n");
+	}
+}
+
 
 function backup_groups($f) {
 	$res = mysql_query("SELECT * FROM user_group");

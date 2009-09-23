@@ -59,14 +59,11 @@ if (isset($send_archive) and $_FILES['archiveZipped']['size'] > 0) {
 		$tool_content .= "<table width=\"99%\"><caption>".$langFileUnzipping."</caption><tbody>";
 		$tool_content .= "<tr><td>".unpack_zip_show_files($pathToArchive)."</td></tr>";
 		$tool_content .= "<tbody></table><br>";
-	}
-	else
+	} else {
 		$tool_content .= $langFileNotFound;
-
+	}
 } elseif (isset($create_dir_for_course)) {
-	//Try to create course with data uploaded
 	$r = $restoreThis."/html";
-	
 	$course_code = create_course($course_code, $course_lang, $course_title,
 		$course_desc, intval($course_fac), $course_vis, $course_prof, $course_type);
 	move_dir($r, "$webDir/courses/$course_code");
@@ -80,7 +77,9 @@ if (isset($send_archive) and $_FILES['archiveZipped']['size'] > 0) {
 	if ($encoding != 'UTF-8') {
 		db_query('SET NAMES greek');
 	}
-	upgrade_course($course_code, $course_lang);
+	if (!isset($eclass_version) or $eclass_version != '2.2') { 
+		upgrade_course($course_code, $course_lang);
+	}
 	$tool_content .= ob_get_contents();
 	ob_end_clean();
 
@@ -110,50 +109,32 @@ elseif (isset($pathOf4path)) {
 // -------------------------------------
 // Displaying Form
 // -------------------------------------
-	$tool_content .= "
-  <table width='99%' class='FormData'>
-  <tbody>
-  <tr>
-    <th>&nbsp;</th>
-    <td><b>$langFirstMethod</b></td>
-  </tr>
-  <tr>
-    <th>&nbsp;</th>
-	<td>$langRequest1
-      <br /><br />
-      <form action=\"".$_SERVER['PHP_SELF']."\" method=\"post\" name=\"sendZip\"  enctype=\"multipart/form-data\">
-	  <input type=\"file\" name=\"archiveZipped\" >
-	  <input type=\"submit\" name=\"send_archive\" value=\"".$langSend."\">
-	  </form>
-    </td>
-  </tr>
-  </tbody>
-  </table>
-  <br>
-
-  <table width='99%' class='FormData'>
-  <tbody>
-  <tr>
-    <th>&nbsp;</th>
-    <td><b>$langSecondMethod</b></td>
-  </tr>
-  <tr>
-    <th>&nbsp;</th>
-    <td>$langRequest2
-      <br><br>
-      <form action=\"".$_SERVER['PHP_SELF']."\" method=\"post\" name=\"sendPath\"  enctype=\"multipart/form-data\">
-	  <input type=\"text\" name=\"pathToArchive\">
-	  <input type=\"submit\" name=\"send_path\" value=\"".$langSend."\">
-	  </form>
-    </td>
-  </tr>
-  </tbody>
-  </table>
-  <br />";
+	$tool_content .= "<table width='99%' class='FormData'>
+	<tbody><tr><th>&nbsp;</th><td><b>$langFirstMethod</b></td></tr>
+	<tr><th>&nbsp;</th><td>$langRequest1
+	<br /><br />
+	<form action=\"".$_SERVER['PHP_SELF']."\" method=\"post\" name=\"sendZip\"  enctype=\"multipart/form-data\">
+	<input type=\"file\" name=\"archiveZipped\" >
+	<input type=\"submit\" name=\"send_archive\" value=\"".$langSend."\">
+	</form>
+	</td>
+	</tr>
+	</tbody></table>
+	<br>
+	<table width='99%' class='FormData'><tbody>
+	<tr><th>&nbsp;</th><td><b>$langSecondMethod</b></td></tr>
+	<tr>
+	<th>&nbsp;</th>
+	<td>$langRequest2
+	<br><br>
+	<form action=\"".$_SERVER['PHP_SELF']."\" method=\"post\" name=\"sendPath\"  enctype=\"multipart/form-data\">
+	<input type=\"text\" name=\"pathToArchive\">
+	<input type=\"submit\" name=\"send_path\" value=\"".$langSend."\">
+	</form>
+	</td></tr>
+	</tbody></table><br />";
 }
-
 draw($tool_content,3, 'admin');
-
 
 // Functions  restoring
 function course_details ($code, $lang, $title, $desc, $fac, $vis, $prof, $type) {
@@ -199,7 +180,7 @@ function course_details ($code, $lang, $title, $desc, $fac, $vis, $prof, $type) 
 		echo "<tr><td>$langCourseCode:</td><td><input type='text' name='course_code' value='$code'></td></tr>";
 		echo "<tr><td>$langLanguage:</td><td>".selection($languages, 'course_lang', $lang)."</td></tr>";
 		echo "<tr><td>$langTitle:</td><td><input type='text' name='course_title' value='$title' size='50'></td></tr>";
-		echo "<tr><td>$langCourseDescription:</td><td><input type='text' name='course_desc' value='$desc' size='50'></td></tr>";
+		echo "<tr><td>$langCourseDescription:</td><td><input type='text' name='course_desc' value='".q($desc)."' size='50'></td></tr>";
 		echo "<tr><td>$langCourseFac:</td><td>".faculty_select($fac)."</td></tr>";
 		echo "<tr><td>$langCourseOldFac:</td><td>$fac</td></tr>";
 		echo "<tr><td>$langCourseVis:</td><td>".visibility_select($vis)."</td></tr>";
@@ -229,6 +210,30 @@ function announcement ($text, $date, $order, $title = '') {
 			quote($course_code),
 			quote($order))).
 			")");
+}
+
+// insert course units into the main database
+function course_units($title, $comments, $visibility, $order, $resource_units) {
+	global $action, $course_code, $mysqlMainDb;
+	
+	if (!$action) return;
+	$cid = course_code_to_id($course_code);
+	
+	db_query("INSERT into `$mysqlMainDb`.course_units
+		(title, comments, visibility, `order`, course_id)
+		VALUES (".
+		join(", ", array(
+			quote($title),
+			quote($comments),
+			quote($visibility),
+			quote($order),
+			quote($cid))).
+			")");
+	$unit_id = mysql_insert_id();
+	foreach ($resource_units as $key => $units_array) {
+		db_query("INSERT into `$mysqlMainDb`.unit_resources (unit_id, title, comments, res_id, type, visibility, `order`, date)
+			VALUES (".$unit_id.",".join(", ", array_map('quote',$units_array)).");\n");
+	}
 }
 
 
@@ -552,10 +557,8 @@ function unpack_zip_show_files($zipfile)
 					<input type=\"radio\" checked name=\"restoreThis\" value=\"".realpath($dirnameArchive.$entries)."\"> ".$entries."
 				</li>";
 			}
-			closedir($handle2);
-			$retString .= "</ol><br>
-			<input type=\"submit\" value=\"$langRestore\" name=\"pathOf4path\">
-			</form></li>";
+		closedir($handle2);
+		$retString .= "</ol><br><input type=\"submit\" value=\"$langRestore\" name=\"pathOf4path\"></form></li>";
 	}
 	closedir($handle);
 	$retString .= "</ol>\n";
