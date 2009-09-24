@@ -77,8 +77,12 @@ if (isset($send_archive) and $_FILES['archiveZipped']['size'] > 0) {
 	if ($encoding != 'UTF-8') {
 		db_query('SET NAMES greek');
 	}
-	if (!isset($eclass_version) or $eclass_version != '2.2') { 
-		upgrade_course($course_code, $course_lang);
+	if (!isset($eclass_version) or $eclass_version != '2.2') { // if we come from older versions 
+		if ($version == 2) { // if we come from 2.1.3 
+			upgrade_course_2_2($course_code, $course_lang);
+		} else {
+			upgrade_course($course_code, $course_lang);
+		}
 	}
 	$tool_content .= ob_get_contents();
 	ob_end_clean();

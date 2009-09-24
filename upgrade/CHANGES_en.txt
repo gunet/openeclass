@@ -9,6 +9,7 @@ Open eClass 2.2 - Changes List
 -- Various corrections in "Learning Path".
 -- Added decimal rating in questions exercises. Bug corrected in changing of  order of exercises questions. Added option of displaying (or no) corrected answers after finish of exercise.
 -- Add statistics in users group.
+-- Add statistics about time consuming in course in user profile
 -- Added support for Spanish Language
 
 ********************************************************************
