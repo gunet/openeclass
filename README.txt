@@ -1,20 +1,20 @@
 EN - English
 ----------------------------------------------------------
-Platform Open eClass 2.2 (http://www.openeclass.org)
+The Open eClass Platform 2.2 (http://www.openeclass.org)
 ----------------------------------------------------------
 
-Platform Open eClass (formerly GUnet eClass), is a complete Course Management System, used to store and 
-present educational materials. It is the solution offered by the Greek Academic 
-Network (GUnet) to support asynchronous elearning services. Its goal is the 
-incorporation and constructive use of the Internet and web technologies in 
-the teaching and learning process.
+The Open eClass platform (formerly GUnet eClass), is a complete Course
+Management System, used to store and present educational materials. It is the
+solution offered by the Greek Academic Network (GUnet) to support asynchronous
+elearning services. Its goal is the incorporation and constructive use of the
+Internet and web technologies in the teaching and learning process.
 
-Platform's distribution started on March 2003 and the current version is the tenth 
-in a row. It is designed and developed by the GUnet Asychronous eLearning group 
-as an open source software (under GNU GPL Lisence). Also, there were many useful 
-ideas and contributions from various users and developers. We would like to express 
-our gratitude to all of them for their support. A complete list of contributors can be 
-found in the CREDITS.txt file.
+Platform's distribution started on March 2003 and the current version is the
+tenth in a row. It is designed and developed by the GUnet Asychronous
+eLearning group as an open source software (under GNU GPL Lisence). Also,
+there were many useful ideas and contributions from various users and
+developers. We would like to express our gratitude to all of them for their
+support. A complete list of contributors can be found in the CREDITS.txt file.
 
 Sincerely,
 Gunet Asychronous eLearning Group
@@ -26,13 +26,15 @@ EL - Ελληνικά
 Πλατφόρμα Open eClass 2.2 (http://www.openeclass.org)
 ----------------------------------------------------------
 
-Η πλατφόρμα Open eClass (παλιότερη ονομασία της GUnet eClass), είναι ένα ολοκληρωμένο Σύστημα Διαχείρισης Ηλεκτρονικών Μαθημάτων και αποτελεί την πρόταση του Ακαδημαϊκού Διαδικτύου GUnet για την υποστήριξη της Υπηρεσίας 
-Ασύγχρονης Τηλεκπαίδευσης. Αναπτύχθηκε από την Ομάδα Ασύγχρονης Τηλεκπαίδευσης του 
-Ακαδημαϊκού Διαδικτύου, υποστηρίζεται κεντρικά από το GUnet και διανέμεται 
+Η πλατφόρμα Open eClass (παλιότερη ονομασία: GUnet eClass), είναι ένα
+ολοκληρωμένο Σύστημα Διαχείρισης Ηλεκτρονικών Μαθημάτων και αποτελεί την
+πρόταση του Ακαδημαϊκού Διαδικτύου GUnet για την υποστήριξη της Υπηρεσίας
+Ασύγχρονης Τηλεκπαίδευσης. Αναπτύχθηκε από την Ομάδα Ασύγχρονης Τηλεκπαίδευσης
+του Ακαδημαϊκού Διαδικτύου, υποστηρίζεται κεντρικά από το GUnet και διανέμεται
 ελεύθερα ως Λογισμικό Ανοικτού Κώδικα.
 
 Η διάθεση της πλατφόρμας ξεκίνησε το Μάρτιο του 2003 και σήμερα (28/09/2009), 
-διανέμεται η δέκατα κατά σειρά έκδοση της πλατφόρμας (Open eClass 2.2). Όλα αυτά τα 
+διανέμεται η δέκατη κατά σειρά έκδοση της πλατφόρμας (Open eClass 2.2). Όλα αυτά τα 
 χρόνια, χρησιμοποιείται με επιτυχία από το σύνολο σχεδόν των Ακαδημαϊκών Ιδρυμάτων 
 της χώρας καθώς κι από ένα πλήθος άλλων εκπαιδευτικών οργανισμών, υποστηρίζοντας 
 ενεργά τις δράσεις Ασύγχρονης Τηλεκπαίδευσης και Κατάρτισης.
