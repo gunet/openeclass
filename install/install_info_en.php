@@ -3,7 +3,7 @@
 <html>
 <head>
 <META http-equiv=Content-Type content="text/html; charset=UTF-8">
-<title>Installation Instructions Open eClass 2.1</title>
+<title>Installation Instructions Open eClass 2.2</title>
 <style type="text/css">
 
 body {
@@ -55,9 +55,9 @@ pre {
 </style>
   </head>
   <body>
-    <h2>Installation Instructions Open eClass 2.1</h2>
+    <h2>Installation Instructions Open eClass 2.2</h2>
 <p>The Open eClass platform is a complete Course Management System. It is the solution offered by the Greek Academic Network GUnet to support Asynchronous eLearning Services. It is mainly designed, developed and supported by the GUnet Asynchronous eLearning Group and is distributed for free as open-source software.</p>
-    <p>The Asynchronous <b>Open eClass 2.1</b> eLearning platform has been tested and operates wwell in: 
+    <p>The Asynchronous <b>Open eClass 2.2</b> eLearning platform has been tested and operates wwell in: 
     </p>
     <ul>
       <li>Ms Windows environment (<b>Windows NT</b>, <b>Windows
@@ -123,13 +123,13 @@ short_open_tag = on</pre>
 
     <ul>
       <li>
-        <code>upload_max_filesize = 20M</code> (predefined value is 2M)
+        <code>upload_max_filesize = 40M</code> (predefined value is 2M)
       </li>
       <li>
         <code>memory_limit = 25M</code> (predefined value is 8M)
       </li>
       <li>
-        <code>post_max_size = 25M</code> (predefined value is 8M)
+        <code>post_max_size = 45M</code> (predefined value is 8M)
       </li>
       <li>
         <code>max_execution_time = 100</code> (predefined value is 30 sec)
@@ -148,7 +148,9 @@ What is more, if a PHP note comes up during the application, search for the erro
         </li>
         <li>Change the <em>session.save_path</em> variable to an existing path <em>(e.g. session.save_path=c:\winnt\temp\)</em>. Also make sure that the apache has access rights on it. 
         </li>
-        <li>Fill in the SMTP server that serves you for an email mission, e.g. <code>SMTP = mail.gunet.gr</code> 
+        <li>Fill in the SMTP server that serves you, e.g. <code>SMTP = mail.gunet.gr</code> 
+        </li>
+        <li>Fill the field <code>sendmail_from</code> with a valid sender email address 
         </li>
       </ul>
     </div>
@@ -187,19 +189,19 @@ What is more, if a PHP note comes up during the application, search for the erro
       Installation Process:
     </h3>
     <p>
-You can decompress the <b>openeclass-2.1.tar.gz</b> file using the <code>tar xzvf openeclass-2.1.tar.gz</code> command. The sub-directory created during decompression of the packet includes all the application files. This sub-directory has to be placed in an accessible point by the computer web server. 
+You can decompress the <b>openeclass-2.2.tar.gz</b> file using the <code>tar xzvf openeclass-2.2.tar.gz</code> command. The sub-directory created during decompression of the packet includes all the application files. This sub-directory has to be placed in an accessible point by the computer web server. 
     </p>
     <p>
 To give access rights to web server you can type the following commands (if the web server runs as a www-data user) 
     </p><pre>
-		cd (path of eclass) (e.g. cd /opt/eclass)
+		cd (path of eclass) (e.g. cd /opt/openeclass)
 		chown -R www-data *
 		find ./ -type f -exec chmod 664 {} \;
 		find ./ -type d -exec chmod 775 {} \;
 		</pre>
     <p>Administrator's rights (root) are usually necessary for the above commands.  
     </p>
-    <p>In order to start installing, visit the /install/ sub-directory address with a web browser. If, for example, the main eclass directory is located in http://www.example.gr/eclass/, the address you have to type is <code>http://www.example.gr/eclass/install/</code>. Then follow the platform installation guide steps like the ones presented on your screen. Note that during the installation process you will be required the following:
+    <p>In order to start installing, visit the /install/ sub-directory address with a web browser. If, for example, the main eclass directory is located in http://www.example.gr/openeclass/, the address you have to type is <code>http://www.example.gr/openeclass/install/</code>. Then follow the platform installation guide steps like the ones presented on your screen. Note that during the installation process you will be required the following:
 </p>
 <ul>
   <li>The name of the computer MySQL is installed to (e.g. eclass.gunet.gr, localhost - if they are on the same computer)  </li>
@@ -207,7 +209,7 @@ To give access rights to web server you can type the following commands (if the 
   <li>Name for the main eClass database (default is eclass). Change it however if there is a database with the same name already.  
   </li>
   <li>Platform URL (as this appears on the browser after installation
-    e.g. http://eclass.gunet.gr/eclass/) </li>
+    e.g. http://eclass.gunet.gr/openeclass/) </li>
   <li>The file path on the server. Make sure that the path is right (e.g. /var/www/html/). </li>
   <li>Administrator's Name / Surname and email. </li>
   <li>Administrator's Username and Password.</li>
@@ -224,16 +226,16 @@ The ldap server of the institute user authentication will be taking place  (ldap
     <h3>
       Installation Process:
     </h3>
-    <p>Decompress the openeclass-2.1.zip file in the root directory of the Apache. The subdirectory created during the decompression of the package includes all files of the application. This sub-directory has to be placed in an accessible path by the web server.
+    <p>Decompress the openeclass-2.2.zip file in the root directory of the Apache. The subdirectory created during the decompression of the package includes all files of the application. This sub-directory has to be placed in an accessible path by the web server.
     </p>
-    <p>In order to start installation, visit the /install/ sub-directory address with a web browser.  If, for example, the main eclass directory is located in http://www.example.gr/eclass/, the address you have to type is <code>http://www.example.gr/eclass/install/</code>. Then follow the platform installation guide steps like the ones presented on your screen. Note that during the installation process you will be required the following:</p>
+    <p>In order to start installation, visit the /install/ sub-directory address with a web browser.  If, for example, the main eclass directory is located in http://www.example.gr/openeclass/, the address you have to type is <code>http://www.example.gr/openeclass/install/</code>. Then follow the platform installation guide steps like the ones presented on your screen. Note that during the installation process you will be required the following:</p>
 <ul>
   <li>The name of the computer MySQL is installed to (e.g. eclass.gunet.gr, localhost - if they are on the same computer) 
  </li>
   <li>A 'username' and a 'password' for MySQL with database c rights.  </li>
   <li>Name for the main eClass database (default is eclass). Change it however if there is a database with the same name already.  
   </li>
-  <li>Platform URL (as this appears on the browser after installation e.g.http://eclass.gunet.gr/eclass/). 
+  <li>Platform URL (as this appears on the browser after installation e.g.http://eclass.gunet.gr/openeclass/). 
  </li>
   <li>The file path on the server. Make sure that the path is right (e.g. C:\Program Files\Apache\htdocs\).</li>
   <li>Administrator's Name / Surname and email.</li>
@@ -251,10 +253,10 @@ The ldap server of the institute user authentication will be taking place  (ldap
   <li> 
     <p>The platform is delivered through the phpMyAdmin management tool. For safety and security reasons, access to phpMyAdmin is done through the browser's cookies. If you want to change it, you can refer to the config.inc.php file of phpMyAdmin.</p>
   </li>
-  <li>eClass introduces 3 tentetive / general Schools / Faculties. (Faculty 1-Code TMA, Faculty 2-Code TMB etc).You will have to change and adjust them to the Schools-Faculties of your own institute. You can do this through the administrator tool. You will find more and further information for these actions in the Administrator's manual (included in the administator tool).</li>
+  <li>eClass introduces 3 tentative / general Schools / Faculties. (Faculty 1-Code TMA, Faculty 2-Code TMB etc).You will have to change and adjust them to the Schools-Faculties of your own institute. You can do this through the administrator tool. You will find more and further information for these actions in the Administrator's manual (included in the administator tool).</li>
   <li> 
     <p> In case some institutes intend to substitute the initial eClass logo with one of its own, they just have to substitute the picture.</p>
-    <pre>(path of eClass)/template/classic/img/logo_bg_50.gif</pre> 
+    <pre>(path of Open eClass)/template/classic/img/logo_bg_50.gif</pre> 
     <p> with its own. </p>
   </li>
   <li> 
@@ -289,8 +291,8 @@ You can add a text (e.g. informative) on the left and right of the platform home
       <ul>
         <li><b>For Unix / Linux systems only:</b>After completing installation, you are advised, for safety reasons, to change access rights for the <code>/config/config.php</code> and <code>/install/index.php</code><p> files and allow reading only. (persmissions must be set to 444)</p> 
 
-          <pre>chmod 444 eclass/config/config.php
-eclass/install/index.php</pre>
+          <pre>chmod 444 openeclass/config/config.php
+openeclass/install/index.php</pre>
         </li>
       </ul>
     </div>

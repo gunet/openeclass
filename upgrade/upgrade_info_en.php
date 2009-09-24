@@ -3,7 +3,7 @@
 <html>
 <head>
 <META http-equiv=Content-Type content="text/html; charset=UTF-8">
-<title>Upgrade Instructions Open eClass 2.1</title>
+<title>Upgrade Instructions Open eClass 2.2</title>
 <style type="text/css">
 
 body {
@@ -55,15 +55,15 @@ pre {
 </style>
 </head>
 <body>
-<h2>Upgrade Instructions of Open eClass 2.1</h2>
+<h2>Upgrade Instructions of Open eClass 2.2</h2>
 <h3>The Upgrade Process </h3>
-<p>The new Open eClass version 2.1 retains backward compatibility (with previous versions). For that reason, you can upgrade an already installed platform from prior versions (1.7, 2.0) to the current 2.1 easily and quickly, following the upgrade instructions provided below. Keeping a safety record of the course contents and the database before beginning to upgrade is recommended.</p>
+<p>The new Open eClass version 2.2 retains backward compatibility (with previous versions). For that reason, you can upgrade an already installed platform from prior versions (1.7, 2.0, 2.1.x) to the current 2.2 easily and quickly, following the upgrade instructions provided below. Keeping a safety record of the course contents and the database before beginning to upgrade is recommended.</p>
 <div class="note">
 <p><b>WARNING!</b>
 <ul>
-<li>Please ensure that during the platform's upgrade process there is no access to eCourses by the platform's users and the platform's database is not accessible by anyone  
+<li>Please ensure that during the platform's upgrade process there is no access to Open eClass courses by the platform's users and the platform's database is not accessible by anyone  
 </li>
-<li>Also check the platform's version that is already installed in your server, by following the link 'Platform's Information' in the home page. In order to the upgrade process to be possible the already installed platform should be either version 1.7 or 2.0 or 2.0 beta For previous versions (1.5, 1.6) you need to upgrade first in  1.7 following the instructions at the last section of this manual 'Upgrade to Open eClass 2.1 from older versions 1.5, 1.6'.
+<li>Also check the platform's version that is already installed in your server, by following the link 'Platform's Information' in the home page. In order to the upgrade process to be possible the already installed platform should be either version >=1.7. For previous versions (1.5, 1.6) you need to upgrade first in 1.7 following the instructions at the last section of this manual 'Upgrade to Open eClass 2.2 from older versions 1.5, 1.6'.
 </li>
 <li>
 Before the upgrade procedure please backup both the eCourses files and the platform's Database.
@@ -97,8 +97,8 @@ Then, follow the steps below.
 </a>
 <p>All operations presuppose you have the administrator's rights (root) on your computer.</p>
 <p>The following example presumes that the eClass platform is already installed on directory <code>/var/www/html</code>.</p>
-<p>Due to some changes included by the new (2.1) Open eClass version you will have to delete the old and install the new one. To make sure that you old configuration remain intact you must do the following actions:</p>
-<p>We consider that you have downloaded <b>openeclass-2.1.tar.gz</b> on the <code>/tmp
+<p>Due to some changes included by the new (2.2) Open eClass version you will have to delete the old and install the new one. To make sure that you old configuration remain intact you must do the following actions:</p>
+<p>We consider that you have downloaded <b>openeclass-2.2.tar.gz</b> on the <code>/tmp
   </code> directory. </p>
 <ul>
   <li>Go to the directory you have installed in eClass. e.g.
@@ -117,8 +117,8 @@ Then, follow the steps below.
     <pre>cd /var/www/html/eclass/
 rm -rf images/ include/ info/ install/ manuals/ template/ modules/ </pre>
   </li>
-  <li>Untar openeclass-2.1.tar.gz in a temporary directory (/tmp) e.g.
-    <pre>tar xzvf /tmp/openeclass-2.1.tar.gz</pre>
+  <li>Untar openeclass-2.2.tar.gz in a temporary directory (/tmp) e.g.
+    <pre>tar xzvf /tmp/openeclass-2.2.tar.gz</pre>
 
 	Then copy from the temporary directory /tmp/openeclass21 all of its contents in the installation directory e.g.
 	<pre>cp -a /tmp/openeclass21/*  /var/www/html/eclass/</pre>
@@ -141,11 +141,11 @@ find ./ -type d -exec chmod 775 {} \;
 </li>
 </ul>
 
-<p>Having completed the previous steps, you will have installed the new eClass version (eClass 2.1) files successfully. Then, move on to  <a href="#dbase">the second step</a> in order to upgrade the platform databases.</p>
+<p>Having completed the previous steps, you will have installed the new eClass version (eClass 2.2) files successfully. Then, move on to  <a href="#dbase">the second step</a> in order to upgrade the platform databases.</p>
 
 <h3><a name="win">1st Step: Upgrading in Ms Windows Computers</a></h3>
-<p>The following example presupposes that eClass has already been installed to directory <code>C:\Program Files\Apache\htdocs\</code> and that you have downloaded <b>openeclass-2.1.zip</b>.</p>  
-<p>Due to several changes included by the new (2.1) Open eClass version you will have to delete the old and install the new one. To make sure that you old configuration remain intact you must do the following actions:</p>
+<p>The following example presupposes that eClass has already been installed to directory <code>C:\Program Files\Apache\htdocs\</code> and that you have downloaded <b>openeclass-2.2.zip</b>.</p>  
+<p>Due to several changes included by the new (2.2) Open eClass version you will have to delete the old and install the new one. To make sure that you old configuration remain intact you must do the following actions:</p>
 <ul>
   <li>Move to the eClass installed folder. e.g.<code>C:\Program
     Files\Apache\htdocs</code></li>
@@ -157,7 +157,7 @@ find ./ -type d -exec chmod 775 {} \;
     These are found in folder <code>C:\Program Files\Apache\htdocs\eclass\modules\chat\</code> with the form course_code.chat.txt 
   </li>
   <li>Go to eclass folder (e.g.<code>C:\Program Files\Apache\htdocs\eclass\</code>) and delete all the folders except courses and config.</li>
-  <li>Unzip openeclass-2.1.zip to a temporary folder on the desktop. e.g.
+  <li>Unzip openeclass-2.2.zip to a temporary folder on the desktop. e.g.
     <code>C:\Documents and Settings\Administrator\Desktop\eclass17</code>.
 	After that rename the temporary folder eclass21 to eclass and copy it along with its contents (files and documents). Then, open the file that includes eClass installation, e.g. 
  <code>C:\Program
@@ -167,7 +167,7 @@ find ./ -type d -exec chmod 775 {} \;
   <li>Move to the original place the chat files. e.g. in <code>C:\Program Files\Apache\htdocs\eclass\modules\chat\</code></li>
   <li>Delete the desktop temporary folder.</li>
 	</ul>
-	<p>As soon as the above have been completed, you will have installed the new eClass version files (eClass 2.1) successfully. Then, follow the  <a href="#dbase">second step</a> so as to upgrade the platform database.
+	<p>As soon as the above have been completed, you will have installed the new eClass version files (eClass 2.2) successfully. Then, follow the  <a href="#dbase">second step</a> so as to upgrade the platform database.
 </p>
 
 <a name="dbase">
@@ -190,7 +190,7 @@ find ./ -type d -exec chmod 775 {} \;
 <a name="after">
 <h3>3rd Step: Successful Upgrade Check</h3>
 </a>
-<p>In order to make sure that the platform has been upgraded, login as administrator and click on the "Open eClass Version". Version 2.1 has to be indicated. You can alternatively click on the "Platform Information" link on the homepage. Among all, version 2.1 of the platform will be indicated.
+<p>In order to make sure that the platform has been upgraded, login as administrator and click on the "Open eClass Version". Version 2.2 has to be indicated. You can alternatively click on the "Platform Information" link on the homepage. Among all, version 2.2 of the platform will be indicated.
 
 <p>You are ready! The upgrade process has been completed successfully. </p>
 <p>If you want to see the new features of the new version, go to <a href="CHANGES.txt">CHANGES.txt</a> text file. Read forward for further additional regulations (HTTPS, Latex etc).</p>

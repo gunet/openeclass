@@ -2,12 +2,14 @@
 Open eClass Platform - CHANGES 
 ****************************************
 
-Platform GUnet eClass has been renamed to Open eClass (http://www.openeclass.org).
-
-Open eClass 2.1.3 is the new version of the platform and is available from 15/10/2008. 
-The platform was designed and developed by the GUnet Asynchronous eLearning group.
-This version introduces a number of new features, the most important of them are
-listed below.
+********************************************************************
+Open eClass 2.2 - Changes List
+********************************************************************
+-- Creation of subsystem "Course units". The trainer may organize his course according to learning resources.
+-- Various corrections in "Learning Path".
+-- Added decimal rating in questions exercises. Bug corrected in changing of  order of exercises questions. Added option of displaying (or no) corrected answers after finish of exercise.
+-- Add statistics in users group.
+-- Added support for Spanish Language
 
 ********************************************************************
 Open eClass 2.1.3 - Changes List

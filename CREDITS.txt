@@ -1,8 +1,8 @@
       /*========================================================================
-      *   Open eClass 2.1
+      *   Open eClass 2.2
       *   E-learning and Course Management System
       * ========================================================================
-      *  Copyright(c) 2003-2008  Greek Universities Network - GUnet
+      *  Copyright(c) 2003-2009  Greek Universities Network - GUnet
       *  A full copyright notice can be read in "/info/copyright.txt".
       *
       *  Developers Group:	Costas Tsibanis <k.tsibanis@noc.uoa.gr>
@@ -21,7 +21,7 @@
       *  			eMail: info@openeclass.org
       * =========================================================================*/
 	
-      GUnet eClass was initially based on Claroline 1.3.0, by:
+      Open eClass was initially based on Claroline 1.3.0, by:
           Thomas De Praetere <depraetere@ipm.ucl.ac.be>
           Hugues Peeters    <peeters@ipm.ucl.ac.be>
           Christophe Gesche <gesche@ipm.ucl.ac.be>
@@ -84,7 +84,7 @@
           Copyright (c), 1999-2001, Uriah Welcome (precision@devrandom.net)
           Copyright (c), 1999-2001, Matthew Snelham (infinite@valinux.com)
 
-        DHTML Calendar: Copyright Mihai Bazon, 2002-2005
+        JSCalendar: Copyright Mihai Bazon, 2002-2005
  
         POP3 class : Manuel Lemos (http://www.manuellemos.net)  <WebMaster@E-na.Net>
 
