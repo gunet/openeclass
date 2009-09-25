@@ -3219,6 +3219,7 @@ $langInsertDoc = "εγγράφου";
 $langInsertExercise = "άσκησης";
 $langInsertVideo = "βίντεο";
 $langInsertForum = "περιοχής συζητήσεων";
+$langInsertWork = 'εργασίας';
 $langUnknownResType = "Πρόβλημα! Άγνωστος πόρος θεματικής ενότητας";
 $langNoExercises = "Δεν υπάρχουν ασκήσεις";
 

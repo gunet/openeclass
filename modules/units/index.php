@@ -154,18 +154,13 @@ foreach (array('previous', 'next') as $i) {
 }
 if ($is_adminOfCourse) {
         $tool_content .= "<div id='operations_container'><ul id='opslist'>" .
-                        "<li>$langAdd: <a href='insert.php?type=doc&amp;id=$id' " .
-                                "title='$langInsertDoc'>$langInsertDoc</a></li>" .
-                        "<li><a href='insert.php?type=exercise&amp;id=$id' " .
-                                "title='$langInsertExercise'>$langInsertExercise</a></li>" .
-                        "<li><a href='insert.php?type=text&amp;id=$id' " .
-                                "title='$langInsertText'>$langInsertText</a></li>" .
-			"<li><a href='insert.php?type=lp&amp;id=$id' " .
-                                "title='$langLearningPath1'>$langLearningPath1</a></li>" .
-			"<li><a href='insert.php?type=video&amp;id=$id' " .
-                                "title='$langInsertVideo'>$langInsertVideo</a></li>" .
-			"<li><a href='insert.php?type=forum&amp;id=$id' " .
-                                "title='$langAddForCat'>$langInsertForum</a></li>" .
+                        "<li>$langAdd: <a href='insert.php?type=doc&amp;id=$id'>$langInsertDoc</a></li>" .
+                        "<li><a href='insert.php?type=exercise&amp;id=$id'>$langInsertExercise</a></li>" .
+                        "<li><a href='insert.php?type=text&amp;id=$id'>$langInsertText</a></li>" .
+			"<li><a href='insert.php?type=lp&amp;id=$id'>$langLearningPath1</a></li>" .
+			"<li><a href='insert.php?type=video&amp;id=$id'>$langInsertVideo</a></li>" .
+			"<li><a href='insert.php?type=forum&amp;id=$id'>$langInsertForum</a></li>" .
+			"<li><a href='insert.php?type=work&amp;id=$id'>$langInsertWork</a></li>" .
                         "</ul></div>\n";
 }
 
@@ -272,6 +267,9 @@ function show_resource($info)
                         break;
 		case 'exercise':
                         $tool_content .= show_exercise($info['title'], $info['comments'], $info['id'], $info['res_id'], $info['visibility']);
+                        break;
+		case 'work':
+                        $tool_content .= show_work($info['title'], $info['comments'], $info['id'], $info['res_id'], $info['visibility']);
                         break;
 		case 'topic':
 		case 'forum':
@@ -409,6 +407,44 @@ function show_video($table, $title, $comments, $resource_id, $video_id, $visibil
 		actions('video', $resource_id, $visibility) .
                 '</tr>' . $comment_box;
 }
+
+
+// display resource work (assignment)
+function show_work($title, $comments, $resource_id, $work_id, $visibility)
+{
+	global $id, $tool_content, $mysqlMainDb, $urlServer, $is_adminOfCourse,
+               $langWasDeleted, $currentCourseID;
+
+	$comment_box = $class_vis = $imagelink = $link = '';
+        $title = htmlspecialchars($title);
+	$r = db_query("SELECT * FROM assignments WHERE id = $work_id",
+                      $currentCourseID);
+	if (mysql_num_rows($r) == 0) { // check if it was deleted
+		if (!$is_adminOfCourse) {
+			return '';
+		} else {
+			$status = 'del';
+			$imagelink = "<img src='../../template/classic/img/delete.gif' />";
+			$exlink = "<span class='invisible'>$title ($langWasDeleted)</span>";
+		}
+	} else {
+                $work = mysql_fetch_array($r, MYSQL_ASSOC);
+		$link = "<a href='${urlServer}modules/work/work.php?id=$work_id&amp;unit=$id'>";
+                $exlink = $link . "$title</a>";
+		$imagelink = $link .
+                        "<img src='../../template/classic/img/assignments_" .
+			($visibility == 'i'? 'off': 'on') . ".gif' /></a>";
+	}
+	$class_vis = ($visibility == 'v')? '': ' class="invisible"';
+        if (!empty($comments)) {
+                $comment_box = "<tr><td width='3%'>&nbsp;</td><td width='82%'>$comments</td>";
+	}
+
+	return "<tr$class_vis><td width='3%'>$imagelink</td><td width='82%'>$exlink</td>" .
+		actions('lp', $resource_id, $visibility) .
+		'</tr>' . $comment_box;
+}
+
 
 // display resource exercise
 function show_exercise($title, $comments, $resource_id, $exercise_id, $visibility)

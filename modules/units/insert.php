@@ -66,6 +66,8 @@ if (isset($_POST['submit_doc'])) {
         insert_video($id);
 } elseif (isset($_POST['submit_exercise'])) {
         insert_exercise($id);
+} elseif (isset($_POST['submit_work'])) {
+        insert_work($id);
 } elseif (isset($_POST['submit_forum'])) {
         insert_forum($id);
 }
@@ -75,6 +77,10 @@ $info = mysql_fetch_array($q);
 $navigation[] = array("url"=>"index.php?id=$id", "name"=> htmlspecialchars($info['title']));
 
 switch ($_GET['type']) {
+        case 'work': $nameTools = "$langAdd $langInsertWork";
+                include 'insert_work.php';
+                display_assignments();
+                break;
         case 'doc': $nameTools = "$langAdd $langInsertDoc";
                 include 'insert_doc.php';
                 display_docs();
@@ -175,6 +181,35 @@ function insert_video($id)
 		$row = mysql_fetch_array(db_query("SELECT * FROM $table
 			WHERE id = $res_id", $GLOBALS['currentCourseID']), MYSQL_ASSOC);
                 db_query("INSERT INTO unit_resources SET unit_id=$id, type='$table', title=" . quote($row['titre']) . ", comments=" . quote($row['description']) . ", visibility='v', `order`=$order, `date`=NOW(), res_id=$res_id", $GLOBALS['mysqlMainDb']);
+	}
+	header('Location: index.php?id=' . $id);
+	exit;
+}
+
+// insert work (assignment) in database
+function insert_work($id)
+{
+	list($order) = mysql_fetch_array(db_query("SELECT MAX(`order`) FROM unit_resources WHERE unit_id=$id"));
+	
+	foreach ($_POST['work'] as $work_id) {
+		$order++;
+		$work = mysql_fetch_array(db_query("SELECT * FROM assignments
+			WHERE id =" . intval($work_id), $GLOBALS['currentCourseID']), MYSQL_ASSOC);
+		if ($work['active'] == '0') {
+			 $visibility = 'i';
+		} else {
+			$visibility = 'v';
+		}
+		db_query("INSERT INTO unit_resources SET
+                                unit_id = $id,
+                                type = 'work',
+                                title = " . quote($work['title']) . ",
+                                comments = " . quote($work['description']) . ",
+                                visibility = '$visibility',
+                                `order` = $order,
+                                `date` = NOW(),
+                                res_id = $work[id]",
+			 $GLOBALS['mysqlMainDb']); 
 	}
 	header('Location: index.php?id=' . $id);
 	exit;

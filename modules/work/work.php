@@ -1331,5 +1331,3 @@ function show_plain_view($id)
 	readfile("$workPath/$secret/index.html");
 	exit;
 }
-
-?>
