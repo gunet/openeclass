@@ -34,7 +34,7 @@ session_start();
 
 // save current course
 if (isset($_SESSION['dbname'])) {
-        $old_dbname = $_SESSION['dbname'];
+        define('old_dbname', $_SESSION['dbname']);
 }
 
 $uri = str_replace('//', chr(1), strstr($_SERVER['REQUEST_URI'], 'file.php/'));
@@ -47,7 +47,7 @@ $dbname = addslashes(array_shift($path_components));
 $require_current_course = true;
 $guest_allowed = true;
 
-include '../../include/baseTheme.php';
+include '../../include/init.php';
 include '../../include/lib/forcedownload.php';
 
 /**** The following is added for statistics purposes ***/
@@ -74,8 +74,8 @@ if ($r['visibility'] != 'v' and !$is_adminOfCourse) {
         $_SESSION['errMessage'] = $l_noread;
         session_write_close();
         // restore current course
-        if (isset($old_dbname)) {
-                $dbname = $old_dbname;
+        if (defined('old_dbname')) {
+                $_SESSION['dbname'] = old_dbname;
         }
         header("Location: $urlServer" );
 }
@@ -84,8 +84,8 @@ if (!preg_match("/\.$r[format]$/", $component)) {
 }
 
 // restore current course
-if (isset($old_dbname)) {
-        $dbname = $old_dbname;
+if (defined('old_dbname')) {
+        $_SESSION['dbname'] = old_dbname;
 }
 if (file_exists($basedir . $r['path'])) {
         send_file_to_client($basedir . $r['path'], $component, true);

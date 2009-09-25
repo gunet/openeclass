@@ -86,7 +86,7 @@ if (!isset($urlSecure)) {
         $urlSecure = $urlServer;
 }
 
-//load the correct language (Author: Evelthon Prodromou)
+// load the correct language (Author: Evelthon Prodromou)
 if (session_is_registered('langswitch')) {
 	$language = $_SESSION['langswitch'];
 }
@@ -150,7 +150,11 @@ if (isset($require_current_course) and $require_current_course) {
                                     FROM cours WHERE cours.code='$dbname'");
 
                 if (!$result or mysql_num_rows($result) == 0) {
-                        unset($_SESSION['dbname']);
+                        if (defined('old_dbname')) {
+                                $_SESSION['dbname'] = old_dbname;
+                        } else {
+                                unset($_SESSION['dbname']);
+                        }
                         header('Location: ' . $urlServer);
                         exit;
                 }
@@ -302,4 +306,3 @@ if(isset($currentCourse) && file_exists($module_ini_dir = getcwd() . "/module.in
 		$errorMessagePath = "../../";
 	}
 }
-?>

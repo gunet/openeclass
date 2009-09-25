@@ -48,23 +48,22 @@ if ($is_adminOfCourse and isset($currentCourseID)) {
 }
 //template path for logged out + logged in (ex., when session expires)
 $extraMessage = ""; //initialise var for security
-if (isset ( $errorMessagePath )) {
+if (isset($errorMessagePath)) {
 	$relPath = $errorMessagePath;
 }
 
-if (isset ( $toolContent_ErrorExists )) {
+if (isset($toolContent_ErrorExists)) {
 	$toolContent = $toolContent_ErrorExists;
 
-	$_SESSION ['errMessage'] = $toolContent_ErrorExists;
+	$_SESSION['errMessage'] = $toolContent_ErrorExists;
 	session_write_close ();
-	header ( "location:" . $urlServer . "index.php" );
-	exit ();
+	header("Location:" . $urlServer . "index.php");
+	exit();
 }
 
-if (session_is_registered ( 'errMessage' ) && strlen ( $_SESSION ['errMessage'] ) > 0) {
-
-	$extraMessage = $_SESSION ['errMessage'];
-	session_unregister ( 'errMessage' );
+if (session_is_registered('errMessage') && strlen($_SESSION['errMessage']) > 0) {
+	$extraMessage = $_SESSION['errMessage'];
+	session_unregister('errMessage');
 }
 
 include ($relPath . "template/template.inc");
