@@ -74,26 +74,26 @@ $head_content .= <<<hCont
 <script type="text/javascript" src="$urlAppend/include/xinha/my_config.js"></script>
 hCont;
 
-$body_action = "onload=\"initEditor()\"";
+$body_action = 'onload="initEditor()"';
 
 if ($is_adminOfCourse) {
 
 //Save  actions
 	if (isset($save)) {
-		if($_POST["edIdBloc"]=="add") {
+		if($_POST['edIdBloc'] == 'add') {
 		    $sql="SELECT MAX(id) as idMax from course_description";
 			$res = db_query($sql, $db);
 			$idMax = mysql_fetch_array($res);
 			$idMax = max(sizeof($titreBloc),$idMax["idMax"]);
-			$sql ="INSERT IGNORE INTO `course_description` (`id`)
-				VALUES ('".($idMax+1)."');";
-			$_POST["edIdBloc"]= $idMax+1;
+			$sql ="INSERT IGNORE INTO `course_description`
+                               SET `id` = " . ($idMax + 1);
+			$_POST['edIdBloc'] = $idMax + 1;
 		} else {
-			$sql ="INSERT IGNORE INTO `course_description`(`id`)
-				VALUES ('".$_POST["edIdBloc"]."');";
+			$sql ="INSERT IGNORE INTO `course_description`
+                               SET `id` = " . intval($_POST['edIdBloc']);
 		}
 		db_query($sql, $db);
-		if ($edTitleBloc == "") {
+		if (empty($edTitleBloc)) {
 			$edTitleBloc = $titreBloc[$edIdBloc];
 		}
 		$sql ="UPDATE course_description SET title= ".autoquote(trim($edTitleBloc)).",
@@ -107,7 +107,7 @@ if ($is_adminOfCourse) {
 	if (isset($delete) and $delete == 'yes') {
 		$sql ="DELETE FROM `course_description` WHERE id = '$_GET[numBloc]'";
 		$res = db_query($sql,$db);
-		$tool_content .= "<p class='success'>$langBlockDeleted<br><br><a href=\"".$_SERVER['PHP_SELF']."\">".$langBack."</a></p>";
+		$tool_content .= "<p class='success'>$langBlockDeleted<br /><br /><a href='$_SERVER[PHP_SELF]'>$langBack</a></p>";
 	}
 //Edit action
 	elseif(isset($numBloc)) {
@@ -143,7 +143,7 @@ if ($is_adminOfCourse) {
 		if ($numBloc =="add") {
 			$tool_content .= "<input type='hidden' name='edIdBloc' value='add' />";
 		} else {
-			$tool_content .= "<input type='hidden' name='edIdBloc' value='".$numBloc."' />";
+			$tool_content .= "<input type='hidden' name='edIdBloc' value='$numBloc' />";
 		}
 		$tool_content .= "
     <tr>
@@ -228,4 +228,3 @@ if(isset($numBloc)) {
 } else {
 	draw($tool_content, 2, 'course_description', $head_content);
 }
-?>

@@ -54,13 +54,13 @@ $action->record('MODULE_ID_DESCRIPTION');
 /**************************************/
 
 $nameTools = $langCourseProgram;
-$tool_content = "";
+$tool_content = '';
 
 if ($is_adminOfCourse) {
 	$tool_content .= "
-  <div id=\"operations_container\">
-    <ul id=\"opslist\">
-	  <li><a href=\"edit.php\">".$langEditCourseProgram."</a></li>
+  <div id='operations_container'>
+    <ul id='opslist'>
+	  <li><a href='edit.php'>$langEditCourseProgram</a></li>
     </ul>
   </div>";
 }
@@ -72,31 +72,27 @@ if (mysql_num_rows($res) > 0) {
 	$tool_content .= "
     <br />
 
-    <table width=\"99%\" class=\"CourseDescr\">
+    <table width='99%' class='CourseDescr'>
     <thead>
     <tr>
       <td>
-        <table width=\"100%\" class=\"FormData\">
-        <thead>
+        <table width='100%' class='FormData'>
         <tr>
-          <th class=\"left\" style=\"border: 1px solid #edecdf;\"><u>".$bloc["title"]."</u></th>
+          <th class='left' style='border: 1px solid #edecdf;'><u>$bloc[title]</u></th>
         </tr>
-        </thead>
         </table>
       </td>
     </tr>
     <tr>
-      <td colspan=\"2\">".mathfilter(make_clickable(nl2br($bloc["content"])), 12, "../../courses/mathimg/")."</td>
+      <td colspan='2'>".mathfilter(make_clickable(nl2br($bloc['content'])), 12, "../../courses/mathimg/")."</td>
     </tr>
-    </tgead>
     </table>";
 
 	$tool_content .= "<br />";
 	}
 } else {
-	$tool_content .= "<p class=\"alert1\">$langThisCourseDescriptionIsEmpty</p>";
+	$tool_content .= "<p class='alert1'>$langThisCourseDescriptionIsEmpty</p>";
 }
 
 add_units_navigation(TRUE);
 draw($tool_content, 2, 'course_description');
-?>
