@@ -96,10 +96,10 @@ if ($is_adminOfCourse) {
 		if ($edTitleBloc == "") {
 			$edTitleBloc = $titreBloc[$edIdBloc];
 		}
-		$sql ="UPDATE course_description SET title= ".quote(trim($edTitleBloc)).",
-			content = ".quote(trim($edContentBloc)).",
+		$sql ="UPDATE course_description SET title= ".autoquote(trim($edTitleBloc)).",
+			content = ".autoquote(trim($edContentBloc)).",
 			`upDate` = NOW()
-			WHERE id = '".$_POST["edIdBloc"]."';";
+			WHERE id = ".intval($_POST['edIdBloc']);
 		db_query($sql, $db);
 	}
 
@@ -123,35 +123,35 @@ if ($is_adminOfCourse) {
 		}
 
     $tool_content .= "
-    <form method=\"post\" action=\"$_SERVER[PHP_SELF]\">
+    <form method='post' action='$_SERVER[PHP_SELF]'>
 
-    <table width='99%' class='FormData  ' align='left'>
+    <table width='99%' class='FormData' align='left'>
     <tbody>
     <tr>
-      <th class=\"left\" width=\"220\">".$langTitle.":</th>
+      <th class='left' width='220'>".$langTitle.":</th>
       <td><b>".@$titreBloc[$numBloc]."</b></td>
     </tr>";
 	if (($numBloc =="add") || @(!$titreBlocNotEditable[$numBloc])) {
 		$tool_content .= "
     <tr>
-      <th class=\"left\">&nbsp;</th>
-      <td><input type=\"text\" name=\"edTitleBloc\" rows='20' cols='90' value=\"".@$titreBloc[$numBloc]."\"></td>
+      <th class='left'>&nbsp;</th>
+      <td><input type='text' name='edTitleBloc' rows='20' cols='90' value='".@$titreBloc[$numBloc]."'></td>
     </tr>";
 	} else {
-		$tool_content .= "<input type=\"hidden\" name=\"edTitleBloc\" value=\"".$titreBloc[$numBloc]."\" >";
+		$tool_content .= "<input type='hidden' name='edTitleBloc' value='".$titreBloc[$numBloc]."' >";
 	}
 		if ($numBloc =="add") {
-			$tool_content .= "<input type=\"hidden\" name=\"edIdBloc\" value=\"add\">";
+			$tool_content .= "<input type='hidden' name='edIdBloc' value='add'>";
 		} else {
-			$tool_content .= "<input type=\"hidden\" name=\"edIdBloc\" value=\"".$numBloc."\">";
+			$tool_content .= "<input type='hidden' name='edIdBloc' value='".$numBloc."'>";
 		}
 		$tool_content .= "
     <tr>
-      <th class=\"left\">&nbsp;</th>
+      <th class='left'>&nbsp;</th>
       <td>
 	    <table class='xinha_editor'>
         <tr>
-          <td><textarea id='xinha' width=\"100%\" name='edContentBloc' value='".@$contentBloc."'>".@$contentBloc."</textarea></td>
+          <td><textarea id='xinha' width='100%' name='edContentBloc'>".@$contentBloc."</textarea></td>
         </tr>
         </table>
       </td>
@@ -159,9 +159,9 @@ if ($is_adminOfCourse) {
 
 	$tool_content .= "
     <tr>
-      <th class=\"left\">&nbsp;</th>
-      <td><input type=\"submit\" name=\"save\" value=\"".$langAdd."\">&nbsp;&nbsp;
-          <input type=\"submit\" name=\"ignore\" value=\"".$langBackAndForget ."\">
+      <th class='left'>&nbsp;</th>
+      <td><input type='submit' name='save' value='$langAdd'>&nbsp;&nbsp;
+          <input type='submit' name='ignore' value='$langBackAndForget'>
       </td>
     </tr>";
 	$tool_content .= "
@@ -180,21 +180,21 @@ if ($is_adminOfCourse) {
 		$tool_content .= "
     <form method='post' action='$_SERVER[PHP_SELF]'>
 
-    <table width=\"99%\" align=\"left\" class=\"FormData\">
+    <table width='99%' align='left' class='FormData'>
     <tbody>
     <tr>
-      <th class=\"left\" width=\"220\">&nbsp;</th>
+      <th class='left' width='220'>&nbsp;</th>
       <td><b>$langAddCat</b></td>
     </tr>
     <tr>
-      <th class=\"left\">$langSelection :</th>
+      <th class='left'>$langSelection :</th>
       <td><select name='numBloc' size='1' class='auth_input'>";
 		while (list($numBloc,) = each($titreBloc)) {
 			if (!isset($blocState[$numBloc])||$blocState[$numBloc] != "used")
 				$tool_content .= "\n            <option value='".$numBloc."'>".$titreBloc[$numBloc]."</option>";
 		}
 		$tool_content .= "\n</select></td></tr><tr><th>&nbsp;</th>
-      		<td><input type='submit' name='add' value='".$langAdd."'></td>
+      		<td><input type='submit' name='add' value='$langAdd'></td>
     		</tr></tbody></table>
     		<p>&nbsp;</p>
     </form>\n";
@@ -202,12 +202,12 @@ if ($is_adminOfCourse) {
 	reset($titreBloc);
 		while (list($numBloc,) = each($titreBloc)) {
 			if (isset($blocState[$numBloc]) && $blocState[$numBloc]=="used") {
-				$tool_content .= "<table width=\"99%\" class=\"CourseDescr\">
+				$tool_content .= "<table width='99%' class='CourseDescr'>
     					<thead><tr><td>
-        				<table width=\"100%\" class=\"FormData\">
+        				<table width='100%' class='FormData'>
         				<thead><tr>
-          				<th class=\"left\" style=\"border: 1px solid #CAC3B5;\">".$titreBloc[$numBloc].":</th>
-          				<td width=\"50\" class=\"right\">
+          				<th class='left' style='border: 1px solid #CAC3B5;'>".$titreBloc[$numBloc].":</th>
+          				<td width='50' class='right'>
 					<a href='".$_SERVER['PHP_SELF']."?numBloc=".$numBloc."' >
 					<img src='../../template/classic/img/edit.gif' border='0' title='$langModify'></a>&nbsp;&nbsp;";
 					$tool_content .= "<a href='$_SERVER[PHP_SELF]?delete=yes&numBloc=$numBloc' onClick='return confirmation();'><img src='../../images/delete.gif' border='0' title='$langDelete'></a>&nbsp;</td></tr></thead></table>
