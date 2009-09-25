@@ -129,9 +129,6 @@ hContent;
     $announcementNumber = mysql_num_rows($result);
     unset($result);
 
-    /*----------------------------------------
-	DEFAULT DISPLAY SETTINGS
-	--------------------------------------*/
     $displayAnnouncementList = true;
     $displayForm = true;
 
@@ -381,28 +378,18 @@ hContent;
         $iterator = 1;
         $bottomAnnouncement = $announcementNumber = mysql_num_rows($result);
 
-	$tool_content .= "
-      <table width=\"99%\" align='left' class=\"announcements\">";
+	$tool_content .= "<table width=\"99%\" align='left' class=\"announcements\">";
 	if ($announcementNumber > 0) {
-		$tool_content .= "
-      <thead>
-      <tr>
-        <th class=\"left\" colspan=\"2\"><b>$langAnnouncement</b></th>";
-	$tool_content .= "
-          <th width='70' class=\"right\"><b>$langTools</b></th>";
+		$tool_content .= "<thead><tr><th class=\"left\" colspan=\"2\"><b>$langAnnouncement</b></th>";
+		$tool_content .= "<th width='70' class=\"right\"><b>$langActions</b></th>";
 		if ($announcementNumber > 1) {
-			$tool_content .= "
-          <th width='70'><b>$langMove</b></th>";
+			$tool_content .= "<th width='70'><b>$langMove</b></th>";
 		}
-		$tool_content .= "
-        </tr>
-        </thead>";
+		$tool_content .= "</tr></thead>";
 	}
-	$tool_content .= "
-        <tbody>";
-    $k = 0;
-	while ($myrow = mysql_fetch_array($result))
-		{
+	$tool_content .= "<tbody>";
+	$k = 0;
+	while ($myrow = mysql_fetch_array($result)) {
             // FORMAT CONTENT
             $content = make_clickable($myrow['contenu']);
             $content = nl2br($content);
