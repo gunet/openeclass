@@ -135,15 +135,15 @@ if ($is_adminOfCourse) {
 		$tool_content .= "
     <tr>
       <th class='left'>&nbsp;</th>
-      <td><input type='text' name='edTitleBloc' rows='20' cols='90' value='".@$titreBloc[$numBloc]."'></td>
+      <td><input type='text' name='edTitleBloc' rows='20' cols='90' value='".@$titreBloc[$numBloc]."' /></td>
     </tr>";
 	} else {
-		$tool_content .= "<input type='hidden' name='edTitleBloc' value='".$titreBloc[$numBloc]."' >";
+		$tool_content .= "<input type='hidden' name='edTitleBloc' value='".$titreBloc[$numBloc]."' />";
 	}
 		if ($numBloc =="add") {
-			$tool_content .= "<input type='hidden' name='edIdBloc' value='add'>";
+			$tool_content .= "<input type='hidden' name='edIdBloc' value='add' />";
 		} else {
-			$tool_content .= "<input type='hidden' name='edIdBloc' value='".$numBloc."'>";
+			$tool_content .= "<input type='hidden' name='edIdBloc' value='".$numBloc."' />";
 		}
 		$tool_content .= "
     <tr>
@@ -160,8 +160,8 @@ if ($is_adminOfCourse) {
 	$tool_content .= "
     <tr>
       <th class='left'>&nbsp;</th>
-      <td><input type='submit' name='save' value='$langAdd'>&nbsp;&nbsp;
-          <input type='submit' name='ignore' value='$langBackAndForget'>
+      <td><input type='submit' name='save' value='$langAdd' />&nbsp;&nbsp;
+          <input type='submit' name='ignore' value='$langBackAndForget' />
       </td>
     </tr>";
 	$tool_content .= "
@@ -194,7 +194,7 @@ if ($is_adminOfCourse) {
 				$tool_content .= "\n            <option value='".$numBloc."'>".$titreBloc[$numBloc]."</option>";
 		}
 		$tool_content .= "\n</select></td></tr><tr><th>&nbsp;</th>
-      		<td><input type='submit' name='add' value='$langAdd'></td>
+      		<td><input type='submit' name='add' value='$langAdd' /></td>
     		</tr></tbody></table>
     		<p>&nbsp;</p>
     </form>\n";
@@ -209,8 +209,8 @@ if ($is_adminOfCourse) {
           				<th class='left' style='border: 1px solid #CAC3B5;'>".$titreBloc[$numBloc].":</th>
           				<td width='50' class='right'>
 					<a href='".$_SERVER['PHP_SELF']."?numBloc=".$numBloc."' >
-					<img src='../../template/classic/img/edit.gif' border='0' title='$langModify'></a>&nbsp;&nbsp;";
-					$tool_content .= "<a href='$_SERVER[PHP_SELF]?delete=yes&numBloc=$numBloc' onClick='return confirmation();'><img src='../../images/delete.gif' border='0' title='$langDelete'></a>&nbsp;</td></tr></thead></table>
+					<img src='../../template/classic/img/edit.gif' border='0' title='$langModify' /></a>&nbsp;&nbsp;";
+					$tool_content .= "<a href='$_SERVER[PHP_SELF]?delete=yes&amp;numBloc=$numBloc' onClick='return confirmation();'><img src='../../images/delete.gif' border='0' title='$langDelete' /></a>&nbsp;</td></tr></thead></table>
       					</td></tr><tr>
       				<td>".mathfilter(make_clickable(nl2br($contentBloc[$numBloc])), 12, "../../courses/mathimg/")."</td>
     				</tr></thead></table>";
