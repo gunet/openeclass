@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language es
-// Generated 2009-06-30 12:29:04
+// Generated 2009-09-25 17:18:30
 
 $langPHPMathPublisher = "<p><u>Soporte de símbolos matemáticos:</u><br>
 <br /><br>
@@ -184,7 +184,6 @@ Además, si el/ella ha subido una tarea y quiere subir una nueva, la vieja se re
 ";
 $langWork_studentContent = "<p>El módulo de asignaciones del curso es una herramienta muy útil ya que permite la admisión electrónica, sumisión y evaluación de las asignaciones del curso. Más específicamente, permite que los alumnos usuarios registrados carguen electrónicamente sus asignaciones en la plataforma hasta la fecha de sumisión y puedan ver su puntuación, después de que el profesor les haya calificado.<br>
 </p>" ;
-$langHGroup_student = $langHGroup ;
 $langGroupContent = "<p>Esta herramienta permite crear y administrar grupos de trabajo.<br>
 En la creación (Crear grupos), están vacíos. Hay muchas formas de rellenarlos:<br>
 <ul><li>automaticamente ('Rellena grupos'),</li><br>
@@ -477,3 +476,4 @@ $langWiki_studentContent = "<p>El módulo Wili is una herramienta de colaboraci�
 $langForContent_student = "<p>La plataforma permite la creación de foros de discusión, donde todos los usuarios registrados en el curso, ambos estudiantes y educadores, pueden participar.</p>" ;
 $langHcourse_home_student = $langHcourse_home ;
 $langHGroup = "Grupos";
+$langHGroup_student = $langHGroup ;

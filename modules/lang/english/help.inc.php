@@ -1,11 +1,9 @@
 <?php
 
 // Message file for language en
-// Generated 2008-10-07 17:01:08
+// Generated 2009-09-25 17:18:30
 
-
-// PHPMATHPUBLISHER : HELP
-$langPHPMathPublisher="<p><u>Support of mathematic symbols:</u>
+$langPHPMathPublisher = "<p><u>Support of mathematic symbols:</u>
 <br />
 For the incorporation of mathematic symbols in your texts, you can use the <a href=\"../../manuals/PhpMathPublisherHelp.pdf\" target=\"_Blanc\">commands</a> (symbolisms) that it provides PhpMathPublisher.<br />
 More analytically, you use the author of text in order to you import your content. If in the content that you import exist mathematic symbols that you wish to present, then:
@@ -15,18 +13,15 @@ More analytically, you use the author of text in order to you import your conten
 </ol>
 <p>For the finding of commands that corresponds in the particular symbols that you wish to import, you are consulted (<a href=\"../../manuals/PhpMathPublisherHelp.pdf\" target=\"_Blanc\">here</a>).<br />
 Eg., in order to you import the square root a you will type &lt;m>sqrt{a}&lt;/m></p>";
-
 $langWindowClose = "Close window";
 $langHDefault = 'Help non available';
 $langDefaultContent = '<p>There is no help text available for the platform page you are currently viewing.</p>';
 $langHFor = "Forums";
 $langHFor_student = $langHFor ;
-$langForContent = "<p>The forum is a written asynchronous communication tool. While email allows one-to-one dialogue, forums allow public or semi-public dialogue.</p><p>Technically speaking, students only need their browser to use eClass forums.</P><p>To organise forums, click on 'Administer'. Discussions are organised in sets and subsets as following:</p><p><b>Category > Forum > Topic > Answers</b></p>To structure your students discussions, it is necessary to organise catgories and forums beforehand, leaving creation of topics and answers to them. By default, the eClass forum contains only the category 'Public', a sample forum and a sample topic.</p><p>The first thing you should do is delete the sample topic and modify the first forum name. Then, you can create other forums in the 'public' category, by groups or by themes, to fit your learning scenario requirements.</p><p>Don't mix Categories and forums, and don't forget that an empty category (without forums) does not appear on the student view.</p><p>The description of a forum can be the list of its members, the definition of a goal, a task, a theme...</p>";
-$langFor_studentContent = "<p>The eCourse discussion forum is a teacher - student interaction module. The platform offers the opportunity to create forums, allowing participation to all registered in the course users (students and teachers).
-</p>" ;
+$langForContent = "<p>The forum is a written asynchronous communication tool. While email allows one-to-one dialogue, forums allow public or semi-public dialogue.</p><p>Technically speaking, students only need their browser to use eClass forums.</P><p>To organise forums, click on 'Administer'. Discussions are organised in sets and subsets as following:</p><p><b>Category > Forum > Topic > Answers</b></p>To structure your students discussions, it is necessary to organise catgories and forums beforehand, leaving creation of topics and answers to them. By default, the eClass forum contains only the category 'Public', a sample forum and a sample topic.</p><p>The first thing you should do is delete the sample topic and modify the first forum name. Then, you can create other forums in the 'public'category, by groups or by themes, to fit your learning scenario requirements.</p><p>Don't mix Categories and forums, and don't forget that an empty category (without forums) does not appear on the student view.</p><p>The description of a forum can be the list of its members, the definition of a goal, a task, a theme...</p>";
 $langHInit = "Home Page";
 $langHInit_student = $langHInit;
-$langInitContent = "<p>You are currently in the Open eClass platform's home page. Type your username and password to login to the platform. In case you have forgotten your login information, click on 'Forgot your password?' and enter your e-mail address in the form that appears, in order to recover your username and password.</p> <p><b>New user registration</b></p> <p>If you are a student, you have to register by clicking in 'User Registration', and then you have to choose your desired courses.</p>  <p><b>Professor acount request</b></p> <p>If you are a professor, you also have to register by clicking on 'Professor account request'. After that, you must fill in a form with some personal information: Name, surname, username, phone number, e-mail and the department in which you belong. After filling the form, your request will be sent to the platform administrators . They will create your account and send you an e-mail with all the details of your account. Using your username / password you will be able to login in the platform. After entering the platform, you have to click in 'Create course site'. After completing some details about your course, your course will be created and you will be directed to your newly created course home page.</p>";
+$langInitContent = "<p>You are currently in the Open eClass platform's home page. Type your username and password to login to the platform. In case you have forgotten your login information, click on 'Forgot your password?'and enter your e-mail address in the form that appears, in order to recover your username and password.</p> <p><b>New user registration</b></p> <p>If you are a student, you have to register by clicking in 'User Registration', and then you have to choose your desired courses.</p>  <p><b>Professor acount request</b></p> <p>If you are a professor, you also have to register by clicking on 'Professor account request'. After that, you must fill in a form with some personal information: Name, surname, username, phone number, e-mail and the department in which you belong. After filling the form, your request will be sent to the platform administrators . They will create your account and send you an e-mail with all the details of your account. Using your username / password you will be able to login in the platform. After entering the platform, you have to click in 'Create course site'. After completing some details about your course, your course will be created and you will be directed to your newly created course home page.</p>";
 $langInit_studentContent = $langInitContent;
 $langHPortfolio = "User Portfolio";
 $langHPortfolio_student = $langHPortfolio;
@@ -37,8 +32,8 @@ $langHcourse_home = 'Main course page';
 $langcourse_homeContent = '<p class="helptopic">You are currently in the main page of your on-line course. From the side menu options, you can enter any of the modules where you can add your course\'s content. Active tools are visible to the visitors and students of your course, while inactive tools are only visible and accessible to you.</p> <p class="helptopic">Using the administration tools you can activate or inactivate course modules, review and administer registered users, change various options (such as course title, access control, etc.), and view usage statistics.</p>';
 $langHDoc = "Documents";
 $langHDoc_student = $langHDoc ;
-$langDocContent = "<p>The Documents tool is similar to the FileManager of your desktop computer.</p><p>You can upload files of any type (HTML, Word, Powerpoint, Excel, Acrobat, Flash, Quicktime, etc.). Your only concern must be that your students have the corresponding software to read them. Some file types may contain viruses, it is your responsibilty not to upload virus contaminated files. It is a worthwhile precaution to check documents with antivirus software before uploading them.</p> <p>Documents are presented in alphabetical order.<br><b>Tip : </b>If you want to present them in a different order, numerate them: 01, 02, 03...</p> <p>You can :</p> <h4>Upload a document</h4> <ul> <li>Select the file on your computer by clicking on 'Upload file'.</li> <li>In the following form use 'Browse' button to search for the file in your computer.</li> <li>Launch the upload with the 'Upload' button  </li> </ul> <h4>Rename a document (a directory)</h4> <ul> <li> Click on the icon 'Rename' (<img src='../../template/classic/img/edit.gif' width=10 height=10 align=baseline>). </li> <li> Type the new name in the field (top left) </li> <li> Validate by clicking 'Rename' button. </li> </ul> <h4> Delete a document (or a directory) </h4> <ul> <li> Click on the icon 'Delete' (<img src='../../template/classic/img/delete.gif' width=10 height=10 align=baseline>)</li> </ul> <h4> Make a document (or directory) invisible to students </h4> <ul> <li> Click on the icon 'Visible/invisible' (<img src='../../template/classic/img/visible.gif' width=10 height=10 align=baseline>)  </li> <li> After that the document (or directory) still exists but it is not visible by students anymore. </li> <li> To make it invisible back again, click on the icon 'Visible/invisible' (<img src='../../template/classic/img/invisible.gif' width=14 height=10 align=baseline>  </li> </ul> <h4> Add or modify a comment to a document (or a directory) </h4> <ul> <li> Click on the 'Comment' icon *(<img src='../../template/classic/img/information.gif' width=10 height=10 align=baseline>)</li> <li> Type new comment in the corresponding field (top right). </li> </ul> <hr> <p> You can organise your content through filing. For this: </p> <h4> <b> Create a directory </b> </h4> <ul> <li> Click on the link 'Create a directory'. </li> <li> Type the name of your new directory in the corresponding field (top left) </li> <li> Validate by clicking 'Create directory' button. </li> </ul> <h4> Move a document (or directory) </h4> <ul> <li> Click on the icon 'Move' (<img src='../../template/classic/img/move_doc.gif' width=10 height=10 align=basename>) </li> <li> Choose the directory into which you want to move the document (or directory) in the corresponding scrolling menu (top left) (note: the word 'root' means you cannot go upper than that level in the document tree of the server). </li> <li> Validate by clicking on 'Move'  </li> </ul> </p>";
-$langDoc_studentContent ="<p>The module “Documents” is the area where the educational material of the course is stored, organized and presented. More specifically, this module provides a useful file organization and grouping mechanism for educational material (texts, presentations, pictures, diagrams, etc) through a folder, sub-folder system.
+$langDocContent = "<p>The Documents tool is similar to the FileManager of your desktop computer.</p><p>You can upload files of any type (HTML, Word, Powerpoint, Excel, Acrobat, Flash, Quicktime, etc.). Your only concern must be that your students have the corresponding software to read them. Some file types may contain viruses, it is your responsibilty not to upload virus contaminated files. It is a worthwhile precaution to check documents with antivirus software before uploading them.</p> <p>Documents are presented in alphabetical order.<br><b>Tip : </b>If you want to present them in a different order, numerate them: 01, 02, 03...</p> <p>You can :</p> <h4>Upload a document</h4> <ul> <li>Select the file on your computer by clicking on 'Upload file'.</li> <li>In the following form use 'Browse'button to search for the file in your computer.</li> <li>Launch the upload with the 'Upload'button  </li> </ul> <h4>Rename a document (a directory)</h4> <ul> <li> Click on the icon 'Rename'(<img src='../../template/classic/img/edit.gif'width=10 height=10 align=baseline>). </li> <li> Type the new name in the field (top left) </li> <li> Validate by clicking 'Rename'button. </li> </ul> <h4> Delete a document (or a directory) </h4> <ul> <li> Click on the icon 'Delete'(<img src='../../template/classic/img/delete.gif'width=10 height=10 align=baseline>)</li> </ul> <h4> Make a document (or directory) invisible to students </h4> <ul> <li> Click on the icon 'Visible/invisible'(<img src='../../template/classic/img/visible.gif'width=10 height=10 align=baseline>)  </li> <li> After that the document (or directory) still exists but it is not visible by students anymore. </li> <li> To make it invisible back again, click on the icon 'Visible/invisible'(<img src='../../template/classic/img/invisible.gif'width=14 height=10 align=baseline>  </li> </ul> <h4> Add or modify a comment to a document (or a directory) </h4> <ul> <li> Click on the 'Comment'icon *(<img src='../../template/classic/img/information.gif'width=10 height=10 align=baseline>)</li> <li> Type new comment in the corresponding field (top right). </li> </ul> <hr> <p> You can organise your content through filing. For this: </p> <h4> <b> Create a directory </b> </h4> <ul> <li> Click on the link 'Create a directory'. </li> <li> Type the name of your new directory in the corresponding field (top left) </li> <li> Validate by clicking 'Create directory'button. </li> </ul> <h4> Move a document (or directory) </h4> <ul> <li> Click on the icon 'Move'(<img src='../../template/classic/img/move_doc.gif'width=10 height=10 align=basename>) </li> <li> Choose the directory into which you want to move the document (or directory) in the corresponding scrolling menu (top left) (note: the word 'root'means you cannot go upper than that level in the document tree of the server). </li> <li> Validate by clicking on 'Move'</li> </ul> </p>";
+$langDoc_studentContent = "<p>The module “Documents” is the area where the educational material of the course is stored, organized and presented. More specifically, this module provides a useful file organization and grouping mechanism for educational material (texts, presentations, pictures, diagrams, etc) through a folder, sub-folder system.
 </p>" ;
 $langHUser = "Users Administration";
 $langUserContent = "<b>Roles</b><p>Roles have no computer related function.
@@ -189,8 +184,6 @@ one.
 ";
 $langWork_studentContent = "<p>The Course Assignments module is a very useful tool since it allows the electronic admission, submission and evaluation of course assignments. More specifically, it allows registered student users to upload electronically their assignments in the platform until the submission date and then see their grade, after the teacher has graded them.
 </p>" ;
-$langHGroup = "Groups";
-$langHGroup_student = $langHGroup ;
 $langGroupContent = "<p>This tool allows to create and manage work groups.
 At creation (Create groups), groups are emtpy. There are
 many ways to fill them:
@@ -250,18 +243,6 @@ $langAnnounceContent = "<p>You can add announcements in a course by clicking in 
 Also, you can change the announcement clicking on the icon 'Modify' or delete an announcement clicking on the icon 'Delete'. If you want to mail your announcement to the registered students in your lesson, just check 'Send announcement (via email) to registered students'</p>$langPHPMathPublisher";
 $langAnnounce_studentContent = "<p>The Announcements module allows registered users’ enlightenment on specific course issues. At the same time, it allows course teachers to send announcements to registered students, who have defined their email address in their profile, via email. (“Modify your Profile” in user’s portfolio).
 </p>" ;
-
-$langHXinha = "HTML Editor";
-$langHXinha_student = $langHXinha ;
-$langXinhaContent = "<p>Type title and body of the announcement. Use the html editor to compose your message.
-<p>Note that you may have math symbols in your text. To accomplish this, you must do the following steps. First you must click on the button 'Toggle HTML source'. Fill the math expression between tags
-&lt;m>.....&lt;/m>. Use the syntax as explained in the following link <a href='http://www.xm1math.net/phpmathpublisher/doc/help.html' target=_blank>http://www.xm1math.net/phpmathpublisher/doc/help.html</a>.
-E.g. for the square root of a, type &lt;m>sqrt{a}&lt;/m>
-</p>
-<p>After that click on the 'Add'button.</p></p>";
-
-
-
 $langHProfile = "Modify my profile";
 $langProfileContent = "<p>You can modify your personal info in the platform</p>
 <li>You can modify your name, surname, and your e-mail address.</li>
@@ -305,8 +286,7 @@ $langHConference = "Conference";
 $langHConference_student = $langHConference ;
 $langConferenceContent = "<p>The instructor has the ability to exchange messages with the students by typing the message on text field at the bottom of the page and then pressing \">>\". The instructor has the option to clear all past messages from appearing on the page by selecting \"Clear\". Also clicking on 'Save'you can save all the conference messages in the 'Documents'</p>
 ";
-$langConference_studentContent = "The Teleconferencing is a message exchange module (chat). Students can type a message and click on “>>” to exchange messages with other course register users. This module offers real time communication for course participants regardless the special limiting factor." ;
-// $langHConference_stud = $langHConference;
+$langConference_studentContent = "The Teleconferencing is a message exchange module (chat). Students can type a message and click on “>>” to exchange messages with other course register users. This module offers real time communication for course participants regardless the special limiting factor.";
 $langHVideo = "Video";
 $langHVideo_student = $langHVideo ;
 $langVideoContent = "
@@ -317,7 +297,6 @@ You can upload video file in several formats like mpeg, avi etc. Choose \"Add vi
 </p>";
 $langVideo_studentContent = "<p>It is a module presenting multimedia educational material. There are two choices, video file or link to video that is stored in a VOD Server (Video on Demand) Server. These two choices are transparent for the students. Every video has a title and a short description.
 </p>" ;
-//$langHVideo_stud = $langHVideo;
 $langHCoursedescription = "Course Description";
 $langHCoursedescription_student = $langHCoursedescription ;
 $langCoursedescriptionContent = "<p>You can add some additional info about the course, when you click in 'Create
@@ -442,7 +421,7 @@ there are all files you have recieved from other users of the platform with some
 <p>Note that if you delete a file, file doesn't delete from the platform database but only from this folder.</p>
 <p>If you wish to send a file to another user, first select the file from your computer by clicking on 'File Upload'. Optionally you can type a short description. Then select the recipient from the users list and click on 'Send'  You can select more recipients with your mouse and pressing <b>CTRL (Control)</b>.
 </p>";
-$langDropbox_studentContent ="<p>The Dropbox module is a collaboration tool used by teachers and students to exchange course files. You can send and receive any type of text files, pictures or presentations.
+$langDropbox_studentContent = "<p>The Dropbox module is a collaboration tool used by teachers and students to exchange course files. You can send and receive any type of text files, pictures or presentations.
 </p>";
 $langHUsage = "Use Statistics";
 $langUsageContent = "<p>Usage statistics modules allow the professor to see statistics about his lesson. They are presented in the form of charts or lists.</p> <p><strong>Statistics categories</strong></p> <ul> <li>Usage statistics</li> <li>Favorite modules</li> <li>User visits</li> <li>Old statistics</li> </ul> <p>Usage statistics can be grouped by number of visits or visit duration. Additionally, the professor is able to choose the modules he wants to see and the timeframe.</p> <p>The favorite modules statistics can be grouped by number of visits or visit duration. Additionally, the professor is able to choose the modules he wants to see.</p> <p>The user visits statistics can be grouped by users, either all, or by letter.</p> <p>Old statistics presentation can be grouped by number of visits or visit duration. Additionally, the professor is able to choose the modules he wants to see and the timeframe.</p> ";
@@ -450,7 +429,7 @@ $langHCreateCourse = "Create Course";
 $langCreateCourseContent = "<p>The Create Course Wizard is one of the most important tools of the platform. By using this, the user-teacher is able to create new courses in the platform and configure them.</p><p>The wizards consist of 3 steps. Filling in every required field with an asterisk, is mandatory. Under each field, lie exemplary information to help the user filling them in.</p><p>In case the user enters invalid data in a field, the system informs the user and prompts him to correct the error so as to be able to continue with the next step.</p>";
 $langHWiki = "Wiki";
 $langHWiki_student = $langHWiki ;
-$langWikiContent = '<p>To create a new Wiki</p> <ul> <li>Click on the "Create a new Wiki" link. Then enter the Wiki properties:</li> <br>
+$langWikiContent = '<p>To create a new Wiki</p> <ul> <li>Click on the "Create a new Wiki"link. Then enter the Wiki properties:</li> <br>
 <li><b>Wiki Title</b>: choose a title for the Wiki</li> <li><b>Wiki Description</b>: choose a description for the Wiki</li> <li><b>Access control management</b>: set the Wiki access control by checking/uncheking the box (see below)</li> </ul> <p>To enter a Wiki click on the Wiki title from the list.</p> <p>To change the properties of a Wiki click on the icon <img src="../../template/classic/img/edit.gif" align="absmiddle" border="0">.</p>  <p>To delete a Wiki click on the icon <img src="../../template/classic/img/delete.gif" align="absmiddle" border="0"></p>  <p>To get the list of the last modified pages click on the link "Recent changes".</p>
 
 <h4>Basic syntax</h4>
@@ -495,6 +474,9 @@ begin each line of preformated text with a blank space&nbsp;
 <code>{{cite}}</code>, <code>{{cite|language}}</code> or <code>{{cite|language|url}}</code>&nbsp;
 </ul>
 </ul>';
-
 $langWiki_studentContent = "<p>The Wiki module is a new collaboration tool introduced in the current version of the platform Open eClass. Wiki is a course tool that allows register users (teachers and students) to create and edit Web page content.
 </p>" ;
+$langForContent_student = "<p>The platform allows the creation of discussion forums, where all users registered to the course, both students and educators, can participate.</p>" ;
+$langHcourse_home_student = $langHcourse_home ;
+$langHGroup = "Groups";
+$langHGroup_student = $langHGroup;
