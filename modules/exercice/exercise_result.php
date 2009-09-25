@@ -252,7 +252,7 @@ foreach($questionList as $questionId) {
 						else
 							$tool_content .= '_off';
 			
-						$tool_content .= " .gif' border='0'></div></td>
+						$tool_content .= ".gif' border='0'></div></td>
 						<td width='5%' style='background: #fff;'><div align='center'>";
 		
 						if ($answerType == UNIQUE_ANSWER)
