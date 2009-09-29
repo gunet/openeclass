@@ -68,7 +68,7 @@ if($is_adminOfCourse) {
 	echo "".csv_escape($first_line)."";
 	echo "$crlf";
 	echo "$crlf";
-	echo join(';', array_map("csv_escape", array($langSurnameName, $langAm, $langGroup, $langDuration))),
+	echo join(';', array_map("csv_escape", array($langSurname, $langName, $langAm, $langGroup, $langDuration))),
 	     $crlf;
 	$totalDuration = 0;
 	$sql= "SELECT user FROM user_group WHERE team = '$userGroupId'";
@@ -82,7 +82,8 @@ if($is_adminOfCourse) {
 		$totalDuration += $duration[$currentCourseID];
 		$totalDuration = format_time_duration(0 + $totalDuration);
 		foreach ($duration as $code => $time) {
-			echo csv_escape(uid_to_name($user_id)) . ";" 
+			echo csv_escape(uid_to_surname($user_id)) . ";" 
+			. csv_escape(uid_to_firstname($user_id)) . ";" 
 			. csv_escape(uid_to_am($user_id)) . ";" 
 			. csv_escape(gid_to_name(user_group($user_id))) . ";" 
 			. csv_escape(format_time_duration(0 + $time)) . ";";
