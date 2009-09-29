@@ -82,7 +82,7 @@ if (isset($_GET['format']) and $_GET['format'] == 'csv') {
              padding-left: 15px; padding-right : 15px; }
             .content {position: relative; left: 25px; }';
 
-        $tool_content .= "<table class='FormData' width='99%' align='left'><tbody>
+        $tool_content .= "<table class='FormData' width='99%' align='left'><thead>
                 <tr>
                 <th class='left'>$langSurname $langName</th>
                 <th>$langAm</th>
@@ -90,7 +90,7 @@ if (isset($_GET['format']) and $_GET['format'] == 'csv') {
                 <th>$langDuration</th>
                 </tr>
                 </thead>
-                <tbody>";
+                ";
 }
 
 mysql_select_db($mysqlMainDb);
@@ -119,7 +119,7 @@ if ($result) {
                         } else {
                                 $tool_content .= "\n    <tr class='odd'>";
                         }
-                        $tool_content .= "<td width='30%'><img style='border:0px; padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif'> $row[nom] $row[prenom]</td><td width='30%'>$row[am]</td><td align='center'>" . gid_to_name(user_group($row['user_id'])) . "</td <td>" . format_time_duration(0 + $row['duration']) . "</td></tr>";
+                        $tool_content .= "<td width='30%'><img style='border:0px; padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif' /> $row[nom] $row[prenom]</td><td width='30%'>$row[am]</td><td align='center'>" . gid_to_name(user_group($row['user_id'])) . "</td><td>" . format_time_duration(0 + $row['duration']) . "</td></tr>";
                 } else {
                         echo csv_escape($row['nom'] . ' ' . $row['prenom']), ';',
                              csv_escape($row['am']), ';',
@@ -128,7 +128,7 @@ if ($result) {
                 }
         }
         if ($format == 'html') {
-                $tool_content .= "</tbody></table>";
+                $tool_content .= "</table>";
         }
 }
 
