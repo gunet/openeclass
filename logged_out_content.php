@@ -43,12 +43,12 @@
 //query for greek announcements
 $sql_el ="SELECT `date`, `gr_title` , `gr_body` , `gr_comment`
 		FROM `admin_announcements`
-		WHERE `visible` = \"V\"
+		WHERE `visible` = \"V\" ORDER BY `date` DESC
 		";
 //query for english announcements
 $sql_en ="SELECT `date`, `en_title` , `en_body` , `en_comment`
 		FROM `admin_announcements`
-		WHERE `visible` = \"V\"
+		WHERE `visible` = \"V\" ORDER BY `date` DESC
 		";
 
 if(session_is_registered('langswitch')) {
