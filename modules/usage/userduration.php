@@ -43,64 +43,97 @@ $require_help = true;
 $helpTopic = 'Usage';
 $require_login = true;
 $require_prof = true;
-$totalDuration = 0; 
 include '../../include/baseTheme.php';
-include('../../include/action.php');
+
 $tool_content = '';
-$tool_content .= "
-  <div id=\"operations_container\">
-    <ul id=\"opslist\">
-      <li><a href='usage.php'>".$langUsageVisits."</a></li>
-      <li><a href='favourite.php?first='>".$langFavourite."</a></li>
-      <li><a href='userduration.php'>".$langUserDuration."</a></li>
-      <li>$langDumpUserDurationToFile&nbsp;(<a href='dumpuserduration.php'>$langCodeUTF</a>&nbsp;<a href='dumpuserduration.php?enc=1253'>$langCodeWin</a>)</li>
-    </ul>
-  </div>";
+if (isset($_GET['format']) and $_GET['format'] == 'csv') {
+        $format = 'csv';
 
-$nameTools = $langUsage;
-$local_style = '
-    .month { font-weight : bold; color: #FFFFFF; background-color: #000066;
-     padding-left: 15px; padding-right : 15px; }
-    .content {position: relative; left: 25px; }';
+        if (isset($_GET['enc']) and $_GET['enc'] == '1253') {
+                $charset = 'Windows-1253';
+        } else {
+                $charset = 'UTF-8';
+        }
+        $crlf="\r\n";
 
+        header("Content-Type: text/csv; charset=$charset");
+        header("Content-Disposition: attachment; filename=usersduration.csv");
+        
+        echo join(';', array_map("csv_escape",
+                                 array($langSurnameName, $langAm, $langGroup, $langDuration))),
+             $crlf, $crlf;
 
-$tool_content .= "<table class='FormData' width='99%' align='left'><tbody>
-	<tr>
-	<th class='left'>$langSurname $langName</th>
-	<th>$langAm</th>
-	<th>$langGroup</th>
-	<th>$langDuration</th>
-	</tr>
-	</thead>
-	<tbody>";
+} else {
+        $format = 'html';
 
+        $tool_content .= "
+          <div id='operations_container'>
+            <ul id='opslist'>
+              <li><a href='usage.php'>".$langUsageVisits."</a></li>
+              <li><a href='favourite.php?first='>".$langFavourite."</a></li>
+              <li><a href='userduration.php'>".$langUserDuration."</a></li>
+              <li>$langDumpUserDurationToFile&nbsp;(<a href='userduration.php?format=csv'>$langCodeUTF</a>&nbsp;<a href='userduration.php?format=csv&amp;enc=1253'>$langCodeWin</a>)</li>
+            </ul>
+          </div>";
 
-$sql= "SELECT a.user_id as user_id FROM user AS a LEFT JOIN cours_user AS b ON a.user_id = b.user_id
-	WHERE b.code_cours='$currentCourseID'";
-$result= db_query($sql, $mysqlMainDb);
+        $nameTools = $langUsage;
+        $local_style = '
+            .month { font-weight : bold; color: #FFFFFF; background-color: #000066;
+             padding-left: 15px; padding-right : 15px; }
+            .content {position: relative; left: 25px; }';
 
-while ($row = mysql_fetch_assoc($result)) {
-	$user_id = $row['user_id'];
-	$sql2 = db_query("SELECT SUM(duration) FROM actions WHERE user_id = '$user_id'", $currentCourseID);
-	list($duration[$currentCourseID]) = mysql_fetch_row($sql2);
-	$totalDuration += $duration[$currentCourseID];
-	$totalDuration = format_time_duration(0 + $totalDuration);
-	$i = 0;
-	foreach ($duration as $code => $time) {
-		if ($i%2 == 0) {
-			$tool_content .= "\n    <tr>";
-		} else {
-			$tool_content .= "\n    <tr class=\"odd\">";
-		}
-		$i++;
-		$tool_content .= "<td width='30%'><img style='border:0px; padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif'>
-		" .uid_to_name($user_id) . "</td>
-		<td width='30%'>" . uid_to_am($user_id) . "</td>
-		<td align='center'>" . gid_to_name(user_group($user_id)) . "</td>
-		<td>" . format_time_duration(0 + $time) . "</td></tr>";
-	}
+        $tool_content .= "<table class='FormData' width='99%' align='left'><tbody>
+                <tr>
+                <th class='left'>$langSurname $langName</th>
+                <th>$langAm</th>
+                <th>$langGroup</th>
+                <th>$langDuration</th>
+                </tr>
+                </thead>
+                <tbody>";
 }
-$tool_content .= "</tbody></table>";
 
-draw($tool_content, 2);
-?>
+mysql_select_db($mysqlMainDb);
+db_query("CREATE TEMPORARY TABLE duration AS
+          SELECT SUM(c.duration) AS duration, user_id
+          FROM `$currentCourseID`.actions AS c GROUP BY c.user_id;");
+
+$result = db_query("SELECT duration.duration AS duration,
+                           user.nom AS nom,
+                           user.prenom AS prenom,
+                           user.user_id AS user_id,
+                           user.am AS am
+                    FROM user LEFT JOIN cours_user ON user.user_id = cours_user.user_id
+                              LEFT JOIN duration ON user.user_id = duration.user_id
+                    WHERE cours_user.code_cours = '$currentCourseID'
+                    GROUP BY duration.user_id
+                    ORDER BY nom, prenom");
+
+if ($result) {
+        $i = 0;
+        while ($row = mysql_fetch_assoc($result)) {
+                $i++;
+                if ($format == 'html') {
+                        if ($i%2 == 0) {
+                                $tool_content .= "\n    <tr>";
+                        } else {
+                                $tool_content .= "\n    <tr class='odd'>";
+                        }
+                        $tool_content .= "<td width='30%'><img style='border:0px; padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif'> $row[nom] $row[prenom]</td><td width='30%'>$row[am]</td><td align='center'>" . gid_to_name(user_group($row['user_id'])) . "</td <td>" . format_time_duration(0 + $row['duration']) . "</td></tr>";
+                } else {
+                        echo csv_escape($row['nom'] . ' ' . $row['prenom']), ';',
+                             csv_escape($row['am']), ';',
+                             csv_escape(gid_to_name(user_group($row['user_id']))), ';',
+                             csv_escape(format_time_duration(0 + $row['duration'])), $crlf;
+                }
+        }
+        if ($format == 'html') {
+                $tool_content .= "</tbody></table>";
+        }
+}
+
+db_query('DROP TEMPORARY TABLE duration', $mysqlMainDb);
+
+if ($format == 'html') {
+        draw($tool_content, 2);
+}
