@@ -47,16 +47,16 @@ $tool_content .= <<<tCont
 <p>$langIntroMan</p>
 <ul class="listBullet">
 
-<img src='../images/pdf.gif' border='0' title='$langFormatPDF' align='absmiddle'>&nbsp;&nbsp;<a href="$urlServerTemp/manuals/OpeneClass$ext.pdf" target=_blank class=mainpage>$langFinalDesc</a></img>
+<img src='../images/pdf.gif' border='0' title='$langFormatPDF' align='absmiddle'>&nbsp;&nbsp;<a href="$urlServerTemp/manuals/OpeneClass22$ext.pdf" target=_blank class=mainpage>$langFinalDesc</a></img>
 <br/><br/>
 <img src='../images/pdf.gif' border='0' title=
-'$langFormatPDF' align='absmiddle'>&nbsp;&nbsp;<a href="$urlServerTemp/manuals/OpeneClass_short$ext.pdf" target=_blank class=mainpage>$langShortDesc</a></img>
+'$langFormatPDF' align='absmiddle'>&nbsp;&nbsp;<a href="$urlServerTemp/manuals/OpeneClass22_short$ext.pdf" target=_blank class=mainpage>$langShortDesc</a></img>
 <br/><br/>
 <img src='../images/pdf.gif' border='0
-' title='$langFormatPDF' align='absmiddle'>&nbsp;&nbsp;<a href="$urlServerTemp/manuals/manT/OpeneClass_ManT$ext.pdf" target=_blank class=mainpage>$langManT</a></img>
+' title='$langFormatPDF' align='absmiddle'>&nbsp;&nbsp;<a href="$urlServerTemp/manuals/manT/OpeneClass22_ManT$ext.pdf" target=_blank class=mainpage>$langManT</a></img>
 <br/><br/>
 <img src='../images/pdf.gif' border='0' title=
-'$langFormatPDF' align='absmiddle'>&nbsp;&nbsp;<a href="$urlServerTemp/manuals/manS/OpeneClass_ManS$ext.pdf" target=_blank class=mainpage>$langManS</a></img>
+'$langFormatPDF' align='absmiddle'>&nbsp;&nbsp;<a href="$urlServerTemp/manuals/manS/OpeneClass22_ManS$ext.pdf" target=_blank class=mainpage>$langManS</a></img>
 <br/>
 
 </ul>
