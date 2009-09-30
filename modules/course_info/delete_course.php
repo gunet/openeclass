@@ -47,6 +47,7 @@ if($is_adminOfCourse) {
 		$tool_content .= "<p class=\"success_small\">$langTheCourse <b>($intitule $currentCourseID)</b>  $langHasDel</p><br />
 		<p align=\"right\"><a href=\"../../index.php\">".$langBackHome." ".$siteName."</a></p>";
                 unset($currentCourseID);
+                unset($_SESSION['dbname']);
 		draw($tool_content, 1);
 		exit();
 	} else {
