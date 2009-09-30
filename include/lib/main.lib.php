@@ -1057,11 +1057,8 @@ function format_time_duration($sec)
         }
         $hour = floor($min / 60);
         $min = $min % 60;
-        if ($hour < 3) {
-                return append_units($hour, $langhour, $langhours) . 
-                       (($min == 0)? '': (', ' . append_units($min, $langminute, $langminutes)));
-        }
-        return append_units($hour, $langhour, $langhours);
+        return append_units($hour, $langhour, $langhours) . 
+               (($min == 0)? '': (', ' . append_units($min, $langminute, $langminutes)));
 }
 
 // Return the URL for a video found in $table (video or videolinks)
