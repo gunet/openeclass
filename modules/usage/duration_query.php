@@ -9,26 +9,28 @@ function user_duration_query($currentCourseID, $start = false, $end = false, $gr
 
         mysql_select_db($mysqlMainDb);
         
-        $sql_where = array();
         if ($group !== false) {
-                $sql_where[] = "c.user_id IN (SELECT user FROM `$currentCourseID`.user_group WHERE TEAM = $group)";
-        }
-        if ($start !== false) {
-                $sql_where[] = 'c.date_time > ' . quote($start . ' 00:00:00');
-        }
-        if ($end !== false) {
-                $sql_where[] = 'c.date_time < ' . quote($end . ' 23:59:59');
-        }
-        if (count($sql_where)) {
-                $where = 'WHERE ' . join(' AND ', $sql_where);
+                $group_where = "AND duration.user_id IN (SELECT user FROM `$currentCourseID`.user_group WHERE TEAM = $group)";
         } else {
-                $where = '';
+                $group_where = '';
+        }
+
+        if ($start !== false AND $end !== false) {
+                $date_where = 'WHERE c.date_time BETWEEN ' .
+                              quote($start . ' 00:00:00') . ' AND ' .
+                              quote($end . ' 23:59:59');
+        } elseif ($start !== false) {
+                $date_where = 'WHERE c.date_time > ' . quote($start . ' 00:00:00');
+        } elseif ($end !== false) {
+                $date_where = 'WHERE c.date_time < ' . quote($end . ' 23:59:59');
+        } else {
+                $date_where = '';
         }
 
         db_query("CREATE TEMPORARY TABLE duration AS
                   SELECT SUM(c.duration) AS duration, c.user_id AS user_id
                   FROM `$currentCourseID`.actions AS c " .
-                  $where .  " GROUP BY c.user_id");
+                  $date_where .  " GROUP BY c.user_id");
 
         return db_query("SELECT duration.duration AS duration,
                                    user.nom AS nom,
@@ -37,7 +39,7 @@ function user_duration_query($currentCourseID, $start = false, $end = false, $gr
                                    user.am AS am
                             FROM user LEFT JOIN cours_user ON user.user_id = cours_user.user_id
                                       LEFT JOIN duration ON user.user_id = duration.user_id
-                            WHERE cours_user.code_cours = '$currentCourseID'
+                            WHERE cours_user.code_cours = '$currentCourseID' $group_where
                             GROUP BY duration.user_id
                             ORDER BY nom, prenom");
 }
