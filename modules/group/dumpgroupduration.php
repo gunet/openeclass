@@ -51,15 +51,14 @@ if($is_adminOfCourse) {
                 $u_date_end = strftime('%Y-%m-%d', strtotime('now'));
 	}
 	
-	$date_spec = ' AND date_time BETWEEN ' .
-                             autoquote($u_date_start) . '00:00:00 AND ' .
-                             autoquote($u_date_end) . ' 23:59:59';
-
+	$u_date_start = escapeSimple($_REQUEST['u_date_start']) . ' 00:00:00';
+        $u_date_end = escapeSimple($_REQUEST['u_date_end']) . ' 23:59:59';
+        $date_spec = " AND date_time BETWEEN '$u_date_start' AND '$u_date_end'";
 
 	if (isset($u_date_start) and isset($u_date_end)) {
-		$date_spec = ' AND date_time BETWEEN ' .
-                             autoquote($u_date_start) . '00:00:00 AND ' .
-                             autoquote($u_date_end) . ' 23:59:59';
+		$u_date_start = escapeSimple($_REQUEST['u_date_start']) . ' 00:00:00';
+                $u_date_end = escapeSimple($_REQUEST['u_date_end']) . ' 23:59:59';
+                $date_spec = " AND date_time BETWEEN '$u_date_start' AND '$u_date_end'";
 		$first_line = "$langFrom $u_date_start $langAs $u_date_end";
 	} else {
 		$date_spec = '';
