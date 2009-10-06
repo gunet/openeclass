@@ -110,8 +110,8 @@ if ($type == 'duration') {
         if (isset($_POST['u_date_start']) and
             isset($_POST['u_date_end'])) {
                 $date_spec = ' AND date_time BETWEEN ' .
-                             autoquote($_POST['u_date_start']) . ' AND ' .
-                             autoquote($_POST['u_date_end']);
+                             autoquote($_POST['u_date_start']) . '00:00:00 AND ' .
+                             autoquote($_POST['u_date_end']) . ' 23:59:59';
                 $u_date_start = $_POST['u_date_start'];
                 $u_date_end = $_POST['u_date_end'];
         } else {

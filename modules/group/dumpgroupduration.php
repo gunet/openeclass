@@ -52,14 +52,14 @@ if($is_adminOfCourse) {
 	}
 	
 	$date_spec = ' AND date_time BETWEEN ' .
-                             autoquote($u_date_start) . ' AND ' .
-                             autoquote($u_date_end);
+                             autoquote($u_date_start) . '00:00:00 AND ' .
+                             autoquote($u_date_end) . ' 23:59:59';
 
 
 	if (isset($u_date_start) and isset($u_date_end)) {
 		$date_spec = ' AND date_time BETWEEN ' .
-                             autoquote($u_date_start) . ' AND ' .
-                             autoquote($u_date_end);
+                             autoquote($u_date_start) . '00:00:00 AND ' .
+                             autoquote($u_date_end) . ' 23:59:59';
 		$first_line = "$langFrom $u_date_start $langAs $u_date_end";
 	} else {
 		$date_spec = '';
