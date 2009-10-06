@@ -27,10 +27,17 @@
 $require_current_course = TRUE;
 
 include '../../include/init.php';
+include '../usage/duration_query.php';
 
-// IF PROF ONLY
+$userGroupId = intval($_REQUEST['userGroupId']);
+list($tutor_id, $group_name) = mysql_fetch_row(db_query("SELECT tutor, name FROM student_group WHERE id='$userGroupId'", $currentCourseID));
+$is_tutor = ($tutor_id == $uid);
+if (!$is_adminOfCourse and !$is_tutor) {
+        header('Location: group_space.php?userGroupId=' . $userGroupId);
+        exit;
+}
+
 if($is_adminOfCourse) {
-	$userGroupId = intval($_REQUEST['userGroupId']);
 	if (isset($_GET['enc']) and $_GET['enc'] == '1253') {
 		$charset = 'Windows-1253';
 	} else {
@@ -42,8 +49,8 @@ if($is_adminOfCourse) {
 	header("Content-Disposition: attachment; filename=groupuserduration.csv");
 	if (isset($_REQUEST['u_date_start']) and
             isset($_REQUEST['u_date_end'])) {
-                $u_date_start = $_REQUEST['u_date_start'];
-                $u_date_end = $_REQUEST['u_date_end'];
+                $u_date_start = autounquote($_REQUEST['u_date_start']);
+                $u_date_end = autounquote($_REQUEST['u_date_end']);
 	} else {
 		list($min_date) = mysql_fetch_row(db_query(
                                 'SELECT MIN(date_time) FROM actions', $currentCourseID));
@@ -51,43 +58,29 @@ if($is_adminOfCourse) {
                 $u_date_end = strftime('%Y-%m-%d', strtotime('now'));
 	}
 	
-	$u_date_start = escapeSimple($_REQUEST['u_date_start']) . ' 00:00:00';
-        $u_date_end = escapeSimple($_REQUEST['u_date_end']) . ' 23:59:59';
-        $date_spec = " AND date_time BETWEEN '$u_date_start' AND '$u_date_end'";
-
 	if (isset($u_date_start) and isset($u_date_end)) {
-		$u_date_start = escapeSimple($_REQUEST['u_date_start']) . ' 00:00:00';
-                $u_date_end = escapeSimple($_REQUEST['u_date_end']) . ' 23:59:59';
-                $date_spec = " AND date_time BETWEEN '$u_date_start' AND '$u_date_end'";
 		$first_line = "$langFrom $u_date_start $langAs $u_date_end";
 	} else {
 		$date_spec = '';
 		
 	}
-	echo "".csv_escape($first_line)."";
-	echo "$crlf";
-	echo "$crlf";
-	echo join(';', array_map("csv_escape", array($langSurname, $langName, $langAm, $langGroup, $langDuration))),
+	echo csv_escape($first_line), $crlf, $crlf,
+	     join(';', array_map("csv_escape", array($langSurname, $langName, $langAm, $langGroup, $langDuration))),
 	     $crlf;
 	$totalDuration = 0;
-	$sql= "SELECT user FROM user_group WHERE team = '$userGroupId'";
-	$result= db_query($sql, $currentCourseID);
+
+	$result = user_duration_query($currentCourseID, $u_date_start, $u_date_end, $userGroupId);
 	
 	while ($row = mysql_fetch_assoc($result)) {
-		echo "$crlf";
-		$user_id = $row['user'];
-		$sql2 = db_query('SELECT SUM(duration) FROM actions WHERE user_id = ' . $user_id . $date_spec, $currentCourseID);
-		list($duration[$currentCourseID]) = mysql_fetch_row($sql2);
-		$totalDuration += $duration[$currentCourseID];
-		$totalDuration = format_time_duration(0 + $totalDuration);
-		foreach ($duration as $code => $time) {
-			echo csv_escape(uid_to_surname($user_id)) . ";" 
-			. csv_escape(uid_to_firstname($user_id)) . ";" 
-			. csv_escape(uid_to_am($user_id)) . ";" 
-			. csv_escape(gid_to_name(user_group($user_id))) . ";" 
-			. csv_escape(format_time_duration(0 + $time)) . ";";
-			}	
-		}
-	echo "$crlf";
-}  // end of initial if
+                echo csv_escape($row['nom']) . ";" .
+                     csv_escape($row['prenom']) . ";" .
+                     csv_escape($row['am']) . ";" .
+                     csv_escape($group_name) . ";" .
+                     csv_escape(format_time_duration(0 + $row['duration'])) . ";" .
+                     csv_escape(round($row['duration'] / 3600));
+                echo $crlf;
+        }
+} 
+
+user_duration_query_end();
 

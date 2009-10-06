@@ -44,6 +44,7 @@ $helpTopic = 'Usage';
 $require_login = true;
 $require_prof = true;
 include '../../include/baseTheme.php';
+include 'duration_query.php';
 
 $tool_content = '';
 if (isset($_GET['format']) and $_GET['format'] == 'csv') {
@@ -93,21 +94,7 @@ if (isset($_GET['format']) and $_GET['format'] == 'csv') {
                 ";
 }
 
-mysql_select_db($mysqlMainDb);
-db_query("CREATE TEMPORARY TABLE duration AS
-          SELECT SUM(c.duration) AS duration, user_id
-          FROM `$currentCourseID`.actions AS c GROUP BY c.user_id;");
-
-$result = db_query("SELECT duration.duration AS duration,
-                           user.nom AS nom,
-                           user.prenom AS prenom,
-                           user.user_id AS user_id,
-                           user.am AS am
-                    FROM user LEFT JOIN cours_user ON user.user_id = cours_user.user_id
-                              LEFT JOIN duration ON user.user_id = duration.user_id
-                    WHERE cours_user.code_cours = '$currentCourseID'
-                    GROUP BY duration.user_id
-                    ORDER BY nom, prenom");
+$result = user_duration_query($currentCourseID);
 
 if ($result) {
         $i = 0;
@@ -132,7 +119,7 @@ if ($result) {
         }
 }
 
-db_query('DROP TEMPORARY TABLE duration', $mysqlMainDb);
+user_duration_query_end();
 
 if ($format == 'html') {
         draw($tool_content, 2);

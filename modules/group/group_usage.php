@@ -34,14 +34,15 @@ $helpTopic = 'Group';
 
 include '../../include/baseTheme.php';
 include '../../include/lib/learnPathLib.inc.php';
+include '../usage/duration_query.php';
 
 if (isset($_GET['module']) and $_GET['module'] == 'usage') {
-        $navigation[] = array('url'=>'../usage/usage.php', 'name'=> $langUsage);
-        $navigation[] = array('url'=>'../usage/group.php', 'name'=> $langGroupUsage);
+        $navigation[] = array('url' => '../usage/usage.php', 'name'=> $langUsage);
+        $navigation[] = array('url' => '../usage/group.php', 'name'=> $langGroupUsage);
         $module = 'module=usage&amp;';
 } else {
-        $navigation[] = array('url'=>'group.php', 'name'=> $langGroupSpace);
-        $navigation[] = array('url'=>'group_space.php?userGroupId=$userGroupId', 'name'=> $langGroupSpace);
+        $navigation[] = array('url' => 'group.php', 'name'=> $langGroupSpace);
+        $navigation[] = array('url' => "group_space.php?userGroupId=$userGroupId", 'name'=> $langGroupSpace);
         $module = '';
 }
 
@@ -109,13 +110,9 @@ if ($type == 'duration') {
 
         if (isset($_POST['u_date_start']) and
             isset($_POST['u_date_end'])) {
-		$u_date_start = escapeSimple($_POST['u_date_start']) . ' 00:00:00';
-                $u_date_end = escapeSimple($_POST['u_date_end']) . ' 23:59:59';
-                $date_spec = " AND date_time BETWEEN '$u_date_start' AND '$u_date_end'";
-                $u_date_start = $_POST['u_date_start'];
-                $u_date_end = $_POST['u_date_end'];
+		$u_date_start = autounquote($_POST['u_date_start']);
+                $u_date_end = autounquote($_POST['u_date_end']);
         } else {
-                $date_spec = '';
                 $u_date_start = strftime('%Y-%m-%d', strtotime($min_date));
                 $u_date_end = strftime('%Y-%m-%d', strtotime('now'));
         }
@@ -164,33 +161,45 @@ $tool_content .= "<table class='FormData sortable' width='100%' id='a'>
 	</tr>";
 
 $i = 0;
-$result = db_query('SELECT user FROM user_group WHERE team = ' . $userGroupId);
-while ($row = mysql_fetch_row($result)) {
-	$user_id = $row[0];
-        if ($i%2 == 0) {
-                $tool_content .= "<tr>";
-        } else {
-                $tool_content .= "<tr class='odd'>";
-        }
-        $i++;
-        if ($type == 'duration') {
-        	$request = db_query('SELECT SUM(duration) FROM actions WHERE user_id = ' . $user_id . $date_spec);
-        	list($time) = mysql_fetch_row($request);
-        	$value = format_time_duration(0 + $time);
-                $sortkey = $time;
-        } elseif ($type == 'lp') {
-                $iterator = 0;
-                $progress = 0;
-                foreach ($learningPathList as $learningPath) {
-                        $progress += get_learnPath_progress($learningPath['learnPath_id'], $user_id);
-                        $iterator++;
-                }
-                $total = round($progress / $iterator);
-                $sortkey = $total;
-                $value = disp_progress_bar($total, 1) . '&nbsp;<small>' . $total . '%</small>';
-        }
-        $tool_content .= "<td width='30%'>" .uid_to_name($user_id) . "</td><td width='30%'>" . uid_to_am($user_id) . "</td><td align='center'>" . user_group($user_id) . "</td><td sorttable_customkey='$sortkey'>$value</td></tr>";
+if ($type == 'duration') {
+        $result = user_duration_query($currentCourseID, $u_date_start, $u_date_end, $userGroupId);
+} else {
+        $result = db_query('SELECT user AS user_id FROM user_group WHERE team = ' . $userGroupId);
 }
-$tool_content .= "</tbody></table>";
+if ($result) {
+        while ($row = mysql_fetch_array($result)) {
+                $user_id = $row['user_id'];
+                if ($i%2 == 0) {
+                        $tool_content .= "<tr>";
+                } else {
+                        $tool_content .= "<tr class='odd'>";
+                }
+                $i++;
+                if ($type == 'duration') {
+                	$value = format_time_duration(0 + $row['duration']);
+                        $sortkey = $row['duration'];
+                        $name = $row['nom'] . ' ' .$row['prenom'];
+                        $am = $row['am'];
+                } elseif ($type == 'lp') {
+                        $name = uid_to_name($user_id);
+                        $am = uid_to_am($user_id);
+                        $iterator = 0;
+                        $progress = 0;
+                        foreach ($learningPathList as $learningPath) {
+                                $progress += get_learnPath_progress($learningPath['learnPath_id'], $user_id);
+                                $iterator++;
+                        }
+                        $total = round($progress / $iterator);
+                        $sortkey = $total;
+                        $value = disp_progress_bar($total, 1) . '&nbsp;<small>' . $total . '%</small>';
+                }
+                $tool_content .= "<td width='30%'>$name</td><td width='30%'>$am</td><td align='center'>$group_name</td><td sorttable_customkey='$sortkey'>$value</td></tr>";
+        }
+        $tool_content .= "</tbody></table>";
+}
+
+if ($type == 'duration') {
+        user_duration_query_end();
+}
 
 draw($tool_content, 2, 'group', $head_content);
