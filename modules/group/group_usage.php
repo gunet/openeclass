@@ -185,6 +185,7 @@ if ($result) {
                         $am = uid_to_am($user_id);
                         $iterator = 0;
                         $progress = 0;
+                        mysql_select_db($currentCourseID);
                         foreach ($learningPathList as $learningPath) {
                                 $progress += get_learnPath_progress($learningPath['learnPath_id'], $user_id);
                                 $iterator++;
