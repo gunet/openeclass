@@ -315,6 +315,9 @@ function auth_user_login ($auth, $test_username, $test_password)
             if ($ldap) {
                     // LDAP connection established - now process all
                     // base dn's until authentication is achieved or fail
+
+                    @ldap_set_option($ldap, LDAP_OPT_PROTOCOL_VERSION, 3);
+
                     foreach ($all_ldap_base_dn as $attrib => $base_dn) {
                             // construct dn for user
                             $dn = "$attrib=$test_username,$base_dn";
