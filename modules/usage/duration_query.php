@@ -9,12 +9,6 @@ function user_duration_query($currentCourseID, $start = false, $end = false, $gr
 
         mysql_select_db($mysqlMainDb);
         
-        if ($group !== false) {
-                $group_where = "AND duration.user_id IN (SELECT user FROM `$currentCourseID`.user_group WHERE TEAM = $group)";
-        } else {
-                $group_where = '';
-        }
-
         if ($start !== false AND $end !== false) {
                 $date_where = 'WHERE c.date_time BETWEEN ' .
                               quote($start . ' 00:00:00') . ' AND ' .
@@ -32,15 +26,24 @@ function user_duration_query($currentCourseID, $start = false, $end = false, $gr
                   FROM `$currentCourseID`.actions AS c " .
                   $date_where .  " GROUP BY c.user_id");
 
+        if ($group !== false) {
+                $from = "`$currentCourseID`.user_group AS groups
+                                LEFT JOIN user ON groups.user = user.user_id";
+                $and = "AND groups.team = $group";
+        } else {
+                $from = "user";
+                $and = '';
+        }
         return db_query("SELECT duration.duration AS duration,
                                    user.nom AS nom,
                                    user.prenom AS prenom,
                                    user.user_id AS user_id,
                                    user.am AS am
-                            FROM user LEFT JOIN cours_user ON user.user_id = cours_user.user_id
+                            FROM $from
+                                      LEFT JOIN cours_user ON user.user_id = cours_user.user_id
                                       LEFT JOIN duration ON user.user_id = duration.user_id
-                            WHERE cours_user.code_cours = '$currentCourseID' $group_where
-                            GROUP BY duration.user_id
+                            WHERE cours_user.code_cours = '$currentCourseID'
+                                  $and
                             ORDER BY nom, prenom");
 }
 
