@@ -239,7 +239,9 @@ if (isset($_POST['submit']) or isset($_POST['edit_submit'])) {
     </tbody>
     </table>
 </form>
-<br/>";
+<p align='right'><small>$langMaxFileSize ".
+ini_get('upload_max_filesize') . "</small></p>";
+
 	} elseif (isset($form_input) && $form_input == "url") {
 		$nameTools = $langAddVideoLink;
 		$navigation[] = array ("url"=>"video.php", "name"=> $langVideo);

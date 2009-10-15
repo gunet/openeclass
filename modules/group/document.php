@@ -58,7 +58,7 @@ $baseServDir = $webDir;
 $tool_content = $dialogBox = "";
 
 $local_head = '
-<script>
+<script type="text/javascript">
 function confirmation ()
 {
     if (confirm("'.$langConfirmDelete.'"))
@@ -221,12 +221,12 @@ if (isset($rename)) {
 	$res = mysql_fetch_array($result);
 	$fileName = $res["filename"];
 	@$dialogBox .= "<form>\n";
-	$dialogBox .= "<input type='hidden' name='sourceFile' value='$rename'>
-        <input type='hidden' name='userGroupId' value='$userGroupId'>
+	$dialogBox .= "<input type='hidden' name='sourceFile' value='$rename' />
+        <input type='hidden' name='userGroupId' value='$userGroupId' />
         <table class='FormData' width='99%'><tbody><tr>
         <th class='left' width='200'>$langRename:</th>
-        <td class='left'>$langRename ".htmlspecialchars($fileName)." $langIn: <input type='text' name='renameTo' value='$fileName' class='FormData_InputText' size='50'></td>
-        <td class='left' width='1'><input type='submit' value='$langRename'></td>
+        <td class='left'>$langRename ".htmlspecialchars($fileName)." $langIn: <input type='text' name='renameTo' value='$fileName' class='FormData_InputText' size='50' /></td>
+        <td class='left' width='1'><input type='submit' value='$langRename' /></td>
         </tr></tbody></table></form><br />";
 }
 
@@ -262,11 +262,11 @@ if (isset($createDir))
 {
 	//$dialogBox ="";
 	$dialogBox .= "<form>\n" .
-	              "<input type='hidden' name='userGroupId' value='$userGroupId'>\n" .
-	              "<input type='hidden' name='newDirPath' value='$createDir'>\n" .
+	              "<input type='hidden' name='userGroupId' value='$userGroupId' />\n" .
+	              "<input type='hidden' name='newDirPath' value='$createDir' />\n" .
 	              "<table class='FormData' width='99%'><tbody><tr><th class='left' width='220'>$langNewDir:</th>" .
-                      "<td class='left' width='1'><input type='text' name='newDirName' class='FormData_InputText'></td>" .
-                      "<td class='left'><input type='submit' value='$langCreate'></td>\n" .
+                      "<td class='left' width='1'><input type='text' name='newDirName' class='FormData_InputText' /></td>" .
+                      "<td class='left'><input type='submit' value='$langCreate' /></td>\n" .
 	              "</tr></tbody></table></form><br />\n";
 }
 
@@ -341,8 +341,8 @@ DISPLAY
 **************************************/
 $dspCurDirName = htmlspecialchars($curDirName);
 $tool_content .= "
-    <div id=\"operations_container\">
-      <ul id=\"opslist\"><li><a href='group_space.php?$groupset'>$langGroupSpaceLink</a></li>
+    <div id='operations_container'>
+      <ul id='opslist'><li><a href='group_space.php?$groupset'>$langGroupSpaceLink</a></li>
         <li><a href='../phpbb/viewforum.php?forum=$forum_id'>$langGroupForumLink</a></li>
         <li><a href='$_SERVER[PHP_SELF]?$groupset&amp;createDir=".$curDirPath."'>$langCreateDir</a></li>
         <li><a href='$_SERVER[PHP_SELF]?$groupset&amp;uploadPath=".$curDirPath."'>$langDownloadFile</a></li>
@@ -371,20 +371,21 @@ UPLOAD SECTION
 if(isset($uploadPath)) {
 	$tool_content .= <<<cData
 	<form action='$_SERVER[PHP_SELF]' method='post' enctype='multipart/form-data'>
-	<input type='hidden' name='userGroupId' value='$userGroupId'>
-	<input type='hidden' name='uploadPath' value='$curDirPath'>
-	<table class='FormData' width=\"99%\">
-    <tbody>
+	<input type='hidden' name='userGroupId' value='$userGroupId' />
+	<input type='hidden' name='uploadPath' value='$curDirPath' />
+	<table class='FormData' width='99%'>
+    <thead>
     <tr>
-      <th class='left' width=\"220\">$langDownloadFile :</th>
-      <td class='left' width=\"1\"><input type='file' name='userFile'></td>
-      <td class='left'><input type='submit' value='$langUpload'></td>
+      <th class='left' width='220'>$langDownloadFile :</th>
+      <td class='left' width='1'><input type='file' name='userFile'></td>
+      <td class='left'><input type='submit' value='$langUpload' /></td>
     </tr>
     </thead>
     </table>
 	</form>
-    <br/>
 cData;
+        $tool_content .= "<p align='right'><small>$langMaxFileSize " .
+                         ini_get('upload_max_filesize') . "</small></p>";
 }
 
 /*------------------------------------
@@ -395,23 +396,22 @@ $tool_content .= "
     <tbody>
     <tr>
         <th height='18' colspan='7'><div align='left'>$langDirectory: ".make_clickable_path("group_documents", $curDirPath). "</div></th>
-        <th><div align='right'>";
+        <th class='right'>";
   /*** go to parent directory ***/
 if ($curDirName) // if the $curDirName is empty, we're in the root point and we can't go to a parent dir
 {
-	$tool_content .=  "<a href=\"$_SERVER[PHP_SELF]?$groupset&amp;openDir=".$parentDir."\">$langUp</a>\n";
-	$tool_content .=  "<img src=\"../../template/classic/img/parent.gif\" border=0 align=\"absmiddle\">";
+	$tool_content .= "<a href='$_SERVER[PHP_SELF]?$groupset&amp;openDir=".$parentDir."'>$langUp</a>\n" .
+                         "<img src='../../template/classic/img/parent.gif' style='vertical-align: middle;' />";
 }
 
-$tool_content .= "</th>\n    </tr>";
-$tool_content .= "\n    <tr>";
-$tool_content .= "
-        <td class=\"DocHead\" colspan=\"2\"><b>$langName</b></td>
-        <td class=\"DocHead\"><b>$langSize</b></td>
-        <td class=\"DocHead\"><b>$langDate</b></td>
-        <td class=\"DocHead\"><b>$langPublish</b></td>
-        <td class=\"DocHead\" colspan=\"3\"><b>$langCommands</b></td>";
-$tool_content .= "\n    </tr>";
+$tool_content .= "</th></tr>
+   <tr>
+        <td class='DocHead' colspan='2'><b>$langName</b></td>
+        <td class='DocHead'><b>$langSize</b></td>
+        <td class='DocHead'><b>$langDate</b></td>
+        <td class='DocHead'><b>$langPublish</b></td>
+        <td class='DocHead' colspan='3'><b>$langCommands</b></td>
+   </tr>";
 
 /*----------------------------------------
 DISPLAY DIRECTORIES

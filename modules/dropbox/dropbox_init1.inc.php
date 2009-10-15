@@ -33,7 +33,7 @@ include_once '../../include/baseTheme.php';
 $tool_content = "";
 
 // javascript functions
-$head_content ='<script>
+$head_content ='<script type="text/javascript">
                 function confirmation (name) {
                 if (confirm("'.$dropbox_lang['confirmDelete1'].'" + name + "'.$dropbox_lang['confirmDelete2'].'" )) {
                         return true;

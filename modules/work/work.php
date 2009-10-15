@@ -637,7 +637,8 @@ function show_submission_form($id)
     <br/>
     </form>
 cData;
-
+		$tool_content .= "<p align='right'><small>$GLOBALS[langMaxFileSize] " .
+                        ini_get('upload_max_filesize') . "</small></p>";
 	}
 }
 
