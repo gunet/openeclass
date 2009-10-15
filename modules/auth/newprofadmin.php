@@ -75,7 +75,6 @@ if($submit) {
 				autoquote($uname) . ", '$password_encrypted', " .
 				autoquote($email_form) .
 				", $pstatut, $depid, " . autoquote($comment) . ", $registered_at, $expires_at, '$proflanguage')");
-		$last_id = mysql_insert_id();
 
 		// close request
 	  	$rid = intval($_POST['rid']);
@@ -184,7 +183,7 @@ $langEmail : $emailAdministrator
 	$tool_content .= "</td>
 	</tr>
 	<tr>
-	<th class='left'><b>$langAm</b></th>
+	<th class='left'><b>$langComments</b></th>
 	<td><input class='FormData_InputText' type='text' name='comment' value='".@q($pcom)."'>&nbsp;</b></td>
 	</tr>
 	<tr>

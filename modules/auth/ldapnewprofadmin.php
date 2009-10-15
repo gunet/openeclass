@@ -25,7 +25,6 @@
 * =========================================================================*/
 
 /*===========================================================================
-	ldapsearch.php
 	@authors list: Karatzidis Stratos <kstratos@uom.gr>
 		       Vagelis Pitsioygas <vagpits@uom.gr>
 ==============================================================================
@@ -47,25 +46,29 @@ $navigation[] = array("url" => "../admin/index.php", "name" => $langAdmin);
 $navigation[] = array("url" => "../admin/listreq.php", "name" => $langOpenProfessorRequests);
 $tool_content = "";
 
-// -----------------------------------------
-// 	professor registration
-// -----------------------------------------
-
-if (isset($submit))  {
+$submit = isset($_POST['submit'])?$_POST['submit']:'';
+// professor registration
+if ($submit)  {
         $auth = $_POST['auth'];
         $pn = $_POST['pn'];
         $ps = $_POST['ps'];
         $pu = $_POST['pu'];
         $pe = $_POST['pe'];
         $department = $_POST['department'];
-        $lang = $_POST['lang'];
+        $comment = isset($_POST['comment'])?$_POST['comment']:'';
+        $lang = $_POST['language'];
+        if (!isset($native_language_names[$lang])) {
+		$lang = langname_to_code($language);
+	}
 
 	// check if user name exists
-    	$username_check = db_query("SELECT username FROM `$mysqlMainDb`.user WHERE username=".autoquote($pu));
-	if ($username_check and mysql_num_rows($username_check) > 0) {
-	     $tool_content .= "<p class='caution_small'>$langUserFree</p><br><br><p align='right'><a href='../admin/listreq.php'>$langBackRequests</a></p>";
-		 draw($tool_content, 3, 'auth');
-	     exit();
+    	$username_check = db_query("SELECT username FROM `$mysqlMainDb`.user 
+			WHERE username=".autoquote($pu));
+	if (mysql_num_rows($username_check) > 0) {
+		$tool_content .= "<p class='caution_small'>$langUserFree</p><br><br><p align='right'>
+		<a href='../admin/listreq.php'>$langBackRequests</a></p>";
+		draw($tool_content, 3, 'auth');
+		exit();
 	}
 
         switch($auth)
@@ -85,13 +88,19 @@ if (isset($submit))  {
 	$registered_at = time();
         $expires_at = time() + $durationAccount;
 
-	$sql=db_query("INSERT INTO user (user_id, nom, prenom, username, password, email, statut, department, registered_at, expires_at, lang)
-       VALUES ('NULL', '$pn', '$ps', '$pu', '$password', '$pe','1','$department', '$registered_at', '$expires_at', '$lang')", $mysqlMainDb);
+	$sql = db_query("INSERT INTO `$mysqlMainDb`.user
+			(nom, prenom, username, password, email, statut, department,
+			am, registered_at, expires_at,lang)
+			VALUES (" .
+			autoquote($ps) . ', ' .
+			autoquote($pn) . ', ' .
+			autoquote($pu) . ", '$password', " .
+			autoquote($pe) .
+			", 1, $department, " . autoquote($comment) . ", $registered_at, $expires_at, '$lang')");
 
-	// close request
-      //  Update table prof_request ------------------------------
-      $rid = intval($_POST['rid']);
-      db_query("UPDATE prof_request set status = '2',date_closed = NOW() WHERE rid = '$rid'");
+	//  Update table prof_request 
+	$rid = intval($_POST['rid']);
+	db_query("UPDATE prof_request set status = '2',date_closed = NOW() WHERE rid = '$rid'");
 		$emailbody = "$langDestination $pu $ps\n" .
                                 "$langYouAreReg $siteName $langSettings $pu\n" .
                                 "$langPass: $password\n$langAddress $siteName: " .
@@ -100,49 +109,42 @@ if (isset($submit))  {
                                 "$langManager $siteName \n$langTel $telephone \n" .
                                 "$langEmail: $emailAdministrator";
 
-    if (!send_mail('', '', $gunet, $emailhelpdesk, $mailsubject, $emailbody, $charset))  {
-		      $tool_content .= "<table width=\"99%\"><tbody><tr>
-    	    	<td class=\"caution\" height='60'>
-	    	    <p>$langMailErrorMessage &nbsp; <a href=\"mailto:$emailhelpdesk\">$emailhelpdesk</a></p>
-  	    	  </td>
-    	    	</tr></tbody></table>";
+	if (!send_mail('', '', '', $pe, $mailsubject, $emailbody, $charset))  {
+		$tool_content .= "<table width='99%'><tbody><tr>
+		<td class='caution' height='60'>
+		<p>$langMailErrorMessage &nbsp; <a href=\"mailto:$emailhelpdesk\">$emailhelpdesk</a></p>
+		</td></tr></tbody></table>";
+		draw($tool_content, 3, 'auth');
         	exit();
-      }
+	}
 
-      //------------------------------------User Message ----------------------------------------
-    $tool_content .= "<table width=\"99%\"><tbody>
-      <tr>
-      <td class=\"well-done\" height='60'>
+	// user message
+	$tool_content .= "<table width='99%'><tbody><tr>
+	<td class='well-done' height='60'>
 	<p>$profsuccess</p><br><br>
 	<center><p><a href='../admin/listreq.php'>$langBackRequests</a></p></center>
-      </td>
-      </tr></tbody></table>";
+	</td>
+	</tr></tbody></table>";
 
-} else {  
-// if not submit then display the form
+} else { 
+	// if not submit then display the form
 	if (isset($id)) { // if we come from prof request
-		$res = mysql_fetch_array(db_query("SELECT profname,profsurname, profuname, profemail, proftmima, lang 
-			FROM prof_request WHERE rid='$id'"));
+		$res = mysql_fetch_array(db_query("SELECT profname,profsurname, profuname, profemail, 
+			proftmima, comment, lang FROM prof_request WHERE rid='$id'"));
 		$ps = $res['profsurname'];
 		$pn = $res['profname'];
 		$pu = $res['profuname'];
 		$pe = $res['profemail'];
 		$pt = $res['proftmima'];
+		$pcom = $res['comment'];
 		$lang = $res['lang'];
-	
-		if (isset($lang)) {	
-			if ($lang == 'el')
-				$language = 'greek';
-			elseif ($lang == 'en')
-				$language = 'english';
-		}
 	}
 
-	$tool_content .= "<form action=\"$_SERVER[PHP_SELF]\" method=\"post\">
-	<table width=\"99%\" class=\"FormData\">
+	$tool_content .= "<form action='$_SERVER[PHP_SELF]' method='post'>
+	<table width='99%' class='FormData'>
 	<tbody>
 	<tr>
-	<th width=\"220\">&nbsp;</th>
+	<th width='220'>&nbsp;</th>
 	<td><b>$langNewProf</b></td>
 	</tr>
 	<tr>
@@ -165,17 +167,24 @@ if (isset($submit))  {
 	<tr>
 	<th class='left'>$langDepartment</th>
 	<td>";
-        $result = db_query("SELECT id, name FROM faculte ORDER BY name");
+        $result = db_query("SELECT id, name FROM faculte ORDER BY id");
         while ($facs = mysql_fetch_array($result)) {
                 $faculte_names[$facs['id']] = $facs['name'];
         }
         $tool_content .= selection($faculte_names, 'department', $pt) .
-                         "</td></tr>" .
-                         "<tr><th class='left'>$langLanguage</th><td>" .
-	                 lang_select_options('lang', '', $lang) . "</td></tr>
+                         "</td></tr>";
+	$tool_content .= "<tr>
+	<th class='left'><b>$langComments</b></th>
+	<td><input class='FormData_InputText' type='text' name='comment' value='".@q($pcom)."'>&nbsp;</b></td>
+	</tr>
+	<tr>
+	<th class='left'>$langLanguage</th>
+	<td>";
+	$tool_content .= lang_select_options('language', '', $lang);
+	$tool_content .= "</td></tr>
 	<tr><th>&nbsp;</th>
-	<td><input type=\"submit\" name=\"submit\" value=\"".$langOk."\" >
-	<input type=\"hidden\" name=\"auth\" value=\"$auth\" >
+	<td><input type='submit' name='submit' value='".$langSubmit."' >
+	<input type='hidden' name='auth' value='$auth' >
 	</td></tr>
 	<input type='hidden' name='rid' value='".@$id."'>
 	</tbody>
