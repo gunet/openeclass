@@ -17,6 +17,7 @@ $nameTools = $langMultiRegUser;
 $navigation[]= array ("url"=>"index.php", "name"=> $langAdmin);
 $tool_content = "";
 
+$error = '';
 $acceptable_fields = array('first', 'last', 'email', 'id', 'phone', 'username');
 
 if (isset($_POST['submit'])) {
@@ -76,15 +77,19 @@ if (isset($_POST['submit'])) {
                                                    @$info['phone'],
                                                    $_POST['lang'],
                                                    $send_mail);
-                                $new_users_info[] = $new;
+                                if ($new === false) {
+                                        $unparsed_lines .= $line . "\n" . $error . "\n";
+                                } else {
+                                        $new_users_info[] = $new;
 
-                                // Now, the $user array should contain only course codes
-                                foreach ($user as $course_code) {
-                                        if (!register($new[0], $course_code)) {
-                                                $unparsed_lines .=
-                                                        sprintf($langMultiRegCourseInvalid . "\n",
-                                                                "$info[last] $info[first] ($info[username])",
-                                                                $course_code);
+                                        // Now, the $user array should contain only course codes
+                                        foreach ($user as $course_code) {
+                                                if (!register($new[0], $course_code)) {
+                                                        $unparsed_lines .=
+                                                                sprintf($langMultiRegCourseInvalid . "\n",
+                                                                        "$info[last] $info[first] ($info[username])",
+                                                                        $course_code);
+                                                }
                                         }
                                 }
                         } else {
@@ -162,6 +167,12 @@ function create_user($statut, $uname, $nom, $prenom, $email, $depid, $am, $phone
                 $message = $usersuccess;
                 $type_message = '';
                 // $langAsUser;
+        }
+
+        $req = db_query('SELECT * FROM user WHERE username = ' . autoquote($uname));
+        if ($req and mysql_num_rows($req) > 0) {
+                $GLOBALS['error'] = "$GLOBALS[l_invalidname] ($uname)";
+                return false;
         }
 
         $password = create_pass();
