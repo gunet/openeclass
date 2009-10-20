@@ -17,60 +17,74 @@ $nameTools = $langMultiRegUser;
 $navigation[]= array ("url"=>"index.php", "name"=> $langAdmin);
 $tool_content = "";
 
+$acceptable_fields = array('first', 'last', 'email', 'id', 'phone', 'username');
+
 if (isset($_POST['submit'])) {
         $send_mail = isset($_POST['send_mail']) && $_POST['send_mail'];
         $unparsed_lines = '';
-        $info = array();
+        $new_users_info = array();
         $newstatut = ($_POST['type'] == 'prof')? 1: 5;
         $facid = intval($_POST['facid']);
         $am = $_POST['am'];
+        $fields = preg_split('/[\s,]+/', $_POST['fields'], -1, PREG_SPLIT_NO_EMPTY);
+        foreach ($fields as $field) {
+                if (!in_array($field, $acceptable_fields)) {
+                        $tool_content = "<p class='caution_small'>$langMultiRegFieldError <b>$field</b></p>";
+                        draw($tool_content, 3, 'admin');
+                        exit;
+                }
+        }
+        $numfields = count($fields);
         $line = strtok($_POST['user_info'], "\n");
         while ($line !== false) {
                 $line = preg_replace('/#.*/', '', trim($line));
                 if (!empty($line)) {
                         $user = preg_split('/\s+/', $line);
-                        if (count($user) >= 2) {
-                                /* Email processing */
-                                if (!isset($user[3]) or
-                                    !email_seems_valid($user[3])) {
-                                        // If no valid e-mail given, use empty string
-                                        $email = '';
-                                } else {
-                                        $email = $user[3];
+                        if (count($user) >= $numfields) {
+                                $info = array();
+                                foreach ($fields as $field) {
+                                        $info[$field] = array_shift($user);
                                 }
 
-                                /* AM / Symplhrwmatika stoixeia */
-                                if (empty($am)) {
-                                        $user_am = $am;
-                                } else {
-                                        $user_am = $am . ' - ' . $user[2];
+                                if (!isset($info['email']) or
+                                    !email_seems_valid($info['email'])) {
+                                        $info['email'] = '';
                                 }
 
-                                /* Phone */
-                                $phone = $user[4];
+                                if (!empty($am)) {
+                                        if (!isset($info['id']) or empty($info['id'])) {
+                                                $info['id'] = $am;
+                                        } else {
+                                                $info['id'] = $am . ' - ' . $info['id'];
+                                        }
+                                }
 
-                                $uname = create_username($newstatut,
-                                                         $facid,
-                                                         $nom,
-                                                         $prenom,
-                                                         $_POST['prefix']);
+                                if (!isset($info['username'])) {
+                                        $info['username'] = create_username($newstatut,
+                                                                            $facid,
+                                                                            $nom,
+                                                                            $prenom,
+                                                                            $_POST['prefix']);
+                                }
                                 $new = create_user($newstatut,
-                                                   $uname,
-                                                   $user[1],
-                                                   $user[0],
-                                                   $email,
+                                                   $info['username'],
+                                                   @$info['last'],
+                                                   @$info['first'],
+                                                   @$info['email'],
                                                    $facid,
-                                                   $user_am,
-                                                   $phone,
+                                                   @$info['id'],
+                                                   @$info['phone'],
                                                    $_POST['lang'],
                                                    $send_mail);
-                                $info[] = $new;
-                                for ($i = 5; $i < count($user); $i++) {
-                                        if (!register($new[0], $user[$i])) {
+                                $new_users_info[] = $new;
+
+                                // Now, the $user array should contain only course codes
+                                foreach ($user as $course_code) {
+                                        if (!register($new[0], $course_code)) {
                                                 $unparsed_lines .=
                                                         sprintf($langMultiRegCourseInvalid . "\n",
-                                                                "$user[0] $user[1] ($uname)",
-                                                                $user[$i]);
+                                                                "$info[last] $info[first] ($info[username])",
+                                                                $course_code);
                                         }
                                 }
                         } else {
@@ -83,7 +97,7 @@ if (isset($_POST['submit'])) {
                 $tool_content .= "<p><b>$langErrors</b></p><pre>$unparsed_lines</pre>";
         }
         $tool_content .= "<table><tr><th>$langSurname</th><th>$langName</th><th>e-mail</th><th>$langPhone</th><th>$langAm</th><th>username</th><th>password</th></tr>\n";
-        foreach ($info as $n) {
+        foreach ($new_users_info as $n) {
                 $tool_content .= "<tr><td>$n[1]</td><td>$n[2]</td><td>$n[3]</td><td>$n[4]</td><td>$n[5]</td><td>$n[6]</td><td>$n[7]</td></tr>\n";
         }
         $tool_content .= "</table>\n";
@@ -92,12 +106,13 @@ if (isset($_POST['submit'])) {
         while ($n = mysql_fetch_array($req)) {
                 $facs[$n['id']] = $n['name'];
         }
-        $tool_content .= "<p>$langMultiRegUserInfo</p>
+        $tool_content .= "$langMultiRegUserInfo
 <form method='post' action='$_SERVER[PHP_SELF]'>
 <table class='FormData'>
+<tr><th>$langMultiRegFields</th>
+    <td><input type='text' name='fields' size='50' value='first last id email phone' /></td>
 <tr><th>$langUsersData</th>
-    <td><textarea class='auth_input' name='user_info' rows='10' cols='60'>
-# $langName $langSurname [$langAm] [$langEmail] [$langPhone] [$langLessonCode...]\n</textarea></td>
+    <td><textarea class='auth_input' name='user_info' rows='10' cols='60'></textarea></td>
 </tr>
 <tr><th>$langMultiRegType</th>
     <td><select name='type'>

@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language en
-// Generated 2009-09-25 17:18:30
+// Generated 2009-10-20 14:26:07
 
 $langIntro = "The <b>$siteName</b> platform is a complete eCourses Management System supporting the Asynchronous eLearning Service in <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
 $langVersion = "$siteName version";
@@ -2695,8 +2695,21 @@ $langUnknownResType = "Error: Unknown unit resource";
 $langNoExercises = "There are no exercises";
 $langFrom2 = "from";
 $langMultiRegUser = 'Mass user account creation';
-$langMultiRegUserInfo = 'Please enter in the field below a list of user details, one line per each new user account, in the following order: last name, first name, e-mail address. If you want to have the users automatically register to some courses, please append the course codes in the end of each line. The e-mail address is optional;
-you can enter a hyphen (-) if you want to skip it. Lines beginning with "#" are ignored.';
+$langMultiRegUserInfo = "<p>Please enter in the area below a list of user details, one line per each new user account.</p>
+<p>The order of the user information is defined in the field before the area, where possible labels are:</p>
+<ul>
+<li><tt>first</tt>: First name</li>
+<li><tt>last</tt>: Last name / surname</li>
+<li><tt>email</tt>: e-mail address</li>
+<li><tt>id</tt>: Student ID</li>
+<li><tt>phone</tt>: Phone number</li>
+<li><tt>username</tt>: Username</li>
+</ul>
+<p>To have the users automatically registered to some courses, please add the course
+codes after the user details in the end of each line. The e-mail addres is optional - you can
+use a hyphen (-) in its place if you want to omit it. Lines beginning with # are ignored. If
+you don't specify usernames, they will be automatically creating by appending a serial
+number to the user prefix entered below.</p>";
 $langMultiRegCourseInvalid = 'User %s: invalid course code "%s"';
 $langMultiRegType = 'Account type';
 $langMultiRegSendMail = 'E-mail account information to users';
@@ -2714,3 +2727,5 @@ $langCodeUTF = "UTF-8 encoding";
 $langCodeWin = "Windows-1253 encoding";
 $langVia = 'via';
 $langInsertWork = 'assignment';
+$langMultiRegFields = 'Field order definition';
+$langMultiRegFieldError = 'Error! Invalid field label:';
