@@ -27,7 +27,7 @@ if (isset($_POST['submit'])) {
         $newstatut = ($_POST['type'] == 'prof')? 1: 5;
         $facid = intval($_POST['facid']);
         $am = $_POST['am'];
-        $fields = preg_split('/[\s,]+/', $_POST['fields'], -1, PREG_SPLIT_NO_EMPTY);
+        $fields = preg_split('/[ \t,]+/', $_POST['fields'], -1, PREG_SPLIT_NO_EMPTY);
         foreach ($fields as $field) {
                 if (!in_array($field, $acceptable_fields)) {
                         $tool_content = "<p class='caution_small'>$langMultiRegFieldError <b>$field</b></p>";
@@ -40,7 +40,7 @@ if (isset($_POST['submit'])) {
         while ($line !== false) {
                 $line = preg_replace('/#.*/', '', trim($line));
                 if (!empty($line)) {
-                        $user = preg_split('/\s+/', $line);
+                        $user = preg_split('/[ \t]+/', $line);
                         if (count($user) >= $numfields) {
                                 $info = array();
                                 foreach ($fields as $field) {
