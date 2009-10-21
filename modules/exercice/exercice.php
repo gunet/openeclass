@@ -260,7 +260,7 @@ else {
 	$temp_StartDate = mktime(0, 0, 0, substr($row['StartDate'], 5,2), substr($row['StartDate'], 8,2), substr($row['StartDate'], 0,4));
 	$temp_EndDate = mktime(0, 0, 0, substr($row['EndDate'], 5,2),substr($row['EndDate'], 8,2),substr($row['EndDate'], 0,4));
 	$CurrentDate = mktime(0, 0 , 0,substr($CurrentDate, 5,2), substr($CurrentDate, 8,2),substr($CurrentDate, 0,4));
-	if (($CurrentDate >= $temp_StartDate) && ($CurrentDate < $temp_EndDate)) {
+	if (($CurrentDate >= $temp_StartDate) && ($CurrentDate <= $temp_EndDate)) {
 		$tool_content .= "<td width=\"1\"><img style='border:0px; padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'></td>
 		<td><a href=\"exercice_submit.php?exerciseId=".$row['id']."\">".$row['titre']."</a>";
 	} else {
