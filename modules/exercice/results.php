@@ -84,7 +84,7 @@ $sql="SELECT DISTINCT uid FROM `exercise_user_record`";
 $result = mysql_query($sql);
 while($row=mysql_fetch_array($result)) {
 	$sid = $row['uid'];
-	$StudentName = db_query("SELECT nom,prenom FROM user WHERE user_id='$sid'", $mysqlMainDb);
+	$StudentName = db_query("SELECT nom,prenom,am FROM user WHERE user_id='$sid'", $mysqlMainDb);
 	$theStudent = mysql_fetch_array($StudentName);
 	
 	mysql_select_db($currentCourseID);
@@ -97,7 +97,9 @@ while($row=mysql_fetch_array($result)) {
 		if (!$sid) {
 			$tool_content .= "$langNoGroupStudents";
 		} else {
-			$tool_content .= "$langUser: <b>".$theStudent["nom"]." ".$theStudent["prenom"]."</b>"; 
+			if ($theStudent['am'] == '') $studentam = '-';
+			else $studentam = $theStudent['am'];
+			$tool_content .= "$langUser: <b>$theStudent[nom] $theStudent[prenom] </b> ($langAm: $studentam)";
 		}
 		$tool_content .= "</th></tr>";
 		$tool_content .= "<tr><td width='150' align='center'><b>".$langExerciseStart."</b></td>";
