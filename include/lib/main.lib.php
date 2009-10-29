@@ -979,34 +979,10 @@ function canonicalize_whitespace($s)
 }
 
 
-// Convert language code to language name in English lowercase (for message files etc.)
-// Returns 'en' if code is not in array
-function langcode_to_name($langname)
-{
-        $langcodes = array('en' => 'english', 'el' => 'greek', 'es' => 'spanish');
-        if (isset($langcodes[$langname])) {
-		return $langcodes[$langname];
-	} else {
-		return 'english';
-	}
-}
-
-
-// Convert language name to language code
-function langname_to_code($langname)
-{
-        $langcodes = array('english' => 'en', 'greek' => 'el', 'spanish' => 'es');
-        return $langcodes[$langname];
-# Some other languages. Warning: main database user.lang field is an enum!
+# Only languages defined below are available for selection in the UI
+# If you enable any new languages, make sure they are defined in the
+# next array as well
 # See include/baseTheme.php for lang_select_options() function
-# 'spanish' => 'es', 'czech' => 'cz', 'albanian' => 'sq',
-# 'bulgarian' => 'bg', 'catalan' => 'ca', 'danish' => 'da',
-# 'dutch' => 'nl', 'finnish' => 'fi', 'french' => 'fr',
-# 'german' => 'de', 'icelandic' => 'is', 'italian' => 'it',
-# 'japanese' => 'jp', 'polish' => 'pl', 'russian' => 'ru',
-# 'turkish' => 'tr',
-}
-
 $native_language_names = array (
 	'el' => 'Ελληνικά',
 	'en' => 'English',
@@ -1027,6 +1003,51 @@ $native_language_names = array (
 #	'ru' => 'Русский',
 #	'tr' => 'Türkçe',
 );
+
+$language_codes = array(
+	'el' => 'greek',
+	'en' => 'english',
+	'es' => 'spanish',
+#	'cs' => 'czech',
+#	'sq' => 'albanian',
+#	'bg' => 'bulgarian',
+#	'ca' => 'catalan',
+#	'da' => 'danish',
+#	'nl' => 'dutch',
+#	'fi' => 'finnish',
+#	'fr' => 'french',
+#	'de' => 'german',
+#	'is' => 'icelandic',
+#	'it' => 'italian',
+#	'jp' => 'japanese',
+#	'pl' => 'polish',
+#	'ru' => 'russian',
+#	'tr' => 'turkish',
+);
+
+// Convert language code to language name in English lowercase (for message files etc.)
+// Returns 'english' if code is not in array
+function langcode_to_name($langcode)
+{
+        global $language_codes;
+        if (isset($language_codes[$langcode])) {
+		return $language_codes[$langcode];
+	} else {
+		return 'english';
+	}
+}
+
+// Convert language name to language code
+function langname_to_code($langname)
+{
+        global $language_codes;
+        $langcode = array_search($langname, $language_codes);
+        if ($langcode) {
+		return $langcode;
+	} else {
+		return 'en';
+	}
+}
 
 
 function append_units($amount, $singular, $plural)
