@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language es
-// Generated 2009-10-20 14:26:08
+// Generated 2009-10-29 15:40:55
 
 $langIntro = "El <b>$siteName</b> platforma es un completo Sistema de Administración eCursos que soporta el Servicio Asincrónico de eAprendizaje en <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
 $langVersion = "$siteName versión";
@@ -2615,49 +2615,63 @@ $langAddTime = "Añadir tiempo a las cuentas inactivas";
 $langRealised = "se ha ido";
 $langUpdates = "actualizaciones";
 $langNoChanges = "¡Error! Las cuentas inactivas no han sido actualizadas";
-$langTutorialDesc = '';
-$langTutorial = '';
-$langAnswersNotDisp = '';
-$langAnswersDisp = '';
-$langDurationVisitsPerCourse = '';
-$langAddUnit = '';
-$langEditUnit = '';
-$langUnitTitle = '';
-$langUnitDescr = '';
-$langUnitUnknown = '';
-$langEmptyUnitTitle = '';
-$langCourseUnits = '';
-$langCourseUnitDeleted = '';
-$langCourseUnitAdded = '';
-$langCourseUnitModified = '';
-$langResourceCourseUnitDeleted = '';
-$langResourceUnitModified = '';
-$langInsertText = '';
-$langInsertDoc = '';
-$langInsertExercise = '';
-$langInsertVideo = '';
-$langInsertForum = '';
-$langUnknownResType = '';
-$langNoExercises = '';
-$langFrom2 = '';
-$langMultiRegUser = '';
-$langMultiRegUserInfo = '';
-$langMultiRegCourseInvalid = '';
-$langMultiRegType = '';
-$langMultiRegSendMail = '';
-$langMultiRegPrefix = '';
-$langModuleNotInstalled = '';
-$langReadHelp = '';
-$langWarnInstallNotice1 = '';
-$langWarnInstallNotice2 = '';
-$langSurnameName = '';
-$langUserDuration = '';
-$langGroupUsage = '';
-$langDumpUserDuration = '';
-$langDumpUserDurationToFile = '';
-$langCodeUTF = '';
-$langCodeWin = '';
-$langVia = '';
-$langInsertWork = '';
-$langMultiRegFields = '';
-$langMultiRegFieldError = '';
+$langTutorialDesc = "Also, in the link below, you will find useful tutorials for using and administrating the Open eClass platform with practical examples. These tutorials are available in three different formats: a) tutorials with pictures, b) video presentations and c) SCORM Packages.";
+$langTutorial = "Platform Tutorials";
+$langAnswersNotDisp = "Hide answers after exercise end";
+$langAnswersDisp = "Display correct answers after exercise end";
+$langDurationVisitsPerCourse = "Participation time per course";
+$langAddUnit = "Add new course unit";
+$langEditUnit = "Edit course unit details";
+$langUnitTitle = "Course unit title";
+$langUnitDescr = "Short description";
+$langUnitUnknown = "Unknown course unit";
+$langEmptyUnitTitle = "Please enter the title of the course unit";
+$langCourseUnits = "Course Units";
+$langCourseUnitDeleted = "Course unit was deleted";
+$langCourseUnitAdded = "Course unit was added";
+$langCourseUnitModified = "Course unit details modified";
+$langResourceCourseUnitDeleted = "Course unit resource was deleted";
+$langResourceUnitModified = "Resource details modified";
+$langInsertText = "text";
+$langInsertDoc = "document";
+$langInsertExercise = "exercise";
+$langInsertVideo = "video";
+$langInsertForum = "forum";
+$langUnknownResType = "Error: Unknown unit resource";
+$langNoExercises = "There are no exercises";
+$langFrom2 = "from";
+$langMultiRegUser = 'Mass user account creation';
+$langMultiRegUserInfo = "<p>Please enter in the area below a list of user details, one line per each new user account.</p>
+<p>The order of the user information is defined in the field before the area, where possible labels are:</p>
+<ul>
+<li><tt>first</tt>: First name</li>
+<li><tt>last</tt>: Last name / surname</li>
+<li><tt>email</tt>: e-mail address</li>
+<li><tt>id</tt>: Student ID</li>
+<li><tt>phone</tt>: Phone number</li>
+<li><tt>username</tt>: Username</li>
+</ul>
+<p>To have the users automatically registered to some courses, please add the course
+codes after the user details in the end of each line. The e-mail addres is optional - you can
+use a hyphen (-) in its place if you want to omit it. Lines beginning with # are ignored. If
+you don't specify usernames, they will be automatically creating by appending a serial
+number to the user prefix entered below.</p>";
+$langMultiRegCourseInvalid = 'User %s: invalid course code "%s"';
+$langMultiRegType = 'Account type';
+$langMultiRegSendMail = 'E-mail account information to users';
+$langMultiRegPrefix = 'Username prefix';
+$langModuleNotInstalled = "Not installed";
+$langReadHelp = "Read more";
+$langWarnInstallNotice1 = "Probably some other changes are required. Read the installation instructions in";
+$langWarnInstallNotice2 = "and restart the installation wizard.";
+$langSurnameName = "Full Name";
+$langUserDuration = "User participation per course";
+$langGroupUsage = 'User Group Statistics';
+$langDumpUserDuration = "Dump usage staticstics";
+$langDumpUserDurationToFile = "In csv file";
+$langCodeUTF = "UTF-8 encoding";
+$langCodeWin = "Windows-1253 encoding";
+$langVia = 'via';
+$langInsertWork = 'assignment';
+$langMultiRegFields = 'Field order definition';
+$langMultiRegFieldError = 'Error! Invalid field label:';
