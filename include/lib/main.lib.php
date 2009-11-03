@@ -874,16 +874,36 @@ function mkpath($path)  {
 	}
 }
 
+
+// checks if a module is visible 
+function display_activation_link($module_id) {
+
+	global $currentCourseID;
+	
+	$v = mysql_fetch_array(db_query("SELECT lien FROM accueil 
+		WHERE id ='$module_id'", $currentCourseID));
+	$newlien = str_replace("../..","","$v[lien]");
+	
+	if (strpos($_SERVER['PHP_SELF'],$newlien) === FALSE) {
+		return FALSE;
+	} else { 
+		return TRUE;
+	}
+}
+
 // checks if a module is visible 
 function visible_module($module_id) {
 
 	global $currentCourseID;
 	
-	$v = mysql_fetch_array(db_query("SELECT visible FROM accueil WHERE id ='$module_id'", $currentCourseID));
- 	if ($v['visible'] == 1)
+	$v = mysql_fetch_array(db_query("SELECT visible FROM accueil 
+		WHERE id ='$module_id'", $currentCourseID));
+	
+	if ($v['visible'] == 1) {
 		return TRUE;
-	else
+	} else {
 		return FALSE;
+	}
 }
 
 

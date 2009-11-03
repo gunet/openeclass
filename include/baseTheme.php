@@ -248,12 +248,14 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 			// link for activating / deactivating module
 			if(file_exists($module_ini_dir = getcwd() . "/module.ini.php")) {
 				include $module_ini_dir;
-				if (visible_module($module_id)) {
-					$message = $langDeactivate;
-					$mod_activation = "<a class='deactivate_module' href='$_SERVER[PHP_SELF]?eclass_module_id=$module_id&amp;hide=0'>($langDeactivate)</a>";
-				} else {
-					$message = $langActivate;
-					$mod_activation = "<a class='activate_module' href='$_SERVER[PHP_SELF]?eclass_module_id=$module_id&amp;hide=1'>($langActivate)</a>";
+				if (display_activation_link($module_id)) {
+					if (visible_module($module_id)) {
+						$message = $langDeactivate;
+						$mod_activation = "<a class='deactivate_module' href='$_SERVER[PHP_SELF]?eclass_module_id=$module_id&amp;hide=0'>($langDeactivate)</a>";
+					} else {
+						$message = $langActivate;
+						$mod_activation = "<a class='activate_module' href='$_SERVER[PHP_SELF]?eclass_module_id=$module_id&amp;hide=1'>($langActivate)</a>";
+					}
 				}
 			}
 		}

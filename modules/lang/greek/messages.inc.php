@@ -2809,6 +2809,8 @@ $langCheckPublicTools = "
 		Για λόγους ασφάλειας η πλατφόρμα σας ανακατεύθυνε αυτόματα στην αρχική σελίδα
 		για να συνδεθείτε ξανά.</p>
 ";
+$langWarnShibUser = "<p><b>Προειδοποίηση:</b> Επειδή η πιστοποίησή σας έγινε μέσω Shibboleth δεν έχετε αποσυνδεθεί από την πλατφόρμα!<br>Για να αποσυνδεθείτε θα πρέπει να κλείσετε τον browser σας.</p>";
+
 $langUserBriefcase = "Χαρτοφυλάκιο χρήστη";
 $langPersonalisedBriefcase = "Προσωπικό χαρτοφυλάκιο";
 $langCopyrightFooter="Copyright &copy; 2003-2009 GUnet";
