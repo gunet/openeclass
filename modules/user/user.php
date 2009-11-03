@@ -70,44 +70,33 @@ while ($numrows=mysql_fetch_array($result_numb)) {
 }
 
 $nameTools = $langAdminUsers;
-$tool_content = ""; //initialise $tool_content
+$tool_content = "";
 
 // IF PROF ONLY
-//  show  help link and  link to Add new  user and  management page of groups
+//  show  help link and  link to Add new user, search new user and  management page of groups
 if ($is_adminOfCourse) {
-
-	$tool_content .= "
-    <table width=\"99%\" align=\"left\" class=\"Users_Operations\">
-    <thead>
-    <tr>
-      <td width=\"50%\">&nbsp;<b>$langDumpUser $langCsv:</b>
-         <br>&nbsp;&nbsp;1.&nbsp;<a href=\"dumpuser2.php\">$langcsvenc2</a>
-         <br>&nbsp;&nbsp;2.&nbsp;<a href=\"dumpuser2.php?enc=1253\">$langcsvenc1</a>
-      </td>
-      <td width=\"50%\"><div align=\"right\"><a href=\"../group/group.php\">$langGroupUserManagement</a>&nbsp;</div></td>
-    </tr>
-    <tr>
-      <td>&nbsp;<b>$langAdd:</b>&nbsp; <a href=\"adduser.php\">$langOneUser</a>, <a href=\"muladduser.php\">$langManyUsers</a>, <a href=\"guestuser.php\">$langGUser</a>&nbsp;</td>
-      <td>&nbsp;</td>
-    </tr>
-    </thead>
-    </table>
-	<p>&nbsp;</p>";
+	$tool_content .= "<table width='99%' align='left' class='Users_Operations'><thead>
+	<tr>
+	<td colspan='3'>&nbsp;<b>$langDumpUser $langCsv:</b>
+	<br>&nbsp;&nbsp;1.&nbsp;<a href='dumpuser2.php'>$langcsvenc2</a>
+	&nbsp;&nbsp;2.&nbsp;<a href='dumpuser2.php?enc=1253'>$langcsvenc1</a>
+	</td>
+	</tr>
+	<tr>
+	<td width='20%'><a href='../group/group.php'><b>$langGroupUserManagement</a></b></td>
+	<td width='15%'><a href='searchuser.php'><b>$langSearchUser</b></a></td>
+	<td><b>$langAdd:</b>&nbsp; <a href='adduser.php'>$langOneUser</a>, <a href='muladduser.php'>$langManyUsers</a>, <a href='guestuser.php'>$langGUser</a>&nbsp;</td>
+	</tr></thead></table>";
 
 	// display number of users
-$tool_content .= "
-    <table width=\"99%\" class=\"FormData\" style=\"border: 1px solid #CAC3B5;\">
-    <tbody>
-    <tr>
-      <td class=\"odd\">
-        <p>$langThereAre <b>$teachers</b> $langTeachers, <b>$students</b> $langStudents, <b>$visitors</b> $langVisitors</p>
-        <p align=\"right\">$langTotal: <b>$countUser</b> $langUsers</p>
-      </td>
-    </tr>
-    </tbody>
-    </table>
-    <p>&nbsp;</p>";
-
+	$tool_content .= "<table width=\"99%\" class=\"FormData\" style=\"border: 1px solid #CAC3B5;\">
+	<tbody><tr>
+	<td class=\"odd\">
+	<p>$langThereAre <b>$teachers</b> $langTeachers, <b>$students</b> $langStudents, <b>$visitors</b> $langVisitors</p>
+	<div align=\"right\">$langTotal: <b>$countUser</b> $langUsers</div>
+	</td>
+	</tr></tbody>
+	</table><p>&nbsp;</p>";
 }	// if prof
 
 // give admin status
@@ -287,7 +276,7 @@ $result = mysql_query("SELECT user.user_id, user.nom, user.prenom, user.email, u
 while ($myrow = mysql_fetch_array($result)) {
 	// bi colored table
 	if ($i%2 == 0) {
-		$tool_content .= "<tr>";		
+		$tool_content .= "<tr>";
 	} else {
 		$tool_content .= "<tr class=\"odd\">";
 	}
