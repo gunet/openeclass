@@ -153,7 +153,7 @@ if($is_adminOfCourse) {
 			AND `cours_user`.`code_cours`='$currentCourseID' AND $query
 			ORDER BY nom, prenom");
 		if (mysql_num_rows($result) == 0) {
-			$tool_content .= "<p class='caution_small'>$langNoUsersFound</p>\n";
+			$tool_content .= "<p class='caution_small'>$langNoUsersFound2</p>\n";
 		} else {
 			$tool_content .= "<table width=99% class=\"FormData\" style=\"border: 1px solid #CAC3B5;\">
 			<thead>
