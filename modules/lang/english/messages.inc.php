@@ -2128,6 +2128,7 @@ $langOneUser = "one user";
 $langManyUsers = "many users";
 $langGUser = "guest user";
 $langNoUsersFound = "No users were found with the details you entered - either no such users exist, or they are already registered in this course.";
+$langNoUsersFound2 = "No users were found with the details you entered";
 $langRegister = "Register user to course";
 $langAdded = "was registered to your course";
 $langAddError = "An error occured and the user was not added to your course. Please try again and if the problem persists, contact the system administrator.";
