@@ -166,7 +166,6 @@ switch ($stats) {
 		</tr>
 		</table></td></tr></table>";
 	break;
-		
 	case 'users':
 		$tool_content .= "<table width='99%' align='center'>
 		<thead><tr>
@@ -272,7 +271,7 @@ switch ($stats) {
 		$tool_content .= "</tr>".tablize($cu)."</table></td></tr></table>";
         break;
 	case 'memail':
-		$sqlLoginDouble = "SELECT DISTINCT email, count(*) AS nb FROM user GROUP BY email 
+		$sqlLoginDouble = "SELECT DISTINCT email, COUNT(*) AS nb FROM user GROUP BY email 
 			HAVING nb > 1 ORDER BY nb DESC";
 		$loginDouble = list_ManyResult($sqlLoginDouble);
 		$tool_content .= "<table width='99%' align='center'><thead><tr>
@@ -280,9 +279,6 @@ switch ($stats) {
 		<tr>
 		<th><b>$langMultipleAddr e-mail</b></th>
 		<th class='right'><strong>$langResult</strong></th>
-		</tr>
-		<tr>
-		<td colspan='2'><small><i>(".$sqlLoginDouble.")</i></small></td>
 		</tr>";
 		if (count($loginDouble) > 0) {
 			$tool_content .= tablize($loginDouble);
@@ -305,8 +301,7 @@ switch ($stats) {
 			<tr>
 			<th><b>$langMultiplePairs LOGIN - PASS</b></th>
 			<th class='right'><b>$langResult</b></td>
-			</tr>
-			<tr><td colspan='2'><small><i>(".$sqlLoginDouble.")</i></small></td></tr>";
+			</tr>";
 		if (count($loginDouble) > 0) {
 			$tool_content .=  tablize($loginDouble);
 			$tool_content .= "<tr><td class='right' colspan='2'>";
@@ -342,8 +337,6 @@ function tablize($table) {
 				case '0': $key = $langClosed; break;
 				case '1'; $key = $langTypesRegistration; break;
 				case '2': $key = $langOpen; break;
-				case '5': $key = $langStudents; break;
-				case '10': $key = $langGuest; break;
 				case 'pre': $key = $langPre; break;
 				case 'post': $key = $langPost; break;
 				case 'other': $key = $langOther; break;
