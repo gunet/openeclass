@@ -234,11 +234,6 @@ if (isset($c)) {
   <tr>
     <td><a href=\"addusertocours.php?c=".htmlspecialchars($c)."".$searchurl."\">".$langAdminUsers."</a></td>
   </tr>";
-  // Course statistics
-	$tool_content .= "
-  <tr>
-    <td>".$langStatsCourse."</td>
-  </tr>";
   // Backup course
 	$tool_content .= "
   <tr>

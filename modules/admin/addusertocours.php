@@ -151,12 +151,12 @@ function reverseAll(cbList) {
 	$sqll= "SELECT DISTINCT u.user_id , u.nom, u.prenom FROM user u
 		LEFT JOIN cours_user cu ON u.user_id = cu.user_id 
 		AND cu.code_cours = '".mysql_real_escape_string($_GET['c'])."'
-		WHERE cu.user_id is null";
+		WHERE cu.user_id is null ORDER BY nom";
 
 	$resultAll=mysql_query($sqll);
 	while ($myuser = mysql_fetch_array($resultAll))
 	{
-		$tool_content .= "<option value='$myuser[user_id]'>$myuser[prenom] $myuser[nom]</option>";
+		$tool_content .= "<option value='$myuser[user_id]'>$myuser[nom] $myuser[prenom]</option>";
 	}
 
 	$tool_content .= "</select></th>
@@ -192,12 +192,12 @@ function reverseAll(cbList) {
 				FROM user u, cours_user cu
 				WHERE cu.code_cours='".mysql_real_escape_string($_GET['c'])."'
 				AND cu.user_id=u.user_id
-				AND cu.statut=5");
+				AND cu.statut=5 ORDER BY nom");
 
 	$a=0;
 	while ($myStud = mysql_fetch_array($resultStud))
 		{
-		$tool_content .= "<option value=\"".$myStud['user_id']."\">$myStud[prenom] $myStud[nom]</option>";
+		$tool_content .= "<option value=\"".$myStud['user_id']."\">$myStud[nom] $myStud[prenom]</option>";
 		$a++;
 	}
 
@@ -212,10 +212,10 @@ function reverseAll(cbList) {
 				WHERE cu.code_cours='".mysql_real_escape_string($_GET['c'])."'
 				AND cu.user_id=u.user_id
 				AND cu.statut=1
-				AND u.user_id!='".$uid."'");
+				AND u.user_id!='$uid' ORDER BY nom");
 	$a=0;
 	while ($myProf = mysql_fetch_array($resultProf)) {
-		$tool_content .= "<option value=\"".$myProf['user_id']."\">$myProf[prenom] $myProf[nom]</option>";
+		$tool_content .= "<option value=\"".$myProf['user_id']."\">$myProf[nom] $myProf[prenom]</option>";
 		$a++;
 	}
 	$tool_content .= "</select></th></tr><tr><td>&nbsp;</td>
