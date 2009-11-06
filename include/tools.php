@@ -142,7 +142,7 @@ function getToolsArray($cat) {
 	return $result;
 
 }
-//
+
 
 /**
  * Function loggedInMenu
@@ -262,14 +262,9 @@ function loggedOutMenu(){
 	$arrMenuType['type'] = 'none';
 	$arrMenuType['text'] = 'none';
 	array_push($sideMenuSubGroup, $arrMenuType);
-
 	array_push($sideMenuText, $GLOBALS['langListCourses']);
 	array_push($sideMenuLink, $urlServer."modules/auth/listfaculte.php");
 	array_push($sideMenuImg, "black-arrow1.gif");
-
-	$newuser = ($is_eclass_unique==1)?'newuser.php':'newuser_info.php';
-	$newprof = ($is_eclass_unique==1)?'newprof.php':'newprof_info.php';
-
 	array_push($sideMenuText, $GLOBALS['langNewUser']);
 	array_push($sideMenuLink, $urlServer."modules/auth/registration.php");
 	array_push($sideMenuImg, "black-arrow1.gif");

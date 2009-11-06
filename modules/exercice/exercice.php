@@ -52,11 +52,11 @@ $nameTools = $langExercices;
 /*******************************/
 /* Clears the exercise session */
 /*******************************/
-if(session_is_registered('objExercise'))	{ session_unregister('objExercise');	}
-if(session_is_registered('objQuestion'))	{ session_unregister('objQuestion');	}
-if(session_is_registered('objAnswer'))		{ session_unregister('objAnswer');	}
-if(session_is_registered('questionList'))	{ session_unregister('questionList');	}
-if(session_is_registered('exerciseResult'))	{ session_unregister('exerciseResult');	}
+if (isset($_SESSION['objExercise']))  { unset($_SESSION['objExercise']); }
+if (isset($_SESSION['objQuestion']))  { unset($_SESSION['objQuestion']); }
+if (isset($_SESSION['objAnswer']))  { unset($_SESSION['objAnswer']); }
+if (isset($_SESSION['questionList']))  { unset($_SESSION['questionList']); }
+if (isset($_SESSION['exerciseResult']))  { unset($_SESSION['exerciseResult']); }
 
 $is_allowedToEdit=$is_adminOfCourse;
 

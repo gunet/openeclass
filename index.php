@@ -76,18 +76,70 @@ if (!isset($selectResult)) {
 //if platform admin allows usage of eclass personalised
 //create a session so that each user can activate it for himself.
 if (isset($persoIsActive)) {
-session_register("perso_is_active");
+	$_SESSION["perso_is_active"] = $persoIsActive;
 }
 
 // ------------------------------------------------------------------------
 // if we try to login... then authenticate user.
 // -----------------------------------------------------------------------
 $warning = '';
+if (isset($_SESSION['shib_uname'])) { // authenticate via shibboleth
+	$shib_uname = $_SESSION['shib_uname'];
+	$shib_email = $_SESSION['shib_email'];
+	$shib_nom = $_SESSION['shib_nom'];
+	if (strpos($shib_nom,';')) {
+		$temp = explode(';',$shib_nom);
+		$shib_nom_en = $temp[0];
+		$shib_nom = $temp[1];
+	}
+	$sqlLogin= "SELECT user_id, nom, username, password, prenom, statut, email, iduser is_admin, perso, lang
+                FROM user LEFT JOIN admin
+                ON user.user_id = admin.iduser
+                WHERE username='".$shib_uname."'";
+	$r = db_query($sqlLogin); 
+	if (mysql_num_rows($r) > 0) { // if shibboleth user found 
+		while ($myrow = mysql_fetch_array($r)) {
+			// update user information
+			db_query("UPDATE user SET nom = '$shib_nom', prenom = '$shib_nom', email = '$shib_email' WHERE username = '$shib_uname'");
+
+			$r2 = db_query($sqlLogin);
+			while ($myrow2 = mysql_fetch_array($r2)) {
+				$uid = $myrow2["user_id"];
+	                	$is_admin = $myrow2["is_admin"];
+        	        	$userPerso = $myrow2["perso"];
+				$nom = $myrow2["nom"];
+				$prenom = $myrow2["prenom"];
+				if (isset($_SESSION['langswitch'])) {
+	                		$language = $_SESSION['langswitch'];
+	        		} else {
+					$language = langcode_to_name($myrow["lang"]);
+				}
+			}
+		}	
+	} else { // else create him
+		db_query("INSERT INTO user SET nom='$shib_nom', prenom='$shib_nom', password='shibboleth', 
+			username='$shib_uname',email='$shib_email', statut=5, lang='el'");
+		$uid = mysql_insert_id();
+        	$userPerso = 'yes';
+		$prenom = $nom = $shib_nom;
+                $language = $_SESSION['langswitch'] = langcode_to_name('el');
+	}
+       	$_SESSION['uid'] = $uid;
+	$_SESSION['nom'] = $nom;
+	$_SESSION['prenom'] = $prenom;
+	$_SESSION['email'] = $shib_email;
+       	$_SESSION['statut'] = 5;
+        $_SESSION['is_admin'] = $is_admin;
+	$_SESSION['shib_user'] = 1; // now we are shibboleth user
+	$log='yes';
+} else { // normal authentication
+
 if (isset($_POST['uname'])) {
         $uname = escapeSimple(preg_replace('/ +/', ' ', trim($_POST['uname'])));
 } else {
         $uname = '';
 }
+
 $pass = isset($_POST['pass'])?$_POST['pass']:'';
 $submit = isset($_POST['submit'])?$_POST['submit']:'';
 $auth = get_auth_active_methods();
@@ -279,12 +331,11 @@ if(!empty($submit))
 	{
 		$warning = '';
 		$log='yes';
-		session_register('uid');
-		session_register('nom');
-		session_register('prenom');
-		session_register('email');
-		session_register('statut');
-		session_register('is_admin');
+		$_SESSION['nom'] = $nom;
+		$_SESSION['prenom'] = $prenom;
+		$_SESSION['email'] = $email;
+		$_SESSION['statut'] = $statut;
+		$_SESSION['is_admin'] = $is_admin;
 		$_SESSION['uid'] = $uid;
 		mysql_query("INSERT INTO loginout (loginout.idLog, loginout.id_user, loginout.ip, loginout.when, loginout.action)
                 VALUES ('', '$uid', '$_SERVER[REMOTE_ADDR]', NOW(), 'LOGIN')");
@@ -294,17 +345,17 @@ if(!empty($submit))
 	##[BEGIN personalisation modification]############
 	//if user has activated the personalised interface
 	//register a control session for it
-	if ((@$userPerso == "yes") && session_is_registered("perso_is_active")) {
-		session_register("user_perso_active");
+//	if ((@$userPerso == "yes") && session_is_registered("perso_is_active")) {
+	if (isset($_SESSION['perso_is_active'])) {
+		$_SESSION['user_perso_active'] = $userPerso;
 	}
 	##[END personalisation modification]############
 
-}  // end of user authentication
-
+	}  // end of user authentication
+} 
 
 if (isset($_SESSION['uid'])) $uid = $_SESSION['uid'];
 else unset($uid);
-
 //if the user logged in include the correct language files
 //in case he has a different language set in his/her profile
 if (isset($language)) {
@@ -313,17 +364,14 @@ if (isset($language)) {
 }
 $nameTools = $langWelcomeToEclass;
 
-
 //----------------------------------------------------------------
 // if login succesful display courses lists
 // --------------------------------------------------------------
-
 if (isset($uid) AND !isset($logout)) {
 	$nameTools = $langWelcomeToPortfolio;
 	$require_help = true;
 	$helpTopic="Portfolio";
-
-	if (!session_is_registered("user_perso_active")) {
+	if (isset($_SESSION['user_perso_active']) and $_SESSION['user_perso_active'] == 'no') {
 		if (!check_guest()){
 			//if the user is not a guest, load classic view
 			include("logged_in_content.php");
@@ -365,7 +413,6 @@ elseif ((isset($logout) && $logout && isset($uid)) OR (1==1)) {
 		unset($statut);
 		session_destroy();
 	}
-
 	$require_help = true;
 	$helpTopic="Init";
 	include("logged_out_content.php");

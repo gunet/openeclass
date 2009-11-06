@@ -35,7 +35,6 @@ $tool_content = "";
 check_uid();
 $nameTools = $langModifProfile;
 check_guest();
-
 $allow_username_change = !get_config('block-username-change');
 
 if (isset($submit) && (!isset($ldap_submit)) && !isset($changePass)) {
@@ -88,9 +87,12 @@ if (isset($submit) && (!isset($ldap_submit)) && !isset($changePass)) {
 	        SET nom='$nom_form', prenom='$prenom_form',
 	        username='$username_form', email='$email_form', am='$am_form',
 	            perso='$persoStatus', lang='$langcode'
-	        WHERE user_id='".$_SESSION["uid"]."'")){
-		header("location:". $_SERVER['PHP_SELF']."?msg=1");
-		exit();
+	        WHERE user_id='".$_SESSION["uid"]."'")) {
+			if (isset($_SESSION['user_perso_active']) and $persoStatus == "no") {
+                		unset($_SESSION['user_perso_active']);
+			}
+			header("location:". $_SERVER['PHP_SELF']."?msg=1");
+			exit();
 	        }
 	}
 }	// if submit
@@ -102,7 +104,10 @@ if (isset($submit) && isset($ldap_submit) && ($ldap_submit == "ON")) {
 
 	mysql_query("UPDATE user SET perso = '$persoStatus',
 		lang = '$langcode' WHERE user_id='".$_SESSION["uid"]."' ");
-	if (session_is_registered("user_perso_active") && $persoStatus=="no") session_unregister("user_perso_active");
+	
+	if (isset($_SESSION['user_perso_active']) and $persoStatus == "no") {
+		unset($_SESSION['user_perso_active']);
+	}
 
 	header("location:". $_SERVER['PHP_SELF']."?msg=1");
 	exit();
@@ -180,29 +185,30 @@ if ($persoStatus == "yes")  {
 
 ##[END personalisation modification]############
 
-session_unregister("uname");
-session_unregister("pass");
-session_unregister("nom");
-session_unregister("prenom");
+unset($_SESSION['uname']);
+unset($_SESSION['pass']);
+unset($_SESSION['nom']);
+unset($_SESSION['prenom']);
 
-$uname = $username_form;
-$pass = $password_form;
-$nom = $nom_form;
-$prenom = $prenom_form;
-
-session_register("uname");
-session_register("pass");
-session_register("nom");
-session_register("prenom");
+$_SESSION['uname'] = $username_form;
+$_SESSION['pass'] = $password_form;
+$_SESSION['nom'] = $nom_form;
+$_SESSION['prenom'] = $prenom_form;
 
 ##[BEGIN personalisation modification]############IT DOES NOT UPDATE THE DB!!!
-if ($persoStatus=="yes" && session_is_registered("perso_is_active")) session_register("user_perso_active");
-if ($persoStatus=="no" && session_is_registered("perso_is_active")) session_unregister("user_perso_active");
+if (isset($_SESSION['perso_is_active'])) {
+	if ($persoStatus == "no") {
+		$_SESSION['user_perso_active'] = TRUE;
+	} else {
+		unset($_SESSION['user_perso_active']);
+	}
+}
+
 ##[END personalisation modification]############
 
 $sec = $urlSecure.'modules/profile/profile.php';
 $passurl = $urlSecure.'modules/profile/password.php';
-$authmethods = array("imap","pop3","ldap","db");
+$authmethods = array("imap","pop3","ldap","db","shibboleth");
 
 if ((!isset($changePass)) || isset($_POST['submit'])) {
 	$tool_content .= "<div id=\"operations_container\"><ul id=\"opslist\">";
@@ -211,18 +217,30 @@ if ((!isset($changePass)) || isset($_POST['submit'])) {
 	}
 	$tool_content .= " <li><a href='../unreguser/unreguser.php'>$langUnregUser</a></li>";
 	$tool_content .= "</ul></div>";
-	$tool_content .= "
-<form method=\"post\" action=\"$sec?submit=yes\"><br/>
+	$tool_content .= "<form method=\"post\" action=\"$sec?submit=yes\"><br/>
     <table width=\"99%\">
-    <tbody>
+    <tbody><tr>
+       <th width=\"220\" class='left'>$langName</th>";
+
+	if (isset($_SESSION['shib_user'])) {
+                $auth_text = "Shibboleth user";
+		$tool_content .= "<td class=\"caution_small\">&nbsp;&nbsp;&nbsp;&nbsp;<b>".$prenom_form."</b> [".$auth_text."]
+	        <input type=\"hidden\" name=\"prenom_form\" value=\"$prenom_form\"></td>";
+	} else {
+		$tool_content .= "<td><input class='FormData_InputText' type=\"text\" size=\"40\" name=\"prenom_form\" value=\"$prenom_form\"></td>";
+	}
+	
+	$tool_content .= "</tr>
     <tr>
-       <th width=\"220\" class='left'>$langName</th>
-       <td><input class='FormData_InputText' type=\"text\" size=\"40\" name=\"prenom_form\" value=\"$prenom_form\"></td>
-    </tr>
-    <tr>
-       <th class='left'>$langSurname</th>
-       <td><input class='FormData_InputText' type=\"text\" size=\"40\" name=\"nom_form\" value=\"$nom_form\"></td>
-    </tr>";
+       <th class='left'>$langSurname</th>";
+	if (isset($_SESSION['shib_user'])) {
+                $auth_text = "Shibboleth user";
+		$tool_content .= "<td class=\"caution_small\">&nbsp;&nbsp;&nbsp;&nbsp;<b>".$nom_form."</b> [".$auth_text."]
+                <input type=\"hidden\" name=\"nom_form\" value=\"$nom_form\"></td>";
+	} else {
+       		$tool_content .= "<td><input class='FormData_InputText' type=\"text\" size=\"40\" name=\"nom_form\" value=\"$nom_form\"></td>";
+	}
+    $tool_content .= "</tr>";
 
 	if(!in_array($password_form,$authmethods) and $allow_username_change) {
 		$tool_content .= "<tr>
@@ -240,7 +258,11 @@ if ((!isset($changePass)) || isset($_POST['submit'])) {
 			case "db": $auth=5;break;
 			default: $auth=1;break;
 		}
-		$auth_text = get_auth_info($auth);
+		if (isset($_SESSION['shib_user'])) {
+			$auth_text = "Shibboleth user";
+		} else {
+			$auth_text = get_auth_info($auth);
+		}
 		$tool_content .= "
     <tr>
       <th class='left'>".$langUsername. "</th>
@@ -250,20 +272,21 @@ if ((!isset($changePass)) || isset($_POST['submit'])) {
     </tr>";
 	}
 
-	$tool_content .= "
-    <tr>
-        <th class='left'>$langEmail</th>
-        <td><input class='FormData_InputText' type=\"text\" size=\"40\" name=\"email_form\" value=\"$email_form\"></td>
-    <tr>
+	$tool_content .= "<tr><th class='left'>$langEmail</th>";
+
+	if (isset($_SESSION['shib_user'])) {
+        	$tool_content .= "<td class=\"caution_small\">&nbsp;&nbsp;&nbsp;&nbsp;<b>".$email_form."</b> [".$auth_text."]
+                <input type=\"hidden\" name=\"email_form\" value=\"$email_form\"></td>";
+	} else {
+		$tool_content .= "<td><input class='FormData_InputText' type=\"text\" size=\"40\" name=\"email_form\" value=\"$email_form\"></td>";
+	}
+    $tool_content .= "</tr><tr>
         <th class='left'>$langAm</th>
         <td><input class='FormData_InputText' type=\"text\" size=\"40\" name=\"am_form\" value=\"$am_form\"></td>
     </tr>";
 	##[BEGIN personalisation modification]############
-	if (session_is_registered("perso_is_active")) {
-		$tool_content .= "
-    <tr>
-      <th class='left'>$langPerso</th>
-      <td>
+	if (isset($_SESSION['perso_is_active'])) {
+		$tool_content .= "<tr><th class='left'>$langPerso</th><td>
 		<input class='FormData_InputText' type=radio name='persoStatus' value='no' $checkedPerso>$langModern&nbsp;
 		<input class='FormData_InputText' type=radio name='persoStatus' value='yes' $checkedClassic>$langClassic
 		</td>

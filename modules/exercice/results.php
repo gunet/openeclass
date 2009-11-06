@@ -46,9 +46,7 @@ $nameTools = $langResults;
 
 include('../../include/lib/textLib.inc.php');
 $picturePath='../../courses/'.$currentCourseID.'/image';
-
 $is_allowedToEdit=$is_adminOfCourse;
-$dbNameGlu=$currentCourseID;
 
 $TBL_EXERCICE_QUESTION='exercice_question';
 $TBL_EXERCICES='exercices';
@@ -58,7 +56,7 @@ $TBL_REPONSES='reponses';
 $navigation[]=array("url" => "exercice.php","name" => $langExercices);
 
 // if the object is not in the session
-if(!session_is_registered('objExercise')) {
+if(!isset($_SESSION['objExercise'])) {
 	// construction of Exercise
 	$objExercise=new Exercise();
 	// if the specified exercise doesn't exist or is disabled
@@ -68,7 +66,7 @@ if(!session_is_registered('objExercise')) {
 		exit();
 	}
 	// saves the object into the session
-	session_register('objExercise');
+	$_SESSION['objExercise'] = $objExercise;
 }
 
 $exerciseTitle=$objExercise->selectTitle();

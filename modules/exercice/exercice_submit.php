@@ -46,9 +46,7 @@ $tool_content = "";
 
 $nameTools = $langExercicesView;
 $picturePath='../../courses/'.$currentCourseID.'/image';
-
 $is_allowedToEdit=$is_adminOfCourse;
-$dbNameGlu=$currentCourseID;
 
 $TBL_EXERCICE_QUESTION='exercice_question';
 $TBL_EXERCICES='exercices';
@@ -57,7 +55,8 @@ $TBL_REPONSES='reponses';
  
 if (isset($exerciseId)) {
 	// security check 
-	$active = mysql_fetch_array(db_query("SELECT active FROM `$TBL_EXERCICES` WHERE id='$exerciseId'", $currentCourseID));
+	$active = mysql_fetch_array(db_query("SELECT active FROM `$TBL_EXERCICES` 
+		WHERE id='$exerciseId'", $currentCourseID));
 	if (($active['active'] == 0) and (!$is_allowedToEdit)) {
 		header('Location: exercice.php');
 		exit();
@@ -80,7 +79,6 @@ if (isset($formSent)) {
 	$CurrentAttempt = mysql_fetch_array(db_query("SELECT COUNT(*) FROM exercise_user_record 
 		WHERE eid='$eid_temp' AND uid='$uid'", $currentCourseID));
 	++$CurrentAttempt[0];
-
 	if (($exerciseAllowedAttemtps == 0) or ($CurrentAttempt[0] <= $exerciseAllowedAttemtps)) { // if it is allowed
 		if (isset($exerciseTimeConstrain) and $exerciseTimeConstrain != 0) { 
 			$exerciseTimeConstrain = $exerciseTimeConstrain*60;
@@ -94,7 +92,7 @@ if (isset($formSent)) {
 			} 
 		}
 		$RecordEndDate = date("Y-m-d H:i:s", time());
-		if (($exerciseType == 1) or (($exerciseType == 2) and ($nbrQuestions == $questionNum))) { // record results
+		if (($exerciseType == 1) or (($exerciseType == 2) and ($nbrQuestions == $questionNum))) { // record
 			mysql_select_db($currentCourseID); 
 			$sql="INSERT INTO exercise_user_record(eid, uid, RecordStartDate, RecordEndDate, attempt)
 				VALUES ('$eid_temp','$uid','$RecordStartDate','$RecordEndDate', 1)";
@@ -124,7 +122,6 @@ if (isset($formSent)) {
 		} else {
 			// gets the question ID from $choice. It is the key of the array
 			list($key)=array_keys($choice);
-
 			// if the user didn't already answer this question
 			if(!isset($exerciseResult[$key])) {
 				// stores the user answer into the array
@@ -134,7 +131,7 @@ if (isset($formSent)) {
 	}
 
 	// the script "exercise_result.php" will take the variable $exerciseResult from the session
-	session_register('exerciseResult'); 
+	$_SESSION['exerciseResult'] = $exerciseResult;
 
 	// if it is the last question (only for a sequential exercise)
 	if($exerciseType == 1 || $questionNum >= $nbrQuestions) {
@@ -148,19 +145,17 @@ if (!add_units_navigation()) {
 }
 
 // if the object is not in the session
-if(!session_is_registered('objExercise')) {
+if(!isset($_SESSION['objExercise'])) {
 	// construction of Exercise
 	$objExercise=new Exercise();
-
 	// if the specified exercise doesn't exist or is disabled
-	if(!$objExercise->read($exerciseId) && (!$is_allowedToEdit))
-		{
+	if(!$objExercise->read($exerciseId) && (!$is_allowedToEdit)) {
 		$tool_content .= $langExerciseNotFound;
 		draw($tool_content, 2, 'exercice');
 		exit();
 	}
 	// saves the object into the session
-	session_register('objExercise');
+	$_SESSION['objExercise'] = $objExercise;
 }
 
 $exerciseTitle=$objExercise->selectTitle();
@@ -172,11 +167,11 @@ $exerciseAllowedAttemtps=$objExercise->selectAttemptsAllowed();
 $eid_temp = $objExercise->selectId();
 
 $RecordStartDate = date("Y-m-d H:i:s", time());
-if(!session_is_registered('questionList')) {
+if (!isset($_SESSION['questionList'])) {
 	// selects the list of question ID
 	$questionList=$randomQuestions?$objExercise->selectRandomList():$objExercise->selectQuestionList();
 	// saves the question list into the session
-	session_register('questionList');
+	$_SESSION['questionList'] = $questionList;
 }
 
 $nbrQuestions=sizeof($questionList);
