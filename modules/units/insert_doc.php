@@ -80,7 +80,7 @@ function display_docs()
                                  $parenthtml . "</tr>\n" .
                                  "<tr><th>$m[type]</th><th>$langName</th><th>$langSize</th>" .
                                  "<th>$langDate</th><th>$langChoice</th></tr>\n";
-
+	$counter = 0;
 		foreach (array(true, false) as $is_dir) {
 			foreach ($fileinfo as $entry) {
 				if ($entry['is_dir'] != $is_dir) {
@@ -105,7 +105,11 @@ function display_docs()
 				if ($entry['visible'] == 'i') { 
 					$vis = 'invisible';
 				} else {
-					$vis = '';
+						if ($counter % 2 == 0) {
+							$vis = '';
+						} else {
+							$vis = 'odd';
+						}
 				}
 				$tool_content .= "<tr class='$vis'>";
 				$tool_content .= "<td width='1%' valign='top' style='padding-top: 7px;' align='center'>
@@ -130,6 +134,7 @@ function display_docs()
 				}
 					$tool_content .= "<td class='center'><input type='checkbox' name='document[]' value='$entry[id]' /></td>";
 					$tool_content .= "</tr>";
+				$counter++;
 			}
 		}
 		$tool_content .= "<tr><td colspan=$colspan class='right'>";

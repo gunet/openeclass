@@ -48,12 +48,16 @@ function display_lp()
                                  "<div class='fileman'><table class='Documents'><tbody>" .
                                  "<tr><th width='60%'>$langLearningPaths</th><th width='40%'>$langComments</th>" .
                                  "<th>$langChoice</th></tr>\n";
-
+			$i = 0;
 			foreach ($lpinfo as $entry) {
 				if ($entry['visibility'] == 'HIDE') { 
 					$vis = 'invisible';
 				} else {
-					$vis = '';
+						if ($i%2 == 0) {
+							$vis = '';
+					} else {
+							$vis = 'odd';
+					}
 				}
 				$tool_content .= "<tr class='$vis'>";
 				$tool_content .= "<td valign='top' style='padding-top: 7px;' align='left'>
@@ -61,6 +65,7 @@ function display_lp()
 				$tool_content .= "<td><div align='left'>$entry[comment]</div></td>";
 				$tool_content .= "<td align='center'><input type='checkbox' name='lp[]' value='$entry[id]'></td>";
 				$tool_content .= "</tr>";
+				$i++;
 			}
 		$tool_content .= "<tr><td colspan='3' class='right'>";
 		$tool_content .= "<input type='submit' name='submit_lp' value='$langAddModulesButton'></td>";

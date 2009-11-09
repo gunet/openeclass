@@ -47,12 +47,16 @@ function display_exercises()
                                  "<div class='fileman'><table class='Documents'><tbody>" .
                                  "<tr><th width='60%'>$langExercices</th><th width='40%'>$langComments</th>" .
                                  "<th>$langChoice</th></tr>\n";
-
+		$i = 0;
 		foreach ($quizinfo as $entry) {
 			if ($entry['visibility'] == '0') { 
 				$vis = 'invisible';
 			} else {
-				$vis = '';
+				if ($i%2 == 0) {
+              $vis = '';
+          } else {
+              $vis = 'odd';
+          }
 			}
 			$tool_content .= "<tr class='$vis'>";
 			$tool_content .= "<td valign='top' style='padding-top: 7px;' align='left'>
@@ -60,6 +64,7 @@ function display_exercises()
 			$tool_content .= "<td><div align='left'>$entry[comment]</div></td>";
 			$tool_content .= "<td align='center'><input type='checkbox' name='exercise[]' value='$entry[id]'></td>";
 			$tool_content .= "</tr>";
+			$i++;
 		}
 		$tool_content .= "<tr><td colspan='3' class='right'>";
 		$tool_content .= "<input type='submit' name='submit_exercise' value='$langAddModulesButton'></td>";
