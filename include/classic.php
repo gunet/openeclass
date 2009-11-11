@@ -35,6 +35,10 @@
  *
  */
 
+if (!defined('INDEX_START')) {
+	die("Action not allowed!");
+}
+
 include("./include/lib/textLib.inc.php");
 include("./include/phpmathpublisher/mathpublisher.php");
 
@@ -91,9 +95,8 @@ while ($mycours = mysql_fetch_array($result2)) {
 <br />";
 
 }  else  {
-           if ($_SESSION['statut'] == '5')  // if we are login for first time
-           $tool_content .= "
-    <p>$langWelcomeStud</p>\n";
+	if ($_SESSION['statut'] == '5')  // if we are login for first time
+		$tool_content .= "<p>$langWelcomeStud</p>\n";
 } // end of if (if we are student)
 
 // second case check in which courses are registered as a professeror
@@ -234,6 +237,5 @@ $tool_content .= "
 </tr>
 </table>
 <br />";
-//$tool_content .= "\n    </table>\n    </div>";
 session_register('status');
 ?>

@@ -1,4 +1,4 @@
-<?php
+<?
 /*========================================================================
 *   Open eClass 2.1
 *   E-learning and Course Management System
@@ -36,7 +36,11 @@
  *
  */
 
-include("redirector.php");
+if (!defined('INDEX_START')) {
+	die("Action not allowed!");
+}
+
+include "redirector.php";
 //Check for lessons that the user is a professor
 $result2 = mysql_query("SELECT cours.code k, cours.fake_code c, cours.intitule i, cours.titulaires t, cours_user.statut s FROM cours, cours_user WHERE cours.code=cours_user.code_cours
 	AND cours_user.user_id='".$uid."' AND cours_user.statut='1' ORDER BY cours.intitule, cours.titulaires");

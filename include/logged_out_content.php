@@ -40,6 +40,10 @@
  *
  */
 
+if (!defined('INDEX_START')) {
+	die("Action not allowed!");
+}
+
 //query for greek announcements
 $sql_el ="SELECT `date`, `gr_title` , `gr_body` , `gr_comment`
 		FROM `admin_announcements`

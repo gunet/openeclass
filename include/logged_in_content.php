@@ -34,10 +34,12 @@
  * user is logged in
  *
  */
+if (!defined('INDEX_START')) {
+	die ("Action not allowed!");
+}
 
 $tool_content = "";
-
-include ("perso.php");
+include "perso.php";
 
 $tool_content = "
 <div id=\"leftnav_perso\">

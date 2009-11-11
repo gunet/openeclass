@@ -37,10 +37,11 @@
 *               HOME PAGE OF ECLASS		               *
 ****************************************************************
 */
+define ("INDEX_START", 1);
 $guest_allowed = true;
-$path2add=0;
-include("include/baseTheme.php");
-include("./modules/auth/auth.inc.php");
+$path2add = 0;
+include "include/baseTheme.php";
+include "modules/auth/auth.inc.php";
 
 //$homePage is used by baseTheme.php to parse correctly the breadcrumb
 $homePage = true;
@@ -188,9 +189,8 @@ if(!empty($submit))
                                                                 $statut = $myrow["statut"];
                                                                 $email = $myrow["email"];
                                                                 $is_admin = $myrow["is_admin"];
-                                                                $userPerso = $myrow["perso"];//user perso flag
-                                                                $language = $_SESSION['langswitch'] = langcode_to_name($myrow["lang"]);//user preferred language
-								
+                                                                $userPerso = $myrow["perso"];
+                                                                $language = $_SESSION['langswitch'] = langcode_to_name($myrow["lang"]);
                                                                 $auth_allow = 1;
                                                         }
                                                         else
@@ -222,40 +222,39 @@ if(!empty($submit))
                                                 default: break;
                                         }
                                         $auth_method_settings = get_auth_settings($auth);
-                                        if($myrow['password']==$auth_method_settings['auth_name'])
+                                        if($myrow['password'] == $auth_method_settings['auth_name'])
                                         {
                                                 switch($auth)
                                                 {
-                                                        case '2':	$pop3host = str_replace("pop3host=","",$auth_method_settings['auth_settings']);
+                                                        case '2': $pop3host = str_replace("pop3host=","",$auth_method_settings['auth_settings']);
                                                         break;
-                                                        case '3':	$imaphost = str_replace("imaphost=","",$auth_method_settings['auth_settings']);
+                                                        case '3': $imaphost = str_replace("imaphost=","",$auth_method_settings['auth_settings']);
                                                         break;
-                                                        case 4:	$ldapsettings = $auth_method_settings['auth_settings'];
+                                                        case 4: $ldapsettings = $auth_method_settings['auth_settings'];
                                                         $ldap = explode("|",$ldapsettings);
-                                                        $ldaphost = str_replace("ldaphost=","",$ldap[0]);	//ldaphost
-                                                        $ldapbind_dn = str_replace("ldapbind_dn=","",$ldap[1]);	//ldapbase_dn
-                                                        $ldapbind_user = str_replace("ldapbind_user=","",$ldap[2]);	//ldapbind_user
-                                                        $ldapbind_pw = str_replace("ldapbind_pw=","",$ldap[3]);		// ldapbind_pw
+                                                        $ldaphost = str_replace("ldaphost=","",$ldap[0]); //ldaphost
+                                                        $ldapbind_dn = str_replace("ldapbind_dn=","",$ldap[1]); //ldapbase_dn
+                                                        $ldapbind_user = str_replace("ldapbind_user=","",$ldap[2]); //ldapbind_user
+                                                        $ldapbind_pw = str_replace("ldapbind_pw=","",$ldap[3]); // ldapbind_pw
                                                         break;
-                                                        case 5:	$dbsettings = $auth_method_settings['auth_settings'];
+                                                        case 5: $dbsettings = $auth_method_settings['auth_settings'];
                                                         $edb = explode("|",$dbsettings);
-                                                        $dbhost = str_replace("dbhost=","",$edb[0]);	//dbhost
-                                                        $dbname = str_replace("dbname=","",$edb[1]);	//dbname
-                                                        $dbuser = str_replace("dbuser=","",$edb[2]);//dbuser
-                                                        $dbpass = str_replace("dbpass=","",$edb[3]);// dbpass
-                                                        $dbtable = str_replace("dbtable=","",$edb[4]);//dbtable
+                                                        $dbhost = str_replace("dbhost=","",$edb[0]); //dbhost
+                                                        $dbname = str_replace("dbname=","",$edb[1]); //dbname
+                                                        $dbuser = str_replace("dbuser=","",$edb[2]); //dbuser
+                                                        $dbpass = str_replace("dbpass=","",$edb[3]); // dbpass
+                                                        $dbtable = str_replace("dbtable=","",$edb[4]); //dbtable
                                                         $dbfielduser = str_replace("dbfielduser=","",$edb[5]);//dbfielduser
                                                         $dbfieldpass = str_replace("dbfieldpass=","",$edb[6]);//dbfieldpass
                                                         break;
                                                         default:
-                                                                break;
+							break;
                                                 }
-
                                                 $is_valid = auth_user_login($auth,$uname,$pass);
                                                 if($is_valid)
                                                 {
-                                                        $is_active = check_activity($myrow["user_id"]);	// check if the account is active
-                                                        if($myrow["user_id"]==$myrow["is_admin"]) // always the admin is active
+                                                        $is_active = check_activity($myrow["user_id"]);
+                                                        if($myrow["user_id"] == $myrow["is_admin"]) // always the admin is active
                                                         {
                                                                 $is_active = 1;
                                                         }
@@ -273,7 +272,7 @@ if(!empty($submit))
                                                 {
                                                         $auth_allow = 2;
                                                 }
-                                                if($auth_allow==1)
+                                                if($auth_allow == 1)
                                                 {
                                                         $uid = $myrow["user_id"];
                                                         $nom = $myrow["nom"];
@@ -281,14 +280,14 @@ if(!empty($submit))
                                                         $statut = $myrow["statut"];
                                                         $email = $myrow["email"];
                                                         $is_admin = $myrow["is_admin"];
-                                                        $userPerso = $myrow["perso"];//user perso flag
-                                                        $language = $_SESSION['langswitch'] = langcode_to_name($myrow["lang"]);//user preferred language
+                                                        $userPerso = $myrow["perso"];
+                                                        $language = $_SESSION['langswitch'] = langcode_to_name($myrow["lang"]);
                                                 }
-                                                elseif($auth_allow==2)
+                                                elseif($auth_allow == 2)
                                                 {
                                                         continue;
                                                 }
-                                                elseif($auth_allow==3)
+                                                elseif($auth_allow == 3)
                                                 {
                                                         continue;
                                                 }
@@ -302,13 +301,13 @@ if(!empty($submit))
                                         {
                                                 $warning .= "<br>$langInvalidAuth<br>";
                                         }
-                                }
+				} // end of alternative authentication  
                         }
                         else
                         {
                                 $tool_content .= "<br>$langInvalidAuth<br>";
                         }
-                }		// while
+		}// while
         }
 
 	if(empty($exists))
@@ -326,9 +325,7 @@ if(!empty($submit))
 			case 4 : $warning .= "<br /><font color='red'>". $langInvalidId . "</font><br />"; break;
 			default: break;
 		}
-	}
-	else
-	{
+	} else {
 		$warning = '';
 		$log='yes';
 		$_SESSION['nom'] = $nom;
@@ -339,7 +336,6 @@ if(!empty($submit))
 		$_SESSION['uid'] = $uid;
 		mysql_query("INSERT INTO loginout (loginout.idLog, loginout.id_user, loginout.ip, loginout.when, loginout.action)
                 VALUES ('', '$uid', '$_SERVER[REMOTE_ADDR]', NOW(), 'LOGIN')");
-
 	}
 
 	##[BEGIN personalisation modification]############
@@ -374,7 +370,7 @@ if (isset($uid) AND !isset($logout)) {
 	if (isset($_SESSION['user_perso_active']) and $_SESSION['user_perso_active'] == 'no') {
 		if (!check_guest()){
 			//if the user is not a guest, load classic view
-			include("logged_in_content.php");
+			include "include/logged_in_content.php";
 			draw($tool_content,1,null,null,null,null,$perso_tool_content);
 		} else {
 			//if the user is a guest send him straight to the corresponding lesson
@@ -386,13 +382,13 @@ if (isset($uid) AND !isset($logout)) {
 				header("location:".$urlServer."courses/$dbname/index.php");
 			} else { // if course has deleted stop guest account
 				$warning = "<br><font color='red'>".$langInvalidGuestAccount."</font><br>";
-				include("logged_out_content.php");
+				include "include/logged_out_content.php";
 				draw($tool_content, 0,'index');
 			}
 		}
 	} else {
 		//load classic view
-		include("classic.php");
+		include "include/classic.php";
 		draw($tool_content, 1, 'index');
 	}
 
@@ -415,7 +411,7 @@ elseif ((isset($logout) && $logout && isset($uid)) OR (1==1)) {
 	}
 	$require_help = true;
 	$helpTopic="Init";
-	include("logged_out_content.php");
+	include "include/logged_out_content.php";
 
 	draw($tool_content, 0,'index');
 
