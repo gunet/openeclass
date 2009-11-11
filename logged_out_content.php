@@ -1,4 +1,4 @@
-<?PHP
+<?
 /*========================================================================
 *   Open eClass 2.1
 *   E-learning and Course Management System
@@ -43,22 +43,21 @@
 //query for greek announcements
 $sql_el ="SELECT `date`, `gr_title` , `gr_body` , `gr_comment`
 		FROM `admin_announcements`
-		WHERE `visible` = \"V\" ORDER BY `date` DESC
-		";
+		WHERE `visible` = \"V\" ORDER BY `date` DESC";
 //query for english announcements
 $sql_en ="SELECT `date`, `en_title` , `en_body` , `en_comment`
 		FROM `admin_announcements`
-		WHERE `visible` = \"V\" ORDER BY `date` DESC
-		";
+		WHERE `visible` = \"V\" ORDER BY `date` DESC";
 
-if(session_is_registered('langswitch')) {
+if (isset($_SESSION['langswitch'])) {
 	$language = $_SESSION['langswitch'];
 }
 
-if ($language == "greek")
-		$sql = $sql_el;
-else
-		$sql = $sql_en;
+if ($language == "greek") {
+	$sql = $sql_el;
+} else {
+	$sql = $sql_en;
+}
 
 $tool_content .= <<<lCont
 <div id="container_login">
@@ -76,22 +75,16 @@ if (mysql_num_rows($result) > 0) {
 	while ($eclassAnnounce = mysql_fetch_array($result)) {
 		array_push($announceArr, $eclassAnnounce);
 	}
-	$tool_content .= "
-<br/>
-
-  <table width=\"99%\" class=\"AnnouncementsList\">
-  <thead>
-  <tr>
-    <th width=\"180\">$langAnnouncements</th>
-    <th>&nbsp;</th>
-  </tr>
-  </thead>
-  <tbody>";
+	$tool_content .= "<br/><table width='99%' class='AnnouncementsList'>
+	<thead>
+	<tr><th width='180'>$langAnnouncements</th><th>&nbsp;</th></tr>
+	</thead>
+	<tbody>";
 
 	$numOfAnnouncements = count($announceArr);
 
 	for($i=0; $i < $numOfAnnouncements; $i++) {
-		$tool_content .= "<tr><td colspan=\"2\">
+		$tool_content .= "<tr><td colspan='2'>
 		<img style='border:0px;' src='${urlAppend}/template/classic/img/arrow_grey.gif' title='bullet'>
 		<b>".$announceArr[$i][1]."</b>
 		(".greek_format($announceArr[$i][0]).")
@@ -101,9 +94,7 @@ if (mysql_num_rows($result) > 0) {
 		</td>
 		</tr>";
 	}
-	$tool_content .= "
-  </tbody>
-  </table>";
+	$tool_content .= "</tbody></table>";
 }
 
 $tool_content .= <<<lCont2

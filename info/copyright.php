@@ -30,9 +30,9 @@ $nameTools = $langCopyright;
 $tool_content = "";
 $tool_content .= "<p align=justify>$langCopyrightNotice</p>";
 
-if(session_is_registered('uid'))
+if (isset($_SESSION['uid'])) {
 	draw($tool_content,1);
-else
+} else {
 	draw($tool_content, 0);
-
+}
 ?>

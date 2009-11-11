@@ -1,4 +1,4 @@
-<?PHP
+<?
 /*========================================================================
 *   Open eClass 2.1
 *   E-learning and Course Management System
@@ -61,9 +61,9 @@ if (isset($toolContent_ErrorExists)) {
 	exit();
 }
 
-if (session_is_registered('errMessage') && strlen($_SESSION['errMessage']) > 0) {
+if (isset($_SESSION['errMessage']) && strlen($_SESSION['errMessage']) > 0) {
 	$extraMessage = $_SESSION['errMessage'];
-	session_unregister('errMessage');
+	unset($_SESSION['errMessage']);
 }
 
 include ($relPath . "template/template.inc");
@@ -192,36 +192,36 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 		//left and right bar.
 
 
-		if ($homePage && file_exists ( './eclass_home_extras_left.html' ) && ! session_is_registered ( 'uid' )) {
+		if ($homePage && file_exists('./eclass_home_extras_left.html') && !isset($_SESSION['uid'])) {
 			$s = file_get_contents ( $webDir . 'eclass_home_extras_left.html' );
 			$t->set_var ( 'ECLASS_HOME_EXTRAS_LEFT', $s );
 		}
 
-		if ($homePage && file_exists ( './eclass_home_extras_right.html' ) && ! session_is_registered ( 'uid' )) {
+		if ($homePage && file_exists('./eclass_home_extras_right.html') && !isset($_SESSION['uid'])) {
 			$s = file_get_contents ( $webDir . 'eclass_home_extras_right.html' );
 			$t->set_var ( 'ECLASS_HOME_EXTRAS_RIGHT', $s );
 		}
 
 		//show user's name and surname on the user bar
-		if (session_is_registered ( 'uid' ) && strlen ( $nom ) > 0) {
+		if (isset($_SESSION['uid']) && strlen ($nom) > 0) {
 			$t->set_var ( 'LANG_USER', $langUserHeader );
 			$t->set_var ( 'USER_NAME', $prenom );
 			$t->set_var ( 'USER_SURNAME', $nom . ", " );
 		}
 
 		//if user is logged in display the logout option
-		if (session_is_registered ( 'uid' )) {
-			$t->set_var ( 'LANG_LOGOUT', $langLogout );
+		if (isset($_SESSION['uid'])) {
+			$t->set_var ('LANG_LOGOUT', $langLogout);
 		}
 
 		//set the text and icon on the third bar (header)
 		if ($menuTypeID == 2) {
 			$t->set_var ( 'THIRD_BAR_TEXT', ellipsize($intitule, 64) );
 			$t->set_var ( 'THIRDBAR_LEFT_ICON', 'lesson_icon' );
-		} elseif (isset ( $langUserBriefcase ) && $menuTypeID > 0 && $menuTypeID < 3 && ! session_is_registered ( 'user_perso_active' )) {
+		} elseif (isset ( $langUserBriefcase ) && $menuTypeID > 0 && $menuTypeID < 3 && !isset($_SESSION['user_perso_active'])) {
 			$t->set_var ( 'THIRD_BAR_TEXT', $langUserBriefcase );
 			$t->set_var ( 'THIRDBAR_LEFT_ICON', 'briefcase_icon' );
-		} elseif (isset ( $langPersonalisedBriefcase ) && $menuTypeID > 0 && session_is_registered ( 'user_perso_active' )) {
+		} elseif (isset ( $langPersonalisedBriefcase ) && $menuTypeID > 0 && isset($_SESSION['user_perso_active'])) {
 			$t->set_var ( 'THIRD_BAR_TEXT', $langPersonalisedBriefcase );
 			$t->set_var ( 'THIRDBAR_LEFT_ICON', 'briefcase_icon' );
 		} elseif ($menuTypeID == 3) {
@@ -290,11 +290,11 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 		$t->set_block ( 'mainBlock', 'breadCrumbHomeBlock', 'breadCrumbHome' );
 
 		if ($statut != 10) {
-			if (! session_is_registered ( 'uid' ))
+			if (!isset($_SESSION['uid']))
 				$t->set_var ( 'BREAD_TEXT', $langHomePage );
-			elseif (session_is_registered ( 'uid' ) && session_is_registered ( 'user_perso_active' )) {
+			elseif (isset($_SESSION['uid']) && isset($_SESSION['user_perso_active'])) {
 				$t->set_var ( 'BREAD_TEXT', $langPersonalisedBriefcase );
-			} elseif (session_is_registered ( 'uid' ) && ! session_is_registered ( 'user_perso_active' )) {
+			} elseif (isset($_SESSION['uid']) && !isset($_SESSION['user_perso_active'])) {
 				$t->set_var ( 'BREAD_TEXT', $langUserBriefcase );
 			}
 
@@ -437,7 +437,6 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 		$t->parse ( 'main', 'mainBlock', false );
 		$t->pparse ( 'Output', 'fh' );
 	}
-	//	session_unregister('errMessage');
 }
 
 

@@ -61,7 +61,6 @@ if (isset($path2add) && $path2add == 0){
 
 // function library
 include $relPathLib . "lib/main.lib.php";
-
 //if session isn't started, start it. Needed by the language switch
 if (!session_id()) { session_start(); }
 
@@ -87,7 +86,7 @@ if (!isset($urlSecure)) {
 }
 
 // load the correct language (Author: Evelthon Prodromou)
-if (session_is_registered('langswitch')) {
+if (isset($_SESSION['langswitch'])) {
 	$language = $_SESSION['langswitch'];
 }
 
@@ -171,14 +170,14 @@ if (isset($require_current_course) and $require_current_course) {
 			$departmentUrlName= $theCourse["departmentUrlName"];
 			$visible = $theCourse['visible'];
 			// New variables
-			$currentCourseCode	= $fake_code ;
-			$currentCourseID	= $code_cours;
-			$currentCourseName	= $intitule;
-			$currentCourseDepartment	= $fac;
-			$currentCourseTitular 	= $titulaires;
-			$currentCourseLanguage		= $languageInterface;
-			$currentCourseDepartmentUrl	= $departmentUrl;
-			$currentCourseDepartmentUrlName	= $departmentUrlName;
+			$currentCourseCode = $fake_code ;
+			$currentCourseID = $code_cours;
+			$currentCourseName = $intitule;
+			$currentCourseDepartment = $fac;
+			$currentCourseTitular = $titulaires;
+			$currentCourseLanguage = $languageInterface;
+			$currentCourseDepartmentUrl = $departmentUrl;
+			$currentCourseDepartmentUrlName = $departmentUrlName;
 		}
 
 		if (!isset($code_cours) or empty($code_cours)) {
