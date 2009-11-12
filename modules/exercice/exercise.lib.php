@@ -1,4 +1,4 @@
-<?php // $Id$
+<? // $Id$
 /*========================================================================
 *   Open eClass 2.1
 *   E-learning and Course Management System
@@ -45,12 +45,12 @@ function showQuestion($questionId, $onlyAnswers=false)
 	{
 		$questionName=$objQuestionTmp->selectTitle();
 		$questionDescription=$objQuestionTmp->selectDescription();
-	// latex support
-
+		// latex support
 		$questionName=latex_content($questionName);
 		$questionDescription=latex_content($questionDescription);
 
 	$questionDescription_temp = nl2br(make_clickable($questionDescription));
+	$questionDescription_temp = mathfilter($questionDescription_temp, 12, "../../courses/mathimg/");
 	$tool_content .= <<<cData
       <tr>
         <td colspan="2">
@@ -61,11 +61,9 @@ function showQuestion($questionId, $onlyAnswers=false)
       </tr>
 cData;
 
-		if(file_exists($picturePath.'/quiz-'.$questionId)) {
-			$tool_content .= "
-      <tr>
-        <td align=\"center\" colspan=\"2\"><center><img src=\"".${'picturePath'}."/quiz-".${'questionId'}."\" border=\"0\"></center></td>
-      </tr>";
+	if(file_exists($picturePath.'/quiz-'.$questionId)) {
+		$tool_content .= "<tr>
+		<td align=\"center\" colspan=\"2\"><center><img src=\"".${'picturePath'}."/quiz-".${'questionId'}."\" border=\"0\"></center></td></tr>";
 		}
 	}  // end if(!$onlyAnswers)
 
@@ -133,10 +131,7 @@ cData;
 		}
 		// fill in blanks
 		elseif($answerType == FILL_IN_BLANKS) {
-			$tool_content .= "
-      <tr>
-        <td colspan=\"2\">${answer}</td>
-      </tr>";
+			$tool_content .= "<tr><td colspan='2'>${answer}</td></tr>";
 		}
 		// matching
 		else
@@ -163,43 +158,27 @@ cData;
 cData;
 
 	       // fills the list-box
-           foreach($Select as $key=>$val)
-	       {
-			$tool_content .= "
-            <option value=\"${key}\">${val['Lettre']}</option>";
-		   }// end foreach()
+		foreach($Select as $key=>$val) {
+			$tool_content .= "<option value=\"${key}\">${val['Lettre']}</option>";
+		}
 
-		  $tool_content .= "
-            </select></div>
-          </td>
-          <td width=\"44%\">";
+		  $tool_content .= "</select></div></td><td width=\"44%\">";
 
 		  if(isset($Select[$cpt2]))
 		  	$tool_content .= '<b>'.$Select[$cpt2]['Lettre'].'.</b> '.$Select[$cpt2]['Reponse'];
 		  else
 		  	$tool_content .= '&nbsp;';
 
-		  $tool_content .=	"
-          </td>
-        </tr>
-        </thead>
-        </table>
-        </td>
-      </tr>";
-			$cpt2++;
-
+		  $tool_content .= "</td></tr></thead></table></td></tr>";
+		  $cpt2++;
 				// if the left side of the "matching" has been completely shown
 				if($answerId == $nbrAnswers) {
 					// if it remains answers to shown at the right side
 					while(isset($Select[$cpt2])) 	{
-		$tool_content .= "
-      <tr>
-        <td colspan=\"2\">".
-			"<table>".
-			"<tr><td width=\"60%\" colspan=\"2\">&nbsp;</td><td width=\"40%\" align=\"right\" valign=\"top\">".
-			"<b>".$Select[$cpt2]['Lettre'].".</b> ".$Select[$cpt2]['Reponse']."</td></tr></table>
-        </td>
-      </tr>";
+						$tool_content .= "<tr><td colspan='2'><table><tr>
+						<td width='60%' colspan='2'>&nbsp;</td>
+						<td width='40%' align='right' valign='top'>".
+						"<b>".$Select[$cpt2]['Lettre'].".</b> ".$Select[$cpt2]['Reponse']."</td></tr></table></td></tr>";
 						$cpt2++;
 					}	// end while()
 				}  // end if()
@@ -208,17 +187,12 @@ cData;
 	}	// end for()
 
 	if(!$nbrAnswers) {
-		$tool_content .= "
-      <tr>
-        <td colspan=\"2\"><font color='red'>$langNoAnswer</font></td>
-      </tr>";
+		$tool_content .= "<tr><td colspan='2'><font color='red'>$langNoAnswer</font></td></tr>";
 	}
-
 	// destruction of the Answer object
 	unset($objAnswerTmp);
 	// destruction of the Question object
 	unset($objQuestionTmp);
-
 	return $nbrAnswers;
 }
 ?>

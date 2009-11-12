@@ -40,7 +40,8 @@ $helpTopic = 'Exercise';
 $guest_allowed = true;
 
 include '../../include/baseTheme.php';
-
+// support for math symbols
+include('../../include/phpmathpublisher/mathpublisher.php');
 /**** The following is added for statistics purposes ***/
 include('../../include/action.php');
 $action = new action();
@@ -160,9 +161,7 @@ if($is_allowedToEdit) {
 	<th width=\"65\" style=\"border: 1px solid #edecdf;\" class=\"right\">$langCommands&nbsp;</th>
 	</tr>
 	</thead>";
-} else {
-
-// student view
+} else { // student view
 	$tool_content .= "<th style=\"border: 1px solid #edecdf;\" class=\"left\" class=\"left\" colspan=\"2\">
 	<div align=\"left\">$langExerciseName</div></th>
 	<th style=\"border: 1px solid #edecdf;\">$langExerciseStart</th>
@@ -183,34 +182,33 @@ if(!$nbrExercises) {
 }
 
 $i=1;
-
-$tool_content .= "
-      <tbody>";
+$tool_content .= "<tbody>";
 // while list exercises
 $k = 0;
-while($row=mysql_fetch_array($result)) {
-	if ($k%2==0) {
-		$tool_content .= "\n      <tr>";
+while($row = mysql_fetch_array($result)) {
+	if ($k%2 == 0) {
+		$tool_content .= "<tr>";
 	} else {
-		$tool_content .= "\n      <tr class=\"odd\">";
+		$tool_content .= "<tr class='odd'>";
 	}
+	// display math symbols (if any)
+	$row['description'] = mathfilter($row['description'], 12, "../../courses/mathimg/");
 
 	// prof only
-if($is_allowedToEdit) {
+	if($is_allowedToEdit) {
 		$page_temp = ($i+(@$page*$limitExPage)).'.';
-	if(!$row['active']) {
-		$tool_content .= "
-        <td width=\"1\"><img style='border:0px; padding-top:3px;' src='${urlServer}/template/classic/img/arrow_red.gif' title='bullet'></td>
-        <td><div class=\"invisible\"><a href=\"exercice_submit.php?exerciseId=${row['id']}\">".$row['titre']."</a>&nbsp;<br/><small>".$row['description']."</small></div></td>";
-	} else {
-		$tool_content .= "
-        <td width=\"1\"><img style='border:0px; padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'></td>
-        <td>
-	<a href=\"exercice_submit.php?exerciseId=${row['id']}\">".$row['titre']."</a>&nbsp;<br/><small>".$row['description']."</small></td>";
-	}
+		if(!$row['active']) {
+			$tool_content .= "<td width=\"1\"><img style='border:0px; padding-top:3px;' src='${urlServer}/template/classic/img/arrow_red.gif' title='bullet'></td><td>
+			<div class=\"invisible\">
+			<a href=\"exercice_submit.php?exerciseId=${row['id']}\">".$row['titre']."</a>&nbsp;<br/><small>".$row['description']."</small></div></td>";
+		} else {
+			$tool_content .= "<td width=\"1\"><img style='border:0px; padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'></td><td>
+			<a href=\"exercice_submit.php?exerciseId=${row['id']}\">".$row['titre']."</a>&nbsp;<br/><small>".$row['description']."</small></td>";
+		}
 
-$eid = $row['id'];
-$NumOfResults = mysql_fetch_array(db_query("SELECT COUNT(*) FROM exercise_user_record WHERE eid='$eid'", $currentCourseID));
+		$eid = $row['id'];
+		$NumOfResults = mysql_fetch_array(db_query("SELECT COUNT(*) FROM exercise_user_record 
+			WHERE eid='$eid'", $currentCourseID));
 
 	if ($NumOfResults[0]) {
 		$tool_content .= "<td align=\"center\"><nobr><a href=\"results.php?exerciseId=".$row['id']."\">".
@@ -237,9 +235,7 @@ cData;
 			$tool_content .= "
 			<a href='$_SERVER[PHP_SELF]?choice=disable&exerciseId=".$row['id']."'>"."<img src='../../template/classic/img/visible.gif' border='0' alt='".$langVisible."'></a>&nbsp;";
 		}
-	}
-// else if not active
-	else {
+	} else { // else if not active
 		if (isset($page)) {
 			$tool_content .= "
 			<a href='$_SERVER[PHP_SELF]?choice=enable&page=${page}&exerciseId=".$row['id']."'>"."<img src='../../template/classic/img/invisible.gif' border='0' alt='".$langVisible."'></a>&nbsp;";
@@ -248,10 +244,7 @@ cData;
 			<a href='$_SERVER[PHP_SELF]?choice=enable&exerciseId=".$row['id']."'>"."<img src='../../template/classic/img/invisible.gif' border='0' alt='".$langVisible."'></a>&nbsp;";
 		}
 	}
-	$tool_content .= "
-        </td>";
-	$tool_content .= "
-      </tr>";
+	$tool_content .= "</td></tr>";
 }
 	// student only
 else {
@@ -264,8 +257,9 @@ else {
 		$tool_content .= "<td width=\"1\"><img style='border:0px; padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'></td>
 		<td><a href=\"exercice_submit.php?exerciseId=".$row['id']."\">".$row['titre']."</a>";
 	} else {
-		$tool_content .= "<td width=\"1\"><img style='border:0px; padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'></td>
-        	<td>".$row['titre']."&nbsp;&nbsp;(<font color=\"red\">$m[expired]</font>)";
+		$tool_content .= "<td width='1'>
+			<img style='border:0px; padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'>
+			</td><td>".$row['titre']."&nbsp;&nbsp;(<font color=\"red\">$m[expired]</font>)";
 	}
 	  $tool_content .= "<br/><small>$row[description]</small></td>
         <td align='center'><small>".nice_format($row['StartDate'])."</small></td>
@@ -274,7 +268,8 @@ else {
 	$CurrentAttempt = mysql_fetch_array(db_query("SELECT COUNT(*) FROM exercise_user_record
 		WHERE eid='$row[id]' AND uid='$uid'", $currentCourseID));
 	 if ($row['TimeConstrain'] > 0) {
-		  $tool_content .= "<td align='center'><small>$row[TimeConstrain] $langExerciseConstrainUnit</small></td>";
+		  $tool_content .= "<td align='center'>
+		<small>$row[TimeConstrain] $langExerciseConstrainUnit</small></td>";
 	} else {
 		$tool_content .= "<td align='center'><small> - </small></td>";
 	}
@@ -286,16 +281,14 @@ else {
 	  $tool_content .= "</tr>";
 }
 	// skips the last exercise, that is only used to know if we have or not to create a link "Next page"
-if ($i == $limitExPage) {
-	break;
-}
-	$i++;
-	$k++;
+	if ($i == $limitExPage) {
+		break;
+	}
+$i++;
+$k++;
 }	// end while()
 
-$tool_content .= "
-      </tbody>
-      </table>";
+$tool_content .= "</tbody></table>";
 add_units_navigation(TRUE);
 draw($tool_content, 2, 'exercice');
 ?>

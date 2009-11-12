@@ -41,7 +41,8 @@ $guest_allowed = true;
 
 include '../../include/baseTheme.php';
 include '../../include/lib/textLib.inc.php';
-
+// support for math symbols
+include('../../include/phpmathpublisher/mathpublisher.php');
 $tool_content = "";
 
 $nameTools = $langExercicesView;
@@ -189,7 +190,9 @@ if(!isset($questionNum) || $_POST['questionNum']) {
 if(@$_POST['questionNum']) {
 	$QUERY_STRING="questionNum=$questionNum";
 }
+	
 	$exerciseDescription_temp = nl2br(make_clickable($exerciseDescription));
+	$exerciseDescription_temp = mathfilter($exerciseDescription_temp, 12, "../../courses/mathimg/");
 	$tool_content .= <<<cData
       <table width="99%" class="Exercise">
       <thead>

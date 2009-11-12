@@ -23,13 +23,14 @@
 *  			Panepistimiopolis Ilissia, 15784, Athens, Greece
 *  			eMail: info@openeclass.org
 * =========================================================================*/
-
+// support for math symbols
+include('../../include/phpmathpublisher/mathpublisher.php');
 
 // the exercise form has been submitted
 if(isset($submitExercise))
 {
-	$exerciseTitle=trim($exerciseTitle);
-	$exerciseDescription=trim($exerciseDescription);
+	$exerciseTitle = trim($exerciseTitle);
+	$exerciseDescription = trim($exerciseDescription);
 	@$randomQuestions=$randomQuestions?$questionDrawn:0;
 
 	// no title given
@@ -88,11 +89,9 @@ if(isset($modifyExercise))
 	<tr><th class=\"left\">".$langExerciseName." :</th>
 	<td><input type=\"text\" name=\"exerciseTitle\" "."size=\"50\" maxlength=\"200\" value=\"".htmlspecialchars($exerciseTitle)."\" style=\"width:400px;\" class=\"FormData_InputText\"></td>
 	</tr>";
-	
-	$tool_content .= "<tr>
-	<th class='left'>".$langExerciseDescription." :</th>
-	<td><textarea wrap=\"virtual\" ".
-		"name=\"exerciseDescription\" cols=\"50\" rows=\"4\" style=\"width:400px;\" class=\"FormData_InputText\">".htmlspecialchars($exerciseDescription)."</textarea></td>
+	$tool_content .= "<tr><th class='left'>".$langExerciseDescription." :</th>
+	<td><textarea wrap='virtual' ".
+		"name='exerciseDescription' cols='50' rows='4' style='width:400px;' class='FormData_InputText'>".str_replace('{','&#123;',htmlspecialchars($exerciseDescription))."</textarea></td>
 	</tr>";
 	
 	$tool_content .= "<tr><th class=\"left\">".$langExerciseType." :</th>
@@ -121,7 +120,7 @@ if(isset($modifyExercise))
 	} else {
 		$end_cal_Excercise = jscal_html('exerciseEndDate', strftime('%Y-%m-%d', strtotime('now +1 year')));
 	}
-	$tool_content .= "<th class=\"left\">".$langExerciseStart." :</th>"."
+	$tool_content .= "<tr><th class=\"left\">".$langExerciseStart." :</th>"."
 	<td>$start_cal_Excercise</td></tr>";
 	
 	$tool_content .= "<th class=\"left\">".$langExerciseEnd." :</th>"."
@@ -170,6 +169,7 @@ if(isset($modifyExercise))
 	} else {
 		$disp_results_message = $langAnswersNotDisp;
 	}
+	
 	$tool_content .= "<table width='99%' class='FormData'><tbody>
 	<tr>
 	<th width='220' class='left'>&nbsp;</th>
@@ -184,8 +184,8 @@ if(isset($modifyExercise))
 	<th class='left'>$langExerciseDescription :</th>
 	<td>";
 	
-	$tool_content .= nl2br($exerciseDescription);
-	
+	$exerciseDescription = mathfilter($exerciseDescription, 12, "../../courses/mathimg/");
+	$tool_content .= $exerciseDescription;
 	$exerciseStartDate = nice_format($exerciseStartDate);
 	$exerciseEndDate = nice_format($exerciseEndDate);
 	$tool_content .= "</td>

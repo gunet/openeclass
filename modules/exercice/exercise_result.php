@@ -44,7 +44,8 @@ $navigation[]= array ("url"=>"exercice.php", "name"=> $langExercices);
 // latex support
 include_once "$webDir"."/modules/latexrender/latex.php";
 include('../../include/lib/textLib.inc.php');
-
+// support for math symbols
+include('../../include/phpmathpublisher/mathpublisher.php');
 $TBL_EXERCICE_QUESTION='exercice_question';
 $TBL_EXERCICES='exercices';
 $TBL_QUESTIONS='questions';
@@ -61,6 +62,7 @@ if(!is_array($exerciseResult) || !is_array($questionList) || !is_object($objExer
 $exerciseTitle = $objExercise->selectTitle();
 $exerciseDescription = $objExercise->selectDescription();
 $exerciseDescription_temp = nl2br(make_clickable($exerciseDescription));
+$exerciseDescription_temp = mathfilter($exerciseDescription_temp, 12, "../../courses/mathimg/");
 $displayResults=$objExercise->selectResults(); 
 
 $tool_content .= "<table class=\"Exercise\" width=\"99%\"><thead><tr>
@@ -87,6 +89,7 @@ foreach($questionList as $questionId) {
 	$questionDescription=$objQuestionTmp->selectDescription();
 	$questionDescription=latex_content($questionDescription);
 	$questionDescription_temp = nl2br(make_clickable($questionDescription));
+	$questionDescription_temp = mathfilter($questionDescription_temp, 12, "../../courses/mathimg/");
 	$questionWeighting=$objQuestionTmp->selectWeighting();
 	$answerType=$objQuestionTmp->selectType();
 
@@ -111,8 +114,8 @@ foreach($questionList as $questionId) {
 	<tr><td colspan='${colspan}'><b><u>$langQuestion</u>: $iplus</b></td>
 	</tr>
 	<tr>
-	<td colspan='${colspan}'><b>${questionName}</b><br/>
-	<small>${questionDescription_temp}</small><br/><br/></td>
+	<td colspan='${colspan}'><b>$questionName</b><br/>
+	<small>$questionDescription_temp</small><br/><br/></td>
 	</tr>
 	</thead><tbody>";
 
