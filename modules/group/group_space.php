@@ -34,8 +34,12 @@
  */
 
 // Delete ancient possible other group values
-session_unregister("secretDirectory");
-session_unregister("forumId");
+if (isset($_SESSION['secretDirectory'])) {
+	unset($_SESSION['secretDirectory']);
+}
+if (isset($_SESSION['forumId'])) {
+	unset($_SESSION['forumId']);
+}
 
 $require_login = TRUE;
 $require_current_course = TRUE;
@@ -69,12 +73,11 @@ if(isset($registration) and $statut != 10)
 $currentCourse=$dbname;
 
 ############### Secret Directory for Documents #################
-$sqlGroup=mysql_query("SELECT secretDirectory
-	FROM `$currentCourse`.student_group WHERE id='$userGroupId'");
+$sqlGroup=mysql_query("SELECT secretDirectory FROM `$currentCourse`.student_group WHERE id='$userGroupId'");
 
-while ($myGroup= mysql_fetch_array($sqlGroup))
+while ($myGroup = mysql_fetch_array($sqlGroup))
 {
-	$secretDirectory=$myGroup['secretDirectory'];
+	$secretDirectory = $myGroup['secretDirectory'];
 }
 
 // name and description
@@ -87,46 +90,34 @@ while ($myGroup = mysql_fetch_array($resultGroup))
         } else {
                 $is_tutor = false;
         }
-	$forumId=$myGroup['forumId'];
+	$forumId = $myGroup['forumId'];
 	if ($is_adminOfCourse or $is_tutor)
 	{
-		$tool_content .= "
-    <div id='operations_container'>
-      <ul id='opslist'>
-        <li><a href='group_edit.php?userGroupId=$userGroupId'>$langEditGroup</a></li>";
+		$tool_content .= "<div id='operations_container'><ul id='opslist'>
+		<li><a href='group_edit.php?userGroupId=$userGroupId'>$langEditGroup</a></li>";
 	}
 	elseif(isset($selfReg) AND ($uid))
 	{
-		$tool_content .=  "
-    <div id='operations_container'>
-      <ul id='opslist'>
-        <li><a href='$_SERVER[PHP_SELF]?registration=1&amp;userGroupId=$userGroupId'>$langRegIntoGroup</a></li>";
+		$tool_content .=  "<div id='operations_container'><ul id='opslist'>
+		<li><a href='$_SERVER[PHP_SELF]?registration=1&amp;userGroupId=$userGroupId'>$langRegIntoGroup</a></li>";
 	}
 	elseif(isset($regDone))
 	{
-			$tool_content .= "
-    <div id='operations_container'>
-      <ul id='opslist'>";
-
-			$tool_content .= "$message&nbsp;";
+		$tool_content .= "<div id='operations_container'><ul id='opslist'>";
+		$tool_content .= "$message&nbsp;";
 	} else {
-			$tool_content .= "
-    <div id='operations_container'>
-      <ul id='opslist'>";
+		$tool_content .= "<div id='operations_container'><ul id='opslist'>";
 	}
 	$tool_content .= loadGroupTools();
-	$tool_content .=  "
-    <br />
-    <table width='99%' class='FormData'>
-    <thead>
-    <tr>
-      <th width='220'>&nbsp;</th>
-      <td><b>$langGroupInfo</b></td>
-    </tr>
-    <tr>
-      <th class='left'>$langGroupName :</th>
-      <td>$myGroup[name]</td>
-    </tr>";
+	$tool_content .=  "<br /><table width='99%' class='FormData'>
+	<thead><tr>
+	<th width='220'>&nbsp;</th>
+	<td><b>$langGroupInfo</b></td>
+	</tr>
+	<tr>
+	<th class='left'>$langGroupName :</th>
+	<td>$myGroup[name]</td>
+	</tr>";
 
 	$sqlTutor=mysql_query("SELECT tutor, user_id, nom, prenom, email, forumId
 		FROM `$mysqlMainDb`.user, student_group
@@ -145,14 +136,11 @@ while ($myGroup = mysql_fetch_array($resultGroup))
 			$tool_content_tutor .= "$myTutor[nom] $myTutor[prenom]
 			(<a href=mailto:$myTutor[email]>$myTutor[email]</a>)";
 		}	// while tutor
-
 	}	// else
 
-	$tool_content .= "
-    <tr>
-      <th class=\"left\">$langGroupTutor :</th>
-      <td>$tool_content_tutor</td>
-    </tr>";
+	$tool_content .= "<tr><th class=\"left\">$langGroupTutor :</th>
+	<td>$tool_content_tutor</td>
+	</tr>";
 
 	// Show 'none' if no description
 	$countDescription=strlen ($myGroup['description']);
@@ -166,27 +154,21 @@ while ($myGroup = mysql_fetch_array($resultGroup))
 		$tool_content_description .=  "$myGroup[description]";
 	}	// else
 
-	$tool_content .=  "
-    <tr>
-      <th class=\"left\">$langDescription :</th>
-      <td>$tool_content_description</td>
-    </tr>";
+	$tool_content .=  "<tr><th class=\"left\">$langDescription :</th>
+	<td>$tool_content_description</td></tr>";
 }	// while loop
 
 // members
-$tool_content .= "
-    <tr>
-      <th class=\"left\" valign=\"top\">$langGroupMembers :</th>
-      <td>
-          <table width=\"99%\" align=\"center\" class=\"GroupSum\">
-          <thead>
-          <tr>
-            <td><b>$langNameSurname</b></td>
-            <td width='100'><div align=\"center\"><b>$langAm</b></div></td>
-            <td><div align=\"center\"><b>$langEmail</b></div></td>
-          </tr>
-          </thead>
-          <tbody>";
+$tool_content .= "<tr><th class=\"left\" valign=\"top\">$langGroupMembers :</th>
+<td><table width=\"99%\" align=\"center\" class=\"GroupSum\">
+<thead>
+<tr>
+<td><b>$langNameSurname</b></td>
+<td width='100'><div align=\"center\"><b>$langAm</b></div></td>
+<td><div align=\"center\"><b>$langEmail</b></div></td>
+</tr>
+</thead>
+<tbody>";
 
 $resultMember=mysql_query("SELECT nom, prenom, email, am
 		FROM `$mysqlMainDb`.user, user_group
@@ -196,10 +178,7 @@ $countMember = mysql_num_rows($resultMember);
 
 if(($countMember==0))
 {
-	$tool_content .=  "
-		  <tr>
-            <td colspan=3>$langGroupNoneMasc</td>
-          </tr>";
+	$tool_content .=  "<tr><td colspan=3>$langGroupNoneMasc</td></tr>";
 }
 else
 {
@@ -221,60 +200,46 @@ else
 	}	// while loop
 }	// else
 
-	$tool_content .=  "
-          </tbody>
-          </table>";
-$tool_content .= "
-      </td>
-    </tr>
-    </thead>
-    </table>";
+$tool_content .=  "</tbody></table>";
+$tool_content .= "</td></tr></thead></table>";
 draw($tool_content, 2, 'group');
 
 function loadGroupTools(){
-	global $selfReg, $forumId, $langForums, $userGroupId, $langDoc,
+	global $selfReg, $forumId, $secretDirectory, $langForums, $userGroupId, $langDoc,
                $is_adminOfCourse, $is_tutor, $userGroupId, $langEmailGroup,
                $langUsage;
 
 	// Vars needed to determine group File Manager and group Forum
 	// They are unregistered when opening group.php once again.
-	session_register("secretDirectory");
-	session_register("forumId");
-
+	$_SESSION['secretDirectory'] = $secretDirectory; 
+	$_SESSION['forumId'] = $forumId;
+	
 	$group_tools = "";
-	if(isset($selfReg))
-	{
-		$group_tools .=  "";
-	}
-	else
-	{
+	if(isset($selfReg)) {
+		$group_tools .= "";
+	} else {
 		$resultProperties=mysql_query("SELECT id, self_registration, private, forum, document
 			FROM group_properties WHERE id=1");
 		while ($myProperties = mysql_fetch_array($resultProperties))
 		{
 			// Drive members into their own forum
-			if($myProperties['forum'] == 1 and $forumId <> 0){
-				$group_tools .= "
-      <li><a href='../phpbb/viewforum.php?forum=$forumId'>$langForums</a></li>";
+			if($myProperties['forum'] == 1 and $forumId <> 0) {
+				$group_tools .= "<li><a href='../phpbb/viewforum.php?forum=$forumId'>$langForums</a></li>";
 			}
 			// Drive members into their own File Manager
 			if($myProperties['document'] == 1) {
-				 $group_tools .=  "
-      <li><a href='document.php?userGroupId=$userGroupId'>$langDoc</a></li>";
+				 $group_tools .=  "<li><a href='document.php?userGroupId=$userGroupId'>$langDoc</a></li>";
 			}
 		}	// while loop
 		if ($is_adminOfCourse or $is_tutor)
 		{
-			$group_tools .=  "
-      <li><a href='group_email.php?userGroupId=$userGroupId'>$langEmailGroup</a></li>
-      <li><a href='group_usage.php?userGroupId=$userGroupId'>$langUsage</a></li>";
+			$group_tools .=  "<li><a href='group_email.php?userGroupId=$userGroupId'>$langEmailGroup</a></li>
+			<li><a href='group_usage.php?userGroupId=$userGroupId'>$langUsage</a></li>";
 		}
 	}
-	$group_tools .= "
-      </ul>
-    </div>";
-	session_unregister("secretDirectory");
-	session_unregister("forumId");
+	$group_tools .= "</ul></div>";
+	unset($_SESSION['secretDirectory']);
+	unset($_SESSION['forumId']);
+
 	return $group_tools;
 }
-

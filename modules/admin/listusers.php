@@ -89,23 +89,21 @@ if($view == 2)		// coming from search_user.php(search with criteria)
 		 } else {
 		    	$mytime = mktime($hour, $minute, 0, 0, 0, 0);
 		}
-
 		if(!empty($mytime)) {
 			$user_registered_at = $mytime;
 		} else {
 			$user_registered_at = "";
 		}
 		// end format date/time
-
 		// unregister their values from session variables
-		session_unregister('user_sirname');
-		session_unregister('user_firstname');
-		session_unregister('user_username');
-		session_unregister('user_am');
-		session_unregister('user_type');
-		session_unregister('user_registered_at_flag');
-		session_unregister('user_registered_at');
-		session_unregister('user_email');
+		unset($_SESSION['user_sirname']);
+		unset($_SESSION['user_firstname']);
+		unset($_SESSION['user_username']);
+		unset($_SESSION['user_am']);
+		unset($_SESSION['user_type']);
+		unset($_SESSION['user_registered_at_flag']);
+		unset($_SESSION['user_registered_at']);
+		unset($_SESSION['user_email']);
 	}
 	else
 	{

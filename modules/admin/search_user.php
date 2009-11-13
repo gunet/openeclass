@@ -61,14 +61,14 @@ $new = isset($_GET['new'])?$_GET['new']:'yes';	//variable of declaring a new sea
 
 if((!empty($new)) && ($new=="yes")) {
 	// It is a new search, so unregister the search terms/filters in session variables
-	session_unregister('user_sirname');
-	session_unregister('user_firstname');
-	session_unregister('user_username');
-	session_unregister('user_am');
-	session_unregister('user_type');
-	session_unregister('user_registered_at_flag');
-	session_unregister('user_registered_at');
-	session_unregister('user_email');
+	unset($_SESSION['user_sirname']);
+	unset($_SESSION['user_firstname']);
+	unset($_SESSION['user_username']);
+	unset($_SESSION['user_am']);
+	unset($_SESSION['user_type']);
+	unset($_SESSION['user_registered_at_flag']);
+	unset($_SESSION['user_registered_at']);
+	unset($_SESSION['user_email']);
 	unset($user_sirname);
 	unset($user_firstname);
 	unset($user_username);
@@ -90,88 +90,83 @@ $user_registered_at = isset($_SESSION['user_registered_at'])?$_SESSION['user_reg
 $user_email = isset($_SESSION['user_email'])?$_SESSION['user_email']:'';
 
 // display link to inactive users
-  $tool_content .= "
-      <div id=\"operations_container\">
-        <ul id=\"opslist\">
-          <li><a href=\"listusers.php?c=4\">".$langInactiveUsers."</a></li>
-        </ul>
-      </div>";
+$tool_content .= "<div id=\"operations_container\">
+<ul id=\"opslist\">
+<li><a href=\"listusers.php?c=4\">".$langInactiveUsers."</a></li>
+</ul></div>";
 
 // display the search form
-$tool_content .= "
-<form action=\"listusers.php?search=".$new."\" method=\"post\" name=\"user_search\">
-  <table width=\"99%\">
-  <tbody>
-  <tr>
-    <th width=\"220\">&nbsp;</th>
-    <td><b>$langUserData</b></td>
-  </tr>
-  <tr>
-    <th class='left'>$langSurname:</th>
-    <td><input type=\"text\" class='FormData_InputText' name=\"user_sirname\" size=\"40\" value=\"".$user_sirname."\"></td>
-  </tr>
-  <tr>
-    <th class='left'>$langName:</th>
-    <td><input type=\"text\" class='FormData_InputText' name=\"user_firstname\" size=\"40\" value=\"".$user_firstname."\"></td>
-  </tr>
-  <tr>
-    <th class='left'>$langAm:</th>
-    <td><input type=\"text\" class='FormData_InputText' name=\"user_am\" size=\"30\" value=\"".$user_am."\"></td>
-  </tr>
-  <tr>
-    <th class='left'>$langUserType:</th>
-    <td>";
+$tool_content .= "<form action=\"listusers.php?search=".$new."\" method=\"post\" name=\"user_search\">
+<table width=\"99%\">
+<tbody><tr>
+<th width=\"220\">&nbsp;</th>
+<td><b>$langUserData</b></td>
+</tr>
+<tr>
+<th class='left'>$langSurname:</th>
+<td><input type=\"text\" class='FormData_InputText' name=\"user_sirname\" size=\"40\" value=\"".$user_sirname."\"></td>
+</tr>
+<tr>
+<th class='left'>$langName:</th>
+<td><input type=\"text\" class='FormData_InputText' name=\"user_firstname\" size=\"40\" value=\"".$user_firstname."\"></td>
+</tr>
+<tr>
+<th class='left'>$langAm:</th>
+<td><input type=\"text\" class='FormData_InputText' name=\"user_am\" size=\"30\" value=\"".$user_am."\"></td>
+</tr>
+<tr>
+<th class='left'>$langUserType:</th>
+<td>";
+
 $usertype_data = array();
 $usertype_data[0] = $langAllUsers;
 $usertype_data[1] = $langTeacher;
 $usertype_data[5] = $langStudent;
 $usertype_data[10] = $langGuest;
 $tool_content .= selection($usertype_data,"user_type",$usertype_data[0]);
-$tool_content .= "</td>
-  </tr>
-  <tr>
-    <th class='left'>$langRegistrationDate:</th>
-    <td>";
+$tool_content .= "</td></tr>
+<tr>
+<th class='left'>$langRegistrationDate:</th>
+<td>";
 $user_registered_at_flag_data = array();
 $user_registered_at_flag_data[1] = $langAfter;
 $user_registered_at_flag_data[2] = $langBefore;
 $tool_content .= selection($user_registered_at_flag_data,"user_registered_at_flag",$user_registered_at_flag);
 
-    $start_cal = $jscalendar->make_input_field(
-       array('showOthers' => true,
-                'align' => 'Tl',
-                 'ifFormat' => '%d-%m-%Y'),
-       array('style' => 'width: 15em; color: #840; background-color: #ff8; border: 1px solid #000; text-align: center',
-                 'name' => 'date',
-                 'value' => ' '));
+$start_cal = $jscalendar->make_input_field(
+array('showOthers' => true,
+		'align' => 'Tl',
+		'ifFormat' => '%d-%m-%Y'),
+array('style' => 'width: 15em; color: #840; background-color: #ff8; border: 1px solid #000; text-align: center',
+		'name' => 'date',
+		'value' => ' '));
 
-    $tool_content .= $start_cal."&nbsp;&nbsp;&nbsp;";
-    @$tool_content .= "<select name='hour'>";
-    for ($h=0; $h<=24; $h++)
-       $tool_content .= "\n      <option value='$h'>$h</option>";
-    $tool_content .= "</select>&nbsp;&nbsp;&nbsp;";
-    @$tool_content .= "<select name=\"minute\">";
-    for ($m=0; $m<=55; $m=$m+5)
-          $tool_content .= "<option value='$m'>$m</option>";
-    $tool_content .= "</select>\n    </td>";
-    $tool_content .= "\n  </tr>";
+$tool_content .= $start_cal."&nbsp;&nbsp;&nbsp;";
+@$tool_content .= "<select name='hour'>";
+for ($h=0; $h<=24; $h++)
+$tool_content .= "\n      <option value='$h'>$h</option>";
+$tool_content .= "</select>&nbsp;&nbsp;&nbsp;";
+@$tool_content .= "<select name=\"minute\">";
+for ($m=0; $m<=55; $m=$m+5)
+	$tool_content .= "<option value='$m'>$m</option>";
+$tool_content .= "</select>\n    </td>";
+$tool_content .= "\n  </tr>";
 
-$tool_content .= "
-  <tr>
-    <th class='left'>$langEmail:</th>
-    <td><input type=\"text\" class='FormData_InputText' name=\"user_email\" size=\"40\" value=\"".$user_email."\"></td>
-  </tr>
-  <tr>
-    <th class='left'><b>$langUsername:</b></th>
-    <td><input type=\"text\" name=\"user_username\" class='FormData_InputText' size=\"40\" value=\"".$user_username."\"></td>
-  </tr>
-  <tr>
-    <th>&nbsp;</th>
-    <td colspan=\"2\">
-      <input type=\"hidden\" name=\"c\" value=\"searchlist\">
-      <input type=\"submit\" name=\"search_submit\" value=\"$langSearch\">
-    </td>
-  </tr>";
+$tool_content .= "<tr>
+<th class='left'>$langEmail:</th>
+<td><input type=\"text\" class='FormData_InputText' name=\"user_email\" size=\"40\" value=\"".$user_email."\"></td>
+</tr>
+<tr>
+<th class='left'><b>$langUsername:</b></th>
+<td><input type=\"text\" name=\"user_username\" class='FormData_InputText' size=\"40\" value=\"".$user_username."\"></td>
+</tr>
+<tr>
+<th>&nbsp;</th>
+<td colspan=\"2\">
+<input type=\"hidden\" name=\"c\" value=\"searchlist\">
+<input type=\"submit\" name=\"search_submit\" value=\"$langSearch\">
+</td>
+</tr>";
 $tool_content .= "\n  </tbody>\n  </table>\n</form>";
 // end form
 

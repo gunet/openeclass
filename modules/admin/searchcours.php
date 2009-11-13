@@ -61,15 +61,12 @@ $navigation[] = array("url" => "index.php", "name" => $langAdmin);
 // Initialise $tool_content
 $tool_content = "";
 
-/*****************************************************************************
-		MAIN BODY
-******************************************************************************/
 // Destroy search varialbles from session
-if (isset($new) && ($new=="yes")) {
-	session_unregister('searchtitle');
-	session_unregister('searchcode');
-	session_unregister('searchtype');
-	session_unregister('searchfaculte');
+if (isset($new) && ($new == "yes")) {
+	unset($_SESSION['searchtitle']);
+	unset($_SESSION['searchcode']);
+	unset($_SESSION['searchtype']);
+	unset($_SESSION['searchfaculte']);
 	unset($searchtitle);
 	unset($searchcode);
 	unset($searchtype);
@@ -80,56 +77,46 @@ if (isset($searchtitle) && isset($searchcode) && isset($searchtype) && isset($se
 	$newsearch = "(<a href=\"searchcours.php?new=yes\">".$langNewSearch."</a>)";
 }
 
-	// Constract search form
-	$tool_content .= "
-    <form action=\"listcours.php?search=yes\" method=\"post\">";
-	$tool_content .= "
-    <table width='99%' class='FormData' align='left'>
-    <tbody>
-    <tr>
-      <th width='220'>&nbsp;</th>
-      <td><b>".$langSearchCriteria." ".@$newsearch."</b></td>
-    </tr>";
-	$tool_content .= "
-    <tr>
-      <th class='left'>$langTitle:</th>
-      <td><input type=\"text\" class='FormData_InputText' name=\"formsearchtitle\" size=\"40\" value=\"".@$searchtitle."\"></td>
-    </tr>";
-	$tool_content .= "
-    <tr>
-      <th class='left'><b>$langCourseCode:</b></th>
-      <td><input class='FormData_InputText' type=\"text\" name=\"formsearchcode\" size=\"40\" value=\"".@$searchcode."\"></td>
-    </tr>";
-	switch (@$searchcode) {
-		case "2":
-			$typeSel[2] = "selected";
-			break;
-		case "1":
-			$typeSel[1] = "selected";
-			break;
-		case "0":
-			$typeSel[0] = "selected";
-			break;
-		default:
-			$typeSel[-1] = "selected";
-			break;
-	}
-	$tool_content .= "  <tr>
-    <th class='left'><b>$langCourseVis:</b></td>
-      <td>
-      <select name=\"formsearchtype\" class=\"auth_input\">
-      	<option value=\"-1\" ".$typeSel[-1].">$langAllTypes</option>
-        <option value=\"2\" ".@$typeSel[2].">$langTypeOpen</option>
-        <option value=\"1\" ".@$typeSel[1].">$langTypeRegistration</option>
-        <option value=\"0\" ".@$typeSel[0].">$langTypeClosed</option>
-      </select>
-      </td>
-    </tr>";
-	$tool_content .= "
-    <tr>
-      <th class='left'><b>".$langDepartment.":</b></th>
-      <td><select name=\"formsearchfaculte\" class=\"auth_input\">
-          <option value=\"0\">$langAllFacultes</option>\n";
+// search form
+$tool_content .= "<form action=\"listcours.php?search=yes\" method=\"post\">";
+$tool_content .= "<table width='99%' class='FormData' align='left'><tbody><tr>
+<th width='220'>&nbsp;</th><td><b>".$langSearchCriteria." ".@$newsearch."</b></td></tr>";
+
+$tool_content .= "<tr><th class='left'>$langTitle:</th>
+<td><input type=\"text\" class='FormData_InputText' name=\"formsearchtitle\" size=\"40\" value=\"".@$searchtitle."\"></td>
+</tr>";
+$tool_content .= "<tr><th class='left'><b>$langCourseCode:</b></th>
+<td><input class='FormData_InputText' type=\"text\" name=\"formsearchcode\" size=\"40\" value=\"".@$searchcode."\"></td>
+</tr>";
+
+switch (@$searchcode) {
+	case "2":
+		$typeSel[2] = "selected";
+		break;
+	case "1":
+		$typeSel[1] = "selected";
+		break;
+	case "0":
+		$typeSel[0] = "selected";
+		break;
+	default:
+		$typeSel[-1] = "selected";
+		break;
+}
+
+$tool_content .= "<tr><th class='left'><b>$langCourseVis:</b></td>
+<td>
+<select name=\"formsearchtype\" class=\"auth_input\">
+<option value=\"-1\" ".$typeSel[-1].">$langAllTypes</option>
+<option value=\"2\" ".@$typeSel[2].">$langTypeOpen</option>
+<option value=\"1\" ".@$typeSel[1].">$langTypeRegistration</option>
+<option value=\"0\" ".@$typeSel[0].">$langTypeClosed</option>
+</select>
+</td></tr>";
+
+$tool_content .= "<tr><th class='left'><b>".$langDepartment.":</b></th>
+<td><select name=\"formsearchfaculte\" class=\"auth_input\">
+<option value=\"0\">$langAllFacultes</option>\n";
 
 $resultFac=mysql_query("SELECT name FROM faculte ORDER BY number");
 
@@ -139,21 +126,15 @@ $resultFac=mysql_query("SELECT name FROM faculte ORDER BY number");
 		else
 			$tool_content .= "<option>$myfac[name]</option>";
 	}
-	$tool_content .= "</select>
-      </td>
-    </tr>";
-	$tool_content .= "
-    <tr>
-      <th>&nbsp;</th>
-      <td><input type='submit' name='search_submit' value='$langSearch'></td>
-    </tr>";
-	$tool_content .= "
-    </tbody>
-    </table>
-    </form>";
 
-	// Display link to go back to index.php
-	$tool_content .= "<p align=\"right\"><a href=\"index.php\">".$langBack."</a></p>";
+$tool_content .= "</select></td></tr>";
+
+$tool_content .= "<tr><th>&nbsp;</th><td>
+	<input type='submit' name='search_submit' value='$langSearch'></td></tr>";
+$tool_content .= "</tbody></table></form>";
+
+// Display link to go back to index.php
+$tool_content .= "<p align=\"right\"><a href=\"index.php\">".$langBack."</a></p>";
 
 /*****************************************************************************
 		DISPLAY HTML

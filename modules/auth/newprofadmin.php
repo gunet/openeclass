@@ -50,7 +50,8 @@ if($submit) {
 	}
 
 	// check if user name exists
-	$username_check = mysql_query("SELECT username FROM `$mysqlMainDb`.user WHERE username=".autoquote($uname));
+	$username_check = mysql_query("SELECT username FROM `$mysqlMainDb`.user 
+			WHERE username=".autoquote($uname));
 	$user_exist = (mysql_num_rows($username_check) > 0);
 
 	// check if there are empty fields

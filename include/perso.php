@@ -50,23 +50,21 @@ if (mysql_num_rows($result2) > 0) {
 		$dbname = $mycours["k"];
 		$status[$dbname] = $mycours["s"];
 		$i++;
-	}       // while
-} // if
+	}
+} 
 
 session_register('status');
 // end of check
 
 //include personalised component files (announcemets.php etc.) from /modules/perso
-
-include(getcwd() . "/modules/perso/lessons.php");
-include(getcwd() . "/modules/perso/assignments.php");
-include(getcwd() . "/modules/perso/announcements.php");
-include(getcwd() . "/modules/perso/documents.php");
-include(getcwd() . "/modules/perso/agenda.php");
-include(getcwd() . "/modules/perso/forumPosts.php");
+include "$webDir/modules/perso/lessons.php";
+include "$webDir/modules/perso/assignments.php";
+include "$webDir/modules/perso/announcements.php";
+include "$webDir/modules/perso/documents.php";
+include "$webDir/modules/perso/agenda.php";
+include "$webDir/modules/perso/forumPosts.php";
 
 //	BEGIN Get user's last login date]==============================================
-
 $last_login_query = 	"SELECT  `id_user` ,  `when` ,  `action`
 			FROM  `$mysqlMainDb`.loginout
 			WHERE  `action`  =  'LOGIN' AND  `id_user`  = $uid
@@ -77,7 +75,7 @@ $login_date_result 	= db_query($last_login_query, $mysqlMainDb);
 
 
 if (mysql_num_rows($login_date_result)) {
-	$login_date_fetch	= mysql_fetch_row($login_date_result);
+	$login_date_fetch = mysql_fetch_row($login_date_result);
 	$_user["persoLastLogin"] = substr($login_date_fetch[1],0,10);
 	$_user["lastLogin"] = eregi_replace("-", " ", substr($login_date_fetch[1],0,10));
 } else {
@@ -98,14 +96,12 @@ if ($row = mysql_fetch_row($user_status_query)) {
 
 
 //	BEGIN Get user's lesson info]=====================================================
-
 $user_lesson_info = getUserLessonInfo($uid, "html");
 //	END Get user's lesson info]=====================================================
 
 
 //if user is registered to at least one lesson
 if ($user_lesson_info[0][0] > 0) {
-
 	// BEGIN - Get user assignments
 	$param = array(	'uid'	=> $uid,
 	'max_repeat_val' 	=> $user_lesson_info[0][0], //max repeat val (num of lessons)
@@ -113,7 +109,6 @@ if ($user_lesson_info[0][0] > 0) {
 	'lesson_code'	=> $user_lesson_info[0][2],
 	'lesson_professor'	=> $user_lesson_info[0][3],
 	'lesson_statut'		=> $user_lesson_info[0][4]
-
 	);
 	$user_assignments = getUserAssignments($param, "html");
 	//END - Get user assignments
@@ -238,14 +233,12 @@ function autoCloseTags($string) {
 		if (in_array($openedtags[$i],$closedtags)) { unset($closedtags[array_search($openedtags[$i],$closedtags)]); }
 		else array_push($tags, $openedtags[$i]);
 	}
-
 	//prepare the close-tags for output
 	for($x=0;$x<count($tags);$x++) {
 		$add=strtolower(trim($tags[$x]));
 
 		if(!in_array($add,$donotclose)) $tagstoclose.='</'.$add.'>';
 	}
-
 	return $tagstoclose;
 }
 

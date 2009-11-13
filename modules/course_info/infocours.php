@@ -27,8 +27,7 @@
 // if we come from the home page
 if (isset($from_home) and ($from_home == TRUE) and isset($_GET['cid'])) {
         session_start();
-        $dbname = $cid;
-        session_register("dbname");
+        $_SESSION['dbname'] = $cid;
 }
 $require_current_course = TRUE;
 $require_prof = true;

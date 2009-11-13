@@ -34,11 +34,11 @@ if ($uname == escapeSimpleSelect($myrow["username"]))
 	if (md5($pass) == escapeSimpleSelect($myrow["password"])) {
 		// check if account is active
 		$is_active = check_activity($myrow["user_id"]);
-		if ($myrow["user_id"]==$myrow["is_admin"]) {
+		if ($myrow["user_id"] == $myrow["is_admin"]) {
 			$is_active = 1;
 			$auth_allow = 1;
 		}
-		if($is_active==1) {
+		if($is_active == 1) {
 			$uid = $myrow["user_id"];
 			$nom = $myrow["nom"];
 			$prenom = $myrow["prenom"];

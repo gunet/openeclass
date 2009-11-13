@@ -110,30 +110,22 @@ if (isset($_SESSION['shib_uname'])) { // authenticate via shibboleth
 		if (empty($pass)) {
 			$auth_allow = 4;
 		} else {
-			while ($myrow = mysql_fetch_array($result))
-			{
+			while ($myrow = mysql_fetch_array($result)) {
 				$exists = 1;
-				if(!empty($auth))
-				{
-					if(!in_array($myrow["password"],$check_passwords))
-					{
+				if(!empty($auth)) {
+					if(!in_array($myrow["password"],$check_passwords)) {
 						// eclass login
 						include "include/login.php"; 
-					}
-					else
-					{
+					} else {
 						// alternate methods login
 						include "include/alt_login.php";
 					}
-				}
-				else
-				{
+				} else {
 					$tool_content .= "<br>$langInvalidAuth<br>";
 				}
 			}
 		}
-		if(empty($exists))
-		{
+		if(empty($exists)) {
 			$auth_allow = 4;
 		}
 		if (!isset($uid))
@@ -167,16 +159,18 @@ if (isset($_SESSION['shib_uname'])) { // authenticate via shibboleth
 		##[BEGIN personalisation modification]############
 		//if user has activated the personalised interface
 		//register a control session for it
-	//	if ((@$userPerso == "yes") && session_is_registered("perso_is_active")) {
-		if (isset($_SESSION['perso_is_active'])) {
+		if (isset($_SESSION['perso_is_active']) and (isset($userPerso))) {
 			$_SESSION['user_perso_active'] = $userPerso;
 		}
 		##[END personalisation modification]############
 	}  // end of user authentication
 } 
 	
-if (isset($_SESSION['uid'])) $uid = $_SESSION['uid'];
-else unset($uid);
+if (isset($_SESSION['uid'])) { 
+	$uid = $_SESSION['uid'];
+} else { 
+	unset($uid);
+}
 //if the user logged in include the correct language files
 //in case he has a different language set in his/her profile
 if (isset($language)) {
@@ -199,7 +193,8 @@ if (isset($uid) AND !isset($logout)) {
 			draw($tool_content,1,null,null,null,null,$perso_tool_content);
 		} else {
 			//if the user is a guest send him straight to the corresponding lesson
-			$guestSQL = db_query("SELECT `code_cours` FROM `cours_user` WHERE `user_id` = $uid", $mysqlMainDb);
+			$guestSQL = db_query("SELECT `code_cours` FROM `cours_user` 
+				WHERE `user_id` = $uid", $mysqlMainDb);
 			if (mysql_num_rows($guestSQL) > 0) {
 				$sql_row = mysql_fetch_row($guestSQL);
 				$dbname=$sql_row[0];
