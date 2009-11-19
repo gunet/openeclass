@@ -157,8 +157,6 @@ if (isset($alreadyVisited)) {
             <input type=\"hidden\" name=\"institutionUrlForm\" value=\"$institutionUrlForm\">
             <input type=\"hidden\" name=\"faxForm\" value=\"".@$faxForm."\">
             <input type=\"hidden\" name=\"postaddressForm\" value=\"".@$postaddressForm."\">
-            <input type=\"hidden\" name=\"ldapserver\" value=\"".@$ldapserver."\">
-            <input type=\"hidden\" name=\"dnldapserver\" value=\"".@$dnldapserver."\">
             <input type=\"hidden\" name=\"reguser\" value=\"".@$reguser."\">
             <input type=\"hidden\" name=\"vodServer\" value=\"".@$vodServerForm."\">";
 }
@@ -312,14 +310,6 @@ elseif(isset($_REQUEST['install5']) OR isset($_REQUEST['back4']))
 	<td><textarea rows='3' class=\"FormData_InputText\" cols='40' name=\"postaddressForm\" value=\"".@$postaddressForm."\"></textarea></td>
 	</tr>
 	<tr>
-	<th class=\"left\">$langldap_host_url</th>
-	<td><input type=\"text\" class=\"FormData_InputText\" size=\"40\" name=\"ldapserver\" value=\"$ldapserver\"></td>
-	</tr>
-	<tr>
-	<th class=\"left\">$langLDAPBaseDn</th>
-	<td><input type=\"text\" class=\"FormData_InputText\" size=\"40\" name=\"dnldapserver\" value=\"$dnldapserver\"></td>
-	</tr>
-	<tr>
 	<th class=\"left\">$langViaReq</th>
 	<td><input type='checkbox' name='reguser'></td>
 	</tr>";
@@ -469,14 +459,6 @@ elseif(isset($_REQUEST['install6']))
 	<tr>
 	<th class=\"left\">$langInstitutePostAddress:</th>
 	<td>$postaddressForm</td>
-	</tr>
-	<tr>
-	<th class=\"left\">$langldap_host_url:</th>
-	<td>$ldapserver</td>
-	</tr>
-	<tr>
-	<th class=\"left\">$langLDAPBaseDn: </th>
-	<td>$dnldapserver</td>
 	</tr>
 	<tr>
 	<th class=\"left\">$langGroupStudentRegistrationType</th>
@@ -762,5 +744,5 @@ elseif (isset($_REQUEST['install1']) || isset($_REQUEST['back1']))
 	</body>
 	</html>";
 	echo $tool_content;
-	}
+}
 ?>

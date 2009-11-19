@@ -126,10 +126,10 @@ db_query("CREATE TABLE `cours` (
   `expirationDate` datetime NOT NULL default '0000-00-00 00:00:00',
   `first_create` datetime NOT NULL default '0000-00-00 00:00:00',
   `type` ENUM( 'pre', 'post', 'other' ) DEFAULT 'pre' NOT NULL,
-  `doc_quota` float NOT NULL default '40000000',
-  `video_quota` float NOT NULL default '20000000',
-  `group_quota` float NOT NULL default '40000000',
-  `dropbox_quota` float NOT NULL default '40000000',
+  `doc_quota` float NOT NULL default '104857600',
+  `video_quota` float NOT NULL default '104857600',
+  `group_quota` float NOT NULL default '104857600',
+  `dropbox_quota` float NOT NULL default '104857600',
   `password` varchar(50) default NULL,
   `faculteid` int(11) NOT NULL default '0',
   PRIMARY KEY  (`cours_id`)) $charset_spec");
@@ -247,23 +247,6 @@ db_query("INSERT INTO loginout (loginout.idLog, loginout.id_user, loginout.ip, l
 
 #add admin in list of admin
 db_query("INSERT INTO admin VALUES ('".$idOfAdmin."')");
-
-#
-# Table structure for table `institution`
-#
-
-db_query("CREATE TABLE institution (
-                 inst_id int(11) NOT NULL auto_increment,
-                 nom varchar(100) NOT NULL default '',
-                 ldapserver varchar(30) NOT NULL default '',
-                 basedn varchar(40) NOT NULL default '',
-	         PRIMARY KEY (inst_id)) $charset_spec");
-
-#
-# Dumping data for table `institution`
-#
-
-db_query("INSERT INTO institution (inst_id, nom, ldapserver, basedn) VALUES ('1', '$institutionForm', '$ldapserver', '$dnldapserver')");
 
 #
 # Table structure for table `prof_request`
