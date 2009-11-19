@@ -36,7 +36,6 @@ $require_admin = TRUE;
 include '../../include/baseTheme.php';
 $nameTools = $langChangeUser;
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
-
 $tool_content = '';
 
 if (isset($_POST['username'])) {
@@ -54,8 +53,7 @@ if (isset($_POST['username'])) {
                 $_SESSION['is_admin'] = $myrow["is_admin"];
                 $userPerso = $myrow["perso"];
                 $userLanguage = $myrow["lang"];
-	        if ($userPerso == "yes" and
-                    session_is_registered("perso_is_active")) {
+	        if ($userPerso == "yes" and isset($_SESSION['perso_is_active'])) {
         		$_SESSION['user_perso_active'] = true;
                 } else {
         		$_SESSION['user_perso_active'] = false;
@@ -68,7 +66,7 @@ if (isset($_POST['username'])) {
         		$_SESSION['langswitch'] = "greek";
 	        	$langChangeLang = $_SESSION['langLinkText'] = "English";
 		        $switchLangURL = $_SESSION['langLinkURL'] = "?localize=en";
-        	}       
+        	}
 		$language = $_SESSION['langswitch'];
                 header('Location: ' . $urlServer);
                 exit;

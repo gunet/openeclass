@@ -46,59 +46,33 @@
 
  */
 
-
-
-if (session_is_registered("uid") && isset($perso)) {
-
+if (isset($_SESSION['uid']) && isset($perso)) {
 	switch ($perso){
-
 		case 1: { //assignments
 			//$c is the lesson code.
 			$_SESSION["dbname"] = $c;
 			$url = $urlServer."modules/work/work.php?id=".$i;
 			header("location:".$url);
 			break;
-
 		}
-
-
-
 		case 2: {//announcements
 			//$c is the lesson code.
 			$_SESSION["dbname"] = $c;
 			header("location:".$urlServer."modules/announcements/announcements.php");
 			break;
 		}
-
-
-
 		case 4: {//agenda
-
 			//$c is the lesson code.
-
 			$_SESSION["dbname"] = $c;
-
 			header("location:".$urlServer."modules/agenda/agenda.php");
-
 			break;
 		}
-
-
-
 		case 5: {//forum
-
 			$_SESSION["dbname"] = $c;
-
 			$url = $urlServer."modules/phpbb/viewtopic.php?topic=".$t."&forum=".$f."&sub=".$s;
-
 			header("location:".$url);
-
 			break;
-
 		}
-
-
-
 		case 6: {//documents
 			$_SESSION["dbname"] = $c;
 			$url = $urlServer."modules/document/document.php?openDir=" . $p;
@@ -106,12 +80,8 @@ if (session_is_registered("uid") && isset($perso)) {
 			break;
 		}
 	}
-
-
-} elseif (!session_is_registered("uid")){
-
+} elseif (!isset($_SESSION['uid'])) {
 	die("UNAUTHORISED ACCESS. THIS IS AN INTERNAL SCRIPT AND CANNOT BE ACCESSED DIRECTLY. Please go back to <a href=\"$urlServer\">the login page</a>");
-
 }
 
 ?>
