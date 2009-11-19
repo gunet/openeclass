@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language es
-// Generated 2009-10-29 15:40:55
+// Generated 2009-11-19 15:13:25
 
 $langIntro = "El <b>$siteName</b> platforma es un completo Sistema de Administración eCursos que soporta el Servicio Asincrónico de eAprendizaje en <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
 $langVersion = "$siteName versión";
@@ -207,7 +207,7 @@ $langemailsubjectBlocked = "Rechazado el requerimiento del registro";
 $langemailbodyBlocked = "Tu requerimiento de registro ha sido rechazado.";
 $langCloseConf = "Cerrando el Requerimiento de Confirmación";
 $langReintroductionApplication = "La recuperación de la aplicación se completó con éxito";
-$langBackRequests = "Retorno a $langOfTeachers requerimientos";
+$langBackRequests = "Retorno a la lista de requerimientos";
 $langSendMessageTo = "Enviar un correo";
 $langToAllUsers = "a todos los usuarios";
 $langProfOnly = "a ".$langsTeachers."solo";
@@ -311,7 +311,7 @@ $langMonth = "Mes";
 $langYear = "Año";
 $langHour = 'hora';
 $langHours = 'horas';
-$langMinute = 'minutos';
+$langMinute = 'minuto';
 $langsecond = 'segundo';
 $langseconds = 'segundos';
 $langminutes = 'minutos';
@@ -388,7 +388,7 @@ $langAlreadyActiv = "El método de Autentificaicón ya está activo";
 $langErrActiv = "¡Error! El método de autentificación no puede ser activado";
 $langAuthSettings = "Ajustes de autentificación";
 $langWrongAuth = "Has tecleado un usurario/contraseña incorrectos";
-$langConference = "Activación de la Teleconferencia";
+$langConference = "Teleconferencia";
 $langWash = "Limpiado";
 $langWashFrom = "Chat libre desde";
 $langSave = "Guardar";
@@ -680,7 +680,7 @@ $langPassSameAuth = "Tu contraseña es la misma que la de la cuenta de autentifi
 $langLdapRequest = "Ya hay una petición para el usuario";
 $langLDAPUser = 'Usuario LDAP';
 $langLogIn = 'Acceso';
-$langLogout = 'Salida';
+$langLogout = 'Cierre de la sesión';
 $langAction = "Accion";
 $langRequiredFields = '(los campos marcados por (*) son requeridos)';
 $langCourseVisits = "Visitas del curso";
@@ -2615,63 +2615,50 @@ $langAddTime = "Añadir tiempo a las cuentas inactivas";
 $langRealised = "se ha ido";
 $langUpdates = "actualizaciones";
 $langNoChanges = "¡Error! Las cuentas inactivas no han sido actualizadas";
-$langTutorialDesc = "Also, in the link below, you will find useful tutorials for using and administrating the Open eClass platform with practical examples. These tutorials are available in three different formats: a) tutorials with pictures, b) video presentations and c) SCORM Packages.";
-$langTutorial = "Platform Tutorials";
-$langAnswersNotDisp = "Hide answers after exercise end";
-$langAnswersDisp = "Display correct answers after exercise end";
-$langDurationVisitsPerCourse = "Participation time per course";
-$langAddUnit = "Add new course unit";
-$langEditUnit = "Edit course unit details";
-$langUnitTitle = "Course unit title";
-$langUnitDescr = "Short description";
-$langUnitUnknown = "Unknown course unit";
-$langEmptyUnitTitle = "Please enter the title of the course unit";
-$langCourseUnits = "Course Units";
-$langCourseUnitDeleted = "Course unit was deleted";
-$langCourseUnitAdded = "Course unit was added";
-$langCourseUnitModified = "Course unit details modified";
-$langResourceCourseUnitDeleted = "Course unit resource was deleted";
-$langResourceUnitModified = "Resource details modified";
-$langInsertText = "text";
-$langInsertDoc = "document";
-$langInsertExercise = "exercise";
-$langInsertVideo = "video";
-$langInsertForum = "forum";
-$langUnknownResType = "Error: Unknown unit resource";
-$langNoExercises = "There are no exercises";
-$langFrom2 = "from";
-$langMultiRegUser = 'Mass user account creation';
-$langMultiRegUserInfo = "<p>Please enter in the area below a list of user details, one line per each new user account.</p>
-<p>The order of the user information is defined in the field before the area, where possible labels are:</p>
-<ul>
-<li><tt>first</tt>: First name</li>
-<li><tt>last</tt>: Last name / surname</li>
-<li><tt>email</tt>: e-mail address</li>
-<li><tt>id</tt>: Student ID</li>
-<li><tt>phone</tt>: Phone number</li>
-<li><tt>username</tt>: Username</li>
-</ul>
-<p>To have the users automatically registered to some courses, please add the course
-codes after the user details in the end of each line. The e-mail addres is optional - you can
-use a hyphen (-) in its place if you want to omit it. Lines beginning with # are ignored. If
-you don't specify usernames, they will be automatically creating by appending a serial
-number to the user prefix entered below.</p>";
-$langMultiRegCourseInvalid = 'User %s: invalid course code "%s"';
-$langMultiRegType = 'Account type';
-$langMultiRegSendMail = 'E-mail account information to users';
-$langMultiRegPrefix = 'Username prefix';
-$langModuleNotInstalled = "Not installed";
-$langReadHelp = "Read more";
-$langWarnInstallNotice1 = "Probably some other changes are required. Read the installation instructions in";
-$langWarnInstallNotice2 = "and restart the installation wizard.";
-$langSurnameName = "Full Name";
-$langUserDuration = "User participation per course";
-$langGroupUsage = 'User Group Statistics';
-$langDumpUserDuration = "Dump usage staticstics";
-$langDumpUserDurationToFile = "In csv file";
-$langCodeUTF = "UTF-8 encoding";
-$langCodeWin = "Windows-1253 encoding";
+$langTutorialDesc = "También, en el enlace inferior, puedes encontrar tutoriales útiles para usar y administrar la Plataforma Open eClass con prácticos ejemplos. Estos tutoriales están disponibles en tres formatos diferentes: a) tutoriales con imágenes, b) presentaciones en vídeo, c) paquetes SCORM.";
+$langTutorial = "Tutoriales de la Plataforma";
+$langAnswersNotDisp = "Esconde las respuestas después de la finalización del ejercicio";
+$langAnswersDisp = "Visualiza las respuestas correctas después de la finalización del ejercicio";
+$langDurationVisitsPerCourse = "Tiempo de participación por curso";
+$langAddUnit = "Añade una nueva unidad del curso";
+$langEditUnit = "Edita los detalles de la unidad del curso";
+$langUnitTitle = "Título de la unidad del curso";
+$langUnitDescr = "Descripción corta";
+$langUnitUnknown = "Unidad del curso desconocida";
+$langEmptyUnitTitle = "Por favor entra el título de la unidad del curso";
+$langCourseUnits = "Unidades del curso";
+$langCourseUnitDeleted = "La unidad del curso fue borrada";
+$langCourseUnitAdded = "La unidad del curso fue añadida";
+$langCourseUnitModified = "Los detalles de la unidad del curso modificados";
+$langResourceCourseUnitDeleted = "El recurso de la unidad del curso fue borrado";
+$langResourceUnitModified = "Detalles del recurso modificados";
+$langInsertText = "texto";
+$langInsertDoc = "documento";
+$langInsertExercise = "ejercicio";
+$langInsertVideo = "vídeo";
+$langInsertForum = "foro";
+$langUnknownResType = "Error: Recurso de la unidad desconocido";
+$langNoExercises = "No hay ejercicios";
+$langFrom2 = "desde";
+$langMultiRegUser = 'Creación masiva de cuentas de usuario';
+$langMultiRegUserInfo = 'Please enter in the field below a list of user details, one line per each new user account, in the following order: last name, first name, e-mail address. If you want to have the users automatically register to some courses, please append the course codes in the end of each line. The e-mail address is optional;<br>
+you can enter a hyphen (-) if you want to skip it. Lines beginning with "#" are ignored.';
+$langMultiRegCourseInvalid = 'Usiario %s: código del curso inválido "%s"';
+$langMultiRegType = 'Tipo de cuenta';
+$langMultiRegSendMail = 'Información de la cuenta de e-mail para usuarios';
+$langMultiRegPrefix = 'Prefijo del nombre de usuario';
+$langModuleNotInstalled = "No instalado";
+$langReadHelp = "Leer más";
+$langWarnInstallNotice1 = "Probablemente algunos de los cambios son requiridos. Lee las instrucciones de instalación en";
+$langWarnInstallNotice2 = "y vuelve a ejecutar la aplicación de instalación.";
+$langSurnameName = "Nombre completo";
+$langUserDuration = "Participación de usuario por curso";
+$langGroupUsage = 'Estadísticas del grupo de usuarios';
+$langDumpUserDuration = "Volcado de los estadísticos usados";
+$langDumpUserDurationToFile = "En un archivo csv";
+$langCodeUTF = "Codificación UTF-8";
+$langCodeWin = "Codificación Windows-1253";
 $langVia = 'via';
-$langInsertWork = 'assignment';
-$langMultiRegFields = 'Field order definition';
-$langMultiRegFieldError = 'Error! Invalid field label:';
+$langInsertWork = 'asignación';
+$langMultiRegFields = 'Definición del orden del campo';
+$langMultiRegFieldError = '¡Error!: Etiqueta de campo inválida:';
