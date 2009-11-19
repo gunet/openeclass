@@ -671,3 +671,33 @@ table.resources th  {
 	background: none;
 	text-align: center;
 }
+
+a.unit_link, a.unit_link:link, a.unit_link:active, a.unit_link:visited {
+    color: #727266;
+    font-size: 13px;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+a.unit_link:hover {
+    color: #008d9b !important;
+    font-size: 13px;
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+a.unit_link_invisible, a.unit_link_invisible:link, a.unit_link_invisible:active, a.unit_link_invisible:visited {
+    font-style: italic;
+    color: silver !important;
+    font-size: 13px;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+a.unit_link_invisible:hover {
+    color: silver !important;
+    font-style: italic;
+    font-size: 13px;
+    font-weight: bold;
+    text-decoration: underline;
+}
