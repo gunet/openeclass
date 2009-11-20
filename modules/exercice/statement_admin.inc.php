@@ -25,16 +25,16 @@
 * =========================================================================*/
 
 // the question form has been submitted
-if($submitQuestion) {
-	$questionName=trim($questionName);
-	$questionDescription=trim($questionDescription);
+if(isset($submitQuestion)) {
+	$questionName = trim($questionName);
+	$questionDescription = trim($questionDescription);
 
 	// no name given
 	if(empty($questionName))
 	{
-		$msgErr=$langGiveQuestion;
+		$msgErr = $langGiveQuestion;
 	}
-	// checks if the question is used in several exercises
+	// checks if the question is used in several exercises	
 	elseif($exerciseId && !$modifyIn && $objQuestion->selectNbrExercises() > 1)
 	{
 	        // if a picture has been set
@@ -43,12 +43,6 @@ if($submitQuestion) {
         	    // saves the picture into a temporary file
 	            $objQuestion->setTmpPicture($imageUpload);
         	}
-	}
-	else
-	{
-        // if the user has chosed to modify the question only in the current exercise
-        if(isset($modifyIn) && $modifyIn == 'thisExercise')
-        {	
 		// duplicates the question
 		$questionId=$objQuestion->duplicate();
 		// deletes the old question
@@ -66,54 +60,51 @@ if($submitQuestion) {
 		// copies answers from $modifyQuestion to $questionId
 		$objAnswerTmp->duplicate($questionId);
 		// destruction of the Answer object
-		unset($objAnswerTmp);
-        }
-
-		$objQuestion->read($modifyQuestion);
-		$objQuestion->updateTitle($questionName);
-		$objQuestion->updateDescription($questionDescription);
-		$objQuestion->updateType($answerType);
-		$objQuestion->save($exerciseId);
-		$questionId=$objQuestion->selectId();
-		// if a picture has been set or checkbox "delete" has been checked
-		if($imageUpload_size || $deletePicture)
-		{
-			// we remove the picture
-			$objQuestion->removePicture();
-			// if we add a new picture
-			if($imageUpload_size)
-			{
-		               // image is already saved in a temporary file
-		                if($modifyIn) {
-					// saves the picture into a temporary file
-					$objQuestion->getTmpPicture();
-				}
-		                // saves the picture coming from POST FILE
-                		else
- 	 	              	{
-                		    $objQuestion->uploadPicture($imageUpload);
-		                }
-			}
-		}
-
-		if($exerciseId)  {
-			// adds the question ID into the question list of the Exercise object
-			if($objExercise->addToList($questionId))
-			{
-				$objExercise->save();
-				$nbrQuestions++;
-			}
-		}
-
-		if($newQuestion) {
-			// goes to answer administration
-			$modifyAnswers=$questionId;
-		} else {
-			// goes to exercise viewing
-			$editQuestion=$questionId;
-		}
-		unset($newQuestion,$modifyQuestion);
+		unset($objAnswerTmp);	
 	}
+	
+	$objQuestion->read($modifyQuestion);
+	$objQuestion->updateTitle($questionName);
+	$objQuestion->updateDescription($questionDescription);
+	$objQuestion->updateType($answerType);
+	$objQuestion->save($exerciseId);
+	$questionId=$objQuestion->selectId();
+	// if a picture has been set or checkbox "delete" has been checked
+	if($imageUpload_size || $deletePicture) {
+		// we remove the picture
+		$objQuestion->removePicture();
+		// if we add a new picture
+		if($imageUpload_size)
+		{
+			// image is already saved in a temporary file
+			if($modifyIn) {
+				// saves the picture into a temporary file
+				$objQuestion->getTmpPicture();
+			}
+			// saves the picture coming from POST FILE
+			else
+			{
+				$objQuestion->uploadPicture($imageUpload);
+			}
+		}
+	}
+	if($exerciseId)  {
+		// adds the question ID into the question list of the Exercise object
+		if($objExercise->addToList($questionId))
+		{
+			$objExercise->save();
+			$nbrQuestions++;
+		}
+	}
+	if($newQuestion) {
+		// goes to answer administration
+		$modifyAnswers=$questionId;
+	} else {
+		// goes to exercise viewing
+		$editQuestion=$questionId;
+	}
+	unset($newQuestion,$modifyQuestion);
+	
 }
 else
 {
@@ -126,28 +117,18 @@ else
 	}
 }
 
-//if(($newQuestion || $modifyQuestion) && !$usedInSeveralExercises) {
 if(($newQuestion || $modifyQuestion)) {
-
 	// is picture set ?
-	$okPicture=file_exists($picturePath.'/quiz-'.$questionId)?true:false;
-	
-	@$tool_content .= "<form enctype='multipart/form-data' method='post' action='$_SERVER[PHP_SELF]?modifyQuestion=$modifyQuestion&newQuestion=$newQuestion'>
+	$okPicture = file_exists($picturePath.'/quiz-'.$questionId)?true:false;
+	$tool_content .= "<form enctype='multipart/form-data' method='post' action='$_SERVER[PHP_SELF]?modifyQuestion=$modifyQuestion&newQuestion=$newQuestion'>
 	<table width=\"99%\" class=\"FormData\"><tbody>";
 
 	// if there is an error message
 	if(!empty($msgErr)) {
-	$tool_content .= <<<cData
-    <tr>
-      <td colspan="2">
-        <table border="0" cellpadding="3" align="center" width="400" bgcolor="#FFCC00">
-        <tr>
-          <td>${msgErr}</td>
-        </tr>
-        </table>
-      </td>
-    </tr>
-cData;
+		$tool_content .= "<tr><td colspan='2'>
+		<table border='0' cellpadding='3' align='center' width='400' bgcolor='#FFCC00'>
+		<tr><td>${msgErr}</td></tr>
+		</table></td></tr>";
 	}
 
 	$tool_content .= "<tr><th width=\"220\">&nbsp;</td>
@@ -167,27 +148,18 @@ cData;
 	}	
 
 	$tool_content .= " :</th><td>";
-
 	if($okPicture) {
 		$tool_content .= "<img src='$picturePath/quiz-$questionId' border='0'><br/><br/>";
 	}
 	$tool_content .= "<input type='file' name='imageUpload' size='30' style='width:390px;'></td></tr>";
 
-	if ($okPicture)
-	{
-	$tool_content .= "
-    <tr>
-      <th class='left'>$langDeletePicture :</th>
-      <td><input type=\"checkbox\" name=\"deletePicture\" value=\"1\" ";
-	
-	if(isset($deletePicture)) 
-		$tool_content .= 'checked="checked"'; 
-	$tool_content .= "> ";
-
-	  $tool_content .= <<<cData
-      </td>
-    </tr>
-cData;
+	if ($okPicture) {
+		$tool_content .= "<tr><th class='left'>$langDeletePicture :</th>
+		<td><input type=\"checkbox\" name=\"deletePicture\" value=\"1\" ";
+		if(isset($deletePicture)) 
+			$tool_content .= 'checked="checked"'; 
+		$tool_content .= "> ";
+		$tool_content .= "</td></tr>";
 	}
 
   $tool_content .= <<<cData
@@ -220,21 +192,10 @@ $tool_content .= "
                         $tool_content .= 'checked="checked"';
                 $tool_content .= "> ".$langFillBlanks;
 
-
-$tool_content .= <<<cData
-
-      </td>
-    <tr>
-      <th>&nbsp;</td>
-      <td>
-      <input type="submit" name="submitQuestion" value="{$langOk}">
-      &nbsp;&nbsp;<input type="submit" name="cancelQuestion" value="{$langCancel}">
-      </td>
-    </tr>
-    </tbody>
-    </table>
-    </form>
-cData;
-
+	$tool_content .= "</td><tr><th>&nbsp;</td><td>
+	<input type='submit' name='submitQuestion' value='$langOk'>
+	&nbsp;&nbsp;<input type='submit' name='cancelQuestion' value='$langCancel'>
+	</td></tr></tbody>
+	</table></form>";
 }
 ?>

@@ -29,34 +29,27 @@ $answerType=$objQuestion->selectType();
 $okPicture=file_exists($picturePath.'/quiz-'.$questionId)?true:false;
 
 // if we come from the warning box "this question is used in several exercises"
-if(isset($modifyIn))
+if (isset($usedInSeveralExercises) or isset($modifyIn))
 {
 	// if the user has chosed to modify the question only in the current exercise
+	//$usedInSeveralExercises=1;
 	if($modifyIn == 'thisExercise')
 	{
 		// duplicates the question
 		$questionId=$objQuestion->duplicate();
-
 		// deletes the old question
 		$objQuestion->delete($exerciseId);
-
 		// removes the old question ID from the question list of the Exercise object
 		$objExercise->removeFromList($modifyAnswers);
-
 		// adds the new question ID into the question list of the Exercise object
 		$objExercise->addToList($questionId);
-
 		// construction of the duplicated Question
 		$objQuestion=new Question();
-
 		$objQuestion->read($questionId);
-
 		// adds the exercise ID into the exercise list of the Question object
 		$objQuestion->addToList($exerciseId);
-
 		// copies answers from $modifyAnswers to $questionId
 		$objAnswer->duplicate($questionId);
-
 		// construction of the duplicated Answers
 		$objAnswer=new Answer($questionId);
 	}
@@ -150,26 +143,22 @@ if(isset($submitAnswers) || isset($buttonBack))
 			if(!$nbrGoodAnswers)
 			{
 				$msgErr=($answerType == UNIQUE_ANSWER)?$langChooseGoodAnswer:$langChooseGoodAnswers;
-
 				// clears answers already recorded into the Answer object
 				$objAnswer->cancel();
 			}
 			// checks if the question is used in several exercises
 			elseif($exerciseId && !isset($modifyIn) && $objQuestion->selectNbrExercises() > 1)
 			{
-//				$usedInSeveralExercises=1;
+				$usedInSeveralExercises=1;
 			}
 			else
 			{
 				// saves the answers into the data base
 				$objAnswer->save();
-
 				// sets the total weighting of the question
 				$objQuestion->updateWeighting($questionWeighting);
 				$objQuestion->save($exerciseId);
-
 				$editQuestion=$questionId;
-
 				unset($modifyAnswers);
 			}
 		}
@@ -187,7 +176,7 @@ if(isset($submitAnswers) || isset($buttonBack))
 				// checks if the question is used in several exercises
 				if($exerciseId && !isset($modifyIn) && $objQuestion->selectNbrExercises() > 1)
 				{
-//					$usedInSeveralExercises=1;
+					$usedInSeveralExercises=1;
 				}
 				else
 				{
@@ -329,7 +318,7 @@ if(isset($submitAnswers) || isset($buttonBack))
 			// checks if the question is used in several exercises
 			if($exerciseId && !isset($modifyIn) && $objQuestion->selectNbrExercises() > 1)
 			{
-//				$usedInSeveralExercises=1;
+				$usedInSeveralExercises=1;
 			}
 			else
 			{
@@ -827,16 +816,7 @@ cData;
 
 			}
 
-$tool_content .= "
-
-
-        </td>
-      </tr>
-      </thead>
-      </table>
-	  
-      </form>
-     ";
+$tool_content .= "</td></tr></thead></table></form>";
 
 		} //END FILL_IN_BLANKS !!!
 		elseif($answerType == MATCHING)
@@ -860,13 +840,9 @@ $tool_content .= <<<cData
     </tr>	
 cData;
 
-	if($okPicture)
-	{
-	$tool_content .= <<<cData
-    <tr>
-      <td colspan="4" align="center"><img src="${picturePath}/quiz-${questionId}" border="0"></td>
-    </tr>
-cData;
+	if($okPicture) {
+		$tool_content .= "<tr>
+		<td colspan='4' align='center'><img src='${picturePath}/quiz-${questionId}' border='0'></td></tr>";
 	}
 
 	// if there is an error message
@@ -961,27 +937,18 @@ $tool_content .= <<<cData
   </tr>
 cData;
 
-			foreach($listeOptions as $key=>$val)
-			{
-
-$tool_content .= "
-    <tr>
-      <th class=\"right\">".$val."</th>
-      <td><input type=\"text\" ".
-	"name=\"option[".$key."]\" size=\"58\" value=\"";
-	
-	
-	if(!isset($formSent) && !isset($option[$key])) 
-		$tool_content .= ${"langDefaultMatchingOpt$val"}; 
-	else 
-		$tool_content .= @htmlspecialchars($option[$key]);
-		
-		$tool_content .= "\" class=\"auth_input\"></td>
-      <td>&nbsp;</td>
-      <td>&nbsp;</td>
-    </tr>";
-
-			 } // end foreach()
+	foreach($listeOptions as $key=>$val) {
+		$tool_content .= "<tr><th class=\"right\">".$val."</th>
+		<td><input type=\"text\" ".
+			"name=\"option[".$key."]\" size=\"58\" value=\"";
+			
+			if(!isset($formSent) && !isset($option[$key])) 
+				$tool_content .= ${"langDefaultMatchingOpt$val"}; 
+			else 
+				$tool_content .= @htmlspecialchars($option[$key]);
+				
+			$tool_content .= "\" class=\"auth_input\"></td><td>&nbsp;</td><td>&nbsp;</td></tr>";
+		} // end foreach()
 
 $tool_content .= <<<cData
     <tr>

@@ -30,8 +30,7 @@ include('../../include/phpmathpublisher/mathpublisher.php');
 // if the question we are modifying is used in several exercises
 if(isset($usedInSeveralExercises))
 {
-
-@$tool_content .= <<<cData
+$tool_content .= <<<cData
 
     <h3>${questionName}</h3>
     <form method="post" action="$_SERVER[PHP_SELF]?modifyQuestion=${modifyQuestion}&modifyAnswers=${modifyAnswers}">
@@ -82,36 +81,28 @@ cData;
 		}
 	} // end submit answers
 
-	$tool_content .= <<<cData
+	$tool_content .= "<input type='hidden' name='answerType' value='${answerType}'>
+	<table width='99%'><tr>
+	<td>${langUsedInSeveralExercises} :</td>
+	</tr>
+	<tr>
+	<td><input type='radio' name='modifyIn' value='allExercises' checked='checked'>
+	${langModifyInAllExercises}</td>
+	</tr>
+	<tr><td><input type='radio' name='modifyIn' value='thisExercise'>${langModifyInThisExercise}</td>
+	</tr><tr><td>";
 
-      <input type="hidden" name="answerType" value="${answerType}">
-
-    <table width="99%">
-    <tr>
-      <td>${langUsedInSeveralExercises} :</td>
-    </tr>
-    <tr>
-      <td><input type="radio" name="modifyIn" value="allExercises" checked="checked">
-      	${langModifyInAllExercises}</td>
-    </tr>
-    <tr>
-      <td><input type="radio" name="modifyIn" value="thisExercise">${langModifyInThisExercise}</td>
-    </tr>
-    <tr>
-cData;
-
-      $tool_content .= "<input type=\"submit\" name=\"";
-      if (isset($submitQuestion))
-      	$tool_content .= "submitQuestion \" ";
-      else	
-      	$tool_content .= "submitAnswers \" ";
-
-     	$tool_content .= "value=\"".$langOk."\"></td>&nbsp;&nbsp;<td align=\"center\">"."
-        <input type=\"submit\" name=\"buttonBack\" value=\"".$langCancel."\">";
+	$tool_content .= "<input type=\"submit\" name=\"";
+	if (isset($submitQuestion))
+		$tool_content .= "submitQuestion \" ";
+	else	
+		$tool_content .= "submitAnswers \" ";
+	$tool_content .= "value='$langOk'>&nbsp;&nbsp;
+		<input type='submit' name='buttonBack' value='$langCancel'>";
 	
      	$tool_content .= <<<cData
 
-    </tr>
+    </td></tr>
     </table>
       </td>
     </tr>
@@ -134,7 +125,7 @@ else
 	if(!isset($fromExercise)) {
 		$tool_content .= "
 		<a href=\"".$_SERVER['PHP_SELF']."?modifyQuestion=".$questionId."\">
-		<img src=\"../../template/classic/img/edit.gif\" border=\"0\" align=\"absmiddle\" title=\"".$langModify."\"></a>";
+		<img src='../../template/classic/img/edit.gif' border='0' align='absmiddle' title='$langModify'></a>";
 	}
 
 	$questionDescription = mathfilter($questionDescription, 12, "../../courses/mathimg/");

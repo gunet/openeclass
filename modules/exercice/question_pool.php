@@ -57,14 +57,12 @@ if($is_adminOfCourse) {
 	{
 		// construction of the Question object
 		$objQuestionTmp=new Question();
-		
 		// if the question exists
 		if($objQuestionTmp->read($delete))
 		{
 			// deletes the question from all exercises
 			$objQuestionTmp->delete();
 		}
-
 		// destruction of the Question object
 		unset($objQuestionTmp);
 	}
@@ -73,66 +71,31 @@ if($is_adminOfCourse) {
 	{
 		// construction of the Question object
 		$objQuestionTmp=new Question();
-
 		// if the question exists
-		if($objQuestionTmp->read($recup))
-		{
-/*
-					if(!is_object(@$objExercise)) {
-						// construction of the Exercise object
-						$objExercise=new Exercise();
-			
-						// creation of a new exercise if wrong or not specified exercise ID
-						if(isset($exerciseId)) {
-							$objExercise->read($exerciseId);
-						}
-					
-						// saves the object into the session
-						session_register('objExercise');
-				}			
-				$fromExercise=$objExercise->selectId();	
- */
-			// adds the exercise ID represented by $fromExercise into the list of exercises for the current question
+		if($objQuestionTmp->read($recup)) {
+			// adds the exercise ID into the list of exercises for the current question
 			$objQuestionTmp->addToList($fromExercise);
 		}
-
 		// destruction of the Question object
 		unset($objQuestionTmp);
-/*
-
-		if(!is_object(@$objExercise)) {
-			// construction of the Exercise object
-			$objExercise=new Exercise();
-
-			// creation of a new exercise if wrong or not specified exercise ID
-			if(isset($exerciseId)) {
-				$objExercise->read($exerciseId);
-			}	
-			// saves the object into the session
-			session_register('objExercise');					
-		}			
-		$exerciseId=$objExercise->selectId();			
-*/	
-// adds the question ID represented by $recup into the list of questions for the current exercise
-		
+		// adds the question ID into the list of questions for the current exercise
 		$objExercise->addToList($recup);
-//		header("Location: admin.php?editQuestion=$recup");
-//		exit();
 	}
-}
-
-
-// if admin of course
-if($is_adminOfCourse) {
-	$sql = "SELECT * from`$TBL_QUESTIONS`";
+	
+	// get the number of available question (used for pagination)
+	if (isset($exerciseId) and $exerciseId != 0) {
+		if ($exerciseId > 0) {
+			$sql="SELECT * FROM `$TBL_EXERCICE_QUESTION`,`$TBL_QUESTIONS` 
+				WHERE question_id=id AND exercice_id='$exerciseId'";
+		} elseif($exerciseId == -1) {
+			$sql="SELECT * FROM `$TBL_QUESTIONS` LEFT JOIN `$TBL_EXERCICE_QUESTION` 
+				ON question_id=id WHERE exercice_id IS NULL";
+		}
+	} else {
+		$sql = "SELECT * from`$TBL_QUESTIONS`";
+	}
 	$result = db_query($sql, $currentCourseID);
 	$num_of_questions = mysql_num_rows($result);	
-
-	if (isset($fromExercise)) {
-		$temp_fromExercise = $fromExercise;
-	} else {
-		$temp_fromExercise = "";
-	}
 
 	$tool_content .= "<div id=\"operations_container\"><ul id=\"opslist\"><li>";
 	if(isset($fromExercise)) {
@@ -148,11 +111,9 @@ if($is_adminOfCourse) {
 		$tool_content .= "<input type='hidden' name='fromExercise' value='$fromExercise'>";
 	}
 	
-	$tool_content .= "<table width='99%' class='FormData'><thead><tr>
-		<th class='left' width='220'>$langQuesList :</th>";
-	
+	$tool_content .= "<table width='99%' class='FormData'><thead><tr>";
 	$tool_content .= "<td align=\"right\" class=\"right\">";
-	$tool_content .= "<b>".$langFilter."</b>: 
+	$tool_content .= "<b>".$langFilter."</b>:
 	<select name=\"exerciseId\" class=\"FormData_InputText\">"."
 	<option value=\"0\">-- ".$langAllExercises." --</option>"."
 	<option value=\"-1\" ";
@@ -161,15 +122,13 @@ if($is_adminOfCourse) {
 		$tool_content .= "selected=\"selected\""; 
 	$tool_content .= ">-- ".$langOrphanQuestions." --</option>";
 	
+	mysql_select_db($currentCourseID);
 	if (isset($fromExercise)) {
-		mysql_select_db($currentCourseID);
-		$sql="SELECT id,titre FROM `$TBL_EXERCICES` WHERE id<>'$fromExercise' ORDER BY id";
-		$result = mysql_query($sql);
+		$sql="SELECT id,titre FROM `$TBL_EXERCICES` WHERE id <> '$fromExercise' ORDER BY id";
 	} else {
-		mysql_select_db($currentCourseID);
 		$sql="SELECT id,titre FROM `$TBL_EXERCICES` ORDER BY id";
-		$result = mysql_query($sql);
 	}
+	$result = mysql_query($sql);
 	
 	// shows a list-box allowing to filter questions
 	while($row=mysql_fetch_array($result)) {
@@ -178,50 +137,50 @@ if($is_adminOfCourse) {
 			$tool_content .= "selected=\"selected\"";
 		$tool_content .= ">".$row['titre']."</option>";
 	}
-	$tool_content .= "</select><input type='submit' value='$langOk'></td></tr></thead></table>";
+	$tool_content .= "</select><input type='submit' value='$langQuestionView'></td></tr></thead></table>";
 
 	$from = $page*$limitQuestPage;
 	
 	// if we have selected an exercise in the list-box 'Filter'
 	if(isset($exerciseId) && $exerciseId > 0)
 	{
-		$sql="SELECT id,question,type FROM `$TBL_EXERCICE_QUESTION`,`$TBL_QUESTIONS` WHERE question_id=id 
-			AND exercice_id='$exerciseId' ORDER BY q_position LIMIT $from,".($limitQuestPage+1);
+		$sql="SELECT id,question,type FROM `$TBL_EXERCICE_QUESTION`,`$TBL_QUESTIONS` 
+			WHERE question_id=id AND exercice_id='$exerciseId' 
+			ORDER BY q_position LIMIT $from,".($limitQuestPage+1);
 		$result = mysql_query($sql);
 	}
 	// if we have selected the option 'Orphan questions' in the list-box 'Filter'
 	elseif(isset($exerciseId) && $exerciseId == -1)
 	{
-		$sql="SELECT id,question,type FROM `$TBL_QUESTIONS` LEFT JOIN `$TBL_EXERCICE_QUESTION` ON question_id=id 
-			WHERE exercice_id IS NULL ORDER BY question LIMIT $from,".($limitQuestPage+1);
+		$sql="SELECT id,question,type FROM `$TBL_QUESTIONS` LEFT JOIN `$TBL_EXERCICE_QUESTION` 
+			ON question_id=id WHERE exercice_id IS NULL ORDER BY question 
+			LIMIT $from,".($limitQuestPage+1);
 		$result = mysql_query($sql);
 	}
 	// if we have not selected any option in the list-box 'Filter'
 	else
 	{		
-		@$sql="SELECT id,question,type FROM `$TBL_QUESTIONS` LEFT JOIN `$TBL_EXERCICE_QUESTION` ON question_id=id 
-			WHERE exercice_id IS NULL OR exercice_id<>'$fromExercise' GROUP BY id 
-			ORDER BY question LIMIT $from,".($limitQuestPage+1);
+		@$sql="SELECT id,question,type FROM `$TBL_QUESTIONS` LEFT JOIN `$TBL_EXERCICE_QUESTION` 
+			ON question_id=id WHERE exercice_id IS NULL OR exercice_id<>'$fromExercise' 
+			GROUP BY id ORDER BY question LIMIT $from,".($limitQuestPage+1);
 		$result = mysql_query($sql);
 		// forces the value to 0
 		$exerciseId = 0;
 	}
 	$nbrQuestions = mysql_num_rows($result);
-
+	
 	$tool_content .= "<table width='99%' class='Question'><tbody><tr>";
-	$tool_content .= "<td class='left' width='90%' colspan='2'>&nbsp;$langQuestionView</td>";
+	$tool_content .= "<th class='left' width='90%' colspan='2'>$langQuesList</th>";
 	
 	if(isset($fromExercise)) {
-		$tool_content .= "<td width='10%' align='center'><b>$langReuse</b></td>";
+		$tool_content .= "<th width='10%' align='center'>$langReuse</th>";
 	} else {
-		$tool_content .= "<td width='5%' align='center'>$langModify</td>
-		<td width='5%' align='center'>$langDelete</td>";
+		$tool_content .= "<th width='10%' align='center' colspan='2'>$langActions</th>";
 	}
 
 	$tool_content .= "</tr>";
 	$i = 1;
-	while($row=mysql_fetch_array($result)) {
-	// if we come from the exercise administration to get a question, doesn't show the question already used by that exercise
+	while ($row = mysql_fetch_array($result)) {
 		if(isset($fromExercise) || !is_object(@$objExercise) || !$objExercise->isInList($row['id'])) {
 			if ($row['type'] <= 1)
 				$answerType = $langUniqueSelect;
@@ -234,18 +193,19 @@ if($is_adminOfCourse) {
 				
 			if(!isset($fromExercise)) {
 				$tool_content .= "<tr>
-				<td width=\"1%\"><div style=\"padding-top:4px;\">
-				<img src=\"../../template/classic/img/arrow_grey.gif\" border=\"0\" alt=\"bullet\"></div></td>
+				<td width='1%'><div style='padding-top:4px;'>
+				<img src='../../template/classic/img/arrow_grey.gif' border='0' alt='bullet'></div></td>
 				<td>
-				<a href=\"admin.php?editQuestion=".$row['id']."&fromExercise=\"\">".$row['question']."</a><br/><small class=\"invisible\">".$answerType."</small></td>
-				<td><div align=\"center\"><a href=\"admin.php?editQuestion=".$row['id']."\"><img src=\"../../template/classic/img/edit.gif\" border=\"0\" alt=\"".$langModify."\"></a></div>";
+				<a href=\"admin.php?editQuestion=".$row['id']."&fromExercise=\"\">".$row['question']."</a><br/><small class='invisible'>".$answerType."</small></td>
+				<td><div align='center'><a href=\"admin.php?editQuestion=".$row['id']."\">
+				<img src='../../template/classic/img/edit.gif' border='0' title='$langModify'></a></div>";
 			} else {
-				$tool_content .= "<tr><td width=\"1%\"><div style=\"padding-top:4px;\">
-				<img src=\"../../template/classic/img/arrow_grey.gif\" border=\"0\" alt=\"bullet\"></div></td>
-				<td><a href=\"admin.php?editQuestion=".$row['id']."&fromExercise=".$fromExercise."\">".$row['question']."</a><br/><small class=\"invisible\">".$answerType."</small></td>
-				<td class=\"center\"><div align=\"center\">";
+				$tool_content .= "<tr><td width='1%'><div style='padding-top:4px;'>
+				<img src='../../template/classic/img/arrow_grey.gif' border='0'></div></td>
+				<td><a href=\"admin.php?editQuestion=".$row['id']."&fromExercise=".$fromExercise."\">".$row['question']."</a><br/><small class='invisible'>".$answerType."</small></td>
+				<td class='center'><div align='center'>";
 				$tool_content .= "<a href=\"".$_SERVER['PHP_SELF']."?recup=".$row['id'].
-					"&fromExercise=".$fromExercise."\"><img src=\"../../template/classic/img/enroll.gif\" border=\"0\" alt=\"".$langReuse."\"></a>";
+					"&fromExercise=".$fromExercise."\"><img src='../../template/classic/img/enroll.gif' border='0' title='$langReuse'></a>";
 			}
 			$tool_content .= "</td>";	
 			if(!isset($fromExercise)) {
@@ -255,7 +215,7 @@ if($is_adminOfCourse) {
 					"')) return false;\"><img src='../../template/classic/img/delete.gif' border='0' title='$langDelete'></a></div></td>";
 			}
 			$tool_content .= "</tr>";
-			// skips the last question, that is only used to know if we have or not to create a link "Next page"
+			// skips the last question,only used to know if we must create a link "Next page"
 			if($i == $limitQuestPage) {
 				break;
 			}
@@ -302,7 +262,9 @@ if($is_adminOfCourse) {
 				"&page=".$nextpage."'>".$langNext.
 				"</a> &gt;&gt;</small>";
 			} else {
-				$tool_content .= "<small><a href='$_SERVER[PHP_SELF]?page=$nextpage'>$langNext</a> &gt;&gt;</small>";
+				$tool_content .= "<small>
+				<a href='$_SERVER[PHP_SELF]?page=$nextpage'>$langNext</a> &gt;&gt;
+				</small>";
 			}
 		}
 	}	 

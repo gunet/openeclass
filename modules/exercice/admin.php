@@ -33,7 +33,6 @@ define('MULTIPLE_ANSWER', 2);
 define('FILL_IN_BLANKS', 3);
 define('MATCHING', 4);
 
-
 include('exercise.class.php');
 include('question.class.php');
 include('answer.class.php');
@@ -171,7 +170,7 @@ if($editQuestion || $newQuestion || $modifyQuestion || $modifyAnswers) {
 }
 
 // if cancelling an exercise
-if($cancelExercise) {
+if(isset($cancelExercise)) {
 	// existing exercise
 	if($exerciseId) {
 		unset($modifyExercise);
@@ -185,7 +184,7 @@ if($cancelExercise) {
 }
 
 // if cancelling question creation/modification
-if($cancelQuestion) {
+if(isset($cancelQuestion)) {
 	// if we are creating a new question from the question pool
 	if(!$exerciseId && !$questionId) {
 		// goes back to the question pool
