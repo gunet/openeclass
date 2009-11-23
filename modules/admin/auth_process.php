@@ -85,7 +85,11 @@ if((!empty($auth_submit)) && ($auth_submit==1))
 	    }
 	    else
 	    {
-			$tool_content .= "<table width=\"99%\"><tbody><tr><td class=\"caution\">$langConnNo</td></tr></tbody></table><br /><br />";
+			$tool_content .= "<table width=\"99%\"><tbody><tr><td class=\"caution\">$langConnNo";
+                        if (isset($GLOBALS['auth_errors'])) {
+                                $tool_content .= "<p>$GLOBALS[auth_errors]</p>";
+                        }
+                        $tool_content .= "</td></tr></tbody></table><br /><br />";
 				$auth_allow = 0;
 	    }
 		}

@@ -312,7 +312,10 @@ function auth_user_login ($auth, $test_username, $test_password)
 
             $ldap = ldap_connect($ldap_host);
 
-            if ($ldap) {
+            if (!$ldap) {
+                    $GLOBALS['auth_errors'] = 'Error connecting to LDAP host';
+                    return false;
+            } else {
                     // LDAP connection established - now process all
                     // base dn's until authentication is achieved or fail
 
@@ -324,6 +327,7 @@ function auth_user_login ($auth, $test_username, $test_password)
 
                             // try an authenticated bind to confirm
                             // user/password pair
+
                             if (@ldap_bind($ldap, $dn, $test_password)) {
                                     $testauth = true;
                                     $search = "$attrib=$test_username";
@@ -335,6 +339,9 @@ function auth_user_login ($auth, $test_username, $test_password)
                                                 'lastname' => get_ldap_attribute($userinfo, 'sn'),
                                                 'email' => get_ldap_attribute($userinfo, 'mail'));
                                     }
+                            } else {
+                                $GLOBALS['auth_errors'] = ldap_error($ldap);
+                                return false;
                             }
                     }
                     @ldap_unbind($ldap);
