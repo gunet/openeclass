@@ -3241,3 +3241,5 @@ $langUnknownResType = "Πρόβλημα! Άγνωστος πόρος θεματ�
 $langNoExercises = "Δεν υπάρχουν ασκήσεις";
 
 $langVia = 'μέσω';
+$langStudentViewEnable = "Περιβάλλον $langsOfStudent";
+$langStudentViewDisable = "Απενεργοποίηση περιβάλλοντος $langsOfStudent";

@@ -261,6 +261,15 @@ if (isset($require_prof) and $require_prof) {
 	}
 }
 
+// Temporary student view
+if (isset($_SESSION['saved_statut'])) {
+        $statut = 5;
+	$is_adminOfCourse = false;
+        if (isset($currentCourse)) {
+               $_SESSION['status'][$currentCourse] = 5;
+        }
+}
+
 
 //Security check:: Users that do not have Professor access for a course must not
 //be able to access inactive tools.

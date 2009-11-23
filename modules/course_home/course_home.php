@@ -316,7 +316,23 @@ $tool_content .= "
 
       </td>
    </tr>
-   <tr>
+   <tr>";
+
+if ($is_adminOfCourse or
+    (isset($_SESSION['saved_statut']) and $_SESSION['saved_statut'] == 1)) {
+        if (isset($_SESSION['saved_statut'])) {
+                $button_message = $langStudentViewDisable;
+        } else {
+                $button_message = $langStudentViewEnable;
+        }
+        $tool_content .=
+                "<tr><td colspan='3' style='text-align: right'>" .
+                "<form action='{$urlServer}student_view.php' method='post'>" .
+                "<input type='submit' name='submit' value='$button_message' />" .
+                "</form></td></tr>\n";
+}
+
+$tool_content .= "
       <td colspan='3' valign='top'>
         <p>&nbsp;</p>
 
