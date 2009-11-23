@@ -29,10 +29,9 @@ $answerType=$objQuestion->selectType();
 $okPicture=file_exists($picturePath.'/quiz-'.$questionId)?true:false;
 
 // if we come from the warning box "this question is used in several exercises"
-if (isset($usedInSeveralExercises) or isset($modifyIn))
-{
+if (isset($usedInSeveralExercises) or isset($modifyIn)) {
 	// if the user has chosed to modify the question only in the current exercise
-	//$usedInSeveralExercises=1;
+	//$usedInSeveralExercises=1;	
 	if($modifyIn == 'thisExercise')
 	{
 		// duplicates the question
@@ -80,8 +79,7 @@ if (isset($usedInSeveralExercises) or isset($modifyIn))
 }
 
 // the answer form has been submitted
-if(isset($submitAnswers) || isset($buttonBack))
-{
+if(isset($submitAnswers) || isset($buttonBack)) {
 
 	if($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER)
 	{
@@ -149,6 +147,7 @@ if(isset($submitAnswers) || isset($buttonBack))
 			// checks if the question is used in several exercises
 			elseif($exerciseId && !isset($modifyIn) && $objQuestion->selectNbrExercises() > 1)
 			{
+				
 				$usedInSeveralExercises=1;
 			}
 			else
@@ -341,7 +340,7 @@ if(isset($modifyAnswers))
 {
 	// construction of the Answer object
 	$objAnswer=new Answer($questionId);
-	session_register('objAnswer');
+	$_SESSION['objAnswer'] = $objAnswer;
 
 	if($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER)
 	{
@@ -515,7 +514,7 @@ if(isset($modifyAnswers))
 
 $tool_content .= <<<cData
 
-    <form method="post" action="${PHP_SELF}?modifyAnswers=${modifyAnswers}">
+    <form method="post" action="$_SERVER[PHP_SELF]?modifyAnswers=${modifyAnswers}">
     <input type="hidden" name="formSent" value="1">
     <input type="hidden" name="nbrAnswers" value="${nbrAnswers}">
 cData;
@@ -650,7 +649,7 @@ cData;
 		{
 
     $tool_content .= "
-      <form name=\"formulaire\" method=\"post\" action=\"".$PHP_SELF."?modifyAnswers=".$modifyAnswers."\">\n";
+      <form name=\"formulaire\" method=\"post\" action=\"".$_SERVER['PHP_SELF']."?modifyAnswers=".$modifyAnswers."\">\n";
 if(!isset($setWeighting))
 	$tempSW = "";
 else

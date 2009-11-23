@@ -28,8 +28,7 @@
 include('../../include/phpmathpublisher/mathpublisher.php');
 
 // if the question we are modifying is used in several exercises
-if(isset($usedInSeveralExercises))
-{
+if(isset($usedInSeveralExercises)) {
 $tool_content .= <<<cData
 
     <h3>${questionName}</h3>
@@ -86,10 +85,10 @@ cData;
 	<td>${langUsedInSeveralExercises} :</td>
 	</tr>
 	<tr>
-	<td><input type='radio' name='modifyIn' value='allExercises' checked='checked'>
-	${langModifyInAllExercises}</td>
+	<td><input type='radio' name='modifyIn' value='allExercises'>
+	$langModifyInAllExercises</td>
 	</tr>
-	<tr><td><input type='radio' name='modifyIn' value='thisExercise'>${langModifyInThisExercise}</td>
+	<tr><td><input type='radio' name='modifyIn' value='thisExercise' checked='checked'>$langModifyInThisExercise</td>
 	</tr><tr><td>";
 
 	$tool_content .= "<input type=\"submit\" name=\"";
@@ -110,9 +109,7 @@ cData;
     </form>
 cData;
 
-}
-else
-{
+} else {
 	// selects question informations
 	$questionName=$objQuestion->selectTitle();
 	$questionDescription=$objQuestion->selectDescription();

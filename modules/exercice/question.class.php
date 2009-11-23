@@ -56,7 +56,6 @@ class Question
 		$this->weighting=0;
 		$this->position=1;
 		$this->type=2;
-
 		$this->exerciseList=array();
 	}
 
@@ -87,7 +86,6 @@ class Question
 
 			$sql="SELECT exercice_id FROM `$TBL_EXERCICE_QUESTION` WHERE question_id='$id'";
 			$result=mysql_query($sql) or die("Error : SELECT in file ".__FILE__." at line ".__LINE__);
-
 			// fills the array with the exercises which this question is in
 			while($object=mysql_fetch_object($result))
 			{
@@ -186,7 +184,9 @@ class Question
 	 */
 	function selectNbrExercises()
 	{
-		return sizeof($this->exerciseList);
+		if (is_array($this->exerciseList)) {
+			return sizeof($this->exerciseList);
+		}
 	}
 
 	/**

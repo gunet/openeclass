@@ -124,7 +124,7 @@ if(!is_object($objExercise)) {
 		$objExercise->read($exerciseId);
 	}
 	// saves the object into the session
-	session_register('objExercise');
+	$_SESSION['objExercise'] = $objExercise; 
 }
 
 // doesn't select the exercise ID if we come from the question pool
@@ -143,7 +143,7 @@ if($editQuestion || $newQuestion || $modifyQuestion || $modifyAnswers) {
 		// construction of the Question object
 		$objQuestion=new Question();
 		// saves the object into the session
-		session_register('objQuestion');
+		$_SESSION['objQuestion'] = $objQuestion;
 		// reads question data
 		if($editQuestion) {
 			// question not found

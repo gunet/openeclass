@@ -25,7 +25,7 @@
 * =========================================================================*/
 
 // answer types
-define('UNIQUE_ANSWER',	1);
+define('UNIQUE_ANSWER', 1);
 define('MULTIPLE_ANSWER', 2);
 define('FILL_IN_BLANKS', 3);
 define('MATCHING', 4);
@@ -66,7 +66,7 @@ $TBL_EXERCICES='exercices';
 $TBL_QUESTIONS='questions';
 
 // maximum number of exercises on a same page
-$limitExPage=50;
+$limitExPage = 30;
 // selects $limitExPage exercises at the same time
 @$from=$page*$limitExPage;
 
@@ -117,7 +117,7 @@ if($is_allowedToEdit) {
         <ul id=\"opslist\">\n";
 
   $tool_content .= <<<cData
-          <li><a href="admin.php?NewExercise=Yes">${langNewEx}</a> |<a href="question_pool.php">${langQuestionPool}</a></li>
+          <li><a href="admin.php?NewExercise=Yes">${langNewEx}</a>&nbsp;|&nbsp;<a href="question_pool.php">${langQuestionPool}</a></li>
 cData;
 
 $tool_content .= "
@@ -223,25 +223,25 @@ while($row = mysql_fetch_array($result)) {
 	$tool_content .= <<<cData
 
         <td align="right">
-          <a href="admin.php?exerciseId=${row['id']}"><img src="../../template/classic/img/edit.gif" border="0" alt="${langModify_temp}"></a>
-          <a href="$_SERVER[PHP_SELF]?choice=delete&exerciseId=${row['id']}"  onclick="javascript:if(!confirm('${langConfirmYourChoice_temp}')) return false;"><img src="../../template/classic/img/delete.gif" border="0" alt="${langDelete_temp}"></a>
+          <a href="admin.php?exerciseId=${row['id']}"><img src="../../template/classic/img/edit.gif" border="0" title="${langModify_temp}"></a>
+          <a href="$_SERVER[PHP_SELF]?choice=delete&exerciseId=${row['id']}"  onclick="javascript:if(!confirm('${langConfirmYourChoice_temp}')) return false;"><img src="../../template/classic/img/delete.gif" border="0" title="${langDelete_temp}"></a>
 cData;
 
 	// if active
 	if($row['active']) {
 		if (isset($page)) {
-			$tool_content .= "<a href=\"$_SERVER[PHP_SELF]?choice=disable&page=${page}&exerciseId=".$row['id']."\">"."<img src=\"../../template/classic/img/visible.gif\" border=\"0\" alt=\"".$langVisible."\"></a>&nbsp;";
+			$tool_content .= "<a href=\"$_SERVER[PHP_SELF]?choice=disable&page=${page}&exerciseId=".$row['id']."\">"."<img src='../../template/classic/img/visible.gif' border='0' title='$langVisible'></a>&nbsp;";
 		} else {
 			$tool_content .= "
-			<a href='$_SERVER[PHP_SELF]?choice=disable&exerciseId=".$row['id']."'>"."<img src='../../template/classic/img/visible.gif' border='0' alt='".$langVisible."'></a>&nbsp;";
+			<a href='$_SERVER[PHP_SELF]?choice=disable&exerciseId=".$row['id']."'>"."<img src='../../template/classic/img/visible.gif' border='0' title='$langVisible'></a>&nbsp;";
 		}
 	} else { // else if not active
 		if (isset($page)) {
 			$tool_content .= "
-			<a href='$_SERVER[PHP_SELF]?choice=enable&page=${page}&exerciseId=".$row['id']."'>"."<img src='../../template/classic/img/invisible.gif' border='0' alt='".$langVisible."'></a>&nbsp;";
+			<a href='$_SERVER[PHP_SELF]?choice=enable&page=${page}&exerciseId=".$row['id']."'>"."<img src='../../template/classic/img/invisible.gif' border='0' title='$langVisible'></a>&nbsp;";
 		} else {
 			$tool_content .= "
-			<a href='$_SERVER[PHP_SELF]?choice=enable&exerciseId=".$row['id']."'>"."<img src='../../template/classic/img/invisible.gif' border='0' alt='".$langVisible."'></a>&nbsp;";
+			<a href='$_SERVER[PHP_SELF]?choice=enable&exerciseId=".$row['id']."'>"."<img src='../../template/classic/img/invisible.gif' border='0' title='$langVisible'></a>&nbsp;";
 		}
 	}
 	$tool_content .= "</td></tr>";
