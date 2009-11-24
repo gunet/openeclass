@@ -117,8 +117,7 @@ if($REQUEST_METHOD == 'POST') {
 // intializes the Exercise object
 if(!is_object($objExercise)) {
 	// construction of the Exercise object
-	$objExercise=new Exercise();
-	
+	$objExercise=new Exercise();	
 	// creation of a new exercise if wrong or not specified exercise ID
 	if($exerciseId) {
 		$objExercise->read($exerciseId);
@@ -138,14 +137,14 @@ if(!isset($fromExercise)) {
 $nbrQuestions=$objExercise->selectNbrQuestions();
 
 // intializes the Question object
-if($editQuestion || $newQuestion || $modifyQuestion || $modifyAnswers) {
-	if($editQuestion || $newQuestion) {
+if(isset($editQuestion) || isset($newQuestion) || isset($modifyQuestion) || isset($modifyAnswers)) {
+	if(isset($editQuestion) || isset($newQuestion)) {
 		// construction of the Question object
 		$objQuestion=new Question();
 		// saves the object into the session
 		$_SESSION['objQuestion'] = $objQuestion;
 		// reads question data
-		if($editQuestion) {
+		if(isset($editQuestion)) {
 			// question not found
 			if(!$objQuestion->read($editQuestion)) {
 				$tool_content .= $langQuestionNotFound;
@@ -154,18 +153,14 @@ if($editQuestion || $newQuestion || $modifyQuestion || $modifyAnswers) {
 			}
 		}
 	}
-
 	// checks if the object exists
 	if(is_object($objQuestion)) {
 		// gets the question ID
 		$questionId=$objQuestion->selectId();
-	}
-	// question not found
-	else
-	{
+	} else { // question not found
 		$tool_content .= $langQuestionNotFound;
 		draw($tool_content, 2, 'exercice', $local_head, '');
-		exit();		
+		exit();
 	}
 }
 
@@ -198,63 +193,62 @@ if(isset($cancelQuestion)) {
 }
 
 // if cancelling answer creation/modification
-if($cancelAnswers) {
+if(isset($cancelAnswers)) {
 	// goes back to the question viewing
 	$editQuestion=$modifyAnswers;
 	unset($modifyAnswers);
 }
 
 // modifies the query string that is used in the link of tool name
-if($editQuestion || $modifyQuestion || $modifyAnswers) {
+if(isset($editQuestion) || isset($modifyQuestion) || isset($modifyAnswers)) {
 	$nameTools=$langQuestionManagement;
 	$navigation[]= array ("url" => "admin.php?exerciseId=$exerciseId", "name" => $langExerciseManagement);
 	$QUERY_STRING=$questionId?'editQuestion='.$questionId.'&fromExercise='.$fromExercise:'newQuestion=yes';
-} elseif($newQuestion) {
+} elseif(isset($newQuestion)) {
 	$nameTools=$langNewQu;
 	$navigation[]= array ("url" => "admin.php?exerciseId=$exerciseId", "name" => $langExerciseManagement);
 	$QUERY_STRING=$questionId?'editQuestion='.$questionId.'&fromExercise='.$fromExercise:'newQuestion=yes';
-} elseif($NewExercise) {
+} elseif(isset($NewExercise)) {
 	$nameTools=$langNewEx;
 	$QUERY_STRING='';
-} elseif($modifyExercise) {
+} elseif(isset($modifyExercise)) {
 	$nameTools=$langInfoExercise;
 	$navigation[]= array ("url" => "admin.php?exerciseId=$exerciseId", "name" => $langExerciseManagement);
 	$QUERY_STRING='';
-}
-else {
+} else {
 	$nameTools=$langExerciseManagement;
 	$QUERY_STRING='';
 }
 
 // if the question is duplicated, disable the link of tool name
-if($modifyIn == 'thisExercise') {
+if(isset($modifyIn) and $modifyIn == 'thisExercise') {
 	if ($buttonBack) {
 		$modifyIn='allExercises';
-	} else{
+	} else {
 		$noPHP_SELF=true;
 	}
 }
 
-if($newQuestion || $modifyQuestion) {
+if(isset($newQuestion) || isset($modifyQuestion)) {
 	// statement management
 	include('statement_admin.inc.php');
 }
 
-if($modifyAnswers) {
+if(isset($modifyAnswers)) {
 	// answer management
 	include('answer_admin.inc.php');
 }
 
-if($editQuestion || $usedInSeveralExercises) {
+if(isset($editQuestion) || isset($usedInSeveralExercises)) {
 	// question management
 	include('question_admin.inc.php');
 }
 
-if(!$newQuestion && !$modifyQuestion && !$editQuestion && !$modifyAnswers) {
+if(!isset($newQuestion) && !isset($modifyQuestion) && !isset($editQuestion) && !isset($modifyAnswers)) {
 	// exercise management
 	include('exercise_admin.inc.php');
 
-	if(!$modifyExercise) {
+	if(!isset($modifyExercise)) {
 		// question list management
 		include('question_list_admin.inc.php');
 	}

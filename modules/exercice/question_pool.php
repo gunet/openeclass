@@ -80,6 +80,7 @@ if($is_adminOfCourse) {
 		unset($objQuestionTmp);
 		// adds the question ID into the list of questions for the current exercise
 		$objExercise->addToList($recup);
+		$tool_content .= "<div class='success'>$langQuestionReused</div><br>";
 	}
 	
 	// get the number of available question (used for pagination)
@@ -247,10 +248,10 @@ if($is_adminOfCourse) {
 				$tool_content .= "<small>&lt;&lt; <a href=\"".$_SERVER['PHP_SELF'].
 				"?exerciseId=".$exerciseId.
 				"&fromExercise=".$fromExercise.
-				"&page=".$prevpage."\">".$langPrevious."</a></small>";
+				"&page=".$prevpage."\">".$langPreviousPage."</a></small>";
 			} else {
 				$tool_content .= "<small>&lt;&lt; 
-				<a href='$_SERVER[PHP_SELF]?page=$prevpage'>$langPrevious</a></small>";
+				<a href='$_SERVER[PHP_SELF]?page=$prevpage'>$langPreviousPage</a></small>";
 			}
 		}
 		if ($page < $numpages) {
@@ -259,11 +260,11 @@ if($is_adminOfCourse) {
 				$tool_content .= "<small><a href='".$_SERVER['PHP_SELF'].
 				"?exerciseId=".$exerciseId.
 				"&fromExercise=".$fromExercise.
-				"&page=".$nextpage."'>".$langNext.
+				"&page=".$nextpage."'>".$langNextPage.
 				"</a> &gt;&gt;</small>";
 			} else {
 				$tool_content .= "<small>
-				<a href='$_SERVER[PHP_SELF]?page=$nextpage'>$langNext</a> &gt;&gt;
+				<a href='$_SERVER[PHP_SELF]?page=$nextpage'>$langNextPage</a> &gt;&gt;
 				</small>";
 			}
 		}

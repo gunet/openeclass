@@ -157,7 +157,7 @@ if(isset($modifyExercise))
 	</tr>";
 
 	$tool_content .= "<tr><th class='left'>&nbsp;</th>
-	<td><input type='submit' name='submitExercise' value='$langOk'>&nbsp;&nbsp;
+	<td><input type='submit' name='submitExercise' value='$langCreate'>&nbsp;&nbsp;
 	<input type='submit' name='cancelExercise' value='$langCancel'></td>
 	</tr></tbody></table>
 	</form>";

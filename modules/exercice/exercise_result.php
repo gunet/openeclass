@@ -149,7 +149,9 @@ foreach($questionList as $questionId) {
 			$answerComment=$objAnswerTmp->selectComment($answerId);
 			$answerCorrect=$objAnswerTmp->isCorrect($answerId);
 			$answerWeighting=$objAnswerTmp->selectWeighting($answerId);
-			$answer=latex_content($answer);
+			// support for math symbols
+			$answer = mathfilter($answer, 12, "../../courses/mathimg/");
+			$answerComment = mathfilter($answerComment, 12, "../../courses/mathimg/");
 	
 			switch($answerType)
 			{

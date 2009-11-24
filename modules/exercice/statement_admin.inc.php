@@ -35,7 +35,7 @@ if(isset($submitQuestion)) {
 		$msgErr = $langGiveQuestion;
 	}
 	// checks if the question is used in several exercises	
-	elseif($exerciseId && !$modifyIn && $objQuestion->selectNbrExercises() > 1)
+	elseif($exerciseId && !isset($modifyIn) && $objQuestion->selectNbrExercises() > 1)
 	{
 	        // if a picture has been set
         	if($imageUpload_size)
@@ -70,7 +70,7 @@ if(isset($submitQuestion)) {
 	$objQuestion->save($exerciseId);
 	$questionId=$objQuestion->selectId();
 	// if a picture has been set or checkbox "delete" has been checked
-	if($imageUpload_size || $deletePicture) {
+	if($imageUpload_size || isset($deletePicture)) {
 		// we remove the picture
 		$objQuestion->removePicture();
 		// if we add a new picture
@@ -108,19 +108,18 @@ if(isset($submitQuestion)) {
 }
 else
 {
-// if we don't come here after having cancelled the warning message "used in serveral exercises"
-	if(!($buttonBack))
-	{
+// if we don't come here after having cancelled the warning message "used in several exercises"
+	if(!isset($buttonBack)) {
 		$questionName=$objQuestion->selectTitle();
 		$questionDescription=$objQuestion->selectDescription();
 		$answerType=$objQuestion->selectType();
 	}
 }
 
-if(($newQuestion || $modifyQuestion)) {
+if(isset($newQuestion) || isset($modifyQuestion)) {
 	// is picture set ?
 	$okPicture = file_exists($picturePath.'/quiz-'.$questionId)?true:false;
-	$tool_content .= "<form enctype='multipart/form-data' method='post' action='$_SERVER[PHP_SELF]?modifyQuestion=$modifyQuestion&newQuestion=$newQuestion'>
+	@$tool_content .= "<form enctype='multipart/form-data' method='post' action='$_SERVER[PHP_SELF]?modifyQuestion=$modifyQuestion&newQuestion=$newQuestion'>
 	<table width=\"99%\" class=\"FormData\"><tbody>";
 
 	// if there is an error message

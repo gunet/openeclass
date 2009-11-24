@@ -59,25 +59,25 @@ if (isset($_SESSION['objAnswer']))  { unset($_SESSION['objAnswer']); }
 if (isset($_SESSION['questionList']))  { unset($_SESSION['questionList']); }
 if (isset($_SESSION['exerciseResult']))  { unset($_SESSION['exerciseResult']); }
 
-$is_allowedToEdit=$is_adminOfCourse;
-
 $TBL_EXERCICE_QUESTION='exercice_question';
 $TBL_EXERCICES='exercices';
 $TBL_QUESTIONS='questions';
 
 // maximum number of exercises on a same page
-$limitExPage = 30;
+$limitExPage = 15;
+if (!isset($page)) {
+	$page = 0;
+} else {
+	$page = $_GET['page'];
+}
 // selects $limitExPage exercises at the same time
-@$from=$page*$limitExPage;
+$from=$page*$limitExPage;
 
 // only for administrator
-if($is_allowedToEdit)
-{
-	if(!empty($choice))
-	{
+if($is_adminOfCourse) {
+	if(!empty($choice)) {
 		// construction of Exercise
 		$objExerciseTmp=new Exercise();
-
 		if($objExerciseTmp->read($exerciseId))
 		{
 			switch($choice)
@@ -100,6 +100,8 @@ if($is_allowedToEdit)
 	}
 	$sql="SELECT id, titre, description, type, active FROM `$TBL_EXERCICES` ORDER BY id LIMIT $from,".($limitExPage+1);
 	$result=db_query($sql,$currentCourseID);
+	$sql2 = "SELECT * FROM `$TBL_EXERCICES`";
+	$result2 = db_query($sql2);
 }
 // only for students
 else
@@ -107,43 +109,35 @@ else
 	$sql="SELECT id, titre, description, type, StartDate, EndDate, TimeConstrain, AttemptsAllowed ".
 		"FROM `$TBL_EXERCICES` WHERE active='1' ORDER BY id LIMIT $from,".($limitExPage+1);
 	$result=db_query($sql);
+	$sql2 = "SELECT * FROM `$TBL_EXERCICES` WHERE active='1'";
+	$result2 = db_query($sql2);
 }
 
 $nbrExercises=mysql_num_rows($result);
+$num_of_ex = mysql_num_rows($result2);;
 
-if($is_allowedToEdit) {
-	$tool_content .= "
-      <div  align=\"left\" id=\"operations_container\">
-        <ul id=\"opslist\">\n";
+if($is_adminOfCourse) {
+	$tool_content .= "<div  align=\"left\" id=\"operations_container\"><ul id=\"opslist\">\n";
 
   $tool_content .= <<<cData
           <li><a href="admin.php?NewExercise=Yes">${langNewEx}</a>&nbsp;|&nbsp;<a href="question_pool.php">${langQuestionPool}</a></li>
 cData;
 
-$tool_content .= "
-        </ul>
-      </div>";
+$tool_content .= "</ul></div>";
 } else  {
-	$tool_content .= "<!--<td align=\"right\">-->";
+	$tool_content .= "";
 }
 
-if(isset($page)) {
-	$tool_content .= <<<cData
-		<small><a href="$_SERVER[PHP_SELF]?page=$page-1">
-	&lt;&lt; ${langPrevious}</a></small> |
-cData;
-}
-elseif($nbrExercises > $limitExPage) {
-	$tool_content .= "<small>&lt;&lt; ${langPrevious} |</small>";
-}
-
-if($nbrExercises > $limitExPage) {
-	$tool_content .= <<<cData
-	<small><a href="${PHP_SELF}?page=$page+1>">${langNext} &gt;&gt;</a></small>
-cData;
-
-} elseif(isset($page)) {
-	$tool_content .= "<small>${langNext} &gt;&gt;</small>";
+$numpages = intval($num_of_ex / $limitExPage);
+if($numpages > 0) {
+	$prevpage = $page-1;
+	$nextpage = $page+1;
+	if ($prevpage >= 0) {
+ 		$tool_content .= "<small><a href='$_SERVER[PHP_SELF]?page=$prevpage'>&lt;&lt; $langPreviousPage</a></small>&nbsp;";
+	}
+	if ($nextpage < $numpages) { 
+		$tool_content .= "<small><a href='$_SERVER[PHP_SELF]?page=$nextpage'>$langNextPage &gt;&gt;</a></small>";
+	}
 }
 
 $tool_content .= <<<cData
@@ -154,7 +148,7 @@ $tool_content .= <<<cData
 cData;
 
 // shows the title bar only for the administrator
-if($is_allowedToEdit) {
+if($is_adminOfCourse) {
 	$tool_content .= "<th style=\"border: 1px solid #edecdf;\" colspan=\"2\">
 	<div align=\"left\">${langExerciseName}</div></th>
 	<th width=\"65\" style=\"border: 1px solid #edecdf;\">${langResults}</th>
@@ -175,13 +169,12 @@ if($is_allowedToEdit) {
 if(!$nbrExercises) {
 	$tool_content .= "
       <tr><td";
-	if($is_allowedToEdit)
+	if($is_adminOfCourse)
 		$tool_content .= " colspan=\"4\"";
 		$tool_content .= " class=\"empty\">${langNoEx}</td>
       </tr>";
 }
 
-$i=1;
 $tool_content .= "<tbody>";
 // while list exercises
 $k = 0;
@@ -195,8 +188,7 @@ while($row = mysql_fetch_array($result)) {
 	$row['description'] = mathfilter($row['description'], 12, "../../courses/mathimg/");
 
 	// prof only
-	if($is_allowedToEdit) {
-		$page_temp = ($i+(@$page*$limitExPage)).'.';
+	if($is_adminOfCourse) {
 		if(!$row['active']) {
 			$tool_content .= "<td width=\"1\"><img style='border:0px; padding-top:3px;' src='${urlServer}/template/classic/img/arrow_red.gif' title='bullet'></td><td>
 			<div class=\"invisible\">
@@ -248,7 +240,6 @@ cData;
 }
 	// student only
 else {
-	$page_offset_temp = @($i+($page*$limitExPage)).'.';
 	$CurrentDate = date("Y-m-d");
 	$temp_StartDate = mktime(0, 0, 0, substr($row['StartDate'], 5,2), substr($row['StartDate'], 8,2), substr($row['StartDate'], 0,4));
 	$temp_EndDate = mktime(0, 0, 0, substr($row['EndDate'], 5,2),substr($row['EndDate'], 8,2),substr($row['EndDate'], 0,4));
@@ -261,7 +252,7 @@ else {
 			<img style='border:0px; padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'>
 			</td><td>".$row['titre']."&nbsp;&nbsp;(<font color=\"red\">$m[expired]</font>)";
 	}
-	  $tool_content .= "<br/><small>$row[description]</small></td>
+	$tool_content .= "<br/><small>$row[description]</small></td>
         <td align='center'><small>".nice_format($row['StartDate'])."</small></td>
         <td align='center'><small>".nice_format($row['EndDate'])."</small></td>";
 	// how many attempts we have.
@@ -281,10 +272,9 @@ else {
 	  $tool_content .= "</tr>";
 }
 	// skips the last exercise, that is only used to know if we have or not to create a link "Next page"
-	if ($i == $limitExPage) {
+	if ($k+1 == $limitExPage) {
 		break;
 	}
-$i++;
 $k++;
 }	// end while()
 

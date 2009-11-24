@@ -24,8 +24,7 @@
 *  			eMail: info@openeclass.org
 * =========================================================================*/
 
-function showQuestion($questionId, $onlyAnswers=false)
-{
+function showQuestion($questionId, $onlyAnswers=false) {
 	global $tool_content, $picturePath, $webDir, $langNoAnswer, $langColumnA, $langColumnB, $langMakeCorrespond;
  	include_once "$webDir"."/modules/latexrender/latex.php";
 
@@ -94,12 +93,11 @@ cData;
 cData;
 	}
 
-	for($answerId=1;$answerId <= $nbrAnswers;$answerId++)
-	{
+	for($answerId=1;$answerId <= $nbrAnswers;$answerId++) {
 		$answer=$objAnswerTmp->selectAnswer($answerId);
 		$answerCorrect=$objAnswerTmp->isCorrect($answerId);
-		// latex support
-		$answer=latex_content($answer);
+		// support for math symbols
+		$answer = mathfilter($answer, 12, "../../courses/mathimg/");
 		if($answerType == FILL_IN_BLANKS) {
 			// splits text and weightings that are joined with the character '::'
 			list($answer)=explode('::',$answer);
@@ -108,26 +106,18 @@ cData;
 		}
 
 		// unique answer
-		if($answerType == UNIQUE_ANSWER)
-		{
-	$tool_content .= <<<cData
-
-      <tr>
-        <td width="1%" align="center"><input type="radio" name="choice[${questionId}]" value="${answerId}"></td>
-        <td width="99%">${answer}</td>
-      </tr>
-cData;
+		if($answerType == UNIQUE_ANSWER) {
+			$tool_content .= "<tr>
+			<td width='1%' align='center'>
+			<input type='radio' name='choice[${questionId}]' value='${answerId}'></td>
+			<td width='99%'>${answer}</td></tr>";
 		}
 		// multiple answers
-		elseif($answerType == MULTIPLE_ANSWER)
-		{
-	$tool_content .= <<<cData
-
-      <tr>
-        <td width="1%" align="center"><input type="checkbox" name="choice[${questionId}][${answerId}]" value="1"></td>
-        <td width="99%">${answer}</td>
-      </tr>
-cData;
+		elseif($answerType == MULTIPLE_ANSWER) {
+			$tool_content .= "<tr>
+			<td width='1%' align='center'>
+			<input type='checkbox' name='choice[${questionId}][${answerId}]' value='1'></td>
+			<td width='99%'>${answer}</td></tr>";
 		}
 		// fill in blanks
 		elseif($answerType == FILL_IN_BLANKS) {
