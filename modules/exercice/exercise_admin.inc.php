@@ -27,8 +27,7 @@
 include('../../include/phpmathpublisher/mathpublisher.php');
 
 // the exercise form has been submitted
-if(isset($submitExercise))
-{
+if(isset($submitExercise)) {
 	$exerciseTitle = trim($exerciseTitle);
 	$exerciseDescription = trim($exerciseDescription);
 	@$randomQuestions=$randomQuestions?$questionDrawn:0;
@@ -50,6 +49,7 @@ if(isset($submitExercise))
 			$objExercise->updateAttemptsAllowed($exerciseAttemptsAllowed);
 			$objExercise->setRandom($randomQuestions);
 			$objExercise->updateResults($dispresults);
+			$objExercise->updateScore($dispscore);
 			$objExercise->save();
 			// reads the exercise ID (only usefull for a new exercise)
 			$exerciseId=$objExercise->selectId();
@@ -68,6 +68,7 @@ else
 	$exerciseAttemptsAllowed=$objExercise->selectAttemptsAllowed();
 	$randomQuestions=$objExercise->isRandom();
 	$displayResults=$objExercise->selectResults();
+	$displayScore=$objExercise->selectScore();
 }
 
 // shows the form to modify the exercise
@@ -141,18 +142,32 @@ if(isset($modifyExercise))
 	$langExerciseAttemptsAllowedUnit." &nbsp;&nbsp;&nbsp;(".$langExerciseAttemptsAllowedExplanation.")</td>
 	</tr>";
 
-	if ($displayResults == 1) {
+	if (isset($displayResults) and $displayResults == 1) {
 		$extra = 'checked';
 		$extra2 = '';
 	} else {
 		$extra = '';
 		$extra2 = 'checked';
 	}
+	if (isset($displayScore) and $displayScore == 1) {
+		$extras = 'checked';
+		$extras2 = '';
+	} else {
+		$extras = '';
+		$extras2 = 'checked';
+	}
 
 	$tool_content .= "<tr>
 	<th class='left'>".$langAnswers." :</th>"."
 	<td><input type='radio' name='dispresults' value='1'". $extra .">&nbsp;$langAnswersDisp
 	<br><input type='radio' name='dispresults' value='0'".  $extra2 .">&nbsp;$langAnswersNotDisp
+	</td>
+	</tr>";
+	
+	$tool_content .= "<tr>
+	<th class='left'>".$langScore." :</th>"."
+	<td><input type='radio' name='dispscore' value='1'". $extras .">&nbsp;$langScoreDisp
+	<br><input type='radio' name='dispscore' value='0'".  $extras2 .">&nbsp;$langScoreNotDisp
 	</td>
 	</tr>";
 
@@ -163,13 +178,18 @@ if(isset($modifyExercise))
 	</form>";
 
 } else {
-	$displayResults=$objExercise->selectResults();
+	$displayResults = $objExercise->selectResults();
 	if ($displayResults == 1) {
 		$disp_results_message = $langAnswersDisp;
 	} else {
 		$disp_results_message = $langAnswersNotDisp;
 	}
-	
+	$displayScore = $objExercise->selectScore();
+	if ($displayScore == 1) {
+		$disp_score_message = $langScoreDisp;
+	} else {
+		$disp_score_message = $langScoreNotDisp;
+	}
 	$tool_content .= "<table width='99%' class='FormData'><tbody>
 	<tr>
 	<th width='220' class='left'>&nbsp;</th>
@@ -209,6 +229,10 @@ if(isset($modifyExercise))
 	<tr>
 	<th class='left'>$langAnswers:</th>
 	<td>$disp_results_message</td>
+	</tr>
+	<tr>
+	<th class='left'>$langScore:</th>
+	<td>$disp_score_message</td>
 	</tr>
 	</tbody>
 	</table>";

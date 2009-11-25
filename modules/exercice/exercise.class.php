@@ -37,13 +37,12 @@ class Exercise
 	var $exercise;
 	var $description;
 	var $type;
-	var $StartDate; 				// added
-	var $EndDate;						//	
-	var $TimeConstrain;			//
-	var $AttemptsAllowed; 	// end of added
+	var $StartDate;
+	var $EndDate;	
+	var $TimeConstrain;
+	var $AttemptsAllowed;
 	var $random;
 	var $active;
-
 	var $questionList;  // array with the list of this exercise's questions
 
 	/**
@@ -64,6 +63,7 @@ class Exercise
 		$this->random=0;
 		$this->active=1;
 		$this->results=1;
+		$this->score=1;
 		$this->questionList=array();
 	}
 
@@ -79,7 +79,7 @@ class Exercise
 		global $TBL_EXERCICES, $TBL_EXERCICE_QUESTION, $TBL_QUESTIONS, $currentCourseID;
 		mysql_select_db($currentCourseID);
 		$sql="SELECT titre, description, type, StartDate, EndDate, TimeConstrain, 
-			AttemptsAllowed, random, active, results 
+			AttemptsAllowed, random, active, results, score 
 			FROM `$TBL_EXERCICES` WHERE id='$id'";
 		$result=db_query($sql);
 
@@ -97,6 +97,7 @@ class Exercise
 			$this->random=$object->random;
 			$this->active=$object->active;
 			$this->results=$object->results;
+			$this->score=$object->score;
 
 			$sql="SELECT question_id,q_position FROM `$TBL_EXERCICE_QUESTION`,`$TBL_QUESTIONS` 
 				WHERE question_id=id AND exercice_id='$id' ORDER BY q_position";
@@ -180,6 +181,10 @@ class Exercise
 	function selectResults()
 	{
 		return $this->results;
+	}
+	function selectScore()
+	{
+		return $this->score;
 	}
 	/**
 	 * tells if questions are selected randomly, and if so returns the draws
@@ -347,6 +352,10 @@ class Exercise
 	{
 		$this->results=$results;
 	}
+	function updateScore($score)
+	{
+		$this->score=$score;
+	}
 	/**
 	 * sets to 0 if questions are not selected randomly
 	 * if questions are selected randomly, sets the draws
@@ -392,13 +401,14 @@ class Exercise
 		$exercise=addslashes($this->exercise);
 		$description=addslashes($this->description);
 		$type=$this->type;
-		$StartDate=$this->StartDate; 	// added
-		$EndDate=$this->EndDate;		//	
-		$TimeConstrain=$this->TimeConstrain;		//
-		$AttemptsAllowed=$this->AttemptsAllowed; 	// end of added
+		$StartDate=$this->StartDate;
+		$EndDate=$this->EndDate;
+		$TimeConstrain=$this->TimeConstrain;
+		$AttemptsAllowed=$this->AttemptsAllowed;
 		$random=$this->random;
 		$active=$this->active;
 		$results=$this->results;
+		$score=$this->score;
 
 		// exercise already exists
 		if($id)
@@ -406,8 +416,8 @@ class Exercise
 			mysql_select_db($currentCourseID);
 			$sql="UPDATE `$TBL_EXERCICES` SET titre='$exercise',description='$description',type='$type',".
 				"StartDate='$StartDate',EndDate='$EndDate',TimeConstrain='$TimeConstrain',".
-				"AttemptsAllowed='$AttemptsAllowed',random='$random', 
-				active='$active', results='$results' WHERE id='$id'";
+				"AttemptsAllowed='$AttemptsAllowed', random='$random',
+				active='$active', results='$results', score='$score' WHERE id='$id'";
 			mysql_query($sql) or die("Error : UPDATE in file ".__FILE__." at line ".__LINE__);
 		}
 		// creates a new exercise
@@ -416,8 +426,8 @@ class Exercise
 			mysql_select_db($currentCourseID);
 
 			$sql="INSERT INTO `$TBL_EXERCICES`
-				VALUES ('0', '$exercise','$description',$type,'$StartDate','$EndDate',
-					$TimeConstrain, $AttemptsAllowed, $random, $active, $results)";
+				VALUES ('', '$exercise','$description',$type,'$StartDate','$EndDate',
+					$TimeConstrain, $AttemptsAllowed, $random, $active, $results, $score)";
 			db_query($sql);
 
 			$this->id=mysql_insert_id();

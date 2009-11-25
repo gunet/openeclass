@@ -52,8 +52,7 @@ $TBL_QUESTIONS='questions';
 $TBL_REPONSES='reponses';
 
 // if the above variables are empty or incorrect, stops the script
-if(!is_array($exerciseResult) || !is_array($questionList) || !is_object($objExercise))
-{
+if(!is_array($exerciseResult) || !is_array($questionList) || !is_object($objExercise)) {
 	$tool_content .= $langExerciseNotFound;
 	draw($tool_content, 2, 'exercice');
 	exit();
@@ -63,7 +62,8 @@ $exerciseTitle = $objExercise->selectTitle();
 $exerciseDescription = $objExercise->selectDescription();
 $exerciseDescription_temp = nl2br(make_clickable($exerciseDescription));
 $exerciseDescription_temp = mathfilter($exerciseDescription_temp, 12, "../../courses/mathimg/");
-$displayResults=$objExercise->selectResults(); 
+$displayResults=$objExercise->selectResults();
+$displayScore=$objExercise->selectScore(); 
 
 $tool_content .= "<table class=\"Exercise\" width=\"99%\"><thead><tr>
 <td colspan=\"2\"><b>".stripslashes($exerciseTitle)."</b>
@@ -291,7 +291,7 @@ foreach($questionList as $questionId) {
 				} 
 			} // end of if
 		}	// end for()
-	 if ($displayResults == 1) {
+	 if ($displayScore == 1) {
 		$tool_content .= "<tr><td colspan='$colspan' class='score'>
 		$langQuestionScore: <b>$questionScore/$questionWeighting</b>
 		</td></tr>";
@@ -321,13 +321,13 @@ $sql="UPDATE exercise_user_record SET TotalScore='$totalScore', TotalWeighting='
 	attempt='$attempt' WHERE eurid='$eurid'";
 db_query($sql, $currentCourseID);
 
-//if ($displayResults == 1) {
+if ($displayScore == 1) {
 	$tool_content .= "<br/><table width='99%' class='Exercise'><thead><tr>
 	<td class='score'>$langYourTotalScore: <b>$totalScore/$totalWeighting</b>
 	</td></tr>
 	</thead></table>
 	";
-//}
+}
 $tool_content .= "<br/><div align='center'>
 <input type='submit' value='${langFinish}'>
 </div>
