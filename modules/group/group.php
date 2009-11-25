@@ -411,7 +411,6 @@ else {
 	} else {
 		$tool_content .= "<p class=\"alert1\">$langNoGroup</p>";
 	}
-
 	$k = 0;
 	while ($group = mysql_fetch_array($groupSelect)) {
 		// Count students registered in each group
@@ -422,20 +421,19 @@ else {
 		} else {
 			$tool_content .= "\n<tr class=\"odd\">";
 		}
-
-		$tool_content .= "<td width=\"2%\"><img src=\"../../template/classic/img/arrow_grey.gif\" title=\"bullet\" border=\"0\"></td><td><div align=\"left\">";
+		$tool_content .= "<td width='2%'><img src='../../template/classic/img/arrow_grey.gif' title='bullet' border='0'></td><td><div align=\"left\">";
 		// Allow student to enter group only if member
 		if(@($tutorCheck == 1)) {
 			if ($uid == $group['tutor']) {
 				$tool_content .= "<a href=\"group_space.php?userGroupId=".$group["id"]."\">".$group["name"]."</a>
-			<span style='color:#900; weight:bold;'>($langOneMyGroups)</span>";
+				<span style='color:#900; weight:bold;'>($langOneMyGroups)</span>";
 			} else {
 				$tool_content .= "<a href=\"group_space.php?userGroupId=".$group["id"]."\">".$group["name"]."</a>";
 			}
 		}
 		// STUDENT VIEW
 		else {
-			if(isset($myTeam) && $myTeam == $group['id'])	{
+			if(isset($myTeam) && $myTeam == $group['id']) {
 				$tool_content .= "<a href=\"group_space.php?userGroupId=".$group["id"]."\">".$group["name"]."</a>&nbsp;&nbsp;($langMyGroup)";
 			} else {
 				$tool_content .= $group['name'];
@@ -448,8 +446,8 @@ else {
 		if($selfRegProp == 1)
 		{
 			$tool_content .= "<td><div align='center'>";
-			if((!$uid) OR (isset($myTeam)) OR (($countRegistered>=$group['maxStudent']) AND ($group['maxStudent']>>0)))
-			{
+			if((!$uid) OR (isset($myTeam)) OR 
+				(($countRegistered>=$group['maxStudent']) AND ($group['maxStudent']>>0))) {
 				$tool_content .= "-";
 			} else {
 				$tool_content .= "<a href=\"group_space.php?selfReg=1&userGroupId=".$group["id"]."\">$langRegistration</a>";

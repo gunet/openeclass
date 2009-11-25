@@ -51,32 +51,41 @@ $nameTools = $langGroupSpace;
 $navigation[] = array ("url"=>"group.php", "name"=> $langGroups);
 $tool_content = "";
 
+$countRegistered = mysql_num_rows(db_query("SELECT id FROM user_group 
+	WHERE team='$userGroupId'", $currentCourse));
+$total = mysql_fetch_array(db_query("SELECT maxStudent FROM student_group 
+		WHERE id='$userGroupId'", $currentCourse));
+$totalRegistered = $total[0];
+
 if (isset($_REQUEST['userGroupId'])) {
         $userGroupId = intval($_REQUEST['userGroupId']);
 } else {
 	die("Wrong user group id / User group id not set");
 }
 
-if(isset($registration) and $statut != 10)
-{
-	$sqlExist=mysql_query("SELECT id FROM `$dbname`.user_group
-		WHERE user='$uid' AND team='$userGroupId'");
-	$countExist = mysql_num_rows($sqlExist);
-	if($countExist==0 )
-	{
-		$sqlReg=mysql_query("INSERT INTO `$dbname`.user_group (user, team)
-			VALUES ('$uid', '$userGroupId')");
-		$message="<font color=red>$langGroupNowMember</font>: ";
-		$regDone=1;
+if (isset($registration)) {
+	if (($statut != 10) and ($countRegistered < $totalRegistered)) {
+		$sqlExist=mysql_query("SELECT id FROM `$dbname`.user_group
+			WHERE user='$uid' AND team='$userGroupId'");
+		$countExist = mysql_num_rows($sqlExist);
+		if($countExist == 0) {
+			$sqlReg=mysql_query("INSERT INTO `$dbname`.user_group (user, team)
+				VALUES ('$uid', '$userGroupId')");
+			$message="<font color=red>$langGroupNowMember</font>: ";
+			$regDone=1;
+		}
+	} else { 
+		$tool_content .= $langForbidden;
+		draw($tool_content, 2, 'group');
+		exit();
 	}
 }
+
 $currentCourse=$dbname;
 
 ############### Secret Directory for Documents #################
 $sqlGroup=mysql_query("SELECT secretDirectory FROM `$currentCourse`.student_group WHERE id='$userGroupId'");
-
-while ($myGroup = mysql_fetch_array($sqlGroup))
-{
+while ($myGroup = mysql_fetch_array($sqlGroup)) {
 	$secretDirectory = $myGroup['secretDirectory'];
 }
 
@@ -91,18 +100,20 @@ while ($myGroup = mysql_fetch_array($resultGroup))
                 $is_tutor = false;
         }
 	$forumId = $myGroup['forumId'];
-	if ($is_adminOfCourse or $is_tutor)
-	{
+	if ($is_adminOfCourse or $is_tutor) {
 		$tool_content .= "<div id='operations_container'><ul id='opslist'>
 		<li><a href='group_edit.php?userGroupId=$userGroupId'>$langEditGroup</a></li>";
-	}
-	elseif(isset($selfReg) AND ($uid))
-	{
-		$tool_content .=  "<div id='operations_container'><ul id='opslist'>
-		<li><a href='$_SERVER[PHP_SELF]?registration=1&amp;userGroupId=$userGroupId'>$langRegIntoGroup</a></li>";
-	}
-	elseif(isset($regDone))
-	{
+	} elseif(isset($selfReg) and isset($uid)) { 
+		if ($countRegistered < $totalRegistered) {
+			$tool_content .=  "<div id='operations_container'><ul id='opslist'>
+			<li>
+			<a href='$_SERVER[PHP_SELF]?registration=1&amp;userGroupId=$userGroupId'>$langRegIntoGroup</a></li>";
+		} else {
+			$tool_content .= $langForbidden;
+			draw($tool_content, 2, 'group');
+			exit();
+		}
+	} elseif(isset($regDone)) {
 		$tool_content .= "<div id='operations_container'><ul id='opslist'>";
 		$tool_content .= "$message&nbsp;";
 	} else {
@@ -125,32 +136,24 @@ while ($myGroup = mysql_fetch_array($resultGroup))
 		AND student_group.id='$userGroupId'");
 	$countTutor = mysql_num_rows($sqlTutor);
 	$tool_content_tutor="";
-	if ($countTutor==0)
-	{
+	if ($countTutor==0) {
 		$tool_content_tutor .=  "$langGroupNoTutor";
-	}
-	else
-	{
-		while ($myTutor = mysql_fetch_array($sqlTutor))
-		{
+	} else {
+		while ($myTutor = mysql_fetch_array($sqlTutor)) {
 			$tool_content_tutor .= "$myTutor[nom] $myTutor[prenom]
 			(<a href=mailto:$myTutor[email]>$myTutor[email]</a>)";
 		}	// while tutor
 	}	// else
 
 	$tool_content .= "<tr><th class=\"left\">$langGroupTutor :</th>
-	<td>$tool_content_tutor</td>
-	</tr>";
+	<td>$tool_content_tutor</td></tr>";
 
 	// Show 'none' if no description
 	$countDescription=strlen ($myGroup['description']);
 	$tool_content_description = "";
-	if(($countDescription <= 3))
-	{
+	if(($countDescription <= 3)) {
 		$tool_content_description .=  "$langGroupNone";
-	}
-	else
-	{
+	} else {
 		$tool_content_description .=  "$myGroup[description]";
 	}	// else
 
@@ -176,27 +179,19 @@ $resultMember=mysql_query("SELECT nom, prenom, email, am
 		AND user_group.user=$mysqlMainDb.user.user_id");
 $countMember = mysql_num_rows($resultMember);
 
-if(($countMember==0))
-{
+if(($countMember==0)) {
 	$tool_content .=  "<tr><td colspan=3>$langGroupNoneMasc</td></tr>";
-}
-else
-{
-	while ($myMember = mysql_fetch_array($resultMember))
-	{
-		$tool_content .= "
-          <tr>
-            <td>$myMember[prenom] $myMember[nom]</td>
-            <td><div align=\"center\">";
+} else {
+	while ($myMember = mysql_fetch_array($resultMember)){
+		$tool_content .= "<tr><td>$myMember[prenom] $myMember[nom]</td>
+		<td><div align=\"center\">";
 		if (!empty($myMember['am'])) {
 			$tool_content .=  "$myMember[am]";
 		} else {
 			$tool_content .= "-";
 		}
-		$tool_content .= "</div>
-            </td>
-            <td><div align=\"center\"><a href=mailto:$myMember[email]>$myMember[email]</a></div></td>
-          </tr>";
+		$tool_content .= "</div></td>
+		<td><div align=\"center\"><a href=mailto:$myMember[email]>$myMember[email]</a></div></td></tr>";
 	}	// while loop
 }	// else
 
