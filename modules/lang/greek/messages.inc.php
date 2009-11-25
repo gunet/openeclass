@@ -997,6 +997,8 @@ $langAmong = "μεταξύ";
 $langTake = "διάλεξε";
 $langAnswersNotDisp = "Απόκρυψη απαντήσεων μετά το τέλος της άσκησης";
 $langAnswersDisp = "Εμφάνιση απαντήσεων μετά το τέλος της άσκησης";
+$langScoreNotDisp = "Απόκρυψη βαθμολογίας μετά το τέλος της άσκησης";
+$langScoreDisp = "Εμφάνιση βαθμολογίας μετά το τέλος της άσκησης";
 // admin.php
 $langExerciseManagement="Διαχείριση Άσκησης";
 $langExerciseModify="Τροποποίηση Άσκησης";
@@ -1060,6 +1062,7 @@ $langAllExercises="Όλες οι ερωτήσεις";
 $langFilter="Φιλτράρισμα";
 $langGoBackToEx="Επιστροφή στην άσκηση";
 $langReuse="Επαναχρησιμοποίηση";
+$langQuestionReused = "Η ερώτηση προστέθηκε στην άσκηση";
 
 // exercise_result.php
 $langElementList="Το στοιχείο";
