@@ -202,6 +202,7 @@ mysql_query("CREATE TABLE exercices (
       random smallint(6) NOT NULL default '0',
       active tinyint(4) default NULL,
       results TINYINT(1) NOT NULL DEFAULT '1',
+      score TINYINT(1) NOT NULL DEFAULT '1',
       PRIMARY KEY  (id))
       TYPE=MyISAM $charset_spec");
 

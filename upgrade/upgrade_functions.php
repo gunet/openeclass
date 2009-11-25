@@ -291,7 +291,20 @@ function upgrade_course($code, $lang)
 	upgrade_course_old($code, $lang);
 	upgrade_course_2_1_3($code);
 	upgrade_course_2_2($code, $lang);
+	upgrade_course_2_2_1($code, $lang);
 }
+
+function upgrade_course_2_2_1($code, $lang, $extramessage = '') {
+	global $langUpgCourse, $global_messages;
+
+	mysql_select_db($code);
+	echo "<hr><p>$langUpgCourse <b>$code</b> (2.2.1) $extramessage<br />";
+	flush();
+	// upgrade exercises
+	if (!mysql_field_exists("$code",'exercices','score'))
+                echo add_field('exercices', 'score', "TINYINT(1) NOT NULL DEFAULT '1'");
+}
+
 
 function upgrade_course_2_2($code, $lang, $extramessage = '')
 {

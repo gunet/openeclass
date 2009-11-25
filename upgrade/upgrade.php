@@ -297,6 +297,8 @@ if (!isset($submit2)) {
                	        upgrade_course_2_1_3($code[0], "($i / $total)");
                 } elseif ($oldversion < '2.2') {
                	        upgrade_course_2_2($code[0], $lang, "($i / $total)");
+		} elseif ($oldversion < '2.2.1') {
+			upgrade_course_2_2_1($code[0], $lang, "($i / $total)");
 		}
                 echo "</p>\n";
                 $i++;
