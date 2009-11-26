@@ -105,7 +105,7 @@ $tool_content .= "<table width='99%' class='FormData' align='center'><tbody>
         <tr><th width='150' class='left'>$langUnitTitle:</th>
             <td><input type='text' name='unittitle' size='50' maxlength='255' $unittitle class='FormData_InputText'></td></tr>
         <tr><th class='left'>$langUnitDescr:</th><td>
-        <table class='xinha_editor'><tr><td><textarea id='xinha' name='unitdescr'>$unitdescr</textarea></td></tr>
+        <table class='xinha_editor'><tr><td><textarea id='xinha' name='unitdescr'>". str_replace('{','&#123;',htmlspecialchars($unitdescr))."</textarea></td></tr>
         </table></td></tr>
         <tr><th>&nbsp;</th>
             <td><input type='submit' name='edit_submit' value='$button'></td></tr>

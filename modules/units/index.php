@@ -34,6 +34,7 @@ $helpTopic = 'AddCourseUnitscontent';
 include '../../include/baseTheme.php';
 include '../../include/lib/fileDisplayLib.inc.php';
 include '../../include/action.php';
+include '../../include/phpmathpublisher/mathpublisher.php';
 
 $action = new action();
 $action->record('MODULE_ID_UNITS');
@@ -329,8 +330,7 @@ function show_text($comments, $resource_id, $visibility)
         global $is_adminOfCourse, $mysqlMainDb, $tool_content;
 
         $class_vis = ($visibility == 'i')? ' class="invisible"': '';
-        /*$imagelink = "<img src='../../template/classic/img/description_" .
-			($visibility == 'i'? 'off': 'on') . ".gif' />"; */
+	$comments = mathfilter($comments, 12, "../../courses/mathimg/");
         $tool_content .= "<tr$class_vis><th width='3%'>&nbsp;</th><td width='82%'>$comments</td>" .
 		actions('text', $resource_id, $visibility) .
                 "</tr>";
@@ -588,6 +588,7 @@ function edit_res($resource_id)
 	} else {
 		$message = $langContents;
 	}
+	$rescomments = str_replace('{','&#123;',htmlspecialchars($rescomments));
         $tool_content .= "<tr><th class='left'>$message:</th><td>
         <table class='xinha_editor'><tr><td><textarea id='xinha' name='rescomments'>$rescomments</textarea></td></tr>
         </table></td></tr>

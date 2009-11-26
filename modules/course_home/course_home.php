@@ -42,6 +42,7 @@ $guest_allowed = true;
 //$path2add is used in init.php to fix relative paths
 $path2add=1;
 include '../../include/baseTheme.php';
+include '../../include/phpmathpublisher/mathpublisher.php';
 $nameTools = $langIdentity;
 $tool_content = $head_content = $main_content = $cunits_content = $bar_content = "";
 add_units_navigation(TRUE);
@@ -57,11 +58,9 @@ function confirmation ()
 </script>
 ';
 
-
 //For statistics: record login
 $sql_log = "INSERT INTO logins SET user_id='$uid', ip='$REMOTE_ADDR', date_time=NOW()";
 db_query($sql_log, $currentCourse);
-
 include '../../include/action.php';
 $action = new action();
 $action->record('MODULE_ID_UNITS');
@@ -216,6 +215,7 @@ while ($cu = mysql_fetch_array($sql)) {
                 } else {
                     $cunits_content .= ">";
                 } 
+                $cu['comments'] = mathfilter($cu['comments'], 12, "../../courses/mathimg/");
                 $cunits_content .= "$cu[comments]";
                 if (strpos($cu['comments'], '<') === false) {
                         $cu['comments'] = '      ' . $cu['comments'] . '';
