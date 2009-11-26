@@ -279,7 +279,12 @@ if (!isset($submit2)) {
 			`visibility` CHAR(1) NOT NULL DEFAULT 'v',
 			`order` INT(11) NOT NULL DEFAULT 0,
 			`date` DATETIME NOT NULL DEFAULT '0000-00-00')");
-        }
+	}  elseif ($oldversion < '2.2.1') {
+		db_query("ALTER TABLE `cours` CHANGE `doc_quota` `doc_quota` FLOAT NOT NULL DEFAULT '104857600'"); 
+		db_query("ALTER TABLE `cours` CHANGE `video_quota` `video_quota` FLOAT NOT NULL DEFAULT '104857600'");
+		db_query("ALTER TABLE `cours` CHANGE `group_quota` `group_quota` FLOAT NOT NULL DEFAULT '104857600'"); 
+		db_query("ALTER TABLE `cours` CHANGE `dropbox_quota` `dropbox_quota` FLOAT NOT NULL DEFAULT '104857600'");
+	}
 
         // **********************************************
         // upgrade courses databases
