@@ -34,6 +34,8 @@
 ==============================================================================
 */
 
+define ("BETACMSREPO", "betacmsrepo");
+
 define ("BRIDGE_HOST", "bridge_host");
 define ("BRIDGE_PORT", "bridge_port");
 define ("BRIDGE_CONTEXT", "bridge_context");
@@ -69,7 +71,7 @@ function getLessonsList($bcmsrepo) {
 	
 	$cli = connectToRepo($bcmsrepo);
 	
-	if ($cli != null) {
+	if (isset($cli)) {
 		require_once("http://".$bridge_host.":".$bridge_port."/".$bridge_context."/java/Java.inc");
 		
 		$criteria = java("org.betaconceptframework.betacms.repository.model.factory.CmsCriteriaFactory")->newContentObjectCriteria();
@@ -83,7 +85,7 @@ function getLessonsList($bcmsrepo) {
 		
 		foreach ($cmsOutcome->getResults() as $key => $cmsRankedOutcome) {
 			$co = $cmsRankedOutcome->getCmsRepositoryEntity();
-			$contentObjectType = $co->getContentObjectType();
+			// $contentObjectType = $co->getContentObjectType();
 			
 			$titlePR = $co->getCmsProperty(PRKEY_TITLE);
 			$lessonDescPR = $co->getCmsProperty(PRKEY_DESCRIPTION);
@@ -132,6 +134,51 @@ function getLessonsList($bcmsrepo) {
 	}
 	
 	return $lessonsArray;
+}
+
+
+function getLesson($bcmsrepo, $objectId) {
+	$bridge_host = $bcmsrepo[BRIDGE_HOST];
+	$bridge_port = $bcmsrepo[BRIDGE_PORT];
+	$bridge_context = $bcmsrepo[BRIDGE_CONTEXT];
+	$bcms_host = $bcmsrepo[BCMS_HOST];
+	$bcms_port = $bcmsrepo[BCMS_PORT];
+	$bcms_repo = $bcmsrepo[BCMS_REPO];
+	$bcms_user = $bcmsrepo[BCMS_USER];
+	$bcms_pass = $bcmsrepo[BCMS_PASS];
+	
+	$cli = connectToRepo($bcmsrepo);
+	
+	if (isset($cli)) {
+		require_once("http://".$bridge_host.":".$bridge_port."/".$bridge_context."/java/Java.inc");
+		
+		$co = $cli->getContentService()->getContentObjectById($objectId, 
+			java("org.betaconceptframework.betacms.repository.api.model.query.CacheRegion")->FIVE_MINUTES);
+			
+		$titlePR = $co->getCmsProperty(PRKEY_TITLE);
+		$lessonDescPR = $co->getCmsProperty(PRKEY_DESCRIPTION);
+		$keywordsPR = $co->getCmsProperty(KEY_KEYWORDS);
+		$copyrightPR = $co->getCmsProperty(KEY_COPYRIGHT);
+		$authorsPR = $co->getCmsProperty(KEY_AUTHORS);
+		$projectPR = $co->getCmsProperty(KEY_PROJECT);
+		$commentsPR = $co->getCmsProperty(KEY_COMMENTS);
+		
+		$retArray = array(
+			KEY_ID => java_values($co->getId()),
+			KEY_TITLE => java_values($titlePR->getSimpleTypeValue()),
+			KEY_DESCRIPTION => java_values($lessonDescPR->getSimpleTypeValue()),
+			KEY_KEYWORDS => java_values($keywordsPR->getSimpleTypeValue()),
+			KEY_COPYRIGHT => java_values($copyrightPR->getSimpleTypeValue()),
+			KEY_AUTHORS => java_values($authorsPR->getSimpleTypeValue()),
+			KEY_PROJECT => java_values($projectPR->getSimpleTypeValue()),
+			KEY_COMMENTS => java_values($commentsPR->getSimpleTypeValue())
+		);
+		
+		return $retArray;
+	}
+	else {
+		return null;
+	}
 }
 
 

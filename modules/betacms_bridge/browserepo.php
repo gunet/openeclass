@@ -39,13 +39,11 @@ include 'admin.inc.php';
 $nameTools = $langBrowseBCMSRepo;
 $navigation[] = array("url" => "../admin/index.php", "name" => $langAdmin);
 $tool_content = "";
-$caption = "";
-$searchurl = "";
-$tool_content = "";
 
 require_once("include/bcms.inc.php");
+session_start();
 
-if (!$_POST['submit']) {
+if (!isset($_POST['submit'])) {
 	// print form
 	$tool_content .= repoForm(); 
 }
@@ -98,13 +96,15 @@ else {
 				<td>".$lessonList[$j][KEY_COPYRIGHT]."</td>
 				<td>".$lessonList[$j][KEY_AUTHORS]."</td>
 				<td>".$lessonList[$j][KEY_PROJECT]."</td>
-				<td><a href=''>[show]</a><a href=''>[import]</a>";
+				<td><a href='viewlesson.php?id=".$lessonList[$j][KEY_ID]."'>[show]</a><a href=''>[import]</a>";
 		}
 		
 		// Close table correctly
 		$tool_content .= "</tr></tbody></table>";
 		// Display link to index.php
 		$tool_content .= "<br/><p align=\"right\"><a href=\"../admin/index.php\">".$langBack."</a></p>";
+		
+		$_SESSION[BETACMSREPO] = $repo;
 	}
 }
 
@@ -116,6 +116,9 @@ else {
 
 draw($tool_content,3);
 
+
+
+// HELPER FUNCTIONS
 
 function repoForm() {
 	return "<form action='$_SERVER[PHP_SELF]' method='post'>
@@ -168,4 +171,5 @@ function repoForm() {
 	<br />
 	<p align='right'><a href='../admin/index.php'>".$GLOBALS['langBack']."</p>";
 }
+
 ?>
