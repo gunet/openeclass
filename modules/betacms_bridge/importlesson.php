@@ -24,7 +24,7 @@
 *  			eMail: info@openeclass.org
 * =========================================================================*/
 /*===========================================================================
-	viewlesson.php
+	import.php
 	@last update: 28-11-2009 by Thanos Kyritsis
 	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
 ==============================================================================
@@ -48,14 +48,13 @@ if (isset($_GET['id']) && isset($_SESSION[BETACMSREPO])) {
 	$coId = $_GET['id'];
 	
 	$co = getLesson($repo, $coId);
-	$tool_content .= objectTable($co);
 	
+	destroyContentObjectInSession();
+	putContentObjectInSession($co);
 	
-	// DEBUG 
-	// $tool_content .= $_GET['id'];
-	// $tool_content .= "<pre>";
-	// $tool_content .= print_r($_SESSION[BETACMSREPO], true);
-	// $tool_content .= "<pre>";
+	// redirect to create course
+	$tool_content .= "Please proceed to create course module to import the Lesson. If your browser doesn't 
+		automatically redirect you, press <a href='../create_course/create_course.php'>here...</a>";
 }
 else {
 	$tool_content .= "<p class=\"caution_small\">$langEmptyFields</p>
@@ -67,48 +66,28 @@ draw($tool_content,3);
 
 // HELPER FUNCTIONS
 
-function objectTable($obj) {
-	return "<table width='99%' align='left' class='FormData'>
-	<tbody><tr>
-	<th width='220'>&nbsp;</th>
-	<td><b>eClass Lesson Object View</b></td>
-	</tr>
-	<tr>
-	<th class='left'><b>"."id"."</b></th>
-	<td>".$obj[KEY_ID]."</td>
-	</tr>
-	<tr>
-	<th class='left'><b>"."title"."</b></th>
-	<td>".$obj[KEY_TITLE]."</td>
-	</tr>
-	<tr>
-	<th class='left'><b>"."description"."</b></th>
-	<td>".$obj[KEY_DESCRIPTION]."</td>
-	</tr>
-	<tr>
-	<th class='left'><b>"."keywords"."</b></th>
-	<td>".$obj[KEY_KEYWORDS]."</td>
-	</tr>
-	<tr>
-	<th class='left'><b>"."copyright"."</b></th>
-	<td>".$obj[KEY_COPYRIGHT]."</td>
-	</tr>
-	<tr>
-	<th class='left'><b>"."authors"."</b></th>
-	<td>".$obj[KEY_AUTHORS]."</td>
-	</tr>
-	<tr>
-	<th class='left'><b>"."project"."</b></th>
-	<td>".$obj[KEY_PROJECT]."</td>
-	</tr>
-	<tr>
-	<th class='left'><b>"."comments"."</b></th>
-	<td>".$obj[KEY_COMMENTS]."</td>
-	</tr>
-	</tbody>
-	</table>
-	<br />
-	<p align='right'><a href='importlesson.php?id=".$obj[KEY_ID]."'>[import]</a>
-	<a href='browserepo.php'>".$GLOBALS['langBack']."</p>";
+function destroyContentObjectInSession() {
+	// an yparxei hdh apo prin, sbhsto
+	unset($_SESSION[IMPORT_FLAG]);
+	unset($_SESSION[IMPORT_INTITULE]);
+	unset($_SESSION[IMPORT_DESCRIPTION]);
+	unset($_SESSION[IMPORT_COURSE_KEYWORDS]);
+	unset($_SESSION[IMPORT_COURSE_ADDON]);
+	
+	return;
+}
+
+function putContentObjectInSession($obj) {
+	$_SESSION[IMPORT_FLAG] = true;
+	$_SESSION[IMPORT_ID] = $obj[KEY_ID];
+	$_SESSION[IMPORT_INTITULE] = $obj[KEY_TITLE];
+	$_SESSION[IMPORT_DESCRIPTION] = $obj[KEY_DESCRIPTION];
+	$_SESSION[IMPORT_COURSE_KEYWORDS] = $obj[KEY_KEYWORDS];
+	$_SESSION[IMPORT_COURSE_ADDON] = "Copyright: " .$obj[KEY_COPYRIGHT] ." "
+		."Authors: " .$obj[KEY_AUTHORS] ." "
+		."Project: " .$obj[KEY_PROJECT] ." "
+		."Comments: " .$obj[KEY_COMMENTS];
+	
+	return;
 }
 ?>

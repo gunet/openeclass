@@ -96,7 +96,8 @@ else {
 				<td>".$lessonList[$j][KEY_COPYRIGHT]."</td>
 				<td>".$lessonList[$j][KEY_AUTHORS]."</td>
 				<td>".$lessonList[$j][KEY_PROJECT]."</td>
-				<td><a href='viewlesson.php?id=".$lessonList[$j][KEY_ID]."'>[show]</a><a href=''>[import]</a>";
+				<td><a href='viewlesson.php?id=".$lessonList[$j][KEY_ID]."'>[show]</a>
+				<a href='importlesson.php?id=".$lessonList[$j][KEY_ID]."'>[import]</a>";
 		}
 		
 		// Close table correctly

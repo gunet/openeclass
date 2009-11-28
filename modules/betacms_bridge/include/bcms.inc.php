@@ -55,7 +55,15 @@ define ("KEY_PROJECT", "project");
 define ("KEY_COMMENTS", "comments");
 
 define ("PRKEY_TITLE", "profile.title");
-define ("PRKEY_DESCRIPTION", "lessonDescription"); 
+define ("PRKEY_DESCRIPTION", "lessonDescription");
+
+define ("IMPORT_FLAG", "bcms_flag");
+define ("IMPORT_ID", "bcms_id");
+define ("IMPORT_INTITULE", "bcms_intitule");
+define ("IMPORT_DESCRIPTION", "bcms_description");
+define ("IMPORT_COURSE_KEYWORDS", "bcms_course_keywords");
+define ("IMPORT_COURSE_ADDON", "bcms_course_addon");
+
 
 function getLessonsList($bcmsrepo) {
 	$bridge_host = $bcmsrepo[BRIDGE_HOST];
