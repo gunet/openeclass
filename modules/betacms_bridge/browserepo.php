@@ -51,14 +51,14 @@ if (!$_POST['submit']) {
 }
 else {
 	$repo = array(
-		"bridge_host" => $_POST["bridge_host"],
-		"bridge_port" => $_POST["bridge_port"],
-		"bridge_context" => $_POST["bridge_context"],
-		"bcms_host" => $_POST["bcms_host"],
-		"bcms_port" => $_POST["bcms_port"],
-		"bcms_repo" => $_POST["bcms_repo"],
-		"bcms_user" => $_POST["bcms_user"],
-		"bcms_pass" => $_POST["bcms_pass"]
+		BRIDGE_HOST => $_POST[BRIDGE_HOST],
+		BRIDGE_PORT => $_POST[BRIDGE_PORT],
+		BRIDGE_CONTEXT => $_POST[BRIDGE_CONTEXT],
+		BCMS_HOST => $_POST[BCMS_HOST],
+		BCMS_PORT => $_POST[BCMS_PORT],
+		BCMS_REPO => $_POST[BCMS_REPO],
+		BCMS_USER => $_POST[BCMS_USER],
+		BCMS_PASS => $_POST[BCMS_PASS]
 	);
 	
 	// Fetch the list of Lessons from Beta CMS
@@ -86,11 +86,11 @@ else {
 			$tool_content .= "<tr class=\"odd\">";
 		}
 		
-		$tool_content .= "<td>".$lessonList[$j]["title"]."</td>
-			<td>".$lessonList[$j]["keywords"]."</td>
-			<td>".$lessonList[$j]["copyright"]."</td>
-			<td>".$lessonList[$j]["authors"]."</td>
-			<td>".$lessonList[$j]["project"]."</td>
+		$tool_content .= "<td>".$lessonList[$j][KEY_TITLE]."</td>
+			<td>".$lessonList[$j][KEY_KEYWORDS]."</td>
+			<td>".$lessonList[$j][KEY_COPYRIGHT]."</td>
+			<td>".$lessonList[$j][KEY_AUTHORS]."</td>
+			<td>".$lessonList[$j][KEY_PROJECT]."</td>
 			<td><a href=''>[show]</a><a href=''>[import]</a>";
 	}
 	
@@ -118,35 +118,35 @@ function repoForm() {
 	</tr>
 	<tr>
 	<th class='left'><b>"."Bridge Host"."</b></th>
-	<td><input class='FormData_InputText' type='text' name='bridge_host' value='localhost'>&nbsp;(*)</td>
+	<td><input class='FormData_InputText' type='text' name='".BRIDGE_HOST."' value='localhost'>&nbsp;(*)</td>
 	</tr>
 	<tr>
 	<th class='left'><b>"."Bridge Port"."</b></th>
-	<td><input class='FormData_InputText' type='text' name='bridge_port' value='8080'>&nbsp;(*)</td>
+	<td><input class='FormData_InputText' type='text' name='".BRIDGE_PORT."' value='8080'>&nbsp;(*)</td>
 	</tr>
 	<tr>
 	<th class='left'><b>"."Bridge Context"."</b></th>
-	<td><input class='FormData_InputText' type='text' name='bridge_context' value='JavaBridgeTemplate554'>&nbsp;(*)</td>
+	<td><input class='FormData_InputText' type='text' name='".BRIDGE_CONTEXT."' value='JavaBridgeTemplate554'>&nbsp;(*)</td>
 	</tr>
 	<tr>
 	<th class='left'><b>"."BetaCMS Host"."</b></th>
-	<td><input class='FormData_InputText' type='text' name='bcms_host' value='localhost'>&nbsp;(*)</td>
+	<td><input class='FormData_InputText' type='text' name='".BCMS_HOST."' value='localhost'>&nbsp;(*)</td>
 	</tr>
 	<tr>
 	<th class='left'><b>"."BetaCMS Port"."</b></th>
-	<td><input class='FormData_InputText' type='text' name='bcms_port' value='8080'>&nbsp;(*)</b></td>
+	<td><input class='FormData_InputText' type='text' name='".BCMS_PORT."' value='8080'>&nbsp;(*)</b></td>
 	</tr>
 	<tr>
 	<th class='left'><b>"."BetaCMS Repository"."</b></th>
-	<td><input class='FormData_InputText' type='text' name='bcms_repo' value='altsolrepo'>&nbsp;(*)</b></td>
+	<td><input class='FormData_InputText' type='text' name='".BCMS_REPO."' value='altsolrepo'>&nbsp;(*)</b></td>
 	</tr>
 	<tr>
 	<th class='left'><b>"."BetaCMS Username"."</b></th>
-	<td><input class='FormData_InputText' type='text' name='bcms_user' value='SYSTEM'>&nbsp;(*)</b></td>
+	<td><input class='FormData_InputText' type='text' name='".BCMS_USER."' value='SYSTEM'>&nbsp;(*)</b></td>
 	</tr>
 	<tr>
 	<th class='left'><b>"."BetaCMS Password"."</b></th>
-	<td><input class='FormData_InputText' type='text' name='bcms_pass' value='betaconcept'>&nbsp;(*)</b></td>
+	<td><input class='FormData_InputText' type='password' name='".BCMS_PASS."' value='betaconcept'>&nbsp;(*)</b></td>
 	</tr>
 	<tr>
 	<th>&nbsp;</th>

@@ -34,15 +34,36 @@
 ==============================================================================
 */
 
+define ("BRIDGE_HOST", "bridge_host");
+define ("BRIDGE_PORT", "bridge_port");
+define ("BRIDGE_CONTEXT", "bridge_context");
+define ("BCMS_HOST", "bcms_host");
+define ("BCMS_PORT", "bcms_port");
+define ("BCMS_REPO", "bcms_repo");
+define ("BCMS_USER", "bcms_user");
+define ("BCMS_PASS", "bcms_pass");
+
+define ("KEY_ID", "id");
+define ("KEY_TITLE", "title");
+define ("KEY_DESCRIPTION", "description");
+define ("KEY_KEYWORDS", "keywords");
+define ("KEY_COPYRIGHT", "copyright");
+define ("KEY_AUTHORS", "authors");
+define ("KEY_PROJECT", "project");
+define ("KEY_COMMENTS", "comments");
+
+define ("PRKEY_TITLE", "profile.title");
+define ("PRKEY_DESCRIPTION", "lessonDescription"); 
+
 function getLessonsList($bcmsrepo) {
-	$bridge_host = $bcmsrepo["bridge_host"];
-	$bridge_port = $bcmsrepo["bridge_port"];
-	$bridge_context = $bcmsrepo["bridge_context"];
-	$bcms_host = $bcmsrepo["bcms_host"];
-	$bcms_port = $bcmsrepo["bcms_port"];
-	$bcms_repo = $bcmsrepo["bcms_repo"];
-	$bcms_user = $bcmsrepo["bcms_user"];
-	$bcms_pass = $bcmsrepo["bcms_pass"];
+	$bridge_host = $bcmsrepo[BRIDGE_HOST];
+	$bridge_port = $bcmsrepo[BRIDGE_PORT];
+	$bridge_context = $bcmsrepo[BRIDGE_CONTEXT];
+	$bcms_host = $bcmsrepo[BCMS_HOST];
+	$bcms_port = $bcmsrepo[BCMS_PORT];
+	$bcms_repo = $bcmsrepo[BCMS_REPO];
+	$bcms_user = $bcmsrepo[BCMS_USER];
+	$bcms_pass = $bcmsrepo[BCMS_PASS];
 	
 	$lessonsArray = array();
 	
@@ -64,25 +85,25 @@ function getLessonsList($bcmsrepo) {
 			$co = $cmsRankedOutcome->getCmsRepositoryEntity();
 			$contentObjectType = $co->getContentObjectType();
 			
-			$titlePR = $co->getCmsProperty("profile.title");
-			$lessonDescPR = $co->getCmsProperty("lessonDescription");
-			$keywordsPR = $co->getCmsProperty("keywords");
-			$copyrightPR = $co->getCmsProperty("copyright");
-			$authorsPR = $co->getCmsProperty("authors");
-			$projectPR = $co->getCmsProperty("project");
-			$commentsPR = $co->getCmsProperty("comments");
-			$unitsPR = $co->getCmsPropertyList("units");
-			$scosPR = $co->getCmsProperty("scormFiles");
+			$titlePR = $co->getCmsProperty(PRKEY_TITLE);
+			$lessonDescPR = $co->getCmsProperty(PRKEY_DESCRIPTION);
+			$keywordsPR = $co->getCmsProperty(KEY_KEYWORDS);
+			$copyrightPR = $co->getCmsProperty(KEY_COPYRIGHT);
+			$authorsPR = $co->getCmsProperty(KEY_AUTHORS);
+			$projectPR = $co->getCmsProperty(KEY_PROJECT);
+			$commentsPR = $co->getCmsProperty(KEY_COMMENTS);
+			// $unitsPR = $co->getCmsPropertyList("units");
+			// $scosPR = $co->getCmsProperty("scormFiles");
 			
 			$lessonsArray[$i] = array(
-				"id" => java_values($co->getId()),
-				"title" => java_values($titlePR->getSimpleTypeValue()),
-				"description" => java_values($lessonDescPR->getSimpleTypeValue()),
-				"keywords" => java_values($keywordsPR->getSimpleTypeValue()),
-				"copyright" => java_values($copyrightPR->getSimpleTypeValue()),
-				"authors" => java_values($authorsPR->getSimpleTypeValue()),
-				"project" => java_values($projectPR->getSimpleTypeValue()),
-				"comments" => java_values($commentsPR->getSimpleTypeValue())
+				KEY_ID => java_values($co->getId()),
+				KEY_TITLE => java_values($titlePR->getSimpleTypeValue()),
+				KEY_DESCRIPTION => java_values($lessonDescPR->getSimpleTypeValue()),
+				KEY_KEYWORDS => java_values($keywordsPR->getSimpleTypeValue()),
+				KEY_COPYRIGHT => java_values($copyrightPR->getSimpleTypeValue()),
+				KEY_AUTHORS => java_values($authorsPR->getSimpleTypeValue()),
+				KEY_PROJECT => java_values($projectPR->getSimpleTypeValue()),
+				KEY_COMMENTS => java_values($commentsPR->getSimpleTypeValue())
 			);
 			
 //			if (!java_is_null($unitsPR) && $unitsPR->size() > 0) {
@@ -103,7 +124,6 @@ function getLessonsList($bcmsrepo) {
 //				}
 //			}
 					
-			//echo $co->toXml();
 			$i++;
 		}
 	}
@@ -116,14 +136,14 @@ function getLessonsList($bcmsrepo) {
 
 
 function connectToRepo($bcmsrepo) {
-	$bridge_host = $bcmsrepo["bridge_host"];
-	$bridge_port = $bcmsrepo["bridge_port"];
-	$bridge_context = $bcmsrepo["bridge_context"];
-	$bcms_host = $bcmsrepo["bcms_host"];
-	$bcms_port = $bcmsrepo["bcms_port"];
-	$bcms_repo = $bcmsrepo["bcms_repo"];
-	$bcms_user = $bcmsrepo["bcms_user"];
-	$bcms_pass = $bcmsrepo["bcms_pass"];
+	$bridge_host = $bcmsrepo[BRIDGE_HOST];
+	$bridge_port = $bcmsrepo[BRIDGE_PORT];
+	$bridge_context = $bcmsrepo[BRIDGE_CONTEXT];
+	$bcms_host = $bcmsrepo[BCMS_HOST];
+	$bcms_port = $bcmsrepo[BCMS_PORT];
+	$bcms_repo = $bcmsrepo[BCMS_REPO];
+	$bcms_user = $bcmsrepo[BCMS_USER];
+	$bcms_pass = $bcmsrepo[BCMS_PASS];
 	
 	require_once("http://".$bridge_host.":".$bridge_port."/".$bridge_context."/java/Java.inc");
 
