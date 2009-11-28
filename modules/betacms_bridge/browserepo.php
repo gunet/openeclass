@@ -50,54 +50,62 @@ if (!$_POST['submit']) {
 	$tool_content .= repoForm(); 
 }
 else {
-	$repo = array(
-		BRIDGE_HOST => $_POST[BRIDGE_HOST],
-		BRIDGE_PORT => $_POST[BRIDGE_PORT],
-		BRIDGE_CONTEXT => $_POST[BRIDGE_CONTEXT],
-		BCMS_HOST => $_POST[BCMS_HOST],
-		BCMS_PORT => $_POST[BCMS_PORT],
-		BCMS_REPO => $_POST[BCMS_REPO],
-		BCMS_USER => $_POST[BCMS_USER],
-		BCMS_PASS => $_POST[BCMS_PASS]
-	);
-	
-	// Fetch the list of Lessons from Beta CMS
-	$lessonList = getLessonsList($repo);
-	
-	
-	// Construct course list table
-	$tool_content .= "<table class=\"FormData\" width=\"99%\" align=\"left\">
-		<tbody><tr>
-		<td class=\"odd\" colspan='6'><div align=\"right\">"."caption"."</div></td></tr>
-		<tr>
-		<th scope=\"col\">"."title"."</th>
-		<th scope=\"col\">"."keywords"."</th>
-		<th scope=\"col\">"."copyright"."</th>
-		<th scope=\"col\">"."authors"."</th>
-		<th scope=\"col\">"."project"."</th>
-		<th scope=\"col\">"."actions"."</th>
-		</tr>";
-	
-	$k = 0;
-	for ($j = 0; $j < count($lessonList); $j++) {
-		if ($k%2 == 0) {
-			$tool_content .= "<tr>";
-		} else {
-			$tool_content .= "<tr class=\"odd\">";
+	if (empty($_POST[BRIDGE_HOST]) || empty($_POST[BRIDGE_PORT]) || empty($_POST[BRIDGE_CONTEXT]) 
+		|| empty($_POST[BCMS_HOST]) || empty($_POST[BCMS_PORT]) || empty($_POST[BCMS_REPO]) 
+		|| empty($_POST[BCMS_USER]) || empty($_POST[BCMS_PASS]) ) {
+		$tool_content .= "<p class=\"caution_small\">$langEmptyFields</p>
+			<br/><br/><p align=\"right\"><a href='$_SERVER[PHP_SELF]'>$langAgain</a></p>";
+	}
+	else {
+		$repo = array(
+			BRIDGE_HOST => $_POST[BRIDGE_HOST],
+			BRIDGE_PORT => $_POST[BRIDGE_PORT],
+			BRIDGE_CONTEXT => $_POST[BRIDGE_CONTEXT],
+			BCMS_HOST => $_POST[BCMS_HOST],
+			BCMS_PORT => $_POST[BCMS_PORT],
+			BCMS_REPO => $_POST[BCMS_REPO],
+			BCMS_USER => $_POST[BCMS_USER],
+			BCMS_PASS => $_POST[BCMS_PASS]
+		);
+		
+		// Fetch the list of Lessons from Beta CMS
+		$lessonList = getLessonsList($repo);
+		
+		
+		// Construct course list table
+		$tool_content .= "<table class=\"FormData\" width=\"99%\" align=\"left\">
+			<tbody><tr>
+			<td class=\"odd\" colspan='6'><div align=\"right\">"."caption"."</div></td></tr>
+			<tr>
+			<th scope=\"col\">"."title"."</th>
+			<th scope=\"col\">"."keywords"."</th>
+			<th scope=\"col\">"."copyright"."</th>
+			<th scope=\"col\">"."authors"."</th>
+			<th scope=\"col\">"."project"."</th>
+			<th scope=\"col\">"."actions"."</th>
+			</tr>";
+		
+		$k = 0;
+		for ($j = 0; $j < count($lessonList); $j++) {
+			if ($k%2 == 0) {
+				$tool_content .= "<tr>";
+			} else {
+				$tool_content .= "<tr class=\"odd\">";
+			}
+			
+			$tool_content .= "<td>".$lessonList[$j][KEY_TITLE]."</td>
+				<td>".$lessonList[$j][KEY_KEYWORDS]."</td>
+				<td>".$lessonList[$j][KEY_COPYRIGHT]."</td>
+				<td>".$lessonList[$j][KEY_AUTHORS]."</td>
+				<td>".$lessonList[$j][KEY_PROJECT]."</td>
+				<td><a href=''>[show]</a><a href=''>[import]</a>";
 		}
 		
-		$tool_content .= "<td>".$lessonList[$j][KEY_TITLE]."</td>
-			<td>".$lessonList[$j][KEY_KEYWORDS]."</td>
-			<td>".$lessonList[$j][KEY_COPYRIGHT]."</td>
-			<td>".$lessonList[$j][KEY_AUTHORS]."</td>
-			<td>".$lessonList[$j][KEY_PROJECT]."</td>
-			<td><a href=''>[show]</a><a href=''>[import]</a>";
+		// Close table correctly
+		$tool_content .= "</tr></tbody></table>";
+		// Display link to index.php
+		$tool_content .= "<br/><p align=\"right\"><a href=\"../admin/index.php\">".$langBack."</a></p>";
 	}
-	
-	// Close table correctly
-	$tool_content .= "</tr></tbody></table>";
-	// Display link to index.php
-	$tool_content .= "<br/><p align=\"right\"><a href=\"../admin/index.php\">".$langBack."</a></p>";
 }
 
 
