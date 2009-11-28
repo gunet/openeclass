@@ -41,6 +41,7 @@ $navigation[] = array("url" => "../admin/index.php", "name" => $langAdmin);
 $tool_content = "";
 $caption = "";
 $searchurl = "";
+$tool_content = "";
 
 require_once("include/bcms.inc.php");
 
@@ -54,16 +55,51 @@ $repo = array(
 	"bcms_user" => "SYSTEM",
 	"bcms_pass" => "betaconcept"
 );
+
+// Fetch the list of Lessons from Beta CMS
 $lessonList = getLessonsList($repo);
 
+
+// Construct course list table
+$tool_content .= "<table class=\"FormData\" width=\"99%\" align=\"left\">
+	<tbody><tr>
+	<td class=\"odd\" colspan='6'><div align=\"right\">"."caption"."</div></td></tr>
+	<tr>
+	<th scope=\"col\">"."title"."</th>
+	<th scope=\"col\">"."keywords"."</th>
+	<th scope=\"col\">"."copyright"."</th>
+	<th scope=\"col\">"."authors"."</th>
+	<th scope=\"col\">"."project"."</th>
+	<th scope=\"col\">"."actions"."</th>
+	</tr>";
+
+$k = 0;
+for ($j = 0; $j < count($lessonList); $j++) {
+	if ($k%2 == 0) {
+		$tool_content .= "<tr>";
+	} else {
+		$tool_content .= "<tr class=\"odd\">";
+	}
+	
+	$tool_content .= "<td>".$lessonList[$j]["title"]."</td>
+		<td>".$lessonList[$j]["keywords"]."</td>
+		<td>".$lessonList[$j]["copyright"]."</td>
+		<td>".$lessonList[$j]["authors"]."</td>
+		<td>".$lessonList[$j]["project"]."</td>
+		<td><a href=''>[show]</a><a href=''>[import]</a>";
+}
+
+// Close table correctly
+$tool_content .= "</tr></tbody></table>";
+// Display link to index.php
+$tool_content .= "<br/><p align=\"right\"><a href=\"../admin/index.php\">".$langBack."</a></p>";
 
 
 
 // DEBUG
-$tool_content = "";
-$tool_content .= "<pre>";
-$tool_content .= print_r($lessonList, true);
-$tool_content .= "</pre>";
+//$tool_content .= "<p><br/><br/><pre>";
+//$tool_content .= print_r($lessonList, true);
+//$tool_content .= "</pre><br/><br/></p>";
 
 draw($tool_content,3);
 ?>
