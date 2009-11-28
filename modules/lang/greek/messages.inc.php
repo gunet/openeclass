@@ -3246,3 +3246,8 @@ $langNoExercises = "Δεν υπάρχουν ασκήσεις";
 $langVia = 'μέσω';
 $langStudentViewEnable = "Περιβάλλον $langsOfStudent";
 $langStudentViewDisable = "Απενεργοποίηση περιβάλλοντος $langsOfStudent";
+
+/**********************************************************************
+ BetaCMS Bridge
+***********************************************************************/
+$langBrowseBCMSRepo = "BetaCMS Bridge";

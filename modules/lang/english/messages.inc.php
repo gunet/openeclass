@@ -2733,3 +2733,8 @@ $langVia = 'via';
 $langInsertWork = 'assignment';
 $langMultiRegFields = 'Field order definition';
 $langMultiRegFieldError = 'Error! Invalid field label:';
+
+/**********************************************************************
+ BetaCMS Bridge
+***********************************************************************/
+$langBrowseBCMSRepo = "BetaCMS Bridge";
