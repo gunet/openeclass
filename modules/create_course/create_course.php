@@ -23,7 +23,7 @@
 *  			Panepistimiopolis Ilissia, 15784, Athens, Greece
 *  			eMail: info@openeclass.org
 * =========================================================================*/
-
+session_start();
 
 $require_login = TRUE;
 $require_prof = TRUE;
@@ -72,6 +72,15 @@ $titulaire_probable="$prenom $nom";
 
 $tool_content .= "<form method='post' name='createform' action='$_SERVER[PHP_SELF]' onsubmit=\"return checkrequired(this, 'intitule', 'titulaires');\">";
 
+// Import from BetaCMS Bridge
+require_once("../betacms_bridge/include/bcms.inc.php");
+if (isset($_SESSION[IMPORT_FLAG]) && $_SESSION[IMPORT_FLAG] == true) {
+	$_POST['intitule'] = $_SESSION[IMPORT_INTITULE];
+	$_POST['description'] = $_SESSION[IMPORT_DESCRIPTION];
+	$_POST['course_keywords'] = $_SESSION[IMPORT_COURSE_KEYWORDS];
+	$_POST['course_addon'] = $_SESSION[IMPORT_COURSE_ADDON];
+	$_SESSION[IMPORT_FLAG] = false;
+}
 
 function escape_if_exists($name) {
         if (isset($_POST[$name])) {
