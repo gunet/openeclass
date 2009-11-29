@@ -55,13 +55,25 @@ if (isset($_GET['id']) && isset($_SESSION[BETACMSREPO])) {
 	// redirect to create course
 	$tool_content .= "Please proceed to create course module to import the Lesson. If your browser doesn't 
 		automatically redirect you, press <a href='../create_course/create_course.php'>here...</a>";
+	
+	$redirect = $urlServer;
+	if ( !substr( $urlServer, strlen( $urlServer ) - strlen( "/" ) ) === "/" ) {
+		$redirect .= "/";
+	}
+	
+	$head_content = '
+		<script type="text/javascript">
+			<!--//
+			parent.window.location.href="'.$urlServer.'modules/create_course/create_course.php";
+			//-->
+		</script>';
 }
 else {
 	$tool_content .= "<p class=\"caution_small\">$langEmptyFields</p>
 			<br/><br/><p align=\"right\"><a href='browserepo.php'>$langAgain</a></p>";
 }
 
-draw($tool_content,3);
+draw($tool_content, 3, null, $head_content);
 
 
 // HELPER FUNCTIONS
