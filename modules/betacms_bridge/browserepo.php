@@ -34,8 +34,8 @@
 ==============================================================================
 */
 $require_admin = TRUE;
-include '../../include/baseTheme.php';
-include 'admin.inc.php';
+require_once("../../include/baseTheme.php");
+require_once("../admin/admin.inc.php");
 $nameTools = $langBrowseBCMSRepo;
 $navigation[] = array("url" => "../admin/index.php", "name" => $langAdmin);
 $tool_content = "";
