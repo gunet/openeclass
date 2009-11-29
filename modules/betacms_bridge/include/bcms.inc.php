@@ -53,6 +53,11 @@ define ("KEY_COPYRIGHT", "copyright");
 define ("KEY_AUTHORS", "authors");
 define ("KEY_PROJECT", "project");
 define ("KEY_COMMENTS", "comments");
+define ("KEY_UNITS", "units");
+define ("KEY_SCORMFILES", "scormFiles");
+define ("KEY_SOURCEFILENAME", "sourcefilename");
+define ("KEY_MIMETYPE", "mimetype");
+define ("KEY_CALCULATEDSIZE", "calculatedsize");
 
 define ("PRKEY_TITLE", "profile.title");
 define ("PRKEY_DESCRIPTION", "lessonDescription");
@@ -102,8 +107,6 @@ function getLessonsList($bcmsrepo) {
 			$authorsPR = $co->getCmsProperty(KEY_AUTHORS);
 			$projectPR = $co->getCmsProperty(KEY_PROJECT);
 			$commentsPR = $co->getCmsProperty(KEY_COMMENTS);
-			// $unitsPR = $co->getCmsPropertyList("units");
-			// $scosPR = $co->getCmsProperty("scormFiles");
 			
 			$lessonsArray[$i] = array(
 				KEY_ID => java_values($co->getId()),
@@ -115,24 +118,6 @@ function getLessonsList($bcmsrepo) {
 				KEY_PROJECT => java_values($projectPR->getSimpleTypeValue()),
 				KEY_COMMENTS => java_values($commentsPR->getSimpleTypeValue())
 			);
-			
-//			if (!java_is_null($unitsPR) && $unitsPR->size() > 0) {
-//				echo "=== Units(".$unitsPR->size().") ===" ."\n";
-//				for ($i = 0; $i < java_values($unitsPR->size()); $i++) {
-//					$ccprop = $unitsPR->get($i);
-//					echo "title[".$i."]: " . $ccprop->getChildProperty("title")->getSimpleTypeValue() ."\n";
-//					echo "description[".$i."]: " . $ccprop->getChildProperty("description")->getSimpleTypeValue() ."\n";
-//				}
-//			}
-//			
-//			if (!java_is_null(scosPR)) {
-//				echo "=== SCOs ====" ."\n";
-//				$bcs = $scosPR->getSimpleTypeValues();
-//				echo "number of files: " . $bcs->size() ."\n";
-//				foreach ($bcs as $key => $bc) {
-//					echo $bc->getSourceFilename() ." ". $bc->getMimeType() ." ".  $bc->getCalculatedSize() ."\n";
-//				}
-//			}
 					
 			$i++;
 		}
@@ -170,6 +155,35 @@ function getLesson($bcmsrepo, $objectId) {
 		$authorsPR = $co->getCmsProperty(KEY_AUTHORS);
 		$projectPR = $co->getCmsProperty(KEY_PROJECT);
 		$commentsPR = $co->getCmsProperty(KEY_COMMENTS);
+		$unitsPR = $co->getCmsPropertyList(KEY_UNITS);
+		$scosPR = $co->getCmsProperty(KEY_SCORMFILES);
+		
+		$unitArray = array();
+		if (!java_is_null($unitsPR) && $unitsPR->size() > 0) {
+			for ($i = 0; $i < java_values($unitsPR->size()); $i++) {
+				$ccprop = $unitsPR->get($i);
+				$unitTitle = java_values($ccprop->getChildProperty(KEY_TITLE)->getSimpleTypeValue());
+				$unitDesc = java_values($ccprop->getChildProperty(KEY_DESCRIPTION)->getSimpleTypeValue());
+				if (isset($unitTitle) && isset($unitDesc)) {
+					$ar = array(KEY_TITLE => $unitTitle, KEY_DESCRIPTION => $unitDesc);
+					$unitArray[$i] = $ar;
+				}
+			}
+		}
+		
+		$scoArray = array();
+		$i = 0;
+		if (!java_is_null(scosPR)) {
+			$bcs = $scosPR->getSimpleTypeValues();
+			foreach ($bcs as $key => $bc) {
+				$scoArray[$i] = array(
+					KEY_SOURCEFILENAME => java_values($bc->getSourceFilename()),
+					KEY_MIMETYPE => java_values($bc->getMimeType()),
+					KEY_CALCULATEDSIZE => java_values($bc->getCalculatedSize())
+					);
+				$i++;
+			}
+		}
 		
 		$retArray = array(
 			KEY_ID => java_values($co->getId()),
@@ -179,7 +193,9 @@ function getLesson($bcmsrepo, $objectId) {
 			KEY_COPYRIGHT => java_values($copyrightPR->getSimpleTypeValue()),
 			KEY_AUTHORS => java_values($authorsPR->getSimpleTypeValue()),
 			KEY_PROJECT => java_values($projectPR->getSimpleTypeValue()),
-			KEY_COMMENTS => java_values($commentsPR->getSimpleTypeValue())
+			KEY_COMMENTS => java_values($commentsPR->getSimpleTypeValue()),
+			KEY_UNITS => $unitArray,
+			KEY_SCORMFILES => $scoArray
 		);
 		
 		return $retArray;

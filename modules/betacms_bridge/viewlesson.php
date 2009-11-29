@@ -68,7 +68,7 @@ draw($tool_content,3);
 // HELPER FUNCTIONS
 
 function objectTable($obj) {
-	return "<table width='99%' align='left' class='FormData'>
+	$ret = "<table width='99%' align='left' class='FormData'>
 	<tbody><tr>
 	<th width='220'>&nbsp;</th>
 	<td><b>eClass Lesson Object View</b></td>
@@ -105,10 +105,48 @@ function objectTable($obj) {
 	<th class='left'><b>"."comments"."</b></th>
 	<td>".$obj[KEY_COMMENTS]."</td>
 	</tr>
-	</tbody>
+	<tr>
+	<th width='220'>&nbsp;</th>
+	<td><b>Units</b></td>
+	</tr>";
+	
+	foreach ($obj[KEY_UNITS] as $key => $unit) {
+		$ret .= "<tr>
+			<th class='left'><b>"."title".$key."</b></th>
+			<td>".$unit[KEY_TITLE]."</td>
+			</tr>
+			<tr>
+			<th class='left'><b>"."description".$key."</b></th>
+			<td>".$unit[KEY_DESCRIPTION]."</td>
+			</tr>";
+	}
+	
+	$ret .= "<tr>
+	<th width='220'>&nbsp;</th>
+	<td><b>Scorm Files</b></td>
+	</tr>";
+	
+	foreach ($obj[KEY_SCORMFILES] as $key => $sco) {
+		$ret .= "<tr>
+			<th class='left'><b>"."Source Filename".$key."</b></th>
+			<td>".$sco[KEY_SOURCEFILENAME]."</td>
+			</tr>
+			<tr>
+			<th class='left'><b>"."Mime Type".$key."</b></th>
+			<td>".$sco[KEY_MIMETYPE]."</td>
+			</tr>
+			<tr>
+			<th class='left'><b>"."Calculated Size".$key."</b></th>
+			<td>".$sco[KEY_CALCULATEDSIZE]."</td>
+			</tr>";
+	}
+	
+	$ret .= "</tbody>
 	</table>
 	<br />
 	<p align='right'><a href='importlesson.php?id=".$obj[KEY_ID]."'>[import]</a>
 	<a href='browserepo.php'>".$GLOBALS['langBack']."</p>";
+	
+	return $ret;
 }
 ?>
