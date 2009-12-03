@@ -157,7 +157,7 @@ function create_user($statut, $uname, $nom, $prenom, $email, $depid, $am, $phone
                $langSettings, $langPass, $langAddress, $langIs, $urlServer,
                $langProblem, $administratorName, $administratorSurname,
                $langManager, $langTel, $telephone, $langEmail,
-               $emailAdministrator, $profsuccess, $usersuccess,
+               $emailAdministrator, $emailhelpdesk, $profsuccess, $usersuccess,
                $durationAccount;
 
         if ($statut == 1) {
@@ -205,7 +205,7 @@ $langProblem
 $administratorName $administratorSurname
 $langManager $siteName
 $langTel $telephone
-$langEmail : $emailAdministrator
+$langEmail : $emailhelpdesk
 ";
         if ($send_mail) {
                 send_mail('', '', '', $email, $emailsubject, $emailbody, $charset);

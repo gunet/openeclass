@@ -90,7 +90,7 @@ $langProblem
 $administratorName $administratorSurname
 $langManager $siteName
 $langTel $telephone
-$langEmail : $emailAdministrator
+$langEmail : $emailhelpdesk
 ";
 
 send_mail('', '', '', $email_form, $emailsubject, $emailbody, $charset);

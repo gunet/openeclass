@@ -107,7 +107,7 @@ if ($submit)  {
                                 "$urlServer\n$langProblem\n$langFormula" .
                                 "$administratorName $administratorSurname" .
                                 "$langManager $siteName \n$langTel $telephone \n" .
-                                "$langEmail: $emailAdministrator";
+                                "$langEmail: $emailhelpdesk";
 
 	if (!send_mail('', '', '', $pe, $mailsubject, $emailbody, $charset))  {
 		$tool_content .= "<table width='99%'><tbody><tr>

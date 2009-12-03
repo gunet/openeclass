@@ -190,7 +190,7 @@ if (isset($_POST['submit'])) {
 			"$urlServer\n$langProblem\n$langFormula" .
 			"$administratorName $administratorSurname" .
 			"$langManager $siteName \n$langTel $telephone \n" .
-			"$langEmail: $emailAdministrator";
+			"$langEmail: $emailhelpdesk";
 	
 		send_mail('', '', '', $email, $emailsubject, $emailbody, $charset);
 		$registered_at = time();

@@ -87,7 +87,7 @@ if (isset($_POST['submit']) && ($_POST['body_mail'] != "") && ($_POST['submit'] 
 $langManager $siteName
 $administratorName $administratorSurname
 $langTel $telephone
-$langEmail : $emailAdministrator
+$langEmail : $emailhelpdesk
 ";
 		if (!send_mail('', '', '', $to,
 			$emailsubject, $emailbody, $charset)) {

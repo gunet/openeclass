@@ -257,7 +257,7 @@ $langComments:> $comment
 $langManager $siteName
 $administratorName $administratorSurname
 $langPhone: $telephone
-$langEmail: $emailAdministrator";
+$langEmail: $emailhelpdesk";
 						send_mail('', '', "$prof_name $prof_surname", $prof_email, $emailsubject, $emailbody, $charset);
 					}
 					$tool_content .= "<p class='success_small'>" .  ($list_statut == 1)? $langTeacherRequestHasRejected: $langRequestReject;

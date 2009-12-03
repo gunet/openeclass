@@ -173,7 +173,7 @@ if (!isset($submit)) {
 					"$urlServer\n$langProblem\n$langFormula" .
 					"$administratorName $administratorSurname" .
 					"$langManager $siteName \n$langTel $telephone \n" .
-					"$langEmail: $emailAdministrator";
+					"$langEmail: $emailhelpdesk";
 		} else {
 			$emailbody = "$langDestination $prenom_form $nom_form\n" .
 				"$langYouAreReg $siteName $langSettings $uname\n" .
@@ -181,7 +181,7 @@ if (!isset($submit)) {
 				"$urlServer\n$langProblem\n$langFormula" .
 				"$administratorName $administratorSurname" .
 				"$langManager $siteName \n$langTel $telephone \n" .
-				"$langEmail: $emailAdministrator";
+				"$langEmail: $emailhelpdesk";
 		}
 	
 	send_mail('', '', '', $email, $emailsubject, $emailbody, $charset);

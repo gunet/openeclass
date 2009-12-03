@@ -68,7 +68,7 @@ if(!empty($userid))
 		$body = isset($_POST['body'])?$_POST['body']:'';
 		$tool_content .= "<table width=\"99%\"><tbody><tr><td>";
 		//$to = $email;
-		$to = $GLOBALS['emailAdministrator'];
+		$to = $GLOBALS['emailhelpdesk'];
 		$emailsubject = "Ενεργοποίηση λογαριασμού χρήστη";
 		$emailbody = "Ο φοιτητής με τα παρακάτω στοιχεία επιθυμεί την 
 		επανενεργοποίηση του λογαριασμού του:
