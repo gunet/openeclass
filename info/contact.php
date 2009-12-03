@@ -57,7 +57,7 @@ $tool_content .= "
   </tr>
   <tr>
     <th class='left'>$langEmail:</th>
-    <td width='300'>".mailto($emailAdministrator, str_replace('@', ' &lt;at> ', $emailAdministrator))."
+    <td width='300'>".mailto($emailhelpdesk, str_replace('@', ' &lt;at> ', $emailhelpdesk))."
     </td>
   </tr>
   </thead>
