@@ -43,15 +43,15 @@
     $sql = "SELECT id FROM monthly_summary WHERE `month` = '$last_month'";
     $result = db_query($sql, $mysqlMainDb);
 
-    $isReported = 0;
-    while ($row = mysql_fetch_assoc($result)) {
-        if ($row['id']) {
-            $isReported = 1;
-        }
-    }
-    mysql_free_result($result);
-    //... and if not inserted yet
-    if (!$isReported) {
+    if (!$result or mysql_num_rows($result) == 0) {
+	echo "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html>
+<head>
+<title>$langUpdatingStatistics</title>
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+</head><body><div style='text-align: center; font-size: 150%; border: 1px solid black; padding: 1 em;'>$langUpdatingStatistics<br />
+$langPleaseWait</div>
+"; 
         $current_month = date('Y-m-01 00:00:00');
         $prev_month = date('Y-m-01 00:00:00', $lmon);
 
@@ -110,7 +110,7 @@
 		<th>".$langTeacher."</th>
 		<th>".$langNbUsers."</th></tr>";
 
-        $sql = "SELECT cours.intitule AS name, cours.visible as visible, cours.type as type, cours.faculte as dept, cours.titulaires as proff, count(user_id) AS cnt FROM cours_user LEFT JOIN cours ON ".
+        $sql = "SELECT cours.intitule AS name, cours.visible as visible, cours.type as type, cours.faculte as dept, cours.titulaires as proff, count(user_id) AS cnt FROM cours LEFT JOIN cours_user ON ".
             " cours.code = cours_user.code_cours GROUP BY code_cours ";
         $result = db_query($sql, $mysqlMainDb);
         while ($row = mysql_fetch_assoc($result)) {
@@ -142,6 +142,6 @@
             visitorsNum = '$vis_sum', coursNum = '$cours_sum', logins = '$login_sum', details = $mtext";
         $result= db_query($sql, $mysqlMainDb);
         @mysql_free_result($result);
-    }
-
-?>
+	echo "<div style='text-align: center; padding: 2em;'><a href='{$urlServer}modules/admin/'>$langCont</a></div></body></html>\n";
+	exit;
+}

@@ -187,6 +187,9 @@ $langDataBase = "Βάση δεδομένων ";
 $langLanguage ="Γλώσσα";
 $langUpgradeBase = "Αναβάθμιση βάσης Δεδομένων";
 $langCleanUp = "Διαγραφή παλιών αρχείων";
+$langUpdatingStatistics = "Ενημέρωση μηνιαίων στατιστικών";
+$langPleaseWait = "Παρακαλώ περιμένετε";
+
 
 // listusers
 $langBegin="αρχή";
@@ -360,7 +363,7 @@ $langStat = "Στατιστικά";
 $langNoUserList = "Δεν υπάρχουν αποτελέσματα πρός εμφάνιση";
 $langContactAdmin = "Αποστολή ενημερωτικού email στον Διαχειριστή";
 $langActivateAccount = "Παρακαλώ να ενεργοποιήσετε το λογαριασμό μου";
-$langLessonCode = "Κωδικός μαθήματος";
+$langLessonCode = "Συνθηματικό μαθήματος";
 
 // unregister
 $langConfirmDelete = "Επιβεβαίωση διαγραφής ";
@@ -1816,7 +1819,7 @@ $m['legclosed'] = 'Κλειστό μάθημα';
 $m['nolessons'] = 'Δεν υπάρχουν διαθέσιμα μαθήματα!';
 $m['type']="Τύπος";
 $m['name']="Μάθημα";
-$m['code']="Κωδικός μαθήματος";
+$m['code']="Συνθηματικό μαθήματος";
 $m['prof']=$langTeacher;
 $m['mailprof'] = "Για να εγγραφείτε στο μάθημα θα πρέπει να στείλετε mail στον διδάσκοντα του μαθήματος
 κάνοντας κλικ";
