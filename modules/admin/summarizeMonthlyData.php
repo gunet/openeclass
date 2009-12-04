@@ -51,7 +51,8 @@
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
 </head><body><div style='text-align: center; font-size: 150%; border: 1px solid black; padding: 1 em;'>$langUpdatingStatistics<br />
 $langPleaseWait</div>
-"; 
+";
+	flush();
         $current_month = date('Y-m-01 00:00:00');
         $prev_month = date('Y-m-01 00:00:00', $lmon);
 
