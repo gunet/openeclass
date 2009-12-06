@@ -25,7 +25,7 @@
 * =========================================================================*/
 /*===========================================================================
 	viewlesson.php
-	@last update: 29-11-2009 by Thanos Kyritsis
+	@last update: 06-12-2009 by Thanos Kyritsis
 	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
 ==============================================================================
     @Description: 
@@ -107,7 +107,7 @@ function objectTable($obj) {
 	</tr>
 	<tr>
 	<th width='220'>&nbsp;</th>
-	<td><b>Units</b></td>
+	<td><b>Units (total number: ".$obj[KEY_UNITS_SIZE].")</b></td>
 	</tr>";
 	
 	foreach ($obj[KEY_UNITS] as $key => $unit) {
@@ -123,7 +123,7 @@ function objectTable($obj) {
 	
 	$ret .= "<tr>
 	<th width='220'>&nbsp;</th>
-	<td><b>Scorm Files</b></td>
+	<td><b>Scorm Files (total number: ".$obj[KEY_SCORMFILES_SIZE].")</b></td>
 	</tr>";
 	
 	foreach ($obj[KEY_SCORMFILES] as $key => $sco) {

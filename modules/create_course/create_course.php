@@ -31,6 +31,7 @@ $require_help = TRUE;
 $helpTopic = 'CreateCourse';
 
 include '../../include/baseTheme.php';
+require_once("../betacms_bridge/include/bcms.inc.php");
 
 $nameTools = $langCreateCourse . " (" . $langCreateCourseStep ." 1 " .$langCreateCourseStep2 . " 3)" ;
 $tool_content = $head_content = "";
@@ -73,14 +74,7 @@ $titulaire_probable="$prenom $nom";
 $tool_content .= "<form method='post' name='createform' action='$_SERVER[PHP_SELF]' onsubmit=\"return checkrequired(this, 'intitule', 'titulaires');\">";
 
 // Import from BetaCMS Bridge
-require_once("../betacms_bridge/include/bcms.inc.php");
-if (isset($_SESSION[IMPORT_FLAG]) && $_SESSION[IMPORT_FLAG] == true) {
-	$_POST['intitule'] = $_SESSION[IMPORT_INTITULE];
-	$_POST['description'] = $_SESSION[IMPORT_DESCRIPTION];
-	$_POST['course_keywords'] = $_SESSION[IMPORT_COURSE_KEYWORDS];
-	$_POST['course_addon'] = $_SESSION[IMPORT_COURSE_ADDON];
-	$_SESSION[IMPORT_FLAG] = false;
-}
+doImportFromBetaCMSBeforeCourseCreation();
 
 function escape_if_exists($name) {
         if (isset($_POST[$name])) {
@@ -420,6 +414,10 @@ if (isset($_POST['create_course'])) {
                 fwrite($fd, "$string");
                 $status[$repertoire]=1;
                 session_register("status");
+                
+                // ----------- Import from BetaCMS Bridge -----------
+                doImportFromBetaCMSAfterCourseCreation($repertoire, $mysqlMainDb, $webDir);
+                // --------------------------------------------------
 
                 $tool_content .= "
                 <p class=\"success_small\">$langJustCreated: &nbsp;<b>$intitule</b></p>

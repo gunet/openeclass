@@ -25,7 +25,7 @@
 * =========================================================================*/
 /*===========================================================================
 	bcms.inc.php
-	@last update: 29-11-2009 by Thanos Kyritsis
+	@last update: 06-12-2009 by Thanos Kyritsis
 	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
 ==============================================================================
     @Description: 
@@ -54,20 +54,28 @@ define ("KEY_AUTHORS", "authors");
 define ("KEY_PROJECT", "project");
 define ("KEY_COMMENTS", "comments");
 define ("KEY_UNITS", "units");
+define ("KEY_UNITS_SIZE", "units_size");
 define ("KEY_SCORMFILES", "scormFiles");
+define ("KEY_SCORMFILES_SIZE", "scormFiles_size");
 define ("KEY_SOURCEFILENAME", "sourcefilename");
 define ("KEY_MIMETYPE", "mimetype");
 define ("KEY_CALCULATEDSIZE", "calculatedsize");
+define ("KEY_FILECONTENT", "filecontent");
 
 define ("PRKEY_TITLE", "profile.title");
 define ("PRKEY_DESCRIPTION", "lessonDescription");
 
 define ("IMPORT_FLAG", "bcms_flag");
+define ("IMPORT_FLAG_INITIATED", "bcms_flag_initiated");
 define ("IMPORT_ID", "bcms_id");
 define ("IMPORT_INTITULE", "bcms_intitule");
 define ("IMPORT_DESCRIPTION", "bcms_description");
 define ("IMPORT_COURSE_KEYWORDS", "bcms_course_keywords");
 define ("IMPORT_COURSE_ADDON", "bcms_course_addon");
+define ("IMPORT_UNITS", "bcms_units");
+define ("IMPORT_UNITS_SIZE", "bcms_units_size");
+define ("IMPORT_SCORMFILES", "bcms_scormFiles");
+define ("IMPORT_SCORMFILES_SIZE", "bcms_scormFiles_size");
 
 
 function getLessonsList($bcmsrepo) {
@@ -159,6 +167,7 @@ function getLesson($bcmsrepo, $objectId) {
 		$scosPR = $co->getCmsProperty(KEY_SCORMFILES);
 		
 		$unitArray = array();
+		$unitsSize = 0;
 		if (!java_is_null($unitsPR) && $unitsPR->size() > 0) {
 			for ($i = 0; $i < java_values($unitsPR->size()); $i++) {
 				$ccprop = $unitsPR->get($i);
@@ -167,21 +176,23 @@ function getLesson($bcmsrepo, $objectId) {
 				if (isset($unitTitle) && isset($unitDesc)) {
 					$ar = array(KEY_TITLE => $unitTitle, KEY_DESCRIPTION => $unitDesc);
 					$unitArray[$i] = $ar;
+					$unitsSize++;
 				}
 			}
 		}
 		
 		$scoArray = array();
-		$i = 0;
+		$scoindex = 0;
 		if (!java_is_null(scosPR)) {
 			$bcs = $scosPR->getSimpleTypeValues();
 			foreach ($bcs as $key => $bc) {
-				$scoArray[$i] = array(
+				$scoArray[$scoindex] = array(
 					KEY_SOURCEFILENAME => java_values($bc->getSourceFilename()),
 					KEY_MIMETYPE => java_values($bc->getMimeType()),
-					KEY_CALCULATEDSIZE => java_values($bc->getCalculatedSize())
+					KEY_CALCULATEDSIZE => java_values($bc->getCalculatedSize()),
+					KEY_FILECONTENT => java_values($bc->getContent())
 					);
-				$i++;
+				$scoindex++;
 			}
 		}
 		
@@ -195,7 +206,9 @@ function getLesson($bcmsrepo, $objectId) {
 			KEY_PROJECT => java_values($projectPR->getSimpleTypeValue()),
 			KEY_COMMENTS => java_values($commentsPR->getSimpleTypeValue()),
 			KEY_UNITS => $unitArray,
-			KEY_SCORMFILES => $scoArray
+			KEY_UNITS_SIZE => $unitsSize,
+			KEY_SCORMFILES => $scoArray,
+			KEY_SCORMFILES_SIZE => $scoindex
 		);
 		
 		return $retArray;
@@ -240,5 +253,75 @@ function connectToRepo($bcmsrepo) {
 	}
 	
 	return $cli;
+}
+
+
+// ---- Functions to call from create_course module ----
+
+function doImportFromBetaCMSBeforeCourseCreation() {
+	if (isset($_SESSION[IMPORT_FLAG]) && $_SESSION[IMPORT_FLAG] == true) {
+		$_POST['intitule'] = $_SESSION[IMPORT_INTITULE];
+		$_POST['description'] = $_SESSION[IMPORT_DESCRIPTION];
+		$_POST['course_keywords'] = $_SESSION[IMPORT_COURSE_KEYWORDS];
+		$_POST['course_addon'] = $_SESSION[IMPORT_COURSE_ADDON];
+		$_SESSION[IMPORT_FLAG] = false;
+		$_SESSION[IMPORT_FLAG_INITIATED] = true;
+		
+		// Remove them from session for proper memory/space management
+		unset($_SESSION[IMPORT_INTITULE]);
+		unset($_SESSION[IMPORT_DESCRIPTION]);
+		unset($_SESSION[IMPORT_COURSE_KEYWORDS]);
+		unset($_SESSION[IMPORT_COURSE_ADDON]);
+	}
+}
+
+function doImportFromBetaCMSAfterCourseCreation($repertoire, $mysqlMainDb, $webDir) {
+	if (isset($_SESSION[IMPORT_FLAG_INITIATED]) && $_SESSION[IMPORT_FLAG_INITIATED] == true) {
+
+		if ($_SESSION[IMPORT_UNITS_SIZE] > 0) {
+			// find course id
+			$result = db_query("SELECT cours_id FROM cours WHERE cours.code='" . $repertoire ."'");
+			$theCourse = mysql_fetch_array($result);
+			$cid = $theCourse["cours_id"];
+			
+			foreach ($_SESSION[IMPORT_UNITS] as $key => $unit) {
+				// find order
+				$result = db_query("SELECT MAX(`order`) FROM course_units WHERE course_id = " . $cid);
+				list($maxorder) = mysql_fetch_row($result);
+				$order = $maxorder + 1;
+
+				// add unit
+				db_query("INSERT INTO course_units SET title = '" . $unit[KEY_TITLE] ."', 
+						comments = '" . $unit[KEY_DESCRIPTION] ."', `order` = '" . $order ."', course_id = '" . $cid ."'");
+			}
+			
+			// Remove them from session for proper memory/space management
+			unset($_SESSION[IMPORT_UNITS]);
+			unset($_SESSION[IMPORT_UNITS_SIZE]);
+		}
+		
+		if ($_SESSION[IMPORT_SCORMFILES_SIZE] > 0) {
+			foreach ($_SESSION[IMPORT_SCORMFILES] as $key => $sco) {
+				$fp = fopen("../../courses/".$repertoire."/temp/".$sco[KEY_SOURCEFILENAME], "w");
+				fwrite($fp, $sco[KEY_FILECONTENT]);
+				fclose($fp);
+				
+				// Do the learningPath Import
+				require_once("../learnPath/importLearningPathLib.php");
+				mysql_select_db($repertoire);
+				doImport($repertoire, $webDir, $sco[KEY_CALCULATEDSIZE], $sco[KEY_SOURCEFILENAME]);
+				mysql_select_db($mysqlMainDb);
+			}
+			
+			// Remove them from session for proper memory/space management
+			unset($_SESSION[IMPORT_SCORMFILES]);
+			unset($_SESSION[IMPORT_SCORMFILES_SIZE]);
+		}
+
+		// done - cleanup
+		$_SESSION[IMPORT_FLAG_INITIATED] = false;
+		unset($_SESSION[IMPORT_FLAG]);
+		unset($_SESSION[IMPORT_FLAG_INITIATED]);
+	}
 }
 ?>
