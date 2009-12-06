@@ -309,7 +309,7 @@ function doImportFromBetaCMSAfterCourseCreation($repertoire, $mysqlMainDb, $webD
 				// Do the learningPath Import
 				require_once("../learnPath/importLearningPathLib.php");
 				mysql_select_db($repertoire);
-				doImport($repertoire, $webDir, $sco[KEY_CALCULATEDSIZE], $sco[KEY_SOURCEFILENAME]);
+				//doImport($repertoire, $webDir, $sco[KEY_CALCULATEDSIZE], $sco[KEY_SOURCEFILENAME]);
 				mysql_select_db($mysqlMainDb);
 			}
 			

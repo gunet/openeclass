@@ -1171,13 +1171,13 @@ function doImport($currentCourseID, $webDir, $scoFileSize, $scoFileName) {
     foreach ( $okMsgs as $msg)
     {
         //$tool_content .= "\n<b>[</b><span class=\"correct\">$langSuccessOk</span><b>]</b>&nbsp;&nbsp;&nbsp;".$msg."<br />";
-        echo "\n<b>[</b><span class=\"correct\">$langSuccessOk</span><b>]</b>&nbsp;&nbsp;&nbsp;".$msg."<br />";
+        //echo "\n<b>[</b><span class=\"correct\">$langSuccessOk</span><b>]</b>&nbsp;&nbsp;&nbsp;".$msg."<br />";
     }
 
     foreach ( $errorMsgs as $msg)
     {
         //$tool_content .= "\n<b>[</b><span class=\"error\">$langError</span><b>]</b>&nbsp;&nbsp;&nbsp;".$msg."<br />";
-        echo "\n<b>[</b><span class=\"error\">$langError</span><b>]</b>&nbsp;&nbsp;&nbsp;".$msg."<br />";
+        //echo "\n<b>[</b><span class=\"error\">$langError</span><b>]</b>&nbsp;&nbsp;&nbsp;".$msg."<br />";
     }
 
     //$tool_content .= "\n<!-- End messages -->\n";
