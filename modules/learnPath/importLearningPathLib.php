@@ -496,7 +496,7 @@ function utf8_decode_if_is_utf8($str) {
        CLAROLINE MAIN
   ======================================*/
 
-function doImport($currentCourseID, $webDir, $scoFileSize, $scoFileName) {
+function doImport($currentCourseID, $mysqlMainDb, $webDir, $scoFileSize, $scoFileName) {
 	global $langUnamedPath;
 	global $langFileScormError;
 	global $langNotice;
@@ -530,6 +530,8 @@ function doImport($currentCourseID, $webDir, $scoFileSize, $scoFileName) {
 	global $langBack;
 	
 	$pwd = getcwd();
+	mysql_select_db($currentCourseID);
+	
 	$TABLELEARNPATH         = "lp_learnPath";
 	$TABLEMODULE            = "lp_module";
 	$TABLELEARNPATHMODULE   = "lp_rel_learnPath_module";
@@ -1231,6 +1233,7 @@ function doImport($currentCourseID, $webDir, $scoFileSize, $scoFileName) {
     //$importMessages .= "\n<br /><a href=\"learningPathList.php\">$langBack</a></p>";
     $importMessages .= "\n<br /></p>";
     
+    mysql_select_db($mysqlMainDb);
     chdir($pwd);
     
     return $importMessages;

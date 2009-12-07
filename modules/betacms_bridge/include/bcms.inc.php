@@ -310,9 +310,8 @@ function doImportFromBetaCMSAfterCourseCreation($repertoire, $mysqlMainDb, $webD
 				
 				// Do the learningPath Import
 				require_once("../learnPath/importLearningPathLib.php");
-				mysql_select_db($repertoire);
-				$importMessages .= doImport($repertoire, $webDir, $sco[KEY_CALCULATEDSIZE], $sco[KEY_SOURCEFILENAME]);
-				mysql_select_db($mysqlMainDb);
+				$importMessages .= doImport($repertoire, $mysqlMainDb, $webDir, $sco[KEY_CALCULATEDSIZE], $sco[KEY_SOURCEFILENAME]);
+				unlink("../../courses/".$repertoire."/temp/".$sco[KEY_SOURCEFILENAME]);
 			}
 			
 			// Remove them from session for proper memory/space management
