@@ -276,6 +276,8 @@ function doImportFromBetaCMSBeforeCourseCreation() {
 }
 
 function doImportFromBetaCMSAfterCourseCreation($repertoire, $mysqlMainDb, $webDir) {
+	$importMessages = "";
+	
 	if (isset($_SESSION[IMPORT_FLAG_INITIATED]) && $_SESSION[IMPORT_FLAG_INITIATED] == true) {
 
 		if ($_SESSION[IMPORT_UNITS_SIZE] > 0) {
@@ -309,7 +311,7 @@ function doImportFromBetaCMSAfterCourseCreation($repertoire, $mysqlMainDb, $webD
 				// Do the learningPath Import
 				require_once("../learnPath/importLearningPathLib.php");
 				mysql_select_db($repertoire);
-				//doImport($repertoire, $webDir, $sco[KEY_CALCULATEDSIZE], $sco[KEY_SOURCEFILENAME]);
+				$importMessages .= doImport($repertoire, $webDir, $sco[KEY_CALCULATEDSIZE], $sco[KEY_SOURCEFILENAME]);
 				mysql_select_db($mysqlMainDb);
 			}
 			
@@ -323,5 +325,7 @@ function doImportFromBetaCMSAfterCourseCreation($repertoire, $mysqlMainDb, $webD
 		unset($_SESSION[IMPORT_FLAG]);
 		unset($_SESSION[IMPORT_FLAG_INITIATED]);
 	}
+	
+	return $importMessages;
 }
 ?>

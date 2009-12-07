@@ -497,6 +497,39 @@ function utf8_decode_if_is_utf8($str) {
   ======================================*/
 
 function doImport($currentCourseID, $webDir, $scoFileSize, $scoFileName) {
+	global $langUnamedPath;
+	global $langFileScormError;
+	global $langNotice;
+	global $langMaxFileSize;
+	global $langNoSpace;
+	global $langOkFileReceived;
+	global $langErrorNoZlibExtension;
+	global $langErrorReadingZipFile;
+	global $langZipNoPhp;
+	global $langErrortExtractingManifest;
+	global $langErrorFileMustBeZip;
+	global $langErrorOpeningManifest;
+	global $langOkManifestFound;
+	global $langErrorReadingManifest;
+	global $langOkManifestRead;
+	global $langErrorAssetNotFound;
+	global $langErrorNoModuleInPackage;
+	global $langErrorSql;
+	global $langOkChapterHeadAdded;
+	global $langUnamedModule;
+	global $langDefaultModuleComment;
+	global $langDefaultModuleAddedComment;
+	global $langOkModuleAdded;
+	global $langOkDefaultTitleUsed;
+	global $langDefaultLearningPathComment;
+	global $langOkDefaultCommentUsed;
+	global $langSuccessOk;
+	global $langError;
+	global $langInstalled;
+	global $langNotInstalled;
+	global $langBack;
+	
+	$pwd = getcwd();
 	$TABLELEARNPATH         = "lp_learnPath";
 	$TABLEMODULE            = "lp_module";
 	$TABLELEARNPATHMODULE   = "lp_rel_learnPath_module";
@@ -510,7 +543,9 @@ function doImport($currentCourseID, $webDir, $scoFileSize, $scoFileName) {
 	$maxFilledSpace = 100000000;
 	
 	$courseDir   = "courses/".$currentCourseID."/scormPackages/";
+	$tempDir     = "courses/".$currentCourseID."/temp/";
 	$baseWorkDir = $webDir.$courseDir; // path_id
+	$tempWorkDir = $webDir.$tempDir;
 	
 	if (!is_dir($baseWorkDir)) claro_mkdir($baseWorkDir, CLARO_FILE_PERMISSIONS);
 		
@@ -569,7 +604,7 @@ function doImport($currentCourseID, $webDir, $scoFileSize, $scoFileName) {
         }
         else
         {
-            $zipFile = new pclZip($scoFileName);
+            $zipFile = new pclZip($tempWorkDir.$scoFileName);
             $is_allowedToUnzip = true ; // default initialisation
 
             // Check the zip content (real size and file extension)
@@ -639,7 +674,7 @@ function doImport($currentCourseID, $webDir, $scoFileSize, $scoFileName) {
     else
     {
         $errorFound = true;
-        array_push ($errorMsgs, $langErrorFileMustBeZip );
+        array_push ($errorMsgs, $langErrorFileMustBeZip.": ".basename($scoFileName) );
     }
     // find xmlmanifest (must be in root else ==> cancel operation, delete files)
 
@@ -1167,32 +1202,38 @@ function doImport($currentCourseID, $webDir, $scoFileSize, $scoFileName) {
     /*--------------------------------------
       status messages
      --------------------------------------*/
-    //$tool_content .= "\n<p><!-- Messages -->\n";
+    $importMessages = "\n<p>\n";
+    //$importMessages .= "<!-- Messages -->";
     foreach ( $okMsgs as $msg)
     {
-        //$tool_content .= "\n<b>[</b><span class=\"correct\">$langSuccessOk</span><b>]</b>&nbsp;&nbsp;&nbsp;".$msg."<br />";
-        //echo "\n<b>[</b><span class=\"correct\">$langSuccessOk</span><b>]</b>&nbsp;&nbsp;&nbsp;".$msg."<br />";
+        $importMessages .= "\n<b>[</b><span class=\"correct\">$langSuccessOk</span><b>]</b>&nbsp;&nbsp;&nbsp;".$msg."<br />";
     }
 
     foreach ( $errorMsgs as $msg)
     {
-        //$tool_content .= "\n<b>[</b><span class=\"error\">$langError</span><b>]</b>&nbsp;&nbsp;&nbsp;".$msg."<br />";
-        //echo "\n<b>[</b><span class=\"error\">$langError</span><b>]</b>&nbsp;&nbsp;&nbsp;".$msg."<br />";
+        $importMessages .= "\n<b>[</b><span class=\"error\">$langError</span><b>]</b>&nbsp;&nbsp;&nbsp;".$msg."<br />";
     }
 
-    //$tool_content .= "\n<!-- End messages -->\n";
+    $importMessages .= "\n\n";
+    //$importMessages .= "<!-- End messages -->";
 
     // installation completed or not message
     if ( !$errorFound )
     {
-        //$tool_content .= "\n<br /><center><b>".$langInstalled."</b></center>";
-        //$tool_content .= "\n<br /><br ><center><a href=\"learningPathAdmin.php?path_id=".$tempPathId."\">".$lpName."</a></center>";
+        $importMessages .= "\n<br /><center><b>".$langInstalled."</b></center>";
+        //$importMessages .= "\n<br /><br ><center><a href=\"learningPathAdmin.php?path_id=".$tempPathId."\">".$lpName."</a></center>";
+        $importMessages .= "\n<br /><br >";
     }
     else
     {
-        //$tool_content .= "\n<br /><center><b>".$langNotInstalled."</b></center>";
+        $importMessages .= "\n<br /><center><b>".$langNotInstalled."</b></center>";
     }
-    //$tool_content .= "\n<br /><a href=\"learningPathList.php\">$langBack</a></p>";
+    //$importMessages .= "\n<br /><a href=\"learningPathList.php\">$langBack</a></p>";
+    $importMessages .= "\n<br /></p>";
+    
+    chdir($pwd);
+    
+    return $importMessages;
 }
 
 ?>

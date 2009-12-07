@@ -138,7 +138,7 @@ function repoForm() {
 	</tr>
 	<tr>
 	<th class='left'><b>"."Bridge Context"."</b></th>
-	<td><input class='FormData_InputText' type='text' name='".BRIDGE_CONTEXT."' value='JavaBridgeTemplate554'>&nbsp;(*)</td>
+	<td><input class='FormData_InputText' type='text' name='".BRIDGE_CONTEXT."' value='JavaBridgeTemplate5541'>&nbsp;(*)</td>
 	</tr>
 	<tr>
 	<th class='left'><b>"."BetaCMS Host"."</b></th>

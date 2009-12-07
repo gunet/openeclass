@@ -416,7 +416,7 @@ if (isset($_POST['create_course'])) {
                 session_register("status");
                 
                 // ----------- Import from BetaCMS Bridge -----------
-                doImportFromBetaCMSAfterCourseCreation($repertoire, $mysqlMainDb, $webDir);
+                $tool_content .= doImportFromBetaCMSAfterCourseCreation($repertoire, $mysqlMainDb, $webDir);
                 // --------------------------------------------------
 
                 $tool_content .= "
