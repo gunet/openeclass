@@ -83,7 +83,6 @@ $warning = '';
 if (isset($_SESSION['shib_uname'])) { // authenticate via shibboleth
 	include 'login/shib_login.php';
 } else { // normal authentication
-
 	if (isset($_POST['uname'])) {
 		$uname = escapeSimple(preg_replace('/ +/', ' ', trim($_POST['uname'])));
 	} else {
@@ -128,10 +127,8 @@ if (isset($_SESSION['shib_uname'])) { // authenticate via shibboleth
 		if(empty($exists)) {
 			$auth_allow = 4;
 		}
-		if (!isset($uid))
-		{
-			switch($auth_allow)
-			{
+		if (!isset($uid)) {
+			switch($auth_allow) {
 				case 1 : $warning .= ""; 
 					break;
 				case 2 : $warning .= "<br /><font color='red'>".$langInvalidId ."</font><br />"; 
@@ -216,14 +213,15 @@ if (isset($uid) AND !isset($logout)) {
 // -------------------------------------------------------------------------------------
 // display login  page
 // -------------------------------------------------------------------------------------
-elseif ((isset($logout) && $logout && isset($uid)) OR (1==1)) {
-	if (isset($logout) && $logout && isset($uid)) {
+elseif ((isset($logout) && isset($uid)) OR (1==1)) {
+	if (isset($logout) && isset($uid)) {
 		mysql_query("INSERT INTO loginout (loginout.idLog, loginout.id_user,
 			loginout.ip, loginout.when, loginout.action)
 			VALUES ('', '$uid', '$REMOTE_ADDR', NOW(), 'LOGOUT')");
 		unset($prenom);
 		unset($nom);
 		unset($statut);
+		unset($_SESSION['uid']);
 		session_destroy();
 	}
 	$require_help = true;
