@@ -27,7 +27,7 @@
 
 /*===========================================================================
 	importLearningPath.php
-	@last update: 06-12-2009 by Thanos Kyritsis
+	@last update: 09-12-2009 by Thanos Kyritsis
 	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
 
 	based on Claroline version 1.7 licensed under GPL
@@ -55,8 +55,12 @@ require_once("../../include/lib/fileDisplayLib.inc.php");
 
 define('CLARO_FILE_PERMISSIONS', 0777);
 
-// error handling
-$errorFound = false;
+// globals
+$errorFound = null;
+$elementsPile = null;
+$itemsPile = null;
+$manifestData = null;
+$iterator = null;
 
  /*--------------------------------------------------------
       Functions
@@ -528,6 +532,11 @@ function doImport($currentCourseID, $mysqlMainDb, $webDir, $scoFileSize, $scoFil
 	global $langInstalled;
 	global $langNotInstalled;
 	global $langBack;
+	
+	global $elementsPile;
+	global $itemsPile;
+	global $manifestData;
+	global $iterator;
 	
 	$pwd = getcwd();
 	mysql_select_db($currentCourseID);
