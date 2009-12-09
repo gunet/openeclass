@@ -130,34 +130,44 @@ while ($row = mysql_fetch_assoc($result_2)) {
 }
 
 $result = db_query($sql_1, $currentCourseID);
-$table_cont ='';
+$table_cont = '';
+$unknown_users = array();
 
 $k=0;
 while ($row = mysql_fetch_assoc($result)) {
-    $user = $users[$row['user_id']];
-	if ($k%2==0) {
-	$table_cont .= "
-  <tr>";
-	} else {
-	$table_cont .= "
-  <tr class=\"odd\">";
-	}
-    $table_cont .= "
-    <td width=\"1\"><img style='border:0px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'></td>
-    <td>";
-    if (!$user) {
-        $table_cont .= "<font color=\"red\">".$l_anonymous."</font>";
-    } else {
-        $table_cont .= "".$user."";
-    }
-    $table_cont .= "</td>
-    <td align=\"center\">".$row['ip']."</td>
-    <td align=\"center\">".$row['date_time']."</td>
-  </tr>";
+        $known = false;
+        if (isset($users[$row['user_id']])) {
+                $user = $users[$row['user_id']];
+                $known = true;
+        } elseif (isset($unknown_users[$row['user_id']])) {
+                $user = $unknown_users[$row['user_id']];
+        } else {
+                $user = uid_to_name($row['user_id']);
+                if ($user === false) {
+                        $user = $l_anonymous;
+                }
+                $unknown_users[$row['user_id']] = $user;
+        }
+        if ($k%2==0) {
+                $table_cont .= "<tr>";
+        } else {
+                $table_cont .= "<tr class='odd'>";
+        }
+        $table_cont .= "
+                <td width=\"1\"><img src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'></td>
+                <td>";
+        if ($known) {
+                $table_cont .= $user;
+        } else {
+                $table_cont .= "<font color='red'>$user</font>";
+        }
+        $table_cont .= "</td>
+                <td align=\"center\">".$row['ip']."</td>
+                <td align=\"center\">".$row['date_time']."</td>
+                </tr>";
 
-  $k++;
+        $k++;
 }
-
 
 //Take data from stat_accueil
 $table2_cont = '';
@@ -185,6 +195,10 @@ if ($exist_stat_accueil){
 
 //$tool_content .= "<p>$langUserLogins</p>";
 //Records exist?
+if (count($unknown_users) > 0) {
+        $tool_content .= "<p class='alert1'>$langAnonymousExplain</p>\n";
+}
+
 if ($table_cont) {
   $tool_content .= "
   <table class=\"FormData\" width=\"99%\" align=\"left\" style=\"border: 1px solid #edecdf;\">
@@ -202,6 +216,7 @@ if ($table_cont) {
   </tbody>
   </table>";
 }
+
 if ($table2_cont) {
   $tool_content .= "
   <br>
