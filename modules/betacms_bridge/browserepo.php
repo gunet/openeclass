@@ -73,7 +73,7 @@ else {
 		// Construct course list table
 		$tool_content .= "<table class=\"FormData\" width=\"99%\" align=\"left\">
 			<tbody><tr>
-			<td class=\"odd\" colspan='6'><div align=\"right\">"."caption"."</div></td></tr>
+			<td class=\"odd\" colspan='6'><div align=\"right\"><a href=\"createlesson.php\">"."Create new Lesson"."</a></div></td></tr>
 			<tr>
 			<th scope=\"col\">"."title"."</th>
 			<th scope=\"col\">"."keywords"."</th>

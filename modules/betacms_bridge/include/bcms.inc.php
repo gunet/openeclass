@@ -25,7 +25,7 @@
 * =========================================================================*/
 /*===========================================================================
 	bcms.inc.php
-	@last update: 06-12-2009 by Thanos Kyritsis
+	@last update: 09-12-2009 by Thanos Kyritsis
 	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
 ==============================================================================
     @Description: 
@@ -44,6 +44,8 @@ define ("BCMS_PORT", "bcms_port");
 define ("BCMS_REPO", "bcms_repo");
 define ("BCMS_USER", "bcms_user");
 define ("BCMS_PASS", "bcms_pass");
+
+define ("ECLASS_LESSON_OBJECT", "eClassLessonObject");
 
 define ("KEY_ID", "id");
 define ("KEY_TITLE", "title");
@@ -96,7 +98,7 @@ function getLessonsList($bcmsrepo) {
 		require_once("http://".$bridge_host.":".$bridge_port."/".$bridge_context."/java/Java.inc");
 		
 		$criteria = java("org.betaconceptframework.betacms.repository.model.factory.CmsCriteriaFactory")->newContentObjectCriteria();
-		$criteria->addContentObjectTypeEqualsCriterion("eClassLessonObject");
+		$criteria->addContentObjectTypeEqualsCriterion(ECLASS_LESSON_OBJECT);
 		$criteria->setCacheable(java("org.betaconceptframework.betacms.repository.api.model.query.CacheRegion")->FIVE_MINUTES);
 		
 		//Execute query
@@ -215,6 +217,65 @@ function getLesson($bcmsrepo, $objectId) {
 	}
 	else {
 		return null;
+	}
+}
+
+
+function putLesson($bcmsrepo, $lessonArray) {
+	$bridge_host = $bcmsrepo[BRIDGE_HOST];
+	$bridge_port = $bcmsrepo[BRIDGE_PORT];
+	$bridge_context = $bcmsrepo[BRIDGE_CONTEXT];
+	$bcms_host = $bcmsrepo[BCMS_HOST];
+	$bcms_port = $bcmsrepo[BCMS_PORT];
+	$bcms_repo = $bcmsrepo[BCMS_REPO];
+	$bcms_user = $bcmsrepo[BCMS_USER];
+	$bcms_pass = $bcmsrepo[BCMS_PASS];
+	
+	$cli = connectToRepo($bcmsrepo);
+	
+	if (isset($cli)) {
+		require_once("http://".$bridge_host.":".$bridge_port."/".$bridge_context."/java/Java.inc");
+		
+		$co = $cli->getCmsRepositoryEntityFactory()->newContentObjectForType(ECLASS_LESSON_OBJECT, "el");
+		
+		$owner = $cli->getRepositoryUserService()->getSystemRepositoryUser();
+		$co->setOwner($owner);
+		
+		$canBeReadByProperty = $co->getCmsProperty("accessibility.canBeReadBy");
+		$canBeReadByProperty->addSimpleTypeValue("ALL");
+		$canBeUpdatedByProperty = $co->getCmsProperty("accessibility.canBeUpdatedBy");
+		$canBeUpdatedByProperty->addSimpleTypeValue("NONE");
+		$canBeDeletedByProperty = $co->getCmsProperty("accessibility.canBeDeletedBy");
+		$canBeDeletedByProperty->addSimpleTypeValue("NONE");
+		$canBeTaggedByProperty = $co->getCmsProperty("accessibility.canBeTaggedBy");
+		$canBeTaggedByProperty->addSimpleTypeValue("ALL");
+		
+		
+		$titlePR = $co->getCmsProperty(PRKEY_TITLE);
+		$lessonDescPR = $co->getCmsProperty(PRKEY_DESCRIPTION);
+		$keywordsPR = $co->getCmsProperty(KEY_KEYWORDS);
+		$copyrightPR = $co->getCmsProperty(KEY_COPYRIGHT);
+		$authorsPR = $co->getCmsProperty(KEY_AUTHORS);
+		$projectPR = $co->getCmsProperty(KEY_PROJECT);
+		$commentsPR = $co->getCmsProperty(KEY_COMMENTS);
+		$unitsPR = $co->getCmsPropertyList(KEY_UNITS);
+		$scosPR = $co->getCmsProperty(KEY_SCORMFILES);
+		
+		$titlePR->setSimpleTypeValue($lessonArray[KEY_TITLE]);
+		$lessonDescPR->setSimpleTypeValue($lessonArray[KEY_DESCRIPTION]);
+		$keywordsPR->setSimpleTypeValue($lessonArray[KEY_KEYWORDS]);
+		$copyrightPR->setSimpleTypeValue($lessonArray[KEY_COPYRIGHT]);
+		$authorsPR->setSimpleTypeValue($lessonArray[KEY_AUTHORS]);
+		$projectPR->setSimpleTypeValue($lessonArray[KEY_PROJECT]);
+		$commentsPR->setSimpleTypeValue($lessonArray[KEY_COMMENTS]);
+		
+		
+		$co = $cli->getContentService()->saveContentObject($co, false);
+		
+		return true;
+	}
+	else {
+		return false;
 	}
 }
 
