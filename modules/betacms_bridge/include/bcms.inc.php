@@ -40,7 +40,6 @@ define ("BRIDGE_HOST", "bridge_host");
 define ("BRIDGE_PORT", "bridge_port");
 define ("BRIDGE_CONTEXT", "bridge_context");
 define ("BCMS_HOST", "bcms_host");
-define ("BCMS_PORT", "bcms_port");
 define ("BCMS_REPO", "bcms_repo");
 define ("BCMS_USER", "bcms_user");
 define ("BCMS_PASS", "bcms_pass");
@@ -85,7 +84,6 @@ function getLessonsList($bcmsrepo) {
 	$bridge_port = $bcmsrepo[BRIDGE_PORT];
 	$bridge_context = $bcmsrepo[BRIDGE_CONTEXT];
 	$bcms_host = $bcmsrepo[BCMS_HOST];
-	$bcms_port = $bcmsrepo[BCMS_PORT];
 	$bcms_repo = $bcmsrepo[BCMS_REPO];
 	$bcms_user = $bcmsrepo[BCMS_USER];
 	$bcms_pass = $bcmsrepo[BCMS_PASS];
@@ -145,7 +143,6 @@ function getLesson($bcmsrepo, $objectId) {
 	$bridge_port = $bcmsrepo[BRIDGE_PORT];
 	$bridge_context = $bcmsrepo[BRIDGE_CONTEXT];
 	$bcms_host = $bcmsrepo[BCMS_HOST];
-	$bcms_port = $bcmsrepo[BCMS_PORT];
 	$bcms_repo = $bcmsrepo[BCMS_REPO];
 	$bcms_user = $bcmsrepo[BCMS_USER];
 	$bcms_pass = $bcmsrepo[BCMS_PASS];
@@ -226,7 +223,6 @@ function putLesson($bcmsrepo, $lessonArray) {
 	$bridge_port = $bcmsrepo[BRIDGE_PORT];
 	$bridge_context = $bcmsrepo[BRIDGE_CONTEXT];
 	$bcms_host = $bcmsrepo[BCMS_HOST];
-	$bcms_port = $bcmsrepo[BCMS_PORT];
 	$bcms_repo = $bcmsrepo[BCMS_REPO];
 	$bcms_user = $bcmsrepo[BCMS_USER];
 	$bcms_pass = $bcmsrepo[BCMS_PASS];
@@ -285,25 +281,15 @@ function connectToRepo($bcmsrepo) {
 	$bridge_port = $bcmsrepo[BRIDGE_PORT];
 	$bridge_context = $bcmsrepo[BRIDGE_CONTEXT];
 	$bcms_host = $bcmsrepo[BCMS_HOST];
-	$bcms_port = $bcmsrepo[BCMS_PORT];
 	$bcms_repo = $bcmsrepo[BCMS_REPO];
 	$bcms_user = $bcmsrepo[BCMS_USER];
 	$bcms_pass = $bcmsrepo[BCMS_PASS];
 	
 	require_once("http://".$bridge_host.":".$bridge_port."/".$bridge_context."/java/Java.inc");
 
-	$cli = new Java("org.betaconceptframework.betacms.repository.client.BetaCmsRepositoryClient", $bcms_host.":".$bcms_port);
-	
-	// $availableRepositories = java_values($cli->getRepositoryService()->getAvailableCmsRepositories());
-	// foreach ($availableRepositories as $key => $cmsRepository) {
-	//	echo "repo".$key.": " .$cmsRepository->getId() ."\n";
-	// }
-	        
-	$betacmsRepository = $cli->getRepositoryService()->getCmsRepository($bcms_repo);
-	// echo "We retrieved information about BetaCMS repository with id: " .$betacmsRepository->getId() ."\n";
+	$cli = new Java("org.betaconceptframework.betacms.repository.client.BetaCmsRepositoryClient", $bcms_host);
 	
 	if (java_values($cli->getRepositoryService()->isRepositoryAvailable($bcms_repo))) {
-		// echo "demorepo is available\n";
 		$pass = new Java("java.lang.String", $bcms_pass);
 		$passCh = $pass->toCharArray();
 		$credentials = new Java("org.betaconceptframework.betacms.repository.api.security.BetaCmsCredentials", $bcms_user, $passCh);
@@ -321,11 +307,6 @@ function checkConnectivityToRepo($bcmsrepo) {
 	$bridge_host = $bcmsrepo[BRIDGE_HOST];
 	$bridge_port = $bcmsrepo[BRIDGE_PORT];
 	$bridge_context = $bcmsrepo[BRIDGE_CONTEXT];
-	$bcms_host = $bcmsrepo[BCMS_HOST];
-	$bcms_port = $bcmsrepo[BCMS_PORT];
-	$bcms_repo = $bcmsrepo[BCMS_REPO];
-	$bcms_user = $bcmsrepo[BCMS_USER];
-	$bcms_pass = $bcmsrepo[BCMS_PASS];
 	
 	$url = "http://".$bridge_host.":".$bridge_port."/".$bridge_context."/java/Java.inc";
 	$fp = @fopen($url, "r");
@@ -343,7 +324,9 @@ function checkConnectivityToRepo($bcmsrepo) {
 		@include_once($url);
 		if (!class_exists("Java"))
 			return false;
-
+			
+		if (connectToRepo($bcmsrepo) == null)
+			return false;
 			
 		return true;
 	}
