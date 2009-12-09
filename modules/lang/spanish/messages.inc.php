@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language es
-// Generated 2009-11-19 15:13:25
+// Generated 2009-12-09 14:35:25
 
 $langIntro = "El <b>$siteName</b> platforma es un completo Sistema de Administración eCursos que soporta el Servicio Asincrónico de eAprendizaje en <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
 $langVersion = "$siteName versión";
@@ -2662,3 +2662,14 @@ $langVia = 'via';
 $langInsertWork = 'asignación';
 $langMultiRegFields = 'Definición del orden del campo';
 $langMultiRegFieldError = '¡Error!: Etiqueta de campo inválida:';
+$langUpdatingStatistics = "Updating monthly statistics";
+$langPleaseWait = "Please wait";
+$langScoreNotDisp = "Hide scoring after exercise end";
+$langScoreDisp = "Display scoring after exercise end";
+$langQuestionReused = "Question added to exercise";
+$langAnonymousExplain = 'Users displayed in a different colour are not currently registered to this course. Users listed as "Anonymous" have been deleted from the system.';
+$langNoUsersFound2 = "No users were found with the details you entered";
+$langWarnShibUser = "<p><b>Warning:</b> Beacause you have been authenticated via Shibboleth you have not logged-out!<br>To log-out, you have to close your browser.</p>";
+$langStudentViewEnable = "Enable $langsStudent view";
+$langStudentViewDisable = "Leave $langsStudent view";
+$langBrowseBCMSRepo = "BetaCMS Bridge";

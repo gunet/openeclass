@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language en
-// Generated 2009-10-20 14:26:07
+// Generated 2009-12-09 14:35:25
 
 $langIntro = "The <b>$siteName</b> platform is a complete eCourses Management System supporting the Asynchronous eLearning Service in <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
 $langVersion = "$siteName version";
@@ -261,7 +261,7 @@ $langStat = "Statistics";
 $langNoUserList = "No listed results";
 $langContactAdmin = "Send an email to the Administrator";
 $langActivateAccount = "Please activate my account";
-$langLessonCode = "Course code";
+$langLessonCode = "Course password";
 $langConfirmDelete = "Confirm delete of ";
 $langConfirmDeleteQuestion1 = "Are you sure that you want to delete the user";
 $langConfirmDeleteQuestion2 = "from the course with id";
@@ -1209,7 +1209,6 @@ $langAllExercises = "All questions";
 $langFilter = "Filter";
 $langGoBackToEx = "Back to exercise";
 $langReuse = "Reuse";
-$langQuestionReused = "Question added to exercise";
 $langElementList = "Element List";
 $langScore = "Score";
 $langQuestionScore = "Question Score";
@@ -1330,7 +1329,7 @@ $langGroupValidate = "validate";
 $langGroupCancel = "cancel";
 $langGroupSettingsModified = "Group settings modified";
 $langNameSurname = "Name Surname";
-$langAm = $langStudent." ID";
+$langAm = $langStudent."ID";
 $langEmail = "Email";
 $langGroupStudentsInGroup = "".$langsStudents."registered in groups";
 $langGroupStudentsRegistered = "".$langsStudents."registered to this course";
@@ -1384,9 +1383,9 @@ $mailbody2 = "User\n\n";
 $mailbody3 = "desires access ";
 $mailbody4 = "to Asynchronous eLearning Service ";
 $mailbody5 = "of $siteName ";
-$mailbody6 = "as a ".$langsTeacher.".";
+$mailbody6 = "as a $langsTeacher.";
 $mailbody7 = "Faculty / Department:";
-$mailbody8 = "as a ".$langsStudent.".";
+$mailbody8 = "as a $langsStudent.";
 $logo = "Asynchronous eLearning Platform $siteName";
 $gunet = "$siteName Asynchronous eLearning Group";
 $sendinfomail = "Send information e-mail to ".$langsTeachers."";
@@ -1785,7 +1784,7 @@ $m['legrestricted'] = 'Registration required';
 $m['legclosed'] = 'Closed Course';
 $m['nolessons'] = 'There are no available courses!';
 $m['name'] = "Course";
-$m['code'] = "Course code";
+$m['code'] = "Course password";
 $m['prof'] = "$langTeacher";
 $m['mailprof'] = "To enroll to this lesson you need to send an email to the ".$langsTeacher."by clicking ";
 $m['here'] = "here.";
@@ -2129,7 +2128,6 @@ $langOneUser = "one user";
 $langManyUsers = "many users";
 $langGUser = "guest user";
 $langNoUsersFound = "No users were found with the details you entered - either no such users exist, or they are already registered in this course.";
-$langNoUsersFound2 = "No users were found with the details you entered";
 $langRegister = "Register user to course";
 $langAdded = "was registered to your course";
 $langAddError = "An error occured and the user was not added to your course. Please try again and if the problem persists, contact the system administrator.";
@@ -2675,8 +2673,6 @@ $langTutorialDesc = "Also, in the link below, you will find useful tutorials for
 $langTutorial = "Platform Tutorials";
 $langAnswersNotDisp = "Hide answers after exercise end";
 $langAnswersDisp = "Display correct answers after exercise end";
-$langScoreNotDisp = "Hide scoring after exercise end";
-$langScoreDisp = "Display scoring after exercise end";
 $langDurationVisitsPerCourse = "Participation time per course";
 $langAddUnit = "Add new course unit";
 $langEditUnit = "Edit course unit details";
@@ -2733,8 +2729,14 @@ $langVia = 'via';
 $langInsertWork = 'assignment';
 $langMultiRegFields = 'Field order definition';
 $langMultiRegFieldError = 'Error! Invalid field label:';
-
-/**********************************************************************
- BetaCMS Bridge
-***********************************************************************/
+$langUpdatingStatistics = "Updating monthly statistics";
+$langPleaseWait = "Please wait";
+$langScoreNotDisp = "Hide scoring after exercise end";
+$langScoreDisp = "Display scoring after exercise end";
+$langQuestionReused = "Question added to exercise";
+$langAnonymousExplain = 'Users displayed in a different colour are not currently registered to this course. Users listed as "Anonymous" have been deleted from the system.';
+$langNoUsersFound2 = "No users were found with the details you entered";
+$langWarnShibUser = "<p><b>Warning:</b> Beacause you have been authenticated via Shibboleth you have not logged-out!<br>To log-out, you have to close your browser.</p>";
+$langStudentViewEnable = "Enable $langsStudent view";
+$langStudentViewDisable = "Leave $langsStudent view";
 $langBrowseBCMSRepo = "BetaCMS Bridge";
