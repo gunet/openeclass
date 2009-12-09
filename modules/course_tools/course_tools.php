@@ -131,7 +131,7 @@ if ($is_adminOfCourse){
 	if  (isset($_REQUEST['toolStatus']) ){
 		if(isset($_POST['toolStatActive'])) $tool_stat_active = $_POST['toolStatActive'];
 
-		$hideSql = "UPDATE  `accueil` SET `visible` = 0 ";
+		
 
 		if (isset($tool_stat_active)) {
 			$loopCount = count($tool_stat_active);
@@ -155,29 +155,27 @@ if ($is_adminOfCourse){
 		//all events of the current lesson from the agenda table in the main db, used by eclass personalised
 		//This way, if a lesson's agenda is inactive, any contents it might have are not diplayed in the
 		//personalised interface
-		$prevAgendaStateSQL = "SELECT `visible`FROM `accueil`WHERE `id` =1";
+		$prevAgendaStateSQL = "SELECT `visible` FROM `accueil`WHERE `id` = 1";
 		$res = db_query($prevAgendaStateSQL, $dbname);
 		$prevAgendaStateRow = mysql_fetch_row($res);
 
 		//reset all tools
-		db_query($hideSql, $dbname);
+		db_query("UPDATE `accueil` SET `visible` = 0", $dbname);
+
 		//and activate the ones the professor wants active, if any
 		if ($loopCount >0) {
-			$publicSql = "UPDATE accueil SET visible = 1 WHERE $tool_id";
-
-			db_query($publicSql, $dbname);
+			db_query("UPDATE accueil SET visible = 1 WHERE $tool_id", $dbname);
 		}
-
+		db_query("UPDATE `accueil` SET `visible` = 2 WHERE define_var = 'MODULE_ID_UNITS'", $dbname);
+		
 		if (isset($tool_stat_active) && is_array($tool_stat_active)) {
 			if (in_array(1, $tool_stat_active)) {
 				//if the agenda module is set to active
 				if ($prevAgendaStateRow[0] != 1) {
-					//and the agenda module was not active before, we need to parse the events to
-					//the main agenda table (main database)
-
+					//and the agenda module was not active before, we need to parse the events to the main agenda table (main database)
 					$sql = 'SELECT id, titre, contenu, day, hour, lasting
-                FROM  agenda WHERE CONCAT(titre,contenu) != \'\'
-                AND DATE_FORMAT(day,\'%Y %m %d\') >= \''.date("Y m d").'\'';
+						FROM  agenda WHERE CONCAT(titre,contenu) != \'\'
+						AND DATE_FORMAT(day,\'%Y %m %d\') >= \''.date("Y m d").'\'';
 
 					//  Get all agenda events from each table & parse them to arrays
 					$mysql_query_result = db_query($sql, $currentCourseID);
@@ -204,21 +202,19 @@ if ($is_adminOfCourse){
                   				'".$lesson_agenda[$j]['duree']."',
                   				'".$lesson_agenda[$j]['lesson_code']."'
                   			)", $mysqlMainDb);
-
 					}
-
 				}
-
 			} else {
 				//if the agenda module is set to inactive
 				if ($prevAgendaStateRow[0] != 0) {
 					//and the agenda module was active before, we need to delete this lesson's events
 					//from the main agenda table (main database)
 
-					$perso_sql= "DELETE FROM $mysqlMainDb.agenda WHERE lesson_code= '$currentCourseID'";
+					$perso_sql= "DELETE FROM $mysqlMainDb.agenda 
+						WHERE lesson_code= '$currentCourseID'";
 					db_query($perso_sql, $mysqlMainDb);
-					}
 				}
+			}
 		}
 	}
 
@@ -323,37 +319,35 @@ if ($is_adminOfCourse && @$action == 1) {//upload html file
 	$navigation[]= array ("url"=>"course_tools.php", "name"=> $langToolManagement);
 	$helpTopic = 'Import';
 
-	$tool_content .= "
-  <form method=\"POST\" action=\"$_SERVER[PHP_SELF]?submit=yes&action=1\" enctype=\"multipart/form-data\">
-  <p>$langExplanation_0</p>
-  <p>$langExplanation_3</p>
-  <br />
-  <table width=\"99%\" align='left' class='FormData'>
-  <tbody>
-  <tr>
-    <th class='left' width='220'>&nbsp;</th>
-    <td><b>$langExplanation_1</b></td>
-    <td>&nbsp;</td>
-  </tr>
-  <tr>
-    <th class='left'>$langSendPage</th>
-    <td><input type=\"file\" name=\"file\" size=\"35\" accept=\"text/html\" class='auth_input'></td>
-    <td><p align='right'><small>$langNoticeExpl</small></p></td>
-  </tr>
-  <tr>
-    <th class='left'>$langPgTitle</th>
-    <td><input type=\"Text\" name=\"link_name\" size=\"40\" class='FormData_InputText'></td>
-    <td><p align='right'><small>$langExplanation_2</small></p></td>
-  </tr>
-  <tr>
-    <th class='left'>&nbsp;</th>
-    <td><input type=\"Submit\" name=\"submit\" value=\"$langAdd\"></td>
-    <td>&nbsp;</td>
-  </tr>
-  </tbody>
-  </table>
-  <br></form>";
-
+	$tool_content .= "<form method=\"POST\" action=\"$_SERVER[PHP_SELF]?submit=yes&action=1\" enctype=\"multipart/form-data\">
+	<p>$langExplanation_0</p>
+	<p>$langExplanation_3</p>
+	<br />
+	<table width=\"99%\" align='left' class='FormData'>
+	<tbody>
+	<tr>
+	<th class='left' width='220'>&nbsp;</th>
+	<td><b>$langExplanation_1</b></td>
+	<td>&nbsp;</td>
+	</tr>
+	<tr>
+	<th class='left'>$langSendPage</th>
+	<td><input type=\"file\" name=\"file\" size=\"35\" accept=\"text/html\" class='auth_input'></td>
+	<td><p align='right'><small>$langNoticeExpl</small></p></td>
+	</tr>
+	<tr>
+	<th class='left'>$langPgTitle</th>
+	<td><input type=\"Text\" name=\"link_name\" size=\"40\" class='FormData_InputText'></td>
+	<td><p align='right'><small>$langExplanation_2</small></p></td>
+	</tr>
+	<tr>
+	<th class='left'>&nbsp;</th>
+	<td><input type=\"Submit\" name=\"submit\" value=\"$langAdd\"></td>
+	<td>&nbsp;</td>
+	</tr>
+	</tbody>
+	</table>
+	<br></form>";
 	draw($tool_content, 2, 'course_tools');
 	exit();
 }
@@ -364,36 +358,34 @@ if ($is_adminOfCourse && @$action == 2) {//add external link
 	$navigation[]= array ("url"=>"course_tools.php", "name"=> $langToolManagement);
 	$helpTopic = 'Module';
 
-	$tool_content .=  "
-  <form method=\"post\" action=\"$_SERVER[PHP_SELF]?submit=yes&action=2\">
-  <br>
-  <table width=\"99%\" align='left' class='FormData'>
-  <tbody>
-  <tr>
-    <th class='left' width='220'>&nbsp;</th>
-    <td><b>$langExplanation_4</b></td>
-    <td>&nbsp;</td>
-  </tr>
-  <tr>
-    <th class='left'>$langLink&nbsp;:</th>
-    <td><input type=\"text\" name=\"link\" size=\"50\" value=\"http://\" class='FormData_InputText'></td>
-    <td>&nbsp;</td>
-  </tr>
-  <tr>
-    <th class='left'>$langName&nbsp;:</th>
-    <td><input type=\"Text\" name=\"name_link\" size=\"50\" class='FormData_InputText'></td>
-    <td>&nbsp;</td>
-  </tr>
-  <tr>
-    <th class='left'>&nbsp;</th>
-    <td><input type=\"Submit\" name=\"submit\" value=\"$langAdd\"></td>
-    <td>&nbsp;</td>
-  </tr>
-  </thead>
-  </table></form>";
+	$tool_content .=  "<form method=\"post\" action=\"$_SERVER[PHP_SELF]?submit=yes&action=2\">
+	<br>
+	<table width=\"99%\" align='left' class='FormData'>
+	<tbody>
+	<tr>
+	<th class='left' width='220'>&nbsp;</th>
+	<td><b>$langExplanation_4</b></td>
+	<td>&nbsp;</td>
+	</tr>
+	<tr>
+	<th class='left'>$langLink&nbsp;:</th>
+	<td><input type=\"text\" name=\"link\" size=\"50\" value=\"http://\" class='FormData_InputText'></td>
+	<td>&nbsp;</td>
+	</tr>
+	<tr>
+	<th class='left'>$langName&nbsp;:</th>
+	<td><input type=\"Text\" name=\"name_link\" size=\"50\" class='FormData_InputText'></td>
+	<td>&nbsp;</td>
+	</tr>
+	<tr>
+	<th class='left'>&nbsp;</th>
+	<td><input type=\"Submit\" name=\"submit\" value=\"$langAdd\"></td>
+	<td>&nbsp;</td>
+	</tr>
+	</thead>
+	</table></form>";
 	draw($tool_content, 2, 'course_tools');
 	exit();
-
 }
 //---------------------------------------------------------
 if ($is_adminOfCourse) {
@@ -412,7 +404,6 @@ if ($is_adminOfCourse) {
 					if ($toolArr[$i][4][$j] < 100) {
 						$activeTools .= "        <option value=\"".$toolArr[$i][4][$j]."\">".$toolArr[$i][1][$j]."</option>\n";
 					} else {
-
 						$activeTools .= "<option class=\"emphasised\" value=\"".$toolArr[$i][4][$j]."\">".$toolArr[$i][1][$j]."</option>\n";
 						$arr['text']=$toolArr[$i][1][$j];
 						$arr['id'] = $toolArr[$i][4][$j];
@@ -486,44 +477,32 @@ tForm;
 	$extToolsCount = count($externalLinks) ;
 	if ($extToolsCount>0)  {
 		//show table to edit/delete external links
-		$tool_content .= "
-
-  <br/>
-  <br/>
-  <table width=\"500\">
-  <tbody>
-  <tr>
-    <th rowspan='2'>&nbsp;</th>
-    <td colspan='2'><b>$langOperations</b></td>
-  </tr>
-  <tr>
-    <td class=\"left\"><b>$langTitle</b></td>
-    <td class=\"left\" width=\"20\"><b>$langDelete</b></td>
-  </tr>
-";
+		$tool_content .= "<br/><br/><table width=\"500\">
+		<tbody>
+		<tr>
+		<th rowspan='2'>&nbsp;</th>
+		<td colspan='2'><b>$langOperations</b></td>
+		</tr>
+		<tr>
+		<td class=\"left\"><b>$langTitle</b></td>
+		<td class=\"left\" width=\"20\"><b>$langDelete</b></td>
+		</tr>";
 		for ($i=0; $i <$extToolsCount; $i++) {
 			if ($i%2==0) {
 				$tool_content .= "<tr>\n";
-			}
-			elseif ($i%2==1) {
+			} elseif ($i%2==1) {
 				$tool_content .= "<tr class=\"odd\">\n";
 			}
 			$tool_content .= "<th class=\"left\" width='1'>
-			<img src=\"../../template/classic/img/external_link_on.gif\" border=\"0\" title='$langTitle' alt=\"".$langTitle."\"></th>
+			<img src=\"../../template/classic/img/external_link_on.gif\" border=\"0\" title='$langTitle'></th>
     			<td class=\"left\">".$externalLinks[$i]['text']."</td>\n";
-
 			$tool_content .= "<td align='center'>
     			<a href=\"".$_SERVER['PHP_SELF'] . "?delete=" . $externalLinks[$i]['id']."\" onClick=\"return confirmation('".addslashes($externalLinks[$i]['text'])."');\">
-    			<img src=\"../../template/classic/img/delete.gif\" border=\"0\" title='$langDelete' alt=\"".$langDelete."\"></a>
-    </td>
-  </tr>";
-
-		}	// for loop
-		$tool_content .= <<<tCont4
-  </tbody>
-  </table>
-tCont4;
-}
+    			<img src=\"../../template/classic/img/delete.gif\" border=\"0\" title='$langDelete'></a>
+			</td></tr>";
+			}	// for loop
+		$tool_content .= "</tbody></table>";
+	}
 draw($tool_content, 2,'course_tools', $head_content);
 }
 ?>
