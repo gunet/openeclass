@@ -77,6 +77,8 @@ define ("IMPORT_UNITS_SIZE", "bcms_units_size");
 define ("IMPORT_SCORMFILES", "bcms_scormFiles");
 define ("IMPORT_SCORMFILES_SIZE", "bcms_scormFiles_size");
 
+define ("JAVA_PREFER_VALUES", true);
+
 
 function getLessonsList($bcmsrepo) {
 	$bridge_host = $bcmsrepo[BRIDGE_HOST];
@@ -281,16 +283,20 @@ function connectToRepo($bcmsrepo) {
 	$bcms_pass = $bcmsrepo[BCMS_PASS];
 	
 	require_once("http://".$bridge_host."/".$bridge_context."/java/Java.inc");
-
-	$cli = new Java("org.betaconceptframework.betacms.repository.client.BetaCmsRepositoryClient", $bcms_host);
 	
-	if (java_values($cli->getRepositoryService()->isRepositoryAvailable($bcms_repo))) {
-		$pass = new Java("java.lang.String", $bcms_pass);
-		$passCh = $pass->toCharArray();
-		$credentials = new Java("org.betaconceptframework.betacms.repository.api.security.BetaCmsCredentials", $bcms_user, $passCh);
-		$cli->login($bcms_repo, $credentials);
-	}
-	else {
+	try {
+		$cli = new Java("org.betaconceptframework.betacms.repository.client.BetaCmsRepositoryClient", $bcms_host);
+		
+		if (java_values($cli->getRepositoryService()->isRepositoryAvailable($bcms_repo))) {
+			$pass = new Java("java.lang.String", $bcms_pass);
+			$passCh = $pass->toCharArray();
+			$credentials = new Java("org.betaconceptframework.betacms.repository.api.security.BetaCmsCredentials", $bcms_user, $passCh);
+			$cli->login($bcms_repo, $credentials);
+		}
+		else {
+			return null;
+		}
+	} catch (JavaException $e) {
 		return null;
 	}
 	
