@@ -64,7 +64,7 @@ if (!isset($_POST['submit'])) {
 	$tool_content .= repoForm(); 
 }
 else {
-	if (empty($_POST[BRIDGE_HOST]) || empty($_POST[BRIDGE_PORT]) || empty($_POST[BRIDGE_CONTEXT]) 
+	if (empty($_POST[BRIDGE_HOST]) || empty($_POST[BRIDGE_CONTEXT]) 
 		|| empty($_POST[BCMS_HOST]) || empty($_POST[BCMS_REPO]) 
 		|| empty($_POST[BCMS_USER]) || empty($_POST[BCMS_PASS]) ) {
 		$tool_content .= "<p class=\"caution_small\">$langEmptyFields</p>
@@ -73,7 +73,6 @@ else {
 	else {
 		$repo = array(
 			BRIDGE_HOST => $_POST[BRIDGE_HOST],
-			BRIDGE_PORT => $_POST[BRIDGE_PORT],
 			BRIDGE_CONTEXT => $_POST[BRIDGE_CONTEXT],
 			BCMS_HOST => $_POST[BCMS_HOST],
 			BCMS_REPO => $_POST[BCMS_REPO],
@@ -154,11 +153,7 @@ function repoForm() {
 	</tr>
 	<tr>
 	<th class='left'><b>"."Bridge Host"."</b></th>
-	<td><input class='FormData_InputText' type='text' name='".BRIDGE_HOST."' value='localhost'>&nbsp;(*)</td>
-	</tr>
-	<tr>
-	<th class='left'><b>"."Bridge Port"."</b></th>
-	<td><input class='FormData_InputText' type='text' name='".BRIDGE_PORT."' value='8080'>&nbsp;(*)</td>
+	<td><input class='FormData_InputText' type='text' name='".BRIDGE_HOST."' value='localhost:8080'>&nbsp;(*)</td>
 	</tr>
 	<tr>
 	<th class='left'><b>"."Bridge Context"."</b></th>
