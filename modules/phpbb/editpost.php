@@ -307,7 +307,7 @@ if ($is_adminOfCourse) { // course admin
 			}
 		}
 		$message = $myrow["post_text"];
-			
+		$message = str_replace('{','&#123;',$message);
 		if (eregi("\[addsig]$", $message)) {
 			$addsig = 1;
 		} else {

@@ -69,7 +69,8 @@ $tool_content = "";
  */
 include_once("./config.php");
 include("functions.php"); // application logic for phpBB
-
+// support for math symbols
+include('../../include/phpmathpublisher/mathpublisher.php');
 /******************************************************************************
  * Actual code starts here
  *****************************************************************************/
@@ -265,6 +266,8 @@ do {
 	$tool_content .= "
       <td class=\"$row_color\"><b>" . $myrow["prenom"] . " " . $myrow["nom"] . "</b></td>";
 	$message = own_stripslashes($myrow["post_text"]);
+	// support for math symbols
+	$message = mathfilter($message, 12, "../../courses/mathimg/");
 
 	if ($count == 0) {
 		$postTitle = "
