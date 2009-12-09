@@ -65,7 +65,7 @@ if (!isset($_POST['submit'])) {
 }
 else {
 	if (empty($_POST[BRIDGE_HOST]) || empty($_POST[BRIDGE_PORT]) || empty($_POST[BRIDGE_CONTEXT]) 
-		|| empty($_POST[BCMS_HOST]) || empty($_POST[BCMS_PORT]) || empty($_POST[BCMS_REPO]) 
+		|| empty($_POST[BCMS_HOST]) || empty($_POST[BCMS_REPO]) 
 		|| empty($_POST[BCMS_USER]) || empty($_POST[BCMS_PASS]) ) {
 		$tool_content .= "<p class=\"caution_small\">$langEmptyFields</p>
 			<br/><br/><p align=\"right\"><a href='$_SERVER[PHP_SELF]'>$langAgain</a></p>";
@@ -76,7 +76,6 @@ else {
 			BRIDGE_PORT => $_POST[BRIDGE_PORT],
 			BRIDGE_CONTEXT => $_POST[BRIDGE_CONTEXT],
 			BCMS_HOST => $_POST[BCMS_HOST],
-			BCMS_PORT => $_POST[BCMS_PORT],
 			BCMS_REPO => $_POST[BCMS_REPO],
 			BCMS_USER => $_POST[BCMS_USER],
 			BCMS_PASS => $_POST[BCMS_PASS]
@@ -168,10 +167,6 @@ function repoForm() {
 	<tr>
 	<th class='left'><b>"."BetaCMS Host"."</b></th>
 	<td><input class='FormData_InputText' type='text' name='".BCMS_HOST."' value='localhost'>&nbsp;(*)</td>
-	</tr>
-	<tr>
-	<th class='left'><b>"."BetaCMS Port"."</b></th>
-	<td><input class='FormData_InputText' type='text' name='".BCMS_PORT."' value='8080'>&nbsp;(*)</b></td>
 	</tr>
 	<tr>
 	<th class='left'><b>"."BetaCMS Repository"."</b></th>

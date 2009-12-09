@@ -37,7 +37,6 @@
 define ("BETACMSREPO", "betacmsrepo");
 
 define ("BRIDGE_HOST", "bridge_host");
-define ("BRIDGE_PORT", "bridge_port");
 define ("BRIDGE_CONTEXT", "bridge_context");
 define ("BCMS_HOST", "bcms_host");
 define ("BCMS_REPO", "bcms_repo");
@@ -81,7 +80,6 @@ define ("IMPORT_SCORMFILES_SIZE", "bcms_scormFiles_size");
 
 function getLessonsList($bcmsrepo) {
 	$bridge_host = $bcmsrepo[BRIDGE_HOST];
-	$bridge_port = $bcmsrepo[BRIDGE_PORT];
 	$bridge_context = $bcmsrepo[BRIDGE_CONTEXT];
 	$bcms_host = $bcmsrepo[BCMS_HOST];
 	$bcms_repo = $bcmsrepo[BCMS_REPO];
@@ -93,7 +91,7 @@ function getLessonsList($bcmsrepo) {
 	$cli = connectToRepo($bcmsrepo);
 	
 	if (isset($cli)) {
-		require_once("http://".$bridge_host.":".$bridge_port."/".$bridge_context."/java/Java.inc");
+		require_once("http://".$bridge_host."/".$bridge_context."/java/Java.inc");
 		
 		$criteria = java("org.betaconceptframework.betacms.repository.model.factory.CmsCriteriaFactory")->newContentObjectCriteria();
 		$criteria->addContentObjectTypeEqualsCriterion(ECLASS_LESSON_OBJECT);
@@ -140,7 +138,6 @@ function getLessonsList($bcmsrepo) {
 
 function getLesson($bcmsrepo, $objectId) {
 	$bridge_host = $bcmsrepo[BRIDGE_HOST];
-	$bridge_port = $bcmsrepo[BRIDGE_PORT];
 	$bridge_context = $bcmsrepo[BRIDGE_CONTEXT];
 	$bcms_host = $bcmsrepo[BCMS_HOST];
 	$bcms_repo = $bcmsrepo[BCMS_REPO];
@@ -150,7 +147,7 @@ function getLesson($bcmsrepo, $objectId) {
 	$cli = connectToRepo($bcmsrepo);
 	
 	if (isset($cli)) {
-		require_once("http://".$bridge_host.":".$bridge_port."/".$bridge_context."/java/Java.inc");
+		require_once("http://".$bridge_host."/".$bridge_context."/java/Java.inc");
 		
 		$co = $cli->getContentService()->getContentObjectById($objectId, 
 			java("org.betaconceptframework.betacms.repository.api.model.query.CacheRegion")->FIVE_MINUTES);
@@ -220,7 +217,6 @@ function getLesson($bcmsrepo, $objectId) {
 
 function putLesson($bcmsrepo, $lessonArray) {
 	$bridge_host = $bcmsrepo[BRIDGE_HOST];
-	$bridge_port = $bcmsrepo[BRIDGE_PORT];
 	$bridge_context = $bcmsrepo[BRIDGE_CONTEXT];
 	$bcms_host = $bcmsrepo[BCMS_HOST];
 	$bcms_repo = $bcmsrepo[BCMS_REPO];
@@ -230,7 +226,7 @@ function putLesson($bcmsrepo, $lessonArray) {
 	$cli = connectToRepo($bcmsrepo);
 	
 	if (isset($cli)) {
-		require_once("http://".$bridge_host.":".$bridge_port."/".$bridge_context."/java/Java.inc");
+		require_once("http://".$bridge_host."/".$bridge_context."/java/Java.inc");
 		
 		$co = $cli->getCmsRepositoryEntityFactory()->newContentObjectForType(ECLASS_LESSON_OBJECT, "el");
 		
@@ -278,14 +274,13 @@ function putLesson($bcmsrepo, $lessonArray) {
 
 function connectToRepo($bcmsrepo) {
 	$bridge_host = $bcmsrepo[BRIDGE_HOST];
-	$bridge_port = $bcmsrepo[BRIDGE_PORT];
 	$bridge_context = $bcmsrepo[BRIDGE_CONTEXT];
 	$bcms_host = $bcmsrepo[BCMS_HOST];
 	$bcms_repo = $bcmsrepo[BCMS_REPO];
 	$bcms_user = $bcmsrepo[BCMS_USER];
 	$bcms_pass = $bcmsrepo[BCMS_PASS];
 	
-	require_once("http://".$bridge_host.":".$bridge_port."/".$bridge_context."/java/Java.inc");
+	require_once("http://".$bridge_host."/".$bridge_context."/java/Java.inc");
 
 	$cli = new Java("org.betaconceptframework.betacms.repository.client.BetaCmsRepositoryClient", $bcms_host);
 	
@@ -305,10 +300,9 @@ function connectToRepo($bcmsrepo) {
 
 function checkConnectivityToRepo($bcmsrepo) {
 	$bridge_host = $bcmsrepo[BRIDGE_HOST];
-	$bridge_port = $bcmsrepo[BRIDGE_PORT];
 	$bridge_context = $bcmsrepo[BRIDGE_CONTEXT];
 	
-	$url = "http://".$bridge_host.":".$bridge_port."/".$bridge_context."/java/Java.inc";
+	$url = "http://".$bridge_host."/".$bridge_context."/java/Java.inc";
 	$fp = @fopen($url, "r");
 	
 	if (isset($fp) && $fp != false) {
