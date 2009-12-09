@@ -43,6 +43,14 @@ $tool_content = "";
 require_once("include/bcms.inc.php");
 session_start();
 
+if (!ini_get('allow_url_include')) {
+	$tool_content .= "<p class=\"caution_small\">".
+		"You need to enable the allow_url_include php ini setting in order to get the BetaCMS Bridge to work".
+		"</p>";
+	draw($tool_content,3);
+	die();
+}
+
 if (!isset($_POST['submit'])) {
 	// print form
 	$tool_content .= repoForm(); 
