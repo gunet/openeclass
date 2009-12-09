@@ -317,6 +317,41 @@ function connectToRepo($bcmsrepo) {
 }
 
 
+function checkConnectivityToRepo($bcmsrepo) {
+	$bridge_host = $bcmsrepo[BRIDGE_HOST];
+	$bridge_port = $bcmsrepo[BRIDGE_PORT];
+	$bridge_context = $bcmsrepo[BRIDGE_CONTEXT];
+	$bcms_host = $bcmsrepo[BCMS_HOST];
+	$bcms_port = $bcmsrepo[BCMS_PORT];
+	$bcms_repo = $bcmsrepo[BCMS_REPO];
+	$bcms_user = $bcmsrepo[BCMS_USER];
+	$bcms_pass = $bcmsrepo[BCMS_PASS];
+	
+	$url = "http://".$bridge_host.":".$bridge_port."/".$bridge_context."/java/Java.inc";
+	$fp = @fopen($url, "r");
+	
+	if (isset($fp) && $fp != false) {
+		$contents = "";
+		while (!feof($fp)) {
+  			$contents .= fread($fp, 8192);
+		}
+		fclose($fp);
+		if (substr_count($contents, "HTTP Status 404") > 0)
+			return false;
+
+			
+		@include_once($url);
+		if (!class_exists("Java"))
+			return false;
+
+			
+		return true;
+	}
+	else
+		return false;
+}
+
+
 // ---- Functions to call from create_course module ----
 
 function doImportFromBetaCMSBeforeCourseCreation() {

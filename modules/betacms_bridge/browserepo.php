@@ -51,6 +51,14 @@ if (!ini_get('allow_url_include')) {
 	die();
 }
 
+if (!ini_get('allow_url_fopen')) {
+	$tool_content .= "<p class=\"caution_small\">".
+		"You need to enable the allow_url_fopen php ini setting in order to get the BetaCMS Bridge to work".
+		"</p>";
+	draw($tool_content,3);
+	die();
+}
+
 if (!isset($_POST['submit'])) {
 	// print form
 	$tool_content .= repoForm(); 
@@ -73,6 +81,15 @@ else {
 			BCMS_USER => $_POST[BCMS_USER],
 			BCMS_PASS => $_POST[BCMS_PASS]
 		);
+		
+		if (!checkConnectivityToRepo($repo)) {
+			$tool_content .= "<p class=\"caution_small\">".
+				"Failure: couldn't connect to remote Bridge".
+				"</p>".
+				"<br/><br/><p align=\"right\"><a href='$_SERVER[PHP_SELF]'>$langAgain</a></p>";
+			draw($tool_content,3);
+			die();
+		}
 		
 		// Fetch the list of Lessons from Beta CMS
 		$lessonList = getLessonsList($repo);
