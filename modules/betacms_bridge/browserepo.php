@@ -59,6 +59,21 @@ if (!ini_get('allow_url_fopen')) {
 	die();
 }
 
+if (isset($_GET['logout'])) {
+	unset($_SESSION[BETACMSREPO]);
+	unset ($_POST['submit']);
+}
+
+if (isset($_SESSION[BETACMSREPO])) {
+	$_POST[BRIDGE_HOST] = $_SESSION[BETACMSREPO][BRIDGE_HOST];
+	$_POST[BRIDGE_CONTEXT] = $_SESSION[BETACMSREPO][BRIDGE_CONTEXT];
+	$_POST[BCMS_HOST] = $_SESSION[BETACMSREPO][BCMS_HOST];
+	$_POST[BCMS_REPO] = $_SESSION[BETACMSREPO][BCMS_REPO];
+	$_POST[BCMS_USER] = $_SESSION[BETACMSREPO][BCMS_USER];
+	$_POST[BCMS_PASS] = $_SESSION[BETACMSREPO][BCMS_PASS];
+	$_POST['submit'] = 'submit';
+}
+
 if (!isset($_POST['submit'])) {
 	// print form
 	$tool_content .= repoForm(); 
@@ -96,7 +111,9 @@ else {
 		// Construct course list table
 		$tool_content .= "<table class=\"FormData\" width=\"99%\" align=\"left\">
 			<tbody><tr>
-			<td class=\"odd\" colspan='6'><div align=\"right\"><a href=\"createlesson.php\">"."Create new Lesson"."</a></div></td></tr>
+			<td class=\"odd\" colspan='2'><div align=\"left\"><a href=\"browserepo.php?logout\">"."Logout from BetaCMS"."</a></div></td>
+			<td class=\"odd\" colspan='4'><div align=\"right\"><a href=\"createlesson.php\">"."Create new Lesson"."</a></div></td>
+			</tr>
 			<tr>
 			<th scope=\"col\">"."title"."</th>
 			<th scope=\"col\">"."keywords"."</th>
