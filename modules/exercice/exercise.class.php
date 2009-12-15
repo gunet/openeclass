@@ -414,7 +414,8 @@ class Exercise
 		if($id)
 		{
 			mysql_select_db($currentCourseID);
-			$sql="UPDATE `$TBL_EXERCICES` SET titre='$exercise',description='$description',type='$type',".
+			$sql="UPDATE `$TBL_EXERCICES` 
+				SET titre='$exercise',description='$description',type='$type',".
 				"StartDate='$StartDate',EndDate='$EndDate',TimeConstrain='$TimeConstrain',".
 				"AttemptsAllowed='$AttemptsAllowed', random='$random',
 				active='$active', results='$results', score='$score' WHERE id='$id'";
@@ -424,15 +425,12 @@ class Exercise
 		else
 		{
 			mysql_select_db($currentCourseID);
-
 			$sql="INSERT INTO `$TBL_EXERCICES`
 				VALUES ('', '$exercise','$description',$type,'$StartDate','$EndDate',
 					$TimeConstrain, $AttemptsAllowed, $random, $active, $results, $score)";
 			db_query($sql);
-
 			$this->id=mysql_insert_id();
 		}
-
 		// updates the question position
 		foreach($this->questionList as $position=>$questionId)
 		{

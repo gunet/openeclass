@@ -773,18 +773,17 @@ cData;
 			$tool_content .= "<tr>
 			<th class=\"right\">".$j."</th>
 			<td><input type=\"text\" name=\"match[".$i."]\" size=\"58\" value=\"";
-	
 		if(!isset($formSent) && !isset($match[$i])) 
-			$tool_content .= ${"langDefaultMakeCorrespond$j"}; 
+			$tool_content .= $langDefaultMakeCorrespond.$j; 
 		else 
-			$tool_content .= str_replace('{','&#123;',htmlspecialchars($match[$i]));
+			@$tool_content .= str_replace('{','&#123;',htmlspecialchars($match[$i]));
 	
-	$tool_content .= "\" class=\"auth_input\"></td>
-	<td align=\"center\"><select name=\"sel[".$i."]\"  class=\"auth_input\">";
-	
+		$tool_content .= "\" class=\"auth_input\"></td>
+		<td align=\"center\"><select name=\"sel[".$i."]\"  class=\"auth_input\">";
 		foreach($listeOptions as $key=>$val) {
 			$tool_content .= "<option value=\"".$key."\" ";
-			if((!isset($submitAnswers) && !isset($sel[$i]) && $j == 2 && $val == 'B') || @$sel[$i] == $key) 
+			if((!isset($submitAnswers) && !isset($sel[$i]) 
+				&& $j == 2 && $val == 'B') || @$sel[$i] == $key) 
 				$tool_content .= "selected=\"selected\"";
 				$tool_content .= ">".$val."</option>";
 		} // end foreach()
@@ -819,7 +818,7 @@ cData;
 			if(!isset($formSent) && !isset($option[$key]))
 				$tool_content .= ${"langDefaultMatchingOpt$val"}; 
 			else 
-				$tool_content .= str_replace('{','&#123;',htmlspecialchars($option[$key]));
+				@$tool_content .= str_replace('{','&#123;',htmlspecialchars($option[$key]));
 				
 			$tool_content .= "\" class=\"auth_input\"></td><td>&nbsp;</td><td>&nbsp;</td></tr>";
 		} // end foreach()

@@ -25,7 +25,7 @@
 * =========================================================================*/
 
 // disable notices due to some problems
-error_reporting('E_ALL ^ E_NOTICE');
+//error_reporting('E_ALL ^ E_NOTICE');
 
 // answer types
 define('UNIQUE_ANSWER',	1);
@@ -74,15 +74,10 @@ function validate() {
 ";
 
 $tool_content = "";
-
 $nameTools = $langExercices;
 $navigation[]= array ("url"=>"exercice.php", "name"=> $langExercices);
-
-$is_allowedToEdit=$is_adminOfCourse;
-
 // picture path
 $picturePath='../../courses/'.$currentCourseID.'/image';
-
 // the 4 types of answers
 $aType=array($langUniqueSelect,$langMultipleSelect,$langFillBlanks,$langMatching);
 
@@ -92,7 +87,7 @@ $TBL_EXERCICES='exercices';
 $TBL_QUESTIONS='questions';
 $TBL_REPONSES='reponses';
 
-if(!$is_allowedToEdit) {
+if(!$is_adminOfCourse) {
 	$tool_content .= $langNotAllowed;
 	draw($tool_content, 2, 'exercice', $local_head, '');
 	exit();
@@ -115,11 +110,11 @@ if($REQUEST_METHOD == 'POST') {
 }
 
 // intializes the Exercise object
-if(!is_object($objExercise)) {
+if(@(!is_object($objExercise))) {
 	// construction of the Exercise object
-	$objExercise=new Exercise();	
+	$objExercise=new Exercise();
 	// creation of a new exercise if wrong or not specified exercise ID
-	if($exerciseId) {
+	if(isset($exerciseId)) {
 		$objExercise->read($exerciseId);
 	}
 	// saves the object into the session
@@ -203,11 +198,11 @@ if(isset($cancelAnswers)) {
 if(isset($editQuestion) || isset($modifyQuestion) || isset($modifyAnswers)) {
 	$nameTools=$langQuestionManagement;
 	$navigation[]= array ("url" => "admin.php?exerciseId=$exerciseId", "name" => $langExerciseManagement);
-	$QUERY_STRING=$questionId?'editQuestion='.$questionId.'&fromExercise='.$fromExercise:'newQuestion=yes';
+	@$QUERY_STRING=$questionId?'editQuestion='.$questionId.'&fromExercise='.$fromExercise:'newQuestion=yes';
 } elseif(isset($newQuestion)) {
 	$nameTools=$langNewQu;
 	$navigation[]= array ("url" => "admin.php?exerciseId=$exerciseId", "name" => $langExerciseManagement);
-	$QUERY_STRING=$questionId?'editQuestion='.$questionId.'&fromExercise='.$fromExercise:'newQuestion=yes';
+	@$QUERY_STRING=$questionId?'editQuestion='.$questionId.'&fromExercise='.$fromExercise:'newQuestion=yes';
 } elseif(isset($NewExercise)) {
 	$nameTools=$langNewEx;
 	$QUERY_STRING='';

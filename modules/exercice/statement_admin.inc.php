@@ -74,24 +74,19 @@ if(isset($submitQuestion)) {
 		// we remove the picture
 		$objQuestion->removePicture();
 		// if we add a new picture
-		if($imageUpload_size)
-		{
+		if($imageUpload_size) {
 			// image is already saved in a temporary file
-			if($modifyIn) {
+			if(isset($modifyIn)) {
 				// saves the picture into a temporary file
 				$objQuestion->getTmpPicture();
-			}
-			// saves the picture coming from POST FILE
-			else
-			{
+			} else { // saves the picture coming from POST FILE
 				$objQuestion->uploadPicture($imageUpload);
 			}
 		}
 	}
 	if($exerciseId)  {
 		// adds the question ID into the question list of the Exercise object
-		if($objExercise->addToList($questionId))
-		{
+		if($objExercise->addToList($questionId)) {
 			$objExercise->save();
 			$nbrQuestions++;
 		}
@@ -104,7 +99,6 @@ if(isset($submitQuestion)) {
 		$editQuestion=$questionId;
 	}
 	unset($newQuestion,$modifyQuestion);
-	
 }
 else
 {
