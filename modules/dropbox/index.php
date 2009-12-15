@@ -66,8 +66,7 @@ if (isset($_GET["sentOrder"]) && in_array($_GET["sentOrder"], array("lastDate", 
 		$sentOrder = "lastDate"; //default sortorder value if nothing is specified
 	}
 }
-session_register("sentOrder");
-
+$_SESSION['sentOrder'] = $sentOrder;
 
 /*
 * get order status of received list.
@@ -82,7 +81,7 @@ if (isset($_GET["receivedOrder"]) && in_array($_GET["receivedOrder"], array("las
 		$receivedOrder = "lastDate"; //default sortorder value if nothing is specified
 	}
 }
-session_register("receivedOrder");
+$_SESSION['receivedOrder'] = $receivedOrder;
 
 /*
 * rest of variables

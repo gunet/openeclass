@@ -72,7 +72,7 @@ if (isset($_SESSION["dropbox_uniqueid"]) && isset($_GET["dropbox_unid"]) && $dro
 }
 
 $dropbox_uniqueid = $dropbox_unid;
-session_register("dropbox_uniqueid");
+$_SESSION['dropbox_uniqueid'] = $dropbox_uniqueid;
 
 require_once("dropbox_class.inc.php");
 
@@ -153,7 +153,7 @@ if (!isset( $_POST['authors']) || !isset( $_POST['description']))
 		$dropbox_filesize = $_FILES['file']['size'];
 		$dropbox_filetype = $_FILES['file']['type'];
 		$dropbox_filetmpname = $_FILES['file']['tmp_name'];
-	
+
 		if ($dropbox_filesize + $dropbox_space > $diskQuotaDropbox)
 		{
 			$errormsg = $dropbox_lang["quotaError"];
@@ -162,7 +162,7 @@ if (!isset( $_POST['authors']) || !isset( $_POST['description']))
 		{
 			die ($dropbox_lang["badFormData"]);
 		}
-	
+
 		if (!$error) {
 			// set title
 			$dropbox_title = $dropbox_filename;
@@ -175,7 +175,7 @@ if (!isset( $_POST['authors']) || !isset( $_POST['description']))
 			{
 				$_POST['authors'] = getUserNameFromId($uid);
 			}
-	
+
 			if ($error) {}
 			elseif ($thisIsAMailing)  // RH: $newWorkRecipients is integer - see class
 			{
@@ -193,8 +193,8 @@ if (!isset( $_POST['authors']) || !isset( $_POST['description']))
 			} else {
 				$newWorkRecipients = $_POST["recipients"];
 			}
-	
-			//After uploading the file, create the db entries	
+
+			//After uploading the file, create the db entries
 			if (!$error)
 			{
 				move_uploaded_file($dropbox_filetmpname, $dropbox_cnf["sysPath"] . '/' . $dropbox_filename)
