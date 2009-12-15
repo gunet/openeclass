@@ -34,6 +34,10 @@
  *
  */
 
+if(function_exists("date_default_timezone_set")) { // only valid if PHP > 5.1
+	date_default_timezone_set("Europe/Athens");
+}
+
 //Modify the relative path prefix according to the state of the system
 //0: logged in/out screen
 //1: user home
@@ -275,7 +279,7 @@ if (isset($_SESSION['saved_statut'])) {
 //be able to access inactive tools.
 if(isset($currentCourse) && file_exists($module_ini_dir = getcwd() . "/module.ini.php") && !$is_adminOfCourse && @$ignore_module_ini != true) {
 	include($module_ini_dir);
-	
+
 	if (!check_guest()) {
 		if (isset($_SESSION['uid']) and $_SESSION['uid']) {
 			$result = db_query("

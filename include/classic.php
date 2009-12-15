@@ -112,7 +112,7 @@ if (mysql_num_rows($result2) > 0) {
 	<th width=\"150\" class='left' style=\"border: 1px solid #edecdf;\">$langTeacher</th>
 	<th width=\"60\" style=\"border: 1px solid #edecdf;\">$langManagement</th>
 	</tr></thead><tbody>";
-	
+
 	$k = 0;
 	while ($mycours = mysql_fetch_array($result2)) {
 		$dbname = $mycours["k"];
@@ -208,5 +208,8 @@ if (mysql_num_rows(db_query($sql, $mysqlMainDb)) > 0) {
 	}
 }
 $tool_content .= "</td></tr></table><br />";
-$_SESSION['status'] = $status; 
+if (isset($status)) {
+	$_SESSION['status'] = $status;
+}
+
 ?>

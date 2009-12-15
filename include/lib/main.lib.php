@@ -249,7 +249,7 @@ function uid_to_firstname($uid)
 {
         global $mysqlMainDb;
 
-        if ($r = mysql_fetch_row(db_query("SELECT prenom 
+        if ($r = mysql_fetch_row(db_query("SELECT prenom
 		FROM user WHERE user_id = '".mysql_real_escape_string($uid)."'", $mysqlMainDb))) {
                 return $r[0];
         } else {
@@ -263,7 +263,7 @@ function uid_to_surname($uid)
 {
         global $mysqlMainDb;
 
-        if ($r = mysql_fetch_row(db_query("SELECT nom 
+        if ($r = mysql_fetch_row(db_query("SELECT nom
 		FROM user WHERE user_id = '".mysql_real_escape_string($uid)."'", $mysqlMainDb))) {
                 return $r[0];
         } else {
@@ -276,7 +276,7 @@ function uid_to_email($uid)
 {
         global $mysqlMainDb;
 
-        if ($r = mysql_fetch_row(db_query("SELECT email 
+        if ($r = mysql_fetch_row(db_query("SELECT email
 		FROM user WHERE user_id = '".mysql_real_escape_string($uid)."'", $mysqlMainDb))) {
                 return $r[0];
         } else {
@@ -324,12 +324,12 @@ function user_group($uid, $required = TRUE)
 function gid_to_name($gid)
 {
 	global $currentCourseID;
-	if ($r = mysql_fetch_row(db_query("SELECT name FROM student_group 
+	if ($r = mysql_fetch_row(db_query("SELECT name FROM student_group
 		WHERE id = '".mysql_real_escape_string($gid)."'", $currentCourseID))) {
                 return $r[0];
 	} else {
                 return FALSE;
-	}	
+	}
 }
 
 
@@ -420,7 +420,7 @@ function selection3($entries, $name, $default = '') {
 		}
 	}
 	$select_box .= "</select>\n";
-	
+
 	return $select_box;
 }
 
@@ -661,17 +661,17 @@ function my_basename($path) {
 // transform the date format from "date year-month-day" to "day-month-year"
 function greek_format($date) {
 
-	return implode("-",array_reverse(split("-",$date)));
+	return implode("-",array_reverse(explode("-",$date)));
 }
 
 // format the date according to language
 function nice_format($date) {
-	 
+
 	if ($GLOBALS['language'] == 'greek')
 		return greek_format($date);
-	else 
+	else
 		return $date;
-	 
+
 }
 
 // creating passwords automatically
@@ -876,18 +876,18 @@ function warnIfExtNotLoaded($extensionName) {
 /*
  * to create missing directory in a gived path
  *
- * @returns a resource identifier or FALSE if the query was not executed correctly. 
- * @author KilerCris@Mail.com original function from  php manual 
- * @author Christophe Gesche gesche@ipm.ucl.ac.be Claroline Team 
- * @since  28-Aug-2001 09:12 
- * @param sting		$path 		wanted path 
+ * @returns a resource identifier or FALSE if the query was not executed correctly.
+ * @author KilerCris@Mail.com original function from  php manual
+ * @author Christophe Gesche gesche@ipm.ucl.ac.be Claroline Team
+ * @since  28-Aug-2001 09:12
+ * @param sting		$path 		wanted path
  */
 function mkpath($path)  {
-	
+
 	$path = str_replace("/","\\",$path);
 	$dirs = explode("\\",$path);
 	$path = $dirs[0];
-	for($i = 1;$i < count($dirs);$i++) 
+	for($i = 1;$i < count($dirs);$i++)
 	{
 		$path .= "/".$dirs[$i];
 		if(!is_dir($path))
@@ -898,30 +898,30 @@ function mkpath($path)  {
 }
 
 
-// checks if a module is visible 
+// checks if a module is visible
 function display_activation_link($module_id) {
 
 	global $currentCourseID;
-	
-	$v = mysql_fetch_array(db_query("SELECT lien FROM accueil 
+
+	$v = mysql_fetch_array(db_query("SELECT lien FROM accueil
 		WHERE id ='$module_id'", $currentCourseID));
 	$newlien = str_replace("../..","","$v[lien]");
-	
+
 	if (strpos($_SERVER['PHP_SELF'],$newlien) === FALSE) {
 		return FALSE;
-	} else { 
+	} else {
 		return TRUE;
 	}
 }
 
-// checks if a module is visible 
+// checks if a module is visible
 function visible_module($module_id) {
 
 	global $currentCourseID;
-	
-	$v = mysql_fetch_array(db_query("SELECT visible FROM accueil 
+
+	$v = mysql_fetch_array(db_query("SELECT visible FROM accueil
 		WHERE id ='$module_id'", $currentCourseID));
-	
+
 	if ($v['visible'] == 1) {
 		return TRUE;
 	} else {
@@ -937,7 +937,7 @@ function invalid_utf8($s)
 }
 
 
-function utf8_to_cp1253($s) 
+function utf8_to_cp1253($s)
 {
 	// First try with iconv() directly
         $cp1253 = @iconv('UTF-8', 'Windows-1253', $s);
@@ -1113,7 +1113,7 @@ function format_time_duration($sec)
         $min = floor($sec / 60);
         $sec = $sec % 60;
         if ($min < 2) {
-                return append_units($min, $langminute, $langminutes) . 
+                return append_units($min, $langminute, $langminutes) .
                        (($sec == 0)? '': (', ' . append_units($sec, $langsecond, $langseconds)));
         }
         if ($min < 60) {
@@ -1121,7 +1121,7 @@ function format_time_duration($sec)
         }
         $hour = floor($min / 60);
         $min = $min % 60;
-        return append_units($hour, $langhour, $langhours) . 
+        return append_units($hour, $langhour, $langhours) .
                (($min == 0)? '': (', ' . append_units($min, $langminute, $langminutes)));
 }
 
@@ -1174,7 +1174,7 @@ function move_order($table, $id_field, $id, $order_field, $direction, $condition
 // Add a link to the appropriate course unit if the page was requested
 // with a unit=ID parametre. This happens if the user got to the module
 // page from a unit resource link. If entry_page == TRUE this is the initial page of module
-// and is assumed that you're exiting the current unit unless $_GET['unit'] is set 
+// and is assumed that you're exiting the current unit unless $_GET['unit'] is set
 function add_units_navigation($entry_page = FALSE)
 {
         global $navigation, $cours_id, $is_adminOfCourse, $mysqlMainDb;
@@ -1187,7 +1187,7 @@ function add_units_navigation($entry_page = FALSE)
                 } else {
                         $visibility_check = "AND visibility='v'";
                 }
-		if (isset($_GET['unit'])) { 
+		if (isset($_GET['unit'])) {
 			$unit_id = intval($_GET['unit']);
 		} elseif (isset($_SESSION['unit'])) {
 			$unit_id = intval($_SESSION['unit']);
