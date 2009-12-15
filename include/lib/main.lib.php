@@ -32,7 +32,7 @@ Defines standard functions and validates variables
 ---------------------------------------------------------------------
 */
 
-define('ECLASS_VERSION', '2.2');
+define('ECLASS_VERSION', '2.2.1');
 
 // Show query string and then do MySQL query
 function db_query2($sql, $db = FALSE)
@@ -400,6 +400,29 @@ function selection($entries, $name, $default = '', $extra = '')
 	return $retString;
 }
 
+/********************************************************************
+Show a selection box. Taken from main.lib.php
+Difference: the return value and not just echo the select box
+
+$entries: an array of (value => label)
+$name: the name of the selection element
+$default: if it matches one of the values, specifies the default entry
+ ***********************************************************************/
+function selection3($entries, $name, $default = '') {
+	$select_box = "<select name='$name'>\n";
+	foreach ($entries as $value => $label)  {
+	    if ($value == $default) {
+		$select_box .= "<option selected value='" . htmlspecialchars($value) . "'>" .
+				htmlspecialchars($label) . "</option>\n";
+		}  else {
+		$select_box .= "<option value='" . htmlspecialchars($value) . "'>" .
+				htmlspecialchars($label) . "</option>\n";
+		}
+	}
+	$select_box .= "</select>\n";
+	
+	return $select_box;
+}
 
 
 // --------------------------------------------------------------------------

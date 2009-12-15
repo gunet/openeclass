@@ -208,5 +208,5 @@ if (mysql_num_rows(db_query($sql, $mysqlMainDb)) > 0) {
 	}
 }
 $tool_content .= "</td></tr></table><br />";
-session_register('status');
+$_SESSION['status'] = $status; 
 ?>

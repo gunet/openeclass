@@ -350,8 +350,12 @@ $langSearchCourses = "Αναζήτηση μαθημάτων";
 $langActSuccess = "Μόλις ενεργοποιήσατε την ";
 $langDeactSuccess = "Μόλις απενεργοποιήσατε την ";
 $langThe = "Η ";
-$langActFailure = "δεν μπορεί να ενεργοποιηθεί, διότι δεν έχετε καθορίσει τις ρυθμίσεις του τρόπου πιστοποίησης";
+$langActFailure = "διότι δεν έχετε καθορίσει τις ρυθμίσεις του";
 $langLdapNotWork = "Προειδοποίση: Η php δεν έχει υποστήριξη για ldap. Βεβαιωθείτε ότι η ldap υποστήριξη είναι εγκατεστημένη και ενεργοποιημένη.";
+$langShibEmail = "Shibboleth Email";
+$langShibUsername = "Shibboleth User Name";
+$langShibCn = "Shibboleth Canonical Name";
+$langShibboleth = "Πιστοποίηση μέσω Shibboleth";
 
 // other
 $langVisitors = "Επισκέπτες";
@@ -532,6 +536,7 @@ $langViaPop = "με πιστοποίηση μέσω POP3";
 $langViaImap = "με πιστοποίηση μέσω IMAP";
 $langViaLdap = "με πιστοποίηση μέσω LDAP";
 $langViaDB = "με πιστοποίηση μέσω άλλης Βάσης Δεδομένων";
+$langViaShibboleth = "με πιστοποίηση μέσω Shibboleth";
 $langHasActivate = "O τρόπος πιστοποίησης που επιλέξατε, έχει ενεργοποιηθεί";
 $langAlreadyActiv = "O τρόπος πιστοποίησης που επιλέξατε, είναι ήδη ενεργοποιημένος";
 $langErrActiv ="Σφάλμα! Ο τρόπος πιστοποίησης δεν μπορεί να ενεργοποιηθεί";

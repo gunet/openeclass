@@ -43,136 +43,99 @@
 $require_admin = TRUE;
 include '../../include/baseTheme.php';
 include_once '../auth/auth.inc.php';
-$nameTools = $langUserAuthentication;		// Define $nameTools
+$nameTools = $langUserAuthentication;
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
-$tool_content = "";			// Initialise $tool_content
+$tool_content = "";
 
 $auth = isset($_GET['auth'])?$_GET['auth']:"";
 $active = isset($_GET['active'])?$_GET['active']:"";
-if((!empty($auth)) && (!empty($active)))
-{
+
+if((!empty($auth)) && (!empty($active))) {
 	$s = get_auth_settings($auth);
 	$settings = $s['auth_settings'];
 
-	switch($active)
-	{
+	switch($active) {
 		case 'yes': $q = empty($settings)?'0':'1';
 		break;
 		case 'no': $q = '0';
 		break;
-		default:	$q = '0';
+		default: $q = '0';
 		break;
 	}
 	$qry = "UPDATE auth SET auth_default=".$q." WHERE auth_id='".mysql_real_escape_string($auth)."'";
-	if(!empty($qry))
-	{
-	$sql = mysql_query($qry,$db);		// do the update as the default method
+	if(!empty($qry)) {
+		$sql = mysql_query($qry,$db); // do the update as the default method
 	}
 }
 $auth_methods = get_auth_active_methods();
 
 $tool_content .= "<p>";
 
-if(empty($auth))
-{
+if(empty($auth)) {
 	$tool_content .= "$langMethods<br>";
-	if(!empty($auth_methods))
-	{
+	if(!empty($auth_methods)) {
 		$tool_content .= "<ul>";
-		foreach($auth_methods as $k=>$v)
-		{
+		foreach($auth_methods as $k=>$v) {
 			$tool_content .= "<li>".get_auth_info($v) . "</li>";
 		}
 		$tool_content .= "</ul>";
 	}
-}
-else
-{
-	//$s = get_auth_settings($auth);
-	//$settings = $s['auth_settings'];
-	if(empty($settings))
-	{
+} else {
+	if(empty($settings)) {
 		$tool_content .= "<p class=\"success\">";
-		$tool_content .= "$langThe" . get_auth_info($auth) . "$langActFailure";
+		$tool_content .= "$langErrActiv $langActFailure";
 		$tool_content .= "</p>";
-	}
-	else
-	{
-		if($active == 'yes')
-		{
-		    $tool_content .= "<p class=\"success\">";
+	} else {
+		if($active == 'yes') {
+			$tool_content .= "<p class=\"success\">";
 			$tool_content .= "$langActSuccess" . get_auth_info($auth);
-		    $tool_content .= "</p>";
-		}
-		else
-		{
-		    $tool_content .= "<p class=\"success\">";		$tool_content .= "<p class=\"success\">";
+			$tool_content .= "</p>";
+		} else {
+			$tool_content .= "<p class=\"success\">";
 			$tool_content .= "$langDeactSuccess" . get_auth_info($auth);
-            $tool_content .= "</p>";
+			$tool_content .= "</p>";
 		}
 	}
 }
 
 $tool_content .= "</p>";
+$tool_content .= "<table width='99%' class='FormData' align='left'>
+<tbody><tr><th width='220'>&nbsp;</th>
+<td colspan=\"2\"><b>$langChooseAuthMethod</b></td>
+</tr><tr><th class=\"left\">POP3:</th><td>[";
 
-	$tool_content .= "
-    <table width='99%' class='FormData' align='left'>
-    <tbody>
-    <tr>
-      <th width='220'>&nbsp;</th>
-      <td colspan=\"2\"><b>$langChooseAuthMethod</b></td>
-    </tr>
-    <tr>
-      <th class=\"left\">POP3:</th>
-      <td>[";
 $tool_content .= in_array("2",$auth_methods)? "<a class=\"add\" href=\"auth.php?auth=2&active=no\">".$langDeactivate."</a>]":"<a class=\"revoke\"  href=\"auth.php?auth=2&active=yes\">".$langActivate."</a>]";
-	$tool_content .= "
-      </td>
-      <td><div align=\"right\">";
+
+$tool_content .= "</td><td><div align=\"right\">";
+
 $tool_content .= "&nbsp;&nbsp;<a href=\"auth_process.php?auth=2\">$langAuthSettings</a>";
-	$tool_content .= "</div>
-      </td>
-    </tr>
-    <tr>
-      <th class=\"left\">IMAP:</th>
-      <td>[";
+$tool_content .= "</div></td></tr>
+<tr><th class=\"left\">IMAP:</th><td>[";
+
 $tool_content .= in_array("3",$auth_methods)? "<a class=\"add\" href=\"auth.php?auth=3&active=no\">".$langDeactivate."</a>]":"<a class=\"revoke\" href=\"auth.php?auth=3&active=yes\">".$langActivate."</a>]";
-	$tool_content .= "
-      </td>
-      <td><div align=\"right\">";
+$tool_content .= "</td><td><div align=\"right\">";
+
 $tool_content .= "&nbsp;&nbsp;<a href=\"auth_process.php?auth=3\">$langAuthSettings</a>";
-	$tool_content .= "</div>
-      </td>
-    </tr>
-    <tr>
-      <th class=\"left\">LDAP:</th>
-      <td>[";
+$tool_content .= "</div></td></tr><tr><th class=\"left\">LDAP:</th><td>[";
+
 $tool_content .= in_array("4",$auth_methods)? "<a class=\"add\" href=\"auth.php?auth=4&active=no\">".$langDeactivate."</a>]":"<a class=\"revoke\" href=\"auth.php?auth=4&active=yes\">".$langActivate."</a>]";
-	$tool_content .= "
-      </td>
-      <td><div align=\"right\">";
-$tool_content .= "&nbsp;&nbsp;<a href=\"auth_process.php?auth=4\">$langAuthSettings</a>";
-	$tool_content .= "</div>
-      </td>
-    </tr>
-    <tr>
-      <th class=\"left\">External DB:</th>
-      <td>[";
+$tool_content .= "</td><td><div align=\"right\">";
+
+$tool_content .= "&nbsp;&nbsp;<a href=\"auth_process.php?auth=4\">$langAuthSettings</a>";	
+$tool_content .= "</div></td></tr><tr><th class=\"left\">External DB:</th><td>[";
+
 $tool_content .= in_array("5",$auth_methods)? "<a class=\"add\" href=\"auth.php?auth=5&active=no\">".$langDeactivate."</a>]":"<a class=\"revoke\" href=\"auth.php?auth=5&active=yes\">".$langActivate."</a>]";
-	$tool_content .= "
-      </td>
-      <td><div align=\"right\">";
+$tool_content .= "</td><td><div align=\"right\">";
+
 $tool_content .= "<a href=\"auth_process.php?auth=5\">$langAuthSettings</a>";
-	$tool_content .= "</div>
-      </td>
-    </tr>
-    <tr>
-	</tbody>
-    </table>
-    <br />";
 
+$tool_content .= "</div></td></tr><tr><th class=\"left\">Shibboleth:</th><td>[";
 
+$tool_content .= in_array("6",$auth_methods)? "<a class=\"add\" href=\"auth.php?auth=6&active=no\">".$langDeactivate."</a>]":"<a class=\"revoke\" href=\"auth.php?auth=6&active=yes\">".$langActivate."</a>]";
+$tool_content .= "</td><td><div align=\"right\">";
 
+$tool_content .= "<a href=\"auth_process.php?auth=6\">$langAuthSettings</a>";
+$tool_content .= "</div></td></tr></tbody></table><br />";
 
-draw($tool_content,3,'admin');
+draw($tool_content, 3,'admin');
 ?>

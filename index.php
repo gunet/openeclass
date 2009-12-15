@@ -81,7 +81,7 @@ if (isset($persoIsActive)) {
 // if we try to login... then authenticate user.
 $warning = '';
 if (isset($_SESSION['shib_uname'])) { // authenticate via shibboleth
-	include 'login/shib_login.php';
+	include 'include/shib_login.php';
 } else { // normal authentication
 	if (isset($_POST['uname'])) {
 		$uname = escapeSimple(preg_replace('/ +/', ' ', trim($_POST['uname'])));

@@ -25,7 +25,7 @@
 * =========================================================================*/
 
 
-/**===========================================================================
+/*===========================================================================
 	auth.inc.php
 	@last update: 31-05-2006 by Stratos Karatzidis
 	@authors list: Karatzidis Stratos <kstratos@uom.gr>
@@ -156,10 +156,9 @@ return $m (string)
 ****************************************************************/
 function get_auth_info($auth)
 {
-	global $langViaeClass, $langViaPop, $langViaImap, $langViaLdap, $langViaDB;
+	global $langViaeClass, $langViaPop, $langViaImap, $langViaLdap, $langViaDB, $langViaShibboleth;
 
-	if(!empty($auth))
-	{
+	if(!empty($auth)) {
 		switch($auth)
 		{
 			case '1': $m = $langViaeClass;
@@ -168,17 +167,17 @@ function get_auth_info($auth)
 				break;
 			case '3': $m = $langViaImap;
 				break;
-			case '4':	$m = $langViaLdap;
+			case '4': $m = $langViaLdap;
 				break;
 			case '5': $m = $langViaDB;
 				break;
-			default:	$m = 0;
+			case '6': $m = $langViaShibboleth;
+				break;
+			default: $m = 0;
 				break;
 		}
 		return $m;
-	}
-	else
-	{
+	} else {
 		return 0;
 	}
 }
@@ -192,21 +191,15 @@ return $auth_row : an associative array
 function get_auth_settings($auth)
 {
 	$qry = "SELECT * FROM auth WHERE auth_id = '".mysql_real_escape_string($auth)."'";
-  $result = db_query($qry);
-  if($result)
-  {
-		if(mysql_num_rows($result)==1)
-		{
-	    $auth_row = mysql_fetch_array($result,MYSQL_ASSOC);
-	    return $auth_row;
-		}
-		else
-		{
-	    return 0;
+	$result = db_query($qry);
+	if($result) {
+		if(mysql_num_rows($result)==1) {
+			$auth_row = mysql_fetch_array($result,MYSQL_ASSOC);
+			return $auth_row;
+		} else {
+			return 0;
 		}	
-	}
-	else
-	{
+	} else {
 		return 0;
 	}
 }
@@ -226,65 +219,53 @@ firstname (LDAP attribute: givenname)
 lastname (LDAP attribute: sn)
 email (LDAP attribute: mail)
 ****************************************************************/
-function auth_user_login ($auth, $test_username, $test_password) 
-{
-    global $mysqlMainDb;
+function auth_user_login ($auth, $test_username, $test_password)  {
+
+	global $mysqlMainDb, $webDir;
+
     switch($auth)
     {
 	case '1':
 	    // Returns true if the username and password work and false if they don't
-	    $sql = "SELECT user_id FROM user WHERE username='".mysql_real_escape_string($test_username)."' AND password='".mysql_real_escape_string($test_password)."'";
+	    $sql = "SELECT user_id FROM user WHERE username='".mysql_real_escape_string($test_username)."' 
+		AND password='".mysql_real_escape_string($test_password)."'";
 	    $result = db_query($sql);
-	    if(mysql_num_rows($result)==1)
-	    {
+	    if(mysql_num_rows($result)==1) {
     		$testauth = true;
-	    }
-	    else
-	    {
+	    } else {
 		$testauth = false;
 	    }
-	break;	
-    
-    
+	break;
 	case '2':
 	    $pop3host = $GLOBALS['pop3host'];
 	    $pop3=new pop3_class;
-	    $pop3->hostname = $pop3host;	/* POP 3 server host name                      */
-	    $pop3->port=110;				/* POP 3 server host port                      */
-	    $user = $test_username;                       	/* Authentication user name                    */
+	    $pop3->hostname = $pop3host; /* POP 3 server host name                      */
+	    $pop3->port=110;	/* POP 3 server host port                      */
+	    $user = $test_username;      /* Authentication user name                    */
 	    $password = $test_password;                   	/* Authentication password                     */
-	    $pop3->realm="";                         	/* Authentication realm or domain              */
-	    $pop3->workstation="";			/* Workstation for NTLM authentication         */
-	    $apop = 0;			/* Use APOP authentication                     */
+	    $pop3->realm=""; /* Authentication realm or domain              */
+	    $pop3->workstation="";	/* Workstation for NTLM authentication         */
+	    $apop = 0;	/* Use APOP authentication                     */
 	    $pop3->authentication_mechanism="USER";  /* SASL authentication mechanism               */
 	    $pop3->debug=0;                          /* Output debug information                    */
 	    $pop3->html_debug=1;                     /* Debug information is in HTML                */
 	    $pop3->join_continuation_header_lines=1; /* Concatenate headers split in multiple lines */
 
-	    if(($error=$pop3->Open())=="")
-	    {
-		if(($error=$pop3->Login($user,$password,$apop))=="")
-		{
+	    if(($error=$pop3->Open())=="") {
+		if(($error=$pop3->Login($user,$password,$apop))=="") {
 		    if($error=="" && ($error=$pop3->Close())=="")
 		    {
-		    $testauth = true;
+			$testauth = true;
+		    } else {
+			$testauth = false;
 		    }
-		    else
-		    {
-		    $testauth = false;
-		    }
-		}
-		else
-		{
+		} else {
 		    $testauth = false;
 		}
-	    }
-	    else
-	    {
+	    } else {
 		$testauth = false;
 	    }
-	    if($error!="")
-	    {
+	    if($error!="") {
 		$testauth = false;
 	    }
 	    break;
@@ -301,7 +282,6 @@ function auth_user_login ($auth, $test_username, $test_password)
 		$testauth = false;
 	    }
 	    break;
-	    
 	case '4':
             $ldap_host = $GLOBALS['ldaphost'];
             $all_ldap_base_dn = array('uid' => $GLOBALS['ldapbind_dn']);
@@ -324,10 +304,8 @@ function auth_user_login ($auth, $test_username, $test_password)
                     foreach ($all_ldap_base_dn as $attrib => $base_dn) {
                             // construct dn for user
                             $dn = "$attrib=$test_username,$base_dn";
-
                             // try an authenticated bind to confirm
                             // user/password pair
-
                             if (@ldap_bind($ldap, $dn, $test_password)) {
                                     $testauth = true;
                                     $search = "$attrib=$test_username";
@@ -346,7 +324,7 @@ function auth_user_login ($auth, $test_username, $test_password)
                     }
                     @ldap_unbind($ldap);
             }
-            break;    
+            break;
 
 	case '5':
 	    $dbhost = $GLOBALS['dbhost'];
@@ -357,82 +335,64 @@ function auth_user_login ($auth, $test_username, $test_password)
 	    $dbfielduser = $GLOBALS['dbfielduser'];
 	    $dbfieldpass = $GLOBALS['dbfieldpass'];
 	    $newlink = true;
-	    mysql_close($GLOBALS['db']);			// close the previous link
+	    mysql_close($GLOBALS['db']); // close the previous link
 	    $link = mysql_connect($dbhost,$dbuser,$dbpass,$newlink);
-	    if($link)
-	    {
-				$db_ext = mysql_select_db($dbname,$link);
-				if($db_ext)
-				{
-		    	$qry = "SELECT * FROM ".$dbname.".".$dbtable." WHERE ".$dbfielduser."='".mysql_real_escape_string($test_username)."' AND ".$dbfieldpass."='".mysql_real_escape_string($test_password)."'";
+	    if($link) {
+		$db_ext = mysql_select_db($dbname,$link);
+		if($db_ext) {
+		    	$qry = "SELECT * FROM ".$dbname.".".$dbtable." 
+				WHERE ".$dbfielduser."='".mysql_real_escape_string($test_username)."' 
+				AND ".$dbfieldpass."='".mysql_real_escape_string($test_password)."'";
 		    	$res = mysql_query($qry,$link);
-		    	if($res)
-		    	{
-						if(mysql_num_rows($res)>0)
-						{
+		    	if($res) {
+				if(mysql_num_rows($res)>0) {
 			     		$testauth = true;
 			    		mysql_close($link);
-							// Connect to database
-							$GLOBALS['db'] = mysql_connect($GLOBALS['mysqlServer'], $GLOBALS['mysqlUser'], $GLOBALS['mysqlPassword']);
-							if (mysql_version()) mysql_query("SET NAMES utf8");
-							mysql_select_db($mysqlMainDb, $GLOBALS['db']);
-
-
-						}
-		    	}
-		    	else
-		    	{
-						$testauth = false;
-		    	}
-		    	
+					// Connect to database
+					$GLOBALS['db'] = mysql_connect($GLOBALS['mysqlServer'], $GLOBALS['mysqlUser'], $GLOBALS['mysqlPassword']);
+					if (mysql_version()) mysql_query("SET NAMES utf8");
+					mysql_select_db($mysqlMainDb, $GLOBALS['db']);
 				}
-				else
-				{
-		    	$testauth = false;
-				}
-	    }
-	    else
-	    {
+		    	} else {
 				$testauth = false;
+		    	}
+		} else {
+		    	$testauth = false;
+			}
+	    } else { 
+		$testauth = false;
 	    }
 	    break;
-	    
+	case '6':
+		$path = "${webDir}secure/";
+		if (!file_exists($path)) {
+			if (!mkdir("$path", 0700)) {
+				$testauth = false;
+			}
+		} else {
+			// creation of secure/index.php file
+			$f = fopen("${path}index.php", "w");
+			$filecontents = '
+<? 
+session_start();
+$_SESSION[\'shib_email\'] = '.autounquote($_POST['shibemail']).';
+$_SESSION[\'shib_uname\'] = '.autounquote($_POST['shibuname']).';
+$_SESSION[\'shib_nom\'] = '.autounquote($_POST['shibcn']).';
+header("Location: ../index.php");
+?>
+';
+			if (!fwrite($f, "$filecontents")) {
+				$testauth = false;
+			} else {
+				$testauth = true;
+			}
+		}
+		break;
 	default:
 	    $testauth = $auth;
 	    break;
     }
-    
     return $testauth;
-
-}
-
-/********************************************************************
-Show a selection box. Taken from main.lib.php
-Difference: the return value and not just echo the select box
-
-$entries: an array of (value => label)
-$name: the name of the selection element
-$default: if it matches one of the values, specifies the default entry
-***********************************************************************/
-function selection3($entries, $name, $default = '')
-{
-	$select_box = "<select name='$name'>\n";
-	foreach ($entries as $value => $label) 
-	{
-	    if ($value == $default) 
-	    {
-		$select_box .= "<option selected value='" . htmlspecialchars($value) . "'>" .
-				htmlspecialchars($label) . "</option>\n";
-	    } 
-	    else 
-	    {
-		$select_box .= "<option value='" . htmlspecialchars($value) . "'>" .
-				htmlspecialchars($label) . "</option>\n";
-	    }
-	}
-	$select_box .= "</select>\n";
-	
-	return $select_box;
 }
 
 

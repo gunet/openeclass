@@ -79,7 +79,7 @@ doImportFromBetaCMSBeforeCourseCreation();
 function escape_if_exists($name) {
         if (isset($_POST[$name])) {
                 if (get_magic_quotes_gpc()) {
-                        $tmp = stripslashes($_POST[$name]);
+                		$tmp = stripslashes($_POST[$name]);
                 } else {
                         $tmp = $_POST[$name];
                 }
@@ -114,54 +114,50 @@ $tool_content .= $intitule_html .
 if (isset($_POST['back1']) or !isset($_POST['visit'])) {
 
    // display form
-   $tool_content .= "
-    <table width=\"99%\" align='left' class='FormData'>
-    <tbody>
-    <tr>
-      <th width=\"220\">&nbsp;</th>
-      <td><b>$langCreateCourseStep1Title</b></td>
-      <td>&nbsp;</td>
-     </tr>
-    <tr>
-      <th class='left' width=\"160\">$langTitle&nbsp;:</th>
-      <td width=\"160\"><input class='FormData_InputText' type='text' name='intitule' size='60' value='".@$intitule."' /></td>
-      <td><small>$langEx</small></td>
-     </tr>
-     <tr>
-       <th class='left'>$langFac&nbsp;:</th>
-       <td>";
-        list($homefac) = mysql_fetch_row(db_query("SELECT department FROM user WHERE user_id=$uid"));
-        $facs = db_query("SELECT id, name FROM faculte order by id");
-        while ($n = mysql_fetch_array($facs)) {
-                $fac[$n['id']] = $n['name'];
-        }
-        $tool_content .= selection($fac, 'faculte', $homefac);
-        $tool_content .= "</td><td>&nbsp;</td></tr>";
-        unset($repertoire);
-        $tool_content .= "
-      <tr>
-        <th class='left'>$langTeachers&nbsp;:</th>
-        <td><input class='FormData_InputText' type='text' name='titulaires' size='60' value='".$titulaire_probable."' /></td>
-        <td>&nbsp;</td>
-      </tr>
-      <tr>
-        <th class='left'>$m[type]&nbsp;:</th>
-        <td>";
-        @$tool_content .= " ".selection(array('pre' => $m['pre'], 'post' => $m['post'], 'other' => $m['other']), 'type', $type)." ";
-        $tool_content .= "
-        </td>
-        <td>&nbsp;</td>
-      </tr>
-      <tr>
-        <th class='left'>$langLanguage&nbsp;:</th>
-        <td>";
-        $tool_content .= lang_select_options('languageCourse');
-        $tool_content .= "</td><td>&nbsp;</td></tr>
-      	<tr><th>&nbsp;</th>
-        <td><input type='submit' name='create2' value='$langNextStep >' /><input type='hidden' name='visit' value='true' /></td>
-        <td><p align='right'><small>(*) &nbsp;$langFieldsRequ</small></p></td>
-      </tbody>
-      </table><br />";
+	$tool_content .= "<table width=\"99%\" align='left' class='FormData'>
+	<tbody>
+	<tr>
+	<th width=\"220\">&nbsp;</th>
+	<td><b>$langCreateCourseStep1Title</b></td>
+	<td>&nbsp;</td>
+	</tr>
+	<tr>
+	<th class='left' width=\"160\">$langTitle&nbsp;:</th>
+	<td width=\"160\"><input class='FormData_InputText' type='text' name='intitule' size='60' value='".@$intitule."' /></td>
+	<td><small>$langEx</small></td>
+	</tr>
+	<tr>
+	<th class='left'>$langFac&nbsp;:</th>
+	<td>";
+	list($homefac) = mysql_fetch_row(db_query("SELECT department FROM user WHERE user_id=$uid"));
+	$facs = db_query("SELECT id, name FROM faculte order by id");
+	while ($n = mysql_fetch_array($facs)) {
+		$fac[$n['id']] = $n['name'];
+	}
+	$tool_content .= selection($fac, 'faculte', $homefac);
+	$tool_content .= "</td><td>&nbsp;</td></tr>";
+	unset($repertoire);
+	$tool_content .= "<tr>
+	<th class='left'>$langTeachers&nbsp;:</th>
+	<td><input class='FormData_InputText' type='text' name='titulaires' size='60' value='".$titulaire_probable."' /></td>
+	<td>&nbsp;</td></tr>
+	<tr>
+	<th class='left'>$m[type]&nbsp;:</th>
+	<td>";
+	@$tool_content .= " ".selection(array('pre' => $m['pre'], 'post' => $m['post'], 'other' => $m['other']), 'type', $type)." ";
+	$tool_content .= "
+	</td>
+	<td>&nbsp;</td></tr>
+	<tr>
+	<th class='left'>$langLanguage&nbsp;:</th>
+	<td>";
+	$tool_content .= lang_select_options('languageCourse');
+	$tool_content .= "</td><td>&nbsp;</td></tr>
+	<tr><th>&nbsp;</th>
+	<td><input type='submit' name='create2' value='$langNextStep >' /><input type='hidden' name='visit' value='true' /></td>
+	<td><p align='right'><small>(*) &nbsp;$langFieldsRequ</small></p></td>
+</tbody>
+</table><br />";
 }
 
 // --------------------------------
@@ -170,174 +166,179 @@ if (isset($_POST['back1']) or !isset($_POST['visit'])) {
 
  elseif (isset($_POST['create2']) or isset($_POST['back2']))  {
 	$nameTools = $langCreateCourse . " (" . $langCreateCourseStep." 2 " .$langCreateCourseStep2 . " 3 )";
-	$tool_content .= "
-    <table width=\"99%\" align='left' class='FormData'>
-    <tbody>
-    <tr>
-      <th width=\"220\">&nbsp;</th>
-      <td><b>$langCreateCourseStep2Title</b></td>
-    </tr>
-    <tr>
-      <th class='left'>$langDescrInfo&nbsp;:</th>
-      <td>
-        <table class='xinha_editor'>
-        <tr>
-          <td><textarea id='xinha' name='description' wrap=\"soft\">$description</textarea></td>
-        </tr>
-        </table>
-      </td>
-    </tr>
-    <tr>
-      <th class='left'>$langCourseKeywords&nbsp;</th>
-      <td><textarea name='course_keywords' cols='85' rows='3' class='FormData_InputText'>$course_keywords</textarea></td>
-    </tr>
-    <tr>
-      <th class='left' width=\"160\">$langCourseAddon&nbsp;</th>
-      <td><textarea name='course_addon' cols='85' rows='5' class='FormData_InputText'>$course_addon</textarea></td>
-    </tr>
-    <tr>
-       <th>&nbsp;</th>
-       <td><input type='submit' name='back1' value='< $langPreviousStep ' />&nbsp;<input type='submit' name='create3' value='$langNextStep >' /></td>
-    </tbody>
-    </table>
-    <p align='right'><small>$langFieldsOptionalNote</small></p>
-    <br />";
+	$tool_content .= "<table width=\"99%\" align='left' class='FormData'>
+	<tbody>
+	<tr>
+	<th width=\"220\">&nbsp;</th>
+	<td><b>$langCreateCourseStep2Title</b></td>
+	</tr>
+	<tr>
+	<th class='left'>$langDescrInfo&nbsp;:</th>
+	<td>
+	<table class='xinha_editor'>
+	<tr>
+	<td><textarea id='xinha' name='description' wrap=\"soft\">$description</textarea></td>
+	</tr>
+	</table>
+	</td>
+	</tr>
+	<tr>
+	<th class='left'>$langCourseKeywords&nbsp;</th>
+	<td><textarea name='course_keywords' cols='85' rows='3' class='FormData_InputText'>$course_keywords</textarea></td>
+	</tr>
+	<tr>
+	<th class='left' width=\"160\">$langCourseAddon&nbsp;</th>
+	<td><textarea name='course_addon' cols='85' rows='5' class='FormData_InputText'>$course_addon</textarea></td>
+	</tr>
+	<tr>
+	<th>&nbsp;</th>
+	<td><input type='submit' name='back1' value='< $langPreviousStep ' />&nbsp;<input type='submit' name='create3' value='$langNextStep >' /></td>
+	</tbody>
+	</table>
+	<p align='right'><small>$langFieldsOptionalNote</small></p>
+	<br />";
 
 }  elseif (isset($_POST['create3']) or isset($_POST['back2'])) {
 	$nameTools = $langCreateCourse . " (" . $langCreateCourseStep." 3 " .$langCreateCourseStep2 . " 3 )" ;
-    $tool_content .= "
-    <table width=\"99%\" align='left' class='FormData'>
-    <tbody>
-    <tr>
-      <th width=\"220\">&nbsp;</th>
-      <td colspan='2'><b>$langCreateCourseStep3Title</b></td>
-    </tr>
-    <tr>
-      <th class='left' width=\"160\" rowspan='2'>$langAccess<br /></th>
-      <td colspan='2'><br />$langAvailableTypes</td>
-    </tr>
-    <tr>
-      <td colspan='2'>
-      <table>
-      <tr>
-         <td width='30'><img src=\"../../template/classic/img/OpenCourse.gif\" alt=\"".$m['legopen']."\" title=\"".$m['legopen']."\" width=\"16\" height=\"16\"></td>
-         <td width='200'>".$m['legopen']."</td>
-         <td width='5' ><input name=\"formvisible\" type=\"radio\" value=\"2\" checked=\"checked\" /></td>
-         <td width='325'><p align='right'><small>$langPublic</small></p></td>
-      </tr>
-      <tr>
-         <td width='30'><img src=\"../../template/classic/img/Registration.gif\" alt=\"".$m['legrestricted']."\" title=\"".$m['legrestricted']."\" width=\"16\" height=\"16\"></td>
-         <td width='200'>".$m['legrestricted']."</td>
-         <td width='5'><input name=\"formvisible\" type=\"radio\" value=\"1\" /></td>
-         <td width='325'><p align='right'><small>$langPrivOpen</small></p></td>
-      </tr>
-      <tr>
-         <td width='30'><img src=\"../../template/classic/img/ClosedCourse.gif\" alt=\"".$m['legclosed']."\" title=\"".$m['legclosed']."\" width=\"16\" height=\"16\"></td>
-         <td width='200'>".$m['legclosed']."</td>
-         <td width='5'><input name=\"formvisible\" type=\"radio\" value=\"0\" /></td>
-         <td width='325'><p align='right'><small>$langPrivate</small></p></td>
-      </tr>
-      </table>
-      <br />
-      </td>
-    </tr>
-    <tr>
-      <th class='left' rowspan='2'>$langModules</th>
-      <td colspan='2'><br />$langSubsystems</td>
-    </tr>
-      <td colspan='2'>
-      <table>
-      <tr>
-        <td width='30' ><img src=\"../../template/classic/img/calendar_on.gif\" alt=\"\" height=\"16\" width=\"16\"></td>
-        <td width='200'>$langAgenda</td>
-        <td width='30' ><input name=\"subsystems[]\" type=\"checkbox\" value=\"1\" checked=\"checked\" /></td>
-        <th width='2' >&nbsp;</th>
-        <td width='30' >&nbsp;<img src=\"../../template/classic/img/dropbox_on.gif\" alt=\"\" height=\"16\" width=\"16\"></td>
-        <td width='200'>$langDropBox</td>
-        <td width='30' ><input type=\"checkbox\" name=\"subsystems[]\" value=\"15\" /></td>
-      </tr>
-      <tr>
-        <td><img src=\"../../template/classic/img/links_on.gif\" alt=\"\" height=\"16\" width=\"16\"></td>
-        <td>$langLinks</td>
-        <td><input name=\"subsystems[]\" type=\"checkbox\" value=\"2\" checked=\"checked\" /></td>
-        <th>&nbsp;</th>
-        <td>&nbsp;<img src=\"../../template/classic/img/groups_on.gif\" alt=\"\" height=\"16\" width=\"16\"></td>
-        <td>$langGroups</td>
-        <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"16\" /></td>
-      </tr>
-      <tr>
-        <td><img src=\"../../template/classic/img/docs_on.gif\" alt=\"\" height=\"16\" width=\"16\"></td>
-        <td>$langDoc</td>
-        <td><input name=\"subsystems[]\" type=\"checkbox\" value=\"3\" checked=\"checked\" /></td>
-        <th>&nbsp;</th>
-        <td>&nbsp;<img src=\"../../template/classic/img/chat_on.gif\" alt=\"\" height=\"16\" width=\"16\"></td>
-        <td>$langConference</td>
-        <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"19\" /></td>
-      </tr>
-      <tr>
-        <td><img src=\"../../template/classic/img/video_on.gif\" alt=\"\" height=\"16\" width=\"16\"></td>
-        <td>$langVideo</td>
-        <td><input name=\"subsystems[]\" type=\"checkbox\" value=\"4\"  /></td>
-        <th>&nbsp;</th>
-        <td>&nbsp;<img src=\"../../template/classic/img/description_on.gif\" alt=\"\" height=\"16\" width=\"16\"></td>
-        <td>$langCourseDescription</td>
-        <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"20\" checked=\"checked\" /></td>
-      </tr>
-      <tr>
-      <td><img src=\"../../template/classic/img/assignments_on.gif\" alt=\"\" height=\"16\" width=\"16\"></td>
-        <td>$langWorks</td>
-        <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"5\" /></td>
-        <th>&nbsp;</th>
-        <td>&nbsp;<img src=\"../../template/classic/img/questionnaire_on.gif\" alt=\"\" height=\"16\" width=\"16\"></td>
-        <td>$langQuestionnaire</td>
-        <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"21\" /></td>
-      </tr>
-      <tr>
-        <td><img src=\"../../template/classic/img/announcements_on.gif\" alt=\"\" height=\"16\" width=\"16\"></td>
-        <td>$langAnnouncements</td>
-        <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"7\" checked=\"checked\"/></td>
-        <th>&nbsp;</th>
-        <td>&nbsp;<img src=\"../../template/classic/img/lp_on.gif\" alt=\"\" height=\"16\" width=\"16\"></td>
-        <td>$langLearnPath</td>
-        <td><input type=\"checkbox\" name=\"subsystems[]\"  value=\"23\" /></td>
-      </tr>
-      <tr>
-        <td><img src=\"../../template/classic/img/forum_on.gif\" alt=\"\" height=\"16\" width=\"16\"></td>
-        <td>$langForums</td>
-        <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"9\" /></td>
-        <th>&nbsp;</th>
-        <td>&nbsp;<img src=\"../../template/classic/img/wiki_on.gif\" alt=\"\" height=\"16\" width=\"16\"></td>
-        <td>$langWiki</td>
-        <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"26\" /></td>
-      </tr>
-      <tr>
-        <td><img src=\"../../template/classic/img/exercise_on.gif\" alt=\"\" height=\"16\" width=\"16\"></td>
-        <td>$langExercices</td>
-        <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"10\" /></td>
-        <th>&nbsp;</th>
-        <td>&nbsp;</td>
-        <td>&nbsp;</td>
-        <td>&nbsp;</td>
-      </tr>
-      </table><br />
-      </td>
-    </tr>
-    <tr>
-      <th>&nbsp;</th>
-      <td width='400'><input type='submit' name='back2' value='< $langPreviousStep '>&nbsp;<input type='submit' name='create_course' value=\"$langFinalize\"></td>
-      <td><p align='right'><small>$langFieldsOptionalNote</small></p></td>
-    </tr>
-    </tbody>
-    </table><br />";
+	@$tool_content .= "
+	<table width=\"99%\" align='left' class='FormData'>
+	<tbody>
+	<tr>
+	<th width=\"220\">&nbsp;</th>
+	<td colspan='2'><b>$langCreateCourseStep3Title</b></td>
+	</tr>
+	<tr>
+	<th class='left' width=\"160\" rowspan='2'>$langAccess<br /></th>
+	<td colspan='2'><br />$langAvailableTypes</td>
+	</tr>
+	<tr>
+	<td colspan='2'>
+	<table>
+	<tr>
+	<td width='30'><img src=\"../../template/classic/img/OpenCourse.gif\" title=\"".$m['legopen']."\" width=\"16\" height=\"16\"></td>
+	<td width='200'>".$m['legopen']."</td>
+	<td width='5' ><input name=\"formvisible\" type=\"radio\" value=\"2\" checked=\"checked\" /></td>
+	<td width='325'><p align='right'><small>$langPublic</small></p></td>
+	</tr>
+	<tr>
+	<td width='30'><img src=\"../../template/classic/img/Registration.gif\" title=\"".$m['legrestricted']."\" width=\"16\" height=\"16\"></td>
+	<td width='200'>".$m['legrestricted']."</td>
+	<td width='5'><input name=\"formvisible\" type=\"radio\" value=\"1\" /></td>
+	<td width='325'><p align='right'><small>$langPrivOpen</small></p></td></tr>
+	<tr>
+	<td colspan='4' class='right'><input type='checkbox' name='checkpassword' ".$checkpasssel.">&nbsp;$langOptPassword
+	<input type='text' name='password' value='".q($password)."' class='FormData_InputText'>
+	</td>
+	</tr>
+	<tr>
+	<td width='30'><img src=\"../../template/classic/img/ClosedCourse.gif\" title=\"".$m['legclosed']."\" width=\"16\" height=\"16\"></td>
+	<td width='200'>".$m['legclosed']."</td>
+	<td width='5'><input name=\"formvisible\" type=\"radio\" value=\"0\" /></td>
+	<td width='325'><p align='right'><small>$langPrivate</small></p></td>
+	</tr>
+	</table>
+	<br />
+	</td>
+	</tr>
+	<tr>
+	<th class='left' rowspan='2'>$langModules</th>
+	<td colspan='2'><br />$langSubsystems</td>
+	</tr>
+	<td colspan='2'>
+	<table>
+	<tr>
+	<td width='30' ><img src=\"../../template/classic/img/calendar_on.gif\" alt=\"\" height=\"16\" width=\"16\"></td>
+	<td width='200'>$langAgenda</td>
+	<td width='30' ><input name=\"subsystems[]\" type=\"checkbox\" value=\"1\" checked=\"checked\" /></td>
+	<th width='2' >&nbsp;</th>
+	<td width='30' >&nbsp;<img src=\"../../template/classic/img/dropbox_on.gif\" alt=\"\" height=\"16\" width=\"16\"></td>
+	<td width='200'>$langDropBox</td>
+	<td width='30' ><input type=\"checkbox\" name=\"subsystems[]\" value=\"15\" /></td>
+	</tr>
+	<tr>
+	<td><img src=\"../../template/classic/img/links_on.gif\" alt=\"\" height=\"16\" width=\"16\"></td>
+	<td>$langLinks</td>
+	<td><input name=\"subsystems[]\" type=\"checkbox\" value=\"2\" checked=\"checked\" /></td>
+	<th>&nbsp;</th>
+	<td>&nbsp;<img src=\"../../template/classic/img/groups_on.gif\" alt=\"\" height=\"16\" width=\"16\"></td>
+	<td>$langGroups</td>
+	<td><input type=\"checkbox\" name=\"subsystems[]\" value=\"16\" /></td>
+	</tr>
+	<tr>
+	<td><img src=\"../../template/classic/img/docs_on.gif\" alt=\"\" height=\"16\" width=\"16\"></td>
+	<td>$langDoc</td>
+	<td><input name=\"subsystems[]\" type=\"checkbox\" value=\"3\" checked=\"checked\" /></td>
+	<th>&nbsp;</th>
+	<td>&nbsp;<img src=\"../../template/classic/img/chat_on.gif\" alt=\"\" height=\"16\" width=\"16\"></td>
+	<td>$langConference</td>
+	<td><input type=\"checkbox\" name=\"subsystems[]\" value=\"19\" /></td>
+	</tr>
+	<tr>
+	<td><img src=\"../../template/classic/img/video_on.gif\" alt=\"\" height=\"16\" width=\"16\"></td>
+	<td>$langVideo</td>
+	<td><input name=\"subsystems[]\" type=\"checkbox\" value=\"4\"  /></td>
+	<th>&nbsp;</th>
+	<td>&nbsp;<img src=\"../../template/classic/img/description_on.gif\" alt=\"\" height=\"16\" width=\"16\"></td>
+	<td>$langCourseDescription</td>
+	<td><input type=\"checkbox\" name=\"subsystems[]\" value=\"20\" checked=\"checked\" /></td>
+	</tr>
+	<tr>
+	<td><img src=\"../../template/classic/img/assignments_on.gif\" alt=\"\" height=\"16\" width=\"16\"></td>
+	<td>$langWorks</td>
+	<td><input type=\"checkbox\" name=\"subsystems[]\" value=\"5\" /></td>
+	<th>&nbsp;</th>
+	<td>&nbsp;<img src=\"../../template/classic/img/questionnaire_on.gif\" alt=\"\" height=\"16\" width=\"16\"></td>
+	<td>$langQuestionnaire</td>
+	<td><input type=\"checkbox\" name=\"subsystems[]\" value=\"21\" /></td>
+	</tr>
+	<tr>
+	<td><img src=\"../../template/classic/img/announcements_on.gif\" alt=\"\" height=\"16\" width=\"16\"></td>
+	<td>$langAnnouncements</td>
+	<td><input type=\"checkbox\" name=\"subsystems[]\" value=\"7\" checked=\"checked\"/></td>
+	<th>&nbsp;</th>
+	<td>&nbsp;<img src=\"../../template/classic/img/lp_on.gif\" alt=\"\" height=\"16\" width=\"16\"></td>
+	<td>$langLearnPath</td>
+	<td><input type=\"checkbox\" name=\"subsystems[]\"  value=\"23\" /></td>
+	</tr>
+	<tr>
+	<td><img src=\"../../template/classic/img/forum_on.gif\" alt=\"\" height=\"16\" width=\"16\"></td>
+	<td>$langForums</td>
+	<td><input type=\"checkbox\" name=\"subsystems[]\" value=\"9\" /></td>
+	<th>&nbsp;</th>
+	<td>&nbsp;<img src=\"../../template/classic/img/wiki_on.gif\" alt=\"\" height=\"16\" width=\"16\"></td>
+	<td>$langWiki</td>
+	<td><input type=\"checkbox\" name=\"subsystems[]\" value=\"26\" /></td>
+	</tr>
+	<tr>
+	<td><img src=\"../../template/classic/img/exercise_on.gif\" alt=\"\" height=\"16\" width=\"16\"></td>
+	<td>$langExercices</td>
+	<td><input type=\"checkbox\" name=\"subsystems[]\" value=\"10\" /></td>
+	<th>&nbsp;</th>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+	</tr>
+	</table><br />
+	</td>
+	</tr>
+	<tr>
+	<th>&nbsp;</th>
+	<td width='400'><input type='submit' name='back2' value='< $langPreviousStep '>&nbsp;
+	<input type='submit' name='create_course' value=\"$langFinalize\"></td>
+	<td><p align='right'><small>$langFieldsOptionalNote</small></p></td>
+	</tr>
+	</tbody>
+	</table><br />";
 } // end of create3
 
 // create the course and the course database
 if (isset($_POST['create_course'])) {
 
 	$nameTools = $langCourseCreate;
-        $facid = intval($faculte);
-        $facname = find_faculty_by_id($facid);
+	$facid = intval($faculte);
+	$facname = find_faculty_by_id($facid);
 	// find new code
+
         $repertoire = new_code($facid);
         $language = langcode_to_name($_POST['languageCourse']);
         include("../lang/$language/common.inc.php");
@@ -412,18 +413,16 @@ if (isset($_POST['create_course'])) {
                 ?>";
 
                 fwrite($fd, "$string");
-                $status[$repertoire]=1;
-                session_register("status");
-                
+                $status[$repertoire] = 1;
+                $_SESSION['status'] = $status;
+
                 // ----------- Import from BetaCMS Bridge -----------
                 $tool_content .= doImportFromBetaCMSAfterCourseCreation($repertoire, $mysqlMainDb, $webDir);
                 // --------------------------------------------------
-
                 $tool_content .= "
                 <p class=\"success_small\">$langJustCreated: &nbsp;<b>$intitule</b></p>
                 <p><small>$langEnterMetadata</small></p><br />
-                <p align='center'>&nbsp;<a href='../../courses/$repertoire/index.php' class=mainpage>$langEnter</a>&nbsp;</p>
-";
+                <p align='center'>&nbsp;<a href='../../courses/$repertoire/index.php' class=mainpage>$langEnter</a>&nbsp;</p>";
 } // end of submit
 
 $tool_content .= "</form>";
