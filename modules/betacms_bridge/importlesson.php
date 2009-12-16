@@ -53,8 +53,9 @@ if (isset($_GET['id']) && isset($_SESSION[BETACMSREPO])) {
 	putContentObjectInSession($co);
 	
 	// redirect to create course
-	$tool_content .= "Please proceed to create course module to import the Lesson. If your browser doesn't 
-		automatically redirect you, press <a href='../create_course/create_course.php'>here...</a>";
+	$tool_content .= $GLOBALS['langBetaCMSRedirectAfterImport'].
+		" <a href='../create_course/create_course.php'>".
+		$GLOBALS['langBetaCMSRedirectHere']."...</a>";
 	
 	$redirect = $urlServer;
 	if ( !substr( $urlServer, strlen( $urlServer ) - strlen( "/" ) ) === "/" ) {
@@ -101,10 +102,10 @@ function putContentObjectInSession($obj) {
 	$_SESSION[IMPORT_INTITULE] = $obj[KEY_TITLE];
 	$_SESSION[IMPORT_DESCRIPTION] = $obj[KEY_DESCRIPTION];
 	$_SESSION[IMPORT_COURSE_KEYWORDS] = $obj[KEY_KEYWORDS];
-	$_SESSION[IMPORT_COURSE_ADDON] = "Copyright: " .$obj[KEY_COPYRIGHT] ." "
-		."Authors: " .$obj[KEY_AUTHORS] ." "
-		."Project: " .$obj[KEY_PROJECT] ." "
-		."Comments: " .$obj[KEY_COMMENTS];
+	$_SESSION[IMPORT_COURSE_ADDON] = $GLOBALS['langBetaCMSCopyright'].": " .$obj[KEY_COPYRIGHT] ." "
+		.$GLOBALS['langBetaCMSAuthors'].": " .$obj[KEY_AUTHORS] ." "
+		.$GLOBALS['langBetaCMSProject'].": " .$obj[KEY_PROJECT] ." "
+		.$GLOBALS['langBetaCMSComments'].": " .$obj[KEY_COMMENTS];
 	$_SESSION[IMPORT_UNITS] = $obj[KEY_UNITS];
 	$_SESSION[IMPORT_UNITS_SIZE] = $obj[KEY_UNITS_SIZE];
 	$_SESSION[IMPORT_SCORMFILES] = $obj[KEY_SCORMFILES];

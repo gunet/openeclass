@@ -67,11 +67,11 @@ else {
 		$flag = putLesson($_SESSION[BETACMSREPO], $lesson);
 		
 		if ($flag == true) {
-			$tool_content .= "<p>"."Lesson created successfully!"."</p>
+			$tool_content .= "<p>".$GLOBALS['langBetaCMSLessonCreatedOK']."</p>
 			<br/><br/><p align=\"right\"><a href='browserepo.php'>$langBack</a></p>";
 		}
 		else {
-			$tool_content .= "<p class=\"caution_small\">"."Failure while creating lesson"."</p>
+			$tool_content .= "<p class=\"caution_small\">".$GLOBALS['langBetaCMSLessonCreateFail']."</p>
 			<br/><br/><p align=\"right\"><a href='createlesson.php'>$langAgain</a></p>";
 		}
 	}
@@ -89,34 +89,34 @@ function repoForm() {
 	<table width='99%' align='left' class='FormData'>
 	<tbody><tr>
 	<th width='220'>&nbsp;</th>
-	<td><b>Create new Lesson on BetaCMS</b></td>
+	<td><b>".$GLOBALS['langBetaCMSCreateNewLesson']."</b></td>
 	</tr>
 	<tr>
-	<th class='left'><b>"."Lesson Title"."</b></th>
+	<th class='left'><b>".$GLOBALS['langBetaCMSTitle']."</b></th>
 	<td><input class='FormData_InputText' type='text' name='".KEY_TITLE."'>&nbsp;(*)</td>
 	</tr>
 	<tr>
-	<th class='left'><b>"."Lesson Description"."</b></th>
+	<th class='left'><b>".$GLOBALS['langBetaCMSDescription']."</b></th>
 	<td><input class='FormData_InputText' type='text' name='".KEY_DESCRIPTION."'>&nbsp;(*)</td>
 	</tr>
 	<tr>
-	<th class='left'><b>"."Lesson Keywords"."</b></th>
+	<th class='left'><b>".$GLOBALS['langBetaCMSKeywords']."</b></th>
 	<td><input class='FormData_InputText' type='text' name='".KEY_KEYWORDS."'>&nbsp;(*)</td>
 	</tr>
 	<tr>
-	<th class='left'><b>"."Lesson Copyright"."</b></th>
+	<th class='left'><b>".$GLOBALS['langBetaCMSCopyright']."</b></th>
 	<td><input class='FormData_InputText' type='text' name='".KEY_COPYRIGHT."'>&nbsp;</td>
 	</tr>
 	<tr>
-	<th class='left'><b>"."Lesson Authors"."</b></th>
+	<th class='left'><b>".$GLOBALS['langBetaCMSAuthors']."</b></th>
 	<td><input class='FormData_InputText' type='text' name='".KEY_AUTHORS."'>&nbsp;(*)</td>
 	</tr>
 	<tr>
-	<th class='left'><b>"."Lesson Project"."</b></th>
+	<th class='left'><b>".$GLOBALS['langBetaCMSProject']."</b></th>
 	<td><input class='FormData_InputText' type='text' name='".KEY_PROJECT."'>&nbsp;</td>
 	</tr>
 	<tr>
-	<th class='left'><b>"."Lesson Comments"."</b></th>
+	<th class='left'><b>".$GLOBALS['langBetaCMSComments']."</b></th>
 	<td><input class='FormData_InputText' type='text' name='".KEY_COMMENTS."'>&nbsp;</td>
 	</tr>
 	<tr>

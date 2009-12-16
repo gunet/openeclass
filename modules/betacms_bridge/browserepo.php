@@ -45,7 +45,7 @@ session_start();
 
 if (!ini_get('allow_url_include')) {
 	$tool_content .= "<p class=\"caution_small\">".
-		"You need to enable the allow_url_include php ini setting in order to get the BetaCMS Bridge to work".
+		$GLOBALS['langNeedAllowUrlInclude'].
 		"</p>";
 	draw($tool_content,3);
 	die();
@@ -53,7 +53,7 @@ if (!ini_get('allow_url_include')) {
 
 if (!ini_get('allow_url_fopen')) {
 	$tool_content .= "<p class=\"caution_small\">".
-		"You need to enable the allow_url_fopen php ini setting in order to get the BetaCMS Bridge to work".
+		$GLOBALS['langNeedAllowUrlFopen'].
 		"</p>";
 	draw($tool_content,3);
 	die();
@@ -97,7 +97,7 @@ else {
 		
 		if (!checkConnectivityToRepo($repo)) {
 			$tool_content .= "<p class=\"caution_small\">".
-				"Failure: couldn't connect to remote Bridge".
+				$GLOBALS['langFailConnectBetaCMSBridge'].
 				"</p>".
 				"<br/><br/><p align=\"right\"><a href='$_SERVER[PHP_SELF]'>$langAgain</a></p>";
 			draw($tool_content,3);
@@ -111,16 +111,16 @@ else {
 		// Construct course list table
 		$tool_content .= "<table class=\"FormData\" width=\"99%\" align=\"left\">
 			<tbody><tr>
-			<td class=\"odd\" colspan='2'><div align=\"left\"><a href=\"browserepo.php?logout\">"."Logout from BetaCMS"."</a></div></td>
-			<td class=\"odd\" colspan='4'><div align=\"right\"><a href=\"createlesson.php\">"."Create new Lesson"."</a></div></td>
+			<td class=\"odd\" colspan='2'><div align=\"left\"><a href=\"browserepo.php?logout\">".$GLOBALS['langBetaCMSLogout']."</a></div></td>
+			<td class=\"odd\" colspan='4'><div align=\"right\"><a href=\"createlesson.php\">".$GLOBALS['langBetaCMSCreateNewLesson']."</a></div></td>
 			</tr>
 			<tr>
-			<th scope=\"col\">"."title"."</th>
-			<th scope=\"col\">"."keywords"."</th>
-			<th scope=\"col\">"."copyright"."</th>
-			<th scope=\"col\">"."authors"."</th>
-			<th scope=\"col\">"."project"."</th>
-			<th scope=\"col\">"."actions"."</th>
+			<th scope=\"col\">".$GLOBALS['langBetaCMSTitle']."</th>
+			<th scope=\"col\">".$GLOBALS['langBetaCMSKeywords']."</th>
+			<th scope=\"col\">".$GLOBALS['langBetaCMSCopyright']."</th>
+			<th scope=\"col\">".$GLOBALS['langBetaCMSAuthors']."</th>
+			<th scope=\"col\">".$GLOBALS['langBetaCMSProject']."</th>
+			<th scope=\"col\">".$GLOBALS['langBetaCMSActions']."</th>
 			</tr>";
 		
 		$k = 0;
@@ -166,30 +166,30 @@ function repoForm() {
 	<table width='99%' align='left' class='FormData'>
 	<tbody><tr>
 	<th width='220'>&nbsp;</th>
-	<td><b>BetaCMS Repository and PHP Bridge Properties</b></td>
+	<td><b>".$GLOBALS['langBetaCMSLoginProperties']."</b></td>
 	</tr>
 	<tr>
-	<th class='left'><b>"."Bridge Host"."</b></th>
+	<th class='left'><b>".$GLOBALS['langBetaCMSBridgeHost']."</b></th>
 	<td><input class='FormData_InputText' type='text' name='".BRIDGE_HOST."' value='localhost:8080'>&nbsp;(*)</td>
 	</tr>
 	<tr>
-	<th class='left'><b>"."Bridge Context"."</b></th>
+	<th class='left'><b>".$GLOBALS['langBetaCMSContext']."</b></th>
 	<td><input class='FormData_InputText' type='text' name='".BRIDGE_CONTEXT."' value='JavaBridgeTemplate5541'>&nbsp;(*)</td>
 	</tr>
 	<tr>
-	<th class='left'><b>"."BetaCMS Host"."</b></th>
+	<th class='left'><b>".$GLOBALS['langBetaCMSHost']."</b></th>
 	<td><input class='FormData_InputText' type='text' name='".BCMS_HOST."' value='localhost'>&nbsp;(*)</td>
 	</tr>
 	<tr>
-	<th class='left'><b>"."BetaCMS Repository"."</b></th>
+	<th class='left'><b>".$GLOBALS['langBetaCMSRepository']."</b></th>
 	<td><input class='FormData_InputText' type='text' name='".BCMS_REPO."' value='altsolrepo'>&nbsp;(*)</b></td>
 	</tr>
 	<tr>
-	<th class='left'><b>"."BetaCMS Username"."</b></th>
+	<th class='left'><b>".$GLOBALS['langBetaCMSUsername']."</b></th>
 	<td><input class='FormData_InputText' type='text' name='".BCMS_USER."' value='SYSTEM'>&nbsp;(*)</b></td>
 	</tr>
 	<tr>
-	<th class='left'><b>"."BetaCMS Password"."</b></th>
+	<th class='left'><b>".$GLOBALS['langBetaCMSPassword']."</b></th>
 	<td><input class='FormData_InputText' type='password' name='".BCMS_PASS."' value='betaconcept'>&nbsp;(*)</b></td>
 	</tr>
 	<tr>

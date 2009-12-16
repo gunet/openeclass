@@ -71,72 +71,72 @@ function objectTable($obj) {
 	$ret = "<table width='99%' align='left' class='FormData'>
 	<tbody><tr>
 	<th width='220'>&nbsp;</th>
-	<td><b>eClass Lesson Object View</b></td>
+	<td><b>".$GLOBALS['langBetaCMSEclassLessonObjectView']."</b></td>
 	</tr>
 	<tr>
-	<th class='left'><b>"."id"."</b></th>
+	<th class='left'><b>".$GLOBALS['langBetaCMSId']."</b></th>
 	<td>".$obj[KEY_ID]."</td>
 	</tr>
 	<tr>
-	<th class='left'><b>"."title"."</b></th>
+	<th class='left'><b>".$GLOBALS['langBetaCMSTitle']."</b></th>
 	<td>".$obj[KEY_TITLE]."</td>
 	</tr>
 	<tr>
-	<th class='left'><b>"."description"."</b></th>
+	<th class='left'><b>".$GLOBALS['langBetaCMSDescription']."</b></th>
 	<td>".$obj[KEY_DESCRIPTION]."</td>
 	</tr>
 	<tr>
-	<th class='left'><b>"."keywords"."</b></th>
+	<th class='left'><b>".$GLOBALS['langBetaCMSKeywords']."</b></th>
 	<td>".$obj[KEY_KEYWORDS]."</td>
 	</tr>
 	<tr>
-	<th class='left'><b>"."copyright"."</b></th>
+	<th class='left'><b>".$GLOBALS['langBetaCMSCopyright']."</b></th>
 	<td>".$obj[KEY_COPYRIGHT]."</td>
 	</tr>
 	<tr>
-	<th class='left'><b>"."authors"."</b></th>
+	<th class='left'><b>".$GLOBALS['langBetaCMSAuthors']."</b></th>
 	<td>".$obj[KEY_AUTHORS]."</td>
 	</tr>
 	<tr>
-	<th class='left'><b>"."project"."</b></th>
+	<th class='left'><b>".$GLOBALS['langBetaCMSProject']."</b></th>
 	<td>".$obj[KEY_PROJECT]."</td>
 	</tr>
 	<tr>
-	<th class='left'><b>"."comments"."</b></th>
+	<th class='left'><b>".$GLOBALS['langBetaCMSComments']."</b></th>
 	<td>".$obj[KEY_COMMENTS]."</td>
 	</tr>
 	<tr>
 	<th width='220'>&nbsp;</th>
-	<td><b>Units (total number: ".$obj[KEY_UNITS_SIZE].")</b></td>
+	<td><b>".$GLOBALS['langBetaCMSUnits']." (".$GLOBALS['langBetaCMSTotalNumber'].": ".$obj[KEY_UNITS_SIZE].")</b></td>
 	</tr>";
 	
 	foreach ($obj[KEY_UNITS] as $key => $unit) {
 		$ret .= "<tr>
-			<th class='left'><b>"."title".$key."</b></th>
+			<th class='left'><b>".$GLOBALS['langBetaCMSUnitTitle'].$key."</b></th>
 			<td>".$unit[KEY_TITLE]."</td>
 			</tr>
 			<tr>
-			<th class='left'><b>"."description".$key."</b></th>
+			<th class='left'><b>".$GLOBALS['langBetaCMSUnitDescription'].$key."</b></th>
 			<td>".$unit[KEY_DESCRIPTION]."</td>
 			</tr>";
 	}
 	
 	$ret .= "<tr>
 	<th width='220'>&nbsp;</th>
-	<td><b>Scorm Files (total number: ".$obj[KEY_SCORMFILES_SIZE].")</b></td>
+	<td><b>".$GLOBALS['langBetaCMSScormFiles']." (".$GLOBALS['langBetaCMSTotalNumber'].": ".$obj[KEY_SCORMFILES_SIZE].")</b></td>
 	</tr>";
 	
 	foreach ($obj[KEY_SCORMFILES] as $key => $sco) {
 		$ret .= "<tr>
-			<th class='left'><b>"."Source Filename".$key."</b></th>
+			<th class='left'><b>".$GLOBALS['langBetaCMSSourceFilename'].$key."</b></th>
 			<td>".$sco[KEY_SOURCEFILENAME]."</td>
 			</tr>
 			<tr>
-			<th class='left'><b>"."Mime Type".$key."</b></th>
+			<th class='left'><b>".$GLOBALS['langBetaCMSMimeType'].$key."</b></th>
 			<td>".$sco[KEY_MIMETYPE]."</td>
 			</tr>
 			<tr>
-			<th class='left'><b>"."Calculated Size".$key."</b></th>
+			<th class='left'><b>".$GLOBALS['langBetaCMSCalculatedSize'].$key."</b></th>
 			<td>".$sco[KEY_CALCULATEDSIZE]."</td>
 			</tr>";
 	}
