@@ -10,6 +10,7 @@ if (isset($_SESSION['statut']) and $_SESSION['statut'] == 1) {
         unset($_SESSION['saved_statut']);
 }
 if (isset($_SESSION['dbname'])) {
+	$_SESSION['status'][$_SESSION['dbname']] = $_SESSION['statut'];
         header("Location: {$urlServer}courses/$_SESSION[dbname]/");
 } else {
         header('Location: ' . $urlServer);
