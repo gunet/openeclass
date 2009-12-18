@@ -194,7 +194,7 @@ hContent;
 		<th class='left'>$m[type]&nbsp;:</th>
 		<td>";
 
-      $tool_content .= selection(array('pre' => $m['pre'], 'post' => $m['post'], 'other' => $m['other']),'type', $type);
+      $tool_content .= selection(array('pre' => $langpre, 'post' => $langpost, 'other' => $langother),'type', $type);
       $tool_content .= "</td>
         <td>&nbsp;</td>
       </tr>

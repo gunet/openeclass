@@ -185,7 +185,7 @@ function course_details ($code, $lang, $title, $desc, $fac, $vis, $prof, $type) 
 		echo "<tr><td>$langLanguage:</td><td>".selection($languages, 'course_lang', $lang)."</td></tr>";
 		echo "<tr><td>$langTitle:</td><td><input type='text' name='course_title' value='$title' size='50'></td></tr>";
 		echo "<tr><td>$langCourseDescription:</td><td><input type='text' name='course_desc' value='".q($desc)."' size='50'></td></tr>";
-		echo "<tr><td>$langCourseFac:</td><td>".faculty_select($fac)."</td></tr>";
+		echo "<tr><td>$langFaculty:</td><td>".faculty_select($fac)."</td></tr>";
 		echo "<tr><td>$langCourseOldFac:</td><td>$fac</td></tr>";
 		echo "<tr><td>$langCourseVis:</td><td>".visibility_select($vis)."</td></tr>";
 		echo "<tr><td>$langTeacher:</td><td><input type='text' name='course_prof' value='$prof' size='50'></td></tr>";

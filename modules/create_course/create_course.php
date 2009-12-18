@@ -127,7 +127,7 @@ if (isset($_POST['back1']) or !isset($_POST['visit'])) {
 	<td><small>$langEx</small></td>
 	</tr>
 	<tr>
-	<th class='left'>$langFac&nbsp;:</th>
+	<th class='left'>$langFaculty&nbsp;:</th>
 	<td>";
 	list($homefac) = mysql_fetch_row(db_query("SELECT department FROM user WHERE user_id=$uid"));
 	$facs = db_query("SELECT id, name FROM faculte order by id");
@@ -144,7 +144,7 @@ if (isset($_POST['back1']) or !isset($_POST['visit'])) {
 	<tr>
 	<th class='left'>$m[type]&nbsp;:</th>
 	<td>";
-	@$tool_content .= " ".selection(array('pre' => $m['pre'], 'post' => $m['post'], 'other' => $m['other']), 'type', $type)." ";
+	$tool_content .= " ".selection(array('pre' => $langpre, 'post' => $langpost, 'other' => $langother), 'type', $type)." ";
 	$tool_content .= "
 	</td>
 	<td>&nbsp;</td></tr>

@@ -234,15 +234,15 @@ $cunits_content .= "\n  <p>$cu[comments]</p>";
 
 switch ($type){
 	case 'pre': { //pre
-		$lessonType = $m['pre'];
+		$lessonType = $langpre;
 		break;
 	}
 	case 'post': {//post
-		$lessonType = $m['post'];
+		$lessonType = $langpost;
 		break;
 	}
 	case 'other': { //other
-		$lessonType = $m['other'];
+		$lessonType = $langother;
 		break;
 	}
 }
