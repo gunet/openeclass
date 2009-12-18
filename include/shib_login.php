@@ -31,9 +31,14 @@ if (!defined('INDEX_START')) {
 $shib_uname = $_SESSION['shib_uname'];
 $shib_email = $_SESSION['shib_email'];
 $shib_nom = $_SESSION['shib_nom'];
-if (strpos($shib_nom,';')) {
-	$temp = explode(';',$shib_nom);
-	$shib_nom_en = $temp[0];
+$r = mysql_fetch_array(db_query("SELECT auth_settings FROM auth WHERE auth_id = 6"));
+$shibsettings = $r['auth_settings'];
+if ($shibsettings != 'shibboleth' and $shibsettings != "") {
+	$shibseparator = $shibsettings;
+}
+if (strpos($shib_nom, $shibseparator)) {
+	$temp = explode($shibseparator, $shib_nom);
+	$shib_prenom = $temp[0];
 	$shib_nom = $temp[1];
 }
 $sqlLogin= "SELECT user_id, nom, username, password, prenom, statut, email, iduser is_admin, perso, lang
@@ -44,7 +49,7 @@ $r = db_query($sqlLogin);
 if (mysql_num_rows($r) > 0) { // if shibboleth user found 
 	while ($myrow = mysql_fetch_array($r)) {
 		// update user information
-		db_query("UPDATE user SET nom = '$shib_nom', prenom = '$shib_nom', email = '$shib_email' 
+		db_query("UPDATE user SET nom = '$shib_nom', prenom = '$shib_prenom', email = '$shib_email' 
 			WHERE username = '$shib_uname'");
 
 		$r2 = db_query($sqlLogin);
@@ -62,11 +67,12 @@ if (mysql_num_rows($r) > 0) { // if shibboleth user found
 		}
 	}	
 } else { // else create him
-	db_query("INSERT INTO user SET nom='$shib_nom', prenom='$shib_nom', password='shibboleth', 
+	db_query("INSERT INTO user SET nom='$shib_nom', prenom='$shib_prenom', password='shibboleth', 
 		username='$shib_uname',email='$shib_email', statut=5, lang='el'");
 	$uid = mysql_insert_id();
 	$userPerso = 'yes';
-	$prenom = $nom = $shib_nom;
+	$nom = $shib_nom;
+	$prenom = $shib_prenom;
 	$language = $_SESSION['langswitch'] = langcode_to_name('el');
 }
 $_SESSION['uid'] = $uid;
