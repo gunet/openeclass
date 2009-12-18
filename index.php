@@ -173,6 +173,9 @@ if (isset($_SESSION['uid'])) {
 if (isset($language)) {
 	include("./modules/lang/$language/common.inc.php");
 	include("./modules/lang/$language/messages.inc.php");
+	if (file_exists("${webDir}/config/$language.inc.php")) { // include extra messages if any
+		include "${webDir}/config/$language.inc.php";
+	}
 }
 $nameTools = $langWelcomeToEclass;
 	

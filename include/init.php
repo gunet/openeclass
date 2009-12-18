@@ -41,7 +41,7 @@ if(function_exists("date_default_timezone_set")) { // only valid if PHP > 5.1
 //Modify the relative path prefix according to the state of the system
 //0: logged in/out screen
 //1: user home
-//2: used by abou, copyright, contact, manuals, upgrade
+//2: used by about, copyright, contact, manuals, upgrade
 //else: everything else (modules)
 //(Author: Evelthon Prodromou)
 if (isset($path2add) && $path2add == 0){
@@ -103,8 +103,11 @@ if (mysql_version()) mysql_query("SET NAMES utf8");
 mysql_select_db($mysqlMainDb, $db);
 
 // Include messages
-include("$webDir/modules/lang/$language/common.inc.php");
-include("$webDir/modules/lang/$language/messages.inc.php");
+include("${webDir}modules/lang/$language/common.inc.php");
+include("${webDir}modules/lang/$language/messages.inc.php");
+if (file_exists("${webDir}/config/$language.inc.php")) { // include extra messages if any
+	include "${webDir}/config/$language.inc.php";
+}
 
 // Make sure that the $uid variable isn't faked
 if (isset($_SESSION['uid'])) {
@@ -223,9 +226,12 @@ if (isset($require_current_course) and $require_current_course) {
 		// include more messages
 		if ($language != $languageInterface) {
 			  $language = $languageInterface ;
-		// Include messages
-		include("$webDir/modules/lang/$language/common.inc.php");
-		include("$webDir/modules/lang/$language/messages.inc.php");
+			// Include messages
+			include("$webDir/modules/lang/$language/common.inc.php");
+			include("$webDir/modules/lang/$language/messages.inc.php");
+			if (file_exists("${webDir}/config/$language.inc.php")) { // include extra messages if any
+				include "${webDir}/config/$language.inc.php";
+			}
 		}
 	}
 }
