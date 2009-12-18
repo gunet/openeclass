@@ -142,7 +142,7 @@ $tool_content .= "
    <td><input type='text' name='phone' size='50' value='".q($info['phone'])."'</td>
   </tr>";
 	$tool_content .= "<tr>
-    <th class='left'>$langDepartment:</th>
+    <th class='left'>$langFaculty:</th>
     <td>";
 		if(!empty($info[6])) {
 			$department_select_box = list_departments($info['department']);

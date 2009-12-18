@@ -138,7 +138,7 @@ $tool_content .= "<table class=\"FormData\" width=\"99%\" align=\"left\">
 	<tr>
 	<th scope=\"col\" colspan='2'>".$langCourseCode."<br />".$langTeacher."</th>
 	<th scope=\"col\" width=\"1\">".$langCourseVis."</th>
-	<th scope=\"col\">".$langDepartment."</th>
+	<th scope=\"col\">".$langFaculty."</th>
 	<th scope=\"col\">".$langUsers."</th>
 	<th scope=\"col\" colspan='2'>".$langActions."</th>
 	</tr>";

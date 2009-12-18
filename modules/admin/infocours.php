@@ -24,7 +24,7 @@
 *  			eMail: info@openeclass.org
 * =========================================================================*/
 
-/**===========================================================================
+/*===========================================================================
 	infocours.php
 	@last update: 31-05-2006 by Pitsiougas Vagelis
 	@authors list: Karatzidis Stratos <kstratos@uom.gr>
@@ -107,7 +107,7 @@ else {
   </tr>";
 	$tool_content .= "
   <tr>
-    <th class=\"left\">".$langDepartment.":</th>
+    <th class=\"left\">".$langFaculty.":</th>
     <td><select name=\"faculte\">\n";
   // Construct select object for facultes
 	$resultFac=mysql_query("SELECT id,name FROM faculte ORDER BY number");

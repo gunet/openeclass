@@ -120,7 +120,7 @@ if (isset($c)) {
   </tr>";
 	$tool_content .= "
   <tr>
-    <th class=\"left\">".$langDepartment.":</th>
+    <th class=\"left\">".$langFaculty.":</th>
     <td>".$row['faculte']."</td>
   </tr>
   <tr>

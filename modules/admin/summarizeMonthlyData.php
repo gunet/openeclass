@@ -107,7 +107,7 @@ $langPleaseWait</div>
         $mtext .= "<tr><th>".$langCourse."</th>
 		<th>".$langCoursVisible."</th>
 		<th>".$langType."</th>
-		<th>".$langDepartment."</th>
+		<th>".$langFaculty."</th>
 		<th>".$langTeacher."</th>
 		<th>".$langNbUsers."</th></tr>";
 

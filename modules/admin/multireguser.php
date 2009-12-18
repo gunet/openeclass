@@ -127,7 +127,7 @@ if (isset($_POST['submit'])) {
 <tr><th>$langMultiRegPrefix</th>
     <td><input type='text' name='prefix' size='10' value='user' /></td>
 </tr>
-<tr><th>$langFaculteDepartment</th>
+<tr><th>$langFaculty</th>
     <td>" . selection($facs, 'facid') . "</td>
 </tr>
 <tr><th>$langAm</th>

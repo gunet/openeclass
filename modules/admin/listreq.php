@@ -383,7 +383,7 @@ draw($tool_content, 3, ' ', $head_content);
 
 function table_header($addon = FALSE, $message = FALSE) {
 	
-	global $langName, $langSurname, $langUsername, $langEmail, $langDepartment, $langTel;
+	global $langName, $langSurname, $langUsername, $langEmail, $langFaculty, $langTel;
 	global $langDate, $langComments, $langActions;
 	global $langDateRequest_small;
 
@@ -407,7 +407,7 @@ function table_header($addon = FALSE, $message = FALSE) {
 	<th scope='col' colspan='2' rowspan='$rowspan' class='left'>&nbsp;&nbsp;$langName $langSurname</th>
 	<th scope='col' width='20' rowspan='$rowspan' class='left'>$langUsername</th>
 	<th scope='col' rowspan='$rowspan' class='left'>$langEmail</th>
-	<th scope='col' rowspan='$rowspan' class='left'>$langDepartment</th>
+	<th scope='col' rowspan='$rowspan' class='left'>$langFaculty</th>
 	<th scope='col' rowspan='$rowspan' align='center'>$langTel</th>";
 	$string .= $datestring; 
 	$string .= "</tr></thead>";

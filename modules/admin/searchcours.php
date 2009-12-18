@@ -114,7 +114,7 @@ $tool_content .= "<tr><th class='left'><b>$langCourseVis:</b></td>
 </select>
 </td></tr>";
 
-$tool_content .= "<tr><th class='left'><b>".$langDepartment.":</b></th>
+$tool_content .= "<tr><th class='left'><b>".$langFaculty.":</b></th>
 <td><select name=\"formsearchfaculte\" class=\"auth_input\">
 <option value=\"0\">$langAllFacultes</option>\n";
 

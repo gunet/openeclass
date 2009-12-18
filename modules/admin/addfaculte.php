@@ -82,68 +82,58 @@ $tool_content = "";
 /*****************************************************************************
 		MAIN BODY
 ******************************************************************************/
-
 	// Give administrator a link to add a new faculty
-    $tool_content .= "
-      <div id='operations_container'>
-        <ul id='opslist'>
-          <li><a href='$_SERVER[PHP_SELF]?a=1'>".$langAdd."</a></li>
-        </ul>
-      </div>";
-
-
+    $tool_content .= "<div id='operations_container'>
+	<ul id='opslist'>
+	<li><a href='$_SERVER[PHP_SELF]?a=1'>".$langAdd."</a></li>
+	</ul>
+	</div>";
 
 // Display all available faculties
 if (!isset($a)) {
 	// Count available faculties
 	$a=mysql_fetch_array(mysql_query("SELECT COUNT(*) FROM faculte"));
 	// Construct a table
-	$tool_content .= "
-  <table width='99%' class='FormData' align='left'>
-  <tbody>
-  <tr>
-    <td class='odd'><b>".$langFaculteCatalog."</b>:<div align='right'><i>".$langManyExist.": <b>$a[0]</b> ".$langFaculteDepartments."</i></div></td>
-  </tr>
-  </tbody>
-  </table>
-
-  <br />";
-
-	$tool_content .= "
-  <table width='99%' class='FormData' align='left'>
-  <tbody>
-  <tr>
-    <th scope='col' colspan='2'><div align='left'>&nbsp;&nbsp;".$langFaculteDepartment."</div></th scope='col'>
-    <th scope='col'>$langCode</th>
-    <th>".$langActions."</th>
-  </tr>";
+	$tool_content .= "<table width='99%' class='FormData' align='left'>
+	<tbody>
+	<tr>
+	<td class='odd'><b>".$langFaculteCatalog."</b>:
+	<div align='right'><i>".$langManyExist.": <b>$a[0]</b> ".$langFaculties."</i></div></td>
+	</tr>
+	</tbody>
+	</table>
+	<br />";
+	$tool_content .= "<table width='99%' class='FormData' align='left'>
+	<tbody><tr>
+	<th scope='col' colspan='2'><div align='left'>&nbsp;&nbsp;".$langFaculty."</div></th scope='col'>
+	<th scope='col'>$langCode</th>
+	<th>".$langActions."</th>
+	</tr>";
 	$sql=mysql_query("SELECT code,name,id FROM faculte");
-
-    $k = 0;
+	$k = 0;
 	// For all faculties display some info
 	for ($j = 0; $j < mysql_num_rows($sql); $j++) {
 		$logs = mysql_fetch_array($sql);
 		if ($k%2==0) {
-		  $tool_content .= "\n  <tr>";
-	    } else {
-		  $tool_content .= "\n  <tr class='odd'>";
-        }
-            $tool_content .= "\n    <td width='1'><img style='border:0px; padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'></td>";
-            $tool_content .= "\n    <td>".htmlspecialchars($logs[1])."</td>";
-            $tool_content .= "\n    <td align='center'>".htmlspecialchars($logs[0])."</td>";
-
-
+			$tool_content .= "\n  <tr>";
+		} else {
+			$tool_content .= "\n  <tr class='odd'>";
+		}
+		$tool_content .= "\n    <td width='1'>
+		<img style='border:0px; padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'></td>";
+		$tool_content .= "\n    <td>".htmlspecialchars($logs[1])."</td>";
+		$tool_content .= "\n    <td align='center'>".htmlspecialchars($logs[0])."</td>";
 		// Give administrator a link to delete or edit a faculty
-    $tool_content .= "\n    <td width='15%' align='center' nowrap><a href='$_SERVER[PHP_SELF]?a=2&c=".$logs['id']."'><img src='../../images/delete.gif' border='0' title='$langDelete'></img></a>&nbsp;&nbsp;<a href='$_SERVER[PHP_SELF]?a=3&c=".$logs['id']."'><img src='../../template/classic/img/edit.gif' border='0' title='$langEdit'></img></a></td>
-  </tr>\n";
-    $k++;
+		$tool_content .= "\n    <td width='15%' align='center' nowrap>
+		<a href='$_SERVER[PHP_SELF]?a=2&c=".$logs['id']."'>
+		<img src='../../images/delete.gif' border='0' title='$langDelete'></img></a>&nbsp;&nbsp;
+		<a href='$_SERVER[PHP_SELF]?a=3&c=".$logs['id']."'>
+		<img src='../../template/classic/img/edit.gif' border='0' title='$langEdit'></img></a></td>
+		</tr>\n";
+		$k++;
 	}
 	// Close table correctly
-	$tool_content .= "
-  </tbody>
-  </table>
-  <br />";
-
+	$tool_content .= "</tbody></table><br />";
 	$tool_content .= "<br /><p align=\"right\"><a href=\"index.php\">".$langBack."</a></p>";
 }
 // Add a new faculte
@@ -178,30 +168,28 @@ elseif ($a == 1)  {
 	} else {
 		// Display form for new faculte information
 		$tool_content .= "<form method=\"post\" action=\"".$_SERVER['PHP_SELF']."?a=1\">";
-		$tool_content .= "
-  <table width='99%' class='FormData'>
-  <tbody>
-  <tr>
-    <th width=\"220\">&nbsp;</th>
-    <td colspan=\"2\"><b>$langFaculteIns</b></td>
-  <tr>
-    <th class='left'>".$langCodeFaculte1.":</th>
-    <td><input class='FormData_InputText' type='text' name='codefaculte' value='".@$codefaculte."' /></td><td><i>".$langCodeFaculte2."</i></td>
-  </tr>
-  <tr>
-    <th class='left'>".$langFaculte1.":</th>
-    <td><input class='FormData_InputText' type='text' name='faculte' value='".@$faculte."' /></td><td><i>".$langFaculte2."</i></td>
-  </tr>
-  <tr>
-    <th>&nbsp;</th>
-    <td><input type='submit' name='add' value='".$langAdd."' /></td>
-  </tr>
-  </tbody>
-  </table>
-  </form>";
-		}
-		$tool_content .= "<br /><p align='right'><a href='$_SERVER[PHP_SELF]'>".$langBack."</a></p>";
+		$tool_content .= "<table width='99%' class='FormData'>
+		<tbody><tr>
+		<th width=\"220\">&nbsp;</th>
+		<td colspan=\"2\"><b>$langFaculteIns</b></td>
+		<tr>
+		<th class='left'>".$langCodeFaculte1.":</th>
+		<td><input class='FormData_InputText' type='text' name='codefaculte' value='".@$codefaculte."' /></td><td><i>".$langCodeFaculte2."</i></td>
+		</tr>
+		<tr>
+		<th class='left'>".$langFaculty.":</th>
+		<td><input class='FormData_InputText' type='text' name='faculte' value='".@$faculte."' /></td><td><i>".$langFaculte2."</i></td>
+		</tr>
+		<tr>
+		<th>&nbsp;</th>
+		<td><input type='submit' name='add' value='".$langAdd."' /></td>
+		</tr>
+		</tbody>
+		</table>
+		</form>";
 	}
+	$tool_content .= "<br /><p align='right'><a href='$_SERVER[PHP_SELF]'>".$langBack."</a></p>";
+}
 // Delete faculty
 elseif ($a == 2) {
         $c = intval($_GET['c']);
@@ -255,33 +243,32 @@ elseif ($a == 3)  {
 		$myrow = mysql_fetch_array($result);
 		// Display form for edit faculte information
 		$tool_content .= "<form method='post' action='$_SERVER[PHP_SELF]?a=3'>";
-		$tool_content .= "
-  <table width='99%' class='FormData'>
-  <tbody>
-  <tr>
-    <th width='220'>&nbsp;</th>
-    <td colspan='2'><b>$langFaculteEdit</b></td>
-  </tr>
-  <tr>
-    <th class='left'>".$langCodeFaculte1.":</th>
-	<td><input type='text' name='codefaculte' value='".$myrow['code']."' readonly='1' />&nbsp;<i>".$langCodeFaculte2."</i></td>
-  </tr>
-  <tr>
-    <th class='left'>".$langFaculte1.":</th>
-    <td><input type='text' name='faculte' value='".htmlspecialchars($myrow['name'], ENT_QUOTES)."' />&nbsp;<i>".$langFaculte2."</i></td>
-  </tr>
-  <tr>
-    <th>&nbsp;</th>
-    <td><input type='hidden' name='c' value='$c' />
-	<input type='submit' name='edit' value='$langAcceptChanges' />
-    </td>
-  </tr>
-  </tbody>
-  </table>
-  </form>";
-		}
-		$tool_content .= "<br /><p align='right'><a href='$_SERVER[PHP_SELF]'>".$langBack."</a></p>";
+		$tool_content .= "<table width='99%' class='FormData'>
+		<tbody>
+		<tr>
+		<th width='220'>&nbsp;</th>
+		<td colspan='2'><b>$langFaculteEdit</b></td>
+		</tr>
+		<tr>
+		<th class='left'>".$langCodeFaculte1.":</th>
+		<td><input type='text' name='codefaculte' value='".$myrow['code']."' readonly='1' />&nbsp;<i>".$langCodeFaculte2."</i></td>
+		</tr>
+		<tr>
+		<th class='left'>".$langFaculte1.":</th>
+		<td><input type='text' name='faculte' value='".htmlspecialchars($myrow['name'], ENT_QUOTES)."' />&nbsp;<i>".$langFaculte2."</i></td>
+		</tr>
+		<tr>
+		<th>&nbsp;</th>
+		<td><input type='hidden' name='c' value='$c' />
+		<input type='submit' name='edit' value='$langAcceptChanges' />
+		</td>
+		</tr>
+		</tbody>
+		</table>
+		</form>";
 	}
+$tool_content .= "<br /><p align='right'><a href='$_SERVER[PHP_SELF]'>".$langBack."</a></p>";
+}
 
 /*****************************************************************************
 		DISPLAY HTML

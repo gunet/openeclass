@@ -131,7 +131,11 @@ if((!empty($auth_submit)) && ($auth_submit==1)) {
 					$auth_instructions = isset($_POST['dbinstructions'])?$_POST['dbinstructions']:'';;
 					break;
 				case '6': $auth_instructions = isset($_POST['shibinstructions'])?$_POST['shibinstructions']:'';;
-					$auth_settings = 'shibboleth';
+					if (isset($checkseparator) && $checkseparator == "on") {
+						$auth_settings = $_POST['shibseparator'];
+					} else {
+						$auth_settings = 'shibboleth';
+					}
 					break;
 				default:
 					break;
