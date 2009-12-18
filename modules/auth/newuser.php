@@ -95,7 +95,7 @@ if (!isset($submit)) {
 	<td colspan=\"2\"><input type=\"text\" name=\"am\" value=\"$am\" class='FormData_InputText'></td>
 	</tr>
 	<tr>
-	<th class='left'>$langDepartment</th>
+	<th class='left'>$langFaculty</th>
 		<td colspan=\"2\"><select name=\"department\">";
 	$deps=mysql_query("SELECT name, id FROM faculte ORDER BY id");
 	while ($dep = mysql_fetch_array($deps)) {

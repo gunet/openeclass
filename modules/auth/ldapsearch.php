@@ -125,7 +125,7 @@ if(!empty($is_submit))
 			<td><input type='text' name='am' class='FormData_InputText' /></td>
 			<td>&nbsp;</td>
 			</tr>
-			<tr><th class='left'>".$langDepartment."</th>
+			<tr><th class='left'>".$langFaculty."</th>
 			<td>
 			<select name='department'>";
 			$deps=mysql_query("SELECT name, id FROM faculte ORDER BY id",$db);

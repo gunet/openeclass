@@ -76,7 +76,7 @@ if (!isset($submit)) {
     <td><textarea name='usercomment' COLS='32' ROWS='4' WRAP='SOFT' class='FormData_InputText'>$usercomment</textarea>&nbsp;&nbsp;<small>(*) $profreason</small></td>
   </tr>
   <tr>
-    <th class='left'>$langDepartment</th>
+    <th class='left'>$langFaculty</th>
     <td><select name='department'>";
         $deps=mysql_query("SELECT id, name FROM faculte order by id");
         while ($dep = mysql_fetch_array($deps))
@@ -155,7 +155,7 @@ $registration_errors = array();
 
             //----------------------------- Email Message --------------------------
             $MailMessage = $mailbody1 . $mailbody2 . "$prenom_form $nom_form\n\n" . $mailbody3 .
-                    $mailbody4 . $mailbody5 . "$mailbody6\n\n" . "$langDepartment: " .
+                    $mailbody4 . $mailbody5 . "$mailbody6\n\n" . "$langFaculty: " .
                     find_faculty_by_id($department) . "\n$langComments: $usercomment\n" .
                     "$langProfUname: $uname\n$langProfEmail: $email_form\n" .
                     "$contactphone: $userphone\n\n\n$logo\n\n";

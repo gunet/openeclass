@@ -168,7 +168,7 @@ $langEmail : $emailhelpdesk
 	<td><input class='FormData_InputText' type='text' name='email_form' value='".@$pe."'>&nbsp;(*)</b></td>
 	</tr>
 	<tr>
-	<th class='left'>$langDepartment</th>
+	<th class='left'>$langFaculty</th>
 	<td>";
 	
 	$dep = array();

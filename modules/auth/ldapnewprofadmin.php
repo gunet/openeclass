@@ -165,7 +165,7 @@ if ($submit)  {
 	<input type='hidden' name='pe' value='$pe' >
 	</tr>
 	<tr>
-	<th class='left'>$langDepartment</th>
+	<th class='left'>$langFaculty</th>
 	<td>";
         $result = db_query("SELECT id, name FROM faculte ORDER BY id");
         while ($facs = mysql_fetch_array($result)) {

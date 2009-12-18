@@ -42,17 +42,28 @@ if ($f = @fopen("${webDir}secure/index.php", "r")) {
 }
 fclose($f);
 
-$r = mysql_fetch_array(db_query("SELECT auth_instructions FROM auth WHERE auth_id = 6"));
+$r = mysql_fetch_array(db_query("SELECT auth_settings, auth_instructions FROM auth WHERE auth_id = 6"));
+$shibsettings = $r['auth_settings'];
 $shibinstructions = $r['auth_instructions'];
-
-$tool_content .= "<tr><th class='left'>$langShibEmail:</th>
+if ($shibsettings != 'shibboleth' and $shibsettings != "") {
+	$shibseparator = $shibsettings;
+	$checkedshib = 'checked';
+} else {
+	$checkedshib = $shibseparator = "";
+}
+$tool_content .= "<tr><td colspan='2' align='justify'>$langExplainShib</td></tr>";
+@$tool_content .= "<tr><th class='left'>$langShibEmail:</th>
 <td><input class='FormData_InputText' name='shibemail' type='text' size='30' value='".$shibemail."' /></td>
 </tr>
 <tr><th class='left'>$langShibUsername:</th>
 <td><input class='FormData_InputText' name='shibuname' type='text' size='30' value='".$shibuname."' /></td>
 </tr>
-<tr><th class='left'>$langShibCn:</th>
+<tr><th class='left' rowspan='2'>$langShibCn:</th>
 <td><input class='FormData_InputText' name='shibcn' type='text' size='30' value='".$shibcn."' /></td>
+</tr>
+<tr><td bgcolor='#F8F8F8'><input type='checkbox' name='checkseparator' $checkedshib />
+&nbsp;$langCharSeparator&nbsp;
+<input class='FormData_InputText' name='shibseparator' type='text' size='1' maxlength='2' value='".q($shibseparator)."' /></th>
 </tr>
 <tr><th class='left'>$langInstructionsAuth:</td>
 <td><textarea class='FormData_InputText' name='shibinstructions' cols='30' rows='10' wrap='virtual'>".$shibinstructions."</textarea></td></tr>";

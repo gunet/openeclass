@@ -133,7 +133,7 @@ if(!empty($is_submit)) {
 		&nbsp;&nbsp;<small>(*) $profreason</small></td>
 		</tr>
 		<tr>
-		<th class='left'>".$langDepartment.":</th>
+		<th class='left'>".$langFaculty.":</th>
 		<td>
 		<select name='department'>";
 		$deps=mysql_query("SELECT name, id FROM faculte ORDER BY id",$db);
@@ -213,7 +213,7 @@ if (isset($submit))  {
 	
 	// send email
         $MailMessage = $mailbody1 . $mailbody2 . "$name $surname\n\n" . $mailbody3
-        . $mailbody4 . $mailbody5 . "$mailbody6\n\n" . "$langDepartment: " . find_faculty_by_id($department) . "
+        . $mailbody4 . $mailbody5 . "$mailbody6\n\n" . "$langFaculty: " . find_faculty_by_id($department) . "
 	\n$langComments: $usercomment\n"
         . "$langProfUname : $username\n$langProfEmail : $usermail\n" . "$contactphone : $userphone\n\n\n$logo\n\n";
 	

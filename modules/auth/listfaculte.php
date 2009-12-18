@@ -31,44 +31,30 @@ $numrows = mysql_num_rows($result);
 
 $tool_content = "";
 if (isset($result))  {
-	$tool_content .= "
-<script type='text/javascript' src='sorttable.js'></script>
-<table width=\"99%\" style=\"border: 1px solid #edecdf;\">
-<tr>
-  <td>
-
-  <table class='sortable' id='t1' align=\"left\" width=\"100%\">
-  <thead>
-  <tr>
-    <th class='left' colspan='2' style='border: 1px solid #E1E0CC;'>$m[department]</th>
-  </tr>
-  </thead>
-  <tbody>";
-
-   $k = 0;
-   while ($fac = mysql_fetch_array($result)) {
-     if ($k%2==0) {
-       $tool_content .= "\n  <tr>";
-     } else {
-       $tool_content .= "\n  <tr class=\"odd\">";
-     }
-	$tool_content .= "
-    <td width='1'><img style='border:0px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'></td>
-    <td><a href='opencourses.php?fc=$fac[id]'>$fac[name]</a>&nbsp;&nbsp;<small><font style=\"color: #a33033;\">($fac[code])</font>";
-
-     	$n=mysql_query("SELECT COUNT(*) FROM cours_faculte WHERE facid=$fac[id]");
-     	$r=mysql_fetch_array($n);
-
-    $tool_content .= "<font style='color: #CAC3B5;'>&nbsp;&nbsp;-&nbsp;&nbsp;$langThereAre $r[0]&nbsp;".  ($r[0] == 1? $langAvCours: $langAvCourses) . "</small></td>
-  </tr>";
-  $k++;
+	$tool_content .= "<script type='text/javascript' src='sorttable.js'></script>
+	<table width=\"99%\" style=\"border: 1px solid #edecdf;\">
+	<tr><td>
+	<table class='sortable' id='t1' align=\"left\" width=\"100%\">
+	<thead><tr>
+	<th class='left' colspan='2' style='border: 1px solid #E1E0CC;'>$langFaculty</th>
+	</tr></thead><tbody>";
+	$k = 0;
+	while ($fac = mysql_fetch_array($result)) {
+		if ($k%2==0) {
+			$tool_content .= "\n  <tr>";
+		} else {
+			$tool_content .= "\n  <tr class=\"odd\">";
+		}
+		$tool_content .= "<td width='1'>
+		<img style='border:0px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'></td>
+		<td><a href='opencourses.php?fc=$fac[id]'>$fac[name]</a>&nbsp;&nbsp;<small>
+		<font style=\"color: #a33033;\">($fac[code])</font>";
+		$n=mysql_query("SELECT COUNT(*) FROM cours_faculte WHERE facid=$fac[id]");
+		$r=mysql_fetch_array($n);
+		$tool_content .= "<font style='color: #CAC3B5;'>&nbsp;&nbsp;-&nbsp;&nbsp;$langThereAre $r[0]&nbsp;".  ($r[0] == 1? $langAvCours: $langAvCourses) . "</small></td>
+		</tr>";
+		$k++;
 	}
-   $tool_content .= "
-  </tbody>
-  </table>
-
-  </td>
-</tr>
-</table>";
-  }
+   $tool_content .= "</tbody></table></td></tr></table>";
+}
 draw($tool_content, (isset($uid) and $uid)? 1: 0, 'auth');

@@ -55,7 +55,7 @@ $upd=db_query("INSERT INTO prof_request(profname,profsurname,profuname,profemail
 //----------------------------- Email Message --------------------------
     $MailMessage = $mailbody1 . $mailbody2 . "$name $surname\n\n" .
 			$mailbody3 . $mailbody4 . $mailbody5 . "$mailbody8\n\n" .
-			"$langDepartment: $department\n$langComments: $usercomment\n" .
+			"$langFaculty: $department\n$langComments: $usercomment\n" .
 			"$langProfUname : $username\n$langProfEmail : $usermail\n" .
 			"$contactphone : $userphone\n\n\n$logo\n\n";
 
@@ -122,7 +122,7 @@ $tool_content .= "
     <td><textarea name='usercomment' COLS='30' ROWS='4' WRAP='SOFT'  class='FormData_InputText'>".@$usercomment."</textarea>&nbsp;&nbsp;<small>(*)</small></td>
   </tr>
   <tr>
-    <th class='left'>$langDepartment&nbsp;</th>
+    <th class='left'>$langFaculty&nbsp;</th>
     <td><select name='department'>";
 
     $deps=mysql_query("SELECT id, name FROM faculte order by name");

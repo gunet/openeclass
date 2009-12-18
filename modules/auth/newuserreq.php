@@ -158,7 +158,7 @@ $tool_content .= "<table width=\"99%\"><tbody>
 		<small>&nbsp;(*)</small></td>
 	  </tr>
 	  <tr>
-	  <th class='left'>$langDepartment &nbsp;
+	  <th class='left'>$langFaculty &nbsp;
 		</span></th><td>";
 
 	$dep = array();
@@ -192,21 +192,21 @@ draw($tool_content,3, 'auth');
 // -----------------
 function error_screen($message) {
 
-global $langTryAgain;
+	global $langTryAgain;
 
-return "<tr height='80'><td colspan='3' valign='top' align='center' class=alert1>$message</td></tr><br><br>
+	return "<tr height='80'><td colspan='3' valign='top' align='center' class=alert1>$message</td></tr><br><br>
       <tr height='30' valign='top' align='center'><td align=center>
       <a href='../admin/listreq.php?type=user' class=mainpage>$langTryAgain</a><br><br></td></tr>";
 }
 
 function end_tables() {
-global $langBack;
-
-$retstring = "</td></tr><tr><td align=right valign=bottom height='180'>";
-$retstring .= "<a href='../admin/index.php' class=mainpage>$langBack&nbsp;</a>";
-$retstring .= "</td></tr></table>";
-
-return $retstring;
+	global $langBack;
+	
+	$retstring = "</td></tr><tr><td align=right valign=bottom height='180'>";
+	$retstring .= "<a href='../admin/index.php' class=mainpage>$langBack&nbsp;</a>";
+	$retstring .= "</td></tr></table>";
+	
+	return $retstring;
 }
 
 ?>
