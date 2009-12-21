@@ -134,7 +134,7 @@ $tool_content .= <<<lCont2
 
 </div>
 <div id="extra">
-<p>{ECLASS_HOME_EXTRAS_RIGHT}</p>
+{ECLASS_HOME_EXTRAS_RIGHT}
 </div>
 
 </div>

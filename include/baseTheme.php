@@ -91,6 +91,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 	global $langSearch, $langAdvancedSearch;
 	global $langMyPersoLessons, $langMyPersoDeadlines;
 	global $langMyPersoAnnouncements, $langMyPersoDocs, $langMyPersoAgenda, $langMyPersoForum;
+	global $langExtrasLeft, $langExtrasRight;
 	global $require_current_course, $is_adminOfCourse;
 
 	//get blocks content from $toolContent array
@@ -186,20 +187,13 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 
 		$t->set_var ( 'TOOL_CONTENT', $toolContent );
 
-		//if we are on the login page we can include two optional html files
-		//by including eclass_home_extras_left.html (if exists) and
-		//eclass_home_extras_right.html (if exists) for extra content on the
-		//left and right bar.
-
-
-		if ($homePage && file_exists('./eclass_home_extras_left.html') && !isset($_SESSION['uid'])) {
-			$s = file_get_contents ( $webDir . 'eclass_home_extras_left.html' );
-			$t->set_var ( 'ECLASS_HOME_EXTRAS_LEFT', $s );
-		}
-
-		if ($homePage && file_exists('./eclass_home_extras_right.html') && !isset($_SESSION['uid'])) {
-			$s = file_get_contents ( $webDir . 'eclass_home_extras_right.html' );
-			$t->set_var ( 'ECLASS_HOME_EXTRAS_RIGHT', $s );
+		// If we are on the login page we can define two optional variables 
+		// in common.inc.php (to allow internationalizing messages)
+		// for extra content on the left and right bar.
+		
+		if ($homePage  && !isset($_SESSION['uid'])) {
+			$t->set_var ( 'ECLASS_HOME_EXTRAS_LEFT', $langExtrasLeft );
+			$t->set_var ( 'ECLASS_HOME_EXTRAS_RIGHT', $langExtrasRight );
 		}
 
 		//show user's name and surname on the user bar
