@@ -64,6 +64,7 @@ $icons = array(2 => "<img src='../../template/classic/img/OpenCourse.gif'   alt=
 
 $tool_content .= "
   <table width=99% class=\"framed\">
+  <tbody>
   <tr>
     <td><a name='top'>&nbsp;</a>$langFaculty:&nbsp;<b>$fac</b></td>
     <td><div align='right'>";
@@ -89,6 +90,7 @@ if ($numoftypes > 1) {
     }
     $tool_content .= "</div></td>
   </tr>
+  </tbody>
   </table>\n\n";
 } else {
     $tool_content .= "&nbsp;</div></td>
@@ -171,10 +173,11 @@ foreach (array("pre" => $langpres,
             if ($visible == $mycours['visible']) {
                 $tool_content .= $image;
             }
+        }
             $tool_content .= "</td>\n";
             $tool_content .= "        </tr>";
             $k++;
-        }
+
         //$tool_content .= "\n        </tbody>\n        </table>\n        </td>\n    </tr>\n    </table>\n    <br />\n";
         $tool_content .= "";
         // that's it!
