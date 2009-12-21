@@ -336,6 +336,11 @@ tfoot td {
     border: 1px dotted #edecdf;
 }
 
+
+table.framed {
+    border: 1px #edecdf solid;
+}
+
 ul.listBullet {
     list-style-image: url(img/square_bullet.gif);
 }
