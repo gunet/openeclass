@@ -1754,6 +1754,7 @@ $langAcrobat = "In order to read PDF files, you can use Acrobat Reader";
 $langWhere = "which you can find";
 $langHere = "here";
 $langListFac = "Courses List / Select faculty";
+$langSelectFac= "Select faculty";
 $listtomeis = "Division";
 $langDepartmentsList = "A list of this institution's departments apprears below. Please click on
 	any of them to view a list of its available courses.";
