@@ -103,12 +103,15 @@ if (isset($_POST["submit"])) {
 		$numrows = mysql_num_rows($result);
 		if (isset($result))  {
 			$tool_content .= "
-			<table width=\"99%\" style=\"border: 1px solid #edecdf;\"><tr><td>
+			<table width=\"99%\" class=\"framed\">
+            <tr>
+              <td>
 			<script type=\"text/javascript\" src=\"sorttable.js\"></script>
 			<table width='100%' class=\"sortable\" id=\"t1\">
 			<thead>
-			<tr><th class='left'><b>$langFaculty</b></th></tr>
-			</thead><tbody>";
+			  <tr><th class='left'><b>$langFaculty</b></th></tr>
+			</thead>
+            <tbody>";
 			$k = 0;
 			while ($fac = mysql_fetch_array($result)) {
 				if ($k%2==0) {
@@ -137,8 +140,16 @@ if (isset($_POST["submit"])) {
 		//$tool_content .= "\n    <br/>";
 		if ($numofcourses > 0) {
 			$tool_content .= expanded_faculte($fac, $fc, $uid);
-			$tool_content .= "<br><input type=\"submit\" name=\"submit\" value=\"$langRegistration\">
-			</form>";
+			$tool_content .= "
+    <br>
+    <table width=\"99%\" class=\"framed\" align=\"left\">
+    <tbody>
+    <tr>
+      <td><input class=\"Login\" type=\"submit\" name=\"submit\" value=\"$langRegistration\"></td>
+    </tr>
+    </tbody>
+    </table>
+    </form>";
 		} else {
 			if ($fac) {
 				$tool_content .= "<table width=99% align=\"left\">
@@ -227,7 +238,7 @@ function expanded_faculte($fac_name, $facid, $uid) {
 				$retString .= "<a href=\"#".$t."\">".${'lang'.$ts}."</a>";
 				$counter++;
 			}
-		$retString .= "</div></td></tr></tbody></table>\n<p>&nbsp;</p>\n<p>&nbsp;</p>";
+		$retString .= "</div></td></tr></tbody></table><br>\n\n";
 	} else {
 		$retString .= "\n      <td>&nbsp;</td>\n</tr>\n
 		</thead>\n</table>\n<p>&nbsp;</p>\n<p>&nbsp;</p>";
@@ -240,7 +251,7 @@ function expanded_faculte($fac_name, $facid, $uid) {
 	foreach (array("pre" => $langpres,
 			"post" => $langposts,
 			"other" => $langothers) as $type => $message) {
-			
+
 			$result=db_query("SELECT
 				cours.code k,
 				cours.fake_code c,
@@ -260,42 +271,42 @@ function expanded_faculte($fac_name, $facid, $uid) {
 		}
 
 		if ($numoftypes > 1) {
+			$retString .= "\n    <br>";
 			$retString .= "\n    <table width=\"99%\">";
-			$retString .= "\n    <thead>";
+			$retString .= "\n    <tbody>";
 			$retString .= "\n    <tr>";
-			$retString .= "\n      <td><a name=\"$type\" class='alert1'></a><b>
-				<font color=\"#a33033\">$message</font></b></td>";
-			$retString .= "\n      <td class=\"right\"><a href=\"#top\">".$langBegin."</a>&nbsp;</td>";
+			$retString .= "\n      <td><a name=\"$type\"></a><b>$message</b></td>";
+			$retString .= "\n      <td align=\"right\"><a href=\"#top\">".$langBegin."</a>&nbsp;</td>";
 			$retString .= "\n    </tr>";
-			$retString .= "\n    </thead>";
+			$retString .= "\n    </tbody>";
 			$retString .= "\n    </table>\n";
 		} else {
+			$retString .= "\n    <br>";
 			$retString .= "\n    <table width=\"99%\">";
 			$retString .= "\n    <thead>";
 			$retString .= "\n    <tr>";
-			$retString .= "\n      <td><a name=\"$type\" class='alert1'></a><b>
-				<font color=\"#a33033\">$message</font></b></td>";
+			$retString .= "\n      <td><a name=\"$type\"></a><b>$message</b></td>";
 			$retString .= "\n      <td>&nbsp;</td>";
 			$retString .= "\n    </tr>";
 			$retString .= "\n    </thead>";
 			$retString .= "\n    </table>\n\n";
 		}
-	
+
 		// legend
-		$retString .= "\n<table width=\"99%\" style=\"border: 1px solid #edecdf;\">";
-		$retString .= "\n<tr>";
-		$retString .= "\n<td>\n";
-		$retString .= "\n<script type=\"text/javascript\" src=\"sorttable.js\"></script>";
-		$retString .= "\n<table class=\"sortable\" id=\"t1\" width=\"100%\">";
-		$retString .= "\n<thead>";
-		$retString .= "\n<tr>";
-		$retString .= "\n<th width='10%' style=\"border: 1px solid #E1E0CC;\">$langRegistration</th>";
-		$retString .= "\n<th class='left' width='60%' style=\"border: 1px solid #E1E0CC;\">$langCourseCode</th>";
-		$retString .= "\n<th class='left' width='23%' style=\"border: 1px solid #E1E0CC;\">$langTeacher</th>";
-		$retString .= "\n<th width='7%' style=\"border: 1px solid #E1E0CC;\"><b>$langType</b></th>";
-		$retString .= "\n</tr>";
-		$retString .= "\n</thead>";
-		$retString .= "\n<tbody>";
+		$retString .= "\n  <table width=\"99%\" class=\"framed\">";
+		$retString .= "\n  <tr>";
+		$retString .= "\n    <td>\n";
+		$retString .= "\n    <script type=\"text/javascript\" src=\"sorttable.js\"></script>";
+		$retString .= "\n    <table class=\"sortable\" id=\"t1\" width=\"100%\">";
+		$retString .= "\n    <thead>";
+		$retString .= "\n    <tr>";
+		$retString .= "\n      <th width='10%'>$langRegistration</th>";
+		$retString .= "\n      <th class='left'>$langCourseCode</th>";
+		$retString .= "\n      <th class='left' width='23%'>$langTeacher</th>";
+		$retString .= "\n      <th width='7%'><b>$langType</b></th>";
+		$retString .= "\n    </tr>";
+		$retString .= "\n    </thead>";
+		$retString .= "\n    <tbody>";
 		$k=0;
 		while ($mycours = mysql_fetch_array($result)) {
 			if ($mycours['visible'] == 2) {
@@ -304,11 +315,11 @@ function expanded_faculte($fac_name, $facid, $uid) {
 				$codelink = $mycours['i'];
 			}
 			if ($k%2==0) {
-				$retString .= "\n<tr>";
+				$retString .= "\n    <tr>";
 			} else {
-				$retString .= "\n<tr class=\"odd\">";
+				$retString .= "\n    <tr class=\"odd\">";
 			}
-			$retString .= "\n<td width='10%' align='center'>";
+			$retString .= "\n      <td width='10%' align='center'>";
 			$requirepassword = "";
 			if (isset ($myCourses[$mycours["k"]]["subscribed"])) {
 				if ($myCourses[$mycours["k"]]["statut"]!=1) {
@@ -334,10 +345,9 @@ function expanded_faculte($fac_name, $facid, $uid) {
 			}
 			$retString .= "<input type='hidden' name='changeCourse[]' value='$mycours[k]'>";
 			$retString .= "</td>";
-			$retString .= "\n<td width=60%><b>$codelink</b> <small>
-				<font style=\"color: #a33033;\">(".$mycours['k'].")</font></small>$requirepassword </td>";
-			$retString .= "\n<td width=23%>$mycours[t]</td>";
-			$retString .= "\n<td align='center' width='7%'>";
+			$retString .= "\n      <td width=60%><b>$codelink</b> <small>(".$mycours['k'].")</small>$requirepassword </td>";
+			$retString .= "\n      <td width=23%>$mycours[t]</td>";
+			$retString .= "\n      <td align='center' width='7%'>";
 			// show the necessary access icon
 			foreach ($icons as $visible => $image) {
 				if ($visible == $mycours['visible']) {
@@ -345,7 +355,7 @@ function expanded_faculte($fac_name, $facid, $uid) {
 				}
 			}
 			$retString .= "</td>";
-			$retString .= "\n</tr>";
+			$retString .= "\n    </tr>";
 			$k++;
 		} // END of while
 		$retString .= "\n       </tbody>";
@@ -396,14 +406,17 @@ $result = mysql_query(
 
 function collapsed_facultes_horiz($fc) {
 
-	global $langListFac;
+	global $langListFac, $langSelectFac;
 
-	$retString = "\n   <form name='depform' action='$_SERVER[PHP_SELF]' method='get'>";
-	$retString .= "\n<table class=\"DepTitle\" width=\"99%\" align=\"left\">
-	<tr><th>$langListFac:&nbsp;</th><td>";
-	// department selection box
+	$retString = "\n   <form name='depform' action='$_SERVER[PHP_SELF]' method='get'>\n";
+
+	$retString .= "\n  <div id=\"operations_container\">\n    <ul id=\"opslist\">";
+	$retString .=  "\n    <li>$langSelectFac:&nbsp;";
 	$retString .= dep_selection($fc);
-  	$retString .= "\n    </td>\n    </tr>\n    </table>";
+	$retString .=  "\n    </li>";
+	$retString .= "\n    </ul>\n  </div>\n";
+
+
   	$retString .= "\n    </form>";
 
 return $retString;
