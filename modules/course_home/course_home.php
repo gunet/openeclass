@@ -101,7 +101,7 @@ if (!empty($addon)) {
 
 $result = db_query("SELECT MAX(`order`) FROM course_units WHERE course_id = $cours_id");
 list($maxorder) = mysql_fetch_row($result);
- 
+
 // other actions in course unit
 if ($is_adminOfCourse) {
         if (isset($_REQUEST['edit_submit'])) {
@@ -115,7 +115,7 @@ if ($is_adminOfCourse) {
                                             WHERE id = $unit_id AND course_id = $cours_id");
 		        $main_content .= "\n      <p class='success_small'>$langCourseUnitModified</p>";
                 } else { // add new course unit
-                        $order = $maxorder + 1; 
+                        $order = $maxorder + 1;
                         db_query("INSERT INTO course_units SET
                                          title = $title, comments =  $descr,
                                          `order` = $order, course_id = $cours_id");
@@ -141,7 +141,7 @@ if ($is_adminOfCourse) {
 		$id = intval($_REQUEST['up']);
                 move_order('course_units', 'id', $id, 'order', 'up',
                            "course_id=$cours_id");
-	}	
+	}
 }
 
 // display course units header
@@ -160,11 +160,11 @@ if ($is_adminOfCourse) {
         list($last_id) = mysql_fetch_row(db_query("SELECT id FROM course_units
                                                    WHERE course_id = $cours_id
                                                    ORDER BY `order` DESC LIMIT 1"));
-	$query = "SELECT id, title, comments, visibility 
+	$query = "SELECT id, title, comments, visibility
 		  FROM course_units WHERE course_id = $cours_id
                   ORDER BY `order`";
 } else {
-	$query = "SELECT id, title, comments, visibility 
+	$query = "SELECT id, title, comments, visibility
 		  FROM course_units WHERE course_id = $cours_id AND visibility='v'
                   ORDER BY `order`";
 }
@@ -214,7 +214,7 @@ while ($cu = mysql_fetch_array($sql)) {
                     $cunits_content .= "colspan='6' $class1_vis>";
                 } else {
                     $cunits_content .= ">";
-                } 
+                }
                 $cu['comments'] = mathfilter($cu['comments'], 12, "../../courses/mathimg/");
                 $cunits_content .= "$cu[comments]";
                 if (strpos($cu['comments'], '<') === false) {
@@ -295,6 +295,7 @@ $tool_content .= "
       <td width='30'>&nbsp;</td>
       <td width='200' valign='top'>
         <p>&nbsp;</p>
+
         <table>
         <tbody>
         <tr>
@@ -314,9 +315,7 @@ $tool_content .= "
         </tbody>
         </table>
 
-      </td>
-   </tr>
-   <tr>";
+        <br />\n";
 
 if ($is_adminOfCourse or
     (isset($_SESSION['saved_statut']) and $_SESSION['saved_statut'] == 1)) {
@@ -325,14 +324,35 @@ if ($is_adminOfCourse or
         } else {
                 $button_message = $langStudentViewEnable;
         }
+        $tool_content .="
+        <table>
+        <tbody>
+        <tr>
+          <td class='odd' width='1%' align='right'></td>
+          <td align='left'>
+            <form action='{$urlServer}student_view.php' method='post'>$button_message
+              <input class=\"Login\" type='submit' name='submit' value='>' />
+            </form>
+          </td>
+        </tr>
+        </tbody>
+        </table>
+
+
+        ";
+        /*
         $tool_content .=
                 "<tr><td colspan='3' style='text-align: right'>" .
                 "<form action='{$urlServer}student_view.php' method='post'>" .
                 "<input type='submit' name='submit' value='$button_message' />" .
                 "</form></td></tr>\n";
+        */
 }
 
 $tool_content .= "
+      </td>
+   </tr>
+   <tr>
       <td colspan='3' valign='top'>
         <p>&nbsp;</p>
 
