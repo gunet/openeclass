@@ -472,6 +472,23 @@ function doImportFromBetaCMSAfterCourseCreation($repertoire, $mysqlMainDb, $webD
 	$importMessages = "";
 	
 	if (isset($_SESSION[IMPORT_FLAG_INITIATED]) && $_SESSION[IMPORT_FLAG_INITIATED] == true) {
+		
+		if ($_SESSION[IMPORT_SCORMFILES_SIZE] > 0) {
+			foreach ($_SESSION[IMPORT_SCORMFILES] as $key => $sco) {
+				$fp = fopen("../../courses/".$repertoire."/temp/".$sco[KEY_SOURCEFILENAME], "w");
+				fwrite($fp, getLessonSco($_SESSION[BETACMSREPO], $_SESSION[IMPORT_ID], $key));
+				fclose($fp);
+				
+				// Do the learningPath Import
+				require_once("../learnPath/importLearningPathLib.php");
+				$importMessages .= doImport($repertoire, $mysqlMainDb, $webDir, $sco[KEY_CALCULATEDSIZE], $sco[KEY_SOURCEFILENAME]);
+				unlink("../../courses/".$repertoire."/temp/".$sco[KEY_SOURCEFILENAME]);
+			}
+			
+			// Remove them from session for proper memory/space management
+			unset($_SESSION[IMPORT_SCORMFILES]);
+			unset($_SESSION[IMPORT_SCORMFILES_SIZE]);
+		}
 
 		if ($_SESSION[IMPORT_UNITS_SIZE] > 0) {
 			// find course id
@@ -493,23 +510,6 @@ function doImportFromBetaCMSAfterCourseCreation($repertoire, $mysqlMainDb, $webD
 			// Remove them from session for proper memory/space management
 			unset($_SESSION[IMPORT_UNITS]);
 			unset($_SESSION[IMPORT_UNITS_SIZE]);
-		}
-		
-		if ($_SESSION[IMPORT_SCORMFILES_SIZE] > 0) {
-			foreach ($_SESSION[IMPORT_SCORMFILES] as $key => $sco) {
-				$fp = fopen("../../courses/".$repertoire."/temp/".$sco[KEY_SOURCEFILENAME], "w");
-				fwrite($fp, getLessonSco($_SESSION[BETACMSREPO], $_SESSION[IMPORT_ID], $key));
-				fclose($fp);
-				
-				// Do the learningPath Import
-				require_once("../learnPath/importLearningPathLib.php");
-				$importMessages .= doImport($repertoire, $mysqlMainDb, $webDir, $sco[KEY_CALCULATEDSIZE], $sco[KEY_SOURCEFILENAME]);
-				unlink("../../courses/".$repertoire."/temp/".$sco[KEY_SOURCEFILENAME]);
-			}
-			
-			// Remove them from session for proper memory/space management
-			unset($_SESSION[IMPORT_SCORMFILES]);
-			unset($_SESSION[IMPORT_SCORMFILES_SIZE]);
 		}
 
 		// done - cleanup
