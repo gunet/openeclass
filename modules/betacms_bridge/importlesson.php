@@ -3,7 +3,7 @@
 *   Open eClass 2.1
 *   E-learning and Course Management System
 * ========================================================================
-*  Copyright(c) 2003-2009  Greek Universities Network - GUnet
+*  Copyright(c) 2003-2010  Greek Universities Network - GUnet
 *  A full copyright notice can be read in "/info/copyright.txt".
 *
 *  Developers Group:	Costas Tsibanis <k.tsibanis@noc.uoa.gr>
@@ -25,7 +25,7 @@
 * =========================================================================*/
 /*===========================================================================
 	import.php
-	@last update: 06-12-2009 by Thanos Kyritsis
+	@last update: 09-01-2010 by Thanos Kyritsis
 	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
 ==============================================================================
     @Description: 
@@ -47,7 +47,7 @@ if (isset($_GET['id']) && isset($_SESSION[BETACMSREPO])) {
 	$repo = $_SESSION[BETACMSREPO];
 	$coId = $_GET['id'];
 	
-	$co = getLesson($repo, $coId);
+	$co = getLesson($repo, $coId, true);
 	
 	destroyContentObjectInSession();
 	putContentObjectInSession($co);

@@ -139,7 +139,7 @@ function getLessonsList($bcmsrepo) {
 }
 
 
-function getLesson($bcmsrepo, $objectId) {
+function getLesson($bcmsrepo, $objectId, $withBinaryContents = false) {
 	$bridge_host = $bcmsrepo[BRIDGE_HOST];
 	$bridge_context = $bcmsrepo[BRIDGE_CONTEXT];
 	$bcms_host = $bcmsrepo[BCMS_HOST];
@@ -187,12 +187,21 @@ function getLesson($bcmsrepo, $objectId) {
 			foreach ($scos as $key => $sco) {
 				$bp = $sco->getCmsProperty(KEY_CONTENT);
 				$bc = $bp->getSimpleTypeValue();
-				$scoArray[$scoindex] = array(
-					KEY_SOURCEFILENAME => java_values($bc->getSourceFilename()),
-					KEY_MIMETYPE => java_values($bc->getMimeType()),
-					KEY_CALCULATEDSIZE => java_values($bc->getCalculatedSize()),
-					KEY_FILECONTENT => java_values($bc->getContent())
-					);
+				if ($withBinaryContents) {
+					$scoArray[$scoindex] = array(
+						KEY_SOURCEFILENAME => java_values($bc->getSourceFilename()),
+						KEY_MIMETYPE => java_values($bc->getMimeType()),
+						KEY_CALCULATEDSIZE => java_values($bc->getCalculatedSize()),
+						KEY_FILECONTENT => java_values($bc->getContent())
+						);
+				}
+				else {
+					$scoArray[$scoindex] = array(
+						KEY_SOURCEFILENAME => java_values($bc->getSourceFilename()),
+						KEY_MIMETYPE => java_values($bc->getMimeType()),
+						KEY_CALCULATEDSIZE => java_values($bc->getCalculatedSize())
+						);
+				} 
 				$scoindex++;
 			}
 		}
