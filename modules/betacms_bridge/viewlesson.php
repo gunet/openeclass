@@ -3,7 +3,7 @@
 *   Open eClass 2.1
 *   E-learning and Course Management System
 * ========================================================================
-*  Copyright(c) 2003-2009  Greek Universities Network - GUnet
+*  Copyright(c) 2003-2010  Greek Universities Network - GUnet
 *  A full copyright notice can be read in "/info/copyright.txt".
 *
 *  Developers Group:	Costas Tsibanis <k.tsibanis@noc.uoa.gr>
@@ -25,7 +25,7 @@
 * =========================================================================*/
 /*===========================================================================
 	viewlesson.php
-	@last update: 06-12-2009 by Thanos Kyritsis
+	@last update: 09-01-2010 by Thanos Kyritsis
 	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
 ==============================================================================
     @Description: 
@@ -138,6 +138,26 @@ function objectTable($obj) {
 			<tr>
 			<th class='left'><b>".$GLOBALS['langBetaCMSCalculatedSize'].$key."</b></th>
 			<td>".$sco[KEY_CALCULATEDSIZE]."</td>
+			</tr>";
+	}
+	
+	$ret .= "<tr>
+	<th width='220'>&nbsp;</th>
+	<td><b>".$GLOBALS['langBetaCMSDocumentFiles']." (".$GLOBALS['langBetaCMSTotalNumber'].": ".$obj[KEY_DOCUMENTFILES_SIZE].")</b></td>
+	</tr>";
+	
+	foreach ($obj[KEY_DOCUMENTFILES] as $key => $doc) {
+		$ret .= "<tr>
+			<th class='left'><b>".$GLOBALS['langBetaCMSSourceFilename'].$key."</b></th>
+			<td>".$doc[KEY_SOURCEFILENAME]."</td>
+			</tr>
+			<tr>
+			<th class='left'><b>".$GLOBALS['langBetaCMSMimeType'].$key."</b></th>
+			<td>".$doc[KEY_MIMETYPE]."</td>
+			</tr>
+			<tr>
+			<th class='left'><b>".$GLOBALS['langBetaCMSCalculatedSize'].$key."</b></th>
+			<td>".$doc[KEY_CALCULATEDSIZE]."</td>
 			</tr>";
 	}
 	

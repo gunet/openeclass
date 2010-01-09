@@ -3271,3 +3271,4 @@ $langBetaCMSScormFiles = "Αρχεία Scorm";
 $langBetaCMSSourceFilename = "Όνομα Αρχείου";
 $langBetaCMSMimeType = "Mime Type";
 $langBetaCMSCalculatedSize = "Μέγεθος Αρχείου";
+$langBetaCMSDocumentFiles = "Έγγραφα";

@@ -62,6 +62,8 @@ define ("KEY_MIMETYPE", "mimetype");
 define ("KEY_CALCULATEDSIZE", "calculatedsize");
 define ("KEY_FILECONTENT", "filecontent");
 define ("KEY_CONTENT", "content");
+define ("KEY_DOCUMENTFILES", "documentFiles");
+define ("KEY_DOCUMENTFILES_SIZE", "documentFiles_size");
 
 define ("PRKEY_TITLE", "profile.title");
 define ("PRKEY_DESCRIPTION", "lessonDescription");
@@ -164,6 +166,7 @@ function getLesson($bcmsrepo, $objectId, $withBinaryContents = false) {
 		$commentsPR = $co->getCmsProperty(KEY_COMMENTS);
 		$unitsPR = $co->getCmsPropertyList(KEY_UNITS);
 		$scosPR = $co->getCmsProperty(KEY_SCORMFILES);
+		$docsPR = $co->getCmsProperty(KEY_DOCUMENTFILES);
 		
 		$unitArray = array();
 		$unitsSize = 0;
@@ -182,7 +185,7 @@ function getLesson($bcmsrepo, $objectId, $withBinaryContents = false) {
 		
 		$scoArray = array();
 		$scoindex = 0;
-		if (!java_is_null(scosPR)) {
+		if (!java_is_null($scosPR)) {
 			$scos = $scosPR->getSimpleTypeValues();
 			foreach ($scos as $key => $sco) {
 				$bp = $sco->getCmsProperty(KEY_CONTENT);
@@ -206,6 +209,32 @@ function getLesson($bcmsrepo, $objectId, $withBinaryContents = false) {
 			}
 		}
 		
+		$docArray = array();
+		$docindex = 0;
+		if (!java_is_null($docsPR)) {
+			$docs = $docsPR->getSimpleTypeValues();
+			foreach ($docs as $key => $doc) {
+				$bp = $doc->getCmsProperty(KEY_CONTENT);
+				$bc = $bp->getSimpleTypeValue();
+				if ($withBinaryContents) {
+					$docArray[$docindex] = array(
+						KEY_SOURCEFILENAME => java_values($bc->getSourceFilename()),
+						KEY_MIMETYPE => java_values($bc->getMimeType()),
+						KEY_CALCULATEDSIZE => java_values($bc->getCalculatedSize()),
+						KEY_FILECONTENT => java_values($bc->getContent())
+						);
+				}
+				else {
+					$docArray[$docindex] = array(
+						KEY_SOURCEFILENAME => java_values($bc->getSourceFilename()),
+						KEY_MIMETYPE => java_values($bc->getMimeType()),
+						KEY_CALCULATEDSIZE => java_values($bc->getCalculatedSize()),
+						);
+				}
+				$docindex++;
+			}
+		}
+		
 		$retArray = array(
 			KEY_ID => java_values($co->getId()),
 			KEY_TITLE => java_values($titlePR->getSimpleTypeValue()),
@@ -218,7 +247,9 @@ function getLesson($bcmsrepo, $objectId, $withBinaryContents = false) {
 			KEY_UNITS => $unitArray,
 			KEY_UNITS_SIZE => $unitsSize,
 			KEY_SCORMFILES => $scoArray,
-			KEY_SCORMFILES_SIZE => $scoindex
+			KEY_SCORMFILES_SIZE => $scoindex,
+			KEY_DOCUMENTFILES => $docArray,
+			KEY_DOCUMENTFILES_SIZE => $docindex
 		);
 		
 		return $retArray;
