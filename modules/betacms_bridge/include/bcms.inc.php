@@ -143,7 +143,7 @@ function getLessonsList($bcmsrepo) {
 }
 
 
-function getLesson($bcmsrepo, $objectId, $withBinaryContents = false) {
+function getLesson($bcmsrepo, $objectId) {
 	$bridge_host = $bcmsrepo[BRIDGE_HOST];
 	$bridge_context = $bcmsrepo[BRIDGE_CONTEXT];
 	$bcms_host = $bcmsrepo[BCMS_HOST];
@@ -187,21 +187,11 @@ function getLesson($bcmsrepo, $objectId, $withBinaryContents = false) {
 						foreach ($unitscos as $key => $unitsco) {
 							$bp = $unitsco->getCmsProperty(KEY_CONTENT);
 							$bc = $bp->getSimpleTypeValue();
-							if ($withBinaryContents) {
-								$unitscoArray[$unitscoindex] = array(
-									KEY_SOURCEFILENAME => java_values($bc->getSourceFilename()),
-									KEY_MIMETYPE => java_values($bc->getMimeType()),
-									KEY_CALCULATEDSIZE => java_values($bc->getCalculatedSize()),
-									KEY_FILECONTENT => java_values($bc->getContent())
-									);
-							}
-							else {
-								$unitscoArray[$unitscoindex] = array(
-									KEY_SOURCEFILENAME => java_values($bc->getSourceFilename()),
-									KEY_MIMETYPE => java_values($bc->getMimeType()),
-									KEY_CALCULATEDSIZE => java_values($bc->getCalculatedSize()),
-									);
-							}
+							$unitscoArray[$unitscoindex] = array(
+								KEY_SOURCEFILENAME => java_values($bc->getSourceFilename()),
+								KEY_MIMETYPE => java_values($bc->getMimeType()),
+								KEY_CALCULATEDSIZE => java_values($bc->getCalculatedSize()),
+								);
 							$unitscoindex++;
 						}
 					}
@@ -214,21 +204,11 @@ function getLesson($bcmsrepo, $objectId, $withBinaryContents = false) {
 						foreach ($unitdocs as $key => $unitdoc) {
 							$bp = $unitdoc->getCmsProperty(KEY_CONTENT);
 							$bc = $bp->getSimpleTypeValue();
-							if ($withBinaryContents) {
-								$unitdocArray[$unitdocindex] = array(
-									KEY_SOURCEFILENAME => java_values($bc->getSourceFilename()),
-									KEY_MIMETYPE => java_values($bc->getMimeType()),
-									KEY_CALCULATEDSIZE => java_values($bc->getCalculatedSize()),
-									KEY_FILECONTENT => java_values($bc->getContent())
-									);
-							}
-							else {
-								$unitdocArray[$unitdocindex] = array(
-									KEY_SOURCEFILENAME => java_values($bc->getSourceFilename()),
-									KEY_MIMETYPE => java_values($bc->getMimeType()),
-									KEY_CALCULATEDSIZE => java_values($bc->getCalculatedSize()),
-									);
-							}
+							$unitdocArray[$unitdocindex] = array(
+								KEY_SOURCEFILENAME => java_values($bc->getSourceFilename()),
+								KEY_MIMETYPE => java_values($bc->getMimeType()),
+								KEY_CALCULATEDSIZE => java_values($bc->getCalculatedSize()),
+								);
 							$unitdocindex++;
 						}
 					}
@@ -261,21 +241,11 @@ function getLesson($bcmsrepo, $objectId, $withBinaryContents = false) {
 			foreach ($scos as $key => $sco) {
 				$bp = $sco->getCmsProperty(KEY_CONTENT);
 				$bc = $bp->getSimpleTypeValue();
-				if ($withBinaryContents) {
-					$scoArray[$scoindex] = array(
-						KEY_SOURCEFILENAME => java_values($bc->getSourceFilename()),
-						KEY_MIMETYPE => java_values($bc->getMimeType()),
-						KEY_CALCULATEDSIZE => java_values($bc->getCalculatedSize()),
-						KEY_FILECONTENT => java_values($bc->getContent())
-						);
-				}
-				else {
-					$scoArray[$scoindex] = array(
-						KEY_SOURCEFILENAME => java_values($bc->getSourceFilename()),
-						KEY_MIMETYPE => java_values($bc->getMimeType()),
-						KEY_CALCULATEDSIZE => java_values($bc->getCalculatedSize())
-						);
-				} 
+				$scoArray[$scoindex] = array(
+					KEY_SOURCEFILENAME => java_values($bc->getSourceFilename()),
+					KEY_MIMETYPE => java_values($bc->getMimeType()),
+					KEY_CALCULATEDSIZE => java_values($bc->getCalculatedSize())
+					);
 				$scoindex++;
 			}
 		}
@@ -287,21 +257,11 @@ function getLesson($bcmsrepo, $objectId, $withBinaryContents = false) {
 			foreach ($docs as $key => $doc) {
 				$bp = $doc->getCmsProperty(KEY_CONTENT);
 				$bc = $bp->getSimpleTypeValue();
-				if ($withBinaryContents) {
-					$docArray[$docindex] = array(
-						KEY_SOURCEFILENAME => java_values($bc->getSourceFilename()),
-						KEY_MIMETYPE => java_values($bc->getMimeType()),
-						KEY_CALCULATEDSIZE => java_values($bc->getCalculatedSize()),
-						KEY_FILECONTENT => java_values($bc->getContent())
-						);
-				}
-				else {
-					$docArray[$docindex] = array(
-						KEY_SOURCEFILENAME => java_values($bc->getSourceFilename()),
-						KEY_MIMETYPE => java_values($bc->getMimeType()),
-						KEY_CALCULATEDSIZE => java_values($bc->getCalculatedSize()),
-						);
-				}
+				$docArray[$docindex] = array(
+					KEY_SOURCEFILENAME => java_values($bc->getSourceFilename()),
+					KEY_MIMETYPE => java_values($bc->getMimeType()),
+					KEY_CALCULATEDSIZE => java_values($bc->getCalculatedSize()),
+					);
 				$docindex++;
 			}
 		}
@@ -324,6 +284,46 @@ function getLesson($bcmsrepo, $objectId, $withBinaryContents = false) {
 		);
 		
 		return $retArray;
+	}
+	else {
+		return null;
+	}
+}
+
+
+function getLessonSco($bcmsrepo, $objectId, $scoId) {
+	$bridge_host = $bcmsrepo[BRIDGE_HOST];
+	$bridge_context = $bcmsrepo[BRIDGE_CONTEXT];
+	$bcms_host = $bcmsrepo[BCMS_HOST];
+	$bcms_repo = $bcmsrepo[BCMS_REPO];
+	$bcms_user = $bcmsrepo[BCMS_USER];
+	$bcms_pass = $bcmsrepo[BCMS_PASS];
+	
+	$cli = connectToRepo($bcmsrepo);
+	
+	if (isset($cli)) {
+		require_once("http://".$bridge_host."/".$bridge_context."/java/Java.inc");
+		
+		$co = $cli->getContentService()->getContentObjectById($objectId, 
+			java("org.betaconceptframework.betacms.repository.api.model.query.CacheRegion")->FIVE_MINUTES);
+			
+		$scosPR = $co->getCmsProperty(KEY_SCORMFILES);
+		
+		$scoArray = array();
+		$scoindex = 0;
+		if (!java_is_null($scosPR)) {
+			$scos = $scosPR->getSimpleTypeValues();
+			foreach ($scos as $key => $sco) {
+				if (!java_is_null($sco) && $scoId == $scoindex) {
+					$bp = $sco->getCmsProperty(KEY_CONTENT);
+					$bc = $bp->getSimpleTypeValue();
+					
+					return java_values($bc->getContent());
+				}
+				
+				$scoindex++;
+			}
+		}
 	}
 	else {
 		return null;
@@ -498,7 +498,7 @@ function doImportFromBetaCMSAfterCourseCreation($repertoire, $mysqlMainDb, $webD
 		if ($_SESSION[IMPORT_SCORMFILES_SIZE] > 0) {
 			foreach ($_SESSION[IMPORT_SCORMFILES] as $key => $sco) {
 				$fp = fopen("../../courses/".$repertoire."/temp/".$sco[KEY_SOURCEFILENAME], "w");
-				fwrite($fp, $sco[KEY_FILECONTENT]);
+				fwrite($fp, getLessonSco($_SESSION[BETACMSREPO], $_SESSION[IMPORT_ID], $key));
 				fclose($fp);
 				
 				// Do the learningPath Import
@@ -516,6 +516,7 @@ function doImportFromBetaCMSAfterCourseCreation($repertoire, $mysqlMainDb, $webD
 		$_SESSION[IMPORT_FLAG_INITIATED] = false;
 		unset($_SESSION[IMPORT_FLAG]);
 		unset($_SESSION[IMPORT_FLAG_INITIATED]);
+		unset($_SESSION[IMPORT_ID]);
 	}
 	
 	return $importMessages;

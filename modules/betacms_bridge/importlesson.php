@@ -47,7 +47,7 @@ if (isset($_GET['id']) && isset($_SESSION[BETACMSREPO])) {
 	$repo = $_SESSION[BETACMSREPO];
 	$coId = $_GET['id'];
 	
-	$co = getLesson($repo, $coId, true);
+	$co = getLesson($repo, $coId);
 	
 	destroyContentObjectInSession();
 	putContentObjectInSession($co);
@@ -83,6 +83,7 @@ function destroyContentObjectInSession() {
 	// an yparxei hdh apo prin, sbhsto
 	unset($_SESSION[IMPORT_FLAG]);
 	unset($_SESSION[IMPORT_FLAG_INITIATED]);
+	unset($_SESSION[IMPORT_ID]);
 	unset($_SESSION[IMPORT_INTITULE]);
 	unset($_SESSION[IMPORT_DESCRIPTION]);
 	unset($_SESSION[IMPORT_COURSE_KEYWORDS]);
