@@ -64,6 +64,8 @@ define ("KEY_FILECONTENT", "filecontent");
 define ("KEY_CONTENT", "content");
 define ("KEY_DOCUMENTFILES", "documentFiles");
 define ("KEY_DOCUMENTFILES_SIZE", "documentFiles_size");
+define ("KEY_TEXTS", "texts");
+define ("KEY_TEXTS_SIZE", "texts_size");
 
 define ("PRKEY_TITLE", "profile.title");
 define ("PRKEY_DESCRIPTION", "lessonDescription");
@@ -175,8 +177,77 @@ function getLesson($bcmsrepo, $objectId, $withBinaryContents = false) {
 				$ccprop = $unitsPR->get($i);
 				$unitTitle = java_values($ccprop->getChildProperty(KEY_TITLE)->getSimpleTypeValue());
 				$unitDesc = java_values($ccprop->getChildProperty(KEY_DESCRIPTION)->getSimpleTypeValue());
+				
 				if (isset($unitTitle) && isset($unitDesc)) {
-					$ar = array(KEY_TITLE => $unitTitle, KEY_DESCRIPTION => $unitDesc);
+					$unitscosPR = $ccprop->getChildProperty(KEY_SCORMFILES);
+					$unitscoArray = array();
+					$unitscoindex = 0;
+					if (!java_is_null($unitscosPR)) {
+						$unitscos = $unitscosPR->getSimpleTypeValues();
+						foreach ($unitscos as $key => $unitsco) {
+							$bp = $unitsco->getCmsProperty(KEY_CONTENT);
+							$bc = $bp->getSimpleTypeValue();
+							if ($withBinaryContents) {
+								$unitscoArray[$unitscoindex] = array(
+									KEY_SOURCEFILENAME => java_values($bc->getSourceFilename()),
+									KEY_MIMETYPE => java_values($bc->getMimeType()),
+									KEY_CALCULATEDSIZE => java_values($bc->getCalculatedSize()),
+									KEY_FILECONTENT => java_values($bc->getContent())
+									);
+							}
+							else {
+								$unitscoArray[$unitscoindex] = array(
+									KEY_SOURCEFILENAME => java_values($bc->getSourceFilename()),
+									KEY_MIMETYPE => java_values($bc->getMimeType()),
+									KEY_CALCULATEDSIZE => java_values($bc->getCalculatedSize()),
+									);
+							}
+							$unitscoindex++;
+						}
+					}
+					
+					$unitdocsPR = $ccprop->getChildProperty(KEY_DOCUMENTFILES);
+					$unitdocArray = array();
+					$unitdocindex = 0;
+					if (!java_is_null($unitdocsPR)) {
+						$unitdocs = $unitdocsPR->getSimpleTypeValues();
+						foreach ($unitdocs as $key => $unitdoc) {
+							$bp = $unitdoc->getCmsProperty(KEY_CONTENT);
+							$bc = $bp->getSimpleTypeValue();
+							if ($withBinaryContents) {
+								$unitdocArray[$unitdocindex] = array(
+									KEY_SOURCEFILENAME => java_values($bc->getSourceFilename()),
+									KEY_MIMETYPE => java_values($bc->getMimeType()),
+									KEY_CALCULATEDSIZE => java_values($bc->getCalculatedSize()),
+									KEY_FILECONTENT => java_values($bc->getContent())
+									);
+							}
+							else {
+								$unitdocArray[$unitdocindex] = array(
+									KEY_SOURCEFILENAME => java_values($bc->getSourceFilename()),
+									KEY_MIMETYPE => java_values($bc->getMimeType()),
+									KEY_CALCULATEDSIZE => java_values($bc->getCalculatedSize()),
+									);
+							}
+							$unitdocindex++;
+						}
+					}
+					
+					$textsPR = $ccprop->getChildProperty(KEY_TEXTS);
+					$texts = $textsPR->getSimpleTypeValues();
+					$unittextArray = array();
+					$unittextindex = 0;
+					if (!java_is_null($texts) && java_values($texts->size()) > 0) {
+						for ($j = 0; $j < java_values($texts->size()); $j++) {
+							$unittextArray[$j] = java_values($texts->get($j));
+							$unittextindex++;
+						}
+					}
+					
+					$ar = array(KEY_TITLE => $unitTitle, KEY_DESCRIPTION => $unitDesc, 
+						KEY_SCORMFILES => $unitscoArray, KEY_SCORMFILES_SIZE => $unitscoindex,
+						KEY_DOCUMENTFILES => $unitdocArray, KEY_DOCUMENTFILES_SIZE => $unitdocindex,
+						KEY_TEXTS => $unittextArray, KEY_TEXTS_SIZE => $unittextindex);
 					$unitArray[$i] = $ar;
 					$unitsSize++;
 				}

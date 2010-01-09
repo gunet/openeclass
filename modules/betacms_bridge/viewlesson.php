@@ -105,6 +105,7 @@ function objectTable($obj) {
 	<th class='left'><b>".$GLOBALS['langBetaCMSComments']."</b></th>
 	<td>".$obj[KEY_COMMENTS]."</td>
 	</tr>
+	<tr><td></td></tr>
 	<tr>
 	<th width='220'>&nbsp;</th>
 	<td><b>".$GLOBALS['langBetaCMSUnits']." (".$GLOBALS['langBetaCMSTotalNumber'].": ".$obj[KEY_UNITS_SIZE].")</b></td>
@@ -119,8 +120,61 @@ function objectTable($obj) {
 			<th class='left'><b>".$GLOBALS['langBetaCMSUnitDescription'].$key."</b></th>
 			<td>".$unit[KEY_DESCRIPTION]."</td>
 			</tr>";
+		
+		$ret .= "<tr>
+		<th width='220'>&nbsp;</th>
+		<td><b>".$GLOBALS['langBetaCMSUnitScormFiles']." (".$GLOBALS['langBetaCMSTotalNumber'].": ".$unit[KEY_SCORMFILES_SIZE].")</b></td>
+		</tr>";
+		
+		foreach ($unit[KEY_SCORMFILES] as $unitscokey => $unitsco) {
+			$ret .= "<tr>
+				<th class='left'><b>".$GLOBALS['langBetaCMSSourceFilename'].$unitscokey."</b></th>
+				<td>".$unitsco[KEY_SOURCEFILENAME]."</td>
+				</tr>
+				<tr>
+				<th class='left'><b>".$GLOBALS['langBetaCMSMimeType'].$unitscokey."</b></th>
+				<td>".$unitsco[KEY_MIMETYPE]."</td>
+				</tr>
+				<tr>
+				<th class='left'><b>".$GLOBALS['langBetaCMSCalculatedSize'].$unitscokey."</b></th>
+				<td>".$unitsco[KEY_CALCULATEDSIZE]."</td>
+				</tr>";
+		}
+		
+		$ret .= "<tr>
+		<th width='220'>&nbsp;</th>
+		<td><b>".$GLOBALS['langBetaCMSUnitDocumentFiles']." (".$GLOBALS['langBetaCMSTotalNumber'].": ".$unit[KEY_DOCUMENTFILES_SIZE].")</b></td>
+		</tr>";
+		
+		foreach ($unit[KEY_DOCUMENTFILES] as $unitdockey => $unitdoc) {
+			$ret .= "<tr>
+				<th class='left'><b>".$GLOBALS['langBetaCMSSourceFilename'].$unitdockey."</b></th>
+				<td>".$unitdoc[KEY_SOURCEFILENAME]."</td>
+				</tr>
+				<tr>
+				<th class='left'><b>".$GLOBALS['langBetaCMSMimeType'].$unitdockey."</b></th>
+				<td>".$unitdoc[KEY_MIMETYPE]."</td>
+				</tr>
+				<tr>
+				<th class='left'><b>".$GLOBALS['langBetaCMSCalculatedSize'].$unitdockey."</b></th>
+				<td>".$unitdoc[KEY_CALCULATEDSIZE]."</td>
+				</tr>";
+		}
+		
+		$ret .= "<tr>
+		<th width='220'>&nbsp;</th>
+		<td><b>".$GLOBALS['langBetaCMSUnitTexts']." (".$GLOBALS['langBetaCMSTotalNumber'].": ".$unit[KEY_TEXTS_SIZE].")</b></td>
+		</tr>";
+		
+		foreach ($unit[KEY_TEXTS] as $unittextkey => $unittext) {
+			$ret .= "<tr>
+				<th class='left'><b>".$GLOBALS['langBetaCMSText'].$unittextkey."</b></th>
+				<td>".$unittext."</td>
+				</tr>";
+		}
 	}
 	
+	$ret .= "<tr><td></td></tr>";
 	$ret .= "<tr>
 	<th width='220'>&nbsp;</th>
 	<td><b>".$GLOBALS['langBetaCMSScormFiles']." (".$GLOBALS['langBetaCMSTotalNumber'].": ".$obj[KEY_SCORMFILES_SIZE].")</b></td>
@@ -141,6 +195,7 @@ function objectTable($obj) {
 			</tr>";
 	}
 	
+	$ret .= "<tr><td></td></tr>";
 	$ret .= "<tr>
 	<th width='220'>&nbsp;</th>
 	<td><b>".$GLOBALS['langBetaCMSDocumentFiles']." (".$GLOBALS['langBetaCMSTotalNumber'].": ".$obj[KEY_DOCUMENTFILES_SIZE].")</b></td>
