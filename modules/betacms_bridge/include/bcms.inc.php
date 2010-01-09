@@ -3,7 +3,7 @@
 *   Open eClass 2.1
 *   E-learning and Course Management System
 * ========================================================================
-*  Copyright(c) 2003-2009  Greek Universities Network - GUnet
+*  Copyright(c) 2003-2010  Greek Universities Network - GUnet
 *  A full copyright notice can be read in "/info/copyright.txt".
 *
 *  Developers Group:	Costas Tsibanis <k.tsibanis@noc.uoa.gr>
@@ -25,7 +25,7 @@
 * =========================================================================*/
 /*===========================================================================
 	bcms.inc.php
-	@last update: 09-12-2009 by Thanos Kyritsis
+	@last update: 09-01-2010 by Thanos Kyritsis
 	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
 ==============================================================================
     @Description: 
@@ -61,6 +61,7 @@ define ("KEY_SOURCEFILENAME", "sourcefilename");
 define ("KEY_MIMETYPE", "mimetype");
 define ("KEY_CALCULATEDSIZE", "calculatedsize");
 define ("KEY_FILECONTENT", "filecontent");
+define ("KEY_CONTENT", "content");
 
 define ("PRKEY_TITLE", "profile.title");
 define ("PRKEY_DESCRIPTION", "lessonDescription");
@@ -182,8 +183,10 @@ function getLesson($bcmsrepo, $objectId) {
 		$scoArray = array();
 		$scoindex = 0;
 		if (!java_is_null(scosPR)) {
-			$bcs = $scosPR->getSimpleTypeValues();
-			foreach ($bcs as $key => $bc) {
+			$scos = $scosPR->getSimpleTypeValues();
+			foreach ($scos as $key => $sco) {
+				$bp = $sco->getCmsProperty(KEY_CONTENT);
+				$bc = $bp->getSimpleTypeValue();
 				$scoArray[$scoindex] = array(
 					KEY_SOURCEFILENAME => java_values($bc->getSourceFilename()),
 					KEY_MIMETYPE => java_values($bc->getMimeType()),
