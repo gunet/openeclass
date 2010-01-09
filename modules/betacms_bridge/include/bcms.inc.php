@@ -81,6 +81,8 @@ define ("IMPORT_UNITS", "bcms_units");
 define ("IMPORT_UNITS_SIZE", "bcms_units_size");
 define ("IMPORT_SCORMFILES", "bcms_scormFiles");
 define ("IMPORT_SCORMFILES_SIZE", "bcms_scormFiles_size");
+define ("IMPORT_DOCUMENTFILES", "bcms_documentFiles");
+define ("IMPORT_DOCUMENTFILES_SIZE", "bcms_documentFiles_size");
 
 define ("JAVA_PREFER_VALUES", true);
 
@@ -309,7 +311,6 @@ function getLessonSco($bcmsrepo, $objectId, $scoId) {
 			
 		$scosPR = $co->getCmsProperty(KEY_SCORMFILES);
 		
-		$scoArray = array();
 		$scoindex = 0;
 		if (!java_is_null($scosPR)) {
 			$scos = $scosPR->getSimpleTypeValues();
@@ -322,6 +323,45 @@ function getLessonSco($bcmsrepo, $objectId, $scoId) {
 				}
 				
 				$scoindex++;
+			}
+		}
+	}
+	else {
+		return null;
+	}
+}
+
+
+function getLessonDoc($bcmsrepo, $objectId, $docId) {
+	$bridge_host = $bcmsrepo[BRIDGE_HOST];
+	$bridge_context = $bcmsrepo[BRIDGE_CONTEXT];
+	$bcms_host = $bcmsrepo[BCMS_HOST];
+	$bcms_repo = $bcmsrepo[BCMS_REPO];
+	$bcms_user = $bcmsrepo[BCMS_USER];
+	$bcms_pass = $bcmsrepo[BCMS_PASS];
+	
+	$cli = connectToRepo($bcmsrepo);
+	
+	if (isset($cli)) {
+		require_once("http://".$bridge_host."/".$bridge_context."/java/Java.inc");
+		
+		$co = $cli->getContentService()->getContentObjectById($objectId, 
+			java("org.betaconceptframework.betacms.repository.api.model.query.CacheRegion")->FIVE_MINUTES);
+			
+		$docsPR = $co->getCmsProperty(KEY_DOCUMENTFILES);
+		
+		$docindex = 0;
+		if (!java_is_null($docsPR)) {
+			$docs = $docsPR->getSimpleTypeValues();
+			foreach ($docs as $key => $doc) {
+				if (!java_is_null($doc) && $docId == $docindex) {
+					$bp = $doc->getCmsProperty(KEY_CONTENT);
+					$bc = $bp->getSimpleTypeValue();
+					
+					return java_values($bc->getContent());
+				}
+				
+				$docindex++;
 			}
 		}
 	}
@@ -488,6 +528,33 @@ function doImportFromBetaCMSAfterCourseCreation($repertoire, $mysqlMainDb, $webD
 			// Remove them from session for proper memory/space management
 			unset($_SESSION[IMPORT_SCORMFILES]);
 			unset($_SESSION[IMPORT_SCORMFILES_SIZE]);
+		}
+		
+		if ($_SESSION[IMPORT_DOCUMENTFILES_SIZE] > 0) {
+			foreach ($_SESSION[IMPORT_DOCUMENTFILES] as $key => $doc) {
+				$fp = fopen("../../courses/".$repertoire."/temp/".$doc[KEY_SOURCEFILENAME], "w");
+				fwrite($fp, getLessonDoc($_SESSION[BETACMSREPO], $_SESSION[IMPORT_ID], $key));
+				fclose($fp);
+				
+				// TODO: register document into the database and write in the correct place with the correct filename
+				require_once("../../include/lib/forcedownload.php");
+				require_once("../../include/lib/fileDisplayLib.inc.php");
+				require_once("../../include/lib/fileManageLib.inc.php");
+				require_once("../../include/lib/fileUploadLib.inc.php");
+				$fileName = trim ($doc[KEY_SOURCEFILENAME]);
+				$fileName = replace_dangerous_char($fileName);
+				$fileName = add_ext_on_mime($fileName);
+				$fileName = php2phps($fileName);
+				$safe_fileName = safe_filename(get_file_extension($fileName));
+				$file_format = get_file_extension($fileName);
+				$file_date = date("Y\-m\-d G\:i\:s");
+				copy("../../courses/".$repertoire."/temp/".$doc[KEY_SOURCEFILENAME], "../../courses/".$repertoire."/document/".$safe_fileName);
+				unlink("../../courses/".$repertoire."/temp/".$doc[KEY_SOURCEFILENAME]);
+			}
+			
+			// Remove them from session for proper memory/space management
+			unset($_SESSION[IMPORT_DOCUMENTFILES]);
+			unset($_SESSION[IMPORT_DOCUMENTFILES_SIZE]);
 		}
 
 		if ($_SESSION[IMPORT_UNITS_SIZE] > 0) {
