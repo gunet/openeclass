@@ -25,7 +25,7 @@
 * =========================================================================*/
 /*===========================================================================
 	bcms.inc.php
-	@last update: 09-01-2010 by Thanos Kyritsis
+	@last update: 10-01-2010 by Thanos Kyritsis
 	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
 ==============================================================================
     @Description: 
@@ -536,7 +536,7 @@ function doImportFromBetaCMSAfterCourseCreation($repertoire, $mysqlMainDb, $webD
 				fwrite($fp, getLessonDoc($_SESSION[BETACMSREPO], $_SESSION[IMPORT_ID], $key));
 				fclose($fp);
 				
-				// TODO: register document into the database and write in the correct place with the correct filename
+				// register document into the database and write it in the correct place with the correct filename
 				require_once("../../include/lib/forcedownload.php");
 				require_once("../../include/lib/fileDisplayLib.inc.php");
 				require_once("../../include/lib/fileManageLib.inc.php");
@@ -549,6 +549,15 @@ function doImportFromBetaCMSAfterCourseCreation($repertoire, $mysqlMainDb, $webD
 				$file_format = get_file_extension($fileName);
 				$file_date = date("Y\-m\-d G\:i\:s");
 				copy("../../courses/".$repertoire."/temp/".$doc[KEY_SOURCEFILENAME], "../../courses/".$repertoire."/document/".$safe_fileName);
+				$query = "INSERT INTO document SET
+					path	=	'".mysql_real_escape_string("/".$safe_fileName)."',
+					filename =	'".mysql_real_escape_string($fileName)."',
+					visibility =	'v',
+					date	= '".mysql_real_escape_string($file_date)."',
+					date_modified	=	'".mysql_real_escape_string($file_date)."',
+					format	=	'".mysql_real_escape_string($file_format)."'";
+				db_query($query, $repertoire);
+				mysql_select_db($mysqlMainDb);
 				unlink("../../courses/".$repertoire."/temp/".$doc[KEY_SOURCEFILENAME]);
 			}
 			
