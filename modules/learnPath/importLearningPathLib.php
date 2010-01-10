@@ -27,7 +27,7 @@
 
 /*===========================================================================
 	importLearningPath.php
-	@last update: 09-12-2009 by Thanos Kyritsis
+	@last update: 10-01-2009 by Thanos Kyritsis
 	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
 
 	based on Claroline version 1.7 licensed under GPL
@@ -1245,7 +1245,7 @@ function doImport($currentCourseID, $mysqlMainDb, $webDir, $scoFileSize, $scoFil
     mysql_select_db($mysqlMainDb);
     chdir($pwd);
     
-    return $importMessages;
+    return array($importMessages, $tempPathId);
 }
 
 ?>

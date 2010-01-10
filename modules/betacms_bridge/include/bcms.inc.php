@@ -190,6 +190,7 @@ function getLesson($bcmsrepo, $objectId) {
 							$bp = $unitsco->getCmsProperty(KEY_CONTENT);
 							$bc = $bp->getSimpleTypeValue();
 							$unitscoArray[$unitscoindex] = array(
+								KEY_ID => java_values($unitsco->getId()),
 								KEY_SOURCEFILENAME => java_values($bc->getSourceFilename()),
 								KEY_MIMETYPE => java_values($bc->getMimeType()),
 								KEY_CALCULATEDSIZE => java_values($bc->getCalculatedSize()),
@@ -207,6 +208,7 @@ function getLesson($bcmsrepo, $objectId) {
 							$bp = $unitdoc->getCmsProperty(KEY_CONTENT);
 							$bc = $bp->getSimpleTypeValue();
 							$unitdocArray[$unitdocindex] = array(
+								KEY_ID => java_values($unitdoc->getId()),
 								KEY_SOURCEFILENAME => java_values($bc->getSourceFilename()),
 								KEY_MIMETYPE => java_values($bc->getMimeType()),
 								KEY_CALCULATEDSIZE => java_values($bc->getCalculatedSize()),
@@ -244,6 +246,7 @@ function getLesson($bcmsrepo, $objectId) {
 				$bp = $sco->getCmsProperty(KEY_CONTENT);
 				$bc = $bp->getSimpleTypeValue();
 				$scoArray[$scoindex] = array(
+					KEY_ID => java_values($sco->getId()),
 					KEY_SOURCEFILENAME => java_values($bc->getSourceFilename()),
 					KEY_MIMETYPE => java_values($bc->getMimeType()),
 					KEY_CALCULATEDSIZE => java_values($bc->getCalculatedSize())
@@ -260,6 +263,7 @@ function getLesson($bcmsrepo, $objectId) {
 				$bp = $doc->getCmsProperty(KEY_CONTENT);
 				$bc = $bp->getSimpleTypeValue();
 				$docArray[$docindex] = array(
+					KEY_ID => java_values($doc->getId()),
 					KEY_SOURCEFILENAME => java_values($bc->getSourceFilename()),
 					KEY_MIMETYPE => java_values($bc->getMimeType()),
 					KEY_CALCULATEDSIZE => java_values($bc->getCalculatedSize()),
@@ -513,6 +517,9 @@ function doImportFromBetaCMSAfterCourseCreation($repertoire, $mysqlMainDb, $webD
 	
 	if (isset($_SESSION[IMPORT_FLAG_INITIATED]) && $_SESSION[IMPORT_FLAG_INITIATED] == true) {
 		
+		$insertedScosArray = array();
+		$insertedDocsArray = array();
+		
 		if ($_SESSION[IMPORT_SCORMFILES_SIZE] > 0) {
 			foreach ($_SESSION[IMPORT_SCORMFILES] as $key => $sco) {
 				$fp = fopen("../../courses/".$repertoire."/temp/".$sco[KEY_SOURCEFILENAME], "w");
@@ -521,7 +528,8 @@ function doImportFromBetaCMSAfterCourseCreation($repertoire, $mysqlMainDb, $webD
 				
 				// Do the learningPath Import
 				require_once("../learnPath/importLearningPathLib.php");
-				$importMessages .= doImport($repertoire, $mysqlMainDb, $webDir, $sco[KEY_CALCULATEDSIZE], $sco[KEY_SOURCEFILENAME]);
+				list($messages, $insertedScosArray[$sco[KEY_ID]]) = doImport($repertoire, $mysqlMainDb, $webDir, $sco[KEY_CALCULATEDSIZE], $sco[KEY_SOURCEFILENAME]);
+				$importMessages .= $messages;
 				unlink("../../courses/".$repertoire."/temp/".$sco[KEY_SOURCEFILENAME]);
 			}
 			
@@ -557,6 +565,7 @@ function doImportFromBetaCMSAfterCourseCreation($repertoire, $mysqlMainDb, $webD
 					date_modified	=	'".mysql_real_escape_string($file_date)."',
 					format	=	'".mysql_real_escape_string($file_format)."'";
 				db_query($query, $repertoire);
+				$insertedDocsArray[$doc[KEY_ID]] = mysql_insert_id();
 				mysql_select_db($mysqlMainDb);
 				unlink("../../courses/".$repertoire."/temp/".$doc[KEY_SOURCEFILENAME]);
 			}
@@ -582,13 +591,47 @@ function doImportFromBetaCMSAfterCourseCreation($repertoire, $mysqlMainDb, $webD
 				db_query("INSERT INTO course_units SET title = '" . $unit[KEY_TITLE] ."', 
 						comments = '" . $unit[KEY_DESCRIPTION] ."', `order` = '" . $order ."', course_id = '" . $cid ."'");
 				$unitId = mysql_insert_id();
+				list($unitResOrder) = mysql_fetch_array(db_query("SELECT MAX(`order`) FROM unit_resources WHERE unit_id=$unitId"));
 				
 				// add unit texts
 				foreach ($unit[KEY_TEXTS] as $key => $text) {
-					list($order) = mysql_fetch_array(db_query("SELECT MAX(`order`) FROM unit_resources WHERE unit_id=$unitId"));
-					$order++;
+					$unitResOrder++;
 					db_query("INSERT INTO unit_resources SET unit_id=$unitId, type='text', title='', 
-						comments=" . autoquote($text) . ", visibility='v', `order`=$order, `date`=NOW(), res_id=0");
+						comments=" . autoquote($text) . ", visibility='v', `order`=$unitResOrder, `date`=NOW(), res_id=0");
+				}
+				
+				// add unit scorms
+				foreach ($unit[KEY_SCORMFILES] as $key => $unitsco) {
+					if (isset($insertedScosArray[$unitsco[KEY_ID]])) {
+						$lp_id = $insertedScosArray[$unitsco[KEY_ID]];
+						$unitResOrder++;
+						$lp = mysql_fetch_array(db_query("SELECT * FROM lp_learnPath
+							WHERE learnPath_id =" . intval($lp_id), $repertoire), MYSQL_ASSOC);
+						if ($lp['visibility'] == 'HIDE') {
+							 $visibility = 'i';
+						} else {
+							$visibility = 'v';
+						}
+						db_query("INSERT INTO unit_resources SET unit_id=$unitId, type='lp', title=" .
+							quote($lp['name']) . ", comments=" . quote($lp['comment']) .
+							", visibility='$visibility', `order`=$unitResOrder, `date`=NOW(), res_id=$lp[learnPath_id]",
+							$mysqlMainDb);
+					}
+				}
+				
+				// add unit documents
+				foreach ($unit[KEY_DOCUMENTFILES] as $key => $unitdoc) {
+					if (isset($insertedDocsArray[$unitdoc[KEY_ID]])) {
+						$file_id = $insertedDocsArray[$unitdoc[KEY_ID]];
+						$unitResOrder++;
+						$file = mysql_fetch_array(db_query("SELECT * FROM document
+							WHERE id =" . intval($file_id), $repertoire), MYSQL_ASSOC);
+						$title = (empty($file['title']))? $file['filename']: $file['title'];
+						db_query("INSERT INTO unit_resources SET unit_id=$unitId, type='doc', title=" .
+							 autoquote($title) . ", comments=" . autoquote($file['comment']) .
+							 ", visibility='$file[visibility]', `order`=$unitResOrder, `date`=NOW(), res_id=$file[id]",
+							 $mysqlMainDb);
+					}
 				}
 			}
 			
