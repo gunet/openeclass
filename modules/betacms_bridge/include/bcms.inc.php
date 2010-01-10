@@ -581,6 +581,15 @@ function doImportFromBetaCMSAfterCourseCreation($repertoire, $mysqlMainDb, $webD
 				// add unit
 				db_query("INSERT INTO course_units SET title = '" . $unit[KEY_TITLE] ."', 
 						comments = '" . $unit[KEY_DESCRIPTION] ."', `order` = '" . $order ."', course_id = '" . $cid ."'");
+				$unitId = mysql_insert_id();
+				
+				// add unit texts
+				foreach ($unit[KEY_TEXTS] as $key => $text) {
+					list($order) = mysql_fetch_array(db_query("SELECT MAX(`order`) FROM unit_resources WHERE unit_id=$unitId"));
+					$order++;
+					db_query("INSERT INTO unit_resources SET unit_id=$unitId, type='text', title='', 
+						comments=" . autoquote($text) . ", visibility='v', `order`=$order, `date`=NOW(), res_id=0");
+				}
 			}
 			
 			// Remove them from session for proper memory/space management
