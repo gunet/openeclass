@@ -49,12 +49,9 @@ $guest_allowed = true;
 
 include '../../include/init.php';
 include '../../include/lib/forcedownload.php';
-
-/**** The following is added for statistics purposes ***/
 include('../../include/action.php');
-$action = new action();
-$action->record('MODULE_ID_DOCS');
-/**************************************/
+
+mysql_select_db($dbname);
 
 $basedir = "{$webDir}courses/$dbname/document";
 
@@ -66,6 +63,15 @@ foreach ($path_components as $component) {
                               (LENGTH(path) - LENGTH(REPLACE(path, '/', ''))) AS depth
                        FROM document WHERE filename = " . quote($component) .
                        " AND path LIKE '$path%' HAVING depth = $depth");
+        if (!$q or mysql_num_rows($q) == 0) {
+                header("HTTP/1.0 404 Not Found");
+                echo '<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN"><html><head>',
+                     '<title>404 Not Found</title></head><body>',
+                     '<h1>Not Found</h1><p>The requested path "',
+                     htmlspecialchars(preg_replace('/^.*file\.php/', '', $uri)),
+                     '" was not found.</p></body></html>';
+                exit;
+        }
         $r = mysql_fetch_array($q);
         $path = $r['path'];
         $depth++;
@@ -82,6 +88,10 @@ if ($r['visibility'] != 'v' and !$is_adminOfCourse) {
 if (!preg_match("/\.$r[format]$/", $component)) {
         $component .= '.' . $r['format'];
 }
+
+// record file access
+$action = new action();
+$action->record('MODULE_ID_DOCS');
 
 // restore current course
 if (defined('old_dbname')) {
