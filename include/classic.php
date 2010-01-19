@@ -75,36 +75,39 @@ function cours_table_end()
 }
 
 $tool_content .= " ";
+$status = array();
 $result2 = mysql_query("
         SELECT cours.code code, cours.fake_code fake_code,
                cours.intitule title, cours.titulaires profs, cours_user.statut statut
 	FROM cours LEFT JOIN cours_user ON cours.cours_id = cours_user.cours_id
         WHERE cours_user.user_id = $uid
         ORDER BY statut, cours.intitule, cours.titulaires");
-if (mysql_num_rows($result2) > 0) {
+if ($result2 and mysql_num_rows($result2) > 0) {
 	$k = 0;
-        $statut = 0;
+        $this_statut = 0;
 	// display courses
 	while ($mycours = mysql_fetch_array($result2)) {
-                $old_statut = $statut;
-                $statut = $mycours['statut'];
-                if ($k == 0 or $old_statut <> $statut) {
+                $old_statut = $this_statut;
+                $this_statut = $mycours['statut'];
+                if ($k == 0 or $old_statut <> $this_statut) {
                         if ($k > 0) {
                                 cours_table_end();
                         }
-                        cours_table_header($statut);
+                        cours_table_header($this_statut);
                 }
 		$code = $mycours['code'];
                 $title = $mycours['title'];
-		$status[$code] = $mycours['statut'];
+		$status[$code] = $this_statut;
+                $profs[$code] = $mycours['profs'];
+                $titles[$code] = $mycours['title'];
 		if ($k%2==0) {
 			$tool_content .= "<tr>";
 		} else {
 			$tool_content .= "<tr class='odd'>";
 		}
-                if ($statut == 1) {
-                        $manage_link = "${urlServer}modules/unreguser/unregcours.php?cid=$code&amp;u=$uid";
-                        $manage_icon = 'template/classic/img/cunregister.gif';
+                if ($this_statut == 1) {
+                        $manage_link = "${urlServer}modules/course_info/infocours.php?from_home=TRUE&amp;cid=$code";
+                        $manage_icon = 'template/classic/img/referencement.gif';
                         $manage_title = $langManagement;
                 } else {
                         $manage_link = "${urlServer}modules/unreguser/unregcours.php?cid=$code&amp;u=$uid";
@@ -113,7 +116,7 @@ if (mysql_num_rows($result2) > 0) {
                 }
 		$tool_content .="<td width='1'><img src='${urlAppend}/template/classic/img/arrow_grey.gif' title='* ' /></td>";
 		$tool_content .= "\n<td><a href='${urlServer}courses/$code' class='CourseLink'>$title</a>
-			<font color='#a33033'> ($mycours[fake_code]</font></td>";
+			<font color='#a33033'> ($mycours[fake_code])</font></td>";
 		$tool_content .= "\n<td><small>$mycours[profs]</small></td>";
 		$tool_content .= "\n<td align='center'>
 			<a href='$manage_link'><img src='$manage_icon' title='$manage_title' /></a></td>";
@@ -129,78 +132,57 @@ if (mysql_num_rows($result2) > 0) {
         $tool_content .= "<p>$langWelcomeProf</p>\n";
 }
 
-// get last login date
-$last_login_query = "SELECT `when` FROM  `$mysqlMainDb`.loginout
-	WHERE action = 'LOGIN' AND id_user = '$uid' ORDER BY `when` DESC LIMIT 1,1";
+if (count($status) > 0) {
+        $announce_table_header = "<table width='99%' style='border: 1px solid #edecdf;'>
+                <tr><td><table width='100%' align='center'><thead><tr>
+                <th style='border: 1px solid #edecdf;' colspan='2' class='left'>$langMyPersoAnnouncements</th>
+                </tr></thead><tbody>";
+        // get last login date
+        $last_login_query = "SELECT DATE_FORMAT(`when`, '%Y-%m-%d') AS last_login FROM loginout
+                WHERE action = 'LOGIN' AND id_user = '$uid' ORDER BY `when` DESC LIMIT 1,1";
+        list($logindate) = mysql_fetch_row(db_query($last_login_query));
 
-$row = mysql_fetch_row(db_query($last_login_query));
-// cut the hour, minutes and seconds
-$logindate = eregi_replace(" ", "-",substr($row[0],0,10));
+        $table_begin = true;
+        foreach ($status as $code => $code_statut) {
+                $result = db_query("SELECT contenu, temps, title
+                                FROM `$mysqlMainDb`.annonces, `$code`.accueil
+                                WHERE code_cours = '$code'
+                                AND temps > DATE_SUB('$logindate', INTERVAL 10 DAY)
+                                AND `$code`.accueil.visible = 1
+                                AND `$code`.accueil.id = 7
+                                ORDER BY temps DESC", $mysqlMainDb);
 
-// get registered courses
-$sql = "SELECT cours.code k, cours.fake_code c, cours.intitule t,
-	cours.intitule i, cours_user.statut s
-	FROM cours, cours_user WHERE cours.code=cours_user.code_cours AND cours_user.user_id='".$uid."'
-	 AND (cours_user.statut='5' OR cours_user.statut='1')";
-
-if (mysql_num_rows(db_query($sql, $mysqlMainDb)) > 0) {
-// display last week announcements
-	$found = 0;
-	$ansql = db_query($sql, $mysqlMainDb);
-	while ($c = mysql_fetch_array($ansql)) {
-		$result = db_query("SELECT temps FROM `$mysqlMainDb`.annonces, `$c[k]`.accueil
-			WHERE code_cours='$c[k]'
-			AND DATE_SUB(DATE_FORMAT('".$logindate."','%Y-%m-%d'), INTERVAL 10 DAY)
-			<= DATE_FORMAT(temps,'%Y-%m-%d')
-			AND `$c[k]`.accueil.visible =1
-			AND `$c[k]`.accueil.id =7", $mysqlMainDb);
-		if (mysql_num_rows($result) > 0) $found++;
-	}
-	// if announcements found display them
-	if ($found > 0)  {
-		$tool_content .= "<table width=\"99%\" style=\"border: 1px solid #edecdf;\">
-		<tr><td>
-		<table width='100%' align='center'>
-		<thead><tr>
-		<th style=\"border: 1px solid #edecdf;\" colspan=\"2\" class=\"left\">$langMyPersoAnnouncements</th>
-		</tr></thead><tbody>";
-		$ansql = db_query($sql, $mysqlMainDb);
-		$la = 0;
-		while ($c = mysql_fetch_array($ansql)) {
-			$result = db_query("SELECT contenu, temps, title
-				FROM `$mysqlMainDb`.annonces, `$c[k]`.accueil
-				WHERE code_cours='$c[k]'
-				AND DATE_SUB(DATE_FORMAT('".$logindate."','%Y-%m-%d'), INTERVAL 10 DAY)
-				<= DATE_FORMAT(temps,'%Y-%m-%d')
-				AND `$c[k]`.accueil.visible =1
-				AND `$c[k]`.accueil.id =7
-				ORDER BY temps DESC", $mysqlMainDb);
-
-			while ($ann = mysql_fetch_array($result)) {
-				$content = $ann['contenu'];
-                		$content = make_clickable($content);
-                		$content = nl2br($content);
-				$content = mathfilter($content, 12, "courses/mathimg/");
-				$row = mysql_fetch_array(db_query("SELECT intitule,titulaires
-						FROM cours WHERE code='$c[k]'"));
-				if ($la%2 == 0) {
-					$tool_content .= "\n<tr>";
-				} else {
-					$tool_content .= "\n<tr class=\"odd\">";
-				}
-				$tool_content .= "\n<td width='1' class='square_bullet2'>&nbsp;</td>";
-				$tool_content .= "\n<td><span class=\"announce_pos\"><b>".$ann['title']."</b> ".nice_format($ann['temps'])."&nbsp;&nbsp;&nbsp;&nbsp;($langCourse: <b>$c[t]</b> | $langTutor: <b>$row[titulaires]</b>)<br />".$content."</span></td>";
-				$tool_content .= "\n</tr>";
-				$la++;
-			}
-		}
-		$tool_content .= "\n</tbody>\n</table>\n";
-		$tool_content .= "</td></tr></table>";
-	}
+                if ($result and mysql_num_rows($result) > 0) {
+                        if ($table_begin) {
+                                $table_begin = false;
+                                $tool_content .= $announce_table_header;
+                        }
+                        $la = 0;
+                        while ($ann = mysql_fetch_array($result)) {
+                                        $content = $ann['contenu'];
+                                        $content = make_clickable($content);
+                                        $content = nl2br($content);
+                                        $content = mathfilter($content, 12, "courses/mathimg/");
+                                        if ($la%2 == 0) {
+                                                $tool_content .= "\n<tr>";
+                                        } else {
+                                                $tool_content .= "\n<tr class='odd'>";
+                                        }
+                                        $tool_content .= "<td width='1' class='square_bullet2'>&nbsp;</td>" .
+                                                         "<td class='announce_pos'><b>$ann[title]</b> " .
+                                                         nice_format($ann['temps']) .
+                                                         "&nbsp;&nbsp;&nbsp;&nbsp;($langCourse: <b>{$titles[$code]}</b> | $langTutor: <b>{$profs[$code]}</b>)<br />$content</td>\n</tr>";
+                                        $la++;
+                                }
+                        }
+        }
+        if (!$table_begin) {
+                $tool_content .= "\n</tbody>\n</table>\n</td></tr></table>";
+        }
 }
+
 $tool_content .= "</td></tr></table><br />";
 if (isset($status)) {
 	$_SESSION['status'] = $status;
 }
 
-?>

@@ -65,15 +65,16 @@ if (isset($_POST["submit"])) {
 	$errorExists = false;
         if (isset($selectCourse) and is_array($selectCourse)) {
                 while (list($key,$contenu) = each ($selectCourse)) {
-				 $sqlcheckpassword = mysql_query("SELECT password FROM cours WHERE code='".$contenu."'");
+				 $sqlcheckpassword = mysql_query("SELECT cours_id, password FROM cours WHERE code='".$contenu."'");
                         $myrow = mysql_fetch_array($sqlcheckpassword);
+                        $cours_id = $myrow['cours_id'];
                         if ($myrow['password'] != "" and $myrow['password'] != autounquote($$contenu)) {
                                 $errorExists = true;
                         } else {
                         	if(!is_restricted($contenu)) { //do not allow registration to restricted course
                                 $sqlInsertCourse =
-                                "INSERT INTO `cours_user` (`code_cours`, `user_id`, `statut`, `reg_date`)
-                                         VALUES ('".$contenu."', '".$uid."', '5', CURDATE())";
+                                "INSERT INTO `cours_user` (`cours_id`, `code_cours`, `user_id`, `statut`, `reg_date`)
+                                         VALUES ($cours_id, '".$contenu."', '".$uid."', '5', CURDATE())";
                                 mysql_query($sqlInsertCourse) ;
                                 if (mysql_errno() > 0) {
               						echo mysql_errno().": ".mysql_error()."<br>";
@@ -310,7 +311,7 @@ function expanded_faculte($fac_name, $facid, $uid) {
 		$k=0;
 		while ($mycours = mysql_fetch_array($result)) {
 			if ($mycours['visible'] == 2) {
-				$codelink = "<a href='../../courses/$mycours[k]/' target=_blank>$mycours[i]</a>";
+				$codelink = "<a href='../../courses/$mycours[k]/' target='_blank'>$mycours[i]</a>";
 			} else {
 				$codelink = $mycours['i'];
 			}
@@ -325,22 +326,22 @@ function expanded_faculte($fac_name, $facid, $uid) {
 				if ($myCourses[$mycours["k"]]["statut"]!=1) {
 					// password needed
 					if ($mycours['p']!="" && $mycours['visible'] == 1) {
-						$requirepassword = $m['code'].": <input type=\"password\" name=\"".$mycours['k']."\" value=\"".$mycours['p']."\">";
+						$requirepassword = $m['code'].": <input type='password' name='".$mycours['k']."' value='".$mycours['p']."' />";
 					} else {
 						$requirepassword = "";
 					}
-					$retString .= "<input type='checkbox' name='selectCourse[]' value='$mycours[k]' checked >";
+					$retString .= "<input type='checkbox' name='selectCourse[]' value='$mycours[k]' checked />";
 				} else {
-					$retString .= "<img src=../../template/classic/img/teacher.gif title=$langTutor>";
+					$retString .= "<img src='../../template/classic/img/teacher.gif' title='$langTutor' />";
 				}
 			} else {
 				if ($mycours['p']!="" && $mycours['visible'] == 1) {
-					$requirepassword = "<br>".$m['code'].": <input type=\"password\" name=\"".$mycours['k']."\">";
+					$requirepassword = "<br>".$m['code'].": <input type='password' name='".$mycours['k']."' />";
 				} else {
 					$requirepassword = "";
 				}
 				if ($mycours["visible"]>0  || isset ($myCourses[$mycours["k"]]["subscribed"])) {
-					$retString .= "<input type='checkbox' name='selectCourse[]' value='$mycours[k]'>";
+					$retString .= "<input type='checkbox' name='selectCourse[]' value='$mycours[k]' />";
 				}
 			}
 			$retString .= "<input type='hidden' name='changeCourse[]' value='$mycours[k]'>";

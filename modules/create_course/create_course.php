@@ -388,7 +388,9 @@ if (isset($_POST['create_course'])) {
                                 type = " . quote($type) . ",
                                 faculteid = '$facid',
 		first_create = NOW()");
+                $new_cours_id = mysql_insert_id();
                 mysql_query("INSERT INTO cours_user SET
+                                cours_id = $new_cours_id,
                                 code_cours = '$repertoire',
                                 user_id = '$uid',
                                 statut = '1',
