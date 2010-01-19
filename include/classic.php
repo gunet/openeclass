@@ -76,10 +76,10 @@ function cours_table_end()
 
 $tool_content .= " ";
 $status = array();
-$result2 = mysql_query("
+$result2 = db_query("
         SELECT cours.code code, cours.fake_code fake_code,
                cours.intitule title, cours.titulaires profs, cours_user.statut statut
-	FROM cours LEFT JOIN cours_user ON cours.cours_id = cours_user.cours_id
+	FROM cours JOIN cours_user ON cours.cours_id = cours_user.cours_id
         WHERE cours_user.user_id = $uid
         ORDER BY statut, cours.intitule, cours.titulaires");
 if ($result2 and mysql_num_rows($result2) > 0) {
