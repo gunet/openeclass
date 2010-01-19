@@ -42,100 +42,91 @@ if (!defined('INDEX_START')) {
 include("./include/lib/textLib.inc.php");
 include("./include/phpmathpublisher/mathpublisher.php");
 
-$tool_content .= " ";
-$result2 = mysql_query("SELECT cours.code k, cours.fake_code c,
-	cours.intitule i, cours.titulaires t, cours_user.statut s
-	FROM cours, cours_user WHERE cours.code=cours_user.code_cours AND cours_user.user_id='".$uid."'
-	AND (cours_user.statut='5' OR cours_user.statut='10') ORDER BY cours.intitule, cours.titulaires");
-if (mysql_num_rows($result2) > 0) {
-	$tool_content .= "\n<table width=99%>";
-	$tool_content .= "\n<tr>";
-	$tool_content .= "\n  <td><b><font color=\"#a33033\">$langMyCoursesUser</font></b></td>";
-	$tool_content .= "\n</tr>";
-	$tool_content .= "\n</table>";
-	$tool_content .= "\n<script type='text/javascript' src='modules/auth/sorttable.js'></script>
-	<table width=\"99%\" style=\"border: 1px solid #edecdf;\">
-	<tr><td>
-	<table width='100%' align='center' class='sortable' id='t1'>
-	<thead>
-	<tr>
-	<th class='left' colspan=\"2\" style=\"border: 1px solid #edecdf;\">$langCourseCode</th>
-	<th width=\"150\" class='left' style=\"border: 1px solid #edecdf;\">$langTeacher</th>
-	<th width=\"60\" style=\"border: 1px solid #edecdf;\">$langUnCourse</th>
-	</tr></thead><tbody>";
+function cours_table_header($statut)
+{
+        global $langCourseCode, $langMyCoursesProf, $langMyCoursesUser, $langCourseCode,
+               $langTeacher, $langManagement, $langUnregCourse, $tool_content;
 
+        if ($statut == 1) {
+                $legend = $langMyCoursesProf;
+                $manage = $langManagement;
+        } elseif ($statut == 5) {
+                $legend = $langMyCoursesUser;
+                $manage = $langUnregCourse;
+        } else {
+                $legend = "(? $statut ?)";
+        }
+
+	$tool_content .= "<p><b><font color='#a33033'>$legend</font></b></p>
+	                 <script type='text/javascript' src='modules/auth/sorttable.js'></script>
+                         <table style='border: 1px solid #edecdf;' width='99%'>
+                         <tr><td>
+                         <table width='100%' align='center' class='sortable' id='t1'>
+                         <thead><tr>
+                         <th class='left' colspan='2' style='border: 1px solid #edecdf;'>$langCourseCode</th>
+                         <th width='150' class='left' style='border: 1px solid #edecdf;'>$langTeacher</th>
+                         <th width='60' style='border: 1px solid #edecdf;'>$manage</th>
+                         </tr></thead><tbody>";
+}
+
+function cours_table_end()
+{
+        $GLOBALS['tool_content'] .= "</tbody></table></td></tr></table><br />";
+}
+
+$tool_content .= " ";
+$result2 = mysql_query("
+        SELECT cours.code code, cours.fake_code fake_code,
+               cours.intitule title, cours.titulaires profs, cours_user.statut statut
+	FROM cours LEFT JOIN cours_user ON cours.cours_id = cours_user.cours_id
+        WHERE cours_user.user_id = $uid
+        ORDER BY statut, cours.intitule, cours.titulaires");
+if (mysql_num_rows($result2) > 0) {
 	$k = 0;
+        $statut = 0;
 	// display courses
 	while ($mycours = mysql_fetch_array($result2)) {
-		$dbname = $mycours["k"];
-		$status[$dbname] = $mycours["s"];
+                $old_statut = $statut;
+                $statut = $mycours['statut'];
+                if ($k == 0 or $old_statut <> $statut) {
+                        if ($k > 0) {
+                                cours_table_end();
+                        }
+                        cours_table_header($statut);
+                }
+		$code = $mycours['code'];
+                $title = $mycours['title'];
+		$status[$code] = $mycours['statut'];
 		if ($k%2==0) {
-			$tool_content .= "\n  <tr>";
+			$tool_content .= "<tr>";
 		} else {
-			$tool_content .= "\n  <tr class=\"odd\">";
+			$tool_content .= "<tr class='odd'>";
 		}
+                if ($statut == 1) {
+                        $manage_link = "${urlServer}modules/unreguser/unregcours.php?cid=$code&amp;u=$uid";
+                        $manage_icon = 'template/classic/img/cunregister.gif';
+                        $manage_title = $langManagement;
+                } else {
+                        $manage_link = "${urlServer}modules/unreguser/unregcours.php?cid=$code&amp;u=$uid";
+                        $manage_icon = 'template/classic/img/cunregister.gif';
+                        $manage_title = $langUnregCourse;
+                }
 		$tool_content .="<td width='1'><img src='${urlAppend}/template/classic/img/arrow_grey.gif' title='* ' /></td>";
-		$tool_content .= "\n<td><a href='${urlServer}courses/$mycours[k]' class=CourseLink>$mycours[i]</a>
-			<font color='#a33033'> ($mycours[c])</font></td>";
-		$tool_content .= "\n<td><small>$mycours[t]</small></td>";
+		$tool_content .= "\n<td><a href='${urlServer}courses/$code' class='CourseLink'>$title</a>
+			<font color='#a33033'> ($mycours[fake_code]</font></td>";
+		$tool_content .= "\n<td><small>$mycours[profs]</small></td>";
 		$tool_content .= "\n<td align='center'>
-			<a href='${urlServer}modules/unreguser/unregcours.php?cid=$mycours[c]&amp;u=$uid'>
-			<img src='template/classic/img/cunregister.gif' title='$langUnregCourse' /></a></td>";
+			<a href='$manage_link'><img src='$manage_icon' title='$manage_title' /></a></td>";
 		$tool_content .= "\n    </tr>";
 		$k++;
 	}
-	$tool_content .= "\n    </tbody>\n    </table>\n";
-	$tool_content .= "</td></tr></table><br />";
-
-}  else  {
-	if ($_SESSION['statut'] == '5')  // if we are login for first time
-		$tool_content .= "<p>$langWelcomeStud</p>\n";
-} // end of if (if we are student)
-
-// second case check in which courses are registered as a professeror
-$result2 = mysql_query("SELECT cours.code k, cours.fake_code c, cours.intitule i, cours.titulaires t, cours_user.statut s FROM cours, cours_user WHERE cours.code=cours_user.code_cours
-		AND cours_user.user_id='".$uid."' AND cours_user.statut='1' ORDER BY cours.intitule, cours.titulaires");
-if (mysql_num_rows($result2) > 0) {
-	$tool_content .= "\n<table width=99%>";
-	$tool_content .= "\n<tr>";
-	$tool_content .= "\n  <td><b><font color=\"#a33033\">$langMyCoursesProf</font></b></td>";
-	$tool_content .= "\n</tr>";
-	$tool_content .= "\n</table>";
-	$tool_content .= "
-	<script type='text/javascript' src='modules/auth/sorttable.js'></script>
-	<table width=\"99%\" style=\"border: 1px solid #edecdf;\">
-	<tr><td>
-	<table width='100%' align='center' class='sortable' id='t1'>
-	<thead>
-	<tr>
-	<th class='left' colspan=\"2\" style=\"border: 1px solid #edecdf;\">$langCourseCode</th>
-	<th width=\"150\" class='left' style=\"border: 1px solid #edecdf;\">$langTeacher</th>
-	<th width=\"60\" style=\"border: 1px solid #edecdf;\">$langManagement</th>
-	</tr></thead><tbody>";
-
-	$k = 0;
-	while ($mycours = mysql_fetch_array($result2)) {
-		$dbname = $mycours["k"];
-		$status[$dbname] = $mycours["s"];
-		if ($k%2==0) {
-			$tool_content .= "\n     <tr>";
-		} else {
-			$tool_content .= "\n     <tr class=\"odd\">";
-		}
-		$tool_content .= "\n<td width=\"1\"><img src='${urlAppend}/template/classic/img/arrow_grey.gif' title='* ' /></td>";
-		$tool_content .= "\n<td><a class='CourseLink' href='${urlServer}courses/$mycours[k]'>$mycours[i]</a><font color='#a33033'> ($mycours[c])</font></td>";
-		$tool_content .= "\n<td><small>$mycours[t]</small></td>";
-		$tool_content .= "\n<td align='center'>
-		<a href='${urlServer}modules/course_info/infocours.php?from_home=TRUE&cid=$mycours[c]'>
-		<img src='template/classic/img/referencement.gif' border=0 title='$langManagement' align='absbottom'></img></a></td>";
-		$tool_content .= "\n</tr>";
-		$k++;
-        }
-	$tool_content .= "\n    </tbody>\n    </table>\n";
-	$tool_content .= "</td></tr></table><br />";
-}  else {
-         if ($_SESSION['statut'] == '1')  // if we are loggin for first time
-         $tool_content .= "<p>$langWelcomeProf</p>\n";
+        cours_table_end();
+}  elseif ($_SESSION['statut'] == '5') {
+        // if are loging in for the first time as student...
+	$tool_content .= "<p>$langWelcomeStud</p>\n";
+}  elseif ($_SESSION['statut'] == '1') {
+        // ...or as professor
+        $tool_content .= "<p>$langWelcomeProf</p>\n";
 }
 
 // get last login date
