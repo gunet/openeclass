@@ -85,7 +85,7 @@ if (isset($_POST["selectedMonth"])) {
 
     $month = $_POST["selectedMonth"];
 
-    list($m, $y) = split(' ',$month);  //only month
+    list($m, $y) = explode(' ',$month);  //only month
     $sql = "SELECT profesNum, studNum, visitorsNum, coursNum, logins, details FROM monthly_summary ".
         "WHERE `month` = '$month'";
 

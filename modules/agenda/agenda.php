@@ -296,7 +296,7 @@ tContentForm;
 		$minutes= date("i");
 
 		if (isset($hourAncient) && $hourAncient) {
-			$hourAncient = split(":", $hourAncient);
+			$hourAncient = explode(":", $hourAncient);
 			$hours=$hourAncient[0];
 			$minutes=$hourAncient[1];
 		}

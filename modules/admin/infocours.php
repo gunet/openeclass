@@ -78,7 +78,7 @@ if (isset($search) && ($search=="yes")) {
 if (isset($submit))  {
   // Get faculte ID and faculte name for $faculte
   // $faculte example: 12--Tmima 1
-  list($facid, $facname) = split("--", $faculte);
+  list($facid, $facname) = explode("--", $faculte);
   // Update query
 	$sql = mysql_query("UPDATE cours SET faculte='$facname', titulaires='$titulaires', intitule='$intitule', faculteid='$facid' WHERE code='".mysql_real_escape_string($_GET['c'])."'");
 	// Some changes happened

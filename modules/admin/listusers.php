@@ -1,4 +1,4 @@
-<?
+// <?
 /*========================================================================
 *   Open eClass 2.1
 *   E-learning and Course Management System
@@ -80,7 +80,7 @@ if($view == 2)		// coming from search_user.php(search with criteria)
 		$user_email = isset($_POST['user_email'])?$_POST['user_email']:'';
 		$user_registered_at_flag = isset($_POST['user_registered_at_flag'])?$_POST['user_registered_at_flag']:'';
 
-	  	$date = split("-",  $_POST['date']);
+	  	$date = explode("-",  $_POST['date']);
 		if (array_key_exists(1, $date)) {
     			$day=$date[0];
 		    	$month=$date[1];
