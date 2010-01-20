@@ -118,19 +118,20 @@ if(isset($formSent)) {
 
 
 // if the object is not in the session
-if(!session_is_registered('objExercise')) {
+if(!isset($_SESSION['objExercise'])) {
 	// construction of Exercise
 	$objExercise=new Exercise();
 
 	// if the specified exercise doesn't exist or is disabled
 	//if(!$objExercise->read($exerciseId) || (!$objExercise->selectStatus() && !$is_allowedToEdit))
-	if(!$objExercise->read($exerciseId) && (!$is_allowedToEdit))
-		{
-		die($langExerciseNotFound);
+	if(!$objExercise->read($exerciseId) && (!$is_allowedToEdit)) {
+		$tool_content .= "<p>$langExerciseNotFound</p>";	
+		draw($tool_content, 2, 'exercice');
+		exit();
 	}
 
 	// saves the object into the session
-	session_register('objExercise');
+	$_SESSION['objExercise'] = $objExercise;
 }
 
 $exerciseTitle=$objExercise->selectTitle();
@@ -146,8 +147,7 @@ $RecordStartDate = date("Y-m-d H:i:s",time());
 // start time of the exercise (use session because in post it could be modified
 // easily by user using a development bar in mozilla for an example)
 // need to check if it already exists in session for sequential exercises
-if(!isset($_SESSION['exeStartTime']) )
-{
+if(!isset($_SESSION['exeStartTime'])) {
    $_SESSION['exeStartTime'] = time();
 }
 
@@ -185,12 +185,12 @@ cData;
 	}
 }
 
-if(!session_is_registered('questionList')) {
+if (!isset($_SESSION['questionList'])) {
 	// selects the list of question ID
 	$questionList=$randomQuestions?$objExercise->selectRandomList():$objExercise->selectQuestionList();
-
 	// saves the question list into the session
-	session_register('questionList');
+	$_SESSION['questionList'] = $questionList;
+	
 }
 
 $nbrQuestions=sizeof($questionList);
@@ -243,15 +243,11 @@ $i=0;
 foreach($questionList as $questionId) {
 	$i++;
 	// for sequential exercises
-	if($exerciseType == 2)
-	{
+	if($exerciseType == 2) {
 		// if it is not the right question, goes to the next loop iteration
-		if($questionNum != $i)
-		{
+		if($questionNum != $i) {
 			continue;
-		}
-		else
-		{
+		} else {
 			// if the user has already answered this question
 			if(isset($exerciseResult[$questionId])) {
 				// construction of the Question object
@@ -270,11 +266,11 @@ foreach($questionList as $questionId) {
 		// shows the question and its answers
 
 	echo "<br/>
-      <table width=\"99%\" class=\"Question\">
-      <thead>
-      <tr>
-        <td colspan=\"2\"><b><u>".$langQuestion."</u>: ".$i."</b></td>
-      </tr>";
+	<table width=\"99%\" class=\"Question\">
+	<thead>
+	<tr>
+		<td colspan=\"2\"><b><u>".$langQuestion."</u>: ".$i."</b></td>
+	</tr>";
 
 	if($exerciseType == 2)
 		echo " / ".$nbrQuestions;
@@ -284,37 +280,29 @@ foreach($questionList as $questionId) {
 	showQuestion($questionId);
 
 	// for sequential exercises
-	if($exerciseType == 2)
-	{
+	if($exerciseType == 2) {
 		// quits the loop
 		break;
 	}
 }	// end foreach()
 
-if (!$questionList)
-{
-   $tool_content .= "
-      <table width=\"99%\" class=\"Question\">
-      <thead>
-      <tr>
-        <td colspan='2'><font color='red'>$langNoAnswer</font></td>
-      </tr>
-      </thead>
-      </table>";
+if (!$questionList) {
+	$tool_content .= "<table width=\"99%\" class=\"Question\">
+	<thead><tr>
+	<td colspan='2'><font color='red'>$langNoAnswer</font></td>
+	</tr></thead>
+	</table>";
 } else {
-	echo "<br/>
-    <table width=\"99%\" class=\"Exercise\">
-    <tr>
-      <td><div align=\"center\"><input type=\"submit\" value=\"";
+	echo "<br/><table width=\"99%\" class=\"Exercise\">
+	<tr>
+	<td><div align=\"center\"><input type=\"submit\" value=\"";
 	if ($exerciseType == 1 || $nbrQuestions == $questionNum)
 		echo "$langCont\">&nbsp;";
 	else
 		$tool_content .= $langNext." &gt;"."\">";
 	echo "<input type=\"submit\" name=\"buttonCancel\" value=\"$langCancel\"></div>
-      </td>
-    </tr>
-    </table>
-	";
+	</td>
+	</tr></table>";
 }
 
     /*
@@ -370,12 +358,9 @@ function showQuestion($questionId, $onlyAnswers=false)
 		</tr>
 cData;
 
-		if(file_exists($picturePath.'/quiz-'.$questionId))
-		{
-
-	echo "<tr><td align=\"center\" colspan=\"2\"><img src=\"".
-		${picturePath}."/quiz-".${questionId}."\" border=\"0\"></td></tr>";
-
+		if(file_exists($picturePath.'/quiz-'.$questionId)) {
+			echo "<tr><td align=\"center\" colspan=\"2\"><img src=\"".
+			${picturePath}."/quiz-".${questionId}."\" border=\"0\"></td></tr>";
 		}
 	}  // end if(!$onlyAnswers)
 
@@ -445,18 +430,12 @@ cData;
 cData;
 		}
 		// fill in blanks
-		elseif($answerType == FILL_IN_BLANKS)
-		{
-			echo "
-      <tr>
-        <td colspan=\"2\">${answer}</td>
-      </tr>";
+		elseif($answerType == FILL_IN_BLANKS) {
+			echo "<tr><td colspan=\"2\">${answer}</td></tr>";
 		}
 		// matching
-		else
-		{
-			if(!$answerCorrect)
-			{
+		else {
+			if(!$answerCorrect) {
 				// options (A, B, C, ...) that will be put into the list-box
 				$Select[$answerId]['Lettre']=$cpt1++;
 				// answers that will be shown at the right side

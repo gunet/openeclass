@@ -154,12 +154,6 @@ switch ($module['contentType'])
 		unset($_SESSION['questionList']);
 		unset($_SESSION['exerciseResult']);
 		unset($_SESSION['exeStartTime'	]);
-		session_unregister('objExercise');
-		session_unregister('objQuestion');
-		session_unregister('objAnswer');
-		session_unregister('questionList');
-		session_unregister('exerciseResult');
-		session_unregister('exeStartTime');
 
 		$moduleStartAssetPage = "showExercise.php?exerciseId=".$assetPath;
 		break;

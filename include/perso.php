@@ -42,7 +42,7 @@ if (!defined('INDEX_START')) {
 
 include "redirector.php";
 //Check for lessons that the user is a professor
-$result2 = mysql_query("SELECT cours.code k, cours.fake_code c, cours.intitule i, cours.titulaires t, cours_user.statut s FROM cours, cours_user WHERE cours.code=cours_user.code_cours
+	$result2 = mysql_query("SELECT cours.code k, cours.fake_code c, cours.intitule i, cours.titulaires t, cours_user.statut s FROM cours, cours_user WHERE cours.cours_id = cours_user.cours_id
 	AND cours_user.user_id='".$uid."' AND cours_user.statut='1' ORDER BY cours.intitule, cours.titulaires");
 if (mysql_num_rows($result2) > 0) {
 	$i=0;
@@ -53,7 +53,9 @@ if (mysql_num_rows($result2) > 0) {
 	}
 } 
 
-session_register('status');
+if (isset($status)) {
+	$_SESSION['status'] = $status;
+}
 // end of check
 
 //include personalised component files (announcemets.php etc.) from /modules/perso
@@ -71,7 +73,7 @@ $last_login_query = 	"SELECT  `id_user` ,  `when` ,  `action`
 			ORDER BY  `when`  DESC
 			LIMIT 1,1 ";
 
-$login_date_result 	= db_query($last_login_query, $mysqlMainDb);
+$login_date_result = db_query($last_login_query, $mysqlMainDb);
 
 
 if (mysql_num_rows($login_date_result)) {
