@@ -1,4 +1,4 @@
-<?php
+<?
 /*========================================================================
 *   Open eClass 2.1
 *   E-learning and Course Management System
@@ -54,68 +54,44 @@ existing (phpBB-based) to a new eclass forum :-(
 ==============================================================================
 */
 
-/*
-* GUNET eclass 2.0 standard stuff
-*/
+
 $require_current_course = TRUE;
 $require_login = TRUE;
 $require_help = TRUE;
 $helpTopic = 'For';
 include '../../include/baseTheme.php';
 if (!add_units_navigation(TRUE)) {
-	$navigation[]= array ("url"=>"index.php", "name"=> $l_forums);
+	$navigation[]= array ("url"=>"index.php", "name"=> $langForums);
 }
 
 $tool_content = "";
 $paging = true;
 $next = 0;
-/*
-* Tool-specific includes
-*/
+
 include_once("./config.php");
-include("functions.php"); // application logic for phpBB
+include("functions.php"); 
 
-/******************************************************************************
-* Actual code starts here
-*****************************************************************************/
+$forum = intval($_GET['forum']);
 
-/*
-* First, some decoration
-*/
+$tool_content .= "<div id=\"operations_container\"><ul id=\"opslist\">";
 
-	$tool_content .= "
-    <div id=\"operations_container\">
-      <ul id=\"opslist\">";
-if ( $is_adminOfCourse || $is_admin ) {
+if ($is_adminOfCourse || $is_admin) {
 	$tool_content .= "
         <li><a href='../forum_admin/forum_admin.php'>$l_adminpanel</a></li>";
 }
-	$tool_content .= "
-        <li><a href='newtopic.php?forum=$forum'>$langNewTopic</a></li>
-      </ul>
-    </div>
-    <br />
-	";
+$tool_content .= "<li><a href='newtopic.php?forum=$forum'>$langNewTopic</a></li></ul></div><br />";
 
 /*
 * Retrieve and present data from course's forum
 */
 
-$forum = intval($_GET['forum']);
-
 $sql = "SELECT f.forum_type, f.forum_name
 	FROM forums f
 	WHERE forum_id = '$forum'";
-if (!$result = db_query($sql, $currentCourseID)) {
-	$tool_content .= $langErrorConnectForumDatabase;
-	draw($tool_content, 2);
-	exit();
-}
-if (!$myrow = mysql_fetch_array($result)) {
-	$tool_content .= $langErrorForumSelect;
-	draw($tool_content, 2);
-	exit();
-}
+
+$result = db_query($sql, $currentCourseID);
+$myrow = mysql_fetch_array($result);
+ 
 $forum_name = own_stripslashes($myrow["forum_name"]);
 $nameTools = $forum_name;
 
@@ -156,31 +132,37 @@ if ($total_topics > $topics_per_page) { // navigation
 	}
 	
 	if ($first_topic == 0) { // beginning
-		$tool_content .= "<a href='$base_url$next'>$l_nextpage</a>";
+		$tool_content .= "<a href='$base_url$next'>$langNextPage</a>";
 	} elseif ($first_topic + $topics_per_page < $total_topics) { 
-		$tool_content .= "<a href='$base_url$prev'>$l_prevpage</a>&nbsp|&nbsp;
-		<a href='$base_url$next'>$l_nextpage</a>";	
+		$tool_content .= "<a href='$base_url$prev'>$langPreviousPage</a>&nbsp|&nbsp;
+		<a href='$base_url$next'>$langNextPage</a>";	
 	} elseif ($start - $topics_per_page < $total_topics) { // end
-		$tool_content .= "<a href='$base_url$prev'>$l_prevpage</a>";
+		$tool_content .= "<a href='$base_url$prev'>$langPreviousPage</a>";
 	} 
 	$tool_content .= "</td></tr></table>";
 }
 
-$tool_content .= <<<cData
+if(isset($topicnotify)) { // modify topic notification
+	$rows = mysql_num_rows(db_query("SELECT * FROM forum_notify 
+		WHERE user_id = $uid AND topic_id = $topic_id", $mysqlMainDb));
+	if ($rows > 0) {
+		db_query("UPDATE forum_notify SET notify_sent = '$topicnotify' 
+			WHERE user_id = $uid AND topic_id = $topic_id", $mysqlMainDb);
+	} else {
+		db_query("INSERT INTO forum_notify SET user_id = $uid,
+		topic_id = $topic_id, notify_sent = '$topicnotify', course_id = $cours_id", $mysqlMainDb);
+	}
+}
 
-    <table width="99%" class="ForumSum">
-    <thead>
-    <tr>
-      <td class="ForumHead" colspan="2">&nbsp;$l_topic</td>
-      <td class="ForumHead" width="100">$l_replies</td>
-      <td class="ForumHead" width="100">$l_poster</td>
-      <td class="ForumHead" width="100">$langSeen</td>
-      <td class="ForumHead" width="100">$langLastMsg</td>
-    </tr>
-    </thead>
-    <tbody>
-cData;
-
+// header 
+$tool_content .= "<table width='99%' class='ForumSum'><thead><tr>
+<td class='ForumHead' colspan='2'>&nbsp;$l_topic</td>
+<td class='ForumHead' width='100'>$l_replies</td>
+<td class='ForumHead' width='100'>$l_poster</td>
+<td class='ForumHead' width='100'>$langSeen</td>
+<td class='ForumHead' width='100'>$langLastMsg</td>
+<td class='ForumHead' width='20'>$langNotifyActions</td>
+</tr></thead><tbody>";
 
 $sql = "SELECT t.*, p.post_time, p.nom AS nom1, p.prenom AS prenom1
         FROM topics t
@@ -188,13 +170,7 @@ $sql = "SELECT t.*, p.post_time, p.nom AS nom1, p.prenom AS prenom1
         WHERE t.forum_id = '$forum' 
         ORDER BY topic_time DESC LIMIT $first_topic, $topics_per_page";
 
-if(!$result = db_query($sql, $currentCourseID)) {
-	$tool_content .= "</table>";
-	$tool_content .= $langErrorTopicsQueryDatabase;
-	draw($tool_content, 2, 'phpbb');
-	exit();
-}
-
+$result = db_query($sql, $currentCourseID);
 
 if (mysql_num_rows($result) > 0) { // topics found
 	while($myrow = mysql_fetch_array($result)) {
@@ -202,7 +178,6 @@ if (mysql_num_rows($result) > 0) { // topics found
 		$replys = $myrow["topic_replies"];
 		$last_post = $myrow["post_time"];
 		$last_post_datetime = $myrow["post_time"];
-
 		list($last_post_date, $last_post_time) = split(" ", $last_post_datetime);
 		list($year, $month, $day) = explode("-", $last_post_date);
 		list($hour, $min) = explode(":", $last_post_time);
@@ -211,12 +186,12 @@ if (mysql_num_rows($result) > 0) { // topics found
 			$last_visit = 0;
 		}
 		if($replys >= $hot_threshold) {
-			if ($last_post_time < $last_visit )
+			if ($last_post_time < $last_visit)
 				$image = $hot_folder_image;
 			else
 				$image = $hot_newposts_image;
 		} else {
-			if ( $last_post_time < $last_visit ) {
+			if ($last_post_time < $last_visit) {
 				$image = $folder_image;
 			} else {
 				$image = $newposts_image;
@@ -231,8 +206,7 @@ if (mysql_num_rows($result) > 0) { // topics found
 		$start = '';
 		$topiclink = "viewtopic.php?topic=" . $myrow["topic_id"] . "&amp;forum=$forum";
 		if($replys+1 > $posts_per_page) {
-			$pagination .= "\n          <strong class='pagination'><span>\n
-			            <img src='$posticon_more' />";
+			$pagination .= "\n<strong class='pagination'><span>\n<img src='$posticon_more' />";
 			$pagenr = 1;
 			$skippages = 0;
 			for($x = 0; $x < $replys + 1; $x += $posts_per_page) {
@@ -256,17 +230,28 @@ if (mysql_num_rows($result) > 0) { // topics found
 					$pagenr++;
 				}
 			}
-			$pagination .= "&nbsp;\n          </span></strong>\n      ";
+			$pagination .= "&nbsp;</span></strong>";
 		}
-		$tool_content .= "\n<td><a href='$topiclink'>$topic_title</a>$pagination</td>\n";
+		$tool_content .= "<td><a href='$topiclink'>$topic_title</a>$pagination</td>\n";
 		$tool_content .= "<td class='Forum_leftside'>$replys</td>\n";
 		$tool_content .= "<td class='Forum_leftside1'>$myrow[prenom] $myrow[nom]</td>\n";
 		$tool_content .= "<td class='Forum_leftside'>$myrow[topic_views]</td>\n";
-		$tool_content .= "<td class='Forum_leftside1'>$myrow[prenom1] $myrow[nom1]<br />$last_post</td></tr>\n";
+		$tool_content .= "<td class='Forum_leftside1'>$myrow[prenom1] $myrow[nom1]<br />$last_post</td>";
+		list($topic_action_notify) = mysql_fetch_row(db_query("SELECT notify_sent FROM forum_notify 
+			WHERE user_id = $uid AND topic_id = $myrow[topic_id] AND course_id = $cours_id", $mysqlMainDb));
+		if (!isset($topic_action_notify)) {
+			$topic_link_notify = FALSE;
+			$topic_icon = '_off';
+		} else {
+			$topic_link_notify = toggle_link($topic_action_notify);
+			$topic_icon = toggle_icon($topic_action_notify);
+		}
+		$tool_content .= "<td class='Forum_leftside' style='text-align:center'>
+			<a href='$_SERVER[PHP_SELF]?forum=$forum&topicnotify=$topic_link_notify&topic_id=$myrow[topic_id]'>
+			<img src='../../template/classic/img/announcements$topic_icon.gif' border='0' title='$langNotify'></img></a></td></tr>";
 	} // end of while
 } else {
-	$tool_content .= "\n      <td colspan=6>$l_notopics</td></tr>\n";
+	$tool_content .= "\n<td colspan=6>$l_notopics</td></tr>\n";
 }
 $tool_content .= "</tbody></table>";
-
 draw($tool_content, 2, 'phpbb');

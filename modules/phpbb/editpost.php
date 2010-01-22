@@ -105,7 +105,7 @@ if ($is_adminOfCourse) { // course admin
 		$topic_title = $row2[0];
 	
 		$nameTools = $l_reply;
-		$navigation[]= array ("url"=>"index.php", "name"=> $l_forums);
+		$navigation[]= array ("url"=>"index.php", "name"=> $langForums);
 		$navigation[]= array ("url"=>"viewforum.php?forum=$forum_id", "name"=> $forum_name);
 		$navigation[]= array ("url"=>"viewtopic.php?&topic=$topic_id&forum=$forum_id", "name"=> $topic_title);
 	
@@ -240,7 +240,7 @@ if ($is_adminOfCourse) { // course admin
 		}
 		
 		$nameTools = $l_reply;
-		$navigation[]= array ("url"=>"index.php", "name"=> $l_forums);
+		$navigation[]= array ("url"=>"index.php", "name"=> $langForums);
 		$navigation[]= array ("url"=>"viewforum.php?forum=$forum", "name"=> $myrow['forum_name']);
 		$navigation[]= array ("url"=>"viewtopic.php?&topic=$topic&forum=$forum", "name"=> $myrow['topic_title']);
 	
@@ -265,7 +265,7 @@ if ($is_adminOfCourse) { // course admin
 			<INPUT TYPE=\"HIDDEN\" NAME=\"forum\" VALUE=\"$forum\">
 			<INPUT TYPE=\"HIDDEN\" NAME=\"topic\" VALUE=\"$topic\">
 			<INPUT TYPE=\"HIDDEN\" NAME=\"post_id\" VALUE=\"$post_id\">
-			<INPUT TYPE=\"SUBMIT\" NAME=\"logging_in\" VALUE=\"$l_enter\">
+			<INPUT TYPE=\"SUBMIT\" NAME=\"logging_in\" VALUE=\"$langEnter\">
 			</TD>
 			</TR>
 			</TABLE></FORM>";
@@ -364,7 +364,7 @@ if ($is_adminOfCourse) { // course admin
 		<!--
 		<INPUT TYPE=\"HIDDEN\" NAME=\"topic_id\" VALUE=\"$topic\">
 		-->
-		<INPUT TYPE=\"SUBMIT\" NAME=\"submit\" VALUE=\"$l_submit\">
+		<INPUT TYPE=\"SUBMIT\" NAME=\"submit\" VALUE=\"$langSubmit\">
 		</TD></TR>";
 		$tool_content .= "</tbody></table>";
 	}

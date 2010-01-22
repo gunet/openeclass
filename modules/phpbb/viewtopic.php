@@ -120,7 +120,7 @@ $topic_subject = own_stripslashes($myrow["topic_title"]);
 $lock_state = $myrow["topic_status"];
 
 if (!add_units_navigation(TRUE)) {
-	$navigation[]= array ("url"=>"index.php", "name"=> $l_forums);
+	$navigation[]= array ("url"=>"index.php", "name"=> $langForums);
 	$navigation[]= array ("url"=>"viewforum.php?forum=$forum", "name"=> $forum_name);
 }
 $nameTools = $topic_subject;
@@ -177,15 +177,15 @@ if ($paging and $total > $posts_per_page ) {
       </span>
       </td>
       <td align=\"right\">
-       <span class='pages'>$l_gotopage: &nbsp;&nbsp;";
+       <span class='pages'>$langGoToPage: &nbsp;&nbsp;";
 	if ( isset($start) && $start > 0 ) {
-		$tool_content .= "\n       <a href=\"$_SERVER[PHP_SELF]?topic=$topic&forum=$forum&start=$last_page\">$l_prevpage</a>&nbsp;|";
+		$tool_content .= "\n       <a href=\"$_SERVER[PHP_SELF]?topic=$topic&forum=$forum&start=$last_page\">$langPreviousPage</a>&nbsp;|";
 	} else {
 		$start = 0;
 	}	
 	if (($start + $posts_per_page) < $total) {
 		$next_page = $start + $posts_per_page;
-		$tool_content .= "\n       <a href=\"$_SERVER[PHP_SELF]?topic=$topic&forum=$forum&start=$next_page\">$l_nextpage</a>&nbsp;|";
+		$tool_content .= "\n       <a href=\"$_SERVER[PHP_SELF]?topic=$topic&forum=$forum&start=$next_page\">$langNextPage</a>&nbsp;|";
 	}
 	$tool_content .= "
        &nbsp;<a href=\"$_SERVER[PHP_SELF]?topic=$topic&amp;forum=$forum&amp;all=true\">$l_all</a>
@@ -208,7 +208,7 @@ if ($paging and $total > $posts_per_page ) {
 	if ($total > $posts_per_page) {	
 	$tool_content .= "
       <span class='pages'>
-       &nbsp;<a href=\"$_SERVER[PHP_SELF]?topic=$topic&amp;forum=$forum&amp;start=0\">$l_pages</a>
+       &nbsp;<a href=\"$_SERVER[PHP_SELF]?topic=$topic&amp;forum=$forum&amp;start=0\">$langPages</a>
       </span>";
 	}	  
 	$tool_content .= "
@@ -224,7 +224,7 @@ $tool_content .= <<<cData
     <table WIDTH="99%" class="ForumSum">
     <thead>
     <tr>
-      <td class="ForumHead" width="150">$l_author</td>
+      <td class="ForumHead" width="150">$langAuthor</td>
       <td class="ForumHead" colspan="2">$l_message</td>
     </tr>
     </thead>
@@ -340,15 +340,15 @@ cData;
       </span>
       </td>
       <td>
-       <span class='pages'>$l_gotopage: &nbsp;&nbsp;";
+       <span class='pages'>$langGoToPage: &nbsp;&nbsp;";
 	if ( isset($start) && $start > 0 ) {
-		$tool_content .= "\n       <a href=\"$_SERVER[PHP_SELF]?topic=$topic&amp;forum=$forum&amp;start=$last_page\">$l_prevpage</a>&nbsp;|";
+		$tool_content .= "\n       <a href=\"$_SERVER[PHP_SELF]?topic=$topic&amp;forum=$forum&amp;start=$last_page\">$langPreviousPage</a>&nbsp;|";
 	} else {
 		$start = 0;
 	}	
 	if (($start + $posts_per_page) < $total) {
 		$next_page = $start + $posts_per_page;
-		$tool_content .= "\n       <a href=\"$_SERVER[PHP_SELF]?topic=$topic&amp;forum=$forum&amp;start=$next_page\">$l_nextpage</a>&nbsp;|";
+		$tool_content .= "\n       <a href=\"$_SERVER[PHP_SELF]?topic=$topic&amp;forum=$forum&amp;start=$next_page\">$langNextPage</a>&nbsp;|";
 	}
 	$tool_content .= "
        &nbsp;<a href=\"$_SERVER[PHP_SELF]?topic=$topic&amp;forum=$forum&amp;all=true\">$l_all</a>
@@ -372,7 +372,7 @@ cData;
     ";
 	if ($total > $posts_per_page) {	
 	$tool_content .= "	  
-       &nbsp;<a href=\"$_SERVER[PHP_SELF]?topic=$topic&amp;forum=$forum&amp;start=0\">$l_pages</a>
+       &nbsp;<a href=\"$_SERVER[PHP_SELF]?topic=$topic&amp;forum=$forum&amp;start=0\">$langPages</a>
     ";
 	}	
 	$tool_content .= "   

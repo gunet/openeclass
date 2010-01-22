@@ -51,12 +51,13 @@
 */
 
 /*
- * GUNET eclass 2.0 standard stuff
+ * Open eClass 2.x standard stuff
  */
 $require_current_course = TRUE;
 $require_help = TRUE;
 $helpTopic = 'For';
 include '../../include/baseTheme.php';
+include '../../include/sendMail.inc.php';
 
 $tool_content = "";
 $lang_editor = langname_to_code($language);
@@ -69,16 +70,11 @@ $head_content = <<<hContent
 <script type="text/javascript" src="$urlAppend/include/xinha/my_config.js"></script>
 hContent;
 
-/*
- * Tool-specific includes
- */
-include_once("./config.php");
-include("functions.php"); // application logic for phpBB
 
-/******************************************************************************
- * Actual code starts here
- *****************************************************************************/
-if ( isset($post_id) && $post_id) {
+include_once("./config.php");
+include("functions.php");
+
+if (isset($post_id) && $post_id) {
 	// We have a post id, so include that in the checks..
 	$sql  = "SELECT f.forum_type, f.forum_name, f.forum_access, t.topic_title ";
 	$sql .= "FROM forums f, topics t, posts p ";
@@ -92,16 +88,8 @@ if ( isset($post_id) && $post_id) {
 	$sql .= "WHERE (f.forum_id = '$forum') AND (t.topic_id = $topic) AND (t.forum_id = f.forum_id)";	
 }
 
-if(!$result = db_query($sql, $currentCourseID)) {
-	$tool_content .= $langErrorConnectForumDatabase;
-	draw($tool_content, 2, 'phpbb', $head_content);
-	exit();
-}
-if (!$myrow = mysql_fetch_array($result)) {
-	$tool_content .= $langErrorTopicSelect;
-	draw($tool_content, 2, 'phpbb', $head_content);
-	exit();
-}
+$result = db_query($sql, $currentCourseID);
+$myrow = mysql_fetch_array($result);
 
 $forum_name = $myrow["forum_name"];
 $forum_access = $myrow["forum_access"];
@@ -110,7 +98,7 @@ $topic_title = $myrow["topic_title"];
 $forum_id = $forum;
 
 $nameTools = $l_reply;
-$navigation[]= array ("url"=>"index.php", "name"=> $l_forums);
+$navigation[]= array ("url"=>"index.php", "name"=> $langForums);
 $navigation[]= array ("url"=>"viewforum.php?forum=$forum", "name"=> $forum_name);
 $navigation[]= array ("url"=>"viewtopic.php?&topic=$topic&forum=$forum", "name"=> $topic_title);
 
@@ -201,100 +189,71 @@ if (isset($submit) && $submit) {
 			exit();
 		}
 	}
-	$sql = "UPDATE topics
-		SET topic_replies = topic_replies+1, topic_last_post_id = $this_post, topic_time = '$time' 
+	$sql = "UPDATE topics SET topic_replies = topic_replies+1, topic_last_post_id = $this_post, topic_time = '$time' 
 		WHERE topic_id = '$topic'";
 	if (!$result = db_query($sql, $currentCourseID)) {
 		$tool_content .= $langUnableEnterData;
 		draw($tool_content, 2, 'phpbb', $head_content);
 		exit();
 	}
-	$sql = "UPDATE forums 
-		SET forum_posts = forum_posts+1, forum_last_post_id = '$this_post' 
+	$sql = "UPDATE forums SET forum_posts = forum_posts+1, forum_last_post_id = '$this_post' 
 		WHERE forum_id = '$forum'";
 	$result = db_query($sql, $currentCourseID);
 	if (!$result) {
 		$tool_content .= $langErrorUpadatePostCount;
 		draw($tool_content, 2, 'phpbb', $head_content);
 		exit();
-	}    
-/* FIXME Should re-enable topic notification using eClass user info
-	$sql = "SELECT t.topic_notify
-		FROM topics t
-		WHERE t.topic_id = '$topic'";
-	if (!$result = db_query($sql, $currentCourseID)) {
-		$tool_content .= $langUserTopicInformation;
-		draw($tool_content, 2, 'phpbb', $head_content);
-		exit();
 	}
-	$m = mysql_fetch_array($result);
-	if ($m["topic_notify"] == 1) {
-		// We have to get the mail body and subject line in the board default language!
-		$subject = get_syslang_string($sys_lang, "l_notifysubj");
-		$message = get_syslang_string($sys_lang, "l_notifybody");
-		mail($m["user_email"], $subject, $message, "From: $email_from\r\nX-Mailer: phpBB $phpbbversion");
+	
+	// --------------------------------
+	// notify users 
+	// --------------------------------
+	$subject_notify = "$logo - $langSubjectNotify";
+	$category_id = forum_category($forum);
+	$cat_name = category_name($category_id);
+	$sql = db_query("SELECT DISTINCT user_id FROM forum_notify 
+			WHERE (topic_id = $topic OR forum_id = $forum OR cat_id = $category_id) 
+			AND notify_sent = 1 AND course_id = $cours_id", $mysqlMainDb);
+	$body_topic_notify = "$langBodyTopicNotify $langInForum '$topic_title' $langOfForum '$forum_name' $langInCat '$cat_name' \n\n$gunet";
+	while ($r = mysql_fetch_array($sql)) {
+		$emailaddr = uid_to_email($r['user_id']);
+		send_mail('', '', '', $emailaddr, $subject_notify, $body_topic_notify, $charset);
 	}
-*/
+	// end of notification
+	 
 	$total_forum = get_total_topics($forum, $currentCourseID);
-	$total_topic = get_total_posts($topic, $currentCourseID, "topic")-1;  
+	$total_topic = get_total_posts($topic, $currentCourseID, "topic")-1;
 	// Subtract 1 because we want the nr of replies, not the nr of posts.
 	$forward = 1;
+	$tool_content .= "<div id=\"operations_container\">
+	<ul id=\"opslist\">
+	<li><a href=\"viewtopic.php?topic=$topic&forum=$forum&$total_topic\">$l_ViewMessage</a></li>
+	<li><a href=\"viewforum.php?forum=$forum&$total_forum\">$l_returntopic</a></li>
+	</ul></div><br />";
 	
-	$tool_content .= "
-    <div id=\"operations_container\">
-      <ul id=\"opslist\">
-        <li><a href=\"viewtopic.php?topic=$topic&forum=$forum&$total_topic\">$l_ViewMessage</a></li>
-        <li><a href=\"viewforum.php?forum=$forum&$total_forum\">$l_returntopic</a></li>
-      </ul>
-    </div>
-    <br />
-	";
-	
-	$tool_content .= "
-    <table width=\"99%\">
-    <tbody>
-    <tr>
-      <td class=\"success\">$l_stored</td>
-    </tr>
-    </tbody>
-    </table>";
+	$tool_content .= "<table width=\"99%\"><tbody><tr>
+	<td class=\"success\">$langStored</td>
+	</tr></tbody></table>";
 } else {
 	// Private forum logic here.
 	if (($forum_type == 1) && !$user_logged_in && !$logging_in) {
-		$tool_content .= "
-    <FORM ACTION=\"$PHP_SELF\" METHOD=\"POST\">
-
-    <TABLE ALIGN=\"left\" WIDTH=\"99%\">
-    <TR>
-      <TD>
-
-      <TABLE WIDTH=\"100%\">
-      <TR>
-        <TD>$l_private</TD>
-      </TR>
-      <TR>
-        <TD>&nbsp;</TD>
-      </TR>
-      <TR>
-        <TD>
-          <INPUT TYPE=\"HIDDEN\" NAME=\"forum\" VALUE=\"$forum\">
-          <INPUT TYPE=\"HIDDEN\" NAME=\"topic\" VALUE=\"$topic\">
-          <INPUT TYPE=\"HIDDEN\" NAME=\"post\" VALUE=\"$post\">
-          <INPUT TYPE=\"HIDDEN\" NAME=\"quote\" VALUE=\"$quote\">
-          <INPUT TYPE=\"SUBMIT\" NAME=\"logging_in\" VALUE=\"$l_enter\">
-        </TD>
-      </TR>
-      </TABLE>
-
-      </TD>
-    </TR>
-    </TABLE>
-
-    </FORM>";
+		$tool_content .= "<form action='$_SERVER[PHP_SELF]' method='post'>
+		<table align='left' width='99%'>
+		<tr><td>
+		<table width='100%'><tr><td>$l_private</td></tr>
+		<tr><td>&nbsp;</td></tr>
+		<tr>
+		<td>
+		<input type='hidden' name='forum' value='$forum'>
+		<input type='hidden' name='topic' value='$topic'>
+		<input type='hidden' name='post' value='$post'>
+		<input type='hidden' name='quote' value='$quote'>
+		<input type='SUBMIT' name='logging_in' value='$langEnter'>
+		</td></tr></table>
+		</td></tr></table></form>";
 		draw($tool_content, 2, 'phpbb', $head_content);
 		exit();
 	} else {
-		// ADDED BY CLAROLINE: exclude non identified visitors
 		if (!$uid AND !$fakeUid) {
 			$tool_content .= "<center><br><br>$langLoginBeforePost1<br>";
 			$tool_content .= "$langLoginBeforePost2<a href=../../index.php>$langLoginBeforePost3</a></center>";
@@ -313,26 +272,19 @@ if (isset($submit) && $submit) {
 		}
 	}	
 	// Topic review
-	$tool_content .= "
-    <div id=\"operations_container\">
-      <ul id=\"opslist\">
-        <li><a href=\"viewtopic.php?topic=$topic&forum=$forum\" target=\"_blank\">$l_topicreview</a></li>
-      </ul>
-    </div>
-    <br />
-	";
-	
-	
-	$tool_content .= "
-    <FORM ACTION=\"$PHP_SELF\" METHOD=\"POST\">
-    <table class=\"FormData\" width=\"99%\">
-    <tbody>
-    <tr>
-      <th width=\"220\">&nbsp;</th>
-      <TD><b>$langTopicAnswer</b>: $topic_title</TD>
-    </tr>
-    <tr>
-      <th class=\"left\">$l_body:";
+	$tool_content .= "<div id=\"operations_container\">
+	<ul id=\"opslist\">
+	<li><a href=\"viewtopic.php?topic=$topic&forum=$forum\" target=\"_blank\">$l_topicreview</a></li>
+	</ul></div><br />";
+	$tool_content .= "<form action='$_SERVER[PHP_SELF]' method='post'>
+	<table class=\"FormData\" width=\"99%\">
+	<tbody>
+	<tr>
+	<th width=\"220\">&nbsp;</th>
+	<td><b>$langTopicAnswer</b>: $topic_title</td>
+	</tr>
+	<tr>
+        <th class=\"left\">$l_body:";
 	if (isset($quote) && $quote) {
 		$sql = "SELECT pt.post_text, p.post_time, u.username 
 			FROM posts p, posts_text pt 
@@ -359,29 +311,24 @@ if (isset($submit) && $submit) {
 	if (!isset($quote)) {
 		$quote = "";
 	}
-	$tool_content .= "
-      </th>
-      <td valign=\"top\">
-      <table class='xinha_editor'>
-          <tr>
+	$tool_content .= "</th><td valign='top'>
+	<table class='xinha_editor'>
+	<tr>
 	<td>
-	<TEXTAREA id='xinha' NAME='message' ROWS=15 COLS=70 WRAP='VIRTUAL' class='auth_input'>$reply</TEXTAREA></td>
+	<textarea id='xinha' NAME='message' ROWS=15 COLS=70 WRAP='VIRTUAL' class='auth_input'>$reply</textarea></td>
 	</tr></table></td>
-    </tr>
-    <tr>
-      <th>&nbsp;</th>
-      <td>
-          <INPUT TYPE=\"HIDDEN\" NAME=\"forum\" VALUE=\"$forum\">
-          <INPUT TYPE=\"HIDDEN\" NAME=\"topic\" VALUE=\"$topic\">
-          <INPUT TYPE=\"HIDDEN\" NAME=\"quote\" VALUE=\"$quote\">
-          <INPUT TYPE=\"SUBMIT\" NAME=\"submit\" VALUE=\"$l_submit\">&nbsp;
-          <INPUT TYPE=\"SUBMIT\" NAME=\"cancel\" VALUE=\"$l_cancelpost\">
-      </td>
-    </tr>
-    </tbody>
-    </TABLE>
-    </FORM>
-    <br/>";
-
+	</tr>
+	<tr>
+	<th>&nbsp;</th>
+	<td>
+	<input type='hidden' name='forum' value='$forum'>
+	<input type='hidden' name='topic' value='$topic'>
+	<input type='hidden' name='quote' value='$quote'>
+	<input type='submit' name='submit' value='$langSubmit'>&nbsp;
+	<input type='submit' name='cancel' value='$l_cancelpost'>
+	</td>
+	</tr>
+	</tbody></table>
+	</form><br/>";
 }
 draw($tool_content, 2, 'phpbb', $head_content);
