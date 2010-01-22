@@ -1864,141 +1864,70 @@ $langLoginBeforePost2 = "πρέπει προηγουμένως να ";
 $langLoginBeforePost3 = "κάνετε login στην πλατφόρμα";
 $langPages = "Σελίδες";
 $langNoForums = "Δεν υπάρχουν διαθέσιμες περιοχές συζητήσεων";
-
-// page_header.php
-
 $langNewTopic="Νέο θέμα";
 $langTopicData="Στοιχεία θέματος";
 $langTopicAnswer="Απάντηση στο θέμα συζήτησης";
 $langGroupDocumentsLink="Έγγραφα ομάδας ";
-$l_forum 	= "Περιοχή συζητήσεων";
-$l_forums	= "Περιοχές συζητήσεων";
+$langNotify = "Ειδοποίηση μέσω email αν σταλούν απαντήσεις";
+$langNotifyActions = "Ειδοποιήσεις";
+$langGoToPage = "Μετάβαση στη σελίδα";
+$langClick = "Κάντε κλικ";
+$langSubjectNotify = "Ειδοποίηση για καινούριο μήνυμα";
+$langNewForumNotify = "Ειδοποίηση για καινούριο θέμα";
+$langCatNotify = "Ειδοποίηση για καινούρια περιοχή συζητήσεων";
+$langInForum = "στο θέμα";
+$langInForums = "στην περιοχή συζητήσεων";
+$langInCat = "στη κατηγορία";
+$langBodyForumNotify = "Ένα καινούριο θέμα έχει προστεθεί";
+$langBodyTopicNotify = "Μια νέα απάντηση έχει προστεθεί";
+$langBodyCatNotify = "Μια νέα περιοχή συζητήσεων έχει προστεθεί";
+$langOfForum = "της περιοχής συζητήσεων";
+
 $l_topic	= "Θέμα";
 $l_topics 	= "Θέματα";
 $l_replies	= "Απαντήσεις";
 $l_poster	= "Αποστολέας";
-$l_author	= "Συγγραφέας";
-$l_views	= "Όψεις";
 $l_post 	= "Αποστολή";
 $l_posts 	= "Αποστολές";
 $l_message	= "Μήνυμα";
 $l_messages	= "Μηνύματα";
 $l_all      = "όλα";
-$l_pages    = "σελίδες";
 $l_subject	= "Θέμα";
 $l_body		= "Σώμα μηνύματος";
-$l_from		= "Από";   // Message from
-$l_moderator 	= "Συντονιστής";
-$l_username 	= "Όνομα χρήστη";
-$l_password 	= "Συνθηματικό";
-$l_email 	= "Email";
-$l_emailaddress	= "Διεύθυνση Email";
-$l_preferences	= "Προτιμήσεις";
 $l_postTitle	= "Θέμα δημοσίευσης";
 
 $langAnonymousExplain = 'Οι χρήστες που εμφανίζονται με διαφορετικό χρώμα δεν είναι αυτή τη στιγμή εγγεγραμμένοι στο μάθημα, ενώ όσοι έχουν την ένδειξη «Ανώνυμος» έχουν διαγραφεί από το σύστημα.';
-$l_anonymous	= "Ανώνυμος";  // Post
-$l_guest	= "Φιλοξενούμενος"; // Whosonline
+
 $l_noposts	= "Δεν υπάρχουν αποστολές";
-$l_joined	= "Προσχώρηση";
-$l_gotopage	= "Πήγαινε σε σελίδα";
-$l_nextpage 	= "Επόμενη";
-$l_prevpage     = "Προηγούμενη";
 $l_go		= "Πήγαινε";
-$l_selectforum	= "Επιλογή $l_forum";
-$l_date		= "Ημερομηνία";
-$l_number	= "Αριθμός";
-$l_name		= "Όνομα";
 $l_options 	= "Επιλογές";
-$l_submit	= "Υποβολή";
 $l_confirm 	= "Επιβεβαίωση";
-$l_enter 	= "Είσοδος";
 $l_by		= "από";
-$l_ondate	= "στις";
 $l_new          = "Νέο";
-$l_html		= "HTML";
-$l_bbcode	= "BBcode";
-$l_smilies	= "Smilies";
-$l_on		= "On";
-$l_off		= "Off";
-$l_yes		= "Ναι";
 $l_no		= "Όχι";
-$l_click 	= "Πατήστε";
-$l_here 	= "εδώ";
 $l_toreturn	= " για επιστροφή";
 $l_returnindex	= "Επιστροφή στο ευρετήριο περιοχών συζητήσεων";
 $l_returntopic	= "Επιστροφή στην περιοχή συζητήσεων";
 $l_error	= "Σφάλμα";
 $l_tryagain	= "Παρακαλούμε επιστρέψτε στην προηγούμενη σελίδα και ξαναδοκιμάστε.";
-$l_mismatch 	= "Τα συνθηματικά δεν είναι ίδια.";
-$l_userremoved 	= "Ο χρήστης αυτός έχει διαγραφεί από τον κατάλογο χρηστών";
-$l_wrongpass	= "Δώσατε λάθος συνθηματικό.";
-$l_userpass	= "Παρακαλούμε δώστε το όνομα χρήστη και το συνθηματικό σας.";
-$l_banned 	= "Σας έχει απαγορευτεί η πρόσβαση σε αυτή την περιοχή. Αν έχετε κάποια ερώτηση επικοινωνήστε με το διαχειριστή του συστήματος.";
-$l_enterpassword= "Πρέπει να δώσετε το συνθηματικό σας";
 $l_nopost	= "Δεν έχετε δικαίωμα αποστολής μηνυμάτων σε αυτή την περιοχή.";
-$l_noread	= "Δεν έχετε δικαίωμα ανάγνωσης αυτής της περιοχής.";
 $l_lastpost 	= "Τελευταία $l_post";
 $l_sincelast	= "από την προηγούμενη επίσκεψή σας.";
 $l_newposts 	= "Υπάρχουν νέα $l_posts $l_sincelast";
 $l_nonewposts 	= "Δεν υπάρχουν νέα $l_posts $l_sincelast";
-// Index page
-$l_indextitle	= "Ευρετήριο περιοχών συζητήσεων";
-// Members and profile
-$l_profile	= "Προφίλ";
-$l_register	= "Καταχώρηση";
-$l_onlyreq 	= "Απαιτείται μόνο αν αλλάζει";
-$l_location 	= "Από";
-$l_viewpostuser	= "Εμφάνιση μηνυμάτων μόνο αυτού του χρήστη";
-$l_perday       = "$l_messages ανά ημέρα";
-$l_oftotal      = "του συνόλου";
-$l_url 		= "URL";
-$l_icq 		= "ICQ";
-$l_icqnumber	= "Αριθμός ICQ";
-$l_icqadd	= "Προσθήκη";
-$l_icqpager	= "Pager";
-$l_aim 		= "AIM";
-$l_yim 		= "YIM";
-$l_yahoo 	= "Yahoo Messenger";
-$l_msn 		= "MSN";
-$l_messenger	= "MSN Messenger";
-$l_website 	= "Διεύθυνση ιστοσελίδας";
-$l_occupation 	= "Επάγγελμα";
-$l_interests 	= "Ενδιαφέροντα";
-$l_signature 	= "Υπογραφή";
-$l_sigexplain 	= "Ένα κείμενο που επισυνάπτεται στο τέλος των μηνυμάτων σας.<BR>Μέγιστο μήκος 255 χαρακτήρες!";
-$l_usertaken	= "Το $l_username που επιλέξατε χρησιμοποιείται ήδη.";
-$l_userdisallowed= "Το $l_username που επιλέξατε δεν επιτρέπεται από το διαχειριστή. $l_tryagain";
-$l_infoupdated	= "Οι πληροφορίες σας ενημερώθηκαν";
-$l_publicmail	= "Εμφάνιση της διεύθυνσης email σας στους άλλους χρήστες";
-$l_itemsreq	= "Τα στοιχεία που σημειώνονται με * είναι υποχρεωτικά";
 
 // Viewforum
 $l_viewforum	= "Εμφάνιση περιοχής συζητήσεων";
 $l_notopics	= "Δεν υπάρχουν θέματα σε αυτή την περιοχή. Μπορείτε να ξεκινήσετε ένα νέο.";
 $l_noforum	= "Δεν υπάρχουν περιοχές συζήτησης σε αυτή την κατηγορία.";
-$l_hotthres	= "To όριο των μηνυμάτων ξεπεράστηκε";
-$l_islocked	= "Το θέμα είναι κλειδωμένο (δεν μπορούν να αποσταλούν νέα μηνύματα σε αυτό)";
-$l_moderatedby	= "Συντονιστής: ";
+
 // Private forums
 $l_privateforum	= "Αυτή η περιοχή συζητήσεων είναι <b>προσωπική</b>.";
 $l_private 	= "$l_privateforum<br>Σημείωση: πρέπει να έχετε ενεργοποιημένα τα cookies για να χρησιμοποιήσετε προσωπικές περιοχές.";
 $l_noprivatepost = "$l_privateforum Δεν έχετε πρόσβαση αποστολής μηνυμάτων σε αυτή την περιοχή.";
 // Viewtopic
 $l_topictitle	= "Εμφάνιση θέματος";
-$l_unregistered	= "Μη καταχωρημένος χρήστης";
 $l_posted	= "Στάλθηκε";
-$l_profileof	= "Εμφάνιση προφίλ του";
-$l_viewsite	= "Μετάβαση στην ιστοσελίδα του";
-$l_icqstatus	= "$l_icq status";  // ICQ status
-$l_editdelete	= "Διόρθωση / διαγραφή του μηνύματος";
-$l_replyquote	= "Απάντηση με παράθεση";
-$l_viewip	= "Εμφάνιση IP αποστολέα (μόνο για διαχειριστές/συντονιστές)";
-$l_locktopic	= "Κλείδωμα αυτού του θέματος";
-$l_unlocktopic	= "Ξεκλείδωμα αυτού του θέματος";
-$l_movetopic	= "Μεταφορά αυτού του θέματος";
-$l_deletetopic	= "Διαγραφή αυτού του θέματος";
-
 $l_ViewMessage	= "Εμφάνιση μηνύματος";
 
 $langErrorConnectForumDatabase="Παρουσιάστηκε πρόβλημα. Αδύνατη η σύνδεση με τη βάση δεδομένων του Forum.";
@@ -2012,98 +1941,21 @@ $langErrorTopicSelect="Η περιοχή συζητήσεων που επιλέ�
 $langUnableEnterData="Αδύνατη η εισαγωγή δεδομένων στη βάση. Παρακαλώ προσπαθήστε ξανά.";
 $langUnableEnterText="Αδύνατη η εισαγωγή κειμένου!<br>Αιτία";
 
-// Functions
-$l_loggedinas	= "Συνδεδεμένος ως";
-$l_notloggedin	= "Μη συνδεδεμένος";
-$l_login	= "Σύνδεση";
-
-// Page_header
-$l_separator	= "» »";  // Included here because some languages have
-		          // problems with high ASCII (Big-5 and the like).
-$l_editprofile	= "Μεταβολή προφίλ";
-$l_editprefs	= "Μεταβολή προτιμήσεων";
-$l_search	= "Αναζήτηση";
-$l_memberslist	= "Λίστα μελών";
-$l_faq		= "FAQ";
-$l_privmsgs	= "Προσωπικά μηνύματα";
-$l_sendpmsg	= "Αποστολή προσωπικού μηνύματος";
-$l_statsblock   = '$statsblock = "Οι χρήστες μας έχουν στείλει συνολικά -$total_posts- μηνύματα.<br>
-Έχουμε -$total_users- καταχωρημένους χρήστες.<br>
-Ο νεότερος καταχωρημένος χρήστης: -<a href=\"$profile_url\">$newest_user</a>-.<br>
--$users_online- ". ($users_online==1?"χρήστης":"χρήστες") ." <a href=\"$online_url\">διαβάζουν αυτή τη στιγμή</a> τις περιοχές συζητήσεων.<br>";';
-$l_privnotify   = '$privnotify = "<br>Έχετε $new_message <a href=\"$privmsg_url\">".($new_message>1?"νέα προσωπικά μηνύματα":"νέο προσωπικό μήνυμα")."</a>.";';
-
 // Page_tail
 $l_adminpanel	= "Διαχείριση";
-$l_poweredby	= "Υποστηρίζεται από το";
-$l_version	= "Έκδοση";
-
-// Register
-$l_notfilledin	= "Σφάλμα - δε συμπληρώσατε όλα τα απαιτούμενα πεδία";
-$l_invalidname	= "Το όνομα χρήστη που επιλέξατε, χρησιμοποιείται ήδη.";
-$l_disallowname	= "Το όνομα χρήστη δεν επιτρέπεται από τον διαχειριστή.";
-$l_welcomesubj	= "Καλωσορίσατε στις περιοχές συζητήσεων";
-$l_beenadded	= "Προστεθήκατε στη βάση δεδομένων.";
-$l_thankregister= "Σας ευχαριστούμε για την εγγραφή σας!";
-$l_useruniq	= "Πρέπει να είναι μοναδικό. Δε γίνεται δύο χρήστες να έχουν το ίδιο όνομα.";
-$l_storecookie	= "Αποθήκευση του ονόματός σας σε ένα «cookie» για ένα χρόνο.";
-
-// Prefs
-$l_prefupdated	= "Οι προτιμήσεις ενημερώθηκαν. <a href=\"index.php\">Πιέστε εδώ για να επιστρέψετε</a> στην κεντρική σελίδα";
-$l_themecookie	= "ΣΗΜΕΙΩΣΗ: για να αλλάξετε την εμφάνιση των σελίδων πρέπει να έχετε τα cookies ενεργά.";
-$l_alwayssig	= "Προσθήκη υπογραφής σε όλα τα μηνύματα";
-$l_alwaysdisable= "Απενεργοποίηση παντού "; // Only used for next three strings
-$l_alwayssmile = "Απενεργοποίηση των $l_smilies παντού";
-$l_alwayshtml	= "Απενεργοποίηση της $l_html παντού";
-$l_alwaysbbcode	= "Απενεργοποίηση του $l_bbcode παντού";
-$l_boardtheme	= "Εμφάνιση περιοχής συζητήσεων";
-$l_boardlang  = "Γλώσσα περιοχής συζητήσεων";
-$l_nothemes	= "Δεν υπάρχουν ρυθμίσεις εμφάνισης στη βάση";
-$l_saveprefs	= "Αποθήκευση προτιμήσεων";
-
-// Search
-$l_searchterms	= "Λέξεις κλειδιά";
-$l_searchany	= "Αναζήτηση για ΟΠΟΙΟΝΔΗΠΟΤΕ από τους όρους (Προκαθορισμένο)";
-$l_searchall	= "Αναζήτηση για ΟΛΟΥΣ τους όρους";
-$l_searchallfrm	= "Αναζήτηση σε όλες τις περιοχές συζητήσεων";
-$l_sortby	= "Ταξινόμηση κατα";
-$l_searchin	= "Αναζήτηση σε";
-$l_titletext	= "Τίτλο και Κείμενο";
-$l_nomatches	= "Δεν βρέθηκαν εγγραφές που να ταιριάζουν. Παρακαλώ διευρύνετε την αναζήτηση.";
-
-// Whosonline
-$l_whosonline	= "Ποιος είναι συνδεδεμένος;";
-$l_nousers	= "Κανείς χρήστης δε διαβάζει αυτή τη στιγμή τις περιοχές συζητήσεων";
-
 // Editpost
 $l_notedit	= "Δεν μπορείτε να αλλάξετε μήνυμα που δεν είναι δικό σας.";
-$l_permdeny	= "Δεν δώσατε το σωστό $l_password ή δεν έχετε το δικαίωμα να αλλάξετε αυτό το μήνυμα. $l_tryagain";
 $l_editedby	= "Το $l_message διορθώθηκε από:";
-$l_stored	= "Το $l_message αποθηκεύτηκε.";
+$langStored	= "Το $l_message αποθηκεύτηκε.";
 $l_viewmsg	= " για να εμφανίσετε το $l_message.";
 $l_viewmsg1	= "εμφάνιση μηνύματος";
 $l_deleted	= "Το μήνυμα διαγράφηκε.";
-$l_nouser	= "Το $l_username δεν υπάρχει.";
-$l_passwdlost	= "Ξέχασα το συνθηματικό μου!";
 $l_delete	= "Διαγραφή του μηνύματος";
-
 $l_disable	= "Απενεργοποίηση";
 $l_onthispost	= "σε αυτό το μήνυμα";
 
-$l_htmlis	= "$l_html ";
-$l_bbcodeis	= "$l_bbcode ";
-
-$l_notify	= "Ειδοποίηση μέσω email αν σταλούν απαντήσεις";
-
 // Newtopic
 $l_emptymsg	= "Για να στείλετε ένα μήνυμα πρέπει να γράψετε κάποιο κείμενο. Δεν μπορείτε να στείλετε κενό μήνυμα.";
-$l_aboutpost	= "Σχετικά με την αποστολή μηνυμάτων";
-$l_regusers	= "Όλοι οι <b>εγγεγραμμένοι</b> χρήστες";
-$l_anonusers	= "Οι <b>ανώνυμοι</b> χρήστες";
-$l_modusers	= "Μόνο οι <b>συντονιστές</b> και οι <b>διαχειριστές</b>";
-$l_anonhint	= "<br>(για να στείλετε μήνυμα ανώνυμα απλώς μη δώσετε όνομα χρήστη και συνθηματικό)";
-$l_inthisforum	= "μπορούν να στείλουν απαντήσεις και να ανοίξουν νέα θέματα εδώ";
-$l_attachsig	= "Εμφάνιση υπογραφής <font size=-2>(Μπορεί να προστεθεί ή να αλλαχτεί στο προφίλ σας)</font>";
 $l_cancelpost	= "Ακύρωση αποστολής";
 
 // Reply
@@ -2112,28 +1964,9 @@ $l_topicreview  = "Ανασκόπηση θέματος";
 $l_notifysubj	= "Στάλθηκε μια απάντηση στο θέμα σας.";
 $l_quotemsg	= '[quote]\nΣτις $m[post_time], ο/η $m[username] έγραψε:\n$text\n[/quote]';
 
-// Sendpmsg
-$l_norecipient	= "Πρέπει να εισάγετε το όνομα χρήστη προς το οποίο θέλετε να στείλετε το μήνυμα.";
-$l_sendothermsg	= "Αποστολή άλλου προσωπικού μηνύματος";
-$l_cansend	= "μπορούν να στείλουν προσωπικά μηνύματα";  // All registered users can send PM's
-$l_yourname	= "Το όνομα χρήστη σας";
-$l_recptname	= "Όνομα χρήστη παραλήπτη";
-
-// Replypmsg
-$l_pmposted	= "Στάλθηκε απάντηση, πιέστε <a href=\"viewpmsg.php\">εδώ</a> για να δείτε τα προσωπικά σας μηνύματα";
-
 // Viewpmsg
-$l_nopmsgs	= "Δεν έχετε προσωπικά μηνύματα.";
 $l_reply	= "Απάντηση";
 $l_replyEdit	= "Αλλαγή απάντησης";
-
-// Delpmsg
-$l_deletesucces	= "Διαγραφή επιτυχής.";
-
-// Smilies
-$l_smilesym	= "Τι να γράψετε";
-$l_smileemotion	= "Συναίσθημα";
-$l_smilepict	= "Εικόνα";
 
 /*****************************************************************
 * questionnaire.inc.php
