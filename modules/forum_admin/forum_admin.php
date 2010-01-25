@@ -34,6 +34,7 @@ $helpTopic = 'For';
 $require_prof = true;
 include '../../include/baseTheme.php';
 include '../../include/sendMail.inc.php';
+include '../phpbb/functions.php';
 $nameTools = $langOrganisation;
 $navigation[]= array ("url"=>"../phpbb/index.php", "name"=> $langForums);
 
@@ -305,13 +306,13 @@ if(isset($forumgo)) {
 	} else {
 		if(isset($forumcatnotify)) { // modify forum category notification
 			$rows = mysql_num_rows(db_query("SELECT * FROM forum_notify 
-				WHERE user_id = $uid AND cat_id = $cat_id"));
+				WHERE user_id = $uid AND cat_id = $cat_id AND course_id = $cours_id"));
 			if ($rows > 0) {
 				db_query("UPDATE forum_notify SET notify_sent = '$forumcatnotify' 
-					WHERE user_id = $uid AND cat_id = $cat_id");
+					WHERE user_id = $uid AND cat_id = $cat_id AND course_id = $cours_id");
 			} else {
 				db_query("INSERT INTO forum_notify SET user_id = $uid,
-				cat_id = $cat_id, notify_sent = '$forumcatnotify', course_id = $cours_id");
+				cat_id = $cat_id, notify_sent = 1, course_id = $cours_id");
 			}
 		}
 		$tool_content .= "<form action=\"$_SERVER[PHP_SELF]?forumadmin=yes\" method=post></td><tr><td>";
@@ -327,16 +328,14 @@ if(isset($forumgo)) {
 		while(list($cat_id, $cat_title) = mysql_fetch_row($result)) {
 			$gets = db_query("SELECT COUNT(*) AS total FROM forums WHERE cat_id=$cat_id", $currentCourseID);
 			$numbers = mysql_fetch_array($gets);
-			list($action_notify) = mysql_fetch_row(db_query("SELECT notify_sent FROM forum_notify 
-				WHERE user_id = $uid AND cat_id = $cat_id", $mysqlMainDb));
-			if ($action_notify == TRUE) {
-				$action_notify = FALSE;
+			list($forum_cat_action_notify) = mysql_fetch_row(db_query("SELECT notify_sent FROM forum_notify 
+				WHERE user_id = $uid AND cat_id = $cat_id AND course_id = $cours_id", $mysqlMainDb));
+			if (!isset($forum_cat_action_notify)) {
+				$link_notify = FALSE;
 				$icon = '_off';
-			} elseif ($action_notify == FALSE) {
-				$action_notify = TRUE;
-				$icon = '_on';
-			} elseif (!isset($action_notify)) {
-				$action_notify = FALSE;
+			} else {
+				$link_notify = toggle_link($forum_cat_action_notify);
+				$icon = toggle_icon($forum_cat_action_notify);
 			}
 			$tool_content .= "\n<tr class=\"odd\">\n<td><div align='right'>$i.</div></td>
       			<td><div align='left'>$cat_title &nbsp;</div></td>
@@ -347,7 +346,7 @@ if(isset($forumgo)) {
 			<img src='../../template/classic/img/edit.gif' border='0' title='$langModify'></img></a>&nbsp;
 			<a href='$_SERVER[PHP_SELF]?forumcatdel=yes&cat_id=$cat_id&ok=0' onClick='return confirmation();'>
 			<img src='../../template/classic/img/delete.gif' border='0' title='$langDelete'></img></a>
-			<a href='$_SERVER[PHP_SELF]?forumcatnotify=$action_notify&cat_id=$cat_id'>	
+			<a href='$_SERVER[PHP_SELF]?forumcatnotify=$link_notify&cat_id=$cat_id'>	
 			<img src='../../template/classic/img/announcements$icon.gif' border='0' title='$langNotify'></img></a>
 			</td></tr>";
 			$i++;

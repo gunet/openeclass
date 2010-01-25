@@ -70,9 +70,7 @@ $action = new action();
 $action->record('MODULE_ID_FORUM');
 /**************************************/
 
-/*
-* Tool-specific includes
-*/
+
 include_once("./config.php");
 include "functions.php";
 
@@ -88,23 +86,23 @@ if ($is_adminOfCourse || $is_admin) {
 
 if(isset($forumcatnotify)) { // modify forum category notification
 		$rows = mysql_num_rows(db_query("SELECT * FROM forum_notify 
-			WHERE user_id = $uid AND cat_id = $cat_id", $mysqlMainDb));
+			WHERE user_id = $uid AND cat_id = $cat_id AND course_id = $cours_id", $mysqlMainDb));
 		if ($rows > 0) {
 			db_query("UPDATE forum_notify SET notify_sent = '$forumcatnotify' 
-				WHERE user_id = $uid AND cat_id = $cat_id", $mysqlMainDb);
+				WHERE user_id = $uid AND cat_id = $cat_id AND course_id = $cours_id", $mysqlMainDb);
 	} else {
 		db_query("INSERT INTO forum_notify SET user_id = $uid,
-		cat_id = $cat_id, notify_sent = '$forumcatnotify', course_id = $cours_id", $mysqlMainDb);
+		cat_id = $cat_id, notify_sent = 1, course_id = $cours_id", $mysqlMainDb);
 	}
 } elseif(isset($forumnotify)) { // modify forum notification
 	$rows = mysql_num_rows(db_query("SELECT * FROM forum_notify 
-		WHERE user_id = $uid AND forum_id = $forum_id", $mysqlMainDb));
+		WHERE user_id = $uid AND forum_id = $forum_id AND course_id = $cours_id", $mysqlMainDb));
 	if ($rows > 0) {
 		db_query("UPDATE forum_notify SET notify_sent = '$forumnotify' 
-			WHERE user_id = $uid AND forum_id = $forum_id", $mysqlMainDb);
+			WHERE user_id = $uid AND forum_id = $forum_id AND course_id = $cours_id", $mysqlMainDb);
 	} else {
 		db_query("INSERT INTO forum_notify SET user_id = $uid,
-		forum_id = $forum_id, notify_sent = '$forumnotify', course_id = $cours_id", $mysqlMainDb);
+		forum_id = $forum_id, notify_sent = 1, course_id = $cours_id", $mysqlMainDb);
 	}
 }
 
@@ -250,7 +248,7 @@ if ($total_categories) {
 					WHERE user_id = $uid AND forum_id = $forum AND course_id = $cours_id", $mysqlMainDb));
 				if (!isset($forum_action_notify)) {
 					$forum_link_notify = FALSE;
-					$forum_icon = '_on';
+					$forum_icon = '_off';
 				} else {
 					$forum_link_notify = toggle_link($forum_action_notify);
 					$forum_icon = toggle_icon($forum_action_notify);
