@@ -93,15 +93,28 @@ db_query("CREATE TABLE admin_announcements (
 #
 
 db_query("CREATE TABLE `agenda` (
-  `id` int(11) NOT NULL auto_increment,
-  `lesson_event_id` int(11) NOT NULL default '0',
-  `titre` varchar(200) NOT NULL default '',
-  `contenu` text NOT NULL,
-  `day` date NOT NULL default '0000-00-00',
-  `hour` time NOT NULL default '00:00:00',
-  `lasting` varchar(20) NOT NULL default '',
-  `lesson_code` varchar(50) NOT NULL default '',
-  PRIMARY KEY  (`id`)) $charset_spec");
+	`id` int(11) NOT NULL auto_increment,
+	`lesson_event_id` int(11) NOT NULL default '0',
+	`titre` varchar(200) NOT NULL default '',
+	`contenu` text NOT NULL,
+	`day` date NOT NULL default '0000-00-00',
+	`hour` time NOT NULL default '00:00:00',
+	`lasting` varchar(20) NOT NULL default '',
+	`lesson_code` varchar(50) NOT NULL default '',
+	PRIMARY KEY  (`id`)) $charset_spec");
+
+#
+# table `forum_notify`
+#
+db_query("CREATE TABLE `forum_notify` (
+	`id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+	`user_id` INT NOT NULL DEFAULT '0',
+	`cat_id` INT NULL ,
+	`forum_id` INT NULL ,
+	`topic_id` INT NULL ,
+	`notify_sent` BOOL NOT NULL DEFAULT '0',
+	`course_id` INT NOT NULL DEFAULT '0'
+	) $charset_spec");
 
 #
 # table `cours`
@@ -151,6 +164,7 @@ db_query("CREATE TABLE `cours` (
 
 db_query("CREATE TABLE cours_user (
       code_cours varchar(30) NOT NULL default '0',
+      cours_id int(11) NOT NULL default '0',
       user_id int(11) unsigned NOT NULL default '0',
       statut tinyint(4) NOT NULL default '0',
       team int(11) NOT NULL default '0',
