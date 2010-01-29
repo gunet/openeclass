@@ -288,7 +288,15 @@ if (!isset($submit2)) {
 		db_query("ALTER TABLE `cours` CHANGE `video_quota` `video_quota` FLOAT NOT NULL DEFAULT '104857600'");
 		db_query("ALTER TABLE `cours` CHANGE `group_quota` `group_quota` FLOAT NOT NULL DEFAULT '104857600'"); 
 		db_query("ALTER TABLE `cours` CHANGE `dropbox_quota` `dropbox_quota` FLOAT NOT NULL DEFAULT '104857600'");
-	}
+		db_query("CREATE TABLE IF NOT EXISTS `forum_notify` (
+			`id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+			`user_id` INT NOT NULL DEFAULT '0',
+			`cat_id` INT NULL ,
+			`forum_id` INT NULL ,
+			`topic_id` INT NULL ,
+			`notify_sent` BOOL NOT NULL DEFAULT '0',
+			`course_id` INT NOT NULL DEFAULT '0')");
+		}
 
         // **********************************************
         // upgrade courses databases
