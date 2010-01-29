@@ -97,7 +97,7 @@ $forum_type = $myrow["forum_type"];
 $topic_title = $myrow["topic_title"];
 $forum_id = $forum;
 
-$nameTools = $l_reply;
+$nameTools = $langReply;
 $navigation[]= array ("url"=>"index.php", "name"=> $langForums);
 $navigation[]= array ("url"=>"viewforum.php?forum=$forum", "name"=> $forum_name);
 $navigation[]= array ("url"=>"viewtopic.php?&topic=$topic&forum=$forum", "name"=> $topic_title);
@@ -111,7 +111,7 @@ if (!does_exists($forum, $currentCourseID, "forum") || !does_exists($topic, $cur
 
 if (isset($submit) && $submit) {
 	if (trim($message) == '') {
-		$tool_content .= $l_emptymsg;
+		$tool_content .= $langEmptyMsg;
 		draw($tool_content, 2, 'phpbb', $head_content);
 		exit();
 	}
@@ -121,14 +121,14 @@ if (isset($submit) && $submit) {
 		exit();
 	}
 	if ($forum_access == 3 && $user_level < 2) {
-		$tool_content .= $l_nopost;
+		$tool_content .= $langNoPost;
 		draw($tool_content, 2, 'phpbb', $head_content);
 		exit();
 	}
 	// XXX: Do we need this code ?
 	if ( $uid == -1 ) {
 		if ($forum_access == 3 && $user_level < 2) {
-			$tool_content .= $l_nopost;
+			$tool_content .= $langNoPost;
 			draw($tool_content, 2, 'phpbb', $head_content);
 			exit();
 		}
@@ -137,7 +137,7 @@ if (isset($submit) && $submit) {
 	// Check that, if this is a private forum, the current user can post here.
 	if ($forum_type == 1) {
 		if (!check_priv_forum_auth($uid, $forum, TRUE, $currentCourseID)) {
-			$tool_content .= "$l_privateforum $l_nopost";
+			$tool_content .= "$langPrivateForum $langNoPost";
 			draw($tool_content, 2, 'phpbb', $head_content);
 			exit();
 		}
@@ -174,28 +174,16 @@ if (isset($submit) && $submit) {
 	}
 	$sql = "INSERT INTO posts (topic_id, forum_id, poster_id, post_time, poster_ip, nom, prenom)
 			VALUES ('$topic', '$forum', '$uid','$time', '$poster_ip', '$nom', '$prenom')";
-	if (!$result = db_query($sql, $currentCourseID)) {
-		$tool_content .= $langUnableEnterData;
-		draw($tool_content, 2, 'phpbb', $head_content);
-		exit();
-	}
+	$result = db_query($sql, $currentCourseID);
 	$this_post = mysql_insert_id();
 	if ($this_post) {
 		$sql = "INSERT INTO posts_text (post_id, post_text) VALUES ($this_post, " .
                         autoquote($message) . ")";
-		if (!$result = db_query($sql, $currentCourseID)) {
-			$tool_content .= $langUnableEnterText;
-			draw($tool_content, 2, 'phpbb', $head_content);
-			exit();
-		}
+		$result = db_query($sql, $currentCourseID); 
 	}
 	$sql = "UPDATE topics SET topic_replies = topic_replies+1, topic_last_post_id = $this_post, topic_time = '$time' 
 		WHERE topic_id = '$topic'";
-	if (!$result = db_query($sql, $currentCourseID)) {
-		$tool_content .= $langUnableEnterData;
-		draw($tool_content, 2, 'phpbb', $head_content);
-		exit();
-	}
+	$result = db_query($sql, $currentCourseID);
 	$sql = "UPDATE forums SET forum_posts = forum_posts+1, forum_last_post_id = '$this_post' 
 		WHERE forum_id = '$forum'";
 	$result = db_query($sql, $currentCourseID);
@@ -214,7 +202,8 @@ if (isset($submit) && $submit) {
 	$sql = db_query("SELECT DISTINCT user_id FROM forum_notify 
 			WHERE (topic_id = $topic OR forum_id = $forum OR cat_id = $category_id) 
 			AND notify_sent = 1 AND course_id = $cours_id", $mysqlMainDb);
-	$body_topic_notify = "$langBodyTopicNotify $langInForum '$topic_title' $langOfForum '$forum_name' $langInCat '$cat_name' \n\n$gunet";
+	$c = course_code_to_title($currentCourseID);
+	$body_topic_notify = "$langCourse: '$c'\n\n$langBodyTopicNotify $langInForum '$topic_title' $langOfForum '$forum_name' $langInCat '$cat_name' \n\n$gunet";
 	while ($r = mysql_fetch_array($sql)) {
 		$emailaddr = uid_to_email($r['user_id']);
 		send_mail('', '', '', $emailaddr, $subject_notify, $body_topic_notify, $charset);
@@ -227,8 +216,8 @@ if (isset($submit) && $submit) {
 	$forward = 1;
 	$tool_content .= "<div id=\"operations_container\">
 	<ul id=\"opslist\">
-	<li><a href=\"viewtopic.php?topic=$topic&forum=$forum&$total_topic\">$l_ViewMessage</a></li>
-	<li><a href=\"viewforum.php?forum=$forum&$total_forum\">$l_returntopic</a></li>
+	<li><a href=\"viewtopic.php?topic=$topic&forum=$forum&$total_topic\">$langViewMessage</a></li>
+	<li><a href=\"viewforum.php?forum=$forum&$total_forum\">$langReturnTopic</a></li>
 	</ul></div><br />";
 	
 	$tool_content .= "<table width=\"99%\"><tbody><tr>
@@ -240,7 +229,7 @@ if (isset($submit) && $submit) {
 		$tool_content .= "<form action='$_SERVER[PHP_SELF]' method='post'>
 		<table align='left' width='99%'>
 		<tr><td>
-		<table width='100%'><tr><td>$l_private</td></tr>
+		<table width='100%'><tr><td>$langPrivate</td></tr>
 		<tr><td>&nbsp;</td></tr>
 		<tr>
 		<td>
@@ -264,7 +253,7 @@ if (isset($submit) && $submit) {
 			// To get here, we have a logged-in user. So, check whether that user is allowed to view
 			// this private forum.
 			if (!check_priv_forum_auth($uid, $forum, TRUE, $currentCourseID)) {
-				$tool_content .= "$l_privateforum $l_nopost";
+				$tool_content .= "$langPrivateForum $langNoPost";
 				draw($tool_content, 2, 'phpbb', $head_content);
 				exit();
 			}
@@ -274,7 +263,7 @@ if (isset($submit) && $submit) {
 	// Topic review
 	$tool_content .= "<div id=\"operations_container\">
 	<ul id=\"opslist\">
-	<li><a href=\"viewtopic.php?topic=$topic&forum=$forum\" target=\"_blank\">$l_topicreview</a></li>
+	<li><a href=\"viewtopic.php?topic=$topic&forum=$forum\" target=\"_blank\">$langTopicReview</a></li>
 	</ul></div><br />";
 	$tool_content .= "<form action='$_SERVER[PHP_SELF]' method='post'>
 	<table class=\"FormData\" width=\"99%\">
@@ -284,7 +273,7 @@ if (isset($submit) && $submit) {
 	<td><b>$langTopicAnswer</b>: $topic_title</td>
 	</tr>
 	<tr>
-        <th class=\"left\">$l_body:";
+        <th class=\"left\">$langBodyMessage:";
 	if (isset($quote) && $quote) {
 		$sql = "SELECT pt.post_text, p.post_time, u.username 
 			FROM posts p, posts_text pt 
@@ -297,7 +286,7 @@ if (isset($submit) && $submit) {
 			$text = bbdecode($text);
 			$text = undo_make_clickable($text);
 			$text = str_replace("[addsig]", "", $text);
-			$syslang_quotemsg = get_syslang_string($sys_lang, "l_quotemsg");
+			$syslang_quotemsg = get_syslang_string($sys_lang, "langQuoteMsg");
 			eval("\$reply = \"$syslang_quotemsg\";");
 		} else {
 			$tool_content .= $langErrorConnectForumDatabase;
@@ -325,7 +314,7 @@ if (isset($submit) && $submit) {
 	<input type='hidden' name='topic' value='$topic'>
 	<input type='hidden' name='quote' value='$quote'>
 	<input type='submit' name='submit' value='$langSubmit'>&nbsp;
-	<input type='submit' name='cancel' value='$l_cancelpost'>
+	<input type='submit' name='cancel' value='$langCancelPost'>
 	</td>
 	</tr>
 	</tbody></table>

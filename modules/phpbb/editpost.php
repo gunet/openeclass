@@ -54,7 +54,7 @@
 */
 
 /*
- * GUNET eclass 2.0 standard stuff
+ * Open eClass 2.x standard stuff
  */
 $require_current_course = TRUE;
 $require_login = TRUE;
@@ -70,9 +70,7 @@ $head_content = <<<hContent
 <script type="text/javascript" src="$urlAppend/include/xinha/XinhaCore.js"></script>
 <script type="text/javascript" src="$urlAppend/include/xinha/my_config.js"></script>
 hContent;
-/*
- * Tool-specific includes
- */
+
 include_once("./config.php");
 include("functions.php"); // application logic for phpBB
 
@@ -104,7 +102,7 @@ if ($is_adminOfCourse) { // course admin
 		$row2 = mysql_fetch_row(db_query("SELECT topic_title FROM topics WHERE topic_id='$topic_id'"));
 		$topic_title = $row2[0];
 	
-		$nameTools = $l_reply;
+		$nameTools = $langReply;
 		$navigation[]= array ("url"=>"index.php", "name"=> $langForums);
 		$navigation[]= array ("url"=>"viewforum.php?forum=$forum_id", "name"=> $forum_name);
 		$navigation[]= array ("url"=>"viewtopic.php?&topic=$topic_id&forum=$forum_id", "name"=> $topic_title);
@@ -158,8 +156,8 @@ if ($is_adminOfCourse) { // course admin
 			
 			$tool_content .= "<div id=\"operations_container\">
 			<ul id=\"opslist\">
-			<li><a href=\"viewtopic.php?topic=$topic_id&forum=$forum_id\">$l_viewmsg1</a></li>
-			<li><a href=\"viewforum.php?forum=$forum_id\">$l_returntopic</a></li>
+			<li><a href=\"viewtopic.php?topic=$topic_id&forum=$forum_id\">$langViewMsg1</a></li>
+			<li><a href=\"viewforum.php?forum=$forum_id\">$langReturnTopic</a></li>
 			</ul>
 			</div>
 			<br />";
@@ -212,12 +210,12 @@ if ($is_adminOfCourse) { // course admin
 			
 			$tool_content .= "<div id=\"operations_container\">
 			<ul id=\"opslist\">
-			<li><a href=\"viewforum.php?forum=$forum_id\">$l_returntopic</a></li>
-			<li><a href=\"index.php\">$l_returnindex</a></li>
+			<li><a href=\"viewforum.php?forum=$forum_id\">$langReturnTopic</a></li>
+			<li><a href=\"index.php\">$langReturnIndex</a></li>
 			</ul></div><br />";
 			$tool_content .= "<table width=\"99%\"><tbody>
 			<tr>
-			<td class=\"success\">$l_deleted</td>
+			<td class=\"success\">$langDeletedMessage</td>
 			</tr>
 			</tbody></table>";
 		}
@@ -239,7 +237,7 @@ if ($is_adminOfCourse) { // course admin
 			exit();
 		}
 		
-		$nameTools = $l_reply;
+		$nameTools = $langReply;
 		$navigation[]= array ("url"=>"index.php", "name"=> $langForums);
 		$navigation[]= array ("url"=>"viewforum.php?forum=$forum", "name"=> $myrow['forum_name']);
 		$navigation[]= array ("url"=>"viewtopic.php?&topic=$topic&forum=$forum", "name"=> $myrow['topic_title']);
@@ -248,11 +246,8 @@ if ($is_adminOfCourse) { // course admin
 			// Private forum, no valid session, and login form not submitted...
 			$tool_content .= "<FORM ACTION=\"$_SERVER[PHP_SELF]\" METHOD=\"POST\">
 			<TABLE WIDTH=\"99%\">
-			<TR>
-			<TD>$l_private</TD>
-			</TR>
-			<TR>
-			<TD>
+			<TR><TD>$langPrivate</TD></TR>
+			<TR><TD>
 			<TABLE WIDTH=\"99%\">
 			<TR>
 			<TD>&nbsp;</TD>
@@ -276,7 +271,7 @@ if ($is_adminOfCourse) { // course admin
 				// To get here, we have a logged-in user. So, check whether that user is allowed to post in
 				// this private forum.
 				if (!check_priv_forum_auth($uid, $forum, TRUE, $currentCourseID)) {
-					$tool_content .= "$l_privateforum $l_nopost";
+					$tool_content .= "$langPrivateForum $langNoPost";
 					draw($tool_content, 2, 'phpbb', $head_content);
 					exit();
 				}
@@ -299,7 +294,7 @@ if ($is_adminOfCourse) { // course admin
 			if($user_level <= 2) {
 				if($user_level == 2 && !is_moderator($forum, $uid, $currentCourseID)) {
 					if($user_level < 2 && ($uid != $myrow["p.poster_id"])) {
-						$tool_content .= $l_notedit;
+						$tool_content .= $langNotEdit;
 						draw($tool_content, 2, 'phpbb', $head_content);
 						exit();
 					}
@@ -313,7 +308,6 @@ if ($is_adminOfCourse) { // course admin
 		} else {
 			$addsig = 0;
 		}
-		//$message = eregi_replace("\[addsig]$", "\n_________________\n" . $myrow["user_sig"], $message);   
 		$message = str_replace("<BR>", "\n", $message);
 		$message = stripslashes($message);
 		$message = bbdecode($message);
@@ -325,7 +319,7 @@ if ($is_adminOfCourse) { // course admin
 		
 		
 		$tool_content .= "<div id=\"operations_container\"><ul id=\"opslist\">
-		<li><a href=\"viewtopic.php?topic=$topic&forum=$forum\" target=\"_blank\">$l_topicreview</a></li>
+		<li><a href=\"viewtopic.php?topic=$topic&forum=$forum\" target=\"_blank\">$langTopicReview</a></li>
 		</ul>
 		</div>
 		<br />";
@@ -334,16 +328,16 @@ if ($is_adminOfCourse) { // course admin
 		<tbody>
 		<TR>
 		<th width=\"220\">&nbsp;</th>
-		<TD><b>$l_replyEdit</b></TD>
+		<TD><b>$langReplyEdit</b></TD>
 		</TR>";
 		$first_post = is_first_post($topic, $post_id, $currentCourseID);
 		if($first_post) {
 			$tool_content .= "<tr>
-			<th class=\"left\">$l_subject:</th>
+			<th class=\"left\">$langSubject:</th>
 			<TD><INPUT TYPE=\"TEXT\" NAME=\"subject\" SIZE=\"53\" MAXLENGTH=\"100\" VALUE=\"" . stripslashes($myrow["topic_title"]) . "\"  class=\"FormData_InputText\"></TD>
 			</TR>";
 		}
-		$tool_content .= "<TR><th class=\"left\">$l_body:</th>
+		$tool_content .= "<TR><th class=\"left\">$langBodyMessage:</th>
 		<TD>
 		<table class='xinha_editor'>
 		<tr>
@@ -353,7 +347,7 @@ if ($is_adminOfCourse) { // course admin
 		</TD>
 		</TR>
 		<TR>
-		<th class=\"left\">$l_delete:</th>
+		<th class=\"left\">$langDeleteMessage:</th>
 		<TD><INPUT TYPE=\"CHECKBOX\" NAME=\"delete\"></TD>
 		</TR>
 		<TR><th>&nbsp;</th><TD>";

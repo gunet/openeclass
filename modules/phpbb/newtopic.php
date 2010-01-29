@@ -104,7 +104,7 @@ if (!does_exists($forum, $currentCourseID, "forum")) {
 if (isset($submit) && $submit) {
 	$subject = strip_tags($subject);
 	if (trim($message) == '' || trim($subject) == '') {
-		$tool_content .= $l_emptymsg;
+		$tool_content .= $langEmptyMsg;
 		draw($tool_content, 2, 'phpbb', $head_content);
 		exit;
 	}
@@ -113,7 +113,7 @@ if (isset($submit) && $submit) {
 	}
 	
 	if($forum_access == 3 && $user_level < 2) {
-		$tool_content .= $l_nopost;
+		$tool_content .= $langNoPost;
 		draw($tool_content, 2, 'phpbb', $head_content);
 		exit;
 	}
@@ -121,7 +121,7 @@ if (isset($submit) && $submit) {
 	// Check that, if this is a private forum, the current user can post here.
 	if ($forum_type == 1) {
 		if (!check_priv_forum_auth($uid, $forum, TRUE, $currentCourseID)) {
-			$tool_content .= "$l_privateforum $l_nopost";
+			$tool_content .= "$langPrivateForum $langNoPost";
 			draw($tool_content, 2, 'phpbb', $head_content);
 			exit();
 		}
@@ -193,7 +193,8 @@ if (isset($submit) && $submit) {
 	$sql = db_query("SELECT DISTINCT user_id FROM forum_notify 
 			WHERE (forum_id = $forum OR cat_id = $category_id) 
 			AND notify_sent = 1 AND course_id = $cours_id", $mysqlMainDb);
-	$body_topic_notify = "$langBodyForumNotify $langInForums '$forum_name' $langInCat '$cat_name' \n\n$gunet";
+	$c = course_code_to_title($currentCourseID);
+	$body_topic_notify = "$langCourse: '$c'\n\n$langBodyForumNotify $langInForums '$forum_name' $langInCat '$cat_name' \n\n$gunet";
 	while ($r = mysql_fetch_array($sql)) {
 		$emailaddr = uid_to_email($r['user_id']);
 		send_mail('', '', '', $emailaddr, $subject_notify, $body_topic_notify, $charset);
@@ -203,8 +204,8 @@ if (isset($submit) && $submit) {
 	$tool_content .= "<table width='99%'><tbody>
 	<tr><td class='success'>
 	<p><b>$langStored</b></p>
-	<p>$langClick <a href='viewtopic.php?topic=$topic_id&amp;forum=$forum&amp;$total_topic'>$langHere</a>$l_viewmsg</p>
-	<p>$langClick <a href='viewforum.php?forum=$forum_id&amp;total_forum'>$langHere</a> $l_returntopic</p>
+	<p>$langClick <a href='viewtopic.php?topic=$topic_id&amp;forum=$forum&amp;$total_topic'>$langHere</a>$langViewMsg</p>
+	<p>$langClick <a href='viewforum.php?forum=$forum_id&amp;total_forum'>$langHere</a> $langReturnTopic</p>
 	</td>
 	</tr>
 	</tbody></table>"; 
@@ -227,11 +228,11 @@ if (isset($submit) && $submit) {
 	<td><b>$langTopicData</b></td>
 	</tr>
 	<tr>
-	<th class='left'>$l_subject:</th>
+	<th class='left'>$langSubject:</th>
 	<td><input type='text' name='subject' size='53' maxlength='100' class='FormData_InputText'></td>
 	</tr>
 	<tr>
-	<th class='left'>$l_body:</th>
+	<th class='left'>$langBodyMessage:</th>
 	<td>
 	<table class='xinha_editor'>
 	<tr>
@@ -243,7 +244,7 @@ if (isset($submit) && $submit) {
 	<th>&nbsp;</th>
 	<td><input type='hidden' name='forum' value='$forum'>
 	<input type='submit' name='submit' value='$langSubmit'>&nbsp;
-	<input type='submit' name='cancel' value='$l_cancelpost'>
+	<input type='submit' name='cancel' value='$langCancelPost'>
 	</td></tr>
 	</tbody>
 	</table>

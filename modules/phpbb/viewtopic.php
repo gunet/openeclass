@@ -54,9 +54,7 @@
 */
 
 
-/*
- * GUNET eclass 2.0 standard stuff
- */
+
 $require_current_course = TRUE;
 $require_login = TRUE;
 $require_help = TRUE;
@@ -64,9 +62,7 @@ $helpTopic = 'For';
 include '../../include/baseTheme.php';
 $tool_content = "";
 
-/*
- * Tool-specific includes
- */
+
 include_once("./config.php");
 include("functions.php"); // application logic for phpBB
 // support for math symbols
@@ -110,11 +106,7 @@ if ($paging and $total > $posts_per_page) {
 	$pages = $times;
 }
 
-if (!$result = db_query($sql, $currentCourseID)) {
-	$tool_content .= $langErrorConnectForumDatabase;
-	draw($tool_content, 2, 'phpbb');
-	exit();
-}
+$result = db_query($sql, $currentCourseID);
 $myrow = mysql_fetch_array($result);
 $topic_subject = own_stripslashes($myrow["topic_title"]);
 $lock_state = $myrow["topic_status"];
@@ -125,22 +117,17 @@ if (!add_units_navigation(TRUE)) {
 }
 $nameTools = $topic_subject;
 
-	$tool_content .= "
-    <div id=\"operations_container\">
-      <ul id=\"opslist\">
-        <li><a href=\"newtopic.php?forum=$forum\">$langNewTopic</a></li>
-        <li>";
+	$tool_content .= "<div id=\"operations_container\">
+	<ul id=\"opslist\">
+	<li><a href=\"newtopic.php?forum=$forum\">$langNewTopic</a></li>
+	<li>";
 	if($lock_state != 1) {
 		$tool_content .= "<a href=\"reply.php?topic=$topic&forum=$forum\">$langAnswer</a>";
 	} else {
 		$tool_content .= "<IMG SRC=\"$reply_locked_image\" BORDER=\"0\">";
 	}				
-	$tool_content .= "</li>
-      </ul>
-    </div>
-	";
-	
-	
+	$tool_content .= "</li></ul></div>";
+
 if ($paging and $total > $posts_per_page ) {
 	$times = 1;
 	$tool_content .= "<table WIDTH='99%'><thead>
@@ -171,13 +158,9 @@ if ($paging and $total > $posts_per_page ) {
 		$times++;
 	}
 
-	$tool_content .= "
-       </span>
-       </strong>
-      </span>
-      </td>
-      <td align=\"right\">
-       <span class='pages'>$langGoToPage: &nbsp;&nbsp;";
+	$tool_content .= "</span></strong></span></td>
+	<td align=\"right\">
+	<span class='pages'>$langGoToPage: &nbsp;&nbsp;";
 	if ( isset($start) && $start > 0 ) {
 		$tool_content .= "\n       <a href=\"$_SERVER[PHP_SELF]?topic=$topic&forum=$forum&start=$last_page\">$langPreviousPage</a>&nbsp;|";
 	} else {
@@ -187,36 +170,23 @@ if ($paging and $total > $posts_per_page ) {
 		$next_page = $start + $posts_per_page;
 		$tool_content .= "\n       <a href=\"$_SERVER[PHP_SELF]?topic=$topic&forum=$forum&start=$next_page\">$langNextPage</a>&nbsp;|";
 	}
-	$tool_content .= "
-       &nbsp;<a href=\"$_SERVER[PHP_SELF]?topic=$topic&amp;forum=$forum&amp;all=true\">$l_all</a>
-       </span>
-      </td>
-    </tr>
-    </thead>
-    </table>
-\n";
+	$tool_content .= "&nbsp;<a href=\"$_SERVER[PHP_SELF]?topic=$topic&amp;forum=$forum&amp;all=true\">$langAllOfThem</a></span>
+	</td>
+	</tr>
+	</thead>
+	</table>";
 } else {
-	$tool_content .= "
-    <table WIDTH=\"99%\">
-    <thead>
-    <tr>
-      <td WIDTH=\"60%\" align=\"left\">
-      <span class='row'><strong class='pagination'>&nbsp;</strong>
-      </span>
-    </td>
-    <td align=\"right\">";
+	$tool_content .= "<table WIDTH=\"99%\"><thead>
+	<tr>
+	<td WIDTH=\"60%\" align=\"left\">
+	<span class='row'><strong class='pagination'>&nbsp;</strong></span></td>
+	<td align=\"right\">";
 	if ($total > $posts_per_page) {	
-	$tool_content .= "
-      <span class='pages'>
-       &nbsp;<a href=\"$_SERVER[PHP_SELF]?topic=$topic&amp;forum=$forum&amp;start=0\">$langPages</a>
-      </span>";
-	}	  
-	$tool_content .= "
-      </td>
-    </tr>
-    </thead>
-    </table>
-    ";
+		$tool_content .= "<span class='pages'>
+		&nbsp;<a href=\"$_SERVER[PHP_SELF]?topic=$topic&amp;forum=$forum&amp;start=0\">$langPages</a>
+		</span>";
+	}
+	$tool_content .= "</td></tr></thead></table>";
 }
 
 $tool_content .= <<<cData
@@ -225,7 +195,7 @@ $tool_content .= <<<cData
     <thead>
     <tr>
       <td class="ForumHead" width="150">$langAuthor</td>
-      <td class="ForumHead" colspan="2">$l_message</td>
+      <td class="ForumHead" colspan="2">$langMessage</td>
     </tr>
     </thead>
     <tbody>
@@ -261,52 +231,39 @@ do {
 		$row_color = 'topic_row1';
 	else 
 		$row_color = 'topic_row2';
-	$tool_content .= "
-    <tr>";
-	$tool_content .= "
-      <td class=\"$row_color\"><b>" . $myrow["prenom"] . " " . $myrow["nom"] . "</b></td>";
+	$tool_content .= "<tr>";
+	$tool_content .= "<td class=\"$row_color\"><b>" . $myrow["prenom"] . " " . $myrow["nom"] . "</b></td>";
 	$message = own_stripslashes($myrow["post_text"]);
 	// support for math symbols
 	$message = mathfilter($message, 12, "../../courses/mathimg/");
 
 	if ($count == 0) {
-		$postTitle = "
-      $l_postTitle: <b>$topic_subject</b>";
+		$postTitle = "$langPostTitle: <b>$topic_subject</b>";
 	} else {
 		$postTitle = "";
 	}
 
-	$tool_content .= "
-      <td class=\"$row_color\">
-        <div class='post_massage'>
-          <img src=\"$posticon\">
-          <em>$l_posted: " . $myrow["post_time"] . "</em>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$postTitle
-        </div>
-      <br />
-      $message
-      <br /><br />
-      </td>
-      <td class='$row_color' width='40'>
-        <div align='right'>";
+	$tool_content .= "<td class=\"$row_color\">
+	<div class='post_massage'>
+	<img src='$posticon'>
+	<em>$langSent: " . $myrow["post_time"] . "</em>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$postTitle
+	</div>
+	<br />$message<br /><br />
+	</td>
+	<td class='$row_color' width='40'><div align='right'>";
 	if ($is_adminOfCourse) { // course admin
 		$tool_content .= "<a href=\"editpost.php?post_id=".$myrow["post_id"]."&amp;topic=$topic&amp;forum=$forum\"><img src='../../template/classic/img/edit.gif' border='0' title='$langModify'></img></a>";
 		$tool_content .= "&nbsp;<a href='editpost.php?post_id=".$myrow["post_id"]."&amp;topic=$topic&amp;forum=$forum&amp;delete=on&amp;submit=yes'><img src='../../template/classic/img/delete.gif' border='0' title='$langDelete'></img></a>";
 	}
-	$tool_content .= "
-        </div>
-      </td>
-    </tr>";
+	$tool_content .= "</div></td></tr>";
 	$count++;
 } while($myrow = mysql_fetch_array($result));
 
 $sql = "UPDATE topics SET topic_views = topic_views + 1 WHERE topic_id = '$topic'";
 db_query($sql, $currentCourseID);
 
-$tool_content .= "
-    </tbody>
-    </table>";
+$tool_content .= "</tbody></table>";
 
-	
 if ($paging and $total > $posts_per_page) {
 	$times = 1;
 	$tool_content .= <<<cData
@@ -334,55 +291,32 @@ cData;
 		}
 		$times++;
 	}
-	$tool_content .= "
-       </span>
-       </strong>
-      </span>
-      </td>
-      <td>
-       <span class='pages'>$langGoToPage: &nbsp;&nbsp;";
-	if ( isset($start) && $start > 0 ) {
+	$tool_content .= "</span></strong></span></td>
+	<td><span class='pages'>$langGoToPage: &nbsp;&nbsp;";
+	if (isset($start) && $start > 0) {
 		$tool_content .= "\n       <a href=\"$_SERVER[PHP_SELF]?topic=$topic&amp;forum=$forum&amp;start=$last_page\">$langPreviousPage</a>&nbsp;|";
 	} else {
 		$start = 0;
 	}	
 	if (($start + $posts_per_page) < $total) {
 		$next_page = $start + $posts_per_page;
-		$tool_content .= "\n       <a href=\"$_SERVER[PHP_SELF]?topic=$topic&amp;forum=$forum&amp;start=$next_page\">$langNextPage</a>&nbsp;|";
+		$tool_content .= "\n<a href=\"$_SERVER[PHP_SELF]?topic=$topic&amp;forum=$forum&amp;start=$next_page\">$langNextPage</a>&nbsp;|";
 	}
-	$tool_content .= "
-       &nbsp;<a href=\"$_SERVER[PHP_SELF]?topic=$topic&amp;forum=$forum&amp;all=true\">$l_all</a>
-       </span>
-      </td>
-    </tr>
-    </thead>
-    </table>
-	";
+	$tool_content .= "&nbsp;<a href=\"$_SERVER[PHP_SELF]?topic=$topic&amp;forum=$forum&amp;all=true\">$langAllOfThem</a>
+	</span>
+	</td></tr></thead></table>";
 } else {
-	$tool_content .= "
-    <table WIDTH=\"99%\">
-    <thead>
-    <tr>
-      <td WIDTH=\"60%\" align=\"left\">
-      <span class='row'><strong class='pagination'>&nbsp;</strong>
-      </span>
-    </td>
-    <td align=\"right\">
-      <span class='pages'>
-    ";
+	$tool_content .= "<table width=\"99%\"><thead>
+	<tr>
+	<td width=\"60%\" align=\"left\">
+	<span class='row'><strong class='pagination'>&nbsp;</strong>
+	</span></td>
+	<td align=\"right\">
+	<span class='pages'>";
 	if ($total > $posts_per_page) {	
-	$tool_content .= "	  
-       &nbsp;<a href=\"$_SERVER[PHP_SELF]?topic=$topic&amp;forum=$forum&amp;start=0\">$langPages</a>
-    ";
+		$tool_content .= "&nbsp;<a href=\"$_SERVER[PHP_SELF]?topic=$topic&amp;forum=$forum&amp;start=0\">$langPages</a>";
 	}	
-	$tool_content .= "   
-      </span>
-      </td>
-    </tr>
-    </thead>
-    </table>
-    ";
-
+	$tool_content .= "</span></td></tr></thead></table>";
 }
 
 draw($tool_content,2,'phpbb');

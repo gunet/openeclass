@@ -62,12 +62,12 @@
  * Gets the total number of topics in a form
  */
 function get_total_topics($forum_id, $thedb) {
-	global $l_error;
+	global $langError;
 	$sql = "SELECT count(*) AS total FROM topics WHERE forum_id = '$forum_id'";
 	if(!$result = db_query($sql, $thedb))
-		return($l_error);
+		return($langError);
 	if(!$myrow = mysql_fetch_array($result))
-		return($l_error);
+		return($langError);
 	
 	return($myrow["total"]);
 }
@@ -107,7 +107,7 @@ function get_total_posts($id, $thedb, $type) {
  * Returns the most recent post in a forum, or a topic
  */
 function get_last_post($id, $thedb, $type) {
-   global $l_error, $l_noposts, $l_by;
+   global $langError, $langNoPosts, $langFrom2;
    switch($type) {
     case 'time_fix':
       $sql = "SELECT p.post_time FROM posts p WHERE p.topic_id = '$id' ORDER BY post_time DESC LIMIT 1";   
@@ -123,15 +123,13 @@ function get_last_post($id, $thedb, $type) {
       break;
    }
    if(!$result = db_query($sql, $thedb))
-     return($l_error);
-   
+     return($langError);
    if(!$myrow = mysql_fetch_array($result))
-     return($l_noposts);
+     return($langNoPosts);
    if(($type != 'user') && ($type != 'time_fix'))
-     $val = sprintf("%s <br> %s %s", $myrow["post_time"], $l_by, $myrow["username"]);
+     $val = sprintf("%s <br> %s %s", $myrow["post_time"], $langFrom2, $myrow["username"]);
    else
      $val = $myrow["post_time"];
-   
    return($val);
 }
 

@@ -158,8 +158,8 @@ if(isset($forumgo)) {
 	elseif(isset($forumgoedit)) {
 		$nameTools = $langEditForum;
 		$navigation[]= array ("url"=>"../forum_admin/forum_admin.php", "name"=> $langOrganisation);
-		$result = db_query("select forum_id, forum_name, forum_desc, forum_access, forum_moderator,
-    		cat_id, forum_type from forums where forum_id='$forum_id'", $currentCourseID);
+		$result = db_query("SELECT forum_id, forum_name, forum_desc, forum_access, forum_moderator,
+    		cat_id, forum_type FROM forums WHERE forum_id='$forum_id'", $currentCourseID);
 		list($forum_id, $forum_name, $forum_desc, $forum_access, $forum_moderator, $cat_id_1,
 		$forum_type) = mysql_fetch_row($result);
 		$tool_content .= "
@@ -246,7 +246,7 @@ if(isset($forumgo)) {
 
 	// forum add category
 	elseif(isset($forumcatadd)) {
-		db_query("insert into catagories values (NULL, '$catagories', NULL)", $currentCourseID);
+		db_query("INSERT INTO catagories VALUES (NULL, '$catagories', NULL)", $currentCourseID);
 		$tool_content .= "\n<p class='success_small'>$langCatAdded<br />
 		<a href='$_SERVER[PHP_SELF]?forumadmin=yes'>$langBack</a></p>";
 		}
@@ -288,8 +288,8 @@ if(isset($forumgo)) {
 		while(list($forum_id) = mysql_fetch_row($result)) {
 			db_query("DELETE from topics where forum_id=$forum_id", $currentCourseID);
 		}
-		db_query("DELETE from forums where cat_id=$cat_id", $currentCourseID);
-		db_query("DELETE from catagories where cat_id=$cat_id", $currentCourseID);
+		db_query("DELETE FROM forums where cat_id=$cat_id", $currentCourseID);
+		db_query("DELETE FROM catagories where cat_id=$cat_id", $currentCourseID);
 		$tool_content .= "\n<p class=\"success_small\">$langCatForumDelete<br />
 		<a href=\"$_SERVER[PHP_SELF]?forumadmin=yes\">$langBack</a></p>";
 	}

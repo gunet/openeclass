@@ -77,7 +77,7 @@ $tool_content .= "<div id=\"operations_container\"><ul id=\"opslist\">";
 
 if ($is_adminOfCourse || $is_admin) {
 	$tool_content .= "
-        <li><a href='../forum_admin/forum_admin.php'>$l_adminpanel</a></li>";
+        <li><a href='../forum_admin/forum_admin.php'>$langAdm</a></li>";
 }
 $tool_content .= "<li><a href='newtopic.php?forum=$forum'>$langNewTopic</a></li></ul></div><br />";
 
@@ -156,9 +156,9 @@ if(isset($topicnotify)) { // modify topic notification
 
 // header 
 $tool_content .= "<table width='99%' class='ForumSum'><thead><tr>
-<td class='ForumHead' colspan='2'>&nbsp;$l_topic</td>
-<td class='ForumHead' width='100'>$l_replies</td>
-<td class='ForumHead' width='100'>$l_poster</td>
+<td class='ForumHead' colspan='2'>&nbsp;$langSubject</td>
+<td class='ForumHead' width='100'>$langAnswers</td>
+<td class='ForumHead' width='100'>$langSender</td>
 <td class='ForumHead' width='100'>$langSeen</td>
 <td class='ForumHead' width='100'>$langLastMsg</td>
 <td class='ForumHead' width='20'>$langNotifyActions</td>
@@ -246,12 +246,18 @@ if (mysql_num_rows($result) > 0) { // topics found
 			$topic_link_notify = toggle_link($topic_action_notify);
 			$topic_icon = toggle_icon($topic_action_notify);
 		}
-		$tool_content .= "<td class='Forum_leftside' style='text-align:center'>
-			<a href='$_SERVER[PHP_SELF]?forum=$forum&topicnotify=$topic_link_notify&topic_id=$myrow[topic_id]'>
-			<img src='../../template/classic/img/announcements$topic_icon.gif' border='0' title='$langNotify'></img></a></td></tr>";
+		$tool_content .= "<td class='Forum_leftside' style='text-align:center'>";
+		if (isset($_GET['start']) and $_GET['start'] > 0) {
+			$tool_content .= "<a href='$_SERVER[PHP_SELF]?forum=$forum&start=$_GET[start]&topicnotify=$topic_link_notify&topic_id=$myrow[topic_id]'>
+			<img src='../../template/classic/img/announcements$topic_icon.gif' border='0' title='$langNotify'></img></a>";
+		} else {
+			$tool_content .= "<a href='$_SERVER[PHP_SELF]?forum=$forum&topicnotify=$topic_link_notify&topic_id=$myrow[topic_id]'>
+			<img src='../../template/classic/img/announcements$topic_icon.gif' border='0' title='$langNotify'></img></a>";
+		}
+		$tool_content .= "</td></tr>";
 	} // end of while
 } else {
-	$tool_content .= "\n<td colspan=6>$l_notopics</td></tr>\n";
+	$tool_content .= "\n<td colspan=6>$langNoTopics</td></tr>\n";
 }
 $tool_content .= "</tbody></table>";
 draw($tool_content, 2, 'phpbb');

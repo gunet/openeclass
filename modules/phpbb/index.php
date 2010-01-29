@@ -80,7 +80,7 @@ include "functions.php";
 if ($is_adminOfCourse || $is_admin) {
 	$tool_content .= "<div id='operations_container'>
 	<ul id='opslist'>
-	<li><a href='../forum_admin/forum_admin.php'>$l_adminpanel</a></li>
+	<li><a href='../forum_admin/forum_admin.php'>$langAdm</a></li>
 	</ul></div><br />";
 }
 
@@ -122,9 +122,9 @@ if ($total_categories) {
 	<thead>
 	<tr>
 	<td colspan='2' class='forum_category'>$langForums</td>
-	<td class='forum_category'>$l_topics</td>
-	<td class='forum_category'>$l_posts</td>
-	<td class='forum_category'>$l_lastpost</td>
+	<td class='forum_category'>$langSubjects</td>
+	<td class='forum_category'>$langPosts</td>
+	<td class='forum_category'>$langLastPost</td>
 	<td class='forum_category' width='5%'>$langNotifyActions</td>
 	</tr>
 	</thead>";
@@ -189,13 +189,13 @@ if ($total_categories) {
 					$human_last_post_time = date("d/m/Y -  H:i", $last_post_time);
 				}
 				if (empty($last_post)) {
-					$last_post = $l_noposts;
+					$last_post = $langNoPosts;
 				}
 				$tool_content .= "<tr>";
 				if (!isset($last_visit)) {
 					$last_visit = 0;
 				}
-				if(@$last_post_time > $last_visit && $last_post != $l_noposts) {
+				if(@$last_post_time > $last_visit && $last_post != $langNoPosts) {
 					$tool_content .= "<td width='1' class='left'>
 					<img src='$newposts_image'></td>";
 				} else {
@@ -242,7 +242,7 @@ if ($total_categories) {
 					<a set='yes' href='viewtopic.php?topic=$last_post_topic_id&amp;forum=$forum'>
 					<img border='0' src='$icon_topic_latest'></a><br />$human_last_post_time</td>";
 				} else {
-					$tool_content .= "<font color='#CAC3B5'>$l_noposts</font></td>";
+					$tool_content .= "<font color='#CAC3B5'>$langNoPosts</font></td>";
 				}
 				list($forum_action_notify) = mysql_fetch_row(db_query("SELECT notify_sent FROM forum_notify 
 					WHERE user_id = $uid AND forum_id = $forum AND course_id = $cours_id", $mysqlMainDb));

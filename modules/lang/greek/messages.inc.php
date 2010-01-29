@@ -87,7 +87,6 @@ $langComments = "Σχόλια";
 $langAdmin = "Εργαλεία Διαχείρισης Πλατφόρμας";
 $langState = "Διαχείριση Εξυπηρετητή";
 $langDevAdmin ="Διαχείριση Βάσης Δεδομένων";
-$langNomPageAdmin 	= "Διαχείριση";
 $langSysInfo  	= "Πληροφορίες Συστήματος";
 $langCheckDatabase  	= "Ελεγχος κύριας βάσης δεδομένων";
 $langStatOf 	= "Στατιστικά του ";
@@ -543,28 +542,28 @@ $langCharSeparator = "Χαρακτήρας χωρισμού";
  * conference.inc.php
  ******************************************************************/
 
- $langConference = "Τηλεσυνεργασία";
- $langWash = "Καθάρισμα";
- $langWashFrom = "Η κουβέντα καθάρισε από";
- $langSave = "Αποθήκευση";
- $langClearedBy = "καθαρισμός από";
- $langChatError = "Δεν είναι δυνατόν να ξεκινήσει η Ζωντανή Τηλεσυνεργασία";
- $langsetvideo="Σύνδεσμος παρουσίασης βίντεο";
- $langButtonVideo="Μετάδοση";
- $langButtonPresantation="Μετάδοση";
- $langconference="Ενεργοποίηση τηλεδιάσκεψης";
- $langpresantation="Σύνδεσμος παρουσίασης ιστοσελίδας";
- $langVideo_content="<p align='justify'>Εδώ θα παρουσιαστεί το βίντεο αφού το ενεργοποιήσει ο $langsTeacher.</p>";
- $langTeleconference_content1 = "<p align='justify'>Εδώ θα παρουσιαστεί η τηλεδιάσκεψη αφού την ενεργοποιήσει ο $langsTeacher.</p>";
- $langTeleconference_content_noIE="<p align='justify'>Η τηλεδιάσκεψη ενεργοποιείται μόνο αν έχετε IE ως πλοηγό.</p>";
- $langWashVideo="Παύση μετάδοσης";
- $langPresantation_content="<p align='center'>Εδώ θα παρουσιαστεί μία ιστοσελίδα που θα επιλέξει ο $langsTeacher.</p>";
- $langWashPresanation="Παύση μετάδοσης";
- $langSaveChat="Αποθήκευση κουβέντας";
- $langSaveMessage="Η κουβέντα αποθηκεύθηκε στα Έγγραφα";
- $langSaveErrorMessage="Η κουβέντα δεν μπόρεσε να αποθηκευθεί";
- $langNoAliens = "Μόνο οι εγγεγραμμένοι χρήστες στην πλατφόρμα μπορούν να χρησιμοποιούν το υποσύστημα 'Κουβέντα' !";
- $langNoGuest = "Οι χρήστες - επισκέπτες δεν μπορούν να χρησιμοποιήσουν το υποσύστημα 'Κουβέντα' !";
+$langConference = "Τηλεσυνεργασία";
+$langWash = "Καθάρισμα";
+$langWashFrom = "Η κουβέντα καθάρισε από";
+$langSave = "Αποθήκευση";
+$langClearedBy = "καθαρισμός από";
+$langChatError = "Δεν είναι δυνατόν να ξεκινήσει η Ζωντανή Τηλεσυνεργασία";
+$langsetvideo="Σύνδεσμος παρουσίασης βίντεο";
+$langButtonVideo="Μετάδοση";
+$langButtonPresantation="Μετάδοση";
+$langconference="Ενεργοποίηση τηλεδιάσκεψης";
+$langpresantation="Σύνδεσμος παρουσίασης ιστοσελίδας";
+$langVideo_content="<p align='justify'>Εδώ θα παρουσιαστεί το βίντεο αφού το ενεργοποιήσει ο $langsTeacher.</p>";
+$langTeleconference_content1 = "<p align='justify'>Εδώ θα παρουσιαστεί η τηλεδιάσκεψη αφού την ενεργοποιήσει ο $langsTeacher.</p>";
+$langTeleconference_content_noIE="<p align='justify'>Η τηλεδιάσκεψη ενεργοποιείται μόνο αν έχετε IE ως πλοηγό.</p>";
+$langWashVideo="Παύση μετάδοσης";
+$langPresantation_content="<p align='center'>Εδώ θα παρουσιαστεί μία ιστοσελίδα που θα επιλέξει ο $langsTeacher.</p>";
+$langWashPresanation="Παύση μετάδοσης";
+$langSaveChat="Αποθήκευση κουβέντας";
+$langSaveMessage="Η κουβέντα αποθηκεύθηκε στα Έγγραφα";
+$langSaveErrorMessage="Η κουβέντα δεν μπόρεσε να αποθηκευθεί";
+$langNoAliens = "Μόνο οι εγγεγραμμένοι χρήστες στην πλατφόρμα μπορούν να χρησιμοποιούν το υποσύστημα 'Κουβέντα' !";
+$langNoGuest = "Οι χρήστες - επισκέπτες δεν μπορούν να χρησιμοποιήσουν το υποσύστημα 'Κουβέντα' !";
 
 /*****************************************************************
 * copyright.inc.php
@@ -718,12 +717,8 @@ $langLanguageTip="Επιλέξτε σε ποια γλώσσα θα εμφανί�
 $langAccess = "Τύπος Πρόσβασης:";
 $langAvailableTypes = "Διαθέσιμοι τύποι πρόσβασης";
 $langModules = "Υποσυστήματα:";
-
-// tables MySQL
-$langForumLanguage="english";
 $langTestForum="Γενικές συζητήσεις";
 $langDelAdmin="Περιοχή συζητήσεων για κάθε θέμα που αφορά το μάθημα";
-$langMessage="Όταν διαγράψετε τη δοκιμαστική περιοχή συζητήσεων, θα διαγραφεί και το παρόν μήνυμα.";
 $langExMessage="Παράδειγμα Μηνύματος";
 $langAnonymous="Ανώνυμος";
 $langExerciceEx="Υπόδειγμα άσκησης";
@@ -802,8 +797,7 @@ $langRename="Μετονομασία";
 $langOkComment="Επικύρωση αλλαγών";
 $langVisible="Ορατό / Αόρατο";
 $langCopy="Αντιγραφή";
-$langNoSpace="Η αποστολή του αρχείου απέτυχε. Έχετε υπερβεί το μέγιστο επιτρεπτό
-	χώρο. Για περισσότερες πληροφορίες, επικοινωνήστε με το διαχειριστή του συστήματος.";
+$langNoSpace="Η αποστολή του αρχείου απέτυχε. Έχετε υπερβεί το μέγιστο επιτρεπτό χώρο. Για περισσότερες πληροφορίες, επικοινωνήστε με το διαχειριστή του συστήματος.";
 $langUnwantedFiletype='Μη αποδεκτός τύπος αρχείου';
 $langDownloadEnd="Το ανέβασμα ολοκληρώθηκε";
 $langFileExists="Δεν είναι δυνατή η λειτουργία.<br>Υπάρχει ήδη ένα αρχείο με το ίδιο όνομα.";
@@ -1341,7 +1335,6 @@ $langAdminTool = "Διαχείριση Πλατφόρμας";
 $langPass="Συνθηματικό (password)";
 $langHelp="Βοήθεια";
 $langSelection="Επιλογή";
-$langManagement="Διαχείριση";
 $langMenu ="Μενού";
 $langLogout="Έξοδος";
 $langSupportForum="Περιοχή Υποστήριξης";
@@ -1854,20 +1847,19 @@ $langModern = "Αναλυτικό";
 /***********************************************************
 * phpbb.inc.php
 ************************************************************/
-$langAdm="Διαχείριση";
-$langQuote="quote";
-$langEditDel="αλλαγή/διαγραφή";
-$langSeen="Το έχουν δει";
-$langLastMsg="Τελευταίο μήνυμα";
+$langAdm = "Διαχείριση";
+$langEditDel = "αλλαγή/διαγραφή";
+$langSeen = "Το έχουν δει";
+$langLastMsg = "Τελευταίο μήνυμα";
 $langLoginBeforePost1 = "Για να στείλετε μηνύματα, ";
 $langLoginBeforePost2 = "πρέπει προηγουμένως να ";
 $langLoginBeforePost3 = "κάνετε login στην πλατφόρμα";
 $langPages = "Σελίδες";
 $langNoForums = "Δεν υπάρχουν διαθέσιμες περιοχές συζητήσεων";
-$langNewTopic="Νέο θέμα";
+$langNewTopic = "Νέο θέμα";
 $langTopicData="Στοιχεία θέματος";
-$langTopicAnswer="Απάντηση στο θέμα συζήτησης";
-$langGroupDocumentsLink="Έγγραφα ομάδας ";
+$langTopicAnswer = "Απάντηση στο θέμα συζήτησης";
+$langGroupDocumentsLink = "Έγγραφα ομάδας ";
 $langNotify = "Ειδοποίηση μέσω email αν σταλούν απαντήσεις";
 $langNotifyActions = "Ειδοποιήσεις";
 $langGoToPage = "Μετάβαση στη σελίδα";
@@ -1882,91 +1874,38 @@ $langBodyForumNotify = "Ένα καινούριο θέμα έχει προστε
 $langBodyTopicNotify = "Μια νέα απάντηση έχει προστεθεί";
 $langBodyCatNotify = "Μια νέα περιοχή συζητήσεων έχει προστεθεί";
 $langOfForum = "της περιοχής συζητήσεων";
-
-$l_topic	= "Θέμα";
-$l_topics 	= "Θέματα";
-$l_replies	= "Απαντήσεις";
-$l_poster	= "Αποστολέας";
-$l_post 	= "Αποστολή";
-$l_posts 	= "Αποστολές";
-$l_message	= "Μήνυμα";
-$l_messages	= "Μηνύματα";
-$l_all      = "όλα";
-$l_subject	= "Θέμα";
-$l_body		= "Σώμα μηνύματος";
-$l_postTitle	= "Θέμα δημοσίευσης";
-
+$langSubjects = "Θέματα";
+$langPosts = "Αποστολές";
+$langMessage = "Μήνυμα";
+$langMessages = "Μηνύματα";
+$langAllOfThem = "όλα";
+$langBodyMessage = "Σώμα μηνύματος";
+$langPostTitle = "Θέμα δημοσίευσης";
 $langAnonymousExplain = 'Οι χρήστες που εμφανίζονται με διαφορετικό χρώμα δεν είναι αυτή τη στιγμή εγγεγραμμένοι στο μάθημα, ενώ όσοι έχουν την ένδειξη «Ανώνυμος» έχουν διαγραφεί από το σύστημα.';
-
-$l_noposts	= "Δεν υπάρχουν αποστολές";
-$l_go		= "Πήγαινε";
-$l_options 	= "Επιλογές";
-$l_confirm 	= "Επιβεβαίωση";
-$l_by		= "από";
-$l_new          = "Νέο";
-$l_no		= "Όχι";
-$l_toreturn	= " για επιστροφή";
-$l_returnindex	= "Επιστροφή στο ευρετήριο περιοχών συζητήσεων";
-$l_returntopic	= "Επιστροφή στην περιοχή συζητήσεων";
-$l_error	= "Σφάλμα";
-$l_tryagain	= "Παρακαλούμε επιστρέψτε στην προηγούμενη σελίδα και ξαναδοκιμάστε.";
-$l_nopost	= "Δεν έχετε δικαίωμα αποστολής μηνυμάτων σε αυτή την περιοχή.";
-$l_lastpost 	= "Τελευταία $l_post";
-$l_sincelast	= "από την προηγούμενη επίσκεψή σας.";
-$l_newposts 	= "Υπάρχουν νέα $l_posts $l_sincelast";
-$l_nonewposts 	= "Δεν υπάρχουν νέα $l_posts $l_sincelast";
-
-// Viewforum
-$l_viewforum	= "Εμφάνιση περιοχής συζητήσεων";
-$l_notopics	= "Δεν υπάρχουν θέματα σε αυτή την περιοχή. Μπορείτε να ξεκινήσετε ένα νέο.";
-$l_noforum	= "Δεν υπάρχουν περιοχές συζήτησης σε αυτή την κατηγορία.";
-
-// Private forums
-$l_privateforum	= "Αυτή η περιοχή συζητήσεων είναι <b>προσωπική</b>.";
-$l_private 	= "$l_privateforum<br>Σημείωση: πρέπει να έχετε ενεργοποιημένα τα cookies για να χρησιμοποιήσετε προσωπικές περιοχές.";
-$l_noprivatepost = "$l_privateforum Δεν έχετε πρόσβαση αποστολής μηνυμάτων σε αυτή την περιοχή.";
-// Viewtopic
-$l_topictitle	= "Εμφάνιση θέματος";
-$l_posted	= "Στάλθηκε";
-$l_ViewMessage	= "Εμφάνιση μηνύματος";
-
-$langErrorConnectForumDatabase="Παρουσιάστηκε πρόβλημα. Αδύνατη η σύνδεση με τη βάση δεδομένων του Forum.";
-$langErrorForumSelect= "Η περιοχή συζητήσεων που επιλέξατε δεν υπάρχει. Παρακαλώ προσπαθήστε ξανά.";
-$langErrorTopicsQuery="Παρουσιάστηκε σφάλμα. Αδύνατη η εκτέλεση της εντολής σας στη βάση δεδομένων των θεμάτων.<br>";
-$langErrorTopicsQueryDatabase="Παρουσιάστηκε σφάλμα. Αδύνατη η εκτέλεση της εντολής σας στη βάση δεδομένων των θεμάτων.";
-$langUnableGetCategories="Αδύνατη η εμφάνιση κατηγοριών των περιοχών συζητήσεων ";
-$langErrorGetForumData="Σφάλμα κατά την ανάκτηση δεδομένων των περιοχών συζητήσεων";
-$langErrorConnectForumDatabase="Αδύνατη η σύνδεση με τη βάση δεδομένων των περιοχών συζητήσεων.";
+$langNoPosts = "Δεν υπάρχουν αποστολές";
+$langNoPost = "Δεν έχετε δικαίωμα αποστολής μηνυμάτων σε αυτή την περιοχή.";
+$langReturnIndex = "Επιστροφή στο ευρετήριο περιοχών συζητήσεων";
+$langReturnTopic = "Επιστροφή στην περιοχή συζητήσεων";
+$langLastPost = "Τελευταία αποστολή";
+$langNoTopics = "Δεν υπάρχουν θέματα σε αυτή την περιοχή. Μπορείτε να ξεκινήσετε ένα νέο.";
+$langPrivateForum = "Αυτή η περιοχή συζητήσεων είναι <b>προσωπική</b>.";
+$langPrivate = "$langPrivateForum<br>Σημείωση: πρέπει να έχετε ενεργοποιημένα τα cookies για να χρησιμοποιήσετε προσωπικές περιοχές.";
+$langSent = "Στάλθηκε";
+$langViewMessage = "Εμφάνιση μηνύματος";
+$langNotEdit = "Δεν μπορείτε να αλλάξετε μήνυμα που δεν είναι δικό σας.";
+$langStored = "Το μήνυμα αποθηκεύτηκε";
+$langViewMsg = " για να εμφανίσετε το μήνυμα";
+$langViewMsg1 = "εμφάνιση μηνύματος";
+$langDeletedMessage = "Το μήνυμα διαγράφηκε";
+$langDeleteMessage = "Διαγραφή του μηνύματος";
+$langEmptyMsg = "Για να στείλετε ένα μήνυμα πρέπει να γράψετε κάποιο κείμενο. Δεν μπορείτε να στείλετε κενό μήνυμα.";
+$langCancelPost	= "Ακύρωση αποστολής";
+$langTopicReview  = "Ανασκόπηση θέματος";
+$langReply = "Απάντηση";
+$langReplyEdit = "Αλλαγή απάντησης";
+$langQuoteMsg = '[quote]\nΣτις $m[post_time], ο/η $m[username] έγραψε:\n$text\n[/quote]';
+$langErrorConnectForumDatabase = "Παρουσιάστηκε πρόβλημα. Αδύνατη η σύνδεση με τη βάση δεδομένων του Forum.";
 $langErrorTopicSelect="Η περιοχή συζητήσεων που επιλέξατε δεν υπάρχει. Παρακαλώ προσπαθήστε ξανά.";
-$langUnableEnterData="Αδύνατη η εισαγωγή δεδομένων στη βάση. Παρακαλώ προσπαθήστε ξανά.";
-$langUnableEnterText="Αδύνατη η εισαγωγή κειμένου!<br>Αιτία";
-
-// Page_tail
-$l_adminpanel	= "Διαχείριση";
-// Editpost
-$l_notedit	= "Δεν μπορείτε να αλλάξετε μήνυμα που δεν είναι δικό σας.";
-$l_editedby	= "Το $l_message διορθώθηκε από:";
-$langStored	= "Το $l_message αποθηκεύτηκε.";
-$l_viewmsg	= " για να εμφανίσετε το $l_message.";
-$l_viewmsg1	= "εμφάνιση μηνύματος";
-$l_deleted	= "Το μήνυμα διαγράφηκε.";
-$l_delete	= "Διαγραφή του μηνύματος";
-$l_disable	= "Απενεργοποίηση";
-$l_onthispost	= "σε αυτό το μήνυμα";
-
-// Newtopic
-$l_emptymsg	= "Για να στείλετε ένα μήνυμα πρέπει να γράψετε κάποιο κείμενο. Δεν μπορείτε να στείλετε κενό μήνυμα.";
-$l_cancelpost	= "Ακύρωση αποστολής";
-
-// Reply
-$l_nopostlock	= "Δεν μπορείτε να στείλετε απαντήσεις σε αυτό το θέμα, έχει κλειδωθεί.";
-$l_topicreview  = "Ανασκόπηση θέματος";
-$l_notifysubj	= "Στάλθηκε μια απάντηση στο θέμα σας.";
-$l_quotemsg	= '[quote]\nΣτις $m[post_time], ο/η $m[username] έγραψε:\n$text\n[/quote]';
-
-// Viewpmsg
-$l_reply	= "Απάντηση";
-$l_replyEdit	= "Αλλαγή απάντησης";
 
 /*****************************************************************
 * questionnaire.inc.php
