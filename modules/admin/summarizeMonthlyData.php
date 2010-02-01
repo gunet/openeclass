@@ -117,10 +117,10 @@ $langPleaseWait</div>
         while ($row = mysql_fetch_assoc($result)) {
             //declare course type
             if ($row['type'] == 'pre') {
-              $ctype = $langPre;
+              $ctype = $langpre;
             }
             else {
-              $ctype = $langPost;
+              $ctype = $langpost;
             }
             //declare visibility
             if ($row['visible'] == 0) {
