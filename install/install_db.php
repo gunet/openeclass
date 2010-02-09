@@ -31,14 +31,14 @@ if (!defined('ECLASS_VERSION')) {
 db_query("DROP DATABASE IF EXISTS ".$mysqlMainDb);
 if (mysql_version()) db_query("SET NAMES utf8");
 if (mysql_version()) {
-	$cdb=db_query("CREATE DATABASE $mysqlMainDb CHARACTER SET utf8");
+        $cdb=db_query("CREATE DATABASE $mysqlMainDb CHARACTER SET utf8");
 
 } else {
-	$cdb=db_query("CREATE DATABASE $mysqlMainDb");
+        $cdb=db_query("CREATE DATABASE $mysqlMainDb");
 }
-	mysql_select_db ($mysqlMainDb);
+mysql_select_db ($mysqlMainDb);
 
-	// drop old tables (if existed)
+// drop old tables if they exist
 db_query("DROP TABLE IF EXISTS admin");
 db_query("DROP TABLE IF EXISTS admin_announcements");
 db_query("DROP TABLE IF EXISTS agenda");
@@ -64,13 +64,13 @@ $charset_spec = 'DEFAULT CHARACTER SET=utf8';
 
 
 db_query("CREATE TABLE annonces (
-      id mediumint(11) NOT NULL auto_increment,
-	title varchar(255) default NULL,
-      contenu text,
-      temps date default NULL,
-      code_cours varchar(20) default NULL,
-      ordre mediumint(11) NOT NULL,
-      PRIMARY KEY  (id))
+      `id` mediumint(11) NOT NULL auto_increment,
+      `title` varchar(255) default NULL,
+      `contenu` text,
+      `temps` date default NULL,
+      `cours_id` int(11) NOT NULL default '0',
+      `ordre` mediumint(11) NOT NULL,
+      PRIMARY KEY (id))
       $charset_spec");
 
 
@@ -163,14 +163,13 @@ db_query("CREATE TABLE `cours` (
 #
 
 db_query("CREATE TABLE cours_user (
-      code_cours varchar(30) NOT NULL default '0',
-      cours_id int(11) NOT NULL default '0',
-      user_id int(11) unsigned NOT NULL default '0',
-      statut tinyint(4) NOT NULL default '0',
-      team int(11) NOT NULL default '0',
-      tutor int(11) NOT NULL default '0',
-      reg_date DATE NOT NULL,
-      PRIMARY KEY  (code_cours,user_id)) $charset_spec");
+      `cours_id` int(11) NOT NULL default '0',
+      `user_id` int(11) unsigned NOT NULL default '0',
+      `statut` tinyint(4) NOT NULL default '0',
+      `team` int(11) NOT NULL default '0',
+      `tutor` int(11) NOT NULL default '0',
+      `reg_date` date NOT NULL,
+      PRIMARY KEY (cours_id, user_id)) $charset_spec");
 
 #
 # Table `faculte`
@@ -399,5 +398,5 @@ db_query("CREATE TABLE `course_units` (
 	`date` DATETIME NOT NULL DEFAULT '0000-00-00') $charset_spec");
  
 //dhmiourgia full text indexes
-db_query("ALTER TABLE `annonces` ADD FULLTEXT `annonces` (`contenu` ,`code_cours`)");
+db_query("ALTER TABLE `annonces` ADD FULLTEXT `annonces` (`contenu`)");
 db_query("ALTER TABLE `cours` ADD FULLTEXT `cours` (`code` ,`description` ,`intitule` ,`course_keywords`, `course_addon`)");

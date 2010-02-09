@@ -251,7 +251,7 @@ if (!isset($submit2)) {
 
         if ($oldversion < '2.1.3') {
         	// delete useless field
-        	if (mysql_field_exists("$mysqlMainDb",'cours','scoreShow')) {
+        	if (mysql_field_exists($mysqlMainDb, 'cours', 'scoreShow')) {
 	        	echo delete_field('cours', 'scoreShow');
                 }
         	// delete old example test from table announcements
@@ -284,19 +284,37 @@ if (!isset($submit2)) {
 	}
 
         if ($oldversion < '2.2.1') {
-		db_query("ALTER TABLE `cours` CHANGE `doc_quota` `doc_quota` FLOAT NOT NULL DEFAULT '104857600'"); 
-		db_query("ALTER TABLE `cours` CHANGE `video_quota` `video_quota` FLOAT NOT NULL DEFAULT '104857600'");
-		db_query("ALTER TABLE `cours` CHANGE `group_quota` `group_quota` FLOAT NOT NULL DEFAULT '104857600'"); 
-		db_query("ALTER TABLE `cours` CHANGE `dropbox_quota` `dropbox_quota` FLOAT NOT NULL DEFAULT '104857600'");
-		db_query("CREATE TABLE IF NOT EXISTS `forum_notify` (
-			`id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
-			`user_id` INT NOT NULL DEFAULT '0',
-			`cat_id` INT NULL ,
-			`forum_id` INT NULL ,
-			`topic_id` INT NULL ,
-			`notify_sent` BOOL NOT NULL DEFAULT '0',
-			`course_id` INT NOT NULL DEFAULT '0')");
-		}
+                db_query("ALTER TABLE `cours` CHANGE `doc_quota` `doc_quota` FLOAT NOT NULL DEFAULT '104857600'"); 
+                db_query("ALTER TABLE `cours` CHANGE `video_quota` `video_quota` FLOAT NOT NULL DEFAULT '104857600'");
+                db_query("ALTER TABLE `cours` CHANGE `group_quota` `group_quota` FLOAT NOT NULL DEFAULT '104857600'"); 
+                db_query("ALTER TABLE `cours` CHANGE `dropbox_quota` `dropbox_quota` FLOAT NOT NULL DEFAULT '104857600'");
+                db_query("CREATE TABLE IF NOT EXISTS `forum_notify` (
+                        `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+                        `user_id` INT NOT NULL DEFAULT '0',
+                        `cat_id` INT NULL ,
+                        `forum_id` INT NULL ,
+                        `topic_id` INT NULL ,
+                        `notify_sent` BOOL NOT NULL DEFAULT '0',
+                        `course_id` INT NOT NULL DEFAULT '0')");
+                
+        	if (!mysql_field_exists($mysqlMainDb, 'cours_user', 'cours_id')) {
+	        	db_query('ALTER TABLE cours_user ADD cours_id int(11) DEFAULT 0 NOT NULL FIRST');
+                        db_query('UPDATE cours_user SET cours_id =
+                                        (SELECT cours_id FROM cours WHERE code = cours_user.code_cours)
+                                  WHERE cours_id = 0');
+	        	db_query('ALTER TABLE cours_user DROP PRIMARY KEY, ADD PRIMARY KEY (cours_id, user_id)');
+                        db_query('CREATE INDEX cours_user_id ON cours_user (user_id, cours_id)');
+                        db_query('ALTER TABLE cours_user DROP code_cours');
+                }
+
+        	if (!mysql_field_exists($mysqlMainDb, 'annonces', 'cours_id')) {
+	        	db_query('ALTER TABLE annonces ADD cours_id int(11) DEFAULT 0 NOT NULL AFTER code_cours');
+                        db_query('UPDATE annonces SET cours_id =
+                                        (SELECT cours_id FROM cours WHERE code = annonces.code_cours)
+                                  WHERE cours_id = 0');
+                        db_query('ALTER TABLE annonces DROP code_cours');
+                }
+        }
 
         // **********************************************
         // upgrade courses databases
