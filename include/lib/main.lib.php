@@ -32,7 +32,7 @@ Defines standard functions and validates variables
 ---------------------------------------------------------------------
 */
 
-define('ECLASS_VERSION', '2.2.1');
+define('ECLASS_VERSION', '2.2.50');
 
 // Show query string and then do MySQL query
 function db_query2($sql, $db = FALSE)
@@ -690,24 +690,38 @@ function create_pass() {
 }
 
 
+// Returns user's previous login date, or today's date if no previous login
+function last_login($uid)
+{
+        global $mysqlMainDb;
+
+        $q = mysql_query("SELECT DATE_FORMAT(MAX(`when`), '%Y-%m-%d') FROM loginout
+                          WHERE id_user = $uid AND action = 'LOGIN'");
+        list($last_login) = mysql_fetch_row($q);
+        if (!$last_login) {
+                $last_login = date('Y-m-d');
+        }
+        return $last_login;
+}
+
+
 // check for new announcements
 function check_new_announce() {
+        global $uid;
 
-  global $uid;
-
-  $row = mysql_fetch_array(mysql_query("SELECT * FROM loginout
-					WHERE id_user='$uid' AND action = 'LOGIN' ORDER BY idLog DESC"));
-  $lastlogin = $row['when'];
-  $sql = "SELECT * FROM annonces,cours_user
-                WHERE annonces.code_cours=cours_user.code_cours
-                AND cours_user.user_id='$uid' AND annonces.temps >= '$lastlogin'
-                ORDER BY temps DESC";
-  if (mysql_num_rows(mysql_query($sql)) > 0)
-	  return TRUE;
-  else
-  	return FALSE;
-
+        $lastlogin = last_login($uid);
+        $q = mysql_query("SELECT * FROM annonces, cours_user
+                          WHERE annonces.cours_id = cours_user.cours_id AND
+                                cours_user.user_id = $uid AND
+                                annonces.temps >= '$lastlogin'
+                          ORDER BY temps DESC LIMIT 1");
+        if ($q and mysql_num_rows($q) > 0) {
+                return true;
+        } else {
+                return false;
+        }
 }
+
 
 // Create a JavaScript-escaped mailto: link
 function mailto($address, $alternative='(e-mail address hidden)')

@@ -41,22 +41,21 @@ if (!defined('INDEX_START')) {
 }
 
 include "redirector.php";
-//Check for lessons that the user is a professor
-	$result2 = mysql_query("SELECT cours.code k, cours.fake_code c, cours.intitule i, cours.titulaires t, cours_user.statut s FROM cours, cours_user WHERE cours.cours_id = cours_user.cours_id
-	AND cours_user.user_id='".$uid."' AND cours_user.statut='1' ORDER BY cours.intitule, cours.titulaires");
-if (mysql_num_rows($result2) > 0) {
-	$i=0;
+
+$status = array();
+$result2 = db_query("
+        SELECT cours.code code, cours.fake_code fake_code,
+               cours.intitule title, cours.titulaires profs, cours_user.statut statut
+        FROM cours JOIN cours_user ON cours.cours_id = cours_user.cours_id
+        WHERE cours_user.user_id = $uid
+        ORDER BY statut, cours.intitule, cours.titulaires");
+if ($result2 and mysql_num_rows($result2) > 0) {
 	while ($mycours = mysql_fetch_array($result2)) {
-		$dbname = $mycours["k"];
-		$status[$dbname] = $mycours["s"];
-		$i++;
+		$status[$mycours['code']] = $mycours['statut'];
 	}
 } 
 
-if (isset($status)) {
-	$_SESSION['status'] = $status;
-}
-// end of check
+$_SESSION['status'] = $status;
 
 //include personalised component files (announcemets.php etc.) from /modules/perso
 include "$webDir/modules/perso/lessons.php";
@@ -66,28 +65,8 @@ include "$webDir/modules/perso/documents.php";
 include "$webDir/modules/perso/agenda.php";
 include "$webDir/modules/perso/forumPosts.php";
 
-//	BEGIN Get user's last login date]==============================================
-$last_login_query = 	"SELECT  `id_user` ,  `when` ,  `action`
-			FROM  `$mysqlMainDb`.loginout
-			WHERE  `action`  =  'LOGIN' AND  `id_user`  = $uid
-			ORDER BY  `when`  DESC
-			LIMIT 1,1 ";
-
-$login_date_result = db_query($last_login_query, $mysqlMainDb);
-
-
-if (mysql_num_rows($login_date_result)) {
-	$login_date_fetch = mysql_fetch_row($login_date_result);
-	$_user["persoLastLogin"] = substr($login_date_fetch[1],0,10);
-	$_user["lastLogin"] = eregi_replace("-", " ", substr($login_date_fetch[1],0,10));
-} else {
-	//The else serves the exceptional case when the user logs in to
-	// the platform for the first time
-	$_user["persoLastLogin"] = date('Y-m-d');
-	$_user["lastLogin"] = eregi_replace("-", " ", substr($_user["persoLastLogin"],0,10));
-}
-//	END Get user's last login date]================================================
-
+$_user['persoLastLogin'] = last_login($uid);
+$_user['lastLogin'] = str_replace('-', ' ', $_user['persoLastLogin']);
 
 //	BEGIN user's status query]=====================================================
 $user_status_query = db_query("SELECT statut FROM user WHERE user_id = '$uid'", $mysqlMainDb);
@@ -243,5 +222,3 @@ function autoCloseTags($string) {
 	}
 	return $tagstoclose;
 }
-
-?>

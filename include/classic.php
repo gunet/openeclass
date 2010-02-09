@@ -74,10 +74,10 @@ function cours_table_end()
         $GLOBALS['tool_content'] .= "</tbody></table></td></tr></table><br />";
 }
 
-$tool_content .= " ";
+$tool_content = "";
 $status = array();
 $result2 = db_query("
-        SELECT cours.code code, cours.fake_code fake_code,
+        SELECT cours.cours_id cours_id, cours.code code, cours.fake_code fake_code,
                cours.intitule title, cours.titulaires profs, cours_user.statut statut
 	FROM cours JOIN cours_user ON cours.cours_id = cours_user.cours_id
         WHERE cours_user.user_id = $uid
@@ -98,6 +98,7 @@ if ($result2 and mysql_num_rows($result2) > 0) {
 		$code = $mycours['code'];
                 $title = $mycours['title'];
 		$status[$code] = $this_statut;
+		$cours_id_map[$code] = $mycours['cours_id'];
                 $profs[$code] = $mycours['profs'];
                 $titles[$code] = $mycours['title'];
 		if ($k%2==0) {
@@ -137,16 +138,15 @@ if (count($status) > 0) {
                 <tr><td><table width='100%' align='center'><thead><tr>
                 <th style='border: 1px solid #edecdf;' colspan='2' class='left'>$langMyPersoAnnouncements</th>
                 </tr></thead><tbody>";
-        // get last login date
-        $last_login_query = "SELECT DATE_FORMAT(`when`, '%Y-%m-%d') AS last_login FROM loginout
-                WHERE action = 'LOGIN' AND id_user = '$uid' ORDER BY `when` DESC LIMIT 1,1";
-        list($logindate) = mysql_fetch_row(db_query($last_login_query));
+
+        $logindate = last_login($uid);
 
         $table_begin = true;
         foreach ($status as $code => $code_statut) {
+                $cid = $cours_id_map[$code];
                 $result = db_query("SELECT contenu, temps, title
                                 FROM `$mysqlMainDb`.annonces, `$code`.accueil
-                                WHERE code_cours = '$code'
+                                WHERE cours_id = $cid
                                 AND temps > DATE_SUB('$logindate', INTERVAL 10 DAY)
                                 AND `$code`.accueil.visible = 1
                                 AND `$code`.accueil.id = 7

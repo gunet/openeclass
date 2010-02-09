@@ -197,15 +197,16 @@ if (isset($require_current_course) and $require_current_course) {
 		// Check for course visibility by current user
 		$statut = 0;
 		if (isset($uid)) {
-			$res2 = mysql_query("
-			SELECT statut FROM cours_user
-			WHERE code_cours = '$dbname' AND user_id='$uid'");
-			if ($row = mysql_fetch_row($res2)) {
-				$statut = $row[0];
-			}
                         // The admin can see all courses as adminOfCourse
                         if ($uid == 1) {
                                 $statut = 1;
+                        } else {
+        			$res2 = db_query("SELECT statut FROM cours_user
+                                                  WHERE user_id = $uid AND
+                                                        cours_id = $cours_id");
+        			if ($res2 and mysql_num_rows($res2) > 0) {
+	        			list($statut) = mysql_fetch_row($res2);
+		        	}
                         }
 		}
 
