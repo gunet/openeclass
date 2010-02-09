@@ -102,7 +102,8 @@ if ($user_lesson_info[0][0] > 0) {
 	'lesson_professor'	=> $user_lesson_info[0][3],
 	'lesson_statut'		=> $user_lesson_info[0][4],
 	'usr_lst_login'		=> $_user["lastLogin"],
-	'usr_memory'		=> $user_lesson_info[0][5]
+	'usr_memory'		=> $user_lesson_info[0][5],
+        'lesson_id'             => $user_lesson_info[0][8]
 	);
 
 	$user_announcements = getUserAnnouncements($param, "html");

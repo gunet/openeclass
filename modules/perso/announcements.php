@@ -52,6 +52,7 @@ function getUserAnnouncements($param = null, $type) {
 	global $mysqlMainDb, $uid, $dbname, $currentCourseID;
 
 	$uid			= $param['uid'];
+	$lesson_id		= $param['lesson_id'];
 	$lesson_code		= $param['lesson_code'];
 	$max_repeat_val		= $param['max_repeat_val'];
 	$lesson_title		= $param['lesson_titles'];
@@ -62,27 +63,23 @@ function getUserAnnouncements($param = null, $type) {
 
 	$usr_memory = $param['usr_memory'];
 
-	//		Generate SQL code for all queries
-	//		----------------------------------------
-	$queryParamNew = array(
-	'lesson_code'		=> $lesson_code,
-	'max_repeat_val'	=> $max_repeat_val,
-	'date'		=> $usr_lst_login
-	);
+        // Generate SQL code for all queries
+        // ----------------------------------------
+        // We have 2 SQL cases. The scripts tries to return all new announcements
+        // the user had since his last login. If the returned rows are less than 1
+        // it gets the last announcements the user had.
+        // -----------------------------------------------------------------------
 
-	$queryParamMemo = array(
-	'lesson_code'		=> $lesson_code,
-	'max_repeat_val'	=> $max_repeat_val,
-	'date'		=> $usr_memory
-	);
-
-	$announce_query_new 	= createQueries($queryParamNew);
-	$announce_query_memo 	= createQueries($queryParamMemo);
-
-	//		We have 2 SQL cases. The scripts tries to return all new announcements
-	//		the user had since his last login. If the returned rows are less than 1
-	//		it gets the last announcements the user had.
-	//		-----------------------------------------------------------------------
+	$announce_query_new = createQueries(array(
+                'lesson_id' => $lesson_id,
+                'lesson_code' => $lesson_code,
+                'max_repeat_val' => $max_repeat_val,
+                'date' => $usr_lst_login));
+	$announce_query_memo = createQueries(array(
+                'lesson_id' => $lesson_id,
+                'lesson_code' => $lesson_code,
+                'max_repeat_val' => $max_repeat_val,
+                'date' => $usr_memory));
 
 	$announceSubGroup = array();
 	$getNewAnnounce = false;
@@ -221,6 +218,7 @@ function createQueries($queryParam){
 
 	global $mysqlMainDb, $maxValue;
 
+	$lesson_id = $queryParam['lesson_id'];
 	$lesson_code = $queryParam['lesson_code'];
 	$max_repeat_val = $queryParam['max_repeat_val'];
 	$date = $queryParam['date'];
@@ -233,12 +231,12 @@ function createQueries($queryParam){
 		}
 
 		$announce_query[$i] = "SELECT title, contenu, temps
-		FROM " .$mysqlMainDb." . annonces, `".$lesson_code[$i]."`.accueil
-		WHERE code_cours='" . $lesson_code[$i] . "'
-		AND DATE_FORMAT(temps,'%Y %m %d / %H %i') >='" .$dateVar."'
-		AND `".$lesson_code[$i]."`.accueil.visible = 1
-		AND `".$lesson_code[$i]."`.accueil.id = 7
-		ORDER BY temps DESC";
+                        FROM `$mysqlMainDb`.annonces, `$lesson_code[$i]`.accueil
+                        WHERE cours_id = $lesson_id[$i]
+                                AND DATE_FORMAT(temps,'%Y %m %d / %H %i') >='$dateVar'
+                                AND `$lesson_code[$i]`.accueil.visible = 1
+                                AND `$lesson_code[$i]`.accueil.id = 7
+                        ORDER BY temps DESC";
 	}
 	return $announce_query;
 }

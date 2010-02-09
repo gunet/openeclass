@@ -49,27 +49,29 @@
  * @param string $type (data, html)
  * @return mixed content
  */
-function  getUserLessonInfo($uid, $type)
+function getUserLessonInfo($uid, $type)
 {
 	//	?$userID=$uid;
 	global $mysqlMainDb;
 
 	//	TODO: add the new fields for memory in the db
 
-	$user_courses = "SELECT cours.code , cours.fake_code ,
-	                                           cours.intitule , cours.titulaires ,
-	                                           cours.languageCourse ,
-	                                           cours_user.statut,
-	                                           user.perso,
-	                                           user.announce_flag,
-	                                           user.doc_flag,
-	                                           user.forum_flag
-	                                  FROM    cours, cours_user, user
-	                                  WHERE cours.code = cours_user.code_cours
-	                                  AND   cours_user.user_id = '".$uid."'
-	                                  AND   user.user_id = '".$uid."' 
-					  ORDER BY cours.intitule, cours.titulaires
-	                                  ";
+	$user_courses = "SELECT cours.cours_id cours_id,
+                                cours.code code,
+                                cours.fake_code fake_code,
+	                        cours.intitule title,
+                                cours.titulaires professor,
+	                        cours.languageCourse,
+	                        cours_user.statut statut,
+	                        user.perso,
+	                        user.announce_flag,
+	                        user.doc_flag,
+	                        user.forum_flag
+	                 FROM cours, cours_user, user
+	                 WHERE cours.cours_id = cours_user.cours_id AND
+	                       cours_user.user_id = $uid AND
+	                       user.user_id = $uid
+                         ORDER BY cours.intitule, cours.titulaires";
 
 	$mysql_query_result = db_query($user_courses, $mysqlMainDb);
 	$repeat_val = 0;
@@ -77,22 +79,23 @@ function  getUserLessonInfo($uid, $type)
         $lesson_fakeCode = array();
 
 	//getting user's lesson info
-	while ($mycourses = mysql_fetch_row($mysql_query_result)) {
-		$lesson_titles[$repeat_val] 	= $mycourses[2]; //lesson titles
-		$lesson_code[$repeat_val]	= $mycourses[0]; //lesson code used in tables
-		$lesson_professor[$repeat_val]	= $mycourses[3]; //lesson professor
-		$lesson_statut[$repeat_val]	= $mycourses[5];//statut (user|prof)
-		$lesson_fakeCode[$repeat_val]	= $mycourses[1];//lesson fake code
+	while ($mycourses = mysql_fetch_array($mysql_query_result)) {
+		$lesson_id[$repeat_val] 	= $mycourses['cours_id'];
+		$lesson_titles[$repeat_val] 	= $mycourses['title'];
+		$lesson_code[$repeat_val]	= $mycourses['code'];
+		$lesson_professor[$repeat_val]	= $mycourses['professor'];
+		$lesson_statut[$repeat_val]	= $mycourses['statut'];
+		$lesson_fakeCode[$repeat_val]	= $mycourses['fake_code'];
 		$repeat_val++;
 	}
 
 	$memory = "SELECT user.announce_flag, user.doc_flag, user.forum_flag
-		FROM user WHERE user.user_id = '".$uid."'";
+		FROM user WHERE user.user_id = $uid";
 	$memory_result = db_query($memory, $mysqlMainDb);
 	while ($my_memory_result = mysql_fetch_row($memory_result)) {
-		$lesson_announce_f = eregi_replace("-", " ", $my_memory_result[0]);
-		$lesson_doc_f = eregi_replace("-", " ", $my_memory_result[1]);
-		$lesson_forum_f = eregi_replace("-", " ", $my_memory_result[2]);
+		$lesson_announce_f = str_replace('-', ' ', $my_memory_result[0]);
+		$lesson_doc_f = str_replace('-', ' ', $my_memory_result[1]);
+		$lesson_forum_f = str_replace('-', ' ', $my_memory_result[2]);
 	}
 	$max_repeat_val = $repeat_val;
 	$ret_val[0] = $max_repeat_val;
@@ -103,9 +106,10 @@ function  getUserLessonInfo($uid, $type)
 	$ret_val[5] = $lesson_announce_f;
 	$ret_val[6] = $lesson_doc_f;
 	$ret_val[7] = $lesson_forum_f;
+	$ret_val[8] = $lesson_id;
 
 	//check what sort of data should be returned
-	if($type == "html") {
+	if ($type == "html") {
 		return array($ret_val,htmlInterface($ret_val, $lesson_fakeCode));
 		//		return htmlInterface($ret_val);
 	} elseif ($type == "data") {
