@@ -63,13 +63,13 @@ $icons = array(2 => "<img src='../../template/classic/img/OpenCourse.gif'   alt=
     );
 
 $tool_content .= "
-  <table width=99% class=\"framed\">
+  <table width=99% class='framed'>
   <tbody>
   <tr>
     <td><a name='top'>&nbsp;</a>$langFaculty:&nbsp;<b>$fac</b></td>
     <td><div align='right'>";
 // get the different course types available for this faculte
-$typesresult = mysql_query("SELECT DISTINCT cours.type types FROM cours WHERE cours.faculte = '$fac' ORDER BY cours.type");
+$typesresult = db_query("SELECT DISTINCT cours.type types FROM cours WHERE cours.faculteid = $fc ORDER BY cours.type");
 // count the number of different types
 $numoftypes = mysql_num_rows($typesresult);;
 // output the nav bar only if we have more than 1 types of courses
@@ -85,7 +85,7 @@ if ($numoftypes > 1) {
         if ($counter != 1) {
             $tool_content .= " | ";
         }
-        $tool_content .= "<a href=\"#" . $t . "\">" . ${'lang'.$ts} . "</a>&nbsp;";
+        $tool_content .= "<a href='#$t'>" . ${'lang'.$ts} . "</a>&nbsp;";
         $counter++;
     }
     $tool_content .= "</div></td>
@@ -113,7 +113,7 @@ foreach (array("pre" => $langpres,
 			FROM cours_faculte, cours
 			WHERE cours.code = cours_faculte.code
 			AND cours.type = '$type'
-			AND cours_faculte.facid='$fc'
+			AND cours_faculte.facid = '$fc'
 			ORDER BY cours.intitule, cours.titulaires");
 
     if (mysql_num_rows($result) == 0) {
@@ -128,7 +128,7 @@ foreach (array("pre" => $langpres,
     $tool_content .= "<a name='$type'>&nbsp;</a><b>$message</b></td>\n";
     // output a top href link if necessary
     if ($numoftypes > 1) {
-        $tool_content .= "\n<td align=\"right\"><a href=\"#top\" class='mainpage'>$m[begin]</a>&nbsp;</td>";
+        $tool_content .= "\n<td align='right'><a href='#top' class='mainpage'>$m[begin]</a>&nbsp;</td>";
         // or a space for beautifying reasons
     } else {
         $tool_content .= "    <td>&nbsp;</td>\n";
@@ -138,7 +138,7 @@ foreach (array("pre" => $langpres,
     $tool_content .= "
 
     <script type='text/javascript' src='sorttable.js'></script>
-    <table width='99%' class=\"framed\">
+    <table width='99%' class='framed'>
     <tr>
         <td>
         <table width=100% class='sortable' id='t1'>
