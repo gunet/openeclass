@@ -649,7 +649,7 @@ while ($list = mysql_fetch_array($result)) // while ... learning path list
     $iterator++;
 } // end while
 
-if (!$is_adminOfCourse && $iterator != 1 && $uid) {
+if (!$is_adminOfCourse && $iterator != 1 && isset($uid)) {
         // add a blank line between module progression and global progression
         $total = round($globalprog / ($iterator-1));
         $tool_content .= "<tr class='odd'>

@@ -68,9 +68,9 @@ $nameTools = $langTrackAllPathExplanation;
 
 // display a list of user and their respective progress
 $sql = "SELECT U.`nom`, U.`prenom`, U.`user_id`
-	FROM `".$TABLEUSER."` AS U, `".$TABLECOURSUSER."` AS CU
+	FROM `$TABLEUSER` AS U, `$TABLECOURSUSER` AS CU
 	WHERE U.`user_id`= CU.`user_id`
-	AND CU.`code_cours` = '". addslashes($currentCourseID) ."'
+	AND CU.`cours_id` = $cours_id
 	ORDER BY U.`nom` ASC";
 
 @$tool_content .= get_limited_page_links($sql, 30, $langPreviousPage, $langNextPage);

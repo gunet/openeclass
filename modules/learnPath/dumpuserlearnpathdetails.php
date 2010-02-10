@@ -49,7 +49,7 @@ if($is_adminOfCourse) {
 	$sql = "SELECT U.`nom`, U.`prenom`, U.`user_id`
 		FROM `user` AS U, `cours_user` AS CU
 		WHERE U.`user_id`= CU.`user_id`
-		AND CU.`code_cours` = '". addslashes($currentCourseID) ."'
+		AND CU.`cours_id` = $cours_id
 		ORDER BY U.`nom` ASC";
 	$usersList = get_limited_list($sql, 500000);
 	mysql_select_db($currentCourseID);
