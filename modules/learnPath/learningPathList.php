@@ -557,11 +557,11 @@ while ($list = mysql_fetch_array($result)) // while ... learning path list
         $tool_content .= "      <td style=\"border-left: 1px solid #edecdf;\" align=\"center\">";
 
         if ($list['lock'] == 'OPEN') {
-            $tool_content .= "<a href=\"".$_SERVER['PHP_SELF']."?cmd=mkBlock&cmdid=".$list['learnPath_id']."\">"
+            $tool_content .= "<a href=\"".$_SERVER['PHP_SELF']."?cmd=mkBlock&amp;cmdid=".$list['learnPath_id']."\">"
                   ."<img src=\"../../template/classic/img/unblock.gif\" alt=\"$langBlock\" title=\"$langBlock\" border=\"0\">"
                   ."</a>";
         } else {
-            $tool_content .= "<a href=\"".$_SERVER['PHP_SELF']."?cmd=mkUnblock&cmdid=".$list['learnPath_id']."\">"
+            $tool_content .= "<a href=\"".$_SERVER['PHP_SELF']."?cmd=mkUnblock&amp;cmdid=".$list['learnPath_id']."\">"
             ."<img src=\"../../template/classic/img/block.gif\" alt=\"$langAltMakeNotBlocking\" title=\"$langAltMakeNotBlocking\" border=\"0\">"
             ."</a>";
         }
@@ -581,7 +581,7 @@ while ($list = mysql_fetch_array($result)) // while ... learning path list
         // VISIBILITY link
         $tool_content .= "      <td align=\"center\">";
         if ( $list['visibility'] == 'HIDE') {
-            $tool_content .= "<a href=\"".$_SERVER['PHP_SELF']."?cmd=mkVisibl&visibility_path_id=".$list['learnPath_id']."\">"
+            $tool_content .= "<a href=\"".$_SERVER['PHP_SELF']."?cmd=mkVisibl&amp;visibility_path_id=".$list['learnPath_id']."\">"
                   ."<img src=\"../../template/classic/img/invisible.gif\" alt=\"$langVisible\" title=\"$langVisible\" border=\"0\" />"
                   ."</a>";
         } else {
@@ -592,7 +592,7 @@ while ($list = mysql_fetch_array($result)) // while ... learning path list
                 $onclick = "";
             }
 
-            $tool_content .= "<a href=\"".$_SERVER['PHP_SELF']."?cmd=mkInvisibl&visibility_path_id=".$list['learnPath_id']."\" ".$onclick. " >"
+            $tool_content .= "<a href=\"".$_SERVER['PHP_SELF']."?cmd=mkInvisibl&amp;visibility_path_id=".$list['learnPath_id']."\" ".$onclick. " >"
                  ."<img src=\"../../template/classic/img/visible.gif\" alt=\"$langVisible\" title=\"$langVisible\" border=\"0\" />"
                  ."</a>";
         }
@@ -611,7 +611,7 @@ while ($list = mysql_fetch_array($result)) // while ... learning path list
         // check if the learning path is of a Scorm import package and add right popup:
         if (is_dir($real)) {
             $tool_content .=  "      <td align=\"center\">"
-                  ."<a href=\"".$_SERVER['PHP_SELF']."?cmd=delete&del_path_id=".$list['learnPath_id']."\" "
+                  ."<a href=\"".$_SERVER['PHP_SELF']."?cmd=delete&amp;del_path_id=".$list['learnPath_id']."\" "
                   ."onClick=\"return scormConfirmation('".clean_str_for_javascript($list['name'])."');\">"
                   ."<img src=\"../../template/classic/img/delete.gif\" border=\"0\" alt=\"$langDelete\" title=\"$langDelete\" />"
                   ."</a>"
@@ -619,7 +619,7 @@ while ($list = mysql_fetch_array($result)) // while ... learning path list
 
         } else {
             $tool_content .=  "      <td align=\"center\">"
-                  ."<a href=\"".$_SERVER['PHP_SELF']."?cmd=delete&del_path_id=".$list['learnPath_id']."\" "
+                  ."<a href=\"".$_SERVER['PHP_SELF']."?cmd=delete&amp;del_path_id=".$list['learnPath_id']."\" "
                   ."onClick=\"return confirmation('".clean_str_for_javascript($list['name'])."');\">"
                   ."<img src=\"../../template/classic/img/delete.gif\" border=\"0\" alt=\"$langDelete\" title=\"$langDelete\" />"
                   ."</a>"
@@ -630,7 +630,7 @@ while ($list = mysql_fetch_array($result)) // while ... learning path list
         // DISPLAY MOVE UP COMMAND only if it is not the top learning path
         if ($iterator != 1) {
             $tool_content .= "      <td class=\"right\">"
-                  ."<a href=\"".$_SERVER['PHP_SELF']."?cmd=moveUp&move_path_id=".$list['learnPath_id']."\">"
+                  ."<a href=\"".$_SERVER['PHP_SELF']."?cmd=moveUp&amp;move_path_id=".$list['learnPath_id']."\">"
                   ."<img src=\"../../template/classic/img/up.gif\" alt=\"$langUp\" title=\"$langUp\" border=\"0\" />"
                   ."</a>"
                   ."</td>\n";
@@ -642,7 +642,7 @@ while ($list = mysql_fetch_array($result)) // while ... learning path list
         // DISPLAY MOVE DOWN COMMAND only if it is not the bottom learning path
         if($iterator < $LPNumber) {
             $tool_content .= "      <td class=\"left\">"
-                  ."<a href=\"".$_SERVER['PHP_SELF']."?cmd=moveDown&move_path_id=".$list['learnPath_id']."\">"
+                  ."<a href=\"".$_SERVER['PHP_SELF']."?cmd=moveDown&amp;move_path_id=".$list['learnPath_id']."\">"
                   ."<img src=\"../../template/classic/img/down.gif\" alt=\"$langDown\" title=\"$langDown\" border=\"0\" />"
                   ."</a>"
                   ."</td>";
