@@ -29,173 +29,109 @@ $helpTopic = 'Guest';
 include '../../include/baseTheme.php';
 
 $nameTools = $langAddGuest;
-$navigation[] = array ("url"=>"user.php", "name"=> $langAdminUsers);
+$navigation[] = array ("url" => "user.php", "name" => $langAdminUsers);
+
+$default_guest_username = $langGuestUserName . $currentCourseID;
 
 $tool_content = "";
 // IF PROF ONLY
-if($is_adminOfCourse) {
-	if (isset($createguest) and (!guestid($currentCourseID)))
-	{
-		// encrypt the password
-		createguest($currentCourseID,md5($guestpassword));
-		$tool_content .= "
-    <p class=\"success_small\">$langGuestSuccess<br /><a href=\"user.php\">$langBackUser</a></p><br />";
-	} elseif (isset($changepass))
-	{
-		$g=guestid($currentCourseID);
+if ($is_adminOfCourse) {
+        if (isset($_POST['submit'])) {
+                $password = autounquote($_POST['guestpassword']);
+                createguest($default_guest_username, $cours_id, $password);
+                $tool_content .= "<p class='success_small'>$langGuestSuccess<br />" .
+                                 "<a href='user.php'>$langBackUser</a></p>";
+        } else {
+                $guest_info = guestinfo($cours_id);
+                if ($guest_info) {
+                        $tool_content .= "
+                                <p class='caution_small'>$langGuestExist<br />
+                                <a href='user.php'>$langBackUser</a></p>";
+                        $submit_label = $langModify;
+                } else {
+                        $guest_info = array('nom' => $langGuestSurname,
+                                            'prenom' => $langGuestName,
+                                            'username' => $default_guest_username);
+                        $submit_label = $langAdd;
+                }
 
-		// encrypt the password
-	 	$guestpassword_encrypted = md5($guestpassword);
-		$uguest=mysql_query("UPDATE user SET password='$guestpassword_encrypted' WHERE user_id='$g'")
-		or die($langGuestFail);
-		$tool_content .= "
-    <p class=\"success_small\">$langGuestChange<br /><a href=\"user.php\">$langBackUser</a></p><br />";
-	} else {
-		$id = guestid($currentCourseID);
-		if ($id) {
-		$tool_content .= "
-    <p class=\"caution_small\">$langGuestExist<br /><a href=\"user.php\">$langBackUser</a></p><br />";
+                $tool_content .= "
+                        <form method='post' action='$_SERVER[PHP_SELF]'>
 
-			$q1=mysql_query("SELECT nom,prenom,username FROM user where user_id='$id'");
-			$s=mysql_fetch_array($q1);
+                        <table class='FormData'>
+                        <tbody>
+                        <tr>
+                        <th width='220'>&nbsp;</th>
+                        <td><b>$langUserData</b></td>
+                        <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                        <th class='left'>$langName:</th>
+                        <td>$guest_info[prenom]</td>
+                        <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                        <th class='left'>$langSurname:</th>
+                        <td>$guest_info[nom]</td>
+                        <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                        <th class='left'>$langUsername:</th>
+                        <td>$guest_info[username]</td>
+                        <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                        <th class='left'>$langPass:</th>
+                        <td><input type='text' name='guestpassword' value='' class='FormData_InputText' /></td>
+                        <td align='right'><small>$langAskGuest</small></td>
+                        </tr>
+                        <tr>
+                        <th>&nbsp;</th>
+                        <td><input type='submit' name='submit' value='$submit_label' /></td>
+                        <td>&nbsp;</td>
+                        </tr>
+                        </table>
+                        </form>";
+        }
 
-			$tool_content .=  "
-    <form method=\"post\" action=\"$_SERVER[PHP_SELF]\">
-
-    <table width=\"99%\" class=\"FormData\">
-    <tbody>
-    <tr>
-      <th width=\"220\">&nbsp;</th>
-      <td><b>$langUserData</b></td>
-      <td>&nbsp;</td>
-    </tr>
-    <tr>
-      <th class=\"left\">$langName:</th>
-      <td>$s[nom]</td>
-      <td align=\"right\"><small></small></td>
-    </tr>
-    <tr>
-      <th class=\"left\">$langSurname:</th>
-      <td>$s[prenom]</td>
-      <td align=\"right\"><small></small></td>
-    </tr>
-    <tr>
-      <th class=\"left\">$langUsername:</th>
-      <td>$s[username]</td>
-      <td align=\"right\"><small></small></td>
-    </tr>
-    <tr>
-      <th class=\"left\">$langPass:</th>
-      <td><input type=\"text\" name=\"guestpassword\" value=\"\"  class=\"FormData_InputText\"></td>
-      <td align=\"right\"><small>$langAskGuest</small></td>
-    </tr>
-    <tr>
-      <th>&nbsp;</th>
-      <td><input type=\"submit\" name=\"changepass\" value=\"$langModify\"></td>
-      <td align=\"right\"><small></small></td>
-    </tr>
-    </thead>
-    </table>
-    <br />
-
-    </form>";
-
-		} else {
-
-	$tool_content .="
-    <form method=\"post\" action=\"".$_SERVER['PHP_SELF']."\">";
-	$tool_content .= <<<tCont
-
-
-    <table width="99%" class="FormData">
-    <tbody>
-    <tr>
-      <th width="220">&nbsp;</th>
-      <td><b>$langUserData</b></td>
-      <td align="right"><small>$langAskGuest</small></td>
-    </tr>
-    <tr>
-      <th class="left">$langName:</th>
-      <td>$langGuestName</td>
-      <td align="right"><small></small></td>
-    </tr>
-    <tr>
-      <th class="left">$langSurname:</th>
-      <td>$langGuestSurname</td>
-      <td align="right"><small></small></td>
-    </tr>
-    <tr>
-      <th class="left">$langUsername:</th>
-      <td>$langGuestUserName$currentCourseID</td>
-      <td align="right"><small></small></td>
-    </tr>
-    <tr>
-      <th class="left">$langPass:</th>
-      <td><input type="text" name="guestpassword" class="FormData_InputText"></td>
-      <td align="right"><small></small></td>
-    </tr>
-    <tr>
-      <th>&nbsp;</th>
-      <td><input type="submit" name="createguest" value="$langAdd"></td>
-      <td align="right"><small></small></td>
-    </tr>
-    </thead>
-    </table>
-    <br>
-
-    </form>
-tCont;
-		}
-	}
-
-draw($tool_content, 2, 'user');
-
+        draw($tool_content, 2, 'user');
 }
 
-// Create guest account
-function createguest($c,$p)
+// Create guest account or update password if it already exists
+function createguest($username, $cours_id, $password)
 {
-	global $langGuestUserName, $langGuestSurname, $langGuestName, $mysqlMainDb;
+	global $langGuestName, $langGuestSurname, $mysqlMainDb;
 
-	// guest account user name
-	$guestusername=$langGuestUserName.$c;
-	// Guest account created...
 	mysql_select_db($mysqlMainDb);
+        $password = md5($password);
 
-	$q=mysql_query("SELECT user_id FROM user WHERE username='$guestusername'");
-
+	$q = db_query("SELECT user_id from cours_user WHERE statut=10 AND cours_id = $cours_id");
 	if (mysql_num_rows($q) > 0) {
-		$s = mysql_fetch_array($q);
-
-		mysql_query("UPDATE user SET password='$p' WHERE user_id='$s[0]'")
-		or die ($langGuestFail);
-
-		mysql_query("INSERT INTO cours_user (code_cours,user_id,statut,reg_date)
-			VALUES ('$c','$s[0]','10',CURDATE())")
-		or die ($langGuestFail);
-	}  else {
-	$regtime = time();
-	$exptime = 126144000 + $regtime;
-	mysql_query("INSERT INTO user (nom,prenom,username,password,statut,registered_at,expires_at)
-		VALUES ('$langGuestName','$langGuestSurname','$guestusername','$p','10',$regtime,$exptime)")
-	or die ($langGuestFail);
-
-	mysql_query("INSERT INTO cours_user (code_cours,user_id,statut,reg_date)
-	VALUES ('$c','".mysql_insert_id()."','10',CURDATE())")
-	or die ($langGuestFail);
+		list($guest_id) = mysql_fetch_array($q);
+		db_query("UPDATE user SET password = '$password' WHERE user_id = $guest_id");
+	} else {
+                $regtime = time();
+                $exptime = 126144000 + $regtime;
+                db_query("INSERT INTO user (nom, prenom, username, password, statut, registered_at, expires_at)
+                             VALUES ('$langGuestSurname', '$langGuestName', '$username', '$password', 10, $regtime, $exptime)");
+                $guest_id = mysql_insert_id();
 	}
+        db_query("INSERT IGNORE INTO cours_user (cours_id, user_id, statut, reg_date)
+                  VALUES ($cours_id, $guest_id, 10, CURDATE())")
+                or die ($langGuestFail);
 }
 
-// Checking if Guest account exists....
-function guestid($c) {
+// Check if guest account exists and return account information
+function guestinfo($cours_id) {
 	global $mysqlMainDb;
 	mysql_select_db($mysqlMainDb);
-	$q1=mysql_query("SELECT user_id  from cours_user WHERE statut='10' AND code_cours='$c'");
-	if (mysql_num_rows($q1) == 0) {
-		return FALSE;
+	$q = db_query("SELECT nom, prenom, username FROM user, cours_user
+                       WHERE user.user_id = cours_user.user_id AND
+                             cours_user.statut = 10 AND
+                             cours_user.cours_id = $cours_id");
+	if (mysql_num_rows($q) == 0) {
+		return false;
 	} else {
-		$s=mysql_fetch_array($q1);
-		return $s[0];
+		return mysql_fetch_array($q);
 	}
 }
-?>
