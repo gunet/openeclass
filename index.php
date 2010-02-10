@@ -191,8 +191,9 @@ if (isset($uid) AND !isset($logout)) {
 			draw($tool_content,1,null,null,null,null,$perso_tool_content);
 		} else {
 			//if the user is a guest send him straight to the corresponding lesson
-			$guestSQL = db_query("SELECT `code_cours` FROM `cours_user` 
-				WHERE `user_id` = $uid", $mysqlMainDb);
+			$guestSQL = db_query("SELECT code FROM cours_user, cours
+				              WHERE cours.cours_id = cours_user.cours_id AND
+                                                    user_id = $uid", $mysqlMainDb);
 			if (mysql_num_rows($guestSQL) > 0) {
 				$sql_row = mysql_fetch_row($guestSQL);
 				$dbname=$sql_row[0];
