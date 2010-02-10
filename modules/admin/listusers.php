@@ -1,4 +1,4 @@
-// <?
+ <?
 /*========================================================================
 *   Open eClass 2.1
 *   E-learning and Course Management System
@@ -58,21 +58,21 @@ $nameTools = $langListUsersActions;
 $search = isset($_GET['search'])?$_GET['search']:'';
 $c = isset($_GET['c'])?$_GET['c']:(isset($_POST['c'])?$_POST['c']:'');
 
-switch($c)		// get the case for each different listing
+switch($c)	// get the case for each different listing
 {
-	case '0': $view = 1;	break;		// normal listing
-	case '': $view = 1;	break;		// normal listing
+	case '0': $view = 1; break;	// normal listing
+	case '': $view = 1; break;	// normal listing
 	case '4': $view = 1; break; // normal listing. Display the inactive accounts
-	case 'searchlist': $view = 2;	break;		// search listing (search_user.php)
-	default: $view = 3;	break;		// list per course
+	case 'searchlist': $view = 2;	break;	// search listing (search_user.php)
+	default: $view = 3; break;	// list per course
 }
 
-if($view == 2)		// coming from search_user.php(search with criteria)
+if($view == 2)	// coming from search_user.php(search with criteria)
 {
 	if((!empty($search)) && ($search="yes"))
 	{
 		// get the incoming values
-		$user_sirname = isset($_POST['user_sirname'])?$_POST['user_sirname']:'';
+		$user_surname = isset($_POST['user_surname'])?$_POST['user_surname']:'';
 		$user_firstname = isset($_POST['user_firstname'])?$_POST['user_firstname']:'';
 		$user_username = isset($_POST['user_username'])?$_POST['user_username']:'';
 		$user_am = isset($_POST['user_am'])?$_POST['user_am']:'';
@@ -95,42 +95,8 @@ if($view == 2)		// coming from search_user.php(search with criteria)
 			$user_registered_at = "";
 		}
 		// end format date/time
-		// unregister their values from session variables
-		unset($_SESSION['user_sirname']);
-		unset($_SESSION['user_firstname']);
-		unset($_SESSION['user_username']);
-		unset($_SESSION['user_am']);
-		unset($_SESSION['user_type']);
-		unset($_SESSION['user_registered_at_flag']);
-		unset($_SESSION['user_registered_at']);
-		unset($_SESSION['user_email']);
 	}
-	else
-	{
-		// get their values from session
-		$user_sirname = isset($_SESSION['user_sirname'])?$_SESSION['user_sirname']:'';
-		$user_firstname = isset($_SESSION['user_firstname'])?$_SESSION['user_firstname']:'';
-		$user_username = isset($_SESSION['user_username'])?$_SESSION['user_username']:'';
-		$user_am = isset($_SESSION['user_am'])?$_SESSION['user_am']:'';
-		$user_type = isset($_SESSION['user_type'])?$_SESSION['user_type']:'';
-		$user_registered_at_flag = isset($_SESSION['user_registered_at_flag'])?$_SESSION['user_registered_at_flag']:'';
-		$user_registered_at = isset($_SESSION['user_registered_at'])?$_SESSION['user_registered_at']:'';
-		$user_email = isset($_SESSION['user_email'])?$_SESSION['user_email']:'';
-	}
-
 }
-else		// means that we have 'normal' listing or 'users per course' listing
-{
-	$user_sirname = "";
-	$user_firstname = "";
-	$user_username = "";
-	$user_am = "";
-	$user_type = "";
-	$user_registered_at_flag = "";
-	$user_registered_at = "";
-	$user_email = "";
-}
-
 /***************
 Criteria/Filters
 ***************/
@@ -138,14 +104,14 @@ Criteria/Filters
 $criteria = 0;
 
 // surname search
-if(!empty($user_sirname))
+if(!empty($user_surname))
 {
-	$user_sirname_qry = " nom LIKE '".$user_sirname."%'";
+	$user_surname_qry = " nom LIKE '".$user_surname."%'";
 	$criteria++;
 }
 else
 {
-	$user_sirname_qry = "";
+	$user_surname_qry = "";
 }
 
 // first name search
@@ -298,16 +264,18 @@ else
 // end filter/criteria
 
 $ord = isset($_GET['ord'])?$_GET['ord']:'';
+$startList = isset($_GET['startList'])?$_GET['startList']:'';
+$numbList = isset($_GET['numbList'])?$_GET['numbList']:'';
+
 if(!empty($ord))
 {
-	switch ($ord)
-  {
-		case "s":	$order = "statut,prenom,nom"; break;
-		case "n":	$order = "nom,prenom,statut"; break;
-		case "p":	$order = "prenom,nom,statut"; break;
-		case "u":	$order = "username,statut,prenom"; break;
-		default:	$order = "statut,prenom,nom"; break;
-    }
+	switch ($ord) {
+		case "s": $order = "statut,prenom,nom"; break;
+		case "n": $order = "nom,prenom,statut"; break;
+		case "p": $order = "prenom,nom,statut"; break;
+		case "u": $order = "username,statut,prenom"; break;
+		default: $order = "statut,prenom,nom"; break;
+	}
 } else {
 	$order = "statut";
 }
@@ -321,11 +289,11 @@ if($view==3) {
 } else {
 	// Count users, with or without criteria/filters
 	$qry = "SELECT user_id,nom,prenom,username,email,statut FROM user";
-	if((!empty($user_sirname_qry)) || (!empty($user_firstname_qry)) || (!empty($user_username_qry)) 
+	if((!empty($user_surname_qry)) || (!empty($user_firstname_qry)) || (!empty($user_username_qry)) 
 		|| (!empty($user_am_qry)) || (!empty($user_type_qry)) || (!empty($user_registered_at_qry)) 
 		|| (!empty($user_email_qry)) || (!empty($users_active_qry)) )
 	{
-		$qry .= " WHERE".$user_sirname_qry.$user_firstname_qry.$user_username_qry.$user_am_qry.$user_type_qry.$user_email_qry.$user_registered_at_qry.$users_active_qry;
+		$qry .= " WHERE".$user_surname_qry.$user_firstname_qry.$user_username_qry.$user_am_qry.$user_type_qry.$user_email_qry.$user_registered_at_qry.$users_active_qry;
 	}
 }
 
@@ -380,10 +348,10 @@ if($sql)
 		{
 			if($numbList=="more")
 	    		{
-	     			$startList=$startList+50;
+	     			$startList=$startList+$endList;
 	    		}
 	    		elseif($numbList=="less") {
-	    			$startList=abs($startList-50);
+	    			$startList=abs($startList-$endList);
 			}
 	    		elseif($numbList=="all") {
 	    			$startList=0;
@@ -392,36 +360,38 @@ if($sql)
 	     			$startList=0;
 	    		}
 	    		elseif($numbList=="final") {
-				$startList=((int)($countUser / 50)*50);
+				$startList=((int)($countUser / $endList)*$endList);
 			}
 		} // if numbering
-		else // default status for the list: users 0 to 50
+		else // default status for the list: users 0 to $endList
 		{
 	   		$startList=0;
 		}
 
 		// Numerating the items in the list to show: starts at 1 and not 0
 		$i=$startList+1;
-		if ($countUser >= 50)	// Do not show navigation buttons if less than 50 users
+		if ($countUser >= $endList)	// Do not show navigation buttons if less than 50 users
 		{
 			$tool_content .= "<table class=\"FormData\" width=\"99%\" align=\"left\">
   			<thead><tr>
     			<td class=\"left\" width=\"20%\">
       			<form method=post action=\"$_SERVER[PHP_SELF]?numbList=begin\">
-        			<input type=submit value=\"$langBegin<<\" name=\"numbering\">
+      			".keep_var()."
+        		<input type=submit value=\"$langBegin<<\" name=\"numbering\">
       			</form>
     			</td>
     			<td class=\"center\" width=\"20%\">";
-        		if($startList!=0)	// if beginning of list or complete listing, do not show "previous" button
+        		if($startList!=0) // if beginning of list or complete listing, do not show "previous" button
 	    		{
 				if (isset($_REQUEST['ord'])) {
-	       				$tool_content .= "
-      				<form method=post action=\"$_SERVER[PHP_SELF]?startList=$startList&numbList=less&ord=$_REQUEST[ord]\">
-        			<input type=submit value=\"$langPreced50<\" name=\"numbering\">
-      				</form>";
+	       				$tool_content .= "<form method=post action=\"$_SERVER[PHP_SELF]?startList=$startList&numbList=less&ord=$_REQUEST[ord]\">
+	       				".keep_var()."
+					<input type=submit value=\"$langPreced50<\" name=\"numbering\">
+					</form>";
 				} else {
 			  		$tool_content .= "
       					<form method=post action=\"$_SERVER[PHP_SELF]?startList=$startList&numbList=less\">
+      					".keep_var()."
         				<input type=submit value=\"$langPreced50<\" name=\"numbering\">
       					</form>";
 				}
@@ -429,26 +399,30 @@ if($sql)
 			if (isset($_REQUEST['ord']))  {
 	    			$tool_content .= "</td><td class=\"center\" width=\"20%\">
       				<form method=post action=\"$_SERVER[PHP_SELF]?startList=$startList&numbList=all&ord=$_REQUEST[ord]\">
+      				".keep_var()."
         			<input type=submit value=\"$langAll\" name=numbering>
       				</form>
     				</td><td class=\"center\" width=\"20%\">";
 			} else 	{
 				$tool_content .= "</td><td class=\"center\" width=\"20%\">
-      				<form method=post action=\"$PHP_SELF?startList=$startList&numbList=all\">
+      				<form method=post action=\"$_SERVER[PHP_SELF]?startList=$startList&numbList=all\">
+      				".keep_var()."
         			<input type=submit value=\"$langAll\" name=numbering>
       				</form></td>
     				<td class=\"center\" width=\"20%\">";
 			}
-			if(!((($countUser-$startList) <= 50) OR ($endList == $countUser)))	// if end of list or complete listing, do not show "next" button
+			if(!((($countUser-$startList) <= $endList) OR ($endList == $countUser))) // if end of list or complete listing, do not show "next" button
 			{
 				if (isset($_REQUEST['ord'])) { 
 					$tool_content .= "
       					<form method=post action=\"$_SERVER[PHP_SELF]?startList=$startList&numbList=more&ord=$_REQUEST[ord]\">
+      					".keep_var()."
         				<input type=submit value=\"$langFollow50>\" name=numbering>
       					</form>";
 				} else {
 	      				$tool_content .= "
       					<form method=post action=\"$_SERVER[PHP_SELF]?startList=$startList&numbList=more\">
+      					".keep_var()."
         				<input type=submit value=\"$langFollow50>\" name=numbering>
       					</form>";
 				}
@@ -456,12 +430,14 @@ if($sql)
 			if (isset($_REQUEST['ord'])) {
 	    			$tool_content .= "</td><td class=\"right\" width=\"20%\">
 	  			<form method=post action=\"$_SERVER[PHP_SELF]?numbList=final&ord=$_REQUEST[ord]\">
+	  			".keep_var()."
         			<input type=submit value=\"$langEnd>>\" name=numbering>
 	  			</form>
 				</td></tr></thead></table>";
 			} else {
 	    			$tool_content .= "</td><td class=\"right\" width=\"20%\">
       				<form method=post action=\"$_SERVER[PHP_SELF]?numbList=final\">
+      				".keep_var()."
         			<input type=submit value=\"$langEnd>>\" name=numbering>
        				</form>
      				</td></tr></thead></table>";
@@ -474,12 +450,12 @@ if($sql)
 			WHERE b.code_cours='".$c."'";
 		} else {
 			$qry = "SELECT user_id,nom,prenom,username,email,statut FROM user";
-			if((!empty($user_sirname_qry)) || (!empty($user_firstname_qry))
+			if((!empty($user_surname_qry)) || (!empty($user_firstname_qry))
 				|| (!empty($user_username_qry)) || (!empty($user_am_qry))
 				|| (!empty($user_type_qry)) || (!empty($user_registered_at_qry))
 				|| (!empty($user_email_qry)) || (!empty($users_active_qry)) )
 			{
-				$qry .= " WHERE".$user_sirname_qry.$user_firstname_qry.$user_username_qry.$user_am_qry.$user_type_qry.$user_email_qry.$user_registered_at_qry.$users_active_qry;
+				$qry .= " WHERE".$user_surname_qry.$user_firstname_qry.$user_username_qry.$user_am_qry.$user_type_qry.$user_email_qry.$user_registered_at_qry.$users_active_qry;
 			}
 		}
 
@@ -490,34 +466,36 @@ if($sql)
 		/****************************************
 		Show users - Format the table for display
 		*****************************************/
-		if (isset($numbering) and isset($_REQUEST['startList']) and isset($_REQUEST['numbList'])) {
+		$str = "user_surname=$_REQUEST[user_surname]&user_firstname=$_REQUEST[user_firstname]&user_username=$_REQUEST[user_username]&user_am=$_REQUEST[user_am]&user_email=$_REQUEST[user_email]&user_type=$_REQUEST[user_type]&user_registered_at_flag=$_REQUEST[user_registered_at_flag]";
+
+		if (isset($numbering) and isset($_REQUEST['startList']) and isset($_REQUEST['numbList'])) {	
 			$tool_content .= "<table class=\"FormData\" width=\"99%\" align=\"left\">
   			<tbody><tr><td class=\"odd\" colspan=\"9\"><div align=\"right\">".$caption."</div></td>
   			</tr>
   			<tr><th scope=\"col\" colspan='2'>
-			<a href=\"$_SERVER[PHP_SELF]?ord=n&startList=$_REQUEST[startList]&numbList=$_REQUEST[numbList]\">$langSurname</a>
+			<a href='$_SERVER[PHP_SELF]?ord=n&$str&startList=$_REQUEST[startList]&numbList=$_REQUEST[numbList]'>$langSurname</a>
 			</th><th>
-			<a href=\"$_SERVER[PHP_SELF]?ord=p&startList=$_REQUEST[startList]&numbList=$_REQUEST[numbList]\">$langName</a>
+			<a href=\"$_SERVER[PHP_SELF]?ord=p&$str&startList=$_REQUEST[startList]&numbList=$_REQUEST[numbList]\">$langName</a>
 			</th><th>
-			<a href=\"$_SERVER[PHP_SELF]?ord=u&startList=$_REQUEST[startList]&numbList=$_REQUEST[numbList]\">$langUsername</a></th><th scope=\"col\">$langEmail</th>
+			<a href=\"$_SERVER[PHP_SELF]?ord=u&$str&startList=$_REQUEST[startList]&numbList=$_REQUEST[numbList]\">$langUsername</a></th><th scope=\"col\">$langEmail</th>
     			<th scope=\"col\">
-			<a href=\"$_SERVER[PHP_SELF]?ord=s&startList=$_REQUEST[startList]&numbList=$_REQUEST[numbList]\">$langProperty</a></th><th scope=\"col\">$langActions</th>
+			<a href=\"$_SERVER[PHP_SELF]?ord=s&$str&startList=$_REQUEST[startList]&numbList=$_REQUEST[numbList]\">$langProperty</a></th><th scope=\"col\">$langActions</th>
     			<th scope=\"col\">$langDelete $langUser</th>
     			<th scope=\"col\">$langStats</th>
   			</tr></thead><tbody>";
 		}
 		else
 		{
-			$tool_content .= "<table class=\"FormData\" width=\"99%\" align=\"left\"><tbody>
-  			<tr><td class=\"odd\" colspan='9'><div align=\"right\"><small>".$caption."</small></div></td>
+			$tool_content .= "<table class='FormData' width='99%' align='left'><tbody>
+  			<tr><td class='odd' colspan='9'><div align='right'><small>".$caption."</small></div></td>
   			</tr><tr>
-    			<th scope=\"col\" colspan='2'><a href=\"listusers.php?ord=n\">$langSurname</a></th>
-    			<th><a href=\"$_SERVER[PHP_SELF]?ord=p\">$langName</a></th>
-    			<th><a href=\"$_SERVER[PHP_SELF]?ord=u\">$langUsername</a></th>
-    			<th scope=\"col\">$langEmail</th>
-    			<th scope=\"col\">
-			<a href=\"$_SERVER[PHP_SELF]?ord=s\">$langProperty</a></th>
-    			<th scope=\"col\" colspan='3'>$langActions</th>
+    			<th scope='col' colspan='2'><a href='$_SERVER[PHP_SELF]?ord=n&$str'>$langSurname</a></th>
+    			<th><a href='$_SERVER[PHP_SELF]?ord=p&$str'>$langName</a></th>
+    			<th><a href='$_SERVER[PHP_SELF]?ord=u&$str'>$langUsername</a></th>
+    			<th scope='col'>$langEmail</th>
+    			<th scope='col'>
+			<a href='$_SERVER[PHP_SELF]?ord=s&$str'>$langProperty</a></th>
+    			<th scope='col' colspan='3'>$langActions</th>
   			</tr>";
 		}
 
@@ -568,6 +546,45 @@ else
 }
 $tool_content .= "<p align=\"right\"><a href=\"index.php\">$langBack</a></p>";
 
+
+//-------------------------------------
+// function for keeping post variables
+//-------------------------------------
+function keep_var() {
+
+	$retstring = '';
+	if (isset($_REQUEST['user_surname'])) {
+		$user_surname = $_REQUEST['user_surname'];
+		$retstring .= "<input type = 'hidden' name='user_surname' value='$user_surname'>";
+	} 
+	if (isset($_REQUEST['user_firstname'])) {
+		$user_firstname = $_REQUEST['user_firstname'];
+		$retstring .= "<input type='hidden' name='user_firstname' value='$user_firstname'>";
+	}
+	if (isset($_REQUEST['user_username'])) {
+		$user_username = $_REQUEST['user_username'];
+		$retstring .= "<input type='hidden' name='user_username' value = '$user_username'>";
+	}
+	if (isset($_REQUEST['user_am'])) {
+		$user_am = $_REQUEST['user_am']; 
+		$retstring .= "<input type='hidden' name='user_am' value = '$user_am'>";
+	}
+	if (isset($_REQUEST['user_type'])) {
+		$user_type = $_REQUEST['user_type'];
+		$retstring .= "<input type='hidden' name='user_type' value='$user_type'>";
+	}
+	if (isset($_REQUEST['user_email'])) {
+		$user_email = $_REQUEST['user_email'];
+		$retstring .= "<input type='hidden' name='user_email' value='$user_email'>";
+	}
+	if (isset($_REQUEST['user_registered_at_flag'])) {
+		$user_registered_at_flag = $_REQUEST['user_registered_at_flag'];
+		$retstring .= "<input type='hidden' name='user_registered_at_flag' value='$user_registered_at_flag'>";
+	}
+	return $retstring;
+}
+
+
 // 3: display administrator menu
-draw($tool_content,3,'admin');
+draw($tool_content, 3, 'admin');
 ?>

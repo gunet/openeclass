@@ -61,7 +61,7 @@ $new = isset($_GET['new'])?$_GET['new']:'yes';	//variable of declaring a new sea
 
 if((!empty($new)) && ($new=="yes")) {
 	// It is a new search, so unregister the search terms/filters in session variables
-	unset($_SESSION['user_sirname']);
+	unset($_SESSION['user_surname']);
 	unset($_SESSION['user_firstname']);
 	unset($_SESSION['user_username']);
 	unset($_SESSION['user_am']);
@@ -69,7 +69,7 @@ if((!empty($new)) && ($new=="yes")) {
 	unset($_SESSION['user_registered_at_flag']);
 	unset($_SESSION['user_registered_at']);
 	unset($_SESSION['user_email']);
-	unset($user_sirname);
+	unset($user_surname);
 	unset($user_firstname);
 	unset($user_username);
 	unset($user_am);
@@ -80,7 +80,7 @@ if((!empty($new)) && ($new=="yes")) {
 }
 
 // initialize the variables
-$user_sirname = isset($_SESSION['user_sirname'])?$_SESSION['user_sirname']:'';
+$user_surname = isset($_SESSION['user_surname'])?$_SESSION['user_surname']:'';
 $user_firstname = isset($_SESSION['user_firstname'])?$_SESSION['user_firstname']:'';
 $user_username = isset($_SESSION['user_username'])?$_SESSION['user_username']:'';
 $user_am = isset($_SESSION['user_am'])?$_SESSION['user_am']:'';
@@ -104,7 +104,7 @@ $tool_content .= "<form action=\"listusers.php?search=".$new."\" method=\"post\"
 </tr>
 <tr>
 <th class='left'>$langSurname:</th>
-<td><input type=\"text\" class='FormData_InputText' name=\"user_sirname\" size=\"40\" value=\"".$user_sirname."\"></td>
+<td><input type=\"text\" class='FormData_InputText' name=\"user_surname\" size=\"40\" value=\"".$user_surname."\"></td>
 </tr>
 <tr>
 <th class='left'>$langName:</th>
