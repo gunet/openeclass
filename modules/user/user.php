@@ -338,7 +338,7 @@ if($countUser>=50) {
 	<tr>
 	<td valign='bottom' align='left' width='20%'>
 	<form method='post' action='$_SERVER[PHP_SELF]?numbList=begin'>
-	<input type='submit' value='$langBegin <<' name='numbering' />
+	<input type='submit' value='<< $langBegin' name='numbering' class='auth_input' />
 	</form>
 	</td>
 	<td valign='bottom' align='center' width='20%'>";
@@ -346,25 +346,25 @@ if($countUser>=50) {
 	if ($startList!=0) {
 		$tool_content .= "
 		<form method='post' action='$_SERVER[PHP_SELF]?startList=$startList&amp;numbList=less'>
-		<input type='submit' value='$langPreced50 <' name='numbering' />
+		<input type='submit' value='< $langPreced50 $endList' name='numbering' class='auth_input' />
 		</form>";
 	}
 	$tool_content .= "</td>
 	<td valign='bottom' align='center' width='20%'>
 	<form method='post' action='".$_SERVER['PHP_SELF']."?startList=$startList&amp;numbList=all'>
-		<input type='submit' value='$langAll' name='numbering' />
+		<input type='submit' value='$langAll' name='numbering' class='auth_input' />
 	</form>
 	</td>
 	<td valign='bottom' align='center' width='20%'>";
 	if (!((( $countUser-$startList ) <= 50) OR ($endList == 2000))) {
 		$tool_content .= "<form method='post' action='$_SERVER[PHP_SELF]?startList=$startList&amp;numbList=more'>
-		<input type='submit' value='$langFollow50>' name='numbering' />
+		<input type='submit' value='$langFollow50 $endList >' name='numbering' class='auth_input' />
 		</form>";
 	}
 	$tool_content .= "</td>
 	<td valign='bottom' align='right' width='20%'>
 	<form method='post' action='$_SERVER[PHP_SELF]?numbList=final'>
-	<input type='submit' value='$langEnd >>' name='numbering' />
+	<input type='submit' value='$langEnd >>' name='numbering' class='auth_input' />
 	</form>
 	</td></tr></table>";
 }	// navigation buttons
