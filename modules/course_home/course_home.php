@@ -152,7 +152,7 @@ if (!is_null($maxorder) or $is_adminOfCourse) {
 }
 // add course units
 if ($is_adminOfCourse) {
-	$cunits_content .= ": <a href='{$urlServer}modules/units/info.php'>$langAddUnit</a>&nbsp;<img src='../../template/classic/img/add.gif' iwidth='15' height='15' title='$langAddUnit' />";
+	$cunits_content .= ": <a href='{$urlServer}modules/units/info.php'>$langAddUnit</a>&nbsp;<img src='../../template/classic/img/add.gif' width='15' height='15' title='$langAddUnit' alt='$langAddUnit' />";
 }
         $cunits_content .= "</h3>";
         $cunits_content .= "</td>\n      </tr>\n      </thead>\n      </table>\n";
