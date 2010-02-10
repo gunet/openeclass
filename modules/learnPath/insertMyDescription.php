@@ -53,7 +53,7 @@ require_once("../../include/baseTheme.php");
 $tool_content = "";
 
 $navigation[] = array("url"=>"learningPathList.php", "name"=> $langLearningPaths);
-$navigation[] = array("url"=>"learningPathAdmin.php", "name"=> $langNomPageAdmin);
+$navigation[] = array("url"=>"learningPathAdmin.php", "name"=> $langAdm);
 $nameTools = $langInsertMyDescToolName;
 
 

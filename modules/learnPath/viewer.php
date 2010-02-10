@@ -64,7 +64,7 @@ $lpname = mysql_fetch_array($l);
 $nameTools = $langPreview;
 if (!add_units_navigation()) {
 	$navigation[] = array("url"=>"learningPathList.php", "name"=> $langLearningPaths);
-	$navigation[] = array("url"=>"learningPath.php", "name"=> $langNomPageAdmin);
+	$navigation[] = array("url"=>"learningPath.php", "name"=> $langAdm);
 }
 
 if (!isset($titlePage)) $titlePage = '';

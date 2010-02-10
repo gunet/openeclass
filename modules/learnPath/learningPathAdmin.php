@@ -78,7 +78,7 @@ $body_action = "";
 $dialogBox = "";
 
 if (!add_units_navigation()) {
-	$nameTools = $langNomPageAdmin;
+	$nameTools = $langAdm;
 	$navigation[] = array("url"=>"learningPathList.php", "name"=> $langLearningPaths);
 }
 

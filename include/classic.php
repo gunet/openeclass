@@ -45,11 +45,11 @@ include("./include/phpmathpublisher/mathpublisher.php");
 function cours_table_header($statut)
 {
         global $langCourseCode, $langMyCoursesProf, $langMyCoursesUser, $langCourseCode,
-               $langTeacher, $langManagement, $langUnregCourse, $tool_content;
+               $langTeacher, $langAdm, $langUnregCourse, $tool_content;
 
         if ($statut == 1) {
                 $legend = $langMyCoursesProf;
-                $manage = $langManagement;
+                $manage = $langAdm;
         } elseif ($statut == 5) {
                 $legend = $langMyCoursesUser;
                 $manage = $langUnregCourse;
@@ -109,7 +109,7 @@ if ($result2 and mysql_num_rows($result2) > 0) {
                 if ($this_statut == 1) {
                         $manage_link = "${urlServer}modules/course_info/infocours.php?from_home=TRUE&amp;cid=$code";
                         $manage_icon = 'template/classic/img/referencement.gif';
-                        $manage_title = $langManagement;
+                        $manage_title = $langAdm;
                 } else {
                         $manage_link = "${urlServer}modules/unreguser/unregcours.php?cid=$code&amp;u=$uid";
                         $manage_icon = 'template/classic/img/cunregister.gif';

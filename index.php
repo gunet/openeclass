@@ -96,10 +96,8 @@ if (isset($_SESSION['shib_uname'])) { // authenticate via shibboleth
 
 	if(!empty($submit)) {
 		unset($uid);
-		$sqlLogin= "SELECT user_id, nom, username, password, prenom, statut, email, iduser is_admin, perso, lang
-			FROM user LEFT JOIN admin
-			ON user.user_id = admin.iduser
-			WHERE username='".$uname."'";
+		$sqlLogin= "SELECT user_id, nom, username, password, prenom, statut, email, perso, lang
+			FROM user WHERE username='".$uname."'";
 		$result = mysql_query($sqlLogin);
 		$check_passwords = array("pop3","imap","ldap","db");
 		$warning = "";

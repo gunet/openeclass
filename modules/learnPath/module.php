@@ -75,11 +75,11 @@ if (!add_units_navigation()) {
 	$navigation[] = array("url"=>"learningPathList.php", "name"=> $langLearningPaths);
 	if ($is_adminOfCourse)
 	{
-	$navigation[]= array ("url"=>"learningPathAdmin.php", "name"=> $langNomPageAdmin);
+	$navigation[]= array ("url"=>"learningPathAdmin.php", "name"=> $langAdm);
 	}
 	else
 	{
-	$navigation[]= array ("url"=>"learningPath.php", "name"=> $langNomPageAdmin);
+	$navigation[]= array ("url"=>"learningPath.php", "name"=> $langAdm);
 	}
 }
 

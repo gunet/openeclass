@@ -70,7 +70,7 @@ $courseDir   = "courses/".$currentCourseID."/document";
 $baseWorkDir = $webDir.$courseDir;
 $InfoBox = "";
 $navigation[] = array("url"=>"learningPathList.php", "name"=> $langLearningPath);
-$navigation[] = array("url"=>"learningPathAdmin.php", "name"=> $langNomPageAdmin);
+$navigation[] = array("url"=>"learningPathAdmin.php", "name"=> $langAdm);
 $nameTools = $langInsertMyDocToolName;
 
 mysql_select_db($currentCourseID);

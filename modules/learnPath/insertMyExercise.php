@@ -74,7 +74,7 @@ $style = "";
 $MessBox = "";
 
 $navigation[] = array("url"=>"learningPathList.php", "name"=> $langLearningPath);
-$navigation[] = array("url"=>"learningPathAdmin.php", "name"=> $langNomPageAdmin);
+$navigation[] = array("url"=>"learningPathAdmin.php", "name"=> $langAdm);
 $nameTools = $langInsertMyExerciseToolName;
 
 

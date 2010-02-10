@@ -370,11 +370,13 @@ function adminMenu(){
 	array_push($sideMenuImg, "black-arrow1.gif");
 	array_push($sideMenuText, $GLOBALS['langListFaculte']);
 	array_push($sideMenuLink, "../admin/addfaculte.php");
+	// check if we have betacms enabled
+	if (get_config('betacms') == TRUE) {
+		array_push($sideMenuImg, "black-arrow1.gif");
+		array_push($sideMenuText, $GLOBALS['langBrowseBCMSRepo']);
+		array_push($sideMenuLink, "../betacms_bridge/browserepo.php");
+	}
 	array_push($sideMenuImg, "black-arrow1.gif");
-	array_push($sideMenuText, $GLOBALS['langBrowseBCMSRepo']);
-	array_push($sideMenuLink, "../betacms_bridge/browserepo.php");
-	array_push($sideMenuImg, "black-arrow1.gif");
-
 	array_push($sideMenuSubGroup, $sideMenuText);
 	array_push($sideMenuSubGroup, $sideMenuLink);
 	array_push($sideMenuSubGroup, $sideMenuImg);
