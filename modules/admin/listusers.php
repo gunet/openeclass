@@ -60,11 +60,10 @@ $c = isset($_GET['c'])?$_GET['c']:(isset($_POST['c'])?$_POST['c']:'');
 
 switch($c)	// get the case for each different listing
 {
-	case '0': $view = 1; break;	// normal listing
-	case '': $view = 1; break;	// normal listing
+	case '': $view = 1; break; // normal listing
 	case '4': $view = 1; break; // normal listing. Display the inactive accounts
-	case 'searchlist': $view = 2;	break;	// search listing (search_user.php)
-	default: $view = 3; break;	// list per course
+	case 'searchlist': $view = 2;	break; // search listing (search_user.php)
+	default: $view = 3; break; // list per course
 }
 
 if($view == 2)	// coming from search_user.php(search with criteria)
@@ -267,8 +266,7 @@ $ord = isset($_GET['ord'])?$_GET['ord']:'';
 $startList = isset($_GET['startList'])?$_GET['startList']:'';
 $numbList = isset($_GET['numbList'])?$_GET['numbList']:'';
 
-if(!empty($ord))
-{
+if(!empty($ord)) {
 	switch ($ord) {
 		case "s": $order = "statut,prenom,nom"; break;
 		case "n": $order = "nom,prenom,statut"; break;
@@ -282,7 +280,7 @@ if(!empty($ord))
 
 $caption ="";
 
-if($view==3) {
+if($view == 3) { // users per course
 	$qry = "SELECT a.user_id, a.nom, a.prenom, a.username, a.email, b.statut
 		FROM user AS a LEFT JOIN cours_user AS b ON a.user_id = b.user_id
 		WHERE b.code_cours='".$c."'";
@@ -291,7 +289,7 @@ if($view==3) {
 	$qry = "SELECT user_id,nom,prenom,username,email,statut FROM user";
 	if((!empty($user_surname_qry)) || (!empty($user_firstname_qry)) || (!empty($user_username_qry)) 
 		|| (!empty($user_am_qry)) || (!empty($user_type_qry)) || (!empty($user_registered_at_qry)) 
-		|| (!empty($user_email_qry)) || (!empty($users_active_qry)) )
+		|| (!empty($user_email_qry)) || (!empty($users_active_qry)))
 	{
 		$qry .= " WHERE".$user_surname_qry.$user_firstname_qry.$user_username_qry.$user_am_qry.$user_type_qry.$user_email_qry.$user_registered_at_qry.$users_active_qry;
 	}
@@ -343,7 +341,7 @@ if($sql)
 
 
 		// DEFINE SETTINGS FOR THE 5 NAVIGATION BUTTONS INTO THE USERS LIST: begin, less, all, more and end
-		$endList=50;
+		$endList=5;
 		if(isset ($numbering) && $numbering)
 		{
 			if($numbList=="more")
@@ -370,8 +368,7 @@ if($sql)
 
 		// Numerating the items in the list to show: starts at 1 and not 0
 		$i=$startList+1;
-		if ($countUser >= $endList)	// Do not show navigation buttons if less than 50 users
-		{
+		if ($countUser >= $endList) { // Do not show navigation buttons if less than 50 users	
 			$tool_content .= "<table class=\"FormData\" width=\"99%\" align=\"left\">
   			<thead><tr>
     			<td class=\"left\" width=\"20%\">
@@ -444,7 +441,7 @@ if($sql)
 			}
 		}       // Show navigation buttons if ($countUser >= 50)
 
-		if($view==3) {
+		if($view == 3) {
 			$qry = "SELECT a.user_id,a.nom, a.prenom, a.username, a.email, b.statut
 			FROM user AS a LEFT JOIN cours_user AS b ON a.user_id = b.user_id
 			WHERE b.code_cours='".$c."'";
@@ -466,30 +463,33 @@ if($sql)
 		/****************************************
 		Show users - Format the table for display
 		*****************************************/
-		$str = "user_surname=$_REQUEST[user_surname]&user_firstname=$_REQUEST[user_firstname]&user_username=$_REQUEST[user_username]&user_am=$_REQUEST[user_am]&user_email=$_REQUEST[user_email]&user_type=$_REQUEST[user_type]&user_registered_at_flag=$_REQUEST[user_registered_at_flag]";
 
-		if (isset($numbering) and isset($_REQUEST['startList']) and isset($_REQUEST['numbList'])) {	
-			$tool_content .= "<table class=\"FormData\" width=\"99%\" align=\"left\">
+		@$str = "user_surname=$_REQUEST[user_surname]&user_firstname=$_REQUEST[user_firstname]&user_username=$_REQUEST[user_username]&user_am=$_REQUEST[user_am]&user_email=$_REQUEST[user_email]&user_type=$_REQUEST[user_type]&user_registered_at_flag=$_REQUEST[user_registered_at_flag]";
+		
+		$tool_content .= "<table class=\"FormData\" width=\"99%\" align=\"left\">
   			<tbody><tr><td class=\"odd\" colspan=\"9\"><div align=\"right\">".$caption."</div></td>
-  			</tr>
-  			<tr><th scope=\"col\" colspan='2'>
-			<a href='$_SERVER[PHP_SELF]?ord=n&$str&startList=$_REQUEST[startList]&numbList=$_REQUEST[numbList]'>$langSurname</a>
+  			</tr>";
+		if (isset($numbering) and isset($_REQUEST['startList']) and isset($_REQUEST['numbList'])) {
+			$string = '';
+			if (isset($_REQUEST['c'])) {
+				$string = "&c=$c";
+			}
+			$tool_content .= "<tr><th scope=\"col\" colspan='2'>
+			<a href='$_SERVER[PHP_SELF]?ord=n$string&$str&startList=$_REQUEST[startList]&numbList=$_REQUEST[numbList]'>$langSurname</a>
 			</th><th>
-			<a href=\"$_SERVER[PHP_SELF]?ord=p&$str&startList=$_REQUEST[startList]&numbList=$_REQUEST[numbList]\">$langName</a>
+			<a href=\"$_SERVER[PHP_SELF]?ord=p$string&$str&startList=$_REQUEST[startList]&numbList=$_REQUEST[numbList]\">$langName</a>
 			</th><th>
-			<a href=\"$_SERVER[PHP_SELF]?ord=u&$str&startList=$_REQUEST[startList]&numbList=$_REQUEST[numbList]\">$langUsername</a></th><th scope=\"col\">$langEmail</th>
+			<a href=\"$_SERVER[PHP_SELF]?ord=u$string&$str&startList=$_REQUEST[startList]&numbList=$_REQUEST[numbList]\">$langUsername</a></th><th scope=\"col\">$langEmail</th>
     			<th scope=\"col\">
-			<a href=\"$_SERVER[PHP_SELF]?ord=s&$str&startList=$_REQUEST[startList]&numbList=$_REQUEST[numbList]\">$langProperty</a></th><th scope=\"col\">$langActions</th>
+			<a href=\"$_SERVER[PHP_SELF]?ord=s$string&$str&startList=$_REQUEST[startList]&numbList=$_REQUEST[numbList]\">$langProperty</a></th><th scope=\"col\">$langActions</th>
     			<th scope=\"col\">$langDelete $langUser</th>
     			<th scope=\"col\">$langStats</th>
   			</tr></thead><tbody>";
 		}
 		else
 		{
-			$tool_content .= "<table class='FormData' width='99%' align='left'><tbody>
-  			<tr><td class='odd' colspan='9'><div align='right'><small>".$caption."</small></div></td>
-  			</tr><tr>
-    			<th scope='col' colspan='2'><a href='$_SERVER[PHP_SELF]?ord=n&$str'>$langSurname</a></th>
+			$tool_content .= "<th scope='col' colspan='2'>
+				<a href='$_SERVER[PHP_SELF]?ord=n&$str'>$langSurname</a></th>
     			<th><a href='$_SERVER[PHP_SELF]?ord=p&$str'>$langName</a></th>
     			<th><a href='$_SERVER[PHP_SELF]?ord=u&$str'>$langUsername</a></th>
     			<th scope='col'>$langEmail</th>
@@ -553,33 +553,38 @@ $tool_content .= "<p align=\"right\"><a href=\"index.php\">$langBack</a></p>";
 function keep_var() {
 
 	$retstring = '';
-	if (isset($_REQUEST['user_surname'])) {
-		$user_surname = $_REQUEST['user_surname'];
-		$retstring .= "<input type = 'hidden' name='user_surname' value='$user_surname'>";
-	} 
-	if (isset($_REQUEST['user_firstname'])) {
-		$user_firstname = $_REQUEST['user_firstname'];
-		$retstring .= "<input type='hidden' name='user_firstname' value='$user_firstname'>";
-	}
-	if (isset($_REQUEST['user_username'])) {
-		$user_username = $_REQUEST['user_username'];
-		$retstring .= "<input type='hidden' name='user_username' value = '$user_username'>";
-	}
-	if (isset($_REQUEST['user_am'])) {
-		$user_am = $_REQUEST['user_am']; 
-		$retstring .= "<input type='hidden' name='user_am' value = '$user_am'>";
-	}
-	if (isset($_REQUEST['user_type'])) {
-		$user_type = $_REQUEST['user_type'];
-		$retstring .= "<input type='hidden' name='user_type' value='$user_type'>";
-	}
-	if (isset($_REQUEST['user_email'])) {
-		$user_email = $_REQUEST['user_email'];
-		$retstring .= "<input type='hidden' name='user_email' value='$user_email'>";
-	}
-	if (isset($_REQUEST['user_registered_at_flag'])) {
-		$user_registered_at_flag = $_REQUEST['user_registered_at_flag'];
-		$retstring .= "<input type='hidden' name='user_registered_at_flag' value='$user_registered_at_flag'>";
+	if (isset($_REQUEST['c']) and $_REQUEST['c'] != 'searchlist' and $_REQUEST['c'] != 4) {
+			$c = $_REQUEST['c'];
+			$retstring .= "<input type = 'hidden' name='c' value='$c'>";
+	} else  {
+		if (isset($_REQUEST['user_surname'])) {
+			$user_surname = $_REQUEST['user_surname'];
+			$retstring .= "<input type = 'hidden' name='user_surname' value='$user_surname'>";
+		} 
+		if (isset($_REQUEST['user_firstname'])) {
+			$user_firstname = $_REQUEST['user_firstname'];
+			$retstring .= "<input type='hidden' name='user_firstname' value='$user_firstname'>";
+		}
+		if (isset($_REQUEST['user_username'])) {
+			$user_username = $_REQUEST['user_username'];
+			$retstring .= "<input type='hidden' name='user_username' value = '$user_username'>";
+		}
+		if (isset($_REQUEST['user_am'])) {
+			$user_am = $_REQUEST['user_am']; 
+			$retstring .= "<input type='hidden' name='user_am' value = '$user_am'>";
+		}
+		if (isset($_REQUEST['user_type'])) {
+			$user_type = $_REQUEST['user_type'];
+			$retstring .= "<input type='hidden' name='user_type' value='$user_type'>";
+		}
+		if (isset($_REQUEST['user_email'])) {
+			$user_email = $_REQUEST['user_email'];
+			$retstring .= "<input type='hidden' name='user_email' value='$user_email'>";
+		}
+		if (isset($_REQUEST['user_registered_at_flag'])) {
+			$user_registered_at_flag = $_REQUEST['user_registered_at_flag'];
+			$retstring .= "<input type='hidden' name='user_registered_at_flag' value='$user_registered_at_flag'>";
+		}
 	}
 	return $retstring;
 }
