@@ -349,30 +349,6 @@ function group_secret($gid)
 }
 
 
-/*
- * Return the $uids of the users participating in a given ($code_cours) course
- *
- * @param $code_cours code of the course as appears in 'cours_user' table in the main database, e.g. "TMA100"
- *
- * @return array containing the $uids of the users registered as students in the given course.
- *
- * @author Sakis Agorastos <thagorastos@gmail.com>
- */
-function get_all_uids_of_students_in_course($code_cours)
-{
-	global $mysqlMainDb;
-
-	$sql= "SELECT `user_id` FROM `cours_user` WHERE `code_cours` LIKE '%".$code_cours."%' AND statut='5'";
-	$result = db_query($sql, $mysqlMainDb);
-
-	$uids = array();
-    	while($row = mysql_fetch_array($result))
-    	{
-	        $uids[] = $row["user_id"];
-    	}
-    return $uids;
-}
-
 // ------------------------------------------------------------------
 // Often useful function (with so many selection boxes in eClass !!)
 // ------------------------------------------------------------------
