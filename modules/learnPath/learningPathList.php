@@ -125,7 +125,7 @@ if ( isset($_GET['cmd']) && $_GET['cmd'] == 'export12'
 mysql_select_db($currentCourseID);
 
 if ($is_adminOfCourse) {
-	$head_content .= "<script>
+	$head_content .= "<script type='text/javascript'>
           function confirmation (name)
           {
               if (confirm('". clean_str_for_javascript($langConfirmDelete) . " ' + name + '? " . $langModuleStillInPool . "'))
@@ -134,7 +134,7 @@ if ($is_adminOfCourse) {
                   {return false;}
           }
           </script>";
-	$head_content .= "<script>
+	$head_content .= "<script type='text/javascript'>
           function scormConfirmation (name)
           {
               if (confirm('". clean_str_for_javascript($langAreYouSureToDeleteScorm) .  "' + name + '?'))
@@ -280,42 +280,28 @@ if ($is_adminOfCourse) {
 					$navigation[] = array("url"=>"learningPathList.php", "name"=> $langLearningPaths);
 					$nameTools = $langCreateNewLearningPath;
 					$dialogBox = "
-    <form action=\"".$_SERVER['PHP_SELF']."\" method=\"POST\">
-    <table width=\"99%\" align=\"left\" class=\"FormData\">
+    <form action='$_SERVER[PHP_SELF]' method='POST'>
+    <table width='99%' align='left' class='FormData'>
     <tbody>
     <tr>
-      <th width=\"220\">&nbsp;</th>
+      <th width='220'>&nbsp;</th>
       <td><b>$langLearningPathData</b></td>
     </tr>
     <tr>
-      <th class=\"left\"><label for=\"newPathName\">".$langLearningPathName."</label> :</th>
-      <td><input type=\"text\" name=\"newPathName\" id=\"newPathName\" size=\"33\" maxlength=\"255\" class=\"FormData_InputText\"></input></td>
+      <th class='left'><label for='newPathName'>$langLearningPathName</label> :</th>
+      <td><input type='text' name='newPathName' id='newPathName' size='33' maxlength='255' class='FormData_InputText'></input></td>
     </tr>
     <tr>
-      <th class=\"left\"><label for=\"newComment\">".$langComment."</label> :</th>
-      <td><textarea id=\"newComment\" name=\"newComment\" rows=\"2\" cols=\"30\" class=\"FormData_InputText\"></textarea></td>
+      <th class='left'><label for='newComment'>$langComment</label> :</th>
+      <td><textarea id='newComment' name='newComment' rows='2' cols='30' class='FormData_InputText'></textarea></td>
     </tr>
     <tr>
-      <th class=\"left\">&nbsp;</th>
-      <td><input type=\"hidden\" name=\"cmd\" value=\"create\"><input type=\"submit\" value=\"".$langCreate."\"></input></td>
+      <th class='left'>&nbsp;</th>
+      <td><input type='hidden' name='cmd' value='create'><input type='submit' value='$langCreate'></input></td>
     </tr>
     </tbody>
     </table>
     </form>";
-
-
-    /*
-					$dialogBox ="<form action=\"".$_SERVER['PHP_SELF']."\" method=\"POST\">"
-						."<p><label for=\"newPathName\">".$langLearningPathName."</label><br />"
-						."<input type=\"text\" name=\"newPathName\" id=\"newPathName\" "
-						."maxlength=\"255\"></input><br /><br />"
-						."<label for=\"newComment\">".$langComment."</label><br />"
-						."<textarea id=\"newComment\" name=\"newComment\" rows=\"2\" "
-						."cols=\"50\"></textarea><br />"
-						."<input type=\"hidden\" name=\"cmd\" value=\"create\">"
-						."<input type=\"submit\" value=\"".$langOk."\"></input>"
-						."<br /><br /></p></form>";
-	*/
 					}
 				break;
 			default:
@@ -345,21 +331,21 @@ if (isset($sortDirection) && $sortDirection)
             $nextLPOrder = $LPOrder;
 
             // move 1 to a temporary rank
-            $sql = "UPDATE `".$TABLELEARNPATH."`
-                    SET `rank` = \"-1337\"
-                    WHERE `learnPath_id` =  \"" . (int)$thisLearningPathId . "\"";
+            $sql = "UPDATE `$TABLELEARNPATH`
+                    SET `rank` = '-1337'
+                    WHERE `learnPath_id` = " . intval($thisLearningPathId);
             db_query($sql);
 
              // move 2 to the previous rank of 1
-             $sql = "UPDATE `".$TABLELEARNPATH."`
-                     SET `rank` = \"" . (int)$thisLPOrder . "\"
-                     WHERE `learnPath_id` =  \"" . (int)$nextLPId . "\"";
+             $sql = "UPDATE `$TABLELEARNPATH`
+                     SET `rank` = " . intval($thisLPOrder) . "
+                     WHERE `learnPath_id` = " . intval($nextLPId);
              db_query($sql);
 
              // move 1 to previous rank of 2
-             $sql = "UPDATE `".$TABLELEARNPATH."`
-                             SET `rank` = \"" . (int)$nextLPOrder . "\"
-                           WHERE `learnPath_id` =  \"" . (int)$thisLearningPathId . "\"";
+             $sql = "UPDATE `$TABLELEARNPATH`
+                     SET `rank` = " . intval($nextLPOrder) . "
+                     WHERE `learnPath_id` = " . intval($thisLearningPathId);
              db_query($sql);
              break;
          }
@@ -381,12 +367,12 @@ if($is_adminOfCourse) {
 		exit;
 	} else {
 		$tool_content .= "
-    <div id=\"operations_container\">
-      <ul id=\"opslist\">
-        <li><a href=\"".$_SERVER['PHP_SELF']."?cmd=create\" title=\"$langCreateNewLearningPath\">".$langCreate."</a></li>
-        <li><a href=\"importLearningPath.php\" title=\"$langimportLearningPath\">".$langImport."</a></li>
-        <li><a href=\"detailsAll.php\" title=\"$langTrackAllPathExplanation\">".$langProgress."</a></li>
-        <li><a href=\"modules_pool.php\">".$langLearningObjectsInUse_sort."</a></li>
+    <div id='operations_container'>
+      <ul id='opslist'>
+        <li><a href='$_SERVER[PHP_SELF]?cmd=create' title='$langCreateNewLearningPath'>$langCreate</a></li>
+        <li><a href='importLearningPath.php' title='$langimportLearningPath'>$langImport</a></li>
+        <li><a href='detailsAll.php' title='$langTrackAllPathExplanation'>$langProgress</a></li>
+        <li><a href='modules_pool.php'>$langLearningObjectsInUse_sort</a></li>
       </ul>
     </div>
     ";
@@ -394,7 +380,7 @@ if($is_adminOfCourse) {
 }
 
 // check if there are learning paths available
-$l = db_query("SELECT * FROM `".$TABLELEARNPATH."`");
+$l = db_query("SELECT * FROM `$TABLELEARNPATH`");
 if ((mysql_num_rows($l) == 0)) {
 	$tool_content .= "<p class='alert1'>$langNoLearningPath</p>";
 	draw($tool_content, 2, 'learnPath', $head_content);
@@ -403,21 +389,21 @@ if ((mysql_num_rows($l) == 0)) {
 
 
 $tool_content .= "
-    <table width=\"99%\" class=\"LearnPathSum\">
+    <table width='99%' class='LearnPathSum'>
     <thead>
-    <tr class=\"LP_header\">
-      <td width=\"1%\">&nbsp;</td>
-      <td><div align=\"left\">".$langLearningPaths."</div></td>\n";
+    <tr class='LP_header'>
+      <td width='1%'>&nbsp;</td>
+      <td><div align='left'>$langLearningPaths</div></td>\n";
 
 
 if($is_adminOfCourse) {
      // Titles for teachers
-     $tool_content .= "      <td colspan=\"3\" width=\"20%\"><div align=\"center\">".$langAdm."</div></td>\n";
-     $tool_content .= "      <td colspan=\"5\" width=\"20%\"><div align=\"center\">".$langActions."</div></td>\n";
+     $tool_content .= "      <td colspan='3' width='20%'><div align='center'>$langAdm</div></td>\n" .
+                      "      <td colspan='5' width='20%'><div align='center'>$langActions</div></td>\n";
 }
 elseif($uid) {
      // display progression only if user is not teacher && not anonymous
-     $tool_content .= "      <td colspan=\"2\" width=\"30%\"><div align=\"center\">".$langProgress."</div></td>\n";
+     $tool_content .= "      <td colspan='2' width='30%'><div align='center'>$langProgress</div></td>\n";
 }
 // close title line
 $tool_content .= "    </tr>
@@ -433,7 +419,7 @@ else {
 }
 // check if user is anonymous
 if($uid) {
-    $uidCheckString = "AND UMP.`user_id` = ". (int)$uid;
+    $uidCheckString = "AND UMP.`user_id` = ". intval($uid);
 }
 else { // anonymous
     $uidCheckString = "AND UMP.`user_id` IS NULL ";
@@ -441,14 +427,14 @@ else { // anonymous
 
 // list available learning paths
 $sql = "SELECT LP.* , MIN(UMP.`raw`) AS minRaw, LP.`lock`
-           FROM `".$TABLELEARNPATH."` AS LP
-     LEFT JOIN `".$TABLELEARNPATHMODULE."` AS LPM
+           FROM `$TABLELEARNPATH` AS LP
+     LEFT JOIN `$TABLELEARNPATHMODULE` AS LPM
             ON LPM.`learnPath_id` = LP.`learnPath_id`
-     LEFT JOIN `".$TABLEUSERMODULEPROGRESS."` AS UMP
+     LEFT JOIN `$TABLEUSERMODULEPROGRESS` AS UMP
             ON UMP.`learnPath_module_id` = LPM.`learnPath_module_id`
-            ".$uidCheckString."
+            $uidCheckString
          WHERE 1=1
-             ".$visibility."
+             $visibility
       GROUP BY LP.`learnPath_id`
       ORDER BY LP.`rank`";
 
@@ -464,7 +450,7 @@ while ($list = mysql_fetch_array($result)) // while ... learning path list
 {
     if ($list['visibility'] == 'HIDE') {
         if ($is_adminOfCourse) {
-            $style = " class=\"invisible\"";
+            $style = " class='invisible'";
             $image_bullet = "arrow_red.gif";
         }
         else {
@@ -476,26 +462,24 @@ while ($list = mysql_fetch_array($result)) // while ... learning path list
         $image_bullet = "arrow_grey.gif";
     }
 
-    $tool_content .= "
-    <tr ".$style.">";
+    $tool_content .= "<tr ".$style.">";
 
     //Display current learning path name
     if (!$is_blocked) {
         $tool_content .= "
-      <td><img src=\"../../template/classic/img/".$image_bullet."\" alt=\"\" border=\"0\" /></td>
-      <td style=\"border-right: 1px solid #edecdf;\"><a href=\"learningPath.php?path_id=".$list['learnPath_id']."\"".$style.">".htmlspecialchars($list['name'])."</a></td>\n";
+      <td><img src='../../template/classic/img/".$image_bullet."' alt='' border='0' /></td>
+      <td style='border-right: 1px solid #edecdf;'><a href='learningPath.php?path_id=".$list['learnPath_id']."'".$style.">".htmlspecialchars($list['name'])."</a></td>\n";
 
         // --------------TEST IF FOLLOWING PATH MUST BE BLOCKED------------------
         // ---------------------(MUST BE OPTIMIZED)------------------------------
         // step 1. find last visible module of the current learning path in DB
 
         $blocksql = "SELECT `learnPath_module_id`
-                     FROM `".$TABLELEARNPATHMODULE."`
-                     WHERE `learnPath_id`=". (int)$list['learnPath_id']."
-                     AND `visibility` = \"SHOW\"
+                     FROM `$TABLELEARNPATHMODULE`
+                     WHERE `learnPath_id` = " . intval($list['learnPath_id']) . "
+                     AND `visibility` = 'SHOW'
                      ORDER BY `rank` DESC
-                     LIMIT 1
-                    ";
+                     LIMIT 1";
         $resultblock = db_query($blocksql);
 
         // step 2. see if there is a user progression in db concerning this module of the current learning path
@@ -503,10 +487,9 @@ while ($list = mysql_fetch_array($result)) // while ... learning path list
         if ($number != 0) {
             $listblock = mysql_fetch_array($resultblock);
             $blocksql2 = "SELECT `credit`
-                          FROM `".$TABLEUSERMODULEPROGRESS."`
-                          WHERE `learnPath_module_id`=". (int)$listblock['learnPath_module_id']."
-                          AND `user_id`='". (int)$uid."'
-                         ";
+                          FROM `$TABLEUSERMODULEPROGRESS`
+                          WHERE `learnPath_module_id`= " . intval($listblock['learnPath_module_id']) . "
+                          AND `user_id` =" . intval($uid);
             $resultblock2 = db_query($blocksql2);
             $moduleNumber = mysql_num_rows($resultblock2);
         }
@@ -545,7 +528,7 @@ while ($list = mysql_fetch_array($result)) // while ... learning path list
         }
     }
     else {  //else of !$is_blocked condition , we have already been blocked before, so we continue beeing blocked : we don't display any links to next paths any longer
-        $tool_content .= "      <td class=\"left\"><img src=\"../../template/classic/img/arrow_grey.gif\" alt=\"\" border=\"0\" /> ".$list['name'].$list['minRaw']."</td>\n";
+        $tool_content .= "      <td class='left'><img src='../../template/classic/img/arrow_grey.gif' alt='' border='0' /> ".$list['name'].$list['minRaw']."</td>\n";
     }
 
     // DISPLAY ADMIN LINK-----------------------------------------------------------
@@ -554,15 +537,15 @@ while ($list = mysql_fetch_array($result)) // while ... learning path list
 
         // LOCK link
 
-        $tool_content .= "      <td style=\"border-left: 1px solid #edecdf;\" align=\"center\">";
+        $tool_content .= "      <td style='border-left: 1px solid #edecdf;' align='center'>";
 
         if ($list['lock'] == 'OPEN') {
-            $tool_content .= "<a href=\"".$_SERVER['PHP_SELF']."?cmd=mkBlock&amp;cmdid=".$list['learnPath_id']."\">"
-                  ."<img src=\"../../template/classic/img/unblock.gif\" alt=\"$langBlock\" title=\"$langBlock\" border=\"0\">"
+            $tool_content .= "<a href='".$_SERVER['PHP_SELF']."?cmd=mkBlock&amp;cmdid=".$list['learnPath_id']."'>"
+                  ."<img src='../../template/classic/img/unblock.gif' alt='$langBlock' title='$langBlock' border='0'>"
                   ."</a>";
         } else {
-            $tool_content .= "<a href=\"".$_SERVER['PHP_SELF']."?cmd=mkUnblock&amp;cmdid=".$list['learnPath_id']."\">"
-            ."<img src=\"../../template/classic/img/block.gif\" alt=\"$langAltMakeNotBlocking\" title=\"$langAltMakeNotBlocking\" border=\"0\">"
+            $tool_content .= "<a href='".$_SERVER['PHP_SELF']."?cmd=mkUnblock&amp;cmdid=".$list['learnPath_id']."'>"
+            ."<img src='../../template/classic/img/block.gif' alt='$langAltMakeNotBlocking' title='$langAltMakeNotBlocking' border='0'>"
             ."</a>";
         }
         $tool_content .= "</td>\n";
@@ -575,14 +558,14 @@ while ($list = mysql_fetch_array($result)) // while ... learning path list
             .'</td>' . "\n";
 
         // statistics links
-        $tool_content .= "      <td style=\"border-right: 1px solid #edecdf;\"  align=\"center\"><a href=\"details.php?path_id=".$list['learnPath_id']."\"><img src=\"../../template/classic/img/statistics.gif\" border=\"0\" alt=\"$langTracking\" title=\"$langTracking\" /></a></td>\n";
+        $tool_content .= "      <td style='border-right: 1px solid #edecdf;'  align='center'><a href='details.php?path_id=".$list['learnPath_id']."'><img src='../../template/classic/img/statistics.gif' border='0' alt='$langTracking' title='$langTracking' /></a></td>\n";
 
 
         // VISIBILITY link
         $tool_content .= "      <td align=\"center\">";
         if ( $list['visibility'] == 'HIDE') {
-            $tool_content .= "<a href=\"".$_SERVER['PHP_SELF']."?cmd=mkVisibl&amp;visibility_path_id=".$list['learnPath_id']."\">"
-                  ."<img src=\"../../template/classic/img/invisible.gif\" alt=\"$langVisible\" title=\"$langVisible\" border=\"0\" />"
+            $tool_content .= "<a href='".$_SERVER['PHP_SELF']."?cmd=mkVisibl&amp;visibility_path_id=".$list['learnPath_id']."'>"
+                  ."<img src='../../template/classic/img/invisible.gif' alt='$langVisible' title='$langVisible' border='0' />"
                   ."</a>";
         } else {
             if ($list['lock']=='CLOSE') {
@@ -593,15 +576,15 @@ while ($list = mysql_fetch_array($result)) // while ... learning path list
             }
 
             $tool_content .= "<a href=\"".$_SERVER['PHP_SELF']."?cmd=mkInvisibl&amp;visibility_path_id=".$list['learnPath_id']."\" ".$onclick. " >"
-                 ."<img src=\"../../template/classic/img/visible.gif\" alt=\"$langVisible\" title=\"$langVisible\" border=\"0\" />"
+                 ."<img src='../../template/classic/img/visible.gif' alt='$langVisible' title='$langVisible' border='0' />"
                  ."</a>";
         }
         $tool_content .= "</td>\n";
 
         // Modify command / go to other page
         $tool_content .= "      <td align=\"center\">"
-             ."<a href=\"learningPathAdmin.php?path_id=".$list['learnPath_id']."\">"
-             ."<img src=\"../../template/classic/img/edit.gif\" border=\"0\" alt=\"$langModify\" title=\"$langModify\" />"
+             ."<a href='learningPathAdmin.php?path_id=".$list['learnPath_id']."'>"
+             ."<img src='../../template/classic/img/edit.gif' border='0' alt='$langModify' title='$langModify' />"
              ."</a>"
              ."</td>\n";
 
@@ -610,18 +593,18 @@ while ($list = mysql_fetch_array($result)) // while ... learning path list
 
         // check if the learning path is of a Scorm import package and add right popup:
         if (is_dir($real)) {
-            $tool_content .=  "      <td align=\"center\">"
-                  ."<a href=\"".$_SERVER['PHP_SELF']."?cmd=delete&amp;del_path_id=".$list['learnPath_id']."\" "
-                  ."onClick=\"return scormConfirmation('".clean_str_for_javascript($list['name'])."');\">"
-                  ."<img src=\"../../template/classic/img/delete.gif\" border=\"0\" alt=\"$langDelete\" title=\"$langDelete\" />"
+            $tool_content .=  "      <td align='center'>"
+                  ."<a href='".$_SERVER['PHP_SELF']."?cmd=delete&amp;del_path_id=".$list['learnPath_id']."' "
+                  ."onClick='return scormConfirmation('".clean_str_for_javascript($list['name'])."');'>"
+                  ."<img src='../../template/classic/img/delete.gif' border='0' alt='$langDelete' title='$langDelete' />"
                   ."</a>"
                   ."</td>\n";
 
         } else {
             $tool_content .=  "      <td align=\"center\">"
-                  ."<a href=\"".$_SERVER['PHP_SELF']."?cmd=delete&amp;del_path_id=".$list['learnPath_id']."\" "
+                  ."<a href='".$_SERVER['PHP_SELF']."?cmd=delete&amp;del_path_id=".$list['learnPath_id']."' "
                   ."onClick=\"return confirmation('".clean_str_for_javascript($list['name'])."');\">"
-                  ."<img src=\"../../template/classic/img/delete.gif\" border=\"0\" alt=\"$langDelete\" title=\"$langDelete\" />"
+                  ."<img src='../../template/classic/img/delete.gif' border='0' alt='$langDelete' title='$langDelete' />"
                   ."</a>"
                   ."</td>\n";
         }
@@ -629,9 +612,9 @@ while ($list = mysql_fetch_array($result)) // while ... learning path list
 
         // DISPLAY MOVE UP COMMAND only if it is not the top learning path
         if ($iterator != 1) {
-            $tool_content .= "      <td class=\"right\">"
-                  ."<a href=\"".$_SERVER['PHP_SELF']."?cmd=moveUp&amp;move_path_id=".$list['learnPath_id']."\">"
-                  ."<img src=\"../../template/classic/img/up.gif\" alt=\"$langUp\" title=\"$langUp\" border=\"0\" />"
+            $tool_content .= "      <td class='right'>"
+                  ."<a href='".$_SERVER['PHP_SELF']."?cmd=moveUp&amp;move_path_id=".$list['learnPath_id']."'>"
+                  ."<img src='../../template/classic/img/up.gif' alt='$langUp' title='$langUp' border='0' />"
                   ."</a>"
                   ."</td>\n";
         }
@@ -641,9 +624,9 @@ while ($list = mysql_fetch_array($result)) // while ... learning path list
 
         // DISPLAY MOVE DOWN COMMAND only if it is not the bottom learning path
         if($iterator < $LPNumber) {
-            $tool_content .= "      <td class=\"left\">"
-                  ."<a href=\"".$_SERVER['PHP_SELF']."?cmd=moveDown&amp;move_path_id=".$list['learnPath_id']."\">"
-                  ."<img src=\"../../template/classic/img/down.gif\" alt=\"$langDown\" title=\"$langDown\" border=\"0\" />"
+            $tool_content .= "      <td class='left'>"
+                  ."<a href='".$_SERVER['PHP_SELF']."?cmd=moveDown&amp;move_path_id=".$list['learnPath_id']."'>"
+                  ."<img src='../../template/classic/img/down.gif' alt='$langDown' title='$langDown' border='0' />"
                   ."</a>"
                   ."</td>";
         }
@@ -658,8 +641,8 @@ while ($list = mysql_fetch_array($result)) // while ... learning path list
         if ($prog >= 0) {
             $globalprog += $prog;
         }
-        $tool_content .= "<td align=\"right\">".disp_progress_bar($prog, 1)."</td>\n";
-        $tool_content .= "<td align=\"left\"><small> ".$prog."% </small></td>";
+        $tool_content .= "<td align='right'>".disp_progress_bar($prog, 1)."</td>\n";
+        $tool_content .= "<td align='left'><small> ".$prog."% </small></td>";
     }
     $tool_content .= "
     </tr>";
@@ -667,7 +650,7 @@ while ($list = mysql_fetch_array($result)) // while ... learning path list
 } // end while
 
 $tool_content .= "
-    <tr class=\"odd\">";
+    <tr class='odd'>";
 
 if (!$is_adminOfCourse && $iterator != 1 && $uid) {
     // add a blank line between module progression and global progression
@@ -682,4 +665,3 @@ $tool_content .= "    </tr>
 $tool_content .= "    </table>\n";
 
 draw($tool_content, 2, 'learnPath', $head_content);
-?>
