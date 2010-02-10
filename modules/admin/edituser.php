@@ -94,18 +94,18 @@ if((!empty($u)) && ctype_digit($u) )	// validate the user id
   </tr>
   <tr>
     <th class='left'>$langSurname:</th>
-    <td><input type='text' name='lname' size='50' value='".q($info['nom'])."'</td>
+    <td><input type='text' name='lname' size='50' value='".q($info['nom'])."' /></td>
   </tr>
   <tr>
     <th class='left'>$langName:</th>
-	<td><input type='text' name='fname' size='50' value='".q($info['prenom'])."'</td>
+	<td><input type='text' name='fname' size='50' value='".q($info['prenom'])."' /></td>
   </tr>";
 
 if(!in_array($info['password'], $authmethods)) {
 		$tool_content .= "
   <tr>
     <th class='left'>$langUsername:</th>
-    <td><input type='text' name='username' size='50' value='".q($info['username'])."'</td>
+    <td><input type='text' name='username' size='50' value='".q($info['username'])."' /></td>
   </tr>";
 	}
   else    // means that it is external auth method, so the user cannot change this password
@@ -123,7 +123,7 @@ if(!in_array($info['password'], $authmethods)) {
   <tr>
     <th class='left'>".$langUsername. "</th>
     <td class='caution_small'>&nbsp;&nbsp;&nbsp;&nbsp;<b>".q($info['username'])."</b> [".$auth_text."]
-        <input type='hidden' name='username' value='".q($info['username'])."'>
+        <input type='hidden' name='username' value='".q($info['username'])."' />
     </td>
   </tr>";
  }
@@ -131,15 +131,15 @@ if(!in_array($info['password'], $authmethods)) {
 $tool_content .= "
   <tr>
     <th class='left'>e-mail: </th>
-    <td><input type='text' name='email' size='50' value='".q($info['email'])."'</td>
+    <td><input type='text' name='email' size='50' value='".q($info['email'])."' /></td>
   </tr>
   <tr>
     <th class='left'>$langAm: </th>
-    <td><input type='text' name='am' size='50' value='".q($info['am'])."'</td>
+    <td><input type='text' name='am' size='50' value='".q($info['am'])."' /></td>
   </tr>
  <tr>
    <th class='left'>$langTel: </th>
-   <td><input type='text' name='phone' size='50' value='".q($info['phone'])."'</td>
+   <td><input type='text' name='phone' size='50' value='".q($info['phone'])."' /></td>
   </tr>";
 	$tool_content .= "<tr>
     <th class='left'>$langFaculty:</th>
@@ -151,7 +151,7 @@ $tool_content .= "
 		}
 
 	$tool_content .= $department_select_box."</td></tr>";
-	$tool_content .= "<tr><th class='left'>$langProperty:</th></td><td>";
+	$tool_content .= "<tr><th class='left'>$langProperty:</th><td>";
 	if ($info[9] == '10') { // if we are guest user do not display selection
 		$tool_content .= selection(array(10 => $langGuest), 'newstatut', $info['statut']);
 	} else {
@@ -160,55 +160,56 @@ $tool_content .= "
 	$tool_content .= "</td>";
 
 	$tool_content .= "<tr>
-    <th class=\"left\">$langRegistrationDate:</th>
-    <td><span style=\"color:green;font-weight:bold;\">".date("j/n/Y H:i",$info['registered_at'])."</span></td>
+    <th class='left'>$langRegistrationDate:</th>
+    <td><span style='color:green;font-weight:bold;'>".date("j/n/Y H:i",$info['registered_at'])."</span></td>
   </tr>
   <tr>
-    <th class=\"left\">$langExpirationDate: </th>
+    <th class='left'>$langExpirationDate: </th>
     <td>";
-		$dateregistration = date("j-n-Y", $info['expires_at']);
-		$hour = date("H", $info['expires_at']);
-		$minute = date("i", $info['expires_at']);
+        $dateregistration = date("j-n-Y", $info['expires_at']);
+        $hour = date("H", $info['expires_at']);
+        $minute = date("i", $info['expires_at']);
 
-// -- jscalendar ------
-		$start_cal = $jscalendar->make_input_field(
-       array('showOthers' => true,
-                'align' => 'Tl',
-                 'ifFormat' => '%d-%m-%Y'),
-       array('style' => 'width: 15em; color: #840; background-color: #ff8; border: 1px solid #000; text-align: center',
-                 'name' => 'date',
-                 'value' => $dateregistration));
+        // -- jscalendar ------
+        $start_cal = $jscalendar->make_input_field(
+                array('showOthers' => true,
+                      'align' => 'Tl',
+                      'ifFormat' => '%d-%m-%Y'),
+                array('style' => 'width: 15em; color: #840; background-color: #ff8; border: 1px solid #000; text-align: center',
+                      'name' => 'date',
+                      'value' => $dateregistration));
 
 	$tool_content .= $start_cal."&nbsp;&nbsp;&nbsp;";
 	$tool_content .= "<select name='hour'>
 	        <option value='$hour'>$hour</option>
         	<option value='--'>--</option>";
-    for ($h=0; $h<=24; $h++)
-	$tool_content .= "<option value='$h'>$h</option>";
-    $tool_content .= "</select>&nbsp;&nbsp;&nbsp;";
-	  $tool_content .= "<select name=\"minute\">
-	    <option value=\"$minute\">$minute</option>
-  	  <option value=\"--\">--</option>";
-    for ($m=0; $m<=55; $m=$m+5)
-          $tool_content .= "<option value='$m'>$m</option>";
-    $tool_content .= "</select></td>";
+        for ($h=0; $h<=24; $h++)
+                $tool_content .= "<option value='$h'>$h</option>";
+        $tool_content .= "</select>&nbsp;&nbsp;&nbsp;";
+        $tool_content .= "<select name='minute'>
+                          <option value='$minute'>$minute</option>
+                          <option value='--'>--</option>";
+        for ($m = 0; $m <= 55; $m = $m + 5)
+                $tool_content .= "<option value='$m'>$m</option>";
+        $tool_content .= "</select></td>";
 
 	$tool_content .= "
   </tr>
   <tr>
-    <th class=\"left\">$langUserID: </th>
+    <th class='left'>$langUserID: </th>
     <td>$u</td>
   </tr>
-      <th class=\"left\">&nbsp;</th>
+  <tr>
+    <th class='left'>&nbsp;</th>
     <td>
-      <input type=\"hidden\" name=\"u\" value=\"".$u."\">
-      <input type=\"hidden\" name=\"u_submitted\" value=\"1\">
-      <input type=\"hidden\" name=\"registered_at\" value=\"".$info['registered_at']."\">
-      <input type=\"submit\" name=\"submit_edituser\" value=\"$langModify\">
+      <input type='hidden' name='u' value='$u' />
+      <input type='hidden' name='u_submitted' value='1' />
+      <input type='hidden' name='registered_at' value='".$info['registered_at']."' />
+      <input type='submit' name='submit_edituser' value='$langModify' />
     </td>
   </tr>
   <tr>
-    <td colspan=\"2\">&nbsp;</td>
+    <td colspan='2'>&nbsp;</td>
   </tr>
   </tbody>
   </table>
@@ -216,17 +217,17 @@ $tool_content .= "
 
 		$sql = mysql_query("SELECT nom, prenom, username FROM user WHERE user_id = '$u'");
 		$sql = mysql_query("SELECT a.code, a.intitule, b.reg_date, b.statut, a.cours_id
-			FROM cours AS a LEFT JOIN cours_user AS b ON a.code = b.code_cours
+			FROM cours AS a LEFT JOIN cours_user AS b ON a.cours_id = b.cours_id
 			WHERE b.user_id = '$u' ORDER BY b.statut, a.faculte");
 
 		// αν ο χρήστης συμμετέχει σε μαθήματα τότε παρουσίασε τη λίστα
 		if (mysql_num_rows($sql) > 0)
 		{
 			$tool_content .= "<br />
-			<table class=\"FormData\" width=\"99%\" align=\"left\">
+			<table class='FormData' align='left'>
 			<tbody>
 			<tr>
-			<th colspan=\"5\">$langStudentParticipation</th>
+			<th colspan='5'>$langStudentParticipation</th>
 			</tr>
 			<tr>
 			<th>$langLessonCode</th>
@@ -253,16 +254,16 @@ $tool_content .= "
 						break;
 					case 5:
 						$tool_content .= $langStudent;
-						$tool_content .= "</td><td align=\"center\">
-						<a href='unreguser.php?u=$u&c=$logs[0]'>
-						<img src='../../template/classic/img/delete.gif' border='0' title='$langDelete'></img></a></td>
+						$tool_content .= "</td><td align='center'>
+						<a href='unreguser.php?u=$u&amp;c=$logs[0]'>
+						<img src='../../template/classic/img/delete.gif' title='$langDelete'></img></a></td>
   						</tr>\n";
 						break;
 					default:
 						$tool_content .= $langVisitor;
-						$tool_content .= "</td><td align=\"center\">
-						<a href=\"unreguser.php?u=$u&c=$logs[0]\">
-						<img src='../../template/classic/img/delete.gif' border='0' title='$langDelete'></img></a></td></tr>\n";
+						$tool_content .= "</td><td align='center'>
+						<a href='unreguser.php?u=$u&amp;c=$logs[0]'>
+						<img src='../../template/classic/img/delete.gif' title='$langDelete'></img></a></td></tr>\n";
 						break;
 				}
 			}
@@ -360,5 +361,5 @@ else
 	// Αλλιώς... τι γίνεται;
 	$tool_content .= "<h1>$langError</h1>\n<p><a href=\"listcours.php\">$back</p>\n";
 }
-draw($tool_content, 3, ' ', $head_content);
-?>
+
+draw($tool_content, 3, null, $head_content);
