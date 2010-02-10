@@ -40,7 +40,7 @@ $require_prof = true;
 include '../../include/baseTheme.php';
 
 $head_content = '
-<script>
+<script type="text/javascript">
 function confirmation (name)
 {
     if (confirm("'.$langDeleteUser.' "+ name + " '.$langDeleteUser2.' ?"))
@@ -52,7 +52,7 @@ function confirmation (name)
 ';
 
 $sql = "SELECT user.user_id, cours_user.statut FROM cours_user, user
-	WHERE code_cours='$currentCourseID' AND cours_user.user_id = user.user_id";
+	WHERE cours_user.cours_id = $cours_id AND cours_user.user_id = user.user_id";
 $result_numb = db_query($sql, $mysqlMainDb);
 $countUser = mysql_num_rows($result_numb);
 
@@ -78,22 +78,22 @@ if ($is_adminOfCourse) {
 	$tool_content .= "<table width='99%' align='left' class='Users_Operations'><thead>
 	<tr>
 	<td colspan='3'>&nbsp;<b>$langDumpUser $langCsv:</b>
-	<br>&nbsp;&nbsp;1.&nbsp;<a href='dumpuser2.php'>$langcsvenc2</a>
+	<br />&nbsp;&nbsp;1.&nbsp;<a href='dumpuser2.php'>$langcsvenc2</a>
 	&nbsp;&nbsp;2.&nbsp;<a href='dumpuser2.php?enc=1253'>$langcsvenc1</a>
 	</td>
 	</tr>
 	<tr>
-	<td width='20%'><a href='../group/group.php'><b>$langGroupUserManagement</a></b></td>
+	<td width='20%'><a href='../group/group.php'><b>$langGroupUserManagement</b></a></td>
 	<td width='15%'><a href='searchuser.php'><b>$langSearchUser</b></a></td>
 	<td><b>$langAdd:</b>&nbsp; <a href='adduser.php'>$langOneUser</a>, <a href='muladduser.php'>$langManyUsers</a>, <a href='guestuser.php'>$langGUser</a>&nbsp;</td>
 	</tr></thead></table>";
 
 	// display number of users
-	$tool_content .= "<table width=\"99%\" class=\"FormData\" style=\"border: 1px solid #CAC3B5;\">
+	$tool_content .= "<table width='99%' class='FormData' style='border: 1px solid #CAC3B5;'>
 	<tbody><tr>
-	<td class=\"odd\">
+	<td class='odd'>
 	<p>$langThereAre <b>$teachers</b> $langTeachers, <b>$students</b> $langStudents, <b>$visitors</b> $langVisitors</p>
-	<div align=\"right\">$langTotal: <b>$countUser</b> $langUsers</div>
+	<div align='right'>$langTotal: <b>$countUser</b> $langUsers</div>
 	</td>
 	</tr></tbody>
 	</table><p>&nbsp;</p>";
@@ -182,12 +182,12 @@ $i=$startList+1;
 // Do not show navigation buttons if less than 50 users
 if ($countUser>=$endList) {
 	$tool_content .= "
-   <table width=99% class=\"NavUser\">
+   <table width=99% class='NavUser'>
    <thead>
    <tr>
      <td valign=bottom align=left width=20%>
-       <form method=post action=\"$_SERVER[PHP_SELF]?numbList=begin\">
-         <input type=submit value=\"<< $langBegin\" name=\"numbering\" class=\"auth_input\">
+       <form method=post action='$_SERVER[PHP_SELF]?numbList=begin'>
+         <input type=submit value='<< $langBegin' name='numbering' class='auth_input'>
        </form>
      </td>
      <td valign=bottom align=middle width=20%>";
@@ -195,31 +195,31 @@ if ($countUser>=$endList) {
 	// if beginning of list or complete listing, do not show "previous" button
 	if ($startList!=0) {
 		$tool_content .= "
-       <form method=post action=\"$_SERVER[PHP_SELF]?startList=$startList&numbList=less\">
-         <div align=\"center\"><input type=submit value=\"< $langPreced50 $endList\" name=\"numbering\" class=\"auth_input\"></div>
+       <form method=post action='$_SERVER[PHP_SELF]?startList=$startList&numbList=less'>
+         <div align='center'><input type=submit value='< $langPreced50 $endList' name='numbering' class='auth_input'></div>
        </form>";
 	}
 	$tool_content .= "
      </td>
      <td valign=bottom align=middle width=20%>
-       <form method=post action=\"$_SERVER[PHP_SELF]?startList=$startList&numbList=all\">
-         <div align=\"center\"><input type=submit value=\"$langAll\" name=numbering class=\"auth_input\"></div>
+       <form method=post action='$_SERVER[PHP_SELF]?startList=$startList&amp;numbList=all'>
+         <div align='center'><input type=submit value='$langAll' name=numbering class='auth_input'></div>
        </form>
      </td>
     <td valign=bottom align=middle width=20%>";
 
 	// if end of list  or complete listing, do not show "next" button
 	if (!((($countUser-$startList)<=$endList) OR ($endList==2000))) {
-		$tool_content .= "<form method=post action=\"$_SERVER[PHP_SELF]?startList=$startList&numbList=more\">
-		<div align=\"center\"><input type=submit value=\"$langFollow50 $endList >\" name=numbering class=\"auth_input\"></div>
+		$tool_content .= "<form method=post action='$_SERVER[PHP_SELF]?startList=$startList&numbList=more'>
+		<div align='center'><input type=submit value='$langFollow50 $endList >' name=numbering class='auth_input'></div>
 		</form>";
 	}
 	$tool_content .= "
      </td>
      <td valign=bottom width=20%>
        <div align='right'>
-       <form method=post action=\"$_SERVER[PHP_SELF]?numbList=final\">
-         <input type=submit value=\"$langEnd >>\" name=numbering class=\"auth_input\">
+       <form method=post action='$_SERVER[PHP_SELF]?numbList=final'>
+         <input type=submit value='$langEnd >>' name=numbering class='auth_input'>
        </form>
        </div>
      </td>
@@ -230,25 +230,25 @@ if ($countUser>=$endList) {
 }	// Show navigation buttons
 
 $tool_content .= "
-   <table width=99% class=\"FormData\" style=\"border: 1px solid #CAC3B5;\">
+   <table width=99% class='FormData' style='border: 1px solid #CAC3B5;'>
    <thead>
-   <tr class=\"odd\">
-     <td rowspan=\"2\" class=\"UsersHead\">$langID</td>
-     <td rowspan=\"2\" class=\"UsersHead\"><div align=\"left\">$langSurname<br>$langName</div></td>";
+   <tr class='odd'>
+     <td rowspan='2' class='UsersHead'>$langID</td>
+     <td rowspan='2' class='UsersHead'><div align='left'>$langSurname<br />$langName</div></td>";
 
 if(isset($status) && ($status[$currentCourseID]==1 OR $status[$currentCourseID]==2))  {
-	$tool_content .="<td rowspan=\"2\" class=\"UsersHead\">$langEmail</td>";
+	$tool_content .="<td rowspan='2' class='UsersHead'>$langEmail</td>";
 }
 
-$tool_content .= "<td rowspan=\"2\" class=\"UsersHead\">$langAm</td>
-     <td rowspan=\"2\" class=\"UsersHead\">$langGroup</td>
-     <td rowspan=\"2\" class=\"UsersHead\">$langCourseRegistrationDate</td>";
+$tool_content .= "<td rowspan='2' class='UsersHead'>$langAm</td>
+     <td rowspan='2' class='UsersHead'>$langGroup</td>
+     <td rowspan='2' class='UsersHead'>$langCourseRegistrationDate</td>";
 
 // show admin tutor and unregister only to admins
 if (isset($status) && ($status[$currentCourseID]==1 OR $status[$currentCourseID]==2)) {
 	$tool_content .= "
-     <td colspan=\"2\" class=\"UsersHead\">$langUserPermitions</td>
-     <td rowspan=\"2\" class=\"UsersHead\">$langActions</td>";
+     <td colspan='2' class='UsersHead'>$langUserPermitions</td>
+     <td rowspan='2' class='UsersHead'>$langActions</td>";
 }
 
 $tool_content .= "
@@ -257,127 +257,124 @@ $tool_content .= "
 if (isset($status) && ($status[$currentCourseID]==1 OR $status[$currentCourseID]==2)) {
 	$tool_content .= "
   <tr>
-     <td class=\"UsersHead\">$langTutor</td>
-     <td class=\"UsersHead\">$langAdministrator</td>
+     <td class='UsersHead'>$langTutor</td>
+     <td class='UsersHead'>$langAdministrator</td>
   </tr>";
 }
 
-$result = mysql_query("SELECT user.user_id, user.nom, user.prenom, user.email, user.am, cours_user.statut,
+$result = db_query("SELECT user.user_id, user.nom, user.prenom, user.email, user.am, cours_user.statut,
 		cours_user.tutor, cours_user.reg_date, user_group.team
 		FROM `$mysqlMainDb`.cours_user, `$mysqlMainDb`.user
 		LEFT JOIN `$currentCourseID`.user_group
-		ON user.user_id=user_group.user
-		WHERE `user`.`user_id`=`cours_user`.`user_id` AND `cours_user`.`code_cours`='$currentCourseID'
+		ON user.user_id = user_group.user
+		WHERE `user`.`user_id` = `cours_user`.`user_id` AND `cours_user`.`cours_id` = $cours_id
 		ORDER BY nom, prenom LIMIT $startList, $endList", $db);
-		$tool_content .= "
-   </thead>
-   </tbody>";
+
+$tool_content .= "</thead>\n";
 
 while ($myrow = mysql_fetch_array($result)) {
-	// bi colored table
-	if ($i%2 == 0) {
-		$tool_content .= "<tr>";
-	} else {
-		$tool_content .= "<tr class=\"odd\">";
-	}
-// show public list of users
-	$tool_content .= "
-     <td valign=\"top\" align=\"right\">$i.</td>
-     <td valign=\"top\">$myrow[nom]<br>$myrow[prenom]</td>";
+        // bi colored table
+        if ($i%2 == 0) {
+                $tool_content .= "<tr>";
+        } else {
+                $tool_content .= "<tr class='odd'>";
+        }
+        // show public list of users
+        $tool_content .= "<td valign='top' align='right'>$i.</td>\n" .
+                "<td valign='top'>$myrow[nom]<br />$myrow[prenom]</td>\n";
 
-if (isset($status) && ($status[$currentCourseID]==1 OR $status[$currentCourseID]==2))  {
-	$tool_content .= "<td valign=\"top\" align=\"center\"><a href=\"mailto:".$myrow["email"]."\">".$myrow["email"]."</a></td>";
-}
-	$tool_content .= "<td valign=\"top\" align=\"center\">$myrow[am]</td>
-	<td valign=top align=\"center\">";
+        if (isset($status) and ($status[$currentCourseID] == 1 or $status[$currentCourseID] == 2))  {
+                $tool_content .= "<td valign='top' align='center'><a href='mailto:$myrow[email]'>$myrow[email]</a></td>";
+        }
+        $tool_content .= "<td valign='top' align='center'>$myrow[am]</td>\n" .
+                "<td valign=top align='center'>\n";
 
-	// NULL AND NOT '0' BECAUSE TEAM CAN BE INEXISTENT
-	if($myrow["team"] == NULL) {
-		$tool_content .= "$langUserNoneMasc";
-	} else {
-		$tool_content .= gid_to_name($myrow['team']);
-	}
-	$tool_content .= "</td>";
-	$tool_content .= "<td align='center'>";
-	if ($myrow['reg_date'] == '0000-00-00') {
-		$tool_content .= $langUnknownDate;
-	} else {
-		$tool_content .= "".nice_format($myrow['reg_date'])."";
-	}
-	$tool_content .= "</td>";
+        // NULL and not '0' because team may not exist
+        if ($myrow['team'] == NULL) {
+                $tool_content .= $langUserNoneMasc;
+        } else {
+                $tool_content .= gid_to_name($myrow['team']);
+        }
+        $tool_content .= "</td>" .
+                "<td align='center'>";
+        if ($myrow['reg_date'] == '0000-00-00') {
+                $tool_content .= $langUnknownDate;
+        } else {
+                $tool_content .= nice_format($myrow['reg_date']);
+        }
+        $tool_content .= "</td>";
 
-// ************** tutor, admin and unsubscribe (admin only) ******************************
-if(isset($status) && ($status["$currentCourseID"]=='1' OR $status["$currentCourseID"]=='2')) {
-// tutor right
-	if ($myrow["tutor"]=='0') {
-		$tool_content .= "<td valign=\"top\" align='center' class=\"add_user\"><a href=\"$_SERVER[PHP_SELF]?giveTutor=yes&user_id=$myrow[user_id]\" title=\"$langGiveTutor\">$langAdd</a></td>";
-	} else {
-		$tool_content .= "<td class=\"highlight\" align='center'>$langTutor<br><a href=\"$_SERVER[PHP_SELF]?removeTutor=yes&user_id=$myrow[user_id]\" title=\"$langRemoveRight\">$langRemove</a></td>";
-	}
+        // ************** tutor, admin and unsubscribe (admin only) ******************************
+        if(isset($status) && ($status["$currentCourseID"]=='1' OR $status["$currentCourseID"]=='2')) {
+                // tutor right
+                if ($myrow['tutor'] == '0') {
+                        $tool_content .= "<td valign='top' align='center' class='add_user'><a href='$_SERVER[PHP_SELF]?giveTutor=yes&amp;user_id=$myrow[user_id]' title='$langGiveTutor'>$langAdd</a></td>";
+                } else {
+                        $tool_content .= "<td class='highlight' align='center'>$langTutor<br /><a href='$_SERVER[PHP_SELF]?removeTutor=yes&amp;user_id=$myrow[user_id]' title='$langRemoveRight'>$langRemove</a></td>";
+                }
 
-		// admin right
-	if ($myrow["user_id"]!=$_SESSION["uid"]) {
-		if ($myrow["statut"]=='1') {
-			$tool_content .= "<td class=\"highlight\" align='center'>$langAdministrator<br><a href=\"$_SERVER[PHP_SELF]?removeAdmin=yes&user_id=$myrow[user_id]\" title=\"$langRemoveRight\">$langRemove</a></td>";
-		} else {
-			$tool_content .= "<td valign=\"top\" align='center' class=\"add_user\"><a href=\"$_SERVER[PHP_SELF]?giveAdmin=yes&user_id=$myrow[user_id]\" title=\"$langGiveAdmin\">$langAdd</a></td>";
-		}
-	} else {
-		if ($myrow["statut"]=='1') {
-			$tool_content .= "<td valign=\"top\" class=\"highlight\" align='center' title=\"$langAdmR\"><b>$langAdministrator</b></td>";
-		} else {
-			$tool_content .= "<td valign=\"top\" align='center'><a href=\"$_SERVER[PHP_SELF]?giveAdmin=yes&user_id=$myrow[user_id]\">$langGiveAdmin</a></td>";
-		}
-	}
-	$tool_content .= "<td valign=\"top\" align='center'>";
-	$alert_uname = $myrow['prenom'] . " " . $myrow['nom'];
-	$tool_content .= "<a href=\"$_SERVER[PHP_SELF]?unregister=yes&user_id=$myrow[user_id]\" onClick=\"return confirmation('".addslashes($alert_uname)."');\"><img src='../../template/classic/img/delete.gif' border='0' title='$langDelete'></a>";
-}	// admin only
-	$tool_content .= "</td></tr>";$i++;
+                // admin right
+                if ($myrow['user_id'] != $_SESSION["uid"]) {
+                        if ($myrow['statut']=='1') {
+                                $tool_content .= "<td class='highlight' align='center'>$langAdministrator<br /><a href='$_SERVER[PHP_SELF]?removeAdmin=yes&amp;user_id=$myrow[user_id]' title='$langRemoveRight'>$langRemove</a></td>";
+                        } else {
+                                $tool_content .= "<td valign='top' align='center' class='add_user'><a href='$_SERVER[PHP_SELF]?giveAdmin=yes&amp;user_id=$myrow[user_id]' title='$langGiveAdmin'>$langAdd</a></td>";
+                        }
+                } else {
+                        if ($myrow['statut']=='1') {
+                                $tool_content .= "<td valign='top' class='highlight' align='center' title='$langAdmR'><b>$langAdministrator</b></td>";
+                        } else {
+                                $tool_content .= "<td valign='top' align='center'><a href='$_SERVER[PHP_SELF]?giveAdmin=yes&amp;user_id=$myrow[user_id]'>$langGiveAdmin</a></td>";
+                        }
+                }
+                $tool_content .= "<td valign='top' align='center'>";
+                $alert_uname = $myrow['prenom'] . " " . $myrow['nom'];
+                $tool_content .= "<a href='$_SERVER[PHP_SELF]?unregister=yes&amp;user_id=$myrow[user_id]' onClick=\"return confirmation('".addslashes($alert_uname)."');\"><img src='../../template/classic/img/delete.gif' title='$langDelete' /></a>";
+        }	// admin only
+        $tool_content .= "</td></tr>";$i++;
 } 	// end of while
 
 $tool_content .= "
-   </tbody>
    </table>";
 
 // navigation buttons
 // Do not show navigation buttons if less than 50 users
 if($countUser>=50) {
 	$tool_content .= "
-	<table width=\"99%\" >
+	<table width='99%' >
 	<tr>
-	<td valign=\"bottom\" align=\"left\" width=\"20%\">
-	<form method=\"post\" action=\"$_SERVER[PHP_SELF]?numbList=begin\">
-	<input type=\"submit\" value=\"$langBegin<<\" name=\"numbering\">
+	<td valign='bottom' align='left' width='20%'>
+	<form method='post' action='$_SERVER[PHP_SELF]?numbList=begin'>
+	<input type='submit' value='$langBegin<<' name='numbering'>
 	</form>
 	</td>
-	<td valign=\"bottom\" align=\"middle\" width=\"20%\">";
+	<td valign='bottom' align='middle' width='20%'>";
 	
 	if ($startList!=0) {
 		$tool_content .= "
-		<form method=post action=\"$_SERVER[PHP_SELF]?startList=$startList&numbList=less\">
-		<input type=\"submit\" value=\"$langPreced50<\" name=\"numbering\">
+		<form method=post action='$_SERVER[PHP_SELF]?startList=$startList&numbList=less'>
+		<input type='submit' value='$langPreced50<' name='numbering'>
 		</form>";
 	}
 	$tool_content .= "</td>
-	<td valign=\"bottom\" align=\"middle\" width=\"20%\">
-	<form method=post action=\"".$_SERVER['PHP_SELF']."?startList=$startList&numbList=all\">
-		<input type=submit value=\"".$langAll."\" name=\"numbering\">
+	<td valign='bottom' align='middle' width='20%'>
+	<form method=post action='".$_SERVER['PHP_SELF']."?startList=$startList&numbList=all'>
+		<input type=submit value='".$langAll."' name='numbering'>
 	</form>
 	</td>
-	<td valign=\"bottom\" align=\"middle\" width=\"20%\">";
+	<td valign='bottom' align='middle' width='20%'>";
 	if (!((( $countUser-$startList ) <= 50) OR ($endList == 2000))) {
-		$tool_content .= "<form method=\"post\" action=\"$_SERVER[PHP_SELF]?startList=$startList&numbList=more\">
-		<input type=\"submit\" value=\"$langFollow50>\" name=\"numbering\">
+		$tool_content .= "<form method='post' action='$_SERVER[PHP_SELF]?startList=$startList&numbList=more'>
+		<input type='submit' value='$langFollow50>' name='numbering'>
 		</form>";
 	}
 	$tool_content .= "</td>
-	<td valign=\"bottom\" align=\"right\" width=\"20%\">
-	<form method=\"post\" action=\"$_SERVER[PHP_SELF]?numbList=final\">
-	<input type=\"submit\" value=\"$langEnd>>\" name=\"numbering\">
+	<td valign='bottom' align='right' width='20%'>
+	<form method='post' action='$_SERVER[PHP_SELF]?numbList=final'>
+	<input type='submit' value='$langEnd>>' name='numbering'>
 	</form>
 	</td></tr></table>";
 }	// navigation buttons
-add_units_navigation(TRUE);
+
+add_units_navigation(true);
 draw($tool_content, 2, 'user', $head_content);
-?>
