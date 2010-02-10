@@ -438,6 +438,8 @@ body {
 	vertical-align: middle;
 	margin-top: 0px;
 	margin-right:0px;
+        width: 18px;
+        height: 18px;
 }
 
 #search input.key {
