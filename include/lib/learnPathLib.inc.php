@@ -211,11 +211,11 @@ function commentBox($type, $mode)
             if ( $is_adminOfCourse )
             {
                 $output .= '&nbsp;&nbsp;&nbsp;<a href="' . $_SERVER['PHP_SELF'] . '?cmd=update' . $col_name . '">' . "\n"
-                .    '<img src="../../template/classic/img/edit.gif" alt="' . $langModify . '" title="'.$langModify.'" border="0" />'
+                .    '<img src="../../template/classic/img/edit.gif" alt="' . $langModify . '" title="'.$langModify.'" />'
                 .    '</a>' . "\n"
                 .    '<a href="' . $_SERVER['PHP_SELF'].'?cmd=del' . $col_name . '" '
                 .    ' onclick="javascript:if(!confirm(\''.clean_str_for_javascript($langConfirmYourChoice).'\')) return false;">' . "\n"
-                .    '<img src="../../template/classic/img/delete.gif" alt="'.$langDelete.'" title="'.$langDelete.'" border="0" /></a>' . "\n"
+                .    '<img src="../../template/classic/img/delete.gif" alt="'.$langDelete.'" title="'.$langDelete.'" /></a>' . "\n"
                 ;
             }
         }
@@ -339,7 +339,7 @@ function nameBox($type, $mode, $formlabel = FALSE)
 
         if ( $is_adminOfCourse )
             $output .= '&nbsp;&nbsp;&nbsp;<a href="' . $_SERVER['PHP_SELF'] . '?cmd=updateName">'
-            .    '<img src="../../template/classic/img/edit.gif" alt="' . $langModify . '" title="' . $langModify . '" border="0" />'
+            .    '<img src="../../template/classic/img/edit.gif" alt="' . $langModify . '" title="' . $langModify . '" />'
             .    '</a>' . "\n";
         //$output .= '</strong>'."\n\n";
     }
@@ -519,7 +519,7 @@ function display_path_content()
 
             $contentType_alt = selectAlt($module['contentType']);
 
-            $output .= '<img src="' . $imgRepositoryWeb . $moduleImg . '" alt="' .$contentType_alt.'" title="' .$contentType_alt.'" border="0" />'
+            $output .= '<img src="' . $imgRepositoryWeb . $moduleImg . '" alt="' .$contentType_alt.'" title="' .$contentType_alt.'" />'
             .    $module['name']
             ;
         }
@@ -890,7 +890,7 @@ function display_my_documents($dialogBox, $style)
 
             $output .= '
     <tr align="center" ' . $style . '>
-      <td align="left" width="1"><img src="' . $imgRepositoryWeb . $image . '" border="0" hspace="5"></td>
+      <td align="left" width="1"><img src="' . $imgRepositoryWeb . $image . '" hspace="5" /></td>
       <td align="left"><a href="' . $urlFileName . '" ' . $style . '>'.$dspFileName.'</a></td>
       <td width="100"><small>' . $size . '</small></td>
       <td width="100"><small>' . $date . '</small></td>';
@@ -1615,19 +1615,19 @@ function disp_progress_bar ($progress, $factor)
 
     // display progress bar
     // origin of the bar
-    $progressBar = '<img src="../../template/classic/img/bar_1.gif" width="1" height="12" alt="">';
+    $progressBar = '<img src="../../template/classic/img/bar_1.gif" width="1" height="12" alt="" />';
 
     if($progress != 0)
-            $progressBar .= '<img src="../../template/classic/img/bar_1u.gif" width="' . $barwidth . '" height="12" alt="">';
+            $progressBar .= '<img src="../../template/classic/img/bar_1u.gif" width="' . $barwidth . '" height="12" alt="" />';
     // display 100% bar
 
     if($progress!= 100 && $progress != 0)
-            $progressBar .= '<img src="../../template/classic/img/bar_1m.gif" width="1" height="12" alt="">';
+            $progressBar .= '<img src="../../template/classic/img/bar_1m.gif" width="1" height="12" alt="" />';
 
     if($progress != 100)
-            $progressBar .= '<img src="../../template/classic/img/bar_1r.gif" width="' . ($maxSize - $barwidth) . '" height="12" alt="">';
+            $progressBar .= '<img src="../../template/classic/img/bar_1r.gif" width="' . ($maxSize - $barwidth) . '" height="12" alt="" />';
     // end of the bar
-    $progressBar .=  '<img src="../../template/classic/img/bar_1.gif" width="1" height="12" alt="">';
+    $progressBar .=  '<img src="../../template/classic/img/bar_1.gif" width="1" height="12" alt="" />';
 
     return $progressBar;
 }
