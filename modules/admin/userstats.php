@@ -62,7 +62,7 @@ if((!empty($u)) && ctype_digit($u))	// validate the user id
 
 	$sql = mysql_query("SELECT nom, prenom, username FROM user WHERE user_id = '$u'");
 	$sql = mysql_query("SELECT a.code, a.intitule, b.statut, a.cours_id
-		FROM cours AS a LEFT JOIN cours_user AS b ON a.code = b.code_cours
+		FROM cours AS a LEFT JOIN cours_user AS b ON a.cours_id = b.cours_id
 		WHERE b.user_id = '$u' ORDER BY b.statut, a.faculte");
 
 		// αν ο χρήστης συμμετέχει σε μαθήματα τότε παρουσίασε τη λίστα
@@ -142,7 +142,7 @@ if (!extension_loaded('gd')) {
 	$totalHits = 0;
 	require_once '../../include/libchart/libchart.php';
 	$sql = "SELECT a.code, a.intitule, b.statut, a.cours_id
-			FROM cours AS a LEFT JOIN cours_user AS b ON a.code = b.code_cours
+			FROM cours AS a LEFT JOIN cours_user AS b ON a.cours_id = b.cours_id
 			WHERE b.user_id = '$u' ORDER BY b.statut, a.faculte";
 	$result = db_query($sql);
 	if (mysql_num_rows($result) > 0) {

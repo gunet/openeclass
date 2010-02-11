@@ -227,7 +227,7 @@ if (isset($c)) {
 	$tool_content .= "
   <tr>
     <th rowspan=\"5\">&nbsp;</th>
-    <td><a href=\"listusers.php?c=".htmlspecialchars($c)."\">".$langListUsersActions."</a></td>
+    <td><a href=\"listusers.php?c=".course_code_to_id($c)."\">".$langListUsersActions."</a></td>
   </tr>";
   // Register unregister users
 	$tool_content .= "

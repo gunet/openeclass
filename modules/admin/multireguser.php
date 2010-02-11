@@ -237,10 +237,11 @@ function create_username($statut, $depid, $nom, $prenom, $prefix)
 function register($uid, $course_code)
 {
         $code = autoquote($course_code);
-        $req = db_query("SELECT code FROM cours WHERE code=$code OR fake_code=$code");
+        $req = db_query("SELECT code, cours_id FROM cours WHERE code=$code OR fake_code=$code");
         if ($req and mysql_num_rows($req) > 0) {
-                list($code) = mysql_fetch_row($req);
-                db_query("INSERT INTO cours_user SET code_cours='$code', user_id=$uid, statut=5, team=0, tutor=0, reg_date=NOW()");
+                list($code, $cid) = mysql_fetch_row($req);
+                db_query("INSERT INTO cours_user SET cours_id = $cid, user_id = $uid, statut = 5,
+                                                     team = 0, tutor = 0, reg_date = NOW()");
                 return true;
         }
         return false;

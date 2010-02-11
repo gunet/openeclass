@@ -65,7 +65,7 @@ $user_surname = $user_firstname = $user_username = $user_am = $user_type = $user
 // display link to inactive users
 $tool_content .= "<div id=\"operations_container\">
 <ul id=\"opslist\">
-<li><a href=\"listusers.php?c=4\">".$langInactiveUsers."</a></li>
+<li><a href=\"listusers.php?c=inactive\">".$langInactiveUsers."</a></li>
 </ul></div>";
 
 // display the search form

@@ -57,7 +57,7 @@ $u_realname = $u? uid_to_name($u): '';
 $u_statut = get_uid_statut($u);
 $t = 0;
 
-if (!$doit)) {
+if (!$doit) {
         $tool_content .= "<h4>$langConfirmDelete</h4><p>$langConfirmDeleteQuestion1 <em>$u_realname ($u_account)</em>";
         if($c) {
                 $tool_content .= " $langConfirmDeleteQuestion2 <em>".htmlspecialchars($c)."</em>";
@@ -214,7 +214,8 @@ if (!$doit)) {
                 }
 
         } elseif ($c and $u) {
-                $sql = db_query("DELETE from cours_user WHERE user_id = $u and code_cours='".mysql_real_escape_string($c)."'");
+                $sql = db_query("DELETE from cours_user WHERE user_id = $u AND
+                                        cours_id = (SELECT cours_id FROM cours WHERE code = ".quote($c).")");
                 if (mysql_affected_rows($conn) > 0) {
                         $tool_content .= "<p>$langUserWithId $u $langWasCourseDeleted $c.</p>\n";
                         $m = 1;

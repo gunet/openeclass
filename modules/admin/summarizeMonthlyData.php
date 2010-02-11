@@ -112,7 +112,7 @@ $langPleaseWait</div>
 		<th>".$langNbUsers."</th></tr>";
 
         $sql = "SELECT cours.intitule AS name, cours.visible as visible, cours.type as type, cours.faculte as dept, cours.titulaires as proff, count(user_id) AS cnt FROM cours LEFT JOIN cours_user ON ".
-            " cours.code = cours_user.code_cours GROUP BY code_cours ";
+            " cours.cours_id = cours_user.cours_id GROUP BY cours.cours_id ";
         $result = db_query($sql, $mysqlMainDb);
         while ($row = mysql_fetch_assoc($result)) {
             //declare course type

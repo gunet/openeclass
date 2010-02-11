@@ -55,15 +55,15 @@ $navigation[] = array("url" => "index.php", "name" => $langAdmin);
 $nameTools = $langListUsersActions;
 
 // initalize the incoming variables
-$search = isset($_GET['search'])?$_GET['search']:'';
-$c = isset($_GET['c'])?$_GET['c']:(isset($_POST['c'])?$_POST['c']:'');
+$search = isset($_GET['search'])? $_GET['search']: '';
+$c = isset($_GET['c'])? $_GET['c']: (isset($_POST['c'])? $_POST['c']: '');
 
 switch($c)	// get the case for each different listing
 {
 	case '': $view = 1; break; // normal listing
-	case '4': $view = 1; break; // normal listing. Display the inactive accounts
+	case 'inactive': $view = 1; break; // normal listing. Display the inactive accounts
 	case 'searchlist': $view = 2;	break; // search listing (search_user.php)
-	default: $view = 3; break; // list per course
+	default: $c = intval($c); $view = 3; break; // list per course
 }
 
 if($view == 2)	// coming from search_user.php(search with criteria)
@@ -243,7 +243,7 @@ else
 }
 
 
-if($c==4)
+if($c=='inactive')
 {
 	if($criteria!=0)
 	{
@@ -283,7 +283,7 @@ $caption ="";
 if($view == 3) { // users per course
 	$qry = "SELECT a.user_id, a.nom, a.prenom, a.username, a.email, b.statut
 		FROM user AS a LEFT JOIN cours_user AS b ON a.user_id = b.user_id
-		WHERE b.code_cours='".$c."'";
+		WHERE b.cours_id = $c";
 } else {
 	// Count users, with or without criteria/filters
 	$qry = "SELECT user_id,nom,prenom,username,email,statut FROM user";
@@ -324,7 +324,7 @@ if($sql)
 
 		if($countUser>0)
 		{
-			if($c==4)
+			if($c=='inactive')
 			{
 				$caption .= "&nbsp;$langAsInactive<br />";
 				$caption .= "<a href=\"updatetheinactive.php?activate=1\">".$langAddSixMonths."</a><br />";
@@ -444,7 +444,7 @@ if($sql)
 		if($view == 3) {
 			$qry = "SELECT a.user_id,a.nom, a.prenom, a.username, a.email, b.statut
 			FROM user AS a LEFT JOIN cours_user AS b ON a.user_id = b.user_id
-			WHERE b.code_cours='".$c."'";
+			WHERE b.cours_id=$c";
 		} else {
 			$qry = "SELECT user_id,nom,prenom,username,email,statut FROM user";
 			if((!empty($user_surname_qry)) || (!empty($user_firstname_qry))
@@ -553,7 +553,7 @@ $tool_content .= "<p align=\"right\"><a href=\"index.php\">$langBack</a></p>";
 function keep_var() {
 
 	$retstring = '';
-	if (isset($_REQUEST['c']) and $_REQUEST['c'] != 'searchlist' and $_REQUEST['c'] != 4) {
+	if (isset($_REQUEST['c']) and $_REQUEST['c'] != 'searchlist' and $_REQUEST['c'] != 'inactive') {
 			$c = $_REQUEST['c'];
 			$retstring .= "<input type = 'hidden' name='c' value='$c'>";
 	} else  {

@@ -252,10 +252,10 @@ switch ($stats) {
 		$tool_content .= "<table width='99%' align='center'><thead><tr>
 		<td><table width='100%' align='center' class='stateclass'>
 		<tr><th class='left' colspan='2'><b>$langUsersPerCourse</b></td>";
-		$result = db_query("SELECT code, intitule, titulaires FROM cours ORDER BY intitule");
+		$result = db_query("SELECT cours_id, code, intitule, titulaires FROM cours ORDER BY intitule");
 		while ($row = mysql_fetch_array($result)) {
 			$result_numb = db_query("SELECT user.user_id, cours_user.statut FROM cours_user, user
-				WHERE code_cours='$row[code]' AND cours_user.user_id = user.user_id", $mysqlMainDb);
+				WHERE cours_id = $row[cours_id] AND cours_user.user_id = user.user_id", $mysqlMainDb);
 			$teachers = $students = $visitors = 0;
 			while ($numrows = mysql_fetch_array($result_numb)) {
 				switch ($numrows['statut']) {
