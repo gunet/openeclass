@@ -59,35 +59,8 @@ $nameTools = $langSearchUser;
 // Main body
 $new = isset($_GET['new'])?$_GET['new']:'yes';	//variable of declaring a new search
 
-if((!empty($new)) && ($new=="yes")) {
-	// It is a new search, so unregister the search terms/filters in session variables
-	unset($_SESSION['user_surname']);
-	unset($_SESSION['user_firstname']);
-	unset($_SESSION['user_username']);
-	unset($_SESSION['user_am']);
-	unset($_SESSION['user_type']);
-	unset($_SESSION['user_registered_at_flag']);
-	unset($_SESSION['user_registered_at']);
-	unset($_SESSION['user_email']);
-	unset($user_surname);
-	unset($user_firstname);
-	unset($user_username);
-	unset($user_am);
-	unset($user_type);
-	unset($user_registered_at_flag);
-	unset($user_registered_at);
-	unset($user_email);
-}
-
 // initialize the variables
-$user_surname = isset($_SESSION['user_surname'])?$_SESSION['user_surname']:'';
-$user_firstname = isset($_SESSION['user_firstname'])?$_SESSION['user_firstname']:'';
-$user_username = isset($_SESSION['user_username'])?$_SESSION['user_username']:'';
-$user_am = isset($_SESSION['user_am'])?$_SESSION['user_am']:'';
-$user_type = isset($_SESSION['user_type'])?$_SESSION['user_type']:'5';
-$user_registered_at_flag = isset($_SESSION['user_registered_at_flag'])?$_SESSION['user_registered_at_flag']:'1';
-$user_registered_at = isset($_SESSION['user_registered_at'])?$_SESSION['user_registered_at']:time();
-$user_email = isset($_SESSION['user_email'])?$_SESSION['user_email']:'';
+$user_surname = $user_firstname = $user_username = $user_am = $user_type = $user_registered_at_flag = $user_registered_at = $user_email = '';
 
 // display link to inactive users
 $tool_content .= "<div id=\"operations_container\">
