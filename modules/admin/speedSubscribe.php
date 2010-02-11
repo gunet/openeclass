@@ -27,7 +27,6 @@
 
 /* ===========================================================================
 	speedSubscribe.php
-	@last update: 31-05-2006 by Pitsiougas Vagelis
 	@authors list: Karatzidis Stratos <kstratos@uom.gr>
 		       Pitsiougas Vagelis <vagpits@uom.gr>
 ==============================================================================
@@ -46,120 +45,86 @@
 
 ==============================================================================*/
 
-
 // Check if user is administrator and if yes continue
 // Othewise exit with appropriate message
 $require_admin = TRUE;
-// Include baseTheme
+
 include '../../include/baseTheme.php';
-// Define $nameTools
+
 $nameTools = $langSpeedSubscribe;
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
-// Initialise $tool_content
+
 $tool_content = "";
 
 /*****************************************************************************
 		MAIN BODY
 ******************************************************************************/
 // Register administrator to selected courses
-if (isset($submit) && $submit == "$langRegistration") {
-	// Constract a display table
-	$tool_content .= "
-  <table class=\"FormData\" width=\"99%\" align=\"left\">
-  <tbody>
-  <tr>
-    <th width=\"30\">&nbsp;</th>
-    <td>".$lang_subscribe_processing."</td>
-  </tr>";
-
-	$lesStatutDeCours["1"] = "Καθηγητής";
-	$lesStatutDeCours["5"] = "Φοιτητής";
+if (isset($_POST['submit'])) {
+        $courses = isset($_POST['course'])? $_POST['course']: array();
+        $old = isset($_POST['old'])? $_POST['old']: array();
 	// Register admin to courses selected
-	while (list($key,$contenu)= @each($course)) {
-		// Insert query
-		$sql = "INSERT INTO `cours_user` (code_cours, user_id, statut, reg_date)
-			VALUES ('$contenu', '$uid', '1', CURDATE())";
-		$res =mysql_query($sql);
-		// All OK
-		if ($res)
-			$tool_content .= "
-  <tr>
-    <td colspan=\"2>".$langSuccess."</td>
-  </tr>";
-		// Something went wrong
-		elseif (mysql_errno() == 1062)
-		{
-			$sql2 = "SELECT `statut` sCours FROM `cours_user`
-				WHERE `code_cours` = '$contenu' AND `user_id`= '$uid'";
-			$res2 =mysql_query($sql2);
-			$lelienUserCours = mysql_fetch_array($res2);
-			$tool_content .= "
-  <tr>
-    <td colspan=\"2\"><b>".$langAlreadySubscribe."</b> ".$langAs." ".$lesStatutDeCours[$lelienUserCours["sCours"]]."</td>
-  </tr>";
-		}
-	} // End while
-	// Close table correctly
-	$tool_content .= "
-  <tr>
-    <td><b>$langAlreadyBrowsed</b></td>
-  </tr>
-  </tbody>
-  </table>
-  <br /><br /><br /><br />";
+        foreach ($courses as $cid) {
+                $cid = intval($cid);
+               db_query("INSERT IGNORE INTO cours_user (cours_id, user_id, statut, reg_date)
+                                VALUES ($cid, $uid, '1', CURDATE())");
+               db_query("UPDATE cours_user SET statut = 1 WHERE cours_id = $cid AND user_id = $uid");
+	} 
+	// Unregister admin from unselected courses
+        foreach ($old as $cid) {
+                $cid = intval($cid);
+                if (!in_array($cid, $courses)) {
+                       db_query("DELETE FROM cours_user WHERE cours_id = $cid AND user_id = $uid");
+                }
+	} 
+	$tool_content .= "<p>$lang_subscribe_processing<br />$langSuccess</p>";
 }
 // Display list of courses
 $tool_content .= "
-<form name=\"speedSub\" action=\"".$_SERVER['PHP_SELF']."\" method=\"post\">";
+<form name='speedSub' action='".$_SERVER['PHP_SELF']."' method='post'>";
 // Select all courses
-$sql = "SELECT cours_faculte.faculte f, cours.code k, cours.fake_code c, cours.intitule i, cours.titulaires t
-		FROM cours_faculte, cours WHERE cours.code=cours_faculte.code
-		ORDER BY cours_faculte.faculte, cours.code";
+$q = db_query("SELECT cours.cours_id cid, faculte.name faculty, cours.code code,
+                      cours.intitule title, cours.titulaires profs,
+                      cours_user.statut statut
+               FROM cours LEFT JOIN faculte ON cours.faculteid = faculte.id
+                          LEFT JOIN cours_user ON cours_user.cours_id = cours.cours_id
+               GROUP BY cid
+               ORDER BY faculty, code");
 
-$result=mysql_query($sql);
+$prev_faculty = '';
 $firstfac = true;
-while ($mycours = mysql_fetch_array($result)) {
-	// Constract different table for every faculte
-	if($mycours['f'] != @$facOnce) {
+while ($mycours = mysql_fetch_array($q)) {
+	// Print header for each faculty
+	if ($mycours['faculty'] != $prev_faculty or $firstfac) {
+                $faculty = empty($mycours['faculty'])? '?': $mycours['faculty'];
 		if ($firstfac) {
-			$tool_content .= "<table class=\"FormData\" width=\"99%\"align=\"left\">
-			<tbody><tr><th>&nbsp;</th><th class=\"left\"><b>".$mycours['f']."</b></th></tr>";
+			$tool_content .= "<table class='FormData' width='100%' align='left'>";
 			$firstfac = false;
-		} else {
-			$tool_content .= "</tbody></table>
-			<br /><br /><br />
-			<table class=\"FormData\" width=\"99%\" align=\"left\">
-			<tbody><tr>
-			<th width=\"30\">&nbsp;</th>
-			<th class=\"left\"><b>".$mycours['f']."</b></th>
-			</tr>";
 		}
+                $tool_content .= "
+			<tr>
+			<th width='30'>&nbsp;</th>
+			<th class='left'><b>$faculty</b></th>
+			</tr>";
 	}
-	$facOnce=$mycours['f'];
-	if($mycours['k'] != @$codeOnce) {
-		$tool_content .= "<tr>
-	<th width=\"30\"><input type=checkbox name=course[] value=$mycours[k]></th>
-	<td><b>$mycours[i]</b> ($mycours[c]) <br />$mycours[t]</td>
+	$prev_faculty = $mycours['faculty'];
+        $check = ($mycours['statut'] == 1)? 'checked="1" ': '';
+        $old = $mycours['statut']? "<input type='hidden' name='old[]' value='$mycours[cid]' />": '';
+        $tool_content .= "<tr>
+	<th width='30'><input type='checkbox' name='course[]' value='$mycours[cid]' $check/>$old</th>
+	<td><b>$mycours[title]</b> ($mycours[code]) <br />$mycours[profs]</td>
 	</tr>";
-	}
-	$codeOnce=$mycours['k'];
 }
 if (!$firstfac) {
-	$tool_content .= "</tbody></table>";
+	$tool_content .= "
+  <tr>
+    <th width='30'>&nbsp;</th>
+    <td class='left'><input type='submit' name='submit' value='".$langRegistration."' /></td>
+  </tr>
+  </table> ";
 }
 
-$tool_content .= "<table class=\"FormData\" width=\"99%\" align=\"left\">
-  <tbody>
-  <tr>
-    <th width=\"30\">&nbsp;</th>
-    <td class=\"left\"><input type=\"submit\" name=\"submit\" value=\"".$langRegistration."\"></td>
-  </tr>
-  </tbody>
-  </table>
-
-</form>";
-// Display link to go back to index.php
-$tool_content .= "<br><p align=\"right\"><a href=\"index.php\">$langBack</a></p></center>";
+$tool_content .= "</form><br /><p align='right'><a href='index.php'>$langBack</a></p>";
 
 /*****************************************************************************
 		DISPLAY HTML
@@ -169,4 +134,3 @@ $tool_content .= "<br><p align=\"right\"><a href=\"index.php\">$langBack</a></p>
 // 3: display administrator menu
 // admin: use tool.css from admin folder
 draw($tool_content,3);
-?>
