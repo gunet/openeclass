@@ -73,11 +73,10 @@ function getUserLessonInfo($uid, $type)
 	                       user.user_id = $uid
                          ORDER BY cours.intitule, cours.titulaires";
 
+	$lesson_titles = $lesson_fakeCode = $lesson_id = $lesson_code = 
+                         $lesson_professor = $lesson_statut = array();
 	$mysql_query_result = db_query($user_courses, $mysqlMainDb);
 	$repeat_val = 0;
-	$lesson_titles = array();
-        $lesson_fakeCode = array();
-
 	//getting user's lesson info
 	while ($mycourses = mysql_fetch_array($mysql_query_result)) {
 		$lesson_id[$repeat_val] 	= $mycourses['cours_id'];
@@ -100,9 +99,9 @@ function getUserLessonInfo($uid, $type)
 	$max_repeat_val = $repeat_val;
 	$ret_val[0] = $max_repeat_val;
 	$ret_val[1] = $lesson_titles;
-	@$ret_val[2] = $lesson_code;
-	@$ret_val[3] = $lesson_professor;
-	@$ret_val[4] = $lesson_statut;
+	$ret_val[2] = $lesson_code;
+	$ret_val[3] = $lesson_professor;
+	$ret_val[4] = $lesson_statut;
 	$ret_val[5] = $lesson_announce_f;
 	$ret_val[6] = $lesson_doc_f;
 	$ret_val[7] = $lesson_forum_f;

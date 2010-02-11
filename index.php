@@ -231,4 +231,3 @@ elseif ((isset($logout) && isset($uid)) OR (1==1)) {
 	include "include/logged_out_content.php";
 	draw($tool_content, 0,'index');
 } // end of display
-?>

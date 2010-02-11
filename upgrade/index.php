@@ -1,4 +1,4 @@
-<?
+<?php
 /*========================================================================
 *   Open eClass 2.1
 *   E-learning and Course Management System
@@ -87,4 +87,3 @@ if (isset($from_admin)) {
         $tool_content .= "&nbsp;";
 }
 draw($tool_content, 0);
-?>

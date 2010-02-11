@@ -592,5 +592,3 @@ function lessonToolsMenu(){
 
 	return $sideMenuGroup;
 }
-
-?>

@@ -1,4 +1,4 @@
-<? session_start();
+<?php session_start();
 header('Content-Type: text/html; charset=UTF-8');
 /*========================================================================
 *   Open eClass 2.1
@@ -745,4 +745,3 @@ elseif (isset($_REQUEST['install1']) || isset($_REQUEST['back1']))
 	</html>";
 	echo $tool_content;
 }
-?>
