@@ -229,7 +229,7 @@ if (isset($submit) && $submit) {
 		$tool_content .= "<form action='$_SERVER[PHP_SELF]' method='post'>
 		<table align='left' width='99%'>
 		<tr><td>
-		<table width='100%'><tr><td>$langPrivate</td></tr>
+		<table width='100%'><tr><td>$langPrivateNotice</td></tr>
 		<tr><td>&nbsp;</td></tr>
 		<tr>
 		<td>

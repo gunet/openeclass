@@ -25,7 +25,7 @@
 * =========================================================================*/
 
 
-/**===========================================================================
+/*===========================================================================
 	statuscours.php
 	@last update: 31-05-2006 by Pitsiougas Vagelis
 	@authors list: Karatzidis Stratos <kstratos@uom.gr>
@@ -48,14 +48,12 @@
 
 ==============================================================================*/
 
-/*****************************************************************************
-		DEAL WITH  BASETHEME, OTHER INCLUDES AND NAMETOOLS
-******************************************************************************/
+
 // Check if user is administrator and if yes continue
 // Othewise exit with appropriate message
 $require_admin = TRUE;
-// Include baseTheme
 include '../../include/baseTheme.php';
+
 if(!isset($_GET['c'])) { die(); }
 // Define $nameTools
 $nameTools = $langCourseStatus;
@@ -96,35 +94,30 @@ else {
 	$visible = $row['visible'];
 	$visibleChecked[$visible]="checked";
 	// Constract edit form
-	$tool_content .= "
-<form action=".$_SERVER['PHP_SELF']."?c=".htmlspecialchars($_GET['c'])."".$searchurl." method=\"post\">
-  <table class=\"FormData\" width=\"99%\" align=\"left\">
-  <tbody>
-  <tr>
-    <th width=\"220\">&nbsp;</th>
-    <td colspan=\"2\"><b>".$langCourseStatusChange."<b></td>
-  </tr>";
-	$tool_content .= "
-  <tr>
-    <th class=\"left\" rowspan=\"3\">$langConfTip</th>
-    <td width=\"1\"><input type=\"radio\" name=\"formvisible\" value=\"2\"".@$visibleChecked[2]."></td>
-    <td>".$langPublic."</td>
-  </tr>
-  <tr>
-    <td><input type=\"radio\" name=\"formvisible\" value=\"1\"".@$visibleChecked[1]."></td>
-    <td>".$langPrivOpen."</td>
-  </tr>
-  <tr>
-    <td><input type=\"radio\" name=\"formvisible\" value=\"0\"".@$visibleChecked[0]."></td>
-    <td>".$langPrivate."</td>
-  </tr>
-  <tr>
-    <th>&nbsp;</th>
-    <td colspan=\"2\"><input type='submit' name='submit' value='$langModify'></td>
-  </tr>
-  </tbody>
-  </table>
-</form>\n";
+	$tool_content .= "<form action=".$_SERVER['PHP_SELF']."?c=".htmlspecialchars($_GET['c'])."".$searchurl." method=\"post\">
+	<table class=\"FormData\" width=\"99%\" align=\"left\">
+	<tbody>
+	<tr><th width=\"220\">&nbsp;</th>
+	<td colspan=\"2\"><b>".$langCourseStatusChange."<b></td></tr>";
+	
+	$tool_content .= "<tr><th class=\"left\" rowspan=\"3\">$langConfTip</th>
+	<td width=\"1\"><input type=\"radio\" name=\"formvisible\" value=\"2\"".@$visibleChecked[2]."></td>
+	<td>".$langPublic."</td>
+	</tr>
+	<tr>
+	<td><input type=\"radio\" name=\"formvisible\" value=\"1\"".@$visibleChecked[1]."></td>
+	<td>".$langPrivOpen."</td>
+	</tr>
+	<tr>
+	<td><input type=\"radio\" name=\"formvisible\" value=\"0\"".@$visibleChecked[0]."></td>
+	<td>".$langPrivate."</td>
+	</tr>
+	<tr>
+	<th>&nbsp;</th>
+	<td colspan=\"2\"><input type='submit' name='submit' value='$langModify'></td>
+	</tr>
+	</tbody></table>
+	</form>";
 }
 // If course selected go back to editcours.php
 if (isset($_GET['c'])) {

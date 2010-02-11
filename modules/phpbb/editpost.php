@@ -246,7 +246,7 @@ if ($is_adminOfCourse) { // course admin
 			// Private forum, no valid session, and login form not submitted...
 			$tool_content .= "<FORM ACTION=\"$_SERVER[PHP_SELF]\" METHOD=\"POST\">
 			<TABLE WIDTH=\"99%\">
-			<TR><TD>$langPrivate</TD></TR>
+			<TR><TD>$langPrivateNotice</TD></TR>
 			<TR><TD>
 			<TABLE WIDTH=\"99%\">
 			<TR>
