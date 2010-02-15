@@ -51,8 +51,8 @@ if (!isset($doit) or $doit != "yes") {
       </td>
     </tr>
     <tr>
-      <th rowspan='2' class='left' width='30%'>$l_confirm :</th>
-      <td><a href='$_SERVER[PHP_SELF]?u=$uid&cid=$cid&doit=yes' class=mainpage>$langYes</a></td>
+      <th rowspan='2' class='left' width='30%'>$langConfirm :</th>
+      <td><a href='$_SERVER[PHP_SELF]?u=$uid&amp;cid=$cid&amp;doit=yes' class=mainpage>$langYes</a></td>
       <td align=\"left\" width='60%'><small>$langUnCourse</small></td>
     </tr>
     <tr>
@@ -68,7 +68,7 @@ if (isset($uid) and $uid==$_SESSION['uid']) {
             //$tool_content .= "<br><tr valign=top>";
             //$tool_content .= "<td align=center valign=top class=td_main>";
             //$tool_content .= "<span class='labeltext'>";
-            db_query("DELETE from cours_user WHERE code_cours='$cid' and user_id='$uid'");
+            db_query("DELETE from cours_user WHERE cours_id = (SELECT cours_id FROM cours WHERE code = " . quote($cid) . ") AND user_id='$uid'");
                 if (mysql_affected_rows() > 0) {
                         $tool_content .= "<p class='success_small'>$langCoursDelSuccess</p>";
                 } else {

@@ -127,16 +127,16 @@ draw($tool_content, 2, 'course_info');
 
 
 function delete_users() {
-	global $currentCourseID,$langUsersDeleted;
+	global $cours_id, $langUsersDeleted;
 
-	db_query("DELETE FROM cours_user WHERE code_cours='$currentCourseID' and statut <> '1'");
+	db_query("DELETE FROM cours_user WHERE cours_id = $cours_id and statut <> '1'");
 	return "<p>$langUsersDeleted</p>";
 }
 
 function delete_announcements() {
-	global $currentCourseID,$langAnnDeleted;
+	global $cours_id, $langAnnDeleted;
 
-	db_query("DELETE FROM annonces WHERE code_cours='$currentCourseID'");
+	db_query("DELETE FROM annonces WHERE cours_id = $cours_id");
 	return "<p>$langAnnDeleted</p>";
 }
 

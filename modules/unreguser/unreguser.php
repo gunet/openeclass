@@ -43,7 +43,7 @@ if (!isset($doit) or $doit != "yes") {
 		draw($tool_content,1);
 		exit;
 	} else {
-		$q = db_query ("SELECT code_cours FROM cours_user WHERE user_id = '$uid'") ;
+		$q = db_query ("SELECT code FROM cours, cours_user WHERE cours.cours_id = cours_user.cours_id AND user_id = '$uid' LIMIT 1") ;
 		if (mysql_num_rows($q) == 0) {
 			$tool_content .=  "<p><b>$langConfirm</b></p>";
 			$tool_content .=  "<ul class=\"listBullet\">";

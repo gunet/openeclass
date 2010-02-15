@@ -52,7 +52,7 @@ if (isset($uid))
  	$query = db_query("SELECT cours.code k, cours.fake_code fc,
 		cours.intitule i, cours.titulaires t
 	                        FROM cours, cours_user
-	                        WHERE cours.code = cours_user.code_cours
+	                        WHERE cours.cours_id = cours_user.cours_id
 	                        AND cours_user.user_id = '$uid'");
 	@$year = $_GET['year'];
 	@$month = $_GET['month'];

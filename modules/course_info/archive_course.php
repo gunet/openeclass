@@ -136,30 +136,29 @@ function copydir($origine, $destination) {
 
 
 
-// adia function
 function create_backup_file($file) {
-	global $currentCourseID, $mysqlMainDb;
+	global $currentCourseID, $cours_id, $mysqlMainDb;
 
 	$f = fopen($file,"w");
 	if (!$f) {
 		die("Error! Unable to open output file: '$f'\n");
 	}
 	list($ver) = mysql_fetch_array(db_query("SELECT `value` FROM `$mysqlMainDb`.config WHERE `key`='version'"));
-	fputs($f, "<?\n\$eclass_version=$ver;\n\$version = 2;\n\$encoding = 'UTF-8';\n");
+	fputs($f, "<?\n\$eclass_version = '$ver';\n\$version = 2;\n\$encoding = 'UTF-8';\n");
 	backup_course_details($f, $currentCourseID);
-	backup_annonces($f, $currentCourseID);
+	backup_annonces($f, $cours_id);
 	backup_course_units($f);
-	backup_users($f, $currentCourseID);
+	backup_users($f, $cours_id);
 	backup_course_db($f, $currentCourseID);
 	fputs($f, "?>\n");
 	fclose($f);
 }
 
-function backup_annonces($f, $course) {
+function backup_annonces($f, $cours_id) {
 	global $mysqlMainDb;
 
 	$res = mysql_query("SELECT * FROM `$mysqlMainDb`.annonces
-				    WHERE code_cours = '$course'");
+				    WHERE cours_id = $cours_id");
 	while($q = mysql_fetch_array($res)) {
 		fputs($f, "announcement(".
 			quote($q['contenu']).",\n".
@@ -265,13 +264,13 @@ function backup_dropbox_post($f) {
 }
 
 
-function backup_users($f, $course) {
+function backup_users($f, $cours_id) {
 	global $mysqlMainDb;
 
 	$res = mysql_query("SELECT user.*, cours_user.statut as cours_statut
 		FROM `$mysqlMainDb`.user, `$mysqlMainDb`.cours_user
 		WHERE user.user_id=cours_user.user_id
-		AND cours_user.code_cours='$course'");
+		AND cours_user.cours_id = $cours_id");
 	while($q = mysql_fetch_array($res)) {
 		fputs($f, "user(".
 			quote($q['user_id']).", ".

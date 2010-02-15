@@ -192,9 +192,9 @@ while ($myStudentGroup = mysql_fetch_array($groupSelect))
                 $tool_content_tutor = '<select name="tutor" class="FormData_InputText">';
                 $resultTutor=db_query("SELECT user.user_id, user.nom, user.prenom, user.username
                         FROM `$mysqlMainDb`.user, `$mysqlMainDb`.cours_user
-                                WHERE cours_user.user_id=user.user_id
-                                AND cours_user.tutor='1'
-                                AND cours_user.code_cours='$currentCourse'
+                                WHERE cours_user.user_id = user.user_id
+                                AND cours_user.tutor = 1
+                                AND cours_user.cours_id = $cours_id
                         ORDER BY nom, prenom, username");
                 $none_selected = 'selected="1"';
                 while ($myTutor = mysql_fetch_array($resultTutor)) {
@@ -234,42 +234,40 @@ while ($myStudentGroup = mysql_fetch_array($groupSelect))
 $sqll= "SELECT DISTINCT u.user_id , u.nom, u.prenom
 			FROM (`$mysqlMainDb`.user u, `$mysqlMainDb`.cours_user cu)
 			LEFT JOIN user_group ug
-			ON u.user_id=ug.user
+			ON u.user_id = ug.user
 			WHERE ug.id IS null
-			AND cu.code_cours='$currentCourse'
-			AND cu.user_id=u.user_id
-			AND cu.statut=5
-			AND cu.tutor=0 ORDER BY u.nom, u.prenom";
+			AND cu.cours_id = $cours_id
+			AND cu.user_id = u.user_id
+			AND cu.statut = 5
+			AND cu.tutor = 0 ORDER BY u.nom, u.prenom";
 
-$tool_content_not_Member="";
-$resultNotMember=db_query($sqll, $currentCourseID);
+$tool_content_not_Member = '';
+$resultNotMember = db_query($sqll, $currentCourseID);
 while ($myNotMember = mysql_fetch_array($resultNotMember)) {
 	$tool_content_not_Member .= "<option value='$myNotMember[user_id]'>$myNotMember[nom] $myNotMember[prenom]</option>";
 }
 
-$resultMember=db_query("SELECT user_group.id, user.user_id, user.nom, user.prenom, user.email
+$resultMember = db_query("SELECT user_group.id, user.user_id, user.nom, user.prenom, user.email
 	FROM `$mysqlMainDb`.user, user_group
 	WHERE user_group.team='$userGroupId' AND user_group.user=$mysqlMainDb.user.user_id");
 
-$a=0;
-$tool_content_group_members = "";
-while ($myMember = mysql_fetch_array($resultMember))
-	{
+$a = 0;
+$tool_content_group_members = '';
+while ($myMember = mysql_fetch_array($resultMember)) {
 	$userIngroupId=$myMember['user_id'];
- 	$tool_content_group_members .=  "<option value='$userIngroupId'>$myMember[nom] $myMember[prenom]</option>";
+ 	$tool_content_group_members .= "<option value='$userIngroupId'>$myMember[nom] $myMember[prenom]</option>";
 	$a++;
 }
 
-	if (isset($message)) {
-		$tool_content .= "
-        <p class=\"success_small\">$message</p>
-        <p>&nbsp;</p>";
-	}
-		$tool_content .= "
+if (isset($message)) {
+        $tool_content .= "<p class='success_small'>$message</p><p>&nbsp;</p>";
+}
+
+$tool_content .= "
     <div id='operations_container'>
       <ul id='opslist'>
         <li><a href='group_space.php?userGroupId=$userGroupId'>$langGroupThisSpace</a></li>" .
-        ($is_adminOfCourse? "<li><a href='../user/user.php'>$langAddTutors</a></li>": '') . "</ul></div>";
+                ($is_adminOfCourse? "<li><a href='../user/user.php'>$langAddTutors</a></li>": '') . "</ul></div>";
 
 
 $tool_content .="

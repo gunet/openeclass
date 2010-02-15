@@ -36,9 +36,9 @@ if($is_adminOfCourse) {
 		mysql_select_db("$mysqlMainDb",$db);
 		mysql_query("DROP DATABASE `$currentCourseID`");
 		mysql_query("DELETE FROM `$mysqlMainDb`.cours WHERE code='$currentCourseID'");
-		mysql_query("DELETE FROM `$mysqlMainDb`.cours_user WHERE code_cours='$currentCourseID'");
+		mysql_query("DELETE FROM `$mysqlMainDb`.cours_user WHERE cours_id='$cours_id'");
 		mysql_query("DELETE FROM `$mysqlMainDb`.cours_faculte WHERE code='$currentCourseID'");
-		mysql_query("DELETE FROM `$mysqlMainDb`.annonces WHERE code_cours='$currentCourseID'");
+		mysql_query("DELETE FROM `$mysqlMainDb`.annonces WHERE cours_id='$cours_id'");
 		##[BEGIN personalisation modification]############
 		mysql_query("DELETE FROM `$mysqlMainDb`.agenda WHERE lesson_code='$currentCourseID'");
 		##[END personalisation modification]############

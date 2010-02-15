@@ -43,11 +43,12 @@ $nameTools = $langMyAnnouncements;
 $tool_content = "";
 $result = db_query("SELECT annonces.id, annonces.title, annonces.contenu,
                         DATE_FORMAT(temps, '%e-%c-%Y') AS temps,
-                         cours_user.code_cours,
+                         cours.fake_code,
                          annonces.ordre
-                        FROM annonces,cours_user
-                        WHERE annonces.code_cours=cours_user.code_cours
-                        AND cours_user.user_id='$uid'
+                        FROM annonces, cours_user, cours
+                        WHERE annonces.cours_id = cours_user.cours_id AND
+                              cours_user.cours_id = cours.cours_id AND
+                              cours_user.user_id = $uid
                         ORDER BY annonces.temps DESC", $mysqlMainDb);
 
 	$tool_content .= "
@@ -70,7 +71,7 @@ $result = db_query("SELECT annonces.id, annonces.title, annonces.contenu,
                 $content = nl2br($content);
 		$content = mathfilter($content, 12, "../../include/phpmathpublisher/img/");
                 $row = mysql_fetch_array(db_query("SELECT intitule,titulaires FROM cours
-			WHERE code='$myrow[code_cours]'"));
+			WHERE code='$myrow[fake_code]'"));
                 $tool_content .= "
       <tr>
         <td width='3'><img class=\"displayed\" src=../../template/classic/img/announcements_on.gif border=0 title=\"" . $myrow["title"] . "\"></td>

@@ -64,11 +64,11 @@ if (isset($send_archive) and $_FILES['archiveZipped']['size'] > 0) {
 	}
 } elseif (isset($create_dir_for_course)) {
 	$r = $restoreThis."/html";
-	$course_code = create_course($course_code, $course_lang, $course_title,
+	list($new_course_code, $new_course_id) = create_course($course_code, $course_lang, $course_title,
 		$course_desc, intval($course_fac), $course_vis, $course_prof, $course_type);
-	move_dir($r, "$webDir/courses/$course_code");
-	course_index("$webDir/courses/$course_code", $course_code);
-	$tool_content .= "<p>$langCopyFiles $webDir/courses/$course_code</p><br><p>";
+	move_dir($r, "$webDir/courses/$new_course_code");
+	course_index("$webDir/courses/$new_course_code", $new_course_code);
+	$tool_content .= "<p>$langCopyFiles $webDir/courses/$new_course_code</p><br><p>";
 	$action = 1;
 	$userid_map = array();
 	// now we include the file for restoring
@@ -77,11 +77,11 @@ if (isset($send_archive) and $_FILES['archiveZipped']['size'] > 0) {
 	if ($encoding != 'UTF-8') {
 		db_query('SET NAMES greek');
 	}
-	if (!isset($eclass_version) or $eclass_version != '2.2') { // if we come from older versions 
-		if ($version == 2) { // if we come from 2.1.3 
-			upgrade_course_2_2($course_code, $course_lang);
+	if (!isset($eclass_version) or $eclass_version < ECLASS_VERSION) { // if we come from older versions 
+		if ($version < '2.2') { // if we come from 2.1.x
+			upgrade_course_2_2($new_course_code, $course_lang);
 		} else {
-			upgrade_course($course_code, $course_lang);
+			upgrade_course($new_course_code, $course_lang);
 		}
 	}
 	$tool_content .= ob_get_contents();
@@ -201,27 +201,26 @@ function course_details ($code, $lang, $title, $desc, $fac, $vis, $prof, $type) 
 }
 
 // inserting announcements into the main database
-function announcement ($text, $date, $order, $title = '') {
-	global $action, $course_code, $mysqlMainDb;
+function announcement($text, $date, $order, $title = '') {
+	global $action, $new_course_id, $mysqlMainDb;
 	if (!$action) return;
 	db_query("INSERT into `$mysqlMainDb`.annonces
-		(title, contenu, temps, code_cours, ordre)
+		(title, contenu, temps, cours_id, ordre)
 		VALUES (".
 		join(", ", array(
 			quote($title),
 			quote($text),
 			quote($date),
-			quote($course_code),
+			$new_course_id,
 			quote($order))).
 			")");
 }
 
 // insert course units into the main database
 function course_units($title, $comments, $visibility, $order, $resource_units) {
-	global $action, $course_code, $mysqlMainDb;
+	global $action, $new_course_id, $mysqlMainDb;
 	
 	if (!$action) return;
-	$cid = course_code_to_id($course_code);
 	
 	db_query("INSERT into `$mysqlMainDb`.course_units
 		(title, comments, visibility, `order`, course_id)
@@ -231,7 +230,7 @@ function course_units($title, $comments, $visibility, $order, $resource_units) {
 			quote($comments),
 			quote($visibility),
 			quote($order),
-			quote($cid))).
+			$new_course_id)).
 			")");
 	$unit_id = mysql_insert_id();
 	foreach ($resource_units as $key => $units_array) {
@@ -242,8 +241,8 @@ function course_units($title, $comments, $visibility, $order, $resource_units) {
 
 
 // inserting users into the main database
-function user ($userid, $name, $surname, $login, $password, $email, $statut, $phone, $department, $registered_at = NULL, $expires_at = NULL, $inst_id = NULL) {
-	global $action, $course_code, $userid_map, $mysqlMainDb, $course_prefix, $course_addusers, $durationAccount, $version, $encoding;
+function user($userid, $name, $surname, $login, $password, $email, $statut, $phone, $department, $registered_at = NULL, $expires_at = NULL, $inst_id = NULL) {
+	global $action, $new_course_code, $new_course_id, $userid_map, $mysqlMainDb, $course_prefix, $course_addusers, $durationAccount, $version, $encoding;
 	global $langUserWith, $langAlready, $langWithUsername, $langUserisAdmin, $langUsernameSame, $langUserAlready, $langUName, $langPrevId, $langNewId, $langUserName;
 
 	if ($encoding != 'UTF-8') {
@@ -271,7 +270,7 @@ function user ($userid, $name, $surname, $login, $password, $email, $statut, $ph
 			echo "<br>$langWithUsername $login $langUserisAdmin".
 				" - $langUsernameSame";
 		} else {
-			$login = $course_code.'_'.$login;
+			$login = $new_course_code.'_'.$login;
 		}
 	}
 
@@ -305,20 +304,15 @@ function user ($userid, $name, $surname, $login, $password, $email, $statut, $ph
 	}
 
 	db_query("INSERT into `$mysqlMainDb`.cours_user
-		(code_cours,user_id,statut)
-		VALUES (".
-		join(", ", array(
-			quote($course_code),
-			quote($userid_map[$userid]),
-			quote($statut))).
-			")");
+		(cours_id, user_id, statut)
+		VALUES ($new_course_id, $userid_map[$userid], $statut)");
 	echo "<br> $langUserName=$login, $langPrevId=$userid, $langNewId=$userid_map[$userid]\n";
 }
 
 function query($sql) {
-	global $action, $course_code, $encoding;
+	global $action, $new_course_code, $encoding;
 	if (!$action) return;
-	mysql_select_db($course_code);
+	mysql_select_db($new_course_code);
 	if ($encoding != 'UTF-8') {
 		if (!iconv($encoding, 'UTF-8', $sql)) {
 			die($sql);
@@ -328,12 +322,12 @@ function query($sql) {
 }
 
 // function for inserting info about user group
-function group( $userid, $team, $status, $role) {
-	global $action, $userid_map, $course_code, $course_addusers;
+function group($userid, $team, $status, $role) {
+	global $action, $userid_map, $new_course_code, $course_addusers;
 	if (!$action or !$course_addusers or !isset($userid_map[$userid])) {
 		return;
 	}
-	mysql_select_db($course_code);
+	mysql_select_db($new_course_code);
 	db_query("INSERT into user_group
 		(user,team,status,role)
 		VALUES (".
@@ -348,10 +342,10 @@ function group( $userid, $team, $status, $role) {
 
 // functions for inserting info about dropbox
 function dropbox_file($userid, $filename, $filesize, $title, $description, $author, $uploadDate, $lastUploadDate) {
-	global $action,$userid_map, $course_code, $course_addusers;
+	global $action,$userid_map, $new_course_code, $course_addusers;
 	if (!$action) return;
 	if (!$course_addusers) return;
-	mysql_select_db($course_code);
+	mysql_select_db($new_course_code);
 	db_query("INSERT into dropbox_file
 		(uploaderId,filename,filesize,title,description,author,uploadDate,lastUploadDate)
 		VALUES (".
@@ -368,7 +362,7 @@ function dropbox_file($userid, $filename, $filesize, $title, $description, $auth
 }
 
 function dropbox_person($fileId, $personId) {
-	global $action, $userid_map, $course_code, $course_addusers;
+	global $action, $userid_map, $new_course_code, $course_addusers;
 	if (!$action) return;
 	if (!$course_addusers) return;
 	mysql_select_db($course_code);
@@ -381,10 +375,10 @@ function dropbox_person($fileId, $personId) {
 }
 
 function dropbox_post($fileId, $recipientId) {
-	global $action, $userid_map, $course_code, $course_addusers;
+	global $action, $userid_map, $new_course_code, $course_addusers;
 	if (!$action) return;
 	if (!$course_addusers) return;
-	mysql_select_db($course_code);
+	mysql_select_db($new_course_code);
 	db_query("INSERT into dropbox_post (fileId, recipientId)
 		VALUES (".
 		join(", ", array(
@@ -399,10 +393,10 @@ function assignment_submit($userid, $assignment_id, $submission_date,
 	$grade, $grade_comments, $grade_submission_date,
 	$grade_submission_ip)
 {
-	global $action, $userid_map, $course_code, $course_addusers;
+	global $action, $userid_map, $new_course_code, $course_addusers;
 	if (!$action) return;
 	if (!$course_addusers) return;
-	mysql_select_db($course_code);
+	mysql_select_db($new_course_code);
 	$values = array();
 	foreach (array($assignment_id, $submission_date,
 		$submission_ip, $file_path, $file_name, $comments,
@@ -443,6 +437,7 @@ function create_course($code, $lang, $title, $desc, $fac, $vis, $prof, $type) {
 			quote($code),
 			quote($type))).
 		")");
+        $cid = mysql_insert_id();
 	db_query("INSERT into `$mysqlMainDb`.cours_faculte
 		(faculte,code)
 		VALUES($fac,".quote($repertoire).")");
@@ -451,7 +446,7 @@ function create_course($code, $lang, $title, $desc, $fac, $vis, $prof, $type) {
 		echo "Database $repertoire creation failure ";
 		exit;
 	}
-	return $repertoire;
+	return array($repertoire, $cid);
 }
 
 // crating course index.php file
@@ -490,11 +485,11 @@ return $ret;
 // form select about type
 function type_select($current)
 {
-	global $langPre, $langPost, $langOther;
+	global $langpre, $langpost, $langother;
 
 	$ret = "";
 	$ret .= "<select name=\"course_type\">\n";
-	foreach (array($langPre => 'pre', $langPost => 'post', $langOther => 'other') as $text => $type) {
+	foreach (array($langpre => 'pre', $langpost => 'post', $langother => 'other') as $text => $type) {
 		if($type == $current) {
 			$ret .= "<option value=\"$type\" selected>$text</option>\n";
 		} else {

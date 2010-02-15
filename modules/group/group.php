@@ -189,7 +189,7 @@ elseif (isset($_REQUEST['fill']) && $is_adminOfCourse) {
 	}
 	$sqlUserSansGroupe= "SELECT cu.user_id FROM `$mysqlMainDb`.cours_user cu
 			LEFT JOIN `$currentCourse`.user_group ug on ug.user = cu.user_id
-			WHERE cu.code_cours='$currentCourse'
+			WHERE cu.cours_id = $cours_id
 			AND cu.statut=5 AND ug.user is null AND cu.tutor=0";
 	$resUserSansGroupe= db_query($sqlUserSansGroupe);
 	while (isset($placeAvailableInGroups) and is_array($placeAvailableInGroups) and (!empty($placeAvailableInGroups)) and list($idUser) = mysql_fetch_array($resUserSansGroupe))
@@ -224,7 +224,7 @@ elseif (isset($_REQUEST['fill']) && $is_adminOfCourse) {
 
 // Determine if uid is tutor for this course
 $sqlTutor=db_query("SELECT tutor FROM `$mysqlMainDb`.cours_user
-		WHERE user_id='$uid' AND code_cours='$currentCourse'");
+		WHERE user_id = $uid AND cours_id = $cours_id");
 while ($myTutor = mysql_fetch_array($sqlTutor)) {
 	$tutorCheck=$myTutor['tutor'];
 }
@@ -361,8 +361,7 @@ if ($is_adminOfCourse) {
 	}	// while loop
 
 	$coursUsersSelect=db_query("SELECT user_id FROM cours_user
-		WHERE code_cours='$currentCourse'
-		AND statut=5 AND tutor=0", $mysqlMainDb);
+		WHERE cours_id = $cours_id AND statut = 5 AND tutor = 0", $mysqlMainDb);
 	$countUsers = mysql_num_rows($coursUsersSelect);
 	$countNoGroup=($countUsers-$totalRegistered);
 	$tool_content .= "</tbody></table><p>&nbsp;</p>";
