@@ -92,6 +92,7 @@ $dropbox_cnf["courseUserTbl"] = "cours_user";
  * --------------------------------------
  */
 $dropbox_cnf["courseId"] = $currentCourseID;
+$dropbox_cnf["cid"] = $cours_id;
 $dropbox_cnf["sysPath"] = $webDir."courses/".$currentCourseID."/dropbox"; //path to dropbox subdir in course containing the uploaded files
 if (!is_dir($dropbox_cnf["sysPath"])) {
 	mkdir($dropbox_cnf["sysPath"]);
@@ -162,7 +163,7 @@ function isCourseMember($id)
     global $dropbox_cnf, $dropbox_lang, $mysqlMainDb;
 
     $sql = "SELECT * FROM `" . $dropbox_cnf["courseUserTbl"] . "`
-		WHERE user_id = '" . addslashes( $id) . "' AND code_cours = '" . $dropbox_cnf["courseId"] . "'";
+		WHERE user_id = '" . addslashes( $id) . "' AND cours_id = '" . $dropbox_cnf["cid"] . "'";
     $result = db_query($sql, $mysqlMainDb); 
     if (mysql_num_rows($result) == 1)
     {

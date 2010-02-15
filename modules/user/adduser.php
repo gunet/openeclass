@@ -42,8 +42,8 @@ if($is_adminOfCourse) {
 
 if (isset($add)) {
 	mysql_select_db($mysqlMainDb);
-	$result = db_query("INSERT INTO cours_user (user_id, code_cours, statut, reg_date) ".
-		"VALUES ('".mysql_escape_string($add)."', '$currentCourseID', ".
+	$result = db_query("INSERT INTO cours_user (user_id, cours_id, statut, reg_date) ".
+		"VALUES ('".mysql_escape_string($add)."', $cours_id, ".
 		"'5', CURDATE())");
 
 		$tool_content .= "<p class=\"success_small\">";
@@ -108,7 +108,7 @@ tCont;
 	$query = join(' AND ', $search);
 	if (!empty($query)) {
 			db_query("CREATE TEMPORARY TABLE lala AS
-			SELECT user_id FROM cours_user WHERE code_cours='$currentCourseID'
+			SELECT user_id FROM cours_user WHERE cours_id = $cours_id
 			");
 			$result = db_query("SELECT u.user_id, u.nom, u.prenom, u.username FROM
 			user u LEFT JOIN lala c ON u.user_id = c.user_id WHERE
