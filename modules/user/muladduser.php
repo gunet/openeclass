@@ -98,7 +98,7 @@ tCont3;
 			$tool_content .= "<tr><td colspan=\"2\">$langFileNotAllowed</td></tr>\n";
 			break;
 		}
-		$result=adduser($uname,$currentCourseID);
+		$result = adduser($uname, $cours_id);
 		$tool_content .= "<tr><td align=center>$uname</td><td>";
 		if ($result == -1) {
 			$tool_content .= $langUserNoExist;
@@ -118,7 +118,7 @@ tCont3;
 $query = join(' AND ', $search);
 if (!empty($query)) {
 	db_query("CREATE TEMPORARY TABLE lala AS
-			SELECT user_id FROM cours_user WHERE code_cours='$currentCourseID'
+			SELECT user_id FROM cours_user WHERE cours_id = $cours_id
 			");
 	$result = db_query("SELECT u.user_id, u.nom, u.prenom, u.username FROM
 			user u LEFT JOIN lala c ON u.user_id = c.user_id WHERE
@@ -173,21 +173,19 @@ draw($tool_content, 2, 'user');
 // returns -2 (error - user is already in the course)
 // returns userid (yes  everything is ok )
 
-function adduser($user,$course) {
-	$result=db_query(
-	"SELECT user_id FROM user WHERE username='".mysql_escape_string($user)."'");
+function adduser($user, $cid) {
+	$result = db_query("SELECT user_id FROM user WHERE username='".mysql_escape_string($user)."'");
 	if (!mysql_num_rows($result))
 	return -1;
 
-	$userid=mysql_fetch_array($result);
-	$userid=$userid[0];
+	list($userid) = mysql_fetch_array($result);
 
-	$result = db_query("SELECT * from cours_user WHERE user_id='$userid' AND code_cours='$course'");
+	$result = db_query("SELECT * from cours_user WHERE user_id = $userid AND cours_id = $cid");
 	if (mysql_num_rows($result) > 0)
 	return -2;
 
-	$result = db_query("INSERT INTO cours_user (user_id, code_cours, statut, reg_date)
-			VALUES ('$userid', '$course', '5', CURDATE())");
+	$result = db_query("INSERT INTO cours_user (user_id, cours_id, statut, reg_date)
+			VALUES ($userid, $cid, '5', CURDATE())");
 	return $userid;
 }
 

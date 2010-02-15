@@ -3,7 +3,7 @@
 // Do the queries to calculate usage between timestamps $start and $end
 // Returns a MySQL resource, where fetching rows results in:
 // duration, nom, prenom, user_id, am
-function user_duration_query($currentCourseID, $start = false, $end = false, $group = false)
+function user_duration_query($course_code, $course_id, $start = false, $end = false, $group = false)
 { 
         global $mysqlMainDb;
 
@@ -23,11 +23,11 @@ function user_duration_query($currentCourseID, $start = false, $end = false, $gr
 
         db_query("CREATE TEMPORARY TABLE duration AS
                   SELECT SUM(c.duration) AS duration, c.user_id AS user_id
-                  FROM `$currentCourseID`.actions AS c " .
+                  FROM `$course_code`.actions AS c " .
                   $date_where .  " GROUP BY c.user_id");
 
         if ($group !== false) {
-                $from = "`$currentCourseID`.user_group AS groups
+                $from = "`$course_code`.user_group AS groups
                                 LEFT JOIN user ON groups.user = user.user_id";
                 $and = "AND groups.team = $group";
         } else {
@@ -42,7 +42,7 @@ function user_duration_query($currentCourseID, $start = false, $end = false, $gr
                             FROM $from
                                       LEFT JOIN cours_user ON user.user_id = cours_user.user_id
                                       LEFT JOIN duration ON user.user_id = duration.user_id
-                            WHERE cours_user.code_cours = '$currentCourseID'
+                            WHERE cours_user.cours_id = $course_id
                                   $and
                             ORDER BY nom, prenom");
 }

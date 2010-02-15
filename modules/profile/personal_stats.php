@@ -47,7 +47,7 @@ if (!extension_loaded('gd')) {
 	require_once '../../include/libchart/libchart.php';
         $sql = "SELECT a.code code, a.intitule intitule
                 FROM cours AS a LEFT JOIN cours_user AS b
-                     ON a.code = b.code_cours
+                     ON a.cours_id = b.cours_id
                 WHERE b.user_id = '$uid' ORDER BY a.intitule";
 	$result = db_query($sql);
 	if (mysql_num_rows($result) > 0) {  // found courses ?

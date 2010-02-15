@@ -35,8 +35,12 @@
 
 ==============================================================================*/
 
+if (!defined('ECLASS_VERSION')) {
+        exit;
+}
+
 mysql_select_db("$mysqlMainDb");
-mysql_query("ALTER TABLE `annonces` ADD FULLTEXT `annonces` (`contenu` ,`code_cours`)");
+mysql_query("ALTER TABLE `annonces` ADD FULLTEXT `annonces` (`contenu`)");
 mysql_query("ALTER TABLE `cours` ADD FULLTEXT `cours` (`code` ,`description` ,`intitule` ,`course_keywords`)");
 
 mysql_select_db("$dbname");

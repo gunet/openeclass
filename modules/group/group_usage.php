@@ -162,7 +162,7 @@ $tool_content .= "<table class='FormData sortable' width='100%' id='a'>
 
 $i = 0;
 if ($type == 'duration') {
-        $result = user_duration_query($currentCourseID, $u_date_start, $u_date_end, $userGroupId);
+        $result = user_duration_query($currentCourseID, $cours_id, $u_date_start, $u_date_end, $userGroupId);
 } else {
         $result = db_query('SELECT user AS user_id FROM user_group WHERE team = ' . $userGroupId);
 }

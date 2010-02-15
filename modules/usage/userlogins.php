@@ -105,7 +105,7 @@ $sql_1=" SELECT user_id, ip, date_time FROM logins AS a WHERE ".$date_where." AN
 
 $sql_2=" SELECT a.user_id as user_id, a.nom as nom, a.prenom as prenom, a.username
             FROM user AS a LEFT JOIN cours_user AS b ON a.user_id = b.user_id
-            WHERE b.code_cours='".$currentCourseID."' AND ".$user_where;
+            WHERE b.cours_id = $cours_id AND ".$user_where;
 
 
 
@@ -264,7 +264,7 @@ if (!($table_cont || $table2_cont)) {
 
     $qry = "SELECT LEFT(a.nom, 1) AS first_letter
         FROM user AS a LEFT JOIN cours_user AS b ON a.user_id = b.user_id
-        WHERE b.code_cours='".$currentCourseID."'
+        WHERE b.cours_id = $cours_id
         GROUP BY first_letter ORDER BY first_letter";
     $result = db_query($qry, $mysqlMainDb);
 
@@ -278,11 +278,11 @@ if (!($table_cont || $table2_cont)) {
         $firstletter = mysql_real_escape_string($_GET['first']);
         $qry = "SELECT a.user_id, a.nom, a.prenom, a.username, a.email, b.statut
             FROM user AS a LEFT JOIN cours_user AS b ON a.user_id = b.user_id
-            WHERE b.code_cours='".$currentCourseID."' AND LEFT(a.nom,1) = '$firstletter'";
+            WHERE b.cours_id = $cours_id AND LEFT(a.nom,1) = '$firstletter'";
     } else {
         $qry = "SELECT a.user_id, a.nom, a.prenom, a.username, a.email, b.statut
             FROM user AS a LEFT JOIN cours_user AS b ON a.user_id = b.user_id
-            WHERE b.code_cours='".$currentCourseID."'";
+            WHERE b.cours_id = $cours_id";
     }
 
 

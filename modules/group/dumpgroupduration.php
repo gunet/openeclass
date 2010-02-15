@@ -69,7 +69,7 @@ if($is_adminOfCourse) {
 	     $crlf;
 	$totalDuration = 0;
 
-	$result = user_duration_query($currentCourseID, $u_date_start, $u_date_end, $userGroupId);
+	$result = user_duration_query($currentCourseID, $cours_id, $u_date_start, $u_date_end, $userGroupId);
 	
 	while ($row = mysql_fetch_assoc($result)) {
                 echo csv_escape($row['nom']) . ";" .

@@ -53,46 +53,46 @@ $tool_content="";
 if($is_adminOfCourse) {
 	// give admin status
 	if(isset($giveAdmin) && $giveAdmin && $is_adminOfCourse) {
-		$result = db_query("UPDATE cours_user SET statut='1'
-		WHERE user_id='".mysql_real_escape_string($_GET['user_id'])."' AND code_cours='$currentCourseID'",$mysqlMainDb);
+		$result = db_query("UPDATE cours_user SET statut = 1
+		WHERE user_id='".mysql_real_escape_string($_GET['user_id'])."' AND cours_id = $cours_id", $mysqlMainDb);
 	}
 	// give tutor status
 	elseif(isset($giveTutor) && $giveTutor) {
-		$result = db_query("UPDATE cours_user SET tutor='1'
-		WHERE user_id='".mysql_real_escape_string($_GET['user_id'])."' AND code_cours='$currentCourseID'",$mysqlMainDb);
+		$result = db_query("UPDATE cours_user SET tutor = 1
+		WHERE user_id='".mysql_real_escape_string($_GET['user_id'])."' AND cours_id = $cours_id",$mysqlMainDb);
 		$result2=db_query("DELETE FROM user_group 
 		WHERE user='".mysql_real_escape_string($_GET['user_id'])."'", $currentCourseID);
 	}
-	// remove admin status
-	elseif(isset($removeAdmin) && $removeAdmin) {
-		$result = db_query("UPDATE cours_user SET statut='5'
-			WHERE user_id != $uid AND user_id='".mysql_real_escape_string($_GET['user_id'])."' "
-			."AND code_cours='$currentCourseID'",$mysqlMainDb);
-	}
-	// remove tutor status
-	elseif(isset($removeTutor) && $removeTutor) {
-		$result = db_query("UPDATE cours_user SET tutor='0'
-			WHERE user_id='".mysql_real_escape_string($_GET['user_id'])."' "
-			."AND code_cours='$currentCourseID'",$mysqlMainDb);
-	}
-	// unregister user from courses
-	elseif(isset($unregister) && $unregister) {
-		// Security: cannot remove myself
-		$result = db_query("DELETE FROM cours_user WHERE user_id!= $uid
-			AND user_id='".mysql_real_escape_string($_GET['user_id'])."' "
-			."AND code_cours='$currentCourseID'", $mysqlMainDb);
-		// Except: remove myself if there is another tutor
-		if ($_GET['user_id'] == $uid) {
-			$result = db_query("SELECT user_id FROM cours_user
-					WHERE code_cours='$currentCourseID'
-					AND user_id != $uid
-					AND statut = 1", $mysqlMainDb);
-			if (mysql_num_rows($result) > 0) {
-				db_query("DELETE FROM cours_user
-					WHERE code_cours='$currentCourseID'
-					AND user_id = $uid");
-			}
-		}
+        // remove admin status
+        elseif(isset($removeAdmin) && $removeAdmin) {
+                $result = db_query("UPDATE cours_user SET statut = 5
+                        WHERE user_id != $uid AND user_id='".mysql_real_escape_string($_GET['user_id'])."'
+                              AND cours_id = $cours_id", $mysqlMainDb);
+        }
+        // remove tutor status
+        elseif(isset($removeTutor) && $removeTutor) {
+                $result = db_query("UPDATE cours_user SET tutor = 0
+                        WHERE user_id = '".mysql_real_escape_string($_GET['user_id'])."'
+                              AND cours_id = $cours_id", $mysqlMainDb);
+        }
+        // unregister user from courses
+        elseif(isset($unregister) && $unregister) {
+                // Security: cannot remove myself
+                $result = db_query("DELETE FROM cours_user WHERE user_id!= $uid
+                        AND user_id = '".mysql_real_escape_string($_GET['user_id'])."'
+                        AND cours_id = $cours_id", $mysqlMainDb);
+                // Except: remove myself if there is another tutor
+                if ($_GET['user_id'] == $uid) {
+                        $result = db_query("SELECT user_id FROM cours_user
+                                        WHERE cours_id = $cours_id
+                                        AND user_id <> $uid
+                                        AND statut = 1 LIMIT 1", $mysqlMainDb);
+                        if (mysql_num_rows($result) > 0) {
+                                db_query("DELETE FROM cours_user
+                                        WHERE cours_id = $cours_id
+                                        AND user_id = $uid");
+                        }
+                }
 		$delGroupUser=db_query("DELETE FROM user_group 
 		WHERE user='".mysql_real_escape_string($_GET['user_id'])."'", $currentCourseID);
 	}
@@ -150,7 +150,7 @@ if($is_adminOfCourse) {
 			LEFT JOIN `$currentCourseID`.user_group
 			ON user.user_id=user_group.user
 			WHERE `user`.`user_id`=`cours_user`.`user_id` 
-			AND `cours_user`.`code_cours`='$currentCourseID' AND $query
+			AND `cours_user`.`cours_id` = $cours_id AND $query
 			ORDER BY nom, prenom");
 		if (mysql_num_rows($result) == 0) {
 			$tool_content .= "<p class='caution_small'>$langNoUsersFound2</p>\n";

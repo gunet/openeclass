@@ -26,7 +26,6 @@
 
 /*===========================================================================
 	detailsUser.php
-	@last update: 30-06-2006 by Thanos Kyritsis
 	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
 
 	based on Claroline version 1.7 licensed under GPL
@@ -83,7 +82,7 @@ if( empty($_REQUEST['uInfo']) )
 $sql = "SELECT `u`.`nom` AS `lastname`,`u`.`prenom` AS `firstname`, `u`.`email`
 			FROM `".$TABLECOURSUSER."` as `cu` , `".$TABLEUSER."` as `u`
 			WHERE `cu`.`user_id` = `u`.`user_id`
-			AND `cu`.`code_cours` = '". addslashes($currentCourseID) ."'
+			AND `cu`.`cours_id` = $cours_id
 			AND `u`.`user_id` = '". (int)$_REQUEST['uInfo']."'";
 
 $results = db_query_fetch_all($sql);

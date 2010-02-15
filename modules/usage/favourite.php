@@ -186,7 +186,7 @@ $local_head = $jscalendar->get_load_files_code();
 
     $qry = "SELECT LEFT(a.nom, 1) AS first_letter
         FROM user AS a LEFT JOIN cours_user AS b ON a.user_id = b.user_id
-        WHERE b.code_cours='".$currentCourseID."'
+        WHERE b.cours_id = $cours_id
         GROUP BY first_letter ORDER BY first_letter";
     $result = db_query($qry, $mysqlMainDb);
 
@@ -200,11 +200,11 @@ $local_head = $jscalendar->get_load_files_code();
         $firstletter = mysql_real_escape_string($_GET['first']);
         $qry = "SELECT a.user_id, a.nom, a.prenom, a.username, a.email, b.statut
             FROM user AS a LEFT JOIN cours_user AS b ON a.user_id = b.user_id
-            WHERE b.code_cours='".$currentCourseID."' AND LEFT(a.nom,1) = '$firstletter'";
+            WHERE b.cours_id = $cours_id AND LEFT(a.nom,1) = '$firstletter'";
     } else {
         $qry = "SELECT a.user_id, a.nom, a.prenom, a.username, a.email, b.statut
             FROM user AS a LEFT JOIN cours_user AS b ON a.user_id = b.user_id
-            WHERE b.code_cours='".$currentCourseID."'";
+            WHERE b.cours_id = $cours_id";
     }
 
 

@@ -44,8 +44,8 @@ if($is_adminOfCourse) {
 	echo join(';', array_map("csv_escape", array($langSurname, $langName, $langEmail, $langAm, $langUsername, $langGroups))),
 	     $crlf;
 	$sql = db_query("SELECT  user.nom, user.prenom, user.email, user.am, user.username, user_group.team
-			FROM cours_user, user LEFT JOIN `$currentCourseID`.user_group ON `user`.user_id=user_group.user
-			WHERE `user`.`user_id`=`cours_user`.`user_id` AND `cours_user`.`code_cours`='$currentCourseID'
+			FROM cours_user, user LEFT JOIN `$currentCourseID`.user_group ON `user`.user_id = user_group.user
+			WHERE `user`.`user_id` = `cours_user`.`user_id` AND `cours_user`.`cours_id` = $cours_id
 			ORDER BY user.nom,user.prenom", $mysqlMainDb);
 	$r=0;
 	while ($r < mysql_num_rows($sql)) {

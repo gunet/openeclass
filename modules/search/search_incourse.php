@@ -188,7 +188,7 @@ if(empty($or_search_terms) && empty($not_search_terms)) {
       <td><div class=\"Results\">";
 		//anazhthsh sthn kentrikh vash - epilogh ths kentrikhs DB
 		mysql_select_db("$mysqlMainDb");
-		$myquery = "SELECT * FROM annonces WHERE MATCH (contenu,code_cours)".$query;
+		$myquery = "SELECT * FROM annonces WHERE cours_id = $cours_id AND MATCH (contenu)".$query;
 		$result = db_query($myquery);
 
 		$c = 0;
@@ -197,7 +197,7 @@ if(empty($or_search_terms) && empty($not_search_terms)) {
 			while($res = mysql_fetch_array($result))
 			{
 				//emfanish apotelesmatos mono gia to yparxon mathima
-				if($res["code_cours"] == $dbname)
+				if($res['cours_id'] == $cours_id)
 				{
 					$c++;
 					$tmp_result .= "\n<li>".$res['contenu'].": ".$res['temps']."<br>";

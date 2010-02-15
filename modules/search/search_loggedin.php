@@ -94,7 +94,7 @@ if(empty($search_terms_title) && empty($search_terms_keywords) && empty($search_
 
 	$result = mysql_query("SELECT DISTINCT * FROM (
 		SELECT  cours.code, cours.intitule, cours.course_keywords, cours.titulaires
-		FROM cours, cours_user  WHERE cours.code = cours_user.code_cours AND cours_user.user_id = '".$uid."'
+		FROM cours, cours_user  WHERE cours.cours_id = cours_user.cours_id AND cours_user.user_id = $uid
 		UNION
 		SELECT  cours.code, cours.intitule, cours.course_keywords, cours.titulaires
 		FROM cours
