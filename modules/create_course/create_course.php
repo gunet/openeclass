@@ -334,93 +334,89 @@ if (isset($_POST['back1']) or !isset($_POST['visit'])) {
 // create the course and the course database
 if (isset($_POST['create_course'])) {
 
-	$nameTools = $langCourseCreate;
-	$facid = intval($faculte);
-	$facname = find_faculty_by_id($facid);
-	// find new code
+        $nameTools = $langCourseCreate;
+        $facid = intval($faculte);
+        $facname = find_faculty_by_id($facid);
 
-        $repertoire = new_code($facid);
+        // create new course code: uppercase, no spaces allowed
+        $repertoire = strtoupper(new_code($facid));
+        $repertoire = str_replace (' ', '', $repertoire);
+
         $language = langcode_to_name($_POST['languageCourse']);
         include("../lang/$language/common.inc.php");
         include("../lang/$language/messages.inc.php");
-        // replace lower case letters by upper case in code_cours
-        $repertoire=strtoupper($repertoire);
-        $faculte_lower=strtolower($faculte);
 
-                //remove space in code_cours
-                $repertoire = str_replace (" ", "", $repertoire);
-                $repertoire_lower=strtolower($repertoire);
-                // create directories
-                umask(0);
-                if (! (mkdir("../../courses/$repertoire", 0777) and
-                       mkdir("../../courses/$repertoire/image", 0777) and
-                       mkdir("../../courses/$repertoire/document", 0777) and
-                       mkdir("../../courses/$repertoire/dropbox", 0777) and
-                       mkdir("../../courses/$repertoire/page", 0777) and
-                       mkdir("../../courses/$repertoire/work", 0777) and
-                       mkdir("../../courses/$repertoire/group", 0777) and
-                       mkdir("../../courses/$repertoire/temp", 0777) and
-                       mkdir("../../courses/$repertoire/scormPackages", 0777) and
-                       mkdir("../../video/$repertoire", 0777))) {
-                        $tool_content .= "<div class='caution'>$langErrorDir</div>";
-                        draw($tool_content, '1', 'create_course', $head_content);
-                        exit;
-                }
-                // ---------------------------------------------------------
-                //  all the course db queries are inside the following script
-                // ---------------------------------------------------------
-                require "create_course_db.php";
+        // create directories
+        umask(0);
+        if (! (mkdir("../../courses/$repertoire", 0777) and
+                                mkdir("../../courses/$repertoire/image", 0777) and
+                                mkdir("../../courses/$repertoire/document", 0777) and
+                                mkdir("../../courses/$repertoire/dropbox", 0777) and
+                                mkdir("../../courses/$repertoire/page", 0777) and
+                                mkdir("../../courses/$repertoire/work", 0777) and
+                                mkdir("../../courses/$repertoire/group", 0777) and
+                                mkdir("../../courses/$repertoire/temp", 0777) and
+                                mkdir("../../courses/$repertoire/scormPackages", 0777) and
+                                mkdir("../../video/$repertoire", 0777))) {
+                $tool_content .= "<div class='caution'>$langErrorDir</div>";
+                draw($tool_content, '1', 'create_course', $head_content);
+                exit;
+        }
+        // ---------------------------------------------------------
+        //  all the course db queries are inside the following script
+        // ---------------------------------------------------------
+        require "create_course_db.php";
 
-                // ------------- update main Db------------
-                mysql_select_db("$mysqlMainDb");
+        // ------------- update main Db------------
+        mysql_select_db("$mysqlMainDb");
 
-                db_query("INSERT INTO cours SET
-                                code = '$code',
-                                languageCourse =" . quote($language) . ",
-                                intitule = " . quote($intitule) . ",
-                                description = " . quote($description) . ",
-                                course_addon = " . quote($course_addon) . ",
-                                course_keywords = " . quote($course_keywords) . ",
-                                faculte = " . quote($facname) . ",
-                                visible = " . quote($formvisible) . ",
-                                titulaires = " . quote($titulaires) . ",
-                                fake_code = " . quote($code) . ",
-                                type = " . quote($type) . ",
-                                faculteid = '$facid',
-		first_create = NOW()");
-                $new_cours_id = mysql_insert_id();
-                mysql_query("INSERT INTO cours_user SET
-                                cours_id = $new_cours_id,
-                                user_id = '$uid',
-                                statut = '1',
-                                tutor='1',
-				reg_date = CURDATE()");
+        db_query("INSERT INTO cours SET
+                        code = '$code',
+                        languageCourse =" . quote($language) . ",
+                        intitule = " . quote($intitule) . ",
+                        description = " . quote($description) . ",
+                        course_addon = " . quote($course_addon) . ",
+                        course_keywords = " . quote($course_keywords) . ",
+                        faculte = " . quote($facname) . ",
+                        visible = " . quote($formvisible) . ",
+                        titulaires = " . quote($titulaires) . ",
+                        fake_code = " . quote($code) . ",
+                        type = " . quote($type) . ",
+                        faculteid = '$facid',
+                        first_create = NOW()");
+        $new_cours_id = mysql_insert_id();
+        mysql_query("INSERT INTO cours_user SET
+                        cours_id = $new_cours_id,
+                        user_id = '$uid',
+                        statut = '1',
+                        tutor='1',
+                        reg_date = CURDATE()");
 
-                mysql_query("INSERT INTO cours_faculte SET
-                                faculte = '$faculte',
-                                code = '$repertoire',
-                                facid = '$facid'");
+        mysql_query("INSERT INTO cours_faculte SET
+                        faculte = '$faculte',
+                        code = '$repertoire',
+                        facid = '$facid'");
 
-                $titou='$dbname';
+        $titou='$dbname';
 
-                // ----------- main course index.php -----------
+        // ----------- main course index.php -----------
 
-                $fd=fopen("../../courses/$repertoire/index.php", "w");
-                $string="<?php
-                        session_start();
-                $titou=\"$repertoire\";
-                session_register(\"dbname\");
-                include(\"../../modules/course_home/course_home.php\");
-                ?>";
+        $fd=fopen("../../courses/$repertoire/index.php", "w");
+        $string="<?php
+                session_start();
+        $titou=\"$repertoire\";
+        session_register(\"dbname\");
+        include(\"../../modules/course_home/course_home.php\");
+        ?>";
 
-                fwrite($fd, "$string");
-                $status[$repertoire] = 1;
-                $_SESSION['status'] = $status;
+        fwrite($fd, "$string");
+        $status[$repertoire] = 1;
+        $_SESSION['status'] = $status;
 
-                // ----------- Import from BetaCMS Bridge -----------
-                $tool_content .= doImportFromBetaCMSAfterCourseCreation($repertoire, $mysqlMainDb, $webDir);
-                // --------------------------------------------------
-                $tool_content .= "
+        // ----------- Import from BetaCMS Bridge -----------
+        $tool_content .= doImportFromBetaCMSAfterCourseCreation($repertoire, $mysqlMainDb, $webDir);
+        // --------------------------------------------------
+        $tool_content .= "
                 <p class=\"success_small\">$langJustCreated: &nbsp;<b>$intitule</b></p>
                 <p><small>$langEnterMetadata</small></p><br />
                 <p align='center'>&nbsp;<a href='../../courses/$repertoire/index.php' class=mainpage>$langEnter</a>&nbsp;</p>";
