@@ -149,20 +149,17 @@ if (!$doit) {
                                         $tool_content .= "$langUnregFirst <br><br>";
                                         $sql = db_query("SELECT a.code, a.intitule, b.statut, a.cours_id
                                                         FROM cours AS a LEFT JOIN cours_user AS b ON a.cours_id = b.cours_id
-                                                        WHERE b.user_id = $u AND (b.statut=5 OR b.statut=10) ORDER BY b.statut, a.faculte");
+                                                        WHERE b.user_id = $u order by b.statut, a.faculte");
                                         // αν ο χρήστης συμμετέχει σε μαθήματα τότε παρουσίασε τη λίστα
-                                        if (mysql_num_rows($sql) > 0)
-                                        {
+                                        if (mysql_num_rows($sql) > 0) {
                                                 $tool_content .= "<h4>$langStudentParticipation</h4>\n".
                                                         "<table border='1'>\n<tr><th>$langLessonCode</th><th>$langLessonName</th>".
                                                         "<th>$langProperty</th><th>$langActions</th></tr>";
-                                                for ($j = 0; $j < mysql_num_rows($sql); $j++)
-                                                {
+                                                for ($j = 0; $j < mysql_num_rows($sql); $j++) {
                                                         $logs = mysql_fetch_array($sql);
                                                         $tool_content .= "<tr><td>".htmlspecialchars($logs[0])."</td><td>".
                                                                 htmlspecialchars($logs[1])."</td><td align=\"center\">";
-                                                        switch ($logs[2])
-                                                        {
+                                                        switch ($logs[2]) {
                                                                 case 1:
                                                                         $tool_content .= $langTeacher;
                                                                         $tool_content .= "</td><td align='center'>---</td></tr>\n";
@@ -182,8 +179,8 @@ if (!$doit) {
                                 }
                                 $t = 1;
                         } else {
-                                $sql = db_query("DELETE from user WHERE user_id = '".mysql_real_escape_string($u)."'");
-                                if (mysql_affected_rows($conn) > 0) {
+                                $q = db_query("DELETE from user WHERE user_id = " . intval($u));
+                                if ($q and mysql_affected_rows() > 0) {
                                         $t = 2;
                                 } else {
                                         $t = 3;
@@ -203,7 +200,7 @@ if (!$doit) {
                         if($u!=1) {
                                 db_query("DELETE from admin WHERE idUser = '".mysql_real_escape_string($u)."'");
                         }
-                        if (mysql_affected_rows($conn) > 0) {
+                        if (mysql_affected_rows() > 0) {
                                 $tool_content .= "<p>$langUserWithId ".htmlspecialchars($u)." $langWasAdmin.</p>\n";
                         }
 
@@ -214,9 +211,9 @@ if (!$doit) {
                 }
 
         } elseif ($c and $u) {
-                $sql = db_query("DELETE from cours_user WHERE user_id = $u AND
+                $q = db_query("DELETE from cours_user WHERE user_id = $u AND
                                         cours_id = (SELECT cours_id FROM cours WHERE code = ".quote($c).")");
-                if (mysql_affected_rows($conn) > 0) {
+                if (mysql_affected_rows($q) > 0) {
                         $tool_content .= "<p>$langUserWithId $u $langWasCourseDeleted $c.</p>\n";
                         $m = 1;
                 }
