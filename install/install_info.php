@@ -3,7 +3,7 @@
 <html>
 <head>
 <META http-equiv=Content-Type content="text/html; charset=UTF-8">
-<title>Οδηγίες Εγκατάστασης Πλατφόρμας Open eClass 2.2</title>
+<title>Οδηγίες Εγκατάστασης Πλατφόρμας Open eClass 2.3</title>
 <style type="text/css">
 
 body {
@@ -55,17 +55,17 @@ pre {
 </style>
   </head>
   <body>
-    <h2>Οδηγίες Εγκατάστασης Πλατφόρμας Open eClass 2.2</h2>
+    <h2>Οδηγίες Εγκατάστασης Πλατφόρμας Open eClass 2.3</h2>
 <p>Η πλατφόρμα <b>Open eClass</b> είναι ένα ολοκληρωμένο Σύστημα Διαχείρισης Ηλεκτρονικών Μαθημάτων και αποτελεί την πρόταση του Ακαδημαϊκού Διαδικτύου GUnet για την υποστήριξη της Υπηρεσίας Ασύγχρονης Τηλεκπαίδευσης. Αναπτύχθηκε από την Ομάδα Ασύγχρονης Τηλεκπαίδευσης του Ακαδημαϊκού Διαδικτύου, υποστηρίζεται κεντρικά από το GUnet και διανέμεται ελεύθερα ως Λογισμικό Ανοικτού Κώδικα.</p>
     <p>
       Η Πλατφόρμα Ασύγχρονης Τηλεκπαίδευσης <b>Open eClass
-      2.2</b> έχει δοκιμαστεί και λειτουργεί κανονικά
+      2.3</b> έχει δοκιμαστεί και λειτουργεί κανονικά
     </p>
     <ul>
       <li>Σε περιβάλλον MsWindows (<b>Windows NT</b>, <b>Windows
-      2000</b>, <b>Windows XP</b>, <b>Windows 2003</b>)
+      2000</b>, <b>Windows XP</b>, <b>Windows 2003</b>, <b>Windows >Vista</b>, <b>Windows 7</b>)
       </li>
-      <li>Σε διάφορες διανομές Linux (π.χ. <b>RedHat</b>,
+      <li>Σε διάφορες διανομές Linux (π.χ. <b>RedHat</b>, <b>CentOS</b>,
       <b>Debian</b>, <b>Ubuntu</b>, <b>Suse</b> κ.λπ.)
       </li>
       <li>Σε περιβάλλον UNIX (π.χ. <b>Solaris</b>).
@@ -74,8 +74,8 @@ pre {
     εγκατάστασης της πλατφόρμας:<br>
     <ul>
       <li><a href="#before">Ενέργειες πριν την εγκατάσταση - Προαπαιτούμενα</a></li>
-      <li><a href="#unix">Για λειτουργικό σύστημα Unix / Linux (Solaris/Redhat, Debian, Suse, Mandrake κ.λπ.)</a> </li>
-      <li><a href="#win">Για λειτουργικό σύστημα Windows (Win2000, WinXP, Win2003 κ.λπ.)</a></li>
+      <li><a href="#unix">Για περιβάλλοντα Unix / Linux </a> </li>
+      <li><a href="#win">Για περιβάλλοντα MsWindows</a></li>
       <li><a href="#after">Ενέργειες μετά την εγκατάσταση - Άλλες ρυθμίσεις</a></li>
     </ul>
     <hr>
@@ -84,19 +84,19 @@ pre {
       Προαπαιτούμενα:</a>
     </h3>
     <p>
-	Για την εγκατάσταση της πλατφόρμας Open eClass 2.2, απαιτείται η ύπαρξη και η καλή λειτουργία μιας σειράς συστημάτων και εφαρμογών. Αυτές είναι οι εξής: 
+	Για την εγκατάσταση της πλατφόρμας Open eClass 2.3, απαιτείται η ύπαρξη και η καλή λειτουργία μιας σειράς συστημάτων και εφαρμογών. Αυτές είναι οι εξής:
     </p>
     <h4>
       1. Web Server (<a href="http://httpd.apache.org/" target="_blank">Apache</a> 1.3.x ή 2.x)
     </h4>
     <p>
       Ο Apache πρέπει να μπορεί να χειριστεί σελίδες τύπου
-      <em>.php3 .php4 .php .inc.</em> Αν δεν τον έχετε ρυθμίσει,
+      <em>.php .inc</em> Αν δεν τον έχετε ρυθμίσει,
       τότε αρκεί στο αρχείο <code>httpd.conf</code> να προσθέσετε
       την ακόλουθη γραμμή:
     </p>
 
-    <pre>AddType application/x-httpd-php .php3 .php4 .php .inc</pre>
+    <pre>AddType application/x-httpd-php .php .inc</pre>
 
     
 <p> Επίσης, θα πρέπει να ορίσετε ότι η προκαθορισμένη κωδικοποίηση των σελίδων 
@@ -177,10 +177,10 @@ short_open_tag = on</pre>
       </li>
     </ul>
 <p> Επίσης, αν τυχόν, εμφανιστεί κάποιο notice της PHP κατά την διάρκεια της εφαρμογής, 
-  αναζητήστε στο αρχείο <code>php.ini</code> την μεταβλητή error_reporting και 
-  δώστε της την παρακάτω τιμή: </p>
+  αναζητήστε στο αρχείο <code>php.ini</code> την μεταβλητή <em>display_errors</em> και 
+  αλλάξτε την τιμή της σε: </p>
 
-    <pre>error_reporting = E_ALL &amp; ~E_NOTICE</pre>
+    <pre>display_errors = Off</pre>
     <div class="note">
       <ul>
         <li class="c2">

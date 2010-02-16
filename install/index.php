@@ -720,7 +720,7 @@ elseif (isset($_REQUEST['install1']) || isset($_REQUEST['back1']))
 	<tbody>
 	<tr>
 	<td width=\"40%\" class=\"odd\">&nbsp;</td>
-	<td><b>$l_options</b></td>
+	<td><b>$langOptions</b></td>
 	</tr>
 	<tr>
 	<td class=\"odd\" class=\"left\">$langChooseLang:</td>
