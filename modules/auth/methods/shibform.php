@@ -39,8 +39,8 @@ if ($f = @fopen("${webDir}secure/index.php", "r")) {
 			$shibcn = trim(substr($shibcn, 1, -2));
 		}
 	}
+        fclose($f);
 }
-fclose($f);
 
 $r = mysql_fetch_array(db_query("SELECT auth_settings, auth_instructions FROM auth WHERE auth_id = 6"));
 $shibsettings = $r['auth_settings'];
