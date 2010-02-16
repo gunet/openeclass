@@ -5,7 +5,7 @@
  * (C) Copyright 1999-2000 NetUSE GmbH
  *                    Kristian Koehntopp
  *
- * $Id: template.inc,v 1.12 2002/07/11 22:29:51 richardarcher Exp $
+ * $Id$
  *
  */
 

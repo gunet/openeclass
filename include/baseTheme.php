@@ -66,7 +66,7 @@ if (isset($_SESSION['errMessage']) && strlen($_SESSION['errMessage']) > 0) {
 	unset($_SESSION['errMessage']);
 }
 
-include ($relPath . "template/template.inc");
+include ($relPath . "template/template.inc.php");
 include ('tools.php');
 
 /**
