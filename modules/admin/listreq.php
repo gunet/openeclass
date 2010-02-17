@@ -375,7 +375,7 @@ if (!empty($show)) {
 	$tool_content .= "<p align=\"right\"><a href=\"$_SERVER[PHP_SELF]\">$langBackRequests</a></p><br>";
 }
 	$tool_content .= "<p align=\"right\"><a href=\"index.php\">$langBack</a></p>";
-draw($tool_content, 3, ' ', $head_content);
+draw($tool_content, 3, null, $head_content);
 
 // --------------------------------------
 // function to display table header
