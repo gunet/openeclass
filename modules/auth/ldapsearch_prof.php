@@ -39,24 +39,27 @@ include '../../include/baseTheme.php';
 include '../../include/sendMail.inc.php';
 require_once 'auth.inc.php';
 
+if (!isset($_POST['auth'])) {
+        header('Location: ' . $urlServer);
+        exit;
+} else {
+        $auth = intval($_POST['auth']);
+}
+
 $msg = "$langReqRegProf (".(get_auth_info($auth)).")";
 $nameTools = $msg;
 $navigation[]= array ("url"=>"registration.php", "name"=> "$langNewUser");
-$navigation[]= array ("url"=>"ldapnewuser.php?p=TRUE&auth=$auth", "name"=> "$langConfirmUser");
+$navigation[]= array ("url"=>"ldapnewuser.php?p=TRUE&amp;auth=$auth", "name"=> "$langConfirmUser");
 
 $tool_content = "";
 
-$auth = get_auth_id();
 $lang = langname_to_code($language);
-
-// for security
-$auth = isset($_POST['auth'])?intval($_POST['auth']):0;
 
 $is_submit = isset($_POST['is_submit'])?$_POST['is_submit']:'';
 $ldap_email = isset($_POST['ldap_email'])?$_POST['ldap_email']:'';
 $ldap_passwd = isset($_POST['ldap_passwd'])?$_POST['ldap_passwd']:'';
 
-$lastpage = 'ldapnewuser.php?p=TRUE&auth='.$auth.'&ldap_email='.$ldap_email.'&ldap_passwd='.$ldap_passwd;
+$lastpage = 'ldapnewuser.php?p=TRUE&amp;auth='.$auth.'&amp;ldap_email='.$ldap_email.'&amp;ldap_passwd='.$ldap_passwd;
 $errormessage = "<br/><p>$ldapback <a href='$lastpage'>$ldaplastpage</a></p>";
 
 if(!empty($is_submit)) {
@@ -106,30 +109,30 @@ if(!empty($is_submit)) {
 		<form action='$_SERVER[PHP_SELF]' method='post'>" .
 		(isset($GLOBALS['auth_user_info'])?
 		('<input type="hidden" name="prenom_form" value="' . $GLOBALS['auth_user_info']['firstname'] .
-		'"><input type="hidden" name="nom_form" value="' . $GLOBALS['auth_user_info']['lastname'] .
-		'"><input type="hidden" name="email" value="' . $GLOBALS['auth_user_info']['email'] . '">'): '') . "<p class='success'>$langTheUser $ldapfound </p>
+		'" /><input type="hidden" name="nom_form" value="' . $GLOBALS['auth_user_info']['lastname'] .
+		'" /><input type="hidden" name="email" value="' . $GLOBALS['auth_user_info']['email'] . '" />'): '') . "<p class='success'>$langTheUser $ldapfound </p>
 		<table width=\"100%\"><tbody>
 		<tr><th class='left' width='220'>".$langName."</th>
 		<td width='10%'>".(isset($GLOBALS['auth_user_info'])?
-		$GLOBALS['auth_user_info']['firstname']: '<input class="FormData_InputText" type="text" name="prenom_form" size="38">')."</td>
+		$GLOBALS['auth_user_info']['firstname']: '<input class="FormData_InputText" type="text" name="prenom_form" size="38" />')."</td>
 		</tr>
 		<tr>
 		<th class='left'>".$langSurname."</th>
 		<td width='10%'>".(isset($GLOBALS['auth_user_info'])?
-		$GLOBALS['auth_user_info']['lastname']: '<input class="FormData_InputText" type="text" name="nom_form" size="38">')."</td>
+		$GLOBALS['auth_user_info']['lastname']: '<input class="FormData_InputText" type="text" name="nom_form" size="38" />')."</td>
 		</tr>
 		<tr>
 		<th class='left'>".$langEmail."</th>
 		<td width='10%'>".(isset($GLOBALS['auth_user_info'])?
-		$GLOBALS['auth_user_info']['email']: '<input class="FormData_InputText" type="text" name="email" size="38">')."</td>
+		$GLOBALS['auth_user_info']['email']: '<input class="FormData_InputText" type="text" name="email" size="38" />')."</td>
 		</tr>
 		<tr>
 		<th class='left'>".$langPhone."</th>
-		<td><input type='text' name='userphone' size='38' value=\"\" class='FormData_InputText'></td>
+		<td><input type='text' name='userphone' size='38' value=\"\" class='FormData_InputText' /></td>
 		<td>&nbsp;&nbsp;<small>(*)</small></td>
 		</tr>
 		<tr>
-		<th class='left'>".$langComments."</th><td><textarea name='usercomment' COLS='32' ROWS='4' WRAP='SOFT' class='FormData_InputText'>".@$usercomment."</textarea>
+		<th class='left'>".$langComments."</th><td><textarea name='usercomment' cols='32' rows='4' class='FormData_InputText' />".@$usercomment."</textarea>
 		&nbsp;&nbsp;<small>(*) $profreason</small></td>
 		</tr>
 		<tr>
@@ -148,10 +151,10 @@ if(!empty($is_submit)) {
 		$tool_content .= "</td></tr>	
 		<tr>
 		<th class='left'>&nbsp;</th>
-		<td><input type=\"submit\" name=\"submit\" value=\"".$langRegistration."\">
-		<input type='hidden' name=\"uname\" value=\"".$ldap_email."\">
-		<input type='hidden' name=\"password\" value=\"".$ldap_passwd."\">
-		<input type='hidden' name=\"auth\" value=\"".$auth."\">
+		<td><input type=\"submit\" name=\"submit\" value=\"".$langRegistration."\" />
+		<input type='hidden' name=\"uname\" value=\"".$ldap_email."\" />
+		<input type='hidden' name=\"password\" value=\"".$ldap_passwd."\" />
+		<input type='hidden' name=\"auth\" value=\"".$auth."\" />
 		</td></tr></tbody></table><div align='right'><small>$langRequiredFields</small></div>
 		</form>
 		</td></tr></thead></table>";
