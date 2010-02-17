@@ -206,9 +206,9 @@ if (isset($submit))  {
 	$depid = intval($department);
 	
 	$sql = "INSERT INTO prof_request(profname, profsurname, profuname, profpassword,
-		profemail, proftmima, profcomm, status, date_open, comment, lang) VALUES(
+		profemail, proftmima, profcomm, status, date_open, comment, lang, statut) VALUES(
 		'$name','$surname','$username','$password','$usermail','$depid','$userphone',
-		'1',NOW(),'$usercomment', '$lang')";
+		1, NOW(), '$usercomment', '$lang', 1)";
 	$upd = db_query($sql,$mysqlMainDb);
 	
 	// send email

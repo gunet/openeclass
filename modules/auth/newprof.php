@@ -148,6 +148,7 @@ $registration_errors = array();
                                 proftmima = ' . autoquote($department). ',
                                 profcomm = ' . autoquote($userphone). ',
                                 status = 1,
+                                statut = 1,
                                 date_open = NOW(),
                                 comment = ' . autoquote($usercomment). ',
                                 lang = ' . autoquote($proflang),

@@ -50,7 +50,7 @@ if (isset($submit)) {
 } else {  // register user request
 
 	// ------------------- Update table prof_request ------------------------------
-$upd=db_query("INSERT INTO prof_request(profname,profsurname,profuname,profemail,proftmima,profcomm,status,date_open,comment,lang,statut) VALUES('$name','$surname','$username','$usermail','$department','$userphone','1',NOW(),'$usercomment','$lang','5')");
+$upd=db_query("INSERT INTO prof_request(profname,profsurname,profuname,profemail,proftmima,profcomm,status,date_open,comment,lang,statut) VALUES('$name','$surname','$username','$usermail','$department','$userphone',1,NOW(),'$usercomment','$lang',5)");
 
 //----------------------------- Email Message --------------------------
     $MailMessage = $mailbody1 . $mailbody2 . "$name $surname\n\n" .
