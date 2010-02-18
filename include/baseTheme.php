@@ -201,7 +201,10 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 			$t->set_var ( 'LANG_USER', $langUserHeader );
 			$t->set_var ( 'USER_NAME', $prenom );
 			$t->set_var ( 'USER_SURNAME', $nom . ", " );
-		}
+		} else {
+                        $t->set_var ( 'LANG_USER', '' );
+			$t->set_var ( 'USER_NAME', '&nbsp;' );
+                }
 
 		//if user is logged in display the logout option
 		if (isset($_SESSION['uid'])) {

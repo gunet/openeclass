@@ -44,23 +44,8 @@ if (!defined('INDEX_START')) {
 	die("Action not allowed!");
 }
 
-//query for greek announcements
-$sql_el ="SELECT `date`, `gr_title` , `gr_body` , `gr_comment`
-		FROM `admin_announcements`
-		WHERE `visible` = \"V\" ORDER BY `date` DESC";
-//query for english announcements
-$sql_en ="SELECT `date`, `en_title` , `en_body` , `en_comment`
-		FROM `admin_announcements`
-		WHERE `visible` = \"V\" ORDER BY `date` DESC";
-
 if (isset($_SESSION['langswitch'])) {
 	$language = $_SESSION['langswitch'];
-}
-
-if ($language == "greek") {
-	$sql = $sql_el;
-} else {
-	$sql = $sql_en;
 }
 
 $tool_content .= <<<lCont
@@ -71,25 +56,28 @@ $tool_content .= <<<lCont
 <p align='justify'>$langInfoAbout</p>
 lCont;
 
-$tool_content .='<br>';
+$tool_content .='<br />';
 
+$qlang = ($language == "greek")? 'gr': 'en';
+$sql = "SELECT `date`, `{$qlang}_title` , `{$qlang}_body` , `{$qlang}_comment`
+        FROM `admin_announcements`
+        WHERE `visible` = 'V' ORDER BY `date` DESC";
 $result = db_query($sql, $mysqlMainDb);
 if (mysql_num_rows($result) > 0) {
 	$announceArr = array();
 	while ($eclassAnnounce = mysql_fetch_array($result)) {
 		array_push($announceArr, $eclassAnnounce);
 	}
-	$tool_content .= "<br/><table width='99%' class='AnnouncementsList'>
-	<thead>
-	<tr><th width='180'>$langAnnouncements</th><th>&nbsp;</th></tr>
-	</thead>
+        $tool_content .= "<br/>
+        <table width='99%' class='AnnouncementsList'>
+	<thead><tr><th width='180'>$langAnnouncements</th><th>&nbsp;</th></tr></thead>
 	<tbody>";
 
 	$numOfAnnouncements = count($announceArr);
 
 	for($i=0; $i < $numOfAnnouncements; $i++) {
 		$tool_content .= "<tr><td colspan='2'>
-		<img style='border:0px;' src='${urlAppend}/template/classic/img/arrow_grey.gif' title='bullet'>
+		<img style='border:0px;' src='${urlAppend}/template/classic/img/arrow_grey.gif' alt='' />
 		<b>".$announceArr[$i][1]."</b>
 		(".greek_format($announceArr[$i][0]).")
 		<p>
@@ -103,7 +91,7 @@ if (mysql_num_rows($result) > 0) {
 
 $shibactive = mysql_fetch_array(db_query("SELECT auth_default FROM auth WHERE auth_name='shibboleth'"));
 if ($shibactive['auth_default'] == 1) {
-	$shibboleth_link = "<a href='{$urlServer}secure/index.php'>$langShibboleth</a><br><br>";
+	$shibboleth_link = "<a href='{$urlServer}secure/index.php'>$langShibboleth</a><br /><br />";
 } else {
 	$shibboleth_link = "";
 }
@@ -120,12 +108,12 @@ $tool_content .= <<<lCont2
  <tr>
    <td class="LoginData">
    <form action="${urlSecure}index.php" method="post">
-   $langUsername <br>
-   <input class="Login" name="uname" size="20"><br>
-   $langPass <br>
-   <input class="Login" name="pass" type="password" size="20"><br><br>
-   <input class="Login" value="$langEnter" name="submit" type="submit"><br>
-   $warning<br>$shibboleth_link
+   $langUsername <br />
+   <input class="Login" name="uname" size="20" /><br />
+   $langPass <br />
+   <input class="Login" name="pass" type="password" size="20" /><br /><br />
+   <input class="Login" name="submit" type="submit" size="20" value="$langEnter" /><br />
+   $warning<br />$shibboleth_link
    <a href="modules/auth/lostpass.php">$lang_forgot_pass</a>
    </form>
    </td>
@@ -140,5 +128,3 @@ $tool_content .= <<<lCont2
 </div>
 
 lCont2;
-
-?>
