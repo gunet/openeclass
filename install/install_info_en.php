@@ -3,7 +3,7 @@
 <html>
 <head>
 <META http-equiv=Content-Type content="text/html; charset=UTF-8">
-<title>Installation Instructions Open eClass 2.2</title>
+<title>Installation Instructions Open eClass 2.3</title>
 <style type="text/css">
 
 body {
@@ -55,29 +55,27 @@ pre {
 </style>
   </head>
   <body>
-    <h2>Installation Instructions Open eClass 2.2</h2>
+    <h2>Installation Instructions Open eClass 2.3</h2>
 <p>The Open eClass platform is a complete Course Management System. It is the solution offered by the Greek Academic Network GUnet to support Asynchronous eLearning Services. It is mainly designed, developed and supported by the GUnet Asynchronous eLearning Group and is distributed for free as open-source software.</p>
-    <p>The Asynchronous <b>Open eClass 2.2</b> eLearning platform has been tested and operates wwell in: 
+    <p>The Asynchronous <b>Open eClass 2.3</b> eLearning platform has been tested and operates wwell in: 
     </p>
     <ul>
-      <li>Ms Windows environment (<b>Windows NT</b>, <b>Windows
-      2000</b>, <b>Windows XP</b>, <b>Windows 2003</b>)
+      <li>Ms Windows environment (<b>Windows NT</b>, <b>Windows 2000</b>, <b>Windows XP</b>, <b>Windows 2003</b>, <b>Windows Vista</b>, <b>Windows 7</b>)
       </li>
-      <li>Various Linux distributions (e.g. <b>RedHat</b>,
-      <b>Debian</b>, <b>Ubuntu</b>, <b>Suse</b> etc)
+      <li>Various Linux distributions (e.g. <b>RedHat</b>, <b>CentOS</b>, <b>Debian</b>, <b>Ubuntu</b>, <b>Suse</b> etc)
       </li>
       <li>UNIX environment (e.g. <b>Solaris</b>).
       </li>
     </ul>In the following pages platform's installation instructions are presented analytically:<br>
     <ul>
       <li><a href="#before">Actions before installation - Prerequisities</a></li>
-      <li><a href="#unix">Installations in Unix / Linux operational systems (Solaris/Redhat, Debian, Suse, Mandrake etc.)</a> </li>
-      <li><a href="#win">Installations in Ms Windows systems (Win2000, WinXP, Win2003 etc.)</a></li>
+      <li><a href="#unix">Installations in Unix / Linux systems</a> </li>
+      <li><a href="#win">Installations in Ms Windows systems</a></li>
       <li><a href="#after">Actions after installation - Further settings</a></li>
     </ul>
     <hr>
     <h3>
-      <a name="before" id="before">Actions before installation - prequisities:</a>
+      <a name="before" id="before">Actions before installation - prequisities</a>
     </h3>
     <p>A series of applications needs to exist and operate in order for the eClass platform to be installed and operate as well. These applications are:
     </p>
@@ -86,7 +84,6 @@ pre {
     </h4>
     <p>Apache has to be able to control pages of the <em>.php .inc.</em> type. If you have not set the server yet, adding the following line to the <code>httpd.conf</code> file is enough:  
     </p>
-
     <pre>AddType application/x-httpd-php .php .inc</pre>
 
 <p>You will also have to define that the default charset of pages sent by the Web Server is <em>UTF-8</em>. In Apache, this can be done by placing the following statement in the <code>httpd.conf</code> file:   
@@ -116,8 +113,8 @@ Options -Indexes
 <p>You will also have to define the following parameters on the <code>php.ini</code> file:  
 </p>
 <pre>register_globals = on
-
-short_open_tag = on</pre>
+short_open_tag = on
+magic_quotes_gpc = on</pre>
     <p>As far as the maximum file size allowed to be uploaded on the platform is concerned, you can adjust it to the following lines in the <code>php.ini</code> file: 
     </p>
 
@@ -136,9 +133,9 @@ short_open_tag = on</pre>
       </li>
     </ul>
 <p>
-What is more, if a PHP note comes up during the application, search for the error_reporting variable in the <code>php.ini</code> file and define the following value: </p>
+What is more, if a PHP notice comes up during the application, search for the <em>display_errors</em> variable in file <code>php.ini</code> and modify it in: </p>
 
-    <pre>error_reporting = E_ALL &amp; ~E_NOTICE</pre>
+    <pre>display_errors = Off</pre> 
     <div class="note">
       <ul>
         <li class="c2">
@@ -160,9 +157,8 @@ What is more, if a PHP note comes up during the application, search for the erro
     <p>As soon as you have finished with changes, restart Apache Web Server. 
     </p>
 
-<h4> 3. Database<a href="http://www.mysql.com" target="_blank">MySQL</a> (versions 4.1.x 
-  or 5.x) </h4>
-    <p>Along with the MySQL installation, a user account with database creation rights has to be created. 
+<h4> 3. Database<a href="http://www.mysql.com" target="_blank">MySQL</a> (versions 4.1.x or 5.x) </h4>
+    <p>Along with the MySQL installation, a user account with database creation rights has to be created.
     </p>
 	<p>You should also be sure that MySQL is not running on a strict mode. For that reason, you should check if the <pre>--sql-mode</pre> parameter that exists in the <em>my.cnf</em> or <em>my.ini</em> configuration file for UNIX and Windows users correspondingly, has a value or not. If it does (e.g. <code>--sql-mode=STRICT_TRANS_TABLES</code> or <code>--sql-mode=STRICT_ALL_TABLES</code>), then turn it into a blank one (<code>--sql-mode=""</code>). 
 	</p>
@@ -172,7 +168,7 @@ What is more, if a PHP note comes up during the application, search for the erro
       target="_blank">postfix</a> (optional)
     </h4>
 
-    <p>In some of the platform operations (e.g. during users' registration), emails are sent. If any of the email mission applications does not function, platform mails are not sent anywhere. 
+    <p>In some of the platform operations (e.g. during users' registration), emails are sent. If any of the email submission applications does not function, platform mails are not sent anywhere. 
     </p>
     <div class="note">
       <p>
@@ -182,14 +178,13 @@ What is more, if a PHP note comes up during the application, search for the erro
     </div>
     <hr>
     <h3>
-      <a name="unix" id="unix">Installation in Unix / Linux systems
-      (Solaris / Redhat, Debian, Suse, Ubuntu etc)</a>
+      <a name="unix" id="unix">Installation in Unix / Linux systems</a>
     </h3>
     <h3>
       Installation Process:
     </h3>
     <p>
-You can decompress the <b>openeclass-2.2.tar.gz</b> file using the <code>tar xzvf openeclass-2.2.tar.gz</code> command. The sub-directory created during decompression of the packet includes all the application files. This sub-directory has to be placed in an accessible point by the computer web server. 
+You can decompress the <b>openeclass-2.3.tar.gz</b> file using the <code>tar xzvf openeclass-2.2.tar.gz</code> command. The sub-directory created during decompression of the packet includes all the application files. This sub-directory has to be placed in an accessible point by the computer web server. 
     </p>
     <p>
 To give access rights to web server you can type the following commands (if the web server runs as a www-data user) 
@@ -216,17 +211,15 @@ To give access rights to web server you can type the following commands (if the 
   <li>The name you would like to give to the platform (e.g. Open eClass).</li>
   <li>Phone number and email helpdesk (several applications meet this email, it could be the same as the administrator's).</li>
   <li>Name and address of your institute.</li>
-  <li>
-The ldap server of the institute user authentication will be taking place  (ldap.noc.uoa.gr), as well as the ldap server basedn (e.g. ou=people,o=UoA,c=gr). It should be noted, that the computer eclass will be installed to, needs to have access to the lpad server of the institute. In case there is no LDAP server available in your institute or organisation, leave it blank. There is an alternative way of authenticate users through MySQL. </li>
 </ul>
     <hr>
     <h3>
-      <a name="win" id="win">Installation in Ms Windows systems (Win2000, WinXP, Win2003)</a>
+      <a name="win" id="win">Installation in Ms Windows systems</a>
     </h3>
     <h3>
-      Installation Process:
+      Installation Process
     </h3>
-    <p>Decompress the openeclass-2.2.zip file in the root directory of the Apache. The subdirectory created during the decompression of the package includes all files of the application. This sub-directory has to be placed in an accessible path by the web server.
+    <p>Decompress the openeclass-2.3.zip file in the root directory of the Apache. The subdirectory created during the decompression of the package includes all files of the application. This sub-directory has to be placed in an accessible path by the web server.
     </p>
     <p>In order to start installation, visit the /install/ sub-directory address with a web browser.  If, for example, the main eclass directory is located in http://www.example.gr/openeclass/, the address you have to type is <code>http://www.example.gr/openeclass/install/</code>. Then follow the platform installation guide steps like the ones presented on your screen. Note that during the installation process you will be required the following:</p>
 <ul>
@@ -243,15 +236,14 @@ The ldap server of the institute user authentication will be taking place  (ldap
   <li>The name you would like to give to the platform (e.g. Open eClass).</li>
   <li>Phone number and email helpdesk (several applications meet this email, it could be the same as the administrator's).</li>
   <li>Name and address of your institute.</li>
-  <li>The ldap server of the institute user authentication will be taking place  (ldap.noc.uoa.gr), as well as the ldap server basedn (e.g. ou=people,o=UoA,c=gr). It should be noted, that the computer eclass will be installed to, needs to have access to the ldap server of the institute. In case there is no LDAP server available in your institute or organisation, leave it blank. There is an alternative way of authenticate users through MySQL.</li>
 </ul>
     <hr>
     <h3>
-      <a name="after" id="after">Actions after Installation - Further Settings:</a>
+      <a name="after" id="after">Actions after installation - Further settings</a>
     </h3>
 <ul>
   <li> 
-    <p>The platform is delivered through the phpMyAdmin management tool. For safety and security reasons, access to phpMyAdmin is done through the browser's cookies. If you want to change it, you can refer to the config.inc.php file of phpMyAdmin.</p>
+    <p>The platform is delivered through the <em>phpMyAdmin</em> management tool. For safety and security reasons, access to phpMyAdmin is done through the browser's cookies. If you want to change it, you can refer to the config.inc.php file of phpMyAdmin.</p>
   </li>
   <li>eClass introduces 3 tentative / general Schools / Faculties. (Faculty 1-Code TMA, Faculty 2-Code TMB etc).You will have to change and adjust them to the Schools-Faculties of your own institute. You can do this through the administrator tool. You will find more and further information for these actions in the Administrator's manual (included in the administator tool).</li>
   <li> 
@@ -260,9 +252,7 @@ The ldap server of the institute user authentication will be taking place  (ldap
     <p> with its own. </p>
   </li>
   <li> 
-    <p>In the <em>config.php</em> the variable <em>have_latex</em>, which is <em>FALSE</em> by definition is defined. If you change its value to <em>TRUE</em>, mathematic symbols will be supported only in some eClass subsystems. However, this presupposes the existence of a latex system on the host computer where eClass has installed. For more about the configurations you will need to do, please refer to <a href="README_latex.txt">README_latex.txt</a>. If you do not want to have a latex support, leave it as it is (that is in <em>FALSE</em> value).</p>
-  <li> 
-    <p>In the <em>config.php</em> file, the <em>close_user_registration</em> variable, which is FALSE by definition, will be defined. Changing the value to <em>TRUE</em>, registration of users with 'student' rights will not be free anymore. Users will have to follow a process similar to the teacher account creation process, namely filling in a student account application form, in order to obtain a platform account. The application will be examined by the administrator who either approves of it and opens an account, or rejects it. 
+<p>In the <em>config.php</em> file, the <em>close_user_registration</em> variable, which is FALSE by definition, will be defined. Changing the value to <em>TRUE</em>, registration of users with 'student' rights will not be free anymore. Users will have to follow a process similar to the teacher account creation process, namely filling in a student account application form, in order to obtain a platform account. The application will be examined by the administrator who either approves of it and opens an account, or rejects it. 
  </p>
   </li>
 <li>
@@ -271,28 +261,40 @@ If you want to use the platform with a Web server which has the SSL support acti
 </p>
 </li>
 <li>
+<p>If you want to modify any message of platform then proceed with the following actions:
+Create a file of type .php with name <em>english.inc.php</em> (or <em>greek.inc.php</em>) and place it in directory <em>(eclass path)/config/</em>. Find the varible name which contains the message you wish to change and assing it the new message. e.g. If you want to change message <pre>$langAboutText = "The platform version is";</pre> create <em>english.inc.php</em> in directory (eclass path)/config/ like this:
+<pre>
+&lt;?
+$langAboutText = "Version is";
+?&gt;
+</pre>
+With the above way, you preserve custom messages from future upgrades of platform.
 <p>
-You can add a text (e.g. informative) on the left and right of the platform homepage. For that reason, keystroke the text you prefer (in HTML form) on the <em>eclass_home_extras_left.html</em> and <em>eclass_home_extras_right.html</em> scripts correspondingly, which can be found on eClass parent directory.
-</p>
-</li>
-<li>
 <p>
  You can modify the names of the basic roles of the users of the platform by modifying the message file (eClass_path)/modules/lang/greek/common.inc.php
 </p>
+<p>
+You can add a text (e.g. informative) on the left and right of the platform homepage. For that reason, assign the value - message in variables <em>$langExtrasLeft</em> και <em>$langExtrasRight</em>, correspondingly in file <em>(path του eClass)/modules/lang/greek/common.inc.php</em> 
+</p>
+</li>
+<li>Open eClass supports mathematical symbols in subsystems "Exercises", "Forums" and "Announcements". In "Exercises" you can add math symbols in fields "Exercise Description" while a new exercise is created (or modified), in field "Comment" when a new question in an exercise is created (or modified). In subsystem "Forums" when you compose a new message or reply to an existing one and in subsystem "Announcements" when a new announcement is created. Math symbols must be enclosed with tags <em>&lt;m&gt;</em> and <em>&lt;/m&gt;</em>.
+E.g. when you type 
+<pre>
+&lt;m&gt;sqrt{x-1}&lt;/m&gt; 
+</pre>
+square root of x-1 will be drawed. For syntax of all mathematical symbols, read manual in <em>http://(Open eClass url)/manuals/PhpMathPublisherHelp.pdf</em> 
 </li>
   <li>Finally, it should be noted to the users of the platform that they need to have javascript activated on their browser. </li>
   <li class="c2"> 
     <ul>
       <li>For Internet Explorer users, choose consecutively <em>Internet Options/Security/Custom Level/Security Options</em> from the menu and check the <em>"Scripting of java applets"</em> option. </li>
-      <li>For users <em>Mozilla Firefox,</em> choose consecutively <em>Edit / Preferences /  Web features</em> from the menu and check the <em>Enable Java script for Navigator</em> option.  
+      <li>For users <em>Mozilla Firefox,</em> choose consecutively <em>Edit / Preferences /  Web features</em> from the menu and check the <em>Enable Java script for Navigator</em> option.
       </li>
     </ul>
     <div class="note"> 
       <ul>
-        <li><b>For Unix / Linux systems only:</b>After completing installation, you are advised, for safety reasons, to change access rights for the <code>/config/config.php</code> and <code>/install/index.php</code><p> files and allow reading only. (persmissions must be set to 444)</p> 
-
-          <pre>chmod 444 openeclass/config/config.php
-openeclass/install/index.php</pre>
+        <li><b>For Unix / Linux systems only:</b>After completing installation, you are advised, for safety reasons, to change access rights for the <code>/config/config.php</code> and <code>/install/index.php</code><p> files and allow reading only. (persmissions must be set to 444) e.g.</p> 
+          <pre>chmod 444 /config/config.php /install/index.php</pre>
         </li>
       </ul>
     </div>
