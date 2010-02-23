@@ -194,7 +194,9 @@ function format_url($filePath)
 
 function file_url_escape($name)
 {
-        return rawurlencode(str_replace('/', '//', $name));
+        return str_replace(array('%2F', '%2f'),
+                           array('//', '//'),
+                           rawurlencode($name));
 }
 
 function file_url($path, $filename)
