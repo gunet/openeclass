@@ -44,7 +44,7 @@ include '../../include/baseTheme.php';
 include '../../include/lib/forcedownload.php';
 
 $head_content = "
-<script>
+<script type='text/javascript'>
 function confirmation (name)
 {
 
@@ -355,7 +355,7 @@ function new_assignment()
 
 
 	$tool_content .= "
-  <form action='work.php' method='post' onsubmit='return checkrequired(this, 'title');'>
+  <form action='work.php' method='post' onsubmit='return checkrequired(this, \"title\");'>
     <table width='99%' class='FormData'>
     <tbody>
     <tr>
@@ -364,17 +364,18 @@ function new_assignment()
     </tr>
     <tr>
       <th class='left'>$m[title]:</th>
-      <td><input type='text' name='title' size='55' class='FormData_InputText'></td>
+      <td><input type='text' name='title' size='55' class='FormData_InputText' /></td>
     </tr>
     <tr>
       <th class='left'>$m[description]:</th>
       <td>
         <table class='xinha_editor'>
         <tr>
-          <td><textarea id='xinha' name='desc' value='$desc' style='width:100%'>";
-	       if ($desc)
-		      $tool_content .= "$desc";
-    $tool_content .= "</textarea></td>
+          <td><textarea id='xinha' name='desc' style='width:100%'>";
+        if ($desc) {
+                $tool_content .= $desc;
+        }
+        $tool_content .= "</textarea></td>
         </tr>
         </table>
       </td>
@@ -389,12 +390,12 @@ function new_assignment()
     </tr>
     <tr>
       <th class='left'>$m[group_or_user]:</th>
-      <td><input type='radio' name='group_submissions' value='0' checked='1'>$m[user_work]
-      <br><input type='radio' name='group_submissions' value='1'>$m[group_work]</td>
+      <td><input type='radio' name='group_submissions' value='0' checked='1' />$m[user_work]
+      <br /><input type='radio' name='group_submissions' value='1' />$m[group_work]</td>
     </tr>
     <tr>
       <th>&nbsp;</th>
-      <td><input type='submit' name='new_assign' value='$langAdd'></td>
+      <td><input type='submit' name='new_assign' value='$langAdd' /></td>
     </tr>
     </tbody>
     </table>
@@ -451,8 +452,8 @@ function show_edit_assignment($id)
 	$description = q($row['description']);
 	$tool_content .= <<<cData
     <form action="$_SERVER[PHP_SELF]" method="post" onsubmit="return checkrequired(this, 'title');">
-    <input type="hidden" name="id" value="$id">
-    <input type="hidden" name="choice" value="do_edit">
+    <input type="hidden" name="id" value="$id" />
+    <input type="hidden" name="choice" value="do_edit" />
     <table width="99%" class="FormData">
     <tbody>
     <tr>
@@ -461,7 +462,7 @@ function show_edit_assignment($id)
     </tr>
     <tr>
       <th class="left">$m[title]:</th>
-      <td><input type="text" name="title" size="45" value="${row['title']}" class='FormData_InputText'></td>
+      <td><input type="text" name="title" size="45" value="${row['title']}" class='FormData_InputText' /></td>
     </tr>
     <tr>
       <th class="left">${m['description']}:</th>
@@ -475,7 +476,7 @@ function show_edit_assignment($id)
     </tr>
     <tr>
       <th class="left">${m['comments']}:</th>
-      <td><textarea name="comments" rows="5" cols="65"  class='FormData_InputText'>${row['comments']}</textarea></td>
+      <td><textarea name="comments" rows="5" cols="65" class='FormData_InputText'>${row['comments']}</textarea></td>
     </tr>
     <tr>
       <th class="left">${m['deadline']}:</th>
@@ -490,22 +491,24 @@ cData;
       <td>".
 	"<input type='radio' name='group_submissions' value='0'";
 
-	if ($row['group_submissions'] == '0')
-	$tool_content .= " checked=\"1\" >";
-	else $tool_content .= ">";
+	if ($row['group_submissions'] == '0') {
+        	$tool_content .= " checked='1' />";
+        } else {
+                $tool_content .= " />";
+        }
 
-	$tool_content .= $m['user_work']."<br><input type='radio' name='group_submissions' value='1' ";
+	$tool_content .= $m['user_work']."<br /><input type='radio' name='group_submissions' value='1'";
 
 	if ($row['group_submissions'] != '0') {
-        	$tool_content .= " checked='1'>";
+        	$tool_content .= " checked='1' />";
 	} else {
-                $tool_content .= ">";
+                $tool_content .= " />";
         }
 	$tool_content .= $m['group_work']."</td>
     </tr>
     <tr>
       <th class='left'>&nbsp;</th>
-      <td><input type='submit' name='do_edit' value='".$langEdit."'></td>
+      <td><input type='submit' name='do_edit' value='$langEdit' /></td>
     </tr>
     </tbody>
     </table>
@@ -612,7 +615,7 @@ function show_submission_form($id)
 		$tool_content .= <<<cData
 
     <form enctype="multipart/form-data" action="work.php" method="post">
-    <input type="hidden" name="id" value="${id}">
+    <input type="hidden" name="id" value="${id}" />
     <br />
     <table width="99%" align="left" class="FormData">
     <tbody>
@@ -622,7 +625,7 @@ function show_submission_form($id)
     </tr>
     <tr>
       <th class="left">${langWorkFile}:</th>
-      <td><input type="file" name="userfile" class="FormData_InputText"></td>
+      <td><input type="file" name="userfile" class="FormData_InputText" /></td>
     </tr>
     <tr>
       <th class="left">${m['comments']}:</th>
@@ -630,7 +633,7 @@ function show_submission_form($id)
     </tr>
     <tr>
       <th>&nbsp;</th>
-      <td><input type="submit" value="${langSubmit}" name="work_submit"><br />$langNotice3</td>
+      <td><input type="submit" value="${langSubmit}" name="work_submit" /><br />$langNotice3</td>
     </tr>
     </tbody>
     </table>
@@ -851,7 +854,7 @@ function show_assignment($id, $message = FALSE)
 		$tool_content .= <<<cData
 
     <form action="work.php" method="post">
-    <input type="hidden" name="grades_id" value="${id}">
+    <input type="hidden" name="grades_id" value="${id}" />
     <br />
     <table class="FormData" width="99%">
     <tbody>
@@ -923,13 +926,13 @@ cData;
 			}
 			$tool_content .= "
         </td>
-        <td width=\"75\" align=\"center\">".nice_format($row['submission_date'])."</td>
-        <td width=\"180\" align=\"left\" class=\"grade\">
-            <div align=\"center\"><input type=\"text\" value=\"${row['grade']}\" maxlength=\"3\" size=\"3\" name=\"grades[${row['id']}]\" class=\"grade_input\"></div>
-            <table align=\"left\" width=\"100%\" class=\"Info\">
+        <td width='75' align='center'>".nice_format($row['submission_date'])."</td>
+        <td width='180' align='left' class='grade'>
+            <div align='center'><input type='text' value='{$row['grade']}' maxlength='3' size='3' name='grades[{$row['id']}]' class='grade_input'></div>
+            <table align='left' width='100%' class='Info'>
             <tbody>
             <tr>
-              <td width=\"1\" class=\"left\"><img src='../../template/classic/img/forum_on.gif' alt='$m[comments]' title=\"$m[comments]\"></td>
+              <td width='1' class='left'><img src='../../template/classic/img/forum_on.gif' alt='$m[comments]' title='$m[comments]'></td>
               <td>$prof_comment</td>
             <tr>
             </tbody>
@@ -944,11 +947,11 @@ cData;
 
 	$tool_content .= "
     <br />
-    <table class=\"FormData\" width=\"99%\">
+    <table class='FormData' width='99%'>
     <tbody>
     <tr>
-      <th class=\"left\" width=\"220\">&nbsp;</th>
-      <td><input type=\"submit\" name=\"submit_grades\" value=\"${langGradeOk}\"></td>
+      <th class='left' width='220'>&nbsp;</th>
+      <td><input type='submit' name='submit_grades' value='${langGradeOk}'></td>
     </tr>
     </tbody>
     </table>
@@ -970,10 +973,10 @@ cData;
 			$chart->render($webDir.$chart_path);
 
 			$tool_content .= "
-    <table width=\"99%\" class=\"FormData\">
+    <table width='99%' class='FormData'>
     <tbody>
     <tr>
-      <td align=\"right\"><img src=\"".$urlServer.$chart_path."\" /></td>
+      <td align='right'><img src='$urlServer$chart_path' /></td>
     </tr>
     </tbody>
     </table>";
@@ -996,7 +999,7 @@ cData;
 	}
 	$tool_content .= "
       <br/>
-      <p align=\"right\"><a href='work.php'>$langBack</a></p>";
+      <p align='right'><a href='work.php'>$langBack</a></p>";
 }
 
 
@@ -1031,25 +1034,24 @@ cData;
 			if ($k%2==0) {
 	           $tool_content .= "\n      <tr>";
 	        } else {
-	           $tool_content .= "\n      <tr class=\"odd\">";
+	           $tool_content .= "\n      <tr class='odd'>";
             }
 			$tool_content .= "
-        <td width=\"1\"><img style='border:0px; padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'></td>
-        <td><a href=\"work.php?id=${row['id']}\">${title_temp}</a></td>
-        <td width=\"30%\">".nice_format($row['deadline'])."
-        ";
+        <td width='1'><img style='border:0px; padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'></td>
+        <td><a href='work.php?id=${row['id']}'>${title_temp}</a></td>
+        <td width='30%'>".nice_format($row['deadline']);
 
 			if ($row['days'] > 1) {
-				$tool_content .= " (<span class=\"not_expired\">$m[in]&nbsp;$row[days]&nbsp;$langDays</span>";
+				$tool_content .= " (<span class='not_expired'>$m[in]&nbsp;$row[days]&nbsp;$langDays</span>";
 			} elseif ($row['days'] < 0) {
-				$tool_content .= " (<span class=\"expired\">$m[expired]</span>)";
+				$tool_content .= " (<span class='expired'>$m[expired]</span>)";
 			} elseif ($row['days'] == 1) {
-				$tool_content .= " (<span class=\"expired_today\">$m[tomorrow]</span>)";
+				$tool_content .= " (<span class='expired_today'>$m[tomorrow]</span>)";
 			} else {
-				$tool_content .= " (<span class=\"expired_today\"><b>$m[today]</b></span>)";
+				$tool_content .= " (<span class='expired_today'><b>$m[today]</b></span>)";
 			}
 			$tool_content .= "</td>
-        <td width=\"10%\" align=\"center\">";
+        <td width='10%' align='center'>";
 
 			$grade = ' - ';
 			if ($submission = find_submission($uid, $row['id'])) {
@@ -1062,7 +1064,7 @@ cData;
 				$tool_content .= "<img src='../../template/classic/img/checkbox_off.gif' alt='$m[no]'>";
 			}
 			$tool_content .= "</td>
-        <td width=\"10%\" align=\"center\">${grade}</td>
+        <td width='10%' align='center'>$grade</td>
       </tr>";
       $k++;
 	}
@@ -1070,7 +1072,7 @@ cData;
       </tbody>
       </table>';
 	} else {
-		$tool_content .= "<p class=\"alert1\">$langNoAssign</p>";
+		$tool_content .= "<p class='alert1'>$langNoAssign</p>";
 
 	}
 }
@@ -1084,12 +1086,12 @@ function show_assignments($message = null)
 	$result = db_query("SELECT * FROM assignments ORDER BY id");
 
 	if (isset($message)) {
-		$tool_content .="<p class=\"success_small\">$message</p><br/>";
+		$tool_content .="<p class='success_small'>$message</p><br/>";
 	}
 
 	$tool_content .="
-    <div id=\"operations_container\">
-      <ul id=\"opslist\">
+    <div id='operations_container'>
+      <ul id='opslist'>
         <li><a href='work.php?add=1'>$langNewAssign</a></li>
       </ul>
     </div><br />";
@@ -1117,7 +1119,7 @@ cData;
 			$row_s = mysql_fetch_array($result_s);
 			$hasUnevaluatedSubmissions = $row_s[0];
 			if(!$row['active']) {
-				$visibility_css = "style=\"color: #CAC3B5;\"";
+				$visibility_css = "style='color: #CAC3B5;'";
 				$visibility_image = "arrow_red";
 			} else {
 				$visibility_css = "";
@@ -1126,44 +1128,42 @@ cData;
 			            if ($index%2==0) {
 	                       $tool_content .= "\n    <tr ".$visibility_css.">";
 	                    } else {
-	                       $tool_content .= "\n    <tr class=\"odd\" ".$visibility_css.">";
+	                       $tool_content .= "\n    <tr class='odd' ".$visibility_css.">";
                         }
 
 			$tool_content .= "
-      <td width=\"1%\"><img style='border:0px; padding-top:3px;' src='${urlServer}/template/classic/img/$visibility_image.gif' title='bullet'></td>
-      <td ".$visibility_css."><a href=\"work.php?id=${row['id']}\" ";
+      <td width='1%'><img style='border:0px; padding-top:3px;' src='$urlServer/template/classic/img/$visibility_image.gif' title='bullet'></td>
+      <td ".$visibility_css."><a href='work.php?id=${row['id']}' ";
 			$tool_content .= ">";
 			$tool_content .= $row_title = htmlspecialchars($row['title']);
 			$tool_content .= "</a></td>
-      <td align=\"center\">".nice_format($row['deadline'])."</td>
-      <td align=\"right\">
-         <a href=\"work.php?id=${row['id']}&choice=edit\"><img src=\"../../template/classic/img/edit.gif\" border=\"0\" alt=\"${m['edit']}\"></a>";
+      <td align='center'>".nice_format($row['deadline'])."</td>
+      <td align='right'>
+         <a href='work.php?id=$row[id]&amp;choice=edit'><img src='../../template/classic/img/edit.gif' alt='$m[edit]' /></a>";
 			$tool_content .= "
-         <a href='work.php?id=${row['id']}&choice=do_delete' onClick=\"return confirmation('".addslashes($row_title)."');\"><img src=\"../../template/classic/img/delete.gif\" border=\"0\" alt=\"${m['delete']}\"></a>";
+         <a href='work.php?id=$row[id]&amp;choice=do_delete' onClick='return confirmation(\"".addslashes($row_title)."\");'><img src='../../template/classic/img/delete.gif' alt='$m[delete]' /></a>";
 
-			if($row['active']) {
+			if ($row['active']) {
 				$deactivate_temp = htmlspecialchars($m['deactivate']);
 				$activate_temp = htmlspecialchars($m['activate']);
 				$tool_content .= "
-         <a href=\"work.php?choice=disable&id=${row['id']}\">"."<img src=\"../../template/classic/img/visible.gif\" border=\"0\" title=\"${deactivate_temp}\"></a>";
+         <a href='work.php?choice=disable&amp;id=$row[id]'><img src='../../template/classic/img/visible.gif' title='$deactivate_temp' /></a>";
 			} else {
 				$activate_temp = htmlspecialchars($m['activate']);
 				$tool_content .= "
-         <a href=\"work.php?choice=enable&id=${row['id']}\">"."<img src=\"../../template/classic/img/invisible.gif\" border=\"0\" title=\"${activate_temp}\"></a>";
+         <a href='work.php?choice=enable&amp;id=$row[id]'><img src='../../template/classic/img/invisible.gif' title='$activate_temp' /></a>";
 			}
 			$tool_content .= "
          &nbsp;
       </td>
     </tr>";
-	$index++;
-}
-$tool_content .= '
-    </tbody>
-    </table>';
-} else {
-	$tool_content .= "<p class=\"alert1\">$langNoAssign</p>";
+                        $index++;
+                }
+                $tool_content .= '</tbody></table>';
+        } else {
+                $tool_content .= "<p class=\"alert1\">$langNoAssign</p>";
 
-}
+        }
 }
 
 
@@ -1176,8 +1176,7 @@ function submit_grade_comments($id, $sid, $grade, $comment)
 
 	/*  If check expression is changed by nikos, in order to give to teacher the ability to 
 	 * assign comments to a work without assigning grade. */
-//	if (!is_numeric($grade)) {
-	if (!is_numeric($grade) && ''!=$grade ) {
+	if (!is_numeric($grade) && '' != $grade ) {
 		$tool_content .= $langWorkWrongInput;
 		$stupid_user = 1;
 	} else {
@@ -1203,9 +1202,9 @@ function submit_grades($grades_id, $grades)
 		if ($val[0] != $grade) {
 			/*  If check expression is changed by nikos, in order to give to teacher
 			 * the ability to assign comments to a work without assigning grade. */
-//			if (!is_numeric($grade))
-			if (!is_numeric($grade) && ''!=$grade )
-			$stupid_user = 1;
+			if (!is_numeric($grade) && '' != $grade) {
+        			$stupid_user = 1;
+                        }
 		}
 	}
 
