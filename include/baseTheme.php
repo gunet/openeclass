@@ -140,11 +140,11 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 		for($i = 0; $i < $numOfToolGroups; $i ++) {
 
 			if ($toolArr [$i] [0] ['type'] == 'none') {
-				$t->set_var ( 'ACTIVE_TOOLS', '' );
+				$t->set_var ( 'ACTIVE_TOOLS', '&nbsp;' );
 				$t->set_var ( 'NAV_CSS_CAT_CLASS', 'spacer' );
 				$t->parse ( 'leftNavCategoryTitle', 'leftNavCategoryTitleBlock', false );
 			} elseif ($toolArr [$i] [0] ['type'] == 'split') {
-				$t->set_var ( 'ACTIVE_TOOLS', '' );
+				$t->set_var ( 'ACTIVE_TOOLS', '&nbsp;' );
 				$t->set_var ( 'NAV_CSS_CAT_CLASS', 'split' );
 				$t->parse ( 'leftNavCategoryTitle', 'leftNavCategoryTitleBlock', false );
 
