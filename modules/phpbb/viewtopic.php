@@ -53,8 +53,6 @@
 ==============================================================================
 */
 
-
-
 $require_current_course = TRUE;
 $require_login = TRUE;
 $require_help = TRUE;
@@ -62,19 +60,28 @@ $helpTopic = 'For';
 include '../../include/baseTheme.php';
 $tool_content = "";
 
-
 include_once("./config.php");
 include("functions.php"); // application logic for phpBB
+
 // support for math symbols
 include('../../include/phpmathpublisher/mathpublisher.php');
-/******************************************************************************
- * Actual code starts here
- *****************************************************************************/
+
+$local_head = '
+<script type="text/javascript">
+function confirmation()
+{
+    if (confirm("'.$langConfirmDelete.'"))
+        {return true;}
+    else
+        {return false;}
+}
+</script>
+';
  
 if (isset($_GET['all'])) {
-    $paging = false;
+        $paging = false;
 } else {
-	$paging = true;
+        $paging = true;
 }
 
 $sql = "SELECT f.forum_type, f.forum_name
@@ -117,14 +124,14 @@ if (!add_units_navigation(TRUE)) {
 }
 $nameTools = $topic_subject;
 
-	$tool_content .= "<div id=\"operations_container\">
-	<ul id=\"opslist\">
-	<li><a href=\"newtopic.php?forum=$forum\">$langNewTopic</a></li>
+	$tool_content .= "<div id='operations_container'>
+	<ul id='opslist'>
+	<li><a href='newtopic.php?forum=$forum'>$langNewTopic</a></li>
 	<li>";
 	if($lock_state != 1) {
-		$tool_content .= "<a href=\"reply.php?topic=$topic&forum=$forum\">$langAnswer</a>";
+		$tool_content .= "<a href='reply.php?topic=$topic&amp;forum=$forum'>$langAnswer</a>";
 	} else {
-		$tool_content .= "<IMG SRC=\"$reply_locked_image\" BORDER=\"0\">";
+		$tool_content .= "<img src='$reply_locked_image' alt='' />";
 	}				
 	$tool_content .= "</li></ul></div>";
 
@@ -153,7 +160,7 @@ if ($paging and $total > $posts_per_page ) {
 		} else if($start == 0 && $x == 0) {
 			$tool_content .= "1";
 		} else {
-			$tool_content .= "\n<a href=\"$_SERVER[PHP_SELF]?mode=viewtopic&topic=$topic&forum=$forum&start=$x\">$times</a>";
+			$tool_content .= "\n<a href=\"$_SERVER[PHP_SELF]?mode=viewtopic&amp;topic=$topic&amp;forum=$forum&amp;start=$x\">$times</a>";
 		}
 		$times++;
 	}
@@ -162,13 +169,13 @@ if ($paging and $total > $posts_per_page ) {
 	<td align=\"right\">
 	<span class='pages'>$langGoToPage: &nbsp;&nbsp;";
 	if ( isset($start) && $start > 0 ) {
-		$tool_content .= "\n       <a href=\"$_SERVER[PHP_SELF]?topic=$topic&forum=$forum&start=$last_page\">$langPreviousPage</a>&nbsp;|";
+		$tool_content .= "\n       <a href=\"$_SERVER[PHP_SELF]?topic=$topic&amp;forum=$forum&amp;start=$last_page\">$langPreviousPage</a>&nbsp;|";
 	} else {
 		$start = 0;
 	}	
 	if (($start + $posts_per_page) < $total) {
 		$next_page = $start + $posts_per_page;
-		$tool_content .= "\n       <a href=\"$_SERVER[PHP_SELF]?topic=$topic&forum=$forum&start=$next_page\">$langNextPage</a>&nbsp;|";
+		$tool_content .= "\n       <a href=\"$_SERVER[PHP_SELF]?topic=$topic&amp;forum=$forum&amp;start=$next_page\">$langNextPage</a>&nbsp;|";
 	}
 	$tool_content .= "&nbsp;<a href=\"$_SERVER[PHP_SELF]?topic=$topic&amp;forum=$forum&amp;all=true\">$langAllOfThem</a></span>
 	</td>
@@ -245,15 +252,15 @@ do {
 
 	$tool_content .= "<td class=\"$row_color\">
 	<div class='post_massage'>
-	<img src='$posticon'>
+	<img src='$posticon' alt='' />
 	<em>$langSent: " . $myrow["post_time"] . "</em>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$postTitle
 	</div>
 	<br />$message<br /><br />
 	</td>
 	<td class='$row_color' width='40'><div align='right'>";
 	if ($is_adminOfCourse) { // course admin
-		$tool_content .= "<a href=\"editpost.php?post_id=".$myrow["post_id"]."&amp;topic=$topic&amp;forum=$forum\"><img src='../../template/classic/img/edit.gif' border='0' title='$langModify'></img></a>";
-		$tool_content .= "&nbsp;<a href='editpost.php?post_id=".$myrow["post_id"]."&amp;topic=$topic&amp;forum=$forum&amp;delete=on&amp;submit=yes'><img src='../../template/classic/img/delete.gif' border='0' title='$langDelete'></img></a>";
+		$tool_content .= "<a href=\"editpost.php?post_id=".$myrow["post_id"]."&amp;topic=$topic&amp;forum=$forum\"><img src='../../template/classic/img/edit.gif' title='$langModify' alt='$langModify' /></a>";
+		$tool_content .= "&nbsp;<a href='editpost.php?post_id=".$myrow["post_id"]."&amp;topic=$topic&amp;forum=$forum&amp;delete=on&amp;submit=yes' onClick='return confirmation()'><img src='../../template/classic/img/delete.gif' title='$langDelete' alt='$langDelete' /></a>";
 	}
 	$tool_content .= "</div></td></tr>";
 	$count++;
@@ -315,9 +322,10 @@ cData;
 	<span class='pages'>";
 	if ($total > $posts_per_page) {	
 		$tool_content .= "&nbsp;<a href=\"$_SERVER[PHP_SELF]?topic=$topic&amp;forum=$forum&amp;start=0\">$langPages</a>";
-	}	
+        } else {
+                $tool_content .= '&nbsp;';
+        }
 	$tool_content .= "</span></td></tr></thead></table>";
 }
 
-draw($tool_content,2,'phpbb');
-?>
+draw($tool_content, 2, 'phpbb', $local_head);

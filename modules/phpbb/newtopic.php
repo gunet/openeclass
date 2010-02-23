@@ -134,13 +134,7 @@ if (isset($submit) && $submit) {
 	if ((isset($allow_bbcode) && $allow_bbcode == 1) && !($_POST['bbcode'])) {
 		$message = bbencode($message, $is_html_disabled);
 	}
-	// MUST do make_clickable() before changing \n into <br>.
-	$message = make_clickable($message);
-	$message = str_replace("\n", "<BR>", $message);
-	$message = str_replace("<w>", "<s><font color=red>", $message);
-	$message = str_replace("</w>", "</font color></s>", $message);
-	$message = str_replace("<r>", "<font color=#0000FF>", $message);
-	$message = str_replace("</r>", "</font color>", $message);
+	$message = format_message($message);
 	$subject = strip_tags($subject);
 	$poster_ip = $REMOTE_ADDR;
 	$time = date("Y-m-d H:i");
@@ -211,9 +205,9 @@ if (isset($submit) && $submit) {
 	</tbody></table>"; 
 } else {
 	if (!$uid AND !$fakeUid) {
-		$tool_content .= "<center><br><br>
+		$tool_content .= "<center><br /><br />
 		$langLoginBeforePost1
-		<br>
+		<br />
 		$langLoginBeforePost2
 		<a href='../../index.php'>$langLoginBeforePost3.</a>
 		</center>";
@@ -229,22 +223,22 @@ if (isset($submit) && $submit) {
 	</tr>
 	<tr>
 	<th class='left'>$langSubject:</th>
-	<td><input type='text' name='subject' size='53' maxlength='100' class='FormData_InputText'></td>
+	<td><input type='text' name='subject' size='53' maxlength='100' class='FormData_InputText' /></td>
 	</tr>
 	<tr>
 	<th class='left'>$langBodyMessage:</th>
 	<td>
 	<table class='xinha_editor'>
 	<tr>
-	<td><textarea id='xinha' name='message' rows=14 cols=50 wrap='virtual' class='FormData_InputText'></textarea></td>
+	<td><textarea id='xinha' name='message' rows='14' cols='50' class='FormData_InputText'></textarea></td>
 	</tr></table>
 	</td>
 	</tr>
 	<tr>
 	<th>&nbsp;</th>
-	<td><input type='hidden' name='forum' value='$forum'>
-	<input type='submit' name='submit' value='$langSubmit'>&nbsp;
-	<input type='submit' name='cancel' value='$langCancelPost'>
+	<td><input type='hidden' name='forum' value='$forum' />
+	<input type='submit' name='submit' value='$langSubmit' />&nbsp;
+	<input type='submit' name='cancel' value='$langCancelPost' />
 	</td></tr>
 	</tbody>
 	</table>

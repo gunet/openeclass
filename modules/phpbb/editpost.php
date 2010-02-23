@@ -103,9 +103,9 @@ if ($is_adminOfCourse) { // course admin
 		$topic_title = $row2[0];
 	
 		$nameTools = $langReply;
-		$navigation[]= array ("url"=>"index.php", "name"=> $langForums);
-		$navigation[]= array ("url"=>"viewforum.php?forum=$forum_id", "name"=> $forum_name);
-		$navigation[]= array ("url"=>"viewtopic.php?&topic=$topic_id&forum=$forum_id", "name"=> $topic_title);
+		$navigation[] = array ("url"=>"index.php", "name"=> $langForums);
+		$navigation[] = array ("url"=>"viewforum.php?forum=$forum_id", "name"=> $forum_name);
+		$navigation[] = array ("url"=>"viewtopic.php?topic=$topic_id&amp;forum=$forum_id", "name"=> $topic_title);
 	
 		// IF we made it this far we are allowed to edit this message, yay!
 		$is_html_disabled = false;
@@ -116,21 +116,14 @@ if ($is_adminOfCourse) { // course admin
 		if ( isset($allow_bbcode) && $allow_bbcode == 1 && !isset($bbcode)) {
 			$message = bbencode($message, $is_html_disabled);
 		}
-		// MUST do make_clickable() before changing \n into <br>.
 		if (isset($message)) {
-			$message = make_clickable($message);
-			$message = str_replace("\n", "<BR>", $message);
-			$message = str_replace("<w>", "<s><font color=red>", $message);
-			$message = str_replace("</w>", "</font color></s>", $message);
-			$message = str_replace("<r>", "<font color=#0000FF>", $message);
-			$message = str_replace("</r>", "</font color>", $message);
-			$message = addslashes($message);
+			$message = format_message($message);
 		}
 		if (!isset($delete) || !$delete) {
 			$forward = 1;
 			$topic = $topic_id;
 			$forum = $forum_id;
-			$sql = "UPDATE posts_text SET post_text = '$message' WHERE (post_id = '$post_id')";
+			$sql = "UPDATE posts_text SET post_text = " . autoquote($message) . " WHERE (post_id = '$post_id')";
 			if (!$result = db_query($sql, $currentCourseID)) {
 				$tool_content .= $langUnableUpadatePost;
 				draw($tool_content, 2, 'phpbb', $head_content);
@@ -154,15 +147,15 @@ if ($is_adminOfCourse) { // course admin
 				}
 			}
 			
-			$tool_content .= "<div id=\"operations_container\">
-			<ul id=\"opslist\">
-			<li><a href=\"viewtopic.php?topic=$topic_id&forum=$forum_id\">$langViewMsg1</a></li>
-			<li><a href=\"viewforum.php?forum=$forum_id\">$langReturnTopic</a></li>
+			$tool_content .= "<div id='operations_container'>
+			<ul id='opslist'>
+			<li><a href='viewtopic.php?topic=$topic_id&amp;forum=$forum_id'>$langViewMsg1</a></li>
+			<li><a href='viewforum.php?forum=$forum_id'>$langReturnTopic</a></li>
 			</ul>
 			</div>
 			<br />";
-			$tool_content .= "<table width=\"99%\">
-			<tbody><tr><td class=\"success\">$l_stored</td>
+			$tool_content .= "<table width='99%'>
+			<tbody><tr><td class='success'>$langStored</td>
 			</tr></tbody></table>";
 		} else {
 			$now_hour = date("H");
@@ -208,14 +201,14 @@ if ($is_adminOfCourse) { // course admin
 				sync($currentCourseID, $topic_id, 'topic');
 			}
 			
-			$tool_content .= "<div id=\"operations_container\">
-			<ul id=\"opslist\">
-			<li><a href=\"viewforum.php?forum=$forum_id\">$langReturnTopic</a></li>
-			<li><a href=\"index.php\">$langReturnIndex</a></li>
+			$tool_content .= "<div id='operations_container'>
+			<ul id='opslist'>
+			<li><a href='viewforum.php?forum=$forum_id'>$langReturnTopic</a></li>
+			<li><a href='index.php'>$langReturnIndex</a></li>
 			</ul></div><br />";
-			$tool_content .= "<table width=\"99%\"><tbody>
+			$tool_content .= "<table width='99%'><tbody>
 			<tr>
-			<td class=\"success\">$langDeletedMessage</td>
+			<td class='success'>$langDeletedMessage</td>
 			</tr>
 			</tbody></table>";
 		}
@@ -240,37 +233,37 @@ if ($is_adminOfCourse) { // course admin
 		$nameTools = $langReply;
 		$navigation[]= array ("url"=>"index.php", "name"=> $langForums);
 		$navigation[]= array ("url"=>"viewforum.php?forum=$forum", "name"=> $myrow['forum_name']);
-		$navigation[]= array ("url"=>"viewtopic.php?&topic=$topic&forum=$forum", "name"=> $myrow['topic_title']);
+		$navigation[]= array ("url"=>"viewtopic.php?topic=$topic&amp;forum=$forum", "name"=> $myrow['topic_title']);
 	
 		if (($myrow["forum_type"] == 1) && !$user_logged_in && !$logging_in) {
 			// Private forum, no valid session, and login form not submitted...
-			$tool_content .= "<FORM ACTION=\"$_SERVER[PHP_SELF]\" METHOD=\"POST\">
-			<TABLE WIDTH=\"99%\">
-			<TR><TD>$langPrivateNotice</TD></TR>
-			<TR><TD>
-			<TABLE WIDTH=\"99%\">
-			<TR>
-			<TD>&nbsp;</TD>
-			</TR>
-			</TABLE>
-			</TD>
-			</TR>
-			<TR>
-			<TD>
-			<INPUT TYPE=\"HIDDEN\" NAME=\"forum\" VALUE=\"$forum\">
-			<INPUT TYPE=\"HIDDEN\" NAME=\"topic\" VALUE=\"$topic\">
-			<INPUT TYPE=\"HIDDEN\" NAME=\"post_id\" VALUE=\"$post_id\">
-			<INPUT TYPE=\"SUBMIT\" NAME=\"logging_in\" VALUE=\"$langEnter\">
-			</TD>
-			</TR>
-			</TABLE></FORM>";
+			$tool_content .= "<form action='$_SERVER[PHP_SELF]' method='post'>
+			<table width='99%'>
+			<tr><td>$langPrivateNotice</td></tr>
+			<tr><td>
+			<table width='99%'>
+			<tr>
+			<td>&nbsp;</td>
+			</tr>
+			</table>
+			</td>
+			</tr>
+			<tr>
+			<td>
+			<input type='hidden' name='forum' value='$forum' />
+			<input type='hidden' name='topic' value='$topic' />
+			<input type='hidden' name='post_id' value='$post_id' />
+			<input type='submit' name='logging_in' value='$langEnter' />
+			</td>
+			</tr>
+			</table></form>";
 			draw($tool_content, 2, 'phpbb', $head_content);
 			exit();
 		} else {
 			if ($myrow["forum_type"] == 1) {
 				// To get here, we have a logged-in user. So, check whether that user is allowed to post in
 				// this private forum.
-				if (!check_priv_forum_auth($uid, $forum, TRUE, $currentCourseID)) {
+				if (!check_priv_forum_auth($uid, $forum, true, $currentCourseID)) {
 					$tool_content .= "$langPrivateForum $langNoPost";
 					draw($tool_content, 2, 'phpbb', $head_content);
 					exit();
@@ -303,12 +296,12 @@ if ($is_adminOfCourse) { // course admin
 		}
 		$message = $myrow["post_text"];
 		$message = str_replace('{','&#123;',$message);
-		if (eregi("\[addsig]$", $message)) {
+		if (preg_match('/\[addsig]$/i', $message)) {
 			$addsig = 1;
 		} else {
 			$addsig = 0;
 		}
-		$message = str_replace("<BR>", "\n", $message);
+		$message = str_ireplace(array('<br>', '<br />'), "\n", $message);
 		$message = stripslashes($message);
 		$message = bbdecode($message);
 		$message = undo_make_clickable($message);
@@ -318,49 +311,46 @@ if ($is_adminOfCourse) { // course admin
 		list($day, $time) = split(" ", $myrow["post_time"]);
 		
 		
-		$tool_content .= "<div id=\"operations_container\"><ul id=\"opslist\">
-		<li><a href=\"viewtopic.php?topic=$topic&forum=$forum\" target=\"_blank\">$langTopicReview</a></li>
+		$tool_content .= "<div id='operations_container'><ul id='opslist'>
+		<li><a href='viewtopic.php?topic=$topic&amp;forum=$forum' target='_blank'>$langTopicReview</a></li>
 		</ul>
 		</div>
 		<br />";
-		$tool_content .= "<FORM action=\"$_SERVER[PHP_SELF]\" METHOD=\"POST\">
-		<table class=\"FormData\" width=\"99%\">
+		$tool_content .= "<form action='$_SERVER[PHP_SELF]' method='post'>
+		<table class='FormData' width='99%'>
 		<tbody>
-		<TR>
-		<th width=\"220\">&nbsp;</th>
-		<TD><b>$langReplyEdit</b></TD>
-		</TR>";
+		<tr>
+		<th width='220'>&nbsp;</th>
+		<td><b>$langReplyEdit</b></TD>
+		</tr>";
 		$first_post = is_first_post($topic, $post_id, $currentCourseID);
 		if($first_post) {
 			$tool_content .= "<tr>
-			<th class=\"left\">$langSubject:</th>
-			<TD><INPUT TYPE=\"TEXT\" NAME=\"subject\" SIZE=\"53\" MAXLENGTH=\"100\" VALUE=\"" . stripslashes($myrow["topic_title"]) . "\"  class=\"FormData_InputText\"></TD>
-			</TR>";
+			<th class='left'>$langSubject:</th>
+			<td><input type='text' name='subject' size='53' maxlength='100' value='" . stripslashes($myrow["topic_title"]) . "'  class='FormData_InputText' /></td>
+			</tr>";
 		}
-		$tool_content .= "<TR><th class=\"left\">$langBodyMessage:</th>
-		<TD>
+		$tool_content .= "<tr><th class='left'>$langBodyMessage:</th>
+		<td>
 		<table class='xinha_editor'>
 		<tr>
 		<td>
-		<TEXTAREA id='xinha' NAME='message' ROWS=10 COLS=50 WRAP='VIRTUAL'  class='FormData_InputText'>$message</TEXTAREA>
+		<textarea id='xinha' name='message' rows='10' cols='50' class='FormData_InputText'>" . q($message) . "</textarea>
 		</td></tr></table>
-		</TD>
-		</TR>
-		<TR>
-		<th class=\"left\">$langDeleteMessage:</th>
-		<TD><INPUT TYPE=\"CHECKBOX\" NAME=\"delete\"></TD>
-		</TR>
-		<TR><th>&nbsp;</th><TD>";
+		</td>
+		</tr>
+		<tr>
+		<th class='left'>$langDeleteMessage:</th>
+		<td><input type='checkbox' name='delete' /></td>
+		</tr>
+		<tr><th>&nbsp;</th><td>";
 		
 		$tool_content .= "
-		<INPUT TYPE=\"HIDDEN\" NAME=\"post_id\" VALUE=\"$post_id\">
-		<INPUT TYPE=\"HIDDEN\" NAME=\"forum\" VALUE=\"$forum\">
-		<!--
-		<INPUT TYPE=\"HIDDEN\" NAME=\"topic_id\" VALUE=\"$topic\">
-		-->
-		<INPUT TYPE=\"SUBMIT\" NAME=\"submit\" VALUE=\"$langSubmit\">
-		</TD></TR>";
-		$tool_content .= "</tbody></table>";
+		<input type='hidden' name='post_id' value='$post_id' />
+		<input type='hidden' name='forum' value='$forum' />
+		<input type='submit' name='submit' value='$langSubmit' />
+		</td></tr>
+		</tbody></table></form>";
 	}
 } else {
 	$tool_content .= $langForbidden;

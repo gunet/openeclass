@@ -157,13 +157,7 @@ if (isset($submit) && $submit) {
 	if ( (isset($allow_bbcode) && $allow_bbcode == 1) && !isset($bbcode)) {
 		$message = bbencode($message, $is_html_disabled);
 	}
-	// MUST do make_clickable() before changing \n into <br>.
-	$message = make_clickable($message);
-	$message = str_replace("\n", "<BR>", $message);
-	$message = str_replace("<w>", "<s><font color=red>", $message);
-	$message = str_replace("</w>", "</font color></s>", $message);
-	$message = str_replace("<r>", "<font color=#0000FF>", $message);
-	$message = str_replace("</r>", "</font color>", $message);
+	$message = format_message($message);
 	$time = date("Y-m-d H:i");
 	$nom = addslashes($nom);
 	$prenom = addslashes($prenom);
@@ -293,7 +287,7 @@ if (isset($submit) && $submit) {
 			draw($tool_content, 2, 'phpbb', $head_content);
 			exit();
 		}
-	}				
+	}
 	if (!isset($reply)) {
 		$reply = "";
 	}
@@ -304,7 +298,7 @@ if (isset($submit) && $submit) {
 	<table class='xinha_editor'>
 	<tr>
 	<td>
-	<textarea id='xinha' NAME='message' ROWS=15 COLS=70 WRAP='VIRTUAL' class='auth_input'>$reply</textarea></td>
+	<textarea id='xinha' name='message' rows='15' cols='70' class='auth_input'>$reply</textarea></td>
 	</tr></table></td>
 	</tr>
 	<tr>
@@ -320,4 +314,6 @@ if (isset($submit) && $submit) {
 	</tbody></table>
 	</form><br/>";
 }
+
 draw($tool_content, 2, 'phpbb', $head_content);
+

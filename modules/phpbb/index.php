@@ -172,8 +172,8 @@ if ($total_categories) {
 		}
 		$tool_content .= "<tr><td colspan='5' class='Forum'>&nbsp;$title</td>
 			<td class='Forum' style='text-align:center'>
-			<a href='$_SERVER[PHP_SELF]?forumcatnotify=$link_notify&cat_id=$catNum'>	
-			<img src='../../template/classic/img/announcements$icon.gif' border='0' title='$langNotify'></img></a></td></tr>";
+			<a href='$_SERVER[PHP_SELF]?forumcatnotify=$link_notify&amp;cat_id=$catNum'>	
+			<img src='../../template/classic/img/announcements$icon.gif' title='$langNotify' alt='$langNotify' /></a></td></tr>";
 			
 		@reset($forum_row);
 		for ($x=0; $x < count($forum_row); $x++) {
@@ -197,9 +197,9 @@ if ($total_categories) {
 				}
 				if(@$last_post_time > $last_visit && $last_post != $langNoPosts) {
 					$tool_content .= "<td width='1' class='left'>
-					<img src='$newposts_image'></td>";
+					<img src='$newposts_image' /></td>";
 				} else {
-					$tool_content .= "<td width='2%' class='center'><IMG SRC='$folder_image'></td>";
+					$tool_content .= "<td width='2%' class='center'><img src='$folder_image' /></td>";
 				}
 				$name = stripslashes($forum_row[$x]["forum_name"]);
 				$last_post_nom = $forum_row[$x]["nom"];
@@ -232,15 +232,15 @@ if ($total_categories) {
 				} else { // OTHER FORUMS
 					$tool_content .= "<a href='viewforum.php?forum=".$forum."'>$name</a>";
 				}
-				$tool_content .= "<br>$desc";
+				$tool_content .= "<br />$desc";
 				$tool_content .= "</td>";
 				$tool_content .= "<td width='65' class='Forum_leftside'>$total_topics</td>";
 				$tool_content .= "<td width='65' class='Forum_leftside'>$total_posts</td>";
 				$tool_content .= "<td width='200' class='Forum_post'>";
 				if ($total_topics > 0 && $total_posts > 0) {
 					$tool_content .= "$last_post_prenom $last_post_nom
-					<a set='yes' href='viewtopic.php?topic=$last_post_topic_id&amp;forum=$forum'>
-					<img border='0' src='$icon_topic_latest'></a><br />$human_last_post_time</td>";
+					<a href='viewtopic.php?topic=$last_post_topic_id&amp;forum=$forum'>
+					<img src='$icon_topic_latest' /></a><br />$human_last_post_time</td>";
 				} else {
 					$tool_content .= "<font color='#CAC3B5'>$langNoPosts</font></td>";
 				}
@@ -254,8 +254,8 @@ if ($total_categories) {
 					$forum_icon = toggle_icon($forum_action_notify);
 				}
 				$tool_content .= "<td class='Forum_leftside' style='text-align:center'>
-					<a href='$_SERVER[PHP_SELF]?forumnotify=$forum_link_notify&forum_id=$forum'>	
-					<img src='../../template/classic/img/announcements$forum_icon.gif' border='0' title='$langNotify'></img></a></td>";
+					<a href='$_SERVER[PHP_SELF]?forumnotify=$forum_link_notify&amp;forum_id=$forum'>	
+					<img src='../../template/classic/img/announcements$forum_icon.gif' title='$langNotify' alt='$langNotify' /></a></td>";
 				$tool_content .= "</tr>";
 			}
 		}

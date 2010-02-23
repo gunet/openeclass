@@ -1006,4 +1006,13 @@ function category_name($id) {
 		return FALSE;
 	}
 }
-?>
+
+// Apply various transformations to message text for display
+function format_message($message)
+{
+        $message = make_clickable($message);
+        return str_replace(
+                        array('<w>', '</w>', '<r>', '</r>'),
+                        array('<s><font color="red">', '</font></s>', '<font color="#0000FF">', '</font>'),
+                        $message);
+}
