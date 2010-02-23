@@ -657,7 +657,7 @@ function assignment_details($id, $row, $message = null)
 	$tool_content .= "
     <div id=\"operations_container\">
       <ul id=\"opslist\">
-        <li><a href=\"work.php?id=$id&choice=do_delete\" onClick=\"return confirmation('".addslashes($row['title'])."');\">$langDelAssign</a></li>
+        <li><a href=\"work.php?id=$id&amp;choice=do_delete\" onClick=\"return confirmation('".addslashes($row['title'])."');\">$langDelAssign</a></li>
         <li><a href=\"work.php?download=$id\">$langZipDownload</a></li>
       </ul>
     </div>
