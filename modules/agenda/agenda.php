@@ -68,10 +68,6 @@ if ((isset($addEvent) && $addEvent == 1) || ((isset($id) && $id)) && $is_adminOf
 </script>
 <script type="text/javascript" src="$urlAppend/include/xinha/XinhaCore.js"></script>
 <script type="text/javascript" src="$urlAppend/include/xinha/my_config.js"></script>
-
-hContent;
-
-$head_content .= <<<hContent
 <script type="text/javascript">
 function checkrequired(which, entry) {
 	var pass=true;
@@ -93,7 +89,6 @@ function checkrequired(which, entry) {
 		return true;
 	}
 }
-
 </script>
 hContent;
 
@@ -205,7 +200,7 @@ if ($is_adminOfCourse) {
 			unset($perso_sql_delete);
 			unset($id);
 			##[END personalisation modification]############
-		$tool_content .=  "<p class=\"success_small\">$langStoredOK</p><br />";
+		$tool_content .=  "<p class='success_small'>$langStoredOK</p><br />";
 		unset($addEvent);
 	}
 	elseif (isset($delete) && $delete) {
@@ -220,13 +215,13 @@ if ($is_adminOfCourse) {
 		db_query($perso_sql, $mysqlMainDb);
 		##[END personalisation modification]############
 
-		$tool_content .= "<p class=\"success_small\">$langDeleteOK</p><br />";
+		$tool_content .= "<p class='success_small'>$langDeleteOK</p><br />";
 		unset($addEvent);
 	}
 //Make top tool links
 if ($is_adminOfCourse) {
 	$head_content .= '
-<script>
+<script type="text/javascript">
 function confirmation (name)
 {
     if (confirm("'.$langSureToDel.' "+ name + " ?"))
@@ -237,19 +232,19 @@ function confirmation (name)
 </script>
 ';
 
-	$tool_content .= "\n  <div id=\"operations_container\">\n    <ul id=\"opslist\">";
+	$tool_content .= "\n  <div id='operations_container'>\n    <ul id='opslist'>";
 	if ((!isset($addEvent) && @$addEvent != 1) || isset($_POST['submit'])) {
-		$tool_content .= "\n<li><a href=\"".$_SERVER['PHP_SELF']."?addEvent=1\">".$langAddEvent."</a></li>";
+		$tool_content .= "\n<li><a href='$_SERVER[PHP_SELF]?addEvent=1'>".$langAddEvent."</a></li>";
 	}
 
 	$sens =" ASC";
 	$result = db_query("SELECT id FROM agenda", $currentCourseID);
 	if (mysql_num_rows($result) > 1) {
 		if (isset($_GET["sens"]) && $_GET["sens"]=="d") {
-			$tool_content .=  "\n<li><a href=\"".$_SERVER['PHP_SELF']."?sens=\" >$langOldToNew</a></li>";
+			$tool_content .=  "\n<li><a href='$_SERVER[PHP_SELF]?sens=' >$langOldToNew</a></li>";
 			$sens=" DESC ";
 		} else {
-			$tool_content .=  "\n<li><a href=\"".$_SERVER['PHP_SELF']."?sens=d\" >$langOldToNew</a></li>";
+			$tool_content .=  "\n<li><a href='$_SERVER[PHP_SELF]?sens=d' >$langOldToNew</a></li>";
 		}
 	}
 	$tool_content .= "\n    </ul>\n  </div>\n";
@@ -280,17 +275,17 @@ function confirmation (name)
 
 	if ((isset($addEvent) && ($addEvent == 1)) || (isset($edit) && $edit == true)) {
 		$nameTools = $langAddEvent;
-		$navigation[] = array ("url"=>"$_SERVER[PHP_SELF]", "name"=> $langAgenda);
-		$tool_content .= <<<tContentForm
-<form method="post" action="".$_SERVER[PHP_SELF]." onsubmit="return checkrequired(this, 'titre');">
-    <input type="hidden" name="id" value="$id">
-    <table width=\"99%\" class=\"FormData\">
+		$navigation[] = array ("url" => $_SERVER['PHP_SELF'], "name" => $langAgenda);
+		$tool_content .= "
+<form method='post' action='$_SERVER[PHP_SELF]' onsubmit='return checkrequired(this, \"titre\");'>
+    <input type='hidden' name='id' value='$id' />
+    <table width='99%' class='FormData'>
     <tbody>
     <tr>
-      <th class=\"left\" width=\"150\">&nbsp;</th>
+      <th class='left' width='150'>&nbsp;</th>
       <td><b>$langAddEvent</b><td>
-    </tr>
-tContentForm;
+      </tr>
+      ";
 		$day	= date("d");
 		$hours	= date("H");
 		$minutes= date("i");
@@ -300,11 +295,11 @@ tContentForm;
 			$hours=$hourAncient[0];
 			$minutes=$hourAncient[1];
 		}
-		$tool_content .= "<tr><th class=\"left\">$langTitle:</th>
-			<td><input type=\"text\" size=\"85\" name=\"titre\" value=\"".@$titre."\"  class='FormData_InputText'></td>
+		$tool_content .= "<tr><th class='left'>$langTitle:</th>
+			<td><input type='text' size='85' name='titre' value='".@$titre."' class='FormData_InputText' /></td>
 			</tr>
 			<tr>
-			<th class=\"left\" rowspan=\"2\">$l_options:</th>
+			<th class='left' rowspan='2'>$langOptions:</th>
 			<td>$langDate: ".$start_cal."</td>
 			</tr>
 			<tr>
@@ -314,23 +309,23 @@ tContentForm;
 			for ($h=0; $h<=24; $h++)
 				$tool_content .= "\n<option value='$h'>$h</option>";
 			$tool_content .= "</select>&nbsp;&nbsp;&nbsp;&nbsp;";
-			$tool_content .= "$langMinute: <select name=\"fminute\" class='auth_input'>
-			<option value=\"$minutes\">[$minutes]</option>
-			<option value=\"--\">--</option>";
+			$tool_content .= "$langMinute: <select name='fminute' class='auth_input'>
+			<option value='$minutes'>[$minutes]</option>
+			<option value='--'>--</option>";
 			for ($m=0; $m<=55; $m=$m+5)
 				$tool_content .=  "<option value='$m'>$m</option>";
 
 			$tool_content .= "</select>&nbsp;&nbsp;&nbsp;&nbsp;$langLasting $langInHour:
-			<input class='FormData_InputText' type=\"text\" name=\"lasting\" value=\"".@$myrow['lasting']."\" size=\"2\" maxlength=\"2\"></td>
+			<input class='FormData_InputText' type='text' name='lasting' value='".@$myrow['lasting']."' size='2' maxlength='2' /></td>
     			</tr>";
     		if (!isset($contenu)) {
 			$contenu = "";
 		}
-		$tool_content .= "<tr><th class=\"left\">$langDetail:</th>
-			<td><textarea id='xinha' name='contenu' value='$contenu'>".$contenu."</textarea></td>
+		$tool_content .= "<tr><th class='left'>$langDetail:</th>
+			<td><textarea id='xinha' name='contenu'>".$contenu."</textarea></td>
 			</tr>
-			<tr><th class=\"left\">&nbsp;</th>
-			<td><input type=\"submit\" name=\"submit\" value=\"$langAddModify\"></td>
+			<tr><th class='left'>&nbsp;</th>
+			<td><input type='submit' name='submit' value='$langAddModify' /></td>
 			</tr></tbody></table>
 			</form><br />";
 	}
@@ -349,19 +344,19 @@ if ($is_adminOfCourse) {
 }
 
 if (mysql_num_rows($result) > 0) {
-	$tool_content .=  "\n    <table width=\"99%\" align=\"left\" class=\"FormData\">";
+	$tool_content .=  "\n    <table width='99%' align='left' class='FormData'>";
 	$tool_content .=  "\n    <tbody>";
 	$tool_content .=  "\n    <tr>";
-	$tool_content .=  "\n      <th style=\"border: 1px solid #edecdf\"><div align=\"left\"><b>$langEvents</b></div></th>";
+	$tool_content .=  "\n      <th style='border: 1px solid #edecdf'><div align='left'><b>$langEvents</b></div></th>";
 	if ($is_adminOfCourse) {
-		$tool_content .=  "\n<th width=\"60\" class='right' style=\"border: 1px solid #edecdf\"><b>$langActions</b></th>";
+		$tool_content .=  "\n<th width='60' class='right' style='border: 1px solid #edecdf'><b>$langActions</b></th>";
 	}
 	$tool_content .= "\n    </tr>\n    </tbody>";
 	$tool_content .= "\n    </table>\n\n";
 	$numLine=0;
 	$barreMois = "";
 	$nowBarShowed = FALSE;
-	$tool_content .= "\n    <table width=\"99%\" align=\"left\" class=\"Agenda\">";
+	$tool_content .= "\n    <table width='99%' align='left' class='Agenda'>";
 	$tool_content .= "\n    <tbody>";
 	while ($myrow = mysql_fetch_array($result)) {
 		$contenu = $myrow["contenu"];
@@ -375,23 +370,23 @@ if (mysql_num_rows($result) > 0) {
 				((strtotime($myrow["day"]." ".$myrow["hour"]) < time()) && ($sens==" DESC "))) {
 				if ($barreMois!=date("m",time())) {
 					$barreMois=date("m",time());
-					$tool_content .= "\n    <tr class=\"odd\">";
+					$tool_content .= "\n    <tr class='odd'>";
 					// current month
-					$tool_content .= "\n      <td colspan=\"2\" class=\"monthLabel\">".$langCalendar."&nbsp;<b>".ucfirst(claro_format_locale_date("%B %Y",time()))."</b></td>";
+					$tool_content .= "\n      <td colspan='2' class='monthLabel'>".$langCalendar."&nbsp;<b>".ucfirst(claro_format_locale_date("%B %Y",time()))."</b></td>";
 					$tool_content .= "\n    </tr>";
 				}
 				$nowBarShowed = TRUE;
 				$tool_content .=  "\n    <tr>";
-				$tool_content .=  "\n      <td colspan=2 class=\"today\"><b>$langDateNow : $dateNow</b></td>";
+				$tool_content .=  "\n      <td colspan=2 class='today'><b>$langDateNow : $dateNow</b></td>";
 				$tool_content .=  "\n    </tr>";
 			}
 		}
 		if ($barreMois!=date("m",strtotime($myrow["day"]))) {
 			$barreMois=date("m",strtotime($myrow["day"]));
             		// month LABEL
-			$tool_content .= "\n    <tr class=\"odd\">";
-			$tool_content .=  "\n      <td colspan=\"2\" class=\"monthLabel\">
-			<div align=\"center\">".$langCalendar."&nbsp;<b>".ucfirst(claro_format_locale_date("%B %Y",strtotime($myrow["day"])))."</b></div></td>";
+			$tool_content .= "\n    <tr class='odd'>";
+			$tool_content .=  "\n      <td colspan='2' class='monthLabel'>
+			<div align='center'>".$langCalendar."&nbsp;<b>".ucfirst(claro_format_locale_date("%B %Y",strtotime($myrow["day"])))."</b></div></td>";
 			$tool_content .= "\n    </tr>";
 		}
 
@@ -401,11 +396,11 @@ if (mysql_num_rows($result) > 0) {
 			} else {
 				$classvis = '';
 			}
-			$tool_content .= "\n<tr $classvis><td valign=\"top\">";
+			$tool_content .= "\n<tr $classvis><td valign='top'>";
 		} else {
-			$tool_content .= "\n<tr><td valign=\"top\" colspan=\"2\">";
+			$tool_content .= "\n<tr><td valign='top' colspan='2'>";
 		}
-		$tool_content .= "<span class=\"day\">".ucfirst(claro_format_locale_date($dateFormatLong,strtotime($myrow["day"])))."</span> ($langHour: ".ucfirst(date("H:i",strtotime($myrow["hour"]))).")";
+		$tool_content .= "<span class='day'>".ucfirst(claro_format_locale_date($dateFormatLong,strtotime($myrow["day"])))."</span> ($langHour: ".ucfirst(date("H:i",strtotime($myrow["hour"]))).")";
 	$message = "$langUnknown";
 	if ($myrow["lasting"] !="") {
 		if ($myrow["lasting"] == 1)
@@ -413,30 +408,30 @@ if (mysql_num_rows($result) > 0) {
 		else
 			$message = $langHours;
 	}
-		$tool_content .=  "<p class=\"event\"><b>";
+		$tool_content .=  "<p class='event'><b>";
             if ($myrow["titre"]=="") {
                 $tool_content .= "".$langAgendaNoTitle."";
             } else {
                 $tool_content .= "".$myrow["titre"]."";
             }
 		$tool_content .= "</b> (".$langLasting.": ".$myrow["lasting"]." ".$message.")</p>
-		<p class=\"agendaBody\">$contenu</p></td>";
+		<p class='agendaBody'>$contenu</p></td>";
 
 	//agenda event functions
 	//added icons next to each function
 	//(evelthon, 12/05/2006)
 	if ($is_adminOfCourse) {
-		$tool_content .=  "\n<td class='right' width=\"80\">
-		<a href=\"$_SERVER[PHP_SELF]?id=".$myrow['id']."&edit=true\">
-            	<img src=\"../../template/classic/img/edit.gif\" border=\"0\" title=\"".$langModify."\"></a>&nbsp;
-        	<a href=\"$_SERVER[PHP_SELF]?id=".$myrow[0]."&delete=yes\" onClick=\"return confirmation('".addslashes($myrow["titre"])."');\">
-            	<img src=\"../../template/classic/img/delete.gif\" border=\"0\" title=\"".$langDelete."\"></a>&nbsp;";
+		$tool_content .=  "\n<td class='right' width='80'>
+		<a href='$_SERVER[PHP_SELF]?id=".$myrow['id']."&amp;edit=true'>
+            	<img src='../../template/classic/img/edit.gif' border='0' title='".$langModify."'></a>&nbsp;
+        	<a href='$_SERVER[PHP_SELF]?id=".$myrow[0]."&amp;delete=yes' onClick='return confirmation('".addslashes($myrow["titre"])."');'>
+            	<img src='../../template/classic/img/delete.gif' border='0' title='".$langDelete."'></a>&nbsp;";
 		if ($myrow["visibility"] == 'v') {
-			$tool_content .= "<a href=\"$_SERVER[PHP_SELF]?id=".$myrow[0]."&mkInvisibl=true\">
-        	    	<img src=\"../../template/classic/img/visible.gif\" border=\"0\" title=\"".$langVisible."\"></a>";
+			$tool_content .= "<a href='$_SERVER[PHP_SELF]?id=".$myrow[0]."&amp;mkInvisibl=true'>
+        	    	<img src='../../template/classic/img/visible.gif' border='0' title='".$langVisible."'></a>";
 		} else {
- 			$tool_content .= "<a href=\"$_SERVER[PHP_SELF]?id=".$myrow[0]."&mkVisibl=true\">
-        	    	<img src=\"../../template/classic/img/invisible.gif\" border=\"0\" title=\"".$langVisible."\"></a>";
+ 			$tool_content .= "<a href='$_SERVER[PHP_SELF]?id=".$myrow[0]."&amp;mkVisibl=true'>
+        	    	<img src='../../template/classic/img/invisible.gif' border='0' title='".$langVisible."'></a>";
 		}
 		$tool_content .= "</td>";
 	}
