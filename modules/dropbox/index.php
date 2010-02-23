@@ -249,7 +249,7 @@ if (!isset($_GET['mailing']))  // RH: Mailing detail: no received files
 		$dr_lang_all = addslashes( $dropbox_lang["all"]);
 		$tool_content .= "
       <th width='3' style='border: 1px solid #edecdf'>
-        <a href='dropbox_submit.php?deleteReceived=all&amp;dropbox_unid=$dr_unid' onClick='return confirmationall('".$dropbox_lang['all']."');'><img src='../../images/delete.gif' border='0' title='$langDelete'></a></th>";
+        <a href='dropbox_submit.php?deleteReceived=all&amp;dropbox_unid=$dr_unid' onClick=\"return confirmationall('".$dropbox_lang['all']."');\"><img src='../../images/delete.gif' title='$langDelete' /></a></th>";
 	}
 
 	$tool_content .= "</tr>
@@ -287,7 +287,7 @@ if (!isset($_GET['mailing']))  // RH: Mailing detail: no received files
 	           $tool_content .= "\n       <tr class=\"odd\">";
             }
 		$tool_content .= "
-        <td width=\"3\"><img src=\"../../template/classic/img/inbox.gif\" border=\"0\" title=\"$dropbox_lang[receivedTitle]\"></td>
+        <td width=\"3\"><img src=\"../../template/classic/img/inbox.gif\" title=\"$dropbox_lang[receivedTitle]\" /></td>
         <td>";
 
 		$tool_content .= "<a href='dropbox_download.php?id=".urlencode($w->id)."' target=_blank>".$w->title."</a>";
@@ -311,8 +311,8 @@ tCont9;
         <td><div class=\"cellpos\">";
 
 	$tool_content .= "
-        <a href=\"dropbox_submit.php?deleteReceived=".urlencode($w->id)."&dropbox_unid=".urlencode($dropbox_unid)."\" onClick='return confirmation(\"$w->title\");'>
-        <img src=\"../../template/classic/img/delete-small.png\" border=\"0\" title=\"$langDelete\"></a>";
+        <a href=\"dropbox_submit.php?deleteReceived=".urlencode($w->id)."&amp;dropbox_unid=".urlencode($dropbox_unid)."\" onClick='return confirmation(\"$w->title\");'>
+        <img src=\"../../template/classic/img/delete-small.png\" title=\"$langDelete\" /></a>";
 
 	$tool_content .= "</div></td></tr>";
 	$i++;
@@ -349,9 +349,9 @@ $tool_content .= "
 	if ($numSent > 0) {
 	$tool_content .= "
         <th width='3' style='border: 1px solid #edecdf'>
-            <a href='dropbox_submit.php?deleteSent=all&dropbox_unid=".urlencode( $dropbox_unid).$mailingInUrl."'
+            <a href='dropbox_submit.php?deleteSent=all&amp;dropbox_unid=".urlencode( $dropbox_unid).$mailingInUrl."'
 	onClick='return confirmationall('".addslashes($dropbox_lang["all"])."');'>
-            <img src='../../images/delete.gif' border='0' title='$langDelete'></a>
+            <img src='../../images/delete.gif' title='$langDelete' /></a>
         </th>";
 	}
 
@@ -459,7 +459,7 @@ foreach ($dropbox_person -> sentWork as $w)
             	}
 	$tool_content .= <<<tCont12
 
-		<td width="3"><img src="../../template/classic/img/outbox.gif" border="0" title="$w->title"></td>
+		<td width="3"><img src="../../template/classic/img/outbox.gif" title="$w->title" /></td>
 		<td ><a href="$ahref" target="_blank">
 		$w->title</a>
         <small>&nbsp;&nbsp;&nbsp;($fSize kB)</small>
@@ -481,9 +481,9 @@ tCont12;
 	//<!--	Users cannot delete their own sent files -->
 
 	$tool_content .= "
-	<a href=\"dropbox_submit.php?deleteSent=".urlencode($w->id)."&dropbox_unid=".urlencode($dropbox_unid) . $mailingInUrl."\"
+	<a href=\"dropbox_submit.php?deleteSent=".urlencode($w->id)."&amp;dropbox_unid=".urlencode($dropbox_unid) . $mailingInUrl."\"
 		onClick='return confirmation(\"$w->title\");'>
-		<img src=\"../../template/classic/img/delete-small.png\" border=\"0\" title=\"$langDelete\"></a>";
+		<img src=\"../../template/classic/img/delete-small.png\" title=\"$langDelete\" /></a>";
 	$tool_content .= "</div></td></tr>";
 
 	// RH: Mailing: clickable images for examine and send

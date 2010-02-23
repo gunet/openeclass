@@ -80,7 +80,7 @@ hContent;
  */
 if ($is_adminOfCourse) { // check teacher status
         $head_content .= '
-<script>
+<script type="text/javascript">
 function confirmation (name)
 {
 	if (name != "all") {
@@ -405,7 +405,7 @@ hContent;
 	           $tool_content .= "\n      <tr class='odd'>";
             }
             $tool_content .= "
-        <td width='1'><img style='border:0px; padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'></td>
+        <td width='1'><img style='padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet' /></td>
         <td><b>";
 
             if ($myrow["title"]=="") {
@@ -418,9 +418,9 @@ hContent;
             <br />".$content."</td>
         <td width='70' class='right'>
         <a href='$_SERVER[PHP_SELF]?modify=" . $myrow['id'] . "'>
-        <img src='../../template/classic/img/edit.gif' border='0' title='" . $langModify . "'></a>
-        <a href='$_SERVER[PHP_SELF]?delete=" . $myrow['id'] . "' onClick='return confirmation('');'>
-        <img src='../../template/classic/img/delete.gif' border='0' title='" . $langDelete . "'></a>
+        <img src='../../template/classic/img/edit.gif' title='" . $langModify . "' /></a>
+        <a href='$_SERVER[PHP_SELF]?delete=" . $myrow['id'] . "' onClick=\"return confirmation('');\">
+        <img src='../../template/classic/img/delete.gif' title='" . $langDelete . "' /></a>
         </td>";
 
 	if ($announcementNumber > 1)  {
@@ -429,11 +429,11 @@ hContent;
            // DISPLAY MOVE UP COMMAND
             // condition: only if it is not the top announcement
 	if ($iterator != 1)  {
-		$tool_content .= "<a href='$_SERVER[PHP_SELF]?up=" . $myrow["id"] . "'><img class='displayed' src=../../template/classic/img/up.gif border=0 title='" . $langUp . "'></a>";
+		$tool_content .= "<a href='$_SERVER[PHP_SELF]?up=" . $myrow["id"] . "'><img class='displayed' src='../../template/classic/img/up.gif' title='" . $langUp . "' /></a>";
 	}
         // DISPLAY MOVE DOWN COMMAND
 	if ($iterator < $bottomAnnouncement) {
-		$tool_content .= "<a href='$_SERVER[PHP_SELF]?down=" . $myrow["id"] . "'><img class='displayed' src=../../template/classic/img/down.gif border=0 title='" . $langDown . "'></a>";
+		$tool_content .= "<a href='$_SERVER[PHP_SELF]?down=" . $myrow["id"] . "'><img class='displayed' src='../../template/classic/img/down.gif' title='" . $langDown . "' /></a>";
 	}
 	if ($announcementNumber > 1) {
 		$tool_content .= "</td>";
@@ -480,7 +480,7 @@ else {
 				$tool_content .= "\n      <tr class='odd'>";
 			}
 			$tool_content .= "
-			<td width='1'><img style='border:0px; padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'></td>
+			<td width='1'><img style='padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet' /></td>
 			<td><b>$myrow[title]</b>&nbsp;<small>(" . nice_format($myrow["temps"]) . ")</small><br/>".unescapeSimple($content)."</td></tr>";
 			$k++;
 		} // while loop

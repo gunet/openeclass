@@ -918,7 +918,7 @@ cData;
             <table align=\"left\" width=\"100%\" class=\"Info\">
             <tbody>
             <tr>
-              <td width=\"1\" class=\"left\"><img src='../../template/classic/img/forum_off.gif' alt='$m[comments]' title=\"$m[comments]\"></td>
+              <td width=\"1\" class=\"left\"><img src='../../template/classic/img/forum_off.gif' alt='$m[comments]' title=\"$m[comments]\" /></td>
               <td>$row[comments]</td>
             <tr>
             </tbody>
@@ -932,7 +932,7 @@ cData;
             <table align='left' width='100%' class='Info'>
             <tbody>
             <tr>
-              <td width='1' class='left'><img src='../../template/classic/img/forum_on.gif' alt='$m[comments]' title='$m[comments]'></td>
+              <td width='1' class='left'><img src='../../template/classic/img/forum_on.gif' alt='$m[comments]' title='$m[comments]' /></td>
               <td>$prof_comment</td>
             <tr>
             </tbody>
@@ -1021,7 +1021,7 @@ function show_student_assignments()
       <thead>
       <tr>
         <th colspan="2"><div align="left">&nbsp;&nbsp;${m['title']}</div></th>
-        <th><div align="left">${m['deadline']}</th>
+        <th><div align="left">${m['deadline']}</div></th>
         <th>${m['submitted']}</th>
         <th>${m['grade']}</th>
       </tr>
@@ -1037,7 +1037,7 @@ cData;
 	           $tool_content .= "\n      <tr class='odd'>";
             }
 			$tool_content .= "
-        <td width='1'><img style='border:0px; padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'></td>
+        <td width='1'><img style='padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet' /></td>
         <td><a href='work.php?id=${row['id']}'>${title_temp}</a></td>
         <td width='30%'>".nice_format($row['deadline']);
 
@@ -1055,13 +1055,13 @@ cData;
 
 			$grade = ' - ';
 			if ($submission = find_submission($uid, $row['id'])) {
-				$tool_content .= "<img src='../../template/classic/img/checkbox_on.gif' alt='$m[yes]'>";
+				$tool_content .= "<img src='../../template/classic/img/checkbox_on.gif' alt='$m[yes]' />";
 				$grade = submission_grade($submission);
 				if (!$grade) {
 					$grade = ' - ';
 				}
 			} else {
-				$tool_content .= "<img src='../../template/classic/img/checkbox_off.gif' alt='$m[no]'>";
+				$tool_content .= "<img src='../../template/classic/img/checkbox_off.gif' alt='$m[no]' />";
 			}
 			$tool_content .= "</td>
         <td width='10%' align='center'>$grade</td>
@@ -1132,7 +1132,7 @@ cData;
                         }
 
 			$tool_content .= "
-      <td width='1%'><img style='border:0px; padding-top:3px;' src='$urlServer/template/classic/img/$visibility_image.gif' title='bullet'></td>
+      <td width='1%'><img style='border:0px; padding-top:3px;' src='$urlServer/template/classic/img/$visibility_image.gif' title='bullet' /></td>
       <td ".$visibility_css."><a href='work.php?id=${row['id']}' ";
 			$tool_content .= ">";
 			$tool_content .= $row_title = htmlspecialchars($row['title']);
