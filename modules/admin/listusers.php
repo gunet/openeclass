@@ -341,7 +341,7 @@ if($sql)
 
 
 		// DEFINE SETTINGS FOR THE 5 NAVIGATION BUTTONS INTO THE USERS LIST: begin, less, all, more and end
-		$endList=5;
+		$endList=30;
 		if(isset ($numbering) && $numbering)
 		{
 			if($numbList=="more")
@@ -368,7 +368,7 @@ if($sql)
 
 		// Numerating the items in the list to show: starts at 1 and not 0
 		$i=$startList+1;
-		if ($countUser >= $endList) { // Do not show navigation buttons if less than 50 users	
+		if ($countUser >= $endList) { // Do not show navigation buttons if less than 30 users	
 			$tool_content .= "<table class=\"FormData\" width=\"99%\" align=\"left\">
   			<thead><tr>
     			<td class=\"left\" width=\"20%\">
@@ -439,7 +439,7 @@ if($sql)
        				</form>
      				</td></tr></thead></table>";
 			}
-		}       // Show navigation buttons if ($countUser >= 50)
+		}       // Show navigation buttons if ($countUser >= 30)
 
 		if($view == 3) {
 			$qry = "SELECT a.user_id,a.nom, a.prenom, a.username, a.email, b.statut
