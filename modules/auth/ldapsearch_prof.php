@@ -59,7 +59,7 @@ $is_submit = isset($_POST['is_submit'])?$_POST['is_submit']:'';
 $ldap_email = isset($_POST['ldap_email'])?$_POST['ldap_email']:'';
 $ldap_passwd = isset($_POST['ldap_passwd'])?$_POST['ldap_passwd']:'';
 
-$lastpage = 'ldapnewuser.php?p=TRUE&amp;auth='.$auth.'&amp;ldap_email='.$ldap_email.'&amp;ldap_passwd='.$ldap_passwd;
+$lastpage = 'ldapnewuser.php?p=TRUE&amp;auth='.$auth.'&amp;ldap_email='.$ldap_email;
 $errormessage = "<br/><p>$ldapback <a href='$lastpage'>$ldaplastpage</a></p>";
 
 if(!empty($is_submit)) {

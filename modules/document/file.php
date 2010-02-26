@@ -77,7 +77,7 @@ foreach ($path_components as $component) {
         $depth++;
 }
 if ($r['visibility'] != 'v' and !$is_adminOfCourse) {
-        $_SESSION['errMessage'] = $l_noread;
+        $_SESSION['errMessage'] = $langNoRead;
         session_write_close();
         // restore current course
         if (defined('old_dbname')) {

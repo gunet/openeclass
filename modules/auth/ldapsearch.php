@@ -49,14 +49,11 @@ $navigation[]= array ("url"=>"registration.php", "name"=> "$langNewUser");
 $navigation[]= array ("url"=>"ldapnewuser.php?auth=$auth", "name"=> "$langConfirmUser");
 $nameTools = $langUserData;
 
-// get the values from ldapnewuser.php
 $ldap_email = isset($_POST['ldap_email'])?$_POST['ldap_email']:'';
 $ldap_passwd = isset($_POST['ldap_passwd'])?$_POST['ldap_passwd']:'';
 $is_submit = isset($_POST['is_submit'])?$_POST['is_submit']:'';
 
-$lastpage = 'ldapnewuser.php?auth='.$auth.'&ldap_email='.$ldap_email.'&ldap_passwd='.$ldap_passwd;
-$userdescr = $langTheUser;
-
+$lastpage = 'ldapnewuser.php?auth='.$auth.'&ldap_email='.$ldap_email;
 $errormessage = "<br/><p>$ldapback <a href=\"$lastpage\">$ldaplastpage</a></p>";
 
 if(!empty($is_submit))
@@ -219,7 +216,7 @@ if (isset($_POST['submit'])) {
 		db_query("INSERT INTO loginout  SET id_user = '$uid',
 			ip = '".$REMOTE_ADDR."', `when` = NOW(), action = 'LOGIN'", $mysqlMainDb);
 		$_SESSION['uid'] = $uid;
-		$_SESSION['statut'] = $statut;
+		$_SESSION['statut'] = 5;
 		$_SESSION['prenom'] = $prenom;
 		$_SESSION['nom'] = $nom;
 		$_SESSION['uname'] = $uname;

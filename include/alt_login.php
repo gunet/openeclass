@@ -68,7 +68,7 @@ if($myrow['password'] == $auth_method_settings['auth_name']) {
 	$is_valid = auth_user_login($auth,$uname,$pass);
 	if($is_valid) {
 		$is_active = check_activity($myrow["user_id"]);
-		if($myrow["user_id"] == $myrow["is_admin"]) // always the admin is active
+		if($myrow["user_id"] == 1) // always the admin is active
 		{
 			$is_active = 1;
 		}
@@ -90,7 +90,6 @@ if($myrow['password'] == $auth_method_settings['auth_name']) {
 		$prenom = $myrow["prenom"];
 		$statut = $myrow["statut"];
 		$email = $myrow["email"];
-		$is_admin = $myrow["is_admin"];
 		$userPerso = $myrow["perso"];
 		$language = $_SESSION['langswitch'] = langcode_to_name($myrow["lang"]);
 	}

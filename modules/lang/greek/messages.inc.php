@@ -815,6 +815,7 @@ $langMoveOK="Η μεταφορά έγινε με επιτυχία!";
 $langMoveNotOK="η μεταφορά δεν πραγματοποιήθηκε!";
 $langRoot = "Αρχικός κατάλογος";
 $langNoDocuments = "Δεν υπάρχουν έγγραφα";
+$langNoRead = "Δεν έχετε δικαίωμα ανάγνωσης σε αυτή την περιοχή";
 
 // Special for group documents
 $langGroupSpace="Περιοχή ομάδας χρηστών";
