@@ -121,7 +121,7 @@ if(isset($forumgo)) {
 			}
 			$tool_content .= "</tbody></table></form><br/>";
 		} else {
-			$tool_content .= "\n<p class=\"alert1\">$l_noforum</p>";
+			$tool_content .= "\n<p class=\"alert1\">$langNoForumsCat</p>";
 		}
 
 		$tool_content .= "

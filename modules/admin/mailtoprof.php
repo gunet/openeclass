@@ -96,27 +96,21 @@ $langEmail : $emailhelpdesk
 	}
 	// Display result and close table correctly
 	$tool_content .= "<p class=\"success_small\">$emailsuccess</p>";
-}
-// Display form to administrator
-else {
-	// Constract form
-$tool_content .= "
-<form action=\"".$_SERVER['PHP_SELF']."\" method=\"post\">
-  <table width=\"99%\" class=\"FormData\">
+} else {
+        // Display form to administrator
+        $tool_content .= "
+<form action='$_SERVER[PHP_SELF]' method='post'>
+  <table class='FormData'>
   <tbody>
   <tr>
-    <th width=\"220\">&nbsp;</th>
-    <td><b>$l_message</b></td>
-  </tr>
-  <tr>
-    <th class='left'>".$typeyourmessage."$l_message</th>
-	<td><textarea class=\"auth_input\" name=\"body_mail\" rows=\"10\" cols=\"60\"></textarea></td>
+    <th class='left'>$typeyourmessage</th>
+	<td><textarea class='auth_input' name='body_mail' rows='10' cols='60'></textarea></td>
   </tr>
   <tr>
     <th class='left'>$langSendMessageTo</th>
-    <td><select name=\"sendTo\">
-          <option value=\"1\">".$langProfOnly."</option>
-          <option value=\"0\">".$langToAllUsers."</option>
+    <td><select name='sendTo'>
+          <option value='1'>$langProfOnly</option>
+          <option value='0'>$langToAllUsers</option>
         </select>
     </td>
   </tr>

@@ -144,7 +144,7 @@ while ($row = mysql_fetch_assoc($result)) {
         } else {
                 $user = uid_to_name($row['user_id']);
                 if ($user === false) {
-                        $user = $l_anonymous;
+                        $user = $langAnonymous;
                 }
                 $unknown_users[$row['user_id']] = $user;
         }

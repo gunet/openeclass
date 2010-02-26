@@ -139,7 +139,7 @@ function getUserAgenda($param, $type)
  */
 function agendaHtmlInterface($data)
 {
-	global $langNoEventsExist, $langUnknown, $langDuration, $langMore, $l_ondate, $langHours, $langHour, $langExerciseStart, $urlServer;
+	global $langNoEventsExist, $langUnknown, $langDuration, $langMore, $langHours, $langHour, $langExerciseStart, $urlServer;
 
 	$numOfDays = count($data);
 	if ($numOfDays > 0) {

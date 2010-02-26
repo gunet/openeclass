@@ -1857,6 +1857,7 @@ $langLoginBeforePost2 = "πρέπει προηγουμένως να ";
 $langLoginBeforePost3 = "κάνετε login στην πλατφόρμα";
 $langPages = "Σελίδες";
 $langNoForums = "Δεν υπάρχουν διαθέσιμες περιοχές συζητήσεων";
+$langNoForumsCat = "Δεν υπάρχουν περιοχές συζήτησης σε αυτή την κατηγορία.";
 $langNewTopic = "Νέο θέμα";
 $langTopicData="Στοιχεία θέματος";
 $langTopicAnswer = "Απάντηση στο θέμα συζήτησης";

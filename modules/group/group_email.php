@@ -61,7 +61,7 @@ if ($is_adminOfCourse or $is_tutor)  {
                 $sender_name = $sender['prenom'] . ' ' . $sender['nom'];
                 $sender_email = $sender['email'];
                 $emailsubject = $intitule." - ".$subject;
-                $emailbody = "$body_mail\n\n$l_poster: $sender[nom] $sender[prenom] <$sender[email]>\n$langProfLesson\n";
+                $emailbody = "$body_mail\n\n$langSender: $sender[nom] $sender[prenom] <$sender[email]>\n$langProfLesson\n";
 
 		$req = mysql_query("SELECT user FROM `$dbname`.user_group WHERE team = '$userGroupId'");
 		while ($userid = mysql_fetch_array($req)) {
