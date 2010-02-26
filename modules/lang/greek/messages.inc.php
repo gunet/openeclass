@@ -3050,3 +3050,5 @@ $langBetaCMSUnitScormFiles = "Αρχεία Scorm Eνότητας";
 $langBetaCMSUnitDocumentFiles = "Έγγραφα Ενότητας";
 $langBetaCMSUnitTexts = "Κείμενα Ενότητας";
 $langBetaCMSText = "Κείμενο";
+
+$langNoCookies = 'Προσοχή! Έχετε απενεργοποιημένα τα cookies στο πρόγραμμα πλοήγησης που χρησιμοποιείτε. Η σύνδεση δεν είναι δυνατή.';

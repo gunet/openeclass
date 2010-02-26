@@ -25,7 +25,7 @@
 * =========================================================================*/
 
 if (!defined('INDEX_START')) {
-	die ("Action not allowed!");
+	die('Action not allowed!');
 }
 
 // authenticate user via eclass
@@ -59,4 +59,3 @@ if ($uname == escapeSimpleSelect($myrow["username"]))
 } else {
 	$auth_allow = 4; // means wrong username or password
 }
-?>

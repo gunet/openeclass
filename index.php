@@ -46,6 +46,10 @@ include "modules/auth/auth.inc.php";
 $homePage = true;
 $tool_content = "";
 
+if (!isset($_POST['submit'])) {
+        $_SESSION['cookie_test'] = true;
+}
+
 // first check
 // check if we can connect to database. If not then eclass is most likely not installed
 if (isset($mysqlServer) and isset($mysqlUser) and isset($mysqlPassword)) {
@@ -103,8 +107,11 @@ if (isset($_SESSION['shib_uname'])) { // authenticate via shibboleth
 		$warning = "";
 		$auth_allow = 0;
 		$exists = 0;
-		// Disallow login with empty password
-		if (empty($pass)) {
+                if (!isset($_SESSION['cookie_test'])) {
+                        // Disallow login when cookies are disabled
+                        $auth_allow = 5;
+                } elseif (empty($pass)) {
+                        // Disallow login with empty password
 			$auth_allow = 4;
 		} else {
 			while ($myrow = mysql_fetch_array($result)) {
@@ -122,7 +129,7 @@ if (isset($_SESSION['shib_uname'])) { // authenticate via shibboleth
 				}
 			}
 		}
-		if(empty($exists)) {
+		if(empty($exists) and !$auth_allow) {
 			$auth_allow = 4;
 		}
 		if (!isset($uid)) {
@@ -134,6 +141,8 @@ if (isset($_SESSION['shib_uname'])) { // authenticate via shibboleth
 				case 3 : $warning .= "<br />".$langAccountInactive1." <a href='modules/auth/contactadmin.php?userid=".$user."'>".$langAccountInactive2."</a><br /><br />"; 
 					break;
 				case 4 : $warning .= "<br /><font color='red'>". $langInvalidId . "</font><br />"; 
+					break;
+				case 5 : $warning .= "<br /><font color='red'>". $langNoCookies . "</font><br />"; 
 					break;
 				default:
 					break;
