@@ -305,7 +305,7 @@ function adminMenu(){
 	array_push($sideMenuSubGroup, $arrMenuType);
 
 	array_push($sideMenuText, $GLOBALS['langProfReg']);
-	array_push($sideMenuLink, "../auth/newprofadmin.php");
+	array_push($sideMenuLink, "newuseradmin.php");
 	array_push($sideMenuImg, "black-arrow1.gif");
 	array_push($sideMenuText, $GLOBALS['langProfOpen']);
 	array_push($sideMenuLink, "../admin/listreq.php");

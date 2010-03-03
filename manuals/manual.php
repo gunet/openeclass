@@ -41,30 +41,27 @@ $nameTools = $langManuals;
 $tool_content = "";
 $urlServerTemp = strrev(substr(strrev($urlServer),1));
 
-$ext = "_".langname_to_code($language);
+$ext = langname_to_code($language);
 
-$tool_content .= <<<tCont
-<p>$langIntroMan</p>
-<ul class="listBullet">
 
-<img src='../images/pdf.gif' border='0' title='$langFormatPDF' align='absmiddle'>&nbsp;&nbsp;<a href="$urlServerTemp/manuals/OpeneClass22$ext.pdf" target=_blank class=mainpage>$langFinalDesc</a></img>
-<br/><br/>
-<img src='../images/pdf.gif' border='0' title=
-'$langFormatPDF' align='absmiddle'>&nbsp;&nbsp;<a href="$urlServerTemp/manuals/OpeneClass22_short$ext.pdf" target=_blank class=mainpage>$langShortDesc</a></img>
-<br/><br/>
-<img src='../images/pdf.gif' border='0
-' title='$langFormatPDF' align='absmiddle'>&nbsp;&nbsp;<a href="$urlServerTemp/manuals/manT/OpeneClass22_ManT$ext.pdf" target=_blank class=mainpage>$langManT</a></img>
-<br/><br/>
-<img src='../images/pdf.gif' border='0' title=
-'$langFormatPDF' align='absmiddle'>&nbsp;&nbsp;<a href="$urlServerTemp/manuals/manS/OpeneClass22_ManS$ext.pdf" target=_blank class=mainpage>$langManS</a></img>
-<br/>
+function manlink($basename, $langext, $desc)
+{
+        global $urlServerTemp, $langFormatPDF;
 
-</ul>
+        if (file_exists($basename . '_' . $langext . '.pdf')) {
+                $url = $urlServerTemp . '/manuals/' . $basename . '_' . $langext . '.pdf';
+        } else {
+                $url = $urlServerTemp . '/manuals/' . $basename . '_en.pdf';
+        }
+        return "<li><a href='$url' target='_blank' class='mainpage'><img src='../images/pdf.gif' title='$langFormatPDF' alt='$langFormatPDF' /></a>&nbsp;&nbsp;<a href='$url' target='_blank' class='mainpage'>$desc</a><br /><br /></li>";
+}
 
-<br/>
-<p><b>$langNote: </b><br/>$langAcrobat <img src='../images/acrobat.png' width=15 height=15> $langWhere <a href="http://www.adobe.com/products/acrobat/readstep2.html" target=_blank><span class='explanationtext'>$langHere</span></a>.</p>
-
-tCont;
+$tool_content .= "<p>$langIntroMan</p><ul class='listBullet'>" .
+                 manlink('OpeneClass22', $ext, $langFinalDesc) .
+                 manlink('OpeneClass22_short', $ext, $langShortDesc) .
+                 manlink('OpeneClass22_ManT', $ext, $langManT) .
+                 manlink('OpeneClass22_ManS', $ext, $langManS) .
+                 "</ul><p><b>$langNote: </b><br/>$langAcrobat <img src='../images/acrobat.png' width='15' height='15' /> $langWhere <a href='http://www.adobe.com/products/acrobat/readstep2.html' target='_blank'><span class='explanationtext'>$langHere</span></a>.</p>";
 
 if (isset($uid) and $uid) {
         draw($tool_content, 1);

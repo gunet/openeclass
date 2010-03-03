@@ -58,48 +58,48 @@ $lang = langname_to_code($language);
 // display form
 if (!isset($submit)) {
 	// Main body
-	@$tool_content .= "<form action=\"$_SERVER[PHP_SELF]\" method=\"post\">
-	<table width=\"99%\" style=\"border: 1px solid #edecdf;\">
+	@$tool_content .= "<form action='$_SERVER[PHP_SELF]' method='post'>
+	<table width='99%' style='border: 1px solid #edecdf;'>
 	<thead>
 	<tr>
 	<td>
-	<table width=\"100%\" align='left' class='FormData'>
+	<table width='100%' align='left' class='FormData'>
 	<thead>
 	<tr>
 	<th class='left' width='220'>$langName</th>
-	<td colspan=\"2\"><input type=\"text\" name=\"prenom_form\" value=\"$prenom_form\" class='FormData_InputText'>&nbsp;&nbsp;<small>(*)</small></td>
+	<td colspan='2'><input type='text' name='prenom_form' value='$prenom_form' class='FormData_InputText' />&nbsp;&nbsp;<small>(*)</small></td>
 	</tr>
 	<tr>
 	<th class='left'>$langSurname</th>
-	<td colspan=\"2\"><input type=\"text\" name=\"nom_form\" value=\"$nom_form\" class='FormData_InputText'>&nbsp;&nbsp;<small>(*)</small></td>
+	<td colspan='2'><input type='text' name='nom_form' value='$nom_form' class='FormData_InputText' />&nbsp;&nbsp;<small>(*)</small></td>
 	</tr>
 	<tr>
 	<th class='left'>$langUsername</th>
-	<td colspan=\"2\"><input type=\"text\" name=\"uname\" value=\"$uname\" size=\"20\" maxlength=\"20\" class='FormData_InputText'>&nbsp;&nbsp;<small>(*) $langUserNotice</small></td>
+	<td colspan='2'><input type='text' name='uname' value='$uname' size='20' maxlength='20' class='FormData_InputText' />&nbsp;&nbsp;<small>(*) $langUserNotice</small></td>
 	</tr>
 	<tr>
 	<th class='left'>$langPass</th>
-	<td colspan=\"2\"><input type=\"password\" name=\"password1\" size=\"20\" maxlength=\"20\" class='FormData_InputText'>&nbsp;&nbsp;<small>(*)</small></td>
+	<td colspan='2'><input type='password' name='password1' size='20' maxlength='20' class='FormData_InputText' />&nbsp;&nbsp;<small>(*)</small></td>
 	</tr>
 	<tr>
 	<th class='left'>$langConfirmation</th>
-	<td colspan=\"2\"><input type=\"password\" name=\"password\" size=\"20\" maxlength=\"20\" class='FormData_InputText'>&nbsp;&nbsp;<small>(*) $langUserNotice</small></td>
+	<td colspan='2'><input type='password' name='password' size='20' maxlength='20' class='FormData_InputText' />&nbsp;&nbsp;<small>(*) $langUserNotice</small></td>
 	</tr>
 	<tr>
 	<th class='left'>$langEmail</th>
-	<td valign=\"top\"><input type=\"text\" name=\"email\" value=\"$email\" class='FormData_InputText'></td>
+	<td valign='top'><input type='text' name='email' value='$email' class='FormData_InputText' /></td>
 	<td><small>$langEmailNotice</small></td>
 	</tr>
 	<tr>
 	<th class='left'>$langAm</th>
-	<td colspan=\"2\"><input type=\"text\" name=\"am\" value=\"$am\" class='FormData_InputText'></td>
+	<td colspan='2' valign='top'><input type='text' name='am' value='$am' class='FormData_InputText' /></td>
 	</tr>
 	<tr>
 	<th class='left'>$langFaculty</th>
-		<td colspan=\"2\"><select name=\"department\">";
+		<td colspan='2'><select name='department'>";
 	$deps=mysql_query("SELECT name, id FROM faculte ORDER BY id");
 	while ($dep = mysql_fetch_array($deps)) {
-		$tool_content .= "\n<option value=\"".$dep[1]."\">".$dep[0]."</option>";
+		$tool_content .= "\n<option value='".$dep[1]."'>".$dep[0]."</option>";
 	}
 	$tool_content .= "\n</select>
 	</td>
@@ -113,14 +113,14 @@ if (!isset($submit)) {
 	</tr>
 	<tr>
 	<th class='left'>&nbsp;</th>
-	<td colspan=\"2\">
-	<input type=\"hidden\" name=\"auth\" value=\"1\">
-	<input type=\"submit\" name=\"submit\" value=\"".$langRegistration."\">
+	<td colspan='2'>
+	<input type='hidden' name='auth' value='1' />
+	<input type='submit' name='submit' value='".$langRegistration."' />
 	</td>
 	</tr>
 	</thead>
 	</table>
-	<div align=\"right\"><small>$langRequiredFields</small></div>
+	<div align='right'><small>$langRequiredFields</small></div>
 	</td>
 	</tr>
 	</thead>

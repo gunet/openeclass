@@ -55,12 +55,12 @@ $auth = get_auth_active_methods();
 $e = 1;
 
 // check for close user registration
-if (isset($close_user_registration) and $close_user_registration == TRUE) {
+if (isset($close_user_registration) and $close_user_registration) {
         $newuser = "formuser.php";
-        $tool_content .= "$langUserAccountInfo1";
+        $tool_content .= $langUserAccountInfo1;
 } else {
         $newuser = "newuser.php";
-        $tool_content .= "$langUserAccountInfo2";
+        $tool_content .= $langUserAccountInfo2;
 }
 
 $tool_content .= "</font></strong></td>

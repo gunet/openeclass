@@ -1265,3 +1265,24 @@ function get_config($key)
                 return false;
         }
 }
+
+
+// Copy variables from $_POST[] to $GLOBALS[], trimming and canonicalizing whitespace
+// $var_array = array('var1' => true, 'var2' => false, [varname] => required...)
+// Returns true if all vars with required=true are set, false if not
+function register_posted_variables($var_array)
+{
+        $all_set = true;
+        foreach ($var_array as $varname => $required) {
+                if (isset($_POST[$varname])) {
+                        $GLOBALS[$varname] = preg_replace('/ +/', ' ', trim($_POST[$varname]));
+                        if ($required and empty($GLOBALS[$varname])) {
+                                $all_set = false;
+                        }
+                } else {
+                        $GLOBALS[$varname] = '';
+                        $all_set = false;
+                }
+        }
+        return $all_set;
+}

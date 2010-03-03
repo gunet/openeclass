@@ -25,7 +25,7 @@
 * =========================================================================*/
 
 
-$require_admin = TRUE;
+$require_admin = true;
 include '../../include/baseTheme.php';
 include '../../include/sendMail.inc.php';
 $navigation[] = array("url" => "../admin/index.php", "name" => $langAdmin);
@@ -33,17 +33,25 @@ $navigation[] = array("url" => "../admin/index.php", "name" => $langAdmin);
 // Initialise $tool_content
 $tool_content = "";
 
+$all_set = register_posted_variables(array(
+        'auth' => true,
+        'uname' => true,
+        'nom_form' => true,
+        'prenom_form' => true,
+        'email_form' => true,
+        'language' => true,
+        'department' => true,
+        'comment' => false,
+        'password' => true,
+        'pstatut' => true,
+        'rid' => false,
+        'submit' => true));
+
 $submit = isset($_POST['submit'])?$_POST['submit']:'';
+
 if($submit) {
-		
 	// register user
-	$nom_form = isset($_POST['nom_form'])?$_POST['nom_form']:'';
-	$prenom_form = isset($_POST['prenom_form'])?$_POST['prenom_form']:'';
-	$uname = isset($_POST['uname'])?$_POST['uname']:'';
-	$password = isset($_POST['password'])?$_POST['password']:'';
-	$email_form = isset($_POST['email_form'])?$_POST['email_form']:'';
 	$depid = intval(isset($_POST['department'])?$_POST['department']: 0);
-	$comment = isset($_POST['comment'])?$_POST['comment']:'';
 	$proflanguage = isset($_POST['language'])?$_POST['language']:'';
 	if (!isset($native_language_names[$proflanguage])) {
 		$proflanguage = langname_to_code($language);
@@ -55,20 +63,20 @@ if($submit) {
 	$user_exist = (mysql_num_rows($username_check) > 0);
 
 	// check if there are empty fields
-	if (empty($nom_form) or empty($prenom_form) or empty($password) or empty($department) or empty($uname) or (empty($email_form))) {
-		$tool_content .= "<p class=\"caution_small\">$langEmptyFields</p>
-			<br><br><p align=\"right\"><a href='$_SERVER[PHP_SELF]'>$langAgain</a></p>";
+	if (!$all_set) {
+		$tool_content .= "<p class='caution_small'>$langEmptyFields</p>
+			<br><br><p align='right'><a href='$_SERVER[PHP_SELF]'>$langAgain</a></p>";
 	} elseif ($user_exist) {
-		$tool_content .= "<p class=\"caution_small\">$langUserFree</p>
-			<br><br><p align=\"right\"><a href='$_SERVER[PHP_SELF]'>$langAgain</a></p>";
+		$tool_content .= "<p class='caution_small'>$langUserFree</p>
+			<br><br><p align='right'><a href='$_SERVER[PHP_SELF]'>$langAgain</a></p>";
 	} elseif(!email_seems_valid($email_form)) {
-		$tool_content .= "<p class=\"caution_small\">$langEmailWrong.</p>
-			<br><br><p align=\"right\"><a href='$_SERVER[PHP_SELF]'>$langAgain</a></p>";
+		$tool_content .= "<p class='caution_small'>$langEmailWrong.</p>
+			<br><br><p align='right'><a href='$_SERVER[PHP_SELF]'>$langAgain</a></p>";
 	} else {
                 $registered_at = time();
 		$expires_at = time() + $durationAccount;
 		$password_encrypted = md5($password);
-		$inscr_user=db_query("INSERT INTO `$mysqlMainDb`.user
+		$inscr_user = db_query("INSERT INTO `$mysqlMainDb`.user
 				(nom, prenom, username, password, email, statut, department, am, registered_at, expires_at,lang)
 				VALUES (" .
 				autoquote($nom_form) . ', ' .
@@ -79,7 +87,7 @@ if($submit) {
 
 		// close request
 	  	$rid = intval($_POST['rid']);
-  	  	db_query("UPDATE prof_request set status = '2',date_closed = NOW() WHERE rid = '$rid'");
+  	  	db_query("UPDATE prof_request set status = 2, date_closed = NOW() WHERE rid = '$rid'");
 
                 if ($pstatut == 1) {
                         $message = $profsuccess;
@@ -112,7 +120,7 @@ $langEmail : $emailhelpdesk
 		
 		send_mail('', '', '', $email_form, $emailsubject, $emailbody, $charset);
 
-		}
+        }
 
 } else {
         $lang = false;
@@ -207,4 +215,5 @@ $langEmail : $emailhelpdesk
 	<br />
 	<p align='right'><a href='../admin/index.php'>$langBack</p>";
 }
+
 draw($tool_content, 3, 'auth');

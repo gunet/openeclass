@@ -424,12 +424,12 @@ body {
     font-size: 10px;
     font-weight: bold;
     text-decoration: none;
-	vertical-align: middle;
+    vertical-align: middle;
 }
 
 #search a:hover {
-	text-decoration: underline;
-	vertical-align: middle;
+    text-decoration: underline;
+    vertical-align: middle;
     font-size: 10px;
 }
 
@@ -687,4 +687,8 @@ a img {
 .invisible, .invisible td, .invisible a {
 	font-style: italic;
 	color: silver !important;
+}
+
+li a img {
+        vertical-align: middle;
 }

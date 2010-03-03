@@ -32,7 +32,7 @@ $tool_content ="";
 
     $tool_content .= "
     <p>$langIntro</p>
-    <br>
+    <br />
 
           <table width=\"600\" class=\"Smart\" align=\"center\" >
           <tbody>
@@ -42,7 +42,7 @@ $tool_content ="";
           </tr>
           <tr class=\"odd\">
             <th class=\"left\" style=\"border-left: 1px solid #edecdf;\">$langVersion:</th>
-            <td>$langAboutText:&nbsp;<b>$siteName " . ECLASS_VERSION . "</b>&nbsp;&nbsp;(<a href='http://www.openeclass.org/' title='Open eClass Portal' target='_blank' border=0>>></a>)</td>
+            <td>$langAboutText:&nbsp;<b>$siteName " . ECLASS_VERSION . "</b>&nbsp;&nbsp;(<a href='http://www.openeclass.org/' title='Open eClass Portal' target='_blank'>>></a>)</td>
           </tr>
           <tr class=\"odd\">
             <th class=\"left\" style=\"border-left: 1px solid #edecdf;\">$langCoursesHeader:</th>
@@ -60,7 +60,7 @@ $a1=mysql_fetch_array(mysql_query("SELECT COUNT(*) FROM cours WHERE visible='2'"
 $a2=mysql_fetch_array(mysql_query("SELECT COUNT(*) FROM cours WHERE visible='1'"));
 $a3=mysql_fetch_array(mysql_query("SELECT COUNT(*) FROM cours WHERE visible='0'"));
 
-$tool_content .= "$langAboutCourses <b>$a[0]</b> $langCourses<br>";
+$tool_content .= "$langAboutCourses <b>$a[0]</b> $langCourses<br />";
 $tool_content .= "
              <ul>
                 <li><b>$a1[0]</b> $langOpen,</li>
@@ -91,7 +91,7 @@ $d=mysql_fetch_array(mysql_query("SELECT COUNT(*) FROM user where statut='10'"))
           </tr>
           </tbody>
           </table>
-          <br>";
+          <br />";
 
 
 if (isset($uid) and $uid) {

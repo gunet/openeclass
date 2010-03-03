@@ -358,7 +358,7 @@ else
 					$langRegistration<br>($langViaImap)</td>\n  </tr>";
 				break;
 			default:  $tool_content .= "<br>
-					<a href='../auth/newprofadmin.php?id=".urlencode($req['rid'])."'>
+					<a href='newuseradmin.php?id=".urlencode($req['rid'])."'>
 					$langRegistration
 					</a></td>\n  </tr>";
 				break;
