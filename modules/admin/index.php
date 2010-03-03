@@ -43,12 +43,10 @@ $tool_content = "";
         MAIN BODY
 ******************************************************************************/
 
-/***************************************/
-//This is used for inserting data in 'monthly_report' table.
-//The work is done every time the admin page is called in order to
-//ensure correct (up-to-date) information on the table.
+// This is used for inserting data in 'monthly_report' table.
+// The work is done every time the admin page is called in order to
+// ensure correct (up-to-date) information on the table.
 require_once "summarizeMonthlyData.php";
-/****************************************/
 
 mysql_select_db($mysqlMainDb);
 
@@ -83,7 +81,7 @@ $tool_content .= "
     </tr>
     </tbody>
     </table>
-    <br>";
+    <br />";
 
 
 // Count prof requests with status = 1
@@ -168,8 +166,7 @@ $tool_content .= "
     </tr>
     </tbody>
     </table>
-
-    <br>";
+    <br />";
 
 /*****************************************************************************
         DISPLAY HTML
@@ -179,4 +176,3 @@ $tool_content .= "
 // 3: display administrator menu
 // admin: use tool.css from admin folder
 draw($tool_content,3,'admin');
-?>

@@ -36,15 +36,18 @@
 ==============================================================================
 */
 
+if (!defined('ECLASS_VERSION')) {
+                exit;
+}
 
-    //check if data for last month have already been inserted in 'monthly_summary'...
-    $lmon = mktime(0, 0, 0, date("m")-1, date("d"),  date("Y"));
-    $last_month = date('m Y', $lmon);
-    $sql = "SELECT id FROM monthly_summary WHERE `month` = '$last_month'";
-    $result = db_query($sql, $mysqlMainDb);
+// Check if data for last month have already been inserted in 'monthly_summary'...
+$lmon = mktime(0, 0, 0, date('m')-1, date('d'),  date('Y'));
+$last_month = date('m Y', $lmon);
+$sql = "SELECT id FROM monthly_summary WHERE `month` = '$last_month'";
+$result = db_query($sql, $mysqlMainDb);
 
-    if (!$result or mysql_num_rows($result) == 0) {
-	echo "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+if (!$result or mysql_num_rows($result) == 0) {
+        echo "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
 <html>
 <head>
 <title>$langUpdatingStatistics</title>
