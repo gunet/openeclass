@@ -104,9 +104,15 @@ mysql_select_db($mysqlMainDb, $db);
 
 // Include messages
 include("${webDir}modules/lang/$language/common.inc.php");
+if (file_exists("${webDir}/config/$language.inc.php")) {
+        // include extra messages if any to override common.inc.php
+        define('LANG_OVERRIDE', "${webDir}/config/$language.inc.php");
+	include LANG_OVERRIDE;
+}
 include("${webDir}modules/lang/$language/messages.inc.php");
-if (file_exists("${webDir}/config/$language.inc.php")) { // include extra messages if any
-	include "${webDir}/config/$language.inc.php";
+if (defined('LANG_OVERRIDE')) {
+        // re-include extra messages to override messages.inc.php
+        include LANG_OVERRIDE;
 }
 
 // Make sure that the $uid variable isn't faked
