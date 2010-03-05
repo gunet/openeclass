@@ -46,10 +46,6 @@ include "modules/auth/auth.inc.php";
 $homePage = true;
 $tool_content = "";
 
-if (!isset($_POST['submit'])) {
-        $_SESSION['cookie_test'] = true;
-}
-
 // first check
 // check if we can connect to database. If not then eclass is most likely not installed
 if (isset($mysqlServer) and isset($mysqlUser) and isset($mysqlPassword)) {
@@ -107,7 +103,7 @@ if (isset($_SESSION['shib_uname'])) { // authenticate via shibboleth
 		$warning = "";
 		$auth_allow = 0;
 		$exists = 0;
-                if (!isset($_SESSION['cookie_test'])) {
+                if (!isset($_COOKIE) or count($_COOKIE) == 0) {
                         // Disallow login when cookies are disabled
                         $auth_allow = 5;
                 } elseif (empty($pass)) {
