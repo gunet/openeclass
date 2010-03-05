@@ -62,12 +62,6 @@ $new = isset($_GET['new'])?$_GET['new']:'yes';	//variable of declaring a new sea
 // initialize the variables
 $user_surname = $user_firstname = $user_username = $user_am = $user_type = $user_registered_at_flag = $user_registered_at = $user_email = '';
 
-// display link to inactive users
-$tool_content .= "<div id=\"operations_container\">
-<ul id=\"opslist\">
-<li><a href=\"listusers.php?c=inactive\">".$langInactiveUsers."</a></li>
-</ul></div>";
-
 // display the search form
 $tool_content .= "<form action=\"listusers.php?search=".$new."\" method=\"post\" name=\"user_search\">
 <table width=\"99%\">

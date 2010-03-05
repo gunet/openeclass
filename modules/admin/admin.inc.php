@@ -151,12 +151,12 @@ return String (the constructed table)
 ***************************************************************/
 function show_paging($limit, $listsize, $fulllistsize, $page) {
 
-	global $langNextPage, $langPage, $langBeforePage;
+	global $langNextPage, $langBeforePage;
 
 	$retString = "";
 	// Page numbers of navigation
 	$pn = 15;
-	$retString .= "<br><table width=\"99%\"><tbody><tr><td width=\"3%\" nowrap>$langPage</b></td><td align=\"center\">";
+	$retString .= "<br><table width=\"99%\"><tbody><tr><td>&nbsp;</td><td align=\"center\">";
 	// Deal with previous page
 	if ($limit!=0) {
 		$newlimit = $limit - $listsize;

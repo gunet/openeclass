@@ -304,14 +304,8 @@ function adminMenu(){
 	$arrMenuType['text'] = $GLOBALS['langAdminUsers'];
 	array_push($sideMenuSubGroup, $arrMenuType);
 
-	array_push($sideMenuText, $GLOBALS['langProfReg']);
-	array_push($sideMenuLink, "newuseradmin.php");
-	array_push($sideMenuImg, "black-arrow1.gif");
 	array_push($sideMenuText, $GLOBALS['langProfOpen']);
 	array_push($sideMenuLink, "../admin/listreq.php");
-	array_push($sideMenuImg, "black-arrow1.gif");
-	array_push($sideMenuText, $GLOBALS['langInfoMail']);
-	array_push($sideMenuLink, "../admin/mailtoprof.php");
 	array_push($sideMenuImg, "black-arrow1.gif");
 
 	// check for close user registration
@@ -322,9 +316,6 @@ function adminMenu(){
 	}
 	array_push($sideMenuText, $GLOBALS['langListUsersActions']);
 	array_push($sideMenuLink, "../admin/listusers.php");
-	array_push($sideMenuImg, "black-arrow1.gif");
-	array_push($sideMenuText, $GLOBALS['langSearchUser']);
-	array_push($sideMenuLink, "../admin/search_user.php");
 	array_push($sideMenuImg, "black-arrow1.gif");
 	array_push($sideMenuText, $GLOBALS['langAddAdminInApache']);
 	array_push($sideMenuLink, "../admin/addadmin.php");
@@ -338,7 +329,9 @@ function adminMenu(){
 	array_push($sideMenuText, $GLOBALS['langMultiRegUser']);
 	array_push($sideMenuLink, "../admin/multireguser.php");
 	array_push($sideMenuImg, "black-arrow1.gif");
-
+	array_push($sideMenuText, $GLOBALS['langInfoMail']);
+	array_push($sideMenuLink, "../admin/mailtoprof.php");
+	array_push($sideMenuImg, "black-arrow1.gif");
 	array_push($sideMenuSubGroup, $sideMenuText);
 	array_push($sideMenuSubGroup, $sideMenuLink);
 	array_push($sideMenuSubGroup, $sideMenuImg);
@@ -359,14 +352,8 @@ function adminMenu(){
 	array_push($sideMenuText, $GLOBALS['langListCours']);
 	array_push($sideMenuLink, "../admin/listcours.php");
 	array_push($sideMenuImg, "black-arrow1.gif");
-	array_push($sideMenuText, $GLOBALS['langSearchCourses']);
-	array_push($sideMenuLink, "../admin/searchcours.php");
-	array_push($sideMenuImg, "black-arrow1.gif");
 	array_push($sideMenuText, $GLOBALS['langRestoreCourse']);
 	array_push($sideMenuLink, "../course_info/restore_course.php");
-	array_push($sideMenuImg, "black-arrow1.gif");
-	array_push($sideMenuText, $GLOBALS['langSpeeSubscribe']);
-	array_push($sideMenuLink, "../admin/speedSubscribe.php");
 	array_push($sideMenuImg, "black-arrow1.gif");
 	array_push($sideMenuText, $GLOBALS['langListFaculte']);
 	array_push($sideMenuLink, "../admin/addfaculte.php");

@@ -50,9 +50,6 @@
 
 ==============================================================================*/
 
-/*****************************************************************************
-		DEAL WITH  BASETHEME, OTHER INCLUDES AND NAMETOOLS
-******************************************************************************/
 // Check if user is administrator and if yes continue
 // Othewise exit with appropriate message
 $require_admin = TRUE;
@@ -73,7 +70,7 @@ $searchurl = "";
 // Manage list limits
 $countcourses = mysql_fetch_array(mysql_query("SELECT COUNT(*) AS cnt FROM cours"));
 $fulllistsize = $countcourses['cnt'];
-$listsize = 50;
+$listsize = 15;
 $limit = isset($_GET['limit'])?$_GET['limit']:0;
 
 // A search has been submitted
@@ -131,6 +128,14 @@ else {
 	}
 }
 
+// Display Actions Toolbar
+  $tool_content .= "
+      <div id='operations_container'>
+        <ul id='opslist'>
+	<li><a href='searchcours.php'>$langSearchCourses</a></li>
+        </ul>
+      </div>";
+
 // Construct course list table
 $tool_content .= "<table class=\"FormData\" width=\"99%\" align=\"left\">
 	<tbody><tr>
@@ -146,7 +151,6 @@ $tool_content .= "<table class=\"FormData\" width=\"99%\" align=\"left\">
 $k = 0;
 for ($j = 0; $j < mysql_num_rows($sql); $j++) {
 	$logs = mysql_fetch_array($sql);
-
 	if ($k%2 == 0) {
 		$tool_content .= "<tr>";
 	} else {
@@ -155,7 +159,8 @@ for ($j = 0; $j < mysql_num_rows($sql); $j++) {
 
 	$tool_content .= "<td width='1'>
 	<img style='border:0px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet' /></td>
-	<td><a href='{$urlServer}courses/$logs[code]/'><b>".htmlspecialchars($logs[2])."</b></a> (".htmlspecialchars($logs[1]).")<br /><i>".$logs[3]."</i>
+	<td><a href='{$urlServer}courses/$logs[code]/'><b>".htmlspecialchars($logs[2])."</b>
+	</a> (".htmlspecialchars($logs[1]).")<br /><i>".$logs[3]."</i>
 	</td>
 	<td align='center'>";
 	// Define course type
@@ -172,25 +177,25 @@ for ($j = 0; $j < mysql_num_rows($sql); $j++) {
 	}
 	$tool_content .= "</td><td>".htmlspecialchars($logs[0])."</td>";
 	// Add links to course users, delete course and course edit
-	$tool_content .= "<td align='center'><a href=\"listusers.php?c=".$logs['cours_id']."\">
-	<img src='../../template/classic/img/user_list.gif' title='$langUsers' border='0'></img></a></td>
-	<td align=\"center\" width='10'><a href=\"delcours.php?c=".$logs[1]."\">
-	<img src='../../images/delete.gif' title='$langDelete' border='0'></img></a></td>
-	<td align=\"center\" width='20'><a href=\"editcours.php?c=".$logs[1]."".$searchurl."\">
-	<img src='../../template/classic/img/edit.gif' title='$langEdit' border='0'></img></a></td>";
+	$tool_content .= "<td align='center'><a href='listusers.php?c=".$logs['cours_id']."'>
+		<img src='../../template/classic/img/user_list.gif' title='$langUsers' border='0'></img></a></td>
+	<td align=\"center\" width='10'><a href='delcours.php?c=".$logs[1]."'>
+		<img src='../../images/delete.gif' title='$langDelete' border='0'></img></a></td>
+	<td align=\"center\" width='20'><a href='editcours.php?c=".$logs[1]."".$searchurl."'>
+		<img src='../../template/classic/img/edit.gif' title='$langEdit' border='0'></img></a></td>";
 	$k++;
 }
 // Close table correctly
 $tool_content .= "</tr></tbody></table>";
 // If a search is started display link to search page
 if (isset($search) && $search=="yes") {
-	$tool_content .= "<br /><p align=\"right\"><a href=\"searchcours.php\">".$langReturnSearch."</a></p>";
+	$tool_content .= "<br /><p align='right'><a href='searchcours.php'>".$langReturnSearch."</a></p>";
 } elseif ($fulllistsize > $listsize) {
 	// Display navigation in pages
 	$tool_content .= show_paging($limit, $listsize, $fulllistsize, "$_SERVER[PHP_SELF]");
 }
 // Display link to index.php
-$tool_content .= "<br /><p align=\"right\"><a href=\"index.php\">".$langBack."</a></p>";
+$tool_content .= "<br /><p align='right'><a href='index.php'>".$langBack."</a></p>";
 
 /*****************************************************************************
 		DISPLAY HTML

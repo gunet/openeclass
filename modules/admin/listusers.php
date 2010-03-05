@@ -96,6 +96,16 @@ if($view == 2)	// coming from search_user.php(search with criteria)
 		// end format date/time
 	}
 }
+
+// Display Actions Toolbar
+  $tool_content .= "
+      <div id='operations_container'>
+        <ul id='opslist'>
+	<li><a href='search_user.php'>$langSearchUser</a></li>
+	<li><a href='listusers.php?c=inactive'>".$langInactiveUsers."</a></li>
+        </ul>
+      </div>";
+
 /***************
 Criteria/Filters
 ***************/
@@ -341,7 +351,7 @@ if($sql)
 
 
 		// DEFINE SETTINGS FOR THE 5 NAVIGATION BUTTONS INTO THE USERS LIST: begin, less, all, more and end
-		$endList=30;
+		$endList=15;
 		if(isset ($numbering) && $numbering)
 		{
 			if($numbList=="more")

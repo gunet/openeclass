@@ -90,13 +90,6 @@ if (isset($submit))  {
                 } else {
                         $user_reg = 'TRUE';
                 }
-
-                if ($_POST['formhavelatex'] == 'false') {
-                        $latex = 'FALSE';
-                } else {
-                        $latex = 'TRUE';
-                }
-
                 if (defined('UTF8')) {
                         $utf8define = "define('UTF8', true);";
                 }
@@ -104,7 +97,7 @@ if (isset($submit))  {
 		// Prepare config.php content
 		$stringConfig='<?php
 /*===========================================================================
- *   Open eClass 2.1
+ *   Open eClass 2.3
  *   E-learning and Course Management System
  *===========================================================================
 
@@ -138,7 +131,6 @@ $language = "'.$_POST['formlanguage'].'";
 
 $postaddress = "'.$_POST['formpostaddress'].'";
 $fax = "'.$_POST['formfax'].'";
-$have_latex = '.$latex.';
 
 $close_user_registration = '.$user_reg.';
 $encryptedPasswd = "true";
@@ -275,9 +267,6 @@ else {
       <option value=\"greek\" ".$grSel.">greek</option>
       <option value=\"english\" ".$enSel.">english</option>
     </select></td>
-  </tr>
-  <tr>
-    <td colspan=\"2\">&nbsp;</td>
   </tr>";
 
 if ($close_user_registration=="true") {
@@ -297,28 +286,11 @@ $tool_content .= "
     </select></td>
 </tr>";
 
-	if ($have_latex=="true") {
-		$have_latexSelTrue = "selected";
-		$have_latexSelFalse = "";
-	} else {
-		$have_latexSelTrue = "";
-		$have_latexSelFalse = "selected";
-	}
-	$tool_content .= "
-  <tr>
-    <th class=\"left\"><b>\$have_latex:</b></th>
-    <td><select name=\"formhavelatex\">
-      <option value=\"true\" ".$have_latexSelTrue.">true</option>
-      <option value=\"false\" ".$have_latexSelFalse.">false</option>
-    </select></td>
-  </tr>";
-
 $tool_content .= "
   <tr>
     <th class=\"left\"><b>\$durationAccount:</b></th>
     <td><input type=\"text\" name=\"formdurationAccount\" size=\"40\" value=\"".$durationAccount."\"></td>
 </tr>";
-
 $tool_content .= "
   <tr>
     <th class=\"left\"><b>\$encryptedPasswd:</b></th>
@@ -360,7 +332,6 @@ $tool_content .= "
 	if (isset($restore) && $restore=="yes") {
 		@include("../../config/config.php");
 	}
-
 }
 
 /*****************************************************************************

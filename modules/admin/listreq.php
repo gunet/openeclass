@@ -46,10 +46,14 @@ if (isset($_GET['type']) and $_GET['type'] == 'user') {
         $nameTools = $langUserOpenRequests;
         $reqtype = '&amp;type=user';
         $basetoolurl .= '?type=user';
+	$linkreg = $langUserDetails;
+	$linkget = '?type=user';
 } else {
         $list_statut = 1;
         $nameTools = $langOpenProfessorRequests;
         $reqtype = '';
+	$linkreg = $langProfReg;
+	$linkget = '';
 }
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
 
@@ -81,6 +85,7 @@ switch ($show) {
   $tool_content .= "
       <div id='operations_container'>
         <ul id='opslist'>
+	  <li><a href='newuseradmin.php$linkget'>$linkreg</a></li>
           <li><a href='$_SERVER[PHP_SELF]?show=closed$reqtype'>$langReqHaveClosed</a></li>
           <li><a href='$_SERVER[PHP_SELF]?show=rejected$reqtype'>$langReqHaveBlocked</a></li>
           <li><a href='$_SERVER[PHP_SELF]?show=accepted$reqtype'>$langReqHaveFinished</a></li>

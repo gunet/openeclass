@@ -142,8 +142,8 @@ $langEmail : $emailhelpdesk
         }
 
         if ($pstatut == 5) {
-                $nameTools = $langNewUser;
-                $title = $langNewUser;
+                $nameTools = $langUserDetails;
+                $title = $langInsertUserInfo;
         } else {
                 $nameTools = $langProfReg;
                 $title = $langNewProf;
