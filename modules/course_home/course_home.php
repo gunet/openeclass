@@ -247,7 +247,7 @@ switch ($type){
 	}
 }
 
-$bar_content .= "\n            <p><b>".$langLessonCode."</b>: ".$fake_code."</p>".
+$bar_content .= "\n            <p><b>".$langCode."</b>: ".$fake_code."</p>".
                 "\n            <p><b>".$langTeachers."</b>:<br /> ".$professor."</p>".
                 "\n            <p><b>".$langFaculty."</b>: ".$faculte."</p>".
                 "\n            <p><b>".$m['type']."</b>: ".$lessonType."</p>";
