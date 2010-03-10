@@ -75,6 +75,8 @@ if (isset($_REQUEST['localize'])) {
 	$_SESSION['langswitch'] = $language = langcode_to_name($_REQUEST['localize']);
 }
 
+$active_ui_languages = array('el', 'en');
+
 // Get configuration variables
 if (!isset($webDir)) {
 	//path for course_home
@@ -83,6 +85,14 @@ if (!isset($webDir)) {
 		include 'not_installed.php';
                 die("Unable to find configuration file, please contact the system administrator");
 	}
+}
+
+// Set active user interface languages
+$native_language_names = array();
+foreach ($active_ui_languages as $langcode) {
+        if (isset($native_language_names_init[$langcode])) {
+                $native_language_names[$langcode] = $native_language_names_init[$langcode];
+        }
 }
 
 if (!isset($urlSecure)) {

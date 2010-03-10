@@ -1013,49 +1013,48 @@ function canonicalize_whitespace($s)
 
 
 # Only languages defined below are available for selection in the UI
-# If you enable any new languages, make sure they are defined in the
+# If you add any new languages, make sure they are defined in the
 # next array as well
-# See include/baseTheme.php for lang_select_options() function
-$native_language_names = array (
+$native_language_names_init = array (
 	'el' => 'Ελληνικά',
 	'en' => 'English',
 	'es' => 'Español',
-#	'cs' => 'Česky',
-#	'sq' => 'Shqip',
-#	'bg' => 'Български',
-#	'ca' => 'Català',
-#	'da' => 'Dansk',
-#	'nl' => 'Nederlands',
-#	'fi' => 'Suomi',
-#	'fr' => 'Français',
-#	'de' => 'Deutsch',
-#	'is' => 'Íslenska',
-#	'it' => 'Italiano',
-#	'jp' => '日本語',
-#	'pl' => 'Polski',
-#	'ru' => 'Русский',
-#	'tr' => 'Türkçe',
+	'cs' => 'Česky',
+	'sq' => 'Shqip',
+	'bg' => 'Български',
+	'ca' => 'Català',
+	'da' => 'Dansk',
+	'nl' => 'Nederlands',
+	'fi' => 'Suomi',
+	'fr' => 'Français',
+	'de' => 'Deutsch',
+	'is' => 'Íslenska',
+	'it' => 'Italiano',
+	'jp' => '日本語',
+	'pl' => 'Polski',
+	'ru' => 'Русский',
+	'tr' => 'Türkçe',
 );
 
 $language_codes = array(
 	'el' => 'greek',
 	'en' => 'english',
 	'es' => 'spanish',
-#	'cs' => 'czech',
-#	'sq' => 'albanian',
-#	'bg' => 'bulgarian',
-#	'ca' => 'catalan',
-#	'da' => 'danish',
-#	'nl' => 'dutch',
-#	'fi' => 'finnish',
-#	'fr' => 'french',
-#	'de' => 'german',
-#	'is' => 'icelandic',
-#	'it' => 'italian',
-#	'jp' => 'japanese',
-#	'pl' => 'polish',
-#	'ru' => 'russian',
-#	'tr' => 'turkish',
+	'cs' => 'czech',
+	'sq' => 'albanian',
+	'bg' => 'bulgarian',
+	'ca' => 'catalan',
+	'da' => 'danish',
+	'nl' => 'dutch',
+	'fi' => 'finnish',
+	'fr' => 'french',
+	'de' => 'german',
+	'is' => 'icelandic',
+	'it' => 'italian',
+	'jp' => 'japanese',
+	'pl' => 'polish',
+	'ru' => 'russian',
+	'tr' => 'turkish',
 );
 
 // Convert language code to language name in English lowercase (for message files etc.)
