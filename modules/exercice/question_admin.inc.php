@@ -142,5 +142,6 @@ cData;
 	}
         $tool_content .= "<br/></td></tr>";
 	$tool_content .= "</td></tr></thead></table><br/>";
+	$tool_content .= "<div class='center'><a href='admin.php?exerciseId=$exerciseId'>$langBackExerciseManagement</a></div>";
 }
 ?>
