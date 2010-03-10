@@ -502,6 +502,8 @@ $langSureToDelAnnounceAll = "Είστε σίγουρος ότι θέλετε ν�
 $langAnn = "Ανακοινώθηκε την";
 $langEmptyAnTitle = "Παρακαλώ πληκτρολογήστε τον τίτλο της ανακοίνωσης";
 $langAnnouncementNoTille = "Ανακοίνωση χωρίς τίτλο";
+$langOfCourse = "του μαθήματος";
+
 /*******************************************
 * archive_course.inc.php
 *******************************************/
@@ -1002,6 +1004,7 @@ $langExerciseModify="Τροποποίηση Άσκησης";
 $langQuestionManagement="Διαχείριση Ερώτησης";
 $langQuestionNotFound="Δεν βρέθηκε η ερώτηση";
 $langAlertAdmin="Παρακαλώ δηλώστε τουλάχιστον έναν διαχειριστή για το μάθημα!";
+$langBackExerciseManagement = "Επιστροφή στη διαχείριση άσκησης";
 
 // question_admin.inc.php
 $langNoAnswer="Δεν υπάρχει απάντηση αυτή την στιγμή!";
