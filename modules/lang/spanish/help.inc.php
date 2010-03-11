@@ -1,8 +1,11 @@
 <?php
 
 // Message file for language es
-// Generated 2009-09-25 17:18:30
+// Generated 2010-03-11 16:10:20
 
+$langWindowClose = "Cierra la ventana";
+$langHDefault = 'Ayuda no disponible';
+$langDefaultContent = '<p>No hay texto de ayuda disponible para esta página de la plataforma que estás visualizando en este momento.</p>';
 $langPHPMathPublisher = "<p><u>Soporte de símbolos matemáticos:</u><br>
 <br /><br>
 Para la incorporación de los símbolos matemáticos en tus textos, puedes usar la <a href=\"../../manuals/PhpMathPublisherHelp.pdf\" target=\"_Blanc\">commands</a> (simbolismos) que proporciona PhpMathPublisher.<br /><br>
@@ -13,22 +16,21 @@ De forma más analítica, si usas el autor del texto para importar tu contenido.
 </ol><br>
 <p>Para la búsqueda de los comandos que corresponden a símbolos en particular que deseas importar, eres consultado (<a href=\"../../manuals/PhpMathPublisherHelp.pdf\" target=\"_Blanc\">here</a>).<br /><br>
 E.j., para importar una raíz cuadrada debes teclear &lt;m>sqrt{a}&lt;/m></p>";
-$langWindowClose = "Cierra la ventana";
-$langHDefault = 'Ayuda no disponible';
-$langDefaultContent = '<p>No hay texto de ayuda disponible para esta página de la plataforma que estás visualizando en este momento.</p>';
 $langHFor = "Foros";
 $langHFor_student = $langHFor ;
 $langForContent = "<p>El foro es una herramienta de comunicación escrita asincrónica. Mientras que el email permite un diálogo uno-a-uno, los foros permiten un diálogo público o semipúblico.</p><p>Técnicamente hablando, los estudiantes necesitan sus exploradores para usar los foros eClass.</P><p>Para organizar foros, haz click en 'Administrador'. Las discusiones están organizadas en conjuntos y subconjuntos como siguen:</p><p><b>Categoría > Foro > Tópico > Answers</b></p>To structure your students discussions, it is necessary to organise catgories y foros por otra parte, dejando la creación de tópicos y respuestas a ellos. Por defecto, el foro de eClass contiene sólo la categoría 'Público', en el mismo foro y en el mismo tópico.</p><p>La primera cosa que debes hacer es borrar el tópico de ejemplo y modificar el primer nombre del foro. Entonces, puedes crear otros foros 'categoría'pública, por grupos o temas, para ajustar los requerimientos de tus escenarios de aprendizaje.</p><p>No mezcles Categorías y foros, y no olvides que una categoría vacía (sin foros) no aparece en la vista del estudiante.</p><p>La descripción de un foro puede ser una lista de sus miembros, la definición de un objetivo, una tarea, un tema...</p>";
+$langForContent_student = "<p>La plataforma permite la creación de foros de discusión, donde todos los usuarios registrados en el curso, ambos estudiantes y educadores, pueden participar.</p>" ;
 $langHInit = "Página Principal";
-$langHInit_student = $langHInit;
 $langInitContent = "<p>Tu estás actualmente en la página Principal de Open eClass. Teclea tu usuario y contraseña para conectarte a la plataforma. En caso de que hayas olvidado la información de conexión, haz click en '¿Contraseña olvidada?' y entra tu dirección de correo electrónico en el formulario que aparece, para poder recuperar tu usuario y contraseña.</p> <p><b>Nuevo registro de usuario</b></p> <p>Si eres un estudiante, tienes que registrarte haciendo click en 'Registro del Usuario', y después tienes que escoger tus cursos deseados.</p>  <p><b>La cuenta requeridad del profesor</b></p> <p>Si eres un profesor, tienes también que registrarte haciendo click en 'Cuenta requerida para profesores'. Después de eso, debes rellenar un formulario con alguna información personal: Nombre, apellidos, usuario, número de teléfono, correo electrónico y el departamento al que perteneces. Después de rellenar el formulario, debes enviar tu requirimiento a los administradores de la plataforma. Te crearán tu cuenta y te enviarán un correo electrónico con todos los detalles de tu nueva cuenta. Usando tu nombre de usario / contraseña podrás conectarte a la plataforma. Después de entrar en la plataforma, debes hacer click en 'Crear el sitio del curso'. Después de completar algunos detalles sobre tu curso, tu curso será creado y será redireccionado a tu nueva página principal de cursos.</p>";
+$langHInit_student = $langHInit;
 $langInit_studentContent = $langInitContent;
 $langHPortfolio = "Carpeta del Usuario";
-$langHPortfolio_student = $langHPortfolio;
 $langPortfolioContent = "<p>Aquí puedes encontrar todos los cursos en los que estás registrado (como estudiante), también todos los cursos que has creado (como profesor). Puedes entrar en cualquiera de ellos hacienco click en su título. </p>  <p>Usando las opciones del menú lateral, puedes registrarte en los cursos adicionales o desmatricularte de tu selección actual de cursos, cambiar la información de tu perfil (como el nombre, la contraseña o el lenguaje preferido) o encontrar una página agregada con los anuncios y la agenda [Filtra tus cursos.</p>";
+$langHPortfolio_student = $langHPortfolio;
 $langPortfolio_studentContent = $langPortfolioContent;
-$langcourse_home_studentContent = '<p>Estás actualmente en la página principal del curso on-line. Desde el menú lateral, puedes entrar en cualquiera de los cursos que han sido activados por los profesores del curso. </p>';
 $langHcourse_home = 'Página principal del curso';
+$langHcourse_home_student = $langHcourse_home ;
+$langcourse_home_studentContent = '<p>Estás actualmente en la página principal del curso on-line. Desde el menú lateral, puedes entrar en cualquiera de los cursos que han sido activados por los profesores del curso. </p>';
 $langcourse_homeContent = '<p clase="tópicoayuda">Estás actualmente en la página principal del curso en línea. Desde el menú lateral, puedes entrar en cualquiera de los módulos donde puedes añadir tu contenido del curso\sos. Las herramientas activas están visibles para los invitados y estudiantes de tu curso, mientras que las herramientas inactivas sólo son visibles en tu acceso.</p> <p clase="tópicoayuda">Usando las herramientas de administración puedes activar o desactivar los módulos del curso, revisarlos y administrar los usuarios registrados, cambiando varias opciones (como el título del curso, el control de acceso, etc.), y ver los estadísticos usados.</p>';
 $langHDoc = "Documentos";
 $langHDoc_student = $langHDoc ;
@@ -184,6 +186,8 @@ Además, si el/ella ha subido una tarea y quiere subir una nueva, la vieja se re
 ";
 $langWork_studentContent = "<p>El módulo de asignaciones del curso es una herramienta muy útil ya que permite la admisión electrónica, sumisión y evaluación de las asignaciones del curso. Más específicamente, permite que los alumnos usuarios registrados carguen electrónicamente sus asignaciones en la plataforma hasta la fecha de sumisión y puedan ver su puntuación, después de que el profesor les haya calificado.<br>
 </p>" ;
+$langHGroup = "Grupos";
+$langHGroup_student = $langHGroup ;
 $langGroupContent = "<p>Esta herramienta permite crear y administrar grupos de trabajo.<br>
 En la creación (Crear grupos), están vacíos. Hay muchas formas de rellenarlos:<br>
 <ul><li>automaticamente ('Rellena grupos'),</li><br>
@@ -473,7 +477,7 @@ empieza cada línea con un texto preformatedado con un espacio en blanco space&n
 </ul>';
 $langWiki_studentContent = "<p>El módulo Wili is una herramienta de colaboración introducidad en la versión actual de la plataforma. Wiki es una herramienta del curso que permite a los usuarios registrados (profesores y alumnos) crear y editar contenidos de Página Web.<br>
 </p>" ;
-$langForContent_student = "<p>La plataforma permite la creación de foros de discusión, donde todos los usuarios registrados en el curso, ambos estudiantes y educadores, pueden participar.</p>" ;
-$langHcourse_home_student = $langHcourse_home ;
-$langHGroup = "Grupos";
-$langHGroup_student = $langHGroup ;
+$langHAddCourseUnits = "Add/Edit course unit";
+$langAddCourseUnitsContent = "<p class='helptopic'>To add a new course unit, please enter a title and a short description. Click on 'Add' to create the new unit.</p>";
+$langHAddCourseUnitscontent = "Add course unit content";
+$langAddCourseUnitscontentContent = "<p class='helptopic'>Hear you can add content or resources to the selected course unit. The types of resources that can be added are listed next to the 'Add:' label. By clicking on 'Add', you can find resources of the selected type available in your course. Tick the ones you would like to add and click on 'Add selected'. Newly added resources are immediately listed, with edit and delete icons for each one. Please note that when multiple course units exist in a course, links to the next and previous unit appear automatically. You can also use the selection box below to navigate directly to a specific unit.</p>";

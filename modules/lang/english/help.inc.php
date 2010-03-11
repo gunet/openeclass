@@ -1,8 +1,11 @@
 <?php
 
 // Message file for language en
-// Generated 2009-09-25 17:18:30
+// Generated 2010-03-11 16:10:20
 
+$langWindowClose = "Close window";
+$langHDefault = 'Help non available';
+$langDefaultContent = '<p>There is no help text available for the platform page you are currently viewing.</p>';
 $langPHPMathPublisher = "<p><u>Support of mathematic symbols:</u>
 <br />
 For the incorporation of mathematic symbols in your texts, you can use the <a href=\"../../manuals/PhpMathPublisherHelp.pdf\" target=\"_Blanc\">commands</a> (symbolisms) that it provides PhpMathPublisher.<br />
@@ -13,22 +16,21 @@ More analytically, you use the author of text in order to you import your conten
 </ol>
 <p>For the finding of commands that corresponds in the particular symbols that you wish to import, you are consulted (<a href=\"../../manuals/PhpMathPublisherHelp.pdf\" target=\"_Blanc\">here</a>).<br />
 Eg., in order to you import the square root a you will type &lt;m>sqrt{a}&lt;/m></p>";
-$langWindowClose = "Close window";
-$langHDefault = 'Help non available';
-$langDefaultContent = '<p>There is no help text available for the platform page you are currently viewing.</p>';
 $langHFor = "Forums";
 $langHFor_student = $langHFor ;
 $langForContent = "<p>The forum is a written asynchronous communication tool. While email allows one-to-one dialogue, forums allow public or semi-public dialogue.</p><p>Technically speaking, students only need their browser to use eClass forums.</P><p>To organise forums, click on 'Administer'. Discussions are organised in sets and subsets as following:</p><p><b>Category > Forum > Topic > Answers</b></p>To structure your students discussions, it is necessary to organise catgories and forums beforehand, leaving creation of topics and answers to them. By default, the eClass forum contains only the category 'Public', a sample forum and a sample topic.</p><p>The first thing you should do is delete the sample topic and modify the first forum name. Then, you can create other forums in the 'public'category, by groups or by themes, to fit your learning scenario requirements.</p><p>Don't mix Categories and forums, and don't forget that an empty category (without forums) does not appear on the student view.</p><p>The description of a forum can be the list of its members, the definition of a goal, a task, a theme...</p>";
+$langForContent_student = "<p>The platform allows the creation of discussion forums, where all users registered to the course, both students and educators, can participate.</p>" ;
 $langHInit = "Home Page";
-$langHInit_student = $langHInit;
 $langInitContent = "<p>You are currently in the Open eClass platform's home page. Type your username and password to login to the platform. In case you have forgotten your login information, click on 'Forgot your password?'and enter your e-mail address in the form that appears, in order to recover your username and password.</p> <p><b>New user registration</b></p> <p>If you are a student, you have to register by clicking in 'User Registration', and then you have to choose your desired courses.</p>  <p><b>Professor acount request</b></p> <p>If you are a professor, you also have to register by clicking on 'Professor account request'. After that, you must fill in a form with some personal information: Name, surname, username, phone number, e-mail and the department in which you belong. After filling the form, your request will be sent to the platform administrators . They will create your account and send you an e-mail with all the details of your account. Using your username / password you will be able to login in the platform. After entering the platform, you have to click in 'Create course site'. After completing some details about your course, your course will be created and you will be directed to your newly created course home page.</p>";
+$langHInit_student = $langHInit;
 $langInit_studentContent = $langInitContent;
 $langHPortfolio = "User Portfolio";
-$langHPortfolio_student = $langHPortfolio;
 $langPortfolioContent = "<p>Here you can find all courses you are registered to (as a student), as well as all the courses you have created (as a professor). You can enter any one of them by clicking on its title.</p>  <p>Using the options of the side menu, you can register to additional courses or sign out from your currently selected courses, change your profile information (such as name, password and preferred language), or find an aggregation page with the announcements and agenda [Cof your courses.</p>";
+$langHPortfolio_student = $langHPortfolio;
 $langPortfolio_studentContent = $langPortfolioContent;
-$langcourse_home_studentContent = '<p>You are currently in the on-line course main page. From the side menu options, you can enter any of the course modules that have been activated by the course instructors. </p>';
 $langHcourse_home = 'Main course page';
+$langHcourse_home_student = $langHcourse_home ;
+$langcourse_home_studentContent = '<p>You are currently in the on-line course main page. From the side menu options, you can enter any of the course modules that have been activated by the course instructors. </p>';
 $langcourse_homeContent = '<p class="helptopic">You are currently in the main page of your on-line course. From the side menu options, you can enter any of the modules where you can add your course\'s content. Active tools are visible to the visitors and students of your course, while inactive tools are only visible and accessible to you.</p> <p class="helptopic">Using the administration tools you can activate or inactivate course modules, review and administer registered users, change various options (such as course title, access control, etc.), and view usage statistics.</p>';
 $langHDoc = "Documents";
 $langHDoc_student = $langHDoc ;
@@ -184,6 +186,8 @@ one.
 ";
 $langWork_studentContent = "<p>The Course Assignments module is a very useful tool since it allows the electronic admission, submission and evaluation of course assignments. More specifically, it allows registered student users to upload electronically their assignments in the platform until the submission date and then see their grade, after the teacher has graded them.
 </p>" ;
+$langHGroup = "Groups";
+$langHGroup_student = $langHGroup ;
 $langGroupContent = "<p>This tool allows to create and manage work groups.
 At creation (Create groups), groups are emtpy. There are
 many ways to fill them:
@@ -476,7 +480,7 @@ begin each line of preformated text with a blank space&nbsp;
 </ul>';
 $langWiki_studentContent = "<p>The Wiki module is a new collaboration tool introduced in the current version of the platform Open eClass. Wiki is a course tool that allows register users (teachers and students) to create and edit Web page content.
 </p>" ;
-$langForContent_student = "<p>The platform allows the creation of discussion forums, where all users registered to the course, both students and educators, can participate.</p>" ;
-$langHcourse_home_student = $langHcourse_home ;
-$langHGroup = "Groups";
-$langHGroup_student = $langHGroup;
+$langHAddCourseUnits = "Add/Edit course unit";
+$langAddCourseUnitsContent = "<p class='helptopic'>To add a new course unit, please enter a title and a short description. Click on 'Add' to create the new unit.</p>";
+$langHAddCourseUnitscontent = "Add course unit content";
+$langAddCourseUnitscontentContent = "<p class='helptopic'>Hear you can add content or resources to the selected course unit. The types of resources that can be added are listed next to the 'Add:' label. By clicking on 'Add', you can find resources of the selected type available in your course. Tick the ones you would like to add and click on 'Add selected'. Newly added resources are immediately listed, with edit and delete icons for each one. Please note that when multiple course units exist in a course, links to the next and previous unit appear automatically. You can also use the selection box below to navigate directly to a specific unit.</p>";

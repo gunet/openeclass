@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language en
-// Generated 2009-09-25 17:18:30
+// Generated 2010-03-11 16:10:20
 
 $langEclass = "Open eClass - Asynchronous eLearning Platform";
 $langYes = "Yes";
@@ -26,3 +26,18 @@ $langsOfStudentss = "students";
 $langsstudent_acc = $langsStudent;
 $langGuest = "Guest User";
 $langGuests = "Guest Users";
+$langFaculty = "Faculty";
+$langOfFaculty = "Faculty";
+$langOfFaculties = "Faculties";
+$langFaculties = "Faculties";
+$langsFaculty = "faculty";
+$langsFaculties = "faculties";
+$langpres = "Undergraduate";
+$langposts = "Postgraduate";
+$langothers = "Other";
+$langpre = "Undergraduate";
+$langpost = "Postgraduate";
+$langother = "Other";
+$langInfoAbout = "The <strong>$siteName</strong> plaform is a complete Course Management System that supports Asynchronous eLearning Services via a simple web browser. Its goal is the incorporation and constructive use of the Internet and web technologies in the teaching and learning process. It supports the electronic management, storage and presentation of teaching materials, independently of the spatial and time limiting factors of conventional teaching and creating the necessary conditions for a dynamic teaching environment.<br><br> The introduction of eLearning into the traditional teaching process provides new capabilities and allows new means of interaction between $langsStudents and $langsTeachers, through a contemporary technological peak environment.";
+$langExtrasLeft = '';
+$langExtrasRight = '&nbsp;';
