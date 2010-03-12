@@ -56,7 +56,8 @@ $nameTools = $langAgenda;
 $tool_content = $head_content = "";
 
 mysql_select_db($dbname);
-if ((isset($addEvent) && $addEvent == 1) || ((isset($id) && $id)) && $is_adminOfCourse) {
+
+if ($is_adminOfCourse and (isset($_GET['addEvent']) or isset($_GET['id']))) {
 	$lang_editor = langname_to_code($language);
 	$lang_jscalendar = langname_to_code($language);
 
@@ -273,7 +274,7 @@ function confirmation (name)
 		$id="";
 	}
 
-	if ((isset($addEvent) && ($addEvent == 1)) || (isset($edit) && $edit == true)) {
+	if (isset($_GET['addEvent']) or isset($_GET['edit'])) {
 		$nameTools = $langAddEvent;
 		$navigation[] = array ("url" => $_SERVER['PHP_SELF'], "name" => $langAgenda);
 		$tool_content .= "
@@ -451,5 +452,3 @@ if($is_adminOfCourse && isset($head_content)) {
 } else {
 	draw($tool_content, 2, 'agenda');
 }
-?>
-
