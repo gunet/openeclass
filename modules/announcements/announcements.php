@@ -311,7 +311,7 @@ hContent;
     if ($displayForm and
         (isset($_GET['addAnnouce']) or isset($_GET['modify']))) {
         // DISPLAY ADD ANNOUNCEMENT COMMAND
-        $tool_content .= "<form method='post' action='$_SERVER[PHP_SELF]' onsubmit='return checkrequired(this, 'antitle');'>";
+        $tool_content .= "<form method='post' action='$_SERVER[PHP_SELF]' onsubmit=\"return checkrequired(this, 'antitle');\">";
         // should not send email if updating old message
         if (isset ($modify) && $modify) {
             $tool_content .= "
@@ -339,37 +339,31 @@ hContent;
 
         $tool_content .= "
       <tr>
-        <th width='150' class='left'>$langAnnTitle:</th>";
-        $tool_content .= "
-        <td><input type='text' name='antitle' value='$titleToModify' size='50' class='FormData_InputText'></td>
-      </tr>";
-        $tool_content .= "
+        <th width='150' class='left'>$langAnnTitle:</th>
+        <td><input type='text' name='antitle' value='$titleToModify' size='50' class='FormData_InputText' /></td>
+      </tr>
       <tr>
         <th class='left'>$langAnnBody:</th>
         <td>
           <table class='xinha_editor'>
           <tr>
-            <td><textarea id='xinha' name='newContent' value='$contentToModify'>$contentToModify</textarea></td>
+            <td><textarea id='xinha' name='newContent'>$contentToModify</textarea></td>
           </tr>
           </table>
         </td>
-      </tr>";
-        $tool_content .= "
-            <input type='hidden' name='id' value='" . $AnnouncementToModify . "'>";
-        $tool_content .= "
+      </tr>
       <tr>
         <th>&nbsp;</th>
-        <td><input type=checkbox value='1' name='emailOption'> $langEmailOption </td>
-      </tr>";
-        $tool_content .= "
+        <td><input type='checkbox' value='1' name='emailOption' /> $langEmailOption</td>
+      </tr>
       <tr>
         <th>&nbsp;</th>
-        <td><input type='Submit' name='submitAnnouncement' value='$langAdd'></td>
+        <td><input type='submit' name='submitAnnouncement' value='$langAdd' /></td>
       </tr>
       </tbody>
       </table>
-      </form>";
-        $tool_content .= "
+      <input type='hidden' name='id' value='$AnnouncementToModify' />
+      </form>
       <br />";
     }
 
