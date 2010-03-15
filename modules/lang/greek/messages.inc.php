@@ -2712,6 +2712,7 @@ $langEmptyVideoTitle = "Παρακαλώ πληκτρολογήστε ένα τ�
 /*************************************************************
 * wiki.inc.php
 **************************************************************/
+$langWikis = "Διαθέσιμα wiki";
 $langAddImage = "Πρόσθεσε εικόνα";
 $langAdministrator = "Διαχειριστής";
 $langChangePwdexp = "Βάλτε δύο φορές νέο κωδικό (password) για να γίνει αλλαγή, αφήστε κενό για να κρατήσετε τον ίδιο";
@@ -2771,14 +2772,14 @@ $langWikiEditLastVersion = "Αλλαγή τελευταίας έκδοσης";
 $langWikiEditPage = "Αλλαγή της σελίδας";
 $langWikiEditPrivilege = "Αλλαγή σελίδων";
 $langWikiEditProperties = "Αλλαγή ιδιοτήτων";
-$langWikiEditionSucceed = "Η έκδοση Wiki είναι επιτυχημένη";
+$langWikiEditionSucceed = "Οι αλλαγές πραγματοποιηθήκανε";
 $langWikiGroupMembers = "Μέλη ομάδας";
 $langWikiIdenticalContent = " Ίδιο περιεχόμενο <br />καμιά αλλαγή δεν αποθηκεύτηκε";
 $langWikiInvalidWikiId = "Μη έγκυρο Wiki Id";
 $langWikiList = "Λίστα του Wiki";
 $langWikiMainPage = "Κύρια σελίδα";
 $langWikiMainPageContent = "Αυτη είναι η κύρια σελίδα του Wiki %s. Επέλεξε '''Αλλαγή της σελίδας''' για να τροποποιήσεις το περιεχόμενο.";
-$langWikiNoWiki = "Κανένα Wiki";
+$langWikiNoWiki = "Δεν υπάρχει Wiki";
 $langWikiNotAllowedToCreate = " Δεν επιτρέπεται να δημιουργήσεις σελίδα";
 $langWikiNotAllowedToEdit = " Δεν επιτρέπεται να αλλάξεις τη σελίδα";
 $langWikiNotAllowedToRead = "Δεν επιτρέπεται να διαβάσεις τη σελίδα";
@@ -3003,6 +3004,7 @@ $langInsertExercise = "άσκησης";
 $langInsertVideo = "βίντεο";
 $langInsertForum = "περιοχής συζητήσεων";
 $langInsertWork = 'εργασίας';
+$langInsertWiki = 'wiki';
 $langUnknownResType = "Πρόβλημα! Άγνωστος πόρος θεματικής ενότητας";
 $langNoExercises = "Δεν υπάρχουν ασκήσεις";
 
