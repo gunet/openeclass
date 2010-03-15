@@ -35,19 +35,17 @@ $require_help = TRUE;
 $helpTopic = 'Infocours';
 include '../../include/baseTheme.php';
 
-if (isset($_POST['localize'])) {
-	$newlang = $language = langcode_to_name($_POST['localize']);
-}
-
-if(isset($newlang)) {
-	include ($webDir."modules/lang/$newlang/messages.inc.php");
-}
 $nameTools = $langModifInfo;
 $tool_content = "";
 
 // submit
-if ($is_adminOfCourse) {
-	$lang_editor = langname_to_code($language);
+if (!$is_adminOfCourse) {
+	$tool_content .= "<p>$langForbidden</p>";
+        draw($tool_content, 2, 'course_info');
+        exit;
+}
+
+$lang_editor = langname_to_code($language);
 
 $head_content = <<<hContent
 <script type="text/javascript">
@@ -58,74 +56,81 @@ $head_content = <<<hContent
 <script type="text/javascript" src="$urlAppend/include/xinha/my_config2.js"></script>
 hContent;
 
-	if (isset($submit)) {
-		if (!empty($int)) {
-			if(isset($newlang)) {
-			include ($webDir."modules/lang/$newlang/messages.inc.php");
-		}
-		// update course settings
-		if (isset($checkpassword) && $checkpassword=="on" && $formvisible=="1") {
-			$password = $password;
-		} else {
-			$password = "";
-		}
+if (isset($_POST['submit'])) {
+        if (empty($_POST['title'])) {
+                $tool_content .= "<p class='caution_small'>$langNoCourseTitle<br />
+                                  <a href='$_SERVER[PHP_SELF]'>$langAgain</a></p><br />";
+        } else {
+                if (isset($_POST['localize'])) {
+                        $newlang = $language = langcode_to_name($_POST['localize']);
+                        include $webDir."modules/lang/$newlang/messages.inc.php";
+                        $lang_override = $webDir."config/$newlang.inc.php";
+                        if (file_exists($lang_override)) {
+                                include $lang_override;
+                        }
+                }
 
-		list($facid, $facname) = split("--", $facu);
-		$sql = "UPDATE $mysqlMainDb.cours
-			SET intitule='$int',
-				faculte='$facname',
-				description=".autoquote($description).",
-				course_addon=".autoquote($course_addon).",
-				course_keywords=".autoquote($course_keywords).",
-				visible=".autoquote($formvisible).",
-				titulaires=".autoquote($titulary).",
-				languageCourse=".autoquote($newlang).",
-				type=".autoquote($type).",
-				password=".autoquote($password).",
-				faculteid=".autoquote($facid)."
-			WHERE code=".autoquote($currentCourseID);
-		mysql_query($sql);
-		mysql_query("UPDATE `$mysqlMainDb`.cours_faculte
-                             SET faculte=".autoquote($facname).",
-                                 facid=".autoquote($facid)."
-                             WHERE code='$currentCourseID'");
+                // update course settings
+                if (isset($_POST['checkpassword']) and
+                    isset($_POST['formvisible']) and
+                    $_POST['formvisible'] == '1') {
+                        $password = $password;
+                } else {
+                        $password = "";
+                }
 
-		// update Home Page Menu Titles for new language
-		mysql_select_db($currentCourseID, $db);
-		db_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langAgenda' WHERE define_var='MODULE_ID_AGENDA'");
-		db_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langLinks' WHERE 'MODULE_ID_LINKS'");
-		db_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langDoc' WHERE define_var='MODULE_ID_DOCS'");
-		db_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langVideo' WHERE define_var='MODULE_ID_VIDEO'");
-		db_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langWorks' WHERE define_var='MODULE_ID_ASSIGN'");
-		db_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langAnnouncements' WHERE define_var='MODULE_ID_ANNOUNCE'");
-		db_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langAdminUsers' WHERE define_var='MODULE_ID_USERS'");
-		db_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langForums' WHERE define_var='MODULE_ID_FORUM'");
-		db_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langExercices' WHERE define_var='MODULE_ID_EXERCISE'");
-		db_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langModifyInfo' WHERE define_var='MODULE_ID_COURSEINFO'");
-		db_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langGroups' WHERE define_var='MODULE_ID_GROUPS'");
-		db_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langDropBox' WHERE define_var='MODULE_ID_DROPBOX'");
-		db_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langConference' WHERE define_var='MODULE_ID_CHAT'");
-		db_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langCourseDescription' WHERE define_var='MODULE_ID_DESCRIPTION'");
-		db_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langQuestionnaire' WHERE define_var='MODULE_ID_QUESTIONNAIRE'");
-		db_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langLearnPath' WHERE define_var='MODULE_ID_LP'");
-		db_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langUsage' WHERE define_var='MODULE_ID_USAGE'");
-		db_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langToolManagement' WHERE define_var='MODULE_ID_TOOLADMIN'");
-		db_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langWiki' WHERE define_var='MODULE_ID_WIKI'");
-		db_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langCourseUnits' WHERE define_var='MODULE_ID_UNITS'");
+                list($facid, $facname) = explode('--', $_POST['facu']);
+                db_query("UPDATE `$mysqlMainDb`.cours
+                          SET intitule = " . autoquote($_POST['title']) .",
+                              faculte = " . autoquote($facname) . ",
+                              description = " . autoquote($_POST['description']) . ",
+                              course_addon = " . autoquote($_POST['$course_addon']) . ",
+                              course_keywords = ".autoquote($_POST['course_keywords']) . ",
+                              visible = " . intval($_POST['formvisible']) . ",
+                              titulaires = " . autoquote($_POST['titulary']) . ",
+                              languageCourse = '$newlang',
+                              type = " . autoquote($_POST['type']) . ",
+                              password = " . autoquote($_POST['password']) . ",
+                              faculteid = " . intval($facid) . "
+                          WHERE cours_id = $cours_id");
+                db_query("UPDATE `$mysqlMainDb`.cours_faculte
+                          SET faculte = " . autoquote($facname) . ",
+                              facid = " . intval($facid) . "
+                          WHERE code='$currentCourseID'");
 
-  		$tool_content .= "<p class=\"success_small\">$langModifDone<br />
-			<a href=\"".$_SERVER['PHP_SELF']."\">$langBack</a></p><br />
-			<p><a href='{$urlServer}courses/$currentCourseID/index.php'>$langBackCourse</a></p><br />";
-	} else {
-		$tool_content .= "<p class=\"caution_small\">$langNoCourseTitle<br />
-		<a href=\"$_SERVER[PHP_SELF]\">$langAgain</a></p><br />";
-		}
+                // update Home Page Menu Titles for new language
+                mysql_select_db($currentCourseID, $db);
+                db_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langAgenda' WHERE define_var='MODULE_ID_AGENDA'");
+                db_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langLinks' WHERE 'MODULE_ID_LINKS'");
+                db_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langDoc' WHERE define_var='MODULE_ID_DOCS'");
+                db_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langVideo' WHERE define_var='MODULE_ID_VIDEO'");
+                db_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langWorks' WHERE define_var='MODULE_ID_ASSIGN'");
+                db_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langAnnouncements' WHERE define_var='MODULE_ID_ANNOUNCE'");
+                db_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langAdminUsers' WHERE define_var='MODULE_ID_USERS'");
+                db_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langForums' WHERE define_var='MODULE_ID_FORUM'");
+                db_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langExercices' WHERE define_var='MODULE_ID_EXERCISE'");
+                db_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langModifyInfo' WHERE define_var='MODULE_ID_COURSEINFO'");
+                db_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langGroups' WHERE define_var='MODULE_ID_GROUPS'");
+                db_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langDropBox' WHERE define_var='MODULE_ID_DROPBOX'");
+                db_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langConference' WHERE define_var='MODULE_ID_CHAT'");
+                db_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langCourseDescription' WHERE define_var='MODULE_ID_DESCRIPTION'");
+                db_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langQuestionnaire' WHERE define_var='MODULE_ID_QUESTIONNAIRE'");
+                db_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langLearnPath' WHERE define_var='MODULE_ID_LP'");
+                db_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langUsage' WHERE define_var='MODULE_ID_USAGE'");
+                db_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langToolManagement' WHERE define_var='MODULE_ID_TOOLADMIN'");
+                db_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langWiki' WHERE define_var='MODULE_ID_WIKI'");
+                db_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langCourseUnits' WHERE define_var='MODULE_ID_UNITS'");
+
+                $tool_content .= "<p class='success_small'>$langModifDone<br />
+                        <a href='".$_SERVER['PHP_SELF']."'>$langBack</a></p><br />
+                        <p><a href='{$urlServer}courses/$currentCourseID/index.php'>$langBackCourse</a></p><br />";
+        }
 } else {
 
-		$tool_content .= "<div id=\"operations_container\"><ul id=\"opslist\">";
-		$tool_content .= "<li><a href=\"archive_course.php\">$langBackupCourse</a></li>
-  		<li><a href=\"delete_course.php\">$langDelCourse</a></li>
-    		<li><a href=\"refresh_course.php\">$langRefreshCourse</a></li></ul></div>";
+		$tool_content .= "<div id='operations_container'><ul id='opslist'>";
+		$tool_content .= "<li><a href='archive_course.php'>$langBackupCourse</a></li>
+  		<li><a href='delete_course.php'>$langDelCourse</a></li>
+    		<li><a href='refresh_course.php'>$langRefreshCourse</a></li></ul></div>";
 
 		$sql = "SELECT cours_faculte.faculte,
 			cours.intitule, cours.description, cours.course_keywords, cours.course_addon,
@@ -136,26 +141,26 @@ hContent;
 			AND cours_faculte.code='$currentCourseID'";
 		$result = mysql_query($sql);
 		$c = mysql_fetch_array($result);
-		$int = $c['intitule'];
+		$title = q($c['intitule']);
 		$facu = $c['faculteid'];
 		$type = $c['type'];
 		$visible = $c['visible'];
-		$visibleChecked[$visible]="checked";
-		$fake_code = $c['fake_code'];
-		$titulary = $c['titulaires'];
+		$visibleChecked[$visible] = " checked='1'";
+		$fake_code = q($c['fake_code']);
+		$titulary = q($c['titulaires']);
 		$languageCourse	= $c['languageCourse'];
-		$description = $c['description'];
-		$course_keywords = $c['course_keywords'];
-		$course_addon = $c['course_addon'];
-		$password = $c['password'];
-		if ($password!="") $checkpasssel = "checked"; else $checkpasssel="";
+		$description = q($c['description']);
+		$course_keywords = q($c['course_keywords']);
+		$course_addon = q($c['course_addon']);
+		$password = q($c['password']);
+		$checkpasssel = empty($password)? '': " checked='1'";
 
 		@$tool_content .="
 		<form method='post' action='$_SERVER[PHP_SELF]'>
-		<table width=\"99%\" align='left'>
+		<table width='99%' align='left'>
 		<thead><tr>
 		<td>
-		<table width=\"100%\" class='FormData' align='left'>
+		<table width='100%' class='FormData' align='left'>
 		<tbody>
 		<tr>
 			<th class='left' width='150'>&nbsp;</th>
@@ -169,33 +174,35 @@ hContent;
 		</tr>
 		<tr>
 			<th class='left'>$langCourseTitle&nbsp;:</th>
-			<td><input type=\"text\" name=\"int\" value=\"$int\" size=\"60\" class='FormData_InputText'></td>
+			<td><input type='text' name='title' value='$title' size='60' class='FormData_InputText' /></td>
 			<td>&nbsp;</td>
 		</tr>
 		<tr>
 			<th class='left'>$langTeachers&nbsp;:</th>
-			<td><input type=\"text\" name=\"titulary\" value=\"$titulary\" size=\"60\" class='FormData_InputText'></td>
+			<td><input type='text' name='titulary' value='$titulary' size='60' class='FormData_InputText' /></td>
 		<td>&nbsp;</td>
 		</tr>
 			<tr><th class='left'>$langFaculty&nbsp;:</th>
 			<td>
-          <select name=\"facu\" class='auth_input'>";
-		$resultFac=mysql_query("SELECT id,name FROM `$mysqlMainDb`.faculte ORDER BY number");
+          <select name='facu' class='auth_input'>";
+		$resultFac=mysql_query("SELECT id, name FROM `$mysqlMainDb`.faculte ORDER BY number");
 		while ($myfac = mysql_fetch_array($resultFac)) {
-			if($myfac['id']==$facu)
-				$tool_content .= "
-            <option value=\"".$myfac['id']."--".$myfac['name']."\" selected>$myfac[name]</option>";
-			else
-				$tool_content .= "
-            <option value=\"".$myfac['id']."--".$myfac['name']."\">$myfac[name]</option>";
+                        if ($myfac['id'] == $facu) {
+                                $selected = ' selected="1"';
+                        } else {
+                                $selected = '';
+                        }
+                        $tool_content .= "<option value='$myfac[id]--" .
+                                         q($myfac['name']) . "'> " .
+                                         q($myfac['name']) . "</option>";
 		}
-		$tool_content .= "</select></td><td>&nbsp;</td></tr>
+                $tool_content .= "</select></td><td>&nbsp;</td></tr>
 		<tr>
 		<th class='left'>$m[type]&nbsp;:</th>
 		<td>";
 
-      $tool_content .= selection(array('pre' => $langpre, 'post' => $langpost, 'other' => $langother),'type', $type);
-      $tool_content .= "</td>
+                $tool_content .= selection(array('pre' => $langpre, 'post' => $langpost, 'other' => $langother), 'type', $type);
+                $tool_content .= "</td>
         <td>&nbsp;</td>
       </tr>
       <tr>
@@ -203,7 +210,7 @@ hContent;
         <td width='100'>
 	      <table class='xinha_editor'>
           <tr>
-             <td><textarea id='xinha' name='description' value='".q($c['description'])."' cols='20' rows='4' class='FormData_InputText'>".q($c['description'])."</textarea></td>
+             <td><textarea id='xinha' name='description' cols='20' rows='4' class='FormData_InputText'>$description</textarea></td>
           </tr>
           </table>
         </td>
@@ -211,7 +218,7 @@ hContent;
       </tr>
       <tr>
         <th class='left'>$langCourseKeywords&nbsp;</th>
-        <td><input type='text' name='course_keywords' value='".q($c['course_keywords'])."' size='60' class='FormData_InputText'></td>
+        <td><input type='text' name='course_keywords' value='$course_keywords' size='60' class='FormData_InputText' /></td>
         <td>&nbsp;</td>
       </tr>
       <tr>
@@ -219,7 +226,7 @@ hContent;
         <td width='100'>
 	      <table class='xinha_editor'>
           <tr>
-        <td><textarea id='xinha2' name='course_addon' value='".q($c['course_addon'])."' cols='20' rows='4' class='FormData_InputText'>".q($c['course_addon'])."</textarea></td>
+        <td><textarea id='xinha2' name='course_addon' cols='20' rows='4' class='FormData_InputText'>$course_addon</textarea></td>
         </tr>
           </table>
           </td>
@@ -227,40 +234,36 @@ hContent;
       </tr>
       </tbody>
       </table>
-      <p>&nbsp;</p>\n";
-
-	$tool_content .= "
-      <table width=\"100%\" class='FormData' align='left'>
+      <p>&nbsp;</p>
+      <table width='100%' class='FormData' align='left'>
       <tbody>
       <tr>
         <th class='left' width='150'>&nbsp;</th>
         <td colspan='2'><b>$langConfidentiality</b></td>
       </tr>
       <tr>
-        <th class='left'><img src='../../template/classic/img/OpenCourse.gif' alt='$m[legopen]' title='$m[legopen]' width='16' height='16'>&nbsp;$m[legopen]&nbsp;:</th>
-        <td width='1'><input type=\"radio\" name=\"formvisible\" value=\"2\"".@$visibleChecked[2]."></td>
+        <th class='left'><img src='../../template/classic/img/OpenCourse.gif' alt='$m[legopen]' title='$m[legopen]' width='16' height='16' />&nbsp;$m[legopen]&nbsp;:</th>
+        <td width='1'><input type='radio' name='formvisible' value='2'".@$visibleChecked[2]." /></td>
         <td>$langPublic&nbsp;</td>
       <tr>
-        <th rowspan='2' class='left'><img src=\"../../template/classic/img/Registration.gif\" alt=\"".$m['legrestricted']."\" title=\"".$m['legrestricted']."\" width=\"16\" height=\"16\">&nbsp;".$m['legrestricted']."&nbsp;:</th>
-        <td><input type=\"radio\" name=\"formvisible\" value=\"1\"".@$visibleChecked[1]."></td>
+        <th rowspan='2' class='left'><img src='../../template/classic/img/Registration.gif' alt='$m[legrestricted]' title='$m[legrestricted]' width='16' height='16' />&nbsp;$m[legrestricted]&nbsp;:</th>
+        <td><input type='radio' name='formvisible' value='1'".@$visibleChecked[1]." /></td>
         <td>$langPrivOpen</td>
       </tr>
       <tr>
         <td>&nbsp;</td>
-        <td bgcolor='#F8F8F8'><input type=\"checkbox\" name=\"checkpassword\" ".$checkpasssel.">&nbsp;
-            $langOptPassword&nbsp;
-            <input type='text' name='password' value='".q($password)."' class='FormData_InputText'>
+        <td bgcolor='#F8F8F8'><input type='checkbox' name='checkpassword'$checkpasssel />&nbsp;$langOptPassword&nbsp;<input type='text' name='password' value='$password' class='FormData_InputText' />
         </td>
       </tr>
       <tr>
-        <th class='left'><img src='../../template/classic/img/ClosedCourse.gif' alt='$m[legclosed]' title='$m[legclosed]' width='16' height='16'>&nbsp;$m[legclosed]&nbsp;:</th>
-        <td><input type='radio' name='formvisible' value='0'".@$visibleChecked[0]."></td>
+        <th class='left'><img src='../../template/classic/img/ClosedCourse.gif' alt='$m[legclosed]' title='$m[legclosed]' width='16' height='16' />&nbsp;$m[legclosed]&nbsp;:</th>
+        <td><input type='radio' name='formvisible' value='0'".@$visibleChecked[0]." /></td>
         <td>$langPrivate&nbsp;</td>
       </tr>
       </tbody>
       </table>
       <p>&nbsp;</p>
-      <table width=\"100%\" class='FormData' align='left'>
+      <table width='100%' class='FormData' align='left'>
       <tbody>
       <tr>
         <th class='left' width='150'>&nbsp;</th>
@@ -277,7 +280,7 @@ hContent;
       </tr>
       <tr>
         <th class='left' width='150'>&nbsp;</th>
-        <td><input type='submit' name='submit' value='$langSubmit'></td>
+        <td><input type='submit' name='submit' value='$langSubmit' /></td>
         <td>&nbsp;</td>
       </tr>
       </tbody>
@@ -287,12 +290,7 @@ hContent;
   </thead>
   </table>
 </form>";
-	}     // else
-}   // if uid==prof_id
-
-// student view
-else {
-	$tool_content .= "<p>$langForbidden</p>";
 }
+
 add_units_navigation(TRUE);
 draw($tool_content, 2, 'course_info', $head_content);
