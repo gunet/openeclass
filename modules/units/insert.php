@@ -70,6 +70,8 @@ if (isset($_POST['submit_doc'])) {
         insert_work($id);
 } elseif (isset($_POST['submit_forum'])) {
         insert_forum($id);
+} elseif (isset($_POST['submit_wiki'])) {
+        insert_wiki($id);
 }
 
 
@@ -104,6 +106,10 @@ switch ($_GET['type']) {
 	case 'forum': $nameTools = "$langAdd $langInsertForum";
                 include 'insert_forum.php';
                 display_forum();
+                break;
+        case 'wiki': $nameTools = "$langAdd $langInsertWiki";
+                include 'insert_wiki.php';
+                display_wiki();
                 break;
         default: break;
 }
@@ -262,6 +268,25 @@ function insert_forum($id)
 				", visibility='v', `order`=$order, `date`=NOW(), res_id=$forum[forum_id]",
 				$GLOBALS['mysqlMainDb']);
 		} 
+	}
+	header('Location: index.php?id=' . $id);
+	exit;
+}
+
+
+// insert wiki in database
+function insert_wiki($id)
+{
+	list($order) = mysql_fetch_array(db_query("SELECT MAX(`order`) FROM unit_resources WHERE unit_id=$id"));
+	
+	foreach ($_POST['wiki'] as $wiki_id) {
+		$order++;
+		$wiki = mysql_fetch_array(db_query("SELECT * FROM wiki_properties
+			WHERE id =" . intval($wiki_id), $GLOBALS['currentCourseID']), MYSQL_ASSOC);
+		db_query("INSERT INTO unit_resources SET unit_id=$id, type='wiki', title=" .
+			quote($wiki['title']) . ", comments=" . quote($wiki['description']) .
+			", visibility='v', `order`=$order, `date`=NOW(), res_id=$wiki[id]",
+			$GLOBALS['mysqlMainDb']); 
 	}
 	header('Location: index.php?id=' . $id);
 	exit;

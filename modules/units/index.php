@@ -164,6 +164,7 @@ if ($is_adminOfCourse) {
 			"<li><a href='insert.php?type=video&amp;id=$id'>$langInsertVideo</a></li>" .
 			"<li><a href='insert.php?type=forum&amp;id=$id'>$langInsertForum</a></li>" .
 			"<li><a href='insert.php?type=work&amp;id=$id'>$langInsertWork</a></li>" .
+			"<li><a href='insert.php?type=wiki&amp;id=$id'>$langInsertWiki</a></li>" .
                         "</ul></div>\n";
 }
 
@@ -277,6 +278,9 @@ function show_resource($info)
 		case 'topic':
 		case 'forum':
                         $tool_content .= show_forum($info['type'], $info['title'], $info['comments'], $info['id'], $info['res_id'], $info['visibility']);
+                        break;
+		case 'wiki':
+                        $tool_content .= show_wiki($info['title'], $info['comments'], $info['id'], $info['res_id'], $info['visibility']);
                         break;
                 default:
                         $tool_content .= $langUnknownResType;
@@ -510,6 +514,43 @@ function show_forum($type, $title, $comments, $resource_id, $ft_id, $visibility)
 
 	return "<tr$class_vis><td width='3%'>$imagelink</td><td width='82%'>$forumlink</td>" .
 		actions('forum', $resource_id, $visibility) .
+		'</tr>' . $comment_box;
+}
+
+// display resource wiki
+function show_wiki($title, $comments, $resource_id, $wiki_id, $visibility)
+{
+	global $id, $tool_content, $mysqlMainDb, $urlServer, $is_adminOfCourse,
+               $langWasDeleted, $currentCourseID;
+
+	$comment_box = $imagelink = $link = $class_vis = '';
+	$class_vis = ($visibility == 'i')? ' class="invisible"': '';
+        $title = htmlspecialchars($title);
+	$r = db_query("SELECT * FROM wiki_properties WHERE id = $wiki_id",
+                      $currentCourseID);
+	if (mysql_num_rows($r) == 0) { // check if it was deleted
+		if (!$is_adminOfCourse) {
+			return '';
+		} else {
+			$status = 'del';
+			$imagelink = "<img src='../../template/classic/img/delete.gif' />";
+			$exlink = "<span class='invisible'>$title ($langWasDeleted)</span>";
+		}
+	} else {
+                $wiki = mysql_fetch_array($r, MYSQL_ASSOC);
+		$link = "<a href='${urlServer}modules/wiki/page.php?wikiId=$wiki_id&amp;action=show&amp;unit=$id'>";
+                $wikilink = $link . "$title</a>";
+		$imagelink = $link .
+                        "<img src='../../template/classic/img/wiki_" .
+			($visibility == 'i'? 'off': 'on') . ".gif' /></a>";
+		
+	}
+        if (!empty($comments)) {
+                $comment_box = "<tr><td width='3%'>&nbsp;</td><td width='82%'>$comments</td>";
+	}
+
+	return "<tr$class_vis><td width='3%'>$imagelink</td><td width='82%'>$wikilink</td>" .
+		actions('wiki', $resource_id, $visibility) .
 		'</tr>' . $comment_box;
 }
 
