@@ -513,12 +513,12 @@
         . "\nvar sImgPath = '".$imgRepositoryWeb . "'"
         . "\n</script>\n"
         ;
-
     // Breadcrumps
-
-    $navigation[]= array ( 'url' => 'wiki.php', 'name' => $langWiki);
-    $navigation[]= array ( 'url' => NULL
-        , 'name' => $wiki->getTitle() );
+	if (!add_units_navigation()) {
+		$navigation[]= array ( 'url' => 'wiki.php', 'name' => $langWiki);
+		$navigation[]= array ( 'url' => NULL, 'name' => $wiki->getTitle() );
+	}
+	mysql_select_db($currentCourseID);
 
     switch( $action )
     {
@@ -528,6 +528,7 @@
             $navigation[]= array ( 'url' => 'page.php?action=show&amp;wikiId='
                 . $wikiId . '&amp;title=' . $title
                 , 'name' => $dispTitle );
+
             $nameTools = $langEdit;
             $noPHP_SELF = true;
             break;
@@ -1146,6 +1147,5 @@
         }
     }
     // ------------ End of wiki script ---------------
-
 draw($tool_content, 2, "wiki", $head_content);
 ?>
