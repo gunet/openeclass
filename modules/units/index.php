@@ -174,7 +174,7 @@ if ($is_adminOfCourse) {
         $link['next'] . "</td></tr></table><br />\n";
 } else {
         $tool_content .= '<table class="DepTitle" width="99%" align="left">' .
-	"<tbody><tr><th>".$link['previous']."</th><td>".$link['next']."&nbsp;</td></tr></tbody></table>\n<p>&nbsp;</p>\n";
+	"<tbody><tr><th>".$link['previous']."</th><td>".$link['next']."&nbsp;</td></tr></tbody></table>\n<p>&nbsp;</p>\n\n<p>&nbsp;</p>\n\n<p>&nbsp;</p>\n";
 }
 
 
@@ -239,7 +239,7 @@ function show_resources($unit_id)
 	if (mysql_num_rows($req) > 0) {
 		list($max_resource_id) = mysql_fetch_row(db_query("SELECT id FROM unit_resources
                                 WHERE unit_id = $unit_id ORDER BY `order` DESC LIMIT 1"));
-		$tool_content .= "<table class='resources' width='99%'>";
+		$tool_content .= "<br /><table class='resources' width='99%'>";
 		while ($info = mysql_fetch_array($req)) {
 			show_resource($info);
 		}	
@@ -318,11 +318,11 @@ function show_doc($title, $comments, $resource_id, $file_id)
         }
 	$class_vis = ($status == 'i' or $status == 'del')? ' class="invisible"': '';
         if (!empty($comments)) {
-                $comment = "<tr><td  width='3%'>&nbsp;</td><td>$comments</td>";
+                $comment = "<tr><td>&nbsp;</td><td>$comments</td>";
         } else {
                 $comment = "";
         }
-        return "<tr$class_vis><td width='3%'>$link<img src='$image' /></a></td><td width='82%'>$link$title</a></td>" .
+        return "<tr$class_vis><td width=1>$link<img src='$image' /></a></td><td align=left>$link$title</a></td>" .
                 actions('doc', $resource_id, $status) .
                 '</tr>' . $comment;
 }
@@ -335,7 +335,7 @@ function show_text($comments, $resource_id, $visibility)
 
         $class_vis = ($visibility == 'i')? ' class="invisible"': '';
 	$comments = mathfilter($comments, 12, "../../courses/mathimg/");
-        $tool_content .= "<tr$class_vis><th width='3%'>&nbsp;</th><td width='82%'>$comments</td>" .
+        $tool_content .= "<tr$class_vis><td colspan=2>$comments</td>" .
 		actions('text', $resource_id, $visibility) .
                 "</tr>";
 }
