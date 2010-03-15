@@ -502,7 +502,6 @@ $langSureToDelAnnounceAll = "Είστε σίγουρος ότι θέλετε ν�
 $langAnn = "Ανακοινώθηκε την";
 $langEmptyAnTitle = "Παρακαλώ πληκτρολογήστε τον τίτλο της ανακοίνωσης";
 $langAnnouncementNoTille = "Ανακοίνωση χωρίς τίτλο";
-$langOfCourse = "του μαθήματος";
 
 /*******************************************
 * archive_course.inc.php
