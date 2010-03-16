@@ -241,8 +241,7 @@ function expanded_faculte($fac_name, $facid, $uid) {
 			}
 		$retString .= "</div></td></tr></tbody></table><br />\n\n";
 	} else {
-		$retString .= "\n      <td>&nbsp;</td>\n</tr>\n
-		</thead>\n</table>\n<p>&nbsp;</p>\n<p>&nbsp;</p>";
+		$retString .= "\n</table>\n<p>&nbsp;</p>\n<p>&nbsp;</p>";
 	}
 
 	  // changed this foreach statement a bit
@@ -315,9 +314,9 @@ function expanded_faculte($fac_name, $facid, $uid) {
                         $course_title = q($mycours['i']);
                         $password = q($mycours['password']);
                         if ($mycours['visible'] == 2 or $uid == 1) {
-                                $codelink = "<a href='../../courses/$mycours[k]/' target='_blank'>$course_title</a>";
+                                $codelink = "<a href='../../courses/$mycours[k]/' target='_blank'>" . q($course_title) . "</a>";
                         } else {
-                                $codelink = $course_title;
+                                $codelink = q($course_title);
                         }
                         if ($k%2==0) {
                                 $retString .= "\n    <tr>";
@@ -352,7 +351,7 @@ function expanded_faculte($fac_name, $facid, $uid) {
                         $retString .= "</td>";
                         $retString .= "\n      <td width=60%><b>$codelink</b> <small>(" . q($mycours['fake_code']) .
                                 ")</small>$requirepassword</td>";
-                        $retString .= "\n      <td width=23%>$mycours[t]</td>";
+                        $retString .= "\n      <td width=23%>" . q($mycours['t']) . "</td>";
                         $retString .= "\n      <td align='center' width='7%'>";
                         // show the necessary access icon
                         foreach ($icons as $visible => $image) {
