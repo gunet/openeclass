@@ -193,7 +193,7 @@ if (isset($_POST['submit'])) {
                                 $selected = '';
                         }
                         $tool_content .= "<option value='$myfac[id]--" .
-                                         q($myfac['name']) . "'> " .
+                                         q($myfac['name']) . "'$selected>" .
                                          q($myfac['name']) . "</option>";
 		}
                 $tool_content .= "</select></td><td>&nbsp;</td></tr>
