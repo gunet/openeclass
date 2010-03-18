@@ -4,7 +4,7 @@
        	GUnet eClass 2.0 
         E-learning and Course Management Program  
 ================================================================================
-       	Copyright(c) 2003-2006  Greek Universities Network - GUnet
+       	Copyright(c) 2003-2010  Greek Universities Network - GUnet
         A full copyright notice can be read in "/info/copyright.txt".
         
        	Authors:    Costas Tsibanis <k.tsibanis@noc.uoa.gr>
