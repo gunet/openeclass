@@ -29,7 +29,7 @@
 
 
 
-      Special Credits to:     
+      Special Credits to:
 
       /************************************************************************
 
@@ -112,7 +112,7 @@
 
         Function user_get_data(): Mathieu Laurent <laurent@cerdecam.be>
 
-        SortTable (sorttable.js): Stuart Langridge (licenced as X11)
+        Javascript SortTable (sorttable.js): Stuart Langridge (licenced as X11)
          http://www.kryogenix.org/code/browser/sorttable/
 
 	Messages translated to spanish language by: 
