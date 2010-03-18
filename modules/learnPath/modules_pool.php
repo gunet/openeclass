@@ -1,6 +1,6 @@
 <?php
 /*========================================================================
-*   Open eClass 2.1
+*   Open eClass 2.3
 *   E-learning and Course Management System
 * ========================================================================
 *  Copyright(c) 2003-2008  Greek Universities Network - GUnet
@@ -26,7 +26,7 @@
 
 /*===========================================================================
 	modules_pool.php
-	@last update: 30-06-2006 by Thanos Kyritsis
+	@last update: 29-08-2009 by Thanos Kyritsis
 	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
 
 	based on Claroline version 1.7 licensed under GPL

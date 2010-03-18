@@ -1,6 +1,6 @@
 <? // $Id$
 /*========================================================================
-*   Open eClass 2.1
+*   Open eClass 2.3
 *   E-learning and Course Management System
 * ========================================================================
 *  Copyright(c) 2003-2008  Greek Universities Network - GUnet
