@@ -1,6 +1,6 @@
 <?
 /*========================================================================
-*   Open eClass 2.1
+*   Open eClass 2.3
 *   E-learning and Course Management System
 * ========================================================================
 *  Copyright(c) 2003-2008  Greek Universities Network - GUnet
@@ -45,20 +45,21 @@ $version = 1;
 $encoding = 'ISO-8859-7';
 
 if (isset($send_archive) and $_FILES['archiveZipped']['size'] > 0) {
-	$tool_content .= "<table width=\"99%\"><caption>".$langFileSent."</caption><tbody>
-	<tr><td width=\"3%\"nowrap>$langFileSentName</td><td>".$_FILES['archiveZipped']['name']."</td></tr>
-	<tr><td width=\"3%\"nowrap>$langFileSentSize</td><td>".$_FILES['archiveZipped']['size']."</td></tr>
-	<tr><td width=\"3%\"nowrap>$langFileSentType</td><td>".$_FILES['archiveZipped']['type']."</td></tr><tr>
-	<td width=\"3%\"nowrap>$langFileSentTName</td><td>".$_FILES['archiveZipped']['tmp_name']."</td></tr>";
-	$tool_content .= "</tbody></table><br>";
-	$tool_content .= "<table width=\"99%\"><caption>".$langFileUnzipping."</caption><tbody>";
+	$tool_content .= "<table width='99%'><caption>".$langFileSent."</caption><tbody>
+	<tr><td width='3%'>$langFileSentName</td><td>".$_FILES['archiveZipped']['name']."</td></tr>
+	<tr><td width='3%'>$langFileSentSize</td><td>".$_FILES['archiveZipped']['size']."</td></tr>
+	<tr><td width='3%'>$langFileSentType</td><td>".$_FILES['archiveZipped']['type']."</td></tr><tr>
+	<td width='3%'>$langFileSentTName</td><td>".$_FILES['archiveZipped']['tmp_name']."</td></tr>";
+	$tool_content .= "</tbody></table><br />";
+	$tool_content .= "<table width='99%'><caption>".$langFileUnzipping."</caption><tbody>";
 	$tool_content .= "<tr><td>".unpack_zip_show_files($archiveZipped)."</td></tr>";
-	$tool_content .= "<tbody></table><br>";
-} elseif (isset($send_path) and !empty($pathToArchive)) {
+	$tool_content .= "<tbody></table><br />";
+} elseif (isset($_POST['send_path']) and isset($_POST['pathToArchive'])) {
+        $pathToArchive = $_POST['pathToArchive'];
 	if (file_exists($pathToArchive)) {
-		$tool_content .= "<table width=\"99%\"><caption>".$langFileUnzipping."</caption><tbody>";
+		$tool_content .= "<table width='99%'><caption>".$langFileUnzipping."</caption><tbody>";
 		$tool_content .= "<tr><td>".unpack_zip_show_files($pathToArchive)."</td></tr>";
-		$tool_content .= "<tbody></table><br>";
+		$tool_content .= "<tbody></table><br />";
 	} else {
 		$tool_content .= $langFileNotFound;
 	}
@@ -68,7 +69,7 @@ if (isset($send_archive) and $_FILES['archiveZipped']['size'] > 0) {
 		$course_desc, intval($course_fac), $course_vis, $course_prof, $course_type);
 	move_dir($r, "$webDir/courses/$new_course_code");
 	course_index("$webDir/courses/$new_course_code", $new_course_code);
-	$tool_content .= "<p>$langCopyFiles $webDir/courses/$new_course_code</p><br><p>";
+	$tool_content .= "<p>$langCopyFiles $webDir/courses/$new_course_code</p><br /><p>";
 	$action = 1;
 	$userid_map = array();
 	// now we include the file for restoring
@@ -93,19 +94,19 @@ if (isset($send_archive) and $_FILES['archiveZipped']['size'] > 0) {
 	if (!file_exists($webDir."courses/garbage/tmpUnzipping"))
 		mkdir($webDir."courses/garbage/tmpUnzipping");
 	rename($webDir."courses/tmpUnzipping", $webDir."courses/garbage/tmpUnzipping/".time()."");
-	$tool_content .= "<br><center><p><a href=\"../admin/index.php\">$langBack</p></center>";
+	$tool_content .= "<br /><center><p><a href='../admin/index.php'>$langBack</p></center>";
 }
 
-elseif (isset($pathOf4path)) {
-	// we know  where is the 4 paths to restore  the  course.
+elseif (isset($_POST['pathOf4path'])) {
+	// we know where is the 4 paths to restore  the  course.
 	// 2 Show content
-	// $restoreThis: contains the path of the archived course
+	// $_POST['restoreThis']: contains the path of the archived course
 
 	// If $action == 0, the course isn't restored - the user just
 	// gets a form with the archived course details.
 	$action = 0;
 	ob_start();
-	include("$restoreThis/backup.php");
+	include($_POST['restoreThis'] . '/backup.php');
 	$tool_content .= ob_get_contents();
 	ob_end_clean();
 } else {
@@ -117,27 +118,28 @@ elseif (isset($pathOf4path)) {
 	<tbody><tr><th>&nbsp;</th><td><b>$langFirstMethod</b></td></tr>
 	<tr><th>&nbsp;</th><td>$langRequest1
 	<br /><br />
-	<form action=\"".$_SERVER['PHP_SELF']."\" method=\"post\" name=\"sendZip\"  enctype=\"multipart/form-data\">
-	<input type=\"file\" name=\"archiveZipped\" >
-	<input type=\"submit\" name=\"send_archive\" value=\"".$langSend."\">
+	<form action='".$_SERVER['PHP_SELF']."' method='post' name='sendZip' enctype='multipart/form-data'>
+	<input type='file' name='archiveZipped' />
+	<input type='submit' name='send_archive' value='".$langSend."' />
 	</form>
 	</td>
 	</tr>
 	</tbody></table>
-	<br>
+	<br />
 	<table width='99%' class='FormData'><tbody>
 	<tr><th>&nbsp;</th><td><b>$langSecondMethod</b></td></tr>
 	<tr>
 	<th>&nbsp;</th>
 	<td>$langRequest2
-	<br><br>
-	<form action=\"".$_SERVER['PHP_SELF']."\" method=\"post\" name=\"sendPath\"  enctype=\"multipart/form-data\">
-	<input type=\"text\" name=\"pathToArchive\">
-	<input type=\"submit\" name=\"send_path\" value=\"".$langSend."\">
+	<br /><br />
+	<form action='".$_SERVER['PHP_SELF']."' method='post'>
+	<input type='text' name='pathToArchive' />
+	<input type='submit' name='send_path' value='".$langSend."' />
 	</form>
 	</td></tr>
 	</tbody></table><br />";
 }
+mysql_select_db($mysqlMainDb);
 draw($tool_content,3, 'admin');
 
 // Functions  restoring
@@ -181,21 +183,21 @@ function course_details ($code, $lang, $title, $desc, $fac, $vis, $prof, $type) 
 		echo "<tr><td align='justify' colspan='2'>$langInfo1</td></tr>";
 		echo "<tr><td align='justify' colspan='2'>$langInfo2</td></tr>";
 		echo "<tr><td>&nbsp;</td></tr>";
-		echo "<tr><td>$langCourseCode:</td><td><input type='text' name='course_code' value='$code'></td></tr>";
+		echo "<tr><td>$langCourseCode:</td><td><input type='text' name='course_code' value='$code' /></td></tr>";
 		echo "<tr><td>$langLanguage:</td><td>".selection($languages, 'course_lang', $lang)."</td></tr>";
-		echo "<tr><td>$langTitle:</td><td><input type='text' name='course_title' value='$title' size='50'></td></tr>";
-		echo "<tr><td>$langCourseDescription:</td><td><input type='text' name='course_desc' value='".q($desc)."' size='50'></td></tr>";
+		echo "<tr><td>$langTitle:</td><td><input type='text' name='course_title' value='$title' size='50' /></td></tr>";
+		echo "<tr><td>$langCourseDescription:</td><td><input type='text' name='course_desc' value='".q($desc)."' size='50' /></td></tr>";
 		echo "<tr><td>$langFaculty:</td><td>".faculty_select($fac)."</td></tr>";
 		echo "<tr><td>$langCourseOldFac:</td><td>$fac</td></tr>";
 		echo "<tr><td>$langCourseVis:</td><td>".visibility_select($vis)."</td></tr>";
-		echo "<tr><td>$langTeacher:</td><td><input type='text' name='course_prof' value='$prof' size='50'></td></tr>";
+		echo "<tr><td>$langTeacher:</td><td><input type='text' name='course_prof' value='$prof' size='50' /></td></tr>";
 		echo "<tr><td>$langCourseType:</td><td>".type_select($type)."</td></tr>";
 		echo "<tr><td>&nbsp;</td></tr>";
-		echo "<tr><td colspan='2'><input type='checkbox' name='course_addusers' checked>$langUsersWillAdd </td></tr>";
-		echo "<tr><td colspan='2'><input type='checkbox' name='course_prefix'>$langUserPrefix</td></tr>";
+		echo "<tr><td colspan='2'><input type='checkbox' name='course_addusers' checked='1' />$langUsersWillAdd </td></tr>";
+		echo "<tr><td colspan='2'><input type='checkbox' name='course_prefix' />$langUserPrefix</td></tr>";
 		echo "<tr><td>&nbsp;</td></tr><tr><td>";
-		echo "<input type='submit' name='create_dir_for_course' value='$langOk'>";
-		echo "<input type='hidden' name='restoreThis' value='$restoreThis'>";
+		echo "<input type='submit' name='create_dir_for_course' value='$langOk' />";
+		echo "<input type='hidden' name='restoreThis' value='$restoreThis' />";
 		echo "</td></tr></tbody></table></form>";
 	}
 }
@@ -254,7 +256,7 @@ function user($userid, $name, $surname, $login, $password, $email, $statut, $pho
 	if (!$action) return;
 	if (!$course_addusers and $statut != 1)  return;
 	if (isset($userid_map[$userid])) {
-		echo "<br>$langUserWith $userid_map[$userid] $langAlready\n";
+		echo "<br />$langUserWith $userid_map[$userid] $langAlready\n";
 		return;
 	}
 	if (!$registered_at)  {
@@ -267,7 +269,7 @@ function user($userid, $name, $surname, $login, $password, $email, $statut, $pho
 	// add prefix only to usernames that dont use LDAP login
 	if ($course_prefix) {
 		if ($statut == 1) {
-			echo "<br>$langWithUsername $login $langUserisAdmin".
+			echo "<br />$langWithUsername $login $langUserisAdmin".
 				" - $langUsernameSame";
 		} else {
 			$login = $new_course_code.'_'.$login;
@@ -278,7 +280,7 @@ function user($userid, $name, $surname, $login, $password, $email, $statut, $pho
 	if (mysql_num_rows($u) > 0) 	{
 		$res = mysql_fetch_array($u);
 		$userid_map[$userid] = $res['user_id'];
-		echo "<br>";
+		echo "<br />";
 		echo "$langUserAlready <b>$login</b>. $langUName <i>$res[1] $res[2]</i>  !\n";
 	} else {
 		if ($version == 1) { // if we come from a archive < 2.x encrypt user password
@@ -306,7 +308,7 @@ function user($userid, $name, $surname, $login, $password, $email, $statut, $pho
 	db_query("INSERT into `$mysqlMainDb`.cours_user
 		(cours_id, user_id, statut)
 		VALUES ($new_course_id, $userid_map[$userid], $statut)");
-	echo "<br> $langUserName=$login, $langPrevId=$userid, $langNewId=$userid_map[$userid]\n";
+	echo "<br /> $langUserName=$login, $langPrevId=$userid, $langNewId=$userid_map[$userid]\n";
 }
 
 function query($sql) {
@@ -469,13 +471,13 @@ function visibility_select($current)
 	global $langTypeOpen, $langTypeRegistration, $langTypeClosed;
 	$ret = "";
 
-	$ret .= "<select name=\"course_vis\">\n";
+	$ret .= "<select name='course_vis'>\n";
 	foreach (array($langTypeOpen => '2', $langTypeRegistration => '1', $langTypeClosed => '0')
 			as $text => $type) {
 		if($type == $current) {
-			$ret .= "<option value=\"$type\" selected>$text</option>\n";
+			$ret .= "<option value='$type' selected='1'>$text</option>\n";
 		} else {
-			$ret .= "<option value=\"$type\">$text</option>\n";
+			$ret .= "<option value='$type'>$text</option>\n";
 		}
 	}
 	$ret .= "</select>\n";
@@ -488,12 +490,12 @@ function type_select($current)
 	global $langpre, $langpost, $langother;
 
 	$ret = "";
-	$ret .= "<select name=\"course_type\">\n";
+	$ret .= "<select name='course_type'>\n";
 	foreach (array($langpre => 'pre', $langpost => 'post', $langother => 'other') as $text => $type) {
 		if($type == $current) {
-			$ret .= "<option value=\"$type\" selected>$text</option>\n";
+			$ret .= "<option value='$type' selected>$text</option>\n";
 		} else {
-			$ret .= "<option value=\"$type\">$text</option>\n";
+			$ret .= "<option value='$type'>$text</option>\n";
 		}
 	}
 	$ret .= "</select>\n";
@@ -506,7 +508,7 @@ function faculty_select($current)
 	global $mysqlMainDb;
 	$ret = "";
 
-	$ret .= "<select name=\"course_fac\">\n";
+	$ret .= "<select name='course_fac'>\n";
 	$res = mysql_query("SELECT id, name FROM `$mysqlMainDb`.faculte ORDER BY number");
 	while ($fac = mysql_fetch_array($res)) {
 		if($fac['name'] == $current) {
@@ -531,7 +533,7 @@ function unpack_zip_show_files($zipfile)
 	$zip = new pclZip($zipfile);
 	chdir($destdir);	
 	$state = $zip->extract(PCLZIP_OPT_REMOVE_PATH, "courses/");
-	$retString .= "<br>$langEndFileUnzip<br><br>$langLesFound<ol>";
+	$retString .= "<br />$langEndFileUnzip<br /><br />$langLesFound<ol>";
 	$dirnameCourse = realpath("$destdir/archive/");
 	if($dirnameCourse[strlen($dirnameCourse)-1] != '/')
 		$dirnameCourse .= '/';
@@ -541,8 +543,8 @@ function unpack_zip_show_files($zipfile)
 		if ($entries == '.' or $entries == '..' or $entries == 'CVS')
 			continue;
 		if (is_dir($dirnameCourse.$entries))
-			$retString .= "<li>".$entries."<br>".$langLesFiles."
-			<form action=\"".$_SERVER['PHP_SELF']."\" method=\"post\" name=\"restoreThis\">
+			$retString .= "<li>".$entries."<br />".$langLesFiles."
+			<form action='".$_SERVER['PHP_SELF']."' method='post' name='restoreThis'>
 			<ol>";
 			$dirnameArchive = realpath("$destdir/archive/$entries/");
 			if($dirnameArchive[strlen($dirnameArchive)-1]!='/')
@@ -553,11 +555,11 @@ function unpack_zip_show_files($zipfile)
 					continue;
 				if (is_dir($dirnameArchive.$entries))
 					$retString.= "<li>
-					<input type=\"radio\" checked name=\"restoreThis\" value=\"".realpath($dirnameArchive.$entries)."\"> ".$entries."
+					<input type='radio' checked='1' name='restoreThis' value='".realpath($dirnameArchive.$entries)."' /> ".$entries."
 				</li>";
 			}
 		closedir($handle2);
-		$retString .= "</ol><br><input type=\"submit\" value=\"$langRestore\" name=\"pathOf4path\"></form></li>";
+		$retString .= "</ol><br /><input type='submit' value='$langRestore' name='pathOf4path' /></form></li>";
 	}
 	closedir($handle);
 	$retString .= "</ol>\n";
