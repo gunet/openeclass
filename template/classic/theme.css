@@ -692,3 +692,7 @@ a img {
 li a img {
         vertical-align: middle;
 }
+
+.feed {
+	padding: 1px 0 0 10px; 
+}

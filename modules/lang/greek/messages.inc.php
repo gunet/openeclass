@@ -1,9 +1,9 @@
 <?php
 /*========================================================================
-*   Open eClass 2.3
+*   Open eClass 2.1
 *   E-learning and Course Management System
 * ========================================================================
-*  Copyright(c) 2003-2010  Greek Universities Network - GUnet
+*  Copyright(c) 2003-2008  Greek Universities Network - GUnet
 *  A full copyright notice can be read in "/info/copyright.txt".
 *
 *  Developers Group:	Costas Tsibanis <k.tsibanis@noc.uoa.gr>
@@ -502,6 +502,7 @@ $langSureToDelAnnounceAll = "Είστε σίγουρος ότι θέλετε ν�
 $langAnn = "Ανακοινώθηκε την";
 $langEmptyAnTitle = "Παρακαλώ πληκτρολογήστε τον τίτλο της ανακοίνωσης";
 $langAnnouncementNoTille = "Ανακοίνωση χωρίς τίτλο";
+$langCourseAnnouncements = "Ανακοινώσεις μαθήματος";
 
 /*******************************************
 * archive_course.inc.php
@@ -1367,7 +1368,8 @@ $langWelcomeProf = "Επιλέξτε \"Δημιουργία Μαθήματος\"
 $langWelcomeSelect = "Επιλέξτε";
 $langWelcomeStudPerso = "<b>\"Εγγραφή σε μάθημα\"</b> για να παρακολουθήσετε τα διαθέσιμα ηλεκτρονικά μαθήματα.";
 $langWelcomeProfPerso = "<b>\"Δημιουργία Μαθήματος\"</b> για να δημιουργήσετε τα ηλεκτρονικά σας μαθήματα.";
-
+$langBasicOptions = "Βασικές Επιλογές";
+$langUserOptions = "Επιλογές Χρήστη";
 
 /***********************************************************
 * install.inc.php
@@ -1775,6 +1777,13 @@ $langNote = "Σημείωση";
 $langAcrobat = "Για να διαβάσετε τα αρχεία PDF μπορείτε να χρησιμοποιήσετε το πρόγραμμα Acrobat Reader";
 $langWhere ="που θα βρείτε";
 $langHere = "εδώ";
+$langTutorials = "Οδηγοί";
+$langTut = "Οδηγός";
+$langScormVideo = "Βιντεοπαρουσίαση";
+$langIntroToCourse = "Γνωριμία με το Ηλεκτρονικό Μάθημα";
+$langAdministratorCourse = "Διαχείριση Ηλεκτρονικού Μαθήματος";
+$langCreateAccount = "Δημιουργία Λογαριασμού";
+$langAllTutorials = "Γενικοί οδηγοί";
 
 /*********************************************************
 * opencours.inc.php

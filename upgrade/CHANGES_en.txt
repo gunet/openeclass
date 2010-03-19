@@ -3,6 +3,16 @@ Open eClass Platform - CHANGES
 ****************************************
 
 ********************************************************************
+Open eClass 2.3 - Changes List
+********************************************************************
+-- Support for user authentication via Shibboleth
+-- Add "Student view" in Course Home module.
+-- Add message notification in Forums.
+-- Support for math symbols in "Exercises" and "Forums".
+-- Various changes and bug fixing in Administration Tool.
+-- Define optional course password while creating a course.
+
+********************************************************************
 Open eClass 2.2 - Changes List
 ********************************************************************
 -- Creation of subsystem "Course units". The trainer may organize his course according to learning resources.
