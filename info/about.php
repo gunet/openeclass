@@ -34,21 +34,23 @@ $tool_content ="";
     <p>$langIntro</p>
     <br />
 
-          <table width=\"600\" class=\"Smart\" align=\"center\" >
+    <table class=\"framed\" align=\"left\" >
+    <tbody><tr><td>
+          <table class=\"Smart\">
           <tbody>
-          <tr class=\"odd\">
-            <th width=\"160\" style=\"border-left: 1px solid #edecdf; border-top: 1px solid #edecdf;\">&nbsp;</th>
+          <tr>
+            <th width=\"120\">&nbsp;</th>
             <td><b>$langStoixeia</b></td>
           </tr>
-          <tr class=\"odd\">
-            <th class=\"left\" style=\"border-left: 1px solid #edecdf;\">$langVersion:</th>
+          <tr>
+            <th class=\"left\">$langVersion:</th>
             <td>$langAboutText:&nbsp;<b>$siteName " . ECLASS_VERSION . "</b>&nbsp;&nbsp;(<a href='http://www.openeclass.org/' title='Open eClass Portal' target='_blank'>>></a>)</td>
           </tr>
-          <tr class=\"odd\">
-            <th class=\"left\" style=\"border-left: 1px solid #edecdf;\">$langCoursesHeader:</th>
+          <tr>
+            <th class=\"left\">$langCoursesHeader:</th>
             <td>";
 
-/*
+  /*
   * Make table with general platform information
   * ophelia neofytou - 2006/09/26
   */
@@ -76,8 +78,8 @@ $c=mysql_fetch_array(mysql_query("SELECT COUNT(*) FROM user where statut='5'"));
 $d=mysql_fetch_array(mysql_query("SELECT COUNT(*) FROM user where statut='10'"));
 
     $tool_content .= "
-          <tr class=\"odd\">
-            <th class=\"left\" style=\"border-left: 1px solid #edecdf;\">$langUsers:</th>
+          <tr>
+            <th class=\"left\">$langUsers:</th>
             <td>$langAboutUsers <b>$e[0]</b> $langUsers
               <ul>
                 <li><b>$b[0]</b> $langTeachers, </li>
@@ -85,12 +87,13 @@ $d=mysql_fetch_array(mysql_query("SELECT COUNT(*) FROM user where statut='10'"))
                 <li><b>$d[0]</b> $langGuest </li>
               </ul></td>
           </tr>
-          <tr class=\"odd\">
-            <th class=\"left\" style=\"border-left: 1px solid #edecdf; border-bottom: 1px solid #edecdf;\">$langSupportUser</th>
+          <tr>
+            <th class=\"left\">$langSupportUser</th>
             <td>$administratorName $administratorSurname</td>
           </tr>
           </tbody>
           </table>
+    </td></tr></tbody></table>
           <br />";
 
 
