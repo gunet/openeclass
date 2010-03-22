@@ -32,40 +32,39 @@ $tool_content = "";
 
 $tool_content .= "
 <p>$introcontact</p>
+<br />
 
-<table width=\"80%\" style=\"border: 1px solid #edecdf;\">
-<thead>
-<tr>
-  <td>
-
-  <table width=\"500\" class=\"FormData\">
-  <thead>
-  <tr>
-    <th class='left' width='220'>$langPostMail</th>
-    <td width='300'>
+  <table class=\"framed\" width=\"500\">
+  <tbody><tr><td>
+  
+    <table class=\"Smart\" width=\"500\">
+    <tbody>
+    <tr>
+      <th class='left' width='160'>$langPostMail</th>
+      <td>
         $Institution<br>
         $postaddress
+      </td>
+    </tr>
+    <tr>
+      <th class='left'>$langPhone:</th>
+      <td>$telephone</td>
+    </tr>
+    <tr>
+      <th class='left'>$langFax</th>
+      <td>$fax</td>
+    </tr>
+    <tr>
+      <th class='left'>$langEmail:</th>
+      <td>".mailto($emailhelpdesk, str_replace('@', ' &lt;at> ', $emailhelpdesk))."
     </td>
   </tr>
-  <tr>
-	<th class='left'>$langPhone:</th>
-    <td width='300'>$telephone</td>
-  </tr>
-  <tr>
-	<th class='left'>$langFax</th>
-    <td width='300'>$fax</td>
-  </tr>
-  <tr>
-    <th class='left'>$langEmail:</th>
-    <td width='300'>".mailto($emailhelpdesk, str_replace('@', ' &lt;at> ', $emailhelpdesk))."
-    </td>
-  </tr>
-  </thead>
+  </tbody>
   </table>
 
   </td>
 </tr>
-</thead>
+</tbody>
 </table>";
 
 if (isset($uid) and $uid) {

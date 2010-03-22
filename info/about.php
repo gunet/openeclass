@@ -34,12 +34,13 @@ $tool_content ="";
     <p>$langIntro</p>
     <br />
 
-    <table class=\"framed\" align=\"left\" >
+    <table class=\"framed\" align=\"left\" width=\"500\">
     <tbody><tr><td>
-          <table class=\"Smart\">
+    
+          <table class=\"Smart\" width=\"500\">
           <tbody>
           <tr>
-            <th width=\"120\">&nbsp;</th>
+            <th width=\"160\">&nbsp;</th>
             <td><b>$langStoixeia</b></td>
           </tr>
           <tr>
@@ -93,6 +94,7 @@ $d=mysql_fetch_array(mysql_query("SELECT COUNT(*) FROM user where statut='10'"))
           </tr>
           </tbody>
           </table>
+          
     </td></tr></tbody></table>
           <br />";
 
