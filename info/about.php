@@ -34,10 +34,10 @@ $tool_content ="";
     <p>$langIntro</p>
     <br />
 
-    <table class=\"framed\" align=\"left\" width=\"600\">
+    <table class=\"framed\" align=\"left\" width=\"99%\">
     <tbody><tr><td>
     
-          <table class=\"FormData\" width=\"600\">
+          <table class=\"FormData\" width=\"100%\">
           <tbody>
           <tr>
             <th width=\"160\">&nbsp;</th>

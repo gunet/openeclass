@@ -34,10 +34,10 @@ $tool_content .= "
 <p>$introcontact</p>
 <br />
 
-  <table class=\"framed\" width=\"600\">
+  <table class=\"framed\" width=\"99%\">
   <tbody><tr><td>
   
-    <table class=\"FormData\" width=\"600\">
+    <table class=\"FormData\" width=\"100%\">
     <tbody>
     <tr>
       <th class='left' width='160'>$langPostMail</th>

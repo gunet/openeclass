@@ -60,10 +60,10 @@ $tool_content .= "
 <p>$langIntroMan</p>
 <br />
 
-  <table class=\"framed\" width=\"600\">
+  <table class=\"framed\" width=\"99%\">
   <tbody><tr><td>
 
-  <table class=\"FormData\" width=\"600\">
+  <table class=\"FormData\" width=\"100%\">
   <tbody>
   <tr class=\"odd\">
     <th class='left' width='160' rowspan='2' valign='top'>$langAllTutorials</th>
@@ -80,7 +80,7 @@ $tool_content .= "
 
 if (isset($language) and $language == 'greek') {
 	$tool_content .= "<tr>
-	<td colspan='2'><strong>$langCreateAccount</strong><br /><img style='vertical-align: bottom;' src='../template/classic/img/pdf.gif' width='20' height='20'>
+	<td colspan='2'><br /><strong>$langCreateAccount</strong><br /><img style='vertical-align: bottom;' src='../template/classic/img/pdf.gif' width='20' height='20'>
 		<a href='http://www.openeclass.org/guides/pdf/create_teacher_account.pdf' target='_blank'>$langTut</a>
 		<strong>|</strong>
 		<img src='../template/classic/img/film.png' width='16' height='16'> 
@@ -116,7 +116,7 @@ if (isset($language) and $language == 'greek') {
 		<img src='../template/classic/img/film.png' width='16' height='16'>
 		<a href='http://www.openeclass.org/guides/video/manage_course' target='_blank'>$langScormVideo</a>
 		<strong>| <img src='../template/classic/img/scorm.png' width='16' height='16'></strong>
-		<a href='http://www.openeclass.org/guides/scorm/manage_course.zip'>Scorm Package</a>
+		<a href='http://www.openeclass.org/guides/scorm/manage_course.zip'>Scorm Package</a><br /><br />
 	</td>
 	</tr>";
 }
@@ -129,7 +129,7 @@ $tool_content .= "
 if (isset($language) and $language == 'greek') {
 	$tool_content .= "
 	<tr>
-	<td colspan='2'><strong>$langRegCourses</strong><br /><img style='vertical-align: bottom;' src='../template/classic/img/pdf.gif' width='20' height='20'>
+	<td colspan='2'><br /><strong>$langRegCourses</strong><br /><img style='vertical-align: bottom;' src='../template/classic/img/pdf.gif' width='20' height='20'>
 		<a href='http://www.openeclass.org/guides/pdf/course_registration.pdf' target='_blank'>$langTut</a>
 		<strong>|</strong>
 		<img src='../template/classic/img/film.png' width='16' height='16'> 
@@ -153,7 +153,7 @@ if (isset($language) and $language == 'greek') {
 		<img src='../template/classic/img/film.png' width='16' height='16'> 
 		<a href='http://www.openeclass.org/guides/video/view_course' target='_blank'>$langScormVideo</a> 
 		<strong>| <img src='../template/classic/img/scorm.png' width='16' height='16'></strong> 
-		<a href='http://www.openeclass.org/guides/scorm/view_course.zip'>Scorm Package</a></td></tr>
+		<a href='http://www.openeclass.org/guides/scorm/view_course.zip'>Scorm Package</a><br /><br /></td></tr>
 	</tbody>
 	</table>
 	</td>
