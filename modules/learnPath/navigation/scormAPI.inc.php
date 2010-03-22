@@ -348,6 +348,12 @@ $sco['session_time'] = "0000:00:00.00";
 								APIError("203");
 								return "";
 							}
+							// ignore cmi.core.none
+							var pos = ele.indexOf("cmi.core.none");
+							if (pos >= 0) {
+								APIError("201");
+								return "";
+							}
                    	    	
                             // not implemented error
                             APIError("401");
@@ -622,10 +628,16 @@ $sco['session_time'] = "0000:00:00.00";
                        else // ele not implemented
                        {
                             // ignore cmi.interactions implementation
-                    	    var pos = ele.indexOf("cmi.interactions")
+                    	    var pos = ele.indexOf("cmi.interactions");
                     	    if (pos >= 0) {
                     	    	APIError("0");
                         	    return "true";
+                    	    }
+                    	    // ignore cmi.core.none
+                    	    var pos = ele.indexOf("cmi.core.none");
+                    	    if (pos >= 0) {
+                        	    APIError("201");
+                        	    return "false";
                     	    }
                     	    
                             // not implemented error
@@ -682,7 +694,9 @@ $sco['session_time'] = "0000:00:00.00";
         function LMSGetDiagnostic(num) {
                 if(debug_) alert ("LMSGetDiagnostic("+num+") = " + errDiagn[num] );
                 
-                if ( num=="" ) num = APILastError;
+                if (num == "") num = APILastError;
+                if (num == "") return "";
+                if (errDiagn[num] == null) return "";
                 return errDiagn[num];
         }
 
@@ -713,15 +727,17 @@ $sco['session_time'] = "0000:00:00.00";
         errCodes["142"] = "Commit Before Initialization";
         errCodes["143"] = "Commit After Termination";
         errCodes["201"] = "Invalid Argument Error";
+        errCodes["202"] = "Element cannot have children";
+        errCodes["203"] = "Element not an array - Cannot have count";
         errCodes["406"] = "General Get Failure";
         errCodes["351"] = "General Set Failure";
         errCodes["391"] = "General Commit Failure";
-        errCodes["401"] = "Undefined Data Model Element";
-        errCodes["402"] = "Unimplemented Data Model Element";
-        errCodes["301"] = "Data Model Element Value Not Initialized";
-        errCodes["403"] = "Data Model Element Is Read Only";
-        errCodes["404"] = "Data Model Element Is Write Only";
-        errCodes["405"] = "Data Model Element Type Mismatch";
+        errCodes["401"] = "Not implemented error";
+        errCodes["402"] = "Invalid set value, element is a keyword";
+        errCodes["301"] = "Not initialized";
+        errCodes["403"] = "Element is read only";
+        errCodes["404"] = "Element is write only";
+        errCodes["405"] = "Incorrect Data Type";
         errCodes["407"] = "Data Model Element Value Out Of Range";
 
         var errDiagn = new Array();
@@ -740,15 +756,17 @@ $sco['session_time'] = "0000:00:00.00";
         errDiagn["142"] = "Commit Before Initialization";
         errDiagn["143"] = "Commit After Termination";
         errDiagn["201"] = "Invalid Argument Error";
+        errDiagn["202"] = "Element cannot have children";
+        errDiagn["203"] = "Element not an array - Cannot have count";
         errDiagn["406"] = "General Get Failure";
         errDiagn["351"] = "General Set Failure";
         errDiagn["391"] = "General Commit Failure";
-        errDiagn["401"] = "Undefined Data Model Element";
-        errDiagn["402"] = "Unimplemented Data Model Element";
-        errDiagn["301"] = "Data Model Element Value Not Initialized";
-        errDiagn["403"] = "Data Model Element Is Read Only";
-        errDiagn["404"] = "Data Model Element Is Write Only";
-        errDiagn["405"] = "Data Model Element Type Mismatch";
+        errDiagn["401"] = "Not implemented error";
+        errDiagn["402"] = "Invalid set value, element is a keyword";
+        errDiagn["301"] = "Not initialized";
+        errDiagn["403"] = "Element is read only";
+        errDiagn["404"] = "Element is write only";
+        errDiagn["405"] = "Incorrect Data Type";
         errDiagn["407"] = "Data Model Element Value Out Of Range";
         
 
