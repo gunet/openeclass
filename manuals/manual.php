@@ -60,7 +60,7 @@ $tool_content .= "
 <p>$langIntroMan</p>
 <br />
 
-  <table class=\"framed\" width=\"500\">
+  <table class=\"framed\" width=\"600\">
   <tbody><tr><td>
 
   <table class=\"Smart\" width=\"500\">
@@ -130,26 +130,20 @@ if (isset($language) and $language == 'greek') {
 		<strong>| <img src='../template/classic/img/scorm.png' width='16' height='16'></strong>
 		<a href='http://www.openeclass.org/guides/scorm/manage_course.zip'>Scorm Package</a>
 	</td>
-	</tr>
-	<tr>
-		<th class='left'>$langTutorials $langOfStudent</th>
-		<td colspan='2'>&nbsp;</td>
 	</tr>";
 }
 $tool_content .= "
   <tr>
-  	<th>&nbsp;</th>
+  	<th class='left' rowspan='7'>$langTutorials $langOfStudent</th>
     ". manlink('OpeneClass22_ManS', $ext, $langManS) ."
   </tr>";
 
 if (isset($language) and $language == 'greek') {
 	$tool_content .= "
   <tr>
-	  <th>&nbsp;</th>
 	  <td colspan='2'><strong>$langRegCourses</strong></td>
 	</tr>
 	<tr>
-	<th>&nbsp;</th>
 	<td colspan='2'><img style='vertical-align: bottom;' src='../template/classic/img/pdf.gif' width='20' height='20'>
 		<a href='http://www.openeclass.org/guides/pdf/course_registration.pdf' target='_blank'>$langTut</a>
 		<strong>|</strong>
@@ -158,10 +152,8 @@ if (isset($language) and $language == 'greek') {
 		<strong>| <img src='../template/classic/img/scorm.png' width='16' height='16'></strong> 
 		<a href='http://www.openeclass.org/guides/scorm/course_registration.zip'>Scorm Package</a></td></tr>
 	<tr>
-	<th>&nbsp;</th>
 	<td colspan='2'><strong>$langPersonalisedBriefcase</strong></td></tr>
 	<tr>
-    <th>&nbsp;</th>
     <td colspan='2'><img style='vertical-align: bottom;' src='../template/classic/img/pdf.gif' width='20' height='20'>
 		<a href='http://www.openeclass.org/guides/pdf/student_portfolio.pdf' target='_blank'>$langTut</a>
 		<strong>|</strong>
@@ -170,10 +162,8 @@ if (isset($language) and $language == 'greek') {
 		<strong>| <img src='../template/classic/img/scorm.png' width='16' height='16'></strong> 
 		<a href='http://www.openeclass.org/guides/scorm/student_portfolio.zip'>Scorm Package</a></td></tr>
 	<tr>
-	<th>&nbsp;</th>
 	<td colspan='2'><strong>$langIntroToCourse</strong></td></tr>
 	<tr>
-    <th>&nbsp;</th>
     <td colspan='2'><img style='vertical-align: bottom;' src='../template/classic/img/pdf.gif' width='20' height='20'>
 		<a href='http://www.openeclass.org/guides/pdf/view_course.pdf' target='_blank'>$langTut</a>
 		<strong>|</strong>
