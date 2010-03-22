@@ -63,7 +63,7 @@ $tool_content .= "
   <table class=\"framed\" width=\"600\">
   <tbody><tr><td>
 
-  <table class=\"Smart\" width=\"600\">
+  <table class=\"FormData\" width=\"600\">
   <tbody>
   <tr>
     <th class='left' width='160' rowspan='2' valign='top'>$langAllTutorials</th>
