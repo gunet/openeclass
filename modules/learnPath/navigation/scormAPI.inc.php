@@ -187,6 +187,11 @@ $sco['session_time'] = "0000:00:00.00";
                         this.APIError("201");
                         return "false";
                 }
+                if (APIInitialized == true) {
+                    this.APIError("101");
+                    return "false";
+                }
+                
                 this.APIError("0");
                 APIInitialized = true;
 
@@ -326,7 +331,7 @@ $sco['session_time'] = "0000:00:00.00";
                        else // ele not implemented
                        {
                     	    // ignore cmi.interactions implementation
-                    	    var pos = ele.indexOf("cmi.interactions")
+                    	    var pos = ele.indexOf("cmi.interactions");
 							if (pos >= 0) {
 								APIError("0");
                        	    	return "";
@@ -608,12 +613,12 @@ $sco['session_time'] = "0000:00:00.00";
                     	    var pos = ele.indexOf("cmi.interactions")
                     	    if (pos >= 0) {
                     	    	APIError("0");
-                        	    return "";
+                        	    return "true";
                     	    }
                     	    
                             // not implemented error
                             APIError("401");
-                            return "";
+                            return "false";
                        }
                 }
                 else
@@ -694,7 +699,7 @@ $sco['session_time'] = "0000:00:00.00";
         errCodes["133"] = "Store Data After Termination";
         errCodes["142"] = "Commit Before Initialization";
         errCodes["143"] = "Commit After Termination";
-        errCodes["201"] = "General Argument Error";
+        errCodes["201"] = "Invalid Argument Error";
         errCodes["301"] = "General Get Failure";
         errCodes["351"] = "General Set Failure";
         errCodes["391"] = "General Commit Failure";
@@ -721,7 +726,7 @@ $sco['session_time'] = "0000:00:00.00";
         errDiagn["133"] = "Store Data After Termination";
         errDiagn["142"] = "Commit Before Initialization";
         errDiagn["143"] = "Commit After Termination";
-        errDiagn["201"] = "General Argument Error";
+        errDiagn["201"] = "Invalid Argument Error";
         errDiagn["301"] = "General Get Failure";
         errDiagn["351"] = "General Set Failure";
         errDiagn["391"] = "General Commit Failure";
