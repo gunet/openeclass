@@ -66,26 +66,23 @@ $tool_content .= "
   <table class=\"Smart\" width=\"500\">
   <tbody>
   <tr>
-    <th class='left' width='160'>$langAllTutorials</th>
+    <th class='left' width='160' rowspan='2'>$langAllTutorials</th>
     ". manlink('OpeneClass22', $ext, $langFinalDesc) ."
   </tr>
   <tr>
-    <th>&nbsp;</th>
     ". manlink('OpeneClass22_short', $ext, $langShortDesc) ."
   </tr>
   
   <tr>
-    <th class='left'>$langTutorials $langOfTeacher</th>
+    <th class='left' rowspan='9'>$langTutorials $langOfTeacher</th>
     ". manlink('OpeneClass22_ManT', $ext, $langManT) ."
   </tr>
   <tr>
-   <th>&nbsp;</th>
    <td class='left' colspan='2'><strong>$langCreateAccount</strong></td>
   </tr>";
 
 if (isset($language) and $language == 'greek') {
 	$tool_content .= "<tr>
-	<th>&nbsp;</th>
 	<td colspan='2'><img style='vertical-align: bottom;' src='../template/classic/img/pdf.gif' width='20' height='20'>
 		<a href='http://www.openeclass.org/guides/pdf/create_teacher_account.pdf' target='_blank'>$langTut</a>
 		<strong>|</strong>
@@ -96,11 +93,9 @@ if (isset($language) and $language == 'greek') {
 	</td>
 	</tr>
 	<tr>
-	<th>&nbsp;</th>
 	<td class='left' colspan='2'><strong>$langCourseCreate</strong></td>
 	</tr>
 	<tr>
-	<th>&nbsp;</th>
 	<td colspan='2'><img style='vertical-align: bottom;' src='../template/classic/img/pdf.gif' width='20' height='20'>
 		<a href='http://www.openeclass.org/guides/pdf/create_course.pdf' target='_blank'>$langTut</a>
 		<strong>|</strong>
@@ -111,11 +106,9 @@ if (isset($language) and $language == 'greek') {
 	</td>
 	</tr>
 	<tr>
-	<th>&nbsp;</th>
 	<td class='left' colspan='2'><strong>$langPersonalisedBriefcase</strong></td>
 	</tr>
 	<tr>
-	<th>&nbsp;</th>
 	<td colspan='2'><img style='vertical-align: bottom;' src='../template/classic/img/pdf.gif' width='20' height='20'>
 		<a href='http://www.openeclass.org/guides/pdf/teacher_portfolio.pdf' target='_blank'>$langTut</a>
 		<strong>|</strong>
@@ -126,11 +119,9 @@ if (isset($language) and $language == 'greek') {
 	</td>
 	</tr>
 	<tr>
-	<th>&nbsp;</th>
 	<td class='left' colspan='2'><strong>$langAdministratorCourse</strong></td>
 	</tr>
 	<tr>
-	<th>&nbsp;</th>
 	<td colspan='2'><img style='vertical-align: bottom;' src='../template/classic/img/pdf.gif' width='20' height='20'>
 		<a href='http://www.openeclass.org/guides/pdf/manage_course.pdf' target='_blank'>$langTut</a>
 		<strong>|</strong>
