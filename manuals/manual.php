@@ -65,15 +65,15 @@ $tool_content .= "
 
   <table class=\"FormData\" width=\"600\">
   <tbody>
-  <tr>
+  <tr class=\"odd\">
     <th class='left' width='160' rowspan='2' valign='top'>$langAllTutorials</th>
     ". manlink('OpeneClass22', $ext, $langFinalDesc) ."
   </tr>
-  <tr>
+  <tr class=\"odd\">
     ". manlink('OpeneClass22_short', $ext, $langShortDesc) ."
   </tr>
   
-  <tr>
+  <tr class=\"odd\">
     <th class='left' rowspan='9' valign='top'>$langTutorials $langOfTeacher</th>
     ". manlink('OpeneClass22_ManT', $ext, $langManT) ."
   </tr>
@@ -133,7 +133,7 @@ if (isset($language) and $language == 'greek') {
 	</tr>";
 }
 $tool_content .= "
-  <tr>
+  <tr class=\"odd\">
   	<th class='left' rowspan='7' valign='top'>$langTutorials $langOfStudent</th>
     ". manlink('OpeneClass22_ManS', $ext, $langManS) ."
   </tr>";
