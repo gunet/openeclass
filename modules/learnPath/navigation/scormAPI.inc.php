@@ -336,6 +336,18 @@ $sco['session_time'] = "0000:00:00.00";
 								APIError("0");
                        	    	return "";
 							}
+							// ignore _children if not explicitly defined
+							var pos = ele.indexOf("_children");
+							if (pos >= 0) {
+								APIError("202");
+								return "";
+							}
+							// ignore _count if not explicitly defined
+							var pos = ele.indexOf("_count");
+							if (pos >= 0) {
+								APIError("203");
+								return "";
+							}
                    	    	
                             // not implemented error
                             APIError("401");
