@@ -673,9 +673,10 @@ $sco['session_time'] = "0000:00:00.00";
 
         function LMSGetErrorString(num) {
                 if(debug_) alert ("LMSGetErrorString(" + num +") = " + errCodes[num] );
-                
-                return errCodes[num];
 
+                if (num == "") return "";
+                if (errCodes[num] == null) return "";
+                return errCodes[num];
         }
 
         function LMSGetDiagnostic(num) {
