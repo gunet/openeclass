@@ -63,10 +63,10 @@ $tool_content .= "
   <table class=\"framed\" width=\"600\">
   <tbody><tr><td>
 
-  <table class=\"Smart\" width=\"500\">
+  <table class=\"Smart\" width=\"600\">
   <tbody>
   <tr>
-    <th class='left' width='160' rowspan='2'>$langAllTutorials</th>
+    <th class='left' width='160' rowspan='2' valign='top'>$langAllTutorials</th>
     ". manlink('OpeneClass22', $ext, $langFinalDesc) ."
   </tr>
   <tr>
@@ -74,7 +74,7 @@ $tool_content .= "
   </tr>
   
   <tr>
-    <th class='left' rowspan='9'>$langTutorials $langOfTeacher</th>
+    <th class='left' rowspan='9' valign='top'>$langTutorials $langOfTeacher</th>
     ". manlink('OpeneClass22_ManT', $ext, $langManT) ."
   </tr>
   <tr>
@@ -134,7 +134,7 @@ if (isset($language) and $language == 'greek') {
 }
 $tool_content .= "
   <tr>
-  	<th class='left' rowspan='7'>$langTutorials $langOfStudent</th>
+  	<th class='left' rowspan='7' valign='top'>$langTutorials $langOfStudent</th>
     ". manlink('OpeneClass22_ManS', $ext, $langManS) ."
   </tr>";
 
