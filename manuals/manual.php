@@ -53,7 +53,7 @@ function manlink($basename, $langext, $desc)
         } else {
                 $url = $urlServerTemp . '/manuals/' . $basename . '_en.pdf';
         }
-        return "<td width='1'><a href='$url' target='_blank' class='mainpage'><img src='../images/pdf.gif' title='$langFormatPDF' alt='$langFormatPDF' /></a></td><td><a href='$url' target='_blank' class='mainpage'>$desc</a></td>";
+        return "<td width='1%'><a href='$url' target='_blank' class='mainpage'><img src='../images/pdf.gif' title='$langFormatPDF' alt='$langFormatPDF' /></a></td><td><a href='$url' target='_blank' class='mainpage'>$desc</a></td>";
 }
 
 $tool_content .= "
