@@ -385,7 +385,7 @@ $sco['session_time'] = "0000:00:00.00";
                                       var upperCaseVal = val.toUpperCase();
                                       if ( upperCaseVal != "PASSED" && upperCaseVal != "FAILED"
                                            && upperCaseVal != "COMPLETED" && upperCaseVal != "INCOMPLETE"
-                                           && upperCaseVal != "BROWSED" && upperCaseVal != "NOT ATTEMPTED" )
+                                           && upperCaseVal != "BROWSED" /*&& upperCaseVal != "NOT ATTEMPTED"*/ )
                                       {
                                            APIError("405");
                                            return "false";
