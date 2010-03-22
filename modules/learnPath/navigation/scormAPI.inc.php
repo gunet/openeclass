@@ -215,7 +215,7 @@ $sco['session_time'] = "0000:00:00.00";
                         APIInitialized = false; //
                         return "true";
                 } else {
-                        this.APIError("406");   // not initialized
+                        this.APIError("301");   // not initialized
                         return "false";
                 }
         }
@@ -357,8 +357,8 @@ $sco['session_time'] = "0000:00:00.00";
                 else
                 {
                         // not initialized error
-                        this.APIError("406");
-                        return "false";
+                        this.APIError("301");
+                        return "";
                 }
         }
 
@@ -636,7 +636,7 @@ $sco['session_time'] = "0000:00:00.00";
                 else
                 {
                         // not initialized error
-                        this.APIError("406");
+                        this.APIError("301");
                         return "false";
                 }
         }
@@ -656,7 +656,7 @@ $sco['session_time'] = "0000:00:00.00";
                                 return "true";
                         }
                 } else {
-                        this.APIError("406");
+                        this.APIError("301");
                         return "false";
                 }
         }
@@ -712,12 +712,12 @@ $sco['session_time'] = "0000:00:00.00";
         errCodes["142"] = "Commit Before Initialization";
         errCodes["143"] = "Commit After Termination";
         errCodes["201"] = "Invalid Argument Error";
-        errCodes["301"] = "General Get Failure";
+        errCodes["406"] = "General Get Failure";
         errCodes["351"] = "General Set Failure";
         errCodes["391"] = "General Commit Failure";
         errCodes["401"] = "Undefined Data Model Element";
         errCodes["402"] = "Unimplemented Data Model Element";
-        errCodes["406"] = "Data Model Element Value Not Initialized";
+        errCodes["301"] = "Data Model Element Value Not Initialized";
         errCodes["403"] = "Data Model Element Is Read Only";
         errCodes["404"] = "Data Model Element Is Write Only";
         errCodes["405"] = "Data Model Element Type Mismatch";
@@ -739,12 +739,12 @@ $sco['session_time'] = "0000:00:00.00";
         errDiagn["142"] = "Commit Before Initialization";
         errDiagn["143"] = "Commit After Termination";
         errDiagn["201"] = "Invalid Argument Error";
-        errDiagn["301"] = "General Get Failure";
+        errDiagn["406"] = "General Get Failure";
         errDiagn["351"] = "General Set Failure";
         errDiagn["391"] = "General Commit Failure";
         errDiagn["401"] = "Undefined Data Model Element";
         errDiagn["402"] = "Unimplemented Data Model Element";
-        errDiagn["406"] = "Data Model Element Value Not Initialized";
+        errDiagn["301"] = "Data Model Element Value Not Initialized";
         errDiagn["403"] = "Data Model Element Is Read Only";
         errDiagn["404"] = "Data Model Element Is Write Only";
         errDiagn["405"] = "Data Model Element Type Mismatch";
@@ -846,7 +846,7 @@ $sco['session_time'] = "0000:00:00.00";
 
 
         APIInitialized = false;
-        APILastError = "403";
+        APILastError = "0";
 
         // Declare Scorm API object for 1.2
 
