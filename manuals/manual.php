@@ -74,16 +74,13 @@ $tool_content .= "
   </tr>
   
   <tr class=\"odd\">
-    <th class='left' rowspan='9' valign='top'>$langTutorials $langOfTeacher</th>
+    <th class='left' rowspan='5' valign='top'>$langTutorials $langOfTeacher</th>
     ". manlink('OpeneClass22_ManT', $ext, $langManT) ."
-  </tr>
-  <tr>
-   <td class='left' colspan='2'><strong>$langCreateAccount</strong></td>
   </tr>";
 
 if (isset($language) and $language == 'greek') {
 	$tool_content .= "<tr>
-	<td colspan='2'><img style='vertical-align: bottom;' src='../template/classic/img/pdf.gif' width='20' height='20'>
+	<td colspan='2'><strong>$langCreateAccount</strong><br /><img style='vertical-align: bottom;' src='../template/classic/img/pdf.gif' width='20' height='20'>
 		<a href='http://www.openeclass.org/guides/pdf/create_teacher_account.pdf' target='_blank'>$langTut</a>
 		<strong>|</strong>
 		<img src='../template/classic/img/film.png' width='16' height='16'> 
@@ -93,10 +90,7 @@ if (isset($language) and $language == 'greek') {
 	</td>
 	</tr>
 	<tr>
-	<td class='left' colspan='2'><strong>$langCourseCreate</strong></td>
-	</tr>
-	<tr>
-	<td colspan='2'><img style='vertical-align: bottom;' src='../template/classic/img/pdf.gif' width='20' height='20'>
+	<td colspan='2'><strong>$langCourseCreate</strong><br /><img style='vertical-align: bottom;' src='../template/classic/img/pdf.gif' width='20' height='20'>
 		<a href='http://www.openeclass.org/guides/pdf/create_course.pdf' target='_blank'>$langTut</a>
 		<strong>|</strong>
 		<img src='../template/classic/img/film.png' width='16' height='16'> 
@@ -106,10 +100,7 @@ if (isset($language) and $language == 'greek') {
 	</td>
 	</tr>
 	<tr>
-	<td class='left' colspan='2'><strong>$langPersonalisedBriefcase</strong></td>
-	</tr>
-	<tr>
-	<td colspan='2'><img style='vertical-align: bottom;' src='../template/classic/img/pdf.gif' width='20' height='20'>
+	<td colspan='2'><strong>$langPersonalisedBriefcase</strong><br /><img style='vertical-align: bottom;' src='../template/classic/img/pdf.gif' width='20' height='20'>
 		<a href='http://www.openeclass.org/guides/pdf/teacher_portfolio.pdf' target='_blank'>$langTut</a>
 		<strong>|</strong>
 		<img src='../template/classic/img/film.png' width='16' height='16'>
@@ -119,10 +110,7 @@ if (isset($language) and $language == 'greek') {
 	</td>
 	</tr>
 	<tr>
-	<td class='left' colspan='2'><strong>$langAdministratorCourse</strong></td>
-	</tr>
-	<tr>
-	<td colspan='2'><img style='vertical-align: bottom;' src='../template/classic/img/pdf.gif' width='20' height='20'>
+	<td colspan='2'><strong>$langAdministratorCourse</strong><br /><img style='vertical-align: bottom;' src='../template/classic/img/pdf.gif' width='20' height='20'>
 		<a href='http://www.openeclass.org/guides/pdf/manage_course.pdf' target='_blank'>$langTut</a>
 		<strong>|</strong>
 		<img src='../template/classic/img/film.png' width='16' height='16'>
@@ -134,37 +122,32 @@ if (isset($language) and $language == 'greek') {
 }
 $tool_content .= "
   <tr class=\"odd\">
-  	<th class='left' rowspan='7' valign='top'>$langTutorials $langOfStudent</th>
+  	<th class='left' rowspan='4' valign='top'>$langTutorials $langOfStudent</th>
     ". manlink('OpeneClass22_ManS', $ext, $langManS) ."
   </tr>";
 
 if (isset($language) and $language == 'greek') {
 	$tool_content .= "
-  <tr>
-	  <td colspan='2'><strong>$langRegCourses</strong></td>
-	</tr>
 	<tr>
-	<td colspan='2'><img style='vertical-align: bottom;' src='../template/classic/img/pdf.gif' width='20' height='20'>
+	<td colspan='2'><strong>$langRegCourses</strong><br /><img style='vertical-align: bottom;' src='../template/classic/img/pdf.gif' width='20' height='20'>
 		<a href='http://www.openeclass.org/guides/pdf/course_registration.pdf' target='_blank'>$langTut</a>
 		<strong>|</strong>
 		<img src='../template/classic/img/film.png' width='16' height='16'> 
 		<a href='http://www.openeclass.org/guides/video/course_registration' target='_blank'>$langScormVideo</a> 
 		<strong>| <img src='../template/classic/img/scorm.png' width='16' height='16'></strong> 
-		<a href='http://www.openeclass.org/guides/scorm/course_registration.zip'>Scorm Package</a></td></tr>
+		<a href='http://www.openeclass.org/guides/scorm/course_registration.zip'>Scorm Package</a></td>
+  </tr>
 	<tr>
-	<td colspan='2'><strong>$langPersonalisedBriefcase</strong></td></tr>
-	<tr>
-    <td colspan='2'><img style='vertical-align: bottom;' src='../template/classic/img/pdf.gif' width='20' height='20'>
+    <td colspan='2'><strong>$langPersonalisedBriefcase</strong><br /><img style='vertical-align: bottom;' src='../template/classic/img/pdf.gif' width='20' height='20'>
 		<a href='http://www.openeclass.org/guides/pdf/student_portfolio.pdf' target='_blank'>$langTut</a>
 		<strong>|</strong>
 		<img src='../template/classic/img/film.png' width='16' height='16'> 
 		<a href='http://www.openeclass.org/guides/video/student_portfolio' target='_blank'>$langScormVideo</a> 
 		<strong>| <img src='../template/classic/img/scorm.png' width='16' height='16'></strong> 
-		<a href='http://www.openeclass.org/guides/scorm/student_portfolio.zip'>Scorm Package</a></td></tr>
+		<a href='http://www.openeclass.org/guides/scorm/student_portfolio.zip'>Scorm Package</a></td>
+  </tr>
 	<tr>
-	<td colspan='2'><strong>$langIntroToCourse</strong></td></tr>
-	<tr>
-    <td colspan='2'><img style='vertical-align: bottom;' src='../template/classic/img/pdf.gif' width='20' height='20'>
+    <td colspan='2'><strong>$langIntroToCourse</strong><br /><img style='vertical-align: bottom;' src='../template/classic/img/pdf.gif' width='20' height='20'>
 		<a href='http://www.openeclass.org/guides/pdf/view_course.pdf' target='_blank'>$langTut</a>
 		<strong>|</strong>
 		<img src='../template/classic/img/film.png' width='16' height='16'> 
