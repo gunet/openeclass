@@ -215,7 +215,7 @@ $sco['session_time'] = "0000:00:00.00";
                         APIInitialized = false; //
                         return "true";
                 } else {
-                        this.APIError("403");   // not initialized
+                        this.APIError("406");   // not initialized
                         return "false";
                 }
         }
@@ -304,12 +304,12 @@ $sco['session_time'] = "0000:00:00.00";
                                       return values[i];
                                       break;
                                 case 'cmi.core.exit' :
-                                      APIError("405"); // write only
+                                      APIError("404"); // write only
                                       return "";
                                       break;
                                 case 'cmi.core.session_time' :
                                 case 'cmi.session_time' :
-                                      APIError("405"); // write only
+                                      APIError("404"); // write only
                                       return "";
                                       break;
 
@@ -345,7 +345,7 @@ $sco['session_time'] = "0000:00:00.00";
                 else
                 {
                         // not initialized error
-                        this.APIError("403");
+                        this.APIError("406");
                         return "false";
                 }
         }
@@ -360,21 +360,21 @@ $sco['session_time'] = "0000:00:00.00";
                            switch (ele)
                            {
                                 case 'cmi.core._children' :
-                                      APIError("404"); // read only
+                                      APIError("403"); // read only
                                       return "false";
                                       break;
                                 case 'cmi.core.student_id' :
-                                      APIError("404"); // read only
+                                      APIError("403"); // read only
                                       return "false";
                                       break;
                                 case 'cmi.core.student_name' :
-                                      APIError("404"); // read only
+                                      APIError("403"); // read only
                                       return "false";
                                       break;
                                 case 'cmi.core.lesson_location' :
                                       if( val.length > 255 )
                                       {
-                                           APIError("406");
+                                           APIError("405");
                                            return "false";
                                       }
                                       values[i] = val;
@@ -387,7 +387,7 @@ $sco['session_time'] = "0000:00:00.00";
                                            && upperCaseVal != "COMPLETED" && upperCaseVal != "INCOMPLETE"
                                            && upperCaseVal != "BROWSED" && upperCaseVal != "NOT ATTEMPTED" )
                                       {
-                                           APIError("406");
+                                           APIError("405");
                                            return "false";
                                       }
 
@@ -409,7 +409,7 @@ $sco['session_time'] = "0000:00:00.00";
                                            && upperCaseVal != "COMPLETED" && upperCaseVal != "INCOMPLETE"
                                            && upperCaseVal != "BROWSED" && upperCaseVal != "NOT ATTEMPTED" && upperCaseVal != "UNKNOWN" )
                                       {
-                                           APIError("406");
+                                           APIError("405");
                                            return "false";
                                       }
                                       ele = 'cmi.core.lesson_status';
@@ -425,7 +425,7 @@ $sco['session_time'] = "0000:00:00.00";
                                            && upperCaseVal != "COMPLETED" && upperCaseVal != "INCOMPLETE"
                                            && upperCaseVal != "BROWSED" && upperCaseVal != "NOT ATTEMPTED" && upperCaseVal != "UNKNOWN" )
                                       {
-                                           APIError("406");
+                                           APIError("405");
                                            return "false";
                                       }
 
@@ -440,21 +440,21 @@ $sco['session_time'] = "0000:00:00.00";
 
 
                                 case 'cmi.core.credit' :
-                                      APIError("404"); // read only
+                                      APIError("403"); // read only
                                       return "false";
                                       break;
                                 case 'cmi.core.entry' :
-                                      APIError("404"); // read only
+                                      APIError("403"); // read only
                                       return "false";
                                       break;
                                 case 'cmi.core.score._children' :
-                                      APIError("404");  // read only
+                                      APIError("403");  // read only
                                       return "false";
                                       break;
                                 case 'cmi.core.score.raw' :
                                       if( isNaN(parseInt(val)) || (val < 0) || (val > 100) )
                                       {
-                                           APIError("406");
+                                           APIError("405");
                                            return "false";
                                       }
                                       values[i] = val;
@@ -464,7 +464,7 @@ $sco['session_time'] = "0000:00:00.00";
                                 case 'cmi.score.raw' :
                                       if( isNaN(parseInt(val)) || (val < 0) || (val > 100) )
                                       {
-                                           APIError("406");
+                                           APIError("405");
                                            return "false";
                                       }
                                       values[8] = val; // SCORM 2004, we deal with the old element
@@ -475,7 +475,7 @@ $sco['session_time'] = "0000:00:00.00";
                                 case 'cmi.core.score.min' :
                                       if( isNaN(parseInt(val)) || (val < 0) || (val > 100) )
                                       {
-                                           APIError("406");
+                                           APIError("405");
                                            return "false";
                                       }
                                       values[i] = val;
@@ -485,7 +485,7 @@ $sco['session_time'] = "0000:00:00.00";
                                 case 'cmi.score.min' :
                                       if( isNaN(parseInt(val)) || (val < 0) || (val > 100) )
                                       {
-                                           APIError("406");
+                                           APIError("405");
                                            return "false";
                                       }
                                       values[14] = val;
@@ -496,7 +496,7 @@ $sco['session_time'] = "0000:00:00.00";
                                 case 'cmi.core.score.max' :
                                       if( isNaN(parseInt(val)) || (val < 0) || (val > 100) )
                                       {
-                                           APIError("406");
+                                           APIError("405");
                                            return "false";
                                       }
                                       values[i] = val;
@@ -506,7 +506,7 @@ $sco['session_time'] = "0000:00:00.00";
                                 case 'cmi.score.max' :
                                       if( isNaN(parseInt(val)) || (val < 0) || (val > 100) )
                                       {
-                                           APIError("406");
+                                           APIError("405");
                                            return "false";
                                       }
                                       values[15] = val;
@@ -515,7 +515,7 @@ $sco['session_time'] = "0000:00:00.00";
                                       return "true";
                                       break;
                                 case 'cmi.core.total_time' :
-                                      APIError("404"); //read only
+                                      APIError("403"); //read only
                                       return "false";
                                       break;
                                 case 'cmi.core.exit' :
@@ -523,7 +523,7 @@ $sco['session_time'] = "0000:00:00.00";
                                       if ( upperCaseVal != "TIME-OUT" && upperCaseVal != "SUSPEND"
                                            && upperCaseVal != "LOGOUT" && upperCaseVal != "" )
                                       {
-                                           APIError("406");
+                                           APIError("405");
                                            return "false";
                                       }
                                       values[i] = val;
@@ -538,7 +538,7 @@ $sco['session_time'] = "0000:00:00.00";
 
                                       if ( !re.test(val) && !re2.test(val) )
                                       {
-                                           APIError("406");
+                                           APIError("405");
                                            return "false";
                                       }
 
@@ -548,7 +548,7 @@ $sco['session_time'] = "0000:00:00.00";
 										var splitted_val = val.split(":");
 										if( splitted_val[1] < 0 || splitted_val[1] >= 60 || splitted_val[2] < 0 || splitted_val[2] >= 60 )
 										{
-											APIError("406");
+											APIError("405");
 											return "false";
 										}
 									  }
@@ -565,7 +565,7 @@ $sco['session_time'] = "0000:00:00.00";
 
                                       if ( !re.test(val) && !re2.test(val) )
                                       {
-                                           APIError("406");
+                                           APIError("405");
                                            return "false";
                                       }
 
@@ -575,7 +575,7 @@ $sco['session_time'] = "0000:00:00.00";
 										var splitted_val = val.split(":");
 										if( splitted_val[1] < 0 || splitted_val[1] >= 60 || splitted_val[2] < 0 || splitted_val[2] >= 60 )
 										{
-											APIError("406");
+											APIError("405");
 											return "false";
 										}
 									  }
@@ -588,7 +588,7 @@ $sco['session_time'] = "0000:00:00.00";
                                 case 'cmi.suspend_data' :
                                       if( val.length > 4096 )
                                       {
-                                           APIError("406");
+                                           APIError("405");
                                            return "false";
                                       }
                                       values[i] = val;
@@ -596,7 +596,7 @@ $sco['session_time'] = "0000:00:00.00";
                                       return "true";
                                       break;
                                 case 'cmi.launch_data' :
-                                      APIError("404"); //read only
+                                      APIError("403"); //read only
                                       return "false";
                                       break;
                                 case 'cmi.core.lesson_mode' :
@@ -624,7 +624,7 @@ $sco['session_time'] = "0000:00:00.00";
                 else
                 {
                         // not initialized error
-                        this.APIError("403");
+                        this.APIError("406");
                         return "false";
                 }
         }
@@ -644,7 +644,7 @@ $sco['session_time'] = "0000:00:00.00";
                                 return "true";
                         }
                 } else {
-                        this.APIError("403");
+                        this.APIError("406");
                         return "false";
                 }
         }
@@ -705,10 +705,10 @@ $sco['session_time'] = "0000:00:00.00";
         errCodes["391"] = "General Commit Failure";
         errCodes["401"] = "Undefined Data Model Element";
         errCodes["402"] = "Unimplemented Data Model Element";
-        errCodes["403"] = "Data Model Element Value Not Initialized";
-        errCodes["404"] = "Data Model Element Is Read Only";
-        errCodes["405"] = "Data Model Element Is Write Only";
-        errCodes["406"] = "Data Model Element Type Mismatch";
+        errCodes["406"] = "Data Model Element Value Not Initialized";
+        errCodes["403"] = "Data Model Element Is Read Only";
+        errCodes["404"] = "Data Model Element Is Write Only";
+        errCodes["405"] = "Data Model Element Type Mismatch";
         errCodes["407"] = "Data Model Element Value Out Of Range";
 
         var errDiagn = new Array();
@@ -732,10 +732,10 @@ $sco['session_time'] = "0000:00:00.00";
         errDiagn["391"] = "General Commit Failure";
         errDiagn["401"] = "Undefined Data Model Element";
         errDiagn["402"] = "Unimplemented Data Model Element";
-        errDiagn["403"] = "Data Model Element Value Not Initialized";
-        errDiagn["404"] = "Data Model Element Is Read Only";
-        errDiagn["405"] = "Data Model Element Is Write Only";
-        errDiagn["406"] = "Data Model Element Type Mismatch";
+        errDiagn["406"] = "Data Model Element Value Not Initialized";
+        errDiagn["403"] = "Data Model Element Is Read Only";
+        errDiagn["404"] = "Data Model Element Is Write Only";
+        errDiagn["405"] = "Data Model Element Type Mismatch";
         errDiagn["407"] = "Data Model Element Value Out Of Range";
         
 
