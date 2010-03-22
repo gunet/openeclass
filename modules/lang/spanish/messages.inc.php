@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language es
-// Generated 2010-03-11 16:10:20
+// Generated 2010-03-22 15:05:42
 
 $langIntro = "El <b>$siteName</b> platforma es un completo Sistema de Administración eCursos que soporta el Servicio Asincrónico de eAprendizaje en <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
 $langVersion = "$siteName versión";
@@ -1479,7 +1479,6 @@ $m['closed'] = 'Cursos cerrados';
 $m['title'] = 'Título';
 $m['description'] = 'Descripción';
 $m['professor'] = $langTeacher;
-$m['type'] = "Tipo";
 $m['legend'] = 'Leyenda';
 $m['legopen'] = 'Curso Abierto';
 $m['legrestricted'] = 'Registro requerido';
@@ -2077,7 +2076,7 @@ $langChangeDBCharset = "Cambiando la codificación de la base de datos";
 $langToUTF = "a UTF-8";
 $langEncryptPass = "Contraseñas de los usuarios encriptadas";
 $langNotEncrypted = "Aviso! El proceso de actualización no ha podido encriptar las contraselas por lo tanto la plataforma no está funcionando. Comenta la linea. «\$encryptedPasswd = true;» from the config.inc.php file";
-$langUpgradeStart = 'Comenzando la actualización de Open eClass 2.3';
+$langUpgradeStart = 'Comenzando la actualización de Open eClass 2.1';
 $langUpgradeConfig = 'Actualizando el archivo de configuración (config.php)';
 $langTool = "Herramienta";
 $langUploadPage = "Carga la página html";
@@ -2109,7 +2108,7 @@ $langCheckPublicTools = "<p><b>Has intentado tener acceso a un módulo de lecci�
 $langWarnShibUser = "<p><b>Warning:</b> Beacause you have been authenticated via Shibboleth you have not logged-out!<br>To log-out, you have to close your browser.</p>";
 $langUserBriefcase = "Porfolio del usuario";
 $langPersonalisedBriefcase = "Porfolio personalizado";
-$langCopyrightFooter = "Copyright &copy;2003-2010 GUnet";
+$langCopyrightFooter = "Copyright &copy;2003-2008 GUnet";
 $langAdvancedSearch = "Búsqueda avanzada";
 $langTitle = "Título";
 $langType = "Tipo";
@@ -2522,3 +2521,16 @@ $langBetaCMSText = "Text";
 $langNoRead = "You don't have read access for this forum";
 $langNoForumsCat = "There are no forums in this category.";
 $langNoCookies = 'Warning! Cookies are deactivated in your browser. Log-in is not possible.';
+$langBackExerciseManagement = "Back to exercise management";
+$langWikis = "Available wikis";
+$langInsertWiki = 'wiki';
+$langCourseAnnouncements = "Course Announcements";
+$langBasicOptions = "Basic Options";
+$langUserOptions = "User Options";
+$langTutorials = "Tutorials";
+$langTut = "Tutorial";
+$langScormVideo = "Scorm Video";
+$langIntroToCourse = "Introduction to Course";
+$langAdministratorCourse = "Course Administration";
+$langCreateAccount = "Create Account";
+$langAllTutorials = "General Tutorials";

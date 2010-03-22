@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language en
-// Generated 2010-03-11 16:10:20
+// Generated 2010-03-22 15:05:42
 
 $langIntro = "The <b>$siteName</b> platform is a complete eCourses Management System supporting the Asynchronous eLearning Service in <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
 $langVersion = "$siteName version";
@@ -1502,7 +1502,6 @@ $m['closed'] = 'Closed Courses';
 $m['title'] = 'Title';
 $m['description'] = 'Description';
 $m['professor'] = $langTeacher;
-$m['type'] = "Type";
 $m['legend'] = 'Legend';
 $m['legopen'] = 'Open Course';
 $m['legrestricted'] = 'Registration required';
@@ -1530,7 +1529,7 @@ $langNoEventsExist = "No events exist";
 $langNoAssignmentsExist = "No assignments exist";
 $langNoAnnouncementsExist = "No announcements exist";
 $langNoDocsExist = "No documents exist";
-$langNoPosts = "There are no submissions to your forums";
+$langNoPosts = "There are no forum submissions";
 $langNotEnrolledToLessons = "You are not registered to any courses";
 $langMore = "More";
 $langSender = "Sender";
@@ -2183,7 +2182,7 @@ $langCheckPublicTools = "<p><b>You tried to gain access to an inactive lesson mo
 $langWarnShibUser = "<p><b>Warning:</b> Beacause you have been authenticated via Shibboleth you have not logged-out!<br>To log-out, you have to close your browser.</p>";
 $langUserBriefcase = "User portfolio";
 $langPersonalisedBriefcase = "Personalised portfolio";
-$langCopyrightFooter = "Copyright &copy;2003-2010 GUnet";
+$langCopyrightFooter = "Copyright &copy;2003-2009 GUnet";
 $langAdvancedSearch = "Advanced search";
 $langTitle = "Title";
 $langType = "Type";
@@ -2350,14 +2349,14 @@ $langWikiEditLastVersion = "Edit last version";
 $langWikiEditPage = "Edit this page";
 $langWikiEditPrivilege = "Edit Pages";
 $langWikiEditProperties = "Edit properties";
-$langWikiEditionSucceed = "Wiki edition succeed";
+$langWikiEditionSucceed = "Wiki modified successfully";
 $langWikiGroupMembers = "Group members";
 $langWikiIdenticalContent = "Identical content<br />no modification saved";
 $langWikiInvalidWikiId = "Invalid Wiki Id";
 $langWikiList = "List of Wiki";
 $langWikiMainPage = "Main page";
 $langWikiMainPageContent = "This is the main page of the Wiki %s. Click on '''Edit'''to modify the content.";
-$langWikiNoWiki = "No Wiki";
+$langWikiNoWiki = "No Wiki has been created";
 $langWikiNotAllowedToCreate = "You are not allowed to create pages";
 $langWikiNotAllowedToEdit = "You are not allowed to edit this page";
 $langWikiNotAllowedToRead = "You are not allowed to read this page";
@@ -2596,3 +2595,16 @@ $langBetaCMSText = "Text";
 $langNoRead = "You don't have read access for this forum";
 $langNoForumsCat = "There are no forums in this category.";
 $langNoCookies = 'Warning! Cookies are deactivated in your browser. Log-in is not possible.';
+$langBackExerciseManagement = "Back to exercise management";
+$langWikis = "Available wikis";
+$langInsertWiki = 'wiki';
+$langCourseAnnouncements = "Course Announcements";
+$langBasicOptions = "Basic Options";
+$langUserOptions = "User Options";
+$langTutorials = "Tutorials";
+$langTut = "Tutorial";
+$langScormVideo = "Scorm Video";
+$langIntroToCourse = "Introduction to Course";
+$langAdministratorCourse = "Course Administration";
+$langCreateAccount = "Create Account";
+$langAllTutorials = "General Tutorials";
