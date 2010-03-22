@@ -71,7 +71,17 @@ pre {
       <li><a href="#before">Actions before installation - Prerequisities</a></li>
       <li><a href="#unix">Installations in Unix / Linux systems</a> </li>
       <li><a href="#win">Installations in Ms Windows systems</a></li>
-      <li><a href="#after">Actions after installation - Further settings</a></li>
+      <li><a href="#after">Actions after installation</a></li>
+	<ul>
+	<li><a href="#after_f">How to modify test courses</a></li>
+	<li><a href="#after_l">How to modify platform logo</a></li>
+	<li><a href="#after_m">How to modify messages</a></li>
+	<li><a href="#after_math">Support of math symbols</a></li>
+	<li><a href="#after_lang">Multi language support</a></li>
+	<li><a href="#after_reg">User registration via request</a></li>
+	<li><a href="#after_pma">PhpMyAdmin</a></li>
+	<li><a href="#after_other">Other settings</a></li>
+	</ul>
     </ul>
     <hr>
     <h3>
@@ -239,28 +249,18 @@ To give access rights to web server you can type the following commands (if the 
 </ul>
     <hr>
     <h3>
-      <a name="after" id="after">Actions after installation - Further settings</a>
+      <a name="after" id="after">Actions after installation</a>
     </h3>
-<ul>
-  <li> 
-    <p>The platform is delivered through the <em>phpMyAdmin</em> management tool. For safety and security reasons, access to phpMyAdmin is done through the browser's cookies. If you want to change it, you can refer to the config.inc.php file of phpMyAdmin.</p>
-  </li>
-  <li>eClass introduces 3 tentative / general Schools / Faculties. (Faculty 1-Code TMA, Faculty 2-Code TMB etc).You will have to change and adjust them to the Schools-Faculties of your own institute. You can do this through the administrator tool. You will find more and further information for these actions in the Administrator's manual (included in the administator tool).</li>
-  <li> 
-    <p> In case some institutes intend to substitute the initial eClass logo with one of its own, they just have to substitute the picture.</p>
+
+<h4><a name="after_f">How to modify test courses</a></h4>
+<p>eClass introduces 3 tentative / general Schools / Faculties. (Faculty 1-Code TMA, Faculty 2-Code TMB etc).You will have to change and adjust them to the Schools-Faculties of your own institute. You can do this through the administrator tool. You will find more and further information for these actions in the Administrator's manual (included in the administator tool).</p>
+
+<h4><a name="after_l">How to modify platform logo</a></h4>
+<p> In case some institutes intend to substitute the initial eClass logo with one of its own, they just have to substitute the picture.</p>
     <pre>(path of Open eClass)/template/classic/img/logo_bg_50.gif</pre> 
     <p> with its own. </p>
-  </li>
-  <li> 
-<p>In the <em>config.php</em> file, the <em>close_user_registration</em> variable, which is FALSE by definition, will be defined. Changing the value to <em>TRUE</em>, registration of users with 'student' rights will not be free anymore. Users will have to follow a process similar to the teacher account creation process, namely filling in a student account application form, in order to obtain a platform account. The application will be examined by the administrator who either approves of it and opens an account, or rejects it. 
- </p>
-  </li>
-<li>
-<p> 
-If you want to use the platform with a Web server which has the SSL support activated (e.g. https://eclass.gunet.gr), you can do it by defining the <em>urlSecure</em> variable on <em>config.php</em>. e.g.<code>$urlSecure = "https://eclass.gunet.gr"</code> 
-</p>
-</li>
-<li>
+
+<h4><a name="after_m">How to modify messages</a></h4>
 <p>If you want to modify any message of platform then proceed with the following actions:
 Create a file of type .php with name <em>english.inc.php</em> (or <em>greek.inc.php</em>) and place it in directory <em>(eclass path)/config/</em>. Find the varible name which contains the message you wish to change and assing it the new message. e.g. If you want to change message <pre>$langAboutText = "The platform version is";</pre> create <em>english.inc.php</em> in directory (eclass path)/config/ like this:
 <pre>
@@ -276,16 +276,38 @@ With the above way, you preserve custom messages from future upgrades of platfor
 <p>
 You can add a text (e.g. informative) on the left and right of the platform homepage. For that reason, assign the value - message in variables <em>$langExtrasLeft</em> και <em>$langExtrasRight</em>, correspondingly in file <em>(path του eClass)/modules/lang/greek/common.inc.php</em> 
 </p>
-</li>
-<li>Open eClass supports mathematical symbols in subsystems "Exercises", "Forums" and "Announcements". In "Exercises" you can add math symbols in fields "Exercise Description" while a new exercise is created (or modified), in field "Comment" when a new question in an exercise is created (or modified). In subsystem "Forums" when you compose a new message or reply to an existing one and in subsystem "Announcements" when a new announcement is created. Math symbols must be enclosed with tags <em>&lt;m&gt;</em> and <em>&lt;/m&gt;</em>.
+
+<h4><a name="after_math">Support of math symbols</a></h4>
+<p>Open eClass supports mathematical symbols in subsystems "Exercises", "Forums" and "Announcements". In "Exercises" you can add math symbols in fields "Exercise Description" while a new exercise is created (or modified), in field "Comment" when a new question in an exercise is created (or modified). In subsystem "Forums" when you compose a new message or reply to an existing one and in subsystem "Announcements" when a new announcement is created. Math symbols must be enclosed with tags <em>&lt;m&gt;</em> and <em>&lt;/m&gt;</em>.
 E.g. when you type 
 <pre>
 &lt;m&gt;sqrt{x-1}&lt;/m&gt; 
 </pre>
 square root of x-1 will be drawed. For syntax of all mathematical symbols, read manual in <em>http://(Open eClass url)/manuals/PhpMathPublisherHelp.pdf</em> 
-</li>
-  <li>Finally, it should be noted to the users of the platform that they need to have javascript activated on their browser. </li>
-  <li class="c2"> 
+</p>
+
+<h4><a name="after_lang">Multi language support</a></h4>
+<p>
+Platform suppports English and Spanish language. If you wish to deactivate any of these language, just open config.php and simply add the following statement <pre>$active_ui_languages = array('el', 'en');</pre> (if you wish to deactive spanish) or
+<pre>$active_ui_languages = array('el', 'es');</pre> (if you wish to deactivate english).</p>
+<p>By default the value of the above variable is<pre>$active_ui_languages = array('el', 'en', 'es');</pre> e.g. supports all three languages.
+</p>
+
+<h4><a name="after_reg">User registration via request</a></h4>
+<p>In the <em>config.php</em> file, the <em>close_user_registration</em> variable, which is FALSE by definition, will be defined. Changing the value to <em>TRUE</em>, registration of users with 'student' rights will not be free anymore. Users will have to follow a process similar to the teacher account creation process, namely filling in a student account application form, in order to obtain a platform account. The application will be examined by the administrator who either approves of it and opens an account, or rejects it.
+</p>
+
+<h4><a name="after_pma">PhpMyAdmin</a></h4> 
+<p>The platform is delivered through the <em>phpMyAdmin</em> management tool. For safety and security reasons, access to phpMyAdmin is done through the browser's cookies. If you want to change it, you can refer to the config.inc.php file of phpMyAdmin.</p>
+
+
+<h4><a name="after_other">Other settings</a></h4>
+<p> 
+If you want to use the platform with a Web server which has the SSL support activated (e.g. https://eclass.gunet.gr), you can do it by defining the <em>urlSecure</em> variable on <em>config.php</em>. e.g.<code>$urlSecure = "https://eclass.gunet.gr"</code> 
+</p>
+
+<p class="c2">
+  Finally, it should be noted to the users of the platform that they need to have javascript activated on their browser.
     <ul>
       <li>For Internet Explorer users, choose consecutively <em>Internet Options/Security/Custom Level/Security Options</em> from the menu and check the <em>"Scripting of java applets"</em> option. </li>
       <li>For users <em>Mozilla Firefox,</em> choose consecutively <em>Edit / Preferences /  Web features</em> from the menu and check the <em>Enable Java script for Navigator</em> option.
@@ -297,8 +319,8 @@ square root of x-1 will be drawed. For syntax of all mathematical symbols, read 
           <pre>chmod 444 /config/config.php /install/index.php</pre>
         </li>
       </ul>
+
     </div>
-  </li>
-</ul>
+
   </body>
 </html>

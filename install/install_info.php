@@ -63,7 +63,7 @@ pre {
     </p>
     <ul>
       <li>Σε περιβάλλον MsWindows (<b>Windows NT</b>, <b>Windows
-      2000</b>, <b>Windows XP</b>, <b>Windows 2003</b>, <b>Windows >Vista</b>, <b>Windows 7</b>)
+      2000</b>, <b>Windows XP</b>, <b>Windows 2003</b>, <b>Windows Vista</b>, <b>Windows 7</b>)
       </li>
       <li>Σε διάφορες διανομές Linux (π.χ. <b>RedHat</b>, <b>CentOS</b>,
       <b>Debian</b>, <b>Ubuntu</b>, <b>Suse</b> κ.λπ.)
@@ -82,7 +82,9 @@ pre {
 	<li><a href="#after_l">Αλλαγή λογότυπου</a></li>
 	<li><a href="#after_m">Αλλαγή μηνυμάτων</a></li>
 	<li><a href="#after_math">Υποστήριξη μαθηματικών συμβόλων</a></li>
+	<li><a href="#after_lang">Υποστήριξη άλλων γλωσσών</a></li>
 	<li><a href="#after_reg">Εγγραφή χρηστών μέσω αίτησης</a></li>
+	<li><a href="#after_pma">PhpMyAdmin</a></li>
 	<li><a href="#after_other">Άλλες ρυθμίσεις</a></li>
 	</ul>
     </ul>
@@ -401,6 +403,13 @@ $langAboutText = "Τρέχουσα έκδοση της πλατφόρμας";
 θα σχηματιστεί η τετραγωνική ρίζα του x-1. Για την σύνταξη των υπόλοιπων μαθηματικών συμβόλων ανατρέξτε στο <em>http://(url της εγκατάστασης)/manuals/PhpMathPublisherHelp.pdf</em> 
 </p>
 
+<h4><a name="after_lang">Υποστήριξη άλλων γλωσσών</a></h4>
+<p>
+Η πλατφόρμα διαθέτει υποστήριξη για τα Αγγλικά και τα Ισπανικά. Αν θέλετε να απενεργοποιήσετε κάποια από αυτές τις γλώσσες, προσθέστε στο αρχείο ρυθμίσεων config.php την γραμμή <pre>$active_ui_languages = array('el', 'en');</pre> (αν θέλετε να απενεργοποιήσετε τα ισπανικά) ή
+<pre>$active_ui_languages = array('el', 'es');</pre> (αν θέλετε να απενεργοποιήσετε τα αγγλικά).</p>
+<p>Εξ' ορισμού η παραπάνω μεταβλητή έχει την τιμή <pre>$active_ui_languages = array('el', 'en', 'es');</pre> δηλαδή υποστήριξη και των τριών γλωσσών.
+</p>
+
 <h4><a name="after_reg">Εγγραφή χρηστών μέσω αίτησης</a></h4>
     <p> Στο αρχείο <em>config.php</em> ορίζεται η μεταβλητή <em>close_user_registration</em> 
       η οποία εξ'ορισμού έχει τιμή <em>FALSE</em>. Αλλάζοντας την σε τιμή <em>TRUE</em> 
@@ -413,12 +422,13 @@ $langAboutText = "Τρέχουσα έκδοση της πλατφόρμας";
       αφήστε την όπως είναι. (δηλαδή στην τιμή <em>FALSE</em>). 
 </p>
 
-<h4><a name="after_other">Άλλες ρυθμίσεις</a></h4>
-      <p> Η πλατφόρμα διανέμεται με το διαχειριστικό εργαλείο phpMyAdmin. Για λόγους 
+<h4><a name="after_pma">PhpMyAdmin</a></h4>
+<p> Η πλατφόρμα διανέμεται με το διαχειριστικό εργαλείο phpMyAdmin. Για λόγους 
       ασφαλείας, η πρόσβαση στο phpMyAdmin γίνεται μέσω cookies του browser. Αν 
       θέλετε να το αλλάξετε, ανατρέξτε στο αρχείο ρυθμίσεων <em>config.inc.php</em> 
       του phpMyAdmin.</p>
 
+<h4><a name="after_other">Άλλες ρυθμίσεις</a></h4>
 <p> Αν θέλετε να χρησιμοποιήσετε την πλατφόρμα με Web server που έχει ενεργοποιημένη την υποστήριξη SSL 
 (π.χ. https://eclass.gunet.gr) μπορείτε να το κάνετε δηλώνοντας στο <em>config.php</em> την μεταβλητή
 <em>urlSecure</em>. π.χ. <code>$urlSecure = "https://eclass.gunet.gr"</code>. Περισσότερες και αναλυτικότερες 
