@@ -37,7 +37,7 @@ $tool_content ="";
     <table class=\"framed\" align=\"left\" width=\"600\">
     <tbody><tr><td>
     
-          <table class=\"Smart\" width=\"600\">
+          <table class=\"FormData\" width=\"600\">
           <tbody>
           <tr>
             <th width=\"160\">&nbsp;</th>
