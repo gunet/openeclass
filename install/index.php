@@ -34,6 +34,10 @@ header('Content-Type: text/html; charset=UTF-8');
  *
  */
 
+if(function_exists("date_default_timezone_set")) { // only valid if PHP > 5.1
+	date_default_timezone_set("Europe/Athens");
+}
+
 $tool_content = "";
 if (!isset($siteName)) $siteName = "";
 if (!isset($InstitutionUrl)) $InstitutionUrl = "";
@@ -532,7 +536,7 @@ elseif(isset($_REQUEST['install7']))
 	}
 
 	$mysqlMainDb = $dbNameForm;
-
+                  die('lala');
 	// create main database
 	require "install_db.php";
 
