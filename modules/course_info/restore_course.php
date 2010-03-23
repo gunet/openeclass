@@ -142,13 +142,22 @@ elseif (isset($_POST['pathOf4path'])) {
 mysql_select_db($mysqlMainDb);
 draw($tool_content,3, 'admin');
 
-// Functions  restoring
-function course_details ($code, $lang, $title, $desc, $fac, $vis, $prof, $type) {
+// Functions restoring
+function course_details($code, $lang, $title, $desc, $fac, $vis, $prof, $type) {
 
 	global $action, $restoreThis, $langNameOfLang, $encoding, $version;
 
-	@include("../lang/greek/common.inc.php");
-	@include("../lang/greek/messages.inc.php");
+        include("../lang/greek/common.inc.php");
+        $extra_messages = "../../config/greek.inc.php";
+        if (file_exists($extra_messages)) {
+                include $extra_messages;
+        } else {
+                $extra_messages = false;
+        }
+        include("../lang/greek/messages.inc.php");
+        if ($extra_messages) {
+                include $extra_messages;
+        }
 
 	if ($encoding != 'UTF-8') {
 		$code = iconv($encoding, 'UTF-8', $code);
@@ -158,25 +167,18 @@ function course_details ($code, $lang, $title, $desc, $fac, $vis, $prof, $type) 
 		$fac = iconv($encoding, 'UTF-8', $fac);
 	}
 
-	//check for lesson language
+	// check for available languages
 	$languages = array();
-	$langdirname = "../lang/";
-	$handle = opendir($langdirname);
-	if (!$handle) { die($langErrorLang); }
-	while ($entries = readdir($handle)) {
-		if ($entries == '.' or $entries == '..' or $entries == 'CVS')
-			continue;
-		if (is_dir($langdirname.$entries)) {
-			if (isset($langNameOfLang[$entries])) {
-				$languages[$entries] = $langNameOfLang[$entries];
-			} else {
-				$languages[$entries] = $entries;
-			}
-		}
+        foreach ($GLOBALS['active_ui_languages'] as $langcode) {
+                $entry = langcode_to_name($langcode);
+                if (isset($langNameOfLang[$entry])) {
+                        $languages[$entry] = $langNameOfLang[$entry];
+                } else {
+                        $languages[$entry] = $entry;
+                }
 	}
-	closedir($handle);
 
-//display the restoring form
+        // display the restoring form
 	if (!$action) {
 		echo "<form action='$_SERVER[PHP_SELF]' method='post'>";
   		echo "<table width='99%' class='FormData'><tbody>";

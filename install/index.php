@@ -56,8 +56,19 @@ if ($lang == 'english') {
 } else {
 	$install_info_file = "install_info.php";
 }
-include "../modules/lang/$lang/common.inc.php";
-include "../modules/lang/$lang/messages.inc.php";
+// include_messages
+include("../modules/lang/$lang/common.inc.php");
+$extra_messages = "../config/$lang.inc.php";
+if (file_exists($extra_messages)) {
+        include $extra_messages;
+} else {
+        $extra_messages = false;
+}
+include("../modules/lang/$lang/messages.inc.php");
+if ($extra_messages) {
+        include $extra_messages;
+}
+
 if (file_exists("../config/config.php")) {
 	$tool_content .= "
 <!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">

@@ -112,17 +112,17 @@ if (!$db) {
 if (mysql_version()) mysql_query("SET NAMES utf8");
 mysql_select_db($mysqlMainDb, $db);
 
-// Include messages
+// include_messages
 include("${webDir}modules/lang/$language/common.inc.php");
-if (file_exists("${webDir}/config/$language.inc.php")) {
-        // include extra messages if any to override common.inc.php
-        define('LANG_OVERRIDE', "${webDir}/config/$language.inc.php");
-	include LANG_OVERRIDE;
+$extra_messages = "${webDir}/config/$language.inc.php";
+if (file_exists($extra_messages)) {
+        include $extra_messages;
+} else {
+        $extra_messages = false;
 }
 include("${webDir}modules/lang/$language/messages.inc.php");
-if (defined('LANG_OVERRIDE')) {
-        // re-include extra messages to override messages.inc.php
-        include LANG_OVERRIDE;
+if ($extra_messages) {
+        include $extra_messages;
 }
 
 // Make sure that the $uid variable isn't faked
@@ -241,15 +241,21 @@ if (isset($require_current_course) and $require_current_course) {
 		$languageInterface = $currentCourseLanguage;
 		// If course language is different from global language,
 		// include more messages
-		if ($language != $languageInterface) {
-			  $language = $languageInterface ;
-			// Include messages
-			include("$webDir/modules/lang/$language/common.inc.php");
-			include("$webDir/modules/lang/$language/messages.inc.php");
-			if (file_exists("${webDir}/config/$language.inc.php")) { // include extra messages if any
-				include "${webDir}/config/$language.inc.php";
-			}
-		}
+                if ($language != $languageInterface) {
+                        $language = $languageInterface;
+                        // include_messages
+                        include("${webDir}modules/lang/$language/common.inc.php");
+                        $extra_messages = "${webDir}/config/$language.inc.php";
+                        if (file_exists($extra_messages)) {
+                                include $extra_messages;
+                        } else {
+                                $extra_messages = false;
+                        }
+                        include("${webDir}modules/lang/$language/messages.inc.php");
+                        if ($extra_messages) {
+                                include $extra_messages;
+                        }
+                }
 	}
 }
 

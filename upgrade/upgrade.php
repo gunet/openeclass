@@ -40,13 +40,32 @@ set_time_limit(0);
 // We need some messages from all languages to upgrade course accueil table
 foreach ($native_language_names as $code => $name) {
         $templang = langcode_to_name($code);
-        include("$webDir/modules/lang/$templang/common.inc.php");
-        include("$webDir/modules/lang/$templang/messages.inc.php");
+        // include_messages
+        include("${webDir}modules/lang/$templang/common.inc.php");
+        $extra_messages = "${webDir}/config/$templang.inc.php";
+        if (file_exists($extra_messages)) {
+                include $extra_messages;
+        } else {
+                $extra_messages = false;
+        }
+        include("${webDir}modules/lang/$templang/messages.inc.php");
+        if ($extra_messages) {
+                include $extra_messages;
+        }
         $global_messages['langCourseUnits'][$templang] = $langCourseUnits;
 }
-include("$webDir/modules/lang/$language/common.inc.php");
-include("$webDir/modules/lang/$language/messages.inc.php");
-
+// include_messages
+include("${webDir}modules/lang/$language/common.inc.php");
+$extra_messages = "${webDir}/config/$language.inc.php";
+if (file_exists($extra_messages)) {
+        include $extra_messages;
+} else {
+        $extra_messages = false;
+}
+include("${webDir}modules/lang/$language/messages.inc.php");
+if ($extra_messages) {
+        include $extra_messages;
+}
 
 $nameTools = $langUpgrade;
 $tool_content = "";

@@ -63,10 +63,17 @@ if (isset($_POST['submit'])) {
         } else {
                 if (isset($_POST['localize'])) {
                         $newlang = $language = langcode_to_name($_POST['localize']);
-                        include $webDir."modules/lang/$newlang/messages.inc.php";
-                        $lang_override = $webDir."config/$newlang.inc.php";
-                        if (file_exists($lang_override)) {
-                                include $lang_override;
+                        // include_messages
+                        include("${webDir}modules/lang/$language/common.inc.php");
+                        $extra_messages = "${webDir}/config/$language.inc.php";
+                        if (file_exists($extra_messages)) {
+                                include $extra_messages;
+                        } else {
+                                $extra_messages = false;
+                        }
+                        include("${webDir}modules/lang/$language/messages.inc.php");
+                        if ($extra_messages) {
+                                include $extra_messages;
                         }
                 }
 
@@ -101,7 +108,7 @@ if (isset($_POST['submit'])) {
                 // update Home Page Menu Titles for new language
                 mysql_select_db($currentCourseID, $db);
                 db_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langAgenda' WHERE define_var='MODULE_ID_AGENDA'");
-                db_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langLinks' WHERE 'MODULE_ID_LINKS'");
+                db_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langLinks' WHERE define_var='MODULE_ID_LINKS'");
                 db_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langDoc' WHERE define_var='MODULE_ID_DOCS'");
                 db_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langVideo' WHERE define_var='MODULE_ID_VIDEO'");
                 db_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langWorks' WHERE define_var='MODULE_ID_ASSIGN'");

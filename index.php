@@ -171,14 +171,22 @@ if (isset($_SESSION['uid'])) {
 } else { 
 	unset($uid);
 }
-//if the user logged in include the correct language files
-//in case he has a different language set in his/her profile
+// if the user logged in include the correct language files
+// in case he has a different language set in his/her profile
 if (isset($language)) {
-	include("./modules/lang/$language/common.inc.php");
-	include("./modules/lang/$language/messages.inc.php");
-	if (file_exists("${webDir}/config/$language.inc.php")) { // include extra messages if any
-		include "${webDir}/config/$language.inc.php";
-	}
+        // include_messages
+        include("${webDir}modules/lang/$language/common.inc.php");
+        $extra_messages = "${webDir}/config/$language.inc.php";
+        if (file_exists($extra_messages)) {
+                include $extra_messages;
+        } else {
+                $extra_messages = false;
+        }
+        include("${webDir}modules/lang/$language/messages.inc.php");
+        if ($extra_messages) {
+                include $extra_messages;
+        }
+
 }
 $nameTools = $langWelcomeToEclass;
 	

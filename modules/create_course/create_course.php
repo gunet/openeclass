@@ -343,8 +343,18 @@ if (isset($_POST['create_course'])) {
         $repertoire = str_replace (' ', '', $repertoire);
 
         $language = langcode_to_name($_POST['languageCourse']);
-        include("../lang/$language/common.inc.php");
-        include("../lang/$language/messages.inc.php");
+        // include_messages
+        include("${webDir}modules/lang/$language/common.inc.php");
+        $extra_messages = "${webDir}/config/$language.inc.php";
+        if (file_exists($extra_messages)) {
+                include $extra_messages;
+        } else {
+                $extra_messages = false;
+        }
+        include("${webDir}modules/lang/$language/messages.inc.php");
+        if ($extra_messages) {
+                include $extra_messages;
+        }
 
         // create directories
         umask(0);
