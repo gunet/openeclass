@@ -698,7 +698,7 @@ if (mysql_num_rows($sql) == 0) {
         $tool_content .= "\n  </tr>";
         $tool_content .= "\n  <tr>";
         $tool_content .= "\n    <td width='10%' class='DocHead'><div align='center'><b>" .
-                         headlink($m['type'], 'type') . '</b></div></td>';
+                         headlink($langType, 'type') . '</b></div></td>';
         $tool_content .= "\n    <td class='DocHead'><div align='left'><b>" .
                          headlink($langName, 'name') . '</b></div></td>';
         $tool_content .= "\n    <td width='15%' class='DocHead'><div align='center'><b>$langSize</b></div></td>";

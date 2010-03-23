@@ -250,7 +250,7 @@ switch ($type){
 $bar_content .= "\n            <p><b>".$langCode."</b>: ".$fake_code."</p>".
                 "\n            <p><b>".$langTeachers."</b>:<br /> ".$professor."</p>".
                 "\n            <p><b>".$langFaculty."</b>: ".$faculte."</p>".
-                "\n            <p><b>".$m['type']."</b>: ".$lessonType."</p>";
+                "\n            <p><b>".$langType."</b>: ".$lessonType."</p>";
 
 $require_help = TRUE;
 $helpTopic = 'course_home';

@@ -271,10 +271,10 @@ $langAboutText = "Version is";
 With the above way, you preserve custom messages from future upgrades of platform.
 <p>
 <p>
- You can modify the names of the basic roles of the users of the platform by modifying the message file (eClass_path)/modules/lang/greek/common.inc.php
+You can modify the names of the basic roles of the users of the platform by modifying the message file (eClass_path)/modules/lang/english/common.inc.php
 </p>
 <p>
-You can add a text (e.g. informative) on the left and right of the platform homepage. For that reason, assign the value - message in variables <em>$langExtrasLeft</em> και <em>$langExtrasRight</em>, correspondingly in file <em>(path του eClass)/modules/lang/greek/common.inc.php</em> 
+You can add a text (e.g. informative) on the left and right of the platform homepage. For that reason, assign the value - message in variables <em>$langExtrasLeft</em> και <em>$langExtrasRight</em>, correspondingly in file <em>(path του eClass)/modules/lang/english/common.inc.php</em> 
 </p>
 
 <h4><a name="after_math">Support of math symbols</a></h4>
