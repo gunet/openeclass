@@ -198,7 +198,7 @@ if (isset($_POST['submit'])) {
 		}
                 $tool_content .= "</select></td><td>&nbsp;</td></tr>
 		<tr>
-		<th class='left'>$m[type]&nbsp;:</th>
+		<th class='left'>$langType&nbsp;:</th>
 		<td>";
 
                 $tool_content .= selection(array('pre' => $langpre, 'post' => $langpost, 'other' => $langother), 'type', $type);

@@ -28,7 +28,7 @@
 function display_docs()
 {
         global $id, $currentCourseID, $webDir, $tool_content,
-               $langDirectory, $langUp, $langName, $langSize, $langDate, $m, $langAddModulesButton, $langChoice, $langNoDocuments;
+               $langDirectory, $langUp, $langName, $langSize, $langDate, $langType, $langAddModulesButton, $langChoice, $langNoDocuments;
 
         $basedir = $webDir . 'courses/' . $currentCourseID . '/document';
         if (isset($_GET['path'])) {
@@ -74,11 +74,11 @@ function display_docs()
                                       "<img src='../../template/classic/img/parent.gif' height='20' width='20' /></a></th>";
                         $colspan = 4;
                 }
-                $tool_content .= "<form action='insert.php' method='post'><input type='hidden' name='id' value='$id' />" .
+        $tool_content .= "<form action='insert.php' method='post'><input type='hidden' name='id' value='$id' />" .
                                  "<div class='fileman'><table class='Documents'><tbody>" .
                                  "<tr><th colspan='$colspan' class='left'>$langDirectory: $dirname</th>" .
                                  $parenthtml . "</tr>\n" .
-                                 "<tr><th>$m[type]</th><th>$langName</th><th>$langSize</th>" .
+                                 "<tr><th>$langType</th><th>$langName</th><th>$langSize</th>" .
                                  "<th>$langDate</th><th>$langChoice</th></tr>\n";
 	$counter = 0;
 		foreach (array(true, false) as $is_dir) {
@@ -105,11 +105,11 @@ function display_docs()
 				if ($entry['visible'] == 'i') { 
 					$vis = 'invisible';
 				} else {
-						if ($counter % 2 == 0) {
-							$vis = '';
-						} else {
-							$vis = 'odd';
-						}
+					if ($counter % 2 == 0) {
+						$vis = '';
+					} else {
+						$vis = 'odd';
+					}
 				}
 				$tool_content .= "<tr class='$vis'>";
 				$tool_content .= "<td width='1%' valign='top' style='padding-top: 7px;' align='center'>

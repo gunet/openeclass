@@ -142,7 +142,7 @@ if (isset($_POST['back1']) or !isset($_POST['visit'])) {
 	<td><input class='FormData_InputText' type='text' name='titulaires' size='60' value='".$titulaire_probable."' /></td>
 	<td>&nbsp;</td></tr>
 	<tr>
-	<th class='left'>$m[type]&nbsp;:</th>
+	<th class='left'>$langType&nbsp;:</th>
 	<td>";
 	$tool_content .= " ".selection(array('pre' => $langpre, 'post' => $langpost, 'other' => $langother), 'type', $type)." ";
 	$tool_content .= "
