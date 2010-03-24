@@ -180,7 +180,7 @@ if(isset($submitAnswers) || isset($buttonBack)) {
 			{
 				$msgErr=$langGiveText;
 			}
-			elseif(!ereg('\[.+\]',$reponse))
+			elseif(!preg_match('/\[.+\]/',$reponse))
 			{
 				$msgErr=$langDefineBlanks;
 			}
@@ -446,8 +446,8 @@ if(isset($modifyAnswers)) {
 $tool_content .= <<<cData
 
     <form method="post" action="$_SERVER[PHP_SELF]?modifyAnswers=${modifyAnswers}">
-    <input type="hidden" name="formSent" value="1">
-    <input type="hidden" name="nbrAnswers" value="${nbrAnswers}">
+    <input type="hidden" name="formSent" value="1" />
+    <input type="hidden" name="nbrAnswers" value="${nbrAnswers}" />
 cData;
 
 	$tool_content .= "<table width=\"99%\" class=\"Question\"><thead><tr>
@@ -504,7 +504,7 @@ cData;
 			$tool_content .= "<td align=\"center\" valign=\"top\">
 			<input type=\"radio\" value=\"".$i."\" name=\"correct\" ";
 			if(isset($correct) and $correct == $i) {
-				$tool_content .= "checked=\"checked\"></td>";
+				$tool_content .= "checked=\"checked\" /></td>";
 			} else {
 				$tool_content .= "></td>";
 			}
@@ -514,7 +514,7 @@ cData;
 			if ((isset($correct[$i]))&&($correct[$i])) {
 				$tool_content .= "checked=\"checked\"></td>";
 			} else {
-				$tool_content .= "></td>";
+				$tool_content .= " /></td>";
 			}
 		}
 		
@@ -531,7 +531,7 @@ cData;
 		} else {	
 			$tool_content .= 0;
 		}
-		$tool_content .= "\"></td></tr>";
+		$tool_content .= "\" /></td></tr>";
 	}
 
 $tool_content .= <<<cData
@@ -539,12 +539,12 @@ $tool_content .= <<<cData
     <tr>
       <th class="left" colspan="2">&nbsp;</th>
       <td class="left"><b>$langAnswers :</b>&nbsp;
-        <input type="submit" name="lessAnswers" value="${langLessAnswers}">&nbsp;
-        <input type="submit" name="moreAnswers" value="${langMoreAnswers}">
+        <input type="submit" name="lessAnswers" value="${langLessAnswers}" />&nbsp;
+        <input type="submit" name="moreAnswers" value="${langMoreAnswers}" />
       </td>
       <td align="center">
-        <input type="submit" name="submitAnswers" value="${langCreate}">&nbsp;&nbsp;
-        <input type="submit" name="cancelAnswers" value="${langCancel}">
+        <input type="submit" name="submitAnswers" value="${langCreate}" />&nbsp;&nbsp;
+        <input type="submit" name="cancelAnswers" value="${langCancel}" />
       </td>
       <th class="left">&nbsp;</th>
     </tr>
@@ -569,13 +569,12 @@ else
 
 
 $tool_content .= <<<cData
-      <input type="hidden" name="formSent" value="1">
-      <input type="hidden" name="setWeighting" value="${tempSW}">
+      <input type="hidden" name="formSent" value="1" />
+      <input type="hidden" name="setWeighting" value="${tempSW}" />
 cData;
 
 	if(!isset($setWeighting)) {
-		$tool_content .= "<input type=\"hidden\" name=\"weighting\" value=\"";
-		$tool_content .= "\">\n";
+		$tool_content .= "<input type=\"hidden\" name=\"weighting\" value=\"\" />\n";
 
     $tool_content .= <<<cData
 	
@@ -637,8 +636,8 @@ $tool_content .= <<<cData
         <tr>
           <th>&nbsp;</th>
           <td>
-          <input type="submit" name="submitAnswers" value="${langNext} &gt;">
-          &nbsp;&nbsp;<input type="submit" name="cancelAnswers" value="${langCancel}">
+          <input type="submit" name="submitAnswers" value="${langNext} &gt;" />
+          &nbsp;&nbsp;<input type="submit" name="cancelAnswers" value="${langCancel}" />
           </td>
         </tr>
         </tbody>
@@ -648,9 +647,9 @@ cData;
 	} else {
 
 $tool_content .= "
-      <input type=\"hidden\" name=\"blanks\" value=\"".htmlspecialchars(serialize($blanks))."\">";
+      <input type=\"hidden\" name=\"blanks\" value=\"".htmlspecialchars(serialize($blanks))."\" />";
 $tool_content .= "
-      <input type=\"hidden\" name=\"reponse\" value=\"".htmlspecialchars($reponse)."\">";
+      <input type=\"hidden\" name=\"reponse\" value=\"".htmlspecialchars($reponse)."\" />";
 $tool_content .= <<<cData
 
 cData;
@@ -671,7 +670,7 @@ $tool_content .= <<<cData
         </td>
       </tr>
 cData;
-		}
+		} else {
 
 $tool_content .= <<<cData
 
@@ -685,7 +684,7 @@ cData;
 
 	foreach($blanks as $i=>$blank) {
 		$tool_content .= "<tr><th class=\"right\">[".$blank."] :</th>"."
-		<td><input type='text' name=\"weighting[".$i."]\" "."size='5' value=\"".$weighting[$i]."\" class='FormData_InputText'></td>
+		<td><input type='text' name=\"weighting[".$i."]\" "."size='5' value=\"".$weighting[$i]."\" class='FormData_InputText' /></td>
 		</tr>";
 	}
 
@@ -694,9 +693,9 @@ $tool_content .= <<<cData
       <tr>
         <th>&nbsp;</th>
         <td>
-        <input type="submit" name="buttonBack" value="&lt; ${langBack}">&nbsp;&nbsp;
-        <input type="submit" name="submitAnswers" value="${langCreate}">&nbsp;&nbsp;
-        <input type="submit" name="cancelAnswers" value="${langCancel}">
+        <input type="submit" name="buttonBack" value="&lt; ${langBack}" />&nbsp;&nbsp;
+        <input type="submit" name="submitAnswers" value="${langCreate}" />&nbsp;&nbsp;
+        <input type="submit" name="cancelAnswers" value="${langCancel}" />
         </td>
       </tr>
       </tbody>
@@ -706,6 +705,7 @@ cData;
 			}
 
 $tool_content .= "</td></tr></thead></table></form>";
+        }
 
 		} //END FILL_IN_BLANKS !!!
 		elseif($answerType == MATCHING)
@@ -717,9 +717,9 @@ $tool_content .= <<<cData
 
   
 	<form method="post" action="$_SERVER[PHP_SELF]?modifyAnswers=${modifyAnswers}">
-	<input type="hidden" name="formSent" value="1">
-	<input type="hidden" name="nbrOptions" value="${nbrOptions}">
-	<input type="hidden" name="nbrMatches" value="${nbrMatches}">
+	<input type="hidden" name="formSent" value="1" />
+	<input type="hidden" name="nbrOptions" value="${nbrOptions}" />
+	<input type="hidden" name="nbrMatches" value="${nbrMatches}" />
 	
     <table width="99%" class="FormData">
     <tbody>
@@ -763,7 +763,7 @@ $tool_content .= <<<cData
     </tr>
     <tr>
       <th class="right">$langColumnA:</th>
-      <td align="left">$langMoreLessChoices: <input type="submit" name="moreMatches" value="+">&nbsp;<input type="submit" name="lessMatches" value="-">
+      <td align="left">$langMoreLessChoices: <input type="submit" name="moreMatches" value="+" />&nbsp;<input type="submit" name="lessMatches" value="-" />
       </td>
       <td align="center"><b>$langColumnB</b></td>
       <td align="center"><b>$langQuestionWeighting</b></td>
@@ -778,7 +778,7 @@ cData;
 		else 
 			@$tool_content .= str_replace('{','&#123;',htmlspecialchars($match[$i]));
 	
-		$tool_content .= "\" class=\"auth_input\"></td>
+		$tool_content .= "\" class=\"auth_input\" /></td>
 		<td align=\"center\"><select name=\"sel[".$i."]\"  class=\"auth_input\">";
 		foreach($listeOptions as $key=>$val) {
 			$tool_content .= "<option value=\"".$key."\" ";
@@ -795,7 +795,7 @@ cData;
 			$tool_content .= '5'; 
 		else 
 			$tool_content .= $weighting[$i];
-		$tool_content .= "\"  class=\"auth_input\"></td></tr>";
+		$tool_content .= "\"  class=\"auth_input\" /></td></tr>";
 	} // end for()
 
 $tool_content .= <<<cData
@@ -805,7 +805,7 @@ $tool_content .= <<<cData
     </tr>
     <tr>
       <th class="right">$langColumnB:</th>
-      <td colspan="3">$langMoreLessChoices: <input type="submit" name="moreOptions" value="+">&nbsp;<input type="submit" name="lessOptions" value="-">
+      <td colspan="3">$langMoreLessChoices: <input type="submit" name="moreOptions" value="+" />&nbsp;<input type="submit" name="lessOptions" value="-" />
       </td>
   </tr>
 cData;
@@ -820,15 +820,15 @@ cData;
 			else 
 				@$tool_content .= str_replace('{','&#123;',htmlspecialchars($option[$key]));
 				
-			$tool_content .= "\" class=\"auth_input\"></td><td>&nbsp;</td><td>&nbsp;</td></tr>";
+			$tool_content .= "\" class=\"auth_input\" /></td><td>&nbsp;</td><td>&nbsp;</td></tr>";
 		} // end foreach()
 
 $tool_content .= <<<cData
     <tr>
       <th>&nbsp;</th>
       <td colspan="3" align="left">
-      <input type="submit" name="submitAnswers" value="${langCreate}">
-      &nbsp;&nbsp;<input type="submit" name="cancelAnswers" value="${langCancel}">
+      <input type="submit" name="submitAnswers" value="${langCreate}" />
+      &nbsp;&nbsp;<input type="submit" name="cancelAnswers" value="${langCancel}" />
       </td>
     </tr>
     </tbody>

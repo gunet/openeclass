@@ -75,7 +75,7 @@ function execute_program ($program, $args = '')
             if ($args_list[$i] == '|') {
                 $cmd = $args_list[$i+1];
                 $new_cmd = find_program($cmd);
-                $args = ereg_replace("\| $cmd", "| $new_cmd", $args);
+                $args = str_replace("| $cmd", "| $new_cmd", $args);
             }
         }
     }

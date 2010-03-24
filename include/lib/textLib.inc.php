@@ -1,4 +1,4 @@
-<?
+<?php
 /*
 =============================================================================
 GUnet eClass 2.0
@@ -108,13 +108,13 @@ function claro_format_locale_date($dateFormat, $timeStamp = -1)
 
 	if ($timeStamp == -1) $timeStamp = time();
 
-	// with the ereg  we  replace %aAbB of date format
-	//(they can be done by the system when locale date aren't available
-	$date = ereg_replace('%[A]', $langDay_of_weekNames['long'][(int)strftime('%w', $timeStamp)], $dateFormat);
-	$date = ereg_replace('%[a]', $langDay_of_weekNames['short'][(int)strftime('%w', $timeStamp)], $date);
-	$date = ereg_replace('%[B]', $langMonthNames['fine'][(int)strftime('%m', $timeStamp)-1], $date);
-	$date = ereg_replace('%[b]', $langMonthNames['short'][(int)strftime('%m', $timeStamp)-1], $date);
+	// we replace %aAbB of date format
+	// (they can be done by the system when locale date aren't available
+	$date = preg_replace('/%[A]/', $langDay_of_weekNames['long'][(int)strftime('%w', $timeStamp)], $dateFormat);
+	$date = preg_replace('/%[a]/', $langDay_of_weekNames['short'][(int)strftime('%w', $timeStamp)], $date);
+	$date = preg_replace('/%[B]/', $langMonthNames['fine'][(int)strftime('%m', $timeStamp)-1], $date);
+	$date = preg_replace('/%[b]/', $langMonthNames['short'][(int)strftime('%m', $timeStamp)-1], $date);
 
 	return strftime($date, $timeStamp);
 
-} 
+}

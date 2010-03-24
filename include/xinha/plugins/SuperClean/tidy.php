@@ -33,7 +33,7 @@
   {
 
 //  Strip http:// from the URL if present
-    $URL = ereg_replace("^http://", "", $URL);
+    $URL = preg_replace('|^http://|', '', $URL);
 
 //  Separate into Host and URI
     $Host = substr($URL, 0, strpos($URL, "/"));

@@ -404,7 +404,7 @@ cData;
 			list($answer)=explode('::',$answer);
 
 			// replaces [blank] by an input field
-			$answer=ereg_replace('\[[^]]+\]','<input type="text" name="choice['.$questionId.'][]" size="10">',nl2br($answer));
+			$answer = preg_replace('/\[[^]]+\]/', '<input type="text" name="choice['.$questionId.'][]" size="10">', nl2br($answer));
 		}
 
 		// unique answer

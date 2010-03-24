@@ -215,8 +215,7 @@ foreach($questionList as $questionId) {
 							$answer.='&nbsp;&nbsp;&nbsp;';
 						}
 						// adds the correct word, followed by ] to close the blank
-						$answer.=' / <font color="green">
-							<b>'.substr($temp,0,$pos).'</b></font>]';
+						$answer.=' / <font color="green"><b>'.substr($temp,0,$pos).'</b></font>]';
 						$j++;
 						$temp=substr($temp,$pos+1);
 						}

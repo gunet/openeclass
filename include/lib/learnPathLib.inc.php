@@ -1889,7 +1889,7 @@ function get_limited_page_links($sql, $limiter, $stringPreviousPage, $stringNext
 			$url .= "?page=";
 			break;
 		case 1:
-			$arguments = ereg_replace('[&|?]page=.*$', "", "?".$_SERVER['argv'][0]);
+			$arguments = preg_replace('/[&|?]page=.*$/', '', '?'.$_SERVER['argv'][0]);
 
 			if (!strcmp($arguments, NULL)) {
 				$url .= "?page=";

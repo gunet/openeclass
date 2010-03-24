@@ -108,8 +108,8 @@ class bsd_common
     function loadavg ()
     {
         $s = $this->grab_key('vm.loadavg');
-        $s = ereg_replace('{ ', '', $s);
-        $s = ereg_replace(' }', '', $s);
+        $s = str_replace('{ ', '', $s);
+        $s = str_replace(' }', '', $s);
         $results = explode(' ', $s);
 
         return $results;
@@ -256,7 +256,7 @@ class bsd_common
 
         $i = 0;
         while (list(,$line) = each($lines)) {
-            ereg('(.*) \((.*)\)', $line, $a);
+            preg_match('/(.*) \((.*)\)/', $line, $a);
 
             $m = explode(' ',$a[0]);
             $fsdev[$m[0]] = $a[2];

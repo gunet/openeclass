@@ -38,7 +38,7 @@ class sysinfo extends bsd_common
     function get_sys_ticks ()
     {
         $s = explode(' ', $this->grab_key('kern.boottime'));
-        $a = ereg_replace('{ ', '', $s[3]);
+        $a = str_replace('{ ', '', $s[3]);
         $sys_ticks = time() - $a;
         return $sys_ticks;
     }

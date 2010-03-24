@@ -165,15 +165,15 @@
             # On vire les &nbsp; dans l'url
             $url = str_replace('&nbsp;', ' ', $url);
              
-            if ( ereg('^(.+)[.](gif|jpg|jpeg|png)$', $url )
+            if ( preg_match('/^(.+)[.](gif|jpg|jpeg|png)$/', $url )
                 && !$no_image && $this->getOpt('active_auto_img' ) )
             {
                 # On ajoute les dimensions de l'image si locale
-                # Id�e de Stephanie
+                # Idée de Stephanie
                 $img_size = NULL;
-                if (!ereg('[a-zA-Z]+://', $url ) )
+                if (!preg_match('|[a-zA-Z0-9]+://|', $url ) )
                 {
-                    if (ereg('^/', $url ) )
+                    if (preg_match('|^/|', $url ) )
                     {
                         $path_img = $_SERVER['DOCUMENT_ROOT'] . $url;
                     }
@@ -208,7 +208,7 @@
                     $url = 'mailto:'.$this->__antiSpam(substr($url, 7));
                 }
                  
-                if ((!ereg('[a-zA-Z]+://', $url)
+                if ((!preg_match('|[a-zA-Z0-9]+://|', $url)
                     && !preg_match('~^#~', $url)
                     && !preg_match('~^\.*/~', $url)
                     && !preg_match('~^mailto:~', $url))

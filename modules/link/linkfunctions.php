@@ -64,9 +64,8 @@ function addlinkcategory($type)
 			}
 
 			// we check weither the $url starts with http://, if not we add this
-			if(!ereg("://",$urllink))
-			{
-				$urllink="http://".$urllink;
+			if(strstr('://', $urllink) === false) {
+				$urllink = "http://" . $urllink;
 			}
 
 			// looking for the largest ordre number for this category

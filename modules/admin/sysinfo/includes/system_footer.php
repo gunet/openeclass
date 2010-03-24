@@ -45,7 +45,7 @@ $update_form .= "\t&nbsp;" . $text['language'] . ":&nbsp;\n"
 $dir = opendir('includes/lang/');
 while (($file = readdir($dir))!=false) {
     if ($file != 'CVS' && $file != '.' && $file != '..') {
-        $file = ereg_replace('.php', '', $file);
+        $file = str_replace('.php', '', $file);
         if ($lng == $file) {
             $update_form .= "\t\t<option value=\"$file\" SELECTED>$file</option>\n";
         } else {

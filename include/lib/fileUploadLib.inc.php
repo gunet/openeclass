@@ -70,9 +70,9 @@ function replace_dangerous_char($string)
  * @return - the filenam phps'ized
  */
 
-function php2phps ($fileName)
+function php2phps($fileName)
 {
-	$fileName = ereg_replace(".php$", ".phps", $fileName);
+	$fileName = preg_replace('/\.php$/', '.phps', $fileName);
 	return $fileName;
 }
 
@@ -125,7 +125,7 @@ function add_ext_on_mime($fileName)
 {
 	/*** check if the file has an extension AND if the browser has send a MIME Type ***/
 
-	if(!ereg("\.[[:alnum:]]+$", $fileName) and @$_FILES['userFile']['type']) {
+	if(!preg_match('/\.[[:alnum:]]+$/', $fileName) and @$_FILES['userFile']['type']) {
 		/*** Build a "MIME-types/extensions" connection table ***/
 
 		static $mimeType = array();

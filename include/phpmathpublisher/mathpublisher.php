@@ -322,7 +322,7 @@ $fontesmath = array(
 
 function est_nombre($str) 
 {
-return ereg("^[0-9]", $str);
+return preg_match('/^[0-9]/', $str);
 }
 
 function tableau_expression($expression)
@@ -338,7 +338,7 @@ $d=0;
 for($i = 0; $i < count($t); $i++)
 	{
 	if(is_array($t[$i])) $t[$i] = $t[$i][1];
-	if (ereg("formula", $t[$i]))
+	if (strstr($t[$i], 'formula') !== false)
 		{
 		$d=$i+2;
 		break;
@@ -657,7 +657,7 @@ $taille=max($taille,6);
 global $symboles, $fontesmath;
 $texte=stripslashes($texte);
 if(isset($fontesmath[$texte])) $font = $dirfonts."/".$fontesmath[$texte].".ttf";
-elseif (ereg("[a-zA-Z]", $texte)) $font = $dirfonts."/cmmi10.ttf";
+elseif (preg_match('/[a-zA-Z]/', $texte)) $font = $dirfonts."/cmmi10.ttf";
 else $font = $dirfonts."/cmr10.ttf";
 if(isset($symboles[$texte])) $texte = $symboles[$texte];
 $htexte = 'dg'.$texte;
@@ -1604,7 +1604,7 @@ $handle=opendir($dirimg);
 while ($fi = readdir($handle))
 	{
 	$info=pathinfo($fi);
-	if ($fi!="." && $fi!=".." && $info["extension"]=="png" && ereg("^math",$fi)) 
+	if ($fi!="." && $fi!=".." && $info["extension"]=="png" && preg_match('/^math/', $fi)) 
 		{
 		list($math,$v,$name)=explode("_",$fi);
 		if ($name==$n) 

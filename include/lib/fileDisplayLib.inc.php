@@ -114,7 +114,7 @@ function choose_image($fileName)
 	}
 
 	/*** function core ***/
-	if (ereg("\.([[:alnum:]]+)$", $fileName, $extension))
+	if (preg_match('/\.([[:alnum:]]+)$/', $fileName, $extension))
 	{
 		$ext = strtolower($extension[1]);
 		foreach( $type as $genericType => $typeList)

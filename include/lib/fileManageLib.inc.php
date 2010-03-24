@@ -189,10 +189,10 @@ function my_rename($filePath, $newFileName)
 	else
 	{
 		/*** check if the new name has an extension ***/
-		if ((!ereg("[^.]+\.[[:alnum:]]+$", $newFileName))
-			&& ereg("\.([[:alnum:]]+)$", $oldFileName, $extension))
+		if ((!preg_match('/[^.]+\.[[:alnum:]]+$/', $newFileName))
+			and preg_match('/\.([[:alnum:]]+)$/', $oldFileName, $extension))
 		{
-			$newFileName .= ".".$extension[1];
+			$newFileName .= '.' . $extension[1];
 		}
 		
 		/*** Prevent file name with php extension ***/
@@ -237,7 +237,7 @@ function move($source, $target)
 			elseif (is_dir($source))
 			{
 				// check to not copy the directory inside itself
-				if (ereg("^".$source."*", $target))
+                                if (preg_match('/^'.$source.'/', $target))
 				{
 					return false;
 				}
@@ -539,8 +539,8 @@ function claro_rename_file($oldFilePath, $newFilePath)
 
     /* CHECK IF THE NEW NAME HAS AN EXTENSION */
 
-    if (( ! ereg('[[:print:]]+\.[[:alnum:]]+$', $newFilePath))
-        &&  ereg('[[:print:]]+\.([[:alnum:]]+)$', $oldFilePath, $extension))
+    if (!preg_match('/[[:print:]]+\.[[:alnum:]]+$/', $newFilePath)
+        and preg_match('/[[:print:]]+\.([[:alnum:]]+)$/', $oldFilePath, $extension))
     {
         $newFilePath .= '.' . $extension[1];
     }
@@ -592,20 +592,18 @@ function claro_copy_file($sourcePath, $targetPath)
     elseif ( is_dir($sourcePath) )
     {
         // check to not copy the directory inside itself
-        if ( ereg('^'.$sourcePath . '/', $targetPath . '/') ) return false;
+        if (preg_match('|^' . $sourcePath . '/|', $targetPath . '/')) return false;
 
-        if ( ! claro_mkdir($targetPath . '/' . $fileName, CLARO_FILE_PERMISSIONS) )   return false;
+        if (!claro_mkdir($targetPath . '/' . $fileName, CLARO_FILE_PERMISSIONS)) return false;
 
         $dirHandle = opendir($sourcePath);
 
-        if ( ! $dirHandle ) return false;
+        if (!$dirHandle) return false;
 
         $copiableFileList = array();
 
-        while ($element = readdir($dirHandle) )
-        {
+        while ($element = readdir($dirHandle) ) {
             if ( $element == '.' || $element == '..') continue;
-
             $copiableFileList[] = $sourcePath . '/' . $element;
         }
 

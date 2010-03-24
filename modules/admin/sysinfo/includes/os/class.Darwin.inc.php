@@ -40,8 +40,8 @@ class sysinfo extends bsd_common
     function grab_key ($key) 
     {
         $s = execute_program('sysctl', $key);
-        $s = ereg_replace($key . ': ', '', $s);
-        $s = ereg_replace($key . ' = ', '', $s); // fix Apple set keys
+        $s = preg_replace('/' . $key . ': /', '', $s);
+        $s = preg_replace('/' . $key . ' = /', '', $s); // fix Apple set keys
 
         return $s;
     }
