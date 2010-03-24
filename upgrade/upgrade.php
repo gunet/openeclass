@@ -350,11 +350,11 @@ if (!isset($submit2)) {
                         db_query('SET NAMES utf8');
                	        upgrade_course_2_1_3($code[0], "($i / $total)");
                 }
-                if ($oldversion < '2.2') {
+                if ($oldversion <= '2.2') {
                	        upgrade_course_2_2($code[0], $lang, "($i / $total)");
 		}
-                if ($oldversion < '2.2.1') {
-			upgrade_course_2_2_1($code[0], $lang, "($i / $total)");
+                if ($oldversion < '2.3') {
+			upgrade_course_2_3($code[0], $lang, "($i / $total)");
 		}
                 echo "</p>\n";
                 $i++;

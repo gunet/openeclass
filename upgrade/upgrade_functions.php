@@ -291,10 +291,10 @@ function upgrade_course($code, $lang)
 	upgrade_course_old($code, $lang);
 	upgrade_course_2_1_3($code);
 	upgrade_course_2_2($code, $lang);
-	upgrade_course_2_2_1($code, $lang);
+	upgrade_course_2_3($code, $lang);
 }
 
-function upgrade_course_2_2_1($code, $lang, $extramessage = '') {
+function upgrade_course_2_3($code, $lang, $extramessage = '') {
 	global $langUpgCourse, $global_messages;
 
 	mysql_select_db($code);

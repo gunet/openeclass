@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language en
-// Generated 2010-03-22 15:05:42
+// Generated 2010-03-24 14:58:30
 
 $langIntro = "The <b>$siteName</b> platform is a complete eCourses Management System supporting the Asynchronous eLearning Service in <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
 $langVersion = "$siteName version";
@@ -2293,7 +2293,7 @@ $langEmptyVideoTitle = "Please type a video title";
 $langAddImage = "Include picture";
 $langAdministrator = "Administrator";
 $langChangePwdexp = "Enter new password twice to change, leave empty to keep it";
-$langChooseYourPassword = "Choose now a username and a password for the user account.";
+$langChooseYourPassword = "Choose username and a password for the user account.";
 $langCloseWindow = "Close window";
 $langCodeUsed = "This official code is already used by another user.";
 $langContinue = "Continue";
@@ -2608,3 +2608,4 @@ $langIntroToCourse = "Introduction to Course";
 $langAdministratorCourse = "Course Administration";
 $langCreateAccount = "Create Account";
 $langAllTutorials = "General Tutorials";
+$langAdminOptions = "Admin Options";

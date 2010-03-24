@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language es
-// Generated 2010-03-22 15:05:42
+// Generated 2010-03-24 14:58:30
 
 $langIntro = "El <b>$siteName</b> platforma es un completo Sistema de Administración eCursos que soporta el Servicio Asincrónico de eAprendizaje en <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
 $langVersion = "$siteName versión";
@@ -2534,3 +2534,4 @@ $langIntroToCourse = "Introduction to Course";
 $langAdministratorCourse = "Course Administration";
 $langCreateAccount = "Create Account";
 $langAllTutorials = "General Tutorials";
+$langAdminOptions = "Admin Options";

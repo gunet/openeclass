@@ -160,6 +160,27 @@ function loggedInMenu(){
 
 	$sideMenuGroup = array();
 
+	if (isset($is_admin) and $is_admin) {
+		$sideMenuSubGroup = array();
+		$sideMenuText = array();
+		$sideMenuLink = array();
+		$sideMenuImg	= array();
+	
+		$arrMenuType = array();
+		$arrMenuType['type'] = 'text';
+		$arrMenuType['text'] = $GLOBALS['langAdminOptions'];
+		array_push($sideMenuSubGroup, $arrMenuType);
+	
+		array_push($sideMenuText, "<b style=\"color:#a33033;\">$GLOBALS[langAdminTool]</b>");
+		array_push($sideMenuLink, $urlServer . "modules/admin/");
+		array_push($sideMenuImg, "black-arrow1.gif");
+		
+		array_push($sideMenuSubGroup, $sideMenuText);
+		array_push($sideMenuSubGroup, $sideMenuLink);
+		array_push($sideMenuSubGroup, $sideMenuImg);
+		array_push($sideMenuGroup, $sideMenuSubGroup);
+	}
+
 	$sideMenuSubGroup = array();
 	$sideMenuText 	= array();
 	$sideMenuLink 	= array();
@@ -167,22 +188,15 @@ function loggedInMenu(){
 
 	$arrMenuType = array();
 	$arrMenuType['type'] = 'text';
-	$arrMenuType['text'] = $GLOBALS['langBasicOptions'];
+	$arrMenuType['text'] = $GLOBALS['langUserOptions'];
 
 	array_push($sideMenuSubGroup, $arrMenuType);
-	// User is not currently in a course - set statut from main database
-
-	if (isset($is_admin) and $is_admin) {
-		array_push($sideMenuText, "<b style=\"color:#a33033;\">$GLOBALS[langAdminTool]</b>");
-		array_push($sideMenuLink, $urlServer . "modules/admin/");
-		array_push($sideMenuImg, "black-arrow1.gif");
-	}
 
 	$res2 = db_query("SELECT statut FROM user WHERE user_id = '$uid'",$mysqlMainDb);
 
 	if ($row = mysql_fetch_row($res2)) $statut = $row[0];
 
-	if ($statut==1) {
+	if ($statut == 1) {
 		array_push($sideMenuText, $GLOBALS['langCourseCreate']);
 		array_push($sideMenuLink, $urlServer . "modules/create_course/create_course.php");
 		array_push($sideMenuImg, "black-arrow1.gif");
@@ -220,7 +234,7 @@ function loggedInMenu(){
 
 	$arrMenuType = array();
 	$arrMenuType['type'] = 'text';
-	$arrMenuType['text'] = $GLOBALS['langUserOptions'];
+	$arrMenuType['text'] = $GLOBALS['langBasicOptions'];
 	array_push($sideMenuSubGroup, $arrMenuType);
 
 	array_push($sideMenuText, $GLOBALS['langListCourses']);
