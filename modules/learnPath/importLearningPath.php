@@ -27,7 +27,7 @@
 
 /*===========================================================================
 	importLearningPath.php
-	@last update: 29-08-2009 by Thanos Kyritsis
+	@last update: 24-10-2010 by Thanos Kyritsis
 	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
 
 	based on Claroline version 1.7 licensed under GPL
@@ -1247,10 +1247,95 @@ else // if method == 'post'
     </table>
     <p align=\"right\"><small>$langMaxFileSize ".ini_get('upload_max_filesize')."</small></p>
     <br />
-    </form><br />
-    <p><u>$langNote</u> :</p>
-    <p>$langScormIntroTextForDummies</p>
-    ";
+    </form>
+    <p>";
+    
+    
+    /*****************************************
+     *  IMPORT SCORM DIRECTLY FROM DOCUMENTS
+     *****************************************/
+    $basedir = $webDir . 'courses/' . $currentCourseID . '/document';
+
+    /*** Retrieve file info for current directory from database and disk ***/
+    $sql = db_query("SELECT * FROM document ORDER BY filename");
+
+    $fileinfo = array();
+    while($row = mysql_fetch_array($sql, MYSQL_ASSOC)) {
+	$fileinfo[] = array(
+		'is_dir' => is_dir($basedir . $row['path']),
+		'size' => filesize($basedir . $row['path']),
+		'title' => $row['title'],
+		'filename' => $row['filename'],
+		'format' => $row['format'],
+		'path' => $row['path'],
+		'visible' => ($row['visibility'] == 'v'),
+		'comment' => $row['comment'],
+		'copyrighted' => $row['copyrighted'],
+		'date' => strtotime($row['date_modified']));
+    }
+    
+    if (mysql_num_rows($sql) != 0) {
+		$tool_content .= "\n<div class=\"fileman\">";
+		$tool_content .= "\n<form action='importFromDocument.php' method='post'>";
+		$tool_content .= "\n  <table width=\"99%\" align='left' class=\"Documents\">";
+		$tool_content .= "\n  <tbody>";
+		$tool_content .= "\n  <tr><th height='18' colspan='5'><div align='left'><strong>Import from Documents</strong</div></th></tr>";
+		$tool_content .= "\n  <tr>";
+		$tool_content .= "\n    <td></td>";
+		$tool_content .= "\n    <td width='10%' class='DocHead'><div align='center'><b>$langType</b></div></td>";
+		$tool_content .= "\n    <td class='DocHead'><div align='left'><b>$langName</b></div></td>";
+		$tool_content .= "\n    <td width='15%' class='DocHead'><div align='center'><b>$langSize</b></div></td>";
+		$tool_content .= "\n    <td width='15%' class='DocHead'><div align='center'><b>$langDate</b></div></td>";
+		$tool_content .= "\n  </tr>";
+
+		foreach ($fileinfo as $entry) {
+		    if ($entry['is_dir']) // do not handle directories
+		      continue;
+	
+		    $cmdDirName = $entry['path'];
+		    $copyright_icon = '';
+		    $image = '../document/img/' . choose_image('.' . $entry['format']);
+		    $size = format_file_size($entry['size']);
+			$date = format_date($entry['date']);
+		    
+			if ($entry['visible'])
+				$style = '';
+			else
+				$style = ' class="invisible"';
+		    
+			if (empty($entry['title']))
+				$link_text = $entry['filename'];
+		    else
+				$link_text = $entry['title'];
+
+			if ($entry['copyrighted'])
+				$link_text .= " <img src='../document/img/copyrighted.jpg' />";
+
+		    $tool_content .= "\n  <tr$style>";
+		    $tool_content .= "\n    <td><input type='radio' name='selectedDocument' value='".$entry['path']."'/></td>";
+		    $tool_content .= "\n    <td width='1%' valign='top' align='center' style='padding-top: 7px;'><img src='$image' border='0' /></td>";
+		    $tool_content .= "\n    <td><div align='left'>$link_text";
+	
+			if (!empty($entry['comment']))
+				$tool_content .= "<br /><span class='commentDoc'>" . nl2br(htmlspecialchars($entry['comment'])) . "</span>\n";
+		
+			$tool_content .= "</div></td>\n";
+			$tool_content .= "<td><div align='center'>$size</div></td><td><div align='center'>$date</div></td>";
+		}
+
+		$tool_content .=  "\n  <tr>";
+		$tool_content .= "\n    <td colspan='2'></td>";
+		$tool_content .= "\n    <td colspan='3'><div align='left'><input type='submit' value='".$langImport."'></div></td>";
+		$tool_content .=  "\n  </tr>";
+		$tool_content .=  "\n  </tbody>";
+		$tool_content .=  "\n  </table>";
+		$tool_content .= "\n</form>";
+		$tool_content .=  "\n</div>";
+	}
+    
+	$tool_content .= "</p>
+		<p><u>$langNote</u> :</p>
+		<p>$langScormIntroTextForDummies</p>";
 
 } // else if method == 'post'
 
