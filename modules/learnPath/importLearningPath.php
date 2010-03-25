@@ -27,7 +27,7 @@
 
 /*===========================================================================
 	importLearningPath.php
-	@last update: 24-10-2010 by Thanos Kyritsis
+	@last update: 25-03-2010 by Thanos Kyritsis
 	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
 
 	based on Claroline version 1.7 licensed under GPL
@@ -1279,7 +1279,7 @@ else // if method == 'post'
 		$tool_content .= "\n<form action='importFromDocument.php' method='post'>";
 		$tool_content .= "\n  <table width=\"99%\" align='left' class=\"Documents\">";
 		$tool_content .= "\n  <tbody>";
-		$tool_content .= "\n  <tr><th height='18' colspan='5'><div align='left'><strong>Import from Documents</strong</div></th></tr>";
+		$tool_content .= "\n  <tr><th height='18' colspan='5'><div align='left'><strong>$langLearningPathImportFromDocuments</strong</div></th></tr>";
 		$tool_content .= "\n  <tr>";
 		$tool_content .= "\n    <td></td>";
 		$tool_content .= "\n    <td width='10%' class='DocHead'><div align='center'><b>$langType</b></div></td>";

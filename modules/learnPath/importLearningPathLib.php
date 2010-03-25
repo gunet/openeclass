@@ -27,7 +27,7 @@
 
 /*===========================================================================
 	importLearningPath.php
-	@last update: 10-01-2009 by Thanos Kyritsis
+	@last update: 25-03-2010 by Thanos Kyritsis
 	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
 
 	based on Claroline version 1.7 licensed under GPL
@@ -500,7 +500,7 @@ function utf8_decode_if_is_utf8($str) {
        CLAROLINE MAIN
   ======================================*/
 
-function doImport($currentCourseID, $mysqlMainDb, $webDir, $scoFileSize, $scoFileName) {
+function doImport($currentCourseID, $mysqlMainDb, $webDir, $scoFileSize, $scoFileName, $displayExtraMessages = false) {
 	global $langUnamedPath;
 	global $langFileScormError;
 	global $langNotice;
@@ -1232,7 +1232,8 @@ function doImport($currentCourseID, $mysqlMainDb, $webDir, $scoFileSize, $scoFil
     if ( !$errorFound )
     {
         $importMessages .= "\n<br /><center><b>".$langInstalled."</b></center>";
-        //$importMessages .= "\n<br /><br ><center><a href=\"learningPathAdmin.php?path_id=".$tempPathId."\">".$lpName."</a></center>";
+        if ($displayExtraMessages == true)
+        	$importMessages .= "\n<br /><br ><center><a href=\"learningPathAdmin.php?path_id=".$tempPathId."\">".$lpName."</a></center>";
         $importMessages .= "\n<br /><br >";
     }
     else

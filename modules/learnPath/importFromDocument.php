@@ -26,7 +26,7 @@
 
 /*===========================================================================
 	importFromDocument.php
-	@last update: 24-03-2010 by Thanos Kyritsis
+	@last update: 25-03-2010 by Thanos Kyritsis
 	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
 ==============================================================================
     @Description: This script handles importing of SCORM packages
@@ -57,7 +57,7 @@ if (isset($_POST) && isset($_POST['selectedDocument'])) {
 	
 	copy($srcFile, $destFile);
 	
-	list($messages, $lpid) = doImport($currentCourseID, $mysqlMainDb, $webDir, filesize($destFile), $filename);
+	list($messages, $lpid) = doImport($currentCourseID, $mysqlMainDb, $webDir, filesize($destFile), $filename, true);
 	$tool_content .= $messages;
 	$tool_content .= "\n<br /><a href=\"importLearningPath.php\">$langBack</a></p>";
 	
