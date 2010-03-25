@@ -1584,6 +1584,7 @@ $langLearningPath = "Γραμμή μάθησης";
 $langLearningPaths = "Γραμμές μάθησης";
 $langLearningPath1 = "γραμμής μάθησης";
 $langLearningPathEmpty = "Η γραμμή μάθησης είναι κενή";
+$langLearningPathImportFromDocuments = "Εισαγωγή γραμμής μάθησης από τα έγγραφα";
 $langLearningPathList = "Διαθέσιμες γραμμές μάθησης";
 $langLearningPathName = "Όνομα νέας γραμμής μάθησης";
 $langLearningPathData = "Στοιχεία γραμμής μάθησης";
