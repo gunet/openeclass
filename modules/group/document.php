@@ -118,7 +118,7 @@ if (isset($action2) and $action2 == "download")  {
 		{
 			$id = $row['filename'];
 		}
-		send_file_to_client($real_file, my_basename($id), true);
+		send_file_to_client($real_file, my_basename($id), false, true);
 		exit;
 	} else {
 		header("Refresh: ${urlServer}modules/group/document.php");
