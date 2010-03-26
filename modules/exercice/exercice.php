@@ -184,14 +184,19 @@ while($row = mysql_fetch_array($result)) {
 	$row['description'] = mathfilter($row['description'], 12, "../../courses/mathimg/");
 
 	// prof only
-	if($is_adminOfCourse) {
+        if($is_adminOfCourse) {
+                if (!empty($row['description'])) {
+                        $descr = "<br/><small>$row[description]</small>";
+                } else {
+                        $descr = '';
+                }
 		if(!$row['active']) {
-			$tool_content .= "<td width=\"1\"><img style='border:0px; padding-top:3px;' src='${urlServer}/template/classic/img/arrow_red.gif' title='bullet'></td><td>
+			$tool_content .= "<td width=\"1\"><img style='padding-top:3px;' src='${urlServer}/template/classic/img/arrow_red.gif' alt='' /></td><td>
 			<div class=\"invisible\">
-			<a href=\"exercice_submit.php?exerciseId=${row['id']}\">".$row['titre']."</a>&nbsp;<br/><small>".$row['description']."</small></div></td>";
+			<a href=\"exercice_submit.php?exerciseId=${row['id']}\">".$row['titre']."</a>$descr</div></td>";
 		} else {
-			$tool_content .= "<td width=\"1\"><img style='border:0px; padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'></td><td>
-			<a href=\"exercice_submit.php?exerciseId=${row['id']}\">".$row['titre']."</a>&nbsp;<br/><small>".$row['description']."</small></td>";
+			$tool_content .= "<td width=\"1\"><img style='padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif' alt='' /></td><td>
+			<a href=\"exercice_submit.php?exerciseId=${row['id']}\">".$row['titre']."</a>$descr</td>";
 		}
 
 		$eid = $row['id'];
@@ -201,7 +206,7 @@ while($row = mysql_fetch_array($result)) {
 	if ($NumOfResults[0]) {
 		$tool_content .= "<td align=\"center\"><nobr><a href=\"results.php?exerciseId=".$row['id']."\">".
 		$langExerciseScores1."</a> | 
-		<a href=\"csv.php?&exerciseId=".$row['id']."\" target=_blank>".$langExerciseScores3."</a></nobr></td>";
+		<a href=\"csv.php?exerciseId=".$row['id']."\" target=_blank>".$langExerciseScores3."</a></nobr></td>";
 	} else {
 		$tool_content .= "<td align=\"center\">	-&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;- </td>";
 	}
@@ -211,25 +216,25 @@ while($row = mysql_fetch_array($result)) {
 	$tool_content .= <<<cData
 
         <td align="right">
-          <a href="admin.php?exerciseId=${row['id']}"><img src="../../template/classic/img/edit.gif" border="0" title="${langModify_temp}"></a>
-          <a href="$_SERVER[PHP_SELF]?choice=delete&exerciseId=${row['id']}"  onclick="javascript:if(!confirm('${langConfirmYourChoice_temp}')) return false;"><img src="../../template/classic/img/delete.gif" border="0" title="${langDelete_temp}"></a>
+          <a href="admin.php?exerciseId=${row['id']}"><img src="../../template/classic/img/edit.gif" alt="${langModify_temp}" title="${langModify_temp}" /></a>
+          <a href="$_SERVER[PHP_SELF]?choice=delete&amp;exerciseId=${row['id']}"  onclick="javascript:if(!confirm('${langConfirmYourChoice_temp}')) return false;"><img src="../../template/classic/img/delete.gif" alt="${langDelete_temp}" title="${langDelete_temp}" /></a>
 cData;
 
 	// if active
 	if($row['active']) {
 		if (isset($page)) {
-			$tool_content .= "<a href=\"$_SERVER[PHP_SELF]?choice=disable&page=${page}&exerciseId=".$row['id']."\">"."<img src='../../template/classic/img/visible.gif' border='0' title='$langVisible'></a>&nbsp;";
+			$tool_content .= "<a href=\"$_SERVER[PHP_SELF]?choice=disable&amp;page=${page}&amp;exerciseId=".$row['id']."\">"."<img src='../../template/classic/img/visible.gif' alt='$langVisible' title='$langVisible' /></a>&nbsp;";
 		} else {
 			$tool_content .= "
-			<a href='$_SERVER[PHP_SELF]?choice=disable&exerciseId=".$row['id']."'>"."<img src='../../template/classic/img/visible.gif' border='0' title='$langVisible'></a>&nbsp;";
+			<a href='$_SERVER[PHP_SELF]?choice=disable&amp;exerciseId=".$row['id']."'>"."<img src='../../template/classic/img/visible.gif' alt='$langVisible' title='$langVisible' /></a>&nbsp;";
 		}
 	} else { // else if not active
 		if (isset($page)) {
 			$tool_content .= "
-			<a href='$_SERVER[PHP_SELF]?choice=enable&page=${page}&exerciseId=".$row['id']."'>"."<img src='../../template/classic/img/invisible.gif' border='0' title='$langVisible'></a>&nbsp;";
+			<a href='$_SERVER[PHP_SELF]?choice=enable&amp;page=${page}&amp;exerciseId=".$row['id']."'>"."<img src='../../template/classic/img/invisible.gif' alt='$langVisible' title='$langVisible' /></a>&nbsp;";
 		} else {
 			$tool_content .= "
-			<a href='$_SERVER[PHP_SELF]?choice=enable&exerciseId=".$row['id']."'>"."<img src='../../template/classic/img/invisible.gif' border='0' title='$langVisible'></a>&nbsp;";
+			<a href='$_SERVER[PHP_SELF]?choice=enable&amp;exerciseId=".$row['id']."'>"."<img src='../../template/classic/img/invisible.gif' alt='$langVisible' title='$langVisible' /></a>&nbsp;";
 		}
 	}
 	$tool_content .= "</td></tr>";
@@ -241,11 +246,11 @@ else {
 	$temp_EndDate = mktime(0, 0, 0, substr($row['EndDate'], 5,2),substr($row['EndDate'], 8,2),substr($row['EndDate'], 0,4));
 	$CurrentDate = mktime(0, 0 , 0,substr($CurrentDate, 5,2), substr($CurrentDate, 8,2),substr($CurrentDate, 0,4));
 	if (($CurrentDate >= $temp_StartDate) && ($CurrentDate <= $temp_EndDate)) {
-		$tool_content .= "<td width=\"1\"><img style='border:0px; padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'></td>
+		$tool_content .= "<td width=\"1\"><img style='padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif' alt='' /></td>
 		<td><a href=\"exercice_submit.php?exerciseId=".$row['id']."\">".$row['titre']."</a>";
 	} else {
 		$tool_content .= "<td width='1'>
-			<img style='border:0px; padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'>
+			<img style='padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif' alt='' />
 			</td><td>".$row['titre']."&nbsp;&nbsp;(<font color=\"red\">$m[expired]</font>)";
 	}
 	$tool_content .= "<br/><small>$row[description]</small></td>
