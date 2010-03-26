@@ -249,7 +249,7 @@ while ($myNotMember = mysql_fetch_array($resultNotMember)) {
 
 $resultMember = db_query("SELECT user_group.id, user.user_id, user.nom, user.prenom, user.email
 	FROM `$mysqlMainDb`.user, user_group
-	WHERE user_group.team='$userGroupId' AND user_group.user=$mysqlMainDb.user.user_id");
+	WHERE user_group.team='$userGroupId' AND user_group.user=$mysqlMainDb.user.user_id ORDER BY user.nom, user.prenom");
 
 $a = 0;
 $tool_content_group_members = '';
