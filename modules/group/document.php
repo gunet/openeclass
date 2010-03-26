@@ -400,8 +400,8 @@ $tool_content .= "
   /*** go to parent directory ***/
 if ($curDirName) // if the $curDirName is empty, we're in the root point and we can't go to a parent dir
 {
-	$tool_content .= "<a href='$_SERVER[PHP_SELF]?$groupset&amp;openDir=".$parentDir."'>$langUp</a>\n" .
-                         "<img src='../../template/classic/img/parent.gif' style='vertical-align: middle;' />";
+	$tool_content .= "<a href='$_SERVER[PHP_SELF]?$groupset&amp;openDir=".$parentDir."'>$langUp\n" .
+                         "<img src='../../template/classic/img/parent.gif' style='vertical-align: middle;' /></a>";
 }
 
 $tool_content .= "</th></tr>
