@@ -65,13 +65,13 @@ $TBL_QUESTIONS='questions';
 
 // maximum number of exercises on a same page
 $limitExPage = 15;
-if (!isset($page)) {
-	$page = 0;
+if (isset($_GET['page'])) {
+	$page = intval($_GET['page']);
 } else {
-	$page = $_GET['page'];
+	$page = 0;
 }
 // selects $limitExPage exercises at the same time
-$from=$page*$limitExPage;
+$from = $page * $limitExPage;
 
 // only for administrator
 if($is_adminOfCourse) {
@@ -98,23 +98,19 @@ if($is_adminOfCourse) {
 		// destruction of Exercise
 		unset($objExerciseTmp);
 	}
-	$sql="SELECT id, titre, description, type, active FROM `$TBL_EXERCICES` ORDER BY id LIMIT $from,".($limitExPage+1);
-	$result=db_query($sql,$currentCourseID);
-	$sql2 = "SELECT * FROM `$TBL_EXERCICES`";
-	$result2 = db_query($sql2);
-}
-// only for students
-else
-{
-	$sql="SELECT id, titre, description, type, StartDate, EndDate, TimeConstrain, AttemptsAllowed ".
-		"FROM `$TBL_EXERCICES` WHERE active='1' ORDER BY id LIMIT $from,".($limitExPage+1);
-	$result=db_query($sql);
-	$sql2 = "SELECT * FROM `$TBL_EXERCICES` WHERE active='1'";
-	$result2 = db_query($sql2);
+	$sql="SELECT id, titre, description, type, active FROM `$TBL_EXERCICES` ORDER BY id LIMIT $from, $limitExPage";
+	$result = db_query($sql,$currentCourseID);
+	$qnum = db_query("SELECT count(*) FROM `$TBL_EXERCICES`");
+} else {
+        // only for students
+	$sql = "SELECT id, titre, description, type, StartDate, EndDate, TimeConstrain, AttemptsAllowed ".
+		"FROM `$TBL_EXERCICES` WHERE active='1' ORDER BY id LIMIT $from, $limitExPage";
+	$result = db_query($sql);
+	$qnum = db_query("SELECT count(*) FROM `$TBL_EXERCICES` WHERE active = 1");
 }
 
-$nbrExercises=mysql_num_rows($result);
-$num_of_ex = mysql_num_rows($result2);;
+list($num_of_ex) = mysql_fetch_array($qnum);
+$nbrExercises = mysql_num_rows($result);
 
 if($is_adminOfCourse) {
 	$tool_content .= "<div  align=\"left\" id=\"operations_container\"><ul id=\"opslist\">\n";
@@ -128,14 +124,14 @@ $tool_content .= "</ul></div>";
 	$tool_content .= "";
 }
 
-$numpages = intval($num_of_ex / $limitExPage);
-if($numpages > 0) {
-	$prevpage = $page-1;
-	$nextpage = $page+1;
+$maxpage = 1 + intval($num_of_ex / $limitExPage);
+if ($maxpage > 0) {
+	$prevpage = $page - 1;
+	$nextpage = $page + 1;
 	if ($prevpage >= 0) {
  		$tool_content .= "<small><a href='$_SERVER[PHP_SELF]?page=$prevpage'>&lt;&lt; $langPreviousPage</a></small>&nbsp;";
 	}
-	if ($nextpage < $numpages) { 
+	if ($nextpage < $maxpage) { 
 		$tool_content .= "<small><a href='$_SERVER[PHP_SELF]?page=$nextpage'>$langNextPage &gt;&gt;</a></small>";
 	}
 }
