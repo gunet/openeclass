@@ -176,14 +176,14 @@ $tool_content .= "<tr><th class=\"left\" valign=\"top\">$langGroupMembers :</th>
 $resultMember=mysql_query("SELECT nom, prenom, email, am
 		FROM `$mysqlMainDb`.user, user_group
 		WHERE user_group.team='$userGroupId'
-		AND user_group.user=$mysqlMainDb.user.user_id");
+		AND user_group.user=$mysqlMainDb.user.user_id ORDER BY nom");
 $countMember = mysql_num_rows($resultMember);
 
 if(($countMember==0)) {
 	$tool_content .=  "<tr><td colspan=3>$langGroupNoneMasc</td></tr>";
 } else {
 	while ($myMember = mysql_fetch_array($resultMember)){
-		$tool_content .= "<tr><td>$myMember[prenom] $myMember[nom]</td>
+		$tool_content .= "<tr><td>$myMember[nom] $myMember[prenom]</td>
 		<td><div align=\"center\">";
 		if (!empty($myMember['am'])) {
 			$tool_content .=  "$myMember[am]";
