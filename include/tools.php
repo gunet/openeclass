@@ -322,23 +322,20 @@ function adminMenu(){
 	$arrMenuType['type'] = 'text';
 	$arrMenuType['text'] = $GLOBALS['langAdminUsers'];
 	array_push($sideMenuSubGroup, $arrMenuType);
+	array_push($sideMenuText, $GLOBALS['langListUsersActions']);
+	array_push($sideMenuLink, "../admin/listusers.php");
+	array_push($sideMenuImg, "black-arrow1.gif");
 
 	array_push($sideMenuText, $GLOBALS['langProfOpen']);
 	array_push($sideMenuLink, "../admin/listreq.php");
 	array_push($sideMenuImg, "black-arrow1.gif");
-
 	// check for close user registration
 	if (isset($close_user_registration) and $close_user_registration == TRUE) {
 		array_push($sideMenuText, $GLOBALS['langUserOpen']);
 		array_push($sideMenuLink, "../admin/listreq.php?type=user");
 		array_push($sideMenuImg, "black-arrow1.gif");
 	}
-	array_push($sideMenuText, $GLOBALS['langListUsersActions']);
-	array_push($sideMenuLink, "../admin/listusers.php");
-	array_push($sideMenuImg, "black-arrow1.gif");
-	array_push($sideMenuText, $GLOBALS['langAddAdminInApache']);
-	array_push($sideMenuLink, "../admin/addadmin.php");
-	array_push($sideMenuImg, "black-arrow1.gif");
+	
 	array_push($sideMenuText, $GLOBALS['langUserAuthentication']);
 	array_push($sideMenuLink, "../admin/auth.php");
 	array_push($sideMenuImg, "black-arrow1.gif");
@@ -403,7 +400,7 @@ function adminMenu(){
   	array_push($sideMenuLink, "../admin/cleanup.php");
   	array_push($sideMenuImg, "black-arrow1.gif");
 
-	if (isset($phpSysInfoURL) && PHP_OS!="WIN32" && PHP_OS!="WINNT") {
+	if (isset($phpSysInfoURL) && PHP_OS == "Linux") {
 		array_push($sideMenuText, $GLOBALS['langSysInfo']);
 		array_push($sideMenuLink, $phpSysInfoURL);
 		array_push($sideMenuImg, "black-arrow1.gif");
@@ -440,9 +437,6 @@ function adminMenu(){
 
 	array_push($sideMenuText, $GLOBALS['langAdminAn']);
 	array_push($sideMenuLink, "../admin/adminannouncements.php");
-	array_push($sideMenuImg, "black-arrow1.gif");
-	array_push($sideMenuText, $GLOBALS['langVersion']);
-	array_push($sideMenuLink, "../admin/about.php");
 	array_push($sideMenuImg, "black-arrow1.gif");
 	array_push($sideMenuText, $GLOBALS['langConfigFile']);
 	array_push($sideMenuLink, "../admin/eclassconf.php");

@@ -84,6 +84,7 @@ function send_file_to_client($real_filename, $filename, $send_inline = false, $s
                 header('Cache-Control: no-store, no-cache, no-transform, must-revalidate, private');
                 header('Expires: 0');
         }
+
         header('Content-length: ' . filesize($real_filename));
         $fp = fopen($real_filename, 'r');
         fpassthru($fp);
