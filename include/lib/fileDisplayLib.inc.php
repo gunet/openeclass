@@ -199,7 +199,7 @@ function file_url_escape($name)
                            rawurlencode($name));
 }
 
-function file_url($path, $filename)
+function file_url($path, $filename = null)
 {
 	global $currentCourseID, $urlServer;
 	static $oldpath = '', $dirname;
@@ -222,6 +222,10 @@ function file_url($path, $filename)
 				$dirname .= '/' . file_url_escape($name);
 			}
 		}
-	}
+        }
+        if (!isset($filename)) {
+                $q = db_query("SELECT filename FROM document WHERE path = '$path'");
+                list($filename) = mysql_fetch_row($q);
+        }
 	return htmlspecialchars($urlServer . "modules/document/file.php/$currentCourseID$dirname/" . file_url_escape($filename), ENT_QUOTES);
 }

@@ -53,6 +53,7 @@
 $require_current_course = TRUE;
 require_once("../../../config/config.php");
 require_once("../../../include/init.php");
+require_once '../../../include/lib/fileDisplayLib.inc.php';
 
 $TABLELEARNPATH         = "lp_learnPath";
 $TABLEMODULE            = "lp_module";
@@ -129,21 +130,7 @@ switch ($module['contentType'])
 		if($uid) { // Directly pass this module
 			directly_pass_lp_module($TABLEUSERMODULEPROGRESS, (int)$uid, (int)$learnPathModuleId);
 		} // else anonymous : record nothing
-
-		$startAssetPage = urlencode($assetPath);
-        if ( strstr($_SERVER['SERVER_SOFTWARE'], 'Apache')
-              && (isset($secureDocumentDownload) && $secureDocumentDownload == true)
-            )
-        {
-            // slash argument method - only compatible with Apache
-            // str_replace("%2F","/",urlencode($startAssetPage)) is used to avoid problems with accents in filename.
-            $moduleStartAssetPage = $clarolineRepositoryWeb.'/document'.str_replace('%2F','/',$startAssetPage);
-        }
-        else
-        {
-            // question mark argument method, for IIS ...
-            $moduleStartAssetPage = $clarolineRepositoryWeb.'/document'.str_replace('%2F','/',$startAssetPage);
-        }
+                $moduleStartAssetPage = file_url($assetPath);
 		break;
 
 	case CTEXERCISE_ :
