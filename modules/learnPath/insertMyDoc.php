@@ -168,7 +168,7 @@ while ($iterator <= $_REQUEST['maxDocForm'])
                         VALUES ('". (int)$_SESSION['path_id']."', '".(int)$insertedModule_id."','".addslashes($langDefaultModuleAddedComment)."', ".(int)$order.", 'OPEN')";
                 $query = db_query($sql);
                 $addedDoc = $filenameDocument;
-                $InfoBox .= $addedDoc ." ".$langDocInsertedAsModule."<br>";
+                $InfoBox = $addedDoc ." ".$langDocInsertedAsModule."<br>";
                 $style = "success";
                 $tool_content .= "<table width=\"99%\"><tr>";
                 $tool_content .= disp_message_box($InfoBox, $style);
@@ -203,7 +203,7 @@ while ($iterator <= $_REQUEST['maxDocForm'])
                             VALUES ('". (int)$_SESSION['path_id']."', '". (int)$thisDocumentModule['module_id']."','".addslashes($langDefaultModuleAddedComment)."', ".(int)$order.",'OPEN')";
                     $query = db_query($sql);
                     $addedDoc =  $filenameDocument;
-                    $InfoBox .= $addedDoc ." ".$langDocInsertedAsModule."<br>";
+                    $InfoBox = $addedDoc ." ".$langDocInsertedAsModule."<br>";
                     $style = "success_small";
                     $tool_content .= "<table width=\"99%\"><tr>";
                     $tool_content .= disp_message_box($InfoBox, $style);
@@ -212,7 +212,7 @@ while ($iterator <= $_REQUEST['maxDocForm'])
                 }
                 else
                 {
-                    $InfoBox .= "<b>$filenameDocument</b>: ".$langDocumentAlreadyUsed."<br>";
+                    $InfoBox = "<b>$filenameDocument</b>: ".$langDocumentAlreadyUsed."<br>";
                     $style = "caution_small";
                     $tool_content .= "<table width=\"99%\"><tr>";
                     $tool_content .= disp_message_box($InfoBox, $style);
