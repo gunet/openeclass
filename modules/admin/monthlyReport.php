@@ -84,7 +84,6 @@ $tool_content .= '
 if (isset($_POST["selectedMonth"])) {
 
     $month = $_POST["selectedMonth"];
-
     list($m, $y) = explode(' ',$month);  //only month
     $sql = "SELECT profesNum, studNum, visitorsNum, coursNum, logins, details FROM monthly_summary ".
         "WHERE `month` = '$month'";
@@ -101,62 +100,59 @@ if (isset($_POST["selectedMonth"])) {
     }
     mysql_free_result($result);
 
-	if ($localize == 'greek') {
+	if (isset($localize) and $localize == 'greek') {
 		$msg_of_month = substr($langMonths[$m], 0, -1);
 	} else {
 		$msg_of_month = $langMonths[$m];
 	}
 
 	if ($coursNum) {
-    $tool_content .= '
-    <br />
-    <table class="FormData" width="99%" align="left">
-    <tbody>
-    <tr>
-      <td class="left">&nbsp;</td>
-      <td>&nbsp;</td>
-    </tr>
-    <tr>
-      <th width="220"  class="left">&nbsp;</th>
-      <td>'.$langReport.': '.$msg_of_month.' '.$y.'</td>
-    </tr>
-    <tr>
-      <th class="left">'.$langNbProf.': </th>
-      <td>'.$profesNum.'</td>
-    </tr>
-    <tr>
-      <th class="left">'.$langNbStudents.': </th>
-      <td>'.$studNum.'</td>
-    </tr>
-    <tr>
-      <th class="left">'.$langNbVisitors.': </th>
-      <td>'.$visitorsNum.'</td>
-    </tr>
-    <tr>
-      <th class="left">'.$langNbCourses.':  </th>
-      <td>'.$coursNum.'</td>
-    </tr>
-    <tr>
-      <th class="left">'.$langNbLogin.': </th>
-      <td>'.$logins.'</td>
-    </tr>
-    <tr>
-      <td colspan="2">
-         '.$details. '
-      </td>
-    </tr>
-    </tbody>
-    </table>';           //$details includes an html table with all details
+		$tool_content .= '
+		<br />
+		<table class="FormData" width="99%" align="left">
+		<tbody>
+		<tr>
+		<td class="left">&nbsp;</td>
+		<td>&nbsp;</td>
+		</tr>
+		<tr>
+		<th width="220"  class="left">&nbsp;</th>
+		<td>'.$langReport.': '.$msg_of_month.' '.$y.'</td>
+		</tr>
+		<tr>
+		<th class="left">'.$langNbProf.': </th>
+		<td>'.$profesNum.'</td>
+		</tr>
+		<tr>
+		<th class="left">'.$langNbStudents.': </th>
+		<td>'.$studNum.'</td>
+		</tr>
+		<tr>
+		<th class="left">'.$langNbVisitors.': </th>
+		<td>'.$visitorsNum.'</td>
+		</tr>
+		<tr>
+		<th class="left">'.$langNbCourses.':  </th>
+		<td>'.$coursNum.'</td>
+		</tr>
+		<tr>
+		<th class="left">'.$langNbLogin.': </th>
+		<td>'.$logins.'</td>
+		</tr>
+		<tr>
+		<td colspan="2">'.$details. '</td>
+		</tr>
+		</tbody>
+		</table>';           //$details includes an html table with all details
     } else {
-        $tool_content .= '
-    <table class="FormData" width="99%" align="left">
-    <tbody>
-    <tr>
-      <th width="220"  class="left">&nbsp;</th>
-      <td>'.$langNoReport.': '.$msg_of_month.' '.$y.'</td>
-    </tr>
-    </tbody>
-    </table>';
+        $tool_content .= '<table class="FormData" width="99%" align="left">
+	<tbody>
+	<tr>
+	<th width="220"  class="left">&nbsp;</th>
+	<td>'.$langNoReport.': '.$msg_of_month.' '.$y.'</td>
+	</tr>
+	</tbody>
+	</table>';
     }
 }
 
