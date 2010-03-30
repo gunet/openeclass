@@ -116,9 +116,8 @@ Options -Indexes
 
 <h4> 2. Scripting Language<a href="http://www.php.net" target="_blank"> PHP</a> (versions &gt;= 4.3.0) 
 </h4>
-<p>The platform operates without any problems with &gt;= <i>4.3.0 </i> and 5.x versions.
-<em>5.x.</em> </p> 
-<p>During PHP installation, it is important to activate the Apache support for PHP. Note that you will need to activate support for <em>mysql, zlib, pcre</em> and <em>gd</em> modules in PHP. If you wish to use an LDAP server to authenticate users, you have to activate the module for the <em>ldap</em> support as well. Most of the PHP distributions have built-in support for these modules (except for the Ldap module maybe). Satisfaction of the above is checked during Open eClass installation. 
+<p>The platform operates without any problems with &gt;= <em>5.x.</em></p> 
+<p>During PHP installation, it is important to activate the Apache support for PHP. Note that you will need to activate support for <em>mysql, zlib, pcre</em> and <em>gd</em> modules in PHP. If you wish to use an LDAP server to authenticate users, you have to activate the module for the <em>ldap</em> support as well. Most of the PHP distributions have built-in support for these modules (except for the Ldap module maybe). Satisfaction of the above is checked during Open eClass installation.
     </p>
 <p>You will also have to define the following parameters on the <code>php.ini</code> file:  
 </p>

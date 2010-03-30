@@ -322,7 +322,7 @@ mkdir courses</pre>
   <li>Μετακινήστε τους καταλόγους των μαθημάτων στον κατάλογο courses. (π.χ. αν
     έχουμε μαθήματα με κωδικούς ΤΜΑ100, ΤΜΑ101)
     <pre>cd /var/www/html/eclass
-		mv TMA* ./courses/</pre>
+mv TMA* ./courses/</pre>
   </li>
   <li>Επαναφέρετε και τα αρχεία με τις προηγούμενες κουβέντες στην αρχική τους
     θέση. π.χ.
@@ -368,7 +368,7 @@ find ./ -type d -exec chmod 775 {} \;
     που δημουργήσατε προηγουμένως δηλαδή <code>C:\Program Files\Apache\htdocs\eclass\courses\</code>
   </li>
   <li>Επαναφέρετε και τα αρχεία με τις προηγούμενες κουβέντες στην αρχική τους
-    θέση δηλαδή στο <code>C:\Program Files\Apache\htdocs\eclass\claroline\chat\</code></li>
+    θέση δηλαδή στο <code>C:\Program Files\Apache\htdocs\eclass\modules\chat\</code></li>
   <li>Τέλος διαγράψτε το φάκελο στην επιφάνεια εργασίας όπου προσωρινά αποσυμπιέσαμε
     τη νέα διανομή.</li>
 </ul>

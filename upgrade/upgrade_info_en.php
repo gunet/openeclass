@@ -310,6 +310,6 @@ find ./ -type d -exec chmod 775 {} \;
     e.g. <code>C:\Program Files\Apache\htdocs\eclass\courses\</code>
   </li>
   <li>Restore previous chat files in its initial folder
-     <code>C:\Program Files\Apache\htdocs\eclass\claroline\chat\</code></li>
+     <code>C:\Program Files\Apache\htdocs\eclass\modules\chat\</code></li>
   <li>Finally delete from your desktop the temporary created folder.</li>
 </ul>
