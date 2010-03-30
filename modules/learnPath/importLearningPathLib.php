@@ -56,7 +56,7 @@ require_once("../../include/lib/fileDisplayLib.inc.php");
 define('CLARO_FILE_PERMISSIONS', 0777);
 
 // globals
-$errorFound = null;
+$errorFound = false;
 $elementsPile = null;
 $itemsPile = null;
 $manifestData = null;
@@ -532,7 +532,7 @@ function doImport($currentCourseID, $mysqlMainDb, $webDir, $scoFileSize, $scoFil
 	global $langInstalled;
 	global $langNotInstalled;
 	global $langBack;
-	
+	global $errorFound;
 	global $elementsPile;
 	global $itemsPile;
 	global $manifestData;
