@@ -98,7 +98,7 @@ if( !$uid || !$userProgressionDetails )
     $sco['total_time'] = "0000:00:00.00";
     $sco['suspend_data'] = "";
     $sco['launch_data'] = "";
-    $sco['lesson_mode'] = "";
+    $sco['lesson_mode'] = "normal";
 }
 else // authenticated user and no error in query
 {
@@ -115,7 +115,7 @@ else // authenticated user and no error in query
     $sco['total_time'] = $userProgressionDetails['total_time'];
     $sco['suspend_data'] = $userProgressionDetails['suspend_data'];
     $sco['launch_data'] = stripslashes($userProgressionDetails['launch_data']);
-    $sco['lesson_mode'] = "";
+    $sco['lesson_mode'] = "normal";
 }
 
 
@@ -130,6 +130,7 @@ $sco['session_time'] = "0000:00:00.00";
 <script type="text/javascript">
 
         var init_total_time = "<?php echo $sco['total_time']; ?>";
+        var item_objectives = new Array();
         // ====================================================
         // API Class Constructor
         var debug_ = false;
@@ -226,116 +227,65 @@ $sco['session_time'] = "0000:00:00.00";
         //
         function LMSGetValue(ele) {
                 if(debug_) alert("LMSGetValue : \n" + ele);
-                if ( APIInitialized )
-                {
+                if ( APIInitialized ) {
                        var i = array_indexOf(elements,ele);
-                       if (i != -1 )  // ele is implemented -> handle it
-                       {
-                           switch (ele)
-                           {
+                       if (i != -1 ) { // ele is implemented -> handle it
+                           switch (ele) {
                                 case 'cmi.core._children' :
-                                      APIError("0");
-                                      return values[i];
-                                      break;
                                 case 'cmi.core.student_id' :
-                                      APIError("0");
-                                      return values[i];
-                                      break;
                                 case 'cmi.core.student_name' :
-                                      APIError("0");
-                                      return values[i];
-                                      break;
                                 case 'cmi.core.lesson_location' :
-                                      APIError("0");
-                                      return values[i];
-                                      break;
                                 case 'cmi.core.credit' :
-                                      APIError("0");
-                                      return values[i];
-                                      break;
                                 case 'cmi.core.lesson_status' :
+                                case 'cmi.core.entry' :
+                                case 'cmi.core.score._children' :
+                                case 'cmi.core.score.raw' :
+                                case 'cmi.score.raw' :
+                                case 'cmi.core.score.min' :
+                                case 'cmi.score.min' :
+                                case 'cmi.core.score.max' :
+                                case 'cmi.score.max' :
+                                case 'cmi.core.total_time' :
+                                case 'cmi.suspend_data' :
+                                case 'cmi.launch_data' :
+                                case 'cmi.core.lesson_mode' :
+                                case 'cmi.objectives._children' :
+                                case 'cmi.objectives._count' :
+                                case 'cmi.student_data._children' :
                                       APIError("0");
                                       return values[i];
                                       break;
-
                                 //-----------------------------------
                                 //deal with SCORM 2004 new elements :
                                 //-----------------------------------
-
                                 case 'cmi.completion_status' :
-                                      APIError("0");
-                                      ele = 'cmi.core.lesson_status';
-                                      return values[i];
-                                      break;
-
                                 case 'cmi.success_status' :
                                       APIError("0");
                                       ele = 'cmi.core.lesson_status';
                                       return values[i];
                                       break;
-
                                 //-----------------------------------
-
-                                case 'cmi.core.entry' :
-                                      APIError("0");
-                                      return values[i];
-                                      break;
-                                case 'cmi.core.score._children' :
-                                      APIError("0");
-                                      return values[i];
-                                      break;
-                                case 'cmi.core.score.raw' :
-                                case 'cmi.score.raw' :
-                                      APIError("0");
-                                      return values[i];
-                                      break;
-                                case 'cmi.core.score.min' :
-                                case 'cmi.score.min' :
-                                      APIError("0");
-                                      return values[i];
-                                      break;
-                                case 'cmi.core.score.max' :
-                                case 'cmi.score.max' :
-                                      APIError("0");
-                                      return values[i];
-                                      break;
-                                case 'cmi.core.total_time' :
-                                      APIError("0");
-                                      return values[i];
-                                      break;
                                 case 'cmi.core.exit' :
-                                      APIError("404"); // write only
-                                      return "";
-                                      break;
                                 case 'cmi.core.session_time' :
                                 case 'cmi.session_time' :
                                       APIError("404"); // write only
                                       return "";
                                       break;
-
-                                case 'cmi.suspend_data' :
-                                      APIError("0");
-                                      return values[i];
-                                      break;
-                                case 'cmi.launch_data' :
-                                      APIError("0");
-                                      return values[i];
-                                      break;
-                                case 'cmi.core.lesson_mode' :
-                                      APIError("0");
-                                      return values[i];
-                                      break;
+                                case 'cmi.student_preference._children' :
+                                    APIError("401"); // not implemented
+                                    return "";
+                                    break;
 
                            }
                        }
-                       else // ele not implemented
-                       {
+                       else { // ele not implemented
                     	    // ignore cmi.interactions implementation
                     	    var pos = ele.indexOf("cmi.interactions");
 							if (pos >= 0) {
 								APIError("0");
                        	    	return "";
 							}
+
 							// ignore _children if not explicitly defined
 							var pos = ele.indexOf("_children");
 							if (pos >= 0) {
@@ -354,15 +304,13 @@ $sco['session_time'] = "0000:00:00.00";
 								APIError("201");
 								return "";
 							}
-                   	    	
+
                             // not implemented error
                             APIError("401");
                             return "";
                        }
                 }
-                else
-                {
-                        // not initialized error
+                else { // not initialized error
                         this.APIError("301");
                         return "";
                 }
@@ -370,28 +318,27 @@ $sco['session_time'] = "0000:00:00.00";
 
         function LMSSetValue(ele,val) {
                 if(debug_) alert ("LMSSetValue : \n" + ele +" "+ val);
-                if ( APIInitialized )
-                {
+                if ( APIInitialized ) {
                        var i = array_indexOf(elements,ele);
-                       if (i != -1 )  // ele is implemented -> handle it
-                       {
-                           switch (ele)
-                           {
+                       if (i != -1 ) { // ele is implemented -> handle it
+                           switch (ele) {
                                 case 'cmi.core._children' :
-                                      APIError("403"); // read only
-                                      return "false";
-                                      break;
                                 case 'cmi.core.student_id' :
-                                      APIError("403"); // read only
-                                      return "false";
-                                      break;
                                 case 'cmi.core.student_name' :
+                                case 'cmi.core.credit' :
+                                case 'cmi.core.entry' :
+                                case 'cmi.core.score._children' :
+                                case 'cmi.core.total_time' :
+                                case 'cmi.launch_data' :
+                                case 'cmi.objectives._children' :
+                                case 'cmi.objectives._count' :
+                                case 'cmi.student_data._children' :
+                                case 'cmi.student_preference._children' :
                                       APIError("403"); // read only
                                       return "false";
                                       break;
                                 case 'cmi.core.lesson_location' :
-                                      if( val.length > 255 )
-                                      {
+                                      if( val.length > 255 ) {
                                            APIError("405");
                                            return "false";
                                       }
@@ -413,14 +360,11 @@ $sco['session_time'] = "0000:00:00.00";
                                       APIError("0");
                                       return "true";
                                       break;
-
-
                                 //-------------------------------
                                 // Deal with SCORM 2004 element :
                                 // completion_status and success_status are new element,
                                 // we use them together with the old element lesson_status in the claro DB
                                 //-------------------------------
-
                                 case 'cmi.completion_status' :
                                       var upperCaseVal = val.toUpperCase();
                                       if ( upperCaseVal != "PASSED" && upperCaseVal != "FAILED"
@@ -436,7 +380,6 @@ $sco['session_time'] = "0000:00:00.00";
                                       APIError("0");
                                       return "true";
                                       break;
-
                                 case 'cmi.success_status' :
                                       var upperCaseVal = val.toUpperCase();
                                       if ( upperCaseVal != "PASSED" && upperCaseVal != "FAILED"
@@ -446,32 +389,15 @@ $sco['session_time'] = "0000:00:00.00";
                                            APIError("405");
                                            return "false";
                                       }
-
                                       ele = 'cmi.core.lesson_status';
                                       values[4] = val;  // deal with lesson_status element from scorm 1.2 instead
                                       values[i] = val;
                                       APIError("0");
                                       return "true";
                                       break;
-
                                 //-------------------------------
-
-
-                                case 'cmi.core.credit' :
-                                      APIError("403"); // read only
-                                      return "false";
-                                      break;
-                                case 'cmi.core.entry' :
-                                      APIError("403"); // read only
-                                      return "false";
-                                      break;
-                                case 'cmi.core.score._children' :
-                                      APIError("403");  // read only
-                                      return "false";
-                                      break;
                                 case 'cmi.core.score.raw' :
-                                      if( isNaN(parseInt(val)) || (val < 0) || (val > 100) )
-                                      {
+                                      if( isNaN(parseInt(val)) || (val < 0) || (val > 100) ) {
                                            APIError("405");
                                            return "false";
                                       }
@@ -480,8 +406,7 @@ $sco['session_time'] = "0000:00:00.00";
                                       return "true";
                                       break;
                                 case 'cmi.score.raw' :
-                                      if( isNaN(parseInt(val)) || (val < 0) || (val > 100) )
-                                      {
+                                      if( isNaN(parseInt(val)) || (val < 0) || (val > 100) ) {
                                            APIError("405");
                                            return "false";
                                       }
@@ -491,8 +416,7 @@ $sco['session_time'] = "0000:00:00.00";
                                       return "true";
                                       break;
                                 case 'cmi.core.score.min' :
-                                      if( isNaN(parseInt(val)) || (val < 0) || (val > 100) )
-                                      {
+                                      if( isNaN(parseInt(val)) || (val < 0) || (val > 100) ) {
                                            APIError("405");
                                            return "false";
                                       }
@@ -501,8 +425,7 @@ $sco['session_time'] = "0000:00:00.00";
                                       return "true";
                                       break;
                                 case 'cmi.score.min' :
-                                      if( isNaN(parseInt(val)) || (val < 0) || (val > 100) )
-                                      {
+                                      if( isNaN(parseInt(val)) || (val < 0) || (val > 100) ) {
                                            APIError("405");
                                            return "false";
                                       }
@@ -512,8 +435,7 @@ $sco['session_time'] = "0000:00:00.00";
                                       return "true";
                                       break;
                                 case 'cmi.core.score.max' :
-                                      if( isNaN(parseInt(val)) || (val < 0) || (val > 100) )
-                                      {
+                                      if( isNaN(parseInt(val)) || (val < 0) || (val > 100) ) {
                                            APIError("405");
                                            return "false";
                                       }
@@ -522,8 +444,7 @@ $sco['session_time'] = "0000:00:00.00";
                                       return "true";
                                       break;
                                 case 'cmi.score.max' :
-                                      if( isNaN(parseInt(val)) || (val < 0) || (val > 100) )
-                                      {
+                                      if( isNaN(parseInt(val)) || (val < 0) || (val > 100) ) {
                                            APIError("405");
                                            return "false";
                                       }
@@ -531,10 +452,6 @@ $sco['session_time'] = "0000:00:00.00";
                                       values[i] = val;
                                       APIError("0");
                                       return "true";
-                                      break;
-                                case 'cmi.core.total_time' :
-                                      APIError("403"); //read only
-                                      return "false";
                                       break;
                                 case 'cmi.core.exit' :
                                       var upperCaseVal = val.toUpperCase();
@@ -604,18 +521,13 @@ $sco['session_time'] = "0000:00:00.00";
                                       return "true";
                                       break;
                                 case 'cmi.suspend_data' :
-                                      if( val.length > 4096 )
-                                      {
+                                      if( val.length > 4096 ) {
                                            APIError("405");
                                            return "false";
                                       }
                                       values[i] = val;
                                       APIError("0");
                                       return "true";
-                                      break;
-                                case 'cmi.launch_data' :
-                                      APIError("403"); //read only
-                                      return "false";
                                       break;
                                 case 'cmi.core.lesson_mode' :
                                 	  values[i] = val;
@@ -799,6 +711,10 @@ $sco['session_time'] = "0000:00:00.00";
         elements[20] = "cmi.score.min";
         elements[21] = "cmi.score.max";
         elements[22] = "cmi.core.lesson_mode";
+        elements[23] = "cmi.objectives._children";
+        elements[24] = "cmi.objectives._count";
+        elements[25] = "cmi.student_data._children";
+        elements[26] = "cmi.student_preference._children";
 
         var values = new Array();
         values[0]  = "<?php echo $sco['_children']; ?>";
@@ -824,6 +740,10 @@ $sco['session_time'] = "0000:00:00.00";
         values[20] = "<?php echo $sco['scoreMin']; ?>"; // we do deal the score.min element with the old element
         values[21] = "<?php echo $sco['scoreMax']; ?>"; // we do deal the score.max element with the old element
         values[22] = "<?php echo $sco['lesson_mode']; ?>";
+        values[23] = "id,score,status";
+        values[24] = item_objectives.length;
+        values[25] = "mastery_score,max_time_allowed";
+        values[26] = "";
 
 
         // ====================================================
