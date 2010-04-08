@@ -131,6 +131,7 @@ $sco['session_time'] = "0000:00:00.00";
 
         var init_total_time = "<?php echo $sco['total_time']; ?>";
         var item_objectives = new Array();
+        var updatetable_to_list=new Array();
         // ====================================================
         // API Class Constructor
         var debug_ = false;
@@ -250,7 +251,6 @@ $sco['session_time'] = "0000:00:00.00";
                                 case 'cmi.launch_data' :
                                 case 'cmi.core.lesson_mode' :
                                 case 'cmi.objectives._children' :
-                                case 'cmi.objectives._count' :
                                 case 'cmi.student_data._children' :
                                       APIError("0");
                                       return values[i];
@@ -271,6 +271,10 @@ $sco['session_time'] = "0000:00:00.00";
                                       APIError("404"); // write only
                                       return "";
                                       break;
+                                case 'cmi.objectives._count' :
+                                	APIError("0");
+                                	return item_objectives.length;
+                                	break;
                                 case 'cmi.student_preference._children' :
                                     APIError("401"); // not implemented
                                     return "";
@@ -285,6 +289,121 @@ $sco['session_time'] = "0000:00:00.00";
 								APIError("0");
                        	    	return "";
 							}
+
+							// cmi.objectives
+							if (ele.substring(0,15)== 'cmi.objectives.') {
+								var myres = '';
+								if (myres = ele.match(/cmi.objectives.(\d+).(id|score|status|_children)(.*)/)) {
+									var obj_id = myres[1];
+									var req_type = myres[2];
+									
+									if (item_objectives[obj_id] == null) {
+										if (req_type == 'id') {
+											APIError("0");
+											return "";
+										} 
+										else if (req_type == '_children') {
+											APIError("0");
+											return "id,score,status";
+										} 
+										else if (req_type == 'score') {
+											if (myres[3]==null) {
+												APIError("401"); // not implemented
+												return "";
+											} 
+											else if (myres[3] == '._children') {
+												APIError("0");
+												return "raw,min,max"; //non-standard, added for NetG
+											} 
+											else if (myres[3] == '.raw') {
+												APIError("0");
+												return "";
+											} 
+											else if (myres[3] == '.max') {
+												APIError("0");
+												return "";
+											} 
+											else if (myres[3] == '.min') {
+												APIError("0");
+												return "";
+											} 
+											else {
+												APIError("401"); // not implemented
+												return "";
+											}
+										} 
+										else if (req_type == 'status') {
+											APIError("0");
+											return "not attempted";
+										}
+									}
+									else {
+										//the object is not null
+										if (req_type == 'id') {
+											APIError("0");
+											return item_objectives[obj_id][0];
+										} 
+										else if (req_type == '_children') {
+											APIError("0");
+											return "id,score,status";
+										} 
+										else if (req_type == 'score') {
+											if (myres[3] == null) {
+												APIError("401"); // not implemented
+												return "";
+											} 
+											else if (myres[3] == '._children') {
+												APIError("0");
+												return "raw,min,max"; //non-standard, added for NetG
+											} 
+											else if (myres[3] == '.raw') {
+												if (item_objectives[obj_id][2] != null) {
+													APIError("0");
+													return item_objectives[obj_id][2];
+												} 
+												else {
+													APIError("0");
+													return "";
+												}
+											} 
+											else if (myres[3] == '.max') {
+												if (item_objectives[obj_id][3] != null) {
+													APIError("0");
+													return item_objectives[obj_id][3];
+												} 
+												else {
+													APIError("0");
+													return "";
+												}
+											} 
+											else if (myres[3] == '.min'){
+												if (item_objectives[obj_id][4] != null) {
+													APIError("0");
+													return item_objectives[obj_id][4];
+												} 
+												else {
+													APIError("0");
+													return "";
+												}
+											} 
+											else {
+												APIError("401"); // not implemented
+												return "";
+											}
+										} 
+										else if(req_type == 'status') {
+											if(item_objectives[obj_id][1] != null) {
+												APIError("0");
+												return item_objectives[obj_id][1];
+											} 
+											else {
+												APIError("0");
+												return "not attempted";
+											}
+										}
+									}
+								}
+							} // end of cmi.objectives
 
 							// ignore _children if not explicitly defined
 							var pos = ele.indexOf("_children");
@@ -537,8 +656,72 @@ $sco['session_time'] = "0000:00:00.00";
 
                            }
                        }
-                       else // ele not implemented
-                       {
+                       else { // ele not implemented
+                            // cmi.objectives
+                            if (ele.substring(0,15) == 'cmi.objectives.') {
+                    			var myres = '';
+                    			updatetable_to_list['objectives']='true';
+                    			
+                    			if (myres = ele.match(/cmi.objectives.(\d+).(id|score|status)(.*)/)) {
+                    				obj_id = myres[1];
+                    				if (obj_id > item_objectives.length) { //objectives setting should start at 0
+                                        APIError("201"); // invalid argument
+                    					return "false";
+                    				}
+                    				else {
+                    					req_type = myres[2];
+                    					if (obj_id == null || obj_id == '') { // do nothing
+                    						APIError("0");
+                                            return "true";
+                    					}
+                    					else {
+                    						if (item_objectives[obj_id] == null) {
+                    							item_objectives[obj_id] = ['','','','',''];
+                    						}
+                    						if (req_type == "id") {
+                    								item_objectives[obj_id][0] = val;
+                    								APIError("0");
+                                                    return "true";
+                    						} 
+                    						else if ( req_type == "score" ) {
+                    								if (myres[3] == '._children') {
+                    									APIError("402"); // invalid set value
+                                                        return "";
+                    								} 
+                    								else if (myres[3] == '.raw') {
+                    									item_objectives[obj_id][2] = val;
+                    									APIError("0");
+                                                        return "true";
+                    								} 
+                    								else if (myres[3] == '.max') {
+                    									item_objectives[obj_id][3] = val;
+                    									APIError("0");
+                                                        return "true";
+                    								} 
+                    								else if (myres[3] == '.min') {
+                    									item_objectives[obj_id][4] = val;
+                    									APIError("0");
+                                                        return "true";
+                    								} 
+                    								else {
+                    									APIError("401"); // not implemented
+                                                        return "";
+                    								}
+                    						} 
+                    						else if ( req_type == "status" ) {
+                    								item_objectives[obj_id][1] = val;
+                    								APIError("0");
+                                                    return "true";
+                    						} 
+                    						else {
+                    							APIError("401"); // not implemented
+                                                return "false";
+                    						}
+                    					}
+                    				}
+                    			}
+                    		} // end of cmi.objectives
+                            
                             // ignore cmi.interactions implementation
                     	    var pos = ele.indexOf("cmi.interactions");
                     	    if (pos >= 0) {
