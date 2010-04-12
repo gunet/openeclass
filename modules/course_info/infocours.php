@@ -91,7 +91,7 @@ if (isset($_POST['submit'])) {
                           SET intitule = " . autoquote($_POST['title']) .",
                               faculte = " . autoquote($facname) . ",
                               description = " . autoquote($_POST['description']) . ",
-                              course_addon = " . autoquote($_POST['$course_addon']) . ",
+                              course_addon = " . autoquote($_POST['course_addon']) . ",
                               course_keywords = ".autoquote($_POST['course_keywords']) . ",
                               visible = " . intval($_POST['formvisible']) . ",
                               titulaires = " . autoquote($_POST['titulary']) . ",
@@ -191,7 +191,7 @@ if (isset($_POST['submit'])) {
 		</tr>
 			<tr><th class='left'>$langFaculty&nbsp;:</th>
 			<td>
-          <select name='facu' class='auth_input'>";
+		<select name='facu' class='auth_input'>";
 		$resultFac=mysql_query("SELECT id, name FROM `$mysqlMainDb`.faculte ORDER BY number");
 		while ($myfac = mysql_fetch_array($resultFac)) {
                         if ($myfac['id'] == $facu) {
