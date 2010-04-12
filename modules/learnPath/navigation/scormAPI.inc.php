@@ -131,7 +131,8 @@ $sco['session_time'] = "0000:00:00.00";
 
         var init_total_time = "<?php echo $sco['total_time']; ?>";
         var item_objectives = new Array();
-        var updatetable_to_list=new Array();
+        var updatetable_to_list = new Array();
+        var interactions = new Array();
         // ====================================================
         // API Class Constructor
         var debug_ = false;
@@ -252,6 +253,7 @@ $sco['session_time'] = "0000:00:00.00";
                                 case 'cmi.core.lesson_mode' :
                                 case 'cmi.objectives._children' :
                                 case 'cmi.student_data._children' :
+                                case 'cmi.interactions._children' :
                                       APIError("0");
                                       return values[i];
                                       break;
@@ -273,12 +275,18 @@ $sco['session_time'] = "0000:00:00.00";
                                       break;
                                 case 'cmi.objectives._count' :
                                 	APIError("0");
+                                	values[i] = item_objectives.length;
                                 	return item_objectives.length;
                                 	break;
                                 case 'cmi.student_preference._children' :
                                     APIError("401"); // not implemented
                                     return "";
                                     break;
+                                case 'cmi.interactions._count' :
+                                	APIError("0");
+                                	values[i] = interactions.length;
+                                	return interactions.length;
+                                	break;
 
                            }
                        }
@@ -657,10 +665,71 @@ $sco['session_time'] = "0000:00:00.00";
                            }
                        }
                        else { // ele not implemented
+                            // interactions
+                    	    var myres = new Array();
+	                   		if (myres = ele.match(/cmi.interactions.(\d+).(id|time|type|correct_responses|weighting|student_response|result|latency)(.*)/)) {
+	                   			updatetable_to_list['interactions'] = 'true';
+	                   			elem_id = myres[1];
+	                   			if (elem_id > interactions.length) { //interactions setting should start at 0
+									interactions[0] = ['0','','','','','','',''];
+	                   			}			
+	                   			if(interactions[elem_id] == null) {
+                   					interactions[elem_id] = ['','','','','','','',''];
+                   					interactions[elem_id][4] = new Array();
+	                   			}
+	                   			elem_attrib = myres[2];
+	                   			switch(elem_attrib) {
+                   					case "id":
+                   						interactions[elem_id][0] = val;
+                   						APIError("0");
+                                        return "true";
+                   						break;
+                   					case "time":
+                   						interactions[elem_id][2] = val;
+                   						APIError("0");
+                                        return "true";
+                   						break;
+                   					case "type":
+                   						interactions[elem_id][1] = val;
+                   						APIError("0");
+                                        return "true";
+                   						break;
+                   					case "correct_responses":
+                   						//do nothing yet
+                   						interactions[elem_id][4].push(val);
+                   						APIError("0");
+                                        return "true";
+                   						break;
+                   					case "weighting":
+                   						interactions[elem_id][3] = val;
+                   						APIError("0");
+                                        return "true";
+                   						break;
+                   					case "student_response":
+                   						interactions[elem_id][5] = ''+val;
+                   						APIError("0");
+                                        return "true";
+                   						break;
+                   					case "result":
+                   						interactions[elem_id][6] = val;
+                   						APIError("0");
+                                        return "true";
+                   						break;
+                   					case "latency":
+                   						interactions[elem_id][7] = val;
+                   						APIError("0");
+                                        return "true";
+                   						break;
+                   					default:
+                   						APIError("401"); // not implemented
+                                    	return "false";
+	                   			}
+	                   		} // end of interactions
+	                   		
                             // cmi.objectives
                             if (ele.substring(0,15) == 'cmi.objectives.') {
                     			var myres = '';
-                    			updatetable_to_list['objectives']='true';
+                    			updatetable_to_list['objectives'] = 'true';
                     			
                     			if (myres = ele.match(/cmi.objectives.(\d+).(id|score|status)(.*)/)) {
                     				obj_id = myres[1];
@@ -722,12 +791,6 @@ $sco['session_time'] = "0000:00:00.00";
                     			}
                     		} // end of cmi.objectives
                             
-                            // ignore cmi.interactions implementation
-                    	    var pos = ele.indexOf("cmi.interactions");
-                    	    if (pos >= 0) {
-                    	    	APIError("0");
-                        	    return "true";
-                    	    }
                     	    // ignore cmi.core.none
                     	    var pos = ele.indexOf("cmi.core.none");
                     	    if (pos >= 0) {
@@ -898,6 +961,8 @@ $sco['session_time'] = "0000:00:00.00";
         elements[24] = "cmi.objectives._count";
         elements[25] = "cmi.student_data._children";
         elements[26] = "cmi.student_preference._children";
+        elements[27] = "cmi.interactions._children";
+        elements[28] = "cmi.interactions._count";
 
         var values = new Array();
         values[0]  = "<?php echo $sco['_children']; ?>";
@@ -927,6 +992,8 @@ $sco['session_time'] = "0000:00:00.00";
         values[24] = item_objectives.length;
         values[25] = "mastery_score,max_time_allowed";
         values[26] = "";
+        values[27] = "id,time,type,correct_responses,weighting,student_response,result,latency";
+        values[28] = interactions.length;
 
 
         // ====================================================
