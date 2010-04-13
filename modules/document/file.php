@@ -64,6 +64,7 @@ foreach ($path_components as $component) {
                        FROM document WHERE filename = " . quote($component) .
                        " AND path LIKE '$path%' HAVING depth = $depth");
         if (!$q or mysql_num_rows($q) == 0) {
+                restore_saved_course();
                 header("HTTP/1.0 404 Not Found");
                 echo '<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN"><html><head>',
                      '<title>404 Not Found</title></head><body>',
@@ -78,11 +79,8 @@ foreach ($path_components as $component) {
 }
 if ($r['visibility'] != 'v' and !$is_adminOfCourse) {
         $_SESSION['errMessage'] = $langNoRead;
+        restore_saved_course();
         session_write_close();
-        // restore current course
-        if (defined('old_dbname')) {
-                $_SESSION['dbname'] = old_dbname;
-        }
         header("Location: $urlServer" );
 }
 if (!preg_match("/\.$r[format]$/", $component)) {
@@ -93,12 +91,17 @@ if (!preg_match("/\.$r[format]$/", $component)) {
 $action = new action();
 $action->record('MODULE_ID_DOCS');
 
-// restore current course
-if (defined('old_dbname')) {
-        $_SESSION['dbname'] = old_dbname;
-}
+restore_saved_course();
 if (file_exists($basedir . $r['path'])) {
         send_file_to_client($basedir . $r['path'], $component, true);
 } else {
         header('Location: ', $urlServer);
+}
+
+// Restore current course
+function restore_saved_course()
+{
+        if (defined('old_dbname')) {
+                $_SESSION['dbname'] = old_dbname;
+        }
 }
