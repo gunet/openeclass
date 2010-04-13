@@ -64,22 +64,22 @@ if (isset($language) and $language == 'greek') {
 
 $tool_content .= "<p>$langIntroMan</p><br />
 
-  <table class=\"framed\" width=\"99%\">
+  <table class='framed' width='99%'>
   <tbody><tr><td>
 
-  <table class=\"FormData\" width=\"100%\">
+  <table class='FormData' width='100%'>
   <tbody>
-  <tr class=\"odd\">
+  <tr class='odd'>
     <th class='left' width='160' rowspan='2' valign='top'>$langAllTutorials</th>
-    ". manlink('OpeneClass22', $ext, $langFinalDesc) ."
+    ". manlink('OpeneClass23', $ext, $langFinalDesc) ."
   </tr>
-  <tr class=\"odd\">
-    ". manlink('OpeneClass22_short', $ext, $langShortDesc) ."
+  <tr class='odd'>
+    ". manlink('OpeneClass23_short', $ext, $langShortDesc) ."
   </tr>
 
-  <tr class=\"odd\">
+  <tr class='odd'>
     <th class='left' rowspan='$rowspan' valign='top'>$langTutorials $langOfTeacher</th>
-    ". manlink('OpeneClass22_ManT', $ext, $langManT) ."
+    ". manlink('manT/OpeneClass23_ManT', $ext, $langManT) ."
   </tr>";
 
 if (isset($language) and $language == 'greek') {
@@ -136,7 +136,7 @@ if (isset($language) and $language == 'greek') {
 $tool_content .= "
   <tr class=\"odd\">
   	<th class='left' rowspan='$rowspan' valign='top'>$langTutorials $langOfStudent</th>
-    ". manlink('OpeneClass22_ManS', $ext, $langManS) ."
+    ". manlink('manS/OpeneClass23_ManS', $ext, $langManS) ."
   </tr>";
 
 if (isset($language) and $language == 'greek') {

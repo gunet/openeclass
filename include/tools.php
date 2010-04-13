@@ -446,9 +446,9 @@ function adminMenu(){
 	array_push($sideMenuImg, "black-arrow1.gif");
 	array_push($sideMenuText, $GLOBALS['langAdminManual']);
 	if ($language == 'greek') {
-		array_push($sideMenuLink, $urlServer . "manuals/manA/OpeneClass22_ManA_el.pdf");
+		array_push($sideMenuLink, $urlServer . "manuals/manA/OpeneClass23_ManA_el.pdf");
 	} else {
-		array_push($sideMenuLink, $urlServer . "manuals/manA/OpeneClass22_ManA_en.pdf");
+		array_push($sideMenuLink, $urlServer . "manuals/manA/OpeneClass23_ManA_en.pdf");
 	}
 	array_push($sideMenuImg, "black-arrow1.gif");
 
