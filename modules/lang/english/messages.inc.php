@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language en
-// Generated 2010-03-24 14:58:30
+// Generated 2010-04-13 14:03:10
 
 $langIntro = "The <b>$siteName</b> platform is a complete eCourses Management System supporting the Asynchronous eLearning Service in <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
 $langVersion = "$siteName version";
@@ -2609,3 +2609,8 @@ $langAdministratorCourse = "Course Administration";
 $langCreateAccount = "Create Account";
 $langAllTutorials = "General Tutorials";
 $langAdminOptions = "Admin Options";
+$langLearningPathImportFromDocuments = "Import learning path from documents";
+$langNameOfLang['spanish'] = "Spanish";
+$langNameOfLang['czech'] = "Czech";
+$langNameOfLang['german'] = "German";
+$langNameOfLang['italian'] = "Italian";

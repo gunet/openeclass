@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language es
-// Generated 2010-03-22 15:05:42
+// Generated 2010-04-13 14:03:10
 
 $langEclass = "eClass Libre - Sistema de Administración del Curso";
 $langYes = "Si";

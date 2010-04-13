@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language es
-// Generated 2010-03-22 15:05:42
+// Generated 2010-04-13 14:03:10
 
 $langWindowClose = "Cierra la ventana";
 $langHDefault = 'Ayuda no disponible';
@@ -480,4 +480,4 @@ $langWiki_studentContent = "<p>El m√≥dulo Wili is una herramienta de colaboraci√
 $langHAddCourseUnits = "Add/Edit course unit";
 $langAddCourseUnitsContent = "<p class='helptopic'>To add a new course unit, please enter a title and a short description. Click on 'Add' to create the new unit.</p>";
 $langHAddCourseUnitscontent = "Add course unit content";
-$langAddCourseUnitscontentContent = "<p class='helptopic'>Hear you can add content or resources to the selected course unit. The types of resources that can be added are listed next to the 'Add:' label. By clicking on 'Add', you can find resources of the selected type available in your course. Tick the ones you would like to add and click on 'Add selected'. Newly added resources are immediately listed, with edit and delete icons for each one. Please note that when multiple course units exist in a course, links to the next and previous unit appear automatically. You can also use the selection box below to navigate directly to a specific unit.</p>";
+$langAddCourseUnitscontentContent = "<p class='helptopic'>Here you can add content or resources to the selected course unit. The types of resources that can be added are listed next to the 'Add:' label. By clicking on 'Add', you can find resources of the selected type available in your course. Tick the ones you would like to add and click on 'Add selected'. Newly added resources are immediately listed, with edit and delete icons for each one. Please note that when multiple course units exist in a course, links to the next and previous unit appear automatically. You can also use the selection box below to navigate directly to a specific unit.</p>";
