@@ -146,6 +146,7 @@ draw($tool_content,3, 'admin');
 function course_details($code, $lang, $title, $desc, $fac, $vis, $prof, $type) {
 
 	global $action, $restoreThis, $langNameOfLang, $encoding, $version;
+	global $siteName, $InstitutionUrl, $Institution;
 
         include("../lang/greek/common.inc.php");
         $extra_messages = "../../config/greek.inc.php";
