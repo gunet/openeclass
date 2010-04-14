@@ -75,7 +75,7 @@ if (isset($_REQUEST['localize'])) {
 	$_SESSION['langswitch'] = $language = langcode_to_name($_REQUEST['localize']);
 }
 
-$active_ui_languages = array('el', 'en');
+$active_ui_languages = array('el', 'en', 'es');
 
 // Get configuration variables
 if (!isset($webDir)) {
