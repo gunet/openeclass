@@ -245,7 +245,7 @@ function convert_db_utf8($database)
 	global $langNotTablesList;
 
         db_query("ALTER DATABASE `$database` DEFAULT CHARACTER SET=utf8");
-        $result = mysql_list_tables($database);
+	$result = db_query("SHOW TABLES FROM `$database`");
         if (!$result) {
                 echo "$langNotTablesList $database. ",
                      'MySQL Error: ', mysql_error();
