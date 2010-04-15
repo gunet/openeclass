@@ -536,7 +536,6 @@ elseif(isset($_REQUEST['install7']))
 	}
 
 	$mysqlMainDb = $dbNameForm;
-                  die('lala');
 	// create main database
 	require "install_db.php";
 
