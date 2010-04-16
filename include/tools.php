@@ -52,7 +52,7 @@ function getSideMenu($menuTypeID){
 			break;
 		}
 
-		case 1: {//logged in
+		case 1: { //logged in
 			$menu = loggedInMenu();
 			break;
 		}
@@ -64,6 +64,11 @@ function getSideMenu($menuTypeID){
 
 		case 3: { // admin tools
 			$menu = adminMenu();
+			break;
+		}
+
+		case 4: { // custom tools
+			$menu = customMenu();
 			break;
 		}
 	}
