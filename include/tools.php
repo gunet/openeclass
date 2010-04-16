@@ -493,8 +493,8 @@ function lessonToolsMenu(){
 		$arrMenuType['type'] = 'text';
 		$arrMenuType['text'] = $GLOBALS['langActiveTools'];
 	} else  {
-		$arrMenuType['type'] = 'none';
-		$arrMenuType['text'] = 'none';
+		$arrMenuType['type'] = 'text';
+		$arrMenuType['text'] = $GLOBALS['langCourseOptions'];
 	}
 	array_push($sideMenuSubGroup, $arrMenuType);
 

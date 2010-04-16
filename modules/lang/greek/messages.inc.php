@@ -1371,6 +1371,7 @@ $langWelcomeProfPerso = "<b>\"Δημιουργία Μαθήματος\"</b> γι
 $langBasicOptions = "Βασικές Επιλογές";
 $langUserOptions = "Επιλογές Χρήστη";
 $langAdminOptions = "Επιλογές Διαχείρισης";
+$langCourseOptions = "Επιλογές Μαθήματος";
 
 /***********************************************************
 * install.inc.php

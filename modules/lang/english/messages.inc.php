@@ -2609,6 +2609,7 @@ $langAdministratorCourse = "Course Administration";
 $langCreateAccount = "Create Account";
 $langAllTutorials = "General Tutorials";
 $langAdminOptions = "Admin Options";
+$langCourseOptions = "Course Options";
 $langLearningPathImportFromDocuments = "Import learning path from documents";
 $langNameOfLang['spanish'] = "Spanish";
 $langNameOfLang['czech'] = "Czech";
