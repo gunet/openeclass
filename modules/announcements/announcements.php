@@ -315,21 +315,17 @@ hContent;
         // should not send email if updating old message
         if (isset ($modify) && $modify) {
             $tool_content .= "
-      <table width='99%' class='FormData'>
-      <tbody>
-      <tr>
-        <th>&nbsp;</th>
-        <td><b>$langModifAnn</b></td>
-      </tr>";
+	    <table width='99%' class='FormData'>
+	    <tbody>
+	    <tr><th>&nbsp;</th><td><b>$langModifAnn</b></td>
+	    </tr>";
             $langAdd = $nameTools = $langModifAnn;
         } else {
 		$tool_content .= "
-      <table width='99%' class='FormData' align='center'>
-      <tbody>
-      <tr>
-        <th width='220'>&nbsp;</th>
-        <td><b>".$langAddAnn."</b></td>
-      </tr>";
+		<table width='99%' class='FormData' align='center'>
+		<tbody>
+		<tr><th width='220'>&nbsp;</th><td><b>".$langAddAnn."</b></td>
+		</tr>";
 		$nameTools = $langAddAnn;
         }
 	$navigation[] = array("url" => "announcements.php", "name" => $langAnnouncements);
@@ -347,7 +343,9 @@ hContent;
         <td>
           <table class='xinha_editor'>
           <tr>
-            <td><textarea id='xinha' name='newContent'>$contentToModify</textarea></td>
+            <td><textarea id='xinha' name='newContent'>".
+		str_replace('{','&#123;',htmlspecialchars($contentToModify))."
+	    </textarea></td>
           </tr>
           </table>
         </td>
