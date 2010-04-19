@@ -105,7 +105,7 @@ if (!empty($show) && ($show=="closed")) {
 		$tool_content .= table_header(1, $langDateClosed_small);
 		$tool_content .= "<tbody>";
  		$sql = db_query("SELECT rid,profname,profsurname,profuname,profemail,proftmima,
-				profcomm,date_open,date_closed,comment
+				profcomm, am, date_open, date_closed, comment
 				FROM prof_request
                                 WHERE (status = 2 AND statut = $list_statut)");
         	$k = 0;
@@ -128,6 +128,9 @@ if (!empty($show) && ($show=="closed")) {
 			}
 			$tool_content .= "<td>".htmlspecialchars($req['proftmima'])."</td>";
 			$tool_content .= "<td>".htmlspecialchars($req['profcomm'])."</td>";
+			if ($list_statut == 5) {
+				$tool_content .= "<td>".htmlspecialchars($req['am'])."</td>";
+			}
 			$tool_content .= "<td align=\"center\">
 				<small>".nice_format(date("Y-m-d", strtotime($req['date_open'])))."</small></td>";
             		$tool_content .= "<td align=\"center\">
@@ -154,8 +157,8 @@ if (!empty($show) && ($show=="closed")) {
 		$tool_content .= table_header(1, $langDateReject_small);
 		$tool_content .= "<tbody>";
 
- 		$sql = db_query("SELECT rid,profname,profsurname,profuname,profemail,
-				proftmima,profcomm,date_open,date_closed,comment
+ 		$sql = db_query("SELECT rid,profname, profsurname, profuname, profemail,
+				proftmima, profcomm, am, date_open, date_closed, comment
 				FROM prof_request
                                 WHERE (status = 3 AND statut = $list_statut)");
 
@@ -179,6 +182,9 @@ if (!empty($show) && ($show=="closed")) {
 			}
 			$tool_content .= "<td>".htmlspecialchars($req['proftmima'])."</td>";
 			$tool_content .= "<td>".htmlspecialchars($req['profcomm'])."</td>";
+			if ($list_statut == 5) {
+				$tool_content .= "<td>".htmlspecialchars($req['am'])."</td>";
+			}
 			$tool_content .= "<td align=\"center\">
 				<small>".nice_format(date("Y-m-d", strtotime($req['date_open'])))."</small></td>";
                 	$tool_content .= "<td align=\"center\">
@@ -200,24 +206,24 @@ if (!empty($show) && ($show=="closed")) {
 	$tool_content .= table_header(1, $langDateCompleted_small);
 	$tool_content .= "<tbody>";
 
- 	$sql = db_query("SELECT rid,profname,profsurname,profuname,profemail,proftmima,
-			profcomm,date_open,date_closed,comment
+ 	$sql = db_query("SELECT rid, profname, profsurname, profuname, profemail, proftmima,
+			profcomm, date_open, date_closed, comment
 			FROM prof_request
                         WHERE (status = 0 AND statut = $list_statut)");
 
     	$k = 0;
 	for ($j = 0; $j < mysql_num_rows($sql); $j++) {
 		$req = mysql_fetch_array($sql);
-			if ($k%2==0) {
-	              $tool_content .= "\n  <tr>";
-	            } else {
-	              $tool_content .= "\n  <tr class=\"odd\">";
-	            }
-	    $tool_content .= "\n    <td width=\"1\"><img style='border:0px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'></td>";
-		$tool_content .= "\n    <td>".htmlspecialchars($req[1])."&nbsp;".htmlspecialchars($req[2])."</td>";
+		if ($k%2==0) {
+	              $tool_content .= "\n<tr>";
+		} else {
+	              $tool_content .= "\n<tr class=\"odd\">";
+	        }
+		$tool_content .= "\n<td width='1'><img style='border:0px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'></td>";
+		$tool_content .= "\n<td>".htmlspecialchars($req[1])."&nbsp;".htmlspecialchars($req[2])."</td>";
 		for ($i = 3; $i < mysql_num_fields($sql) - 3; $i++) {
 			if ($i == 4 and $req[$i] != "") {
-				$tool_content .= "\n    <td><a href=\"mailto:".
+				$tool_content .= "\n<td><a href=\"mailto:".
 				htmlspecialchars($req[$i])."\">".
 				htmlspecialchars($req[$i])."</a></td>";
 			} else {
@@ -226,8 +232,8 @@ if (!empty($show) && ($show=="closed")) {
 			}
 		}
 		$tool_content .= "\n    <td align=\"center\"><small>".nice_format(date("Y-m-d", strtotime($req[7])))."</small></td>";
-        $tool_content .= "\n    <td align=\"center\"><small>".nice_format(date("Y-m-d", strtotime($req[8])))."</small></td>";
-        $tool_content .= "\n    <td>".$req[9]."</td>";
+		$tool_content .= "\n    <td align=\"center\"><small>".nice_format(date("Y-m-d", strtotime($req[8])))."</small></td>";
+		$tool_content .= "\n    <td>".$req[9]."</td>";
 		$tool_content .= "</tr>";
 		$k++;
 	}
@@ -319,30 +325,33 @@ else
 	$tool_content .= "<table class=\"FormData\" width=\"99%\" align=\"left\">";
 	$tool_content .= table_header();
 	$tool_content .= "<tbody>";
- 	$sql = db_query("SELECT rid,profname,profsurname,profuname,profemail,proftmima, 
-			profcomm, date_open, comment, profpassword, lang
+ 	$sql = db_query("SELECT rid, profname, profsurname, profuname, profemail, proftmima, 
+			profcomm, am, date_open, comment, profpassword, lang
 			FROM prof_request
                         WHERE (status = 1 AND statut = $list_statut)");
     	$k = 0;
 	while ($req = mysql_fetch_array($sql)) {
 		if ($k%2 == 0) {
 	              $tool_content .= "\n<tr>";
-	            } else {
+	        } else {
 	              $tool_content .= "\n<tr class='odd'>";
-	            }
+	        }
 	    	$tool_content .= "<td align='right' width='1'>
 		<img style='border:0px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'></td>";
 	     	$tool_content .= "<td>".htmlspecialchars($req['profname'])."&nbsp;".htmlspecialchars($req['profsurname'])."</td>";
 		$tool_content .= "<td>".htmlspecialchars($req['profuname'])."</td>";
 		if ($req['profemail'] != "") {
-				$tool_content .= "\n<td><a href=\"mailto:".
-				htmlspecialchars($req['profemail'])."\">".
-				htmlspecialchars($req['profemail'])."</a></td>";
+			$tool_content .= "\n<td><a href=\"mailto:".
+			htmlspecialchars($req['profemail'])."\">".
+			htmlspecialchars($req['profemail'])."</a></td>";
 		} else {
 			$tool_content .= "\n<td>".htmlspecialchars($req['profemail'])."</td>";
 		}
 		$tool_content .= "<td>".htmlspecialchars(find_faculty_by_id($req['proftmima']))."</td>";
 		$tool_content .= "<td>".htmlspecialchars($req['profcomm'])."</td>";
+		if ($list_statut == 5) {
+			$tool_content .= "<td>".htmlspecialchars($req['am'])."</td>";
+		}
 		$tool_content .= "<td align='center'>
 			<small>".nice_format(date("Y-m-d", strtotime($req['date_open'])))."</small></td>";
 		$tool_content .= "<td align='center'>$req[comment]</td>";
@@ -377,9 +386,9 @@ else
 // If show is set then we return to listreq, else return to admin index.php
 //if (isset($close) or isset($closed)) {
 if (!empty($show)) {
-	$tool_content .= "<p align=\"right\"><a href=\"$_SERVER[PHP_SELF]\">$langBackRequests</a></p><br>";
+	$tool_content .= "<p align='right'><a href='$_SERVER[PHP_SELF]$linkget'>$langBackRequests</a></p><br>";
 }
-	$tool_content .= "<p align=\"right\"><a href=\"index.php\">$langBack</a></p>";
+	$tool_content .= "<p align='right'><a href='index.php'>$langBack</a></p>";
 draw($tool_content, 3, null, $head_content);
 
 // --------------------------------------
@@ -389,8 +398,8 @@ draw($tool_content, 3, null, $head_content);
 function table_header($addon = FALSE, $message = FALSE) {
 	
 	global $langName, $langSurname, $langUsername, $langEmail, $langFaculty, $langTel;
-	global $langDate, $langComments, $langActions;
-	global $langDateRequest_small;
+	global $langDate, $langComments, $langActions, $langAm;
+	global $langDateRequest_small, $list_statut;
 
 	$string = "";
 	if ($addon) { 
@@ -414,6 +423,9 @@ function table_header($addon = FALSE, $message = FALSE) {
 	<th scope='col' rowspan='$rowspan' class='left'>$langEmail</th>
 	<th scope='col' rowspan='$rowspan' class='left'>$langFaculty</th>
 	<th scope='col' rowspan='$rowspan' align='center'>$langTel</th>";
+	if ($list_statut == 5) {
+		$string .= "<th scope='col' rowspan='$rowspan' align='center'>$langAm</th>";
+	}
 	$string .= $datestring; 
 	$string .= "</tr></thead>";
 

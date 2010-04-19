@@ -70,7 +70,7 @@ if ($all_set) {
         // register user request
         db_query("INSERT INTO prof_request
                         (profname, profsurname, profuname, profemail,
-                         proftmima, profcomm, status, date_open,
+                         proftmima, profcomm, am, status, date_open,
                          comment, lang, statut)
                   VALUES (".
                   autoquote($name) .', '.
@@ -78,7 +78,8 @@ if ($all_set) {
                   autoquote($username) .', '.
                   autoquote($usermail) .', '.
                   intval($department) .', '.
-                  autoquote($userphone) .', 1, NOW(), '.
+                  autoquote($userphone) .', '.
+                  autoquote($am) .', 1, NOW(), '.
                   autoquote($usercomment) .", '$lang', 5)");
 
         //----------------------------- Email Message --------------------------
@@ -86,6 +87,7 @@ if ($all_set) {
         $MailMessage = $mailbody1 . $mailbody2 . "$name $surname\n\n" .
                 $mailbody3 . $mailbody4 . $mailbody5 . "$mailbody8\n\n" .
                 "$langFaculty: $department\n$langComments: $usercomment\n" .
+                "$langAm: $am\n" .
                 "$langProfUname : $username\n$langProfEmail : $usermail\n" .
                 "$contactphone : $userphone\n\n\n$logo\n\n";
 

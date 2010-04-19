@@ -41,7 +41,7 @@ $all_set = register_posted_variables(array(
         'email_form' => true,
         'language' => true,
         'department' => true,
-        'comment' => false,
+	'am' => false,
         'password' => true,
         'pstatut' => true,
         'rid' => false,
@@ -83,7 +83,7 @@ if($submit) {
 				autoquote($prenom_form) . ', ' .
 				autoquote($uname) . ", '$password_encrypted', " .
 				autoquote($email_form) .
-				", $pstatut, $depid, " . autoquote($comment) . ", $registered_at, $expires_at, '$proflanguage')");
+				", $pstatut, $depid, " . autoquote($am) . ", $registered_at, $expires_at, '$proflanguage')");
 
 		// close request
 	  	$rid = intval($_POST['rid']);
@@ -125,13 +125,14 @@ $langEmail : $emailhelpdesk
 } else {
         $lang = false;
 	if (isset($id)) { // if we come from prof request
-		$res = mysql_fetch_array(db_query("SELECT profname, profsurname, profuname, profemail, proftmima, comment, lang, statut 
+		$res = mysql_fetch_array(db_query("SELECT profname, profsurname, profuname, profemail, proftmima, am, comment, lang, statut 
 			FROM prof_request WHERE rid='$id'"));
 		$ps = $res['profsurname'];
 		$pn = $res['profname'];
 		$pu = $res['profuname'];
 		$pe = $res['profemail'];
 		$pt = $res['proftmima'];
+		$pam = $res['am'];
 		$pcom = $res['comment'];
 		$lang = $res['lang'];
                 $pstatut = $res['statut'];
@@ -192,8 +193,12 @@ $langEmail : $emailhelpdesk
 	$tool_content .= "</td>
 	</tr>
 	<tr>
+	<th class='left'><b>$langAm</b></th>
+	<td><input class='FormData_InputText' type='text' name='am' value='".@q($pam)."'>&nbsp;</b></td>
+	</tr>
+	<tr>
 	<th class='left'><b>$langComments</b></th>
-	<td><input class='FormData_InputText' type='text' name='comment' value='".@q($pcom)."'>&nbsp;</b></td>
+	<td>".@q($pcom)."&nbsp;</td>
 	</tr>
 	<tr>
 	<th class='left'>$langLanguage</th>

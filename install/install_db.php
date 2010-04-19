@@ -274,6 +274,7 @@ db_query("CREATE TABLE `prof_request` (
                 `profemail` varchar(255) NOT NULL default '',
                 `proftmima` varchar(255) default NULL,
                 `profcomm` varchar(20) default NULL,
+		`am` varchar(20) default NULL,
                 `status` int(11) default NULL,
                 `date_open` datetime default NULL,
                 `date_closed` datetime default NULL,
