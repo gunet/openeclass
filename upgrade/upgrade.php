@@ -334,7 +334,11 @@ if (!isset($submit2)) {
                         db_query('ALTER TABLE annonces DROP code_cours');
                 }
         }
-
+	if ($oldversion < '2.3.1') {
+		if (!mysql_field_exists($mysqlMainDb, 'prof_request', 'am')) {
+			db_query('ALTER TABLE `prof_request` ADD `am` VARCHAR(20) NULL AFTER profcomm');
+		}
+	}
         // **********************************************
         // upgrade courses databases
         // **********************************************

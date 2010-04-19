@@ -32,7 +32,7 @@ Defines standard functions and validates variables
 ---------------------------------------------------------------------
 */
 
-define('ECLASS_VERSION', '2.3');
+define('ECLASS_VERSION', '2.3.1');
 
 // Show query string and then do MySQL query
 function db_query2($sql, $db = FALSE)
