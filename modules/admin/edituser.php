@@ -255,14 +255,14 @@ $tool_content .= "
 					case 5:
 						$tool_content .= $langStudent;
 						$tool_content .= "</td><td align='center'>
-						<a href='unreguser.php?u=$u&amp;c=$logs[0]'>
+						<a href='unreguser.php?u=$u&amp;c=$logs[cours_id]'>
 						<img src='../../template/classic/img/delete.gif' title='$langDelete'></img></a></td>
   						</tr>\n";
 						break;
 					default:
 						$tool_content .= $langVisitor;
 						$tool_content .= "</td><td align='center'>
-						<a href='unreguser.php?u=$u&amp;c=$logs[0]'>
+						<a href='unreguser.php?u=$u&amp;c=$logs[cours_id]'>
 						<img src='../../template/classic/img/delete.gif' title='$langDelete'></img></a></td></tr>\n";
 						break;
 				}
@@ -310,12 +310,12 @@ $tool_content .= "
 		$expires_at = mktime($hour, $minute, 0, $month, $day, $year);
 		$user_exist= FALSE;
 		// check if username is free
-  		$username_check=mysql_query("SELECT username FROM user WHERE username='".escapeSimple($username)."'");
-		$nums = mysql_num_rows($username_check);
-
-if (mysql_num_rows($username_check) > 1) {
-		    $user_exist = TRUE;
-	  }
+  		$username_check = db_query("SELECT username FROM user WHERE
+					   user_id <> $u AND
+					   username = '".escapeSimple($username)."'");
+		if (mysql_num_rows($username_check) > 0) {
+			$user_exist = TRUE;
+		}
 
   // check if there are empty fields
   if (empty($fname) OR empty($lname) OR empty($username)) {

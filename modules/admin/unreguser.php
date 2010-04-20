@@ -60,11 +60,11 @@ $t = 0;
 if (!$doit) {
         $tool_content .= "<h4>$langConfirmDelete</h4><p>$langConfirmDeleteQuestion1 <em>$u_realname ($u_account)</em>";
         if($c) {
-                $tool_content .= " $langConfirmDeleteQuestion2 <em>".htmlspecialchars($c)."</em>";
+                $tool_content .= " $langConfirmDeleteQuestion2 <em>".course_id_to_title($c)."</em>";
         }
         $tool_content .= ";</p>
                 <ul>
-                <li>$langYes: <a href=\"unreguser.php?u=".htmlspecialchars($u)."&c=".htmlspecialchars($c)."&doit=yes\">$langDelete</a><br>&nbsp;</li>
+                <li>$langYes: <a href=\"unreguser.php?u=".htmlspecialchars($u)."&c=".htmlspecialchars($c)."&amp;doit=yes\">$langDelete</a><br>&nbsp;</li>
                 <li>$langNo: <a href=\"edituser.php?u=".htmlspecialchars($u)."\">$langBack</a></li>
                 </ul>";
 } else {
@@ -187,15 +187,13 @@ if (!$doit) {
                                 }
                         }
 
-
                         switch($t)
                         {
-                                case '1':	$tool_content .= "";	$m = 1; break;
-                                case '2': $tool_content .= "<p>$langUserWithId $u $langWasDeleted.</p>\n";	$m = 0;	break;
-                                case '3': $tool_content .= "$langErrorDelete";	$m = 1;	break;
-                                default: $m = 0;	break;
+                                case '1': $tool_content .= "";	$m = 1; break;
+                                case '2': $tool_content .= "<p>$langUserWithId $u $langWasDeleted.</p>\n"; $m = 0; break;
+                                case '3': $tool_content .= "$langErrorDelete"; $m = 1; break;
+                                default: $m = 0; break;
                         }
-
 
                         if($u!=1) {
                                 db_query("DELETE from admin WHERE idUser = '".mysql_real_escape_string($u)."'");
@@ -211,9 +209,8 @@ if (!$doit) {
                 }
 
         } elseif ($c and $u) {
-                $q = db_query("DELETE from cours_user WHERE user_id = $u AND
-                                        cours_id = (SELECT cours_id FROM cours WHERE code = ".quote($c).")");
-                if (mysql_affected_rows($q) > 0) {
+                $q = db_query("DELETE from cours_user WHERE user_id = $u AND cours_id = $c");
+                if (mysql_affected_rows() > 0) {
                         $tool_content .= "<p>$langUserWithId $u $langWasCourseDeleted $c.</p>\n";
                         $m = 1;
                 }
