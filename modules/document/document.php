@@ -563,6 +563,9 @@ if ($curDirPath == '/') {
 }
 $curDirName = my_basename($curDirPath);
 $parentDir = dirname($curDirPath);
+if ($parentDir == '\\') {
+        $parentdir = '/';
+}
 
 if (strpos($curDirName, '/../') !== false or
     !is_dir(realpath($basedir . $curDirPath))) {
