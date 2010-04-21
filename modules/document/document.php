@@ -558,7 +558,7 @@ else
 	$curDirPath="";
 }
 
-if ($curDirPath == '/') {
+if ($curDirPath == '/' or $curDirPath == '\\') {
         $curDirPath = '';
 }
 $curDirName = my_basename($curDirPath);
