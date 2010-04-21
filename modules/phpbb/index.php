@@ -178,20 +178,20 @@ if ($total_categories) {
 		@reset($forum_row);
 		for ($x=0; $x < count($forum_row); $x++) {
 			unset($last_post);
-			if ($forum_row[$x]["cat_id"] == $categories[$i]["cat_id"]) {
+			if ($forum_row[$x]['cat_id'] == $categories[$i]['cat_id']) {
 				if ($forum_row[$x]["post_time"]) {
 					$last_post = $forum_row[$x]["post_time"];
 					$last_post_datetime = $forum_row[$x]["post_time"];
-					list($last_post_date, $last_post_time) = split(" ", $last_post_datetime);
-					list($year, $month, $day) = explode("-", $last_post_date);
-					list($hour, $min) = explode(":", $last_post_time);
+					list($last_post_date, $last_post_time) = explode(' ', $last_post_datetime);
+					list($year, $month, $day) = explode('-', $last_post_date);
+					list($hour, $min) = explode(':', $last_post_time);
 					$last_post_time = mktime($hour, $min, 0, $month, $day, $year);
-					$human_last_post_time = date("d/m/Y -  H:i", $last_post_time);
+					$human_last_post_time = date('d/m/Y -  H:i', $last_post_time);
 				}
 				if (empty($last_post)) {
 					$last_post = $langNoPosts;
 				}
-				$tool_content .= "<tr>";
+				$tool_content .= '<tr>';
 				if (!isset($last_visit)) {
 					$last_visit = 0;
 				}

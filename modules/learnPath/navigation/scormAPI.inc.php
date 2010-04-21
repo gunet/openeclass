@@ -104,7 +104,7 @@ else // authenticated user and no error in query
 {
     // set vars
     $sco['student_id'] = $uid;
-    $sco['student_name'] = $userProgressionDetails['nom'].", ".$userProgressionDetails['prenom'];
+    $sco['student_name'] = $userProgressionDetails['nom'].', '.$userProgressionDetails['prenom'];
     $sco['lesson_location'] = $userProgressionDetails['lesson_location'];
     $sco['credit'] = strtolower($userProgressionDetails['credit']);
     $sco['lesson_status'] = strtolower($userProgressionDetails['lesson_status']);
@@ -607,7 +607,7 @@ $sco['session_time'] = "0000:00:00.00";
 									  // check that minuts and second are 0 <= x < 60
 									  if (re.test(val)) // only for SCORM 1.2
 									  {
-										var splitted_val = val.split(":");
+										var splitted_val = val.split(':');
 										if( splitted_val[1] < 0 || splitted_val[1] >= 60 || splitted_val[2] < 0 || splitted_val[2] >= 60 )
 										{
 											APIError("405");
@@ -634,7 +634,7 @@ $sco['session_time'] = "0000:00:00.00";
 									  // check that minuts and second are 0 <= x < 60
 									  if (re.test(val)) // only for SCORM 1.2
 									  {
-										var splitted_val = val.split(":");
+										var splitted_val = val.split(':');
 										if( splitted_val[1] < 0 || splitted_val[1] >= 60 || splitted_val[2] < 0 || splitted_val[2] >= 60 )
 										{
 											APIError("405");

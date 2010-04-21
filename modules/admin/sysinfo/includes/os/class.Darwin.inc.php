@@ -75,9 +75,9 @@ class sysinfo extends bsd_common
         $results['ram'] = array();
 
         $pstat = execute_program('vm_stat'); // use darwin's vm_stat
-        $lines = split("\n", $pstat);
+        $lines = explode("\n", $pstat);
         for ($i = 0; $i < sizeof($lines); $i++) {
-            $ar_buf = preg_split("/\s+/", $lines[$i], 19);
+            $ar_buf = preg_split('/\s+/', $lines[$i], 19);
 
             if ($i == 1) {
                 $results['ram']['free'] = $ar_buf[2] * 4; // calculate free memory from page sizes (each page = 4MB)
@@ -96,10 +96,10 @@ class sysinfo extends bsd_common
 
         // need to fix the swap info...
         $pstat = execute_program('swapinfo', '-k');
-        $lines = split("\n",$pstat);
+        $lines = explode("\n", $pstat);
 
         for ($i = 0; $i < sizeof($lines); $i++) {
-            $ar_buf = preg_split("/\s+/", $lines[$i], 6);
+            $ar_buf = preg_split('/\s+/', $lines[$i], 6);
 
             if ($i == 0) {
                 $results['swap']['total'] = 0;
@@ -119,10 +119,10 @@ class sysinfo extends bsd_common
     function network ()
     {
         $netstat = execute_program('netstat', '-nbdi | cut -c1-24,42- | grep Link');
-        $lines = split("\n", $netstat);
+        $lines = explode("\n", $netstat);
         $results = array();
         for ($i = 0; $i < sizeof($lines); $i++) {
-            $ar_buf = preg_split("/\s+/", $lines[$i]);
+            $ar_buf = preg_split('/\s+/', $lines[$i]);
             if (!empty($ar_buf[0])) {
                 $results[$ar_buf[0]] = array();
 

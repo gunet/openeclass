@@ -178,7 +178,7 @@ if (mysql_num_rows($result) > 0) { // topics found
 		$replys = $myrow["topic_replies"];
 		$last_post = $myrow["post_time"];
 		$last_post_datetime = $myrow["post_time"];
-		list($last_post_date, $last_post_time) = split(" ", $last_post_datetime);
+		list($last_post_date, $last_post_time) = explode(' ', $last_post_datetime);
 		list($year, $month, $day) = explode("-", $last_post_date);
 		list($hour, $min) = explode(":", $last_post_time);
 		$last_post_time = mktime($hour, $min, 0, $month, $day, $year);

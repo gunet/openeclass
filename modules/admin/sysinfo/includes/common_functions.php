@@ -70,7 +70,7 @@ function execute_program ($program, $args = '')
 
     // see if we've gotten a |, if we have we need to do patch checking on the cmd
     if ($args) {
-        $args_list = split(' ', $args);
+        $args_list = explode(' ', $args);
         for ($i = 0; $i < count($args_list); $i++) {
             if ($args_list[$i] == '|') {
                 $cmd = $args_list[$i+1];

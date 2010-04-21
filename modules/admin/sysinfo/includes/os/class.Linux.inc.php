@@ -79,7 +79,7 @@ class sysinfo
     {
         global $text;
         $fd = fopen('/proc/uptime', 'r');
-        $ar_buf = split(' ', fgets($fd, 4096));
+        $ar_buf = explode(' ', fgets($fd, 4096));
         fclose($fd);
 
         $sys_ticks = trim($ar_buf[0]);
@@ -104,7 +104,7 @@ class sysinfo
 
     function users ()
     {
-        $who = split('=', execute_program('who', '-q'));
+        $who = explode('=', execute_program('who', '-q'));
         $result = $who[1];
         return $result;
     }
@@ -112,7 +112,7 @@ class sysinfo
     function loadavg ()
     {
         if ($fd = fopen('/proc/loadavg', 'r')) {
-            $results = split(' ', fgets($fd, 4096));
+            $results = explode(' ', fgets($fd, 4096));
             fclose($fd);
         } else {
             $results = array('N.A.','N.A.','N.A.');
@@ -187,7 +187,7 @@ class sysinfo
                 }
 
                 if ($device) {
-                    list($key, $value) = split(': ', $buf, 2);
+                    list($key, $value) = explode(': ', $buf, 2);
 
                     if (!preg_match('/bridge/i', $key) && !preg_match('/USB/i', $key)) {
                         $results[] = preg_replace('/\([^\)]+\)\.$/', '', trim($value));
@@ -266,7 +266,7 @@ class sysinfo
             while ($buf = fgets($fd, 4096)) {
                 if (preg_match('/Vendor/', $buf)) {
                     preg_match('/Vendor: (.*) Model: (.*) Rev: (.*)/i', $buf, $dev);
-                    list($key, $value) = split(': ', $buf, 2);
+                    list($key, $value) = explode(': ', $buf, 2);
                     $dev_str  = $value;
                     $get_type = 1;
                     continue;
@@ -344,7 +344,7 @@ class sysinfo
 
                     // Get info on individual swap files
                     $swaps = file ('/proc/swaps');
-                    $swapdevs = split("\n", $swaps);
+                    $swapdevs = explode("\n", $swaps);
 
                     for ($i = 1; $i < (sizeof($swapdevs) - 1); $i++) {
                         $ar_buf = preg_split('/\s+/', $swapdevs[$i], 6);
@@ -371,7 +371,7 @@ class sysinfo
     function filesystems ()
     {
         $df = execute_program('df', '-kP');
-        $mounts = split("\n", $df);
+        $mounts = explode("\n", $df);
         $fstype = array();
 
         if ($fd = fopen('/proc/mounts', 'r')) {

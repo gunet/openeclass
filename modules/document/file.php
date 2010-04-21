@@ -38,7 +38,7 @@ if (isset($_SESSION['dbname'])) {
 }
 
 $uri = str_replace('//', chr(1), strstr($_SERVER['REQUEST_URI'], 'file.php/'));
-$path_components = split('/', $uri);
+$path_components = explode('/', $uri);
 array_shift($path_components);
 
 // temporary course change

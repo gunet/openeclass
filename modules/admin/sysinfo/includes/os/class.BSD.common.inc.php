@@ -205,9 +205,9 @@ class bsd_common
         $results['ram'] = array();
 
         $pstat = execute_program('vmstat');
-        $lines = split("\n", $pstat);
+        $lines = explode("\n", $pstat);
         for ($i = 0; $i < sizeof($lines); $i++) {
-            $ar_buf = preg_split("/\s+/", $lines[$i], 19);
+            $ar_buf = preg_split('/\s+/', $lines[$i], 19);
 
             if ($i == 2) {
                 $results['ram']['free'] = $ar_buf[5] * $pagesize / 1024;
@@ -225,10 +225,10 @@ class bsd_common
         $results['ram']['percent'] = round(($results['ram']['used'] *100) / $results['ram']['total']);
 
         $pstat = execute_program('swapinfo', '-k');
-        $lines = split("\n",$pstat);
+        $lines = explode("\n", $pstat);
 
         for ($i = 0; $i < sizeof($lines); $i++) {
-            $ar_buf = preg_split("/\s+/", $lines[$i], 6);
+            $ar_buf = preg_split('/\s+/', $lines[$i], 6);
 
             if ($i == 0) {
                 $results['swap']['total'] = 0;
@@ -248,7 +248,7 @@ class bsd_common
     function filesystems ()
     {
         $df = execute_program('df', '-k');
-        $mounts = split("\n", $df);
+        $mounts = explode('\n', $df);
         $fstype = array();
 
         $s     = execute_program('mount');
@@ -263,7 +263,7 @@ class bsd_common
         }
 
         for ($i = 1, $j = 0; $i < sizeof($mounts); $i++) {
-            $ar_buf = preg_split("/\s+/", $mounts[$i], 6);
+            $ar_buf = preg_split('/\s+/', $mounts[$i], 6);
 
             // skip the proc filesystem
             if ($ar_buf[0] == 'procfs') {

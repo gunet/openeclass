@@ -94,7 +94,7 @@ if ($is_adminOfCourse) { // course admin
 		$forum_id = $myrow["forum_id"];
 		$topic_id = $myrow["topic_id"];
 		$this_post_time = $myrow["post_time"];
-		list($day, $time) = split(" ", $myrow["post_time"]);
+		list($day, $time) = explode(' ', $myrow["post_time"]);
 		$date = date("Y-m-d H:i");
 	
 		$row1 = mysql_fetch_row(db_query("SELECT forum_name FROM forums WHERE forum_id='$forum_id'"));
@@ -160,7 +160,7 @@ if ($is_adminOfCourse) { // course admin
 		} else {
 			$now_hour = date("H");
 			$now_min = date("i");
-			list($hour, $min) = split(":", $time);
+			list($hour, $min) = explode(':', $time);
 			$last_post_in_thread = get_last_post($topic_id, $currentCourseID, "time_fix");
 			$sql = "DELETE FROM posts
 				WHERE post_id = '$post_id'";
@@ -308,7 +308,7 @@ if ($is_adminOfCourse) { // course admin
 		$message = undo_htmlspecialchars($message);
 		// Special handling for </textarea> tags in the message, which can break the editing form..
 		$message = preg_replace('#</textarea>#si', '&lt;/TEXTAREA&gt;', $message);
-		list($day, $time) = split(" ", $myrow["post_time"]);
+		list($day, $time) = explode(' ', $myrow["post_time"]);
 		
 		
 		$tool_content .= "<div id='operations_container'><ul id='opslist'>

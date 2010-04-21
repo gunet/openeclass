@@ -65,8 +65,8 @@ class sysinfo extends bsd_common
     {
         $netstat_b = execute_program('netstat', '-nbdi | cut -c1-25,44- | grep Link | grep -v \'* \'');
         $netstat_n = execute_program('netstat', '-ndi | cut -c1-25,44- | grep Link | grep -v \'* \'');
-        $lines_b = split("\n", $netstat_b);
-        $lines_n = split("\n", $netstat_n);
+        $lines_b = explode("\n", $netstat_b);
+        $lines_n = explode("\n", $netstat_n);
         $results = array();
         for ($i = 0; $i < sizeof($lines_b); $i++) {
             $ar_buf_b = preg_split("/\s+/", $lines_b[$i]);

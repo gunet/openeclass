@@ -46,10 +46,10 @@ class sysinfo extends bsd_common
     function network ()
     {
         $netstat = execute_program('netstat', '-nbdi | cut -c1-24,42- | grep Link');
-        $lines = split("\n", $netstat);
+        $lines = explode("\n", $netstat);
         $results = array();
         for ($i = 0; $i < sizeof($lines); $i++) {
-            $ar_buf = preg_split("/\s+/", $lines[$i]);
+            $ar_buf = preg_split('/\s+/', $lines[$i]);
             if (!empty($ar_buf[0]) && !empty($ar_buf[3])) {
                 $results[$ar_buf[0]] = array();
 
