@@ -343,9 +343,7 @@ hContent;
         <td>
           <table class='xinha_editor'>
           <tr>
-            <td><textarea id='xinha' name='newContent'>".
-		str_replace('{','&#123;',htmlspecialchars($contentToModify))."
-	    </textarea></td>
+            <td>".rich_text_editor('newContent', 4, 20, $contentToModify)."</td>
           </tr>
           </table>
         </td>

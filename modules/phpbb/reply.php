@@ -297,8 +297,9 @@ if (isset($submit) && $submit) {
 	$tool_content .= "</th><td valign='top'>
 	<table class='xinha_editor'>
 	<tr>
-	<td>
-	<textarea id='xinha' name='message' rows='15' cols='70' class='auth_input'>$reply</textarea></td>
+	<td>".
+	rich_text_editor('message', 15, 70, $reply, "class='FormData_InputText'")
+	."</td>
 	</tr></table></td>
 	</tr>
 	<tr>

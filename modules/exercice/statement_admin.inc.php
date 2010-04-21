@@ -130,9 +130,9 @@ if(isset($newQuestion) || isset($modifyQuestion)) {
 	<th class=\"left\">".$langQuestion." :</th>
 	<td><input type=\"text\" name=\"questionName\"" ."size=\"50\" maxlength=\"200\" value=\"".htmlspecialchars($questionName)."\" style=\"width:400px;\" class=\"FormData_InputText\"></td>";
 	$tool_content .= "</tr><tr><th class='left'>$langQuestionDescription:</th>";
-	$tool_content .= "<td>
-	<textarea wrap=\"virtual\" name=\"questionDescription\" cols=\"50\" rows=\"4\" "."style=\"width:400px;\" class=\"FormData_InputText\">".str_replace('{','&#123;',htmlspecialchars($questionDescription))."</textarea>
-	</td></tr><tr><th class='left'>";
+	$tool_content .= "<td>"
+	.rich_text_editor('questionDescription', 4, 50, $questionDescription, "style='width:400px;' class='FormData_InputText'").
+	"</td></tr><tr><th class='left'>";
 
 	if ($okPicture) {
 		$tool_content .= "$langReplacePicture";

@@ -137,8 +137,9 @@ if ($is_adminOfCourse) {
                 $tool_content .= "
                         <tr><th class='left'>&nbsp;</th>
                             <td><table class='xinha_editor'>
-                            <tr><td><textarea id='xinha' name='edContentBloc'>" . 
-                                q(@$contentBloc) . "</textarea></td></tr></table></td></tr>
+                            <tr><td>".
+                            @rich_text_editor('edContentBloc', 4, 20, $contentBloc)
+                            ."</td></tr></table></td></tr>
                         <tr><th class='left'>&nbsp;</th>
                             <td><input type='submit' name='save' value='$langAdd' />&nbsp;&nbsp;
                                 <input type='submit' name='ignore' value='$langBackAndForget' /></td></tr>

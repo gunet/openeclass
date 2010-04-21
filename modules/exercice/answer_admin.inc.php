@@ -502,6 +502,7 @@ cData;
 		$tool_content .="<tr><td class=\"right\">$i.</td>";
 		if($answerType == UNIQUE_ANSWER) {
 			$tool_content .= "<td align=\"center\" valign=\"top\">
+			
 			<input type=\"radio\" value=\"".$i."\" name=\"correct\" ";
 			if(isset($correct) and $correct == $i) {
 				$tool_content .= "checked=\"checked\" /></td>";
@@ -518,14 +519,12 @@ cData;
 			}
 		}
 		
-		$tool_content .= "<td align=\"center\">
-		<textarea wrap=\"virtual\" rows=\"7\" cols=\"25\" "."name=\"reponse[".$i."]\" class=\"FormData_InputText\">".str_replace('{','&#123;',htmlspecialchars($reponse[$i]))."</textarea>
-		</td>"."
-		<td align=\"center\">
-		<textarea wrap=\"virtual\" rows=\"7\" cols=\"25\" ". "name=\"comment[".$i."]\" class=\"FormData_InputText\">".str_replace('{','&#123;',htmlspecialchars($comment[$i]))."</textarea>
-		</td>"."
-		<td valign=\"top\" align=\"center\">
-		<input class=\"FormData_InputText\" type=\"text\" name=\"weighting[".$i."]\" size=\"5\" value=\"";
+		$tool_content .= "<td align=\"center\">".
+		rich_text_editor("reponse[$i]", 7, 25, @$reponse[$i], "class='FormData_InputText'")
+		."</td><td align='center'>".
+		rich_text_editor("comment[$i]", 7, 25, @$comment[$i], "class='FormData_InputText'")
+		."</td><td valign='top' align='center'>
+		<input class='FormData_InputText' type='text' name=\"weighting[".$i."]\" size=\"5\" value=\"";
 		if (isset($weighting[$i])) {
 			$tool_content .= $weighting[$i];
 		} else {	
@@ -596,7 +595,7 @@ cData;
       <tr>
         <th class="left">$langQuestionAnswers:</th>
         <td>$langTypeTextBelow, $langAnd $langUseTagForBlank :<br/><br/>
-            <textarea wrap="virtual" name="reponse" cols="70" rows="6" class="FormData_InputText">
+            <textarea name="reponse" cols="70" rows="6" class="FormData_InputText">
 cData;
 
   if(!isset($submitAnswers) && empty($reponse)) 

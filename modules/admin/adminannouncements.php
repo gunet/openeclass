@@ -151,8 +151,9 @@ if ($displayForm && (@$addAnnouce==1 || isset($modify))) {
                     <td><input type='text' name='title' value='$titleToModify' size='50' class='FormData_InputText' /></td></tr>
                 <tr><th class='left'>$langAnnouncement</th>
                     <td><table class='xinha_editor'>
-                            <tr><td><textarea id='xinha' name='newContent'>$contentToModify</textarea>
-                                    </td></tr></table>
+                            <tr><td>".
+			    rich_text_editor('newContent', 4, 20, $contentToModify)
+			    ."</td></tr></table>
                         $id_hidden_input</td></tr>
                 <tr><th class='left'>$langComments</th>
                     <td><textarea name='comment' rows='2' cols='50' class='FormData_InputText'>$commentToModify</textarea>

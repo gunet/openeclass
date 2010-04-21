@@ -91,8 +91,9 @@ if(isset($modifyExercise))
 	<td><input type=\"text\" name=\"exerciseTitle\" "."size=\"50\" maxlength=\"200\" value=\"".htmlspecialchars($exerciseTitle)."\" style=\"width:400px;\" class=\"FormData_InputText\"></td>
 	</tr>";
 	$tool_content .= "<tr><th class='left'>".$langExerciseDescription." :</th>
-	<td><textarea wrap='virtual' ".
-		"name='exerciseDescription' cols='50' rows='4' style='width:400px;' class='FormData_InputText'>".str_replace('{','&#123;',htmlspecialchars($exerciseDescription))."</textarea></td>
+	<td>".
+	rich_text_editor('exerciseDescription', 4, 50, $exerciseDescription, "style='width:400px;' class='FormData_InputText'")
+	."</td>
 	</tr>";
 	
 	$tool_content .= "<tr><th class=\"left\">".$langExerciseType." :</th>

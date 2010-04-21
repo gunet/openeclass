@@ -291,7 +291,7 @@ $langActivateAccount = "Please activate my account";
 $langLessonCode = "Course password";
 $langConfirmDelete = "Confirm delete of ";
 $langConfirmDeleteQuestion1 = "Are you sure that you want to delete the user";
-$langConfirmDeleteQuestion2 = "from the course with id";
+$langConfirmDeleteQuestion2 = "from the course";
 $langTryDeleteAdmin = "You have tried to delete the user with user id = 1 (Admin)!";
 $langUserWithId = "The user with id";
 $langWasDeleted = "was deleted";

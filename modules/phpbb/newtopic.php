@@ -230,7 +230,10 @@ if (isset($submit) && $submit) {
 	<td>
 	<table class='xinha_editor'>
 	<tr>
-	<td><textarea id='xinha' name='message' rows='14' cols='50' class='FormData_InputText'></textarea></td>
+	<td>".
+	rich_text_editor('message', 14, 50, '', "class='FormData_InputText'")
+	."
+	</td>
 	</tr></table>
 	</td>
 	</tr>

@@ -629,9 +629,10 @@ function edit_res($resource_id)
 	} else {
 		$message = $langContents;
 	}
-	$rescomments = str_replace('{','&#123;',htmlspecialchars($rescomments));
         $tool_content .= "<tr><th class='left'>$message:</th><td>
-        <table class='xinha_editor'><tr><td><textarea id='xinha' name='rescomments'>$rescomments</textarea></td></tr>
+        <table class='xinha_editor'><tr><td>".
+	rich_text_editor('rescomments', 4, 20, $rescomments)
+	."</td></tr>
         </table></td></tr>
         <tr><th>&nbsp;</th>
 	<td><input type='submit' name='edit_res_submit' value='$langModify'></td></tr>

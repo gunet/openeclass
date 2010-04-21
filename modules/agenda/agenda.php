@@ -322,8 +322,9 @@ function confirmation (name)
     		if (!isset($contenu)) {
 			$contenu = "";
 		}
-		$tool_content .= "<tr><th class='left'>$langDetail:</th>
-			<td><textarea id='xinha' name='contenu'>".$contenu."</textarea></td>
+		$tool_content .= "<tr><th class='left'>$langDetail:</th><td>".
+			rich_text_editor('contenu', 4, 20, $contenu)
+			."</td>
 			</tr>
 			<tr><th class='left'>&nbsp;</th>
 			<td><input type='submit' name='submit' value='$langAddModify' /></td>

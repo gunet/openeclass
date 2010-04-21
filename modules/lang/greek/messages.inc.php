@@ -365,7 +365,7 @@ $langLessonCode = "Συνθηματικό μαθήματος";
 // unregister
 $langConfirmDelete = "Επιβεβαίωση διαγραφής ";
 $langConfirmDeleteQuestion1 = "Θέλετε σίγουρα να διαγράψετε τον χρήστη";
-$langConfirmDeleteQuestion2 = "από το μάθημα με κωδικό";
+$langConfirmDeleteQuestion2 = "από το μάθημα";
 $langTryDeleteAdmin = "Προσπαθήσατε να διαγράψετε τον χρήστη με user id = 1(Admin)!";
 $langUserWithId = "Ο χρήστης με id";
 $langWasDeleted = "διαγράφηκε";

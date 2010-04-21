@@ -156,7 +156,7 @@ if (isset($_POST['submit'])) {
 		$fake_code = q($c['fake_code']);
 		$titulary = q($c['titulaires']);
 		$languageCourse	= $c['languageCourse'];
-		$description = q($c['description']);
+		$description = $c['description'];
 		$course_keywords = q($c['course_keywords']);
 		$course_addon = q($c['course_addon']);
 		$password = q($c['password']);
@@ -207,7 +207,6 @@ if (isset($_POST['submit'])) {
 		<tr>
 		<th class='left'>$langType&nbsp;:</th>
 		<td>";
-
                 $tool_content .= selection(array('pre' => $langpre, 'post' => $langpost, 'other' => $langother), 'type', $type);
                 $tool_content .= "</td>
         <td>&nbsp;</td>
@@ -217,7 +216,9 @@ if (isset($_POST['submit'])) {
         <td width='100'>
 	      <table class='xinha_editor'>
           <tr>
-             <td><textarea id='xinha' name='description' cols='20' rows='4' class='FormData_InputText'>$description</textarea></td>
+             <td>".
+	     rich_text_editor('description', 4, 20, $description)
+	     ."</td>
           </tr>
           </table>
         </td>

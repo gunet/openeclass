@@ -177,7 +177,9 @@ if (isset($_POST['back1']) or !isset($_POST['visit'])) {
 	<td>
 	<table class='xinha_editor'>
 	<tr>
-	<td><textarea id='xinha' name='description' wrap=\"soft\">$description</textarea></td>
+	<td>".
+        rich_text_editor('description', 4, 20, $description)
+        ."</td>
 	</tr>
 	</table>
 	</td>

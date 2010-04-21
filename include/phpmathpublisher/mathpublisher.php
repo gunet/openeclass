@@ -335,11 +335,9 @@ $extraits = array();
 $result=array();
 //stupid code but token_get_all bug in some php versions
 $d=0;
-for($i = 0; $i < count($t); $i++)
-	{
+for($i = 0; $i < count($t); $i++) {
 	if(is_array($t[$i])) $t[$i] = $t[$i][1];
-	if (strstr($t[$i], 'formula') !== false)
-		{
+	if (strstr($t[$i], 'formula') !== false) {
 		$d=$i+2;
 		break;
 		}
@@ -1604,8 +1602,7 @@ $handle=opendir($dirimg);
 while ($fi = readdir($handle))
 	{
 	$info=pathinfo($fi);
-	if ($fi!="." && $fi!=".." && $info["extension"]=="png" && preg_match('/^math/', $fi)) 
-		{
+	if ($fi!="." && $fi!=".." && $info["extension"]=="png" && preg_match('/^math/', $fi)) {
 		list($math,$v,$name)=explode("_",$fi);
 		if ($name==$n) 
 			{
@@ -1656,11 +1653,13 @@ math_(1000+valign)_md5(formulatext.size).png.
 $text=stripslashes($text);
 $size=max($size,10);
 $size=min($size,24);
-preg_match_all("|<m>(.*?)</m>|", $text, $regs, PREG_SET_ORDER);
+//preg_match_all("|<m>(.*?)</m>|", $text, $regs, PREG_SET_ORDER);
+preg_match_all("#(<m>.*?</m>|\\[m].*?\\[/m])#", $text, $regs, PREG_SET_ORDER);
 foreach ($regs as $math) 
 	{
-	$t=str_replace('<m>','',$math[0]);
-	$t=str_replace('</m>','',$t);
+//	$t=str_replace('<m>','',$math[0]);
+//	$t=str_replace('</m>','',$t);
+        $t=str_replace(array('<m>','</m>','[m]','[/m]'), '',$math[0]);
 	$code=mathimage(trim($t),$size,$pathtoimg);
 	$text = str_replace($math[0], $code, $text);
 	}	

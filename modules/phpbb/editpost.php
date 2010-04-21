@@ -334,8 +334,9 @@ if ($is_adminOfCourse) { // course admin
 		<td>
 		<table class='xinha_editor'>
 		<tr>
-		<td>
-		<textarea id='xinha' name='message' rows='10' cols='50' class='FormData_InputText'>" . q($message) . "</textarea>
+		<td>".
+		rich_text_editor('message', 10, 50, $message, "class='FormData_InputText'")
+		."	
 		</td></tr></table>
 		</td>
 		</tr>

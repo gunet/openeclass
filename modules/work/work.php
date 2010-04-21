@@ -355,7 +355,7 @@ function new_assignment()
 
 
 	$tool_content .= "
-  <form action='work.php' method='post' onsubmit='return checkrequired(this, \"title\");'>
+    <form action='$_SERVER[PHP_SELF]' method='post' onsubmit='return checkrequired(this, \"title\");'>
     <table width='99%' class='FormData'>
     <tbody>
     <tr>
@@ -371,16 +371,10 @@ function new_assignment()
       <td>
         <table class='xinha_editor'>
         <tr>
-          <td><textarea id='xinha' name='desc' style='width:100%'>";
-        if ($desc) {
-                $tool_content .= $desc;
-        }
-        $tool_content .= "</textarea></td>
-        </tr>
-        </table>
-      </td>
-    </tr>
-    <tr>
+          <td>";
+        $tool_content .= rich_text_editor('desc', 4, 20, $desc, "style='width:100%'");
+        $tool_content .= "</td></tr></table></td></tr>
+        <tr>
       <th class='left'>$m[comments]:</th>
       <td><textarea name='comments' rows='3' cols='53' class='FormData_InputText'></textarea></td>
     </tr>
@@ -450,6 +444,7 @@ function show_edit_assignment($id)
 
 
 	$description = q($row['description']);
+        $textarea = rich_text_editor('desc', 4, 20, $row['description'], "style='width:100%'");
 	$tool_content .= <<<cData
     <form action="$_SERVER[PHP_SELF]" method="post" onsubmit="return checkrequired(this, 'title');">
     <input type="hidden" name="id" value="$id" />
@@ -469,7 +464,7 @@ function show_edit_assignment($id)
       <td>
         <table class='xinha_editor'>
         <tr>
-          <td><textarea id='xinha' name='desc' value='$description' style='width:100%'>${row['description']}</textarea></td>
+          <td>$textarea</td>
         </tr>
         </table>
       </td>
