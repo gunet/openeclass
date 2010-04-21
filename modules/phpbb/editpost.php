@@ -219,13 +219,13 @@ if ($is_adminOfCourse) { // course admin
 			WHERE (f.forum_id = '$forum') AND (t.topic_id = $topic) AND (t.forum_id = f.forum_id)";
 		
 		if (!$result = db_query($sql, $currentCourseID)) {
-			$tool_content .= "$langTopicInformation";
+			$tool_content .= $langTopicInformation;
 			draw($tool_content, 2, 'phpbb', $head_content);
 			exit();
 		}
 		
 		if (!$myrow = mysql_fetch_array($result)) {
-			$tool_content .= "$langErrorTopicSelect";
+			$tool_content .= $langErrorTopicSelect;
 			draw($tool_content, 2, 'phpbb', $head_content);
 			exit();
 		}

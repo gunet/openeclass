@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language es
-// Generated 2010-04-13 14:03:10
+// Generated 2010-04-21 15:28:48
 
 $langIntro = "El <b>$siteName</b> platforma es un completo Sistema de Administración eCursos que soporta el Servicio Asincrónico de eAprendizaje en <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
 $langVersion = "$siteName versión";
@@ -248,8 +248,23 @@ $langUserAuthentication = "Autentificación del Usuario";
 $langChangeUser = 'Conectar como un usuario diferentes';
 $langChangeUserNotFound = 'Cuenta con el nombre de usurario "%s"no se encontró';
 $langMultiRegUser = 'Creación masiva de cuentas de usuario';
-$langMultiRegUserInfo = 'Please enter in the field below a list of user details, one line per each new user account, in the following order: last name, first name, e-mail address. If you want to have the users automatically register to some courses, please append the course codes in the end of each line. The e-mail address is optional;<br>
-you can enter a hyphen (-) if you want to skip it. Lines beginning with "#" are ignored.';
+$langMultiRegUserInfo = "<p>Please enter in the area below a list of user details, one line per each new user account.</p>
+<p>The order of the user information is defined in the field before the area, where possible labels are:</p>
+<ul>
+<li><tt>first</tt>: First name</li>
+<li><tt>last</tt>: Last name / surname</li>
+<li><tt>email</tt>: e-mail address</li>
+<li><tt>id</tt>: Student ID</li>
+<li><tt>phone</tt>: Phone number</li>
+<li><tt>username</tt>: Username</li>
+<li><tt>password</tt>: Password</li>
+</ul>
+<p>To have the users automatically registered to some courses, please add the course
+codes after the user details in the end of each line. The e-mail addres is optional - you can
+use a hyphen (-) in its place if you want to omit it. Lines beginning with # are ignored. If
+you don't specify usernames, they will be automatically creating by appending a serial
+number to the user prefix entered below. If you don't specify passwords, a random
+password will be created for each account.</p>";
 $langMultiRegCourseInvalid = 'Usiario %s: código del curso inválido "%s"';
 $langMultiRegFields = 'Definición del orden del campo';
 $langMultiRegFieldError = '¡Error!: Etiqueta de campo inválida:';
@@ -2540,3 +2555,4 @@ $langNameOfLang['spanish'] = "Español";
 $langNameOfLang['czech'] = "Checo";
 $langNameOfLang['german'] = "Alemán";
 $langNameOfLang['italian'] = "Italiano";
+$langCourseOptions = "Course Options";

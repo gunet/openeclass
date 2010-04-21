@@ -18,7 +18,7 @@ $navigation[]= array ("url"=>"index.php", "name"=> $langAdmin);
 $tool_content = "";
 
 $error = '';
-$acceptable_fields = array('first', 'last', 'email', 'id', 'phone', 'username');
+$acceptable_fields = array('first', 'last', 'email', 'id', 'phone', 'username', 'password');
 
 if (isset($_POST['submit'])) {
         $send_mail = isset($_POST['send_mail']) && $_POST['send_mail'];
@@ -67,8 +67,12 @@ if (isset($_POST['submit'])) {
                                                                             $prenom,
                                                                             $_POST['prefix']);
                                 }
+                                if (!isset($info['password'])) {
+                                        $info['password'] = create_pass();
+                                }
                                 $new = create_user($newstatut,
                                                    $info['username'],
+                                                   $info['password'],
                                                    @$info['last'],
                                                    @$info['first'],
                                                    @$info['email'],
@@ -150,7 +154,7 @@ if (isset($_POST['submit'])) {
 draw($tool_content,3,'admin');
 
 
-function create_user($statut, $uname, $nom, $prenom, $email, $depid, $am, $phone, $lang, $send_mail)
+function create_user($statut, $uname, $password, $nom, $prenom, $email, $depid, $am, $phone, $lang, $send_mail)
 {
         global $charset, $mysqlMainDb, $langAsUser, $langAsProf,
                $langYourReg, $siteName, $langDestination, $langYouAreReg,
@@ -175,7 +179,6 @@ function create_user($statut, $uname, $nom, $prenom, $email, $depid, $am, $phone
                 return false;
         }
 
-        $password = create_pass();
         $registered_at = time();
         $expires_at = time() + $durationAccount;
         $password_encrypted = md5($password);

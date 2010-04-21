@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language en
-// Generated 2010-04-13 14:03:10
+// Generated 2010-04-21 15:28:47
 
 $langIntro = "The <b>$siteName</b> platform is a complete eCourses Management System supporting the Asynchronous eLearning Service in <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
 $langVersion = "$siteName version";
@@ -257,12 +257,14 @@ $langMultiRegUserInfo = "<p>Please enter in the area below a list of user detail
 <li><tt>id</tt>: Student ID</li>
 <li><tt>phone</tt>: Phone number</li>
 <li><tt>username</tt>: Username</li>
+<li><tt>password</tt>: Password</li>
 </ul>
 <p>To have the users automatically registered to some courses, please add the course
 codes after the user details in the end of each line. The e-mail addres is optional - you can
 use a hyphen (-) in its place if you want to omit it. Lines beginning with # are ignored. If
 you don't specify usernames, they will be automatically creating by appending a serial
-number to the user prefix entered below.</p>";
+number to the user prefix entered below. If you don't specify passwords, a random
+password will be created for each account.</p>";
 $langMultiRegCourseInvalid = 'User %s: invalid course code "%s"';
 $langMultiRegFields = 'Field order definition';
 $langMultiRegFieldError = 'Error! Invalid field label:';
@@ -291,7 +293,7 @@ $langActivateAccount = "Please activate my account";
 $langLessonCode = "Course password";
 $langConfirmDelete = "Confirm delete of ";
 $langConfirmDeleteQuestion1 = "Are you sure that you want to delete the user";
-$langConfirmDeleteQuestion2 = "from the course";
+$langConfirmDeleteQuestion2 = "from the course with id";
 $langTryDeleteAdmin = "You have tried to delete the user with user id = 1 (Admin)!";
 $langUserWithId = "The user with id";
 $langWasDeleted = "was deleted";
@@ -423,7 +425,7 @@ $langAlreadyActiv = "Authentication method is already active";
 $langErrActiv = "Error! Authentication method cannot be activated";
 $langAuthSettings = "Authentication Settings";
 $langWrongAuth = "You typed a wrong username/password";
-$langExplainShib = "Enter the names of the variables returned by the Shibboleth server. The variables will be written in <em><em>%ssecure/index.php</em>. Please note that if the Shibboleth Canonical Name contains the user's full name (both first and last names), you need the enter the character delimiting the first from the last name.";
+$langExplainShib = "Enter the names of the variables returned by the Shibboleth server. The variables will be written in <em>${webDir}secure/index.php</em>. Please note that if the Shibboleth Canonical Name contains the user's full name (both first and last names), you need the enter the character delimiting the first from the last name.";
 $langCharSeparator = "Delimiter character";
 $langConference = "Teleconference";
 $langWash = "Cleaning";
@@ -2609,9 +2611,9 @@ $langAdministratorCourse = "Course Administration";
 $langCreateAccount = "Create Account";
 $langAllTutorials = "General Tutorials";
 $langAdminOptions = "Admin Options";
-$langCourseOptions = "Course Options";
 $langLearningPathImportFromDocuments = "Import learning path from documents";
 $langNameOfLang['spanish'] = "Spanish";
 $langNameOfLang['czech'] = "Czech";
 $langNameOfLang['german'] = "German";
 $langNameOfLang['italian'] = "Italian";
+$langCourseOptions = "Course Options";
