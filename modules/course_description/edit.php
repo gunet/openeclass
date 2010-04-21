@@ -146,7 +146,7 @@ if ($is_adminOfCourse) {
                     </tbody></table></form>\n";
         } else {
                 $sql = "SELECT * FROM `course_description` order by id";
-                $res = db_query($sql,$db);
+                $res = db_query($sql);
                 while($bloc = mysql_fetch_array($res)) {
                         $blocState[$bloc["id"]] = "used";
                         $titreBloc[$bloc["id"]]	= $bloc["title"];
