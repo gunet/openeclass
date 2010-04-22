@@ -301,7 +301,7 @@ if ($is_adminOfCourse) { // course admin
 		} else {
 			$addsig = 0;
 		}
-		$message = str_ireplace(array('<br>', '<br />'), "\n", $message);
+		$message = str_replace(array('<br>', '<br />', '<BR>', '<BR />'), "\n", $message);
 		$message = stripslashes($message);
 		$message = bbdecode($message);
 		$message = undo_make_clickable($message);

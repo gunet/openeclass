@@ -1305,9 +1305,9 @@ function rich_text_editor($name, $rows, $cols, $text, $extra = '')
 {
 	static $id = 0;
 	
-	$text = str_ireplace(array('<m>', '</m>'),
-			     array('[m]', '[/m]'),
-			     $text);
+	$text = str_replace(array('<m>', '</m>', '<M>', '</M>'),
+			    array('[m]', '[/m]', '[m]', '[/m]'),
+			    $text);
 	if ($id == 0) {
 		$id1 = '';
 	} else {
