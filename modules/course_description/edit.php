@@ -90,12 +90,12 @@ if (isset($_POST['edIdBloc'])) {
         if (isset($titreBloc[$numBloc])) {
                 $title = q($titreBloc[$numBloc]);
         }
-        if (!isset($titreBlocNotEditable[$numBloc]) or !$titreBlocNotEditable[$numBloc]) {
+        if (isset($title) and @!$titreBlocNotEditable[$numBloc]) {
                $edit_title = " value='$title'"; 
         } else {
                $edit_title = false; 
         }
-        if (isset($_POST['add'])) {
+        if (isset($_POST['add']) and @!$titreBlocNotEditable[$numBloc]) {
                 $q = db_query("SELECT MAX(res_id) FROM unit_resources WHERE unit_id =
                         (SELECT id FROM course_units WHERE course_id = $cours_id AND `order` = -1)");
                 list($max_res_id) = mysql_fetch_row($q);
@@ -106,9 +106,9 @@ if (isset($_POST['edIdBloc'])) {
                                         (SELECT id FROM course_units WHERE course_id = $cours_id AND `order` = -1)
                                         AND res_id = $numBloc");
                 if ($q and mysql_num_rows($q)) {
-                        list($old_title, $contentBloc) = mysql_fetch_row($q);
+                        list($title, $contentBloc) = mysql_fetch_row($q);
                         if ($edit_title) {
-                               $edit_title = " value='$old_title'"; 
+                               $edit_title = " value='$title'"; 
                         }
                 } else {
                         $contentBloc = '';
@@ -149,10 +149,10 @@ draw($tool_content, 2, 'course_description', $head_content, $body_action);
 // Display form to to add a new block
 function display_add_block_form()
 {
-        global $cours_id, $tool_content, $titreBloc, $langAddCat, $langAdd, $langSelection;
+        global $cours_id, $tool_content, $titreBloc, $langAddCat, $langAdd, $langSelection, $titreBlocNotEditable;
         $q = db_query("SELECT res_id FROM unit_resources WHERE unit_id =
                                 (SELECT id FROM course_units WHERE course_id = $cours_id AND `order` = -1)
-                                AND res_id > 0 ORDER BY `order`");
+                       ORDER BY `order`");
         while ($row = mysql_fetch_row($q)) {
                 if (@$titreBlocNotEditable[$row[0]]) {
                         $blocState[$row[0]] = true;

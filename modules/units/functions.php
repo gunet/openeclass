@@ -27,7 +27,7 @@ _editor_lang = '$lang_editor';
 // Process resource actions
 function process_actions()
 {
-        global $tool_content, $id;
+        global $tool_content, $id, $mysqlMainDb, $langResourceCourseUnitDeleted;
 
         if (isset($_REQUEST['edit'])) {
                 $res_id = intval($_GET['edit']);
