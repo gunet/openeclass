@@ -58,6 +58,8 @@ $action->record('MODULE_ID_ANNOUNCE');
 /*
  */
 
+define ('RSS', 'modules/announcements/rss.php?c='.$currentCourseID);
+
 $nameTools = $langAnnouncements;
 $tool_content = $head_content = "";
 
@@ -74,10 +76,7 @@ if ($is_adminOfCourse and
 <script type="text/javascript" src="$urlAppend/include/xinha/my_config.js"></script>
 hContent;
 }
-
-/*
- * TEACHER ONLY
- */
+$displayAnnouncementList = true;
 if ($is_adminOfCourse) { // check teacher status
         $head_content .= '
 <script type="text/javascript">
@@ -132,14 +131,11 @@ hContent;
     $displayAnnouncementList = true;
     $displayForm = true;
 
-    /*----------------------------------------
-	MOVE UP AND MOVE DOWN COMMANDS
-	--------------------------------------*/
+    /* up and down commands */
     if (isset($down) && $down) {
         $thisAnnouncementId = $down;
         $sortDirection = "DESC";
     }
-
     if (isset($up) && $up) {
         $thisAnnouncementId = $up;
         $sortDirection = "ASC";
@@ -157,7 +153,7 @@ hContent;
                 db_query("UPDATE annonces SET ordre = '$thisAnnouncementOrder' WHERE id = '$nextAnnouncementId'", $mysqlMainDb);
                 break;
             }
-            // STEP 1 : FIND THE ORDER OF THE ANNOUNCEMENT
+            // find the order
             if ($announcementId == $thisAnnouncementId) {
                 $thisAnnouncementOrder = $announcementOrder;
                 $thisAnnouncementOrderFound = true;
@@ -165,34 +161,23 @@ hContent;
         }
     }
 
-    /*----------------------------------------
-	DELETE ANNOUNCEMENT COMMAND
-	--------------------------------------*/
-
+    /* delete */
     if (isset($delete) && $delete) {
         $result = db_query("DELETE FROM annonces WHERE id='$delete'", $mysqlMainDb);
         $message = "<p class='success_small'>$langAnnDel</p>";
     }
 
-    /*----------------------------------------
-	DELETE ALL ANNOUNCEMENTS COMMAND
-	--------------------------------------*/
-
+    /* delete all */
     if (isset($deleteAllAnnouncement) && $deleteAllAnnouncement) {
         db_query("DELETE FROM annonces WHERE cours_id = $cours_id", $mysqlMainDb);
         $message = "<p class='success_small'>$langAnnEmpty</p>";
     }
 
-    /*----------------------------------------
-	MODIFY COMMAND
-	--------------------------------------*/
-
+    /* modify */
     if (isset($_GET['modify'])) {
         $modify = intval($_GET['modify']);
-        // RETRIEVE THE CONTENT OF THE ANNOUNCEMENT TO MODIFY
         $result = db_query("SELECT * FROM annonces WHERE id='$modify'", $mysqlMainDb);
         $myrow = mysql_fetch_array($result);
-
         if ($myrow) {
             $AnnouncementToModify = $myrow['id'];
 	    $contentToModify = unescapeSimple($myrow['contenu']);
@@ -200,10 +185,8 @@ hContent;
             $displayAnnouncementList = true;
         }
     }
-    /*----------------------------------------
-	SUBMIT ANNOUNCEMENT COMMAND
-	--------------------------------------*/
-
+    
+    /* submit */
     if (isset($_POST['submitAnnouncement'])) {
         // modify announcement
         $antitle = autoquote($_POST['antitle']);
@@ -218,24 +201,23 @@ hContent;
 
         // add new announcement
         else {
-            // DETERMINE THE ORDER OF THE NEW ANNOUNCEMENT
             $result = db_query("SELECT MAX(ordre) FROM annonces
 				WHERE cours_id = $cours_id", $mysqlMainDb);
             list($orderMax) = mysql_fetch_row($result);
             $order = $orderMax + 1;
-            // INSERT ANNOUNCEMENT
+            // insert
             db_query("INSERT INTO annonces SET contenu = $newContent,
 			title = $antitle, temps = NOW(),
 			cours_id = $cours_id, ordre = $order");
         }
 
-        // SEND EMAIL (OPTIONAL)
+        // send email 
         if (isset($_POST['emailOption']) and $_POST['emailOption']) {
             $emailContent = autounquote($_POST['antitle']) .
                             "<br><br>" .
                             autounquote($_POST['newContent']);
             $emailSubject = "$professorMessage ($currentCourseID - $intitule)";
-            // Select students email list
+            // select students email list
             $sqlUserOfCourse = "SELECT user.email FROM cours_user, user
                                 WHERE cours_id = $cours_id AND cours_user.user_id = user.user_id";
             $result = db_query($sqlUserOfCourse, $mysqlMainDb);
@@ -274,45 +256,31 @@ hContent;
         else {
             $message = "<p class='success_small'>$langAnnAdd</p>";
         }
-    } // if $submit Announcement
+    } // end of if $submit 
 
 
     // teacher display
-    /*----------------------------------------
-	DISPLAY ACTION MESSAGE
-	--------------------------------------*/
     if (isset($message) && $message) {
         $tool_content .= $message . "<br/>";
-        $displayAnnouncementList = true; //do not show announcements
+        $displayAnnouncementList = false; //do not show announcements
         $displayForm = false; //do not show form
     }
 
-
-    /*----------------------------------------
-	DISPLAY ACTIONS TOOL BAR
-	--------------------------------------*/
-    $tool_content .= "
-      <div id='operations_container'>
+    /* display actions toolbar */
+    $tool_content .= "<a href='http://www.xul.fr/rss.xml'><img src='rss.gif'></a>";
+    $tool_content .= "<div id='operations_container'>
         <ul id='opslist'>
-          <li><a href='" . $_SERVER['PHP_SELF'] . "?addAnnouce=1'>" . $langAddAnn . "</a></li>";
+        <li><a href='" . $_SERVER['PHP_SELF'] . "?addAnnouce=1'>" . $langAddAnn . "</a></li>";
 
     if ($announcementNumber > 1 || isset($_POST['submitAnnouncement'])) {
         $tool_content .= "
           <li><a href='$_SERVER[PHP_SELF]?deleteAllAnnouncement=1' onClick='return confirmation('all');'>$langEmptyAnn</a></li>";
     }
-    $tool_content .= "
-        </ul>
-      </div>";
+    $tool_content .= "</ul></div>";
 
-    /*----------------------------------------
-	DISPLAY FORM TO FILL AN ANNOUNCEMENT
-	(USED FOR ADD AND MODIFY)
-	--------------------------------------*/
-    if ($displayForm and
-        (isset($_GET['addAnnouce']) or isset($_GET['modify']))) {
-        // DISPLAY ADD ANNOUNCEMENT COMMAND
+    /* display form */
+    if ($displayForm and (isset($_GET['addAnnouce']) or isset($_GET['modify']))) {
         $tool_content .= "<form method='post' action='$_SERVER[PHP_SELF]' onsubmit=\"return checkrequired(this, 'antitle');\">";
-        // should not send email if updating old message
         if (isset ($modify) && $modify) {
             $tool_content .= "
 	    <table width='99%' class='FormData'>
@@ -334,109 +302,110 @@ hContent;
         if (!isset($titleToModify)) $titleToModify = "";
 
         $tool_content .= "
-      <tr>
-        <th width='150' class='left'>$langAnnTitle:</th>
-        <td><input type='text' name='antitle' value='$titleToModify' size='50' class='FormData_InputText' /></td>
-      </tr>
-      <tr>
-        <th class='left'>$langAnnBody:</th>
-        <td>
-          <table class='xinha_editor'>
-          <tr>
-            <td>".rich_text_editor('newContent', 4, 20, $contentToModify)."</td>
-          </tr>
-          </table>
-        </td>
-      </tr>
-      <tr>
-        <th>&nbsp;</th>
-        <td><input type='checkbox' value='1' name='emailOption' /> $langEmailOption</td>
-      </tr>
-      <tr>
-        <th>&nbsp;</th>
-        <td><input type='submit' name='submitAnnouncement' value='$langAdd' /></td>
-      </tr>
-      </tbody>
-      </table>
-      <input type='hidden' name='id' value='$AnnouncementToModify' />
-      </form>
-      <br />";
+	<tr>
+	  <th width='150' class='left'>$langAnnTitle:</th>
+	  <td><input type='text' name='antitle' value='$titleToModify' size='50' class='FormData_InputText' /></td>
+	</tr>
+	<tr>
+	  <th class='left'>$langAnnBody:</th>
+	  <td>
+	    <table class='xinha_editor'>
+	    <tr>
+	      <td>".rich_text_editor('newContent', 4, 20, $contentToModify)."</td>
+	    </tr>
+	    </table>
+	  </td>
+	</tr>
+	<tr>
+	  <th>&nbsp;</th>
+	  <td><input type='checkbox' value='1' name='emailOption' /> $langEmailOption</td>
+	</tr>
+	<tr>
+	  <th>&nbsp;</th>
+	  <td><input type='submit' name='submitAnnouncement' value='$langAdd' /></td>
+	</tr>
+	</tbody>
+	</table>
+	<input type='hidden' name='id' value='$AnnouncementToModify' />
+	</form>
+	<br />";
     }
+} // end: teacher only
 
-    /*----------------------------------------
-	DISPLAY ANNOUNCEMENT LIST
-	--------------------------------------*/
+    /* display announcements */
     if ($displayAnnouncementList == true) {
         $result = db_query("SELECT * FROM annonces WHERE cours_id = $cours_id ORDER BY ordre DESC", $mysqlMainDb);
         $iterator = 1;
         $bottomAnnouncement = $announcementNumber = mysql_num_rows($result);
 
 	$tool_content .= "<table width='99%' align='left' class='announcements'>";
+	if ($is_adminOfCourse) {
+		$colspan = 2;
+	} else {
+		$colspan = 3;
+	}
 	if ($announcementNumber > 0) {
-		$tool_content .= "<thead><tr><th class='left' colspan='2'><b>$langAnnouncement</b></th>";
-		$tool_content .= "<th width='70' class='right'><b>$langActions</b></th>";
-		if ($announcementNumber > 1) {
-			$tool_content .= "<th width='70'><b>$langMove</b></th>";
+		$tool_content .= "<thead><tr><th class='left' colspan='$colspan'><b>$langAnnouncement</b></th>";
+		if ($is_adminOfCourse) {
+		    $tool_content .= "<th width='70' class='right'><b>$langActions</b></th>";
+		    if ($announcementNumber > 1) {
+			    $tool_content .= "<th width='70'><b>$langMove</b></th>";
+		    }
 		}
 		$tool_content .= "</tr></thead>";
 	}
 	$tool_content .= "<tbody>";
 	$k = 0;
 	while ($myrow = mysql_fetch_array($result)) {
-            // FORMAT CONTENT
             $content = make_clickable($myrow['contenu']);
             $content = nl2br($content);
             // display math symbols (if there are)
             $content = mathfilter($content, 12, "../../courses/mathimg/");
             $myrow['temps'] = nice_format($myrow['temps']);
             if ($k%2==0) {
-	           $tool_content .= "\n      <tr>";
+	           $tool_content .= "\n<tr>";
 	        } else {
-	           $tool_content .= "\n      <tr class='odd'>";
+	           $tool_content .= "\n<tr class='odd'>";
             }
-            $tool_content .= "
-        <td width='1'><img style='padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet' /></td>
-        <td><b>";
-
+            $tool_content .= "<td width='1'>
+	    <img style='padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet' /></td>
+            <td><b>";
             if ($myrow["title"]=="") {
                 $tool_content .= "".$langAnnouncementNoTille."";
             } else {
                 $tool_content .= "".$myrow["title"]."";
             }
-
-            $tool_content .= "</b>&nbsp;<small>(" . $myrow['temps'] . ")</small>
-            <br />".$content."</td>
-        <td width='70' class='right'>
-        <a href='$_SERVER[PHP_SELF]?modify=" . $myrow['id'] . "'>
-        <img src='../../template/classic/img/edit.gif' title='" . $langModify . "' /></a>
-        <a href='$_SERVER[PHP_SELF]?delete=" . $myrow['id'] . "' onClick=\"return confirmation('');\">
-        <img src='../../template/classic/img/delete.gif' title='" . $langDelete . "' /></a>
-        </td>";
-
+	    
+            $tool_content .= "</b>&nbsp;<small>(" . nice_format($myrow["temps"]). ")</small>
+            <br />".unescapeSimple($content)."</td>";
+	    if ($is_adminOfCourse) {
+		$tool_content .= "<td width='70' class='right'>
+		<a href='$_SERVER[PHP_SELF]?modify=" . $myrow['id'] . "'>
+		<img src='../../template/classic/img/edit.gif' title='" . $langModify . "' /></a>
+		<a href='$_SERVER[PHP_SELF]?delete=" . $myrow['id'] . "' onClick=\"return confirmation('');\">
+		<img src='../../template/classic/img/delete.gif' title='" . $langDelete . "' /></a>
+		</td>";
+	    }
 	if ($announcementNumber > 1)  {
 		$tool_content .= "<td align='center' width='70' class='right'>";
 	}
-           // DISPLAY MOVE UP COMMAND
-            // condition: only if it is not the top announcement
-	if ($iterator != 1)  {
-		$tool_content .= "<a href='$_SERVER[PHP_SELF]?up=" . $myrow["id"] . "'><img class='displayed' src='../../template/classic/img/up.gif' title='" . $langUp . "' /></a>";
+	if ($is_adminOfCourse) {
+	    if ($iterator != 1)  {
+		    $tool_content .= "<a href='$_SERVER[PHP_SELF]?up=" . $myrow["id"] . "'><img class='displayed' src='../../template/classic/img/up.gif' title='" . $langUp . "' /></a>";
+	    }
+	    if ($iterator < $bottomAnnouncement) {
+		    $tool_content .= "<a href='$_SERVER[PHP_SELF]?down=" . $myrow["id"] . "'><img class='displayed' src='../../template/classic/img/down.gif' title='" . $langDown . "' /></a>";
+	    }
+	    if ($announcementNumber > 1) {
+		    $tool_content .= "</td>";
+	    }
 	}
-        // DISPLAY MOVE DOWN COMMAND
-	if ($iterator < $bottomAnnouncement) {
-		$tool_content .= "<a href='$_SERVER[PHP_SELF]?down=" . $myrow["id"] . "'><img class='displayed' src='../../template/classic/img/down.gif' title='" . $langDown . "' /></a>";
-	}
-	if ($announcementNumber > 1) {
-		$tool_content .= "</td>";
-	}
-// DISPLAY ANNOUNCEMENT CONTENT
-	$tool_content .= "\n      </tr>";
+	$tool_content .= "\n</tr>";
             $iterator ++;
             $k++;
-        } // end while ($myrow = mysql_fetch_array($result))
-        $tool_content .= "
-      </tbody>
-      </table>";
-    } // end: if ($displayAnnoucementList == true)
+        } // end of while 
+        $tool_content .= "</tbody></table>";
+    
     if ($announcementNumber < 1) {
         $no_content = true;
         if (isset($_GET['addAnnouce'])) {
@@ -446,40 +415,10 @@ hContent;
         if (isset($_GET['modify'])) {
             $no_content = false;
         }
-
         if ($no_content) $tool_content .= "<p class='alert1'>$langNoAnnounce</p>";
     }
-} // end: teacher only
-// student view
-else {
-	$result = db_query("SELECT * FROM annonces WHERE cours_id = $cours_id
-		ORDER BY ordre DESC", $mysqlMainDb) OR die("DB problem");
-	if (mysql_num_rows($result) > 0) {
-		$tool_content .= "<table width='99%' align='left' class='announcements'>
-		<thead>
-		<tr><th class='left' colspan='2'><b>$langAnnouncement</b></th>
-		</tr></thead><tbody>";
-		$k = 0;
-		while ($myrow = mysql_fetch_array($result)) {
-			$content = $myrow['contenu'];
-			$content = make_clickable($content);
-			$content = nl2br($content);
-			if ($k%2==0) {
-				$tool_content .= "\n      <tr>";
-			} else {
-				$tool_content .= "\n      <tr class='odd'>";
-			}
-			$tool_content .= "
-			<td width='1'><img style='padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet' /></td>
-			<td><b>$myrow[title]</b>&nbsp;<small>(" . nice_format($myrow["temps"]) . ")</small><br/>".unescapeSimple($content)."</td></tr>";
-			$k++;
-		} // while loop
-		$tool_content .= "
-	</tbody></table>";
-	} else {
-		$tool_content .= "<p class='alert1'>$langNoAnnounce</p>";
-	}
-}
+} // end: of if 
+
 add_units_navigation(TRUE);
 if ($is_adminOfCourse) {
     draw($tool_content, 2, 'announcements', $head_content, @$body_action);
