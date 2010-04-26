@@ -87,6 +87,10 @@ hCont;
                 add_unit_resource($unit_id, 'description', $res_id,
                                   autounquote($_POST['edTitleBloc']),
                                   autounquote($_POST['edContentBloc']));
+                if ($res_id == -1) {
+                        header("Location: {$urlServer}courses/$currentCourseID");
+                        exit;
+                }
         }
 }
 
@@ -96,9 +100,7 @@ if ($q and mysql_num_rows($q) > 0) {
         list($max_resource_id) = mysql_fetch_row(db_query("SELECT id FROM unit_resources
                                         WHERE unit_id = $unit_id ORDER BY `order` DESC LIMIT 1"));
 	while ($row = mysql_fetch_array($q)) {
-                $tool_content .= "
-    <br />
-
+                $tool_content .= "<br />
     <table width='99%' class='CourseDescr'>
     <thead>
     <tr>
@@ -114,8 +116,7 @@ if ($q and mysql_num_rows($q) > 0) {
     <tr>
       <td colspan='2'>" . mathfilter(make_clickable($row['comments']), 12, '../../courses/mathimg/') . "</td>
     </tr>
-    </table>
-    <br />";
+    </table>";
 	}
 } else {
 	$tool_content .= "<p class='alert1'>$langThisCourseDescriptionIsEmpty</p>";

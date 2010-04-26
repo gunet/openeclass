@@ -73,10 +73,13 @@ if ($q and mysql_num_rows($q) > 0) {
         }
 }
 
-$tool_content = "<form method='post' action='$_SERVER[PHP_SELF]'><table>
+$tool_content = "<form method='post' action='index.php'>
+   <input type='hidden' name='edIdBloc' value='-1' />
+   <input type='hidden' name='edTitleBloc' value='$langDescription' />
+   <table>
         <tr><th class='left'>$langDescription:</th>
            <td width='100'><table class='xinha_editor'>
-              <tr><td>" . rich_text_editor('description', 4, 20, $description) . "
+              <tr><td>" . rich_text_editor('edContentBloc', 4, 20, $description) . "
               </td></tr></table>
            </td><td>&nbsp;</td></tr>
         <tr><th class='left' width='150'>&nbsp;</th>
