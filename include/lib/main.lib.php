@@ -1381,7 +1381,7 @@ function new_description_res_id($unit_id)
 }
 
 
-function add_unit_resource($unit_id, $type, $res_id, $title, $content, $visibility = 'v', $date = false)
+function add_unit_resource($unit_id, $type, $res_id, $title, $content, $visibility = 'i', $date = false)
 {
         if (!$date) {
                 $date = 'NOW()';
