@@ -53,19 +53,22 @@ mysql_select_db($mysqlMainDb);
 if (isset($_POST['submit'])) {
         $unit_id = description_unit_id($cours_id);
         add_unit_resource($unit_id, 'description', -1, $langDescription, trim(autounquote($_POST['description'])));
-        add_unit_resource($unit_id, 'description', -2, $langCourseAddon, trim(autounquote($_POST['addon'])));
 }
 
-$description = $addon = '';
-$q = db_query("SELECT res_id, comments FROM unit_resources WHERE unit_id =
-                      (SELECT id FROM course_units WHERE course_id = $cours_id AND `order` = -1)
-                      AND res_id < 0");
+$description = '';
+$unit_id = description_unit_id($cours_id);
+$q = db_query("SELECT id, res_id, comments FROM unit_resources WHERE unit_id = $unit_id
+                      AND (res_id < 0 OR `order` < 0)");
 if ($q and mysql_num_rows($q) > 0) {
         while ($row = mysql_fetch_array($q)) {
                 if ($row['res_id'] == -1) {
                         $description = $row['comments'];
-                } elseif ($row['res_id'] == -2) {
-                        $addon = q($row['comments']);
+                } else {
+                        $new_order = add_unit_resource_max_order($unit_id);
+                        $new_res_id = new_description_res_id($unit_id);
+                        db_query("UPDATE unit_resources SET
+                                         res_id = $new_res_id, visibility = 'v', `order` = $new_order
+                                  WHERE id = $row[id]");
                 }
         }
 }
@@ -74,11 +77,6 @@ $tool_content = "<form method='post' action='$_SERVER[PHP_SELF]'><table>
         <tr><th class='left'>$langDescription:</th>
            <td width='100'><table class='xinha_editor'>
               <tr><td>" . rich_text_editor('description', 4, 20, $description) . "
-              </td></tr></table>
-           </td><td>&nbsp;</td></tr>
-        <tr><th class='left'>$langCourseAddon</th>
-           <td width='100'><table class='xinha_editor'>
-              <tr><td>" . rich_text_editor('addon', 4, 20, $addon) . "
               </td></tr></table>
            </td><td>&nbsp;</td></tr>
         <tr><th class='left' width='150'>&nbsp;</th>

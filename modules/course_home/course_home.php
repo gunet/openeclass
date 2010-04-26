@@ -122,6 +122,9 @@ $main_content .= $main_extra;
 
 $result = db_query("SELECT MAX(`order`) FROM course_units WHERE course_id = $cours_id");
 list($maxorder) = mysql_fetch_row($result);
+if ($maxorder <= 0) {
+        $maxorder = null;
+}
 
 // other actions in course unit
 if ($is_adminOfCourse) {
@@ -179,14 +182,14 @@ if ($is_adminOfCourse) {
         $cunits_content .= "</td>\n      </tr>\n      </thead>\n      </table>\n";
 if ($is_adminOfCourse) {
         list($last_id) = mysql_fetch_row(db_query("SELECT id FROM course_units
-                                                   WHERE course_id = $cours_id AND `order` > 0
+                                                   WHERE course_id = $cours_id AND `order` >= 0
                                                    ORDER BY `order` DESC LIMIT 1"));
 	$query = "SELECT id, title, comments, visibility
-		  FROM course_units WHERE course_id = $cours_id AND `order` > 0
+		  FROM course_units WHERE course_id = $cours_id AND `order` >= 0
                   ORDER BY `order`";
 } else {
 	$query = "SELECT id, title, comments, visibility
-		  FROM course_units WHERE course_id = $cours_id AND visibility='v' AND `order` > 0
+		  FROM course_units WHERE course_id = $cours_id AND visibility='v' AND `order` >= 0
                   ORDER BY `order`";
 }
 $sql = db_query($query);

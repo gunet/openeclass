@@ -1461,6 +1461,8 @@ function convert_description_to_units($code, $cours_id)
         $qdesc = @mysql_query("SELECT description, course_addon FROM cours WHERE cours_id = $cours_id");
         if ($qdesc) {
                 list($desc, $addon) = mysql_fetch_row($qdesc);
+                $desc = trim($desc);
+                $addon = trim($addon);
         }
 
         $q = @mysql_query("SELECT * FROM `$code`.course_description");
@@ -1475,10 +1477,12 @@ function convert_description_to_units($code, $cours_id)
 
         $error = false;
         if (!empty($desc)) {
-                $error = add_unit_resource($id, 'description', -1, '', $desc) && $error;
+                $error = add_unit_resource($id, 'description', -1,
+                                           $GLOBALS['langCourseDescription'], $desc) && $error;
         }
         if (!empty($addon)) {
-                $error = add_unit_resource($id, 'description', -2, '', $desc) && $error;
+                $error = add_unit_resource($id, 'description', false,
+                                           $GLOBALS['langCourseAddon'], $addon, 'v') && $error;
         }
         if (!$error) {
                 db_query("UPDATE cours SET description = '', course_addon = '' WHERE cours_id = $cours_id");
@@ -1488,7 +1492,7 @@ function convert_description_to_units($code, $cours_id)
                 $error = false;
                 while ($row = mysql_fetch_array($q, MYSQL_ASSOC)) {
                         $error = add_unit_resource($id, 'description', $row['id'], $row['title'],
-                                                   $row['content'], $row['upDate']) && $error;
+                                                   $row['content'], 'i', $row['upDate']) && $error;
                 }
                 if (!$error) {
                         db_query("DROP TABLE `$code`.course_description");

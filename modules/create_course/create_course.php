@@ -409,9 +409,15 @@ if (isset($_POST['create_course'])) {
 
         $titou='$dbname';
 
+        $description = trim(autounquote($description));
+        $course_addon = trim(autounquote($course_addon));
         $unit_id = description_unit_id($new_cours_id);
-        add_unit_resource($unit_id, 'description', -1, $langDescription, trim(autounquote($description)));
-        add_unit_resource($unit_id, 'description', -2, $langCourseAddon, trim(autounquote($course_addon)));
+        if (!empty($description)) {
+                add_unit_resource($unit_id, 'description', -1, $langDescription, trim(autounquote($description)));
+        }
+        if (!empty($course_addon)) {
+                add_unit_resource($unit_id, 'description', false, $langCourseAddon, trim(autounquote($course_addon)), 'v');
+        }
 
         // ----------- main course index.php -----------
 

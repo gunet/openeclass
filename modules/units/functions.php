@@ -4,26 +4,6 @@
 // Units utility functions	
 //
 
-// Add rich html editor JavaScript to $head_content
-function add_html_editor()
-{
-        global $head_content, $language, $urlAppend;
-
-        if ($language == 'greek') {
-                $lang_editor = 'el';
-        } else {
-                $lang_editor = 'en';
-        }
-
-        $head_content .= "<script type='text/javascript'>
-_editor_url  = '$urlAppend/include/xinha/';
-_editor_lang = '$lang_editor';
-</script>
-<script type='text/javascript' src='$urlAppend/include/xinha/XinhaCore.js'></script>
-<script type='text/javascript' src='$urlAppend/include/xinha/my_config.js'></script>";
-}
-
-
 // Process resource actions
 function process_actions()
 {
@@ -449,14 +429,14 @@ function actions($res_type, $resource_id, $status, $res_id = false)
 
         if ($type = 'description') {
                 $icon_vis = ($status == 'v')? 'checkbox_on.gif': 'checkbox_off.gif';
-                $edit = "numBloc=$res_id";
+                $edit_link = "edit.php?numBloc=$res_id";
         } else {
                 $icon_vis = ($status == 'v')? 'visible.gif': 'invisible.gif';
-                $edit = "edit=$resource_id";
+                $edit = "$_SERVER[PHP_SELF]?edit=$resource_id";
         }
 
         if ($status != 'del') {
-                $content = "<td width='3%'><a href='$_SERVER[PHP_SELF]?$edit'>" .
+                $content = "<td width='3%'><a href='$edit_link'>" .
                 "<img src='../../template/classic/img/edit.gif' title='$langEdit' /></a></td>";
         } else {
                 $content = '<td width="3%">&nbsp;</td>';

@@ -44,6 +44,7 @@ include '../../include/baseTheme.php';
 include '../../include/lib/textLib.inc.php';
 // support for math symbols
 include '../../include/phpmathpublisher/mathpublisher.php';
+include '../units/functions.php';
 
 /**** The following is added for statistics purposes ***/
 include('../../include/action.php');
@@ -52,9 +53,11 @@ $action->record('MODULE_ID_DESCRIPTION');
 /**************************************/
 
 $nameTools = $langCourseProgram;
-$tool_content = '';
+$head_content = $tool_content = '';
 
 mysql_select_db($mysqlMainDb);
+
+$unit_id = description_unit_id($cours_id);
 
 if ($is_adminOfCourse) {
 	$tool_content .= "
@@ -63,14 +66,37 @@ if ($is_adminOfCourse) {
 	  <li><a href='edit.php'>$langEditCourseProgram</a></li>
     </ul>
   </div>";
+
+        $head_content .= <<<hCont
+<script type="text/javascript">
+function confirmation ()
+{
+    if (confirm('$langConfirmDelete'))
+        {return true;}
+    else
+        {return false;}
+}
+</script>
+hCont;
+
+        process_actions();
+
+        if (isset($_POST['edIdBloc'])) {
+                // Save results from block edit (save action)
+                $res_id = intval($_POST['edIdBloc']);
+                add_unit_resource($unit_id, 'description', $res_id,
+                                  autounquote($_POST['edTitleBloc']),
+                                  autounquote($_POST['edContentBloc']));
+        }
 }
 
-$q = db_query("SELECT title, comments, res_id FROM unit_resources WHERE unit_id =
-                        (SELECT id FROM course_units WHERE course_id = $cours_id AND `order` = -1)
-                        AND res_id >= 0 ORDER BY `order`");
+$q = db_query("SELECT id, title, comments, res_id, visibility FROM unit_resources WHERE
+                        unit_id = $unit_id AND `order` >= 0 ORDER BY `order`");
 if ($q and mysql_num_rows($q) > 0) {
+        list($max_resource_id) = mysql_fetch_row(db_query("SELECT id FROM unit_resources
+                                        WHERE unit_id = $unit_id ORDER BY `order` DESC LIMIT 1"));
 	while ($row = mysql_fetch_array($q)) {
-	$tool_content .= "
+                $tool_content .= "
     <br />
 
     <table width='99%' class='CourseDescr'>
@@ -79,7 +105,8 @@ if ($q and mysql_num_rows($q) > 0) {
       <td>
         <table width='100%' class='FormData'>
         <tr>
-          <th class='left' style='border: 1px solid #edecdf;'><u>" . q($row['title']) . "</u></th>
+        <th class='left' style='border: 1px solid #edecdf;'><u>" . q($row['title']) . "</u></th>\n" .
+                actions('description', $row['id'], $row['visibility'], $row['res_id']) . "
         </tr>
         </table>
       </td>
@@ -95,4 +122,4 @@ if ($q and mysql_num_rows($q) > 0) {
 }
 
 add_units_navigation(TRUE);
-draw($tool_content, 2, 'course_description');
+draw($tool_content, 2, 'course_description', $head_content);

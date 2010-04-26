@@ -1299,6 +1299,27 @@ function register_posted_variables($var_array)
         return $all_set;
 }
 
+
+// Add rich html editor JavaScript to global variable $head_content
+function add_html_editor()
+{
+        global $head_content, $language, $urlAppend;
+
+        if ($language == 'greek') {
+                $lang_editor = 'el';
+        } else {
+                $lang_editor = 'en';
+        }
+
+        $head_content .= "<script type='text/javascript'>
+_editor_url  = '$urlAppend/include/xinha/';
+_editor_lang = '$lang_editor';
+</script>
+<script type='text/javascript' src='$urlAppend/include/xinha/XinhaCore.js'></script>
+<script type='text/javascript' src='$urlAppend/include/xinha/my_config.js'></script>";
+}
+
+
 // Display a textarea with name $name using the rich text editor
 // Apply automatically arious fixes for the text to be edited
 function rich_text_editor($name, $rows, $cols, $text, $extra = '')
@@ -1340,12 +1361,40 @@ function description_unit_id($cours_id)
         }
 }
 
-function add_unit_resource($unit_id, $type, $res_id, $title, $content, $date = false)
+function add_unit_resource_max_order($unit_id)
+{
+        $q = db_query("SELECT MAX(`order`) FROM unit_resources WHERE unit_id = $unit_id");
+        if ($q and mysql_num_rows($q) > 0) {
+                list($order) = mysql_fetch_row($q);
+                return max(0, $order) + 1;
+        } else {
+                return 1;
+        }
+}
+
+
+function new_description_res_id($unit_id)
+{
+        $q = db_query("SELECT MAX(res_id) FROM unit_resources WHERE unit_id = $unit_id");
+        list($max_res_id) = mysql_fetch_row($q);
+        return 1 + max(count($GLOBALS['titreBloc']), $max_res_id);
+}
+
+
+function add_unit_resource($unit_id, $type, $res_id, $title, $content, $visibility = 'v', $date = false)
 {
         if (!$date) {
                 $date = 'NOW()';
         } else {
                 $date = quote($date);
+        }
+        if ($res_id === false) {
+                $res_id = new_description_res_id($unit_id);
+                $order = add_unit_resource_max_order($unit_id);
+        } elseif ($res_id < 0) {
+                $order = $res_id;
+        } else {
+                $order = add_unit_resource_max_order($unit_id);
         }
         $q = db_query("SELECT id FROM unit_resources WHERE
                                 `unit_id` = $unit_id AND
@@ -1359,24 +1408,13 @@ function add_unit_resource($unit_id, $type, $res_id, $title, $content, $date = f
                                         `date` = $date
                                  WHERE id = $id");
         }
-        if ($res_id < 0) {
-                $order = $res_id;
-        } else {
-                $q = db_query("SELECT MAX(`order`) FROM unit_resources WHERE unit_id = $unit_id");
-                if ($q and mysql_num_rows($q) > 0) {
-                        list($order) = mysql_fetch_row($q);
-                        $order = max(0, $order) + 1;
-                } else {
-                        $order = 1;
-                }
-        }
         return db_query("INSERT INTO unit_resources SET
                                 `unit_id` = $unit_id,
                                 `title` = " . quote($title) . ",
                                 `comments` = " . quote($content) . ",
                                 `date` = $date,
                                 `type` = '$type',
-                                `visibility` = 'i',
+                                `visibility` = '$visibility',
                                 `res_id` = $res_id,
                                 `order` = $order");
 }
