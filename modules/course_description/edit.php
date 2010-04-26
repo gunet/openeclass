@@ -117,14 +117,11 @@ if (isset($_POST['edIdBloc'])) {
         $tool_content .= "<form method='post' action='$_SERVER[PHP_SELF]'>
                 <input type='hidden' name='edIdBloc' value='$numBloc' />
                 <table width='99%' class='FormData' align='left'><tbody>
-                   <tr><th class='left' width='220'>$langTitle:</th>
-                       <td><b>$title</b>";
+                   <tr><th class='left' width='220'>$langTitle:</th>\n";
         if ($edit_title) {
-                $tool_content .= "</td></tr><tr><th class='left'>&nbsp;</th>
-                    <td><input type='text' name='edTitleBloc' $edit_title />
-                        </td></tr>";
+                $tool_content .= "<td><input type='text' name='edTitleBloc' $edit_title /></td></tr>";
         } else {
-                $tool_content .= "<input type='hidden' name='edTitleBloc' value='$title' /></td></tr>";
+                $tool_content .= "<td><b>$title</b><input type='hidden' name='edTitleBloc' value='$title' /></td></tr>";
         }
 
         $tool_content .= "
