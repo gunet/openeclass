@@ -31,7 +31,7 @@
  *
  * @abstract Actions for add/edit/delete portions of a course's descriptions
  *
- * Based on previous code of eclass 1.6
+ * Based on course units code
  *
  */
 
@@ -43,8 +43,8 @@ $require_prof = true;
 
 include '../../include/baseTheme.php';
 include '../../include/lib/textLib.inc.php';
-// support for math symbols
 include '../../include/phpmathpublisher/mathpublisher.php';
+include '../units/functions.php';
 
 $tool_content = $head_content = "";
 $nameTools = $langEditCourseProgram ;
@@ -64,141 +64,120 @@ function confirmation ()
 </script>
 hCont;
 
-$head_content .= <<<hCont
-<script type="text/javascript">
-        _editor_url  = "$urlAppend/include/xinha/";
-        _editor_lang = "$lang_editor";
-</script>
-<script type="text/javascript" src="$urlAppend/include/xinha/XinhaCore.js"></script>
-<script type="text/javascript" src="$urlAppend/include/xinha/my_config.js"></script>
-hCont;
-
 $body_action = 'onload="initEditor()"';
 
-mysql_select_db($_SESSION['dbname']);
-
-if ($is_adminOfCourse) {
-        if (isset($_POST['save'])) {
-                if ($_POST['edIdBloc'] == 'add') {
-                        $res = db_query("SELECT MAX(id) FROM course_description");
-                        list($max_id) = mysql_fetch_row($res);
-                        $new_id = max(sizeof($titreBloc), $max_id) + 1;
-                } else {
-                        $new_id = intval($_POST['edIdBloc']);
-                }
-                if (empty($edTitleBloc)) {
-                        $edTitleBloc = $titreBloc[$edIdBloc];
-                }
-                db_query("INSERT IGNORE INTO course_description SET id = $new_id");
-                db_query("UPDATE course_description
-                                SET title = " . autoquote(trim($edTitleBloc)) . ",
-                                    content = " . autoquote(trim($edContentBloc)) . ",
-                                    `upDate` = NOW()
-                                WHERE id = $new_id");
-                header('Location: ' . $urlServer . 'modules/course_description/edit.php');
-                exit;
-        } elseif (isset($_GET['delete'])) {
-                $del_id = intval($_GET['numBloc']);
-		$res = db_query("DELETE FROM course_description WHERE id = $del_id");
-		$tool_content .= "<p class='success'>$langBlockDeleted<br /><br /><a href='$_SERVER[PHP_SELF]'>$langBack</a></p>";
-
-        } elseif (isset($_REQUEST['numBloc'])) {
-                // Edit action
-                $edit_id = intval($_REQUEST['numBloc']);
-                $numBlock = $edit_id;
-                $res = db_query("SELECT * FROM course_description WHERE id = $edit_id");
-                $title = '';
-                if ($res and mysql_num_rows($res) > 0) {
-                        $blocs = mysql_fetch_array($res);
-                        $title = q($blocs['title']);
-                        $contentBloc = $blocs["content"];
-                } else {
-                        if (isset($titreBloc[$edit_id])) {
-                                $title = q($titreBloc[$edit_id]);
-                        }
-                        if (!isset($titreBlocNotEditable[$edit_id]) or !$titreBlocNotEditable[$numBloc]) {
-                                $numBloc = 'add';
-                        }
-                }
-
-                $tool_content .= "<form method='post' action='$_SERVER[PHP_SELF]'>
-                        <input type='hidden' name='edIdBloc' value='$numBloc' />
-                        <table width='99%' class='FormData' align='left'><tbody>
-                           <tr><th class='left' width='220'>$langTitle:</th>
-                               <td><b>$title</b>";
-                if (!isset($titreBlocNotEditable[$edit_id]) or !$titreBlocNotEditable[$numBloc]) {
-                        $tool_content .= "</td></tr><tr><th class='left'>&nbsp;</th>
-                            <td><input type='text' name='edTitleBloc' value='$title' />
-                                </td></tr>";
-                } else {
-                        $tool_content .= "<input type='hidden' name='edTitleBloc' value='$title' /></td></tr>";
-                }
-
-                $tool_content .= "
-                        <tr><th class='left'>&nbsp;</th>
-                            <td><table class='xinha_editor'>
-                            <tr><td>".
-                            @rich_text_editor('edContentBloc', 4, 20, $contentBloc)
-                            ."</td></tr></table></td></tr>
-                        <tr><th class='left'>&nbsp;</th>
-                            <td><input type='submit' name='save' value='$langAdd' />&nbsp;&nbsp;
-                                <input type='submit' name='ignore' value='$langBackAndForget' /></td></tr>
-                    </tbody></table></form>\n";
-        } else {
-                $sql = "SELECT * FROM `course_description` order by id";
-                $res = db_query($sql);
-                while($bloc = mysql_fetch_array($res)) {
-                        $blocState[$bloc["id"]] = "used";
-                        $titreBloc[$bloc["id"]]	= $bloc["title"];
-                        $contentBloc[$bloc["id"]] = $bloc["content"];
-                }
-                $tool_content .= "
-    <form method='post' action='$_SERVER[PHP_SELF]'>
-
-    <table width='99%' align='left' class='FormData'>
-    <tbody>
-    <tr>
-      <th class='left' width='220'>&nbsp;</th>
-      <td><b>$langAddCat</b></td>
-    </tr>
-    <tr>
-      <th class='left'>$langSelection :</th>
-      <td><select name='numBloc' size='1' class='auth_input'>";
-		while (list($numBloc,) = each($titreBloc)) {
-			if (!isset($blocState[$numBloc])||$blocState[$numBloc] != "used")
-				$tool_content .= "\n            <option value='".$numBloc."'>".$titreBloc[$numBloc]."</option>";
-		}
-		$tool_content .= "\n</select></td></tr><tr><th>&nbsp;</th>
-      		<td><input type='submit' name='add' value='$langAdd' /></td>
-    		</tr></tbody></table>
-    		<p>&nbsp;</p>
-    </form>\n";
-
-	reset($titreBloc);
-		while (list($numBloc,) = each($titreBloc)) {
-			if (isset($blocState[$numBloc]) && $blocState[$numBloc]=="used") {
-				$tool_content .= "<table width='99%' class='CourseDescr'>
-    					<thead><tr><td>
-        				<table width='100%' class='FormData'>
-        				<thead><tr>
-          				<th class='left' style='border: 1px solid #CAC3B5;'>".$titreBloc[$numBloc].":</th>
-          				<td width='50' class='right'>
-					<a href='".$_SERVER['PHP_SELF']."?numBloc=".$numBloc."' >
-					<img src='../../template/classic/img/edit.gif' border='0' title='$langModify' /></a>&nbsp;&nbsp;";
-					$tool_content .= "<a href='$_SERVER[PHP_SELF]?delete=yes&amp;numBloc=$numBloc' onClick='return confirmation();'><img src='../../images/delete.gif' border='0' title='$langDelete' /></a>&nbsp;</td></tr></thead></table>
-      					</td></tr><tr>
-      				<td>".mathfilter(make_clickable(nl2br($contentBloc[$numBloc])), 12, "../../courses/mathimg/")."</td>
-    				</tr></thead></table>";
-				$tool_content .= "<br />";
-			}
-		}
-	}
-} else {
-	exit();
+if (!$is_adminOfCourse) {
+        header('Location: ' . $urlServer);
+        exit;
 }
 
-if(isset($numBloc)) {
-	draw($tool_content, 2, 'course_description', $head_content, $body_action);
+mysql_select_db($mysqlMainDb);
+
+process_actions();
+
+if (isset($_POST['edIdBloc'])) {
+        // Save results from block edit (save action)
+        $res_id = intval($_POST['edIdBloc']);
+        $unit_id = description_unit_id($cours_id);
+        add_unit_resource($unit_id, 'description', $res_id,
+                          autounquote($_POST['edTitleBloc']),
+                          autounquote($_POST['edContentBloc']));
+        display_add_block_form();
+} elseif (isset($_REQUEST['numBloc'])) {
+        // Display block edit form (edit action)
+        add_html_editor();
+        $numBloc = intval($_REQUEST['numBloc']);
+        if (isset($titreBloc[$numBloc])) {
+                $title = q($titreBloc[$numBloc]);
+        }
+        if (!isset($titreBlocNotEditable[$numBloc]) or !$titreBlocNotEditable[$numBloc]) {
+               $edit_title = " value='$title'"; 
+        } else {
+               $edit_title = false; 
+        }
+        if (isset($_POST['add'])) {
+                $q = db_query("SELECT MAX(res_id) FROM unit_resources WHERE unit_id =
+                        (SELECT id FROM course_units WHERE course_id = $cours_id AND `order` = -1)");
+                list($max_res_id) = mysql_fetch_row($q);
+                $numBloc = 1 + max(count($titreBloc), $max_res_id);
+                $contentBloc = '';
+        } else {
+                $q = db_query("SELECT title, comments FROM unit_resources WHERE unit_id =
+                                        (SELECT id FROM course_units WHERE course_id = $cours_id AND `order` = -1)
+                                        AND res_id = $numBloc");
+                if ($q and mysql_num_rows($q)) {
+                        list($old_title, $contentBloc) = mysql_fetch_row($q);
+                        if ($edit_title) {
+                               $edit_title = " value='$old_title'"; 
+                        }
+                } else {
+                        $contentBloc = '';
+                }
+        }
+        $tool_content .= "<form method='post' action='$_SERVER[PHP_SELF]'>
+                <input type='hidden' name='edIdBloc' value='$numBloc' />
+                <table width='99%' class='FormData' align='left'><tbody>
+                   <tr><th class='left' width='220'>$langTitle:</th>
+                       <td><b>$title</b>";
+        if ($edit_title) {
+                $tool_content .= "</td></tr><tr><th class='left'>&nbsp;</th>
+                    <td><input type='text' name='edTitleBloc' $edit_title />
+                        </td></tr>";
+        } else {
+                $tool_content .= "<input type='hidden' name='edTitleBloc' value='$title' /></td></tr>";
+        }
+
+        $tool_content .= "
+                <tr><th class='left'>&nbsp;</th>
+                    <td><table class='xinha_editor'>
+                    <tr><td>".
+                    @rich_text_editor('edContentBloc', 4, 20, $contentBloc)
+                    ."</td></tr></table></td></tr>
+                <tr><th class='left'>&nbsp;</th>
+                    <td><input type='submit' name='save' value='$langAdd' />&nbsp;&nbsp;
+                        <input type='submit' name='ignore' value='$langBackAndForget' /></td></tr>
+            </tbody></table></form>\n";
 } else {
-	draw($tool_content, 2, 'course_description', $head_content);
+        display_add_block_form();
+}
+
+show_resources(description_unit_id($cours_id));
+
+draw($tool_content, 2, 'course_description', $head_content, $body_action);
+
+
+// Display form to to add a new block
+function display_add_block_form()
+{
+        global $cours_id, $tool_content, $titreBloc, $langAddCat, $langAdd, $langSelection;
+        $q = db_query("SELECT res_id FROM unit_resources WHERE unit_id =
+                                (SELECT id FROM course_units WHERE course_id = $cours_id AND `order` = -1)
+                                AND res_id > 0 ORDER BY `order`");
+        while ($row = mysql_fetch_row($q)) {
+                if (@$titreBlocNotEditable[$row[0]]) {
+                        $blocState[$row[0]] = true;
+                }
+        }
+
+        $tool_content .= "
+        <form method='post' action='$_SERVER[PHP_SELF]'>
+        <input type='hidden' name='add' value='1' />
+        <table width='99%' align='left' class='FormData'>
+        <tbody>
+        <tr>
+        <th class='left' width='220'>&nbsp;</th>
+        <td><b>$langAddCat</b></td>
+        </tr>
+        <tr>
+        <th class='left'>$langSelection :</th>
+        <td><select name='numBloc' size='1' class='auth_input'>";
+        while (list($numBloc,) = each($titreBloc)) {
+                if (!isset($blocState[$numBloc])) {
+                        $tool_content .= "<option value='$numBloc'>$titreBloc[$numBloc]</option>\n";
+                }
+        }
+        $tool_content .= "</select></td></tr><tr><th>&nbsp;</th>
+                <td><input type='submit' name='add' value='$langAdd' /></td>
+                </tr></tbody></table>
+                </form>\n";
 }

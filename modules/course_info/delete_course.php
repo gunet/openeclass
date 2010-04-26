@@ -33,19 +33,22 @@ $tool_content = "";
 
 if($is_adminOfCourse) {
 	if(isset($delete)) {
-		mysql_select_db("$mysqlMainDb",$db);
-		mysql_query("DROP DATABASE `$currentCourseID`");
-		mysql_query("DELETE FROM `$mysqlMainDb`.cours WHERE code='$currentCourseID'");
-		mysql_query("DELETE FROM `$mysqlMainDb`.cours_user WHERE cours_id='$cours_id'");
-		mysql_query("DELETE FROM `$mysqlMainDb`.cours_faculte WHERE code='$currentCourseID'");
-		mysql_query("DELETE FROM `$mysqlMainDb`.annonces WHERE cours_id='$cours_id'");
+		mysql_select_db($mysqlMainDb);
+                db_query("DELETE FROM unit_resources WHERE unit_id IN
+                                (SELECT id FROM course_units WHERE course_id = $cours_id)");
+		db_query("DELETE FROM course_units WHERE course_id = $cours_id");
+		db_query("DELETE FROM annonces WHERE cours_id = $cours_id");
+		db_query("DELETE FROM cours_faculte WHERE code = '$currentCourseID'");
+		db_query("DELETE FROM cours_user WHERE cours_id = $cours_id");
+		db_query("DELETE FROM cours WHERE cours_id = $cours_id");
+		db_query("DROP DATABASE `$currentCourseID`");
 		##[BEGIN personalisation modification]############
-		mysql_query("DELETE FROM `$mysqlMainDb`.agenda WHERE lesson_code='$currentCourseID'");
+		db_query("DELETE FROM `$mysqlMainDb`.agenda WHERE lesson_code='$currentCourseID'");
 		##[END personalisation modification]############
-		@mkdir("../../courses/garbage");
+		@mkdir('../../courses/garbage');
 		rename("../../courses/$currentCourseID", "../../courses/garbage/$currentCourseID");
-		$tool_content .= "<p class=\"success_small\">$langTheCourse <b>($intitule $currentCourseID)</b>  $langHasDel</p><br />
-		<p align=\"right\"><a href=\"../../index.php\">".$langBackHome." ".$siteName."</a></p>";
+                $tool_content .= "<p class='success_small'>$langTheCourse <b>($intitule $currentCourseID)</b> $langHasDel</p>
+                                  <br /><p align='right'><a href='../../index.php'>$langBackHome $siteName</a></p>";
                 unset($currentCourseID);
                 unset($_SESSION['dbname']);
 		draw($tool_content, 1);

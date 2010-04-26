@@ -342,7 +342,8 @@ if (!isset($submit2)) {
         // **********************************************
         // upgrade courses databases
         // **********************************************
-        $res = db_query("SELECT code, languageCourse FROM cours ORDER BY code");
+        $res = db_query("SELECT code, languageCourse, cours_id
+                         FROM cours ORDER BY code");
         $total = mysql_num_rows($res);
         $i = 1;
         while ($code = mysql_fetch_row($res)) {
@@ -360,6 +361,9 @@ if (!isset($submit2)) {
                 if ($oldversion < '2.3') {
 			upgrade_course_2_3($code[0], $lang, "($i / $total)");
 		}
+                if ($oldversion < '2.4') {
+                        convert_description_to_units($code[0], $code[2]);
+                }
                 echo "</p>\n";
                 $i++;
         }

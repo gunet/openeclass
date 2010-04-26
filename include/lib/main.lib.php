@@ -1318,3 +1318,65 @@ function rich_text_editor($name, $rows, $cols, $text, $extra = '')
 	       str_replace('{','&#123;',htmlspecialchars($text)) .
 	       "</textarea>\n";
 }
+
+
+// Does the special course unit with course descriptions exist?
+// If so, return its id, else create it first
+function description_unit_id($cours_id)
+{
+        global $langCourseDescription;
+
+        $q = db_query("SELECT id FROM course_units
+                       WHERE course_id = $cours_id AND `order` = -1");
+        if ($q and mysql_num_rows($q) > 0) {
+                list($id) = mysql_fetch_row($q);
+                return $id;
+        } else {
+                db_query('INSERT INTO course_units SET `order` = -1,
+                                `title` = ' . quote($langCourseDescription) . ',
+                                `visibility` = "i",
+                                `course_id` = ' . $cours_id);
+                return mysql_insert_id();
+        }
+}
+
+function add_unit_resource($unit_id, $type, $res_id, $title, $content, $date = false)
+{
+        if (!$date) {
+                $date = 'NOW()';
+        } else {
+                $date = quote($date);
+        }
+        $q = db_query("SELECT id FROM unit_resources WHERE
+                                `unit_id` = $unit_id AND
+                                `type` = '$type' AND
+                                `res_id` = $res_id");
+        if ($q and mysql_num_rows($q) > 0) {
+                list($id) = mysql_fetch_row($q);
+                return db_query("UPDATE unit_resources SET
+                                        `title` = " . quote($title) . ",
+                                        `comments` = " . quote($content) . ",
+                                        `date` = $date
+                                 WHERE id = $id");
+        }
+        if ($res_id < 0) {
+                $order = $res_id;
+        } else {
+                $q = db_query("SELECT MAX(`order`) FROM unit_resources WHERE unit_id = $unit_id");
+                if ($q and mysql_num_rows($q) > 0) {
+                        list($order) = mysql_fetch_row($q);
+                        $order = max(0, $order) + 1;
+                } else {
+                        $order = 1;
+                }
+        }
+        return db_query("INSERT INTO unit_resources SET
+                                `unit_id` = $unit_id,
+                                `title` = " . quote($title) . ",
+                                `comments` = " . quote($content) . ",
+                                `date` = $date,
+                                `type` = '$type',
+                                `visibility` = 'i',
+                                `res_id` = $res_id,
+                                `order` = $order");
+}

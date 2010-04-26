@@ -31,9 +31,7 @@
  *
  * @abstract This module displays the course description of every course. If the user
  * is the course's professor, he/she is shown of a link to add/edit the contents of
- * the module.
- *
- * Based on previous code of eclass 1.6
+ * the module. Description text is kept in a special course unit with order=-1
  *
  */
 
@@ -56,6 +54,8 @@ $action->record('MODULE_ID_DESCRIPTION');
 $nameTools = $langCourseProgram;
 $tool_content = '';
 
+mysql_select_db($mysqlMainDb);
+
 if ($is_adminOfCourse) {
 	$tool_content .= "
   <div id='operations_container'>
@@ -65,10 +65,11 @@ if ($is_adminOfCourse) {
   </div>";
 }
 
-$sql = "SELECT `id`,`title`,`content` FROM `course_description` order by id";
-$res = db_query($sql, $currentCourseID);
-if (mysql_num_rows($res) > 0) {
-	while ($bloc = mysql_fetch_array($res)) {
+$q = db_query("SELECT title, comments, res_id FROM unit_resources WHERE unit_id =
+                        (SELECT id FROM course_units WHERE course_id = $cours_id AND `order` = -1)
+                        AND res_id >= 0 ORDER BY `order`");
+if ($q and mysql_num_rows($q) > 0) {
+	while ($row = mysql_fetch_array($q)) {
 	$tool_content .= "
     <br />
 
@@ -78,17 +79,16 @@ if (mysql_num_rows($res) > 0) {
       <td>
         <table width='100%' class='FormData'>
         <tr>
-          <th class='left' style='border: 1px solid #edecdf;'><u>$bloc[title]</u></th>
+          <th class='left' style='border: 1px solid #edecdf;'><u>" . q($row['title']) . "</u></th>
         </tr>
         </table>
       </td>
     </tr>
     <tr>
-      <td colspan='2'>".mathfilter(make_clickable(nl2br($bloc['content'])), 12, "../../courses/mathimg/")."</td>
+      <td colspan='2'>" . mathfilter(make_clickable($row['comments']), 12, '../../courses/mathimg/') . "</td>
     </tr>
-    </table>";
-
-	$tool_content .= "<br />";
+    </table>
+    <br />";
 	}
 } else {
 	$tool_content .= "<p class='alert1'>$langThisCourseDescriptionIsEmpty</p>";

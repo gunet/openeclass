@@ -90,8 +90,6 @@ if (isset($_POST['submit'])) {
                 db_query("UPDATE `$mysqlMainDb`.cours
                           SET intitule = " . autoquote($_POST['title']) .",
                               faculte = " . autoquote($facname) . ",
-                              description = " . autoquote($_POST['description']) . ",
-                              course_addon = " . autoquote($_POST['course_addon']) . ",
                               course_keywords = ".autoquote($_POST['course_keywords']) . ",
                               visible = " . intval($_POST['formvisible']) . ",
                               titulaires = " . autoquote($_POST['titulary']) . ",
@@ -139,13 +137,11 @@ if (isset($_POST['submit'])) {
   		<li><a href='delete_course.php'>$langDelCourse</a></li>
     		<li><a href='refresh_course.php'>$langRefreshCourse</a></li></ul></div>";
 
-		$sql = "SELECT cours_faculte.faculte,
-			cours.intitule, cours.description, cours.course_keywords, cours.course_addon,
-			cours.visible, cours.fake_code, cours.titulaires, cours.languageCourse,
-			cours.departmentUrlName, cours.departmentUrl, cours.type, cours.password, cours.faculteid
-			FROM `$mysqlMainDb`.cours, `$mysqlMainDb`.cours_faculte
-			WHERE cours.code='$currentCourseID'
-			AND cours_faculte.code='$currentCourseID'";
+                $sql = "SELECT cours_faculte.faculte, cours.intitule, cours.course_keywords, cours.visible,
+                               cours.fake_code, cours.titulaires, cours.languageCourse, cours.departmentUrlName,
+                               cours.departmentUrl, cours.type, cours.password, cours.faculteid
+                        FROM `$mysqlMainDb`.cours, `$mysqlMainDb`.cours_faculte
+                        WHERE cours.code='$currentCourseID' AND cours_faculte.code='$currentCourseID'";
 		$result = mysql_query($sql);
 		$c = mysql_fetch_array($result);
 		$title = q($c['intitule']);
@@ -156,9 +152,7 @@ if (isset($_POST['submit'])) {
 		$fake_code = q($c['fake_code']);
 		$titulary = q($c['titulaires']);
 		$languageCourse	= $c['languageCourse'];
-		$description = $c['description'];
 		$course_keywords = q($c['course_keywords']);
-		$course_addon = q($c['course_addon']);
 		$password = q($c['password']);
 		$checkpasssel = empty($password)? '': " checked='1'";
 
@@ -212,33 +206,9 @@ if (isset($_POST['submit'])) {
         <td>&nbsp;</td>
       </tr>
       <tr>
-        <th class='left'>$langDescription&nbsp;:</th>
-        <td width='100'>
-	      <table class='xinha_editor'>
-          <tr>
-             <td>".
-	     rich_text_editor('description', 4, 20, $description)
-	     ."</td>
-          </tr>
-          </table>
-        </td>
-        <td>&nbsp;</td>
-      </tr>
-      <tr>
         <th class='left'>$langCourseKeywords&nbsp;</th>
         <td><input type='text' name='course_keywords' value='$course_keywords' size='60' class='FormData_InputText' /></td>
         <td>&nbsp;</td>
-      </tr>
-      <tr>
-        <th class='left'>$langCourseAddon&nbsp;</th>
-        <td width='100'>
-	      <table class='xinha_editor'>
-          <tr>
-        <td><textarea id='xinha2' name='course_addon' cols='20' rows='4' class='FormData_InputText'>$course_addon</textarea></td>
-        </tr>
-          </table>
-          </td>
-          <td>&nbsp;</td>
       </tr>
       </tbody>
       </table>

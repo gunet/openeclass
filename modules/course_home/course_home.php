@@ -65,21 +65,41 @@ include '../../include/action.php';
 $action = new action();
 $action->record('MODULE_ID_UNITS');
 
-$sql = 'SELECT `description`,`course_keywords`, `course_addon`,`faculte`,`lastEdit`,`type`, `visible`, `titulaires`, `fake_code` FROM `cours` WHERE `code` = "'.$currentCourse.'"';
-$res = db_query($sql, $mysqlMainDb);
-while($result = mysql_fetch_row($res)) {
-	$description = trim($result[0]);
-	$keywords = trim($result[1]);
-	$addon = nl2br(trim($result[2]));
-	$faculte = $result[3];
-	$type = $result[5];
-	$visible = $result[6];
-	$professor = $result[7];
-	$fake_code = $result[8];
-}
+$res = db_query("SELECT course_keywords, faculte, type, visible, titulaires, fake_code
+                 FROM cours WHERE cours_id = $cours_id", $mysqlMainDb);
+$result = mysql_fetch_array($res);
+$keywords = trim($result['course_keywords']);
+$faculte = $result['faculte'];
+$type = $result['type'];
+$visible = $result['visible'];
+$professor = $result['titulaires'];
+$fake_code = $result['fake_code'];
 
+$main_extra = $description = $addon = '';
+$res = db_query("SELECT res_id, title, comments FROM unit_resources WHERE unit_id =
+                        (SELECT id FROM course_units WHERE course_id = $cours_id AND `order` = -1)
+                        AND (visibility = 'v' OR res_id < 0)
+                 ORDER BY `order`");
+if ($res and mysql_num_rows($res) > 0) {
+        while ($row = mysql_fetch_array($res)) {
+                if ($row['res_id'] == -1) {
+                        $description = $row['comments'];
+                } elseif ($row['res_id'] == -2) {
+                        $addon = nl2br(trim($row['comments']));
+                } else {
+                        if (isset($idBloc[$row['res_id']]) and !empty($idBloc[$row['res_id']])) {
+                                $element_id = " id='{$idBloc[$row['res_id']]}'";
+                        } else {
+                                $element_id = '';
+                        }
+                        $main_extra .= "<div class='course_info'$element_id><h1>" . q($row['title']) . "</h1><p>" .
+                                mathfilter($row['comments'], 12, '../../courses/mathimg/') .
+                                "</p></div>";
+                }
+        }
+}
 if ($is_adminOfCourse) {
-        $edit_link = "&nbsp;<a href='../../modules/course_info/infocours.php'><img src='../../template/classic/img/edit.gif' title='$langEdit'></img></a>";
+        $edit_link = "&nbsp;<a href='../../modules/course_description/editdesc.php'><img src='../../template/classic/img/edit.gif' title='$langEdit'></img></a>";
 } else {
         $edit_link = '';
 }
@@ -91,13 +111,14 @@ if (!empty($description)) {
         $main_content .= "\n      <p>$langThisCourseDescriptionIsEmpty$edit_link</p>";
 }
 if (!empty($keywords)) {
-	$main_content .= "\n      <p><b>$langCourseKeywords</b> $keywords</p>";
+	$main_content .= "\n      <p id='keywords'><b>$langCourseKeywords</b> $keywords</p>";
 }
 $main_content .= "\n      </div>\n";
 
 if (!empty($addon)) {
 	$main_content .= "\n      <div class='course_info'><h1>$langCourseAddon</h1><p>$addon</p></div>";
 }
+$main_content .= $main_extra;
 
 $result = db_query("SELECT MAX(`order`) FROM course_units WHERE course_id = $cours_id");
 list($maxorder) = mysql_fetch_row($result);
@@ -152,20 +173,20 @@ if (!is_null($maxorder) or $is_adminOfCourse) {
 }
 // add course units
 if ($is_adminOfCourse) {
-	$cunits_content .= ": <a href='{$urlServer}modules/units/info.php'>$langAddUnit</a>&nbsp;<img src='../../template/classic/img/add.gif' width='15' height='15' title='$langAddUnit' alt='$langAddUnit' />";
+	$cunits_content .= ": <a href='{$urlServer}modules/units/info.php'>$langAddUnit</a>&nbsp;<a href='{$urlServer}modules/units/info.php'><img src='../../template/classic/img/add.gif' width='15' height='15' title='$langAddUnit' alt='$langAddUnit' /></a>";
 }
         $cunits_content .= "</h3>";
         $cunits_content .= "</td>\n      </tr>\n      </thead>\n      </table>\n";
 if ($is_adminOfCourse) {
         list($last_id) = mysql_fetch_row(db_query("SELECT id FROM course_units
-                                                   WHERE course_id = $cours_id
+                                                   WHERE course_id = $cours_id AND `order` > 0
                                                    ORDER BY `order` DESC LIMIT 1"));
 	$query = "SELECT id, title, comments, visibility
-		  FROM course_units WHERE course_id = $cours_id
+		  FROM course_units WHERE course_id = $cours_id AND `order` > 0
                   ORDER BY `order`";
 } else {
 	$query = "SELECT id, title, comments, visibility
-		  FROM course_units WHERE course_id = $cours_id AND visibility='v'
+		  FROM course_units WHERE course_id = $cours_id AND visibility='v' AND `order` > 0
                   ORDER BY `order`";
 }
 $sql = db_query($query);

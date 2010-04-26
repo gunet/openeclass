@@ -1448,3 +1448,51 @@ function upgrade_video($file, $id, $code)
                 db_query("DELETE FROM video WHERE id = '$id'", $code);
         }
 }
+
+
+// Convert course description to special course unit with order = -1
+function convert_description_to_units($code, $cours_id)
+{
+        global $mysqlMainDb, $langCourseDescription;
+
+        mysql_select_db($mysqlMainDb);
+
+        $desc = $addon = '';
+        $qdesc = @mysql_query("SELECT description, course_addon FROM cours WHERE cours_id = $cours_id");
+        if ($qdesc) {
+                list($desc, $addon) = mysql_fetch_row($qdesc);
+        }
+
+        $q = @mysql_query("SELECT * FROM `$code`.course_description");
+
+        // If old-style course description data don't exist and course description is
+        // empty, don't do anything 
+        if ((!$q or mysql_num_rows($q) == 0) and empty($desc) and empty($addon)) {
+                return;
+        }
+
+        $id = description_unit_id($cours_id);
+
+        $error = false;
+        if (!empty($desc)) {
+                $error = add_unit_resource($id, 'description', -1, '', $desc) && $error;
+        }
+        if (!empty($addon)) {
+                $error = add_unit_resource($id, 'description', -2, '', $desc) && $error;
+        }
+        if (!$error) {
+                db_query("UPDATE cours SET description = '', course_addon = '' WHERE cours_id = $cours_id");
+        }
+
+        if ($q and mysql_num_rows($q) > 0) {
+                $error = false;
+                while ($row = mysql_fetch_array($q, MYSQL_ASSOC)) {
+                        $error = add_unit_resource($id, 'description', $row['id'], $row['title'],
+                                                   $row['content'], $row['upDate']) && $error;
+                }
+                if (!$error) {
+                        db_query("DROP TABLE `$code`.course_description");
+                }
+        }
+}
+

@@ -386,8 +386,6 @@ if (isset($_POST['create_course'])) {
                         code = '$code',
                         languageCourse =" . quote($language) . ",
                         intitule = " . quote($intitule) . ",
-                        description = " . quote($description) . ",
-                        course_addon = " . quote($course_addon) . ",
                         course_keywords = " . quote($course_keywords) . ",
                         faculte = " . quote($facname) . ",
                         visible = " . quote($formvisible) . ",
@@ -410,6 +408,10 @@ if (isset($_POST['create_course'])) {
                         facid = '$facid'");
 
         $titou='$dbname';
+
+        $unit_id = description_unit_id($new_cours_id);
+        add_unit_resource($unit_id, 'description', -1, $langDescription, trim(autounquote($description)));
+        add_unit_resource($unit_id, 'description', -2, $langCourseAddon, trim(autounquote($course_addon)));
 
         // ----------- main course index.php -----------
 
