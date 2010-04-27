@@ -76,23 +76,16 @@ if ($is_adminOfCourse and
 <script type="text/javascript" src="$urlAppend/include/xinha/my_config.js"></script>
 hContent;
 }
-$displayAnnouncementList = true;
+
 if ($is_adminOfCourse) { // check teacher status
         $head_content .= '
 <script type="text/javascript">
-function confirmation (name)
+function confirmation ()
 {
-	if (name != "all") {
-    	if (confirm("' . $langSureToDelAnnounce . ' "+ name + " ?"))
-        	{return true;}
+    	if (confirm("' . $langSureToDelAnnounce . ' ?"))
+	    {return true;}
     	else
-        	{return false;}
-	} else {
-		if (confirm("' . $langSureToDelAnnounceAll . ' "+" ?"))
-        	{return true;}
-    	else
-        	{return false;}
-	}
+            {return false;}	
 }
 
 </script>
@@ -128,7 +121,6 @@ hContent;
     list($announcementNumber) = mysql_fetch_row($result);
     mysql_free_result($result);
 
-    $displayAnnouncementList = true;
     $displayForm = true;
 
     /* up and down commands */
@@ -167,12 +159,6 @@ hContent;
         $message = "<p class='success_small'>$langAnnDel</p>";
     }
 
-    /* delete all */
-    if (isset($deleteAllAnnouncement) && $deleteAllAnnouncement) {
-        db_query("DELETE FROM annonces WHERE cours_id = $cours_id", $mysqlMainDb);
-        $message = "<p class='success_small'>$langAnnEmpty</p>";
-    }
-
     /* modify */
     if (isset($_GET['modify'])) {
         $modify = intval($_GET['modify']);
@@ -182,7 +168,6 @@ hContent;
             $AnnouncementToModify = $myrow['id'];
 	    $contentToModify = unescapeSimple($myrow['contenu']);
             $titleToModify = q($myrow['title']);
-            $displayAnnouncementList = true;
         }
     }
     
@@ -262,7 +247,6 @@ hContent;
     // teacher display
     if (isset($message) && $message) {
         $tool_content .= $message . "<br/>";
-        $displayAnnouncementList = false; //do not show announcements
         $displayForm = false; //do not show form
     }
 
@@ -271,11 +255,6 @@ hContent;
     $tool_content .= "<div id='operations_container'>
         <ul id='opslist'>
         <li><a href='" . $_SERVER['PHP_SELF'] . "?addAnnouce=1'>" . $langAddAnn . "</a></li>";
-
-    if ($announcementNumber > 1 || isset($_POST['submitAnnouncement'])) {
-        $tool_content .= "
-          <li><a href='$_SERVER[PHP_SELF]?deleteAllAnnouncement=1' onClick='return confirmation('all');'>$langEmptyAnn</a></li>";
-    }
     $tool_content .= "</ul></div>";
 
     /* display form */
@@ -333,7 +312,6 @@ hContent;
 } // end: teacher only
 
     /* display announcements */
-    if ($displayAnnouncementList == true) {
         $result = db_query("SELECT * FROM annonces WHERE cours_id = $cours_id ORDER BY ordre DESC", $mysqlMainDb);
         $iterator = 1;
         $bottomAnnouncement = $announcementNumber = mysql_num_rows($result);
@@ -417,8 +395,6 @@ hContent;
         }
         if ($no_content) $tool_content .= "<p class='alert1'>$langNoAnnounce</p>";
     }
-} // end: of if 
-
 add_units_navigation(TRUE);
 if ($is_adminOfCourse) {
     draw($tool_content, 2, 'announcements', $head_content, @$body_action);
