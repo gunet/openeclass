@@ -290,7 +290,7 @@ function backup_users($f, $cours_id) {
 function backup_course_db($f, $course) {
 	mysql_select_db($course);
 
-	$res_tables = db_query("SHOW TABLES FROM $course");
+	$res_tables = db_query("SHOW TABLES FROM `$course`");
 	while ($r = mysql_fetch_row($res_tables)) {
 		$tablename = $r[0];
 		fwrite($f, "query(\"DROP TABLE IF EXISTS `$tablename`\");\n");

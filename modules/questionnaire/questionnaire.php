@@ -274,7 +274,7 @@ global $tool_content, $currentCourse, $langCreatePoll, $langPollsActive,
 	$user_id, $langHasParticipated, $langHasNotParticipated, $uid, $urlServer;
 
 $poll_check = 0;
-$result = db_query("SHOW TABLES FROM $currentCourse", $currentCourse);
+$result = db_query("SHOW TABLES FROM `$currentCourse`", $currentCourse);
 while ($row = mysql_fetch_row($result)) {
 		if ($row[0] == 'poll') {
 	 		$result = db_query("SELECT * FROM poll", $currentCourse);
