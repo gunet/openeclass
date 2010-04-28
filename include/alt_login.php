@@ -29,8 +29,7 @@ if (!defined('INDEX_START')) {
 }
 
 // authenticate user via alternate defined methods 
-switch($myrow["password"])
-{
+switch ($myrow["password"]) {
 	case 'eclass': $auth = 1; break;
 	case 'pop3': $auth = 2; break;
 	case 'imap': $auth = 3; break;
@@ -39,74 +38,67 @@ switch($myrow["password"])
 	default: break;
 }
 $auth_method_settings = get_auth_settings($auth);
-if($myrow['password'] == $auth_method_settings['auth_name']) {
-	switch($auth) {
-		case '2': $pop3host = str_replace("pop3host=","",$auth_method_settings['auth_settings']);
-		break;
-		case '3': $imaphost = str_replace("imaphost=","",$auth_method_settings['auth_settings']);
-		break;
-		case 4: $ldapsettings = $auth_method_settings['auth_settings'];
-		$ldap = explode("|",$ldapsettings);
-		$ldaphost = str_replace("ldaphost=","",$ldap[0]); //ldaphost
-		$ldapbind_dn = str_replace("ldapbind_dn=","",$ldap[1]); //ldapbase_dn
-		$ldapbind_user = str_replace("ldapbind_user=","",$ldap[2]); //ldapbind_user
-		$ldapbind_pw = str_replace("ldapbind_pw=","",$ldap[3]); // ldapbind_pw
-		break;
-		case 5: $dbsettings = $auth_method_settings['auth_settings'];
-		$edb = explode("|",$dbsettings);
-		$dbhost = str_replace("dbhost=","",$edb[0]); //dbhost
-		$dbname = str_replace("dbname=","",$edb[1]); //dbname
-		$dbuser = str_replace("dbuser=","",$edb[2]); //dbuser
-		$dbpass = str_replace("dbpass=","",$edb[3]); // dbpass
-		$dbtable = str_replace("dbtable=","",$edb[4]); //dbtable
-		$dbfielduser = str_replace("dbfielduser=","",$edb[5]);//dbfielduser
-		$dbfieldpass = str_replace("dbfieldpass=","",$edb[6]);//dbfieldpass
-		break;
-		default:
-		break;
-	}
-	$is_valid = auth_user_login($auth,$uname,$pass);
-	if($is_valid) {
-		$is_active = check_activity($myrow["user_id"]);
-		if($myrow["user_id"] == 1) // always the admin is active
-		{
-			$is_active = 1;
-		}
-		if(!empty($is_active))
-		{
-			$auth_allow = 1;
-		}
-		else
-		{
-			$auth_allow = 3;
-			$user = $myrow["user_id"];
-		}
-	} else {
-		$auth_allow = 2;
-	}
-	if ($auth_allow == 1) {
-		$uid = $myrow["user_id"];
-		$nom = $myrow["nom"];
-		$prenom = $myrow["prenom"];
-		$statut = $myrow["statut"];
-		$email = $myrow["email"];
-		$userPerso = $myrow["perso"];
-		$language = $_SESSION['langswitch'] = langcode_to_name($myrow["lang"]);
-	}
-	elseif($auth_allow == 2)
-	{
-		continue;
-	}
-	elseif($auth_allow == 3)
-	{
-		continue;
-	}
-	else
-	{
-		$tool_content .= $langLoginFatalError."<br />";
-		continue;
-	}
+if ($myrow['password'] == $auth_method_settings['auth_name']) {
+        switch ($auth) {
+            case 2:
+                $pop3host = str_replace('pop3host=', '', $auth_method_settings['auth_settings']);
+                break;
+            case 3:
+                $imaphost = str_replace('imaphost=', '', $auth_method_settings['auth_settings']);
+                break;
+            case 4:
+                $ldapsettings = $auth_method_settings['auth_settings'];
+                $ldap = explode('|', $ldapsettings);
+                $ldaphost = str_replace('ldaphost=', '', $ldap[0]); //ldaphost
+                $ldapbind_dn = str_replace('ldapbind_dn=', '', $ldap[1]); //ldapbase_dn
+                $ldapbind_user = str_replace('ldapbind_user=', '', $ldap[2]); //ldapbind_user
+                $ldapbind_pw = str_replace('ldapbind_pw=', '', $ldap[3]); // ldapbind_pw
+                break;
+            case 5:
+                $dbsettings = $auth_method_settings['auth_settings'];
+                $edb = explode('|', $dbsettings);
+                $dbhost = str_replace('dbhost=', '', $edb[0]); // dbhost
+                $dbname = str_replace('dbname=', '', $edb[1]); // dbname
+                $dbuser = str_replace('dbuser=', '', $edb[2]); // dbuser
+                $dbpass = str_replace('dbpass=', '', $edb[3]); // dbpass
+                $dbtable = str_replace('dbtable=', '', $edb[4]); // dbtable
+                $dbfielduser = str_replace('dbfielduser=', '', $edb[5]); // dbfielduser
+                $dbfieldpass = str_replace('dbfieldpass=', '', $edb[6]); // dbfieldpass
+                break;
+            default:
+                break;
+        }
+        $is_valid = auth_user_login($auth, $uname, $pass);
+        if ($is_valid) {
+                $is_active = check_activity($myrow['user_id']);
+                if ($myrow['user_id'] == 1) {
+                        // the admin is always active
+                        $is_active = 1;
+                }
+                if (!empty($is_active)) {
+                        $auth_allow = 1;
+                } else {
+                        $auth_allow = 3;
+                        $user = $myrow["user_id"];
+                }
+        } else {
+                $auth_allow = 2;
+        }
+        if ($auth_allow == 1) {
+                $uid = $myrow["user_id"];
+                $nom = $myrow["nom"];
+                $prenom = $myrow["prenom"];
+                $statut = $myrow["statut"];
+                $email = $myrow["email"];
+                $userPerso = $myrow["perso"];
+                $language = $_SESSION['langswitch'] = langcode_to_name($myrow["lang"]);
+        } elseif ($auth_allow == 2) {
+                ;
+        } elseif ($auth_allow == 3) {
+                ;
+        } else {
+                $tool_content .= $langLoginFatalError."<br />";
+        }
 } else {
 	$warning .= "<br>$langInvalidAuth<br>";
 }
-?>
