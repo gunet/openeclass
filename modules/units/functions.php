@@ -427,12 +427,12 @@ function actions($res_type, $resource_id, $status, $res_id = false)
 		return '';
 	}
 
-        if ($type = 'description') {
+        if ($res_type == 'description') {
                 $icon_vis = ($status == 'v')? 'checkbox_on.gif': 'checkbox_off.gif';
                 $edit_link = "edit.php?numBloc=$res_id";
         } else {
                 $icon_vis = ($status == 'v')? 'visible.gif': 'invisible.gif';
-                $edit = "$_SERVER[PHP_SELF]?edit=$resource_id";
+                $edit_link = "$_SERVER[PHP_SELF]?edit=$resource_id";
         }
 
         if ($status != 'del') {
