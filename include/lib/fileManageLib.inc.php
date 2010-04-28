@@ -237,7 +237,7 @@ function move($source, $target)
 			elseif (is_dir($source))
 			{
 				// check to not copy the directory inside itself
-                                if (preg_match('/^'.$source.'/', $target))
+                                if (strpos($target, $source) === 0)
 				{
 					return false;
 				}
@@ -311,6 +311,7 @@ function copyDirTo($origDirPath, $destination)
 	mkdir ($destination."/".$dirName, 0775);
 	$destinationTrail = $destination."/".$dirName;
 
+        $cwd = getcwd();
 	chdir ($origDirPath) ;
 	$handle = opendir($origDirPath);
 
@@ -342,7 +343,7 @@ function copyDirTo($origDirPath, $destination)
 	}
 
 	rmdir ($origDirPath) ;
-
+        chdir ($cwd);
 }
 
 
