@@ -7,7 +7,7 @@
 // Process resource actions
 function process_actions()
 {
-        global $tool_content, $id, $mysqlMainDb, $langResourceCourseUnitDeleted;
+        global $tool_content, $id, $mysqlMainDb, $langResourceCourseUnitDeleted, $langResourceUnitModified;
 
         if (isset($_REQUEST['edit'])) {
                 $res_id = intval($_GET['edit']);
