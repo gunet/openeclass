@@ -255,7 +255,7 @@ if (isset($_POST['back1']) or !isset($_POST['visit'])) {
 	<th width='2' >&nbsp;</th>
 	<td width='30' >&nbsp;<img src=\"../../template/classic/img/dropbox_on.gif\" alt=\"\" height=\"16\" width=\"16\"></td>
 	<td width='200'>$langDropBox</td>
-	<td width='30' ><input type=\"checkbox\" name=\"subsystems[]\" value=\"15\" /></td>
+	<td width='30' ><input type=\"checkbox\" name=\"subsystems[]\" value=\"16\" /></td>
 	</tr>
 	<tr>
 	<td><img src=\"../../template/classic/img/links_on.gif\" alt=\"\" height=\"16\" width=\"16\"></td>
@@ -264,7 +264,7 @@ if (isset($_POST['back1']) or !isset($_POST['visit'])) {
 	<th>&nbsp;</th>
 	<td>&nbsp;<img src=\"../../template/classic/img/groups_on.gif\" alt=\"\" height=\"16\" width=\"16\"></td>
 	<td>$langGroups</td>
-	<td><input type=\"checkbox\" name=\"subsystems[]\" value=\"16\" /></td>
+	<td><input type=\"checkbox\" name=\"subsystems[]\" value=\"15\" /></td>
 	</tr>
 	<tr>
 	<td><img src=\"../../template/classic/img/docs_on.gif\" alt=\"\" height=\"16\" width=\"16\"></td>
