@@ -127,7 +127,7 @@ function insert_docs($id)
 			WHERE id =" . intval($file_id), $GLOBALS['currentCourseID']), MYSQL_ASSOC);
 		$title = (empty($file['title']))? $file['filename']: $file['title'];
 		db_query("INSERT INTO unit_resources SET unit_id=$id, type='doc', title=" .
-			 autoquote($title) . ", comments=" . autoquote($file['comment']) .
+			 quote($title) . ", comments=" . quote($file['comment']) .
 			 ", visibility='$file[visibility]', `order`=$order, `date`=NOW(), res_id=$file[id]",
 			 $GLOBALS['mysqlMainDb']); 
 	}
