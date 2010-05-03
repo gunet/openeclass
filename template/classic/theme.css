@@ -10,9 +10,7 @@ body {
 	background-repeat: repeat-y;
 }
 
-body {
-	font-family: Verdana, Arial, Helvetica, sans-serif;
-	text-align: center;
+a {
 	color: #505367;
 }
 
