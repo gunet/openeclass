@@ -43,7 +43,7 @@ if (isset($result))  {
 		if ($k%2==0) {
 			$tool_content .= "\n  <tr>";
 		} else {
-			$tool_content .= "\n  <tr class=\"odd\">";
+			$tool_content .= "\n  <tr class='odd'>";
 		}
 		$tool_content .= "<td width='1'>
 		<img style='border:0px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'></td>

@@ -588,7 +588,7 @@ a.sortheader, a.sortheader:link, a.sortheader:active, a.sortheader:visited {
     background-color: #edecdf;
     color: #727266;
     font-size: 10px;
-    font-weight: nolmal;
+    font-weight: normal;
     text-decoration: none;
 }
 
@@ -735,10 +735,6 @@ a.revoke:hover {
 	text-decoration: underline;
 }
 
-p {
-	font-size:12px;
-}
-
 .tidy {
         vertical-align: middle;
         padding : 2px;
@@ -754,30 +750,6 @@ p {
         font-size: 8pt;
         word-wrap: break-word;
         word-break: break-all;
-}
-		
-table {
-	border: 0px;
-	font-family: Verdana, Arial, sans-serif !important;
-}
-
-th {
-	padding: 4px;
-	border: 0px;
-	font-family: Verdana, Arial, sans-serif !important;
-}
-
-td {
-	padding: 4px;
-	border: 0px;
-	font-family: Verdana, Arial, sans-serif !important;
-}
-
-thead th {
-	text-align: left;
-	background: #E6EDF5;
-	color: #4F76A3;
-	font-size: 90% !important;
 }
 
 .b-right {
@@ -930,11 +902,6 @@ table.announcements td {
 	vertical-align: middle;
 }
 
-table.xinha_editor td {
-	vertical-align: top;
-	font-size : 10px;
-	padding : 1px 1px 1px 1px;
-}
 /* ----- END announcements ----- */
 
 
@@ -950,9 +917,6 @@ table.xinha_editor td {
         word-break: break-all;
         }
 
-tbody td {
-        font-size: 11px !important;
-}
 /* ----- START auth ----- */
 
 
@@ -1086,11 +1050,6 @@ table.CourseDescr td {
 	vertical-align: middle;
 }
 
-table.xinha_editor td {
-	vertical-align: top;
-    	font-size : 10px;
-	padding : 1px 1px 1px 1px;
-}
 /* ----- END course_description ----- */
 
 
@@ -1098,9 +1057,8 @@ table.xinha_editor td {
 
 
 /* ----- START course_home ----- */
-div#content_login { margin-right: 350px; padding-left: 10px; }
+div#content_login { margin-right: 200px; padding-left: 10px; }
 div#content_login p { line-height:1.4; }
-div#extra { background: #FF8539; }
 div#wrapper { float: left; width: 99%; margin-right:-300px; }
 div#navigation { float: right; width: 300px; }
 div#extra { float: right; clear: right; width:200px; }
@@ -1139,21 +1097,6 @@ div#footer { clear: both; width: 100%; }
 /* ----- END course_home ----- */
 
 
-
-
-
-/* ----- START course_info ----- */
-table.xinha_editor td {
-    vertical-align: top;
-    font-size : 10px;
-    padding : 1px 1px 1px 1px;
-}
-/* ----- END course_info ----- */
-
-
-
-
-
 /* ----- START course_tools ----- */
 option.emphasised { font-style: italic; }
 
@@ -1163,20 +1106,6 @@ option.emphasised { font-style: italic; }
     float:center;
 }
 /* ----- END course_tools ----- */
-
-
-
-
-/* ----- START create_course ----- */
-table.xinha_editor td {
-    vertical-align: top;
-    font-size : 10px;
-    padding : 1px 1px 1px 1px;
-}
-/* ----- END create_course ----- */
-
-
-
 
 
 /* ----- START document ----- */
@@ -1630,9 +1559,7 @@ table.Documents td {
 
 
 /* ----- START index ----- */
-div#content_login p{line-height:1.4}
 div#navigation{backgroundX:red;}
-div#extra{backgroundX:#FF8539}
 
 div#wrapper{float:left;width:99%;margin-right:-200px}
 div#content_login{margin-right:200px; padding-leftX:10px;}
@@ -1887,27 +1814,10 @@ table.Question td {
     font-weight: bold;
 }
 
-.invisible {
-	color : #CAC3B5 !important;
-}
-
-.invisible a{
-	color : #ABABAB;
-}
-
 .empty {
 	color: red !important;
 }
 
-.score {
-	color: #a33033 !important;
-	text-align : right;
-}
-
-.question_local_header {
-	color: #a33033;
-	border: red  !important;
-}
 
 table.Users_Operations {
     background: none;
@@ -2124,10 +2034,6 @@ table.ForumSum td {
 		font-size:10px !important;
 }
 
-.inactive {
-	color : #CAC3B5 !important;	
-}
-
    /* ----- Pagination ----- */
 .pagination {
 	height: 1%; /* IE tweak (holly hack) */
@@ -2209,13 +2115,7 @@ li.pagination {
 	background-color: #d2d2d2;
 }
 
-table.xinha_editor td {
-	vertical-align: top;
-	font-size : 10px;
-	padding : 1px 1px 1px 1px;
-}
 /* ----- END phpbb ----- */
-
 
 
 
@@ -2249,7 +2149,7 @@ table.xinha_editor td {
     padding: 6px !important;
 }
 
-.Questionnaire_Operations a, a:link, a:active, a:visited {
+.Questionnaire_Operations a, .Questionnaire_Operations a:link, .Questionnaire_Operations a:active, .Questionnaire_Operations a:visited {
    color: #000000;
    font-size: 10px;
    font-weight: normal;
@@ -2261,7 +2161,6 @@ table.xinha_editor td {
        color: #ffffff;
        font-size: 10px;
 }
-
 
 
 table.Questionnaire {
@@ -2336,12 +2235,6 @@ table.Search td {
 
 
 /* ----- START units ----- */
-table.xinha_editor td {
-	vertical-align: top;
-	font-size : 10px;
-	padding : 1px 1px 1px 1px;
-}
-
 table.unit-navigation {
         width: 100%;
         margin: 0;
@@ -2908,27 +2801,6 @@ table.Question td {
     font-weight: bold;
 }
 
-.invisible {
-	color : #CAC3B5 !important;
-}
-
-.invisible a{
-	color : #ABABAB;
-}
-
-.empty {
-	color: red !important;
-}
-
-.score {
-	color: #a33033 !important;
-	text-align : right;
-}
-
-.question_local_header {
-	color: #a33033;
-	border: red  !important;
-}
 /* ----- END Wiki ----- */
 
 
@@ -3063,18 +2935,6 @@ table.Info td {
     background: #FFFFCC
 }
 
-.invisible a{
-	color : #ABABAB;
-}
-
-.empty {
-	color: red !important;
-}
-
-.score {
-	color: #a33033 !important;
-	text-align : right;
-}
 
 
 td.category {
@@ -3157,9 +3017,4 @@ table.dropbox td {
 	color: #FF8000;
 }
 
-table.xinha_editor td {
-	vertical-align: top;
-    	font-size : 10px;
-	padding : 1px 1px 1px 1px;
-}
 /* ----- End Work ----- */
