@@ -707,3 +707,2459 @@ a.unit_link_invisible:hover {
     font-weight: bold;
     text-decoration: underline;
 }
+
+
+
+
+/* ----- START admin ----- */
+.invisible {
+	background: #F7F9FC !important;
+	color: silver !important;
+}
+
+a.add {
+	color: #ff0000 !important;
+}
+
+a.add:hover {
+	color: #ff3f00 !important;
+	text-decoration: underline;
+}
+
+a.revoke {
+	color: #029516 !important;
+}
+
+a.revoke:hover {
+	color: #02c81c !important;
+	text-decoration: underline;
+}
+
+p {
+	font-size:12px;
+}
+
+.tidy {
+        vertical-align: middle;
+        padding : 2px;
+        font-size: 8pt;
+        word-wrap: break-word;
+        word-break: break-all;
+}
+
+.color1 {
+        background : #F5F5F5;
+        vertical-align: middle;
+        padding : 5px;
+        font-size: 8pt;
+        word-wrap: break-word;
+        word-break: break-all;
+}
+		
+table {
+	border: 0px;
+	font-family: Verdana, Arial, sans-serif !important;
+}
+
+th {
+	padding: 4px;
+	border: 0px;
+	font-family: Verdana, Arial, sans-serif !important;
+}
+
+td {
+	padding: 4px;
+	border: 0px;
+	font-family: Verdana, Arial, sans-serif !important;
+}
+
+thead th {
+	text-align: left;
+	background: #E6EDF5;
+	color: #4F76A3;
+	font-size: 90% !important;
+}
+
+.b-right {
+	border-right: 1px solid silver;
+}
+
+.b-left {
+	border-left: 1px solid silver;
+}
+
+.b-top {
+	border-top: 1px solid silver;
+}
+
+.b-bottom {
+	border-bottom: 1px solid silver;
+}
+
+.stat {
+        background : #edecdf;
+        color : #727266;
+        vertical-align: middle;
+        padding : 5px;
+        font-size: 8pt;
+        word-wrap: break-word;
+        word-break: break-all;
+        }
+
+table.stateclass {
+	padding: 2px;
+	vertical-align: top;
+	border-top: 1px solid #edecdf;
+	border-bottom: 1px solid #edecdf;
+	border-left: 1px solid #edecdf;
+	border-right: 1px solid #edecdf;
+}
+
+table.stateclass th {
+	padding: 4px;
+	vertical-align: top;
+	background: #edecdf;
+	font-size:10px;
+	color: #727266;
+	border-top: 1px solid #edecdf;
+	border-bottom: 1px solid #edecdf;
+	border-left: 1px solid #edecdf;
+	border-right: 1px solid #edecdf;
+	font-style : normal;
+	font-variant : normal;
+	font-weight : normal;
+}
+
+table.stateclass td {
+	padding: 4px;
+	vertical-align: top !important;
+	background: #Fbfbfb;
+	font-size:10px;
+	color: #727266;
+	vertical-align: middle;
+}
+
+table.xinha_editor td {
+	vertical-align: top;
+    	font-size : 10px;
+	padding : 1px 1px 1px 1px;
+}
+/* ----- END admin ----- */
+
+
+
+
+
+/* ----- START agenda ----- */
+.today {
+    background-color:#a33033;
+    color: #FAEDED;!important
+}
+
+table.Agenda{
+    padding: 2px;
+    border-top: 1px solid #edecdf;
+    border-bottom: 1px solid #edecdf;
+    border-left: 1px solid #edecdf;
+    border-right: 1px solid #edecdf;
+}
+
+table.Agenda th {
+    text-align: center!important;
+    border-top: 1px solid #edecdf;
+    border-bottom: 1px solid #edecdf;
+    border-left: 1px solid #edecdf;
+    border-right: 1px solid #edecdf;
+}
+
+table.Agenda td {
+	vertical-align: top;
+    font-size : 10px;
+	padding : 5px 4px 4px 4px;
+}
+
+.monthLabel {
+  text-align: center;
+  color: #a33033;
+  background-color:#FAEDED;
+}
+
+.day {
+  border-bottom: 1px dotted #727266;
+}
+
+.event {
+  padding: 4px 0px 0px 4px;
+}
+
+.agendaBody {;
+  padding: 0px 0px 0px 4px;
+}
+/* ----- END agenda ----- */
+
+
+
+
+
+/* ----- START announcements ----- */
+table.announcements {
+	padding: 2px;
+	vertical-align: top;
+	border-top: 1px solid #edecdf;
+	border-bottom: 1px solid #edecdf;
+	border-left: 1px solid #edecdf;
+	border-right: 1px solid #edecdf;
+}
+
+table.announcements th {
+	padding: 4px;
+	vertical-align: top;
+	font-size:10px;
+	color: #727266;
+	border-top: 1px solid #edecdf;
+	border-bottom: 1px solid #edecdf;
+	border-left: 1px solid #edecdf;
+	border-right: 1px solid #edecdf;
+}
+
+table.announcements td {
+	padding: 4px;
+	vertical-align: top !important;
+	font-size:10px;
+	color: #727266;
+	vertical-align: middle;
+}
+
+table.xinha_editor td {
+	vertical-align: top;
+	font-size : 10px;
+	padding : 1px 1px 1px 1px;
+}
+/* ----- END announcements ----- */
+
+
+
+
+
+/* ----- START auth ----- */
+.tidy {
+        vertical-align: middle;
+        padding : 2px;
+        font-size: 8pt;
+        word-wrap: break-word;
+        word-break: break-all;
+        }
+
+tbody td {
+        font-size: 11px !important;
+}
+/* ----- START auth ----- */
+
+
+
+
+
+/* ----- START conference ----- */
+#conference{
+	position:absolute;
+	height: 200px;
+	width: 200px;
+	/*border:groove;*/
+	top:210px;
+	left:220px;
+	border:1px solid #a2a2a3;
+	background: #edecdf;
+	}
+
+#video{
+	position:absolute;
+	height: 200px;
+	width: 200px;
+	/*border:groove;*/
+	top:435px;
+	left:220px;
+	border:1px solid #a2a2a3;
+	background: #edecdf;
+}
+#video_presantation_control{
+	position:absolute;
+	height:203px;
+	width: 200px;
+	/*border:groove;*/
+	top:659px;
+	left:220px;
+	border:1px solid #a2a2a3;
+	background: #edecdf;
+}
+
+#chat_window{
+	position:relative;
+	height: 300px;
+	width: 800px;
+	/*border:groove;*/
+	border:1px solid #a2a2a3;
+	background: #edecdf;
+	overflow: auto;
+}
+
+#iframe{
+	height:500px;
+	width:700px;
+}
+#chat{
+	position: relative;
+	height: 100px;
+	width:500px;
+	overflow: auto;
+	border:2px inset #a2a2a3;
+	background:#ffffff;
+	margin-top: 2px;
+	margin-bottom: 2px;
+	/*margin-left: 10px;*/
+	/*margin-right: 10px;*/
+}
+#chat_control{
+	position: relative;
+	width:700px
+}
+#background{
+	height:650px;
+	width:930px;
+}
+
+#chat_div{
+	position:absolute;
+	/*border:groove;*/
+	top:720px;
+	left:430px;
+	width:700px;
+	border:1px solid #a2a2a3;
+	background: #edecdf;
+}
+/* ----- END conference ----- */
+
+
+
+
+
+/* ----- START course_description ----- */
+form.category {
+	margin: 0 auto;
+	text-align:right;
+}
+
+.cellpos{
+	position: relative;
+	vertical-align:middle;
+	text-align: right;
+}
+
+table.CourseDescr {
+	padding: 2px;
+	vertical-align: top;
+	border-top: 1px solid #edecdf;
+	border-bottom: 1px solid #edecdf;
+	border-left: 1px solid #edecdf;
+	border-right: 1px solid #edecdf;
+}
+
+table.CourseDescr th {
+	padding: 4px;
+	vertical-align: top;
+	background: #edecdf;
+	font-size:10px;
+	font-weight: bold;
+	color: #727266;
+	border-top: 1px solid #edecdf;
+	border-bottom: 1px solid #edecdf;
+	border-left: 1px solid #edecdf;
+	border-right: 1px solid #edecdf;
+	font-style : normal;
+	font-variant : normal;
+}
+
+table.CourseDescr td {
+	padding: 4px;
+	vertical-align: top !important;
+	font-size:10px;
+	color: #727266;
+	vertical-align: middle;
+}
+
+table.xinha_editor td {
+	vertical-align: top;
+    	font-size : 10px;
+	padding : 1px 1px 1px 1px;
+}
+/* ----- END course_description ----- */
+
+
+
+
+
+/* ----- START course_home ----- */
+div#content_login { margin-right: 350px; padding-left: 10px; }
+div#content_login p { line-height:1.4; }
+div#extra { background: #FF8539; }
+div#wrapper { float: left; width: 99%; margin-right:-300px; }
+div#navigation { float: right; width: 300px; }
+div#extra { float: right; clear: right; width:200px; }
+div#footer { clear: both; width: 100%; }
+
+.course_info {
+        background: #ffffff;
+        margin-bottom: 1em;
+}
+.course_info h1 {
+        border-bottom: 1px solid #a2a2a3;
+        padding: 5px 2px;
+        color: #a33033;
+        font-size: 11px;
+        font-weight: bold;
+}
+.course_info h1 a {
+        font-size: 11px;
+        font-weight: bold;
+        color: #a33033;
+}
+.actions {
+        float: right;
+        padding: 0;
+        margin: 0;
+}
+.actions td {
+        padding: 0 2px;
+        margin: 0;
+        width: 20%;
+        text-align: center;
+}
+.actions img {
+        vertical-align: middle;
+}
+/* ----- END course_home ----- */
+
+
+
+
+
+/* ----- START course_info ----- */
+table.xinha_editor td {
+    vertical-align: top;
+    font-size : 10px;
+    padding : 1px 1px 1px 1px;
+}
+/* ----- END course_info ----- */
+
+
+
+
+
+/* ----- START course_tools ----- */
+option.emphasised { font-style: italic; }
+
+.cellpos{
+    vertical-align:top; 
+    text-align:center;
+    float:center;
+}
+/* ----- END course_tools ----- */
+
+
+
+
+/* ----- START create_course ----- */
+table.xinha_editor td {
+    vertical-align: top;
+    font-size : 10px;
+    padding : 1px 1px 1px 1px;
+}
+/* ----- END create_course ----- */
+
+
+
+
+
+/* ----- START document ----- */
+.comment {
+    text-align: left;
+}
+
+table.Documents{
+    padding: 2px;
+    border-top: 1px solid #edecdf;
+    border-bottom: 1px solid #edecdf;
+    border-left: 1px solid #edecdf;
+    border-right: 1px solid #edecdf;;
+    background-color: #fbfbfb;
+}
+
+.DocHead {
+    background-color: #fbfbfb;
+    color: #727266;
+    text-align: center !important;
+}
+
+
+table.Documents th {
+    text-align: center!important;
+    border-top: 1px solid #edecdf;
+    border-bottom: 1px solid #edecdf;
+    border-left: 1px solid #edecdf;
+    border-right: 1px solid #edecdf;
+    font-weight: normal !important;
+}
+
+table.Documents td {
+    font-size: 10px;
+    padding: 5px 4px 4px 4px;
+    text-align: center;
+}
+
+table.Documents img {
+    vertical-align: middle; 
+}
+/* ----- END document ----- */
+
+
+
+
+
+/* ----- START dropbox ----- */
+td.category {
+	background: #E6EDF5;
+	color: #4F76A3;
+	font-weight:bold;
+	text-align:left;
+}
+.cellpos{
+	position:relative;
+	vertical-align:middle; 
+	text-align:center;
+}
+
+form.sort {
+ 	margin: 0 auto;
+	text-align:right;
+}
+
+.dropbox_detail {  
+	font-size: 10px; 
+	font-family: Verdana, Arial, Helvetica; 
+}
+
+.dropbox_date {  
+	font-style: italic;
+}
+
+.dropbox_person {  
+	font-weight: bold;
+}
+
+.dropbox_listTitle { 
+	font-style: bold;
+	color: black;
+}
+
+table.dropbox {
+	padding: 2px;
+	vertical-align: top;
+	border-top: 1px solid #edecdf;
+	border-bottom: 1px solid #edecdf;
+	border-left: 1px solid #edecdf;
+	border-right: 1px solid #edecdf;
+}
+
+table.dropbox th {
+	padding: 4px;
+	vertical-align: top;
+	background: #edecdf;
+	font-size:10px;
+	font-weight: bold;
+	color: #727266;
+	border-top: 1px solid #edecdf;
+	border-bottom: 1px solid #edecdf;
+	border-left: 1px solid #edecdf;
+	border-right: 1px solid #edecdf;
+	font-style : normal;
+	font-variant : normal;
+}
+
+table.dropbox td {
+	padding: 4px;
+	vertical-align: top !important;
+	font-size:10px;
+	color: #727266;
+	vertical-align: middle;
+}
+/* ----- END dropbox ----- */
+
+
+
+/* ----- START exercice ----- */
+table.ExerciseSum{
+    padding: 2px;
+    border-top: 1px solid #edecdf;
+    border-bottom: 1px solid #edecdf;
+    border-left: 1px solid #edecdf;
+    border-right: 1px solid #edecdf;
+}
+
+table.ExerciseSum th {
+    text-align: center!important;
+}
+
+table.ExerciseSum td {
+	color: #727266;
+	vertical-align: top;
+	padding : 5px 4px 4px 4px;
+}
+
+table.Exercise {
+	padding: 2px;
+	vertical-align: middle;
+	border-top: 1px solid #DBDCCD;
+	border-bottom: 1px solid #DBDCCD;
+	border-left: 1px solid #DBDCCD;
+	border-right: 1px solid #DBDCCD;
+}
+
+table.Exercise th{
+	text-align: center;
+	padding: 4px;
+	padding-bottom: 6px;
+	padding-top: 6px;
+	font-weight: bold;
+	font-size:10px !important;
+	vertical-align: middle;
+	background : #edecdf;
+}
+
+table.Exercise td {
+    padding: 4px;
+    color: #727266;
+    vertical-align: middle;
+    background : #edecdf;
+}
+
+table.Question {
+    padding: 2px;
+	vertical-align: top;
+    border-top: 1px solid #edecdf;
+    border-bottom: 1px solid #edecdf;
+    border-left: 1px solid #edecdf;
+    border-right: 1px solid #edecdf;
+}
+
+table.Question th {
+	padding: 4px;
+	vertical-align: top;
+	background: #edecdf;
+	font-size:10px;
+	color: #727266;
+	border-top: 1px solid #edecdf;
+	border-bottom: 1px solid #edecdf;
+	border-left: 1px solid #edecdf;
+	border-right: 1px solid #edecdf;
+	font-style : normal;
+	font-variant : normal;
+	font-weight : normal;
+}
+
+table.Question td {
+	padding: 4px;
+	vertical-align: top !important;
+	background: #Fbfbfb;
+	font-size:10px;
+	color: #727266;
+	vertical-align: middle;
+}
+
+#question_title_id {
+    padding:2px;
+    padding-top:5px;
+    color: #a33033;
+    font-size: 10px;
+    font-weight: bold;
+}
+
+.invisible {
+	color : #CAC3B5 !important;
+}
+
+.invisible a{
+	color : #ABABAB;
+}
+
+.empty {
+	color: #000000 !important;
+}
+
+.score {
+	color: #a33033 !important;
+	text-align : right;
+}
+
+.question_local_header {
+	color: #a33033;
+	border: red  !important;
+}
+/* ----- END exercice ----- */
+
+
+
+
+/* ----- START forum_admin ----- */
+table.ForumAdmSum{
+    border-top: 1px solid #edecdf;
+    border-bottom: 1px solid #edecdf;
+    border-left: 1px solid #edecdf;
+    border-right: 1px solid #edecdf;
+}
+
+table.ForumAdmSum th{
+	border-top: 1px solid #edecdf;
+	border-bottom: 1px solid #edecdf;
+	border-left: 1px solid #edecdf;
+	border-right: 1px solid #edecdf;
+	background: #edecdf !important;
+	text-align: left;
+	font-weight: bold;
+	font-size:10px !important;
+}
+
+table.ForumCategory{
+    padding: 2px;
+    vertical-align: middle;
+    border-top: 1px solid #edecdf;
+	border-bottom: 1px solid #edecdf;
+	border-left: 1px solid #edecdf;
+	border-right: 1px solid #edecdf;
+    font-size:10px !important;
+}
+
+table.ForumCategory th{
+	text-align: center;
+	padding: 4px;
+    border-top: 1px solid #edecdf;
+	border-bottom: 1px solid #edecdf;
+	border-left: 1px solid #edecdf;
+	border-right: 1px solid #edecdf;
+	padding-bottom: 6px;
+	padding-top: 6px;
+	font-weight: bold;
+	font-size:10px !important;
+	vertical-align: middle;
+	background: #edecdf !important;
+}
+/* ----- END forum_admin ----- */
+
+
+
+
+/* ----- START group ----- */
+.cellpos{
+    vertical-align:top; 
+    text-align:center;
+}
+
+#box1 {
+    float: left;
+    }
+    
+
+#box2 {
+    float: right;
+    }
+    
+#box3 {
+    float: left;
+    }
+
+.GroupHead {
+    background: #edecdf;
+    text-align: center !important;
+    font-weight: bold;
+    font-size: 10px !important;
+}
+
+.Group_Operations {
+    background: #CAC3B5;
+    font-size: 11px;
+    color: #000000;
+    border-top: 1px solid #a33033;
+    border-bottom: 1px solid #a33033;
+    border-left: 1px solid #CAC3B5;
+    border-right: 1px solid #CAC3B5;
+}
+
+.Group_Operations td{
+    padding: 2px !important;
+}
+
+.Group_Operations a {
+   color: #000000;
+   font-size: 10px;
+   font-weight: normal;
+   text-decoration: none;
+}
+
+.Group_Operations a:hover {
+       text-decoration: underline;
+       color: #ffffff;
+       font-size: 10px;
+}
+
+table.GroupList {
+    background: none;
+    vertical-align: middle;
+    padding: 2px;
+    border-top: 1px solid #edecdf;
+    border-bottom: 1px solid #edecdf;
+    border-left: 1px solid #edecdf;
+    border-right: 1px solid #edecdf;;
+    background-color: #fbfbfb;
+}
+
+table.GroupList tr {
+    padding: 4px;
+    font-size: 10px;
+}
+
+table.GroupList th {
+    padding: 4px;
+    font-size: 10px;
+    text-align: center!important;
+    border-top: 1px solid #edecdf;
+    border-bottom: 1px solid #edecdf;
+    border-left: 1px solid #edecdf;
+    border-right: 1px solid #edecdf;
+}
+
+table.GroupList td {
+    font-size : 10px;
+	padding : 5px 4px 4px 4px;
+    text-align: center;
+
+}
+
+.GroupHead {
+   background-color: #edecdf;
+   color: #727266;
+   font-weight: bold;
+}
+
+table.GroupSum{
+    padding: 2px;
+    vertical-align: middle;
+    border-top: 1px solid #edecdf;
+    border-bottom: 1px solid #edecdf;
+    border-left: 1px solid #edecdf;
+    border-right: 1px solid #edecdf;
+    }
+
+table.GroupSum thead{
+	padding: 2px;
+	vertical-align: middle;
+	border-top: 1px solid #CAC3B5;
+	border-bottom: 1px solid #CAC3B5;
+	border-left: 1px solid #edecdf;
+	border-right: 1px solid #edecdf;
+}
+
+table.GroupSum tbody{
+    padding: 2px;
+    vertical-align: middle;
+    border-top: 1px solid #edecdf;
+    border-bottom: 1px solid #CAC3B5;
+    border-left: 1px solid #edecdf;
+    border-right: 1px solid #edecdf;
+}
+
+table.GroupSum th{
+	text-align: center;
+	padding: 4px;
+	padding-bottom: 6px;
+	padding-top: 6px;
+	font-weight: bold;
+	font-size:10px !important;
+	vertical-align: middle;
+	background : #fbfbfb;
+}
+
+table.GroupSum td {
+	color: #727266;
+	vertical-align: top;
+	background : #fbfbfb;
+	padding : 5px 4px 4px 4px;
+}
+
+.comment {
+  text-align: left;
+}
+
+table.Documents{
+    padding: 2px;
+    border-top: 1px solid #edecdf;
+    border-bottom: 1px solid #edecdf;
+    border-left: 1px solid #edecdf;
+    border-right: 1px solid #edecdf;;
+    background-color: #fbfbfb;
+}
+
+.DocHead {
+   background-color: #fbfbfb;
+   color: #727266;
+}
+
+table.Documents th {
+    text-align: center!important;
+    border-top: 1px solid #edecdf;
+    border-bottom: 1px solid #edecdf;
+    border-left: 1px solid #edecdf;
+    border-right: 1px solid #edecdf;
+    font-weight: normal !important;
+}
+
+table.Documents td {
+    font-size : 10px;
+    padding : 5px 4px 4px 4px;
+    text-align: center;
+}
+/* ----- END group ----- */
+
+
+
+/* ----- START index ----- */
+div#content_login p{line-height:1.4}
+div#navigation{backgroundX:red;}
+div#extra{backgroundX:#FF8539}
+
+div#wrapper{float:left;width:99%;margin-right:-200px}
+div#content_login{margin-right:200px; padding-leftX:10px;}
+div#navigation{float:right;width:200px;}
+div#extra{float:right;clear:right;width:200px}
+div#footer{clear:both;width:100%}
+
+.extraMessage {
+    background-image: url(../../images/important.gif);
+    background-repeat: no-repeat;
+    margin-left: 50px;
+    background-position: 12px 6px;
+    padding-top: 12px;
+    padding-left: 65px;
+    padding-bottom: 12px;
+    background-color: #ffffff;
+    border-left : 10px solid #F57A00;
+    border-top : 1px solid Gray;
+    border-bottom : 1px solid Gray;
+    width: 99%;
+}
+/* ----- END index ----- */
+
+
+
+
+/* ----- START learnpath ----- */
+#course_topic_title_id {
+    border-bottom: 1px dotted #a2a2a3;
+    background: #ffffff;
+    padding:2px;
+    padding-top:5px;
+    color: #a33033;
+    font-size: 11px;
+    font-weight:bold;
+}
+
+.invisible { 
+    color: #999999 !important;
+    background-color: #f9f8ea !important;
+}
+
+.invisible a,
+.invisible a:link,
+.invisible a:visited,
+a.invisible,
+a:link.invisible,
+a:visited.invisible
+{
+   color: #999999;
+}
+
+.comments{ color: #a19b99; }
+.correct{ color: #009900; }
+.error{  color: #990000; }
+
+.comment {
+    font-size: smaller;
+    margin-left: 30px;
+}
+
+.LP_header {
+    color: #000 !important;
+    background-color: #edecdf !important;
+    text-align: center !important;
+    font-weight: bold !important;
+}
+
+.LP_button { 
+    vertical-align:middle;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 10px;
+    padding: 2px;
+    border: 1px solid #CAC3B5;
+    background-color: #f9f8ea;
+    color: #666666;
+}
+
+.LP_Operations {
+    background: #CAC3B5;
+    font-size: 11px;
+    color: #000000;
+    border-top: 1px solid #a33033;
+    border-bottom: 1px solid #a33033;
+	border-left: 1px solid #CAC3B5;
+	border-right: 1px #000000 solid;
+}
+
+.LP_Operations td{
+    padding: 2px !important;
+}
+
+.Group_Operations a {
+   color: #000000;
+   font-size: 10px;
+   font-weight: normal;
+   text-decoration: none;
+}
+
+.LP_Operations a:hover {
+       text-decoration: underline;
+       color: #ffffff;
+       font-size: 10px;
+}
+
+table.LearnPathSum{
+    padding: 2px;
+    border-top: 1px solid #edecdf;
+    border-bottom: 1px solid #edecdf;
+    border-left: 1px solid #edecdf;
+    border-right: 1px solid #edecdf;
+}
+
+table.LearnPathSum thead{
+	padding: 2px;
+	border-top: 1px solid #edecdf;
+	border-bottom: 1px solid #edecdf;
+	border-left: 1px solid #edecdf;
+	border-right: 1px solid #edecdf;
+}
+
+
+table.LearnPathSum th{
+	text-align: center;
+	padding: 4px;
+	padding-bottom: 6px;
+	padding-top: 6px;
+	font-weight: bold;
+	font-size:10px !important;
+    border-top: 1px solid #edecdf;
+	border-bottom: 1px solid #edecdf;
+	border-left: 1px solid #edecdf;
+	border-right: 1px solid #edecdf;
+    background: #edecdf;
+}
+
+table.LearnPathSum td{
+	color: #727266;
+}
+
+table.ExerciseSum{
+    padding: 2px;
+    vertical-align: middle;
+    border-top: 1px solid #edecdf;
+    border-bottom: 1px solid #edecdf;
+    border-left: 1px solid #edecdf;
+    border-right: 1px solid #edecdf;
+}
+
+table.ExerciseSum thead{
+	padding: 2px;
+	vertical-align: middle;
+	border-top: 1px solid #CAC3B5;
+	border-bottom: 1px solid #CAC3B5;
+	border-left: 1px solid #edecdf;
+	border-right: 1px solid #edecdf;
+}
+
+table.ExerciseSum tbody{
+    padding: 2px;
+    vertical-align: middle;
+    border-top: 1px solid #edecdf;
+    border-bottom: 1px solid #CAC3B5;
+    border-left: 1px solid #edecdf;
+    border-right: 1px solid #edecdf;
+}
+
+table.ExerciseSum th{
+	text-align: center;
+	padding: 4px;
+	padding-bottom: 6px;
+	padding-top: 6px;
+	font-weight: bold;
+	font-size:10px !important;
+	vertical-align: middle;
+	background : #fbfbfb;
+}
+
+table.ExerciseSum td {
+	color: #727266;
+	vertical-align: top;
+	background : #fbfbfb;
+	padding : 5px 4px 4px 4px;
+}
+
+
+table.Exercise {
+	padding: 2px;
+	vertical-align: middle;
+	border-top: 1px solid #DBDCCD;
+	border-bottom: 1px solid #DBDCCD;
+	border-left: 1px solid #DBDCCD;
+	border-right: 1px solid #DBDCCD;
+}
+
+table.Exercise th{
+	text-align: center;
+	padding: 4px;
+	padding-bottom: 6px;
+	padding-top: 6px;
+	font-weight: bold;
+	font-size:10px !important;
+	vertical-align: middle;
+	background : #edecdf;
+}
+
+table.Exercise td {
+    padding: 4px;
+    color: #727266;
+    vertical-align: middle;
+    background : #edecdf;
+}
+
+table.Question {
+    padding: 2px;
+	vertical-align: top;
+    border-top: 1px solid #edecdf;
+    border-bottom: 1px solid #edecdf;
+    border-left: 1px solid #edecdf;
+    border-right: 1px solid #edecdf;
+}
+
+table.Question th {
+	padding: 4px;
+	vertical-align: top;
+	background: #edecdf;
+	font-size:10px;
+	color: #727266;
+	border-top: 1px solid #edecdf;
+	border-bottom: 1px solid #edecdf;
+	border-left: 1px solid #edecdf;
+	border-right: 1px solid #edecdf;
+	font-style : normal;
+	font-variant : normal;
+	font-weight : normal;
+}
+
+table.Question td {
+	padding: 4px;
+	vertical-align: top !important;
+	background: #Fbfbfb;
+	font-size:10px;
+	color: #727266;
+	vertical-align: middle;
+}
+
+#question_title_id {
+    padding:2px;
+    padding-top:5px;
+    color: #a33033;
+    font-size: 10px;
+    font-weight: bold;
+}
+
+.invisible {
+	color : #CAC3B5 !important;
+}
+
+.invisible a{
+	color : #ABABAB;
+}
+
+.empty {
+	color: red !important;
+}
+
+.score {
+	color: #a33033 !important;
+	text-align : right;
+}
+
+.question_local_header {
+	color: #a33033;
+	border: red  !important;
+}
+
+table.Users_Operations {
+    background: none;
+    vertical-align: middle;
+    padding: 2px;
+    background: #CAC3B5;
+    font-size: 11px;
+    color: #000000;
+    border-top: 1px solid #a33033;
+    border-bottom: 1px solid #a33033;
+	border-left: 1px solid #CAC3B5;
+	border-right: 1px solid #CAC3B5;
+}
+
+table.Users_Operations tr {
+    padding: 4px;
+    font-size: 11px;
+}
+
+table.Users_Operations th {
+    padding: 4px;
+    font-size: 11px;
+
+}
+
+table.Users_Operations td {
+    padding: 4px;
+    font-size: 11px;
+}
+
+table.Users_Operations td {
+    padding: 2px !important;
+}
+
+table.Users_Operations a {
+   color: #000000;
+   font-size: 10px;
+   font-weight: normal;
+   text-decoration: none;
+}
+
+table.Users_Operations a:hover {
+       text-decoration: underline;
+       color: #ffffff;
+       font-size: 10px;
+}
+
+
+
+/* Copied from Documents tool.css */
+.commentDoc {
+	text-align: left;
+}
+
+table.Documents {
+	padding: 2px;
+	margin-bottom: 30px;
+	border-top: 1px solid #edecdf;
+	border-bottom: 1px solid #edecdf;
+	border-left: 1px solid #edecdf;
+	border-right: 1px solid #edecdf;;
+	background-color: #fbfbfb;
+}
+
+.DocHead {
+	background-color: #fbfbfb;
+	color: #727266;
+	text-align: center !important;
+}
+
+
+table.Documents th {
+	text-align: center!important;
+	border-top: 1px solid #edecdf;
+	border-bottom: 1px solid #edecdf;
+	border-left: 1px solid #edecdf;
+	border-right: 1px solid #edecdf;
+	font-weight: normal !important;
+}
+
+table.Documents td {
+	font-size: 10px;
+	padding: 5px 4px 4px 4px;
+	text-align: center;
+}
+
+table.Documents img {
+	vertical-align: middle; 
+} 
+/* ----- END learnpath ----- */
+
+
+/* ----- START link ----- */
+.linkimg{
+	vertical-align:top; 
+}
+/* ----- END link ----- */
+
+
+
+/* ----- START phpbb ----- */
+table.ForumSum{
+    padding: 2px;
+    vertical-align: middle;
+    border-top: 1px solid #edecdf;
+    border-bottom: 1px solid #edecdf;
+    border-left: 1px solid #edecdf;
+    border-right: 1px solid #edecdf;
+}
+
+table.ForumSum thead{
+	padding: 2px;
+	vertical-align: middle;
+	border-top: 1px solid #CAC3B5;
+	border-bottom: 1px solid #CAC3B5;
+	border-left: 1px solid #edecdf;
+	border-right: 1px solid #edecdf;
+	background: #edecdf !important;
+}
+
+table.ForumSum tbody{
+    padding: 2px;
+    vertical-align: middle;
+    border-top: 1px solid #edecdf;
+    border-bottom: 1px solid #CAC3B5;
+    border-left: 1px solid #edecdf;
+    border-right: 1px solid #edecdf;
+}
+
+table.ForumSum th{
+	background : #edecdf !important;
+	text-align: center !important;
+	vertical-align: middle;	
+	font-weight: bold;		
+	font-size:10px !important;	
+	padding-bottom: 6px;
+	padding-top: 6px;
+}
+
+table.ForumSum td {
+	color: #727266;
+	vertical-align: top;
+	background : #fbfbfb;
+	padding : 5px 4px 4px 4px;
+}
+
+.Forum {
+	background : #edecdf !important;
+	text-align: left;
+	padding: 4px;
+	padding-bottom: 6px;
+	padding-top: 6px;
+	font-size:10px !important;
+	color: #000000 !important;
+}
+
+.ForumHead {
+	background : #edecdf !important;
+	text-align: center !important;;
+	padding: 4px;
+	padding-bottom: 6px;
+	padding-top: 6px;
+	font-weight: bold;
+}
+
+.Forum_leftside {
+	background : #F7F7F7 !important;
+	text-align: center;
+	vertical-align: middle !important;
+	font-size:10px !important;
+}
+
+.Forum_post {
+	background : #F7F7F7 !important;
+	text-align: center;
+	vertical-align: middle !important;
+	font-size:9px !important;
+}
+
+.Forum_leftside1 {
+	background : #F4F4F4 !important;
+	text-align: center;
+	vertical-align: middle !important;
+	font-size:10px !important;
+}
+
+.topic_row1 {
+	background : #F7F7F7 !important;
+	text-align: left;
+	vertical-align: top !important;
+	font-size:10px !important;
+}
+
+.topic_row2 {
+	background : #FBFBFB !important;
+	text-align: left;
+	vertical-align: top !important;
+	font-size:10px !important;
+}
+
+.post_massage {
+	border-bottom: 1px dotted #D1D7DC;
+}
+
+.forum_category {
+	margin-top: 8px;
+	margin-left: 4px;
+	margin-bottom: 8px;
+	text-align: center;
+	padding: 4px;
+	color: #000000 !important;
+	background-color: #CAC3B5 !important;;
+	font-weight: normal;
+		font-size:10px !important;
+}
+
+.inactive {
+	color : #CAC3B5 !important;	
+}
+
+   /* ----- Pagination ----- */
+.pagination {
+	height: 1%; /* IE tweak (holly hack) */
+	width: auto;
+	text-align: right;
+	margin-top: 5px;
+	float: right;
+}
+
+.pagination span.page-sep {
+	display: none;
+}
+
+li.pagination {
+	margin-top: 0;
+}
+
+.pagination strong, .pagination b {
+	font-weight: normal;
+}
+
+.pagination span strong {
+	padding: 0 2px;
+	margin: 0 2px;
+	font-weight: normal;
+	color: #FFFFFF;
+	background-color: #bfbfbf;
+	border: 1px solid #bfbfbf;
+	font-size: 0.9em;
+}
+
+.pagination span a, .pagination span a:link, .pagination span a:visited, .pagination span a:active {
+	font-weight: normal;
+	text-decoration: none;
+	color: #747474;
+	margin: 0 2px;
+	padding: 0 2px;
+	background-color: #eeeeee;
+	border: 1px solid #bababa;
+	font-size: 0.9em;
+	line-height: 1.5em;
+}
+
+.pagination span a:hover {
+	border-color: #d2d2d2;
+	background-color: #d2d2d2;
+	color: #FFF;
+	text-decoration: none;
+}
+
+.pagination img {
+	vertical-align: middle;
+}
+
+/* Pagination in viewforum for multipage topics */
+.row .pagination {
+	display: block;
+	float: left;
+	width: auto;
+	margin-top: 0;
+	padding: 1px 0px 1px 0px;
+	font-size: 0.9em;
+	background: none no-repeat;
+}
+
+.pages{
+	float: right;
+	width: auto;
+	margin-top: 0;
+	padding: 1px 1px 1px 1px;
+	font-size: 0.9em;
+}
+
+.row .pagination span a, li.pagination span a {
+	background-color: #FFFFFF;
+}
+
+.row .pagination span a:hover, li.pagination span a:hover {
+	background-color: #d2d2d2;
+}
+
+table.xinha_editor td {
+	vertical-align: top;
+	font-size : 10px;
+	padding : 1px 1px 1px 1px;
+}
+/* ----- END phpbb ----- */
+
+
+
+
+/* ----- START Questionnaire ----- */
+.toolBar_Button{
+    margin-top: 0px;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 10px;
+    padding: 0px 0px 0px 0px;
+    border: 0px solid #727266;
+    background-color: #CAC3B5;
+    color: #000000;
+    font-weight: bold;
+}
+
+.toolBar_Button:hover {
+	background-color:white;
+}
+
+.Questionnaire_Operations {
+    background: #CAC3B5;
+    font-size: 11px;
+    color: #000000;
+    border-top: 1px solid #a33033;
+    border-bottom: 1px solid #a33033;
+	border-left: 1px solid #CAC3B5;
+	border-right: 1px solid #CAC3B5;
+}
+
+.Questionnaire_Operations td{
+    padding: 6px !important;
+}
+
+.Questionnaire_Operations a, a:link, a:active, a:visited {
+   color: #000000;
+   font-size: 10px;
+   font-weight: normal;
+   text-decoration: none;
+}
+
+.Questionnaire_Operations a:hover {
+       text-decoration: underline;
+       color: #ffffff;
+       font-size: 10px;
+}
+
+
+
+table.Questionnaire {
+    padding: 2px;
+    border-top: 1px solid #edecdf;
+    border-bottom: 1px solid #edecdf;
+    border-left: 1px solid #edecdf;
+    border-right: 1px solid #edecdf;
+}
+
+table.Questionnaire th {
+	padding: 4px;
+	background: #edecdf;
+	font-size:10px;
+    font-weight: bold;
+	color: #727266;
+	font-style : normal;
+	font-variant : normal;
+    border-top: 1px solid #edecdf;
+    border-bottom: 1px solid #edecdf;
+    border-left: 1px solid #edecdf;
+    border-right: 1px solid #edecdf;
+}
+
+.newQue {
+      border-top: 1px solid #727266;
+}
+
+
+table.Questionnaire td {
+	padding: 4px;
+	font-size:10px;
+	color: #727266;
+	vertical-align: middle;
+}
+/* ----- END Questionnaire ----- */
+
+
+
+/* ----- START Search ----- */
+.Results {
+    padding: 2px 1px 1px 14px;
+    list-style: disc;
+    color: #727266;
+}
+
+
+table.Search{
+    padding: 0px 0px 0px 0px;
+    border-top: 1px solid #edecdf;
+    border-bottom: 1px solid #edecdf;
+    border-left: 1px solid #edecdf;
+    border-right: 1px solid #edecdf;
+}
+
+table.Search th {
+    text-align: center !important;
+    border-top: 1px solid #edecdf;
+    border-bottom: 1px solid #edecdf;
+    border-left: 1px solid #edecdf;
+    border-right: 1px solid #edecdf;
+}
+
+table.Search td {
+	color: #727266;
+	vertical-align: top;
+	padding : 5px 4px 4px 4px;
+    font-size: 10px;
+}
+/* ----- END Search ----- */
+
+
+
+/* ----- START units ----- */
+table.xinha_editor td {
+	vertical-align: top;
+	font-size : 10px;
+	padding : 1px 1px 1px 1px;
+}
+
+table.unit-navigation {
+        width: 100%;
+        margin: 0;
+        padding: 0;
+}
+
+.left {
+        text-align: left;
+}
+
+.right {
+        text-align: right;
+}
+
+.center {
+        text-align: center;
+}
+
+.unit-select {
+        text-align: center;
+        margin-top: 2em;
+        padding-bottom: 2em;
+}
+
+table img {
+        vertical-align: middle;
+}
+
+.topic {
+	padding-left: 1em;
+}
+
+.topic img {
+	padding-right: 10px;
+}
+
+.forum {
+	background: rgb(237, 236, 223);
+}
+/* ----- END units ----- */
+
+
+
+/* ----- START user ----- */
+td.highlight {
+	background: #eaffd5 !important;
+    text-align: center;
+    font-size: 9px;}
+
+td.highlight a {
+	color: #ff0000;
+}
+
+td.highlight a:hover {
+	color: #ff3f00;
+    text-decoration: underline;
+}
+
+.add_user a {
+	color: #029516 !important;
+}
+
+.add_user a:hover {
+	color: #02c81c !important;
+    text-decoration: underline;
+}
+
+.UsersHead {
+  background: #edecdf;
+  text-align: center !important;
+  font-weight: bold;
+  font-size: 10px !important;
+}
+
+
+table.NavUsers{
+    padding: 2px;
+    vertical-align: middle;
+    border-top: 1px solid #CAC3B5;
+    border-bottom: 1px solid #CAC3B5;
+    border-left: 1px solid #CAC3B5;
+    border-right: 1px solid #CAC3B5;
+    }
+
+table.NavUser tbody{
+    padding: 2px;
+    vertical-align: middle;
+}
+
+table.NavUser th{
+	text-align: center;
+	padding: 4px;
+	padding-bottom: 6px;
+	padding-top: 6px;
+	font-weight: bold;
+	font-size:10px !important;
+	background : #edecdf;
+    border-bottom: 1px dotted #CAC3B5;
+    border-top: 0px dotted #CAC3B5;
+}
+
+table.NavUser td {
+	color: #727266;
+	vertical-align: top;
+	padding : 5px 4px 4px 4px;
+    border-bottom: 1px dotted #CAC3B5;
+}
+
+table.Users_Operations {
+    background: none;
+    vertical-align: middle;
+    padding: 2px;
+    background: #CAC3B5;
+    font-size: 11px;
+    color: #000000;
+    border-top: 1px solid #a33033;
+    border-bottom: 1px solid #a33033;
+	border-left: 1px solid #CAC3B5;
+	border-right: 1px solid #CAC3B5;
+}
+
+table.Users_Operations tr {
+    padding: 4px;
+    font-size: 11px;
+}
+
+table.Users_Operations th {
+    padding: 4px;
+    font-size: 11px;
+
+}
+
+table.Users_Operations td {
+    padding: 4px;
+    font-size: 11px;
+}
+
+table.Users_Operations td {
+    padding: 2px !important;
+}
+
+table.Users_Operations a {
+   color: #000000;
+   font-size: 10px;
+   font-weight: normal;
+   text-decoration: none;
+}
+
+table.Users_Operations a:hover {
+       text-decoration: underline;
+       color: #ffffff;
+       font-size: 10px;
+}
+
+
+  /* ---- Pagination ---- */
+.pagination {
+	height: 1%; /* IE tweak (holly hack) */
+	width: auto;
+	text-align: right;
+	margin-top: 5px;
+	float: right;
+}
+
+.pagination span.page-sep {
+	display: none;
+}
+
+li.pagination {
+	margin-top: 0;
+}
+
+.pagination strong, .pagination b {
+	font-weight: normal;
+}
+
+.pagination span strong {
+	padding: 0 2px;
+	margin: 0 2px;
+	font-weight: normal;
+	color: #FFFFFF;
+	background-color: #bfbfbf;
+	border: 1px solid #bfbfbf;
+	font-size: 0.9em;
+}
+
+.pagination span a, .pagination span a:link, .pagination span a:visited, .pagination span a:active {
+	font-weight: normal;
+	text-decoration: none;
+	color: #747474;
+	margin: 0 2px;
+	padding: 0 2px;
+	background-color: #eeeeee;
+	border: 1px solid #bababa;
+	font-size: 0.9em;
+	line-height: 1.5em;
+}
+
+.pagination span a:hover {
+	border-color: #d2d2d2;
+	background-color: #d2d2d2;
+	color: #FFF;
+	text-decoration: none;
+}
+
+.pagination img {
+	vertical-align: middle;
+}
+
+/* Pagination in viewforum for multipage topics */
+.row .pagination {
+	display: block;
+	float: left;
+	width: auto;
+	margin-top: 0;
+	padding: 1px 0px 1px 0px;
+	font-size: 0.9em;
+	background: none no-repeat;
+}
+
+.pages{
+	float: right;
+	width: auto;
+	margin-top: 0;
+	padding: 1px 1px 1px 1px;
+	font-size: 0.9em;
+}
+
+.row .pagination span a, li.pagination span a {
+	background-color: #FFFFFF;
+}
+
+.row .pagination span a:hover, li.pagination span a:hover {
+	background-color: #d2d2d2;
+}
+/* ----- END user ----- */
+
+
+
+
+/* ----- START Video ----- */
+table.Video{
+    padding: 2px;
+    border-top: 1px solid #edecdf;
+    border-bottom: 1px solid #edecdf;
+    border-left: 1px solid #edecdf;
+    border-right: 1px solid #edecdf;
+}
+
+table.Video th {
+    text-align: center!important;
+    border-top: 1px solid #edecdf;
+    border-bottom: 1px solid #edecdf;
+    border-left: 1px solid #edecdf;
+    border-right: 1px solid #edecdf;
+}
+
+table.Video td {
+    color: #727266;
+    vertical-align: top;
+    padding : 5px 4px 4px 4px;
+    font-size: 10px;
+}
+/* ----- END Video ----- */
+
+
+/* ----- START Wiki ----- */
+.wikiTitle h1{
+    color: grey;
+    background: none;
+    font-size: 11px;
+    font-weight: bold;
+    /*font-weight: normal;*/
+}
+
+.wiki2xhtml{
+    vertical-align:middle;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 10px;
+    padding: 1px;
+    border: 1px solid #CAC3B5;
+    background-color: #f9f8ea;
+    color: #666666;
+}
+
+.wiki2xhtml h2,h3,h4{
+    color: Black;
+    background: none;
+}
+
+.wiki2xhtml h2{
+    border-bottom: 1px solid #aaaaaa;
+    font-size: 11px;
+    font-weight:bold;
+}
+
+.wiki2xhtml h3{
+    border-bottom: 1px groove #aaaaaa;
+    font-size: 11px;
+    font-weight:bold;
+}
+
+.wiki2xhtml h4{
+    font-size: 11px;
+    font-weight:bold;
+}
+
+.wiki2xhtml a.wikiEdit{
+    color: red;
+}
+
+.diff{
+    font-family: monospace;
+    padding: 5px;
+    margin: 5px;
+}
+
+.diffEqual{
+    background-color: white;
+}
+
+.diffMoved{
+    background-color: #00CCFF;
+}
+
+.diffAdded{
+    background-color: lime;
+}
+
+.diffDeleted{
+    background-color: #FF00AA;
+}
+
+.invisible { 
+    color: #999999 !important;
+    background-color: #f9f8ea !important;
+}
+
+.invisible a,
+.invisible a:link,
+.invisible a:visited,
+a.invisible,
+a:link.invisible,
+a:visited.invisible
+{
+   color: #999999;
+}
+ 
+.comments {
+    color: #a19b99; 
+}
+
+.correct {
+    color: #009900; 
+}
+
+.error {
+    color: #990000; 
+}
+
+.comment {
+    font-size: smaller;
+    margin-left: 30px;
+}
+
+.LP_button { 
+    vertical-align:middle;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 10px;
+    padding: 2px;
+    border: 1px solid #CAC3B5;
+    background-color: #f9f8ea;
+    color: #666666;
+}
+
+.LP_Operations {
+    background: #CAC3B5;
+    font-size: 11px;
+    color: #000000;
+    border-top: 1px solid #a33033;
+    border-bottom: 1px solid #a33033;
+    border-left: 1px solid #CAC3B5;
+    border-right: 1px #000000 solid;
+}
+
+.LP_Operations td{
+    padding: 2px !important;
+}
+
+.Group_Operations a {
+    color: #000000;
+    font-size: 10px;
+    font-weight: normal;
+    text-decoration: none;
+}
+
+.LP_Operations a:hover {
+       text-decoration: underline;
+       color: #ffffff;
+       font-size: 10px;
+}
+
+a.claroCmd {
+   font-size: 10px;
+   font-weight: normal;
+   text-decoration: none;
+}
+
+a.claroCmd:hover {
+   text-decoration: underline;
+}
+
+table.WikiSum{
+    padding: 2px;
+    border-top: 1px solid #edecdf;
+    border-bottom: 1px solid #edecdf;
+    border-left: 1px solid #edecdf;
+    border-right: 1px solid #edecdf;
+}
+
+table.WikiSum thead{
+	padding: 2px;
+	border-top: 1px solid #edecdf;
+	border-bottom: 1px solid #edecdf;
+	border-left: 1px solid #edecdf;
+	border-right: 1px solid #edecdf;
+}
+
+table.WikiSum th{
+    text-align: center;
+    padding: 4px;
+    padding-bottom: 6px;
+    padding-top: 6px;
+    font-weight: bold;
+    font-size:10px !important;
+    border-top: 1px solid #edecdf;
+    border-bottom: 1px solid #edecdf;
+    border-left: 1px solid #edecdf;
+    border-right: 1px solid #edecdf;
+    background: #edecdf;
+}
+
+table.WikiSum td{
+    color: #727266;
+}
+
+.Wiki_header {
+    color: #000 !important;
+    background-color: #edecdf !important;
+    text-align: center !important;
+    font-weight: bold !important;
+}
+
+table.ExerciseSum{
+    padding: 2px;
+    vertical-align: middle;
+    border-top: 1px solid #edecdf;
+    border-bottom: 1px solid #edecdf;
+    border-left: 1px solid #edecdf;
+    border-right: 1px solid #edecdf;
+}
+
+table.ExerciseSum thead{
+    padding: 2px;
+    vertical-align: middle;
+    border-top: 1px solid #CAC3B5;
+    border-bottom: 1px solid #CAC3B5;
+    border-left: 1px solid #edecdf;
+    border-right: 1px solid #edecdf;
+}
+
+table.ExerciseSum tbody{
+    padding: 2px;
+    vertical-align: middle;
+    border-top: 1px solid #edecdf;
+    border-bottom: 1px solid #CAC3B5;
+    border-left: 1px solid #edecdf;
+    border-right: 1px solid #edecdf;
+}
+
+table.ExerciseSum th{
+    text-align: center;
+    padding: 4px;
+    padding-bottom: 6px;
+    padding-top: 6px;
+    font-weight: bold;
+    font-size:10px !important;
+    vertical-align: middle;
+    background : #fbfbfb;
+}
+
+table.ExerciseSum td {
+	color: #727266;
+	vertical-align: top;
+	background : #fbfbfb;
+	padding : 5px 4px 4px 4px;
+}
+
+table.Exercise {
+	padding: 2px;
+	vertical-align: middle;
+	border-top: 1px solid #DBDCCD;
+	border-bottom: 1px solid #DBDCCD;
+	border-left: 1px solid #DBDCCD;
+	border-right: 1px solid #DBDCCD;
+}
+
+table.Exercise th{
+	text-align: center;
+	padding: 4px;
+	padding-bottom: 6px;
+	padding-top: 6px;
+	font-weight: bold;
+	font-size:10px !important;
+	vertical-align: middle;
+	background : #edecdf;
+}
+
+table.Exercise td {
+    padding: 4px;
+    color: #727266;
+    vertical-align: middle;
+    background : #edecdf;
+}
+
+table.Question {
+    padding: 2px;
+    vertical-align: top;
+    border-top: 1px solid #edecdf;
+    border-bottom: 1px solid #edecdf;
+    border-left: 1px solid #edecdf;
+    border-right: 1px solid #edecdf;
+}
+
+table.Question th {
+	padding: 4px;
+	vertical-align: top;
+	background: #edecdf;
+	font-size:10px;
+	color: #727266;
+	border-top: 1px solid #edecdf;
+	border-bottom: 1px solid #edecdf;
+	border-left: 1px solid #edecdf;
+	border-right: 1px solid #edecdf;
+	font-style : normal;
+	font-variant : normal;
+	font-weight : normal;
+}
+
+table.Question td {
+	padding: 4px;
+	vertical-align: top !important;
+	background: #Fbfbfb;
+	font-size:10px;
+	color: #727266;
+	vertical-align: middle;
+}
+
+#question_title_id {
+    padding:2px;
+    padding-top:5px;
+    color: #a33033;
+    font-size: 10px;
+    font-weight: bold;
+}
+
+.invisible {
+	color : #CAC3B5 !important;
+}
+
+.invisible a{
+	color : #ABABAB;
+}
+
+.empty {
+	color: red !important;
+}
+
+.score {
+	color: #a33033 !important;
+	text-align : right;
+}
+
+.question_local_header {
+	color: #a33033;
+	border: red  !important;
+}
+/* ----- END Wiki ----- */
+
+
+
+/* ----- START Work ----- */
+table.WorkSum {
+    padding: 2px;
+	vertical-align: top;
+    border-top: 1px solid #edecdf;
+    border-bottom: 1px solid #edecdf;
+    border-left: 1px solid #edecdf;
+    border-right: 1px solid #edecdf;
+}
+
+table.WorkSum th {
+	padding: 4px;
+	vertical-align: top;
+	font-size:10px;
+	color: #727266;
+	border-top: 1px solid #edecdf;
+	border-bottom: 1px solid #edecdf;
+	border-left: 1px solid #edecdf;
+	border-right: 1px solid #edecdf;
+}
+
+table.WorkSum td {
+	padding: 4px;
+	vertical-align: top; !important
+	font-size:10px;
+	color: #727266;
+	vertical-align: middle;
+}
+
+table.Work {
+	padding: 2px;
+	vertical-align: middle;
+	border-top: 1px solid #DBDCCD;
+	border-bottom: 1px solid #DBDCCD;
+	border-left: 1px solid #DBDCCD;
+	border-right: 1px solid #DBDCCD;
+}
+
+table.Work th{
+	text-align: center;
+	padding: 4px;
+	padding-bottom: 6px;
+	padding-top: 6px;
+	font-weight: bold;
+	font-size:10px !important;
+	vertical-align: middle;
+	background : #edecdf;
+}
+
+table.Work td {
+    padding: 4px;
+    color: #727266;
+    vertical-align: middle;
+    background : #edecdf;
+}
+
+table.Work_List {
+    padding: 2px;
+	vertical-align: top;
+    border-top: 1px solid #edecdf;
+    border-bottom: 1px solid #edecdf;
+    border-left: 1px solid #edecdf;
+    border-right: 1px solid #edecdf;
+}
+
+.grade_input{
+	margin-top: 0px;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	font-weight: bold;
+	padding: 0px 5px 0px 0px;
+	border: 1px solid #a33033;
+	background-color: #fff;
+	color: #000;
+	text-align : right;
+}
+
+.grade {
+	color: #000000;
+	vertical-align: top;
+	background : #fff !important;
+	padding : 5px 4px 4px 4px;
+}
+
+table.Work_List th {
+	padding: 4px;
+	vertical-align: top;
+	background: #edecdf;
+	font-size:10px;
+	color: #727266;
+	border-top: 1px solid #edecdf;
+	border-bottom: 1px solid #edecdf;
+	border-left: 1px solid #edecdf;
+	border-right: 1px solid #edecdf;
+	font-style : normal;
+	font-variant : normal;
+	font-weight : normal;
+}
+
+table.Work_List thead {
+	text-align : center !Important;
+}
+
+table.Work_List td {
+	padding: 4px;
+	vertical-align: top !important;
+	background: #Fbfbfb;
+	font-size:10px;
+	color: #727266;
+	vertical-align: middle;
+}
+
+table.Info {
+	background: #ffffff;
+}
+
+table.Info td {
+	font-size: 9	px;
+	background: #fff !important;
+	border-bottom: 1px solid #ffffff;
+	border-top: 1px solid #ffffff;
+	border-left: 1px solid #ffffff;
+	border-right: 1px solid #ffffff;
+}
+
+.invisible {
+	color : #CAC3B5 !important;
+    background: #FFFFCC
+}
+
+.invisible a{
+	color : #ABABAB;
+}
+
+.empty {
+	color: red !important;
+}
+
+.score {
+	color: #a33033 !important;
+	text-align : right;
+}
+
+
+td.category {
+	background: #E6EDF5;
+	color: #4F76A3;
+	
+	text-align:left;
+}
+.cellpos{
+	position:relative;
+	vertical-align:middle; 
+	text-align:center;
+}
+
+form.sort {
+ 	margin: 0 auto;
+	text-align:right;
+}
+
+.dropbox_detail {  
+		font-size: 10px; 
+		font-family: Verdana, Arial, Helvetica; 
+}
+
+.dropbox_date {  
+		font-style: italic;
+}
+
+.dropbox_person {  
+		font-weight: bold;
+}
+
+.dropbox_listTitle { 
+		font-style: bold; 
+		color: black;
+}
+
+table.dropbox {
+    padding: 2px;
+	vertical-align: top;
+    border-top: 1px solid #edecdf;
+    border-bottom: 1px solid #edecdf;
+    border-left: 1px solid #edecdf;
+    border-right: 1px solid #edecdf;
+}
+
+table.dropbox th {
+	padding: 4px;
+	vertical-align: top;
+	background: #edecdf;
+	font-size:10px;
+	color: #727266;
+	border-top: 1px solid #edecdf;
+	border-bottom: 1px solid #edecdf;
+	border-left: 1px solid #edecdf;
+	border-right: 1px solid #edecdf;
+	font-style : normal;
+	font-variant : normal;
+	font-weight : normal;
+}
+
+table.dropbox td {
+	padding: 4px;
+	vertical-align: top !important;
+	background: #Fbfbfb;
+	font-size:10px;
+	color: #727266;
+	vertical-align: middle;
+}
+
+.expired {
+	color: red;
+}
+
+.not_expired {
+	color: #008040;
+}
+
+.expired_today {
+	color: #FF8000;
+}
+
+table.xinha_editor td {
+	vertical-align: top;
+    	font-size : 10px;
+	padding : 1px 1px 1px 1px;
+}
+/* ----- End Work ----- */
