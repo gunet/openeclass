@@ -356,42 +356,36 @@ function new_assignment()
 
 	$tool_content .= "
     <form action='$_SERVER[PHP_SELF]' method='post' onsubmit='return checkrequired(this, \"title\");'>
-    <table width='99%' class='FormData'>
-    <tbody>
+    <table class='framed'>
+    <thead>
     <tr>
-      <th width='220'>&nbsp;</th>
       <td><b>$m[WorkInfo]</b></td>
     </tr>
     <tr>
-      <th class='left'>$m[title]:</th>
-      <td><input type='text' name='title' size='55' class='FormData_InputText' /></td>
+      <td>$m[title]:<br />
+      <input type='text' name='title' size='55' class='FormData_InputText' /></td>
     </tr>
     <tr>
-      <th class='left'>$m[description]:</th>
-      <td>
-        <table class='xinha_editor'>
+      <td>$m[description]:<br />";
+        $tool_content .= rich_text_editor('desc', 4, 20, $desc);
+        $tool_content .= "</td></tr>
         <tr>
-          <td>";
-        $tool_content .= rich_text_editor('desc', 4, 20, $desc, "style='width:100%'");
-        $tool_content .= "</td></tr></table></td></tr>
-        <tr>
-      <th class='left'>$m[comments]:</th>
-      <td><textarea name='comments' rows='3' cols='53' class='FormData_InputText'></textarea></td>
+      <td>$m[comments]:<br />
+      <textarea name='comments' rows='3' cols='53' class='FormData_InputText'></textarea></td>
     </tr>
     <tr>
-      <th class='left'>$m[deadline]:</th>
-      <td>$end_cal_Work</td>
+      <td>$m[deadline]:<br />
+      $end_cal_Work</td>
     </tr>
     <tr>
-      <th class='left'>$m[group_or_user]:</th>
-      <td><input type='radio' name='group_submissions' value='0' checked='1' />$m[user_work]
+      <td>$m[group_or_user]:<br />
+      <input type='radio' name='group_submissions' value='0' checked='1' />$m[user_work]
       <br /><input type='radio' name='group_submissions' value='1' />$m[group_work]</td>
     </tr>
     <tr>
-      <th>&nbsp;</th>
-      <td><input type='submit' name='new_assign' value='$langAdd' /></td>
+      <td><input class='Login' type='submit' name='new_assign' value='$langAdd' /></td>
     </tr>
-    </tbody>
+    </thead>
     </table>
   </form>
   <br/>";
@@ -444,46 +438,45 @@ function show_edit_assignment($id)
 
 
 	$description = q($row['description']);
-        $textarea = rich_text_editor('desc', 4, 20, $row['description'], "style='width:100%'");
+        $textarea = rich_text_editor('desc', 4, 20, $row['description']);
 	$tool_content .= <<<cData
     <form action="$_SERVER[PHP_SELF]" method="post" onsubmit="return checkrequired(this, 'title');">
     <input type="hidden" name="id" value="$id" />
     <input type="hidden" name="choice" value="do_edit" />
-    <table width="99%" class="FormData">
-    <tbody>
+    <table class='framed'>
+    <thead>
     <tr>
       <th width="150">&nbsp;</th>
       <td><b>$m[WorkInfo]</b></td>
     </tr>
     <tr>
-      <th class="left">$m[title]:</th>
-      <td><input type="text" name="title" size="45" value="${row['title']}" class='FormData_InputText' /></td>
+      <td>$m[title]:<br />
+      <input type="text" name="title" size="45" value="${row['title']}" class='FormData_InputText' /></td>
     </tr>
     <tr>
-      <th class="left">${m['description']}:</th>
-      <td>
-        <table class='xinha_editor'>
-        <tr>
-          <td>$textarea</td>
+      <td>$m[description]:<br />
+          $textarea</td>
         </tr>
         </table>
       </td>
     </tr>
     <tr>
-      <th class="left">${m['comments']}:</th>
-      <td><textarea name="comments" rows="5" cols="65" class='FormData_InputText'>${row['comments']}</textarea></td>
+      <td>$m[description]:<br />
+          $textarea</td>
+        </tr>
+    <tr>
+      <td>$m[comments]:<br />
+      <textarea name="comments" rows="5" cols="65" class='FormData_InputText'>${row['comments']}</textarea></td>
     </tr>
     <tr>
-      <th class="left">${m['deadline']}:</th>
-      <td>
+      <td>$m[deadline]:<br />
 cData;
 
 	$tool_content .= getJsDeadline($deadline)."
       </td>
     </tr>
     <tr>
-      <th class='left'>".$m['group_or_user'].":</th>
-      <td>".
+      <td>".$m['group_or_user'].":<br />".
 	"<input type='radio' name='group_submissions' value='0'";
 
 	if ($row['group_submissions'] == '0') {
@@ -502,10 +495,9 @@ cData;
 	$tool_content .= $m['group_work']."</td>
     </tr>
     <tr>
-      <th class='left'>&nbsp;</th>
-      <td><input type='submit' name='do_edit' value='$langEdit' /></td>
+      <td><input class='Login' type='submit' name='do_edit' value='$langEdit' /></td>
     </tr>
-    </tbody>
+    </thead>
     </table>
     </form>";
 

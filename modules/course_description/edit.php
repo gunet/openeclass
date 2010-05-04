@@ -96,23 +96,20 @@ if (isset($_POST['edIdBloc'])) {
         }
         $tool_content .= "<form method='post' action='index.php'>
                 <input type='hidden' name='edIdBloc' value='$numBloc' />
-                <table width='99%' class='FormData' align='left'><tbody>
-                   <tr><th class='left' width='220'>$langTitle:</th>\n";
+                <table class='framed' align='left'><thead>
+                   <tr><td>$langTitle:<br />";
         if ($edit_title) {
-                $tool_content .= "<td><input type='text' name='edTitleBloc' $edit_title /></td></tr>";
+                $tool_content .= "<input type='text' name='edTitleBloc' $edit_title /></td></tr>";
         } else {
-                $tool_content .= "<td><b>$title</b><input type='hidden' name='edTitleBloc' value='$title' /></td></tr>";
+                $tool_content .= "<b>$title</b><input type='hidden' name='edTitleBloc' value='$title' /></td></tr>";
         }
 
         $tool_content .= "
-                <tr><th class='left'>&nbsp;</th>
-                    <td><table class='xinha_editor'>
-                    <tr><td>".
+                <tr><td>".
                     @rich_text_editor('edContentBloc', 4, 20, $contentBloc)
-                    ."</td></tr></table></td></tr>
-                <tr><th class='left'>&nbsp;</th>
-                    <td><input type='submit' name='save' value='$langAdd' />&nbsp;&nbsp;
-                        <input type='submit' name='ignore' value='$langBackAndForget' /></td></tr>
+                    ."</td></tr>
+                <tr><td><input class='Login' type='submit' name='save' value='$langAdd' />&nbsp;&nbsp;
+                        <input class='Login' type='submit' name='ignore' value='$langBackAndForget' /></td></tr>
             </tbody></table></form>\n";
 } else {
         display_add_block_form();

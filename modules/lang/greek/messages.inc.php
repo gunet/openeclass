@@ -2615,7 +2615,6 @@ $langNotice = "Σημείωση";
 $langModifProfile="Αλλαγή του προφίλ μου";
 
 //unregcours.php
-$langUnregCours = "Απεγγραφή από μάθημα";
 $langCoursDelSuccess = "Η απεγγραφή σας από το μάθημα έγινε με επιτυχία";
 $langCoursError = "Σφάλμα κατά την απεγγραφή του χρήστη";
 $langConfirmUnregCours = "Θέλετε σίγουρα να απεγγραφείτε από το μάθημα";

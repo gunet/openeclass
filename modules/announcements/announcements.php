@@ -262,17 +262,13 @@ hContent;
         $tool_content .= "<form method='post' action='$_SERVER[PHP_SELF]' onsubmit=\"return checkrequired(this, 'antitle');\">";
         if (isset ($modify) && $modify) {
             $tool_content .= "
-	    <table width='99%' class='FormData'>
-	    <tbody>
-	    <tr><th>&nbsp;</th><td><b>$langModifAnn</b></td>
-	    </tr>";
+	    <table class='framed' align='center'>
+	    <thead>";
             $langAdd = $nameTools = $langModifAnn;
         } else {
 		$tool_content .= "
-		<table width='99%' class='FormData' align='center'>
-		<tbody>
-		<tr><th width='220'>&nbsp;</th><td><b>".$langAddAnn."</b></td>
-		</tr>";
+		<table class='framed' align='center'>
+		<thead>";
 		$nameTools = $langAddAnn;
         }
 	$navigation[] = array("url" => "announcements.php", "name" => $langAnnouncements);
@@ -281,33 +277,25 @@ hContent;
         if (!isset($titleToModify)) $titleToModify = "";
 
         $tool_content .= "
-	<tr>
-	  <th width='150' class='left'>$langAnnTitle:</th>
-	  <td><input type='text' name='antitle' value='$titleToModify' size='50' class='FormData_InputText' /></td>
-	</tr>
-	<tr>
-	  <th class='left'>$langAnnBody:</th>
-	  <td>
-	    <table class='xinha_editor'>
-	    <tr>
-	      <td>".rich_text_editor('newContent', 4, 20, $contentToModify)."</td>
-	    </tr>
-	    </table>
-	  </td>
-	</tr>
-	<tr>
-	  <th>&nbsp;</th>
-	  <td><input type='checkbox' value='1' name='emailOption' /> $langEmailOption</td>
-	</tr>
-	<tr>
-	  <th>&nbsp;</th>
-	  <td><input type='submit' name='submitAnnouncement' value='$langAdd' /></td>
-	</tr>
-	</tbody>
-	</table>
-	<input type='hidden' name='id' value='$AnnouncementToModify' />
-	</form>
-	<br />";
+      <tr>
+        <td>$langAnnTitle:<br /><input type='text' name='antitle' value='$titleToModify' size='50' class='FormData_InputText' /></td>
+      </tr>
+      <tr>
+        <td>$langAnnBody:<br />
+            ".rich_text_editor('newContent', 4, 20, $contentToModify)."
+        </td>
+      </tr>
+      <tr>
+        <td><input type='checkbox' value='1' name='emailOption' /> $langEmailOption</td>
+      </tr>
+      <tr>
+        <td><input class='Login' type='submit' name='submitAnnouncement' value='$langAdd' /></td>
+      </tr>
+      </thead>
+      </table>
+      <input type='hidden' name='id' value='$AnnouncementToModify' />
+      </form>
+      <br />";
     }
 } // end: teacher only
 

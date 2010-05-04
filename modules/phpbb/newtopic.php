@@ -215,36 +215,23 @@ if (isset($submit) && $submit) {
 		exit();
 	}
 	$tool_content .= "<form action='$_SERVER[PHP_SELF]' method='post'>
-	<table class='FormData' width='99%'>
-	<tbody>
+	<table class='framed'>
+	<thead>
+	<tr><td><b>$langTopicData</b></td></tr>
 	<tr>
-	<th width='220'>&nbsp;</th>
-	<td><b>$langTopicData</b></td>
+	<td>$langSubject:<br />
+	<input type='text' name='subject' size='53' maxlength='100' class='FormData_InputText' /></td>
 	</tr>
-	<tr>
-	<th class='left'>$langSubject:</th>
-	<td><input type='text' name='subject' size='53' maxlength='100' class='FormData_InputText' /></td>
-	</tr>
-	<tr>
-	<th class='left'>$langBodyMessage:</th>
-	<td>
-	<table class='xinha_editor'>
-	<tr>
-	<td>".
+	<tr><td>$langBodyMessage:<br />".
 	rich_text_editor('message', 14, 50, '', "class='FormData_InputText'")
 	."
-	</td>
-	</tr></table>
-	</td>
-	</tr>
-	<tr>
-	<th>&nbsp;</th>
-	<td><input type='hidden' name='forum' value='$forum' />
-	<input type='submit' name='submit' value='$langSubmit' />&nbsp;
-	<input type='submit' name='cancel' value='$langCancelPost' />
 	</td></tr>
-	</tbody>
-	</table>
+	<tr>
+	<td><input type='hidden' name='forum' value='$forum' />
+	<input class='Login' type='submit' name='submit' value='$langSubmit' />&nbsp;
+	<input class='Login' type='submit' name='cancel' value='$langCancelPost' />
+	</td></tr>
+	</thead></table>
 	<br/>
 	</form>";
 }

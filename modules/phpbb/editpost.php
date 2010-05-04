@@ -310,48 +310,37 @@ if ($is_adminOfCourse) { // course admin
 		$message = preg_replace('#</textarea>#si', '&lt;/TEXTAREA&gt;', $message);
 		list($day, $time) = explode(' ', $myrow["post_time"]);
 		
-		
 		$tool_content .= "<div id='operations_container'><ul id='opslist'>
 		<li><a href='viewtopic.php?topic=$topic&amp;forum=$forum' target='_blank'>$langTopicReview</a></li>
 		</ul>
 		</div>
 		<br />";
 		$tool_content .= "<form action='$_SERVER[PHP_SELF]' method='post'>
-		<table class='FormData' width='99%'>
-		<tbody>
-		<tr>
-		<th width='220'>&nbsp;</th>
-		<td><b>$langReplyEdit</b></TD>
-		</tr>";
+		<table class='framed'>
+		<thead>
+		<tr><td><b>$langReplyEdit</b></td></tr>";
 		$first_post = is_first_post($topic, $post_id, $currentCourseID);
 		if($first_post) {
 			$tool_content .= "<tr>
-			<th class='left'>$langSubject:</th>
-			<td><input type='text' name='subject' size='53' maxlength='100' value='" . stripslashes($myrow["topic_title"]) . "'  class='FormData_InputText' /></td>
+			<td>$langSubject:<br />
+			<input type='text' name='subject' size='53' maxlength='100' value='" . stripslashes($myrow["topic_title"]) . "'  class='FormData_InputText' /></td>
 			</tr>";
 		}
-		$tool_content .= "<tr><th class='left'>$langBodyMessage:</th>
-		<td>
-		<table class='xinha_editor'>
-		<tr>
-		<td>".
+		$tool_content .= "<tr><td>$langBodyMessage:<br />".
 		rich_text_editor('message', 10, 50, $message, "class='FormData_InputText'")
 		."	
-		</td></tr></table>
-		</td>
-		</tr>
+		</td></tr>
 		<tr>
-		<th class='left'>$langDeleteMessage:</th>
-		<td><input type='checkbox' name='delete' /></td>
+		<td>$langDeleteMessage:<br />
+		<input type='checkbox' name='delete' /></td>
 		</tr>
-		<tr><th>&nbsp;</th><td>";
-		
+		<tr><td>";
 		$tool_content .= "
 		<input type='hidden' name='post_id' value='$post_id' />
 		<input type='hidden' name='forum' value='$forum' />
-		<input type='submit' name='submit' value='$langSubmit' />
+		<input class='Login' type='submit' name='submit' value='$langSubmit' />
 		</td></tr>
-		</tbody></table></form>";
+		</thead></table></form>";
 	}
 } else {
 	$tool_content .= $langForbidden;

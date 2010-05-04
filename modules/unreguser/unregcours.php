@@ -27,7 +27,7 @@
 $require_login = TRUE;
 include '../../include/baseTheme.php';
 
-$nameTools = $langUnregCours;
+$nameTools = $langUnregCourse;
 
 $local_style = 'h3 { font-size: 10pt;} li { font-size: 10pt;} ';
 
@@ -48,7 +48,7 @@ if (!isset($doit) or $doit != "yes") {
       	<p>$langConfirmUnregCours:</p><p> <em>".course_code_to_title($cid)."</em>&nbsp;? </p>
 	<ul class='listBullet'>
 	<li>$langYes: 
-	<a href='$_SERVER[PHP_SELF]?u=$uid&amp;cid=$cid&amp;doit=yes' class=mainpage>$langUnregCours</a>
+	<a href='$_SERVER[PHP_SELF]?u=$uid&amp;cid=$cid&amp;doit=yes' class=mainpage>$langUnregCourse</a>
 	</li>
 	<li>$langNo: <a href='../../index.php' class=mainpage>$langBack</a>
 	</li></ul>

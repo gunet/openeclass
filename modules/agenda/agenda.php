@@ -278,15 +278,10 @@ function confirmation (name)
 		$nameTools = $langAddEvent;
 		$navigation[] = array ("url" => $_SERVER['PHP_SELF'], "name" => $langAgenda);
 		$tool_content .= "
-<form method='post' action='$_SERVER[PHP_SELF]' onsubmit='return checkrequired(this, \"titre\");'>
-    <input type='hidden' name='id' value='$id' />
-    <table width='99%' class='FormData'>
-    <tbody>
-    <tr>
-      <th class='left' width='150'>&nbsp;</th>
-      <td><b>$langAddEvent</b><td>
-      </tr>
-      ";
+		<form method='post' action='$_SERVER[PHP_SELF]' onsubmit='return checkrequired(this, \"titre\");'>
+		<input type='hidden' name='id' value='$id' />
+		<table class='framed' align='center'>
+		<thead>";
 		$day	= date("d");
 		$hours	= date("H");
 		$minutes= date("i");
@@ -296,39 +291,32 @@ function confirmation (name)
 			$hours=$hourAncient[0];
 			$minutes=$hourAncient[1];
 		}
-		$tool_content .= "<tr><th class='left'>$langTitle:</th>
-			<td><input type='text' size='85' name='titre' value='".@$titre."' class='FormData_InputText' /></td>
-			</tr>
-			<tr>
-			<th class='left' rowspan='2'>$langOptions:</th>
-			<td>$langDate: ".$start_cal."</td>
-			</tr>
-			<tr>
-		<td>$langHour: <select name='fhour' class='auth_input'>
+		$tool_content .= "<tr><td colspan='4'>$langTitle:<br />
+			<input type='text' size='70' name='titre' value='".@$titre."' class='FormData_InputText' /></td></tr>
+			<tr><td colspan='4'>$langOptions:</td></tr>
+			<tr><td>$langDate: ".$start_cal."</td>
+			<td>$langHour: <select name='fhour' class='auth_input'>
 				<option value='$hours'>$hours</option>
 				<option value='--'>--</option>";
 			for ($h=0; $h<=24; $h++)
 				$tool_content .= "\n<option value='$h'>$h</option>";
-			$tool_content .= "</select>&nbsp;&nbsp;&nbsp;&nbsp;";
+			$tool_content .= "</select>&nbsp;&nbsp;&nbsp;";
 			$tool_content .= "$langMinute: <select name='fminute' class='auth_input'>
 			<option value='$minutes'>[$minutes]</option>
 			<option value='--'>--</option>";
 			for ($m=0; $m<=55; $m=$m+5)
 				$tool_content .=  "<option value='$m'>$m</option>";
 
-			$tool_content .= "</select>&nbsp;&nbsp;&nbsp;&nbsp;$langLasting $langInHour:
-			<input class='FormData_InputText' type='text' name='lasting' value='".@$myrow['lasting']."' size='2' maxlength='2' /></td>
-    			</tr>";
+			$tool_content .= "</select></td>&nbsp;&nbsp;&nbsp;<td>$langLasting $langInHour:
+			<input class='FormData_InputText' type='text' name='lasting' value='".@$myrow['lasting']."' size='2' maxlength='2' /></td></tr>";
     		if (!isset($contenu)) {
 			$contenu = "";
 		}
-		$tool_content .= "<tr><th class='left'>$langDetail:</th><td>".
+		$tool_content .= "<tr><td colspan='4'>$langDetail:<br />".
 			rich_text_editor('contenu', 4, 20, $contenu)
-			."</td>
-			</tr>
-			<tr><th class='left'>&nbsp;</th>
-			<td><input type='submit' name='submit' value='$langAddModify' /></td>
-			</tr></tbody></table>
+			."</td></tr>
+			<tr><td><input class='Login' type='submit' name='submit' value='$langAddModify' /></td></tr>
+			</thead></table>
 			</form><br />";
 	}
 }

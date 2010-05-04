@@ -154,7 +154,7 @@ if (isset($_POST['back1']) or !isset($_POST['visit'])) {
 	$tool_content .= lang_select_options('languageCourse');
 	$tool_content .= "</td><td>&nbsp;</td></tr>
 	<tr><th>&nbsp;</th>
-	<td><input type='submit' name='create2' value='$langNextStep >' /><input type='hidden' name='visit' value='true' /></td>
+	<td><input class='Login' type='submit' name='create2' value='$langNextStep >' /><input type='hidden' name='visit' value='true' /></td>
 	<td><p align='right'><small>(*) &nbsp;$langFieldsRequ</small></p></td>
 </tbody>
 </table><br />";
@@ -166,35 +166,24 @@ if (isset($_POST['back1']) or !isset($_POST['visit'])) {
 
  elseif (isset($_POST['create2']) or isset($_POST['back2']))  {
 	$nameTools = $langCreateCourse . " (" . $langCreateCourseStep." 2 " .$langCreateCourseStep2 . " 3 )";
-	$tool_content .= "<table width=\"99%\" align='left' class='FormData'>
-	<tbody>
+	$tool_content .= "<table class='framed'>
+	<thead>
 	<tr>
-	<th width=\"220\">&nbsp;</th>
 	<td><b>$langCreateCourseStep2Title</b></td>
 	</tr>
+	<tr><td>$langDescrInfo&nbsp;:<br />
+	".
+        rich_text_editor('description', 4, 20, $description)."</td></tr>
 	<tr>
-	<th class='left'>$langDescrInfo&nbsp;:</th>
-	<td>
-	<table class='xinha_editor'>
-	<tr>
-	<td>".
-        rich_text_editor('description', 4, 20, $description)
-        ."</td>
-	</tr>
-	</table>
-	</td>
+	<td>$langCourseKeywords&nbsp;<br>
+	<textarea name='course_keywords' cols='65' rows='3' class='FormData_InputText'>$course_keywords</textarea></td>
 	</tr>
 	<tr>
-	<th class='left'>$langCourseKeywords&nbsp;</th>
-	<td><textarea name='course_keywords' cols='85' rows='3' class='FormData_InputText'>$course_keywords</textarea></td>
+	<td>$langCourseAddon&nbsp;<br />
+	<textarea name='course_addon' cols='65' rows='5' class='FormData_InputText'>$course_addon</textarea></td>
 	</tr>
 	<tr>
-	<th class='left' width=\"160\">$langCourseAddon&nbsp;</th>
-	<td><textarea name='course_addon' cols='85' rows='5' class='FormData_InputText'>$course_addon</textarea></td>
-	</tr>
-	<tr>
-	<th>&nbsp;</th>
-	<td><input type='submit' name='back1' value='< $langPreviousStep ' />&nbsp;<input type='submit' name='create3' value='$langNextStep >' /></td>
+	<td><input class='Login' type='submit' name='back1' value='< $langPreviousStep ' />&nbsp;<input class='Login' type='submit' name='create3' value='$langNextStep >' /></td></tr>
 	</tbody>
 	</table>
 	<p align='right'><small>$langFieldsOptionalNote</small></p>
@@ -325,8 +314,8 @@ if (isset($_POST['back1']) or !isset($_POST['visit'])) {
 	</tr>
 	<tr>
 	<th>&nbsp;</th>
-	<td width='400'><input type='submit' name='back2' value='< $langPreviousStep '>&nbsp;
-	<input type='submit' name='create_course' value=\"$langFinalize\"></td>
+	<td width='400'><input class='Login' type='submit' name='back2' value='< $langPreviousStep '>&nbsp;
+	<input class='Login' type='submit' name='create_course' value=\"$langFinalize\"></td>
 	<td><p align='right'><small>$langFieldsOptionalNote</small></p></td>
 	</tr>
 	</tbody>
