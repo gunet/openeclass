@@ -119,8 +119,8 @@ if ($is_adminOfCourse) {
         $link['previous'] . '</td><td class="right">' .
         $link['next'] . "</td></tr></table><br />\n";
 } else {
-        $tool_content .= '<table class="DepTitle" width="99%" align="left">' .
-	"<tbody><tr><th>".$link['previous']."</th><td>".$link['next']."&nbsp;</td></tr></tbody></table>\n<p>&nbsp;</p>\n\n<p>&nbsp;</p>\n\n<p>&nbsp;</p>\n";
+        $tool_content .= '<table class="NavUnits" width="99%" align="left">' .
+	"<tbody><tr><th>".$link['previous']."</th><td>".$link['next']."&nbsp;</td></tr></tbody></table>\n\n\n";
 }
 
 

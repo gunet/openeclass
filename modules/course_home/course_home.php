@@ -208,8 +208,13 @@ while ($cu = mysql_fetch_array($sql)) {
                 } else {
                     $cunits_content .= "class='resources'";
                 }
-                $cunits_content .= " width='99%'>\n      <thead>\n      <tr>\n        <th width='5%' class='right'>$count_index.</th>";
-                $cunits_content .= "\n        <td width='85%'><a class=\"unit_link$class_vis\" href='${urlServer}modules/units/?id=$cu[id]'>$cu[title]</a></td>";
+                $cunits_content .= " width='99%'>\n      <thead>";
+                if ($is_adminOfCourse) {
+                $cunits_content .= "\n      <tr class='meros'>\n        <td width='1%' class='right'>&nbsp;<b>$count_index.</b>&nbsp;</td>\n        <td width='89%'><a class=\"unit_link$class_vis\" href='${urlServer}modules/units/?id=$cu[id]'>$cu[title]</a></td>";
+                } else {
+                $cunits_content .= "\n      <tr class='meros'>\n        <td width='1%' class='right'>&nbsp;<b>$count_index.</b>&nbsp;</td>\n        <td  width='99%'><a class=\"unit_link$class_vis\" href='${urlServer}modules/units/?id=$cu[id]'>$cu[title]</a></td>";
+                }
+
                 if ($is_adminOfCourse) { // display actions
                         $cunits_content .= "\n        <td width='2%' style=\"border-bottom: 1px solid #CAC3B5;\">".
                                 "<a href='../../modules/units/info.php?edit=$cu[id]'>" .
@@ -233,11 +238,11 @@ while ($cu = mysql_fetch_array($sql)) {
                                 $cunits_content .= "\n        <td width='2%' style=\"border-bottom: 1px solid #CAC3B5;\">&nbsp;&nbsp;&nbsp;&nbsp;</td>";
                         }
                 }
-                $cunits_content .= "\n      <tr>\n        \n<td width='4%'>&nbsp;</td>\n        <td width='96%' ";
+                $cunits_content .= "\n      </tr>\n      <tr><td>&nbsp;</td></tr>\n      <tr>\n        <td ";
                 if ($is_adminOfCourse) {
-                    $cunits_content .= "colspan='6' $class1_vis>";
+                    $cunits_content .= "colspan='7' $class1_vis>";
                 } else {
-                    $cunits_content .= ">";
+                    $cunits_content .= "colspan='2'>";
                 }
                 $cu['comments'] = mathfilter($cu['comments'], 12, "../../courses/mathimg/");
                 $cunits_content .= "$cu[comments]";
@@ -245,7 +250,7 @@ while ($cu = mysql_fetch_array($sql)) {
                         $cu['comments'] = '      ' . $cu['comments'] . '';
                 }
                 $cunits_content .= "\n        </td>";
-                $cunits_content .= "\n      </tr>\n      </thead>\n      </table>\n";
+                $cunits_content .= "\n      </tr>\n      <tr><td>&nbsp;<br /><br /></td></tr>\n      </thead>\n      </table>\n";
                 $first = false;
                 $count_index++;
         }
@@ -308,7 +313,6 @@ if ($is_adminOfCourse) {
 	$bar_content .= "\n            <p><b>".$langConfidentiality."</b>: ".$lessonStatus."</p>";
 	$bar_content .= "\n            <p><b>".$langUsers."</b>: ".$numUsers." ".$langRegistered."</p>";
 }
-
 
 $tool_content .= "
 <div id='container_login'>
