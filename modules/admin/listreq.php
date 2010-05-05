@@ -75,10 +75,6 @@ switch ($show) {
 		$navigation[] = array("url" => $basetoolurl, "name" => $nameTools);
 		$nameTools = $langReqHaveBlocked;
 		break;
-	case "accepted":
-		$navigation[] = array("url" => $basetoolurl, "name" => $nameTools);
-		$nameTools = $langReqHaveFinished;
-		break;
 }
 
  // Display Actions Toolbar
@@ -88,7 +84,6 @@ switch ($show) {
 	  <li><a href='newuseradmin.php$linkget'>$linkreg</a></li>
           <li><a href='$_SERVER[PHP_SELF]?show=closed$reqtype'>$langReqHaveClosed</a></li>
           <li><a href='$_SERVER[PHP_SELF]?show=rejected$reqtype'>$langReqHaveBlocked</a></li>
-          <li><a href='$_SERVER[PHP_SELF]?show=accepted$reqtype'>$langReqHaveFinished</a></li>
         </ul>
       </div>";
 
@@ -118,24 +113,11 @@ if (!empty($show) && ($show=="closed")) {
 	        	$tool_content .= "<td width=\"1\">
 			<img style='border:0px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'></td>";
 			$tool_content .= "<td>".htmlspecialchars($req['profname'])."&nbsp;".htmlspecialchars($req['profsurname'])."";
-			$tool_content .= "<td>".htmlspecialchars($req['profuname'])."</td>";
-			if ($req['profemail'] != "") {
-				$tool_content .= "<td>
-				<a href=\"mailto:".htmlspecialchars($req['profemail'])."\">".
-				htmlspecialchars($req['profemail'])."</a></td>";
-			} else {
-				htmlspecialchars($req['profemail'])."</td>";
-			}
 			$tool_content .= "<td>".htmlspecialchars($req['proftmima'])."</td>";
-			$tool_content .= "<td>".htmlspecialchars($req['profcomm'])."</td>";
-			if ($list_statut == 5) {
-				$tool_content .= "<td>".htmlspecialchars($req['am'])."</td>";
-			}
 			$tool_content .= "<td align=\"center\">
 				<small>".nice_format(date("Y-m-d", strtotime($req['date_open'])))."</small></td>";
             		$tool_content .= "<td align=\"center\">
 				<small>".nice_format(date("Y-m-d", strtotime($req['date_closed'])))."</small></td>";
-            		$tool_content .= "<td>".$req['comment']."</td>";
 			$tool_content .= "<td align=center>
 			<a href='$_SERVER[PHP_SELF]?id=$req[rid]&show=closed$reqtype'>$langRestore</a></td>\n  </tr>";
 		$k++;
@@ -172,24 +154,11 @@ if (!empty($show) && ($show=="closed")) {
 	    		$tool_content .= "<td width='1'>
 			<img style='border:0px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'></td>";
 			$tool_content .= "<td>".htmlspecialchars($req['profname'])."&nbsp;".htmlspecialchars($req['profsurname'])."";
-			$tool_content .= "<td>".htmlspecialchars($req['profuname'])."</td>";
-			if ($req['profemail'] != "") {
-				$tool_content .= "<td><a href=\"mailto:".
-				htmlspecialchars($req['profemail'])."\">".
-				htmlspecialchars($req['profemail'])."</a></td>";
-			} else {
-				$tool_content .= "<td>".htmlspecialchars($req['profemail'])."</td>";
-			}
 			$tool_content .= "<td>".htmlspecialchars($req['proftmima'])."</td>";
-			$tool_content .= "<td>".htmlspecialchars($req['profcomm'])."</td>";
-			if ($list_statut == 5) {
-				$tool_content .= "<td>".htmlspecialchars($req['am'])."</td>";
-			}
 			$tool_content .= "<td align=\"center\">
 				<small>".nice_format(date("Y-m-d", strtotime($req['date_open'])))."</small></td>";
                 	$tool_content .= "<td align=\"center\">
 				<small>".nice_format(date("Y-m-d", strtotime($req['date_closed'])))."</small></td>";
-                	$tool_content .= "<td>".$req['comment']."</td>";
 			$tool_content .= "<td align=center>
 			<a href='$_SERVER[PHP_SELF]?id=$req[rid]&show=closed$reqtype'>$langRestore</a>
 			</td></tr>";
@@ -198,46 +167,6 @@ if (!empty($show) && ($show=="closed")) {
 	}
 	$tool_content .= "</tbody></table>";
 
-// ---------------------------------
-// Display accepted requests
-// ---------------------------------
-} elseif (!empty($show) && ($show=="accepted")) {
-	$tool_content .= "<table class='FormData' width='99%' align='left'>";
-	$tool_content .= table_header(1, $langDateCompleted_small);
-	$tool_content .= "<tbody>";
-
- 	$sql = db_query("SELECT rid, profname, profsurname, profuname, profemail, proftmima,
-			profcomm, date_open, date_closed, comment
-			FROM prof_request
-                        WHERE (status = 0 AND statut = $list_statut)");
-
-    	$k = 0;
-	for ($j = 0; $j < mysql_num_rows($sql); $j++) {
-		$req = mysql_fetch_array($sql);
-		if ($k%2==0) {
-	              $tool_content .= "\n<tr>";
-		} else {
-	              $tool_content .= "\n<tr class=\"odd\">";
-	        }
-		$tool_content .= "\n<td width='1'><img style='border:0px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'></td>";
-		$tool_content .= "\n<td>".htmlspecialchars($req[1])."&nbsp;".htmlspecialchars($req[2])."</td>";
-		for ($i = 3; $i < mysql_num_fields($sql) - 3; $i++) {
-			if ($i == 4 and $req[$i] != "") {
-				$tool_content .= "\n<td><a href=\"mailto:".
-				htmlspecialchars($req[$i])."\">".
-				htmlspecialchars($req[$i])."</a></td>";
-			} else {
-				$tool_content .= "\n    <td>".
-				htmlspecialchars($req[$i])."</td>";
-			}
-		}
-		$tool_content .= "\n    <td align=\"center\"><small>".nice_format(date("Y-m-d", strtotime($req[7])))."</small></td>";
-		$tool_content .= "\n    <td align=\"center\"><small>".nice_format(date("Y-m-d", strtotime($req[8])))."</small></td>";
-		$tool_content .= "\n    <td>".$req[9]."</td>";
-		$tool_content .= "</tr>";
-		$k++;
-	}
-	$tool_content .= "\n  </tbody>\n  </table>\n";
 // ------------------------------
 // close request
 // ------------------------------
@@ -322,12 +251,10 @@ $langEmail: $emailhelpdesk";
 
 else
 {
-	$tool_content .= "<table class=\"FormData\" width=\"99%\" align=\"left\">";
+	$tool_content .= "<table class='FormData' width='99%' align='left'>";
 	$tool_content .= table_header();
 	$tool_content .= "<tbody>";
- 	$sql = db_query("SELECT rid, profname, profsurname, profuname, profemail, proftmima, 
-			profcomm, am, date_open, comment, profpassword, lang
-			FROM prof_request
+ 	$sql = db_query("SELECT rid, profname, profsurname, proftmima, date_open, comment, profpassword FROM prof_request
                         WHERE (status = 1 AND statut = $list_statut)");
     	$k = 0;
 	while ($req = mysql_fetch_array($sql)) {
@@ -339,40 +266,21 @@ else
 	    	$tool_content .= "<td align='right' width='1'>
 		<img style='border:0px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'></td>";
 	     	$tool_content .= "<td>".htmlspecialchars($req['profname'])."&nbsp;".htmlspecialchars($req['profsurname'])."</td>";
-		$tool_content .= "<td>".htmlspecialchars($req['profuname'])."</td>";
-		if ($req['profemail'] != "") {
-			$tool_content .= "\n<td><a href=\"mailto:".
-			htmlspecialchars($req['profemail'])."\">".
-			htmlspecialchars($req['profemail'])."</a></td>";
-		} else {
-			$tool_content .= "\n<td>".htmlspecialchars($req['profemail'])."</td>";
-		}
 		$tool_content .= "<td>".htmlspecialchars(find_faculty_by_id($req['proftmima']))."</td>";
-		$tool_content .= "<td>".htmlspecialchars($req['profcomm'])."</td>";
-		if ($list_statut == 5) {
-			$tool_content .= "<td>".htmlspecialchars($req['am'])."</td>";
-		}
 		$tool_content .= "<td align='center'>
 			<small>".nice_format(date("Y-m-d", strtotime($req['date_open'])))."</small></td>";
-		$tool_content .= "<td align='center'>$req[comment]</td>";
-		$tool_content .= "<td align='center'>
-		<a href='$_SERVER[PHP_SELF]?id=$req[rid]&amp;close=1$reqtype' onclick='return confirmation();'>$langClose</a><br />
-		<a href='$_SERVER[PHP_SELF]?id=$req[rid]&amp;close=2$reqtype'>$langRejectRequest</a>";
+		$tool_content .= "<td align='center'>";
 		switch($req['profpassword']) {
-			case 'ldap': $tool_content .= "<br />
-					<a href='../auth/ldapnewprofadmin.php?id=".urlencode($req['rid'])."&amp;auth=4'>
+			case 'ldap': $tool_content .= "<a href='../auth/ldapnewprofadmin.php?id=".urlencode($req['rid'])."&amp;auth=4'>
 					$langRegistration<br />($langViaLdap)</td>\n  </tr>";
 				break;
-			case 'pop3': $tool_content .= "<br>
-					<a href='../auth/ldapnewprofadmin.php?id=".urlencode($req['rid'])."&amp;auth=2'>
+			case 'pop3': $tool_content .= "<a href='../auth/ldapnewprofadmin.php?id=".urlencode($req['rid'])."&amp;auth=2'>
 					$langRegistration<br>($langViaPop)</td>\n  </tr>";
 				break;
-			case 'imap': $tool_content .= "<br>
-					<a href='../auth/ldapnewprofadmin.php?id=".urlencode($req['rid'])."&amp;auth=3'>
+			case 'imap': $tool_content .= "<a href='../auth/ldapnewprofadmin.php?id=".urlencode($req['rid'])."&amp;auth=3'>
 					$langRegistration<br>($langViaImap)</td>\n  </tr>";
 				break;
-			default:  $tool_content .= "<br>
-					<a href='newuseradmin.php?id=".urlencode($req['rid'])."'>
+			default:  $tool_content .= "<a href='newuseradmin.php?id=".urlencode($req['rid'])."'>
 					$langRegistration
 					</a></td>\n  </tr>";
 				break;
@@ -397,15 +305,13 @@ draw($tool_content, 3, null, $head_content);
 
 function table_header($addon = FALSE, $message = FALSE) {
 	
-	global $langName, $langSurname, $langUsername, $langEmail, $langFaculty, $langTel;
-	global $langDate, $langComments, $langActions, $langAm;
+	global $langName, $langSurname, $langFaculty, $langDate, $langActions, $langComments;
 	global $langDateRequest_small, $list_statut;
 
 	$string = "";
 	if ($addon) { 
 		$rowspan=2;
 		$datestring = "<th align='center' colspan='2'>$langDate</th>
-		<th scope='col' rowspan='$rowspan' align='center'>$langComments</th>
 		<th scope='col' rowspan='$rowspan' align='center'>$langActions</th>
 		</tr><tr>
 		<th>$langDateRequest_small</th>
@@ -413,19 +319,12 @@ function table_header($addon = FALSE, $message = FALSE) {
 	} else {
 		$rowspan=1;
 		$datestring = "<th scope='col' align='center'>$langDate<br />$langDateRequest_small</th>
-		<th scope='col' align='center'>$langComments</th>
 		<th scope='col' align='center'>$langActions</th>";
 	}
 
 	$string .= "<thead><tr>
 	<th scope='col' colspan='2' rowspan='$rowspan' class='left'>&nbsp;&nbsp;$langName $langSurname</th>
-	<th scope='col' width='20' rowspan='$rowspan' class='left'>$langUsername</th>
-	<th scope='col' rowspan='$rowspan' class='left'>$langEmail</th>
-	<th scope='col' rowspan='$rowspan' class='left'>$langFaculty</th>
-	<th scope='col' rowspan='$rowspan' align='center'>$langTel</th>";
-	if ($list_statut == 5) {
-		$string .= "<th scope='col' rowspan='$rowspan' align='center'>$langAm</th>";
-	}
+	<th scope='col' rowspan='$rowspan' class='left'>$langFaculty</th>";
 	$string .= $datestring; 
 	$string .= "</tr></thead>";
 

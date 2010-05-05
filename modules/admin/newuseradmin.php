@@ -125,17 +125,19 @@ $langEmail : $emailhelpdesk
 } else {
         $lang = false;
 	if (isset($id)) { // if we come from prof request
-		$res = mysql_fetch_array(db_query("SELECT profname, profsurname, profuname, profemail, proftmima, am, comment, lang, statut 
-			FROM prof_request WHERE rid='$id'"));
+		$res = mysql_fetch_array(db_query("SELECT profname, profsurname, profuname, profemail, proftmima, profcomm, am,
+			comment, lang, date_open, statut FROM prof_request WHERE rid='$id'"));
 		$ps = $res['profsurname'];
 		$pn = $res['profname'];
 		$pu = $res['profuname'];
 		$pe = $res['profemail'];
 		$pt = $res['proftmima'];
 		$pam = $res['am'];
+		$pphone = $res['profcomm'];
 		$pcom = $res['comment'];
 		$lang = $res['lang'];
                 $pstatut = $res['statut'];
+		$pdate = nice_format(date("Y-m-d", strtotime($res['date_open'])));
 	} elseif (@$_GET['type'] == 'user') {
                 $pstatut = 5;
         } else {
@@ -150,6 +152,14 @@ $langEmail : $emailhelpdesk
                 $title = $langNewProf;
         }
 
+	if (isset($id)) {
+		// display actions toolbar
+		$tool_content .= "<div id='operations_container'>
+		<ul id='opslist'>
+		<li><a href='listreq.php?id=$id&amp;close=1' onclick='return confirmation();'>$langClose</a></li>
+		<li><a href='listreq.php?id=$id&amp;close=2'>$langRejectRequest</a></li>
+		</ul></div>";
+	}
 	$tool_content .= "<form action='$_SERVER[PHP_SELF]' method='post'>
 	<table width='99%' align='left' class='FormData'>
 	<tbody><tr>
@@ -197,28 +207,46 @@ $langEmail : $emailhelpdesk
 	<td><input class='FormData_InputText' type='text' name='am' value='".@q($pam)."'>&nbsp;</b></td>
 	</tr>
 	<tr>
-	<th class='left'><b>$langComments</b></th>
-	<td>".@q($pcom)."&nbsp;</td>
-	</tr>
-	<tr>
 	<th class='left'>$langLanguage</th>
 	<td>";
 	$tool_content .= lang_select_options('language', '', $lang);
-	$tool_content .= "</td></tr>
+	$tool_content .= "</td></tr>";
+	if (isset($id)) {
+		$tool_content .="<tr>
+		<th class='left'><b>$langPhone</b></th>
+		<td>".@q($pphone)."&nbsp;</td>
+		</tr>
+		<tr>
+		<th class='left'><b>$langComments</b></th>
+		<td>".@q($pcom)."&nbsp;</td>
+		</tr>
+		<tr>
+		<th class='left'><b>$langDate</b></th>
+		<td>".@q($pdate)."&nbsp;</td>
+		</tr>";
+	}
+	$tool_content .= "<input type='hidden' name='rid' value='".@$id."'>
+	<input type='hidden' name='pstatut' value='$pstatut'>
+        <input type='hidden' name='auth' value='1' >
 	<tr>
 	<th>&nbsp;</th>
 	<td><input type='submit' name='submit' value='$langSubmit' >
-		<small>$langRequiredFields</small></td>
+	<small>$langRequiredFields</small></td>
 	</tr>
 	</tbody>
 	</table>
-	<input type='hidden' name='rid' value='".@$id."'>
-	<input type='hidden' name='pstatut' value='$pstatut'>
-        <input type='hidden' name='auth' value='1' >
 	</form>";
-	$tool_content .= "
-	<br />
-	<p align='right'><a href='../admin/index.php'>$langBack</p>";
+	if ($pstatut == 5) {
+                $reqtype ='?type=user';
+        } else {
+                $reqtype ='';
+        }
+	if (isset($id)) {
+		$tool_content .= "
+		<br />
+		<p align='right'><a href='../admin/listreq.php$reqtype'>$langBackRequests</p>";
+	}
+	$tool_content .= "<br /><p align='right'><a href='../admin/index.php'>$langBack</p>";
 }
 
 draw($tool_content, 3, 'auth');

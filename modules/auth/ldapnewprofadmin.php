@@ -130,16 +130,26 @@ if ($submit)  {
 	// if not submit then display the form
 	if (isset($id)) { // if we come from prof request
 		$res = mysql_fetch_array(db_query("SELECT profname,profsurname, profuname, profemail, 
-			proftmima, comment, lang FROM prof_request WHERE rid='$id'"));
+			proftmima, comment, lang, date_open, profcomm, am FROM prof_request WHERE rid='$id'"));
 		$ps = $res['profsurname'];
 		$pn = $res['profname'];
 		$pu = $res['profuname'];
 		$pe = $res['profemail'];
 		$pt = $res['proftmima'];
 		$pcom = $res['comment'];
+		$pam = $res['am'];
+		$pphone = $res['profcomm'];
 		$lang = $res['lang'];
+		$pdate = nice_format(date("Y-m-d", strtotime($res['date_open'])));
 	}
-
+	if (isset($id)) {
+		// display actions toolbar
+		$tool_content .= "<div id='operations_container'>
+		<ul id='opslist'>
+		<li><a href='listreq.php?id=$id&amp;close=1' onclick='return confirmation();'>$langClose</a></li>
+		<li><a href='listreq.php?id=$id&amp;close=2'>$langRejectRequest</a></li>
+		</ul></div>";
+	}
 	$tool_content .= "<form action='$_SERVER[PHP_SELF]' method='post'>
 	<table width='99%' class='FormData'>
 	<tbody>
@@ -174,14 +184,22 @@ if ($submit)  {
         $tool_content .= selection($faculte_names, 'department', $pt) .
                          "</td></tr>";
 	$tool_content .= "<tr>
-	<th class='left'><b>$langComments</b></th>
-	<td><input class='FormData_InputText' type='text' name='comment' value='".@q($pcom)."'>&nbsp;</b></td>
-	</tr>
-	<tr>
 	<th class='left'>$langLanguage</th>
 	<td>";
 	$tool_content .= lang_select_options('language', '', $lang);
-	$tool_content .= "</td></tr>
+	$tool_content .= "</td></tr>";
+	$tool_content .= "<tr>
+		<th class='left'><b>$langPhone</b></th>
+		<td>".@q($pphone)."&nbsp;</td>
+		</tr>
+		<tr>
+		<th class='left'><b>$langComments</b></th>
+		<td>".@q($pcom)."&nbsp;</td>
+		</tr>
+		<tr>
+		<th class='left'><b>$langDate</b></th>
+		<td>".@q($pdate)."&nbsp;</td>
+		</tr>
 	<tr><th>&nbsp;</th>
 	<td><input type='submit' name='submit' value='".$langSubmit."' >
 	<input type='hidden' name='auth' value='$auth' >
@@ -190,5 +208,11 @@ if ($submit)  {
 	</tbody>
 	</table>
 	</form>";
+	if (isset($id)) {
+		$tool_content .= "
+		<br />
+		<p align='right'><a href='../admin/listreq.php'>$langBackRequests</p>";
+	}
+	$tool_content .= "<br /><p align='right'><a href='../admin/index.php'>$langBack</p>";
  }
 draw($tool_content, 3, 'auth');
