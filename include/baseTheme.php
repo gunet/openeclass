@@ -490,10 +490,13 @@ function print_a($TheArray) {
  *
  */
 function lang_selections() {
-	$html = '<form name="langform" action="' . $_SERVER ['PHP_SELF'] . '" method="get" >';
-	$html .= lang_select_options('localize', 'onChange="document.langform.submit();"');
-	$html .= '</form>';
-	return $html;
+        if (count($GLOBALS['active_ui_languages']) < 2) {
+                return ('&nbsp;');
+        }
+        $html = '<form name="langform" action="' . $_SERVER ['PHP_SELF'] . '" method="get" >';
+        $html .= lang_select_options('localize', 'onChange="document.langform.submit();"');
+        $html .= '</form>';
+        return $html;
 }
 
 /*
