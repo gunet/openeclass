@@ -427,16 +427,17 @@ function create_course($code, $lang, $title, $desc, $fac, $vis, $prof, $type) {
 	if (mysql_select_db($repertoire)) {
 		echo $langCourseExists;
 		exit;
-	}
+        }
+        $fac_name = find_faculty_by_id($fac);
 	db_query("INSERT into `$mysqlMainDb`.cours
-		(code, languageCourse, intitule, description, faculte, visible, titulaires, fake_code, type)
+		(code, languageCourse, intitule, description, faculte, faculteid, visible, titulaires, fake_code, type)
 		VALUES (".
 		join(", ", array(
 			quote($repertoire),
 			quote($lang),
 			quote($title),
 			quote($desc),
-			$fac,
+			quote($fac_name), $fac,
 			quote($vis),
 			quote($prof),
 			quote($code),
@@ -444,8 +445,8 @@ function create_course($code, $lang, $title, $desc, $fac, $vis, $prof, $type) {
 		")");
         $cid = mysql_insert_id();
 	db_query("INSERT into `$mysqlMainDb`.cours_faculte
-		(faculte,code)
-		VALUES($fac,".quote($repertoire).")");
+		(faculte, code, facid)
+		VALUES (" . quote($fac_name) . ', ' . quote($repertoire) . ", $fac)");
 
 	if (!db_query("CREATE DATABASE `$repertoire`")) {
 		echo "Database $repertoire creation failure ";
