@@ -72,6 +72,8 @@ if (isset($_POST['submit_doc'])) {
         insert_forum($id);
 } elseif (isset($_POST['submit_wiki'])) {
         insert_wiki($id);
+} elseif (isset($_POST['submit_link'])) {
+	insert_link($id);
 }
 
 
@@ -95,6 +97,10 @@ switch ($_GET['type']) {
                 include 'insert_text.php';
                 display_text();
                 break;
+	case 'link': $nameTools = "$langAdd $langInsertLink";
+		include 'insert_link.php';
+		display_links();
+		break;
 	case 'lp': $nameTools = "$langAdd $langLearningPath1";
                 include 'insert_lp.php';
                 display_lp();
@@ -286,6 +292,34 @@ function insert_wiki($id)
 		db_query("INSERT INTO unit_resources SET unit_id=$id, type='wiki', title=" .
 			quote($wiki['title']) . ", comments=" . quote($wiki['description']) .
 			", visibility='v', `order`=$order, `date`=NOW(), res_id=$wiki[id]",
+			$GLOBALS['mysqlMainDb']); 
+	}
+	header('Location: index.php?id=' . $id);
+	exit;
+}
+
+// insert link in database
+function insert_link($id)
+{
+	list($order) = mysql_fetch_array(db_query("SELECT MAX(`order`) FROM unit_resources WHERE unit_id=$id"));
+	// insert link categories 
+	foreach ($_POST['catlink'] as $catlink_id) {
+		$order++;
+		$sql = db_query("SELECT * FROM link_categories WHERE id =" . intval($catlink_id), $GLOBALS['currentCourseID']);
+		$linkcat = mysql_fetch_array($sql);
+		db_query("INSERT INTO unit_resources SET unit_id=$id, type='linkcategory', title=" .
+			quote($linkcat['categoryname']) . ", comments=" . quote($linkcat['description']) .
+			", visibility='v', `order`=$order, `date`=NOW(), res_id=$linkcat[id]",
+			$GLOBALS['mysqlMainDb']);
+	}
+	
+	foreach ($_POST['link'] as $link_id) {
+		$order++;
+		$link = mysql_fetch_array(db_query("SELECT * FROM liens
+			WHERE id =" . intval($link_id), $GLOBALS['currentCourseID']), MYSQL_ASSOC);
+		db_query("INSERT INTO unit_resources SET unit_id=$id, type='link', title=" .
+			quote($link['titre']) . ", comments=" . quote($link['description']) .
+			", visibility='v', `order`=$order, `date`=NOW(), res_id=$link[id]",
 			$GLOBALS['mysqlMainDb']); 
 	}
 	header('Location: index.php?id=' . $id);

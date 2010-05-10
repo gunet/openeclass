@@ -107,6 +107,7 @@ if ($is_adminOfCourse) {
                         "<li>$langAdd: <a href='insert.php?type=doc&amp;id=$id'>$langInsertDoc</a></li>" .
                         "<li><a href='insert.php?type=exercise&amp;id=$id'>$langInsertExercise</a></li>" .
                         "<li><a href='insert.php?type=text&amp;id=$id'>$langInsertText</a></li>" .
+			"<li><a href='insert.php?type=link&amp;id=$id'>$langInsertLink</a></li>" .
 			"<li><a href='insert.php?type=lp&amp;id=$id'>$langLearningPath1</a></li>" .
 			"<li><a href='insert.php?type=video&amp;id=$id'>$langInsertVideo</a></li>" .
 			"<li><a href='insert.php?type=forum&amp;id=$id'>$langInsertForum</a></li>" .

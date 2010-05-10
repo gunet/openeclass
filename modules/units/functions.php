@@ -130,6 +130,12 @@ function show_resource($info)
 		case 'wiki':
                         $tool_content .= show_wiki($info['title'], $info['comments'], $info['id'], $info['res_id'], $info['visibility']);
                         break;
+		case 'link':
+                        $tool_content .= show_link($info['title'], $info['comments'], $info['id'], $info['res_id'], $info['visibility']);
+                        break;
+		case 'linkcategory':
+                        $tool_content .= show_linkcat($info['title'], $info['comments'], $info['id'], $info['res_id'], $info['visibility']);
+                        break;
                 default:
                         $tool_content .= $langUnknownResType;
         }
@@ -414,6 +420,82 @@ function show_wiki($title, $comments, $resource_id, $wiki_id, $visibility)
 	return "<tr$class_vis><td width='3%'>$imagelink</td><td width='82%'>$wikilink</td>" .
 		actions('wiki', $resource_id, $visibility) .
 		'</tr>' . $comment_box;
+}
+
+
+// display resource link
+function show_link($title, $comments, $resource_id, $link_id, $visibility)
+{
+	global $id, $tool_content, $mysqlMainDb, $urlServer, $is_adminOfCourse,
+               $langWasDeleted, $currentCourseID;
+
+	$comment_box = $class_vis = $imagelink = $link = '';
+        $title = htmlspecialchars($title);
+	$r = db_query("SELECT * FROM liens WHERE id = $link_id",
+                      $currentCourseID);
+	if (mysql_num_rows($r) == 0) { // check if it was deleted
+		if (!$is_adminOfCourse) {
+			return '';
+		} else {
+			$status = 'del';
+			$imagelink = "<img src='../../template/classic/img/delete.gif' />";
+			$exlink = "<span class='invisible'>$title ($langWasDeleted)</span>";
+		}
+	} else {
+                $l = mysql_fetch_array($r, MYSQL_ASSOC);
+		$link = "<a href='${urlServer}modules/link/link_goto.php?link_id=$link_id&amp;link_url=$l[url]' target=_blank>";
+                $exlink = $link . "$title</a>";
+		$imagelink = $link .
+                        "<img src='../../template/classic/img/links_" .
+			($visibility == 'i'? 'off': 'on') . ".gif' /></a>";
+	}
+	$class_vis = ($visibility == 'v')? '': ' class="invisible"';
+        if (!empty($comments)) {
+                $comment_box = "<tr><td width='3%'>&nbsp;</td><td width='82%'>$comments</td>";
+	}
+
+	return "<tr$class_vis><td width='3%'>$imagelink</td><td width='82%'>$exlink</td>" .
+		actions('link', $resource_id, $visibility) .
+		'</tr>' . $comment_box;
+}
+
+// display resource link category
+function show_linkcat($title, $comments, $resource_id, $linkcat_id, $visibility)
+{
+	global $id, $tool_content, $mysqlMainDb, $urlServer, $is_adminOfCourse,
+               $langWasDeleted, $currentCourseID;
+	
+	$content = $linkcontent = '';
+	$comment_box = $class_vis = $imagelink = $link = '';
+        $title = htmlspecialchars($title);
+	$sql = db_query("SELECT * FROM link_categories WHERE id = $linkcat_id",
+                      $currentCourseID);
+	if (mysql_num_rows($sql) == 0) { // check if it was deleted
+		if (!$is_adminOfCourse) {
+			return '';
+		} else {
+			$status = 'del';
+			$imagelink = "<img src='../../template/classic/img/delete.gif' />";
+			$exlink = "<span class='invisible'>$title ($langWasDeleted)</span>";
+		}
+	} else {
+		while ($lcat = mysql_fetch_array($sql)) {
+			$content .= "<tr><td width='3%'><img src='../../template/classic/img/opendir.gif' /></td>
+			<td>$lcat[categoryname]</td>";
+			if (!empty($lcat['description'])) {
+				$comment_box = "<tr><td width='3%'>&nbsp;</td><td width='82%'>$lcat[description]</td></tr>";
+			}
+			$sql2 = db_query("SELECT * FROM liens WHERE category='$lcat[id]'", $currentCourseID);
+			while ($l = mysql_fetch_array($sql2, MYSQL_ASSOC)) {
+				$imagelink = "<img src='../../template/classic/img/links_" .
+				($visibility == 'i'? 'off': 'on') . ".gif' />";
+				$linkcontent .= "<tr><td width='3%'>&nbsp;</td><td width='82%'>$imagelink
+				<a href='${urlServer}modules/link/link_goto.php?link_id=$l[id]&amp;link_url=$l[url]' target=_blank>$l[titre]</a></td></tr>";
+			}
+		}
+	}
+	return $content . actions('linkcategory', $resource_id, $visibility) .
+		'</tr>' . $comment_box . $linkcontent;
 }
 
 // resource actions
