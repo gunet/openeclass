@@ -129,9 +129,9 @@ if ($is_adminOfCourse) {
 
 if (!empty($comments)) {
         if (strpos('<', $comments) === false) {
-                $tool_content .= "<p>$comments</p>";
+                $tool_content .= "<table class='resources' width='99%'><tbody><tr><td>$comments </td></tr></tbody></table>";
         } else {
-                $tool_content .= $comments;
+                $tool_content .= "<table class='resources' width='99%'><tbody><tr><td>$comments </td></tr></tbody></table>";
         }
 }
 

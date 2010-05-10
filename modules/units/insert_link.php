@@ -44,15 +44,15 @@ function display_links()
 			$tool_content .= "<tr><th valign='top' style='padding-top: 7px;' align='left' colspan='3'>$langCategorisedLinks</th></tr>";
 			while($catrow = mysql_fetch_array($sql, MYSQL_ASSOC)) {
 				$tool_content .= "<tr>";
-				$tool_content .= "<td valign='top' style='padding-top: 7px;' align='left'><img src='../../template/classic/img/opendir.gif' />&nbsp;&nbsp;$catrow[categoryname]</th>";
+				$tool_content .= "<td valign='top' style='padding-top: 7px;'><div align='left'><img src='../../template/classic/img/opendir.gif' />&nbsp;&nbsp;$catrow[categoryname]</div></th>";
 				$tool_content .= "<td><div align='left'>$catrow[description]</div></td>";
 				$tool_content .= "<td align='center'><input type='checkbox' name='catlink[]' value='$catrow[id]'></td>";
 				$tool_content .= "</tr>";
 				$sql2 = db_query("SELECT * FROM liens WHERE category = $catrow[id]");
 				while($linkcatrow = mysql_fetch_array($sql2, MYSQL_ASSOC)) {
 					$tool_content .= "<tr>";
-					$tool_content .= "<td valign='top' style='padding-top: 7px;' align='left'>
-					<a href='${urlServer}modules/link/link_goto.php?link_id=$linkcatrow[id]&link_url=$linkcatrow[url]' target=_blank>$linkcatrow[titre]</a></td>";
+					$tool_content .= "<td valign='top' style='padding-top: 7px; padding-left: 20px;'><div align='left'>
+					<a href='${urlServer}modules/link/link_goto.php?link_id=$linkcatrow[id]&link_url=$linkcatrow[url]' target=_blank>$linkcatrow[titre]</a></div></td>";
 					$tool_content .= "<td><div align='left'>$linkcatrow[description]</div></td>";
 					$tool_content .= "<td align='center'><input type='checkbox' name='link[]' value='$linkcatrow[id]'></td>";
 					$tool_content .= "</tr>";	
@@ -73,8 +73,8 @@ function display_links()
 			$tool_content .= "<tr><th valign='top' style='padding-top: 7px;' align='left ' colspan='3'>$langNoCategory</th></tr>";
 			foreach ($linkinfo as $entry) { 
 				$tool_content .= "<tr>";
-				$tool_content .= "<td valign='top' style='padding-top: 7px;' align='left'>
-				<a href='${urlServer}modules/link/link_goto.php?link_id=$entry[id]&link_url=$entry[url]' target=_blank>$entry[title]</a></td>";
+				$tool_content .= "<td valign='top' style='padding-top: 7px;'><div align='left'>
+				<a href='${urlServer}modules/link/link_goto.php?link_id=$entry[id]&link_url=$entry[url]' target=_blank>$entry[title]</a></div></td>";
 				$tool_content .= "<td><div align='left'>$entry[comment]</div></td>";
 				$tool_content .= "<td align='center'><input type='checkbox' name='link[]' value='$entry[id]'></td>";
 				$tool_content .= "</tr>";
