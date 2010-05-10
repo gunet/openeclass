@@ -90,6 +90,7 @@ foreach (array('previous', 'next') as $i) {
                        WHERE course_id = $cours_id
                              AND id <> $id
                              AND `order` $op $info[order]
+                             AND `order` >= 0
                              $visibility_check
                        ORDER BY `order` $dir
                        LIMIT 1");
