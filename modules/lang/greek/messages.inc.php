@@ -1714,7 +1714,7 @@ $langCategorisedLinks = "Κατηγοριοποιημένοι σύνδεσμοι
 $showall = "Εμφάνιση";
 $shownone = "Απόκρυψη";
 $langProfNoLinksExist = "Δεν υπάρχουν σύνδεσμοι!<p><p align=\"center\"><small>Μπορείτε να χρησιμοποιήσετε τις λειτουργίες του εργαλείου για να προσθέσετε σύνδεσμους.</small>";
-$langNoLinksExist = "Δεν έχουν προστεθεί σύνδεσμοι.";
+$langNoLinksExist = "Δεν υπάρχουν σύνδεσμοι!";
 $langEmptyLinkURL = "Δεν πληκτρολογήσατε το url του συνδέσμου";
 
 /*****************************************************************
@@ -3017,6 +3017,7 @@ $langInsertVideo = "βίντεο";
 $langInsertForum = "περιοχής συζητήσεων";
 $langInsertWork = 'εργασίας';
 $langInsertWiki = 'wiki';
+$langInsertLink = "συνδέσμου";
 $langUnknownResType = "Πρόβλημα! Άγνωστος πόρος θεματικής ενότητας";
 $langNoExercises = "Δεν υπάρχουν ασκήσεις";
 
