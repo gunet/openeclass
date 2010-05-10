@@ -32,7 +32,7 @@ function display_wiki()
 
 
         $result = db_query("SELECT * FROM wiki_properties", $currentCourseID);
-        $wikinfo = array();
+        $wikiinfo = array();
         while($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
                 $wikiinfo[] = array(
 			'id' => $row['id'],
