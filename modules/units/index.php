@@ -125,7 +125,7 @@ if ($is_adminOfCourse) {
         $tool_content .= '<table class="unit-navigation"><tr><td class="left">' .
         $link['previous'] . '</td><td class="right">' .
         $link['next'] . "</td></tr></table><br />\n";
-        $comment_edit_link = "<div style='float: right;'><a href='info.php?edit=$id&amp;next=1'><img src='../../template/classic/img/edit.gif' title='' alt='' /></a></div>";
+        $comment_edit_link = "<td valign='top' width='3%'><a href='info.php?edit=$id&amp;next=1'><img src='../../template/classic/img/edit.gif' title='' alt='' /></a></td>";
 } else {
         $tool_content .= '<table class="NavUnits" width="99%" align="left">' .
                 "<tbody><tr><th>".$link['previous']."</th><td>".$link['next']."&nbsp;</td></tr></tbody></table>\n\n\n";
@@ -133,7 +133,7 @@ if ($is_adminOfCourse) {
 }
 
 if (!empty($comments)) {
-        $tool_content .= "<table class='resources' width='99%'><tbody><tr><td>$comment_edit_link$comments</td></tr></tbody></table>";
+        $tool_content .= "<table class='resources' width='99%'><tbody><tr>$comment_edit_link<td>$comments</td></tr></tbody></table>";
 }
 
 show_resources($id);
