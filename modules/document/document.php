@@ -451,16 +451,16 @@ if($is_adminOfCourse)
 		$query = "SELECT * FROM $dbTable WHERE path LIKE '%".$comment."%'";
 		$result = mysql_query ($query);
 		$row = mysql_fetch_array($result);
-		$oldFilename = $row['filename'];
-		$oldComment = $row['comment'];
+		$oldFilename = q($row['filename']);
+		$oldComment = q($row['comment']);
 		$oldCategory = $row['category'];
-		$oldTitle = $row['title'];
-		$oldCreator = $row['creator'];
-		$oldDate = $row['date'];
-		$oldSubject = $row['subject'];
-		$oldDescription = $row['description'];
-		$oldAuthor = $row['author'];
-		$oldLanguage = $row['language'];
+		$oldTitle = q($row['title']);
+		$oldCreator = q($row['creator']);
+		$oldDate = q($row['date']);
+		$oldSubject = q($row['subject']);
+		$oldDescription = q($row['description']);
+		$oldAuthor = q($row['author']);
+		$oldLanguage = q($row['language']);
 		$oldCopyrighted = $row['copyrighted'];
 
 		//filsystem compability: ean gia to arxeio den yparxoun dedomena sto pedio filename
@@ -748,7 +748,7 @@ if (mysql_num_rows($sql) == 0) {
                                 }
                         }
                         $tool_content .= "\n  <tr$style>";
-                        $tool_content .= "\n    <td width='1%' valign='top' style='padding-top: 7px;'><a href='$file_url'$style$link_extra><img src='$image' border='0' /></a></td>";
+                        $tool_content .= "\n    <td width='1%' valign='top'><a href='$file_url'$style$link_extra><img src='$image' /></a></td>";
                         $tool_content .= "\n    <td><div align='left'><a href='$file_url'$style$link_extra>$link_text</a>";
 
                         /*** comments ***/
