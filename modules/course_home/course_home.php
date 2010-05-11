@@ -120,31 +120,12 @@ if (!empty($addon)) {
 }
 $main_content .= $main_extra;
 
-$result = db_query("SELECT MAX(`order`) FROM course_units WHERE course_id = $cours_id");
-list($maxorder) = mysql_fetch_row($result);
-if ($maxorder <= 0) {
-        $maxorder = null;
-}
+units_set_maxorder();
 
 // other actions in course unit
 if ($is_adminOfCourse) {
         if (isset($_REQUEST['edit_submit'])) {
-                $title = autoquote($_REQUEST['unittitle']);
-                $descr = autoquote($_REQUEST['unitdescr']);
-                if (isset($_REQUEST['unit_id'])) { // update course unit
-                        $unit_id = intval($_REQUEST['unit_id']);
-                        $result = db_query("UPDATE course_units SET
-                                                   title = $title,
-                                                   comments = $descr
-                                            WHERE id = $unit_id AND course_id = $cours_id");
-		        $main_content .= "\n      <p class='success_small'>$langCourseUnitModified</p>";
-                } else { // add new course unit
-                        $order = $maxorder + 1;
-                        db_query("INSERT INTO course_units SET
-                                         title = $title, comments =  $descr,
-                                         `order` = $order, course_id = $cours_id");
-		        $main_content .= "\n        <p class='success_small'>$langCourseUnitAdded</p>";
-                }
+                $main_content .= handle_unit_info_edit();
         } elseif (isset($_REQUEST['del'])) { // delete course unit
 		$id = intval($_REQUEST['del']);
 		db_query("DELETE FROM course_units WHERE id = '$id'");

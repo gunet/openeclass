@@ -55,6 +55,11 @@ function confirmation () {
 }
 </script>';
 
+if (isset($_REQUEST['edit_submit'])) {
+        units_set_maxorder();
+        $tool_content .= handle_unit_info_edit();
+}
+
 process_actions();
 
 if ($is_adminOfCourse) {
@@ -120,19 +125,15 @@ if ($is_adminOfCourse) {
         $tool_content .= '<table class="unit-navigation"><tr><td class="left">' .
         $link['previous'] . '</td><td class="right">' .
         $link['next'] . "</td></tr></table><br />\n";
+        $comment_edit_link = "<div style='float: right;'><a href='info.php?edit=$id&amp;next=1'><img src='../../template/classic/img/edit.gif' title='' alt='' /></a></div>";
 } else {
         $tool_content .= '<table class="NavUnits" width="99%" align="left">' .
-	"<tbody><tr><th>".$link['previous']."</th><td>".$link['next']."&nbsp;</td></tr></tbody></table>\n\n\n";
+                "<tbody><tr><th>".$link['previous']."</th><td>".$link['next']."&nbsp;</td></tr></tbody></table>\n\n\n";
+        $comment_edit_link = '';
 }
 
-
-
 if (!empty($comments)) {
-        if (strpos('<', $comments) === false) {
-                $tool_content .= "<table class='resources' width='99%'><tbody><tr><td>$comments </td></tr></tbody></table>";
-        } else {
-                $tool_content .= "<table class='resources' width='99%'><tbody><tr><td>$comments </td></tr></tbody></table>";
-        }
+        $tool_content .= "<table class='resources' width='99%'><tbody><tr><td>$comment_edit_link$comments</td></tr></tbody></table>";
 }
 
 show_resources($id);

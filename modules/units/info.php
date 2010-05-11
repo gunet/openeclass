@@ -94,7 +94,13 @@ if (isset($_GET['edit'])) { // display form for editing course unit
         $unitdescr = $unittitle = '';
 }
 
-$tool_content .= "<form method='post' action='${urlServer}courses/$currentCourseID/'
+if (isset($_GET['next'])) {
+        $action = "index.php?id=$unit_id";
+} else {
+        $action = "${urlServer}courses/$currentCourseID/";
+}
+
+$tool_content .= "<form method='post' action='$action'
         onsubmit=\"return checkrequired(this, 'unittitle');\">";
 if (isset($unit_id)) {
         $tool_content .= "<input type='hidden' name='unit_id' value='$unit_id'>";
