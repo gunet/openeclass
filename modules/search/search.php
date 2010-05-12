@@ -134,7 +134,7 @@ if (!register_posted_variables(array('search_terms' => false,
                                 (unit_resources.visibility = "v" OR
                                  unit_resources.visibility IS NULL) AND (' .
                   implode($join_op, $terms) . ') GROUP BY code ORDER BY code';
-die('<pre>' . $search);
+
         $result = db_query($search);
         if (!$result or mysql_num_rows($result) == 0) {
                 $tool_content .= "<p class='alert1'>$langNoResult</p>";
