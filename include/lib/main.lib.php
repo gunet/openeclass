@@ -1281,22 +1281,31 @@ function get_config($key)
 
 // Copy variables from $_POST[] to $GLOBALS[], trimming and canonicalizing whitespace
 // $var_array = array('var1' => true, 'var2' => false, [varname] => required...)
-// Returns true if all vars with required=true are set, false if not
-function register_posted_variables($var_array)
+// Returns true if all vars with required=true are set, false if not (by default)
+// If $what = 'any' returns true if any variable is set
+function register_posted_variables($var_array, $what = 'all')
 {
         $all_set = true;
+        $any_set = false;
         foreach ($var_array as $varname => $required) {
                 if (isset($_POST[$varname])) {
                         $GLOBALS[$varname] = preg_replace('/ +/', ' ', trim($_POST[$varname]));
                         if ($required and empty($GLOBALS[$varname])) {
                                 $all_set = false;
                         }
+                        if (!empty($GLOBALS[$varname])) {
+                                $any_set = true;
+                        }
                 } else {
                         $GLOBALS[$varname] = '';
                         $all_set = false;
                 }
         }
-        return $all_set;
+        if ($what == 'any') {
+                return $any_set;
+        } else {
+                return $all_set;
+        }
 }
 
 

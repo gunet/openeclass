@@ -34,22 +34,141 @@ search.php
 //  oi diathesimes katastaseis einai oi ekseis:
 //
 //  1. sthn kentrikh selida tou systhmatos (den exei ginei log-in)
-//
 //  2. sthn kentrikh selida twn mathimatwn (amesws meta to log-in)
-//
-//  x. sthn kentrikh selida mathimatos (exei ginei log-in kai o xrhsths eigaxthhke se mathima)
 //*/
 
 include '../../include/baseTheme.php';
-if(isset($_POST['search_terms'])) {
-	$search_terms_title = $search_terms_keywords = $search_terms_instructor = $search_terms_coursecode = $_POST['search_terms'];
+$require_current_course = FALSE;
+
+$nameTools = $langSearch;
+$tool_content = "";
+
+//elegxos ean *yparxoun* oroi anazhthshs
+if (!register_posted_variables(array('search_terms' => false,
+                                    'search_terms_title' => false,
+                                    'search_terms_keywords' => false,
+                                    'search_terms_instructor' => false,
+                                    'search_terms_coursecode' => false,
+                                    'search_terms_description' => false), 'any')) {
+/**********************************************************************************************
+	emfanish formas anahzthshs ean oi oroi anazhthshs einai kenoi
+***********************************************************************************************/
+	$tool_content .= "
+    <form method='post' action='$_SERVER[PHP_SELF]'>
+        <table width='99%'>
+            <tr><th width='120' class='left'>&nbsp;</th>
+                <td><b>$langSearchCriteria</b></td></tr>
+            <tr><th class='left'>$langTitle</th>
+                <td width='250'><input class='FormData_InputText' name='search_terms_title' type='text' size='50' /></td>
+                <td><small>$langTitle_Descr</small></td></tr>
+            <tr><th class='left'>$langDescription</th>
+                <td width='250'><input class='FormData_InputText' name='search_terms_description' type='text' size='50' /></td>
+                <td><small>$langDescription_Descr</small></td></tr>
+            <tr><th class='left'>$langKeywords</th>
+                <td><input class='FormData_InputText' name='search_terms_keywords' type='text' size='50' /></td>
+                <td><small>$langKeywords_Descr</small></td></tr>
+            <tr><th class='left'>$langTeacher</th>
+                <td><input class='FormData_InputText' name='search_terms_instructor' type='text' size='50' /></td>
+                <td><small>$langInstructor_Descr</small></td></tr>
+            <tr><th class='left'>$langCourseCode</th>
+                <td><input class='FormData_InputText' name='search_terms_coursecode' type='text' size='50' /></td>
+                <td><small>$langCourseCode_Descr</small></td></tr>
+            <tr><th>&nbsp;</th>
+                <td colspan=2><input type='submit' name='submit' value='$langDoSearch' />&nbsp;&nbsp;<input type='reset' name='reset' value='$langNewSearch' /></td></tr>
+        </table>
+    </form>";
+
+} else {
+/**********************************************************************************************
+		ektelesh anazhthshs afou yparxoun oroi anazhthshs
+		 emfanish arikown mhnymatwn anazhthshs
+***********************************************************************************************/
+        $join_op = ' AND ';
+        if(!empty($search_terms)) {
+                $search_terms_title = $search_terms_keywords =
+                        $search_terms_instructor = $search_terms_coursecode =
+                        $search_terms_description = $_POST['search_terms'];
+                $join_op = ' OR ';
+        }
+        $terms = array();
+
+        $search_keys = array(
+                       'search_terms_title' => 'intitule',
+                       'search_terms_instructor' => 'titulaires',
+                       'search_terms_keywords' => 'course_keywords',
+                       'search_terms_coursecode' => array('code', 'fake_code'),
+                       'search_terms_description' => array('course_units.title', 'course_units.comments',
+                                                           'unit_resources.title', 'unit_resources.comments'));
+        foreach ($search_keys as $key => $subject) {
+                if (isset($GLOBALS[$key]) and !empty($GLOBALS[$key])) {
+                        if (is_array($subject)) {
+                                $subterms = array();
+                                foreach ($subject as $field) {
+                                        $subterms[] = $field . ' LIKE ' . quote('%' . $GLOBALS[$key] . '%');
+                                }
+                                $terms[] = '(' . implode(' OR ', $subterms) . ')';
+                        } else {
+                                $terms[] = $subject . ' LIKE ' . quote('%' . $GLOBALS[$key] . '%');
+                        }
+                }
+        }
+
+        $course_restriction = 'cours.visible IN (2, 1)';
+        $course_user_join = '';
+        if (isset($uid) and $uid) {
+                $course_restriction = "($course_restriction OR cours_user.statut IS NOT NULL)";
+                $course_user_join = 'LEFT JOIN cours_user ON cours.cours_id = cours_user.cours_id AND cours_user.user_id = ' . $uid;
+        }
+
+        
+	// visible = 2 or 1 for Public and Open courses
+        $search = 'SELECT code, fake_code, intitule, titulaires, course_keywords,
+                          course_units.title, course_units.comments,
+                          unit_resources.title, unit_resources.comments
+                          FROM cours ' . $course_user_join . '
+                                     LEFT JOIN course_units ON cours.cours_id = course_units.course_id
+                                     LEFT JOIN unit_resources ON course_units.id = unit_resources.unit_id
+                          WHERE ' . $course_restriction . ' AND
+                                (unit_resources.visibility = "v" OR
+                                 unit_resources.visibility IS NULL) AND
+                                (unit_resources.visibility = "v" OR
+                                 unit_resources.visibility IS NULL) AND (' .
+                  implode($join_op, $terms) . ') GROUP BY code ORDER BY code';
+die('<pre>' . $search);
+        $result = db_query($search);
+        if (!$result or mysql_num_rows($result) == 0) {
+                $tool_content .= "<p class='alert1'>$langNoResult</p>";
+        } else {
+                $tool_content .= "
+                        <table width='99%' class='Search' align='left'>
+                        <tr class='odd'>
+                                <td colspan='4'>$langDoSearch:&nbsp;<b>$langResults</b></td>
+                        </tr>
+                        <tr>
+                                <th width='1%'>&nbsp;</th>
+                                <th width='40%'><div align='left'>".$langCourse." ($langCode)</div></th>
+                                <th width='30%'><div align='left'>$langTeacher</div></th>
+                                <th width='30%'><div align='left'>$langKeywords</div></th>
+                        </tr>";
+                $k = 0;
+                while ($mycours = mysql_fetch_array($result)) {
+                        if ($k % 2) {
+                                $tool_content .= "<tr class='odd'>";
+                        } else {
+                                $tool_content .= "<tr>";
+                        }
+                        $tool_content .= "<td><img src='../../template/classic/img/arrow_grey.gif' alt=''  /></td>" .
+                                "<td><a href='../../courses/$mycours[code]/'>" . q($mycours['intitule']) .
+                                "</a> (" . q($mycours['fake_code']) . ")</td>" .
+                                "<td>" . q($mycours['titulaires']) . "</td>" .
+                                "<td>" . q($mycours['course_keywords']) . "</td></tr>";
+                        $k++;
+                }
+                $tool_content .= "</table>
+                        <div id='operations_container'><ul id='opslist'>
+                             <li><a href='search.php'>$langNewSearch</a></li>
+                        </ul></div>";
+        }
 }
-//elegxos ean o xrhsths vrisketai sthn kentrikh selida tou systhmatos xwris na exei kanei login
-if (@empty($uid))
-{
-	include 'search_loggedout.php';
-}else
-{
-	include 'search_loggedin.php';
-}
-?>
+
+draw($tool_content, 0, 'search');
