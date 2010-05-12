@@ -90,15 +90,15 @@ if (!register_posted_variables(array('search_terms' => false,
                         $search_terms_description = $_POST['search_terms'];
                 $join_op = ' OR ';
         }
+
         $terms = array();
 
         $search_keys = array(
                        'search_terms_title' => 'intitule',
                        'search_terms_instructor' => 'titulaires',
                        'search_terms_keywords' => 'course_keywords',
-                       'search_terms_coursecode' => array('code', 'fake_code'),
-                       'search_terms_description' => array('course_units.title', 'course_units.comments',
-                                                           'unit_resources.title', 'unit_resources.comments'));
+                       'search_terms_coursecode' => array('code', 'fake_code'));
+
         foreach ($search_keys as $key => $subject) {
                 if (isset($GLOBALS[$key]) and !empty($GLOBALS[$key])) {
                         if (is_array($subject)) {
@@ -111,6 +111,12 @@ if (!register_posted_variables(array('search_terms' => false,
                                 $terms[] = $subject . ' LIKE ' . quote('%' . $GLOBALS[$key] . '%');
                         }
                 }
+        }
+
+        if (!empty($search_terms_description)) {
+                $terms[] = "MATCH (course_units.title, course_units.comments,
+                        unit_resources.title, unit_resources.comments) AGAINST (" .
+                        quote($search_terms_description) . ' IN BOOLEAN MODE)';
         }
 
         $course_restriction = 'cours.visible IN (2, 1)';
@@ -129,10 +135,12 @@ if (!register_posted_variables(array('search_terms' => false,
                                      LEFT JOIN course_units ON cours.cours_id = course_units.course_id
                                      LEFT JOIN unit_resources ON course_units.id = unit_resources.unit_id
                           WHERE ' . $course_restriction . ' AND
+                                (course_units.visibility = "v" OR
+                                 course_units.visibility IS NULL OR
+                                 course_units.`order` < 0) AND
                                 (unit_resources.visibility = "v" OR
-                                 unit_resources.visibility IS NULL) AND
-                                (unit_resources.visibility = "v" OR
-                                 unit_resources.visibility IS NULL) AND (' .
+                                 unit_resources.visibility IS NULL OR
+                                 unit_resources.`order` < 0) AND (' .
                   implode($join_op, $terms) . ') GROUP BY code ORDER BY code';
 
         $result = db_query($search);
