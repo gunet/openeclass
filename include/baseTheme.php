@@ -407,7 +407,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 			$t->set_var ( 'HELP_LINK_ICON', $help_link_icon );
 			$t->set_var ( 'LANG_HELP', $langHelp );
 		} else {
-			$t->set_var ( '{HELP_LINK}', '' );
+			$t->set_var ( 'HELP_LINK_ICON', '' );
 			$t->set_var ( 'LANG_HELP', '' );
 		}
 		if (defined('RSS')) {
@@ -433,6 +433,11 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 		}
 
 		$t->set_var ( 'LANG_COPYRIGHT_NOTICE', $langCopyrightFooter );
+
+                if ($tool_css == 'course_home') {
+                        $t->set_block('mainBlock', 'toolTitleBlock', 'toolTitleBlockVar');
+                        $t->set_var('toolTitleBlockVar', '');
+                }
 
 		//	At this point all variables are set and we are ready to send the final output
 		//	back to the browser
