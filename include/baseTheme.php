@@ -82,7 +82,7 @@ include ('tools.php');
  * @param string $body_action (optional) code to be added to the BODY tag
  */
 function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null, $body_action = null, $hideLeftNav = null, $perso_tool_content = null) {
-	global $langUser, $langUserHeader, $prenom, $nom, $langLogout, $siteName, $intitule, $nameTools, $langHelp, $langAnonUser, $langActivate, $langDeactivate;
+	global $langUser, $langUserHeader, $prenom, $nom, $langLogout, $langLogin, $siteName, $intitule, $nameTools, $langHelp, $langAnonUser, $langActivate, $langDeactivate;
 	global $language, $helpTopic, $require_help, $langEclass, $langCopyrightFooter;
 	global $relPath, $urlServer, $urlAppend, $toolContent_ErrorExists, $statut;
 	global $page_name, $page_navi, $currentCourseID, $langHomePage, $siteName, $navigation;
@@ -209,7 +209,11 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 		//if user is logged in display the logout option
 		if (isset($_SESSION['uid'])) {
 			$t->set_var ('LANG_LOGOUT', $langLogout);
-		}
+		        $t->set_var ('LOGOUT_LINK', $relPath . 'index.php?logout=yes');
+                } else {
+                        $t->set_var ('LANG_LOGOUT', $langLogin);
+		        $t->set_var ('LOGOUT_LINK', $relPath . 'login_form.php');
+                }
 
 		//set the text and icon on the third bar (header)
 		if ($menuTypeID == 2) {
@@ -267,8 +271,6 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 		if ($is_adminOfCourse) {
 			$t->set_var ( 'ACTIVATE_MODULE', $mod_activation );
 		}
-
-		$t->set_var ( 'LOGOUT_LINK', $relPath );
 
 		if ($menuTypeID != 2) {
 			$t->set_var ( 'LANG_SELECT', lang_selections () );
