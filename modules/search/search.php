@@ -114,9 +114,15 @@ if (!register_posted_variables(array('search_terms' => false,
         }
 
         if (!empty($search_terms_description)) {
-                $terms[] = "MATCH (course_units.title, course_units.comments,
-                        unit_resources.title, unit_resources.comments) AGAINST (" .
-                        quote($search_terms_description) . ' IN BOOLEAN MODE)';
+                db_query('CREATE TEMPORARY TABLE desc_search_tmp AS
+                                SELECT unit_id FROM unit_resources WHERE
+                                        (visibility = "v" OR unit_resources.`order` < 0) AND 
+                                        MATCH (title, comments)
+                                        AGAINST (' . quote($search_terms_description) . ' IN BOOLEAN MODE)');
+                db_query('INSERT INTO desc_search_tmp
+                                SELECT id FROM course_units WHERE
+                                        MATCH (title, comments) AGAINST (' . quote($search_terms_description) . ' IN BOOLEAN MODE)');
+                $terms[] = "course_units.id IN (SELECT DISTINCT unit_id FROM desc_search_tmp)";
         }
 
         $course_restriction = 'cours.visible IN (2, 1)';
@@ -128,19 +134,13 @@ if (!register_posted_variables(array('search_terms' => false,
 
         
 	// visible = 2 or 1 for Public and Open courses
-        $search = 'SELECT code, fake_code, intitule, titulaires, course_keywords,
-                          course_units.title, course_units.comments,
-                          unit_resources.title, unit_resources.comments
+        $search = 'SELECT code, fake_code, intitule, titulaires, course_keywords
                           FROM cours ' . $course_user_join . '
                                      LEFT JOIN course_units ON cours.cours_id = course_units.course_id
-                                     LEFT JOIN unit_resources ON course_units.id = unit_resources.unit_id
                           WHERE ' . $course_restriction . ' AND
                                 (course_units.visibility = "v" OR
                                  course_units.visibility IS NULL OR
-                                 course_units.`order` < 0) AND
-                                (unit_resources.visibility = "v" OR
-                                 unit_resources.visibility IS NULL OR
-                                 unit_resources.`order` < 0) AND (' .
+                                 course_units.`order` < 0) AND (' .
                   implode($join_op, $terms) . ') GROUP BY code ORDER BY code';
 
         $result = db_query($search);
@@ -177,6 +177,10 @@ if (!register_posted_variables(array('search_terms' => false,
                              <li><a href='search.php'>$langNewSearch</a></li>
                         </ul></div>";
         }
+}
+
+if (!empty($search_terms_description)) {
+        db_query('DROP TEMPORARY TABLE desc_search_tmp');
 }
 
 draw($tool_content, 0, 'search');
