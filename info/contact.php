@@ -42,7 +42,7 @@ $tool_content .= "
     <tr>
       <th class='left' width='160'>$langPostMail</th>
       <td>
-        $Institution<br>
+        $Institution<br />
         $postaddress
       </td>
     </tr>
