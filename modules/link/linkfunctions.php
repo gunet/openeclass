@@ -44,45 +44,38 @@ function addlinkcategory($type)
 		global $langGiveURL;
 		global $langLinkAdded;
 
-		$urllink=trim($urllink);
-		$title=trim($title);
-		$description=trim($description);
+		$urllink = trim($urllink);
+		$title = trim($title);
+		$description = trim($description);
 
-		// if title is empty, an error occurs
-		if(empty($urllink))
-		{
-			$msgErr=$langGiveURL;
-
-			$ok=false;
-		}
-		// if the title is empty, we use the url as the title
-		else
-		{
-			if(empty($title))
-			{
-				$title=$urllink;
+		// if url is empty, an error occurs
+		if (empty($urllink)) {
+			$msgErr = $langGiveURL;
+			$ok = false;
+		} else {
+                        // if the title is empty, we use the url as the title
+			if (empty($title)) {
+				$title = $urllink;
 			}
 
-			// we check weither the $url starts with http://, if not we add this
-			if(strstr('://', $urllink) === false) {
+			if (strpos('://', $urllink) === false) {
 				$urllink = "http://" . $urllink;
 			}
 
 			// looking for the largest ordre number for this category
 			$result=db_query("SELECT MAX(ordre) FROM  `".$tbl_link."` WHERE category='$selectcategory'", $dbname);
 
-			list($orderMax)=mysql_fetch_row($result);
+			list($orderMax) = mysql_fetch_row($result);
 
-			$ordre=$orderMax+1;
+			$ordre = $orderMax + 1;
 
-			$sql="INSERT INTO `".$tbl_link."` (url, titre, description, category,ordre) VALUES ('$urllink','$title','$description','$selectcategory','$ordre')";
-			$catlinkstatus=$langLinkAdded;
+			$sql = "INSERT INTO `".$tbl_link."` (url, titre, description, category,ordre) VALUES ('$urllink','$title','$description','$selectcategory','$ordre')";
+			$catlinkstatus = $langLinkAdded;
 
 			unset($urllink,$title,$description,$selectcategory);
 		}
 	}
-	if($type == "category")
-	{
+	if ($type == "category") {
 		global $tbl_categories;
 		global $categoryname;
 		global $description;
@@ -91,13 +84,10 @@ function addlinkcategory($type)
 
 		$categoryname=trim($categoryname);
 
-		if(empty($categoryname))
-		{
-			$msgErr=$langGiveCategoryName;
-			$ok=false;
-		}
-		else
-		{
+		if(empty($categoryname)) {
+			$msgErr = $langGiveCategoryName;
+			$ok = false;
+		} else {
 			// looking for the largest ordre number for this category
 			$result = db_query("SELECT MAX(ordre) FROM  `".$tbl_categories."`" , $dbname);
 
@@ -185,6 +175,10 @@ function editlinkcategory($type)
 		{
 			global $langLinkModded;
 			global $selectcategory;
+
+			if (strpos('://', $urllink) === false) {
+				$urllink = "http://" . $urllink;
+			}
 
 			$sql="UPDATE `".$tbl_link."` set url='$urllink', titre='$title', description='$description', category='$selectcategory' WHERE id='".$id."'";
 			db_query($sql, $dbname);
