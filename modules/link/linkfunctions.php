@@ -58,7 +58,7 @@ function addlinkcategory($type)
 				$title = $urllink;
 			}
 
-			if (strpos('://', $urllink) === false) {
+			if (strpos($urllink, '://') === false) {
 				$urllink = "http://" . $urllink;
 			}
 
@@ -176,9 +176,9 @@ function editlinkcategory($type)
 			global $langLinkModded;
 			global $selectcategory;
 
-			if (strpos('://', $urllink) === false) {
+			if (strpos($urllink, '://') === false) {
 				$urllink = "http://" . $urllink;
-			}
+                        }
 
 			$sql="UPDATE `".$tbl_link."` set url='$urllink', titre='$title', description='$description', category='$selectcategory' WHERE id='".$id."'";
 			db_query($sql, $dbname);
