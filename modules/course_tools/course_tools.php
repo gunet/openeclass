@@ -396,13 +396,12 @@ if ($is_adminOfCourse) {
 
 	if (is_array($toolArr)){
 		$externalLinks = array();//array used to populate the external tools table afterwards
-		for($i=0; $i< $numOfToolGroups; $i++){
+		for($i=1; $i< $numOfToolGroups; $i++){
 			$numOfTools = count($toolArr[$i][1]);
 			for($j=0; $j< $numOfTools; $j++){
-
-				if ($i  == 0){//active tools
+				if ($i == 1){//active tools
 					if ($toolArr[$i][4][$j] < 100) {
-						$activeTools .= "        <option value=\"".$toolArr[$i][4][$j]."\">".$toolArr[$i][1][$j]."</option>\n";
+						$activeTools .= "<option value=\"".$toolArr[$i][4][$j]."\">".$toolArr[$i][1][$j]."</option>\n";
 					} else {
 						$activeTools .= "<option class=\"emphasised\" value=\"".$toolArr[$i][4][$j]."\">".$toolArr[$i][1][$j]."</option>\n";
 						$arr['text']=$toolArr[$i][1][$j];
@@ -410,12 +409,11 @@ if ($is_adminOfCourse) {
 						array_push($externalLinks, $arr);
 					}
 
-					}  elseif ($i ==  2) {//admin tools
+					}  elseif ($i == 3) {//admin tools
 
-				} elseif ($i == 1){//inactive tools
-
+				} elseif ($i == 2){//inactive tools
 					if ($toolArr[$i][4][$j] < 100) {
-						$inactiveTools .= "        <option value=\"".$toolArr[$i][4][$j]."\">".$toolArr[$i][1][$j]."</option>\n";
+						$inactiveTools .= "<option value=\"".$toolArr[$i][4][$j]."\">".$toolArr[$i][1][$j]."</option>\n";
 					} else {
 						$inactiveTools .= "<option class=\"emphasised\" value=\"".$toolArr[$i][4][$j]."\">".$toolArr[$i][1][$j]."</option>\n";
 						$arr['text']=$toolArr[$i][1][$j];

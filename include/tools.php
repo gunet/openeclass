@@ -480,6 +480,26 @@ function lessonToolsMenu(){
 	global $webDir, $language;
 
 	$sideMenuGroup = array();
+	$sideMenuSubGroup = array();
+        $sideMenuText = array();
+        $sideMenuLink = array();
+        $sideMenuImg = array();
+	$sideMenuID = array();
+
+        $arrMenuType = array();
+        $arrMenuType['type'] = 'none';
+
+        array_push($sideMenuSubGroup, $arrMenuType);
+        array_push($sideMenuText, $GLOBALS['langCourseHome']);
+        array_push($sideMenuLink, "../../courses/".$GLOBALS['currentCourseID']."/");
+        array_push($sideMenuImg, "lesson_icon.gif");
+	array_push($sideMenuID, 0);
+
+        array_push($sideMenuSubGroup, $sideMenuText);
+        array_push($sideMenuSubGroup, $sideMenuLink);
+        array_push($sideMenuSubGroup, $sideMenuImg);
+	array_push($sideMenuSubGroup, $sideMenuID);
+        array_push($sideMenuGroup, $sideMenuSubGroup);
 
 	//	------------------------------------------------------------------
 	//	Get public tools
