@@ -100,6 +100,7 @@ escape_if_exists('description');
 escape_if_exists('course_addon');
 escape_if_exists('course_keywords');
 escape_if_exists('visit');
+escape_if_exists('password');
 
 $tool_content .= $intitule_html .
                  $faculte_html .
@@ -109,7 +110,8 @@ $tool_content .= $intitule_html .
                  $description_html .
                  $course_addon_html .
                  $course_keywords_html .
-                 $visit_html;
+                 $visit_html .
+                 $password_html;
 
 if (isset($_POST['back1']) or !isset($_POST['visit'])) {
 
@@ -217,7 +219,7 @@ if (isset($_POST['back1']) or !isset($_POST['visit'])) {
 	<td width='5'><input name=\"formvisible\" type=\"radio\" value=\"1\" /></td>
 	<td width='325'><p align='right'><small>$langPrivOpen</small></p></td></tr>
 	<tr>
-	<td colspan='4' class='right'><input type='checkbox' name='checkpassword' ".$checkpasssel.">&nbsp;$langOptPassword
+	<td colspan='4' class='right'>&nbsp;$langOptPassword
 	<input type='text' name='password' value='".q($password)."' class='FormData_InputText'>
 	</td>
 	</tr>
@@ -381,6 +383,7 @@ if (isset($_POST['create_course'])) {
                         titulaires = " . quote($titulaires) . ",
                         fake_code = " . quote($code) . ",
                         type = " . quote($type) . ",
+                        password = " . quote($password) . ",
                         faculteid = '$facid',
                         first_create = NOW()");
         $new_cours_id = mysql_insert_id();
