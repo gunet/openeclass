@@ -211,9 +211,8 @@ if (!isset( $_POST['authors']) || !isset( $_POST['description']))
 	}
 	else
 	{
-		$tool_content .= "<p class=\"caution_small\">".$errormsg."<br />
+		$tool_content .= "<p class=\"caution_small\">".$errormsg."<br /><br />
 		<a href='index.php'>".$dropbox_lang['backList']."</a><br/>";
-		$tool_content .=  "<b><font color='#FF0000'>".$errormsg."</font></b><br><br>";
 	}
 }
 
