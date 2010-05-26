@@ -78,8 +78,7 @@ if (isset($_POST['submit'])) {
                 }
 
                 // update course settings
-                if (isset($_POST['checkpassword']) and
-                    isset($_POST['formvisible']) and
+                if (isset($_POST['formvisible']) and
                     $_POST['formvisible'] == '1') {
                         $password = $password;
                 } else {
@@ -154,7 +153,6 @@ if (isset($_POST['submit'])) {
 		$languageCourse	= $c['languageCourse'];
 		$course_keywords = q($c['course_keywords']);
 		$password = q($c['password']);
-		$checkpasssel = empty($password)? '': " checked='1'";
 
 		@$tool_content .="
 		<form method='post' action='$_SERVER[PHP_SELF]'>
@@ -230,7 +228,7 @@ if (isset($_POST['submit'])) {
       </tr>
       <tr>
         <td>&nbsp;</td>
-        <td bgcolor='#F8F8F8'><input type='checkbox' name='checkpassword'$checkpasssel />&nbsp;$langOptPassword&nbsp;<input type='text' name='password' value='$password' class='FormData_InputText' />
+        <td bgcolor='#F8F8F8'>&nbsp;$langOptPassword&nbsp;<input type='text' name='password' value='$password' class='FormData_InputText' />
         </td>
       </tr>
       <tr>
