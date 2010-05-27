@@ -31,6 +31,7 @@ $require_help = TRUE;
 $helpTopic = 'User';
 
 include '../../include/baseTheme.php';
+include '../../include/sendMail.inc.php';
 
 $nameTools = $langAddUser;
 $navigation[] = array ("url"=>"user.php", "name"=> $langAdminUsers);
@@ -45,8 +46,16 @@ if (isset($add)) {
 	$result = db_query("INSERT INTO cours_user (user_id, cours_id, statut, reg_date) ".
 		"VALUES ('".mysql_escape_string($add)."', $cours_id, ".
 		"'5', CURDATE())");
-
+		// notify user via email
+		$email = uid_to_email($add);
+		if (!empty($email) and email_seems_valid($email)) {
+			$emailsubject = "$langYourReg " . course_id_to_title($cours_id);
+			$emailbody = "$langNotifyRegUser1 '".course_id_to_title($cours_id). "' $langNotifyRegUser2 $langFormula \n$gunet";
+			send_mail('', '', '', $email, $emailsubject, $emailbody, $charset);
+		}
+	
 		$tool_content .= "<p class=\"success_small\">";
+		
 	if ($result) {
 		$tool_content .=  "$langTheU $langAdded";
 	} else {
@@ -149,6 +158,6 @@ tCont3;
 	}
 }
 
-draw($tool_content, 2, 'user');
+draw($tool_content, 2);
 
 ?>
