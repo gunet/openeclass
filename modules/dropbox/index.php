@@ -147,7 +147,7 @@ tCont2;
 	$tool_content .= "
     <tr>
       <th class='left'>".$dropbox_lang["authors"]." :</th>
-      <td><input type='text' name='authors' value='".getUserNameFromId($uid)."' size='40' class='FormData_InputText' /></td>
+      <td>".getUserNameFromId($uid)."</td>
     </tr>
     <tr>
       <th class='left'>".$dropbox_lang["description"]." :</th>
@@ -210,6 +210,7 @@ tCont2;
     </tr>
     <tr>
       <th>&nbsp;</th>
+      <input type='hidden' name='authors' value='".getUserNameFromId($uid)."' />
       <td><input type='Submit' name='submitWork' value='".$dropbox_lang["ok"]."' /></td>
     </tr>
     </tbody>
