@@ -185,6 +185,8 @@ $langUpgradeBase = "Αναβάθμιση βάσης Δεδομένων";
 $langCleanUp = "Διαγραφή παλιών αρχείων";
 $langUpdatingStatistics = "Ενημέρωση μηνιαίων στατιστικών";
 $langPleaseWait = "Παρακαλώ περιμένετε";
+$langSupportedLanguages = "Υποστηριζόμενες Γλώσσες";
+$langAvailLanguages = "Διαθέσιμες";
 
 // listusers
 $langBegin="αρχή";

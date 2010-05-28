@@ -62,7 +62,6 @@ $nameTools = $langEclassConf;
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
 // Initialise $tool_content
 $tool_content = "";
-
 /*****************************************************************************
 		MAIN BODY
 ******************************************************************************/
@@ -93,7 +92,15 @@ if (isset($submit))  {
                 if (defined('UTF8')) {
                         $utf8define = "define('UTF8', true);";
                 }
-
+	
+	$string_active_ui_languages = "array('el'";
+	if (isset($_POST['av_lang'])) { 
+		foreach ($_POST['av_lang'] as $langname => $langvalue) {
+			$string_active_ui_languages .= ",'$langvalue'";
+		}
+	}
+	$string_active_ui_languages .= ");";
+	
 		// Prepare config.php content
 		$stringConfig='<?php
 /*===========================================================================
@@ -137,6 +144,7 @@ $encryptedPasswd = "true";
 $persoIsActive = TRUE;
 
 $durationAccount = "'.$_POST['formdurationAccount'].'";
+$active_ui_languages = '.$string_active_ui_languages.'
 ';
 	// Save new config.php
 	fwrite($fd, $stringConfig);
@@ -286,6 +294,17 @@ $tool_content .= "
     </select></td>
 </tr>";
 
+$sel_en = in_array("en", $active_ui_languages)?'checked':'';
+$sel_es = in_array("es", $active_ui_languages)?'checked':'';
+	
+$tool_content .= "<tr><th class='left'>$langSupportedLanguages</th>";
+$tool_content .= "<td><fieldset>";
+$tool_content .= "<legend>$langAvailLanguages</legend>";
+$tool_content .= "<input type='checkbox' value='el' name = 'av_lang[]' checked disabled />Ελληνικά&nbsp;";
+$tool_content .= "<input type='checkbox' value='en' name = 'av_lang[]' $sel_en />Αγγλικά&nbsp;";
+$tool_content .= "<input type='checkbox' value='es' name = 'av_lang[]' $sel_es />Ισπανικά";
+$tool_content .= "</fieldset></td></tr>";
+
 $tool_content .= "
   <tr>
     <th class=\"left\"><b>\$durationAccount:</b></th>
@@ -341,5 +360,5 @@ $tool_content .= "
 // $tool_content: the content to display
 // 3: display administrator menu
 // admin: use tool.css from admin folder
-draw($tool_content,3,'admin');
+draw($tool_content, 3);
 ?>
