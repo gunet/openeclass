@@ -85,7 +85,6 @@ require_once("dropbox_class.inc.php");
  */
 if (isset($_POST["submitWork"]))
 {
-	require("../../include/lib/fileUploadLib.inc.php");
 
 	$error = FALSE;
 	$errormsg = '';
@@ -524,5 +523,5 @@ if (isset($_GET['deleteReceived']) || isset($_GET['deleteSent']))
 	$tool_content .= "<p class=\"success_small\">".$dropbox_lang["fileDeleted"]."<br />
 	<a href='index.php'>".$dropbox_lang['backList']."</a></p><br/>";
 }
-draw($tool_content, 2, 'dropbox', $head_content);
+draw($tool_content, 2, '', $head_content);
 ?>

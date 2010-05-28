@@ -61,6 +61,14 @@ $diskQuotaDocument = $d[0];
 mysql_select_db($currentCourseID);
 
 $basedir = $webDir . 'courses/' . $currentCourseID . '/document';
+$diskUsed = dir_total_space($basedir);
+if (isset($showQuota) and $showQuota == TRUE) {
+	$nameTools = $langQuotaBar;
+	$navigation[]= array ("url"=>"document.php", "name"=> $langDoc);
+	$tool_content .= showquota($diskQuotaDocument, $diskUsed);
+	draw($tool_content, 2);
+	exit;
+}
 
 // -------------------------
 // download action2
@@ -90,7 +98,6 @@ if($is_adminOfCourse)  {
 }
 
 // file manager basic variables definition
-$diskUsed = dir_total_space($basedir);
 $local_head = '
 <script type="text/javascript">
 function confirmation (name)
@@ -570,7 +577,7 @@ if ($parentDir == '\\') {
 if (strpos($curDirName, '/../') !== false or
     !is_dir(realpath($basedir . $curDirPath))) {
 	$tool_content .=  $langInvalidDir;
-        draw($tool_content, 2, 'document');
+        draw($tool_content, 2);
         exit;
 }
 
@@ -631,10 +638,10 @@ if($is_adminOfCourse) {
 	/*----------------------------------------
 	Create new folder
 	--------------------------------------*/
-	$tool_content .= "\n      <li><a href='$_SERVER[PHP_SELF]?createDir=".$cmdCurDirPath."'>$langCreateDir</a></li>";
+	$tool_content .= "\n<li><a href='$_SERVER[PHP_SELF]?createDir=".$cmdCurDirPath."'>$langCreateDir</a></li>";
 	$diskQuotaDocument = $diskQuotaDocument * 1024 / 1024;
-	$tool_content .= "\n      <li><a href='showquota.php?diskQuotaDocument=$diskQuotaDocument&amp;diskUsed=$diskUsed'>$langQuotaBar</a></li>";
-    $tool_content .= "\n    </ul>\n  </div>\n";
+	$tool_content .= "\n<li><a href='$_SERVER[PHP_SELF]?showQuota=TRUE'>$langQuotaBar</a></li>";
+	$tool_content .= "\n</ul>\n</div>\n";
 
 	// Dialog Box
 	if (!empty($dialogBox))
@@ -797,4 +804,4 @@ if (mysql_num_rows($sql) == 0) {
         $tool_content .=  "\n</div>";
 }
 add_units_navigation(TRUE);
-draw($tool_content, 2, "document", $local_head);
+draw($tool_content, 2, '', $local_head);

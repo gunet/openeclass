@@ -38,6 +38,8 @@
 
 require_once("dropbox_init1.inc.php");
 $nameTools = $dropbox_lang["dropbox"];
+$basedir = $webDir . 'courses/' . $currentCourseID . '/dropbox';
+$diskUsed = dir_total_space($basedir);
 
 /**** The following is added for statistics purposes ***/
 include('../../include/action.php');
@@ -45,10 +47,20 @@ $action = new action();
 $action->record('MODULE_ID_DROPBOX');
 /**************************************/
 
+if (isset($showQuota) and $showQuota == TRUE) {
+	$nameTools = $langQuotaBar;
+	$navigation[]= array ("url"=>"$_SERVER[PHP_SELF]", "name"=> $dropbox_lang["dropbox"]);
+	$tool_content .= showquota($diskQuotaDropbox, $diskUsed);
+	draw($tool_content, 2);
+	exit;
+}
+
+
 $tool_content .="
 <div id=\"operations_container\">
   <ul id=\"opslist\">
     <li><a href=\"".$_SERVER['PHP_SELF']."?upload=1\">".$dropbox_lang['uploadFile']."</a></li>
+    <li><a href='$_SERVER[PHP_SELF]?showQuota=TRUE'>$langQuotaBar</a></li>
   </ul>
 </div>";
 
@@ -503,5 +515,5 @@ if (count($dropbox_person->sentWork)==0) {
 
 $tool_content .= "</tbody></table>";
 add_units_navigation(TRUE);
-draw($tool_content, 2, 'dropbox', $head_content);
+draw($tool_content, 2, '', $head_content);
 

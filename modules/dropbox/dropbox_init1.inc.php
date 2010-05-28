@@ -29,6 +29,7 @@ $guest_allowed = FALSE;
 $require_help = TRUE;
 $helpTopic = 'Dropbox';
 include_once '../../include/baseTheme.php';
+include_once "../../include/lib/fileUploadLib.inc.php";
 
 $tool_content = "";
 
@@ -103,7 +104,8 @@ $d = mysql_fetch_array(db_query("SELECT dropbox_quota FROM `".$mysqlMainDb."`.`c
 $diskQuotaDropbox = $d['dropbox_quota'];
 $dropbox_cnf["allowJustUpload"] = false;
 $dropbox_cnf["allowStudentToStudent"] = false;
-
+$basedir = $webDir . 'courses/' . $currentCourseID . '/dropbox';
+$diskUsed = dir_total_space($basedir);
 /**
  * --------------------------------------
  * RH:   INITIALISE MAILING VARIABLES

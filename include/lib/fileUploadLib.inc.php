@@ -417,4 +417,62 @@ function get_max_upload_size($maxFilledSpace, $baseWorkDir)
 	return $maxFileSize;
 }
 
+/*
+	function showquota()
+	param - quota 
+	param - used , how much disp space is used
+	@last update: 18-07-2006 by Sakis Agorastos
+	@authors list: Agorastos Sakis <th_agorastos@hotmail.com>
+
+    @Description: A page that shows a table with statistic data and a
+    gauge bar. The statistical data are transfered here with GET in
+    $diskQuotaDocument and $diskUsed
+
+    This scipt uses the 'gaugebar.php' class for the graphic gauge bar
+===============================================================*/
+
+function showquota($quota, $used) {
+
+	global $langQuotaUsed, $langQuotaPercentage, $langQuotaTotal;
+	include 'gaugebar.php';
+
+	$retstring = "";
+	
+	//diamorfwsh ths grafikhs mparas xrhsimopoioumenou kai eleftherou xwrou (me vash ta quotas) + ypologismos statistikwn stoixeiwn
+	$oGauge = new myGauge(); //vrisketai sto arxeio 'gaugebar.php' & ginetai include parapanw
+	// apodosh timwn gia thn mpara
+	$fc = "#E6E6E6"; //foreground color
+	$bc = "#4F76A3"; //background color
+	$wi = 125; //width pixel
+	$hi = 10; //width pixel
+	$mi = 0;  //minimum value
+	$ma = $quota; //maximum value
+	$cu = $used; //current value
+	$oGauge->setValues($fc, $bc, $wi, $hi, $mi, $ma, $cu);
+	//pososto xrhsimopoioumenou xorou se %
+	$diskUsedPercentage = round(($used / $quota) * 100)."%";
+	//morfopoihsh tou synolikou diathesimou megethous tou quota
+	$quota = format_bytesize($quota / 1024);
+	//morfopoihsh tou synolikou megethous pou xrhsimopoieitai
+	$used = format_bytesize($used / 1024);
+	format_bytesize($used, '0');
+	//telos diamorfwshs ths grafikh mparas kai twn arithmitikwn statistikwn stoixeiwn
+	//ektypwsh pinaka me arithmitika stoixeia + thn grafikh bara
+	$retstring .= "<table class='FormData'>
+	<tbody><tr><th class='left' width='220'>$langQuotaUsed :</td>
+	<td>$used</td></tr>
+	<tr><th class='left'>$langQuotaPercentage :</td>
+	<td align='center'>";
+	$retstring .= $oGauge->display();
+	$retstring .= "$diskUsedPercentage</td>
+	</tr>
+	<tr>
+	<th class='left'>$langQuotaTotal :</td>
+	<td align='center'>$quota</td>
+	</tr></tbody></table>";
+	$tmp_cwd = getcwd();
+	
+	return $retstring;
+}
+
 ?>
