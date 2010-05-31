@@ -801,6 +801,9 @@ if (mysql_num_rows($sql) == 0) {
         }
         $tool_content .=  "\n  </tbody>";
         $tool_content .=  "\n  </table>";
+	if ($is_adminOfCourse) {
+		$tool_content .= "<p align='right'><small>$langMaxFileSize ".ini_get('upload_max_filesize')."</small></p>";
+	}
         $tool_content .=  "\n</div>";
 }
 add_units_navigation(TRUE);
