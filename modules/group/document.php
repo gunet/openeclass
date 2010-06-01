@@ -87,7 +87,7 @@ $navigation[] = array ("url" => "group_space.php?$groupset", "name" => $langGrou
 $sql_result = db_query("SELECT group_quota FROM cours WHERE code='$currentCourseID'", $mysqlMainDb);
 $d = mysql_fetch_array($sql_result);
 $diskQuotaGroup = $d['group_quota'];
-
+$diskUsed = dir_total_space("$webDir/courses/".$dbname."/group/");
 /**************************************
 /FILEMANAGER BASIC VARIABLES DEFINITION
 **************************************/
@@ -97,7 +97,7 @@ if ($forum_id === false) {
 }
 if (empty($secretDirectory)) {
 	$tool_content .= $langInvalidGroupDir;
-	draw($tool_content, 2, 'group', $local_head);
+	draw($tool_content, 2, '', $local_head);
 	exit;
 }
 
@@ -106,6 +106,13 @@ $baseServUrl = $urlAppend."/";
 $courseDir = "courses/".$dbname."/group/".$secretDirectory;
 $baseWorkDir = $baseServDir.$courseDir;
 
+if (isset($showQuota) and $showQuota == TRUE) {
+	$nameTools = $langQuotaBar;
+	$navigation[]= array ("url"=>"$_SERVER[PHP_SELF]?userGroupId=$userGroupId", "name"=> $langDoc);
+	$tool_content .= showquota($diskQuotaGroup, $diskUsed);
+	draw($tool_content, 2);
+	exit;
+}
 // -------------------------
 // download
 // -------------------------
@@ -345,9 +352,11 @@ $tool_content .= "
       <ul id='opslist'><li><a href='group_space.php?$groupset'>$langGroupSpaceLink</a></li>
         <li><a href='../phpbb/viewforum.php?forum=$forum_id'>$langGroupForumLink</a></li>
         <li><a href='$_SERVER[PHP_SELF]?$groupset&amp;createDir=".$curDirPath."'>$langCreateDir</a></li>
-        <li><a href='$_SERVER[PHP_SELF]?$groupset&amp;uploadPath=".$curDirPath."'>$langDownloadFile</a></li>
-      </ul>
-    </div>";
+        <li><a href='$_SERVER[PHP_SELF]?$groupset&amp;uploadPath=".$curDirPath."'>$langDownloadFile</a></li>";
+	if ($is_adminOfCourse) {
+		$tool_content .= "<li><a href='$_SERVER[PHP_SELF]?userGroupId=$userGroupId&showQuota=TRUE'>$langQuotaBar</a></li>";
+	}
+$tool_content .= "</ul></div>";
 
 /*----------------------------------------
 DIALOG BOX SECTION

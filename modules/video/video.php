@@ -56,6 +56,7 @@ $helpTopic = 'Video';
 $guest_allowed = true;
 
 include '../../include/baseTheme.php';
+include_once "../../include/lib/fileUploadLib.inc.php";
 
 /**** The following is added for statistics purposes ***/
 include('../../include/action.php');
@@ -69,6 +70,16 @@ $nameTools = $langVideo;
 $tool_content = "";
 $d = mysql_fetch_array(db_query("SELECT video_quota FROM cours WHERE code='$currentCourseID'",$mysqlMainDb));
 $diskQuotaVideo = $d['video_quota'];
+$updir = "$webDir/video/$currentCourseID"; //path to upload directory
+$diskUsed = dir_total_space($updir);
+
+if (isset($showQuota) and $showQuota == TRUE) {
+	$nameTools = $langQuotaBar;
+	$navigation[]= array ("url"=>"$_SERVER[PHP_SELF]", "name"=> $langVideo);
+	$tool_content .= showquota($diskQuotaVideo, $diskUsed);
+	draw($tool_content, 2);
+	exit;
+}
 
 if (isset($action2) and $action2 == "download")
 {
@@ -141,7 +152,6 @@ if (isset($_POST['submit']) or isset($_POST['edit_submit'])) {
 			$url = $URL;
 			$sql = "INSERT INTO videolinks (url,titre,description,creator,publisher,date) VALUES ('$url','".mysql_real_escape_string($titre)."','".mysql_real_escape_string($description)."','".mysql_real_escape_string($creator)."','".mysql_real_escape_string($publisher)."','".mysql_real_escape_string($date)."')";
 		} else {
-			$updir = "$webDir/video/$currentCourseID"; //path to upload directory
 			if (($file_name != "") && ($file_size <= $diskQuotaVideo )) {
 					// convert php file in phps to protect the platform against malicious codes
 					$file_name = preg_replace("/\.php$/", ".phps", $file_name);
@@ -360,13 +370,13 @@ if (isset($id)) {
 	}
 }	// if id
 	if (!isset($form_input)) {
-		$tool_content .= "
-  <div id=\"operations_container\">
-    <ul id=\"opslist\">
-	  <li><a href=\"$_SERVER[PHP_SELF]?form_input=file\">$langAddV</a></li>
-      <li><a href=\"$_SERVER[PHP_SELF]?form_input=url\">$langAddVideoLink</a></li>
-    </ul>
-  </div>";
+		$tool_content .= "<div id='operations_container'>
+		<ul id='opslist'>
+		<li><a href='$_SERVER[PHP_SELF]?form_input=file'>$langAddV</a></li>
+		<li><a href='$_SERVER[PHP_SELF]?form_input=url'>$langAddVideoLink</a></li>
+		<li><a href='$_SERVER[PHP_SELF]?showQuota=TRUE'>$langQuotaBar</a></li>
+		</ul>
+		</div>";
 	}
 
 	$count_video = mysql_fetch_array(db_query("SELECT count(*) FROM video ORDER BY titre",$currentCourseID));
@@ -488,7 +498,7 @@ else {
 }
 add_units_navigation(TRUE);
 if (isset($head_content))
-	draw($tool_content, 2, 'video', $head_content);
+	draw($tool_content, 2, '', $head_content);
 else
-	draw($tool_content, 2, 'video');
+	draw($tool_content, 2, '');
 ?>
