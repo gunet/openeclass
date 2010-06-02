@@ -39,25 +39,6 @@
 ==============================================================================
 */
 
-/*******************************************************
-	eclass replacement for php stripslashes() function
-	The standard php stripslashes() removes ALL backslashes
-	even from strings - so  C:\temp becomes C:temp - this isn't good.
-	This function should work as a fairly safe replacement
-	to be called on quoted AND unquoted strings (to be sure)
-
-	@param string the string to remove unsafe slashes from
-	@return string
-*********************************************************/
-function stripslashes_safe($string)
-{
-
-    $string = str_replace("\\'", "'", $string);
-    $string = str_replace('\\"', '"', $string);
-    $string = str_replace('\\\\', '\\', $string);
-    return $string;
-}
-
 /*************************************************************
 Show a selection box with departments.
 
@@ -146,10 +127,11 @@ Parameters: limit - the current limit
             listsize - the size of the list
             fulllistsize - the size of the full list
             page - the page to send links from pages
+            extra_page - extra arguments to page link
 
 return String (the constructed table)
 ***************************************************************/
-function show_paging($limit, $listsize, $fulllistsize, $page) {
+function show_paging($limit, $listsize, $fulllistsize, $page, $extra_page = '') {
 
 	global $langNextPage, $langBeforePage;
 
@@ -160,7 +142,7 @@ function show_paging($limit, $listsize, $fulllistsize, $page) {
 	// Deal with previous page
 	if ($limit!=0) {
 		$newlimit = $limit - $listsize;
-		$retString .= "<a href=\"".$page."?limit=".$newlimit."\"><b>$langBeforePage</b></a>&nbsp;|&nbsp;";
+		$retString .= "<a href=\"".$page."?limit=".$newlimit."".$extra_page."\"><b>$langBeforePage</b></a>&nbsp;|&nbsp;";
 	} else {
 		$retString .= "<b>$langBeforePage</b>&nbsp;|&nbsp;";
 	}
@@ -175,7 +157,7 @@ function show_paging($limit, $listsize, $fulllistsize, $page) {
 				$retString .= "<b>".$aa."</b>&nbsp;";
 			} else {
 				$newlimit = $counter * $listsize;
-				$retString .= "<b><a href=\"".$page."?limit=".$newlimit."\">".$aa."</a></b>&nbsp;";
+				$retString .= "<b><a href=\"".$page."?limit=".$newlimit."".$extra_page."\">".$aa."</a></b>&nbsp;";
 			}
 			$counter++;
 		}
@@ -188,7 +170,7 @@ function show_paging($limit, $listsize, $fulllistsize, $page) {
 				$retString .= "<b>".$aa."</b>&nbsp;";
 			} else {
 				$newlimit = $counter * $listsize;
-				$retString .= "<b><a href=\"".$page."?limit=".$newlimit."\">".$aa."</a></b>&nbsp;";
+				$retString .= "<b><a href=\"".$page."?limit=".$newlimit."".$extra_page."\">".$aa."</a></b>&nbsp;";
 			}
 			$counter++;
 		}
@@ -201,7 +183,7 @@ function show_paging($limit, $listsize, $fulllistsize, $page) {
 				$retString .= "<b>".$aa."</b>&nbsp;";
 			} else {
 				$newlimit = $counter * $listsize;
-				$retString .= "<b><a href=\"".$page."?limit=".$newlimit."\">".$aa."</a></b>&nbsp;";
+				$retString .= "<b><a href=\"".$page."?limit=".$newlimit."".$extra_page."\">".$aa."</a></b>&nbsp;";
 			}
 			$counter++;
 		}
@@ -214,7 +196,7 @@ function show_paging($limit, $listsize, $fulllistsize, $page) {
 				$retString .= "<b>".$aa."</b>&nbsp;";
 			} else {
 				$newlimit = $counter * $listsize;
-				$retString .= "<b><a href=\"".$page."?limit=".$newlimit."\">".$aa."</a></b>&nbsp;";
+				$retString .= "<b><a href=\"".$page."?limit=".$newlimit."".$extra_page."\">".$aa."</a></b>&nbsp;";
 			}
 			$counter++;
 		}
@@ -227,7 +209,7 @@ function show_paging($limit, $listsize, $fulllistsize, $page) {
 				$retString .= "<b>".$aa."</b>&nbsp;";
 			} else {
 				$newlimit = $counter * $listsize;
-				$retString .= "<b><a href=\"".$page."?limit=".$newlimit."\">".$aa."</a></b>&nbsp;";
+				$retString .= "<b><a href=\"".$page."?limit=".$newlimit."".$extra_page."\">".$aa."</a></b>&nbsp;";
 			}
 			$counter++;
 		}
@@ -240,7 +222,7 @@ function show_paging($limit, $listsize, $fulllistsize, $page) {
 				$retString .= "<b>".$aa."</b>&nbsp;";
 			} else {
 				$newlimit = $counter * $listsize;
-				$retString .= "<b><a href=\"".$page."?limit=".$newlimit."\">".$aa."</a></b>&nbsp;";
+				$retString .= "<b><a href=\"".$page."?limit=".$newlimit."".$extra_page."\">".$aa."</a></b>&nbsp;";
 			}
 			$counter++;
 		}
@@ -254,7 +236,7 @@ function show_paging($limit, $listsize, $fulllistsize, $page) {
 				$retString .= "<b>".$aa."</b>&nbsp;";
 			} else {
 				$newlimit = $counter * $listsize;
-				$retString .= "<b><a href=\"".$page."?limit=".$newlimit."\">".$aa."</a></b>&nbsp;";
+				$retString .= "<b><a href=\"".$page."?limit=".$newlimit."".$extra_page."\">".$aa."</a></b>&nbsp;";
 			}
 			$counter++;
 		}
@@ -267,7 +249,7 @@ function show_paging($limit, $listsize, $fulllistsize, $page) {
 				$retString .= "<b>".$aa."</b>&nbsp;";
 			} else {
 				$newlimit = $counter * $listsize;
-				$retString .= "<b><a href=\"".$page."?limit=".$newlimit."\">".$aa."</a></b>&nbsp;";
+				$retString .= "<b><a href=\"".$page."?limit=".$newlimit."".$extra_page."\">".$aa."</a></b>&nbsp;";
 			}
 			$counter++;
 		}
@@ -277,7 +259,7 @@ function show_paging($limit, $listsize, $fulllistsize, $page) {
 		$retString .= "|&nbsp;<b>$langNextPage</b>";
 	} else {
 		$newlimit = $limit + $listsize;
-		$retString .= "|&nbsp;<a href=\"".$page."?limit=".$newlimit."\"><b>$langNextPage</b></a>";
+		$retString .= "|&nbsp;<a href=\"".$page."?limit=".$newlimit."".$extra_page."\"><b>$langNextPage</b></a>";
 	}
 	$retString .= "</td></tr></tbody></table>";
 
