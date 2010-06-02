@@ -128,17 +128,23 @@ Parameters: limit - the current limit
             fulllistsize - the size of the full list
             page - the page to send links from pages
             extra_page - extra arguments to page link
+            displayAll - display 'all' button (defaults to FALSE)
 
 return String (the constructed table)
 ***************************************************************/
-function show_paging($limit, $listsize, $fulllistsize, $page, $extra_page = '') {
+function show_paging($limit, $listsize, $fulllistsize, $page, $extra_page = '', $displayAll = FALSE) {
 
-	global $langNextPage, $langBeforePage;
+	global $langNextPage, $langBeforePage, $langAllUsers;
 
-	$retString = "";
+	$retString = $link_all = "";
+	if ($displayAll == TRUE) {
+	    $link_all = "<a href='$_SERVER[PHP_SELF]?all=TRUE'>$langAllUsers</a>"; 
+	} 
+	
 	// Page numbers of navigation
 	$pn = 15;
-	$retString .= "<br><table width=\"99%\"><tbody><tr><td>&nbsp;</td><td align=\"center\">";
+	//$retString .= "<br><table width=\"99%\"><tbody><tr><td>&nbsp;</td><td align=\"center\">";
+	$retString .= "<br><table width=\"99%\"><tbody><tr><td>&nbsp;</td><td align='center'>$link_all &nbsp;&nbsp;&nbsp;";
 	// Deal with previous page
 	if ($limit!=0) {
 		$newlimit = $limit - $listsize;
