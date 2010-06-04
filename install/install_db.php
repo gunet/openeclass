@@ -198,7 +198,7 @@ db_query("CREATE TABLE user (
       user_id mediumint unsigned NOT NULL auto_increment,
       nom varchar(60) default NULL,
       prenom varchar(60) default NULL,
-      username varchar(20) default 'empty',
+      username varchar(50) default 'empty',
       password varchar(50) default 'empty',
       email varchar(100) default NULL,
       statut tinyint(4) default NULL,
