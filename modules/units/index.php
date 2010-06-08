@@ -123,11 +123,13 @@ if ($is_adminOfCourse) {
 
 if ($is_adminOfCourse) {
         $comment_edit_link = "<td valign='top' width='3%'><a href='info.php?edit=$id&amp;next=1'><img src='../../template/classic/img/edit.gif' title='' alt='' /></a></td>";
+        $units_class = 'unit-navigation';
 } else {
+        $units_class = 'NavUnits';
         $comment_edit_link = '';
 }
 
-$tool_content .= '<table class="unit-navigation"><tr><td class="left">' .
+$tool_content .= "<table class='$units_class'><tr><td class='left'>" .
                  $link['previous'] . '</td><td class="right">' .
                  $link['next'] . "</td></tr></table>\n";
 
