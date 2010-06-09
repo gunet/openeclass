@@ -42,7 +42,6 @@ $guest_allowed = true;
 //$path2add is used in init.php to fix relative paths
 $path2add=1;
 include '../../include/baseTheme.php';
-include '../../include/phpmathpublisher/mathpublisher.php';
 $nameTools = $langIdentity;
 $tool_content = $head_content = $main_content = $cunits_content = $bar_content = "";
 add_units_navigation(TRUE);
@@ -68,7 +67,7 @@ $action->record('MODULE_ID_UNITS');
 $res = db_query("SELECT course_keywords, faculte, type, visible, titulaires, fake_code
                  FROM cours WHERE cours_id = $cours_id", $mysqlMainDb);
 $result = mysql_fetch_array($res);
-$keywords = trim($result['course_keywords']);
+$keywords = q(trim($result['course_keywords']));
 $faculte = $result['faculte'];
 $type = $result['type'];
 $visible = $result['visible'];
@@ -83,9 +82,9 @@ $res = db_query("SELECT res_id, title, comments FROM unit_resources WHERE unit_i
 if ($res and mysql_num_rows($res) > 0) {
         while ($row = mysql_fetch_array($res)) {
                 if ($row['res_id'] == -1) {
-                        $description = $row['comments'];
+                        $description = standard_text_escape($row['comments']);
                 } elseif ($row['res_id'] == -2) {
-                        $addon = nl2br(trim($row['comments']));
+                        $addon = nl2br(trim(q($row['comments'])));
                 } else {
                         if (isset($idBloc[$row['res_id']]) and !empty($idBloc[$row['res_id']])) {
                                 $element_id = " id='{$idBloc[$row['res_id']]}'";
@@ -93,8 +92,7 @@ if ($res and mysql_num_rows($res) > 0) {
                                 $element_id = '';
                         }
                         $main_extra .= "<div class='course_info'$element_id><h1>" . q($row['title']) . "</h1><p>" .
-                                mathfilter($row['comments'], 12, '../../courses/mathimg/') .
-                                "</p></div>";
+                                standard_text_escape($row['comments']) . "</p></div>\n";
                 }
         }
 }
@@ -191,9 +189,9 @@ while ($cu = mysql_fetch_array($sql)) {
                 }
                 $cunits_content .= " width='99%'>\n      <thead>";
                 if ($is_adminOfCourse) {
-                $cunits_content .= "\n      <tr class='meros'>\n        <td width='1%' class='right'>&nbsp;<b>$count_index.</b>&nbsp;</td>\n        <td width='89%'><a class=\"unit_link$class_vis\" href='${urlServer}modules/units/?id=$cu[id]'>$cu[title]</a></td>";
+                $cunits_content .= "\n      <tr class='meros'>\n        <td width='1%' class='right'>&nbsp;<b>$count_index.</b>&nbsp;</td>\n        <td width='89%'><a class=\"unit_link$class_vis\" href='${urlServer}modules/units/?id=$cu[id]'>" . q($cu['title']) . "</a></td>\n";
                 } else {
-                $cunits_content .= "\n      <tr class='meros'>\n        <td width='1%' class='right'>&nbsp;<b>$count_index.</b>&nbsp;</td>\n        <td  width='99%'><a class=\"unit_link$class_vis\" href='${urlServer}modules/units/?id=$cu[id]'>$cu[title]</a></td>";
+                $cunits_content .= "\n      <tr class='meros'>\n        <td width='1%' class='right'>&nbsp;<b>$count_index.</b>&nbsp;</td>\n        <td  width='99%'><a class=\"unit_link$class_vis\" href='${urlServer}modules/units/?id=$cu[id]'>" . q($cu['title']) . "</a></td>\n";
                 }
 
                 if ($is_adminOfCourse) { // display actions
@@ -225,13 +223,8 @@ while ($cu = mysql_fetch_array($sql)) {
                 } else {
                     $cunits_content .= "colspan='2'>";
                 }
-                $cu['comments'] = mathfilter($cu['comments'], 12, "../../courses/mathimg/");
-                $cunits_content .= "$cu[comments]";
-                if (strpos($cu['comments'], '<') === false) {
-                        $cu['comments'] = '      ' . $cu['comments'] . '';
-                }
-                $cunits_content .= "\n        </td>";
-                $cunits_content .= "\n      </tr>\n      <tr><td>&nbsp;<br /><br /></td></tr>\n      </thead>\n      </table>\n";
+                $cunits_content .= standard_text_escape($cu['comments']) . "\n</td></tr>\n" .
+                                   "<tr><td>&nbsp;<br /><br /></td></tr>\n</thead>\n</table>\n";
                 $first = false;
                 $count_index++;
         }
@@ -239,8 +232,6 @@ while ($cu = mysql_fetch_array($sql)) {
 if (!is_null($maxorder) or $is_adminOfCourse) {
         $main_content .= "\n  </div>\n";
 }
-
-$cunits_content .= "\n  <p>$cu[comments]</p>";
 
 switch ($type){
 	case 'pre': { //pre

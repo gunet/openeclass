@@ -1650,7 +1650,7 @@ To be sure that the name of the image file is unique and to allow the script to 
 math_(1000+valign)_md5(formulatext.size).png.
 (1000+valign is used instead of valign directly to avoid a negative number)
 */
-$text=stripslashes($text);
+// $text=stripslashes($text);
 $size=max($size,10);
 $size=min($size,24);
 //preg_match_all("|<m>(.*?)</m>|", $text, $regs, PREG_SET_ORDER);

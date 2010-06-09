@@ -166,7 +166,7 @@ hContent;
         $myrow = mysql_fetch_array($result);
         if ($myrow) {
             $AnnouncementToModify = $myrow['id'];
-	    $contentToModify = unescapeSimple($myrow['contenu']);
+	    $contentToModify = $myrow['contenu'];
             $titleToModify = q($myrow['title']);
         }
     }
@@ -322,9 +322,8 @@ hContent;
 	}
 	$tool_content .= "<tbody>";
 	$k = 0;
-	while ($myrow = mysql_fetch_array($result)) {
-            $content = make_clickable($myrow['contenu']);
-            $content = nl2br($content);
+        while ($myrow = mysql_fetch_array($result)) {
+            $content = $purifier->purify($myrow['contenu']);
             // display math symbols (if there are)
             $content = mathfilter($content, 12, "../../courses/mathimg/");
             $myrow['temps'] = nice_format($myrow['temps']);
@@ -336,14 +335,14 @@ hContent;
             $tool_content .= "<td width='1'>
 	    <img style='padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet' /></td>
             <td><b>";
-            if ($myrow["title"]=="") {
-                $tool_content .= "".$langAnnouncementNoTille."";
+            if (empty($myrow['title'])) {
+                $tool_content .= $langAnnouncementNoTille;
             } else {
-                $tool_content .= "".$myrow["title"]."";
+                $tool_content .= q($myrow['title']);
             }
 	    
             $tool_content .= "</b>&nbsp;<small>(" . nice_format($myrow["temps"]). ")</small>
-            <br />".unescapeSimple($content)."</td>";
+            <br />$content</td>";
 	    if ($is_adminOfCourse) {
 		$tool_content .= "<td width='70' class='right'>
 		<a href='$_SERVER[PHP_SELF]?modify=" . $myrow['id'] . "'>

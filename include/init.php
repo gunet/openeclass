@@ -78,14 +78,21 @@ if (isset($_REQUEST['localize'])) {
 $active_ui_languages = array('el', 'en', 'es');
 
 // Get configuration variables
+//path for course_home
+unset($webDir);
+@include($relPath . "config/config.php");
 if (!isset($webDir)) {
-	//path for course_home
-	@include($relPath . "config/config.php");
-	if (!isset($webDir)) {
-		include 'not_installed.php';
-                die("Unable to find configuration file, please contact the system administrator");
-	}
+        include 'not_installed.php';
+        die("Unable to find configuration file, please contact the system administrator");
 }
+
+// HTML Purifier
+require_once $relPathLib . 'htmlpurifier-4.1.1-standalone/HTMLPurifier.standalone.php';
+$purifier = new HTMLPurifier();
+$purifier->config->set('Cache.SerializerPath', $webDir . 'courses/temp');
+
+// PHP Math Publisher
+include $relPathLib . 'phpmathpublisher/mathpublisher.php';
 
 // Set active user interface languages
 $native_language_names = array();

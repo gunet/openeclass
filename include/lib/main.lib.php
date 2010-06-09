@@ -1458,3 +1458,10 @@ function handle_unit_info_edit()
                 return "<p class='success_small'>$langCourseUnitAdded</p>";
         }
 }
+
+// Standard function to prepare some HTML text, possibly with math escapes, for display
+function standard_text_escape($text, $mathimg = '../../courses/mathimg/')
+{
+        global $purifier;
+        return mathfilter($purifier->purify($text), 12, $mathimg);
+}
