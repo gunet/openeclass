@@ -524,12 +524,12 @@ function lessonToolsMenu(){
 	array_push($sideMenuSubGroup, $arrMenuType);
 
 	while ($toolsRow = mysql_fetch_array($result)) {
-		if(!defined($toolsRow["define_var"])) define($toolsRow["define_var"], $toolsRow["id"]);
+		if(!defined($toolsRow['define_var'])) define($toolsRow['define_var'], $toolsRow['id']);
 
 		array_push($sideMenuText, q($toolsRow['rubrique']));
 		array_push($sideMenuLink, q($toolsRow['lien']));
-		array_push($sideMenuImg, $toolsRow['image']."_on.gif");
-		array_push($sideMenuID, $toolsRow["id"]);
+		array_push($sideMenuImg, $toolsRow['image'].'_on.gif');
+		array_push($sideMenuID, $toolsRow['id']);
 	}
 
 	array_push($sideMenuSubGroup, $sideMenuText);
@@ -565,14 +565,14 @@ function lessonToolsMenu(){
 		array_push($sideMenuSubGroup, $arrMenuType);
 
 		while ($toolsRow = mysql_fetch_array($result)) {
-			if(!defined($toolsRow["define_var"])) {
-				define($toolsRow["define_var"], $toolsRow["id"]);
+			if(!defined($toolsRow['define_var'])) {
+				define($toolsRow['define_var'], $toolsRow['id']);
 			}
 
-			array_push($sideMenuText, $toolsRow["rubrique"]);
-			array_push($sideMenuLink, $toolsRow["lien"]);
-			array_push($sideMenuImg, $toolsRow["image"]."_off.gif");
-			array_push($sideMenuID, $toolsRow["id"]);
+			array_push($sideMenuText, q($toolsRow['rubrique']));
+			array_push($sideMenuLink, q($toolsRow['lien']));
+			array_push($sideMenuImg, $toolsRow['image'].'_off.gif');
+			array_push($sideMenuID, $toolsRow['id']);
 		}
 
 		array_push($sideMenuSubGroup, $sideMenuText);
@@ -596,12 +596,12 @@ function lessonToolsMenu(){
 		array_push($sideMenuSubGroup, $arrMenuType);
 		while ($toolsRow = mysql_fetch_array($result)) {
 
-			if(!defined($toolsRow["define_var"])) define($toolsRow["define_var"], $toolsRow["id"]);
+			if(!defined($toolsRow['define_var'])) define($toolsRow['define_var'], $toolsRow['id']);
 
-			array_push($sideMenuText, $toolsRow["rubrique"]);
-			array_push($sideMenuLink, $toolsRow["lien"]);
-			array_push($sideMenuImg, $toolsRow["image"]."_on.gif");
-			array_push($sideMenuID, $toolsRow["id"]);
+			array_push($sideMenuText, q($toolsRow['rubrique']));
+			array_push($sideMenuLink, q($toolsRow['lien']));
+			array_push($sideMenuImg, $toolsRow['image'].'_on.gif');
+			array_push($sideMenuID, $toolsRow['id']);
 		}
 
 		array_push($sideMenuSubGroup, $sideMenuText);
