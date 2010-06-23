@@ -63,9 +63,6 @@ $tool_content = "";
 include_once("./config.php");
 include("functions.php"); // application logic for phpBB
 
-// support for math symbols
-include('../../include/phpmathpublisher/mathpublisher.php');
-
 $local_head = '
 <script type="text/javascript">
 function confirmation()

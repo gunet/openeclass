@@ -42,8 +42,6 @@ $guest_allowed = true;
 
 include '../../include/baseTheme.php';
 include '../../include/lib/textLib.inc.php';
-// support for math symbols
-include '../../include/phpmathpublisher/mathpublisher.php';
 include '../units/functions.php';
 
 /**** The following is added for statistics purposes ***/

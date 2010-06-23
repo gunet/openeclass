@@ -43,8 +43,6 @@ include '../../include/baseTheme.php';
 include '../../include/lib/textLib.inc.php';
 include '../../include/action.php';
 include '../../include/jscalendar/calendar.php';
-// support for math symbols
-include '../../include/phpmathpublisher/mathpublisher.php';
 
 $action = new action();
 $action->record('MODULE_ID_AGENDA');

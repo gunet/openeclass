@@ -23,8 +23,6 @@
 *  			Panepistimiopolis Ilissia, 15784, Athens, Greece
 *  			eMail: info@openeclass.org
 * =========================================================================*/
-// support for math symbols
-include('../../include/phpmathpublisher/mathpublisher.php');
 
 // the exercise form has been submitted
 if(isset($submitExercise)) {

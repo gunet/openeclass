@@ -40,8 +40,6 @@ $helpTopic = 'Exercise';
 $guest_allowed = true;
 
 include '../../include/baseTheme.php';
-// support for math symbols
-include('../../include/phpmathpublisher/mathpublisher.php');
 /**** The following is added for statistics purposes ***/
 include('../../include/action.php');
 $action = new action();

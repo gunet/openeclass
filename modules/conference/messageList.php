@@ -41,9 +41,6 @@ body { font-family: Verdana, Arial, Helvetica, sans-serif; }
 <?
 include '../../include/lib/textLib.inc.php';
 
-// support for math symbols
-include('../../include/phpmathpublisher/mathpublisher.php');
-
 $coursePath=$webDir."courses";
 $fileChatName   = $coursePath.'/'.$currentCourseID.'.chat.txt';
 $tmpArchiveFile = $coursePath.'/'.$currentCourseID.'.tmpChatArchive.txt';

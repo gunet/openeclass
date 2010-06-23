@@ -1344,7 +1344,7 @@ function rich_text_editor($name, $rows, $cols, $text, $extra = '')
 		$id1 = "_$id";
 	}
 	$id++;
-	return "<textarea id='xinha$id1' name='$name' rows='$rows' cols='$cols' $extra>" .
+	return "<textarea name='$name' rows='$rows' cols='$cols' $extra>" .
 	       str_replace('{','&#123;',htmlspecialchars($text)) .
 	       "</textarea>\n";
 }

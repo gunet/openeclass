@@ -24,8 +24,6 @@
 *  			eMail: info@openeclass.org
 * =========================================================================*/
 
-// support for math symbols
-include('../../include/phpmathpublisher/mathpublisher.php');
 
 // if the question we are modifying is used in several exercises
 if(isset($usedInSeveralExercises)) {

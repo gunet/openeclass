@@ -38,7 +38,6 @@ $ignore_module_ini = true;
 
 include '../../include/baseTheme.php';
 include '../../include/lib/textLib.inc.php';
-include('../../include/phpmathpublisher/mathpublisher.php') ;
 $nameTools = $langMyAnnouncements;
 $tool_content = "";
 $result = db_query("SELECT annonces.id, annonces.title, annonces.contenu,

@@ -44,8 +44,7 @@ $navigation[]= array ("url"=>"exercice.php", "name"=> $langExercices);
 // latex support
 include_once "$webDir"."/modules/latexrender/latex.php";
 include('../../include/lib/textLib.inc.php');
-// support for math symbols
-include('../../include/phpmathpublisher/mathpublisher.php');
+
 $TBL_EXERCICE_QUESTION='exercice_question';
 $TBL_EXERCICES='exercices';
 $TBL_QUESTIONS='questions';

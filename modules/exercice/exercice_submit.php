@@ -41,8 +41,6 @@ $guest_allowed = true;
 
 include '../../include/baseTheme.php';
 include '../../include/lib/textLib.inc.php';
-// support for math symbols
-include('../../include/phpmathpublisher/mathpublisher.php');
 $tool_content = "";
 
 $nameTools = $langExercicesView;

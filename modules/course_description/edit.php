@@ -43,7 +43,6 @@ $require_prof = true;
 
 include '../../include/baseTheme.php';
 include '../../include/lib/textLib.inc.php';
-include '../../include/phpmathpublisher/mathpublisher.php';
 
 $tool_content = $head_content = '';
 $nameTools = $langEditCourseProgram ;

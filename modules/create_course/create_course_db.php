@@ -801,7 +801,7 @@ mysql_query("CREATE TABLE poll (
 	pid int(11) NOT NULL default '0',
 	qid int(11) NOT NULL default '0',
       	aid int(11) NOT NULL default '0',
-	answer_text varchar(255) NOT NULL default '',
+	answer_text text NOT NULL default '',
 	user_id int(11) NOT NULL default '0',
       submit_date date NOT NULL default '0000-00-00',
       PRIMARY KEY  (arid))

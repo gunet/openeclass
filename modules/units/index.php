@@ -34,7 +34,6 @@ $helpTopic = 'AddCourseUnitscontent';
 include '../../include/baseTheme.php';
 include '../../include/lib/fileDisplayLib.inc.php';
 include '../../include/action.php';
-include '../../include/phpmathpublisher/mathpublisher.php';
 include 'functions.php';
 
 $action = new action();
