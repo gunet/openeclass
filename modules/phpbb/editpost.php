@@ -63,12 +63,51 @@ include '../../include/baseTheme.php';
 $tool_content = "";
 $lang_editor = langname_to_code($language);
 $head_content = <<<hContent
+<script type="text/javascript" src="$urlAppend/include/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
 <script type="text/javascript">
-        _editor_url  = "$urlAppend/include/xinha/";
-        _editor_lang = "$lang_editor";
+tinyMCE.init({
+	// General options
+		language : "$lang_editor",
+		mode : "textareas",
+		theme : "advanced",
+		plugins : "pagebreak,style,save,advimage,advlink,inlinepopups,media,print,contextmenu,paste,noneditable,visualchars,nonbreaking,xhtmlxtras,template,wordcount,advlist,emotions,preview",
+
+		// Theme options
+		theme_advanced_buttons1 : "bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,styleselect,formatselect,fontsizeselect,forecolor,backcolor,removeformat,hr",
+		theme_advanced_buttons2 : "pasteword,|,bullist,numlist,|indent,blockquote,|,sub,sup,|,undo,redo,|,link,unlink,|,charmap,media,emotions,image,|,preview,cleanup,code",
+		theme_advanced_buttons3 : "",
+		theme_advanced_toolbar_location : "top",
+		theme_advanced_toolbar_align : "left",
+		theme_advanced_statusbar_location : "bottom",
+		theme_advanced_resizing : true,
+
+		// Example content CSS (should be your site CSS)
+		content_css : "$urlAppend/template/classic/img/tool.css",
+
+		// Drop lists for link/image/media/template dialogs
+		template_external_list_url : "lists/template_list.js",
+		external_link_list_url : "lists/link_list.js",
+		external_image_list_url : "lists/image_list.js",
+		media_external_list_url : "lists/media_list.js",
+
+		// Style formats
+		style_formats : [
+			{title : 'Bold text', inline : 'b'},
+			{title : 'Red text', inline : 'span', styles : {color : '#ff0000'}},
+			{title : 'Red header', block : 'h1', styles : {color : '#ff0000'}},
+			{title : 'Example 1', inline : 'span', classes : 'example1'},
+			{title : 'Example 2', inline : 'span', classes : 'example2'},
+			{title : 'Table styles'},
+			{title : 'Table row 1', selector : 'tr', classes : 'tablerow1'}
+		],
+
+		// Replace values for the template plugin
+		template_replace_values : {
+			username : "Open eClass",
+			staffid : "991234"
+		}
+});
 </script>
-<script type="text/javascript" src="$urlAppend/include/xinha/XinhaCore.js"></script>
-<script type="text/javascript" src="$urlAppend/include/xinha/my_config.js"></script>
 hContent;
 
 include_once("./config.php");
@@ -82,12 +121,12 @@ if ($is_adminOfCourse) { // course admin
 		$sql = "SELECT * FROM posts WHERE post_id = '$post_id'";
 		if (!$result = db_query($sql, $currentCourseID)) {
 			$tool_content .= $langErrorDataOne;
-			draw($tool_content, 2, 'phpbb', $head_content);
+			draw($tool_content, 2, '', $head_content);
 			exit();
 		}
 		if (mysql_num_rows($result) <= 0) {
 			$tool_content .= $langErrorDataTwo;
-			draw($tool_content, 2, 'phpbb', $head_content);
+			draw($tool_content, 2, '', $head_content);
 			exit();
 		}
 		$myrow = mysql_fetch_array($result);
@@ -126,7 +165,7 @@ if ($is_adminOfCourse) { // course admin
 			$sql = "UPDATE posts_text SET post_text = " . autoquote($message) . " WHERE (post_id = '$post_id')";
 			if (!$result = db_query($sql, $currentCourseID)) {
 				$tool_content .= $langUnableUpadatePost;
-				draw($tool_content, 2, 'phpbb', $head_content);
+				draw($tool_content, 2, '', $head_content);
 				exit();
 			}
 			if (isset($subject)) {
@@ -166,14 +205,14 @@ if ($is_adminOfCourse) { // course admin
 				WHERE post_id = '$post_id'";
 			if (!$r = db_query($sql, $currentCourseID)){
 				$tool_content .= $langUnableDeletePost;
-				draw($tool_content, 2, 'phpbb', $head_content);
+				draw($tool_content, 2, '', $head_content);
 				exit();
 			}
 			$sql = "DELETE FROM posts_text
 				WHERE post_id = '$post_id'";
 			if (!$r = db_query($sql, $currentCourseID)) {
 				$tool_content .= $langUnableDeletePost;
-				draw($tool_content, 2, 'phpbb', $head_content);
+				draw($tool_content, 2, '', $head_content);
 				exit();
 			} else if ($last_post_in_thread == $this_post_time) {
 				$topic_time_fixed = get_last_post($topic_id, $currentCourseID, "time_fix");
@@ -182,7 +221,7 @@ if ($is_adminOfCourse) { // course admin
 					WHERE topic_id = '$topic_id'";
 				if (!$r = db_query($sql, $currentCourseID)) {
 					$tool_content .= $langPostRemoved;
-					draw($tool_content, 2, 'phpbb', $head_content);
+					draw($tool_content, 2, '', $head_content);
 					exit();
 				}
 			}
@@ -191,7 +230,7 @@ if ($is_adminOfCourse) { // course admin
 					WHERE topic_id = '$topic_id'";
 				if (!$r = db_query($sql, $currentCourseID)) {
 					$tool_content .= $langUnableDeleteTopic;
-					draw($tool_content, 2, 'phpbb', $head_content);
+					draw($tool_content, 2, '', $head_content);
 					exit();
 				}
 				$topic_removed = TRUE;
@@ -220,13 +259,13 @@ if ($is_adminOfCourse) { // course admin
 		
 		if (!$result = db_query($sql, $currentCourseID)) {
 			$tool_content .= $langTopicInformation;
-			draw($tool_content, 2, 'phpbb', $head_content);
+			draw($tool_content, 2, '', $head_content);
 			exit();
 		}
 		
 		if (!$myrow = mysql_fetch_array($result)) {
 			$tool_content .= $langErrorTopicSelect;
-			draw($tool_content, 2, 'phpbb', $head_content);
+			draw($tool_content, 2, '', $head_content);
 			exit();
 		}
 		
@@ -257,7 +296,7 @@ if ($is_adminOfCourse) { // course admin
 			</td>
 			</tr>
 			</table></form>";
-			draw($tool_content, 2, 'phpbb', $head_content);
+			draw($tool_content, 2, '', $head_content);
 			exit();
 		} else {
 			if ($myrow["forum_type"] == 1) {
@@ -265,7 +304,7 @@ if ($is_adminOfCourse) { // course admin
 				// this private forum.
 				if (!check_priv_forum_auth($uid, $forum, true, $currentCourseID)) {
 					$tool_content .= "$langPrivateForum $langNoPost";
-					draw($tool_content, 2, 'phpbb', $head_content);
+					draw($tool_content, 2, '', $head_content);
 					exit();
 				}
 				// Ok, looks like we're good.
@@ -279,7 +318,7 @@ if ($is_adminOfCourse) { // course admin
 
 		if (!$result = db_query($sql, $currentCourseID)) {
 			$tool_content .= "<p>Couldn't get user and topic information from the database.</p>";
-			draw($tool_content, 2, 'phpbb', $head_content);
+			draw($tool_content, 2, '', $head_content);
 			exit();
 		}
 		$myrow = mysql_fetch_array($result);
@@ -288,7 +327,7 @@ if ($is_adminOfCourse) { // course admin
 				if($user_level == 2 && !is_moderator($forum, $uid, $currentCourseID)) {
 					if($user_level < 2 && ($uid != $myrow["p.poster_id"])) {
 						$tool_content .= $langNotEdit;
-						draw($tool_content, 2, 'phpbb', $head_content);
+						draw($tool_content, 2, '', $head_content);
 						exit();
 					}
 				}
@@ -345,4 +384,4 @@ if ($is_adminOfCourse) { // course admin
 } else {
 	$tool_content .= $langForbidden;
 }
-draw($tool_content, 2, 'phpbb', $head_content);
+draw($tool_content, 2, '', $head_content);

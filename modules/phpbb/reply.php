@@ -59,17 +59,55 @@ $helpTopic = 'For';
 include '../../include/baseTheme.php';
 include '../../include/sendMail.inc.php';
 
-$tool_content = "";
+$tool_content = $head_content = "";
 $lang_editor = langname_to_code($language);
 $head_content = <<<hContent
+<script type="text/javascript" src="$urlAppend/include/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
 <script type="text/javascript">
-        _editor_url  = "$urlAppend/include/xinha/";
-        _editor_lang = "$lang_editor";
-</script>
-<script type="text/javascript" src="$urlAppend/include/xinha/XinhaCore.js"></script>
-<script type="text/javascript" src="$urlAppend/include/xinha/my_config.js"></script>
-hContent;
+tinyMCE.init({
+	// General options
+		language : "$lang_editor",
+		mode : "textareas",
+		theme : "advanced",
+		plugins : "pagebreak,style,save,advimage,advlink,inlinepopups,media,print,contextmenu,paste,noneditable,visualchars,nonbreaking,xhtmlxtras,template,wordcount,advlist,emotions,preview",
 
+		// Theme options
+		theme_advanced_buttons1 : "bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,styleselect,formatselect,fontsizeselect,forecolor,backcolor,removeformat,hr",
+		theme_advanced_buttons2 : "pasteword,|,bullist,numlist,|indent,blockquote,|,sub,sup,|,undo,redo,|,link,unlink,|,charmap,media,emotions,image,|,preview,cleanup,code",
+		theme_advanced_buttons3 : "",
+		theme_advanced_toolbar_location : "top",
+		theme_advanced_toolbar_align : "left",
+		theme_advanced_statusbar_location : "bottom",
+		theme_advanced_resizing : true,
+
+		// Example content CSS (should be your site CSS)
+		content_css : "$urlAppend/template/classic/img/tool.css",
+
+		// Drop lists for link/image/media/template dialogs
+		template_external_list_url : "lists/template_list.js",
+		external_link_list_url : "lists/link_list.js",
+		external_image_list_url : "lists/image_list.js",
+		media_external_list_url : "lists/media_list.js",
+
+		// Style formats
+		style_formats : [
+			{title : 'Bold text', inline : 'b'},
+			{title : 'Red text', inline : 'span', styles : {color : '#ff0000'}},
+			{title : 'Red header', block : 'h1', styles : {color : '#ff0000'}},
+			{title : 'Example 1', inline : 'span', classes : 'example1'},
+			{title : 'Example 2', inline : 'span', classes : 'example2'},
+			{title : 'Table styles'},
+			{title : 'Table row 1', selector : 'tr', classes : 'tablerow1'}
+		],
+
+		// Replace values for the template plugin
+		template_replace_values : {
+			username : "Open eClass",
+			staffid : "991234"
+		}
+});
+</script>
+hContent;
 
 include_once("./config.php");
 include("functions.php");
@@ -105,31 +143,31 @@ $navigation[]= array ("url"=>"viewtopic.php?&topic=$topic&forum=$forum", "name"=
 
 if (!does_exists($forum, $currentCourseID, "forum") || !does_exists($topic, $currentCourseID, "topic")) {
 	$tool_content .= $langErrorTopicSelect;
-	draw($tool_content, 2, 'phpbb', $head_content);
+	draw($tool_content, 2, '', $head_content);
 	exit();
 }
 
 if (isset($submit) && $submit) {
 	if (trim($message) == '') {
 		$tool_content .= $langEmptyMsg;
-		draw($tool_content, 2, 'phpbb', $head_content);
+		draw($tool_content, 2, '', $head_content);
 		exit();
 	}
 	if (isset($user_level) && $user_level == -1) {
 		$tool_content .= $luserremoved;
-		draw($tool_content, 2, 'phpbb', $head_content);
+		draw($tool_content, 2, '', $head_content);
 		exit();
 	}
 	if ($forum_access == 3 && $user_level < 2) {
 		$tool_content .= $langNoPost;
-		draw($tool_content, 2, 'phpbb', $head_content);
+		draw($tool_content, 2, '', $head_content);
 		exit();
 	}
 	// XXX: Do we need this code ?
 	if ( $uid == -1 ) {
 		if ($forum_access == 3 && $user_level < 2) {
 			$tool_content .= $langNoPost;
-			draw($tool_content, 2, 'phpbb', $head_content);
+			draw($tool_content, 2, '', $head_content);
 			exit();
 		}
 	}
@@ -138,7 +176,7 @@ if (isset($submit) && $submit) {
 	if ($forum_type == 1) {
 		if (!check_priv_forum_auth($uid, $forum, TRUE, $currentCourseID)) {
 			$tool_content .= "$langPrivateForum $langNoPost";
-			draw($tool_content, 2, 'phpbb', $head_content);
+			draw($tool_content, 2, '', $head_content);
 			exit();
 		}
 	}
@@ -183,7 +221,7 @@ if (isset($submit) && $submit) {
 	$result = db_query($sql, $currentCourseID);
 	if (!$result) {
 		$tool_content .= $langErrorUpadatePostCount;
-		draw($tool_content, 2, 'phpbb', $head_content);
+		draw($tool_content, 2, '', $head_content);
 		exit();
 	}
 	
@@ -234,13 +272,13 @@ if (isset($submit) && $submit) {
 		<input type='SUBMIT' name='logging_in' value='$langEnter'>
 		</td></tr></table>
 		</td></tr></table></form>";
-		draw($tool_content, 2, 'phpbb', $head_content);
+		draw($tool_content, 2, '', $head_content);
 		exit();
 	} else {
 		if (!$uid AND !$fakeUid) {
 			$tool_content .= "<center><br><br>$langLoginBeforePost1<br>";
 			$tool_content .= "$langLoginBeforePost2<a href=../../index.php>$langLoginBeforePost3</a></center>";
-			draw($tool_content, 2, 'phpbb', $head_content);
+			draw($tool_content, 2, '', $head_content);
 			exit();
 		}
 		if ($forum_type == 1) {
@@ -248,7 +286,7 @@ if (isset($submit) && $submit) {
 			// this private forum.
 			if (!check_priv_forum_auth($uid, $forum, TRUE, $currentCourseID)) {
 				$tool_content .= "$langPrivateForum $langNoPost";
-				draw($tool_content, 2, 'phpbb', $head_content);
+				draw($tool_content, 2, '', $head_content);
 				exit();
 			}
 			// Ok, looks like we're good.
@@ -260,14 +298,11 @@ if (isset($submit) && $submit) {
 	<li><a href=\"viewtopic.php?topic=$topic&forum=$forum\" target=\"_blank\">$langTopicReview</a></li>
 	</ul></div><br />";
 	$tool_content .= "<form action='$_SERVER[PHP_SELF]' method='post'>
-	<table class=\"FormData\" width=\"99%\">
-	<tbody>
+	<table class='framed'>
+	<thead>
+	<tr><td><b>$langTopicAnswer</b>: $topic_title</td></tr>
 	<tr>
-	<th width=\"220\">&nbsp;</th>
-	<td><b>$langTopicAnswer</b>: $topic_title</td>
-	</tr>
-	<tr>
-        <th class=\"left\">$langBodyMessage:";
+        <td>$langBodyMessage:";
 	if (isset($quote) && $quote) {
 		$sql = "SELECT pt.post_text, p.post_time, u.username 
 			FROM posts p, posts_text pt 
@@ -284,7 +319,7 @@ if (isset($submit) && $submit) {
 			eval("\$reply = \"$syslang_quotemsg\";");
 		} else {
 			$tool_content .= $langErrorConnectForumDatabase;
-			draw($tool_content, 2, 'phpbb', $head_content);
+			draw($tool_content, 2, '', $head_content);
 			exit();
 		}
 	}
@@ -294,16 +329,9 @@ if (isset($submit) && $submit) {
 	if (!isset($quote)) {
 		$quote = "";
 	}
-	$tool_content .= "</th><td valign='top'>
-	<table class='xinha_editor'>
+	$tool_content .= "</td></tr>
+	<tr><td>".rich_text_editor('message', 15, 70, $reply, "class='FormData_InputText'")."</td></tr>
 	<tr>
-	<td>".
-	rich_text_editor('message', 15, 70, $reply, "class='FormData_InputText'")
-	."</td>
-	</tr></table></td>
-	</tr>
-	<tr>
-	<th>&nbsp;</th>
 	<td>
 	<input type='hidden' name='forum' value='$forum'>
 	<input type='hidden' name='topic' value='$topic'>
@@ -312,9 +340,9 @@ if (isset($submit) && $submit) {
 	<input type='submit' name='cancel' value='$langCancelPost'>
 	</td>
 	</tr>
-	</tbody></table>
+	</thead></table>
 	</form><br/>";
 }
 
-draw($tool_content, 2, 'phpbb', $head_content);
+draw($tool_content, 2, '', $head_content);
 

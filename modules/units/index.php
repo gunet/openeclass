@@ -35,7 +35,7 @@ include '../../include/baseTheme.php';
 include '../../include/lib/fileDisplayLib.inc.php';
 include '../../include/action.php';
 include 'functions.php';
-
+$tool_content = $head_content = '';
 $action = new action();
 $action->record('MODULE_ID_UNITS');
 mysql_select_db($mysqlMainDb);
@@ -43,16 +43,63 @@ mysql_select_db($mysqlMainDb);
 if (isset($_REQUEST['id'])) {
 	$id = intval($_REQUEST['id']);
 }
-$tool_content = $head_content = '';
+$lang_editor = langname_to_code($language);
 
-$head_content .= '<script type="text/javascript">
+$head_content = <<<hContent
+<script type="text/javascript" src="$urlAppend/include/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
+<script type="text/javascript">
+tinyMCE.init({
+	// General options
+		language : "$lang_editor",
+		mode : "textareas",
+		theme : "advanced",
+		plugins : "pagebreak,style,save,advimage,advlink,inlinepopups,media,print,contextmenu,paste,noneditable,visualchars,nonbreaking,xhtmlxtras,template,wordcount,advlist,emotions,preview",
+
+		// Theme options
+		theme_advanced_buttons1 : "bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,styleselect,formatselect,fontsizeselect,forecolor,backcolor,removeformat,hr",
+		theme_advanced_buttons2 : "pasteword,|,bullist,numlist,|indent,blockquote,|,sub,sup,|,undo,redo,|,link,unlink,|,charmap,media,emotions,image,|,preview,cleanup,code",
+		theme_advanced_buttons3 : "",
+		theme_advanced_toolbar_location : "top",
+		theme_advanced_toolbar_align : "left",
+		theme_advanced_statusbar_location : "bottom",
+		theme_advanced_resizing : true,
+
+		// Example content CSS (should be your site CSS)
+		content_css : "$urlAppend/template/classic/img/tool.css",
+
+		// Drop lists for link/image/media/template dialogs
+		template_external_list_url : "lists/template_list.js",
+		external_link_list_url : "lists/link_list.js",
+		external_image_list_url : "lists/image_list.js",
+		media_external_list_url : "lists/media_list.js",
+
+		// Style formats
+		style_formats : [
+			{title : 'Bold text', inline : 'b'},
+			{title : 'Red text', inline : 'span', styles : {color : '#ff0000'}},
+			{title : 'Red header', block : 'h1', styles : {color : '#ff0000'}},
+			{title : 'Example 1', inline : 'span', classes : 'example1'},
+			{title : 'Example 2', inline : 'span', classes : 'example2'},
+			{title : 'Table styles'},
+			{title : 'Table row 1', selector : 'tr', classes : 'tablerow1'}
+		],
+
+		// Replace values for the template plugin
+		template_replace_values : {
+			username : "Open eClass",
+			staffid : "991234"
+		}
+});
+</script>
+<script type="text/javascript">
 function confirmation () {
         if (confirm("'.$langConfirmDelete.'"))
                 {return true;}
         else
                 {return false;}
 }
-</script>';
+</script>
+hContent;
 
 if (isset($_REQUEST['edit_submit'])) {
         units_set_maxorder();
@@ -70,7 +117,7 @@ $q = db_query("SELECT * FROM course_units
                WHERE id = $id AND course_id=$cours_id " . $visibility_check);
 if (!$q or mysql_num_rows($q) == 0) {
         $nameTools = $langUnitUnknown;
-        draw('', 2, 'units', $head_content);
+        draw('', 2, '', $head_content);
         exit;
 }
 $info = mysql_fetch_array($q);
@@ -154,5 +201,5 @@ while ($info = mysql_fetch_array($q)) {
 }
 $tool_content .= '</select></td></tr></tbody></table></form>';
 
-draw($tool_content, 2, 'units', $head_content);
+draw($tool_content, 2, '', $head_content);
 

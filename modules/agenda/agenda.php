@@ -60,13 +60,53 @@ if ($is_adminOfCourse and (isset($_GET['addEvent']) or isset($_GET['id']))) {
 	$lang_jscalendar = langname_to_code($language);
 
 	//--if add event
-	$head_content = <<<hContent
+$head_content = <<<hContent
+<script type="text/javascript" src="$urlAppend/include/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
 <script type="text/javascript">
-        _editor_url  = "$urlAppend/include/xinha/";
-        _editor_lang = "$lang_editor";
+tinyMCE.init({
+	// General options
+		language : "$lang_editor",
+		mode : "textareas",
+		theme : "advanced",
+		plugins : "pagebreak,style,save,advimage,advlink,inlinepopups,media,print,contextmenu,paste,noneditable,visualchars,nonbreaking,xhtmlxtras,template,wordcount,advlist,emotions,preview",
+
+		// Theme options
+		theme_advanced_buttons1 : "bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,styleselect,formatselect,fontsizeselect,forecolor,backcolor,removeformat,hr",
+		theme_advanced_buttons2 : "pasteword,|,bullist,numlist,|indent,blockquote,|,sub,sup,|,undo,redo,|,link,unlink,|,charmap,media,emotions,image,|,preview,cleanup,code",
+		theme_advanced_buttons3 : "",
+		theme_advanced_toolbar_location : "top",
+		theme_advanced_toolbar_align : "left",
+		theme_advanced_statusbar_location : "bottom",
+		theme_advanced_resizing : true,
+
+		// Example content CSS (should be your site CSS)
+		content_css : "$urlAppend/template/classic/img/tool.css",
+
+		// Drop lists for link/image/media/template dialogs
+		template_external_list_url : "lists/template_list.js",
+		external_link_list_url : "lists/link_list.js",
+		external_image_list_url : "lists/image_list.js",
+		media_external_list_url : "lists/media_list.js",
+
+		// Style formats
+		style_formats : [
+			{title : 'Bold text', inline : 'b'},
+			{title : 'Red text', inline : 'span', styles : {color : '#ff0000'}},
+			{title : 'Red header', block : 'h1', styles : {color : '#ff0000'}},
+			{title : 'Example 1', inline : 'span', classes : 'example1'},
+			{title : 'Example 2', inline : 'span', classes : 'example2'},
+			{title : 'Table styles'},
+			{title : 'Table row 1', selector : 'tr', classes : 'tablerow1'}
+		],
+
+		// Replace values for the template plugin
+		template_replace_values : {
+			username : "Open eClass",
+			staffid : "991234"
+		}
+});
 </script>
-<script type="text/javascript" src="$urlAppend/include/xinha/XinhaCore.js"></script>
-<script type="text/javascript" src="$urlAppend/include/xinha/my_config.js"></script>
+
 <script type="text/javascript">
 function checkrequired(which, entry) {
 	var pass=true;
@@ -221,9 +261,9 @@ if ($is_adminOfCourse) {
 if ($is_adminOfCourse) {
 	$head_content .= '
 <script type="text/javascript">
-function confirmation (name)
+function confirmation ()
 {
-    if (confirm("'.$langSureToDel.' "+ name + " ?"))
+    if (confirm("'.$langConfirmDelete.'"))
         {return true;}
     else
         {return false;}
@@ -412,7 +452,7 @@ if (mysql_num_rows($result) > 0) {
 		$tool_content .=  "\n<td class='right' width='80'>
 		<a href='$_SERVER[PHP_SELF]?id=".$myrow['id']."&amp;edit=true'>
             	<img src='../../template/classic/img/edit.gif' border='0' title='".$langModify."'></a>&nbsp;
-        	<a href='$_SERVER[PHP_SELF]?id=".$myrow[0]."&amp;delete=yes' onClick='return confirmation('".addslashes($myrow["titre"])."');'>
+        	<a href='$_SERVER[PHP_SELF]?id=".$myrow[0]."&amp;delete=yes' onClick='return confirmation();'>
             	<img src='../../template/classic/img/delete.gif' border='0' title='".$langDelete."'></a>&nbsp;";
 		if ($myrow["visibility"] == 'v') {
 			$tool_content .= "<a href='$_SERVER[PHP_SELF]?id=".$myrow[0]."&amp;mkInvisibl=true'>
@@ -428,14 +468,14 @@ if (mysql_num_rows($result) > 0) {
 
 	} 	// while
 	$tool_content .= "\n    </tbody>";
-	$tool_content .=  "\n    </table>\n";
+	$tool_content .= "\n    </table>\n";
 
 } else  {
 	$tool_content .= "<p class='alert1'>$langNoEvents</p>";
 }
 add_units_navigation(TRUE);
 if($is_adminOfCourse && isset($head_content)) {
-	draw($tool_content, 2, 'agenda', $head_content, @$body_action);
+	draw($tool_content, 2, '', $head_content, @$body_action);
 } else {
-	draw($tool_content, 2, 'agenda');
+	draw($tool_content, 2);
 }

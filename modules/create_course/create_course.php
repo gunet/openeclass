@@ -61,12 +61,51 @@ function checkrequired(which, entry, entry2) {
 }
 
 </script>
+<script type="text/javascript" src="$urlAppend/include/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
 <script type="text/javascript">
-        _editor_url  = "$urlAppend/include/xinha/";
-        _editor_lang = "$lang_editor";
+tinyMCE.init({
+	// General options
+		language : "$lang_editor",
+		mode : "textareas",
+		theme : "advanced",
+		plugins : "pagebreak,style,save,advimage,advlink,inlinepopups,media,print,contextmenu,paste,noneditable,visualchars,nonbreaking,xhtmlxtras,template,wordcount,advlist,emotions,preview",
+
+		// Theme options
+		theme_advanced_buttons1 : "bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,styleselect,formatselect,fontsizeselect,forecolor,backcolor,removeformat,hr",
+		theme_advanced_buttons2 : "pasteword,|,bullist,numlist,|indent,blockquote,|,sub,sup,|,undo,redo,|,link,unlink,|,charmap,media,emotions,image,|,preview,cleanup,code",
+		theme_advanced_buttons3 : "",
+		theme_advanced_toolbar_location : "top",
+		theme_advanced_toolbar_align : "left",
+		theme_advanced_statusbar_location : "bottom",
+		theme_advanced_resizing : true,
+
+		// Example content CSS (should be your site CSS)
+		content_css : "$urlAppend/template/classic/img/tool.css",
+
+		// Drop lists for link/image/media/template dialogs
+		template_external_list_url : "lists/template_list.js",
+		external_link_list_url : "lists/link_list.js",
+		external_image_list_url : "lists/image_list.js",
+		media_external_list_url : "lists/media_list.js",
+
+		// Style formats
+		style_formats : [
+			{title : 'Bold text', inline : 'b'},
+			{title : 'Red text', inline : 'span', styles : {color : '#ff0000'}},
+			{title : 'Red header', block : 'h1', styles : {color : '#ff0000'}},
+			{title : 'Example 1', inline : 'span', classes : 'example1'},
+			{title : 'Example 2', inline : 'span', classes : 'example2'},
+			{title : 'Table styles'},
+			{title : 'Table row 1', selector : 'tr', classes : 'tablerow1'}
+		],
+
+		// Replace values for the template plugin
+		template_replace_values : {
+			username : "Open eClass",
+			staffid : "991234"
+		}
+});
 </script>
-<script type="text/javascript" src="$urlAppend/include/xinha/XinhaCore.js"></script>
-<script type="text/javascript" src="$urlAppend/include/xinha/my_config.js"></script>
 hContent;
 
 $titulaire_probable="$prenom $nom";
@@ -362,7 +401,7 @@ if (isset($_POST['create_course'])) {
                                 mkdir("../../courses/$repertoire/scormPackages", 0777) and
                                 mkdir("../../video/$repertoire", 0777))) {
                 $tool_content .= "<div class='caution'>$langErrorDir</div>";
-                draw($tool_content, '1', 'create_course', $head_content);
+                draw($tool_content, '1', '', $head_content);
                 exit;
         }
         // ---------------------------------------------------------
@@ -417,7 +456,7 @@ if (isset($_POST['create_course'])) {
         $string="<?php
                 session_start();
         $titou=\"$repertoire\";
-        session_register(\"dbname\");
+        \$_SESSION['dbname']=\$dbname;
         include(\"../../modules/course_home/course_home.php\");
         ?>";
 
@@ -436,5 +475,5 @@ if (isset($_POST['create_course'])) {
 
 $tool_content .= "</form>";
 
-draw($tool_content, '1', 'create_course', $head_content);
+draw($tool_content, '1', '', $head_content);
 ?>

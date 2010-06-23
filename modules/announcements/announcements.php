@@ -420,8 +420,8 @@ hContent;
     }
 add_units_navigation(TRUE);
 if ($is_adminOfCourse) {
-    draw($tool_content, 2, 'announcements', $head_content, @$body_action);
+    draw($tool_content, 2, '', $head_content, @$body_action);
 } else {
-    draw($tool_content, 2, 'announcements');
+    draw($tool_content, 2);
 }
 ?>
