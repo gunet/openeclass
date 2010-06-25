@@ -40,7 +40,6 @@ if (!defined('INDEX_START')) {
 }
 
 include("./include/lib/textLib.inc.php");
-include("./include/phpmathpublisher/mathpublisher.php");
 
 function cours_table_header($statut)
 {
