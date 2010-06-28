@@ -35,14 +35,17 @@ a {
 /* end hack */ 
 
 #header {
-	height: 80px;
-	width:100%;
-	background-color: #edecdf;
+	background-color:#EDECDF;
+    border-bottom-color:#A33033;
+    border-bottom-style:solid;
+    border-bottom-width:3px;
+    height:80px;
 	margin: 0px 0px 0px 0px;
-	border-bottom: 3px solid #a33033;
-	position:relative;
-	z-index:2;
-	overflow:hidden;	
+    overflow-x:hidden;
+    overflow-y:hidden;
+    position:relative;
+    width:100%;
+    z-index:2;	
 }
 
 * html #mainheader {height:136px;he\ight:135px}
