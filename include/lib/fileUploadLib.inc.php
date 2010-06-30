@@ -121,11 +121,11 @@ function dir_total_space($dirPath)
  *
  */
 
-function add_ext_on_mime($fileName)
+function add_ext_on_mime($fileName, $userFile = 'userFile')
 {
 	/*** check if the file has an extension AND if the browser has send a MIME Type ***/
 
-	if(!preg_match('/\.[[:alnum:]]+$/', $fileName) and @$_FILES['userFile']['type']) {
+	if(!preg_match('/\.[[:alnum:]]+$/', $fileName) and @$_FILES[$userFile]['type']) {
 		/*** Build a "MIME-types/extensions" connection table ***/
 
 		static $mimeType = array();
@@ -218,7 +218,7 @@ function add_ext_on_mime($fileName)
 		/*** Check if the MIME type send by the browser is in the table ***/
 
 		foreach($mimeType as $key=>$type) {
-			if ($type == $_FILES['userFile']['type']) {
+			if ($type == $_FILES[$userFile]['type']) {
 				$fileName .=  $extension[$key];
 				break;
 			}

@@ -49,7 +49,7 @@ $action->record('MODULE_ID_DOCS');
 
 $tool_content = "";
 $nameTools = $langDoc;
-$dbTable = "document";
+$dbTable = 'document';
 
 $require_help = TRUE;
 $helpTopic = 'Doc';
@@ -62,9 +62,9 @@ mysql_select_db($currentCourseID);
 
 $basedir = $webDir . 'courses/' . $currentCourseID . '/document';
 $diskUsed = dir_total_space($basedir);
-if (isset($showQuota) and $showQuota == TRUE) {
+if (isset($_GET['showQuota'])) {
 	$nameTools = $langQuotaBar;
-	$navigation[]= array ("url"=>"document.php", "name"=> $langDoc);
+	$navigation[] = array ("url"=>"document.php", "name"=> $langDoc);
 	$tool_content .= showquota($diskQuotaDocument, $diskUsed);
 	draw($tool_content, 2);
 	exit;
@@ -198,24 +198,23 @@ function make_path($path, $path_components)
 }
 
 /*** clean information submited by the user from antislash ***/
-stripSubmitValue($_POST);
-stripSubmitValue($_GET);
+// stripSubmitValue($_POST);
+// stripSubmitValue($_GET);
 /*****************************************************************************/
 
-if($is_adminOfCourse)
-{       // teacher only
-
+if($is_adminOfCourse) {
 	/*********************************************************************
 	UPLOAD FILE
-	//ousiastika dhmiourgei ena safe_fileName xrhsimopoiwntas ta DATETIME wste na mhn dhmiourgeitai
-	//provlhma sto filesystem apo to onoma tou arxeiou. Parola afta to palio filename pernaei apo
-	//'filtrarisma' wste na apofefxthoun 'epikyndynoi' xarakthres.
-	//gia pardeigma me $fileName = "test.jpg" sto filesystem grafetai arxeio
-	$safe_fileName = "20060301121510sdjklhsd.jpg"
+
+        Ousiastika dhmiourgei ena safe_fileName xrhsimopoiwntas ta DATETIME
+        wste na mhn dhmiourgeitai provlhma sto filesystem apo to onoma tou
+        arxeiou. Parola afta to palio filename pernaei apo 'filtrarisma' wste
+        na apofefxthoun 'epikyndynoi' xarakthres.
 	***********************************************************************/
 
 	$dialogBox = '';
-	if (is_uploaded_file(@$userFile)) {
+	if (isset($_FILES['userFile']) and is_uploaded_file($_FILES['userFile']['tmp_name'])) {
+                $userFile = $_FILES['userFile']['tmp_name'];
 		// check for disk quotas
 		$diskUsed = dir_total_space($basedir);
 		if ($diskUsed + @$_FILES['userFile']['size'] > $diskQuotaDocument) {
@@ -228,7 +227,7 @@ if($is_adminOfCourse)
                                 $dialogBox .= "$langUnwantedFiletype: {$_FILES['userFile']['name']}";
                         }
                         /*** Unzipping stage ***/
-                        elseif (isset($uncompress) and $uncompress == 1
+                        elseif (isset($_POST['uncompress']) and $_POST['uncompress'] == 1
                                 and preg_match('/\.zip$/i', $_FILES['userFile']['name'])) {
                                 $zipFile = new pclZip($userFile);
                                 $realFileSize = 0;
@@ -238,61 +237,68 @@ if($is_adminOfCourse)
                                 } else {
                                         $dialogBox .= "<p class='success_small'>$langDownloadAndZipEnd</p><br />";
                                 }
-                        }
-                        else
-                        {
-                        $fileName = trim ($_FILES['userFile']['name']);
-                        //elegxos ean to "path" tou arxeiou pros upload vrisketai hdh se eggrafh ston pinaka documents
-                        //(aftos einai ousiastika o elegxos if_exists dedomenou tou oti to onoma tou arxeiou sto filesystem einai monadiko)
-                        $result = mysql_query ("SELECT filename FROM document WHERE filename LIKE '%$uploadPath/$fileName%'");
-                        $row = mysql_fetch_array($result);
-                                if (!empty($row['filename']))
-                                {
-                                        //to arxeio yparxei hdh se eggrafh ston pinaka document ths vashs
-                                        $dialogBox .= "<b>$langFileExists !</b>";
-                                } else //to arxeio den vrethike sth vash ara mporoume na proxwrhsoume me to upload
-                                {
-                                        /**** Check for no desired characters ***/
-                                        $fileName = replace_dangerous_char($fileName);
+                        } else {
+                                $error = false;
+                                $fileName = canonicalize_whitespace($_FILES['userFile']['name']);
+                                $uploadPath = $_POST['uploadPath'];
+                                // Check if upload path exists
+                                if (!empty($uploadPath)) {
+                                        $result = mysql_fetch_row(db_query("SELECT count(*) FROM document
+                                                                            WHERE path = " . autoquote($uploadPath)));
+                                        if (!$result[0]) {
+                                                $error = $langImpossible;
+                                        }
+                                }
+                                if (!$error) {
+                                        // Check if file already exists
+                                        $result = db_query("SELECT filename FROM document WHERE path REGEXP '" .
+                                                            escapeSimple($uploadPath) . "/.*$' AND
+                                                            filename = " . autoquote($fileName));
+                                        if (mysql_num_rows($result) > 0) {
+                                                $error = $langFileExists;
+                                        }
+                                }
+                                if (!$error) {
+                                        //to arxeio den vrethike sth vash ara mporoume na proxwrhsoume me to upload
                                         /*** Try to add an extension to files witout extension ***/
                                         $fileName = add_ext_on_mime($fileName);
                                         /*** Handle PHP files ***/
                                         $fileName = php2phps($fileName);
-                                        //ypologismos onomatos arxeiou me date + time.
-                                        //to onoma afto tha xrhsimopoiei sto filesystem & tha apothikevetai ston pinaka documents
+                                        // to onoma afto tha xrhsimopoiei sto filesystem kai sto pedio path
                                         $safe_fileName = safe_filename(get_file_extension($fileName));
                                         //prosthiki eggrafhs kai metadedomenwn gia to eggrafo sth vash
-                                        if ($uploadPath == ".")
+                                        if ($uploadPath == ".") {
                                                 $uploadPath2 = "/".$safe_fileName;
-                                        else
+                                        } else {
                                                 $uploadPath2 = $uploadPath."/".$safe_fileName;
-                                        //san file format vres to extension tou arxeiou
+                                        }
+                                        // san file format vres to extension tou arxeiou
                                         $file_format = get_file_extension($fileName);
-                                        //san date you arxeiou xrhsimopoihse thn shmerinh hm/nia
+                                        // san date you arxeiou xrhsimopoihse thn shmerinh hm/nia
                                         $file_date = date("Y\-m\-d G\:i\:s");
-                                        $query = "INSERT INTO ".$dbTable." SET
-                                        path	=	'".mysql_real_escape_string($uploadPath2)."',
-                                        filename =	'".mysql_real_escape_string($fileName)."',
-                                        visibility =	'v',
-                                        comment	=	'".mysql_real_escape_string($file_comment)."',
-                                        category =	'".mysql_real_escape_string($file_category)."',
-                                        title =	'".mysql_real_escape_string($file_title)."',
-                                        creator	=	'".mysql_real_escape_string($file_creator)."',
-                                        date	= '".mysql_real_escape_string($file_date)."',
-                                        date_modified	=	'".mysql_real_escape_string($file_date)."',
-                                        subject	=	'".mysql_real_escape_string($file_subject)."',
-                                        description =	'".mysql_real_escape_string($file_description)."',
-                                        author	=	'".mysql_real_escape_string($file_author)."',
-                                        format	=	'".mysql_real_escape_string($file_format)."',
-                                        language =	'".mysql_real_escape_string($file_language)."',
-                                        copyrighted	=	'".mysql_real_escape_string($file_copyrighted)."'";
-
-                                        db_query($query, $currentCourseID);
+                                        db_query("INSERT INTO $dbTable SET
+                                                        path = " . quote($uploadPath2) . ",
+                                                        filename = " . autoquote($fileName) . ",
+                                                        visibility = 'v',
+                                                        comment = " . autoquote($_POST['file_comment']) . ",
+                                                        category = " . intval($_POST['file_category']) . ",
+                                                        title =	" . autoquote($_POST['file_title']) . ",
+                                                        creator	= " . autoquote($_POST['file_creator']) . ",
+                                                        date = '$file_date',
+                                                        date_modified =	'$file_date',
+                                                        subject	= " . autoquote($_POST['file_subject']) . ",
+                                                        description = " . autoquote($_POST['file_description']) . ",
+                                                        author = " . autoquote($_POST['file_author']) . ",
+                                                        format = " . autoquote($file_format) . ",
+                                                        language = " . autoquote($_POST['file_language']) . ",
+                                                        copyrighted = " . intval($_POST['file_copyrighted']));
 
                                         /*** Copy the file to the desired destination ***/
-                                        copy ($userFile, $basedir.$uploadPath."/".$safe_fileName);
-                                        @$dialogBox .= "<p class='success_small'>$langDownloadEnd</p><br />";
-                                } // end else tou if(!empty($row['filename']))
+                                        copy ($userFile, $basedir.$uploadPath.'/'.$safe_fileName);
+                                        $dialogBox .= "<p class='success_small'>$langDownloadEnd</p><br />";
+                                } else {
+                                        $dialogBox .= "<p class='caution_small'>$error</p><br />";
+                                }
                         }
                 }
 	} // end if is_uploaded_file
@@ -303,17 +309,15 @@ if($is_adminOfCourse)
 	/*-------------------------------------
 	MOVE FILE OR DIRECTORY : STEP 2
 	--------------------------------------*/
-	if (isset($moveTo))
-	{
+        if (isset($_POST['moveTo'])) {
+                $moveTo = $_POST['moveTo'];
+                $source = $_POST['source'];
 		//elegxos ean source kai destintation einai to idio
-		if($basedir . $source != $basedir . $moveTo || $basedir . $source != $basedir . $moveTo)
-		{
+		if($basedir . $source != $basedir . $moveTo or $basedir . $source != $basedir . $moveTo) {
 			if (move($basedir . $source, $basedir . $moveTo)) {
 				update_db_info('document', 'update', $source, $moveTo.'/'.my_basename($source));
 				$dialogBox = "<p class='success_small'>$langDirMv</p><br />";
-			}
-			else
-			{
+			} else {
 				$dialogBox = "<p class='caution_small'>$langImpossible</p><br />";
 				/*** return to step 1 ***/
 				$move = $source;
@@ -325,8 +329,8 @@ if($is_adminOfCourse)
 	/*-------------------------------------
 	MOVE FILE OR DIRECTORY : STEP 1
 	--------------------------------------*/
-	if (isset($move))
-	{
+        if (isset($_GET['move'])) {
+                $move = $_GET['move'];
 		//h $move periexei to onoma tou arxeiou. anazhthsh onomatos arxeiou sth vash
 		$result = mysql_query("SELECT * FROM $dbTable WHERE path=" . autoquote($move));
 		$res = mysql_fetch_array($result);
@@ -337,9 +341,10 @@ if($is_adminOfCourse)
 	/**************************************
 	DELETE FILE OR DIRECTORY
 	**************************************/
-	if (isset($delete)) {
-                update_db_info("document", "delete", $delete);
+        if (isset($_POST['delete'])) {
+                $delete = str_replace('..', '', $_POST['delete']);
 		if (my_delete($basedir . $delete)) {
+                        update_db_info('document', 'delete', $delete);
 			$dialogBox = "<p class='success_small'>$langDocDeleted</p><br />";
 		}
 	}
@@ -347,39 +352,34 @@ if($is_adminOfCourse)
 	/*****************************************
 	RENAME
 	******************************************/
-	// step 2
-	//nea methodos metonomasias arxeiwn kanontas update sthn eggrafh pou yparxei sth vash
-	if (isset($renameTo2)) {
-		$query =  "UPDATE $dbTable SET filename=" .
-                        quote(canonicalize_whitespace($renameTo2)) .
-                        " WHERE path='$sourceFile'";
-		db_query($query);
+	// Step 2: Rename file by updating record in database
+	if (isset($_POST['renameTo'])) {
+		db_query("UPDATE $dbTable SET filename=" .
+                         autoquote(canonicalize_whitespace($_POST['renameTo'])) .
+                         " WHERE path=" . autoquote($_POST['sourceFile']));
 		$dialogBox = "<p class='caution_small'>$langElRen</p><br />";
 	}
 
-	//	rename
-	if (isset($rename))
-	{
-		//elegxos gia to ean yparxei hdh eggrafh sth vash
-		$result = mysql_query("SELECT * FROM $dbTable WHERE path='$rename'");
+	// Step 1: Show rename dialog box
+        if (isset($_GET['rename'])) {
+		$result = mysql_query("SELECT * FROM $dbTable WHERE path=" . autoquote($_GET['rename']));
 		$res = mysql_fetch_array($result);
-		//yparxei eggrafh sth vash gia to arxeio opote xrhsimopoihse thn nea methodo metonomasias (ginetai sto STEP 2)
-		$fileName = $res["filename"];
-		@$dialogBox .= "<form>\n";
-		$dialogBox .= "<input type='hidden' name='sourceFile' value='$rename' />
+		$fileName = $res['filename'];
+		@$dialogBox .= "<form method='post' action='document.php'>\n";
+		$dialogBox .= "<input type='hidden' name='sourceFile' value='$_GET[rename]' />
         	<table class='FormData' width='99%'><tbody><tr>
           	<th class='left' width='200'>$langRename:</th>
-          	<td class='left'>$langRename ".htmlspecialchars($fileName)." $langIn: <input type='text' name='renameTo2' value='$fileName' class='FormData_InputText' size='50' /></td>
+          	<td class='left'>$langRename ".q($fileName)." $langIn: <input type='text' name='renameTo' value='$fileName' class='FormData_InputText' size='50' /></td>
           	<td class='left' width='1'><input type='submit' value='$langRename' /></td>
         	</tr></tbody></table></form><br />";
 	}
 
 	// create directory
 	// step 2: create the new directory
-	if (isset($newDirPath)) {
-                $newDirName = canonicalize_whitespace($newDirName);
+	if (isset($_POST['newDirPath'])) {
+                $newDirName = canonicalize_whitespace($_POST['newDirName']);
                 if (!empty($newDirName)) {
-                        make_path($newDirPath, array($newDirName));
+                        make_path($_POST['newDirPath'], array($newDirName));
                         // $path_already_exists: global variable set by make_path()
                         if ($path_already_exists) {
                                 $dialogBox = "<p class='caution_small'>$langFileExists</p>";
@@ -390,9 +390,9 @@ if($is_adminOfCourse)
 	}
 
 	// step 1: display a field to enter the new dir name
-	if (isset($createDir))
-	{
-		$dialogBox .= "<form>\n";
+        if (isset($_GET['createDir'])) {
+                $createDir = q($_GET['createDir']);
+		$dialogBox .= "<form action='document.php' method='post'>\n";
 		$dialogBox .= "<input type='hidden' name='newDirPath' value='$createDir' />\n";
 		$dialogBox .= "<table class='FormData' width='99%'>
         	<tbody><tr><th class='left' width='200'>$langNameDir:</th>
@@ -401,169 +401,170 @@ if($is_adminOfCourse)
   		</tr></tbody></table></form><br />";
 	}
 
-	//	add/update/remove comment
-	//	h $commentPath periexei to path tou arxeiou gia to opoio tha epikyrothoun ta metadata
-	if (isset($edit_metadata))
-	{
+	// add/update/remove comment
+	// h $commentPath periexei to path tou arxeiou gia to opoio tha epikyrothoun ta metadata
+	if (isset($_POST['commentPath'])) {
+                $commentPath = $_POST['commentPath'];
 		//elegxos ean yparxei eggrafh sth vash gia to arxeio
-		$result = mysql_query ("SELECT * FROM $dbTable WHERE path=" . autoquote($commentPath));
+		$result = db_query("SELECT * FROM $dbTable WHERE path=" . autoquote($commentPath));
 		$res = mysql_fetch_array($result);
-		if(!empty($res))
-		{
-			//elegxos ean o xrhsths epelekse diaforetikh glwssa h' tipota (option -> "")
-			if (empty($file_language)) $file_language = $file_oldLanguage;
-			$query =  "UPDATE ".$dbTable." SET
-    				comment=\"".mysql_real_escape_string($file_comment)."\",
-				category=\"".mysql_real_escape_string($file_category)."\",
-  	 			title=\"".mysql_real_escape_string($file_title)."\",
-				date_modified=\"".date("Y\-m\-d G\:i\:s")."\",
-    				subject=\"".mysql_real_escape_string($file_subject)."\",
-    				description=\"".mysql_real_escape_string($file_description)."\",
-    				author=\"".mysql_real_escape_string($file_author)."\",
-    				language=\"".mysql_real_escape_string($file_language)."\",
-    				copyrighted=\"".mysql_real_escape_string($file_copyrighted)."\"
-    				  WHERE path=\"".$commentPath."\"";
-		} else
-		//den yparxei eggrafh sth vash gia to sygkekrimeno arxeio opote dhmiourghse thn eggrafh
-		{
-			if (empty($file_language)) $file_language = $file_oldLanguage;
-			if (empty($file_filename)) $file_filename = htmlspecialchars($fileName);
-			$file_format = get_file_extension($file_filename);
-			$query =  "INSERT INTO ".$dbTable." SET
-    			path=\"".$commentPath."\",
-    			filename=\"".$file_filename."\",
-    			visibility=\"v\",
-				comment=\"".mysql_real_escape_string($file_comment)."\",
-				category=\"".mysql_real_escape_string($file_category)."\",
-				title=\"".mysql_real_escape_string($file_title)."\",
-				creator=\"".$prenom." ".$nom."\",
-				date=\"".date("Y\-m\-d G\:i\:s")."\",
-				date_modified=\"".date("Y\-m\-d G\:i\:s")."\",
-				subject=\"".mysql_real_escape_string($file_subject)."\",
-				description=\"".mysql_real_escape_string($file_description)."\",
-				author=\"".mysql_real_escape_string($file_author)."\",
-				format=\"".mysql_real_escape_string($file_format)."\",
-				language=\"".mysql_real_escape_string($file_language)."\",
-				copyrighted=\"".mysql_real_escape_string($file_copyrighted)."\"";
-		}
-		mysql_query($query);
+		if(!empty($res)) {
+                        if (!isset($language_codes[$_POST['file_language']])) {
+                                $file_language = langname_to_code($language);
+                        } else {
+                                $file_language = $_POST['file_language'];
+                        }
+			db_query("UPDATE $dbTable SET
+                                                comment = " . autoquote($_POST['file_comment']) . ",
+                                                category = " . intval($_POST['file_category']) . ",
+                                                title = " . autoquote($_POST['file_title']) . ",
+                                                date_modified = NOW(),
+                                                subject = " . autoquote($_POST['file_subject']) . ",
+                                                description = " . autoquote($_POST['file_description']) . ",
+                                                author = " . autoquote($_POST['file_author']) . ",
+                                                language = '$file_language',
+                                                copyrighted = " . intval($_POST['file_copyrighted']) . "
+                                        WHERE path = '$commentPath'");
+                }
 	}
 
-	//emfanish ths formas gia tropopoihsh comment
-	//edw tha valoume kai ta epipleon pedia gia ta metadedomena
-	if (isset($comment))
-	{
+	// Emfanish ths formas gia tropopoihsh comment
+	if (isset($_GET['comment'])) {
+                $comment = $_GET['comment'];
 		$oldComment='';
 		/*** Retrieve the old comment and metadata ***/
-		$query = "SELECT * FROM $dbTable WHERE path LIKE '%".$comment."%'";
-		$result = mysql_query ($query);
-		$row = mysql_fetch_array($result);
-		$oldFilename = q($row['filename']);
-		$oldComment = q($row['comment']);
-		$oldCategory = $row['category'];
-		$oldTitle = q($row['title']);
-		$oldCreator = q($row['creator']);
-		$oldDate = q($row['date']);
-		$oldSubject = q($row['subject']);
-		$oldDescription = q($row['description']);
-		$oldAuthor = q($row['author']);
-		$oldLanguage = q($row['language']);
-		$oldCopyrighted = $row['copyrighted'];
+		$result = db_query("SELECT * FROM $dbTable WHERE path = " . autoquote($comment));
+                if (mysql_num_rows($result) > 0) {
+                        $row = mysql_fetch_array($result);
+                        $oldFilename = q($row['filename']);
+                        $oldComment = q($row['comment']);
+                        $oldCategory = $row['category'];
+                        $oldTitle = q($row['title']);
+                        $oldCreator = q($row['creator']);
+                        $oldDate = q($row['date']);
+                        $oldSubject = q($row['subject']);
+                        $oldDescription = q($row['description']);
+                        $oldAuthor = q($row['author']);
+                        $oldLanguage = q($row['language']);
+                        $oldCopyrighted = $row['copyrighted'];
 
-		//filsystem compability: ean gia to arxeio den yparxoun dedomena sto pedio filename
-		//(ara to arxeio den exei safe_filename (=alfarithmitiko onoma)) xrhsimopoihse to
-		//$fileName gia thn provolh tou onomatos arxeiou
-		$fileName = my_basename($comment);
-		if (empty($oldFilename)) $oldFilename = $fileName;
-		$dialogBox .="	<form method=\"post\" action=\"$_SERVER[PHP_SELF]?edit_metadata\">
-        		<input type='hidden' name='commentPath' value='$comment' />
-        		<input type='hidden' size='80' name='file_filename' value='$oldFilename' />
-        		<table  class='FormData' width=\"99%\">
-        		<tbody><tr><th>&nbsp;</th>
-        		<td><b>$langAddComment: </b>".htmlspecialchars($oldFilename)."</td>
-        		</tr><tr>
-        		<th class='left'>$langComment:</th>
-        		<td><input type='text' size='60' name='file_comment' value='$oldComment' class='FormData_InputText' /></td>
-        		</tr><tr>
-        		<th class='left'>$langTitle:</th>
-        		<td><input type='text' size='60' name='file_title' value='$oldTitle' class='FormData_InputText' /></td>
-        		</tr>
-        		<tr><th class='left'>$langCategory:</th><td>";
-		//ektypwsh tou combobox gia thn epilogh kathgorias tou eggrafou
-		$dialogBox .= "<select name='file_category' class='auth_input'>
-			<option"; if($oldCategory=="0") $dialogBox .= " selected=\"selected\""; $dialogBox .= " value=\"0\">$langCategoryOther<br>";
-		$dialogBox .= "	<option";
-		if($oldCategory=="1") $dialogBox .= " selected=\"selected\""; $dialogBox .= " value=\"1\">$langCategoryExcercise<br>
-		<option"; if($oldCategory=="1") $dialogBox .= " selected=\"selected\""; $dialogBox .= " value=\"2\">$langCategoryLecture<br>
-		<option"; if($oldCategory=="2") $dialogBox .= " selected=\"selected\""; $dialogBox .= " value=\"3\">$langCategoryEssay<br>
-		<option"; if($oldCategory=="3") $dialogBox .= " selected=\"selected\""; $dialogBox .= " value=\"4\">$langCategoryDescription<br>
-		<option"; if($oldCategory=="4") $dialogBox .= " selected=\"selected\""; $dialogBox .= " value=\"5\">$langCategoryExample<br>
-		<option"; if($oldCategory=="5") $dialogBox .= " selected=\"selected\""; $dialogBox .= " value=\"6\">$langCategoryTheory<br>
-		</select></td></tr>";
-		$dialogBox .= "<input type='hidden' size='80' name='file_creator' value='$oldCreator' />
-    			<input type='hidden' size='80' name='file_date' value='$oldDate' />
-    			<tr><th class='left'>$langSubject : </th><td>
-			<input type='text' size='60' name='file_subject' value='$oldSubject' class='FormData_InputText' />
-			</td></tr><tr><th class='left'>$langDescription : </th><td>
-    			<input type='text' size='60' name='file_description' value='$oldDescription' class='FormData_InputText' /></td></tr>
-    			<tr><th class='left'>$langAuthor : </th><td>
-    			<input type='text' size='60' name='file_author' value='$oldAuthor' class='FormData_InputText' />
-    			</td></tr>";
+                        // filsystem compability: ean gia to arxeio den yparxoun dedomena sto pedio filename
+                        // (ara to arxeio den exei safe_filename (=alfarithmitiko onoma)) xrhsimopoihse to
+                        // $fileName gia thn provolh tou onomatos arxeiou
+                        $fileName = my_basename($comment);
+                        if (empty($oldFilename)) $oldFilename = $fileName;
+                        $dialogBox .= "<form method='post' action='document.php'>
+                                <input type='hidden' name='commentPath' value='" . q($comment) . "' />
+                                <input type='hidden' size='80' name='file_filename' value='$oldFilename' />
+                                <table  class='FormData' width='99%'>
+                                <tbody><tr><th>&nbsp;</th>
+                                <td><b>$langAddComment:</b> $oldFilename</td>
+                                </tr><tr>
+                                <th class='left'>$langComment:</th>
+                                <td><input type='text' size='60' name='file_comment' value='$oldComment' class='FormData_InputText' /></td>
+                                </tr><tr>
+                                <th class='left'>$langTitle:</th>
+                                <td><input type='text' size='60' name='file_title' value='$oldTitle' class='FormData_InputText' /></td>
+                                </tr>
+                                <tr><th class='left'>$langCategory:</th><td>";
+                        //ektypwsh tou combobox gia thn epilogh kathgorias tou eggrafou
+                        $dialogBox .= "<select name='file_category' class='auth_input'>
+                                <option"; if($oldCategory=="0") $dialogBox .= " selected='selected'"; $dialogBox .= " value='0'>$langCategoryOther";
+                        $dialogBox .= "	<option";
+                        if($oldCategory=="1") $dialogBox .= " selected='selected'"; $dialogBox .= " value='1'>$langCategoryExcercise
+                        <option"; if($oldCategory=="1") $dialogBox .= " selected='selected'"; $dialogBox .= " value='2'>$langCategoryLecture
+                        <option"; if($oldCategory=="2") $dialogBox .= " selected='selected'"; $dialogBox .= " value='3'>$langCategoryEssay
+                        <option"; if($oldCategory=="3") $dialogBox .= " selected='selected'"; $dialogBox .= " value='4'>$langCategoryDescription
+                        <option"; if($oldCategory=="4") $dialogBox .= " selected='selected'"; $dialogBox .= " value='5'>$langCategoryExample
+                        <option"; if($oldCategory=="5") $dialogBox .= " selected='selected'"; $dialogBox .= " value='6'>$langCategoryTheory
+                        </select></td></tr>";
+                        $dialogBox .= "
+                                <tr><th class='left'>$langSubject : </th><td>
+                                <input type='text' size='60' name='file_subject' value='$oldSubject' class='FormData_InputText' />
+                                </td></tr><tr><th class='left'>$langDescription : </th><td>
+                                <input type='text' size='60' name='file_description' value='$oldDescription' class='FormData_InputText' /></td></tr>
+                                <tr><th class='left'>$langAuthor : </th><td>
+                                <input type='text' size='60' name='file_author' value='$oldAuthor' class='FormData_InputText' />
+                                </td></tr>";
 
-		$dialogBox .= "<tr><th class='left'>$langCopyrighted : </th>
-			<td><input name='file_copyrighted' type='radio' value='0' ";
-		if ($oldCopyrighted=="0" || empty($oldCopyrighted)) $dialogBox .= " checked='checked' "; $dialogBox .= " /> $langCopyrightedUnknown <input name='file_copyrighted' type='radio' value='2' "; if ($oldCopyrighted=="2") $dialogBox .= " checked='checked' "; $dialogBox .= " /> $langCopyrightedFree <input name='file_copyrighted' type='radio' value='1' ";
+                        $dialogBox .= "<tr><th class='left'>$langCopyrighted : </th>
+                                <td><input name='file_copyrighted' type='radio' value='0' ";
+                        if ($oldCopyrighted=="0" || empty($oldCopyrighted)) $dialogBox .= " checked='checked' "; $dialogBox .= " /> $langCopyrightedUnknown <input name='file_copyrighted' type='radio' value='2' "; if ($oldCopyrighted=="2") $dialogBox .= " checked='checked' "; $dialogBox .= " /> $langCopyrightedFree <input name='file_copyrighted' type='radio' value='1' ";
 
-		if ($oldCopyrighted=="1") $dialogBox .= " checked='checked' "; $dialogBox .= "/> $langCopyrightedNotFree
-    		</td></tr>
-    		<input type='hidden' size='80' name='file_oldLanguage' value='$oldLanguage' />";
-		//ektypwsh tou combox gia epilogh glwssas
-		$dialogBox .= "	<tr><th class='left'>$langLanguage :</th>
-    			<td><select name='file_language' class='auth_input'>
-			</option><option value='en'>$langEnglish
-			</option><option value='fr'>$langFrench
-			</option><option value='de'>$langGerman
-			</option><option value='el' selected>$langGreek
-			</option><option value='it'>$langItalian
-			</option><option value='es'>$langSpanish
-			</option>
-			</select></td></tr>
-			<tr><th>&nbsp;</th>
-			<td><input type='submit' value='$langOkComment' />&nbsp;&nbsp;&nbsp;$langNotRequired</td>
-			</tr></tbody></table></form><br>";
-	}
+                        if ($oldCopyrighted=="1") $dialogBox .= " checked='checked' "; $dialogBox .= "/> $langCopyrightedNotFree
+                        </td></tr>
+";
+                        //ektypwsh tou combox gia epilogh glwssas
+                        $dialogBox .= "	<tr><th class='left'>$langLanguage :</th><td>" .
+                                selection(array('en' => $langEnglish,
+                                                'fr' => $langFrench,
+                                                'de' => $langGerman,
+                                                'el' => $langGreek,
+                                                'it' => $langItalian,
+                                                'es' => $langSpanish), 'file_language', $oldLanguage) .
+                                "</td></tr>
+                                <tr><th>&nbsp;</th>
+                                <td><input type='submit' value='$langOkComment' />&nbsp;&nbsp;&nbsp;$langNotRequired</td>
+                                </tr></tbody></table>
+                                <input type='hidden' size='80' name='file_creator' value='$oldCreator' />
+                                <input type='hidden' size='80' name='file_date' value='$oldDate' />
+                                <input type='hidden' size='80' name='file_oldLanguage' value='$oldLanguage' />
+                                </form><br />";
+                } else {
+                        $dialogBox = "<p class='caution_small'>$langFileNotFound</p><br />";
+                }
+        }
 
 	// Visibility commands
-	if (isset($mkVisibl) || isset($mkInvisibl))
-	{
-		$visibilityPath = @$mkVisibl.@$mkInvisibl; // At least one of these variables are empty
-
-		// analoga me poia metavlhth exei timh ($mkVisibl h' $mkInvisibl) vale antistoixh
-		//timh sthn $newVisibilityStatus gia na graftei sth vash
-		if (isset($mkVisibl))
-			$newVisibilityStatus = "v";
-		else
-			$newVisibilityStatus = "i";
-		// enallagh ths timhs sto pedio visibility tou pinaka document
-		mysql_query ("UPDATE $dbTable SET visibility='".$newVisibilityStatus."' WHERE path = '$visibilityPath'");
+	if (isset($_GET['mkVisibl']) || isset($_GET['mkInvisibl'])) {
+		if (isset($_GET['mkVisibl'])) {
+                        $newVisibilityStatus = "v";
+                        $visibilityPath = $_GET['mkVisibl'];
+                } else {
+                        $newVisibilityStatus = "i";
+                        $visibilityPath = $_GET['mkInvisibl'];
+                }
+		db_query("UPDATE $dbTable SET visibility='$newVisibilityStatus' WHERE path = " . autoquote($visibilityPath));
 		$dialogBox = "<p class='success_small'>$langViMod</p><br />";
 	}
 } // teacher only
 
 // Common for teachers and students
 // define current directory
-if (isset($openDir)  || isset($moveTo) || isset($createDir) || isset($newDirPath) || isset($uploadPath) ) // $newDirPath is from createDir command (step 2) and $uploadPath from upload command
+
+// Check if $var is set and return it - if $is_file, then return only dirname part
+function pathvar(&$var, $is_file = false)
 {
-	$curDirPath = @$openDir . @$createDir . @$moveTo . @$newDirPath . @$uploadPath;
+        static $found = false;
+        if ($found) {
+                return '';
+        }
+        if (isset($var)) {
+                $found = true;
+                $var = str_replace('..', '', $var);
+                if ($is_file) {
+                        return dirname($var);
+                } else {
+                        return $var;
+                }
+        }
+        return '';
 }
-elseif (isset($delete) || isset($move) || isset($rename) || isset($sourceFile) || isset($comment) || isset($commentPath) || isset($mkVisibl) || isset($mkInvisibl)) //$sourceFile is from rename command (step 2)
-{
-	$curDirPath = dirname(@$delete . @$move . @$rename . @$sourceFile . @$comment . @$commentPath . @$mkVisibl . @$mkInvisibl);
-}
-else
-{
-	$curDirPath="";
-}
+
+$curDirPath = 
+        pathvar($_GET['openDir'], false) .
+        pathvar($_GET['createDir'], false) .
+        pathvar($_POST['moveTo'], false) .
+        pathvar($_POST['newDirPath'], false) .
+        pathvar($_POST['uploadPath'], false) .
+        pathvar($_POST['delete'], true) .
+        pathvar($_GET['move'], true) .
+        pathvar($_GET['rename'], true) .
+        pathvar($_GET['comment'], true) .
+        pathvar($_GET['mkInvisibl'], true) .
+        pathvar($_GET['mkVisibl'], true) .
+        pathvar($_POST['sourceFile'], true) .
+        pathvar($_POST['commentPath'], true);
 
 if ($curDirPath == '/' or $curDirPath == '\\') {
         $curDirPath = '';
@@ -646,7 +647,7 @@ if($is_adminOfCourse) {
 	// Dialog Box
 	if (!empty($dialogBox))
 	{
-		$tool_content .=  $dialogBox . " ";
+		$tool_content .=  $dialogBox . "\n";
 	}
 }
 
@@ -661,9 +662,10 @@ if (mysql_num_rows($sql) == 0) {
 } else {
 
 	// Current Directory Line
-	$tool_content .= "\n<br /><div class=\"fileman\">";
-	$tool_content .= "\n  <table width=\"99%\" align='left' class=\"Documents\">";
-        $tool_content .= "\n  <tbody>";
+	$tool_content .= "<br /><div class='fileman'>\n" .
+	                 "<form action='document.php' method='post'>\n" .
+	                 "<table width='99%' align='left' class='Documents'>\n" .
+                         "<tbody>\n";
 
         if ($is_adminOfCourse) {
                 $cols = 4;
@@ -688,7 +690,7 @@ if (mysql_num_rows($sql) == 0) {
                 if ($sort == $this_sort) {
                         $this_reverse = !$reverse;
                         $indicator = ' <img src="../../template/classic/img/arrow_' . 
-                                ($reverse? 'up': 'down') . '.gif" border="0"/>';
+                                ($reverse? 'up': 'down') . '.gif" />';
                 } else {
                         $this_reverse = $reverse;
                         $indicator = '';
@@ -748,7 +750,7 @@ if (mysql_num_rows($sql) == 0) {
                                 if (empty($entry['title'])) {
                                         $link_text = $entry['filename'];
                                 } else {
-                                        $link_text = $entry['title'];
+                                        $link_text = q($entry['title']);
                                 }
                                 if ($entry['copyrighted']) {
                                         $link_text .= " <img src='./img/copyrighted.jpg' />";
@@ -775,32 +777,30 @@ if (mysql_num_rows($sql) == 0) {
                         }
                         if ($is_adminOfCourse) {
                                 /*** delete command ***/
-                                $tool_content .= "\n    <td><a href='$_SERVER[PHP_SELF]?delete=$cmdDirName' onClick=\"return confirmation('".addslashes($entry['filename'])."');\">";
-                                $tool_content .= "<img src='../../template/classic/img/delete.gif' border='0' title='$langDelete' /></a>&nbsp;";
+                                $tool_content .= "<td><input type='image' src='../../template/classic/img/delete.gif' title='$langDelete' name='delete' value='$cmdDirName' onClick=\"return confirmation('".addslashes($entry['filename'])."');\" />&nbsp;";
                                 /*** copy command ***/
                                 $tool_content .= "<a href='$_SERVER[PHP_SELF]?move=$cmdDirName'>";
-                                $tool_content .= "<img src='../../template/classic/img/move_doc.gif' border='0' title='$langMove' /></a>&nbsp;";
+                                $tool_content .= "<img src='../../template/classic/img/move_doc.gif' title='$langMove' /></a>&nbsp;";
                                 /*** rename command ***/
                                 $tool_content .=  "<a href='$_SERVER[PHP_SELF]?rename=$cmdDirName'>";
-                                $tool_content .=  "<img src='../../template/classic/img/edit.gif' border='0' title='$langRename' /></a>&nbsp;";
+                                $tool_content .=  "<img src='../../template/classic/img/edit.gif' title='$langRename' /></a>&nbsp;";
                                 /*** comment command ***/
                                 $tool_content .= "<a href='$_SERVER[PHP_SELF]?comment=$cmdDirName'>";
-                                $tool_content .= "<img src='../../template/classic/img/information.gif' border='0' title='$langComment' /></a>&nbsp;";
+                                $tool_content .= "<img src='../../template/classic/img/information.gif' title='$langComment' /></a>&nbsp;";
                                 /*** visibility command ***/
                                 if ($entry['visible']) {
                                         $tool_content .= "<a href='$_SERVER[PHP_SELF]?mkInvisibl=$cmdDirName'>";
-                                        $tool_content .= "<img src='../../template/classic/img/visible.gif' border='0' title='$langVisible' /></a>";
+                                        $tool_content .= "<img src='../../template/classic/img/visible.gif' title='$langVisible' /></a>";
                                 } else {
                                         $tool_content .= "<a href='$_SERVER[PHP_SELF]?mkVisibl=$cmdDirName'>";
-                                        $tool_content .= "<img src='../../template/classic/img/invisible.gif' border='0' title='$langVisible' /></a>";
+                                        $tool_content .= "<img src='../../template/classic/img/invisible.gif' title='$langVisible' /></a>";
                                 }
                                 $tool_content .= "</td>";
                                 $tool_content .= "\n  </tr>";
                         }
                 }
         }
-        $tool_content .=  "\n  </tbody>";
-        $tool_content .=  "\n  </table>";
+        $tool_content .=  "\n</tbody>\n</table>\n</form>\n";
 	if ($is_adminOfCourse) {
 		$tool_content .= "<p align='right'><small>$langMaxFileSize ".ini_get('upload_max_filesize')."</small></p>";
 	}

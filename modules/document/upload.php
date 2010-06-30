@@ -44,15 +44,15 @@ $tool_content = "";
 
 if($is_adminOfCourse) {
 
-	if(!isset($_REQUEST['uploadPath'])) {
-		$_REQUEST['uploadPath'] = "";
+	if(!isset($_GET['uploadPath'])) {
+		$_GET['uploadPath'] = "";
 	}
 	
 	$nameTools = $langDownloadFile;
 	$navigation[]= array ("url"=>"document.php", "name"=> $langDoc);
 	$tool_content .= "
 	<form action='document.php' method='post' enctype='multipart/form-data'>
-	<input type='hidden' name='uploadPath' value='".htmlspecialchars($_REQUEST['uploadPath'])."' />
+	<input type='hidden' name='uploadPath' value='".htmlspecialchars($_GET['uploadPath'])."' />
 	<table width='99%'>
 	<tbody>
 	<tr>
@@ -89,7 +89,7 @@ if($is_adminOfCourse) {
 		</select>
 	</td>
 	<td>&nbsp;</td>
-		<td><input type='hidden' name='file_creator' value='$prenom $nom' size='40' /></td>
+		<td><input type='hidden' name='file_creator' value='$_SESSION[prenom] $_SESSION[nom]' size='40' /></td>
 	</tr>
 	<tr>
 	<th class='left'>$langSubject:</th>
@@ -151,5 +151,3 @@ if($is_adminOfCourse) {
 }
 
 draw($tool_content, '2');
-
-?>
