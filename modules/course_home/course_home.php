@@ -58,7 +58,7 @@ function confirmation ()
 ';
 
 //For statistics: record login
-$sql_log = "INSERT INTO logins SET user_id='$uid', ip='$REMOTE_ADDR', date_time=NOW()";
+$sql_log = "INSERT INTO logins SET user_id='$uid', ip='$_SERVER[REMOTE_ADDR]', date_time=NOW()";
 db_query($sql_log, $currentCourse);
 include '../../include/action.php';
 $action = new action();
