@@ -343,7 +343,7 @@ if($is_adminOfCourse) {
 	**************************************/
         if (isset($_POST['delete'])) {
                 $delete = str_replace('..', '', $_POST['delete']);
-		if (my_delete($basedir . $delete)) {
+		if (my_delete($basedir . $delete) or !file_exists($basedir . $delete)) {
                         update_db_info('document', 'delete', $delete);
 			$dialogBox = "<p class='success_small'>$langDocDeleted</p><br />";
 		}
