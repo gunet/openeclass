@@ -82,11 +82,11 @@ include ('tools.php');
  * @param string $body_action (optional) code to be added to the BODY tag
  */
 function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null, $body_action = null, $hideLeftNav = null, $perso_tool_content = null) {
-	global $langUser, $langUserHeader, $prenom, $nom, $langLogout, $langLogin, $siteName, $intitule, $nameTools, $langHelp, $langAnonUser, $langActivate, $langDeactivate;
+	global $langUser, $langUserHeader, $langLogout, $langLogin, $siteName, $intitule, $nameTools, $langHelp, $langAnonUser, $langActivate, $langDeactivate;
 	global $language, $helpTopic, $require_help, $langEclass, $langCopyrightFooter;
 	global $relPath, $urlServer, $urlAppend, $toolContent_ErrorExists, $statut;
 	global $page_name, $page_navi, $currentCourseID, $langHomePage, $siteName, $navigation;
-	global $homePage, $courseHome, $uid, $webDir, $extraMessage;
+	global $homePage, $courseHome, $webDir, $extraMessage;
 	global $langChangeLang, $langUserBriefcase, $langPersonalisedBriefcase, $langAdmin, $switchLangURL;
 	global $langSearch, $langAdvancedSearch;
 	global $langMyPersoLessons, $langMyPersoDeadlines;
@@ -111,8 +111,8 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 
 
 	if (strlen ( $extraMessage ) > 0) {
-		$messageBox = "<table width=\"99%\">
-		<tbody><tr><td class=\"extraMessage\">
+		$messageBox = "<table width='99%'>
+		<tbody><tr><td class='extraMessage'>
 		$extraMessage</td></tr>
 		</tbody></table><br/>";
 	}
@@ -121,9 +121,9 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 	$toolArr = getSideMenu ( $menuTypeID );
 	$numOfToolGroups = count ( $toolArr );
 
-	$t = new Template ( $relPath . "template/classic" );
+	$t = new Template ( $relPath . 'template/classic' );
 
-	$t->set_file ( 'fh', "theme.html" );
+	$t->set_file ( 'fh', 'theme.html' );
 
 	$t->set_block ( 'fh', 'mainBlock', 'main' );
 
@@ -197,10 +197,10 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 		}
 
 		//show user's name and surname on the user bar
-		if (isset($_SESSION['uid']) && strlen ($nom) > 0) {
+		if (isset($_SESSION['uid'])) {
 			$t->set_var ( 'LANG_USER', $langUserHeader );
-			$t->set_var ( 'USER_NAME', $prenom );
-			$t->set_var ( 'USER_SURNAME', $nom . ", " );
+			$t->set_var ( 'USER_NAME', $_SESSION['prenom'] );
+			$t->set_var ( 'USER_SURNAME', $_SESSION['nom'] . ", " );
 		} else {
                         $t->set_var ( 'LANG_USER', '' );
 			$t->set_var ( 'USER_NAME', '&nbsp;' );
