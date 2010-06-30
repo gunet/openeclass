@@ -193,7 +193,7 @@ $nameTools = $langWelcomeToEclass;
 //----------------------------------------------------------------
 // if login succesful display courses lists
 // --------------------------------------------------------------
-if (isset($uid) AND !isset($logout)) {
+if (isset($uid) AND !isset($_GET['logout'])) {
 	$nameTools = $langWelcomeToPortfolio;
 	$require_help = true;
 	$helpTopic="Portfolio";
@@ -228,7 +228,7 @@ if (isset($uid) AND !isset($logout)) {
 // -------------------------------------------------------------------------------------
 // display login  page
 // -------------------------------------------------------------------------------------
-elseif ((isset($logout) && isset($uid)) OR (1==1)) {
+elseif (isset($_GET['logout']) and isset($uid)) {
 	if (isset($logout) && isset($uid)) {
 		mysql_query("INSERT INTO loginout (loginout.idLog, loginout.id_user,
 			loginout.ip, loginout.when, loginout.action)
