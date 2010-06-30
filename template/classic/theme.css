@@ -690,7 +690,7 @@ a img {
 	color: silver !important;
 }
 
-li a img {
+li a img, input[type=image] {
         vertical-align: middle;
 }
 
