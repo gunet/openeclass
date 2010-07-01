@@ -37,7 +37,7 @@ define('ECLASS_VERSION', '2.3.2');
 // Show query string and then do MySQL query
 function db_query2($sql, $db = FALSE)
 {
-	echo "<hr><pre>$sql</pre><hr>";
+	echo "<hr /><pre>$sql</pre><hr />";
 	return db_query($sql, $db);
 }
 
@@ -58,9 +58,16 @@ function db_query($sql, $db = FALSE) {
 	}
 	$r = mysql_query($sql);
 
-	if (defined('DEBUG_MYSQL') or mysql_errno()) {
-		echo '<hr>' . mysql_errno() . ': ' . mysql_error()
-		. "<br><pre>$sql</pre><hr>";
+        if (defined('DEBUG_MYSQL')) {
+                echo "<hr /><pre>$sql</pre><hr />";
+        }
+        if (mysql_errno()) {
+                if ($GLOBALS['is_admin']) {
+                        echo '<hr />' . mysql_errno() . ': ' . mysql_error()
+                                . "<br><pre>$sql</pre><hr />";
+                } else {
+                        echo '<hr />Database error<hr />';
+                }
 	}
 	return $r;
 }
