@@ -37,6 +37,9 @@
 include '../../include/baseTheme.php';
 $nameTools = $langListCourses;
 $navigation[] = array ("url" => "listfaculte.php", "name" => $langListFac);
+if (isset($_GET['fc'])) {
+    $fc = intval($_GET['fc']);
+}
 // parse the faculte id in a session
 // This is needed in case the user decides to switch language.
 if (isset($fc)) {
@@ -45,8 +48,7 @@ if (isset($fc)) {
 if (!isset($fc)) {
     $fc = $_SESSION['fc_memo'];
 }
-// security check
-$fc = intval($fc);
+
 $fac = mysql_fetch_row(mysql_query("SELECT name FROM faculte WHERE id = " . $fc));
 if (!($fac = $fac[0])) {
     die("ERROR: no faculty with id $fc");
@@ -62,12 +64,10 @@ $icons = array(2 => "<img src='../../template/classic/img/OpenCourse.gif'   alt=
     0 => "<img src='../../template/classic/img/ClosedCourse.gif' alt='" . $m['legclosed'] . "' title='" . $m['legclosed'] . "' width='16' height='16'>"
     );
 
-$tool_content .= "
-  <table width=99% class='framed'>
-  <tbody>
-  <tr>
-    <td><a name='top'>&nbsp;</a>$langFaculty:&nbsp;<b>$fac</b></td>
-    <td><div align='right'>";
+$tool_content .= "<table width=99% class='framed'><tbody>
+<tr>
+<td><a name='top'>&nbsp;</a>$langFaculty:&nbsp;<b>$fac</b></td>
+<td><div align='right'>";
 // get the different course types available for this faculte
 $typesresult = db_query("SELECT DISTINCT cours.type types FROM cours WHERE cours.faculteid = $fc ORDER BY cours.type");
 // count the number of different types
@@ -120,10 +120,7 @@ foreach (array("pre" => $langpres,
         continue;
     }
 
-    $tool_content .= "\n  <br />\n\n
-  <table width=99%>
-  <tr>
-    <td>";
+    $tool_content .= "\n  <br />\n\n<table width=99%><tr><td>";
     // We changed the style a bit here and we output types as the title
     $tool_content .= "<a name='$type'>&nbsp;</a><b>$message</b></td>\n";
     // output a top href link if necessary
@@ -159,15 +156,15 @@ foreach (array("pre" => $langpres,
             $codelink = "$mycours[i]&nbsp;<small>(" . $mycours['c'] . ")</small>";
         }
 
-        if ($k % 2 == 0) {
-            $tool_content .= "\n        <tr>";
+        if ($k%2 == 0) {
+            $tool_content .= "\n<tr>";
         } else {
-            $tool_content .= "\n        <tr class='odd'>";
+            $tool_content .= "\n<tr class='odd'>";
         }
-        $tool_content .= "\n          <td width='1%'><img style='border:0px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'></td>";
-        $tool_content .= "\n          <td>" . $codelink . "</td>";
-        $tool_content .= "\n          <td><small>$mycours[t]</small></td>";
-        $tool_content .= "\n          <td align='center'>";
+        $tool_content .= "\n<td width='1%'><img style='border:0px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'></td>";
+        $tool_content .= "\n<td>" . $codelink . "</td>";
+        $tool_content .= "\n<td><small>$mycours[t]</small></td>";
+        $tool_content .= "\n<td align='center'>";
         // show the necessary access icon
         foreach ($icons as $visible => $image) {
             if ($visible == $mycours['visible']) {
@@ -175,20 +172,17 @@ foreach (array("pre" => $langpres,
             }
         }
             $tool_content .= "</td>\n";
-            $tool_content .= "        </tr>";
+            $tool_content .= "</tr>";
             $k++;
-
-        //$tool_content .= "\n        </tbody>\n        </table>\n        </td>\n    </tr>\n    </table>\n    <br />\n";
-        $tool_content .= "";
         // that's it!
         // upatras.gr patch end here, atkyritsis@upnet.gr, daskalou@upnet.gr
     }
-    $tool_content .= "\n        </tbody>\n        </table>\n        </td>\n    </tr>\n    </table>\n    <br />\n";
+    $tool_content .= "\n</tbody>\n</table>\n</td>\n</tr>\n</table>\n<br />\n";
     if ($numoftypes == 0) {
-        $tool_content .= "\n    <br/>";
-        $tool_content .= "\n    <br/>\n    <p class='alert1'>$m[nolessons]</p>";
+        $tool_content .= "\n<br/>";
+        $tool_content .= "\n<br/>\n<p class='alert1'>$m[nolessons]</p>";
     }
 }
-$tool_content .= "\n    <br>";
+$tool_content .= "\n<br>";
 
-draw($tool_content, (isset($uid) and $uid)? 1: 0, 'auth');
+draw($tool_content, (isset($uid) and $uid)? 1: 0);
