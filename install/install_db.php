@@ -387,7 +387,7 @@ db_query("CREATE TABLE `course_units` (
 	`order` INT(11) NOT NULL DEFAULT 0,
 	`course_id` INT(11) NOT NULL) $charset_spec");
 
- db_query("CREATE TABLE `unit_resources` (
+db_query("CREATE TABLE `unit_resources` (
 	`id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
 	`unit_id` INT(11) NOT NULL ,
 	`title` VARCHAR(255) NOT NULL DEFAULT '',
@@ -398,6 +398,12 @@ db_query("CREATE TABLE `course_units` (
 	`order` INT(11) NOT NULL DEFAULT 0,
 	`date` DATETIME NOT NULL DEFAULT '0000-00-00') $charset_spec");
  
-//dhmiourgia full text indexes
-db_query("ALTER TABLE `annonces` ADD FULLTEXT `annonces` (`contenu`)");
-db_query("ALTER TABLE `cours` ADD FULLTEXT `cours` (`code` ,`description` ,`intitule` ,`course_keywords`, `course_addon`)");
+// Create full text indexes
+db_query('ALTER TABLE `annonces` ADD FULLTEXT `annonces` (`contenu`)');
+db_query('ALTER TABLE `cours` ADD FULLTEXT `cours` (`code` ,`description` ,`intitule` ,`course_keywords`, `course_addon`)');
+
+db_query('CREATE FULLTEXT INDEX course_units_title ON course_units (title)');
+db_query('CREATE FULLTEXT INDEX course_units_comments ON course_units (comments)');
+db_query('CREATE FULLTEXT INDEX unit_resources_title ON unit_resources (title)');
+db_query('CREATE FULLTEXT INDEX unit_resources_comments ON unit_resources (comments)');
+
