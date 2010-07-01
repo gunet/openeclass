@@ -32,18 +32,18 @@ function addlinkcategory($type)
 	global $msgErr;
 	global $tool_content;
 	global $dbname;
-	$ok=true;
+	global $langGiveURL, $langLinkAdded, $langCategoryAdded, $langGiveCategoryName;
+	global $tbl_categories, $tbl_link;
+	
+	$ok = true;
 
 	if($type == "link")
 	{
-		global $tbl_link;
 		global $urllink;
 		global $title;
 		global $description;
 		global $selectcategory;
-		global $langGiveURL;
-		global $langLinkAdded;
-
+		
 		$urllink = trim($urllink);
 		$title = trim($title);
 		$description = trim($description);
@@ -76,11 +76,8 @@ function addlinkcategory($type)
 		}
 	}
 	if ($type == "category") {
-		global $tbl_categories;
 		global $categoryname;
 		global $description;
-		global $langCategoryAdded;
-		global $langGiveCategoryName;
 
 		$categoryname=trim($categoryname);
 
@@ -96,13 +93,10 @@ function addlinkcategory($type)
 			$ordre=$orderMax+1;
 
 			$sql="INSERT INTO `".$tbl_categories."` (categoryname, description, ordre) VALUES ('$categoryname','$description', '$ordre')";
-
 			$catlinkstatus=$langCategoryAdded;
-
 			unset($categoryname,$description);
 		}
 	}
-
 	db_query($sql, $dbname);
 	return $ok;
 }
@@ -115,11 +109,11 @@ function deletelinkcategory($type)
 	global $catlinkstatus;
 	global $tool_content;
 	global $dbname;
+	global $langLinkDeleted, $langCategoryDeleted;
 
 	if ($type=="link")
 	{
 		global $id;
-		global $langLinkDeleted;
 		$sql="DELETE FROM `".$tbl_link."` WHERE id='".$id."'";
 		$catlinkstatus=$langLinkDeleted;
 		unset($id);
@@ -127,7 +121,6 @@ function deletelinkcategory($type)
 	if ($type=="category")
 	{
 		global $id;
-		global $langCategoryDeleted;
 		// first we delete the category itself and afterwards all the links of this category.
 		$sql="DELETE FROM `".$tbl_categories."` WHERE id='".$id."'";
 		db_query($sql, $dbname);
@@ -145,25 +138,22 @@ function editlinkcategory($type)
 	global $tbl_link;
 	global $catlinkstatus;
 	global $id;
-	global $submitLink;
-	global $submitCategory;
 	global $tool_content;
-	global $dbname, $langLinkMod;
+	global $dbname, $langLinkMod, $langLinkModded;
 
-	if ($type=="link")
-	{
+	if ($type == "link") {
+
 		global $urllink;
 		global $title;
 		global $description;
 		global $category;
 
 		// this is used to populate the link-form with the info found in the database
-		if (!$submitLink)
+		if (!isset($_POST['submitLink']))
 		{
 			$sql="SELECT * FROM `".$tbl_link."` WHERE id='".$id."'";
 			$result=db_query($sql, $dbname);
-			if ($myrow=mysql_fetch_array($result))
-			{
+			if ($myrow=mysql_fetch_array($result)) {
 				$urllink = $myrow["url"];
 				$title = $myrow["titre"];
 				$description = $myrow["description"];
@@ -171,28 +161,23 @@ function editlinkcategory($type)
 			}
 		}
 		// this is used to put the modified info of the link-form into the database
-		if ($submitLink)
-		{
-			global $langLinkModded;
+		if (isset($_POST['submitLink'])) {
 			global $selectcategory;
-
 			if (strpos($urllink, '://') === false) {
 				$urllink = "http://" . $urllink;
                         }
-
 			$sql="UPDATE `".$tbl_link."` set url='$urllink', titre='$title', description='$description', category='$selectcategory' WHERE id='".$id."'";
 			db_query($sql, $dbname);
 			$catlinkstatus=$langLinkMod;
-
 		}
 	}
-	if ($type=="category")
+	if ($type == "category")
 	{
 		global $description;
 		global $categoryname;
 
 		// this is used to populate the category-form with the info found in the database
-		if (!$submitCategory)
+		if (!isset($_POST['submitCategory']))
 		{
 			$sql="SELECT * FROM `".$tbl_categories."` WHERE id='".$id."'";
 			$result=db_query($sql, $dbname);
@@ -203,7 +188,7 @@ function editlinkcategory($type)
 			}
 		}
 		// this is used to put the modified info of the category-form into the database
-		if ($submitCategory)
+		if (isset($_POST['submitCategory']))
 		{
 			global $langCategoryModded;
 			$sql="UPDATE `".$tbl_categories."` set categoryname='$categoryname', description='$description' WHERE id='".$id."'";
@@ -235,6 +220,7 @@ function makedefaultviewcode($locatie)
  */
 function getNumberOfLinks($catid){
 	global $tbl_link, $dbname;
+	
 	$sqlLinks = "SELECT * FROM `".$tbl_link."` WHERE category='".$catid."' ORDER BY ordre DESC";
 	$result = db_query($sqlLinks, $dbname);
 	$numberoflinks=mysql_num_rows($result);
