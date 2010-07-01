@@ -91,15 +91,15 @@ if (!defined('UTF8')) {
         $postaddress = iconv('ISO-8859-7', 'UTF-8', $postaddress);
 }
 
-if (!isset($submit2)) {
+if (!isset($_POST['submit2'])) {
         if(isset($encryptedPasswd) and $encryptedPasswd) {
-                $newpass = md5(@$_REQUEST['password']);
+                $newpass = md5(@$_POST['password']);
         } else {
                 // plain text password since the passwords are not hashed
-                $newpass = @$_REQUEST['password'];
+                $newpass = @$_POST['password'];
         }
 
-        if (!is_admin(@$_REQUEST['login'], $newpass, $mysqlMainDb)) {
+        if (!is_admin(@$_POST['login'], $newpass, $mysqlMainDb)) {
                 $tool_content .= "<p>$langUpgAdminError</p>
                         <center><a href=\"index.php\">$langBack</a></center>";
                 draw($tool_content, 0);
@@ -125,7 +125,7 @@ if (!@chdir("../config/")) {
      die ("$langConfigError4");
 }
 
-if (!isset($submit2)) {
+if (!isset($_POST['submit2'])) {
         $closeregdefault = $close_user_registration? ' checked="checked"': '';
         // get old contact values
         $tool_content .= "<form action='$_SERVER[PHP_SELF]' method='post'>" .
