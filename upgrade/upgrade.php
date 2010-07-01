@@ -338,7 +338,14 @@ if (!isset($submit2)) {
 		if (!mysql_field_exists($mysqlMainDb, 'prof_request', 'am')) {
 			db_query('ALTER TABLE `prof_request` ADD `am` VARCHAR(20) NULL AFTER profcomm');
 		}
-	}
+        }
+        if ($oldversion < '2.4') {
+                db_query('CREATE FULLTEXT INDEX course_units_title ON course_units (title)');
+                db_query('CREATE FULLTEXT INDEX course_units_comments ON course_units (comments)');
+                db_query('CREATE FULLTEXT INDEX unit_resources_title ON unit_resources (title)');
+                db_query('CREATE FULLTEXT INDEX unit_resources_comments ON unit_resources (comments)');
+        }
+
         // **********************************************
         // upgrade courses databases
         // **********************************************
@@ -363,6 +370,7 @@ if (!isset($submit2)) {
 		}
                 if ($oldversion < '2.4') {
                         convert_description_to_units($code[0], $code[2]);
+                        upgrade_course_index_php($code[0]);
                 }
                 echo "</p>\n";
                 $i++;

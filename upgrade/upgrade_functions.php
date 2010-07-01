@@ -412,7 +412,6 @@ function upgrade_course_old($code, $lang, $extramessage = '')
 		encode_dropbox_documents($code, $dbox['id'], $dbox['filename'], $dbox['title']);
 	}
 
-
         $course_base_dir = "{$webDir}courses/$code";
         if (!is_writable($course_base_dir)) {
                 die ("$langUpgNotIndex \"$course_base_dir\"! $langCheckPerm.");
@@ -421,20 +420,6 @@ function upgrade_course_old($code, $lang, $extramessage = '')
         if (!file_exists("$course_base_dir/temp")) {
                 mkdir("$course_base_dir/temp", 0777);
         }
-
-        $filecontents = file_get_contents("$course_base_dir/index.php");
-        if (!$filecontents) {
-                die($langUpgFileNotRead);
-        }
-        $newfilecontents = preg_replace('#../claroline/#',
-                                        '../../modules/',
-                                        $filecontents);
-        if (!($fp = @fopen("$course_base_dir/index.php","w"))) {
-                die($langUpgFileNotRead);
-        }
-        if (!@fwrite($fp, $newfilecontents))
-                die($langUpgFileNotModify);
-        fclose($fp);
 
         echo "$langUpgCourse <b>$code</b><br>";
         flush();
@@ -1500,3 +1485,18 @@ function convert_description_to_units($code, $cours_id)
         }
 }
 
+function upgrade_course_index_php($code)
+{
+        $course_base_dir = "$GLOBALS[webDir]courses/$code";
+        if (!is_writable($course_base_dir)) {
+                echo "$langUpgNotIndex \"$course_base_dir\"! $langCheckPerm.<br />";
+                return;
+        }
+        if (!($f = fopen("$course_base_dir/index.php", 'w'))) {
+                echo "$langUpgNotIndex \"$course_base_dir/index.php\"! $langCheckPerm.<br />";
+                return;
+        }
+        fwrite($f, "<?php\nsession_start();\n\$_SESSION['dbname']='$code';\n" .
+                   "include '../../modules/course_home/course_home.php';\n");
+        fclose($f);
+}
