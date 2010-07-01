@@ -171,6 +171,18 @@ if (isset($_SESSION['uid'])) {
 } else { 
 	unset($uid);
 }
+
+if (isset($_GET['logout']) and isset($uid)) {
+        mysql_query("INSERT INTO loginout (loginout.idLog, loginout.id_user,
+                loginout.ip, loginout.when, loginout.action)
+                VALUES ('', '$uid', '$_SERVER[REMOTE_ADDR]', NOW(), 'LOGOUT')");
+        unset($_SESSION['prenom']);
+        unset($_SESSION['nom']);
+        unset($_SESSION['statut']);
+        unset($_SESSION['uid']);
+        unset($_SESSION['user_perso_active']);
+}
+
 // if the user logged in include the correct language files
 // in case he has a different language set in his/her profile
 if (isset($language)) {
@@ -189,7 +201,7 @@ if (isset($language)) {
 
 }
 $nameTools = $langWelcomeToEclass;
-	
+
 //----------------------------------------------------------------
 // if login succesful display courses lists
 // --------------------------------------------------------------
@@ -223,24 +235,9 @@ if (isset($uid) AND !isset($_GET['logout'])) {
 		include "include/classic.php";
 		draw($tool_content, 1, 'index');
 	}
-}	// end of if login
-
-// -------------------------------------------------------------------------------------
-// display login  page
-// -------------------------------------------------------------------------------------
-elseif (isset($_GET['logout']) and isset($uid)) {
-	if (isset($logout) && isset($uid)) {
-		mysql_query("INSERT INTO loginout (loginout.idLog, loginout.id_user,
-			loginout.ip, loginout.when, loginout.action)
-			VALUES ('', '$uid', '$REMOTE_ADDR', NOW(), 'LOGOUT')");
-		unset($prenom);
-		unset($nom);
-		unset($statut);
-		unset($_SESSION['uid']);
-		session_destroy();
-	}
+} else {
 	$require_help = true;
-	$helpTopic="Init";
+	$helpTopic = "Init";
 	include "include/logged_out_content.php";
 	draw($tool_content, 0,'index');
-} // end of display
+}
