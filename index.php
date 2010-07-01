@@ -175,12 +175,12 @@ if (isset($_SESSION['uid'])) {
 if (isset($_GET['logout']) and isset($uid)) {
         mysql_query("INSERT INTO loginout (loginout.idLog, loginout.id_user,
                 loginout.ip, loginout.when, loginout.action)
-                VALUES ('', '$uid', '$_SERVER[REMOTE_ADDR]', NOW(), 'LOGOUT')");
-        unset($_SESSION['prenom']);
-        unset($_SESSION['nom']);
-        unset($_SESSION['statut']);
-        unset($_SESSION['uid']);
-        unset($_SESSION['user_perso_active']);
+                VALUES ('', $uid, '$_SERVER[REMOTE_ADDR]', NOW(), 'LOGOUT')");
+	foreach(array_keys($_SESSION) as $key) {
+		unset($_SESSION[$key]);
+	}
+        session_destroy();
+	unset($uid);
 }
 
 // if the user logged in include the correct language files
