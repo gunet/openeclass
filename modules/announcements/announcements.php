@@ -61,7 +61,7 @@ $nameTools = $langAnnouncements;
 $tool_content = $head_content = "";
 
 if ($is_adminOfCourse and
-    (isset($_GET['addAnnouce']) or isset($_GET['modify']))) {
+    (isset($_GET['addAnnounce']) or isset($_GET['modify']))) {
 	$lang_editor = langname_to_code($language);
 
         $head_content = <<<hContent
@@ -160,12 +160,12 @@ hContent;
     $displayForm = true;
 
     /* up and down commands */
-    if (isset($down) && $down) {
-        $thisAnnouncementId = $down;
+    if (isset($_GET['down'])) {
+        $thisAnnouncementId = $_GET['down'];
         $sortDirection = "DESC";
     }
-    if (isset($up) && $up) {
-        $thisAnnouncementId = $up;
+    if (isset($_GET['up'])) {
+        $thisAnnouncementId = $_GET['up'];
         $sortDirection = "ASC";
     }
 
@@ -190,7 +190,8 @@ hContent;
     }
 
     /* delete */
-    if (isset($delete) && $delete) {
+    if (isset($_GET['delete'])) {
+	$delete = intval($_GET['delete']);
         $result = db_query("DELETE FROM annonces WHERE id='$delete'", $mysqlMainDb);
         $message = "<p class='success_small'>$langAnnDel</p>";
     }
@@ -212,16 +213,13 @@ hContent;
         // modify announcement
         $antitle = autoquote($_POST['antitle']);
         $newContent = autoquote($_POST['newContent']);
-        if ($id) {
+        if (!empty($_POST['id'])) {
             $id = intval($_POST['id']);
             db_query("UPDATE annonces SET contenu = $newContent,
 			title = $antitle, temps = NOW()
 			WHERE id = $id", $mysqlMainDb);
             $message = "<p class='success_small'>$langAnnModify</p>";
-        }
-
-        // add new announcement
-        else {
+        } else { // add new announcement
             $result = db_query("SELECT MAX(ordre) FROM annonces
 				WHERE cours_id = $cours_id", $mysqlMainDb);
             list($orderMax) = mysql_fetch_row($result);
@@ -259,7 +257,7 @@ hContent;
                     }
                     // send mail message per 50 recipients
                     if (count($recipients) >= 50) {
-                            send_mail_multipart("$prenom $nom", $email,
+                            send_mail_multipart("$_SESSION[prenom] $_SESSION[nom]", $_SESSION['email'],
                                                 $general_to,
                                             $recipients, $emailSubject,
                                             $emailBody, $emailContent, $charset);
@@ -267,7 +265,7 @@ hContent;
                     }
             }
             if (count($recipients) > 0)  {
-                    send_mail_multipart("$prenom $nom", $email, $general_to,
+                    send_mail_multipart("$_SESSION[prenom] $_SESSION[nom]", $_SESSION['email'], $general_to,
                                     $recipients, $emailSubject,
                                     $emailBody, $emailContent, $charset);
             }
@@ -288,50 +286,36 @@ hContent;
 
     /* display actions toolbar */
     $tool_content .= "<a href='http://www.xul.fr/rss.xml'><img src='rss.gif'></a>";
-    $tool_content .= "<div id='operations_container'>
-        <ul id='opslist'>
-        <li><a href='" . $_SERVER['PHP_SELF'] . "?addAnnouce=1'>" . $langAddAnn . "</a></li>";
+    $tool_content .= "<div id='operations_container'><ul id='opslist'>
+        <li><a href='" . $_SERVER['PHP_SELF'] . "?addAnnounce=1'>" . $langAddAnn . "</a></li>";
     $tool_content .= "</ul></div>";
 
     /* display form */
-    if ($displayForm and (isset($_GET['addAnnouce']) or isset($_GET['modify']))) {
+    if ($displayForm and (isset($_GET['addAnnounce']) or isset($_GET['modify']))) {
         $tool_content .= "<form method='post' action='$_SERVER[PHP_SELF]' onsubmit=\"return checkrequired(this, 'antitle');\">";
-        if (isset ($modify) && $modify) {
-            $tool_content .= "
-	    <table class='framed' align='center'>
-	    <thead>";
+	$tool_content .= "<table class='framed' align='center'><thead>";
+        if (isset($_GET['modify'])) {
             $langAdd = $nameTools = $langModifAnn;
         } else {
-		$tool_content .= "
-		<table class='framed' align='center'>
-		<thead>";
-		$nameTools = $langAddAnn;
+	    $nameTools = $langAddAnn;
         }
 	$navigation[] = array("url" => "announcements.php", "name" => $langAnnouncements);
         if (!isset($AnnouncementToModify)) $AnnouncementToModify = "";
         if (!isset($contentToModify)) $contentToModify = "";
         if (!isset($titleToModify)) $titleToModify = "";
 
-        $tool_content .= "
-      <tr>
-        <td>$langAnnTitle:<br /><input type='text' name='antitle' value='$titleToModify' size='50' class='FormData_InputText' /></td>
-      </tr>
-      <tr>
-        <td>$langAnnBody:<br />
-            ".rich_text_editor('newContent', 4, 20, $contentToModify)."
-        </td>
-      </tr>
-      <tr>
-        <td><input type='checkbox' value='1' name='emailOption' /> $langEmailOption</td>
-      </tr>
-      <tr>
+        $tool_content .= "<tr><td>$langAnnTitle:<br />
+	<input type='text' name='antitle' value='$titleToModify' size='50' class='FormData_InputText' /></td>
+	</tr>
+	<tr><td>$langAnnBody:<br />".rich_text_editor('newContent', 4, 20, $contentToModify)."</td></tr>
+	<tr><td><input type='checkbox' value='1' name='emailOption' /> $langEmailOption</td></tr>
+	<tr>
         <td><input class='Login' type='submit' name='submitAnnouncement' value='$langAdd' /></td>
-      </tr>
-      </thead>
-      </table>
-      <input type='hidden' name='id' value='$AnnouncementToModify' />
-      </form>
-      <br />";
+	</tr>
+	</thead>
+	</table>
+	<input type='hidden' name='id' value='$AnnouncementToModify' />
+	</form><br />";
     }
 } // end: teacher only
 
@@ -392,27 +376,28 @@ hContent;
 	}
 	if ($is_adminOfCourse) {
 	    if ($iterator != 1)  {
-		    $tool_content .= "<a href='$_SERVER[PHP_SELF]?up=" . $myrow["id"] . "'><img class='displayed' src='../../template/classic/img/up.gif' title='" . $langUp . "' /></a>";
+		$tool_content .= "<a href='$_SERVER[PHP_SELF]?up=" . $myrow["id"] . "'>
+		<img class='displayed' src='../../template/classic/img/up.gif' title='" . $langUp . "' /></a>";
 	    }
 	    if ($iterator < $bottomAnnouncement) {
-		    $tool_content .= "<a href='$_SERVER[PHP_SELF]?down=" . $myrow["id"] . "'><img class='displayed' src='../../template/classic/img/down.gif' title='" . $langDown . "' /></a>";
+		$tool_content .= "<a href='$_SERVER[PHP_SELF]?down=" . $myrow["id"] . "'>
+		<img class='displayed' src='../../template/classic/img/down.gif' title='" . $langDown . "' /></a>";
 	    }
 	    if ($announcementNumber > 1) {
 		    $tool_content .= "</td>";
 	    }
 	}
 	$tool_content .= "\n</tr>";
-            $iterator ++;
-            $k++;
+        $iterator ++;
+        $k++;
         } // end of while 
         $tool_content .= "</tbody></table>";
     
     if ($announcementNumber < 1) {
         $no_content = true;
-        if (isset($_GET['addAnnouce'])) {
+        if (isset($_GET['addAnnounce'])) {
             $no_content = false;
         }
-
         if (isset($_GET['modify'])) {
             $no_content = false;
         }
