@@ -70,7 +70,8 @@ db_query("CREATE TABLE annonces (
       `temps` date default NULL,
       `cours_id` int(11) NOT NULL default '0',
       `ordre` mediumint(11) NOT NULL,
-      PRIMARY KEY (id))
+      `visibility` CHAR(1) NOT NULL DEFAULT 'v',
+       PRIMARY KEY (id))
       $charset_spec");
 
 
@@ -221,7 +222,7 @@ db_query("CREATE TABLE admin (
 db_query("CREATE TABLE loginout (
       idLog mediumint(9) unsigned NOT NULL auto_increment,
       id_user mediumint(9) unsigned NOT NULL default '0',
-      ip char(16) NOT NULL default '0.0.0.0',
+      ip char(39) NOT NULL default '0.0.0.0',
       loginout.when datetime NOT NULL default '0000-00-00 00:00:00',
       loginout.action enum('LOGIN','LOGOUT') NOT NULL default 'LOGIN',
       PRIMARY KEY (idLog)) $charset_spec");
@@ -387,7 +388,7 @@ db_query("CREATE TABLE `course_units` (
 	`order` INT(11) NOT NULL DEFAULT 0,
 	`course_id` INT(11) NOT NULL) $charset_spec");
 
-db_query("CREATE TABLE `unit_resources` (
+ db_query("CREATE TABLE `unit_resources` (
 	`id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
 	`unit_id` INT(11) NOT NULL ,
 	`title` VARCHAR(255) NOT NULL DEFAULT '',
@@ -398,12 +399,6 @@ db_query("CREATE TABLE `unit_resources` (
 	`order` INT(11) NOT NULL DEFAULT 0,
 	`date` DATETIME NOT NULL DEFAULT '0000-00-00') $charset_spec");
  
-// Create full text indexes
-db_query('ALTER TABLE `annonces` ADD FULLTEXT `annonces` (`contenu`)');
-db_query('ALTER TABLE `cours` ADD FULLTEXT `cours` (`code` ,`description` ,`intitule` ,`course_keywords`, `course_addon`)');
-
-db_query('CREATE FULLTEXT INDEX course_units_title ON course_units (title)');
-db_query('CREATE FULLTEXT INDEX course_units_comments ON course_units (comments)');
-db_query('CREATE FULLTEXT INDEX unit_resources_title ON unit_resources (title)');
-db_query('CREATE FULLTEXT INDEX unit_resources_comments ON unit_resources (comments)');
-
+//dhmiourgia full text indexes
+db_query("ALTER TABLE `annonces` ADD FULLTEXT `annonces` (`contenu`)");
+db_query("ALTER TABLE `cours` ADD FULLTEXT `cours` (`code` ,`description` ,`intitule` ,`course_keywords`, `course_addon`)");

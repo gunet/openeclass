@@ -146,6 +146,7 @@ if (count($status) > 0) {
                 $result = db_query("SELECT contenu, temps, title
                                 FROM `$mysqlMainDb`.annonces, `$code`.accueil
                                 WHERE cours_id = $cid
+				AND `$mysqlMainDb`.annonces.visibility = 'v'
                                 AND temps > DATE_SUB('$logindate', INTERVAL 10 DAY)
                                 AND `$code`.accueil.visible = 1
                                 AND `$code`.accueil.id = 7

@@ -305,6 +305,15 @@ function upgrade_course_2_3($code, $lang, $extramessage = '') {
                 echo add_field('exercices', 'score', "TINYINT(1) NOT NULL DEFAULT '1'");
 }
 
+function upgrade_course_2_3($code, $lang, $extramessage = '') {
+	global $langUpgCourse, $global_messages;
+	
+	echo "<hr><p>$langUpgCourse <b>$code</b> (2.2.1) $extramessage<br />";
+	flush();
+	// upgrade polls
+	db_query("ALTER TABLE `poll_answer_record` CHANGE `answer_text` `answer_text` TEXT", $code);
+}
+
 
 function upgrade_course_2_2($code, $lang, $extramessage = '')
 {

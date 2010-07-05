@@ -344,6 +344,7 @@ if (!isset($_POST['submit2'])) {
                 db_query('CREATE FULLTEXT INDEX course_units_comments ON course_units (comments)');
                 db_query('CREATE FULLTEXT INDEX unit_resources_title ON unit_resources (title)');
                 db_query('CREATE FULLTEXT INDEX unit_resources_comments ON unit_resources (comments)');
+		db_query("ALTER TABLE `loginout` CHANGE `ip` `ip` CHAR(39) NOT NULL DEFAULT '0.0.0.0'");
         }
 
         // **********************************************
@@ -369,8 +370,10 @@ if (!isset($_POST['submit2'])) {
 			upgrade_course_2_3($code[0], $lang, "($i / $total)");
 		}
                 if ($oldversion < '2.4') {
+			db_query("ALTER TABLE `annonces` ADD `visibility` CHAR(1) NOT NULL DEFAULT 'v'");
                         convert_description_to_units($code[0], $code[2]);
                         upgrade_course_index_php($code[0]);
+			upgrade_course_2_4($code[0], $lang, "($i / $total)");
                 }
                 echo "</p>\n";
                 $i++;

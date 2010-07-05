@@ -233,6 +233,7 @@ function createQueries($queryParam){
 		$announce_query[$i] = "SELECT title, contenu, temps
                         FROM `$mysqlMainDb`.annonces, `$lesson_code[$i]`.accueil
                         WHERE cours_id = $lesson_id[$i]
+				AND visibility = 'v'
                                 AND DATE_FORMAT(temps,'%Y %m %d / %H %i') >='$dateVar'
                                 AND `$lesson_code[$i]`.accueil.visible = 1
                                 AND `$lesson_code[$i]`.accueil.id = 7

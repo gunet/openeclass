@@ -152,13 +152,16 @@ function checkrequired(which, entry) {
 
 </script>
 hContent;
-
-    $result = db_query("SELECT count(*) FROM annonces WHERE cours_id = $cours_id", $mysqlMainDb);
+    if ($is_adminOfCourse) {
+	$result = db_query("SELECT count(*) FROM annonces WHERE cours_id = $cours_id", $mysqlMainDb);
+    } else {
+	$result = db_query("SELECT count(*) FROM annonces WHERE cours_id = $cours_id AND visibility = 'v'", $mysqlMainDb);
+    }
+    
     list($announcementNumber) = mysql_fetch_row($result);
     mysql_free_result($result);
 
     $displayForm = true;
-
     /* up and down commands */
     if (isset($_GET['down'])) {
         $thisAnnouncementId = $_GET['down'];
@@ -174,7 +177,7 @@ hContent;
 		ORDER BY ordre $sortDirection", $mysqlMainDb);
 
         while (list ($announcementId, $announcementOrder) = mysql_fetch_row($result)) {
-            if (isset ($thisAnnouncementOrderFound) && $thisAnnouncementOrderFound == true) {
+            if (isset($thisAnnouncementOrderFound) && $thisAnnouncementOrderFound == true) {
                 $nextAnnouncementId = $announcementId;
                 $nextAnnouncementOrder = $announcementOrder;
                 db_query("UPDATE annonces SET ordre = '$nextAnnouncementOrder' WHERE id = '$thisAnnouncementId'", $mysqlMainDb);
@@ -189,6 +192,16 @@ hContent;
         }
     }
 
+    /* modify visibility */
+    if (isset($_GET['mkvis'])) {
+	$mkvis = intval($_GET['mkvis']);
+	if ($_GET['vis'] == 1) {
+	    $result = db_query("UPDATE annonces SET visibility = 'v' WHERE id = '$mkvis'", $mysqlMainDb);
+	}
+	if ($_GET['vis'] == 0) {
+	    $result = db_query("UPDATE annonces SET visibility = 'i' WHERE id = '$mkvis'", $mysqlMainDb);
+	}
+    }
     /* delete */
     if (isset($_GET['delete'])) {
 	$delete = intval($_GET['delete']);
@@ -320,7 +333,11 @@ hContent;
 } // end: teacher only
 
     /* display announcements */
-        $result = db_query("SELECT * FROM annonces WHERE cours_id = $cours_id ORDER BY ordre DESC", $mysqlMainDb);
+	if ($is_adminOfCourse) {
+	    $result = db_query("SELECT * FROM annonces WHERE cours_id = $cours_id ORDER BY ordre DESC", $mysqlMainDb);
+	} else {
+	    $result = db_query("SELECT * FROM annonces WHERE cours_id = $cours_id AND visibility = 'v' ORDER BY ordre DESC", $mysqlMainDb);
+	}
         $iterator = 1;
         $bottomAnnouncement = $announcementNumber = mysql_num_rows($result);
 
@@ -347,10 +364,24 @@ hContent;
             // display math symbols (if there are)
             $content = mathfilter($content, 12, "../../courses/mathimg/");
             $myrow['temps'] = nice_format($myrow['temps']);
-            if ($k%2==0) {
-	           $tool_content .= "\n<tr>";
+	    if ($is_adminOfCourse) {
+		if ($myrow['visibility'] == 'v') {
+		    $visibility = 0;
+		    $vis_icon = 'visible.gif';
+		    $classvis = 'visible';
+		}
+		if ($myrow['visibility'] == 'i') {
+		    $visibility = 1;
+		    $vis_icon = 'invisible.gif';
+		    $classvis = 'invisible';
+		}
+	    }
+	    if ($is_adminOfCourse) {
+		$tool_content .= "<tr class='$classvis'>";
+	    } elseif ($k%2 == 0) {
+	           $tool_content .= "<tr>";
 	        } else {
-	           $tool_content .= "\n<tr class='odd'>";
+	           $tool_content .= "<tr class='odd'>";
             }
             $tool_content .= "<td width='1'>
 	    <img style='padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet' /></td>
@@ -366,9 +397,11 @@ hContent;
 	    if ($is_adminOfCourse) {
 		$tool_content .= "<td width='70' class='right'>
 		<a href='$_SERVER[PHP_SELF]?modify=" . $myrow['id'] . "'>
-		<img src='../../template/classic/img/edit.gif' title='" . $langModify . "' /></a>
+		<img src='../../template/classic/img/edit.gif' title='" . $langModify . "' /></a>&nbsp;
 		<a href='$_SERVER[PHP_SELF]?delete=" . $myrow['id'] . "' onClick=\"return confirmation('');\">
-		<img src='../../template/classic/img/delete.gif' title='" . $langDelete . "' /></a>
+		<img src='../../template/classic/img/delete.gif' title='" . $langDelete . "' /></a>&nbsp;
+		<a href='$_SERVER[PHP_SELF]?mkvis=$myrow[id]&vis=$visibility'>
+		<img src='../../template/classic/img/$vis_icon' title='$langVisible' /></a>
 		</td>";
 	    }
 	if ($announcementNumber > 1)  {
