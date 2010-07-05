@@ -33,12 +33,15 @@ $local_style = 'h3 { font-size: 10pt;} li { font-size: 10pt;} ';
 
 $tool_content = "";
 
-if (isset($_GET['cid']))
+if (isset($_GET['cid'])) {
+  $cid = $_GET['cid'];
   $_SESSION['cid_tmp']=$cid;
-if(!isset($_GET['cid']))
+}
+if(!isset($_GET['cid'])) {
   $cid=$_SESSION['cid_tmp'];
+}
 
-if (!isset($doit) or $doit != "yes") {
+if (!isset($_GET['doit']) or $_GET['doit'] != "yes") {
 
   $tool_content .= "
     <table width='40%'>
@@ -48,7 +51,7 @@ if (!isset($doit) or $doit != "yes") {
       	<p>$langConfirmUnregCours:</p><p> <em>".course_code_to_title($cid)."</em>&nbsp;? </p>
 	<ul class='listBullet'>
 	<li>$langYes: 
-	<a href='$_SERVER[PHP_SELF]?u=$uid&amp;cid=$cid&amp;doit=yes' class=mainpage>$langUnregCourse</a>
+	<a href='$_SERVER[PHP_SELF]?u=$_SESSION[uid]&amp;cid=$cid&amp;doit=yes' class=mainpage>$langUnregCourse</a>
 	</li>
 	<li>$langNo: <a href='../../index.php' class=mainpage>$langBack</a>
 	</li></ul>
@@ -58,8 +61,9 @@ if (!isset($doit) or $doit != "yes") {
     </table>";
 
 } else {
-if (isset($uid) and $uid==$_SESSION['uid']) {
-            db_query("DELETE from cours_user WHERE cours_id = (SELECT cours_id FROM cours WHERE code = " . quote($cid) . ") AND user_id='$uid'");
+  if (isset($_SESSION['uid']) and $_GET['u'] == $_SESSION['uid']) {
+            db_query("DELETE from cours_user
+		    WHERE cours_id = (SELECT cours_id FROM cours WHERE code = " . quote($cid) . ") AND user_id='$_GET[u]'");
                 if (mysql_affected_rows() > 0) {
                         $tool_content .= "<p class='success_small'>$langCoursDelSuccess</p>";
                 } else {

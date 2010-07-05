@@ -37,12 +37,36 @@ $nameTools = $langModifProfile;
 check_guest();
 $allow_username_change = !get_config('block-username-change');
 
-if (isset($submit) && (!isset($ldap_submit)) && !isset($changePass)) {
+if (isset($_POST['nom_form'])) {
+	$nom_form = $_POST['nom_form'];
+}
+if (isset($_POST['prenom_form'])) {
+	$prenom_form = $_POST['prenom_form'];
+}
+if (isset($_POST['email_form'])) {
+	$email_form = $_POST['email_form'];
+}
+if (isset($_POST['am_form'])) {
+	$am_form = $_POST['am_form'];
+}
+if (isset($_POST['username_form'])) {
+	$username_form = $_POST['username_form'];
+}
+if (isset($_POST['userLanguage'])) {
+	$userLanguage = $_POST['userLanguage'];
+}
+if (isset($_POST['persoStatus'])) {
+	$persoStatus = $_POST['persoStatus'];
+}
+
+if (isset($_POST['submit']) && !isset($_GET['changePass'])) {
         if (!$allow_username_change) {
-                $username_form = $uname;
+                $username_form = $_SESSION['uname'];
         }
+	
 	// check if username exists
-	$username_check=mysql_query("SELECT username FROM user WHERE username='".escapeSimple($username_form)."'");
+	$username_check=mysql_query("SELECT username FROM user
+		WHERE username='".escapeSimple($username_form)."'");
 	while ($myusername = mysql_fetch_array($username_check))
 	{
 		$user_exist=$myusername[0];
@@ -65,7 +89,7 @@ if (isset($submit) && (!isset($ldap_submit)) && !isset($changePass)) {
 	}
 
 	// check if username is free
-	elseif(isset($user_exist) AND ($username_form==$user_exist) AND ($username_form!=$uname)) {
+	elseif(isset($user_exist) AND ($username_form == $user_exist) AND ($username_form != $_SESSION['uname'])) {
 		header("location:". $_SERVER['PHP_SELF']."?msg=5");
 		exit();
 	}
@@ -84,10 +108,10 @@ if (isset($submit) && (!isset($ldap_submit)) && !isset($changePass)) {
 
 		$username_form = escapeSimple($username_form);
 		if(mysql_query("UPDATE user
-	        SET nom='$nom_form', prenom='$prenom_form',
-	        username='$username_form', email='$email_form', am='$am_form',
-	            perso='$persoStatus', lang='$langcode'
-	        WHERE user_id='".$_SESSION["uid"]."'")) {
+			SET nom='$nom_form', prenom='$prenom_form',
+			username='$username_form', email='$email_form', am='$am_form',
+			    perso='$persoStatus', lang='$langcode'
+			WHERE user_id='".$_SESSION["uid"]."'")) {
 			if (isset($_SESSION['user_perso_active']) and $persoStatus == "no") {
                 		unset($_SESSION['user_perso_active']);
 			}
@@ -97,27 +121,10 @@ if (isset($submit) && (!isset($ldap_submit)) && !isset($changePass)) {
 	}
 }	// if submit
 
-##[BEGIN personalisation modification - For LDAP users]############
-if (isset($submit) && isset($ldap_submit) && ($ldap_submit == "ON")) {
-	$_SESSION['langswitch'] = $language = langcode_to_name($_REQUEST['userLanguage']);
-	$langcode = langname_to_code($language);
-
-	mysql_query("UPDATE user SET perso = '$persoStatus',
-		lang = '$langcode' WHERE user_id='".$_SESSION["uid"]."' ");
-	
-	if (isset($_SESSION['user_perso_active']) and $persoStatus == "no") {
-		unset($_SESSION['user_perso_active']);
-	}
-
-	header("location:". $_SERVER['PHP_SELF']."?msg=1");
-	exit();
-}
-##[END personalisation modification]############
-
 //Show message if exists
-if(isset($msg))
+if(isset($_GET['msg']))
 {
-	switch ($msg){
+	switch ($_GET['msg']){
 		case 1: { //profile information changed successfully (not the password data!)
 			$message = $langProfileReg;
 			$urlText = $langHome;
@@ -210,17 +217,16 @@ $sec = $urlSecure.'modules/profile/profile.php';
 $passurl = $urlSecure.'modules/profile/password.php';
 $authmethods = array("imap","pop3","ldap","db","shibboleth");
 
-if ((!isset($changePass)) || isset($_POST['submit'])) {
+if ((!isset($_GET['changePass'])) || isset($_POST['submit'])) {
 	$tool_content .= "<div id=\"operations_container\"><ul id=\"opslist\">";
 	if(!in_array($password_form,$authmethods)) {
 		$tool_content .= "<li><a href=\"".$passurl."\">".$langChangePass."</a></li>";
 	}
 	$tool_content .= " <li><a href='../unreguser/unreguser.php'>$langUnregUser</a></li>";
 	$tool_content .= "</ul></div>";
-	$tool_content .= "<form method=\"post\" action=\"$sec?submit=yes\"><br/>
-    <table width=\"99%\">
-    <tbody><tr>
-       <th width=\"220\" class='left'>$langName</th>";
+	$tool_content .= "<form method='post' action=\"$sec?submit=yes\"><br/>
+	<table width=\"99%\">
+	<tbody><tr><th width=\"220\" class='left'>$langName</th>";
 
 	if (isset($_SESSION['shib_user'])) {
                 $auth_text = "Shibboleth user";
@@ -230,9 +236,7 @@ if ((!isset($changePass)) || isset($_POST['submit'])) {
 		$tool_content .= "<td><input class='FormData_InputText' type=\"text\" size=\"40\" name=\"prenom_form\" value=\"$prenom_form\"></td>";
 	}
 	
-	$tool_content .= "</tr>
-    <tr>
-       <th class='left'>$langSurname</th>";
+	$tool_content .= "</tr><tr><th class='left'>$langSurname</th>";
 	if (isset($_SESSION['shib_user'])) {
                 $auth_text = "Shibboleth user";
 		$tool_content .= "<td class=\"caution_small\">&nbsp;&nbsp;&nbsp;&nbsp;<b>".$nom_form."</b> [".$auth_text."]
@@ -240,13 +244,12 @@ if ((!isset($changePass)) || isset($_POST['submit'])) {
 	} else {
        		$tool_content .= "<td><input class='FormData_InputText' type=\"text\" size=\"40\" name=\"nom_form\" value=\"$nom_form\"></td>";
 	}
-    $tool_content .= "</tr>";
+	$tool_content .= "</tr>";
 
 	if(!in_array($password_form,$authmethods) and $allow_username_change) {
-		$tool_content .= "<tr>
-       <th class='left'>$langUsername</th>
-       <td><input class='FormData_InputText' type=\"text\" size=\"40\" name=\"username_form\" value=\"$username_form\"></td>
-    </tr>";
+		$tool_content .= "<tr><th class='left'>$langUsername</th>
+		<td><input class='FormData_InputText' type=\"text\" size=\"40\" name=\"username_form\" value=\"$username_form\"></td>
+		</tr>";
 	}
 	else		// means that it is external auth method, so the user cannot change this password
 	{
@@ -263,13 +266,12 @@ if ((!isset($changePass)) || isset($_POST['submit'])) {
 		} else {
 			$auth_text = get_auth_info($auth);
 		}
-		$tool_content .= "
-    <tr>
-      <th class='left'>".$langUsername. "</th>
-      <td class=\"caution_small\">&nbsp;&nbsp;&nbsp;&nbsp;<b>".$username_form."</b> [".$auth_text."]
-        <input type=\"hidden\" name=\"username_form\" value=\"$username_form\">
-      </td>
-    </tr>";
+		$tool_content .= "<tr>
+		<th class='left'>".$langUsername. "</th>
+		<td class=\"caution_small\">&nbsp;&nbsp;&nbsp;&nbsp;<b>".$username_form."</b> [".$auth_text."]
+		<input type=\"hidden\" name=\"username_form\" value=\"$username_form\">
+		</td>
+		</tr>";
 	}
 
 	$tool_content .= "<tr><th class='left'>$langEmail</th>";
@@ -280,35 +282,27 @@ if ((!isset($changePass)) || isset($_POST['submit'])) {
 	} else {
 		$tool_content .= "<td><input class='FormData_InputText' type=\"text\" size=\"40\" name=\"email_form\" value=\"$email_form\"></td>";
 	}
-    $tool_content .= "</tr><tr>
-        <th class='left'>$langAm</th>
-        <td><input class='FormData_InputText' type=\"text\" size=\"40\" name=\"am_form\" value=\"$am_form\"></td>
-    </tr>";
+	$tool_content .= "</tr><tr>
+	    <th class='left'>$langAm</th>
+	    <td><input class='FormData_InputText' type=\"text\" size=\"40\" name=\"am_form\" value=\"$am_form\"></td>
+	</tr>";
 	##[BEGIN personalisation modification]############
 	if (isset($_SESSION['perso_is_active'])) {
 		$tool_content .= "<tr><th class='left'>$langPerso</th><td>
 		<input class='FormData_InputText' type=radio name='persoStatus' value='no' $checkedPerso>$langModern&nbsp;
 		<input class='FormData_InputText' type=radio name='persoStatus' value='yes' $checkedClassic>$langClassic
-		</td>
-    </tr>";
+		</td></tr>";
 	}
 	##[END personalisation modification]############
-	$tool_content .= "
-    <tr>
-      <th class='left'>$langLanguage</th>
-      <td>
-        " . lang_select_options('userLanguage') . "
-      </td>
-    </tr>
-	<tr>
-      <th>&nbsp;</th>
-      <td><input type=\"Submit\" name=\"submit\" value=\"$langModify\"></td>
-    </tr>
-    </tbody>
-    </table>
-
-</form>
-   ";
+	$tool_content .= "<tr><th class='left'>$langLanguage</th>
+	  <td>
+	    " . lang_select_options('userLanguage') . "
+	  </td>
+	</tr>
+	<tr><th>&nbsp;</th>
+	<td><input type='submit' name='submit' value='$langModify'></td>
+	</tr>
+	</tbody>
+	</table></form>";
 }
-
 draw($tool_content, 1);
