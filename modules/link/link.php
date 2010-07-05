@@ -114,7 +114,7 @@ if (isset($_POST['selectcategory'])) {
 	$selectcategory = $_POST['selectcategory'];
 }
 if (isset($_POST['categoryname'])) {
-	$categoryname = $_POST['categoryname	'];
+	$categoryname = $_POST['categoryname'];
 }
 if (isset($_POST['id'])) {
 	$id = $_POST['id'];
