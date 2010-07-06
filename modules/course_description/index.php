@@ -112,7 +112,7 @@ if ($q and mysql_num_rows($q) > 0) {
       </td>
     </tr>
     <tr>
-      <td colspan='2'>" . mathfilter(make_clickable($row['comments']), 12, '../../courses/mathimg/') . "</td>
+      <td colspan='2'>" . standard_text_escape($row['comments']) . "</td>
     </tr>
     </table>";
 	}

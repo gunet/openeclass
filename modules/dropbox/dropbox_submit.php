@@ -194,10 +194,11 @@ if (!isset( $_POST['authors']) || !isset( $_POST['description']))
 			}
 
 			//After uploading the file, create the db entries
-			if (!$error)
-			{
-				move_uploaded_file($dropbox_filetmpname, $dropbox_cnf["sysPath"] . '/' . $dropbox_filename)
-				or die($dropbox_lang["uploadError"]);
+                        if (!$error) {
+                                $filename_final = $dropbox_cnf['sysPath'] . '/' . $dropbox_filename;
+				move_uploaded_file($dropbox_filetmpname, $filename_final)
+                                        or die($dropbox_lang["uploadError"]);
+                                @chmod($filename_final, 0644);
 				new Dropbox_SentWork($uid, $dropbox_title, $_POST['description'], $_POST['authors'], $dropbox_filename, $dropbox_filesize, $newWorkRecipients);
 			}
 		}

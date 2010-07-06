@@ -123,7 +123,7 @@ cData;
 		<img src='../../template/classic/img/edit.gif' border='0' align='absmiddle' title='$langModify'></a>";
 	}
 
-	$questionDescription = mathfilter($questionDescription, 12, "../../courses/mathimg/");
+	$questionDescription = standard_text_escape($questionDescription);
 	$tool_content .= "<br/><i>$questionDescription</i>";
 	// show the picture of the question
 	if($okPicture) {

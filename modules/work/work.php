@@ -346,7 +346,8 @@ function submit_work($id) {
 	$secret = work_secret($id);
         $ext = get_file_extension($_FILES['userfile']['name']);
 	$filename = "$secret/$local_name" . (empty($ext)? '': '.' . $ext);
-	if (move_uploaded_file($_FILES['userfile']['tmp_name'], "$workPath/$filename")) {
+        if (move_uploaded_file($_FILES['userfile']['tmp_name'], "$workPath/$filename")) {
+                @chmod("$workPath/$filename", 0644);
 		$msg2 = "$langUploadSuccess";//to message
 		$group_id = user_group($uid, FALSE);
 		if ($group_sub == 'yes' and !was_submitted(-1, $group_id, $id)) {
@@ -916,7 +917,7 @@ cData;
 
 			//professor comments
 			if (trim($row['grade_comments'] != '')) {
-				$prof_comment = "".htmlspecialchars($row['grade_comments']).
+				$prof_comment = standard_text_escape($row['grade_comments']).
 				" (<a href='grade_edit.php?assignment=$id&submission=$row[id]'>".
 				"$m[edit]</a>)";
 			} else {
@@ -1052,7 +1053,7 @@ function show_student_assignments()
 cData;
         $k = 0;
 		while ($row = mysql_fetch_array($result)) {
-			$title_temp = htmlspecialchars($row['title']);
+			$title_temp = q($row['title']);
 			if ($k%2==0) {
 	           $tool_content .= "\n      <tr>";
 	        } else {
@@ -1157,7 +1158,7 @@ cData;
       <td width='1%'><img style='border:0px; padding-top:3px;' src='$urlServer/template/classic/img/$visibility_image.gif' title='bullet' /></td>
       <td ".$visibility_css."><a href='work.php?id=${row['id']}' ";
 			$tool_content .= ">";
-			$tool_content .= $row_title = htmlspecialchars($row['title']);
+			$tool_content .= $row_title = q($row['title']);
 			$tool_content .= "</a></td>
       <td align='center'>".nice_format($row['deadline'])."</td>
       <td align='right'>

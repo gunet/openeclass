@@ -1296,7 +1296,7 @@ function register_posted_variables($var_array, $what = 'all')
         $any_set = false;
         foreach ($var_array as $varname => $required) {
                 if (isset($_POST[$varname])) {
-                        $GLOBALS[$varname] = preg_replace('/ +/', ' ', trim($_POST[$varname]));
+                        $GLOBALS[$varname] = canonicalize_whitespace($_POST[$varname]);
                         if ($required and empty($GLOBALS[$varname])) {
                                 $all_set = false;
                         }

@@ -139,10 +139,11 @@ if (isset($_SESSION['uid'])) {
 	$uid = 0;
 }
 
-if (isset($_SESSION["is_admin"]) and $_SESSION["is_admin"])
-	$is_admin = TRUE;
-else
-	$is_admin = FALSE;
+if (isset($_SESSION['is_admin']) and $_SESSION['is_admin']) {
+	$is_admin = true;
+} else {
+        $is_admin = false;
+}
 
 if (isset($require_login) and $require_login and !$uid) {
 	$toolContent_ErrorExists = $langLoginRequired;
@@ -162,8 +163,6 @@ if (!isset($guest_allowed) || $guest_allowed!= true){
 		$errorMessagePath = "../../";
 	}
 }
-
-
 
 // If $require_current_course is true, initialise course settings
 // Read properties of current course

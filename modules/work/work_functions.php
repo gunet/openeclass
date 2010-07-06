@@ -58,15 +58,17 @@
 
 
 // Print a two-cell table row with that title, if the content is non-empty
-function table_row($title, $content)
+function table_row($title, $content, $html = false)
 {
-	global $tool_content;
-	if (trim($content) != '') {
-		$tool_content .= "
-    <tr>
-      <th class=\"left\">$title:</th>
-      <td>".htmlspecialchars($content)."</td>
-    </tr>";
+        global $tool_content;
+
+        if ($html) {
+                $content = standard_text_escape($content);
+        } else {
+                $content = htmlspecialchars($content);
+        }
+	if (strlen(trim($content))) {
+		$tool_content .= "<tr><th class='left'>$title:</th><td>$content</td></tr>";
 	}
 }
 
@@ -319,7 +321,7 @@ function show_submission_details($id)
 	table_row($m['gradecomments'], $sub['grade_comments']);
 	table_row($m['sub_date'], $sub['submission_date']);
 	table_row($m['filename'], $sub['file_name']);
-	table_row($m['comments'], $sub['comments']);
+	table_row($m['comments'], $sub['comments'], true);
 	$tool_content .= "
     </tbody>
     </table>

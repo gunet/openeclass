@@ -133,10 +133,10 @@ $code=$repertoire;
 
 	mysql_query("INSERT INTO users VALUES (
                '1',
-               '$nom $prenom',
+               '$_SESSION[nom] $_SESSION[prenom]',
                NOW(),
                'password',
-               '$email',
+               '$_SESSION[email]',
                NULL,
                NULL,
                NULL,
@@ -271,7 +271,7 @@ TYPE=MyISAM $charset_spec");
     }
 
     //allagh timwn sto array analoga me to poio checkbox exei epilegei
-    foreach ($subsystems as $sb )
+    foreach ($_POST['subsystems'] as $sb )
     {
         $sbsystems[$sb] = 1;
     }

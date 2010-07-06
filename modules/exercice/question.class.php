@@ -24,6 +24,8 @@
 *  			eMail: info@openeclass.org
 * =========================================================================*/
 
+// Needed for add_ext_on_mime() which is not yet suported here
+// include '../../include/lib/fileUploadLib.inc.php';
 
 if(!class_exists('Question')):
 
@@ -272,11 +274,17 @@ class Question
 		global $picturePath;
 
 		// if the question has got an ID
-		if($this->id)
-		{
-	  		return @move_uploaded_file($Picture,$picturePath.'/quiz-'.$this->id)?true:false;
+                if($this->id) {
+                        // Adding extension to file isn't supported yet
+                        // $filename_final = add_ext_on_mime($picturePath . '/quiz-' . $this->id,
+                        //                                   'imageUpload');
+                        $filename_final = $picturePath . '/quiz-' . $this->id;
+                        $result = @move_uploaded_file($Picture, $filename_final);
+                        if ($result) {
+                                @chmod($filename_final, 0644);
+                                return true;
+                        }
 		}
-
 		return false;
 	}
 

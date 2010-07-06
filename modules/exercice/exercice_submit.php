@@ -41,7 +41,8 @@ $guest_allowed = true;
 
 include '../../include/baseTheme.php';
 include '../../include/lib/textLib.inc.php';
-$tool_content = "";
+
+$tool_content = '';
 
 $nameTools = $langExercicesView;
 $picturePath='../../courses/'.$currentCourseID.'/image';
@@ -189,8 +190,7 @@ if(@$_POST['questionNum']) {
 	$QUERY_STRING="questionNum=$questionNum";
 }
 	
-	$exerciseDescription_temp = nl2br(make_clickable($exerciseDescription));
-	$exerciseDescription_temp = mathfilter($exerciseDescription_temp, 12, "../../courses/mathimg/");
+	$exerciseDescription_temp = standard_text_escape($exerciseDescription);
 	$tool_content .= <<<cData
       <table width="99%" class="Exercise">
       <thead>

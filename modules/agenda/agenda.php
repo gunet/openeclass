@@ -387,11 +387,7 @@ if (mysql_num_rows($result) > 0) {
 	$tool_content .= "\n    <table width='99%' align='left' class='Agenda'>";
 	$tool_content .= "\n    <tbody>";
 	while ($myrow = mysql_fetch_array($result)) {
-		$contenu = $myrow["contenu"];
-		$contenu = nl2br($contenu);
-		$contenu = make_clickable($contenu);
-		// display math symbols (if there are)
-	    	$contenu = mathfilter($contenu, 12, "../../courses/mathimg/");
+		$contenu = standard_text_escape($myrow['contenu']);
 		if (!$nowBarShowed) {
 			// Following order
 			if (((strtotime($myrow["day"]." ".$myrow["hour"]) > time()) && ($sens==" ASC")) ||

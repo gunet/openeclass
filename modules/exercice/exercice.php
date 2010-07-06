@@ -40,6 +40,7 @@ $helpTopic = 'Exercise';
 $guest_allowed = true;
 
 include '../../include/baseTheme.php';
+
 /**** The following is added for statistics purposes ***/
 include('../../include/action.php');
 $action = new action();
@@ -178,8 +179,7 @@ while($row = mysql_fetch_array($result)) {
 	} else {
 		$tool_content .= "<tr class='odd'>";
 	}
-	// display math symbols (if any)
-	$row['description'] = mathfilter($row['description'], 12, "../../courses/mathimg/");
+	$row['description'] = standard_text_escape($row['description']);
 
 	// prof only
         if($is_adminOfCourse) {

@@ -203,7 +203,7 @@ if(isset($modifyExercise))
 	<th class='left'>$langExerciseDescription :</th>
 	<td>";
 	
-	$exerciseDescription = mathfilter($exerciseDescription, 12, "../../courses/mathimg/");
+	$exerciseDescription = standard_text_escape($exerciseDescription);
 	$tool_content .= $exerciseDescription;
 	$exerciseStartDate = nice_format($exerciseStartDate);
 	$exerciseEndDate = nice_format($exerciseEndDate);

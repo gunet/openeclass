@@ -360,9 +360,7 @@ hContent;
 	$tool_content .= "<tbody>";
 	$k = 0;
         while ($myrow = mysql_fetch_array($result)) {
-            $content = $purifier->purify($myrow['contenu']);
-            // display math symbols (if there are)
-            $content = mathfilter($content, 12, "../../courses/mathimg/");
+            $content = standard_text_escape($myrow['contenu']);
             $myrow['temps'] = nice_format($myrow['temps']);
 	    if ($is_adminOfCourse) {
 		if ($myrow['visibility'] == 'v') {

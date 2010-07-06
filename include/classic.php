@@ -159,10 +159,7 @@ if (count($status) > 0) {
                         }
                         $la = 0;
                         while ($ann = mysql_fetch_array($result)) {
-                                        $content = $ann['contenu'];
-                                        $content = make_clickable($content);
-                                        $content = nl2br($content);
-                                        $content = mathfilter($content, 12, "courses/mathimg/");
+                                        $content = standard_text_escape($ann['contenu']);
                                         if ($la%2 == 0) {
                                                 $tool_content .= "\n<tr>";
                                         } else {

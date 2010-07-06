@@ -84,15 +84,15 @@ if ($res and mysql_num_rows($res) > 0) {
                 if ($row['res_id'] == -1) {
                         $description = standard_text_escape($row['comments']);
                 } elseif ($row['res_id'] == -2) {
-                        $addon = nl2br(trim(q($row['comments'])));
+                        $addon = standard_text_escape($row['comments']);
                 } else {
                         if (isset($idBloc[$row['res_id']]) and !empty($idBloc[$row['res_id']])) {
                                 $element_id = " id='{$idBloc[$row['res_id']]}'";
                         } else {
                                 $element_id = '';
                         }
-                        $main_extra .= "<div class='course_info'$element_id><h1>" . q($row['title']) . "</h1><p>" .
-                                standard_text_escape($row['comments']) . "</p></div>\n";
+                        $main_extra .= "<div class='course_info'$element_id><h1>" . q($row['title']) . "</h1>" .
+                                standard_text_escape($row['comments']) . "</div>\n";
                 }
         }
 }

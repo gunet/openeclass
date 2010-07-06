@@ -48,8 +48,7 @@ function showQuestion($questionId, $onlyAnswers=false) {
 		$questionName=latex_content($questionName);
 		$questionDescription=latex_content($questionDescription);
 
-	$questionDescription_temp = nl2br(make_clickable($questionDescription));
-	$questionDescription_temp = mathfilter($questionDescription_temp, 12, "../../courses/mathimg/");
+	$questionDescription_temp = standard_text_escape($questionDescription);
 	$tool_content .= <<<cData
       <tr>
         <td colspan="2">
@@ -94,10 +93,8 @@ cData;
 	}
 
 	for($answerId=1;$answerId <= $nbrAnswers;$answerId++) {
-		$answer=$objAnswerTmp->selectAnswer($answerId);
+		$answer = standard_text_escape($objAnswerTmp->selectAnswer($answerId));
 		$answerCorrect=$objAnswerTmp->isCorrect($answerId);
-		// support for math symbols
-		$answer = mathfilter($answer, 12, "../../courses/mathimg/");
 		if($answerType == FILL_IN_BLANKS) {
 			// splits text and weightings that are joined with the character '::'
 			list($answer)=explode('::',$answer);

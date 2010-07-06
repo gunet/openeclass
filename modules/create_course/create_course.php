@@ -108,7 +108,7 @@ tinyMCE.init({
 </script>
 hContent;
 
-$titulaire_probable="$prenom $nom";
+$titulaire_probable="$_SESSION[prenom] $_SESSION[nom]";
 
 $tool_content .= "<form method='post' name='createform' action='$_SERVER[PHP_SELF]' onsubmit=\"return checkrequired(this, 'intitule', 'titulaires');\">";
 
@@ -140,6 +140,7 @@ escape_if_exists('course_addon');
 escape_if_exists('course_keywords');
 escape_if_exists('visit');
 escape_if_exists('password');
+escape_if_exists('formvisible');
 
 $tool_content .= $intitule_html .
                  $faculte_html .
@@ -216,12 +217,12 @@ if (isset($_POST['back1']) or !isset($_POST['visit'])) {
 	".
         rich_text_editor('description', 4, 20, $description)."</td></tr>
 	<tr>
-	<td>$langCourseKeywords&nbsp;<br>
-	<textarea name='course_keywords' cols='65' rows='3' class='FormData_InputText'>$course_keywords</textarea></td>
-	</tr>
-	<tr>
 	<td>$langCourseAddon&nbsp;<br />
 	<textarea name='course_addon' cols='65' rows='5' class='FormData_InputText'>$course_addon</textarea></td>
+	</tr>
+	<tr>
+	<td>$langCourseKeywords&nbsp;<br>
+	<input type='text' name='course_keywords' size='65' class='FormData_InputText' value='$course_keywords' /></td>
 	</tr>
 	<tr>
 	<td><input class='Login' type='submit' name='back1' value='< $langPreviousStep ' />&nbsp;<input class='Login' type='submit' name='create3' value='$langNextStep >' /></td></tr>
@@ -452,15 +453,11 @@ if (isset($_POST['create_course'])) {
 
         // ----------- main course index.php -----------
 
-        $fd=fopen("../../courses/$repertoire/index.php", "w");
-        $string="<?php
-                session_start();
-        $titou=\"$repertoire\";
-        \$_SESSION['dbname']=\$dbname;
-        include(\"../../modules/course_home/course_home.php\");
-        ?>";
-
-        fwrite($fd, "$string");
+        $fd = fopen("../../courses/$repertoire/index.php", "w");
+        fwrite($fd, "<?php\nsession_start();\n" .
+                    "\$_SESSION['dbname']='$repertoire';\n" .
+                    "include '../../modules/course_home/course_home.php';\n");
+        fclose($fd);
         $status[$repertoire] = 1;
         $_SESSION['status'] = $status;
 
