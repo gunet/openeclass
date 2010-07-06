@@ -39,13 +39,13 @@
  *
  */
 include ('init.php');
-if ($is_adminOfCourse and isset($currentCourseID)) {
-	if (isset($_GET['hide']) and $_GET['hide'] == 0) {
-		db_query("UPDATE accueil SET visible = 0 WHERE id='$eclass_module_id'", $currentCourseID);
-	} else if (isset($_GET['hide']) and $_GET['hide'] == 1) {
-		db_query("UPDATE accueil SET visible = 1 WHERE id='$eclass_module_id'", $currentCourseID);
-	}
+
+if ($is_adminOfCourse and isset($currentCourseID) and isset($_GET['hide'])) {
+        $eclass_module_id = intval($_GET['eclass_module_id']);
+	$visible = ($_GET['hide'] == 0)? 0: 1;
+        db_query("UPDATE accueil SET visible = $visible WHERE id = $eclass_module_id", $currentCourseID);
 }
+
 //template path for logged out + logged in (ex., when session expires)
 $extraMessage = ""; //initialise var for security
 if (isset($errorMessagePath)) {
