@@ -291,10 +291,22 @@ function upgrade_course($code, $lang)
 	upgrade_course_old($code, $lang);
 	upgrade_course_2_1_3($code);
 	upgrade_course_2_2($code, $lang);
-	upgrade_course_2_3($code, $lang);
+	upgrade_course_2_3($code);
+	upgrade_course_2_4($code);
 }
 
-function upgrade_course_2_3($code, $lang, $extramessage = '') {
+function upgrade_course_2_4($code, $extramessage = '')
+{
+	global $langUpgCourse, $global_messages;
+	
+	mysql_select_db($code);
+	echo "<hr><p>$langUpgCourse <b>$code</b> (2.2.1) $extramessage<br />";
+	flush();
+	// upgrade polls
+	db_query("ALTER TABLE `poll_answer_record` CHANGE `answer_text` `answer_text` TEXT", $code);
+}
+
+function upgrade_course_2_3($code, $extramessage = '') {
 	global $langUpgCourse, $global_messages;
 
 	mysql_select_db($code);
@@ -304,16 +316,6 @@ function upgrade_course_2_3($code, $lang, $extramessage = '') {
 	if (!mysql_field_exists("$code",'exercices','score'))
                 echo add_field('exercices', 'score', "TINYINT(1) NOT NULL DEFAULT '1'");
 }
-
-function upgrade_course_2_3($code, $lang, $extramessage = '') {
-	global $langUpgCourse, $global_messages;
-	
-	echo "<hr><p>$langUpgCourse <b>$code</b> (2.2.1) $extramessage<br />";
-	flush();
-	// upgrade polls
-	db_query("ALTER TABLE `poll_answer_record` CHANGE `answer_text` `answer_text` TEXT", $code);
-}
-
 
 function upgrade_course_2_2($code, $lang, $extramessage = '')
 {
