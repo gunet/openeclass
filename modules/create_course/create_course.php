@@ -108,7 +108,7 @@ tinyMCE.init({
 </script>
 hContent;
 
-$titulaire_probable="$_SESSION[prenom] $_SESSION[nom]";
+$titulaire_probable = "$_SESSION[prenom] $_SESSION[nom]";
 
 $tool_content .= "<form method='post' name='createform' action='$_SERVER[PHP_SELF]' onsubmit=\"return checkrequired(this, 'intitule', 'titulaires');\">";
 
@@ -129,18 +129,26 @@ function escape_if_exists($name) {
                 $GLOBALS[$name . '_html'] = $GLOBALS[$name] = '';
         }
 }
-
 escape_if_exists('intitule');
 escape_if_exists('faculte');
 escape_if_exists('titulaires');
 escape_if_exists('type');
 escape_if_exists('languageCourse');
 escape_if_exists('description');
-escape_if_exists('course_addon');
 escape_if_exists('course_keywords');
 escape_if_exists('visit');
 escape_if_exists('password');
 escape_if_exists('formvisible');
+
+if (empty($faculte)) {
+        list($homefac) = mysql_fetch_row(db_query("SELECT department FROM user WHERE user_id=$uid"));
+} else {
+        $homefac = intval($faculte);
+}
+
+if (empty($titulaires)) {
+        $titulaires = $titulaire_probable;
+}
 
 $tool_content .= $intitule_html .
                  $faculte_html .
@@ -148,7 +156,6 @@ $tool_content .= $intitule_html .
                  $type_html .
                  $languageCourse_html .
                  $description_html .
-                 $course_addon_html .
                  $course_keywords_html .
                  $visit_html .
                  $password_html;
@@ -171,7 +178,6 @@ if (isset($_POST['back1']) or !isset($_POST['visit'])) {
 	<tr>
 	<th class='left'>$langFaculty&nbsp;:</th>
 	<td>";
-	list($homefac) = mysql_fetch_row(db_query("SELECT department FROM user WHERE user_id=$uid"));
 	$facs = db_query("SELECT id, name FROM faculte order by id");
 	while ($n = mysql_fetch_array($facs)) {
 		$fac[$n['id']] = $n['name'];
@@ -181,20 +187,15 @@ if (isset($_POST['back1']) or !isset($_POST['visit'])) {
 	unset($repertoire);
 	$tool_content .= "<tr>
 	<th class='left'>$langTeachers&nbsp;:</th>
-	<td><input class='FormData_InputText' type='text' name='titulaires' size='60' value='".$titulaire_probable."' /></td>
+	<td><input class='FormData_InputText' type='text' name='titulaires' size='60' value='" . q($titulaires) . "' /></td>
 	<td>&nbsp;</td></tr>
 	<tr>
 	<th class='left'>$langType&nbsp;:</th>
-	<td>";
-	$tool_content .= " ".selection(array('pre' => $langpre, 'post' => $langpost, 'other' => $langother), 'type', $type)." ";
-	$tool_content .= "
-	</td>
+	<td>" .  selection(array('pre' => $langpre, 'post' => $langpost, 'other' => $langother), 'type', $type) . "</td>
 	<td>&nbsp;</td></tr>
 	<tr>
 	<th class='left'>$langLanguage&nbsp;:</th>
-	<td>";
-	$tool_content .= lang_select_options('languageCourse');
-	$tool_content .= "</td><td>&nbsp;</td></tr>
+	<td>" . lang_select_options('languageCourse', '', $languageCourse) . "</td><td>&nbsp;</td></tr>
 	<tr><th>&nbsp;</th>
 	<td><input class='Login' type='submit' name='create2' value='$langNextStep >' /><input type='hidden' name='visit' value='true' /></td>
 	<td><p align='right'><small>(*) &nbsp;$langFieldsRequ</small></p></td>
@@ -216,10 +217,6 @@ if (isset($_POST['back1']) or !isset($_POST['visit'])) {
 	<tr><td>$langDescrInfo&nbsp;:<br />
 	".
         rich_text_editor('description', 4, 20, $description)."</td></tr>
-	<tr>
-	<td>$langCourseAddon&nbsp;<br />
-	<textarea name='course_addon' cols='65' rows='5' class='FormData_InputText'>$course_addon</textarea></td>
-	</tr>
 	<tr>
 	<td>$langCourseKeywords&nbsp;<br>
 	<input type='text' name='course_keywords' size='65' class='FormData_InputText' value='$course_keywords' /></td>
@@ -442,13 +439,9 @@ if (isset($_POST['create_course'])) {
         $titou='$dbname';
 
         $description = trim(autounquote($description));
-        $course_addon = trim(autounquote($course_addon));
         $unit_id = description_unit_id($new_cours_id);
         if (!empty($description)) {
                 add_unit_resource($unit_id, 'description', -1, $langDescription, trim(autounquote($description)));
-        }
-        if (!empty($course_addon)) {
-                add_unit_resource($unit_id, 'description', false, $langCourseAddon, trim(autounquote($course_addon)), 'v');
         }
 
         // ----------- main course index.php -----------
