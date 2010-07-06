@@ -32,7 +32,7 @@ $nameTools = $langDelCourse;
 $tool_content = "";
 
 if($is_adminOfCourse) {
-	if(isset($delete)) {
+	if(isset($_POST['delete'])) {
 		mysql_select_db($mysqlMainDb);
                 db_query("DELETE FROM unit_resources WHERE unit_id IN
                                 (SELECT id FROM course_units WHERE course_id = $cours_id)");
@@ -64,11 +64,13 @@ if($is_adminOfCourse) {
 		</tr>
 		<tr>
 		<th rowspan='2' class='left' width='220'>$langConfirmDel :</th>
-		<td width='52' align='center'><a href=\"".$_SERVER['PHP_SELF']."?delete=yes\">$langYes</a></td>
+                <td width='52' align='center'><form method='post' action='delete_course.php'>
+                                              <input type='submit' name='delete' value='$langDelete' /></form></td>
 		<td><small>$langByDel</small></td>
 		</tr>
 		<tr>
-		<td align='center'><a href=\"infocours.php\">$langNo</a></td>
+                <td align='center'><form method='get' action='infocours.php'>
+                                   <input type='submit' name='dont_delete' value='$langCancel' /></form></td>
 		<td>&nbsp;</td>
 		</tr>
 		</tbody>
