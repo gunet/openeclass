@@ -41,8 +41,8 @@ body { font-family: Verdana, Arial, Helvetica, sans-serif; }
 <?
 include '../../include/lib/textLib.inc.php';
 
-$coursePath=$webDir."courses";
-$fileChatName   = $coursePath.'/'.$currentCourseID.'.chat.txt';
+$coursePath = $webDir."courses";
+$fileChatName = $coursePath.'/'.$currentCourseID.'.chat.txt';
 $tmpArchiveFile = $coursePath.'/'.$currentCourseID.'.tmpChatArchive.txt';
 $pathToSaveChat = $coursePath.'/'.$currentCourseID.'/document/';
 
@@ -54,10 +54,11 @@ define('MESSAGE_LINE_NB',  40);
 // (the rest are in the current chat file)
 define('MAX_LINE_IN_FILE', 80);
 
-if ($GLOBALS['language'] == 'greek')
+if ($GLOBALS['language'] == 'greek') {
 	$timeNow = date("d-m-Y / H:i",time());
-else
+} else {
 	$timeNow = date("Y-m-d / H:i",time());
+}
 
 if (!file_exists($fileChatName)) {
 	$fp = fopen($fileChatName, 'w')
@@ -93,19 +94,20 @@ if (isset($_GET['store']) && $is_adminOfCourse) {
 }
 
 // add new line
-if (isset($chatLine) and trim($chatLine) != '') {
-	$chatLine = standard_text_escape($chatLine);
+if (isset($_GET['chatLine']) and trim($_GET['chatLine']) != '') {
+	$chatLine = standard_text_escape($_GET['chatLine']);
 	$fchat = fopen($fileChatName,'a');
 	fwrite($fchat,$timeNow.' - '.$nick.' : '.stripslashes($chatLine)."\n");
 	fclose($fchat);
 }
 
 // display message list
-$fileContent  = file($fileChatName);
-
-$FileNbLine   = count($fileContent);
+$fileContent = file($fileChatName);
+$FileNbLine = count($fileContent);
 $lineToRemove = $FileNbLine - MESSAGE_LINE_NB;
-if ($lineToRemove < 0) $lineToRemove = 0;
+if ($lineToRemove < 0) {
+	$lineToRemove = 0;
+}
 $tmp = array_splice($fileContent, 0 , $lineToRemove);
 $fileReverse = array_reverse($fileContent);
 
@@ -116,7 +118,6 @@ foreach ($fileReverse as $thisLine) {
 	}
  	echo '<div><span>', $newline, "</div>\n";
 }
-
 echo "</body></html>\n";
 
 

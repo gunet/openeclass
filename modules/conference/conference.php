@@ -30,8 +30,9 @@ $helpTopic = 'Conference';
 $tool_content = "";
 include '../../include/baseTheme.php';
 
-if(!isset($MCU))
+if (!isset($MCU)) {
 	$MCU="";
+}
 
 /**** The following is added for statistics purposes ***/
 include('../../include/action.php');
@@ -41,35 +42,28 @@ $action->record('MODULE_ID_CHAT');
 
 $nameTools = $langConference;
 
-
 // guest user not allowed
 if (check_guest()) {
-	$tool_content .= "
-       <table width=\"99%\">
-       <tbody>
-       <tr>
-         <td class=\"extraMessage\"><p>$langNoGuest</p></td>
-       </tr>
-       </tbody>
-       </table>";
+	$tool_content .= "<table width=\"99%\"><tbody>
+	<tr><td class=\"extraMessage\"><p>$langNoGuest</p></td></tr>
+	</tbody></table>";
 	draw($tool_content, 2, 'conference');
 }
 
 if (!($uid) or !($_SESSION['uid'])) {
 	$tool_content .= "
-       <table width=\"99%\">
-       <tbody>
-       <tr>
-         <td class=\"extraMessage\"><p>$langNoAliens</p></td>
-       </tr>
-       </tbody>
-       </table>";
-	draw($tool_content, 2, 'conference');
+	<table width=\"99%\">
+	<tbody>
+	<tr>
+        <td class=\"extraMessage\"><p>$langNoAliens</p></td>
+	</tr>
+	</tbody>
+	</table>";
+	draw($tool_content, 2);
 }
 
 $head_content = '<script type="text/javascript">
-function prepare_message()
-{
+function prepare_message() {
 	document.chatForm.chatLine.value=document.chatForm.msg.value;
 	document.chatForm.msg.value = "";
 	document.chatForm.msg.focus();
@@ -78,37 +72,32 @@ function prepare_message()
 </script>';
 
 if ($is_adminOfCourse) {
-    $tool_content .= "
-      <div id=\"operations_container\">
+	$tool_content .= "
+	<div id=\"operations_container\">
         <ul id=\"opslist\">
-          <li><a href='messageList.php?reset=true' target='messageList' class=small_tools>$langWash</a></li>
-          <li><a href='messageList.php?store=true' target='messageList' class=small_tools>$langSave</a></li>
+        <li><a href='messageList.php?reset=true' target='messageList' class=small_tools>$langWash</a></li>
+        <li><a href='messageList.php?store=true' target='messageList' class=small_tools>$langSave</a></li>
         </ul>
-      </div>";
+	</div>";
 }
 
-$tool_content .= "
-<form name='chatForm' action='messageList.php' method='get' target='messageList' onSubmit='return prepare_message();'>
-  <table width='99%' class='FormData'>
-  <thead>
-  <tr>
-    <th>&nbsp;</th>
-    <td>
-
-      <b>$langTypeMessage</b><br />
-      <input type='text' name='msg' size='80'style='border: 1px solid #CAC3B5; background: #fbfbfb;'>
-      <input type='hidden' name='chatLine'>
-      <input type='submit' value=' >> '>
-
-    </td>
-  </tr>
-  <tr>
-    <th>&nbsp;</th>
-    <td><iframe frameborder='0' src='messageList.php' width='100%' height='300' name='messageList' style='background: #fbfbfb; border: 1px solid #CAC3B5;'><a href='messageList.php'>Message list</a></iframe></td>
-  </tr>
-  </thead>
-  </table>
-</form>
-  ";
+$tool_content .= "<form name='chatForm' action='messageList.php' method='get' target='messageList' onSubmit='return prepare_message();'>
+	<table width='99%' class='FormData'>
+	<thead>
+	<tr>
+	<th>&nbsp;</th><td>
+	<b>$langTypeMessage</b><br />
+	<input type='text' name='msg' size='80'style='border: 1px solid #CAC3B5; background: #fbfbfb;'>
+	<input type='hidden' name='chatLine'>
+	<input type='submit' value=' >> '>
+	</td>
+	</tr>
+	<tr>
+	<th>&nbsp;</th>
+	<td><iframe frameborder='0' src='messageList.php' width='100%' height='300' name='messageList' style='background: #fbfbfb; border: 1px solid #CAC3B5;'><a href='messageList.php'>Message list</a></iframe></td>
+	</tr>
+	</thead>
+	</table>
+	</form>";
 add_units_navigation(TRUE);
-draw($tool_content, 2, 'conference', $head_content);
+draw($tool_content, 2, '', $head_content);
