@@ -1,4 +1,4 @@
-<?PHP
+<?
 /*========================================================================
 *   Open eClass 2.3
 *   E-learning and Course Management System
@@ -139,7 +139,8 @@ function getUserAgenda($param, $type)
  */
 function agendaHtmlInterface($data)
 {
-	global $langNoEventsExist, $langUnknown, $langDuration, $langMore, $langHours, $langHour, $langExerciseStart, $urlServer;
+	global $langNoEventsExist, $langUnknown, $langDuration, $langMore, $langHours, $langHour;
+	global $langExerciseStart, $urlServer, $dateFormatLong;
 
 	$numOfDays = count($data);
 	if ($numOfDays > 0) {
@@ -148,7 +149,7 @@ function agendaHtmlInterface($data)
         <ul class="datalist">
 agCont;
 		for ($i=0; $i <$numOfDays; $i++) {
-			$agenda_content .= "\n          <li class=\"category\">".nice_format($data[$i][0][2])."</li>";
+			$agenda_content .= "\n<li class=\"category\">".claro_format_locale_date($dateFormatLong, strtotime($data[$i][0][2]))."</li>";
 			$iterator =  count($data[$i]);
 			for ($j=0; $j < $iterator; $j++){
 				$url = $urlServer . "index.php?perso=4&c=" . $data[$i][$j][5];
@@ -173,7 +174,7 @@ agCont;
 
 				}
 
-				$agenda_content .= "\n          <li><a class=\"square_bullet2\" href=\"$url\"><strong class=\"title_pos\">".$data[$i][$j][0]."</strong></a> <p class=\"content_pos\"><b class=\"announce_date\">".$data[$i][$j][6]."</b>&nbsp;-&nbsp;(".$langExerciseStart.":<b>".$data[$i][$j][3]."</b>, $langDuration:<b>".$data[$i][$j][4]."</b>)<br /><span class=\"announce_date\"> ".$data[$i][$j][1].autoCloseTags($data[$i][$j][1])."</span></p></li>";
+				$agenda_content .= "\n<li><a class=\"square_bullet2\" href=\"$url\"><strong class=\"title_pos\">".$data[$i][$j][0]."</strong></a> <p class=\"content_pos\"><b class=\"announce_date\">".$data[$i][$j][6]."</b>&nbsp;-&nbsp;(".$langExerciseStart.":<b>".$data[$i][$j][3]."</b>, $langDuration:<b>".$data[$i][$j][4]."</b>)<br /><span class=\"announce_date\"> ".$data[$i][$j][1].autoCloseTags($data[$i][$j][1])."</span></p></li>";
 			}
 		}
 		$agenda_content .= "

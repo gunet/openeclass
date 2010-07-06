@@ -361,7 +361,7 @@ hContent;
 	$k = 0;
         while ($myrow = mysql_fetch_array($result)) {
             $content = standard_text_escape($myrow['contenu']);
-            $myrow['temps'] = nice_format($myrow['temps']);
+	    $myrow['temps'] = claro_format_locale_date($dateFormatLong, strtotime($myrow['temps']));
 	    if ($is_adminOfCourse) {
 		if ($myrow['visibility'] == 'v') {
 		    $visibility = 0;

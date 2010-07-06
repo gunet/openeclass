@@ -167,7 +167,7 @@ if (count($status) > 0) {
                                         }
                                         $tool_content .= "<td width='1' class='square_bullet2'>&nbsp;</td>" .
                                                          "<td class='announce_pos'><b>$ann[title]</b> " .
-                                                         nice_format($ann['temps']) .
+                                                         claro_format_locale_date($dateFormatLong, strtotime($ann['temps'])) .
                                                          "&nbsp;&nbsp;&nbsp;&nbsp;($langCourse: <b>{$titles[$code]}</b> | $langTutor: <b>{$profs[$code]}</b>)<br />$content</td>\n</tr>";
                                         $la++;
                                 }

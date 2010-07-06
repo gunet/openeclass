@@ -159,7 +159,7 @@ function getUserAnnouncements($param = null, $type) {
  * @see function getUserAnnouncements()
  */
 function announceHtmlInterface($data) {
-	global $urlServer, $langNoAnnouncementsExist, $langMore;
+	global $urlServer, $langNoAnnouncementsExist, $langMore, $dateFormatLong;
 	$announceExist = false;
 	$assign_content= '<div class="datacontainer"><ul>';
 
@@ -184,7 +184,7 @@ function announceHtmlInterface($data) {
                                            "<strong class='title_pos'>" . $data[$i][2][$j][0] .
                                            autoCloseTags($data[$i][2][$j][0]) .
                                            " <span class='announce_date'> (" .
-                                           nice_format($data[$i][2][$j][2]) .
+                                           claro_format_locale_date($dateFormatLong, strtotime($data[$i][2][$j][2])) .
                                            ")</span></strong></a><p class='content_pos'>" .
                                            unescapeSimple($data[$i][2][$j][1]) .
                                            autoCloseTags($data[$i][2][$j][1]) .
