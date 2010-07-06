@@ -119,13 +119,19 @@ if(isset($_REQUEST['creation']) && $is_adminOfCourse) {
 }	// if $submit
 
 
-if(isset($_REQUEST['properties']) && $is_adminOfCourse)
-{
-	@db_query("UPDATE group_properties
-		SET self_registration='".mysql_real_escape_string($self_registration)."', private='".mysql_real_escape_string($private)."',
-		forum='".mysql_real_escape_string($forum)."', document='".mysql_real_escape_string($document)."' WHERE id=1", $currentCourse);
+if (isset($_POST['properties']) && $is_adminOfCourse) {
+        register_posted_variables(array(
+                'self_registration' => true,
+                'private' => true,
+                'forum' => true,
+                'document' => true), 'all', 'intval');
+        db_query("UPDATE group_properties SET
+                         self_registration = $self_registration,
+                         private = $private,
+                         forum = $forum,
+                         document = $document WHERE id = 1", $currentCourse);
 	$message = $langGroupPropertiesModified;
-}	// if $submit
+}
 
 
 // Delete all groups
