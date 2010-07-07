@@ -362,15 +362,14 @@ hContent;
             $content = standard_text_escape($myrow['contenu']);
 	    $myrow['temps'] = claro_format_locale_date($dateFormatLong, strtotime($myrow['temps']));
 	    if ($is_adminOfCourse) {
-		if ($myrow['visibility'] == 'v') {
-		    $visibility = 0;
-		    $vis_icon = 'visible.gif';
-		    $classvis = 'visible';
-		}
 		if ($myrow['visibility'] == 'i') {
 		    $visibility = 1;
 		    $vis_icon = 'invisible.gif';
 		    $classvis = 'invisible';
+		} else {
+		    $visibility = 0;
+		    $vis_icon = 'visible.gif';
+		    $classvis = 'visible';
 		}
 	    }
 	    if ($is_adminOfCourse) {
