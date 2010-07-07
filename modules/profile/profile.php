@@ -46,25 +46,24 @@ if (in_array($password, $authmethods)) {
         $allow_password_change = true;
 }
 
+function redirect_to_message($id) {
+        header('Location: ' . $_SERVER['PHP_SELF'] . '?msg=' . $id);
+        exit();
+}
+
 if (isset($_POST['submit'])) {
         // First do personalization and language changes
-        $persoStatus = ($_POST['persoStatus'] == 'yes')? 'yes': 'no';
-        $_SESSION['langswitch'] = langcode_to_name($_POST['userLanguage']);
+        $perso_status = ($_POST['persoStatus'] == 'yes')? 'yes': 'no';
+        $old_language = $language;
+        $language = $_SESSION['langswitch'] = langcode_to_name($_POST['userLanguage']);
         $langcode = langname_to_code($language);
-        if (isset($_SESSION['user_perso_active']) and $persoStatus == "no") {
-                unset($_SESSION['user_perso_active']);
-        }
-        db_query("UPDATE user SET perso = '$persoStatus',
+        $old_perso_status = $_SESSION['user_perso_active'];
+        $_SESSION['user_perso_active'] = $perso_status;
+        db_query("UPDATE user SET perso = '$perso_status',
                                   lang = '$langcode'
                               WHERE user_id = $uid");
-        if (isset($_SESSION['user_perso_active']) and $persoStatus == "no") {
-                unset($_SESSION['user_perso_active']);
-        }
-
         $all_ok = register_posted_variables(array(
                 'am_form' => false,
-                'persoStatus' => true,
-                'userLanguage' => true,
                 'email_form' => check_prof(),
                 'nom_form' => true,
                 'prenom_form' => true,
@@ -72,8 +71,7 @@ if (isset($_POST['submit'])) {
 
 	// check if there are empty fields
 	if (!$all_ok) {
-		header('Location: '. $_SERVER['PHP_SELF'] . '?msg=4');
-		exit;
+                redirect_to_message(4);
 	}
                 
         if (!$allow_username_change) {
@@ -89,17 +87,12 @@ if (isset($_POST['submit'])) {
                 $user_exist = false;
         }
 
-        function redirect_to_message($id) {
-		header('Location: ' . $_SERVER['PHP_SELF'] . '?msg=' . $id);
-                exit();
-        }
-
 	if (strstr($username_form, "'") or strstr($username_form, '"') or strstr($username_form, '\\')){
 		redirect_to_message(10);
 	}
 
 	// check if username is free
-	if ($user_exist and ($username_form == $user_exist) AND ($username_form!=$uname)) {
+	if ($user_exist and $username_form == $user_exist AND $username_form != $uname) {
 		redirect_to_message(5);
 	}
 
@@ -109,18 +102,21 @@ if (isset($_POST['submit'])) {
 	}
 
 	// everything is ok
-        if (mysql_query("UPDATE user SET
-                                nom = " . autoquote($_POST['nom_form']) . ",
-                                prenom = " . autoquote($_POST['prenom_form']) . ",
-                                username = " . autoquote($_POST['username_form']) . ",
-                                email = " . autoquote($_POST['email_form']) . ",
-                                am = " . autoquote($_POST['am_form']) . ",
+        if (db_query("UPDATE user SET
+                                nom = " . autoquote($nom_form) . ",
+                                prenom = " . autoquote($prenom_form) . ",
+                                username = " . autoquote($username_form) . ",
+                                email = " . autoquote($email_form) . ",
+                                am = " . autoquote($am_form) . "
                         WHERE user_id = $_SESSION[uid]")) {
                 $_SESSION['uname'] = $username_form;
                 $_SESSION['nom'] = $nom_form;
                 $_SESSION['prenom'] = $prenom_form;
                 $_SESSION['email'] = $email_form;
 
+                redirect_to_message(1);
+        }
+        if ($old_language != $language or $old_perso_status != $perso_status) {
                 redirect_to_message(1);
         }
 }
