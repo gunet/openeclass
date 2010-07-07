@@ -298,7 +298,6 @@ hContent;
     }
 
     /* display actions toolbar */
-    $tool_content .= "<a href='http://www.xul.fr/rss.xml'><img src='rss.gif'></a>";
     $tool_content .= "<div id='operations_container'><ul id='opslist'>
         <li><a href='" . $_SERVER['PHP_SELF'] . "?addAnnounce=1'>" . $langAddAnn . "</a></li>";
     $tool_content .= "</ul></div>";
