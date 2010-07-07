@@ -411,7 +411,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 			$t->set_var ( 'LANG_HELP', '' );
 		}
 		if (defined('RSS')) {
-			$t->set_var ('RSS_LINK_ICON', "<span class='feed'><a href='${urlServer}" . RSS . "'><img src='${urlServer}template/classic/img/feed.png' alt='RSS Feed' title='RSS Feed'></a></span>");
+			$t->set_var ('RSS_LINK_ICON', "<span class='feed'><a href='${urlServer}" . RSS . "'><img src='${urlServer}template/classic/img/feed.png' alt='RSS Feed' title='RSS Feed' /></a></span>");
 		}
 
 		if ($perso_tool_content) {

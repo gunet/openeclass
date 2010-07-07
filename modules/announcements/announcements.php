@@ -397,7 +397,7 @@ hContent;
 		<img src='../../template/classic/img/edit.gif' title='" . $langModify . "' /></a>&nbsp;
 		<a href='$_SERVER[PHP_SELF]?delete=" . $myrow['id'] . "' onClick=\"return confirmation('');\">
 		<img src='../../template/classic/img/delete.gif' title='" . $langDelete . "' /></a>&nbsp;
-		<a href='$_SERVER[PHP_SELF]?mkvis=$myrow[id]&vis=$visibility'>
+		<a href='$_SERVER[PHP_SELF]?mkvis=$myrow[id]&amp;vis=$visibility'>
 		<img src='../../template/classic/img/$vis_icon' title='$langVisible' /></a>
 		</td>";
 	    }
