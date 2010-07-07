@@ -51,17 +51,17 @@ $nameTools = $langGroupSpace;
 $navigation[] = array ("url"=>"group.php", "name"=> $langGroups);
 $tool_content = "";
 
-$countRegistered = mysql_num_rows(db_query("SELECT id FROM user_group 
-	WHERE team='$userGroupId'", $currentCourse));
-$total = mysql_fetch_array(db_query("SELECT maxStudent FROM student_group 
-		WHERE id='$userGroupId'", $currentCourse));
-$totalRegistered = $total[0];
-
 if (isset($_REQUEST['userGroupId'])) {
         $userGroupId = intval($_REQUEST['userGroupId']);
 } else {
 	die("Wrong user group id / User group id not set");
 }
+
+$countRegistered = mysql_num_rows(db_query("SELECT id FROM user_group 
+	WHERE team='$userGroupId'", $currentCourse));
+$total = mysql_fetch_array(db_query("SELECT maxStudent FROM student_group 
+		WHERE id='$userGroupId'", $currentCourse));
+$totalRegistered = $total[0];
 
 if (isset($registration)) {
 	if (($statut != 10) and ($countRegistered < $totalRegistered)) {
