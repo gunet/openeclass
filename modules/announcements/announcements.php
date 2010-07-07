@@ -239,8 +239,9 @@ hContent;
             $order = $orderMax + 1;
             // insert
             db_query("INSERT INTO annonces SET contenu = $newContent,
-			title = $antitle, temps = NOW(),
-			cours_id = $cours_id, ordre = $order");
+                            title = $antitle, temps = NOW(),
+                            cours_id = $cours_id, ordre = $order,
+                            visibility = 'v'");
         }
 
         // send email 
