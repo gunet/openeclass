@@ -1290,7 +1290,7 @@ function get_config($key)
 // $var_array = array('var1' => true, 'var2' => false, [varname] => required...)
 // Returns true if all vars with required=true are set, false if not (by default)
 // If $what = 'any' returns true if any variable is set
-function register_posted_variables($var_array, $what = 'all', $callback)
+function register_posted_variables($var_array, $what = 'all', $callback = null)
 {
         $all_set = true;
         $any_set = false;
