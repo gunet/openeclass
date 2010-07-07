@@ -41,13 +41,13 @@ $tool_content="";
 // IF PROF ONLY
 if($is_adminOfCourse) {
 
-if (isset($add)) {
+if (isset($_GET['add'])) {
+        $uid_to_add = intval($_GET['add']);
 	mysql_select_db($mysqlMainDb);
 	$result = db_query("INSERT INTO cours_user (user_id, cours_id, statut, reg_date) ".
-		"VALUES ('".mysql_escape_string($add)."', $cours_id, ".
-		"'5', CURDATE())");
+                           "VALUES ($uid_to_add, $cours_id, 5, CURDATE())");
 		// notify user via email
-		$email = uid_to_email($add);
+		$email = uid_to_email($uid_to_add);
 		if (!empty($email) and email_seems_valid($email)) {
 			$emailsubject = "$langYourReg " . course_id_to_title($cours_id);
 			$emailbody = "$langNotifyRegUser1 '".course_id_to_title($cours_id). "' $langNotifyRegUser2 $langFormula \n$gunet";
@@ -67,10 +67,11 @@ if (isset($add)) {
 
 	$tool_content .= "<form method='post' action='$_SERVER[PHP_SELF]'>";
 
-if(!isset($search_nom)) $search_nom = "";
-if(!isset($search_prenom)) $search_prenom = "";
-if(!isset($search_uname)) $search_uname = "";
-$tool_content .= <<<tCont
+        register_posted_variables(array('search_nom' => true,
+                                        'search_prenom' => true,
+                                        'search_uname' => true), 'any');
+
+        $tool_content .= <<<tCont
 
     <table width="99%" class="FormData">
     <tbody>
@@ -80,19 +81,19 @@ $tool_content .= <<<tCont
     </tr>
     <tr>
       <th class="left">$langSurname</th>
-      <td><input type="text" name="search_nom" value="$search_nom" class="FormData_InputText"></td>
+      <td><input type="text" name="search_nom" value="$search_nom" class="FormData_InputText" /></td>
     </tr>
 	<tr>
       <th class="left">$langName</th>
-      <td><input type="text" name="search_prenom" value="$search_prenom" class="FormData_InputText"></td>
+      <td><input type="text" name="search_prenom" value="$search_prenom" class="FormData_InputText" /></td>
     </tr>
 	<tr>
       <th class="left">$langUsername</th>
-      <td><input type="text" name="search_uname" value="$search_uname" class="FormData_InputText"></td>
+      <td><input type="text" name="search_uname" value="$search_uname" class="FormData_InputText" /></td>
     </tr>
     <tr>
       <th class="left">&nbsp;</th>
-      <td><input type="submit" value="$langSearch"></td>
+      <td><input type='submit' name='search' value='$langSearch' /></td>
     </tr>
 	</tbody>
 	</table>
@@ -104,14 +105,14 @@ tCont;
 
 	mysql_select_db($mysqlMainDb);
 	$search=array();
-	if(!empty($search_nom)) {
-		$search[] = "u.nom LIKE '".mysql_escape_string($search_nom)."%'";
+	if (!empty($search_nom)) {
+		$search[] = "u.nom LIKE " . autoquote($search_nom . '%');
 	}
-	if(!empty($search_prenom)) {
-		$search[] = "u.prenom LIKE '".mysql_escape_string($search_prenom)."%'";
+	if (!empty($search_prenom)) {
+		$search[] = "u.prenom LIKE " . autoquote($search_prenom . '%');
 	}
-	if(!empty($search_uname)) {
-		$search[] = "u.username LIKE '".mysql_escape_string($search_uname)."%'";
+	if (!empty($search_uname)) {
+		$search[] = "u.username LIKE " . autoquote($search_uname . '%');
 	}
 
 	$query = join(' AND ', $search);
