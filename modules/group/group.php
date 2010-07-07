@@ -82,7 +82,8 @@ function confirmation (name)
 }
 
 // Group creation
-if(isset($_REQUEST['creation']) && $is_adminOfCourse) {
+if(isset($_POST['creation']) and $is_adminOfCourse) {
+        $group_quantity = intval($_POST['group_quantity']);
 	// Create a hidden category for group forums
         $req = db_query('SELECT cat_id FROM catagories WHERE cat_order = -1');
         if ($req and mysql_num_rows($req) > 0) {
@@ -95,18 +96,18 @@ if(isset($_REQUEST['creation']) && $is_adminOfCourse) {
 	for ($i = 1; $i <= $group_quantity; $i++) {
 		// Creating a Unique Id path to group documents to try (!)
 		// avoiding groups entering other groups area
-		$secretDirectory=uniqid("");
+		$secretDirectory = uniqid('');
 		mkdir("../../courses/$currentCourse/group/$secretDirectory", 0777);
 		// Write group description in student_group table. Contains path to group document dir.
 		db_query("INSERT INTO student_group (maxStudent, secretDirectory)
-			VALUES ('".mysql_real_escape_string($group_max)."', '$secretDirectory')");
-		$lastId=mysql_insert_id();
+			VALUES (" . intval($_POST['group_max']) . ", '$secretDirectory')");
+		$lastId = mysql_insert_id();
 
 		db_query("INSERT INTO forums
 			(forum_id, forum_name, forum_desc,
 			forum_access, forum_moderator, forum_topics,
 			forum_posts, forum_last_post_id, cat_id, forum_type)
-			VALUES ('','$langForumGroup $lastId','',2,1,0,0,1,$cat_id,0)");
+			VALUES ('', '$langForumGroup $lastId', '', 2, 1, 0, 0, 1, $cat_id, 0)");
 
 		$forumInsertId=mysql_insert_id();
 		db_query("UPDATE student_group SET name='$langGroup $lastId',
@@ -119,7 +120,7 @@ if(isset($_REQUEST['creation']) && $is_adminOfCourse) {
 }	// if $submit
 
 
-if (isset($_POST['properties']) && $is_adminOfCourse) {
+if (isset($_POST['properties']) and $is_adminOfCourse) {
         register_posted_variables(array(
                 'self_registration' => true,
                 'private' => true,
