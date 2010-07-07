@@ -137,8 +137,8 @@ function display_monthcalendar($agendaitems, $month, $year, $weekdaynames, $mont
   	//Start the week on monday
 	$startdayofweek = $dayone['wday']<>0 ? ($dayone['wday']-1) : 6;
 
-	$backwardsURL = "$_SERVER[PHP_SELF]?month=".($month==1 ? 12 : $month-1)."&year=".($month==1 ? $year-1 : $year);
-	$forewardsURL = "$_SERVER[PHP_SELF]?month=".($month==12 ? 1 : $month+1)."&year=".($month==12 ? $year+1 : $year);
+	$backwardsURL = "$_SERVER[PHP_SELF]?month=".($month==1 ? 12 : $month-1)."&amp;year=".($month==1 ? $year-1 : $year);
+	$forewardsURL = "$_SERVER[PHP_SELF]?month=".($month==12 ? 1 : $month+1)."&amp;year=".($month==12 ? $year+1 : $year);
 
 	$tool_content .=  "\n  <table width=99% class=\"DepTitle\">\n  <thead>";
   	$tool_content .=  "\n  <tr>";
@@ -146,7 +146,7 @@ function display_monthcalendar($agendaitems, $month, $year, $weekdaynames, $mont
 	$tool_content .=  "\n    <th width=90%><div align=\"center\"><b>$monthName $year</b></div></th>";
 	$tool_content .=  "\n    <th width=5%><a href=$forewardsURL>&gt;&gt;</a></th>";
 	$tool_content .=  "\n  </tr>";
-	$tool_content .=  "\n  </thead>\n  </table>\n  <br>\n\n";
+	$tool_content .=  "\n  </thead>\n  </table>\n  <br />\n\n";
 
 	$tool_content .=  "\n <table width=99% style=\"border: 1px solid #CAC3B5;\">\n <tbody>\n <tr>\n  <td>";
 	$tool_content .=  "\n  <table width=100% class=\"FormData\">\n  <thead>\n  <tr>";
