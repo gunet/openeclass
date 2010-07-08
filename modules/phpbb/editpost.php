@@ -1,4 +1,4 @@
-<?php
+<?
 /*========================================================================
 *   Open eClass 2.3
 *   E-learning and Course Management System
@@ -116,8 +116,21 @@ include("functions.php"); // application logic for phpBB
 /******************************************************************************
  * Actual code starts here
  *****************************************************************************/
-if ($is_adminOfCourse) { // course admin 
-	if (isset($submit) && $submit) {
+if ($is_adminOfCourse) { // course admin
+	if (isset($_GET['forum'])) {
+		$forum = intval($_GET['forum']);
+	}
+	if (isset($_GET['topic'])) {
+		$topic = intval($_GET['topic']);
+	}
+	if (isset($_GET['post_id'])) {
+		$post_id = intval($_GET['post_id']);
+	}
+	if (isset($_POST['submit'])) {
+		$message = $_POST['message'];
+		if (isset($_POST['subject'])) {
+			$subject = $_POST['subject'];	
+		}
 		$sql = "SELECT * FROM posts WHERE post_id = '$post_id'";
 		if (!$result = db_query($sql, $currentCourseID)) {
 			$tool_content .= $langErrorDataOne;
@@ -146,23 +159,23 @@ if ($is_adminOfCourse) { // course admin
 		$navigation[] = array ("url"=>"viewforum.php?forum=$forum_id", "name"=> $forum_name);
 		$navigation[] = array ("url"=>"viewtopic.php?topic=$topic_id&amp;forum=$forum_id", "name"=> $topic_title);
 	
-		// IF we made it this far we are allowed to edit this message, yay!
 		$is_html_disabled = false;
-		if ( (isset($allow_html) && $allow_html == 0) || isset($html) ) {
+		if ((isset($allow_html) && $allow_html == 0) || isset($html)) {
 			$message = htmlspecialchars($message);
 			$is_html_disabled = true;
 		}
-		if ( isset($allow_bbcode) && $allow_bbcode == 1 && !isset($bbcode)) {
+		if (isset($allow_bbcode) && $allow_bbcode == 1 && !isset($bbcode)) {
 			$message = bbencode($message, $is_html_disabled);
 		}
 		if (isset($message)) {
 			$message = format_message($message);
 		}
-		if (!isset($delete) || !$delete) {
+		if (!isset($_GET['delete']) and !isset($_POST['delete'])) {	
 			$forward = 1;
 			$topic = $topic_id;
 			$forum = $forum_id;
-			$sql = "UPDATE posts_text SET post_text = " . autoquote($message) . " WHERE (post_id = '$post_id')";
+			$sql = "UPDATE posts_text SET post_text = " . autoquote($message) . "
+				WHERE (post_id = '$post_id')";
 			if (!$result = db_query($sql, $currentCourseID)) {
 				$tool_content .= $langUnableUpadatePost;
 				draw($tool_content, 2, '', $head_content);
@@ -239,7 +252,6 @@ if ($is_adminOfCourse) { // course admin
 			if (@!$topic_removed) {
 				sync($currentCourseID, $topic_id, 'topic');
 			}
-			
 			$tool_content .= "<div id='operations_container'>
 			<ul id='opslist'>
 			<li><a href='viewforum.php?forum=$forum_id'>$langReturnTopic</a></li>
@@ -307,7 +319,6 @@ if ($is_adminOfCourse) { // course admin
 					draw($tool_content, 2, '', $head_content);
 					exit();
 				}
-				// Ok, looks like we're good.
 			}
 		}	
 		
@@ -354,14 +365,13 @@ if ($is_adminOfCourse) { // course admin
 		</ul>
 		</div>
 		<br />";
-		$tool_content .= "<form action='$_SERVER[PHP_SELF]' method='post'>
+		$tool_content .= "<form action='$_SERVER[PHP_SELF]?post_id=$post_id&forum=$forum' method='post'>
 		<table class='framed'>
 		<thead>
 		<tr><td><b>$langReplyEdit</b></td></tr>";
 		$first_post = is_first_post($topic, $post_id, $currentCourseID);
 		if($first_post) {
-			$tool_content .= "<tr>
-			<td>$langSubject:<br />
+			$tool_content .= "<tr><td>$langSubject:<br />
 			<input type='text' name='subject' size='53' maxlength='100' value='" . stripslashes($myrow["topic_title"]) . "'  class='FormData_InputText' /></td>
 			</tr>";
 		}
@@ -374,10 +384,7 @@ if ($is_adminOfCourse) { // course admin
 		<input type='checkbox' name='delete' /></td>
 		</tr>
 		<tr><td>";
-		$tool_content .= "
-		<input type='hidden' name='post_id' value='$post_id' />
-		<input type='hidden' name='forum' value='$forum' />
-		<input class='Login' type='submit' name='submit' value='$langSubmit' />
+		$tool_content .= "<input class='Login' type='submit' name='submit' value='$langSubmit' />
 		</td></tr>
 		</thead></table></form>";
 	}

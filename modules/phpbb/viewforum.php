@@ -142,11 +142,14 @@ if ($total_topics > $topics_per_page) { // navigation
 	$tool_content .= "</td></tr></table>";
 }
 
-if(isset($topicnotify)) { // modify topic notification
+if(isset($_GET['topicnotify'])) { // modify topic notification
+	if (isset($_GET['topic_id'])) {
+		$topic_id = intval($_GET['topic_id']);
+	}
 	$rows = mysql_num_rows(db_query("SELECT * FROM forum_notify 
 		WHERE user_id = $uid AND topic_id = $topic_id AND course_id = $cours_id", $mysqlMainDb));
 	if ($rows > 0) {
-		db_query("UPDATE forum_notify SET notify_sent = '$topicnotify' 
+		db_query("UPDATE forum_notify SET notify_sent = '$_GET[topicnotify]' 
 			WHERE user_id = $uid AND topic_id = $topic_id AND course_id = $cours_id", $mysqlMainDb);
 	} else {
 		db_query("INSERT INTO forum_notify SET user_id = $uid,
@@ -260,4 +263,4 @@ if (mysql_num_rows($result) > 0) { // topics found
 	$tool_content .= "\n<td colspan=6>$langNoTopics</td></tr>\n";
 }
 $tool_content .= "</tbody></table>";
-draw($tool_content, 2, 'phpbb');
+draw($tool_content, 2);

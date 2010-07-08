@@ -84,21 +84,27 @@ if ($is_adminOfCourse || $is_admin) {
 	</ul></div><br />";
 }
 
-if(isset($forumcatnotify)) { // modify forum category notification
+if(isset($_GET['forumcatnotify'])) { // modify forum category notification
+		if (isset($_GET['cat_id'])) {
+			$cat_id = intval($_GET['cat_id']);
+		}
 		$rows = mysql_num_rows(db_query("SELECT * FROM forum_notify 
 			WHERE user_id = $uid AND cat_id = $cat_id AND course_id = $cours_id", $mysqlMainDb));
 		if ($rows > 0) {
-			db_query("UPDATE forum_notify SET notify_sent = '$forumcatnotify' 
+			db_query("UPDATE forum_notify SET notify_sent = '$_GET[forumcatnotify]' 
 				WHERE user_id = $uid AND cat_id = $cat_id AND course_id = $cours_id", $mysqlMainDb);
 	} else {
 		db_query("INSERT INTO forum_notify SET user_id = $uid,
 		cat_id = $cat_id, notify_sent = 1, course_id = $cours_id", $mysqlMainDb);
 	}
-} elseif(isset($forumnotify)) { // modify forum notification
+} elseif(isset($_GET['forumnotify'])) { // modify forum notification
+	if (isset($_GET['forum_id'])) {
+		$forum_id = intval($_GET['forum_id']);
+	}
 	$rows = mysql_num_rows(db_query("SELECT * FROM forum_notify 
 		WHERE user_id = $uid AND forum_id = $forum_id AND course_id = $cours_id", $mysqlMainDb));
 	if ($rows > 0) {
-		db_query("UPDATE forum_notify SET notify_sent = '$forumnotify' 
+		db_query("UPDATE forum_notify SET notify_sent = '$_GET[forumnotify]' 
 			WHERE user_id = $uid AND forum_id = $forum_id AND course_id = $cours_id", $mysqlMainDb);
 	} else {
 		db_query("INSERT INTO forum_notify SET user_id = $uid,
@@ -264,8 +270,6 @@ if ($total_categories) {
 	$tool_content .= "<p class='alert1'>$langNoForums</p>";
 }
 $tool_content .= "</tbody></table>";
-
 add_units_navigation(TRUE);
-draw($tool_content, 2, 'phpbb');
-
+draw($tool_content, 2);
 ?>

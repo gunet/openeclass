@@ -1,4 +1,4 @@
-<?php
+<?
 /*========================================================================
 *   Open eClass 2.3
 *   E-learning and Course Management System
@@ -81,6 +81,12 @@ if (isset($_GET['all'])) {
         $paging = true;
 }
 
+if (isset($_GET['forum'])) {
+	$forum = intval($_GET['forum']);
+}
+if (isset($_GET['topic'])) {
+	$topic = intval($_GET['topic']);
+}
 $sql = "SELECT f.forum_type, f.forum_name
 	FROM forums f, topics t 
 	WHERE (f.forum_id = '$forum') AND (t.topic_id = $topic) AND (t.forum_id = f.forum_id)";
@@ -123,7 +129,7 @@ $nameTools = $topic_subject;
 
 	$tool_content .= "<div id='operations_container'>
 	<ul id='opslist'>
-	<li><a href='newtopic.php?forum=$forum'>$langNewTopic</a></li>
+	<li><a href='newtopic.php?topic=$topic&forum=$forum'>$langNewTopic</a></li>
 	<li>";
 	if($lock_state != 1) {
 		$tool_content .= "<a href='reply.php?topic=$topic&amp;forum=$forum'>$langAnswer</a>";
@@ -157,7 +163,7 @@ if ($paging and $total > $posts_per_page ) {
 		} else if($start == 0 && $x == 0) {
 			$tool_content .= "1";
 		} else {
-			$tool_content .= "\n<a href=\"$_SERVER[PHP_SELF]?mode=viewtopic&amp;topic=$topic&amp;forum=$forum&amp;start=$x\">$times</a>";
+			$tool_content .= "\n<a href=\"$_SERVER[PHP_SELF]?topic=$topic&amp;forum=$forum&amp;start=$x\">$times</a>";
 		}
 		$times++;
 	}
@@ -165,14 +171,14 @@ if ($paging and $total > $posts_per_page ) {
 	$tool_content .= "</span></strong></span></td>
 	<td align=\"right\">
 	<span class='pages'>$langGoToPage: &nbsp;&nbsp;";
-	if ( isset($start) && $start > 0 ) {
-		$tool_content .= "\n       <a href=\"$_SERVER[PHP_SELF]?topic=$topic&amp;forum=$forum&amp;start=$last_page\">$langPreviousPage</a>&nbsp;|";
+	if (isset($start) && $start > 0 ) {
+		$tool_content .= "\n<a href=\"$_SERVER[PHP_SELF]?topic=$topic&amp;forum=$forum&amp;start=$last_page\">$langPreviousPage</a>&nbsp;|";
 	} else {
 		$start = 0;
 	}	
 	if (($start + $posts_per_page) < $total) {
 		$next_page = $start + $posts_per_page;
-		$tool_content .= "\n       <a href=\"$_SERVER[PHP_SELF]?topic=$topic&amp;forum=$forum&amp;start=$next_page\">$langNextPage</a>&nbsp;|";
+		$tool_content .= "\n<a href=\"$_SERVER[PHP_SELF]?topic=$topic&amp;forum=$forum&amp;start=$next_page\">$langNextPage</a>&nbsp;|";
 	}
 	$tool_content .= "&nbsp;<a href=\"$_SERVER[PHP_SELF]?topic=$topic&amp;forum=$forum&amp;all=true\">$langAllOfThem</a></span>
 	</td>
@@ -180,7 +186,7 @@ if ($paging and $total > $posts_per_page ) {
 	</thead>
 	</table>";
 } else {
-	$tool_content .= "<table WIDTH=\"99%\"><thead>
+	$tool_content .= "<table width=\"99%\"><thead>
 	<tr>
 	<td WIDTH=\"60%\" align=\"left\">
 	<span class='row'><strong class='pagination'>&nbsp;</strong></span></td>
@@ -205,7 +211,6 @@ $tool_content .= <<<cData
     <tbody>
 cData;
 
-$topic = intval($_GET['topic']);
 if (isset($_GET['all'])) {
     $sql = "SELECT p.*, pt.post_text FROM posts p, posts_text pt 
 		WHERE topic_id = '$topic' 
@@ -225,7 +230,7 @@ if (isset($_GET['all'])) {
 }
 if (!$result = db_query($sql, $currentCourseID)) {
 	$tool_content .= "$langErrorConnectPostDatabase. $sql";
-	draw($tool_content, 2, 'phpbb');
+	draw($tool_content, 2);
 	exit();
 }
 $myrow = mysql_fetch_array($result);
@@ -257,7 +262,8 @@ do {
 	<td class='$row_color' width='40'><div align='right'>";
 	if ($is_adminOfCourse) { // course admin
 		$tool_content .= "<a href=\"editpost.php?post_id=".$myrow["post_id"]."&amp;topic=$topic&amp;forum=$forum\"><img src='../../template/classic/img/edit.gif' title='$langModify' alt='$langModify' /></a>";
-		$tool_content .= "&nbsp;<a href='editpost.php?post_id=".$myrow["post_id"]."&amp;topic=$topic&amp;forum=$forum&amp;delete=on&amp;submit=yes' onClick='return confirmation()'><img src='../../template/classic/img/delete.gif' title='$langDelete' alt='$langDelete' /></a>";
+		$tool_content .= "&nbsp;<a href='editpost.php?post_id=".$myrow["post_id"]."&amp;topic=$topic&amp;forum=$forum&amp;delete=on&amp;submit=yes' onClick='return confirmation()'>
+			<img src='../../template/classic/img/delete.gif' title='$langDelete' /></a>";
 	}
 	$tool_content .= "</div></td></tr>";
 	$count++;
@@ -284,21 +290,21 @@ cData;
 
 	for($x = 0; $x < $total; $x += $posts_per_page) {
 		if($times != 1) {
-			$tool_content .= "\n       <span class=\"page-sep\">,</span>";
+			$tool_content .= "\n<span class=\"page-sep\">,</span>";
 		}
 		if($start && ($start == $x)) {
 			$tool_content .= "" .  $times;
 		} else if($start == 0 && $x == 0) {
 			$tool_content .= "1";
 		} else {
-			$tool_content .= "\n<a href=\"$_SERVER[PHP_SELF]?mode=viewtopic&amp;topic=$topic&amp;forum=$forum&amp;start=$x\">$times</a>";
+			$tool_content .= "\n<a href=\"$_SERVER[PHP_SELF]?topic=$topic&amp;forum=$forum&amp;start=$x\">$times</a>";
 		}
 		$times++;
 	}
 	$tool_content .= "</span></strong></span></td>
 	<td><span class='pages'>$langGoToPage: &nbsp;&nbsp;";
 	if (isset($start) && $start > 0) {
-		$tool_content .= "\n       <a href=\"$_SERVER[PHP_SELF]?topic=$topic&amp;forum=$forum&amp;start=$last_page\">$langPreviousPage</a>&nbsp;|";
+		$tool_content .= "\n<a href=\"$_SERVER[PHP_SELF]?topic=$topic&amp;forum=$forum&amp;start=$last_page\">$langPreviousPage</a>&nbsp;|";
 	} else {
 		$start = 0;
 	}	
@@ -325,4 +331,4 @@ cData;
 	$tool_content .= "</span></td></tr></thead></table>";
 }
 
-draw($tool_content, 2, 'phpbb', $local_head);
+draw($tool_content, 2, '', $local_head);

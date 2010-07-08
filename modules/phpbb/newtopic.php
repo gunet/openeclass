@@ -1,4 +1,4 @@
-<?php
+<?
 /*========================================================================
 *   Open eClass 2.3
 *   E-learning and Course Management System
@@ -117,6 +117,12 @@ include("functions.php"); // application logic for phpBB
 /******************************************************************************
  * Actual code starts here
  *****************************************************************************/
+if (isset($_GET['forum'])) {
+	$forum = intval($_GET['forum']);
+}
+if (isset($_GET['topic'])) {
+	$topic = intval($_GET['topic']);
+}
 
 $sql = "SELECT forum_name, forum_access, forum_type FROM forums
 	WHERE (forum_id = '$forum')";
@@ -136,27 +142,22 @@ $navigation[]= array ("url"=>"index.php", "name"=> $langForums);
 $navigation[]= array ("url"=>"viewforum.php?forum=$forum_id", "name"=> $forum_name);
 
 if (!does_exists($forum, $currentCourseID, "forum")) {
-	//XXX: Error message in specified language
 	$tool_content .= $langErrorPost;
 }
 
-if (isset($submit) && $submit) {
-	$subject = strip_tags($subject);
+if (isset($_POST['submit'])) {
+	$subject = strip_tags($_POST['subject']);
+	$message = $_POST['message'];
 	if (trim($message) == '' || trim($subject) == '') {
 		$tool_content .= $langEmptyMsg;
 		draw($tool_content, 2, '', $head_content);
 		exit;
 	}
-	if (!isset($username)) {
-		$username = $langAnonymous;
-	}
-	
 	if($forum_access == 3 && $user_level < 2) {
 		$tool_content .= $langNoPost;
 		draw($tool_content, 2, '', $head_content);
 		exit;
 	}
-	// Either valid user/pass, or valid session. continue with post.. but first:
 	// Check that, if this is a private forum, the current user can post here.
 	if ($forum_type == 1) {
 		if (!check_priv_forum_auth($uid, $forum, TRUE, $currentCourseID)) {
@@ -174,11 +175,10 @@ if (isset($submit) && $submit) {
 		$message = bbencode($message, $is_html_disabled);
 	}
 	$message = format_message($message);
-	$subject = strip_tags($subject);
-	$poster_ip = $REMOTE_ADDR;
+	$poster_ip = $_SERVER['REMOTE_ADDR'];
 	$time = date("Y-m-d H:i");
-	$nom = addslashes($nom);
-	$prenom = addslashes($prenom);
+	$nom = addslashes($_SESSION['nom']);
+	$prenom = addslashes($_SESSION['prenom']);
 
 	if (isset($sig) && $sig) {
 		$message .= "\n[addsig]";
@@ -238,22 +238,14 @@ if (isset($submit) && $submit) {
 	<tr><td class='success'>
 	<p><b>$langStored</b></p>
 	<p>$langClick <a href='viewtopic.php?topic=$topic_id&amp;forum=$forum&amp;$total_topic'>$langHere</a>$langViewMsg</p>
-	<p>$langClick <a href='viewforum.php?forum=$forum_id&amp;total_forum'>$langHere</a> $langReturnTopic</p>
+	<p>$langClick <a href='viewforum.php?forum=$forum_id'>$langHere</a> $langReturnTopic</p>
 	</td>
 	</tr>
 	</tbody></table>"; 
+} elseif (isset($_POST['cancel'])) {
+	header("Location: viewtopic.php?topic=$topic&forum=$forum");	
 } else {
-	if (!$uid AND !$fakeUid) {
-		$tool_content .= "<center><br /><br />
-		$langLoginBeforePost1
-		<br />
-		$langLoginBeforePost2
-		<a href='../../index.php'>$langLoginBeforePost3.</a>
-		</center>";
-		draw($tool_content, 2, '', $head_content);
-		exit();
-	}
-	$tool_content .= "<form action='$_SERVER[PHP_SELF]' method='post'>
+	$tool_content .= "<form action='$_SERVER[PHP_SELF]?topic=$topic&forum=$forum' method='post'>
 	<table class='framed'>
 	<thead>
 	<tr><td><b>$langTopicData</b></td></tr>
@@ -266,7 +258,7 @@ if (isset($submit) && $submit) {
 	."
 	</td></tr>
 	<tr>
-	<td><input type='hidden' name='forum' value='$forum' />
+	<td>
 	<input class='Login' type='submit' name='submit' value='$langSubmit' />&nbsp;
 	<input class='Login' type='submit' name='cancel' value='$langCancelPost' />
 	</td></tr>

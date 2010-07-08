@@ -1,4 +1,4 @@
-<?php
+<?
 /*========================================================================
 *   Open eClass 2.3
 *   E-learning and Course Management System
@@ -112,6 +112,13 @@ hContent;
 include_once("./config.php");
 include("functions.php");
 
+if (isset($_GET['forum'])) {
+	$forum = intval($_GET['forum']);
+}
+if (isset($_GET['topic'])) {
+	$topic = intval($_GET['topic']);
+}
+
 if (isset($post_id) && $post_id) {
 	// We have a post id, so include that in the checks..
 	$sql  = "SELECT f.forum_type, f.forum_name, f.forum_access, t.topic_title ";
@@ -147,19 +154,11 @@ if (!does_exists($forum, $currentCourseID, "forum") || !does_exists($topic, $cur
 	exit();
 }
 
-if (isset($submit) && $submit) {
+if (isset($_POST['submit'])) {
+	$message = $_POST['message'];
+	$quote = $_POST['quote'];
 	if (trim($message) == '') {
 		$tool_content .= $langEmptyMsg;
-		draw($tool_content, 2, '', $head_content);
-		exit();
-	}
-	if (isset($user_level) && $user_level == -1) {
-		$tool_content .= $luserremoved;
-		draw($tool_content, 2, '', $head_content);
-		exit();
-	}
-	if ($forum_access == 3 && $user_level < 2) {
-		$tool_content .= $langNoPost;
 		draw($tool_content, 2, '', $head_content);
 		exit();
 	}
@@ -171,7 +170,6 @@ if (isset($submit) && $submit) {
 			exit();
 		}
 	}
-	// Either valid user/pass, or valid session. continue with post.. but first:
 	// Check that, if this is a private forum, the current user can post here.
 	if ($forum_type == 1) {
 		if (!check_priv_forum_auth($uid, $forum, TRUE, $currentCourseID)) {
@@ -180,9 +178,9 @@ if (isset($submit) && $submit) {
 			exit();
 		}
 	}
-	$poster_ip = $REMOTE_ADDR;
+	$poster_ip = $_SERVER['REMOTE_ADDR'];
 	$is_html_disabled = false;
-	if ( (isset($allow_html) && $allow_html == 0) || isset($html)) {
+	if ((isset($allow_html) && $allow_html == 0) || isset($html)) {
 		$message = htmlspecialchars($message);
 		$is_html_disabled = true;
 		if (isset($quote) && $quote) {
@@ -192,13 +190,13 @@ if (isset($submit) && $submit) {
 			$message = preg_replace("#&lt;font\ size\=-1&gt;\[\ $edit_by(.*?)\ \]&lt;/font&gt;#si", '[ ' . $edit_by . '\1 ]', $message);
 		}
 	}
-	if ( (isset($allow_bbcode) && $allow_bbcode == 1) && !isset($bbcode)) {
+	if ((isset($allow_bbcode) && $allow_bbcode == 1) && !isset($bbcode)) {
 		$message = bbencode($message, $is_html_disabled);
 	}
 	$message = format_message($message);
 	$time = date("Y-m-d H:i");
-	$nom = addslashes($nom);
-	$prenom = addslashes($prenom);
+	$nom = addslashes($_SESSION['nom']);
+	$prenom = addslashes($_SESSION['prenom']);
 
 	//to prevent [addsig] from getting in the way, let's put the sig insert down here.
 	if (isset($sig) && $sig) {
@@ -255,6 +253,8 @@ if (isset($submit) && $submit) {
 	$tool_content .= "<table width=\"99%\"><tbody><tr>
 	<td class=\"success\">$langStored</td>
 	</tr></tbody></table>";
+} elseif (isset($_POST['cancel'])) {
+	header("Location: viewtopic.php?topic=$topic&forum=$forum");	
 } else {
 	// Private forum logic here.
 	if (($forum_type == 1) && !$user_logged_in && !$logging_in) {
@@ -275,12 +275,6 @@ if (isset($submit) && $submit) {
 		draw($tool_content, 2, '', $head_content);
 		exit();
 	} else {
-		if (!$uid AND !$fakeUid) {
-			$tool_content .= "<center><br><br>$langLoginBeforePost1<br>";
-			$tool_content .= "$langLoginBeforePost2<a href=../../index.php>$langLoginBeforePost3</a></center>";
-			draw($tool_content, 2, '', $head_content);
-			exit();
-		}
 		if ($forum_type == 1) {
 			// To get here, we have a logged-in user. So, check whether that user is allowed to view
 			// this private forum.
@@ -289,7 +283,6 @@ if (isset($submit) && $submit) {
 				draw($tool_content, 2, '', $head_content);
 				exit();
 			}
-			// Ok, looks like we're good.
 		}
 	}	
 	// Topic review
@@ -297,7 +290,7 @@ if (isset($submit) && $submit) {
 	<ul id=\"opslist\">
 	<li><a href=\"viewtopic.php?topic=$topic&forum=$forum\" target=\"_blank\">$langTopicReview</a></li>
 	</ul></div><br />";
-	$tool_content .= "<form action='$_SERVER[PHP_SELF]' method='post'>
+	$tool_content .= "<form action='$_SERVER[PHP_SELF]?topic=$topic&forum=$forum' method='post'>
 	<table class='framed'>
 	<thead>
 	<tr><td><b>$langTopicAnswer</b>: $topic_title</td></tr>
@@ -333,8 +326,6 @@ if (isset($submit) && $submit) {
 	<tr><td>".rich_text_editor('message', 15, 70, $reply, "class='FormData_InputText'")."</td></tr>
 	<tr>
 	<td>
-	<input type='hidden' name='forum' value='$forum'>
-	<input type='hidden' name='topic' value='$topic'>
 	<input type='hidden' name='quote' value='$quote'>
 	<input type='submit' name='submit' value='$langSubmit'>&nbsp;
 	<input type='submit' name='cancel' value='$langCancelPost'>
