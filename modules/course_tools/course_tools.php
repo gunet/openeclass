@@ -212,7 +212,8 @@ if ($is_adminOfCourse) {
 		}
 	}
 
-	if (isset($delete)) {
+        if (isset($_POST['delete'])) {
+                $delete = intval($_POST['delete']);
 		$sql = "SELECT lien, define_var FROM accueil WHERE `id` = ". $delete ." ";
 		$result = db_query($sql, $dbname);
 		while ($res = mysql_fetch_row($result)){
@@ -428,7 +429,7 @@ tForm;
 	$extToolsCount = count($externalLinks) ;
 	if ($extToolsCount > 0)  {
 		// show table to edit/delete external links
-                $tool_content .= "<br/><br/><form method='post' action='course_tools.php'>
+                $tool_content .= "<br/><br/>
                         <table width='500'><tbody>
                         <tr>
                         <th rowspan='2'>&nbsp;</th>
@@ -445,14 +446,15 @@ tForm;
 				$tool_content .= "<tr class='odd'>\n";
 			}
 			$tool_content .= "<th class='left' width='1'>
-                                <img src='../../template/classic/img/external_link_on.gif' border='0' title='$langTitle' /></th>
+                                <img src='../../template/classic/img/external_link_on.gif' title='$langTitle' /></th>
                                 <td class='left'>".$externalLinks[$i]['text']."</td>\n";
-			$tool_content .= "<td align='center'>
-                                <input type='image' src='../../template/classic/img/delete.gif' name='delete' value='" .
-                                $externalLinks[$i]['id'] . "' onClick='return confirmation(\"" .
-                                addslashes($externalLinks[$i]['text']) . "\");' title='$langDelete' /></td></tr>";
+                        $tool_content .= "<td align='center'><form method='post' action='course_tools.php'>
+                                <input type='hidden' name='delete' value='{$externalLinks[$i]['id']}' />
+                                <input type='image' src='../../template/classic/img/delete.gif' name='delete_button' 
+                                       onClick='return confirmation(\"" .  addslashes($externalLinks[$i]['text']) .
+                                               "\");' title='$langDelete' /></form></td></tr>";
                 }
-		$tool_content .= "</tbody></table></form>";
+		$tool_content .= "</tbody></table>";
 	}
         draw($tool_content, 2,'course_tools', $head_content);
 }
