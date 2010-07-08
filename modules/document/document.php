@@ -220,10 +220,7 @@ if($is_adminOfCourse) {
 		if ($diskUsed + @$_FILES['userFile']['size'] > $diskQuotaDocument) {
 			$dialogBox .= "<p class='caution_small'>$langNoSpace</p>";
 		} else {
-                        // check for dangerous extensions and file types
-                        if (preg_match('/\.(ade|adp|bas|bat|chm|cmd|com|cpl|crt|exe|hlp|hta|' .
-                        'inf|ins|isp|jse|lnk|mdb|mde|msc|msi|msp|mst|pcd|pif|reg|scr|sct|shs|' .
-                        'shb|url|vbe|vbs|wsc|wsf|wsh)$/', $_FILES['userFile']['name'])) {
+                        if (unwanted_file($_FILES['userFile']['name'])) {
                                 $dialogBox .= "$langUnwantedFiletype: {$_FILES['userFile']['name']}";
                         }
                         /*** Unzipping stage ***/
@@ -341,12 +338,16 @@ if($is_adminOfCourse) {
 	/**************************************
 	DELETE FILE OR DIRECTORY
 	**************************************/
-        if (isset($_POST['delete'])) {
-                $delete = str_replace('..', '', $_POST['delete']);
-		if (my_delete($basedir . $delete) or !file_exists($basedir . $delete)) {
-                        update_db_info('document', 'delete', $delete);
-			$dialogBox = "<p class='success_small'>$langDocDeleted</p><br />";
-		}
+        if (isset($_POST['delete']) or isset($_POST['delete_x'])) {
+                $delete = str_replace('..', '', $_POST['filePath']);
+		// Check if file actually exists
+                $result = db_query("SELECT path, format FROM $dbTable WHERE path=" . autoquote($delete));
+                if (mysql_num_rows($result) > 0) {
+                        if (my_delete($basedir . $delete) or !file_exists($basedir . $delete)) {
+                                update_db_info('document', 'delete', $delete);
+                                $dialogBox = "<p class='success_small'>$langDocDeleted</p><br />";
+                        }
+                }
 	}
 
 	/*****************************************
@@ -427,6 +428,60 @@ if($is_adminOfCourse) {
                                         WHERE path = '$commentPath'");
                 }
 	}
+
+        if (isset($_POST['replacePath']) and
+            isset($_FILES['newFile']) and
+            is_uploaded_file($_FILES['newFile']['tmp_name'])) {
+                $replacePath = $_POST['replacePath'];
+		// Check if file actually exists
+                $result = db_query("SELECT path, format FROM $dbTable WHERE format <> '.dir' AND
+                                        path=" . autoquote($replacePath));
+                if (mysql_num_rows($result) > 0) {
+        		list($oldpath, $oldformat) = mysql_fetch_row($result);
+                        // check for disk quota
+                        $diskUsed = dir_total_space($basedir);
+                        if ($diskUsed - filesize($basedir . $oldpath) + $_FILES['newFile']['size'] > $diskQuotaDocument) {
+                                $dialogBox = "<p class='caution_small'>$langNoSpace</p>";
+                        } elseif (unwanted_file($_FILES['newFile']['name'])) {
+                                $dialogBox = "<p class='caution_small'>$langUnwantedFiletype: " .
+                                                        q($_FILES['newFile']['name']) . "</p>";
+                        } else {
+                                $newformat = get_file_extension($_FILES['newFile']['name']);
+                                $newpath = preg_replace("/\\.$oldformat$/", '', $oldpath) .
+                                           (empty($newformat)? '': '.' . $newformat);
+                                my_delete($basedir . $oldpath);
+                                if (!copy($_FILES['newFile']['tmp_name'], $basedir . $newpath) or
+                                    !db_query("UPDATE $dbTable SET path = " . quote($newpath) . ",
+                                                                   format = " . quote($newformat) . ",
+                                                                   filename = " . autoquote($_FILES['newFile']['name']) . "
+                                                              WHERE path = " . quote($oldpath))) {
+                                        $dialogBox = "<p class='caution_small'>$dropbox_lang[generalError]</p>";
+                                } else {
+                                        $dialogBox = "<p class='success_small'>$langReplaceOK</p>";
+                                }
+                        }
+                }
+	}
+
+
+	// Display form to replace/overwrite an existing file
+	if (isset($_GET['replace'])) {
+                $result = db_query("SELECT filename FROM $dbTable WHERE format <> '.dir' AND
+                                        path = " . autoquote($_GET['replace']));
+                if (mysql_num_rows($result) > 0) {
+                        list($filename) = mysql_fetch_row($result);
+                        $filename = q($filename);
+                        $replacemessage = sprintf($langReplaceFile, '<i>' . $filename . '</i>');
+                        $dialogBox = "<form method='post' action='document.php' enctype='multipart/form-data'>
+		              <input type='hidden' name='replacePath' value='" . q($_GET['replace']) . "' />
+                              <table class='FormData' width='99%'><tbody><tr>
+                                  <th class='left' width='200'>$langReplace:</th>
+                                  <td class='left'>$replacemessage:
+                                      <input type='file' name='newFile' size='35' class='FormData_InputText' /></td>
+                                  <td class='left' width='1'><input type='submit' value='$langReplace' /></td></tr>
+                              </tbody></table></form><br />";
+                }
+        }
 
 	// Emfanish ths formas gia tropopoihsh comment
 	if (isset($_GET['comment'])) {
@@ -557,13 +612,15 @@ $curDirPath =
         pathvar($_POST['moveTo'], false) .
         pathvar($_POST['newDirPath'], false) .
         pathvar($_POST['uploadPath'], false) .
-        pathvar($_POST['delete'], true) .
+        pathvar($_POST['filePath'], true) .
         pathvar($_GET['move'], true) .
         pathvar($_GET['rename'], true) .
+        pathvar($_GET['replace'], true) .
         pathvar($_GET['comment'], true) .
         pathvar($_GET['mkInvisibl'], true) .
         pathvar($_GET['mkVisibl'], true) .
         pathvar($_POST['sourceFile'], true) .
+        pathvar($_POST['replacePath'], true) .
         pathvar($_POST['commentPath'], true);
 
 if ($curDirPath == '/' or $curDirPath == '\\') {
@@ -663,7 +720,6 @@ if (mysql_num_rows($sql) == 0) {
 
 	// Current Directory Line
 	$tool_content .= "<br /><div class='fileman'>\n" .
-	                 "<form action='document.php' method='post'>\n" .
 	                 "<table width='99%' align='left' class='Documents'>\n" .
                          "<tbody>\n";
 
@@ -776,8 +832,10 @@ if (mysql_num_rows($sql) == 0) {
                                 $tool_content .= "<td>$size</td><td>$date</td>";
                         }
                         if ($is_adminOfCourse) {
+                                $tool_content .= "<td><form action='document.php' method='post'>" .
+                                                 "<input type='hidden' name='filePath' value='$cmdDirName' />";
                                 /*** delete command ***/
-                                $tool_content .= "<td><input type='image' src='../../template/classic/img/delete.gif' title='$langDelete' name='delete' value='$cmdDirName' onClick=\"return confirmation('".addslashes($entry['filename'])."');\" />&nbsp;";
+                                $tool_content .= "<input type='image' src='../../template/classic/img/delete.gif' alt='$langDelete' title='$langDelete' name='delete' value='1' onClick=\"return confirmation('".addslashes($entry['filename'])."');\" />&nbsp;";
                                 /*** copy command ***/
                                 $tool_content .= "<a href='$_SERVER[PHP_SELF]?move=$cmdDirName'>";
                                 $tool_content .= "<img src='../../template/classic/img/move_doc.gif' title='$langMove' /></a>&nbsp;";
@@ -795,14 +853,19 @@ if (mysql_num_rows($sql) == 0) {
                                         $tool_content .= "<a href='$_SERVER[PHP_SELF]?mkVisibl=$cmdDirName'>";
                                         $tool_content .= "<img src='../../template/classic/img/invisible.gif' title='$langVisible' /></a>";
                                 }
-                                $tool_content .= "</td>";
+                                if (!$is_dir) {
+                                        /*** replace/overwrite command, only applies to files ***/
+                                        $tool_content .= "&nbsp;<a href='$_SERVER[PHP_SELF]?replace=$cmdDirName'>" .
+                                                         "<img src='../../template/classic/img/add.gif' title='$langReplace' /></a>";
+                                }
+                                $tool_content .= "</form></td>";
                                 $tool_content .= "\n  </tr>";
                         }
                 }
         }
-        $tool_content .=  "\n</tbody>\n</table>\n</form>\n";
+        $tool_content .=  "\n</tbody>\n</table>\n";
 	if ($is_adminOfCourse) {
-		$tool_content .= "<p align='right'><small>$langMaxFileSize ".ini_get('upload_max_filesize')."</small></p>";
+		$tool_content .= "<p align='right'><small>$langMaxFileSize " . ini_get('upload_max_filesize') . "</small></p>";
 	}
         $tool_content .=  "\n</div>";
 }

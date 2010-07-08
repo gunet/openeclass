@@ -475,4 +475,10 @@ function showquota($quota, $used) {
 	return $retstring;
 }
 
-?>
+// check for dangerous extensions and file types
+function unwanted_file($filename)
+{
+        return preg_match('/\.(ade|adp|bas|bat|chm|cmd|com|cpl|crt|exe|hlp|hta|' .
+                              'inf|ins|isp|jse|lnk|mdb|mde|msc|msi|msp|mst|pcd|pif|reg|scr|sct|shs|' .
+                              'shb|url|vbe|vbs|wsc|wsf|wsh)$/', $filename);
+}
