@@ -37,135 +37,62 @@ $tool_content = "";
 
 // IF PROF ONLY
 if($is_adminOfCourse) {
-
     $tool_content .= "
-    <form method=\"post\" action=\"".$_SERVER['PHP_SELF']."\" enctype=\"multipart/form-data\">";
-	$tool_content .= <<<tCont2
-
-    <table width="99%" class="FormData">
+    <form method='post' action='".$_SERVER['PHP_SELF']."' enctype='multipart/form-data'>";
+    $tool_content .= "<table width='99%' class='FormData'>
     <tbody>
     <tr>
-      <th width="220">&nbsp;</th>
+      <th width='220'>&nbsp;</th>
       <td><b>$langUsersData</b></td>
-      <td align="right">&nbsp;</td>
+      <td align='right'>&nbsp;</td>
     </tr>
     <tr>
-      <th class="left">$langAskUserFile</th>
-      <td><input type="file" name="users_file" class="FormData_InputText"></td>
-      <td align="justify"><small>$langAskManyUsers</small></td>
+      <th class='left'>$langAskUserFile</th>
+      <td><input type='file' name='users_file' class=FormData_InputText'></td>
+      <td align='justify'><small>$langAskManyUsers</small></td>
     </tr>
     <tr>
-      <th class="left">&nbsp;</th>
-      <td><input type="submit" value="$langAdd"></td>
-      <td align="right">&nbsp;</td>
+      <th class='left'>&nbsp;</th>
+      <td><input type='submit' value='$langAdd'></td>
+      <td align='right'>&nbsp;</td>
     </tr>
-	</tbody>
-	</table>
-	<br />
-
+    </tbody>
+    </table>
+    <br />
     </form>
-    <p>$langAskManyUsers1<br />$langAskManyUsers2</small></p>
+    <p>$langAskManyUsers1<br />$langAskManyUsers2</small></p>";
 
-tCont2;
-
-mysql_select_db($mysqlMainDb);
-$search=array();
-if(!empty($search_nom)) {
-	$search[] = "u.nom LIKE '".mysql_escape_string($search_nom)."%'";
-}
-if(!empty($search_prenom)) {
-	$search[] = "u.prenom LIKE '".mysql_escape_string($search_prenom)."%'";
-}
-if(!empty($search_uname)) {
-	$search[] = "u.username LIKE '".mysql_escape_string($search_uname)."%'";
-}
-// added by jexi
-if (!empty($users_file)) {
-	$tmpusers=trim($_FILES['users_file']['name']);
-	$tool_content .= <<<tCont3
-		<table width=99%>
-		<thead>
-		<tr>
-		<th>$langUsers</th><th>$langResult</th>
-		</thead>
-		<tbody>
-tCont3;
-	$f=fopen($users_file,"r");
-	while (!feof($f))	{
-		$uname=trim(fgets($f,1024));
-		if (!$uname) continue;
-		if (!check_uname_line($uname)) {
-			$tool_content .= "<tr><td colspan=\"2\">$langFileNotAllowed</td></tr>\n";
-			break;
-		}
-		$result = adduser($uname, $cours_id);
-		$tool_content .= "<tr><td align=center>$uname</td><td>";
-		if ($result == -1) {
-			$tool_content .= $langUserNoExist;
-		} elseif ($result == -2) {
-			$tool_content .= $langUserAlready;
-		} else {
-			$tool_content .= $langTheU.$langAdded;
-		}
-		$tool_content .= "</td></tr>\n";
+    mysql_select_db($mysqlMainDb);
+    
+    if (isset($_FILES['users_file']) && is_uploaded_file($_FILES['users_file']['tmp_name'])) {
+	$tmpusers = trim($_FILES['users_file']['tmp_name']);
+	$tool_content .= "<table width=99%><thead>
+	    <tr><th>$langUsers</th><th>$langResult</th></thead><tbody>";
+	$f = fopen($tmpusers,"r");
+	while (!feof($f)) {
+	    $uname = trim(fgets($f,1024));
+	    if (!$uname) continue;
+	    if (!check_uname_line($uname)) {
+		    $tool_content .= "<tr><td colspan=\"2\">$langFileNotAllowed</td></tr>\n";
+		    break;
+	    }
+	    $result = adduser($uname, $cours_id);
+	    $tool_content .= "<tr><td align=center>$uname</td><td>";
+	    if ($result == -1) {
+		    $tool_content .= $langUserNoExist;
+	    } elseif ($result == -2) {
+		    $tool_content .= $langUserAlready;
+	    } else {
+		    $tool_content .= $langTheU.$langAdded;
+	    }
+	    $tool_content .= "</td></tr>\n";
 	}
 	$tool_content .= "</tbody></table>\n";
 	fclose($f);
-}
+    }
+} // end
 
-// end
-
-$query = join(' AND ', $search);
-if (!empty($query)) {
-	db_query("CREATE TEMPORARY TABLE lala AS
-			SELECT user_id FROM cours_user WHERE cours_id = $cours_id
-			");
-	$result = db_query("SELECT u.user_id, u.nom, u.prenom, u.username FROM
-			user u LEFT JOIN lala c ON u.user_id = c.user_id WHERE
-			c.user_id IS NULL AND $query
-			");
-	if (mysql_num_rows($result) == 0) {
-		$tool_content .= $langNoUsersFound."</td></tr>\n";
-	} else {
-$tool_content .= <<<tCont4
-	<table width=99%>
-	<thead>
-		<tr bgcolor=silver>
-			<th></th>
-			<th>$langName</th>
-			<th>$langSurname</th>
-			<th>$langUsername</th>
-			<th></th>
-		</tr>
-	</thead>
-	<tbody>
-tCont4;
-$i = 1;
-while ($myrow = mysql_fetch_array($result)) {
-	if ($i % 2 == 0) {
-		$tool_content .= "<tr>";
-	} else {
-		$tool_content .= "<tr class=\"odd\">";
-	}
-	$tool_content .= "<td>$i</td>".
-	"<td>$myrow[prenom]</td>".
-	"<td>$myrow[nom]</td>".
-	"<td>$myrow[username]</td>".
-	"<td><a href=\"$_SERVER[PHP_SELF]?add=$myrow[user_id]\">".
-	"$langRegister</a></td></tr>\n";
-	$i++;
-}
-
-	$tool_content .= "</tbody></table>";
-
-	}
-	db_query("DROP TABLE lala");
-}
-
-
-}
-
-draw($tool_content, 2, 'user');
+draw($tool_content, 2);
 
 // function for adding users
 

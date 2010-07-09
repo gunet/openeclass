@@ -148,7 +148,7 @@ if ($is_adminOfCourse) {
 }
 
 // display navigation links if course users > COURSE_USERS_PER_PAGE
-if ($countUser > COURSE_USERS_PER_PAGE and !isset($all)) {
+if ($countUser > COURSE_USERS_PER_PAGE and !isset($_GET['all'])) {
 	$q = "LIMIT $limit, ".COURSE_USERS_PER_PAGE."";
 	$tool_content .= show_paging($limit, COURSE_USERS_PER_PAGE, $countUser, "$_SERVER[PHP_SELF]", '', TRUE);
 }
@@ -227,7 +227,7 @@ while ($myrow = mysql_fetch_array($result)) {
 
         // ************** tutor, admin and unsubscribe (admin only) ******************************
         if(isset($status) && ($status["$currentCourseID"]=='1' OR $status["$currentCourseID"]=='2')) {
-		if (isset($all) and $all == TRUE) {
+		if (isset($_GET['all']) and $_GET['all'] == TRUE) {
 			$extra_link = '&all=TRUE';
 		} else {
 			$extra_link = "&limit=".$limit;
