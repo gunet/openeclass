@@ -1,4 +1,4 @@
-<?PHP
+<?
 /*========================================================================
 *   Open eClass 2.3
 *   E-learning and Course Management System
@@ -212,6 +212,7 @@ if ($is_adminOfCourse) {
 		}
 	}
 
+
         if (isset($_POST['delete'])) {
                 $delete = intval($_POST['delete']);
 		$sql = "SELECT lien, define_var FROM accueil WHERE `id` = ". $delete ." ";
@@ -224,40 +225,41 @@ if ($is_adminOfCourse) {
 				@unlink($file2Delete);
 			}
 		}
-		$sql = "DELETE FROM `accueil` WHERE `id` = " . $delete ." ";
+		$sql = "DELETE FROM `accueil` WHERE `id` = " . $_POST['delete'] ." ";
 		db_query($sql, $dbname);
 		unset($sql);
-
 		$tool_content .= "<p class=\"success_small\">$langLinkDeleted</p><br/>";
 	}
 
         if (isset($_POST['submit'])) {
                 // Add external link
                 if ($action == 2) {
-                        $link = @$_POST['link'];
-                        $name_link = @$_POST['name_link'];
-                        if (($link == 'http://') or ($link == 'ftp://') or empty($link) or empty($name_link))  {
+                        $link = isset($_POST['link'])?$_POST['link']:'';
+                        $name_link = isset($_POST['name_link'])?$_POST['name_link']:'';
+                        if ((trim($link) == 'http://') or (trim($link) == 'ftp://')
+                                        or empty($link) or empty($name_link))  {
                                 $tool_content .= "<p class='caution_small'>$langInvalidLink<br /><a href='$_SERVER[PHP_SELF]?action=2'>$langHome</a></p><br />";
-                                draw($tool_content, 2, 'course_tools');
+                                draw($tool_content, 2);
                                 exit();
                         }
 
                         $res = db_query('SELECT MAX(`id`) FROM `accueil`', $dbname);
                         list($mID) = mysql_fetch_row($res);
-
-                        if ($mID<101) $mID = 101;
+                        if ($mID < 101) $mID = 101;
                         else $mID = $mID + 1;
                         $link = autoquote($link);
                         $name_link = autoquote($name_link);
                         db_query("INSERT INTO accueil VALUES ($mID, $name_link, $link, 'external_link', 1, 0, $link, '')");
-
                         $tool_content .= "<p class='success_small'>$langLinkAdded</p><br/>";
                 } elseif ($action == 1) { 
-                        $updir = "$webDir/courses/$currentCourseID/page/"; //path to upload directory
+                        $updir = "$webDir/courses/$currentCourseID/page"; //path to upload directory
                         $size = "20971520"; //file size is 20M (1024x1024x20)
-                        if (isset($file_name) and ($file_name != "") && ($file_size <= "$size") and ($link_name != "")) {
-
-                                @copy("$file", "$updir/$file_name")
+                        if (isset($_FILES['file']['name']) && is_uploaded_file($_FILES['file']['tmp_name'])
+                            && ($_FILES['file']['size'] < "$size") and (!empty($_POST['link_name']))) {
+                            
+                                $tmpfile = $_FILES['file']['tmp_name'];
+                                $file_name = $_FILES['file']['name'];
+                                @copy("$tmpfile", "$updir/$file_name")
                                         or die("<p>$langCouldNot</p></tr>");
 
                                 $sql = 'SELECT MAX(`id`) FROM `accueil` ';
@@ -266,10 +268,10 @@ if ($is_adminOfCourse) {
                                         $mID = $maxID[0];
                                 }
 
-                                if($mID<101) $mID = 101;
+                                if($mID < 101) $mID = 101;
                                 else $mID = $mID+1;
 
-                                $link_name = quote($link_name);
+                                $link_name = quote($_POST['link_name']);
                                 $lien = quote("../../courses/$currentCourse/page/$file_name");
                                 db_query("INSERT INTO accueil VALUES (
                                                 $mID,
@@ -281,11 +283,11 @@ if ($is_adminOfCourse) {
                                                 '',
                                                 'HTML_PAGE'
                                                 )", $currentCourse);
-
-                                $tool_content .= "<p class=\"success_small\">$langOkSent</p><br/>";
+                                $tool_content .= "<p class='success_small'>$langOkSent</p><br/>";
                         } else {
-                                $tool_content .= "<p class=\"caution_small\">$langTooBig<br /><a href=\"$_SERVER[PHP_SELF]?action=1\">$langHome</a></p><br />";
-                                draw($tool_content, 2, 'course_tools');
+                                $tool_content .= "<p class='caution_small'>$langTooBig<br />";
+                                $tool_content .= "<a href='$_SERVER[PHP_SELF]?action=1'>$langHome</a></p><br />";
+                                draw($tool_content, 2);
                         }
                 }
         } elseif ($action == 1) { // upload html file
@@ -311,13 +313,12 @@ if ($is_adminOfCourse) {
                             <td><input type='Submit' name='submit' value='$langAdd'></td>
                             <td>&nbsp;</td></tr>
                         </tbody></table></form>";
-                draw($tool_content, 2, 'course_tools');
+                draw($tool_content, 2);
                 exit();
         } elseif ($action == 2) { // add external link
                 $nameTools = $langAddExtLink;
                 $navigation[]= array ('url' => 'course_tools.php', 'name' => $langToolManagement);
                 $helpTopic = 'Module';
-
                 $tool_content .=  "<form method='post' action='$_SERVER[PHP_SELF]?action=2'>
                 <br>
                 <table width='99%' align='left' class='FormData'>
@@ -344,7 +345,7 @@ if ($is_adminOfCourse) {
                 </tr>
                 </thead>
                 </table></form>";
-                draw($tool_content, 2, 'course_tools');
+                draw($tool_content, 2);
                 exit();
         }
 
@@ -456,5 +457,5 @@ tForm;
                 }
 		$tool_content .= "</tbody></table>";
 	}
-        draw($tool_content, 2,'course_tools', $head_content);
+        draw($tool_content, 2,'', $head_content);
 }
