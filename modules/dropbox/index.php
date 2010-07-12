@@ -47,7 +47,7 @@ $action = new action();
 $action->record('MODULE_ID_DROPBOX');
 /**************************************/
 
-if (isset($showQuota) and $showQuota == TRUE) {
+if (isset($_GET['showQuota']) and $_GET['showQuota'] == TRUE) {
 	$nameTools = $langQuotaBar;
 	$navigation[]= array ("url"=>"$_SERVER[PHP_SELF]", "name"=> $dropbox_lang["dropbox"]);
 	$tool_content .= showquota($diskQuotaDropbox, $diskUsed);
@@ -157,18 +157,18 @@ tCont2;
 	}
 
 	$tool_content .= "
-    <tr>
-      <th class='left'>".$dropbox_lang["authors"]." :</th>
-      <td>".getUserNameFromId($uid)."</td>
-    </tr>
-    <tr>
-      <th class='left'>".$dropbox_lang["description"]." :</th>
-      <td><textarea name='description' cols='37' rows='2' class='FormData_InputText'></textarea></td>
-    </tr>
-    <tr>
-      <th class='left'>".$dropbox_lang["sendTo"]." :</th>
-      <td>
-        <select name='recipients[]' size='$reciepientsSize' multiple='true'  class='auth_input'>";
+	<tr>
+	  <th class='left'>".$dropbox_lang["authors"]." :</th>
+	  <td>".getUserNameFromId($uid)."</td>
+	</tr>
+	<tr>
+	  <th class='left'>".$dropbox_lang["description"]." :</th>
+	  <td><textarea name='description' cols='37' rows='2' class='FormData_InputText'></textarea></td>
+	</tr>
+	<tr>
+	  <th class='left'>".$dropbox_lang["sendTo"]." :</th>
+	  <td>
+	<select name='recipients[]' size='$reciepientsSize' multiple='true'  class='auth_input'>";
 
 	/*
 	*  if current user is a teacher then show all users of current course
@@ -216,19 +216,13 @@ tCont2;
            <option value="0">'.$dropbox_lang["justUploadInSelect"].'</option>';
 	}
 
-	$tool_content .= "
-        </select>
-      </td>
-    </tr>
-    <tr>
-      <th>&nbsp;</th>
-      <input type='hidden' name='authors' value='".getUserNameFromId($uid)."' />
-      <td><input type='Submit' name='submitWork' value='".$dropbox_lang["ok"]."' /></td>
-    </tr>
-    </tbody>
-    </table>
-    </form>
-    <p align='right'><small>$langMaxFileSize ".ini_get('upload_max_filesize')."</small></p>";
+	$tool_content .= "</select></td></tr>
+	<tr>
+	<th>&nbsp;</th>
+	<input type='hidden' name='authors' value='".getUserNameFromId($uid)."' />
+	<td><input type='Submit' name='submitWork' value='".$dropbox_lang["ok"]."' /></td>
+	</tr></tbody></table></form>
+	<p align='right'><small>$langMaxFileSize ".ini_get('upload_max_filesize')."</small></p>";
 	//==========================================================================
 	//END of send_file form
 	//==========================================================================
@@ -256,29 +250,26 @@ if (!isset($_GET['mailing']))  // RH: Mailing detail: no received files
  	".strtoupper($dropbox_lang["receivedTitle"])."</u></th>";
 
 	// check if there are received documents. If yes then display the icon deleteall
-	$dr_unid = urlencode( $dropbox_unid);
-	if ($numberDisplayed > 0)
-	{
+	$dr_unid = urlencode($dropbox_unid);
+	if ($numberDisplayed > 0) {
 		$dr_lang_all = addslashes( $dropbox_lang["all"]);
 		$tool_content .= "
-      <th width='3' style='border: 1px solid #edecdf'>
-        <a href='dropbox_submit.php?deleteReceived=all&amp;dropbox_unid=$dr_unid' onClick=\"return confirmationall('".$dropbox_lang['all']."');\"><img src='../../images/delete.gif' title='$langDelete' /></a></th>";
+		<th width='3' style='border: 1px solid #edecdf'>
+		<a href='dropbox_submit.php?deleteReceived=all&amp;dropbox_unid=$dr_unid' onClick=\"return confirmationall();\">
+		<img src='../../images/delete.gif' title='$langDelete' /></a></th>";
 	}
 
-	$tool_content .= "</tr>
-      </thead>
-      </table>
-
-      <table width='99%' class='dropbox'>
-      <thead>
-      <tr>
+	$tool_content .= "</tr></thead></table>
+	<table width='99%' class='dropbox'>
+	<thead>
+	<tr>
          <th colspan='2' class='left'>&nbsp;$dropbox_lang[file]</th>
          <th width='130' class='left'>$dropbox_lang[authors]</th>
          <th width='130'>$dropbox_lang[date]</th>
          <th width='20'>$langDelete</th>
-      </tr>
-      </thead>
-      <tbody>";
+	</tr>
+	</thead>
+	<tbody>";
 
  /*
  * --------------------------------------
@@ -298,9 +289,9 @@ if (!isset($_GET['mailing']))  // RH: Mailing detail: no received files
 	           $tool_content .= "\n       <tr>";
 	        } else {
 	           $tool_content .= "\n       <tr class=\"odd\">";
-            }
-		$tool_content .= "
-        <td width=\"3\"><img src=\"../../template/classic/img/inbox.gif\" title=\"$dropbox_lang[receivedTitle]\" /></td>
+		}
+	$tool_content .= "<td width=\"3\">
+	<img src=\"../../template/classic/img/inbox.gif\" title=\"$dropbox_lang[receivedTitle]\" /></td>
         <td>";
 
 		$tool_content .= "<a href='dropbox_download.php?id=".urlencode($w->id)."' target=_blank>".$w->title."</a>";
@@ -331,10 +322,7 @@ tCont9;
 	$i++;
 	} //end of foreach
 	if ($numberDisplayed == 0) {  // RH
-	$tool_content .= "
-      <tr>
-        <td colspan=\"6\">".$dropbox_lang['tableEmpty']."</td>
-      </tr>";
+		$tool_content .= "<tr><td colspan=\"6\">".$dropbox_lang['tableEmpty']."</td></tr>";
 	}
 	$tool_content .= "
       </tbody>
@@ -363,7 +351,7 @@ $tool_content .= "
 	$tool_content .= "
         <th width='3' style='border: 1px solid #edecdf'>
             <a href='dropbox_submit.php?deleteSent=all&amp;dropbox_unid=".urlencode( $dropbox_unid).$mailingInUrl."'
-	onClick='return confirmationall('".addslashes($dropbox_lang["all"])."');'>
+	onClick=\"return confirmationall();\">
             <img src='../../images/delete.gif' title='$langDelete' /></a>
         </th>";
 	}

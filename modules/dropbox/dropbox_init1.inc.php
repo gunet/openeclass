@@ -44,7 +44,7 @@ $head_content ='<script type="text/javascript">
                 return true;
                 }
 
-                function confirmationall (name) {
+                function confirmationall () {
                 if (confirm("'.$dropbox_lang['all'].'" )) {
                         return true;
                 } else {
