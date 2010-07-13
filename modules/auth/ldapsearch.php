@@ -39,10 +39,14 @@ require_once 'auth.inc.php';
 
 $tool_content = "";
 
-if (isset($_GET['auth']) or isset($_POST['auth']))
-	$_SESSION['u_tmp']=$auth;
-if(!isset($_GET['auth']) or !isset($_POST['auth']))
-	$auth=$_SESSION['u_tmp'];
+if (isset($_POST['auth'])) {
+	$auth = intval($_POST['auth']);
+	$_SESSION['u_tmp'] = $auth;
+}
+if(!isset($_POST['auth'])) {
+	$auth = 0;
+	$auth = $_SESSION['u_tmp'];
+}
 
 $nameTools = get_auth_info($auth);
 $navigation[]= array ("url"=>"registration.php", "name"=> "$langNewUser");
@@ -75,21 +79,21 @@ if(!empty($is_submit))
 			case '3': $imaphost = str_replace("imaphost=","",$auth_method_settings['auth_settings']);
 				break;
 			case '4': $ldapsettings = $auth_method_settings['auth_settings'];
-				    $ldap = explode("|",$ldapsettings);
-				    $ldaphost = str_replace("ldaphost=","",$ldap[0]);	//ldaphost
-				    $ldapbind_dn = str_replace("ldapbind_dn=","",$ldap[1]);	//ldapbase_dn
-				    $ldapbind_user = str_replace("ldapbind_user=","",$ldap[2]);	//ldapbind_user
-				    $ldapbind_pw = str_replace("ldapbind_pw=","",$ldap[3]);		// ldapbind_pw
+				$ldap = explode("|",$ldapsettings);
+				$ldaphost = str_replace("ldaphost=","",$ldap[0]);	//ldaphost
+				$ldapbind_dn = str_replace("ldapbind_dn=","",$ldap[1]);	//ldapbase_dn
+				$ldapbind_user = str_replace("ldapbind_user=","",$ldap[2]);	//ldapbind_user
+				$ldapbind_pw = str_replace("ldapbind_pw=","",$ldap[3]);		// ldapbind_pw
 				break;
 			case '5': $dbsettings = $auth_method_settings['auth_settings'];
-					$edb = explode("|",$dbsettings);
-					$dbhost = str_replace("dbhost=","",$edb[0]);	//dbhost
-					$dbname = str_replace("dbname=","",$edb[1]);	//dbname
-					$dbuser = str_replace("dbuser=","",$edb[2]);//dbuser
-					$dbpass = str_replace("dbpass=","",$edb[3]);// dbpass
-					$dbtable = str_replace("dbtable=","",$edb[4]);//dbtable
-					$dbfielduser = str_replace("dbfielduser=","",$edb[5]);//dbfielduser
-					$dbfieldpass = str_replace("dbfieldpass=","",$edb[6]);//dbfieldpass
+				$edb = explode("|",$dbsettings);
+				$dbhost = str_replace("dbhost=","",$edb[0]);	//dbhost
+				$dbname = str_replace("dbname=","",$edb[1]);	//dbname
+				$dbuser = str_replace("dbuser=","",$edb[2]);//dbuser
+				$dbpass = str_replace("dbpass=","",$edb[3]);// dbpass
+				$dbtable = str_replace("dbtable=","",$edb[4]);//dbtable
+				$dbfielduser = str_replace("dbfielduser=","",$edb[5]);//dbfielduser
+				$dbfieldpass = str_replace("dbfieldpass=","",$edb[6]);//dbfieldpass
 				break;
 			default:
 				break;
@@ -150,7 +154,7 @@ if(!empty($is_submit))
 			$tool_content .= "<tr><td><a href='$lastpage'>$langBack</a></td</tr></div></tbody></table>";
 		}
 	}
-	draw($tool_content,0,'auth');
+	draw($tool_content, 0);
 	exit();
 }   // end of if is_submit()
 
@@ -160,6 +164,12 @@ if(!empty($is_submit))
 
 if (isset($_POST['submit'])) {
 	$uname = $_POST['uname'];
+	$email = isset($_POST['email'])?$_POST['email']:'';
+	$am = isset($_POST['am'])?$_POST['am']:'';
+	$prenom_form = isset($_POST['prenom_form'])?$_POST['prenom_form']:'';
+	$nom_form = isset($_POST['nom_form'])?$_POST['nom_form']:'';
+	$department = isset($_POST['department'])?$_POST['department']:'';
+	
 	$registration_errors = array();
 		// check if there are empty fields
 		if (empty($_POST['nom_form']) or empty($_POST['prenom_form']) or empty($uname)) {
@@ -214,7 +224,7 @@ if (isset($_POST['submit'])) {
 		}
 	
 		db_query("INSERT INTO loginout  SET id_user = '$uid',
-			ip = '".$REMOTE_ADDR."', `when` = NOW(), action = 'LOGIN'", $mysqlMainDb);
+			ip = '".$_SERVER['REMOTE_ADDR']."', `when` = NOW(), action = 'LOGIN'", $mysqlMainDb);
 		$_SESSION['uid'] = $uid;
 		$_SESSION['statut'] = 5;
 		$_SESSION['prenom'] = $prenom;
@@ -238,4 +248,4 @@ if (isset($_POST['submit'])) {
 	}
 } // end of submit
 
-draw($tool_content,0,'auth');
+draw($tool_content, 0);

@@ -81,11 +81,11 @@ if(!empty($is_submit)) {
 			case '3':$imaphost = str_replace("imaphost=","",$auth_method_settings['auth_settings']);
 				break;
 			case '4':$ldapsettings = $auth_method_settings['auth_settings'];
-				    $ldap = explode("|",$ldapsettings);
-				    $ldaphost = str_replace("ldaphost=","",$ldap[0]);	//ldaphost
-				    $ldapbind_dn = str_replace("ldapbind_dn=","",$ldap[1]);	//ldapbase_dn
-				    $ldapbind_user = str_replace("ldapbind_user=","",$ldap[2]);	//ldapbind_user
-				    $ldapbind_pw = str_replace("ldapbind_pw=","",$ldap[3]);	// ldapbind_pw
+				$ldap = explode("|",$ldapsettings);
+				$ldaphost = str_replace("ldaphost=","",$ldap[0]);	//ldaphost
+				$ldapbind_dn = str_replace("ldapbind_dn=","",$ldap[1]);	//ldapbase_dn
+				$ldapbind_user = str_replace("ldapbind_user=","",$ldap[2]);	//ldapbind_user
+				$ldapbind_pw = str_replace("ldapbind_pw=","",$ldap[3]);	// ldapbind_pw
 				break;
 			case '5':$dbsettings = $auth_method_settings['auth_settings'];
 				$edb = explode("|",$dbsettings);
@@ -170,13 +170,19 @@ if(!empty($is_submit)) {
 // -----------------------------------------
 // registration
 // -----------------------------------------
-if (isset($submit))  {
+if (isset($_POST['submit']))  {
 	$uname = $_POST['uname'];
 	$uname = escapeSimple($uname);
+	$email = isset($_POST['email'])?$_POST['email']:'';
+	$prenom_form = isset($_POST['prenom_form'])?$_POST['prenom_form']:'';
+	$nom_form = isset($_POST['nom_form'])?$_POST['nom_form']:'';
+	$department = isset($_POST['department'])?$_POST['department']:'';
+	$usercomment = isset($_POST['usercomment'])?$_POST['usercomment']:'';
+	$userphone = isset($_POST['userphone'])?$_POST['userphone']:'';
 	
 	// check if there are empty fields
 	if (empty($nom_form) or empty($prenom_form) or empty($userphone)
-	 or empty($usercomment) or empty($uname) or (empty($email))) {
+	or empty($usercomment) or empty($uname) or (empty($email))) {
 		$tool_content .= "<table width='99%'><tbody><tr>" .
 		"<td class='caution' height='60'>";
 		$tool_content .= "<p>$langEmptyFields <br><br><a href='javascript:history.go(-1)'>$langAgain</a></p>
@@ -185,8 +191,6 @@ if (isset($submit))  {
 		exit();
 	}
 	
-	$username = $uname;
-	$auth = $_POST['auth'];
 	if($auth!=1) {
 		switch($auth)
 		{
@@ -202,7 +206,8 @@ if (isset($submit))  {
 			break;
 		}
 	}
-
+	
+	$username = $uname;
 	$usermail = $email;
 	$surname = $nom_form;
 	$name = $prenom_form;
