@@ -25,9 +25,9 @@
 *  			eMail: info@openeclass.org
 * =========================================================================*/
 // if we come from the home page
-if (isset($from_home) and ($from_home == TRUE) and isset($_GET['cid'])) {
+if (isset($_GET['from_home']) and ($_GET['from_home'] == TRUE) and isset($_GET['cid'])) {
         session_start();
-        $_SESSION['dbname'] = $cid;
+        $_SESSION['dbname'] = $_GET['cid'];
 }
 $require_current_course = TRUE;
 $require_prof = true;
@@ -41,20 +41,11 @@ $tool_content = "";
 // submit
 if (!$is_adminOfCourse) {
 	$tool_content .= "<p>$langForbidden</p>";
-        draw($tool_content, 2, 'course_info');
+        draw($tool_content, 2);
         exit;
 }
 
 $lang_editor = langname_to_code($language);
-
-$head_content = <<<hContent
-<script type="text/javascript">
-        _editor_url  = "$urlAppend/include/xinha/";
-        _editor_lang = "$lang_editor";
-</script>
-<script type="text/javascript" src="$urlAppend/include/xinha/XinhaCore.js"></script>
-<script type="text/javascript" src="$urlAppend/include/xinha/my_config2.js"></script>
-hContent;
 
 if (isset($_POST['submit'])) {
         if (empty($_POST['title'])) {
@@ -80,7 +71,7 @@ if (isset($_POST['submit'])) {
                 // update course settings
                 if (isset($_POST['formvisible']) and
                     $_POST['formvisible'] == '1') {
-                        $password = $password;
+                        $password = $_POST['password'];
                 } else {
                         $password = "";
                 }
@@ -269,4 +260,4 @@ if (isset($_POST['submit'])) {
 }
 
 add_units_navigation(TRUE);
-draw($tool_content, 2, 'course_info', $head_content);
+draw($tool_content, 2);

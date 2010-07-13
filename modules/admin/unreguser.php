@@ -240,4 +240,4 @@ function get_uid_statut($u)
 	}
 }
 
-draw($tool_content,3,'admin');
+draw($tool_content,3);

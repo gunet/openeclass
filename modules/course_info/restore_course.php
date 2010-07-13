@@ -536,7 +536,7 @@ function unpack_zip_show_files($zipfile)
 	mkpath("$destdir");
 	$zip = new pclZip($zipfile);
 	chdir($destdir);	
-	$state = $zip->extract(PCLZIP_OPT_REMOVE_PATH, "courses/");
+	$state = $zip->extract(PCLZIP_OPT_PATH, "courses/");
 	$retString .= "<br />$langEndFileUnzip<br /><br />$langLesFound<ol>";
 	$dirnameCourse = realpath("$destdir/archive/");
 	if($dirnameCourse[strlen($dirnameCourse)-1] != '/')

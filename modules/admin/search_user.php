@@ -1,4 +1,4 @@
-<?php
+<?
 /*========================================================================
 *   Open eClass 2.3
 *   E-learning and Course Management System
@@ -140,5 +140,5 @@ $tool_content .= "\n  </tbody>\n  </table>\n</form>";
 $tool_content .= "<p>&nbsp;</p><p align=\"right\"><a href=\"index.php\">$langBack</a></p>";
 
 // 3: display administrator menu
-draw($tool_content,3, 'admin', $head_content);
+draw($tool_content,3, '', $head_content);
 ?>

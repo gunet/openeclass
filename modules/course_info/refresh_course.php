@@ -1,4 +1,4 @@
-<?php
+<?
 /*========================================================================
 *   Open eClass 2.3
 *   E-learning and Course Management System
@@ -50,80 +50,71 @@ if (!$is_adminOfCourse)
 	exit();
 }
 
-if(isset($submit)) {
+if(isset($_POST['submit'])) {
 	$output = array();
 	mysql_select_db($mysqlMainDb);
-	if (isset($delusers))
-	$output[] = delete_users();
-	if (isset($delannounces))
-	$output[] = delete_announcements();
+	if (isset($_POST['delusers']))
+		$output[] = delete_users();
+	if (isset($_POST['delannounces']))
+		$output[] = delete_announcements();
 
 	mysql_select_db($currentCourseID);
-	if (isset($delagenda))
-	$output[] = delete_agenda();
-	if (isset($hideworks))
-	$output[] = hide_work();
-
+	if (isset($_POST['delagenda']))
+		$output[] = delete_agenda();
+	if (isset($_POST['hideworks']))
+		$output[] = hide_work();
 
 	if (($count_events = count($output)) > 0 ) {
-
-		$tool_content .=  "<p class=\"success_small\">$langRefreshSuccess
-		<ul class=\"listBullet\">";
+		$tool_content .=  "<p class='success_small'>$langRefreshSuccess
+		<ul class='listBullet'>";
 		for ($i=0; $i< $count_events; $i++) {
 			$tool_content .= "
-			<li>$output[$i]</li>			";
+			<li>$output[$i]</li>";
 		}
-
-		$tool_content .= "\n		</ul>\n</p><br />";
+		$tool_content .= "\n</ul>\n</p><br />";
 	}
-
-
-
 	$tool_content .="<p align=\"right\"><a href='infocours.php'>$langBack</a></p>";
 
 } else {
-
-	$tool_content .= "
-<form action='refresh_course.php' method='post'>
-
-    <table width=\"99%\" class=\"FormData\">
-    <tbody>
-    <tr>
-      <th width='220'>&nbsp;</th>
-      <td colspan='2'>$langRefreshInfo<br /><br /><b>$langRefreshInfo_A :</b></td>
-    </tr>
-    <tr>
-      <th class='left'><img src=\"../../template/classic/img/users_on.gif\" alt=\"\" border=\"0\" height=\"16\" width=\"16\"> $langUsers</th>
-      <td width='1%'><input type='checkbox' name='delusers'></td>
-      <td>$langUserDelCourse</td>
-    </tr>
-    <tr>
-      <th class='left'><img src=\"../../template/classic/img/announcements_on.gif\" alt=\"\" border=\"0\" height=\"16\" width=\"16\"> $langAnnouncements</th>
-      <td><input type='checkbox' name='delannounces'></td>
-      <td>$langAnnouncesDel</td>
-    </tr>
-    <tr>
-      <th class='left'><img src=\"../../template/classic/img/calendar_on.gif\" alt=\"\" border=\"0\" height=\"16\" width=\"16\"> $langAgenda</th>
-      <td><input type='checkbox' name='delagenda'></td>
-      <td>$langAgendaDel</td>
-    </tr>
-    <tr>
-      <th class='left'><img src=\"../../template/classic/img/assignments_on.gif\" alt=\"\" border=\"0\" height=\"16\" width=\"16\"> $langWorks</th>
-      <td><input type='checkbox' name='hideworks'></td>
-      <td>$langHideWork</td>
-    </tr>
-    <tr>
-      <th>&nbsp;</th>
-      <td colspan='2'><input type='submit' value='$langSubmitActions' name='submit'></td>
-    </tr>
-    </tbody>
-    </table>
-</form>";
-
-  $tool_content .= "<p align=\"right\"><a href=\"infocours.php\">$langBack</a></p>";
+	$tool_content .= "<form action='$_SERVER[PHP_SELF]' method='post'>
+	<table width=\"99%\" class=\"FormData\">
+	<tbody>
+	<tr>
+	  <th width='220'>&nbsp;</th>
+	  <td colspan='2'>$langRefreshInfo<br /><br /><b>$langRefreshInfo_A :</b></td>
+	</tr>
+	<tr>
+	  <th class='left'><img src=\"../../template/classic/img/users_on.gif\" alt=\"\" border=\"0\" height=\"16\" width=\"16\"> $langUsers</th>
+	  <td width='1%'><input type='checkbox' name='delusers'></td>
+	  <td>$langUserDelCourse</td>
+	</tr>
+	<tr>
+	  <th class='left'><img src=\"../../template/classic/img/announcements_on.gif\" alt=\"\" border=\"0\" height=\"16\" width=\"16\"> $langAnnouncements</th>
+	  <td><input type='checkbox' name='delannounces'></td>
+	  <td>$langAnnouncesDel</td>
+	</tr>
+	<tr>
+	  <th class='left'><img src=\"../../template/classic/img/calendar_on.gif\" alt=\"\" border=\"0\" height=\"16\" width=\"16\"> $langAgenda</th>
+	  <td><input type='checkbox' name='delagenda'></td>
+	  <td>$langAgendaDel</td>
+	</tr>
+	<tr>
+	  <th class='left'><img src=\"../../template/classic/img/assignments_on.gif\" alt=\"\" border=\"0\" height=\"16\" width=\"16\"> $langWorks</th>
+	  <td><input type='checkbox' name='hideworks'></td>
+	  <td>$langHideWork</td>
+	</tr>
+	<tr>
+	  <th>&nbsp;</th>
+	  <td colspan='2'><input type='submit' value='$langSubmitActions' name='submit'></td>
+	</tr>
+	</tbody>
+	</table>
+	</form>";
+	
+	$tool_content .= "<p align=\"right\"><a href=\"infocours.php\">$langBack</a></p>";
 }
 
-draw($tool_content, 2, 'course_info');
+draw($tool_content, 2);
 
 
 function delete_users() {
@@ -164,6 +155,3 @@ function hide_work()  {
 	db_query("UPDATE assignments SET active=0");
 	return "<p>$langWorksDeleted</p>";
 }
-
-
-

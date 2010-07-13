@@ -56,9 +56,18 @@ $nameTools = $langListUsersActions;
 
 define ('USERS_PER_PAGE', 15);
 
-// initalize the incoming variables
+// get the incoming values
 $search = isset($_GET['search'])? $_GET['search']: '';
 $c = isset($_GET['c'])? $_GET['c']: (isset($_POST['c'])? $_POST['c']: '');
+$user_surname = isset($_REQUEST['user_surname'])?$_REQUEST['user_surname']:'';
+$user_firstname = isset($_REQUEST['user_firstname'])?$_REQUEST['user_firstname']:'';
+$user_username = isset($_REQUEST['user_username'])?$_REQUEST['user_username']:'';
+$user_am = isset($_REQUEST['user_am'])?$_REQUEST['user_am']:'';
+$user_type = isset($_REQUEST['user_type'])?$_REQUEST['user_type']:'';
+$user_email = isset($_REQUEST['user_email'])?$_REQUEST['user_email']:'';
+$user_registered_at_flag = isset($_REQUEST['user_registered_at_flag'])?$_REQUEST['user_registered_at_flag']:'';
+$hour = isset($_REQUEST['hour'])?$_REQUEST['hour']:'';
+$minute = isset($_REQUEST['minute'])?$_REQUEST['minute']:'';
 
 switch($c)	// get the case for each different listing
 {
@@ -72,15 +81,6 @@ if($view == 2)	// coming from search_user.php(search with criteria)
 {
 	if((!empty($search)) && ($search="yes"))
 	{
-		// get the incoming values
-		$user_surname = isset($_POST['user_surname'])?$_POST['user_surname']:'';
-		$user_firstname = isset($_POST['user_firstname'])?$_POST['user_firstname']:'';
-		$user_username = isset($_POST['user_username'])?$_POST['user_username']:'';
-		$user_am = isset($_POST['user_am'])?$_POST['user_am']:'';
-		$user_type = isset($_POST['user_type'])?$_POST['user_type']:'';
-		$user_email = isset($_POST['user_email'])?$_POST['user_email']:'';
-		$user_registered_at_flag = isset($_POST['user_registered_at_flag'])?$_POST['user_registered_at_flag']:'';
-
 	  	$date = explode("-",  $_POST['date']);
 		if (array_key_exists(1, $date)) {
     			$day=$date[0];

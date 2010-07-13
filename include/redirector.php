@@ -46,7 +46,9 @@
 
  */
 
-if (isset($_SESSION['uid']) && isset($perso)) {
+if (isset($_SESSION['uid']) && isset($_GET['perso'])) {
+	$perso = $_GET['perso'];
+	$c = $_GET['c'];
 	switch ($perso){
 		case 1: { //assignments
 			//$c is the lesson code.
@@ -69,13 +71,13 @@ if (isset($_SESSION['uid']) && isset($perso)) {
 		}
 		case 5: {//forum
 			$_SESSION["dbname"] = $c;
-			$url = $urlServer."modules/phpbb/viewtopic.php?topic=".$t."&forum=".$f."&sub=".$s;
+			$url = $urlServer."modules/phpbb/viewtopic.php?topic=".$_GET['t']."&forum=".$_GET['f']."&sub=".$_GET['s'];
 			header("location:".$url);
 			break;
 		}
 		case 6: {//documents
 			$_SESSION["dbname"] = $c;
-			$url = $urlServer."modules/document/document.php?openDir=" . $p;
+			$url = $urlServer."modules/document/document.php?openDir=" . $_GET['p'];
 			header("location:".$url);
 			break;
 		}

@@ -1,4 +1,4 @@
-<?PHP
+<?
 /*========================================================================
 *   Open eClass 2.3
 *   E-learning and Course Management System
@@ -45,29 +45,13 @@ check_uid();
 $tool_content = "";
 $passurl = $urlSecure.'modules/profile/password.php';
 
-if (isset($submit) && isset($changePass) && ($changePass == "do")) {
-
+if (isset($_POST['submit'])) {
 	if (empty($_REQUEST['password_form']) || empty($_REQUEST['password_form1']) || empty($_REQUEST['old_pass'])) {
-		header("location:". $passurl."?msg=3");
+		header("location:". $passurl."?msg=2");
 		exit();
 	}
-
 	if ($_REQUEST['password_form1'] !== $_REQUEST['password_form']) {
 		header("location:". $passurl."?msg=1");
-		exit();
-	}
-
-	// check if passwd is too easy
-	$sql = "SELECT `nom`,`prenom` ,`username`,`email`,`am` FROM `user`WHERE `user_id`=".$_SESSION["uid"]." ";
-	$result = db_query($sql, $mysqlMainDb);
-	$myrow = mysql_fetch_array($result);
-
-	if ((strtoupper($_REQUEST['password_form1']) == strtoupper($myrow['nom']))
-	|| (strtoupper($_REQUEST['password_form1']) == strtoupper($myrow['prenom']))
-	|| (strtoupper($_REQUEST['password_form1']) == strtoupper($myrow['username']))
-	|| (strtoupper($_REQUEST['password_form1']) == strtoupper($myrow['email']))
-	|| (strtoupper($_REQUEST['password_form1']) == strtoupper($myrow['am']))) {
-		header("location:". $passurl."?msg=2");
 		exit();
 	}
 
@@ -81,21 +65,20 @@ if (isset($submit) && isset($changePass) && ($changePass == "do")) {
 	$new_pass = md5($_REQUEST['password_form']);
 
 	if($old_pass == $old_pass_db) {
-
 		$sql = "UPDATE `user` SET `password` = '$new_pass' WHERE `user_id` = ".$_SESSION["uid"]."";
 		db_query($sql, $mysqlMainDb);
 		header("location:". $passurl."?msg=4");
 		exit();
 	} else {
-		header("location:". $passurl."?msg=5");
+		header("location:". $passurl."?msg=3");
 		exit();
 	}
 
 }
 
 //Show message if exists
-if(isset($msg)) {
-
+if(isset($_GET['msg'])) {
+	$msg = $_GET['msg'];
 	switch ($msg){
 
 		case 1: {//passwords do not match
@@ -105,15 +88,14 @@ if(isset($msg)) {
 			break;
 		}
 
-		case 2: { //pass too easy
-			$message = $langPassTooEasy .": <strong>".substr(md5(date("Bis").$_SERVER['REMOTE_ADDR']),0,8)."</strong>";
+		case 2: { // admin tools
+			$message = $langFields;
 			$urlText = "";
 			$type = "caution_small";
 			break;
 		}
-
-		case 3: { // admin tools
-			$message = $langFields;
+		case 3: {//wrong old password entered
+			$message = $langPassOldWrong;
 			$urlText = "";
 			$type = "caution_small";
 			break;
@@ -125,55 +107,35 @@ if(isset($msg)) {
 			$type = "success_small";
 			break;
 		}
-
-		case 5: {//wrong old password entered
-			$message = $langPassOldWrong;
-			$urlText = "";
-			$type = "caution_small";
-			break;
-		}
-
-		case 6: {//not acceptable characters in password
-			$message = $langInvalidCharsPass;
-			$urlText = "";
-			$type = "caution_small";
-			break;
-		}
-
 		default:die("invalid message id");
-
 	}
 	$tool_content .=  "<p class=\"$type\">$message<br><a href=\"$urlServer\">$urlText</a></p><br/>";
 }
 
-if (!isset($changePass)) {
+if (!isset($_POST['changePass'])) {
 	$tool_content .= "
-<form method=\"post\" action=\"$passurl?submit=yes&changePass=do\">
-  <table width=\"99%\">
-  <tbody>
-  <tr>
-    <th width=\"220\" class='left'>$langOldPass</th>
-    <td><input class='FormData_InputText' type=\"password\" size=\"40\" name=\"old_pass\" value=\"\"></td>
-    </tr>
-   <tr>
-     <th class='left'>$langNewPass1</th>
-     <td>";
-
-	$tool_content .= "<input class='FormData_InputText' type=\"password\" size=\"40\" name=\"password_form\" value=\"\"></td>
-   </tr>
-   <tr>
-     <th width=\"150\" class='left'>$langNewPass2</th>
-     <td><input class='FormData_InputText' type=\"password\" size=\"40\" name=\"password_form1\" value=\"\"></td>
-    </tr>
+	<form method=\"post\" action=\"$passurl\">
+	<table width=\"99%\">
+	<tbody>
 	<tr>
-      <th>&nbsp;</th>
-      <td><input type=\"Submit\" name=\"submit\" value=\"$langModify\"></td>
-    </tr>
-	</tbody>
-    </table>
-
-</form>
-   ";
+	<th width=\"220\" class='left'>$langOldPass</th>
+	<td><input class='FormData_InputText' type=\"password\" size=\"40\" name=\"old_pass\" value=\"\"></td>
+	</tr>
+	<tr>
+	<th class='left'>$langNewPass1</th>
+	<td>";
+	$tool_content .= "<input class='FormData_InputText' type=\"password\" size=\"40\" name=\"password_form\" value=\"\"></td>
+	</tr>
+	<tr>
+	<th width=\"150\" class='left'>$langNewPass2</th>
+	<td><input class='FormData_InputText' type=\"password\" size=\"40\" name=\"password_form1\" value=\"\"></td>
+	</tr>
+	<tr>
+	<th>&nbsp;</th>
+	<td><input type=\"submit\" name=\"submit\" value=\"$langModify\"></td>
+	</tr>
+	</tbody>	
+	</table></form>";
 }
 
 draw($tool_content, 1);

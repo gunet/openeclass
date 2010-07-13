@@ -124,7 +124,15 @@ $langEmail : $emailhelpdesk
 
 } else {
         $lang = false;
-	if (isset($id)) { // if we come from prof request
+	if (isset($_GET['id'])) { // if we come from prof request
+		$id = $_GET['id'];
+		// display actions toolbar
+		$tool_content .= "<div id='operations_container'>
+		<ul id='opslist'>
+		<li><a href='listreq.php?id=$id&amp;close=1' onclick='return confirmation();'>$langClose</a></li>
+		<li><a href='listreq.php?id=$id&amp;close=2'>$langRejectRequest</a></li>
+		
+		</ul></div>";
 		$res = mysql_fetch_array(db_query("SELECT profname, profsurname, profuname, profemail, proftmima, profcomm, am,
 			comment, lang, date_open, statut FROM prof_request WHERE rid='$id'"));
 		$ps = $res['profsurname'];
@@ -152,14 +160,6 @@ $langEmail : $emailhelpdesk
                 $title = $langNewProf;
         }
 
-	if (isset($id)) {
-		// display actions toolbar
-		$tool_content .= "<div id='operations_container'>
-		<ul id='opslist'>
-		<li><a href='listreq.php?id=$id&amp;close=1' onclick='return confirmation();'>$langClose</a></li>
-		<li><a href='listreq.php?id=$id&amp;close=2'>$langRejectRequest</a></li>
-		</ul></div>";
-	}
 	$tool_content .= "<form action='$_SERVER[PHP_SELF]' method='post'>
 	<table width='99%' align='left' class='FormData'>
 	<tbody><tr>
@@ -211,7 +211,7 @@ $langEmail : $emailhelpdesk
 	<td>";
 	$tool_content .= lang_select_options('language', '', $lang);
 	$tool_content .= "</td></tr>";
-	if (isset($id)) {
+	if (isset($_GET['id'])) {
 		$tool_content .="<tr>
 		<th class='left'><b>$langPhone</b></th>
 		<td>".@q($pphone)."&nbsp;</td>
@@ -241,7 +241,7 @@ $langEmail : $emailhelpdesk
         } else {
                 $reqtype ='';
         }
-	if (isset($id)) {
+	if (isset($_GET['id'])) {
 		$tool_content .= "
 		<br />
 		<p align='right'><a href='../admin/listreq.php$reqtype'>$langBackRequests</p>";
@@ -249,4 +249,4 @@ $langEmail : $emailhelpdesk
 	$tool_content .= "<br /><p align='right'><a href='../admin/index.php'>$langBack</p>";
 }
 
-draw($tool_content, 3, 'auth');
+draw($tool_content, 3);
