@@ -1,4 +1,4 @@
-<?php
+<?
 /*========================================================================
 *   Open eClass 2.3
 *   E-learning and Course Management System
@@ -47,11 +47,6 @@
 
 ==============================================================================*/
 
-/*****************************************************************************
-		DEAL WITH LANGFILES, BASETHEME, OTHER INCLUDES AND NAMETOOLS
-******************************************************************************/
-// Check if user is administrator and if yes continue
-// Othewise exit with appropriate message
 $require_admin = TRUE;
 // Include baseTheme
 include '../../include/baseTheme.php';
@@ -62,7 +57,7 @@ $navigation[] = array("url" => "index.php", "name" => $langAdmin);
 $tool_content = "";
 
 // Destroy search varialbles from session
-if (isset($new) && ($new == "yes")) {
+if (isset($_GET['new']) && ($_GET['new'] == "yes")) {
 	unset($_SESSION['searchtitle']);
 	unset($_SESSION['searchcode']);
 	unset($_SESSION['searchtype']);
@@ -119,13 +114,12 @@ $tool_content .= "<tr><th class='left'><b>".$langFaculty.":</b></th>
 <option value=\"0\">$langAllFacultes</option>\n";
 
 $resultFac=mysql_query("SELECT name FROM faculte ORDER BY number");
-
-	while ($myfac = mysql_fetch_array($resultFac)) {
-		if($myfac['name'] == @$searchfaculte)
-			$tool_content .= "<option selected>$myfac[name]</option>";
-		else
-			$tool_content .= "<option>$myfac[name]</option>";
-	}
+while ($myfac = mysql_fetch_array($resultFac)) {
+	if($myfac['name'] == @$searchfaculte)
+		$tool_content .= "<option selected>$myfac[name]</option>";
+	else
+		$tool_content .= "<option>$myfac[name]</option>";
+}
 
 $tool_content .= "</select></td></tr>";
 
@@ -136,12 +130,5 @@ $tool_content .= "</tbody></table></form>";
 // Display link to go back to index.php
 $tool_content .= "<p align=\"right\"><a href=\"index.php\">".$langBack."</a></p>";
 
-/*****************************************************************************
-		DISPLAY HTML
-******************************************************************************/
-// Call draw function to display the HTML
-// $tool_content: the content to display
-// 3: display administrator menu
-// admin: use tool.css from admin folder
-draw($tool_content,3,'admin');
+draw($tool_content, 3);
 ?>

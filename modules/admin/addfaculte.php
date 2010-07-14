@@ -1,4 +1,4 @@
-<?php
+<?
 /*========================================================================
 *   Open eClass 2.3
 *   E-learning and Course Management System
@@ -50,9 +50,6 @@
 
 ==============================================================================*/
 
-/*****************************************************************************
-		DEAL WITH  BASETHEME, OTHER INCLUDES AND NAMETOOLS
-******************************************************************************/
 // Check if user is administrator and if yes continue
 // Othewise exit with appropriate message
 $require_admin = TRUE;
@@ -61,8 +58,8 @@ include '../../include/baseTheme.php';
 // Define $nameTools
 $nameTools=$langListFaculteActions;
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
-if (isset($a)) {
-	switch ($a) {
+if (isset($_GET['a'])) {
+	switch ($_GET['a']) {
 		case 1:
 			$navigation[] = array("url" => "$_SERVER[PHP_SELF]", "name" => $langListFaculteActions);
 			$nameTools = $langFaculteAdd;
@@ -79,18 +76,16 @@ if (isset($a)) {
 }
 // Initialise $tool_content
 $tool_content = "";
-/*****************************************************************************
-		MAIN BODY
-******************************************************************************/
+
 	// Give administrator a link to add a new faculty
-    $tool_content .= "<div id='operations_container'>
-	<ul id='opslist'>
-	<li><a href='$_SERVER[PHP_SELF]?a=1'>".$langAdd."</a></li>
-	</ul>
-	</div>";
+$tool_content .= "<div id='operations_container'>
+    <ul id='opslist'>
+    <li><a href='$_SERVER[PHP_SELF]?a=1'>".$langAdd."</a></li>
+    </ul>
+    </div>";
 
 // Display all available faculties
-if (!isset($a)) {
+if (!isset($_GET['a'])) {
 	// Count available faculties
 	$a=mysql_fetch_array(mysql_query("SELECT COUNT(*) FROM faculte"));
 	// Construct a table
@@ -109,22 +104,22 @@ if (!isset($a)) {
 	<th scope='col'>$langCode</th>
 	<th>".$langActions."</th>
 	</tr>";
-	$sql=mysql_query("SELECT code,name,id FROM faculte");
+	$sql = mysql_query("SELECT code,name,id FROM faculte");
 	$k = 0;
 	// For all faculties display some info
 	for ($j = 0; $j < mysql_num_rows($sql); $j++) {
 		$logs = mysql_fetch_array($sql);
 		if ($k%2==0) {
-			$tool_content .= "\n  <tr>";
+			$tool_content .= "\n<tr>";
 		} else {
-			$tool_content .= "\n  <tr class='odd'>";
+			$tool_content .= "\n<tr class='odd'>";
 		}
-		$tool_content .= "\n    <td width='1'>
+		$tool_content .= "\n<td width='1'>
 		<img style='border:0px; padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'></td>";
-		$tool_content .= "\n    <td>".htmlspecialchars($logs[1])."</td>";
-		$tool_content .= "\n    <td align='center'>".htmlspecialchars($logs[0])."</td>";
+		$tool_content .= "\n<td>".htmlspecialchars($logs[1])."</td>";
+		$tool_content .= "\n<td align='center'>".htmlspecialchars($logs[0])."</td>";
 		// Give administrator a link to delete or edit a faculty
-		$tool_content .= "\n    <td width='15%' align='center' nowrap>
+		$tool_content .= "\n<td width='15%' align='center' nowrap>
 		<a href='$_SERVER[PHP_SELF]?a=2&c=".$logs['id']."'>
 		<img src='../../images/delete.gif' border='0' title='$langDelete'></img></a>&nbsp;&nbsp;
 		<a href='$_SERVER[PHP_SELF]?a=3&c=".$logs['id']."'>
@@ -137,8 +132,10 @@ if (!isset($a)) {
 	$tool_content .= "<br /><p align=\"right\"><a href=\"index.php\">".$langBack."</a></p>";
 }
 // Add a new faculte
-elseif ($a == 1)  {
-	if (isset($add)) {
+elseif (isset($_GET['a']) and $_GET['a'] == 1)  {
+	if (isset($_POST['add'])) {
+		$codefaculte = $_POST['codefaculte'];
+		$faculte = $_POST['faculte'];
 		// Check for empty fields
 		if (empty($codefaculte) or empty($faculte)) {
 			$tool_content .= "<p>".$langEmptyFaculte."</p><br />";
@@ -191,9 +188,9 @@ elseif ($a == 1)  {
 	$tool_content .= "<br /><p align='right'><a href='$_SERVER[PHP_SELF]'>".$langBack."</a></p>";
 }
 // Delete faculty
-elseif ($a == 2) {
+elseif (isset($_GET['a']) and $_GET['a'] == 2)  {
         $c = intval($_GET['c']);
-	$s=mysql_query("SELECT * from cours WHERE faculteid=$c");
+	$s = mysql_query("SELECT * from cours WHERE faculteid=$c");
 	// Check for existing courses of a faculty
 	if (mysql_num_rows($s) > 0)  {
 		// The faculty cannot be deleted
@@ -207,8 +204,8 @@ elseif ($a == 2) {
 	$tool_content .= "<br><p align='right'><a href='$_SERVER[PHP_SELF]'>".$langBack."</a></p>";
 }
 // Edit a faculte
-elseif ($a == 3)  {
-        $c = @intval($_REQUEST['c']);
+elseif (isset($_GET['a']) and $_GET['a'] == 3)  {
+        $c = intval($_REQUEST['c']);
 	if (isset($_POST['edit'])) {
 		// Check for empty fields
                 $faculte = $_POST['faculte'];
@@ -217,8 +214,8 @@ elseif ($a == 3)  {
 			$tool_content .= "<p align='right'><a href='$_SERVER[PHP_SELF]?a=3&c=$c'>$langReturnToEditFaculte</a></p>";
 			}
 		// Check if faculte name already exists
-		elseif (mysql_num_rows(mysql_query("SELECT * from faculte WHERE id <> $c AND name=" .
-                                                   autoquote($faculte))) > 0) {
+		elseif (mysql_num_rows(mysql_query("SELECT * from faculte WHERE id <> $c
+					AND name=" . autoquote($faculte))) > 0) {
 			$tool_content .= "<p>".$langFaculteExists."</p><br>";
 			$tool_content .= "<p align='right'><a href='$_SERVER[PHP_SELF]?a=3&amp;c=$c'>$langReturnToEditFaculte</a></p>";
 		} else {
@@ -254,7 +251,7 @@ elseif ($a == 3)  {
 		<td><input type='text' name='codefaculte' value='".$myrow['code']."' readonly='1' />&nbsp;<i>".$langCodeFaculte2."</i></td>
 		</tr>
 		<tr>
-		<th class='left'>".$langFaculte1.":</th>
+		<th class='left'>".$langFaculty.":</th>
 		<td><input type='text' name='faculte' value='".htmlspecialchars($myrow['name'], ENT_QUOTES)."' />&nbsp;<i>".$langFaculte2."</i></td>
 		</tr>
 		<tr>
@@ -270,11 +267,4 @@ elseif ($a == 3)  {
 $tool_content .= "<br /><p align='right'><a href='$_SERVER[PHP_SELF]'>".$langBack."</a></p>";
 }
 
-/*****************************************************************************
-		DISPLAY HTML
-******************************************************************************/
-// Call draw function to display the HTML
-// $tool_content: the content to display
-// 3: display administrator menu
-// admin: use tool.css from admin folder
 draw($tool_content,3);

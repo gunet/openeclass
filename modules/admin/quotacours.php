@@ -1,4 +1,4 @@
-<?php
+<?
 /*========================================================================
 *   Open eClass 2.3
 *   E-learning and Course Management System
@@ -48,16 +48,11 @@
 
 ==============================================================================*/
 
-/*****************************************************************************
-		DEAL WITH LANGFILES, BASETHEME, OTHER INCLUDES AND NAMETOOLS
-******************************************************************************/
-
-// Check if user is administrator and if yes continue
-// Othewise exit with appropriate message
 $require_admin = TRUE;
 // Include baseTheme
 include '../../include/baseTheme.php';
 if(!isset($_GET['c'])) { die(); }
+
 // Define $nameTools
 $nameTools = $langQuota;
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
@@ -65,26 +60,18 @@ $navigation[] = array("url" => "listcours.php", "name" => $langListCours);
 $navigation[] = array("url" => "editcours.php?c=".htmlspecialchars($_GET['c']), "name" => $langCourseEdit);
 // Initialise $tool_content
 $tool_content = "";
-
-/*****************************************************************************
-		MAIN BODY
-******************************************************************************/
 // Initialize some variables
-$searchurl = "";
 $quota_info = "";
 
-// Define $searchurl to go back to search results
-if (isset($search) && ($search=="yes")) {
-	$searchurl = "&search=yes";
-}
 // Update course quota
-if (isset($submit))  {
-	$dq = $dq * 1000000;
-        $vq = $vq * 1000000;
-        $gq = $gq * 1000000;
-        $drq = $drq * 1000000;
+if (isset($_POST['submit']))  {
+	$dq = $_POST['dq'] * 1000000;
+        $vq = $_POST['vq'] * 1000000;
+        $gq = $_POST['gq'] * 1000000;
+        $drq = $_POST['drq'] * 1000000;
   // Update query
-	$sql = mysql_query("UPDATE cours SET doc_quota='$dq',video_quota='$vq',group_quota='$gq',dropbox_quota='$drq' 			WHERE code='".mysql_real_escape_string($_GET['c'])."'");
+	$sql = mysql_query("UPDATE cours SET doc_quota='$dq', video_quota='$vq', group_quota='$gq', dropbox_quota='$drq'
+			WHERE code='".mysql_real_escape_string($_GET['c'])."'");
 	// Some changes occured
 	if (mysql_affected_rows() > 0) {
 		$tool_content .= "<p>".$langQuotaSuccess."</p>";
@@ -97,7 +84,6 @@ if (isset($submit))  {
 }
 // Display edit form for course quota
 else {
-	// Get course information
 	$q = mysql_fetch_array(mysql_query("SELECT code,intitule,doc_quota,video_quota,group_quota,dropbox_quota
 			FROM cours WHERE code='".mysql_real_escape_string($_GET['c'])."'"));
 	$quota_info .= "<i>".$langTheCourse." <b>".$q['intitule']."</b> ".$langMaxQuota;
@@ -105,59 +91,51 @@ else {
 	$vq = $q['video_quota'] / 1000000;
 	$gq = $q['group_quota'] / 1000000;
 	$drq = $q['dropbox_quota'] / 1000000;
-	// Constract the edit form
+	
 	$tool_content .= "
-<form action=".$_SERVER['PHP_SELF']."?c=".htmlspecialchars($_GET['c'])."".$searchurl." method=\"post\">
-  <table class=\"FormData\" width=\"99%\" align=\"left\">
-  <tbody>
-  <tr>
-    <th width=\"220\">&nbsp;</th>
-    <td><b>".$langQuotaAdmin."</b></td>
-  </tr>
-  <tr>
-    <th>&nbsp;</th>
-    <td>".$quota_info."</td>
-  </tr>
-  <tr>
-    <th class=\"left\">$langLegend <b>$langDoc</b>:</th>
-    <td><input type='text' name='dq' value='$dq' size='4' maxlength='4'> Mb.</td>
-  </tr>
-  <tr>
-    <th class=\"left\">$langLegend <b>$langVideo</b>:</th>
-    <td><input type='text' name='vq' value='$vq' size='4' maxlength='4'> Mb.</td>
-  </tr>
-  <tr>
-    <th class=\"left\">$langLegend <b>$langGroups</b>:</th>
-    <td><input type='text' name='gq' value='$gq' size='4' maxlength='4'> Mb.</td>
-  </tr>
-  <tr>
-    <th class=\"left\">$langLegend <b>$langDropBox</b>:</th>
-    <td><input type='text' name='drq' value='$drq' size='4' maxlength='4'> Mb.</td>
-  </tr>
-  <input type='hidden' name='c' value='".htmlspecialchars($_GET['c'])."'>
-  <tr>
-    <th>&nbsp;</th>
-    <td><input type='submit' name='submit' value='$langModify'></td>
-  </tr>
-  </tbody>
-  </table>
-</form>\n";
+	<form action=".$_SERVER['PHP_SELF']."?c=".htmlspecialchars($_GET['c'])." method=\"post\">
+	<table class=\"FormData\" width=\"99%\" align=\"left\">
+	<tbody>
+	<tr>
+	  <th width=\"220\">&nbsp;</th>
+	  <td><b>".$langQuotaAdmin."</b></td>
+	</tr>
+	<tr>
+	  <th>&nbsp;</th>
+	  <td>".$quota_info."</td>
+	</tr>
+	<tr>
+	  <th class=\"left\">$langLegend <b>$langDoc</b>:</th>
+	  <td><input type='text' name='dq' value='$dq' size='4' maxlength='4'> Mb.</td>
+	</tr>
+	<tr>
+	  <th class=\"left\">$langLegend <b>$langVideo</b>:</th>
+	  <td><input type='text' name='vq' value='$vq' size='4' maxlength='4'> Mb.</td>
+	</tr>
+	<tr>
+	  <th class=\"left\">$langLegend <b>$langGroups</b>:</th>
+	  <td><input type='text' name='gq' value='$gq' size='4' maxlength='4'> Mb.</td>
+	</tr>
+	<tr>
+	  <th class=\"left\">$langLegend <b>$langDropBox</b>:</th>
+	  <td><input type='text' name='drq' value='$drq' size='4' maxlength='4'> Mb.</td>
+	</tr>
+	<tr>
+	  <th>&nbsp;</th>
+	  <td><input type='submit' name='submit' value='$langModify'></td>
+	</tr>
+	</tbody>
+	</table>
+	</form>\n";
 }
 // If course selected go back to editcours.php
 if (isset($_GET['c'])) {
-	$tool_content .= "<p align=\"right\"><a href=\"editcours.php?c=".htmlspecialchars($_GET['c'])."".$searchurl."\">".$langBack."</a></p>";
+	$tool_content .= "<p align=\"right\"><a href='editcours.php?c=".htmlspecialchars($_GET['c'])."'>".$langBack."</a></p>";
 }
 // Else go back to index.php directly
 else {
 	$tool_content .= "<p align=\"right\"><a href=\"index.php\">".$langBackAdmin."</a></p>";
 }
 
-/*****************************************************************************
-		DISPLAY HTML
-******************************************************************************/
-// Call draw function to display the HTML
-// $tool_content: the content to display
-// 3: display administrator menu
-// admin: use tool.css from admin folder
-draw($tool_content,3,'admin');
+draw($tool_content, 3);
 ?>

@@ -1,4 +1,4 @@
-<?php
+<?
 /*========================================================================
 *   Open eClass 2.3
 *   E-learning and Course Management System
@@ -37,17 +37,9 @@ $navigation[] = array("url" => "editcours.php?c=".htmlspecialchars($_GET['c']), 
 // Initialise $tool_content
 $tool_content = "";
 
-/*****************************************************************************
-		MAIN BODY
-******************************************************************************/
 // Initialize some variables
-$searchurl = "";
 $cid = course_code_to_id($_GET['c']);
 
-// Define $searchurl to go back to search results
-if (isset($search) && ($search=="yes")) {
-	$searchurl = "&search=yes";
-}
 // Register - Unregister students - professors to course
 if (isset($_POST['submit']))  {
         $regstuds = isset($_POST['regstuds'])? array_map('intval', $_POST['regstuds']): array();
@@ -138,7 +130,7 @@ function reverseAll(cbList) {
 
 </script>';
 
-	$tool_content .= "<form action=".$_SERVER['PHP_SELF']."?c=".htmlspecialchars($_GET['c'])."".$searchurl." method='post'>";
+	$tool_content .= "<form action=".$_SERVER['PHP_SELF']."?c=".htmlspecialchars($_GET['c'])." method='post'>";
 	$tool_content .= "<table class='FormData' width='99%' align='left'><tbody>
                           <tr><th colspan='3'>".$langFormUserManage."</th></tr>
                           <tr><th align=left>".$langListNotRegisteredUsers."<br />
@@ -223,18 +215,11 @@ function reverseAll(cbList) {
 // If course selected go back to editcours.php
 if (isset($_GET['c'])) {
 	$tool_content .= "<p align='right'>
-	<a href=\"editcours.php?c=".htmlspecialchars($_GET['c']).$searchurl."\">".$langBack."</a></p>";
+	<a href='editcours.php?c=".htmlspecialchars($_GET['c'])."'>".$langBack."</a></p>";
 }
 // Else go back to index.php directly
 else {
 	$tool_content .= "<p align='right'><a href='index.php'>".$langBackAdmin."</a></p>";
 }
 
-/*****************************************************************************
-		DISPLAY HTML
-******************************************************************************/
-// Call draw function to display the HTML
-// $tool_content: the content to display
-// 3: display administrator menu
-// admin: use tool.css from admin folder
-draw($tool_content,3,'admin');
+draw($tool_content, 3);

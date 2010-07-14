@@ -1,4 +1,4 @@
-<?php
+<?
 /*========================================================================
 *   Open eClass 2.3
 *   E-learning and Course Management System
@@ -50,8 +50,6 @@
 
 ==============================================================================*/
 
-// Check if user is administrator and if yes continue
-// Othewise exit with appropriate message
 $require_admin = TRUE;
 include '../../include/baseTheme.php';
 include 'admin.inc.php';
@@ -62,10 +60,8 @@ $navigation[] = array("url" => "index.php", "name" => $langAdmin);
 // Initialise $tool_content
 $tool_content = "";
 $caption = "";
-
 // Initialize some variables
 $searchurl = "";
-
 // Manage list limits
 $countcourses = mysql_fetch_array(mysql_query("SELECT COUNT(*) AS cnt FROM cours"));
 $fulllistsize = $countcourses['cnt'];
@@ -75,14 +71,14 @@ define ('COURSES_PER_PAGE', 15);
 $limit = isset($_GET['limit'])?$_GET['limit']:0;
 
 // A search has been submitted
-if (isset($search) && $search=="yes") {
+if (isset($_GET['search']) && $_GET['search'] == "yes") {
 	$searchurl = "&search=yes";
 	// Search from post form
-	if (isset($search_submit)) {
-		$searchtitle = $_SESSION['searchtitle'] = $formsearchtitle;
-		$searchcode = $_SESSION['searchcode'] = $formsearchcode;
-		$searchtype = $_SESSION['searchtype'] = $formsearchtype;
-		$searchfaculte = $_SESSION['searchfaculte'] = $formsearchfaculte;
+	if (isset($_POST['search_submit'])) 	{
+		$searchtitle = $_SESSION['searchtitle'] = $_POST['formsearchtitle'];
+		$searchcode = $_SESSION['searchcode'] = $_POST['formsearchcode'];
+		$searchtype = $_SESSION['searchtype'] = $_POST['formsearchtype'];
+		$searchfaculte = $_SESSION['searchfaculte'] = $_POST['formsearchfaculte'];
 	}
 	// Search from session
 	else {
@@ -130,12 +126,10 @@ else {
 }
 
 // Display Actions Toolbar
-  $tool_content .= "
-      <div id='operations_container'>
-        <ul id='opslist'>
+$tool_content .= "<div id='operations_container'>
+	<ul id='opslist'>
 	<li><a href='searchcours.php'>$langSearchCourses</a></li>
-        </ul>
-      </div>";
+	</ul></div>";
 
 // Construct course list table
 $tool_content .= "<table class=\"FormData\" width=\"99%\" align=\"left\">
@@ -166,15 +160,15 @@ for ($j = 0; $j < mysql_num_rows($sql); $j++) {
 	<td align='center'>";
 	// Define course type
 	switch ($logs[4]) {
-	case 2:
-		$tool_content .= "<img src='../../template/classic/img/OpenCourse.gif' title='$langOpenCourse' />";
-		break;
-	case 1:
-		$tool_content .= "<img src='../../template/classic/img/Registration.gif' title='$langRegCourse'></img>";
-		break;
-	case 0:
-		$tool_content .= "<img src='../../template/classic/img/ClosedCourse.gif' title='$langClosedCourse'></img>";
-		break;
+		case 2:
+			$tool_content .= "<img src='../../template/classic/img/OpenCourse.gif' title='$langOpenCourse' />";
+			break;
+		case 1:
+			$tool_content .= "<img src='../../template/classic/img/Registration.gif' title='$langRegCourse' />";
+			break;
+		case 0:
+			$tool_content .= "<img src='../../template/classic/img/ClosedCourse.gif' title='$langClosedCourse' />";
+			break;
 	}
 	$tool_content .= "</td><td>".htmlspecialchars($logs[0])."</td>";
 	// Add links to course users, delete course and course edit
@@ -189,7 +183,7 @@ for ($j = 0; $j < mysql_num_rows($sql); $j++) {
 // Close table correctly
 $tool_content .= "</tr></tbody></table>";
 // If a search is started display link to search page
-if (isset($search) && $search=="yes") {
+if (isset($_GET['search']) && $_GET['search'] == "yes") {
 	$tool_content .= "<br /><p align='right'><a href='searchcours.php'>".$langReturnSearch."</a></p>";
 } elseif ($fulllistsize > COURSES_PER_PAGE) {
 	// Display navigation in pages
@@ -197,13 +191,5 @@ if (isset($search) && $search=="yes") {
 }
 // Display link to index.php
 $tool_content .= "<br /><p align='right'><a href='index.php'>".$langBack."</a></p>";
-
-/*****************************************************************************
-		DISPLAY HTML
-******************************************************************************/
-// Call draw function to display the HTML
-// $tool_content: the content to display
-// 3: display administrator menu
-// admin: use tool.css from admin folder
 draw($tool_content,3);
 ?>

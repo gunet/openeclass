@@ -58,7 +58,7 @@ define ('USERS_PER_PAGE', 15);
 
 // get the incoming values
 $search = isset($_GET['search'])? $_GET['search']: '';
-$c = isset($_GET['c'])? $_GET['c']: (isset($_POST['c'])? $_POST['c']: '');
+$c = isset($_REQUEST['c'])? $_REQUEST['c']:'';
 $user_surname = isset($_REQUEST['user_surname'])?$_REQUEST['user_surname']:'';
 $user_firstname = isset($_REQUEST['user_firstname'])?$_REQUEST['user_firstname']:'';
 $user_username = isset($_REQUEST['user_username'])?$_REQUEST['user_username']:'';
@@ -291,6 +291,12 @@ if($view == 3) { // users per course
 	$qry = "SELECT a.user_id, a.nom, a.prenom, a.username, a.email, b.statut
 		FROM user AS a LEFT JOIN cours_user AS b ON a.user_id = b.user_id
 		WHERE b.cours_id = $c";
+		if((!empty($user_surname_qry)) || (!empty($user_firstname_qry)) || (!empty($user_username_qry)) 
+			|| (!empty($user_am_qry)) || (!empty($user_type_qry)) || (!empty($user_registered_at_qry)) 
+			|| (!empty($user_email_qry)) || (!empty($users_active_qry)))
+		{
+			$qry .= " WHERE".$user_surname_qry.$user_firstname_qry.$user_username_qry.$user_am_qry.$user_type_qry.$user_email_qry.$user_registered_at_qry.$users_active_qry;
+		}
 } else {
 	// Count users, with or without criteria/filters
 	$qry = "SELECT user_id,nom,prenom,username,email,statut FROM user";
@@ -344,10 +350,8 @@ if($sql) {
 			$caption .= "";
 		}
 
-		@$str = "&user_surname=$_REQUEST[user_surname]&user_firstname=$_REQUEST[user_firstname]&user_username=$_REQUEST[user_username]&user_am=$_REQUEST[user_am]&user_email=$_REQUEST[user_email]&user_type=$_REQUEST[user_type]&user_registered_at_flag=$_REQUEST[user_registered_at_flag]";
-		if (isset($ord) and !empty($ord)) {
-			$str .= "&ord=$ord";
-		}
+		@$str = "&user_surname=$user_surname&user_firstname=$user_firstname&user_username=$user_username&user_am=$user_am&user_email=$user_email&user_type=$user_type&user_registered_at_flag=$user_registered_at_flag";
+
 		if ($countUser >= USERS_PER_PAGE) { // display navigation links if more than USERS_PER_PAGE
 			$tool_content .= show_paging($limit, USERS_PER_PAGE, $countUser, "$_SERVER[PHP_SELF]", "$str");
 		}  
@@ -356,6 +360,13 @@ if($sql) {
 			$qry = "SELECT a.user_id,a.nom, a.prenom, a.username, a.email, b.statut
 			FROM user AS a LEFT JOIN cours_user AS b ON a.user_id = b.user_id
 			WHERE b.cours_id=$c";
+			if((!empty($user_surname_qry)) || (!empty($user_firstname_qry))
+				|| (!empty($user_username_qry)) || (!empty($user_am_qry))
+				|| (!empty($user_type_qry)) || (!empty($user_registered_at_qry))
+				|| (!empty($user_email_qry)) || (!empty($users_active_qry)))
+			{
+				$qry .= " WHERE".$user_surname_qry.$user_firstname_qry.$user_username_qry.$user_am_qry.$user_type_qry.$user_email_qry.$user_registered_at_qry.$users_active_qry;
+			}
 		} else {
 			$qry = "SELECT user_id,nom,prenom,username,email,statut FROM user";
 			if((!empty($user_surname_qry)) || (!empty($user_firstname_qry))
@@ -371,17 +382,20 @@ if($sql) {
 		mysql_free_result($sql);
 		$sql = db_query($qry);
 		
+		if ($view == 3) {
+			$str .= "&c=$c";	
+		}
 		$tool_content .= "<table class='FormData' width='99%' align='left'>
 		<tbody><tr><td class='odd' colspan='9'><div align='right'>".$caption."</div></td>
 		</tr>";
-		
-		$tool_content .= "<th scope='col' colspan='2'><a href='$_SERVER[PHP_SELF]?ord=n&$str'>$langSurname</a></th>
-		<th><a href='$_SERVER[PHP_SELF]?ord=p&$str'>$langName</a></th>
-		<th><a href='$_SERVER[PHP_SELF]?ord=u&$str'>$langUsername</a></th>
-		<th scope='col'>$langEmail</th>
-		<th scope='col'><a href='$_SERVER[PHP_SELF]?ord=s&$str'>$langProperty</a></th>
-		<th scope='col' colspan='3'>$langActions</th>
-		</tr>";
+		$tool_content .= "<th scope='col' colspan='2'>
+			<a href='$_SERVER[PHP_SELF]?ord=n$str'>$langSurname</a></th>
+			<th><a href='$_SERVER[PHP_SELF]?ord=p$str'>$langName</a></th>
+			<th><a href='$_SERVER[PHP_SELF]?ord=u$str'>$langUsername</a></th>
+			<th scope='col'>$langEmail</th>
+			<th scope='col'><a href='$_SERVER[PHP_SELF]?ord=s$str'>$langProperty</a></th>
+			<th scope='col' colspan='3'>$langActions</th>
+			</tr>";
         	$k = 0;
 		for ($j = 0; $j < mysql_num_rows($sql); $j++) {
 			while($logs = mysql_fetch_array($sql, MYSQL_ASSOC)) {

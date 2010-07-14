@@ -1,4 +1,4 @@
-<?php
+<?
 /*========================================================================
 *   Open eClass 2.3
 *   E-learning and Course Management System
@@ -48,13 +48,11 @@
 
 ==============================================================================*/
 
-
-// Check if user is administrator and if yes continue
-// Othewise exit with appropriate message
 $require_admin = TRUE;
 include '../../include/baseTheme.php';
 
 if(!isset($_GET['c'])) { die(); }
+
 // Define $nameTools
 $nameTools = $langCourseStatus;
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
@@ -63,20 +61,11 @@ $navigation[] = array("url" => "editcours.php?c=".htmlspecialchars($_GET['c']), 
 // Initialise $tool_content
 $tool_content = "";
 
-/*****************************************************************************
-		MAIN BODY
-******************************************************************************/
-// Initialize some variables
-$searchurl = "";
-
-// Define $searchurl to go back to search results
-if (isset($search) && ($search=="yes")) {
-	$searchurl = "&search=yes";
-}
 // Update course status
-if (isset($submit))  {
+if (isset($_POST['submit']))  {
   // Update query
-	$sql = mysql_query("UPDATE cours SET visible='$formvisible' WHERE code='".mysql_real_escape_string($_GET['c'])."'");
+	$sql = mysql_query("UPDATE cours SET visible='$_POST[formvisible]'
+			WHERE code='".mysql_real_escape_string($_GET['c'])."'");
 	// Some changes occured
 	if (mysql_affected_rows() > 0) {
 		$tool_content .= "<p>".$langCourseStatusChangedSuccess."</p>";
@@ -90,16 +79,16 @@ if (isset($submit))  {
 // Display edit form for course status
 else {
 	// Get course information
-	$row = mysql_fetch_array(mysql_query("SELECT * FROM cours WHERE code='".mysql_real_escape_string($_GET['c'])."'"));
+	$row = mysql_fetch_array(mysql_query("SELECT * FROM cours
+		WHERE code='".mysql_real_escape_string($_GET['c'])."'"));
 	$visible = $row['visible'];
 	$visibleChecked[$visible]="checked";
-	// Constract edit form
-	$tool_content .= "<form action=".$_SERVER['PHP_SELF']."?c=".htmlspecialchars($_GET['c'])."".$searchurl." method=\"post\">
+	
+	$tool_content .= "<form action=".$_SERVER['PHP_SELF']."?c=".htmlspecialchars($_GET['c'])." method=\"post\">
 	<table class=\"FormData\" width=\"99%\" align=\"left\">
 	<tbody>
 	<tr><th width=\"220\">&nbsp;</th>
 	<td colspan=\"2\"><b>".$langCourseStatusChange."<b></td></tr>";
-	
 	$tool_content .= "<tr><th class=\"left\" rowspan=\"3\">$langConfTip</th>
 	<td width=\"1\"><input type=\"radio\" name=\"formvisible\" value=\"2\"".@$visibleChecked[2]."></td>
 	<td>".$langPublic."</td>
@@ -121,19 +110,12 @@ else {
 }
 // If course selected go back to editcours.php
 if (isset($_GET['c'])) {
-	$tool_content .= "<p align=\"right\"><a href=\"editcours.php?c=".htmlspecialchars($_GET['c'])."".$searchurl."\">".$langBack."</a></p>";
+	$tool_content .= "<p align=\"right\"><a href='editcours.php?c=".htmlspecialchars($_GET['c'])."'>".$langBack."</a></p>";
 }
 // Else go back to index.php directly
 else {
 	$tool_content .= "<p align=\"right\"><a href=\"index.php\">".$langBackAdmin."</a></p>";
 }
 
-/*****************************************************************************
-		DISPLAY HTML
-******************************************************************************/
-// Call draw function to display the HTML
-// $tool_content: the content to display
-// 3: display administrator menu
-// admin: use tool.css from admin folder
-draw($tool_content,3,'admin');
+draw($tool_content, 3);
 ?>

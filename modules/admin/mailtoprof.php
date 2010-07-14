@@ -46,10 +46,6 @@
 
 ==============================================================================*/
 
-/*****************************************************************************
-		DEAL WITH LANGFILES, BASETHEME, OTHER INCLUDES AND NAMETOOLS
-******************************************************************************/
-
 // Check if user is administrator and if yes continue
 // Othewise exit with appropriate message
 $require_admin = TRUE;
@@ -99,39 +95,32 @@ $langEmail : $emailhelpdesk
 } else {
         // Display form to administrator
         $tool_content .= "
-<form action='$_SERVER[PHP_SELF]' method='post'>
-  <table class='FormData'>
-  <tbody>
-  <tr>
-    <th class='left'>$typeyourmessage</th>
-	<td><textarea class='auth_input' name='body_mail' rows='10' cols='60'></textarea></td>
-  </tr>
-  <tr>
-    <th class='left'>$langSendMessageTo</th>
-    <td><select name='sendTo'>
-          <option value='1'>$langProfOnly</option>
-          <option value='0'>$langToAllUsers</option>
-        </select>
-    </td>
-  </tr>
-  <tr>
-    <th>&nbsp;</th>
-    <td><input type=\"submit\" name=\"submit\" value=\"$langSend\"></input></td>
-  </tr>
-  </tbody>
-  </table>
-</form>";
+	<form action='$_SERVER[PHP_SELF]' method='post'>
+	<table class='FormData'>
+	<tbody>
+	<tr>
+	<th class='left'>$typeyourmessage</th>
+	    <td><textarea class='auth_input' name='body_mail' rows='10' cols='60'></textarea></td>
+	</tr>
+	<tr>
+	<th class='left'>$langSendMessageTo</th>
+	<td><select name='sendTo'>
+	      <option value='1'>$langProfOnly</option>
+	      <option value='0'>$langToAllUsers</option>
+	    </select>
+	</td>
+	</tr>
+	<tr>
+	<th>&nbsp;</th>
+	<td><input type=\"submit\" name=\"submit\" value=\"$langSend\"></input></td>
+	</tr>
+	</tbody>
+	</table>
+	</form>";
 
 }
 // Display link back to index.php
 $tool_content .= "<p>&nbsp;</p><p align=\"right\"><a href=\"index.php\">".$langBack."</a></p>";
 
-/*****************************************************************************
-		DISPLAY HTML
-******************************************************************************/
-// Call draw function to display the HTML
-// $tool_content: the content to display
-// 3: display administrator menu
-// admin: use tool.css from admin folder
-draw($tool_content,3,'admin');
+draw($tool_content,3);
 ?>
