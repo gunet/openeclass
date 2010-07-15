@@ -58,10 +58,13 @@ if (!email_seems_valid($usermail)) {
 if (isset($_POST['submit']) and !$all_set) {
 
         // form submitted but required fields empty
-        $tool_content .= "<table width='99%'><tbody><tr>
-                <td class='caution' height='60'><p>$langFieldsMissing</p></td>
-                </tr></tbody>
-                </table><br /><br />";
+        $tool_content .= "
+                <table width='99%' class='tbl'>
+                <tr>
+                  <td class='caution' height='60'><p>$langFieldsMissing</p></td>
+                </tr>
+                </table>
+                <br /><br />";
 
 }
 
@@ -92,11 +95,15 @@ if ($all_set) {
                 "$contactphone : $userphone\n\n\n$logo\n\n";
 
         if (!send_mail('', $emailhelpdesk, '', $emailhelpdesk, $mailsubject2, $MailMessage, $charset)) {
-                $tool_content .= "<table width='99%'><tbody><tr>
-                        <td class='caution' height='60'>
-                        <p>$langMailErrorMessage&nbsp; <a href='mailto:$emailhelpdesk' class='mainpage'>$emailhelpdesk</a>.</p>
-                        </td>
-                        </tr></tbody></table><br /><br />";
+                $tool_content .= "
+                       <table class='tbl'>
+                       <tr>
+                         <td class='caution' height='60'>
+                         <p>$langMailErrorMessage&nbsp; <a href='mailto:$emailhelpdesk' class='mainpage'>$emailhelpdesk</a>.</p>
+                         </td>
+                       </tr>
+                       </table>
+                       <br /><br />";
         }
 
         // User Message
@@ -112,41 +119,38 @@ if ($all_set) {
         $tool_content .= "
 <p>$langInfoStudReq</p><br />
 <form action='$_SERVER[PHP_SELF]' method='post'>
-<table width='99%' style='border: 1px solid #edecdf;'>
-<thead>
-<tr>
-  <td>
-  <table width='99%' align='left' class='FormData'>
-  <thead>
+ <fieldset>
+  <legend>lala</legend>
+  <table class='tbl'>
   <tr>
-    <th class='left' width='220'>$langName</th>
-    <td><input type='text' name='name' value='$name' class='FormData_InputText' size='33' />&nbsp;&nbsp;<small>(*)</small></td>
+    <td>$langName</td>
+    <td><input type='text' name='name' value='$name' size='33' />&nbsp;&nbsp;<small>(*)</small></td>
   </tr>
   <tr>
-    <th class='left'>$langSurname</th>
-    <td><input type='text' name='surname' value='$surname' class='FormData_InputText' size='33' />&nbsp;&nbsp;<small>(*)</small></td>
+    <td>$langSurname</td>
+    <td><input type='text' name='surname' value='$surname' size='33' />&nbsp;&nbsp;<small>(*)</small></td>
   </tr>
   <tr>
-    <th class='left'>$langPhone</th>
-    <td colspan='2'><input type='text' name='userphone' value='$userphone' class='FormData_InputText' size='33' /></td>
+    <td>$langPhone</td>
+    <td colspan='2'><input type='text' name='userphone' value='$userphone' size='33' /></td>
   <tr>
-    <th class='left'>$langUsername</th>
-    <td><input type='text' name='username' size='33' maxlength='20' value='$username' class='FormData_InputText' />&nbsp;&nbsp;<small>(*)&nbsp;$langUserNotice</small></td>
+    <td>$langUsername</td>
+    <td><input type='text' name='username' size='33' maxlength='20' value='$username' />&nbsp;&nbsp;<small>(*)&nbsp;$langUserNotice</small></td>
   </tr>
   <tr>
-    <th class='left'>$langProfEmail</th>
-    <td><input type='text' name='usermail' value='$usermail' class='FormData_InputText' size='33' />&nbsp;&nbsp;<small>(*)</small></td>
+    <td>$langProfEmail</td>
+    <td><input type='text' name='usermail' value='$usermail' size='33' />&nbsp;&nbsp;<small>(*)</small></td>
   </tr>
   <tr>
-    <th class='left'>$langAm</th>
-    <td colspan='2'><input type='text' name='am' value='$am' class='FormData_InputText' size='33' /></td>
+    <td>$langAm</td>
+    <td colspan='2'><input type='text' name='am' value='$am' size='33' /></td>
   </tr>
   <tr>
-    <th class='left'>$langComments<br /><small>$profreason</small></th>
-    <td><textarea name='usercomment' cols='30' rows='4' class='FormData_InputText'>$usercomment</textarea>&nbsp;&nbsp;<small>(*)</small></td>
+    <td>$langComments</td>
+    <td><textarea name='usercomment' cols='30' rows='4'>$usercomment</textarea>&nbsp;&nbsp;<small>(*) $profreason</small></td>
   </tr>
   <tr>
-    <th class='left'>$langFaculty&nbsp;</th>
+    <td>$langFaculty&nbsp;</td>
     <td><select name='department'>";
 
         $deps = db_query("SELECT id, name FROM faculte order by name");
@@ -162,22 +166,19 @@ if ($all_set) {
 	 $tool_content .= "\n</select>
     </td>
   </tr>
-	<tr>
-      <th class='left'>$langLanguage</th>
-      <td>";
+  <tr>
+    <td>$langLanguage</td>
+    <td>";
 	$tool_content .= lang_select_options('localize');
 	$tool_content .= "</td>
-    </tr>
+  </tr>
   <tr>
-    <th class='left'>&nbsp;</th>
+    <td>&nbsp;</td>
     <td><input type='submit' class='ButtonSubmit' name='submit' value='$langSubmitNew' /></td>
   </tr>
   </table>
-     <div align='right'><small>$langRequiredFields</small></div>
-  </td>
-</tr>
-</thead>
-</table>
+  <div align='right'><small>$langRequiredFields</small></div>
+ </fieldset>
 </form>";
 }   // end of form
 
