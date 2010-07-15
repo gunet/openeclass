@@ -1473,5 +1473,22 @@ function handle_unit_info_edit()
 function standard_text_escape($text, $mathimg = '../../courses/mathimg/')
 {
         global $purifier;
-        return mathfilter($purifier->purify($text), 12, $mathimg);
+        return glossary_expand(mathfilter($purifier->purify($text), 12, $mathimg));
+}
+
+// Expand glossry terms to HTML for tooltips with the definition
+function glossary_expand($text)
+{
+        # FIXME: Use actual terms from glossary subsystem
+        $terms = array('κοκ[οό]', 'λαλ[αά]', 'koko', 'lala');
+        $terms_regexp = '/' . implode('|', $terms) . '/ui';
+
+        return preg_replace_callback($terms_regexp, 'glossary_expand_callback', $text);
+}
+
+function glossary_expand_callback($matches)
+{
+        return '<span style="background-color: #FCC;" title=\'Glossary definition for term "' .
+                $matches[0] . '"\'>' . $matches[0] . '</span>';
+
 }
