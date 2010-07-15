@@ -159,13 +159,13 @@ if (isset($message) && !empty($message)) {
 }
 
 // display form
-if ($displayForm && (@$addAnnouce==1 || isset($modify))) {
+if ($displayForm && isset($_GET['addAnnounce']) && ($_GET['addAnnounce'] == 1) || isset($_GET['modify'])) {
         $displayAnnouncementList = false;
         // display add announcement command
         $tool_content .= "<form method='post' action='$_SERVER[PHP_SELF]?localize=$localize'>";
         $tool_content .= "<table width='99%' class='FormData' align='left'><tbody>
                 <tr><th width='220'>&nbsp;</th><td><b>";
-        if (isset($modify)) {
+        if (isset($_GET['modify'])) {
                 $tool_content .= $langAdminModifAnn;
         } else {
                 $tool_content .= $langAdminAddAnn;
@@ -220,10 +220,10 @@ if ($displayForm && (@$addAnnouce==1 || isset($modify))) {
 if ($displayAnnouncementList == true) {
         $result = db_query("SELECT * FROM admin_announcements ORDER BY id DESC", $mysqlMainDb);
         $announcementNumber = mysql_num_rows($result);
-        if (@$addAnnouce != 1) {
+        if (!isset($_GET['addAnnounce'])) {
                 $tool_content .= "<div id='operations_container'>
                 <ul id='opslist'><li>";
-                $tool_content .= "<a href='".$_SERVER['PHP_SELF']."?addAnnouce=1&amp;localize=$localize'>".$langAdminAddAnn."</a>";
+                $tool_content .= "<a href='".$_SERVER['PHP_SELF']."?addAnnounce=1&amp;localize=$localize'>".$langAdminAddAnn."</a>";
                 $tool_content .= "</li></ul></div>";
         }
         if ($announcementNumber > 0) {

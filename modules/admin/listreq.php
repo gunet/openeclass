@@ -184,25 +184,25 @@ if (!empty($show) && ($show=="closed")) {
 		$submit = isset($_POST['submit'])?$_POST['submit']:'';
 		if(!empty($submit)) {
 			// post the comment and do the delete action
-			if (!empty($comment)) {
+			if (!empty($_POST['comment'])) {
 				$sql = "UPDATE prof_request set status = '3',
 						date_closed = NOW(),
-						comment = '".mysql_escape_string($comment)."'
+						comment = '".mysql_escape_string($_POST['comment'])."'
 						WHERE rid = '$id'";
 				if (db_query($sql)) {
-					if (isset($sendmail) and ($sendmail == 1)) {
+					if (isset($_POST['sendmail']) and ($_POST['sendmail'] == 1)) {
 						$emailsubject = $langemailsubjectBlocked;
 						$emailbody = "$langemailbodyBlocked
-$langComments:> $comment
+$langComments:> $_POST[comment]
 $langManager $siteName
 $administratorName $administratorSurname
 $langPhone: $telephone
 $langEmail: $emailhelpdesk";
-						send_mail('', '', "$prof_name $prof_surname", $prof_email, $emailsubject, $emailbody, $charset);
+						send_mail('', '', "$_POST[prof_name] $_POST[prof_surname]", $_POST['prof_email'], $emailsubject, $emailbody, $charset);
 					}
 					$tool_content .= "<p class='success_small'>" .  ($list_statut == 1)? $langTeacherRequestHasRejected: $langRequestReject;
-					$tool_content .= " $langRequestMessageHasSent <b>$prof_email</b></p>";
-					$tool_content .= "<br><p><b>$langComments:</b><br />$comment</p>\n";
+					$tool_content .= " $langRequestMessageHasSent <b>$_POST[prof_email]</b></p>";
+					$tool_content .= "<br><p><b>$langComments:</b><br />$_POST[comment]</p>\n";
 				}
 			}
 		} else {
@@ -296,7 +296,7 @@ else
 if (!empty($show)) {
 	$tool_content .= "<p align='right'><a href='$_SERVER[PHP_SELF]$linkget'>$langBackRequests</a></p><br>";
 }
-	$tool_content .= "<p align='right'><a href='index.php'>$langBack</a></p>";
+$tool_content .= "<p align='right'><a href='index.php'>$langBack</a></p>";
 draw($tool_content, 3, null, $head_content);
 
 // --------------------------------------

@@ -36,7 +36,6 @@ $navigation[]= array ("url"=>"index.php", "name"=> $langAdmin);
 // Initialise $tool_content
 $tool_content = "";
 
-
 if (isset($_POST['submit'])) {
 	foreach (array('temp' => 2, 'garbage' => 5, 'archive' => 1, 'tmpUnzipping' => 1) as $dir => $days) {
 		$tool_content .= sprintf("<p class=kk>$langCleaningUp</p>", $days,
@@ -45,37 +44,28 @@ if (isset($_POST['submit'])) {
 	}
 } else {
 	$tool_content .= "
-    <table width='99%' class='FormData' align='left'>
-    <tbody>
-    <tr>
-      <th width='220'>&nbsp;</th>
-      <td>$langCleanupInfo</td>
-    </tr>
-    <tr>
-      <th width='220'>&nbsp;</th>
-      <td>
-         <form method='post' action='$_SERVER[PHP_SELF]'>
-	     <input type='submit' name='submit' value='$langCleanup'>
-         </form>
-      </td>
-    </tr>
-	</tbody>
-    </table>
-    <br />";
+	<table width='99%' class='FormData' align='left'>
+	<tbody>
+	<tr>
+	  <th width='220'>&nbsp;</th>
+	  <td>$langCleanupInfo</td>
+	</tr>
+	<tr>
+	  <th width='220'>&nbsp;</th>
+	  <td>
+	     <form method='post' action='$_SERVER[PHP_SELF]'>
+		 <input type='submit' name='submit' value='$langCleanup'>
+	     </form>
+	  </td>
+	</tr>
+	    </tbody>
+	</table>
+	<br />";
 }
-
 
 $tool_content .= "<br /><br /><p align=right><a href=\"index.php\" class=mainpage>$langBackAdmin&nbsp;</a></p>";
 
-
-/*****************************************************************************
-                DISPLAY HTML
-******************************************************************************/
-// Call draw function to display the HTML
-// $tool_content: the content to display
-// 3: display administrator menu
-// admin: use tool.css from admin folder
-draw($tool_content,3,'admin');
+draw($tool_content, 3);
 
 
 // Remove all files under $path older than $max_age days

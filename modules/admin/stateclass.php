@@ -1,4 +1,4 @@
-<?php
+<?
 /*========================================================================
 *   Open eClass 2.3
 *   E-learning and Course Management System
@@ -93,8 +93,8 @@ $tool_content .= "<table class='FormData' width='99%' align='left'>
 // ---------------------
 // actions
 // ---------------------
-if (isset($stats)) {
-	switch ($stats) {
+if (isset($_GET['stats'])) {
+	switch ($_GET['stats']) {
 		case 'login':
 			mysql_select_db($mysqlMainDb);
 			$result = db_query("SELECT code FROM cours");
@@ -385,13 +385,5 @@ function list_ManyResult($sql) {
 	return $resu;
 }
 
-/*****************************************************************************
-        DISPLAY HTML
-******************************************************************************/
-// Call draw function to display the HTML
-// $tool_content: the content to display
-// 3: display administrator menu
-// admin: use tool.css from admin folder
-draw($tool_content, 3, 'admin');
-
+draw($tool_content, 3);
 ?>

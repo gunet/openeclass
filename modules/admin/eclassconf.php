@@ -1,4 +1,4 @@
-<?php
+<?
 /*========================================================================
 *   Open eClass 2.3
 *   E-learning and Course Management System
@@ -66,12 +66,12 @@ $tool_content = "";
 		MAIN BODY
 ******************************************************************************/
 // Save new config.php
-if (isset($submit))  {
+if (isset($_POST['submit']))  {
 	// Make config directory writable
 	@chmod( "../../config",777 );
 	@chmod( "../../config", 0777 );
 	// Create backup file
-	if ($backupfile=="on") {
+	if (isset($_POST['backupfile']) and $_POST['backupfile'] == "on") {
 		// If a backup already exists delete it
 		if (file_exists("../../config/config_backup.php"))
 			unlink("../../config/config_backup.php");
@@ -104,7 +104,7 @@ if (isset($submit))  {
 		// Prepare config.php content
 		$stringConfig='<?php
 /*===========================================================================
- *   Open eClass 2.3
+ *   Open eClass 2.4
  *   E-learning and Course Management System
  *===========================================================================
 
@@ -160,107 +160,104 @@ $active_ui_languages = '.$string_active_ui_languages.'
 else {
 	$titleextra = "config.php";
 	// Check if restore has been selected
-	if (isset($restore) && $restore=="yes") {
+	if (isset($_GET['restore']) && $_GET['restore'] == "yes") {
 		// Substitute variables with those from backup file
 		$titleextra = " ($langRestoredValues)";
 		@include("../../config/config_backup.php");
 	}
-	// Constract the form
+	$tool_content .= "<form action=\"".$_SERVER['PHP_SELF']."\" method=\"post\">";
 	$tool_content .= "
-    <form action=\"".$_SERVER['PHP_SELF']."\" method=\"post\">";
-	$tool_content .= "
-
-  <table class=\"FormData\" width=\"99%\" align=\"left\">
-  <tbody>
-  <tr>
-    <th width=\"220\" class=\"left\">&nbsp;</th>
-    <td>".$langFileEdit." <b>".$titleextra."</b></td>
-  </tr>
-  <tr>
-    <th class=\"left\"><b>\$urlServer:</b></th>
-    <td><input class=\"FormData_InputText\" type=\"text\" name=\"formurlServer\" size=\"40\" value=\"".$urlServer."\"></td>
-  </tr>
-  <tr>
-    <th class=\"left\"><b>\$urlAppend:</b></th>
-    <td><input class=\"FormData_InputText\" type=\"text\" name=\"formurlAppend\" size=\"40\" value=\"".$urlAppend."\"></td>
-  </tr>
-  <tr>
-    <th class=\"left\"><b>\$webDir:</b></th>
-    <td><input class=\"FormData_InputText\" type=\"text\" name=\"formwebDir\" size=\"40\" value=\"".$webDir."\"></td>
-  </tr>
-  <tr>
-    <td colspan=\"2\">&nbsp;</td>
-  </tr>
-  <tr>
-    <th class=\"left\"><b>\$mysqlServer:</b></th>
-    <td><input class=\"FormData_InputText\" type=\"text\" name=\"formmysqlServer\" size=\"40\" value=\"".$mysqlServer."\"></td>
-  </tr>
-  <tr>
-    <th class=\"left\"><b>\$mysqlUser:</b></th>
-    <td><input class=\"FormData_InputText\" type=\"text\" name=\"formmysqlUser\" size=\"40\" value=\"".$mysqlUser."\"></td>
-  </tr>
-  <tr>
-    <th class=\"left\"><b>\$mysqlPassword:</b></th>
-    <td><input class=\"FormData_InputText\" type=\"password\" name=\"formmysqlPassword\" size=\"40\" value=\"".$mysqlPassword."\"></td>
-  </tr>
-  <tr>
-    <th class=\"left\"><b>\$mysqlMainDb:</b></th>
-    <td><input class=\"FormData_InputText\" type=\"text\" name=\"formmysqlMainDb\" size=\"40\" value=\"".$mysqlMainDb."\"></td>
-  </tr>";
-	$tool_content .= "  <tr>
-    <th class=\"left\"><b>\$phpMyAdminURL:</b></th>
-    <td><input class=\"FormData_InputText\" type=\"text\" name=\"formphpMyAdminURL\" size=\"40\" value=\"".$phpMyAdminURL."\"></td>
-  </tr>
-  <tr>
-    <th class=\"left\"><b>\$phpSysInfoURL:</b></th>
-    <td><input class=\"FormData_InputText\" type=\"text\" name=\"formphpSysInfoURL\" size=\"40\" value=\"".$phpSysInfoURL."\"></td>
-  </tr>
-  <tr>
-    <th class=\"left\"><b>\$emailAdministrator:</b></th>
-    <td><input class=\"FormData_InputText\" type=\"text\" name=\"formemailAdministrator\" size=\"40\" value=\"".$emailAdministrator."\"></td>
-  </tr>
-  <tr>
-    <th class=\"left\"><b>\$administratorName:</b></th>
-    <td><input class=\"FormData_InputText\" type=\"text\" name=\"formadministratorName\" size=\"40\" value=\"".$administratorName."\"></td>
-  </tr>
-  <tr>
-    <th class=\"left\"><b>\$administratorSurname:</b></th>
-    <td><input class=\"FormData_InputText\" type=\"text\" name=\"formadministratorSurname\" size=\"40\" value=\"".$administratorSurname."\"></td>
-  </tr>
-  <tr>
-    <th class=\"left\"><b>\$siteName:</b></th>
-    <td><input class=\"FormData_InputText\" type=\"text\" name=\"formsiteName\" size=\"40\" value=\"".$siteName."\"></td>
-  </tr>
-  <tr>
-    <td colspan=\"2\">&nbsp;</td>
-  </tr>
-  <tr>
-    <th class=\"left\"><b>\$postaddress:</b></th>
-	<td><textarea rows='3' cols='40' name='formpostaddress'>$postaddress</textarea></td>
-  </tr>
-  <tr>
-    <th class=\"left\"><b>\$telephone:</b></th>
-    <td><input class=\"FormData_InputText\" type=\"text\" name=\"formtelephone\" size=\"40\" value=\"".$telephone."\"></td>
-  </tr>
-  <tr>
-    <th class=\"left\"><b>\$fax:</b></th>
-    <td><input class=\"FormData_InputText\" type=\"text\" name=\"formfax\" size=\"40\" value=\"".$fax."\"></td>
-  </tr>
-  <tr>
-    <th class=\"left\"><b>\$emailhelpdesk:</b></th>
-    <td><input class=\"FormData_InputText\" type=\"text\" name=\"formemailhelpdesk\" size=\"40\" value=\"".$emailhelpdesk."\"></td>
-  </tr>
-  <tr>
-    <th class=\"left\"><b>\$Institution:</b></th>
-    <td><input class=\"FormData_InputText\" type=\"text\" name=\"formInstitution\" size=\"40\" value=\"".$Institution."\"></td>
-  </tr>
-  <tr>
-    <th class=\"left\"><b>\$InstitutionUrl:</b></th>
-    <td><input class=\"FormData_InputText\" type=\"text\" name=\"formInstitutionUrl\" size=\"40\" value=\"".$InstitutionUrl."\"></td>
-  </tr>
-  <tr>
-    <td colspan=\"2\">&nbsp;</td>
-  </tr>";
+	<table class=\"FormData\" width=\"99%\" align=\"left\">
+	<tbody>
+	<tr>
+	  <th width=\"220\" class=\"left\">&nbsp;</th>
+	  <td>".$langFileEdit." <b>".$titleextra."</b></td>
+	</tr>
+	<tr>
+	  <th class=\"left\"><b>\$urlServer:</b></th>
+	  <td><input class=\"FormData_InputText\" type=\"text\" name=\"formurlServer\" size=\"40\" value=\"".$urlServer."\"></td>
+	</tr>
+	<tr>
+	  <th class=\"left\"><b>\$urlAppend:</b></th>
+	  <td><input class=\"FormData_InputText\" type=\"text\" name=\"formurlAppend\" size=\"40\" value=\"".$urlAppend."\"></td>
+	</tr>
+	<tr>
+	  <th class=\"left\"><b>\$webDir:</b></th>
+	  <td><input class=\"FormData_InputText\" type=\"text\" name=\"formwebDir\" size=\"40\" value=\"".$webDir."\"></td>
+	</tr>
+	<tr>
+	  <td colspan=\"2\">&nbsp;</td>
+	</tr>
+	<tr>
+	  <th class=\"left\"><b>\$mysqlServer:</b></th>
+	  <td><input class=\"FormData_InputText\" type=\"text\" name=\"formmysqlServer\" size=\"40\" value=\"".$mysqlServer."\"></td>
+	</tr>
+	<tr>
+	  <th class=\"left\"><b>\$mysqlUser:</b></th>
+	  <td><input class=\"FormData_InputText\" type=\"text\" name=\"formmysqlUser\" size=\"40\" value=\"".$mysqlUser."\"></td>
+	</tr>
+	<tr>
+	  <th class=\"left\"><b>\$mysqlPassword:</b></th>
+	  <td><input class=\"FormData_InputText\" type=\"password\" name=\"formmysqlPassword\" size=\"40\" value=\"".$mysqlPassword."\"></td>
+	</tr>
+	<tr>
+	  <th class=\"left\"><b>\$mysqlMainDb:</b></th>
+	  <td><input class=\"FormData_InputText\" type=\"text\" name=\"formmysqlMainDb\" size=\"40\" value=\"".$mysqlMainDb."\"></td>
+	</tr>";
+	      $tool_content .= "  <tr>
+	  <th class=\"left\"><b>\$phpMyAdminURL:</b></th>
+	  <td><input class=\"FormData_InputText\" type=\"text\" name=\"formphpMyAdminURL\" size=\"40\" value=\"".$phpMyAdminURL."\"></td>
+	</tr>
+	<tr>
+	  <th class=\"left\"><b>\$phpSysInfoURL:</b></th>
+	  <td><input class=\"FormData_InputText\" type=\"text\" name=\"formphpSysInfoURL\" size=\"40\" value=\"".$phpSysInfoURL."\"></td>
+	</tr>
+	<tr>
+	  <th class=\"left\"><b>\$emailAdministrator:</b></th>
+	  <td><input class=\"FormData_InputText\" type=\"text\" name=\"formemailAdministrator\" size=\"40\" value=\"".$emailAdministrator."\"></td>
+	</tr>
+	<tr>
+	  <th class=\"left\"><b>\$administratorName:</b></th>
+	  <td><input class=\"FormData_InputText\" type=\"text\" name=\"formadministratorName\" size=\"40\" value=\"".$administratorName."\"></td>
+	</tr>
+	<tr>
+	  <th class=\"left\"><b>\$administratorSurname:</b></th>
+	  <td><input class=\"FormData_InputText\" type=\"text\" name=\"formadministratorSurname\" size=\"40\" value=\"".$administratorSurname."\"></td>
+	</tr>
+	<tr>
+	  <th class=\"left\"><b>\$siteName:</b></th>
+	  <td><input class=\"FormData_InputText\" type=\"text\" name=\"formsiteName\" size=\"40\" value=\"".$siteName."\"></td>
+	</tr>
+	<tr>
+	  <td colspan=\"2\">&nbsp;</td>
+	</tr>
+	<tr>
+	  <th class=\"left\"><b>\$postaddress:</b></th>
+	      <td><textarea rows='3' cols='40' name='formpostaddress'>$postaddress</textarea></td>
+	</tr>
+	<tr>
+	  <th class=\"left\"><b>\$telephone:</b></th>
+	  <td><input class=\"FormData_InputText\" type=\"text\" name=\"formtelephone\" size=\"40\" value=\"".$telephone."\"></td>
+	</tr>
+	<tr>
+	  <th class=\"left\"><b>\$fax:</b></th>
+	  <td><input class=\"FormData_InputText\" type=\"text\" name=\"formfax\" size=\"40\" value=\"".$fax."\"></td>
+	</tr>
+	<tr>
+	  <th class=\"left\"><b>\$emailhelpdesk:</b></th>
+	  <td><input class=\"FormData_InputText\" type=\"text\" name=\"formemailhelpdesk\" size=\"40\" value=\"".$emailhelpdesk."\"></td>
+	</tr>
+	<tr>
+	  <th class=\"left\"><b>\$Institution:</b></th>
+	  <td><input class=\"FormData_InputText\" type=\"text\" name=\"formInstitution\" size=\"40\" value=\"".$Institution."\"></td>
+	</tr>
+	<tr>
+	  <th class=\"left\"><b>\$InstitutionUrl:</b></th>
+	  <td><input class=\"FormData_InputText\" type=\"text\" name=\"formInstitutionUrl\" size=\"40\" value=\"".$InstitutionUrl."\"></td>
+	</tr>
+	<tr>
+	  <td colspan=\"2\">&nbsp;</td>
+	</tr>";
 	if ($language=="greek") {
 		$grSel = "selected";
 		$enSel = "";
@@ -269,13 +266,13 @@ else {
 		$enSel = "selected";
 	}
 	$tool_content .= "
-  <tr>
-    <th class=\"left\"><b>\$language:</b></th>
-    <td><select name=\"formlanguage\">
-      <option value=\"greek\" ".$grSel.">greek</option>
-      <option value=\"english\" ".$enSel.">english</option>
-    </select></td>
-  </tr>";
+	<tr>
+	  <th class=\"left\"><b>\$language:</b></th>
+	  <td><select name=\"formlanguage\">
+	    <option value=\"greek\" ".$grSel.">greek</option>
+	    <option value=\"english\" ".$enSel.">english</option>
+	  </select></td>
+	</tr>";
 
 if ($close_user_registration=="true") {
     $close_user_registrationSelTrue = "selected";
@@ -300,9 +297,9 @@ $sel_es = in_array("es", $active_ui_languages)?'checked':'';
 $tool_content .= "<tr><th class='left'>$langSupportedLanguages</th>";
 $tool_content .= "<td><fieldset>";
 $tool_content .= "<legend>$langAvailLanguages</legend>";
-$tool_content .= "<input type='checkbox' value='el' name = 'av_lang[]' checked disabled />Ελληνικά&nbsp;";
-$tool_content .= "<input type='checkbox' value='en' name = 'av_lang[]' $sel_en />Αγγλικά&nbsp;";
-$tool_content .= "<input type='checkbox' value='es' name = 'av_lang[]' $sel_es />Ισπανικά";
+$tool_content .= "<input type='checkbox' value='el' name = 'av_lang[]' checked disabled />$langGreek&nbsp;";
+$tool_content .= "<input type='checkbox' value='en' name = 'av_lang[]' $sel_en />$langEnglish&nbsp;";
+$tool_content .= "<input type='checkbox' value='es' name = 'av_lang[]' $sel_es />$langSpanish";
 $tool_content .= "</fieldset></td></tr>";
 
 $tool_content .= "
@@ -332,23 +329,21 @@ $tool_content .= "
 	// Check if a backup file exists
   if (file_exists("../../config/config_backup.php")) {
   	// Give option to restore values from backup file
-  	$tool_content .= "
-  <table class=\"FormData\" width=\"99%\" align=\"left\">
-  <tbody>
-  <tr>
-    <th width=\"220\" class=\"left\">".$langOtherActions."</th>
-    <td><a href=\"eclassconf.php?restore=yes\">$langRestoredValues</a></td>
-  </tr>
-  </tbody>
-  </table>";
+		$tool_content .= "
+		<table class=\"FormData\" width=\"99%\" align=\"left\">
+		<tbody>
+		<tr>
+		  <th width=\"220\" class=\"left\">".$langOtherActions."</th>
+		  <td><a href=\"eclassconf.php?restore=yes\">$langRestoredValues</a></td>
+		</tr>
+		</tbody>
+		</table>";
 	}
 	// Display link to index.php
-	$tool_content .= "
-    <br>
-    <p align=\"right\"><a href=\"index.php\">".$langBack."</a></p>";
+	$tool_content .= "<br><p align=\"right\"><a href=\"index.php\">".$langBack."</a></p>";
 	// After restored values have been inserted into form then bring back
 	// values from original config.php, so the rest of the page can be played correctly
-	if (isset($restore) && $restore=="yes") {
+	if (isset($_GET['restore']) && $_GET['restore'] == "yes") {
 		@include("../../config/config.php");
 	}
 }
