@@ -221,6 +221,13 @@ if (get_magic_quotes_gpc()) {
 
 }
 
+// Escape string to use as JavaScript argument
+function js_escape($s)
+{
+        return q(str_replace("'", "\\'", $s));
+}
+
+
 // ------------------------------------------------------
 // Other useful functions. We use it in various scripts.
 // -----------------------------------------------------
@@ -238,6 +245,27 @@ function uid_to_username($uid)
 		return FALSE;
 	}
 }
+
+
+// Return HTML for a user - first parameter is either a user id (so that the user's info is
+// fetched from the DB) or a hash with user_id, prenom, nom, email.
+function display_user($user, $print_email = false)
+{
+        global $mysqlMainDb;
+
+        if (count($user) == 1) {
+	        $r = db_query("SELECT user_id, nom, prenom, email FROM user WHERE user_id = $user", $mysqlMainDb);
+                if ($r and mysql_num_rows($r) > 0) {
+                        $user = mysql_fetch_array($r);
+                } else {
+                        return $langAnonymous;
+                }
+	}
+        return "<a href='profile.php?id=$user[user_id]'>" . q("$user[prenom] $user[nom]") . "</a>" .
+                ($print_email? (' (' . mailto(trim($user['email']), 'e-mail address hidden') . ')'): '');
+
+}
+
 
 // Translate uid to real name / surname
 function uid_to_name($uid)
