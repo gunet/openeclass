@@ -134,7 +134,7 @@ $sql = "SELECT LPM.`learnPath_module_id`, LPM.`parent`,
 if (mysql_num_rows(db_query($sql)) == 0)  {
 	$tool_content .= "<p class='alert1'>$langNoModule</p>";
 	add_units_navigation();
-	draw($tool_content, 2, "learnPath");
+	draw($tool_content, 2);
 	exit;
 }
 
@@ -339,5 +339,5 @@ if($uid && $moduleNb > 0) {
 		.'    </tbody>'."\n\n";
 }
 $tool_content .= '    </table>'."\n\n";
-draw($tool_content, 2, "learnPath");
+draw($tool_content, 2);
 ?>

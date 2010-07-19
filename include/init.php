@@ -53,6 +53,9 @@ if (isset($path2add) && $path2add == 0){
 } elseif (isset($path2add) && $path2add == 2) {
 	$relPathLib = "";
 	$relPath = "../";
+} elseif (isset($path2add) && $path2add == 3) {
+	$relPathLib = "";
+	$relPath = "../../../";
 } else {
 	$relPathLib = "";
 	$relPath = "../../";

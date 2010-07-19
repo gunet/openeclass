@@ -49,8 +49,8 @@
 
 
 $require_current_course = TRUE;
-require_once("../../../config/config.php");
-require_once("../../../include/init.php");
+$path2add = 3;
+include("../../../include/init.php");
 
 $TABLELEARNPATH         = "lp_learnPath";
 $TABLEMODULE            = "lp_module";

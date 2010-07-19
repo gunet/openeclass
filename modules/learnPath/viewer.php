@@ -98,30 +98,29 @@ if ($displayFull == 0)
 		."<br />"."\n"
 		."      <a href=\"module.php\">".$langBack."</a>"."\n"
 		."      </iframe>"."\n";
-	draw($tool_content, 2, "learnPath", $head_content);
+	draw($tool_content, 2, '', $head_content);
 }
 else
 {
-echo
- "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Frameset//EN\""
-."   \"http://www.w3.org/TR/html4/frameset.dtd\">"."\n"
-."<html>"."\n"
-."<head>"."\n"
-.'<meta http-equiv="Content-Type" content="text/html; charset='.$charset.'">'."\n"
-."<title>".$titlePage."</title>"."\n"
-."</head>"."\n"
-."<frameset cols=\"*\" border=\"0\">"."\n"
-."<frame src=\"navigation/startModule.php\" name=\"mainFrame\" />"."\n"
-."</frameset>"."\n"
-."<noframes>"."\n"
-."<body>"."\n"
-.$langBrowserCannotSeeFrames
-."<br />"."\n"
-."<a href=\"module.php\">".$langBack."</a>"."\n"
-."</body>"."\n"
-."</noframes>"."\n"
-."</html>"."\n";
-
+	echo
+	 "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Frameset//EN\""
+	."   \"http://www.w3.org/TR/html4/frameset.dtd\">"."\n"
+	."<html>"."\n"
+	."<head>"."\n"
+	.'<meta http-equiv="Content-Type" content="text/html; charset='.$charset.'">'."\n"
+	."<title>".$titlePage."</title>"."\n"
+	."</head>"."\n"
+	."<frameset cols=\"*\" border=\"0\">"."\n"
+	."<frame src=\"navigation/startModule.php\" name=\"mainFrame\" />"."\n"
+	."</frameset>"."\n"
+	."<noframes>"."\n"
+	."<body>"."\n"
+	.$langBrowserCannotSeeFrames
+	."<br />"."\n"
+	."<a href=\"module.php\">".$langBack."</a>"."\n"
+	."</body>"."\n"
+	."</noframes>"."\n"
+	."</html>"."\n";
 }
 
 ?>

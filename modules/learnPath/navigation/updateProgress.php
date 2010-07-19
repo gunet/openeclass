@@ -48,11 +48,10 @@
 */
 
 $require_current_course = TRUE;
+$path2add = 3;
+include("../../../include/init.php");
 require_once("../../../include/lib/learnPathLib.inc.php");
-require_once("../../../config/config.php");
-require_once("../../../include/init.php");
 mysql_select_db($currentCourseID);
-
 
 $TABLELEARNPATH         = "lp_learnPath";
 $TABLEMODULE            = "lp_module";

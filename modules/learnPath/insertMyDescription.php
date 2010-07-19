@@ -149,6 +149,5 @@ $tool_content .= "</td></tr></tbody></table>";
 	$tool_content .= "
     <br />
     <p align=\"right\"><a href=\"learningPathAdmin.php\">$langBackToLPAdmin</a></p>";
-//$tool_content .= '<a href="learningPathAdmin.php">&lt;&lt;&nbsp;'.$langBackToLPAdmin.'</a>';
-draw($tool_content, 2, "learnPath");
+draw($tool_content, 2);
 ?>

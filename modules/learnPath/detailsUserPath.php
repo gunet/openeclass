@@ -325,5 +325,5 @@ elseif($moduleNb > 0)
 }
 $tool_content .= "\n".'    </tbody>'."\n".'    </table>'."\n";
 
-draw($tool_content, 2, "learnPath", $head_content);
+draw($tool_content, 2, '', $head_content);
 ?>

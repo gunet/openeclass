@@ -316,6 +316,6 @@ if ($atleastOne == false) {
 }
 
 
-draw($tool_content, 2, "learnPath", $head_content, $body_action);
+draw($tool_content, 2, '', $head_content, $body_action);
 
 ?>

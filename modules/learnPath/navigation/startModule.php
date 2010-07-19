@@ -49,11 +49,9 @@
 ==============================================================================
 */
 
-
 $require_current_course = TRUE;
-require_once("../../../config/config.php");
-require_once("../../../include/init.php");
-require_once '../../../include/lib/fileDisplayLib.inc.php';
+$path2add = 3;
+include("../../../include/init.php");
 
 $TABLELEARNPATH         = "lp_learnPath";
 $TABLEMODULE            = "lp_module";
@@ -64,6 +62,7 @@ $TABLEUSERMODULEPROGRESS= "lp_user_module_progress";
 $clarolineRepositoryWeb = $urlServer."courses/".$currentCourseID;
 
 // lib of this tool
+require_once '../../../include/lib/fileDisplayLib.inc.php';
 require_once("../../../include/lib/learnPathLib.inc.php");
 mysql_select_db($currentCourseID);
 

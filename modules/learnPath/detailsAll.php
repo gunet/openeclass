@@ -144,5 +144,5 @@ foreach ($usersList as $user)
 
 // foot of table
 $tool_content .= '</tbody>'."\n".'</table>'."\n\n";
-draw($tool_content, 2, "learnPath", $head_content);
+draw($tool_content, 2, '', $head_content);
 ?>

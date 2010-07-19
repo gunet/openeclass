@@ -1340,5 +1340,5 @@ else // if method == 'post'
 } // else if method == 'post'
 
 chdir($pwd);
-draw($tool_content, 2, "learnPath");
+draw($tool_content, 2);
 ?>

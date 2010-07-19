@@ -376,4 +376,4 @@ $tool_content .= display_my_documents($dialogBox, $style) ;
 // display list of modules used by this learning path
 //$tool_content .= display_path_content();
 chdir($pwd);
-draw($tool_content, 2, "learnPath");
+draw($tool_content, 2);

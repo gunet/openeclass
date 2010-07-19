@@ -187,7 +187,7 @@ $tool_content .= showlinks($tbl_link);
 	$tool_content .= "
     <br />
     <p align=\"right\"><a href=\"learningPathAdmin.php\">$langBackToLPAdmin</a>";
-draw($tool_content, 2, "learnPath");
+draw($tool_content, 2);
 
 
 function showlinks($tbl_link)

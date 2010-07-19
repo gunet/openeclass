@@ -115,12 +115,10 @@ if ($all_set) {
 
 } else {
         // display the form
-
-        $tool_content .= "
-<p>$langInfoStudReq</p><br />
+$tool_content .= "<p>$langInfoStudReq</p><br />
 <form action='$_SERVER[PHP_SELF]' method='post'>
  <fieldset>
-  <legend>lala</legend>
+  <legend>$langUserData</legend>
   <table class='tbl'>
   <tr>
     <td>$langName</td>
@@ -152,7 +150,6 @@ if ($all_set) {
   <tr>
     <td>$langFaculty&nbsp;</td>
     <td><select name='department'>";
-
         $deps = db_query("SELECT id, name FROM faculte order by name");
         while ($dep = mysql_fetch_array($deps)) {
                 if ($dep['id'] == $department) {
@@ -163,23 +160,22 @@ if ($all_set) {
                 $tool_content .= "\n<option value='$dep[id]'$selected>$dep[name]</option>\n";
         }
 
-	 $tool_content .= "\n</select>
-    </td>
-  </tr>
-  <tr>
-    <td>$langLanguage</td>
-    <td>";
+	 $tool_content .= "\n</select></td>
+        </tr>
+        <tr>
+        <td>$langLanguage</td>
+        <td>";
 	$tool_content .= lang_select_options('localize');
 	$tool_content .= "</td>
-  </tr>
-  <tr>
-    <td>&nbsp;</td>
-    <td><input type='submit' class='ButtonSubmit' name='submit' value='$langSubmitNew' /></td>
-  </tr>
-  </table>
-  <div align='right'><small>$langRequiredFields</small></div>
- </fieldset>
-</form>";
+        </tr>
+        <tr>
+          <td>&nbsp;</td>
+          <td><input type='submit' class='ButtonSubmit' name='submit' value='$langSubmitNew' /></td>
+        </tr>
+        </table>
+        <div align='right'><small>$langRequiredFields</small></div>
+       </fieldset>
+      </form>";
 }   // end of form
 
 draw($tool_content, 0);

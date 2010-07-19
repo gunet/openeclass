@@ -43,11 +43,13 @@
 */
 
 $require_current_course = TRUE;
+
+$path2add = 3;
+include("../../../include/init.php");
+
 require_once('../../exercice/exercise.class.php');
 require_once('../../exercice/question.class.php');
 require_once('../../exercice/answer.class.php');
-require_once("../../../config/config.php");
-require_once("../../../include/init.php");
 require_once('../../../include/lib/textLib.inc.php');
 
 // answer types

@@ -68,5 +68,5 @@ else {
 }
 
 
-draw($tool_content, 2, "learnPath");
+draw($tool_content, 2);
 ?>

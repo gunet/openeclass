@@ -512,7 +512,7 @@ $result = db_query($sql);
 if (mysql_num_rows($result) == 0) {
 	$tool_content .= "<p class='alert1'>$langNoModule</p>";
 	$tool_content .= "</td></tr></table>";
-	draw($tool_content, 2, "learnPath", $head_content, $body_action);
+	draw($tool_content, 2, '', $head_content, $body_action);
 	exit;
 }
 
@@ -695,5 +695,5 @@ foreach ($flatElementList as $module)
 
 $tool_content .= "</tbody></table>";
 $tool_content .="</td></tr></tbody></table>";
-draw($tool_content, 2, "learnPath", $head_content, $body_action);
+draw($tool_content, 2, '', $head_content, $body_action);
 ?>

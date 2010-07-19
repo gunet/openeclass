@@ -222,6 +222,6 @@ $tool_content .= display_my_exercises($dialogBox, $style);
     <br />
     <p align=\"right\"><a href=\"learningPathAdmin.php\">$langBackToLPAdmin</p>";
 
-draw($tool_content, 2, "learnPath");
+draw($tool_content, 2);
 
 ?>

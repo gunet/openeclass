@@ -256,5 +256,5 @@ $tool_content .= "\n".'    </tbody>'."\n".'    </table>'."\n".'    </form>';
 // display list of modules used by this learning path
 //$tool_content .= display_path_content();
 
-draw($tool_content, 2, "learnPath");
+draw($tool_content, 2);
 ?>
