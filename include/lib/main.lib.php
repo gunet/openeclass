@@ -397,7 +397,7 @@ function group_secret($gid)
 function selection($entries, $name, $default = '', $extra = '')
 {
 	$retString = "";
-	$retString .= "\n<select name='$name' $extra class='auth_input'>\n";
+	$retString .= "\n<select name='$name' $extra>\n";
 	foreach ($entries as $value => $label) {
 		if ($value == $default) {
 			$retString .= "<option selected value='" . htmlspecialchars($value) . "'>" .
