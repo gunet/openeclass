@@ -62,7 +62,7 @@ function db_query($sql, $db = FALSE) {
                 echo "<hr /><pre>$sql</pre><hr />";
         }
         if (mysql_errno()) {
-                if ($GLOBALS['is_admin']) {
+                if ($GLOBALS['is_admin'] or defined('DEBUG_MYSQL')) {
                         echo '<hr />' . mysql_errno() . ': ' . mysql_error()
                                 . "<br><pre>$sql</pre><hr />";
                 } else {
@@ -247,20 +247,36 @@ function uid_to_username($uid)
 }
 
 
-// Return HTML for a user - first parameter is either a user id (so that the user's info is
-// fetched from the DB) or a hash with user_id, prenom, nom, email.
+// Return HTML for a user - first parameter is either a user id (so that the 
+// user's info is fetched from the DB) or a hash with user_id, prenom, nom, 
+// email, or an array of user ids or user info arrays
 function display_user($user, $print_email = false)
 {
-        global $mysqlMainDb;
+        global $mysqlMainDb, $langAnonymous;
 
-        if (count($user) == 1) {
+        if (count($user) == 0) {
+                return '-';
+        } elseif (is_array($user) and !isset($user['user_id'])) {
+                $begin = true;
+                $html = '';
+                foreach ($user as $user_data) {
+                        if ($begin) {
+                                $begin = true;
+                        } else {
+                                $html .= ', ';
+                        }
+                        $html .= display_user($user_data, $print_email);
+                }
+                return $html;
+        } elseif (!is_array($user)) {
 	        $r = db_query("SELECT user_id, nom, prenom, email FROM user WHERE user_id = $user", $mysqlMainDb);
                 if ($r and mysql_num_rows($r) > 0) {
                         $user = mysql_fetch_array($r);
                 } else {
                         return $langAnonymous;
                 }
-	}
+        }
+
         return "<a href='profile.php?id=$user[user_id]'>" . q("$user[prenom] $user[nom]") . "</a>" .
                 ($print_email? (' (' . mailto(trim($user['email']), 'e-mail address hidden') . ')'): '');
 
