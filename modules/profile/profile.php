@@ -176,42 +176,59 @@ if ($myrow['perso'] == 'yes')  {
 $sec = $urlSecure . 'modules/profile/profile.php';
 $passurl = $urlSecure . 'modules/profile/password.php';
 
-$tool_content .= "<div id='operations_container'><ul id='opslist'>";
+$tool_content .= "
+    <div id='operations_container'>
+     <ul id='opslist'>";
 if ($allow_password_change) {
-        $tool_content .= "<li><a href='$passurl'>$langChangePass</a></li>";
+        $tool_content .= "
+        <li><a href='$passurl'>$langChangePass</a></li>";
 }
-$tool_content .= " <li><a href='../unreguser/unreguser.php'>$langUnregUser</a></li>";
-$tool_content .= "</ul></div>";
-$tool_content .= "<form method='post' action='$sec'><br/>
-<table width='99%'>
-<tbody><tr>
-<th width='220' class='left'>$langName</th>";
+$tool_content .= "
+        <li><a href='../unreguser/unreguser.php'>$langUnregUser</a></li>";
+$tool_content .= "
+      </ul>
+   </div>";
+$tool_content .= "
+   <form method='post' action='$sec'>
+   <fieldset>
+     <legend>$langUserData</legend>
+        <table class='tbl'>
+        <tr>
+          <td>$langName</td>";
 
 if (isset($_SESSION['shib_user'])) {
         $auth_text = "Shibboleth user";
-        $tool_content .= "<td class='caution_small'>&nbsp;&nbsp;&nbsp;&nbsp;<b>$prenom_form</b> [$auth_text]
-        <input type='hidden' name='prenom_form' value='$prenom_form' /></td>";
+        $tool_content .= "
+          <td class='caution_small'>&nbsp;&nbsp;&nbsp;&nbsp;<b>$prenom_form</b> [$auth_text]
+            <input type='hidden' name='prenom_form' value='$prenom_form' />
+          </td>";
 } else {
-        $tool_content .= "<td><input class='FormData_InputText' type='text' size='40' name='prenom_form' value='$prenom_form' /></td>";
+        $tool_content .= "
+          <td><input type='text' size='40' name='prenom_form' value='$prenom_form' /></td>";
 }
 
-$tool_content .= "</tr>
-<tr>
-<th class='left'>$langSurname</th>";
+$tool_content .= "
+        </tr>
+        <tr>
+          <td>$langSurname</td>";
 if (isset($_SESSION['shib_user'])) {
         $auth_text = "Shibboleth user";
-        $tool_content .= "<td class='caution_small'>&nbsp;&nbsp;&nbsp;&nbsp;<b>".$nom_form."</b> [".$auth_text."]
-        <input type='hidden' name='nom_form' value='$nom_form' /></td>";
+        $tool_content .= "
+          <td class='caution_small'>&nbsp;&nbsp;&nbsp;&nbsp;<b>".$nom_form."</b> [".$auth_text."]
+            <input type='hidden' name='nom_form' value='$nom_form' /></td>";
 } else {
-        $tool_content .= "<td><input class='FormData_InputText' type='text' size='40' name='nom_form' value='$nom_form' /></td>";
+        $tool_content .= "
+          <td><input type='text' size='40' name='nom_form' value='$nom_form' /></td>";
 }
-$tool_content .= "</tr>";
+$tool_content .= "
+        </tr>";
 
 if ($allow_username_change) {
-        $tool_content .= "<tr>
-<th class='left'>$langUsername</th>
-<td><input class='FormData_InputText' type='text' size='40' name='username_form' value='$username_form' /></td>
-</tr>";
+        $tool_content .= "
+        <tr>
+          <td>$langUsername</td>
+          <td><input type='text' size='40' name='username_form' value='$username_form' /></td>
+        </tr>";
 } else {
         // means that it is external auth method, so the user cannot change this password
         switch($password) {
@@ -227,48 +244,56 @@ if ($allow_username_change) {
                 $auth_text = get_auth_info($auth);
         }
         $tool_content .= "
-    <tr>
-      <th class='left'>$langUsername</th>
-      <td class='caution_small'>&nbsp;&nbsp;&nbsp;&nbsp;<b>$username_form</b> [$auth_text]
-        <input type='hidden' name='username_form' value='$username_form' />
-      </td>
-    </tr>";
+        <tr>
+          <th class='left'>$langUsername</th>
+          <td class='caution_small'>&nbsp;&nbsp;&nbsp;&nbsp;<b>$username_form</b> [$auth_text]
+            <input type='hidden' name='username_form' value='$username_form' />
+          </td>
+        </tr>";
 }
 
-$tool_content .= "<tr><th class='left'>$langEmail</th>";
+$tool_content .= "
+        <tr>
+           <td>$langEmail</td>";
 
 if (isset($_SESSION['shib_user'])) {
-        $tool_content .= "<td class='caution_small'>&nbsp;&nbsp;&nbsp;&nbsp;<b>$email_form</b> [$auth_text]
-        <input type='hidden' name='email_form' value='$email_form' /></td>";
+        $tool_content .= "
+           <td class='caution_small'>&nbsp;&nbsp;&nbsp;&nbsp;<b>$email_form</b> [$auth_text]
+             <input type='hidden' name='email_form' value='$email_form' />
+           </td>";
 } else {
-        $tool_content .= "<td><input class='FormData_InputText' type='text' size='40' name='email_form' value='$email_form' /></td>";
+        $tool_content .= "
+           <td><input type='text' size='40' name='email_form' value='$email_form' /></td>";
 }
-$tool_content .= "</tr><tr>
-<th class='left'>$langAm</th>
-<td><input class='FormData_InputText' type='text' size='40' name='am_form' value='$am_form' /></td>
-</tr>";
+$tool_content .= "
+        </tr>
+        <tr>
+          <td>$langAm</td>
+          <td><input type='text' size='40' name='am_form' value='$am_form' /></td>
+        </tr>";
 ##[BEGIN personalisation modification]############
 if (isset($_SESSION['perso_is_active'])) {
-        $tool_content .= "<tr><th class='left'>$langPerso</th><td>
-        <input class='FormData_InputText' type=radio name='persoStatus' value='no'$checkedPerso />$langModern&nbsp;
-        <input class='FormData_InputText' type=radio name='persoStatus' value='yes'$checkedClassic />$langClassic
-        </td>
-</tr>";
+        $tool_content .= "
+        <tr>
+          <td>$langPerso</td>
+          <td><input type=radio name='persoStatus' value='no'$checkedPerso />$langModern&nbsp;
+              <input type=radio name='persoStatus' value='yes'$checkedClassic />$langClassic
+          </td>
+        </tr>";
 }
 ##[END personalisation modification]############
 $tool_content .= "
-    <tr>
-      <th class='left'>$langLanguage</th>
-      <td>" . lang_select_options('userLanguage') . "</td>
-    </tr>
+        <tr>
+          <td>$langLanguage</td>
+          <td>" . lang_select_options('userLanguage') . "          </td>
+        </tr>
 	<tr>
-      <th>&nbsp;</th>
-      <td><input type='submit' name='submit' value='$langModify' /></td>
-    </tr>
-    </tbody>
-    </table>
+          <td>&nbsp;</td>
+          <td><input type='submit' name='submit' value='$langModify' /></td>
+        </tr>
+        </table>
 
-</form>
-";
+        </fieldset>
+        </form>";
 
 draw($tool_content, 1);
