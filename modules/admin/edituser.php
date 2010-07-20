@@ -78,7 +78,7 @@ if (!empty($u))
 				registered_at, expires_at, statut, am
 				FROM user WHERE user_id = '$u'");
 		$info = mysql_fetch_array($sql);
-		$tool_content .= "<div id=\"operations_container\"><ul id=\"opslist\">";
+		$tool_content .= "<div id='operations_container'><ul id='opslist'>";
 		if(!in_array($info['password'], $authmethods)) {
 			$tool_content .= "
 			<li><a href='password.php?userid=$u'>".$langChangePass."</a></li>";
@@ -246,7 +246,7 @@ $tool_content .= "<tr><th class='left'>e-mail: </th>
 				{
 					case 1:
 						$tool_content .= $langTeacher;
-						$tool_content .= "</td><td align=\"center\">---</td></tr>\n";
+						$tool_content .= "</td><td align='center'>---</td></tr>\n";
 						break;
 					case 5:
 						$tool_content .= $langStudent;
@@ -267,15 +267,15 @@ $tool_content .= "<tr><th class='left'>e-mail: </th>
 		}
 		else
 		{
-			$tool_content .= "<br><h4>$langNoStudentParticipation</h4>";
+			$tool_content .= "<br /><h4>$langNoStudentParticipation</h4>";
 			if ($u > 1)
 			{
 				if (isset($logs))
 					$tool_content .= "<center>
-					<a href=\"unreguser.php?u=$u&c=$logs[0]\">$langDelete</a></center>";
+					<a href='unreguser.php?u=$u&amp;c=$logs[0]'>$langDelete</a></center>";
 				else
 					$tool_content .= "<center>
-					<a href=\"unreguser.php?u=$u&c=\">$langDelete</a></center>";
+					<a href='unreguser.php?u=$u'>$langDelete</a></center>";
 			}
 			else
 			{
@@ -327,7 +327,7 @@ $tool_content .= "<tr><th class='left'>e-mail: </th>
 	   exit();
 	}
 		if($registered_at>$expires_at) {
-			$tool_content .= "<center><br><b>$langExpireBeforeRegister<br><br><a href=\"edituser.php?u=".$u."\">$langAgain</a></b><br />";
+			$tool_content .= "<center><br /><b>$langExpireBeforeRegister<br /><br /><a href='edituser.php?u=$u'>$langAgain</a></b><br />";
 		} else {
 			if ($u=='1') $department = 'NULL';
 			$sql = "UPDATE user SET nom = ".autoquote($lname).", prenom = ".autoquote($fname).",
@@ -341,9 +341,9 @@ $tool_content .= "<tr><th class='left'>e-mail: </th>
                         } else {
                                 $num_update = mysql_affected_rows();
                                 if ($num_update == 1) {
-                                        $tool_content .= "<center><br /><b>$langSuccessfulUpdate</b><br><br />";
+                                        $tool_content .= "<center><br /><b>$langSuccessfulUpdate</b><br /><br />";
                                 } else {
-                                        $tool_content .= "<center><br /><b>$langUpdateNoChange</b><br><br />";
+                                        $tool_content .= "<center><br /><b>$langUpdateNoChange</b><br /><br />";
                                 }
                         }
                         $tool_content .= "<a href='listusers.php'>$langBack</a></center>";
@@ -352,7 +352,7 @@ $tool_content .= "<tr><th class='left'>e-mail: </th>
 }
 else
 {
-	$tool_content .= "<h1>$langError</h1>\n<p><a href=\"listcours.php\">$back</p>\n";
+	$tool_content .= "<h1>$langError</h1>\n<p><a href='listcours.php'>$back</p>\n";
 }
 
 draw($tool_content, 3, null, $head_content);
