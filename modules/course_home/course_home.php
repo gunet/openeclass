@@ -294,10 +294,12 @@ $tool_content .= "
       <td valign='top'>$main_content</td>
       <td width='30'>&nbsp;</td>
       <td width='200' valign='top'>
-        <p>&nbsp;</p>
 
         <table class='tbl_border'>
-        <tr class='odd'>
+        <tr class='head'>
+          <th>$langIdentity</th>
+        </tr>
+        <tr>
           <td>$bar_content</td>
         </tr>
         </table>
