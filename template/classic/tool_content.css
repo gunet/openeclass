@@ -236,7 +236,7 @@ p.success_small{
 }
 
 .today {
-     background-color: #ffffff;
+     border: 1px solid #727266;
 }
 
 
@@ -767,7 +767,7 @@ table.xinha_editor td {
 
 
 /* ----- START agenda ----- */
-.today {
+.today1 {
     background-color:#ffffff;
     color: #FAEDED;!important
 }
