@@ -52,20 +52,20 @@ $u = isset($_GET['u'])? intval($_GET['u']): false;
 $c = isset($_GET['c'])? intval($_GET['c']): false;
 $doit = isset($_GET['doit']);
 
-$u_account = $u? uid_to_username($u): '';
-$u_realname = $u? uid_to_name($u): '';
+$u_account = $u? q(uid_to_username($u)): '';
+$u_realname = $u? q(uid_to_name($u)): '';
 $u_statut = get_uid_statut($u);
 $t = 0;
 
 if (!$doit) {
         $tool_content .= "<h4>$langConfirmDelete</h4><p>$langConfirmDeleteQuestion1 <em>$u_realname ($u_account)</em>";
         if($c) {
-                $tool_content .= " $langConfirmDeleteQuestion2 <em>".course_id_to_title($c)."</em>";
+                $tool_content .= " $langConfirmDeleteQuestion2 <em>".q(course_id_to_title($c))."</em>";
         }
         $tool_content .= ";</p>
                 <ul>
-                <li>$langYes: <a href=\"unreguser.php?u=".htmlspecialchars($u)."&c=".htmlspecialchars($c)."&amp;doit=yes\">$langDelete</a><br>&nbsp;</li>
-                <li>$langNo: <a href=\"edituser.php?u=".htmlspecialchars($u)."\">$langBack</a></li>
+                <li>$langYes: <a href='unreguser.php?u=$u&amp;c=$c&amp;doit=yes'>$langDelete</a><br />&nbsp;</li>
+                <li>$langNo: <a href='edituser.php?u=$u'>$langBack</a></li>
                 </ul>";
 } else {
         if (!$c) {
@@ -77,7 +77,7 @@ if (!$doit) {
                         $total = mysql_num_rows($q1);
                         if ($total>0) {
                                 // user has courses, so not allowed to delete
-                                $tool_content .= "$langUnregForbidden <em>$u_realname ($u_account)</em><br>";
+                                $tool_content .= "$langUnregForbidden <em>$u_realname ($u_account)</em><br />";
                                 $v = 0;	$s = 0;
                                 for ($p = 0; $p < mysql_num_rows($q1); $p++) {
                                         $l1 = mysql_fetch_array($q1);
@@ -92,39 +92,39 @@ if (!$doit) {
                                 if ($v>0) {
                                         if ($s>0) {
                                                 //display list
-                                                $tool_content .= "$langUnregFirst <br><br>";
+                                                $tool_content .= "$langUnregFirst <br/ ><br />";
                                                 $sql = db_query("SELECT a.code, a.intitule, b.statut, a.cours_id, b.tutor
                                                                  FROM cours AS a LEFT JOIN cours_user AS b ON a.cours_id = b.cours_id
                                                                  WHERE b.user_id = $u AND b.tutor=0 ORDER BY b.statut, a.faculte");
                                                 // αν ο χρήστης συμμετέχει σε μαθήματα τότε παρουσίασε τη λίστα
                                                 if (mysql_num_rows($sql) > 0) {
                                                         $tool_content .= "<h4>$langStudentParticipation</h4>\n".
-                                                                "<table border=\"1\">\n<tr><th>$langLessonCode</th><th>$langLessonName</th>".
+                                                                "<table border='1'>\n<tr><th>$langLessonCode</th><th>$langLessonName</th>".
                                                                 "<th>$langProperty</th><th>$langActions</th></tr>";
                                                         for ($j = 0; $j < mysql_num_rows($sql); $j++) {
                                                                 $logs = mysql_fetch_array($sql);
                                                                 $tool_content .= "<tr><td>".htmlspecialchars($logs[0])."</td><td>".
-                                                                        htmlspecialchars($logs[1])."</td><td align=\"center\">";
+                                                                        htmlspecialchars($logs[1])."</td><td align='center'>";
                                                                 switch ($logs[4])
                                                                 {
                                                                         case '1':
                                                                                 $tool_content .= $langTeacher;
-                                                                                $tool_content .= "</td><td align=\"center\">---</td></tr>\n";
+                                                                                $tool_content .= "</td><td align='center'>---</td></tr>\n";
                                                                                 break;
                                                                         case '0':
                                                                                 $tool_content .= $langStudent;
-                                                                                $tool_content .= "</td><td align=\"center\"><a href=\"unreguser.php?u=".htmlspecialchars($u)."&c=$logs[0]\">$langDelete</a></td></tr>\n";
+                                                                                $tool_content .= "</td><td align='center'><a href='unreguser.php?u=$u&amp;c=$logs[0]'>$langDelete</a></td></tr>\n";
                                                                                 break;
                                                                         default:
                                                                                 $tool_content .= $langVisitor;
-                                                                                $tool_content .= "</td><td align=\"center\"><a href=\"unreguser.php?u=".htmlspecialchars($u)."&c=$logs[0]\">$langDelete</a></td></tr>\n";
+                                                                                $tool_content .= "</td><td align='center'><a href='unreguser.php?u=$u&amp;c=$logs[0]'>$langDelete</a></td></tr>\n";
                                                                                 break;
                                                                 }
                                                         }
                                                         $tool_content .= "</table>\n";
                                                 }
                                         } else {
-                                                $tool_content .= "$langUnregTeacher<br>";
+                                                $tool_content .= "$langUnregTeacher<br />";
                                                 $sql = db_query("SELECT a.code, a.intitule, b.statut, a.cours_id
                                                                  FROM cours AS a LEFT JOIN cours_user AS b ON a.cours_id = b.cours_id
                                                                  WHERE b.user_id = $u AND b.statut=1 ORDER BY b.statut, a.faculte");
@@ -146,7 +146,7 @@ if (!$doit) {
                                         }
                                 } else {
                                         // display list
-                                        $tool_content .= "$langUnregFirst <br><br>";
+                                        $tool_content .= "$langUnregFirst <br /><br />";
                                         $sql = db_query("SELECT a.code, a.intitule, b.statut, a.cours_id
                                                         FROM cours AS a LEFT JOIN cours_user AS b ON a.cours_id = b.cours_id
                                                         WHERE b.user_id = $u order by b.statut, a.faculte");
@@ -219,11 +219,11 @@ if (!$doit) {
         {
                 $tool_content .= "$langErrorDelete";
         }
-        $tool_content .= "<br>&nbsp;";
+        $tool_content .= "<br />&nbsp;";
         if((isset($m)) && (!empty($m))) {
-                $tool_content .= "<br><a href=\"edituser.php?u=".htmlspecialchars($u)."\">$langEditUser $u_account</a>&nbsp;&nbsp;&nbsp;";
+                $tool_content .= "<br /><a href='edituser.php?u=$u'>$langEditUser $u_account</a>&nbsp;&nbsp;&nbsp;";
         }
-        $tool_content .= "<a href=\"./index.php\">$langBackAdmin</a>.<br />\n";
+        $tool_content .= "<a href='index.php'>$langBackAdmin</a>.<br />\n";
 }
 
 function get_uid_statut($u)
