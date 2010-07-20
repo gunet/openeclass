@@ -101,7 +101,7 @@ $tool_content .= <<<lCont2
 </div>
 <div id="navigation">
 
- <table width="99%">
+ <table width="99%" class='tbl'>
  <tr>
    <th class="LoginHead"><b>$langUserLogin </b></th>
  </tr>

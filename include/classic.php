@@ -56,21 +56,20 @@ function cours_table_header($statut)
                 $legend = "(? $statut ?)";
         }
 
-	$tool_content .= "<p><b><font color='#a33033'>$legend</font></b></p>
-	                 <script type='text/javascript' src='modules/auth/sorttable.js'></script>
-                         <table style='border: 1px solid #edecdf;' width='99%'>
-                         <tr><td>
-                         <table width='100%' align='center' class='sortable' id='t1'>
-                         <thead><tr>
-                         <th class='left' colspan='2' style='border: 1px solid #edecdf;'>$langCourseCode</th>
-                         <th width='150' class='left' style='border: 1px solid #edecdf;'>$langTeacher</th>
-                         <th width='60' style='border: 1px solid #edecdf;'>$manage</th>
-                         </tr></thead><tbody>";
+	$tool_content .= "\n        <p><b>$legend</b></p>
+
+        <script type='text/javascript' src='modules/auth/sorttable.js'></script>
+        <table width='99%' class='sortable' id='t1'>
+        <tr>
+          <th colspan='2'>$langCourseCode</th>
+          <th width='220'>$langTeacher</th>
+          <th width='125' class='center'>$manage</th>
+        </tr>\n";
 }
 
 function cours_table_end()
 {
-        $GLOBALS['tool_content'] .= "</tbody></table></td></tr></table><br />";
+        $GLOBALS['tool_content'] .= "\n        </table><br />\n";
 }
 
 $tool_content = "";
@@ -101,9 +100,9 @@ if ($result2 and mysql_num_rows($result2) > 0) {
                 $profs[$code] = $mycours['profs'];
                 $titles[$code] = $mycours['title'];
 		if ($k%2==0) {
-			$tool_content .= "<tr>";
+			$tool_content .= "        <tr class='even'>\n";
 		} else {
-			$tool_content .= "<tr class='odd'>";
+			$tool_content .= "        <tr class='odd'>\n";
 		}
                 if ($this_statut == 1) {
                         $manage_link = "${urlServer}modules/course_info/infocours.php?from_home=TRUE&amp;cid=$code";
@@ -114,29 +113,28 @@ if ($result2 and mysql_num_rows($result2) > 0) {
                         $manage_icon = 'template/classic/img/cunregister.gif';
                         $manage_title = $langUnregCourse;
                 }
-		$tool_content .="<td width='1'><img src='${urlAppend}/template/classic/img/arrow_grey.gif' title='* ' /></td>";
-		$tool_content .= "\n<td><a href='${urlServer}courses/$code' class='CourseLink'>" . q($title) . "</a>
-			<font color='#a33033'> (" . q($mycours['fake_code']) . ")</font></td>";
-		$tool_content .= "\n<td><small>" . q($mycours['profs']) . "</small></td>";
-		$tool_content .= "\n<td align='center'>
-			<a href='$manage_link'><img src='$manage_icon' title='$manage_title' /></a></td>";
-		$tool_content .= "\n    </tr>";
+		$tool_content .="          <td width='5'><img src='${urlAppend}/template/classic/img/arrow_grey.gif' alt='' /></td>";
+		$tool_content .= "\n          <td><a href='${urlServer}courses/$code'>".q($title)."</a> (".q($mycours['fake_code']).")</td>";
+		$tool_content .= "\n          <td>".q($mycours['profs'])."</td>";
+		$tool_content .= "\n          <td align='center'><a href='$manage_link'><img src='$manage_icon' title='$manage_title' alt='$manage_title' /></a></td>";
+		$tool_content .= "\n        </tr>";
 		$k++;
 	}
         cours_table_end();
 }  elseif ($_SESSION['statut'] == '5') {
         // if are loging in for the first time as student...
-	$tool_content .= "<p>$langWelcomeStud</p>\n";
+	$tool_content .= "\n        <p>$langWelcomeStud</p>\n";
 }  elseif ($_SESSION['statut'] == '1') {
         // ...or as professor
-        $tool_content .= "<p>$langWelcomeProf</p>\n";
+        $tool_content .= "\n        <p>$langWelcomeProf</p>\n";
 }
 
 if (count($status) > 0) {
-        $announce_table_header = "<table width='99%' style='border: 1px solid #edecdf;'>
-                <tr><td><table width='100%' align='center'><thead><tr>
-                <th style='border: 1px solid #edecdf;' colspan='2' class='left'>$langMyPersoAnnouncements</th>
-                </tr></thead><tbody>";
+        $announce_table_header = "
+        <table width='99%' class='tbl_border'>
+        <tr>
+           <th colspan='2'>$langMyPersoAnnouncements</th>
+        </tr>\n";
 
         $logindate = last_login($uid);
 
@@ -161,9 +159,9 @@ if (count($status) > 0) {
                         while ($ann = mysql_fetch_array($result)) {
                                         $content = standard_text_escape($ann['contenu']);
                                         if ($la%2 == 0) {
-                                                $tool_content .= "\n<tr>";
+                                                $tool_content .= "        <tr>\n";
                                         } else {
-                                                $tool_content .= "\n<tr class='odd'>";
+                                                $tool_content .= "        <tr class='odd'>\n";
                                         }
                                         $tool_content .= "<td width='1' class='square_bullet2'>&nbsp;</td>" .
                                                          "<td class='announce_pos'><b>$ann[title]</b> " .
@@ -174,11 +172,11 @@ if (count($status) > 0) {
                         }
         }
         if (!$table_begin) {
-                $tool_content .= "\n</tbody>\n</table>\n</td></tr></table>";
+                $tool_content .= "\n        </table>";
         }
 }
 
-$tool_content .= "</td></tr></table><br />";
+//$tool_content .= "</td></tr></table><br />";
 if (isset($status)) {
 	$_SESSION['status'] = $status;
 }

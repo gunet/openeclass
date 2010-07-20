@@ -86,7 +86,7 @@
     <!-- END leftNavBlock -->
     <div id="{CONTENT_MAIN_CSS}">
       <!-- BEGIN toolTitleBlock -->
-      <div id="tool_title">{TOOL_NAME}{HELP_LINK_ICON}{RSS_LINK_ICON}<small class='actmod'>&nbsp;{ACTIVATE_MODULE}</small></div>
+      <div id="tool_title">{TOOL_NAME}{RSS_LINK_ICON}<small class='actmod'>&nbsp;{ACTIVATE_MODULE}</small></div>
       <!-- END toolTitleBlock -->
 
       <!-- BEGIN TOOL CONTENT -->
@@ -99,12 +99,30 @@
   	<div id="clearfooter"></div>
 
   	<div id="footer">
-		<p><a href="{TOOL_PATH}info/copyright.php">{LANG_COPYRIGHT_NOTICE}</a></p>
+        <table width="100%">
+          <tr>
+            <td align="left" width="35%"><a href="http://www.ypaideias.gr" target="_blank"><img src="{TOOL_PATH}template/classic/img/footer_logo.jpg" width="230" height="40" border="0" alt="" /></a></td>
+            <td align="center"  width="35%"><p><a href="{TOOL_PATH}info/copyright.php">{LANG_COPYRIGHT_NOTICE}</a></p>
+        </td>
+            <td align="right"  width="35%"><a href="http://www.openeclass.org" target="_blank"><img src="{TOOL_PATH}template/classic/img/powered_by.jpg" width="146" height="40" border="0" alt="" /></a></td>
+          </tr>
+          </table>
   	</div>
   </div>
 </div>
 
 <!-- END mainBlock -->
-
+<!-- Piwik -->
+<script type="text/javascript">
+var pkBaseURL = (("https:" == document.location.protocol) ? "https://analytics.uoa.gr/" : "http://analytics.uoa.gr/");
+document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/javascript'%3E%3C/script%3E"));
+</script><script type="text/javascript">
+try {
+var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 10);
+piwikTracker.trackPageView();
+piwikTracker.enableLinkTracking();
+} catch( err ) {}
+</script><noscript><p><img src="http://analytics.uoa.gr/piwik.php?idsite=10" style="border:0" alt=""/></p></noscript>
+<!-- End Piwik Tag -->
 </body>
 </html>

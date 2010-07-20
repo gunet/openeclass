@@ -18,20 +18,19 @@
 table.blocks {
 	border: none !important;
 	border-collapse: separate;
-	font-family: Verdana, Arial, sans-serif;
-	font-size:12px;
+	font-size:11px;
 }
 
 .persoBoxTitle {
 	text-align: left !important;
 	padding: 6px !important;
-	background: #CAC3B5 !important;
-	font-size: 10px !important;
-	color: #727266 !important;
-	border-top: 1px solid #a33033 !important;
-	border-bottom: 1px solid #a33033 !important;
-	border-left: 1px solid #CAC3B5 !important;
-	border-right: 1px solid #CAC3B5 !important;
+	background: #627aad !important;
+	font-size: 11px !important;
+	color: #ffffff !important;
+	border-top: 1px solid #3b5998 !important;
+	border-bottom: 1px solid #3b5998 !important;
+	border-left: 1px solid #627aad !important;
+	border-right: 1px solid #627aad !important;
 	margin-bottom: 0.8em !important;
 	font-weight : bold;
     word-wrap: break-word !important;
@@ -90,8 +89,7 @@ div.blocks a:hover {
 table.assign, th.assign, td.assign {
 	border: none;
 	border-collapse: collapse;
-	font-family: Verdana, Arial, sans-serif;
-	font-size:12px;
+	font-size:11px;
 	color: #green;
 }
 
@@ -111,7 +109,6 @@ table.assign {
 	margin: 0;
 	padding: 0;
 	list-style-type: none;
-	font-family: Arial, Helvetica, sans-serif;
 }
 
 .datacontainer a {
@@ -142,7 +139,7 @@ table.assign {
 	margin-left: 1px;
 	display: block;
 	padding: 3px;
-	color: #CAC3B5;
+	color: #627aad;
 	border-bottom: 1px solid #EDECDF;
 	font-weight: bold;
 }
@@ -158,7 +155,6 @@ table.assign {
 	margin: 0;
 	padding: 0;
 	list-style-type: none;
-	font-family: Arial, Helvetica, sans-serif;
 }
 
 #assigncontainer a {
@@ -199,7 +195,7 @@ table.assign {
 	padding: 0px !important;
 	background-color: transparent !important;
 	border-bottom: 1px solid #EDECDF !important;
-	color: #CAC3B5;
+	color: #627aad;
 }
 
 
@@ -236,14 +232,14 @@ table.assign {
 p.content_pos {
   	display: block;
 	padding-left: 10px;
-    font-size: 10px;
+    font-size: 11px;
     color: #727266;
 }
 
 cite.content_pos {
 	padding-left: 0px;
 	font-style : normal;
-	color: #CAC3B5;
+	color: #627aad;
 }
 
 .content_pos_announce {

@@ -45,38 +45,36 @@ if (!isset($submit)) {
 
 @$tool_content .= "
 <form action=\"$_SERVER[PHP_SELF]\" method=\"post\">
-<table width=\"99%\" style=\"border: 1px solid #edecdf;\">
-<thead>
-<tr>
-  <td>
-  <table width=\"99%\" class='FormData' align='left'>
-  <thead>
+
+ <fieldset>
+  <legend>$langUserData</legend>
+  <table class='tbl'> 
   <tr>
-   <th class='left' width='220'>$langSurname</th>
-   <td><input size='35' type='text' name='nom_form' value='$nom_form' class='FormData_InputText'>&nbsp;&nbsp;<small>(*)</small></td>
+   <td>$langSurname</td>
+   <td><input size='35' type='text' name='nom_form' value='$nom_form'>&nbsp;&nbsp;(*)</td>
   </tr>
   <tr>
-    <th class='left'>$langName</th>
-    <td><input size='35' type='text' name='prenom_form' value='$prenom_form' class='FormData_InputText'>&nbsp;&nbsp;<small>(*)</small></td>
-  </tr>
-	<tr>
-    <th class='left'>$langPhone</th>
-    <td><input size='35' type='text' name='userphone' value='$userphone' class='FormData_InputText'>&nbsp;&nbsp;<small>(*)</small></td>
+    <td>$langName</td>
+    <td><input size='35' type='text' name='prenom_form' value='$prenom_form'>&nbsp;&nbsp;(*)</td>
   </tr>
   <tr>
-    <th class='left'>$langUsername</th>
-    <td><input size='35' type='text' name='uname' value='$uname' class='FormData_InputText'>&nbsp;&nbsp;<small>(*)</small></td>
+    <td>$langPhone</td>
+    <td><input size='35' type='text' name='userphone' value='$userphone'>&nbsp;&nbsp;(*)</td>
   </tr>
   <tr>
-    <th class='left'>$langEmail</th>
-    <td><input size='35' type='text' name='email_form' value='$email_form' class='FormData_InputText'>&nbsp;&nbsp;<small>(*)</small></td>
+    <td>$langUsername</td>
+    <td><input size='35' type='text' name='uname' value='$uname'>&nbsp;&nbsp;(*)</td>
   </tr>
   <tr>
-    <th class='left'>$langComments</td>
-    <td><textarea name='usercomment' COLS='32' ROWS='4' WRAP='SOFT' class='FormData_InputText'>$usercomment</textarea>&nbsp;&nbsp;<small>(*) $profreason</small></td>
+    <td>$langEmail</td>
+    <td><input size='35' type='text' name='email_form' value='$email_form'>&nbsp;&nbsp;(*)</td>
   </tr>
   <tr>
-    <th class='left'>$langFaculty</th>
+    <td>$langComments</td>
+    <td><textarea name='usercomment' COLS='32' ROWS='4' WRAP='SOFT'>$usercomment</textarea>&nbsp;&nbsp;(*) $profreason</td>
+  </tr>
+  <tr>
+    <td>$langFaculty</td>
     <td><select name='department'>";
         $deps=mysql_query("SELECT id, name FROM faculte order by id");
         while ($dep = mysql_fetch_array($deps))
@@ -87,26 +85,21 @@ if (!isset($submit)) {
     </td>
   </tr>
 <tr>
-      <th class='left'>$langLanguage</th>
+      <td>$langLanguage</td>
       <td>";
 	$tool_content .= lang_select_options('proflang');
 	$tool_content .= "</td>
     </tr>
   <tr>
-    <th>&nbsp;</th>
+    <td>&nbsp;</td>
     <td>
       <input type='submit' name='submit' value='$langSubmitNew' />
       <input type='hidden' name='auth' value='1' />
     </td>
   </tr>
-  </thead>
   </table>
-    <div align='right'><small>$langRequiredFields</small></div>
-  </td>
-</tr>
-</thead>
-</table>
-
+ <div align='right'>$langRequiredFields</div>
+ </fieldset>
 </form>
 
 <br>";

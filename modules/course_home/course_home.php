@@ -150,7 +150,7 @@ if ($is_adminOfCourse) {
 // display course units header
 if (!is_null($maxorder) or $is_adminOfCourse) {
         $cunits_content .= "\n      <div class='course_info'>".
-        $cunits_content .= "\n\n      <table class='resources' width='99%'>\n      <thead>";
+        $cunits_content .= "\n\n      <table class='resources' width='99%'>\n";
         $cunits_content .= "\n      <tr>\n        <td><h3>$langCourseUnits ";
 }
 // add course units
@@ -158,7 +158,7 @@ if ($is_adminOfCourse) {
 	$cunits_content .= ": <a href='{$urlServer}modules/units/info.php'>$langAddUnit</a>&nbsp;<a href='{$urlServer}modules/units/info.php'><img src='../../template/classic/img/add.gif' width='15' height='15' title='$langAddUnit' alt='$langAddUnit' /></a>";
 }
         $cunits_content .= "</h3>";
-        $cunits_content .= "</td>\n      </tr>\n      </thead>\n      </table>\n";
+        $cunits_content .= "</td>\n      </tr>\n      </table>\n";
 if ($is_adminOfCourse) {
         list($last_id) = mysql_fetch_row(db_query("SELECT id FROM course_units
                                                    WHERE course_id = $cours_id AND `order` >= 0
@@ -289,30 +289,26 @@ if ($is_adminOfCourse) {
 $tool_content .= "
 <div id='container_login'>
 
-   <table width='99%' class='resources'>
+   <table width='99%' class='tbl'>
    <tr>
       <td valign='top'>$main_content</td>
       <td width='30'>&nbsp;</td>
       <td width='200' valign='top'>
         <p>&nbsp;</p>
 
-        <table>
-        <tbody>
-        <tr>
-          <td class='odd'>$bar_content</td>
+        <table class='tbl_border'>
+        <tr class='odd'>
+          <td>$bar_content</td>
         </tr>
-        </tbody>
         </table>
 
         <br />
 
-        <table>
-        <tbody>
+        <table class='tbl_border'>
         <tr>
-          <td class='odd' width='1%' align='right'></td>
+          <th width='3'></th>
           <td align='left'>$langContactProf: (<a href='../../modules/contact/index.php'>$langEmail</a>)</td>
         </tr>
-        </tbody>
         </table>
 
         <br />\n";
@@ -325,21 +321,16 @@ if ($is_adminOfCourse or
                 $button_message = $langStudentViewEnable;
         }
         $tool_content .="
-        <table>
-        <tbody>
+        <table width='200' class='tbl_border'>
         <tr>
-          <td class='odd' width='1%' align='right'></td>
+          <th width='3' align='right'></th>
           <td align='left'>
             <form action='{$urlServer}student_view.php' method='post'>$button_message
               <input class=\"Login\" type='submit' name='submit' value='>' />
             </form>
           </td>
         </tr>
-        </tbody>
-        </table>
-
-
-        ";
+        </table> ";
         /*
         $tool_content .=
                 "<tr><td colspan='3' style='text-align: right'>" .
@@ -356,7 +347,7 @@ $tool_content .= "
       <td colspan='3' valign='top'>
         <p>&nbsp;</p>
 
-        <table width='99%' class='resources'>
+        <table width='99%' class='tbl'>
         <tr>
           <td>$cunits_content</td>
         </tr>

@@ -144,7 +144,7 @@ if ($is_adminOfCourse) {
 	<div align='right'>$langTotal: <b>$countUser</b> $langUsers</div>
 	</td>
 	</tr></tbody>
-	</table>";
+	</table><br />";
 }
 
 // display navigation links if course users > COURSE_USERS_PER_PAGE
@@ -154,30 +154,38 @@ if ($countUser > COURSE_USERS_PER_PAGE and !isset($_GET['all'])) {
 }
 
 
-$tool_content .= "<table width='99%' class='FormData' style='border: 1px solid #CAC3B5;'>
-   <thead>
-   <tr class='odd'><td rowspan='2' class='UsersHead'>$langID</td>
-   <td rowspan='2' class='UsersHead'><div align='left'>$langSurname<br />$langName</div></td>";
+$tool_content .= "
+   <table width='99%' class='tbl_alt'>
+   <tr class='odd'>
+     <th rowspan='2'>$langID</th>
+     <th rowspan='2'><div align='left'>$langSurname<br />$langName</div></th>";
 
 if(isset($status) && ($status[$currentCourseID]==1 OR $status[$currentCourseID]==2))  {
-	$tool_content .="<td rowspan='2' class='UsersHead'>$langEmail</td>";
+	$tool_content .="
+     <th rowspan='2'>$langEmail</th>";
 }
 
-$tool_content .= "<td rowspan='2' class='UsersHead'>$langAm</td>
-     <td rowspan='2' class='UsersHead'>$langGroup</td>
-     <td rowspan='2' class='UsersHead'>$langCourseRegistrationDate</td>";
+$tool_content .= "
+     <th rowspan='2'>$langAm</th>
+     <th rowspan='2'>$langGroup</th>
+     <th rowspan='2'>$langCourseRegistrationDate</th>";
 
 // show admin tutor and unregister only to admins
 if (isset($status) && ($status[$currentCourseID]==1 OR $status[$currentCourseID]==2)) {
-	$tool_content .= "<td colspan='2' class='UsersHead'>$langUserPermitions</td>
-	<td rowspan='2' class='UsersHead'>$langActions</td>";
+	$tool_content .= "
+     <th colspan='2'>$langUserPermitions</th>
+     <th rowspan='2'>$langActions</th>";
 }
 
-$tool_content .= "</tr>";
+$tool_content .= "
+   </tr>";
 
 if (isset($status) && ($status[$currentCourseID]==1 OR $status[$currentCourseID]==2)) {
-	$tool_content .= "<tr><td class='UsersHead'>$langTutor</td>
-	<td class='UsersHead'>$langAdministrator</td></tr>";
+	$tool_content .= "
+   <tr>
+     <th>$langTutor</th>
+     <th>$langAdministrator</th>
+   </tr>";
 }
 
 // Numerating the items in the list to show: starts at 1 and not 0
@@ -191,17 +199,20 @@ $result = db_query("SELECT user.user_id, user.nom, user.prenom, user.email, user
 		WHERE `user`.`user_id` = `cours_user`.`user_id` AND `cours_user`.`cours_id` = $cours_id
 		ORDER BY nom, prenom ".$q, $db);
 
-$tool_content .= "</thead>\n";
+//$tool_content .= "</thead>\n";
 
 while ($myrow = mysql_fetch_array($result)) {
         // bi colored table
         if ($i%2 == 0) {
-                $tool_content .= "<tr>";
+                $tool_content .= "
+   <tr class='tbl_alt_even'>";
         } else {
-                $tool_content .= "<tr class='odd'>";
+                $tool_content .= "
+   <tr class='tbl_alt_odd'>";
         }
         // show public list of users
-        $tool_content .= "<td valign='top' align='right'>$i.</td>\n" .
+        $tool_content .= "
+     <td valign='top'>$i.</td>\n" .
                 "<td valign='top'>$myrow[nom]<br />$myrow[prenom]</td>\n";
 
         if (isset($status) and ($status[$currentCourseID] == 1 or $status[$currentCourseID] == 2))  {

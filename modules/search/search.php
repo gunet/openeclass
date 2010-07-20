@@ -55,27 +55,40 @@ if (!register_posted_variables(array('search_terms' => false,
 ***********************************************************************************************/
 	$tool_content .= "
     <form method='post' action='$_SERVER[PHP_SELF]'>
-        <table width='99%'>
-            <tr><th width='120' class='left'>&nbsp;</th>
-                <td><b>$langSearchCriteria</b></td></tr>
-            <tr><th class='left'>$langTitle</th>
-                <td width='250'><input class='FormData_InputText' name='search_terms_title' type='text' size='50' /></td>
-                <td><small>$langTitle_Descr</small></td></tr>
-            <tr><th class='left'>$langDescription</th>
-                <td width='250'><input class='FormData_InputText' name='search_terms_description' type='text' size='50' /></td>
-                <td><small>$langDescription_Descr</small></td></tr>
-            <tr><th class='left'>$langKeywords</th>
-                <td><input class='FormData_InputText' name='search_terms_keywords' type='text' size='50' /></td>
-                <td><small>$langKeywords_Descr</small></td></tr>
-            <tr><th class='left'>$langTeacher</th>
-                <td><input class='FormData_InputText' name='search_terms_instructor' type='text' size='50' /></td>
-                <td><small>$langInstructor_Descr</small></td></tr>
-            <tr><th class='left'>$langCourseCode</th>
-                <td><input class='FormData_InputText' name='search_terms_coursecode' type='text' size='50' /></td>
-                <td><small>$langCourseCode_Descr</small></td></tr>
-            <tr><th>&nbsp;</th>
-                <td colspan=2><input type='submit' name='submit' value='$langDoSearch' />&nbsp;&nbsp;<input type='reset' name='reset' value='$langNewSearch' /></td></tr>
+    <fieldset>
+     <legend>$langSearchCriteria</legend>
+        <table class='tbl'>
+            <tr>
+                <td>$langTitle</td>
+                <td><input name='search_terms_title' type='text' size='50' /></td>
+                <td>$langTitle_Descr</td>
+            </tr>
+            <tr>
+                <td>$langDescription</td>
+                <td><input name='search_terms_description' type='text' size='50' /></td>
+                <td>$langDescription_Descr</small>
+            </tr>
+            <tr>
+                <td>$langKeywords</td>
+                <td><input name='search_terms_keywords' type='text' size='50' /></td>
+                <td>$langKeywords_Descr</td>
+            </tr>
+            <tr>
+                <td>$langTeacher</td>
+                <td><input name='search_terms_instructor' type='text' size='50' /></td>
+                <td>$langInstructor_Descr</td>
+            </tr>
+            <tr>
+                <td>$langCourseCode</td>
+                <td><input name='search_terms_coursecode' type='text' size='50' /></td>
+                <td>$langCourseCode_Descr</td>
+            </tr>
+            <tr>
+              <td>&nbsp;</td>
+              <td colspan=2><input type='submit' name='submit' value='$langDoSearch' />&nbsp;&nbsp;<input type='reset' name='reset' value='$langNewSearch' /></td>
+            </tr>
         </table>
+    </fieldset>
     </form>";
 
 } else {

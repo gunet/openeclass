@@ -44,12 +44,8 @@ include 'auth.inc.php';
 
 $nameTools = $langNewUser;
 $tool_content = "";
-$tool_content .= "<table width=\"99%\" style=\"border: 1px solid #edecdf;\">
-	<thead><tr><td>
-	<table class=\"FormData\" width=\"99%\" align=\"left\">
-	<thead>
-	<tr><th width=\"120\" rowspan=\"5\">&nbsp;</th>
-	<td><strong><font style='color: #a33033;'>$langUserAccount ";
+$tool_content .= "
+  <p class='title1'>$langUserAccount ";
 
 $auth = get_auth_active_methods();
 $e = 1;
@@ -63,13 +59,12 @@ if (isset($close_user_registration) and $close_user_registration) {
         $tool_content .= $langUserAccountInfo2;
 }
 
-$tool_content .= "</font></strong></td>
-  </tr>
-    <td><p><img style='border:0px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'>&nbsp;&nbsp;<a href=\"$newuser\">$langNewAccount</a></p>";
+$tool_content .= "</p>
+  <p><img style='border:0px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'>&nbsp;&nbsp;<a href=\"$newuser\">$langNewAccount</a></p>";
 
 if(!empty($auth)) {
         if (count($auth) > 1) {
-                $tool_content .= "\n<br>\n<p>$langUserAccountInfo3&nbsp;: </p>";
+                $tool_content .= "\n  <p class='sub_title1'>$langUserAccountInfo3&nbsp;: </p>";
         }
 
         foreach($auth as $k => $v) {
@@ -81,14 +76,14 @@ if(!empty($auth)) {
         }
 }
 
-$tool_content .= "\n<br></td></tr><tr><td>&nbsp;</td></tr><tr>
-	<td><strong><font style='color: #a33033;'>".$langProfAccount." ".$langUserAccountInfo1."</font></strong></td>
-	</tr><tr><td>";
+$tool_content .= "\n<br></p>
+  <p>&nbsp;</p>
+  <p class='title1'>".$langProfAccount." ".$langUserAccountInfo1."</p>";
 
 if(!empty($auth)) {
         $tool_content .= "<p><img style='border:0px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'>&nbsp;&nbsp;<a href=\"newprof.php\">$langNewAccount</a></p>";
         if (count($auth) > 1) {
-                $tool_content .= "<br><p>$langUserAccountInfo3&nbsp;:</p>";
+                $tool_content .= "  <p class='sub_title1'>$langUserAccountInfo3&nbsp;:</p>";
         }
         foreach($auth as $k=>$v) {
                 if ($v == 1) {	// bypass the eclass auth method, as it has already been displayed
@@ -104,6 +99,6 @@ if(!empty($auth)) {
         $tool_content .= "<p>$langCannotUseAuthMethods </p>";
 }
 
-$tool_content .= "<br></td></tr></thead></table></td></tr></thead></table>";
+$tool_content .= "<br></p>";
 draw($tool_content, 0);
 ?>

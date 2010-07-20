@@ -64,10 +64,11 @@ $icons = array(2 => "<img src='../../template/classic/img/OpenCourse.gif'   alt=
     0 => "<img src='../../template/classic/img/ClosedCourse.gif' alt='" . $m['legclosed'] . "' title='" . $m['legclosed'] . "' width='16' height='16'>"
     );
 
-$tool_content .= "<table width=99% class='framed'><tbody>
-<tr>
-<td><a name='top'>&nbsp;</a>$langFaculty:&nbsp;<b>$fac</b></td>
-<td><div align='right'>";
+$tool_content .= "
+  <table width=99% class='tbl_border'>
+  <tr>
+    <th><a name='top'>&nbsp;</a>$langFaculty:&nbsp;<b>$fac</b></th>
+    <th><div align='right'>";
 // get the different course types available for this faculte
 $typesresult = db_query("SELECT DISTINCT cours.type types FROM cours WHERE cours.faculteid = $fc ORDER BY cours.type");
 // count the number of different types
@@ -88,12 +89,11 @@ if ($numoftypes > 1) {
         $tool_content .= "<a href='#$t'>" . ${'lang'.$ts} . "</a>&nbsp;";
         $counter++;
     }
-    $tool_content .= "</div></td>
+    $tool_content .= "</div></th>
   </tr>
-  </tbody>
   </table>\n\n";
 } else {
-    $tool_content .= "&nbsp;</div></td>
+    $tool_content .= "&nbsp;</div></th>
   </tr>
   </table>\n\n";
 }
@@ -120,12 +120,15 @@ foreach (array("pre" => $langpres,
         continue;
     }
 
-    $tool_content .= "\n  <br />\n\n<table width=99%><tr><td>";
+    $tool_content .= "\n  <br />\n\n
+       <table width=99% class='tbl_course_type'>
+       <tr>
+         <td>";
     // We changed the style a bit here and we output types as the title
     $tool_content .= "<a name='$type'>&nbsp;</a><b>$message</b></td>\n";
     // output a top href link if necessary
     if ($numoftypes > 1) {
-        $tool_content .= "\n<td align='right'><a href='#top' class='mainpage'>$m[begin]</a>&nbsp;</td>";
+        $tool_content .= "\n<td align='right'><a href='#top'>$m[begin]</a>&nbsp;</td>";
         // or a space for beautifying reasons
     } else {
         $tool_content .= "    <td>&nbsp;</td>\n";
@@ -135,18 +138,12 @@ foreach (array("pre" => $langpres,
     $tool_content .= "
 
     <script type='text/javascript' src='sorttable.js'></script>
-    <table width='99%' class='framed'>
-    <tr>
-        <td>
-        <table width=100% class='sortable' id='t1'>
-        <thead>
+        <table width=99% class='sortable' id='t1'>
         <tr>
             <th class='left' colspan='2'>$m[lessoncode]</th>
             <th class='left' width='200'>$m[professor]</th>
             <th width='30'>$langType</th>
-        </tr>
-        </thead>
-        <tbody>";
+        </tr>";
 
     $k = 0;
     while ($mycours = mysql_fetch_array($result)) {
@@ -157,13 +154,13 @@ foreach (array("pre" => $langpres,
         }
 
         if ($k%2 == 0) {
-            $tool_content .= "\n<tr>";
+            $tool_content .= "\n<tr class='even'>";
         } else {
             $tool_content .= "\n<tr class='odd'>";
         }
-        $tool_content .= "\n<td width='1%'><img style='border:0px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'></td>";
+        $tool_content .= "\n<td width='1'><img style='border:0px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'></td>";
         $tool_content .= "\n<td>" . $codelink . "</td>";
-        $tool_content .= "\n<td><small>$mycours[t]</small></td>";
+        $tool_content .= "\n<td>$mycours[t]</td>";
         $tool_content .= "\n<td align='center'>";
         // show the necessary access icon
         foreach ($icons as $visible => $image) {
@@ -177,7 +174,7 @@ foreach (array("pre" => $langpres,
         // that's it!
         // upatras.gr patch end here, atkyritsis@upnet.gr, daskalou@upnet.gr
     }
-    $tool_content .= "\n</tbody>\n</table>\n</td>\n</tr>\n</table>\n<br />\n";
+    $tool_content .= "\n</table>\n<br />\n";
     if ($numoftypes == 0) {
         $tool_content .= "\n<br/>";
         $tool_content .= "\n<br/>\n<p class='alert1'>$m[nolessons]</p>";

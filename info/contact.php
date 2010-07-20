@@ -34,38 +34,29 @@ $tool_content .= "
 <p>$introcontact</p>
 <br />
 
-  <table class=\"framed\" width=\"99%\">
-  <tbody><tr><td>
-  
-    <table class=\"FormData\" width=\"100%\">
-    <tbody>
+    <table width='500' class='tbl_border'> 
     <tr>
-      <th class='left' width='160'>$langPostMail</th>
+      <th>$langPostMail</th>
       <td>
         $Institution<br />
         $postaddress
       </td>
     </tr>
     <tr>
-      <th class='left'>$langPhone:</th>
+      <th>$langPhone:</th>
       <td>$telephone</td>
     </tr>
     <tr>
-      <th class='left'>$langFax</th>
+      <th>$langFax</th>
       <td>$fax</td>
     </tr>
     <tr>
-      <th class='left'>$langEmail:</th>
-      <td>".mailto($emailhelpdesk, str_replace('@', ' &lt;at> ', $emailhelpdesk))."
-    </td>
+      <th>$langEmail:</th>
+      <td>".mailto($emailhelpdesk, str_replace('@', ' &lt;at> ', $emailhelpdesk))."</td>
   </tr>
-  </tbody>
   </table>
 
-  </td>
-</tr>
-</tbody>
-</table>";
+";
 
 if (isset($uid) and $uid) {
         draw($tool_content, 1);

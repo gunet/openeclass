@@ -64,9 +64,12 @@ if(!empty($is_submit))
 {
 	if (empty($ldap_email) or empty($ldap_passwd)) // check for empty username-password
 	{
-		$tool_content .= "<table width=\"99%\"><tbody><tr>
+		$tool_content .= "
+                <table width=\"99%\" class=\"tbl\">
+                <tr>
 		  <td class=\"caution\" height='60'><p>$ldapempty  $errormessage</p></td>
-		</tr></tbody></table>";
+		</tr>
+                </table>";
 	} 
 	else 
 	{
@@ -102,56 +105,76 @@ if(!empty($is_submit))
 		$is_valid = auth_user_login($auth,$ldap_email,$ldap_passwd);
 
 		if($is_valid) {  // Successfully connected
-			$tool_content .= "<table width=\"99%\" align='left' class='FormData'><thead>
-			<tr><td>
+			$tool_content .= "
 			<form action=\"$_SERVER[PHP_SELF]\" method=\"post\">" .
 					(isset($GLOBALS['auth_user_info'])?
 			('<input type="hidden" name="prenom_form" value="' . $GLOBALS['auth_user_info']['firstname'] .
 			'" /><input type="hidden" name="nom_form" value="' . $GLOBALS['auth_user_info']['lastname'] .
 			'" /><input type="hidden" name="email" value="' . $GLOBALS['auth_user_info']['email'] . '" />'): '') . "
-			<p class='success'>$langTheUser $ldapfound </p>
-			<table width='100%'>
-			<tbody>
-			<tr><th class='left' width='20%'>".$langName."</th>
-			<td width='10%'>".(isset($GLOBALS['auth_user_info'])?
-        		 $GLOBALS['auth_user_info']['firstname']: '<input class="FormData_InputText" type="text" name="prenom_form" size="38" />')."</td>
-			</tr>
-			<tr><th class='left'>".$langSurname."</th>
-			<td width='10%'>".(isset($GLOBALS['auth_user_info'])?$GLOBALS['auth_user_info']['lastname']: '<input class="FormData_InputText" type="text" name="nom_form" size="38" />')."</td>
-			</tr>
-			<tr><th class='left'>".$langEmail."</th>
-			<td width='10%'>".(isset($GLOBALS['auth_user_info'])?$GLOBALS['auth_user_info']['email']: '<input class="FormData_InputText" type="text" name="email" size="38" />')."</td>
-			</tr>
-			<tr><th class='left'>".$langAm."</th>
-			<td><input type='text' name='am' class='FormData_InputText' /></td>
-			<td>&nbsp;</td>
-			</tr>
-			<tr><th class='left'>".$langFaculty."</th>
-			<td>
-			<select name='department'>";
+			<p class='success'>$langTheUser $ldapfound <br /><br /></p>
+                        <fieldset>
+                          <legend>$langUserData</legend>
+			  <table width='99%' class='tbl'>
+			  <tr>
+                            <td width='60'>".$langName."</td>
+			    <td class='bold'>".(isset($GLOBALS['auth_user_info'])?
+        		 $GLOBALS['auth_user_info']['firstname']: '<input type="text" name="prenom_form" size="38" />')."</td>
+			  </tr>
+			  <tr>
+                            <td>".$langSurname."</td>
+			    <td class='bold'>".(isset($GLOBALS['auth_user_info'])?$GLOBALS['auth_user_info']['lastname']: '<input type="text" name="nom_form" size="38" />')."</td>
+			  </tr>
+			  <tr>
+                            <td>".$langEmail."</td>
+			    <td class='bold'>".(isset($GLOBALS['auth_user_info'])?$GLOBALS['auth_user_info']['email']: '<input type="text" name="email" size="38" />')."</td>
+			  </tr>
+			  <tr>
+                            <td>".$langAm."</td>
+			    <td><input type='text' name='am' /></td>
+			  </tr>
+			  <tr>
+                            <td>".$langFaculty."</td>
+			    <td>
+                              <select name='department'>\n";
 			$deps=mysql_query("SELECT name, id FROM faculte ORDER BY id",$db);
 			while ($dep = mysql_fetch_array($deps))  {
-				$tool_content .= "\n<option value='$dep[1]'>$dep[0]</option>";
+				$tool_content .= "                              <option value='$dep[1]'>$dep[0]</option>\n";
 			}
-			$tool_content .= "</select></td></tr>";
-			$tool_content .= "<tr><th class='left'>$langLanguage</th><td width='1'>";
+			$tool_content .= "                              </select>
+                            </td>
+                          </tr>";
+			$tool_content .= "
+                          <tr>
+                            <td>$langLanguage</td>
+                            <td width='1'>";
 			$tool_content .= lang_select_options('localize');
-			$tool_content .= "</td></tr>";
-			$tool_content .= "<tr><th class='left'>&nbsp;</th>
-			<td><input type='submit' name='submit' value='$langRegistration' />
-			<input type='hidden' name='uname' value='$ldap_email' />
-			<input type='hidden' name='password' value='$ldap_passwd' />
-			<input type='hidden' name='auth' value='$auth' />
-			</td></tr>
-			</tbody></table>
-			</form>
-			</td></tr></thead></table>";
+			$tool_content .= "                            </td>
+                          </tr>";
+			$tool_content .= "
+                          <tr>
+                            <td>&nbsp;</td>
+			    <td>
+                              <input type='submit' name='submit' value='$langRegistration' />
+			      <input type='hidden' name='uname' value='$ldap_email' />
+			      <input type='hidden' name='password' value='$ldap_passwd' />
+			      <input type='hidden' name='auth' value='$auth' />
+			    </td>
+                          </tr>
+			  </table>
+                        </fieldset>
+		        </form>";
 		}
 		else // not connected
 		{
-			$tool_content .= "<table width='99%'><tbody>";
-			$tool_content .= "<tr><td class='caution' height='60'>$langConnNo <br />$langAuthNoValidUser</td></tr>";
-			$tool_content .= "<tr><td><a href='$lastpage'>$langBack</a></td</tr></div></tbody></table>";
+			$tool_content .= "
+                        <table width='99%' class='tbl'>
+			<tr>
+                          <td class='caution' height='60'>$langConnNo <br />$langAuthNoValidUser</td>
+                        </tr>
+			<tr>
+                          <td><a href='$lastpage'>$langBack</a></td>
+                        </tr>
+                        </table>";
 		}
 	}
 	draw($tool_content, 0);
@@ -231,20 +254,31 @@ if (isset($_POST['submit'])) {
 		$_SESSION['nom'] = $nom;
 		$_SESSION['uname'] = $uname;
 	
-		$tool_content .= "<table width='99%'><tbody><tr>" .
-			"<td class='well-done' height='60'>" .
-			"<p>$langDear $prenom $nom,</p>" .
-			"<p>$langPersonalSettings</p></td>" .
-			"</tr></tbody></table><br /><br />" .
-			"<p>$langPersonalSettingsMore</p>";
+		$tool_content .= "
+                    <table width='99%' class='tbl'>
+                    <tr>
+	              <td class='well-done' height='60'>
+			<p>$langDear $prenom $nom,</p>
+			<p>$langPersonalSettings</p>
+                      </td>
+		    </tr>
+                    </table>
+                    <br /><br />
+		    <p>$langPersonalSettingsMore</p>";
 	} else {
 		// errors exist - registration failed
-		$tool_content .= "<table width='99%'><tbody><tr><td class='caution' height='60'>";
+		$tool_content .= "\
+                    <table width='99%' class='tbl'>
+                    <tr>
+                      <td class='caution' height='60'>";
 		foreach ($registration_errors as $error) {
 			$tool_content .= "<p>$error</p>";
 		}
 		$tool_content .= "<p><a href='javascript:history.go(-1)'>$langAgain</a></p>" .
-		"</td></tr></tbody></table><br /><br />";
+		"</td>
+                    </tr>
+                    </table>
+                    <br /><br />";
 	}
 } // end of submit
 

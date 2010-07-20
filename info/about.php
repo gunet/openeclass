@@ -34,21 +34,17 @@ $tool_content ="";
     <p>$langIntro</p>
     <br />
 
-    <table class=\"framed\" align=\"left\" width=\"99%\">
-    <tbody><tr><td>
-    
-          <table class=\"FormData\" width=\"100%\">
-          <tbody>
+          <table class='tbl_border' width='500'>
           <tr>
-            <th width=\"160\">&nbsp;</th>
+            <th>&nbsp;</th>
             <td><b>$langStoixeia</b></td>
           </tr>
           <tr>
-            <th class=\"left\">$langVersion:</th>
+            <th>$langVersion:</th>
             <td>$langAboutText:&nbsp;<b>$siteName " . ECLASS_VERSION . "</b>&nbsp;&nbsp;(<a href='http://www.openeclass.org/' title='Open eClass Portal' target='_blank'>>></a>)</td>
           </tr>
           <tr>
-            <th class=\"left\">$langCoursesHeader:</th>
+            <th>$langCoursesHeader:</th>
             <td>";
 
   /*
@@ -80,7 +76,7 @@ $d=mysql_fetch_array(mysql_query("SELECT COUNT(*) FROM user where statut='10'"))
 
     $tool_content .= "
           <tr>
-            <th class=\"left\">$langUsers:</th>
+            <th>$langUsers:</th>
             <td>$langAboutUsers <b>$e[0]</b> $langUsers
               <ul>
                 <li><b>$b[0]</b> $langTeachers, </li>
@@ -89,13 +85,11 @@ $d=mysql_fetch_array(mysql_query("SELECT COUNT(*) FROM user where statut='10'"))
               </ul></td>
           </tr>
           <tr>
-            <th class=\"left\">$langSupportUser</th>
+            <th>$langSupportUser</th>
             <td>$administratorName $administratorSurname</td>
           </tr>
-          </tbody>
           </table>
           
-    </td></tr></tbody></table>
           <br />";
 
 

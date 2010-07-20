@@ -122,22 +122,22 @@ $tool_content .= "<p>$langInfoStudReq</p><br />
   <table class='tbl'>
   <tr>
     <td>$langName</td>
-    <td><input type='text' name='name' value='$name' size='33' />&nbsp;&nbsp;<small>(*)</small></td>
+    <td><input type='text' name='name' value='$name' size='33' />&nbsp;&nbsp;(*)</td>
   </tr>
   <tr>
     <td>$langSurname</td>
-    <td><input type='text' name='surname' value='$surname' size='33' />&nbsp;&nbsp;<small>(*)</small></td>
+    <td><input type='text' name='surname' value='$surname' size='33' />&nbsp;&nbsp;(*)</td>
   </tr>
   <tr>
     <td>$langPhone</td>
     <td colspan='2'><input type='text' name='userphone' value='$userphone' size='33' /></td>
   <tr>
     <td>$langUsername</td>
-    <td><input type='text' name='username' size='33' maxlength='20' value='$username' />&nbsp;&nbsp;<small>(*)&nbsp;$langUserNotice</small></td>
+    <td><input type='text' name='username' size='33' maxlength='20' value='$username' />&nbsp;&nbsp;(*)&nbsp;$langUserNotice</td>
   </tr>
   <tr>
     <td>$langProfEmail</td>
-    <td><input type='text' name='usermail' value='$usermail' size='33' />&nbsp;&nbsp;<small>(*)</small></td>
+    <td><input type='text' name='usermail' value='$usermail' size='33' />&nbsp;&nbsp;(*)</td>
   </tr>
   <tr>
     <td>$langAm</td>
@@ -145,7 +145,7 @@ $tool_content .= "<p>$langInfoStudReq</p><br />
   </tr>
   <tr>
     <td>$langComments</td>
-    <td><textarea name='usercomment' cols='30' rows='4'>$usercomment</textarea>&nbsp;&nbsp;<small>(*) $profreason</small></td>
+    <td><textarea name='usercomment' cols='30' rows='4'>$usercomment</textarea>&nbsp;&nbsp;(*) $profreason</td>
   </tr>
   <tr>
     <td>$langFaculty&nbsp;</td>

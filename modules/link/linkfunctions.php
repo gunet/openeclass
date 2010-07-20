@@ -249,9 +249,9 @@ function showlinksofcategory($catid)
                 $myrow[3] = parse_tex($myrow[3]);
                 $tool_content .= "
                         <tr>
-                        <td>&nbsp;</td>
-                        <td width='1%'><img src='$urlServer/template/classic/img/arrow_grey.gif' alt=\"".$langLinks."\" /></td>
-                        <td class=\"left\"><a href=\"link_goto.php?link_id=".$myrow[0]."&amp;link_url=".urlencode($myrow[1])."\" target=\"_blank\">".$myrow[2]."</a>";
+                          <td>&nbsp;</td>
+                          <td width='1%'><img src='$urlServer/template/classic/img/arrow_grey.gif' alt=\"".$langLinks."\" /></td>
+                          <td><a href=\"link_goto.php?link_id=".$myrow[0]."&amp;link_url=".urlencode($myrow[1])."\" target=\"_blank\">".$myrow[2]."</a>";
                 if (!empty($myrow[3])) {
                         $tool_content .= "<br /><small>".q($myrow[3])."</small>";
                 }

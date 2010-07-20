@@ -110,19 +110,13 @@ if (isset($_POST["submit"])) {
 		$numrows = mysql_num_rows($result);
 		if (isset($result))  {
 			$tool_content .= "
-			<table width='99%' class='framed'>
-            <tr>
-              <td>
 			<script type='text/javascript' src='sorttable.js'></script>
-			<table width='100%' class='sortable' id='t1'>
-			<thead>
-			  <tr><th class='left'><b>$langFaculty</b></th></tr>
-			</thead>
-            <tbody>";
+			<table width='99%' class='sortable' id='t1'>
+			  <tr><th class='left'><b>$langFaculty</b></th></tr>";
 			$k = 0;
 			while ($fac = mysql_fetch_array($result)) {
 				if ($k%2==0) {
-					$tool_content .= "\n        <tr>";
+					$tool_content .= "\n        <tr class='even'>";
 				} else {
 					$tool_content .= "\n        <tr class='odd'>";
 				}
@@ -133,8 +127,7 @@ if (isset($_POST["submit"])) {
 				$tool_content .= "&nbsp;<small><font color=#a5a5a5>($r[0]  ". ($r[0] == 1? $langAvCours: $langAvCourses) . ")</font><small></td></tr>";
 				$k++;
 			}
-			$tool_content .= "\n</tbody>\n</table>";
-			$tool_content .= "\n\n</td>\n</tr>\n</table>\n";
+			$tool_content .= "\n</table>";
 		}
 		$tool_content .= "<br /><br />\n";
 	} else {
@@ -147,13 +140,7 @@ if (isset($_POST["submit"])) {
 			$tool_content .= expanded_faculte($fac, $fc, $uid);
 			$tool_content .= "
     <br />
-    <table width='99%' class='framed' align='left'>
-    <tbody>
-    <tr>
-      <td><input class='Login' type='submit' name='submit' value='$langRegistration' /></td>
-    </tr>
-    </tbody>
-    </table>
+      <div align='right'><input class='Login' type='submit' name='submit' value='$langRegistration' />&nbsp;&nbsp;</div>
     </form>";
 		} else {
 			if ($fac) {
@@ -214,8 +201,10 @@ function expanded_faculte($fac_name, $facid, $uid) {
 	 	$myCourses[$row['cours_id']] = $row;
 	}
 
-	$retString .= "<table width='99%' align='left'><tbody>
-                       <tr><td><a name='top'> </a>$langFaculty: <b>$fac_name</b>&nbsp;&nbsp;</td></tr>";
+	$retString .= "
+           <table width='99%' class='tbl_border'>
+           <tr>
+             <th><a name='top'> </a>$langFaculty: <b>$fac_name</b>&nbsp;&nbsp;</th>";
 
 	// get the different course types available for this faculte
 	$typesresult = db_query("SELECT DISTINCT type FROM cours
@@ -226,7 +215,8 @@ function expanded_faculte($fac_name, $facid, $uid) {
 	$numoftypes = mysql_num_rows($typesresult);
 	// output the nav bar only if we have more than 1 type of course
 	if ($numoftypes > 1) {
-		$retString .= "<tr><td><div align='right'>";
+		$retString .= "
+             <th><div align='right'>";
 		$counter = 1;
 		while ($typesArray = mysql_fetch_array($typesresult)) {
 			$t = $typesArray['type'];
@@ -239,9 +229,11 @@ function expanded_faculte($fac_name, $facid, $uid) {
 				$retString .= "<a href=\"#".$t."\">".${'lang'.$ts}."</a>";
 				$counter++;
 			}
-		$retString .= "</div></td></tr></tbody></table><br />\n\n";
+		$retString .= "</div></th>
+           </tr>
+           </table>\n\n";
 	} else {
-		$retString .= "\n</table>\n<p>&nbsp;</p>\n<p>&nbsp;</p>";
+		$retString .= "\n</table>\n";
 	}
 
 	  // changed this foreach statement a bit
@@ -272,42 +264,31 @@ function expanded_faculte($fac_name, $facid, $uid) {
                 }
 
                 if ($numoftypes > 1) {
-                        $retString .= "\n    <br />";
-                        $retString .= "\n    <table width='99%'>";
-                        $retString .= "\n    <tbody>";
+                        $retString .= "\n    <table width='99%' class='tbl_course_type'>";
                         $retString .= "\n    <tr>";
                         $retString .= "\n      <td><a name='$type'></a><b>$message</b></td>";
                         $retString .= "\n      <td align='right'><a href='#top'>$langBegin</a>&nbsp;</td>";
                         $retString .= "\n    </tr>";
-                        $retString .= "\n    </tbody>";
                         $retString .= "\n    </table>\n";
                 } else {
                         $retString .= "\n    <br />";
-                        $retString .= "\n    <table width='99%'>";
-                        $retString .= "\n    <thead>";
+                        $retString .= "\n    <table width='99%' class='tbl_course_type'>";
                         $retString .= "\n    <tr>";
                         $retString .= "\n      <td><a name='$type'></a><b>$message</b></td>";
                         $retString .= "\n      <td>&nbsp;</td>";
                         $retString .= "\n    </tr>";
-                        $retString .= "\n    </thead>";
                         $retString .= "\n    </table>\n\n";
                 }
 
                 // legend
-                $retString .= "\n  <table width='99%' class='framed'>";
-                $retString .= "\n  <tr>";
-                $retString .= "\n    <td>\n";
                 $retString .= "\n    <script type='text/javascript' src='sorttable.js'></script>";
-                $retString .= "\n    <table class='sortable' id='t1$type' width='100%'>";
-                $retString .= "\n    <thead>";
+                $retString .= "\n    <table class='sortable' id='t1$type' width='99%'>";
                 $retString .= "\n    <tr>";
-                $retString .= "\n      <th width='10%'>$langRegistration</th>";
-                $retString .= "\n      <th class='left'>$langCourseCode</th>";
-                $retString .= "\n      <th class='left' width='23%'>$langTeacher</th>";
-                $retString .= "\n      <th width='7%'><b>$langType</b></th>";
+                $retString .= "\n      <th width='50' align='center'>$langRegistration</th>";
+                $retString .= "\n      <th>$langCourseCode</th>";
+                $retString .= "\n      <th width='220'>$langTeacher</th>";
+                $retString .= "\n      <th width='30' align='center'>$langType</th>";
                 $retString .= "\n    </tr>";
-                $retString .= "\n    </thead>";
-                $retString .= "\n    <tbody>";
                 $k=0;
                 while ($mycours = mysql_fetch_array($result)) {
                         $cid = $mycours['cid'];
@@ -319,11 +300,11 @@ function expanded_faculte($fac_name, $facid, $uid) {
                                 $codelink = q($course_title);
                         }
                         if ($k%2==0) {
-                                $retString .= "\n    <tr>";
+                                $retString .= "\n    <tr class='even'>";
                         } else {
                                 $retString .= "\n    <tr class='odd'>";
                         }
-                        $retString .= "\n      <td width='10%' align='center'>";
+                        $retString .= "\n      <td align='center'>";
                         $requirepassword = "";
                         if (isset($myCourses[$cid])) {
                                 if ($myCourses[$cid]['statut'] != 1) {
@@ -349,10 +330,10 @@ function expanded_faculte($fac_name, $facid, $uid) {
                         }
                         $retString .= "<input type='hidden' name='changeCourse[]' value='$cid' />";
                         $retString .= "</td>";
-                        $retString .= "\n      <td width=60%><b>$codelink</b> <small>(" . q($mycours['fake_code']) .
-                                ")</small>$requirepassword</td>";
-                        $retString .= "\n      <td width=23%>" . q($mycours['t']) . "</td>";
-                        $retString .= "\n      <td align='center' width='7%'>";
+                        $retString .= "\n      <td>$codelink (" . q($mycours['fake_code']) .
+                                ")$requirepassword</td>";
+                        $retString .= "\n      <td>" . q($mycours['t']) . "</td>";
+                        $retString .= "\n      <td align='center'>";
                         // show the necessary access icon
                         foreach ($icons as $visible => $image) {
                                 if ($visible == $mycours['visible']) {
@@ -363,11 +344,8 @@ function expanded_faculte($fac_name, $facid, $uid) {
                         $retString .= "\n    </tr>";
                         $k++;
                 } // END of while
-                $retString .= "\n       </tbody>";
                 $retString .= "\n       </table>";
-                $retString .= "\n       </td>";
-                $retString .= "\n    </tr>";
-                $retString .= "\n    </table>\n";
+                //$retString .= "\n       </td>";
         } // end of foreach
 
         return $retString;

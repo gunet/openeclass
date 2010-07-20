@@ -1,6 +1,6 @@
 
 /* ----------------Open eClass tool_content CSS----------------- */
-/* 12. Modules  */
+/* 13. Modules  */
 
 .Login {
     vertical-align:middle;
@@ -16,7 +16,7 @@
     font-size: 16px;
     font-family: "Trebuchet MS",  Verdana, Arial, Helvetica, sans-serif; 
     font-weight: bold;
-    color: #8398c5;
+    color: #727266;
     text-align: left;
 }
 
@@ -137,15 +137,15 @@ td.bold {
 }
 
 .LoginHead {
-    border-top: 2px solid #627aad;
-    border-bottom: 2px solid #627aad;
-    border-left: 2px solid #eceff5;
-    border-right: 2px solid #eceff5;
+    border-top: 2px solid #a33134;
+    border-bottom: 2px solid #a33134;
+    border-left: 2px solid #edecdf;
+    border-right: 2px solid #edecdf;
 
 }
 
 .LoginData {
-    border-bottom: 2px solid #627aad;
+    border-bottom: 2px solid #a33134;
 }
 
 
@@ -202,10 +202,10 @@ p.caution_small{
 }
 
 p.success_small{
-  border-bottom: 1px solid #eceff5;
+  border-bottom: 1px solid #edecdf;
   border-top: 0px solid #BAEFBF;
   border-left: 0px solid #BAEFBF;
-  border-right: 0px solid #eceff5;
+  border-right: 0px solid #edecdf;
 }
 
 
@@ -298,7 +298,7 @@ tfoot tr {
 }
 
 tfoot td {
-    background: #eceff5;
+    background: #edecdf;
     font-size: 11px;
     font-size: 85%;
 
@@ -335,7 +335,7 @@ table.CourseListTitle {
 table.CourseListTitle tr{
     text-align: left;
     color: #627aad;
-    background: #eceff5;
+    background: #edecdf;
     font-weight: bold;
     font-size:12px;
     border-top:    0px solid #ffffff;
@@ -347,7 +347,7 @@ table.CourseListTitle tr{
 table.CourseListTitle th{
     text-align: left;
     color: #627aad;
-    background: #eceff5;
+    background: #edecdf;
     font-weight: bold;
     font-size:12px;
     border-top:    0px solid #ffffff;
@@ -358,7 +358,7 @@ table.CourseListTitle th{
 
 table.CourseListTitle td {
     text-align: right;
-    background: #eceff5;
+    background: #edecdf;
     color: #627aad;
     font-weight: bold;
     font-size:12px;
@@ -443,9 +443,9 @@ table.Deps th{
     background: #FBFBFB;
     font-size:11px;
     color: #727266;
-    border-top: 1px solid #eceff5;
-    border-bottom: 1px solid #eceff5;
-    border-left: 1px solid #eceff5;
+    border-top: 1px solid #edecdf;
+    border-bottom: 1px solid #edecdf;
+    border-left: 1px solid #edecdf;
     vertical-align: middle;
 
 }
@@ -456,9 +456,9 @@ table.Deps td {
     background: #FBFBFB;
     font-size:11px;
     color: #727266;
-    border-top: 1px solid #eceff5;
-    border-bottom: 1px solid #eceff5;
-    border-right: 1px solid #eceff5;
+    border-top: 1px solid #edecdf;
+    border-bottom: 1px solid #edecdf;
+    border-right: 1px solid #edecdf;
     vertical-align: middle;
 }
 
@@ -538,38 +538,10 @@ table.FormData td {
 
 
 .month {
-    background: #eceff5;
+    background: #edecdf;
     text-align: center;
 }
 
-table.sortable a.sortheader {
-    background-color: #ececdf;
-    color: #727266;
-    font-weight: normal;
-    text-decoration: none;
-    padding : 0px;
-    display: block;
-}
-
-a.sortheader, a.sortheader:link, a.sortheader:active, a.sortheader:visited {
-    background-color: #ececdf;
-    color: #727266;
-    font-weight: normal;
-    text-decoration: none;
-}
-
-a.sortheader:hover {
-    background-color: #ececdf;
-    color: #d8dfea;
-    font-weight: normal;
-    text-decoration: underline;
-}
-
-
-table.sortable span.sortarrow {
-    color: #727266;
-    text-decoration: none;
-}
 
 .warntitle {
         text-align: center;
@@ -620,10 +592,10 @@ table.AnnouncementsList td {
 
 table.Smart{
     padding: 0px 0px 0px 0px;
-    border-top: 1px solid #eceff5;
-    border-bottom: 1px solid #eceff5;
-    border-left: 1px solid #eceff5;
-    border-right: 1px solid #eceff5;
+    border-top: 1px solid #edecdf;
+    border-bottom: 1px solid #edecdf;
+    border-left: 1px solid #edecdf;
+    border-right: 1px solid #edecdf;
 }
 
 table.Smart td {
@@ -741,7 +713,7 @@ a.revoke:hover {
 }
 
 .stat {
-        background : #eceff5;
+        background : #edecdf;
         color : #727266;
         vertical-align: middle;
         padding : 5px;
@@ -753,22 +725,22 @@ a.revoke:hover {
 table.stateclass {
 	padding: 2px;
 	vertical-align: top;
-	border-top: 1px solid #eceff5;
-	border-bottom: 1px solid #eceff5;
-	border-left: 1px solid #eceff5;
-	border-right: 1px solid #eceff5;
+	border-top: 1px solid #edecdf;
+	border-bottom: 1px solid #edecdf;
+	border-left: 1px solid #edecdf;
+	border-right: 1px solid #edecdf;
 }
 
 table.stateclass th {
 	padding: 4px;
 	vertical-align: top;
-	background: #eceff5;
+	background: #edecdf;
 	font-size:11px;
 	color: #727266;
-	border-top: 1px solid #eceff5;
-	border-bottom: 1px solid #eceff5;
-	border-left: 1px solid #eceff5;
-	border-right: 1px solid #eceff5;
+	border-top: 1px solid #edecdf;
+	border-bottom: 1px solid #edecdf;
+	border-left: 1px solid #edecdf;
+	border-right: 1px solid #edecdf;
 	font-style : normal;
 	font-variant : normal;
 	font-weight : normal;
@@ -802,18 +774,18 @@ table.xinha_editor td {
 
 table.Agenda{
     padding: 2px;
-    border-top: 1px solid #eceff5;
-    border-bottom: 1px solid #eceff5;
-    border-left: 1px solid #eceff5;
-    border-right: 1px solid #eceff5;
+    border-top: 1px solid #edecdf;
+    border-bottom: 1px solid #edecdf;
+    border-left: 1px solid #edecdf;
+    border-right: 1px solid #edecdf;
 }
 
 table.Agenda th {
     text-align: center!important;
-    border-top: 1px solid #eceff5;
-    border-bottom: 1px solid #eceff5;
-    border-left: 1px solid #eceff5;
-    border-right: 1px solid #eceff5;
+    border-top: 1px solid #edecdf;
+    border-bottom: 1px solid #edecdf;
+    border-left: 1px solid #edecdf;
+    border-right: 1px solid #edecdf;
 }
 
 table.Agenda td {
@@ -849,10 +821,10 @@ table.Agenda td {
 table.announcements {
 	padding: 2px;
 	vertical-align: top;
-	border-top: 1px solid #eceff5;
-	border-bottom: 1px solid #eceff5;
-	border-left: 1px solid #eceff5;
-	border-right: 1px solid #eceff5;
+	border-top: 1px solid #edecdf;
+	border-bottom: 1px solid #edecdf;
+	border-left: 1px solid #edecdf;
+	border-right: 1px solid #edecdf;
 }
 
 table.announcements th {
@@ -860,10 +832,10 @@ table.announcements th {
 	vertical-align: top;
 	font-size:11px;
 	color: #727266;
-	border-top: 1px solid #eceff5;
-	border-bottom: 1px solid #eceff5;
-	border-left: 1px solid #eceff5;
-	border-right: 1px solid #eceff5;
+	border-top: 1px solid #edecdf;
+	border-bottom: 1px solid #edecdf;
+	border-left: 1px solid #edecdf;
+	border-right: 1px solid #edecdf;
 }
 
 table.announcements td {
@@ -904,7 +876,7 @@ table.announcements td {
 	top:210px;
 	left:220px;
 	border:1px solid #a2a2a3;
-	background: #eceff5;
+	background: #edecdf;
 	}
 
 #video{
@@ -915,7 +887,7 @@ table.announcements td {
 	top:435px;
 	left:220px;
 	border:1px solid #a2a2a3;
-	background: #eceff5;
+	background: #edecdf;
 }
 #video_presantation_control{
 	position:absolute;
@@ -925,7 +897,7 @@ table.announcements td {
 	top:659px;
 	left:220px;
 	border:1px solid #a2a2a3;
-	background: #eceff5;
+	background: #edecdf;
 }
 
 #chat_window{
@@ -934,7 +906,7 @@ table.announcements td {
 	width: 800px;
 	/*border:groove;*/
 	border:1px solid #a2a2a3;
-	background: #eceff5;
+	background: #edecdf;
 	overflow: auto;
 }
 
@@ -970,7 +942,7 @@ table.announcements td {
 	left:430px;
 	width:700px;
 	border:1px solid #a2a2a3;
-	background: #eceff5;
+	background: #edecdf;
 }
 /* ----- END conference ----- */
 
@@ -993,23 +965,23 @@ form.category {
 table.CourseDescr {
 	padding: 2px;
 	vertical-align: top;
-	border-top: 1px solid #eceff5;
-	border-bottom: 1px solid #eceff5;
-	border-left: 1px solid #eceff5;
-	border-right: 1px solid #eceff5;
+	border-top: 1px solid #edecdf;
+	border-bottom: 1px solid #edecdf;
+	border-left: 1px solid #edecdf;
+	border-right: 1px solid #edecdf;
 }
 
 table.CourseDescr th {
 	padding: 4px;
 	vertical-align: top;
-	background: #eceff5;
+	background: #edecdf;
 	font-size:11px;
 	font-weight: bold;
 	color: #727266;
-	border-top: 1px solid #eceff5;
-	border-bottom: 1px solid #eceff5;
-	border-left: 1px solid #eceff5;
-	border-right: 1px solid #eceff5;
+	border-top: 1px solid #edecdf;
+	border-bottom: 1px solid #edecdf;
+	border-left: 1px solid #edecdf;
+	border-right: 1px solid #edecdf;
 	font-style : normal;
 	font-variant : normal;
 }
@@ -1042,7 +1014,7 @@ div#footer { clear: both; width: 100%; }
 }
 .course_info h1 {
         border-bottom: 2px solid #e5eaf1;
-	background-color: #eceff5;
+	background-color: #edecdf;
         padding: 5px;
         color: #627aad;
         font-size: 11px;
@@ -1097,10 +1069,10 @@ option.emphasised { font-style: italic; }
 
 table.Documents{
     padding: 2px;
-    border-top: 1px solid #eceff5;
-    border-bottom: 1px solid #eceff5;
-    border-left: 1px solid #eceff5;
-    border-right: 1px solid #eceff5;;
+    border-top: 1px solid #edecdf;
+    border-bottom: 1px solid #edecdf;
+    border-left: 1px solid #edecdf;
+    border-right: 1px solid #edecdf;;
     background-color: #fbfbfb;
 }
 
@@ -1113,10 +1085,10 @@ table.Documents{
 
 table.Documents th {
     text-align: center!important;
-    border-top: 1px solid #eceff5;
-    border-bottom: 1px solid #eceff5;
-    border-left: 1px solid #eceff5;
-    border-right: 1px solid #eceff5;
+    border-top: 1px solid #edecdf;
+    border-bottom: 1px solid #edecdf;
+    border-left: 1px solid #edecdf;
+    border-right: 1px solid #edecdf;
     font-weight: normal !important;
 }
 
@@ -1172,23 +1144,23 @@ form.sort {
 table.dropbox {
 	padding: 2px;
 	vertical-align: top;
-	border-top: 1px solid #eceff5;
-	border-bottom: 1px solid #eceff5;
-	border-left: 1px solid #eceff5;
-	border-right: 1px solid #eceff5;
+	border-top: 1px solid #edecdf;
+	border-bottom: 1px solid #edecdf;
+	border-left: 1px solid #edecdf;
+	border-right: 1px solid #edecdf;
 }
 
 table.dropbox th {
 	padding: 4px;
 	vertical-align: top;
-	background: #eceff5;
+	background: #edecdf;
 	font-size:11px;
 	font-weight: bold;
 	color: #727266;
-	border-top: 1px solid #eceff5;
-	border-bottom: 1px solid #eceff5;
-	border-left: 1px solid #eceff5;
-	border-right: 1px solid #eceff5;
+	border-top: 1px solid #edecdf;
+	border-bottom: 1px solid #edecdf;
+	border-left: 1px solid #edecdf;
+	border-right: 1px solid #edecdf;
 	font-style : normal;
 	font-variant : normal;
 }
@@ -1207,10 +1179,10 @@ table.dropbox td {
 /* ----- START exercice ----- */
 table.ExerciseSum{
     padding: 2px;
-    border-top: 1px solid #eceff5;
-    border-bottom: 1px solid #eceff5;
-    border-left: 1px solid #eceff5;
-    border-right: 1px solid #eceff5;
+    border-top: 1px solid #edecdf;
+    border-bottom: 1px solid #edecdf;
+    border-left: 1px solid #edecdf;
+    border-right: 1px solid #edecdf;
 }
 
 table.ExerciseSum th {
@@ -1240,35 +1212,35 @@ table.Exercise th{
 	font-weight: bold;
 	font-size:11px !important;
 	vertical-align: middle;
-	background : #eceff5;
+	background : #edecdf;
 }
 
 table.Exercise td {
     padding: 4px;
     color: #727266;
     vertical-align: middle;
-    background : #eceff5;
+    background : #edecdf;
 }
 
 table.Question {
     padding: 2px;
 	vertical-align: top;
-    border-top: 1px solid #eceff5;
-    border-bottom: 1px solid #eceff5;
-    border-left: 1px solid #eceff5;
-    border-right: 1px solid #eceff5;
+    border-top: 1px solid #edecdf;
+    border-bottom: 1px solid #edecdf;
+    border-left: 1px solid #edecdf;
+    border-right: 1px solid #edecdf;
 }
 
 table.Question th {
 	padding: 4px;
 	vertical-align: top;
-	background: #eceff5;
+	background: #edecdf;
 	font-size:11px;
 	color: #727266;
-	border-top: 1px solid #eceff5;
-	border-bottom: 1px solid #eceff5;
-	border-left: 1px solid #eceff5;
-	border-right: 1px solid #eceff5;
+	border-top: 1px solid #edecdf;
+	border-bottom: 1px solid #edecdf;
+	border-left: 1px solid #edecdf;
+	border-right: 1px solid #edecdf;
 	font-style : normal;
 	font-variant : normal;
 	font-weight : normal;
@@ -1318,18 +1290,18 @@ table.Question td {
 
 /* ----- START forum_admin ----- */
 table.ForumAdmSum{
-    border-top: 1px solid #eceff5;
-    border-bottom: 1px solid #eceff5;
-    border-left: 1px solid #eceff5;
-    border-right: 1px solid #eceff5;
+    border-top: 1px solid #edecdf;
+    border-bottom: 1px solid #edecdf;
+    border-left: 1px solid #edecdf;
+    border-right: 1px solid #edecdf;
 }
 
 table.ForumAdmSum th{
-	border-top: 1px solid #eceff5;
-	border-bottom: 1px solid #eceff5;
-	border-left: 1px solid #eceff5;
-	border-right: 1px solid #eceff5;
-	background: #eceff5 !important;
+	border-top: 1px solid #edecdf;
+	border-bottom: 1px solid #edecdf;
+	border-left: 1px solid #edecdf;
+	border-right: 1px solid #edecdf;
+	background: #edecdf !important;
 	text-align: left;
 	font-weight: bold;
 	font-size:11px !important;
@@ -1338,26 +1310,26 @@ table.ForumAdmSum th{
 table.ForumCategory{
     padding: 2px;
     vertical-align: middle;
-    border-top: 1px solid #eceff5;
-	border-bottom: 1px solid #eceff5;
-	border-left: 1px solid #eceff5;
-	border-right: 1px solid #eceff5;
+    border-top: 1px solid #edecdf;
+	border-bottom: 1px solid #edecdf;
+	border-left: 1px solid #edecdf;
+	border-right: 1px solid #edecdf;
     font-size:11px !important;
 }
 
 table.ForumCategory th{
 	text-align: center;
 	padding: 4px;
-    border-top: 1px solid #eceff5;
-	border-bottom: 1px solid #eceff5;
-	border-left: 1px solid #eceff5;
-	border-right: 1px solid #eceff5;
+    border-top: 1px solid #edecdf;
+	border-bottom: 1px solid #edecdf;
+	border-left: 1px solid #edecdf;
+	border-right: 1px solid #edecdf;
 	padding-bottom: 6px;
 	padding-top: 6px;
 	font-weight: bold;
 	font-size:11px !important;
 	vertical-align: middle;
-	background: #eceff5 !important;
+	background: #edecdf !important;
 }
 /* ----- END forum_admin ----- */
 
@@ -1384,7 +1356,7 @@ table.ForumCategory th{
     }
 
 .GroupHead {
-    background: #eceff5;
+    background: #edecdf;
     text-align: center !important;
     font-weight: bold;
     font-size: 11px !important;
@@ -1421,10 +1393,10 @@ table.GroupList {
     background: none;
     vertical-align: middle;
     padding: 2px;
-    border-top: 1px solid #eceff5;
-    border-bottom: 1px solid #eceff5;
-    border-left: 1px solid #eceff5;
-    border-right: 1px solid #eceff5;;
+    border-top: 1px solid #edecdf;
+    border-bottom: 1px solid #edecdf;
+    border-left: 1px solid #edecdf;
+    border-right: 1px solid #edecdf;;
     background-color: #fbfbfb;
 }
 
@@ -1436,10 +1408,10 @@ table.GroupList tr {
 table.GroupList th {
     padding: 4px;
     text-align: center!important;
-    border-top: 1px solid #eceff5;
-    border-bottom: 1px solid #eceff5;
-    border-left: 1px solid #eceff5;
-    border-right: 1px solid #eceff5;
+    border-top: 1px solid #edecdf;
+    border-bottom: 1px solid #edecdf;
+    border-left: 1px solid #edecdf;
+    border-right: 1px solid #edecdf;
 }
 
 table.GroupList td {
@@ -1450,7 +1422,7 @@ table.GroupList td {
 }
 
 .GroupHead {
-   background-color: #eceff5;
+   background-color: #edecdf;
    color: #727266;
    font-weight: bold;
 }
@@ -1458,10 +1430,10 @@ table.GroupList td {
 table.GroupSum{
     padding: 2px;
     vertical-align: middle;
-    border-top: 1px solid #eceff5;
-    border-bottom: 1px solid #eceff5;
-    border-left: 1px solid #eceff5;
-    border-right: 1px solid #eceff5;
+    border-top: 1px solid #edecdf;
+    border-bottom: 1px solid #edecdf;
+    border-left: 1px solid #edecdf;
+    border-right: 1px solid #edecdf;
     }
 
 table.GroupSum thead{
@@ -1469,17 +1441,17 @@ table.GroupSum thead{
 	vertical-align: middle;
 	border-top: 1px solid #d8dfea;
 	border-bottom: 1px solid #d8dfea;
-	border-left: 1px solid #eceff5;
-	border-right: 1px solid #eceff5;
+	border-left: 1px solid #edecdf;
+	border-right: 1px solid #edecdf;
 }
 
 table.GroupSum tbody{
     padding: 2px;
     vertical-align: middle;
-    border-top: 1px solid #eceff5;
+    border-top: 1px solid #edecdf;
     border-bottom: 1px solid #d8dfea;
-    border-left: 1px solid #eceff5;
-    border-right: 1px solid #eceff5;
+    border-left: 1px solid #edecdf;
+    border-right: 1px solid #edecdf;
 }
 
 table.GroupSum th{
@@ -1506,10 +1478,10 @@ table.GroupSum td {
 
 table.Documents{
     padding: 2px;
-    border-top: 1px solid #eceff5;
-    border-bottom: 1px solid #eceff5;
-    border-left: 1px solid #eceff5;
-    border-right: 1px solid #eceff5;;
+    border-top: 1px solid #edecdf;
+    border-bottom: 1px solid #edecdf;
+    border-left: 1px solid #edecdf;
+    border-right: 1px solid #edecdf;;
     background-color: #fbfbfb;
 }
 
@@ -1520,10 +1492,10 @@ table.Documents{
 
 table.Documents th {
     text-align: center!important;
-    border-top: 1px solid #eceff5;
-    border-bottom: 1px solid #eceff5;
-    border-left: 1px solid #eceff5;
-    border-right: 1px solid #eceff5;
+    border-top: 1px solid #edecdf;
+    border-bottom: 1px solid #edecdf;
+    border-left: 1px solid #edecdf;
+    border-right: 1px solid #edecdf;
     font-weight: normal !important;
 }
 
@@ -1600,7 +1572,7 @@ a:visited.invisible
 
 .LP_header {
     color: #000 !important;
-    background-color: #eceff5 !important;
+    background-color: #edecdf !important;
     text-align: center !important;
     font-weight: bold !important;
 }
@@ -1644,18 +1616,18 @@ a:visited.invisible
 
 table.LearnPathSum{
     padding: 2px;
-    border-top: 1px solid #eceff5;
-    border-bottom: 1px solid #eceff5;
-    border-left: 1px solid #eceff5;
-    border-right: 1px solid #eceff5;
+    border-top: 1px solid #edecdf;
+    border-bottom: 1px solid #edecdf;
+    border-left: 1px solid #edecdf;
+    border-right: 1px solid #edecdf;
 }
 
 table.LearnPathSum thead{
 	padding: 2px;
-	border-top: 1px solid #eceff5;
-	border-bottom: 1px solid #eceff5;
-	border-left: 1px solid #eceff5;
-	border-right: 1px solid #eceff5;
+	border-top: 1px solid #edecdf;
+	border-bottom: 1px solid #edecdf;
+	border-left: 1px solid #edecdf;
+	border-right: 1px solid #edecdf;
 }
 
 
@@ -1666,11 +1638,11 @@ table.LearnPathSum th{
 	padding-top: 6px;
 	font-weight: bold;
 	font-size:11px !important;
-    border-top: 1px solid #eceff5;
-	border-bottom: 1px solid #eceff5;
-	border-left: 1px solid #eceff5;
-	border-right: 1px solid #eceff5;
-    background: #eceff5;
+    border-top: 1px solid #edecdf;
+	border-bottom: 1px solid #edecdf;
+	border-left: 1px solid #edecdf;
+	border-right: 1px solid #edecdf;
+    background: #edecdf;
 }
 
 table.LearnPathSum td{
@@ -1680,10 +1652,10 @@ table.LearnPathSum td{
 table.ExerciseSum{
     padding: 2px;
     vertical-align: middle;
-    border-top: 1px solid #eceff5;
-    border-bottom: 1px solid #eceff5;
-    border-left: 1px solid #eceff5;
-    border-right: 1px solid #eceff5;
+    border-top: 1px solid #edecdf;
+    border-bottom: 1px solid #edecdf;
+    border-left: 1px solid #edecdf;
+    border-right: 1px solid #edecdf;
 }
 
 table.ExerciseSum thead{
@@ -1691,17 +1663,17 @@ table.ExerciseSum thead{
 	vertical-align: middle;
 	border-top: 1px solid #d8dfea;
 	border-bottom: 1px solid #d8dfea;
-	border-left: 1px solid #eceff5;
-	border-right: 1px solid #eceff5;
+	border-left: 1px solid #edecdf;
+	border-right: 1px solid #edecdf;
 }
 
 table.ExerciseSum tbody{
     padding: 2px;
     vertical-align: middle;
-    border-top: 1px solid #eceff5;
+    border-top: 1px solid #edecdf;
     border-bottom: 1px solid #d8dfea;
-    border-left: 1px solid #eceff5;
-    border-right: 1px solid #eceff5;
+    border-left: 1px solid #edecdf;
+    border-right: 1px solid #edecdf;
 }
 
 table.ExerciseSum th{
@@ -1740,35 +1712,35 @@ table.Exercise th{
 	font-weight: bold;
 	font-size:11px !important;
 	vertical-align: middle;
-	background : #eceff5;
+	background : #edecdf;
 }
 
 table.Exercise td {
     padding: 4px;
     color: #727266;
     vertical-align: middle;
-    background : #eceff5;
+    background : #edecdf;
 }
 
 table.Question {
     padding: 2px;
 	vertical-align: top;
-    border-top: 1px solid #eceff5;
-    border-bottom: 1px solid #eceff5;
-    border-left: 1px solid #eceff5;
-    border-right: 1px solid #eceff5;
+    border-top: 1px solid #edecdf;
+    border-bottom: 1px solid #edecdf;
+    border-left: 1px solid #edecdf;
+    border-right: 1px solid #edecdf;
 }
 
 table.Question th {
 	padding: 4px;
 	vertical-align: top;
-	background: #eceff5;
+	background: #edecdf;
 	font-size:11px;
 	color: #727266;
-	border-top: 1px solid #eceff5;
-	border-bottom: 1px solid #eceff5;
-	border-left: 1px solid #eceff5;
-	border-right: 1px solid #eceff5;
+	border-top: 1px solid #edecdf;
+	border-bottom: 1px solid #edecdf;
+	border-left: 1px solid #edecdf;
+	border-right: 1px solid #edecdf;
 	font-style : normal;
 	font-variant : normal;
 	font-weight : normal;
@@ -1852,10 +1824,10 @@ table.Users_Operations a:hover {
 table.Documents {
 	padding: 2px;
 	margin-bottom: 30px;
-	border-top: 1px solid #eceff5;
-	border-bottom: 1px solid #eceff5;
-	border-left: 1px solid #eceff5;
-	border-right: 1px solid #eceff5;;
+	border-top: 1px solid #edecdf;
+	border-bottom: 1px solid #edecdf;
+	border-left: 1px solid #edecdf;
+	border-right: 1px solid #edecdf;;
 	background-color: #fbfbfb;
 }
 
@@ -1868,10 +1840,10 @@ table.Documents {
 
 table.Documents th {
 	text-align: center!important;
-	border-top: 1px solid #eceff5;
-	border-bottom: 1px solid #eceff5;
-	border-left: 1px solid #eceff5;
-	border-right: 1px solid #eceff5;
+	border-top: 1px solid #edecdf;
+	border-bottom: 1px solid #edecdf;
+	border-left: 1px solid #edecdf;
+	border-right: 1px solid #edecdf;
 	font-weight: normal !important;
 }
 
@@ -1898,10 +1870,10 @@ table.Documents img {
 table.ForumSum{
     padding: 2px;
     vertical-align: middle;
-    border-top: 1px solid #eceff5;
-    border-bottom: 1px solid #eceff5;
-    border-left: 1px solid #eceff5;
-    border-right: 1px solid #eceff5;
+    border-top: 1px solid #edecdf;
+    border-bottom: 1px solid #edecdf;
+    border-left: 1px solid #edecdf;
+    border-right: 1px solid #edecdf;
 }
 
 table.ForumSum thead{
@@ -1909,22 +1881,22 @@ table.ForumSum thead{
 	vertical-align: middle;
 	border-top: 1px solid #d8dfea;
 	border-bottom: 1px solid #d8dfea;
-	border-left: 1px solid #eceff5;
-	border-right: 1px solid #eceff5;
-	background: #eceff5 !important;
+	border-left: 1px solid #edecdf;
+	border-right: 1px solid #edecdf;
+	background: #edecdf !important;
 }
 
 table.ForumSum tbody{
     padding: 2px;
     vertical-align: middle;
-    border-top: 1px solid #eceff5;
+    border-top: 1px solid #edecdf;
     border-bottom: 1px solid #d8dfea;
-    border-left: 1px solid #eceff5;
-    border-right: 1px solid #eceff5;
+    border-left: 1px solid #edecdf;
+    border-right: 1px solid #edecdf;
 }
 
 table.ForumSum th{
-	background : #eceff5 !important;
+	background : #edecdf !important;
 	text-align: center !important;
 	vertical-align: middle;	
 	font-weight: bold;		
@@ -1941,7 +1913,7 @@ table.ForumSum td {
 }
 
 .Forum {
-	background : #eceff5 !important;
+	background : #edecdf !important;
 	text-align: left;
 	padding: 4px;
 	padding-bottom: 6px;
@@ -1951,7 +1923,7 @@ table.ForumSum td {
 }
 
 .ForumHead {
-	background : #eceff5 !important;
+	background : #edecdf !important;
 	text-align: center !important;;
 	padding: 4px;
 	padding-bottom: 6px;
@@ -2141,24 +2113,24 @@ li.pagination {
 
 table.Questionnaire {
     padding: 2px;
-    border-top: 1px solid #eceff5;
-    border-bottom: 1px solid #eceff5;
-    border-left: 1px solid #eceff5;
-    border-right: 1px solid #eceff5;
+    border-top: 1px solid #edecdf;
+    border-bottom: 1px solid #edecdf;
+    border-left: 1px solid #edecdf;
+    border-right: 1px solid #edecdf;
 }
 
 table.Questionnaire th {
 	padding: 4px;
-	background: #eceff5;
+	background: #edecdf;
 	font-size:11px;
     font-weight: bold;
 	color: #727266;
 	font-style : normal;
 	font-variant : normal;
-    border-top: 1px solid #eceff5;
-    border-bottom: 1px solid #eceff5;
-    border-left: 1px solid #eceff5;
-    border-right: 1px solid #eceff5;
+    border-top: 1px solid #edecdf;
+    border-bottom: 1px solid #edecdf;
+    border-left: 1px solid #edecdf;
+    border-right: 1px solid #edecdf;
 }
 
 .newQue {
@@ -2186,18 +2158,18 @@ table.Questionnaire td {
 
 table.Search{
     padding: 0px 0px 0px 0px;
-    border-top: 1px solid #eceff5;
-    border-bottom: 1px solid #eceff5;
-    border-left: 1px solid #eceff5;
-    border-right: 1px solid #eceff5;
+    border-top: 1px solid #edecdf;
+    border-bottom: 1px solid #edecdf;
+    border-left: 1px solid #edecdf;
+    border-right: 1px solid #edecdf;
 }
 
 table.Search th {
     text-align: center !important;
-    border-top: 1px solid #eceff5;
-    border-bottom: 1px solid #eceff5;
-    border-left: 1px solid #eceff5;
-    border-right: 1px solid #eceff5;
+    border-top: 1px solid #edecdf;
+    border-bottom: 1px solid #edecdf;
+    border-left: 1px solid #edecdf;
+    border-right: 1px solid #edecdf;
 }
 
 table.Search td {
@@ -2266,7 +2238,7 @@ table.NavUnits .left {
 
 table.NavUnits td {
     text-align: right;
-    background: #eceff5;
+    background: #edecdf;
     font-size:11px;
     color: #e79544;
     border-top: 1px solid #627aad;
@@ -2322,7 +2294,7 @@ td.highlight a:hover {
 }
 
 .UsersHead {
-  background: #eceff5;
+  background: #edecdf;
   text-align: center !important;
   font-weight: bold;
   font-size: 11px !important;
@@ -2350,7 +2322,7 @@ table.NavUser th{
 	padding-top: 6px;
 	font-weight: bold;
 	font-size:11px !important;
-	background : #eceff5;
+	background : #edecdf;
     border-bottom: 1px dotted #d8dfea;
     border-top: 0px dotted #d8dfea;
 }
@@ -2497,18 +2469,18 @@ li.pagination {
 /* ----- START Video ----- */
 table.Video{
     padding: 2px;
-    border-top: 1px solid #eceff5;
-    border-bottom: 1px solid #eceff5;
-    border-left: 1px solid #eceff5;
-    border-right: 1px solid #eceff5;
+    border-top: 1px solid #edecdf;
+    border-bottom: 1px solid #edecdf;
+    border-left: 1px solid #edecdf;
+    border-right: 1px solid #edecdf;
 }
 
 table.Video th {
     text-align: center!important;
-    border-top: 1px solid #eceff5;
-    border-bottom: 1px solid #eceff5;
-    border-left: 1px solid #eceff5;
-    border-right: 1px solid #eceff5;
+    border-top: 1px solid #edecdf;
+    border-bottom: 1px solid #edecdf;
+    border-left: 1px solid #edecdf;
+    border-right: 1px solid #edecdf;
 }
 
 table.Video td {
@@ -2666,18 +2638,18 @@ a.claroCmd:hover {
 
 table.WikiSum{
     padding: 2px;
-    border-top: 1px solid #eceff5;
-    border-bottom: 1px solid #eceff5;
-    border-left: 1px solid #eceff5;
-    border-right: 1px solid #eceff5;
+    border-top: 1px solid #edecdf;
+    border-bottom: 1px solid #edecdf;
+    border-left: 1px solid #edecdf;
+    border-right: 1px solid #edecdf;
 }
 
 table.WikiSum thead{
 	padding: 2px;
-	border-top: 1px solid #eceff5;
-	border-bottom: 1px solid #eceff5;
-	border-left: 1px solid #eceff5;
-	border-right: 1px solid #eceff5;
+	border-top: 1px solid #edecdf;
+	border-bottom: 1px solid #edecdf;
+	border-left: 1px solid #edecdf;
+	border-right: 1px solid #edecdf;
 }
 
 table.WikiSum th{
@@ -2687,11 +2659,11 @@ table.WikiSum th{
     padding-top: 6px;
     font-weight: bold;
     font-size:11px !important;
-    border-top: 1px solid #eceff5;
-    border-bottom: 1px solid #eceff5;
-    border-left: 1px solid #eceff5;
-    border-right: 1px solid #eceff5;
-    background: #eceff5;
+    border-top: 1px solid #edecdf;
+    border-bottom: 1px solid #edecdf;
+    border-left: 1px solid #edecdf;
+    border-right: 1px solid #edecdf;
+    background: #edecdf;
 }
 
 table.WikiSum td{
@@ -2700,7 +2672,7 @@ table.WikiSum td{
 
 .Wiki_header {
     color: #000 !important;
-    background-color: #eceff5 !important;
+    background-color: #edecdf !important;
     text-align: center !important;
     font-weight: bold !important;
 }
@@ -2708,10 +2680,10 @@ table.WikiSum td{
 table.ExerciseSum{
     padding: 2px;
     vertical-align: middle;
-    border-top: 1px solid #eceff5;
-    border-bottom: 1px solid #eceff5;
-    border-left: 1px solid #eceff5;
-    border-right: 1px solid #eceff5;
+    border-top: 1px solid #edecdf;
+    border-bottom: 1px solid #edecdf;
+    border-left: 1px solid #edecdf;
+    border-right: 1px solid #edecdf;
 }
 
 table.ExerciseSum thead{
@@ -2719,17 +2691,17 @@ table.ExerciseSum thead{
     vertical-align: middle;
     border-top: 1px solid #d8dfea;
     border-bottom: 1px solid #d8dfea;
-    border-left: 1px solid #eceff5;
-    border-right: 1px solid #eceff5;
+    border-left: 1px solid #edecdf;
+    border-right: 1px solid #edecdf;
 }
 
 table.ExerciseSum tbody{
     padding: 2px;
     vertical-align: middle;
-    border-top: 1px solid #eceff5;
+    border-top: 1px solid #edecdf;
     border-bottom: 1px solid #d8dfea;
-    border-left: 1px solid #eceff5;
-    border-right: 1px solid #eceff5;
+    border-left: 1px solid #edecdf;
+    border-right: 1px solid #edecdf;
 }
 
 table.ExerciseSum th{
@@ -2767,35 +2739,35 @@ table.Exercise th{
 	font-weight: bold;
 	font-size:11px !important;
 	vertical-align: middle;
-	background : #eceff5;
+	background : #edecdf;
 }
 
 table.Exercise td {
     padding: 4px;
     color: #727266;
     vertical-align: middle;
-    background : #eceff5;
+    background : #edecdf;
 }
 
 table.Question {
     padding: 2px;
     vertical-align: top;
-    border-top: 1px solid #eceff5;
-    border-bottom: 1px solid #eceff5;
-    border-left: 1px solid #eceff5;
-    border-right: 1px solid #eceff5;
+    border-top: 1px solid #edecdf;
+    border-bottom: 1px solid #edecdf;
+    border-left: 1px solid #edecdf;
+    border-right: 1px solid #edecdf;
 }
 
 table.Question th {
 	padding: 4px;
 	vertical-align: top;
-	background: #eceff5;
+	background: #edecdf;
 	font-size:11px;
 	color: #727266;
-	border-top: 1px solid #eceff5;
-	border-bottom: 1px solid #eceff5;
-	border-left: 1px solid #eceff5;
-	border-right: 1px solid #eceff5;
+	border-top: 1px solid #edecdf;
+	border-bottom: 1px solid #edecdf;
+	border-left: 1px solid #edecdf;
+	border-right: 1px solid #edecdf;
 	font-style : normal;
 	font-variant : normal;
 	font-weight : normal;
@@ -2826,10 +2798,10 @@ table.Question td {
 table.WorkSum {
     padding: 2px;
 	vertical-align: top;
-    border-top: 1px solid #eceff5;
-    border-bottom: 1px solid #eceff5;
-    border-left: 1px solid #eceff5;
-    border-right: 1px solid #eceff5;
+    border-top: 1px solid #edecdf;
+    border-bottom: 1px solid #edecdf;
+    border-left: 1px solid #edecdf;
+    border-right: 1px solid #edecdf;
 }
 
 table.WorkSum th {
@@ -2837,10 +2809,10 @@ table.WorkSum th {
 	vertical-align: top;
 	font-size:11px;
 	color: #727266;
-	border-top: 1px solid #eceff5;
-	border-bottom: 1px solid #eceff5;
-	border-left: 1px solid #eceff5;
-	border-right: 1px solid #eceff5;
+	border-top: 1px solid #edecdf;
+	border-bottom: 1px solid #edecdf;
+	border-left: 1px solid #edecdf;
+	border-right: 1px solid #edecdf;
 }
 
 table.WorkSum td {
@@ -2868,23 +2840,23 @@ table.Work th{
 	font-weight: bold;
 	font-size:11px !important;
 	vertical-align: middle;
-	background : #eceff5;
+	background : #edecdf;
 }
 
 table.Work td {
     padding: 4px;
     color: #727266;
     vertical-align: middle;
-    background : #eceff5;
+    background : #edecdf;
 }
 
 table.Work_List {
     padding: 2px;
 	vertical-align: top;
-    border-top: 1px solid #eceff5;
-    border-bottom: 1px solid #eceff5;
-    border-left: 1px solid #eceff5;
-    border-right: 1px solid #eceff5;
+    border-top: 1px solid #edecdf;
+    border-bottom: 1px solid #edecdf;
+    border-left: 1px solid #edecdf;
+    border-right: 1px solid #edecdf;
 }
 
 .grade_input{
@@ -2909,13 +2881,13 @@ table.Work_List {
 table.Work_List th {
 	padding: 4px;
 	vertical-align: top;
-	background: #eceff5;
+	background: #edecdf;
 	font-size:11px;
 	color: #727266;
-	border-top: 1px solid #eceff5;
-	border-bottom: 1px solid #eceff5;
-	border-left: 1px solid #eceff5;
-	border-right: 1px solid #eceff5;
+	border-top: 1px solid #edecdf;
+	border-bottom: 1px solid #edecdf;
+	border-left: 1px solid #edecdf;
+	border-right: 1px solid #edecdf;
 	font-style : normal;
 	font-variant : normal;
 	font-weight : normal;
@@ -2992,22 +2964,22 @@ form.sort {
 table.dropbox {
     padding: 2px;
 	vertical-align: top;
-    border-top: 1px solid #eceff5;
-    border-bottom: 1px solid #eceff5;
-    border-left: 1px solid #eceff5;
-    border-right: 1px solid #eceff5;
+    border-top: 1px solid #edecdf;
+    border-bottom: 1px solid #edecdf;
+    border-left: 1px solid #edecdf;
+    border-right: 1px solid #edecdf;
 }
 
 table.dropbox th {
 	padding: 4px;
 	vertical-align: top;
-	background: #eceff5;
+	background: #edecdf;
 	font-size:11px;
 	color: #727266;
-	border-top: 1px solid #eceff5;
-	border-bottom: 1px solid #eceff5;
-	border-left: 1px solid #eceff5;
-	border-right: 1px solid #eceff5;
+	border-top: 1px solid #edecdf;
+	border-bottom: 1px solid #edecdf;
+	border-left: 1px solid #edecdf;
+	border-right: 1px solid #edecdf;
 	font-style : normal;
 	font-variant : normal;
 	font-weight : normal;

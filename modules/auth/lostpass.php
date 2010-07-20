@@ -72,12 +72,16 @@ if (isset($_REQUEST['do']) && $_REQUEST['do'] == "go") {
 			$res = db_query("SELECT `email` FROM user WHERE `user_id` = ".$myrow['user_id']."", $mysqlMainDb);
 			$myrow2 = mysql_fetch_array($res);
 			$text = "$langPassEmail1 <em>$myrow[password]</em><br>$langPassEmail2";
-			$tool_content .= "<table width=\"99%\"><tbody>
-				<tr><td class=\"success\"><p>$langAccountResetSuccess1</p>
-				<p>$text</p>
-    				<p><a href=\"../../index.php\">$langHome</a></p>
-				</td>
-				</tr></tbody></table>";
+			$tool_content .= "
+                        <table width=\"99%\" class=\"tbl\">
+			<tr>
+                          <td class=\"success\">
+                            <p>$langAccountResetSuccess1</p>
+			    <p>$text</p>
+    			    <p><a href=\"../../index.php\">$langHome</a></p>
+			  </td>
+			</tr>
+                        </table>";
 			db_query("DELETE FROM `passwd_reset` WHERE `user_id` = '$myrow[user_id]'", $mysqlMainDb);
 			// delete passws_reset entries older from 2 days
 			db_query("DELETE FROM `passwd_reset` 
@@ -85,15 +89,12 @@ if (isset($_REQUEST['do']) && $_REQUEST['do'] == "go") {
 		}
 		//advice him to change his pass once logged in
 	} else {
-		$tool_content = "<table width=\"99%\">
-		<tbody><tr>
-		<td class=\"caution\">
-		<p><strong>$langAccountResetInvalidLink</strong></p>
-		<p><a href=\"../../index.php\">$langHome</a></p>
-		</td>
-		</tr>
-		</tbody>
-		</table>";
+		$tool_content = "
+        <table width=\"99%\" class=\"tbl\">
+        <tr>
+	  <td class=\"caution\">$langAccountResetInvalidLink <br /><a href=\"../../index.php\">$langHome</a></td>
+	</tr>
+	</table>";
 	}
 } elseif ((!isset($email) || !email_seems_valid($email)
      || !isset($userName) || empty($userName)) && !isset($_REQUEST['do'])) {
@@ -102,30 +103,36 @@ if (isset($_REQUEST['do']) && $_REQUEST['do'] == "go") {
 
 	/***** Email address entry form *****/
         if (isset($email) and !email_seems_valid($email)) {
-                $tool_content .= '<table width="99%"><tbody><tr><td class="caution">' .
-                                '<p><strong>' . $lang_pass_invalid_mail . '<br />&nbsp;<br />' .
-                                '&nbsp;<br />&nbsp;<br /></strong></p>' .
-				'</td></tr></tbody></table>';
+                $tool_content .= '
+        <table width="99%" class="tbl">
+        <tr>
+          <td class="caution">' . $lang_pass_invalid_mail . '<br />&nbsp;<br /></td>
+        </tr>
+        </table>';
         }
 
 	$tool_content .= $lang_pass_intro;
 
-	$tool_content .= "<form method=\"post\" action=\"".$REQUEST_URI."\">
-		<table>
-		<thead>
-		<tr><th>$lang_username: </th>
-		<td>
-		<input type=\"text\" name=\"userName\" size=\"40\" />
-		</td>
-		<tr>
-		<th>$lang_email: </th>
-		<td>
-		<input type=\"text\" name=\"email\" size=\"40\" />
-		</td>
-		</thead>
-		</table>
-		<br/>
-		<input type=\"submit\" name=\"doit\" value=\"".$lang_pass_submit."\" />
+	$tool_content .= "
+        <form method=\"post\" action=\"".$REQUEST_URI."\">
+        <fieldset>
+          <legend>$langUserData</legend>
+	  <table class='tbl'>
+	  <tr>
+            <td>$lang_username:</td>
+	    <td><input type=\"text\" name=\"userName\" size=\"40\" /></td>
+          </tr>
+	  <tr>
+	    <td>$lang_email: </td>
+	    <td><input type=\"text\" name=\"email\" size=\"40\" /></td>
+          </tr>
+          <tr>
+            <td>&nbsp;</td>
+            <td><input type=\"submit\" name=\"doit\" value=\"".$lang_pass_submit."\" /></td>
+          </tr>
+	  </table>
+	  <br/>
+        </fieldset>
 	</form>";
 
 } elseif (!isset($_REQUEST['do'])) {
@@ -176,13 +183,16 @@ if (isset($_REQUEST['do']) && $_REQUEST['do'] == "go") {
 						break;
 					}
 				}
-				$tool_content = "<table width=\"99%\">
-				<tbody><tr><td class=\"caution\">
-				<p><strong>$langPassCannotChange1</strong></p>
-				<p>$langPassCannotChange2 <a href='mailto:$emailhelpdesk'>$emailhelpdesk</a> $langPassCannotChange3</p>
-				<p><a href=\"../../index.php\">$langHome</a></p>
-				</td>
-				</tr></tbody></table>";
+				$tool_content = "
+                                <table width=\"99%\" class=\"tbl\">
+				<tr>
+                                  <td class=\"caution\">
+				    <p><strong>$langPassCannotChange1</strong></p>
+				    <p>$langPassCannotChange2 <a href='mailto:$emailhelpdesk'>$emailhelpdesk</a> $langPassCannotChange3</p>
+				    <p><a href=\"../../index.php\">$langHome</a></p>
+				  </td>
+				</tr>
+                                </table>";
 			}
 		}
 
@@ -191,49 +201,52 @@ if (isset($_REQUEST['do']) && $_REQUEST['do'] == "go") {
                 $emailsubject = $lang_remind_pass;
                 if (!send_mail('', '', '', $email, $emailsubject, $text, $charset)) {
                         $tool_content = "
-                                <table width=\"99%\">
-                                <tbody>
-                                        <tr>
-                                                <td class=\"caution\">
-                                                <p><strong>$langAccountEmailError1</strong></p>
-                                                <p>$langAccountEmailError2 $email.</p>
-                                                <p>$langAccountEmailError3 <a href='mailto:$emailhelpdesk'>$emailhelpdesk</a>.</p>
-                                                <p><a href=\"../../index.php\">$langHome</a></p>
-                                        </td>
-                                        </tr>
-                                </tbody>
-                        </table>";
+                                <table width=\"99%\" class=\"tbl\">
+                                <tr>
+                                  <td class=\"caution\">
+                                    <p><strong>$langAccountEmailError1</strong></p>
+                                    <p>$langAccountEmailError2 $email.</p>
+                                    <p>$langAccountEmailError3 <a href='mailto:$emailhelpdesk'>$emailhelpdesk</a>.</p>
+                                    <p><a href=\"../../index.php\">$langHome</a></p>
+                                   </td>
+                                </tr>
+                                </table>";
 
                 } elseif (!isset($auth)) {
-                    $tool_content .= "<table width=\"99%\">
-                           <tbody><tr><td class=\"success\">
-                               $lang_pass_email_ok <strong>$email</strong><br/><br/>
-                                <a href=\"../../index.php\">$langHome</a>
-                                </td></tr></tbody></table><br/>";
+                    $tool_content .= "
+                                <table width=\"99%\" class=\"tbl\">
+                                <tr>
+                                  <td class=\"success\">$lang_pass_email_ok <strong>$email</strong><br/><br/><a href=\"../../index.php\">$langHome</a></td>
+                                </tr>
+                                </table>
+                                <br/>";
                         }
                 }
 
        } else {
-		$tool_content .= "<table width=\"99%\"><tbody>
-		<tr><td class=\"caution\">
-		<p><strong>$langAccountNotFound1 ($userName / $email)</strong></p>
-		<p>$langAccountNotFound2 <a href='mailto: $emailhelpdesk'>$emailhelpdesk</a>, $langAccountNotFound3</p>
-		<p><a href=\"../../index.php\">$langHome</a></p>
-		</td>
+		$tool_content .= "
+                <table width=\"99%\" class=\"tbl\">
+		<tr>
+                  <td class=\"caution\">
+		    <p><strong>$langAccountNotFound1 ($userName / $email)</strong></p>
+		    <p>$langAccountNotFound2 <a href='mailto: $emailhelpdesk'>$emailhelpdesk</a>, $langAccountNotFound3</p>
+		    <p><a href=\"../../index.php\">$langHome</a></p>
+		  </td>
 		</tr>
-		</tbody></table>";
+		</table>";
         }
 } else {
-	$tool_content = "<table width=\"99%\">
-	<tbody><tr>
-	<td class=\"caution\">
-	<p><strong>$langAccountEmailError1</strong></p>
-	<p>$langAccountEmailError2 $email.</p>
-	<p>$langAccountEmailError3 <a href='mailto:$emailhelpdesk'>$emailhelpdesk</a>.</p>
-	<p><a href=\"../../index.php\">$langHome</a></p>
-	</td>
+	$tool_content = "
+        <table width=\"99%\" class=\"tbl\">
+	<tr>
+	  <td class=\"caution\">
+	    <p><strong>$langAccountEmailError1</strong></p>
+	    <p>$langAccountEmailError2 $email.</p>
+	    <p>$langAccountEmailError3 <a href='mailto:$emailhelpdesk'>$emailhelpdesk</a>.</p>
+	    <p><a href=\"../../index.php\">$langHome</a></p>
+	  </td>
 	</tr>
-	</tbody></table>";
+	</table>";
 }
 draw($tool_content,0);
 ?>

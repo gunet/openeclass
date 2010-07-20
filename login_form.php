@@ -92,20 +92,24 @@ if(!empty($submit)) {
 	
 }  // end of user authentication
 
-$tool_content .= "<table width='30%' align='center'>
-<tr><th class='LoginHead'><b>$langUserLogin </b></th>
-</tr>
-<tr>
-<td class='LoginData'>
-<form action='$_SERVER[PHP_SELF]' method='post'>
-$langUsername <br />
-<input class='Login' name='uname' size='20' /><br />
-$langPass <br />
-<input class='Login' name='pass' type='password' size='20' /><br /><br />
-<input class='Login' name='submit' type='submit' size='20' value='$langEnter' /><br />
-$warning<br />
-<a href='${urlServer}modules/auth/lostpass.php'>$lang_forgot_pass</a>
-</form>
-</td></tr></table>";
+$tool_content .= "
+  <table class='tbl' width='30%' align='center'>
+  <tr>
+    <th class='LoginHead'><b>$langUserLogin </b></th>
+  </tr>
+  <tr>
+    <td class='LoginData'>
+      <form action='$_SERVER[PHP_SELF]' method='post'>
+        $langUsername <br />
+        <input class='Login' name='uname' size='20' /><br />
+        $langPass <br />
+        <input class='Login' name='pass' type='password' size='20' /><br /><br />
+        <input class='Login' name='submit' type='submit' size='20' value='$langEnter' /><br />
+        $warning<br />
+        <a href='${urlServer}modules/auth/lostpass.php'>$lang_forgot_pass</a>
+      </form>
+    </td>
+  </tr>
+  </table>";
 
 draw($tool_content, 0);
