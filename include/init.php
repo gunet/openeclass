@@ -356,3 +356,5 @@ if(isset($currentCourse) && file_exists($module_ini_dir = getcwd() . "/module.in
 		$errorMessagePath = "../../";
 	}
 }
+
+$tool_content = $head_content = '';
