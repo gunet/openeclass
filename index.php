@@ -222,11 +222,11 @@ if (isset($uid) AND !isset($_GET['logout'])) {
                                                     user_id = $uid", $mysqlMainDb);
 			if (mysql_num_rows($guestSQL) > 0) {
 				$sql_row = mysql_fetch_row($guestSQL);
-				$dbname=$sql_row[0];
+				$dbname = $sql_row[0];
 				session_register("dbname");
-				header("location:".$urlServer."courses/$dbname/index.php");
-			} else { // if course has deleted stop guest account
-				$warning = "<br><font color='red'>".$langInvalidGuestAccount."</font><br>";
+				header("Location: {$urlServer}courses/$dbname/index.php");
+			} else { // if course was deleted stop guest account
+				$warning = "<br><font color='red'>$langInvalidGuestAccount</font><br>";
 				include "include/logged_out_content.php";
 				draw($tool_content, 0,'index');
 			}
