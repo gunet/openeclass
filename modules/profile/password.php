@@ -109,33 +109,35 @@ if(isset($_GET['msg'])) {
 		}
 		default:die("invalid message id");
 	}
-	$tool_content .=  "<p class=\"$type\">$message<br><a href=\"$urlServer\">$urlText</a></p><br/>";
+	$tool_content .=  "\n         <p class=\"$type\">$message<br><a href=\"$urlServer\">$urlText</a></p>";
 }
 
 if (!isset($_POST['changePass'])) {
 	$tool_content .= "
 	<form method=\"post\" action=\"$passurl\">
-	<table width=\"99%\">
-	<tbody>
+        <fieldset>
+        <legend>$langPassword</legend>
+	<table class=\"tbl\">
 	<tr>
-	<th width=\"220\" class='left'>$langOldPass</th>
-	<td><input class='FormData_InputText' type=\"password\" size=\"40\" name=\"old_pass\" value=\"\"></td>
+	   <td>$langOldPass</td>
+	   <td><input type=\"password\" size=\"40\" name=\"old_pass\" value=\"\"></td>
 	</tr>
 	<tr>
-	<th class='left'>$langNewPass1</th>
-	<td>";
-	$tool_content .= "<input class='FormData_InputText' type=\"password\" size=\"40\" name=\"password_form\" value=\"\"></td>
+	   <td>$langNewPass1</td>
+	   <td>";
+	$tool_content .= "<input type=\"password\" size=\"40\" name=\"password_form\" value=\"\"></td>
 	</tr>
 	<tr>
-	<th width=\"150\" class='left'>$langNewPass2</th>
-	<td><input class='FormData_InputText' type=\"password\" size=\"40\" name=\"password_form1\" value=\"\"></td>
+	   <td>$langNewPass2</td>
+	   <td><input type=\"password\" size=\"40\" name=\"password_form1\" value=\"\"></td>
 	</tr>
 	<tr>
-	<th>&nbsp;</th>
-	<td><input type=\"submit\" name=\"submit\" value=\"$langModify\"></td>
+	   <td>&nbsp;</td>
+	   <td><input type=\"submit\" name=\"submit\" value=\"$langModify\"></td>
 	</tr>
-	</tbody>	
-	</table></form>";
+	</table>
+        </fieldset>
+        </form>";
 }
 
 draw($tool_content, 1);
