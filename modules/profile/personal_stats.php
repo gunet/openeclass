@@ -93,48 +93,46 @@ if (!extension_loaded('gd')) {
 
     $totalDuration = format_time_duration(0 + $totalDuration);
     $tool_content .= "
-  <table class='FormData' width='99%' align='left'>
-  <tbody>
+
+  <p class='title1'>$langPlatformGenStats</p>
+  <table class='tbl' width='99%'>
   <tr>
-    <th width='220' class='left' valign='top'>&nbsp;</th>
-    <td><b>$langPlatformGenStats</b></td>
+    <td width='250'>$langTotalVisitsCourses:</td>
+    <td class='bold'>$totalHits</td>
   </tr>
   <tr>
-    <th width='220' class='left'>$langTotalVisitsCourses:</th>
-    <td>$totalHits</td>
+    <td>$langDurationVisits:</td>
+    <td class='bold'>$totalDuration</td>
   </tr>
   <tr>
-    <th width='220' class='left'>$langDurationVisits:</th>
-    <td>$totalDuration</td>
-  </tr>
-  <tr>
-    <th width='220' class='left'>$langDurationVisitsPerCourse:</th>
+    <td valign='top'>$langDurationVisitsPerCourse:</td>
     <td>
-            <table width='100%'>
-            <thead>
+            <table class='tbl_alt' width='400'>
             <tr>
-                <th>&nbsp;</th><th>$langCourseTitle</th>
-                <th>$langDuration</th>
-            </tr>
-            </thead>
-            <tbody>";
+              <th>&nbsp;</th><th>$langCourseTitle</th>
+              <th>$langDuration</th>
+            </tr>";
 
 
                 $i = 0;
                 foreach ($duration as $code => $time) {
                         if ($i%2==0) {
-                                $tool_content .= "\n    <tr>";
+                                $tool_content .= "\n    <tr class=\"even\">";
                         } else {
                                 $tool_content .= "\n    <tr class=\"odd\">";
                         }
                         $i++;
                         $tool_content .= "
-<td width='1'><img style='border:0px; padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif' alt=''></td>
-<td>" . course_code_to_title($code) . "</td>
-<td>" . format_time_duration(0 + $time) . "</td></tr>";
+              <td width='1'><img style='border:0px; padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif' alt=''></td>
+              <td>" . course_code_to_title($code) . "</td>
+              <td class='center'>" . format_time_duration(0 + $time) . "</td>
+           </tr>";
                 }
 
-                $tool_content .= "</tbody></table></td></tr></tbody></table>";
+                $tool_content .= "\n              </table>
+    </td>
+  </tr>
+  </table>";
 	}
 }
 // End of chart display; chart unlinked at end of script.
@@ -147,21 +145,17 @@ $leResultat = db_query($sql, $mysqlMainDb);
 
 
     $tool_content .= "
-  <table class=\"FormData\" width=\"99%\" align=\"left\">
-  <thead>
+  <table class=\"tbl\" width=\"99%\">
   <tr>
-    <th width=\"220\" class=\"left\" valign=\"top\">$langLastVisits:</th>
+    <td width=\"250\" valign=\"top\">$langLastVisits:</td>
     <td>";
 
     $tool_content .= "
-    <table width=\"100%\">
-    <thead>
+    <table class=\"tbl_alt\" width='400'>
     <tr>
         <th colspan=\"2\" class=\"left\">&nbsp;&nbsp;&nbsp;&nbsp;$langDate</th>
         <th>$langAction</th>
-    </tr>
-    </thead>
-    <tbody>";
+    </tr>";
     $i = 0;
 
     $nomAction["LOGIN"] = "<div align=\"center\"><font color=\"#008000\">$langLogIn</font></div>";
@@ -171,7 +165,7 @@ $leResultat = db_query($sql, $mysqlMainDb);
 	   $when = $leRecord["when"];
 	   $action = $leRecord["action"];
 	   if ($i%2==0) {
-		$tool_content .= "\n    <tr>";
+		$tool_content .= "\n    <tr class=\"even\">";
 	   } else {
 		$tool_content .= "\n    <tr class=\"odd\">";
 	   }
