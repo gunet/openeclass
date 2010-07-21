@@ -103,7 +103,7 @@ if ($is_adminOfCourse) {
 }
 $main_content .= "\n      <div class='course_info'>";
 if (!empty($description)) {
-        $main_content .= "\n      <h1>$langDescription$edit_link</h1>\n      <p>$description</p>";
+        $main_content .= "\n      <div class=\"descr_title\">$langDescription$edit_link</div>\n      <p>$description</p>";
 
 } else {
         $main_content .= "\n      <p>$langThisCourseDescriptionIsEmpty$edit_link</p>";
@@ -289,14 +289,14 @@ if ($is_adminOfCourse) {
 $tool_content .= "
 <div id='container_login'>
 
-   <table width='99%' class='tbl'>
+   <table width='99%'>
    <tr>
       <td valign='top'>$main_content</td>
       <td width='30'>&nbsp;</td>
       <td width='200' valign='top'>
 
-        <table class='tbl_border'>
-        <tr class='head'>
+        <table class='tbl_courseid'>
+        <tr>
           <th>$langIdentity</th>
         </tr>
         <tr>
