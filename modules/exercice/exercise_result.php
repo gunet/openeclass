@@ -1,4 +1,4 @@
-<?php
+<?
 /*========================================================================
 *   Open eClass 2.3
 *   E-learning and Course Management System
@@ -33,27 +33,28 @@ define('MULTIPLE_ANSWER', 2);
 define('FILL_IN_BLANKS', 3);
 define('MATCHING', 4);
 
-$require_current_course = TRUE;
-$guest_allowed = true;
-include '../../include/baseTheme.php';
-$tool_content = "";
-
-$nameTools = $langExercicesResult;
-$navigation[]= array ("url"=>"exercice.php", "name"=> $langExercices);
-
-// latex support
-include_once "$webDir"."/modules/latexrender/latex.php";
-include('../../include/lib/textLib.inc.php');
-
 $TBL_EXERCICE_QUESTION='exercice_question';
 $TBL_EXERCICES='exercices';
 $TBL_QUESTIONS='questions';
 $TBL_REPONSES='reponses';
 
+$require_current_course = TRUE;
+$guest_allowed = true;
+include '../../include/baseTheme.php';
+
+$nameTools = $langExercicesResult;
+$navigation[] = array ("url"=>"exercice.php", "name"=> $langExercices);
+
+include('../../include/lib/textLib.inc.php');
+
+if (isset($_SESSION['objExercise'])) {
+    $objExercise = $_SESSION['objExercise'];
+}
+
 // if the above variables are empty or incorrect, stops the script
-if(!is_array($exerciseResult) || !is_array($questionList) || !is_object($objExercise)) {
+if(!is_array($_SESSION['exerciseResult']) || !is_array($_SESSION['questionList']) || !is_object($objExercise)) {
 	$tool_content .= $langExerciseNotFound;
-	draw($tool_content, 2, 'exercice');
+	draw($tool_content, 2);
 	exit();
 }
 
@@ -61,8 +62,8 @@ $exerciseTitle = $objExercise->selectTitle();
 $exerciseDescription = $objExercise->selectDescription();
 $exerciseDescription_temp = nl2br(make_clickable($exerciseDescription));
 $exerciseDescription_temp = mathfilter($exerciseDescription_temp, 12, "../../courses/mathimg/");
-$displayResults=$objExercise->selectResults();
-$displayScore=$objExercise->selectScore(); 
+$displayResults = $objExercise->selectResults();
+$displayScore = $objExercise->selectScore(); 
 
 $tool_content .= "<table class=\"Exercise\" width=\"99%\"><thead><tr>
 <td colspan=\"2\"><b>".stripslashes($exerciseTitle)."</b>
@@ -75,18 +76,17 @@ $i=$totalScore=$totalWeighting=0;
 
 // for each question
 
-foreach($questionList as $questionId) {
+foreach($_SESSION['questionList'] as $questionId) {
 	// gets the student choice for this question
-	$choice=@$exerciseResult[$questionId];
-
+	$choice = @$_SESSION['exerciseResult'][$questionId];
 	// creates a temporary Question object
 	$objQuestionTmp=new Question();
 	$objQuestionTmp->read($questionId);
 
 	$questionName=$objQuestionTmp->selectTitle();
-	$questionName=latex_content($questionName);
+	$questionName=$questionName;
 	$questionDescription=$objQuestionTmp->selectDescription();
-	$questionDescription=latex_content($questionDescription);
+	$questionDescription=$questionDescription;
 	$questionDescription_temp = nl2br(make_clickable($questionDescription));
 	$questionDescription_temp = mathfilter($questionDescription_temp, 12, "../../courses/mathimg/");
 	$questionWeighting=$objQuestionTmp->selectWeighting();
@@ -323,13 +323,12 @@ if ($displayScore == 1) {
 	$tool_content .= "<br/><table width='99%' class='Exercise'><thead><tr>
 	<td class='score'>$langYourTotalScore: <b>$totalScore/$totalWeighting</b>
 	</td></tr>
-	</thead></table>
-	";
+	</thead></table>";
 }
 $tool_content .= "<br/><div align='center'>
-<input type='submit' value='${langFinish}'>
+<input type='submit' value='$langFinish'>
 </div>
 <br/></form><br>";
 
-draw($tool_content, 2, 'exercice');
+draw($tool_content, 2);
 ?>

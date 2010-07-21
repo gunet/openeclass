@@ -1,4 +1,4 @@
-<?php // $Id$
+<? // $Id$
 /*========================================================================
 *   Open eClass 2.3
 *   E-learning and Course Management System
@@ -32,29 +32,36 @@ $require_current_course = TRUE;
 
 include '../../include/baseTheme.php';
 
-$tool_content = "";
-$nameTools=$langQuestionPool;
-$navigation[]=array("url" => "exercice.php","name" => $langExercices);
-if (isset($fromExercise)) {
-	$navigation[]= array ("url" => "admin.php?exerciseId=$fromExercise", "name" => $langExerciseManagement);
-}
-
 $TBL_EXERCICE_QUESTION='exercice_question';
 $TBL_EXERCICES='exercices';
 $TBL_QUESTIONS='questions';
 $TBL_REPONSES='reponses';
 
+$nameTools = $langQuestionPool;
+$navigation[]=array("url" => "exercice.php","name" => $langExercices);
+if (isset($_GET['fromExercise'])) {
+	$fromExercise = $_GET['fromExercise'];
+	$navigation[]= array ("url" => "admin.php?exerciseId=$fromExercise", "name" => $langExerciseManagement);
+}
+if (isset($_GET['exerciseId'])) {
+	$exerciseId = $_GET['exerciseId'];
+}
+if (isset($_SESSION['objExercise'])) {
+    $objExercise = $_SESSION['objExercise'];
+}
+
 // maximum number of questions on a same page
-$limitQuestPage = 15;
-if (!isset($page)) {
+define('QUESTIONS_PER_PAGE', 15);
+
+if (!isset($_GET['page'])) {
 	$page = 0;
 } else {
 	$page = $_GET['page'];
 }
 if($is_adminOfCourse) {
 	// deletes a question from the data base and all exercises
-	if(isset($delete))
-	{
+	if(isset($_GET['delete'])) {
+		$delete = intval($_GET['delete']);
 		// construction of the Question object
 		$objQuestionTmp=new Question();
 		// if the question exists
@@ -67,8 +74,8 @@ if($is_adminOfCourse) {
 		unset($objQuestionTmp);
 	}
 	// gets an existing question and copies it into a new exercise
-	elseif(isset($recup) && $fromExercise)
-	{
+	elseif(isset($_GET['recup']) && $fromExercise) {
+		$recup = intval($_GET['recup']);
 		// construction of the Question object
 		$objQuestionTmp=new Question();
 		// if the question exists
@@ -119,8 +126,9 @@ if($is_adminOfCourse) {
 	<option value=\"0\">-- ".$langAllExercises." --</option>"."
 	<option value=\"-1\" ";
 		
-	if(isset($exerciseId) && $exerciseId == -1) 
+	if(isset($exerciseId) && $exerciseId == -1) {
 		$tool_content .= "selected=\"selected\""; 
+	}
 	$tool_content .= ">-- ".$langOrphanQuestions." --</option>";
 	
 	mysql_select_db($currentCourseID);
@@ -132,22 +140,23 @@ if($is_adminOfCourse) {
 	$result = mysql_query($sql);
 	
 	// shows a list-box allowing to filter questions
-	while($row=mysql_fetch_array($result)) {
+	while($row = mysql_fetch_array($result)) {
 		$tool_content .= "<option value=\"".$row['id']."\"";
-		if(isset($exerciseId) && $exerciseId == $row['id']) 
+		if(isset($exerciseId) && $exerciseId == $row['id']) {
 			$tool_content .= "selected=\"selected\"";
+		}
 		$tool_content .= ">".$row['titre']."</option>";
 	}
 	$tool_content .= "</select><input type='submit' value='$langQuestionView'></td></tr></thead></table>";
 
-	$from = $page*$limitQuestPage;
+	$from = $page * QUESTIONS_PER_PAGE;
 	
 	// if we have selected an exercise in the list-box 'Filter'
 	if(isset($exerciseId) && $exerciseId > 0)
 	{
 		$sql="SELECT id,question,type FROM `$TBL_EXERCICE_QUESTION`,`$TBL_QUESTIONS` 
 			WHERE question_id=id AND exercice_id='$exerciseId' 
-			ORDER BY q_position LIMIT $from,".($limitQuestPage+1);
+			ORDER BY q_position LIMIT $from,".(QUESTIONS_PER_PAGE+1);
 		$result = mysql_query($sql);
 	}
 	// if we have selected the option 'Orphan questions' in the list-box 'Filter'
@@ -155,7 +164,7 @@ if($is_adminOfCourse) {
 	{
 		$sql="SELECT id,question,type FROM `$TBL_QUESTIONS` LEFT JOIN `$TBL_EXERCICE_QUESTION` 
 			ON question_id=id WHERE exercice_id IS NULL ORDER BY question 
-			LIMIT $from,".($limitQuestPage+1);
+			LIMIT $from,".(QUESTIONS_PER_PAGE+1);
 		$result = mysql_query($sql);
 	}
 	// if we have not selected any option in the list-box 'Filter'
@@ -163,7 +172,7 @@ if($is_adminOfCourse) {
 	{		
 		@$sql="SELECT id,question,type FROM `$TBL_QUESTIONS` LEFT JOIN `$TBL_EXERCICE_QUESTION` 
 			ON question_id=id WHERE exercice_id IS NULL OR exercice_id<>'$fromExercise' 
-			GROUP BY id ORDER BY question LIMIT $from,".($limitQuestPage+1);
+			GROUP BY id ORDER BY question LIMIT $from,".(QUESTIONS_PER_PAGE+1);
 		$result = mysql_query($sql);
 		// forces the value to 0
 		$exerciseId = 0;
@@ -217,7 +226,7 @@ if($is_adminOfCourse) {
 			}
 			$tool_content .= "</tr>";
 			// skips the last question,only used to know if we must create a link "Next page"
-			if($i == $limitQuestPage) {
+			if($i == QUESTIONS_PER_PAGE) {
 				break;
 			}
 			$i++;
@@ -225,7 +234,7 @@ if($is_adminOfCourse) {
 	}
 	if(!$nbrQuestions) {
 		$tool_content .= "<tr><td colspan='";
-		if (isset($fromExercise)&&($fromExercise)) {
+		if (isset($fromExercise) && ($fromExercise)) {
 			$tool_content .= "3";
 		} else {
 			$tool_content .= "4";
@@ -233,7 +242,7 @@ if($is_adminOfCourse) {
 		$tool_content .= "\">".$langNoQuestion."</td></tr>";
 	}
 	// questions pagination 
-	$numpages = intval($num_of_questions / $limitQuestPage);
+	$numpages = intval($num_of_questions / QUESTIONS_PER_PAGE);
 	if ($numpages > 0) {
 		$tool_content .= "<tr><th align='right' colspan='";
 		if (isset($fromExercise)) {
@@ -248,7 +257,7 @@ if($is_adminOfCourse) {
 				$tool_content .= "<small>&lt;&lt; <a href=\"".$_SERVER['PHP_SELF'].
 				"?exerciseId=".$exerciseId.
 				"&fromExercise=".$fromExercise.
-				"&page=".$prevpage."\">".$langPreviousPage."</a></small>";
+				"&page=".$prevpage."\">".$langPreviousPage."</a>&nbsp;</small>";
 			} else {
 				$tool_content .= "<small>&lt;&lt; 
 				<a href='$_SERVER[PHP_SELF]?page=$prevpage'>$langPreviousPage</a></small>";
@@ -274,5 +283,5 @@ if($is_adminOfCourse) {
 } else { // if not admin of course
 	$tool_content .= $langNotAllowed;
 }
-draw($tool_content, 2, 'exercice');
+draw($tool_content, 2);
 ?>

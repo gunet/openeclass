@@ -25,10 +25,10 @@
 * =========================================================================*/
 
 // the question form has been submitted
-if(isset($submitQuestion)) {
+if(isset($_POST['submitQuestion'])) {
 	$questionName = trim($questionName);
 	$questionDescription = trim($questionDescription);
-
+	$imageUpload_size = isset($_POST['imageUpload_size'])?$_POST['imageUpload_size']:'';
 	// no name given
 	if(empty($questionName))
 	{
@@ -63,7 +63,7 @@ if(isset($submitQuestion)) {
 		unset($objAnswerTmp);	
 	}
 	
-	$objQuestion->read($modifyQuestion);
+	$objQuestion->read($_GET['modifyQuestion']);
 	$objQuestion->updateTitle($questionName);
 	$objQuestion->updateDescription($questionDescription);
 	$objQuestion->updateType($answerType);
@@ -98,7 +98,7 @@ if(isset($submitQuestion)) {
 		// goes to exercise viewing
 		$editQuestion=$questionId;
 	}
-	unset($newQuestion,$modifyQuestion);
+	unset($_GET['newQuestion'], $_GET['modifyQuestion']);
 }
 else
 {
@@ -109,18 +109,17 @@ else
 		$answerType=$objQuestion->selectType();
 	}
 }
-
-if(isset($newQuestion) || isset($modifyQuestion)) {
+if(isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
+	$questionId = $objQuestion->selectId();
 	// is picture set ?
 	$okPicture = file_exists($picturePath.'/quiz-'.$questionId)?true:false;
-	@$tool_content .= "<form enctype='multipart/form-data' method='post' action='$_SERVER[PHP_SELF]?modifyQuestion=$modifyQuestion&newQuestion=$newQuestion'>
-	<table width=\"99%\" class=\"FormData\"><tbody>";
-
+	@$tool_content .= "<form enctype='multipart/form-data' method='post' action='$_SERVER[PHP_SELF]?modifyQuestion=$_GET[modifyQuestion]&newQuestion=$_GET[newQuestion]'>
+	<table width='99%' class='FormData'><tbody>";
 	// if there is an error message
 	if(!empty($msgErr)) {
 		$tool_content .= "<tr><td colspan='2'>
 		<table border='0' cellpadding='3' align='center' width='400' bgcolor='#FFCC00'>
-		<tr><td>${msgErr}</td></tr>
+		<tr><td>$msgErr</td></tr>
 		</table></td></tr>";
 	}
 
@@ -149,42 +148,35 @@ if(isset($newQuestion) || isset($modifyQuestion)) {
 	if ($okPicture) {
 		$tool_content .= "<tr><th class='left'>$langDeletePicture :</th>
 		<td><input type=\"checkbox\" name=\"deletePicture\" value=\"1\" ";
-		if(isset($deletePicture)) 
+		if(isset($deletePicture)) {
 			$tool_content .= 'checked="checked"'; 
+		}
 		$tool_content .= "> ";
 		$tool_content .= "</td></tr>";
 	}
-
-  $tool_content .= <<<cData
-
-    <tr>
-      <th class='left'>${langAnswerType} :</th>
-cData;
-
-$tool_content .= "
-      <td><input type=\"radio\" name=\"answerType\" value=\"1\" ";
-        if ($answerType <= 1)
+	$tool_content .= "<tr><th class='left'>$langAnswerType :</th>";
+	$tool_content .= "<td><input type=\"radio\" name=\"answerType\" value=\"1\" ";
+        if ($answerType <= 1) {
                 $tool_content .= 'checked="checked"';
-        $tool_content .= "> ".$langUniqueSelect."
-          <br>
-          ";
+        }
+        $tool_content .= "> ".$langUniqueSelect."<br>";
         $tool_content .= "<input type=\"radio\" name=\"answerType\" value=\"2\" ";
-                if ($answerType == 2)
-                        $tool_content .= 'checked="checked"';
-                $tool_content .= "> ".$langMultipleSelect."
-          <br>
-          ";
+	if ($answerType == 2) {
+		$tool_content .= 'checked="checked"';
+	}
+	$tool_content .= "> ".$langMultipleSelect."
+	<br>";
         $tool_content .= "<input type=\"radio\" name=\"answerType\" value=\"4\" ";
-                if ($answerType >= 4)
-                        $tool_content .= 'checked="checked"';
-                $tool_content .= "> ".$langMatching."
-          <br>
-          ";
+	if ($answerType >= 4) {
+		$tool_content .= 'checked="checked"';
+	}
+	$tool_content .= "> ".$langMatching."
+	<br>";
         $tool_content .= "<input type=\"radio\" name=\"answerType\" value=\"3\" ";
-                if ($answerType == 3)
-                        $tool_content .= 'checked="checked"';
-                $tool_content .= "> ".$langFillBlanks;
-
+	if ($answerType == 3) {
+		$tool_content .= 'checked="checked"';
+	}
+	$tool_content .= "> ".$langFillBlanks;
 	$tool_content .= "</td><tr><th>&nbsp;</td><td>
 	<input type='submit' name='submitQuestion' value='$langOk'>
 	&nbsp;&nbsp;<input type='submit' name='cancelQuestion' value='$langCancel'>

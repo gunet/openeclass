@@ -1,4 +1,4 @@
-<?php
+<?
 /*========================================================================
 *   Open eClass 2.3
 *   E-learning and Course Management System
@@ -31,28 +31,25 @@
  */
 
 // moves a question up in the list
-if(isset($moveUp)) {
-	$objExercise->moveUp($moveUp);
+if(isset($_GET['moveUp'])) {
+	$objExercise->moveUp($_GET['moveUp']);
 	$objExercise->save();
 }
 
 // moves a question down in the list
-if(isset($moveDown)) {
-	$objExercise->moveDown($moveDown);
+if(isset($_GET['moveDown'])) {
+	$objExercise->moveDown($_GET['moveDown']);
 	$objExercise->save();
 }
 
 // deletes a question from the exercise (not from the data base)
-if(isset($deleteQuestion))
-{
+if(isset($_GET['deleteQuestion'])) {
+	$deleteQuestion = $_GET['deleteQuestion'];
 	// construction of the Question object
 	$objQuestionTmp=new Question();
-
 	// if the question exists
-	if($objQuestionTmp->read($deleteQuestion))
-	{
+	if($objQuestionTmp->read($deleteQuestion)) {
 		$objQuestionTmp->delete($exerciseId);
-
 		// if the question has been removed from the exercise
 		if($objExercise->removeFromList($deleteQuestion))
 		{
@@ -64,24 +61,15 @@ if(isset($deleteQuestion))
 }
 
 
-  $tool_content .= <<<cData
-    <table width="99%" class="FormData">
-    <thead>
-    <tr>
-      <th class="left" width="220">$langQuestionList :</th>
-      <td><div class="right">
-      <a href="$_SERVER[PHP_SELF]?newQuestion=yes">${langNewQu}</a> | <a href="question_pool.php?fromExercise=${exerciseId}">${langGetExistingQuestion}</a>
-      </div></td>
-    </tr>
-    </thead>
-    </table>
-cData;
+$tool_content .= "<table width='99%' class='FormData'><thead><tr>
+<th class='left width='220'>$langQuestionList :</th>
+<td><div class='right'>
+<a href='$_SERVER[PHP_SELF]?newQuestion=yes'>$langNewQu</a> |
+<a href='question_pool.php?fromExercise=$exerciseId'>$langGetExistingQuestion</a>
+</div></td>
+</tr></thead></table>";
 
-  $tool_content .= <<<cData
-  
-    <table width="99%" class="Question">
-    <tbody>
-cData;
+$tool_content .= "<table width='99%' class='Question'><tbody>";
 
 if($nbrQuestions) {
 	$questionList=$objExercise->selectQuestionList();
@@ -90,13 +78,14 @@ if($nbrQuestions) {
 	foreach($questionList as $id) {
 		$objQuestionTmp=new Question();
 		$objQuestionTmp->read($id);
-
-	$tool_content .= "<tr><td align=\"right\" width=\"1\">".$i.".</td>
-	<td> ".$objQuestionTmp->selectTitle()."<br/>
-	<small class=\"invisible\">".$aType[$objQuestionTmp->selectType()-1]."</small></td>
-	<td class=\"right\" width=\"50\"><a href=\"".$_SERVER['PHP_SELF']."?editQuestion=".$id."\">"."<img src='../../template/classic/img/edit.gif' border='0' align='absmiddle' title='$langModify'></a>"." <a href=\"".$_SERVER['PHP_SELF']."?deleteQuestion=".$id."\" "."onclick=\"javascript:if(!confirm('".addslashes(htmlspecialchars($langConfirmYourChoice))."')) return false;\">"."<img src='../../template/classic/img/delete.gif' border='0' align='absmiddle' title='$langDelete'></a></td>
-	<td width='20'>";
-	
+		$tool_content .= "<tr><td align=\"right\" width=\"1\">".$i.".</td>
+		<td> ".$objQuestionTmp->selectTitle()."<br/>
+		<small class=\"invisible\">".$aType[$objQuestionTmp->selectType()-1]."</small></td>
+		<td class=\"right\" width=\"50\"><a href=\"".$_SERVER['PHP_SELF']."?editQuestion=".$id."\">".
+		"<img src='../../template/classic/img/edit.gif' align='absmiddle' title='$langModify'></a>".
+		" <a href=\"".$_SERVER['PHP_SELF']."?deleteQuestion=".$id."\" "."onclick=\"javascript:if(!confirm('".addslashes(htmlspecialchars($langConfirmYourChoice))."')) return false;\">".
+		"<img src='../../template/classic/img/delete.gif' align='absmiddle' title='$langDelete'></a></td>
+		<td width='20'>";
 		if($i != 1) {
 			$tool_content .= "<a href=\"".$_SERVER['PHP_SELF']."?moveUp=".$id."\">
    			<img src=\"../../template/classic/img/up.gif\" border=\"0\" align=\"absmiddle\" title=\"".$langUp."\"></a> ";
@@ -113,11 +102,7 @@ if($nbrQuestions) {
 }
 
 if(!isset($i)) {
-$tool_content .= <<<cData
-    <tr>
-      <td class="alert1">${langNoQuestion}</td>
-    </tr>
-cData;
+	$tool_content .= "<tr><td class='alert1'>$langNoQuestion</td></tr>";
 }
 
 $tool_content .= "</tbody></table>";

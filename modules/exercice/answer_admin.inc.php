@@ -25,10 +25,14 @@
 * =========================================================================*/
 
 
-$questionName=$objQuestion->selectTitle();
-$answerType=$objQuestion->selectType();
-$okPicture=file_exists($picturePath.'/quiz-'.$questionId)?true:false;
-
+$questionName = $objQuestion->selectTitle();
+$answerType = $objQuestion->selectType();
+$questionId = $objQuestion->selectId();
+$okPicture = file_exists($picturePath.'/quiz-'.$questionId)?true:false;
+$modifyAnswers = isset($_GET['modifyAnswers'])?$_GET['modifyAnswers']:'';
+if (isset($_POST['submitAnswers'])) {
+	$submitAnswers = $_POST['submitAnswers'];
+}
 // if we come from the warning box "this question is used in several exercises"
 if (isset($usedInSeveralExercises) or isset($modifyIn)) {
 	// if the user has chosed to modify the question only in the current exercise
@@ -78,6 +82,7 @@ if (isset($usedInSeveralExercises) or isset($modifyIn)) {
 	unset($buttonBack);
 }
 
+
 // the answer form has been submitted
 if(isset($submitAnswers) || isset($buttonBack)) {
 	if($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER) {
@@ -109,10 +114,8 @@ if(isset($submitAnswers) || isset($buttonBack)) {
 			// checks if field is empty
 			if(empty($reponse[$i])) {
 				$msgErr=$langGiveAnswers;
-
 				// clears answers already recorded into the Answer object
 				$objAnswer->cancel();
-
 				break;
 			} else {
 				// adds the answer into the object
@@ -129,7 +132,6 @@ if(isset($submitAnswers) || isset($buttonBack)) {
 			// checks if the question is used in several exercises
 			elseif($exerciseId && !isset($modifyIn) && $objQuestion->selectNbrExercises() > 1)
 			{
-				
 				$usedInSeveralExercises=1;
 			} else {
 				// saves the answers into the data base
@@ -278,7 +280,6 @@ if(isset($submitAnswers) || isset($buttonBack)) {
 		}
 	}
 }
-
 if(isset($modifyAnswers)) {
 	// construction of the Answer object
 	$objAnswer=new Answer($questionId);
@@ -442,29 +443,23 @@ if(isset($modifyAnswers)) {
 
 	if(!isset($usedInSeveralExercises)) {
 		if($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER) {
-
-$tool_content .= <<<cData
-
-    <form method="post" action="$_SERVER[PHP_SELF]?modifyAnswers=${modifyAnswers}">
-    <input type="hidden" name="formSent" value="1" />
-    <input type="hidden" name="nbrAnswers" value="${nbrAnswers}" />
-cData;
-
-	$tool_content .= "<table width=\"99%\" class=\"Question\"><thead><tr>
-	<th class=\"left\" colspan=\"5\" height=\"25\">
-	<b>".nl2br($questionName)."</b>&nbsp;&nbsp;
-	</th></tr>
-	<tr><td colspan=\"5\" ><b><u>$langQuestionAnswers</u>:</b><br />";
-		
-		if($answerType == UNIQUE_ANSWER) {
-			$tool_content .= "<small>$langUniqueSelect</small>";
-		}
-		if($answerType == MULTIPLE_ANSWER) {
-			$tool_content .= "<small>$langMultipleSelect</small>";
-		}
-		
-	$tool_content .= "</td></tr></thead>";
-	$tool_content .= "<tbody>";
+			$tool_content .= "<form method='post' action='$_SERVER[PHP_SELF]?modifyAnswers=$modifyAnswers'>
+			<input type='hidden' name='formSent' value='1' />
+			<input type='hidden' name='nbrAnswers' value='$nbrAnswers' />";
+			$tool_content .= "<table width=\"99%\" class=\"Question\"><thead><tr>
+			<th class=\"left\" colspan=\"5\" height=\"25\">
+			<b>".nl2br($questionName)."</b>&nbsp;&nbsp;
+			</th></tr>
+			<tr><td colspan=\"5\" ><b><u>$langQuestionAnswers</u>:</b><br />";
+			
+			if($answerType == UNIQUE_ANSWER) {
+				$tool_content .= "<small>$langUniqueSelect</small>";
+			}
+			if($answerType == MULTIPLE_ANSWER) {
+				$tool_content .= "<small>$langMultipleSelect</small>";
+			}
+			$tool_content .= "</td></tr></thead>";
+			$tool_content .= "<tbody>";
 
 	// if there is a picture, display this
 	if($okPicture) {
@@ -474,29 +469,20 @@ cData;
 	}
 
 	// if there is an error message
-	if(!empty($msgErr))
-	{
-	$tool_content .= <<<cData
-    <tr>
-      <td colspan="5">
-        <table border="0" cellpadding="3" align="center" width="400" bgcolor="#FFCC00">
-        <tr><td>$msgErr</td></tr>
-        </table>
-      </td>
-    </tr>
-cData;
+	if(!empty($msgErr)) {
+		$tool_content .= "<tr><td colspan='5'>
+		<table border='0' cellpadding='3' align='center' width='400' bgcolor='#FFCC00'>
+		<tr><td>$msgErr</td></tr>
+		</table></td></tr>";
 	}
 
-	$tool_content .= <<<cData
-
-  <tr>
-    <td align="right" width="3%"><b>$langID</b></td>
-    <td align="center" width="7%"><b>$langTrue</b></td>
-    <td align="center" width="45%"><b>$langAnswer</b></td>
-    <td align="center" width="45%"><b>$langComment</b></td>
-    <td align="center" width="10%"><b>$langQuestionWeighting</b></td>
-  </tr>
-cData;
+	$tool_content .= "<tr>
+	  <td align='right' width='3%'><b>$langID</b></td>
+	  <td align='center' width='7%'><b>$langTrue</b></td>
+	  <td align='center' width='45%'><b>$langAnswer</b></td>
+	  <td align='center' width='45%'><b>$langComment</b></td>
+	  <td align='center' width='10%'><b>$langQuestionWeighting</b></td>
+	</tr>";
 
 	for($i=1;$i <= $nbrAnswers;$i++) {
 		$tool_content .="<tr><td class=\"right\">$i.</td>";
@@ -538,12 +524,12 @@ $tool_content .= <<<cData
     <tr>
       <th class="left" colspan="2">&nbsp;</th>
       <td class="left"><b>$langAnswers :</b>&nbsp;
-        <input type="submit" name="lessAnswers" value="${langLessAnswers}" />&nbsp;
-        <input type="submit" name="moreAnswers" value="${langMoreAnswers}" />
+        <input type="submit" name="lessAnswers" value="$langLessAnswers" />&nbsp;
+        <input type="submit" name="moreAnswers" value="$langMoreAnswers" />
       </td>
       <td align="center">
-        <input type="submit" name="submitAnswers" value="${langCreate}" />&nbsp;&nbsp;
-        <input type="submit" name="cancelAnswers" value="${langCancel}" />
+        <input type="submit" name="submitAnswers" value="$langCreate" />&nbsp;&nbsp;
+        <input type="submit" name="cancelAnswers" value="$langCancel" />
       </td>
       <th class="left">&nbsp;</th>
     </tr>
@@ -558,19 +544,14 @@ cData;
 		}
 		elseif($answerType == FILL_IN_BLANKS)
 		{
-
-    $tool_content .= "
-      <form name=\"formulaire\" method=\"post\" action=\"".$_SERVER['PHP_SELF']."?modifyAnswers=".$modifyAnswers."\">\n";
-if(!isset($setWeighting))
-	$tempSW = "";
-else
-	$tempSW = $setWeighting;	
-
-
-$tool_content .= <<<cData
-      <input type="hidden" name="formSent" value="1" />
-      <input type="hidden" name="setWeighting" value="${tempSW}" />
-cData;
+		$tool_content .= "<form name=\"formulaire\" method=\"post\" action=\"".$_SERVER['PHP_SELF']."?modifyAnswers=".$modifyAnswers."\">\n";
+		if(!isset($setWeighting)) {
+			$tempSW = "";
+		} else {
+			$tempSW = $setWeighting;	
+		}
+		$tool_content .= "<input type='hidden' name='formSent' value='1' />
+		      <input type='hidden' name='setWeighting' value='$tempSW' />";
 
 	if(!isset($setWeighting)) {
 		$tool_content .= "<input type=\"hidden\" name=\"weighting\" value=\"\" />\n";
@@ -715,7 +696,7 @@ $tool_content .= <<<cData
 
 
   
-	<form method="post" action="$_SERVER[PHP_SELF]?modifyAnswers=${modifyAnswers}">
+	<form method="post" action="$_SERVER[PHP_SELF]?modifyAnswers=$modifyAnswers">
 	<input type="hidden" name="formSent" value="1" />
 	<input type="hidden" name="nbrOptions" value="${nbrOptions}" />
 	<input type="hidden" name="nbrMatches" value="${nbrMatches}" />
@@ -822,20 +803,11 @@ cData;
 			$tool_content .= "\" class=\"auth_input\" /></td><td>&nbsp;</td><td>&nbsp;</td></tr>";
 		} // end foreach()
 
-$tool_content .= <<<cData
-    <tr>
-      <th>&nbsp;</th>
-      <td colspan="3" align="left">
-      <input type="submit" name="submitAnswers" value="${langCreate}" />
-      &nbsp;&nbsp;<input type="submit" name="cancelAnswers" value="${langCancel}" />
-      </td>
-    </tr>
-    </tbody>
-    </table>
-	
-    </form>
-cData;
-
+		$tool_content .= "<tr><th>&nbsp;</th><td colspan='3' align='left'>
+		<input type='submit' name='submitAnswers' value='$langCreate' />
+		&nbsp;&nbsp;<input type='submit' name='cancelAnswers' value='$langCancel' />
+		</td></tr></tbody></table>	
+		</form>";
 		}
 	}
 }

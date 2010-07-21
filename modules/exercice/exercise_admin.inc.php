@@ -1,4 +1,4 @@
-<?php // $Id$
+<? // $Id$
 /*========================================================================
 *   Open eClass 2.3
 *   E-learning and Course Management System
@@ -25,10 +25,10 @@
 * =========================================================================*/
 
 // the exercise form has been submitted
-if(isset($submitExercise)) {
+if(isset($_POST['submitExercise'])) {
 	$exerciseTitle = trim($exerciseTitle);
 	$exerciseDescription = trim($exerciseDescription);
-	@$randomQuestions=$randomQuestions?$questionDrawn:0;
+	//$randomQuestions=$randomQuestions?$questionDrawn:0;
 
 	// no title given
 	if(empty($exerciseTitle))
@@ -45,13 +45,13 @@ if(isset($submitExercise)) {
 			$objExercise->updateEndDate($exerciseEndDate);
 			$objExercise->updateTimeConstrain($exerciseTimeConstrain);
 			$objExercise->updateAttemptsAllowed($exerciseAttemptsAllowed);
-			$objExercise->setRandom($randomQuestions);
+	//		$objExercise->setRandom($randomQuestions);
 			$objExercise->updateResults($dispresults);
 			$objExercise->updateScore($dispscore);
 			$objExercise->save();
 			// reads the exercise ID (only usefull for a new exercise)
 			$exerciseId=$objExercise->selectId();
-			unset($modifyExercise);
+			unset($_GET['modifyExercise']);
 		}
 	}
 }
@@ -64,18 +64,15 @@ else
 	$exerciseEndDate=$objExercise->selectEndDate();
 	$exerciseTimeConstrain=$objExercise->selectTimeConstrain();
 	$exerciseAttemptsAllowed=$objExercise->selectAttemptsAllowed();
-	$randomQuestions=$objExercise->isRandom();
+	//$randomQuestions=$objExercise->isRandom();
 	$displayResults=$objExercise->selectResults();
 	$displayScore=$objExercise->selectScore();
 }
 
 // shows the form to modify the exercise
-if(isset($modifyExercise))
-{
-
-	$tool_content .= "<form method='post' action='$_SERVER[PHP_SELF]?modifyExercise=${modifyExercise}'>
+if(isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
+	$tool_content .= "<form method='post' action='$_SERVER[PHP_SELF]?modifyExercise=$_GET[modifyExercise]'>
 	<table width='99%' class='FormData'><tbody>";
-
 	if(!empty($msgErr)) {
 		$tool_content .= "<tr><td colspan='2'>
 		<table border='0' cellpadding='3' align='center' width='400' bgcolor='#FFCC00'>

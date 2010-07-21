@@ -74,12 +74,15 @@ $from = $page * $limitExPage;
 
 // only for administrator
 if($is_adminOfCourse) {
-	if(!empty($choice)) {
+	if (isset($_GET['exerciseId'])) {
+		$exerciseId = $_GET['exerciseId'];
+	}
+	if(!empty($_GET['choice'])) {
 		// construction of Exercise
 		$objExerciseTmp=new Exercise();
 		if($objExerciseTmp->read($exerciseId))
 		{
-			switch($choice)
+			switch($_GET['choice'])
 			{
 				case 'delete':	// deletes an exercise
 					$objExerciseTmp->delete();
@@ -113,12 +116,10 @@ $nbrExercises = mysql_num_rows($result);
 
 if($is_adminOfCourse) {
 	$tool_content .= "<div  align=\"left\" id=\"operations_container\"><ul id=\"opslist\">\n";
-
-  $tool_content .= <<<cData
-          <li><a href="admin.php?NewExercise=Yes">${langNewEx}</a>&nbsp;|&nbsp;<a href="question_pool.php">${langQuestionPool}</a></li>
-cData;
-
-$tool_content .= "</ul></div>";
+	$tool_content .= "<li><a href='admin.php?NewExercise=Yes'>$langNewEx</a>&nbsp;|
+			&nbsp;<a href='question_pool.php'>$langQuestionPool</a></li>";
+			//&nbsp;<a href='import.php'>$langImportExercise</li>";
+	$tool_content .= "</ul></div>";
 } else  {
 	$tool_content .= "";
 }
@@ -135,12 +136,7 @@ if ($maxpage > 0) {
 	}
 }
 
-$tool_content .= <<<cData
-
-      <table align="left" width="99%" class="ExerciseSum">
-      <thead>
-      <tr>
-cData;
+$tool_content .= "<table align='left' width='99%' class='ExerciseSum'><thead><tr>";
 
 // shows the title bar only for the administrator
 if($is_adminOfCourse) {
@@ -162,12 +158,10 @@ if($is_adminOfCourse) {
 }
 
 if(!$nbrExercises) {
-	$tool_content .= "
-      <tr><td";
+	$tool_content .= "<tr><td";
 	if($is_adminOfCourse)
 		$tool_content .= " colspan=\"4\"";
-		$tool_content .= " class=\"empty\">${langNoEx}</td>
-      </tr>";
+		$tool_content .= " class=\"empty\">${langNoEx}</td></tr>";
 }
 
 $tool_content .= "<tbody>";
@@ -196,7 +190,6 @@ while($row = mysql_fetch_array($result)) {
 			$tool_content .= "<td width=\"1\"><img style='padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif' alt='' /></td><td>
 			<a href=\"exercice_submit.php?exerciseId=${row['id']}\">".$row['titre']."</a>$descr</td>";
 		}
-
 		$eid = $row['id'];
 		$NumOfResults = mysql_fetch_array(db_query("SELECT COUNT(*) FROM exercise_user_record 
 			WHERE eid='$eid'", $currentCourseID));
@@ -238,38 +231,38 @@ cData;
 	$tool_content .= "</td></tr>";
 }
 	// student only
-else {
-	$CurrentDate = date("Y-m-d");
-	$temp_StartDate = mktime(0, 0, 0, substr($row['StartDate'], 5,2), substr($row['StartDate'], 8,2), substr($row['StartDate'], 0,4));
-	$temp_EndDate = mktime(0, 0, 0, substr($row['EndDate'], 5,2),substr($row['EndDate'], 8,2),substr($row['EndDate'], 0,4));
-	$CurrentDate = mktime(0, 0 , 0,substr($CurrentDate, 5,2), substr($CurrentDate, 8,2),substr($CurrentDate, 0,4));
-	if (($CurrentDate >= $temp_StartDate) && ($CurrentDate <= $temp_EndDate)) {
-		$tool_content .= "<td width=\"1\"><img style='padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif' alt='' /></td>
-		<td><a href=\"exercice_submit.php?exerciseId=".$row['id']."\">".$row['titre']."</a>";
-	} else {
-		$tool_content .= "<td width='1'>
-			<img style='padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif' alt='' />
-			</td><td>".$row['titre']."&nbsp;&nbsp;(<font color=\"red\">$m[expired]</font>)";
+	else {
+		$CurrentDate = date("Y-m-d");
+		$temp_StartDate = mktime(0, 0, 0, substr($row['StartDate'], 5,2), substr($row['StartDate'], 8,2), substr($row['StartDate'], 0,4));
+		$temp_EndDate = mktime(0, 0, 0, substr($row['EndDate'], 5,2),substr($row['EndDate'], 8,2),substr($row['EndDate'], 0,4));
+		$CurrentDate = mktime(0, 0 , 0,substr($CurrentDate, 5,2), substr($CurrentDate, 8,2),substr($CurrentDate, 0,4));
+		if (($CurrentDate >= $temp_StartDate) && ($CurrentDate <= $temp_EndDate)) {
+			$tool_content .= "<td width=\"1\"><img style='padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif' alt='' /></td>
+			<td><a href=\"exercice_submit.php?exerciseId=".$row['id']."\">".$row['titre']."</a>";
+		} else {
+			$tool_content .= "<td width='1'>
+				<img style='padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif' alt='' />
+				</td><td>".$row['titre']."&nbsp;&nbsp;(<font color=\"red\">$m[expired]</font>)";
+		}
+		$tool_content .= "<br/><small>$row[description]</small></td>
+		<td align='center'><small>".nice_format($row['StartDate'])."</small></td>
+		<td align='center'><small>".nice_format($row['EndDate'])."</small></td>";
+		// how many attempts we have.
+		$CurrentAttempt = mysql_fetch_array(db_query("SELECT COUNT(*) FROM exercise_user_record
+			WHERE eid='$row[id]' AND uid='$uid'", $currentCourseID));
+		 if ($row['TimeConstrain'] > 0) {
+			  $tool_content .= "<td align='center'>
+			<small>$row[TimeConstrain] $langExerciseConstrainUnit</small></td>";
+		} else {
+			$tool_content .= "<td align='center'><small> - </small></td>";
+		}
+		if ($row['AttemptsAllowed'] > 0) {
+			   $tool_content .= "<td align='center'><small>$CurrentAttempt[0]/$row[AttemptsAllowed]</small></td>";
+		} else {
+			 $tool_content .= "<td align='center'><small> - </small></td>";
+		}
+		  $tool_content .= "</tr>";
 	}
-	$tool_content .= "<br/><small>$row[description]</small></td>
-        <td align='center'><small>".nice_format($row['StartDate'])."</small></td>
-        <td align='center'><small>".nice_format($row['EndDate'])."</small></td>";
-	// how many attempts we have.
-	$CurrentAttempt = mysql_fetch_array(db_query("SELECT COUNT(*) FROM exercise_user_record
-		WHERE eid='$row[id]' AND uid='$uid'", $currentCourseID));
-	 if ($row['TimeConstrain'] > 0) {
-		  $tool_content .= "<td align='center'>
-		<small>$row[TimeConstrain] $langExerciseConstrainUnit</small></td>";
-	} else {
-		$tool_content .= "<td align='center'><small> - </small></td>";
-	}
-	if ($row['AttemptsAllowed'] > 0) {
-		   $tool_content .= "<td align='center'><small>$CurrentAttempt[0]/$row[AttemptsAllowed]</small></td>";
-	} else {
-		 $tool_content .= "<td align='center'><small> - </small></td>";
-	}
-	  $tool_content .= "</tr>";
-}
 	// skips the last exercise, that is only used to know if we have or not to create a link "Next page"
 	if ($k+1 == $limitExPage) {
 		break;
@@ -279,5 +272,5 @@ $k++;
 
 $tool_content .= "</tbody></table>";
 add_units_navigation(TRUE);
-draw($tool_content, 2, 'exercice');
+draw($tool_content, 2);
 ?>

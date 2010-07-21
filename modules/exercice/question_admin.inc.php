@@ -27,17 +27,12 @@
 
 // if the question we are modifying is used in several exercises
 if(isset($usedInSeveralExercises)) {
-$tool_content .= <<<cData
-
-    <h3>${questionName}</h3>
-    <form method="post" action="$_SERVER[PHP_SELF]?modifyQuestion=${modifyQuestion}&modifyAnswers=${modifyAnswers}">
-    <table width="99%">
-    <tr>
-	<td>
-cData;
+	$tool_content .= "<h3>$questionName</h3>
+	<form method='post' action='$_SERVER[PHP_SELF]?modifyQuestion=$modifyQuestion&modifyAnswers=$modifyAnswers'>
+	<table width='99%'><tr><td>";
 
 	// submit question
-	if(isset($submitQuestion)) {
+	if(isset($_POST['submitQuestion'])) {
 		$tool_content .= "<input type=\"hidden\" name=\"questionName\" value=\"".htmlspecialchars($questionName)."\">";
 		$tool_content .= "<input type=\"hidden\" name=\"questionDescription\""."value=\"".htmlspecialchars($questionDescription)."\">";
 		$tool_content .= "<input type='hidden' name='imageUpload_size' value='$imageUpload_size'>
@@ -78,9 +73,9 @@ cData;
 		}
 	} // end submit answers
 
-	$tool_content .= "<input type='hidden' name='answerType' value='${answerType}'>
+	$tool_content .= "<input type='hidden' name='answerType' value='$answerType'>
 	<table width='99%'><tr>
-	<td>${langUsedInSeveralExercises} :</td>
+	<td>$langUsedInSeveralExercises :</td>
 	</tr>
 	<tr>
 	<td><input type='radio' name='modifyIn' value='allExercises'>
@@ -90,27 +85,19 @@ cData;
 	</tr><tr><td>";
 
 	$tool_content .= "<input type=\"submit\" name=\"";
-	if (isset($submitQuestion))
+	if (isset($_POST['submitQuestion'])) {
 		$tool_content .= "submitQuestion \" ";
-	else	
+	} else	{
 		$tool_content .= "submitAnswers \" ";
-	$tool_content .= "value='$langOk'>&nbsp;&nbsp;
-		<input type='submit' name='buttonBack' value='$langCancel'>";
-	
-     	$tool_content .= <<<cData
-
-    </td></tr>
-    </table>
-      </td>
-    </tr>
-    </table>
-    </form>
-cData;
+	}
+	$tool_content .= "value='$langOk'>&nbsp;&nbsp;<input type='submit' name='buttonBack' value='$langCancel'>";
+     	$tool_content .= "</td></tr></table></td></tr></table></form>";
 
 } else {
-	// selects question informations
+	// selects question information
 	$questionName=$objQuestion->selectTitle();
 	$questionDescription=$objQuestion->selectDescription();
+	$questionId = $objQuestion->selectId();
 	// is picture set ?
 	$okPicture=file_exists($picturePath.'/quiz-'.$questionId)?true:false;
 	$tool_content .= "<table width='99%' class='Question'><thead>
@@ -118,9 +105,8 @@ cData;
 	<b>".nl2br($questionName)."</b>&nbsp;&nbsp;";
 	// doesn't show the edit link if we come from the question pool to pick a question for an exercise
 	if(!isset($fromExercise)) {
-		$tool_content .= "
-		<a href=\"".$_SERVER['PHP_SELF']."?modifyQuestion=".$questionId."\">
-		<img src='../../template/classic/img/edit.gif' border='0' align='absmiddle' title='$langModify'></a>";
+		$tool_content .= "<a href=\"".$_SERVER['PHP_SELF']."?modifyQuestion=".$questionId."\">
+		<img src='../../template/classic/img/edit.gif' align='absmiddle' title='$langModify'></a>";
 	}
 
 	$questionDescription = standard_text_escape($questionDescription);
@@ -129,14 +115,12 @@ cData;
 	if($okPicture) {
 		$tool_content .= "<br/><center><img src='$picturePath/quiz-$questionId' border='0'></center><br/>";
 	}
-
 	$tool_content .= "</th></tr>";	
 	$tool_content .= "<tr><td colspan='2'><b><u>$langQuestionAnswers</u>:</b>";
-
 	// doesn't show the edit link if we come from the question pool to pick a question for an exercise
 	if(!isset($fromExercise)) {
 		$tool_content .= "&nbsp;&nbsp;<a href='$_SERVER[PHP_SELF]?modifyAnswers=$questionId'>
-		<img src='../../template/classic/img/edit.gif' border='0' align='absmiddle' title='$langModify'></a>";
+		<img src='../../template/classic/img/edit.gif' align='absmiddle' title='$langModify'></a>";
 	}
         $tool_content .= "<br/></td></tr>";
 	$tool_content .= "</td></tr></thead></table><br/>";

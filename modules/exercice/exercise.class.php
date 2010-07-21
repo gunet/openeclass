@@ -82,7 +82,6 @@ class Exercise
 			AttemptsAllowed, random, active, results, score 
 			FROM `$TBL_EXERCICES` WHERE id='$id'";
 		$result=db_query($sql);
-
 		// if the exercise has been found
 		if($object=mysql_fetch_object($result))
 		{
@@ -140,6 +139,17 @@ class Exercise
 	{
 		return $this->exercise;
 	}
+	
+	/**
+	* set title
+	*
+	* @author Sebastien Piraux <pir@cerdecam.be>
+	* @param string $value
+	*/
+	function setTitle($value)
+	{
+	    $this->exercise = trim($value);
+	}
 
 	/**
 	 * returns the exercise description
@@ -150,6 +160,17 @@ class Exercise
 	function selectDescription()
 	{
 		return $this->description;
+	}
+
+	/**
+	* set description
+	*
+	* @author Sebastien Piraux <pir@cerdecam.be>
+	* @param string $value
+	*/
+	function setDescription($value)
+	{
+	    $this->description = trim($value);
 	}
 
 	/**
@@ -437,6 +458,27 @@ class Exercise
 			$sql="UPDATE `$TBL_QUESTIONS` SET q_position='$position' WHERE id='$questionId'";
 			db_query($sql);
 		}
+	}
+
+	/**
+	* check if data are valide
+	*
+	* @author Sebastien Piraux <pir@cerdecam.be>
+	* @return boolean
+	*/
+	function validate() {
+		
+	   $title = strip_tags($this->exercise);
+	   if(empty($title)) {
+	       $tool_content .= $langExerciseNoTitle;
+	       return false;
+	   } /*else {
+	       if(!is_null($this->EndDate) && $this->EndDate <= $this->StartDate) {
+			$tool_content .= $langExerciseWrongDates;
+			return false;
+	       }
+	   }*/
+	return true; 
 	}
 
 	/**

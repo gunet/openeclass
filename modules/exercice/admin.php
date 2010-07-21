@@ -55,15 +55,15 @@ if ($language == 'greek') {
 }
 
 $jscalendar = new DHTML_Calendar($urlServer.'include/jscalendar/', $lang, 'calendar-blue2', false);
-$local_head = $jscalendar->get_load_files_code();
+$head_content = $jscalendar->get_load_files_code();
 
-$local_head .= "
+$head_content .= "
 <script language=\"JavaScript\">
 function validate() {
 	if (document.forms[0].intitule.value==\"\") {
    		alert(\"$langAlertTitle\"); 
    		return false;
- 	}
+ 	}	
  	if (document.forms[0].titulaires.value==\"\") {
    		alert(\"$langAlertAdmin\"); 
    		return false;
@@ -73,7 +73,6 @@ function validate() {
 </script>
 ";
 
-$tool_content = "";
 $nameTools = $langExercices;
 $navigation[]= array ("url"=>"exercice.php", "name"=> $langExercices);
 // picture path
@@ -89,14 +88,14 @@ $TBL_REPONSES='reponses';
 
 if(!$is_adminOfCourse) {
 	$tool_content .= $langNotAllowed;
-	draw($tool_content, 2, 'exercice', $local_head, '');
+	draw($tool_content, 2, '', $head_content);
 	exit();
 }
 
 /****************************/
 /*  stripslashes POST data  */
 /****************************/
-if($REQUEST_METHOD == 'POST') {
+if($_SERVER['REQUEST_METHOD'] == 'POST') {
 	foreach($_POST as $key=>$val) {
 		if(is_string($val)) {
 			$_POST[$key]=stripslashes($val);
@@ -109,64 +108,82 @@ if($REQUEST_METHOD == 'POST') {
 	}
 }
 
+if (isset($_GET['exerciseId'])) {
+    $exerciseId = $_GET['exerciseId'];
+}
+if (isset($_GET['newQuestion'])) {
+    $newQuestion = $_GET['newQuestion'];
+}
+if (isset($_SESSION['objExercise'])) {
+    $objExercise = $_SESSION['objExercise'];
+}
+if (isset($_SESSION['objAnswer'])) {
+    $objAnswer = $_SESSION['objAnswer'];
+}
 // intializes the Exercise object
 if(@(!is_object($objExercise))) {
 	// construction of the Exercise object
-	$objExercise=new Exercise();
+	$objExercise = new Exercise();
 	// creation of a new exercise if wrong or not specified exercise ID
 	if(isset($exerciseId)) {
-		$objExercise->read($exerciseId);
+	    $objExercise->read($exerciseId);
 	}
 	// saves the object into the session
-	$_SESSION['objExercise'] = $objExercise; 
+	$_SESSION['objExercise'] = $objExercise;
 }
 
+///////////////////////////////////////////////////////
 // doesn't select the exercise ID if we come from the question pool
 if(!isset($fromExercise)) {
 	// gets the right exercise ID, and if 0 creates a new exercise
-	if(!$exerciseId=$objExercise->selectId()) {
+	if(!$exerciseId = $objExercise->selectId()) {
 		$modifyExercise='yes';
 	}
 }
+///////////////////////////////////////////////////////
 
 $nbrQuestions=$objExercise->selectNbrQuestions();
 
 // intializes the Question object
-if(isset($editQuestion) || isset($newQuestion) || isset($modifyQuestion) || isset($modifyAnswers)) {
-	if(isset($editQuestion) || isset($newQuestion)) {
-		// construction of the Question object
-		$objQuestion=new Question();
-		// saves the object into the session
-		$_SESSION['objQuestion'] = $objQuestion;
-		// reads question data
-		if(isset($editQuestion)) {
-			// question not found
-			if(!$objQuestion->read($editQuestion)) {
-				$tool_content .= $langQuestionNotFound;
-				draw($tool_content, 2, 'exercice', $local_head, '');
-				exit();
-			}
-		}
-	}
+
+if(isset($_GET['editQuestion']) || isset($_GET['newQuestion'])) {
+    // construction of the Question object
+    $objQuestion=new Question();
+    // saves the object into the session
+    $_SESSION['objQuestion'] = $objQuestion;
+    // reads question data
+    if(isset($_GET['editQuestion'])) {
+	    // question not found
+	    if(!$objQuestion->read($_GET['editQuestion'])) {
+		    $tool_content .= $langQuestionNotFound;
+		    draw($tool_content, 2, '', $head_content);
+		    exit();
+	    }
+    }
+}
+    
+if (isset($_SESSION['objQuestion'])) {
+    $objQuestion = $_SESSION['objQuestion'];
+}    
+    
+if (isset($_GET['modifyQuestion']) || isset($_GET['modifyAnswers'])) {
 	// checks if the object exists
 	if(is_object($objQuestion)) {
 		// gets the question ID
 		$questionId=$objQuestion->selectId();
 	} else { // question not found
 		$tool_content .= $langQuestionNotFound;
-		draw($tool_content, 2, 'exercice', $local_head, '');
+		draw($tool_content, 2, '', $head_content);
 		exit();
 	}
 }
 
 // if cancelling an exercise
-if(isset($cancelExercise)) {
+if(isset($_POST['cancelExercise'])) {
 	// existing exercise
 	if($exerciseId) {
-		unset($modifyExercise);
-	}
-	// new exercise
-	else {
+		unset($_GET['modifyExercise']);
+	} else {
 		// goes back to the exercise list
 		header('Location: exercice.php');
 		exit();
@@ -174,7 +191,7 @@ if(isset($cancelExercise)) {
 }
 
 // if cancelling question creation/modification
-if(isset($cancelQuestion)) {
+if(isset($_POST['cancelQuestion'])) {
 	// if we are creating a new question from the question pool
 	if(!$exerciseId && !$questionId) {
 		// goes back to the question pool
@@ -182,31 +199,31 @@ if(isset($cancelQuestion)) {
 		exit();
 	} else {
 		// goes back to the question viewing
-		$editQuestion=$modifyQuestion;
-		unset($newQuestion,$modifyQuestion);
+		$editQuestion = $_GET['modifyQuestion'];
+		unset($_GET['newQuestion'], $_GET['modifyQuestion']);
 	}
 }
 
 // if cancelling answer creation/modification
-if(isset($cancelAnswers)) {
+if(isset($_POST['cancelAnswers'])) {
 	// goes back to the question viewing
-	$editQuestion=$modifyAnswers;
-	unset($modifyAnswers);
+	$editQuestion = $_GET['modifyAnswers'];
+	unset($_GET['modifyAnswers']);
 }
 
 // modifies the query string that is used in the link of tool name
-if(isset($editQuestion) || isset($modifyQuestion) || isset($modifyAnswers)) {
+if(isset($_GET['editQuestion']) || isset($_GET['modifyQuestion']) || isset($_GET['modifyAnswers'])) {
 	$nameTools=$langQuestionManagement;
 	$navigation[]= array ("url" => "admin.php?exerciseId=$exerciseId", "name" => $langExerciseManagement);
 	@$QUERY_STRING=$questionId?'editQuestion='.$questionId.'&fromExercise='.$fromExercise:'newQuestion=yes';
-} elseif(isset($newQuestion)) {
+} elseif(isset($_GET['newQuestion'])) {
 	$nameTools=$langNewQu;
 	$navigation[]= array ("url" => "admin.php?exerciseId=$exerciseId", "name" => $langExerciseManagement);
 	@$QUERY_STRING=$questionId?'editQuestion='.$questionId.'&fromExercise='.$fromExercise:'newQuestion=yes';
-} elseif(isset($NewExercise)) {
+} elseif(isset($_GET['NewExercise'])) {
 	$nameTools=$langNewEx;
 	$QUERY_STRING='';
-} elseif(isset($modifyExercise)) {
+} elseif(isset($_GET['modifyExercise'])) {
 	$nameTools=$langInfoExercise;
 	$navigation[]= array ("url" => "admin.php?exerciseId=$exerciseId", "name" => $langExerciseManagement);
 	$QUERY_STRING='';
@@ -214,6 +231,9 @@ if(isset($editQuestion) || isset($modifyQuestion) || isset($modifyAnswers)) {
 	$nameTools=$langExerciseManagement;
 	$QUERY_STRING='';
 }
+
+
+// --------- Various Actions ---------------------------
 
 // if the question is duplicated, disable the link of tool name
 if(isset($modifyIn) and $modifyIn == 'thisExercise') {
@@ -223,32 +243,31 @@ if(isset($modifyIn) and $modifyIn == 'thisExercise') {
 		$noPHP_SELF=true;
 	}
 }
-
-if(isset($newQuestion) || isset($modifyQuestion)) {
+   
+if(isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
 	// statement management
 	include('statement_admin.inc.php');
 }
-
-if(isset($modifyAnswers)) {
+if(isset($_GET['modifyAnswers'])) {
 	// answer management
 	include('answer_admin.inc.php');
 }
 
-if(isset($editQuestion) || isset($usedInSeveralExercises)) {
+if(isset($_GET['editQuestion']) || isset($usedInSeveralExercises)) {
 	// question management
 	include('question_admin.inc.php');
 }
 
-if(!isset($newQuestion) && !isset($modifyQuestion) && !isset($editQuestion) && !isset($modifyAnswers)) {
+if(!isset($_GET['newQuestion']) && !isset($_GET['modifyQuestion']) &&
+	    !isset($_GET['editQuestion']) && !isset($_GET['modifyAnswers'])) {
 	// exercise management
 	include('exercise_admin.inc.php');
-
-	if(!isset($modifyExercise)) {
+	if(!isset($_GET['modifyExercise'])) {
 		// question list management
 		include('question_list_admin.inc.php');
 	}
 }
-draw($tool_content, 2, 'exercice', $local_head, '');
+draw($tool_content, 2, '', $head_content);
 
 // -----------------------------------------------
 // function for displaying jscalendar

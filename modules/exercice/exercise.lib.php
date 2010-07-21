@@ -24,13 +24,12 @@
 *  			eMail: info@openeclass.org
 * =========================================================================*/
 
-function showQuestion($questionId, $onlyAnswers=false) {
-	global $tool_content, $picturePath, $webDir, $langNoAnswer, $langColumnA, $langColumnB, $langMakeCorrespond;
- 	include_once "$webDir"."/modules/latexrender/latex.php";
+function showQuestion($questionId, $onlyAnswers = false) {
+	global $tool_content, $picturePath, $webDir;
+	global $langNoAnswer, $langColumnA, $langColumnB, $langMakeCorrespond;
 
 	// construction of the Question object
 	$objQuestionTmp=new Question();
-
 	// reads question informations
 	if(!$objQuestionTmp->read($questionId))
 	{
@@ -43,21 +42,14 @@ function showQuestion($questionId, $onlyAnswers=false) {
 	if(!$onlyAnswers)
 	{
 		$questionName=$objQuestionTmp->selectTitle();
-		$questionDescription=$objQuestionTmp->selectDescription();
-		// latex support
-		$questionName=latex_content($questionName);
-		$questionDescription=latex_content($questionDescription);
-
+		$questionDescription=$objQuestionTmp->selectDescription();	
+	
 	$questionDescription_temp = standard_text_escape($questionDescription);
-	$tool_content .= <<<cData
-      <tr>
-        <td colspan="2">
-        <b>${questionName}</b>
-        <br/>
-        <small>${questionDescription_temp}</small>
-        </td>
-      </tr>
-cData;
+	$tool_content .= "<tr>
+	<td colspan='2'>
+	<b>$questionName</b><br/>
+	<small>$questionDescription_temp</small>
+	</td></tr>";
 
 	if(file_exists($picturePath.'/quiz-'.$questionId)) {
 		$tool_content .= "<tr>
@@ -67,7 +59,6 @@ cData;
 
 	// construction of the Answer object
 	$objAnswerTmp=new Answer($questionId);
-
 	$nbrAnswers=$objAnswerTmp->selectNbrAnswers();
 
 	// only used for the answer type "Matching"
@@ -75,21 +66,19 @@ cData;
 		$cpt1='A';
 		$cpt2=1;
 		$Select=array();
-		$tool_content .= <<<cData
-      <tr>
-        <td colspan="2">
-        <table width="100%">
-        <thead>
-        <tr>
-          <td width="44%" class="left"><u><b>$langColumnA</b></u></td>
-          <td width="12%"><div align="center"><b>$langMakeCorrespond</b></div></td>
-          <td width="44%" class="left"><u><b>$langColumnB</b></u></td>
-        </tr>
-        </thead>
-        </table>
-        </td>
-      </tr>
-cData;
+		$tool_content .= "<tr>
+		<td colspan='2'>
+		<table width='100%'>
+		<thead>
+		<tr>
+		  <td width='44%' class='left'><u><b>$langColumnA</b></u></td>
+		  <td width='12%'><div align='center'><b>$langMakeCorrespond</b></div></td>
+		  <td width='44%' class='left'><u><b>$langColumnB</b></u></td>
+		</tr>
+		</thead>
+		</table>
+		</td>
+		</tr>";
 	}
 
 	for($answerId=1;$answerId <= $nbrAnswers;$answerId++) {
@@ -131,33 +120,28 @@ cData;
 			}
 			else
 			{
-				$tool_content .= <<<cData
+				$tool_content .= "<tr><td colspan='2'>
+				<table width='100%'><thead>
+				<tr>
+				  <td width='44%'><b>${cpt2}.</b> ${answer}</td>
+				  <td width='12%'><div align='center'>
+				<select name='choice[${questionId}][${answerId}]'>
+				<option value='0'>--</option>";
 
-      <tr>
-        <td colspan="2">
-        <table width="100%">
-        <thead>
-        <tr>
-          <td width="44%"><b>${cpt2}.</b> ${answer}</td>
-          <td width="12%"><div align="center">
-            <select name="choice[${questionId}][${answerId}]">
-            <option value="0">--</option>
-cData;
+				// fills the list-box
+				 foreach($Select as $key=>$val) {
+					 $tool_content .= "<option value=\"${key}\">${val['Lettre']}</option>";
+				 }
+		 
+				 $tool_content .= "</select></div></td><td width=\"44%\">";
+		 
+				 if(isset($Select[$cpt2]))
+				       $tool_content .= '<b>'.$Select[$cpt2]['Lettre'].'.</b> '.$Select[$cpt2]['Reponse'];
+				 else
+				       $tool_content .= '&nbsp;';
 
-	       // fills the list-box
-		foreach($Select as $key=>$val) {
-			$tool_content .= "<option value=\"${key}\">${val['Lettre']}</option>";
-		}
-
-		  $tool_content .= "</select></div></td><td width=\"44%\">";
-
-		  if(isset($Select[$cpt2]))
-		  	$tool_content .= '<b>'.$Select[$cpt2]['Lettre'].'.</b> '.$Select[$cpt2]['Reponse'];
-		  else
-		  	$tool_content .= '&nbsp;';
-
-		  $tool_content .= "</td></tr></thead></table></td></tr>";
-		  $cpt2++;
+				$tool_content .= "</td></tr></thead></table></td></tr>";
+				$cpt2++;
 				// if the left side of the "matching" has been completely shown
 				if($answerId == $nbrAnswers) {
 					// if it remains answers to shown at the right side
