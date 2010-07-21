@@ -76,23 +76,27 @@ $sql = "SELECT U.`nom`, U.`prenom`, U.`user_id`
 @$tool_content .= get_limited_page_links($sql, 30, $langPreviousPage, $langNextPage);
 $usersList = get_limited_list($sql, 30);
 
-$tool_content .= "<table width='99%' align='left' class='Users_Operations'>
-	<thead><tr>
-	<td>&nbsp;<b>$langDumpUserDurationToFile:</b>
-        &nbsp;&nbsp;1.&nbsp;<a href='dumpuserlearnpathdetails.php'>$langcsvenc2</a>
-        &nbsp;&nbsp;2.&nbsp;<a href='dumpuserlearnpathdetails.php?enc=1253'>$langcsvenc1</a>
-        </td></tr>
-	</thead>
-	</table>";
+
+$tool_content .= "
+  <div id=\"operations_container\">
+    <ul id=\"opslist\">
+      <li>$langDumpUserDurationToFile: <a href='dumpuserlearnpathdetails.php'>$langcsvenc2</a></li>
+      <li><a href='dumpuserlearnpathdetails.php?enc=1253'>$langcsvenc1</a></li>
+    </ul>
+  </div>
+";
+
 	
 // display tab header
-$tool_content .= "<table width='99%' class='LearnPathSum'><thead><tr>
-	<th class='left'>&nbsp;</th>
-	<th class='left'><div align='left'>$langStudent</div></th>
-	<th class='left'>$langAm</th>
-	<th width='15%' align='center'>$langGroup</th>
-	<th colspan='2' width='30%'><div align='center'>$langProgress&nbsp;&nbsp;</div></th>
-	</tr></thead><tbody>";
+$tool_content .= "
+  <table width='99%' class='tbl_alt'>
+  <tr>
+    <th>&nbsp;</th>
+    <th class='left'><div align='left'>$langStudent</div></th>
+    <th>$langAm</th>
+    <th>$langGroup</th>
+    <th colspan='2'>$langProgress&nbsp;&nbsp;</th>
+  </tr>\n";
 
 mysql_select_db($currentCourseID);
 
@@ -108,9 +112,9 @@ foreach ($usersList as $user)
 	$iterator = 1;
 	$globalprog = 0;
 	if ($k%2 == 0) {
-		$tool_content .= "\n    <tr>";
+		$tool_content .= "  <tr class=\"even\">\n";
 	} else {
-		$tool_content .= "\n    <tr class=\"odd\">";
+		$tool_content .= "  <tr class=\"odd\">\n";
 	}
 	foreach($learningPathList as $learningPath)
 	{
@@ -124,25 +128,25 @@ foreach ($usersList as $user)
 	}
 	if($iterator == 1)
 	{
-		$tool_content .= '<td align="center" colspan="8">'.$langNoLearningPath.'</td></tr>'."\n";
+		$tool_content .= '    <td class="center" colspan="8">'.$langNoLearningPath.'</td>'."\n".'  </tr>'."\n";
 	}
 	else
 	{
 		$total = round($globalprog/($iterator-1));
-		$tool_content .= '<td width="1"><img src="../../template/classic/img/arrow_grey.gif" alt="bullet" title="bullet" border="0"></td>'."\n"
-		.'<td><a href="detailsUser.php?uInfo='.$user['user_id'].'">'.$user['nom'].' '.$user['prenom'].'</a></td>'."\n"
-		.'<td>'.uid_to_am($user['user_id']).'</td>'
-		.'<td align="center">'.gid_to_name(user_group($user['user_id'])).'</td>'
-		.'<td align="right">'
+		$tool_content .= '    <td width="1"><img src="../../template/classic/img/arrow_grey.gif" alt="bullet" title="bullet" border="0"></td>'."\n"
+		.'    <td><a href="detailsUser.php?uInfo='.$user['user_id'].'">'.$user['nom'].' '.$user['prenom'].'</a></td>'."\n"
+		.'    <td>'.uid_to_am($user['user_id']).'</td>'."\n"
+		.'    <td align="center">'.gid_to_name(user_group($user['user_id'])).'</td>'."\n"
+		.'    <td align="right">'
 		.disp_progress_bar($total, 1)
 		.'</td>'."\n"
-		.'<td align="left"><small>'.$total.'%</small></td>'."\n"
+		.'    <td align="left"><small>'.$total.'%</small></td>'."\n"
 		.'</tr>'."\n";
 	}
 	$k++;
 }
 
 // foot of table
-$tool_content .= '</tbody>'."\n".'</table>'."\n\n";
+$tool_content .= '  </table>'."\n\n";
 draw($tool_content, 2, '', $head_content);
 ?>
