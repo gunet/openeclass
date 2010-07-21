@@ -85,6 +85,18 @@ th {
     text-align: left;
 }
 
+.left {
+    text-align: left !important;
+}
+ 
+.center {
+    text-align: center !important;
+}
+
+.red {
+    color: #ff0000 !important;
+}
+
 /* 2. Basic Formatted Elements  */
 
 a:link, a:active, a:visited {
@@ -138,6 +150,12 @@ fieldset {
         border-bottom: 1px dotted #cac3b5; /* BEIGE  */
 }
 
+.descr_title {
+        background-color:#edecdf;
+        font-weight: bold;
+        padding: 5px;
+        border-bottom: 1px solid #cac3b5; /* BEIGE  */
+}
 
 
 /* 4. Header  */
@@ -802,6 +820,19 @@ border-top: 1px solid #94a3c4;}
 	border: 1px solid #cac3b5; /* BEIGE  */
 }
 
+.tbl_courseid {
+        border: 1px solid #cac3b5; /* BEIGE  */
+        background-color: #edecdf;
+}
+
+.tbl_courseid th {
+        font-weight: bold;
+        background-color: #cac3b5;
+        padding: 3px;
+}
+
+
+
 .tbl_header_row {
 	font-weight: bold;
 	text-align: center;
@@ -845,11 +876,12 @@ border-top: 1px solid #94a3c4;}
 }	
 		
 	
-			/*	Hover effect to table rows */	
+/*	Hover effect to table rows */	
 	
 .tbl_alt tr:hover td { 
   background-color: #ffeb96;
 } 
+
 
 /*	Sortable Table*/	
 
