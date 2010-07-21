@@ -75,7 +75,7 @@ if (isset($_GET['format']) and $_GET['format'] == 'csv') {
               <li><a href='userduration.php'>".$langUserDuration."</a></li>
               <li>$langDumpUserDurationToFile&nbsp;(<a href='userduration.php?format=csv'>$langCodeUTF</a>&nbsp;<a href='userduration.php?format=csv&amp;enc=1253'>$langCodeWin</a>)</li>
             </ul>
-          </div>";
+          </div>\n";
 
         $nameTools = $langUsage;
         $local_style = '
@@ -83,15 +83,14 @@ if (isset($_GET['format']) and $_GET['format'] == 'csv') {
              padding-left: 15px; padding-right : 15px; }
             .content {position: relative; left: 25px; }';
 
-        $tool_content .= "<table class='FormData' width='99%' align='left'><thead>
-                <tr>
-                <th class='left'>$langSurname $langName</th>
-                <th>$langAm</th>
-                <th>$langGroup</th>
-                <th>$langDuration</th>
-                </tr>
-                </thead>
-                ";
+        $tool_content .= "
+        <table class='tbl_alt' width='99%'>
+        <tr>
+          <th class='left'>&nbsp;&nbsp;&nbsp;$langSurname $langName</th>
+          <th>$langAm</th>
+          <th>$langGroup</th>
+          <th>$langDuration</th>
+        </tr>\n";
 }
 
 $result = user_duration_query($currentCourseID, $cours_id);
@@ -102,11 +101,16 @@ if ($result) {
                 $i++;
                 if ($format == 'html') {
                         if ($i%2 == 0) {
-                                $tool_content .= "\n    <tr>";
+                                $tool_content .= "\n        <tr class='even'>";
                         } else {
-                                $tool_content .= "\n    <tr class='odd'>";
+                                $tool_content .= "\n        <tr class='odd'>";
                         }
-                        $tool_content .= "<td width='30%'><img style='border:0px; padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif' /> $row[nom] $row[prenom]</td><td width='30%'>$row[am]</td><td align='center'>" . gid_to_name(user_group($row['user_id'])) . "</td><td>" . format_time_duration(0 + $row['duration']) . "</td></tr>";
+                        $tool_content .= "
+          <td><img style='border:0px; padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif' />&nbsp;&nbsp;$row[nom] $row[prenom]</td>
+          <td class='center'>$row[am]</td>
+          <td class='center'>" . gid_to_name(user_group($row['user_id'])) . "</td>
+          <td class='center'>" . format_time_duration(0 + $row['duration']) . "</td>
+       </tr>\n";
                 } else {
                         echo csv_escape($row['nom'] . ' ' . $row['prenom']), ';',
                              csv_escape($row['am']), ';',
@@ -115,7 +119,7 @@ if ($result) {
                 }
         }
         if ($format == 'html') {
-                $tool_content .= "</table>";
+                $tool_content .= "        </table>";
         }
 }
 

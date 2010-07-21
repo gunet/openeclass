@@ -158,8 +158,8 @@ $local_head = $jscalendar->get_load_files_code();
     $chart->render($webDir.$chart_path);
 
     if ($chart_content) {
-        $tool_content .= "<p>$langFavouriteExpl</p>";
-        $tool_content .= '<p align="left"><img src="'.$urlServer.$chart_path.'" /></p>';
+        $tool_content .= "\n  <p>$langFavouriteExpl</p>\n";
+        $tool_content .= '  <p class="center"><img src="'.$urlServer.$chart_path.'" /></p>';
      } elseif (isset($btnUsage) and $chart_content == 0) {
       $tool_content .='<p class="alert1">'.$langNoStatistics.'</p>';
     }
@@ -222,39 +222,40 @@ $local_head = $jscalendar->get_load_files_code();
 
     $tool_content .= '
  <form method="post">
-  <table class="FormData" width="99%" align="left">
-  <tbody>
+ <fieldset>
+  <legend>'.$langFavourite.'</legend>
+  <table class="tbl">
   <tr>
-    <th width="220" class="left">&nbsp;</th>
-    <td><b>'.$langFavourite.'</b><br />'.$langCreateStatsGraph.':</td>
+    <td>&nbsp;</td>
+    <td class="bold">'.$langCreateStatsGraph.':</td>
   </tr>
   <tr>
-    <th class="left">'.$langValueType.':</th>
-    <td><select name="u_stats_value" class="auth_input">'.$statsValueOptions.'</select></td>
+    <td>'.$langValueType.':</td>
+    <td><select name="u_stats_value">'.$statsValueOptions.'</select></td>
   </tr>
   <tr>
-    <th class="left">'.$langStartDate.':</th>
+    <td>'.$langStartDate.':</td>
     <td>'."$start_cal".'</td>
   </tr>
   <tr>
-    <th class="left">'.$langEndDate.':</th>
+    <td>'.$langEndDate.':</td>
     <td>'."$end_cal".'</td>
   </tr>
   <tr>
-    <th class="left" rowspan="2">'.$langUser.':</th>
+    <td rowspan="2" valign="top">'.$langUser.':</td>
     <td>'.$langFirstLetterUser.': '.$letterlinks.'</td>
   </tr>
   <tr>
-    <td><select name="u_user_id" class="auth_input">'.$user_opts.'</select></td>
+    <td><select name="u_user_id">'.$user_opts.'</select></td>
   </tr>
   <tr>
-    <th class="left">&nbsp;</th>
+    <td>&nbsp;</td>
     <td><input type="submit" name="btnUsage" value="'.$langSubmit.'">
-        <div align="right"><a href="oldStats.php">'.$langOldStats.'</a></div>
+        <div><br /><a href="oldStats.php">'.$langOldStats.'</a></div>
     </td>
   </tr>
-  </thead>
   </table>
+ </fieldset>
  </form>';
 }
 

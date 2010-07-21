@@ -54,7 +54,7 @@ $tool_content .= "
       <li><a href='favourite.php?first='>".$langFavourite."</a></li>
       <li><a href='userduration.php'>".$langUserDuration."</a></li>
     </ul>
-  </div>";
+  </div>\n";
 
 $nameTools = $langUsage;
 $local_style = '
@@ -149,7 +149,7 @@ while ($row = mysql_fetch_assoc($result)) {
                 $unknown_users[$row['user_id']] = $user;
         }
         if ($k%2==0) {
-                $table_cont .= "<tr>";
+                $table_cont .= "<tr class='even'>";
         } else {
                 $table_cont .= "<tr class='odd'>";
         }
@@ -159,7 +159,7 @@ while ($row = mysql_fetch_assoc($result)) {
         if ($known) {
                 $table_cont .= $user;
         } else {
-                $table_cont .= "<font color='red'>$user</font>";
+                $table_cont .= "<span class='red'>$user</span>";
         }
         $table_cont .= "</td>
                 <td align=\"center\">".$row['ip']."</td>
@@ -177,7 +177,7 @@ if ($exist_stat_accueil){
     while ($row = mysql_fetch_assoc($result_4)) {
 	if ($k%2==0) {
 	$table2_cont .= "
-  <tr>";
+  <tr class=\"even\">";
 	} else {
 	$table2_cont .= "
   <tr class=\"odd\">";
@@ -196,44 +196,39 @@ if ($exist_stat_accueil){
 //$tool_content .= "<p>$langUserLogins</p>";
 //Records exist?
 if (count($unknown_users) > 0) {
-        $tool_content .= "<p class='alert1'>$langAnonymousExplain</p>\n";
+        $tool_content .= "<p>$langAnonymousExplain</p>\n";
 }
 
 if ($table_cont) {
   $tool_content .= "
-  <table class=\"FormData\" width=\"99%\" align=\"left\" style=\"border: 1px solid #edecdf;\">
-  <tbody>
+  <table width='99%' class=\"tbl_alt\">
   <tr>
-    <th colspan=\"4\" style=\"border-top: 1px solid #edecdf; border-left: 1px solid #edecdf; border-right: 1px solid #edecdf;\">$langUserLogins</th>
+    <th colspan=\"4\">$langUserLogins</th>
   </tr>
   <tr>
-    <th colspan=\"2\" class=\"left\" style=\"border: 1px solid #edecdf;\">&nbsp;&nbsp;&nbsp;&nbsp;".$langUser."</th>
-    <th style=\"border: 1px solid #edecdf;\">".$langAddress."</th>
-    <th style=\"border: 1px solid #edecdf;\">".$langLoginDate."</th>
+    <th colspan=\"2\" class=\"left\">".$langUser."</th>
+    <th>".$langAddress."</th>
+    <th>".$langLoginDate."</th>
   </tr>";
   $tool_content .= "".$table_cont."";
   $tool_content .= "
-  </tbody>
   </table>";
 }
 
 if ($table2_cont) {
   $tool_content .= "
-  <br>
   <p>".$langStatAccueil."</p>
-  <table class=\"FormData\" width=\"99%\" align=\"left\">
-  <tbody>
+  <table width='99%' class=\"tbl_alt\">
   <tr>
-    <th colspan=\"4\" style=\"border-top: 1px solid #edecdf; border-left: 1px solid #edecdf; border-right: 1px solid #edecdf;\">$langUserLogins</th>
+    <th colspan=\"4\">$langUserLogins</th>
   </tr>
   <tr>
-    <th colspan=\"2\" class=\"left\" style=\"border: 1px solid #edecdf;\">&nbsp;&nbsp;&nbsp;&nbsp;".$langHost."</th>
-    <th style=\"border: 1px solid #edecdf;\">".$langAddress."</th>
-    <th style=\"border: 1px solid #edecdf;\">".$langLoginDate."</th>
+    <th colspan=\"2\">".$langHost."</th>
+    <th>".$langAddress."</th>
+    <th>".$langLoginDate."</th>
   </tr>";
   $tool_content .= "".$table2_cont."";
   $tool_content .= "
-  </tbody>
   </table>";
 }
 if (!($table_cont || $table2_cont)) {
@@ -294,36 +289,36 @@ if (!($table_cont || $table2_cont)) {
     }
 
     $tool_content .= '
-<p>&nbsp;</p>
 <form method="post">
+<fieldset>
+  <legend>'.$langUserLogins.'</legend>
 
-  <table class="FormData" width="99%" align="left">
+  <table class="tbl">
   <tbody>
   <tr>
-    <th width="220" class="left">&nbsp;</th>
-    <td><b>'.$langUserLogins.'</b><br />'.$langCreateStatsGraph.':</td>
+    <th>&nbsp;</th>
+    <td><b>'.$langCreateStatsGraph.':</td>
   </tr>
   <tr>
-    <th class="left">'.$langStartDate.':</th>
+    <th>'.$langStartDate.':</th>
     <td>'."$start_cal".'</td>
   </tr>
   <tr>
-    <th class="left">'.$langEndDate.':</th>
+    <th>'.$langEndDate.':</th>
     <td>'."$end_cal".'</td>
   </tr>
   <tr>
-    <th class="left">'.$langUser.':</th>
-    <td>'.$langFirstLetterUser.': '.$letterlinks.' <br /><select name="u_user_id" class="auth_input">'.$user_opts.'</select></td>
+    <th valign="top">'.$langUser.':</th>
+    <td>'.$langFirstLetterUser.': '.$letterlinks.' <br /><select name="u_user_id">'.$user_opts.'</select></td>
   </tr>
   <tr>
     <th>&nbsp;</th>
     <td><input type="submit" name="btnUsage" value="'.$langSubmit.'">
-        <div align="right"><a href="oldStats.php">'.$langOldStats.'</a></div>
+        <div><br /><a href="oldStats.php">'.$langOldStats.'</a></div>
     </td>
   </tr>
-  </tbody>
   </table>
-
+</fieldset>
 </form>';
 
 

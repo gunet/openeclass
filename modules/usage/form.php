@@ -72,39 +72,40 @@ $statsIntervalOptions =
 
 $tool_content .= '
 <form method="post">
-  <table class="FormData" width="99%" align="left">
-  <tbody>
+<fieldset>
+  <legend>'.$langUsageVisits.'</legend>
+  <table class="tbl">
   <tr>
-    <th width="220" class="left">&nbsp;</th>
-    <td><b>'.$langUsageVisits.'</b><br />'.$langCreateStatsGraph.':</td>
+    <th>&nbsp;</th>
+    <td>'.$langCreateStatsGraph.'</td>
   </tr>
   <tr>
-    <th class="left">'.$langValueType.':</th>
-    <td><select name="u_stats_value" class="auth_input">'.$statsValueOptions.'</select></td>
+    <th>'.$langValueType.':</th>
+    <td><select name="u_stats_value">'.$statsValueOptions.'</select></td>
   </tr>
   <tr>
-    <th class="left">'.$langStartDate.':</th>
+    <th>'.$langStartDate.':</th>
     <td>'."$start_cal".'</td>
   </tr>
   <tr>
-    <th class="left">'.$langEndDate.':</th>
+    <th>'.$langEndDate.':</th>
     <td>'."$end_cal".'</td>
   </tr>
   <tr>
-    <th class="left">'.$langModule.':</th>
-    <td><select name="u_module_id" class="auth_input">'.$mod_opts.'</select></td>
+    <th>'.$langModule.':</th>
+    <td><select name="u_module_id">'.$mod_opts.'</select></td>
   </tr>
   <tr>
-    <th class="left">'.$langInterval.':</th>
-    <td><select name="u_interval" class="auth_input">'.$statsIntervalOptions.'</select></td>
+    <th>'.$langInterval.':</th>
+    <td><select name="u_interval">'.$statsIntervalOptions.'</select></td>
   </tr>
   <tr>
-    <th class="left">&nbsp;</th>
+    <th>&nbsp;</th>
     <td><input type="submit" name="btnUsage" value="'.$langSubmit.'">
-        <div align="right"><a href="oldStats.php">'.$langOldStats.'</a></div>
+        <div><br /><a href="oldStats.php">'.$langOldStats.'</a></div>
     </td>
   </tr>
-  </tbody>
   </table>
+</fieldset>
 </form>';
 ?>

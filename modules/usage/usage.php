@@ -54,7 +54,7 @@ $tool_content .= "
     <li><a href='../learnPath/detailsAll.php'>$langLearningPaths</a></li>
     <li><a href='group.php'>$langGroupUsage</a></li>
   </ul>
-</div>";
+</div>\n";
 
 $dateNow = date("d-m-Y / H:i:s",time());
 $nameTools = $langUsage;

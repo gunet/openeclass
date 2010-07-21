@@ -50,10 +50,10 @@ include('../../include/action.php');
 $tool_content = '';
 $tool_content .= "
   <div id=\"operations_container\">
-	<ul id=\"opslist\">";
-$tool_content .= "\n	  <li><a href='usage.php'>".$langUsageVisits."</a></li>";
-$tool_content .= "\n	  <li><a href='favourite.php?first='>".$langFavourite."</a></li>";
-$tool_content .= "\n	  <li><a href='userlogins.php?first='>".$langUserLogins."</a></li>
+    <ul id=\"opslist\">
+      <li><a href='usage.php'>".$langUsageVisits."</a></li>
+      <li><a href='favourite.php?first='>".$langFavourite."</a></li>
+      <li><a href='userlogins.php?first='>".$langUserLogins."</a></li>
     </ul>
   </div>";
 
@@ -224,34 +224,35 @@ $local_head = $jscalendar->get_load_files_code();
 
     $tool_content .= '
 <form method="post">
-  <table class="FormData" width="99%" align="left">
-  <tbody>
+<fieldset>
+  <legend>'.$langOldStats.'</legend>
+  <table class="tbl">
   <tr>
-    <th width="220" class="left">&nbsp;</th>
-    <td><b>'.$langOldStats.'</b><br />'.$langCreateStatsGraph.':</td>
+    <th>&nbsp;</th>
+    <td>'.$langCreateStatsGraph.':</td>
   </tr>
   <tr>
-    <th width="220" class="left">'.$langValueType.'</th>
-    <td><select name="u_stats_value" class="auth_input">'.$statsValueOptions.'</select></td>
+    <th>'.$langValueType.'</th>
+    <td><select name="u_stats_value">'.$statsValueOptions.'</select></td>
   </tr>
   <tr>
-    <th class="left">'.$langStartDate.'</th>
+    <th>'.$langStartDate.'</th>
     <td>'."$start_cal".'</td>
   </tr>
   <tr>
-     <th class="left">'.$langEndDate.'</th>
+     <th>'.$langEndDate.'</th>
      <td>'."$end_cal".'</td>
   </tr>
   <tr>
-    <th class="left">'.$langModule.'</th>
-    <td><select name="u_module_id" class="auth_input">'.$mod_opts.'</select></td>
+    <th>'.$langModule.'</th>
+    <td><select name="u_module_id">'.$mod_opts.'</select></td>
   </tr>
   <tr>
     <th>&nbsp;</th>
     <td><input type="submit" name="btnUsage" value="'.$langSubmit.'"></td>
   </tr>
-  </thead>
   </table>
+</fieldset>
 </form>';
      }
 
