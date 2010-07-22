@@ -121,174 +121,173 @@ foreach($_SESSION['questionList'] as $questionId) {
 	$questionScore=0;
 
 	if ($displayResults == 1) {
-
 		if($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER) {
 			$tool_content .= "<tr>
-			<td width='5%' align='center' style='background: #fff;'><b>${langChoice}</b></td>
-			<td width='5%' align='center' style='background: #fff;'><b>${langExpectedChoice}</b></td>
-			<td width='45%' align='center' style='background: #fff;'><b>${langAnswer}</b></td>
-			<td width='45%' align='center' style='background: #fff;'><b>${langComment}</b></td>
+			<td width='5%' align='center' style='background: #fff;'><b>$langChoice</b></td>
+			<td width='5%' align='center' style='background: #fff;'><b>$langExpectedChoice</b></td>
+			<td width='45%' align='center' style='background: #fff;'><b>$langAnswer</b></td>
+			<td width='45%' align='center' style='background: #fff;'><b>$langComment</b></td>
 			</tr>";
 		} elseif($answerType == FILL_IN_BLANKS) {
 			$tool_content .= "<tr>
-			<td style='background: #fff;'><b>${langAnswer}</b></td>
+			<td style='background: #fff;'><b>$langAnswer</b></td>
 			</tr>";
 		} else {
 			$tool_content .= "<tr>
-			<td width='50%' style='background: #fff;'><b>${langElementList}</b></td>
-			<td width='50%' style='background: #fff;'><b>${langCorrespondsTo}</b></td></tr>";
+			<td width='50%' style='background: #fff;'><b>$langElementList</b></td>
+			<td width='50%' style='background: #fff;'><b>$langCorrespondsTo</b></td></tr>";
 		}
 	}
-			// construction of the Answer object
-		$objAnswerTmp=new Answer($questionId);
-		$nbrAnswers=$objAnswerTmp->selectNbrAnswers();
-		
-		for($answerId=1;$answerId <= $nbrAnswers;$answerId++) {
-			$answer=$objAnswerTmp->selectAnswer($answerId);
-			$answerComment=$objAnswerTmp->selectComment($answerId);
-			$answerCorrect=$objAnswerTmp->isCorrect($answerId);
-			$answerWeighting=$objAnswerTmp->selectWeighting($answerId);
-			// support for math symbols
-			$answer = mathfilter($answer, 12, "../../courses/mathimg/");
-			$answerComment = mathfilter($answerComment, 12, "../../courses/mathimg/");
+	// construction of the Answer object
+	$objAnswerTmp=new Answer($questionId);
+	$nbrAnswers=$objAnswerTmp->selectNbrAnswers();
 	
-			switch($answerType)
-			{
-				// for unique answer
-				case UNIQUE_ANSWER :	$studentChoice=($choice == $answerId)?1:0;
-					if($studentChoice) {
-						$questionScore+=$answerWeighting;
-						$totalScore+=$answerWeighting;
+	for($answerId=1;$answerId <= $nbrAnswers;$answerId++) {
+		$answer=$objAnswerTmp->selectAnswer($answerId);
+		$answerComment=$objAnswerTmp->selectComment($answerId);
+		$answerCorrect=$objAnswerTmp->isCorrect($answerId);
+		$answerWeighting=$objAnswerTmp->selectWeighting($answerId);
+		// support for math symbols
+		$answer = mathfilter($answer, 12, "../../courses/mathimg/");
+		$answerComment = mathfilter($answerComment, 12, "../../courses/mathimg/");
+
+		switch($answerType)
+		{
+			// for unique answer
+			case UNIQUE_ANSWER :	$studentChoice=($choice == $answerId)?1:0;
+				if($studentChoice) {
+					$questionScore+=$answerWeighting;
+					$totalScore+=$answerWeighting;
+				}
+				break;
+			// for multiple answers
+			case MULTIPLE_ANSWER :	$studentChoice=@$choice[$answerId];
+				if($studentChoice) {
+					$questionScore+=$answerWeighting;
+					$totalScore+=$answerWeighting;
 					}
-					break;
-				// for multiple answers
-				case MULTIPLE_ANSWER :	$studentChoice=@$choice[$answerId];
-					if($studentChoice) {
-						$questionScore+=$answerWeighting;
-						$totalScore+=$answerWeighting;
-						}
-					break;
-				// for fill in the blanks
-				case FILL_IN_BLANKS : // splits text and weightings that are joined with the char '::'
-						list($answer,$answerWeighting)=explode('::',$answer);
-						// splits weightings that are joined with a comma
-						$answerWeighting=explode(',',$answerWeighting);
-						// we save the answer because it will be modified
-						$temp=$answer;
-						$answer='';
-						$j=0;
-						// the loop will stop at the end of the text
-						while(1)
-						{
-						// quits the loop if there are no more blanks
-						if(($pos = strpos($temp,'[')) === false) {
-							// adds the end of the text
-							$answer.=$temp;
-							break;
-						}
-					// adds the piece of text that is before the blank and ended by [
-						$answer.=substr($temp,0,$pos+1);
-						$temp=substr($temp,$pos+1);
-						// quits the loop if there are no more blanks
-						if(($pos = strpos($temp,']')) === false) {
-							// adds the end of the text
-							$answer.=$temp;
-							break;
-						}
-						$choice[$j]=trim(stripslashes($choice[$j]));
-					// if the word entered is the same as the one defined by the professor
-					if(strtolower(substr($temp,0,$pos)) == strtolower($choice[$j])) {
-						// gives the related weighting to the student
-						$questionScore+=$answerWeighting[$j];
-						// increments total score
-						$totalScore+=$answerWeighting[$j];
-						// adds the word in green at the end of the string
-						$answer.=$choice[$j];
-					}
-				// else if the word entered is not the same as the one defined by the professor
-						elseif(!empty($choice[$j])) {
-							// adds the word in red at the end of the string, and strikes it
-							$answer.='<font color="red"><s>'.$choice[$j].'</s></font>';
-						} else {
-							// adds a tabulation if no word has been typed by the student
-							$answer.='&nbsp;&nbsp;&nbsp;';
-						}
-						// adds the correct word, followed by ] to close the blank
-						$answer.=' / <font color="green"><b>'.substr($temp,0,$pos).'</b></font>]';
-						$j++;
-						$temp=substr($temp,$pos+1);
-						}
-					break;
-				// for matching
-				case MATCHING :	if($answerCorrect) {
-							if($answerCorrect == $choice[$answerId]) {
-								$questionScore+=$answerWeighting;
-								$totalScore+=$answerWeighting;
-								$choice[$answerId]=$matching[$choice[$answerId]];
-							}
-							elseif(!$choice[$answerId]) {
-								$choice[$answerId]='&nbsp;&nbsp;&nbsp;';
-							} else {
-								$choice[$answerId]='<font color="red">
-								<s>'.$matching[$choice[$answerId]].'</s>
-								</font>';
-							}
-						} else {
-							$matching[$answerId]=$answer;
-						}
+				break;
+			// for fill in the blanks
+			case FILL_IN_BLANKS : // splits text and weightings that are joined with the char '::'
+					list($answer,$answerWeighting)=explode('::',$answer);
+					// splits weightings that are joined with a comma
+					$answerWeighting=explode(',',$answerWeighting);
+					// we save the answer because it will be modified
+					$temp=$answer;
+					$answer='';
+					$j=0;
+					// the loop will stop at the end of the text
+					while(1)
+					{
+					// quits the loop if there are no more blanks
+					if(($pos = strpos($temp,'[')) === false) {
+						// adds the end of the text
+						$answer.=$temp;
 						break;
-			}	// end switch()
-			if ($displayResults == 1) { 
-				if($answerType != MATCHING || $answerCorrect) {
-					if($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER) {
-						$tool_content .= "<tr><td width='5%' style='background: #fff;'>
-						<div align='center'>
-						<img src='../../template/classic/img/";
-		
-						if ($answerType == UNIQUE_ANSWER)
-							$tool_content .= "radio";
-						else
-							$tool_content .= "checkbox";
-		
-						if ($studentChoice)
-							$tool_content .= "_on";
-						else
-							$tool_content .= '_off';
-			
-						$tool_content .= ".gif' border='0'></div></td>
-						<td width='5%' style='background: #fff;'><div align='center'>";
-		
-						if ($answerType == UNIQUE_ANSWER)
-							$tool_content .= "<img src=\"../../template/classic/img/radio";
-						else
-							$tool_content .= "<img src=\"../../template/classic/img/checkbox";
-						if ($answerCorrect)
-							$tool_content .= "_on";
-						else	
-							$tool_content .= "_off";	
-						$tool_content .= ".gif\" border=\"0\"></div>";	
-						$tool_content .= "</td><td width='45%' style='background: #fff;'>${answer}</td>
-						<td width='45%' style='background: #fff;'>";
-		
-						if ($studentChoice) {
-							$tool_content .= nl2br(make_clickable($answerComment)); 
-						} else { 
-							$tool_content .= '&nbsp;';
-						} 
-					
-					$tool_content .= "</td></tr>";
-		
-					} elseif($answerType == FILL_IN_BLANKS) {
-						$tool_content .= "<tr>
-						<td style=\"background: #fff;\">".nl2br($answer)."</td></tr>";
-					} else {
-						$tool_content .= "<tr><td width='50%' style='background: #fff;'>${answer}</td>
-						<td width='50%' style='background: #fff;'>${choice[$answerId]} / 
-						<font color='green'><b>${matching[$answerCorrect]}</b></font></td></tr>";
 					}
-				} 
-			} // end of if
-		}	// end for()
+				// adds the piece of text that is before the blank and ended by [
+					$answer.=substr($temp,0,$pos+1);
+					$temp=substr($temp,$pos+1);
+					// quits the loop if there are no more blanks
+					if(($pos = strpos($temp,']')) === false) {
+						// adds the end of the text
+						$answer.=$temp;
+						break;
+					}
+					$choice[$j]=trim(stripslashes($choice[$j]));
+				// if the word entered is the same as the one defined by the professor
+				if(strtolower(substr($temp,0,$pos)) == strtolower($choice[$j])) {
+					// gives the related weighting to the student
+					$questionScore+=$answerWeighting[$j];
+					// increments total score
+					$totalScore+=$answerWeighting[$j];
+					// adds the word in green at the end of the string
+					$answer.=$choice[$j];
+				}
+			// else if the word entered is not the same as the one defined by the professor
+					elseif(!empty($choice[$j])) {
+						// adds the word in red at the end of the string, and strikes it
+						$answer.='<font color="red"><s>'.$choice[$j].'</s></font>';
+					} else {
+						// adds a tabulation if no word has been typed by the student
+						$answer.='&nbsp;&nbsp;&nbsp;';
+					}
+					// adds the correct word, followed by ] to close the blank
+					$answer.=' / <font color="green"><b>'.substr($temp,0,$pos).'</b></font>]';
+					$j++;
+					$temp=substr($temp,$pos+1);
+					}
+				break;
+			// for matching
+			case MATCHING :	if($answerCorrect) {
+						if($answerCorrect == $choice[$answerId]) {
+							$questionScore+=$answerWeighting;
+							$totalScore+=$answerWeighting;
+							$choice[$answerId]=$matching[$choice[$answerId]];
+						}
+						elseif(!$choice[$answerId]) {
+							$choice[$answerId]='&nbsp;&nbsp;&nbsp;';
+						} else {
+							$choice[$answerId]='<font color="red">
+							<s>'.$matching[$choice[$answerId]].'</s>
+							</font>';
+						}
+					} else {
+						$matching[$answerId]=$answer;
+					}
+					break;
+		}	// end switch()
+		if ($displayResults == 1) { 
+			if($answerType != MATCHING || $answerCorrect) {
+				if($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER) {
+					$tool_content .= "<tr><td width='5%' style='background: #fff;'>
+					<div align='center'>
+					<img src='../../template/classic/img/";
+	
+					if ($answerType == UNIQUE_ANSWER)
+						$tool_content .= "radio";
+					else
+						$tool_content .= "checkbox";
+	
+					if ($studentChoice)
+						$tool_content .= "_on";
+					else
+						$tool_content .= '_off';
+		
+					$tool_content .= ".gif' border='0'></div></td>
+					<td width='5%' style='background: #fff;'><div align='center'>";
+	
+					if ($answerType == UNIQUE_ANSWER)
+						$tool_content .= "<img src=\"../../template/classic/img/radio";
+					else
+						$tool_content .= "<img src=\"../../template/classic/img/checkbox";
+					if ($answerCorrect)
+						$tool_content .= "_on";
+					else	
+						$tool_content .= "_off";	
+					$tool_content .= ".gif\" border=\"0\"></div>";	
+					$tool_content .= "</td><td width='45%' style='background: #fff;'>${answer}</td>
+					<td width='45%' style='background: #fff;'>";
+	
+					if ($studentChoice) {
+						$tool_content .= nl2br(make_clickable($answerComment)); 
+					} else { 
+						$tool_content .= '&nbsp;';
+					} 
+				
+				$tool_content .= "</td></tr>";
+	
+				} elseif($answerType == FILL_IN_BLANKS) {
+					$tool_content .= "<tr>
+					<td style=\"background: #fff;\">".nl2br($answer)."</td></tr>";
+				} else {
+					$tool_content .= "<tr><td width='50%' style='background: #fff;'>${answer}</td>
+					<td width='50%' style='background: #fff;'>${choice[$answerId]} / 
+					<font color='green'><b>${matching[$answerCorrect]}</b></font></td></tr>";
+				}
+			} 
+		} // end of if
+	}	// end for()
 	 if ($displayScore == 1) {
 		$tool_content .= "<tr><td colspan='$colspan' class='score'>
 		$langQuestionScore: <b>$questionScore/$questionWeighting</b>

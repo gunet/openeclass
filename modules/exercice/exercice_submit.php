@@ -74,7 +74,7 @@ if(isset($_POST['buttonCancel'])) {
 	header('Location: exercice.php');
 	exit();
 }
-
+	
 // if the user has submitted the form
 if (isset($_POST['formSent'])) {
 	$exerciseType = isset($_POST['exerciseType'])?$_POST['exerciseType']:'';
@@ -83,46 +83,32 @@ if (isset($_POST['formSent'])) {
 	$exerciseTimeConstrain = isset($_POST['exerciseTimeConstrain'])?$_POST['exerciseTimeConstrain']:'';
 	$eid_temp = isset($_POST['eid_temp'])?$_POST['eid_temp']:'';
 	$RecordStartDate = isset($_POST['RecordStartDate'])?$_POST['RecordStartDate']:'';
-	$exerciseAllowedAttempts = isset($_POST['exerciseAllowedAttempts'])?$_POST['exerciseAllowedAttempts']:'';
 	$choice = isset($_POST['choice'])?$_POST['choice']:'';
-	
-	$CurrentAttempt = mysql_fetch_array(db_query("SELECT COUNT(*) FROM exercise_user_record 
-		WHERE eid='$eid_temp' AND uid='$uid'", $currentCourseID));
-	++$CurrentAttempt[0];
-	if (($exerciseAllowedAttempts == 0) or ($CurrentAttempt[0] <= $exerciseAllowedAttempts)) { // if it is allowed
-		if (isset($exerciseTimeConstrain) and $exerciseTimeConstrain != 0) { 
-			$exerciseTimeConstrain = $exerciseTimeConstrain*60;
-			$exerciseTimeConstrainSecs = time() - $exerciseTimeConstrain;
-			$_SESSION['exercise_end_time'] = $exerciseTimeConstrainSecs;
-			if ($_SESSION['exercise_end_time'] - $_SESSION['exercise_begin_time'] > $exerciseTimeConstrain) {
-				unset($_SESSION['exercise_begin_time']);
-				unset($_SESSION['exercise_end_time']);
-				header('Location: exercise_redirect.php');
-				exit();
-			} 
-		}
-		$RecordEndDate = date("Y-m-d H:i:s", time());
-		if (($exerciseType == 1) or (($exerciseType == 2) and ($nbrQuestions == $questionNum))) { // record
-			mysql_select_db($currentCourseID); 
-			$sql="INSERT INTO exercise_user_record(eid, uid, RecordStartDate, RecordEndDate, attempt)
-				VALUES ('$eid_temp','$uid','$RecordStartDate','$RecordEndDate', 1)";
-			$result=db_query($sql);
-		}	
+	if (isset($_SESSION['exerciseResult'])) {
+		$exerciseResult = $_SESSION['exerciseResult'];
 	} else {
-		$tool_content .= "<br/><table width='99%' class='Question'>
-		<thead><tr><td class='alert1'>$langExerciseExpired</td></tr>
-		<tr>
-		<td><br/><br/><br/><div align='center'><a href='exercice.php'>$langBack</a></div></td>
-		</tr></thead></table>";
-		draw($tool_content, 2);
-		exit();
+		$exerciseResult = array();
 	}
 	
-	// initializing
-	if(!is_array(@$exerciseResult)) {
-		$exerciseResult=array();
+	if (isset($exerciseTimeConstrain) and $exerciseTimeConstrain != 0) { 
+		$exerciseTimeConstrain = $exerciseTimeConstrain*60;
+		$exerciseTimeConstrainSecs = time() - $exerciseTimeConstrain;
+		$_SESSION['exercise_end_time'] = $exerciseTimeConstrainSecs;
+		if ($_SESSION['exercise_end_time'] - $_SESSION['exercise_begin_time'] > $exerciseTimeConstrain) {
+			unset($_SESSION['exercise_begin_time']);
+			unset($_SESSION['exercise_end_time']);
+			header('Location: exercise_redirect.php');
+			exit();
+		} 
 	}
-
+	$RecordEndDate = date("Y-m-d H:i:s", time());
+	if (($exerciseType == 1) or (($exerciseType == 2) and ($nbrQuestions == $questionNum))) { // record
+		mysql_select_db($currentCourseID); 
+		$sql="INSERT INTO exercise_user_record(eid, uid, RecordStartDate, RecordEndDate, attempt)
+			VALUES ('$eid_temp','$uid','$RecordStartDate','$RecordEndDate', 1)";
+		$result=db_query($sql);
+	}	
+	
 	// if the user has answered at least one question
 	if(is_array($choice)) {
 		if($exerciseType == 1) {
@@ -142,7 +128,7 @@ if (isset($_POST['formSent'])) {
 
 	// the script "exercise_result.php" will take the variable $exerciseResult from the session
 	$_SESSION['exerciseResult'] = $exerciseResult;
-
+	print_r($_SESSION['exerciseResult']);
 	// if it is the last question (only for a sequential exercise)
 	if($exerciseType == 1 || $questionNum >= $nbrQuestions) {
 		// goes to the script that will show the result of the exercise
@@ -173,14 +159,28 @@ if(!isset($_SESSION['objExercise'])) {
 	$_SESSION['objExercise'] = $objExercise;
 }
 
-$exerciseTitle=$objExercise->selectTitle();
-$exerciseDescription=$objExercise->selectDescription();
-$exerciseType=$objExercise->selectType();
-$exerciseTimeConstrain=$objExercise->selectTimeConstrain();
-$exerciseAllowedAttempts=$objExercise->selectAttemptsAllowed();
+$exerciseTitle = $objExercise->selectTitle();
+$exerciseDescription = $objExercise->selectDescription();
+$exerciseType = $objExercise->selectType();
+$exerciseTimeConstrain = $objExercise->selectTimeConstrain();
+$exerciseAllowedAttempts = $objExercise->selectAttemptsAllowed();
 $eid_temp = $objExercise->selectId();
-
 $RecordStartDate = date("Y-m-d H:i:s", time());
+
+// check if exercise has expired 
+$CurrentAttempt = mysql_fetch_array(db_query("SELECT COUNT(*) FROM exercise_user_record 
+		WHERE eid='$eid_temp' AND uid='$uid'", $currentCourseID));
+++$CurrentAttempt[0];
+if ($exerciseAllowedAttempts > 0 and $CurrentAttempt[0] > $exerciseAllowedAttempts) { 
+	$tool_content .= "<br/><table width='99%' class='Question'>
+	<thead><tr><td class='alert1'>$langExerciseExpired</td></tr>
+	<tr>
+	<td><br/><br/><br/><div align='center'><a href='exercice.php'>$langBack</a></div></td>
+	</tr></thead></table>";
+	draw($tool_content, 2);
+	exit();
+}
+
 if (isset($_SESSION['questionList'])) {
 	$questionList = $_SESSION['questionList'];
 }
@@ -224,8 +224,7 @@ $tool_content .= "<table width='99%' class='Exercise'>
 <input type='hidden' name='nbrQuestions' value='$nbrQuestions'>
 <input type='hidden' name='exerciseTimeConstrain' value='$exerciseTimeConstrain'>
 <input type='hidden' name='eid_temp' value='$eid_temp'>
-<input type='hidden' name='RecordStartDate' value='$RecordStartDate'>
-<input type='hidden' name='exerciseAllowedAttempts' value='$exerciseAllowedAttempts'>";
+<input type='hidden' name='RecordStartDate' value='$RecordStartDate'>";
 
 $i=0;
 foreach($questionList as $questionId) {
