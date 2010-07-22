@@ -28,7 +28,6 @@
 if(isset($_POST['submitQuestion'])) {
 	$questionName = trim($questionName);
 	$questionDescription = trim($questionDescription);
-	$imageUpload_size = isset($_POST['imageUpload_size'])?$_POST['imageUpload_size']:'';
 	// no name given
 	if(empty($questionName))
 	{
@@ -37,12 +36,6 @@ if(isset($_POST['submitQuestion'])) {
 	// checks if the question is used in several exercises	
 	elseif($exerciseId && !isset($modifyIn) && $objQuestion->selectNbrExercises() > 1)
 	{
-	        // if a picture has been set
-        	if($imageUpload_size)
-	        {
-        	    // saves the picture into a temporary file
-	            $objQuestion->setTmpPicture($imageUpload);
-        	}
 		// duplicates the question
 		$questionId=$objQuestion->duplicate();
 		// deletes the old question
@@ -68,21 +61,12 @@ if(isset($_POST['submitQuestion'])) {
 	$objQuestion->updateDescription($questionDescription);
 	$objQuestion->updateType($answerType);
 	$objQuestion->save($exerciseId);
-	$questionId=$objQuestion->selectId();
-	// if a picture has been set or checkbox "delete" has been checked
-	if($imageUpload_size || isset($deletePicture)) {
-		// we remove the picture
+	$questionId = $objQuestion->selectId();
+	// upload or delete picture
+	if (isset($_POST['deletePicture'])) {
 		$objQuestion->removePicture();
-		// if we add a new picture
-		if($imageUpload_size) {
-			// image is already saved in a temporary file
-			if(isset($modifyIn)) {
-				// saves the picture into a temporary file
-				$objQuestion->getTmpPicture();
-			} else { // saves the picture coming from POST FILE
-				$objQuestion->uploadPicture($imageUpload);
-			}
-		}
+	} elseif (isset($_FILES['imageUpload']) && is_uploaded_file($_FILES['imageUpload']['tmp_name'])) {
+		$objQuestion->uploadPicture($_FILES['imageUpload']['tmp_name']);
 	}
 	if($exerciseId)  {
 		// adds the question ID into the question list of the Exercise object
@@ -148,7 +132,7 @@ if(isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
 	if ($okPicture) {
 		$tool_content .= "<tr><th class='left'>$langDeletePicture :</th>
 		<td><input type=\"checkbox\" name=\"deletePicture\" value=\"1\" ";
-		if(isset($deletePicture)) {
+		if(isset($_POST['deletePicture'])) {
 			$tool_content .= 'checked="checked"'; 
 		}
 		$tool_content .= "> ";

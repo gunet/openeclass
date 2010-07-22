@@ -273,13 +273,12 @@ class Question
 	{
 		global $picturePath;
 
-		// if the question has got an ID
                 if($this->id) {
                         // Adding extension to file isn't supported yet
                         // $filename_final = add_ext_on_mime($picturePath . '/quiz-' . $this->id,
                         //                                   'imageUpload');
                         $filename_final = $picturePath . '/quiz-' . $this->id;
-                        $result = @move_uploaded_file($Picture, $filename_final);
+                        $result = copy($Picture, $filename_final);
                         if ($result) {
                                 @chmod($filename_final, 0644);
                                 return true;
@@ -342,48 +341,6 @@ class Question
 		if($this->id && file_exists($picturePath.'/quiz-'.$this->id))
 		{
 			return @copy($picturePath.'/quiz-'.$this->id,$picturePath.'/quiz-'.$questionId)?true:false;
-		}
-
-		return false;
-	}
-
-	/**
-	 * saves the picture coming from POST into a temporary file
-	 * Temporary pictures are used when we don't want to save a picture right after a form submission.
-	 * For example, if we first show a confirmation box.
-	 *
-	 * @author - Olivier Brouckaert
-	 * @param - string $Picture - temporary path of the picture to move
-	 */
-	function setTmpPicture($Picture)
-	{
-		global $picturePath;
-
-		if(file_exists($picturePath.'/tmp'))
-		{
-			@unlink($picturePath.'/tmp');
-		}
-
-		// saves the picture into a temporary file
-		@move_uploaded_file($Picture,$picturePath.'/tmp');
-	}
-
-	/**
-	 * moves the temporary question "tmp" to "quiz-$questionId"
-	 * Temporary pictures are used when we don't want to save a picture right after a form submission.
-	 * For example, if we first show a confirmation box.
-	 *
-	 * @author - Olivier Brouckaert
-	 * @return - boolean - true if moved, otherwise false
-	 */
-	function getTmpPicture()
-	{
-		global $picturePath;
-
-		// if the question has got an ID and if the picture exists
-		if($this->id && file_exists($picturePath.'/tmp'))
-		{
-			return rename($picturePath.'/tmp',$picturePath.'/quiz-'.$this->id)?true:false;
 		}
 
 		return false;

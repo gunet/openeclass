@@ -35,8 +35,7 @@ if(isset($usedInSeveralExercises)) {
 	if(isset($_POST['submitQuestion'])) {
 		$tool_content .= "<input type=\"hidden\" name=\"questionName\" value=\"".htmlspecialchars($questionName)."\">";
 		$tool_content .= "<input type=\"hidden\" name=\"questionDescription\""."value=\"".htmlspecialchars($questionDescription)."\">";
-		$tool_content .= "<input type='hidden' name='imageUpload_size' value='$imageUpload_size'>
-		<input type='hidden' name='deletePicture' value='$deletePicture'>";
+		$tool_content .= "<input type='hidden' name='deletePicture' value='$deletePicture'>";
 	}
 	// submit answers
 	else {
