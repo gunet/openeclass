@@ -65,11 +65,7 @@ if(!empty($is_submit))
 	if (empty($ldap_email) or empty($ldap_passwd)) // check for empty username-password
 	{
 		$tool_content .= "
-                <table width=\"99%\" class=\"tbl\">
-                <tr>
-		  <td class=\"caution\" height='60'><p>$ldapempty  $errormessage</p></td>
-		</tr>
-                </table>";
+		  <p class=\"caution\"$ldapempty  $errormessage</p>";
 	} 
 	else 
 	{
@@ -167,14 +163,8 @@ if(!empty($is_submit))
 		else // not connected
 		{
 			$tool_content .= "
-                        <table width='99%' class='tbl'>
-			<tr>
-                          <td class='caution' height='60'>$langConnNo <br />$langAuthNoValidUser</td>
-                        </tr>
-			<tr>
-                          <td><a href='$lastpage'>$langBack</a></td>
-                        </tr>
-                        </table>";
+                          <p class='alert1'><b>$langConnNo</b> <br />$langAuthNoValidUser</p>
+                          <p>&laquo; <a href='$lastpage'>$langBack</a></p>";
 		}
 	}
 	draw($tool_content, 0);
@@ -268,17 +258,12 @@ if (isset($_POST['submit'])) {
 	} else {
 		// errors exist - registration failed
 		$tool_content .= "\
-                    <table width='99%' class='tbl'>
-                    <tr>
-                      <td class='caution' height='60'>";
+                      <p class='alert1''>";
 		foreach ($registration_errors as $error) {
 			$tool_content .= "<p>$error</p>";
 		}
-		$tool_content .= "<p><a href='javascript:history.go(-1)'>$langAgain</a></p>" .
-		"</td>
-                    </tr>
-                    </table>
-                    <br /><br />";
+		$tool_content .= "<br /><a href='javascript:history.go(-1)'>&laquo; $langAgain</a></p>" .
+		"";
 	}
 } // end of submit
 

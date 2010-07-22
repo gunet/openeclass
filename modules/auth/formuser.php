@@ -59,12 +59,7 @@ if (isset($_POST['submit']) and !$all_set) {
 
         // form submitted but required fields empty
         $tool_content .= "
-                <table width='99%' class='tbl'>
-                <tr>
-                  <td class='caution' height='60'><p>$langFieldsMissing</p></td>
-                </tr>
-                </table>
-                <br /><br />";
+                  <p class='alert1'>$langFieldsMissing</p>";
 
 }
 
@@ -96,14 +91,7 @@ if ($all_set) {
 
         if (!send_mail('', $emailhelpdesk, '', $emailhelpdesk, $mailsubject2, $MailMessage, $charset)) {
                 $tool_content .= "
-                       <table class='tbl'>
-                       <tr>
-                         <td class='caution' height='60'>
-                         <p>$langMailErrorMessage&nbsp; <a href='mailto:$emailhelpdesk' class='mainpage'>$emailhelpdesk</a>.</p>
-                         </td>
-                       </tr>
-                       </table>
-                       <br /><br />";
+                         <p class='alert1'>$langMailErrorMessage&nbsp; <a href='mailto:$emailhelpdesk' class='mainpage'>$emailhelpdesk</a>.</p>";
         }
 
         // User Message
@@ -121,7 +109,7 @@ $tool_content .= "<p>$langInfoStudReq</p><br />
   <legend>$langUserData</legend>
   <table class='tbl'>
   <tr>
-    <td>$langName</td>
+    <th>$langName</th>
     <td><input type='text' name='name' value='$name' size='33' />&nbsp;&nbsp;(*)</td>
   </tr>
   <tr>

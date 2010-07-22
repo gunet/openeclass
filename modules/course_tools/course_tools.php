@@ -228,7 +228,7 @@ if ($is_adminOfCourse) {
 		$sql = "DELETE FROM `accueil` WHERE `id` = " . $_POST['delete'] ." ";
 		db_query($sql, $dbname);
 		unset($sql);
-		$tool_content .= "<p class=\"success_small\">$langLinkDeleted</p><br/>";
+		$tool_content .= "<p class=\"success\">$langLinkDeleted</p>";
 	}
 
         if (isset($_POST['submit'])) {
@@ -238,7 +238,7 @@ if ($is_adminOfCourse) {
                         $name_link = isset($_POST['name_link'])?$_POST['name_link']:'';
                         if ((trim($link) == 'http://') or (trim($link) == 'ftp://')
                                         or empty($link) or empty($name_link))  {
-                                $tool_content .= "<p class='caution_small'>$langInvalidLink<br /><a href='$_SERVER[PHP_SELF]?action=2'>$langHome</a></p><br />";
+                                $tool_content .= "<p class='caution'>$langInvalidLink<br /><a href='$_SERVER[PHP_SELF]?action=2'>$langHome</a></p><br />";
                                 draw($tool_content, 2);
                                 exit();
                         }
@@ -250,7 +250,7 @@ if ($is_adminOfCourse) {
                         $link = autoquote($link);
                         $name_link = autoquote($name_link);
                         db_query("INSERT INTO accueil VALUES ($mID, $name_link, $link, 'external_link', 1, 0, $link, '')");
-                        $tool_content .= "<p class='success_small'>$langLinkAdded</p><br/>";
+                        $tool_content .= "<p class='success'>$langLinkAdded</p>";
                 } elseif ($action == 1) { 
                         $updir = "$webDir/courses/$currentCourseID/page"; //path to upload directory
                         $size = "20971520"; //file size is 20M (1024x1024x20)
@@ -283,10 +283,10 @@ if ($is_adminOfCourse) {
                                                 '',
                                                 'HTML_PAGE'
                                                 )", $currentCourse);
-                                $tool_content .= "<p class='success_small'>$langOkSent</p><br/>";
+                                $tool_content .= "  <p class='success'>$langOkSent</p>\n";
                         } else {
-                                $tool_content .= "<p class='caution_small'>$langTooBig<br />";
-                                $tool_content .= "<a href='$_SERVER[PHP_SELF]?action=1'>$langHome</a></p><br />";
+                                $tool_content .= "  <p class='caution'>$langTooBig<br />\n";
+                                $tool_content .= "  <a href='$_SERVER[PHP_SELF]?action=1'>$langHome</a></p>\n  <br />\n";
                                 draw($tool_content, 2);
                         }
                 }
@@ -295,56 +295,62 @@ if ($is_adminOfCourse) {
                 $navigation[]= array ("url"=>"course_tools.php", "name"=> $langToolManagement);
                 $helpTopic = 'Import';
 
-                $tool_content .= "<form method='post' action='$_SERVER[PHP_SELF]?submit=yes&action=1' enctype='multipart/form-data'>
-                        <p>$langExplanation_0</p>
-                        <p>$langExplanation_3</p>
-                        <br />
-                        <table width='99%' align='left' class='FormData'><tbody>
-                        <tr><th class='left' width='220'>&nbsp;</th>
-                            <td><b>$langExplanation_1</b></td>
-                            <td>&nbsp;</td></tr>
-                        <tr><th class='left'>$langSendPage</th>
-                            <td><input type='file' name='file' size='35' accept='text/html' class='auth_input'></td>
-                            <td><p align='right'><small>$langNoticeExpl</small></p></td></tr>
-                        <tr><th class='left'>$langPgTitle</th>
-                            <td><input type='Text' name='link_name' size='40' class='FormData_InputText'></td>
-                            <td><p align='right'><small>$langExplanation_2</small></p></td></tr>
-                        <tr><th class='left'>&nbsp;</th>
-                            <td><input type='Submit' name='submit' value='$langAdd'></td>
-                            <td>&nbsp;</td></tr>
-                        </tbody></table></form>";
+                $tool_content .= "\n 
+                    <form method='post' action='$_SERVER[PHP_SELF]?submit=yes&action=1' enctype='multipart/form-data'>
+                      <p>$langExplanation_0</p>
+                      <p>$langExplanation_3</p>
+                  
+                      <fieldset>
+                      <legend>$langExplanation_1</legend> 
+                      <table class='tbl'>
+                      <tr>
+                        <th>$langSendPage</th>
+                        <td><input type='file' name='file' size='35' accept='text/html'></td>
+                        <td class='right'>$langNoticeExpl</p></td>
+                      </tr>
+                      <tr>
+                        <th>$langPgTitle</th>
+                        <td><input type='Text' name='link_name' size='40'></td>
+                        <td class='right'>$langExplanation_2</p></td>
+                      </tr>
+                      <tr>
+                        <th>&nbsp;</th>
+                        <td><input type='Submit' name='submit' value='$langAdd'></td>
+                        <td>&nbsp;</td>
+                      </tr>
+                      </table>
+                      </fieldset>
+
+                    </form>";
                 draw($tool_content, 2);
                 exit();
         } elseif ($action == 2) { // add external link
                 $nameTools = $langAddExtLink;
                 $navigation[]= array ('url' => 'course_tools.php', 'name' => $langToolManagement);
                 $helpTopic = 'Module';
-                $tool_content .=  "<form method='post' action='$_SERVER[PHP_SELF]?action=2'>
-                <br>
-                <table width='99%' align='left' class='FormData'>
-                <tbody>
-                <tr>
-                <th class='left' width='220'>&nbsp;</th>
-                <td><b>$langExplanation_4</b></td>
-                <td>&nbsp;</td>
-                </tr>
-                <tr>
-                <th class='left'>$langLink&nbsp;:</th>
-                <td><input type='text' name='link' size='50' value='http://' class='FormData_InputText'></td>
-                <td>&nbsp;</td>
-                </tr>
-                <tr>
-                <th class='left'>$langName&nbsp;:</th>
-                <td><input type='Text' name='name_link' size='50' class='FormData_InputText'></td>
-                <td>&nbsp;</td>
-                </tr>
-                <tr>
-                <th class='left'>&nbsp;</th>
-                <td><input type='submit' name='submit' value='$langAdd'></td>
-                <td>&nbsp;</td>
-                </tr>
-                </thead>
-                </table></form>";
+                $tool_content .=  "
+                  <form method='post' action='$_SERVER[PHP_SELF]?action=2'>
+                    <fieldset>
+                    <legend>$langExplanation_4</legend>
+                    <table width='99%' class='tbl'>
+                    <tr>
+                      <th>$langLink&nbsp;:</th>
+                      <td><input type='text' name='link' size='50' value='http://'></td>
+                      <td>&nbsp;</td>
+                    </tr>
+                    <tr>
+                      <th>$langName&nbsp;:</th>
+                      <td><input type='Text' name='name_link' size='50'></td>
+                      <td>&nbsp;</td>
+                    </tr>
+                    <tr>
+                      <th>&nbsp;</th>
+                      <td><input type='submit' name='submit' value='$langAdd'></td>
+                      <td>&nbsp;</td>
+                    </tr>
+                    </table>
+                    </fieldset>
+                  </form>";
                 draw($tool_content, 2);
                 exit();
         }
@@ -391,38 +397,31 @@ if ($is_adminOfCourse) {
 
 	$tool_content .= <<<tForm
 <form name="courseTools" action="$_SERVER[PHP_SELF]" method="post" enctype="multipart/form-data">
-  <br/>
-  <table class="FormData" align="center" width="99%" style="border: 1px solid #CAC3B5;">
-  <thead>
+  <table class="tbl_border" width="99%">
   <tr>
-    <td width="45%" style="color: #a33033;"><div align="center"><b>$langInactiveTools</b></div></td>
-    <td width="10%" style="color: #727266;"><div align="center"><b>$langMove</b></div></td>
-    <td width="45%" style="color: green;"><div align="center"><b>$langActiveTools</b></div></td>
+    <th width="45%" class="center">$langInactiveTools</th>
+    <th width="10%" class="center">$langMove</th>
+    <th width="45%" class="center">$langActiveTools</th>
   </tr>
   <tr>
-    <td><div align="center">
-        <select name="toolStatInactive[]" size=17 multiple class='FormData_InactiveTools'>\n$inactiveTools        </select>
-        </div>
+    <td class="center">
+        <select name="toolStatInactive[]" size=17 multiple>\n$inactiveTools        </select>
     </td>
-    <td><div align="center">
+    <td class="center">
         <input type="button" onClick="move(this.form.elements[0],this.form.elements[3])" value="   >>   " /><br/>
         <input type="button" onClick="move(this.form.elements[3],this.form.elements[0])" value="   <<   " />
-        </div>
     </td>
-    <td><div align="center">
-        <select name="toolStatActive[]" size="17" multiple class='FormData_ActiveTools'>\n$activeTools        </select>
-        </div>
+    <td class="center">
+        <select name="toolStatActive[]" size="17" multiple>\n$activeTools        </select>
     </td>
   </tr>
   <tr>
     <td>&nbsp;</td>
-    <td><div align="center">
+    <td class="center">
         <input type=submit value="$langSubmitChanges" name="toolStatus" onClick="selectAll(this.form.elements[3],true)" />
-        </div>
-        </td>
+    </td>
     <td>&nbsp;</td>
   </tr>
-  </thead>
   </table>
 </form>
 tForm;
@@ -430,32 +429,35 @@ tForm;
 	$extToolsCount = count($externalLinks) ;
 	if ($extToolsCount > 0)  {
 		// show table to edit/delete external links
-                $tool_content .= "<br/><br/>
-                        <table width='500'><tbody>
+                $tool_content .= "
+                <br/>
+                        <table class='tbl_alt' width='99%'>
                         <tr>
-                        <th rowspan='2'>&nbsp;</th>
-                        <td colspan='2'><b>$langOperations</b></td>
+                          <th>&nbsp;</th>
+                          <th colspan='2'>$langOperations</th>
                         </tr>
                         <tr>
-                        <td class='left'><b>$langTitle</b></td>
-                        <td class='left' width='20'><b>$langDelete</b></td>
-                        </tr>";
+                          <th>&nbsp;</th>
+                          <th><div align=\"left\">$langTitle</div></th>
+                          <th width='20'>$langDelete</th>
+                        </tr>\n";
 		for ($i=0; $i < $extToolsCount; $i++) {
 			if ($i % 2==0) {
-				$tool_content .= "<tr>\n";
+				$tool_content .= "                        <tr class='even'>\n";
 			} elseif ($i % 2 == 1) {
-				$tool_content .= "<tr class='odd'>\n";
+				$tool_content .= "                        <tr class='odd'>\n";
 			}
-			$tool_content .= "<th class='left' width='1'>
+			$tool_content .= "                          <td width='1'>
                                 <img src='../../template/classic/img/external_link_on.gif' title='$langTitle' /></th>
-                                <td class='left'>".$externalLinks[$i]['text']."</td>\n";
-                        $tool_content .= "<td align='center'><form method='post' action='course_tools.php'>
-                                <input type='hidden' name='delete' value='{$externalLinks[$i]['id']}' />
-                                <input type='image' src='../../template/classic/img/delete.gif' name='delete_button' 
+                                <td class='left'>".$externalLinks[$i]['text']."</td>
+                                <td align='center'><form method='post' action='course_tools.php'>
+                                   <input type='hidden' name='delete' value='{$externalLinks[$i]['id']}' />
+                                   <input type='image' src='../../template/classic/img/delete.gif' name='delete_button' 
                                        onClick='return confirmation(\"" .  addslashes($externalLinks[$i]['text']) .
-                                               "\");' title='$langDelete' /></form></td></tr>";
+                                               "\");' title='$langDelete' /></form></td>
+                             </tr>\n";
                 }
-		$tool_content .= "</tbody></table>";
+		$tool_content .= "                        </table>\n";
 	}
         draw($tool_content, 2,'', $head_content);
 }

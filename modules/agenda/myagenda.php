@@ -140,21 +140,20 @@ function display_monthcalendar($agendaitems, $month, $year, $weekdaynames, $mont
 	$backwardsURL = "$_SERVER[PHP_SELF]?month=".($month==1 ? 12 : $month-1)."&amp;year=".($month==1 ? $year-1 : $year);
 	$forewardsURL = "$_SERVER[PHP_SELF]?month=".($month==12 ? 1 : $month+1)."&amp;year=".($month==12 ? $year+1 : $year);
 
-	$tool_content .=  "\n  <table width=99% class=\"DepTitle\">\n  <thead>";
+	$tool_content .=  "\n  <table width=99% class=\"tbl_border\">\n";
   	$tool_content .=  "\n  <tr>";
-	$tool_content .=  "\n    <th width=5%><a href=$backwardsURL>&lt;&lt;</a></th>";
-	$tool_content .=  "\n    <th width=90%><div align=\"center\"><b>$monthName $year</b></div></th>";
-	$tool_content .=  "\n    <th width=5%><a href=$forewardsURL>&gt;&gt;</a></th>";
+	$tool_content .=  "\n    <th width='5'><a href=$backwardsURL>&lt;&lt;</a></th>";
+	$tool_content .=  "\n    <th class='center'><b>$monthName $year</b></th>";
+	$tool_content .=  "\n    <th width='5'><a href=$forewardsURL>&gt;&gt;</a></th>";
 	$tool_content .=  "\n  </tr>";
-	$tool_content .=  "\n  </thead>\n  </table>\n  <br />\n\n";
+	$tool_content .=  "\n  </table>\n  <br />\n\n";
 
-	$tool_content .=  "\n <table width=99% style=\"border: 1px solid #CAC3B5;\">\n <tbody>\n <tr>\n  <td>";
-	$tool_content .=  "\n  <table width=100% class=\"FormData\">\n  <thead>\n  <tr>";
+	$tool_content .=  "\n  <table width=99% class=\"tbl_border\">\n  <tr>";
 	for ($ii=1;$ii<8; $ii++)
 	{
-    	$tool_content .=  "\n    <th width=14%>".$weekdaynames[$ii%7]."</th>";
+    	$tool_content .=  "\n    <th class='center'>".$weekdaynames[$ii%7]."</th>";
 	    }
-	$tool_content .=  "\n  </tr>\n  </thead>\n  <tbody>";
+	$tool_content .=  "\n  </tr>\n";
 	$curday = -1;
 	$today = getdate();
 	while ($curday <=$numberofdays[$month])
@@ -173,7 +172,7 @@ function display_monthcalendar($agendaitems, $month, $year, $weekdaynames, $mont
 				$class_style = "class=odd";
 		  		if (($curday==$today['mday'])&&($year ==$today['year'])&&($month == $today['mon']))
 				{
-		  			$dayheader = "<font color=green><b>$curday</b> <small>($langToday)</small></font>";
+		  			$dayheader = "<b>$curday</b> <small>($langToday)</small>";
 		  			$class_style = "class=\"today\"";
 		  			//$class_style = "";
 				}
@@ -183,13 +182,12 @@ function display_monthcalendar($agendaitems, $month, $year, $weekdaynames, $mont
 	    	}
 	  		else
 	    	{
-	    		$tool_content .=  "\n    <td width=14% class=\"inactive\">&nbsp;</td>";
+	    		$tool_content .=  "\n    <td width=14%>&nbsp;</td>";
 	    	}
 		}
     	$tool_content .=  "\n  </tr>";
     }
-  	$tool_content .=  "\n  </tbody>\n  </table>\n\n";
-  		$tool_content .=  "\n  </td>\n </tr>\n </tbody>\n  </table>";
+  	$tool_content .=  "\n  </table>\n\n";
 
 draw($tool_content, 1);
 }

@@ -55,8 +55,7 @@ if($is_adminOfCourse) {
 		exit();
 	} else {
 		$tool_content .= "
-		<table width=\"99%\">
-		<tbody>
+		<table class='tbl'>
 		<tr>
 		<td class=\"caution_NoBorder\" height='60' colspan='3'>
 			<p>$langByDel_A <b>$intitule ($currentCourseID) </b>&nbsp;?  </p>
@@ -73,7 +72,6 @@ if($is_adminOfCourse) {
                                    <input type='submit' name='dont_delete' value='$langCancel' /></form></td>
 		<td>&nbsp;</td>
 		</tr>
-		</tbody>
 		</table>";
 		
 		$tool_content .= "<p align=\"right\"><a href=\"infocours.php\">$langBack</a></p>
