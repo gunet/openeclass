@@ -113,30 +113,30 @@ $tool_content .= "<p>$langInfoStudReq</p><br />
     <td><input type='text' name='name' value='$name' size='33' />&nbsp;&nbsp;(*)</td>
   </tr>
   <tr>
-    <td>$langSurname</td>
+    <th>$langSurname</th>
     <td><input type='text' name='surname' value='$surname' size='33' />&nbsp;&nbsp;(*)</td>
   </tr>
   <tr>
-    <td>$langPhone</td>
+    <th>$langPhone</th>
     <td colspan='2'><input type='text' name='userphone' value='$userphone' size='33' /></td>
   <tr>
-    <td>$langUsername</td>
+    <th>$langUsername</th>
     <td><input type='text' name='username' size='33' maxlength='20' value='$username' />&nbsp;&nbsp;(*)&nbsp;$langUserNotice</td>
   </tr>
   <tr>
-    <td>$langProfEmail</td>
+    <th>$langProfEmail</th>
     <td><input type='text' name='usermail' value='$usermail' size='33' />&nbsp;&nbsp;(*)</td>
   </tr>
   <tr>
-    <td>$langAm</td>
+    <th>$langAm</th>
     <td colspan='2'><input type='text' name='am' value='$am' size='33' /></td>
   </tr>
   <tr>
-    <td>$langComments</td>
+    <th>$langComments</th>
     <td><textarea name='usercomment' cols='30' rows='4'>$usercomment</textarea>&nbsp;&nbsp;(*) $profreason</td>
   </tr>
   <tr>
-    <td>$langFaculty&nbsp;</td>
+    <th>$langFaculty&nbsp;</th>
     <td><select name='department'>";
         $deps = db_query("SELECT id, name FROM faculte order by name");
         while ($dep = mysql_fetch_array($deps)) {
@@ -148,22 +148,23 @@ $tool_content .= "<p>$langInfoStudReq</p><br />
                 $tool_content .= "\n<option value='$dep[id]'$selected>$dep[name]</option>\n";
         }
 
-	 $tool_content .= "\n</select></td>
-        </tr>
-        <tr>
-        <td>$langLanguage</td>
-        <td>";
+	 $tool_content .= "\n</select>
+     </td>
+  </tr>
+  <tr>
+     <th>$langLanguage</th>
+     <td>";
 	$tool_content .= lang_select_options('localize');
 	$tool_content .= "</td>
-        </tr>
-        <tr>
-          <td>&nbsp;</td>
-          <td><input type='submit' class='ButtonSubmit' name='submit' value='$langSubmitNew' /></td>
-        </tr>
-        </table>
-        <div align='right'><small>$langRequiredFields</small></div>
-       </fieldset>
-      </form>";
+  </tr>
+  <tr>
+     <td>&nbsp;</td>
+     <td><input type='submit' class='ButtonSubmit' name='submit' value='$langSubmitNew' /></td>
+  </tr>
+  </table>
+  <div align='right'><small>$langRequiredFields</small></div>
+  </fieldset>
+  </form>";
 }   // end of form
 
 draw($tool_content, 0);

@@ -50,31 +50,31 @@ if (!isset($submit)) {
   <legend>$langUserData</legend>
   <table class='tbl'> 
   <tr>
-   <td>$langSurname</td>
+   <th>$langSurname</th>
    <td><input size='35' type='text' name='nom_form' value='$nom_form'>&nbsp;&nbsp;(*)</td>
   </tr>
   <tr>
-    <td>$langName</td>
+    <th>$langName</th>
     <td><input size='35' type='text' name='prenom_form' value='$prenom_form'>&nbsp;&nbsp;(*)</td>
   </tr>
   <tr>
-    <td>$langPhone</td>
+    <th>$langPhone</th>
     <td><input size='35' type='text' name='userphone' value='$userphone'>&nbsp;&nbsp;(*)</td>
   </tr>
   <tr>
-    <td>$langUsername</td>
+    <th>$langUsername</th>
     <td><input size='35' type='text' name='uname' value='$uname'>&nbsp;&nbsp;(*)</td>
   </tr>
   <tr>
-    <td>$langEmail</td>
+    <th>$langEmail</th>
     <td><input size='35' type='text' name='email_form' value='$email_form'>&nbsp;&nbsp;(*)</td>
   </tr>
   <tr>
-    <td>$langComments</td>
+    <th>$langComments</th>
     <td><textarea name='usercomment' COLS='32' ROWS='4' WRAP='SOFT'>$usercomment</textarea>&nbsp;&nbsp;(*) $profreason</td>
   </tr>
   <tr>
-    <td>$langFaculty</td>
+    <th>$langFaculty</th>
     <td><select name='department'>";
         $deps=mysql_query("SELECT id, name FROM faculte order by id");
         while ($dep = mysql_fetch_array($deps))
@@ -85,13 +85,13 @@ if (!isset($submit)) {
     </td>
   </tr>
 <tr>
-      <td>$langLanguage</td>
+      <th>$langLanguage</th>
       <td>";
 	$tool_content .= lang_select_options('proflang');
 	$tool_content .= "</td>
     </tr>
   <tr>
-    <td>&nbsp;</td>
+    <th>&nbsp;</th>
     <td>
       <input type='submit' name='submit' value='$langSubmitNew' />
       <input type='hidden' name='auth' value='1' />
@@ -156,34 +156,25 @@ $registration_errors = array();
 
             if (!send_mail('', $emailhelpdesk, $gunet, $emailhelpdesk, $mailsubject, $MailMessage, $charset))
             {
-                    $tool_content .= "<table width='99%'>
-                            <tbody><tr>
-                            <td class='caution' height='60'>
-                            <p>$langMailErrorMessage &nbsp; <a href='mailto:$emailhelpdesk'>$emailhelpdesk</a></p>
-                            </td>
-                            </tr></tbody></table>";
+                    $tool_content .= "
+                            <p class='alert1'>$langMailErrorMessage &nbsp; <a href='mailto:$emailhelpdesk'>$emailhelpdesk</a></p>";
                     draw($tool_content,0);
                     exit();
             }
 
             //------------------------------------User Message ----------------------------------------
-            $tool_content .= "<table width='99%'><tbody>
-                    <tr>
-                    <td class='well-done' height='60'>
-                    <p>$langDearProf</p><p>$success</p><p>$infoprof</p>
-                    <p><a href='$urlServer'>$langBack</a></p>
-                    </td>
-                    </tr></tbody></table>";
+            $tool_content .= "
+                    <p class='success'>$langDearProf<br />$success<br />$infoprof<br />
+                    <p>&laquo; <a href='$urlServer'>$langBack</a></p>";
     }
 
 	else	{  // errors exist - registration failed
-            $tool_content .= "<table width='99%'><tbody><tr>" .
-                              "<td class='caution' height='60'>";
+            $tool_content .= "<p class='caution'>";
                 foreach ($registration_errors as $error) {
-                        $tool_content .= "<p>$error</p>";
+                        $tool_content .= "$error<br />";
                 }
-	       $tool_content .= "<p><a href='$_SERVER[PHP_SELF]?prenom_form=$_POST[prenom_form]&amp;nom_form=$_POST[nom_form]&amp;userphone=$_POST[userphone]&amp;uname=$_POST[uname]&amp;email_form=$_POST[email_form]&amp;usercomment=$_POST[usercomment]'>$langAgain</a></p>" .
-                "</td></tr></tbody></table><br /><br />";
+	       $tool_content .= "<a href='$_SERVER[PHP_SELF]?prenom_form=$_POST[prenom_form]&amp;nom_form=$_POST[nom_form]&amp;userphone=$_POST[userphone]&amp;uname=$_POST[uname]&amp;email_form=$_POST[email_form]&amp;usercomment=$_POST[usercomment]'>$langAgain</a><br />" .
+                "</p>";
 	}
 
 } // end of submit

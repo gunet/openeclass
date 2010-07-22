@@ -49,8 +49,8 @@ $lang_editor = langname_to_code($language);
 
 if (isset($_POST['submit'])) {
         if (empty($_POST['title'])) {
-                $tool_content .= "<p class='caution_small'>$langNoCourseTitle<br />
-                                  <a href='$_SERVER[PHP_SELF]'>$langAgain</a></p><br />";
+                $tool_content .= "<p class='caution'>$langNoCourseTitle</p>
+                                  <p>&laquo; <a href='$_SERVER[PHP_SELF]'>$langAgain</a></p>";
         } else {
                 if (isset($_POST['localize'])) {
                         $newlang = $language = langcode_to_name($_POST['localize']);
@@ -116,9 +116,9 @@ if (isset($_POST['submit'])) {
                 db_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langWiki' WHERE define_var='MODULE_ID_WIKI'");
                 db_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langCourseUnits' WHERE define_var='MODULE_ID_UNITS'");
 
-                $tool_content .= "<p class='success_small'>$langModifDone<br />
-                        <a href='".$_SERVER['PHP_SELF']."'>$langBack</a></p><br />
-                        <p><a href='{$urlServer}courses/$currentCourseID/index.php'>$langBackCourse</a></p><br />";
+                $tool_content .= "<p class='success'>$langModifDone</p>
+                        <p>&laquo; <a href='".$_SERVER['PHP_SELF']."'>$langBack</a></p>
+                        <p>&laquo; <a href='{$urlServer}courses/$currentCourseID/index.php'>$langBackCourse</a></p>";
         }
 } else {
 
@@ -213,7 +213,7 @@ if (isset($_POST['submit'])) {
                         <td>$langPublic&nbsp;</td>
                     </tr>
                     <tr>
-                        <td rowspan='2'><img src='../../template/classic/img/Registration.gif' alt='$m[legrestricted]' title='$m[legrestricted]' width='16' height='16' />&nbsp;$m[legrestricted]&nbsp;:</td>
+                        <td rowspan='2' valign='top'><img src='../../template/classic/img/Registration.gif' alt='$m[legrestricted]' title='$m[legrestricted]' width='16' height='16' />&nbsp;$m[legrestricted]&nbsp;:</td>
                         <td><input type='radio' name='formvisible' value='1'".@$visibleChecked[1]." /></td>
                         <td>$langPrivOpen</td>
                     </tr>
@@ -243,7 +243,7 @@ if (isset($_POST['submit'])) {
                     </tr>
                     </table>
                     </fieldset>
-                    <p><input type='submit' name='submit' value='$langSubmit' /></p>
+                    <p align='right'><input type='submit' name='submit' value='$langSubmit' /></p>
 
                     </form>";
 }

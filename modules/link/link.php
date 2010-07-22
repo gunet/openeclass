@@ -149,22 +149,29 @@ if (isset($_GET['action']) && ($is_adminOfCourse)) { //allow link management act
 
 if($is_adminOfCourse) {
 	if (!empty($catlinkstatus))	{
-	   $tool_content .=  "<p class=\"success_small\">".$catlinkstatus."</p><br />";
+	   $tool_content .=  "\n  <p class=\"success\">".$catlinkstatus."</p>i\n";
 	   unset($catlinkstatus);
 	}
 
-	$tool_content .="<div id=\"operations_container\">
-        <ul id=\"opslist\">";
+	$tool_content .="
+        <div id=\"operations_container\">
+          <ul id=\"opslist\">";
 	if (isset($category))
-		$tool_content .=  "<li><a href=\"".$_SERVER['PHP_SELF']."?action=addlink&amp;category=".$category."&amp;urlview=@$urlview\">".$langLinkAdd."</a></li>";
+		$tool_content .=  "
+            <li><a href=\"".$_SERVER['PHP_SELF']."?action=addlink&amp;category=".$category."&amp;urlview=@$urlview\">".$langLinkAdd."</a></li>";
 	else
-		$tool_content .=  "<li><a href=\"".$_SERVER['PHP_SELF']."?action=addlink\">".$langLinkAdd."</a></li>";
+		$tool_content .=  "
+            <li><a href=\"".$_SERVER['PHP_SELF']."?action=addlink\">".$langLinkAdd."</a></li>";
 	if (isset($urlview))
-		$tool_content .=  "<li><a href=\"".$_SERVER['PHP_SELF']."?action=addcategory&amp;urlview=".$urlview."\">".$langCategoryAdd."</a></li>";
+		$tool_content .=  "
+            <li><a href=\"".$_SERVER['PHP_SELF']."?action=addcategory&amp;urlview=".$urlview."\">".$langCategoryAdd."</a></li>";
 	else
-		$tool_content .=  "<li><a href=\"".$_SERVER['PHP_SELF']."?action=addcategory\">".$langCategoryAdd."</a></li>";
+		$tool_content .=  "
+            <li><a href=\"".$_SERVER['PHP_SELF']."?action=addcategory\">".$langCategoryAdd."</a></li>";
 
-	$tool_content .=  "</ul></div>";
+	$tool_content .=  "
+          </ul>
+        </div>";
 	// Displaying the correct title and the form for adding a category or link.
 	// This is only shown when nothing has been submitted yet, hence !isset($submitLink)
 	if (isset($_GET['action']) and ($_GET['action'] == "addlink" or $_GET['action'] == "editlink")
@@ -174,14 +181,16 @@ if($is_adminOfCourse) {
 		if (isset($_GET['category']) and $category == "") {
 			$category=0;
 		}
-		$tool_content .= "<form method='post' action='".$_SERVER['PHP_SELF']."?action=".$action."&amp;urlview=".@$urlview."' onsubmit=\"return checkrequired(this, 'urllink');\">";
+		$tool_content .= "
+                <form method='post' action='".$_SERVER['PHP_SELF']."?action=".$action."&amp;urlview=".@$urlview."' onsubmit=\"return checkrequired(this, 'urllink');\">";
 		if ($action == "editlink") {
 			$tool_content .= "<input type=\"hidden\" name=\"id\" value=\"".$id."\" />";
 		}
 
-		$tool_content .= "<table width='99%'>
+		$tool_content .= "
+                <table width='99%' class='tbl_border'>
 		<tr>
-		  <th width='220'>&nbsp;</th>
+		  <th>&nbsp;</th>
 		  <td><b>";
 		if ($action == "addlink") {
 			$tool_content .= $langLinkAdd;
@@ -229,7 +238,8 @@ if($is_adminOfCourse) {
 		</tr>
                 </table>
                 <br/>
-              </form><br/>";
+              </form>
+              <br/>";
 	}
 	elseif(isset($_GET['action']) and ($_GET['action'] == "addcategory" or $_GET['action'] == "editcategory")
 		and !isset($_POST['submitCategory'])) {

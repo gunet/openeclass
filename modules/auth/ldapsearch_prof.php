@@ -65,10 +65,8 @@ $errormessage = "<br/><p>$ldapback <a href='$lastpage'>$ldaplastpage</a></p>";
 if(!empty($is_submit)) {
 	if (empty($ldap_email) or empty($ldap_passwd)) // check for empty username-password
 	{
-		$tool_content .= "<table width=\"99%\"><tbody>
-		<tr>
-		<td class='caution' height='60'><p>$ldapempty  $errormessage </p></td>
-		</tr></tbody></table>";
+		$tool_content .= "
+		<p class='caution'>$ldapempty  $errormessage </p>";
 		draw($tool_content,0);
 		exit();
 	}  else  {
@@ -104,64 +102,72 @@ if(!empty($is_submit)) {
 	}	
 
 	if ($is_valid) { // connection successful	
-		$tool_content .= "<table width='99%' style='border: 1px solid #edecdf;'>
-		<thead><tr><td>
+		$tool_content .= "
 		<form action='$_SERVER[PHP_SELF]' method='post'>" .
 		(isset($GLOBALS['auth_user_info'])?
 		('<input type="hidden" name="prenom_form" value="' . $GLOBALS['auth_user_info']['firstname'] .
 		'" /><input type="hidden" name="nom_form" value="' . $GLOBALS['auth_user_info']['lastname'] .
 		'" /><input type="hidden" name="email" value="' . $GLOBALS['auth_user_info']['email'] . '" />'): '') . "<p class='success'>$langTheUser $ldapfound </p>
-		<table width=\"100%\"><tbody>
-		<tr><th class='left' width='220'>".$langName."</th>
-		<td width='10%'>".(isset($GLOBALS['auth_user_info'])?
-		$GLOBALS['auth_user_info']['firstname']: '<input class="FormData_InputText" type="text" name="prenom_form" size="38" />')."</td>
+                <fieldset>
+                <legend>$langUserData</legend>
+		<table width=\"99%\" class='tbl'>
+		<tr>
+                  <th class='left'>".$langName."</th>
+		  <td>".(isset($GLOBALS['auth_user_info'])?
+		$GLOBALS['auth_user_info']['firstname']: '<input type="text" name="prenom_form" size="38" />')."</td>
 		</tr>
 		<tr>
-		<th class='left'>".$langSurname."</th>
-		<td width='10%'>".(isset($GLOBALS['auth_user_info'])?
-		$GLOBALS['auth_user_info']['lastname']: '<input class="FormData_InputText" type="text" name="nom_form" size="38" />')."</td>
+		  <th class='left'>".$langSurname."</th>
+		  <td>".(isset($GLOBALS['auth_user_info'])?
+		$GLOBALS['auth_user_info']['lastname']: '<input type="text" name="nom_form" size="38" />')."</td>
 		</tr>
 		<tr>
-		<th class='left'>".$langEmail."</th>
-		<td width='10%'>".(isset($GLOBALS['auth_user_info'])?
-		$GLOBALS['auth_user_info']['email']: '<input class="FormData_InputText" type="text" name="email" size="38" />')."</td>
+		  <th class='left'>".$langEmail."</th>
+		  <td>".(isset($GLOBALS['auth_user_info'])?
+		$GLOBALS['auth_user_info']['email']: '<input type="text" name="email" size="38" />')."</td>
 		</tr>
 		<tr>
-		<th class='left'>".$langPhone."</th>
-		<td><input type='text' name='userphone' size='38' value=\"\" class='FormData_InputText' /></td>
-		<td>&nbsp;&nbsp;<small>(*)</small></td>
+		  <th class='left'>".$langPhone."</th>
+		  <td><input type='text' name='userphone' size='38' value=\"\" />&nbsp;&nbsp;(*)</td>
 		</tr>
 		<tr>
-		<th class='left'>".$langComments."</th><td><textarea name='usercomment' cols='32' rows='4' class='FormData_InputText' />".@$usercomment."</textarea>
-		&nbsp;&nbsp;<small>(*) $profreason</small></td>
+		  <th class='left'>".$langComments."</th>
+                  <td><textarea name='usercomment' cols='32' rows='4' />".@$usercomment."</textarea>&nbsp;&nbsp;(*) $profreason</td>
 		</tr>
 		<tr>
-		<th class='left'>".$langFaculty.":</th>
-		<td>
-		<select name='department'>";
+		  <th class='left'>".$langFaculty.":</th>
+		  <td>
+		    <select name='department'>";
 		$deps=mysql_query("SELECT name, id FROM faculte ORDER BY id",$db);
 		while ($dep = mysql_fetch_array($deps))  {
 			$tool_content .= "\n<option value='$dep[1]'>$dep[0]</option>";
 		}
-		$tool_content .= "</select></td></tr>
+		$tool_content .= "</select></td>
+                </tr>
 		<tr>
-		<th class='left'>$langLanguage</th>
-		<td>";
+		  <th class='left'>$langLanguage</th>
+		  <td>";
 		$tool_content .= lang_select_options('localize');
-		$tool_content .= "</td></tr>	
+		$tool_content .= "</td>
+                </tr>	
 		<tr>
-		<th class='left'>&nbsp;</th>
-		<td><input type=\"submit\" name=\"submit\" value=\"".$langRegistration."\" />
-		<input type='hidden' name=\"uname\" value=\"".$ldap_email."\" />
-		<input type='hidden' name=\"password\" value=\"".$ldap_passwd."\" />
-		<input type='hidden' name=\"auth\" value=\"".$auth."\" />
-		</td></tr></tbody></table><div align='right'><small>$langRequiredFields</small></div>
-		</form>
-		</td></tr></thead></table>";
+		  <th class='left'>&nbsp;</th>
+		  <td><input type=\"submit\" name=\"submit\" value=\"".$langRegistration."\" />
+		      <input type='hidden' name=\"uname\" value=\"".$ldap_email."\" />
+		      <input type='hidden' name=\"password\" value=\"".$ldap_passwd."\" />
+		      <input type='hidden' name=\"auth\" value=\"".$auth."\" />
+		      </td>
+                </tr>
+                <tr>
+                  <th class='left'>&nbsp;</th>
+                  <td><div align='right'>$langRequiredFields</div></td>
+                </tr>
+                </table>
+                </fieldset>
+		</form>";
 	}  else {
-		$tool_content .= "<table width='99%'><tbody>";
-		$tool_content .= "<tr><td class='caution' height='60'>$langConnNo<br/>$langAuthNoValidUser</td></tr>";
-		$tool_content .= "<tr><td><a href='$lastpage'>$langBack</a></td</tr></div></tbody></table>";
+		$tool_content .= "<p class='caution'>$langConnNo<br/>$langAuthNoValidUser</p>";
+		$tool_content .= "<p>&laquo; <a href='$lastpage'>$langBack</a></p>";
 	}
 	draw($tool_content,0);
 	exit();
@@ -183,10 +189,8 @@ if (isset($_POST['submit']))  {
 	// check if there are empty fields
 	if (empty($nom_form) or empty($prenom_form) or empty($userphone)
 	or empty($usercomment) or empty($uname) or (empty($email))) {
-		$tool_content .= "<table width='99%'><tbody><tr>" .
-		"<td class='caution' height='60'>";
-		$tool_content .= "<p>$langEmptyFields <br><br><a href='javascript:history.go(-1)'>$langAgain</a></p>
-		</td></tr></tbody></table>";
+		$tool_content .= "<p class='caution'>";
+		$tool_content .= "$langEmptyFields <br /><a href='javascript:history.go(-1)'>$langAgain</a></p>";
 		draw($tool_content,0);
 		exit();
 	}
@@ -226,21 +230,12 @@ if (isset($_POST['submit']))  {
         . "$langProfUname : $username\n$langProfEmail : $usermail\n" . "$contactphone : $userphone\n\n\n$logo\n\n";
 	
 	if (!send_mail('', $emailhelpdesk, $gunet, $emailhelpdesk, $mailsubject, $MailMessage, $charset)) {
-		$tool_content .= "<table width=\"99%\"><tbody>
-		<tr><td class=\"caution\" height='60'>
-		<p>$langMailErrorMessage &nbsp; <a href=\"mailto:$emailhelpdesk\">$emailhelpdesk</a></p>
-		</td>
-		</tr></tbody></table>";
+		$tool_content .= "<p class=\"alert1\">$langMailErrorMessage &nbsp; <a href=\"mailto:$emailhelpdesk\">$emailhelpdesk</a></p>";
 		draw($tool_content,0);
 		exit();
 	}
 
-	$tool_content .= "<table width='99%'><tbody>
-	<tr><td class='well-done' height='60'>
-	<p>$langDearProf</p><p>$success</p><p>$infoprof</p>
-	<p><a href='$urlServer'>$langBack</a></p>
-	</td>
-	</tr></tbody></table>";
+	$tool_content .= "<p class='success'>$langDearProf<br />$success<br />$infoprof</p><p>&laquo; <a href='$urlServer'>$langBack</a></p>";
 }
 
 draw($tool_content,0);

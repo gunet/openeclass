@@ -152,7 +152,7 @@ hContent;
     if (isset($_GET['delete'])) {
 	$delete = intval($_GET['delete']);
         $result = db_query("DELETE FROM annonces WHERE id='$delete'", $mysqlMainDb);
-        $message = "<p class='success_small'>$langAnnDel</p>";
+        $message = "<p class='success'>$langAnnDel</p>";
     }
 
     /* modify */
@@ -177,7 +177,7 @@ hContent;
             db_query("UPDATE annonces SET contenu = $newContent,
 			title = $antitle, temps = NOW()
 			WHERE id = $id", $mysqlMainDb);
-            $message = "<p class='success_small'>$langAnnModify</p>";
+            $message = "<p class='success'>$langAnnModify</p>";
         } else { // add new announcement
             $result = db_query("SELECT MAX(ordre) FROM annonces
 				WHERE cours_id = $cours_id", $mysqlMainDb);
@@ -230,10 +230,10 @@ hContent;
                                     $emailBody, $emailContent, $charset);
             }
             $messageUnvalid = " $langOn $countEmail $langRegUser, $invalid $langUnvalid";
-            $message = "<p class='success_small'>$langAnnAdd $langEmailSent<br />$messageUnvalid</p>";
+            $message = "<p class='success'>$langAnnAdd $langEmailSent<br />$messageUnvalid</p>";
         } // if $emailOption==1
         else {
-            $message = "<p class='success_small'>$langAnnAdd</p>";
+            $message = "<p class='success'>$langAnnAdd</p>";
         }
     } // end of if $submit 
 
@@ -251,8 +251,11 @@ hContent;
 
     /* display form */
     if ($displayForm and (isset($_GET['addAnnounce']) or isset($_GET['modify']))) {
-        $tool_content .= "<form method='post' action='$_SERVER[PHP_SELF]' onsubmit=\"return checkrequired(this, 'antitle');\">";
-	$tool_content .= "<table class='framed' align='center'><thead>";
+        $tool_content .= "
+        <form method='post' action='$_SERVER[PHP_SELF]' onsubmit=\"return checkrequired(this, 'antitle');\">
+        <fieldset>
+        <legend>$langAnnouncement</legend>
+	<table class='tbl'>";
         if (isset($_GET['modify'])) {
             $langAdd = $nameTools = $langModifAnn;
         } else {
@@ -263,18 +266,24 @@ hContent;
         if (!isset($contentToModify)) $contentToModify = "";
         if (!isset($titleToModify)) $titleToModify = "";
 
-        $tool_content .= "<tr><td>$langAnnTitle:<br />
-	<input type='text' name='antitle' value='$titleToModify' size='50' class='FormData_InputText' /></td>
+        $tool_content .= "
+        <tr>
+          <td>$langAnnTitle:<br />
+	      <input type='text' name='antitle' value='$titleToModify' size='50' /></td>
 	</tr>
-	<tr><td>$langAnnBody:<br />".rich_text_editor('newContent', 4, 20, $contentToModify)."</td></tr>
-	<tr><td><input type='checkbox' value='1' name='emailOption' /> $langEmailOption</td></tr>
 	<tr>
-        <td><input class='Login' type='submit' name='submitAnnouncement' value='$langAdd' /></td>
+          <td>$langAnnBody:<br />".rich_text_editor('newContent', 4, 20, $contentToModify)."</td>
+        </tr>
+	<tr>
+          <td><input type='checkbox' value='1' name='emailOption' /> $langEmailOption</td>
+        </tr>
+	<tr>
+          <td><input type='submit' name='submitAnnouncement' value='$langAdd' /></td>
 	</tr>
-	</thead>
 	</table>
 	<input type='hidden' name='id' value='$AnnouncementToModify' />
-	</form><br />";
+        </fieldset>
+	</form>";
     }
 } // end: teacher only
 
@@ -287,23 +296,29 @@ hContent;
         $iterator = 1;
         $bottomAnnouncement = $announcementNumber = mysql_num_rows($result);
 
-	$tool_content .= "<table width='99%' align='left' class='announcements'>";
+	$tool_content .= "
+        <table width='99%' class='tbl_alt'>";
 	if ($is_adminOfCourse) {
-		$colspan = 2;
+		$colspan = 1;
 	} else {
-		$colspan = 3;
+		$colspan = 2;
 	}
 	if ($announcementNumber > 0) {
-		$tool_content .= "<thead><tr><th class='left' colspan='$colspan'><b>$langAnnouncement</b></th>";
+		$tool_content .= "
+        <tr>
+          <th>&nbsp;</th>
+          <th colspan='$colspan'><div align='left'>$langAnnouncement</th>";
 		if ($is_adminOfCourse) {
-		    $tool_content .= "<th width='70' class='right'><b>$langActions</b></th>";
+		    $tool_content .= "
+          <th width='70'>$langActions</th>";
 		    if ($announcementNumber > 1) {
-			    $tool_content .= "<th width='70'><b>$langMove</b></th>";
+			    $tool_content .= "
+          <th width='70'>$langMove</th>";
 		    }
 		}
-		$tool_content .= "</tr></thead>";
+		$tool_content .= "
+        </tr>\n";
 	}
-	$tool_content .= "<tbody>";
 	$k = 0;
         while ($myrow = mysql_fetch_array($result)) {
             $content = standard_text_escape($myrow['contenu']);
@@ -320,35 +335,33 @@ hContent;
 		}
 	    }
 	    if ($is_adminOfCourse) {
-		$tool_content .= "<tr class='$classvis'>";
+		$tool_content .= "        <tr class='$classvis'>\n";
 	    } elseif ($k%2 == 0) {
-	           $tool_content .= "<tr>";
+	           $tool_content .= "        <tr class='even'>\n";
 	        } else {
-	           $tool_content .= "<tr class='odd'>";
+	           $tool_content .= "        <tr class='odd'>\n";
             }
-            $tool_content .= "<td width='1'>
-	    <img style='padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet' /></td>
-            <td><b>";
+            $tool_content .= "          <td width='1' valign='top'><img style='padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet' /></td>
+          <td><b>";
             if (empty($myrow['title'])) {
                 $tool_content .= $langAnnouncementNoTille;
             } else {
                 $tool_content .= q($myrow['title']);
             }
 	    
-            $tool_content .= "</b>&nbsp;<small>(" . nice_format($myrow["temps"]). ")</small>
-            <br />$content</td>";
+            $tool_content .= "</b>&nbsp;<small>(" . nice_format($myrow["temps"]). ")</small><br />$content</td>\n";
 	    if ($is_adminOfCourse) {
-		$tool_content .= "<td width='70' class='right'>
+		$tool_content .= "          <td width='70' class='right'>
 		<a href='$_SERVER[PHP_SELF]?modify=" . $myrow['id'] . "'>
 		<img src='../../template/classic/img/edit.gif' title='" . $langModify . "' /></a>&nbsp;
 		<a href='$_SERVER[PHP_SELF]?delete=" . $myrow['id'] . "' onClick=\"return confirmation('');\">
 		<img src='../../template/classic/img/delete.gif' title='" . $langDelete . "' /></a>&nbsp;
 		<a href='$_SERVER[PHP_SELF]?mkvis=$myrow[id]&amp;vis=$visibility'>
 		<img src='../../template/classic/img/$vis_icon' title='$langVisible' /></a>
-		</td>";
+		</td>\n";
 	    }
 	if ($announcementNumber > 1)  {
-		$tool_content .= "<td align='center' width='70' class='right'>";
+		$tool_content .= "        <td align='center' width='70' class='right'>";
 	}
 	if ($is_adminOfCourse) {
 	    if ($iterator != 1)  {
@@ -360,14 +373,14 @@ hContent;
 		<img class='displayed' src='../../template/classic/img/down.gif' title='" . $langDown . "' /></a>";
 	    }
 	    if ($announcementNumber > 1) {
-		    $tool_content .= "</td>";
+		    $tool_content .= "</td>\n";
 	    }
 	}
-	$tool_content .= "\n</tr>";
+	$tool_content .= "        </tr>\n";
         $iterator ++;
         $k++;
         } // end of while 
-        $tool_content .= "</tbody></table>";
+        $tool_content .= "        </table>\n";
     
     if ($announcementNumber < 1) {
         $no_content = true;
@@ -377,7 +390,7 @@ hContent;
         if (isset($_GET['modify'])) {
             $no_content = false;
         }
-        if ($no_content) $tool_content .= "<p class='alert1'>$langNoAnnounce</p>";
+        if ($no_content) $tool_content .= "    <p class='alert1'>$langNoAnnounce</p>\n";
     }
 add_units_navigation(TRUE);
 if ($is_adminOfCourse) {
