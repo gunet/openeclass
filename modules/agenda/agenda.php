@@ -241,7 +241,7 @@ if ($is_adminOfCourse) {
 		unset($perso_sql_delete);
 		unset($id);
 		##[END personalisation modification]############
-		$tool_content .=  "<p class='success_small'>$langStoredOK</p><br />";
+		$tool_content .=  "<p class='success'>$langStoredOK</p><br />";
 		unset($addEvent);
 	}
 	elseif (isset($_GET['delete']) && $_GET['delete'] == 'yes') {
@@ -273,21 +273,21 @@ function confirmation ()
 </script>
 ';
 
-	$tool_content .= "\n  <div id='operations_container'>\n<ul id='opslist'>";
+	$tool_content .= "\n  <div id='operations_container'>\n    <ul id='opslist'>";
 	if ((!isset($addEvent) && @$addEvent != 1) || isset($_POST['submit'])) {
-		$tool_content .= "\n<li><a href='$_SERVER[PHP_SELF]?addEvent=1'>".$langAddEvent."</a></li>";
+		$tool_content .= "\n      <li><a href='$_SERVER[PHP_SELF]?addEvent=1'>".$langAddEvent."</a></li>";
 	}
 	$sens =" ASC";
 	$result = db_query("SELECT id FROM agenda", $currentCourseID);
 	if (mysql_num_rows($result) > 1) {
 		if (isset($_GET["sens"]) && $_GET["sens"]=="d") {
-			$tool_content .=  "\n<li><a href='$_SERVER[PHP_SELF]?sens=' >$langOldToNew</a></li>";
+			$tool_content .= "\n      <li><a href='$_SERVER[PHP_SELF]?sens=' >$langOldToNew</a></li>";
 			$sens=" DESC ";
 		} else {
-			$tool_content .= "\n<li><a href='$_SERVER[PHP_SELF]?sens=d' >$langOldToNew</a></li>";
+			$tool_content .= "\n      <li><a href='$_SERVER[PHP_SELF]?sens=d' >$langOldToNew</a></li>";
 		}
 	}
-	$tool_content .= "</ul></div>";
+	$tool_content .= "\n    </ul>\n  </div>\n";
 }
 	if (isset($id) && $id) {
 		$sql = "SELECT id, titre, contenu, day, hour, lasting FROM agenda WHERE id=$id";
@@ -319,8 +319,9 @@ function confirmation ()
 		$tool_content .= "
 		<form method='post' action='$_SERVER[PHP_SELF]' onsubmit='return checkrequired(this, \"titre\");'>
 		<input type='hidden' name='id' value='$id' />
-		<table class='framed' align='center'>
-		<thead>";
+                <fieldset>
+                  <legend>$langOptions</legend>
+		  <table class='tbl'>";
 		$day	= date("d");
 		$hours	= date("H");
 		$minutes= date("i");
@@ -330,33 +331,57 @@ function confirmation ()
 			$hours=$hourAncient[0];
 			$minutes=$hourAncient[1];
 		}
-		$tool_content .= "<tr><td colspan='4'>$langTitle:<br />
-			<input type='text' size='70' name='titre' value='".@$titre."' class='FormData_InputText' /></td></tr>
-			<tr><td colspan='4'>$langOptions:</td></tr>
-			<tr><td>$langDate: ".$start_cal."</td>
-			<td>$langHour: <select name='fhour' class='auth_input'>
-				<option value='$hours'>$hours</option>
-				<option value='--'>--</option>";
+		$tool_content .= "
+                  <tr>
+                    <th>$langTitle:</th>
+                    <td><input type='text' size='70' name='titre' value='".@$titre."' /></td>
+                  </tr>
+		  <tr>
+                    <th>$langDate:</th>
+                    <td> ".$start_cal."</td>
+                  </tr>
+                  <tr>
+		    <th>$langHour:</th>
+                    <td><select name='fhour'>
+		 	<option value='$hours'>$hours</option>
+			<option value='--'>--</option>";
 			for ($h=0; $h<=24; $h++)
-				$tool_content .= "\n<option value='$h'>$h</option>";
-			$tool_content .= "</select>&nbsp;&nbsp;&nbsp;";
-			$tool_content .= "$langMinute: <select name='fminute' class='auth_input'>
+			   $tool_content .= "\n                        <option value='$h'>$h</option>";
+			   $tool_content .= "\n                        </select>&nbsp;&nbsp;&nbsp;";
+			   $tool_content .= "
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>$langMinute:</th>
+                    <td><select name='fminute'>
 			<option value='$minutes'>[$minutes]</option>
 			<option value='--'>--</option>";
 			for ($m=0; $m<=55; $m=$m+5)
-				$tool_content .=  "<option value='$m'>$m</option>";
+				$tool_content .=  "\n                        <option value='$m'>$m</option>";
 
-			$tool_content .= "</select></td>&nbsp;&nbsp;&nbsp;<td>$langLasting $langInHour:
-			<input class='FormData_InputText' type='text' name='lasting' value='".@$myrow['lasting']."' size='2' maxlength='2' /></td></tr>";
+			$tool_content .= "\n                        </select>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>$langLasting $langInHour:</td>
+                    <td><input type='text' name='lasting' value='".@$myrow['lasting']."' size='2' maxlength='2' /></td>
+                  </tr>";
     		if (!isset($contenu)) {
 			$contenu = "";
 		}
-		$tool_content .= "<tr><td colspan='4'>$langDetail:<br />".
-			rich_text_editor('contenu', 4, 20, $contenu)
-			."</td></tr>
-			<tr><td><input class='Login' type='submit' name='submit' value='$langAddModify' /></td></tr>
-			</thead></table>
-			</form><br />";
+		$tool_content .= "
+                  <tr>
+                    <th>$langDetail:</th>
+                    <th>". rich_text_editor('contenu', 4, 20, $contenu) ."</td>
+                  </tr>
+		  <tr>
+                    <th>&nbsp;</th>
+                    <td><input type='submit' name='submit' value='$langAddModify' /></td>
+                  </tr>
+		  </table>
+                </fieldset>
+		</form>
+                <br />";
 	}
 }
 
@@ -373,20 +398,25 @@ if ($is_adminOfCourse) {
 }
 
 if (mysql_num_rows($result) > 0) {
-	$tool_content .= "\n<table width='99%' align='left' class='FormData'>";
-	$tool_content .= "\n<tbody>";
-	$tool_content .= "\n<tr>";
-	$tool_content .= "\n<th style='border: 1px solid #edecdf'><div align='left'><b>$langEvents</b></div></th>";
-	if ($is_adminOfCourse) {
-		$tool_content .= "\n<th width='60' class='right' style='border: 1px solid #edecdf'><b>$langActions</b></th>";
-	}
-	$tool_content .= "\n</tr>\n</tbody>";
-	$tool_content .= "\n</table>\n\n";
 	$numLine=0;
 	$barreMois = "";
 	$nowBarShowed = FALSE;
-	$tool_content .= "\n<table width='99%' align='left' class='Agenda'>";
-	$tool_content .= "\n<tbody>";
+        $tool_content .= "
+        <table width='99%' align='left' class='tbl_alt'>
+        <tr>
+          <th><div align='left'><b>$langEvents</b></div></th>";
+        if ($is_adminOfCourse) {
+                $tool_content .= "
+          <th width='60' class='right'><b>$langActions</b></th>";
+        } else {
+                          $tool_content .= "
+          <th width='60' class='right'>&nbsp;</th>";
+        }
+       
+        $tool_content .= "
+        </tr>
+        \n\n";
+
 	while ($myrow = mysql_fetch_array($result)) {
 		$contenu = $myrow["contenu"];
 		$contenu = nl2br($contenu);
@@ -399,24 +429,23 @@ if (mysql_num_rows($result) > 0) {
 				((strtotime($myrow["day"]." ".$myrow["hour"]) < time()) && ($sens==" DESC "))) {
 				if ($barreMois!=date("m",time())) {
 					$barreMois=date("m",time());
-					$tool_content .= "\n<tr class='odd'>";
+					$tool_content .= "\n        <tr class='odd'>";
 					// current month
-					$tool_content .= "\n<td colspan='2' class='monthLabel'>".$langCalendar."&nbsp;<b>".ucfirst(claro_format_locale_date("%B %Y",time()))."</b></td>";
+					$tool_content .= "\n          <td colspan='2' class='monthLabel'>".$langCalendar."&nbsp;<b>".ucfirst(claro_format_locale_date("%B %Y",time()))."</b></td>";
 					$tool_content .= "\n</tr>";
 				}
 				$nowBarShowed = TRUE;
-				$tool_content .= "\n<tr>";
-				$tool_content .= "\n<td colspan=2 class='today'><b>$langDateNow : $dateNow</b></td>";
-				$tool_content .= "\n</tr>";
+				$tool_content .= "\n        <tr>";
+				$tool_content .= "\n          <td colspan=2 class='today'><b>$langDateNow : $dateNow</b></td>";
+				$tool_content .= "\n        </tr>";
 			}
 		}
 		if ($barreMois!=date("m",strtotime($myrow["day"]))) {
 			$barreMois=date("m",strtotime($myrow["day"]));
             		// month LABEL
-			$tool_content .= "\n<tr class='odd'>";
-			$tool_content .= "\n<td colspan='2' class='monthLabel'>
-			<div align='center'>".$langCalendar."&nbsp;<b>".ucfirst(claro_format_locale_date("%B %Y",strtotime($myrow["day"])))."</b></div></td>";
-			$tool_content .= "\n</tr>";
+			$tool_content .= "\n          <tr class='odd'>";
+			$tool_content .= "\n            <td colspan='2' class='monthLabel'><div align='center'>".$langCalendar."&nbsp;<b>".ucfirst(claro_format_locale_date("%B %Y",strtotime($myrow["day"])))."</b></div></td>";
+			$tool_content .= "\n          </tr>";
 		}
 
 		if ($is_adminOfCourse) {
@@ -425,9 +454,9 @@ if (mysql_num_rows($result) > 0) {
 			} else {
 				$classvis = '';
 			}
-			$tool_content .= "\n<tr $classvis><td valign='top'>";
+			$tool_content .= "\n          <tr $classvis>\n          <td valign='top'>";
 		} else {
-			$tool_content .= "\n<tr><td valign='top' colspan='2'>";
+			$tool_content .= "\n          <tr>            <td valign='top' colspan='2'>";
 		}
 		$tool_content .= "<span class='day'>".ucfirst(claro_format_locale_date($dateFormatLong,strtotime($myrow["day"])))."</span> ($langHour: ".ucfirst(date("H:i",strtotime($myrow["hour"]))).")";
 		$message = "$langUnknown";
@@ -437,7 +466,7 @@ if (mysql_num_rows($result) > 0) {
 			else
 				$message = $langHours;
 		}
-		$tool_content .=  "<p class='event'><b>";
+		$tool_content .=  "\n            <p class='event'><b>";
 		if ($myrow["titre"]=="") {
 		    $tool_content .= "".$langAgendaNoTitle."";
 		} else {
@@ -450,7 +479,7 @@ if (mysql_num_rows($result) > 0) {
 	//added icons next to each function
 	//(evelthon, 12/05/2006)
 		if ($is_adminOfCourse) {
-			$tool_content .=  "\n<td class='right' width='80'>
+			$tool_content .=  "\n            <td class='right' width='80'>
 			<a href='$_SERVER[PHP_SELF]?id=".$myrow['id']."&amp;edit=true'>
 			<img src='../../template/classic/img/edit.gif' border='0' title='".$langModify."'></a>&nbsp;
 			<a href='$_SERVER[PHP_SELF]?id=".$myrow[0]."&amp;delete=yes' onClick='return confirmation();'>
@@ -464,13 +493,13 @@ if (mysql_num_rows($result) > 0) {
 			}
 			$tool_content .= "</td>";
 		}
-		$tool_content .= "\n</tr>";
+		$tool_content .= "\n          </tr>";
 		$numLine++;
 	} 	// while
-	$tool_content .= "\n</tbody></table>";
+	$tool_content .= "\n          </table>";
 
 } else  {
-	$tool_content .= "<p class='alert1'>$langNoEvents</p>";
+	$tool_content .= "\n          <p class='alert1'>$langNoEvents</p>";
 }
 add_units_navigation(TRUE);
 if($is_adminOfCourse && isset($head_content)) {
