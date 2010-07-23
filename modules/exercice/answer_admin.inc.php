@@ -1,4 +1,4 @@
-<?php // $Id$
+<? // $Id$
 /*========================================================================
 *   Open eClass 2.3
 *   E-learning and Course Management System
@@ -29,21 +29,23 @@ $questionName = $objQuestion->selectTitle();
 $answerType = $objQuestion->selectType();
 $questionId = $objQuestion->selectId();
 $okPicture = file_exists($picturePath.'/quiz-'.$questionId)?true:false;
-$modifyAnswers = isset($_GET['modifyAnswers'])?$_GET['modifyAnswers']:'';
 if (isset($_POST['submitAnswers'])) {
 	$submitAnswers = $_POST['submitAnswers'];
 }
+if (isset($_POST['buttonBack'])) {
+	$buttonBack = $_POST['buttonBack'];
+}
 // if we come from the warning box "this question is used in several exercises"
-if (isset($usedInSeveralExercises) or isset($modifyIn)) {
+if (isset($usedInSeveralExercises) or isset($_POST['modifyIn'])) {
 	// if the user has chosed to modify the question only in the current exercise
-	if($modifyIn == 'thisExercise')
+	if($_POST['modifyIn'] == 'thisExercise')
 	{
 		// duplicates the question
 		$questionId=$objQuestion->duplicate();
 		// deletes the old question
 		$objQuestion->delete($exerciseId);
 		// removes the old question ID from the question list of the Exercise object
-		$objExercise->removeFromList($modifyAnswers);
+		$objExercise->removeFromList($_GET['modifyAnswers']);
 		// adds the new question ID into the question list of the Exercise object
 		$objExercise->addToList($questionId);
 		// construction of the duplicated Question
@@ -78,7 +80,6 @@ if (isset($usedInSeveralExercises) or isset($modifyIn)) {
 		$blanks=unserialize($blanks);
 		$weighting=unserialize($weighting);
 	}
-
 	unset($buttonBack);
 }
 
@@ -130,7 +131,7 @@ if(isset($submitAnswers) || isset($buttonBack)) {
 				$objAnswer->cancel();
 			}
 			// checks if the question is used in several exercises
-			elseif($exerciseId && !isset($modifyIn) && $objQuestion->selectNbrExercises() > 1)
+			elseif($exerciseId && !isset($_POST['modifyIn']) && $objQuestion->selectNbrExercises() > 1)
 			{
 				$usedInSeveralExercises=1;
 			} else {
@@ -140,7 +141,7 @@ if(isset($submitAnswers) || isset($buttonBack)) {
 				$objQuestion->updateWeighting($questionWeighting);
 				$objQuestion->save($exerciseId);
 				$editQuestion=$questionId;
-				unset($modifyAnswers);
+				unset($_GET['modifyAnswers']);
 			}
 		}
 	}
@@ -150,7 +151,7 @@ if(isset($submitAnswers) || isset($buttonBack)) {
 			if($setWeighting) {
 				@$blanks=unserialize($blanks);
 				// checks if the question is used in several exercises
-				if($exerciseId && !isset($modifyIn) && $objQuestion->selectNbrExercises() > 1)
+				if($exerciseId && !isset($_POST['modifyIn']) && $objQuestion->selectNbrExercises() > 1)
 				{
 					$usedInSeveralExercises=1;
 				} else {
@@ -173,8 +174,7 @@ if(isset($submitAnswers) || isset($buttonBack)) {
 					$objQuestion->save($exerciseId);
 
 					$editQuestion=$questionId;
-
-					unset($modifyAnswers);
+					unset($_GET['modifyAnswers']);
 				}
 			}
 			// if no text has been typed or the text contains no blank
@@ -266,7 +266,7 @@ if(isset($submitAnswers) || isset($buttonBack)) {
 
 		if(empty($msgErr)) {
 			// checks if the question is used in several exercises
-			if($exerciseId && !isset($modifyIn) && $objQuestion->selectNbrExercises() > 1) {
+			if($exerciseId && !isset($_POST['modifyIn']) && $objQuestion->selectNbrExercises() > 1) {
 				$usedInSeveralExercises=1;
 			} else {
 				// all answers have been recorded, so we save them into the data base
@@ -275,12 +275,12 @@ if(isset($submitAnswers) || isset($buttonBack)) {
 				$objQuestion->updateWeighting($questionWeighting);
 				$objQuestion->save($exerciseId);
 				$editQuestion=$questionId;
-				unset($modifyAnswers);
+				unset($_GET['modifyAnswers']);
 			}
 		}
 	}
 }
-if(isset($modifyAnswers)) {
+if(isset($_GET['modifyAnswers'])) {
 	// construction of the Answer object
 	$objAnswer=new Answer($questionId);
 	$_SESSION['objAnswer'] = $objAnswer;
@@ -349,9 +349,8 @@ if(isset($modifyAnswers)) {
 				}
 				$weighting=$temp;
 			}
-			elseif(!isset($modifyIn))
+			elseif(!isset($_POST['modifyIn']))
 			{
-//				$weighting=unserialize(base64_decode($weighting));
 				$weighting=unserialize($weighting);
 			}
 		}
@@ -443,7 +442,7 @@ if(isset($modifyAnswers)) {
 
 	if(!isset($usedInSeveralExercises)) {
 		if($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER) {
-			$tool_content .= "<form method='post' action='$_SERVER[PHP_SELF]?modifyAnswers=$modifyAnswers'>
+			$tool_content .= "<form method='post' action='$_SERVER[PHP_SELF]?modifyAnswers=$_GET[modifyAnswers]'>
 			<input type='hidden' name='formSent' value='1' />
 			<input type='hidden' name='nbrAnswers' value='$nbrAnswers' />";
 			$tool_content .= "<table width=\"99%\" class=\"Question\"><thead><tr>
@@ -464,7 +463,7 @@ if(isset($modifyAnswers)) {
 	// if there is a picture, display this
 	if($okPicture) {
 		$tool_content .= "<tr>
-		<td colspan='5' align=\"center\">"."<img src=\"".$picturePath."/quiz-".$questionId."\" border='0'></td>
+		<td colspan='5' align=\"center\">"."<img src=\"".$picturePath."/quiz-".$questionId."\"></td>
 		</tr>";
 	}
 
@@ -544,7 +543,7 @@ cData;
 		}
 		elseif($answerType == FILL_IN_BLANKS)
 		{
-		$tool_content .= "<form name=\"formulaire\" method=\"post\" action=\"".$_SERVER['PHP_SELF']."?modifyAnswers=".$modifyAnswers."\">\n";
+		$tool_content .= "<form name=\"formulaire\" method=\"post\" action=\"".$_SERVER['PHP_SELF']."?modifyAnswers=".$_GET['modifyAnswers']."\">\n";
 		if(!isset($setWeighting)) {
 			$tempSW = "";
 		} else {
@@ -568,7 +567,7 @@ cData;
 
 	if($okPicture) {
 		$tool_content .= "<tr>
-		<th colspan=\"2\"align=\"center\"><img src=\"".$picturePath."/quiz-".$questionId."\" border=\"0\"></th>
+		<th colspan=\"2\"align=\"center\"><img src=\"".$picturePath."/quiz-".$questionId."\"></th>
 		</tr>";
 	}
 	
@@ -625,66 +624,38 @@ $tool_content .= <<<cData
 cData;
 
 	} else {
-
-$tool_content .= "
-      <input type=\"hidden\" name=\"blanks\" value=\"".htmlspecialchars(serialize($blanks))."\" />";
-$tool_content .= "
-      <input type=\"hidden\" name=\"reponse\" value=\"".htmlspecialchars($reponse)."\" />";
-$tool_content .= <<<cData
-
-cData;
-
+		$tool_content .= "<input type=\"hidden\" name=\"blanks\" value=\"".htmlspecialchars(serialize($blanks))."\" />";
+		$tool_content .= "<input type=\"hidden\" name=\"reponse\" value=\"".htmlspecialchars($reponse)."\" />";
 		// if there is an error message
-		if(!empty($msgErr))
-		{
-
-$tool_content .= <<<cData
-
-      <tr>
-        <td colspan="2">
-          <table border="0" cellpadding="3" align="center" width="400" bgcolor="#FFCC00">
-          <tr>
-            <td>$msgErr</td>
-          </tr>
-          </table>
-        </td>
-      </tr>
-cData;
+		if(!empty($msgErr)) {
+			$tool_content .= "<tr><td colspan='2'>
+			<table border='0' cellpadding='3' align='center' width='400' bgcolor='#FFCC00'>
+			<tr><td>$msgErr</td></tr>
+			</table>
+			</td></tr>";
 		} else {
-
-$tool_content .= <<<cData
-
-      <table class="FormData" width="99%">
-      <tbody>
-      <tr>
-        <th width="220">&nbsp;</th>
-        <td><b>${langWeightingForEachBlank} :</b></td>
-      </tr>
-cData;
-
-	foreach($blanks as $i=>$blank) {
-		$tool_content .= "<tr><th class=\"right\">[".$blank."] :</th>"."
-		<td><input type='text' name=\"weighting[".$i."]\" "."size='5' value=\"".$weighting[$i]."\" class='FormData_InputText' /></td>
-		</tr>";
-	}
-
-$tool_content .= <<<cData
-
-      <tr>
-        <th>&nbsp;</th>
-        <td>
-        <input type="submit" name="buttonBack" value="&lt; ${langBack}" />&nbsp;&nbsp;
-        <input type="submit" name="submitAnswers" value="${langCreate}" />&nbsp;&nbsp;
-        <input type="submit" name="cancelAnswers" value="${langCancel}" />
-        </td>
-      </tr>
-      </tbody>
-      </table>
-cData;
-
+			$tool_content .= "<table class='FormData' width='99%'>
+			<tbody><tr>
+			<th width='220'>&nbsp;</th>
+			<td><b>$langWeightingForEachBlank :</b></td>	</tr>";
+	
+			foreach($blanks as $i=>$blank) {
+				$tool_content .= "<tr><th class=\"right\">[".$blank."] :</th>"."
+				<td><input type='text' name=\"weighting[".$i."]\" "."size='5' value=\"".$weighting[$i]."\" class='FormData_InputText' /></td>
+				</tr>";
 			}
-
-$tool_content .= "</td></tr></thead></table></form>";
+			$tool_content .= "<tr>
+			<th>&nbsp;</th>
+			<td>
+			<input type='submit' name='buttonBack' value='&lt; $langBack'' />&nbsp;&nbsp;
+			<input type='submit' name='submitAnswers' value='$langCreate' />&nbsp;&nbsp;
+			<input type='submit' name='cancelAnswers' value='$langCancel' />
+			</td>
+			</tr>
+			</tbody>
+			</table>";
+		}
+	$tool_content .= "</td></tr></thead></table></form>";
         }
 
 		} //END FILL_IN_BLANKS !!!
@@ -696,10 +667,10 @@ $tool_content .= <<<cData
 
 
   
-	<form method="post" action="$_SERVER[PHP_SELF]?modifyAnswers=$modifyAnswers">
+	<form method="post" action="$_SERVER[PHP_SELF]?modifyAnswers=$_GET[modifyAnswers]">
 	<input type="hidden" name="formSent" value="1" />
-	<input type="hidden" name="nbrOptions" value="${nbrOptions}" />
-	<input type="hidden" name="nbrMatches" value="${nbrMatches}" />
+	<input type="hidden" name="nbrOptions" value="$nbrOptions" />
+	<input type="hidden" name="nbrMatches" value="$nbrMatches" />
 	
     <table width="99%" class="FormData">
     <tbody>
@@ -711,24 +682,17 @@ cData;
 
 	if($okPicture) {
 		$tool_content .= "<tr>
-		<td colspan='4' align='center'><img src='${picturePath}/quiz-${questionId}' border='0'></td></tr>";
+		<td colspan='4' align='center'><img src='${picturePath}/quiz-${questionId}'></td></tr>";
 	}
 
 	// if there is an error message
 	if(!empty($msgErr)) {
-	$tool_content .= <<<cData
-    <tr>
-      <td colspan="4">
-        <table border="0" cellpadding="3" align="center" width="400" bgcolor="#FFCC00">
-        <tr>
-          <td>$msgErr</td>
-        </tr>
-        </table>
-      </td>
-    </tr>
-cData;
+		$tool_content .= "<tr><td colspan='4'>
+		<table border='0' cellpadding='3' align='center' width='400' bgcolor='#FFCC00'>
+		<tr><td>$msgErr</td>
+		</tr></table>
+		</td></tr>";
 	}
-
 	$listeOptions=Array();
 	// creates an array with the option letters
 	for($i=1,$j='A';$i <= $nbrOptions;$i++,$j++) {

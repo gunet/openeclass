@@ -1,4 +1,4 @@
-<?php 
+<?
 /*========================================================================
 *   Open eClass 2.3
 *   E-learning and Course Management System
@@ -122,5 +122,5 @@ while($row=mysql_fetch_array($result)) {
 	$tool_content .= "</table><br/>";
 	}
 }
-draw($tool_content, 2, 'exercice');
+draw($tool_content, 2);
 ?>	

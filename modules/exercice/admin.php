@@ -236,8 +236,8 @@ if(isset($_GET['editQuestion']) || isset($_GET['modifyQuestion']) || isset($_GET
 // --------- Various Actions ---------------------------
 
 // if the question is duplicated, disable the link of tool name
-if(isset($modifyIn) and $modifyIn == 'thisExercise') {
-	if ($buttonBack) {
+if(isset($_POST['modifyIn']) and $_POST['modifyIn'] == 'thisExercise') {
+	if (isset($_POST['buttonBack'])) {
 		$modifyIn='allExercises';
 	} else {
 		$noPHP_SELF=true;

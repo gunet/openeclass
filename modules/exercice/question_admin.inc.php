@@ -27,8 +27,8 @@
 
 // if the question we are modifying is used in several exercises
 if(isset($usedInSeveralExercises)) {
-	$tool_content .= "<h3>$questionName</h3>
-	<form method='post' action='$_SERVER[PHP_SELF]?modifyQuestion=$modifyQuestion&modifyAnswers=$modifyAnswers'>
+	@$tool_content .= "<h3>$questionName</h3>
+	<form method='post' action='$_SERVER[PHP_SELF]?modifyQuestion=$_GET[modifyQuestion]&modifyAnswers=$_GET[modifyAnswers]'>
 	<table width='99%'><tr><td>";
 
 	// submit question

@@ -128,7 +128,6 @@ if (isset($_POST['formSent'])) {
 
 	// the script "exercise_result.php" will take the variable $exerciseResult from the session
 	$_SESSION['exerciseResult'] = $exerciseResult;
-	print_r($_SESSION['exerciseResult']);
 	// if it is the last question (only for a sequential exercise)
 	if($exerciseType == 1 || $questionNum >= $nbrQuestions) {
 		// goes to the script that will show the result of the exercise

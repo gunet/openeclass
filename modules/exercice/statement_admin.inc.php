@@ -1,4 +1,4 @@
-<?php // $Id$
+<? // $Id$
 /*========================================================================
 *   Open eClass 2.3
 *   E-learning and Course Management System
@@ -34,7 +34,7 @@ if(isset($_POST['submitQuestion'])) {
 		$msgErr = $langGiveQuestion;
 	}
 	// checks if the question is used in several exercises	
-	elseif($exerciseId && !isset($modifyIn) && $objQuestion->selectNbrExercises() > 1)
+	elseif($exerciseId && !isset($_POST['modifyIn']) && $objQuestion->selectNbrExercises() > 1)
 	{
 		// duplicates the question
 		$questionId=$objQuestion->duplicate();

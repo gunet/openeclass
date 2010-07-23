@@ -74,7 +74,7 @@ if($is_adminOfCourse) {
 		unset($objQuestionTmp);
 	}
 	// gets an existing question and copies it into a new exercise
-	elseif(isset($_GET['recup']) && $fromExercise) {
+	elseif(isset($_GET['recup']) && isset($fromExercise)) {
 		$recup = intval($_GET['recup']);
 		// construction of the Question object
 		$objQuestionTmp=new Question();
