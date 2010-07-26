@@ -121,19 +121,18 @@ if ($q and mysql_num_rows($q) > 0) {
         }
 }
 
-$tool_content = "<form method='post' action='index.php'>
-   <input type='hidden' name='edIdBloc' value='-1' />
-   <input type='hidden' name='edTitleBloc' value='$langDescription' />
-   <table>
-        <tr><th class='left'>$langDescription:</th>
-           <td width='100'><table class='xinha_editor'>
-              <tr><td>" . rich_text_editor('edContentBloc', 4, 20, $description) . "
-              </td></tr></table>
-           </td><td>&nbsp;</td></tr>
-        <tr><th class='left' width='150'>&nbsp;</th>
-            <td><input type='submit' name='submit' value='$langSubmit' /></td>
-            <td>&nbsp;</td></tr>
-   </table></form>\n";
+$tool_content = "
+
+ <form method='post' action='index.php'>
+ <input type='hidden' name='edIdBloc' value='-1' />
+ <input type='hidden' name='edTitleBloc' value='$langDescription' />
+   <fieldset>
+   <legend>$langDescription</legend>
+         " . rich_text_editor('edContentBloc', 4, 20, $description) . "
+   <br />
+   <input type='submit' name='submit' value='$langSubmit' />
+   </fieldset>
+ </form>\n";
 
 draw($tool_content, 2, '', $head_content);
 

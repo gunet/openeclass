@@ -141,23 +141,40 @@ if (isset($_POST['edIdBloc'])) {
                         $contentBloc = '';
                 }
         }
-        $tool_content .= "<form method='post' action='index.php'>
-                <input type='hidden' name='edIdBloc' value='$numBloc' />
-                <table class='framed' align='left'><thead>
-                   <tr><td>$langTitle:<br />";
+        $tool_content .= "
+      <form method='post' action='index.php'>
+      <input type='hidden' name='edIdBloc' value='$numBloc' />
+        <fieldset>
+        
+        <table class='tbl'>
+        <tr>
+           <th>$langTitle:</th>";
         if ($edit_title) {
-                $tool_content .= "<input type='text' name='edTitleBloc' $edit_title /></td></tr>";
+                $tool_content .= "
+           <td><input type='text' name='edTitleBloc' $edit_title /></td>
+        </tr>";
         } else {
-                $tool_content .= "<b>$title</b><input type='hidden' name='edTitleBloc' value='$title' /></td></tr>";
+                $tool_content .= "
+           <td><b>$title</b><input type='hidden' name='edTitleBloc' value='$title' /></td>
+        </tr>";
         }
 
         $tool_content .= "
-                <tr><td>".
+        <tr>
+           <th valign='top'>$langContent:</th>
+           <td>".
                     @rich_text_editor('edContentBloc', 4, 20, $contentBloc)
-                    ."</td></tr>
-                <tr><td><input class='Login' type='submit' name='save' value='$langAdd' />&nbsp;&nbsp;
-                        <input class='Login' type='submit' name='ignore' value='$langBackAndForget' /></td></tr>
-            </tbody></table></form>\n";
+                    ."</td>
+        </tr>
+        <tr>
+           <td>&nbsp;</td>
+           <td><input class='Login' type='submit' name='save' value='$langAdd' />&nbsp;&nbsp;
+              <input class='Login' type='submit' name='ignore' value='$langBackAndForget' />
+           </td>
+        </tr>
+        </table>
+      </fieldset>
+      </form>\n";
 } else {
         display_add_block_form();
 }
@@ -181,22 +198,25 @@ function display_add_block_form()
         $tool_content .= "
         <form method='post' action='$_SERVER[PHP_SELF]'>
         <input type='hidden' name='add' value='1' />
-        <table width='99%' align='left' class='FormData'>
-        <tbody>
-        <tr>
-        <th class='left' width='220'>&nbsp;</th>
-        <td><b>$langAddCat</b></td>
-        </tr>
-        <tr>
-        <th class='left'>$langSelection :</th>
-        <td><select name='numBloc' size='1' class='auth_input'>";
+        <fieldset>
+          <legend>$langAddCat</legend>
+          <table class='tbl'>
+          <tr>
+            <th>$langSelection :</th>
+            <td><select name='numBloc' size='1'>";
         while (list($numBloc,) = each($titreBloc)) {
                 if (!isset($blocState[$numBloc])) {
-                        $tool_content .= "<option value='$numBloc'>$titreBloc[$numBloc]</option>\n";
+                        $tool_content .= "\n                <option value='$numBloc'>$titreBloc[$numBloc]</option>\n";
                 }
         }
-        $tool_content .= "</select></td></tr><tr><th>&nbsp;</th>
-                <td><input type='submit' name='add' value='$langAdd' /></td>
-                </tr></tbody></table>
-                </form>\n";
+        $tool_content .= "\n                </select>
+            </td>
+          </tr>
+          <tr>
+            <th>&nbsp;</th>
+            <td><input type='submit' name='add' value='$langAdd' /></td>
+          </tr>
+          </table>
+        </fieldset>  
+        </form>\n";
 }

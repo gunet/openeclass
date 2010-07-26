@@ -98,26 +98,25 @@ if ($q and mysql_num_rows($q) > 0) {
         list($max_resource_id) = mysql_fetch_row(db_query("SELECT id FROM unit_resources
                                         WHERE unit_id = $unit_id ORDER BY `order` DESC LIMIT 1"));
 	while ($row = mysql_fetch_array($q)) {
-                $tool_content .= "<br />
-    <table width='99%' class='CourseDescr'>
-    <thead>
-    <tr>
-      <td>
-        <table width='100%' class='FormData'>
-        <tr>
-        <th class='left' style='border: 1px solid #edecdf;'><u>" . q($row['title']) . "</u></th>\n" .
-                actions('description', $row['id'], $row['visibility'], $row['res_id']) . "
+          $tool_content .= "
+        <table width='99%' class='tbl_border'>
+        <tr class='odd'>
+           <td><b><u>" . q($row['title']) . "</u></b></td>\n" .
+           actions('description', $row['id'], $row['visibility'], $row['res_id']) . "
+        </tr>
+        <tr>";
+        if ($is_adminOfCourse) {
+           $tool_content .= "\n           <td colspan='6'>" . standard_text_escape($row['comments']) . "</td>";
+        } else {
+           $tool_content .= "\n           <td>" . standard_text_escape($row['comments']) . "</td>";
+        }
+        $tool_content .= "
         </tr>
         </table>
-      </td>
-    </tr>
-    <tr>
-      <td colspan='2'>" . standard_text_escape($row['comments']) . "</td>
-    </tr>
-    </table>";
+        <br />\n";
 	}
 } else {
-	$tool_content .= "<p class='alert1'>$langThisCourseDescriptionIsEmpty</p>";
+	$tool_content .= "   <p class='alert1'>$langThisCourseDescriptionIsEmpty</p>";
 }
 
 add_units_navigation(TRUE);
