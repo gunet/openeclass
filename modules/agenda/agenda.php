@@ -406,16 +406,15 @@ if (mysql_num_rows($result) > 0) {
         <tr>
           <th><div align='left'><b>$langEvents</b></div></th>";
         if ($is_adminOfCourse) {
-                $tool_content .= "
+              $tool_content .= "
           <th width='60' class='right'><b>$langActions</b></th>";
         } else {
-                          $tool_content .= "
+              $tool_content .= "
           <th width='60' class='right'>&nbsp;</th>";
         }
        
         $tool_content .= "
-        </tr>
-        \n\n";
+        </tr>";
 
 	while ($myrow = mysql_fetch_array($result)) {
 		$contenu = $myrow["contenu"];
@@ -432,7 +431,7 @@ if (mysql_num_rows($result) > 0) {
 					$tool_content .= "\n        <tr class='odd'>";
 					// current month
 					$tool_content .= "\n          <td colspan='2' class='monthLabel'>".$langCalendar."&nbsp;<b>".ucfirst(claro_format_locale_date("%B %Y",time()))."</b></td>";
-					$tool_content .= "\n</tr>";
+					$tool_content .= "\n        </tr>";
 				}
 				$nowBarShowed = TRUE;
 				$tool_content .= "\n        <tr>";
@@ -443,22 +442,32 @@ if (mysql_num_rows($result) > 0) {
 		if ($barreMois!=date("m",strtotime($myrow["day"]))) {
 			$barreMois=date("m",strtotime($myrow["day"]));
             		// month LABEL
-			$tool_content .= "\n          <tr class='odd'>";
-			$tool_content .= "\n            <td colspan='2' class='monthLabel'><div align='center'>".$langCalendar."&nbsp;<b>".ucfirst(claro_format_locale_date("%B %Y",strtotime($myrow["day"])))."</b></div></td>";
-			$tool_content .= "\n          </tr>";
+			$tool_content .= "\n        <tr>";
+			$tool_content .= "\n          <td colspan='2' class='monthLabel'><div align='center'>".$langCalendar."&nbsp;<b>".ucfirst(claro_format_locale_date("%B %Y",strtotime($myrow["day"])))."</b></div></td>";
+			$tool_content .= "\n        </tr>";
 		}
 
 		if ($is_adminOfCourse) {
 			if ($myrow["visibility"] == 'i') {
 				$classvis = 'class="invisible"';
 			} else {
-				$classvis = '';
+                             if ($numLine%2 == 0) {
+                               $classvis = 'class="even"';
+                             } else {
+                               $classvis = 'class="odd"';
+                             }
 			}
-			$tool_content .= "\n          <tr $classvis>\n          <td valign='top'>";
+			$tool_content .= "\n        <tr $classvis>\n          <td valign='top'>";
 		} else {
-			$tool_content .= "\n          <tr>            <td valign='top' colspan='2'>";
+                            if ($numLine%2 == 0) {
+                              $tool_content .= "\n        <tr class='even'>";
+                            } else {
+                              $tool_content .= "\n        <tr class='odd'>";
+                            }
+                        $tool_content .= "\n          <td valign='top' colspan='2'>";
 		}
-		$tool_content .= "<span class='day'>".ucfirst(claro_format_locale_date($dateFormatLong,strtotime($myrow["day"])))."</span> ($langHour: ".ucfirst(date("H:i",strtotime($myrow["hour"]))).")";
+
+		$tool_content .= "\n              <span class='day'>".ucfirst(claro_format_locale_date($dateFormatLong,strtotime($myrow["day"])))."</span> ($langHour: ".ucfirst(date("H:i",strtotime($myrow["hour"]))).")";
 		$message = "$langUnknown";
 		if ($myrow["lasting"] != "") {
 			if ($myrow["lasting"] == 1)
@@ -466,37 +475,41 @@ if (mysql_num_rows($result) > 0) {
 			else
 				$message = $langHours;
 		}
-		$tool_content .=  "\n            <p class='event'><b>";
+		$tool_content .=  "\n              <p class='event'><b>";
 		if ($myrow["titre"]=="") {
 		    $tool_content .= "".$langAgendaNoTitle."";
 		} else {
 		    $tool_content .= "".$myrow["titre"]."";
 		}
 		$tool_content .= "</b> (".$langLasting.": ".$myrow["lasting"]." ".$message.")</p>
-		<p class='agendaBody'>$contenu</p></td>";
+              <p class='agendaBody'>$contenu</p></td>";
 
 	//agenda event functions
 	//added icons next to each function
 	//(evelthon, 12/05/2006)
 		if ($is_adminOfCourse) {
-			$tool_content .=  "\n            <td class='right' width='80'>
-			<a href='$_SERVER[PHP_SELF]?id=".$myrow['id']."&amp;edit=true'>
-			<img src='../../template/classic/img/edit.gif' border='0' title='".$langModify."'></a>&nbsp;
-			<a href='$_SERVER[PHP_SELF]?id=".$myrow[0]."&amp;delete=yes' onClick='return confirmation();'>
-			<img src='../../template/classic/img/delete.gif' border='0' title='".$langDelete."'></a>&nbsp;";
+			$tool_content .=  "
+          <td class='right' width='80'>
+            <a href='$_SERVER[PHP_SELF]?id=".$myrow['id']."&amp;edit=true'>
+            <img src='../../template/classic/img/edit.gif' border='0' title='".$langModify."'></a>&nbsp;
+            <a href='$_SERVER[PHP_SELF]?id=".$myrow[0]."&amp;delete=yes' onClick='return confirmation();'>
+            <img src='../../template/classic/img/delete.gif' border='0' title='".$langDelete."'></a>&nbsp;";
 			if ($myrow["visibility"] == 'v') {
-				$tool_content .= "<a href='$_SERVER[PHP_SELF]?id=".$myrow[0]."&amp;mkInvisibl=true'>
-				<img src='../../template/classic/img/visible.gif' border='0' title='".$langVisible."'></a>";
+				$tool_content .= "
+            <a href='$_SERVER[PHP_SELF]?id=".$myrow[0]."&amp;mkInvisibl=true'>
+            <img src='../../template/classic/img/visible.gif' border='0' title='".$langVisible."'></a>";
 			} else {
-				$tool_content .= "<a href='$_SERVER[PHP_SELF]?id=".$myrow[0]."&amp;mkVisibl=true'>
-				<img src='../../template/classic/img/invisible.gif' border='0' title='".$langVisible."'></a>";
+				$tool_content .= "
+            <a href='$_SERVER[PHP_SELF]?id=".$myrow[0]."&amp;mkVisibl=true'>
+            <img src='../../template/classic/img/invisible.gif' border='0' title='".$langVisible."'></a>";
 			}
-			$tool_content .= "</td>";
+			$tool_content .= "
+          </td>";
 		}
-		$tool_content .= "\n          </tr>";
+		$tool_content .= "\n        </tr>";
 		$numLine++;
 	} 	// while
-	$tool_content .= "\n          </table>";
+	$tool_content .= "\n        </table>";
 
 } else  {
 	$tool_content .= "\n          <p class='alert1'>$langNoEvents</p>";
