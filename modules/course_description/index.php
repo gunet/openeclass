@@ -121,4 +121,4 @@ if ($q and mysql_num_rows($q) > 0) {
 }
 
 add_units_navigation(TRUE);
-draw($tool_content, 2, 'course_description', $head_content);
+draw($tool_content, 2, '', $head_content);
