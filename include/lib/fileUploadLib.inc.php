@@ -458,18 +458,23 @@ function showquota($quota, $used) {
 	format_bytesize($used, '0');
 	//telos diamorfwshs ths grafikh mparas kai twn arithmitikwn statistikwn stoixeiwn
 	//ektypwsh pinaka me arithmitika stoixeia + thn grafikh bara
-	$retstring .= "<table class='FormData'>
-	<tbody><tr><th class='left' width='220'>$langQuotaUsed :</td>
-	<td>$used</td></tr>
-	<tr><th class='left'>$langQuotaPercentage :</td>
-	<td align='center'>";
+	$retstring .= "
+        <table class='tbl_border'>
+	<tr>
+          <th>$langQuotaUsed :</th>
+	  <td>$used</td>
+        </tr>
+	<tr>
+          <th valign='top'>$langQuotaPercentage :</th>
+	  <td align='center'>";
 	$retstring .= $oGauge->display();
 	$retstring .= "$diskUsedPercentage</td>
 	</tr>
 	<tr>
-	<th class='left'>$langQuotaTotal :</td>
-	<td align='center'>$quota</td>
-	</tr></tbody></table>";
+	  <th>$langQuotaTotal :</th>
+	  <td>$quota</td>
+	</tr>
+        </table>";
 	$tmp_cwd = getcwd();
 	
 	return $retstring;
