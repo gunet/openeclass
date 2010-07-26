@@ -963,7 +963,7 @@ $langExercice="Ασκηση";
 $langActive="ενεργό";
 $langInactive="μη ενεργό";
 $langNoEx="Δεν υπάρχει διαθέσιμη άσκηση";
-$langNewEx="Νέα άσκηση";
+$langNewEx="Νέα Άσκηση";
 $langExerciseType="Τύπος Ασκήσεων";
 $langExerciseName="Όνομα Άσκησης";
 $langExerciseDescription="Περιγραφή Άσκησης";
@@ -1005,6 +1005,7 @@ $langAnswersNotDisp = "Απόκρυψη απαντήσεων μετά το τέ�
 $langAnswersDisp = "Εμφάνιση απαντήσεων μετά το τέλος της άσκησης";
 $langScoreNotDisp = "Απόκρυψη βαθμολογίας μετά το τέλος της άσκησης";
 $langScoreDisp = "Εμφάνιση βαθμολογίας μετά το τέλος της άσκησης";
+
 // admin.php
 $langExerciseManagement="Διαχείριση Άσκησης";
 $langExerciseModify="Τροποποίηση Άσκησης";
@@ -1107,6 +1108,11 @@ $langExerciseScores2="Ποσοστιαία";
 $langExerciseScores3="CSV";
 $langNotRecorded = "μη καταγεγραμμένη";
 
+// import exercise.php
+$langImportExercise = "Εισαγωγή Άσκησης";
+$langAskExercise = "Εντοπισμός του αρχείου Άσκησης";
+$langExerciseNoTitle = "Η άσκηση δεν έχει τίτλο!";
+$langExerciseWrongDates = "Η άσκηση έχει λάθος ημερομηνίες!";
 /***********************************************
 * external_module.inc.php
 ***********************************************/
@@ -3078,3 +3084,17 @@ $langBetaCMSUnitTexts = "Κείμενα Ενότητας";
 $langBetaCMSText = "Κείμενο";
 
 $langNoCookies = 'Προσοχή! Έχετε απενεργοποιημένα τα cookies στο πρόγραμμα πλοήγησης που χρησιμοποιείτε. Η σύνδεση δεν είναι δυνατή.';
+
+
+/**************************************
+ Glossary
+ *************************************/
+
+$langGlossary = "Γλωσσάριο";
+$langGlossaryTerm = "Όρος";
+$langGlossaryDefinition = "Ορισμός";
+$langAddGlossaryTerm = "Προσθήκη όρου";
+$langEditGlossaryTerm = "Διόρθωση όρου";
+$langGlossaryAdded = "Η προσθήκη όρου πραγματοποιήθηκε";
+$langGlossaryUpdated = "Η αλλαγή πραγματοποιήθηκε με επιτυχία";
+$langGlossaryDeleted = "Η διαγραφή πραγματοποιήθηκε με επιτυχία";
