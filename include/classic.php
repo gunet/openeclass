@@ -63,7 +63,7 @@ function cours_table_header($statut)
         <tr>
           <th colspan='2'>$langCourseCode</th>
           <th width='220'>$langTeacher</th>
-          <th width='125' class='center'>$manage</th>
+          <th width='150' class='center'>$manage</th>
         </tr>\n";
 }
 
@@ -159,7 +159,7 @@ if (count($status) > 0) {
                         while ($ann = mysql_fetch_array($result)) {
                                         $content = standard_text_escape($ann['contenu']);
                                         if ($la%2 == 0) {
-                                                $tool_content .= "        <tr>\n";
+                                                $tool_content .= "        <tr class='even'>\n";
                                         } else {
                                                 $tool_content .= "        <tr class='odd'>\n";
                                         }
