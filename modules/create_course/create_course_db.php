@@ -398,6 +398,17 @@ mysql_query("INSERT INTO accueil VALUES (
         )");
 
     mysql_query("INSERT INTO accueil VALUES (
+        '17',
+        '$langGlossary',
+        '../../modules/glossary/glossary.php',
+        'glossary',
+        '".$sbsystems[17]."',
+        '0',
+        '',
+        'MODULE_ID_GLOSSARY'
+        )");
+    
+    mysql_query("INSERT INTO accueil VALUES (
                 '19',
                 '$langConference',
                 '../../modules/conference/conference.php',

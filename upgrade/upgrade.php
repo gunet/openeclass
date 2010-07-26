@@ -373,6 +373,16 @@ if (!isset($_POST['submit2'])) {
                 if ($oldversion < '2.4') {
                         convert_description_to_units($code[0], $code[2]);
                         upgrade_course_index_php($code[0]);
+			if (!mysql_table_exists($mysqlMainDb, 'glossary')) {
+				 db_query("CREATE TABLE `glossary` (
+					`id` MEDIUMINT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+					`term` VARCHAR(255) NOT NULL ,
+					`definition` TEXT NOT NULL ,
+					`order` MEDIUMINT( 11 ) NOT NULL ,
+					`datestamp` DATE NOT NULL ,
+					`cid` INT( 11 ) NOT NULL
+					) TYPE = MYISAM", $mysqlMainDb);
+			}
 			upgrade_course_2_4($code[0], $lang, "($i / $total)");
                 }
                 echo "</p>\n";
