@@ -68,7 +68,9 @@ include '../../include/lib/forcedownload.php';
 
 $nameTools = $langVideo;
 $tool_content = $head_content = "";
+if (isset($_SESSION['prenom'])) { 
 $nick=$_SESSION['prenom']." ".$_SESSION['nom'];
+}
 
 // ----------------------
 // download video
@@ -164,7 +166,7 @@ if (isset($_POST['edit_submit'])) { // edit
 			WHERE id='".mysql_real_escape_string($id)."'";
 		}
 		$result = db_query($sql, $currentCourseID);
-		$tool_content .= "<p class=\"success_small\">$langTitleMod</p><br />";
+		$tool_content .= "<p class=\"success\">$langTitleMod</p><br />";
 		$id = "";
 	}
 }	
@@ -183,11 +185,11 @@ if (isset($_POST['add_submit'])) {  // add
 				'".mysql_real_escape_string($_POST['publisher'])."',
 				'".mysql_real_escape_string($_POST['date'])."')";
 			$result = db_query($sql, $currentCourseID);
-			$tool_content .= "<p class=\"success_small\">$langLinkAdded</p><br />";
+			$tool_content .= "<p class=\"success\">$langLinkAdded</p><br />";
 		} else {  // add video
 			if (isset($_FILES['userFile']) && is_uploaded_file($_FILES['userFile']['tmp_name'])) {
 				if ($diskUsed + @$_FILES['userFile']['size'] > $diskQuotaVideo) {
-					$tool_content .= "<p class=\"caution_small\">$langNoSpace<br />
+					$tool_content .= "<p class=\"caution\">$langNoSpace<br />
 						<a href=\"$_SERVER[PHP_SELF]\">$langBack</a></p><br />";
 						draw($tool_content, 2, '', $head_content);
 						exit;
@@ -198,7 +200,7 @@ if (isset($_POST['add_submit'])) {  // add
 					$file_name = preg_replace("/\.php$/", ".phps", $file_name);
 					// check for dangerous file extensions
 					if (preg_match('/\.(ade|adp|bas|bat|chm|cmd|com|cpl|crt|exe|hlp|hta|' .'inf|ins|isp|jse|lnk|mdb|mde|msc|msi|msp|mst|pcd|pif|reg|scr|sct|shs|' .'shb|url|vbe|vbs|wsc|wsf|wsh)$/', $file_name)) {
-						$tool_content .= "<p class=\"caution_small\">$langUnwantedFiletype:  $file_name<br />";
+						$tool_content .= "<p class=\"caution\">$langUnwantedFiletype:  $file_name<br />";
 						$tool_content .= "<a href=\"$_SERVER[PHP_SELF]\">$langBack</a></p><br />";
 						draw($tool_content, 2, '', $head_content);
 						exit;
@@ -209,7 +211,7 @@ if (isset($_POST['add_submit'])) {  // add
 					$safe_filename = date("YmdGis").randomkeys("8").".".get_file_extension($file_name);
 					$iscopy = copy("$tmpfile", "$updir/$safe_filename");
 					if(!$iscopy) {
-						$tool_content .= "<p class=\"success_small\">$langFileNot<br />
+						$tool_content .= "<p class=\"success\">$langFileNot<br />
 						<a href=\"$_SERVER[PHP_SELF]\">$langBack</a></p><br />";
 						draw($tool_content, 2, '', $head_content);
 						exit;
@@ -225,7 +227,7 @@ if (isset($_POST['add_submit'])) {  // add
 						'".mysql_real_escape_string($_POST['date'])."')";
 				}
 				$result = db_query($sql, $currentCourseID);
-				$tool_content .= "<p class=\"success_small\">$langFAdd</p><br />";
+				$tool_content .= "<p class=\"success\">$langFAdd</p><br />";
 			}
 		}
 	}	// end of add
@@ -240,93 +242,95 @@ if (isset($_POST['add_submit'])) {  // add
 		}
 		$sql = "DELETE FROM $table WHERE id='".mysql_real_escape_string($id)."'";
 		$result = db_query($sql,$currentCourseID);
-		$tool_content .= "<p class=\"success_small\">$langDelF</p><br />";
+		$tool_content .= "<p class=\"success\">$langDelF</p><br />";
 		$id="";
 	} elseif (isset($_GET['form_input']) && $_GET['form_input'] == "file") { // display video form
 		$nameTools = $langAddV;
 		$navigation[] = array ("url"=>"video.php", "name"=> $langVideo);
-		$tool_content .= "<form method=\"POST\" action=\"$_SERVER[PHP_SELF]\" enctype=\"multipart/form-data\" onsubmit=\"return checkrequired(this, 'titre');\">
-		<table width=\"99%\" class=\"FormData\">
-		<tbody>
-		<tr><th class=\"left\" width=\"220\">&nbsp;</th>
-		    <td><b>$langAddV</b></td>
-		</tr>
+		$tool_content .= "
+              <form method=\"POST\" action=\"$_SERVER[PHP_SELF]\" enctype=\"multipart/form-data\" onsubmit=\"return checkrequired(this, 'titre');\">
+              <fieldset>
+              <legend>$langAddV</legend>
+		<table width=\"99%\" class=\"tbl\">
 		<tr>
-		  <th class=\"left\">$langPathUploadFile :</th>
+		  <th valign='top'>$langWorkFile :</th>
 		  <td>
-		  <input type=\"hidden\" name=\"id\" value=\"\">
-		  <input type=\"file\" name=\"userFile\" size=\"38\">
+		    <input type=\"hidden\" name=\"id\" value=\"\">
+		    <input type=\"file\" name=\"userFile\" size=\"38\">
+                    <br />
+                    $langPathUploadFile
 		  </td>
 		<tr>
-		  <th class=\"left\">$langVideoTitle:</th>
-		  <td><input type=\"text\" name=\"titre\" value=\"\" size=\"55\" class=\"FormData_InputText\"></td>
+		  <th>$langVideoTitle:</th>
+		  <td><input type=\"text\" name=\"titre\" value=\"\" size=\"55\"></td>
 		</tr>
 		<tr>
-		  <th class=\"left\">$langDescr&nbsp;:</th>
-		  <td><textarea wrap=\"physical\" rows=\"3\" name=\"description\" cols=\"52\" class=\"FormData_InputText\"></textarea></td>
+		  <th>$langDescr&nbsp;:</th>
+		  <td><textarea wrap=\"physical\" rows=\"3\" name=\"description\" cols=\"52\"></textarea></td>
 		</tr>
 		<tr>
-		  <th class=\"left\">$langcreator&nbsp;:</th>
-		  <td><input type=\"text\" name=\"creator\" value=\"$nick\" size=\"55\" class=\"FormData_InputText\"></td>
+		  <th>$langcreator&nbsp;:</th>
+		  <td><input type=\"text\" name=\"creator\" value=\"$nick\" size=\"55\"></td>
 		</tr>
 		<tr>
-		  <th class=\"left\">$langpublisher &nbsp;:</th>
-		  <td><input type=\"text\" name=\"publisher\" value=\"$nick\" size=\"55\" class=\"FormData_InputText\"></td>
+		  <th>$langpublisher &nbsp;:</th>
+		  <td><input type=\"text\" name=\"publisher\" value=\"$nick\" size=\"55\"></td>
 		</tr>
 		<tr>
-		  <th class=\"left\">$langdate &nbsp;:</th>
-		  <td><input type=\"text\" name=\"date\" value=\"".date("Y-m-d G:i:s")."\" size=\"55\" class=\"FormData_InputText\"></td>
+		  <th>$langdate &nbsp;:</th>
+		  <td><input type=\"text\" name=\"date\" value=\"".date("Y-m-d G:i:s")."\" size=\"55\"></td>
 		</tr>
 		<tr>
-		  <th class=\"left\">&nbsp;</th>
+		  <th>&nbsp;</th>
 		  <td><input type=\"submit\" name=\"add_submit\" value=\"$dropbox_lang[uploadFile]\"></td>
 		</tr>
-		</tbody>
+                <tr>
+                  <th>&nbsp;</th>
+                  <td><div align='right'>$langMaxFileSize <b>". ini_get('upload_max_filesize') . "</b></div></td>
+                </tr>
 		</table>
-		</form>
-		<p align='right'><small>$langMaxFileSize ". ini_get('upload_max_filesize') . "</small></p>";
+              </fieldset>
+	      </form>";
 	} elseif (isset($_GET['form_input']) && $_GET['form_input'] == "url") { // display video links form
 		$nameTools = $langAddVideoLink;
 		$navigation[] = array ("url"=>"video.php", "name"=> $langVideo);
 		$tool_content .= "
 		<form method=\"POST\" action=\"$_SERVER[PHP_SELF]\" onsubmit=\"return checkrequired(this, 'titre');\">
-		<table width=\"99%\" class=\"FormData\">
-		<tbody>
+                <fieldset>
+                <legend>$langAddVideoLink</legend>
+		<table width=\"99%\" class=\"tbl\">
 		<tr>
-		  <th class='left' width=\"220\">&nbsp;</th>
-		  <td><b>$langAddVideoLink</b></td>
+		  <th valign='top'>$langGiveURL<input type=\"hidden\" name=\"id\" value=\"\"></th>
+		  <td><input type=\"text\" name=\"URL\" size=\"55\">
+                      <br />
+                      $langURL
+                  </td>
+		<tr>
+		  <th>$langVideoTitle :</th>
+		  <td><input type=\"text\" name=\"titre\" value=\"\" size=\"55\"></td>
 		</tr>
 		<tr>
-		  <th class='left'>$langURL
-		  <input type=\"hidden\" name=\"id\" value=\"\">
-		  </th>
-		  <td><input type=\"text\" name=\"URL\" size=\"55\" class=\"FormData_InputText\"></td>
-		<tr>
-		  <th class='left'>$langVideoTitle :</th>
-		  <td><input type=\"text\" name=\"titre\" value=\"\" size=\"55\" class=\"FormData_InputText\"></td>
+		  <th>$langDescr :</th>
+		  <td><textarea wrap=\"physical\" rows=\"3\" name=\"description\" cols=\"52\"></textarea></td>
 		</tr>
 		<tr>
-		  <th class='left'>$langDescr :</th>
-		  <td><textarea wrap=\"physical\" rows=\"3\" name=\"description\" cols=\"52\" class=\"FormData_InputText\"></textarea></td>
+		  <th>$langcreator :</th>
+		  <td><input type=\"text\" name=\"creator\" value=\"$nick\" size=\"55\"></td>
 		</tr>
 		<tr>
-		  <th class='left'>$langcreator :</th>
-		  <td><input type=\"text\" name=\"creator\" value=\"$nick\" size=\"55\" class=\"FormData_InputText\"></td>
+		  <th>$langpublisher :</th>
+		  <td><input type=\"text\" name=\"publisher\" value=\"$nick\" size=\"55\"></td>
 		</tr>
 		<tr>
-		  <th class='left'>$langpublisher :</th>
-		  <td><input type=\"text\" name=\"publisher\" value=\"$nick\" size=\"55\" class=\"FormData_InputText\"></td>
+		  <th>$langdate :</th>
+		  <td><input type=\"text\" name=\"date\" value=\"".date("Y-m-d G:i")."\" size=\"55\"></td>
 		</tr>
 		<tr>
-		  <th class='left'>$langdate :</th>
-		  <td><input type=\"text\" name=\"date\" value=\"".date("Y-m-d G:i")."\" size=\"55\" class=\"FormData_InputText\"></td>
-		</tr>
-		<tr>
-		  <th class='left'>&nbsp;</th>
+		  <th>&nbsp;</th>
 		  <td><input type=\"submit\" name=\"add_submit\" value=\"$langAdd\"></td>
 		</tr>
-		</tbody>
 		</table>
+                </fieldset>
 		</form>
 		<br/>";
 	}
@@ -355,58 +359,62 @@ if (isset($_GET['id']) and isset($_GET['table_edit']))  {
 		}
 		$nameTools = $langModify;
 		$navigation[] = array ("url"=>"video.php", "name"=> $langVideo);
-		$tool_content .= "<form method='POST' action='$_SERVER[PHP_SELF]' onsubmit=\"return checkrequired(this, 'titre');\">
-			<table width=\"99%\" class=\"FormData\"><tbody>
-			<tr>
-			<th class=\"left\" width=\"220\">&nbsp;</th>
-			<td><b>$langModify</b></td></tr>";
+		$tool_content .= "
+           <form method='POST' action='$_SERVER[PHP_SELF]' onsubmit=\"return checkrequired(this, 'titre');\">
+           <fieldset>
+           <legend>$langModify</legend>
+
+           <table width=\"99%\" class=\"tbl\">";
 		if ($table_edit == 'videolinks') {
-			$tool_content .= "<tr>
-			  <th class=\"left\">$langURL:</th>
-			  <td><input type='text' name='url' value='$url' size='55' class=\"FormData_InputText\"></td>
-			</tr>";
+			$tool_content .= "
+           <tr>
+             <th>$langURL:</th>
+             <td><input type='text' name='url' value='$url' size='55'></td>
+           </tr>";
 		}
 		elseif ($table_edit == 'video') {
-			$tool_content .= "<input type='hidden' name='url' value='$url' class=\"FormData_InputText\">";
+			$tool_content .= "<input type='hidden' name='url' value='$url'>";
 		}
 		@$tool_content .= "
-		<tr>
-		  <th class=\"left\">$langVideoTitle:</th>
-		  <td><input type=\"text\" name=\"titre\" value=\"".$titre."\" size=\"55\" class=\"FormData_InputText\"></td>
-		</tr>
-		<tr>
-		  <th class=\"left\">$langDescr&nbsp;:</th>
-		  <td><textarea wrap=\"physical\" rows=\"3\" name=\"description\" cols=\"52\" class=\"FormData_InputText\">".$description."</textarea></td>
-		</tr>
-		<tr>
-		  <th class=\"left\">$langcreator&nbsp;:</th>
-		  <td><input type=\"text\" name=\"creator\" value=\"".$creator."\" size=\"55\" class=\"FormData_InputText\"></td>
-		</tr>
-		    <tr>
-		  <th class=\"left\">$langpublisher &nbsp;:</th>
-		  <td><input type=\"text\" name=\"publisher\" value=\"".$publisher."\" size=\"55\" class=\"FormData_InputText\"></td>
-		</tr>
-		<tr>
-		  <th class=\"left\">&nbsp;</th>
-		  <td><input type=\"submit\" name=\"edit_submit\" value=\"$langModify\">
-		    <input type=\"hidden\" name=\"id\" value=\"".$id."\">
-		    <input type=\"hidden\" name=\"table\" value=\"".$table_edit."\">
-		  </td>
-		</tr>
-		</tbody>
-		</table>
-		</form>
-		<br/>";
+           <tr>
+             <th>$langVideoTitle:</th>
+             <td><input type=\"text\" name=\"titre\" value=\"".$titre."\" size=\"55\"></td>
+	   </tr>
+           <tr>
+             <th>$langDescr&nbsp;:</th>
+             <td><textarea wrap=\"physical\" rows=\"3\" name=\"description\" cols=\"52\">".$description."</textarea></td>
+          </tr>
+          <tr>
+            <th>$langcreator&nbsp;:</th>
+            <td><input type=\"text\" name=\"creator\" value=\"".$creator."\" size=\"55\"></td>
+          </tr>
+          <tr>
+            <th>$langpublisher &nbsp;:</th>
+            <td><input type=\"text\" name=\"publisher\" value=\"".$publisher."\" size=\"55\"></td>
+          </tr>
+          <tr>
+            <th>&nbsp;</th>
+            <td><input type=\"submit\" name=\"edit_submit\" value=\"$langModify\">
+		<input type=\"hidden\" name=\"id\" value=\"".$id."\">
+		<input type=\"hidden\" name=\"table\" value=\"".$table_edit."\">
+            </td>
+          </tr>
+          </table>
+          </fieldset>
+          </form>
+          <br/>";
 	}
 }	// if id
 	if (!isset($_GET['form_input'])) {
-		$tool_content .= "<div id='operations_container'>
-		<ul id='opslist'>
-		<li><a href='$_SERVER[PHP_SELF]?form_input=file'>$langAddV</a></li>
-		<li><a href='$_SERVER[PHP_SELF]?form_input=url'>$langAddVideoLink</a></li>
-		<li><a href='$_SERVER[PHP_SELF]?showQuota=TRUE'>$langQuotaBar</a></li>
-		</ul>
-		</div>";
+		
+          $tool_content .= "
+        <div id='operations_container'>
+	  <ul id='opslist'>
+	    <li><a href='$_SERVER[PHP_SELF]?form_input=file'>$langAddV</a></li>
+	    <li><a href='$_SERVER[PHP_SELF]?form_input=url'>$langAddVideoLink</a></li>
+	    <li><a href='$_SERVER[PHP_SELF]?showQuota=TRUE'>$langQuotaBar</a></li>
+	  </ul>
+	</div>";
 	}
 
 	$count_video = mysql_fetch_array(db_query("SELECT count(*) FROM video ORDER BY titre",$currentCourseID));
@@ -420,17 +428,15 @@ if (isset($_GET['id']) and isset($_GET['table_edit']))  {
 		$i=0;
 		$count_video_presented_for_admin=1;
 		$tool_content.= "
-		<table width=\"99%\" class=\"Video\">
-		<thead>
-		<tr>
-		  <th colspan=\"2\"><div align=\"left\">$langDirectory $langVideo</div></th>
-		  <th width=\"150\"><div align=\"left\">$langcreator</div></th>
-		  <th width=\"150\"><div align=\"left\">$langpublisher</div></th>
-		  <th width=\"70\">$langdate</th>
-		  <th width=\"70\">$langActions</th>
-		</tr>
-		</thead>
-		<tbody>";
+        <table width=\"99%\" class=\"tbl_alt\">
+        <tr>
+          <th>&nbsp;</th>
+          <th><div align=\"left\">$langDirectory $langVideo</div></th>
+          <th width=\"150\"><div align=\"left\">$langcreator</div></th>
+          <th width=\"150\"><div align=\"left\">$langpublisher</div></th>
+          <th width=\"70\">$langdate</th>
+          <th width=\"70\">$langActions</th>
+        </tr>";
 		foreach($results as $table => $result)
 		while ($myrow = mysql_fetch_array($result)) {
 			switch($table){
@@ -440,11 +446,11 @@ if (isset($_GET['id']) and isset($_GET['table_edit']))  {
 					} else {
 						$videoURL = "'$_SERVER[PHP_SELF]?action=download&id=$myrow[1]'";
 					}
-					$link_to_add = "\n<td><a href= $videoURL>$myrow[3]</a><br>\n$myrow[4]</td>\n      <td>$myrow[5]</td>\n      <td>$myrow[6]</td>\n<td align='center'>".nice_format(date("Y-m-d", strtotime($myrow[7])))."</td>";
+					$link_to_add = "\n          <td><a href= $videoURL>$myrow[3]</a><br>\n$myrow[4]</td>\n      <td>$myrow[5]</td>\n      <td>$myrow[6]</td>\n<td align='center'>".nice_format(date("Y-m-d", strtotime($myrow[7])))."</td>";
 					break;
 				case "videolinks":
 					$videoURL= "'$myrow[1]' target=_blank";
-					$link_to_add = "\n<td><a href= $videoURL>$myrow[2]</a><br>$myrow[3]</td>\n      <td>$myrow[4]</td>\n      <td>$myrow[5]</td>\n      <td align='center'>".nice_format(date("Y-m-d", strtotime($myrow[6])))."</td>";
+					$link_to_add = "\n          <td><a href= $videoURL>$myrow[2]</a><br>$myrow[3]</td>\n      <td>$myrow[4]</td>\n      <td>$myrow[5]</td>\n      <td align='center'>".nice_format(date("Y-m-d", strtotime($myrow[6])))."</td>";
 					break;
 				default:
 					exit;
@@ -452,20 +458,21 @@ if (isset($_GET['id']) and isset($_GET['table_edit']))  {
 			if ($i%2) {
 				$rowClass = "class='odd'";
 			} else {
-				$rowClass = " ";
+				$rowClass = "class='even'";
 			}
-				$tool_content .= "\n<tr $rowClass>";
-				$tool_content .= "\n<td width=\"1%\"><img style='border:0px; padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'></td>";
+				$tool_content .= "\n        <tr $rowClass>";
+				$tool_content .= "\n          <td width=\"1%\"><img style='border:0px; padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'></td>";
 				$tool_content .= $link_to_add;
-				$tool_content .= "\n<td align='center'><a href='$_SERVER[PHP_SELF]?id=$myrow[0]&table_edit=$table'><img src='../../template/classic/img/edit.gif' border='0' title='$langModify'></img></a>&nbsp;&nbsp;<a href='$_SERVER[PHP_SELF]?id=$myrow[0]&delete=yes&table=$table' onClick='return confirmation(\"".addslashes($myrow[2])."\");'><img src='../../template/classic/img/delete.gif' border='0' title='$langDelete'></img></a></td>\n    </tr>";
+				$tool_content .= "\n          <td align='center'><a href='$_SERVER[PHP_SELF]?id=$myrow[0]&table_edit=$table'><img src='../../template/classic/img/edit.gif' border='0' title='$langModify'></img></a>&nbsp;&nbsp;<a href='$_SERVER[PHP_SELF]?id=$myrow[0]&delete=yes&table=$table' onClick='return confirmation(\"".addslashes($myrow[2])."\");'><img src='../../template/classic/img/delete.gif' border='0' title='$langDelete'></img></a></td>";
+                                $tool_content .= "\n        </tr>";
 			$i++;
 			$count_video_presented_for_admin++;
 		} // while
-		$tool_content.="\n</tbody>\n</table>";
+		$tool_content.="\n        </table>";
 	}
 	else
 	{
-		$tool_content .= "\n<p class='alert1'>$langNoVideo</p>";
+		$tool_content .= "\n        <p class='alert1'>$langNoVideo</p>";
 	}
 }   // if uid=prof_id
 
@@ -478,13 +485,11 @@ else {
 			ORDER BY titre",$currentCourseID));
 	if ($count_video[0]<>0 || $count_video_links[0]<>0) {
 		$tool_content .= "
-		<table width=\"99%\" align='left' class=\"Video\">
-		<thead>
+		<table width=\"99%\" class=\"tbl_alt\">
 		<tr>
-		  <th colspan=\"2\"><div align=\"left\">$langDirectory $langVideo</div></th>
-		</tr>
-		</thead>
-		<tbody>";
+                  <th>&nbsp;</th>
+                  <th><div align=\"left\">$langDirectory $langVideo</div></th>
+		</tr>";
 		$i=0;
 		$count_video_presented=1;
 		foreach($results as $table => $result) {
@@ -496,11 +501,11 @@ else {
 						} else {
 							$videoURL = "'$_SERVER[PHP_SELF]?action=download&id=$myrow[1]'";
 						}
-						$link_to_add = "\n<td><a href=$videoURL>$myrow[3]</a><br /><small>$myrow[4]</small></td>";
+						$link_to_add = "\n                  <td><a href=$videoURL>$myrow[3]</a><br /><small>$myrow[4]</small></td>";
 						break;
 					case "videolinks":
 						$videoURL= "'$myrow[1]' target=_blank";
-						$link_to_add = "\n<td><a href=$videoURL>$myrow[2]</a><br />$myrow[3]</td>";
+						$link_to_add = "\n                  <td><a href=$videoURL>$myrow[2]</a><br />$myrow[3]</td>";
 						break;
 					default:
 						exit;
@@ -508,19 +513,19 @@ else {
 				if ($i%2) {
 					$rowClass = "class='odd'";
 				} else {
-					$rowClass = " ";
+					$rowClass = "class='even'";
 				}
-				$tool_content .= "\n<tr $rowClass>";
-				$tool_content .= "\n<td width=\"1%\"><img style='border:0px; padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'></td>";
+				$tool_content .= "\n                <tr $rowClass>";
+				$tool_content .= "\n                  <td width=\"1%\"><img style='border:0px; padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'></td>";
 				$tool_content .= $link_to_add;
-				$tool_content .= "\n</tr>";
+				$tool_content .= "\n                </tr>";
 				$i++;
 				$count_video_presented++;
 			}
 		}
-		$tool_content .= "\n</tbody>\n</table>\n";
+		$tool_content .= "\n                </table>\n";
 	} else {
-		$tool_content .= "<p class='alert1'>$langNoVideo</p>";
+		$tool_content .= "                  <p class='alert1'>$langNoVideo</p>";
 	}
 }
 add_units_navigation(TRUE);
