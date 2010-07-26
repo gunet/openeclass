@@ -73,31 +73,23 @@ function prepare_message() {
 
 if ($is_adminOfCourse) {
 	$tool_content .= "
-	<div id=\"operations_container\">
-        <ul id=\"opslist\">
-        <li><a href='messageList.php?reset=true' target='messageList' class=small_tools>$langWash</a></li>
-        <li><a href='messageList.php?store=true' target='messageList' class=small_tools>$langSave</a></li>
-        </ul>
-	</div>";
+   <div id=\"operations_container\">
+     <ul id=\"opslist\">
+       <li><a href='messageList.php?reset=true' target='messageList' class=small_tools>$langWash</a></li>
+       <li><a href='messageList.php?store=true' target='messageList' class=small_tools>$langSave</a></li>
+     </ul>
+   </div>";
 }
 
-$tool_content .= "<form name='chatForm' action='messageList.php' method='get' target='messageList' onSubmit='return prepare_message();'>
-	<table width='99%' class='FormData'>
-	<thead>
-	<tr>
-	<th>&nbsp;</th><td>
-	<b>$langTypeMessage</b><br />
-	<input type='text' name='msg' size='80'style='border: 1px solid #CAC3B5; background: #fbfbfb;'>
-	<input type='hidden' name='chatLine'>
-	<input type='submit' value=' >> '>
-	</td>
-	</tr>
-	<tr>
-	<th>&nbsp;</th>
-	<td><iframe frameborder='0' src='messageList.php' width='100%' height='300' name='messageList' style='background: #fbfbfb; border: 1px solid #CAC3B5;'><a href='messageList.php'>Message list</a></iframe></td>
-	</tr>
-	</thead>
-	</table>
-	</form>";
+$tool_content .= "
+   <form name='chatForm' action='messageList.php' method='get' target='messageList' onSubmit='return prepare_message();'>
+   <fieldset>
+    <legend>$langTypeMessage</legend>
+      <input type='text' name='msg' size='80'>
+      <input type='hidden' name='chatLine'>
+      <input type='submit' value=' >> '><br /><br />
+      <iframe frameborder='0' src='messageList.php' width='100%' height='300' name='messageList' style='border: 1px solid #CAC3B5;'><a href='messageList.php'>Message list</a></iframe></td>
+   </fieldset>
+   </form>";
 add_units_navigation(TRUE);
 draw($tool_content, 2, '', $head_content);
