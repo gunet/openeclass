@@ -304,6 +304,19 @@ function upgrade_course_2_4($code, $extramessage = '')
 	flush();
 	// upgrade polls
 	db_query("ALTER TABLE `poll_answer_record` CHANGE `answer_text` `answer_text` TEXT", $code);
+	// upgrade acceuil for glossary
+	if (accueil_tool_missing('MODULE_ID_GLOSSARY')) {
+                db_query("INSERT IGNORE INTO accueil VALUES (
+                        '17',
+                        '$langGlossary[$lang]',
+                        '../../modules/glossary/glossary.php',
+                        'glossary',
+                        '0',
+                        '0',
+                        '',
+                        'MODULE_ID_GLOSSARY'
+                                )", $code);
+        }
 }
 
 function upgrade_course_2_3($code, $extramessage = '') {
