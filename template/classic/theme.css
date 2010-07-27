@@ -85,6 +85,43 @@ th {
     text-align: left;
 }
 
+
+
+
+table {
+    border: 1px solid red;
+}
+
+
+table, th, td {
+    border-collapse: collapse;
+    font-family: "Tahoma",  Verdana, Arial, Helvetica, sans-serif; 
+    font-size: 11px;
+}
+
+table a:link {
+    text-decoration: none;
+}
+
+table a:visited {
+    text-decoration: none;
+}
+
+table a:hover {
+    text-decoration: underline !important;
+}
+
+td, th {
+    padding: 4px;
+}
+
+td.bold {
+    font-weight: bold;
+}
+
+
+
+
 .left {
     text-align: left; !important;
 }

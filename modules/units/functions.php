@@ -518,38 +518,38 @@ function actions($res_type, $resource_id, $status, $res_id = false)
         }
 
         if ($status != 'del') {
-                $content = "<td width='3%'><a href='$edit_link'>" .
-                "<img src='../../template/classic/img/edit.gif' title='$langEdit' /></a></td>";
+                $content = "<td width='3'><a href='$edit_link'>" .
+                           "<img src='../../template/classic/img/edit.gif' title='$langEdit' /></a></td>";
         } else {
-                $content = '<td width="3%">&nbsp;</td>';
+                $content = '<td width="3">&nbsp;</td>';
         }
-        $content .= "<td width='3%'><a href='$_SERVER[PHP_SELF]?del=$resource_id'" .
-                                        " onClick=\"return confirmation();\">" .
-                                        "<img src='../../template/classic/img/delete.gif' " .
-                                        "title='$langDelete'></img></a></td>";
+        $content .= "<td width='3'><a href='$_SERVER[PHP_SELF]?del=$resource_id'" .
+                    " onClick=\"return confirmation();\">" .
+                    "<img src='../../template/classic/img/delete.gif' " .
+                    "title='$langDelete'></img></a></td>";
 	 
 	if ($status != 'del') {
 		if (in_array($res_type, array('description', 'text', 'video', 'forum', 'topic'))) { 
-			$content .= "<td width='3%'><a href='$_SERVER[PHP_SELF]?vis=$resource_id'>" .
-                                        "<img src='../../template/classic/img/$icon_vis' " .
-                                        "title='$langVisibility'></img></a></td>";
+			$content .= "<td width='3'><a href='$_SERVER[PHP_SELF]?vis=$resource_id'>" .
+                                    "<img src='../../template/classic/img/$icon_vis' " .
+                                    "title='$langVisibility'></img></a></td>";
 		} else {
-			$content .= "<td width='3%'>&nbsp;</td>";
+			$content .= "<td width='3'>&nbsp;</td>";
 		}
         } else {
-                $content .= '<td width="3%">&nbsp;</td>';
+                $content .= '<td width="3">&nbsp;</td>';
         }
         if ($resource_id != $GLOBALS['max_resource_id']) {
-                $content .= "<td width='3%'><a href='$_SERVER[PHP_SELF]?down=$resource_id'>" .
-                        "<img src='../../template/classic/img/down.gif' title='$langDown'></img></a></td>";
+                $content .= "<td width='12'><div align='right'><a href='$_SERVER[PHP_SELF]?down=$resource_id'>" .
+                            "<img src='../../template/classic/img/down.gif' title='$langDown'></img></a></div></td>";
 	} else {
-		$content .= "<td width='3%'>&nbsp;</td>";
+		$content .= "<td width='12'>&nbsp;</td>";
 	}
         if (!$first) {
-                $content .= "<td width='3%'><a href='$_SERVER[PHP_SELF]?up=$resource_id'>" .
-                        "<img src='../../template/classic/img/up.gif' title='$langUp'></img></a></td>";
+                $content .= "<td width='12'><div align='left'><a href='$_SERVER[PHP_SELF]?up=$resource_id'>" .
+                            "<img src='../../template/classic/img/up.gif' title='$langUp'></img></a></div></td>";
         } else {
-                $content .= "<td width='3%'>&nbsp;</td>";
+                $content .= "<td width='12'>&nbsp;</td>";
         }
         $first = false;
         return $content;
