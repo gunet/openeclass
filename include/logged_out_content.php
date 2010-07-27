@@ -48,6 +48,8 @@ if (isset($_SESSION['langswitch'])) {
 	$language = $_SESSION['langswitch'];
 }
 
+include('lib/textLib.inc.php');
+
 $tool_content .= <<<lCont
 <div id="container_login">
 
@@ -58,10 +60,9 @@ lCont;
 
 $tool_content .='<br />';
 
-$qlang = ($language == "greek")? 'gr': 'en';
-$sql = "SELECT `date`, `{$qlang}_title` , `{$qlang}_body` , `{$qlang}_comment`
-        FROM `admin_announcements`
-        WHERE `visible` = 'V' ORDER BY `date` DESC";
+$qlang = ($language == "greek")? 'el': 'en';
+$sql = "SELECT `date`, `title` , `body` FROM `admin_announcements`
+        WHERE `visible` = 'V' AND lang='$qlang' ORDER BY `date` DESC";
 $result = db_query($sql, $mysqlMainDb);
 if (mysql_num_rows($result) > 0) {
 	$announceArr = array();
@@ -78,11 +79,10 @@ if (mysql_num_rows($result) > 0) {
 	for($i=0; $i < $numOfAnnouncements; $i++) {
 		$tool_content .= "<tr><td colspan='2'>
 		<img style='border:0px;' src='${urlAppend}/template/classic/img/arrow_grey.gif' alt='' />
-		<b>".$announceArr[$i][1]."</b>
-		(".greek_format($announceArr[$i][0]).")
+		<b>".q($announceArr[$i]['title'])."</b>
+		&nbsp;(".claro_format_locale_date($dateFormatLong, strtotime($announceArr[$i]['date'])).")
 		<p>
-		".$announceArr[$i][2]."<br />
-		<i>".$announceArr[$i][3]."</i></p>
+		".standard_text_escape($announceArr[$i]['body'])."<br /></p>
 		</td>
 		</tr>";
 	}

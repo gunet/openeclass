@@ -23,7 +23,6 @@
 *  			Panepistimiopolis Ilissia, 15784, Athens, Greece
 *  			eMail: info@openeclass.org
 * =========================================================================*/
-
 session_start();
 
 //Flag for fixing relative path
@@ -346,6 +345,37 @@ if (!isset($_POST['submit2'])) {
                 db_query('CREATE FULLTEXT INDEX unit_resources_comments ON unit_resources (comments)');
 		db_query("ALTER TABLE `loginout` CHANGE `ip` `ip` CHAR(39) NOT NULL DEFAULT '0.0.0.0'");
                 db_query("ALTER TABLE `annonces` ADD `visibility` CHAR(1) NOT NULL DEFAULT 'v'");
+		if (!mysql_table_exists($mysqlMainDb, 'glossary')) {
+			db_query("CREATE TABLE `glossary` (
+			       `id` MEDIUMINT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+			       `term` VARCHAR(255) NOT NULL ,
+			       `definition` TEXT NOT NULL ,
+			       `order` MEDIUMINT( 11 ) NOT NULL ,
+			       `datestamp` DATE NOT NULL ,
+			       `cid` INT( 11 ) NOT NULL
+			) TYPE = MYISAM", $mysqlMainDb);
+		}
+		// upgrade table admin_announcements
+		if (mysql_field_exists("$mysqlMainDb", 'admin_announcements', 'gr_body')) {
+			db_query("RENAME TABLE `admin_announcements` TO `admin_announcements_old`", $mysqlMainDb);
+			db_query("CREATE TABLE IF NOT EXISTS `admin_announcements` (
+				`id` int(11) NOT NULL auto_increment,
+				`title` varchar(255) default NULL,
+				`body` mediumtext,
+				`date` date NOT NULL,
+				`visible` enum('V','I') NOT NULL,
+				`lang` varchar(10) NOT NULL default 'el',
+				PRIMARY KEY  (`id`)
+			      )", $mysqlMainDb);
+			
+			$aq = db_query("INSERT INTO admin_announcements (title, body, `date`, visible, lang)
+				       SELECT gr_title AS title, CONCAT_WS('  ', gr_body, gr_comment) AS body, `date`, visible, 'el'
+					FROM admin_announcements_old WHERE gr_title <> '' OR gr_body <> ''", $mysqlMainDb);	
+			$adm = db_query("INSERT INTO admin_announcements (title, body, `date`, visible, lang)
+					SELECT en_title AS title, CONCAT_WS('  ', en_body, en_comment) AS body, `date`, visible, 'en'
+					FROM admin_announcements_old WHERE en_title <> '' OR en_body <> ''", $mysqlMainDb);	
+			db_query("DROP TABLE admin_announcements_old");
+		}
         }
 
         // **********************************************
@@ -373,16 +403,6 @@ if (!isset($_POST['submit2'])) {
                 if ($oldversion < '2.4') {
                         convert_description_to_units($code[0], $code[2]);
                         upgrade_course_index_php($code[0]);
-			if (!mysql_table_exists($mysqlMainDb, 'glossary')) {
-				 db_query("CREATE TABLE `glossary` (
-					`id` MEDIUMINT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
-					`term` VARCHAR(255) NOT NULL ,
-					`definition` TEXT NOT NULL ,
-					`order` MEDIUMINT( 11 ) NOT NULL ,
-					`datestamp` DATE NOT NULL ,
-					`cid` INT( 11 ) NOT NULL
-					) TYPE = MYISAM", $mysqlMainDb);
-			}
 			upgrade_course_2_4($code[0], $lang, "($i / $total)");
                 }
                 echo "</p>\n";

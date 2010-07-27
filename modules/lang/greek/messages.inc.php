@@ -187,6 +187,7 @@ $langUpdatingStatistics = "Ενημέρωση μηνιαίων στατιστι�
 $langPleaseWait = "Παρακαλώ περιμένετε";
 $langSupportedLanguages = "Υποστηριζόμενες Γλώσσες";
 $langAvailLanguages = "Διαθέσιμες";
+$langTipLangAdminAnn = "Επιλέξτε την γλώσσα στην οποία θα εμφανίζονται οι ανακοινώσεις του διαχειριστή";
 
 // listusers
 $langBegin="αρχή";

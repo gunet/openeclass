@@ -29,9 +29,6 @@ include '../../include/baseTheme.php';
 include('../../include/lib/textLib.inc.php');
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
 $nameTools = $langAdminAn;
-$tool_content = $head_content = "";
-
-$lang_editor = langname_to_code($language);
 
 $head_content .= <<<hContent
 <script type='text/javascript'>
@@ -43,70 +40,32 @@ function confirmation ()
                 {return false;}
 }
 </script>
-<script type="text/javascript" src="$urlAppend/include/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
-<script type="text/javascript">
-tinyMCE.init({
-	// General options
-		language : "$lang_editor",
-		mode : "textareas",
-		theme : "advanced",
-		plugins : "pagebreak,style,save,advimage,advlink,inlinepopups,media,print,contextmenu,paste,noneditable,visualchars,nonbreaking,xhtmlxtras,template,wordcount,advlist,emotions,preview",
-
-		// Theme options
-		theme_advanced_buttons1 : "bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,styleselect,formatselect,fontsizeselect,forecolor,backcolor,removeformat,hr",
-		theme_advanced_buttons2 : "pasteword,|,bullist,numlist,|indent,blockquote,|,sub,sup,|,undo,redo,|,link,unlink,|,charmap,media,emotions,image,|,preview,cleanup,code",
-		theme_advanced_buttons3 : "",
-		theme_advanced_toolbar_location : "top",
-		theme_advanced_toolbar_align : "left",
-		theme_advanced_statusbar_location : "bottom",
-		theme_advanced_resizing : true,
-
-		// Example content CSS (should be your site CSS)
-		content_css : "$urlAppend/template/classic/img/tool.css",
-
-		// Drop lists for link/image/media/template dialogs
-		template_external_list_url : "lists/template_list.js",
-		external_link_list_url : "lists/link_list.js",
-		external_image_list_url : "lists/image_list.js",
-		media_external_list_url : "lists/media_list.js",
-
-		// Style formats
-		style_formats : [
-			{title : 'Bold text', inline : 'b'},
-			{title : 'Red text', inline : 'span', styles : {color : '#ff0000'}},
-			{title : 'Red header', block : 'h1', styles : {color : '#ff0000'}},
-			{title : 'Example 1', inline : 'span', classes : 'example1'},
-			{title : 'Example 2', inline : 'span', classes : 'example2'},
-			{title : 'Table styles'},
-			{title : 'Table row 1', selector : 'tr', classes : 'tablerow1'}
-		],
-
-		// Replace values for the template plugin
-		template_replace_values : {
-			username : "Open eClass",
-			staffid : "991234"
-		}
-});
-</script>
-
 hContent;
-
-// default language
-if (!isset($localize)) $localize='el';
 
 // display settings
 $displayAnnouncementList = true;
 $displayForm = true;
-$id_hidden_input = '';
 
-foreach (array('title', 'title_en', 'newContent', 'newContent_en', 'comment', 'comment_en') as $var) {
+foreach (array('title', 'newContent') as $var) {
         if (isset($_POST[$var])) {
                 $GLOBALS[$var] = autoquote($_POST[$var]);
         } else {
                 $GLOBALS[$var] = '';
         }
 }
-$visible = isset($_POST['visible'])? 'V': 'I';
+
+// modify visibility
+if (isset($_GET['vis'])) {
+	$id = $_GET['id'];
+	$vis = $_GET['vis'];
+	if ($vis == 0) {
+		$vis = 'I';
+	} else {
+		$vis = 'V';
+	}
+	db_query("UPDATE admin_announcements SET visible = '$vis' WHERE id = '$id'", $mysqlMainDb);
+}
+
 
 if (isset($_GET['delete'])) {
         // delete announcement command
@@ -118,16 +77,9 @@ if (isset($_GET['delete'])) {
         $id = intval($_GET['modify']);
         $result = db_query("SELECT * FROM admin_announcements WHERE id='$id'", $mysqlMainDb);
         $myrow = mysql_fetch_array($result);
-
         if ($myrow) {
-                $id_hidden_input = "<input type='hidden' name='id' value='$myrow[id] />";
-                $titleToModify = q($myrow['gr_title']);
-                $contentToModify = $myrow['gr_body'];
-                $commentToModify = q($myrow['gr_comment']);
-                $titleToModifyEn = q($myrow['en_title']);
-                $contentToModifyEn = $myrow['en_body'];
-                $commentToModifyEn = q($myrow['en_comment']);
-                $visibleToModify = $myrow['visible'];
+                $titleToModify = q($myrow['title']);
+                $contentToModify = $myrow['body'];
                 $displayAnnouncementList = true;
         }
 } elseif (isset($_POST['submitAnnouncement'])) {
@@ -136,84 +88,68 @@ if (isset($_GET['delete'])) {
                 // modify announcement
                 $id = intval($_POST['id']);
                 db_query("UPDATE admin_announcements
-                        SET gr_title = $title, gr_body = $newContent, gr_comment = $comment,
-                        en_title = $title_en, en_body = $newContent_en, en_comment = $comment_en,
-                        visible = '$visible', date = NOW()
+                        SET title = $title, body = $newContent,
+			lang = '".langname_to_code($_POST['lang_admin_ann'])."', 
+			date = NOW()
                         WHERE id = $id", $mysqlMainDb);
                 $message = $langAdminAnnModify;
         } else {
                 // add new announcement
                 db_query("INSERT INTO admin_announcements
-                        SET gr_title = $title, gr_body = $newContent, gr_comment = $comment,
-                        en_title = $title_en, en_body = $newContent_en, en_comment = $comment_en,
-                        visible = '$visible', date = NOW()");
+                        SET title = $title, body = $newContent,
+			visible = 'V', lang = '".langname_to_code($_POST['lang_admin_ann'])."', date = NOW()");
                 $message = $langAdminAnnAdd;
         }
 }
 
 // action message
 if (isset($message) && !empty($message)) {
-        $tool_content .=  "<p class='success_small'>$message</p><br/>";
+        $tool_content .= "<p class='success_small'>$message</p><br/>";
         $displayAnnouncementList = true;
         $displayForm = false; //do not show form
 }
 
 // display form
-if ($displayForm && isset($_GET['addAnnounce']) && ($_GET['addAnnounce'] == 1) || isset($_GET['modify'])) {
+if ($displayForm && isset($_GET['addAnnounce']) || isset($_GET['modify'])) {
         $displayAnnouncementList = false;
         // display add announcement command
-        $tool_content .= "<form method='post' action='$_SERVER[PHP_SELF]?localize=$localize'>";
-        $tool_content .= "<table width='99%' class='FormData' align='left'><tbody>
-                <tr><th width='220'>&nbsp;</th><td><b>";
-        if (isset($_GET['modify'])) {
-                $tool_content .= $langAdminModifAnn;
+	if (isset($_GET['modify'])) {
+                $titleform = $langAdminModifAnn;
         } else {
-                $tool_content .= $langAdminAddAnn;
+                $titleform = $langAdminAddAnn;
         }
-        $tool_content .= "</b></td></tr>";
+	$navigation[] = array("url" => "$_SERVER[PHP_SELF]", "name" => $langAdminAn);
+	$nameTools = $titleform;
+	
+	if (!isset($contentToModify)) {
+		$contentToModify = "";
+	}
+        if (!isset($titleToModify)) {
+		$titleToModify = "";
+	}
 
-        if (!isset($contentToModify))	$contentToModify ="";
-        if (!isset($titleToModify))	$titleToModify ="";
-        if (!isset($commentToModify))	$commentToModify ="";
-        // english
-        if (!isset($contentToModifyEn))	$contentToModifyEn ="";
-        if (!isset($titleToModifyEn))	$titleToModifyEn ="";
-        if (!isset($commentToModifyEn))	$commentToModifyEn ="";
-
-        $checked = (isset($visibleToModify) and $visibleToModify == 'V')? " checked='1'": '';
-        $tool_content .= "
-                <tr><th class='left'>$langAdminAnVis</th>
-                    <td><input type='checkbox' value='1' name='visible'$checked /></td></tr>
-                <tr><td colspan='2'>&nbsp;</td></tr>
-                <tr><th class='left'>$langTitle</th>
-                    <td><input type='text' name='title' value='$titleToModify' size='50' class='FormData_InputText' /></td></tr>
-                <tr><th class='left'>$langAnnouncement</th>
-                    <td><table class='xinha_editor'>
-                            <tr><td>".
-			    rich_text_editor('newContent', 4, 20, $contentToModify)
-			    ."</td></tr></table>
-                        $id_hidden_input</td></tr>
-                <tr><th class='left'>$langComments</th>
-                    <td><textarea name='comment' rows='2' cols='50' class='FormData_InputText'>$commentToModify</textarea>
-                        </td></tr>
-                <tr><td colspan='2'>&nbsp;</td></tr>
-                <tr><th class='left'>$langAdminAnnTitleEn</th>
-                    <td><input type='text' name='title_en' value='$titleToModifyEn' size='50' class='FormData_InputText' /></td></tr>
-                <tr><th class='left'>$langAdminAnnBodyEn</th>
-                    <td><table class='xinha_editor'>
-                            <tr><td><textarea id='xinha_en' name='newContent_en'>$contentToModifyEn</textarea>
-                                    </td></tr>
-                         </table></td></tr>
-               <tr><th class='left'>$langAdminAnnCommEn</th>
-                   <td><textarea name='comment_en' rows='2' cols='50' class='FormData_InputText'>$commentToModifyEn</textarea>
-                       </td></tr>
-              <tr><th class='left'>&nbsp;</th>
-                  <td><input type='submit' name='submitAnnouncement' value='$langSubmit' /></td></tr>
-              <tr><td colspan='2'>&nbsp;</td></tr>
-          </tbody>
-       </table>
-    </form>
-    <br /><br />";
+        $tool_content .= "<form method='post' action='$_SERVER[PHP_SELF]'>";
+	$tool_content .= "<fieldset><legend>$titleform</legend>";
+        $tool_content .= "<table width='99%' class='tbl'>";
+        $tool_content .= "<tr><td>$langTitle<br />
+		<input type='text' name='title' value='$titleToModify' size='50' /></td></tr>
+		<tr><td>$langAnnouncement <br />".
+		rich_text_editor('newContent', 4, 20, $contentToModify)
+		."</td></tr></table></fieldset>";
+	if (isset($_GET['modify'])) {
+		$tool_content .= "<input type='hidden' name='id' value='$id'>";
+	}
+	$tool_content .= "<fieldset><legend>$langLanguage</legend>
+	<table class='tbl'><tr><td>$langOptions&nbsp;:</td>
+	<td width='1'>";
+	if (isset($_GET['modify'])) {
+		$tool_content .= lang_select_options('lang_admin_ann', '', $myrow['lang']);
+	} else {
+		$tool_content .= lang_select_options('lang_admin_ann');
+	}
+	$tool_content .= "</td><td>$langTipLangAdminAnn</td></tr></table></fieldset>";
+        $tool_content .= "<tr><td><input type='submit' name='submitAnnouncement' value='$langSubmit' /></td></tr>              
+	</table</fieldset></form>";
 }
 
 // display admin announcements
@@ -223,49 +159,37 @@ if ($displayAnnouncementList == true) {
         if (!isset($_GET['addAnnounce'])) {
                 $tool_content .= "<div id='operations_container'>
                 <ul id='opslist'><li>";
-                $tool_content .= "<a href='".$_SERVER['PHP_SELF']."?addAnnounce=1&amp;localize=$localize'>".$langAdminAddAnn."</a>";
+                $tool_content .= "<a href='".$_SERVER['PHP_SELF']."?addAnnounce=1'>".$langAdminAddAnn."</a>";
                 $tool_content .= "</li></ul></div>";
         }
         if ($announcementNumber > 0) {
-                $tool_content .= "<table class='FormData' width='99%' align='left'><tbody>
-                        <tr><th width='220' class='left'>$langAdminAn</th>
-                        <td width='300'><b>".$langNameOfLang['greek']."</b></td>
-                        <td width='300'><b>".$langNameOfLang['english']."</b></td></tr>";
-        }
-        while ($myrow = mysql_fetch_array($result)) {
-                $visibleAnn = $myrow['visible'];
-                if ($visibleAnn == 'I') {
-                        $stylerow = "style='color: silver;'";
-                } else {
-                        $stylerow = "";
-                }
-                $tool_content .=  "<tr class='odd' $stylerow>
-                <td colspan='3' class='right'>(".$langAdminAnnMes." <b>".nice_format($myrow['date'])."</b>)
-                &nbsp;&nbsp;
-                <a href='$_SERVER[PHP_SELF]?modify=$myrow[id]&amp;localize=$localize'>
-                <img src='../../template/classic/img/edit.gif' title='$langModify' style='vertical-align:middle;' />
-                </a>&nbsp;
-                <a href='$_SERVER[PHP_SELF]?delete=$myrow[id]&amp;localize=$localize' onClick='return confirmation();'>
-                <img src='../../images/delete.gif' title='$langDelete' style='vertical-align:middle;' /></a>
-                </td></tr>";
-                $tool_content .= "<tr $stylerow>";
-                // title
-                $tool_content .= "<th class='left'>$langTitle:</th>";
-                $tool_content .= "<td>".q($myrow['gr_title'])."</td>";
-                // english title
-                $tool_content .= "<td>".q($myrow['en_title'])."</td>";
-                // announcements content
-                $tool_content .= "</tr>";
-                $tool_content .= "<tr $stylerow><th class='left'>$langAnnouncement:</th><td>$myrow[gr_body]</td>";
-                //english content
-                $tool_content .= "<td>$myrow[en_body]</td></tr>";
-                // comments
-                $tool_content .= "<tr $stylerow><th class='left'>$langComments:</th>
-                <td>".$myrow['gr_comment']."</td>";
-                // english comments
-                $tool_content .= "<td>".$myrow['en_comment']."</td></tr>";
-        }	// end while
-        $tool_content .= "</tbody></table>";
-}	// end: if ($displayAnnoucementList == true)
-
+                $tool_content .= "<table class='FormData' width='99%' align='left'><tbody>";
+		$tool_content .= "<th>$langTitle</th><th>$langAnnouncement</th><th>$langActions</th>";
+		while ($myrow = mysql_fetch_array($result)) {
+			if ($myrow['visible'] == 'V') {
+				$visibility = 0;
+				$classvis = 'visible';
+				$icon = 'visible.gif';
+			} else {
+				$visibility = 1;
+				$classvis = 'invisible';
+				$icon = 'invisible.gif';
+			}
+			$myrow['date'] = claro_format_locale_date($dateFormatLong, strtotime($myrow['date']));
+			$tool_content .= "<tr class='$classvis'>";
+			$tool_content .= "<td><b>".q($myrow['title'])."</b>&nbsp;&nbsp;<small>($myrow[date])</small></td>";
+			$tool_content .= "<td>$myrow[body]</td>";
+			$tool_content .=  "<td>
+			<a href='$_SERVER[PHP_SELF]?modify=$myrow[id]'>
+			<img src='../../template/classic/img/edit.gif' title='$langModify' style='vertical-align:middle;' />
+			</a>&nbsp;
+			<a href='$_SERVER[PHP_SELF]?delete=$myrow[id]' onClick='return confirmation();'>
+			<img src='../../images/delete.gif' title='$langDelete' style='vertical-align:middle;' /></a>
+			&nbsp;
+			<a href='$_SERVER[PHP_SELF]?id=$myrow[id]&amp;vis=$visibility'>
+			<img src='../../template/classic/img/$icon' title='$langVisibility'/></a></td></tr>";
+	        }
+		$tool_content .= "</tbody></table>";
+	}
+}
 draw($tool_content, 3, '', $head_content);
