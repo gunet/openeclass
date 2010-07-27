@@ -1,4 +1,4 @@
-<?
+<?php
 /*========================================================================
 *   Open eClass 2.3
 *   E-learning and Course Management System
@@ -142,12 +142,11 @@ tCont3;
 				if ($i % 2 == 0) {
 					$tool_content .= "<tr>";
 		        	} else {
-					$tool_content .= "<tr class=\"odd\">";
+					$tool_content .= "<tr class='odd'>";
 				}
-				$tool_content .= "<td align=\"right\">$i.</td><td>$myrow[prenom]</td>
-      				<td>$myrow[nom]</td><td>$myrow[username]</td>
-      				<td align=\"center\">
-				<a href=\"$_SERVER[PHP_SELF]?add=$myrow[user_id]\">$langRegister</a></td></tr>\n";
+                                $tool_content .= "<td align='right'>$i.</td><td>" . q($myrow['prenom']) . "</td><td>" .
+                                                 q($myrow['nom']) . "</td><td>" . q($myrow['username']) . "</td><td align='center'>
+                                                 <a href='$_SERVER[PHP_SELF]?add=$myrow[user_id]'>$langRegister</a></td></tr>\n";
 				$i++;
 			}
 			$tool_content .= "</tbody>";

@@ -88,7 +88,7 @@ if ($is_adminOfCourse) {
                 $new_tutor_gid = intval($_GET['giveTutor']);
                 db_query("UPDATE cours_user SET tutor = 1
                                 WHERE user_id = $new_tutor_gid AND cours_id = $cours_id", $mysqlMainDb);
-                db_query("DELETE FROM user_group WHERE user = $new_tutor_gid", $currentCourseID);
+                db_query("DELETE FROM user_group WHERE user = $new_tutor_gid");
         } elseif (isset($_GET['removeAdmin'])) {
                 $removed_admin_gid = intval($_GET['removeAdmin']);
                 db_query("UPDATE cours_user SET statut = 5
@@ -117,9 +117,10 @@ if ($is_adminOfCourse) {
                 if ($unregister_ok) {
                         db_query("DELETE FROM cours_user
                                         WHERE user_id = $unregister_gid AND
-                                              cours_id = $cours_id", $mysqlMainDb);
-                        db_query("DELETE FROM user_group
-                                        WHERE user = $unregister_gid", $currentCourseID);
+                                              cours_id = $cours_id");
+                        db_query("DELETE FROM group_members
+                                        WHERE user_id = $unregister_gid AND
+                                              group_id IN (SELECT id FROM `group` WHERE course_id = $cours_id)");
                 }
         }
 
@@ -192,14 +193,10 @@ if (isset($status) && ($status[$currentCourseID]==1 OR $status[$currentCourseID]
 $i = $limit + 1;
 
 $result = db_query("SELECT user.user_id, user.nom, user.prenom, user.email, user.am, cours_user.statut,
-		cours_user.tutor, cours_user.reg_date, user_group.team
-		FROM `$mysqlMainDb`.cours_user, `$mysqlMainDb`.user
-		LEFT JOIN `$currentCourseID`.user_group
-		ON user.user_id = user_group.user
-		WHERE `user`.`user_id` = `cours_user`.`user_id` AND `cours_user`.`cours_id` = $cours_id
-		ORDER BY nom, prenom ".$q, $db);
-
-//$tool_content .= "</thead>\n";
+                           cours_user.tutor, cours_user.reg_date
+                    FROM cours_user, user
+                    WHERE `user`.`user_id` = `cours_user`.`user_id` AND `cours_user`.`cours_id` = $cours_id
+                    ORDER BY nom, prenom ".$q);
 
 while ($myrow = mysql_fetch_array($result)) {
         // bi colored table
@@ -211,23 +208,14 @@ while ($myrow = mysql_fetch_array($result)) {
    <tr class='tbl_alt_odd'>";
         }
         // show public list of users
-        $tool_content .= "
-     <td valign='top'>$i.</td>\n" .
-                "<td valign='top'>$myrow[nom]<br />$myrow[prenom]</td>\n";
+        $tool_content .= "<td valign='top' align='right'>$i.</td>\n" .
+                "<td valign='top'>" . display_user($myrow) . "</td>\n";
 
         if (isset($status) and ($status[$currentCourseID] == 1 or $status[$currentCourseID] == 2))  {
-                $tool_content .= "<td valign='top' align='center'><a href='mailto:$myrow[email]'>$myrow[email]</a></td>";
+                $tool_content .= "<td valign='top' align='center'>" . mailto($myrow['email']) . "</td>";
         }
-        $tool_content .= "<td valign='top' align='center'>$myrow[am]</td>\n" .
-                "<td valign=top align='center'>\n";
-
-        // NULL and not '0' because team may not exist
-        if ($myrow['team'] == NULL) {
-                $tool_content .= $langUserNoneMasc;
-        } else {
-                $tool_content .= gid_to_name($myrow['team']);
-        }
-        $tool_content .= "</td>" .
+        $tool_content .= "<td valign='top' align='center'>" . q($myrow['am']) . "</td>\n" .
+                "<td valign=top align='center'>" . user_groups($cours_id, $myrow['user_id']) . "</td>\n" .
                 "<td align='center'>";
         if ($myrow['reg_date'] == '0000-00-00') {
                 $tool_content .= $langUnknownDate;
