@@ -219,15 +219,15 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 		if ($menuTypeID == 2) {
 			$t->set_var ( 'THIRD_BAR_TEXT', q(ellipsize($intitule, 64)) );
 			$t->set_var ( 'THIRDBAR_LEFT_ICON', 'lesson_icon' );
-		} elseif (isset ( $langUserBriefcase ) && $menuTypeID > 0 && $menuTypeID < 3 && !isset($_SESSION['user_perso_active'])) {
-			$t->set_var ( 'THIRD_BAR_TEXT', $langUserBriefcase );
-			$t->set_var ( 'THIRDBAR_LEFT_ICON', 'briefcase_icon' );
-		} elseif (isset ( $langPersonalisedBriefcase ) && $menuTypeID > 0 && isset($_SESSION['user_perso_active'])) {
-			$t->set_var ( 'THIRD_BAR_TEXT', $langPersonalisedBriefcase );
-			$t->set_var ( 'THIRDBAR_LEFT_ICON', 'briefcase_icon' );
 		} elseif ($menuTypeID == 3) {
 			$t->set_var ( 'THIRD_BAR_TEXT', $langAdmin );
 			$t->set_var ( 'THIRDBAR_LEFT_ICON', 'admin_bar_icon' );
+		} elseif ($menuTypeID > 0 && $menuTypeID < 3 && !isset($_SESSION['user_perso_active'])) {
+			$t->set_var ( 'THIRD_BAR_TEXT', $langUserBriefcase );
+			$t->set_var ( 'THIRDBAR_LEFT_ICON', 'briefcase_icon' );
+		} elseif ($menuTypeID > 0 && isset($_SESSION['user_perso_active'])) {
+			$t->set_var ( 'THIRD_BAR_TEXT', $langPersonalisedBriefcase );
+			$t->set_var ( 'THIRDBAR_LEFT_ICON', 'briefcase_icon' );
 		} else {
 			$t->set_var ( 'THIRD_BAR_TEXT', $langEclass );
 			$t->set_var ( 'THIRDBAR_LEFT_ICON', 'logo_icon' );
@@ -520,4 +520,3 @@ function lang_select_options($name, $onchange_js = '', $default_langcode = false
         }
 	return selection($native_language_names, $name, $default_langcode, $onchange_js);
 }
-
