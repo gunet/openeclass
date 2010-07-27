@@ -73,13 +73,18 @@ include("functions.php");
 
 $forum = intval($_GET['forum']);
 
-$tool_content .= "<div id=\"operations_container\"><ul id=\"opslist\">";
+$tool_content .= "
+    <div id=\"operations_container\">
+      <ul id=\"opslist\">";
 
 if ($is_adminOfCourse || $is_admin) {
 	$tool_content .= "
         <li><a href='../forum_admin/forum_admin.php'>$langAdm</a></li>";
 }
-$tool_content .= "<li><a href='newtopic.php?forum=$forum'>$langNewTopic</a></li></ul></div><br />";
+$tool_content .= "
+        <li><a href='newtopic.php?forum=$forum'>$langNewTopic</a></li>
+      </ul>
+    </div>\n";
 
 /*
 * Retrieve and present data from course's forum
@@ -157,16 +162,6 @@ if(isset($_GET['topicnotify'])) { // modify topic notification
 	}
 }
 
-// header 
-$tool_content .= "<table width='99%' class='ForumSum'><thead><tr>
-<td class='ForumHead' colspan='2'>&nbsp;$langSubject</td>
-<td class='ForumHead' width='100'>$langAnswers</td>
-<td class='ForumHead' width='100'>$langSender</td>
-<td class='ForumHead' width='100'>$langSeen</td>
-<td class='ForumHead' width='100'>$langLastMsg</td>
-<td class='ForumHead' width='20'>$langNotifyActions</td>
-</tr></thead><tbody>";
-
 $sql = "SELECT t.*, p.post_time, p.nom AS nom1, p.prenom AS prenom1
         FROM topics t
         LEFT JOIN posts p ON t.topic_last_post_id = p.post_id
@@ -176,8 +171,25 @@ $sql = "SELECT t.*, p.post_time, p.nom AS nom1, p.prenom AS prenom1
 $result = db_query($sql, $currentCourseID);
 
 if (mysql_num_rows($result) > 0) { // topics found
+// header
+$tool_content .= "
+     <table width='99%' class='tbl_border'>
+     <tr>
+       <th colspan='2'>&nbsp;$langSubject</th>
+       <th width='100' class='center'>$langAnswers</th>
+       <th width='100' class='center'>$langSender</th>
+       <th width='100' class='center'>$langSeen</th>
+       <th width='100' class='center'>$langLastMsg</th>
+       <th width='20' class='center'>$langNotifyActions</th>
+     </tr>";
+
+        $i=0;
 	while($myrow = mysql_fetch_array($result)) {
-		$tool_content .= "<tr>";
+                if ($i%2==1) {
+                   $tool_content .= "\n     <tr class=\"even\">";
+                } else {
+                   $tool_content .= "\n     <tr class=\"odd\">";
+                }
 		$replys = $myrow["topic_replies"];
 		$last_post = $myrow["post_time"];
 		$last_post_datetime = $myrow["post_time"];
@@ -203,7 +215,7 @@ if (mysql_num_rows($result) > 0) { // topics found
 				$image = $locked_image;
 			}
 		}
-		$tool_content .= "<td width='1'><img src='$image' /></td>";
+		$tool_content .= "\n       <td width='1'><img src='$image' /></td>";
 		$topic_title = own_stripslashes($myrow["topic_title"]);
 		$pagination = '';
 		$start = '';
@@ -235,11 +247,11 @@ if (mysql_num_rows($result) > 0) { // topics found
 			}
 			$pagination .= "&nbsp;</span></strong>";
 		}
-		$tool_content .= "<td><a href='$topiclink'>$topic_title</a>$pagination</td>\n";
-		$tool_content .= "<td class='Forum_leftside'>$replys</td>\n";
-		$tool_content .= "<td class='Forum_leftside1'>$myrow[prenom] $myrow[nom]</td>\n";
-		$tool_content .= "<td class='Forum_leftside'>$myrow[topic_views]</td>\n";
-		$tool_content .= "<td class='Forum_leftside1'>$myrow[prenom1] $myrow[nom1]<br />$last_post</td>";
+		$tool_content .= "\n       <td><a href='$topiclink'>$topic_title</a>$pagination</td>";
+		$tool_content .= "\n       <td>$replys</td>";
+		$tool_content .= "\n       <td class='center'>$myrow[prenom] $myrow[nom]</td>";
+		$tool_content .= "\n       <td class='center'>$myrow[topic_views]</td>";
+		$tool_content .= "\n       <td class='center'>$myrow[prenom1] $myrow[nom1]<br />$last_post</td>";
 		list($topic_action_notify) = mysql_fetch_row(db_query("SELECT notify_sent FROM forum_notify 
 			WHERE user_id = $uid AND topic_id = $myrow[topic_id] AND course_id = $cours_id", $mysqlMainDb));
 		if (!isset($topic_action_notify)) {
@@ -249,18 +261,18 @@ if (mysql_num_rows($result) > 0) { // topics found
 			$topic_link_notify = toggle_link($topic_action_notify);
 			$topic_icon = toggle_icon($topic_action_notify);
 		}
-		$tool_content .= "<td class='Forum_leftside' style='text-align:center'>";
+		$tool_content .= "\n       <td class='center'>";
 		if (isset($_GET['start']) and $_GET['start'] > 0) {
-			$tool_content .= "<a href='$_SERVER[PHP_SELF]?forum=$forum&start=$_GET[start]&amp;topicnotify=$topic_link_notify&amp;topic_id=$myrow[topic_id]'>
-			<img src='../../template/classic/img/announcements$topic_icon.gif' title='$langNotify'></img></a>";
+			$tool_content .= "<a href='$_SERVER[PHP_SELF]?forum=$forum&start=$_GET[start]&amp;topicnotify=$topic_link_notify&amp;topic_id=$myrow[topic_id]'><img src='../../template/classic/img/announcements$topic_icon.gif' title='$langNotify'></img></a>";
 		} else {
-			$tool_content .= "<a href='$_SERVER[PHP_SELF]?forum=$forum&amp;topicnotify=$topic_link_notify&amp;topic_id=$myrow[topic_id]'>
-			<img src='../../template/classic/img/announcements$topic_icon.gif' title='$langNotify'></img></a>";
+			$tool_content .= "<a href='$_SERVER[PHP_SELF]?forum=$forum&amp;topicnotify=$topic_link_notify&amp;topic_id=$myrow[topic_id]'><img src='../../template/classic/img/announcements$topic_icon.gif' title='$langNotify'></img></a>";
 		}
-		$tool_content .= "</td></tr>";
+		$tool_content .= "</td>\n     </tr>";
+                $i++;
 	} // end of while
+$tool_content .= "\n       </table>";
 } else {
-	$tool_content .= "\n<td colspan=6>$langNoTopics</td></tr>\n";
+	$tool_content .= "\n  <p class='alert1'>$langNoTopics</p>\n";
 }
 $tool_content .= "</tbody></table>";
 draw($tool_content, 2);

@@ -122,7 +122,7 @@ if (isset($_GET['forum'])) {
 }
 if (isset($_GET['topic'])) {
 	$topic = intval($_GET['topic']);
-}
+} else $topic = '';
 
 $sql = "SELECT forum_name, forum_access, forum_type FROM forums
 	WHERE (forum_id = '$forum')";
@@ -149,7 +149,9 @@ if (isset($_POST['submit'])) {
 	$subject = strip_tags($_POST['subject']);
 	$message = $_POST['message'];
 	if (trim($message) == '' || trim($subject) == '') {
-		$tool_content .= $langEmptyMsg;
+		$tool_content .= "
+                <p class='alert1'>$langEmptyMsg</p>
+                <p class='back'>&laquo; $langClick <a href='newtopic.php?forum=$forum_id'>$langHere</a> $langReturnTopic</p>";
 		draw($tool_content, 2, '', $head_content);
 		exit;
 	}
@@ -234,36 +236,36 @@ if (isset($_POST['submit'])) {
 	}
 	// end of notification
 	
-	$tool_content .= "<table width='99%'><tbody>
-	<tr><td class='success'>
-	<p><b>$langStored</b></p>
-	<p>$langClick <a href='viewtopic.php?topic=$topic_id&amp;forum=$forum&amp;$total_topic'>$langHere</a>$langViewMsg</p>
-	<p>$langClick <a href='viewforum.php?forum=$forum_id'>$langHere</a> $langReturnTopic</p>
-	</td>
-	</tr>
-	</tbody></table>"; 
+	$tool_content .= "
+	<p class='success'>$langStored</p>
+	<p class='back'>&laquo; $langClick <a href='viewtopic.php?topic=$topic_id&amp;forum=$forum&amp;$total_topic'>$langHere</a>$langViewMsg</p>
+	<p class='back'>&laquo; $langClick <a href='viewforum.php?forum=$forum_id'>$langHere</a> $langReturnTopic</p>
+	"; 
 } elseif (isset($_POST['cancel'])) {
 	header("Location: viewtopic.php?topic=$topic&forum=$forum");	
 } else {
-	$tool_content .= "<form action='$_SERVER[PHP_SELF]?topic=$topic&forum=$forum' method='post'>
-	<table class='framed'>
-	<thead>
-	<tr><td><b>$langTopicData</b></td></tr>
-	<tr>
-	<td>$langSubject:<br />
-	<input type='text' name='subject' size='53' maxlength='100' class='FormData_InputText' /></td>
-	</tr>
-	<tr><td>$langBodyMessage:<br />".
-	rich_text_editor('message', 14, 50, '', "class='FormData_InputText'")
-	."
-	</td></tr>
-	<tr>
-	<td>
-	<input class='Login' type='submit' name='submit' value='$langSubmit' />&nbsp;
-	<input class='Login' type='submit' name='cancel' value='$langCancelPost' />
-	</td></tr>
-	</thead></table>
-	<br/>
+	$tool_content .= "
+        <form action='$_SERVER[PHP_SELF]?topic=$topic&forum=$forum' method='post'>
+        <fieldset>
+          <legend>$langTopicData</legend>
+	  <table class='tbl'>
+	  <tr>
+	    <th>$langSubject:</th>
+	    <td><input type='text' name='subject' size='53' maxlength='100' /></td>
+	  </tr>
+	  <tr>
+            <th valign='top'>$langBodyMessage:</th>
+            <td>".  rich_text_editor('message', 14, 50, '', "") ."            </td>
+          </tr>
+	  <tr>
+            <th>&nbsp;</th>
+	    <td>
+	       <input class='Login' type='submit' name='submit' value='$langSubmit' />&nbsp;
+	       <input class='Login' type='submit' name='cancel' value='$langCancelPost' />
+	    </td>
+          </tr>
+	  </table>
+	</fieldset>
 	</form>";
 }
 draw($tool_content, 2, '', $head_content);

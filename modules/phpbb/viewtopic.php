@@ -91,12 +91,15 @@ $sql = "SELECT f.forum_type, f.forum_name
 	FROM forums f, topics t 
 	WHERE (f.forum_id = '$forum') AND (t.topic_id = $topic) AND (t.forum_id = f.forum_id)";
 if (!$result = db_query($sql, $currentCourseID)) {
-	$tool_content .= $langErrorConnectForumDatabase;
+	$tool_content .= "
+           <p class='caution'>$langErrorConnectForumDatabase</p>";
 	draw($tool_content, 2);
 	exit();
 }
 if (!$myrow = mysql_fetch_array($result)) {
-	$tool_content .= $langErrorTopicSelect;
+                $tool_content .= "
+                <p class='alert1'>$langErrorTopicSelect</p>";
+
 	draw($tool_content, 2);
 	exit();
 }
@@ -127,23 +130,28 @@ if (!add_units_navigation(TRUE)) {
 }
 $nameTools = $topic_subject;
 
-	$tool_content .= "<div id='operations_container'>
-	<ul id='opslist'>
-	<li><a href='newtopic.php?topic=$topic&forum=$forum'>$langNewTopic</a></li>
-	<li>";
+	$tool_content .= "
+   <div id='operations_container'>
+     <ul id='opslist'>
+       <li><a href='newtopic.php?topic=$topic&forum=$forum'>$langNewTopic</a></li>
+       <li>";
 	if($lock_state != 1) {
 		$tool_content .= "<a href='reply.php?topic=$topic&amp;forum=$forum'>$langAnswer</a>";
 	} else {
 		$tool_content .= "<img src='$reply_locked_image' alt='' />";
 	}				
-	$tool_content .= "</li></ul></div>";
+	$tool_content .= "</li>
+     </ul>
+   </div>";
 
 if ($paging and $total > $posts_per_page ) {
 	$times = 1;
-	$tool_content .= "<table WIDTH='99%'><thead>
-	<tr><td WIDTH='50%' align='left'>
-	<span class='row'><strong class='pagination'>
-	<span>";
+	$tool_content .= "
+        <table width='99%' class='tbl'>
+	<tr>
+          <td width='50%' align='left'>
+	  <span class='row'><strong class='pagination'>
+	  <span>";
 
 	if (isset($_GET['start'])) {
 		$start = intval($_GET['start']);
@@ -183,10 +191,10 @@ if ($paging and $total > $posts_per_page ) {
 	$tool_content .= "&nbsp;<a href=\"$_SERVER[PHP_SELF]?topic=$topic&amp;forum=$forum&amp;all=true\">$langAllOfThem</a></span>
 	</td>
 	</tr>
-	</thead>
 	</table>";
 } else {
-	$tool_content .= "<table width=\"99%\"><thead>
+	$tool_content .= "
+        <table width=\"99%\" class='tbl'>
 	<tr>
 	<td WIDTH=\"60%\" align=\"left\">
 	<span class='row'><strong class='pagination'>&nbsp;</strong></span></td>
@@ -196,19 +204,18 @@ if ($paging and $total > $posts_per_page ) {
 		&nbsp;<a href=\"$_SERVER[PHP_SELF]?topic=$topic&amp;forum=$forum&amp;start=0\">$langPages</a>
 		</span>";
 	}
-	$tool_content .= "</td></tr></thead></table>";
+	$tool_content .= "</td></tr></table>";
 }
 
 $tool_content .= <<<cData
 
-    <table WIDTH="99%" class="ForumSum">
+    <table WIDTH="99%" class="tbl_border">
     <thead>
     <tr>
-      <td class="ForumHead" width="150">$langAuthor</td>
-      <td class="ForumHead" colspan="2">$langMessage</td>
+      <th width="150">$langAuthor</th>
+      <th>$langMessage</th>
+      <th width="70" class="right">$langActions</th>
     </tr>
-    </thead>
-    <tbody>
 cData;
 
 if (isset($_GET['all'])) {
@@ -236,12 +243,13 @@ if (!$result = db_query($sql, $currentCourseID)) {
 $myrow = mysql_fetch_array($result);
 $count = 0;
 do {
-	if(!($count % 2))
-		$row_color = 'topic_row1';
-	else 
-		$row_color = 'topic_row2';
-	$tool_content .= "<tr>";
-	$tool_content .= "<td class=\"$row_color\"><b>" . $myrow["prenom"] . " " . $myrow["nom"] . "</b></td>";
+       if ($count%2==1) {
+         $tool_content .= "\n    <tr class=\"even\">";
+       } else {
+         $tool_content .= "\n    <tr class=\"odd\">";
+       }
+
+	$tool_content .= "\n      <td valign='top'><b>" . $myrow["prenom"] . " " . $myrow["nom"] . "</b></td>";
 	$message = own_stripslashes($myrow["post_text"]);
 	// support for math symbols
 	$message = mathfilter($message, 12, "../../courses/mathimg/");
@@ -252,33 +260,32 @@ do {
 		$postTitle = "";
 	}
 
-	$tool_content .= "<td class=\"$row_color\">
-	<div class='post_massage'>
-	<img src='$posticon' alt='' />
-	<em>$langSent: " . $myrow["post_time"] . "</em>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$postTitle
-	</div>
-	<br />$message<br /><br />
-	</td>
-	<td class='$row_color' width='40'><div align='right'>";
+	$tool_content .= "\n      <td>
+	  <div class='post_massage'>
+	    <img src='$posticon' alt='' />
+	    <em>$langSent: " . $myrow["post_time"] . "</em>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$postTitle
+	  </div>
+	  <br />$message<br /><br />
+      </td>
+      <td width='40'i valign='top'><div align='right'>";
 	if ($is_adminOfCourse) { // course admin
 		$tool_content .= "<a href=\"editpost.php?post_id=".$myrow["post_id"]."&amp;topic=$topic&amp;forum=$forum\"><img src='../../template/classic/img/edit.gif' title='$langModify' alt='$langModify' /></a>";
-		$tool_content .= "&nbsp;<a href='editpost.php?post_id=".$myrow["post_id"]."&amp;topic=$topic&amp;forum=$forum&amp;delete=on&amp;submit=yes' onClick='return confirmation()'>
-			<img src='../../template/classic/img/delete.gif' title='$langDelete' /></a>";
+		$tool_content .= "&nbsp;<a href='editpost.php?post_id=".$myrow["post_id"]."&amp;topic=$topic&amp;forum=$forum&amp;delete=on&amp;submit=yes' onClick='return confirmation()'><img src='../../template/classic/img/delete.gif' title='$langDelete' /></a>";
 	}
-	$tool_content .= "</div></td></tr>";
+	$tool_content .= "</div></td>\n    </tr>";
 	$count++;
 } while($myrow = mysql_fetch_array($result));
 
 $sql = "UPDATE topics SET topic_views = topic_views + 1 WHERE topic_id = '$topic'";
 db_query($sql, $currentCourseID);
 
-$tool_content .= "</tbody></table>";
+$tool_content .= "\n    </table>";
 
 if ($paging and $total > $posts_per_page) {
 	$times = 1;
 	$tool_content .= <<<cData
 
-    <table WIDTH="99%">
+    <table WIDTH="99%" class="tbl">
     <thead>
     <tr>
     <td WIDTH="50%" align=\"right\">
@@ -316,7 +323,7 @@ cData;
 	</span>
 	</td></tr></thead></table>";
 } else {
-	$tool_content .= "<table width=\"99%\"><thead>
+	$tool_content .= "<table width=\"99%\" class=\"tbl\">
 	<tr>
 	<td width=\"60%\" align=\"left\">
 	<span class='row'><strong class='pagination'>&nbsp;</strong>
@@ -328,7 +335,7 @@ cData;
         } else {
                 $tool_content .= '&nbsp;';
         }
-	$tool_content .= "</span></td></tr></thead></table>";
+	$tool_content .= "</span></td></tr></table>";
 }
 
 draw($tool_content, 2, '', $local_head);

@@ -158,7 +158,9 @@ if (isset($_POST['submit'])) {
 	$message = $_POST['message'];
 	$quote = $_POST['quote'];
 	if (trim($message) == '') {
-		$tool_content .= $langEmptyMsg;
+                $tool_content .= "
+                <p class='alert1'>$langEmptyMsg</p>
+                <p class='back'>&laquo; $langClick <a href='newtopic.php?forum=$forum_id'>$langHere</a> $langReturnTopic</p>";
 		draw($tool_content, 2, '', $head_content);
 		exit();
 	}
@@ -244,21 +246,26 @@ if (isset($_POST['submit'])) {
 	$total_topic = get_total_posts($topic, $currentCourseID, "topic")-1;
 	// Subtract 1 because we want the nr of replies, not the nr of posts.
 	$forward = 1;
-	$tool_content .= "<div id=\"operations_container\">
-	<ul id=\"opslist\">
+	$tool_content .= "
+    <div id=\"operations_container\">
+      <ul id=\"opslist\">
 	<li><a href=\"viewtopic.php?topic=$topic&forum=$forum&$total_topic\">$langViewMessage</a></li>
 	<li><a href=\"viewforum.php?forum=$forum&$total_forum\">$langReturnTopic</a></li>
-	</ul></div><br />";
+      </ul>
+    </div>
+    ";
 	
-	$tool_content .= "<table width=\"99%\"><tbody><tr>
-	<td class=\"success\">$langStored</td>
-	</tr></tbody></table>";
+	$tool_content .= "
+    <p class=\"success\">$langStored</p>";
 } elseif (isset($_POST['cancel'])) {
 	header("Location: viewtopic.php?topic=$topic&forum=$forum");	
 } else {
 	// Private forum logic here.
 	if (($forum_type == 1) && !$user_logged_in && !$logging_in) {
-		$tool_content .= "<form action='$_SERVER[PHP_SELF]' method='post'>
+		$tool_content .= "
+        <form action='$_SERVER[PHP_SELF]' method='post'>
+        <fieldset>
+           <legend></legend>     
 		<table align='left' width='99%'>
 		<tr><td>
 		<table width='100%'><tr><td>$langPrivateNotice</td></tr>
@@ -271,7 +278,9 @@ if (isset($_POST['submit'])) {
 		<input type='hidden' name='quote' value='$quote'>
 		<input type='SUBMIT' name='logging_in' value='$langEnter'>
 		</td></tr></table>
-		</td></tr></table></form>";
+		</td></tr></table>
+        </fieldset>
+        </form>";
 		draw($tool_content, 2, '', $head_content);
 		exit();
 	} else {
@@ -286,16 +295,19 @@ if (isset($_POST['submit'])) {
 		}
 	}	
 	// Topic review
-	$tool_content .= "<div id=\"operations_container\">
+	$tool_content .= "
+    <div id=\"operations_container\">
 	<ul id=\"opslist\">
-	<li><a href=\"viewtopic.php?topic=$topic&forum=$forum\" target=\"_blank\">$langTopicReview</a></li>
-	</ul></div><br />";
-	$tool_content .= "<form action='$_SERVER[PHP_SELF]?topic=$topic&forum=$forum' method='post'>
-	<table class='framed'>
-	<thead>
-	<tr><td><b>$langTopicAnswer</b>: $topic_title</td></tr>
-	<tr>
-        <td>$langBodyMessage:";
+          <li><a href=\"viewtopic.php?topic=$topic&forum=$forum\" target=\"_blank\">$langTopicReview</a></li>
+	</ul>
+    </div>";
+	$tool_content .= "
+    <form action='$_SERVER[PHP_SELF]?topic=$topic&forum=$forum' method='post'>
+    <fieldset>
+        <legend>$langTopicAnswer: $topic_title</legend>
+	<table class='tbl'>
+        <tr>
+          <td>$langBodyMessage:";
 	if (isset($quote) && $quote) {
 		$sql = "SELECT pt.post_text, p.post_time, u.username 
 			FROM posts p, posts_text pt 
@@ -322,17 +334,21 @@ if (isset($_POST['submit'])) {
 	if (!isset($quote)) {
 		$quote = "";
 	}
-	$tool_content .= "</td></tr>
-	<tr><td>".rich_text_editor('message', 15, 70, $reply, "class='FormData_InputText'")."</td></tr>
+	$tool_content .= "</td>
+        </tr>
 	<tr>
-	<td>
-	<input type='hidden' name='quote' value='$quote'>
-	<input type='submit' name='submit' value='$langSubmit'>&nbsp;
-	<input type='submit' name='cancel' value='$langCancelPost'>
-	</td>
+          <td>".rich_text_editor('message', 15, 70, $reply, "")."</td>
+        </tr>
+	<tr>
+	  <td>
+	    <input type='hidden' name='quote' value='$quote'>
+	    <input type='submit' name='submit' value='$langSubmit'>&nbsp;
+	    <input type='submit' name='cancel' value='$langCancelPost'>
+ 	  </td>
 	</tr>
-	</thead></table>
-	</form><br/>";
+	</table>
+        </fieldset>
+	</form>";
 }
 
 draw($tool_content, 2, '', $head_content);

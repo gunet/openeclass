@@ -964,7 +964,7 @@ border-top: 1px solid #94a3c4;}
 }
 
 .tbl_courseid {
-		border: 1px solid #000000;
+	border: 1px solid #000000;
         background-color: #edecdf;
 }
 
@@ -985,9 +985,16 @@ border-top: 1px solid #94a3c4;}
 
 .tbl th {
 	font-weight: bold;
-	background-color: #edecdf; /* LIGHTER BEIGE  */
+	background-color: #cac3b5; /* BEIGE  */
 	padding: 3px;
 }
+
+.tbl_border th {
+        font-weight: bold;
+        background-color: #cac3b5; /* BEIGE  */
+        padding: 3px;
+}
+
 
 .tbl_course_type {
          border: none;
@@ -999,13 +1006,13 @@ border-top: 1px solid #94a3c4;}
 .tbl_alt {
         padding: 5px;
         border: none;
-		border: 1px solid #000000;
+	border: 1px solid #000000;
        
 }	
 	
 .tbl_alt th {
         font-weight: bold;
-        background-color: #cac3b5; /* LIGHTER BEIGE  */
+        background-color: #cac3b5; /* BEIGE  */
         text-align: center;
         padding: 3px;
 }
@@ -1016,7 +1023,7 @@ border-top: 1px solid #94a3c4;}
 	
 	
 .tbl_alt_even {
-	background-color: #ffffff; /* BEIGE  */
+	background-color: #ffffff; /* WHITE  */
 }	
 		
 	

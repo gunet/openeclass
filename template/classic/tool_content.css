@@ -194,7 +194,8 @@ p.success_small{
     color: #E36154;
 }
 .inactive {
-    background-color: #d8dfea;
+    color: #cccccc;
+    font-size: 10px;
 }
 
 .today {
@@ -1248,48 +1249,6 @@ table.Question td {
 
 
 /* ----- START forum_admin ----- */
-table.ForumAdmSum{
-    border-top: 1px solid #edecdf;
-    border-bottom: 1px solid #edecdf;
-    border-left: 1px solid #edecdf;
-    border-right: 1px solid #edecdf;
-}
-
-table.ForumAdmSum th{
-	border-top: 1px solid #edecdf;
-	border-bottom: 1px solid #edecdf;
-	border-left: 1px solid #edecdf;
-	border-right: 1px solid #edecdf;
-	background: #edecdf !important;
-	text-align: left;
-	font-weight: bold;
-	font-size:11px !important;
-}
-
-table.ForumCategory{
-    padding: 2px;
-    vertical-align: middle;
-    border-top: 1px solid #edecdf;
-	border-bottom: 1px solid #edecdf;
-	border-left: 1px solid #edecdf;
-	border-right: 1px solid #edecdf;
-    font-size:11px !important;
-}
-
-table.ForumCategory th{
-	text-align: center;
-	padding: 4px;
-    border-top: 1px solid #edecdf;
-	border-bottom: 1px solid #edecdf;
-	border-left: 1px solid #edecdf;
-	border-right: 1px solid #edecdf;
-	padding-bottom: 6px;
-	padding-top: 6px;
-	font-weight: bold;
-	font-size:11px !important;
-	vertical-align: middle;
-	background: #edecdf !important;
-}
 /* ----- END forum_admin ----- */
 
 
@@ -1822,75 +1781,12 @@ table.Documents img {
 
 
 /* ----- START phpbb ----- */
-table.ForumSum{
-    padding: 2px;
-    vertical-align: middle;
-    border-top: 1px solid #edecdf;
-    border-bottom: 1px solid #edecdf;
-    border-left: 1px solid #edecdf;
-    border-right: 1px solid #edecdf;
-}
-
-table.ForumSum thead{
-	padding: 2px;
-	vertical-align: middle;
-	border-top: 1px solid #d8dfea;
-	border-bottom: 1px solid #d8dfea;
-	border-left: 1px solid #edecdf;
-	border-right: 1px solid #edecdf;
-	background: #edecdf !important;
-}
-
-table.ForumSum tbody{
-    padding: 2px;
-    vertical-align: middle;
-    border-top: 1px solid #edecdf;
-    border-bottom: 1px solid #d8dfea;
-    border-left: 1px solid #edecdf;
-    border-right: 1px solid #edecdf;
-}
-
-table.ForumSum th{
-	background : #edecdf !important;
-	text-align: center !important;
-	vertical-align: middle;	
-	font-weight: bold;		
-	font-size:11px !important;	
-	padding-bottom: 6px;
-	padding-top: 6px;
-}
-
-table.ForumSum td {
-	color: #727266;
-	vertical-align: top;
-	background : #fbfbfb;
-	padding : 5px 4px 4px 4px;
-}
-
-.Forum {
-	background : #edecdf !important;
-	text-align: left;
-	padding: 4px;
-	padding-bottom: 6px;
-	padding-top: 6px;
-	font-size:11px !important;
-	color: #000000 !important;
-}
-
-.ForumHead {
-	background : #edecdf !important;
-	text-align: center !important;;
-	padding: 4px;
-	padding-bottom: 6px;
-	padding-top: 6px;
-	font-weight: bold;
-}
 
 .Forum_leftside {
-	background : #F7F7F7 !important;
+	background : #F7F7F7; 
 	text-align: center;
-	vertical-align: middle !important;
-	font-size:11px !important;
+	vertical-align: middle;
+	font-size:11px;
 }
 
 .Forum_post {
