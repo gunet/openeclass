@@ -1,4 +1,4 @@
-<?
+<?php
 /*========================================================================
 *   Open eClass 2.3
 *   E-learning and Course Management System
@@ -107,7 +107,7 @@ if ($user_lesson_info[0][0] > 0) {
         'lesson_id'             => $user_lesson_info[0][8]
 	);
 
-	$user_announcements = getUserAnnouncements($param, "html");
+	$user_announcements = getUserAnnouncements($param, 'html');
 	// END - Get user announcements
 
 	// BEGIN - Get user documents
