@@ -1,4 +1,4 @@
-<?
+<?php
 define ("INDEX_START", 1);
 $path2add = 0;
 include 'include/baseTheme.php';
