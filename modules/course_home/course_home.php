@@ -1,4 +1,4 @@
-<?php
+<?
 /*===========================================================================
 *   Open eClass 2.3
 *   E-learning and Course Management System
@@ -148,17 +148,16 @@ if ($is_adminOfCourse) {
 }
 
 // display course units header
-if (!is_null($maxorder) or $is_adminOfCourse) {
-        $cunits_content .= "\n      <div class='course_info'>".
-        $cunits_content .= "\n\n      <table class='resources' width='99%'>\n";
-        $cunits_content .= "\n      <tr>\n        <td><h3>$langCourseUnits ";
-}
+//if (!is_null($maxorder) or $is_adminOfCourse) {
+        //$cunits_content .= "\n      <div class='course_info'>".
+//}
 // add course units
 if ($is_adminOfCourse) {
-	$cunits_content .= ": <a href='{$urlServer}modules/units/info.php'>$langAddUnit</a>&nbsp;<a href='{$urlServer}modules/units/info.php'><img src='../../template/classic/img/add.gif' width='15' height='15' title='$langAddUnit' alt='$langAddUnit' /></a>";
+        $cunits_content .= "\n  <div id='operations_container'>\n    <ul id='opslist'>" .
+                        "\n      <li>$langCourseUnits : <a href='{$urlServer}modules/units/info.php'>$langAddUnit</a>&nbsp;<a href='{$urlServer}modules/units/info.php'><img src='../../template/classic/img/add.gif' width='15' height='15' title='$langAddUnit' alt='$langAddUnit' /></a></li>" .
+                        "\n    </ul>\n  </div>\n";
 }
-        $cunits_content .= "</h3>";
-        $cunits_content .= "</td>\n      </tr>\n      </table>\n";
+        //$cunits_content .= "</p>\n\n\n";
 if ($is_adminOfCourse) {
         list($last_id) = mysql_fetch_row(db_query("SELECT id FROM course_units
                                                    WHERE course_id = $cours_id AND `order` >= 0
@@ -178,53 +177,52 @@ while ($cu = mysql_fetch_array($sql)) {
                 // Visibility icon
                 $vis = $cu['visibility'];
                 $icon_vis = ($vis == 'v')? 'visible.gif': 'invisible.gif';
-                //$class_vis = ($vis == 'i')? ' class="invisible"': '';
                 $class1_vis = ($vis == 'i')? ' class="invisible"': '';
                 $class_vis = ($vis == 'i')? '_invisible': '';
-                $cunits_content .= "\n      <table ";
+                $cunits_content .= "\n\n\n      <table ";
                 if ($is_adminOfCourse) {
-                    $cunits_content .= "class='FormData'";
+                    $cunits_content .= "class='tbl'";
                 } else {
-                    $cunits_content .= "class='resources'";
+                    $cunits_content .= "class=''";
                 }
-                $cunits_content .= " width='99%'>\n      <thead>";
+                $cunits_content .= " width='99%'>\n";
                 if ($is_adminOfCourse) {
-                $cunits_content .= "\n      <tr class='meros'>\n        <td width='1%' class='right'>&nbsp;<b>$count_index.</b>&nbsp;</td>\n        <td width='89%'><a class=\"unit_link$class_vis\" href='${urlServer}modules/units/?id=$cu[id]'>" . q($cu['title']) . "</a></td>\n";
+                $cunits_content .= "\n      <tr class=''>\n        <th width='1' class='right'>&nbsp;<b>$count_index.</b>&nbsp;</th>\n        <th><a class=\"unit_link$class_vis\" href='${urlServer}modules/units/?id=$cu[id]'>" . q($cu['title']) . "</a></th>\n";
                 } else {
-                $cunits_content .= "\n      <tr class='meros'>\n        <td width='1%' class='right'>&nbsp;<b>$count_index.</b>&nbsp;</td>\n        <td  width='99%'><a class=\"unit_link$class_vis\" href='${urlServer}modules/units/?id=$cu[id]'>" . q($cu['title']) . "</a></td>\n";
+                $cunits_content .= "\n      <tr class=''>\n        <th width='1' class='right'>&nbsp;<b>$count_index.</b>&nbsp;</td>\n        <td><a class=\"unit_link$class_vis\" href='${urlServer}modules/units/?id=$cu[id]'>" . q($cu['title']) . "</a></th>\n";
                 }
 
                 if ($is_adminOfCourse) { // display actions
-                        $cunits_content .= "\n        <td width='2%' style=\"border-bottom: 1px solid #CAC3B5;\">".
+                        $cunits_content .= "\n        <th width='16'>".
                                 "<a href='../../modules/units/info.php?edit=$cu[id]'>" .
-                                "<img src='../../template/classic/img/edit.gif' title='$langEdit' /></a></td>" .
-                                "\n        <td width='2%' style=\"border-bottom: 1px solid #CAC3B5;\"><a href='$_SERVER[PHP_SELF]?del=$cu[id]' " .
+                                "<img src='../../template/classic/img/edit.gif' title='$langEdit' /></a></th>" .
+                                "\n        <th width='16'><a href='$_SERVER[PHP_SELF]?del=$cu[id]' " .
                                 "onClick=\"return confirmation();\">" .
                                 "<img src='../../template/classic/img/delete.gif' " .
-                                "title='$langDelete'></img></a></td>" .
-                                "\n        <td width='2%' style=\"border-bottom: 1px solid #CAC3B5;\"><a href='$_SERVER[PHP_SELF]?vis=$cu[id]'>" .
+                                "title='$langDelete'></img></a></th>" .
+                                "\n        <th width='16'><a href='$_SERVER[PHP_SELF]?vis=$cu[id]'>" .
                                 "<img src='../../template/classic/img/$icon_vis' " .
-                                "title='$langVisibility'></img></a></td>";
+                                "title='$langVisibility'></img></a></th>";
                         if ($cu['id'] != $last_id) {
-                                $cunits_content .= "\n        <td width='2%' style=\"border-bottom: 1px solid #CAC3B5;\"><a href='$_SERVER[PHP_SELF]?down=$cu[id]'>" .
-                                "<img src='../../template/classic/img/down.gif' title='$langDown'></img></a></td>";
+                                $cunits_content .= "\n        <th width='16'><a href='$_SERVER[PHP_SELF]?down=$cu[id]'>" .
+                                "<img src='../../template/classic/img/down.gif' title='$langDown'></img></a></th>";
                         } else {
-                                $cunits_content .= "\n        <td width='2%' style=\"border-bottom: 1px solid #CAC3B5;\">&nbsp;&nbsp;&nbsp;&nbsp;</td>";
+                                $cunits_content .= "\n        <th width='16'>&nbsp;&nbsp;&nbsp;&nbsp;</th>";
                         }
                         if (!$first) {
-                                $cunits_content .= "\n        <td width='2%' style=\"border-bottom: 1px solid #CAC3B5;\"><a href='$_SERVER[PHP_SELF]?up=$cu[id]'><img src='../../template/classic/img/up.gif' title='$langUp'></img></a></td>";
+                                $cunits_content .= "\n        <th width='16'><a href='$_SERVER[PHP_SELF]?up=$cu[id]'><img src='../../template/classic/img/up.gif' title='$langUp'></img></a></th>";
                         } else {
-                                $cunits_content .= "\n        <td width='2%' style=\"border-bottom: 1px solid #CAC3B5;\">&nbsp;&nbsp;&nbsp;&nbsp;</td>";
+                                $cunits_content .= "\n        <th width='16'>&nbsp;&nbsp;&nbsp;&nbsp;</th>";
                         }
                 }
-                $cunits_content .= "\n      </tr>\n      <tr><td>&nbsp;</td></tr>\n      <tr>\n        <td ";
+                $cunits_content .= "\n      </tr>\n      <tr>\n        <td ";
                 if ($is_adminOfCourse) {
                     $cunits_content .= "colspan='7' $class1_vis>";
                 } else {
                     $cunits_content .= "colspan='2'>";
                 }
-                $cunits_content .= standard_text_escape($cu['comments']) . "\n</td></tr>\n" .
-                                   "<tr><td>&nbsp;<br /><br /></td></tr>\n</thead>\n</table>\n";
+                $cunits_content .= standard_text_escape($cu['comments']) . "\n    </td>\n  </tr>\n" .
+                                   "\n  </table>\n";
                 $first = false;
                 $count_index++;
         }

@@ -133,24 +133,30 @@ if (isset($_GET['next'])) {
         $action = "${urlServer}courses/$currentCourseID/";
 }
 
-$tool_content .= "<form method='post' action='$action'
-        onsubmit=\"return checkrequired(this, 'unittitle');\">";
+$tool_content .= "
+    <form method='post' action='$action' onsubmit=\"return checkrequired(this, 'unittitle');\">
+    <fieldset>
+    <legend>$nameTools</legend>";
 if (isset($unit_id)) {
-        $tool_content .= "<input type='hidden' name='unit_id' value='$unit_id'>";
+        $tool_content .= "
+    <input type='hidden' name='unit_id' value='$unit_id'>";
 }
-$tool_content .= "<table width='99%' class='FormData' align='center'><tbody>
-        <tr><th width='220'>&nbsp;</th>
-            <td><b>$nameTools</b></td></tr>
-        <tr><th width='150' class='left'>$langUnitTitle:</th>
-            <td><input type='text' name='unittitle' size='50' maxlength='255' $unittitle class='FormData_InputText'></td></tr>
-        <tr><th class='left'>$langUnitDescr:</th><td>
-        <table class='xinha_editor'><tr><td>".
-        rich_text_editor('unitdescr', 4, 20, $unitdescr)
-        ."</td></tr>
-        </table></td></tr>
-        <tr><th>&nbsp;</th>
-            <td><input type='submit' name='edit_submit' value='$button'></td></tr>
-</tbody></table>
-</form>";
+$tool_content .= "
+    <table width='99%' class='tbl'>
+    <tr>
+      <th width='150'>$langUnitTitle:</th>
+      <td><input type='text' name='unittitle' size='50' maxlength='255' $unittitle ></td>
+    </tr>
+    <tr>
+      <th valign='top'>$langUnitDescr:</th>
+      <td>".  rich_text_editor('unitdescr', 4, 20, $unitdescr) ."</td>
+    </tr>
+    <tr>
+      <th>&nbsp;</th>
+      <td><input type='submit' name='edit_submit' value='$button'></td>
+    </tr>
+    </table>
+    </fieldset>
+    </form>";
 draw($tool_content, 2, 'units', $head_content);
 

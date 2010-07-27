@@ -1547,13 +1547,13 @@ function handle_unit_info_edit()
                                            title = $title,
                                            comments = $descr
                                     WHERE id = $unit_id AND course_id = $cours_id");
-                return "<p class='success_small'>$langCourseUnitModified</p>";
+                return "<p class='success'>$langCourseUnitModified</p>";
         } else { // add new course unit
                 $order = $maxorder + 1;
                 db_query("INSERT INTO course_units SET
                                  title = $title, comments =  $descr,
                                  `order` = $order, course_id = $cours_id");
-                return "<p class='success_small'>$langCourseUnitAdded</p>";
+                return "<p class='success'>$langCourseUnitAdded</p>";
         }
 }
 

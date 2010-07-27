@@ -154,17 +154,17 @@ foreach (array('previous', 'next') as $i) {
         }
 }
 if ($is_adminOfCourse) {
-        $tool_content .= "<div id='operations_container'><ul id='opslist'>" .
-                        "<li>$langAdd: <a href='insert.php?type=doc&amp;id=$id'>$langInsertDoc</a></li>" .
-                        "<li><a href='insert.php?type=exercise&amp;id=$id'>$langInsertExercise</a></li>" .
-                        "<li><a href='insert.php?type=text&amp;id=$id'>$langInsertText</a></li>" .
-			"<li><a href='insert.php?type=link&amp;id=$id'>$langInsertLink</a></li>" .
-			"<li><a href='insert.php?type=lp&amp;id=$id'>$langLearningPath1</a></li>" .
-			"<li><a href='insert.php?type=video&amp;id=$id'>$langInsertVideo</a></li>" .
-			"<li><a href='insert.php?type=forum&amp;id=$id'>$langInsertForum</a></li>" .
-			"<li><a href='insert.php?type=work&amp;id=$id'>$langInsertWork</a></li>" .
-			"<li><a href='insert.php?type=wiki&amp;id=$id'>$langInsertWiki</a></li>" .
-                        "</ul></div>\n";
+        $tool_content .= "\n  <div id='operations_container'>\n    <ul id='opslist'>" .
+                        "\n      <li>$langAdd: <a href='insert.php?type=doc&amp;id=$id'>$langInsertDoc</a></li>" .
+                        "\n      <li><a href='insert.php?type=exercise&amp;id=$id'>$langInsertExercise</a></li>" .
+                        "\n      <li><a href='insert.php?type=text&amp;id=$id'>$langInsertText</a></li>" .
+			"\n      <li><a href='insert.php?type=link&amp;id=$id'>$langInsertLink</a></li>" .
+			"\n      <li><a href='insert.php?type=lp&amp;id=$id'>$langLearningPath1</a></li>" .
+			"\n      <li><a href='insert.php?type=video&amp;id=$id'>$langInsertVideo</a></li>" .
+			"\n      <li><a href='insert.php?type=forum&amp;id=$id'>$langInsertForum</a></li>" .
+			"\n      <li><a href='insert.php?type=work&amp;id=$id'>$langInsertWork</a></li>" .
+			"\n      <li><a href='insert.php?type=wiki&amp;id=$id'>$langInsertWiki</a></li>" .
+                        "\n    </ul>\n  </div>\n";
 }
 
 if ($is_adminOfCourse) {
