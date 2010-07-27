@@ -1,4 +1,4 @@
-<?
+<?php
  //* @version $Id$
 /*****************************************************************************
         DEAL WITH  BASETHEME, OTHER INCLUDES AND NAMETOOLS
