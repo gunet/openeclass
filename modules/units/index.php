@@ -106,7 +106,22 @@ if (isset($_REQUEST['edit_submit'])) {
         $tool_content .= handle_unit_info_edit();
 }
 
-process_actions();
+$form = process_actions();
+
+if ($is_adminOfCourse) {
+        $tool_content .= "\n  <div id='operations_container'>\n    <ul id='opslist'>" .
+                        "\n      <li>$langAdd: <a href='insert.php?type=doc&amp;id=$id'>$langInsertDoc</a></li>" .
+                        "\n      <li><a href='insert.php?type=exercise&amp;id=$id'>$langInsertExercise</a></li>" .
+                        "\n      <li><a href='insert.php?type=text&amp;id=$id'>$langInsertText</a></li>" .
+			"\n      <li><a href='insert.php?type=link&amp;id=$id'>$langInsertLink</a></li>" .
+			"\n      <li><a href='insert.php?type=lp&amp;id=$id'>$langLearningPath1</a></li>" .
+			"\n      <li><a href='insert.php?type=video&amp;id=$id'>$langInsertVideo</a></li>" .
+			"\n      <li><a href='insert.php?type=forum&amp;id=$id'>$langInsertForum</a></li>" .
+			"\n      <li><a href='insert.php?type=work&amp;id=$id'>$langInsertWork</a></li>" .
+			"\n      <li><a href='insert.php?type=wiki&amp;id=$id'>$langInsertWiki</a></li>" .
+                        "\n    </ul>\n  </div>\n" .
+		        $form;
+}
 
 if ($is_adminOfCourse) {
         $visibility_check = '';
@@ -153,42 +168,48 @@ foreach (array('previous', 'next') as $i) {
                 $link[$i] = '&nbsp;';
         }
 }
-if ($is_adminOfCourse) {
-        $tool_content .= "\n  <div id='operations_container'>\n    <ul id='opslist'>" .
-                        "\n      <li>$langAdd: <a href='insert.php?type=doc&amp;id=$id'>$langInsertDoc</a></li>" .
-                        "\n      <li><a href='insert.php?type=exercise&amp;id=$id'>$langInsertExercise</a></li>" .
-                        "\n      <li><a href='insert.php?type=text&amp;id=$id'>$langInsertText</a></li>" .
-			"\n      <li><a href='insert.php?type=link&amp;id=$id'>$langInsertLink</a></li>" .
-			"\n      <li><a href='insert.php?type=lp&amp;id=$id'>$langLearningPath1</a></li>" .
-			"\n      <li><a href='insert.php?type=video&amp;id=$id'>$langInsertVideo</a></li>" .
-			"\n      <li><a href='insert.php?type=forum&amp;id=$id'>$langInsertForum</a></li>" .
-			"\n      <li><a href='insert.php?type=work&amp;id=$id'>$langInsertWork</a></li>" .
-			"\n      <li><a href='insert.php?type=wiki&amp;id=$id'>$langInsertWiki</a></li>" .
-                        "\n    </ul>\n  </div>\n";
-}
 
 if ($is_adminOfCourse) {
-        $comment_edit_link = "<td valign='top' width='3%'><a href='info.php?edit=$id&amp;next=1'><img src='../../template/classic/img/edit.gif' title='' alt='' /></a></td>";
-        $units_class = 'unit-navigation';
+        $comment_edit_link = "<td valign='top' width='20'><a href='info.php?edit=$id&amp;next=1'><img src='../../template/classic/img/edit.gif' title='' alt='' /></a></td>";
+        $units_class = 'tbl';
 } else {
-        $units_class = 'NavUnits';
+        $units_class = 'tbl';
         $comment_edit_link = '';
 }
 
-$tool_content .= "<table class='$units_class'><tr><td class='left'>" .
-                 $link['previous'] . '</td><td class="right">' .
-                 $link['next'] . "</td></tr></table>\n";
+$tool_content .= "
+    <br />
+    <table class='$units_class' width='99%'>
+    <tr class='odd'>
+      <td class='left'>" .  $link['previous'] . '</td>
+      <td class="right">' .  $link['next'] . "</td>
+    </tr>
+    <tr>
+      <td colspan='2' class='unit_title'>$nameTools</td>
+    </tr>
+    </table>\n";
+
 
 if (!empty($comments)) {
-        $tool_content .= "<table class='resources' width='99%'><tbody><tr>$comment_edit_link<td>$comments</td></tr></tbody></table>";
+        $tool_content .= "
+    <table class='tbl' width='99%'>
+    <tr class='even'>
+      <td>$comments</td>
+      $comment_edit_link
+    </tr>
+    </table>";
 }
 
 show_resources($id);
 
-$tool_content .= '<form class="unit-select" name="unitselect" action="' .
-                 $urlServer . 'modules/units/" method="get">' .
-                 '<table align="left"><tbody><tr><th class="left">'.$langCourseUnits.':&nbsp;</th><td>'.
-                 '<select class="auth_input" name="id" onChange="document.unitselect.submit();">';
+$tool_content .= '
+  <form name="unitselect" action="' .  $urlServer . 'modules/units/" method="get">';
+$tool_content .="
+    <table width='99%' class='tbl'>
+     <tr class='odd'>
+       <td class='right'>".$langCourseUnits.":&nbsp;</td>
+       <td width='50' class='right'>".
+                 "<select name='id' onChange='document.unitselect.submit();'>";
 $q = db_query("SELECT id, title FROM course_units
                WHERE course_id = $cours_id AND `order` > 0
                      $visibility_check
@@ -199,7 +220,11 @@ while ($info = mysql_fetch_array($q)) {
                          htmlspecialchars(ellipsize($info['title'], 40)) .
                          '</option>';
 }
-$tool_content .= '</select></td></tr></tbody></table></form>';
+$tool_content .= "</select>
+       </td>
+     </tr>
+    </table>
+ </form>";
 
 draw($tool_content, 2, 'units', $head_content);
 

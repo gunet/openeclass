@@ -13,9 +13,9 @@ function process_actions()
                 $res_id = intval($_GET['edit']);
                 if ($id = check_admin_unit_resource($res_id)) {
                         add_html_editor();
-                        edit_res($res_id);
+                        return edit_res($res_id);
                 }
-        }  elseif(isset($_REQUEST['edit_res_submit'])) { // edit resource
+        } elseif (isset($_REQUEST['edit_res_submit'])) { // edit resource
                 $res_id = intval($_REQUEST['resource_id']);	
                 if ($id = check_admin_unit_resource($res_id)) {
                         @$restitle = autoquote(trim($_REQUEST['restitle']));
@@ -25,12 +25,12 @@ function process_actions()
                                         comments = $rescomments
                                         WHERE unit_id = $id AND id = $res_id");
                 }
-                $tool_content .= "<p class='success_small'>$langResourceUnitModified</p>";
-        } elseif(isset($_REQUEST['del'])) { // delete resource from course unit
+                $tool_content .= "<p class='success'>$langResourceUnitModified</p>";
+        } elseif (isset($_REQUEST['del'])) { // delete resource from course unit
                 $res_id = intval($_GET['del']);
                 if ($id = check_admin_unit_resource($res_id)) {
                         db_query("DELETE FROM unit_resources WHERE id = '$res_id'", $mysqlMainDb);
-                        $tool_content .= "<p class='success_small'>$langResourceCourseUnitDeleted</p>";
+                        $tool_content .= "<p class='success'>$langResourceCourseUnitDeleted</p>";
                 }
         } elseif (isset($_REQUEST['vis'])) { // modify visibility in text resources only 
                 $res_id = intval($_REQUEST['vis']);
@@ -53,6 +53,7 @@ function process_actions()
                                    "unit_id=$id");
                 }
         }
+	return '';
 }
 
 
@@ -84,11 +85,14 @@ function show_resources($unit_id)
 	if (mysql_num_rows($req) > 0) {
 		list($max_resource_id) = mysql_fetch_row(db_query("SELECT id FROM unit_resources
                                 WHERE unit_id = $unit_id ORDER BY `order` DESC LIMIT 1"));
-		$tool_content .= "<br /><table class='resources' width='99%'>";
+		$tool_content .= "
+        <table class='tbl_alt' width='99%'>";
 		while ($info = mysql_fetch_array($req)) {
+			$info['comments'] = standard_text_escape($info['comments']);
 			show_resource($info);
 		}	
-		$tool_content .= "</table>\n";
+		$tool_content .= "
+        </table>\n";
 	}
 }
 
@@ -170,15 +174,18 @@ function show_doc($title, $comments, $resource_id, $file_id)
                         $link = "<a href='" . file_url($file['path'], $file['filename']) . "' target='_blank'>";
                 }
         }
-	$class_vis = ($status == 'i' or $status == 'del')? ' class="invisible"': '';
+	$class_vis = ($status == 'i' or $status == 'del')? ' class="invisible"': ' class="even"';
         if (!empty($comments)) {
-                $comment = "<tr><td>&nbsp;</td><td>$comments</td>";
+                $comment = '<br />' . $comments;
         } else {
-                $comment = "";
+                $comment = '';
         }
-        return "<tr$class_vis><td width='1'>$link<img src='$image' /></a></td><td align='left'>$link$title</a></td>" .
+        return "
+        <tr$class_vis>
+          <td width='1'>$link<img src='$image' /></a></td>
+          <td align='left'>$link$title</a>$comment</td>" .
                 actions('doc', $resource_id, $status) .
-                '</tr>' . $comment;
+                '</tr>';
 }
 
 
@@ -187,7 +194,7 @@ function show_text($comments, $resource_id, $visibility)
 {
         global $tool_content;
 
-        $class_vis = ($visibility == 'i')? ' class="invisible"': '';
+        $class_vis = ($visibility == 'i')? ' class="invisible"': ' class="even"';
 	$comments = mathfilter($comments, 12, "../../courses/mathimg/");
         $tool_content .= "<tr$class_vis><td colspan='2'>$comments</td>" .
 		actions('text', $resource_id, $visibility) .
@@ -238,8 +245,7 @@ function show_lp($title, $comments, $resource_id, $lp_id)
         if (!empty($comments)) {
                 $comment_box = "<tr><td width='3%'>&nbsp;</td><td width='82%'>$comments</td>";
         }
-        $class_vis = ($status == 'i' or $status == 'del')?
-                ' class="invisible"': '';
+        $class_vis = ($status == 'i' or $status == 'del')?  ' class="invisible"': ' class="even"';
 	return "<tr$class_vis><td width='3%'>$link$imagelink</a></td><td width='82%'>$link$title</a></td>" .
 		actions('lp', $resource_id, $status) .
 		'</tr>' . $comment_box;
@@ -270,9 +276,13 @@ function show_video($table, $title, $comments, $resource_id, $video_id, $visibil
                 $imagelink = "<img src='../../template/classic/img/delete.gif' />";
                 $visibility = 'del';
         }
-        $class_vis = ($visibility == 'v')? '': ' class="invisible"';
+        $class_vis = ($visibility == 'v')? ' class="even"': ' class="invisible"';
         if (!empty($comments)) {
-                $comment_box = "<tr$class_vis><td width='3%'>&nbsp;</td><td width='82%'>$comments</td>";
+                $comment_box = "<tr$class_vis><td width='3'>&nbsp;</td><td>$comments</td>";
+                if ($is_adminOfCourse) {
+                  $comment_box .= "<td colspan='5'>&nbsp;</td>";
+                }
+                
         } else {
                 $comment_box = "";
         }
@@ -308,7 +318,7 @@ function show_work($title, $comments, $resource_id, $work_id, $visibility)
                         "<img src='../../template/classic/img/assignments_" .
 			($visibility == 'i'? 'off': 'on') . ".gif' /></a>";
 	}
-	$class_vis = ($visibility == 'v')? '': ' class="invisible"';
+	$class_vis = ($visibility == 'v')? ' class="even"': ' class="invisible"';
         if (!empty($comments)) {
                 $comment_box = "<tr><td width='3%'>&nbsp;</td><td width='82%'>$comments</td>";
 	}
@@ -345,7 +355,7 @@ function show_exercise($title, $comments, $resource_id, $exercise_id, $visibilit
                         "<img src='../../template/classic/img/exercise_" .
 			($visibility == 'i'? 'off': 'on') . ".gif' /></a>";
 	}
-	$class_vis = ($visibility == 'v')? '': ' class="invisible"';
+	$class_vis = ($visibility == 'v')? ' class="even"': ' class="invisible"';
         if (!empty($comments)) {
                 $comment_box = "<tr><td width='3%'>&nbsp;</td><td width='82%'>$comments</td>";
 	}
@@ -361,7 +371,7 @@ function show_forum($type, $title, $comments, $resource_id, $ft_id, $visibility)
 {
 	global $id, $tool_content, $mysqlMainDb, $urlServer, $is_adminOfCourse, $currentCourseID;
 	$comment_box = '';
-	$class_vis = ($visibility == 'i')? ' class="invisible"': '';
+	$class_vis = ($visibility == 'i')? ' class="invisible"': ' class="even"';
         $title = htmlspecialchars($title);
 	if ($type == 'forum') {
 		$link = "<a href='${urlServer}modules/phpbb/viewforum.php?forum=$ft_id&amp;unit=$id'>";
@@ -392,7 +402,7 @@ function show_wiki($title, $comments, $resource_id, $wiki_id, $visibility)
                $langWasDeleted, $currentCourseID;
 
 	$comment_box = $imagelink = $link = $class_vis = '';
-	$class_vis = ($visibility == 'i')? ' class="invisible"': '';
+	$class_vis = ($visibility == 'i')? ' class="invisible"': ' class="even"';
         $title = htmlspecialchars($title);
 	$r = db_query("SELECT * FROM wiki_properties WHERE id = $wiki_id",
                       $currentCourseID);
@@ -449,7 +459,7 @@ function show_link($title, $comments, $resource_id, $link_id, $visibility)
                         "<img src='../../template/classic/img/links_" .
 			($visibility == 'i'? 'off': 'on') . ".gif' /></a>";
 	}
-	$class_vis = ($visibility == 'v')? '': ' class="invisible"';
+	$class_vis = ($visibility == 'v')? ' class="even"': ' class="invisible"';
         if (!empty($comments)) {
                 $comment_box = "<tr><td width='3%'>&nbsp;</td><td width='82%'>$comments</td>";
 	}
@@ -559,7 +569,7 @@ function actions($res_type, $resource_id, $status, $res_id = false)
 // edit resource
 function edit_res($resource_id) 
 {
-	global $tool_content, $id, $urlServer, $langTitle, $langDescr, $langContents, $langModify;
+	global $id, $urlServer, $langTitle, $langDescr, $langContents, $langModify;
 	 
         $sql = db_query("SELECT id, title, comments, type FROM unit_resources WHERE id='$resource_id'");
         $ru = mysql_fetch_array($sql);
@@ -568,10 +578,9 @@ function edit_res($resource_id)
         $resource_id = $ru['id'];
         $resource_type = $ru['type'];
 
-	$tool_content .= "<form method='post' action='${urlServer}modules/units/'>";
-	$tool_content .= "<input type='hidden' name='id' value='$id'>";
-	$tool_content .= "<input type='hidden' name='resource_id' value='$resource_id'>";
-	$tool_content .= "<table class='FormData'><tbody>";
+	$tool_content = "<form method='post' action='${urlServer}modules/units/'>" .
+	                "<input type='hidden' name='id' value='$id'>" .
+                        "<input type='hidden' name='resource_id' value='$resource_id'>";
 	if ($resource_type != 'text') {
 		$tool_content .= "<tr><th width='150' class='left'>$langTitle:</th>
 		<td><input type='text' name='restitle' size='50' maxlength='255' $restitle class='FormData_InputText'></td></tr>";
@@ -579,13 +588,9 @@ function edit_res($resource_id)
 	} else {
 		$message = $langContents;
 	}
-        $tool_content .= "<tr><th class='left'>$message:</th><td>
-        <table class='xinha_editor'><tr><td>".
-	rich_text_editor('rescomments', 4, 20, $rescomments)
-	."</td></tr>
-        </table></td></tr>
-        <tr><th>&nbsp;</th>
-	<td><input type='submit' name='edit_res_submit' value='$langModify'></td></tr>
-	</tbody></table>
-	</form>";
+        $tool_content .= "<tr><th class='left'>$message:</th><td>" .
+                         rich_text_editor('rescomments', 4, 20, $rescomments) .
+	                 "<input type='submit' name='edit_res_submit' value='$langModify'></form>";
+
+	return $tool_content;
 }

@@ -435,7 +435,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 		$t->set_var ( 'LANG_COPYRIGHT_NOTICE', $langCopyrightFooter );
 
                 // Remove tool tile block from selected pages
-                if (in_array($tool_css, array('index', 'admin', 'course_home'))) {
+                if (in_array($tool_css, array('index', 'admin', 'course_home', 'units'))) {
                         $t->set_block('mainBlock', 'toolTitleBlock', 'toolTitleBlockVar');
                         $t->set_var('toolTitleBlockVar', '');
                 }

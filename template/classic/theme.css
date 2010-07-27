@@ -205,6 +205,15 @@ fieldset table.th {
         border-bottom: 1px solid #cac3b5; /* BEIGE  */
 }
 
+.unit_title {
+        font-weight: bold;
+        padding: 5px;
+        background-color:#ffffff;
+        border-bottom: 1px dotted #cac3b5; /* BEIGE  */
+        font-size: 14px;
+        text-align: center;
+}
+
 
 /* 4. Header  */
 
@@ -1021,15 +1030,25 @@ border-top: 1px solid #94a3c4;}
         text-align: center;
         padding: 3px;
 }
-	
-.tbl_alt_odd {
+
+.tbl_alt td, .tbl_alt th {
+	vertical-align: top;
+}
+
+.tbl_alt .odd {
 	background-color: #edecdf; /* LIGHTER BEIGE  */
 }	
 	
 	
-.tbl_alt_even {
+.tbl_alt .even {
 	background-color: #ffffff; /* WHITE  */
 }	
+
+.tbl_alt_border {
+        background-color: #ffffff; /* WHITE  */
+        border-bottom: 1px dotted #cac3b5; /* BEIGE  */
+}
+
 		
 	
 /*	Hover effect to table rows */	
