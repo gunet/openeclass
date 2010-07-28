@@ -51,7 +51,7 @@ include '../../include/init.php';
 include '../../include/lib/forcedownload.php';
 include('../../include/action.php');
 
-mysql_select_db($dbname);
+mysql_select_db($mysqlMainDb);
 
 $basedir = "{$webDir}courses/$dbname/document";
 
@@ -60,9 +60,11 @@ $path = '';
 foreach ($path_components as $component) {
         $component = urldecode(str_replace(chr(1), '/', $component));
         $q = db_query("SELECT path, visibility, format,
-                              (LENGTH(path) - LENGTH(REPLACE(path, '/', ''))) AS depth
-                       FROM document WHERE filename = " . quote($component) .
-                       " AND path LIKE '$path%' HAVING depth = $depth");
+                                    (LENGTH(path) - LENGTH(REPLACE(path, '/', ''))) AS depth
+                              FROM document WHERE course_id = $cours_id AND
+                                                  group_id IS NULL AND
+                                                  filename = " . quote($component) . " AND
+                                                  path LIKE '$path%' HAVING depth = $depth");
         if (!$q or mysql_num_rows($q) == 0) {
                 restore_saved_course();
                 header("HTTP/1.0 404 Not Found");

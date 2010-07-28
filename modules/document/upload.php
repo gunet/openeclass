@@ -32,27 +32,41 @@
         @Description: Upload form that aids the user to select
 		  a file to upload and add some metadata with it.
 
-    The script shows a form with a "Browse file" tag and some simpl
+    The script shows a form with a "Browse file" tag and some simple
     inputs for metadata. The actual uploading takes place at document.php
 ==============================================================================*/
 
-$require_current_course = TRUE;
+$require_current_course = true;
 $require_login = true;
 
 include "../../include/baseTheme.php";
-$tool_content = "";
 
-if($is_adminOfCourse) {
+if (isset($_GET['uploadPath'])) {
+        $uploadPath = q($_GET['uploadPath']);
+} else {
+        $uploadPath = '';
+}
 
-	if(!isset($_GET['uploadPath'])) {
-		$_GET['uploadPath'] = "";
-	}
-	
+if (defined('GROUP_DOCUMENTS')) {
+        include '../group/group_functions.php';
+
+        initialize_group_id('gid');
+        initialize_group_info($group_id);
+        $group_hidden_input = "<input type='hidden' name='gid' value='$group_id' />";
+        $navigation[] = array ('url' => 'group.php', 'name' => $langGroups);
+        $navigation[] = array ('url' => 'group_space.php?userGroupId=' . $group_id, 'name' => q($name));
+	$navigation[] = array ('url' => "document.php?gid=$group_id&amp;openDir=$uploadPath", 'name' => $langDoc);
+} else {
+	$navigation[] = array ('url' => "document.php?openDir=$uploadPath", 'name' => $langDoc);
+        $group_hidden_input = '';
+}
+
+if ($is_adminOfCourse) {
 	$nameTools = $langDownloadFile;
-	$navigation[]= array ("url"=>"document.php", "name"=> $langDoc);
 	$tool_content .= "
 	<form action='document.php' method='post' enctype='multipart/form-data'>
-	<input type='hidden' name='uploadPath' value='".htmlspecialchars($_GET['uploadPath'])."' />
+	<input type='hidden' name='uploadPath' value='$uploadPath' />
+        $group_hidden_input
 	<table width='99%'>
 	<tbody>
 	<tr>

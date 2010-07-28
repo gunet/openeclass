@@ -1212,6 +1212,7 @@ $langEmptyGroupName = "Αφήσατε κενό το όνομα της ομάδα
 // Group Properties
 $langGroupProperties="Ρυθμίσεις ομάδων χρηστών";
 $langGroupAllowStudentRegistration="Οι ".$langsStudents." επιτρέπονται να εγγραφούν στις ομάδες χρηστών";
+$langGroupAllowMultipleRegistration="Δυνατότητα εγγραφής σε περισσότερες από μία ομάδες";
 $langGroupStudentRegistrationType="Δυνατότητα Εγγραφής";
 $langGroupPrivatise="Κλειστές περιοχές συζητήσεων ομάδων χρηστών";
 $langGroupForum="Περιοχή συζητήσεων";
@@ -2142,6 +2143,7 @@ $langInvalidCharsUsername="Έχετε χρησιμοποιήσει μη επιτ
 $langProfileReg="Οι αλλαγές στο προφίλ σας αποθηκεύτηκαν";
 $langOldPass="Παρόν συνθηματικό";
 $langChangePass="Αλλαγή συνθηματικού πρόσβασης";
+$langUserProfile = 'Στοιχεία χρήστη';
 
 // user.php
 $langNewUser = "Εγγραφή Χρήστη";

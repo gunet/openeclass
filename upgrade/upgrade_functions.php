@@ -297,13 +297,69 @@ function upgrade_course($code, $lang)
 
 function upgrade_course_2_4($code, $extramessage = '')
 {
-	global $langUpgCourse, $global_messages;
-	
+	global $langUpgCourse, $mysqlMainDb;
+
+        $course_id = course_code_to_id($code);
 	mysql_select_db($code);
 	echo "<hr><p>$langUpgCourse <b>$code</b> (2.2.1) $extramessage<br />";
 	flush();
+
 	// upgrade polls
 	db_query("ALTER TABLE `poll_answer_record` CHANGE `answer_text` `answer_text` TEXT", $code);
+
+        // move main documents to central table and if successful drop table
+        db_query("INSERT INTO `$mysqlMainDb`.document
+                        (`course_id`, `group_id`, `path`, `filename`, `visibility`, `comment`,
+                         `category`, `title`, `creator`, `date`, `date_modified`, `subject`,
+                         `description`, `author`, `format`, `language`, `copyrighted`)
+                        SELECT $course_id, NULL, `path`, `filename`, `visibility`, `comment`,
+                               `category`, `title`, `creator`, `date`, `date_modified`, `subject`,
+                               `description`, `author`, `format`, `language`, `copyrighted` FROM document") and
+                db_query("DROP TABLE document");
+
+        // move user group information to central tables and if successful drop original tables
+        $ok = db_query("INSERT INTO `$mysqlMainDb`.`group_properties`
+                        (`course_id`, `self_registration`, `private`, `forum`, `documents`,
+                         `wiki`, `agenda`)
+                        SELECT $course_id, `self_registration`, `private`, `forum`, `document`,
+                                `wiki`, `agenda` FROM group_properties");
+
+        $ok = db_query("INSERT INTO `$mysqlMainDb`.`group`
+                        (`course_id`, `name`, `description`, `forum_id`, `max_members`,
+                         `secret_directory`)
+                        SELECT $course_id, `name`, `description`, `forumId`, `maxStudent`,
+                                `secretDirectory` FROM student_group") && $ok;
+
+        db_query("CREATE TEMPORARY TABLE group_map AS
+                        SELECT old.id AS old_id, new.id AS new_id
+                                FROM student_group AS old, `$mysqlMainDb`.`group` AS new
+                                WHERE new.course_id = $course_id AND
+                                      old.secretDirectory = new.secret_directory");
+
+        $ok = db_query("INSERT INTO `$mysqlMainDb`.group_members
+                                (group_id, user_id, is_tutor)
+                                SELECT new_id, tutor, 1
+                                        FROM student_group, group_map
+                                        WHERE student_group.id = group_map.old_id AND
+                                              tutor IS NOT NULL") && $ok;
+
+        $ok = db_query("INSERT INTO `$mysqlMainDb`.group_members
+                                (group_id, user_id, is_tutor)
+                                SELECT new_id, user, 0
+                                        FROM user_group, group_map
+                                        WHERE user_group.team = group_map.old_id") && $ok;
+
+        db_query("DROP TEMPORARY TABLE group_map");
+
+        $ok = move_group_documents_to_main_db($code, $course_id) && $ok;
+
+        if ($ok) {
+                db_query("DROP TABLE group_properties");
+                db_query("DROP TABLE student_group");
+                db_query("DROP TABLE user_group");
+                db_query("DROP TABLE group_documents");
+        }
+
 	// upgrade acceuil for glossary
 	if (accueil_tool_missing('MODULE_ID_GLOSSARY')) {
                 db_query("INSERT IGNORE INTO accueil VALUES (
@@ -320,7 +376,7 @@ function upgrade_course_2_4($code, $extramessage = '')
 }
 
 function upgrade_course_2_3($code, $extramessage = '') {
-	global $langUpgCourse, $global_messages;
+	global $langUpgCourse;
 
 	mysql_select_db($code);
 	echo "<hr><p>$langUpgCourse <b>$code</b> (2.2.1) $extramessage<br />";
@@ -373,7 +429,6 @@ function upgrade_course_2_2($code, $lang, $extramessage = '')
         add_index('optimize', 'lp_user_module_progress', 'user_id', 'learnPath_module_id' );
         add_index('actionsindex',  'actions', 'module_id', 'date_time');
 }
-
 
 function upgrade_course_2_1_3($code, $extramessage = '')
 {
@@ -1523,4 +1578,44 @@ function upgrade_course_index_php($code)
         fwrite($f, "<?php\nsession_start();\n\$_SESSION['dbname']='$code';\n" .
                    "include '../../modules/course_home/course_home.php';\n");
         fclose($f);
+}
+
+function move_group_documents_to_main_db($code, $course_id)
+{
+        global $mysqlMainDb, $webDir, $group_document_upgrade_ok, $group_document_dir;
+
+        $group_document_upgrade_ok = true;
+        $q = db_query("SELECT id, secretDirectory FROM student_group");
+        while ($r = mysql_fetch_array($q)) {
+                $group_document_dir = $webDir . 'courses/' . $code . '/group/' . $r['secretDirectory'];
+                traverseDirTree($group_document_dir, 'group_documents_main_db_file', 'group_documents_main_db_dir',
+                                array($course_id, $r['id']));
+        }
+        return $group_document_upgrade_ok;
+}
+
+function group_documents_main_db_file($path, $data)
+{
+        group_documents_main_db($path, $data[0], $data[1], get_file_extension($path));
+}
+
+function group_documents_main_db_dir($path, $data)
+{
+        group_documents_main_db($path, $data[0], $data[1], '.dir');
+}
+
+function group_documents_main_db($path, $course_id, $group_id, $type)
+{
+        global $group_document_upgrade_ok, $mysqlMainDb, $group_document_dir;
+
+        $file_date = quote(date('Y-m-d H:i:s', filemtime($path)));
+        $internal_path = quote(str_replace($group_document_dir, '', $path));
+        list($filename) = mysql_fetch_row(db_query("SELECT `filename` FROM group_documents WHERE `path` = " . $internal_path));
+        if (!db_query("INSERT INTO `$mysqlMainDb`.document SET
+                              course_id = $course_id, group_id = $group_id,
+                              path = $internal_path, filename = " . quote($filename) . ",
+                              format = '$type', visibility = 'v',
+                              date = $file_date, date_modified = $file_date")) {
+                $group_document_upgrade_ok = false;
+        }
 }

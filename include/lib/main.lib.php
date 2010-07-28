@@ -252,7 +252,7 @@ function uid_to_username($uid)
 // email, or an array of user ids or user info arrays
 function display_user($user, $print_email = false)
 {
-        global $mysqlMainDb, $langAnonymous;
+        global $mysqlMainDb, $langAnonymous, $urlAppend;
 
         if (count($user) == 0) {
                 return '-';
@@ -277,7 +277,11 @@ function display_user($user, $print_email = false)
                 }
         }
 
-        return "<a href='profile.php?id=$user[user_id]'>" . q("$user[prenom] $user[nom]") . "</a>" .
+        if ($print_email) {
+                $email = trim($user['email']);
+                $print_email = $print_email && !empty($email);
+        }
+        return "<a href='$urlAppend/modules/user/profile.php?id=$user[user_id]'>" . q("$user[prenom] $user[nom]") . "</a>" .
                 ($print_email? (' (' . mailto(trim($user['email']), 'e-mail address hidden') . ')'): '');
 
 }
@@ -371,16 +375,26 @@ function user_group($uid, $required = TRUE)
 	}
 }
 
-// find a group name
-function gid_to_name($gid)
+// Display links to the groups a user is member of
+function user_groups($course_id, $user_id)
 {
-	global $currentCourseID;
-	if ($r = mysql_fetch_row(db_query("SELECT name FROM student_group
-		WHERE id = '".mysql_real_escape_string($gid)."'", $currentCourseID))) {
-                return $r[0];
-	} else {
-                return FALSE;
-	}
+        global $urlAppend;
+
+        $groups = '';
+        $q = db_query("SELECT `group`.id, `group`.name FROM `group`, group_members
+                       WHERE `group`.course_id = $course_id AND
+                             `group`.id = group_members.group_id AND
+                             `group_members`.user_id = $user_id
+                       ORDER BY `group`.name");
+        while ($r = mysql_fetch_array($q)) {
+                $groups .= (empty($groups)? '': ', ') .
+                           "<a href='$urlAppend/modules/group/group_space.php?userGroupId=$r[id]'>" .
+                           q($r['name']) . "</a>";
+        }
+        if (empty($groups)) {
+                $groups = '-';
+        }
+        return $groups;
 }
 
 
@@ -839,35 +853,6 @@ function format_bytesize ($kbytes, $dec_places = 2)
 	}
 	return $result;
 }
-
-
-// used in documents and group documents path navigation bar
-function make_clickable_path($dbTable, $path)
-{
-	global $langRoot, $userGroupId;
-
-        if (isset($userGroupId)) {
-                $base = $_SERVER['PHP_SELF'] . '?userGroupId=' . $userGroupId . '&amp;';
-        } else {
-                $base = $_SERVER['PHP_SELF'] . '?';
-        }
-
-	$cur = '';
-	$out = '';
-	foreach (explode('/', $path) as $component) {
-		if (empty($component)) {
-			$out = "<a href='{$base}openDir=/'>$langRoot</a>";
-		} else {
-			$cur .= rawurlencode("/$component");
-			$row = mysql_fetch_array(db_query ("SELECT filename FROM $dbTable
-					WHERE path LIKE '%$component'"));
-			$dirname = $row['filename'];
-			$out .= " &raquo; <a href='{$base}openDir=$cur'>$dirname</a>";
-		}
-	}
-	return $out;
-}
-
 
 
 /*
@@ -1579,4 +1564,12 @@ function glossary_expand_callback($matches)
         return '<span style="background-color: #FCC;" title=\'Glossary definition for term "' .
                 $matches[0] . '"\'>' . $matches[0] . '</span>';
 
+}
+
+function redirect_to_home_page($path = '')
+{
+        global $urlServer;
+
+        header("Location: $urlServer");
+        exit;
 }

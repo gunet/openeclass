@@ -33,118 +33,81 @@
  *
  */
 
-$require_current_course = TRUE;
-$require_help = TRUE;
+$require_current_course = true;
+$require_help = true;
 $helpTopic = 'Group';
 $require_prof = true;
 
 include '../../include/baseTheme.php';
 $nameTools = $langGroupProperties;
-$navigation[]= array ("url"=>"group.php", "name"=> $langGroupManagement);
+$navigation[] = array ("url"=>"group.php", "name"=> $langGroupManagement);
 
-$dbname = $_SESSION['dbname'];
+include 'group_functions.php';
+initialize_group_info();
+
+$checked['self_reg'] = $self_reg? ' checked="1"': '';
+$checked['multi_reg'] = $multi_reg? ' checked="1"': '';
+$checked['forum'] = $forum? ' checked="1"': '';
+$checked['documents'] = $documents? ' checked="1"': '';
+$checked['private_forum_yes'] = $private_forum? ' checked="1"': '';
+$checked['private_forum_no'] = $private_forum? '': ' checked="1"';
 
 if ($is_adminOfCourse) {
-	$tool_content = "";
-	$tool_content .= <<<tCont
-
-<form method="post" action="group.php">
-    <table width="99%" align="left" class="FormData">
+	$tool_content = "
+<form method='post' action='group.php'>
+    <table width='99%' align='left' class='FormData'>
     <tbody>
     <tr>
-      <th width="220">&nbsp;</th>
+      <th width='220'>&nbsp;</th>
       <td><b>$langGroupProperties</b></td>
     </tr>
     <tr>
-      <th class="left">$langGroupStudentRegistrationType :</th>
+      <th class='left'>$langGroupStudentRegistrationType :</th>
       <td>
-
-tCont;
-	$resultProperties=db_query("SELECT id, self_registration, private, forum, document
-			FROM group_properties WHERE id=1", $dbname);
-	while ($myProperties = mysql_fetch_array($resultProperties))
-	{
-		if($myProperties['self_registration'])
-		{
-			$tool_content .=  "<input type=checkbox name=\"self_registration\" value=1 checked>&nbsp;$langGroupAllowStudentRegistration";
-		}
-		else
-		{
-			$tool_content .=  "<input type=checkbox name=\"self_registration\" value=1>&nbsp;$langGroupAllowStudentRegistration";
-		}
-		$tool_content .= "</td>
+       <input type='checkbox' name='self_reg' value='1'$checked[self_reg] />&nbsp;$langGroupAllowStudentRegistration<br />
+       <input type='checkbox' name='multi_reg' value='1'$checked[multi_reg] />&nbsp;$langGroupAllowMultipleRegistration<br />
+       </td>
     </tr>
     <tr>
       <td>&nbsp;</td>
       <td>&nbsp;</td>
     </tr>
     <tr>
-      <th width=\"220\">&nbsp;</th>
+      <th width='220'>&nbsp;</th>
       <td><b>$langTools</b></td>
     </tr>
     <tr>
-    <th class=\"left\">$langGroupForum :</th>
-      <td>";
-		if($myProperties['forum'])
-		{
-			$tool_content .=  "<input type=checkbox name=\"forum\" value=1 checked>";
-		}
-		else
-		{
-			$tool_content .=  "<input type=checkbox name=\"forum\" value=1>";
-		}
-		$tool_content .=  "</td>
-    </tr>";
-		$tool_content .=  "
+    <th class='left'>$langGroupForum :</th>
+      <td>
+        <input type='checkbox' name='forum' value='1'$checked[forum] />
+        </td>
+    </tr>
     <tr>
-      <th class=\"left\">$langPrivate_1 :</th>
-      <td>";
-		if($myProperties['private'])
-		{
-			$tool_content .= "<input type=radio name=\"private\" value=1 checked>
+      <th class='left'>$langPrivate_1 :</th>
+      <td>
+        <input type='radio' name='private_forum' value='1'$checked[private_forum_yes] />
 		&nbsp;$langPrivate_2&nbsp;<br />
-		<input type=radio name=\"private\" value=0>
-		&nbsp;$langPrivate_3";
-		}
-		else
-		{
-			$tool_content .=  "<input type=radio name=\"private\" value=1>
-		&nbsp;$langPrivate_2&nbsp;<br />
-		<input type=radio name=\"private\" value=0 checked>
-		&nbsp;$langPrivate_3";
-		}
-		$tool_content .=  "</td>
-    </tr>";
-		$tool_content .=  "
+		<input type='radio' name='private_forum' value='0'$checked[private_forum_no] />
+		&nbsp;$langPrivate_3
+        </td>
+    </tr>
     <tr>
-      <th class=\"left\">$langDoc :</th>
-      <td>";
-		if($myProperties['document'])
-		{
-			$tool_content .=  "<input type=checkbox name=\"document\" value=1 checked>";
-		}
-		else
-		{
-			$tool_content .=  "<input type=checkbox name=\"document\" value=1>";
-		}
-			$tool_content .=  "</td>
-    </tr>";
-	}
-
-	$tool_content .= <<<tCont2
-
+      <th class='left'>$langDoc :</th>
+      <td>
+        <input type='checkbox' name='documents' value='1'$checked[documents] />
+        </td>
+    </tr>
     <tr>
       <th>&nbsp;</th>
-      <td><input type="submit" name="properties" value="$langModify"></td>
+      <td><input type='submit' name='properties' value='$langModify' /></td>
     </tr>
     </tbody>
     </table>
     <br />
     
-    </form>
+    </form>";
 
-tCont2;
-
-	draw($tool_content, 2, 'group');
+        draw($tool_content, 2, 'group');
+} else {
+        header("Location: $urlServer");
 }
-?>

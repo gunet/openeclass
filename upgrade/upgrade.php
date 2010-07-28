@@ -345,37 +345,79 @@ if (!isset($_POST['submit2'])) {
                 db_query('CREATE FULLTEXT INDEX unit_resources_comments ON unit_resources (comments)');
 		db_query("ALTER TABLE `loginout` CHANGE `ip` `ip` CHAR(39) NOT NULL DEFAULT '0.0.0.0'");
                 db_query("ALTER TABLE `annonces` ADD `visibility` CHAR(1) NOT NULL DEFAULT 'v'");
-		if (!mysql_table_exists($mysqlMainDb, 'glossary')) {
-			db_query("CREATE TABLE `glossary` (
-			       `id` MEDIUMINT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
-			       `term` VARCHAR(255) NOT NULL ,
-			       `definition` TEXT NOT NULL ,
-			       `order` MEDIUMINT( 11 ) NOT NULL ,
-			       `datestamp` DATE NOT NULL ,
-			       `cid` INT( 11 ) NOT NULL
-			) TYPE = MYISAM", $mysqlMainDb);
-		}
-		// upgrade table admin_announcements
-		if (mysql_field_exists("$mysqlMainDb", 'admin_announcements', 'gr_body')) {
-			db_query("RENAME TABLE `admin_announcements` TO `admin_announcements_old`", $mysqlMainDb);
-			db_query("CREATE TABLE IF NOT EXISTS `admin_announcements` (
-				`id` int(11) NOT NULL auto_increment,
-				`title` varchar(255) default NULL,
-				`body` mediumtext,
-				`date` date NOT NULL,
-				`visible` enum('V','I') NOT NULL,
-				`lang` varchar(10) NOT NULL default 'el',
-				PRIMARY KEY  (`id`)
-			      )", $mysqlMainDb);
-			
-			$aq = db_query("INSERT INTO admin_announcements (title, body, `date`, visible, lang)
-				       SELECT gr_title AS title, CONCAT_WS('  ', gr_body, gr_comment) AS body, `date`, visible, 'el'
-					FROM admin_announcements_old WHERE gr_title <> '' OR gr_body <> ''", $mysqlMainDb);	
-			$adm = db_query("INSERT INTO admin_announcements (title, body, `date`, visible, lang)
-					SELECT en_title AS title, CONCAT_WS('  ', en_body, en_comment) AS body, `date`, visible, 'en'
-					FROM admin_announcements_old WHERE en_title <> '' OR en_body <> ''", $mysqlMainDb);	
-			db_query("DROP TABLE admin_announcements_old");
-		}
+                db_query("CREATE TABLE IF NOT EXISTS `document` (
+                                `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                                `course_id` INT(11) NOT NULL,
+                                `group_id` INT(11) DEFAULT NULL,
+                                `path` VARCHAR(255) NOT NULL,
+                                `filename` VARCHAR(255) NOT NULL,
+                                `visibility` CHAR(1) NOT NULL DEFAULT 'v',
+                                `comment` TEXT,
+                                `category` TINYINT(4) NOT NULL DEFAULT 0,
+                                `title` TEXT,
+                                `creator` TEXT,
+                                `date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
+                                `date_modified` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
+                                `subject` TEXT,
+                                `description` TEXT,
+                                `author` VARCHAR(255) NOT NULL DEFAULT '',
+                                `format` VARCHAR(32) NOT NULL DEFAULT '',
+                                `language` VARCHAR(16) NOT NULL DEFAULT '',
+                                `copyrighted` TINYINT(4) NOT NULL DEFAULT 0,
+                                FULLTEXT KEY `document`
+                                        (`filename`, `comment`, `title`, `creator`,
+                                         `subject`, `description`, `author`, `language`))");
+                db_query("CREATE TABLE IF NOT EXISTS `group_properties` (
+                                `course_id` INT(11) NOT NULL PRIMARY KEY ,
+                                `self_registration` TINYINT(4) NOT NULL DEFAULT 1,
+                                `multiple_registration` TINYINT(4) NOT NULL DEFAULT 0,
+                                `forum` TINYINT(4) NOT NULL DEFAULT 1,
+                                `private_forum` TINYINT(4) NOT NULL DEFAULT 0,
+                                `documents` TINYINT(4) NOT NULL DEFAULT 1,
+                                `wiki` TINYINT(4) NOT NULL DEFAULT 0,
+                                `agenda` TINYINT(4) NOT NULL DEFAULT 0)");
+                db_query("CREATE TABLE IF NOT EXISTS `group` (
+                                `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                                `course_id` INT(11) NOT NULL DEFAULT 0,
+                                `name` varchar(100) NOT NULL DEFAULT '',
+                                `description` TEXT,
+                                `forum_id` int(11) NULL,
+                                `max_members` int(11) NOT NULL DEFAULT 0,
+                                `secret_directory` varchar(30) NOT NULL DEFAULT '0')");
+                db_query("CREATE TABLE IF NOT EXISTS `group_members` (
+                                `group_id` INT(11) NOT NULL,
+                                `user_id` INT(11) NOT NULL,
+                                `is_tutor` INT(11) NOT NULL DEFAULT 0,
+                                PRIMARY KEY (`group_id`, `user_id`))");
+                db_query("CREATE TABLE IF NOT EXISTS `glossary` (
+			       `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+			       `term` VARCHAR(255) NOT NULL,
+			       `definition` TEXT,
+                               `order` INT(11) NOT NULL DEFAULT 0,
+                               `datestamp` DATE NOT NULL,
+                               `course_id` INT(11) NOT NULL)");
+                }
+
+                // Upgrade table admin_announcements if needed
+                if (mysql_field_exists($mysqlMainDb, 'admin_announcements', 'gr_body')) {
+                        db_query("RENAME TABLE `admin_announcements` TO `admin_announcements_old`");
+                        db_query("CREATE TABLE IF NOT EXISTS `admin_announcements` (
+                                        `id` int(11) NOT NULL auto_increment,
+                                        `title` varchar(255) default NULL,
+                                        `body` mediumtext,
+                                        `date` date NOT NULL,
+                                        `visible` enum('V','I') NOT NULL,
+                                        `lang` varchar(10) NOT NULL default 'el',
+                                        PRIMARY KEY (`id`))");
+                        
+                        $aq = db_query("INSERT INTO admin_announcements (title, body, `date`, visible, lang)
+                                        SELECT gr_title AS title, CONCAT_WS('  ', gr_body, gr_comment) AS body, `date`, visible, 'el'
+                                        FROM admin_announcements_old WHERE gr_title <> '' OR gr_body <> ''");     
+                        $adm = db_query("INSERT INTO admin_announcements (title, body, `date`, visible, lang)
+                                         SELECT en_title AS title, CONCAT_WS('  ', en_body, en_comment) AS body, `date`, visible, 'en'
+                                         FROM admin_announcements_old WHERE en_title <> '' OR en_body <> ''");     
+                        db_query("DROP TABLE admin_announcements_old");
+                }
         }
 
         // **********************************************

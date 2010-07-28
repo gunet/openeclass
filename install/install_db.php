@@ -246,6 +246,61 @@ db_query("CREATE TABLE monthly_summary (
         details text,
         PRIMARY KEY (id)) $charset_spec");
 
+db_query("CREATE TABLE IF NOT EXISTS `document` (
+                `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                `course_id` INT(11) NOT NULL,
+                `group_id` INT(11) DEFAULT NULL,
+                `path` VARCHAR(255) NOT NULL,
+                `filename` VARCHAR(255) NOT NULL,
+                `visibility` CHAR(1) NOT NULL DEFAULT 'v',
+                `comment` TEXT,
+                `category` TINYINT(4) NOT NULL DEFAULT 0,
+                `title` TEXT,
+                `creator` TEXT,
+                `date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
+                `date_modified` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
+                `subject` TEXT,
+                `description` TEXT,
+                `author` VARCHAR(255) NOT NULL DEFAULT '',
+                `format` VARCHAR(32) NOT NULL DEFAULT '',
+                `language` VARCHAR(16) NOT NULL DEFAULT '',
+                `copyrighted` TINYINT(4) NOT NULL DEFAULT 0,
+                FULLTEXT KEY `document`
+                        (`filename`, `comment`, `title`, `creator`,
+                         `subject`, `description`, `author`, `language`))");
+
+db_query("CREATE TABLE IF NOT EXISTS `group_properties` (
+                `course_id` INT(11) NOT NULL PRIMARY KEY ,
+                `self_registration` TINYINT(4) NOT NULL DEFAULT 1,
+                `multiple_registration` TINYINT(4) NOT NULL DEFAULT 0,
+                `forum` TINYINT(4) NOT NULL DEFAULT 1,
+                `private_forum` TINYINT(4) NOT NULL DEFAULT 0,
+                `documents` TINYINT(4) NOT NULL DEFAULT 1,
+                `wiki` TINYINT(4) NOT NULL DEFAULT 0,
+                `agenda` TINYINT(4) NOT NULL DEFAULT 0)");
+
+db_query("CREATE TABLE IF NOT EXISTS `group` (
+                `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                `course_id` INT(11) NOT NULL DEFAULT 0,
+                `name` varchar(100) NOT NULL DEFAULT '',
+                `description` TEXT,
+                `forum_id` int(11) NULL,
+                `max_members` int(11) NOT NULL DEFAULT 0,
+                `secret_directory` varchar(30) NOT NULL DEFAULT '0')");
+
+db_query("CREATE TABLE IF NOT EXISTS `group_members` (
+                `group_id` int(11) NOT NULL,
+                `user_id` int(11) NOT NULL,
+                `is_tutor` int(11) NOT NULL DEFAULT 0,
+                PRIMARY KEY (`group_id`, `user_id`))");
+
+db_query("CREATE TABLE IF NOT EXISTS `glossary` (
+               `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+               `term` VARCHAR(255) NOT NULL,
+               `definition` TEXT,
+               `order` INT(11) NOT NULL DEFAULT 0,
+               `datestamp` DATE NOT NULL,
+               `course_id` INT(11) NOT NULL)");
 
 // encrypt the admin password into DB
 $password_encrypted = md5($passForm);

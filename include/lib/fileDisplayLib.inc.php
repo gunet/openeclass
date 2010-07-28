@@ -216,8 +216,7 @@ function file_url($path, $filename = null)
 			$dirname = '';
 			foreach ($components as $c) {
 				$partial_path .= '/' . $c;
-				$q = db_query("SELECT filename FROM document WHERE path = '$partial_path'",
-					      $currentCourseID);
+				$q = db_query("SELECT filename FROM document WHERE path = '$partial_path'");
 				list($name) = mysql_fetch_row($q);
 				$dirname .= '/' . file_url_escape($name);
 			}
