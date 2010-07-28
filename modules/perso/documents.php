@@ -51,47 +51,24 @@ function getUserDocuments($param)
 
         $lesson_code = $param['lesson_code'];
         $max_repeat_val = $param['max_repeat_val'];
-        $lesson_title = $param['lesson_titles'];
         $usr_lst_login = $param['usr_lst_login'];
 	$usr_memory = $param['usr_memory'];
 
-	// We have 2 SQL cases. The scripts tries to return all the new documents
-	// the user had since his last login. If the returned items are less than 1
-	// it gets the last documents the user had by using the docs_flag field
-	// (table user, main database).
+        // Try to return all the new documents the user had since his last login.
+        // If no items are returned, get the last documents the user had by using
+        // the docs_flag field.
 
-	$docs_query_new = docsHtmlInterface($usr_lst_login);
-	$docs_query_memo = docsHtmlInterface($usr_memory);
+        $new_docs = docsHtmlInterface($usr_lst_login);
+        if (empty($new_docs)) {
+		// if there are no new documents, get the last documents the user had
+		// so that we always have something to display
+        	$new_docs = docsHtmlInterface($usr_memory);
+        } else {
+		$sqlNowDate = str_replace(' ', '-', $usr_lst_login);
+                db_query("UPDATE `user` SET `doc_flag` = '$sqlNowDate' WHERE `user_id` = $uid");
+        }
 
-	$docsSubGroup = array();
-	$getNewDocs = false;
-
-	if ($getNewDocs) {
-		$docsGroup = array();
-		array_push($docsGroup, $docsSubGroup);
-		$sqlNowDate = eregi_replace(" ", "-",$usr_lst_login);
-		$sql = "UPDATE `user` SET `doc_flag` = '$sqlNowDate' WHERE `user_id` = $uid ";
-		db_query($sql, $mysqlMainDb);
-	} elseif (!$getNewDocs) {
-		//if there are no new documents, get the last documents the user had
-		//so that we always have something to display
-		for ($i=0; $i < $max_repeat_val; $i++){
-			$mysql_query_result = db_query($docs_query_memo[$i], $lesson_code[$i]);
-			if (mysql_num_rows($mysql_query_result) > 0) {
-				$docsLessonData = array();
-				$docsData = array();
-				array_push($docsLessonData, $lesson_title[$i]);
-				array_push($docsLessonData, $lesson_code[$i]);
-
-				while ($myDocuments = mysql_fetch_row($mysql_query_result)) {
-					$myDocuments[0] = strrev(substr(strstr(strrev($myDocuments[0]),"/"), 1));
-					array_push($docsData,$myDocuments);
-				}
-				array_push($docsLessonData, $docsData);
-				array_push($docsSubGroup, $docsLessonData);
-			}
-		}
-	}
+        return $new_docs;
 }
 
 
@@ -109,40 +86,33 @@ function docsHtmlInterface($date)
 	global $urlServer, $langNoDocsExist, $uid;
         global $mysqlMainDb, $maxValue;
 
-        $q = db_query("SELECT path, filename, title, date_modified
-                       FROM document, cours_user, accueil
-                       WHERE visibility = 'v' AND
-                             date_modified >= '$date' AND
-                             accueil.visible = 1 AND
-                             accueil.id = 3
-                       ORDER BY date_modified DESC");
+        $q = db_query("SELECT path, course_id, filename, title, date_modified, intitule
+                       FROM document, cours_user, cours
+                       WHERE document.course_id = cours_user.cours_id AND
+                             cours_user.user_id = $uid AND
+                             cours.cours_id = cours_user.cours_id AND
+                             group_id IS NULL AND
+                             visibility = 'v' AND
+                             date_modified >= '$date'
+                       ORDER BY course_id, date_modified DESC", $mysqlMainDb);
 
-	$docsExist = false;
-	$content= <<<aCont
-    <div class="datacontainer">
-      <ul class="datalist">
-aCont;
-
-	$max_repeat_val = count($data);
-	for ($i=0; $i <$max_repeat_val; $i++) {
-		$iterator =  count($data[$i][2]);
-		if ($iterator > 0) {
-			$docsExist = true;
-			$content .= "\n          <li class=\"category\">".$data[$i][0]."</li>";
-			for ($j=0; $j < $iterator; $j++) {
-				$url = $urlServer . "index.php?perso=6&amp;c=" .$data[$i][1]."&amp;p=".$data[$i][2][$j][0];
-				$content .= "\n          <li><a class=\"square_bullet2\" href=\"$url\"><strong class=\"title_pos\">".$data[$i][2][$j][1]." - (".nice_format(date("Y-m-d", strtotime($data[$i][2][$j][3]))).")</strong></a></li>";
-			}
+        $last_course_id = null;
+        if ($q and mysql_num_rows($q) > 0) {
+                $content = '<div class="datacontainer"><ul class="datalist">';
+                while ($row = mysql_fetch_array($q)) {
+                        if ($last_course_id != $row['course_id']) {
+                                $content .= "\n<li class='category'>" . q($row['intitule']) . "</li>";
+                        }
+                        $last_course_id = $row['course_id'];
+			$url = $urlServer . "modules/document/file.php?c=$row[course_id]&amp;p=$row[path]";
+                        $content .= "\n<li><a class='square_bullet2' href='$url'><strong class='title_pos'>" .
+                                    q($row['filename']) . ' - (' .
+                                    nice_format(date('Y-m-d', strtotime($row['date_modified']))) .
+                                    ")</strong></a></li>";
 		}
+                $content .= "\n</ul></div>\n";
+                return $content;
+	} else {
+		return "\n<p>$langNoDocsExist</p>\n";
 	}
-	$content .= "
-      </ul>
-    </div> ";
-
-	if (!$docsExist) {
-		$content = "<p>$langNoDocsExist</p>";
-	}
-	return $content;
 }
-
-
