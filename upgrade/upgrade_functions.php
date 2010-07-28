@@ -325,7 +325,7 @@ function upgrade_course_2_4($code, $extramessage = '')
 
         // move user group information to central tables and if successful drop original tables
         $ok = db_query("INSERT INTO `$mysqlMainDb`.`group_properties`
-                        (`course_id`, `self_registration`, `private`, `forum`, `documents`,
+                        (`course_id`, `self_registration`, `private_forum`, `forum`, `documents`,
                          `wiki`, `agenda`)
                         SELECT $course_id, `self_registration`, `private`, `forum`, `document`,
                                 `wiki`, `agenda` FROM group_properties");
