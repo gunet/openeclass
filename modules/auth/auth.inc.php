@@ -372,14 +372,12 @@ function auth_user_login ($auth, $test_username, $test_password)  {
 		} else {
 			// creation of secure/index.php file
 			$f = fopen("${path}index.php", "w");
-			$filecontents = '
-<? 
+			$filecontents = '<?php
 session_start();
 $_SESSION[\'shib_email\'] = '.autounquote($_POST['shibemail']).';
 $_SESSION[\'shib_uname\'] = '.autounquote($_POST['shibuname']).';
 $_SESSION[\'shib_nom\'] = '.autounquote($_POST['shibcn']).';
 header("Location: ../index.php");
-?>
 ';
 			if (!fwrite($f, "$filecontents")) {
 				$testauth = false;

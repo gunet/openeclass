@@ -144,7 +144,7 @@ function create_backup_file($file) {
 		die("Error! Unable to open output file: '$f'\n");
 	}
 	list($ver) = mysql_fetch_array(db_query("SELECT `value` FROM `$mysqlMainDb`.config WHERE `key`='version'"));
-	fputs($f, "<?\n\$eclass_version = '$ver';\n\$version = 2;\n\$encoding = 'UTF-8';\n");
+	fputs($f, "<?php\n\$eclass_version = '$ver';\n\$version = 2;\n\$encoding = 'UTF-8';\n");
 	backup_course_details($f, $currentCourseID);
 	backup_annonces($f, $cours_id);
 	backup_course_units($f);

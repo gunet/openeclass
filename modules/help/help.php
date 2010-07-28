@@ -1,4 +1,4 @@
-<?
+<?php
 /*========================================================================
 *   Open eClass 2.3
 *   E-learning and Course Management System
@@ -50,7 +50,7 @@ $title = $GLOBALS["langH" . str_replace('_student', '', $_GET['topic'])];
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 	<head>
-		<title><?= $GLOBALS["langH$_GET[topic]"] ?></title>
+		<title><?php echo $GLOBALS["langH$_GET[topic]"]; ?></title>
 		<link href="../../template/classic/tool_content.css" rel="stylesheet" type="text/css" />
 
 		<style type='text/css'>
@@ -107,9 +107,9 @@ $title = $GLOBALS["langH" . str_replace('_student', '', $_GET['topic'])];
 		</style>
 	</head>
 	<body>
-		<h3><?= $title ?></h3>
-		<?= $GLOBALS["lang$_GET[topic]Content"] ?>
-		<div align="right"><a href='javascript:window.close();'><?= $langWindowClose ?></a>&nbsp;&nbsp;</div>
+		<h3><?php echo $title; ?></h3>
+		<?php echo $GLOBALS["lang$_GET[topic]Content"]; ?>
+		<div align="right"><a href='javascript:window.close();'><?php echo $langWindowClose; ?></a>&nbsp;&nbsp;</div>
 		<br />
 	</body>
 </html>
