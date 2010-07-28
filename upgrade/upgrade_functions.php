@@ -223,6 +223,10 @@ function is_admin($username, $password, $mysqlMainDb) {
 	} else {
 		$row = mysql_fetch_array($r);
 		$_SESSION['uid'] = $row['user_id'];
+		$_SESSION['nom'] = $row['nom'];
+		$_SESSION['prenom'] = $row['prenom'];
+		$_SESSION['email'] = $row['email'];
+		$_SESSION['uname'] = $username;
 		//we need to return the user id
 		//or setup session UID with the admin's User ID so that it validates @ init.php
 		return TRUE;
