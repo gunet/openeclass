@@ -226,7 +226,9 @@ function is_admin($username, $password, $mysqlMainDb) {
 		$_SESSION['nom'] = $row['nom'];
 		$_SESSION['prenom'] = $row['prenom'];
 		$_SESSION['email'] = $row['email'];
-		$_SESSION['uname'] = $username;
+                $_SESSION['uname'] = $username;
+                $_SESSION['statut'] = $row['statut'];
+                $_SESSION['is_admin'] = true;
 		//we need to return the user id
 		//or setup session UID with the admin's User ID so that it validates @ init.php
 		return TRUE;
@@ -1590,6 +1592,10 @@ function move_group_documents_to_main_db($code, $course_id)
 
         $group_document_upgrade_ok = true;
         $q = db_query("SELECT id, secretDirectory FROM student_group");
+        if (!$q) {
+                // Group table doesn't exist in course database
+                return false;
+        }
         while ($r = mysql_fetch_array($q)) {
                 $group_document_dir = $webDir . 'courses/' . $code . '/group/' . $r['secretDirectory'];
                 traverseDirTree($group_document_dir, 'group_documents_main_db_file', 'group_documents_main_db_dir',

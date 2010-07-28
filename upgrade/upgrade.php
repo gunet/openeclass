@@ -154,7 +154,7 @@ if (!isset($_POST['submit2'])) {
 ?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 <head>
-<title><?= $langUpgrade ?></title>
+<title><?php echo $langUpgrade; ?></title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <link href="../template/classic/theme.css" rel="stylesheet" type="text/css" />
 <link href="../template/classic/tool_content.css" rel="stylesheet" type="text/css" />
