@@ -398,7 +398,15 @@ if (isset($_POST['create_course'])) {
                         code = '$repertoire',
                         facid = '$facid'");
 
-        $titou='$dbname';
+        mysql_query("INSERT INTO group_properties SET
+                        course_id = $new_cours_id,
+                        self_registration = 1,
+                        multiple_registration = 0,
+                        forum = 1,
+                        private_forum = 0,
+                        documents = 1,
+                        wiki = 0,
+                        agenda = 0");
 
         $description = trim(autounquote($description));
         $unit_id = description_unit_id($new_cours_id);

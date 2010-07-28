@@ -573,26 +573,6 @@ mysql_query("CREATE TABLE agenda (
                PRIMARY KEY (id))
         TYPE=MyISAM $charset_spec");
 
-############################# DOCUMENTS ###########################################
-mysql_query ("CREATE TABLE document (id int(4) NOT NULL auto_increment,
-    path varchar(255) NOT NULL,
-    filename text,
-    visibility char(1) DEFAULT 'v' NOT NULL,
-    comment varchar(255),
-    category text,
-    title text,
-    creator text,
-    date datetime default NULL,
-    date_modified datetime default NULL,
-    subject text,
-    description text,
-    author text,
-    format text,
-    language text,
-    copyrighted text,
-    PRIMARY KEY (id))
-    TYPE=MyISAM $charset_spec");
-
 ############################# VIDEO ###########################################
     mysql_query("CREATE TABLE video (
                id int(11) NOT NULL auto_increment,
@@ -707,48 +687,6 @@ db_query("CREATE TABLE `assignment_submit` (
       recipientId int(11) unsigned NOT NULL default '0',
       PRIMARY KEY  (fileId,recipientId))
     TYPE=MyISAM $charset_spec");
-
-mysql_query("CREATE TABLE student_group (
-    id int(11) NOT NULL auto_increment,
-    name varchar(100) default NULL,
-    description text,
-    tutor int(11) default NULL,
-    forumId int(11) default NULL,
-    maxStudent int(11) NOT NULL default '0',
-    secretDirectory varchar(30) NOT NULL default '0',
-    PRIMARY KEY  (id))
-TYPE=MyISAM $charset_spec");
-
-mysql_query("CREATE TABLE user_group (
-    id int(11) NOT NULL auto_increment,
-    user int(11) NOT NULL default '0',
-    team int(11) NOT NULL default '0',
-    status int(11) NOT NULL default '0',
-    role varchar(50) NOT NULL default '',
-    PRIMARY KEY  (id))
-    TYPE=MyISAM $charset_spec");
-
-mysql_query("CREATE TABLE `group_documents` (
-	`id` INT(4) NOT NULL AUTO_INCREMENT,
-	`path` VARCHAR(255) default NULL ,
-	`filename` VARCHAR(255) default NULL,
- 	PRIMARY KEY(id)) 
-	TYPE=MyISAM $charset_spec");
- 
-mysql_query("CREATE TABLE group_properties (
-    id tinyint(4) NOT NULL auto_increment,
-    self_registration tinyint(4) default '1',
-    private tinyint(4) default '0',
-    forum tinyint(4) default '1',
-    document tinyint(4) default '1',
-    wiki tinyint(4) default '0',
-    agenda tinyint(4) default '0',
-    PRIMARY KEY  (id))
-    TYPE=MyISAM $charset_spec");
-
-mysql_query("INSERT INTO group_properties
-    (id, self_registration, private, forum, document, wiki, agenda)
-    VALUES (NULL, '1', '0', '1', '1', '0', '0')");
 
 #################### QUESTIONNAIRE ###############################################
 
@@ -942,7 +880,6 @@ mysql_query("CREATE TABLE `wiki_pages_content` (
 //dhmiourgia full text indexes gia th diadikasia ths anazhthshs
 mysql_query("ALTER TABLE `agenda` ADD FULLTEXT `agenda` (`titre` ,`contenu`)");
 mysql_query("ALTER TABLE `course_description` ADD FULLTEXT `course_description` (`title` ,`content`)");
-mysql_query("ALTER TABLE `document` ADD FULLTEXT `document` (`filename` ,`comment` ,`title`,`creator`,`subject`,`description`,`author`,`language`)");
 mysql_query("ALTER TABLE `exercices` ADD FULLTEXT `exercices` (`titre`,`description`)");
 mysql_query("ALTER TABLE `posts_text` ADD FULLTEXT `posts_text` (`post_text`)");
 mysql_query("ALTER TABLE `forums` ADD FULLTEXT `forums` (`forum_name`,`forum_desc`)");
