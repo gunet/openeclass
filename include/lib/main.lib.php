@@ -34,6 +34,9 @@ Defines standard functions and validates variables
 
 define('ECLASS_VERSION', '2.3.2');
 
+// MySQL debug level
+define('FULL', 1);
+
 // Show query string and then do MySQL query
 function db_query2($sql, $db = FALSE)
 {
@@ -58,7 +61,7 @@ function db_query($sql, $db = FALSE) {
 	}
 	$r = mysql_query($sql);
 
-        if (defined('DEBUG_MYSQL')) {
+        if (defined('DEBUG_MYSQL') and DEBUG_MYSQL === FULL) {
                 echo "<hr /><pre>$sql</pre><hr />";
         }
         if (mysql_errno()) {
