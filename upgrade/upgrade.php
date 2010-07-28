@@ -396,7 +396,6 @@ if (!isset($_POST['submit2'])) {
                                `order` INT(11) NOT NULL DEFAULT 0,
                                `datestamp` DATE NOT NULL,
                                `course_id` INT(11) NOT NULL)");
-                }
 
                 // Upgrade table admin_announcements if needed
                 if (mysql_field_exists($mysqlMainDb, 'admin_announcements', 'gr_body')) {
