@@ -46,68 +46,26 @@
  * @param  string $type (data, html)
  * @return array
  */
-function getUserDocuments($param = null, $type)
+function getUserDocuments($param)
 {
-	global $mysqlMainDb, $uid, $dbname, $currentCourseID;
+	global $mysqlMainDb, $uid;
 
-	$uid	= $param['uid'];
-	$lesson_code		= $param['lesson_code'];
-	$max_repeat_val		= $param['max_repeat_val'];
-	$lesson_title		= $param['lesson_titles'];
-	$lesson_code		= $param['lesson_code'];
-	$lesson_professor	= $param['lesson_professor'];
-	$usr_lst_login	= $param['usr_lst_login'];
-
+        $lesson_code = $param['lesson_code'];
+        $max_repeat_val = $param['max_repeat_val'];
+        $lesson_title = $param['lesson_titles'];
+        $usr_lst_login = $param['usr_lst_login'];
 	$usr_memory = $param['usr_memory'];
-	//		Generate SQL code for all queries
-	//		----------------------------------------
-	$queryParamNew = array(
-	'lesson_code'		=> $lesson_code,
-	'max_repeat_val'	=> $max_repeat_val,
-	'date'		=> $usr_lst_login
-	);
 
-	$queryParamMemo = array(
-	'lesson_code'		=> $lesson_code,
-	'max_repeat_val'	=> $max_repeat_val,
-	'date'		=> $usr_memory
-	);
+	// We have 2 SQL cases. The scripts tries to return all the new documents
+	// the user had since his last login. If the returned items are less than 1
+	// it gets the last documents the user had by using the docs_flag field
+	// (table user, main database).
 
-	$docs_query_new 	= createDocsQueries($queryParamNew);
-	$docs_query_memo 	= createDocsQueries($queryParamMemo);
-
-	//		We have 2 SQL cases. The scripts tries to return all the new documents
-	//		the user had since his last login. If the returned items are less than 1
-	//		it gets the last documents the user had by using the docs_flag field
-	//		(table user, main database).
-	//		--------------------------------------------------------------------------
+	$docs_query_new = docsHtmlInterface($usr_lst_login);
+	$docs_query_memo = docsHtmlInterface($usr_memory);
 
 	$docsSubGroup = array();
 	$getNewDocs = false;
-	for ($i=0;$i<$max_repeat_val;$i++) { //each iteration refers to one lesson
-
-		$mysql_query_result = db_query($docs_query_new[$i], $lesson_code[$i]);
-		if ($num_rows = mysql_num_rows($mysql_query_result) > 0) {
-			$getNewDocs = true;
-			$docsLessonData = array();
-			$docsData = array();
-
-			array_push($docsLessonData, $lesson_title[$i]);
-			array_push($docsLessonData, $lesson_code[$i]);
-		}
-
-		while ($myDocuments = mysql_fetch_row($mysql_query_result)) {
-			if ($myDocuments){
-				$myDocuments[0] = strrev(substr(strstr(strrev($myDocuments[0]),"/"), 1));
-				array_push($docsData,$myDocuments);
-			}
-		}
-
-		if ($num_rows > 0) {
-			array_push($docsLessonData, $docsData);
-			array_push($docsSubGroup, $docsLessonData);
-		}
-	}
 
 	if ($getNewDocs) {
 		$docsGroup = array();
@@ -135,12 +93,6 @@ function getUserDocuments($param = null, $type)
 			}
 		}
 	}
-
-	if($type == "html") {
-		return docsHtmlInterface($docsSubGroup);
-	} elseif ($type == "data") {
-		return $docsSubGroup;
-	}
 }
 
 
@@ -149,13 +101,22 @@ function getUserDocuments($param = null, $type)
  *
  * Generates html content for the documents block of eClass personalised.
  *
- * @param array $data
+ * @param $date
  * @return string HTML content for the documents block
  * @see function getUserDocuments()
  */
-function docsHtmlInterface($data)
+function docsHtmlInterface($date)
 {
-	global $urlServer, $langNoDocsExist ;
+	global $urlServer, $langNoDocsExist, $uid;
+        global $mysqlMainDb, $maxValue;
+
+        $q = db_query("SELECT path, filename, title, date_modified
+                       FROM document, cours_user, accueil
+                       WHERE visibility = 'v' AND
+                             date_modified >= '$date' AND
+                             accueil.visible = 1 AND
+                             accueil.id = 3
+                       ORDER BY date_modified DESC");
 
 	$docsExist = false;
 	$content= <<<aCont
@@ -173,7 +134,6 @@ aCont;
 				$url = $urlServer . "index.php?perso=6&amp;c=" .$data[$i][1]."&amp;p=".$data[$i][2][$j][0];
 				$content .= "\n          <li><a class=\"square_bullet2\" href=\"$url\"><strong class=\"title_pos\">".$data[$i][2][$j][1]." - (".nice_format(date("Y-m-d", strtotime($data[$i][2][$j][3]))).")</strong></a></li>";
 			}
-			//if ($i+1 <$max_repeat_val) $content .= "<br>";
 		}
 	}
 	$content .= "
@@ -187,36 +147,3 @@ aCont;
 }
 
 
-/**
- * Function createDocsQueries
- *
- * Creates needed queries used by getUserDocuments
- *
- * @param array $queryParam
- * @return array sql query
- * @see function getUserDocuments()
- */
-function createDocsQueries($queryParam)
-{
-	global $mysqlMainDb, $maxValue;
-
-	$lesson_code = $queryParam['lesson_code'];
-	$max_repeat_val = $queryParam['max_repeat_val'];
-	$date = $queryParam['date'];
-
-	for ($i=0;$i<$max_repeat_val;$i++) {
-		if(is_array($date)){
-			$dateVar = $date[$i];
-		} else {
-			$dateVar = $date;
-		}
-
-		$docs_query[$i] = "SELECT path, filename, title, date_modified
-			FROM document, accueil WHERE visibility = 'v'
-			AND DATE_FORMAT(date_modified,'%Y %m %d') >='" .$dateVar."'
-			AND accueil.visible =1
-			AND accueil.id =3
-			ORDER BY date_modified DESC";
-	}
-	return $docs_query;
-}
