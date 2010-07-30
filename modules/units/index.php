@@ -178,7 +178,6 @@ if ($is_adminOfCourse) {
 }
 
 $tool_content .= "
-    <br />
     <table class='$units_class' width='99%'>
     <tr class='odd'>
       <td class='left'>" .  $link['previous'] . '</td>

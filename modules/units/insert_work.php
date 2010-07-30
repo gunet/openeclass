@@ -67,9 +67,9 @@ function display_assignments()
                 $i++;
 		}
 		$tool_content .= "\n    <tr>".
-                                "\n        <td colspan='4' class='right'>" .
+                                "\n        <th colspan='4'><div align='right'>" .
                                 "<input type='submit' name='submit_work' value='$langAddModulesButton' />" .
-                                "</td>".
+                                "</div></th>".
                                 "\n    </tr>".
                                 "\n    </table>".
                                 "\n  </form>";
