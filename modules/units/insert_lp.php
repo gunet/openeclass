@@ -42,33 +42,37 @@ function display_lp()
                         'rank' => $row['rank']);
         }
         if (count($lpinfo) == 0) {
-                $tool_content .= "\n<p class='alert1'>$langNoLearningPath</p>";
+                $tool_content .= "\n  <p class='alert1'>$langNoLearningPath</p>";
         } else {
-                $tool_content .= "<form action='insert.php' method='post'><input type='hidden' name='id' value='$id'" .
-                                 "<div class='fileman'><table class='Documents'><tbody>" .
-                                 "<tr><th width='60%'>$langLearningPaths</th><th width='40%'>$langComments</th>" .
-                                 "<th>$langChoice</th></tr>\n";
+                $tool_content .= "\n  <form action='insert.php' method='post'>" .
+                                 "\n  <input type='hidden' name='id' value='$id'" .
+                                 "\n  <table width='99%' class='tbl_alt'>" .
+                                 "\n  <tr>" .
+                                 "\n    <th><div align='left'>&nbsp;$langLearningPaths</div></th>" .
+                                 "\n    <th><div align='left'>$langComments</div></th>" .
+                                 "\n    <th width='80'>$langChoice</th>" .
+                                 "\n  </tr>";
 			$i = 0;
 			foreach ($lpinfo as $entry) {
 				if ($entry['visibility'] == 'HIDE') { 
 					$vis = 'invisible';
 				} else {
 						if ($i%2 == 0) {
-							$vis = '';
+							$vis = 'even';
 					} else {
 							$vis = 'odd';
 					}
 				}
-				$tool_content .= "<tr class='$vis'>";
-				$tool_content .= "<td valign='top' style='padding-top: 7px;' align='left'>
-				<a href='${urlServer}/modules/learnPath/learningPath.php?path_id=$entry[id]'>$entry[name]</a></td>";
-				$tool_content .= "<td><div align='left'>$entry[comment]</div></td>";
-				$tool_content .= "<td align='center'><input type='checkbox' name='lp[]' value='$entry[id]'></td>";
-				$tool_content .= "</tr>";
+				$tool_content .= "\n  <tr class='$vis'>";
+				$tool_content .= "\n    <td>&nbsp;<img src='../../template/classic/img/lp_on.gif' />&nbsp;&nbsp;<a href='${urlServer}/modules/learnPath/learningPath.php?path_id=$entry[id]'>$entry[name]</a></td>";
+				$tool_content .= "\n    <td>$entry[comment]</td>";
+				$tool_content .= "\n    <td align='center'><input type='checkbox' name='lp[]' value='$entry[id]'></td>";
+				$tool_content .= "\n  </tr>";
 				$i++;
 			}
-		$tool_content .= "<tr><td colspan='3' class='right'>";
+		$tool_content .= "\n  <tr>" .
+                                 "\n    <th colspan='3'><div align='right'>";
 		$tool_content .= "<input type='submit' name='submit_lp' value='$langAddModulesButton'></td>";
-                $tool_content .= "</tr></tbody></table></div></form>\n";
+                $tool_content .= "\n  </tr>\n  </table>\n  </form>\n";
         }
 }

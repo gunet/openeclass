@@ -58,7 +58,7 @@ function display_docs()
                         'date' => strtotime($row['date_modified']));
         }
         if (count($fileinfo) == 0) {
-                $tool_content .= "\n<p class='alert1'>$langNoDocuments</p>";
+                $tool_content .= "\n  <p class='alert1'>$langNoDocuments</p>\n";
         } else {
                 if (empty($path)) {
                         $dirname = '';
@@ -74,12 +74,19 @@ function display_docs()
                                       "<img src='../../template/classic/img/parent.gif' height='20' width='20' /></a></th>";
                         $colspan = 4;
                 }
-        $tool_content .= "<form action='insert.php' method='post'><input type='hidden' name='id' value='$id' />" .
-                                 "<div class='fileman'><table class='Documents'><tbody>" .
-                                 "<tr><th colspan='$colspan' class='left'>$langDirectory: $dirname</th>" .
-                                 $parenthtml . "</tr>\n" .
-                                 "<tr><th>$langType</th><th>$langName</th><th>$langSize</th>" .
-                                 "<th>$langDate</th><th>$langChoice</th></tr>\n";
+        $tool_content .= "\n    <form action='insert.php' method='post'><input type='hidden' name='id' value='$id' />" .
+                         "\n    <table class='tbl_alt' width='99%'>" .
+                         "\n    <tr>".
+                         "\n       <th colspan='$colspan'><div align='left'>$langDirectory: $dirname</div></th>" .
+                                   $parenthtml . 
+                         "\n    </tr>" .
+                         "\n    <tr>" .
+                         "\n      <th>$langType</th>" .
+                         "\n      <th><div align='left'>$langName</div></th>" .
+                         "\n      <th width='100'>$langSize</th>" .
+                         "\n      <th width='80'>$langDate</th>" .
+                         "\n      <th width='80'>$langChoice</th>" .
+                         "\n    </tr>\n";
 	$counter = 0;
 		foreach (array(true, false) as $is_dir) {
 			foreach ($fileinfo as $entry) {
@@ -106,39 +113,37 @@ function display_docs()
 					$vis = 'invisible';
 				} else {
 					if ($counter % 2 == 0) {
-						$vis = '';
+						$vis = 'even';
 					} else {
 						$vis = 'odd';
 					}
 				}
-				$tool_content .= "<tr class='$vis'>";
-				$tool_content .= "<td width='1%' valign='top' style='padding-top: 7px;' align='center'>
-					<a href='$file_url'$link_extra><img src='$image' border='0' /></a></td>";
-				$tool_content .= "<td width='60%'><div align='left'>
-					<a href='$file_url'$link_extra>$link_text</a>";
+				$tool_content .= "\n    <tr class='$vis'>";
+				$tool_content .= "\n      <td width='1' class='center'><a href='$file_url'$link_extra><img src='$image' border='0' /></a></td>";
+				$tool_content .= "\n      <td><a href='$file_url'$link_extra>$link_text</a>";
 	
 				/*** comments ***/
 				if (!empty($entry['comment'])) {
 					$tool_content .= "<br /><span class='comment'>" .
 						nl2br(htmlspecialchars($entry['comment'])) .
-						"</span>\n";
+						"</span>";
 				}
-				$tool_content .= "</div></td>";
+				$tool_content .= "</td>";
 				if ($is_dir) {
 					// skip display of date and time for directories
-					$tool_content .= "<td>&nbsp;</td><td>&nbsp;</td>";
+					$tool_content .= "\n      <td>&nbsp;</td>\n      <td>&nbsp;</td>";
 				} else {
 					$size = format_file_size($entry['size']);
 					$date = format_date($entry['date']);
-					$tool_content .= "<td class='center'>$size</td><td class='center'>$date</td>";
+					$tool_content .= "\n      <td class='center'>$size</td>\n      <td class='center'>$date</td>";
 				}
-					$tool_content .= "<td class='center'><input type='checkbox' name='document[]' value='$entry[id]' /></td>";
-					$tool_content .= "</tr>";
+					$tool_content .= "\n      <td class='center'><input type='checkbox' name='document[]' value='$entry[id]' /></td>";
+					$tool_content .= "\n    </tr>";
 				$counter++;
 			}
 		}
-		$tool_content .= "<tr><td colspan=$colspan class='right'>";
-		$tool_content .= "<input type='submit' name='submit_doc' value='$langAddModulesButton' /></td>";
-                $tool_content .= "</tr></tbody></table></div></form>\n";
+		$tool_content .= "\n    <tr>\n      <th colspan=$colspan><div align='right'>";
+		$tool_content .= "<input type='submit' name='submit_doc' value='$langAddModulesButton' /></div></th>";
+                $tool_content .= "\n    </tr>\n    </table>\n    </form>\n";
         }
 }

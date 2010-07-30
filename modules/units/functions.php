@@ -86,7 +86,7 @@ function show_resources($unit_id)
 		list($max_resource_id) = mysql_fetch_row(db_query("SELECT id FROM unit_resources
                                 WHERE unit_id = $unit_id ORDER BY `order` DESC LIMIT 1"));
 		$tool_content .= "
-        <table class='tbl_alt' width='99%'>";
+        <table class='tbl_alt_bordless' width='99%'>";
 		while ($info = mysql_fetch_array($req)) {
 			$info['comments'] = standard_text_escape($info['comments']);
 			show_resource($info);
@@ -196,9 +196,12 @@ function show_text($comments, $resource_id, $visibility)
 
         $class_vis = ($visibility == 'i')? ' class="invisible"': ' class="even"';
 	$comments = mathfilter($comments, 12, "../../courses/mathimg/");
-        $tool_content .= "<tr$class_vis><td colspan='2'>$comments</td>" .
+        $tool_content .= "
+        <tr$class_vis>
+          <td colspan='2'>$comments</td>" .
 		actions('text', $resource_id, $visibility) .
-                "</tr>";
+                "
+        </tr>";
 }
 
 
@@ -208,10 +211,13 @@ function show_description($title, $comments, $id, $res_id, $visibility)
         global $tool_content;
 
 	$comments = mathfilter($comments, 12, "../../courses/mathimg/");
-        $tool_content .= "<tr><td colspan='2'><div class='title'>" . q($title) .
-                "</div><div class='content'>$comments</div></td>" .
-		actions('description', $id, $visibility, $res_id) .
-                "</tr>";
+        $tool_content .= "
+        <tr>
+          <td colspan='2'>
+            <div class='title'>" . q($title) .  "</div>
+            <div class='content'>$comments</div>
+          </td>" .  actions('description', $id, $visibility, $res_id) .  "
+        </tr>";
 }
 
 // display resource learning path
@@ -242,13 +248,19 @@ function show_lp($title, $comments, $resource_id, $lp_id)
         if ($status != 'v' and !$is_adminOfCourse) {
 			return '';
         }
+
         if (!empty($comments)) {
-                $comment_box = "<tr><td width='3%'>&nbsp;</td><td width='82%'>$comments</td>";
+                $comment_box = "<br />$comments";
+        } else {
+                $comment_box = '';
         }
         $class_vis = ($status == 'i' or $status == 'del')?  ' class="invisible"': ' class="even"';
-	return "<tr$class_vis><td width='3%'>$link$imagelink</a></td><td width='82%'>$link$title</a></td>" .
-		actions('lp', $resource_id, $status) .
-		'</tr>' . $comment_box;
+	return "
+        <tr$class_vis>
+          <td width='1'>$link$imagelink</a></td>
+          <td>$link$title</a>$comment_box</td>" .
+		actions('lp', $resource_id, $status) .  '
+        </tr>';
 }
 
 
@@ -277,18 +289,18 @@ function show_video($table, $title, $comments, $resource_id, $video_id, $visibil
                 $visibility = 'del';
         }
         $class_vis = ($visibility == 'v')? ' class="even"': ' class="invisible"';
+
+
         if (!empty($comments)) {
-                $comment_box = "<tr$class_vis><td width='3'>&nbsp;</td><td>$comments</td>";
-                if ($is_adminOfCourse) {
-                  $comment_box .= "<td colspan='5'>&nbsp;</td>";
-                }
-                
+                $comment_box = "<br />$comments";
         } else {
                 $comment_box = "";
         }
-        $tool_content .= "<tr$class_vis><td width='3%'>$imagelink</td><td width='82%'>$videolink</td>" .
-		actions('video', $resource_id, $visibility) .
-                '</tr>' . $comment_box;
+        $tool_content .= "
+        <tr$class_vis>
+          <td width='1'>$imagelink</td>
+          <td>$videolink $comment_box</td>" .  actions('video', $resource_id, $visibility) . "
+        </tr>";
 }
 
 
@@ -319,13 +331,18 @@ function show_work($title, $comments, $resource_id, $work_id, $visibility)
 			($visibility == 'i'? 'off': 'on') . ".gif' /></a>";
 	}
 	$class_vis = ($visibility == 'v')? ' class="even"': ' class="invisible"';
-        if (!empty($comments)) {
-                $comment_box = "<tr><td width='3%'>&nbsp;</td><td width='82%'>$comments</td>";
-	}
 
-	return "<tr$class_vis><td width='3%'>$imagelink</td><td width='82%'>$exlink</td>" .
-		actions('lp', $resource_id, $visibility) .
-		'</tr>' . $comment_box;
+        if (!empty($comments)) {
+                $comment_box = "<br />$comments";
+	} else {
+                $comment_box = '';
+        }
+	return "
+        <tr$class_vis>
+          <td width='1'>$imagelink</td>
+          <td>$exlink $comment_box</td>" .
+		actions('lp', $resource_id, $visibility) .  '
+        </tr>';
 }
 
 
@@ -356,13 +373,19 @@ function show_exercise($title, $comments, $resource_id, $exercise_id, $visibilit
 			($visibility == 'i'? 'off': 'on') . ".gif' /></a>";
 	}
 	$class_vis = ($visibility == 'v')? ' class="even"': ' class="invisible"';
-        if (!empty($comments)) {
-                $comment_box = "<tr><td width='3%'>&nbsp;</td><td width='82%'>$comments</td>";
-	}
 
-	return "<tr$class_vis><td width='3%'>$imagelink</td><td width='82%'>$exlink</td>" .
-		actions('lp', $resource_id, $visibility) .
-		'</tr>' . $comment_box;
+
+        if (!empty($comments)) {
+                $comment_box = "<br />$comments";
+	} else {
+                $comment_box = "";
+        }
+
+	return "
+        <tr$class_vis>
+          <td width='3'>$imagelink</td>
+          <td>$exlink $comment_box</td>" .  actions('lp', $resource_id, $visibility) . "
+        </tr>";
 }
 
 
@@ -385,13 +408,20 @@ function show_forum($type, $title, $comments, $resource_id, $ft_id, $visibility)
 
 	$imagelink = $link . "<img src='../../template/classic/img/forum_" .
 			($visibility == 'i'? 'off': 'on') . ".gif' /></a>";
-        if (!empty($comments)) {
-                $comment_box = "<tr><td width='3%'>&nbsp;</td><td width='82%'>$comments</td>";
-	}
 
-	return "<tr$class_vis><td width='3%'>$imagelink</td><td width='82%'>$forumlink</td>" .
-		actions('forum', $resource_id, $visibility) .
-		'</tr>' . $comment_box;
+
+        if (!empty($comments)) {
+                $comment_box = "<br />$comments";
+	} else {
+                $comment_box = '';
+        }
+
+	return "
+        <tr$class_vis>
+          <td width='1'>$imagelink</td>
+          <td>$forumlink $comment_box</td>" .
+		actions('forum', $resource_id, $visibility) .  '
+        </tr>';
 }
 
 
@@ -421,15 +451,19 @@ function show_wiki($title, $comments, $resource_id, $wiki_id, $visibility)
 		$imagelink = $link .
                         "<img src='../../template/classic/img/wiki_" .
 			($visibility == 'i'? 'off': 'on') . ".gif' /></a>";
-		
-	}
-        if (!empty($comments)) {
-                $comment_box = "<tr><td width='3%'>&nbsp;</td><td width='82%'>$comments</td>";
 	}
 
-	return "<tr$class_vis><td width='3%'>$imagelink</td><td width='82%'>$wikilink</td>" .
-		actions('wiki', $resource_id, $visibility) .
-		'</tr>' . $comment_box;
+        if (!empty($comments)) {
+                $comment_box = "<br />$comments";
+	} else {
+                $comment_box = '';
+        }
+	return "
+        <tr$class_vis>
+          <td width='1'>$imagelink</td>
+          <td>$wikilink $comment_box</td>" .
+		actions('wiki', $resource_id, $visibility) .  '
+        </tr>';
 }
 
 
@@ -460,13 +494,19 @@ function show_link($title, $comments, $resource_id, $link_id, $visibility)
 			($visibility == 'i'? 'off': 'on') . ".gif' /></a>";
 	}
 	$class_vis = ($visibility == 'v')? ' class="even"': ' class="invisible"';
-        if (!empty($comments)) {
-                $comment_box = "<tr><td width='3%'>&nbsp;</td><td width='82%'>$comments</td>";
-	}
 
-	return "<tr$class_vis><td width='3%'>$imagelink</td><td width='82%'>$exlink</td>" .
-		actions('link', $resource_id, $visibility) .
-		'</tr>' . $comment_box;
+
+        if (!empty($comments)) {
+                $comment_box = "<br />$comments";
+	} else {
+                $comment_box = "";
+        }
+
+	return "
+        <tr$class_vis>
+          <td>$imagelink</td>
+          <td>$exlink $comment_box</td>" .  actions('link', $resource_id, $visibility) . "
+        </tr>";
 }
 
 // display resource link category
@@ -489,23 +529,29 @@ function show_linkcat($title, $comments, $resource_id, $linkcat_id, $visibility)
 			$exlink = "<span class='invisible'>$title ($langWasDeleted)</span>";
 		}
 	} else {
+                $class_vis = ($visibility == 'v')? ' class="even"': ' class="invisible"';
 		while ($lcat = mysql_fetch_array($sql)) {
-			$content .= "<tr><td width='3%'><img src='../../template/classic/img/opendir.gif' /></td>
-			<td>$lcat[categoryname]</td>";
+			$content .= "
+        <tr$class_vis>
+          <td width='1'><img src='../../template/classic/img/opendir.gif' /></td>
+          <td>$lcat[categoryname]";
 			if (!empty($lcat['description'])) {
-				$comment_box = "<tr><td width='3%'>&nbsp;</td><td width='82%'>$lcat[description]</td></tr>";
-			}
+				$comment_box = "<br />$lcat[description]";
+			} else {
+                                $comment_box = '';
+                        }
+
 			$sql2 = db_query("SELECT * FROM liens WHERE category='$lcat[id]'", $currentCourseID);
 			while ($l = mysql_fetch_array($sql2, MYSQL_ASSOC)) {
 				$imagelink = "<img src='../../template/classic/img/links_" .
 				($visibility == 'i'? 'off': 'on') . ".gif' />";
-				$linkcontent .= "<tr><td width='3%'>&nbsp;</td><td width='82%'>$imagelink
-				<a href='${urlServer}modules/link/link_goto.php?link_id=$l[id]&amp;link_url=$l[url]' target=_blank>$l[titre]</a></td></tr>";
+				$linkcontent .= "<br />$imagelink&nbsp;&nbsp;<a href='${urlServer}modules/link/link_goto.php?link_id=$l[id]&amp;link_url=$l[url]' target=_blank>$l[titre]</a>";
 			}
 		}
 	}
-	return $content . actions('linkcategory', $resource_id, $visibility) .
-		'</tr>' . $comment_box . $linkcontent;
+	return $content . $comment_box . $linkcontent .'
+           </td>'. actions('linkcategory', $resource_id, $visibility) .
+		'</tr>';
 }
 
 // resource actions
@@ -528,38 +574,37 @@ function actions($res_type, $resource_id, $status, $res_id = false)
         }
 
         if ($status != 'del') {
-                $content = "<td width='3'><a href='$edit_link'>" .
-                           "<img src='../../template/classic/img/edit.gif' title='$langEdit' /></a></td>";
+                $content = "\n          <td width='3'><a href='$edit_link'>" .  "<img src='../../template/classic/img/edit.gif' title='$langEdit' /></a></td>";
         } else {
-                $content = '<td width="3">&nbsp;</td>';
+                $content = "\n          <td width='3'>&nbsp;</td>";
         }
-        $content .= "<td width='3'><a href='$_SERVER[PHP_SELF]?del=$resource_id'" .
+        $content .= "\n          <td width='3'><a href='$_SERVER[PHP_SELF]?del=$resource_id'" .
                     " onClick=\"return confirmation();\">" .
                     "<img src='../../template/classic/img/delete.gif' " .
                     "title='$langDelete'></img></a></td>";
 	 
 	if ($status != 'del') {
 		if (in_array($res_type, array('description', 'text', 'video', 'forum', 'topic'))) { 
-			$content .= "<td width='3'><a href='$_SERVER[PHP_SELF]?vis=$resource_id'>" .
+			$content .= "\n          <td width='3'><a href='$_SERVER[PHP_SELF]?vis=$resource_id'>" .
                                     "<img src='../../template/classic/img/$icon_vis' " .
                                     "title='$langVisibility'></img></a></td>";
 		} else {
-			$content .= "<td width='3'>&nbsp;</td>";
+			$content .= "\n          <td width='3'>&nbsp;</td>";
 		}
         } else {
-                $content .= '<td width="3">&nbsp;</td>';
+                $content .= "\n          <td width='3'>&nbsp;</td>";
         }
         if ($resource_id != $GLOBALS['max_resource_id']) {
-                $content .= "<td width='12'><div align='right'><a href='$_SERVER[PHP_SELF]?down=$resource_id'>" .
+                $content .= "\n          <td width='12'><div align='right'><a href='$_SERVER[PHP_SELF]?down=$resource_id'>" .
                             "<img src='../../template/classic/img/down.gif' title='$langDown'></img></a></div></td>";
 	} else {
-		$content .= "<td width='12'>&nbsp;</td>";
+		$content .= "\n          <td width='12'>&nbsp;</td>";
 	}
         if (!$first) {
                 $content .= "<td width='12'><div align='left'><a href='$_SERVER[PHP_SELF]?up=$resource_id'>" .
                             "<img src='../../template/classic/img/up.gif' title='$langUp'></img></a></div></td>";
         } else {
-                $content .= "<td width='12'>&nbsp;</td>";
+                $content .= "\n          <td width='12'>&nbsp;</td>";
         }
         $first = false;
         return $content;
@@ -569,7 +614,7 @@ function actions($res_type, $resource_id, $status, $res_id = false)
 // edit resource
 function edit_res($resource_id) 
 {
-	global $id, $urlServer, $langTitle, $langDescr, $langContents, $langModify;
+	global $id, $urlServer, $langTitle, $langDescr, $langEditForum, $langContents, $langModify;
 	 
         $sql = db_query("SELECT id, title, comments, type FROM unit_resources WHERE id='$resource_id'");
         $ru = mysql_fetch_array($sql);
@@ -578,19 +623,32 @@ function edit_res($resource_id)
         $resource_id = $ru['id'];
         $resource_type = $ru['type'];
 
-	$tool_content = "<form method='post' action='${urlServer}modules/units/'>" .
-	                "<input type='hidden' name='id' value='$id'>" .
-                        "<input type='hidden' name='resource_id' value='$resource_id'>";
+	$tool_content = "\n  <form method='post' action='${urlServer}modules/units/'>" .
+                        "\n  <fieldset>".
+                        "\n  <legend>$langEditForum</legend>".
+	                "\n    <input type='hidden' name='id' value='$id'>" .
+                        "\n    <input type='hidden' name='resource_id' value='$resource_id'>";
 	if ($resource_type != 'text') {
-		$tool_content .= "<tr><th width='150' class='left'>$langTitle:</th>
-		<td><input type='text' name='restitle' size='50' maxlength='255' $restitle class='FormData_InputText'></td></tr>";
+		$tool_content .= "\n    <table class='tbl'>" .
+                                 "\n    <tr>" .
+                                 "\n      <th>$langTitle:</th>" .
+                                 "\n      <td><input type='text' name='restitle' size='50' maxlength='255' $restitle></td>" .
+                                 "\n    </tr>";
 		$message = $langDescr;
 	} else {
 		$message = $langContents;
 	}
-        $tool_content .= "<tr><th class='left'>$message:</th><td>" .
-                         rich_text_editor('rescomments', 4, 20, $rescomments) .
-	                 "<input type='submit' name='edit_res_submit' value='$langModify'></form>";
+        $tool_content .= "\n    <tr>" .
+                         "\n      <th>$message:</th>" .
+                         "\n      <td>" .  rich_text_editor('rescomments', 4, 20, $rescomments) . "      </td>" .
+                         "\n    </tr>" .
+                         "\n    <tr>" .
+                         "\n      <th>&nbsp;</th>" .
+                         "\n      <td><input type='submit' name='edit_res_submit' value='$langModify'></td>" .
+                         "\n    </tr> " .
+                         "\n    </table>" .
+                         "\n  </fieldset>" .
+                         "\n  </form>";
 
 	return $tool_content;
 }

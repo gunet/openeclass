@@ -42,22 +42,30 @@ function display_wiki()
         if (count($wikiinfo) == 0) {
                 $tool_content .= "\n<p class='alert1'>$langWikiNoWiki</p>";
         } else {
-                $tool_content .= "<form action='insert.php' method='post'><input type='hidden' name='id' value='$id'" .
-                                 "<div class='fileman'><table class='Documents'><tbody>" .
-                                 "<tr><th width='60%'>$langWikis</th><th width='40%'>$langWikiDescriptionForm</th>" .
-                                 "<th>$langChoice</th></tr>\n";
+                $tool_content .= "\n  <form action='insert.php' method='post'>".
+                                 "\n  <input type='hidden' name='id' value='$id'" .
+                                 "\n  <table class='tbl_alt' width='99%'>" .
+                                 "\n  <tr>".
+                                 "\n    <th><div align='left'>&nbsp;$langWikis</div></th>".
+                                 "\n    <th>$langWikiDescriptionForm</th>" .
+                                 "\n    <th>$langChoice</th>".
+                                 "\n  </tr>\n";
 		$i = 0;
 		foreach ($wikiinfo as $entry) {
-			$tool_content .= "<tr>";
-			$tool_content .= "<td valign='top' style='padding-top: 7px;' align='left'>
-			<a href='${urlServer}modules/wiki/page.php?wikiId=$entry[id]&action=show'>$entry[title]</a></td>";
-			$tool_content .= "<td><div align='left'>$entry[description]</div></td>";
-			$tool_content .= "<td align='center'><input type='checkbox' name='wiki[]' value='$entry[id]'></td>";
-			$tool_content .= "</tr>";
+                        if ($i%2) {
+                                $rowClass = "class='odd'";
+                        } else {
+                                $rowClass = "class='even'";
+                        }
+			$tool_content .= "\n  <tr $rowClass>";
+			$tool_content .= "\n    <td>&nbsp;<img src='../../template/classic/img/wiki_on.gif' />&nbsp;&nbsp;<a href='${urlServer}modules/wiki/page.php?wikiId=$entry[id]&action=show'>$entry[title]</a></td>";
+			$tool_content .= "\n    <td>$entry[description]</td>";
+			$tool_content .= "\n    <td align='center'><input type='checkbox' name='wiki[]' value='$entry[id]'></td>";
+			$tool_content .= "\n  </tr>";
 			$i++;
 		}
-		$tool_content .= "<tr><td colspan='3' class='right'>";
-		$tool_content .= "<input type='submit' name='submit_wiki' value='$langAddModulesButton'></td>";
-                $tool_content .= "</tr></tbody></table></div></form>\n";
+		$tool_content .= "\n  <tr><th colspan='3'><div align='right'>";
+		$tool_content .= "<input type='submit' name='submit_wiki' value='$langAddModulesButton'></div></td>";
+                $tool_content .= "\n  </tr>\n  </table>\n  </form>\n";
         }
 }

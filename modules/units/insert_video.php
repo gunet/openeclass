@@ -41,7 +41,12 @@ function display_video()
                         if (!$table_started) {
                                 $tool_content .= "\n  <form action='insert.php' method='post'><input type='hidden' name='id' value='$id' />";
                                 $tool_content .= "\n  <table class='tbl_alt' width='99%'>";
-                        	$tool_content .= "\n  <tr>\n    <th><div align='left'>$langVideoTitle</div></th>\n    <th><div align='left'>$langDescr</div></th>\n    <th>$langDate</th>\n    <th>$langChoice</th>\n  </tr>";
+                        	$tool_content .= "\n  <tr>" .
+                                                 "\n    <th><div align='left'>&nbsp;$langVideoTitle</div></th>" .
+                                                 "\n    <th><div align='left'>$langDescr</div></th>" .
+                                                 "\n    <th width='100'>$langDate</th>" .
+                                                 "\n    <th width='80'>$langChoice</th>" .
+                                                 "\n  </tr>";
                                 $table_started = true;
                         }
                         $videolink = "<a href='" .
@@ -54,13 +59,17 @@ function display_video()
                               $tool_content .= "\n  <tr class='odd'>";
                           }
 
-                        $tool_content .= '<td>' . $videolink . '</td><td>' . htmlspecialchars($row['description']) . '</td><td class="center">' . format_date(strtotime($row['date'])) . "</td><td class='center'><input type='checkbox' name='video[]' value='$table:$row[id]' /></td></tr>";
+                        $tool_content .= "\n    <td>&nbsp;<img src='../../template/classic/img/videos_on.gif' />&nbsp;&nbsp;" . $videolink . "</td>".
+                                         "\n    <td>" . htmlspecialchars($row['description']) . "</td>".
+                                         "\n    <td class='center'>" . format_date(strtotime($row['date'])) . "</td>" .
+                                         "\n    <td class='center'><input type='checkbox' name='video[]' value='$table:$row[id]' /></td>\n" .
+                                         "\n  </tr>";
                 $numLine++;
                 }
         }
         if ($count > 0) {
-                $tool_content .= "\n  <tr>\n    </table><p align='right'><input type='submit' name='submit_video' value='$langAddModulesButton' />&nbsp;&nbsp;</p>\n  </form>";
+                $tool_content .= "\n  <tr>\n    <th colspan='4'><div align='right'><input type='submit' name='submit_video' value='$langAddModulesButton' />&nbsp;&nbsp;</div>\n    </th>\n  </tr>\n  </table>\n  </form>";
         } else {
-                $tool_content .= "<p class='alert1'>$langNoVideo</p>";
+                $tool_content .= "\n  <p class='alert1'>$langNoVideo</p>";
         }
 }

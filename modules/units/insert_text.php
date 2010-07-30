@@ -29,15 +29,13 @@ function display_text()
 {
 	global $tool_content, $id, $langContent, $langAdd;
 
-	$tool_content .= "<form action='insert.php' method='post'><input type='hidden' name='id' value='$id'";
-	$tool_content .= "<table width='99%' class='FormData' align='center'><tbody>
-        <tr><th class='left'>$langContent:</th><td>
-        <table class='xinha_editor'><tr><td>".
-	rich_text_editor('comments', 4, 20, '')
-	."</td></tr>
-        </table></td></tr>
-        <tr><th>&nbsp;</th>
-	<td><input type='submit' name='submit_text' value='$langAdd'></td></tr>
-	</tbody></table>
+	$tool_content .= "
+        <form action='insert.php' method='post'><input type='hidden' name='id' value='$id'";
+	$tool_content .= "
+        <fieldset>
+        <legend>$langContent:</legend>".  rich_text_editor('comments', 4, 20, '') ."
+	<br />
+        <input type='submit' name='submit_text' value='$langAdd'></td></tr>
+	</fieldset>
 	</form>";
 }

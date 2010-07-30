@@ -34,26 +34,44 @@ function display_assignments()
 
         $result = db_query("SELECT * FROM assignments ORDER BY active, title", $currentCourseID);
         if (mysql_num_rows($result) == 0) {
-                $tool_content .= "\n<p class='alert1'>$langNoAssign</p>";
+                $tool_content .= "\n  <p class='alert1'>$langNoAssign</p>";
         } else {
-                $tool_content .= "<form action='insert.php' method='post'><input type='hidden' name='id' value='$id' />\n" .
-                                 "<table width='100%'>\n" .
-                                 "<tr><th width='70%'>$langTitle</th><th>$langVisible<th>$m[deadline]</th>" .
-                                 "<th>$langChoice</th></tr>\n";
+                $tool_content .= "\n  <form action='insert.php' method='post'>" .
+                                 "\n  <input type='hidden' name='id' value='$id' />\n" .
+                                 "\n    <table width='99%' class='tbl_alt'>" .
+                                 "\n    <tr>".
+                                 "\n      <th><div align='left'>&nbsp;$langTitle</th>".
+                                 "\n      <th width='110'>$langVisible</th>".
+                                 "\n      <th width='120'>$m[deadline]</th>" .
+                                 "\n      <th width='80'>$langChoice</th>".
+                                 "\n    </tr>\n";
+                $i = 0;
                 while($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
                         $visible = $row['active']?
                                 "<img title='$langActive' src='../../template/classic/img/visible.gif' />":
                                 "<img title='$langInactive' src='../../template/classic/img/invisible.gif' />";
                         $description = empty($row['description'])? '':
-                                "<br /><i>$row[description]</i>";
-                        $tool_content .= "<tr><td>$row[title]$description</td>" .
-                                "<td class='center'>$visible</td>" .
-                                "<td class='center'>$row[submission_date]</td>" .
-                                "<td class='center'><input name='work[]' value='$row[id]' type='checkbox' /></td></tr>\n";
+                                "<div>$row[description]</div>";
+                        if ($i%2) {
+                                $rowClass = "class='odd'";
+                        } else {
+                                $rowClass = "class='even'";
+                        }
 
+                        $tool_content .= "\n    <tr $rowClass>".
+                                "\n      <td>&laquo; $row[title]$description</td>" .
+                                "\n      <td class='center'>$visible</td>" .
+                                "\n      <td class='center'>$row[submission_date]</td>" .
+                                "\n      <td class='center'><input name='work[]' value='$row[id]' type='checkbox' /></td>".
+                                "\n    </tr>";
+                $i++;
 		}
-		$tool_content .= "<tr><td colspan='4' class='right'>" .
-                        "<input type='submit' name='submit_work' value='$langAddModulesButton' />" .
-                        "</td></tr></table></form>\n";
+		$tool_content .= "\n    <tr>".
+                                "\n        <td colspan='4' class='right'>" .
+                                "<input type='submit' name='submit_work' value='$langAddModulesButton' />" .
+                                "</td>".
+                                "\n    </tr>".
+                                "\n    </table>".
+                                "\n  </form>";
         }
 }

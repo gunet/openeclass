@@ -41,33 +41,35 @@ function display_exercises()
                         'visibility' => $row['active']);
         }
         if (count($quizinfo) == 0) {
-                $tool_content .= "\n<p class='alert1'>$langNoExercises</p>";
+                $tool_content .= "\n  <p class='alert1'>$langNoExercises</p>";
         } else {
-                $tool_content .= "<form action='insert.php' method='post'><input type='hidden' name='id' value='$id'" .
-                                 "<div class='fileman'><table class='Documents'><tbody>" .
-                                 "<tr><th width='60%'>$langExercices</th><th width='40%'>$langComments</th>" .
-                                 "<th>$langChoice</th></tr>\n";
+                $tool_content .= "\n  <form action='insert.php' method='post'><input type='hidden' name='id' value='$id'" .
+                                 "\n  <table width='99%' class='tbl_alt'>" .
+                                 "\n  <tr>" .
+                                 "\n    <th><div align='left'>&nbsp;$langExercices</div></th>" .
+                                 "\n    <th><div align='left'>$langComments</div></th>" .
+                                 "\n    <th width='100'>$langChoice</th>" .
+                                 "\n  </tr>";
 		$i = 0;
 		foreach ($quizinfo as $entry) {
 			if ($entry['visibility'] == '0') { 
 				$vis = 'invisible';
 			} else {
 				if ($i%2 == 0) {
-              $vis = '';
+              $vis = 'even';
           } else {
               $vis = 'odd';
           }
 			}
-			$tool_content .= "<tr class='$vis'>";
-			$tool_content .= "<td valign='top' style='padding-top: 7px;' align='left'>
-			<a href='${urlServer}modules/exercice/exercice_submit.php?exerciseId=$entry[id]'>$entry[name]</a></td>";
-			$tool_content .= "<td><div align='left'>$entry[comment]</div></td>";
-			$tool_content .= "<td align='center'><input type='checkbox' name='exercise[]' value='$entry[id]'></td>";
-			$tool_content .= "</tr>";
+			$tool_content .= "\n  <tr class='$vis'>";
+			$tool_content .= "\n    <td>&laquo; <a href='${urlServer}modules/exercice/exercice_submit.php?exerciseId=$entry[id]'>$entry[name]</a></td>";
+			$tool_content .= "\n    <td><div align='left'>$entry[comment]</div></td>";
+			$tool_content .= "\n    <td class='center'><input type='checkbox' name='exercise[]' value='$entry[id]'></td>";
+			$tool_content .= "\n  </tr>";
 			$i++;
 		}
-		$tool_content .= "<tr><td colspan='3' class='right'>";
-		$tool_content .= "<input type='submit' name='submit_exercise' value='$langAddModulesButton'></td>";
-                $tool_content .= "</tr></tbody></table></div></form>\n";
+		$tool_content .= "\n  <tr>\n    <th colspan='3'><div align='right'>";
+		$tool_content .= "<input type='submit' name='submit_exercise' value='$langAddModulesButton'></div></th>";
+                $tool_content .= "\n  </tr>\n  </table>\n  </form>\n";
         }
 }
