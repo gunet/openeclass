@@ -1048,14 +1048,54 @@ border-top: 1px solid #94a3c4;}
         background-color: #ffffff; /* WHITE  */
         border-bottom: 1px dotted #cac3b5; /* BEIGE  */
 }
-
-		
 	
 /*	Hover effect to table rows */	
 	
 .tbl_alt tr:hover td { 
   background-color: #ffeb96;
 } 
+
+
+/* Alternating Table Row NO_Border   */
+
+.tbl_alt_bordless {
+        padding: 5px;
+        border: none;
+}
+
+.tbl_alt_bordless tr{
+        border-bottom: 1px dotted #cac3b5; /* BEIGE  */;
+}
+
+
+.tbl_alt_bordless th {
+        font-weight: bold;
+        background-color: #cac3b5; /* BEIGE  */
+        text-align: center;
+        padding: 3px;
+}
+
+.tbl_alt_bordless td, .tbl_alt_bordless th {
+        vertical-align: top;
+}
+
+.tbl_alt_bordless .odd {
+        background-color: #edecdf; /* LIGHTER BEIGE  */
+}
+
+
+.tbl_alt_bordless .even {
+        background-color: #ffffff; /* WHITE  */
+}
+
+/*      Hover effect to table rows */
+
+.tbl_alt_bordless tr:hover td {
+  background-color: #ffeb96;
+}
+
+
+
 
 
 /*	Sortable Table*/	
