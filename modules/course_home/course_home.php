@@ -178,41 +178,45 @@ while ($cu = mysql_fetch_array($sql)) {
                 $vis = $cu['visibility'];
                 $icon_vis = ($vis == 'v')? 'visible.gif': 'invisible.gif';
                 $class1_vis = ($vis == 'i')? ' class="invisible"': '';
-                $class_vis = ($vis == 'i')? '_invisible': '';
+                $class_vis = ($vis == 'i')? 'invisible': '';
                 $cunits_content .= "\n\n\n      <table ";
                 if ($is_adminOfCourse) {
                     $cunits_content .= "class='tbl'";
                 } else {
-                    $cunits_content .= "class=''";
+                    $cunits_content .= "class='tbl'";
                 }
-                $cunits_content .= " width='99%'>\n";
+                $cunits_content .= " width='99%'>";
                 if ($is_adminOfCourse) {
-                $cunits_content .= "\n      <tr class=''>\n        <th width='1' class='right'>&nbsp;<b>$count_index.</b>&nbsp;</th>\n        <th><a class=\"unit_link$class_vis\" href='${urlServer}modules/units/?id=$cu[id]'>" . q($cu['title']) . "</a></th>\n";
+                $cunits_content .= "\n      <tr class='odd'>".
+                                   "\n        <td width='3%' class='right'>&nbsp;<b>$count_index.</b>&nbsp;</td>" .
+                                   "\n        <td><a class=\"$class_vis\" href='${urlServer}modules/units/?id=$cu[id]'>" . q($cu['title']) . "</a></td>";
                 } else {
-                $cunits_content .= "\n      <tr class=''>\n        <th width='1' class='right'>&nbsp;<b>$count_index.</b>&nbsp;</td>\n        <td><a class=\"unit_link$class_vis\" href='${urlServer}modules/units/?id=$cu[id]'>" . q($cu['title']) . "</a></th>\n";
+                $cunits_content .= "\n      <tr class='odd'>".
+                                   "\n        <td width='3%' class='right'>&nbsp;<b>$count_index.</b>&nbsp;</td>".
+                                   "\n        <td><a class=\"$class_vis\" href='${urlServer}modules/units/?id=$cu[id]'>" . q($cu['title']) . "</a></td>";
                 }
 
                 if ($is_adminOfCourse) { // display actions
-                        $cunits_content .= "\n        <th width='16'>".
+                        $cunits_content .= "\n        <td width='16'>".
                                 "<a href='../../modules/units/info.php?edit=$cu[id]'>" .
-                                "<img src='../../template/classic/img/edit.gif' title='$langEdit' /></a></th>" .
-                                "\n        <th width='16'><a href='$_SERVER[PHP_SELF]?del=$cu[id]' " .
+                                "<img src='../../template/classic/img/edit.gif' title='$langEdit' /></a></td>" .
+                                "\n        <td width='16'><a href='$_SERVER[PHP_SELF]?del=$cu[id]' " .
                                 "onClick=\"return confirmation();\">" .
                                 "<img src='../../template/classic/img/delete.gif' " .
-                                "title='$langDelete'></img></a></th>" .
-                                "\n        <th width='16'><a href='$_SERVER[PHP_SELF]?vis=$cu[id]'>" .
+                                "title='$langDelete'></img></a></td>" .
+                                "\n        <td width='16'><a href='$_SERVER[PHP_SELF]?vis=$cu[id]'>" .
                                 "<img src='../../template/classic/img/$icon_vis' " .
-                                "title='$langVisibility'></img></a></th>";
+                                "title='$langVisibility'></img></a></td>";
                         if ($cu['id'] != $last_id) {
-                                $cunits_content .= "\n        <th width='16'><a href='$_SERVER[PHP_SELF]?down=$cu[id]'>" .
-                                "<img src='../../template/classic/img/down.gif' title='$langDown'></img></a></th>";
+                                $cunits_content .= "\n        <td width='16'><a href='$_SERVER[PHP_SELF]?down=$cu[id]'>" .
+                                "<img src='../../template/classic/img/down.gif' title='$langDown'></img></a></td>";
                         } else {
-                                $cunits_content .= "\n        <th width='16'>&nbsp;&nbsp;&nbsp;&nbsp;</th>";
+                                $cunits_content .= "\n        <td width='16'>&nbsp;&nbsp;&nbsp;&nbsp;</td>";
                         }
                         if (!$first) {
-                                $cunits_content .= "\n        <th width='16'><a href='$_SERVER[PHP_SELF]?up=$cu[id]'><img src='../../template/classic/img/up.gif' title='$langUp'></img></a></th>";
+                                $cunits_content .= "\n        <td width='16'><a href='$_SERVER[PHP_SELF]?up=$cu[id]'><img src='../../template/classic/img/up.gif' title='$langUp'></img></a></td>";
                         } else {
-                                $cunits_content .= "\n        <th width='16'>&nbsp;&nbsp;&nbsp;&nbsp;</th>";
+                                $cunits_content .= "\n        <td width='16'>&nbsp;&nbsp;&nbsp;&nbsp;</td>";
                         }
                 }
                 $cunits_content .= "\n      </tr>\n      <tr>\n        <td ";
