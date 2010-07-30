@@ -436,6 +436,12 @@ function confirmation (name)
 
             // if admin, display add new wiki link
 
+            if ( ! empty( $message ) )
+            {
+              //$tool_content .= disp_message_box( $message, $style ) ."<br />" . "\n";
+              $tool_content .= "\n   <p class=\"success\">$message</p> ";
+            }
+
             if ( $is_allowedToAdmin )
             {
                 $tool_content .= '
@@ -454,70 +460,49 @@ function confirmation (name)
 
     // O titlos tis othonis wiki
     //$tool_content .= disp_tool_title($toolTitle) . "\n";
-    if ( ! empty( $message ) )
-    {
-        //$tool_content .= disp_message_box( $message, $style ) ."<br />" . "\n";
-
-        $tool_content .= "
-        <table width=\"99%\">
-        <tbody>
-        <tr>
-          <td class=\"success\">
-            <p><b>$message</b></p>
-          </td>
-        </tr>
-        </tbody>
-        </table>
-        <br />
-        ";
-    }
-
             // display list in a table
-
             $tool_content .= '
-        <table width="99%" class="WikiSum">' . "\n";
+        <table width="99%" class="tbl_alt">' . "\n";
 
             // if admin, display title, edit and delete
             if ( $is_allowedToAdmin )
             {
-                $tool_content .= '        <thead>' . "\n"
-                    . '        <tr class="Wiki_header">' . "\n"
-                    . '          <td width="1%">&nbsp;</td>' . "\n"
-                    . '          <td><div align="left">'.$langTitle.'</div></td>' . "\n"
-                    . '          <td>'.$langDescription.'</td>' . "\n"
-                    . '          <td width="15%"><div align="center">'.$langPages.'</div></td>' . "\n"
-                    . '          <td width="15%" colspan="3" ><div align="center">'.$langActions.'</div></td>'
-                    . '        </tr>' . "\n"
-                    . '        </thead>' . "\n"
-                    ;
+                $tool_content .= '' . "\n"
+                    . '        <tr>' . "\n"
+                    . '          <th width="1%">&nbsp;</th>' . "\n"
+                    . '          <th><div align="left">'.$langTitle.'</div></th>' . "\n"
+                    . '          <th>'.$langDescription.'</th>' . "\n"
+                    . '          <th width="15%"><div align="center">'.$langPages.'</div></th>' . "\n"
+                    . '          <th width="15%" colspan="3" ><div align="center">'.$langActions.'</div></th>'
+                    . '        </tr>' . "\n" ;
             }
             // else display title only
             else
             {
-                $tool_content .= '        <thead>' . "\n"
-                    . '        <tr class="Wiki_header">' . "\n"
+                $tool_content .= '' . "\n"
+                    . '        <tr>' . "\n"
                     . '          <td width="1%">&nbsp;</td>' . "\n"
                     . '          <td><div align="left">'.$langTitle.'</div></td>' . "\n"
                     . '          <td>'.$langDescription.'</td>' . "\n"
                     . '          <td width="20%"><div align="center">'.$langWikiNumberOfPages.'</div></td>' . "\n"
                     . '          <td width="20%"><div align="center">'.$langWikiRecentChanges.'</div></td>' . "\n"
-                    . '        </tr>' . "\n"
-                    . '        </thead>' . "\n"
-                    ;
+                    . '        </tr>' . "\n" ;
             }
 
-            $tool_content .= '        <tbody>' . "\n";
 
             // wiki list not empty
             if ( is_array( $wikiList ) && count( $wikiList ) > 0 )
             {
-
+                $k=0;
                 foreach ( $wikiList as $entry )
                 {
-                    $tool_content .= '        <tr>' . "\n";
+                    if ($k%2==0) {
+                       $tool_content .= "        <tr class='even'>\n";
+                    } else {
+                       $tool_content .= "        <tr class='odd'>\n";
+                    } 
 
                     // display title for all users
-
                     //modify style if the wiki is recently added or modified since last login
 
                     if ((isset($_uid) && $claro_notifier->is_a_notified_ressource($_cid, $date, $_uid, $_gid, $_tid, $entry['id'])))
@@ -598,6 +583,7 @@ function confirmation (name)
                     }
 
                     $tool_content .= '        </tr>' . "\n";
+                $k++;
                 }
             }
             // wiki list empty
@@ -606,7 +592,6 @@ function confirmation (name)
                 $tool_content .= '        <tr><td colspan="5" style="text-align: center;">'.$langWikiNoWiki.'</td></tr>' . "\n";
             }
 
-            $tool_content .= '        </tbody>' . "\n";
             $tool_content .= '        </table>' . "\n" . "\n";
 
             break;

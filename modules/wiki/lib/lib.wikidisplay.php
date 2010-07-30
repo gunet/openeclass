@@ -276,26 +276,23 @@
 
         $script = ( is_null( $script ) ) ? $_SERVER['PHP_SELF'] : $script;
 
-        $form = '<form method="POST" id="wikiProperties" action="'.$script.'">' . "\n"
-              . '      <table width="99%" class="FormData">' . "\n"
-              . '      <tbody>' . "\n"
+        $form = '   <form method="POST" id="wikiProperties" action="'.$script.'">' . "\n"
+              . '   <fieldset>' . "\n"
+              . '      <legend>'.$langWikiDescriptionForm.'</legend>' . "\n"
+              . '      <table width="99%" class="tbl">' . "\n"
               . '      <tr>' . "\n"
-              . '        <th class="left" width="220">&nbsp;</th>' . "\n"
-              . '        <td><b>'.$langWikiDescriptionForm.'</b></td>' . "\n"
-              . '      </tr>' . "\n"
-              . '      <tr>' . "\n"
-              . '        <th class="left">'.$langWikiTitle.' :</th>' . "\n"
+              . '        <th>'.$langWikiTitle.' :</th>' . "\n"
               . '        <td>' . "\n"
               . '        <input type="hidden" name="wikiId" value="'.$wikiId.'" />' . "\n"
               . '        <!-- groupId = 0 if course wiki, != 0 if group_wiki  -->' . "\n"
               . '        <input type="hidden" name="groupId" value="'.$groupId.'" />' . "\n"
-              . '        <input class="FormData_InputText" type="text" name="title" id="wikiTitle" size="53" maxlength="254" value="'.htmlspecialchars($title).'" />' . "\n"
+              . '        <input type="text" name="title" id="wikiTitle" size="53" maxlength="254" value="'.htmlspecialchars($title).'" />' . "\n"
               . '        </td>' . "\n"
               . '      </tr>' . "\n"
               . '      <tr>' . "\n"
-              . '        <th class="left">'.$langWikiDescription.' :</th>' . "\n"
+              . '        <th>'.$langWikiDescription.' :</th>' . "\n"
               . '        <td>' . "\n"
-              . '        <textarea class="FormData_InputText" id="wikiDesc" name="desc" cols="50" rows="5">'.$desc.'</textarea>' . "\n";
+              . '        <textarea id="wikiDesc" name="desc" cols="50" rows="5">'.$desc.'</textarea>' . "\n";
 
 
               /*
@@ -380,7 +377,7 @@
 		$form .= '        </td>' . "\n"
                . '      </tr>' . "\n"
                . '      <tr>' . "\n"
-               . '        <th class="left">&nbsp;</th>' . "\n"
+               . '        <th>&nbsp;</th>' . "\n"
                . '        <td>' . "\n";
 
 
@@ -390,8 +387,8 @@
 
         $form .= '        </td>' . "\n"
                . '      </tr>' . "\n"
-               . '      </tbody>' . "\n"
                . '      </table>' . "\n"
+            . '      </fieldset>' . "\n"
             . '      </form>' . "\n"
             ;
 
