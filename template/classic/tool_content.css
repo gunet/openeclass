@@ -29,8 +29,6 @@
 
 
 
-
-
 #tool_title {
     width: 99%;
     margin-top: 10px;
@@ -675,28 +673,6 @@ table.xinha_editor td {
     color: #FAEDED;!important
 }
 
-table.Agenda{
-    padding: 2px;
-    border-top: 1px solid #edecdf;
-    border-bottom: 1px solid #edecdf;
-    border-left: 1px solid #edecdf;
-    border-right: 1px solid #edecdf;
-}
-
-table.Agenda th {
-    text-align: center!important;
-    border-top: 1px solid #edecdf;
-    border-bottom: 1px solid #edecdf;
-    border-left: 1px solid #edecdf;
-    border-right: 1px solid #edecdf;
-}
-
-table.Agenda td {
-	vertical-align: top;
-    font-size : 10px;
-	padding : 5px 4px 4px 4px;
-}
-
 .monthLabel {
     text-align: center;
     color: #627aad;
@@ -724,33 +700,6 @@ table.Agenda td {
 
 
 /* ----- START announcements ----- */
-table.announcements {
-	padding: 2px;
-	vertical-align: top;
-	border-top: 1px solid #edecdf;
-	border-bottom: 1px solid #edecdf;
-	border-left: 1px solid #edecdf;
-	border-right: 1px solid #edecdf;
-}
-
-table.announcements th {
-	padding: 4px;
-	vertical-align: top;
-	font-size:11px;
-	color: #727266;
-	border-top: 1px solid #edecdf;
-	border-bottom: 1px solid #edecdf;
-	border-left: 1px solid #edecdf;
-	border-right: 1px solid #edecdf;
-}
-
-table.announcements td {
-	padding: 4px;
-	vertical-align: top !important;
-	font-size:11px;
-	color: #727266;
-	vertical-align: middle;
-}
 
 /* ----- END announcements ----- */
 
@@ -1979,78 +1928,7 @@ table.Search td {
 
 
 /* ----- START units ----- */
-table.unit-navigation {
-        width: 99%;
-        margin: 0;
-        padding: 0;
-}
 
-
-
-
-
-.unit-select {
-        text-align: center;
-        margin-top: 2em;
-        padding-bottom: 2em;
-}
-
-table img {
-        vertical-align: middle;
-}
-
-.topic {
-	padding-left: 1em;
-}
-
-.topic img {
-	padding-right: 10px;
-}
-
-.forum {
-	background: rgb(237, 236, 223);
-}
-
-table.NavUnits {
-    background: none;
-    vertical-align: middle;
-    margin-bottom: 15px;
-    padding: 0px;
-    width: 99%;
-}
-
-table.NavUnits .left {
-    text-align: left;
-}
-
-table.NavUnits td {
-    text-align: right;
-    background: #edecdf;
-    font-size:11px;
-    color: #e79544;
-    border-top: 1px solid #627aad;
-    border-bottom: 1px solid #627aad;
-    border-left: 0px solid #ffffff;
-    border-right: 0px solid #ffffff;
-}
-
-table.NavUnits a {
-    color: #000000;
-    font-size: 11px;
-    font-weight: normal;
-    text-decoration: none;
-}
-
-table.NavUnits a:hover {
-    text-decoration: underline;
-    color: #e79544;
-    font-size: 11px;
-}
-
-table.NavUnits form {
-    padding: 0px 0px 0px 0px;
-    vertical-align: middle;
-}
 
 /* ----- END units ----- */
 
