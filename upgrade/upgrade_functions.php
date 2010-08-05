@@ -133,21 +133,31 @@ function merge_tables($table_destination,$table_source,$fields_destination,$fiel
 	return $retString;
 }
 
-// checks if a mysql table exists
+// check if a mysql table exists
 function mysql_table_exists($db, $table)
 {
 	$exists = db_query('SHOW TABLES FROM `'.$db.'` LIKE \''.$table.'\'');
 	return mysql_num_rows($exists) == 1;
 }
 
-// checks if a mysql table field exists
-
+// check if a mysql table field exists
 function mysql_field_exists($db,$table,$field)
 {
 	$fields = db_query("SHOW COLUMNS from $table LIKE '$field'",$db);
 	if (mysql_num_rows($fields) > 0)
 	return TRUE;
 
+}
+
+// check if a mysql index exists
+function mysql_index_exists($table, $index_name)
+{
+        $q = db_query("SHOW INDEX FROM `$table` WHERE Key_name = " . quote($index_name));
+        if ($q and mysql_num_rows($q) > 0) {
+                return true;
+        } else {
+                return false;
+        }
 }
 
 // add index/indexes in specific table columns 
@@ -314,56 +324,62 @@ function upgrade_course_2_4($code, $extramessage = '')
 	db_query("ALTER TABLE `poll_answer_record` CHANGE `answer_text` `answer_text` TEXT", $code);
 
         // move main documents to central table and if successful drop table
-        db_query("INSERT INTO `$mysqlMainDb`.document
-                        (`course_id`, `group_id`, `path`, `filename`, `visibility`, `comment`,
-                         `category`, `title`, `creator`, `date`, `date_modified`, `subject`,
-                         `description`, `author`, `format`, `language`, `copyrighted`)
-                        SELECT $course_id, NULL, `path`, `filename`, `visibility`, `comment`,
-                               `category`, `title`, `creator`, `date`, `date_modified`, `subject`,
-                               `description`, `author`, `format`, `language`, `copyrighted` FROM document") and
-                db_query("DROP TABLE document");
+        if (mysql_table_exists($code, 'document')) {
+                db_query("INSERT INTO `$mysqlMainDb`.document
+                                (`course_id`, `group_id`, `path`, `filename`, `visibility`, `comment`,
+                                 `category`, `title`, `creator`, `date`, `date_modified`, `subject`,
+                                 `description`, `author`, `format`, `language`, `copyrighted`)
+                                SELECT $course_id, NULL, `path`, `filename`, `visibility`, `comment`,
+                                       `category`, `title`, `creator`, `date`, `date_modified`, `subject`,
+                                       `description`, `author`, `format`, `language`, `copyrighted` FROM document") and
+                       db_query("DROP TABLE document");
+        }
 
         // move user group information to central tables and if successful drop original tables
-        $ok = db_query("INSERT INTO `$mysqlMainDb`.`group_properties`
-                        (`course_id`, `self_registration`, `private_forum`, `forum`, `documents`,
-                         `wiki`, `agenda`)
-                        SELECT $course_id, `self_registration`, `private`, `forum`, `document`,
-                                `wiki`, `agenda` FROM group_properties");
+        if (mysql_table_exists($code, 'group_properties')) {
+                $ok = db_query("INSERT INTO `$mysqlMainDb`.`group_properties`
+                                (`course_id`, `self_registration`, `private_forum`, `forum`, `documents`,
+                                 `wiki`, `agenda`)
+                                SELECT $course_id, `self_registration`, `private`, `forum`, `document`,
+                                        `wiki`, `agenda` FROM group_properties");
+                if ($ok) {
+                        db_query("DROP TABLE group_properties");
+                }
 
-        $ok = db_query("INSERT INTO `$mysqlMainDb`.`group`
-                        (`course_id`, `name`, `description`, `forum_id`, `max_members`,
-                         `secret_directory`)
-                        SELECT $course_id, `name`, `description`, `forumId`, `maxStudent`,
-                                `secretDirectory` FROM student_group") && $ok;
+                $ok = db_query("INSERT INTO `$mysqlMainDb`.`group`
+                                (`course_id`, `name`, `description`, `forum_id`, `max_members`,
+                                 `secret_directory`)
+                                SELECT $course_id, `name`, `description`, `forumId`, `maxStudent`,
+                                        `secretDirectory` FROM student_group");
 
-        db_query("CREATE TEMPORARY TABLE group_map AS
-                        SELECT old.id AS old_id, new.id AS new_id
-                                FROM student_group AS old, `$mysqlMainDb`.`group` AS new
-                                WHERE new.course_id = $course_id AND
-                                      old.secretDirectory = new.secret_directory");
+                db_query("CREATE TEMPORARY TABLE group_map AS
+                                SELECT old.id AS old_id, new.id AS new_id
+                                        FROM student_group AS old, `$mysqlMainDb`.`group` AS new
+                                        WHERE new.course_id = $course_id AND
+                                              old.secretDirectory = new.secret_directory");
 
-        $ok = db_query("INSERT INTO `$mysqlMainDb`.group_members
-                                (group_id, user_id, is_tutor)
-                                SELECT new_id, tutor, 1
-                                        FROM student_group, group_map
-                                        WHERE student_group.id = group_map.old_id AND
-                                              tutor IS NOT NULL") && $ok;
+                $ok = db_query("INSERT INTO `$mysqlMainDb`.group_members
+                                        (group_id, user_id, is_tutor)
+                                        SELECT new_id, tutor, 1
+                                                FROM student_group, group_map
+                                                WHERE student_group.id = group_map.old_id AND
+                                                      tutor IS NOT NULL") && $ok;
 
-        $ok = db_query("INSERT INTO `$mysqlMainDb`.group_members
-                                (group_id, user_id, is_tutor)
-                                SELECT new_id, user, 0
-                                        FROM user_group, group_map
-                                        WHERE user_group.team = group_map.old_id") && $ok;
+                $ok = db_query("INSERT INTO `$mysqlMainDb`.group_members
+                                        (group_id, user_id, is_tutor)
+                                        SELECT new_id, user, 0
+                                                FROM user_group, group_map
+                                                WHERE user_group.team = group_map.old_id") && $ok;
 
-        db_query("DROP TEMPORARY TABLE group_map");
+                db_query("DROP TEMPORARY TABLE group_map");
 
-        $ok = move_group_documents_to_main_db($code, $course_id) && $ok;
+                $ok = move_group_documents_to_main_db($code, $course_id) && $ok;
 
-        if ($ok) {
-                db_query("DROP TABLE group_properties");
-                db_query("DROP TABLE student_group");
-                db_query("DROP TABLE user_group");
-                db_query("DROP TABLE group_documents");
+                if ($ok) {
+                        db_query("DROP TABLE student_group");
+                        db_query("DROP TABLE user_group");
+                        db_query("DROP TABLE group_documents");
+                }
         }
 
 	// upgrade acceuil for glossary
@@ -1598,8 +1614,17 @@ function move_group_documents_to_main_db($code, $course_id)
         }
         while ($r = mysql_fetch_array($q)) {
                 $group_document_dir = $webDir . 'courses/' . $code . '/group/' . $r['secretDirectory'];
-                traverseDirTree($group_document_dir, 'group_documents_main_db_file', 'group_documents_main_db_dir',
-                                array($course_id, $r['id']));
+                if (!is_dir($group_document_dir)) {
+                        if (file_exists($group_document_dir)) {
+                                unlink($group_document_dir);
+                        }
+                        mkdir($group_document_dir, 0775);
+                } else {
+                        traverseDirTree($group_document_dir,
+                                        'group_documents_main_db_file',
+                                        'group_documents_main_db_dir',
+                                        array($course_id, $r['id']));
+                }
         }
         return $group_document_upgrade_ok;
 }

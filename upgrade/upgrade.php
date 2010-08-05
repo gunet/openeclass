@@ -339,12 +339,17 @@ if (!isset($_POST['submit2'])) {
 		}
         }
         if ($oldversion < '2.4') {
-                db_query('CREATE FULLTEXT INDEX course_units_title ON course_units (title)');
-                db_query('CREATE FULLTEXT INDEX course_units_comments ON course_units (comments)');
-                db_query('CREATE FULLTEXT INDEX unit_resources_title ON unit_resources (title)');
-                db_query('CREATE FULLTEXT INDEX unit_resources_comments ON unit_resources (comments)');
+                mysql_index_exists('course_units', 'course_units_title') or
+                        db_query('CREATE FULLTEXT INDEX course_units_title ON course_units (title)');
+                mysql_index_exists('course_units', 'course_units_comments') or
+                        db_query('CREATE FULLTEXT INDEX course_units_comments ON course_units (comments)');
+                mysql_index_exists('unit_resources', 'unit_resources_title') or
+                        db_query('CREATE FULLTEXT INDEX unit_resources_title ON unit_resources (title)');
+                mysql_index_exists('unit_resources', 'unit_resources_title') or
+                        db_query('CREATE FULLTEXT INDEX unit_resources_comments ON unit_resources (comments)');
+                mysql_field_exists($mysqlMainDb, 'annonces', 'visibility') or
+                        db_query("ALTER TABLE `annonces` ADD `visibility` CHAR(1) NOT NULL DEFAULT 'v'");
 		db_query("ALTER TABLE `loginout` CHANGE `ip` `ip` CHAR(39) NOT NULL DEFAULT '0.0.0.0'");
-                db_query("ALTER TABLE `annonces` ADD `visibility` CHAR(1) NOT NULL DEFAULT 'v'");
                 db_query("CREATE TABLE IF NOT EXISTS `document` (
                                 `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                                 `course_id` INT(11) NOT NULL,
