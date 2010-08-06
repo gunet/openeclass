@@ -382,6 +382,18 @@ function upgrade_course_2_4($code, $extramessage = '')
                 }
         }
 
+        // move links to central tables and if successful drop original tables
+        if (mysql_table_exists($code, 'liens')) {
+                db_query("INSERT INTO `$mysqlMainDb`.link
+                                (`id`, `course_id`, `url`, `title`, `description`, `category`, `order`)
+                                SELECT `id`, $course_id, `url`, `titre`, `description`, `category`, `ordre` FROM liens") and
+                       db_query("DROP TABLE liens");
+                db_query("INSERT INTO `$mysqlMainDb`.link_category
+                                (`id`, `course_id`, `name`, `description`, `order`)
+                                SELECT `id`, $course_id, `categoryname`, `description`, `ordre` FROM link_categories") and
+                       db_query("DROP TABLE link_categories");
+        }
+
 	// upgrade acceuil for glossary
 	if (accueil_tool_missing('MODULE_ID_GLOSSARY')) {
                 db_query("INSERT IGNORE INTO accueil VALUES (
@@ -1614,6 +1626,9 @@ function move_group_documents_to_main_db($code, $course_id)
         }
         while ($r = mysql_fetch_array($q)) {
                 $group_document_dir = $webDir . 'courses/' . $code . '/group/' . $r['secretDirectory'];
+                list($new_group_id) = mysql_fetch_row(db_query("SELECT id FROM `$mysqlMainDb`.`group`
+                                                                WHERE course_id = $course_id AND
+                                                                      secret_directory = '$r[secretDirectory]'"));
                 if (!is_dir($group_document_dir)) {
                         if (file_exists($group_document_dir)) {
                                 unlink($group_document_dir);
@@ -1623,7 +1638,7 @@ function move_group_documents_to_main_db($code, $course_id)
                         traverseDirTree($group_document_dir,
                                         'group_documents_main_db_file',
                                         'group_documents_main_db_dir',
-                                        array($course_id, $r['id']));
+                                        array($course_id, $new_group_id));
                 }
         }
         return $group_document_upgrade_ok;
