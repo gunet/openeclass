@@ -201,7 +201,7 @@ function file_url_escape($name)
 
 function file_url($path, $filename = null)
 {
-	global $currentCourseID, $urlServer;
+	global $currentCourseID, $urlServer, $group_id;
 	static $oldpath = '', $dirname;
 
 	$dirpath = dirname($path);
@@ -226,5 +226,6 @@ function file_url($path, $filename = null)
                 $q = db_query("SELECT filename FROM document WHERE path = '$path'");
                 list($filename) = mysql_fetch_row($q);
         }
-	return htmlspecialchars($urlServer . "modules/document/file.php/$currentCourseID$dirname/" . file_url_escape($filename), ENT_QUOTES);
+        $gid = GROUP_DOCUMENTS? ",$group_id": '';
+	return htmlspecialchars($urlServer . "modules/document/file.php/$currentCourseID$gid$dirname/" . file_url_escape($filename), ENT_QUOTES);
 }
