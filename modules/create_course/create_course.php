@@ -436,4 +436,3 @@ if (isset($_POST['create_course'])) {
 $tool_content .= "</form>";
 
 draw($tool_content, '1', '', $head_content);
-?>

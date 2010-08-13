@@ -24,12 +24,17 @@
 *  			eMail: info@openeclass.org
 * =========================================================================*/
 
-header("Cache-Control: no-store, no-cache, must-revalidate");   // HTTP/1.1
-header("Cache-Control: post-check=0, pre-check=0", false);
-header("Pragma: no-cache");                                     // HTTP/1.0
-
-header("Location: $link_url");
-//to be sure that the script stop running after the redirection
-exit;
-
-?>
+include '../../include/init.php';
+$course_id = course_code_to_id(escapeSimple($_GET['c']));
+$id = intval($_GET['id']);
+if ($course_id !== false) {
+        db_query("UPDATE link SET hits = hits + 1 WHERE course_id = $course_id AND id = $id");
+        $q = db_query("SELECT url FROM link WHERE course_id = $course_id AND id = $id");
+        if ($q and mysql_num_rows($q) > 0) {
+                list($url) = mysql_fetch_row($q);
+                header('Location: ' . $url);
+                exit;
+        }
+}
+$_SESSION['errMessage'] = $langAccountResetInvalidLink;
+header('Location: ' . $urlServer);

@@ -62,14 +62,13 @@ $charset_spec = 'DEFAULT CHARACTER SET=utf8';
 # table `annonces`
 #
 
-
 db_query("CREATE TABLE annonces (
-      `id` mediumint(11) NOT NULL auto_increment,
-      `title` varchar(255) default NULL,
-      `contenu` text,
-      `temps` date default NULL,
-      `cours_id` int(11) NOT NULL default '0',
-      `ordre` mediumint(11) NOT NULL,
+      `id` MEDIUMINT(11) NOT NULL auto_increment,
+      `title` VARCHAR(255) DEFAULT NULL,
+      `contenu` TEXT,
+      `temps` DATE DEFAULT NULL,
+      `cours_id` INT(11) NOT NULL default '0',
+      `ordre` MEDIUMINT(11) NOT NULL,
       `visibility` CHAR(1) NOT NULL DEFAULT 'v',
        PRIMARY KEY (id))
       $charset_spec");
@@ -278,7 +277,6 @@ db_query("CREATE TABLE IF NOT EXISTS `group_properties` (
                 `documents` TINYINT(4) NOT NULL DEFAULT 1,
                 `wiki` TINYINT(4) NOT NULL DEFAULT 0,
                 `agenda` TINYINT(4) NOT NULL DEFAULT 0)");
-
 db_query("CREATE TABLE IF NOT EXISTS `group` (
                 `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 `course_id` INT(11) NOT NULL DEFAULT 0,
@@ -287,7 +285,6 @@ db_query("CREATE TABLE IF NOT EXISTS `group` (
                 `forum_id` int(11) NULL,
                 `max_members` int(11) NOT NULL DEFAULT 0,
                 `secret_directory` varchar(30) NOT NULL DEFAULT '0')");
-
 db_query("CREATE TABLE IF NOT EXISTS `group_members` (
                 `group_id` int(11) NOT NULL,
                 `user_id` int(11) NOT NULL,
@@ -301,6 +298,24 @@ db_query("CREATE TABLE IF NOT EXISTS `glossary` (
                `order` INT(11) NOT NULL DEFAULT 0,
                `datestamp` DATE NOT NULL,
                `course_id` INT(11) NOT NULL)");
+
+db_query("CREATE TABLE IF NOT EXISTS `link` (
+                `id` INT(11) NOT NULL AUTO_INCREMENT,
+                `course_id` INT(11) NOT NULL,
+                `url` VARCHAR(255),
+                `title` VARCHAR(255),
+                `description` TEXT,
+                `category` INT(6) DEFAULT NULL,
+                `order` INT(6) DEFAULT 0 NOT NULL,
+                `hits` INT(6) DEFAULT 0 NOT NULL,
+                PRIMARY KEY (`id`, `course_id`))");
+db_query("CREATE TABLE IF NOT EXISTS `link_category` (
+                `id` INT(6) NOT NULL AUTO_INCREMENT,
+                `course_id` INT(11) NOT NULL,
+                `name` VARCHAR(255) NOT NULL,
+                `description` TEXT,
+                `order` INT(6) NOT NULL DEFAULT 0,
+                PRIMARY KEY (`id`, `course_id`))");
 
 // encrypt the admin password into DB
 $password_encrypted = md5($passForm);

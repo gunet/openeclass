@@ -1552,6 +1552,12 @@ function standard_text_escape($text, $mathimg = '../../courses/mathimg/')
         return glossary_expand(mathfilter($purifier->purify($text), 12, $mathimg));
 }
 
+function purify($text)
+{
+        global $purifier;
+        return $purifier->purify($text);
+}
+
 // Expand glossry terms to HTML for tooltips with the definition
 function glossary_expand($text)
 {

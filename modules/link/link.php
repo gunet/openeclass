@@ -47,8 +47,6 @@ $guest_allowed = true;
 
 include '../../include/baseTheme.php';
 $dbname = $_SESSION['dbname'];
-$tbl_link = "liens";
-$tbl_categories = "link_categories";
 
 /**** The following is added for statistics purposes ***/
 include('../../include/action.php');
@@ -56,8 +54,9 @@ $action_stats = new action();
 $action_stats->record('MODULE_ID_LINKS');
 /**************************************/
 
+mysql_select_db($mysqlMainDb);
+
 $nameTools = $langLinks;
-$tool_content = $head_content = "";
 
 $head_content .= <<<hContent
 <script type="text/javascript">
@@ -85,236 +84,159 @@ function checkrequired(which, entry) {
 </script>
 hContent;
 
+if (isset($_GET['category'])) {
+        $category = intval($_GET['category']);
+} else {
+        unset($category);
+}
+
+if (isset($_GET['id'])) {
+        $id = intval($_GET['id']);
+} else {
+        unset($id);
+}
 
 if (isset($_GET['urlview'])) {
-	$urlview = $_GET['urlview'];
-}
-if (isset($_GET['down'])) {
-	$down = $_GET['down'];
-}
-if (isset($_GET['up'])) {
-	$up = $_GET['up'];
-}
-if (isset($_GET['catmove'])) {
-	$catmove = $_GET['catmove'];
-}
-if (isset($_GET['id'])) {
-	$id = $_GET['id'];
-}
-if (isset($_POST['urllink'])) {
-	$urllink = $_POST['urllink'];
-}
-if (isset($_POST['title'])) {
-	$title = $_POST['title'];
-}
-if (isset($_POST['description'])) {
-	$description = $_POST['description'];
-}
-if (isset($_POST['selectcategory'])) {
-	$selectcategory = $_POST['selectcategory'];
-}
-if (isset($_POST['categoryname'])) {
-	$categoryname = $_POST['categoryname'];
-}
-if (isset($_POST['id'])) {
-	$id = $_POST['id'];
+        $urlview = urlencode($_GET['urlview']);
+} else {
+        $urlview = '';
 }
 
-include("linkfunctions.php");
+include 'linkfunctions.php';
 
-// treating the post date by calling the relevant function depending of the action querystring.
-if (isset($_GET['action']) && ($is_adminOfCourse)) { //allow link management actions only for course admin
-	switch($_GET['action'])
-	{
-		case "addlink":	if(isset($_POST['submitLink'])) {
-			if(!addlinkcategory("link"))	// here we add a link
-			unset($_POST['submitLink']);
-		}
-		break;
-		case "addcategory": if(isset($_POST['submitCategory'])) {
-			if(!addlinkcategory("category"))	// here we add a category
-			unset($_POST['submitCategory']);
-		}
-		break;
-		case "deletelink": deletelinkcategory("link");
-		break; // here we delete a link
-		case "deletecategory":	deletelinkcategory("category");
-		break; // here we delete a category
-		case "editlink": editlinkcategory("link");
-		break; // here we edit a link
-		case "editcategory": editlinkcategory("category");
-		break; // here we edit a category
-	}
-}
+$action = isset($_GET['action'])? $_GET['action']: '';
 
-if($is_adminOfCourse) {
+if ($is_adminOfCourse) {
+        if (isset($_POST['submitLink'])) {
+                submit_link();
+        }
+        if (isset($_POST['submitCategory'])) {
+                submit_category();
+        }
+        switch ($action) {
+                case 'deletelink': 
+                        delete_link($id);
+                        break;
+                case 'deletecategory':
+                        delete_category($id);
+                        break;
+        }
+
 	if (!empty($catlinkstatus))	{
-	   $tool_content .=  "\n  <p class=\"success\">".$catlinkstatus."</p>\n";
-	   unset($catlinkstatus);
+	   $tool_content .=  "<p class='success'>$catlinkstatus</p>\n";
 	}
 
 	$tool_content .="
-        <div id=\"operations_container\">
-          <ul id=\"opslist\">";
+        <div id='operations_container'>
+          <ul id='opslist'>";
 	if (isset($category))
 		$tool_content .=  "
-            <li><a href=\"".$_SERVER['PHP_SELF']."?action=addlink&amp;category=".$category."&amp;urlview=@$urlview\">".$langLinkAdd."</a></li>";
+            <li><a href='$_SERVER[PHP_SELF]?action=addlink&amp;category=$category&amp;urlview=$urlview'>$langLinkAdd</a></li>";
 	else
 		$tool_content .=  "
-            <li><a href=\"".$_SERVER['PHP_SELF']."?action=addlink\">".$langLinkAdd."</a></li>";
+            <li><a href='$_SERVER[PHP_SELF]?action=addlink'>$langLinkAdd</a></li>";
 	if (isset($urlview))
 		$tool_content .=  "
-            <li><a href=\"".$_SERVER['PHP_SELF']."?action=addcategory&amp;urlview=".$urlview."\">".$langCategoryAdd."</a></li>";
+            <li><a href='$_SERVER[PHP_SELF]?action=addcategory&amp;urlview=$urlview'>$langCategoryAdd</a></li>";
 	else
 		$tool_content .=  "
-            <li><a href=\"".$_SERVER['PHP_SELF']."?action=addcategory\">".$langCategoryAdd."</a></li>";
+            <li><a href='$_SERVER[PHP_SELF]?action=addcategory'>$langCategoryAdd</a></li>";
 
-	$tool_content .=  "
-          </ul>
-        </div>";
-	// Displaying the correct title and the form for adding a category or link.
-	// This is only shown when nothing has been submitted yet, hence !isset($submitLink)
-	if (isset($_GET['action']) and ($_GET['action'] == "addlink" or $_GET['action'] == "editlink")
-		and !isset($_POST['submitLink'])) {
-		
-		$action = $_GET['action'];
-		if (isset($_GET['category']) and $category == "") {
-			$category=0;
-		}
-		$tool_content .= "
-              <form method='post' action='".$_SERVER['PHP_SELF']."?action=".$action."&amp;urlview=".@$urlview."' onsubmit=\"return checkrequired(this, 'urllink');\">";
-		if ($action == "editlink") {
-			$tool_content .= "<input type=\"hidden\" name=\"id\" value=\"".$id."\" />";
-		}
+        $tool_content .=  "</ul></div>";
 
-		$tool_content .= "
-              <fieldset>
-              <legend>";
-		if ($action == "addlink") {
-			$tool_content .= $langLinkAdd;
-		}
-		else
-		{
-			$tool_content .= $langLinkModify;
-			$langAdd = $langLinkModify;
-		}
+	// Display the correct title and form for adding or modifying a category or link.
+        if (in_array($action, array('addlink', 'editlink'))) {
+                $tool_content .= "<form method='post' action='$_SERVER[PHP_SELF]?urlview=$urlview' onsubmit=\"return checkrequired(this, 'urllink');\">";
+                if ($action == 'editlink') {
+                        $tool_content .= "<input type='hidden' name='id' value='$id' />";
+                        link_form_defaults($id);
+                        $form_legend = $langLinkModify;
+                        $submit_label = $langLinkModify;
+                } else {
+                        $form_url = $form_title = $form_description = '';
+                        $form_legend = $langLinkAdd;
+                        $submit_label = $langAdd;
+                } 
 
-		$tool_content .=  "</legend>
-		<table width='99%' class='tbl'>
-		<tr>
-		  <th>URL :</th>
-		  <td><input type=\"text\" name=\"urllink\" size=\"53\" value=\"".@htmlspecialchars($urllink)."\" /></td>
-		</tr>
-		<tr>
-		  <th>".$langLinkName." :</th>
-		  <td><input type=\"text\" name=\"title\" size=\"53\" value=\"".@htmlspecialchars($title)."\" /></td>
-		</tr>
-		<tr>
-		  <th>".$langDescription." :</th>
-		  <td><textarea rows=\"3\" cols=\"50\" name=\"description\">".trim(@htmlspecialchars($description))."</textarea></td>
-		</tr>
-		<tr>
-		  <th>".$langCategory." :</th>
-		  <td><select name='selectcategory'>
-		    <option value=\"0\">--</option>
-		";
-		$sqlcategories="SELECT * FROM `".$tbl_categories."` ORDER BY ordre DESC";
-		$resultcategories = db_query($sqlcategories, $dbname);
-		while ($myrow = mysql_fetch_array($resultcategories))
-		{
-			$tool_content .=  "<option value=\"".$myrow["id"]."\"";
-			if (isset($_GET['category']) and $myrow["id"]==$category)
-			$tool_content .=  " selected";
-			$tool_content .= 	">".$myrow["categoryname"]."</option>\n";
-		}
-		$tool_content .=  "</select></td>
-                </tr>";
-		$tool_content .=  "
-                <tr>
-                  <th>&nbsp;</th>
-		  <td><input type='submit' name='submitLink' value='$langAdd' /></td>
-		</tr>
-                </table>
-              </fieldset>
-              </form>";
-	}
-	elseif(isset($_GET['action']) and ($_GET['action'] == "addcategory" or $_GET['action'] == "editcategory")
-		and !isset($_POST['submitCategory'])) {
-		
-		$action = $_GET['action'];
-		
-		$tool_content .=  "
-              <form method='post' action='".$_SERVER['PHP_SELF']."?action=".$action."&amp;urlview=".@$urlview."'>
-              <fieldset>
-                <legend>";
+                $tool_content .= "<fieldset><legend>$form_legend</legend>
+                        <table width='99%' class='tbl'>
+                        <tr><th>URL:</th>
+                            <td><input type='text' name='urllink' size='53'$form_url /></td></tr>
+                        <tr><th>$langLinkName:</th>
+                            <td><input type='text' name='title' size='53'$form_title /></td></tr>
+                        <tr><th>$langDescription:</th>
+                            <td>" . rich_text_editor('description', 3, 50, $form_description) . "</td></tr>
+                        <tr><th>$langCategory:</th>
+                            <td><select name='selectcategory'>
+                                <option value='0'>--</option>";
+                $resultcategories = db_query("SELECT * FROM link_category WHERE course_id = $cours_id ORDER BY `order`");
+                while ($myrow = mysql_fetch_array($resultcategories)) {
+                        $tool_content .=  "<option value='$myrow[id]'";
+                        if (isset($category) and $myrow['id'] == $category) {
+                                $tool_content .= " selected='selected'";
+                        }
+                        $tool_content .= '>' . q($myrow['name']) . "</option>\n";
+                }
+                $tool_content .=  "</select></td></tr>
+                        <tr><th>&nbsp;</th>
+                            <td><input type='submit' name='submitLink' value='$submit_label' /></td></tr>
+                     </table></fieldset></form>";
 
-		if ($action == "addcategory") {
-		   $tool_content .=  $langCategoryAdd;
-		} else {
-		   $tool_content .=  $langCategoryMod;
-		}
-		if ($action == "editcategory") {
-			$tool_content .=  "<input type='hidden' name='id' value='$id' />";
-		}
-
-		$tool_content .=  "</legend>
-                <table width='99%' class='tbl'>
-		<tr>
-		  <th>".$langCategoryName." :</th>
-		  <td><input type='text' name='categoryname' size='53' value='".@htmlspecialchars($categoryname)."' /></td>
-		</tr>
-		<tr>
-		  <th>".$langDescription." :</th>
-		  <td><textarea rows='5' cols='50' name='description'>" .  @htmlspecialchars($description)."</textarea></td>
-		</tr>
-		<tr>
-		  <th>&nbsp;</th>
-		  <td><input type='submit' name='submitCategory' value='$langAdd' /></td>
-		</tr>
-		</table>
-	      </fieldset>
-	      </form>";
-	}
+        } elseif (in_array($action, array('addcategory', 'editcategory'))) {
+                $tool_content .=  "<form method='post' action='$_SERVER[PHP_SELF]?urlview=$urlview'>\n";
+                if ($action == 'editcategory') {
+                        $tool_content .= "<input type='hidden' name='id' value='$id' />";
+                        category_form_defaults($id);
+                        $form_legend = $langCategoryMod;
+                } else {
+                        $form_name = $form_description = '';
+                        $form_legend = $langCategoryAdd;
+                } 
+                $tool_content .=  "<fieldset><legend>$form_legend</legend>
+                                   <table width='99%' class='tbl'>
+                                   <tr><th>$langCategoryName:</th>
+                                       <td><input type='text' name='categoryname' size='53'$form_name /></td></tr>
+                                   <tr><th>$langDescription:</th>
+                                       <td><textarea rows='5' cols='50' name='description'>$form_description</textarea></td></tr>
+                                   <tr><th>&nbsp;</th>
+                                       <td><input type='submit' name='submitCategory' value='$form_legend' /></td></tr>
+                                </table></fieldset></form>";
+        }
 }
 
-if (isset($down))
-	movecatlink($down);
-if (isset($up))
-	movecatlink($up);
+if (isset($_GET['down'])) {
+        move_order('link', 'id', intval($_GET['down']), 'order', 'down', "course_id = $cours_id");
+} elseif (isset($_GET['up'])) {
+        move_order('link', 'id', intval($_GET['up']), 'order', 'up', "course_id = $cours_id");
+} elseif (isset($_GET['cdown'])) {
+        move_order('link_category', 'id', intval($_GET['cdown']), 'order', 'down', "course_id = $cours_id");
+} elseif (isset($_GET['cup'])) {
+        move_order('link_category', 'id', intval($_GET['cup']), 'order', 'up', "course_id = $cours_id");
+}
 
-$sqlcategories="SELECT * FROM `".$tbl_categories."` order by ordre DESC";
-$resultcategories=db_query($sqlcategories, $dbname);
+$resultcategories = db_query("SELECT * FROM `link_category` WHERE course_id = $cours_id ORDER BY `order`");
 
 if (mysql_num_rows($resultcategories) > 0) {
-	//Starting the table which contains the categories
+	// Starting the table which contains the categories
 	// displaying the links which have no category (thus category = 0 or NULL), if none present this will not be displayed
-	$sqlLinks = "SELECT * FROM `".$tbl_link."` WHERE category=0 or category IS NULL";
-	$result = db_query($sqlLinks, $dbname);
-	$numberofzerocategory=mysql_num_rows($result);
-	//making the show none / show all links. Show none means urlview=0000 (number of zeros depending on the
-	//number of categories). Show all means urlview=1111 (number of 1 depending on teh number of categories).
-	$sqlcategories="SELECT * FROM `".$tbl_categories."` ORDER BY `ordre` DESC";
-	$resultcategories=db_query($sqlcategories, $dbname);
-	$aantalcategories = @mysql_num_rows($resultcategories);
+	$result = db_query("SELECT * FROM `link` WHERE course_id = $cours_id AND (category = 0 OR category IS NULL)");
+	$numberofzerocategory = mysql_num_rows($result);
+	// making the show none / show all links. Show none means urlview=0000 (number of zeros depending on the
+	// number of categories). Show all means urlview=1111 (number of 1 depending on teh number of categories).
+	$resultcategories = db_query("SELECT * FROM `link_category` WHERE course_id = $cours_id ORDER BY `order`");
+	$aantalcategories = mysql_num_rows($resultcategories);
 
 	if ($aantalcategories > 0) {
 		$more_less = "
-                <table width=\"99%\" class='tbl'>
+                <table width='99%' class='tbl'>
 		<tr>
 		  <td class='bold'>$langCategorisedLinks</td>
-		  <td width=\"1\"><img src=\"../../template/classic/img/closeddir.gif\" title=\"$showall\" /></td>
-		  <td width=\"60\"><a href=\"".$_SERVER['PHP_SELF']."?urlview=";
-		for($j = 1; $j <= $aantalcategories; $j++){
-			$more_less .=  "0";
-		}
-		$more_less .=  "\">$shownone</a></td>";
-		$more_less .=  "
-		  <td width=\"1\"><img src=\"../../template/classic/img/opendir.gif\" title=\"$showall\" /></td>
-		  <td width=\"60\"><a href=\"".$_SERVER['PHP_SELF']."?urlview=";
-		for($j = 1; $j <= $aantalcategories; $j++) {
-			$more_less .=  "1";
-		}
-		$more_less .=  "\">$showall</a></td>
+		  <td width='1'><img src='../../template/classic/img/closeddir.gif' title='$showall' /></td>
+		  <td width='60'><a href='$_SERVER[PHP_SELF]?urlview=" . str_repeat('0', $aantalcategories) .
+	              "'>$shownone</a></td>
+		  <td width='1'><img src='../../template/classic/img/opendir.gif' title='$showall' /></td>
+		  <td width='60'><a href='$_SERVER[PHP_SELF]?urlview=" . str_repeat('1', $aantalcategories) .
+		      "'>$showall</a></td>
 		</tr>
                 </table>";
 	}
@@ -323,45 +245,40 @@ if (mysql_num_rows($resultcategories) > 0) {
     // Edw fiaxnei ton pinaka me tis Genikes kathgories
 	if ($numberofzerocategory !== 0) {
 		$tool_content .= "\n
-		<table width=\"99%\" class='tbl_alt'>
+		<table width='99%' class='tbl_alt'>
 		<tr>
-		  <th width='15'><img src=\"../../template/classic/img/opendir.gif\" title=\"$langNoCategory\" /></th>
+		  <th width='15'><img src='../../template/classic/img/opendir.gif' title='$langNoCategory' /></th>
 		  <th colspan='6'><div align='left'>$langNoCategory</div></th>
 		</tr>";
 		showlinksofcategory(0);
-		$tool_content .= "
-                </table>";
+		$tool_content .= "</table>";
 	}
 
 	// Edw fiaxnei to tool bar me tin emfanisi apokripsi
 	$tool_content .= "<br />$more_less
 	        <table width=\"99%\" class='tbl_alt'>";
-	$i=0;
-	$catcounter=1;
-	$view="0";
-	while ($myrow=@mysql_fetch_array($resultcategories)) {
-		if (!isset($urlview))
-		{
+	$i = 0;
+	$catcounter = 1;
+	while ($myrow = mysql_fetch_array($resultcategories)) {
+		if (empty($urlview)) {
 			// No $view set in the url, thus for each category link it should be all zeros except it's own
-			makedefaultviewcode($i);
-		}
-		else
-		{
-			$view=$urlview;
-			$view[$i]="1";
+			$view = makedefaultviewcode($i);
+		} else {
+			$view = $urlview;
+			$view[$i] = '1';
 		}
 		// if the $urlview has a 1 for this categorie, this means it is expanded and should be desplayed as a
 		// - instead of a +, the category is no longer clickable and all the links of this category are displayed
-		$myrow["description"]=parse_tex($myrow["description"]);
-		if ((isset($urlview[$i]) and $urlview[$i]=="1")) {
+		$description = standard_text_escape($myrow['description']);
+		if ((isset($urlview[$i]) and $urlview[$i] == '1')) {
 			$newurlview = $urlview;
-			$newurlview[$i] = "0";
+			$newurlview[$i] = '0';
 			$tool_content .= "
                 <tr>
-		  <th width='15' valign='top'><img src=\"../../template/classic/img/opendir.gif\" title=\"$shownone\" /></th>
-		  <th colspan=\"2\" valign='top'><div class='left'><a href=\"".$_SERVER['PHP_SELF']."?urlview=".$newurlview."\">".q($myrow["categoryname"])."</a>";
-                        if (!empty($myrow["description"])) {
-                                $tool_content .= "<br /><small>".q($myrow["description"])."</small></div></th>";
+		  <th width='15' valign='top'><img src='../../template/classic/img/opendir.gif' title='$shownone' /></th>
+		  <th colspan='2' valign='top'><div class='left'><a href='$_SERVER[PHP_SELF]?urlview=$newurlview'>".q($myrow['name'])."</a>";
+                        if (!empty($description)) {
+                                $tool_content .= "<br />$description</div></th>";
                         }
                         if ($is_adminOfCourse) {
                                 showcategoryadmintools($myrow["id"]);
@@ -375,12 +292,13 @@ if (mysql_num_rows($resultcategories) > 0) {
 		} else {
 			$tool_content .=  "
 		  <tr>
-		    <th width='15' valign='top'><img src=\"../../template/classic/img/closeddir.gif\" title=\"$showall\" /></th>
-		    <th colspan=\"2\" valign='top'><div class='left'><a href=\"".$_SERVER['PHP_SELF']."?urlview=";
+		    <th width='15' valign='top'><img src='../../template/classic/img/closeddir.gif' title='$showall' /></th>
+		    <th colspan='2' valign='top'><div class='left'><a href='$_SERVER[PHP_SELF]?urlview=";
 			$tool_content .=  is_array($view)?implode('',$view):$view;
-			$tool_content .=  "\">".q($myrow["categoryname"])."</a>";
-                        if (!empty($myrow["description"])) {
-                                $tool_content .= "<br /><small>".q($myrow["description"])."</small></div></th>";
+			$tool_content .=  "'>" . q($myrow['name']) . "</a>";
+		        $description = standard_text_escape($myrow['description']);
+                        if (!empty($description)) {
+                                $tool_content .= "<br />$description</div></th>";
                         }
 			if ($is_adminOfCourse) {
 			showcategoryadmintools($myrow["id"]);
@@ -401,24 +319,127 @@ if (mysql_num_rows($resultcategories) > 0) {
 		$tool_content .=  "
                 <table width=\"99%\">
 		<tr>
-		  <td width='1'><img src=\"../../template/classic/img/opendir.gif\" title=\"$langNoCategory\" /></td>
-		  <td colspan=\"4\"><b>$langLinks</b></td>
+		  <td width='1'><img src='../../template/classic/img/opendir.gif' title='$langNoCategory' /></td>
+		  <td colspan='4'><b>$langLinks</b></td>
 		</tr>";
 		showlinksofcategory(0);
 		$tool_content .=  "
                 </table>";
 	} else {
 		if($is_adminOfCourse){
-			//if the user is the course administrator instruct him/her
-			//what he can do to add links
+			// if the user is the course administrator instruct him/her
+			// what he can do to add links
 			$tool_content .= "<p class='alert1'>$langProfNoLinksExist</p>";
 		} else {
-			//if the user has no course administrator access
-			//inform him/her that no links exist
+			// if the user has no course administrator access
+			// inform him/her that no links exist
 			$tool_content .= "<p class='alert1'>$langNoLinksExist</p>";
 		}
 	}
 }
-add_units_navigation(TRUE);
+
+add_units_navigation(true);
 draw($tool_content, 2, '', $head_content);
-?>
+
+
+function link_form_defaults($id)
+{
+	global $cours_id, $form_url, $form_title, $form_description, $category;
+
+        $result = db_query("SELECT * FROM `link` WHERE course_id = $cours_id AND id = $id");
+        if ($myrow = mysql_fetch_array($result)) {
+                $form_url = ' value="' . q($myrow['url']) . '"';
+                $form_title = ' value="' . q($myrow['title']) . '"';
+                $form_description = q(purify($myrow['description']));
+                $category = $myrow['category'];
+        } else {
+                $form_url = $form_title = $form_description = '';
+        }
+}
+
+// Enter the modified info submitted from the link form into the database
+function submit_link()
+{
+        global $cours_id, $catlinkstatus, $langLinkMod, $langLinkAdded,
+               $urllink, $title, $description, $selectcategory;
+
+        register_posted_variables(array('urllink' => true,
+                                        'title' => true,
+                                        'description' => true,
+                                        'selectcategory' => true), 'all', 'trim');
+        if (!preg_match('/^[a-zA-Z0-9_-]+:/', $urllink)) {
+                $urllink = 'http://' . $urllink;
+        }
+        $set_sql = "SET url = " . autoquote($urllink) . ",
+                        title = " . autoquote($title) . ",
+                        description = " . autoquote($description) . ",
+                        category = " . intval($selectcategory);
+
+        if (isset($_POST['id'])) {
+                $id = intval($_POST['id']);
+                db_query("UPDATE `link` $set_sql WHERE course_id = $cours_id AND id = $id");
+                $catlinkstatus = $langLinkMod;
+        } else {
+                $q = db_query("SELECT MAX(`order`) FROM `link`
+                                      WHERE course_id = $cours_id AND category = $selectcategory");
+                list($order) = mysql_fetch_row($q);
+                $order++;
+                db_query("INSERT INTO `link` $set_sql, course_id = $cours_id, `order` = $order");
+                $catlinkstatus = $langLinkAdded;
+        }
+}
+
+function category_form_defaults($id)
+{
+	global $cours_id, $form_name, $form_description;
+
+        $result = db_query("SELECT * FROM link_category WHERE course_id = $cours_id AND id = $id");
+        if ($myrow = mysql_fetch_array($result)) {
+                $form_name = ' value="' . q($myrow['name']) . '"';
+                $form_description = q($myrow['description']);
+        } else {
+                $form_name = $form_description = '';
+        }
+}
+
+// Enter the modified info submitted from the category form into the database
+function submit_category()
+{
+        global $cours_id, $langCategoryAdded, $langCategoryModded,
+               $categoryname, $description;
+
+        register_posted_variables(array('categoryname' => true,
+                                        'description' => true), 'all', 'trim');
+        $set_sql = "SET name = " . autoquote($categoryname) . ",
+                        description = " . autoquote($description);
+
+        if (isset($_POST['id'])) {
+                $id = intval($_POST['id']);
+                db_query("UPDATE `link_category` $set_sql WHERE course_id = $cours_id AND id = $id");
+                $catlinkstatus = $langCategoryModded;
+        } else {
+                $q = db_query("SELECT MAX(`order`) FROM `link_category`
+                                      WHERE course_id = $cours_id");
+                list($order) = mysql_fetch_row($q);
+                $order++;
+                db_query("INSERT INTO `link_category` $set_sql, course_id = $cours_id, `order` = $order");
+                $catlinkstatus = $langCategoryAdded;
+        }
+}
+
+function delete_link($id)
+{
+	global $cours_id, $catlinkstatus, $langLinkDeleted;
+
+	db_query("DELETE FROM `link` WHERE course_id = $cours_id AND id = $id");
+        $catlinkstatus = $langLinkDeleted;
+}
+
+function delete_category($id)
+{
+	global $cours_id, $catlinkstatus, $langCategoryDeleted;
+
+	db_query("DELETE FROM `link` WHERE course_id = $cours_id AND category = $id");
+	db_query("DELETE FROM `link_category` WHERE course_id = $cours_id AND id = $id");
+        $catlinkstatus = $langCategoryDeleted;
+}

@@ -382,12 +382,12 @@ if (!isset($_POST['submit2'])) {
                                 `wiki` TINYINT(4) NOT NULL DEFAULT 0,
                                 `agenda` TINYINT(4) NOT NULL DEFAULT 0)");
                 db_query("CREATE TABLE IF NOT EXISTS `group` (
-                                `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                                `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                                 `course_id` INT(11) NOT NULL DEFAULT 0,
                                 `name` varchar(100) NOT NULL DEFAULT '',
                                 `description` TEXT,
-                                `forum_id` int(11) NULL,
-                                `max_members` int(11) NOT NULL DEFAULT 0,
+                                `forum_id` INT(11) NULL,
+                                `max_members` INT(11) NOT NULL DEFAULT 0,
                                 `secret_directory` varchar(30) NOT NULL DEFAULT '0')");
                 db_query("CREATE TABLE IF NOT EXISTS `group_members` (
                                 `group_id` INT(11) NOT NULL,
@@ -401,6 +401,23 @@ if (!isset($_POST['submit2'])) {
                                `order` INT(11) NOT NULL DEFAULT 0,
                                `datestamp` DATE NOT NULL,
                                `course_id` INT(11) NOT NULL)");
+                db_query("CREATE TABLE IF NOT EXISTS `link` (
+                                `id` INT(11) NOT NULL AUTO_INCREMENT,
+                                `course_id` INT(11) NOT NULL,
+                                `url` VARCHAR(255),
+                                `title` VARCHAR(255),
+                                `description` TEXT,
+                                `category` INT(6) DEFAULT NULL,
+                                `order` INT(6) DEFAULT 0 NOT NULL,
+                                `hits` INT(6) DEFAULT 0 NOT NULL,
+                                PRIMARY KEY (`id`, `course_id`))");
+                db_query("CREATE TABLE IF NOT EXISTS `link_category` (
+                                `id` INT(6) NOT NULL AUTO_INCREMENT,
+                                `course_id` INT(11) NOT NULL,
+                                `name` VARCHAR(255) NOT NULL,
+                                `description` TEXT,
+                                `order` INT(6) NOT NULL DEFAULT 0,
+                                PRIMARY KEY (`id`, `course_id`))");
 
                 // Upgrade table admin_announcements if needed
                 if (mysql_field_exists($mysqlMainDb, 'admin_announcements', 'gr_body')) {

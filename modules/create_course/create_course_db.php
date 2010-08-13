@@ -632,34 +632,6 @@ db_query("CREATE TABLE `assignment_submit` (
     UNIQUE KEY `id` (`id`))
     TYPE=MyISAM $charset_spec");
 
-
-############################## LINKS #############################################
-
-    mysql_query("CREATE TABLE liens (
-               id int(11) NOT NULL auto_increment,
-               url varchar(255),
-               titre varchar(255),
-               description text,
-           category int(4) default '0' NOT NULL,
-           ordre mediumint(8) default '0' NOT NULL,
-               PRIMARY KEY (id))
-        TYPE=MyISAM $charset_spec");
-
-    mysql_query("INSERT INTO liens VALUES (
-               '1',
-               'http://www.google.com',
-               'Google',
-               '$langGoogle','0','0'
-               )");
-
-    mysql_query("CREATE TABLE `link_categories` (
-      `id` int(6) NOT NULL auto_increment,
-      `categoryname` varchar(255) default NULL,
-      `description` text,
-      `ordre` mediumint(8) NOT NULL default '0',
-      PRIMARY KEY (`id`))
-    TYPE=MyISAM $charset_spec");
-
 ###################################### DROPBOX #####################################
 
     mysql_query("CREATE TABLE dropbox_file (
