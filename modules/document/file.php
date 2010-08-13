@@ -42,18 +42,45 @@ $path_components = explode('/', $uri);
 array_shift($path_components);
 
 // temporary course change
-$dbname = addslashes(array_shift($path_components));
+$cinfo = addslashes(array_shift($path_components));
+$cinfo_components = explode(',', $cinfo);
+$_SESSION['dbname'] = $cinfo_components[0];
+if (isset($cinfo_components[1])) {
+        $group_id = intval($cinfo_components[1]);
+        $group_sql = '= ' . $group_id;
+        define('GROUP_DOCUMENTS', true);
+} else {
+        unset($group_id);
+        $group_sql = 'IS NULL';
+        $basedir = "{$webDir}courses/$dbname/document";
+        define('GROUP_DOCUMENTS', false);
+}
 
 $require_current_course = true;
 $guest_allowed = true;
 
 include '../../include/init.php';
 include '../../include/lib/forcedownload.php';
-include('../../include/action.php');
+include '../../include/action.php';
 
 mysql_select_db($mysqlMainDb);
 
-$basedir = "{$webDir}courses/$dbname/document";
+if (GROUP_DOCUMENTS) {
+        list($secret_directory) = mysql_fetch_row(db_query("SELECT secret_directory FROM `group`
+                                                                WHERE id = $group_id AND course_id = $cours_id"));
+        if (!$secret_directory) {
+                not_found();
+        }
+        $basedir = "{$webDir}courses/$dbname/group/$secret_directory";
+        if (!$uid) {
+                error($langNoRead);
+        }
+        list($member) = mysql_fetch_row(db_query("SELECT COUNT(*) FROM group_members WHERE
+                                                         group_id = $group_id AND user_id = $uid"));
+        if (!($is_adminOfCourse or $member)) {
+                error($langNoRead);
+        }
+}
 
 $depth = 1;
 $path = '';
@@ -62,28 +89,18 @@ foreach ($path_components as $component) {
         $q = db_query("SELECT path, visibility, format,
                                     (LENGTH(path) - LENGTH(REPLACE(path, '/', ''))) AS depth
                               FROM document WHERE course_id = $cours_id AND
-                                                  group_id IS NULL AND
+                                                  group_id $group_sql AND
                                                   filename = " . quote($component) . " AND
                                                   path LIKE '$path%' HAVING depth = $depth");
         if (!$q or mysql_num_rows($q) == 0) {
-                restore_saved_course();
-                header("HTTP/1.0 404 Not Found");
-                echo '<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN"><html><head>',
-                     '<title>404 Not Found</title></head><body>',
-                     '<h1>Not Found</h1><p>The requested path "',
-                     htmlspecialchars(preg_replace('/^.*file\.php/', '', $uri)),
-                     '" was not found.</p></body></html>';
-                exit;
+                not_found();
         }
         $r = mysql_fetch_array($q);
         $path = $r['path'];
         $depth++;
 }
 if ($r['visibility'] != 'v' and !$is_adminOfCourse) {
-        $_SESSION['errMessage'] = $langNoRead;
-        restore_saved_course();
-        session_write_close();
-        header("Location: $urlServer" );
+        error($langNoRead);
 }
 if (!preg_match("/\.$r[format]$/", $component)) {
         $component .= '.' . $r['format'];
@@ -106,4 +123,27 @@ function restore_saved_course()
         if (defined('old_dbname')) {
                 $_SESSION['dbname'] = old_dbname;
         }
+}
+
+function not_found()
+{
+        global $uri;
+        restore_saved_course();
+        header("HTTP/1.0 404 Not Found");
+        echo '<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN"><html><head>',
+             '<title>404 Not Found</title></head><body>',
+             '<h1>Not Found</h1><p>The requested path "',
+             htmlspecialchars(preg_replace('/^.*file\.php/', '', $uri)),
+             '" was not found.</p></body></html>';
+        exit;
+}
+
+function error($message)
+{
+        global $urlServer;
+        $_SESSION['errMessage'] = $message;
+        restore_saved_course();
+        session_write_close();
+        header("Location: $urlServer" );
+        exit;
 }

@@ -53,33 +53,29 @@ if (isset($_GET['selfReg'])) {
 	if (isset($uid) and !$is_member and $statut != 10 and $member_count < $max_members) {
                 $sqlReg = mysql_query("INSERT INTO group_members SET user_id = $uid, group_id = $group_id");
                 $message = "<font color=red>$langGroupNowMember</font>: ";
-                $regDone=1;
+                $regDone = $is_member = true;
 	} else { 
 		$tool_content .= $langForbidden;
 		draw($tool_content, 2, 'group');
-		exit();
+		exit;
 	}
 }
 
-if ($is_adminOfCourse or $is_tutor) {
-        $tool_content .= "<div id='operations_container'><ul id='opslist'>
-                <li><a href='group_edit.php?userGroupId=$group_id'>$langEditGroup</a></li>";
-} elseif ($self_reg and isset($uid)) { 
-        if ($member_count < $totalRegistered) {
-                $tool_content .=  "<div id='operations_container'><ul id='opslist'>
-                        <li>
-                        <a href='$_SERVER[PHP_SELF]?registration=1&amp;userGroupId=$group_id'>$langRegIntoGroup</a></li>";
-        } else {
-                $tool_content .= $langForbidden;
-                draw($tool_content, 2, 'group');
-                exit();
-        }
-} elseif(isset($regDone)) {
-        $tool_content .= "<div id='operations_container'><ul id='opslist'>";
-        $tool_content .= "$message&nbsp;";
-} else {
-        $tool_content .= "<div id='operations_container'><ul id='opslist'>";
+if (!$is_member and !$is_adminOfCourse and (!$self_reg or $member_count >= $max_members)) {
+        $tool_content .= $langForbidden;
+        draw($tool_content, 2, 'group');
+        exit;
 }
+
+$tool_content .= "<div id='operations_container'><ul id='opslist'>\n";
+if ($is_adminOfCourse or $is_tutor) {
+                $tool_content .= "<li><a href='group_edit.php?userGroupId=$group_id'>$langEditGroup</a></li>\n";
+} elseif ($self_reg and isset($uid) and !$is_member and $member_count < $max_members) { 
+                $tool_content .=  "<li><a href='$_SERVER[PHP_SELF]?registration=1&amp;userGroupId=$group_id'>$langRegIntoGroup</a></li>\n";
+} elseif (isset($regDone)) {
+        $tool_content .= "$message&nbsp;";
+}
+
 $tool_content .= loadGroupTools();
 $tool_content .=  "<br /><table width='99%' class='FormData'>
 	<thead><tr>
