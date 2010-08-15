@@ -103,7 +103,7 @@ if ($is_adminOfCourse) {
 }
 $main_content .= "\n      <div class='course_info'>";
 if (!empty($description)) {
-        $main_content .= "\n      <div class=\"descr_title\">$langDescription$edit_link</div>\n      <p>$description</p>";
+        $main_content .= "\n      <div class='descr_title'>$langDescription$edit_link</div>\n$description";
 
 } else {
         $main_content .= "\n      <p>$langThisCourseDescriptionIsEmpty$edit_link</p>";
@@ -230,10 +230,6 @@ while ($cu = mysql_fetch_array($sql)) {
                 $first = false;
                 $count_index++;
         }
-// Close units div if open
-if (!is_null($maxorder) or $is_adminOfCourse) {
-        $main_content .= "\n  </div>\n";
-}
 
 switch ($type){
 	case 'pre': { //pre
