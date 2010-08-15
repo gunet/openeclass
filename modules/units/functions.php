@@ -471,23 +471,22 @@ function show_wiki($title, $comments, $resource_id, $wiki_id, $visibility)
 function show_link($title, $comments, $resource_id, $link_id, $visibility)
 {
 	global $id, $tool_content, $mysqlMainDb, $urlServer, $is_adminOfCourse,
-               $langWasDeleted, $currentCourseID;
+               $langWasDeleted, $cours_id, $currentCourseID;
 
 	$comment_box = $class_vis = $imagelink = $link = '';
         $title = htmlspecialchars($title);
-	$r = db_query("SELECT * FROM liens WHERE id = $link_id",
-                      $currentCourseID);
+	$r = db_query("SELECT * FROM link WHERE course_id = $cours_id AND id = $link_id");
 	if (mysql_num_rows($r) == 0) { // check if it was deleted
 		if (!$is_adminOfCourse) {
 			return '';
 		} else {
 			$status = 'del';
 			$imagelink = "<img src='../../template/classic/img/delete.gif' />";
-			$exlink = "<span class='invisible'>$title ($langWasDeleted)</span>";
+			$exlink = "<span class='invisible'>" . q($title) . " ($langWasDeleted)</span>";
 		}
 	} else {
                 $l = mysql_fetch_array($r, MYSQL_ASSOC);
-		$link = "<a href='${urlServer}modules/link/link_goto.php?link_id=$link_id&amp;link_url=$l[url]' target=_blank>";
+		$link = "<a href='${urlServer}modules/link/go.php?c=$currentCourseID&amp;id=$link_id&amp;url=$l[url]' target='_blank'>";
                 $exlink = $link . "$title</a>";
 		$imagelink = $link .
                         "<img src='../../template/classic/img/links_" .
@@ -497,9 +496,9 @@ function show_link($title, $comments, $resource_id, $link_id, $visibility)
 
 
         if (!empty($comments)) {
-                $comment_box = "<br />$comments";
+                $comment_box = '<br />' . standard_text_escape($comments);
 	} else {
-                $comment_box = "";
+                $comment_box = '';
         }
 
 	return "
@@ -513,20 +512,19 @@ function show_link($title, $comments, $resource_id, $link_id, $visibility)
 function show_linkcat($title, $comments, $resource_id, $linkcat_id, $visibility)
 {
 	global $id, $tool_content, $mysqlMainDb, $urlServer, $is_adminOfCourse,
-               $langWasDeleted, $currentCourseID;
+               $langWasDeleted, $cours_id, $currentCourseID;
 	
 	$content = $linkcontent = '';
 	$comment_box = $class_vis = $imagelink = $link = '';
         $title = htmlspecialchars($title);
-	$sql = db_query("SELECT * FROM link_categories WHERE id = $linkcat_id",
-                      $currentCourseID);
+	$sql = db_query("SELECT * FROM link_category WHERE course_id = $cours_id AND id = $linkcat_id");
 	if (mysql_num_rows($sql) == 0) { // check if it was deleted
 		if (!$is_adminOfCourse) {
 			return '';
 		} else {
 			$status = 'del';
 			$imagelink = "<img src='../../template/classic/img/delete.gif' />";
-			$exlink = "<span class='invisible'>$title ($langWasDeleted)</span>";
+			$exlink = "<span class='invisible'>" . q($title) . " ($langWasDeleted)</span>";
 		}
 	} else {
                 $class_vis = ($visibility == 'v')? ' class="even"': ' class="invisible"';
@@ -534,18 +532,18 @@ function show_linkcat($title, $comments, $resource_id, $linkcat_id, $visibility)
 			$content .= "
         <tr$class_vis>
           <td width='1'><img src='../../template/classic/img/opendir.gif' /></td>
-          <td>$lcat[categoryname]";
+          <td>" . q($lcat['name']);
 			if (!empty($lcat['description'])) {
 				$comment_box = "<br />$lcat[description]";
 			} else {
                                 $comment_box = '';
                         }
 
-			$sql2 = db_query("SELECT * FROM liens WHERE category='$lcat[id]'", $currentCourseID);
+			$sql2 = db_query("SELECT * FROM link WHERE course_id = $cours_id AND category = $lcat[id]");
 			while ($l = mysql_fetch_array($sql2, MYSQL_ASSOC)) {
 				$imagelink = "<img src='../../template/classic/img/links_" .
 				($visibility == 'i'? 'off': 'on') . ".gif' />";
-				$linkcontent .= "<br />$imagelink&nbsp;&nbsp;<a href='${urlServer}modules/link/link_goto.php?link_id=$l[id]&amp;link_url=$l[url]' target=_blank>$l[titre]</a>";
+				$linkcontent .= "<br />$imagelink&nbsp;&nbsp;<a href='${urlServer}modules/link/go.php?c=$currentCourseID&amp;id=$l[id]&amp;url=$l[url]' target='_blank'>" . q($l['title']) . "</a>";
 			}
 		}
 	}
