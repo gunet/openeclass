@@ -163,12 +163,14 @@ draw($tool_content, 2, 'units', $head_content);
 // insert docs in database
 function insert_docs($id)
 {
-	list($order) = mysql_fetch_array(db_query("SELECT MAX(`order`) FROM unit_resources WHERE unit_id=$id"));
+	global $cours_id;
+
+	list($order) = mysql_fetch_array(db_query("SELECT MAX(`order`) FROM unit_resources WHERE unit_id = $id"));
 	
 	foreach ($_POST['document'] as $file_id) {
 		$order++;
 		$file = mysql_fetch_array(db_query("SELECT * FROM document
-			WHERE id =" . intval($file_id), $GLOBALS['currentCourseID']), MYSQL_ASSOC);
+			WHERE course_id = $cours_id AND id =" . intval($file_id), MYSQL_ASSOC);
 		$title = (empty($file['title']))? $file['filename']: $file['title'];
 		db_query("INSERT INTO unit_resources SET unit_id=$id, type='doc', title=" .
 			 quote($title) . ", comments=" . quote($file['comment']) .

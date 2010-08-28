@@ -28,6 +28,7 @@
 Units display module	
 */
 
+define('GROUP_DOCUMENTS', false);
 $require_current_course = true;
 $require_help = TRUE;
 $helpTopic = 'AddCourseUnitscontent';
@@ -36,8 +37,10 @@ include '../../include/lib/fileDisplayLib.inc.php';
 include '../../include/action.php';
 include 'functions.php';
 $tool_content = $head_content = '';
+
 $action = new action();
 $action->record('MODULE_ID_UNITS');
+
 mysql_select_db($mysqlMainDb);
 
 if (isset($_REQUEST['id'])) {

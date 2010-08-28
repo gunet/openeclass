@@ -27,9 +27,10 @@
 
 function display_docs()
 {
-        global $id, $currentCourseID, $webDir, $tool_content,
+        global $id, $webDir, $currentCourseID, $cours_id, $tool_content,
                $langDirectory, $langUp, $langName, $langSize, $langDate, $langType, $langAddModulesButton, $langChoice, $langNoDocuments;
 
+	define('GROUP_DOCUMENTS', false);
         $basedir = $webDir . 'courses/' . $currentCourseID . '/document';
         if (isset($_GET['path'])) {
                 $path = escapeSimple($_GET['path']);
@@ -40,10 +41,11 @@ function display_docs()
                 $path = "";
         }
         $result = db_query("SELECT * FROM document
-                            WHERE path LIKE '$path/%'
-                            AND path NOT LIKE '$path/%/%'", $currentCourseID);
+                            WHERE course_id = $cours_id AND
+			          path LIKE '$path/%' AND
+                                  path NOT LIKE '$path/%/%'");
         $fileinfo = array();
-        while($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
+        while ($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
                 $fileinfo[] = array(
 			'id' => $row['id'],
                         'is_dir' => is_dir($basedir . $row['path']),
@@ -66,7 +68,7 @@ function display_docs()
                         $colspan = 5;
                 } else {
                         list($dirname) = mysql_fetch_row(db_query("SELECT filename FROM document
-                                                                   WHERE path = '$path'"));
+                                                                   WHERE course_id = $cours_id AND path = '$path'"));
 			$parentpath = dirname($path);
                         $dirname = "/".htmlspecialchars($dirname);
                         $parentlink = $_SERVER['PHP_SELF'] . "?type=doc&amp;id=$id&amp;path=" . $parentpath;
@@ -74,7 +76,7 @@ function display_docs()
                                       "<img src='../../template/classic/img/parent.gif' height='20' width='20' /></a></th>";
                         $colspan = 4;
                 }
-        $tool_content .= "\n    <form action='insert.php' method='post'><input type='hidden' name='id' value='$id' />" .
+		$tool_content .= "\n    <form action='insert.php' method='post'><input type='hidden' name='id' value='$id' />" .
                          "\n    <table class='tbl_alt' width='99%'>" .
                          "\n    <tr>".
                          "\n       <th colspan='$colspan'><div align='left'>$langDirectory: $dirname</div></th>" .
@@ -87,7 +89,7 @@ function display_docs()
                          "\n      <th width='80'>$langDate</th>" .
                          "\n      <th width='80'>$langChoice</th>" .
                          "\n    </tr>\n";
-	$counter = 0;
+		$counter = 0;
 		foreach (array(true, false) as $is_dir) {
 			foreach ($fileinfo as $entry) {
 				if ($entry['is_dir'] != $is_dir) {
@@ -124,9 +126,9 @@ function display_docs()
 	
 				/*** comments ***/
 				if (!empty($entry['comment'])) {
-					$tool_content .= "<br /><span class='comment'>" .
-						nl2br(htmlspecialchars($entry['comment'])) .
-						"</span>";
+					$tool_content .= "<br /><div class='comment'>" .
+						standard_text_escape($entry['comment']) .
+						"</div>\n";
 				}
 				$tool_content .= "</td>";
 				if ($is_dir) {

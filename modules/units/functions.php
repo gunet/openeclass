@@ -149,12 +149,12 @@ function show_resource($info)
 // display resource documents
 function show_doc($title, $comments, $resource_id, $file_id)
 {
-        global $is_adminOfCourse, $currentCourseID, $langWasDeleted,
-               $visibility_check, $urlServer, $id;
+        global $mysqlMainDb, $is_adminOfCourse, $currentCourseID, $cours_id,
+               $langWasDeleted, $visibility_check, $urlServer, $id;
 
         $title = htmlspecialchars($title);
-        $r = db_query("SELECT * FROM document
-	               WHERE id =" . intval($file_id) ." $visibility_check", $GLOBALS['currentCourseID']);
+        $r = db_query("SELECT * FROM `$mysqlMainDb`.document
+	               WHERE course_id = $cours_id AND id =" . intval($file_id) ." $visibility_check");
         if (mysql_num_rows($r) == 0) {
                 if (!$is_adminOfCourse) {
                         return '';
@@ -475,7 +475,7 @@ function show_link($title, $comments, $resource_id, $link_id, $visibility)
 
 	$comment_box = $class_vis = $imagelink = $link = '';
         $title = htmlspecialchars($title);
-	$r = db_query("SELECT * FROM link WHERE course_id = $cours_id AND id = $link_id");
+	$r = db_query("SELECT * FROM `$mysqlMainDb`.link WHERE course_id = $cours_id AND id = $link_id");
 	if (mysql_num_rows($r) == 0) { // check if it was deleted
 		if (!$is_adminOfCourse) {
 			return '';
