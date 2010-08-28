@@ -325,14 +325,21 @@ function upgrade_course_2_4($code, $extramessage = '')
 
         // move main documents to central table and if successful drop table
         if (mysql_table_exists($code, 'document')) {
+                list($doc_id) = mysql_fetch_row(db_query("SELECT MAX(id) FROM `$mysqlMainDb`.document"));
+                if (!$doc_id) {
+                        $doc_id = 1;
+                }
                 db_query("INSERT INTO `$mysqlMainDb`.document
-                                (`course_id`, `group_id`, `path`, `filename`, `visibility`, `comment`,
+                                (`id`, `course_id`, `group_id`, `path`, `filename`, `visibility`, `comment`,
                                  `category`, `title`, `creator`, `date`, `date_modified`, `subject`,
                                  `description`, `author`, `format`, `language`, `copyrighted`)
-                                SELECT $course_id, NULL, `path`, `filename`, `visibility`, `comment`,
+                                SELECT $doc_id + id, $course_id, NULL, `path`, `filename`, `visibility`, `comment`,
                                        `category`, `title`, `creator`, `date`, `date_modified`, `subject`,
                                        `description`, `author`, `format`, `language`, `copyrighted` FROM document") and
                        db_query("DROP TABLE document");
+                db_query("UPDATE `$mysqlMainDb`.course_units AS units, `$mysqlMainDb`.unit_resources AS res
+                                 SET res_id = res_id + $doc_id
+                                 WHERE units.id = res.unit_id AND course_id = $course_id AND type = 'doc'");
         }
 
         // move user group information to central tables and if successful drop original tables
