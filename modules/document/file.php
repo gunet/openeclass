@@ -52,7 +52,6 @@ if (isset($cinfo_components[1])) {
 } else {
         unset($group_id);
         $group_sql = 'IS NULL';
-        $basedir = "{$webDir}courses/$dbname/document";
         define('GROUP_DOCUMENTS', false);
 }
 
@@ -80,6 +79,8 @@ if (GROUP_DOCUMENTS) {
         if (!($is_adminOfCourse or $member)) {
                 error($langNoRead);
         }
+} else {
+        $basedir = "{$webDir}courses/$dbname/document";
 }
 
 $depth = 1;
