@@ -619,16 +619,6 @@ elseif (isset($_REQUEST['install1']) || isset($_REQUEST['back1']))
 	$_SESSION['step']=1;
 	$configErrorExists = false;
 
-	if (empty($SERVER_SOFTWARE)) {
-		$errorContent[]= "<p class='caution_small'>$langWarningInstall1 $langWarnInstallNotice1 <a href='$install_info_file'>$langHere</a> $langWarnInstallNotice2</p>";
-		$configErrorExists = true;
-	}
-
-	if (!ini_get('short_open_tag')) {
-		$errorContent[]= "<p class=\"caution_small\">$langWarningInstall2 $langWarnInstallNotice1 <a href='$install_info_file'>$langHere</a> $langWarnInstallNotice2</p>";
-		$configErrorExists = true;
-	}
-
 	// create config, courses and video catalogs
 	//config directory
 	if (!is_dir("../config")) {
