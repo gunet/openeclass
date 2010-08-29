@@ -13,7 +13,7 @@
 <link href="../template/classic/tool_content.css" rel="stylesheet" type="text/css" />
 <link href="./install.css" rel="stylesheet" type="text/css" />
 
-<link rel="SHORTCUT ICON" href="{URL_PATH}template/classic/img/eclass-icon.ico">
+<link rel="SHORTCUT ICON" href="{URL_PATH}template/classic/img/eclass-icon.ico" />
 
  {HEAD_EXTRAS}
 
@@ -24,15 +24,12 @@
 <div id="container"> 
 
   <div id="header"> 
-		<a id="logo" href="{URL_PATH}" title="Home page"></a>
-	
+                <a id="logo" title="Home page">&nbsp;</a>
+
 		<div id="fbar_info">
 			<div class="user">{LANG_USER} {USER_NAME} {USER_SURNAME}
    				<a href="{LOGOUT_LINK}index.php?logout=yes" title="{LANG_LOGOUT}" >{LANG_LOGOUT}</a>
    			</div>
-    		<div class="langSwitch">
-    			<a href="{LOCALIZE_LINK}" title="{LANG_LOCALIZE}">{LANG_LOCALIZE}</a>
-    		</div>
 		</div>
   	</div>
 	
@@ -45,7 +42,7 @@
 		    {BREAD_TEXT}
 			</div>
 			<div>
-				<span class="logo_icon"></span><span class="lesson">{FOUR_BAR_TEXT}</span>
+				<span class="logo_icon">&nbsp;</span><span class="lesson">{FOUR_BAR_TEXT}</span>
 			</div>
 		</div>
 
@@ -57,7 +54,6 @@
 				<div id="navcontainer">
 					<ul id="navlist">
 					<!-- BEGIN leftNavCategoryBlock -->
-  						<li class="{NAV_CSS_CAT_CLASS}">{ACTIVE_TOOLS}</li>
 						<!-- BEGIN leftNavLinkBlock -->
 						<li class="{CURRENT_STEP}">
 							<div>
@@ -77,12 +73,12 @@
 				{CURRENT_STEP_TITLE}
 			</div>
 
-			<!-- ---------- BEGIN TOOL CONTENT ---------- -->
+			<!-- BEGIN TOOL CONTENT -->
 			<br/>
 				{EXTRA_MSG}
 				{TOOL_CONTENT}
 				
-			<!-- ---------- END TOOL CONTENT ---------- -->
+			<!-- END TOOL CONTENT -->
 			
 	</div>
 
@@ -101,6 +97,6 @@
 </div>
 
 <!-- END mainBlock -->
-
+</div>
 </body>
 </html>

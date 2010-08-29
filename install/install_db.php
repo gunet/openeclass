@@ -78,11 +78,11 @@ db_query("CREATE TABLE annonces (
 # table admin_announcements
 #
 db_query("CREATE TABLE admin_announcements (
-	id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
-	title VARCHAR(255) NULL,
-	body TEXT NULL,
+	id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	title VARCHAR(255) NOT NULL,
+	body TEXT,
 	`date` DATE NOT NULL,
-	lang` varchar(10) NOT NULL default 'el'
+	`lang` VARCHAR(10) NOT NULL DEFAULT 'el',
 	visible ENUM('V', 'I') NOT NULL) $charset_spec");
 
 #
@@ -316,6 +316,23 @@ db_query("CREATE TABLE IF NOT EXISTS `link_category` (
                 `description` TEXT,
                 `order` INT(6) NOT NULL DEFAULT 0,
                 PRIMARY KEY (`id`, `course_id`))");
+
+db_query('CREATE TABLE IF NOT EXISTS ebook (
+                `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                `course_id` INT(11) NOT NULL,
+                `order` INT(11) NOT NULL,
+                `title` TEXT)');
+db_query('CREATE TABLE IF NOT EXISTS ebook_section (
+                `ebook_id` INT(11) NOT NULL,
+                `id` VARCHAR(11) NOT NULL,
+                `title` TEXT,
+                PRIMARY KEY (`ebook_id`, `id`))');
+db_query('CREATE TABLE IF NOT EXISTS ebook_subsection (
+                `section_id` VARCHAR(11) NOT NULL,
+                `id` VARCHAR(11) NOT NULL,
+                `file` VARCHAR(128),
+                `title` TEXT,
+                PRIMARY KEY (`section_id`, `id`))');
 
 // encrypt the admin password into DB
 $password_encrypted = md5($passForm);
