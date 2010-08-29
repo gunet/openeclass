@@ -156,7 +156,7 @@ if (isset($_POST['back1']) or !isset($_POST['visit'])) {
         </tr>
 	<tr>
           <td>&nbsp;</td>
-	  <td><input type='submit' name='create2' value='$langNextStep >' /><input type='hidden' name='visit' value='true' /></td>
+	  <td><input type='submit' name='create2' value='$langNextStep  />' /><input type='hidden' name='visit' value='true' /></td>
 	  <td>&nbsp;</td>
         </tr>
         </table>
@@ -184,7 +184,7 @@ if (isset($_POST['back1']) or !isset($_POST['visit'])) {
         </td>
       </tr>
       <tr>
-	<td><input type='submit' name='back1' value='< $langPreviousStep ' />&nbsp;<input type='submit' name='create3' value='$langNextStep >' /></td>
+	<td><input type='submit' name='back1' value='< $langPreviousStep ' />&nbsp;<input type='submit' name='create3' value='$langNextStep  />' /></td>
       </tr>
       </table>
     </fieldset>
@@ -204,22 +204,22 @@ if (isset($_POST['back1']) or !isset($_POST['visit'])) {
 	<td>
 	  <table class='tbl_alt' width='99%'>
 	  <tr class='even'>
-	    <td><img src=\"../../template/classic/img/OpenCourse.gif\" title=\"".$m['legopen']."\" width=\"16\" height=\"16\"></td>
+	    <td><img src=\"../../template/classic/img/OpenCourse.gif\" title=\"".$m['legopen']."\" width=\"16\" height=\"16\" /></td>
 	    <td width='100'>".$m['legopen']."</td>
 	    <td><input name=\"formvisible\" type=\"radio\" value=\"2\" checked=\"checked\" /></td>
 	    <td class='right'>$langPublic</td>
 	  </tr>
 	  <tr class='even'>
-	    <td valign='top'><img src=\"../../template/classic/img/Registration.gif\" title=\"".$m['legrestricted']."\" width=\"16\" height=\"16\"></td>
+	    <td valign='top'><img src=\"../../template/classic/img/Registration.gif\" title=\"".$m['legrestricted']."\" width=\"16\" height=\"16\" /></td>
 	    <td valign='top'>".$m['legrestricted']."</td>
 	    <td valign='top'><input name=\"formvisible\" type=\"radio\" value=\"1\" /></td>
 	    <td class='right'>
               $langPrivOpen<br />
-              $langOptPassword <input type='text' name='password' value='".q($password)."' class='FormData_InputText'>
+              $langOptPassword <input type='text' name='password' value='".q($password)."' class='FormData_InputText' />
             </td>
           </tr>
 	  <tr class='even'>
-	    <td valign='top'><img src=\"../../template/classic/img/ClosedCourse.gif\" title=\"".$m['legclosed']."\" width=\"16\" height=\"16\"></td>
+	    <td valign='top'><img src=\"../../template/classic/img/ClosedCourse.gif\" title=\"".$m['legclosed']."\" width=\"16\" height=\"16\" /></td>
 	    <td valign='top'>".$m['legclosed']."</td>
 	    <td valign='top'><input name=\"formvisible\" type=\"radio\" value=\"0\" /></td>
 	    <td class='right'>$langPrivate</td>
@@ -236,76 +236,85 @@ if (isset($_POST['back1']) or !isset($_POST['visit'])) {
 	<td>
  	  <table class='tbl_border'>
 	  <tr class='even'>
-	    <td width='30' ><img src=\"../../template/classic/img/calendar_on.gif\" alt=\"\" height=\"16\" width=\"16\"></td>
+	    <td width='30' ><img src=\"../../template/classic/img/calendar_on.gif\" alt=\"\" height=\"16\" width=\"16\" /></td>
 	    <td width='150'>$langAgenda</td>
 	    <td width='30' ><input name=\"subsystems[]\" type=\"checkbox\" value=\"1\" checked=\"checked\" /></td>
 	    <th width='2' >&nbsp;</th>
-	    <td width='30' >&nbsp;<img src=\"../../template/classic/img/dropbox_on.gif\" alt=\"\" height=\"16\" width=\"16\"></td>
+	    <td width='30' >&nbsp;<img src=\"../../template/classic/img/dropbox_on.gif\" alt=\"\" height=\"16\" width=\"16\" /></td>
 	    <td width='150'>$langDropBox</td>
  	    <td width='30' ><input type=\"checkbox\" name=\"subsystems[]\" value=\"16\" /></td>
 	  </tr>
 	  <tr class='even'>
-	    <td><img src=\"../../template/classic/img/links_on.gif\" alt=\"\" height=\"16\" width=\"16\"></td>
+	    <td><img src=\"../../template/classic/img/links_on.gif\" alt=\"\" height=\"16\" width=\"16\" /></td>
 	    <td>$langLinks</td>
 	    <td><input name=\"subsystems[]\" type=\"checkbox\" value=\"2\" checked=\"checked\" /></td>
 	    <th>&nbsp;</th>
-	    <td>&nbsp;<img src=\"../../template/classic/img/groups_on.gif\" alt=\"\" height=\"16\" width=\"16\"></td>
+	    <td>&nbsp;<img src=\"../../template/classic/img/groups_on.gif\" alt=\"\" height=\"16\" width=\"16\" /></td>
 	    <td>$langGroups</td>
 	    <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"15\" /></td>
 	  </tr>
 	  <tr class='even'>
-	    <td><img src=\"../../template/classic/img/docs_on.gif\" alt=\"\" height=\"16\" width=\"16\"></td>
+	    <td><img src=\"../../template/classic/img/docs_on.gif\" alt=\"\" height=\"16\" width=\"16\" /></td>
 	    <td>$langDoc</td>
 	    <td><input name=\"subsystems[]\" type=\"checkbox\" value=\"3\" checked=\"checked\" /></td>
 	    <th>&nbsp;</th>
-	    <td>&nbsp;<img src=\"../../template/classic/img/chat_on.gif\" alt=\"\" height=\"16\" width=\"16\"></td>
+	    <td>&nbsp;<img src=\"../../template/classic/img/chat_on.gif\" alt=\"\" height=\"16\" width=\"16\" /></td>
 	    <td>$langConference</td>
 	    <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"19\" /></td>
 	  </tr>
 	  <tr class='even'>
-	    <td><img src=\"../../template/classic/img/video_on.gif\" alt=\"\" height=\"16\" width=\"16\"></td>
+	    <td><img src=\"../../template/classic/img/video_on.gif\" alt=\"\" height=\"16\" width=\"16\" /></td>
 	    <td>$langVideo</td>
 	    <td><input name=\"subsystems[]\" type=\"checkbox\" value=\"4\"  /></td>
 	    <th>&nbsp;</th>
-	    <td>&nbsp;<img src=\"../../template/classic/img/description_on.gif\" alt=\"\" height=\"16\" width=\"16\"></td>
+	    <td>&nbsp;<img src=\"../../template/classic/img/description_on.gif\" alt=\"\" height=\"16\" width=\"16\" /></td>
 	    <td>$langCourseDescription</td>
 	    <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"20\" checked=\"checked\" /></td>
 	  </tr>
 	  <tr class='even'>
-	    <td><img src=\"../../template/classic/img/assignments_on.gif\" alt=\"\" height=\"16\" width=\"16\"></td>
+	    <td><img src=\"../../template/classic/img/assignments_on.gif\" alt=\"\" height=\"16\" width=\"16\" /></td>
 	    <td>$langWorks</td>
 	    <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"5\" /></td>
 	    <th>&nbsp;</th>
-	    <td>&nbsp;<img src=\"../../template/classic/img/questionnaire_on.gif\" alt=\"\" height=\"16\" width=\"16\"></td>
+	    <td>&nbsp;<img src=\"../../template/classic/img/questionnaire_on.gif\" alt=\"\" height=\"16\" width=\"16\" /></td>
 	    <td>$langQuestionnaire</td>
 	    <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"21\" /></td>
 	  </tr>
 	  <tr class='even'>
-	    <td><img src=\"../../template/classic/img/announcements_on.gif\" alt=\"\" height=\"16\" width=\"16\"></td>
+	    <td><img src=\"../../template/classic/img/announcements_on.gif\" alt=\"\" height=\"16\" width=\"16\" /></td>
 	    <td>$langAnnouncements</td>
 	    <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"7\" checked=\"checked\"/></td>
 	    <th>&nbsp;</th>
-	    <td>&nbsp;<img src=\"../../template/classic/img/lp_on.gif\" alt=\"\" height=\"16\" width=\"16\"></td>
+	    <td>&nbsp;<img src=\"../../template/classic/img/lp_on.gif\" alt=\"\" height=\"16\" width=\"16\" /></td>
 	    <td>$langLearnPath</td>
 	    <td><input type=\"checkbox\" name=\"subsystems[]\"  value=\"23\" /></td>
 	  </tr>
 	  <tr class='even'>
-	    <td><img src=\"../../template/classic/img/forum_on.gif\" alt=\"\" height=\"16\" width=\"16\"></td>
+	    <td><img src=\"../../template/classic/img/forum_on.gif\" alt=\"\" height=\"16\" width=\"16\" /></td>
 	    <td>$langForums</td>
 	    <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"9\" /></td>
 	    <th>&nbsp;</th>
-	    <td>&nbsp;<img src=\"../../template/classic/img/wiki_on.gif\" alt=\"\" height=\"16\" width=\"16\"></td>
+	    <td>&nbsp;<img src=\"../../template/classic/img/wiki_on.gif\" alt=\"\" height=\"16\" width=\"16\" /></td>
 	    <td>$langWiki</td>
 	    <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"26\" /></td>
 	  </tr>
 	  <tr class='even'>
-	    <td><img src=\"../../template/classic/img/exercise_on.gif\" alt=\"\" height=\"16\" width=\"16\"></td>
+	    <td><img src=\"../../template/classic/img/exercise_on.gif\" alt=\"\" height=\"16\" width=\"16\" /></td>
 	    <td>$langExercices</td>
 	    <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"10\" /></td>
 	    <th>&nbsp;</th>
-            <td>&nbsp;<img src=\"../../template/classic/img/glossary_on.gif\" alt=\"\" height=\"16\" width=\"16\"></td>
+            <td>&nbsp;<img src=\"../../template/classic/img/glossary_on.gif\" alt=\"\" height=\"16\" width=\"16\" /></td>
 	    <td>$langGlossary</td>
 	    <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"17\" checked=\"checked\" /></td>
+	  </tr>
+	  <tr class='even'>
+	    <td><img src=\"../../template/classic/img/ebook_on.gif\" alt=\"\" height=\"16\" width=\"16\" /></td>
+	    <td>$langEBook</td>
+	    <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"18\" /></td>
+	    <th>&nbsp;</th>
+            <td>&nbsp;</td>
+	    <td>&nbsp;</td>
+	    <td>&nbsp;</td>
 	  </tr>
 	  </table>
         <br />
@@ -313,8 +322,8 @@ if (isset($_POST['back1']) or !isset($_POST['visit'])) {
       </tr>
       <tr>
 	<td>
-          <input type='submit' name='back2' value='< $langPreviousStep '>&nbsp;
-	  <input type='submit' name='create_course' value=\"$langFinalize\">
+          <input type='submit' name='back2' value='< $langPreviousStep ' />&nbsp;
+	  <input type='submit' name='create_course' value=\"$langFinalize\" />
         </td>
       </tr>
       </table>
@@ -350,16 +359,16 @@ if (isset($_POST['create_course'])) {
 
         // create directories
         umask(0);
-        if (! (mkdir("../../courses/$repertoire", 0777) and
-                                mkdir("../../courses/$repertoire/image", 0777) and
-                                mkdir("../../courses/$repertoire/document", 0777) and
-                                mkdir("../../courses/$repertoire/dropbox", 0777) and
-                                mkdir("../../courses/$repertoire/page", 0777) and
-                                mkdir("../../courses/$repertoire/work", 0777) and
-                                mkdir("../../courses/$repertoire/group", 0777) and
-                                mkdir("../../courses/$repertoire/temp", 0777) and
-                                mkdir("../../courses/$repertoire/scormPackages", 0777) and
-                                mkdir("../../video/$repertoire", 0777))) {
+        if (!(mkdir("../../courses/$repertoire", 0777) and
+              mkdir("../../courses/$repertoire/image", 0777) and
+              mkdir("../../courses/$repertoire/document", 0777) and
+              mkdir("../../courses/$repertoire/dropbox", 0777) and
+              mkdir("../../courses/$repertoire/page", 0777) and
+              mkdir("../../courses/$repertoire/work", 0777) and
+              mkdir("../../courses/$repertoire/group", 0777) and
+              mkdir("../../courses/$repertoire/temp", 0777) and
+              mkdir("../../courses/$repertoire/scormPackages", 0777) and
+              mkdir("../../video/$repertoire", 0777))) {
                 $tool_content .= "<div class='caution'>$langErrorDir</div>";
                 draw($tool_content, '1', '', $head_content);
                 exit;

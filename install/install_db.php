@@ -319,6 +319,7 @@ db_query("CREATE TABLE IF NOT EXISTS `link_category` (
 
 db_query('CREATE TABLE IF NOT EXISTS ebook (
                 `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                `public_id` INT(11) NOT NULL,
                 `course_id` INT(11) NOT NULL,
                 `order` INT(11) NOT NULL,
                 `title` TEXT)');

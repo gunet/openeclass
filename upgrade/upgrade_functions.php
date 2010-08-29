@@ -308,12 +308,12 @@ function upgrade_course($code, $lang)
 	upgrade_course_2_1_3($code);
 	upgrade_course_2_2($code, $lang);
 	upgrade_course_2_3($code);
-	upgrade_course_2_4($code);
+	upgrade_course_2_4($code, $lang);
 }
 
-function upgrade_course_2_4($code, $extramessage = '')
+function upgrade_course_2_4($code, $lang, $extramessage = '')
 {
-	global $langUpgCourse, $mysqlMainDb;
+	global $langUpgCourse, $mysqlMainDb, $global_messages;
 
         $course_id = course_code_to_id($code);
 	mysql_select_db($code);
@@ -404,15 +404,27 @@ function upgrade_course_2_4($code, $extramessage = '')
 	// upgrade acceuil for glossary
 	if (accueil_tool_missing('MODULE_ID_GLOSSARY')) {
                 db_query("INSERT IGNORE INTO accueil VALUES (
-                        '17',
-                        '$langGlossary[$lang]',
-                        '../../modules/glossary/glossary.php',
-                        'glossary',
-                        '0',
-                        '0',
-                        '',
-                        'MODULE_ID_GLOSSARY'
-                                )", $code);
+                                '17',
+                                '{$global_messages['langGlossary'][$lang]}',
+                                '../../modules/glossary/glossary.php',
+                                'glossary',
+                                '0',
+                                '0',
+                                '',
+                                'MODULE_ID_GLOSSARY')", $code);
+        }
+
+	// upgrade acceuil for glossary
+	if (accueil_tool_missing('MODULE_ID_EBOOK')) {
+                db_query("INSERT IGNORE INTO accueil VALUES (
+                                '18',
+                                '{$global_messages['langEBook'][$lang]}',
+                                '../../modules/ebook/index.php',
+                                'ebook',
+                                '0',
+                                '0',
+                                '',
+                                'MODULE_ID_EBOOK')", $code);
         }
 }
 

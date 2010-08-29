@@ -407,7 +407,18 @@ mysql_query("INSERT INTO accueil VALUES (
         '',
         'MODULE_ID_GLOSSARY'
         )");
-    
+
+    mysql_query("INSERT INTO accueil VALUES (
+        '18',
+        '$langEBook',
+        '../../modules/ebook/index.php',
+        'ebook',
+        '".$sbsystems[18]."',
+        '0',
+        '',
+        'MODULE_ID_EBOOK'
+        )");
+
     mysql_query("INSERT INTO accueil VALUES (
                 '19',
                 '$langConference',

@@ -52,6 +52,8 @@ foreach ($native_language_names as $code => $name) {
                 include $extra_messages;
         }
         $global_messages['langCourseUnits'][$templang] = $langCourseUnits;
+        $global_messages['langGlossary'][$templang] = $langGlossary;
+        $global_messages['langEBook'][$templang] = $langEBook;
 }
 // include_messages
 include("${webDir}modules/lang/$language/common.inc.php");
@@ -418,6 +420,23 @@ if (!isset($_POST['submit2'])) {
                                 `description` TEXT,
                                 `order` INT(6) NOT NULL DEFAULT 0,
                                 PRIMARY KEY (`id`, `course_id`))");
+                db_query('CREATE TABLE IF NOT EXISTS ebook (
+                                `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                                `public_id` INT(11) NOT NULL,
+                                `course_id` INT(11) NOT NULL,
+                                `order` INT(11) NOT NULL,
+                                `title` TEXT)');
+                db_query('CREATE TABLE IF NOT EXISTS ebook_section (
+                                `ebook_id` INT(11) NOT NULL,
+                                `id` VARCHAR(11) NOT NULL,
+                                `title` TEXT,
+                                PRIMARY KEY (`ebook_id`, `id`))');
+                db_query('CREATE TABLE IF NOT EXISTS ebook_subsection (
+                                `section_id` VARCHAR(11) NOT NULL,
+                                `id` VARCHAR(11) NOT NULL,
+                                `file` VARCHAR(128),
+                                `title` TEXT,
+                                PRIMARY KEY (`section_id`, `id`))');
 
                 // Upgrade table admin_announcements if needed
                 if (mysql_field_exists($mysqlMainDb, 'admin_announcements', 'gr_body')) {

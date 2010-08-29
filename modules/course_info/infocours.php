@@ -115,6 +115,8 @@ if (isset($_POST['submit'])) {
                 db_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langToolManagement' WHERE define_var='MODULE_ID_TOOLADMIN'");
                 db_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langWiki' WHERE define_var='MODULE_ID_WIKI'");
                 db_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langCourseUnits' WHERE define_var='MODULE_ID_UNITS'");
+                db_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langGlossary' WHERE define_var='MODULE_ID_GLOSSARY'");
+                db_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langEBook' WHERE define_var='MODULE_ID_EBOOK'");
 
                 $tool_content .= "<p class='success'>$langModifDone</p>
                         <p>&laquo; <a href='".$_SERVER['PHP_SELF']."'>$langBack</a></p>
