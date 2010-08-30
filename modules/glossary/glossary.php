@@ -34,8 +34,9 @@ include '../../include/baseTheme.php';
 include('../../include/action.php');
 $action = new action();
 $action->record('MODULE_ID_GLOSSARY');
-/*
- */
+
+mysql_select_db($mysqlMainDb);
+
 if ($is_adminOfCourse) {
     $head_content .= '
     <script type="text/javascript">
@@ -72,7 +73,7 @@ if ($is_adminOfCourse) {
         }
     }
     if (isset($_GET['delete'])) {
-        $sql = db_query("DELETE FROM glossary WHERE id = '$_GET[delete]' AND course_id = $cours_id", $mysqlMainDb);
+        $sql = db_query("DELETE FROM glossary WHERE id = '$_GET[delete]' AND course_id = $cours_id");
         if (mysql_affected_rows() > 0) {
             $tool_content .= "<div class='success_small'>$langGlossaryDeleted</div>";    
         }
@@ -108,7 +109,7 @@ if ($is_adminOfCourse) {
         $navigation[] = array("url" => "$_SERVER[PHP_SELF]", "name" => $langGlossary);
         $nameTools = $langEditGlossaryTerm;
         
-        $sql = db_query("SELECT term, definition FROM glossary WHERE id='$_GET[edit]'", $mysqlMainDb);
+        $sql = db_query("SELECT term, definition FROM glossary WHERE id='$_GET[edit]'");
         $data = mysql_fetch_array($sql);
         
         $tool_content .= "<form action='$_SERVER[PHP_SELF]' method='post'>";
@@ -135,7 +136,7 @@ if ($is_adminOfCourse) {
     $tool_content .= "<th>$langActions</th>";
 }
 $tool_content .= "</tr>";
-$sql = db_query("SELECT id, term, definition FROM glossary WHERE course_id = '$cours_id'", $mysqlMainDb);
+$sql = db_query("SELECT id, term, definition FROM glossary WHERE course_id = '$cours_id'");
 while ($g = mysql_fetch_array($sql)) {
     $tool_content .= "<tr><td>$g[term]</td><td>$g[definition]</td>";
     if ($is_adminOfCourse) {
@@ -152,8 +153,6 @@ draw($tool_content, 2, '', $head_content);
 /*******************************************/
 function findorder($course_id)
 {
-    global $mysqlMainDb;
-    
     $sql = db_query("SELECT MAX(`ORDER`) FROM glossary WHERE course_id = $course_id");
     list($maxorder) = mysql_fetch_row($sql);
     if ($maxorder > 0) {
