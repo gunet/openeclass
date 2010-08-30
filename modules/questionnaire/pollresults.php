@@ -34,7 +34,6 @@ require_once '../../include/libchart/libchart.php';
 $nameTools = $langPollCharts;
 $navigation[] = array("url"=>"questionnaire.php", "name"=> $langQuestionnaire);
 
-$tool_content = "";
 $total_answers = 0;
 $questions = array();
 
@@ -43,59 +42,48 @@ if(!isset($_GET['pid']) || !is_numeric($_GET['pid'])) die();
 	$current_poll = db_query("SELECT * FROM poll WHERE pid='$pid' ORDER BY pid", $currentCourse);
 	$thePoll = mysql_fetch_array($current_poll);
 
-
 	$tool_content .= "
-    <table width=\"99%\" class='FormData'>
-    <tbody>
-    <tr>
-      <th class=\"left\" width=\"220\">&nbsp;</th>
-      <td><b>$langSurvey</b></td>
-    </tr>
-    <tr>
-      <th class='left'>$langTitle:</th>
-      <td>" . $thePoll["name"] . "</td>
-    </tr>
-    <tr>
-      <th class='left'>$langPollCreation:</th>
-      <td>".nice_format(date("Y-m-d", strtotime($thePoll["creation_date"])))."</td>
-    </tr>
-    <tr>
-      <th class='left'>$langPollStart:</th>
-      <td>".nice_format(date("Y-m-d", strtotime($thePoll["start_date"])))."</td>
-    </tr>
-    <tr>
-      <th class='left'>$langPollEnd:</th>
-      <td>".nice_format(date("Y-m-d", strtotime($thePoll["end_date"])))."</td>
-    </tr>
-    </tbody>
-    </table>
-    <br />";
-
-
-	//$tool_content .= "<div id=\"topic_title_id\">" . $thePoll["name"] . "</div><br><p>";
-	//$tool_content .= "$langPollCreateDate: <b>" . $thePoll["creation_date"] . "</b><br><br>";
-	//$tool_content .= $langPollStarted . " <b>" . $thePoll["start_date"] . "</b> ";
-	//$tool_content .= $langPollEnded. " <b>" . $thePoll["end_date"] . "</b><br><br>";
-
+	<table width=\"99%\" class='FormData'>
+	<tbody>
+	<tr>
+	  <th class=\"left\" width=\"220\">&nbsp;</th>
+	  <td><b>$langSurvey</b></td>
+	</tr>
+	<tr>
+	  <th class='left'>$langTitle:</th>
+	  <td>" . $thePoll["name"] . "</td>
+	</tr>
+	<tr>
+	  <th class='left'>$langPollCreation:</th>
+	  <td>".nice_format(date("Y-m-d", strtotime($thePoll["creation_date"])))."</td>
+	</tr>
+	<tr>
+	  <th class='left'>$langPollStart:</th>
+	  <td>".nice_format(date("Y-m-d", strtotime($thePoll["start_date"])))."</td>
+	</tr>
+	<tr>
+	  <th class='left'>$langPollEnd:</th>
+	  <td>".nice_format(date("Y-m-d", strtotime($thePoll["end_date"])))."</td>
+	</tr>
+	</tbody>
+	</table>
+	<br />";
 	$tool_content .= "
-    <table width=\"99%\" class='FormData'>
-    <tbody>
-    <tr>
-      <th class='left' width=\"220\">&nbsp;</th>
-      <td><b>$langAnswers</b></td>
-    </tr>";
+	<table width=\"99%\" class='FormData'>
+	<tbody>
+	<tr>
+	  <th class='left' width=\"220\">&nbsp;</th>
+	  <td><b>$langAnswers</b></td>
+	</tr>";
 
 	$questions = db_query("SELECT * FROM poll_question WHERE pid=$pid");
 	while ($theQuestion = mysql_fetch_array($questions)) {
-	$tool_content .= "
-    <tr>
-      <th class='left' width=\"220\">$langQuestion</th>
-      <td>$theQuestion[question_text]</td>
-    </tr>
-    <tr>
-      <th>&nbsp;</th>
-      <td>";
-
+		$tool_content .= "<tr>
+		  <th class='left' width=\"220\">$langQuestion</th>
+		  <td>$theQuestion[question_text]</td>
+		</tr>
+		<tr>
+		<th>&nbsp;</th><td>";
 		if ($theQuestion['qtype'] == 'multiple') {
 			$answers = db_query("SELECT COUNT(aid) AS count, aid, poll_question_answer.answer_text AS answer
 				FROM poll_answer_record LEFT JOIN poll_question_answer
@@ -121,7 +109,6 @@ if(!isset($_GET['pid']) || !is_numeric($_GET['pid'])) die();
 				$label = sprintf("$answer_text[$i] (%2.1f%%)", $percentage);
 				$chart->addPoint(new Point($label, $percentage));
 			}
-
 			$chart_path = 'courses/'.$currentCourseID.'/temp/chart_'.md5(serialize($chart)).'.png';
 			$chart->render($webDir.$chart_path);
 			$tool_content .= '<img src="'.$urlServer.$chart_path.'" /><br>';
@@ -134,24 +121,15 @@ if(!isset($_GET['pid']) || !is_numeric($_GET['pid'])) die();
 			}
 			$tool_content .= '</dl>';
 		}
-			$tool_content .= "
-	  </td>
-	</tr>
-	<tr>
-      <td colspan=\"2\">&nbsp;</td>
-    </tr>
-    ";
-	}
+		$tool_content .= "</td></tr><tr><td colspan=\"2\">&nbsp;</td></tr>";}
 		$tool_content .= "
-    <tr>
-      <th class='left'>$langPollTotalAnswers:</th>
-      <td><b>$answer_total</b></td>
-    </tr>
-    </tbody>
-    </table>
-    <br />";
-
-
+		<tr>
+		  <th class='left'>$langPollTotalAnswers:</th>
+		  <td><b>$answer_total</b></td>
+		</tr>
+		</tbody>
+		</table>
+		<br />";
 // display page
-draw($tool_content, 2, 'questionnaire');
+draw($tool_content, 2);
 ?>

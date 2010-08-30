@@ -39,7 +39,6 @@ include '../../include/baseTheme.php';
 
 $nameTools = $langParticipate;
 $navigation[] = array("url"=>"questionnaire.php", "name"=> $langQuestionnaire);
-$tool_content = "";
 
 if(!isset($_REQUEST['UseCase'])) $_REQUEST['UseCase'] = "";
 if(!isset($_REQUEST['pid'])) die();
@@ -78,13 +77,11 @@ function printPollForm() {
 	$temp_CurrentDate = mktime(0, 0 , 0,substr($temp_CurrentDate, 5,2), substr($temp_CurrentDate, 8,2),substr($temp_CurrentDate, 0,4));
 	
 	if (($temp_CurrentDate >= $temp_StartDate) && ($temp_CurrentDate < $temp_EndDate)) {
-		$tool_content .= <<<cData
-	<p>
-	<form action="$_SERVER[PHP_SELF]" id="poll" method="post">
-		<input type="hidden" value="2" name="UseCase">
-		<input type="hidden" value="$pid" name="pid">
-		
-cData;
+		$tool_content .= "<p>
+		<form action='$_SERVER[PHP_SELF]' id='poll' method='post'>
+		<input type='hidden' value='2' name='UseCase'>
+		<input type='hidden' value='$pid' name='pid'>";
+	
 		$tool_content .= "<div id=\"topic_title_id\">".$thePoll["name"]."</div>\n";
 
 		//*****************************************************************************
