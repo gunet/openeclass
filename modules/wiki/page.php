@@ -1147,5 +1147,5 @@
         }
     }
     // ------------ End of wiki script ---------------
-draw($tool_content, 2, "wiki", $head_content);
+draw($tool_content, 2, '', $head_content);
 ?>

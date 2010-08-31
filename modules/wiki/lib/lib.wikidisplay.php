@@ -192,7 +192,7 @@
 
         $script = ( is_null( $script ) ) ? $_SERVER['PHP_SELF'] : $script;
 
-        $out = '<div style="clear:both;"><form method="POST" action="' . $script
+        $out = '<br><div><form method="POST" action="' . $script
             . '" name="previewform" id="previewform">' . "\n"
             ;
         $out .= '<input type="hidden" name="wiki_content" value="'
@@ -222,7 +222,7 @@
 
         $out .= disp_button ($location, $langCancel);
 
-        $out .= "</form></div>\n";
+        $out .= "</form></div>";
 
         return $out;
     }
