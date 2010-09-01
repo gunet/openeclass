@@ -58,6 +58,8 @@ if ($result2 and mysql_num_rows($result2) > 0) {
 $_SESSION['status'] = $status;
 
 include "lib/textLib.inc.php";
+include "lib/fileDisplayLib.inc.php";
+define('GROUP_DOCUMENTS', false);
 //include personalised component files (announcemets.php etc.) from /modules/perso
 include "$webDir/modules/perso/lessons.php";
 include "$webDir/modules/perso/assignments.php";

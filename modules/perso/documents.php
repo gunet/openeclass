@@ -83,17 +83,18 @@ function getUserDocuments($param)
  */
 function docsHtmlInterface($date)
 {
-	global $urlServer, $langNoDocsExist, $uid;
+	global $urlServer, $langNoDocsExist, $uid, $currentCourseID;
         global $mysqlMainDb, $maxValue;
 
-        $q = db_query("SELECT path, course_id, filename, title, date_modified, intitule
+        $q = db_query("SELECT path, course_id, code, filename, title, date_modified, intitule
                        FROM document, cours_user, cours
                        WHERE document.course_id = cours_user.cours_id AND
                              cours_user.user_id = $uid AND
                              cours.cours_id = cours_user.cours_id AND
                              group_id IS NULL AND
                              visibility = 'v' AND
-                             date_modified >= '$date'
+                             date_modified >= '$date' AND
+			     format <> '.dir'
                        ORDER BY course_id, date_modified DESC", $mysqlMainDb);
 
         $last_course_id = null;
@@ -102,14 +103,16 @@ function docsHtmlInterface($date)
                 while ($row = mysql_fetch_array($q)) {
                         if ($last_course_id != $row['course_id']) {
                                 $content .= "\n<li class='category'>" . q($row['intitule']) . "</li>";
+				$currentCourseID = $row['code'];
                         }
                         $last_course_id = $row['course_id'];
-			$url = $urlServer . "modules/document/file.php?c=$row[course_id]&amp;p=$row[path]";
+			$url = file_url($row['path']);
                         $content .= "\n<li><a class='square_bullet2' href='$url'><strong class='title_pos'>" .
                                     q($row['filename']) . ' - (' .
                                     nice_format(date('Y-m-d', strtotime($row['date_modified']))) .
                                     ")</strong></a></li>";
 		}
+		unset($currentCourseID);
                 $content .= "\n</ul></div>\n";
                 return $content;
 	} else {
