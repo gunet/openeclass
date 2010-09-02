@@ -58,7 +58,7 @@ class Question
 		$this->description='';
 		$this->weighting=0;
 		$this->position=1;
-		$this->type=2;
+		$this->type=1;
 		$this->exerciseList=array();
 	}
 
