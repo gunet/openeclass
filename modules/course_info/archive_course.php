@@ -161,10 +161,10 @@ function backup_annonces($f, $cours_id) {
 				    WHERE cours_id = $cours_id");
 	while($q = mysql_fetch_array($res)) {
 		fputs($f, "announcement(".
-			quote($q['contenu']).",\n".
-			quote($q['temps']).", ".
-			quote($q['ordre']).", ".
-			quote($q['title']).");\n");
+			quote_not_double($q['contenu']).",\n".
+			quote_not_double($q['temps']).", ".
+			quote_not_double($q['ordre']).", ".
+			quote_not_double($q['title']).");\n");
 	}
 }
 
@@ -175,10 +175,10 @@ function backup_course_units($f) {
 				    WHERE course_id = $cours_id");
 	while($q = mysql_fetch_array($res)) {
 		fputs($f, "course_units(".
-			quote($q['title']).", ".
-			quote($q['comments']).", ".
-			quote($q['visibility']).", ".
-			quote($q['order']).", array(");
+			quote_not_double($q['title']).", ".
+			quote_not_double($q['comments']).", ".
+			quote_not_double($q['visibility']).", ".
+			quote_not_double($q['order']).", array(");
 		$res2 = db_query("SELECT * FROM unit_resources WHERE unit_id = $q[id]", $mysqlMainDb);
 		$begin = true;
 		while($q2 = mysql_fetch_array($res2)) {
@@ -189,13 +189,13 @@ function backup_course_units($f) {
 				fputs($f, ",\n");
 			}
 			fputs($f, "array(".
-			quote($q2['title']).", ".
-			quote($q2['comments']).", ".
-			quote($q2['res_id']).", ".
-			quote($q2['type']).", ".
-			quote($q2['visibility']).", ".
-			quote($q2['order']).", ".
-			quote($q2['date']).")");
+			quote_not_double($q2['title']).", ".
+			quote_not_double($q2['comments']).", ".
+			quote_not_double($q2['res_id']).", ".
+			quote_not_double($q2['type']).", ".
+			quote_not_double($q2['visibility']).", ".
+			quote_not_double($q2['order']).", ".
+			quote_not_double($q2['date']).")");
 		}
 		fputs($f,"));\n");
 	}
@@ -209,7 +209,7 @@ function backup_groups($f) {
 			$row['user'].", ".
 			$row['team'].", ".
 			$row['status'].", ".
-			quote($row['role']).");\n");
+			quote_not_double($row['role']).");\n");
 	}
 }
 
@@ -221,7 +221,7 @@ function backup_assignment_submit($f) {
 			'submission_ip', 'file_path', 'file_name', 'comments',
 			'grade', 'grade_comments', 'grade_submission_date',
 			'grade_submission_ip') as $field) {
-			$values[] = quote($row[$field]);
+			$values[] = quote_not_double($row[$field]);
 		}
 		fputs($f, "assignment_submit($row[uid], ".
 			join(", ", $values).
@@ -234,14 +234,14 @@ function backup_dropbox_file($f) {
 	$res = mysql_query("SELECT * FROM dropbox_file");
 	while ($row = mysql_fetch_array($res)) {
 		fputs ($f, "dropbox_file(".
-			quote($row['uploaderId']).", ".
-			quote($row['filename']).", ".
-			quote($row['filesize']).", ".
-			quote($row['title']).", ".
-			quote($row['description']).", ".
-			quote($row['author']).", ".
-			quote($row['uploadDate']).", ".
-			quote($row['lastUploadDate']).");\n");
+			quote_not_double($row['uploaderId']).", ".
+			quote_not_double($row['filename']).", ".
+			quote_not_double($row['filesize']).", ".
+			quote_not_double($row['title']).", ".
+			quote_not_double($row['description']).", ".
+			quote_not_double($row['author']).", ".
+			quote_not_double($row['uploadDate']).", ".
+			quote_not_double($row['lastUploadDate']).");\n");
 		}
 }
 
@@ -249,8 +249,8 @@ function backup_dropbox_person($f) {
 	$res = mysql_query("SELECT * FROM dropbox_person");
 	while ($row = mysql_fetch_array($res)) {
 		fputs ($f, "dropbox_person(".
-			quote($row['fileId']).", ".
-			quote($row['personId']).");\n");
+			quote_not_double($row['fileId']).", ".
+			quote_not_double($row['personId']).");\n");
 		}
 }
 
@@ -258,8 +258,8 @@ function backup_dropbox_post($f) {
 	$res = mysql_query("SELECT * FROM dropbox_post");
 	while ($row = mysql_fetch_array($res)) {
 		fputs ($f, "dropbox_post(".
-			quote($row['fileId']).", ".
-			quote($row['recipientId']).");\n");
+			quote_not_double($row['fileId']).", ".
+			quote_not_double($row['recipientId']).");\n");
 	}
 }
 
@@ -273,17 +273,17 @@ function backup_users($f, $cours_id) {
 		AND cours_user.cours_id = $cours_id");
 	while($q = mysql_fetch_array($res)) {
 		fputs($f, "user(".
-			quote($q['user_id']).", ".
-			quote($q['nom']).", ".
-			quote($q['prenom']).", ".
-			quote($q['username']).", ".
-			quote($q['password']).", ".
-			quote($q['email']).", ".
-			quote($q['cours_statut']).", ".
-			quote($q['phone']).", ".
-			quote($q['department']).", ".
-			quote($q['registered_at']).", ".
-			quote($q['expires_at']).");\n");
+			quote_not_double($q['user_id']).", ".
+			quote_not_double($q['nom']).", ".
+			quote_not_double($q['prenom']).", ".
+			quote_not_double($q['username']).", ".
+			quote_not_double($q['password']).", ".
+			quote_not_double($q['email']).", ".
+			quote_not_double($q['cours_statut']).", ".
+			quote_not_double($q['phone']).", ".
+			quote_not_double($q['department']).", ".
+			quote_not_double($q['registered_at']).", ".
+			quote_not_double($q['expires_at']).");\n");
 	}
 }
 
@@ -331,7 +331,7 @@ function backup_course_db($f, $course) {
 					}
 					$counter++;
 					for ($j = 0; $j < $num_fields; $j++) {
-						fputs($f, quote($rowdata[$j]));
+						fputs($f, quote_not_double($rowdata[$j]));
 						if ($j < ($num_fields - 1)) {
 							fputs($f, ', ');
 						}
@@ -352,12 +352,19 @@ function backup_course_details($f, $course) {
 				    WHERE code = '$course'");
 	$q = mysql_fetch_array($res);
 	fputs($f, "course_details('$course',\t// Course code\n\t".
-		quote($q['languageCourse']).",\t// Language\n\t".
-		quote($q['intitule']).",\t// Title\n\t".
-		quote($q['description']).",\t// Description\n\t".
-		quote($q['faculte']).",\t// Faculty\n\t".
-		quote($q['visible']).",\t// Visible?\n\t".
-		quote($q['titulaires']).",\t// Professor\n\t".
-		quote($q['type']).");\t// Type\n");
+		quote_not_double($q['languageCourse']).",\t// Language\n\t".
+		quote_not_double($q['intitule']).",\t// Title\n\t".
+		quote_not_double($q['description']).",\t// Description\n\t".
+		quote_not_double($q['faculte']).",\t// Faculty\n\t".
+		quote_not_double($q['visible']).",\t// Visible?\n\t".
+		quote_not_double($q['titulaires']).",\t// Professor\n\t".
+		quote_not_double($q['type']).");\t// Type\n");
 }
-?>
+
+
+function quote_not_double($s)
+{
+        return "'" . str_replace(array("'", '\\', '\0'),
+                array("\\'", '\\\\', '\\\0'),
+                $s) . "'";
+}
