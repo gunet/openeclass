@@ -24,35 +24,21 @@
 *  			eMail: info@openeclass.org
 * =========================================================================*/
 
+$TBL_EXERCICE_QUESTION='exercice_question';
+$TBL_EXERCICES='exercices';
+$TBL_QUESTIONS='questions';
+$TBL_REPONSES='reponses'; 
 
-include('exercise.class.php');
-include('question.class.php');
-include('answer.class.php');
-include('exercise.lib.php');
-
-// answer types
-define('UNIQUE_ANSWER',1);
-define('MULTIPLE_ANSWER',2);
-define('FILL_IN_BLANKS',3);
-define('MATCHING',4);
 
 $require_current_course = TRUE;
 $require_help = TRUE;
 $helpTopic = 'Exercise';
 
 include '../../include/baseTheme.php';
-$tool_content = "";
-$nameTools = $langResults;
-
+include('exercise.class.php');
 include('../../include/lib/textLib.inc.php');
-$picturePath='../../courses/'.$currentCourseID.'/image';
-$is_allowedToEdit=$is_adminOfCourse;
 
-$TBL_EXERCICE_QUESTION='exercice_question';
-$TBL_EXERCICES='exercices';
-$TBL_QUESTIONS='questions';
-$TBL_REPONSES='reponses';
-
+$nameTools = $langResults;
 $navigation[]=array("url" => "exercice.php","name" => $langExercices);
 
 if (isset($_GET['exerciseId'])) {
@@ -64,7 +50,7 @@ if(!isset($_SESSION['objExercise'])) {
 	// construction of Exercise
 	$objExercise = new Exercise();
 	// if the specified exercise doesn't exist or is disabled
-	if(!$objExercise->read($exerciseId) && (!$is_allowedToEdit)) {
+	if(!$objExercise->read($exerciseId) && (!$is_adminOfCourse)) {
 		$tool_content .= "<p>$langExerciseNotFound</p>";	
 		draw($tool_content, 2, 'exercice');
 		exit();
@@ -92,8 +78,10 @@ while($row=mysql_fetch_array($result)) {
 	$theStudent = mysql_fetch_array($StudentName);
 	
 	mysql_select_db($currentCourseID);
-	$sql2="SELECT DATE_FORMAT(RecordStartDate, '%Y-%m-%d / %H:%i') AS RecordStartDate, RecordEndDate, TIME_TO_SEC(TIMEDIFF(RecordEndDate,RecordStartDate)) AS TimeDuration, TotalScore, TotalWeighting 
-	FROM `exercise_user_record` WHERE uid='$sid' AND eid='$exerciseId'";
+	$sql2="SELECT DATE_FORMAT(RecordStartDate, '%Y-%m-%d / %H:%i') AS RecordStartDate, RecordEndDate,
+		TIME_TO_SEC(TIMEDIFF(RecordEndDate,RecordStartDate))
+		AS TimeDuration, TotalScore, TotalWeighting 
+		FROM `exercise_user_record` WHERE uid='$sid' AND eid='$exerciseId'";
 	$result2 = db_query($sql2);
 	if (mysql_num_rows($result2) > 0) { // if users found
 		$tool_content .= "<table class='Question'>";
