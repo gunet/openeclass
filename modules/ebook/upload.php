@@ -34,9 +34,9 @@ mysql_select_db($mysqlMainDb);
 $basedir = $webDir . 'courses/' . $currentCourseID . '/ebook';
 
 if (!$is_adminOfCourse or !isset($_FILES['file'])) {
-        header('Location: ' . $urlServer);
+        redirect_to_home_page();
 } else {
-        if ($_FILES['file']['type'] != 'application/zip') {
+        if (!preg_match('/\.zip$/i', $_FILES['file']['name'])) {
                 echo "Error no zip...";
                 die;
         }
@@ -45,25 +45,22 @@ if (!$is_adminOfCourse or !isset($_FILES['file'])) {
         }
         chdir($basedir);
 
-        list($id, $order) = mysql_fetch_row(db_query("SELECT MAX(`public_id`), MAX(`order`) FROM ebook WHERE course_id = $cours_id"));
+        list($order) = mysql_fetch_row(db_query("SELECT MAX(`order`) FROM ebook WHERE course_id = $cours_id"));
         if (!$order) {
                 $order = 1;
         } else {
                 $order++;
         }
-        if (!$id) {
-                $id = 1;
-        } else {
-                $id++;
-        }
+        db_query("INSERT INTO ebook SET `order` = $order, `course_id` = $cours_id, `title` = " .
+                         autoquote($_POST['title']));
+        $id = mysql_insert_id();
         mkdir($id, 0777);
         chdir($id);
         $zip = new pclZip($_FILES['file']['tmp_name']);
         if (!$zip->extract()) {
                 echo 'Error extracting...';
+                db_query("DELETE FROM ebook WHERE id = $id");
                 die;
         }
-        db_query("INSERT INTO ebook SET `public_id` = $id, `order` = $order, `course_id` = $cours_id, `title` = " .
-                  autoquote($_POST['title']));
         header("Location: $urlAppend/modules/ebook/edit.php?id=$id");
 }

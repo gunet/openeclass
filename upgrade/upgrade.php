@@ -422,21 +422,20 @@ if (!isset($_POST['submit2'])) {
                                 PRIMARY KEY (`id`, `course_id`))");
                 db_query('CREATE TABLE IF NOT EXISTS ebook (
                                 `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                                `public_id` INT(11) NOT NULL,
                                 `course_id` INT(11) NOT NULL,
                                 `order` INT(11) NOT NULL,
                                 `title` TEXT)');
                 db_query('CREATE TABLE IF NOT EXISTS ebook_section (
+                                `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                                 `ebook_id` INT(11) NOT NULL,
-                                `id` VARCHAR(11) NOT NULL,
-                                `title` TEXT,
-                                PRIMARY KEY (`ebook_id`, `id`))');
+                                `public_id` VARCHAR(11) NOT NULL,
+                                `title` TEXT)');
                 db_query('CREATE TABLE IF NOT EXISTS ebook_subsection (
+                                `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                                 `section_id` VARCHAR(11) NOT NULL,
-                                `id` VARCHAR(11) NOT NULL,
+                                `public_id` VARCHAR(11) NOT NULL,
                                 `file` VARCHAR(128),
-                                `title` TEXT,
-                                PRIMARY KEY (`section_id`, `id`))');
+                                `title` TEXT)');
 
                 // Upgrade table admin_announcements if needed
                 if (mysql_field_exists($mysqlMainDb, 'admin_announcements', 'gr_body')) {

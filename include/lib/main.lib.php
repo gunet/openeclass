@@ -1582,3 +1582,14 @@ function redirect_to_home_page($path = '')
         header("Location: $urlServer");
         exit;
 }
+
+
+function odd_even($k)
+{
+        if ($k % 2 == 0) {
+                return " class='even'";
+        } else {
+                return " class='odd'";
+        }
+} 
+
