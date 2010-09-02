@@ -364,7 +364,7 @@ function backup_course_details($f, $course) {
 
 function quote_not_double($s)
 {
-        return "'" . str_replace(array('\'', '\\', '\0'),
-                array('\\\'', '\\\\', '\\\0'),
+        return "'" . str_replace(array('\\', '\'', "\0"),
+                array('\\\\', '\\\'', "\\\0"),
                 $s) . "'";
 }
