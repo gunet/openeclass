@@ -193,7 +193,7 @@ $t->set_block('page', 'chapter_select_options', 'option_var');
 foreach ($sections as $section_id => $section_title) {
 	$t->set_var('chapter_title', $section_title);
 	$t->set_var('chapter_id', $section_id);
-	if ($sid == $current_sid) {
+	if ($section_id == $current_sid) {
 		$t->set_var('chapter_selected', ' selected="selected"');
 	} else {
 		$t->set_var('chapter_selected', '');
