@@ -91,8 +91,8 @@ if (mysql_num_rows($q) == 0) {
         while ($r = mysql_fetch_array($q)) {
                 $tool_content .= "<tr" . odd_even($k) . "><td width='1' valign='top'>" .
                                  "<img style='padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif' " .
-                                 " alt='' /></td><td><a href='show.php/$currentCourseID/" . urlencode($r['id']) .
-                                 "/'>" . q($r['title']) . "</a></td>" . tools($r['id'], $r['title'], $k, $num) . "</tr>\n";
+                                 " alt='' /></td><td><a href='show.php/$currentCourseID/$r[id]/'>" .
+                                 q($r['title']) . "</a></td>" . tools($r['id'], $r['title'], $k, $num) . "</tr>\n";
                 $k++;
         }
         $tool_content .= "</table>\n";
