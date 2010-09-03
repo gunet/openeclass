@@ -63,19 +63,19 @@ if ($is_adminOfCourse) {
     if (isset($_POST['submit'])) {
         db_query("INSERT INTO glossary SET term = '$_POST[term]', definition='$_POST[definition]',
                 `order` = '".findorder($cours_id)."', datestamp = NOW(), course_id = $cours_id");
-        $tool_content .= "<div class='success_small'>$langGlossaryAdded</div>";
+        $tool_content .= "<div class='success'>$langGlossaryAdded</div><br />";
     }
     if (isset($_POST['edit_submit'])) {
         $sql = db_query("UPDATE glossary SET term='$_POST[term]', definition='$_POST[definition]',
                  datestamp=NOW() WHERE id='$_POST[id]' AND course_id = $cours_id");
         if (mysql_affected_rows() > 0) {
-            $tool_content .= "<div class='success_small'>$langGlossaryUpdated</div>";    
+            $tool_content .= "<div class='success'>$langGlossaryUpdated</div><br />";    
         }
     }
     if (isset($_GET['delete'])) {
         $sql = db_query("DELETE FROM glossary WHERE id = '$_GET[delete]' AND course_id = $cours_id");
         if (mysql_affected_rows() > 0) {
-            $tool_content .= "<div class='success_small'>$langGlossaryDeleted</div>";    
+            $tool_content .= "<div class='success'>$langGlossaryDeleted</div><br />";    
         }
     }
     $tool_content .= "<div id='operations_container'><ul id='opslist'>
@@ -93,15 +93,32 @@ if ($is_adminOfCourse) {
         $navigation[] = array("url" => "$_SERVER[PHP_SELF]", "name" => $langGlossary);
         $nameTools = $langAddGlossaryTerm;
         
-        $tool_content .= "<form action='$_SERVER[PHP_SELF]' method='post'>";
-        $tool_content .= "<table class='framed' align='center'><thead>";
-        $tool_content .= "<tr><td>$langGlossaryTerm<br />";
-        $tool_content .= "<input type='text' name='term' value='$term' size='60' class='FormData_InputText'></td></tr>";
-        $tool_content .= "<tr><td>$langGlossaryDefinition<br />";
+        $tool_content .= "
+              <form action='$_SERVER[PHP_SELF]' method='post'>
+               <fieldset>
+                 <legend>$langAddGlossaryTerm</legend>
+                 <table class='tbl'>
+                 <tr>
+                   <th>$langGlossaryTerm</th>
+                   <td>
+                     <input type='text' name='term' value='$term' size='60'>
+                   </td>
+                 </tr>
+                 <tr>
+                   <th valign='top'>$langGlossaryDefinition</th>
+                   <td>\n";
         $tool_content .= rich_text_editor('definition', 4, 20, $definition);
-        $tool_content .= "</td></tr>";
-        $tool_content .= "<tr><td><input type='submit' name='submit' value='$langSubmit'></td></tr>";
-        $tool_content .= "</thead></table><br />";    
+        $tool_content .= "\n
+                   </td>
+                 </tr>
+                 <tr>
+                   <th>&nbsp;</th>
+                   <td><input type='submit' name='submit' value='$langSubmit'></td>
+                 </tr>
+                 </table>
+               </fieldset>
+              </form>
+              <br />\n";    
     }
     
     // display form for editiong a glossary term
@@ -112,16 +129,32 @@ if ($is_adminOfCourse) {
         $sql = db_query("SELECT term, definition FROM glossary WHERE id='$_GET[edit]'");
         $data = mysql_fetch_array($sql);
         
-        $tool_content .= "<form action='$_SERVER[PHP_SELF]' method='post'>";
-        $tool_content .= "<table class='framed' align='center'><thead>";
-        $tool_content .= "<tr><td>$langGlossaryTerm<br />";
-        $tool_content .= "<input type='text' name='term' value='$data[term]' size='60' class='FormData_InputText'></td></tr>";
-        $tool_content .= "<tr><td>$langGlossaryDefinition<br />";
+        $tool_content .= "
+               <form action='$_SERVER[PHP_SELF]' method='post'>
+               <fieldset>
+                 <legend>$langModify</legend>
+                 <table class='tbl'>
+                 <tr>
+                   <th>$langGlossaryTerm</th>
+                   <td><input type='text' name='term' value='$data[term]' size='60'></td>
+                 </tr>
+                 <tr>
+                   <th valign='top'>$langGlossaryDefinition</th>
+                   <td valign='top'>\n";
         $tool_content .= rich_text_editor('definition', 4, 20, $data['definition']);
-        $tool_content .= "</td></tr>";
-        $tool_content .= "<input type = 'hidden' name='id' value='$_GET[edit]'>";
-        $tool_content .= "<tr><td><input type='submit' name='edit_submit' value='$langModify'></td></tr>";
-        $tool_content .= "</thead></table><br />";    
+        $tool_content .= "\n
+                   </td>
+                 </tr>
+                 <tr>
+                   <th>&nbsp;</th>
+                   <td>
+                    <input type='submit' name='edit_submit' value='$langModify'>
+                    <input type = 'hidden' name='id' value='$_GET[edit]'>
+                   </td>
+                 </tr>
+                 </table>
+               </fieldset>
+               <br />\n";    
     }
     
 }
@@ -130,22 +163,40 @@ if ($is_adminOfCourse) {
 // display glossary
 *************************************************/
 
-$tool_content .= "<table>";
-$tool_content .= "<tr><th width='200'>$langGlossaryTerm</th><th width='500'>$langGlossaryDefinition</th>";
+$tool_content .= "
+                 <table class='tbl' width='99%'>";
+$tool_content .= "
+                 <tr>
+                   <th>$langGlossaryTerm - $langGlossaryDefinition</th>";
 if ($is_adminOfCourse) {
-    $tool_content .= "<th>$langActions</th>";
+    $tool_content .= "
+                   <th width='20'>$langActions</th>";
 }
 $tool_content .= "</tr>";
 $sql = db_query("SELECT id, term, definition FROM glossary WHERE course_id = '$cours_id'");
+$i=0;
 while ($g = mysql_fetch_array($sql)) {
-    $tool_content .= "<tr><td>$g[term]</td><td>$g[definition]</td>";
+                if ($i%2) {
+                    $rowClass = "class='odd'";
+                } else {
+                    $rowClass = "class='even'";
+                }
+
+    $tool_content .= "
+                 <tr>
+                   <td><strong>$g[term]</strong>: $g[definition]</td>";
     if ($is_adminOfCourse) {
-        $tool_content .= "<td align='center'><a href='$_SERVER[PHP_SELF]?edit=$g[id]'><img src='../../template/classic/img/edit.gif' /></a>&nbsp;&nbsp;
-                    <a href='$_SERVER[PHP_SELF]?delete=$g[id]' onClick=\"return confirmation();\"><img src='../../template/classic/img/delete.gif' /></a></td>";
+        $tool_content .= "
+                   <td align='center' valign='top'><a href='$_SERVER[PHP_SELF]?edit=$g[id]'><img src='../../template/classic/img/edit.gif' /></a>&nbsp;&nbsp;
+                   <a href='$_SERVER[PHP_SELF]?delete=$g[id]' onClick=\"return confirmation();\"><img src='../../template/classic/img/delete.gif' /></a></td>";
     }
-    $tool_content .= "</tr>";
+    $tool_content .= "
+                 </tr>";
+    $i++;
 }
-$tool_content .= "</table";
+$tool_content .= "
+                 </table>
+                 <br />\n";
 
 draw($tool_content, 2, '', $head_content);
 
