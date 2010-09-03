@@ -152,6 +152,7 @@ if (mysql_num_rows($q) == 0) {
         $q = db_query("SELECT ebook_section.id AS sid,
                               ebook_section.id AS psid,
                               ebook_section.title AS section_title,
+                              ebook_subsection.id AS ssid,
                               ebook_subsection.public_id AS pssid,
                               ebook_subsection.title AS subsection_title,
                               ebook_subsection.file
@@ -163,8 +164,7 @@ if (mysql_num_rows($q) == 0) {
         while ($r = mysql_fetch_array($q)) {
                 $class = odd_even($k); 
                 $key = array_search($r['file'], $html_files);
-                $display_id = q($r['psid'] .
-                                empty($r['pssid'])? '': ",$r[pssid]");
+                $display_id = $r['sid'] . ',' . $r['ssid'];
                 $tool_content .= "<tr$class><td><a href='show.php/$currentCourseID/$display_id/'
                                                    target='_blank'>" . q($r['file']) . "</a></td>
                                      <td><input type='text' name='title[$key]' size='30' value='" . q($r['subsection_title']) . "' /></td>
@@ -178,7 +178,7 @@ if (mysql_num_rows($q) == 0) {
         foreach ($html_files as $key => $file) {
                 $class = odd_even($k); 
                 $title = get_html_title($basedir . '/' . $file);
-                $tool_content .= "<tr$class><td><a href='show.php/$currentCourseID/$id/" . q($file) .
+                $tool_content .= "<tr$class><td><a href='show.php/$currentCourseID/$id/_/" . q($file) .
                                       "' target='_blank'>" . q($file) . "</a></td>
                         <td><input type='text' name='title[$key]' size='30' value='" . q($title) . "' /></td>
                         <td>" . selection($sections, "sid[$key]") . "</td>

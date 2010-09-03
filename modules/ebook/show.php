@@ -16,12 +16,17 @@ if (count($path_components) >= 4) {
         $_SESSION['dbname'] = $path_components[2];
         $ebook_id = intval($path_components[3]);
         if (!empty($path_components[4])) {
-        	$ids = explode(',', $path_components[4]);
-        	$current_sid = intval($ids[0]);
-                if (isset($ids[1])) {
-                        $current_ssid = intval($ids[1]);
-                        $full_url_found = true;
-                        $current_display_id = $current_sid . ',' . $current_ssid;
+                if ($path_components[4] == '_') {
+                        $show_orphan_file = true;
+                } else {
+                        $show_orphan_file = false;
+                        $ids = explode(',', $path_components[4]);
+                        $current_sid = intval($ids[0]);
+                        if (isset($ids[1])) {
+                                $current_ssid = intval($ids[1]);
+                                $full_url_found = true;
+                                $current_display_id = $current_sid . ',' . $current_ssid;
+                        }
                 }
         }
         if (isset($path_components[5])) {
@@ -43,6 +48,14 @@ include '../../include/lib/forcedownload.php';
 mysql_select_db($mysqlMainDb);
 
 $ebook_url_base = "{$urlServer}modules/ebook/show.php/$currentCourseID/$ebook_id/";
+
+if ($show_orphan_file and $file_path) {
+        $disk_path = "{$webDir}courses/$currentCourseID/ebook/$ebook_id/$file_path";
+	if (!send_file_to_client($disk_path, $file_path, true, false)) {
+                not_found($file_path);
+	}
+	exit;
+}
 
 $nameTools = 'Ηλεκτρονικό Βιβλίο';
 
