@@ -23,20 +23,21 @@
 *  			Panepistimiopolis Ilissia, 15784, Athens, Greece
 *  			eMail: info@openeclass.org
 * =========================================================================*/
-include('exercise.class.php');
-include('question.class.php');
-include('answer.class.php');
-
 // answer types
 define('UNIQUE_ANSWER',	1);
 define('MULTIPLE_ANSWER', 2);
 define('FILL_IN_BLANKS', 3);
 define('MATCHING', 4);
+define('TRUE_FALSE', 5);
 
 $TBL_EXERCICE_QUESTION='exercice_question';
 $TBL_EXERCICES='exercices';
 $TBL_QUESTIONS='questions';
 $TBL_REPONSES='reponses';
+
+include('exercise.class.php');
+include('question.class.php');
+include('answer.class.php');
 
 $require_current_course = TRUE;
 $guest_allowed = true;
@@ -95,7 +96,7 @@ foreach($_SESSION['questionList'] as $questionId) {
 	// destruction of the Question object
 	unset($objQuestionTmp);
 
-	if($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER)
+	if($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER || $answerType == TRUE_FALSE)
 	{
 		$colspan=4;
 	}
@@ -121,7 +122,7 @@ foreach($_SESSION['questionList'] as $questionId) {
 	$questionScore=0;
 
 	if ($displayResults == 1) {
-		if($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER) {
+		if($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER || $answerType == TRUE_FALSE) {
 			$tool_content .= "<tr>
 			<td width='5%' align='center' style='background: #fff;'><b>$langChoice</b></td>
 			<td width='5%' align='center' style='background: #fff;'><b>$langExpectedChoice</b></td>
@@ -235,48 +236,52 @@ foreach($_SESSION['questionList'] as $questionId) {
 					} else {
 						$matching[$answerId]=$answer;
 					}
-					break;
+				break;
+			case TRUE_FALSE : $studentChoice=($choice == $answerId)?1:0;
+					if($studentChoice) {
+						$questionScore+=$answerWeighting;
+						$totalScore+=$answerWeighting;
+					}
+				break;
 		}	// end switch()
 		if ($displayResults == 1) { 
 			if($answerType != MATCHING || $answerCorrect) {
-				if($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER) {
+				if($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER || $answerType == TRUE_FALSE) {
 					$tool_content .= "<tr><td width='5%' style='background: #fff;'>
-					<div align='center'>
-					<img src='../../template/classic/img/";
-	
-					if ($answerType == UNIQUE_ANSWER)
+					<div align='center'><img src='../../template/classic/img/";
+					if ($answerType == UNIQUE_ANSWER || $answerType == TRUE_FALSE) {
 						$tool_content .= "radio";
-					else
+					} else {
 						$tool_content .= "checkbox";
-	
-					if ($studentChoice)
+					}
+					if ($studentChoice) {
 						$tool_content .= "_on";
-					else
+					} else {
 						$tool_content .= '_off';
+					}
 		
 					$tool_content .= ".gif' border='0'></div></td>
 					<td width='5%' style='background: #fff;'><div align='center'>";
 	
-					if ($answerType == UNIQUE_ANSWER)
+					if ($answerType == UNIQUE_ANSWER || $answerType == TRUE_FALSE) {
 						$tool_content .= "<img src=\"../../template/classic/img/radio";
-					else
+					} else {
 						$tool_content .= "<img src=\"../../template/classic/img/checkbox";
-					if ($answerCorrect)
+					}
+					if ($answerCorrect) {
 						$tool_content .= "_on";
-					else	
+					} else {
 						$tool_content .= "_off";	
-					$tool_content .= ".gif\" border=\"0\"></div>";	
+					}
+					$tool_content .= ".gif\"></div>";	
 					$tool_content .= "</td><td width='45%' style='background: #fff;'>${answer}</td>
 					<td width='45%' style='background: #fff;'>";
-	
 					if ($studentChoice) {
 						$tool_content .= nl2br(make_clickable($answerComment)); 
 					} else { 
 						$tool_content .= '&nbsp;';
 					} 
-				
-				$tool_content .= "</td></tr>";
-	
+					$tool_content .= "</td></tr>";
 				} elseif($answerType == FILL_IN_BLANKS) {
 					$tool_content .= "<tr>
 					<td style=\"background: #fff;\">".nl2br($answer)."</td></tr>";
@@ -297,7 +302,7 @@ foreach($_SESSION['questionList'] as $questionId) {
 	// destruction of Answer
 	unset($objAnswerTmp);
 	$i++;
-	$totalWeighting+=$questionWeighting;
+	$totalWeighting += $questionWeighting;
 }	// end foreach()
 
 // update db with results

@@ -370,15 +370,18 @@ class Question
 		// question already exists
 		if($id)
 		{
-			$sql="UPDATE `$TBL_QUESTIONS` SET question='$question',description='$description',ponderation='$weighting',q_position='$position',type='$type' WHERE id='$id'";
+			$sql="UPDATE `$TBL_QUESTIONS` SET question='$question',description='$description',
+					ponderation='$weighting',q_position='$position',
+					type='$type'
+					WHERE id='$id'";
 			mysql_query($sql) or die("Error : UPDATE in file ".__FILE__." at line ".__LINE__);
 		}
 		// creates a new question
 		else
 		{
-			$sql="INSERT INTO `$TBL_QUESTIONS`(question,description,ponderation,q_position,type) VALUES('$question','$description','$weighting','$position','$type')";
+			$sql="INSERT INTO `$TBL_QUESTIONS`(question,description,ponderation,q_position,type)
+				VALUES('$question','$description','$weighting','$position','$type')";
 			mysql_query($sql) or die("Error : INSERT in file ".__FILE__." at line ".__LINE__);
-
 			$this->id=mysql_insert_id();
 		}
 

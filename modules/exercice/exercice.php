@@ -29,6 +29,7 @@ define('UNIQUE_ANSWER', 1);
 define('MULTIPLE_ANSWER', 2);
 define('FILL_IN_BLANKS', 3);
 define('MATCHING', 4);
+define('TRUE_FALSE', 5);
 
 include('exercise.class.php');
 include('question.class.php');

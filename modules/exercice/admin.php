@@ -24,14 +24,13 @@
 *  			eMail: info@openeclass.org
 * =========================================================================*/
 
-// disable notices due to some problems
-//error_reporting('E_ALL ^ E_NOTICE');
 
 // answer types
 define('UNIQUE_ANSWER',	1);
 define('MULTIPLE_ANSWER', 2);
 define('FILL_IN_BLANKS', 3);
 define('MATCHING', 4);
+define('TRUE_FALSE', 5);
 
 include('exercise.class.php');
 include('question.class.php');
@@ -78,7 +77,7 @@ $navigation[]= array ("url"=>"exercice.php", "name"=> $langExercices);
 // picture path
 $picturePath='../../courses/'.$currentCourseID.'/image';
 // the 4 types of answers
-$aType=array($langUniqueSelect,$langMultipleSelect,$langFillBlanks,$langMatching);
+$aType=array($langUniqueSelect, $langMultipleSelect, $langFillBlanks, $langMatching, $langTrueFalse);
 
 // tables used in the exercise tool
 $TBL_EXERCICE_QUESTION='exercice_question';

@@ -32,29 +32,24 @@ function showQuestion($questionId, $onlyAnswers = false) {
 	// construction of the Question object
 	$objQuestionTmp=new Question();
 	// reads question informations
-	if(!$objQuestionTmp->read($questionId))
-	{
+	if(!$objQuestionTmp->read($questionId)) {
 		// question not found
 		return false;
 	}
-
 	$answerType=$objQuestionTmp->selectType();
 
-	if(!$onlyAnswers)
-	{
+	if(!$onlyAnswers) {
 		$questionName=$objQuestionTmp->selectTitle();
 		$questionDescription=$objQuestionTmp->selectDescription();	
-	
-	$questionDescription_temp = standard_text_escape($questionDescription);
-	$tool_content .= "<tr>
-	<td colspan='2'>
-	<b>$questionName</b><br/>
-	<small>$questionDescription_temp</small>
-	</td></tr>";
-
-	if(file_exists($picturePath.'/quiz-'.$questionId)) {
-		$tool_content .= "<tr>
-		<td align=\"center\" colspan=\"2\"><center><img src=\"".${'picturePath'}."/quiz-".${'questionId'}."\" border=\"0\"></center></td></tr>";
+		$questionDescription_temp = standard_text_escape($questionDescription);
+		$tool_content .= "<tr><td colspan='2'>
+		<b>$questionName</b><br/>
+		<small>$questionDescription_temp</small>
+		</td></tr>";
+		if(file_exists($picturePath.'/quiz-'.$questionId)) {
+			$tool_content .= "<tr>
+			<td align='center' colspan='2'>
+			<center><img src='".${'picturePath'}."/quiz-".${'questionId'}."'></center></td></tr>";
 		}
 	}  // end if(!$onlyAnswers)
 
@@ -91,7 +86,6 @@ function showQuestion($questionId, $onlyAnswers = false) {
 			// replaces [blank] by an input field
                         $answer = preg_replace('/\[[^]]+\]/', '<input type="text" name="choice['.$questionId.'][]" size="10">', nl2br(q($answer)));
 		}
-
 		// unique answer
 		if($answerType == UNIQUE_ANSWER) {
 			$tool_content .= "<tr>
@@ -111,8 +105,7 @@ function showQuestion($questionId, $onlyAnswers = false) {
 			$tool_content .= "<tr><td colspan='2'>${answer}</td></tr>";
 		}
 		// matching
-		else
-		{
+		elseif($answerType == MATCHING) { 
 			if(!$answerCorrect) {
 				// options (A, B, C, ...) that will be put into the list-box
 				$Select[$answerId]['Lettre']=$cpt1++;
@@ -133,9 +126,7 @@ function showQuestion($questionId, $onlyAnswers = false) {
 				 foreach($Select as $key=>$val) {
 					 $tool_content .= "<option value=\"${key}\">${val['Lettre']}</option>";
 				 }
-		 
-				 $tool_content .= "</select></div></td><td width=\"44%\">";
-		 
+				 $tool_content .= "</select></div></td><td width='44%'>";
 				 if(isset($Select[$cpt2]))
 				       $tool_content .= '<b>'.$Select[$cpt2]['Lettre'].'.</b> '.$Select[$cpt2]['Reponse'];
 				 else
@@ -155,6 +146,11 @@ function showQuestion($questionId, $onlyAnswers = false) {
 					}	// end while()
 				}  // end if()
 			}
+		}
+		elseif($answerType == TRUE_FALSE) {
+			$tool_content .= "<tr><td width='1%' align='center'>
+			<input type='radio' name='choice[${questionId}]' value='${answerId}'></td>
+			<td width='99%'>$answer</td></tr>";
 		}
 	}	// end for()
 

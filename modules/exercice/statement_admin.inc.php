@@ -140,28 +140,34 @@ if(isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
 		$tool_content .= "</td></tr>";
 	}
 	$tool_content .= "<tr><th class='left'>$langAnswerType :</th>";
-	$tool_content .= "<td><input type=\"radio\" name=\"answerType\" value=\"1\" ";
-        if ($answerType <= 1) {
+	$tool_content .= "<td><input type='radio' name='answerType' value='1' ";
+        if ($answerType == 1) {
                 $tool_content .= 'checked="checked"';
         }
         $tool_content .= "> ".$langUniqueSelect."<br>";
-        $tool_content .= "<input type=\"radio\" name=\"answerType\" value=\"2\" ";
+        $tool_content .= "<input type='radio' name='answerType' value='2' ";
 	if ($answerType == 2) {
 		$tool_content .= 'checked="checked"';
 	}
 	$tool_content .= "> ".$langMultipleSelect."
 	<br>";
-        $tool_content .= "<input type=\"radio\" name=\"answerType\" value=\"4\" ";
-	if ($answerType >= 4) {
+        $tool_content .= "<input type='radio' name='answerType' value='4' ";
+	if ($answerType == 4) {
 		$tool_content .= 'checked="checked"';
 	}
 	$tool_content .= "> ".$langMatching."
 	<br>";
-        $tool_content .= "<input type=\"radio\" name=\"answerType\" value=\"3\" ";
+	$tool_content .= "<input type='radio' name='answerType' value='3' ";
 	if ($answerType == 3) {
 		$tool_content .= 'checked="checked"';
 	}
-	$tool_content .= "> ".$langFillBlanks;
+	$tool_content .= "> ".$langFillBlanks."
+	<br>";
+	$tool_content .= "<input type='radio' name='answerType' value='5' ";
+	if ($answerType == 5) {
+		$tool_content .= 'checked="checked"';
+	}
+	$tool_content .= "> ".$langTrueFalse;
 	$tool_content .= "</td><tr><th>&nbsp;</td><td>
 	<input type='submit' name='submitQuestion' value='$langOk'>
 	&nbsp;&nbsp;<input type='submit' name='cancelQuestion' value='$langCancel'>

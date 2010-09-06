@@ -246,7 +246,6 @@ class Answer
 		// removes old answers before inserting of new ones
 		$sql="DELETE FROM `$TBL_REPONSES` WHERE question_id='$questionId'";
 		db_query($sql, $currentCourseID);
-//		mysql_query($sql) or die("Error : DELETE in file ".__FILE__." at line ".__LINE__);
 
 		// inserts new answers into data base
 		$sql="INSERT INTO `$TBL_REPONSES`(id,question_id,reponse,correct,comment,ponderation,r_position) VALUES";
@@ -258,7 +257,6 @@ class Answer
 			$comment=addslashes($this->new_comment[$i]);
 			$weighting=$this->new_weighting[$i];
 			$position=$this->new_position[$i];
-
 			$sql.="('$i','$questionId','$answer','$correct','$comment','$weighting','$position'),";
 		}
 

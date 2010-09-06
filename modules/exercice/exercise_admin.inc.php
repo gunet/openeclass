@@ -70,9 +70,12 @@ else
 	$displayScore=$objExercise->selectScore();
 }
 
+if (isset($_GET['modifyExercise'])) {
+	$modifyExercise = $_GET['modifyExercise'];
+}
 // shows the form to modify the exercise
-if(isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
-	$tool_content .= "<form method='post' action='$_SERVER[PHP_SELF]?modifyExercise=$_GET[modifyExercise]'>
+if(isset($modifyExercise) or isset($_GET['NewExercise'])) {
+	$tool_content .= "<form method='post' action='$_SERVER[PHP_SELF]?modifyExercise=$modifyExercise'>
 	<table width='99%' class='FormData'><tbody>";
 	if(!empty($msgErr)) {
 		$tool_content .= "<tr><td colspan='2'>

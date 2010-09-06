@@ -193,37 +193,39 @@ if($is_adminOfCourse) {
 	$i = 1;
 	while ($row = mysql_fetch_array($result)) {
 		if(isset($fromExercise) || !is_object(@$objExercise) || !$objExercise->isInList($row['id'])) {
-			if ($row['type'] <= 1)
+			if ($row['type'] == 1) {
 				$answerType = $langUniqueSelect;
-			elseif ($row['type'] == 2)
+			} elseif ($row['type'] == 2) {
 				$answerType = $langMultipleSelect;
-			elseif ($row['type'] >= 4)
-				$answerType = $langMatching;
-			elseif ($row['type'] == 3)
+			} elseif ($row['type'] == 3) {
 				$answerType = $langFillBlanks;
-				
+			} elseif ($row['type'] == 4) {
+				$answerType = $langMatching;	
+			} elseif ($row['type'] == 5) {
+				$answerType = $langTrueFalse;
+			}
 			if(!isset($fromExercise)) {
 				$tool_content .= "<tr>
 				<td width='1%'><div style='padding-top:4px;'>
-				<img src='../../template/classic/img/arrow_grey.gif' border='0' alt='bullet'></div></td>
+				<img src='../../template/classic/img/arrow_grey.gif' alt='bullet'></div></td>
 				<td>
 				<a href=\"admin.php?editQuestion=".$row['id']."&fromExercise=\"\">".$row['question']."</a><br/><small class='invisible'>".$answerType."</small></td>
 				<td><div align='center'><a href=\"admin.php?editQuestion=".$row['id']."\">
-				<img src='../../template/classic/img/edit.gif' border='0' title='$langModify'></a></div>";
+				<img src='../../template/classic/img/edit.gif' title='$langModify'></a></div>";
 			} else {
 				$tool_content .= "<tr><td width='1%'><div style='padding-top:4px;'>
-				<img src='../../template/classic/img/arrow_grey.gif' border='0'></div></td>
+				<img src='../../template/classic/img/arrow_grey.gif'></div></td>
 				<td><a href=\"admin.php?editQuestion=".$row['id']."&fromExercise=".$fromExercise."\">".$row['question']."</a><br/><small class='invisible'>".$answerType."</small></td>
 				<td class='center'><div align='center'>";
 				$tool_content .= "<a href=\"".$_SERVER['PHP_SELF']."?recup=".$row['id'].
-					"&fromExercise=".$fromExercise."\"><img src='../../template/classic/img/enroll.gif' border='0' title='$langReuse'></a>";
+					"&fromExercise=".$fromExercise."\"><img src='../../template/classic/img/enroll.gif' title='$langReuse'></a>";
 			}
 			$tool_content .= "</td>";	
 			if(!isset($fromExercise)) {
 				$tool_content .= "<td><div align='center'>
 					<a href=\"".$_SERVER['PHP_SELF']."?exerciseId=".$exerciseId."&delete=".$row['id']."\"". 
 					" onclick=\"javascript:if(!confirm('".addslashes(htmlspecialchars($langConfirmYourChoice)).
-					"')) return false;\"><img src='../../template/classic/img/delete.gif' border='0' title='$langDelete'></a></div></td>";
+					"')) return false;\"><img src='../../template/classic/img/delete.gif' title='$langDelete'></a></div></td>";
 			}
 			$tool_content .= "</tr>";
 			// skips the last question,only used to know if we must create a link "Next page"

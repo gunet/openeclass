@@ -52,7 +52,7 @@ if(!isset($_SESSION['objExercise'])) {
 	// if the specified exercise doesn't exist or is disabled
 	if(!$objExercise->read($exerciseId) && (!$is_adminOfCourse)) {
 		$tool_content .= "<p>$langExerciseNotFound</p>";	
-		draw($tool_content, 2, 'exercice');
+		draw($tool_content, 2);
 		exit();
 	}
 }
