@@ -50,7 +50,10 @@ if ($is_adminOfCourse) {
                 $r = db_query("SELECT title FROM ebook WHERE course_id = $cours_id AND id = $id");
                 if (mysql_num_rows($r) > 0) {
                         list($title) = mysql_fetch_row($r);
-                        db_query("DELETE FROM ebook WHERE course_id = $cours_id AND id = $id");
+                        db_query("DELETE FROM ebook_subsection WHERE section_id IN
+                                         (SELECT id FROM ebook_section WHERE ebook_id = $id)");
+                        db_query("DELETE FROM ebook_section WHERE ebook_id = $id");
+                        db_query("DELETE FROM ebook WHERE id = $id");
                         $basedir = $webDir . 'courses/' . $currentCourseID . '/ebook/' . $id;
                         my_delete($basedir);
                         $tool_content .= "<p class='success'>" . q(sprintf($langEBookDeleted, $title)) . "</p>";
