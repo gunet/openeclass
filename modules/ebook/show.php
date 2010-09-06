@@ -188,6 +188,7 @@ foreach ($body_node->childNodes as $element) {
 unset($dom);
 $t->set_var('ebook_head', $ebook_head);
 $t->set_var('ebook_body', $ebook_body);
+$t->set_var('menu_title', $langEBookMenuTitle);
 
 $t->set_block('page', 'chapter_select_options', 'option_var');
 foreach ($sections as $section_id => $section_title) {

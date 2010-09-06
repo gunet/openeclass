@@ -3112,3 +3112,4 @@ $langSubsection = 'Υποενότητα';
 $langEBookDelConfirm = 'Επιβεβαίωση διαγραφής ηλεκτρονικού βιβλίου «%s»';
 $langEBookSectionDelConfirm = 'Επιβεβαίωση διαγραφής κεφαλαίου «%s»';
 $langEBookDeleted = 'Το βιβλίο με τίτλο «%s» διαγράφτηκε.';
+$langEBookMenuTitle = 'Υποενότητες';

@@ -43,6 +43,7 @@ li {
 .ebook_left {
         float: left;
         padding-left: 20px;
+        min-width: 250px
 }
 
 .controls {
@@ -55,14 +56,15 @@ a img {
 }
 
 .tools {
+        position: fixed;
+        top: 0; left: 0;
+        height: 80px;
+        width: 100%;
         background-color:#3b5998;
         border-bottom: 3px solid #e5eaf0;
-        width:100%;
         font-family: "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
         font-size: 16px;
-        position: fixed;
-        height: 80px;
-        margin-top: -80px;
+        z-index: 1;
 }
 
 .tools a {
@@ -82,33 +84,43 @@ a img {
         padding-top: 40px;
 }
 
-#menu_right {
-        float: right;
-        width: 200px;
-        padding: 20px;
+.menu_right {
+        position: fixed;
+        top: 130px; right: 0;
+        display: none;
+        width: 330px;
         height: auto;
+        padding: 30px;
         background-color: #eceff5;
-        background-repeat: repeat;
+        border: #3B5998 1px solid;
+        z-index: 2;
 }
 
-#menu_right_hidden {
-	float: right;
-	padding: 10px;
-	background-color: #eceff5;
+a.trigger {
+        position: fixed;
+        text-decoration: none;
+        top: 80px; right: 0;
+        padding: 10px 15px 10px 40px;
+        background: #eceff5 url(img/ebook/show.png) 15% 55% no-repeat;
+        display: block;
 }
 
-.active {
+a.trigger:hover {
+        background: #eceff5 url(img/ebook/show.png) 15% 55% no-repeat;
+}
+
+a.active.trigger {
+        background: #eceff5 url(img/ebook/hide.png) 15% 55% no-repeat;
+}
+
+.menu_right .active {
         background-color: #cfd8ea;
         padding: 2px;
         border: 1px solid #ffffff;
         font-weight: bold;
 }
 
-#hide_img {
-        margin-top: -8px;
-}
-
-
 .ebook_body {
         margin-top: 80px;
+        clear: both;
 }

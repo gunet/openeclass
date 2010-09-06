@@ -56,35 +56,38 @@ function change_section() {
 </div>
 <div class="clear"> </div>
 
-<!-- BEGIN section_titles -->
-<div id='menu_right_hidden'><img src='{img_base}/show.png' id='show_img' /></div>
-<div id='menu_right'> 
-  <img src='{img_base}/hide.png' class='ebook_right' id='hide_img' />
 
+<!-- BEGIN section_titles -->
+<div class='menu_right'> 
 <!-- BEGIN section_title_entry -->
-  <p{class_active}><a href='{section_link}'>{section_title}</a></p>
+  <div{class_active}><a href='{section_link}'>{section_title}</a></div>
 <!-- END section_title_entry -->
 </div>
+<a class="trigger" href="#">{menu_title}</a>
 <!-- END section_titles -->
+
 
 <div class='ebook_body'>{ebook_body}</div>
 
+
 <script type='text/javascript'>
-if ($.cookie('ebook_menu') == 'closed') {
-	$('#menu_right').hide();
-} else {
-	$('#menu_right_hidden').hide();
+$(document).ready(function(){
+        $(".trigger").click(function(){
+                $(".menu_right").toggle("fast");
+                $(this).toggleClass("active");
+                if ($.cookie('ebook_menu') == 'open') {
+                        $.cookie('ebook_menu', 'closed', { path: '/' });
+                } else {
+                        $.cookie('ebook_menu', 'open', { path: '/' });
+                }
+                return false;
+        });
+});
+
+if ($.cookie('ebook_menu') == 'open') {
+	$('.menu_right').show();
+        $('.trigger').toggleClass("active");
 }
-$('#hide_img').click(function() {
-  $('#menu_right').toggle('slide');
-  $('#menu_right_hidden').toggle('slide');
-  $.cookie('ebook_menu', 'closed', { path: '/' });
-});
-$('#show_img').click(function() {
-  $('#menu_right_hidden').toggle('slide');
-  $('#menu_right').toggle('slide');
-  $.cookie('ebook_menu', 'open', { path: '/' });
-});
 </script>
 </body>
 </html>
