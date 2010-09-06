@@ -225,7 +225,7 @@ mysql_query("CREATE TABLE questions (
         description text,
         ponderation float(11,2) default NULL,
         q_position int(11) default 1,
-        type int(11) default 2,
+        type int(11) default 1,
         PRIMARY KEY  (id))
         TYPE=MyISAM $charset_spec");
 
