@@ -605,15 +605,15 @@ if($is_adminOfCourse) {
         <fieldset>
           <input type='hidden' name='commentPath' value='" . q($comment) . "' />
           <input type='hidden' size='80' name='file_filename' value='$oldFilename' />
-          <legend>$langAddComment/legend>
-          <table  class='tbl' width='99%'>
+          <legend>$langAddComment</legend>
+          <table class='tbl' width='99%'>
           <tr>
-            <th>$langFilename:</th>
-			<td>$oldFilename</td>
+            <th>$langWorkFile:</th>
+	    <td>$oldFilename</td>
           </tr>
           <tr>
-            <th class='left'>$langComment:</th>
-            <td><input type='text' size='60' name='file_comment' value='$oldComment' class='FormData_InputText' /></td>
+            <th>$langComment:</th>
+            <td><input type='text' size='60' name='file_comment' value='$oldComment' /></td>
           </tr>
           <tr>
             <th>$langTitle:</th>
@@ -657,7 +657,10 @@ if($is_adminOfCourse) {
           </tr>";
 
                         //ektypwsh tou combox gia epilogh glwssas
-                        $dialogBox .= "<tr><th class='left'>$langLanguage :</th><td>" .
+                        $dialogBox .= "
+          <tr>
+            <th>$langLanguage :</th>
+            <td>" .
                                 selection(array('en' => $langEnglish,
                                                 'fr' => $langFrench,
                                                 'de' => $langGerman,
@@ -668,14 +671,19 @@ if($is_adminOfCourse) {
           </tr>
           <tr>
             <th>&nbsp;</th>
-            <td><input type='submit' value='$langOkComment' />&nbsp;&nbsp;&nbsp;$langNotRequired</td>
+            <td><input type='submit' value='$langOkComment' /></td>
+          </tr>
+          <tr>
+            <th>&nbsp;</th>
+            <td class='right'>$langNotRequired</td>
           </tr>
           </table>
         <input type='hidden' size='80' name='file_creator' value='$oldCreator' />
         <input type='hidden' size='80' name='file_date' value='$oldDate' />
         <input type='hidden' size='80' name='file_oldLanguage' value='$oldLanguage' />
+        </fieldset>
         </form>
-        <br />\n\n";
+        \n\n";
                 } else {
                         $dialogBox = "\n        <p class='caution'>$langFileNotFound</p>\n        <br />\n";
                 }
@@ -831,8 +839,7 @@ if (mysql_num_rows($sql) == 0) {
 
 	// Current Directory Line
 	$tool_content .= "
-    <br />
-    <table width='99%'>\n";
+    <table width='99%' class='tbl_alt'>\n";
 
         if ($is_adminOfCourse) {
                 $cols = 4;
@@ -842,7 +849,7 @@ if (mysql_num_rows($sql) == 0) {
 
 	$tool_content .= "
     <tr>
-      <th height='18' colspan='$cols'>$langDirectory: " . make_clickable_path($curDirPath) . "</th>
+      <th colspan='$cols'><div align='left'>$langDirectory: " . make_clickable_path($curDirPath) . "</div></th>
       <th><div align='right'>";
 
         // Link for sortable table headings
@@ -877,18 +884,19 @@ if (mysql_num_rows($sql) == 0) {
         $tool_content .= "</div></th>
     </tr>
     <tr>";
-        $tool_content .= "\n      <td width='10%' class='center'><b>" . headlink($langType, 'type') . '</b></td>';
-        $tool_content .= "\n      <td><b>" . headlink($langName, 'name') . '</b></td>';
-        $tool_content .= "\n      <td width='15%' class='center'><b>$langSize</b></td>";
-        $tool_content .= "\n      <td width='15%' class='center'><b>" . headlink($langDate, 'date') . '</b></td>';
+        $tool_content .= "\n      <th width='50' class='center'><b>" . headlink($langType, 'type') . '</b></th>';
+        $tool_content .= "\n      <th><div align='left'>" . headlink($langName, 'name') . '</div></th>';
+        $tool_content .= "\n      <th width='60' class='center'><b>$langSize</b></th>";
+        $tool_content .= "\n      <th width='80' class='center'><b>" . headlink($langDate, 'date') . '</b></th>';
 	if($is_adminOfCourse) {
-		$tool_content .= "\n      <td width='20%' class='center'><b>$langCommands</b></td>";
+		$tool_content .= "\n      <th width='120' class='center'><b>$langCommands</b></th>";
 	}
 	$tool_content .= "\n    </tr>";
 
         // -------------------------------------
         // Display directories first, then files
         // -------------------------------------
+        $counter=0;
         foreach (array(true, false) as $is_dir) {
                 foreach ($fileinfo as $entry) {
                         if (($entry['is_dir'] != $is_dir) or
@@ -897,7 +905,11 @@ if (mysql_num_rows($sql) == 0) {
                         }
                         $cmdDirName = $entry['path'];
                         if ($entry['visible']) {
-                                $style = '';
+                                if ($counter%2 == 0) {
+                                  $style = 'class="even"';
+                                } else {
+                                  $style = 'class="odd"';
+                                }
                         } else {
                                 $style = ' class="invisible"';
                         }
@@ -921,9 +933,10 @@ if (mysql_num_rows($sql) == 0) {
                                         $link_text .= " <img src='$urlAppend/modules/document/img/copyrighted.jpg' />";
                                 }
                         }
-                        $tool_content .= "\n    <tr$style>";
-                        $tool_content .= "\n      <td width='1%' valign='top'><a href='$file_url'$style$link_extra><img src='$image' /></a></td>";
-                        $tool_content .= "\n      <td><a href='$file_url'$style$link_extra>$link_text</a>";
+
+                        $tool_content .= "\n    <tr $style>";
+                        $tool_content .= "\n      <td class='center' valign='top'><a href='$file_url'$style$link_extra><img src='$image' /></a></td>";
+                        $tool_content .= "\n      <td><a href='$file_url'$link_extra>$link_text</a>";
 
                         /*** comments ***/
                         if (!empty($entry['comment'])) {
@@ -938,11 +951,16 @@ if (mysql_num_rows($sql) == 0) {
                         } else {
                                 $size = format_file_size($entry['size']);
                                 $date = format_date($entry['date']);
-                                $tool_content .= "\n      <td>$size</td>\n      <td>$date</td>";
+                                $tool_content .= "\n      <td class='center'>$size</td>\n      <td class='center'>$date</td>";
                         }
                         if ($is_adminOfCourse) {
-                                $tool_content .= "\n      <td><form action='document.php' method='post'>" . $group_hidden_input .
+                                $tool_content .= "\n      <td class='right' valign='top'><form action='document.php' method='post'>" . $group_hidden_input .
                                                  "<input type='hidden' name='filePath' value='$cmdDirName' />";
+                                if (!$is_dir) {
+                                        /*** replace/overwrite command, only applies to files ***/
+                                        $tool_content .= "<a href='{$base_url}replace=$cmdDirName'>" .
+                                                         "<img src='../../template/classic/img/add.gif' title='$langReplace' /></a>&nbsp;";
+                                }
                                 /*** delete command ***/
                                 $tool_content .= "<input type='image' src='../../template/classic/img/delete.gif' alt='$langDelete' title='$langDelete' name='delete' value='1' onClick=\"return confirmation('".addslashes($entry['filename'])."');\" />&nbsp;";
                                 /*** copy command ***/
@@ -962,19 +980,15 @@ if (mysql_num_rows($sql) == 0) {
                                         $tool_content .= "<a href='{$base_url}mkVisibl=$cmdDirName'>";
                                         $tool_content .= "<img src='../../template/classic/img/invisible.gif' title='$langVisible' /></a>";
                                 }
-                                if (!$is_dir) {
-                                        /*** replace/overwrite command, only applies to files ***/
-                                        $tool_content .= "&nbsp;<a href='{$base_url}replace=$cmdDirName'>" .
-                                                         "<img src='../../template/classic/img/add.gif' title='$langReplace' /></a>";
-                                }
                                 $tool_content .= "</form></td>";
                                 $tool_content .= "\n    </tr>";
                         }
+                        $counter++;
                 }
         }
         $tool_content .=  "\n    </table>\n";
 	if ($is_adminOfCourse) {
-		$tool_content .= "\n    <p align='right'><small>$langMaxFileSize " . ini_get('upload_max_filesize') . "</small></p>\n";
+		$tool_content .= "\n    <p align='right'>$langMaxFileSize " . ini_get('upload_max_filesize') . "</p>\n";
 	}
         $tool_content .= "\n    <br />";
 }
