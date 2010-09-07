@@ -459,7 +459,7 @@ function showquota($quota, $used) {
 	//telos diamorfwshs ths grafikh mparas kai twn arithmitikwn statistikwn stoixeiwn
 	//ektypwsh pinaka me arithmitika stoixeia + thn grafikh bara
 	$retstring .= "
-        <table class='tbl_border'>
+        <table class='tbl'>
 	<tr>
           <th>$langQuotaUsed :</th>
 	  <td>$used</td>
