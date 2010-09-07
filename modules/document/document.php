@@ -601,27 +601,27 @@ if($is_adminOfCourse) {
                         $fileName = my_basename($comment);
                         if (empty($oldFilename)) $oldFilename = $fileName;
                         $dialogBox .= "
-				<form method='post' action='document.php'>
-				<fieldset>
-				<input type='hidden' name='commentPath' value='" . q($comment) . "' />
-				<input type='hidden' size='80' name='file_filename' value='$oldFilename' />
-					<legend>aaaa</legend>
-					<table  class='tbl' width='99%'>
-					<tr>
-						<th>&nbsp;</th>
-						<td><b>$langAddComment:</b> $oldFilename</td>
-					</tr>
-					<tr>
-						<th class='left'>$langComment:</th>
-						<td><input type='text' size='60' name='file_comment' value='$oldComment' class='FormData_InputText' /></td>
-					</tr>
-					<tr>
-						<th class='left'>$langTitle:</th>
-						<td><input type='text' size='60' name='file_title' value='$oldTitle' class='FormData_InputText' /></td>
-					</tr>
-					<tr>
-						<th class='left'>$langCategory:</th>
-						<td>" .
+        <form method='post' action='document.php'>
+        <fieldset>
+          <input type='hidden' name='commentPath' value='" . q($comment) . "' />
+          <input type='hidden' size='80' name='file_filename' value='$oldFilename' />
+          <legend>$langAddComment/legend>
+          <table  class='tbl' width='99%'>
+          <tr>
+            <th>$langFilename:</th>
+			<td>$oldFilename</td>
+          </tr>
+          <tr>
+            <th class='left'>$langComment:</th>
+            <td><input type='text' size='60' name='file_comment' value='$oldComment' class='FormData_InputText' /></td>
+          </tr>
+          <tr>
+            <th>$langTitle:</th>
+            <td><input type='text' size='60' name='file_title' value='$oldTitle' /></td>
+          </tr>
+          <tr>
+            <th>$langCategory:</th>
+            <td>" .
                         selection(array('0' => $langCategoryOther,
                                         '1' => $langCategoryExcercise,
                                         '2' => $langCategoryLecture,
@@ -630,31 +630,31 @@ if($is_adminOfCourse) {
                                         '5' => $langCategoryExample,
                                         '6' => $langCategoryTheory),
                                   'file_category', $oldCategory) . "</td>
-					</tr>
-					<tr>
-						<th class='left'>$langSubject : </th>
-						<td><input type='text' size='60' name='file_subject' value='$oldSubject' class='FormData_InputText' /></td>
-					</tr>
-					<tr>
-						<th class='left'>$langDescription : </th>
-						<td><input type='text' size='60' name='file_description' value='$oldDescription' class='FormData_InputText' /></td>
-					</tr>
-					<tr>
-						<th class='left'>$langAuthor : </th>
-						<td><input type='text' size='60' name='file_author' value='$oldAuthor' class='FormData_InputText' /></td>
-					</tr>";
-
+          </tr>
+          <tr>
+            <th>$langSubject : </th>
+            <td><input type='text' size='60' name='file_subject' value='$oldSubject' /></td>
+          </tr>
+          <tr>
+            <th>$langDescription : </th>
+            <td><input type='text' size='60' name='file_description' value='$oldDescription' /></td>
+          </tr>
+          <tr>
+            <th>$langAuthor : </th>
+            <td><input type='text' size='60' name='file_author' value='$oldAuthor' /></td>
+          </tr>";
+		  
                         $dialogBox .= "
-					<tr>
-						<th class='left'>$langCopyrighted : </th>
-						<td><input name='file_copyrighted' type='radio' value='0' ";
+          <tr>
+            <th>$langCopyrighted : </th>
+            <td><input name='file_copyrighted' type='radio' value='0' ";
                         if ($oldCopyrighted=="0" || empty($oldCopyrighted)) $dialogBox .= " checked='checked' "; $dialogBox .= " /> $langCopyrightedUnknown <input name='file_copyrighted' type='radio' value='2' "; if ($oldCopyrighted=="2") $dialogBox .= " checked='checked' "; $dialogBox .= " /> $langCopyrightedFree <input name='file_copyrighted' type='radio' value='1' ";
 
                         if ($oldCopyrighted=="1") { 
                                 $dialogBox .= " checked='checked' ";
                         }
                         $dialogBox .= "/>$langCopyrightedNotFree</td>
-					</tr>";
+          </tr>";
 
                         //ektypwsh tou combox gia epilogh glwssas
                         $dialogBox .= "<tr><th class='left'>$langLanguage :</th><td>" .
@@ -665,19 +665,19 @@ if($is_adminOfCourse) {
                                                 'it' => $langItalian,
                                                 'es' => $langSpanish), 'file_language', $oldLanguage) .
                                 "</td>
-					</tr>
-					<tr>
-						<th>&nbsp;</th>
-						<td><input type='submit' value='$langOkComment' />&nbsp;&nbsp;&nbsp;$langNotRequired</td>
-					</tr>
-					</table>
-                <input type='hidden' size='80' name='file_creator' value='$oldCreator' />
-                <input type='hidden' size='80' name='file_date' value='$oldDate' />
-                <input type='hidden' size='80' name='file_oldLanguage' value='$oldLanguage' />
-                </form>
-				<br />\n";
+          </tr>
+          <tr>
+            <th>&nbsp;</th>
+            <td><input type='submit' value='$langOkComment' />&nbsp;&nbsp;&nbsp;$langNotRequired</td>
+          </tr>
+          </table>
+        <input type='hidden' size='80' name='file_creator' value='$oldCreator' />
+        <input type='hidden' size='80' name='file_date' value='$oldDate' />
+        <input type='hidden' size='80' name='file_oldLanguage' value='$oldLanguage' />
+        </form>
+        <br />\n\n";
                 } else {
-                        $dialogBox = "\n       <p class='caution'>$langFileNotFound</p>\n       <br />\n";
+                        $dialogBox = "\n        <p class='caution'>$langFileNotFound</p>\n        <br />\n";
                 }
         }
 
@@ -691,7 +691,7 @@ if($is_adminOfCourse) {
                         $visibilityPath = $_GET['mkInvisibl'];
                 }
 		db_query("UPDATE document SET visibility='$newVisibilityStatus' WHERE path = " . autoquote($visibilityPath));
-		$dialogBox = "<p class='success_small'>$langViMod</p><br />";
+		$dialogBox = "\n        <p class='success'>$langViMod</p>\n        <br />";
 	}
 } // teacher only
 
@@ -831,8 +831,8 @@ if (mysql_num_rows($sql) == 0) {
 
 	// Current Directory Line
 	$tool_content .= "
-		<br />
-			<table width='99%'>\n";
+    <br />
+    <table width='99%'>\n";
 
         if ($is_adminOfCourse) {
                 $cols = 4;
@@ -841,9 +841,9 @@ if (mysql_num_rows($sql) == 0) {
         }
 
 	$tool_content .= "
-			<tr>
-				<th height='18' colspan='$cols'><div align=\"left\">$langDirectory: " . make_clickable_path($curDirPath) . "</div></th>
-				<th><div align='right'>";
+    <tr>
+      <th height='18' colspan='$cols'>$langDirectory: " . make_clickable_path($curDirPath) . "</th>
+      <th><div align='right'>";
 
         // Link for sortable table headings
         function headlink($label, $this_sort)
@@ -875,16 +875,16 @@ if (mysql_num_rows($sql) == 0) {
                 $tool_content .=  "<a href='$parentlink'>$langUp</a> <a href='$parentlink'><img src='../../template/classic/img/parent.gif' height='20' width='20' /></a>";
         }
         $tool_content .= "</div></th>
-			</tr>
-			<tr>";
-        $tool_content .= "\n				<td width='10%' class='center'><b>" . headlink($langType, 'type') . '</b></td>';
-        $tool_content .= "\n				<td><b>" . headlink($langName, 'name') . '</b></td>';
-        $tool_content .= "\n				<td width='15%' class='center'><b>$langSize</b></td>";
-        $tool_content .= "\n				<td width='15%' class='center'><b>" . headlink($langDate, 'date') . '</b></td>';
+    </tr>
+    <tr>";
+        $tool_content .= "\n      <td width='10%' class='center'><b>" . headlink($langType, 'type') . '</b></td>';
+        $tool_content .= "\n      <td><b>" . headlink($langName, 'name') . '</b></td>';
+        $tool_content .= "\n      <td width='15%' class='center'><b>$langSize</b></td>";
+        $tool_content .= "\n      <td width='15%' class='center'><b>" . headlink($langDate, 'date') . '</b></td>';
 	if($is_adminOfCourse) {
-		$tool_content .= "\n				<td width='20%' class='center'><b>$langCommands</b></td>";
+		$tool_content .= "\n      <td width='20%' class='center'><b>$langCommands</b></td>";
 	}
-	$tool_content .= "\n  </tr>";
+	$tool_content .= "\n    </tr>";
 
         // -------------------------------------
         // Display directories first, then files
@@ -921,27 +921,27 @@ if (mysql_num_rows($sql) == 0) {
                                         $link_text .= " <img src='$urlAppend/modules/document/img/copyrighted.jpg' />";
                                 }
                         }
-                        $tool_content .= "\n			<tr$style>";
-                        $tool_content .= "\n				<td width='1%' valign='top'><a href='$file_url'$style$link_extra><img src='$image' /></a></td>";
-                        $tool_content .= "\n				<td><a href='$file_url'$style$link_extra>$link_text</a>";
+                        $tool_content .= "\n    <tr$style>";
+                        $tool_content .= "\n      <td width='1%' valign='top'><a href='$file_url'$style$link_extra><img src='$image' /></a></td>";
+                        $tool_content .= "\n      <td><a href='$file_url'$style$link_extra>$link_text</a>";
 
                         /*** comments ***/
                         if (!empty($entry['comment'])) {
                                 $tool_content .= "<br /><span class='comment'>" .
                                         nl2br(htmlspecialchars($entry['comment'])) .
-                                        "</span>\n";
+                                        "</span>";
                         }
-                        $tool_content .= "</td>\n";
+                        $tool_content .= "</td>";
                         if ($is_dir) {
                                 // skip display of date and time for directories
-                                $tool_content .= "				<td>&nbsp;</td>\n				<td>&nbsp;</td>";
+                                $tool_content .= "\n      <td>&nbsp;</td>\n      <td>&nbsp;</td>";
                         } else {
                                 $size = format_file_size($entry['size']);
                                 $date = format_date($entry['date']);
-                                $tool_content .= "\n				<td>$size</td>\n				<td>$date</td>";
+                                $tool_content .= "\n      <td>$size</td>\n      <td>$date</td>";
                         }
                         if ($is_adminOfCourse) {
-                                $tool_content .= "\n				<td><form action='document.php' method='post'>" . $group_hidden_input .
+                                $tool_content .= "\n      <td><form action='document.php' method='post'>" . $group_hidden_input .
                                                  "<input type='hidden' name='filePath' value='$cmdDirName' />";
                                 /*** delete command ***/
                                 $tool_content .= "<input type='image' src='../../template/classic/img/delete.gif' alt='$langDelete' title='$langDelete' name='delete' value='1' onClick=\"return confirmation('".addslashes($entry['filename'])."');\" />&nbsp;";
@@ -968,15 +968,15 @@ if (mysql_num_rows($sql) == 0) {
                                                          "<img src='../../template/classic/img/add.gif' title='$langReplace' /></a>";
                                 }
                                 $tool_content .= "</form></td>";
-                                $tool_content .= "\n			</tr>";
+                                $tool_content .= "\n    </tr>";
                         }
                 }
         }
-        $tool_content .=  "\n			</table>\n";
+        $tool_content .=  "\n    </table>\n";
 	if ($is_adminOfCourse) {
-		$tool_content .= "			<p align='right'><small>$langMaxFileSize " . ini_get('upload_max_filesize') . "</small></p>\n";
+		$tool_content .= "\n    <p align='right'><small>$langMaxFileSize " . ini_get('upload_max_filesize') . "</small></p>\n";
 	}
-        $tool_content .=  "\n			<br />";
+        $tool_content .= "\n    <br />";
 }
 add_units_navigation(TRUE);
 draw($tool_content, 2, '', $local_head);
