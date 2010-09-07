@@ -106,10 +106,10 @@ if (mysql_num_rows($q) == 0) {
                           <form method='post' action='edit.php'>
                           <input type='hidden' name='id' value='$id' /><br />
                           <table>
-                             <tr><th>αρ. ενότητας</th><th>τίτλος ενότητας</th><th>&nbsp;</th></tr>\n";
+                             <tr><th>$langID</th><th>$langTitle</th><th>&nbsp;</th></tr>\n";
         $q = db_query("SELECT id, public_id, title FROM ebook_section
                        WHERE ebook_id = $info[id]
-                       ORDER BY public_id");
+                       ORDER BY CONVERT(public_id, UNSIGNED), public_id");
         $sections = array('' => '---');
         if (isset($_GET['s'])) {
                 $edit_section = $_GET['s'];
@@ -165,7 +165,7 @@ if (mysql_num_rows($q) == 0) {
                 $class = odd_even($k); 
                 $key = array_search($r['file'], $html_files);
                 $display_id = $r['sid'] . ',' . $r['ssid'];
-                $tool_content .= "<tr$class><td><a href='show.php/$currentCourseID/$display_id/'
+                $tool_content .= "<tr$class><td><a href='show.php/$currentCourseID/$id/$display_id/'
                                                    target='_blank'>" . q($r['file']) . "</a></td>
                                      <td><input type='text' name='title[$key]' size='30' value='" . q($r['subsection_title']) . "' /></td>
                                      <td>" . selection($sections, "sid[$key]", $r['sid']) . "</td>

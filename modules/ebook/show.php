@@ -10,6 +10,7 @@ if (isset($_SESSION['dbname'])) {
 $unit = false;
 $file_path = false;
 $full_url_found = false;
+$show_orphan_file = false;
 $uri = strstr($_SERVER['REQUEST_URI'], 'ebook/show.php');
 $path_components = explode('/', $uri);
 if (count($path_components) >= 4) {
@@ -19,7 +20,6 @@ if (count($path_components) >= 4) {
                 if ($path_components[4] == '_') {
                         $show_orphan_file = true;
                 } else {
-                        $show_orphan_file = false;
                         $ids = explode(',', $path_components[4]);
                         $current_sid = intval($ids[0]);
                         if (isset($ids[1])) {
@@ -66,20 +66,23 @@ if ($unit !== false) {
 	$exit_fullscreen_link = $urlAppend . '/courses/' . $currentCourseID . '/';
 	$unit_parameter = '';
 }
-        $q = db_query("SELECT ebook_section.id AS sid,
-                              ebook_section.id AS psid,
-                              ebook_section.title AS section_title,
-                              ebook_subsection.id AS ssid,
-                              ebook_subsection.public_id AS pssid,
-                              ebook_subsection.title AS subsection_title,
-                              ebook_subsection.file
-                       FROM ebook, ebook_section, ebook_subsection
-                       WHERE ebook.id = $ebook_id AND
-                             ebook.course_id = $cours_id AND
-                             ebook_section.ebook_id = ebook.id AND
-                             ebook_section.id = ebook_subsection.section_id
-                             ORDER BY CONVERT(psid, UNSIGNED), psid,
-                                      CONVERT(pssid, UNSIGNED), pssid");
+$q = db_query("SELECT ebook_section.id AS sid,
+                      ebook_section.id AS psid,
+                      ebook_section.title AS section_title,
+                      ebook_subsection.id AS ssid,
+                      ebook_subsection.public_id AS pssid,
+                      ebook_subsection.title AS subsection_title,
+                      ebook_subsection.file
+               FROM ebook, ebook_section, ebook_subsection
+               WHERE ebook.id = $ebook_id AND
+                     ebook.course_id = $cours_id AND
+                     ebook_section.ebook_id = ebook.id AND
+                     ebook_section.id = ebook_subsection.section_id
+                     ORDER BY CONVERT(psid, UNSIGNED), psid,
+                              CONVERT(pssid, UNSIGNED), pssid");
+if (!$q or mysql_num_rows($q) == 0) {
+        not_found($uri);
+}
 while ($row = mysql_fetch_array($q)) {
 	$sid = $row['sid'];
 	$ssid = $row['ssid'];
@@ -222,7 +225,7 @@ function not_found($path)
         echo '<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN"><html><head>',
                 '<title>404 Not Found</title></head><body>',
                 '<h1>Not Found</h1><p>The requested path "',
-                htmlspecialchars($file_path),
+                htmlspecialchars($path),
                 '" was not found.</p></body></html>';
         restore_saved_course();
         exit;
