@@ -278,7 +278,7 @@ if($is_adminOfCourse) {
 		// check for disk quotas
 		$diskUsed = dir_total_space($basedir);
 		if ($diskUsed + @$_FILES['userFile']['size'] > $diskQuotaDocument) {
-			$dialogBox .= "<p class='caution_small'>$langNoSpace</p>";
+			$dialogBox .= "<p class='caution'>$langNoSpace</p>";
 		} else {
                         if (unwanted_file($_FILES['userFile']['name'])) {
                                 $dialogBox .= "$langUnwantedFiletype: {$_FILES['userFile']['name']}";
@@ -292,7 +292,7 @@ if($is_adminOfCourse) {
                                 if ($diskUsed + $realFileSize > $diskQuotaDocument) {
                                         $dialogBox .= $langNoSpace;
                                 } else {
-                                        $dialogBox .= "<p class='success_small'>$langDownloadAndZipEnd</p><br />";
+                                        $dialogBox .= "<p class='success'>$langDownloadAndZipEnd</p><br />";
                                 }
                         } else {
                                 $error = false;
@@ -357,9 +357,9 @@ if($is_adminOfCourse) {
 
                                         /*** Copy the file to the desired destination ***/
                                         copy ($userFile, $basedir.$uploadPath.'/'.$safe_fileName);
-                                        $dialogBox .= "<p class='success_small'>$langDownloadEnd</p><br />";
+                                        $dialogBox .= "<p class='success'>$langDownloadEnd</p><br />";
                                 } else {
-                                        $dialogBox .= "<p class='caution_small'>$error</p><br />";
+                                        $dialogBox .= "<p class='caution'>$error</p><br />";
                                 }
                         }
                 }
@@ -378,9 +378,9 @@ if($is_adminOfCourse) {
 		if($basedir . $source != $basedir . $moveTo or $basedir . $source != $basedir . $moveTo) {
 			if (move($basedir . $source, $basedir . $moveTo)) {
 				update_db_info('document', 'update', $source, $moveTo.'/'.my_basename($source));
-				$dialogBox = "<p class='success_small'>$langDirMv</p><br />";
+				$dialogBox = "<p class='success'>$langDirMv</p><br />";
 			} else {
-				$dialogBox = "<p class='caution_small'>$langImpossible</p><br />";
+				$dialogBox = "<p class='caution'>$langImpossible</p><br />";
 				/*** return to step 1 ***/
 				$move = $source;
 				unset ($moveTo);
@@ -414,7 +414,7 @@ if($is_adminOfCourse) {
                 if (mysql_num_rows($result) > 0) {
                         if (my_delete($basedir . $delete) or !file_exists($basedir . $delete)) {
                                 update_db_info('document', 'delete', $delete);
-                                $dialogBox = "<p class='success_small'>$langDocDeleted</p><br />";
+                                $dialogBox = "<p class='success'>$langDocDeleted</p><br />";
                         }
                 }
 	}
@@ -427,7 +427,7 @@ if($is_adminOfCourse) {
 		db_query("UPDATE document SET filename=" .
                          autoquote(canonicalize_whitespace($_POST['renameTo'])) .
                          " WHERE course_id = $cours_id AND $group_sql AND path=" . autoquote($_POST['sourceFile']));
-		$dialogBox = "<p class='caution_small'>$langElRen</p><br />";
+		$dialogBox = "<p class='success'>$langElRen</p><br />";
 	}
 
 	// Step 1: Show rename dialog box
@@ -437,13 +437,21 @@ if($is_adminOfCourse) {
                                                                     path = " . autoquote($_GET['rename']));
 		$res = mysql_fetch_array($result);
 		$fileName = $res['filename'];
-		@$dialogBox .= "<form method='post' action='document.php'>\n";
-		$dialogBox .= "<input type='hidden' name='sourceFile' value='$_GET[rename]' />
-        	<table class='FormData' width='99%'><tbody><tr>
-          	<th class='left' width='200'>$langRename:</th>
-          	<td class='left'>$langRename ".q($fileName)." $langIn: <input type='text' name='renameTo' value='$fileName' class='FormData_InputText' size='50' /></td>
-          	<td class='left' width='1'><input type='submit' value='$langRename' /></td>
-        	</tr></tbody></table></form><br />";
+		@$dialogBox .= "
+              <form method='post' action='document.php'>\n";
+		$dialogBox .= "
+              <input type='hidden' name='sourceFile' value='$_GET[rename]' />
+              <fieldset>
+        	<table class='tbl'>
+                <tr>
+          	  <td>$langRename: <b>".q($fileName)."</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; $langIn:</td>
+          	  <td><input type='text' name='renameTo' value='$fileName' size='50' /></td>
+          	  <td width='1'><input type='submit' value='$langRename' /></td>
+        	</tr>
+                </table>
+              </fieldset>
+              </form>
+              <br />";
 	}
 
 	// create directory
@@ -454,9 +462,9 @@ if($is_adminOfCourse) {
                         make_path($_POST['newDirPath'], array($newDirName));
                         // $path_already_exists: global variable set by make_path()
                         if ($path_already_exists) {
-                                $dialogBox = "<p class='caution_small'>$langFileExists</p>";
+                                $dialogBox = "<p class='caution'>$langFileExists</p>";
                         } else {
-                                $dialogBox = "<p class='success_small'>$langDirCr</p>";
+                                $dialogBox = "<p class='success'>$langDirCr</p>";
                         }
                 }
 	}
@@ -464,14 +472,21 @@ if($is_adminOfCourse) {
 	// step 1: display a field to enter the new dir name
         if (isset($_GET['createDir'])) {
                 $createDir = q($_GET['createDir']);
-                $dialogBox .= "<form action='document.php' method='post'>
-                               $group_hidden_input
-                               <input type='hidden' name='newDirPath' value='$createDir' />
-                               <table class='FormData' width='99%'>
-                               <tr><th class='left' width='200'>$langNameDir:</th>
-                                   <td class='left' width='1'><input type='text' name='newDirName' class='FormData_InputText' /></td>
-                                   <td class='left'><input type='submit' value='$langCreateDir' /></td>
-                                   </tr></table></form><br />";
+                $dialogBox .= "
+           <form action='document.php' method='post'>
+                $group_hidden_input
+           <fieldset>
+             <input type='hidden' name='newDirPath' value='$createDir' />
+             <table class='tbl'>
+             <tr>
+               <th>$langNameDir</th>
+               <td width='1'><input type='text' name='newDirName' /></td>
+               <td><input type='submit' value='$langCreateDir' /></td>
+             </tr>
+             </table>
+           </fieldset>
+           </form>
+           <br />";
 	}
 
 	// add/update/remove comment
@@ -513,9 +528,9 @@ if($is_adminOfCourse) {
                         // check for disk quota
                         $diskUsed = dir_total_space($basedir);
                         if ($diskUsed - filesize($basedir . $oldpath) + $_FILES['newFile']['size'] > $diskQuotaDocument) {
-                                $dialogBox = "<p class='caution_small'>$langNoSpace</p>";
+                                $dialogBox = "<p class='caution'>$langNoSpace</p>";
                         } elseif (unwanted_file($_FILES['newFile']['name'])) {
-                                $dialogBox = "<p class='caution_small'>$langUnwantedFiletype: " .
+                                $dialogBox = "<p class='caution'>$langUnwantedFiletype: " .
                                                         q($_FILES['newFile']['name']) . "</p>";
                         } else {
                                 $newformat = get_file_extension($_FILES['newFile']['name']);
@@ -527,9 +542,9 @@ if($is_adminOfCourse) {
                                                                    format = " . quote($newformat) . ",
                                                                    filename = " . autoquote($_FILES['newFile']['name']) . "
                                                               WHERE path = " . quote($oldpath))) {
-                                        $dialogBox = "<p class='caution_small'>$dropbox_lang[generalError]</p>";
+                                        $dialogBox = "<p class='caution'>$dropbox_lang[generalError]</p>";
                                 } else {
-                                        $dialogBox = "<p class='success_small'>$langReplaceOK</p>";
+                                        $dialogBox = "<p class='success'>$langReplaceOK</p>";
                                 }
                         }
                 }
@@ -542,15 +557,21 @@ if($is_adminOfCourse) {
                 if (mysql_num_rows($result) > 0) {
                         list($filename) = mysql_fetch_row($result);
                         $filename = q($filename);
-                        $replacemessage = sprintf($langReplaceFile, '<i>' . $filename . '</i>');
-                        $dialogBox = "<form method='post' action='document.php' enctype='multipart/form-data'>
-		              <input type='hidden' name='replacePath' value='" . q($_GET['replace']) . "' />
-                              <table class='FormData' width='99%'><tbody><tr>
-                                  <th class='left' width='200'>$langReplace:</th>
-                                  <td class='left'>$replacemessage:
-                                      <input type='file' name='newFile' size='35' class='FormData_InputText' /></td>
-                                  <td class='left' width='1'><input type='submit' value='$langReplace' /></td></tr>
-                              </tbody></table></form><br />";
+                        $replacemessage = sprintf($langReplaceFile, '<b>' . $filename . '</b>');
+                        $dialogBox = "
+               <form method='post' action='document.php' enctype='multipart/form-data'>
+               <fieldset>
+	       <input type='hidden' name='replacePath' value='" . q($_GET['replace']) . "' />
+                 <table class='tbl'>
+                 <tr>
+                    <td>$replacemessage</td>
+                    <td><input type='file' name='newFile' size='35' /></td>
+                    <td><input type='submit' value='$langReplace' /></td>
+                 </tr>
+                 </table>
+               </fieldset>
+               </form>
+               <br />";
                 }
         }
 
@@ -579,13 +600,16 @@ if($is_adminOfCourse) {
                         // $fileName gia thn provolh tou onomatos arxeiou
                         $fileName = my_basename($comment);
                         if (empty($oldFilename)) $oldFilename = $fileName;
-                        $dialogBox .= "<form method='post' action='document.php'>
-                                <input type='hidden' name='commentPath' value='" . q($comment) . "' />
-                                <input type='hidden' size='80' name='file_filename' value='$oldFilename' />
-                                <table  class='FormData' width='99%'>
-                                <tbody><tr><th>&nbsp;</th>
-                                <td><b>$langAddComment:</b> $oldFilename</td>
-                                </tr><tr>
+                        $dialogBox .= "
+                 <form method='post' action='document.php'>
+                 <input type='hidden' name='commentPath' value='" . q($comment) . "' />
+                 <input type='hidden' size='80' name='file_filename' value='$oldFilename' />
+                 <table  class='tbl' width='99%'>
+                 <tr>
+                   <th>&nbsp;</th>
+                   <td><b>$langAddComment:</b> $oldFilename</td>
+                 </tr>
+                 <tr>
                                 <th class='left'>$langComment:</th>
                                 <td><input type='text' size='60' name='file_comment' value='$oldComment' class='FormData_InputText' /></td>
                                 </tr><tr>
