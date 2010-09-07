@@ -438,20 +438,20 @@ if($is_adminOfCourse) {
 		$res = mysql_fetch_array($result);
 		$fileName = $res['filename'];
 		@$dialogBox .= "
-              <form method='post' action='document.php'>\n";
+            <form method='post' action='document.php'>\n";
 		$dialogBox .= "
-              <input type='hidden' name='sourceFile' value='$_GET[rename]' />
-              <fieldset>
-        	<table class='tbl'>
+            <input type='hidden' name='sourceFile' value='$_GET[rename]' />
+            <fieldset>
+				<table class='tbl'>
                 <tr>
-          	  <td>$langRename: <b>".q($fileName)."</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; $langIn:</td>
-          	  <td><input type='text' name='renameTo' value='$fileName' size='50' /></td>
-          	  <td width='1'><input type='submit' value='$langRename' /></td>
-        	</tr>
-                </table>
-              </fieldset>
-              </form>
-              <br />";
+					<td>$langRename: <b>".q($fileName)."</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; $langIn:</td>
+					<td><input type='text' name='renameTo' value='$fileName' size='50' /></td>
+					<td width='1'><input type='submit' value='$langRename' /></td>
+				</tr>
+				</table>
+            </fieldset>
+            </form>
+            <br />\n";
 	}
 
 	// create directory
@@ -473,20 +473,20 @@ if($is_adminOfCourse) {
         if (isset($_GET['createDir'])) {
                 $createDir = q($_GET['createDir']);
                 $dialogBox .= "
-           <form action='document.php' method='post'>
-                $group_hidden_input
-           <fieldset>
-             <input type='hidden' name='newDirPath' value='$createDir' />
-             <table class='tbl'>
-             <tr>
-               <th>$langNameDir</th>
-               <td width='1'><input type='text' name='newDirName' /></td>
-               <td><input type='submit' value='$langCreateDir' /></td>
-             </tr>
-             </table>
+			<form actsion='document.php' method='post'>
+            $group_hidden_input
+			<fieldset>
+				<input type='hidden' name='newDirPath' value='$createDir' />
+				<table class='tbl'>
+				<tr>
+					<th>$langNameDir</th>
+					<td width='1'><input type='text' name='newDirName' /></td>
+					<td><input type='submit' value='$langCreateDir' /></td>
+				</tr>
+				</table>
            </fieldset>
            </form>
-           <br />";
+           <br />\n";
 	}
 
 	// add/update/remove comment
@@ -559,19 +559,19 @@ if($is_adminOfCourse) {
                         $filename = q($filename);
                         $replacemessage = sprintf($langReplaceFile, '<b>' . $filename . '</b>');
                         $dialogBox = "
-               <form method='post' action='document.php' enctype='multipart/form-data'>
-               <fieldset>
-	       <input type='hidden' name='replacePath' value='" . q($_GET['replace']) . "' />
-                 <table class='tbl'>
-                 <tr>
-                    <td>$replacemessage</td>
-                    <td><input type='file' name='newFile' size='35' /></td>
-                    <td><input type='submit' value='$langReplace' /></td>
-                 </tr>
-                 </table>
-               </fieldset>
-               </form>
-               <br />";
+				<form method='post' action='document.php' enctype='multipart/form-data'>
+				<fieldset>
+				<input type='hidden' name='replacePath' value='" . q($_GET['replace']) . "' />
+					<table class='tbl'>
+					<tr>
+						<td>$replacemessage</td>
+						<td><input type='file' name='newFile' size='35' /></td>
+						<td><input type='submit' value='$langReplace' /></td>
+					</tr>
+					</table>
+				</fieldset>
+				</form>
+				<br />\n";
                 }
         }
 
@@ -601,22 +601,27 @@ if($is_adminOfCourse) {
                         $fileName = my_basename($comment);
                         if (empty($oldFilename)) $oldFilename = $fileName;
                         $dialogBox .= "
-                 <form method='post' action='document.php'>
-                 <input type='hidden' name='commentPath' value='" . q($comment) . "' />
-                 <input type='hidden' size='80' name='file_filename' value='$oldFilename' />
-                 <table  class='tbl' width='99%'>
-                 <tr>
-                   <th>&nbsp;</th>
-                   <td><b>$langAddComment:</b> $oldFilename</td>
-                 </tr>
-                 <tr>
-                                <th class='left'>$langComment:</th>
-                                <td><input type='text' size='60' name='file_comment' value='$oldComment' class='FormData_InputText' /></td>
-                                </tr><tr>
-                                <th class='left'>$langTitle:</th>
-                                <td><input type='text' size='60' name='file_title' value='$oldTitle' class='FormData_InputText' /></td>
-                                </tr>
-                                <tr><th class='left'>$langCategory:</th><td>" .
+				<form method='post' action='document.php'>
+				<fieldset>
+				<input type='hidden' name='commentPath' value='" . q($comment) . "' />
+				<input type='hidden' size='80' name='file_filename' value='$oldFilename' />
+					<legend>aaaa</legend>
+					<table  class='tbl' width='99%'>
+					<tr>
+						<th>&nbsp;</th>
+						<td><b>$langAddComment:</b> $oldFilename</td>
+					</tr>
+					<tr>
+						<th class='left'>$langComment:</th>
+						<td><input type='text' size='60' name='file_comment' value='$oldComment' class='FormData_InputText' /></td>
+					</tr>
+					<tr>
+						<th class='left'>$langTitle:</th>
+						<td><input type='text' size='60' name='file_title' value='$oldTitle' class='FormData_InputText' /></td>
+					</tr>
+					<tr>
+						<th class='left'>$langCategory:</th>
+						<td>" .
                         selection(array('0' => $langCategoryOther,
                                         '1' => $langCategoryExcercise,
                                         '2' => $langCategoryLecture,
@@ -624,23 +629,32 @@ if($is_adminOfCourse) {
                                         '4' => $langCategoryDescription,
                                         '5' => $langCategoryExample,
                                         '6' => $langCategoryTheory),
-                                  'file_category', $oldCategory) . "</td></tr>
-                                <tr><th class='left'>$langSubject : </th><td>
-                                <input type='text' size='60' name='file_subject' value='$oldSubject' class='FormData_InputText' />
-                                </td></tr><tr><th class='left'>$langDescription : </th><td>
-                                <input type='text' size='60' name='file_description' value='$oldDescription' class='FormData_InputText' /></td></tr>
-                                <tr><th class='left'>$langAuthor : </th><td>
-                                <input type='text' size='60' name='file_author' value='$oldAuthor' class='FormData_InputText' />
-                                </td></tr>";
+                                  'file_category', $oldCategory) . "</td>
+					</tr>
+					<tr>
+						<th class='left'>$langSubject : </th>
+						<td><input type='text' size='60' name='file_subject' value='$oldSubject' class='FormData_InputText' /></td>
+					</tr>
+					<tr>
+						<th class='left'>$langDescription : </th>
+						<td><input type='text' size='60' name='file_description' value='$oldDescription' class='FormData_InputText' /></td>
+					</tr>
+					<tr>
+						<th class='left'>$langAuthor : </th>
+						<td><input type='text' size='60' name='file_author' value='$oldAuthor' class='FormData_InputText' /></td>
+					</tr>";
 
-                        $dialogBox .= "<tr><th class='left'>$langCopyrighted : </th>
-                                <td><input name='file_copyrighted' type='radio' value='0' ";
+                        $dialogBox .= "
+					<tr>
+						<th class='left'>$langCopyrighted : </th>
+						<td><input name='file_copyrighted' type='radio' value='0' ";
                         if ($oldCopyrighted=="0" || empty($oldCopyrighted)) $dialogBox .= " checked='checked' "; $dialogBox .= " /> $langCopyrightedUnknown <input name='file_copyrighted' type='radio' value='2' "; if ($oldCopyrighted=="2") $dialogBox .= " checked='checked' "; $dialogBox .= " /> $langCopyrightedFree <input name='file_copyrighted' type='radio' value='1' ";
 
                         if ($oldCopyrighted=="1") { 
                                 $dialogBox .= " checked='checked' ";
                         }
-                        $dialogBox .= "/>$langCopyrightedNotFree</td></tr>";
+                        $dialogBox .= "/>$langCopyrightedNotFree</td>
+					</tr>";
 
                         //ektypwsh tou combox gia epilogh glwssas
                         $dialogBox .= "<tr><th class='left'>$langLanguage :</th><td>" .
@@ -650,16 +664,20 @@ if($is_adminOfCourse) {
                                                 'el' => $langGreek,
                                                 'it' => $langItalian,
                                                 'es' => $langSpanish), 'file_language', $oldLanguage) .
-                                "</td></tr>
-                                <tr><th>&nbsp;</th>
-                                <td><input type='submit' value='$langOkComment' />&nbsp;&nbsp;&nbsp;$langNotRequired</td>
-                                </tr></tbody></table>
-                                <input type='hidden' size='80' name='file_creator' value='$oldCreator' />
-                                <input type='hidden' size='80' name='file_date' value='$oldDate' />
-                                <input type='hidden' size='80' name='file_oldLanguage' value='$oldLanguage' />
-                                </form><br />";
+                                "</td>
+					</tr>
+					<tr>
+						<th>&nbsp;</th>
+						<td><input type='submit' value='$langOkComment' />&nbsp;&nbsp;&nbsp;$langNotRequired</td>
+					</tr>
+					</table>
+                <input type='hidden' size='80' name='file_creator' value='$oldCreator' />
+                <input type='hidden' size='80' name='file_date' value='$oldDate' />
+                <input type='hidden' size='80' name='file_oldLanguage' value='$oldLanguage' />
+                </form>
+				<br />\n";
                 } else {
-                        $dialogBox = "<p class='caution_small'>$langFileNotFound</p><br />";
+                        $dialogBox = "\n       <p class='caution'>$langFileNotFound</p>\n       <br />\n";
                 }
         }
 
@@ -789,10 +807,10 @@ if($is_adminOfCourse) {
 	/*----------------------------------------
 	Create new folder
 	--------------------------------------*/
-	$tool_content .= "\n<li><a href='{$base_url}createDir=$cmdCurDirPath'>$langCreateDir</a></li>";
+	$tool_content .= "\n      <li><a href='{$base_url}createDir=$cmdCurDirPath'>$langCreateDir</a></li>";
 	$diskQuotaDocument = $diskQuotaDocument * 1024 / 1024;
-	$tool_content .= "\n<li><a href='{$base_url}showQuota=true'>$langQuotaBar</a></li>";
-	$tool_content .= "\n</ul>\n</div>\n";
+	$tool_content .= "\n      <li><a href='{$base_url}showQuota=true'>$langQuotaBar</a></li>";
+	$tool_content .= "\n    </ul>\n  </div>\n";
 
 	// Dialog Box
 	if (!empty($dialogBox))
@@ -808,13 +826,13 @@ if ($is_adminOfCourse) {
 	$sql = db_query("SELECT * FROM document WHERE visibility = 'v'");
 }
 if (mysql_num_rows($sql) == 0) {
-	$tool_content .= "\n<p class='alert1'>$langNoDocuments</p>";
+	$tool_content .= "\n    <p class='alert1'>$langNoDocuments</p>";
 } else {
 
 	// Current Directory Line
-	$tool_content .= "<br /><div class='fileman'>\n" .
-	                 "<table width='99%' align='left' class='Documents'>\n" .
-                         "<tbody>\n";
+	$tool_content .= "
+		<br />
+			<table width='99%'>\n";
 
         if ($is_adminOfCourse) {
                 $cols = 4;
@@ -822,10 +840,10 @@ if (mysql_num_rows($sql) == 0) {
                 $cols = 3;
         }
 
-	$tool_content .= "\n  <tr>" .
-                         "\n    <th height='18' colspan='$cols'><div align=\"left\">$langDirectory: " .
-                         make_clickable_path($curDirPath) . "</div></th>" .
-                         "\n    <th><div align='right'>";
+	$tool_content .= "
+			<tr>
+				<th height='18' colspan='$cols'><div align=\"left\">$langDirectory: " . make_clickable_path($curDirPath) . "</div></th>
+				<th><div align='right'>";
 
         // Link for sortable table headings
         function headlink($label, $this_sort)
@@ -856,18 +874,15 @@ if (mysql_num_rows($sql) == 0) {
                 $parentlink = $base_url . 'openDir=' . $cmdParentDir;
                 $tool_content .=  "<a href='$parentlink'>$langUp</a> <a href='$parentlink'><img src='../../template/classic/img/parent.gif' height='20' width='20' /></a>";
         }
-        $tool_content .= "</div></th>";
-        $tool_content .= "\n  </tr>";
-        $tool_content .= "\n  <tr>";
-        $tool_content .= "\n    <td width='10%' class='DocHead'><div align='center'><b>" .
-                         headlink($langType, 'type') . '</b></div></td>';
-        $tool_content .= "\n    <td class='DocHead'><div align='left'><b>" .
-                         headlink($langName, 'name') . '</b></div></td>';
-        $tool_content .= "\n    <td width='15%' class='DocHead'><div align='center'><b>$langSize</b></div></td>";
-        $tool_content .= "\n    <td width='15%' class='DocHead'><div align='center'><b>" . 
-                         headlink($langDate, 'date') . '</b></div></td>';
+        $tool_content .= "</div></th>
+			</tr>
+			<tr>";
+        $tool_content .= "\n				<td width='10%' class='center'><b>" . headlink($langType, 'type') . '</b></td>';
+        $tool_content .= "\n				<td><b>" . headlink($langName, 'name') . '</b></td>';
+        $tool_content .= "\n				<td width='15%' class='center'><b>$langSize</b></td>";
+        $tool_content .= "\n				<td width='15%' class='center'><b>" . headlink($langDate, 'date') . '</b></td>';
 	if($is_adminOfCourse) {
-		$tool_content .= "\n    <td width='20%' class='DocHead'><div align='center'><b>$langCommands</b></div></td>";
+		$tool_content .= "\n				<td width='20%' class='center'><b>$langCommands</b></td>";
 	}
 	$tool_content .= "\n  </tr>";
 
@@ -906,9 +921,9 @@ if (mysql_num_rows($sql) == 0) {
                                         $link_text .= " <img src='$urlAppend/modules/document/img/copyrighted.jpg' />";
                                 }
                         }
-                        $tool_content .= "\n  <tr$style>";
-                        $tool_content .= "\n    <td width='1%' valign='top'><a href='$file_url'$style$link_extra><img src='$image' /></a></td>";
-                        $tool_content .= "\n    <td><div align='left'><a href='$file_url'$style$link_extra>$link_text</a>";
+                        $tool_content .= "\n			<tr$style>";
+                        $tool_content .= "\n				<td width='1%' valign='top'><a href='$file_url'$style$link_extra><img src='$image' /></a></td>";
+                        $tool_content .= "\n				<td><a href='$file_url'$style$link_extra>$link_text</a>";
 
                         /*** comments ***/
                         if (!empty($entry['comment'])) {
@@ -916,17 +931,17 @@ if (mysql_num_rows($sql) == 0) {
                                         nl2br(htmlspecialchars($entry['comment'])) .
                                         "</span>\n";
                         }
-                        $tool_content .= "</div></td>\n";
+                        $tool_content .= "</td>\n";
                         if ($is_dir) {
                                 // skip display of date and time for directories
-                                $tool_content .= "<td>&nbsp;</td><td>&nbsp;</td>";
+                                $tool_content .= "				<td>&nbsp;</td>\n				<td>&nbsp;</td>";
                         } else {
                                 $size = format_file_size($entry['size']);
                                 $date = format_date($entry['date']);
-                                $tool_content .= "<td>$size</td><td>$date</td>";
+                                $tool_content .= "\n				<td>$size</td>\n				<td>$date</td>";
                         }
                         if ($is_adminOfCourse) {
-                                $tool_content .= "<td><form action='document.php' method='post'>" . $group_hidden_input .
+                                $tool_content .= "\n				<td><form action='document.php' method='post'>" . $group_hidden_input .
                                                  "<input type='hidden' name='filePath' value='$cmdDirName' />";
                                 /*** delete command ***/
                                 $tool_content .= "<input type='image' src='../../template/classic/img/delete.gif' alt='$langDelete' title='$langDelete' name='delete' value='1' onClick=\"return confirmation('".addslashes($entry['filename'])."');\" />&nbsp;";
@@ -953,15 +968,15 @@ if (mysql_num_rows($sql) == 0) {
                                                          "<img src='../../template/classic/img/add.gif' title='$langReplace' /></a>";
                                 }
                                 $tool_content .= "</form></td>";
-                                $tool_content .= "\n  </tr>";
+                                $tool_content .= "\n			</tr>";
                         }
                 }
         }
-        $tool_content .=  "\n</tbody>\n</table>\n";
+        $tool_content .=  "\n			</table>\n";
 	if ($is_adminOfCourse) {
-		$tool_content .= "<p align='right'><small>$langMaxFileSize " . ini_get('upload_max_filesize') . "</small></p>";
+		$tool_content .= "			<p align='right'><small>$langMaxFileSize " . ini_get('upload_max_filesize') . "</small></p>\n";
 	}
-        $tool_content .=  "\n</div>";
+        $tool_content .=  "\n			<br />";
 }
 add_units_navigation(TRUE);
 draw($tool_content, 2, '', $local_head);
