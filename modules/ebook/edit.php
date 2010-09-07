@@ -197,7 +197,7 @@ function find_html_files($base, $prepend = '')
         if ($handle = opendir($base)) {
                 while (($file = readdir($handle)) !== false){
                         if (is_dir($base . '/' . $file) and $file != '.' and $file != '..'){
-                                $files = array_merge($files, find_html_files($base . '/' . $file, $file . '/'));
+                                $files = array_merge($files, find_html_files($base . '/' . $file, $prepend . $file . '/'));
                         } elseif (preg_match('/\.html?$/i', $file)) {
                                 $files[] = $prepend . $file;
                         }

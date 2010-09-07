@@ -34,6 +34,7 @@ mysql_select_db($mysqlMainDb);
 $basedir = $webDir . 'courses/' . $currentCourseID . '/ebook';
 
 if (!$is_adminOfCourse or !isset($_FILES['file'])) {
+        print_r($_FILES); die;
         redirect_to_home_page();
 } else {
         if (!preg_match('/\.zip$/i', $_FILES['file']['name'])) {
