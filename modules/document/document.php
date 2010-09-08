@@ -828,12 +828,9 @@ if($is_adminOfCourse) {
 }
 
 // check if there are documents
-if ($is_adminOfCourse) {
-	$sql = db_query("SELECT * FROM document");
-} else {
-	$sql = db_query("SELECT * FROM document WHERE visibility = 'v'");
-}
-if (mysql_num_rows($sql) == 0) {
+list($doc_count) = mysql_fetch_row(db_query("SELECT COUNT(*) FROM document WHERE course_id = $cours_id" .
+				            ($is_adminOfCourse? '': " AND visibility='v'")));
+if ($doc_count == 0) {
 	$tool_content .= "\n    <p class='alert1'>$langNoDocuments</p>";
 } else {
 
