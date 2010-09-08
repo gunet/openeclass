@@ -369,6 +369,7 @@ function index_dir($path)
 	$handle = opendir($path);
 
 	// reads directory content end record subdirectoies names in $dir_array
+	$dirArray = array();
 	while ($element = readdir($handle) )
 	{
 		if ( $element == "." || $element == "..") continue;	// skip the current and parent directories
@@ -376,12 +377,11 @@ function index_dir($path)
 	}
 
 	closedir($handle) ;
-
 	// recursive operation if subdirectories exist
-	$dirNumber = sizeof ($dirArray);
+	$dirNumber = count($dirArray);
 	if ( $dirNumber > 0 )
 	{
-		for ($i = 0 ; $i < $dirNnumber ; $i++ )
+		for ($i = 0 ; $i < $dirNumber ; $i++ )
 		{
 			$subDirArray = index_dir( $dirArray [$i] ) ;			// function recursivity
 			$dirArray  =  array_merge( $dirArray , $subDirArray ) ;	// data merge
@@ -438,13 +438,17 @@ function form_dir_list_exclude($dbTable, $sourceType, $sourceComponent, $command
                 $groupset = '';
         }
 	$dirList = index_and_sort_dir($baseWorkDir);
-	$dialogBox .= "<form action='$_SERVER[PHP_SELF]$groupset' method='post'>\n";
-	$dialogBox .= "<input type='hidden' name='".$sourceType."' value='".$sourceComponent."'>\n";
-	$dialogBox .="<table class='FormData' width='99%'>
-        	<tbody><tr><th class='left' width='200'>$langMove:</th>
-          	<td class='left'>$langMoveFrom <em>$moveFileNameAlias</em> $langTo:</td><td class='left'>";
-	$dialogBox .= "<select name='".$command."' class='auth_input'>\n" ;
-	$dialogBox .= "<option value='' style='color:#999999'>".$langParentDir."\n";
+	$dialogBox = "
+      <form action='$_SERVER[PHP_SELF]$groupset' method='post'>
+      <fieldset>
+      <input type='hidden' name='".$sourceType."' value='".$sourceComponent."'>
+        <table class='tbl' width='99%'>
+        <tr>
+          <td>$langMoveFrom &nbsp;&nbsp;<b>$moveFileNameAlias</b>&nbsp;&nbsp; $langTo:";
+	$dialogBox .= "
+            <select name='".$command."'>" ;
+	$dialogBox .= "
+            <option value=''>".$langParentDir."\n";
 	$bwdLen = strlen($baseWorkDir) ;
 	
 	/* build html form inputs */
@@ -468,14 +472,19 @@ function form_dir_list_exclude($dbTable, $sourceType, $sourceComponent, $command
 			
 //			$tool_content .= $baseWorkDir.$path;
 			if ($pathValue != $entryToExclude and (!is_file($baseWorkDir.$path)))
-				$dialogBox .= "<option value='$path'>$tab>$filename</option>";
+				$dialogBox .= "            <option value='$path'>$tab>$filename</option>\n";
 			}
 		}
 	}
 
-	$dialogBox .= "</select></td><td class='left'><input type=\"submit\" value=\"$langMove\"></td></tr>
-        	</tbody></table><br/>";
-	$dialogBox .= "</form>";
+	$dialogBox .= "
+            </select>
+          </td>
+          <td class='right'><input type=\"submit\" value=\"$langMove\"></td>
+        </tr>
+        </table>
+        </fieldset>
+      </form>";
 	return $dialogBox;
 }
 
