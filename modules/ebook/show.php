@@ -67,7 +67,7 @@ if ($unit !== false) {
 	$unit_parameter = '';
 }
 $q = db_query("SELECT ebook_section.id AS sid,
-                      ebook_section.id AS psid,
+                      ebook_section.public_id AS psid,
                       ebook_section.title AS section_title,
                       ebook_subsection.id AS ssid,
                       ebook_subsection.public_id AS pssid,
