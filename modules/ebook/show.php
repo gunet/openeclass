@@ -177,7 +177,7 @@ if (isset($next_section_id)) {
 $ebook_body = '';
 $ebook_head = '';
 $dom = new DOMDocument();
-$dom->loadHTMLFile($subsections[$current_sid][$current_ssid]['file']);
+@$dom->loadHTMLFile($subsections[$current_sid][$current_ssid]['file']);
 foreach ($dom->getElementsByTagName('link') as $element) {
 	 $ebook_head .= $dom->saveXML($element);
 }

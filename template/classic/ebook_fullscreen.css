@@ -7,9 +7,6 @@ html {
 body {
         margin: 0;
         padding: 0;
-        font-family: "Tahoma", Verdana, Arial, Helvetica, sans-serif;
-        font-size: 12px;
-        color: #a9a9a9;
         margin-bottom: 1px;
         height: 100%!important; /* For Firefox */
         height: auto;
@@ -86,6 +83,18 @@ a img {
         z-index: 2;
 }
 
+
+.menu_right, a.trigger {
+        font-family: "Tahoma", Verdana, Arial, Helvetica, sans-serif;
+        font-size: 11px;
+}
+.menu_right a, a.trigger {
+        text-decoration: none;
+}
+.menu_right a:hover, a.trigger:hover {
+        text-decoration: underline;
+}
+
 a.trigger {
         position: fixed;
         text-decoration: none;
@@ -99,7 +108,7 @@ a.trigger:hover {
         background: #eceff5 url(img/ebook/show.png) 15% 55% no-repeat;
 }
 
-a.active.trigger {
+a.trigger.active {
         background: #eceff5 url(img/ebook/hide.png) 15% 55% no-repeat;
 }
 
