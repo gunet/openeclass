@@ -272,16 +272,17 @@ if($is_adminOfCourse) {
         na apofefxthoun 'epikyndynoi' xarakthres.
 	***********************************************************************/
 
-	$dialogBox = '';
+	$action_message = $dialogBox = '';
 	if (isset($_FILES['userFile']) and is_uploaded_file($_FILES['userFile']['tmp_name'])) {
                 $userFile = $_FILES['userFile']['tmp_name'];
 		// check for disk quotas
 		$diskUsed = dir_total_space($basedir);
 		if ($diskUsed + @$_FILES['userFile']['size'] > $diskQuotaDocument) {
-			$dialogBox .= "<p class='caution'>$langNoSpace</p>";
+			$action_message .= "<p class='caution'>$langNoSpace</p>";
 		} else {
                         if (unwanted_file($_FILES['userFile']['name'])) {
-                                $dialogBox .= "$langUnwantedFiletype: {$_FILES['userFile']['name']}";
+                                $action_message .= "<p class='caution'>$langUnwantedFiletype: " .
+                                                   q($_FILES['userFile']['name']) . "</p>";
                         }
                         /*** Unzipping stage ***/
                         elseif (isset($_POST['uncompress']) and $_POST['uncompress'] == 1
@@ -290,9 +291,9 @@ if($is_adminOfCourse) {
                                 $realFileSize = 0;
                                 $zipFile->extract(PCLZIP_CB_PRE_EXTRACT, 'process_extracted_file');
                                 if ($diskUsed + $realFileSize > $diskQuotaDocument) {
-                                        $dialogBox .= $langNoSpace;
+                                        $action_message .= "<p class='caution'>$langNoSpace</p>";
                                 } else {
-                                        $dialogBox .= "<p class='success'>$langDownloadAndZipEnd</p><br />";
+                                        $action_message .= "<p class='success'>$langDownloadAndZipEnd</p><br />";
                                 }
                         } else {
                                 $error = false;
@@ -357,9 +358,9 @@ if($is_adminOfCourse) {
 
                                         /*** Copy the file to the desired destination ***/
                                         copy ($userFile, $basedir.$uploadPath.'/'.$safe_fileName);
-                                        $dialogBox .= "<p class='success'>$langDownloadEnd</p><br />";
+                                        $action_message .= "<p class='success'>$langDownloadEnd</p><br />";
                                 } else {
-                                        $dialogBox .= "<p class='caution'>$error</p><br />";
+                                        $action_message .= "<p class='caution'>$error</p><br />";
                                 }
                         }
                 }
@@ -378,9 +379,9 @@ if($is_adminOfCourse) {
 		if($basedir . $source != $basedir . $moveTo or $basedir . $source != $basedir . $moveTo) {
 			if (move($basedir . $source, $basedir . $moveTo)) {
 				update_db_info('document', 'update', $source, $moveTo.'/'.my_basename($source));
-				$dialogBox = "<p class='success'>$langDirMv</p><br />";
+				$action_message = "<p class='success'>$langDirMv</p><br />";
 			} else {
-				$dialogBox = "<p class='caution'>$langImpossible</p><br />";
+				$action_message = "<p class='caution'>$langImpossible</p><br />";
 				/*** return to step 1 ***/
 				$move = $source;
 				unset ($moveTo);
@@ -399,7 +400,7 @@ if($is_adminOfCourse) {
                                                                     path=" . autoquote($move));
 		$res = mysql_fetch_array($result);
 		$moveFileNameAlias = $res['filename'];
-		@$dialogBox .= form_dir_list_exclude('document', 'source', $move, "moveTo", $basedir, $move);
+		$dialogBox .= form_dir_list_exclude('document', 'source', $move, "moveTo", $basedir, $move);
 	}
 
 	/**************************************
@@ -414,7 +415,7 @@ if($is_adminOfCourse) {
                 if (mysql_num_rows($result) > 0) {
                         if (my_delete($basedir . $delete) or !file_exists($basedir . $delete)) {
                                 update_db_info('document', 'delete', $delete);
-                                $dialogBox = "<p class='success'>$langDocDeleted</p><br />";
+                                $action_message = "<p class='success'>$langDocDeleted</p><br />";
                         }
                 }
 	}
@@ -427,7 +428,7 @@ if($is_adminOfCourse) {
 		db_query("UPDATE document SET filename=" .
                          autoquote(canonicalize_whitespace($_POST['renameTo'])) .
                          " WHERE course_id = $cours_id AND $group_sql AND path=" . autoquote($_POST['sourceFile']));
-		$dialogBox = "<p class='success'>$langElRen</p><br />";
+		$action_message = "<p class='success'>$langElRen</p><br />";
 	}
 
 	// Step 1: Show rename dialog box
@@ -437,21 +438,18 @@ if($is_adminOfCourse) {
                                                                     path = " . autoquote($_GET['rename']));
 		$res = mysql_fetch_array($result);
 		$fileName = $res['filename'];
-		@$dialogBox .= "
-            <form method='post' action='document.php'>\n";
 		$dialogBox .= "
+            <form method='post' action='document.php'>
             <input type='hidden' name='sourceFile' value='$_GET[rename]' />
             <fieldset>
-				<table class='tbl'>
+		<table class='tbl' width='99%'>
                 <tr>
-					<td>$langRename: <b>".q($fileName)."</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; $langIn:</td>
-					<td><input type='text' name='renameTo' value='$fileName' size='50' /></td>
-					<td width='1'><input type='submit' value='$langRename' /></td>
-				</tr>
-				</table>
+		  <td>$langRename: &nbsp;&nbsp;&nbsp;<b>".q($fileName)."</b>&nbsp;&nbsp;&nbsp; $langIn:<input type='text' name='renameTo' value='$fileName' size='50' /></td>
+		  <td class='right'><input type='submit' value='$langRename' /></td>
+		</tr>
+		</table>
             </fieldset>
-            </form>
-            <br />\n";
+            </form>\n";
 	}
 
 	// create directory
@@ -462,9 +460,9 @@ if($is_adminOfCourse) {
                         make_path($_POST['newDirPath'], array($newDirName));
                         // $path_already_exists: global variable set by make_path()
                         if ($path_already_exists) {
-                                $dialogBox = "<p class='caution'>$langFileExists</p>";
+                                $action_message = "<p class='caution'>$langFileExists</p>";
                         } else {
-                                $dialogBox = "<p class='success'>$langDirCr</p>";
+                                $action_message = "<p class='success'>$langDirCr</p>";
                         }
                 }
 	}
@@ -513,6 +511,7 @@ if($is_adminOfCourse) {
                                                 language = '$file_language',
                                                 copyrighted = " . intval($_POST['file_copyrighted']) . "
                                         WHERE path = '$commentPath'");
+			$action_message = "<p class='success'>$langComMod</p>";
                 }
 	}
 
@@ -528,10 +527,10 @@ if($is_adminOfCourse) {
                         // check for disk quota
                         $diskUsed = dir_total_space($basedir);
                         if ($diskUsed - filesize($basedir . $oldpath) + $_FILES['newFile']['size'] > $diskQuotaDocument) {
-                                $dialogBox = "<p class='caution'>$langNoSpace</p>";
+                                $action_message = "<p class='caution'>$langNoSpace</p>";
                         } elseif (unwanted_file($_FILES['newFile']['name'])) {
-                                $dialogBox = "<p class='caution'>$langUnwantedFiletype: " .
-                                                        q($_FILES['newFile']['name']) . "</p>";
+                                $action_message = "<p class='caution'>$langUnwantedFiletype: " .
+                                                  q($_FILES['newFile']['name']) . "</p>";
                         } else {
                                 $newformat = get_file_extension($_FILES['newFile']['name']);
                                 $newpath = preg_replace("/\\.$oldformat$/", '', $oldpath) .
@@ -542,9 +541,9 @@ if($is_adminOfCourse) {
                                                                    format = " . quote($newformat) . ",
                                                                    filename = " . autoquote($_FILES['newFile']['name']) . "
                                                               WHERE path = " . quote($oldpath))) {
-                                        $dialogBox = "<p class='caution'>$dropbox_lang[generalError]</p>";
+                                        $action_message = "<p class='caution'>$dropbox_lang[generalError]</p>";
                                 } else {
-                                        $dialogBox = "<p class='success'>$langReplaceOK</p>";
+                                        $action_message = "<p class='success'>$langReplaceOK</p>";
                                 }
                         }
                 }
@@ -685,7 +684,7 @@ if($is_adminOfCourse) {
         </form>
         \n\n";
                 } else {
-                        $dialogBox = "\n        <p class='caution'>$langFileNotFound</p>\n        <br />\n";
+                        $action_message = "<p class='caution'>$langFileNotFound</p>";
                 }
         }
 
@@ -699,7 +698,7 @@ if($is_adminOfCourse) {
                         $visibilityPath = $_GET['mkInvisibl'];
                 }
 		db_query("UPDATE document SET visibility='$newVisibilityStatus' WHERE path = " . autoquote($visibilityPath));
-		$dialogBox = "\n        <p class='success'>$langViMod</p>\n        <br />";
+		$action_message = "<p class='success'>$langViMod</p>";
 	}
 } // teacher only
 
@@ -806,6 +805,12 @@ $cmdCurDirPath = rawurlencode($curDirPath);
 $cmdParentDir  = rawurlencode($parentDir);
 
 if($is_adminOfCourse) {
+	// Action result message
+	if (!empty($action_message))
+	{
+		$tool_content .= "\n" . $action_message . "\n";
+	}
+
 	/*----------------------------------------------------------------
 	UPLOAD SECTION (ektypwnei th forma me ta stoixeia gia upload eggrafou + ola ta pedia
 	gia ta metadata symfwna me Dublin Core)
@@ -823,7 +828,7 @@ if($is_adminOfCourse) {
 	// Dialog Box
 	if (!empty($dialogBox))
 	{
-		$tool_content .=  $dialogBox . "\n";
+		$tool_content .= "\n" . $dialogBox . "\n";
 	}
 }
 
@@ -833,7 +838,6 @@ list($doc_count) = mysql_fetch_row(db_query("SELECT COUNT(*) FROM document WHERE
 if ($doc_count == 0) {
 	$tool_content .= "\n    <p class='alert1'>$langNoDocuments</p>";
 } else {
-
 	// Current Directory Line
 	$tool_content .= "
     <table width='99%' class='tbl_alt'>\n";
