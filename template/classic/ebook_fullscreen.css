@@ -15,16 +15,6 @@ body {
         height: auto;
 }
 
-ul {
-        margin: 0;
-        padding: 0.5em;
-}
-
-li {
-	font-size: 10px;
-        padding-bottom: 0.5em;
-}
-
 #menu_right a, .tools a {
         text-decoration: none;
         color: #627aad;
