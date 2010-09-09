@@ -91,11 +91,11 @@ if ($is_adminOfCourse) {
                 list($group_num) = mysql_fetch_row(db_query("SELECT COUNT(*) FROM `group` WHERE course_id = $cours_id"));
 
                 // Create a hidden category for group forums
-                $req = db_query('SELECT cat_id FROM catagories WHERE cat_order = -1');
+                $req = db_query("SELECT cat_id FROM `$currentCourseID`.catagories WHERE cat_order = -1");
                 if ($req and mysql_num_rows($req) > 0) {
                         list($cat_id) = mysql_fetch_row($req);
                 } else {
-                        db_query("INSERT INTO catagories (cat_title, cat_order)
+                        db_query("INSERT INTO `$currentCourseID`.catagories (cat_title, cat_order)
                                          VALUES ('$langCatagoryGroup', -1)");
                         $cat_id = mysql_insert_id();
                 }

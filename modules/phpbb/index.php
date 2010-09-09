@@ -218,10 +218,11 @@ if ($total_categories) {
 				$desc = q($forum_row[$x]['forum_desc']);
 				$tool_content .= "<td>";
 				$forum_id = $forum_row[$x]['forum_id'];
-                                $q = db_query("SELECT id FROM `$mysqlMainDb`.`group` WHERE forum_id = $forum_id");
+                                $q = db_query("SELECT id FROM `$mysqlMainDb`.`group`
+                                                      WHERE course_id = $cours_id AND forum_id = $forum_id");
                                 if ($q and mysql_num_rows($q) > 0) {
-                                        initialize_group_info($group_id);
                                         list($group_id) = mysql_fetch_row($q);
+                                        initialize_group_info($group_id);
                                         $member = $is_member? "&nbsp;&nbsp;($langMyGroup)": false;
                                 } else {
                                         $group_id = $private_forum = false;
