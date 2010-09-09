@@ -1372,7 +1372,7 @@ _editor_lang = '$lang_editor';
 
 
 // Display a textarea with name $name using the rich text editor
-// Apply automatically arious fixes for the text to be edited
+// Apply automatically various fixes for the text to be edited
 function rich_text_editor($name, $rows, $cols, $text, $extra = '')
 {
 	global $head_content, $language, $urlAppend, $purifier;
@@ -1435,6 +1435,22 @@ tinyMCE.init({
 	       "</textarea>\n";
 }
 
+
+// Display a simple textarea with name $name 
+// Apply automatically various fixes for the text to be edited
+function text_area($name, $rows, $cols, $text, $extra = '')
+{
+
+	global $purifier;
+
+	$text = $purifier->purify(str_replace(array('<m>', '</m>', '<M>', '</M>'),
+			                      array('[m]', '[/m]', '[m]', '[/m]'),
+			                      $text));
+
+	return "<textarea name='$name' rows='$rows' cols='$cols' $extra>" .
+	       str_replace('{','&#123;', $text) .
+	       "</textarea>\n";
+}
 
 // Does the special course unit with course descriptions exist?
 // If so, return its id, else create it first

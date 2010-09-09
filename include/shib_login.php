@@ -1,4 +1,4 @@
-<?php
+`<?php
 /*========================================================================
 *   Open eClass 2.3
 *   E-learning and Course Management System
@@ -48,22 +48,26 @@ $sqlLogin= "SELECT user_id, nom, username, password, prenom, statut, email, idus
 $r = db_query($sqlLogin); 
 if (mysql_num_rows($r) > 0) { // if shibboleth user found 
 	while ($myrow = mysql_fetch_array($r)) {
-		// update user information
-		db_query("UPDATE user SET nom = '$shib_nom', prenom = '$shib_prenom', email = '$shib_email' 
-			WHERE username = '$shib_uname'");
-
-		$r2 = db_query($sqlLogin);
-		while ($myrow2 = mysql_fetch_array($r2)) {
-			$uid = $myrow2["user_id"];
-			$is_admin = $myrow2["is_admin"];
-			$userPerso = $myrow2["perso"];
-			$nom = $myrow2["nom"];
-			$prenom = $myrow2["prenom"];
-			if (isset($_SESSION['langswitch'])) {
-				$language = $_SESSION['langswitch'];
-			} else {
-				$language = langcode_to_name($myrow["lang"]);
+		if ($myrow['password'] == 'shibboleth') {
+			// update user information
+			db_query("UPDATE user SET nom = '$shib_nom', prenom = '$shib_prenom', email = '$shib_email' 
+				WHERE username = '$shib_uname'");
+			$r2 = db_query($sqlLogin);
+			while ($myrow2 = mysql_fetch_array($r2)) {
+				$uid = $myrow2["user_id"];
+				$is_admin = $myrow2["is_admin"];
+				$userPerso = $myrow2["perso"];
+				$nom = $myrow2["nom"];
+				$prenom = $myrow2["prenom"];
+				if (isset($_SESSION['langswitch'])) {
+					$language = $_SESSION['langswitch'];
+				} else {
+					$language = langcode_to_name($myrow["lang"]);
+				}
 			}
+		} else {
+			$tool_content .= "<table width='99%'><tbody><tr><td class='caution' height='60'>";
+			$tool_content .= "<p>$langUserFree</p></td></tr></table>";
 		}
 	}	
 } else { // else create him

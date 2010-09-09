@@ -571,9 +571,9 @@ if(isset($_GET['modifyAnswers'])) {
 				}
 				
 				$tool_content .= "<td align=\"center\">".
-				rich_text_editor("reponse[$i]", 7, 25, @$reponse[$i], "class='FormData_InputText'")
+				text_area("reponse[$i]", 7, 45, @$reponse[$i], "class='FormData_InputText'")
 				."</td><td align='center'>".
-				rich_text_editor("comment[$i]", 7, 25, @$comment[$i], "class='FormData_InputText'")
+				text_area("comment[$i]", 7, 30, @$comment[$i], "class='FormData_InputText'")
 				."</td><td valign='top' align='center'>
 				<input class='FormData_InputText' type='text' name=\"weighting[".$i."]\" size=\"5\" value=\"";
 				if (isset($weighting[$i])) {
@@ -857,7 +857,7 @@ cData;
 			$tool_content .= "<td align='center'>$langCorrect</td>
 			<input type='hidden' name='reponse[1]' value='$langCorrect'>
 			<td align='center'>".
-			rich_text_editor("comment[1]", 7, 25, @$comment[1], "class='FormData_InputText'")
+			text_area("comment[1]", 7, 60, @$comment[1], "class='FormData_InputText'")
 			."</td>
 			<td valign='top' align='center'>
 			<input class='FormData_InputText' type='text' name='weighting[1]' size='5' value=\"";
@@ -878,7 +878,7 @@ cData;
 			$tool_content .= "<td align='center'>$langFalse</td>
 			<input type='hidden' name='reponse[2]' value='$langFalse'>
 			<td align='center'>".
-			rich_text_editor("comment[2]", 7, 25, @$comment[2], "class='FormData_InputText'")
+			text_area("comment[2]", 7, 60, @$comment[2], "class='FormData_InputText'")
 			."</td>
 			<td valign='top' align='center'>
 			<input class='FormData_InputText' type='text' name='weighting[2]' size='5' value=\"";
