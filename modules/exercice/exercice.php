@@ -116,11 +116,15 @@ list($num_of_ex) = mysql_fetch_array($qnum);
 $nbrExercises = mysql_num_rows($result);
 
 if($is_adminOfCourse) {
-	$tool_content .= "<div  align=\"left\" id=\"operations_container\"><ul id=\"opslist\">\n";
-	$tool_content .= "<li><a href='admin.php?NewExercise=Yes'>$langNewEx</a>&nbsp;|
+	$tool_content .= "
+    <div align=\"left\" id=\"operations_container\">
+      <ul id=\"opslist\">
+	<li><a href='admin.php?NewExercise=Yes'>$langNewEx</a>&nbsp;|
 			&nbsp;<a href='question_pool.php'>$langQuestionPool</a></li>";
 			//&nbsp;<a href='import.php'>$langImportExercise</li>";
-	$tool_content .= "</ul></div>";
+	$tool_content .= "
+      </ul>
+    </div>";
 } else  {
 	$tool_content .= "";
 }
@@ -130,39 +134,42 @@ if ($maxpage > 0) {
 	$prevpage = $page - 1;
 	$nextpage = $page + 1;
 	if ($prevpage >= 0) {
- 		$tool_content .= "<small><a href='$_SERVER[PHP_SELF]?page=$prevpage'>&lt;&lt; $langPreviousPage</a></small>&nbsp;";
+ 		$tool_content .= "<a href='$_SERVER[PHP_SELF]?page=$prevpage'>&lt;&lt; $langPreviousPage</a>&nbsp;";
 	}
 	if ($nextpage < $maxpage) { 
-		$tool_content .= "<small><a href='$_SERVER[PHP_SELF]?page=$nextpage'>$langNextPage &gt;&gt;</a></small>";
+		$tool_content .= "<a href='$_SERVER[PHP_SELF]?page=$nextpage'>$langNextPage &gt;&gt;</a>";
 	}
 }
 
-$tool_content .= "<table align='left' width='99%' class='ExerciseSum'><thead><tr>";
+$tool_content .= "
+    <table width='99%' class='tbl_alt'>
+    <tr>";
 
 // shows the title bar only for the administrator
 if($is_adminOfCourse) {
-	$tool_content .= "<th style=\"border: 1px solid #edecdf;\" colspan=\"2\">
-	<div align=\"left\">${langExerciseName}</div></th>
-	<th width=\"65\" style=\"border: 1px solid #edecdf;\">${langResults}</th>
-	<th width=\"65\" style=\"border: 1px solid #edecdf;\" class=\"right\">$langCommands&nbsp;</th>
-	</tr>
-	</thead>";
+	$tool_content .= "
+      <th colspan=\"2\"><div class='left'>${langExerciseName}</div></th>
+      <th width=\"65\">${langResults}</th>
+      <th width=\"65\" class=\"right\">$langCommands&nbsp;</th>
+    </tr>";
 } else { // student view
-	$tool_content .= "<th style=\"border: 1px solid #edecdf;\" class=\"left\" class=\"left\" colspan=\"2\">
-	<div align=\"left\">$langExerciseName</div></th>
-	<th style=\"border: 1px solid #edecdf;\">$langExerciseStart</th>
-	<th style=\"border: 1px solid #edecdf;\">$langExerciseEnd</th>
-	<th style=\"border: 1px solid #edecdf;\">$langExerciseConstrain</th>
-	<th style=\"border: 1px solid #edecdf;\">$langExerciseAttemptsAllowed</th>
-	</tr>
-	</thead>";
+	$tool_content .= "
+      <th colspan=\"2\">$langExerciseName</th>
+      <th>$langExerciseStart</th>
+      <th>$langExerciseEnd</th>
+      <th>$langExerciseConstrain</th>
+      <th>$langExerciseAttemptsAllowed</th>
+    </tr>";
 }
 
 if(!$nbrExercises) {
-	$tool_content .= "<tr><td";
+	$tool_content .= "
+    <tr>
+      <td";
 	if($is_adminOfCourse)
 		$tool_content .= " colspan=\"4\"";
-		$tool_content .= " class=\"empty\">${langNoEx}</td></tr>";
+		$tool_content .= " class=\"empty\">${langNoEx}</td>
+    </tr>";
 }
 
 $tool_content .= "<tbody>";
@@ -170,7 +177,7 @@ $tool_content .= "<tbody>";
 $k = 0;
 while($row = mysql_fetch_array($result)) {
 	if ($k%2 == 0) {
-		$tool_content .= "<tr>";
+		$tool_content .= "<tr class='even'>";
 	} else {
 		$tool_content .= "<tr class='odd'>";
 	}
@@ -179,7 +186,7 @@ while($row = mysql_fetch_array($result)) {
 	// prof only
         if($is_adminOfCourse) {
                 if (!empty($row['description'])) {
-                        $descr = "<br/><small>$row[description]</small>";
+                        $descr = "<br/>$row[description]";
                 } else {
                         $descr = '';
                 }
@@ -196,9 +203,9 @@ while($row = mysql_fetch_array($result)) {
 			WHERE eid='$eid'", $currentCourseID));
 
 	if ($NumOfResults[0]) {
-		$tool_content .= "<td align=\"center\"><nobr><a href=\"results.php?exerciseId=".$row['id']."\">".
+		$tool_content .= "<td align=\"center\"><a href=\"results.php?exerciseId=".$row['id']."\">".
 		$langExerciseScores1."</a> | 
-		<a href=\"csv.php?exerciseId=".$row['id']."\" target=_blank>".$langExerciseScores3."</a></nobr></td>";
+		<a href=\"csv.php?exerciseId=".$row['id']."\" target=_blank>".$langExerciseScores3."</a></td>";
 	} else {
 		$tool_content .= "<td align=\"center\">	-&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;- </td>";
 	}
@@ -245,22 +252,22 @@ cData;
 				<img style='padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif' alt='' />
 				</td><td>".$row['titre']."&nbsp;&nbsp;(<font color=\"red\">$m[expired]</font>)";
 		}
-		$tool_content .= "<br/><small>$row[description]</small></td>
-		<td align='center'><small>".nice_format($row['StartDate'])."</small></td>
-		<td align='center'><small>".nice_format($row['EndDate'])."</small></td>";
+		$tool_content .= "<br/>$row[description]</td>
+		<td align='center'>".nice_format($row['StartDate'])."</td>
+		<td align='center'>".nice_format($row['EndDate'])."</td>";
 		// how many attempts we have.
 		$CurrentAttempt = mysql_fetch_array(db_query("SELECT COUNT(*) FROM exercise_user_record
 			WHERE eid='$row[id]' AND uid='$uid'", $currentCourseID));
 		 if ($row['TimeConstrain'] > 0) {
 			  $tool_content .= "<td align='center'>
-			<small>$row[TimeConstrain] $langExerciseConstrainUnit</small></td>";
+			$row[TimeConstrain] $langExerciseConstrainUnit</td>";
 		} else {
-			$tool_content .= "<td align='center'><small> - </small></td>";
+			$tool_content .= "<td align='center'> - </td>";
 		}
 		if ($row['AttemptsAllowed'] > 0) {
-			   $tool_content .= "<td align='center'><small>$CurrentAttempt[0]/$row[AttemptsAllowed]</small></td>";
+			   $tool_content .= "<td align='center'>$CurrentAttempt[0]/$row[AttemptsAllowed]</td>";
 		} else {
-			 $tool_content .= "<td align='center'><small> - </small></td>";
+			 $tool_content .= "<td align='center'> - </td>";
 		}
 		  $tool_content .= "</tr>";
 	}

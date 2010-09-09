@@ -75,35 +75,37 @@ if (isset($_GET['modifyExercise'])) {
 }
 // shows the form to modify the exercise
 if(isset($modifyExercise) or isset($_GET['NewExercise'])) {
-	$tool_content .= "<form method='post' action='$_SERVER[PHP_SELF]?modifyExercise=$modifyExercise'>
-	<table width='99%' class='FormData'><tbody>";
+	$tool_content .= "
+      <form method='post' action='$_SERVER[PHP_SELF]?modifyExercise=$modifyExercise'>
+      <fieldset>
+        <legend>$langInfoExercise </legend>
+	<table width='99%' class='tbl'>";
 	if(!empty($msgErr)) {
-		$tool_content .= "<tr><td colspan='2'>
-		<table border='0' cellpadding='3' align='center' width='400' bgcolor='#FFCC00'>
-		<tr><td>$msgErr</td></tr>
-		</table></td></tr>";
+		$tool_content .= "
+        <tr>
+          <td colspan='2'><p class='caution'>$msgErr</td>
+        </tr>";
 	}
 
-	$tool_content .= "<tr><th class=\"left\" width=\"220\">&nbsp;</th>
-	<td><b>$langInfoExercise</b></td></tr>
-	<tr><th class=\"left\">".$langExerciseName." :</th>
-	<td><input type=\"text\" name=\"exerciseTitle\" "."size=\"50\" maxlength=\"200\" value=\"".htmlspecialchars($exerciseTitle)."\" style=\"width:400px;\" class=\"FormData_InputText\"></td>
-	</tr>";
-	$tool_content .= "<tr><th class='left'>".$langExerciseDescription." :</th>
-	<td>".
-	rich_text_editor('exerciseDescription', 4, 50, $exerciseDescription, "style='width:400px;' class='FormData_InputText'")
-	."</td>
-	</tr>";
-	
-	$tool_content .= "<tr><th class=\"left\">".$langExerciseType." :</th>
-	<td>"."<input type='radio' name='exerciseType' value='1'";
+	$tool_content .= "
+	<tr>
+          <th width='180'>".$langExerciseName.":</th>
+	  <td><input type=\"text\" name=\"exerciseTitle\" "."size=\"50\" maxlength=\"200\" value=\"".htmlspecialchars($exerciseTitle)."\" style=\"width:400px;\"></td>
+	</tr>
+	<tr>
+          <th>".$langExerciseDescription.":</th>
+	  <td>". rich_text_editor('exerciseDescription', 4, 50, $exerciseDescription, "style='width:400px;' class='FormData_InputText'") ."</td>
+	</tr>
+	<tr>
+          <th>".$langExerciseType.":</th>
+	  <td>"."<input type='radio' name='exerciseType' value='1'";
 	
 	if ($exerciseType <= 1) {
 		$tool_content .= " checked='checked'";
 	}
 	$tool_content .= "> ".$langSimpleExercise."
-	<br>
-	<input type='radio' name='exerciseType' value='2'";
+	  <br />
+	  <input type='radio' name='exerciseType' value='2'";
 	
 	if ($exerciseType >= 2) {
 		$tool_content .= 'checked="checked"';
@@ -121,24 +123,25 @@ if(isset($modifyExercise) or isset($_GET['NewExercise'])) {
 	} else {
 		$end_cal_Excercise = jscal_html('exerciseEndDate', strftime('%Y-%m-%d', strtotime('now +1 year')));
 	}
-	$tool_content .= "<tr><th class=\"left\">".$langExerciseStart." :</th>"."
-	<td>$start_cal_Excercise</td></tr>";
-	
-	$tool_content .= "<th class=\"left\">".$langExerciseEnd." :</th>"."
-	<td>$end_cal_Excercise</td>
-	</tr>";
-	
-	$tool_content .= "<tr>
-	<th class=\"left\">".$langExerciseConstrain." :</th>"."
-	<td><input type=\"text\" name=\"exerciseTimeConstrain\" size=\"3\" maxlength=\"3\" ".
-	"value=\"".htmlspecialchars($exerciseTimeConstrain)."\" class=\"FormData_InputText\">&nbsp;&nbsp;".
-	$langExerciseConstrainUnit." &nbsp;&nbsp;&nbsp;&nbsp;(".$langExerciseConstrainExplanation.")</td>
-	</tr>";
-	
-	$tool_content .= "<tr>
-	<th class=\"left\">".$langExerciseAttemptsAllowed." :</th>"."
-	<td><input type=\"text\" name=\"exerciseAttemptsAllowed\" size=\"3\" maxlength=\"2\"".
-	"value=\"".htmlspecialchars($exerciseAttemptsAllowed)."\" class=\"FormData_InputText\">&nbsp;&nbsp;".
+	$tool_content .= "
+        <tr>
+          <th>".$langExerciseStart.":</th>
+	  <td>$start_cal_Excercise</td>
+        </tr>
+        <tr>
+	  <th>".$langExerciseEnd.":</th>
+	  <td>$end_cal_Excercise</td>
+	</tr>	
+	<tr>
+	  <th>".$langExerciseConstrain.":</th>
+	  <td><input type=\"text\" name=\"exerciseTimeConstrain\" size=\"3\" maxlength=\"3\" ".
+	  "value=\"".htmlspecialchars($exerciseTimeConstrain)."\">&nbsp;&nbsp;".
+	  $langExerciseConstrainUnit." &nbsp;&nbsp;&nbsp;&nbsp;(".$langExerciseConstrainExplanation.")</td>
+	</tr>	
+	<tr>
+	  <th>".$langExerciseAttemptsAllowed.":</th>
+	  <td><input type=\"text\" name=\"exerciseAttemptsAllowed\" size=\"3\" maxlength=\"2\"".
+	"value=\"".htmlspecialchars($exerciseAttemptsAllowed)."\">&nbsp;&nbsp;".
 	$langExerciseAttemptsAllowedUnit." &nbsp;&nbsp;&nbsp;(".$langExerciseAttemptsAllowedExplanation.")</td>
 	</tr>";
 
@@ -157,25 +160,27 @@ if(isset($modifyExercise) or isset($_GET['NewExercise'])) {
 		$extras2 = 'checked';
 	}
 
-	$tool_content .= "<tr>
-	<th class='left'>".$langAnswers." :</th>"."
-	<td><input type='radio' name='dispresults' value='1'". $extra .">&nbsp;$langAnswersDisp
-	<br><input type='radio' name='dispresults' value='0'".  $extra2 .">&nbsp;$langAnswersNotDisp
-	</td>
-	</tr>";
-	
-	$tool_content .= "<tr>
-	<th class='left'>".$langScore." :</th>"."
-	<td><input type='radio' name='dispscore' value='1'". $extras .">&nbsp;$langScoreDisp
-	<br><input type='radio' name='dispscore' value='0'".  $extras2 .">&nbsp;$langScoreNotDisp
-	</td>
-	</tr>";
-
-	$tool_content .= "<tr><th class='left'>&nbsp;</th>
-	<td><input type='submit' name='submitExercise' value='$langCreate'>&nbsp;&nbsp;
-	<input type='submit' name='cancelExercise' value='$langCancel'></td>
-	</tr></tbody></table>
-	</form>";
+	$tool_content .= "
+        <tr>
+	  <th>".$langAnswers.":</th>"."
+	  <td><input type='radio' name='dispresults' value='1'". $extra .">&nbsp;$langAnswersDisp
+	  <br /><input type='radio' name='dispresults' value='0'".  $extra2 .">&nbsp;$langAnswersNotDisp
+	  </td>
+	</tr>
+	<tr>
+	  <th>".$langScore.":</th>"."
+	  <td><input type='radio' name='dispscore' value='1'". $extras .">&nbsp;$langScoreDisp
+	  <br /><input type='radio' name='dispscore' value='0'".  $extras2 .">&nbsp;$langScoreNotDisp
+	  </td>
+	</tr>
+	<tr>
+          <th>&nbsp;</th>
+	  <td><input type='submit' name='submitExercise' value='$langModify'>&nbsp;&nbsp;
+	      <input type='submit' name='cancelExercise' value='$langCancel'></td>
+	</tr>
+        </table>
+      </fieldset>
+      </form>";
 
 } else {
 	$displayResults = $objExercise->selectResults();
@@ -190,19 +195,18 @@ if(isset($modifyExercise) or isset($_GET['NewExercise'])) {
 	} else {
 		$disp_score_message = $langScoreNotDisp;
 	}
-	$tool_content .= "<table width='99%' class='FormData'><tbody>
+	$tool_content .= "
+        <fieldset>
+        <legend>$langInfoExercise&nbsp;<a href='$_SERVER[PHP_SELF]?modifyExercise=yes'>
+              <img src='../../template/classic/img/edit.gif' border='0' align='absmiddle' title='$langModify'></a></legend>
+        <table width='99%' class='tbl'>
 	<tr>
-	<th width='220' class='left'>&nbsp;</th>
-	<td><b>$langInfoExercise</b>&nbsp;&nbsp;<a href='$_SERVER[PHP_SELF]?modifyExercise=yes'>
-	<img src='../../template/classic/img/edit.gif' border='0' align='absmiddle' title='$langModify'></a>
-	</td></tr>
-	<tr>
-	<th width='220' class='left'>$langExerciseName :</th>
-	<td>$exerciseTitle</td>
+	  <th width='180'>$langExerciseName :</th>
+	  <td>$exerciseTitle</td>
 	</tr>
 	<tr>
-	<th class='left'>$langExerciseDescription :</th>
-	<td>";
+	  <th>$langExerciseDescription :</th>
+	  <td>";
 	
 	$exerciseDescription = standard_text_escape($exerciseDescription);
 	$tool_content .= $exerciseDescription;
@@ -211,31 +215,30 @@ if(isset($modifyExercise) or isset($_GET['NewExercise'])) {
 	$tool_content .= "</td>
 	</tr>
 	<tr>
-	<th class='left'>$langExerciseStart:</th>
-	<td>$exerciseStartDate</td>
+	  <th>$langExerciseStart:</th>
+	  <td>$exerciseStartDate</td>
 	</tr>
 	<tr>
-	<th class='left'>$langExerciseEnd:</th>
-	<td>$exerciseEndDate</td>
+	  <th>$langExerciseEnd:</th>
+	  <td>$exerciseEndDate</td>
 	</tr>
 	<tr>
-	<th class='left'>$langExerciseConstrain:</th>
-	<td>$exerciseTimeConstrain $langExerciseConstrainUnit</td>
+	  <th>$langExerciseConstrain:</th>
+	  <td>$exerciseTimeConstrain $langExerciseConstrainUnit</td>
 	</tr>
 	<tr>
-	<th class='left'>$langExerciseAttemptsAllowed:</th>
-	<td>$exerciseAttemptsAllowed $langExerciseAttemptsAllowedUnit</td>
+	  <th>$langExerciseAttemptsAllowed:</th>
+  	  <td>$exerciseAttemptsAllowed $langExerciseAttemptsAllowedUnit</td>
 	</tr>
 	<tr>
-	<th class='left'>$langAnswers:</th>
-	<td>$disp_results_message</td>
+	  <th>$langAnswers:</th>
+	  <td>$disp_results_message</td>
 	</tr>
 	<tr>
-	<th class='left'>$langScore:</th>
-	<td>$disp_score_message</td>
+	  <th>$langScore:</th>
+	  <td>$disp_score_message</td>
 	</tr>
-	</tbody>
-	</table>";
-	$tool_content .= "<br>";
+	</table>
+        </fieldset>";
 }
 ?>
