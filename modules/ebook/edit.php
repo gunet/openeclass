@@ -121,7 +121,7 @@ if (mysql_num_rows($q) == 0) {
                 $sid = $section['id'];
                 $qsid = q($section['public_id']);
                 $qstitle = q($section['title']);
-                $sections[$sid] = $qsid . '. ' . $section['title'];
+                $sections[$sid] = $qsid . '. ' . ellipsize($section['title'], 25);
                 if ($sid === $edit_section) {
                         $section_id = "<input type='hidden' name='csid' value='$sid' />" .
                                       "<input type='text size='5' name='new_section_id' value='$qsid' />";
@@ -148,7 +148,7 @@ if (mysql_num_rows($q) == 0) {
         $tool_content .= "<tr><td colspan='3' class='right'><input type='submit' name='new_section_submit' value='$langAdd' /></td></tr>
                           </table>
                           <table>
-                             <tr><th>$langFileName</th><th>$langTitle</th><th>$langSection</th><th>$langSubsection</th></tr>\n";
+                             <tr><th>$langFileName</th><th>$langTitle</th><th>$langSection</th><th>$langID</th></tr>\n";
         $q = db_query("SELECT ebook_section.id AS sid,
                               ebook_section.id AS psid,
                               ebook_section.title AS section_title,
@@ -169,7 +169,7 @@ if (mysql_num_rows($q) == 0) {
                                                    target='_blank'>" . q($r['file']) . "</a></td>
                                      <td><input type='text' name='title[$key]' size='30' value='" . q($r['subsection_title']) . "' /></td>
                                      <td>" . selection($sections, "sid[$key]", $r['sid']) . "</td>
-                                     <td><input type='text' name='ssid[$key]' size='5' value='" . q($r['pssid']) . "' /></td></tr>\n";
+                                     <td><input type='text' name='ssid[$key]' size='3' value='" . q($r['pssid']) . "' /></td></tr>\n";
                 if ($key !== false) {
                         unset($html_files[$key]);
                 }
