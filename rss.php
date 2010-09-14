@@ -43,9 +43,9 @@ echo "<?xml version='1.0' encoding='utf-8'?>";
 echo "<rss version='2.0' xmlns:atom='http://www.w3.org/2005/Atom'>";
 echo "<channel>";
 echo "<atom:link href='${urlServer}rss.php' rel='self' type='application/rss+xml' />";
-echo "<title>$langAnnouncements</title>";
+echo "<title>$langAnnouncements $siteName</title>";
 echo "<link>".$urlServer."rss.php?lang=".$rss_lang."</link>";
-echo "<description>$langAnnouncements $siteName</description>";
+echo "<description>$langAnnouncements</description>";
 echo "<lastBuildDate>$lastbuilddate</lastBuildDate>";
 echo "<language>".$rss_lang."</language>";
 
