@@ -77,7 +77,7 @@ a img {
         display: none;
         width: 330px;
         height: auto;
-        padding: 30px;
+        padding: 20px;
         background-color: #eceff5;
         border: #3B5998 1px solid;
         z-index: 2;
@@ -86,7 +86,7 @@ a img {
 
 .menu_right, a.trigger {
         font-family: "Tahoma", Verdana, Arial, Helvetica, sans-serif;
-        font-size: 11px;
+        font-size: 12px;
 }
 .menu_right a, a.trigger {
         text-decoration: none;
