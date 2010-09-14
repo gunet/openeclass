@@ -69,19 +69,37 @@ if (isset($_POST['delete'])) {
         $basedir = $webDir . 'courses/' . $currentCourseID . '/ebook/' . $id;
         $html_files = find_html_files($basedir);
         sort($html_files, SORT_STRING);
-        db_query("DELETE FROM ebook_subsection WHERE section_id IN (SELECT id FROM ebook_section WHERE ebook_id = $id)");
+//        db_query("DELETE FROM ebook_subsection WHERE section_id IN (SELECT id FROM ebook_section WHERE ebook_id = $id)");
         foreach ($_POST['sid'] as $key => $sid) {
                 if (!empty($sid)) {
                         $sid = intval($sid);
                         $qssid = quote($_POST['ssid'][$key]);
                         $qtitle = quote($_POST['title'][$key]);
                         $qfile = quote($html_files[$key]);
-                        db_query("INSERT INTO ebook_subsection
-                                         SET section_id = $sid,
-                                             public_id = $qssid,
-                                             title = $qtitle,
-                                             file = $qfile");
+                        if (isset($_POST['oldssid'][$key])) {
+                                $oldssid = intval($_POST['oldssid'][$key]);
+                                db_query("UPDATE ebook_subsection
+                                                 SET section_id = $sid,
+                                                     public_id = $qssid,
+                                                     title = $qtitle,
+                                                     file = $qfile
+                                                 WHERE id = $oldssid");
+                                unset($_POST['oldssid'][$key]);
+                        } else {
+                                db_query("INSERT INTO ebook_subsection
+                                                 SET section_id = $sid,
+                                                     public_id = $qssid,
+                                                     title = $qtitle,
+                                                     file = $qfile");
+                        }
                 }
+        }
+        $oldssids = array();
+        foreach ($_POST['oldssid'] as $key => $oldssid) {
+                $oldssids[] = intval($oldssid);
+        }
+        if (count($oldssids)) {
+                db_query('DELETE FROM ebook_subsection WHERE id IN (' . implode(', ', $oldssids) . ')');
         }
 } 
 
@@ -168,8 +186,9 @@ if (mysql_num_rows($q) == 0) {
                 $tool_content .= "<tr$class><td><a href='show.php/$currentCourseID/$id/$display_id/'
                                                    target='_blank'>" . q($r['file']) . "</a></td>
                                      <td><input type='text' name='title[$key]' size='30' value='" . q($r['subsection_title']) . "' /></td>
-                                     <td>" . selection($sections, "sid[$key]", $r['sid']) . "</td>
-                                     <td><input type='text' name='ssid[$key]' size='3' value='" . q($r['pssid']) . "' /></td></tr>\n";
+                                     <td>" .  selection($sections, "sid[$key]", $r['sid']) . "</td>
+                                     <td><input type='hidden' name='oldssid[$key]' value='$r[ssid]' />
+                                     <input type='text' name='ssid[$key]' size='3' value='" . q($r['pssid']) . "' /></td></tr>\n";
                 if ($key !== false) {
                         unset($html_files[$key]);
                 }
