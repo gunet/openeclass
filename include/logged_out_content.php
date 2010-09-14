@@ -71,11 +71,13 @@ if (mysql_num_rows($result) > 0) {
 	}
         $tool_content .= "<br/>
         <table width='99%' class='AnnouncementsList'>
-	<thead><tr><th width='180'>$langAnnouncements</th><th>&nbsp;</th></tr></thead>
+	<thead><tr><th width='180'>$langAnnouncements
+	<span class='feed'><a href='${urlServer}rss.php'>
+	<img src='${urlServer}template/classic/img/feed.png' alt='RSS Feed' title='RSS Feed' />
+	</a></span></th><th>&nbsp;</th></tr></thead>
 	<tbody>";
 
 	$numOfAnnouncements = count($announceArr);
-
 	for($i=0; $i < $numOfAnnouncements; $i++) {
 		$tool_content .= "<tr><td colspan='2'>
 		<img style='border:0px;' src='${urlAppend}/template/classic/img/arrow_grey.gif' alt='' />
