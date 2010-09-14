@@ -284,31 +284,39 @@ function auth_user_login ($auth, $test_username, $test_password)  {
 	    break;
 	case '4':
             $ldap_host = $GLOBALS['ldaphost'];
-            $all_ldap_base_dn = array('uid' => $GLOBALS['ldapbind_dn']);
-            // anonymous account:
+            //$all_ldap_base_dn = array('uid' => $GLOBALS['ldapbind_dn']);
+	    // bilias TEICRETE
+            // $all_ldap_base_dn = array('eduPersonPrincipalName' => $GLOBALS['ldapbind_dn']);
+	    $attrib1 = "eduPersonPrincipalName";
+	    $attrib2 = "mail";
+	    $base_dn = $GLOBALS['ldapbind_dn'];
             $a_user = $GLOBALS['ldapbind_user'];
             $a_pass = $GLOBALS['ldapbind_pw'];
             $testauth = false;
 
             $ldap = ldap_connect($ldap_host);
 
-            if (!$ldap) {
-                    $GLOBALS['auth_errors'] = 'Error connecting to LDAP host';
-                    return false;
-            } else {
+            if ($ldap) {
                     // LDAP connection established - now process all
                     // base dn's until authentication is achieved or fail
-
-                    @ldap_set_option($ldap, LDAP_OPT_PROTOCOL_VERSION, 3);
-
-                    foreach ($all_ldap_base_dn as $attrib => $base_dn) {
+		    // bilias: foreach is not needed
+                    // foreach ($all_ldap_base_dn as $attrib => $base_dn) {
                             // construct dn for user
-                            $dn = "$attrib=$test_username,$base_dn";
+			    // bilias TEICRETE
+			    // search for user DN before bind
+                            //$dn = "$attrib=$test_username,$base_dn";
+			if (@ldap_bind($ldap, $a_user, $a_pass)) {
+			  //$dn = "$attrib=$test_username";
+			  $search_attr = "(|(${attrib1}=${test_username})(${attrib2}=${test_username}))";
+			  $my_userinforeq = ldap_search($ldap, $base_dn, $search_attr);
+			  if ( $my_entry_id = ldap_first_entry($ldap, $my_userinforeq)) {
+			    $user_dn = ldap_get_dn($ldap, $my_entry_id);
                             // try an authenticated bind to confirm
                             // user/password pair
-                            if (@ldap_bind($ldap, $dn, $test_password)) {
+                            if (@ldap_bind($ldap, $user_dn, $test_password)) {
                                     $testauth = true;
-                                    $search = "$attrib=$test_username";
+                                    //$search = "$attrib=$test_username";
+                                    $search = $search_attr;
                                     $userinforequest = ldap_search($ldap, $base_dn, $search);
                                     $userinfo = ldap_get_entries($ldap, $userinforequest);
                                     if ($userinfo["count"] == 1) {
@@ -316,12 +324,14 @@ function auth_user_login ($auth, $test_username, $test_password)  {
                                                 'firstname' => get_ldap_attribute($userinfo, 'givenname'),
                                                 'lastname' => get_ldap_attribute($userinfo, 'sn'),
                                                 'email' => get_ldap_attribute($userinfo, 'mail'));
-                                    }
-                            } else {
-                                $GLOBALS['auth_errors'] = ldap_error($ldap);
-                                return false;
+                                    }               
                             }
-                    }
+			    // simple brute force delay
+			    else sleep(10);
+			  }
+			  else sleep(10);
+			}
+                    //}
                     @ldap_unbind($ldap);
             }
             break;
