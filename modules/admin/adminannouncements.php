@@ -89,7 +89,7 @@ if (isset($_GET['delete'])) {
                 $id = intval($_POST['id']);
                 db_query("UPDATE admin_announcements
                         SET title = $title, body = $newContent,
-			lang = '".langname_to_code($_POST['lang_admin_ann'])."', 
+			lang = '".$_POST['lang_admin_ann']."', 
 			date = NOW()
                         WHERE id = $id", $mysqlMainDb);
                 $message = $langAdminAnnModify;
@@ -97,7 +97,7 @@ if (isset($_GET['delete'])) {
                 // add new announcement
                 db_query("INSERT INTO admin_announcements
                         SET title = $title, body = $newContent,
-			visible = 'V', lang = '".langname_to_code($_POST['lang_admin_ann'])."', date = NOW()");
+			visible = 'V', lang = '".$_POST['lang_admin_ann']."', date = NOW()");
                 $message = $langAdminAnnAdd;
         }
 }
