@@ -42,14 +42,18 @@ function showQuestion($questionId, $onlyAnswers = false) {
 		$questionName=$objQuestionTmp->selectTitle();
 		$questionDescription=$objQuestionTmp->selectDescription();	
 		$questionDescription_temp = standard_text_escape($questionDescription);
-		$tool_content .= "<tr><td colspan='2'>
-		<b>$questionName</b><br/>
-		<small>$questionDescription_temp</small>
-		</td></tr>";
+		$tool_content .= "
+  <tr class='even'>
+    <td colspan='2'>
+		<b>$questionName</b><br />
+		$questionDescription_temp
+    </td>
+  </tr>";
 		if(file_exists($picturePath.'/quiz-'.$questionId)) {
-			$tool_content .= "<tr>
-			<td align='center' colspan='2'>
-			<center><img src='".${'picturePath'}."/quiz-".${'questionId'}."'></center></td></tr>";
+			$tool_content .= "
+  <tr class='even'>
+    <td class='center' colspan='2'><img src='".${'picturePath'}."/quiz-".${'questionId'}."'></td>
+  </tr>";
 		}
 	}  // end if(!$onlyAnswers)
 
@@ -62,19 +66,18 @@ function showQuestion($questionId, $onlyAnswers = false) {
 		$cpt1='A';
 		$cpt2=1;
 		$Select=array();
-		$tool_content .= "<tr>
-		<td colspan='2'>
-		<table width='100%'>
-		<thead>
-		<tr>
-		  <td width='44%' class='left'><u><b>$langColumnA</b></u></td>
-		  <td width='12%'><div align='center'><b>$langMakeCorrespond</b></div></td>
-		  <td width='44%' class='left'><u><b>$langColumnB</b></u></td>
-		</tr>
-		</thead>
-		</table>
-		</td>
-		</tr>";
+		$tool_content .= "
+  <tr class='even'>
+    <td colspan='2'>
+      <table class='tbl'>
+      <tr>
+        <td width='200'><b>$langColumnA</b></td>
+        <td class='center' width='130'><b>$langMakeCorrespond</b></td>
+        <td width='200'><b>$langColumnB</b></td>
+      </tr>
+      </table>
+    </td>
+  </tr>";
 	}
 
 	for($answerId=1;$answerId <= $nbrAnswers;$answerId++) {
@@ -84,25 +87,34 @@ function showQuestion($questionId, $onlyAnswers = false) {
 			// splits text and weightings that are joined with the character '::'
 			list($answer)=explode('::',$answer);
 			// replaces [blank] by an input field
-                        $answer = preg_replace('/\[[^]]+\]/', '<input type="text" name="choice['.$questionId.'][]" size="10">', nl2br(q($answer)));
+                        $answer = preg_replace('/\[[^]]+\]/', '<input type="text" name="choice['.$questionId.'][]" size="10" />', nl2br(q($answer)));
 		}
 		// unique answer
 		if($answerType == UNIQUE_ANSWER) {
-			$tool_content .= "<tr>
-			<td width='1%' align='center'>
-			<input type='radio' name='choice[${questionId}]' value='${answerId}'></td>
-			<td width='99%'>${answer}</td></tr>";
+			$tool_content .= "
+  <tr class='even'>
+    <td class='center' width='1'>
+      <input type='radio' name='choice[${questionId}]' value='${answerId}' />
+    </td>
+    <td>${answer}</td>
+  </tr>";
 		}
 		// multiple answers
 		elseif($answerType == MULTIPLE_ANSWER) {
-			$tool_content .= "<tr>
-			<td width='1%' align='center'>
-			<input type='checkbox' name='choice[${questionId}][${answerId}]' value='1'></td>
-			<td width='99%'>${answer}</td></tr>";
+			$tool_content .= "
+  <tr class='even'>
+    <td width='1' align='center'>
+      <input type='checkbox' name='choice[${questionId}][${answerId}]' value='1' />
+    </td>
+    <td>${answer}</td>
+  </tr>";
 		}
 		// fill in blanks
 		elseif($answerType == FILL_IN_BLANKS) {
-			$tool_content .= "<tr><td colspan='2'>${answer}</td></tr>";
+			$tool_content .= "
+  <tr class='even'>
+    <td colspan='2'>${answer}</td>
+  </tr>";
 		}
 		// matching
 		elseif($answerType == MATCHING) { 
@@ -114,48 +126,75 @@ function showQuestion($questionId, $onlyAnswers = false) {
 			}
 			else
 			{
-				$tool_content .= "<tr><td colspan='2'>
-				<table width='100%'><thead>
-				<tr>
-				  <td width='44%'><b>${cpt2}.</b> ${answer}</td>
-				  <td width='12%'><div align='center'>
-				<select name='choice[${questionId}][${answerId}]'>
-				<option value='0'>--</option>";
+				$tool_content .= "
+  <tr class='even'>
+    <td colspan='2'>
+      <table class='tbl'>
+      <tr>
+        <td width='200'><b>${cpt2}.</b> ${answer}</td>
+        <td width='130'><div align='center'>
+         <select name='choice[${questionId}][${answerId}]'>
+           <option value='0'>--</option>";
 
 				// fills the list-box
 				 foreach($Select as $key=>$val) {
-					 $tool_content .= "<option value=\"${key}\">${val['Lettre']}</option>";
+					 $tool_content .= "
+           <option value=\"${key}\">${val['Lettre']}</option>";
 				 }
-				 $tool_content .= "</select></div></td><td width='44%'>";
+				 $tool_content .= "
+         </select></div>
+        </td>
+        <td width='200'>";
 				 if(isset($Select[$cpt2]))
 				       $tool_content .= '<b>'.$Select[$cpt2]['Lettre'].'.</b> '.$Select[$cpt2]['Reponse'];
 				 else
 				       $tool_content .= '&nbsp;';
 
-				$tool_content .= "</td></tr></thead></table></td></tr>";
+				$tool_content .= "
+        </td>
+      </tr>
+      </table>
+    </td>
+  </tr>";
 				$cpt2++;
 				// if the left side of the "matching" has been completely shown
 				if($answerId == $nbrAnswers) {
 					// if it remains answers to shown at the right side
 					while(isset($Select[$cpt2])) 	{
-						$tool_content .= "<tr><td colspan='2'><table><tr>
-						<td width='60%' colspan='2'>&nbsp;</td>
-						<td width='40%' align='right' valign='top'>".
-						"<b>".$Select[$cpt2]['Lettre'].".</b> ".$Select[$cpt2]['Reponse']."</td></tr></table></td></tr>";
+						$tool_content .= "
+      <tr class='even'>
+        <td colspan='2'>
+          <table>
+          <tr>
+            <td width='60%' colspan='2'>&nbsp;</td>
+            <td width='40%' align='right' valign='top'>".
+              "<b>".$Select[$cpt2]['Lettre'].".</b> ".$Select[$cpt2]['Reponse']."</td>
+          </tr>
+          </table>
+        </td>
+      </tr>";
 						$cpt2++;
 					}	// end while()
 				}  // end if()
 			}
+                               // $tool_content .= " </table>";
 		}
 		elseif($answerType == TRUE_FALSE) {
-			$tool_content .= "<tr><td width='1%' align='center'>
-			<input type='radio' name='choice[${questionId}]' value='${answerId}'></td>
-			<td width='99%'>$answer</td></tr>";
+			$tool_content .= "
+  <tr class='even'>
+    <td width='1' align='center'>
+      <input type='radio' name='choice[${questionId}]' value='${answerId}' />
+    </td>
+    <td>$answer</td>
+  </tr>";
 		}
 	}	// end for()
 
 	if(!$nbrAnswers) {
-		$tool_content .= "<tr><td colspan='2'><font color='red'>$langNoAnswer</font></td></tr>";
+		$tool_content .= "
+  <tr>
+    <td colspan='2'><p class='caution'>$langNoAnswer</td>
+  </tr>";
 	}
 	// destruction of the Answer object
 	unset($objAnswerTmp);

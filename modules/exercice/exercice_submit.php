@@ -172,11 +172,16 @@ $CurrentAttempt = mysql_fetch_array(db_query("SELECT COUNT(*) FROM exercise_user
 		WHERE eid='$eid_temp' AND uid='$uid'", $currentCourseID));
 ++$CurrentAttempt[0];
 if ($exerciseAllowedAttempts > 0 and $CurrentAttempt[0] > $exerciseAllowedAttempts) { 
-	$tool_content .= "<br/><table width='99%' class='Question'>
-	<thead><tr><td class='alert1'>$langExerciseExpired</td></tr>
-	<tr>
-	<td><br/><br/><br/><div align='center'><a href='exercice.php'>$langBack</a></div></td>
-	</tr></thead></table>";
+	$tool_content .= "
+  <br/>
+    <table width='99%' class='tbl'>
+    <tr>
+      <td class='alert1'>$langExerciseExpired</td>
+    </tr>
+    <tr>
+      <td><br/><br/><br/><div align='center'><a href='exercice.php'>$langBack</a></div></td>
+    </tr>
+    </table>";
 	draw($tool_content, 2);
 	exit();
 }
@@ -208,23 +213,24 @@ if(@$_POST['questionNum']) {
 }
 
 $exerciseDescription_temp = standard_text_escape($exerciseDescription);
-$tool_content .= "<table width='99%' class='Exercise'>
-<thead>
-<tr>
-  <td colspan=\"2\"><b>$exerciseTitle</b>
-  <br/><br/>
-  $exerciseDescription_temp</td>
-</tr>
-</thead>
-</table>
-<form method='post' action='$_SERVER[PHP_SELF]' autocomplete='off'>
-<input type='hidden' name='formSent' value='1'>
-<input type='hidden' name='exerciseType' value='$exerciseType'>	
-<input type='hidden' name='questionNum' value='$questionNum'>
-<input type='hidden' name='nbrQuestions' value='$nbrQuestions'>
-<input type='hidden' name='exerciseTimeConstrain' value='$exerciseTimeConstrain'>
-<input type='hidden' name='eid_temp' value='$eid_temp'>
-<input type='hidden' name='RecordStartDate' value='$RecordStartDate'>";
+$tool_content .= "
+  <table width='99%' class='tbl_border'>
+  <tr class='odd'>
+    <td colspan=\"2\"><b>$exerciseTitle</b>
+    <br/>
+    $exerciseDescription_temp</td>
+  </tr>
+  </table>
+  <br />
+
+  <form method='post' action='$_SERVER[PHP_SELF]'>
+  <input type='hidden' name='formSent' value='1' />
+  <input type='hidden' name='exerciseType' value='$exerciseType' />	
+  <input type='hidden' name='questionNum' value='$questionNum' />
+  <input type='hidden' name='nbrQuestions' value='$nbrQuestions' />
+  <input type='hidden' name='exerciseTimeConstrain' value='$exerciseTimeConstrain' />
+  <input type='hidden' name='eid_temp' value='$eid_temp' />
+  <input type='hidden' name='RecordStartDate' value='$RecordStartDate' />";
 
 $i=0;
 foreach($questionList as $questionId) {
@@ -250,15 +256,22 @@ foreach($questionList as $questionId) {
 		}
 	}
 	// shows the question and its answers
-	$tool_content .= "<br/><table width=\"99%\" class=\"Question\"><thead>
-	<tr><td colspan=\"2\"><b><u>".$langQuestion."</u>: ".$i; 
+	$tool_content .= "
+  <table width=\"99%\" class=\"tbl\">
+  <tr class='odd'>
+    <td colspan=\"2\"><b><u>".$langQuestion."</u>: ".$i; 
 	
 	if($exerciseType == 2) { 
 		$tool_content .= "/".$nbrQuestions;
 	}
-	$tool_content .= "</b></td></tr>";
+	$tool_content .= "</b></td>
+  </tr>";
 	showQuestion($questionId);
-	$tool_content .= "</thead></table>";
+	$tool_content .= "
+  <tr>
+    <td class='even' colspan=\"2\">&nbsp;</td>
+  </tr>
+  </table>";
 	// for sequential exercises
 	if($exerciseType == 2) {
 		// quits the loop
@@ -267,21 +280,32 @@ foreach($questionList as $questionId) {
 }	// end foreach()
 
 if (!$questionList) {
-	$tool_content .= "<table width=\"99%\" class=\"Question\">
-	<thead>
-	<tr><td colspan='2'><font color='red'>$langNoAnswer</font></td></tr>
-	</thead>
-	</table>";	 
+	$tool_content .= "
+  <table width=\"99%\" class=\"tbl\">
+  <tr class='odd'>
+    <td colspan='2'>
+      <p class='caution'>'$langNoAnswer</p>
+    </td>
+  </tr>
+  </table>";	 
 } else {
-	$tool_content .= "<br/>	<table width=\"99%\" class=\"Exercise\"><tr>
-	<td><div align=\"center\"><input type=\"submit\" value=\"";
+	$tool_content .= "
+  <br/>
+  <table width=\"99%\" class=\"tbl\">
+  <tr>
+    <td><div align=\"center\"><input type=\"submit\" value=\"";
 		if ($exerciseType == 1 || $nbrQuestions == $questionNum) {
-			$tool_content .= "$langCont\">&nbsp;";
+			$tool_content .= "$langCont\" />&nbsp;";
 		} else {
-			$tool_content .= $langNext." &gt;"."\">";
+			$tool_content .= $langNext." &gt;"."\" />";
 		}
-	$tool_content .= "<input type='submit' name='buttonCancel' value='$langCancel'></div>
-	</td></tr></table>";
+	$tool_content .= "<input type='submit' name='buttonCancel' value='$langCancel' /></div>
+    </td>
+  </tr>
+  <tr>
+    <td colspan=\"2\">&nbsp;</td>
+  </tr>
+  </table>";
 }	
 
 $tool_content .= "</form>";

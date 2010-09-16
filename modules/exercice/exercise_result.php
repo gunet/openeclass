@@ -66,12 +66,17 @@ $exerciseDescription_temp = mathfilter($exerciseDescription_temp, 12, "../../cou
 $displayResults = $objExercise->selectResults();
 $displayScore = $objExercise->selectScore(); 
 
-$tool_content .= "<table class=\"Exercise\" width=\"99%\"><thead><tr>
-<td colspan=\"2\"><b>".stripslashes($exerciseTitle)."</b>
-<br/><br/>".stripslashes($exerciseDescription_temp)."
-</td></tr></thead></table>";
+$tool_content .= "
+  <table class=\"tbl_border\" width=\"99%\">
+  <tr class='odd'>
+    <td colspan=\"2\"><b>".stripslashes($exerciseTitle)."</b>
+    <br/>".stripslashes($exerciseDescription_temp)."
+    </td>
+  </tr>
+  </table>";
 
-$tool_content .= "<form method='GET' action='exercice.php'>";
+$tool_content .= "
+  <form method='GET' action='exercice.php'>";
 
 $i=$totalScore=$totalWeighting=0;
 
@@ -109,34 +114,43 @@ foreach($_SESSION['questionList'] as $questionId) {
 		$colspan=1;
 	}
 	$iplus=$i+1;
-	$tool_content .= "<br/><table width='99%' class='Question'>
-	<thead>
-	<tr><td colspan='${colspan}'><b><u>$langQuestion</u>: $iplus</b></td>
-	</tr>
-	<tr>
-	<td colspan='${colspan}'><b>$questionName</b><br/>
-	<small>$questionDescription_temp</small><br/><br/></td>
-	</tr>
-	</thead><tbody>";
+	$tool_content .= "
+    <br/>
+    <table width='99%' class='tbl'>
+    <tr class='odd'>
+      <td colspan='${colspan}'><b><u>$langQuestion</u>: $iplus</b></td>
+    </tr>
+    <tr>
+      <td class='even' colspan='${colspan}'>
+        <b>$questionName</b>
+        <br />
+        $questionDescription_temp
+        <br/><br/>
+      </td>
+    </tr>";
 
 	$questionScore=0;
 
 	if ($displayResults == 1) {
 		if($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER || $answerType == TRUE_FALSE) {
-			$tool_content .= "<tr>
-			<td width='5%' align='center' style='background: #fff;'><b>$langChoice</b></td>
-			<td width='5%' align='center' style='background: #fff;'><b>$langExpectedChoice</b></td>
-			<td width='45%' align='center' style='background: #fff;'><b>$langAnswer</b></td>
-			<td width='45%' align='center' style='background: #fff;'><b>$langComment</b></td>
-			</tr>";
+			$tool_content .= "
+    <tr class='even'>
+      <td width='50' valign='top'><b>$langChoice</b></td>
+      <td width='50' class='center' valign='top'><b>$langExpectedChoice</b></td>
+      <td valign='top'><b>$langAnswer</b></td>
+      <td valign='top'><b>$langComment</b></td>
+    </tr>";
 		} elseif($answerType == FILL_IN_BLANKS) {
-			$tool_content .= "<tr>
-			<td style='background: #fff;'><b>$langAnswer</b></td>
-			</tr>";
+			$tool_content .= "
+    <tr>
+      <td class='even'><b>$langAnswer</b></td>
+    </tr>";
 		} else {
-			$tool_content .= "<tr>
-			<td width='50%' style='background: #fff;'><b>$langElementList</b></td>
-			<td width='50%' style='background: #fff;'><b>$langCorrespondsTo</b></td></tr>";
+			$tool_content .= "
+    <tr class='even'>
+      <td><b>$langElementList</b></td>
+      <td><b>$langCorrespondsTo</b></td>
+    </tr>";
 		}
 	}
 	// construction of the Answer object
@@ -247,8 +261,10 @@ foreach($_SESSION['questionList'] as $questionId) {
 		if ($displayResults == 1) { 
 			if($answerType != MATCHING || $answerCorrect) {
 				if($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER || $answerType == TRUE_FALSE) {
-					$tool_content .= "<tr><td width='5%' style='background: #fff;'>
-					<div align='center'><img src='../../template/classic/img/";
+					$tool_content .= "
+    <tr class='even'>
+      <td>
+      <div align='center'><img src='../../template/classic/img/";
 					if ($answerType == UNIQUE_ANSWER || $answerType == TRUE_FALSE) {
 						$tool_content .= "radio";
 					} else {
@@ -260,8 +276,9 @@ foreach($_SESSION['questionList'] as $questionId) {
 						$tool_content .= '_off';
 					}
 		
-					$tool_content .= ".gif' border='0'></div></td>
-					<td width='5%' style='background: #fff;'><div align='center'>";
+					$tool_content .= ".gif' border='0' /></div>
+      </td>
+      <td><div align='center'>";
 	
 					if ($answerType == UNIQUE_ANSWER || $answerType == TRUE_FALSE) {
 						$tool_content .= "<img src=\"../../template/classic/img/radio";
@@ -273,32 +290,44 @@ foreach($_SESSION['questionList'] as $questionId) {
 					} else {
 						$tool_content .= "_off";	
 					}
-					$tool_content .= ".gif\"></div>";	
-					$tool_content .= "</td><td width='45%' style='background: #fff;'>${answer}</td>
-					<td width='45%' style='background: #fff;'>";
+					$tool_content .= ".gif\" /></div>";	
+					$tool_content .= "
+      </td>
+      <td>${answer}</td>
+      <td>";
 					if ($studentChoice) {
 						$tool_content .= nl2br(make_clickable($answerComment)); 
 					} else { 
 						$tool_content .= '&nbsp;';
 					} 
-					$tool_content .= "</td></tr>";
+					$tool_content .= "
+      </td>
+    </tr>";
 				} elseif($answerType == FILL_IN_BLANKS) {
-					$tool_content .= "<tr>
-					<td style=\"background: #fff;\">".nl2br($answer)."</td></tr>";
+					$tool_content .= "
+    <tr class='even'>
+      <td>".nl2br($answer)."</td>
+    </tr>";
 				} else {
-					$tool_content .= "<tr><td width='50%' style='background: #fff;'>${answer}</td>
-					<td width='50%' style='background: #fff;'>${choice[$answerId]} / 
-					<font color='green'><b>${matching[$answerCorrect]}</b></font></td></tr>";
+					$tool_content .= "
+    <tr class='even'>
+      <td>${answer}</td>
+      <td>${choice[$answerId]} / <font color='green'><b>${matching[$answerCorrect]}</b></font></td>
+    </tr>";
 				}
 			} 
 		} // end of if
 	}	// end for()
 	 if ($displayScore == 1) {
-		$tool_content .= "<tr><td colspan='$colspan' class='score'>
-		$langQuestionScore: <b>$questionScore/$questionWeighting</b>
-		</td></tr>";
+		$tool_content .= "
+    <tr class='even'>
+      <td colspan='$colspan' class='odd'><div align='right'>
+		$langQuestionScore: <b>$questionScore/$questionWeighting</b></div>
+      </td>
+    </tr>";
 	}
-	$tool_content .= "</tbody></table>";
+	$tool_content .= "
+    </table>";
 	// destruction of Answer
 	unset($objAnswerTmp);
 	$i++;
@@ -324,15 +353,20 @@ $sql="UPDATE exercise_user_record SET TotalScore='$totalScore', TotalWeighting='
 db_query($sql, $currentCourseID);
 
 if ($displayScore == 1) {
-	$tool_content .= "<br/><table width='99%' class='Exercise'><thead><tr>
-	<td class='score'>$langYourTotalScore: <b>$totalScore/$totalWeighting</b>
-	</td></tr>
-	</thead></table>";
+	$tool_content .= "
+    <br/>
+    <table width='99%' class='tbl'>
+    <tr class='odd'>
+	<td class='right'>$langYourTotalScore: <b>$totalScore/$totalWeighting</b>
+      </td>
+    </tr>
+    </table>";
 }
-$tool_content .= "<br/><div align='center'>
-<input type='submit' value='$langFinish'>
-</div>
-<br/></form><br>";
+$tool_content .= "
+  <br/>
+  <div align='center'><input type='submit' value='$langFinish' /></div>
+  <br />
+  </form><br />";
 
 draw($tool_content, 2);
 ?>

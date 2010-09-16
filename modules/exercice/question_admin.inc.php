@@ -28,9 +28,10 @@
 
 // if the question we are modifying is used in several exercises
 if(isset($usedInSeveralExercises)) {
-	@$tool_content .= "<h3>$questionName</h3>
-	<form method='post' action='$_SERVER[PHP_SELF]?modifyQuestion=$_GET[modifyQuestion]&modifyAnswers=$_GET[modifyAnswers]'>
-	<table width='99%'><tr><td>";
+	@$tool_content .= "
+  <h3>$questionName</h3>
+  <form method='post' action='$_SERVER[PHP_SELF]?modifyQuestion=$_GET[modifyQuestion]&modifyAnswers=$_GET[modifyAnswers]'>
+  <table width='99%'><tr><td>";
 
 	// submit question
 	if(isset($_POST['submitQuestion'])) {
@@ -100,14 +101,17 @@ if(isset($usedInSeveralExercises)) {
 	$questionId = $objQuestion->selectId();
 	// is picture set ?
 	$okPicture=file_exists($picturePath.'/quiz-'.$questionId)?true:false;
-	$tool_content .= "<table width='99%' class='Question'><thead>
-	<tr><th class='left' colspan='2' height=\"25\">
+	$tool_content .= "
+      <fieldset>
+        <legend>$langQuestion &nbsp;";
+        // doesn't show the edit link if we come from the question pool to pick a question for an exercise
+        if(!isset($fromExercise)) {
+                $tool_content .= "<a href=\"".$_SERVER['PHP_SELF']."?modifyQuestion=".$questionId."\">
+                <img src='../../template/classic/img/edit.gif' align='absmiddle' title='$langModify'></a>";
+        }
+
+        $tool_content .= "</legend>
 	<b>".nl2br($questionName)."</b>&nbsp;&nbsp;";
-	// doesn't show the edit link if we come from the question pool to pick a question for an exercise
-	if(!isset($fromExercise)) {
-		$tool_content .= "<a href=\"".$_SERVER['PHP_SELF']."?modifyQuestion=".$questionId."\">
-		<img src='../../template/classic/img/edit.gif' align='absmiddle' title='$langModify'></a>";
-	}
 
 	$questionDescription = standard_text_escape($questionDescription);
 	$tool_content .= "<br/><i>$questionDescription</i>";
@@ -115,15 +119,22 @@ if(isset($usedInSeveralExercises)) {
 	if($okPicture) {
 		$tool_content .= "<br/><center><img src='$picturePath/quiz-$questionId' border='0'></center><br/>";
 	}
-	$tool_content .= "</th></tr>";	
-	$tool_content .= "<tr><td colspan='2'><b><u>$langQuestionAnswers</u>:</b>";
+	$tool_content .= "
+      </fieldset>
+    <table width='99%' class='tbl'>
+    <tr>
+      <th><b><u>$langQuestionAnswers</u>:</b>";
 	// doesn't show the edit link if we come from the question pool to pick a question for an exercise
 	if(!isset($fromExercise)) {
 		$tool_content .= "&nbsp;&nbsp;<a href='$_SERVER[PHP_SELF]?modifyAnswers=$questionId'>
 		<img src='../../template/classic/img/edit.gif' align='absmiddle' title='$langModify'></a>";
 	}
-        $tool_content .= "<br/></td></tr>";
-	$tool_content .= "</td></tr></thead></table><br/>";
-	$tool_content .= "<div class='center'><a href='admin.php?exerciseId=$exerciseId'>$langBackExerciseManagement</a></div>";
+        $tool_content .= "<br/></th>
+    </tr>
+    </table>
+
+    <br/>
+
+    <div class='right'><a href='admin.php?exerciseId=$exerciseId'>$langBackExerciseManagement</a></div>";
 }
 ?>

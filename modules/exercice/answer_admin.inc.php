@@ -509,60 +509,70 @@ if(isset($_GET['modifyAnswers'])) {
 
 	if(!isset($usedInSeveralExercises)) {
 		if($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER) {
-			$tool_content .= "<form method='post' action='$_SERVER[PHP_SELF]?modifyAnswers=$_GET[modifyAnswers]'>
-			<input type='hidden' name='formSent' value='1' />
-			<input type='hidden' name='nbrAnswers' value='$nbrAnswers' />";
-			$tool_content .= "<table width=\"99%\" class=\"Question\"><thead><tr>
-			<th class=\"left\" colspan=\"5\" height=\"25\">
-			<b>".nl2br($questionName)."</b>&nbsp;&nbsp;
-			</th></tr>
-			<tr><td colspan=\"5\" ><b><u>$langQuestionAnswers</u>:</b><br />";
+			$tool_content .= "
+   <form method='post' action='$_SERVER[PHP_SELF]?modifyAnswers=$_GET[modifyAnswers]'>
+   <input type='hidden' name='formSent' value='1' />
+   <input type='hidden' name='nbrAnswers' value='$nbrAnswers' />
+
+   <fieldset>
+   <legend>$langQuestion</legend>
+     <b>".nl2br($questionName)."</b>
+   </fieldset>
+
+   <fieldset>
+   <legend>$langQuestionAnswers</legend>
+   <table width=\"99%\" class=\"tbl\">
+   <tr>
+     <td colspan=\"5\" >";
 			
 			if($answerType == UNIQUE_ANSWER) {
-				$tool_content .= "<small>$langUniqueSelect</small>";
+				$tool_content .= "$langUniqueSelect";
 			}
 			if($answerType == MULTIPLE_ANSWER) {
-				$tool_content .= "<small>$langMultipleSelect</small>";
+				$tool_content .= "$langMultipleSelect";
 			}
-			$tool_content .= "</td></tr></thead>";
-			$tool_content .= "<tbody>";
+			$tool_content .= "</td>
+    </tr>";
 
 			// if there is a picture, display this
 			if($okPicture) {
-				$tool_content .= "<tr>
-				<td colspan='5' align=\"center\">"."<img src=\"".$picturePath."/quiz-".$questionId."\"></td>
-				</tr>";
+				$tool_content .= "
+    <tr>
+      <td colspan='5' align=\"center\">"."<img src=\"".$picturePath."/quiz-".$questionId."\"></td>
+    </tr>";
 			}
 
 			// if there is an error message
 			if(!empty($msgErr)) {
-				$tool_content .= "<tr><td colspan='5'>
-				<table border='0' cellpadding='3' align='center' width='400' bgcolor='#FFCC00'>
-				<tr><td>$msgErr</td></tr>
-				</table></td></tr>";
+				$tool_content .= "
+    <tr>
+      <td colspan='5'><div class='caution'>$msgErr</div></td>
+    </tr>";
 			}
 
-			$tool_content .= "<tr>
-			  <td align='right' width='3%'><b>$langID</b></td>
-			  <td align='center' width='7%'><b>$langTrue</b></td>
-			  <td align='center' width='45%'><b>$langAnswer</b></td>
-			  <td align='center' width='45%'><b>$langComment</b></td>
-			  <td align='center' width='10%'><b>$langQuestionWeighting</b></td>
-			</tr>";
+			$tool_content .= "
+    <tr>
+      <th class='right' width='3'>$langID</th>
+      <th class='center' width='20'>$langTrue</th>
+      <th class='center'>$langAnswer</th>
+      <th class='center'>$langComment</th>
+      <th class='center' width='20'>$langQuestionWeighting</th>
+    </tr>";
 			for($i=1;$i <= $nbrAnswers;$i++) {
-				$tool_content .="<tr><td class=\"right\">$i.</td>";
+				$tool_content .="
+    <tr>
+      <td class=\"right\" valign='top'>$i.</td>";
 				if($answerType == UNIQUE_ANSWER) {
-					$tool_content .= "<td align=\"center\" valign=\"top\">
-					
-					<input type=\"radio\" value=\"".$i."\" name=\"correct\" ";
+					$tool_content .= "
+      <td class=\"center\" valign=\"top\"><input type=\"radio\" value=\"".$i."\" name=\"correct\" ";
 					if(isset($correct) and $correct == $i) {
 						$tool_content .= "checked=\"checked\" /></td>";
 					} else {
 						$tool_content .= "></td>";
 					}
 				} else {
-					$tool_content .= "<td align=\"center\" valign=\"top\">
-					<input type=\"checkbox\" value=\"1\" name=\"correct[".$i."]\" ";
+					$tool_content .= "
+      <td class=\"center\" valign=\"top\"><input type=\"checkbox\" value=\"1\" name=\"correct[".$i."]\" ";
 					if ((isset($correct[$i]))&&($correct[$i])) {
 						$tool_content .= "checked=\"checked\"></td>";
 					} else {
@@ -570,134 +580,147 @@ if(isset($_GET['modifyAnswers'])) {
 					}
 				}
 				
-				$tool_content .= "<td align=\"center\">".
-				text_area("reponse[$i]", 7, 45, @$reponse[$i], "class='FormData_InputText'")
-				."</td><td align='center'>".
-				text_area("comment[$i]", 7, 30, @$comment[$i], "class='FormData_InputText'")
-				."</td><td valign='top' align='center'>
-				<input class='FormData_InputText' type='text' name=\"weighting[".$i."]\" size=\"5\" value=\"";
+				$tool_content .= "
+      <td>". text_area("reponse[$i]", 7, 40, @$reponse[$i], "class=''") ."</td>
+      <td class='center'>". text_area("comment[$i]", 7, 25, @$comment[$i], "class=''") ."</td>
+      <td valign='top' class='center'><input type='text' name=\"weighting[".$i."]\" size=\"5\" value=\"";
 				if (isset($weighting[$i])) {
 					$tool_content .= $weighting[$i];
 				} else {	
 					$tool_content .= 0;
 				}
-				$tool_content .= "\" /></td></tr>";
+				$tool_content .= "\" /></td>
+    </tr>";
 			}
 
 			$tool_content .= "
-			    <tr>
-			      <th class='left' colspan='2'>&nbsp;</th>
-			      <td class='left'><b>$langAnswers :</b>&nbsp;
-				<input type='submit' name='lessAnswers' value='$langLessAnswers' />&nbsp;
-				<input type='submit' name='moreAnswers' value='$langMoreAnswers' />
-			      </td>
-			      <td align='center'>
-				<input type='submit' name='submitAnswers' value='$langCreate' />&nbsp;&nbsp;
-				<input type='submit' name='cancelAnswers' value='$langCancel' />
-			      </td>
-			      <th class='left'>&nbsp;</th>
-			    </tr>
-			    <tr>
-			      <th class='left' colspan='5'>&nbsp;</th>
-			    </tr>
-			    </tbody>
-			    </table>
-			</form>";
+    <tr>
+      <td class='left' colspan='2'>&nbsp;</td>
+      <td><b>$langSurveyAddAnswer :</b>&nbsp;
+        <input type='submit' name='lessAnswers' value='$langLessAnswers' />&nbsp;
+        <input type='submit' name='moreAnswers' value='$langMoreAnswers' />
+      </td>
+      <td colspan='3'>&nbsp;</td>
+    </tr>
+    <tr>
+      <td class='left' colspan='5'>&nbsp;</td>
+    </tr>
+    <tr>
+      <td class='right' colspan='5'>
+	<input type='submit' name='submitAnswers' value='$langCreate' />&nbsp;&nbsp;
+	<input type='submit' name='cancelAnswers' value='$langCancel' />
+      </td>
+    </tr>
+    </table>
+    </fieldset>
+    </form>";
 		}
 		elseif($answerType == FILL_IN_BLANKS) {
-			$tool_content .= "<form name=\"formulaire\" method=\"post\" action=\"".$_SERVER['PHP_SELF']."?modifyAnswers=".$_GET['modifyAnswers']."\">\n";
+			$tool_content .= "
+    <form name=\"formulaire\" method=\"post\" action=\"".$_SERVER['PHP_SELF']."?modifyAnswers=".$_GET['modifyAnswers']."\">\n";
 			if(!isset($setWeighting)) {
 				$tempSW = "";
 			} else {
 				$tempSW = $setWeighting;	
 			}
-			$tool_content .= "<input type='hidden' name='formSent' value='1' />
-				<input type='hidden' name='setWeighting' value='$tempSW' />";
+			$tool_content .= "
+    <input type='hidden' name='formSent' value='1' />\n
+    <input type='hidden' name='setWeighting' value='$tempSW' />\n";
 			if(!isset($setWeighting)) {
-				$tool_content .= "<input type=\"hidden\" name=\"weighting\" value=\"\" />\n";
-				$tool_content .= "<table class='FormData' width='99%'>
-				  <tbody>
-				  <tr>
-				    <th class='left' width='220'>$langQuestion:</th>
-				    <td><b>$questionName</b></td>
-				  </tr>";
+				$tool_content .= "
+    <input type=\"hidden\" name=\"weighting\" value=\"\" />\n";
+				$tool_content .= "
+    <fieldset>
+    <legend>$langQuestion</legend>
+     <b>$questionName</b>
+     <br />";
 				if($okPicture) {
-					$tool_content .= "<tr>
-					<th colspan=\"2\"align=\"center\"><img src=\"".$picturePath."/quiz-".$questionId."\"></th>
-					</tr>";
+					$tool_content .= "
+     <div align=\"center\"><img src=\"".$picturePath."/quiz-".$questionId."\"></div>";
 				}
-				$tool_content .= "<tr>
-				    <th class='left'>$langQuestionAnswers:</th>
-				    <td>$langTypeTextBelow, $langAnd $langUseTagForBlank :<br/><br/>
-					<textarea name='reponse' cols='70' rows='6' class='FormData_InputText'>";
+                                $tool_content .= "
+    </fieldset>";
+				$tool_content .= "
+    <fieldset>
+    <legend>$langQuestionAnswers</legend>
+    <table class='tbl' width='99%'>
+    <tr>
+      <td>$langTypeTextBelow, $langAnd $langUseTagForBlank :<br/><br/>
+      <textarea name='reponse' cols='70' rows='6'>";
 
 				if(!isset($submitAnswers) && empty($reponse)) 
 				      $tool_content .= $langDefaultTextInBlanks; 
 				else 
 				      $tool_content .= htmlspecialchars($reponse);
-				$tool_content .= "</textarea></td></tr>";
+				$tool_content .= "</textarea></td>
+    </tr>";
 
 				// if there is an error message
 				if(!empty($msgErr)) {
 					$tool_content .= "\n";
-					$tool_content .= "<tr>
-					<th>&nbsp;</th>
-					<td>
-					<table border='0' cellpadding='3' align='center' width='400' bgcolor='#FFCC00'>
-					<tr><td>$msgErr</td></tr>
-					</table>
-					</td>
-					</tr>";
+					$tool_content .= "
+    <tr>
+      <td>
+        <table border='0' cellpadding='3' align='center' width='400' bgcolor='#FFCC00'>
+          <tr><td>$msgErr</td></tr>
+        </table>
+      </td>
+    </tr>";
 				}
 
 
 
 $tool_content .= <<<cData
 
-        <tr>
-          <th>&nbsp;</th>
-          <td>
+    <tr>
+      <td>
           <input type="submit" name="submitAnswers" value="${langNext} &gt;" />
           &nbsp;&nbsp;<input type="submit" name="cancelAnswers" value="${langCancel}" />
-          </td>
-        </tr>
-        </tbody>
-        </table>
+      </td>
+    </tr>
+    </table>
+    </fieldset>
+    </form>
 cData;
 
 	} else {
-		$tool_content .= "<input type=\"hidden\" name=\"blanks\" value=\"".htmlspecialchars(serialize($blanks))."\" />";
-		$tool_content .= "<input type=\"hidden\" name=\"reponse\" value=\"".htmlspecialchars($reponse)."\" />";
+		$tool_content .= "
+    <input type=\"hidden\" name=\"blanks\" value=\"".htmlspecialchars(serialize($blanks))."\" />";
+		$tool_content .= "
+    <input type=\"hidden\" name=\"reponse\" value=\"".htmlspecialchars($reponse)."\" />";
 		// if there is an error message
 		if(!empty($msgErr)) {
-			$tool_content .= "<tr><td colspan='2'>
-			<table border='0' cellpadding='3' align='center' width='400' bgcolor='#FFCC00'>
-			<tr><td>$msgErr</td></tr>
-			</table>
-			</td></tr>";
+			$tool_content .= "
+			<table border='0' cellpadding='3' align='center' width='400'>
+			<tr><td class='caution'>$msgErr</td></tr>
+			</table>";
 		} else {
-			$tool_content .= "<table class='FormData' width='99%'>
-			<tbody><tr>
-			<th width='220'>&nbsp;</th>
-			<td><b>$langWeightingForEachBlank :</b></td>	</tr>";
+			$tool_content .= "
+    <fieldset>
+    <legend>$langWeightingForEachBlank</legend>
+    <table class='tbl' width='99%'>";
 	
 			foreach($blanks as $i=>$blank) {
-				$tool_content .= "<tr><th class=\"right\">[".$blank."] :</th>"."
-				<td><input type='text' name=\"weighting[".$i."]\" "."size='5' value=\"".$weighting[$i]."\" class='FormData_InputText' /></td>
-				</tr>";
+				$tool_content .= "
+    <tr>
+      <td class=\"right\"><b>[".$blank."] :</b></td>"."
+      <td><input type='text' name=\"weighting[".$i."]\" "."size='5' value=\"".$weighting[$i]."\" /></td>
+    </tr>";
 			}
-			$tool_content .= "<tr>
-			<th>&nbsp;</th>
-			<td>
-			<input type='submit' name='buttonBack' value='&lt; $langBack'' />&nbsp;&nbsp;
-			<input type='submit' name='submitAnswers' value='$langCreate' />&nbsp;&nbsp;
-			<input type='submit' name='cancelAnswers' value='$langCancel' />
-			</td>
-			</tr>
-			</tbody>
-			</table>";
+			$tool_content .= "
+    <tr>
+      <td>&nbsp;</td>
+      <td>
+	<input type='submit' name='buttonBack' value='&lt; $langBack'' />&nbsp;&nbsp;
+	<input type='submit' name='submitAnswers' value='$langCreate' />&nbsp;&nbsp;
+	<input type='submit' name='cancelAnswers' value='$langCancel' />
+      </td>
+    </tr>
+    </table>";
 		}
-	$tool_content .= "</td></tr></thead></table></form>";
+	$tool_content .= "
+    </fieldset>
+    </form>";
         }
 
 		} //END FILL_IN_BLANKS !!!
@@ -708,31 +731,40 @@ $tool_content .= <<<cData
 
 
   
-	<form method="post" action="$_SERVER[PHP_SELF]?modifyAnswers=$_GET[modifyAnswers]">
-	<input type="hidden" name="formSent" value="1" />
-	<input type="hidden" name="nbrOptions" value="$nbrOptions" />
-	<input type="hidden" name="nbrMatches" value="$nbrMatches" />
+    <form method="post" action="$_SERVER[PHP_SELF]?modifyAnswers=$_GET[modifyAnswers]">
+    <input type="hidden" name="formSent" value="1" />
+    <input type="hidden" name="nbrOptions" value="$nbrOptions" />
+    <input type="hidden" name="nbrMatches" value="$nbrMatches" />
 	
-    <table width="99%" class="FormData">
-    <tbody>
-    <tr>
-      <th width="220" class="left">$langQuestion :</th>
-      <td colspan="3" class="left"><b>$questionName</b></td>
-    </tr>	
+    <fieldset>
+    <legend>$langQuestion</legend>
+    $questionName
+    </fieldset>	
+    
+    <fieldset>
+    <legend>$langAnswer</legend>
+    <table width="99%" class="tbl">
 cData;
 
 	if($okPicture) {
-		$tool_content .= "<tr>
-		<td colspan='4' align='center'><img src='${picturePath}/quiz-${questionId}'></td></tr>";
+		$tool_content .= "
+    <tr>
+      <td colspan='4' class='center'><img src='${picturePath}/quiz-${questionId}'></td>
+    </tr>";
 	}
 
 	// if there is an error message
 	if(!empty($msgErr)) {
-		$tool_content .= "<tr><td colspan='4'>
-		<table border='0' cellpadding='3' align='center' width='400' bgcolor='#FFCC00'>
-		<tr><td>$msgErr</td>
-		</tr></table>
-		</td></tr>";
+		$tool_content .= "
+    <tr>
+      <td colspan='4'>
+        <table border='0' cellpadding='3' align='center' width='400'>
+        <tr>
+          <td>$msgErr</td>
+        </tr>
+        </table>
+      </td>
+    </tr>";
 	}
 	$listeOptions=Array();
 	// creates an array with the option letters
@@ -742,29 +774,28 @@ cData;
 
 $tool_content .= <<<cData
     <tr>
-      <th class="left">$langDefineOptions</th>
-      <td>&nbsp;</td>
-      <th align="right" colspan="2"><b>$langMakeCorrespond</b></th>
+      <td colspan="2"><b>$langDefineOptions</b></td>
+      <td class="center" colspan="2"><b>$langMakeCorrespond</b></td>
     </tr>
     <tr>
-      <th class="right">$langColumnA:</th>
-      <td align="left">$langMoreLessChoices: <input type="submit" name="moreMatches" value="+" />&nbsp;<input type="submit" name="lessMatches" value="-" />
-      </td>
-      <td align="center"><b>$langColumnB</b></td>
-      <td align="center"><b>$langQuestionWeighting</b></td>
+      <td>&nbsp;</td>
+      <td><b>$langColumnA</b>: $langMoreLessChoices: <input type="submit" name="moreMatches" value="+" />&nbsp;<input type="submit" name="lessMatches" value="-" /></td>
+      <td><div align='right'>$langColumnB</div></td>
+      <td>$langQuestionWeighting</td>
     </tr>
 cData;
 	for($j=1;$j <= $nbrMatches;$i++,$j++) {
-			$tool_content .= "<tr>
-			<th class=\"right\">".$j."</th>
-			<td><input type=\"text\" name=\"match[".$i."]\" size=\"58\" value=\"";
+			$tool_content .= "
+    <tr>
+      <td class=\"right\"><b>".$j."</b></td>
+      <td><input type=\"text\" name=\"match[".$i."]\" size=\"58\" value=\"";
 		if(!isset($formSent) && !isset($match[$i])) 
 			$tool_content .= "${langDefaultMakeCorrespond.$j}"; 
 		else 
 			@$tool_content .= str_replace('{','&#123;',htmlspecialchars($match[$i]));
 	
-		$tool_content .= "\" class=\"auth_input\" /></td>
-		<td align=\"center\"><select name=\"sel[".$i."]\"  class=\"auth_input\">";
+		$tool_content .= "\" /></td>
+      <td><div align='right'><select name=\"sel[".$i."]\">";
 		foreach($listeOptions as $key=>$val) {
 			$tool_content .= "<option value=\"".$key."\" ";
 			if((!isset($submitAnswers) && !isset($sel[$i]) 
@@ -773,133 +804,149 @@ cData;
 				$tool_content .= ">".$val."</option>";
 		} // end foreach()
 	
-	$tool_content .= "</select></td>
-	<td align=\"center\"><input type=\"text\" size=\"3\" ".
+	$tool_content .= "</select></div></td>
+      <td><input type=\"text\" size=\"3\" ".
 		"name=\"weighting[".$i."]\" value=\"";
 		if(!isset($submitAnswers) && !isset($weighting[$i])) 
 			$tool_content .= '5'; 
 		else 
 			$tool_content .= $weighting[$i];
-		$tool_content .= "\"  class=\"auth_input\" /></td></tr>";
+		$tool_content .= "\" /></td>
+    </tr>";
 	} // end for()
 
 $tool_content .= <<<cData
     <tr>
-      <th class="right">&nbsp;</th>
+      <td class="right">&nbsp;</td>
       <td colspan="3">&nbsp;</td>
     </tr>
     <tr>
-      <th class="right">$langColumnB:</th>
-      <td colspan="3">$langMoreLessChoices: <input type="submit" name="moreOptions" value="+" />&nbsp;<input type="submit" name="lessOptions" value="-" />
+      <td>&nbsp;</td>
+      <td colspan="1"><b>$langColumnB</b>: $langMoreLessChoices: <input type="submit" name="moreOptions" value="+" />&nbsp;<input type="submit" name="lessOptions" value="-" />
       </td>
-  </tr>
+      <td>&nbsp;</td>
+    </tr>
 cData;
 
 			foreach($listeOptions as $key=>$val) {
-				$tool_content .= "<tr><th class=\"right\">".$val."</th>
-				<td><input type=\"text\" ".
+				$tool_content .= "
+    <tr>
+      <td class=\"right\"><b>".$val."</b></td>
+      <td><input type=\"text\" ".
 					"name=\"option[".$key."]\" size=\"58\" value=\"";
 				if(!isset($formSent) && !isset($option[$key]))
 					$tool_content .= ${"langDefaultMatchingOpt$val"}; 
 				else 
 					@$tool_content .= str_replace('{','&#123;',htmlspecialchars($option[$key]));
 					
-				$tool_content .= "\" class=\"auth_input\" /></td><td>&nbsp;</td><td>&nbsp;</td></tr>";
+				$tool_content .= "\" /></td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+    </tr>";
 			} // end foreach()
 
-			$tool_content .= "<tr><th>&nbsp;</th><td colspan='3' align='left'>
-			<input type='submit' name='submitAnswers' value='$langCreate' />
+			$tool_content .= "
+    <tr>
+      <td>&nbsp;</td>
+      <td colspan='3'><input type='submit' name='submitAnswers' value='$langCreate' />
 			&nbsp;&nbsp;<input type='submit' name='cancelAnswers' value='$langCancel' />
-			</td></tr></tbody></table>	
-			</form>";
+      </td>
+    </tr>
+    </table>	
+    </fieldset>
+    </form>";
 		} // end of MATCHING
 		
 		elseif ($answerType == TRUE_FALSE) {
-			$tool_content .= "<form method='post' action='$_SERVER[PHP_SELF]?modifyAnswers=$_GET[modifyAnswers]'>
-			<input type='hidden' name='formSent' value='1' />
-			<input type='hidden' name='nbrAnswers' value='$nbrAnswers' />";
-			$tool_content .= "<table width=\"99%\" class=\"Question\"><thead><tr>
-			<th class=\"left\" colspan=\"4\" height=\"25\">
-			<b>".nl2br($questionName)."</b>&nbsp;&nbsp;
-			</th></tr>";
+			$tool_content .= "
+   <form method='post' action='$_SERVER[PHP_SELF]?modifyAnswers=$_GET[modifyAnswers]'>
+   <input type='hidden' name='formSent' value='1' />
+   <input type='hidden' name='nbrAnswers' value='$nbrAnswers' />
+   <fieldset>
+    <legend>$langQuestion</legend>
+      <b>".nl2br($questionName)."</b>";
 			// if there is a picture, display this
 			if($okPicture) {
-				$tool_content .= "<tr>
-				<td colspan='4' align=\"center\">"."<img src=\"".$picturePath."/quiz-".$questionId."\"></td>
-				</tr>";
+				$tool_content .= "
+      <div align=\"center\">"."<img src=\"".$picturePath."/quiz-".$questionId."\"></div>";
 			}
-			$tool_content .=" <tr><td colspan=\"5\" ><b><u>$langQuestionAnswers</u>:</b><br />";
-			$tool_content .= "</td></tr></thead>";
-			$tool_content .= "<tbody>";
+			$tool_content .="
+   </fieldset>
+ 
+   <fieldset>
+    <legend>$langQuestionAnswers</legend>";
 			// if there is an error message
 			if(!empty($msgErr)) {
-				$tool_content .= "<tr><td colspan='4'>
-				<table border='0' cellpadding='3' align='center' width='400' bgcolor='#FFCC00'>
-				<tr><td>$msgErr</td></tr>
-				</table></td></tr>";
+				$tool_content .= "
+       <div class='caution'>$msgErr</div>";
 			}
-			$tool_content .= "<tr>
-			  <td>&nbsp;</td>
-			  <td align='center' width='45%'><b>$langAnswer</b></td>
-			  <td align='center' width='45%'><b>$langComment</b></td>
-			  <td align='center' width='10%'><b>$langQuestionWeighting</b></td>
-			</tr>";
+			$tool_content .= "
+    <table class='tbl'>
+    <tr>
+      <td colspan='2'><b>$langAnswer</b></td>
+      <td class='center'><b>$langComment</b></td>
+      <td class='center'><b>$langQuestionWeighting</b></td>
+    </tr>";
 			
-			$tool_content .="<tr>";
-			$tool_content .= "<td align='center' valign='top'>
-				<input type='radio' value='1' name='correct' ";
+			$tool_content .="
+    <tr>
+      <td valign='top' width='30'>$langCorrect</td>
+      <td valign='top' width='1'><input type='radio' value='1' name='correct' ";
 			if(isset($correct) and $correct == 1) {
 				$tool_content .= "checked='checked' /></td>";
 			} else {
 				$tool_content .= "></td>";
 			}
 			
-			$tool_content .= "<td align='center'>$langCorrect</td>
-			<input type='hidden' name='reponse[1]' value='$langCorrect'>
-			<td align='center'>".
-			text_area("comment[1]", 7, 60, @$comment[1], "class='FormData_InputText'")
+			$tool_content .= "
+      <input type='hidden' name='reponse[1]' value='$langCorrect' />
+      <td>".
+			text_area("comment[1]", 4, 40, @$comment[1], "class=''")
 			."</td>
-			<td valign='top' align='center'>
-			<input class='FormData_InputText' type='text' name='weighting[1]' size='5' value=\"";
+      <td valign='top'><input type='text' name='weighting[1]' size='5' value=\"";
 			if (isset($weighting[1])) {
 				$tool_content .= $weighting[1];
 			} else {	
 				$tool_content .= 0;
 			}
-			$tool_content .= "\" /></td></tr>";		
-			$tool_content .="<tr>";
-			$tool_content .= "<td align='center' valign='top'>
-				<input type='radio' value='2' name='correct' ";
+			$tool_content .= "\" /></td>
+    </tr>";		
+			$tool_content .="
+    <tr>";
+			$tool_content .= "
+      <td valign='top'>$langFalse</td>
+      <td valign='top'><input type='radio' value='2' name='correct' ";
 			if(isset($correct) and $correct == 2) {
 				$tool_content .= "checked='checked' /></td>";
 			} else {
 				$tool_content .= "></td>";
 			}
-			$tool_content .= "<td align='center'>$langFalse</td>
-			<input type='hidden' name='reponse[2]' value='$langFalse'>
-			<td align='center'>".
-			text_area("comment[2]", 7, 60, @$comment[2], "class='FormData_InputText'")
+			$tool_content .= "
+        <input type='hidden' name='reponse[2]' value='$langFalse'>
+      <td>".
+			text_area("comment[2]", 4, 40, @$comment[2], "class=''")
 			."</td>
-			<td valign='top' align='center'>
-			<input class='FormData_InputText' type='text' name='weighting[2]' size='5' value=\"";
+      <td valign='top'><input type='text' name='weighting[2]' size='5' value=\"";
 			if (isset($weighting[2])) {
 				$tool_content .= $weighting[2];
 			} else {	
 				$tool_content .= 0;
 			}
-			$tool_content .= "\" /></td></tr>";
+			$tool_content .= "\" /></td>
+    </tr>";
 			
-			$tool_content .= "<tr>
-			<td colspan='2'>&nbsp;</td>
-			<td align='center'>
-			  <input type='submit' name='submitAnswers' value='$langCreate' />&nbsp;&nbsp;
-			  <input type='submit' name='cancelAnswers' value='$langCancel' />
-			</td>
-			<td>&nbsp;</td>
-			</tr>
-			</tbody>
-			</table>
-			</form>";
+			$tool_content .= "
+    <tr>
+      <td colspan='2'>&nbsp;</td>
+      <td align='center'>
+         <input type='submit' name='submitAnswers' value='$langCreate' />&nbsp;&nbsp;
+         <input type='submit' name='cancelAnswers' value='$langCancel' />
+      </td>
+      <td>&nbsp;</td>
+    </tr>
+    </table>
+   </fieldset>
+   </form>";
 		}
 	}
 }
