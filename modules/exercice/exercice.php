@@ -192,7 +192,7 @@ while($row = mysql_fetch_array($result)) {
                 }
 		if(!$row['active']) {
 			$tool_content .= "<td width=\"1\"><img style='padding-top:3px;' src='${urlServer}/template/classic/img/arrow_red.gif' alt='' /></td><td>
-			<div class=\"invisible\">
+			<div class=\"inactive\">
 			<a href=\"exercice_submit.php?exerciseId=${row['id']}\">".$row['titre']."</a>$descr</div></td>";
 		} else {
 			$tool_content .= "<td width=\"1\"><img style='padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif' alt='' /></td><td>
