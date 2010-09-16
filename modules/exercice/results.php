@@ -65,9 +65,13 @@ $exerciseTitle=$objExercise->selectTitle();
 $exerciseDescription=$objExercise->selectDescription();
 $exerciseDescription_temp = nl2br(make_clickable($exerciseDescription));
 	
-$tool_content .= "<table class=\"Exercise\" width=\"99%\"><thead><tr>
-	<td><b>$exerciseTitle</b><br/><br/>${exerciseDescription_temp}
-	</td></tr></thead></table><br/>";
+$tool_content .= "
+    <table class=\"tbl_border\" width=\"99%\">
+    <tr class='odd'>
+      <td><b>$exerciseTitle</b><br/><br/>${exerciseDescription_temp}</td>
+    </tr>
+    </table>
+    <br/>";
 
 mysql_select_db($currentCourseID);
 $sql="SELECT DISTINCT uid FROM `exercise_user_record`";
@@ -84,8 +88,11 @@ while($row=mysql_fetch_array($result)) {
 		FROM `exercise_user_record` WHERE uid='$sid' AND eid='$exerciseId'";
 	$result2 = db_query($sql2);
 	if (mysql_num_rows($result2) > 0) { // if users found
-		$tool_content .= "<table class='Question'>";
-		$tool_content .= "<tr><th colspan='3' class='left'>";
+		$tool_content .= "
+    <table class='tbl' width='99%'>";
+		$tool_content .= "
+    <tr>
+      <th colspan='3'>";
 		if (!$sid) {
 			$tool_content .= "$langNoGroupStudents";
 		} else {
@@ -93,21 +100,39 @@ while($row=mysql_fetch_array($result)) {
 			else $studentam = $theStudent['am'];
 			$tool_content .= "$langUser: <b>$theStudent[nom] $theStudent[prenom] </b> ($langAm: $studentam)";
 		}
-		$tool_content .= "</th></tr>";
-		$tool_content .= "<tr><td width='150' align='center'><b>".$langExerciseStart."</b></td>";
-		$tool_content .= "<td width='150' align='center'><b>".$langExerciseDuration."</b></td>";
-		$tool_content .= "<td width='150' align='right'><b>".$langYourTotalScore2."</b></td></tr>";
-	
+		$tool_content .= "</th>
+    </tr>
+    <tr>
+      <th width='150' class='center'>".$langExerciseStart."</td>
+      <th width='150' class='center'>".$langExerciseDuration."</td>
+      <th width='150' class='center'>".$langYourTotalScore2."</td>
+    </tr>";
+ 	
+                $k=0;
 		while($row2=mysql_fetch_array($result2)) {
-			$tool_content .= "<tr><td align='center'>$row2[RecordStartDate]</td>";
+        if ($k%2 == 0) {
+                $tool_content .= "    <tr class='even'>\n";
+        } else {
+                $tool_content .= "    <tr class='odd'>\n";
+        }
+
+			$tool_content .= "
+      <td class='center'>$row2[RecordStartDate]</td>";
 			if ($row2['TimeDuration'] == '00:00:00' or empty($row2['TimeDuration'])) { // for compatibility 
-				$tool_content .= "<td align='center'>$langNotRecorded</td>";
+				$tool_content .= "
+      <td class='center'>$langNotRecorded</td>";
 			} else {
-				$tool_content .= "<td align='center'>".format_time_duration($row2['TimeDuration'])."</td>";
+				$tool_content .= "
+      <td class='center'>".format_time_duration($row2['TimeDuration'])."</td>";
 			}
-			$tool_content .= "<td align='center'>".$row2['TotalScore']. "/".$row2['TotalWeighting']."</td></tr>";
+			$tool_content .= "
+      <td class='center'>".$row2['TotalScore']. "/".$row2['TotalWeighting']."</td>
+    </tr>";
+    $k++;
 		}
-	$tool_content .= "</table><br/>";
+	$tool_content .= "
+    </table>
+    <br/>";
 	}
 }
 draw($tool_content, 2);
