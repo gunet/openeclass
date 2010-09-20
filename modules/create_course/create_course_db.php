@@ -697,7 +697,7 @@ mysql_query("CREATE TABLE poll (
     TYPE=MyISAM $charset_spec");
 
     mysql_query("CREATE TABLE poll_question (
-      pqid int(11) NOT NULL auto_increment,
+      pqid bigint(12) NOT NULL auto_increment,
       pid int(11) NOT NULL default '0',
       question_text varchar(250) NOT NULL default '',
       qtype ENUM('multiple', 'fill') NOT NULL,

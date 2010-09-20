@@ -317,7 +317,7 @@ function upgrade_course_2_4($code, $lang, $extramessage = '')
 
         $course_id = course_code_to_id($code);
 	mysql_select_db($code);
-	echo "<hr><p>$langUpgCourse <b>$code</b> (2.2.1) $extramessage<br />";
+	echo "<hr><p>$langUpgCourse <b>$code</b> (2.4) $extramessage<br />";
 	flush();
 
 	// upgrade polls
@@ -426,13 +426,15 @@ function upgrade_course_2_4($code, $lang, $extramessage = '')
                                 '',
                                 'MODULE_ID_EBOOK')", $code);
         }
+	// upgrade poll_question
+	db_query("ALTER TABLE `poll_question` CHANGE `pqid` `pqid` BIGINT(12) NOT NULL AUTO_INCREMENT", $code);
 }
 
 function upgrade_course_2_3($code, $extramessage = '') {
 	global $langUpgCourse;
 
 	mysql_select_db($code);
-	echo "<hr><p>$langUpgCourse <b>$code</b> (2.2.1) $extramessage<br />";
+	echo "<hr><p>$langUpgCourse <b>$code</b> (2.3) $extramessage<br />";
 	flush();
 	// upgrade exercises
 	if (!mysql_field_exists("$code",'exercices','score'))
