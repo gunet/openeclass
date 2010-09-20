@@ -63,6 +63,7 @@ Also Credits to:
  Konstantinidis K. (Aristotele University of Thessaloniki)
  Emmanuela Patiniotaki <aporoemm@hotmail.com> (University of Athens)
  Kostantinos Tsakaloglou <tsakf@yahoo.com>
+ Yannis Kapetanakis <bilias@edu.physics.uoc.gr> (Technological Education of Crete)
 
 Xinha:
  Xinha was originally based on work by Mihai Bazon who produced htmlArea for Interactive Tools.
