@@ -128,7 +128,7 @@ if ($is_adminOfCourse) {
 	} elseif (isset($_POST['sid'])) {
 		show_submission($_POST['sid']);
 	} elseif (isset($_POST['new_assign'])) {
-		add_assignment($_POST['title'], $_POST['comments'], $_POST['desc'], "$_POST[WorkEnd]", $_POST['group_submissions']);
+		add_assignment($_POST['title'], $_POST['desc'], "$_POST[WorkEnd]", $_POST['group_submissions']);
 		show_assignments();
 	} elseif (isset($_POST['grades'])) {
 		$nameTools = $m['WorkView'];
@@ -222,15 +222,15 @@ function show_submission($sid)
 
 
 // insert the assignment into the database
-function add_assignment($title, $comments, $desc, $deadline, $group_submissions)
+function add_assignment($title, $desc, $deadline, $group_submissions)
 {
 	global $tool_content, $workPath;
 
 	$secret = uniqid("");
 	db_query("INSERT INTO assignments
-		(title, description, comments, deadline, submission_date, secret_directory,
+		(title, description, deadline, submission_date, secret_directory,
 			group_submissions) VALUES
-		(".autoquote($title).", ".autoquote($desc).", ".autoquote($comments).", ".autoquote($deadline).", NOW(), '$secret',
+		(".autoquote($title).", ".autoquote($desc).", ".autoquote($deadline).", NOW(), '$secret',
 			".autoquote($group_submissions).")");
 	mkdir("$workPath/$secret",0777);
 }
