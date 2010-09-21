@@ -465,9 +465,14 @@ function edit_assignment($id)
 	$nav[] = array("url"=>"$_SERVER[PHP_SELF]", "name"=> $langWorks);
 	$nav[] = array("url"=>"$_SERVER[PHP_SELF]?id=$id", "name"=> $_POST['title']);
 
+        if (!isset($_POST['comments'])) {
+                $comments = "''";
+        } else {
+                $comments = autoquote($_POST['comments']);
+        }
 	if (db_query("UPDATE assignments SET title=".autoquote($_POST['title']).",
 		description=".autoquote($_POST['desc']).", group_submissions=".autoquote($_POST['group_submissions']).",
-		comments=".autoquote($_POST['comments']).", deadline=".autoquote($_POST['WorkEnd'])." WHERE id='$id'")) {
+		comments=$comments, deadline=".autoquote($_POST['WorkEnd'])." WHERE id='$id'")) {
 
         $title = autounquote($_POST['title']);
 	$tool_content .="<p class='success_small'>$langEditSuccess<br /><a href='$_SERVER[PHP_SELF]?id=$id'>$langBackAssignment '$title'</a></p><br />";
