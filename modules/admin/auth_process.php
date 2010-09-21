@@ -62,6 +62,33 @@ if((!empty($step)) && ($step=='1')) {
 } else {
 	$auth = isset($_GET['auth'])?$_GET['auth']:'';
 }
+
+$imaphost = isset($_POST['imaphost'])?$_POST['imaphost']:'';
+$auth_instructions = isset($_POST['imapinstructions'])?$_POST['imapinstructions']:'';
+
+$pop3host = isset($_POST['pop3host'])?$_POST['pop3host']:'';
+$auth_instructions = isset($_POST['pop3instructions'])?$_POST['pop3instructions']:'';
+
+$ldaphost = isset($_POST['ldaphost'])?$_POST['ldaphost']:'';
+$ldap_base = isset($_POST['ldap_base'])?$_POST['ldap_base']:'';
+$ldapbind_dn = isset($_POST['ldapbind_dn'])?$_POST['ldapbind_dn']:'';
+$ldapbind_pw = isset($_POST['ldapbind_pw'])?$_POST['ldapbind_pw']:'';
+$ldap_login_attr = isset($_POST['ldap_login_attr'])?$_POST['ldap_login_attr']:'';
+$ldap_login_attr2 = isset($_POST['ldap_login_attr2'])?$_POST['ldap_login_attr2']:'';
+$ldapinstructions = isset($_POST['ldapinstructions'])?$_POST['ldapinstructions']:'';
+
+$dbhost = isset($_POST['dbhost'])?$_POST['dbhost']:'';
+$dbtype = isset($_POST['dbtype'])?$_POST['dbtype']:'';
+$dbname = isset($_POST['dbname'])?$_POST['dbname']:'';
+$dbuser = isset($_POST['dbuser'])?$_POST['dbuser']:'';
+$dbpass = isset($_POST['dbpass'])?$_POST['dbpass']:'';
+$dbtable = isset($_POST['dbtable'])?$_POST['dbtable']:'';
+$dbfielduser = isset($_POST['dbfielduser'])?$_POST['dbfielduser']:'';
+$dbfieldpass = isset($_POST['dbfieldpass'])?$_POST['dbfieldpass']:'';
+$auth_instructions = isset($_POST['dbinstructions'])?$_POST['dbinstructions']:'';;
+
+$auth_instructions = isset($_POST['shibinstructions'])?$_POST['shibinstructions']:'';;
+
 $test_username = isset($_POST['test_username'])?$_POST['test_username']:'';
 $test_password = isset($_POST['test_password'])?$_POST['test_password']:'';
 
@@ -100,38 +127,20 @@ if((!empty($auth_submit)) && ($auth_submit==1)) {
 					$auth_settings = "";
 					$auth_instructions = "";
 					break;
-				case '2': $pop3host = isset($_POST['pop3host'])?$_POST['pop3host']:'';
-					$auth_default = 2;
-					$auth_settings = "pop3host=".$pop3host;
-					$auth_instructions = isset($_POST['pop3instructions'])?$_POST['pop3instructions']:'';
+				case '2': $auth_default = 2;
+					$auth_settings = "pop3host=".$pop3host;					
 					break;
-				case '3': $imaphost = isset($_POST['imaphost'])?$_POST['imaphost']:'';
-					$auth_default = 3;
+				case '3': $auth_default = 3;
 					$auth_settings = "imaphost=".$imaphost;
-					$auth_instructions = isset($_POST['imapinstructions'])?$_POST['imapinstructions']:'';
 					break;
-				case '4': $ldaphost = isset($_POST['ldaphost'])?$_POST['ldaphost']:'';
-					$ldapbase_dn = isset($_POST['ldapbase_dn'])?$_POST['ldapbase_dn']:'';
-					$ldapbind_user = isset($_POST['ldapbind_user'])?$_POST['ldapbind_user']:'';
-					$ldapbind_pw = isset($_POST['ldapbind_pw'])?$_POST['ldapbind_pw']:'';
-					$auth_default = 4;
-					$auth_settings = "ldaphost=".$ldaphost."|ldapbind_dn=".$ldapbind_dn."|ldapbind_user=".$ldapbind_user."|ldapbind_pw=".$ldapbind_pw;
-					$auth_instructions = isset($_POST['ldapinstructions'])?$_POST['ldapinstructions']:'';
+				case '4': $auth_default = 4;
+					$auth_settings = "ldaphost=".$ldaphost."|ldap_base=".$ldap_base."|ldapbind_dn=".$ldapbind_dn."|ldapbind_pw=".$ldapbind_pw."|ldap_login_attr=".$ldap_login_attr."|ldap_login_attr2=".$ldap_login_attr2;
 					break;
-				case '5': $dbhost = isset($_POST['dbhost'])?$_POST['dbhost']:'';
-					$dbtype = isset($_POST['dbtype'])?$_POST['dbtype']:'';
-					$dbname = isset($_POST['dbname'])?$_POST['dbname']:'';
-					$dbuser = isset($_POST['dbuser'])?$_POST['dbuser']:'';
-					$dbpass = isset($_POST['dbpass'])?$_POST['dbpass']:'';
-					$dbtable = isset($_POST['dbtable'])?$_POST['dbtable']:'';
-					$dbfielduser = isset($_POST['dbfielduser'])?$_POST['dbfielduser']:'';
-					$dbfieldpass = isset($_POST['dbfieldpass'])?$_POST['dbfieldpass']:'';
+				case '5': 
 					$auth_default = 5;
 					$auth_settings = "dbhost=".$dbhost."|dbname=".$dbname."|dbuser=".$dbuser."|dbpass=".$dbpass."|dbtable=".$dbtable."|dbfielduser=".$dbfielduser."|dbfieldpass=".$dbfieldpass;
-					$auth_instructions = isset($_POST['dbinstructions'])?$_POST['dbinstructions']:'';;
 					break;
-				case '6': $auth_instructions = isset($_POST['shibinstructions'])?$_POST['shibinstructions']:'';;
-					if (isset($checkseparator) && $checkseparator == "on") {
+				case '6': if (isset($checkseparator) && $checkseparator == "on") {
 						$auth_settings = $_POST['shibseparator'];
 					} else {
 						$auth_settings = 'shibboleth';

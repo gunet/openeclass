@@ -50,9 +50,11 @@ if ($myrow['password'] == $auth_method_settings['auth_name']) {
                 $ldapsettings = $auth_method_settings['auth_settings'];
                 $ldap = explode('|', $ldapsettings);
                 $ldaphost = str_replace('ldaphost=', '', $ldap[0]); //ldaphost
-                $ldapbind_dn = str_replace('ldapbind_dn=', '', $ldap[1]); //ldapbase_dn
-                $ldapbind_user = str_replace('ldapbind_user=', '', $ldap[2]); //ldapbind_user
+                $ldap_base = str_replace("ldap_base=","",$ldap[1]); //ldap_base
+					 $ldapbind_dn = str_replace("ldapbind_dn=","",$ldap[2]); //ldapbind_dn
                 $ldapbind_pw = str_replace('ldapbind_pw=', '', $ldap[3]); // ldapbind_pw
+					 $ldap_login_attr = str_replace("ldap_login_attr=","",$ldap[4]); // ldap_login_attr
+					 $ldap_login_attr2 = str_replace("ldap_login_attr2=","",$ldap[5]); // ldap_login_attr2
                 break;
             case 5:
                 $dbsettings = $auth_method_settings['auth_settings'];
