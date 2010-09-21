@@ -340,12 +340,8 @@ function new_assignment()
           <input type='text' name='title' size='55' class='FormData_InputText' /></td>
         </tr>
         <tr>
-          <td>$m[description]:<br />";
-            $tool_content .= rich_text_editor('desc', 4, 20, $desc);
-            $tool_content .= "</td></tr>
-            <tr>
-          <td>$m[comments]:<br />
-          <textarea name='comments' rows='3' cols='53' class='FormData_InputText'></textarea></td>
+          <td>$m[description]:<br />" . rich_text_editor('desc', 4, 20, $desc) . "
+          </td>
         </tr>
         <tr>
           <td>$m[deadline]:<br />
@@ -409,7 +405,6 @@ function show_edit_assignment($id)
 
 	$deadline = $row['deadline'];
 
-
 	$description = q($row['description']);
         $textarea = rich_text_editor('desc', 4, 20, $row['description']);
 	$tool_content .= <<<cData
@@ -433,46 +428,31 @@ function show_edit_assignment($id)
         </table>
       </td>
     </tr>
-    <tr>
-      <td>$m[description]:<br />
-          $textarea</td>
-        </tr>
-    <tr>
-      <td>$m[comments]:<br />
-      <textarea name="comments" rows="5" cols="65" class='FormData_InputText'>${row['comments']}</textarea></td>
-    </tr>
-    <tr>
-      <td>$m[deadline]:<br />
 cData;
 
-	$tool_content .= getJsDeadline($deadline)."
-      </td>
-    </tr>
-    <tr>
-      <td>".$m['group_or_user'].":<br />".
-	"<input type='radio' name='group_submissions' value='0'";
+        if (!empty($row['comments'])) {
+                $tool_content .= "<tr><td>$m[comments]:<br />" .
+                                 rich_text_editor('comments', 5, 65, $row['comments']) .
+                                 "</td></tr>";
+        }
 
 	if ($row['group_submissions'] == '0') {
-        	$tool_content .= " checked='1' />";
+                $group_checked_0 = ' checked="1"';
+                $group_checked_1 = '';
         } else {
-                $tool_content .= " />";
+                $group_checked_0 = '';
+                $group_checked_1 = ' checked="1"';
         }
-
-	$tool_content .= $m['user_work']."<br /><input type='radio' name='group_submissions' value='1'";
-
-	if ($row['group_submissions'] != '0') {
-        	$tool_content .= " checked='1' />";
-	} else {
-                $tool_content .= " />";
-        }
-	$tool_content .= $m['group_work']."</td>
-    </tr>
-    <tr>
-      <td><input class='Login' type='submit' name='do_edit' value='$langEdit' /></td>
-    </tr>
-    </thead>
-    </table>
-    </form>";
+        $tool_content .= "<tr><td>$m[deadline]:<br />" .
+                         getJsDeadline($deadline) .
+                         "</td></tr>
+                          <tr><td>$m[group_or_user]:<br />
+                                  <input type='radio' name='group_submissions' value='0'$group_checked_0 />
+	                          $m[user_work]<br />
+                                  <input type='radio' name='group_submissions' value='1'$group_checked_1 />
+	                          $m[group_work]</td></tr>
+                          <tr><td><input class='Login' type='submit' name='do_edit' value='$langEdit' /></td></tr>
+                          </thead></table></form>";
 
     $tool_content .= "<br /><div align='right'><a href='$_SERVER[PHP_SELF]'>$langBack</ul></div>";
 }
