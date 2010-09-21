@@ -330,36 +330,35 @@ function new_assignment()
 
 	$tool_content .= "
         <form action='$_SERVER[PHP_SELF]' method='post' onsubmit='return checkrequired(this, \"title\");'>
-        <table class='framed'>
-        <thead>
+        <fieldset>
+        <legend>$m[WorkInfo]</legend>
+        <table class='tbl'>
         <tr>
-          <td><b>$m[WorkInfo]</b></td>
+          <th>$m[title]:</th>
+          <td><input type='text' name='title' size='55' /></td>
         </tr>
         <tr>
-          <td>$m[title]:<br />
-          <input type='text' name='title' size='55' class='FormData_InputText' /></td>
+          <th valign='top'>$m[description]:</th>
+          <td>" . rich_text_editor('desc', 4, 20, $desc) . " </td>
         </tr>
         <tr>
-          <td>$m[description]:<br />" . rich_text_editor('desc', 4, 20, $desc) . "
-          </td>
+          <th valign='top'>$m[deadline]:</th>
+          <td>$end_cal_Work</td>
         </tr>
         <tr>
-          <td>$m[deadline]:<br />
-          $end_cal_Work</td>
-        </tr>
-        <tr>
-          <td>$m[group_or_user]:<br />
-          <input type='radio' name='group_submissions' value='0' checked='1' />$m[user_work]
+          <th valign='top'>$m[group_or_user]:</th>
+          <td><input type='radio' name='group_submissions' value='0' checked='1' />$m[user_work]
           <br /><input type='radio' name='group_submissions' value='1' />$m[group_work]</td>
         </tr>
         <tr>
-          <td><input class='Login' type='submit' name='new_assign' value='$langAdd' /></td>
+          <th>&nbsp;</th>
+          <td><input type='submit' name='new_assign' value='$langAdd' /></td>
         </tr>
-        </thead>
         </table>
+        </fieldset>
       </form>
       <br/>";
-  	$tool_content .= "<p align='right'><a href='$_SERVER[PHP_SELF]'>$langBack</a></p>";
+  	$tool_content .= "\n      <p align='right'><a href='$_SERVER[PHP_SELF]'>$langBack</a></p>";
 }
 
 
@@ -1001,15 +1000,12 @@ function show_assignments($message = null)
 
 		$tool_content .= <<<cData
 
-    <table width="99%" class="WorkSum" align="left">
-    <thead>
+    <table width="99%" class="tbl_alt" align="left">
     <tr>
       <th colspan="2"><div align="left">&nbsp;&nbsp;&nbsp;&nbsp;${m['title']}</div></th>
       <th width="150">${m['deadline']}</th>
       <th width="110"><div align="right">$langCommands &nbsp;</div></th>
     </tr>
-    </thead>
-    <tbody>
 cData;
        $index = 0;
 		while ($row = mysql_fetch_array($result)) {
@@ -1026,22 +1022,19 @@ cData;
 				$visibility_image = "arrow_grey";
 			}
 			    if ($index%2==0) {
-	                       $tool_content .= "\n    <tr ".$visibility_css.">";
+	                       $tool_content .= "\n    <tr class='even' ".$visibility_css.">";
 	                    } else {
 	                       $tool_content .= "\n    <tr class='odd' ".$visibility_css.">";
                         }
 
-			$tool_content .= "<td width='1%'>
-                            <img style='border:0px; padding-top:3px;' src='$urlServer/template/classic/img/$visibility_image.gif' title='bullet' /></td>
-                            <td ".$visibility_css.">
-                            <a href='$_SERVER[PHP_SELF]?id=${row['id']}' ";
+			$tool_content .= "
+       <td width='1'><img style='border:0px; padding-top:3px;' src='$urlServer/template/classic/img/$visibility_image.gif' title='bullet' /></td>
+       <td ".$visibility_css."><a href='$_SERVER[PHP_SELF]?id=${row['id']}' ";
 			$tool_content .= ">";
 			$tool_content .= $row_title = q($row['title']);
 			$tool_content .= "</a></td>
-                        <td align='center'>".nice_format($row['deadline'])."</td>
-                        <td align='right'>
-                        <a href='$_SERVER[PHP_SELF]?id=$row[id]&amp;choice=edit'><img src='../../template/classic/img/edit.gif' alt='$m[edit]' /></a>";
-		    $tool_content .= "<a href='$_SERVER[PHP_SELF]?id=$row[id]&amp;choice=do_delete' onClick='return confirmation(\"".addslashes($row_title)."\");'><img src='../../template/classic/img/delete.gif' alt='$m[delete]' /></a>";
+       <td class='center'>".nice_format($row['deadline'])."</td>
+       <td class='right'><a href='$_SERVER[PHP_SELF]?id=$row[id]&amp;choice=edit'><img src='../../template/classic/img/edit.gif' alt='$m[edit]' /></a> <a href='$_SERVER[PHP_SELF]?id=$row[id]&amp;choice=do_delete' onClick='return confirmation(\"".addslashes($row_title)."\");'><img src='../../template/classic/img/delete.gif' alt='$m[delete]' /></a>";
 
 			if ($row['active']) {
 				$deactivate_temp = htmlspecialchars($m['deactivate']);
@@ -1051,12 +1044,14 @@ cData;
 				$activate_temp = htmlspecialchars($m['activate']);
 				$tool_content .= "<a href='$_SERVER[PHP_SELF]?choice=enable&amp;id=$row[id]'><img src='../../template/classic/img/invisible.gif' title='$activate_temp' /></a>";
 			}
-			$tool_content .= "&nbsp;</td></tr>";
+			$tool_content .= "&nbsp;</td>
+    </tr>";
                         $index++;
                 }
-                $tool_content .= '</tbody></table>';
+                $tool_content .= '
+    </table>';
         } else {
-                $tool_content .= "<p class=\"alert1\">$langNoAssign</p>";
+                $tool_content .= "\n    <p class=\"alert1\">$langNoAssign</p>";
         }
 }
 
