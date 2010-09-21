@@ -113,37 +113,37 @@ if (isset($_POST['submit']))  {
 */
 
 '.$utf8define.'
-$urlServer	=	"'.$_POST['formurlServer'].'";
-$urlAppend	=	"'.$_POST['formurlAppend'].'";
+$urlServer	=	'.autoquote($_POST['formurlServer']).';
+$urlAppend	=	'.autoquote($_POST['formurlAppend']).';
 $webDir		=	"'.str_replace("\\","/",realpath($_POST['formwebDir'])."/").'" ;
 
-$mysqlServer="'.$_POST['formmysqlServer'].'";
-$mysqlUser="'.$_POST['formmysqlUser'].'";
-$mysqlPassword="'.$_POST['formmysqlPassword'].'";
-$mysqlMainDb="'.$_POST['formmysqlMainDb'].'";
-$phpMyAdminURL="'.$_POST['formphpMyAdminURL'].'";
-$phpSysInfoURL="'.$_POST['formphpSysInfoURL'].'";
-$emailAdministrator="'.$_POST['formemailAdministrator'].'";
-$administratorName="'.$_POST['formadministratorName'].'";
-$administratorSurname="'.$_POST['formadministratorSurname'].'";
-$siteName="'.$_POST['formsiteName'].'";
+$mysqlServer='.autoquote($_POST['formmysqlServer']).';
+$mysqlUser='.autoquote($_POST['formmysqlUser']).';
+$mysqlPassword= '.autoquote($_POST['formmysqlPassword']).';
+$mysqlMainDb='.autoquote($_POST['formmysqlMainDb']).';
+$phpMyAdminURL='.autoquote($_POST['formphpMyAdminURL']).';
+$phpSysInfoURL='.autoquote($_POST['formphpSysInfoURL']).';
+$emailAdministrator='.autoquote($_POST['formemailAdministrator']).';
+$administratorName='.autoquote($_POST['formadministratorName']).';
+$administratorSurname='.autoquote($_POST['formadministratorSurname']).';
+$siteName='.autoquote($_POST['formsiteName']).';
 
-$telephone="'.$_POST['formtelephone'].'";
-$emailhelpdesk="'.$_POST['formemailhelpdesk'].'";
-$Institution="'.$_POST['formInstitution'].'";
-$InstitutionUrl="'.$_POST['formInstitutionUrl'].'";
+$telephone='.autoquote($_POST['formtelephone']).';
+$emailhelpdesk='.autoquote($_POST['formemailhelpdesk']).';
+$Institution='.autoquote($_POST['formInstitution']).';
+$InstitutionUrl='.autoquote($_POST['formInstitutionUrl']).';
 
 // available: greek and english
 $language = "'.$_POST['formlanguage'].'";
 
-$postaddress = "'.$_POST['formpostaddress'].'";
-$fax = "'.$_POST['formfax'].'";
+$postaddress = '.autoquote($_POST['formpostaddress']).';
+$fax = '.autoquote($_POST['formfax']).';
 
 $close_user_registration = '.$user_reg.';
 $encryptedPasswd = "true";
 $persoIsActive = TRUE;
 
-$durationAccount = "'.$_POST['formdurationAccount'].'";
+$durationAccount = '.autoquote($_POST['formdurationAccount']).';
 $active_ui_languages = '.$string_active_ui_languages.'
 ';
 	// Save new config.php
