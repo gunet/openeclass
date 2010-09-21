@@ -43,12 +43,9 @@ include '../../include/baseTheme.php';
 include 'auth.inc.php';
 
 $nameTools = $langNewUser;
-$tool_content = "";
-$tool_content .= "
-  <p class='title1'>$langUserAccount ";
+$tool_content .= "<p class='title1'>$langUserAccount ";
 
 $auth = get_auth_active_methods();
-$e = 1;
 
 // check for close user registration
 if (isset($close_user_registration) and $close_user_registration) {
@@ -66,13 +63,19 @@ if(!empty($auth)) {
         if (count($auth) > 1) {
                 $tool_content .= "\n  <p class='sub_title1'>$langUserAccountInfo3&nbsp;: </p>";
         }
-
         foreach($auth as $k => $v) {
-                if($v!=1) {
-                        $tool_content .= "\n      <p><img src='../../images/arrow_blue.gif'>&nbsp;&nbsp;$langNewAccount&nbsp;(<a href=\"ldapnewuser.php?auth=".$v."\">".get_auth_info($v)."</a>)</p>";
-                } else {
+                if ($v == 1) {	// bypass the eclass auth method, as it has already been displayed
                         continue;
+                } else {
+                        $tool_content .= "<p><img src='../../images/arrow_blue.gif'>&nbsp;&nbsp;$langNewAccount&nbsp;";
+                        if ($v == 6)  { // shibboleth method
+                                $tool_content .= "(<a href='{$urlServer}secure/index.php'>".get_auth_info($v)."</a>)";
+                        } else {
+                                $tool_content .= "(<a href='ldapnewuser.php?auth=".$v."'>".get_auth_info($v)."</a>)";
+                        }
+                        $tool_content .= "</p>";
                 }
+                
         }
 }
 
@@ -89,10 +92,13 @@ if(!empty($auth)) {
                 if ($v == 1) {	// bypass the eclass auth method, as it has already been displayed
                         continue;
                 } else {
-                        $auth_method_settings = get_auth_settings($v);
-                        $tool_content .= "<p><img src='../../images/arrow_blue.gif'>&nbsp;&nbsp;
-                        $langNewAccount
-                                &nbsp;(<a href='ldapnewuser.php?p=TRUE&auth=".$v."'>".get_auth_info($v)."</a>)</p>";
+                        $tool_content .= "<p><img src='../../images/arrow_blue.gif'>&nbsp;&nbsp;$langNewAccount&nbsp;";
+                        if ($v == 6)  { // shibboleth method
+                                $tool_content .= "(<a href='{$urlServer}secure/index.php'>".get_auth_info($v)."</a>)";
+                        } else {
+                                $tool_content .= "(<a href='ldapnewuser.php?p=TRUE&auth=".$v."'>".get_auth_info($v)."</a>)";
+                        }
+                        $tool_content .= "</p>";
                 }
         }
 } else {
