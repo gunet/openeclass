@@ -216,7 +216,7 @@ function show_submission($sid)
 		}
 		$tool_content .=  "</p>\n";
 	} else {
-		$tool_content .= "<p class=\"caution_small\">error - no such submission with id $sid</p>\n";
+		$tool_content .= "<p class=\"caution\">error - no such submission with id $sid</p>\n";
 	}
 }
 
@@ -279,7 +279,7 @@ function submit_work($id) {
             }
             $local_name = replace_dangerous_char($local_name);
             if (preg_match('/\.(ade|adp|bas|bat|chm|cmd|com|cpl|crt|exe|hlp|hta|' .'inf|ins|isp|jse|lnk|mdb|mde|msc|msi|msp|mst|pcd|pif|reg|scr|sct|shs|' .'shb|url|vbe|vbs|wsc|wsf|wsh)$/', $_FILES['userfile']['name'])) {
-                    $tool_content .= "<p class=\"caution_small\">$langUnwantedFiletype: {$_FILES['userfile']['name']}<br />";
+                    $tool_content .= "<p class=\"caution\">$langUnwantedFiletype: {$_FILES['userfile']['name']}<br />";
                     $tool_content .= "<a href=\"$_SERVER[PHP_SELF]?id=$id\">$langBack</a></p><br />";
                     return;
             }
@@ -304,12 +304,12 @@ function submit_work($id) {
                                     '$filename','".$_FILES['userfile']['name'].
                                     "', '$stud_comments')", $currentCourseID);
                     }
-                $tool_content .= "<p class='success_small'>$msg2<br />$msg1<br /><a href='$_SERVER[PHP_SELF]'>$langBack</a></p><br />";
+                $tool_content .= "<p class='success'>$msg2<br />$msg1<br /><a href='$_SERVER[PHP_SELF]'>$langBack</a></p><br />";
             } else {
-                $tool_content .= "<p class='caution_small'>$langUploadError<br /><a href='$_SERVER[PHP_SELF]'>$langBack</a></p><br />";
+                $tool_content .= "<p class='caution'>$langUploadError<br /><a href='$_SERVER[PHP_SELF]'>$langBack</a></p><br />";
             }
         } else { // not submit_ok
-            $tool_content .="<p class=\"caution_small\">$langExerciseNotPermit<br /><a href='$_SERVER[PHP_SELF]'>$langBack</a></p></br>";
+            $tool_content .="<p class=\"caution\">$langExerciseNotPermit<br /><a href='$_SERVER[PHP_SELF]'>$langBack</a></p></br>";
         }
 }
 
@@ -410,29 +410,25 @@ function show_edit_assignment($id)
     <form action="$_SERVER[PHP_SELF]" method="post" onsubmit="return checkrequired(this, 'title');">
     <input type="hidden" name="id" value="$id" />
     <input type="hidden" name="choice" value="do_edit" />
-    <table class='framed'>
-    <thead>
+    <fieldset>
+    <legend>$m[WorkInfo]</legend>
+    <table class='tbl'>
     <tr>
-      <th width="150">&nbsp;</th>
-      <td><b>$m[WorkInfo]</b></td>
+      <th>$m[title]:</th>
+      <td><input type="text" name="title" size="45" value="${row['title']}" /></td>
     </tr>
     <tr>
-      <td>$m[title]:<br />
-      <input type="text" name="title" size="45" value="${row['title']}" class='FormData_InputText' /></td>
-    </tr>
-    <tr>
-      <td>$m[description]:<br />
-          $textarea</td>
-        </tr>
-        </table>
-      </td>
+      <th valign='top'>$m[description]:</th>
+      <td>$textarea</td>
     </tr>
 cData;
 
         if (!empty($row['comments'])) {
-                $tool_content .= "<tr><td>$m[comments]:<br />" .
-                                 rich_text_editor('comments', 5, 65, $row['comments']) .
-                                 "</td></tr>";
+                $tool_content .= "
+    <tr>
+      <th>$m[comments]:</th>
+      <td>" .  rich_text_editor('comments', 5, 65, $row['comments']) .  "</td>
+    </tr>";
         }
 
 	if ($row['group_submissions'] == '0') {
@@ -442,18 +438,27 @@ cData;
                 $group_checked_0 = '';
                 $group_checked_1 = ' checked="1"';
         }
-        $tool_content .= "<tr><td>$m[deadline]:<br />" .
-                         getJsDeadline($deadline) .
-                         "</td></tr>
-                          <tr><td>$m[group_or_user]:<br />
-                                  <input type='radio' name='group_submissions' value='0'$group_checked_0 />
-	                          $m[user_work]<br />
-                                  <input type='radio' name='group_submissions' value='1'$group_checked_1 />
-	                          $m[group_work]</td></tr>
-                          <tr><td><input class='Login' type='submit' name='do_edit' value='$langEdit' /></td></tr>
-                          </thead></table></form>";
+        $tool_content .= "
+    <tr>
+      <th valign='top'>$m[deadline]:</th>
+      <td>" .  getJsDeadline($deadline) .  "</td>
+    </tr>
+    <tr>
+      <th valign='top'>$m[group_or_user]:</th>
+      <td><input type='radio' name='group_submissions' value='0'$group_checked_0 />
+          $m[user_work]<br />
+          <input type='radio' name='group_submissions' value='1'$group_checked_1 />
+          $m[group_work]</td>
+    </tr>
+    <tr>
+      <th>&nbsp;</th>
+      <td><input type='submit' name='do_edit' value='$langEdit' /></td>
+    </tr>
+    </table>
+    </fieldset>
+    </form>";
 
-    $tool_content .= "<br /><div align='right'><a href='$_SERVER[PHP_SELF]'>$langBack</ul></div>";
+    $tool_content .= "\n   <br /><div align='right'><a href='$_SERVER[PHP_SELF]'>$langBack</ul></div>";
 }
 
 // edit assignment
@@ -475,9 +480,9 @@ function edit_assignment($id)
 		comments=$comments, deadline=".autoquote($_POST['WorkEnd'])." WHERE id='$id'")) {
 
         $title = autounquote($_POST['title']);
-	$tool_content .="<p class='success_small'>$langEditSuccess<br /><a href='$_SERVER[PHP_SELF]?id=$id'>$langBackAssignment '$title'</a></p><br />";
+	$tool_content .="\n  <p class='success'>$langEditSuccess<br /><a href='$_SERVER[PHP_SELF]?id=$id'>$langBackAssignment '$title'</a></p><br />";
 	} else {
-	$tool_content .="<p class='caution_small'>$langEditError<br /><a href='$_SERVER[PHP_SELF]?id=$id'>$langBackAssignment '$title'</a></p><br />";
+	$tool_content .="\n  <p class='caution'>$langEditError<br /><a href='$_SERVER[PHP_SELF]?id=$id'>$langBackAssignment '$title'</a></p><br />";
 	}
 }
 
@@ -496,7 +501,7 @@ function delete_assignment($id) {
 	move_dir("$workPath/$secret",
 	"$webDir/courses/garbage/$currentCourseID/work/${id}_$secret");
 
-	$tool_content .="<p class=\"success_small\">$langDeleted<br /><a href=\"$_SERVER[PHP_SELF]\">".$langBack."</a></p>";
+	$tool_content .="\n  <p class=\"success\">$langDeleted<br /><a href=\"$_SERVER[PHP_SELF]\">".$langBack."</a></p>";
 }
 
 
@@ -524,7 +529,7 @@ function show_student_assignment($id)
 		$tool_content .= "<p>$langUserOnly</p>";
 		$submit_ok = FALSE;
 	} elseif ($GLOBALS['statut'] == 10) {
-		$tool_content .= "<p class='alert1'>$m[noguest]</p>";
+		$tool_content .= "\n  <p class='alert1'>$m[noguest]</p>";
 		$submit_ok = FALSE;
 	} else {
 		if ($submission = was_graded($uid, $id)) {
@@ -548,16 +553,14 @@ function show_submission_form($id)
 	global $tool_content, $m, $langWorkFile, $langSendFile, $langSubmit, $uid, $langNotice3;
 
 	if (is_group_assignment($id) and ($gid = user_group($uid))) {
-		$tool_content .= "<p>$m[this_is_group_assignment] ".
+		$tool_content .= "\n  <p>$m[this_is_group_assignment] ".
 		"<a href='../group/document.php?userGroupId=$gid'>".
 		"$m[group_documents]</a> $m[select_publish]</p>";
 	} else {
 		$tool_content .= "
                 <form enctype='multipart/form-data' action='$_SERVER[PHP_SELF]' method='post'>
                 <input type='hidden' name='id' value='$id' />
-                <br />
-                <table width='99%' align='left' class='FormData'>
-                <tbody>
+                <table width='99%' class=''>
                 <tr>
                   <th width='220'>&nbsp;</th>
                   <td><b>$langSubmit</b></td>
@@ -574,7 +577,6 @@ function show_submission_form($id)
                   <th>&nbsp;</th>
                   <td><input type='submit' value='$langSubmit' name='work_submit' /><br />$langNotice3</td>
                 </tr>
-                </tbody>
                 </table>
                 <br/>
                 </form>";
@@ -603,72 +605,67 @@ function assignment_details($id, $row, $message = null)
 	if (isset($message)) {
 		$tool_content .="
                 <table width=\"99%\">
-                <tbody>
                 <tr>
                   <td class=\"success\"><p><b>$langSaved</b></p></td>
                 </tr>
-                </tbody>
                 </table>
                 <br/>";
             }
 	$tool_content .= "
-        <table width=\"99%\" class=\"FormData\">
-        <tbody>
+        <fieldset>
+        <legend>".$m['WorkInfo']."</legend>
+        <table width=\"99%\" class=\"tbl\">
         <tr>
-          <th class='left' width='220'>&nbsp;</th>
-          <td><b>".$m['WorkInfo']."</b></td>
-        </tr>
-        <tr>
-          <th class='left'>$m[title]:</th>
+          <th width='150'>$m[title]:</th>
           <td>$row[title]</td>
         </tr>";
         $tool_content .= "
         <tr>
-          <th class='left'>$m[description]:</th>
+          <th valign='top'>$m[description]:</th>
           <td>$row[description]</td>
         </tr>";
 	if (!empty($row['comments'])) {
 		$tool_content .= "
-                <tr>
-                  <th class='left'>$m[comments]:</th>
-                  <td>$row[comments]</td>
-                </tr>";
+        <tr>
+          <th class='left'>$m[comments]:</th>
+          <td>$row[comments]</td>
+        </tr>";
 	}
 	$tool_content .= "
-    <tr>
-      <th class='left'>$m[start_date]:</th>
-      <td>".nice_format($row['submission_date'])."</td>
-    </tr>
-    <tr>
-      <th class='left'>$m[deadline]:</th>
-      <td>".nice_format($row['deadline'])." ";
+        <tr>
+          <th>$m[start_date]:</th>
+          <td>".nice_format($row['submission_date'])."</td>
+        </tr>
+        <tr>
+          <th valign='top'>$m[deadline]:</th>
+          <td>".nice_format($row['deadline'])." <br />";
 	if ($row['days'] > 1) {
 		$tool_content .= "<span class=\"not_expired\">$langDaysLeft $row[days] $langDays</span></td>
-    </tr>";
+        </tr>";
 	} elseif ($row['days'] < 0) {
 		$tool_content .= "<span class=\"expired\">$langEndDeadline</span></td>
-    </tr>";
+        </tr>";
 	} elseif ($row['days'] == 1) {
 		$tool_content .= "<span class=\"expired_today\">$langWEndDeadline !</span></td>
-    </tr>";
+        </tr>";
 	} else {
 		$tool_content .= "<span class=\"expired_today\"><b>$langNEndDeadLine</b> !!!</span></td>
-    </tr>";
+        </tr>";
 	}
 	$tool_content .= "
-    <tr>
-      <th class='left'>$m[group_or_user]:</th>
-      <td>";
+        <tr>
+          <th>$m[group_or_user]:</th>
+          <td>";
 	if ($row['group_submissions'] == '0') {
 		$tool_content .= "$m[user_work]</td>
-    </tr>";
+        </tr>";
 	} else {
 		$tool_content .= "$m[group_work]</td>
-    </tr>";
+        </tr>";
 	}
 	$tool_content .= "
-    </tbody>
-    </table>";
+        </table>
+        </fieldset>";
 }
 
 // Show a table header which is a link with the appropriate sorting
@@ -990,7 +987,7 @@ function show_assignments($message = null)
 	$result = db_query("SELECT * FROM assignments ORDER BY id");
 
 	if (isset($message)) {
-		$tool_content .="<p class='success_small'>$message</p><br/>";
+		$tool_content .="<p class='success'>$message</p><br/>";
 	}
 
 	$tool_content .="
