@@ -61,7 +61,7 @@ lCont;
 $tool_content .='<br />';
 
 $qlang = ($language == "greek")? 'el': 'en';
-$sql = "SELECT `date`, `title` , `body` FROM `admin_announcements`
+$sql = "SELECT `id`, `date`, `title` , `body` FROM `admin_announcements`
         WHERE `visible` = 'V' AND lang='$qlang' ORDER BY `date` DESC";
 $result = db_query($sql, $mysqlMainDb);
 if (mysql_num_rows($result) > 0) {
@@ -79,12 +79,13 @@ if (mysql_num_rows($result) > 0) {
 
 	$numOfAnnouncements = count($announceArr);
 	for($i=0; $i < $numOfAnnouncements; $i++) {
+		$aid = $announceArr[$i]['id'];
 		$tool_content .= "<tr><td colspan='2'>
 		<img style='border:0px;' src='${urlAppend}/template/classic/img/arrow_grey.gif' alt='' />
-		<b>".q($announceArr[$i]['title'])."</b>
+		<b><a href='modules/announcements/main_ann.php?aid=$aid'>".q($announceArr[$i]['title'])."</a></b>
 		&nbsp;(".claro_format_locale_date($dateFormatLong, strtotime($announceArr[$i]['date'])).")
 		<p>
-		".standard_text_escape($announceArr[$i]['body'])."<br /></p>
+		".standard_text_escape(ellipsize($announceArr[$i]['body'], 150, "<strong>&nbsp;<a href='modules/announcements/main_ann.php?aid=$aid'>....</a></strong>"))."<br /></p>
 		</td>
 		</tr>";
 	}

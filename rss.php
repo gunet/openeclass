@@ -57,7 +57,7 @@ $sql = db_query("SELECT id, title, body, DATE_FORMAT(`date`,'%a, %d %b %Y %T +03
 while ($r = mysql_fetch_array($sql)) {
 	echo "<item>";
 	echo "<title>".$r['title']."</title>";
-	echo "<link>".$urlServer."</link>";
+	echo "<link>".$urlServer."modules/announcements/main_ann.php?aid=".$r['id']."</link>";
 	echo "<description>".q(standard_text_escape($r['body']))."</description>";	
 	echo "<pubDate>".$r['dateformat']."</pubDate>";
 	echo "<guid isPermaLink='false'>".$r['dateformat'].$r['id']."</guid>";
