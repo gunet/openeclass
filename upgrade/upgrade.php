@@ -32,6 +32,10 @@ $path2add=2;
 include '../include/baseTheme.php';
 include '../include/lib/fileUploadLib.inc.php';
 include '../include/lib/forcedownload.php';
+
+// set default storage engine
+mysql_query("SET storage_engine=MYISAM");
+
 include 'upgrade_functions.php';
 
 set_time_limit(0);

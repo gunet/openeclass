@@ -25,6 +25,7 @@
 * =========================================================================*/
 
 $charset_spec = 'DEFAULT CHARACTER SET=utf8';
+mysql_query("SET storage_engine=MYISAM");
 
 $cdb=mysql_query("CREATE DATABASE `$repertoire` $charset_spec");
 $code=$repertoire;
@@ -38,7 +39,7 @@ $code=$repertoire;
         cat_title varchar(100),
         cat_order varchar(10),
         PRIMARY KEY (cat_id))
-        TYPE=MyISAM $charset_spec");
+         $charset_spec");
 
   // Create an example category
   mysql_query("INSERT INTO catagories VALUES (2,'$langCatagoryMain',NULL)");
@@ -56,7 +57,7 @@ $code=$repertoire;
      forum_type int(10) DEFAULT '0',
      PRIMARY KEY (forum_id),
      KEY forum_last_post_id (forum_last_post_id))
-    TYPE=MyISAM $charset_spec");
+     $charset_spec");
 
   mysql_query("INSERT INTO forums VALUES (1,'$langTestForum','$langDelAdmin',2,1,0,0,0,2,0)");
 
@@ -74,13 +75,13 @@ $code=$repertoire;
       KEY forum_id (forum_id),
       KEY topic_id (topic_id),
       KEY poster_id (poster_id))
-      TYPE=MyISAM $charset_spec");
+       $charset_spec");
 
       mysql_query("CREATE TABLE posts_text (
                 post_id int(10) DEFAULT '0' NOT NULL,
                 post_text text,
                 PRIMARY KEY (post_id))
-    TYPE=MyISAM $charset_spec");
+     $charset_spec");
 
   mysql_query("CREATE TABLE topics (
                topic_id int(10) NOT NULL auto_increment,
@@ -99,7 +100,7 @@ $code=$repertoire;
                KEY topic_id (topic_id),
                KEY forum_id (forum_id),
                KEY topic_last_post_id (topic_last_post_id))
-    TYPE=MyISAM $charset_spec");
+     $charset_spec");
 
   mysql_query("CREATE TABLE users (
                user_id int(10) NOT NULL auto_increment,
@@ -129,7 +130,7 @@ $code=$repertoire;
                user_actkey varchar(32),
                user_newpasswd varchar(32),
                PRIMARY KEY (user_id))
-        TYPE=MyISAM $charset_spec");
+         $charset_spec");
 
 	mysql_query("INSERT INTO users VALUES (
                '1',
@@ -204,7 +205,7 @@ mysql_query("CREATE TABLE exercices (
       results TINYINT(1) NOT NULL DEFAULT '1',
       score TINYINT(1) NOT NULL DEFAULT '1',
       PRIMARY KEY  (id))
-      TYPE=MyISAM $charset_spec");
+       $charset_spec");
 
  mysql_query("CREATE TABLE exercise_user_record (
       eurid int(11) NOT NULL auto_increment,
@@ -216,7 +217,7 @@ mysql_query("CREATE TABLE exercices (
       TotalWeighting int(11) default '0',
       attempt int(11) NOT NULL default '0',
       PRIMARY KEY  (eurid))
-      TYPE=MyISAM $charset_spec");
+       $charset_spec");
 
 // QUESTIONS
 mysql_query("CREATE TABLE questions (
@@ -227,7 +228,7 @@ mysql_query("CREATE TABLE questions (
         q_position int(11) default 1,
         type int(11) default 1,
         PRIMARY KEY  (id))
-        TYPE=MyISAM $charset_spec");
+         $charset_spec");
 
 // REPONSES
 mysql_query("CREATE TABLE reponses (
@@ -239,14 +240,14 @@ mysql_query("CREATE TABLE reponses (
 	ponderation float(5,2),
 	r_position int(11) default NULL,
         PRIMARY KEY  (id, question_id))
-        TYPE=MyISAM $charset_spec");
+         $charset_spec");
 
 // EXERCISE_QUESTION
 mysql_query("CREATE TABLE exercice_question (
                 question_id int(11) NOT NULL default '0',
                 exercice_id int(11) NOT NULL default '0',
                 PRIMARY KEY  (question_id,exercice_id))
-        TYPE=MyISAM $charset_spec");
+         $charset_spec");
 
 
 #######################COURSE_DESCRIPTION ################################
@@ -259,7 +260,7 @@ mysql_query("CREATE TABLE `course_description`
     `upDate` DATETIME NOT NULL,
     UNIQUE (`id`)
 )
-TYPE=MyISAM $charset_spec");
+ $charset_spec");
 
 
 #######################ACCUEIL ###########################################
@@ -285,7 +286,7 @@ mysql_query("CREATE TABLE accueil (
                address varchar(120),
                define_var varchar(50),
                PRIMARY KEY (id))
-        TYPE=MyISAM $charset_spec");
+         $charset_spec");
 
 // Content accueil (homepage) Table
     mysql_query("INSERT INTO accueil VALUES (
@@ -573,7 +574,7 @@ mysql_query("CREATE TABLE agenda (
     lasting varchar(20),
     visibility CHAR(1) NOT NULL DEFAULT 'v',
     PRIMARY KEY (id))
-    TYPE=MyISAM $charset_spec");
+     $charset_spec");
 
 ############################# PAGES ###########################################
     mysql_query("CREATE TABLE pages (
@@ -582,7 +583,7 @@ mysql_query("CREATE TABLE agenda (
                titre varchar(200),
                description text,
                PRIMARY KEY (id))
-        TYPE=MyISAM $charset_spec");
+         $charset_spec");
 
 ############################# VIDEO ###########################################
     mysql_query("CREATE TABLE video (
@@ -595,7 +596,7 @@ mysql_query("CREATE TABLE agenda (
                publisher varchar(200),
                date DATETIME,
                PRIMARY KEY (id))
-        TYPE=MyISAM $charset_spec");
+         $charset_spec");
 
 ################################# VIDEO LINKS ################################
 
@@ -608,7 +609,7 @@ mysql_query("CREATE TABLE agenda (
          publisher varchar(200),
          date DATETIME,
                PRIMARY KEY (id))
-        TYPE=MyISAM $charset_spec");
+         $charset_spec");
 
 
 ############################# WORKS ###########################################
@@ -624,7 +625,7 @@ db_query("CREATE TABLE `assignments` (
     `secret_directory` varchar(30) NOT NULL,
     `group_submissions` CHAR(1) DEFAULT '0' NOT NULL,
     UNIQUE KEY `id` (`id`))
-    TYPE=MyISAM $charset_spec");
+     $charset_spec");
 
 db_query("CREATE TABLE `assignment_submit` (
     `id` int(11) NOT NULL auto_increment,
@@ -641,7 +642,7 @@ db_query("CREATE TABLE `assignment_submit` (
     `grade_submission_ip` varchar(16) NOT NULL default '',
     `group_id` INT( 11 ) DEFAULT NULL,
     UNIQUE KEY `id` (`id`))
-    TYPE=MyISAM $charset_spec");
+     $charset_spec");
 
 ###################################### DROPBOX #####################################
 
@@ -657,19 +658,19 @@ db_query("CREATE TABLE `assignment_submit` (
       lastUploadDate datetime NOT NULL default '0000-00-00 00:00:00',
       PRIMARY KEY  (id),
       UNIQUE KEY UN_filename (filename))
-    TYPE=MyISAM $charset_spec");
+     $charset_spec");
 
     mysql_query("CREATE TABLE dropbox_person (
       fileId int(11) unsigned NOT NULL default '0',
       personId int(11) unsigned NOT NULL default '0',
       PRIMARY KEY  (fileId,personId))
-    TYPE=MyISAM $charset_spec");
+     $charset_spec");
 
     mysql_query("CREATE TABLE dropbox_post (
       fileId int(11) unsigned NOT NULL default '0',
       recipientId int(11) unsigned NOT NULL default '0',
       PRIMARY KEY  (fileId,recipientId))
-    TYPE=MyISAM $charset_spec");
+     $charset_spec");
 
 #################### QUESTIONNAIRE ###############################################
 
@@ -683,7 +684,7 @@ mysql_query("CREATE TABLE poll (
       end_date date NOT NULL default '0000-00-00',
       active int(11) NOT NULL default '0',
       PRIMARY KEY  (pid))
-    TYPE=MyISAM $charset_spec");
+     $charset_spec");
 
     mysql_query("CREATE TABLE poll_answer_record (
       arid int(11) NOT NULL auto_increment,
@@ -694,7 +695,7 @@ mysql_query("CREATE TABLE poll (
 	user_id int(11) NOT NULL default '0',
       submit_date date NOT NULL default '0000-00-00',
       PRIMARY KEY  (arid))
-    TYPE=MyISAM $charset_spec");
+     $charset_spec");
 
     mysql_query("CREATE TABLE poll_question (
       pqid bigint(12) NOT NULL auto_increment,
@@ -702,14 +703,14 @@ mysql_query("CREATE TABLE poll (
       question_text varchar(250) NOT NULL default '',
       qtype ENUM('multiple', 'fill') NOT NULL,
       PRIMARY KEY  (pqid))
-    TYPE=MyISAM $charset_spec");
+     $charset_spec");
 
     mysql_query("CREATE TABLE poll_question_answer (
       pqaid int(11) NOT NULL auto_increment,
       pqid int(11) NOT NULL default '0',
       answer_text text NOT NULL,
       PRIMARY KEY  (pqaid))
-    TYPE=MyISAM $charset_spec");
+     $charset_spec");
 
 
 ############################# LEARNING PATH ######################################
@@ -723,7 +724,7 @@ mysql_query("CREATE TABLE `lp_module` (
               `contentType` enum('CLARODOC','DOCUMENT','EXERCISE','HANDMADE','SCORM','SCORM_ASSET','LABEL','COURSE_DESCRIPTION','LINK') NOT NULL,
               `launch_data` text NOT NULL,
               PRIMARY KEY  (`module_id`)
-             ) TYPE=MyISAM $charset_spec");
+             )  $charset_spec");
              //COMMENT='List of available modules used in learning paths';
 
 mysql_query("CREATE TABLE `lp_learnPath` (
@@ -735,7 +736,7 @@ mysql_query("CREATE TABLE `lp_learnPath` (
               `rank` int(11) NOT NULL default '0',
               PRIMARY KEY  (`learnPath_id`),
               UNIQUE KEY rank (`rank`)
-            ) TYPE=MyISAM $charset_spec");
+            )  $charset_spec");
             //COMMENT='List of learning Paths';
 
 mysql_query("CREATE TABLE `lp_rel_learnPath_module` (
@@ -749,7 +750,7 @@ mysql_query("CREATE TABLE `lp_rel_learnPath_module` (
                 `parent` int(11) NOT NULL default '0',
                 `raw_to_pass` tinyint(4) NOT NULL default '50',
                 PRIMARY KEY  (`learnPath_module_id`)
-              ) TYPE=MyISAM $charset_spec");
+              )  $charset_spec");
               //COMMENT='This table links module to the learning path using them';
 
 
@@ -759,7 +760,7 @@ mysql_query("CREATE TABLE `lp_asset` (
               `path` varchar(255) NOT NULL default '',
               `comment` varchar(255) default NULL,
               PRIMARY KEY  (`asset_id`)
-            ) TYPE=MyISAM $charset_spec");
+            )  $charset_spec");
             //COMMENT='List of resources of module of learning paths';
 
 mysql_query("CREATE TABLE `lp_user_module_progress` (
@@ -778,7 +779,7 @@ mysql_query("CREATE TABLE `lp_user_module_progress` (
               `suspend_data` text NOT NULL,
               `credit` enum('CREDIT','NO-CREDIT') NOT NULL default 'NO-CREDIT',
               PRIMARY KEY  (`user_module_progress_id`)
-            ) TYPE=MyISAM $charset_spec");
+            )  $charset_spec");
             //COMMENT='Record the last known status of the user in the course';
 
 ############################# WIKI ######################################
@@ -789,13 +790,13 @@ mysql_query("CREATE TABLE `wiki_properties` (
               `description` TEXT NULL,
               `group_id` INT(11) NOT NULL DEFAULT 0,
               PRIMARY KEY(`id`)
-            ) TYPE=MyISAM $charset_spec");
+            )  $charset_spec");
 
 mysql_query("CREATE TABLE `wiki_acls` (
               `wiki_id` INT(11) UNSIGNED NOT NULL,
               `flag` VARCHAR(255) NOT NULL,
               `value` ENUM('false','true') NOT NULL DEFAULT 'false'
-            ) TYPE=MyISAM $charset_spec");
+            )  $charset_spec");
 
 mysql_query("CREATE TABLE `wiki_pages` (
               `id` int(11) unsigned NOT NULL auto_increment,
@@ -806,7 +807,7 @@ mysql_query("CREATE TABLE `wiki_pages` (
               `last_version` int(11) unsigned NOT NULL default '0',
               `last_mtime` datetime NOT NULL default '0000-00-00 00:00:00',
               PRIMARY KEY  (`id`)
-            ) TYPE=MyISAM $charset_spec");
+            )  $charset_spec");
 
 mysql_query("CREATE TABLE `wiki_pages_content` (
               `id` int(11) unsigned NOT NULL auto_increment,
@@ -815,7 +816,7 @@ mysql_query("CREATE TABLE `wiki_pages_content` (
               `mtime` datetime NOT NULL default '0000-00-00 00:00:00',
               `content` text NOT NULL,
               PRIMARY KEY  (`id`)
-            ) TYPE=MyISAM $charset_spec");
+            )  $charset_spec");
 
 //dhmiourgia full text indexes gia th diadikasia ths anazhthshs
 mysql_query("ALTER TABLE `agenda` ADD FULLTEXT `agenda` (`titre` ,`contenu`)");

@@ -30,6 +30,10 @@ if (!defined('ECLASS_VERSION')) {
 
 db_query("DROP DATABASE IF EXISTS ".$mysqlMainDb);
 if (mysql_version()) db_query("SET NAMES utf8");
+
+// set default storage engine
+mysql_query("SET storage_engine=MYISAM");
+
 if (mysql_version()) {
         $cdb=db_query("CREATE DATABASE $mysqlMainDb CHARACTER SET utf8");
 

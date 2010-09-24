@@ -78,8 +78,9 @@
             $con->executeQuery( $sql );
         }
 
-        // init page table
-
+        // init page table	
+        // set default storage engine
+        mysql_query("SET storage_engine=MYISAM");
         $sql = "CREATE TABLE IF NOT EXISTS `$tblWikiPages` (
             `id` int(11) unsigned NOT NULL auto_increment,
             `wiki_id` int(11) unsigned NOT NULL default '0',
