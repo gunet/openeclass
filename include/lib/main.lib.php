@@ -357,27 +357,6 @@ function uid_to_am($uid)
 }
 
 
-// Find a user's group
-// If $required == TRUE, show error if user doesn't belong to group
-// else returns FALSE;
-function user_group($uid, $required = TRUE)
-{
-	global $currentCourseID;
-
-	$res = db_query("SELECT team FROM user_group WHERE user = '$uid'",
-	$currentCourseID);
-	if ($res) {
-		$secret = mysql_fetch_row($res);
-		return $secret[0];
-	} else {
-		if ($required) {
-			die("Error: user tried to submit group work but doesn't belong in a group!");
-		} else {
-			return FALSE;
-		}
-	}
-}
-
 // Display links to the groups a user is member of
 function user_groups($course_id, $user_id)
 {

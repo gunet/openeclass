@@ -542,19 +542,15 @@ function display_path_content()
  */
 function get_learnPath_progress($lpid, $lpUid)
 {
-
-    $tbl_lp_learnPath            = "lp_learnPath";
-    $tbl_lp_rel_learnPath_module = "lp_rel_learnPath_module";
-    $tbl_lp_user_module_progress = "lp_user_module_progress";
-    $tbl_lp_module               = "lp_module";
+    global $currentCourseID;
 
     // find progression for this user in each module of the path
 
     $sql = "SELECT UMP.`raw` AS R, UMP.`scoreMax` AS SMax, M.`contentType` AS CTYPE, UMP.`lesson_status` AS STATUS
-             FROM `" . $tbl_lp_learnPath . "` AS LP,
-                  `" . $tbl_lp_rel_learnPath_module . "` AS LPM,
-                  `" . $tbl_lp_user_module_progress . "` AS UMP,
-                  `" . $tbl_lp_module . "` AS M
+             FROM `$currentCourseID`.`lp_learnPath` AS LP,
+                  `$currentCourseID`.`lp_rel_learnPath_module` AS LPM,
+                  `$currentCourseID`.`lp_user_module_progress` AS UMP,
+                  `$currentCourseID`.`lp_module` AS M
             WHERE LP.`learnPath_id` = LPM.`learnPath_id`
               AND LPM.`learnPath_module_id` = UMP.`learnPath_module_id`
               AND UMP.`user_id` = " . (int) $lpUid . "
@@ -603,8 +599,8 @@ function get_learnPath_progress($lpid, $lpUid)
         }
         // find number of visible modules in this path
         $sqlnum = "SELECT COUNT(M.`module_id`)
-                    FROM `" . $tbl_lp_rel_learnPath_module . "` AS LPM,
-                          `". $tbl_lp_module . "` AS M
+                    FROM `$currentCourseID`.`lp_rel_learnPath_module` AS LPM,
+                         `$currentCourseID`.`lp_module` AS M
                     WHERE LPM.`learnPath_id` = " . (int) $lpid . "
                     AND LPM.`visibility` = 'SHOW'
                     AND M.`contentType` != '" . CTLABEL_ . "'
