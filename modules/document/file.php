@@ -37,9 +37,8 @@ if (isset($_SESSION['dbname'])) {
         define('old_dbname', $_SESSION['dbname']);
 }
 
-$uri = str_replace('//', chr(1), strstr($_SERVER['REQUEST_URI'], 'file.php/'));
+$uri = str_replace('//', chr(1), preg_replace('/^.*file\.php\??\//', '', $_SERVER['REQUEST_URI']));
 $path_components = explode('/', $uri);
-array_shift($path_components);
 
 // temporary course change
 $cinfo = addslashes(array_shift($path_components));

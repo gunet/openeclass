@@ -227,5 +227,5 @@ function file_url($path, $filename = null)
                 list($filename) = mysql_fetch_row($q);
         }
         $gid = GROUP_DOCUMENTS? ",$group_id": '';
-	return htmlspecialchars($urlServer . "modules/document/file.php/$currentCourseID$gid$dirname/" . file_url_escape($filename), ENT_QUOTES);
+	return htmlspecialchars($urlServer . "modules/document/file.php?/$currentCourseID$gid$dirname/" . file_url_escape($filename), ENT_QUOTES);
 }
