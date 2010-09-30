@@ -43,47 +43,39 @@ if(!isset($_GET['pid']) || !is_numeric($_GET['pid'])) die();
 	$thePoll = mysql_fetch_array($current_poll);
 
 	$tool_content .= "
-	<table width=\"99%\" class='FormData'>
-	<tbody>
+        <p class=\"sub_title1\">$langSurvey</p>
+	<table width=\"99%\" class='tbl'>
 	<tr>
-	  <th class=\"left\" width=\"220\">&nbsp;</th>
-	  <td><b>$langSurvey</b></td>
-	</tr>
-	<tr>
-	  <th class='left'>$langTitle:</th>
+	  <td width='120' class='bold'>$langTitle:</td>
 	  <td>" . $thePoll["name"] . "</td>
 	</tr>
 	<tr>
-	  <th class='left'>$langPollCreation:</th>
+	  <td class='bold'>$langPollCreation:</td>
 	  <td>".nice_format(date("Y-m-d", strtotime($thePoll["creation_date"])))."</td>
 	</tr>
 	<tr>
-	  <th class='left'>$langPollStart:</th>
+	  <td class='bold'>$langPollStart:</td>
 	  <td>".nice_format(date("Y-m-d", strtotime($thePoll["start_date"])))."</td>
 	</tr>
 	<tr>
-	  <th class='left'>$langPollEnd:</th>
+	  <td class='bold'>$langPollEnd:</td>
 	  <td>".nice_format(date("Y-m-d", strtotime($thePoll["end_date"])))."</td>
 	</tr>
-	</tbody>
 	</table>
-	<br />";
+	<p class=\"sub_title1\">$langAnswers</p>";
 	$tool_content .= "
-	<table width=\"99%\" class='FormData'>
-	<tbody>
-	<tr>
-	  <th class='left' width=\"220\">&nbsp;</th>
-	  <td><b>$langAnswers</b></td>
-	</tr>";
+	<table width=\"99%\" class='tbl'>";
 
 	$questions = db_query("SELECT * FROM poll_question WHERE pid=$pid");
 	while ($theQuestion = mysql_fetch_array($questions)) {
-		$tool_content .= "<tr>
-		  <th class='left' width=\"220\">$langQuestion</th>
-		  <td>$theQuestion[question_text]</td>
-		</tr>
-		<tr>
-		<th>&nbsp;</th><td>";
+		$tool_content .= "
+        <tr>
+	  <td class='bold' width=\"120\">$langQuestion:</th>
+	  <td>$theQuestion[question_text]</td>
+	</tr>
+	<tr>
+	  <td>&nbsp;</td>
+          <td>";
 		if ($theQuestion['qtype'] == 'multiple') {
 			$answers = db_query("SELECT COUNT(aid) AS count, aid, poll_question_answer.answer_text AS answer
 				FROM poll_answer_record LEFT JOIN poll_question_answer
@@ -111,7 +103,7 @@ if(!isset($_GET['pid']) || !is_numeric($_GET['pid'])) die();
 			}
 			$chart_path = 'courses/'.$currentCourseID.'/temp/chart_'.md5(serialize($chart)).'.png';
 			$chart->render($webDir.$chart_path);
-			$tool_content .= '<img src="'.$urlServer.$chart_path.'" /><br>';
+			$tool_content .= '<img src="'.$urlServer.$chart_path.'" /><br />';
 		} else {
 			$answers = db_query("SELECT answer_text, user_id FROM poll_answer_record
 					WHERE qid = $theQuestion[pqid]", $currentCourseID);
@@ -121,15 +113,16 @@ if(!isset($_GET['pid']) || !is_numeric($_GET['pid'])) die();
 			}
 			$tool_content .= '</dl>';
 		}
-		$tool_content .= "</td></tr><tr><td colspan=\"2\">&nbsp;</td></tr>";}
 		$tool_content .= "
-		<tr>
-		  <th class='left'>$langPollTotalAnswers:</th>
-		  <td><b>$answer_total</b></td>
-		</tr>
-		</tbody>
-		</table>
-		<br />";
+           </td>
+         </tr>";}
+		$tool_content .= "
+	<tr>
+	  <th class='bold' colspan='2'>$langPollTotalAnswers: $answer_total</th>
+	</tr>
+	</table>
+        <br />
+	";
 // display page
 draw($tool_content, 2);
 ?>

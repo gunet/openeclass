@@ -90,11 +90,11 @@ if (isset($_GET['delete']) and $_GET['delete'] == 'yes')  {
 
 if ($is_adminOfCourse) {
 	$tool_content .= "
-		<div id=\"operations_container\">
-		  <ul id=\"opslist\">
-		    <li><a href='addpoll.php'>$langCreatePoll</a></li>
-		  </ul>
-		</div>";
+        <div id=\"operations_container\">
+	  <ul id=\"opslist\">
+	    <li><a href='addpoll.php'>$langCreatePoll</a></li>
+	  </ul>
+	</div>";
 }
 
 printPolls();
@@ -124,25 +124,27 @@ global $tool_content, $currentCourse, $langCreatePoll, $langPollsActive,
 				}
 		}
 		if (!$poll_check) {
-			$tool_content .= "<p class='alert1'>".$langPollNone . "</p><br>";
+			$tool_content .= "\n    <p class='alert1'>".$langPollNone . "</p><br>";
 		} else {
 			// Print active polls
 				$tool_content .= "
-		      <table align='left' width='99%' class='Questionnaire'>
-		      <tbody>
+		      <table align='left' width='99%' class='tbl_alt'>
 		      <tr>
-			<th class='left' colspan='2' width='35%'>&nbsp;$langTitle</th>
-			<th width='25%' class='left'>$langPollCreator</th>
-			<th width='10%'>$langPollCreation</th>
-			<th width='10%'>$langPollStart</th>
-			<th width='10%'>$langPollEnd</th>";
+			<th colspan='2'><div align='left'>&nbsp;$langTitle</div></th>
+			<th width='120'>$langPollCreator</th>
+			<th width='120'>$langPollCreation</th>
+			<th width='70'>$langPollStart</th>
+			<th width='70'>$langPollEnd</th>";
 		
 			if ($is_adminOfCourse) {
-				$tool_content .= "\n<th width=\"10%\">$langActions</th>";
+				$tool_content .= "
+                        <th width=\"70\">$langActions</th>";
 			} else {
-				$tool_content .= "\n<th>$langParticipate</th>";
+				$tool_content .= "
+                        <th>$langParticipate</th>";
 			}
-			$tool_content .= "\n</tr>";
+			$tool_content .= "
+                      </tr>";
 			$active_polls = db_query("SELECT * FROM poll", $currentCourse);
 			$index_aa = 1;
 			$k =0;
@@ -151,22 +153,24 @@ global $tool_content, $currentCourse, $langCreatePoll, $langPollsActive,
 		
 				if (($visibility) or ($is_adminOfCourse)) {
 					if ($visibility) {
-						$visibility_css = "";
+						$visibility_css = " class=\"even\"";
 						$visibility_gif = "visible";
 						$visibility_func = "deactivate";
-						$arrow_gif = "arrow_red";
+						$arrow_gif = "arrow_grey";
 						$k++;
 					} else {
 						$visibility_css = " class=\"invisible\"";
 						$visibility_gif = "invisible";
 						$visibility_func = "activate";
-						$arrow_gif = "arrow_grey";
+						$arrow_gif = "arrow_red";
 						$k++;
 					}
 					if ($k%2 == 0) {
-						$tool_content .= "\n<tr $visibility_css>";
+						$tool_content .= "
+                      <tr $visibility_css>";
 					} else {
-						$tool_content .= "\n<tr class=\"odd\">";
+						$tool_content .= "
+                      <tr class=\"odd\">";
 					}			
 					$temp_CurrentDate = date("Y-m-d");
 					$temp_StartDate = $thepoll["start_date"];
@@ -190,31 +194,34 @@ global $tool_content, $currentCourse, $langCreatePoll, $langPollsActive,
 						$poll_ended = 1;
 					}
 					if ($is_adminOfCourse) {
-						$tool_content .= "\n<td width=\"1%\"><img style='border:0px; padding-top:3px;' src='${urlServer}/template/classic/img/$arrow_gif.gif' title='bullet'></td>
-						<td><div align=\"left\"><a href='pollresults.php?pid=$pid'>$thepoll[name]</a>";
+						$tool_content .= "
+                        <td width='1'><img style='border:0px; padding-top:3px;' src='${urlServer}/template/classic/img/$arrow_gif.gif' title='bullet' /></td>
+                        <td><a href='pollresults.php?pid=$pid'>$thepoll[name]</a>";
 					} else {
-						$tool_content .= "\n<td width=\"1%\"><img style='border:0px; padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'></td>
-						<td><div align=\"left\">";
+						$tool_content .= "
+                        <td><img style='border:0px; padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet' /></td>
+                        <td>";
 						if (($has_participated[0] == 0) and $poll_ended == 0) {
 							$tool_content .= "<a href='pollparticipate.php?UseCase=1&pid=$pid'>$thepoll[name]</a>";
 						} else {
 						       $tool_content .= "$thepoll[name]";
 						}
 					}
-					$tool_content .= "</div></td><td>$theCreator</td>";
-					$tool_content .= "\n<td align='center'>".nice_format(date("Y-m-d", strtotime($thepoll["creation_date"])))."</td>";
-					$tool_content .= "\n<td align='center'>".nice_format(date("Y-m-d", strtotime($thepoll["start_date"])))."</td>";
-					$tool_content .= "\n<td align='center'>".nice_format(date("Y-m-d", strtotime($thepoll["end_date"])))."</td>";
+					$tool_content .= "</td>
+                        <td class='center'>$theCreator</td>";
+					$tool_content .= "
+                        <td class='center'>".nice_format(date("Y-m-d", strtotime($thepoll["creation_date"])))."</td>";
+					$tool_content .= "
+                        <td class='center'>".nice_format(date("Y-m-d", strtotime($thepoll["start_date"])))."</td>";
+					$tool_content .= "
+                        <td class='center'>".nice_format(date("Y-m-d", strtotime($thepoll["end_date"])))."</td>";
 					if ($is_adminOfCourse)  {
-						$tool_content .= "\n<td align='center'>
-						<a href='addpoll.php?edit=yes&pid=$pid'>
-						<img src='../../template/classic/img/edit.gif' title='$langEdit' border='0'></img></a>&nbsp;
-						<a href='$_SERVER[PHP_SELF]?delete=yes&pid=$pid' onClick='return confirmation();'>
-						<img src='../../template/classic/img/delete.gif' title='$langDelete' border='0'></img></a>&nbsp;
-						<a href='$_SERVER[PHP_SELF]?visibility=$visibility_func&pid={$pid}'>
-						<img src='../../template/classic/img/".$visibility_gif.".gif' border='0' title=\"".$langVisible."\"></img></a></td>\n      </tr>";
+						$tool_content .= "
+                        <td class='center'><a href='addpoll.php?edit=yes&pid=$pid'><img src='../../template/classic/img/edit.gif' title='$langEdit' border='0' /></a>&nbsp;<a href='$_SERVER[PHP_SELF]?delete=yes&pid=$pid' onClick='return confirmation();'><img src='../../template/classic/img/delete.gif' title='$langDelete' border='0' /></a>&nbsp;<a href='$_SERVER[PHP_SELF]?visibility=$visibility_func&pid={$pid}'><img src='../../template/classic/img/".$visibility_gif.".gif' border='0' title=\"".$langVisible."\" /></a></td>
+                      </tr>";
 					} else {
-						$tool_content .= "\n<td align='center'>";
+						$tool_content .= "
+                        <td class='center'>";
 						if (($has_participated[0] == 0) and ($poll_ended == 0)) {
 							$tool_content .= "$langHasNotParticipated";
 						} else {
@@ -224,12 +231,14 @@ global $tool_content, $currentCourse, $langCreatePoll, $langPollsActive,
 								$tool_content .= $langHasParticipated;
 							}
 						}
-						$tool_content .= "</td>\n</tr>";
+						$tool_content .= "</td>
+                      </tr>";
 					}
 				}
 				$index_aa ++;
 				}
-				$tool_content .= "\n</tbody>\n</table>";
+				$tool_content .= "
+                      </table>";
 			}
 }
 ?>

@@ -77,12 +77,12 @@ function printPollForm() {
 	$temp_CurrentDate = mktime(0, 0 , 0,substr($temp_CurrentDate, 5,2), substr($temp_CurrentDate, 8,2),substr($temp_CurrentDate, 0,4));
 	
 	if (($temp_CurrentDate >= $temp_StartDate) && ($temp_CurrentDate < $temp_EndDate)) {
-		$tool_content .= "<p>
-		<form action='$_SERVER[PHP_SELF]' id='poll' method='post'>
-		<input type='hidden' value='2' name='UseCase'>
-		<input type='hidden' value='$pid' name='pid'>";
-	
-		$tool_content .= "<div id=\"topic_title_id\">".$thePoll["name"]."</div>\n";
+		$tool_content .= "
+	<form action='$_SERVER[PHP_SELF]' id='poll' method='post'>
+	<input type='hidden' value='2' name='UseCase' />
+	<input type='hidden' value='$pid' name='pid' />
+
+        <p class=\"title1\">".$thePoll["name"]."</p>\n";
 
 		//*****************************************************************************
 		//		Get answers + questions
@@ -92,21 +92,29 @@ function printPollForm() {
 		while ($theQuestion = mysql_fetch_array($questions)) {
 			$pqid = $theQuestion["pqid"];
 			$qtype = $theQuestion["qtype"];
-			$tool_content .= "<p><b>".$theQuestion["question_text"]."</b><br>\n" .
-				"<input type='hidden' name='question[$pqid]' value='$qtype'>";
+			$tool_content .= "
+        <p class=\"sub_title1\"><b>".$theQuestion["question_text"]."</b></p>
+        <p>
+	<input type='hidden' name='question[$pqid]' value='$qtype' />";
 			if ($qtype == 'multiple') {
 				$answers = db_query("SELECT * FROM poll_question_answer 
 					WHERE pqid=$pqid ORDER BY pqaid", $currentCourse);
 				while ($theAnswer = mysql_fetch_array($answers)) {
-					$tool_content .= "\n<label><input type='radio' name='answer[$pqid]' value='$theAnswer[pqaid]'>$theAnswer[answer_text]</label><br>\n";
+					$tool_content .= "
+        <label><input type='radio' name='answer[$pqid]' value='$theAnswer[pqaid]' />$theAnswer[answer_text] </label><br />\n";
 				}
-				$tool_content .= "\n<label><input type='radio' name='answer[$pqid]' value='-1' checked='checked'>$langPollUnknown</label>\n";
+				$tool_content .= "
+        <label><input type='radio' name='answer[$pqid]' value='-1' checked='checked' />$langPollUnknown</label>\n";
 			} else {
-				$tool_content .= "\n<label><textarea cols='40' rows='3' name='answer[$pqid]'></textarea>\n";
+				$tool_content .= "
+        <label><textarea cols='40' rows='3' name='answer[$pqid]'></textarea></label>\n";
 			}
-			$tool_content .= "<br><br><br>";
+			$tool_content .= "<br /><br />";
 		}
-		$tool_content .= "<input name='submit' type='submit' value='$langSubmit'></form></p>";
+		$tool_content .= "
+        <input name='submit' type='submit' value='$langSubmit' />
+        </p>
+        </form>";
 	} else {
 		$tool_content .= $langPollInactive;
 	}	
