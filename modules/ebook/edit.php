@@ -33,6 +33,7 @@ include '../../include/baseTheme.php';
 mysql_select_db($mysqlMainDb);
 
 $nameTools = $langEBookEdit;
+$navigation[] = array('url' => 'index.php', 'name' => $langEBook);
 
 if (!$is_adminOfCourse) {
         redirect_to_home_page();
@@ -69,7 +70,6 @@ if (isset($_POST['delete'])) {
         $basedir = $webDir . 'courses/' . $currentCourseID . '/ebook/' . $id;
         $html_files = find_html_files($basedir);
         sort($html_files, SORT_STRING);
-//        db_query("DELETE FROM ebook_subsection WHERE section_id IN (SELECT id FROM ebook_section WHERE ebook_id = $id)");
         foreach ($_POST['sid'] as $key => $sid) {
                 if (!empty($sid)) {
                         $sid = intval($sid);
@@ -113,12 +113,14 @@ if (mysql_num_rows($q) == 0) {
         $k = 0;
         $html_files = find_html_files($basedir);
         sort($html_files, SORT_STRING);
-        $tool_content .= "<form method='post' action='edit.php'>
-                          <p>
-                          <input type='hidden' name='id' value='$id' /><br />
-                          $langTitle: <input type='text' name='ebook_title' size='53' value='" . q($info['title']) . "' />
-                          <input name='title_submit' type='submit' value='$langModify' />
-                          </p>
+
+        $tool_content .= "<div id='operations_container'><ul id='opslist'>
+                             <li><a href='replace.php?id=$id'>$langEBookReplace</a></li></ul></div>
+                          <form method='post' action='edit.php'>
+                             <p><input type='hidden' name='id' value='$id' /><br />
+                                $langTitle: <input type='text' name='ebook_title' size='53' value='" . q($info['title']) . "' />
+                                <input name='title_submit' type='submit' value='$langModify' />
+                             </p>
                           </form>
 
                           <form method='post' action='edit.php'>
