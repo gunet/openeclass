@@ -87,11 +87,11 @@ if ($res and mysql_num_rows($res) > 0) {
                         $addon = standard_text_escape($row['comments']);
                 } else {
                         if (isset($idBloc[$row['res_id']]) and !empty($idBloc[$row['res_id']])) {
-                                $element_id = " id='{$idBloc[$row['res_id']]}'";
+                                $element_id = "class='course_info' id='{$idBloc[$row['res_id']]}'";
                         } else {
-                                $element_id = '';
+                                $element_id = 'class="course_info other"';
                         }
-                        $main_extra .= "<div class='course_info'$element_id><h1>" . q($row['title']) . "</h1>" .
+                        $main_extra .= "<div $element_id><h1>" . q($row['title']) . "</h1>" .
                                 standard_text_escape($row['comments']) . "</div>\n";
                 }
         }
