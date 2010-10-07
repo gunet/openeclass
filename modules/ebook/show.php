@@ -134,7 +134,7 @@ while ($row = mysql_fetch_array($q)) {
 restore_saved_course();
 
 if (!$full_url_found) {
-	header('Location: ' . $ebook_url_base . $current_display_id . '/');
+	header('Location: ' . $ebook_url_base . $current_display_id . '/' . $unit_parameter);
 	exit;
 }
 
