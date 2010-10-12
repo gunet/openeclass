@@ -86,7 +86,11 @@ if ($is_adminOfCourse) {
 
         if (isset($_POST['creation'])) {
                 $group_quantity = intval($_POST['group_quantity']);
-                $group_max = intval($_POST['group_quantity']);
+                if (preg_match('/^[0-9]/', $_POST['group_max'])) {
+                        $group_max = intval($_POST['group_max']);
+                } else {
+                        $group_max = 0;
+                }
 
                 list($group_num) = mysql_fetch_row(db_query("SELECT COUNT(*) FROM `group` WHERE course_id = $cours_id"));
 
