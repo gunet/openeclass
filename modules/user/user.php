@@ -226,10 +226,10 @@ while ($myrow = mysql_fetch_array($result)) {
 
         // ************** tutor, admin and unsubscribe (admin only) ******************************
         if(isset($status) && ($status["$currentCourseID"]=='1' OR $status["$currentCourseID"]=='2')) {
-		if (isset($_GET['all']) and $_GET['all'] == TRUE) {
-			$extra_link = '&all=TRUE';
+		if (isset($_GET['all']) and $_GET['all'] == true) {
+			$extra_link = '&amp;all=true';
 		} else {
-			$extra_link = "&limit=".$limit;
+			$extra_link = "&amp;limit=".$limit;
 		}
                 // tutor right
                 if ($myrow['tutor'] == '0') {
