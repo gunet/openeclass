@@ -147,10 +147,6 @@ if ($is_adminOfCourse) {
 	}
 }
 
-// display course units header
-//if (!is_null($maxorder) or $is_adminOfCourse) {
-        //$cunits_content .= "\n      <div class='course_info'>".
-//}
 // add course units
 if ($is_adminOfCourse) {
         $cunits_content .= "\n  <div id='operations_container'>\n    <ul id='opslist'>" .
@@ -280,8 +276,8 @@ if ($is_adminOfCourse) {
 			break;
 		}
 	}
-	$bar_content .= "\n            <p><b>".$langConfidentiality."</b>: ".$lessonStatus."</p>";
-	$bar_content .= "\n            <p><b>".$langUsers."</b>: ".$numUsers." ".$langRegistered."</p>";
+	$bar_content .= "\n            <p><b>$langConfidentiality</b>: $lessonStatus</p>";
+	$bar_content .= "\n            <p><b>$langUsers</b>: <a href='$urlAppend/modules/user/user.php'>$numUsers $langRegistered</a></p>";
 }
 
 $tool_content .= "
