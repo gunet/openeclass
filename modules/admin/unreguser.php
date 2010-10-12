@@ -64,7 +64,7 @@ if (!$doit) {
         }
         $tool_content .= ";</p>
                 <ul>
-                <li>$langYes: <a href='unreguser.php?u=$u&amp;c=$c&amp;doit=yes'>$langDelete</a><br />&nbsp;</li>
+                <li>$langYes: <a href='$_SERVER[PHP_SELF]?u=$u&amp;c=$c&amp;doit=yes'>$langDelete</a><br />&nbsp;</li>
                 <li>$langNo: <a href='edituser.php?u=$u'>$langBack</a></li>
                 </ul>";
 } else {
@@ -99,12 +99,12 @@ if (!$doit) {
                                                 // αν ο χρήστης συμμετέχει σε μαθήματα τότε παρουσίασε τη λίστα
                                                 if (mysql_num_rows($sql) > 0) {
                                                         $tool_content .= "<h4>$langStudentParticipation</h4>\n".
-                                                                "<table border='1'>\n<tr><th>$langLessonCode</th><th>$langLessonName</th>".
+                                                                "<table border='1'>\n<tr><th>$langCourseCode</th><th>$langLessonName</th>".
                                                                 "<th>$langProperty</th><th>$langActions</th></tr>";
                                                         for ($j = 0; $j < mysql_num_rows($sql); $j++) {
                                                                 $logs = mysql_fetch_array($sql);
-                                                                $tool_content .= "<tr><td>".htmlspecialchars($logs[0])."</td><td>".
-                                                                        htmlspecialchars($logs[1])."</td><td align='center'>";
+                                                                $tool_content .= "<tr><td>".htmlspecialchars($logs['code'])."</td><td>".
+                                                                        htmlspecialchars($logs['intitule'])."</td><td align='center'>";
                                                                 switch ($logs[4])
                                                                 {
                                                                         case '1':
@@ -113,11 +113,11 @@ if (!$doit) {
                                                                                 break;
                                                                         case '0':
                                                                                 $tool_content .= $langStudent;
-                                                                                $tool_content .= "</td><td align='center'><a href='unreguser.php?u=$u&amp;c=$logs[0]'>$langDelete</a></td></tr>\n";
+                                                                                $tool_content .= "</td><td align='center'><a href='$_SERVER[PHP_SELF]?u=$u&amp;c=$logs[cours_id]'>$langDelete</a></td></tr>\n";
                                                                                 break;
                                                                         default:
                                                                                 $tool_content .= $langVisitor;
-                                                                                $tool_content .= "</td><td align='center'><a href='unreguser.php?u=$u&amp;c=$logs[0]'>$langDelete</a></td></tr>\n";
+                                                                                $tool_content .= "</td><td align='center'><a href='$_SERVER[PHP_SELF]?u=$u&amp;c=$logs[cours_id]'>$langDelete</a></td></tr>\n";
                                                                                 break;
                                                                 }
                                                         }
@@ -131,7 +131,7 @@ if (!$doit) {
                                                 // αν ο χρήστης συμμετέχει σε μαθήματα τότε παρουσίασε τη λίστα
                                                 if (mysql_num_rows($sql) > 0) {
                                                         $tool_content .= "<h4>$langStudentParticipation</h4>\n".
-                                                                "<table border=\"1\">\n<tr><th>$langLessonCode</th><th>$langLessonName</th>".
+                                                                "<table border=\"1\">\n<tr><th>$langCourseCode</th><th>$langLessonName</th>".
                                                                 "<th>$langProperty</th><th>$langActions</th></tr>";
                                                         for ($j = 0; $j < mysql_num_rows($sql); $j++) {
                                                                 $logs = mysql_fetch_array($sql);
@@ -153,24 +153,24 @@ if (!$doit) {
                                         // αν ο χρήστης συμμετέχει σε μαθήματα τότε παρουσίασε τη λίστα
                                         if (mysql_num_rows($sql) > 0) {
                                                 $tool_content .= "<h4>$langStudentParticipation</h4>\n".
-                                                        "<table border='1'>\n<tr><th>$langLessonCode</th><th>$langLessonName</th>".
+                                                        "<table border='1'>\n<tr><th>$langCourseCode</th><th>$langLessonName</th>".
                                                         "<th>$langProperty</th><th>$langActions</th></tr>";
                                                 for ($j = 0; $j < mysql_num_rows($sql); $j++) {
                                                         $logs = mysql_fetch_array($sql);
-                                                        $tool_content .= "<tr><td>".htmlspecialchars($logs[0])."</td><td>".
-                                                                htmlspecialchars($logs[1])."</td><td align=\"center\">";
-                                                        switch ($logs[2]) {
+                                                        $tool_content .= "<tr><td>".htmlspecialchars($logs['code'])."</td><td>".
+                                                                htmlspecialchars($logs['intitule'])."</td><td align=\"center\">";
+                                                        switch ($logs['statut']) {
                                                                 case 1:
                                                                         $tool_content .= $langTeacher;
                                                                         $tool_content .= "</td><td align='center'>---</td></tr>\n";
                                                                         break;
                                                                 case 5:
                                                                         $tool_content .= $langStudent;
-                                                                        $tool_content .= "</td><td align='center'><a href='unreguser.php?u=$u&amp;c=$logs[0]'>$langDelete</a></td></tr>\n";
+                                                                        $tool_content .= "</td><td align='center'><a href='$_SERVER[PHP_SELF]?u=$u&amp;c=$logs[cours_id]'>$langDelete</a></td></tr>\n";
                                                                         break;
                                                                 default:
                                                                         $tool_content .= $langVisitor;
-                                                                        $tool_content .= "</td><td align='center'><a href='unreguser.php?u=$u&amp;c=$logs[0]'>$langDelete</a></td></tr>\n";
+                                                                        $tool_content .= "</td><td align='center'><a href='$_SERVER[PHP_SELF]?u=$u&amp;c=$logs[cours_id]'>$langDelete</a></td></tr>\n";
                                                                         break;
                                                         }
                                                 }
@@ -211,7 +211,7 @@ if (!$doit) {
         } elseif ($c and $u) {
                 $q = db_query("DELETE from cours_user WHERE user_id = $u AND cours_id = $c");
                 if (mysql_affected_rows() > 0) {
-                        $tool_content .= "<p>$langUserWithId $u $langWasCourseDeleted $c.</p>\n";
+                        $tool_content .= "<p>$langUserWithId $u $langWasCourseDeleted <em>".q(course_id_to_title($c))."</em></p>\n";
                         $m = 1;
                 }
         }
