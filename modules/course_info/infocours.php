@@ -78,6 +78,7 @@ if (isset($_POST['submit'])) {
                 list($facid, $facname) = explode('--', $_POST['facu']);
                 db_query("UPDATE `$mysqlMainDb`.cours
                           SET intitule = " . autoquote($_POST['title']) .",
+                              fake_code = " . autoquote($_POST['fcode']) .",
                               faculte = " . autoquote($facname) . ",
                               course_keywords = ".autoquote($_POST['course_keywords']) . ",
                               visible = " . intval($_POST['formvisible']) . ",
@@ -158,7 +159,7 @@ if (isset($_POST['submit'])) {
                 <table class='tbl'>
                     <tr>
                         <td>$langCode&nbsp;:</td>
-                        <td>$fake_code</td>
+                        <td><input type='text' name='fcode' value='$fake_code' size='60' /' size='60' />></td>
                         <td>&nbsp;</td>
                     </tr>
                     <tr>
