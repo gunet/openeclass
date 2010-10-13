@@ -97,13 +97,13 @@ if((!empty($u)) && ctype_digit($u))	// validate the user id
 					$tool_content .= $langStudent;
 					$tool_content .= "</div></td><td><div align=\"center\">
 					<a href=\"unreguser.php?u=$u&un=$info[2]&c=$logs[0]\">
-					<img src='../../images/delete.gif' title='$langDelete' border='0'></img></a></div></td></tr>";
+					<img src='../../template/classic/img/delete.gif' title='$langDelete' border='0'></img></a></div></td></tr>";
 					break;
 				default:
 					$tool_content .= $langVisitor;
 					$tool_content .= "</div></td><td><div align=\"center\">
 					<a href=\"unreguser.php?u=$u&un=$info[2]&c=$logs[0]\">
-					<img src='../../images/delete.gif' title='$langDelete' border='0'>
+					<img src='../../template/classic/img/delete.gif' title='$langDelete' border='0'>
 					</img></a></div></td></tr>";
 					break;
 				}

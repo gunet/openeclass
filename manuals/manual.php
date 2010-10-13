@@ -53,7 +53,7 @@ function manlink($basename, $langext, $desc)
         } else {
                 $url = $urlServerTemp . '/manuals/' . $basename . '_en.pdf';
         }
-        return "<p><a href='$url' target='_blank' class='mainpage'><img src='../images/pdf.gif' title='$langFormatPDF' alt='$langFormatPDF' /></a>&nbsp;<a href='$url' target='_blank' class='mainpage'>$desc</a></p>";
+        return "<p><a href='$url' target='_blank' class='mainpage'><img src='../template/classic/img/pdf.gif' title='$langFormatPDF' alt='$langFormatPDF' /></a>&nbsp;<a href='$url' target='_blank' class='mainpage'>$desc</a></p>";
 }
 
 if (isset($language) and $language == 'greek') {
@@ -152,7 +152,8 @@ $tool_content .= "
 
 
 
-$tool_content .= "<p><b>$langNote: </b><br/>$langAcrobat <img src='../images/acrobat.png' width='15' height='15' /> $langWhere <a href='http://www.adobe.com/products/acrobat/readstep2.html' target='_blank'><span class='explanationtext'>$langHere</span></a>.</p>";
+$tool_content .= "<p><b>$langNote: </b><br/>$langAcrobat <img src='../template/classic/img/acrobat.png' width='15' height='15' /> $langWhere <a href='http://www.adobe.com/products/acrobat/readstep2.html' target='_blank'>
+		<span class='explanationtext'>$langHere</span></a>.</p>";
 
 if (isset($uid) and $uid) {
         draw($tool_content, 1);

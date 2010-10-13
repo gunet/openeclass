@@ -121,9 +121,9 @@ if (!isset($_GET['a'])) {
 		// Give administrator a link to delete or edit a faculty
 		$tool_content .= "\n<td width='15%' align='center' nowrap>
 		<a href='$_SERVER[PHP_SELF]?a=2&c=".$logs['id']."'>
-		<img src='../../images/delete.gif' border='0' title='$langDelete'></img></a>&nbsp;&nbsp;
+		<img src='../../template/classic/img/delete.gif' title='$langDelete'></img></a>&nbsp;&nbsp;
 		<a href='$_SERVER[PHP_SELF]?a=3&c=".$logs['id']."'>
-		<img src='../../template/classic/img/edit.gif' border='0' title='$langEdit'></img></a></td>
+		<img src='../../template/classic/img/edit.gif' title='$langEdit'></img></a></td>
 		</tr>\n";
 		$k++;
 	}

@@ -184,7 +184,7 @@ if ($displayAnnouncementList == true) {
 			<img src='../../template/classic/img/edit.gif' title='$langModify' style='vertical-align:middle;' />
 			</a>&nbsp;
 			<a href='$_SERVER[PHP_SELF]?delete=$myrow[id]' onClick='return confirmation();'>
-			<img src='../../images/delete.gif' title='$langDelete' style='vertical-align:middle;' /></a>
+			<img src='../../template/classic/img/delete.gif' title='$langDelete' style='vertical-align:middle;' /></a>
 			&nbsp;
 			<a href='$_SERVER[PHP_SELF]?id=$myrow[id]&amp;vis=$visibility'>
 			<img src='../../template/classic/img/$icon' title='$langVisibility'/></a></td></tr>";

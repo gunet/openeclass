@@ -1181,7 +1181,7 @@ div#extra{float:right;clear:right;width:200px}
 div#footer{clear:both;width:100%}
 
 .extraMessage {
-    background-image: url(../../images/important.gif);
+    background-image: url(img/important.gif);
     background-repeat: no-repeat;
     margin-left: 50px;
     background-position: 12px 6px;

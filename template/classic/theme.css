@@ -823,7 +823,7 @@ fieldset table.th {
 
 	
 /*.caution {
-    background-image: url(../../images/important.gif);
+    background-image: url(img/important.gif);
     background-repeat: no-repeat;
     background-position: 7px 7px;
     padding-left : 60px;
@@ -832,7 +832,7 @@ fieldset table.th {
 }
 
 .caution_NoBorder {
-    background-image: url(../../images/important.gif);
+    background-image: url(img/important.gif);
     background-repeat: no-repeat;
     background-position: 7px 7px;
     padding-left : 60px;

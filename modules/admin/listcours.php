@@ -173,11 +173,11 @@ for ($j = 0; $j < mysql_num_rows($sql); $j++) {
 	$tool_content .= "</td><td>".htmlspecialchars($logs[0])."</td>";
 	// Add links to course users, delete course and course edit
 	$tool_content .= "<td align='center'><a href='listusers.php?c=".$logs['cours_id']."'>
-		<img src='../../template/classic/img/user_list.gif' title='$langUsers' border='0'></img></a></td>
+		<img src='../../template/classic/img/user_list.gif' title='$langUsers'></img></a></td>
 	<td align=\"center\" width='10'><a href='delcours.php?c=".$logs[1]."'>
-		<img src='../../images/delete.gif' title='$langDelete' border='0'></img></a></td>
+		<img src='../../template/classic/img/delete.gif' title='$langDelete'></img></a></td>
 	<td align=\"center\" width='20'><a href='editcours.php?c=".$logs[1]."".$searchurl."'>
-		<img src='../../template/classic/img/edit.gif' title='$langEdit' border='0'></img></a></td>";
+		<img src='../../template/classic/img/edit.gif' title='$langEdit'></img></a></td>";
 	$k++;
 }
 // Close table correctly
