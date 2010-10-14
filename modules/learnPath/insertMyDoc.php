@@ -59,8 +59,6 @@ $TABLELEARNPATHMODULE   = "lp_rel_learnPath_module";
 $TABLEASSET             = "lp_asset";
 $TABLEUSERMODULEPROGRESS= "lp_user_module_progress";
 $imgRepositoryWeb       = "../../template/classic/img/";
-$dbTable                = "document";
-$TABLEDOCUMENT          = "document";
 
 require_once("../../include/baseTheme.php");
 $tool_content = "";
@@ -228,27 +226,23 @@ while ($iterator <= $_REQUEST['maxDocForm'])
   DEFINE CURRENT DIRECTORY
  ======================================*/
 
-if (isset($_REQUEST['openDir']) ) // $newDirPath is from createDir command (step 2) and $uploadPath from upload command
-{
+if (isset($_REQUEST['openDir'])) { // $newDirPath is from createDir command (step 2) and $uploadPath from upload command
     $curDirPath = $_REQUEST['openDir'];
-}
-else
-{
-    $curDirPath="";
+} else {
+    $curDirPath = '';
 }
 
-if ($curDirPath == "/" || $curDirPath == "\\" || strstr($curDirPath, ".."))
-{
-    $curDirPath =""; // manage the root directory problem
+if ($curDirPath == '/' or $curDirPath == '\\' or strstr($curDirPath, '..')) {
+    $curDirPath = ''; // manage the root directory problem
 }
 
-$d = mysql_fetch_array(db_query("SELECT filename FROM $TABLEDOCUMENT WHERE path='$curDirPath'"));
+$d = mysql_fetch_array(db_query("SELECT filename FROM `$mysqlMainDb`.document
+                                                 WHERE course_id = $cours_id AND path='$curDirPath'"));
 $curDirName = $d['filename'];
 $parentDir  = dirname($curDirPath);
 
-if ($parentDir == "/" || $parentDir == "\\")
-{
-        $parentDir =""; // manage the root directory problem
+if ($parentDir == '/' or $parentDir == '\\') {
+        $parentDir = ''; // manage the root directory problem
 }
 
 /*======================================
@@ -261,10 +255,10 @@ if ($parentDir == "/" || $parentDir == "\\")
   --------------------------------------*/
 
 /* Search infos in the DB about the current directory the user is in */
-$sql = "SELECT *
-        FROM `".$TABLEDOCUMENT."`
-        WHERE `path` LIKE \"". addslashes($curDirPath) ."/%\"
-        AND `path` NOT LIKE \"". addslashes($curDirPath) ."/%/%\"";
+$sql = "SELECT * FROM `$mysqlMainDb`.document
+                 WHERE course_id = $cours_id AND
+                       path LIKE '". addslashes($curDirPath) ."/%' AND
+                       path NOT LIKE '". addslashes($curDirPath) ."/%/%'";
 $result = db_query($sql);
 $attribute = array();
 

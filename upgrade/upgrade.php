@@ -355,6 +355,8 @@ if (!isset($_POST['submit2'])) {
                         db_query('CREATE FULLTEXT INDEX unit_resources_comments ON unit_resources (comments)');
                 mysql_field_exists($mysqlMainDb, 'annonces', 'visibility') or
                         db_query("ALTER TABLE `annonces` ADD `visibility` CHAR(1) NOT NULL DEFAULT 'v'");
+                mysql_field_exists($mysqlMainDb, 'user', 'description') or
+                        db_query("ALTER TABLE `user` ADD description TEXT, ADD has_icon BOOL NOT NULL DEFAULT 0");
 		db_query("ALTER TABLE `loginout` CHANGE `ip` `ip` CHAR(39) NOT NULL DEFAULT '0.0.0.0'");
                 db_query("CREATE TABLE IF NOT EXISTS `document` (
                                 `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -382,6 +384,7 @@ if (!isset($_POST['submit2'])) {
                                 `course_id` INT(11) NOT NULL PRIMARY KEY ,
                                 `self_registration` TINYINT(4) NOT NULL DEFAULT 1,
                                 `multiple_registration` TINYINT(4) NOT NULL DEFAULT 0,
+                                `allow_unregister` TINYINT(4) NOT NULL DEFAULT 0,
                                 `forum` TINYINT(4) NOT NULL DEFAULT 1,
                                 `private_forum` TINYINT(4) NOT NULL DEFAULT 0,
                                 `documents` TINYINT(4) NOT NULL DEFAULT 1,
@@ -399,6 +402,7 @@ if (!isset($_POST['submit2'])) {
                                 `group_id` INT(11) NOT NULL,
                                 `user_id` INT(11) NOT NULL,
                                 `is_tutor` INT(11) NOT NULL DEFAULT 0,
+                                `description` TEXT,
                                 PRIMARY KEY (`group_id`, `user_id`))");
                 db_query("CREATE TABLE IF NOT EXISTS `glossary` (
 			       `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,

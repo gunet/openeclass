@@ -45,6 +45,10 @@
 ==============================================================================
 */
 
+if (!defined('GROUP_DOCUMENTS')) {
+        define('GROUP_DOCUMENTS', false);
+}
+
 /*****************************************
    GENERIC FUNCTION :STRIP SUBMIT VALUE
 *****************************************/
@@ -201,7 +205,7 @@ function file_url_escape($name)
 
 function file_url($path, $filename = null)
 {
-	global $currentCourseID, $urlServer, $group_id;
+	global $mysqlMainDb, $currentCourseID, $cours_id, $urlServer, $group_id;
 	static $oldpath = '', $dirname;
 
 	$dirpath = dirname($path);
@@ -216,14 +220,18 @@ function file_url($path, $filename = null)
 			$dirname = '';
 			foreach ($components as $c) {
 				$partial_path .= '/' . $c;
-				$q = db_query("SELECT filename FROM document WHERE path = '$partial_path'");
+                                $q = db_query("SELECT filename FROM `$mysqlMainDb`.document
+                                                               WHERE course_id = $cours_id AND
+                                                                     path = '$partial_path'");
 				list($name) = mysql_fetch_row($q);
 				$dirname .= '/' . file_url_escape($name);
 			}
 		}
         }
         if (!isset($filename)) {
-                $q = db_query("SELECT filename FROM document WHERE path = '$path'");
+                $q = db_query("SELECT filename FROM `$mysqlMainDb`.document
+                                               WHERE course_id = $cours_id AND
+                                                     path = '$path'");
                 list($filename) = mysql_fetch_row($q);
         }
         $gid = GROUP_DOCUMENTS? ",$group_id": '';

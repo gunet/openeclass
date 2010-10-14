@@ -196,24 +196,26 @@ db_query("INSERT INTO faculte VALUES (5, 'TME', 'Τμήμα 5', 50, 100)");
 #
 
 db_query("CREATE TABLE user (
-      user_id mediumint unsigned NOT NULL auto_increment,
-      nom varchar(60) default NULL,
-      prenom varchar(60) default NULL,
-      username varchar(50) default 'empty',
-      password varchar(50) default 'empty',
-      email varchar(100) default NULL,
-      statut tinyint(4) default NULL,
-      phone varchar(20) default NULL,
-      department int(10) default NULL,
-      am varchar(20) default NULL,
-      registered_at int(10) NOT NULL default '0',
-      expires_at int(10) NOT NULL default '0',
-     `perso` enum('yes','no') NOT NULL default 'yes',
-	 `lang` enum('el','en','es') DEFAULT 'el' NOT NULL,
- 	`announce_flag` date NOT NULL default '0000-00-00',
- 	 `doc_flag` date NOT NULL default '0000-00-00',
-    `forum_flag` date NOT NULL default '0000-00-00',
-     PRIMARY KEY (user_id)) $charset_spec");
+      user_id MEDIUMINT UNSIGNED NOT NULL AUTO_INCREMENT,
+      nom VARCHAR(60) DEFAULT NULL,
+      prenom VARCHAR(60) DEFAULT NULL,
+      username VARCHAR(50) DEFAULT 'empty',
+      password VARCHAR(50) DEFAULT 'empty',
+      email VARCHAR(100) DEFAULT NULL,
+      statut TINYINT(4) DEFAULT NULL,
+      phone VARCHAR(20) DEFAULT NULL,
+      department INT(10) DEFAULT NULL,
+      am VARCHAR(20) DEFAULT NULL,
+      registered_at INT(10) NOT NULL default '0',
+      expires_at INT(10) NOT NULL default '0',
+      perso ENUM('yes','no') NOT NULL default 'yes',
+      lang ENUM('el','en','es') DEFAULT 'el' NOT NULL,
+      announce_flag date NOT NULL DEFAULT '0000-00-00',
+      doc_flag DATE NOT NULL DEFAULT '0000-00-00',
+      forum_flag DATE NOT NULL DEFAULT '0000-00-00',
+      description TEXT,
+      has_icon BOOL NOT NULL DEFAULT 0,
+      PRIMARY KEY (user_id)) $charset_spec");
 
 db_query("CREATE TABLE admin (
       idUser mediumint unsigned  NOT NULL default '0',
@@ -276,6 +278,7 @@ db_query("CREATE TABLE IF NOT EXISTS `group_properties` (
                 `course_id` INT(11) NOT NULL PRIMARY KEY ,
                 `self_registration` TINYINT(4) NOT NULL DEFAULT 1,
                 `multiple_registration` TINYINT(4) NOT NULL DEFAULT 0,
+                `allow_unregister` TINYINT(4) NOT NULL DEFAULT 0,
                 `forum` TINYINT(4) NOT NULL DEFAULT 1,
                 `private_forum` TINYINT(4) NOT NULL DEFAULT 0,
                 `documents` TINYINT(4) NOT NULL DEFAULT 1,
@@ -293,6 +296,7 @@ db_query("CREATE TABLE IF NOT EXISTS `group_members` (
                 `group_id` int(11) NOT NULL,
                 `user_id` int(11) NOT NULL,
                 `is_tutor` int(11) NOT NULL DEFAULT 0,
+                `description` TEXT,
                 PRIMARY KEY (`group_id`, `user_id`))");
 
 db_query("CREATE TABLE IF NOT EXISTS `glossary` (

@@ -1218,6 +1218,7 @@ $langGroupProperties="Ρυθμίσεις ομάδων χρηστών";
 $langGroupAllowStudentRegistration="Οι ".$langsStudents." επιτρέπονται να εγγραφούν στις ομάδες χρηστών";
 $langGroupAllowMultipleRegistration="Δυνατότητα εγγραφής σε περισσότερες από μία ομάδες";
 $langGroupStudentRegistrationType="Δυνατότητα Εγγραφής";
+$langGroupAllowUnregister="Δυνατότητα απεγγραφής από ομάδα";
 $langGroupPrivatise="Κλειστές περιοχές συζητήσεων ομάδων χρηστών";
 $langGroupForum="Περιοχή συζητήσεων";
 $langGroupPropertiesModified="Αλλάχτηκαν οι ρυθμίσεις της ομάδας χρηστών";
