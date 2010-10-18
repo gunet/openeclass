@@ -69,13 +69,17 @@ $auth_instructions = isset($_POST['imapinstructions'])?$_POST['imapinstructions'
 $pop3host = isset($_POST['pop3host'])?$_POST['pop3host']:'';
 $auth_instructions = isset($_POST['pop3instructions'])?$_POST['pop3instructions']:'';
 
-$ldaphost = isset($_POST['ldaphost'])?$_POST['ldaphost']:'';
-$ldap_base = isset($_POST['ldap_base'])?$_POST['ldap_base']:'';
-$ldapbind_dn = isset($_POST['ldapbind_dn'])?$_POST['ldapbind_dn']:'';
-$ldapbind_pw = isset($_POST['ldapbind_pw'])?$_POST['ldapbind_pw']:'';
-$ldap_login_attr = isset($_POST['ldap_login_attr'])?$_POST['ldap_login_attr']:'';
-$ldap_login_attr2 = isset($_POST['ldap_login_attr2'])?$_POST['ldap_login_attr2']:'';
-$ldapinstructions = isset($_POST['ldapinstructions'])?$_POST['ldapinstructions']:'';
+$ldaphost = isset($_POST['ldaphost'])? $_POST['ldaphost']: '';
+$ldap_base = isset($_POST['ldap_base'])? $_POST['ldap_base']: '';
+$ldapbind_dn = isset($_POST['ldapbind_dn'])? $_POST['ldapbind_dn']: '';
+$ldapbind_pw = isset($_POST['ldapbind_pw'])? $_POST['ldapbind_pw']: '';
+$ldap_login_attr = (isset($_POST['ldap_login_attr']) and
+                    !empty($_POST['ldap_login_attr']))?
+                        $_POST['ldap_login_attr']: 'uid';
+$ldap_login_attr2 = isset($_POST['ldap_login_attr2'])?
+                        $_POST['ldap_login_attr2']: '';
+$ldapinstructions = isset($_POST['ldapinstructions'])?
+                        $_POST['ldapinstructions']: '';
 
 $dbhost = isset($_POST['dbhost'])?$_POST['dbhost']:'';
 $dbtype = isset($_POST['dbtype'])?$_POST['dbtype']:'';
