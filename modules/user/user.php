@@ -45,7 +45,7 @@ define ("COURSE_USERS_PER_PAGE", 15);
 $limit = isset($_REQUEST['limit'])?$_REQUEST['limit']:0;
 
 $nameTools = $langAdminUsers;
-$tool_content = $q = "";
+$q = "";
 
 $head_content = '
 <script type="text/javascript">
@@ -64,9 +64,8 @@ $sql = "SELECT user.user_id, cours_user.statut FROM cours_user, user
 $result_numb = db_query($sql, $mysqlMainDb);
 $countUser = mysql_num_rows($result_numb);
 
-$teachers = 0;
-$students = 0;
-$visitors = 0;
+$teachers = $students = $visitors = 0;
+
 while ($numrows=mysql_fetch_array($result_numb)) {
 	switch ($numrows['statut'])
 	{
@@ -77,7 +76,6 @@ while ($numrows=mysql_fetch_array($result_numb)) {
 	}
 }
 
-// IF PROF ONLY
 if ($is_adminOfCourse) {
         // Handle user removal / status change
         if (isset($_GET['giveAdmin'])) {
@@ -123,7 +121,6 @@ if ($is_adminOfCourse) {
                                               group_id IN (SELECT id FROM `group` WHERE course_id = $cours_id)");
                 }
         }
-
         // show help link and link to Add new user, search new user and management page of groups
 	$tool_content .= "<table width='99%' align='left' class='Users_Operations'><thead>
 	<tr>
@@ -146,119 +143,98 @@ if ($is_adminOfCourse) {
 	</td>
 	</tr></tbody>
 	</table><br />";
-}
 
-// display navigation links if course users > COURSE_USERS_PER_PAGE
-if ($countUser > COURSE_USERS_PER_PAGE and !isset($_GET['all'])) {
-	$q = "LIMIT $limit, ".COURSE_USERS_PER_PAGE."";
-	$tool_content .= show_paging($limit, COURSE_USERS_PER_PAGE, $countUser, "$_SERVER[PHP_SELF]", '', TRUE);
-}
-
-
-$tool_content .= "
-   <table width='99%' class='tbl_alt'>
-   <tr class='odd'>
-     <th rowspan='2'>$langID</th>
-     <th rowspan='2'><div align='left'>$langSurname<br />$langName</div></th>";
-
-if(isset($status) && ($status[$currentCourseID]==1 OR $status[$currentCourseID]==2))  {
-	$tool_content .="
-     <th rowspan='2'>$langEmail</th>";
-}
-
-$tool_content .= "
-     <th rowspan='2'>$langAm</th>
-     <th rowspan='2'>$langGroup</th>
-     <th rowspan='2'>$langCourseRegistrationDate</th>";
-
-// show admin tutor and unregister only to admins
-if (isset($status) && ($status[$currentCourseID]==1 OR $status[$currentCourseID]==2)) {
-	$tool_content .= "
-     <th colspan='2'>$langUserPermitions</th>
-     <th rowspan='2'>$langActions</th>";
-}
-
-$tool_content .= "
-   </tr>";
-
-if (isset($status) && ($status[$currentCourseID]==1 OR $status[$currentCourseID]==2)) {
-	$tool_content .= "
-   <tr>
-     <th>$langTutor</th>
-     <th>$langAdministrator</th>
-   </tr>";
-}
-
-// Numerating the items in the list to show: starts at 1 and not 0
-$i = $limit + 1;
-
-$result = db_query("SELECT user.user_id, user.nom, user.prenom, user.email, user.am, cours_user.statut,
-                           cours_user.tutor, cours_user.reg_date
-                    FROM cours_user, user
-                    WHERE `user`.`user_id` = `cours_user`.`user_id` AND `cours_user`.`cours_id` = $cours_id
-                    ORDER BY nom, prenom ".$q);
-
-while ($myrow = mysql_fetch_array($result)) {
-        // bi colored table
-        if ($i%2 == 0) {
-                $tool_content .= "
-   <tr class='tbl_alt_even'>";
-        } else {
-                $tool_content .= "
-   <tr class='tbl_alt_odd'>";
-        }
-        // show public list of users
-        $tool_content .= "<td valign='top' align='right'>$i.</td>\n" .
-                "<td valign='top'>" . display_user($myrow) . "</td>\n";
-
-        if (isset($status) and ($status[$currentCourseID] == 1 or $status[$currentCourseID] == 2))  {
-                $tool_content .= "<td valign='top' align='center'>" . mailto($myrow['email']) . "</td>";
-        }
-        $tool_content .= "<td valign='top' align='center'>" . q($myrow['am']) . "</td>\n" .
-                "<td valign=top align='center'>" . user_groups($cours_id, $myrow['user_id']) . "</td>\n" .
-                "<td align='center'>";
-        if ($myrow['reg_date'] == '0000-00-00') {
-                $tool_content .= $langUnknownDate;
-        } else {
-                $tool_content .= nice_format($myrow['reg_date']);
-        }
-        $tool_content .= "</td>";
-
-        // ************** tutor, admin and unsubscribe (admin only) ******************************
-        if(isset($status) && ($status["$currentCourseID"]=='1' OR $status["$currentCourseID"]=='2')) {
-		if (isset($_GET['all']) and $_GET['all'] == true) {
-			$extra_link = '&amp;all=true';
+	// display navigation links if course users > COURSE_USERS_PER_PAGE
+	if ($countUser > COURSE_USERS_PER_PAGE and !isset($_GET['all'])) {
+		$q = "LIMIT $limit, ".COURSE_USERS_PER_PAGE."";
+		$tool_content .= show_paging($limit, COURSE_USERS_PER_PAGE, $countUser, "$_SERVER[PHP_SELF]", '', TRUE);
+	}
+	
+	if (isset($_GET['all']) and $_GET['all'] == true) {
+		$extra_link = '&amp;all=true';
+	} else {
+		$extra_link = "&amp;limit=".$limit;
+	}
+	
+	$tool_content .= "<table width='99%' class='tbl_alt'><tr class='odd'>
+	     <th rowspan='2'>$langID</th>
+	     <th rowspan='2'><div align='left'><a href='$_SERVER[PHP_SELF]?ord=s$extra_link'>$langName<br />$langSurname</a></div></th>";
+	$tool_content .= "<th rowspan='2'><a href='$_SERVER[PHP_SELF]?ord=e$extra_link'>$langEmail</a></th>";
+	$tool_content .= "<th rowspan='2'><a href='$_SERVER[PHP_SELF]?ord=am$extra_link'>$langAm</a></th>
+		<th rowspan='2'>$langGroup</th>
+		<th rowspan='2'><a href='$_SERVER[PHP_SELF]?ord=rd$extra_link'>$langCourseRegistrationDate</a></th>";
+	$tool_content .= "<th colspan='2'>$langUserPermitions</th><th rowspan='2'>$langActions</th>";
+	$tool_content .= "</tr>";
+	$tool_content .= "<tr><th>$langTutor</th><th>$langAdministrator</th></tr>";
+	
+	// Numerating the items in the list to show: starts at 1 and not 0
+	$i = $limit + 1;
+	$ord = isset($_GET['ord'])?$_GET['ord']:'';
+	
+	switch ($ord) {
+		case 's': $order = 'ORDER BY nom';
+			break;
+		case 'e': $order = 'ORDER BY email';
+			break;
+		case 'am': $order = 'ORDER BY am';
+			break;
+		case 'rd': $order = 'ORDER BY cours_user.reg_date DESC';
+			break;
+		default: $order = 'ORDER  BY nom, prenom';
+			break;
+	}
+	$result = db_query("SELECT user.user_id, user.nom, user.prenom, user.email, user.am, cours_user.statut,
+				   cours_user.tutor, cours_user.reg_date
+			    FROM cours_user, user
+			    WHERE `user`.`user_id` = `cours_user`.`user_id` AND `cours_user`.`cours_id` = $cours_id"
+			   ." ".$order." ".$q); 
+	
+	while ($myrow = mysql_fetch_array($result)) {
+		// bi colored table
+		if ($i%2 == 0) {
+			$tool_content .= "<tr class='tbl_alt_even'>";
 		} else {
-			$extra_link = "&amp;limit=".$limit;
+			$tool_content .= "<tr class='tbl_alt_odd'>";
 		}
-                // tutor right
-                if ($myrow['tutor'] == '0') {
-                        $tool_content .= "<td valign='top' align='center' class='add_user'><a href='$_SERVER[PHP_SELF]?giveTutor=$myrow[user_id]$extra_link' title='$langGiveTutor'>$langAdd</a></td>";
-                } else {
-                        $tool_content .= "<td class='highlight' align='center'>$langTutor<br /><a href='$_SERVER[PHP_SELF]?removeTutor=$myrow[user_id]$extra_link' title='$langRemoveRight'>$langRemove</a></td>";
-                }
-                // admin right
-                if ($myrow['user_id'] != $_SESSION["uid"]) {
-                        if ($myrow['statut']=='1') {
-                                $tool_content .= "<td class='highlight' align='center'>$langAdministrator<br /><a href='$_SERVER[PHP_SELF]?removeAdmin=$myrow[user_id]$extra_link' title='$langRemoveRight'>$langRemove</a></td>";
-                        } else {
-                                $tool_content .= "<td valign='top' align='center' class='add_user'><a href='$_SERVER[PHP_SELF]?giveAdmin=$myrow[user_id]$extra_link' title='$langGiveAdmin'>$langAdd</a></td>";
-                        }
-                } else {
-                        if ($myrow['statut']=='1') {
-                                $tool_content .= "<td valign='top' class='highlight' align='center' title='$langAdmR'><b>$langAdministrator</b></td>";
-                        } else {
-                                $tool_content .= "<td valign='top' align='center'><a href='$_SERVER[PHP_SELF]?giveAdmin=$myrow[user_id]$extra_link'>$langGiveAdmin</a></td>";
-                        }
-                }
-                $tool_content .= "<td valign='top' align='center'>";
-                $alert_uname = $myrow['prenom'] . " " . $myrow['nom'];
-                $tool_content .= "<a href='$_SERVER[PHP_SELF]?unregister=$myrow[user_id]$extra_link' onClick=\"return confirmation('".addslashes($alert_uname)."');\"><img src='../../template/classic/img/delete.gif' title='$langDelete' /></a>";
-        }	// admin only
-        $tool_content .= "</td></tr>";$i++;
-} 	// end of while
-
-$tool_content .= "</table>";
-
+		// show public list of users
+		$tool_content .= "<td valign='top' align='right'>$i.</td>\n" .
+			"<td valign='top'>" . display_user($myrow) . "</td>\n";
+		$tool_content .= "<td valign='top' align='center'>" . mailto($myrow['email']) . "</td>";
+		$tool_content .= "<td valign='top' align='center'>" . q($myrow['am']) . "</td>\n" .
+			"<td valign=top align='center'>" . user_groups($cours_id, $myrow['user_id']) . "</td>\n" .
+			"<td align='center'>";
+		if ($myrow['reg_date'] == '0000-00-00') {
+			$tool_content .= $langUnknownDate;
+		} else {
+			$tool_content .= nice_format($myrow['reg_date']);
+		}
+		$tool_content .= "</td>";
+		// tutor right
+		if ($myrow['tutor'] == '0') {
+			$tool_content .= "<td valign='top' align='center' class='add_user'><a href='$_SERVER[PHP_SELF]?giveTutor=$myrow[user_id]$extra_link' title='$langGiveTutor'>$langAdd</a></td>";
+		} else {
+			$tool_content .= "<td class='highlight' align='center'>$langTutor<br /><a href='$_SERVER[PHP_SELF]?removeTutor=$myrow[user_id]$extra_link' title='$langRemoveRight'>$langRemove</a></td>";
+		}
+		// admin right
+		if ($myrow['user_id'] != $_SESSION["uid"]) {
+			if ($myrow['statut']=='1') {
+				$tool_content .= "<td class='highlight' align='center'>$langAdministrator<br /><a href='$_SERVER[PHP_SELF]?removeAdmin=$myrow[user_id]$extra_link' title='$langRemoveRight'>$langRemove</a></td>";
+			} else {
+				$tool_content .= "<td valign='top' align='center' class='add_user'><a href='$_SERVER[PHP_SELF]?giveAdmin=$myrow[user_id]$extra_link' title='$langGiveAdmin'>$langAdd</a></td>";
+			}
+		} else {
+			if ($myrow['statut']=='1') {
+				$tool_content .= "<td valign='top' class='highlight' align='center' title='$langAdmR'><b>$langAdministrator</b></td>";
+			} else {
+				$tool_content .= "<td valign='top' align='center'><a href='$_SERVER[PHP_SELF]?giveAdmin=$myrow[user_id]$extra_link'>$langGiveAdmin</a></td>";
+			}
+		}
+		$tool_content .= "<td valign='top' align='center'>";
+		$alert_uname = $myrow['prenom'] . " " . $myrow['nom'];
+		$tool_content .= "<a href='$_SERVER[PHP_SELF]?unregister=$myrow[user_id]$extra_link' onClick=\"return confirmation('".addslashes($alert_uname)."');\"><img src='../../template/classic/img/delete.gif' title='$langDelete' /></a>";
+		$tool_content .= "</td></tr>";$i++;
+	} 	// end of while
+	$tool_content .= "</table>";
+}
 add_units_navigation(true);
 draw($tool_content, 2, '', $head_content);
