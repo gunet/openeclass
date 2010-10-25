@@ -30,7 +30,6 @@ function display_docs()
         global $id, $webDir, $currentCourseID, $cours_id, $tool_content,
                $langDirectory, $langUp, $langName, $langSize, $langDate, $langType, $langAddModulesButton, $langChoice, $langNoDocuments;
 
-	define('GROUP_DOCUMENTS', false);
         $basedir = $webDir . 'courses/' . $currentCourseID . '/document';
         if (isset($_GET['path'])) {
                 $path = escapeSimple($_GET['path']);

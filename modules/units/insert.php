@@ -170,7 +170,7 @@ function insert_docs($id)
 	foreach ($_POST['document'] as $file_id) {
 		$order++;
 		$file = mysql_fetch_array(db_query("SELECT * FROM document
-			WHERE course_id = $cours_id AND id =" . intval($file_id), MYSQL_ASSOC);
+			WHERE course_id = $cours_id AND id =" . intval($file_id)), MYSQL_ASSOC);
 		$title = (empty($file['title']))? $file['filename']: $file['title'];
 		db_query("INSERT INTO unit_resources SET unit_id=$id, type='doc', title=" .
 			 quote($title) . ", comments=" . quote($file['comment']) .
