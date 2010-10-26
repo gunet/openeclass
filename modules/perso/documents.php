@@ -83,7 +83,7 @@ function getUserDocuments($param)
  */
 function docsHtmlInterface($date)
 {
-	global $urlServer, $langNoDocsExist, $uid, $currentCourseID;
+	global $urlServer, $langNoDocsExist, $uid, $currentCourseID, $cours_id;
         global $mysqlMainDb, $maxValue;
 
         $q = db_query("SELECT path, course_id, code, filename, title, date_modified, intitule
@@ -104,6 +104,7 @@ function docsHtmlInterface($date)
                         if ($last_course_id != $row['course_id']) {
                                 $content .= "\n<li class='category'>" . q($row['intitule']) . "</li>";
 				$currentCourseID = $row['code'];
+				$cours_id = $row['course_id'];
                         }
                         $last_course_id = $row['course_id'];
 			$url = file_url($row['path']);
