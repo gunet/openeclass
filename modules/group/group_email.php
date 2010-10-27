@@ -38,34 +38,33 @@ $require_help = TRUE;
 $helpTopic = 'Group';
 
 include '../../include/baseTheme.php';
-include('../../include/sendMail.inc.php');
+include '../../include/sendMail.inc.php';
+
+$group_id = intval($_REQUEST['group_id']);
 
 $nameTools = $langGroupMail;
 $navigation[]= array ("url"=>"group.php", "name"=> $langGroupSpace,
-"url"=>"group_space.php?userGroupId=$userGroupId", "name"=>$langGroupSpace);
+"url"=>"group_space.php?userGroupId=$group_id", "name"=>$langGroupSpace);
 
-$userGroupId = intval($_REQUEST['userGroupId']);
-list($tutor_id) = mysql_fetch_row(db_query("SELECT tutor FROM student_group WHERE id='$userGroupId'", $currentCourseID));
-$is_tutor = ($tutor_id == $uid);
+list($tutor_id) = mysql_fetch_row(db_query("SELECT is_tutor FROM group_members WHERE group_id='$group_id'", $mysqlMainDb));
+$is_tutor = ($tutor_id == 1)?TRUE:FALSE;
+
 if (!$is_adminOfCourse and !$is_tutor) {
-        header('Location: group_space.php?userGroupId=' . $userGroupId);
+        header('Location: group_space.php?userGroupId=' . $group_id);
         exit;
 }
 
-$tool_content = "";
-$currentCourse = $dbname;
-
 if ($is_adminOfCourse or $is_tutor)  {
-	if (isset($submit)) {
-                $sender = mysql_fetch_array(db_query("SELECT email, nom, prenom FROM user WHERE user_id = $uid", $mysqlMainDb));
+	if (isset($_POST['submit'])) {
+                $sender = mysql_fetch_array(db_query("SELECT email, nom, prenom FROM user
+						WHERE user_id = $uid", $mysqlMainDb));
                 $sender_name = $sender['prenom'] . ' ' . $sender['nom'];
                 $sender_email = $sender['email'];
-                $emailsubject = $intitule." - ".$subject;
-                $emailbody = "$body_mail\n\n$langSender: $sender[nom] $sender[prenom] <$sender[email]>\n$langProfLesson\n";
-
-		$req = mysql_query("SELECT user FROM `$dbname`.user_group WHERE team = '$userGroupId'");
+                $emailsubject = $intitule." - ".$_POST['subject'];
+                $emailbody = "$_POST[body_mail]\n\n$langSender: $sender[nom] $sender[prenom] <$sender[email]>\n$langProfLesson\n";
+		$req = db_query("SELECT user_id FROM group_members WHERE group_id = '$group_id'", $mysqlMainDb);
 		while ($userid = mysql_fetch_array($req)) {
-                        $r = db_query("SELECT email FROM user where user_id='$userid[0]'", $mysqlMainDb);
+                        $r = db_query("SELECT email FROM user where user_id='$userid[user_id]'", $mysqlMainDb);
 			list($email) = mysql_fetch_array($r);
 			if (email_seems_valid($email) and
                             !send_mail($sender_name, $sender_email,
@@ -76,40 +75,32 @@ if ($is_adminOfCourse or $is_tutor)  {
 		}
 		$tool_content .= "<p class='success_small'>$langEmailSuccess<br />";
 		$tool_content .= "<a href='group.php'>$langBack</a></p>";
-		$tool_content .= "<p>&nbsp;</p>";
 	} else {
-
-		$tool_content .= <<<tCont
-
-  <form action="$_SERVER[PHP_SELF]" method="post">
-  <input type="hidden" name="userGroupId" value="$userGroupId">
-    <table width="99%" class="FormData">
-    <thead>
-    <tr>
-      <th width="220">&nbsp;</th>
-      <td><b>$langTypeMessage</b></td>
-    </tr>
-    <tr>
-      <th class="left">$langMailSubject</th>
-      <td><input type="text" name="subject" size="58" class="FormData_InputText"></input></td>
-    </tr>
-    <tr>
-      <th class="left" valign="top">$langMailBody</th>
-      <td><textarea name="body_mail" rows="10" cols="73" class="FormData_InputText"></textarea></td>
-    </tr>
-    <tr>
-      <th>&nbsp;</th>
-      <td><input type="submit" name="submit" value="$langSend"></input></td>
-    </tr>
-    </thead>
-    </table>
-   <br />
-   </form>
-
-
-tCont;
-        }
-
+		$tool_content .= "
+		<form action='$_SERVER[PHP_SELF]' method='post'>
+		<input type='hidden' name='group_id' value='$group_id'>
+		  <table width='99%' class='FormData'>
+		  <thead>
+		  <tr>
+		    <th width='220'>&nbsp;</th>
+		    <td><b>$langTypeMessage</b></td>
+		  </tr>
+		  <tr>
+		    <th class='left'>$langMailSubject</th>
+		    <td><input type='text' name='subject' size='58' class='FormData_InputText'></input></td>
+		  </tr>
+		  <tr>
+		    <th class='left' valign='top'>$langMailBody</th>
+		    <td><textarea name='body_mail' rows='10' cols='73' class='FormData_InputText'></textarea></td>
+		  </tr>
+		  <tr>
+		    <th>&nbsp;</th>
+		    <td><input type='submit' name='submit' value='$langSend'></input></td>
+		  </tr>
+		  </thead>
+		  </table>
+		 <br />
+		 </form>";
+	}
 }
-
-draw($tool_content, 2, 'group');
+draw($tool_content, 2);
