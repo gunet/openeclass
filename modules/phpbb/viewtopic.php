@@ -144,6 +144,11 @@ $nameTools = $topic_subject;
      </ul>
    </div>";
 
+if (isset($_SESSION['message'])) {
+	$tool_content .= $_SESSION['message'];
+	unset($_SESSION['message']);
+}
+
 if ($paging and $total > $posts_per_page ) {
 	$times = 1;
 	$tool_content .= "

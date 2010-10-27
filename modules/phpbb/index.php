@@ -205,9 +205,9 @@ if ($total_categories) {
 					$last_visit = 0;
 				}
 				if(@$last_post_time > $last_visit && $last_post != $langNoPosts) {
-					$tool_content .= "           <td width='1'><img src='$newposts_image' /></td>\n";
+					$tool_content .= "<td width='1'><img src='$newposts_image' /></td>\n";
 				} else {
-					$tool_content .= "           <td width='2'><img src='$folder_image' /></td>\n";
+					$tool_content .= "<td width='2'><img src='$folder_image' /></td>\n";
 				}
 				$forum_name = q($forum_row[$x]['forum_name']);
 				$last_post_nom = q($forum_row[$x]['nom']);
@@ -218,26 +218,25 @@ if ($total_categories) {
 				$desc = q($forum_row[$x]['forum_desc']);
 				$tool_content .= "<td>";
 				$forum_id = $forum_row[$x]['forum_id'];
-                                $q = db_query("SELECT id FROM `$mysqlMainDb`.`group`
-                                                      WHERE course_id = $cours_id AND forum_id = $forum_id");
-                                if ($q and mysql_num_rows($q) > 0) {
-                                        list($group_id) = mysql_fetch_row($q);
-                                        initialize_group_info($group_id);
-                                        $member = $is_member? "&nbsp;&nbsp;($langMyGroup)": false;
-                                } else {
-                                        $group_id = $private_forum = false;
-                                        $member = '';
-                                }
-                                if (!$private_forum or $is_member or $is_adminOfCourse) {
+				$is_member = false;
+				$group_id = init_forum_group_info($forum_id);
+				$member = $is_member? "&nbsp;&nbsp;($langMyGroup)": '';
+				// Show link to forum if:
+				//  - user is admin of course
+				//  - forum doesn't belong to group
+				//  - forum belongs to group and group forums are enabled and
+				//     - forum is not private or
+				//     - user is member of group
+                                if ($is_adminOfCourse or !$group_id or ($has_forum and (!$private_forum or $is_member))) {
                                         $tool_content .= "<a href='viewforum.php?forum=$forum_id'>$forum_name</a>" . $member;
                                 } else {
                                         $tool_content .= $forum_name;
                                 }
 				$tool_content .= "<br />$desc";
 				$tool_content .= "</td>\n";
-				$tool_content .= "           <td width='65' class='center'>$total_topics</td>\n";
-				$tool_content .= "           <td width='65' class='center'>$total_posts</td>\n";
-				$tool_content .= "           <td width='200' class='center'>";
+				$tool_content .= "<td width='65' class='center'>$total_topics</td>\n";
+				$tool_content .= "<td width='65' class='center'>$total_posts</td>\n";
+				$tool_content .= "<td width='200' class='center'>";
 				if ($total_topics > 0 && $total_posts > 0) {
 					$tool_content .= "$last_post_prenom $last_post_nom <a href='viewtopic.php?topic=$last_post_topic_id&amp;forum=$forum_id'> <img src='$icon_topic_latest' /></a><br />$human_last_post_time</td>\n";
 				} else {

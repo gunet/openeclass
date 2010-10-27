@@ -258,11 +258,15 @@ function submission_grade($subid)
 // assignments were found.
 function was_graded($uid, $id, $ret_val = FALSE)
 {
-	global $tool_content;
-	$gid = user_group($uid);
+	global $tool_content, $cours_id, $mysqlMainDb;
+
 	$res = db_query("SELECT * FROM assignment_submit
 			WHERE assignment_id = '$id'
-			AND (uid = '$uid' OR group_id = '$gid')");
+			AND (uid = '$uid' OR
+			     group_id IN (SELECT group_id FROM `$mysqlMainDb`.`group` AS grp,
+			                                       `$mysqlMainDb`.group_members AS members
+			                         WHERE grp.id = members.group_id AND
+						       user_id = $uid AND course_id = $cours_id))");
 	if ($res) {
 		while ($row = mysql_fetch_array($res)) {
 			if ($row['grade']) {

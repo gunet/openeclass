@@ -51,9 +51,9 @@ function getUserAssignments($param, $type)
 	global $mysqlMainDb;
 	$uid	= $param['uid'];
 	$lesson_code	= $param['lesson_code'];
+	$lesson_id = $param['lesson_id'];
 	$max_repeat_val	= $param['max_repeat_val'];
 	$lesson_titles	= $param['lesson_titles'];
-	$lesson_code	= $param['lesson_code'];
 	$lesson_professor	= $param['lesson_professor'];
 
 	for ($i=0;$i<$max_repeat_val;$i++) {
@@ -81,7 +81,7 @@ function getUserAssignments($param, $type)
 		$assignments_repeat_val=0;
 		while($myAssignments = mysql_fetch_row($mysql_query_result)){
 			if ($myAssignments) {
-				if ($submission = findSubmission($uid, $myAssignments[0], $lesson_code[$i])) {
+				if (submitted($uid, $myAssignments[0], $lesson_code[$i], $lesson_id[$i])) {
 					$lesson_assign[$i][$assignments_repeat_val]['delivered'] = 1; //delivered
 					array_push($myAssignments, 1);
 				} else {
@@ -188,34 +188,20 @@ function columnSort($unsorted, $column) {
 }
 
 /**
- * Function findSubmission
  *
- *  Gets the id of an assignments
- *
- * @param int $uid
- * @param int $id
- * @param string $lesson_db
- * @return mixed (assignment id if true, else false)
+ *  returns whether the use has submitted an assignment
  */
-function findSubmission($uid, $id, $lesson_db)
+function submitted($uid, $assignment_id, $lesson_db, $lesson_id)
 {
-
-	if (isGroupAssignment($id, $lesson_db))	{
-		$gid = getUserGroup($uid, $lesson_db);
-		$res = db_query("SELECT id FROM `$lesson_db`.assignment_submit
-			WHERE assignment_id = '$id'
-			AND (uid = '$uid' OR group_id = '$gid')", $lesson_db);
-	} else {
-		$res =db_query("SELECT id FROM `$lesson_db`.assignment_submit
-			WHERE assignment_id = '$id' AND uid = '$uid'", $lesson_db);
-	}
-	if ($res) {
-		$row = mysql_fetch_row($res);
-		return $row[0];
-	} else {
-		return FALSE;
-	}
-
+	global $mysqlMainDb;
+	
+	$res = db_query("SELECT * FROM `$lesson_db`.assignment_submit
+		WHERE assignment_id = $assignment_id
+		AND (uid = $uid OR
+		     group_id IN (SELECT group_id FROM `$mysqlMainDb`.`group` AS grp,
+						       `$mysqlMainDb`.group_members AS members
+					 WHERE grp.id = members.group_id AND
+					       user_id = $uid AND course_id = $lesson_id))");
 
 }
 
@@ -246,25 +232,3 @@ function isGroupAssignment($id, $lesson_db)
 	}
 }
 
-
-/**
- * Function getUserGroup
- *
- * Returns the user's group he is enrolled at, false otherwise
- *
- * @param int $uid
- * @param string $lesson_db
- * @return mixed
- */
-function getUserGroup($uid, $lesson_db)
-{
-	$res =db_query("SELECT team FROM `$lesson_db`.user_group WHERE user = '$uid'", $lesson_db);
-	if ($res) {
-		$row = mysql_fetch_row($res);
-		if ($row[0] == 0) {
-			return $row[0];
-		} else {
-			return FALSE;
-		}
-	}
-}

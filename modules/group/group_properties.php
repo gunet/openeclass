@@ -47,7 +47,7 @@ initialize_group_info();
 
 $checked['self_reg'] = $self_reg? ' checked="1"': '';
 $checked['multi_reg'] = $multi_reg? ' checked="1"': '';
-$checked['forum'] = $forum? ' checked="1"': '';
+$checked['has_forum'] = $has_forum? ' checked="1"': '';
 $checked['documents'] = $documents? ' checked="1"': '';
 $checked['private_forum_yes'] = $private_forum? ' checked="1"': '';
 $checked['private_forum_no'] = $private_forum? '': ' checked="1"';
@@ -79,7 +79,7 @@ if ($is_adminOfCourse) {
     <tr>
     <th class='left'>$langGroupForum :</th>
       <td>
-        <input type='checkbox' name='forum' value='1'$checked[forum] />
+        <input type='checkbox' name='has_forum' value='1'$checked[has_forum] />
         </td>
     </tr>
     <tr>
@@ -106,7 +106,6 @@ if ($is_adminOfCourse) {
     <br />
     
     </form>";
-
         draw($tool_content, 2, 'group');
 } else {
         header("Location: $urlServer");

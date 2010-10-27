@@ -1016,3 +1016,24 @@ function format_message($message)
                         array('<s><font color="red">', '</font></s>', '<font color="#0000FF">', '</font>'),
                         $message);
 }
+
+
+function init_forum_group_info($forum_id)
+{
+	global $mysqlMainDb, $cours_id, $group_id, $private_forum, $can_post, $is_member, $is_adminOfCourse;
+
+	$q = db_query("SELECT id FROM `$mysqlMainDb`.`group`
+			WHERE course_id = $cours_id AND forum_id = $forum_id");
+	if ($q and mysql_num_rows($q) > 0) {
+		list($group_id) = mysql_fetch_row($q);
+		initialize_group_info($group_id);
+	} else {
+		$group_id = $private_forum = false;
+	}
+	if (!$group_id or $is_member or $is_adminOfCourse) {
+		$can_post = true;
+	} else {
+		$can_post = false;
+	}
+	return $group_id;
+}

@@ -91,7 +91,8 @@ if ($user_lesson_info[0][0] > 0) {
 	'lesson_titles'	=> $user_lesson_info[0][1],
 	'lesson_code'	=> $user_lesson_info[0][2],
 	'lesson_professor'	=> $user_lesson_info[0][3],
-	'lesson_statut'		=> $user_lesson_info[0][4]
+	'lesson_statut'		=> $user_lesson_info[0][4],
+	'lesson_id'             => $user_lesson_info[0][8]
 	);
 	$user_assignments = getUserAssignments($param, "html");
 	//END - Get user assignments

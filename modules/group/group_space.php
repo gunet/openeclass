@@ -47,7 +47,6 @@ include 'group_functions.php';
 mysql_select_db($mysqlMainDb);
 initialize_group_id();
 initialize_group_info($group_id);
-$is_tutor = is_tutor($group_id, $uid);
 
 if (isset($_GET['selfReg'])) {
 	if (isset($uid) and !$is_member and $statut != 10 and $member_count < $max_members) {
@@ -161,7 +160,7 @@ draw($tool_content, 2, 'group');
 
 
 function loadGroupTools(){
-        global $self_reg, $forum, $forum_id, $documents, $secret_directory, $langForums,
+        global $self_reg, $has_forum, $forum_id, $documents, $secret_directory, $langForums,
                $group_id, $langDoc, $is_adminOfCourse, $is_tutor, $group_id, $langEmailGroup,
                $langUsage;
 
@@ -169,7 +168,7 @@ function loadGroupTools(){
         if (!$self_reg) {
         }
         // Drive members into their own forum
-        if ($forum and $forum_id <> 0) {
+        if ($has_forum and $forum_id <> 0) {
                 $group_tools .= "<li><a href='../phpbb/viewforum.php?forum=$forum_id'>$langForums</a></li>";
         }
         // Drive members into their own File Manager

@@ -60,56 +60,7 @@ $require_login = TRUE;
 $require_help = FALSE;
 include '../../include/baseTheme.php';
 include '../../include/sendMail.inc.php';
-$tool_content = $head_content = "";
-$lang_editor = langname_to_code($language);
-
-$head_content = <<<hContent
-<script type="text/javascript" src="$urlAppend/include/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
-<script type="text/javascript">
-tinyMCE.init({
-	// General options
-		language : "$lang_editor",
-		mode : "textareas",
-		theme : "advanced",
-		plugins : "pagebreak,style,save,advimage,advlink,inlinepopups,media,print,contextmenu,paste,noneditable,visualchars,nonbreaking,xhtmlxtras,template,wordcount,advlist,emotions,preview",
-
-		// Theme options
-		theme_advanced_buttons1 : "bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,styleselect,formatselect,fontsizeselect,forecolor,backcolor,removeformat,hr",
-		theme_advanced_buttons2 : "pasteword,|,bullist,numlist,|indent,blockquote,|,sub,sup,|,undo,redo,|,link,unlink,|,charmap,media,emotions,image,|,preview,cleanup,code",
-		theme_advanced_buttons3 : "",
-		theme_advanced_toolbar_location : "top",
-		theme_advanced_toolbar_align : "left",
-		theme_advanced_statusbar_location : "bottom",
-		theme_advanced_resizing : true,
-
-		// Example content CSS (should be your site CSS)
-		content_css : "$urlAppend/template/classic/img/tool.css",
-
-		// Drop lists for link/image/media/template dialogs
-		template_external_list_url : "lists/template_list.js",
-		external_link_list_url : "lists/link_list.js",
-		external_image_list_url : "lists/image_list.js",
-		media_external_list_url : "lists/media_list.js",
-
-		// Style formats
-		style_formats : [
-			{title : 'Bold text', inline : 'b'},
-			{title : 'Red text', inline : 'span', styles : {color : '#ff0000'}},
-			{title : 'Red header', block : 'h1', styles : {color : '#ff0000'}},
-			{title : 'Example 1', inline : 'span', classes : 'example1'},
-			{title : 'Example 2', inline : 'span', classes : 'example2'},
-			{title : 'Table styles'},
-			{title : 'Table row 1', selector : 'tr', classes : 'tablerow1'}
-		],
-
-		// Replace values for the template plugin
-		template_replace_values : {
-			username : "Open eClass",
-			staffid : "991234"
-		}
-});
-</script>
-hContent;
+include '../group/group_functions.php';
 
 include_once("./config.php");
 include("functions.php"); // application logic for phpBB
@@ -137,36 +88,42 @@ $forum_access = $myrow["forum_access"];
 $forum_type = $myrow["forum_type"];
 $forum_id = $forum;
 
+$is_member = false;
+$group_id = init_forum_group_info($forum_id);
+if ($private_forum and !$is_member) {
+	$tool_content .= "<div class='caution'>$langPrivateForum</div>";
+	draw($tool_content, 2);
+	exit;
+}
+
+
 $nameTools = $langNewTopic;
 $navigation[]= array ("url"=>"index.php", "name"=> $langForums);
 $navigation[]= array ("url"=>"viewforum.php?forum=$forum_id", "name"=> $forum_name);
 
 if (!does_exists($forum, $currentCourseID, "forum")) {
-	$tool_content .= $langErrorPost;
+	$tool_content .= "<div class='caution'>$langErrorPost</div>";
+	draw($tool_content, 2);
+	exit;
 }
 
 if (isset($_POST['submit'])) {
-	$subject = strip_tags($_POST['subject']);
-	$message = $_POST['message'];
-	if (trim($message) == '' || trim($subject) == '') {
+	$subject = trim($_POST['subject']);
+	$message = trim($_POST['message']);
+	if (empty($message) or empty($subject)) {
 		$tool_content .= "
                 <p class='alert1'>$langEmptyMsg</p>
                 <p class='back'>&laquo; $langClick <a href='newtopic.php?forum=$forum_id'>$langHere</a> $langReturnTopic</p>";
-		draw($tool_content, 2, '', $head_content);
+		draw($tool_content, 2);
 		exit;
 	}
-	if($forum_access == 3 && $user_level < 2) {
-		$tool_content .= $langNoPost;
-		draw($tool_content, 2, '', $head_content);
-		exit;
-	}
+	
 	// Check that, if this is a private forum, the current user can post here.
-	if ($forum_type == 1) {
-		if (!check_priv_forum_auth($uid, $forum, TRUE, $currentCourseID)) {
-			$tool_content .= "$langPrivateForum $langNoPost";
-			draw($tool_content, 2, '', $head_content);
-			exit();
-		}
+	if (!$can_post) {
+		$tool_content .= "<div class='caution'>$langPrivateForum $langNoPost</div>";
+		draw($tool_content, 2);
+		exit();
+		
 	}
 	$is_html_disabled = false;
 	if ((isset($allow_html) && $allow_html == 0) || isset($html)) {

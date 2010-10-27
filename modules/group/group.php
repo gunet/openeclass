@@ -142,13 +142,13 @@ if ($is_adminOfCourse) {
                         'self_reg' => true,
                         'multi_reg' => true,
                         'private_forum' => true,
-                        'forum' => true,
+                        'has_forum' => true,
                         'documents' => true), 'all', 'intval');
                 db_query("UPDATE group_properties SET
                                  self_registration = $self_reg,
                                  multiple_registration = $multi_reg,
                                  private_forum = $private_forum,
-                                 forum = $forum,
+                                 forum = $has_forum,
                                  documents = $documents WHERE course_id = $cours_id");
                 $message = $langGroupPropertiesModified;
 
@@ -274,7 +274,7 @@ if ($is_adminOfCourse) {
         <tr><td colspan=2 class='left'><b>$langTools</b></td></tr>
         <tr><td>";
 
-        if ($forum) {
+        if ($has_forum) {
                 $tool_content .= "$langGroupForum</td><td align='right'><font color='green'>$langYes</font>";
                 $fontColor="black";
         } else {

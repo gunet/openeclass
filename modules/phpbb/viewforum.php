@@ -60,6 +60,8 @@ $require_login = TRUE;
 $require_help = TRUE;
 $helpTopic = 'For';
 include '../../include/baseTheme.php';
+include '../group/group_functions.php';
+
 if (!add_units_navigation(TRUE)) {
 	$navigation[]= array ("url"=>"index.php", "name"=> $langForums);
 }
@@ -71,8 +73,14 @@ $next = 0;
 include_once("./config.php");
 include("functions.php"); 
 
-$forum = intval($_GET['forum']);
-
+$forum_id = intval($_GET['forum']);
+$is_member = false;
+$group_id = init_forum_group_info($forum_id);
+if ($private_forum and !$is_member) {
+	$tool_content .= "<div class='caution'>$langPrivateForum</div>";
+	draw($tool_content, 2);
+	exit;
+}
 $tool_content .= "
     <div id=\"operations_container\">
       <ul id=\"opslist\">";
@@ -81,18 +89,18 @@ if ($is_adminOfCourse || $is_admin) {
 	$tool_content .= "
         <li><a href='../forum_admin/forum_admin.php'>$langAdm</a></li>";
 }
-$tool_content .= "
-        <li><a href='newtopic.php?forum=$forum'>$langNewTopic</a></li>
-      </ul>
-    </div>\n";
 
+if ($can_post) {
+	$tool_content .= "<li><a href='newtopic.php?forum=$forum_id'>$langNewTopic</a></li>\n";	
+}
+$tool_content .= "</ul></div>";
 /*
 * Retrieve and present data from course's forum
 */
 
 $sql = "SELECT f.forum_type, f.forum_name
 	FROM forums f
-	WHERE forum_id = '$forum'";
+	WHERE forum_id = $forum_id";
 
 $result = db_query($sql, $currentCourseID);
 $myrow = mysql_fetch_array($result);
@@ -100,7 +108,7 @@ $myrow = mysql_fetch_array($result);
 $forum_name = own_stripslashes($myrow["forum_name"]);
 $nameTools = $forum_name;
 
-$topic_count = mysql_fetch_row(db_query("SELECT COUNT(*) FROM topics WHERE forum_id = '$forum'"));
+$topic_count = mysql_fetch_row(db_query("SELECT COUNT(*) FROM topics WHERE forum_id = $forum_id"));
 $total_topics = $topic_count[0];
 
 if ($total_topics > $topics_per_page) { 
@@ -114,7 +122,7 @@ if (isset($_GET['start'])) {
 }
 
 if ($total_topics > $topics_per_page) { // navigation
-	$base_url = "viewforum.php?forum=$forum&amp;start="; 
+	$base_url = "viewforum.php?forum=$forum_id&amp;start="; 
 	$tool_content .= "<table width='99%'><tr>";
 	$tool_content .= "<td width='50%' align='left'><span class='row'><strong class='pagination'>
 		<span class='pagination'>$langPages:&nbsp;";
@@ -165,7 +173,7 @@ if(isset($_GET['topicnotify'])) { // modify topic notification
 $sql = "SELECT t.*, p.post_time, p.nom AS nom1, p.prenom AS prenom1
         FROM topics t
         LEFT JOIN posts p ON t.topic_last_post_id = p.post_id
-        WHERE t.forum_id = '$forum' 
+        WHERE t.forum_id = $forum_id 
         ORDER BY topic_time DESC LIMIT $first_topic, $topics_per_page";
 
 $result = db_query($sql, $currentCourseID);
@@ -219,7 +227,7 @@ $tool_content .= "
 		$topic_title = own_stripslashes($myrow["topic_title"]);
 		$pagination = '';
 		$start = '';
-		$topiclink = "viewtopic.php?topic=" . $myrow["topic_id"] . "&amp;forum=$forum";
+		$topiclink = "viewtopic.php?topic=" . $myrow["topic_id"] . "&amp;forum=$forum_id";
 		if($replys+1 > $posts_per_page) {
 			$pagination .= "\n<strong class='pagination'><span>\n<img src='$posticon_more' />";
 			$pagenr = 1;
@@ -263,16 +271,18 @@ $tool_content .= "
 		}
 		$tool_content .= "\n       <td class='center'>";
 		if (isset($_GET['start']) and $_GET['start'] > 0) {
-			$tool_content .= "<a href='$_SERVER[PHP_SELF]?forum=$forum&start=$_GET[start]&amp;topicnotify=$topic_link_notify&amp;topic_id=$myrow[topic_id]'><img src='../../template/classic/img/announcements$topic_icon.gif' title='$langNotify'></img></a>";
+			$tool_content .= "<a href='$_SERVER[PHP_SELF]?forum=$forum_id&amp;start=$_GET[start]&amp;topicnotify=$topic_link_notify&amp;topic_id=$myrow[topic_id]'><img src='../../template/classic/img/announcements$topic_icon.gif' title='$langNotify'></img></a>";
 		} else {
-			$tool_content .= "<a href='$_SERVER[PHP_SELF]?forum=$forum&amp;topicnotify=$topic_link_notify&amp;topic_id=$myrow[topic_id]'><img src='../../template/classic/img/announcements$topic_icon.gif' title='$langNotify'></img></a>";
+			$tool_content .= "<a href='$_SERVER[PHP_SELF]?forum=$forum_id&amp;topicnotify=$topic_link_notify&amp;topic_id=$myrow[topic_id]'><img src='../../template/classic/img/announcements$topic_icon.gif' title='$langNotify'></img></a>";
 		}
 		$tool_content .= "</td>\n     </tr>";
                 $i++;
 	} // end of while
 $tool_content .= "\n       </table>";
 } else {
-	$tool_content .= "\n  <p class='alert1'>$langNoTopics</p>\n";
+	$tool_content .= "\n<p class='alert1'>$langNoTopics" .
+			($can_post? ' ' . $langStartNewTopic: '') .
+			"</p>\n";
 }
 $tool_content .= "</tbody></table>";
 draw($tool_content, 2);

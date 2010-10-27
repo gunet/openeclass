@@ -58,57 +58,7 @@ $require_help = TRUE;
 $helpTopic = 'For';
 include '../../include/baseTheme.php';
 include '../../include/sendMail.inc.php';
-
-$tool_content = $head_content = "";
-$lang_editor = langname_to_code($language);
-$head_content = <<<hContent
-<script type="text/javascript" src="$urlAppend/include/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
-<script type="text/javascript">
-tinyMCE.init({
-	// General options
-		language : "$lang_editor",
-		mode : "textareas",
-		theme : "advanced",
-		plugins : "pagebreak,style,save,advimage,advlink,inlinepopups,media,print,contextmenu,paste,noneditable,visualchars,nonbreaking,xhtmlxtras,template,wordcount,advlist,emotions,preview",
-
-		// Theme options
-		theme_advanced_buttons1 : "bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,styleselect,formatselect,fontsizeselect,forecolor,backcolor,removeformat,hr",
-		theme_advanced_buttons2 : "pasteword,|,bullist,numlist,|indent,blockquote,|,sub,sup,|,undo,redo,|,link,unlink,|,charmap,media,emotions,image,|,preview,cleanup,code",
-		theme_advanced_buttons3 : "",
-		theme_advanced_toolbar_location : "top",
-		theme_advanced_toolbar_align : "left",
-		theme_advanced_statusbar_location : "bottom",
-		theme_advanced_resizing : true,
-
-		// Example content CSS (should be your site CSS)
-		content_css : "$urlAppend/template/classic/img/tool.css",
-
-		// Drop lists for link/image/media/template dialogs
-		template_external_list_url : "lists/template_list.js",
-		external_link_list_url : "lists/link_list.js",
-		external_image_list_url : "lists/image_list.js",
-		media_external_list_url : "lists/media_list.js",
-
-		// Style formats
-		style_formats : [
-			{title : 'Bold text', inline : 'b'},
-			{title : 'Red text', inline : 'span', styles : {color : '#ff0000'}},
-			{title : 'Red header', block : 'h1', styles : {color : '#ff0000'}},
-			{title : 'Example 1', inline : 'span', classes : 'example1'},
-			{title : 'Example 2', inline : 'span', classes : 'example2'},
-			{title : 'Table styles'},
-			{title : 'Table row 1', selector : 'tr', classes : 'tablerow1'}
-		],
-
-		// Replace values for the template plugin
-		template_replace_values : {
-			username : "Open eClass",
-			staffid : "991234"
-		}
-});
-</script>
-hContent;
-
+include '../group/group_functions.php';
 include_once("./config.php");
 include("functions.php");
 
@@ -141,6 +91,14 @@ $forum_access = $myrow["forum_access"];
 $forum_type = $myrow["forum_type"];
 $topic_title = $myrow["topic_title"];
 $forum_id = $forum;
+
+$is_member = false;
+$group_id = init_forum_group_info($forum_id);
+if ($private_forum and !$is_member) {
+	$tool_content .= "<div class='caution'>$langPrivateForum</div>";
+	draw($tool_content, 2);
+	exit;
+}
 
 $nameTools = $langReply;
 $navigation[]= array ("url"=>"index.php", "name"=> $langForums);
@@ -241,22 +199,16 @@ if (isset($_POST['submit'])) {
 		send_mail('', '', '', $emailaddr, $subject_notify, $body_topic_notify, $charset);
 	}
 	// end of notification
-	 
-	$total_forum = get_total_topics($forum, $currentCourseID);
-	$total_topic = get_total_posts($topic, $currentCourseID, "topic")-1;
-	// Subtract 1 because we want the nr of replies, not the nr of posts.
-	$forward = 1;
-	$tool_content .= "
-    <div id=\"operations_container\">
-      <ul id=\"opslist\">
-	<li><a href=\"viewtopic.php?topic=$topic&forum=$forum&$total_topic\">$langViewMessage</a></li>
-	<li><a href=\"viewforum.php?forum=$forum&$total_forum\">$langReturnTopic</a></li>
-      </ul>
-    </div>
-    ";
 	
-	$tool_content .= "
-    <p class=\"success\">$langStored</p>";
+	$total_posts = get_total_posts($topic, $currentCourseID, "topic");
+	if ($total_posts > $posts_per_page) { 
+		$page = '&start=' . ($posts_per_page * intval(($total_posts - 1) / $posts_per_page));
+	} else {
+		$page = '';
+	}
+	$_SESSION['message'] = "<p class='success'>$langStored</p>";
+	header("Location: {$urlServer}modules/phpbb/viewtopic.php?topic=$topic&forum=$forum" . $page);
+	exit;
 } elseif (isset($_POST['cancel'])) {
 	header("Location: viewtopic.php?topic=$topic&forum=$forum");	
 } else {
