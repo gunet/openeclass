@@ -45,7 +45,7 @@ initialize_group_id();
 initialize_group_info($group_id);
 
 $navigation[] = array ('url' => 'group.php', 'name' => $langGroups);
-$navigation[] = array ('url' => "group_space.php?userGroupId=$group_id", 'name' => q($name));
+$navigation[] = array ('url' => "group_space.php?userGroupId=$group_id", 'name' => q($group_name));
 
 if (!($is_adminOfCourse or $is_tutor)) {
         header('Location: group_space.php?userGroupId=' . $group_id);
@@ -182,7 +182,7 @@ if (isset($_POST['modify'])) {
         initialize_group_info($group_id);
 }
 
-$tool_content_group_name = q($name);
+$tool_content_group_name = q($group_name);
 
 if ($is_adminOfCourse) {
         $tool_content_tutor = "<select name='tutor[]' multiple='multiple'>\n";
@@ -192,7 +192,7 @@ if ($is_adminOfCourse) {
                                               cours_user.cours_id = $cours_id
                                         ORDER BY nom, prenom, user_id");
         while ($row = mysql_fetch_array($resultTutor)) {
-                $selected = is_tutor($group_id, $row['user_id'])? ' selected="selected"': '';
+                $selected = $is_tutor? ' selected="selected"': '';
                 $tool_content_tutor .= "<option value='$row[user_id]'$selected>" . q($row['nom']) .
                                        ' ' . q($row['prenom']) . "</option>\n";
 
@@ -207,10 +207,8 @@ if ($is_adminOfCourse) {
 }
 
 $tool_content_max_student = $max_members? $max_members: '-';
+$tool_content_group_description = q($group_description);
 
-$tool_content_group_description = q($description);
-
-################### STUDENTS IN AND OUT GROUPS #######################
 
 if ($multi_reg) {
         // Students registered to the course but not members of this group
@@ -337,4 +335,4 @@ $tool_content .="
 </form>
 ";
 
-draw($tool_content, 2, 'group', $head_content);
+draw($tool_content, 2, '', $head_content);

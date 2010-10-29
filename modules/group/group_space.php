@@ -83,7 +83,7 @@ $tool_content .=  "<br /><table width='99%' class='FormData'>
 	</tr>
 	<tr>
 	<th class='left'>$langGroupName :</th>
-	<td>" . q($name) . "</td>
+	<td>" . q($group_name) . "</td>
 	</tr>";
 
 $tutors = array();
@@ -110,8 +110,8 @@ if ($tutors) {
 $tool_content .= "<tr><th class='left'>$langGroupTutor :</th>
 <td>$tool_content_tutor</td></tr>";
 
-$description = trim($description);
-if (empty($description)) {
+$group_description = trim($group_description);
+if (empty($group_description)) {
         $tool_content_description = $langGroupNone;
 } else {
         $tool_content_description = q($description);
@@ -156,7 +156,7 @@ if ($members) {
 
 $tool_content .=  "</tbody></table>";
 $tool_content .= "</td></tr></thead></table>";
-draw($tool_content, 2, 'group');
+draw($tool_content, 2);
 
 
 function loadGroupTools(){

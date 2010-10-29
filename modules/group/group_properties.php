@@ -106,7 +106,7 @@ if ($is_adminOfCourse) {
     <br />
     
     </form>";
-        draw($tool_content, 2, 'group');
+        draw($tool_content, 2);
 } else {
         header("Location: $urlServer");
 }

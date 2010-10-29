@@ -320,7 +320,7 @@ if ($is_adminOfCourse) {
                         }
                         $tool_content .= "<td width='2%'>
                         <img src='../../template/classic/img/arrow_grey.gif' alt='' /></td><td>
-                        <a href='group_space.php?userGroupId=$group[id]'>".q($name)."</a></td>";
+                        <a href='group_space.php?userGroupId=$group[id]'>".q($group_name)."</a></td>";
                         $tool_content .= "<td width='35%'>" . display_user($tutors) . "</td>" .
                                          "<td><div class='cellpos'>$member_count</div></td>";
                         if ($max_members == 0) {
@@ -332,7 +332,7 @@ if ($is_adminOfCourse) {
                         <a href='group_edit.php?userGroupId=$group[id]'>
                         <img src='../../template/classic/img/edit.gif' alt='$langEdit' title='$langEdit' /></a>
                         <a href='$_SERVER[PHP_SELF]?delete=$group[id]' onClick=\"return confirmation('" .
-                                js_escape($name) . "');\">
+                                js_escape($group_name) . "');\">
                         <img src='../../template/classic/img/delete.gif' alt='$langDelete' title='$langDelete' /></a></div></td>
                         </tr>";
                         $totalRegistered += $member_count;
@@ -418,7 +418,6 @@ if ($is_adminOfCourse) {
                         $totalRegistered += $member_count;
                         $k++;
                 }
-
                 $tool_content .= "</tbody></table>";
 	}
 }
@@ -426,7 +425,7 @@ if ($is_adminOfCourse) {
 add_units_navigation(TRUE);
 
 if ($is_adminOfCourse) {
-	draw($tool_content, 2, 'group', $head_content);
+	draw($tool_content, 2, '', $head_content);
 } else {
-	draw($tool_content, 2, 'group');
+	draw($tool_content, 2, '');
 }

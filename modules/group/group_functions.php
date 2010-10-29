@@ -21,7 +21,7 @@ function initialize_group_id($param = 'userGroupId')
 function initialize_group_info($group_id = false)
 {
         global $cours_id, $statut, $self_reg, $multi_reg, $has_forum, $private_forum, $documents,
-               $name, $description, $forum_id, $max_members, $secret_directory, $tutors,
+               $group_name, $group_description, $forum_id, $max_members, $secret_directory, $tutors,
                $member_count, $is_tutor, $is_member, $uid, $urlServer, $mysqlMainDb;
 
         if (!(isset($self_reg) and isset($multi_reg) and isset($has_forum) and isset($private_forum) and isset($documents))) {
@@ -42,7 +42,7 @@ function initialize_group_info($group_id = false)
                         header("Location: {$urlServer}modules/group/group.php");
                         exit;
                 }
-                list($name, $description, $forum_id, $max_members, $secret_directory) = mysql_fetch_row($res);
+                list($group_name, $group_description, $forum_id, $max_members, $secret_directory) = mysql_fetch_row($res);
 
                 list($member_count) = mysql_fetch_row(db_query("SELECT COUNT(*) FROM `$mysqlMainDb`.group_members
 							       WHERE group_id = $group_id"));

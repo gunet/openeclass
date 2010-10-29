@@ -26,13 +26,14 @@
 $require_current_course = TRUE;
 
 include '../../include/init.php';
+include 'group_functions.php';
 include '../usage/duration_query.php';
 
-$userGroupId = intval($_REQUEST['userGroupId']);
-list($tutor_id, $group_name) = mysql_fetch_row(db_query("SELECT tutor, name FROM student_group WHERE id='$userGroupId'", $currentCourseID));
-$is_tutor = ($tutor_id == $uid);
+$group_id = intval($_REQUEST['group_id']);
+initialize_group_info($group_id);
+
 if (!$is_adminOfCourse and !$is_tutor) {
-        header('Location: group_space.php?userGroupId=' . $userGroupId);
+        header('Location: group_space.php?group_id=' . $group_id);
         exit;
 }
 
@@ -68,7 +69,7 @@ if($is_adminOfCourse) {
 	     $crlf;
 	$totalDuration = 0;
 
-	$result = user_duration_query($currentCourseID, $cours_id, $u_date_start, $u_date_end, $userGroupId);
+	$result = user_duration_query($currentCourseID, $cours_id, $u_date_start, $u_date_end, $group_id);
 	
 	while ($row = mysql_fetch_assoc($result)) {
                 echo csv_escape($row['nom']) . ";" .
@@ -80,6 +81,4 @@ if($is_adminOfCourse) {
                 echo $crlf;
         }
 } 
-
 user_duration_query_end();
-
