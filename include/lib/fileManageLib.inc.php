@@ -430,10 +430,10 @@ function index_and_sort_dir($path)
 function form_dir_list_exclude($dbTable, $sourceType, $sourceComponent, $command, $baseWorkDir, $entryToExclude)
 {
 	global $langParentDir, $langTo, $langMoveFrom, $langMove, $moveFileNameAlias;
-	global $tool_content, $userGroupId;
+	global $tool_content, $group_id;
 
-        if (isset($userGroupId)) {
-                $groupset = '?userGroupId=' . $userGroupId;
+        if (isset($group_id)) {
+                $groupset = '?group_id=' . $group_id;
         } else {
                 $groupset = '';
         }

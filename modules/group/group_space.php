@@ -62,15 +62,15 @@ if (isset($_GET['selfReg'])) {
 
 if (!$is_member and !$is_adminOfCourse and (!$self_reg or $member_count >= $max_members)) {
         $tool_content .= $langForbidden;
-        draw($tool_content, 2, 'group');
+        draw($tool_content, 2);
         exit;
 }
 
 $tool_content .= "<div id='operations_container'><ul id='opslist'>\n";
 if ($is_adminOfCourse or $is_tutor) {
-                $tool_content .= "<li><a href='group_edit.php?userGroupId=$group_id'>$langEditGroup</a></li>\n";
+                $tool_content .= "<li><a href='group_edit.php?group_id=$group_id'>$langEditGroup</a></li>\n";
 } elseif ($self_reg and isset($uid) and !$is_member and $member_count < $max_members) { 
-                $tool_content .=  "<li><a href='$_SERVER[PHP_SELF]?registration=1&amp;userGroupId=$group_id'>$langRegIntoGroup</a></li>\n";
+                $tool_content .=  "<li><a href='$_SERVER[PHP_SELF]?registration=1&amp;group_id=$group_id'>$langRegIntoGroup</a></li>\n";
 } elseif (isset($regDone)) {
         $tool_content .= "$message&nbsp;";
 }
@@ -114,7 +114,7 @@ $group_description = trim($group_description);
 if (empty($group_description)) {
         $tool_content_description = $langGroupNone;
 } else {
-        $tool_content_description = q($description);
+        $tool_content_description = q($group_description);
 }
 
 $tool_content .= "<tr><th class='left'>$langDescription :</th>

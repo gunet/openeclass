@@ -304,7 +304,7 @@ function show_submission_details($id)
 	
 	if ($sub['uid'] != $uid) {
 		$sub_notice = "$m[submitted_by_other_member] ".
-			"<a href='../group/group_space.php?userGroupId=$sub[group_id]'>".
+			"<a href='../group/group_space.php?group_id=$sub[group_id]'>".
 			"$m[your_group]</a> (".uid_to_name($sub['uid']).")";
 	} else $sub_notice = "";
 	

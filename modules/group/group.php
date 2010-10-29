@@ -320,7 +320,7 @@ if ($is_adminOfCourse) {
                         }
                         $tool_content .= "<td width='2%'>
                         <img src='../../template/classic/img/arrow_grey.gif' alt='' /></td><td>
-                        <a href='group_space.php?userGroupId=$group[id]'>".q($group_name)."</a></td>";
+                        <a href='group_space.php?group_id=$group[id]'>".q($group_name)."</a></td>";
                         $tool_content .= "<td width='35%'>" . display_user($tutors) . "</td>" .
                                          "<td><div class='cellpos'>$member_count</div></td>";
                         if ($max_members == 0) {
@@ -329,7 +329,7 @@ if ($is_adminOfCourse) {
                                 $tool_content .= "<td><div class='cellpos'>$max_members</div></td>";
                         }
                         $tool_content .= "<td width='10%'><div class='cellpos'>
-                        <a href='group_edit.php?userGroupId=$group[id]'>
+                        <a href='group_edit.php?group_id=$group[id]'>
                         <img src='../../template/classic/img/edit.gif' alt='$langEdit' title='$langEdit' /></a>
                         <a href='$_SERVER[PHP_SELF]?delete=$group[id]' onClick=\"return confirmation('" .
                                 js_escape($group_name) . "');\">
@@ -394,7 +394,7 @@ if ($is_adminOfCourse) {
                                           <td class='left'>";
                         // Allow student to enter group only if member
                         if ($is_member) {
-                                $tool_content .= "<a href='group_space.php?userGroupId=$row[0]'>" . q($name) .
+                                $tool_content .= "<a href='group_space.php?group_id=$row[0]'>" . q($name) .
                                         "</a> <span style='color:#900; weight:bold;'>($langOneMyGroups)</span>";
 			} else {
 				$tool_content .= q($name);
@@ -408,7 +408,7 @@ if ($is_adminOfCourse) {
                                 if (!isset($uid) or $is_member or ($max_members and $member_count >= $max_members)) {
                                         $tool_content .= "-";
                                 } else {
-                                        $tool_content .= "<a href='group_space.php?selfReg=1&amp;userGroupId=$row[0]'>$langRegistration</a>";
+                                        $tool_content .= "<a href='group_space.php?selfReg=1&amp;group_id=$row[0]'>$langRegistration</a>";
                                 }
                                 $tool_content .= "</td>";
                         }

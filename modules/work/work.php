@@ -554,7 +554,7 @@ function show_submission_form($id)
 
 	if (is_group_assignment($id) and ($gid = user_group($uid))) {
 		$tool_content .= "\n  <p>$m[this_is_group_assignment] ".
-		"<a href='../group/document.php?userGroupId=$gid'>".
+		"<a href='../group/document.php?group_id=$gid'>".
 		"$m[group_documents]</a> $m[select_publish]</p>";
 	} else {
 		$tool_content .= "
@@ -804,7 +804,7 @@ function show_assignment($id, $message = FALSE)
 			//is it a group assignment?
 			if (!empty($row['group_id'])) {
 				$subContentGroup = "($m[groupsubmit] ".
-				"<a href='../group/group_space.php?userGroupId=$row[group_id]'>".
+				"<a href='../group/group_space.php?group_id=$row[group_id]'>".
 				"$m[ofgroup] $row[group_id]</a>)";
 			} else $subContentGroup = "";
 

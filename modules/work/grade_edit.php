@@ -70,7 +70,7 @@ function show_edit_form($id, $sid, $assign)
 		$uid_2_name = uid_to_name($sub['uid']);
 		if (!empty($sub['group_id'])) {
 				$group_submission = "($m[groupsubmit] ".
-					"<a href='../group/group_space.php?userGroupId=$sub[group_id]'>".
+					"<a href='../group/group_space.php?group_id=$sub[group_id]'>".
 					"$m[ofgroup] $sub[group_id]</a>)";
 		} else $group_submission = "";
 			$tool_content .= "

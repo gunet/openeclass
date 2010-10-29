@@ -54,7 +54,7 @@ if (defined('GROUP_DOCUMENTS')) {
         initialize_group_info($group_id);
         $group_hidden_input = "<input type='hidden' name='gid' value='$group_id' />";
         $navigation[] = array ('url' => 'group.php', 'name' => $langGroups);
-        $navigation[] = array ('url' => 'group_space.php?userGroupId=' . $group_id, 'name' => q($name));
+        $navigation[] = array ('url' => 'group_space.php?group_id=' . $group_id, 'name' => q($group_name));
 	$navigation[] = array ('url' => "document.php?gid=$group_id&amp;openDir=$uploadPath", 'name' => $langDoc);
 } else {
 	$navigation[] = array ('url' => "document.php?openDir=$uploadPath", 'name' => $langDoc);

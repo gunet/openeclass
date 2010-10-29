@@ -57,7 +57,7 @@ if (GROUP_DOCUMENTS) {
         initialize_group_id('gid');
         initialize_group_info($group_id);
         $navigation[] = array ('url' => 'group.php', 'name' => $langGroups);
-        $navigation[] = array ('url' => 'group_space.php?userGroupId=' . $group_id, 'name' => q($name));
+        $navigation[] = array ('url' => 'group_space.php?group_id=' . $group_id, 'name' => q($group_name));
         $groupset = "gid=$group_id&amp;";
         $base_url = $_SERVER['PHP_SELF'] . '?' . $groupset;
         $group_sql = "group_id = $group_id";
@@ -239,7 +239,7 @@ function make_path($path, $path_components)
 // Used in documents path navigation bar
 function make_clickable_path($path)
 {
-	global $langRoot, $userGroupId, $base_url, $group_sql;
+	global $langRoot, $group_id, $base_url, $group_sql;
 
 	$cur = $out = '';
 	foreach (explode('/', $path) as $component) {

@@ -57,24 +57,24 @@ if (mysql_num_rows($q) > 0) {
 		$resultRegistered = db_query("SELECT id FROM user_group WHERE team = $group[id]", $currentCourseID);
 		$countRegistered = mysql_num_rows($resultRegistered);
 		if ($i % 2 == 0) {
-			$tool_content .= "                  <tr class='even'>\n";
+			$tool_content .= "<tr class='even'>\n";
 		} else {
-			$tool_content .= "                  <tr class='odd'>\n";
+			$tool_content .= "<tr class='odd'>\n";
 		}
-		$tool_content .= "                    <td class='arrow'><a href='../group/group_usage.php?module=usage&amp;userGroupId=".$group["id"]."'>".$group["name"]."</a></td>\n";
-		$tool_content .= "                    <td>".uid_to_name($group['tutor'])."</td>\n";
-      		$tool_content .= "                    <td class='center'>$countRegistered</td>\n";
+		$tool_content .= "<td class='arrow'><a href='../group/group_usage.php?module=usage&amp;group_id=".$group["id"]."'>".$group["name"]."</a></td>\n";
+		$tool_content .= "<td>".uid_to_name($group['tutor'])."</td>\n";
+      		$tool_content .= "<td class='center'>$countRegistered</td>\n";
 		if ($group['maxStudent'] == 0) {
-			$tool_content .= "                    <td class='center'>-</td>\n";
+			$tool_content .= "<td class='center'>-</td>\n";
 		} else {
-			$tool_content .= "                    <td class='center'>$group[maxStudent]</td>\n";
+			$tool_content .= "<td class='center'>$group[maxStudent]</td>\n";
 		}
-    		$tool_content .= "                  </tr>\n";
+    		$tool_content .= "</tr>\n";
 		$i++;
         }
-        $tool_content .= "                  </table>\n";
+        $tool_content .= "/table>\n";
 } else {
-	$tool_content .= "    <p class='caution_small'>$langNoGroup</p>";
+	$tool_content .= "<p class='caution_small'>$langNoGroup</p>";
 }
 
-draw($tool_content, 2, 'usage', $head_content);
+draw($tool_content, 2, '', $head_content);

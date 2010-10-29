@@ -44,13 +44,13 @@ $group_id = intval($_REQUEST['group_id']);
 
 $nameTools = $langGroupMail;
 $navigation[]= array ("url"=>"group.php", "name"=> $langGroupSpace,
-"url"=>"group_space.php?userGroupId=$group_id", "name"=>$langGroupSpace);
+"url"=>"group_space.php?group_id=$group_id", "name"=>$langGroupSpace);
 
 list($tutor_id) = mysql_fetch_row(db_query("SELECT is_tutor FROM group_members WHERE group_id='$group_id'", $mysqlMainDb));
 $is_tutor = ($tutor_id == 1)?TRUE:FALSE;
 
 if (!$is_adminOfCourse and !$is_tutor) {
-        header('Location: group_space.php?userGroupId=' . $group_id);
+        header('Location: group_space.php?group_id=' . $group_id);
         exit;
 }
 

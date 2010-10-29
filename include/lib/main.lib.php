@@ -370,7 +370,7 @@ function user_groups($course_id, $user_id)
                        ORDER BY `group`.name");
         while ($r = mysql_fetch_array($q)) {
                 $groups .= (empty($groups)? '': ', ') .
-                           "<a href='$urlAppend/modules/group/group_space.php?userGroupId=$r[id]'>" .
+                           "<a href='$urlAppend/modules/group/group_space.php?group_id=$r[id]'>" .
                            q($r['name']) . "</a>";
         }
         if (empty($groups)) {

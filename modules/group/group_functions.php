@@ -6,7 +6,7 @@
 *  Copyright(c) 2003-2010  Greek Universities Network - GUnet
 */
 
-function initialize_group_id($param = 'userGroupId')
+function initialize_group_id($param = 'group_id')
 {
         global $group_id, $urlServer;
 

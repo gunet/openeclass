@@ -27,9 +27,9 @@ function user_duration_query($course_code, $course_id, $start = false, $end = fa
                   $date_where .  " GROUP BY c.user_id");
 
         if ($group !== false) {
-                $from = "`$course_code`.user_group AS groups
-                                LEFT JOIN user ON groups.user = user.user_id";
-                $and = "AND groups.team = $group";
+                $from = "`group_members` AS groups
+                                LEFT JOIN user ON groups.user_id = user.user_id";
+                $and = "AND groups.group_id = $group";
         } else {
                 $from = "user";
                 $and = '';
