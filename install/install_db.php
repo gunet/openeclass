@@ -215,7 +215,8 @@ db_query("CREATE TABLE user (
       forum_flag DATE NOT NULL DEFAULT '0000-00-00',
       description TEXT,
       has_icon BOOL NOT NULL DEFAULT 0,
-      PRIMARY KEY (user_id)) $charset_spec");
+      PRIMARY KEY (user_id),
+      KEY `user_username` (`username`)) $charset_spec");
 
 db_query("CREATE TABLE admin (
       idUser mediumint unsigned  NOT NULL default '0',

@@ -345,6 +345,8 @@ if (!isset($_POST['submit2'])) {
 		}
         }
         if ($oldversion < '2.4') {
+                mysql_index_exists('user', 'user_username') or
+                        db_query('CREATE INDEX user_username ON user (username)');
                 mysql_index_exists('course_units', 'course_units_title') or
                         db_query('CREATE FULLTEXT INDEX course_units_title ON course_units (title)');
                 mysql_index_exists('course_units', 'course_units_comments') or
