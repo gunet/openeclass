@@ -349,7 +349,7 @@ $exp_time = time() + 140000000;
 db_query("INSERT INTO `user` (`prenom`, `nom`, `username`, `password`, `email`, `statut`,`registered_at`,`expires_at`)
     VALUES ('$nameForm', '$surnameForm', '$loginForm','$password_encrypted','$emailForm','1',".time().",".$exp_time.")");
 $idOfAdmin=mysql_insert_id();
-db_query("INSERT INTO loginout (loginout.idLog, loginout.id_user, loginout.ip, loginout.when, loginout.action) VALUES ('', '".$idOfAdmin."', '".$REMOTE_ADDR."', NOW(), 'LOGIN')");
+db_query("INSERT INTO loginout (loginout.idLog, loginout.id_user, loginout.ip, loginout.when, loginout.action) VALUES ('', $idOfAdmin, '$_SERVER[REMOTE_ADDR]', NOW(), 'LOGIN')");
 
 
 #add admin in list of admin

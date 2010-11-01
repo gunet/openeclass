@@ -141,10 +141,10 @@ if (isset($_POST['welcomeScreen'])) {
 	$passForm = create_pass();
 	$campusForm = 'Open eClass';
 	$helpdeskForm = '+30 2xx xxxx xxx';
-	$faxForm = '';
-	$postaddressForm = '';
 	$institutionForm = 'Ακαδημαϊκό Διαδίκτυο GUNet ';
-	$institutionUrlForm = 'http://www.gunet.gr/';
+        $institutionUrlForm = 'http://www.gunet.gr/';
+        $reguser = $dbPassForm = $helpdeskmail = $faxForm = 
+                   $postaddressForm = $vodServerForm = '';
 } else {
        register_posted_variables(array(
                 'dbHostForm' => true,
@@ -164,10 +164,12 @@ if (isset($_POST['welcomeScreen'])) {
                 'passForm' => true,
                 'campusForm' => true,
                 'helpdeskForm' => true,
+                'helpdeskmail' => true,
                 'faxForm' => true,
                 'postaddressForm' => true,
                 'institutionForm' => true,
-                'institutionUrlForm' => true), 'all');
+                'institutionUrlForm' => true,
+                'vodServerForm' => true), 'all');
 }
 
 if (isset($_GET['alreadyVisited'])) {
@@ -189,13 +191,13 @@ if (isset($_GET['alreadyVisited'])) {
             <input type='hidden' name='phpSysInfoURL' value='$phpSysInfoURL' />
             <input type='hidden' name='campusForm' value='$campusForm' />
             <input type='hidden' name='helpdeskForm' value='$helpdeskForm' />
-            <input type='hidden' name='helpdeskmail' value='".@$helpdeskmail."' />
+            <input type='hidden' name='helpdeskmail' value='$helpdeskmail' />
             <input type='hidden' name='institutionForm' value='$institutionForm' />
             <input type='hidden' name='institutionUrlForm' value='$institutionUrlForm' />
-            <input type='hidden' name='faxForm' value='".@$faxForm."' />
-            <input type='hidden' name='postaddressForm' value='".@$postaddressForm."' />
-            <input type='hidden' name='reguser' value='".@$reguser."' />
-            <input type='hidden' name='vodServer' value='".@$vodServerForm."' />";
+            <input type='hidden' name='faxForm' value='$faxForm' />
+            <input type='hidden' name='postaddressForm' value='$postaddressForm' />
+            <input type='hidden' name='reguser' value='$reguser' />
+            <input type='hidden' name='vodServer' value='$vodServerForm' />";
 }
 
 // step 2 license
@@ -285,7 +287,10 @@ elseif(isset($_REQUEST['install5']) OR isset($_REQUEST['back4']))
 	$langStepTitle = $langCfgSetting;
 	$langStep = $langStep4;
 	$_SESSION['step']=4;
-	$tool_content .= "<table width=\"99%\" class='FormData' align='left'>
+        if (empty($helpdeskmail)) {
+                $helpdeskmail = '';
+        }
+	$tool_content .= "<table width='99%' class='FormData' align='left'>
 	<tbody>
 	<tr>
 	<th width='220' class='left'>&nbsp;</th>
@@ -333,11 +338,11 @@ elseif(isset($_REQUEST['install5']) OR isset($_REQUEST['back4']))
 	</tr>
 	<tr>
 	<th class='left'>$langHelpDeskEmail</th>
-	<td><input type=text class='FormData_InputText' size=40 name='helpdeskmail' value='$helpdeskmail'>&nbsp;&nbsp;(**)</td>
+	<td><input type='text' class='FormData_InputText' size='40' name='helpdeskmail' value='$helpdeskmail'>&nbsp;&nbsp;(**)</td>
 	</tr>
 	<tr>
 	<th class='left'>$langInstituteShortName</th>
-	<td><input type=text class='FormData_InputText' size=40 name='institutionForm' value='$institutionForm'></td>
+	<td><input type=text class='FormData_InputText' size='40' name='institutionForm' value='$institutionForm'></td>
 	</tr>
 	<tr>
 	<th class='left'>$langInstituteName</th>
@@ -568,8 +573,7 @@ elseif(isset($_REQUEST['install7']))
 	if (!$fd) {
 		$tool_content .= $langErrorConfig;
 	} else {
-		if (!$reguser) $user_registration = 'FALSE';
-    		else $user_registration = 'TRUE';
+		$user_registration = $reguser? 'TRUE': 'FALSE';
 		$stringConfig='<?php
 /* ========================================================
  * OpeneClass 2.2 configuration file
@@ -643,32 +647,22 @@ elseif (isset($_REQUEST['install1']) || isset($_REQUEST['back1']))
 
 	$tool_content .= "<form action='$_SERVER[PHP_SELF]?alreadyVisited=1' method='post'>";
 
+        function mkdir_or_error($dirname, $warn_message) {
+                global $errorContent, $configErrorExists, $langWarnInstallNotice1,
+                       $install_info_file, $langHere, $langWarnInstallNotice2;
+                if (!is_dir($dirname)) {
+                        if (@!mkdir($dirname, 0777)) {
+                                $errorContent[] = "<p class='caution_small'>$warn_message $langWarnInstallNotice1 <a href='$install_info_file'>$langHere</a> $langWarnInstallNotice2</p>";
+                                $configErrorExists = true;
+                        }
+                }
+        }
+
 	// create config, courses and video catalogs
-	//config directory
-	if (!is_dir("../config")) {
-		$mkd=@mkdir("../config", 0777);
-		if(!$mkd) {
-			$errorContent[]= "<p class='caution_small'>$langWarningInstall3 $langWarnInstallNotice1 <a href='$install_info_file'>$langHere</a> $langWarnInstallNotice2</p>";
-			$configErrorExists = true;
-		}
-	}
-	// courses directory
-
-	if (!is_dir("../courses")) {
-		$mkd = @mkdir("../courses", 0777);
-	if(!$mkd){
-		$errorContent[]= "<p class='caution_small'>$langWarningInstall4 $langWarnInstallNotice1 <a href='$install_info_file'>$langHere</a> $langWarnInstallNotice2</p>";
-		$configErrorExists = true;
-		}
-	}
-
-	if (!is_dir("../video")) {
-		$mkd = @mkdir("../video", 0777);
-		if(!$mkd) {
-    			$errorContent[]= "<p class='caution_small'>$langWarningInstall5 $langWarnInstallNotice1 <a href='$install_info_file'>$langHere</a> $langWarnInstallNotice2</p>";
-    			$configErrorExists = true;
-  		}
-	}
+        mkdir_or_error('../config', $langWarningInstall3);
+	mkdir_or_error('../courses', $langWarningInstall4);
+	mkdir_or_error('../courses/temp', $langWarningInstall4);
+        mkdir_or_error('../video', $langWarningInstall5);
 
 	if($configErrorExists) {
 		$tool_content .= implode("<br/>", $errorContent);
@@ -685,13 +679,13 @@ elseif (isset($_REQUEST['install1']) || isset($_REQUEST['back1']))
 	$tool_content .= "</li></ul>";
 	$tool_content .= "<b>$langRequiredPHP</b>";
 	$tool_content .= "<ul class='installBullet'>";
-	warnIfExtNotLoaded("standard");
-	warnIfExtNotLoaded("session");
-	warnIfExtNotLoaded("mysql");
-	warnIfExtNotLoaded("gd");
-	warnIfExtNotLoaded("mbstring");
-	warnIfExtNotLoaded("zlib");
-	warnIfExtNotLoaded("pcre");
+	warnIfExtNotLoaded('standard');
+	warnIfExtNotLoaded('session');
+	warnIfExtNotLoaded('mysql');
+	warnIfExtNotLoaded('gd');
+	warnIfExtNotLoaded('mbstring');
+	warnIfExtNotLoaded('zlib');
+	warnIfExtNotLoaded('pcre');
 	$tool_content .= "</ul><b>$langOptionalPHP</b>";
 	$tool_content .= "<ul class='installBullet'>";
 	warnIfExtNotLoaded("ldap");
@@ -719,57 +713,40 @@ elseif (isset($_REQUEST['install1']) || isset($_REQUEST['back1']))
 		'english' => 'English (en)');
 
 	$tool_content .= "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
-	<html>
-	<head>
-	<title>$langWelcomeWizard</title>
-	<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
-	<link href='./install.css' rel='stylesheet' type='text/css' />
-	<link href='../template/classic/tool_content.css' rel='stylesheet' type='text/css' />
-	<link href='../template/classic/perso.css' rel='stylesheet' type='text/css' />
-	</head>
-	<body>
-	<table class='FormInput' align='center' style='border: 1px solid #edecdf;'>
-	<thead>
-	<tr>
-	<td colspan='2'><div align='center' class='welcomeImg'></div></td>
-	</tr>
-	<tr>
-	<td colspan='2'><div align='center'><h4>$langWelcomeWizard</h4></div>$langThisWizard
-	<ul class='installBullet'>
-	<li>$langWizardHelp1</li>
-	<li>$langWizardHelp2</li>
-	<li>$langWizardHelp3</li>
-	</ul>
-	</td>
-	</tr>
-	<tr>
-	<td colspan='2'>
-	<table width='100%' class='FormInput' align='center'>
-	<tbody>
-	<tr>
-	<td width='40%' class='odd'>&nbsp;</td>
-	<td><b>$langOptions</b></td>
-	</tr>
-	<tr>
-	<td class='odd' class='left'>$langChooseLang:</td>
-	<td><form name='langform' action='$_SERVER[PHP_SELF]' method='post'>".selection($langLanguages, 'lang', $lang, 'onChange="document.langform.submit();"')."</form></td>
-	</tr>
-	<tr>
-	<td class='odd' class='left'>&nbsp;</td>
-	<td>
-	<form action='$_SERVER[PHP_SELF]?alreadyVisited=1' method='post'>
-	<input type='hidden' name='welcomeScreen' value='welcomeScreen'>
-	<input type='submit' name='install1' value='$langNextStep >' />
-	</form>
-	</td>
-	</tr>
-	</thead>
-	</table>
-	</td>
-	</tr>
-	</thead>
-	</table>
-	</body>
-	</html>";
+<html>
+<head>
+        <title>$langWelcomeWizard</title>
+        <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+        <link href='./install.css' rel='stylesheet' type='text/css' />
+        <link href='../template/classic/tool_content.css' rel='stylesheet' type='text/css' />
+        <link href='../template/classic/perso.css' rel='stylesheet' type='text/css' />
+</head>
+<body>
+        <table class='FormInput' align='center' style='border: 1px solid #edecdf;'>
+        <tr><td colspan='2'><div align='center' class='welcomeImg'></div></td></tr>
+        <tr><td colspan='2'><div align='center'><h4>$langWelcomeWizard</h4></div>
+               $langThisWizard
+               <ul class='installBullet'>
+                  <li>$langWizardHelp1</li>
+                  <li>$langWizardHelp2</li>
+                  <li>$langWizardHelp3</li>
+               </ul></td></tr>
+        <tr><td colspan='2'>
+               <table width='100%' class='FormInput' align='center'>
+                  <tr><td width='40%' class='odd'>&nbsp;</td>
+                      <td><b>$langOptions</b></td></tr>
+                  <tr><td class='odd left'>$langChooseLang:</td>
+                  <td><form name='langform' action='$_SERVER[PHP_SELF]' method='post'>" .
+                      selection($langLanguages, 'lang', $lang, 'onChange="document.langform.submit();"') .
+                      "</form></td></tr>
+                  <tr><td class='odd left'>&nbsp;</td>
+                      <td><form action='$_SERVER[PHP_SELF]?alreadyVisited=1' method='post'>
+                          <input type='hidden' name='welcomeScreen' value='welcomeScreen' />
+                          <input type='submit' name='install1' value='$langNextStep >' />
+                          </form></td></tr>
+                  </table></td></tr>
+        </table>
+</body>
+</html>";
 	echo $tool_content;
 }
