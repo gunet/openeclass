@@ -327,8 +327,8 @@ function adminMenu(){
 	$arrMenuType['type'] = 'text';
 	$arrMenuType['text'] = $GLOBALS['langAdminUsers'];
 	array_push($sideMenuSubGroup, $arrMenuType);
-	array_push($sideMenuText, $GLOBALS['langListUsersActions']);
-	array_push($sideMenuLink, "../admin/listusers.php");
+	array_push($sideMenuText, $GLOBALS['langSearchUser']);
+	array_push($sideMenuLink, "../admin/search_user.php");
 	array_push($sideMenuImg, "black-arrow1.gif");
 
 	array_push($sideMenuText, $GLOBALS['langProfOpen']);
