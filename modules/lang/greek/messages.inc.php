@@ -343,6 +343,7 @@ e-mail είναι προαιρετικό - αν θέλετε να το παρα�
 $langMultiRegCourseInvalid = 'Χρήστης %s: μη έγκυρος κωδικός μαθήματος «%s»';
 $langMultiRegFields = 'Ορισμός πεδίων';
 $langMultiRegFieldError = 'Σφάλμα! Μη επιτρεπτή ετικέτα πεδίου:';
+$langMultiRegUsernameError = 'Το όνομα χρήστη υπάρχει ήδη.';
 $langMultiRegType = 'Δημιουργία λογαριασμών';
 $langMultiRegSendMail = 'Αποστολή των στοιχείων των χρηστών μέσω e-mail';
 $langMultiRegPrefix = 'Πρόθεμα username χρηστών';

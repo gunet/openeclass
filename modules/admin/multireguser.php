@@ -175,7 +175,7 @@ function create_user($statut, $uname, $password, $nom, $prenom, $email, $depid, 
 
         $req = db_query('SELECT * FROM user WHERE username = ' . autoquote($uname));
         if ($req and mysql_num_rows($req) > 0) {
-                $GLOBALS['error'] = "$GLOBALS[l_invalidname] ($uname)";
+                $GLOBALS['error'] = "$GLOBALS[langMultiRegUsernameError] ($uname)";
                 return false;
         }
 
