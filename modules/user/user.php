@@ -40,12 +40,12 @@ $require_prof = true;
 include '../../include/baseTheme.php';
 include '../admin/admin.inc.php';
 
-define ("COURSE_USERS_PER_PAGE", 15);
+define ('COURSE_USERS_PER_PAGE', 15);
 
 $limit = isset($_REQUEST['limit'])?$_REQUEST['limit']:0;
 
 $nameTools = $langAdminUsers;
-$q = "";
+$q = '';
 
 $head_content = '
 <script type="text/javascript">
@@ -146,7 +146,7 @@ if ($is_adminOfCourse) {
 
 	// display navigation links if course users > COURSE_USERS_PER_PAGE
 	if ($countUser > COURSE_USERS_PER_PAGE and !isset($_GET['all'])) {
-		$q = "LIMIT $limit, ".COURSE_USERS_PER_PAGE."";
+		$q = "LIMIT $limit, " . COURSE_USERS_PER_PAGE;
 		$tool_content .= show_paging($limit, COURSE_USERS_PER_PAGE, $countUser, "$_SERVER[PHP_SELF]", '', TRUE);
 	}
 	
@@ -155,7 +155,7 @@ if ($is_adminOfCourse) {
 	} else {
 		$extra_link = "&amp;limit=".$limit;
 	}
-	
+
 	$tool_content .= "<table width='99%' class='tbl_alt'><tr class='odd'>
 	     <th rowspan='2'>$langID</th>
 	     <th rowspan='2'><div align='left'><a href='$_SERVER[PHP_SELF]?ord=s$extra_link'>$langName<br />$langSurname</a></div></th>";
@@ -188,7 +188,7 @@ if ($is_adminOfCourse) {
 			    FROM cours_user, user
 			    WHERE `user`.`user_id` = `cours_user`.`user_id` AND `cours_user`.`cours_id` = $cours_id"
 			   ." ".$order." ".$q); 
-	
+
 	while ($myrow = mysql_fetch_array($result)) {
 		// bi colored table
 		if ($i%2 == 0) {
@@ -232,8 +232,9 @@ if ($is_adminOfCourse) {
 		$tool_content .= "<td valign='top' align='center'>";
 		$alert_uname = $myrow['prenom'] . " " . $myrow['nom'];
 		$tool_content .= "<a href='$_SERVER[PHP_SELF]?unregister=$myrow[user_id]$extra_link' onClick=\"return confirmation('".addslashes($alert_uname)."');\"><img src='../../template/classic/img/delete.gif' title='$langDelete' /></a>";
-		$tool_content .= "</td></tr>";$i++;
-	} 	// end of while
+                $tool_content .= "</td></tr>";
+                $i++;
+	}
 	$tool_content .= "</table>";
 }
 add_units_navigation(true);

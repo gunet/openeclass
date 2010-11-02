@@ -143,27 +143,27 @@ function show_paging($limit, $listsize, $fulllistsize, $page, $extra_page = '', 
 	
 	// Page numbers of navigation
 	$pn = 15;
-	//$retString .= "<br><table width=\"99%\"><tbody><tr><td>&nbsp;</td><td align=\"center\">";
-	$retString .= "<br><table width=\"99%\"><tbody><tr><td>&nbsp;</td><td align='center'>$link_all &nbsp;&nbsp;&nbsp;";
+
+	$retString .= "<br /><table width='99%'><tbody><tr><td>&nbsp;</td><td align='center'>$link_all &nbsp;&nbsp;&nbsp;";
+        //
 	// Deal with previous page
 	if ($limit!=0) {
 		$newlimit = $limit - $listsize;
-		$retString .= "<a href=\"".$page."?limit=".$newlimit."".$extra_page."\"><b>$langBeforePage</b></a>&nbsp;|&nbsp;";
+		$retString .= "<a href='$page?limit=$newlimit$extra_page'><b>$langBeforePage</b></a>&nbsp;|&nbsp;";
 	} else {
 		$retString .= "<b>$langBeforePage</b>&nbsp;|&nbsp;";
 	}
 	// Deal with pages
-	if (ceil($fulllistsize / $listsize) <= $pn/3)
-	{
+	if (ceil($fulllistsize / $listsize) <= $pn/3) {
 		// Show all
 		$counter = 0;
 		while ($counter * $listsize < $fulllistsize) {
 			$aa = $counter + 1;
 			if ($counter * $listsize == $limit) {
-				$retString .= "<b>".$aa."</b>&nbsp;";
+				$retString .= "<b>$aa</b>&nbsp;";
 			} else {
 				$newlimit = $counter * $listsize;
-				$retString .= "<b><a href=\"".$page."?limit=".$newlimit."".$extra_page."\">".$aa."</a></b>&nbsp;";
+				$retString .= "<b><a href='$page?limit=$newlimit$extra_page'>$aa</a></b>&nbsp;";
 			}
 			$counter++;
 		}
@@ -173,10 +173,10 @@ function show_paging($limit, $listsize, $fulllistsize, $page, $extra_page = '', 
 		while ($counter * $listsize < $fulllistsize && $counter < $pn/3*2) {
 			$aa = $counter + 1;
 			if ($counter * $listsize == $limit) {
-				$retString .= "<b>".$aa."</b>&nbsp;";
+				$retString .= "<b>$aa</b>&nbsp;";
 			} else {
 				$newlimit = $counter * $listsize;
-				$retString .= "<b><a href=\"".$page."?limit=".$newlimit."".$extra_page."\">".$aa."</a></b>&nbsp;";
+				$retString .= "<b><a href='$page?limit=$newlimit$extra_page'>$aa</a></b>&nbsp;";
 			}
 			$counter++;
 		}
@@ -189,7 +189,7 @@ function show_paging($limit, $listsize, $fulllistsize, $page, $extra_page = '', 
 				$retString .= "<b>".$aa."</b>&nbsp;";
 			} else {
 				$newlimit = $counter * $listsize;
-				$retString .= "<b><a href=\"".$page."?limit=".$newlimit."".$extra_page."\">".$aa."</a></b>&nbsp;";
+				$retString .= "<b><a href='$page?limit=$newlimit$extra_page'>$aa</a></b>&nbsp;";
 			}
 			$counter++;
 		}
@@ -215,7 +215,7 @@ function show_paging($limit, $listsize, $fulllistsize, $page, $extra_page = '', 
 				$retString .= "<b>".$aa."</b>&nbsp;";
 			} else {
 				$newlimit = $counter * $listsize;
-				$retString .= "<b><a href=\"".$page."?limit=".$newlimit."".$extra_page."\">".$aa."</a></b>&nbsp;";
+				$retString .= "<b><a href='$page?limit=$newlimit$extra_page'>$aa</a></b>&nbsp;";
 			}
 			$counter++;
 		}
@@ -225,10 +225,10 @@ function show_paging($limit, $listsize, $fulllistsize, $page, $extra_page = '', 
 		while ($counter * $listsize < $fulllistsize && $counter < ($pn/3)) {
 			$aa = $counter + 1;
 			if ($counter * $listsize == $limit) {
-				$retString .= "<b>".$aa."</b>&nbsp;";
+				$retString .= "<b>$aa</b>&nbsp;";
 			} else {
 				$newlimit = $counter * $listsize;
-				$retString .= "<b><a href=\"".$page."?limit=".$newlimit."".$extra_page."\">".$aa."</a></b>&nbsp;";
+				$retString .= "<b><a href='$page?limit=$newlimit$extra_page'>$aa</a></b>&nbsp;";
 			}
 			$counter++;
 		}
@@ -242,7 +242,7 @@ function show_paging($limit, $listsize, $fulllistsize, $page, $extra_page = '', 
 				$retString .= "<b>".$aa."</b>&nbsp;";
 			} else {
 				$newlimit = $counter * $listsize;
-				$retString .= "<b><a href=\"".$page."?limit=".$newlimit."".$extra_page."\">".$aa."</a></b>&nbsp;";
+				$retString .= "<b><a href='$page?limit=$newlimit$extra_page'>$aa</a></b>&nbsp;";
 			}
 			$counter++;
 		}
@@ -252,10 +252,10 @@ function show_paging($limit, $listsize, $fulllistsize, $page, $extra_page = '', 
 		while ($counter * $listsize < $fulllistsize) {
 			$aa = $counter + 1;
 			if ($counter * $listsize == $limit) {
-				$retString .= "<b>".$aa."</b>&nbsp;";
+				$retString .= "<b>$aa</b>&nbsp;";
 			} else {
 				$newlimit = $counter * $listsize;
-				$retString .= "<b><a href=\"".$page."?limit=".$newlimit."".$extra_page."\">".$aa."</a></b>&nbsp;";
+				$retString .= "<b><a href='$page?limit=$newlimit$extra_page'>$aa</a></b>&nbsp;";
 			}
 			$counter++;
 		}
@@ -265,11 +265,9 @@ function show_paging($limit, $listsize, $fulllistsize, $page, $extra_page = '', 
 		$retString .= "|&nbsp;<b>$langNextPage</b>";
 	} else {
 		$newlimit = $limit + $listsize;
-		$retString .= "|&nbsp;<a href=\"".$page."?limit=".$newlimit."".$extra_page."\"><b>$langNextPage</b></a>";
+		$retString .= "|&nbsp;<a href='$page?limit=$newlimit$extra_page'><b>$langNextPage</b></a>";
 	}
 	$retString .= "</td></tr></tbody></table>";
 
 	return $retString;
 }
-
-?>

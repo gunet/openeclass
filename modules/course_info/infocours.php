@@ -152,14 +152,14 @@ if (isset($_POST['submit'])) {
 		$course_keywords = q($c['course_keywords']);
 		$password = q($c['password']);
 
-		@$tool_content .="
+		$tool_content .="
 		<form method='post' action='$_SERVER[PHP_SELF]'>
                 <fieldset>
                 <legend>$langCourseIden</legend>
                 <table class='tbl'>
                     <tr>
                         <td>$langCode&nbsp;:</td>
-                        <td><input type='text' name='fcode' value='$fake_code' size='60' /' size='60' />></td>
+                        <td><input type='text' name='fcode' value='$fake_code' size='60' /></td>
                         <td>&nbsp;</td>
                     </tr>
                     <tr>

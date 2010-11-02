@@ -67,7 +67,7 @@ function db_query($sql, $db = FALSE) {
         if (mysql_errno()) {
                 if ($GLOBALS['is_admin'] or defined('DEBUG_MYSQL')) {
                         echo '<hr />' . mysql_errno() . ': ' . mysql_error()
-                                . "<br><pre>$sql</pre><hr />";
+                                . "<br /><pre>$sql</pre><hr />";
                 } else {
                         echo '<hr />Database error<hr />';
                 }
@@ -750,7 +750,7 @@ function check_new_announce() {
 function mailto($address, $alternative='(e-mail address hidden)')
 {
         if (empty($address)) {
-                echo '&nbsp;';
+                return '&nbsp;';
         } else {
                 $prog = urlenc("var a='" . urlenc(str_replace('@', '&#64;', $address)) .
                       "';document.write('<a href=\"mailto:'+unescape(a)+'\">'+unescape(a)+'</a>');");

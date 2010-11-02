@@ -156,7 +156,7 @@ if (isset($_POST['back1']) or !isset($_POST['visit'])) {
         </tr>
 	<tr>
           <td>&nbsp;</td>
-	  <td><input type='submit' name='create2' value='$langNextStep  />' /><input type='hidden' name='visit' value='true' /></td>
+	  <td><input type='submit' name='create2' value='$langNextStep >' /><input type='hidden' name='visit' value='true' /></td>
 	  <td>&nbsp;</td>
         </tr>
         </table>
@@ -184,7 +184,7 @@ if (isset($_POST['back1']) or !isset($_POST['visit'])) {
         </td>
       </tr>
       <tr>
-	<td><input type='submit' name='back1' value='< $langPreviousStep ' />&nbsp;<input type='submit' name='create3' value='$langNextStep  />' /></td>
+	<td><input type='submit' name='back1' value='< $langPreviousStep ' />&nbsp;<input type='submit' name='create3' value='$langNextStep >' /></td>
       </tr>
       </table>
     </fieldset>
