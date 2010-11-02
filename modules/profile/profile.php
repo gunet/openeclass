@@ -76,9 +76,8 @@ if (isset($_POST['submit'])) {
                 
         if (!$allow_username_change) {
                 $username_form = $_SESSION['uname'];
-        } else {
-                $username_form = $_POST['username_form'];
         }
+
         if ($username_form != $_SESSION['uname']) {
                 // check if username exists
                 $username_check = db_query('SELECT username FROM user WHERE username = ' . autoquote($username_form));

@@ -32,7 +32,7 @@ $tool_content = "";
 $lang = langname_to_code($language);
 
 $nameTools = $langUserRequest;
-$navigation[] = array("url"=>"registration.php", "name"=> $langNewUser);
+$navigation[] = array('url' => 'registration.php', 'name' => $langNewUser);
 
 // security - show error instead of form if user registration is open
 if (!isset($close_user_registration) or $close_user_registration == false) {
@@ -58,8 +58,7 @@ if (!email_seems_valid($usermail)) {
 if (isset($_POST['submit']) and !$all_set) {
 
         // form submitted but required fields empty
-        $tool_content .= "
-                  <p class='alert1'>$langFieldsMissing</p>";
+        $tool_content .= "<p class='alert1'>$langFieldsMissing</p>";
 
 }
 
@@ -103,37 +102,37 @@ if ($all_set) {
 
 } else {
         // display the form
-$tool_content .= "<p>$langInfoStudReq</p><br />
+        $tool_content .= "<p>$langInfoStudReq</p><br />
 <form action='$_SERVER[PHP_SELF]' method='post'>
  <fieldset>
   <legend>$langUserData</legend>
   <table class='tbl'>
   <tr>
     <th>$langName</th>
-    <td><input type='text' name='name' value='$name' size='33' />&nbsp;&nbsp;(*)</td>
+    <td><input type='text' name='name' value='" . q($name) . "' size='33' />&nbsp;&nbsp;(*)</td>
   </tr>
   <tr>
     <th>$langSurname</th>
-    <td><input type='text' name='surname' value='$surname' size='33' />&nbsp;&nbsp;(*)</td>
+    <td><input type='text' name='surname' value='" . q($surname) . "' size='33' />&nbsp;&nbsp;(*)</td>
   </tr>
   <tr>
     <th>$langPhone</th>
-    <td colspan='2'><input type='text' name='userphone' value='$userphone' size='33' /></td>
+    <td colspan='2'><input type='text' name='userphone' value='" . q($userphone) . "' size='33' /></td>
   <tr>
     <th>$langUsername</th>
-    <td><input type='text' name='username' size='33' maxlength='20' value='$username' />&nbsp;&nbsp;(*)&nbsp;$langUserNotice</td>
+    <td><input type='text' name='username' size='33' maxlength='20' value='" . q($username) . "' />&nbsp;&nbsp;(*)&nbsp;$langUserNotice</td>
   </tr>
   <tr>
     <th>$langProfEmail</th>
-    <td><input type='text' name='usermail' value='$usermail' size='33' />&nbsp;&nbsp;(*)</td>
+    <td><input type='text' name='usermail' value='" . q($usermail) . "' size='33' />&nbsp;&nbsp;(*)</td>
   </tr>
   <tr>
     <th>$langAm</th>
-    <td colspan='2'><input type='text' name='am' value='$am' size='33' /></td>
+    <td colspan='2'><input type='text' name='am' value='" . q($am) . "' size='33' /></td>
   </tr>
   <tr>
     <th>$langComments</th>
-    <td><textarea name='usercomment' cols='30' rows='4'>$usercomment</textarea>&nbsp;&nbsp;(*) $profreason</td>
+    <td><textarea name='usercomment' cols='30' rows='4'>" . q($usercomment) . "</textarea>&nbsp;&nbsp;(*) $profreason</td>
   </tr>
   <tr>
     <th>$langFaculty&nbsp;</th>
@@ -145,7 +144,7 @@ $tool_content .= "<p>$langInfoStudReq</p><br />
                 } else {
                         $selected = '';
                 }
-                $tool_content .= "\n<option value='$dep[id]'$selected>$dep[name]</option>\n";
+                $tool_content .= "\n<option value='$dep[id]'$selected>" . q($dep['name']) . "</option>\n";
         }
 
 	 $tool_content .= "\n</select>
@@ -165,6 +164,6 @@ $tool_content .= "<p>$langInfoStudReq</p><br />
   <div align='right'><small>$langRequiredFields</small></div>
   </fieldset>
   </form>";
-}   // end of form
+}
 
 draw($tool_content, 0);

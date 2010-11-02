@@ -84,7 +84,7 @@ if (isset($_SESSION['shib_uname'])) { // authenticate via shibboleth
 	include 'include/shib_login.php';
 } else { // normal authentication
 	if (isset($_POST['uname'])) {
-		$uname = escapeSimple(preg_replace('/ +/', ' ', trim($_POST['uname'])));
+		$uname = unescapeSimple(preg_replace('/ +/', ' ', trim($_POST['uname'])));
 	} else {
 		$uname = '';
 	}
@@ -97,10 +97,10 @@ if (isset($_SESSION['shib_uname'])) { // authenticate via shibboleth
 	if(!empty($submit)) {
 		unset($uid);
 		$sqlLogin= "SELECT user_id, nom, username, password, prenom, statut, email, perso, lang
-			FROM user WHERE username='".$uname."'";
+			FROM user WHERE username=" . quote($uname);
 		$result = mysql_query($sqlLogin);
-		$check_passwords = array("pop3","imap","ldap","db");
-		$warning = "";
+		$check_passwords = array('pop3', 'imap', 'ldap', 'db');
+		$warning = '';
 		$auth_allow = 0;
 		$exists = 0;
                 if (!isset($_COOKIE) or count($_COOKIE) == 0) {
@@ -113,7 +113,7 @@ if (isset($_SESSION['shib_uname'])) { // authenticate via shibboleth
 			while ($myrow = mysql_fetch_array($result)) {
 				$exists = 1;
 				if(!empty($auth)) {
-					if(!in_array($myrow["password"],$check_passwords)) {
+					if (!in_array($myrow['password'], $check_passwords)) {
 						// eclass login
 						include "include/login.php"; 
 					} else {
@@ -125,27 +125,27 @@ if (isset($_SESSION['shib_uname'])) { // authenticate via shibboleth
 				}
 			}
 		}
-		if(empty($exists) and !$auth_allow) {
+		if (empty($exists) and !$auth_allow) {
 			$auth_allow = 4;
 		}
 		if (!isset($uid)) {
 			switch($auth_allow) {
-				case 1 : $warning .= ""; 
+				case 1: $warning .= ""; 
 					break;
-				case 2 : $warning .= "<br /><font color='red'>".$langInvalidId ."</font><br />"; 
+				case 2: $warning .= "<br /><font color='red'>".$langInvalidId ."</font><br />"; 
 					break;
-				case 3 : $warning .= "<br />".$langAccountInactive1." <a href='modules/auth/contactadmin.php?userid=".$user."'>".$langAccountInactive2."</a><br /><br />"; 
+				case 3: $warning .= "<br />".$langAccountInactive1." <a href='modules/auth/contactadmin.php?userid=".$user."'>".$langAccountInactive2."</a><br /><br />"; 
 					break;
-				case 4 : $warning .= "<br /><font color='red'>". $langInvalidId . "</font><br />"; 
+				case 4: $warning .= "<br /><font color='red'>". $langInvalidId . "</font><br />"; 
 					break;
-				case 5 : $warning .= "<br /><font color='red'>". $langNoCookies . "</font><br />"; 
+				case 5: $warning .= "<br /><font color='red'>". $langNoCookies . "</font><br />"; 
 					break;
 				default:
 					break;
 			}
 		} else {
 			$warning = '';
-			$log='yes';
+			$log = 'yes';
 			$_SESSION['nom'] = $nom;
 			$_SESSION['prenom'] = $prenom;
 			$_SESSION['email'] = $email;
