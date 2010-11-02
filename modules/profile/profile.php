@@ -86,9 +86,10 @@ if (isset($_POST['submit'])) {
                 $user_exist = false;
         }
 
-	if (strstr($username_form, "'") or strstr($username_form, '"') or strstr($username_form, '\\')){
-		redirect_to_message(10);
-	}
+        // TODO: Allow admin to configure allowed username format
+	// if (strstr($username_form, "'") or strstr($username_form, '"') or strstr($username_form, '\\')){
+	//	redirect_to_message(10);
+	// }
 
 	// check if username is free
 	if ($user_exist and $username_form == $user_exist AND $username_form != $uname) {
