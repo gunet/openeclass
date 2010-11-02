@@ -12,7 +12,7 @@ For example if you want to change message
 $langAboutText = "The platform version is"; 
 create english.inc.php in directory (eclass path)/config/ like this:
 
-<?
+<?php
 $langAboutText = "Version is";
 ?>
 

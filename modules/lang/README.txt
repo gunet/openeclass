@@ -13,7 +13,7 @@
 $langAboutText = "Η έκδοση της πλατφόρμας είναι";
 απλά δημιουργούμε το <em>greek.inc.php</em> στον κατάλογo (path του eclass)/config/ ως εξής:
 
-<?
+<?php
 $langAboutText = "Τρέχουσα έκδοση της πλατφόρμας";
 ?>
 
