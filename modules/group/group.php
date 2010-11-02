@@ -182,15 +182,16 @@ if ($is_adminOfCourse) {
                 $message = $langGroupDel;
 
         } elseif (isset($_REQUEST['empty'])) {
-                $result = db_query("DELETE FROM user_group");
-                $result2 = db_query("UPDATE student_group SET tutor='0'");
+                $result = db_query("DELETE FROM group_members
+				   WHERE group_id IN
+				   (SELECT id FROM `group` WHERE course_id = $cours_id)");
                 $message = $langGroupsEmptied;
 
         } elseif (isset($_REQUEST['fill'])) {
                 $resGroups = db_query("SELECT id, max_members -
                                                       (SELECT count(*) from group_members WHERE group_members.group_id = id)
                                                   AS remaining
-                                              FROM `group` WHERE course_id = $cours_id ORDER BY id;");
+                                              FROM `group` WHERE course_id = $cours_id ORDER BY id");
                 while (list($idGroup, $places) = mysql_fetch_row($resGroups)) {
                         if ($places > 0) {
                                 $placeAvailableInGroups[$idGroup] = $places;
@@ -427,5 +428,5 @@ add_units_navigation(TRUE);
 if ($is_adminOfCourse) {
 	draw($tool_content, 2, '', $head_content);
 } else {
-	draw($tool_content, 2, '');
+	draw($tool_content, 2);
 }

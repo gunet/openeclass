@@ -264,7 +264,7 @@ function display_user($user, $print_email = false)
                 $html = '';
                 foreach ($user as $user_data) {
                         if ($begin) {
-                                $begin = true;
+                                $begin = false;
                         } else {
                                 $html .= ', ';
                         }
@@ -383,10 +383,9 @@ function user_groups($course_id, $user_id)
 // Find secret subdir of group gid
 function group_secret($gid)
 {
-	global $currentCourseID;
+	global $mysqlMainDb;
 
-	$res = db_query("SELECT secretDirectory FROM student_group WHERE id = '$gid'",
-	$currentCourseID);
+	$res = db_query("SELECT secret_directory FROM `group` WHERE id = '$gid'", $mysqlMainDb);
 	if ($res) {
 		$secret = mysql_fetch_row($res);
 		return $secret[0];

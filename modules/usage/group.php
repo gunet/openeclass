@@ -35,14 +35,18 @@ $require_login = true;
 $require_prof = true;
 
 include '../../include/baseTheme.php';
+include '../group/group_functions.php';
 
 $navigation[] = array('url' => 'usage.php', 'name' => $langUsage);
 $nameTools = $langGroupUsage;
-$tool_content = '';
 $head_content = '<script type="text/javascript" src="../auth/sorttable.js"></script>';
+initialize_group_info();
 
 $i = 0;
-$q = db_query("SELECT id, name, tutor, maxStudent FROM student_group", $currentCourse);
+$q = db_query("SELECT id, name, g.description, max_members, COUNT(*) AS registered
+	              FROM `group` AS g, group_members AS gm
+		      WHERE g.course_id = $cours_id AND g.id = gm.group_id
+		      GROUP BY g.id", $mysqlMainDb);
 if (mysql_num_rows($q) > 0) {
         $tool_content .= "
                 <table class='sortable' width='99%' id='b'>
@@ -53,26 +57,25 @@ if (mysql_num_rows($q) > 0) {
 		  <th class='center'>$langMax</th>
 		</tr>\n";
 	while ($group = mysql_fetch_array($q)) {
-		// Count students registered in each group
-		$resultRegistered = db_query("SELECT id FROM user_group WHERE team = $group[id]", $currentCourseID);
-		$countRegistered = mysql_num_rows($resultRegistered);
 		if ($i % 2 == 0) {
 			$tool_content .= "<tr class='even'>\n";
 		} else {
 			$tool_content .= "<tr class='odd'>\n";
 		}
-		$tool_content .= "<td class='arrow'><a href='../group/group_usage.php?module=usage&amp;group_id=".$group["id"]."'>".$group["name"]."</a></td>\n";
-		$tool_content .= "<td>".uid_to_name($group['tutor'])."</td>\n";
-      		$tool_content .= "<td class='center'>$countRegistered</td>\n";
-		if ($group['maxStudent'] == 0) {
+		$tool_content .= "<td class='arrow'>
+			<a href='../group/group_usage.php?module=usage&amp;group_id=$group[id]'>".
+			q($group['name'])."</a></td>\n";
+		$tool_content .= "<td>".display_user(group_tutors($group['id']))."</td>\n";
+      		$tool_content .= "<td class='center'>$group[registered]</td>\n";
+		if ($group['max_members'] == 0) {
 			$tool_content .= "<td class='center'>-</td>\n";
 		} else {
-			$tool_content .= "<td class='center'>$group[maxStudent]</td>\n";
+			$tool_content .= "<td class='center'>$group[max_members]</td>\n";
 		}
     		$tool_content .= "</tr>\n";
 		$i++;
         }
-        $tool_content .= "/table>\n";
+        $tool_content .= "</table>\n";
 } else {
 	$tool_content .= "<p class='caution_small'>$langNoGroup</p>";
 }

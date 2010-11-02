@@ -47,16 +47,7 @@ function initialize_group_info($group_id = false)
                 list($member_count) = mysql_fetch_row(db_query("SELECT COUNT(*) FROM `$mysqlMainDb`.group_members
 							       WHERE group_id = $group_id"));
 
-                $tutors = array();
-                $res = db_query("SELECT user.user_id, nom, prenom FROM `$mysqlMainDb`.group_members, `$mysqlMainDb`.user
-                                 WHERE group_id = $group_id AND
-                                       is_tutor = 1 AND
-                                       group_members.user_id = user.user_id
-                                 ORDER BY nom, prenom");
-                while ($tutor = mysql_fetch_array($res)) {
-                        $tutors[] = $tutor;
-                }
-
+		$tutors = group_tutors($group_id);	
                 $is_tutor = $is_member = false;
                 if (isset($uid)) {
                         $res = db_query("SELECT is_tutor FROM `$mysqlMainDb`.group_members
@@ -67,4 +58,20 @@ function initialize_group_info($group_id = false)
                         }
                 }
         }
+}
+
+function group_tutors($group_id)
+{
+	global $mysqlMainDb;
+	
+	$tutors = array();
+	$res = db_query("SELECT user.user_id, nom, prenom FROM `$mysqlMainDb`.group_members, `$mysqlMainDb`.user
+			 WHERE group_id = $group_id AND
+			       is_tutor = 1 AND
+			       group_members.user_id = user.user_id
+			 ORDER BY nom, prenom");
+	while ($tutor = mysql_fetch_array($res)) {
+		$tutors[] = $tutor;
+	}
+	return $tutors;
 }
