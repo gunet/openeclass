@@ -535,7 +535,7 @@ function show_student_assignment($id)
 		if ($submission = was_graded($uid, $id)) {
 			show_submission_details($submission);
 			$submit_ok = FALSE;
-		} elseif ($submission = find_submission($uid, $id)) {
+		} elseif ($submission = find_submission($uid, $id, $gids)) {
 			show_submission_details($submission);
 		}
 	}

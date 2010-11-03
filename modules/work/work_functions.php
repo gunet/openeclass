@@ -206,14 +206,14 @@ function group_member_names($gid)
 
 
 // Find submission by a user (or the user's group)
-function find_submission($uid, $id)
+function find_submission($uid, $id, $gids)
 {
-	global $tool_content;
+	global $tool_content, $cours_id;
 	if (is_group_assignment($id)) {
-		$gid = user_group($uid);
+		$groups_sql = join(', ', $gids);
 		$res = db_query("SELECT id FROM assignment_submit
 				WHERE assignment_id = '$id'
-				AND (uid = '$uid' OR group_id = '$gid')");
+				AND (uid = $uid OR group_id IN ($groups_sql)')");
 	} else {
 		$res = db_query("SELECT id FROM assignment_submit
 				WHERE assignment_id = '$id' AND uid = '$uid'");
@@ -368,4 +368,21 @@ function cleanup_filename($f)
 	}
 	$f = preg_replace('{^/+}', '', $f);
 	return preg_replace('{//}', '/', $f);
+}
+
+
+function user_group_info($uid, $cours_id)
+{
+	global $mysqlMainDb;
+	$gids = array();
+	
+	$q = db_query("SELECT group_members.group_id AS grp_id, `group`.name AS grp_name FROM group_members,`group`
+			WHERE group_members.user_id = $uid
+			AND group_members.group_id = `group`.id
+			AND `group`.course_id = $cours_id", $mysqlMainDb);
+	$r = mysql_fetch_array($q);
+	while ($r) {
+		$gids[$r['grp_id']] = $r['grp_name'];
+	}
+	return $gids;
 }
