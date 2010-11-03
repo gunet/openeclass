@@ -395,10 +395,10 @@ if ($is_adminOfCourse) {
                                           <td class='left'>";
                         // Allow student to enter group only if member
                         if ($is_member) {
-                                $tool_content .= "<a href='group_space.php?group_id=$row[0]'>" . q($name) .
+                                $tool_content .= "<a href='group_space.php?group_id=$row[0]'>" . q($group_name) .
                                         "</a> <span style='color:#900; weight:bold;'>($langOneMyGroups)</span>";
 			} else {
-				$tool_content .= q($name);
+				$tool_content .= q($group_name);
 			}
                         $tool_content .= "</td>";
                         $tool_content .= "<td width='35%' class='center'>" . display_user($tutors) . "</td>";
