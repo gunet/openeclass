@@ -50,8 +50,9 @@ $action->record('MODULE_ID_GROUPS');
 $nameTools = $langGroups;
 $totalRegistered = 0;
 unset($message);
-if ($is_adminOfCourse) {
-	$head_content = '
+
+$head_content = <<< END
+<script type="text/javascript" src="$urlAppend/js/jquery-1.4.3.min.js"></script>
 <script type="text/javascript">
 function confirmation (name)
 {
@@ -72,18 +73,23 @@ function confirmation (name)
         {return false;}
     }
 }
+$(document).ready(function(){
+  $('#group_desc').click(function(event) {
+	$(this).replaceWith('<input type="text" size="30" name="group_desc_input" /> <input type="submit" name="submit" value="$langSave" />');
+	event.preventDefault();
+  });
+});
 </script>
-';
-}
+END;
 
 unset($_SESSION['secret_directory']);
 unset($_SESSION['forum_id']);
 
 mysql_select_db($mysqlMainDb);
 initialize_group_info();
+$user_groups = user_group_info($uid, $cours_id);
 
 if ($is_adminOfCourse) {
-
         if (isset($_POST['creation'])) {
                 $group_quantity = intval($_POST['group_quantity']);
                 if (preg_match('/^[0-9]/', $_POST['group_max'])) {
@@ -396,24 +402,31 @@ if ($is_adminOfCourse) {
                         // Allow student to enter group only if member
                         if ($is_member) {
                                 $tool_content .= "<a href='group_space.php?group_id=$row[0]'>" . q($group_name) .
-                                        "</a> <span style='color:#900; weight:bold;'>($langOneMyGroups)</span>";
+                                        "</a> <span style='color:#900; weight:bold;'>($langMyGroup)</span>";
 			} else {
 				$tool_content .= q($group_name);
 			}
+			if ($user_group_description) {
+				$tool_content .= "<br />".q($user_group_description);
+			} elseif ($is_member) {
+				$tool_content .= "<br /><a id='group_desc' href='#'><i>$langAddDescription</i></a>";
+			}
                         $tool_content .= "</td>";
                         $tool_content .= "<td width='35%' class='center'>" . display_user($tutors) . "</td>";
-
-                        // If self-registration allowed by admin
-                        if ($self_reg and !$is_member) {
-                                $tool_content .= "<td class='center'>";
-                                if (!isset($uid) or $is_member or ($max_members and $member_count >= $max_members)) {
-                                        $tool_content .= "-";
-                                } else {
+			
+                        // If self-registration and multi registration allowed by admin and group is not full
+                        $tool_content .= "<td class='center'>";
+			if ($uid and
+			    $self_reg and
+			    (!$user_groups or $multi_reg) and
+			    !$is_member and
+			    (!$max_members or $member_count < $max_members)) {
                                         $tool_content .= "<a href='group_space.php?selfReg=1&amp;group_id=$row[0]'>$langRegistration</a>";
-                                }
-                                $tool_content .= "</td>";
-                        }
-
+			} else {
+                                        $tool_content .= "-";
+			}
+                        $tool_content .= "</td>";
+			
                         $tool_content .= "<td class='center'>$member_count</td><td class='center'>" .
                                          ($max_members? $max_members: '-') . "</td></tr>\n";
                         $totalRegistered += $member_count;
@@ -425,8 +438,4 @@ if ($is_adminOfCourse) {
 
 add_units_navigation(TRUE);
 
-if ($is_adminOfCourse) {
-	draw($tool_content, 2, '', $head_content);
-} else {
-	draw($tool_content, 2);
-}
+draw($tool_content, 2, '', $head_content);

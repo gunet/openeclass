@@ -370,7 +370,7 @@ function cleanup_filename($f)
 	return preg_replace('{//}', '/', $f);
 }
 
-
+// fills an array with info about user groups (group_id => group_name)
 function user_group_info($uid, $cours_id)
 {
 	global $mysqlMainDb;

@@ -22,7 +22,7 @@ function initialize_group_info($group_id = false)
 {
         global $cours_id, $statut, $self_reg, $multi_reg, $has_forum, $private_forum, $documents,
                $group_name, $group_description, $forum_id, $max_members, $secret_directory, $tutors,
-               $member_count, $is_tutor, $is_member, $uid, $urlServer, $mysqlMainDb;
+               $member_count, $is_tutor, $is_member, $uid, $urlServer, $mysqlMainDb, $user_group_description;
 
         if (!(isset($self_reg) and isset($multi_reg) and isset($has_forum) and isset($private_forum) and isset($documents))) {
                 list($self_reg, $multi_reg, $has_forum, $private_forum, $documents) = mysql_fetch_row(mysql_query(
@@ -48,13 +48,13 @@ function initialize_group_info($group_id = false)
 							       WHERE group_id = $group_id"));
 
 		$tutors = group_tutors($group_id);	
-                $is_tutor = $is_member = false;
+                $is_tutor = $is_member = $user_group_description = false;
                 if (isset($uid)) {
-                        $res = db_query("SELECT is_tutor FROM `$mysqlMainDb`.group_members
+                        $res = db_query("SELECT is_tutor, description FROM `$mysqlMainDb`.group_members
                                          WHERE group_id = $group_id AND user_id = $uid");
                         if (mysql_num_rows($res) > 0) {
                                 $is_member = true;
-                                list($is_tutor) = mysql_fetch_row($res);
+                                list($is_tutor, $user_group_description) = mysql_fetch_row($res);
                         }
                 }
         }
@@ -74,4 +74,22 @@ function group_tutors($group_id)
 		$tutors[] = $tutor;
 	}
 	return $tutors;
+}
+
+
+// fills an array with user groups (group_id => group_name)
+function user_group_info($uid, $cours_id)
+{
+	global $mysqlMainDb;
+	$gids = array();
+	
+	$q = db_query("SELECT group_members.group_id AS grp_id, `group`.name AS grp_name FROM group_members,`group`
+			WHERE group_members.user_id = $uid
+			AND group_members.group_id = `group`.id
+			AND `group`.course_id = $cours_id", $mysqlMainDb);
+	
+	while ($r = mysql_fetch_array($q)) {
+		$gids[$r['grp_id']] = $r['grp_name'];
+	}
+	return $gids;
 }
