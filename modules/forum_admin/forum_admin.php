@@ -273,7 +273,7 @@ if(isset($_GET['forumgo'])) {
 		$subject_notify = "$logo - $langCatNotify";
 		$sql = db_query("SELECT DISTINCT user_id FROM forum_notify 
 				WHERE (cat_id = $cat_id) 
-				AND notify_sent = 1 AND course_id = $cours_id", $mysqlMainDb);
+				AND notify_sent = 1 AND course_id = $cours_id AND user_id != $uid", $mysqlMainDb);
 		$body_topic_notify = "$langBodyCatNotify $langInCat '$ctg' \n\n$gunet";
 		while ($r = mysql_fetch_array($sql)) {
 			$emailaddr = uid_to_email($r['user_id']);
