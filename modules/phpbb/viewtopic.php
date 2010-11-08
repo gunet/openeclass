@@ -58,10 +58,8 @@ $require_login = TRUE;
 $require_help = TRUE;
 $helpTopic = 'For';
 include '../../include/baseTheme.php';
-$tool_content = "";
-
-include_once("./config.php");
-include("functions.php"); // application logic for phpBB
+include_once "config.php";
+include "functions.php"; 
 
 $local_head = '
 <script type="text/javascript">
@@ -97,13 +95,59 @@ if (!$result = db_query($sql, $currentCourseID)) {
 	exit();
 }
 if (!$myrow = mysql_fetch_array($result)) {
-                $tool_content .= "
-                <p class='alert1'>$langErrorTopicSelect</p>";
-
+        $tool_content .= "<p class='alert1'>$langErrorTopicSelect</p>";
 	draw($tool_content, 2);
 	exit();
 }
 $forum_name = own_stripslashes($myrow["forum_name"]);
+
+if (isset($_GET['delete'])) {
+	$post_id = $_GET['post_id'];
+	$last_post_in_thread = get_last_post($topic, $currentCourseID, "time_fix");
+	
+	$result = db_query("SELECT * FROM posts WHERE post_id = '$post_id'", $currentCourseID);
+	$myrow = mysql_fetch_array($result);
+	$this_post_time = $myrow["post_time"];
+	list($day, $time) = explode(' ', $this_post_time);
+		
+	$sql = "DELETE FROM posts WHERE post_id = '$post_id'";
+	if (!$r = db_query($sql, $currentCourseID)){
+		$tool_content .= $langUnableDeletePost;
+		draw($tool_content, 2, '', $head_content);
+		exit();
+	}
+	$sql = "DELETE FROM posts_text
+		WHERE post_id = '$post_id'";
+	if (!$r = db_query($sql, $currentCourseID)) {
+		$tool_content .= $langUnableDeletePost;
+		draw($tool_content, 2, '', $head_content);
+		exit();
+	} else if ($last_post_in_thread == $this_post_time) {
+		$topic_time_fixed = get_last_post($topic, $currentCourseID, "time_fix");
+		$sql = "UPDATE topics
+			SET topic_time = '$topic_time_fixed'
+			WHERE topic_id = '$topic'";
+		if (!$r = db_query($sql, $currentCourseID)) {
+			$tool_content .= $langPostRemoved;
+			draw($tool_content, 2, '', $head_content);
+			exit();
+		}
+	}
+	if (get_total_posts($topic, $currentCourseID, "topic") == 0) {
+		$sql = "DELETE FROM topics WHERE topic_id = '$topic'";
+		if (!$r = db_query($sql, $currentCourseID)) {
+			$tool_content .= $langUnableDeleteTopic;
+			draw($tool_content, 2, '', $head_content);
+			exit();
+		}
+		$topic_removed = TRUE;
+	}
+	sync($currentCourseID, $forum, 'forum');
+	if (@!$topic_removed) {
+		sync($currentCourseID, $topic, 'topic');
+	}
+	$tool_content .= "<div id='operations_container'><p class='success'>$langDeletedMessage</p></div>";
+}
 
 $sql = "SELECT topic_title, topic_status
 	FROM topics 
@@ -275,7 +319,8 @@ do {
       <td width='40'i valign='top'><div align='right'>";
 	if ($is_adminOfCourse) { // course admin
 		$tool_content .= "<a href=\"editpost.php?post_id=".$myrow["post_id"]."&amp;topic=$topic&amp;forum=$forum\"><img src='../../template/classic/img/edit.gif' title='$langModify' alt='$langModify' /></a>";
-		$tool_content .= "&nbsp;<a href='editpost.php?post_id=".$myrow["post_id"]."&amp;topic=$topic&amp;forum=$forum&amp;delete=on&amp;submit=yes' onClick='return confirmation()'><img src='../../template/classic/img/delete.gif' title='$langDelete' /></a>";
+		$tool_content .= "&nbsp;<a href='$_SERVER[PHP_SELF]?post_id=".$myrow["post_id"]."&amp;topic=$topic&amp;forum=$forum&amp;delete=on' onClick='return confirmation()'>
+			<img src='../../template/classic/img/delete.gif' title='$langDelete' /></a>";
 	}
 	$tool_content .= "</div></td>\n    </tr>";
 	$count++;
@@ -342,5 +387,4 @@ cData;
         }
 	$tool_content .= "</span></td></tr></table>";
 }
-
 draw($tool_content, 2, '', $local_head);
