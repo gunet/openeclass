@@ -38,7 +38,6 @@ $require_help = TRUE;
 $helpTopic = 'Group';
 
 include '../../include/baseTheme.php';
-
 include 'group_functions.php';
 
 /**** The following is added for statistics purposes ***/
@@ -52,7 +51,6 @@ $totalRegistered = 0;
 unset($message);
 
 $head_content = <<< END
-<script type="text/javascript" src="$urlAppend/js/jquery-1.4.3.min.js"></script>
 <script type="text/javascript">
 function confirmation (name)
 {
@@ -73,12 +71,13 @@ function confirmation (name)
         {return false;}
     }
 }
-$(document).ready(function(){
-  $('#group_desc').click(function(event) {
-	$(this).replaceWith('<input type="text" size="30" name="group_desc_input" /> <input type="submit" name="submit" value="$langSave" />');
-	event.preventDefault();
-  });
-});
+function confirm_delete()
+{
+    if (confirm("$langConfirmDelete"))
+        {return true;}
+    else
+        {return false;}
+}
 </script>
 END;
 
@@ -97,7 +96,6 @@ if ($is_adminOfCourse) {
                 } else {
                         $group_max = 0;
                 }
-
                 list($group_num) = mysql_fetch_row(db_query("SELECT COUNT(*) FROM `group` WHERE course_id = $cours_id"));
 
                 // Create a hidden category for group forums
@@ -407,9 +405,13 @@ if ($is_adminOfCourse) {
 				$tool_content .= q($group_name);
 			}
 			if ($user_group_description) {
-				$tool_content .= "<br />".q($user_group_description);
+				$tool_content .= "<br />".q($user_group_description)."&nbsp;&nbsp;
+					<a href='group_description.php?group_id=$row[0]'>
+						<img src='../../template/classic/img/edit.gif' title='$langModify' /></a>
+					<a href='group_description.php?group_id=$row[0]&amp;delete=true' onClick=\"return confirm_delete();\">
+						<img src='../../template/classic/img/delete.gif' title='$langDelete' /></a>";
 			} elseif ($is_member) {
-				$tool_content .= "<br /><a id='group_desc' href='#'><i>$langAddDescription</i></a>";
+				$tool_content .= "<br /><a href='group_description.php?group_id=$row[0]'><i>$langAddDescription</i></a>";
 			}
                         $tool_content .= "</td>";
                         $tool_content .= "<td width='35%' class='center'>" . display_user($tutors) . "</td>";
@@ -426,7 +428,6 @@ if ($is_adminOfCourse) {
                                         $tool_content .= "-";
 			}
                         $tool_content .= "</td>";
-			
                         $tool_content .= "<td class='center'>$member_count</td><td class='center'>" .
                                          ($max_members? $max_members: '-') . "</td></tr>\n";
                         $totalRegistered += $member_count;
@@ -437,5 +438,4 @@ if ($is_adminOfCourse) {
 }
 
 add_units_navigation(TRUE);
-
 draw($tool_content, 2, '', $head_content);

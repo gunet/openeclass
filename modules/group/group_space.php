@@ -41,7 +41,6 @@ $helpTopic = 'Group';
 include '../../include/baseTheme.php';
 $nameTools = $langGroupSpace;
 $navigation[] = array('url' => 'group.php', 'name' => $langGroups);
-$tool_content = '';
 
 include 'group_functions.php';
 mysql_select_db($mysqlMainDb);
@@ -55,11 +54,10 @@ if (isset($_GET['selfReg'])) {
                 $regDone = $is_member = true;
 	} else { 
 		$tool_content .= $langForbidden;
-		draw($tool_content, 2, 'group');
+		draw($tool_content, 2);
 		exit;
 	}
 }
-
 if (!$is_member and !$is_adminOfCourse and (!$self_reg or $member_count >= $max_members)) {
         $tool_content .= $langForbidden;
         draw($tool_content, 2);
@@ -88,7 +86,7 @@ $tool_content .=  "<br /><table width='99%' class='FormData'>
 
 $tutors = array();
 $members = array();
-$q = db_query("SELECT user.user_id, nom, prenom, email, am, is_tutor
+$q = db_query("SELECT user.user_id, nom, prenom, email, am, is_tutor, description
                       FROM group_members, user
                       WHERE group_id = $group_id AND
                             group_members.user_id = user.user_id
@@ -134,8 +132,12 @@ $tool_content .= "<tr><th class='left' valign='top'>$langGroupMembers :</th>
 
 if ($members) {
 	foreach ($members as $member){
-		$tool_content .= "<tr><td>" . display_user($member) . "</td>" .
-                                 "<td class='center'>";
+		$user_group_description = $member['description'];
+		$tool_content .= "<tr><td>" . display_user($member);  
+		if ($user_group_description) {
+			$tool_content .= "<br />".q($user_group_description);
+		}
+                $tool_content .= "</td><td class='center'>";
 		if (!empty($member['am'])) {
 			$tool_content .=  q($member['am']);
 		} else {
