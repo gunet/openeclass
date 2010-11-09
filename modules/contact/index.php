@@ -59,7 +59,7 @@ if (empty($userdata['email'])) {
 	$tool_content .= form();
 }
 
-draw($tool_content, 2, 'admin');
+draw($tool_content, 2);
 
 
 // display form
