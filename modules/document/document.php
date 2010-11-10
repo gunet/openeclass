@@ -49,6 +49,7 @@ if (!defined('GROUP_DOCUMENTS')) {
 include '../../include/action.php';
 $action = new action();
 
+$can_upload = $is_adminOfCourse;
 if (GROUP_DOCUMENTS) {
         include '../group/group_functions.php';
         $action->record('MODULE_ID_GROUPS');
@@ -63,6 +64,7 @@ if (GROUP_DOCUMENTS) {
         $group_sql = "group_id = $group_id";
         $group_hidden_input = "<input type='hidden' name='gid' value='$group_id' />";
         $basedir = $webDir . 'courses/' . $currentCourseID . '/group/' . $secret_directory;
+	$can_upload = $can_upload || $is_member;
 } else {
         $action->record('MODULE_ID_DOCS');
         mysql_select_db($mysqlMainDb);
@@ -75,7 +77,6 @@ if (GROUP_DOCUMENTS) {
         $basedir = $webDir . 'courses/' . $currentCourseID . '/document';
 }
 
-$tool_content = "";
 $nameTools = $langDoc;
 
 $require_help = TRUE;
@@ -123,7 +124,7 @@ if (@$action2=="download")
 }
 
 
-if($is_adminOfCourse)  {
+if($can_upload)  {
 	if (@$uncompress == 1)
 		include("../../include/pclzip/pclzip.lib.php");
 }
@@ -262,7 +263,7 @@ function make_clickable_path($path)
 // stripSubmitValue($_GET);
 /*****************************************************************************/
 
-if($is_adminOfCourse) {
+if($can_upload) {
 	/*********************************************************************
 	UPLOAD FILE
 
@@ -561,6 +562,7 @@ if($is_adminOfCourse) {
 				<form method='post' action='document.php' enctype='multipart/form-data'>
 				<fieldset>
 				<input type='hidden' name='replacePath' value='" . q($_GET['replace']) . "' />
+				$group_hidden_input
 					<table class='tbl'>
 					<tr>
 						<td>$replacemessage</td>
@@ -804,7 +806,7 @@ $dspCurDirName = htmlspecialchars($curDirName);
 $cmdCurDirPath = rawurlencode($curDirPath);
 $cmdParentDir  = rawurlencode($parentDir);
 
-if($is_adminOfCourse) {
+if($can_upload) {
 	// Action result message
 	if (!empty($action_message))
 	{
@@ -842,7 +844,7 @@ if ($doc_count == 0) {
 	$tool_content .= "
     <table width='99%' class='tbl_alt'>\n";
 
-        if ($is_adminOfCourse) {
+        if ($can_upload) {
                 $cols = 4;
         } else {
                 $cols = 3;
@@ -889,7 +891,7 @@ if ($doc_count == 0) {
         $tool_content .= "\n      <th><div align='left'>" . headlink($langName, 'name') . '</div></th>';
         $tool_content .= "\n      <th width='60' class='center'><b>$langSize</b></th>";
         $tool_content .= "\n      <th width='80' class='center'><b>" . headlink($langDate, 'date') . '</b></th>';
-	if($is_adminOfCourse) {
+	if($can_upload) {
 		$tool_content .= "\n      <th width='120' class='center'><b>$langCommands</b></th>";
 	}
 	$tool_content .= "\n    </tr>";
@@ -954,33 +956,47 @@ if ($doc_count == 0) {
                                 $date = format_date($entry['date']);
                                 $tool_content .= "\n      <td class='center'>$size</td>\n      <td class='center'>$date</td>";
                         }
-                        if ($is_adminOfCourse) {
+                        if ($can_upload) {
                                 $tool_content .= "\n      <td class='right' valign='top'><form action='document.php' method='post'>" . $group_hidden_input .
                                                  "<input type='hidden' name='filePath' value='$cmdDirName' />";
                                 if (!$is_dir) {
                                         /*** replace/overwrite command, only applies to files ***/
                                         $tool_content .= "<a href='{$base_url}replace=$cmdDirName'>" .
-                                                         "<img src='../../template/classic/img/add.gif' title='$langReplace' /></a>&nbsp;";
+                                                         "<img src='../../template/classic/img/add.gif' " .
+							 "title='$langReplace' alt='$langReplace' /></a>&nbsp;";
                                 }
                                 /*** delete command ***/
                                 $tool_content .= "<input type='image' src='../../template/classic/img/delete.gif' alt='$langDelete' title='$langDelete' name='delete' value='1' onClick=\"return confirmation('".addslashes($entry['filename'])."');\" />&nbsp;";
                                 /*** copy command ***/
-                                $tool_content .= "<a href='{$base_url}move=$cmdDirName'>";
-                                $tool_content .= "<img src='../../template/classic/img/move_doc.gif' title='$langMove' /></a>&nbsp;";
+                                $tool_content .= "<a href='{$base_url}move=$cmdDirName'>" .
+                                                 "<img src='../../template/classic/img/move_doc.gif' " .
+						 "title='$langMove' alt='$langMove' /></a>&nbsp;";
                                 /*** rename command ***/
                                 $tool_content .=  "<a href='{$base_url}rename=$cmdDirName'>";
-                                $tool_content .=  "<img src='../../template/classic/img/edit.gif' title='$langRename' /></a>&nbsp;";
+                                $tool_content .=  "<img src='../../template/classic/img/edit.gif' " .
+					          "title='$langRename' alt='$langRename' /></a>&nbsp;";
                                 /*** comment command ***/
                                 $tool_content .= "<a href='{$base_url}comment=$cmdDirName'>";
-                                $tool_content .= "<img src='../../template/classic/img/information.gif' title='$langComment' /></a>&nbsp;";
+                                $tool_content .= "<img src='../../template/classic/img/information.gif' " .
+					         "title='$langComment' alt='$langComment' /></a>&nbsp;";
                                 /*** visibility command ***/
-                                if ($entry['visible']) {
-                                        $tool_content .= "<a href='{$base_url}mkInvisibl=$cmdDirName'>";
-                                        $tool_content .= "<img src='../../template/classic/img/visible.gif' title='$langVisible' /></a>";
-                                } else {
-                                        $tool_content .= "<a href='{$base_url}mkVisibl=$cmdDirName'>";
-                                        $tool_content .= "<img src='../../template/classic/img/invisible.gif' title='$langVisible' /></a>";
-                                }
+                                if ($is_adminOfCourse) {
+					if ($entry['visible']) {
+						$tool_content .= "<a href='{$base_url}mkInvisibl=$cmdDirName'>" .
+								 "<img src='../../template/classic/img/visible.gif' " .
+								 "title='$langVisible' alt='$langVisible' /></a>";
+	                                } else {
+	                                        $tool_content .= "<a href='{$base_url}mkVisibl=$cmdDirName'>" .
+								 "<img src='../../template/classic/img/invisible.gif' " .
+								 "title='$langVisible' alt='$langVisible' /></a>";
+	                                }
+				}
+				if ($is_member) {
+	                                $tool_content .= "<a href='$urlAppend/modules/work/group_work.php?" .
+							 "gid=$group_id&amp;submit=$cmdDirName'>" .
+							 "<img src='../../template/classic/img/book.gif' " .
+							 "title='$langPublish' alt='$langPublish' /></a>";			
+				}
                                 $tool_content .= "</form></td>";
                                 $tool_content .= "\n    </tr>";
                         }
@@ -988,7 +1004,7 @@ if ($doc_count == 0) {
                 }
         }
         $tool_content .=  "\n    </table>\n";
-	if ($is_adminOfCourse) {
+	if ($can_upload) {
 		$tool_content .= "\n    <p align='right'>$langMaxFileSize " . ini_get('upload_max_filesize') . "</p>\n";
 	}
         $tool_content .= "\n    <br />";
