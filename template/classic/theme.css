@@ -733,7 +733,6 @@ fieldset table.th {
 	margin-right: 4px;
 	background-image: url(img/eu_flag.gif);
 	background-repeat: no-repeat;
-	//background-position: center left;
 	overflow:visible;
 }
 
@@ -745,7 +744,6 @@ fieldset table.th {
 	margin-right: 4px;
 	background-image: url(img/gr_flag.gif);
 	background-repeat: no-repeat;
-	//background-position: center left;
 	overflow:visible;
 }
 
@@ -757,7 +755,6 @@ fieldset table.th {
 	margin-right: 4px;
 	background-image: url(img/other_flag.gif);
 	background-repeat: no-repeat;
-	//background-position: center left;
 	overflow:visible;
 }
 
@@ -770,7 +767,6 @@ fieldset table.th {
 	margin-right: 4px;
 	background-image: url(img/epeaek_flag.gif);
 	background-repeat: no-repeat;
-	//background-position: center left;
 	overflow:visible;
 }
 
@@ -782,7 +778,6 @@ fieldset table.th {
 	margin-right: 4px;
 	background-image: url(img/infosoc_flag.gif);
 	background-repeat: no-repeat;
-	//background-position: center left;
 	overflow:visible;
 }
 
@@ -924,7 +919,7 @@ p.success_small{
 }
 
 li a img, input[type=image] {
-        vertical-align: middle;
+        vertical-align: baseline;
 }
 
 .feed {

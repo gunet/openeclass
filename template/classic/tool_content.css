@@ -1,7 +1,5 @@
 
 /* ----------------Open eClass tool_content CSS----------------- */
-/* 13. Modules  */
-
 
 /* Login Module */
 
@@ -20,7 +18,6 @@
 .LoginData {
     border-bottom: 2px solid #a33134;
 }
-
 
 
 #tool_title {
@@ -114,20 +111,12 @@ float: left;
 * html #opslist li:first-child { border-left: 0; }
 
 
-
-
-
-
 caption {
     font-size: 1px;
     font-weight: bold;
     margin: 5px;
     text-align: left;
 }
-
-
-
-
 
 
 .inactive {
@@ -141,9 +130,6 @@ caption {
     border-top: 1px dotted #F0C9C1;
     border-bottom: 1px dotted #F0C9C1;
 }
-
-
-
 
 
 thead th {
@@ -578,8 +564,6 @@ a.revoke:hover {
         vertical-align: middle;
         padding : 2px;
         font-size: 8pt;
-        word-wrap: break-word;
-        word-break: break-all;
 }
 
 .color1 {
@@ -587,8 +571,6 @@ a.revoke:hover {
         vertical-align: middle;
         padding : 5px;
         font-size: 8pt;
-        word-wrap: break-word;
-        word-break: break-all;
 }
 
 .b-right {
@@ -613,9 +595,7 @@ a.revoke:hover {
         vertical-align: middle;
         padding : 5px;
         font-size: 8pt;
-        word-wrap: break-word;
-        word-break: break-all;
-        }
+}
 
 table.stateclass {
 	padding: 2px;
@@ -658,13 +638,10 @@ table.xinha_editor td {
 /* ----- END admin ----- */
 
 
-
-
-
 /* ----- START agenda ----- */
 .today1 {
     background-color:#ffffff;
-    color: #FAEDED;!important
+    color: #FAEDED !important;
 }
 
 .monthLabel {
@@ -690,30 +667,14 @@ table.xinha_editor td {
 /* ----- END agenda ----- */
 
 
-
-
-
-/* ----- START announcements ----- */
-
-/* ----- END announcements ----- */
-
-
-
-
-
 /* ----- START auth ----- */
 .tidy {
         vertical-align: middle;
         padding : 2px;
         font-size: 8pt;
-        word-wrap: break-word;
-        word-break: break-all;
-        }
+}
 
-/* ----- START auth ----- */
-
-
-
+/* ----- END auth ----- */
 
 
 /* ----- START conference ----- */
@@ -721,18 +682,16 @@ table.xinha_editor td {
 	position:absolute;
 	height: 200px;
 	width: 200px;
-	/*border:groove;*/
 	top:210px;
 	left:220px;
 	border:1px solid #a2a2a3;
 	background: #edecdf;
-	}
+}
 
 #video{
 	position:absolute;
 	height: 200px;
 	width: 200px;
-	/*border:groove;*/
 	top:435px;
 	left:220px;
 	border:1px solid #a2a2a3;
@@ -742,7 +701,6 @@ table.xinha_editor td {
 	position:absolute;
 	height:203px;
 	width: 200px;
-	/*border:groove;*/
 	top:659px;
 	left:220px;
 	border:1px solid #a2a2a3;
@@ -753,7 +711,6 @@ table.xinha_editor td {
 	position:relative;
 	height: 300px;
 	width: 800px;
-	/*border:groove;*/
 	border:1px solid #a2a2a3;
 	background: #edecdf;
 	overflow: auto;
@@ -772,8 +729,6 @@ table.xinha_editor td {
 	background:#ffffff;
 	margin-top: 2px;
 	margin-bottom: 2px;
-	/*margin-left: 10px;*/
-	/*margin-right: 10px;*/
 }
 #chat_control{
 	position: relative;
@@ -786,7 +741,6 @@ table.xinha_editor td {
 
 #chat_div{
 	position:absolute;
-	/*border:groove;*/
 	top:720px;
 	left:430px;
 	width:700px;
@@ -794,9 +748,6 @@ table.xinha_editor td {
 	background: #edecdf;
 }
 /* ----- END conference ----- */
-
-
-
 
 
 /* ----- START course_description ----- */
@@ -844,9 +795,6 @@ table.CourseDescr td {
 }
 
 /* ----- END course_description ----- */
-
-
-
 
 
 /* ----- START course_home ----- */
@@ -905,7 +853,6 @@ option.emphasised { font-style: italic; }
 .cellpos{
     vertical-align:top; 
     text-align:center;
-    float:center;
 }
 /* ----- END course_tools ----- */
 
@@ -915,9 +862,6 @@ option.emphasised { font-style: italic; }
     text-align: left;
 }
 /* ----- END document ----- */
-
-
-
 
 
 /* ----- START dropbox ----- */
@@ -951,7 +895,7 @@ form.sort {
 }
 
 .dropbox_listTitle { 
-	font-style: bold;
+	font-weight: bold;
 	color: black;
 }
 
@@ -989,20 +933,6 @@ table.dropbox td {
 /* ----- END dropbox ----- */
 
 
-
-/* ----- START exercice ----- */
-
-/* ----- END exercice ----- */
-
-
-
-
-/* ----- START forum_admin ----- */
-/* ----- END forum_admin ----- */
-
-
-
-
 /* ----- START group ----- */
 .cellpos{
     vertical-align:top; 
@@ -1011,16 +941,15 @@ table.dropbox td {
 
 #box1 {
     float: left;
-    }
-    
+}    
 
 #box2 {
     float: right;
-    }
+}
     
 #box3 {
     float: left;
-    }
+}
 
 .GroupHead {
     background: #edecdf;
@@ -1097,7 +1026,7 @@ table.GroupSum{
     border-bottom: 1px solid #edecdf;
     border-left: 1px solid #edecdf;
     border-right: 1px solid #edecdf;
-    }
+}
 
 table.GroupSum thead{
 	padding: 2px;
@@ -1170,10 +1099,7 @@ table.Documents td {
 /* ----- END group ----- */
 
 
-
 /* ----- START index ----- */
-div#navigation{backgroundX:red;}
-
 div#wrapper{float:left;width:99%;margin-right:-200px}
 div#content_login{margin-right:200px;}
 div#navigation{float:right;width:200px;}
@@ -1195,8 +1121,6 @@ div#footer{clear:both;width:100%}
     width: 99%;
 }
 /* ----- END index ----- */
-
-
 
 
 /* ----- START learnpath ----- */
@@ -1256,8 +1180,8 @@ a:visited.invisible
     color: #000000;
     border-top: 1px solid #627aad;
     border-bottom: 1px solid #627aad;
-	border-left: 1px solid #d8dfea;
-	border-right: 1px #000000 solid;
+    border-left: 1px solid #d8dfea;
+    border-right: 1px #000000 solid;
 }
 
 .LP_Operations td{
@@ -1522,11 +1446,10 @@ table.Documents img {
 
 
 /* ----- START link ----- */
-.linkimg{
+.linkimg {
 	vertical-align:top; 
 }
 /* ----- END link ----- */
-
 
 
 /* ----- START phpbb ----- */
@@ -1666,19 +1589,12 @@ li.pagination {
 /* ----- END phpbb ----- */
 
 
-
-/* ----- START Questionnaire ----- */
-/* ----- END Questionnaire ----- */
-
-
-
 /* ----- START Search ----- */
 .Results {
     padding: 2px 1px 1px 14px;
     list-style: disc;
     color: #727266;
 }
-
 
 table.Search{
     padding: 0px 0px 0px 0px;
@@ -1703,14 +1619,6 @@ table.Search td {
     font-size: 11px;
 }
 /* ----- END Search ----- */
-
-
-
-/* ----- START units ----- */
-
-
-/* ----- END units ----- */
-
 
 
 /* ----- START user ----- */
@@ -1825,7 +1733,7 @@ table.Users_Operations a:hover {
 }
 
 
-  /* ---- Pagination ---- */
+/* ---- Pagination ---- */
 .pagination {
 	height: 1%; /* IE tweak (holly hack) */
 	width: auto;
@@ -1906,8 +1814,6 @@ li.pagination {
 	background-color: #d2d2d2;
 }
 /* ----- END user ----- */
-
-
 
 
 /* ----- START Video ----- */
@@ -2261,7 +2167,7 @@ table.WorkSum th {
 
 table.WorkSum td {
 	padding: 4px;
-	vertical-align: top; !important
+	vertical-align: top !important;
 	font-size:11px;
 	color: #727266;
 	vertical-align: middle;
@@ -2355,7 +2261,7 @@ table.Info {
 }
 
 table.Info td {
-	font-size: 9	px;
+	font-size: 9px;
 	background: #fff !important;
 	border-bottom: 1px solid #ffffff;
 	border-top: 1px solid #ffffff;
@@ -2373,7 +2279,6 @@ table.Info td {
 td.category {
 	background: #E6EDF5;
 	color: #4F76A3;
-	
 	text-align:left;
 }
 .cellpos{
@@ -2388,21 +2293,21 @@ form.sort {
 }
 
 .dropbox_detail {  
-		font-size: 11px; 
-		font-family: Verdana, Arial, Helvetica; 
+	font-size: 11px; 
+	font-family: Verdana, Arial, Helvetica; 
 }
 
 .dropbox_date {  
-		font-style: italic;
+	font-style: italic;
 }
 
 .dropbox_person {  
-		font-weight: bold;
+	font-weight: bold;
 }
 
 .dropbox_listTitle { 
-		font-style: bold; 
-		color: black;
+	font-weight: bold; 
+	color: black;
 }
 
 table.dropbox {
@@ -2454,21 +2359,7 @@ table.dropbox td {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 /* ----- Lesson Layout ----- */
-
 
 .image_kef {
         padding: 5px !important;
@@ -2489,7 +2380,6 @@ li.main
         font-size: 11px !important;
 }
 
-
 #keywords {
         line-height: 15px;
         padding: 5px;
@@ -2500,7 +2390,7 @@ li.main
         padding-left: 50px;
         margin-top: 10px !important;
         font-size: 11px !important;
-        }
+}
         
 #goals {
         line-height: 15px;
@@ -2512,7 +2402,7 @@ li.main
         background-position: 10px 10px;
         padding-left: 50px;
         font-size: 11px !important;
-        }
+}
         
 #aps {
         line-height: 15px;
@@ -2525,7 +2415,7 @@ li.main
         padding-left: 50px;
         margin-top: 10px !important;
         font-size: 11px !important;
-        }
+}
 
 #material {
         line-height: 15px;
@@ -2537,7 +2427,7 @@ li.main
         padding-left: 50px;
         margin-top: 10px !important;
         font-size: 11px !important;
-        }
+}
         
 .definitions {
         line-height: 15px;
@@ -2550,7 +2440,7 @@ li.main
         background-position: 10px 10px;
         padding-left: 50px;
         font-size: 11px !important;
-        }
+}
 
 
 .description {
@@ -2558,26 +2448,26 @@ li.main
         border-bottom: 1px solid #cccccc;
         color:#e79544;
         padding: 3px;
-        }
+}
 
 
 .meros {
 
         border: 2px solid #e5eaf1 !important;
-		color:#627aad;
-		background-color: #f2f5fa;
-        }
-		
-.meros a{
-		color:#627aad;
-        }	
+	color:#627aad;
+	background-color: #f2f5fa;
+}
+
+.meros a {
+	color:#627aad;
+}	
 
 .image_exof {
         padding: 5px !important;
         border: 2px solid #e5eaf1 !important;
         margin-left: 0px !important;
         margin-right: 10px !important;
-        }
+}
 
 .image_kef {
         padding: 5px !important;
@@ -2585,20 +2475,19 @@ li.main
         margin-left: 10px !important;
         margin-right: 0px !important;
         float: right;
-        }
+}
 
 
 .image_cover {
-        clear: width;
+        clear: both;
         padding: 10px !important;
         border: 2px solid #d2dbe8 !important;
         margin-left: 10px !important;
         margin-right: 0px !important;
         float: right;
-        }
+}
+
 /* ----- End Lesson Layout ----- */
-
-
 
 
 fieldset {
