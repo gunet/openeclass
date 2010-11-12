@@ -88,7 +88,8 @@ JSCalendar: Copyright Mihai Bazon, 2002-2005
 
 POP3 class : Manuel Lemos (http://www.manuellemos.net)  <WebMaster@E-na.Net>
 
-Libchart - PHP chart library: Copyright 2005-2006 Jean Marc Tr?meaux <jm.tremeaux@gmail.com>
+Libchart - PHP chart library: Copyright 2005-2010 Jean Marc Tr?meaux <jm.tremeaux@gmail.com>
+http://naku.dohcrew.com/libchart/pages/introduction/
 
 LaTeX Rendering: Copyright (c) 2003/2004 Benjamin Zeiss <zeiss@math.uni-goettingen.de>
 

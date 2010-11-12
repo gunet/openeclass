@@ -77,7 +77,7 @@ if ($language == 'greek') {
             " cours.cours_id = cours_user.cours_id GROUP BY cours.cours_id";
 
         $result = db_query($query, $mysqlMainDb);
-        $chart = new VerticalChart(200, 300);
+        $chart = new VerticalBarChart(200, 300);
         while ($row = mysql_fetch_assoc($result)) {
               $chart->addPoint(new Point($row['name'], $row['cnt']));
               $chart->width += 25;

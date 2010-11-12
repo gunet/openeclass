@@ -143,7 +143,7 @@ $local_head = $jscalendar->get_load_files_code();
 
             $result = db_query($query, $currentCourseID);
 
-            $chart = new VerticalChart(200, 300);
+            $chart = new VerticalBarChart(200, 300);
 
             while ($row = mysql_fetch_assoc($result)) {
                 $mont = $langMonths[$row['month']];
@@ -162,7 +162,7 @@ $local_head = $jscalendar->get_load_files_code();
 
             $result = db_query($query, $currentCourseID);
 
-            $chart = new VerticalChart(200, 300);
+            $chart = new VerticalBarChart(200, 300);
 
             while ($row = mysql_fetch_assoc($result)) {
                 $mont = $langMonths[$row['month']];

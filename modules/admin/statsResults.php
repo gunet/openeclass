@@ -84,7 +84,7 @@ switch ($u_stats_type) {
     case "visits":
     $query = "SELECT ".$date_what." COUNT(*) AS cnt FROM loginout WHERE $date_where AND $user_where AND action='LOGIN' $date_group ORDER BY `when` ASC";
     $result = db_query($query, $mysqlMainDb);
-    $chart = new VerticalChart(200, 300);
+    $chart = new VerticalBarChart(200, 300);
     switch ($u_interval) {
         case "summary":
             while ($row = mysql_fetch_assoc($result)) {

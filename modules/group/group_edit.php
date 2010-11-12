@@ -186,13 +186,17 @@ $tool_content_group_name = q($group_name);
 
 if ($is_adminOfCourse) {
         $tool_content_tutor = "<select name='tutor[]' multiple='multiple'>\n";
-        $resultTutor = db_query("SELECT user.user_id, nom, prenom FROM user, cours_user
-                                        WHERE cours_user.user_id = user.user_id AND
-                                              cours_user.tutor = 1 AND
-                                              cours_user.cours_id = $cours_id
-                                        ORDER BY nom, prenom, user_id");
-        while ($row = mysql_fetch_array($resultTutor)) {
-                $selected = $is_tutor? ' selected="selected"': '';
+        $q = db_query("SELECT user.user_id, nom, prenom, is_tutor
+                              FROM cours_user, user LEFT JOIN group_members
+                                        ON group_members.user_id = user.user_id
+                              WHERE cours_user.user_id = user.user_id AND
+                                    cours_user.tutor = 1 AND
+                                    cours_user.cours_id = $cours_id AND
+                                    (group_members.group_id = $group_id OR
+                                     group_members.group_id IS NULL)
+                              ORDER BY nom, prenom, user_id");
+        while ($row = mysql_fetch_array($q)) {
+                $selected = $row['is_tutor']? ' selected="selected"': '';
                 $tool_content_tutor .= "<option value='$row[user_id]'$selected>" . q($row['nom']) .
                                        ' ' . q($row['prenom']) . "</option>\n";
 

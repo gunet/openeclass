@@ -127,7 +127,7 @@ if (!extension_loaded('gd')) {
 
     $result = db_query($query, $mysqlMainDb);
 
-    $chart = new VerticalChart(200, 300);
+    $chart = new VerticalBarChart(200, 300);
 
     //add points to chart
     while ($row = mysql_fetch_assoc($result)) {

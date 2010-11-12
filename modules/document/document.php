@@ -65,6 +65,7 @@ if (GROUP_DOCUMENTS) {
         $group_hidden_input = "<input type='hidden' name='gid' value='$group_id' />";
         $basedir = $webDir . 'courses/' . $currentCourseID . '/group/' . $secret_directory;
 	$can_upload = $can_upload || $is_member;
+        $nameTools = $langGroupDocumentsLink;
 } else {
         $action->record('MODULE_ID_DOCS');
         mysql_select_db($mysqlMainDb);
@@ -75,9 +76,9 @@ if (GROUP_DOCUMENTS) {
         $group_sql = "group_id IS NULL";
         $group_hidden_input = '';
         $basedir = $webDir . 'courses/' . $currentCourseID . '/document';
+        $nameTools = $langDoc;
 }
 
-$nameTools = $langDoc;
 
 $require_help = TRUE;
 $helpTopic = 'Doc';

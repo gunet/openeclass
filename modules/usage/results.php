@@ -91,52 +91,52 @@ $chart_content=0;
 switch ($u_stats_value) {
     case "visits":
 
-     $chart = new VerticalChart(300, 300);
-	$query = "SELECT ".$date_what.", COUNT(*) AS cnt FROM actions
-		WHERE $date_where AND $mod_where GROUP BY $date_group ORDER BY date_time ASC";
-            $result = db_query($query, $currentCourseID);
+        $chart = new VerticalBarChart(300, 300);
+        $dataSet = new XYDataSet();
+        $query = "SELECT ".$date_what.", COUNT(*) AS cnt FROM actions
+                         WHERE $date_where AND $mod_where GROUP BY $date_group ORDER BY date_time ASC";
+        $result = db_query($query, $currentCourseID);
 
         switch ($u_interval) {
             case "summary":
                  while ($row = mysql_fetch_assoc($result)) {
-                    $chart->addPoint(new Point($langSummary, $row['cnt']));
+                    $dataSet->addPoint(new Point($langSummary, $row['cnt']));
                     $chart->width += 25;
-                    $chart_content=1;
+                    $chart_content = 1;
                     }
             break;
             case "daily":
                     while ($row = mysql_fetch_assoc($result)) {
-                        $chart->addPoint(new Point($row['date'], $row['cnt']));
+                        $dataSet->addPoint(new Point($row['date'], $row['cnt']));
                         $chart->width += 25;
-                        $chart_content=1;
+                        $chart_content = 1;
                     }
             break;
             case "weekly":
                 while ($row = mysql_fetch_assoc($result)) {
                     $chart->setLabelMarginBottom(110);
                     $chart->setLabelMarginRight(80);
-                    $chart->addPoint(new Point($row['week_start'].' - '.$row['week_end'], $row['cnt']));
+                    $dataSet->addPoint(new Point($row['week_start'].' - '.$row['week_end'], $row['cnt']));
                     $chart->width += 25;
-                    $chart_content=1;
+                    $chart_content = 1;
                 }
             break;
             case "monthly":
                 while ($row = mysql_fetch_assoc($result)) {
-                    $chart->addPoint(new Point($langMonths[$row['month']], $row['cnt']));
+                    $dataSet->addPoint(new Point($langMonths[$row['month']], $row['cnt']));
                     $chart->width += 25;
-                    $chart_content=1;
+                    $chart_content = 1;
                 }
             break;
             case "yearly":
                 while ($row = mysql_fetch_assoc($result)) {
                     $chart->addPoint(new Point($row['year'], $row['cnt']));
                     $chart->width += 25;
-                    $chart_content=1;
+                    $chart_content = 1;
                 }
             break;
         }
         $chart->setTitle("$langVisits");
-
 
     break;
     case "duration":
@@ -145,12 +145,13 @@ switch ($u_stats_value) {
             " WHERE $date_where AND $mod_where GROUP BY ".$date_group." ORDER BY date_time ASC";
 
         $result = db_query($query, $currentCourseID);
-        $chart = new VerticalChart(200, 300);
+        $chart = new VerticalBarChart(200, 300);
+        $dataSet = new XYDataSet();
 	switch ($u_interval) {
             case "summary":
                 while ($row = mysql_fetch_assoc($result)) {
 		    $row['tot_dur'] = round($row['tot_dur'] / 60);
-		    $chart->addPoint(new Point($langSummary, $row['tot_dur']));
+		    $dataSet->addPoint(new Point($langSummary, $row['tot_dur']));
                     $chart->width += 25;
                     $chart_content=1;
                 }
@@ -158,7 +159,7 @@ switch ($u_stats_value) {
           case "daily":
              while ($row = mysql_fetch_assoc($result)) {
 		 $row['tot_dur'] = round($row['tot_dur'] / 60);
-                 $chart->addPoint(new Point($row['date'], $row['tot_dur']));
+                 $dataSet->addPoint(new Point($row['date'], $row['tot_dur']));
                  $chart->width += 25;
                  $chart_content=1;
              }
@@ -168,7 +169,7 @@ switch ($u_stats_value) {
 		$row['tot_dur'] = round($row['tot_dur'] / 60);
 		$chart->setLabelMarginBottom(110);
                 $chart->setLabelMarginRight(80);
-                $chart->addPoint(new Point($row['week_start'].' - '.$row['week_end'], $row['tot_dur']));
+                $dataSet->addPoint(new Point($row['week_start'].' - '.$row['week_end'], $row['tot_dur']));
                 $chart->width += 25;
                 $chart_content=1;
              }
@@ -176,7 +177,7 @@ switch ($u_stats_value) {
          case "monthly":
             while ($row = mysql_fetch_assoc($result)) {
 		$row['tot_dur'] = round($row['tot_dur'] / 60);
-                $chart->addPoint(new Point($langMonths[$row['month']], $row['tot_dur']));
+                $dataSet->addPoint(new Point($langMonths[$row['month']], $row['tot_dur']));
                 $chart->width += 25;
                 $chart_content=1;
             }
@@ -184,7 +185,7 @@ switch ($u_stats_value) {
          case "yearly":
             while ($row = mysql_fetch_assoc($result)) {
 		$row['tot_dur'] = round($row['tot_dur'] / 60);
-                $chart->addPoint(new Point($row['year'], $row['tot_dur']));
+                $dataSet->addPoint(new Point($row['year'], $row['tot_dur']));
                 $chart->width += 25;
                 $chart_content=1;
             }
@@ -199,13 +200,12 @@ switch ($u_stats_value) {
 mysql_free_result($result);
 
 
+$chart->setDataSet($dataSet);
 $chart_path = 'courses/'.$currentCourseID.'/temp/chart_'.md5(serialize($chart)).'.png';
 $chart->render($webDir.$chart_path);
 
- if ($chart_content) {
-  $tool_content .= '<p align="center"><img src="'.$urlServer.$chart_path.'" /></p>';
+if ($chart_content) {
+        $tool_content .= '<p align="center"><img src="'.$urlServer.$chart_path.'" /></p>';
 } elseif (isset($btnUsage) and $chart_content == 0) {
-  $tool_content .='<p class="alert1">'.$langNoStatistics.'</p>';
- }
-
-?>
+        $tool_content .='<p class="alert1">'.$langNoStatistics.'</p>';
+}

@@ -191,7 +191,7 @@ if (!extension_loaded('gd')) {
             ksort($point);
         }
 
-        $chart = new VerticalChart(200, 300);
+        $chart = new VerticalBarChart(200, 300);
 
         //add points to chart
         while ($newp = current($point)){

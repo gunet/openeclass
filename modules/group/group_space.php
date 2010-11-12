@@ -164,7 +164,7 @@ draw($tool_content, 2);
 
 function loadGroupTools(){
         global $self_reg, $has_forum, $forum_id, $documents, $secret_directory, $langForums,
-               $group_id, $langDoc, $is_adminOfCourse, $is_tutor, $group_id, $langEmailGroup,
+               $group_id, $langGroupDocumentsLink, $is_adminOfCourse, $is_tutor, $group_id, $langEmailGroup,
                $langUsage;
 
 	$group_tools = '';
@@ -176,7 +176,7 @@ function loadGroupTools(){
         }
         // Drive members into their own File Manager
         if ($documents) {
-                 $group_tools .=  "<li><a href='document.php?gid=$group_id'>$langDoc</a></li>";
+                 $group_tools .=  "<li><a href='document.php?gid=$group_id'>$langGroupDocumentsLink</a></li>";
         }
         if ($is_adminOfCourse or $is_tutor) {
                 $group_tools .=  "<li><a href='group_email.php?group_id=$group_id'>$langEmailGroup</a></li>
