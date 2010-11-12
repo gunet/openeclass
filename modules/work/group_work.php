@@ -67,7 +67,7 @@ include '../../include/lib/forcedownload.php';
 $tool_content = "";
 
 mysql_select_db($currentCourseID);
-$gid = user_group($uid);
+$gid = intval($_GET['gid']);
 
 $coursePath = $webDir."/courses/".$currentCourseID;
 if (!file_exists($coursePath))
@@ -93,10 +93,10 @@ if (isset($_GET['submit'])) {
 // show non-expired assignments list to allow selection
 function show_assignments()
 {
-	global $m, $uid, $langSubmit, $langDays, $langNoAssign, $tool_content, $langWorks;
+	global $m, $uid, $gid, $langSubmit, $langDays, $langNoAssign, $tool_content, $langWorks, $currentCourseID;
 
 	$res = db_query("SELECT *, (TO_DAYS(deadline) - TO_DAYS(NOW())) AS days
-		FROM assignments");
+		FROM `$currentCourseID`.assignments");
 
 	if (mysql_num_rows($res) == 0) {
 		$tool_content .=  $langNoAssign;
@@ -152,7 +152,7 @@ $tool_content .= "
 
 				$tool_content .= "</div></td>\n      <td align=\"center\">";
 
-						$subm = was_submitted($uid, user_group($uid), $row['id']);
+						$subm = was_submitted($uid, $gid, $row['id']);
 						if ($subm == 'user') {
 							$tool_content .=  $m['yes'];
 						} elseif ($subm == 'group') {
@@ -219,12 +219,12 @@ function submit_work($uid, $id, $file) {
 
 
         delete_submissions_by_uid($uid, $group, $id, $destination);
-	if (copy($source, "$workPath/$destination")) {
-		db_query("INSERT INTO assignment_submit (uid, assignment_id, submission_date,
-			             submission_ip, file_path, file_name, comments, group_id)
-                          VALUES ('$uid','$id', NOW(), '$_SERVER[REMOTE_ADDR]', '$destination'," .
-				quote($original_filename) . ', ' .
-                                autoquote($_POST['comments']) . ", $group)",
+        if (copy($source, "$workPath/$destination")) {
+                db_query("INSERT INTO `$currentCourseID`.assignment_submit (uid, assignment_id, submission_date,
+                                     submission_ip, file_path, file_name, comments, group_id)
+                                 VALUES ('$uid','$id', NOW(), '$_SERVER[REMOTE_ADDR]', '$destination'," .
+                                         quote($original_filename) . ', ' .
+                                         autoquote($_POST['comments']) . ", $group)",
                         $currentCourseID);
 
 		$tool_content .="<p class=\"success_small\">$langUploadSuccess<br />$m[the_file] \"$original_filename\" $m[was_submitted]<br /><a href='work.php'>$langBack</a></p><br />";

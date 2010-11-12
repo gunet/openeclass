@@ -1,5 +1,4 @@
 <?php
-/*===========================================================================
 /*========================================================================
 *   Open eClass 2.3
 *   E-learning and Course Management System
@@ -23,21 +22,22 @@
 *  			Network Operations Center, University of Athens,
 *  			Panepistimiopolis Ilissia, 15784, Athens, Greece
 *  			eMail: info@openeclass.org
-* =========================================================================*/
-/*===========================================================================
+* =========================================================================
+
+===========================================================================
 work.php
 @version $Id$
 @author : Dionysios G. Synodinos <synodinos@gmail.com>
 @author : Evelthon Prodromou <eprodromou@upnet.gr>
-==============================================================================
+============================================================================
 @Description: Main script for the work tool
-==============================================================================
+============================================================================
 */
 
 
-$require_current_course = TRUE;
+$require_current_course = true;
 $require_login = true;
-$require_help = TRUE;
+$require_help = true;
 $helpTopic = 'Work';
 
 include '../../include/baseTheme.php';
@@ -92,6 +92,7 @@ $action->record('MODULE_ID_ASSIGN');
 /**************************************/
 
 include('work_functions.php');
+include('../group/group_functions.php');
 
 $workPath = $webDir."courses/".$currentCourseID."/work";
 
@@ -109,8 +110,10 @@ if ($is_adminOfCourse) { //Only course admins can download assignments
 $nameTools = $langWorks;
 mysql_select_db($currentCourseID);
 
-include('../../include/lib/fileUploadLib.inc.php');
-include('../../include/lib/fileManageLib.inc.php');
+include '../../include/lib/fileUploadLib.inc.php';
+include '../../include/lib/fileManageLib.inc.php';
+
+include '../../include/libchart/libchart.php';
 
 //-------------------------------------------
 // main program
@@ -237,79 +240,81 @@ function add_assignment($title, $desc, $deadline, $group_submissions)
 
 
 
-function submit_work($id) {
+function submit_work($id)
+{
+        global $tool_content, $workPath, $uid, $cours_id, $stud_comments, $group_sub,
+                $langUploadSuccess, $langBack, $langWorks, $langUploadError, $currentCourseID,
+                $langExerciseNotPermit, $langUnwantedFiletype;
 
-	global $tool_content, $workPath, $uid, $stud_comments, $group_sub, $langUploadSuccess,
-	$langBack, $langWorks, $langUploadError, $currentCourseID, $langExerciseNotPermit, $langUnwantedFiletype;
+        $submit_ok = FALSE; //Default do not allow submission
+        if(isset($uid) && $uid) { //check if loged-in
+                if ($GLOBALS['statut'] == 10) { //user is guest
+                        $submit_ok = FALSE;
+                } else { //user NOT guest
+                        if(isset($_SESSION['status']) && isset($_SESSION['status'][$_SESSION["dbname"]])) {
+                                //user is registered to this lesson
+                                $res = db_query("SELECT (TO_DAYS(deadline) - TO_DAYS(NOW())) AS days
+                                        FROM assignments WHERE id = '$id'");
+                                $row = mysql_fetch_array($res);
+                                if ($row['days'] < 0) {
+                                        $submit_ok = FALSE; //after assignment deadline
+                                } else {
+                                        $submit_ok = TRUE; //before deadline
+                                }
+                        } else {
+                                //user NOT registered to this lesson
+                                $submit_ok = FALSE;
+                        }
+                }
+        } //checks for submission validity end here
 
-	$submit_ok = FALSE; //Default do not allow submission
-	if(isset($uid) && $uid) { //check if loged-in
-		if ($GLOBALS['statut'] == 10) { //user is guest
-			$submit_ok = FALSE;
-		} else { //user NOT guest
-			if(isset($_SESSION['status']) && isset($_SESSION['status'][$_SESSION["dbname"]])) {
-				//user is registered to this lesson
-				$res = db_query("SELECT (TO_DAYS(deadline) - TO_DAYS(NOW())) AS days
-					FROM assignments WHERE id = '$id'");
-				$row = mysql_fetch_array($res);
-				if ($row['days'] < 0) {
-					$submit_ok = FALSE; //after assignment deadline
-				} else {
-					$submit_ok = TRUE; //before deadline
-				}
-			} else {
-				//user NOT registered to this lesson
-				$submit_ok = FALSE;
-			}
-		}
-	} //checks for submission validity end here
+        $res = db_query("SELECT title FROM assignments WHERE id = '$id'");
+        $row = mysql_fetch_array($res);
 
-  	$res = db_query("SELECT title FROM assignments WHERE id = '$id'");
-	$row = mysql_fetch_array($res);
+        $nav[] = array("url"=>"$_SERVER[PHP_SELF]", "name"=> $langWorks);
+        $nav[] = array("url"=>"$_SERVER[PHP_SELF]?id=$id", "name"=> $row['title']);
 
-	$nav[] = array("url"=>"$_SERVER[PHP_SELF]", "name"=> $langWorks);
-	$nav[] = array("url"=>"$_SERVER[PHP_SELF]?id=$id", "name"=> $row['title']);
-
-  	if($submit_ok) { //only if passed the above validity checks...
-            $msg1 = delete_submissions_by_uid($uid, -1, $id);  
-            $local_name = greek_to_latin(uid_to_name($uid));
-            $am = mysql_fetch_array(db_query("SELECT am FROM user WHERE user_id = '$uid'"));
-            if (!empty($am[0])) {
-                    $local_name = "$local_name $am[0]";
-            }
-            $local_name = replace_dangerous_char($local_name);
-            if (preg_match('/\.(ade|adp|bas|bat|chm|cmd|com|cpl|crt|exe|hlp|hta|' .'inf|ins|isp|jse|lnk|mdb|mde|msc|msi|msp|mst|pcd|pif|reg|scr|sct|shs|' .'shb|url|vbe|vbs|wsc|wsf|wsh)$/', $_FILES['userfile']['name'])) {
-                    $tool_content .= "<p class=\"caution\">$langUnwantedFiletype: {$_FILES['userfile']['name']}<br />";
-                    $tool_content .= "<a href=\"$_SERVER[PHP_SELF]?id=$id\">$langBack</a></p><br />";
-                    return;
-            }
-            $secret = work_secret($id);
-            $ext = get_file_extension($_FILES['userfile']['name']);
-            $filename = "$secret/$local_name" . (empty($ext)? '': '.' . $ext);
-            if (move_uploaded_file($_FILES['userfile']['tmp_name'], "$workPath/$filename")) {
-                    @chmod("$workPath/$filename", 0644);
-                    $msg2 = "$langUploadSuccess";//to message
-                    $group_id = user_group($uid, FALSE);
-                    if ($group_sub == 'yes' and !was_submitted(-1, $group_id, $id)) {
-                            delete_submissions_by_uid(-1, $group_id, $id);
-                            db_query("INSERT INTO assignment_submit
-                                    (uid, assignment_id, submission_date, submission_ip, file_path,
-                                    file_name, comments, group_id) VALUES ('$uid','$id', NOW(),
-                                    '$_SERVER[REMOTE_ADDR]', '$filename','".$_FILES['userfile']['name'].
-                                    "', '$stud_comments', '$group_id')", $currentCourseID);
-                    } else {
-                            db_query("INSERT INTO assignment_submit
-                                    (uid, assignment_id, submission_date, submission_ip, file_path,
-                                    file_name, comments) VALUES ('$uid','$id', NOW(), '".$_SERVER['REMOTE_ADDR']."',
-                                    '$filename','".$_FILES['userfile']['name'].
-                                    "', '$stud_comments')", $currentCourseID);
-                    }
-                $tool_content .= "<p class='success'>$msg2<br />$msg1<br /><a href='$_SERVER[PHP_SELF]'>$langBack</a></p><br />";
-            } else {
-                $tool_content .= "<p class='caution'>$langUploadError<br /><a href='$_SERVER[PHP_SELF]'>$langBack</a></p><br />";
-            }
+        if($submit_ok) { //only if passed the above validity checks...
+                $msg1 = delete_submissions_by_uid($uid, -1, $id);  
+                $local_name = greek_to_latin(uid_to_name($uid));
+                $am = mysql_fetch_array(db_query("SELECT am FROM user WHERE user_id = '$uid'"));
+                if (!empty($am[0])) {
+                        $local_name = "$local_name $am[0]";
+                }
+                $local_name = replace_dangerous_char($local_name);
+                if (preg_match('/\.(ade|adp|bas|bat|chm|cmd|com|cpl|crt|exe|hlp|hta|' .'inf|ins|isp|jse|lnk|mdb|mde|msc|msi|msp|mst|pcd|pif|reg|scr|sct|shs|' .'shb|url|vbe|vbs|wsc|wsf|wsh)$/', $_FILES['userfile']['name'])) {
+                        $tool_content .= "<p class=\"caution\">$langUnwantedFiletype: {$_FILES['userfile']['name']}<br />";
+                        $tool_content .= "<a href=\"$_SERVER[PHP_SELF]?id=$id\">$langBack</a></p><br />";
+                        return;
+                }
+                $secret = work_secret($id);
+                $ext = get_file_extension($_FILES['userfile']['name']);
+                $filename = "$secret/$local_name" . (empty($ext)? '': '.' . $ext);
+                if (move_uploaded_file($_FILES['userfile']['tmp_name'], "$workPath/$filename")) {
+                        @chmod("$workPath/$filename", 0644);
+                        $msg2 = "$langUploadSuccess";//to message
+                        $group_id = intval($_POST['gid']);
+                        $gids = user_group_info($uid, $cours_id);
+                        if ($group_sub == 'yes' and !was_submitted(-1, $group_id, $id)) {
+                                delete_submissions_by_uid(-1, $group_id, $id);
+                                db_query("INSERT INTO assignment_submit
+                                        (uid, assignment_id, submission_date, submission_ip, file_path,
+                                        file_name, comments, group_id) VALUES ('$uid','$id', NOW(),
+                                '$_SERVER[REMOTE_ADDR]', '$filename','".$_FILES['userfile']['name'].
+                                "', '$stud_comments', '$group_id')", $currentCourseID);
+                        } else {
+                                db_query("INSERT INTO assignment_submit
+                                        (uid, assignment_id, submission_date, submission_ip, file_path,
+                                        file_name, comments) VALUES ('$uid','$id', NOW(), '".$_SERVER['REMOTE_ADDR']."',
+                                        '$filename','".$_FILES['userfile']['name'].
+                                        "', '$stud_comments')", $currentCourseID);
+                        }
+                        $tool_content .= "<p class='success'>$msg2<br />$msg1<br /><a href='$_SERVER[PHP_SELF]'>$langBack</a></p><br />";
+                } else {
+                        $tool_content .= "<p class='caution'>$langUploadError<br /><a href='$_SERVER[PHP_SELF]'>$langBack</a></p><br />";
+                }
         } else { // not submit_ok
-            $tool_content .="<p class=\"caution\">$langExerciseNotPermit<br /><a href='$_SERVER[PHP_SELF]'>$langBack</a></p></br>";
+                $tool_content .="<p class=\"caution\">$langExerciseNotPermit<br /><a href='$_SERVER[PHP_SELF]'>$langBack</a></p></br>";
         }
 }
 
@@ -509,10 +514,13 @@ function delete_assignment($id) {
 function show_student_assignment($id)
 {
 	global $tool_content, $m, $uid, $langSubmitted, $langSubmittedAndGraded, $langNotice3,
-	$langWorks, $langUserOnly, $langBack, $langWorkGrade, $langGradeComments;
+               $langWorks, $langUserOnly, $langBack, $langWorkGrade, $langGradeComments,
+               $currentCourseID, $cours_id;
+
+        $user_group_info = user_group_info($uid, $cours_id);
 
 	$res = db_query("SELECT *, (TO_DAYS(deadline) - TO_DAYS(NOW())) AS days
-		FROM assignments WHERE id = '$id'");
+                                FROM `$currentCourseID`.assignments WHERE id = '$id'");
 	$row = mysql_fetch_array($res);
 
 	$nav[] = array("url"=>"$_SERVER[PHP_SELF]", "name"=> $langWorks);
@@ -535,12 +543,12 @@ function show_student_assignment($id)
 		if ($submission = was_graded($uid, $id)) {
 			show_submission_details($submission);
 			$submit_ok = FALSE;
-		} elseif ($submission = find_submission($uid, $id, $gids)) {
+                } elseif ($submission = find_submission($uid, $id, $user_group_info)) {
 			show_submission_details($submission);
 		}
 	}
 	if ($submit_ok) {
-		show_submission_form($id);
+		show_submission_form($id, $user_group_info);
 	}
 	$tool_content .= "
     <br/>
@@ -548,30 +556,41 @@ function show_student_assignment($id)
 }
 
 
-function show_submission_form($id)
+function show_submission_form($id, $user_group_info)
 {
-	global $tool_content, $m, $langWorkFile, $langSendFile, $langSubmit, $uid, $langNotice3;
+        global $tool_content, $m, $langWorkFile, $langSendFile, $langSubmit, $uid, $langNotice3, $gid, $is_member,
+               $urlAppend, $langGroupSpaceLink;
 
-	if (is_group_assignment($id) and ($gid = user_group($uid))) {
+        $group_select_hidden_input = $group_select_form = '';
+        if (is_group_assignment($id)) {
+                if (count($user_group_info) == 1) {
+                        $gids = array_keys($user_group_info);
+                        $group_link = $urlAppend . '/modules/group/document.php?gid=' . $gids[0];
+                        $group_select_hidden_input = "<input type='hidden' name='gid' value='$gids[0]' />";
+                } else {
+                        $group_link = $urlAppend . '/modules/group/group.php';
+                        $group_select_form = "<tr><th class='left'>$langGroupSpaceLink:</th><td>" .
+                                             selection($user_group_info, 'gid') . "</td></tr>";
+                }
 		$tool_content .= "\n  <p>$m[this_is_group_assignment] ".
-		"<a href='../group/document.php?group_id=$gid'>".
-		"$m[group_documents]</a> $m[select_publish]</p>";
-	} else {
-		$tool_content .= "
-                <form enctype='multipart/form-data' action='$_SERVER[PHP_SELF]' method='post'>
-                <input type='hidden' name='id' value='$id' />
-                <table width='99%' class=''>
+                                 "<a href='$group_link'>".
+                                 "$m[group_documents]</a> $m[select_publish]</p>";
+	}
+	$tool_content .= "
+             <form enctype='multipart/form-data' action='$_SERVER[PHP_SELF]' method='post'>
+                <input type='hidden' name='id' value='$id' />$group_select_hidden_input
+                <table width='99%'>
                 <tr>
                   <th width='220'>&nbsp;</th>
                   <td><b>$langSubmit</b></td>
-                </tr>
+                </tr>$group_select_form 
                 <tr>
                   <th class='left'>$langWorkFile:</th>
                   <td><input type='file' name='userfile' class='FormData_InputText' /></td>
                 </tr>
                 <tr>
                   <th class='left'>$m[comments]:</th>
-                  <td><textarea name='stud_comments' rows='5' cols='55' class='FormData_InputText'></textarea></td>'
+                  <td><textarea name='stud_comments' rows='5' cols='55' class='FormData_InputText'></textarea></td>
                 </tr>
                 <tr>
                   <th>&nbsp;</th>
@@ -579,10 +598,9 @@ function show_submission_form($id)
                 </tr>
                 </table>
                 <br/>
-                </form>";
-		$tool_content .= "<p align='right'><small>$GLOBALS[langMaxFileSize] " .
+             </form>
+	     <p align='right'><small>$GLOBALS[langMaxFileSize] " .
                         ini_get('upload_max_filesize') . "</small></p>";
-	}
 }
 
 
@@ -749,9 +767,8 @@ function show_assignment($id, $message = FALSE)
 			$num_of_submissions = sprintf("$m[more_submissions]", $num_results);
 		}
 
-		require_once '../../include/libchart/libchart.php';
-
-		$chart = new PieChart(300, 200);
+                $chart = new PieChart(300, 200);
+                $dataSet = new XYDataSet();
 		$chart->setTitle("$langGraphResults");
 
 		$gradeOccurances = array(); // Named array to hold grade occurances/stats
@@ -878,10 +895,11 @@ function show_assignment($id, $message = FALSE)
 				 * percentage. */
 //				$percentage = 100*($gradeOccurance/$num_results);
 				$percentage = 100*($gradeOccurance/$num_resultsForChart);
-				$chart->addPoint(new Point("$gradeValue ($percentage)", $percentage));
+				$dataSet->addPoint(new Point("$gradeValue ($percentage)", $percentage));
 			}
 
 			$chart_path = 'courses/'.$currentCourseID.'/temp/chart_'.md5(serialize($chart)).'.png';
+                        $chart->setDataSet($dataSet);
 			$chart->render($webDir.$chart_path);
 
 			$tool_content .= "
@@ -918,64 +936,65 @@ cData;
 // // show assignment - student view only
 function show_student_assignments()
 {
+        global $tool_content, $m, $uid, $cours_id, $currentCourseID,
+               $langDaysLeft, $langDays, $langNoAssign, $urlServer;
 
-	global $tool_content, $m, $uid;
-	global $langDaysLeft, $langDays, $langNoAssign, $urlServer;
+        $gids = user_group_info($uid, $cours_id);
 
-	$result = db_query("SELECT *, (TO_DAYS(deadline) - TO_DAYS(NOW())) AS days FROM assignments
-			WHERE active = '1' ORDER BY submission_date");
+        $result = db_query("SELECT *, (TO_DAYS(deadline) - TO_DAYS(NOW())) AS days
+                                   FROM `$currentCourseID`.assignments
+                                   WHERE active = '1' ORDER BY submission_date");
 
-	if (mysql_num_rows($result)) {
-	    $tool_content .= "<table class='WorkSum' align='left' width='99%'>
-            <thead>
-            <tr>
-              <th colspan='2'><div align='left'>&nbsp;&nbsp;$m[title]</div></th>
-              <th><div align='left'>$m[deadline]</div></th>
-              <th>$m[submitted]</th>
-              <th>$m[grade]</th>
-            </tr>
-            </thead>
-            <tbody>";
-            $k = 0;
-		while ($row = mysql_fetch_array($result)) {
-                    $title_temp = q($row['title']);
-                    if ($k%2==0) {
-                        $tool_content .= "\n      <tr>";
-                    } else {
-                       $tool_content .= "\n      <tr class='odd'>";
-                    }
-                $tool_content .= "<td width='1'><img style='padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet' /></td>
-                <td><a href='$_SERVER[PHP_SELF]?id=$row[id]'>$title_temp</a></td>
-                <td width='30%'>".nice_format($row['deadline']);
-                if ($row['days'] > 1) {
-                        $tool_content .= " (<span class='not_expired'>$m[in]&nbsp;$row[days]&nbsp;$langDays</span>";
-                } elseif ($row['days'] < 0) {
-                        $tool_content .= " (<span class='expired'>$m[expired]</span>)";
-                } elseif ($row['days'] == 1) {
-                        $tool_content .= " (<span class='expired_today'>$m[tomorrow]</span>)";
-                } else {
-                        $tool_content .= " (<span class='expired_today'><b>$m[today]</b></span>)";
-                }
-		    $tool_content .= "</td><td width='10%' align='center'>";
-                $grade = ' - ';
-                if ($submission = find_submission($uid, $row['id'])) {
-                        $tool_content .= "<img src='../../template/classic/img/checkbox_on.gif' alt='$m[yes]' />";
-                        $grade = submission_grade($submission);
-                        if (!$grade) {
-                                $grade = ' - ';
+        if (mysql_num_rows($result)) {
+                $tool_content .= "<table class='WorkSum' align='left' width='99%'>
+                                  <thead>
+                                  <tr><th colspan='2'><div align='left'>&nbsp;&nbsp;$m[title]</div></th>
+                                      <th><div align='left'>$m[deadline]</div></th>
+                                      <th>$m[submitted]</th>
+                                      <th>$m[grade]</th>
+                                  </tr>
+                                  </thead>
+                                  <tbody>";
+                $k = 0;
+                while ($row = mysql_fetch_array($result)) {
+                        $title_temp = q($row['title']);
+                        if ($k%2==0) {
+                                $tool_content .= "\n      <tr>";
+                        } else {
+                                $tool_content .= "\n      <tr class='odd'>";
                         }
-                } else {
-                        $tool_content .= "<img src='../../template/classic/img/checkbox_off.gif' alt='$m[no]' />";
+                        $tool_content .= "<td width='1'><img style='padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet' /></td>
+                                <td><a href='$_SERVER[PHP_SELF]?id=$row[id]'>$title_temp</a></td>
+                                <td width='30%'>".nice_format($row['deadline']);
+                        if ($row['days'] > 1) {
+                                $tool_content .= " (<span class='not_expired'>$m[in]&nbsp;$row[days]&nbsp;$langDays</span>";
+                        } elseif ($row['days'] < 0) {
+                                $tool_content .= " (<span class='expired'>$m[expired]</span>)";
+                        } elseif ($row['days'] == 1) {
+                                $tool_content .= " (<span class='expired_today'>$m[tomorrow]</span>)";
+                        } else {
+                                $tool_content .= " (<span class='expired_today'><b>$m[today]</b></span>)";
+                        }
+                        $tool_content .= "</td><td width='10%' align='center'>";
+                        $grade = ' - ';
+                        if ($submission = find_submission($uid, $row['id'], $gids)) {
+                                $tool_content .= "<img src='../../template/classic/img/checkbox_on.gif' alt='$m[yes]' />";
+                                $grade = submission_grade($submission);
+                                if (!$grade) {
+                                        $grade = ' - ';
+                                }
+                        } else {
+                                $tool_content .= "<img src='../../template/classic/img/checkbox_off.gif' alt='$m[no]' />";
+                        }
+                        $tool_content .= "</td>
+                                <td width='10%' align='center'>$grade</td>
+                                </tr>";
+                        $k++;
                 }
-                $tool_content .= "</td>
-                <td width='10%' align='center'>$grade</td>
-                </tr>";
-                $k++;
-            }
-	    $tool_content .= '</tbody></table>';
-	} else {
-	    $tool_content .= "<p class='alert1'>$langNoAssign</p>";
-    }
+                $tool_content .= '</tbody></table>';
+        } else {
+                $tool_content .= "<p class='alert1'>$langNoAssign</p>";
+        }
 }
 
 
@@ -1204,10 +1223,8 @@ function create_zip_index($path, $id, $online = FALSE)
 			"</b>$row[grade_comments]</td></tr>");
 		}
 		if (!empty($row['group_id'])) {
-			fputs($fp, "
-			<tr><td colspan='6'>$m[groupsubmit] ".
-			"$m[ofgroup] $row[group_id] (".
-			group_member_names($row['group_id']).")</td></tr>\n");
+			fputs($fp, "<tr><td colspan='6'>$m[groupsubmit] ".
+                                   "$m[ofgroup] $row[group_id]</td></tr>\n");
 		}
 	}
 	fputs($fp, ' </tbody></table></body></html>');

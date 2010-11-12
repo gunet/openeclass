@@ -79,7 +79,7 @@ function work_secret($id)
 {
 	global $currentCourseID, $workPath, $tool_content, $coursePath;
 	
-	$res = db_query("SELECT secret_directory FROM assignments WHERE id = '$id'", $currentCourseID);
+	$res = db_query("SELECT secret_directory FROM `$currentCourseID`.assignments WHERE id = '$id'", $currentCourseID);
 	if ($res) {
 		$secret = mysql_fetch_row($res);
 		if (!empty($secret[0])) {
@@ -105,8 +105,8 @@ function work_secret($id)
 // Is this a group assignment?
 function is_group_assignment($id)
 {
-	global $tool_content;
-	$res = db_query("SELECT group_submissions FROM assignments WHERE id = '$id'");
+	global $tool_content, $currentCourseID;
+	$res = db_query("SELECT group_submissions FROM `$currentCourseID`.assignments WHERE id = '$id'");
 	if ($res) {
 		$row = mysql_fetch_row($res);
 		if ($row[0] == 0) {
@@ -124,24 +124,25 @@ function is_group_assignment($id)
 // Doesn't delete files if they are the same with $new_filename
 function delete_submissions_by_uid($uid, $gid, $id, $new_filename = '')
 {
-	global $m, $tool_content;
+	global $m, $tool_content, $currentCourseID;
 	$return="";
-	$res = db_query("SELECT * FROM assignment_submit WHERE
-		uid = '$uid' AND assignment_id = '$id'");
+        $res = db_query("SELECT * FROM `$currentCourseID`.assignment_submit
+                                  WHERE uid = $uid AND assignment_id = $id");
 	while ($row = mysql_fetch_array($res)) {
                 if ($row['file_path'] != $new_filename) {
         		@unlink("$GLOBALS[workPath]/$row[file_path]");
                 }
-		db_query("DELETE FROM assignment_submit WHERE id = '$row[id]'");
-		$return .= "$m[deleted_work_by_user] \"$row[file_name]\"";
+                db_query("DELETE FROM `$currentCourseID`.assignment_submit
+                                 WHERE id = '$row[id]'");
+                $return .= "$m[deleted_work_by_user] \"$row[file_name]\"";
 	}
-	$res = db_query("SELECT * FROM assignment_submit WHERE
-		group_id = '$gid' AND assignment_id = '$id'");
+        $res = db_query("SELECT * FROM `$currentCourseID`.assignment_submit
+                                  WHERE group_id = '$gid' AND assignment_id = '$id'");
 	while ($row = mysql_fetch_array($res)) {
                 if ($row['file_path'] != $new_filename) {
                         @unlink("$GLOBALS[workPath]/$row[file_path]");
                 }
-		db_query("DELETE FROM assignment_submit WHERE id = '$row[id]'");
+		db_query("DELETE FROM `$currentCourseID`.assignment_submit WHERE id = '$row[id]'");
 		$return .= "$m[deleted_work_by_group] \"$row[file_name]\".";
 	}
 	return $return;
@@ -168,64 +169,26 @@ function greek_to_latin($string)
 }
 
 
-// Returns an array of a group's members' uids
-function group_members($gid)
-{	
-	global $currentCourseID, $tool_content;
-
-	$members = array();
-	$res = db_query("SELECT user FROM user_group WHERE team = '$gid'",
-		$currentCourseID);
-	while ($user = mysql_fetch_row($res)) {
-		$members[] = $user[0];
-	}
-	return $members;
-}
-
-
-// Returns a string of the names and student numbers of
-// a group's members
-function group_member_names($gid)
-{
-	global $tool_content;
-	$start = TRUE;
-	$names= '';
-	foreach (group_members($gid) as $id) {
-		if ($start) {
-			$start = FALSE;
-		} else {
-			$names .= ', ';
-		}
-		$names .= uid_to_name($id);
-		if ($am = uid_to_am($id)) {
-			$names .= " ($am)";
-		}
-	}
-	return $names;
-}
-
-
 // Find submission by a user (or the user's group)
 function find_submission($uid, $id, $gids)
 {
-	global $tool_content, $cours_id;
-	if (is_group_assignment($id)) {
-		$groups_sql = join(', ', $gids);
-		$res = db_query("SELECT id FROM assignment_submit
-				WHERE assignment_id = '$id'
-				AND (uid = $uid OR group_id IN ($groups_sql)')");
-	} else {
-		$res = db_query("SELECT id FROM assignment_submit
-				WHERE assignment_id = '$id' AND uid = '$uid'");
-	}
-	if ($res) {
-		$row = mysql_fetch_row($res);
-		return $row[0];
-	} else {
-		return FALSE;
-	}
+        global $tool_content, $cours_id, $currentCourseID;
+        if (is_group_assignment($id)) {
+                $groups_sql = join(', ', array_keys($gids));
+                $res = db_query("SELECT id FROM `$currentCourseID`.assignment_submit
+                                        WHERE assignment_id = '$id'
+                                              AND (uid = $uid OR group_id IN ($groups_sql))");
+        } else {
+                $res = db_query("SELECT id FROM `$currentCourseID`.assignment_submit
+                                        WHERE assignment_id = '$id' AND uid = '$uid'");
+        }
+        if ($res) {
+                $row = mysql_fetch_row($res);
+                return $row[0];
+        } else {
+                return FALSE;
+        }
 }
-
 
 
 // Returns grade, if submission has been graded, or "Yes" (translated) if
@@ -233,10 +196,11 @@ function find_submission($uid, $id, $gids)
 // grade or professor comment is set
 function submission_grade($subid)
 {
-	global $m, $tool_content;
+	global $m, $tool_content, $currentCourseID;
 
 	$res = mysql_fetch_row(db_query("SELECT grade, grade_comments
-		FROM assignment_submit WHERE id = '$subid'"));
+                                                FROM `$currentCourseID`.assignment_submit
+                                                WHERE id = '$subid'"));
 	if ($res) {
 		$grade = trim($res[0]);
 		if (!empty($grade)) {
@@ -258,28 +222,29 @@ function submission_grade($subid)
 // assignments were found.
 function was_graded($uid, $id, $ret_val = FALSE)
 {
-	global $tool_content, $cours_id, $mysqlMainDb;
+        global $tool_content, $cours_id, $mysqlMainDb, $currentCourseID;
 
-	$res = db_query("SELECT * FROM assignment_submit
-			WHERE assignment_id = '$id'
-			AND (uid = '$uid' OR
-			     group_id IN (SELECT group_id FROM `$mysqlMainDb`.`group` AS grp,
-			                                       `$mysqlMainDb`.group_members AS members
-			                         WHERE grp.id = members.group_id AND
-						       user_id = $uid AND course_id = $cours_id))");
-	if ($res) {
-		while ($row = mysql_fetch_array($res)) {
-			if ($row['grade']) {
-				if ($ret_val) {
-					return $row;
-				} else {
-					return $row['id'];
-				}
-			}
-		}
-	} else {
-		return FALSE;
-	}
+        $res = db_query("SELECT * FROM `$currentCourseID`.assignment_submit
+                                  WHERE assignment_id = '$id'
+                                        AND (uid = '$uid' OR
+                                        group_id IN (SELECT group_id FROM `$mysqlMainDb`.`group` AS grp,
+                                                                          `$mysqlMainDb`.group_members AS members
+                                                            WHERE grp.id = members.group_id AND
+                                                                  user_id = $uid AND
+                                                                  course_id = $cours_id))");
+        if ($res) {
+                while ($row = mysql_fetch_array($res)) {
+                        if ($row['grade']) {
+                                if ($ret_val) {
+                                        return $row;
+                                } else {
+                                        return $row['id'];
+                                }
+                        }
+                }
+        } else {
+                return FALSE;
+        }
 }
 
 
@@ -289,8 +254,8 @@ function show_submission_details($id)
 	global $uid, $m, $currentCourseID, $langSubmittedAndGraded, $tool_content;
 
 	$sub = mysql_fetch_array(
-		db_query("SELECT * FROM assignment_submit
-			WHERE id = '$id'"));
+		db_query("SELECT * FROM `$currentCourseID`.assignment_submit
+			           WHERE id = '$id'"));
 	if (!$sub) {
 		die("Error: submission $id doesn't exist.");
 	}
@@ -338,15 +303,15 @@ function show_submission_details($id)
 // for assignment id. Returns 'user' if by user, 'group' if by group
 function was_submitted($uid, $gid, $id)
 {
-	global $tool_content;
+	global $tool_content, $currentCourseID;
 	if (mysql_num_rows(db_query(
-		"SELECT id FROM assignment_submit WHERE assignment_id = '$id'
-			AND uid = '$uid'"))) {
+		"SELECT id FROM `$currentCourseID`.assignment_submit WHERE assignment_id = $id
+			AND uid = $uid"))) {
 		return 'user';
 	}
 	if (mysql_num_rows(db_query(
-		"SELECT id FROM assignment_submit WHERE assignment_id = '$id'
-			AND group_id = '$gid'"))) {
+		"SELECT id FROM `$currentCourseID`.assignment_submit WHERE assignment_id = $id
+			AND group_id = $gid"))) {
 		return 'group';
 	}
 	return FALSE;
@@ -368,21 +333,4 @@ function cleanup_filename($f)
 	}
 	$f = preg_replace('{^/+}', '', $f);
 	return preg_replace('{//}', '/', $f);
-}
-
-// fills an array with info about user groups (group_id => group_name)
-function user_group_info($uid, $cours_id)
-{
-	global $mysqlMainDb;
-	$gids = array();
-	
-	$q = db_query("SELECT group_members.group_id AS grp_id, `group`.name AS grp_name FROM group_members,`group`
-			WHERE group_members.user_id = $uid
-			AND group_members.group_id = `group`.id
-			AND `group`.course_id = $cours_id", $mysqlMainDb);
-	$r = mysql_fetch_array($q);
-	while ($r) {
-		$gids[$r['grp_id']] = $r['grp_name'];
-	}
-	return $gids;
 }
