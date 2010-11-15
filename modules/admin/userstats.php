@@ -54,70 +54,73 @@ if((!empty($u)) && ctype_digit($u))	// validate the user id
 	$u = (int)$u;
 	$sql = mysql_query("SELECT nom, prenom, username, password, email, phone, department, registered_at, expires_at FROM user WHERE user_id = '$u'");
 	$info = mysql_fetch_array($sql);
-    	$tool_content .= "<table class=\"FormData\" width=\"99%\" align=\"left\">
-	<thead>
-	<tr><th width=\"220\">&nbsp;</th>
-	<td><b>$langUserStats</b>: $info[2]</td>
-	</tr>";
+    	$tool_content .= "
+	<p class='title1'>$langUserStats: <b>$info[2]</b></p>
+        <p><b>$langStudentParticipation</b></p>";
 
 	$sql = mysql_query("SELECT nom, prenom, username FROM user WHERE user_id = '$u'");
 	$sql = mysql_query("SELECT a.code, a.intitule, b.statut, a.cours_id
 		FROM cours AS a LEFT JOIN cours_user AS b ON a.cours_id = b.cours_id
 		WHERE b.user_id = '$u' ORDER BY b.statut, a.faculte");
 
-		// αν ο χρήστης συμμετέχει σε μαθήματα τότε παρουσίασε τη λίστα
+	// αν ο χρήστης συμμετέχει σε μαθήματα τότε παρουσίασε τη λίστα
 	if (mysql_num_rows($sql) > 0) {
-    		$tool_content .= "<tr><th class=\"left\" valign=\"top\">$langStudentParticipation</th>
-		<td>
-		<table class=\"FormData\" width=\"99%\" align=\"left\">
-		<thead><tr>
-		<th colspan=\"2\"><div align=\"left\">&nbsp;&nbsp;$langCourseCode</div></th>
-		<th>$langProperty</th>
-		<th>$langActions</th>
-		</tr></thead><tbody>";
+    		$tool_content .= "
+		<table class=\"tbl_alt\" width=\"99%\" align=\"left\">
+		<tr>
+		  <th colspan=\"2\"><div align=\"left\">&nbsp;&nbsp;$langCourseCode</div></th>
+		  <th>$langProperty</th>
+		  <th>$langActions</th>
+		</tr>";
 		$k = 0;
 		for ($j = 0; $j < mysql_num_rows($sql); $j++) {
 			$logs = mysql_fetch_array($sql);
 			if ($k%2==0) {
-		              $tool_content .= "<tr>";
+		              $tool_content .= "
+                <tr class=\"even\">";
 	                } else {
-		                $tool_content .= "<tr class=\"odd\">";
+		                $tool_content .= "
+                <tr class=\"odd\">";
 	                }
-			$tool_content .= "<td width=\"1\">
-			<img style='border:0px; padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'></td>
-         		<td align=\"left\">".htmlspecialchars($logs[0])." (".htmlspecialchars($logs[1]).")</td>
-         		<td><div align=\"center\">";
+			$tool_content .= "
+                  <td width=\"1\"><img style='border:0px; padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet' /></td>
+       		  <td align=\"left\">".htmlspecialchars($logs[0])." (".htmlspecialchars($logs[1]).")</td>
+         	  <td><div align=\"center\">";
 			switch ($logs[2]) {
 				case 1:
 					$tool_content .= $langTeacher;
-					$tool_content .= "</div></td><td><div align=\"center\">---</div></td>
-      					</tr>";
+					$tool_content .= "</div></td>
+                  <td><div align=\"center\">---</div></td>
+      		</tr>";
 					break;
 				case 5:
 					$tool_content .= $langStudent;
-					$tool_content .= "</div></td><td><div align=\"center\">
-					<a href=\"unreguser.php?u=$u&un=$info[2]&c=$logs[0]\">
-					<img src='../../template/classic/img/delete.gif' title='$langDelete' border='0'></img></a></div></td></tr>";
+					$tool_content .= "</div></td>
+                  <td><div align=\"center\">
+		      <a href=\"unreguser.php?u=$u&un=$info[2]&c=$logs[0]\">
+		      <img src='../../template/classic/img/delete.gif' title='$langDelete' border='0'></img></a></div>
+                  </td>
+                </tr>";
 					break;
 				default:
 					$tool_content .= $langVisitor;
-					$tool_content .= "</div></td><td><div align=\"center\">
-					<a href=\"unreguser.php?u=$u&un=$info[2]&c=$logs[0]\">
-					<img src='../../template/classic/img/delete.gif' title='$langDelete' border='0'>
-					</img></a></div></td></tr>";
+					$tool_content .= "</div></td>
+                  <td><div align=\"center\">
+		      <a href=\"unreguser.php?u=$u&un=$info[2]&c=$logs[0]\">
+		      <img src='../../template/classic/img/delete.gif' title='$langDelete' border='0'></img></a></div>
+                  </td>
+                </tr>";
 					break;
 				}
 				$k++;
 			}
 		  $tool_content .= "
-      </tbody>
-      </table>\n";
-		  $tool_content .= "\n    </td>\n  </tr>";
+                </table>\n";
 
 		} else {
-		$tool_content .= "<tr><th class=\"left\">$langStudentParticipation</th><td>";
+		$tool_content .= "<p>$langStudentParticipation</p>";
 
-		$tool_content .= "$langNoStudentParticipation ";
+		$tool_content .= "<p>$langNoStudentParticipation </p>";
 		  if ($u > 1) {
 				if (isset($logs))
 			    $tool_content .= "<center><a href=\"unreguser.php?u=$u&un=$info[2]&c=$logs[0]\">$langDelete</a></center>";
@@ -128,13 +131,11 @@ if((!empty($u)) && ctype_digit($u))	// validate the user id
 		  {
 			$tool_content .= $langCannotDeleteAdmin;
 		  }
-    		$tool_content .= "</td></tr>";
+    		$tool_content .= " ";
 		}
 	
     $tool_content .= "
-  <tr>
-    <th class=\"left\" width=\"220\">$langTotalVisits:</th>
-    <td>";
+    <p><b>$langTotalVisits</b>: ";
 // Chart display added - haniotak
 if (!extension_loaded('gd')) {
 	$tool_content .= "$langGDRequired";
@@ -161,8 +162,7 @@ if (!extension_loaded('gd')) {
 			mysql_free_result($result);
 		}
 	}
-	$tool_content .= "<b>$totalHits</b></td>";
-    	$tool_content .= "</tr><tr><td colspan=\"2\">";
+	$tool_content .= "<b>$totalHits</b></p>";
 	$chart = new PieChart(600, 300);
 	$hits = array();
 	foreach ($hits as $code => $count) {
@@ -174,12 +174,9 @@ if (!extension_loaded('gd')) {
 	$chart->setTitle($langCourseVisits);
 	$chart_path = 'courses/chart_'.md5(serialize($chart)).'.png';
 	$chart->render($webDir.$chart_path);
-	$tool_content .= '<img src="'.$urlServer.$chart_path.'" />';
+	$tool_content .= '<p><img src="'.$urlServer.$chart_path.'" /></p>';
 	$made_chart = true;
 }
-    $tool_content .= "
-    </td>
-  </tr>";
 
 // End of chart display; chart unlinked at end of script.
 
@@ -188,18 +185,13 @@ $sql = "SELECT * FROM loginout WHERE id_user = '$u' ORDER by idLog DESC LIMIT 15
 
 $leResultat = db_query($sql, $mysqlMainDb);
     $tool_content .= "
-  <tr>
-    <th class=\"left\" width=\"220\" valign=\"top\">$langLastUserVisits $info[2]</th>
-    <td>\n";
+    <p>$langLastUserVisits $info[2]</p>\n";
 $tool_content .= "
-      <table width=\"99%\">
-      <thead>
+      <table class='tbl_alt' width=\"99%\">
       <tr>
         <th colspan=\"2\"><div align=\"left\">&nbsp;&nbsp;$langDate</div></th>
         <th>$langAction</th>
-      </tr>
-      </thead>
-      <tbody>";
+      </tr>";
 $i = 0;
 
 $nomAction["LOGIN"] = "<font color=\"#008000\">$langLogIn</font>";
@@ -215,26 +207,20 @@ while ($leRecord = mysql_fetch_array($leResultat)) {
       		<tr class=\"odd\">";
 	}
 	$tool_content .= "<td width=\"1\">
-	<img style='border:0px; padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'></td>
+	<img style='border:0px; padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet' /></td>
         <td>".strftime("%d/%m/%Y (%H:%M:%S) ", strtotime($when))."</td>
         <td align=\"center\"><div align=\"center\">".$nomAction[$action]."</div></td>
       </tr>";
 	$i++;
 }
 $tool_content .= "
-      </tbody>
       </table>\n";
 
-$tool_content .= "
-    </td>
-  </tr>
-  </thead>
-  </table>";
 }
 else
 {
     // Αλλιώς... τι γίνεται;
-    $tool_content .= "<h1>$langError</h1>\n<p align=\"right\"><a href=\"listcours.php\">$langBack</p>\n";
+    $tool_content .= "<p class='caution'>$langError</p>\n<p align=\"right\"><a href=\"listcours.php\">$langBack</p>\n";
 }
 
 $tool_content .= "<p align=\"right\"><a href=\"listusers.php\">$langBack</a></p>";

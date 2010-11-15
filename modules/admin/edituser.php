@@ -78,34 +78,38 @@ if (!empty($u))
 				registered_at, expires_at, statut, am
 				FROM user WHERE user_id = '$u'");
 		$info = mysql_fetch_array($sql);
-		$tool_content .= "<div id='operations_container'><ul id='opslist'>";
+		$tool_content .= "
+    <div id='operations_container'>
+     <ul id='opslist'>";
 		if(!in_array($info['password'], $authmethods)) {
 			$tool_content .= "
-			<li><a href='password.php?userid=$u'>".$langChangePass."</a></li>";
+      <li><a href='password.php?userid=$u'>".$langChangePass."</a></li>";
 		}
-		$tool_content .= "<li><a href='./listusers.php'>$langBack</a></li>";
-		$tool_content .= "</ul></div>";
-		$tool_content .= "<form name='edituser' method='post' action='$_SERVER[PHP_SELF]'>
-		  <table class='FormData' width='99%' align='left'>
-		  <tbody>
-		  <tr>
-		    <th width='220'>&nbsp;</th>
-		    <td><b>$langEditUser ".q($info[2])."</b></td>
-		  </tr>
-		  <tr>
-		    <th class='left'>$langSurname:</th>
-		    <td><input type='text' name='lname' size='50' value='".q($info['nom'])."' /></td>
-		  </tr>
-		  <tr>
-		    <th class='left'>$langName:</th>
-			<td><input type='text' name='fname' size='50' value='".q($info['prenom'])."' /></td>
-		  </tr>";
+		$tool_content .= "
+      <li><a href='./listusers.php'>$langBack</a></li>";
+		$tool_content .= "
+     </ul>
+    </div>";
+		$tool_content .= "
+    <form name='edituser' method='post' action='$_SERVER[PHP_SELF]'>
+    <fieldset>
+    <legend>$langEditUser: ".q($info[2])."</legend>
+    <table class='tbl'>
+    <tr>
+      <th width='170' class='left'>$langSurname:</th>
+      <td><input type='text' name='lname' size='50' value='".q($info['nom'])."' /></td>
+    </tr>
+    <tr>
+      <th class='left'>$langName:</th>
+      <td><input type='text' name='fname' size='50' value='".q($info['prenom'])."' /></td>
+   </tr>";
 
 		if(!in_array($info['password'], $authmethods)) {
-			$tool_content .= "<tr>
-			<th class='left'>$langUsername:</th>
-			<td><input type='text' name='username' size='50' value='".q($info['username'])."' /></td>
-			</tr>";
+			$tool_content .= "
+   <tr>
+     <th class='left'>$langUsername:</th>
+     <td><input type='text' name='username' size='50' value='".q($info['username'])."' /></td>
+   </tr>";
 		}
 		else    // means that it is external auth method, so the user cannot change this password
 		{
@@ -119,36 +123,41 @@ if (!empty($u))
 		  }
 		  
 		$auth_text = get_auth_info($auth);
-		$tool_content .= "<tr>
-		<th class='left'>".$langUsername. "</th>
-		<td class='caution_small'>&nbsp;&nbsp;&nbsp;&nbsp;<b>".q($info['username'])."</b> [".$auth_text."]
-		    <input type='hidden' name='username' value='".q($info['username'])."' />
-		</td>
-	      </tr>";
+		$tool_content .= "
+   <tr>
+     <th class='left'>".$langUsername. "</th>
+     <td class='caution_small'>&nbsp;&nbsp;&nbsp;&nbsp;<b>".q($info['username'])."</b> [".$auth_text."] <input type='hidden' name='username' value='".q($info['username'])."' /> </td>
+   </tr>";
 	}
 
-$tool_content .= "<tr><th class='left'>e-mail: </th>
-	  <td><input type='text' name='email' size='50' value='".q($info['email'])."' /></td>
-	</tr>
-	<tr>
-	  <th class='left'>$langAm: </th>
-	  <td><input type='text' name='am' size='50' value='".q($info['am'])."' /></td>
-	</tr>
-       <tr>
-	 <th class='left'>$langTel: </th>
-	 <td><input type='text' name='phone' size='50' value='".q($info['phone'])."' /></td>
-	</tr>";
-	$tool_content .= "<tr>
-    <th class='left'>$langFaculty:</th>
-    <td>";
+$tool_content .= "
+   <tr>
+     <th class='left'>e-mail: </th>
+     <td><input type='text' name='email' size='50' value='".q($info['email'])."' /></td>
+   </tr>
+   <tr>
+     <th class='left'>$langAm: </th>
+     <td><input type='text' name='am' size='50' value='".q($info['am'])."' /></td>
+   </tr>
+   <tr>
+     <th class='left'>$langTel: </th>
+     <td><input type='text' name='phone' size='50' value='".q($info['phone'])."' /></td>
+   </tr>
+   <tr>
+     <th class='left'>$langFaculty:</th>
+   <td>";
 	if(!empty($info['department'])) {
 		$department_select_box = list_departments($info['department']);
 	} else {
 		$department_select_box = "";
 	}
 
-	$tool_content .= $department_select_box."</td></tr>";
-	$tool_content .= "<tr><th class='left'>$langProperty:</th><td>";
+	$tool_content .= $department_select_box."</td>
+    </tr>";
+	$tool_content .= "
+    <tr>
+      <th class='left'>$langProperty:</th>
+      <td>";
 	if ($info[9] == '10') { // if we are guest user do not display selection
 		$tool_content .= selection(array(10 => $langGuest), 'newstatut', $info['statut']);
 	} else {
@@ -156,13 +165,14 @@ $tool_content .= "<tr><th class='left'>e-mail: </th>
 	}
 	$tool_content .= "</td>";
 
-	$tool_content .= "<tr>
-    <th class='left'>$langRegistrationDate:</th>
-    <td><span style='color:green;font-weight:bold;'>".date("j/n/Y H:i",$info['registered_at'])."</span></td>
-  </tr>
-  <tr>
-    <th class='left'>$langExpirationDate: </th>
-    <td>";
+	$tool_content .= "
+     <tr>
+       <th class='left'>$langRegistrationDate:</th>
+       <td><span style='color:green;font-weight:bold;'>".date("j/n/Y H:i",$info['registered_at'])."</span></td>
+     </tr>
+     <tr>
+      <th class='left'>$langExpirationDate: </th>
+      <td>";
         $dateregistration = date("j-n-Y", $info['expires_at']);
         $hour = date("H", $info['expires_at']);
         $minute = date("i", $info['expires_at']);
@@ -191,25 +201,22 @@ $tool_content .= "<tr><th class='left'>e-mail: </th>
         $tool_content .= "</select></td>";
 
 	$tool_content .= "</tr>
-	<tr>
-	  <th class='left'>$langUserID: </th>
-	  <td>$u</td>
-	</tr>
-	<tr>
-	  <th class='left'>&nbsp;</th>
-	  <td>
+     <tr>
+       <th class='left'>$langUserID: </th>
+       <td>$u</td>
+     </tr>
+     <tr>
+       <th class='left'>&nbsp;</th>
+       <td>
 	    <input type='hidden' name='u' value='$u' />
 	    <input type='hidden' name='u_submitted' value='1' />
 	    <input type='hidden' name='registered_at' value='".$info['registered_at']."' />
 	    <input type='submit' name='submit_edituser' value='$langModify' />
-	  </td>
-	</tr>
-	<tr>
-	  <td colspan='2'>&nbsp;</td>
-	</tr>
-	</tbody>
-	</table>
-      </form>";
+       </td>
+     </tr>
+     </table>
+     </fieldset>
+     </form>";
 
 	$sql = mysql_query("SELECT nom, prenom, username FROM user WHERE user_id = '$u'");
 	$sql = mysql_query("SELECT a.code, a.intitule, b.reg_date, b.statut, a.cours_id
@@ -219,22 +226,28 @@ $tool_content .= "<tr><th class='left'>e-mail: </th>
 		// αν ο χρήστης συμμετέχει σε μαθήματα τότε παρουσίασε τη λίστα
 		if (mysql_num_rows($sql) > 0)
 		{
-			$tool_content .= "<br />
-			<table class='FormData' align='left'>
-			<tbody>
+			$tool_content .= "
+                        <p class='title1'>$langStudentParticipation</p>
+			<table class='tbl_alt' align='left' width='99%'>
 			<tr>
-			<th colspan='5'>$langStudentParticipation</th>
-			</tr>
-			<tr>
-			<th>$langLessonCode</th>
-			<th>$langLessonName</th>
+                        <th width='1'>&nbsp;</th>
+			<th><div align='left'>$langLessonCode</div></th>
+			<th><div align='left'>$langLessonName</div></th>
 			<th>$langCourseRegistrationDate</th><th>$langProperty</th><th>$langActions</th>
 			</tr>";
 
+                        $k=0;
 			for ($j = 0; $j < mysql_num_rows($sql); $j++)
 			{
 				$logs = mysql_fetch_array($sql);
-				$tool_content .= "<tr>
+                                 if ($k%2 == 0) {
+                                        $tool_content .= "\n      <tr class='even'>";
+                                } else {
+                                        $tool_content .= "\n      <tr class='odd'>";
+                                }
+
+				$tool_content .= "
+                                        <td width='1'><img style='border:0px; margin:4px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'></td>
 					<td>".htmlspecialchars($logs[0])."</td>
 					<td>".htmlspecialchars($logs[1])."</td><td align='center'>";
 				if ($logs[2] == '0000-00-00')
@@ -262,12 +275,14 @@ $tool_content .= "<tr><th class='left'>e-mail: </th>
 						<img src='../../template/classic/img/delete.gif' title='$langDelete'></img></a></td></tr>\n";
 						break;
 				}
+                        $k++;
 			}
-			$tool_content .= "</tbody></table>\n";
+                           
+			$tool_content .= "</table>\n";
 		}
 		else
 		{
-			$tool_content .= "<br /><h4>$langNoStudentParticipation</h4>";
+			$tool_content .= "<p class='caution'>$langNoStudentParticipation</p>";
 			if ($u > 1)
 			{
 				if (isset($logs))

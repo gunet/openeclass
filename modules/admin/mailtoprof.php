@@ -96,31 +96,32 @@ $langEmail : $emailhelpdesk
         // Display form to administrator
         $tool_content .= "
 	<form action='$_SERVER[PHP_SELF]' method='post'>
-	<table class='FormData'>
-	<tbody>
+        <fieldset>
+        <legend>$langMessage</legend>
+	<table class='tbl'>
 	<tr>
-	<th class='left'>$typeyourmessage</th>
-	    <td><textarea class='auth_input' name='body_mail' rows='10' cols='60'></textarea></td>
+	  <th colspan='2'>$typeyourmessage<br />
+	      <textarea name='body_mail' rows='10' cols='60'></textarea></th>
 	</tr>
 	<tr>
-	<th class='left'>$langSendMessageTo</th>
-	<td><select name='sendTo'>
-	      <option value='1'>$langProfOnly</option>
-	      <option value='0'>$langToAllUsers</option>
-	    </select>
-	</td>
+	  <th width='140'>$langSendMessageTo</th>
+	  <td><select name='sendTo'>
+	        <option value='1'>$langProfOnly</option>
+	        <option value='0'>$langToAllUsers</option>
+	      </select>
+	  </td>
 	</tr>
 	<tr>
-	<th>&nbsp;</th>
-	<td><input type=\"submit\" name=\"submit\" value=\"$langSend\"></input></td>
+	  <th>&nbsp;</th>
+	  <td><input type=\"submit\" name=\"submit\" value=\"$langSend\"></input></td>
 	</tr>
-	</tbody>
 	</table>
+        </fieldset>
 	</form>";
 
 }
 // Display link back to index.php
-$tool_content .= "<p>&nbsp;</p><p align=\"right\"><a href=\"index.php\">".$langBack."</a></p>";
+$tool_content .= "<p align=\"right\"><a href=\"index.php\">".$langBack."</a></p>";
 
 draw($tool_content,3);
 ?>

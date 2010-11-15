@@ -143,9 +143,11 @@ function show_paging($limit, $listsize, $fulllistsize, $page, $extra_page = '', 
 	
 	// Page numbers of navigation
 	$pn = 15;
-
-	$retString .= "<br /><table width='99%'><tbody><tr><td>&nbsp;</td><td align='center'>$link_all &nbsp;&nbsp;&nbsp;";
-        //
+	$retString .= "
+        <table width=\"99%\" class='tbl'>
+        <tr>
+          <td>&nbsp;</td>
+          <td align='center'>$link_all &nbsp;&nbsp;&nbsp;";
 	// Deal with previous page
 	if ($limit!=0) {
 		$newlimit = $limit - $listsize;
@@ -267,7 +269,10 @@ function show_paging($limit, $listsize, $fulllistsize, $page, $extra_page = '', 
 		$newlimit = $limit + $listsize;
 		$retString .= "|&nbsp;<a href='$page?limit=$newlimit$extra_page'><b>$langNextPage</b></a>";
 	}
-	$retString .= "</td></tr></tbody></table>";
+	$retString .= "
+          </td>
+        </tr>
+        </table>";
 
 	return $retString;
 }

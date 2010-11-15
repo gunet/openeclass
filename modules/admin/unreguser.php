@@ -58,7 +58,7 @@ $u_statut = get_uid_statut($u);
 $t = 0;
 
 if (!$doit) {
-        $tool_content .= "<h4>$langConfirmDelete</h4><p>$langConfirmDeleteQuestion1 <em>$u_realname ($u_account)</em>";
+        $tool_content .= "<p class='title1'>$langConfirmDelete</p><p>$langConfirmDeleteQuestion1 <em>$u_realname ($u_account)</em>";
         if($c) {
                 $tool_content .= " $langConfirmDeleteQuestion2 <em>".q(course_id_to_title($c))."</em>";
         }

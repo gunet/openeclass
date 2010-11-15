@@ -60,15 +60,12 @@ if (!isset($_POST['changePass'])) {
         }
 	$tool_content .= "
 <form method='post' action='$passurl'>
+<fieldset>
+  <legend>$lang_remind_pass</legend>
   <input type='hidden' name='userid' value='$_GET[userid]' />
-  <table class='FormData' width='99%' align='left'>
-  <tbody>
+  <table class='tbl' width='99%'>
   <tr>
-    <th width='220'>&nbsp;</th>
-    <td><b>$lang_remind_pass</b></td>
-  </tr>
-  <tr>
-    <th class='left'>$langNewPass1</th>
+    <th class='left' width='140'>$langNewPass1</th>
     <td><input type='password' size='40' name='password_form' value='' /></td>
   </tr>
   <tr>
@@ -79,8 +76,8 @@ if (!isset($_POST['changePass'])) {
     <th class='left'>&nbsp;</th>
     <td><input type='submit' name='changePass' value='$langModify' /></td>
   </tr>
-  </tbody>
   </table>
+</fieldset>
 </form>";
 } else {
 	$userid = intval($_POST['userid']);

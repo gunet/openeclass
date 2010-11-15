@@ -52,26 +52,24 @@ mysql_select_db($mysqlMainDb);
 
 // Constract a table with platform identification info
 $tool_content .= "
-    <table width='75%' class='Smart' align='center' >
-    <tbody>
-    <tr class='odd'>
-      <th width='30%' style='border-left: 1px solid #edecdf; border-top: 1px solid #edecdf;'>&nbsp;</th>
-      <td><b>$langPlatformIdentity</b></td>
-    </tr>
-    <tr class='odd'>
-      <th class='left' style='border-left: 1px solid #edecdf;'>Version:</th>
+  <br />
+  <fieldset>
+  <legend>$langPlatformIdentity</legend>
+    <table width='99%' class='tbl'>
+    <tr>
+      <th width='140'>Version:</th>
       <td>$langAboutText <b>$siteName " . ECLASS_VERSION . "</b></td>
     </tr>
-    <tr class='odd'>
+    <tr>
       <th class='left' style='border-left: 1px solid #edecdf;'>IP Host:</th>
       <td>$langHostName <b>$_SERVER[SERVER_NAME]</b></td>
     </tr>
-    <tr class='odd'>
+    <tr>
       <th class='left' style='border-left: 1px solid #edecdf;'>Web Server:</th>
       <td>$langWebVersion <b>$_SERVER[SERVER_SOFTWARE]</b></td>
     </tr>
-    <tr class='odd'>
-      <th class='left' style='border-left: 1px solid #edecdf; border-bottom: 1px solid #edecdf;'>Data Base Server:</th>
+    <tr>
+      <th>Data Base Server:</th>
       <td>";
         if (extension_loaded('mysql'))
             $tool_content .= "$langMySqlVersion<b>".mysql_get_server_info()."</b>";
@@ -79,9 +77,9 @@ $tool_content .= "
             $tool_content .= "<font color='red'>".$langNoMysql."</font>";
     $tool_content .= "</td>
     </tr>
-    </tbody>
     </table>
-    <br />";
+  </fieldset>
+  <br />";
 
 
 // Count prof requests with status = 1
@@ -133,30 +131,27 @@ $lastregisteredstuds = $myrow['cnt'];
 
 
 $tool_content .= "
-    <table width=\"75%\" class=\"Smart\" align=\"center\" >
-    <tbody>
-    <tr class=\"odd\">
-      <th width=\"30%\" style=\"border-left: 1px solid #edecdf; border-top: 1px solid #edecdf;\">&nbsp;</th>
-      <td><b>$langInfoAdmin</b></td>
-    </tr>
-    <tr class=\"odd\">
-      <th class=\"left\" style=\"border-left: 1px solid #edecdf;\">$langOpenRequests:</th>
+  <fieldset>
+  <legend>$langInfoAdmin</legend>
+    <table width=\"99%\" class=\"tbl\">
+    <tr>
+      <th width=\"240\">$langOpenRequests:</th>
       <td>".$prof_request_msg."</td>
     </tr>
-    <tr class=\"odd\">
-      <th class=\"left\" style=\"border-left: 1px solid #edecdf;\">$langLastLesson</th>
+    <tr>
+      <th>$langLastLesson</th>
       <td>$last_course_info</td>
     </tr>
-    <tr class=\"odd\">
-      <th class=\"left\" style=\"border-left: 1px solid #edecdf;\">$langLastProf</th>
+    <tr>
+      <th>$langLastProf</th>
       <td>$last_prof_info</td>
     </tr>
-    <tr class=\"odd\">
-      <th class=\"left\" style=\"border-left: 1px solid #edecdf;\">$langLastStud</th>
+    <tr>
+      <th>$langLastStud</th>
       <td>$last_stud_info</td>
     </tr>
-    <tr class=\"odd\">
-      <th class=\"left\" style=\"border-left: 1px solid #edecdf; border-bottom: 1px solid #edecdf;\">$langAfterLastLoginInfo</th>
+    <tr>
+      <th>$langAfterLastLoginInfo</th>
       <td>$langAfterLastLogin
         <ul>
           <li><b>".$lastregisteredprofs."</b> $langTeachers</li>
@@ -164,9 +159,9 @@ $tool_content .= "
         </ul>
       </td>
     </tr>
-    </tbody>
     </table>
-    <br />";
+  </fieldset>
+  <br />";
 
 /*****************************************************************************
         DISPLAY HTML

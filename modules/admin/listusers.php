@@ -100,10 +100,13 @@ if($view == 2)	// coming from search_user.php(search with criteria)
 }
 
 // Display Actions Toolbar
-$tool_content .= "<div id='operations_container'><ul id='opslist'>
+$tool_content .= "
+  <div id='operations_container'>
+    <ul id='opslist'>
       <li><a href='search_user.php'>$langSearchUser</a></li>
       <li><a href='listusers.php?c=inactive'>".$langInactiveUsers."</a></li>
-      </ul></div>";
+    </ul>
+  </div>";
 
 
 /***************
@@ -329,9 +332,9 @@ if($sql) {
 
 	if($countUser>0)
 	{
-		$caption .= "<i>$langThereAre: <b>$teachers</b> $langTeachers, <b>$students</b> $langStudents 
-			$langAnd <b>$visitors</b> $langVisitors</i><br />";
-		$caption .= "<i>$langTotal: <b>$countUser</b> $langUsers</i><br />";
+		$caption .= "$langThereAre: <b>$teachers</b> $langTeachers, <b>$students</b> $langStudents 
+			$langAnd <b>$visitors</b> $langVisitors<br />";
+		$caption .= "$langTotal: <b>$countUser</b> $langUsers<br />";
 
 		if($countUser > 0)
 		{
@@ -385,32 +388,35 @@ if($sql) {
 		if ($view == 3) {
 			$str .= "&c=$c";	
 		}
-		$tool_content .= "<table class='FormData' width='99%' align='left'>
-		<tbody><tr><td class='odd' colspan='9'><div align='right'>".$caption."</div></td>
-		</tr>";
-		$tool_content .= "<th scope='col' colspan='2'>
-			<a href='$_SERVER[PHP_SELF]?ord=n$str'>$langSurname</a></th>
-			<th><a href='$_SERVER[PHP_SELF]?ord=p$str'>$langName</a></th>
-			<th><a href='$_SERVER[PHP_SELF]?ord=u$str'>$langUsername</a></th>
-			<th scope='col'>$langEmail</th>
-			<th scope='col'><a href='$_SERVER[PHP_SELF]?ord=s$str'>$langProperty</a></th>
-			<th scope='col' colspan='3'>$langActions</th>
-			</tr>";
+		$tool_content .= "
+      <table class='tbl_alt' width='99%'>
+      <tr>
+        <th colspan='9'><div align='right'>".$caption."</div></th>
+      </tr>
+      <tr>
+        <th width='1'>&nbsp;</th>
+        <th scope='col'><div align='left'><a href='$_SERVER[PHP_SELF]?ord=n$str'>$langSurname</a></div></th>
+	<th><div align='left'><a href='$_SERVER[PHP_SELF]?ord=p$str'>$langName</a></div></th>
+	<th><div align='left'><a href='$_SERVER[PHP_SELF]?ord=u$str'>$langUsername</a></div></th>
+	<th scope='col'>$langEmail</th>
+	<th scope='col'><a href='$_SERVER[PHP_SELF]?ord=s$str'>$langProperty</a></th>
+	<th scope='col' colspan='3'>$langActions</th>
+      </tr>";
         	$k = 0;
 		for ($j = 0; $j < mysql_num_rows($sql); $j++) {
 			while($logs = mysql_fetch_array($sql, MYSQL_ASSOC)) {
 				if ($k%2 == 0) {
-		              		$tool_content .= "<tr>";
+		              		$tool_content .= "\n      <tr class='even'>";
 	            		} else {
-		                	$tool_content .= "<tr class='odd'>";
+		                	$tool_content .= "\n      <tr class='odd'>";
 	            		}
-				$tool_content .= "<td width='1'>
-				<img style='border:0px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'></td>
-    				<td>".htmlspecialchars($logs['nom'])."</td>
-    				<td>".htmlspecialchars($logs['prenom'])."</td>
-    				<td>".htmlspecialchars($logs['username'])."</td>
-    				<td>".htmlspecialchars($logs['email'])."</td>
-    				<td align='center'>";
+				$tool_content .= "
+        <td width='1'><img style='border:0px; margin:4px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'></td>
+    	<td>".htmlspecialchars($logs['nom'])."</td>
+    	<td>".htmlspecialchars($logs['prenom'])."</td>
+    	<td>".htmlspecialchars($logs['username'])."</td>
+    	<td>".htmlspecialchars($logs['email'])."</td>
+    	<td align='center'>";
 				switch ($logs['statut'])
 				{
 					case 1:	$tool_content .= "<img src='../../template/classic/img/teacher.gif' title='$langTeacher'></img>";break;
@@ -418,22 +424,22 @@ if($sql) {
 					case 10: $tool_content .= "<img src='../../template/classic/img/guest.gif' title='$langVisitor'></img>";break;
 	   				default: $tool_content .= "$langOther ($logs[6])";break;
 				}
-				$tool_content .= "</td><td><a href=\"edituser.php?u=".$logs['user_id']."\">
-				<img src='../../template/classic/img/edit.gif' title='$langEdit'></a></td>
-      				<td><a href='unreguser.php?u=".$logs['user_id']."'>
-					<img src='../../template/classic/img/delete.gif' title='$langDelete'></img></a></td>
-      				<td align='center'><a href='userstats.php?u=".$logs['user_id']."'>
-					<img src='../../template/classic/img/platform_stats.gif' title='$langStat'></img></a></td>\n";
-				$tool_content .= "</tr>";
+				$tool_content .= "</td>
+        <td><a href=\"edituser.php?u=".$logs['user_id']."\"><img src='../../template/classic/img/edit.gif' title='$langEdit'></a></td>
+ 	<td><a href='unreguser.php?u=".$logs['user_id']."'><img src='../../template/classic/img/delete.gif' title='$langDelete'></img></a></td>
+	<td align='center'><a href='userstats.php?u=".$logs['user_id']."'><img src='../../template/classic/img/platform_stats.gif' title='$langStat'></img></a></td>\n";
+				$tool_content .= "
+      </tr>";
+                        $k++;
 			}
- 			$k++;
 		}
-		$tool_content .= "</tbody></table>";
+		$tool_content .= "
+      </table>";
 		if ($countUser >= USERS_PER_PAGE) { // display navigation links if more than USERS_PER_PAGE
 			$tool_content .= show_paging($limit, USERS_PER_PAGE, $countUser, "$_SERVER[PHP_SELF]", "$str");
 		}  
 	} else {
-		$tool_content .= "<p class='caution_small'>$langNoSuchUsers</p>";
+		$tool_content .= "<p class='caution'>$langNoSuchUsers</p>";
 	}
 } else {
 	$tool_content .= "<br />$langNoUserList<br />";
