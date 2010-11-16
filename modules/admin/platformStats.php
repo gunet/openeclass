@@ -46,8 +46,6 @@ $nameTools = $langVisitsStats;
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
 $page_title = $langPlatformStats.": ".$langVisitsStats;
 
-// Initialise $tool_content
-$tool_content = "";
 $tool_content .= "
   <div id=\"operations_container\">
     <ul id=\"opslist\">
@@ -79,5 +77,5 @@ $local_head = $jscalendar->get_load_files_code();
         require_once "statsForm.php";
     }
 
-draw($tool_content, 3, 'admin', $local_head, '');
+draw($tool_content, 3, '', $local_head);
 ?>

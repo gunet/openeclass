@@ -42,8 +42,8 @@ foreach ($usage_defaults as $key => $val) {
     }
 }
 
- #see if chart has content
-    $chart_content=0;
+#see if chart has content
+$chart_content=0;
 
 $date_fmt = '%Y-%m-%d';
 $date_where = " (`when` BETWEEN '$u_date_start 00:00:00' AND '$u_date_end 23:59:59') ";
@@ -84,51 +84,52 @@ switch ($u_stats_type) {
     case "visits":
     $query = "SELECT ".$date_what." COUNT(*) AS cnt FROM loginout WHERE $date_where AND $user_where AND action='LOGIN' $date_group ORDER BY `when` ASC";
     $result = db_query($query, $mysqlMainDb);
-    $chart = new VerticalBarChart(200, 300);
+    $chart = new VerticalBarChart();
+    $dataSet = new XYDataSet();
     switch ($u_interval) {
         case "summary":
             while ($row = mysql_fetch_assoc($result)) {
-                $chart->addPoint(new Point($langSummary, $row['cnt']));
+                $dataSet->addPoint(new Point($langSummary, $row['cnt']));
                 $chart->width += 25;
+                $chart->setDataSet($dataSet);
                 $chart_content=1;
             }
         break;
         case "daily":
             while ($row = mysql_fetch_assoc($result)) {
-                $chart->addPoint(new Point($row['date'], $row['cnt']));
+                $dataSet->addPoint(new Point($row['date'], $row['cnt']));
                 $chart->width += 25;
+                $chart->setDataSet($dataSet);
                 $chart_content=1;
             }
         break;
         case "weekly":
             while ($row = mysql_fetch_assoc($result)) {
-                $chart->setLabelMarginBottom(110);
-                $chart->setLabelMarginRight(80);
-                $chart->addPoint(new Point($row['week_start'].' - '.$row['week_end'], $row['cnt']));
+                $dataSet->addPoint(new Point($row['week_start'].' - '.$row['week_end'], $row['cnt']));
                 $chart->width += 25;
+                $chart->setDataSet($dataSet);
                 $chart_content=1;
             }
         break;
         case "monthly":
             while ($row = mysql_fetch_assoc($result)) {
-                $chart->addPoint(new Point($langMonths[$row['month']], $row['cnt']));
+                $dataSet->addPoint(new Point($langMonths[$row['month']], $row['cnt']));
                 $chart->width += 25;
+                $chart->setDataSet($dataSet);
                 $chart_content=1;
             }
         break;
         case "yearly":
             while ($row = mysql_fetch_assoc($result)) {
-                $chart->addPoint(new Point($row['year'], $row['cnt']));
+                $dataSet->addPoint(new Point($row['year'], $row['cnt']));
                 $chart->width += 25;
+                $chart->setDataSet($dataSet);
                 $chart_content=1;
             }
         break;
     }
     $chart->setTitle($langVisits);
-
     break;
-
-
 }
 mysql_free_result($result);
 
@@ -141,26 +142,25 @@ $chart->render($webDir.$chart_path);
 
 //check if there are statistics to show
 if ($chart_content) {
-$tool_content .= '
-  <table class="FormData" width="99%" align="left">
-  <tbody>
-  <tr>
-    <th width="220"  class="left">'.$langVisits.' :</th>
-    <td valign="top"><img src="'.$urlServer.$chart_path.'" /></td>
-  </tr>
-  </tbody>
-  </table>';
-
+    $tool_content .= '
+      <table class="FormData" width="99%" align="left">
+      <tbody>
+      <tr>
+        <th width="220"  class="left">'.$langVisits.' :</th>
+        <td valign="top"><img src="'.$urlServer.$chart_path.'" /></td>
+      </tr>
+      </tbody>
+      </table>';
 } elseif (isset($btnUsage) and $chart_content == 0) {
-$tool_content .= '
-  <table class="FormData" width="99%" align="left">
-  <tbody>
-  <tr>
-    <th width="220"  class="left">'.$langVisits.' :</th>
-    <td>'.$langNoStatistics.'</td>
-  </tr>
-  </tbody>
-  </table>';
+    $tool_content .= '
+      <table class="FormData" width="99%" align="left">
+      <tbody>
+      <tr>
+        <th width="220"  class="left">'.$langVisits.' :</th>
+        <td>'.$langNoStatistics.'</td>
+      </tr>
+      </tbody>
+      </table>';
 }
 
 $tool_content .= '<br />';

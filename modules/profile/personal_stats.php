@@ -72,12 +72,14 @@ if (!extension_loaded('gd')) {
 		}
 
 		$chart = new PieChart(600, 300);
+		$dataSet = new XYDataSet();
 		$chart_content=0;
 		foreach ($hits as $code => $count) {
 			if ($count >0 ){
 				$chart_content=5;
+				$dataSet->addPoint(new Point($course_names[$code], $count));
 				$chart->width += 7;
-				$chart->addPoint(new Point($course_names[$code], $count));
+				$chart->setDataSet($dataSet);
 			}
 		}
 		$chart->setTitle($langCourseVisits);
@@ -87,7 +89,7 @@ if (!extension_loaded('gd')) {
 		$chart_path = 'courses/temp/chart_'.md5(serialize($chart)).'.png';
 		$chart->render($webDir.$chart_path);
 		if ($chart_content) {
-		$tool_content .= '<p><img src="'.$urlServer.$chart_path.'" /></p>';
+			$tool_content .= '<p><img src="'.$urlServer.$chart_path.'" /></p>';
 		}
 		$made_chart = true;
 

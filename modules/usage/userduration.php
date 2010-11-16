@@ -45,8 +45,8 @@ $require_login = true;
 $require_prof = true;
 include '../../include/baseTheme.php';
 include 'duration_query.php';
+include '../group/group_functions.php';
 
-$tool_content = '';
 if (isset($_GET['format']) and $_GET['format'] == 'csv') {
         $format = 'csv';
 
@@ -94,32 +94,31 @@ if (isset($_GET['format']) and $_GET['format'] == 'csv') {
 }
 
 $result = user_duration_query($currentCourseID, $cours_id);
-
 if ($result) {
         $i = 0;
         while ($row = mysql_fetch_assoc($result)) {
                 $i++;
+                $grp_name = user_groups($cours_id, $row['user_id'], $format);
                 if ($format == 'html') {
                         if ($i%2 == 0) {
-                                $tool_content .= "\n        <tr class='even'>";
+                                $tool_content .= "\n<tr class='even'>";
                         } else {
-                                $tool_content .= "\n        <tr class='odd'>";
+                                $tool_content .= "\n<tr class='odd'>";
                         }
-                        $tool_content .= "
-          <td><img style='border:0px; padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif' />&nbsp;&nbsp;$row[nom] $row[prenom]</td>
-          <td class='center'>$row[am]</td>
-          <td class='center'>" . gid_to_name(user_group($row['user_id'])) . "</td>
-          <td class='center'>" . format_time_duration(0 + $row['duration']) . "</td>
-       </tr>\n";
+                        $tool_content .= "<td class='bullet'>" . display_user($row) . "</td>
+                                <td class='center'>$row[am]</td>
+                                <td class='center'>$grp_name</td>
+                                <td class='center'>" . format_time_duration(0 + $row['duration']) . "</td>
+                                </tr>\n";
                 } else {
                         echo csv_escape($row['nom'] . ' ' . $row['prenom']), ';',
                              csv_escape($row['am']), ';',
-                             csv_escape(gid_to_name(user_group($row['user_id']))), ';',
+                             csv_escape($grp_name), ';',
                              csv_escape(format_time_duration(0 + $row['duration'])), $crlf;
                 }
         }
         if ($format == 'html') {
-                $tool_content .= "        </table>";
+                $tool_content .= "</table>";
         }
 }
 

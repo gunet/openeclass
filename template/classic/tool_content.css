@@ -2494,3 +2494,10 @@ fieldset {
         padding: 7px; 
         border: 1px solid #897A7A;
 }
+
+td.bullet {
+	background-image: url(img/arrow_grey.gif);
+	padding-left: 16px;
+	background-repeat: no-repeat;
+	background-position: 5px center;
+}

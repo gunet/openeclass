@@ -358,7 +358,7 @@ function uid_to_am($uid)
 
 
 // Display links to the groups a user is member of
-function user_groups($course_id, $user_id)
+function user_groups($course_id, $user_id, $format = 'html')
 {
         global $urlAppend;
 
@@ -369,9 +369,13 @@ function user_groups($course_id, $user_id)
                              `group_members`.user_id = $user_id
                        ORDER BY `group`.name");
         while ($r = mysql_fetch_array($q)) {
-                $groups .= (empty($groups)? '': ', ') .
-                           "<a href='$urlAppend/modules/group/group_space.php?group_id=$r[id]'>" .
-                           q($r['name']) . "</a>";
+		if ($format == 'html') {
+	                $groups .= (empty($groups)? '': ', ') .
+	                           "<a href='$urlAppend/modules/group/group_space.php?group_id=$r[id]'>" .
+	                           q($r['name']) . "</a>";
+		} else {
+			$groups .= (empty($groups)? '': ', ') . $r['name'];
+		}
         }
         if (empty($groups)) {
                 $groups = '-';

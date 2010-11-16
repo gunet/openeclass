@@ -46,8 +46,6 @@ include '../../include/baseTheme.php';
 // Define $nameTools
 $nameTools = $langOldStats;
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
-// Initialise $tool_content
-$tool_content = "";
 
 $tool_content .= "
   <div id=\"operations_container\">
@@ -62,7 +60,6 @@ $tool_content .= "
 
 //move data from table 'loginout' to 'loginout_summary' if older than eight months
 require_once "summarizeLogins.php";
-
 #see if chart has content
 $chart_content=0;
 
@@ -75,7 +72,6 @@ if ($language == 'greek') {
 
 $jscalendar = new DHTML_Calendar($urlServer.'include/jscalendar/', $lang, 'calendar-blue2', false);
 $local_head = $jscalendar->get_load_files_code();
-
 
 
 //$min_w is the min date in 'loginout'. Statistics older than $min_w will be shown.
@@ -91,15 +87,15 @@ if (!extension_loaded('gd')) {
     $tool_content .= "<p>$langGDRequired</p>";
 } else {
     $made_chart = true;
-  $tool_content .= '
-  <table class="FormData" width="99%" align="left">
-  <tbody>
-  <tr>
-    <th width="220"  class="left">&nbsp;</th>
-    <td valign="top">'.$langOldStatsLoginsExpl.'</td>
-  </tr>
-  </tbody>
-  </table>';
+    $tool_content .= '
+    <table class="FormData" width="99%" align="left">
+    <tbody>
+    <tr>
+      <th width="220"  class="left">&nbsp;</th>
+      <td valign="top">'.$langOldStatsLoginsExpl.'</td>
+    </tr>
+    </tbody>
+    </table>';
 
     /*****************************************
       start making chart
@@ -126,54 +122,53 @@ if (!extension_loaded('gd')) {
             " WHERE $date_where GROUP BY MONTH(start_date)";
 
     $result = db_query($query, $mysqlMainDb);
-
-    $chart = new VerticalBarChart(200, 300);
-
-    //add points to chart
-    while ($row = mysql_fetch_assoc($result)) {
-        $mont = $langMonths[$row['month']];
-        $chart->addPoint(new Point($mont." - ".$row['year'], $row['visits']));
-        $chart->width += 25;
-        $chart_content=1;
+    
+    if (mysql_num_rows($result) > 0) {
+            $chart = new VerticalBarChart();
+            $dataSet = new XYDataSet();
+    
+            //add points to chart
+            while ($row = mysql_fetch_assoc($result)) {
+                $mont = $langMonths[$row['month']];
+                $dataSet->addPoint(new Point($mont." - ".$row['year'], $row['visits']));
+                $chart->width += 25;
+                $chart->setDataSet($dataSet);
+                $chart_content=1;
+            }
+    
+        $chart->setTitle("$langOldStats");
+    
+        mysql_free_result($result);
+        if (!file_exists("../../courses/temp")) {
+            mkdir("../../courses/temp", 0777);
+        }
+        $chart_path = 'courses/temp/chart_'.md5(serialize($chart)).'.png';
+        $chart->render($webDir.$chart_path);
     }
-
-    $chart->setTitle("$langOldStats");
-
-
-    mysql_free_result($result);
-    if (!file_exists("../../courses/temp")) {
-        mkdir("../../courses/temp", 0777);
-    }
-    $chart_path = 'courses/temp/chart_'.md5(serialize($chart)).'.png';
-
-    $chart->render($webDir.$chart_path);
-
-
+    
 //check if there are statistics to show
-    if ($chart_content) {
-  $tool_content .= '
-  <table class="FormData" width="99%" align="left">
-  <tbody>
-  <tr>
-    <th width="220"  class="left">'.$langVisits.' :</th>
-    <td valign="top"><img src="'.$urlServer.$chart_path.'" /></td>
-  </tr>
-  </tbody>
-  </table>';
-} elseif (isset($btnUsage) and $chart_content == 0) {
-  $tool_content .= '
-  <table class="FormData" width="99%" align="left">
-  <tbody>
-  <tr>
-    <th width="220"  class="left">'.$langVisits.' :</th>
-    <td valign="top">'.$langNoStatistics.'</td>
-  </tr>
-  </tbody>
-  </table>';
-    }
+if ($chart_content) {
     $tool_content .= '
-    <br />';
-
+    <table class="FormData" width="99%" align="left">
+    <tbody>
+    <tr>
+      <th width="220"  class="left">'.$langVisits.' :</th>
+      <td valign="top"><img src="'.$urlServer.$chart_path.'" /></td>
+    </tr>
+    </tbody>
+    </table>';
+} elseif (isset($btnUsage) and $chart_content == 0) {
+    $tool_content .= '
+    <table class="FormData" width="99%" align="left">
+    <tbody>
+    <tr>
+      <th width="220"  class="left">'.$langVisits.' :</th>
+      <td valign="top">'.$langNoStatistics.'</td>
+    </tr>
+    </tbody>
+    </table>';
+}
+    $tool_content .= '<br />';
 
     /********************************************************
        Start making the form for choosing start and end date
@@ -197,40 +192,23 @@ if (!extension_loaded('gd')) {
                  'value'       => $u_date_end));
 
 
-    $tool_content .= '
-  <form method="post">
-  <table class="FormData" width="99%" align="left">
-  <tbody>
-  <tr>
-    <th width="220" class="left">'.$langStartDate.'</th>
-    <td>'."$start_cal".'</td>
-  </tr>
-  <tr>
-    <th class="left">'.$langEndDate.'</th>
-    <td>'."$end_cal".'</td>
-  </tr>
-  <tr>
-    <th>&nbsp;</th>
-    <td><input type="submit" name="btnUsage" value="'.$langSubmit.'"></td>
-  </tr>
-  </table>
-  </form>';
-
+    $tool_content .= '<form method="post">
+    <table class="FormData" width="99%" align="left">
+    <tbody>
+    <tr>
+      <th width="220" class="left">'.$langStartDate.'</th>
+      <td>'."$start_cal".'</td>
+    </tr>
+    <tr>
+      <th class="left">'.$langEndDate.'</th>
+      <td>'."$end_cal".'</td>
+    </tr>
+    <tr>
+      <th>&nbsp;</th>
+      <td><input type="submit" name="btnUsage" value="'.$langSubmit.'"></td>
+    </tr>
+    </table>
+    </form>';
 }
-
-
-draw($tool_content, 3, 'admin', $local_head, '');
-
-/*
-if ($made_chart) {
-
-		while (ob_get_level() > 0) {
-  	   ob_end_flush();
-  	}
-    ob_flush();
-    flush();
-    sleep(5);
-    unlink ($webDir.$chart_path);
-}
-*/
+draw($tool_content, 3, '', $local_head);
 ?>
