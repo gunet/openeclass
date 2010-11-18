@@ -24,7 +24,6 @@
 *  			eMail: info@openeclass.org
 * =========================================================================*/
 
-
 require_once '../../include/libchart/libchart.php';
 $usage_defaults = array (
     'u_stats_type' => 'visits',
@@ -43,7 +42,7 @@ foreach ($usage_defaults as $key => $val) {
 }
 
 #see if chart has content
-$chart_content=0;
+$chart_content = 0;
 
 $date_fmt = '%Y-%m-%d';
 $date_where = " (`when` BETWEEN '$u_date_start 00:00:00' AND '$u_date_end 23:59:59') ";
@@ -92,7 +91,7 @@ switch ($u_stats_type) {
                 $dataSet->addPoint(new Point($langSummary, $row['cnt']));
                 $chart->width += 25;
                 $chart->setDataSet($dataSet);
-                $chart_content=1;
+                $chart_content = 1;
             }
         break;
         case "daily":
@@ -100,7 +99,7 @@ switch ($u_stats_type) {
                 $dataSet->addPoint(new Point($row['date'], $row['cnt']));
                 $chart->width += 25;
                 $chart->setDataSet($dataSet);
-                $chart_content=1;
+                $chart_content = 1;
             }
         break;
         case "weekly":
@@ -108,7 +107,7 @@ switch ($u_stats_type) {
                 $dataSet->addPoint(new Point($row['week_start'].' - '.$row['week_end'], $row['cnt']));
                 $chart->width += 25;
                 $chart->setDataSet($dataSet);
-                $chart_content=1;
+                $chart_content = 1;
             }
         break;
         case "monthly":
@@ -137,11 +136,10 @@ if (!file_exists("../../courses/temp")) {
     mkdir("../../courses/temp", 0777);
 }
 
-$chart_path = 'courses/temp/chart_'.md5(serialize($chart)).'.png';
-$chart->render($webDir.$chart_path);
-
 //check if there are statistics to show
 if ($chart_content) {
+    $chart_path = 'courses/temp/chart_'.md5(serialize($chart)).'.png';
+    $chart->render($webDir.$chart_path);    
     $tool_content .= '
       <table class="FormData" width="99%" align="left">
       <tbody>
@@ -151,7 +149,7 @@ if ($chart_content) {
       </tr>
       </tbody>
       </table>';
-} elseif (isset($btnUsage) and $chart_content == 0) {
+} elseif (isset($_POST['btnUsage']) and $chart_content == 0) {
     $tool_content .= '
       <table class="FormData" width="99%" align="left">
       <tbody>
@@ -162,6 +160,4 @@ if ($chart_content) {
       </tbody>
       </table>';
 }
-
-$tool_content .= '<br />';
 ?>
