@@ -75,7 +75,8 @@ if (isset($_POST['submit'])) {
                         $password = "";
                 }
 
-                list($facid, $facname) = explode('--', $_POST['facu']);
+                //list($facid, $facname) = explode('--', $_POST['facu']);
+		$facname = find_faculty_by_id(intval($_POST['department']));
                 db_query("UPDATE `$mysqlMainDb`.cours
                           SET intitule = " . autoquote($_POST['title']) .",
                               fake_code = " . autoquote($_POST['fcode']) .",
@@ -86,11 +87,11 @@ if (isset($_POST['submit'])) {
                               languageCourse = '$newlang',
                               type = " . autoquote($_POST['type']) . ",
                               password = " . autoquote($_POST['password']) . ",
-                              faculteid = " . intval($facid) . "
+                              faculteid = $_POST[department]
                           WHERE cours_id = $cours_id");
                 db_query("UPDATE `$mysqlMainDb`.cours_faculte
                           SET faculte = " . autoquote($facname) . ",
-                              facid = " . intval($facid) . "
+                              facid = $_POST[department]
                           WHERE code='$currentCourseID'");
 
                 // update Home Page Menu Titles for new language
@@ -142,7 +143,7 @@ if (isset($_POST['submit'])) {
 		$result = mysql_query($sql);
 		$c = mysql_fetch_array($result);
 		$title = q($c['intitule']);
-		$facu = $c['faculteid'];
+		$department = $c['faculteid'];
 		$type = $c['type'];
 		$visible = $c['visible'];
 		$visibleChecked[$visible] = " checked='1'";
@@ -173,27 +174,15 @@ if (isset($_POST['submit'])) {
                         <td>&nbsp;</td>
                     </tr>
                     <tr>
-                        <td>$langFaculty&nbsp;:</td>
-                        <td>
-                        <select name='facu'>";
-                $resultFac=mysql_query("SELECT id, name FROM `$mysqlMainDb`.faculte ORDER BY number");
-                while ($myfac = mysql_fetch_array($resultFac)) {
-                        if ($myfac['id'] == $facu) {
-                                $selected = ' selected="1"';
-                        } else {
-                                $selected = '';
-                        }
-                        $tool_content .= "<option value='$myfac[id]--" .
-                                         q($myfac['name']) . "'$selected>" .
-                                         q($myfac['name']) . "</option>";
-                }
-                $tool_content .= "</select>
-                        </td>
-                        <td>&nbsp;</td>
-                    </tr>
-                    <tr>
-                        <td>$langType&nbsp;:</td>
-                        <td>";
+                <tr><td>$langFaculty</td><td>";
+		$tool_content .= list_departments($department);
+		$tool_content .= "</td></tr>
+                </select>
+		</td>
+		</tr>
+		<tr>
+                <td>$langType&nbsp;:</td>
+                <td>";
                 $tool_content .= selection(array('pre' => $langpre, 'post' => $langpost, 'other' => $langother), 'type', $type);
                 $tool_content .= "</td>
                         <td>&nbsp;</td>
@@ -205,8 +194,6 @@ if (isset($_POST['submit'])) {
                     </tr>
                     </table>
                     </fieldset>
-    
-
                     <fieldset>
                     <legend>$langConfidentiality</legend>
                     <table class='tbl'>

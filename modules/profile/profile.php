@@ -30,7 +30,6 @@ $helpTopic = 'Profile';
 include '../../include/baseTheme.php';
 include "../auth/auth.inc.php";
 $require_valid_uid = TRUE;
-$tool_content = "";
 
 $authmethods = array('imap', 'pop3', 'ldap', 'db', 'shibboleth');
 
@@ -67,7 +66,8 @@ if (isset($_POST['submit'])) {
                 'email_form' => check_prof(),
                 'nom_form' => true,
                 'prenom_form' => true,
-                'username_form' => true), 'all');
+                'username_form' => true,
+		'department' => true), 'all');
 
 	// check if there are empty fields
 	if (!$all_ok) {
@@ -107,7 +107,8 @@ if (isset($_POST['submit'])) {
                                 prenom = " . autoquote($prenom_form) . ",
                                 username = " . autoquote($username_form) . ",
                                 email = " . autoquote($email_form) . ",
-                                am = " . autoquote($am_form) . "
+                                am = " . autoquote($am_form) . ",
+				department = $department
                         WHERE user_id = $_SESSION[uid]")) {
                 $_SESSION['uname'] = $username_form;
                 $_SESSION['nom'] = $nom_form;
@@ -150,11 +151,10 @@ if (isset($_GET['msg'])) {
                 header('Location: ' . $urlAppend . '/modules/profile/profile.php');
                 exit;
         }
-
 	$tool_content .=  "<p class='$type'>$message$urlText</p><br/>";
 }
 
-$result = db_query("SELECT nom, prenom, username, email, am, perso, lang
+$result = db_query("SELECT nom, prenom, username, email, am, perso, lang, department, statut
                     FROM user WHERE user_id = $uid");
 $myrow = mysql_fetch_array($result);
 
@@ -183,11 +183,8 @@ if ($allow_password_change) {
         $tool_content .= "
         <li><a href='$passurl'>$langChangePass</a></li>";
 }
-$tool_content .= "
-        <li><a href='../unreguser/unreguser.php'>$langUnregUser</a></li>";
-$tool_content .= "
-      </ul>
-   </div>";
+$tool_content .= "<li><a href='../unreguser/unreguser.php'>$langUnregUser</a></li>";
+$tool_content .= "</ul></div>";
 $tool_content .= "
    <form method='post' action='$sec'>
    <fieldset>
@@ -207,21 +204,16 @@ if (isset($_SESSION['shib_user'])) {
           <td><input type='text' size='40' name='prenom_form' value='$prenom_form' /></td>";
 }
 
-$tool_content .= "
-        </tr>
-        <tr>
-          <td>$langSurname</td>";
+$tool_content .= "</tr><tr><td>$langSurname</td>";
 if (isset($_SESSION['shib_user'])) {
         $auth_text = "Shibboleth user";
         $tool_content .= "
           <td class='caution_small'>&nbsp;&nbsp;&nbsp;&nbsp;<b>".$nom_form."</b> [".$auth_text."]
             <input type='hidden' name='nom_form' value='$nom_form' /></td>";
 } else {
-        $tool_content .= "
-          <td><input type='text' size='40' name='nom_form' value='$nom_form' /></td>";
+        $tool_content .= "<td><input type='text' size='40' name='nom_form' value='$nom_form' /></td>";
 }
-$tool_content .= "
-        </tr>";
+$tool_content .= "</tr>";
 
 if ($allow_username_change) {
         $tool_content .= "
@@ -252,9 +244,7 @@ if ($allow_username_change) {
         </tr>";
 }
 
-$tool_content .= "
-        <tr>
-           <td>$langEmail</td>";
+$tool_content .= "<tr><td>$langEmail</td>";
 
 if (isset($_SESSION['shib_user'])) {
         $tool_content .= "
@@ -262,8 +252,7 @@ if (isset($_SESSION['shib_user'])) {
              <input type='hidden' name='email_form' value='$email_form' />
            </td>";
 } else {
-        $tool_content .= "
-           <td><input type='text' size='40' name='email_form' value='$email_form' /></td>";
+        $tool_content .= "<td><input type='text' size='40' name='email_form' value='$email_form' /></td>";
 }
 $tool_content .= "
         </tr>
@@ -281,6 +270,13 @@ if (isset($_SESSION['perso_is_active'])) {
           </td>
         </tr>";
 }
+
+if ($myrow['statut'] == 5) { // students allow to change their faculties
+	$tool_content .= "<tr><td>$langFaculty</td><td>";
+	$tool_content .= list_departments($myrow['department']);
+	$tool_content .= "</td></tr>";
+}
+
 ##[END personalisation modification]############
 $tool_content .= "
         <tr>
@@ -292,7 +288,6 @@ $tool_content .= "
           <td><input type='submit' name='submit' value='$langModify' /></td>
         </tr>
         </table>
-
         </fieldset>
         </form>";
 

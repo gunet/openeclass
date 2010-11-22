@@ -39,35 +39,6 @@
 ==============================================================================
 */
 
-/*************************************************************
-Show a selection box with departments.
-
-The function returns a value( a formatted select box with departments)
-and their values as keys in the array/select box
-
-$department_value: the predefined/selected department value
-return $departments_select : string (a formatted select box)
-****************************************************************/
-function list_departments($department_value)
-{
-	$qry = "SELECT faculte.id,faculte.name FROM faculte ORDER BY faculte.name";
-  	$dep = mysql_query($qry);
-  	if($dep)
-  	{
-		$departments_select = "";
-		$departments = array();
-		while($row=mysql_fetch_array($dep))
-		{
-		    	$id = $row['id'];
-	    		$name = $row['name'];
-	    		$departments[$id] = $name;
-		}
-		$departments_select = selection($departments,"department",$department_value);
-		return $departments_select;
-  	} else {
-		return 0;
-	}
-}
 
 /**************************************************************
 Purpose: covert the difference ($seconds) between 2 unix timestamps

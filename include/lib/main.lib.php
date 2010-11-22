@@ -357,6 +357,36 @@ function uid_to_am($uid)
 }
 
 
+/*************************************************************
+Show a selection box with departments.
+
+The function returns a value( a formatted select box with departments)
+and their values as keys in the array/select box
+
+$department_value: the predefined/selected department value
+return $departments_select : string (a formatted select box)
+****************************************************************/
+function list_departments($department_value)
+{
+	$qry = "SELECT id, name FROM faculte ORDER BY name";
+  	$dep = db_query($qry);
+  	if($dep)
+  	{
+		$departments_select = "";
+		$departments = array();
+		while($row = mysql_fetch_array($dep))
+		{
+		    	$id = $row['id'];
+	    		$name = $row['name'];
+	    		$departments[$id] = $name;
+		}
+		$departments_select = selection($departments, "department", $department_value);
+		return $departments_select;
+  	} else {
+		return 0;
+	}
+}
+
 // Display links to the groups a user is member of
 function user_groups($course_id, $user_id, $format = 'html')
 {
