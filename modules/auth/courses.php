@@ -28,7 +28,6 @@ $require_login = TRUE;
 include '../../include/baseTheme.php';
 $nameTools = $langChoiceLesson;
 $navigation[] = array ("url"=>"courses.php", "name"=> $langChoiceDepartment);
-$tool_content = "";
 
 $icons = array(
         2 => "<img src='../../template/classic/img/OpenCourse.gif' alt='' />",
@@ -103,7 +102,7 @@ if (isset($_POST["submit"])) {
 
 } else {
         $fac = getfacfromfc($fc);
-	if (!$fac) {
+	if (!$fac) { // if user does not belong to department
 		$tool_content .= "
 		<p align='justify'>$langAddHereSomeCourses</p>";
 		$result=db_query("SELECT id, name, code FROM faculte ORDER BY name");
@@ -121,10 +120,12 @@ if (isset($_POST["submit"])) {
 					$tool_content .= "\n        <tr class='odd'>";
 				}
 				$tool_content .= "\n<td>&nbsp;<img src='../../template/classic/img/arrow_blue.gif' />&nbsp;
-					<a href='$_SERVER[PHP_SELF]?fc=$fac[id]'>" . htmlspecialchars($fac['name']) . "</a> <small><font color='#a33033'>($fac[code])</font></small>";
-				$n=db_query("SELECT COUNT(*) FROM cours_faculte WHERE facid='$fac[id]'");
-				$r=mysql_fetch_array($n);
-				$tool_content .= "&nbsp;<small><font color=#a5a5a5>($r[0]  ". ($r[0] == 1? $langAvCours: $langAvCourses) . ")</font><small></td></tr>";
+					<a href='$_SERVER[PHP_SELF]?fc=$fac[id]'>" . htmlspecialchars($fac['name']) . "</a>&nbsp;
+					<small><font color='#a33033'>($fac[code])</font></small>";
+				$n = db_query("SELECT COUNT(*) FROM cours
+					WHERE faculteid = $fac[id] AND (cours.visible = '1' OR cours.visible = '2')");
+				$r = mysql_fetch_array($n);
+				$tool_content .= " <small><font color='#a5a5a5'>&nbsp;($r[0]  ". ($r[0] == 1? $langAvCours: $langAvCourses) . ")</font><small></td></tr>";
 				$k++;
 			}
 			$tool_content .= "\n</table>";
@@ -138,10 +139,9 @@ if (isset($_POST["submit"])) {
 		$tool_content .= "\n    <form action='$_SERVER[PHP_SELF]' method='post'>";
 		if ($numofcourses > 0) {
 			$tool_content .= expanded_faculte($fac, $fc, $uid);
-			$tool_content .= "
-    <br />
-      <div align='right'><input class='Login' type='submit' name='submit' value='$langRegistration' />&nbsp;&nbsp;</div>
-    </form>";
+			$tool_content .= "<br />
+				<div align='right'><input class='Login' type='submit' name='submit' value='$langRegistration' />&nbsp;&nbsp;</div>
+				</form>";
 		} else {
 			if ($fac) {
 				$tool_content .= "<table width='99%' align='left'>
@@ -159,7 +159,7 @@ if (isset($_POST["submit"])) {
 draw($tool_content, 1);
 
 
-function getfacfromfc( $dep_id) {
+function getfacfromfc($dep_id) {
 	$dep_id = intval( $dep_id);
 
 	$fac = mysql_fetch_row(db_query("SELECT name FROM faculte WHERE id = '$dep_id'"));
@@ -171,17 +171,16 @@ function getfacfromfc( $dep_id) {
 
 function getfcfromuid($uid) {
 	$res = mysql_fetch_row(db_query("SELECT department FROM user WHERE user_id = '$uid'"));
-	if (isset($res[0]))
+	if (isset($res[0])) {
 		return $res[0];
-	else
+	}
+	else {
 		return 0;
+	}
 }
 
 function getdepnumcourses($fac) {
-	$res = mysql_fetch_row(db_query(
-	"SELECT count(code)
-	FROM cours_faculte
-	WHERE facid='$fac'" ));
+	$res = mysql_fetch_row(db_query("SELECT count(code) FROM cours WHERE faculteid = $fac"));
 	return $res[0];
 }
 
@@ -244,7 +243,7 @@ function expanded_faculte($fac_name, $facid, $uid) {
                        "post" => $langposts,
                        "other" => $langothers) as $type => $message) {
 
-                $result=db_query("SELECT
+                $result = db_query("SELECT
                                         cours.cours_id cid,
                                         cours.code k,
                                         cours.fake_code fake_code,
@@ -252,11 +251,10 @@ function expanded_faculte($fac_name, $facid, $uid) {
                                         cours.visible visible,
                                         cours.titulaires t,
                                         cours.password password
-                                  FROM cours_faculte, cours
-                                  WHERE cours.code = cours_faculte.code AND
-                                        cours.type = '$type' AND
-                                        cours_faculte.facid = '$facid' AND
-                                        cours.visible <> '0'
+                                  FROM cours
+                                  WHERE cours.faculteid = $facid
+				  AND cours.type = '$type'
+				  AND cours.visible <> '0'
                                   ORDER BY cours.intitule, cours.titulaires");
 
                 if (mysql_num_rows($result) == 0) {
@@ -344,38 +342,10 @@ function expanded_faculte($fac_name, $facid, $uid) {
                         $retString .= "\n    </tr>";
                         $k++;
                 } // END of while
-                $retString .= "\n       </table>";
-                //$retString .= "\n       </td>";
+                $retString .= "\n</table>";
         } // end of foreach
 
         return $retString;
-}
-
-function collapsed_facultes_vert($fc) {
-
-	global $langAvCourse, $langAvCourses;
-	$retString = '';
-
-	$result = db_query(
-		"SELECT DISTINCT cours.faculte f, faculte.id id
-		FROM cours, faculte
-		WHERE (cours.visible = '1' OR cours.visible = '2')
-			AND faculte.name = cours.faculte
-			AND faculte.id <> '$fc'
-		ORDER BY cours.faculte");
-
-	while ($fac = mysql_fetch_array($result)) {
-		$retString .= "<a href='?fc=$fac[id]' class='normal'>$fac[f]</a>";
-
-		$n = db_query("SELECT COUNT(*) FROM cours
-			WHERE cours.faculte='$fac[f]' AND cours.visible <> '0'");
-                $r = mysql_fetch_array($n);
-                $retString .= " <span style='font-size: 10pt'>($r[0] "
-                        . ($r[0] == 1? $langAvLesson: $langAvCourses) . ")</span><br />\n";
-	}
-		$retString .= "<br />";
-
-	return $retString;
 }
 
 
@@ -384,7 +354,6 @@ function collapsed_facultes_horiz($fc) {
 	global $langListFac, $langSelectFac;
 
 	$retString = "\n   <form name='depform' action='$_SERVER[PHP_SELF]' method='get'>\n";
-
 	$retString .= "\n  <div id='operations_container'>\n    <ul id='opslist'>";
 	$retString .=  "\n    <li>$langSelectFac:&nbsp;";
 	$retString .= dep_selection($fc);
