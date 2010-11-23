@@ -48,10 +48,12 @@ initialize_group_id();
 initialize_group_info($group_id);
 
 if (isset($_GET['selfReg'])) {
-	if (isset($uid) and !$is_member and $statut != 10 and $member_count < $max_members) {
-                $sqlReg = mysql_query("INSERT INTO group_members SET user_id = $uid, group_id = $group_id");
-                $message = "<font color=red>$langGroupNowMember</font>: ";
-                $regDone = $is_member = true;
+	if (isset($uid) and !$is_member and $statut != 10) {
+		if ($max_members == 0 or $member_count < $max_members) {
+			$sqlReg = mysql_query("INSERT INTO group_members SET user_id = $uid, group_id = $group_id");
+			$message = "<font color=red>$langGroupNowMember</font>: ";
+			$regDone = $is_member = true;
+		}
 	} else { 
 		$tool_content .= $langForbidden;
 		draw($tool_content, 2);
@@ -66,9 +68,11 @@ if (!$is_member and !$is_adminOfCourse and (!$self_reg or $member_count >= $max_
 
 $tool_content .= "<div id='operations_container'><ul id='opslist'>\n";
 if ($is_adminOfCourse or $is_tutor) {
-                $tool_content .= "<li><a href='group_edit.php?group_id=$group_id'>$langEditGroup</a></li>\n";
-} elseif ($self_reg and isset($uid) and !$is_member and $member_count < $max_members) { 
-                $tool_content .=  "<li><a href='$_SERVER[PHP_SELF]?registration=1&amp;group_id=$group_id'>$langRegIntoGroup</a></li>\n";
+        $tool_content .= "<li><a href='group_edit.php?group_id=$group_id'>$langEditGroup</a></li>\n";
+} elseif ($self_reg and isset($uid) and !$is_member) {
+	if ($max_members == 0 or $member_count < $max_members) {
+		$tool_content .=  "<li><a href='$_SERVER[PHP_SELF]?registration=1&amp;group_id=$group_id'>$langRegIntoGroup</a></li>\n";
+	}
 } elseif (isset($regDone)) {
         $tool_content .= "$message&nbsp;";
 }
@@ -176,7 +180,7 @@ function loadGroupTools(){
         }
         // Drive members into their own File Manager
         if ($documents) {
-                 $group_tools .=  "<li><a href='document.php?gid=$group_id'>$langGroupDocumentsLink</a></li>";
+                $group_tools .=  "<li><a href='document.php?gid=$group_id'>$langGroupDocumentsLink</a></li>";
         }
         if ($is_adminOfCourse or $is_tutor) {
                 $group_tools .=  "<li><a href='group_email.php?group_id=$group_id'>$langEmailGroup</a></li>
