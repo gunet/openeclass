@@ -35,7 +35,6 @@ $helpTopic = 'Infocours';
 include '../../include/baseTheme.php';
 
 $nameTools = $langModifInfo;
-$tool_content = "";
 
 // submit
 if (!$is_adminOfCourse) {
@@ -66,7 +65,6 @@ if (isset($_POST['submit'])) {
                                 include $extra_messages;
                         }
                 }
-
                 // update course settings
                 if (isset($_POST['formvisible']) and
                     $_POST['formvisible'] == '1') {
@@ -75,8 +73,9 @@ if (isset($_POST['submit'])) {
                         $password = "";
                 }
 
-                //list($facid, $facname) = explode('--', $_POST['facu']);
-		$facname = find_faculty_by_id(intval($_POST['department']));
+                $department = intval($_POST['department']);
+		
+		$facname = find_faculty_by_id($department);
                 db_query("UPDATE `$mysqlMainDb`.cours
                           SET intitule = " . autoquote($_POST['title']) .",
                               fake_code = " . autoquote($_POST['fcode']) .",
@@ -87,12 +86,8 @@ if (isset($_POST['submit'])) {
                               languageCourse = '$newlang',
                               type = " . autoquote($_POST['type']) . ",
                               password = " . autoquote($_POST['password']) . ",
-                              faculteid = $_POST[department]
+                              faculteid = $department
                           WHERE cours_id = $cours_id");
-                db_query("UPDATE `$mysqlMainDb`.cours_faculte
-                          SET faculte = " . autoquote($facname) . ",
-                              facid = $_POST[department]
-                          WHERE code='$currentCourseID'");
 
                 // update Home Page Menu Titles for new language
                 mysql_select_db($currentCourseID, $db);
@@ -125,118 +120,113 @@ if (isset($_POST['submit'])) {
                         <p>&laquo; <a href='{$urlServer}courses/$currentCourseID/index.php'>$langBackCourse</a></p>";
         }
 } else {
+	$tool_content .= "
+	<div id='operations_container'>
+	  <ul id='opslist'>
+	    <li><a href='archive_course.php'>$langBackupCourse</a></li>
+	    <li><a href='delete_course.php'>$langDelCourse</a></li>
+	    <li><a href='refresh_course.php'>$langRefreshCourse</a></li>
+	  </ul>
+	</div>";
 
-		$tool_content .= "
-                <div id='operations_container'>
-                  <ul id='opslist'>
-		    <li><a href='archive_course.php'>$langBackupCourse</a></li>
-  		    <li><a href='delete_course.php'>$langDelCourse</a></li>
-    		    <li><a href='refresh_course.php'>$langRefreshCourse</a></li>
-                  </ul>
-                </div>";
+	$sql = "SELECT cours.intitule, cours.course_keywords, cours.visible,
+		       cours.fake_code, cours.titulaires, cours.languageCourse, cours.type,
+		       cours.password, cours.faculteid
+		FROM `$mysqlMainDb`.cours WHERE cours.code = '$currentCourseID'";
+	$result = db_query($sql);
+	$c = mysql_fetch_array($result);
+	$title = q($c['intitule']);
+	$department = $c['faculteid'];
+	$type = $c['type'];
+	$visible = $c['visible'];
+	$visibleChecked[$visible] = " checked='1'";
+	$fake_code = q($c['fake_code']);
+	$titulary = q($c['titulaires']);
+	$languageCourse	= $c['languageCourse'];
+	$course_keywords = q($c['course_keywords']);
+	$password = q($c['password']);
 
-                $sql = "SELECT cours_faculte.faculte, cours.intitule, cours.course_keywords, cours.visible,
-                               cours.fake_code, cours.titulaires, cours.languageCourse, cours.departmentUrlName,
-                               cours.departmentUrl, cours.type, cours.password, cours.faculteid
-                        FROM `$mysqlMainDb`.cours, `$mysqlMainDb`.cours_faculte
-                        WHERE cours.code='$currentCourseID' AND cours_faculte.code='$currentCourseID'";
-		$result = mysql_query($sql);
-		$c = mysql_fetch_array($result);
-		$title = q($c['intitule']);
-		$department = $c['faculteid'];
-		$type = $c['type'];
-		$visible = $c['visible'];
-		$visibleChecked[$visible] = " checked='1'";
-		$fake_code = q($c['fake_code']);
-		$titulary = q($c['titulaires']);
-		$languageCourse	= $c['languageCourse'];
-		$course_keywords = q($c['course_keywords']);
-		$password = q($c['password']);
-
-		$tool_content .="
-		<form method='post' action='$_SERVER[PHP_SELF]'>
-                <fieldset>
-                <legend>$langCourseIden</legend>
-                <table class='tbl'>
-                    <tr>
-                        <td>$langCode&nbsp;:</td>
-                        <td><input type='text' name='fcode' value='$fake_code' size='60' /></td>
-                        <td>&nbsp;</td>
-                    </tr>
-                    <tr>
-                        <td>$langCourseTitle&nbsp;:</td>
-                        <td><input type='text' name='title' value='$title' size='60' /></td>
-                        <td>&nbsp;</td>
-                    </tr>
-                    <tr>
-                        <td>$langTeachers&nbsp;:</td>
-                        <td><input type='text' name='titulary' value='$titulary' size='60' /></td>
-                        <td>&nbsp;</td>
-                    </tr>
-                    <tr>
-                <tr><td>$langFaculty</td><td>";
-		$tool_content .= list_departments($department);
-		$tool_content .= "</td></tr>
-                </select>
-		</td>
-		</tr>
-		<tr>
-                <td>$langType&nbsp;:</td>
-                <td>";
-                $tool_content .= selection(array('pre' => $langpre, 'post' => $langpost, 'other' => $langother), 'type', $type);
-                $tool_content .= "</td>
-                        <td>&nbsp;</td>
-                    </tr>
-                    <tr>
-                        <td>$langCourseKeywords&nbsp;</td>
-                        <td><input type='text' name='course_keywords' value='$course_keywords' size='60' /></td>
-                        <td>&nbsp;</td>
-                    </tr>
-                    </table>
-                    </fieldset>
-                    <fieldset>
-                    <legend>$langConfidentiality</legend>
-                    <table class='tbl'>
-                    <tr>
-                        <td><img src='../../template/classic/img/OpenCourse.gif' alt='$m[legopen]' title='$m[legopen]' width='16' height='16' />&nbsp;$m[legopen]&nbsp;:</td>
-                        <td width='1'><input type='radio' name='formvisible' value='2'".@$visibleChecked[2]." /></td>
-                        <td>$langPublic&nbsp;</td>
-                    </tr>
-                    <tr>
-                        <td rowspan='2' valign='top'><img src='../../template/classic/img/Registration.gif' alt='$m[legrestricted]' title='$m[legrestricted]' width='16' height='16' />&nbsp;$m[legrestricted]&nbsp;:</td>
-                        <td><input type='radio' name='formvisible' value='1'".@$visibleChecked[1]." /></td>
-                        <td>$langPrivOpen</td>
-                    </tr>
-                    <tr>
-                        <td>&nbsp;</td>
-                        <td>&nbsp;$langOptPassword&nbsp;<input type='text' name='password' value='$password' /></td>
-                    </tr>
-                    <tr>
-                        <td><img src='../../template/classic/img/ClosedCourse.gif' alt='$m[legclosed]' title='$m[legclosed]' width='16' height='16' />&nbsp;$m[legclosed]&nbsp;:</td>
-                        <td><input type='radio' name='formvisible' value='0'".@$visibleChecked[0]." /></td>
-                        <td>$langPrivate&nbsp;</td>
-                    </tr>
-                    </table>
-                    </fieldset>
-
-                    <fieldset>
-                    <legend>$langLanguage</legend>
-                    <table class='tbl'>
-                    <tr>
-                        <td>$langOptions&nbsp;:</td>
-                        <td width='1'>";
-		$language = $c['languageCourse'];
-		$tool_content .= lang_select_options('localize');
-		$tool_content .= "
-                        </td>
-                        <td>$langTipLang</td>
-                    </tr>
-                    </table>
-                    </fieldset>
-                    <p align='right'><input type='submit' name='submit' value='$langSubmit' /></p>
-
-                    </form>";
+	$tool_content .="
+	<form method='post' action='$_SERVER[PHP_SELF]'>
+	<fieldset>
+	<legend>$langCourseIden</legend>
+	<table class='tbl'>
+	    <tr>
+		<td>$langCode&nbsp;:</td>
+		<td><input type='text' name='fcode' value='$fake_code' size='60' /></td>
+		<td>&nbsp;</td>
+	    </tr>
+	    <tr>
+		<td>$langCourseTitle&nbsp;:</td>
+		<td><input type='text' name='title' value='$title' size='60' /></td>
+		<td>&nbsp;</td>
+	    </tr>
+	    <tr>
+		<td>$langTeachers&nbsp;:</td>
+		<td><input type='text' name='titulary' value='$titulary' size='60' /></td>
+		<td>&nbsp;</td>
+	    </tr>
+	    <tr>
+	<tr><td>$langFaculty</td><td>";
+	$tool_content .= list_departments($department);
+	$tool_content .= "</td></tr>
+	</select>
+	</td>
+	</tr>
+	<tr>
+	<td>$langType&nbsp;:</td>
+	<td>";
+	$tool_content .= selection(array('pre' => $langpre, 'post' => $langpost, 'other' => $langother), 'type', $type);
+	$tool_content .= "</td>
+		<td>&nbsp;</td>
+	    </tr>
+	    <tr>
+		<td>$langCourseKeywords&nbsp;</td>
+		<td><input type='text' name='course_keywords' value='$course_keywords' size='60' /></td>
+		<td>&nbsp;</td>
+	    </tr>
+	    </table>
+	    </fieldset>
+	    <fieldset>
+	    <legend>$langConfidentiality</legend>
+	    <table class='tbl'>
+	    <tr>
+		<td><img src='../../template/classic/img/OpenCourse.gif' alt='$m[legopen]' title='$m[legopen]' width='16' height='16' />&nbsp;$m[legopen]&nbsp;:</td>
+		<td width='1'><input type='radio' name='formvisible' value='2'".@$visibleChecked[2]." /></td>
+		<td>$langPublic&nbsp;</td>
+	    </tr>
+	    <tr>
+		<td rowspan='2' valign='top'><img src='../../template/classic/img/Registration.gif' alt='$m[legrestricted]' title='$m[legrestricted]' width='16' height='16' />&nbsp;$m[legrestricted]&nbsp;:</td>
+		<td><input type='radio' name='formvisible' value='1'".@$visibleChecked[1]." /></td>
+		<td>$langPrivOpen</td>
+	    </tr>
+	    <tr>
+		<td>&nbsp;</td>
+		<td>&nbsp;$langOptPassword&nbsp;<input type='text' name='password' value='$password' /></td>
+	    </tr>
+	    <tr>
+		<td><img src='../../template/classic/img/ClosedCourse.gif' alt='$m[legclosed]' title='$m[legclosed]' width='16' height='16' />&nbsp;$m[legclosed]&nbsp;:</td>
+		<td><input type='radio' name='formvisible' value='0'".@$visibleChecked[0]." /></td>
+		<td>$langPrivate&nbsp;</td>
+	    </tr>
+	    </table>
+	    </fieldset>
+	    <fieldset>
+	    <legend>$langLanguage</legend>
+	    <table class='tbl'>
+	    <tr>
+		<td>$langOptions&nbsp;:</td>
+		<td width='1'>";
+	$language = $c['languageCourse'];
+	$tool_content .= lang_select_options('localize');
+	$tool_content .= "
+	</td>
+	<td>$langTipLang</td>
+	</tr>
+	</table>
+	</fieldset>
+	<p align='right'><input type='submit' name='submit' value='$langSubmit' /></p>
+	</form>";
 }
-
 add_units_navigation(TRUE);
 draw($tool_content, 2);
