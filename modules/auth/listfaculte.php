@@ -26,10 +26,9 @@
 
 include '../../include/baseTheme.php';
 $nameTools = $langListFac;
-$result=mysql_query("SELECT id, name, code FROM faculte ORDER BY name");
+$result = db_query("SELECT id, name, code FROM faculte ORDER BY name");
 $numrows = mysql_num_rows($result);
 
-$tool_content = "";
 if (isset($result))  {
 	$tool_content .= "<script type='text/javascript' src='sorttable.js'></script>
 	<table class='sortable' id='t1' width=\"99%\">
@@ -38,7 +37,7 @@ if (isset($result))  {
 	</tr>";
 	$k = 0;
 	while ($fac = mysql_fetch_array($result)) {
-		if ($k%2==0) {
+		if ($k%2 == 0) {
 			$tool_content .= "\n  <tr class='even'>";
 		} else {
 		        $tool_content .= "\n  <tr class='odd'>";
@@ -47,8 +46,8 @@ if (isset($result))  {
 		<img style='border:0px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'></td>
 		<td><a href='opencourses.php?fc=$fac[id]'>$fac[name]</a>&nbsp;&nbsp;<small>
 		($fac[code])";
-		$n=mysql_query("SELECT COUNT(*) FROM cours_faculte WHERE facid=$fac[id]");
-		$r=mysql_fetch_array($n);
+		$n = db_query("SELECT COUNT(*) FROM cours WHERE faculteid = $fac[id]");
+		$r = mysql_fetch_array($n);
 		$tool_content .= "&nbsp;&nbsp;-&nbsp;&nbsp;$langThereAre $r[0]&nbsp;".  ($r[0] == 1? $langAvCours: $langAvCourses) . "</small></td>
 		</tr>";
 		$k++;

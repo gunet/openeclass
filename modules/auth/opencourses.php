@@ -72,9 +72,9 @@ $tool_content .= "
 // get the different course types available for this faculte
 $typesresult = db_query("SELECT DISTINCT cours.type types FROM cours WHERE cours.faculteid = $fc ORDER BY cours.type");
 // count the number of different types
-$numoftypes = mysql_num_rows($typesresult);;
+$numoftypes = mysql_num_rows($typesresult);
 // output the nav bar only if we have more than 1 types of courses
-if ($numoftypes > 1) {
+if ($numoftypes > 0) {
     $counter = 1;
     while ($typesArray = mysql_fetch_array($typesresult)) {
         $t = $typesArray['types'];
@@ -90,96 +90,86 @@ if ($numoftypes > 1) {
         $counter++;
     }
     $tool_content .= "</div></th>
-  </tr>
-  </table>\n\n";
-} else {
-    $tool_content .= "&nbsp;</div></th>
-  </tr>
-  </table>\n\n";
-}
-// changed this foreach statement a bit
-// this way we sort by the course types
-// then we just select visible
-// and finally we do the secondary sort by course title and but teacher's name
-foreach (array("pre" => $langpres,
-        "post" => $langposts,
-        "other" => $langothers) as $type => $message) {
-    $result = mysql_query("SELECT
-			cours.code k,
-			cours.fake_code c,
-			cours.intitule i,
-			cours.visible visible,
-			cours.titulaires t
-			FROM cours_faculte, cours
-			WHERE cours.code = cours_faculte.code
-			AND cours.type = '$type'
-			AND cours_faculte.facid = '$fc'
-			ORDER BY cours.intitule, cours.titulaires");
-
-    if (mysql_num_rows($result) == 0) {
-        continue;
-    }
-
-    $tool_content .= "\n  <br />\n\n
-       <table width=99% class='tbl_course_type'>
-       <tr>
-         <td>";
-    // We changed the style a bit here and we output types as the title
-    $tool_content .= "<a name='$type'>&nbsp;</a><b>$message</b></td>\n";
-    // output a top href link if necessary
-    if ($numoftypes > 1) {
+    </tr>
+    </table>\n\n";
+    // changed this foreach statement a bit
+    // this way we sort by the course types
+    // then we just select visible
+    // and finally we do the secondary sort by course title and but teacher's name
+    foreach (array("pre" => $langpres,
+            "post" => $langposts,
+            "other" => $langothers) as $type => $message) {
+        $result = db_query("SELECT
+                            cours.code k,
+                            cours.fake_code c,
+                            cours.intitule i,
+                            cours.visible visible,
+                            cours.titulaires t
+                            FROM cours
+                            WHERE cours.faculteid = $fc
+                            AND cours.type = '$type'
+                            ORDER BY cours.intitule, cours.titulaires");
+    
+        if (mysql_num_rows($result) == 0) {
+            continue;
+        }
+        $tool_content .= "\n  <br />\n\n
+           <table width=99% class='tbl_course_type'>
+           <tr>
+            <td>";
+        // We changed the style a bit here and we output types as the title
+        $tool_content .= "<a name='$type'>&nbsp;</a><b>$message</b></td>\n";
+        // output a top href link if necessary
         $tool_content .= "\n<td align='right'><a href='#top'>$m[begin]</a>&nbsp;</td>";
-        // or a space for beautifying reasons
-    } else {
-        $tool_content .= "    <td>&nbsp;</td>\n";
-    }
-    $tool_content .= "  </tr>\n";
-    $tool_content .= "  </table>\n\n";
-    $tool_content .= "
-
-    <script type='text/javascript' src='sorttable.js'></script>
-        <table width=99% class='sortable' id='t1'>
-        <tr>
-            <th class='left' colspan='2'>$m[lessoncode]</th>
-            <th class='left' width='200'>$m[professor]</th>
-            <th width='30'>$langType</th>
-        </tr>";
-
-    $k = 0;
-    while ($mycours = mysql_fetch_array($result)) {
-        if ($mycours['visible'] == 2) {
-            $codelink = "<a href='../../courses/$mycours[k]/'>$mycours[i]</a>&nbsp;<small>(" . $mycours['c'] . ")</small>";
-        } else {
-            $codelink = "$mycours[i]&nbsp;<small>(" . $mycours['c'] . ")</small>";
-        }
-
-        if ($k%2 == 0) {
-            $tool_content .= "\n<tr class='even'>";
-        } else {
-            $tool_content .= "\n<tr class='odd'>";
-        }
-        $tool_content .= "\n<td width='1'><img style='border:0px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'></td>";
-        $tool_content .= "\n<td>" . $codelink . "</td>";
-        $tool_content .= "\n<td>$mycours[t]</td>";
-        $tool_content .= "\n<td align='center'>";
-        // show the necessary access icon
-        foreach ($icons as $visible => $image) {
-            if ($visible == $mycours['visible']) {
-                $tool_content .= $image;
+        $tool_content .= "</tr>\n";
+        $tool_content .= "</table>\n\n";
+        $tool_content .= "
+    
+        <script type='text/javascript' src='sorttable.js'></script>
+            <table width=99% class='sortable' id='t1'>
+            <tr>
+                <th class='left' colspan='2'>$m[lessoncode]</th>
+                <th class='left' width='200'>$m[professor]</th>
+                <th width='30'>$langType</th>
+            </tr>";
+    
+        $k = 0;
+        while ($mycours = mysql_fetch_array($result)) {
+            if ($mycours['visible'] == 2) {
+                $codelink = "<a href='../../courses/$mycours[k]/'>$mycours[i]</a>&nbsp;<small>(" . $mycours['c'] . ")</small>";
+            } else {
+                $codelink = "$mycours[i]&nbsp;<small>(" . $mycours['c'] . ")</small>";
             }
-        }
+    
+            if ($k%2 == 0) {
+                $tool_content .= "\n<tr class='even'>";
+            } else {
+                $tool_content .= "\n<tr class='odd'>";
+            }
+            $tool_content .= "\n<td width='1'><img style='border:0px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'></td>";
+            $tool_content .= "\n<td>" . $codelink . "</td>";
+            $tool_content .= "\n<td>$mycours[t]</td>";
+            $tool_content .= "\n<td align='center'>";
+            // show the necessary access icon
+            foreach ($icons as $visible => $image) {
+                if ($visible == $mycours['visible']) {
+                    $tool_content .= $image;
+                }
+            }
             $tool_content .= "</td>\n";
             $tool_content .= "</tr>";
             $k++;
-        // that's it!
-        // upatras.gr patch end here, atkyritsis@upnet.gr, daskalou@upnet.gr
-    }
-    $tool_content .= "\n</table>\n<br />\n";
-    if ($numoftypes == 0) {
-        $tool_content .= "\n<br/>";
-        $tool_content .= "\n<br/>\n<p class='alert1'>$m[nolessons]</p>";
-    }
+            // that's it!
+            // upatras.gr patch end here, atkyritsis@upnet.gr, daskalou@upnet.gr
+        }
+        $tool_content .= "\n</table>\n<br />\n";
+    } // end of foreach
+} else {
+    $tool_content .= "&nbsp;</div></th></tr></table>\n\n";
+    $tool_content .= "\n<br/>";
+    $tool_content .= "\n<br/>\n<p class='alert1'>$m[nolessons]</p>";
 }
+
 $tool_content .= "\n<br>";
 
 draw($tool_content, (isset($uid) and $uid)? 1: 0);
