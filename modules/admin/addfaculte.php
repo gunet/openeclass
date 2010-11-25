@@ -74,10 +74,7 @@ if (isset($_GET['a'])) {
 			break;
 	}
 }
-// Initialise $tool_content
-$tool_content = "";
-
-	// Give administrator a link to add a new faculty
+// Give administrator a link to add a new faculty
 $tool_content .= "<div id='operations_container'>
     <ul id='opslist'>
     <li><a href='$_SERVER[PHP_SELF]?a=1'>".$langAdd."</a></li>
@@ -87,7 +84,7 @@ $tool_content .= "<div id='operations_container'>
 // Display all available faculties
 if (!isset($_GET['a'])) {
 	// Count available faculties
-	$a=mysql_fetch_array(mysql_query("SELECT COUNT(*) FROM faculte"));
+	$a = mysql_fetch_array(db_query("SELECT COUNT(*) FROM faculte"));
 	// Construct a table
 	$tool_content .= "<table width='99%' class='FormData' align='left'>
 	<tbody>
@@ -104,7 +101,7 @@ if (!isset($_GET['a'])) {
 	<th scope='col'>$langCode</th>
 	<th>".$langActions."</th>
 	</tr>";
-	$sql = mysql_query("SELECT code,name,id FROM faculte");
+	$sql = db_query("SELECT code,name,id FROM faculte");
 	$k = 0;
 	// For all faculties display some info
 	for ($j = 0; $j < mysql_num_rows($sql); $j++) {
@@ -131,7 +128,7 @@ if (!isset($_GET['a'])) {
 	$tool_content .= "</tbody></table><br />";
 	$tool_content .= "<br /><p align=\"right\"><a href=\"index.php\">".$langBack."</a></p>";
 }
-// Add a new faculte
+// Add a new faculty
 elseif (isset($_GET['a']) and $_GET['a'] == 1)  {
 	if (isset($_POST['add'])) {
 		$codefaculte = $_POST['codefaculte'];
@@ -148,22 +145,22 @@ elseif (isset($_GET['a']) and $_GET['a'] == 1)  {
 			$tool_content .= "<center><p><a href=\"$_SERVER[PHP_SELF]?a=1\">".$langReturnToAddFaculte."</a></p></center>";
 			}
 		// Check if faculty code already exists
-		elseif (mysql_num_rows(mysql_query("SELECT * from faculte WHERE code=" . autoquote($codefaculte))) > 0) {
+		elseif (mysql_num_rows(db_query("SELECT * from faculte WHERE code=" . autoquote($codefaculte))) > 0) {
 			$tool_content .= "<p>".$langFCodeExists."</p><br />";
 			$tool_content .= "<center><p><a href=\"$_SERVER[PHP_SELF]?a=1\">".$langReturnToAddFaculte."</a></p></center>";
 			}
 		// Check if faculty name already exists
-		elseif (mysql_num_rows(mysql_query("SELECT * from faculte WHERE name=" . autoquote($faculte))) > 0) {
+		elseif (mysql_num_rows(db_query("SELECT * from faculte WHERE name=" . autoquote($faculte))) > 0) {
 			$tool_content .= "<p>".$langFaculteExists."</p><br />";
 			$tool_content .= "<center><p><a href=\"$_SERVER[PHP_SELF]?a=1\">".$langReturnToAddFaculte."</a></p></center>";
 		} else {
 		// OK Create the new faculty
-			mysql_query("INSERT into faculte(code,name,generator,number) VALUES(" . autoquote($codefaculte) . ',' . autoquote($faculte) . ",'100','1000')")
+			db_query("INSERT into faculte(code,name,generator,number) VALUES(" . autoquote($codefaculte) . ',' . autoquote($faculte) . ",'100','1000')")
 				or die ($langNoSuccess);
 			$tool_content .= "<p>".$langAddSuccess."</p><br />";
 			}
 	} else {
-		// Display form for new faculte information
+		// Display form for new faculty information
 		$tool_content .= "<form method=\"post\" action=\"".$_SERVER['PHP_SELF']."?a=1\">";
 		$tool_content .= "<table width='99%' class='FormData'>
 		<tbody><tr>
@@ -190,7 +187,7 @@ elseif (isset($_GET['a']) and $_GET['a'] == 1)  {
 // Delete faculty
 elseif (isset($_GET['a']) and $_GET['a'] == 2)  {
         $c = intval($_GET['c']);
-	$s = mysql_query("SELECT * from cours WHERE faculteid=$c");
+	$s = db_query("SELECT * from cours WHERE faculteid=$c");
 	// Check for existing courses of a faculty
 	if (mysql_num_rows($s) > 0)  {
 		// The faculty cannot be deleted
@@ -198,12 +195,12 @@ elseif (isset($_GET['a']) and $_GET['a'] == 2)  {
 		$tool_content .= "<p>".$langNoErase."</p><br />";
 	} else {
 		// The faculty can be deleted
-		mysql_query("DELETE from faculte WHERE id=$c");
+		db_query("DELETE from faculte WHERE id=$c");
 		$tool_content .= "<p>$langErase</p><br />";
 	}
 	$tool_content .= "<br><p align='right'><a href='$_SERVER[PHP_SELF]'>".$langBack."</a></p>";
 }
-// Edit a faculte
+// Edit a faculty
 elseif (isset($_GET['a']) and $_GET['a'] == 3)  {
         $c = intval($_REQUEST['c']);
 	if (isset($_POST['edit'])) {
@@ -213,32 +210,28 @@ elseif (isset($_GET['a']) and $_GET['a'] == 3)  {
 			$tool_content .= "<p>".$langEmptyFaculte."</p><br>";
 			$tool_content .= "<p align='right'><a href='$_SERVER[PHP_SELF]?a=3&c=$c'>$langReturnToEditFaculte</a></p>";
 			}
-		// Check if faculte name already exists
-		elseif (mysql_num_rows(mysql_query("SELECT * from faculte WHERE id <> $c
+		// Check if faculty name already exists
+		elseif (mysql_num_rows(db_query("SELECT * from faculte WHERE id <> $c
 					AND name=" . autoquote($faculte))) > 0) {
 			$tool_content .= "<p>".$langFaculteExists."</p><br>";
 			$tool_content .= "<p align='right'><a href='$_SERVER[PHP_SELF]?a=3&amp;c=$c'>$langReturnToEditFaculte</a></p>";
 		} else {
-		// OK Update the faculte
-			mysql_query("UPDATE faculte SET name = " .
+		// OK Update the faculty
+			db_query("UPDATE faculte SET name = " .
                                     autoquote($faculte) . " WHERE id=$c")
 				or die ($langNoSuccess);
-		// For backwards compatibility update cours and cours_facult also
 			db_query("UPDATE cours SET faculte = " .
                                     autoquote($faculte) . " WHERE faculteid=$c")
-				or die ($langNoSuccess);
-			db_query("UPDATE cours_faculte SET faculte = " .
-                                    autoquote($faculte) . " WHERE facid=$c")
 				or die ($langNoSuccess);
 			$tool_content .= "<p>$langEditFacSucces</p><br>";
 			}
 	} else {
-		// Get faculte information
+		// Get faculty information
                 $c = intval($_GET['c']);
 		$sql = "SELECT code, name FROM faculte WHERE id=$c";
-		$result = mysql_query($sql);
+		$result = db_query($sql);
 		$myrow = mysql_fetch_array($result);
-		// Display form for edit faculte information
+		// Display form for edit faculty information
 		$tool_content .= "<form method='post' action='$_SERVER[PHP_SELF]?a=3'>";
 		$tool_content .= "<table width='99%' class='FormData'>
 		<tbody>

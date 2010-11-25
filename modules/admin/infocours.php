@@ -51,7 +51,6 @@ $require_admin = TRUE;
 // Include baseTheme
 include '../../include/baseTheme.php';
 if(!isset($_GET['c'])) { die(); }
-
 // Define $nameTools
 $nameTools = $langCourseInfo;
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
@@ -62,62 +61,42 @@ $tool_content = "";
 
 // Update cours basic information
 if (isset($_POST['submit']))  {
-  // Get faculte ID and faculte name for $faculte
-  // $faculte example: 12--Tmima 1
-  list($facid, $facname) = explode("--", $_POST['faculte']);
-  // Update query
-	$sql = mysql_query("UPDATE cours SET faculte='$facname',
-		titulaires='$_POST[titulaires]', intitule='$_POST[intitule]', faculteid='$facid'
-		WHERE code='".mysql_real_escape_string($_GET['c'])."'");
-	// Some changes happened
-	if (mysql_affected_rows() > 0) {
-		$sql = mysql_query("UPDATE cours_faculte SET faculte='$facname', facid='$facid'
-				WHERE code='".mysql_real_escape_string($_GET['c'])."'");
-		$tool_content .= "<p class=\"alert1\">".$langCourseEditSuccess."</p>";
-	}
-	// Nothing updated
-	else {
-		$tool_content .= "<p class=\"alert1\">".$langNoChangeHappened."</p>";
-	}
-
+	$department = intval($_POST['department']);
+	$facname = find_faculty_by_id($department);
+	// Update query
+	db_query("UPDATE cours SET faculte = ". autoquote($facname) . ",
+		titulaires = " . autoquote($_POST['titulaires']) . ",
+		intitule = ". autoquote($_POST['intitule']) . ",
+		faculteid = $department
+		WHERE code = '".mysql_real_escape_string($_GET['c'])."'");
+	
+	$tool_content .= "<p class='success'>$langModifDone</p>
+                <p>&laquo; <a href='editcours.php?c=$_GET[c]'>$langBack</a></p>";
 }
 // Display edit form for course basic information
 else {
 	$row = mysql_fetch_array(mysql_query("SELECT * FROM cours WHERE code='".mysql_real_escape_string($_GET['c'])."'"));
 	$tool_content .= "
-	<form action=".$_SERVER['PHP_SELF']."?c=".htmlspecialchars($_GET['c'])." method=\"post\">
-	<table class=\"FormData\" width=\"99%\" align=\"left\">
+	<form action=".$_SERVER['PHP_SELF']."?c=".htmlspecialchars($_GET['c'])." method='post'>
+	<table class='FormData' width='99%' align='left'>
 	<tbody>
 	<tr>
-	<th width=\"220\">&nbsp;</th>
+	<th width='220'>&nbsp;</th>
 	<td><b>".$langCourseInfoEdit."</b></td>
-	</tr>";
-	$tool_content .= "
+	</tr><tr><th>$langFaculty</th><td>";
+	$tool_content .= list_departments($row['faculteid']);
+	$tool_content .= "</td></tr>
 	<tr>
-	<th class=\"left\">".$langFaculty.":</th>
-	<td><select name=\"faculte\">\n";
-	$resultFac=mysql_query("SELECT id,name FROM faculte ORDER BY number");
-
-	while ($myfac = mysql_fetch_array($resultFac)) {
-		if($myfac['id'] == $row['faculteid'])
-			$tool_content .= "<option value=\"".$myfac['id']."--".$myfac['name']."\" selected>$myfac[name]</option>";
-		else
-			$tool_content .= "<option value=\"".$myfac['id']."--".$myfac['name']."\">$myfac[name]</option>";
-	}
-	$tool_content .= "</select>
-	</td>
-	</tr>
-	<tr>
-	  <th class=\"left\">".$langCourseCode.":</th>
+	  <th class='left'>".$langCourseCode.":</th>
 	  <td><i>".$row['code']."</i></td>
 	</tr>
 	<tr>
-	  <th class=\"left\">".$langTitle.":</b></th>
-	  <td><input type=\"text\" name=\"intitule\" value=\"".$row['intitule']."\" size=\"60\"></td>
+	  <th class='left'>".$langTitle.":</b></th>
+	  <td><input type='text' name='intitule' value='".$row['intitule']."' size='60'></td>
 	</tr>
 	<tr>
-	  <th class=\"left\">".$langTeacher.":</th>
-	  <td><input type=\"text\" name=\"titulaires\" value=\"".$row['titulaires']."\" size=\"60\"></td>
+	  <th class='left'>".$langTeacher.":</th>
+	  <td><input type='text' name='titulaires' value='".$row['titulaires']."' size='60'></td>
 	</tr>
 	<tr>
 	  <th>&nbsp;</th>
@@ -129,12 +108,10 @@ else {
 }
 // If course selected go back to editcours.php
 if (isset($_GET['c'])) {
-	$tool_content .= "<p align=\"right\"><a href='editcours.php?c=".htmlspecialchars($_GET['c'])."'>".$langBack."</a></p>";
+	$tool_content .= "<p align='right'><a href='editcours.php?c=".htmlspecialchars($_GET['c'])."'>".$langBack."</a></p>";
 }
 // Else go back to index.php directly
 else {
-	$tool_content .= "<p align=\"right\"><a href=\"index.php\">".$langBackAdmin."</a></p>";
+	$tool_content .= "<p align='right'><a href=\"index.php\">".$langBackAdmin."</a></p>";
 }
-
 draw($tool_content, 3);
-?>

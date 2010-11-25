@@ -49,49 +49,60 @@
 $require_admin = TRUE;
 // Include baseTheme
 include '../../include/baseTheme.php';
-if(!isset($_GET['c'])) { die(); }
+
+if(isset($_GET['c'])) {
+	$cours_id = $_GET['c'];
+} else {
+	$cours_id = '';
+}
 
 $nameTools = $langCourseDel;
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
 $navigation[] = array("url" => "listcours.php", "name" => $langListCours);
-$tool_content = "";
 
 // Delete course
 if (isset($_GET['delete']) && isset($_GET['c']))  {
-	db_query("DROP DATABASE `".mysql_real_escape_string($_GET['c'])."`");
+	$course_code = course_id_to_code($cours_id);
+	
+	db_query("DROP DATABASE `$course_code`");
         mysql_select_db($mysqlMainDb);
-        $code = quote($_GET['c']);
-	db_query("DELETE FROM cours_faculte WHERE code = $code");
-	db_query("DELETE FROM cours_user WHERE cours_id =
-                        (SELECT cours_id FROM cours WHERE code = $code)");
-	db_query("DELETE FROM annonces WHERE cours_id =
-                        (SELECT cours_id FROM cours WHERE code = $code)");
-	db_query("DELETE FROM cours WHERE code = $code");
+	db_query("DELETE FROM cours_user WHERE cours_id = $cours_id");
+	db_query("DELETE FROM annonces WHERE cours_id = $cours_id");
+	db_query("DELETE FROM document WHERE course_id = $cours_id");
+	db_query("DELETE FROM ebook WHERE course_id = $cours_id");
+	db_query("DELETE FROM forum_notify WHERE course_id = $cours_id");
+	db_query("DELETE FROM glossary WHERE course_id = $cours_id");
+	db_query("DELETE FROM `group` WHERE course_id = $cours_id");
+	db_query("DELETE FROM group_properties WHERE course_id = $cours_id");
+	db_query("DELETE FROM link WHERE course_id = $cours_id");
+	db_query("DELETE FROM link_category WHERE course_id = $cours_id");
+	db_query("DELETE FROM agenda WHERE lesson_code = '$course_code'");
+	db_query("DELETE FROM cours WHERE cours_id = $cours_id");
 	@mkdir("../../courses/garbage");
-	rename("../../courses/".$_GET['c'], "../../courses/garbage/".$_GET['c']);
+	rename("../../courses/".$course_code, "../../courses/garbage/".$course_code);
 	$tool_content .= "<p>".$langCourseDelSuccess."</p>";
 }
 // Display confirmatiom message for course deletion
 else {
-	$row = mysql_fetch_array(mysql_query("SELECT * FROM cours WHERE code='".mysql_real_escape_string($_GET['c'])."'"));
+	$row = mysql_fetch_array(db_query("SELECT * FROM cours WHERE cours_id = $cours_id"));
 
 	$tool_content .= "<table><caption>".$langCourseDelConfirm."</caption><tbody>";
-	$tool_content .= "<tr>
-	<td><br />".$langCourseDelConfirm2." <em>".htmlspecialchars($_GET['c'])."</em>;<br /><br /><i>".$langNoticeDel."</i><br /><br /></td>
-	</tr>";
+	$tool_content .= "<tr><td>
+		<br />".$langCourseDelConfirm2." <em>".course_id_to_title($cours_id)."</em>;
+		<br /><br /><i>".$langNoticeDel."</i><br />
+		</td></tr>";
 	$tool_content .= "<tr>
 	<td><ul><li><a href='".$_SERVER['PHP_SELF']."?c=".htmlspecialchars($_GET['c'])."&amp;delete=yes'><b>$langYes</b></a><br />&nbsp;</li>
-	<li><a href=\"listcours.php?c=".htmlspecialchars($_GET['c'])."\"><b>$langNo</b></a></li></ul></td>
+	<li><a href='listcours.php'><b>$langNo</b></a></li></ul></td>
 	</tr>";
 	$tool_content .= "</tbody></table><br />";
 }
 // If course deleted go back to listcours.php
 if (isset($_GET['c']) && !isset($_GET['delete'])) {
-	$tool_content .= "<center><p><a href='listcours.php?c=".htmlspecialchars($_GET['c'])."'>".$langBack."</a></p></center>";
+	$tool_content .= "<center><p><a href='listcours.php'>$langBack</a></p></center>";
 }
-// Go back to listcours.php
+// Display link to index.php
 else {
-	$tool_content .= "<center><p><a href=\"listcours.php\">$langBack</a></p></center>";
+	$tool_content .= "<br /><p align='right'><a href='index.php'>$langBack</a></p>";
 }
-
 draw($tool_content, 3);

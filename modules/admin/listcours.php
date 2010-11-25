@@ -57,8 +57,6 @@ include 'admin.inc.php';
 $nameTools = $langListCours;
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
 
-// Initialise $tool_content
-$tool_content = "";
 $caption = "";
 // Initialize some variables
 $searchurl = "";
@@ -103,18 +101,18 @@ if (isset($_GET['search']) && $_GET['search'] == "yes") {
 	}
 	$query=join(' AND ',$searchcours);
 	if (!empty($query)) {
-		$sql=mysql_query("SELECT faculte, code, intitule, titulaires, visible, cours_id FROM cours 
+		$sql = mysql_query("SELECT faculte, code, intitule, titulaires, visible, cours_id FROM cours 
 			WHERE $query ORDER BY faculte");
 		$caption .= "$langFound ".mysql_num_rows($sql)." $langCourses ";
 	} else {
-		$sql=mysql_query("SELECT faculte, code, intitule,titulaires, visible, cours_id FROM cours 
+		$sql = mysql_query("SELECT faculte, code, intitule,titulaires, visible, cours_id FROM cours 
 				ORDER BY faculte");
 		$caption .= "$langFound ".mysql_num_rows($sql)." $langCourses ";
 	}
 }
 // Normal list, no search, select all courses
 else {
-	$a=mysql_fetch_array(mysql_query("SELECT COUNT(*) FROM cours"));
+	$a = mysql_fetch_array(mysql_query("SELECT COUNT(*) FROM cours"));
 	$caption .= "".$langManyExist.": <b>".$a[0]." $langCourses</b>";
 	$sql = mysql_query("SELECT faculte, code, intitule, titulaires, visible, cours_id FROM cours 
 			ORDER BY faculte,code LIMIT ".$limit.",".COURSES_PER_PAGE."");
@@ -174,7 +172,7 @@ for ($j = 0; $j < mysql_num_rows($sql); $j++) {
 	// Add links to course users, delete course and course edit
 	$tool_content .= "<td align='center'><a href='listusers.php?c=".$logs['cours_id']."'>
 		<img src='../../template/classic/img/user_list.gif' title='$langUsers'></img></a></td>
-	<td align=\"center\" width='10'><a href='delcours.php?c=".$logs[1]."'>
+	<td align=\"center\" width='10'><a href='delcours.php?c=".$logs['cours_id']."'>
 		<img src='../../template/classic/img/delete.gif' title='$langDelete'></img></a></td>
 	<td align=\"center\" width='20'><a href='editcours.php?c=".$logs[1]."".$searchurl."'>
 		<img src='../../template/classic/img/edit.gif' title='$langEdit'></img></a></td>";
@@ -192,4 +190,3 @@ if (isset($_GET['search']) && $_GET['search'] == "yes") {
 // Display link to index.php
 $tool_content .= "<br /><p align='right'><a href='index.php'>".$langBack."</a></p>";
 draw($tool_content,3);
-?>

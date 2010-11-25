@@ -170,7 +170,6 @@ if (isset($_POST['submit'])) {
 	<tr><td>$langFaculty</td><td>";
 	$tool_content .= list_departments($department);
 	$tool_content .= "</td></tr>
-	</select>
 	</td>
 	</tr>
 	<tr>

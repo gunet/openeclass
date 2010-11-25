@@ -29,7 +29,6 @@ $require_prof = true;
 include '../../include/baseTheme.php';
 
 $nameTools = $langDelCourse;
-$tool_content = "";
 
 if($is_adminOfCourse) {
 	if(isset($_POST['delete'])) {
@@ -38,13 +37,20 @@ if($is_adminOfCourse) {
                                 (SELECT id FROM course_units WHERE course_id = $cours_id)");
 		db_query("DELETE FROM course_units WHERE course_id = $cours_id");
 		db_query("DELETE FROM annonces WHERE cours_id = $cours_id");
-		db_query("DELETE FROM cours_faculte WHERE code = '$currentCourseID'");
+		db_query("DELETE FROM document WHERE course_id = $cours_id");
+		db_query("DELETE FROM ebook WHERE course_id = $cours_id");
+		db_query("DELETE FROM forum_notify WHERE course_id = $cours_id");
+		db_query("DELETE FROM glossary WHERE course_id = $cours_id");
+		db_query("DELETE FROM `group` WHERE course_id = $cours_id");
+		db_query("DELETE FROM group_properties WHERE course_id = $cours_id");
+		db_query("DELETE FROM link WHERE course_id = $cours_id");
+		db_query("DELETE FROM link_category WHERE course_id = $cours_id");
 		db_query("DELETE FROM cours_user WHERE cours_id = $cours_id");
 		db_query("DELETE FROM cours WHERE cours_id = $cours_id");
-		db_query("DROP DATABASE `$currentCourseID`");
 		##[BEGIN personalisation modification]############
 		db_query("DELETE FROM `$mysqlMainDb`.agenda WHERE lesson_code='$currentCourseID'");
 		##[END personalisation modification]############
+		db_query("DROP DATABASE `$currentCourseID`");
 		@mkdir('../../courses/garbage');
 		rename("../../courses/$currentCourseID", "../../courses/garbage/$currentCourseID");
                 $tool_content .= "<p class='success_small'>$langTheCourse <b>($intitule $currentCourseID)</b> $langHasDel</p>
@@ -63,24 +69,22 @@ if($is_adminOfCourse) {
 		</tr>
 		<tr>
 		<th rowspan='2' class='left' width='220'>$langConfirmDel :</th>
-                <td width='52' align='center'><form method='post' action='delete_course.php'>
-                                              <input type='submit' name='delete' value='$langDelete' /></form></td>
+                <td width='52' align='center'>
+		<form method='post' action='delete_course.php'>
+                <input type='submit' name='delete' value='$langDelete' /></form></td>
 		<td><small>$langByDel</small></td>
 		</tr>
 		<tr>
                 <td align='center'><form method='get' action='infocours.php'>
-                                   <input type='submit' name='dont_delete' value='$langCancel' /></form></td>
+                                <input type='submit' name='dont_delete' value='$langCancel' /></form></td>
 		<td>&nbsp;</td>
 		</tr>
 		</table>";
-		
-		$tool_content .= "<p align=\"right\"><a href=\"infocours.php\">$langBack</a></p>
+		$tool_content .= "<p align='right'><a href='infocours.php'>$langBack</a></p>
 		</ul>
 		</div>";
 	} // else
 } else  {
 	$tool_content .= "<center><p>$langForbidden</p></center>";
 }
-
-draw($tool_content, 2, 'course_info');
-?>
+draw($tool_content, 2);

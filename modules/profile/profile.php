@@ -271,7 +271,7 @@ if (isset($_SESSION['perso_is_active'])) {
         </tr>";
 }
 
-if ($myrow['statut'] == 5) { // students allow to change their faculties
+if ($myrow['statut'] == 5) { // students can change their faculties
 	$tool_content .= "<tr><td>$langFaculty</td><td>";
 	$tool_content .= list_departments($myrow['department']);
 	$tool_content .= "</td></tr>";

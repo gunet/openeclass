@@ -1287,7 +1287,20 @@ function course_code_to_id($code)
 function course_id_to_title($cid)
 {
 	global $mysqlMainDb;
-        $r = db_query("SELECT intitule FROM cours WHERE cours_id='$cid'", $mysqlMainDb);
+        $r = db_query("SELECT intitule FROM cours WHERE cours_id = $cid", $mysqlMainDb);
+        if ($r and mysql_num_rows($r) > 0) {
+                $row = mysql_fetch_row($r);
+                return $row[0];
+	} else {
+                return false;
+	}
+}
+
+// find the course code from its id
+function course_id_to_code ($cid)
+{
+	global $mysqlMainDb;
+        $r = db_query("SELECT code FROM cours WHERE cours_id = $cid ", $mysqlMainDb);
         if ($r and mysql_num_rows($r) > 0) {
                 $row = mysql_fetch_row($r);
                 return $row[0];

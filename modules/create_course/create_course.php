@@ -115,9 +115,8 @@ $tool_content .= $intitule_html .
                  $password_html;
 
 if (isset($_POST['back1']) or !isset($_POST['visit'])) {
-
    // display form
-	$tool_content .= "
+    $tool_content .= "
       <fieldset>
       <legend>$langCreateCourseStep1Title</legend>
         <table class='tbl'>
@@ -228,7 +227,6 @@ if (isset($_POST['back1']) or !isset($_POST['visit'])) {
 	  <br />
 	</td>
       </tr>
-
       <tr>
 	<td>$langSubsystems</td>
       </tr>
@@ -395,19 +393,13 @@ if (isset($_POST['create_course'])) {
                         faculteid = '$facid',
                         first_create = NOW()");
         $new_cours_id = mysql_insert_id();
-        mysql_query("INSERT INTO cours_user SET
+        db_query("INSERT INTO cours_user SET
                         cours_id = $new_cours_id,
                         user_id = '$uid',
                         statut = '1',
                         tutor='1',
                         reg_date = CURDATE()");
-
-        mysql_query("INSERT INTO cours_faculte SET
-                        faculte = '$faculte',
-                        code = '$repertoire',
-                        facid = '$facid'");
-
-        mysql_query("INSERT INTO group_properties SET
+        db_query("INSERT INTO group_properties SET
                         course_id = $new_cours_id,
                         self_registration = 1,
                         multiple_registration = 0,
