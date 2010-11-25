@@ -242,12 +242,12 @@ function add_assignment($title, $desc, $deadline, $group_submissions)
 
 function submit_work($id)
 {
-        global $tool_content, $workPath, $uid, $cours_id, $stud_comments, $group_sub,
+        global $tool_content, $workPath, $uid, $cours_id, $stud_comments,
                 $langUploadSuccess, $langBack, $langWorks, $langUploadError, $currentCourseID,
                 $langExerciseNotPermit, $langUnwantedFiletype;
 
         $submit_ok = FALSE; //Default do not allow submission
-        if(isset($uid) && $uid) { //check if loged-in
+        if(isset($uid) && $uid) { //check if logged-in
                 if ($GLOBALS['statut'] == 10) { //user is guest
                         $submit_ok = FALSE;
                 } else { //user NOT guest
@@ -268,18 +268,23 @@ function submit_work($id)
                 }
         } //checks for submission validity end here
 
-        $res = db_query("SELECT title FROM assignments WHERE id = '$id'");
+        $res = db_query("SELECT title, group_submissions FROM assignments WHERE id = '$id'");
         $row = mysql_fetch_array($res);
-
+        $group_sub = $row['group_submissions'];
         $nav[] = array("url"=>"$_SERVER[PHP_SELF]", "name"=> $langWorks);
         $nav[] = array("url"=>"$_SERVER[PHP_SELF]?id=$id", "name"=> $row['title']);
 
         if($submit_ok) { //only if passed the above validity checks...
-                $msg1 = delete_submissions_by_uid($uid, -1, $id);  
-                $local_name = greek_to_latin(uid_to_name($uid));
-                $am = mysql_fetch_array(db_query("SELECT am FROM user WHERE user_id = '$uid'"));
-                if (!empty($am[0])) {
-                        $local_name = "$local_name $am[0]";
+                if ($group_sub) {
+                    $group_id = intval($_POST['gid']);
+                    $gids = user_group_info($uid, $cours_id);
+                    $local_name = greek_to_latin($gids[$group_id]);
+                } else {
+                    $local_name = greek_to_latin(uid_to_name($uid));
+                    $am = mysql_fetch_array(db_query("SELECT am FROM user WHERE user_id = '$uid'"));
+                    if (!empty($am[0])) {
+                            $local_name = "$local_name $am[0]";
+                    }
                 }
                 $local_name = replace_dangerous_char($local_name);
                 if (preg_match('/\.(ade|adp|bas|bat|chm|cmd|com|cpl|crt|exe|hlp|hta|' .'inf|ins|isp|jse|lnk|mdb|mde|msc|msi|msp|mst|pcd|pif|reg|scr|sct|shs|' .'shb|url|vbe|vbs|wsc|wsf|wsh)$/', $_FILES['userfile']['name'])) {
@@ -292,17 +297,20 @@ function submit_work($id)
                 $filename = "$secret/$local_name" . (empty($ext)? '': '.' . $ext);
                 if (move_uploaded_file($_FILES['userfile']['tmp_name'], "$workPath/$filename")) {
                         @chmod("$workPath/$filename", 0644);
-                        $msg2 = "$langUploadSuccess";//to message
-                        $group_id = intval($_POST['gid']);
-                        $gids = user_group_info($uid, $cours_id);
-                        if ($group_sub == 'yes' and !was_submitted(-1, $group_id, $id)) {
-                                delete_submissions_by_uid(-1, $group_id, $id);
-                                db_query("INSERT INTO assignment_submit
+                        $msg2 = $langUploadSuccess;
+                        if ($group_sub) {
+                            if (array_key_exists($group_id, $gids)) {
+                                    $msg1 = delete_submissions_by_uid(-1, $group_id, $id);
+                                    db_query("INSERT INTO assignment_submit
                                         (uid, assignment_id, submission_date, submission_ip, file_path,
-                                        file_name, comments, group_id) VALUES ('$uid','$id', NOW(),
-                                '$_SERVER[REMOTE_ADDR]', '$filename','".$_FILES['userfile']['name'].
-                                "', '$stud_comments', '$group_id')", $currentCourseID);
+                                        file_name, comments, group_id)
+                                        VALUES
+                                        ($uid, $id, NOW(), '$_SERVER[REMOTE_ADDR]',
+                                        ".autoquote($filename).",'".$_FILES['userfile']['name']."',
+                                        ".autoquote($stud_comments).", $group_id)", $currentCourseID);    
+                            }
                         } else {
+                                $msg1 = delete_submissions_by_uid($uid, -1, $id);  
                                 db_query("INSERT INTO assignment_submit
                                         (uid, assignment_id, submission_date, submission_ip, file_path,
                                         file_name, comments) VALUES ('$uid','$id', NOW(), '".$_SERVER['REMOTE_ADDR']."',
@@ -540,11 +548,12 @@ function show_student_assignment($id)
 		$tool_content .= "\n  <p class='alert1'>$m[noguest]</p>";
 		$submit_ok = FALSE;
 	} else {
-		if ($submission = was_graded($uid, $id)) {
-			show_submission_details($submission);
-			$submit_ok = FALSE;
-                } elseif ($submission = find_submission($uid, $id, $user_group_info)) {
-			show_submission_details($submission);
+                foreach (find_submissions($row['group_submissions'],
+                                          $uid, $id, $user_group_info) as $sub) {
+                    if (!empty($sub['grade'])) {
+                        $submit_ok = false;
+                    }
+                    show_submission_details($sub);
 		}
 	}
 	if ($submit_ok) {
@@ -887,7 +896,6 @@ function show_assignment($id, $message = FALSE)
             </table>
             </form>";
 
-
 		if ($gradesExists) {
 			foreach ( $gradeOccurances as $gradeValue=>$gradeOccurance ) {
 				/*  Changed by nikos. Only the number of works that are graded
@@ -977,7 +985,7 @@ function show_student_assignments()
                         }
                         $tool_content .= "</td><td width='10%' align='center'>";
                         $grade = ' - ';
-                        if ($submission = find_submission($uid, $row['id'], $gids)) {
+                        if ($submission = find_submissions(is_group_assignment($row['id']), $uid, $row['id'], $gids)) {
                                 $tool_content .= "<img src='../../template/classic/img/checkbox_on.gif' alt='$m[yes]' />";
                                 $grade = submission_grade($submission);
                                 if (!$grade) {
