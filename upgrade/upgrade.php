@@ -467,6 +467,11 @@ if (!isset($_POST['submit2'])) {
                                          FROM admin_announcements_old WHERE en_title <> '' OR en_body <> ''");     
                         db_query("DROP TABLE admin_announcements_old");
                 }
+		// not needed anymore
+		if (mysql_table_exists($mysqlMainDb, 'cours_faculte')) {
+			db_query("DROP TABLE cours_faculte");	
+		}
+		
         }
 
         // **********************************************

@@ -319,7 +319,10 @@ function upgrade_course_2_4($code, $lang, $extramessage = '')
 	mysql_select_db($code);
 	echo "<hr><p>$langUpgCourse <b>$code</b> (2.4) $extramessage<br />";
 	flush();
-
+	// not needed anymore
+	if (mysql_table_exists($code, 'stat_accueil')) {
+		db_query("DROP TABLE stat_accueil");	
+	}
 	// upgrade polls
 	db_query("ALTER TABLE `poll_answer_record` CHANGE `answer_text` `answer_text` TEXT", $code);
 
