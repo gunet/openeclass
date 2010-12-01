@@ -179,7 +179,7 @@ function find_submissions($is_group_assignment, $uid, $id, $gids)
 					grade_comments, grade_submission_date
 					FROM `$currentCourseID`.assignment_submit
                                         WHERE assignment_id = '$id' AND
-                                              group_id IN ($groups_sql))");
+                                              group_id IN ($groups_sql)");
         } else {
                 $res = db_query("SELECT id FROM `$currentCourseID`.assignment_submit
                                         WHERE assignment_id = '$id' AND uid = '$uid'");
@@ -255,7 +255,6 @@ function was_graded($uid, $id, $ret_val = FALSE)
 function show_submission_details($id)
 {
 	global $uid, $m, $currentCourseID, $langSubmittedAndGraded, $tool_content;
-
 	$sub = mysql_fetch_array(
 		db_query("SELECT * FROM `$currentCourseID`.assignment_submit
 			           WHERE id = '$id'"));
@@ -276,28 +275,21 @@ function show_submission_details($id)
 			"$m[your_group]</a> (".display_user($sub['uid']).")";
 	} else $sub_notice = "";
 	
-	$tool_content .= "
-    <br />
-    <table width=\"99%\" class=\"FormData\">
-    <tbody>";
-	$tool_content .= "
-    <tr>
-      <th width=\"220\">&nbsp;</th>
-      <td><b>$m[SubmissionWorkInfo]</b></td>
-    </tr>
-    <tr>
-      <th class=\"left\">$m[SubmissionStatusWorkInfo]:</th>
-      <td>$notice</td>
-    </tr>";
-	table_row($m['grade'], $sub['grade']);
-	table_row($m['gradecomments'], $sub['grade_comments']);
-	table_row($m['sub_date'], $sub['submission_date']);
-	table_row($m['filename'], $sub['file_name']);
-	table_row($m['comments'], $sub['comments'], true);
-	$tool_content .= "
-    </tbody>
-    </table>
-    $sub_notice";
+	$tool_content .= "<br /><table width=\"99%\" class=\"FormData\"><tbody>";
+	$tool_content .= "<tr>
+		  <th width=\"220\">&nbsp;</th>
+		  <td><b>$m[SubmissionWorkInfo]</b></td>
+		</tr>
+		<tr>
+		  <th class=\"left\">$m[SubmissionStatusWorkInfo]:</th>
+		  <td>$notice</td>
+		</tr>";
+		    table_row($m['grade'], $sub['grade']);
+		    table_row($m['gradecomments'], $sub['grade_comments']);
+		    table_row($m['sub_date'], $sub['submission_date']);
+		    table_row($m['filename'], $sub['file_name']);
+		    table_row($m['comments'], $sub['comments'], true);
+	$tool_content .= "</tbody></table> $sub_notice";
 	mysql_select_db($currentCourseID);
 }
 

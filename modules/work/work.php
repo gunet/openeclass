@@ -553,7 +553,7 @@ function show_student_assignment($id)
                     if (!empty($sub['grade'])) {
                         $submit_ok = false;
                     }
-                    show_submission_details($sub);
+                    show_submission_details($sub['id']);
 		}
 	}
 	if ($submit_ok) {
@@ -831,7 +831,7 @@ function show_assignment($id, $message = FALSE)
 			if (!empty($row['group_id'])) {
 				$subContentGroup = "($m[groupsubmit] ".
 				"<a href='../group/group_space.php?group_id=$row[group_id]'>".
-				"$m[ofgroup] $row[group_id]</a>)";
+				"$m[ofgroup] ".gid_to_name($row['group_id'])."</a>)";
 			} else $subContentGroup = "";
 
 			//professor comments
@@ -844,7 +844,7 @@ function show_assignment($id, $message = FALSE)
 				<a href='grade_edit.php?assignment=$id&submission=$row[id]'>".
 				$m['comments']."</a> (+)";
 			}
-			$uid_2_name = uid_to_name($row['uid']);
+                        $uid_2_name = display_user($row['uid']);
 			$stud_am = mysql_fetch_array(db_query("SELECT am from $mysqlMainDb.user WHERE user_id = '$row[uid]'"));
 			$tool_content .= "
                         <tr>
@@ -909,35 +909,24 @@ function show_assignment($id, $message = FALSE)
 			$chart_path = 'courses/'.$currentCourseID.'/temp/chart_'.md5(serialize($chart)).'.png';
                         $chart->setDataSet($dataSet);
 			$chart->render($webDir.$chart_path);
-
 			$tool_content .= "
-    <table width='99%' class='FormData'>
-    <tbody>
-    <tr>
-      <td align='right'><img src='$urlServer$chart_path' /></td>
-    </tr>
-    </tbody>
-    </table>";
+                        <table width='99%' class='FormData'>
+                        <tbody>
+                        <tr>
+                          <td align='right'><img src='$urlServer$chart_path' /></td>
+                        </tr>
+                        </tbody>
+                        </table>";
 		}
-
 	} else {
-
-		$tool_content .= <<<cData
-
-    <br />
-    <table class="FormData" width="99%">
-    <tbody>
-    <tr>
-      <th class="left" width="220">$langSubmissions:</th>
-      <td class="empty">$langNoSubmissions</td>
-    </tr>
-    </tbody>
-    </table>
-cData;
+		$tool_content .= "<br /><table class='FormData' width='99%'>
+                    <tbody><tr>
+                <th class='left' width='220'>$langSubmissions:</th>
+                <td class='empty'>$langNoSubmissions</td>
+                </tr>
+            </tbody></table>";
 	}
-	$tool_content .= "
-      <br/>
-      <p align='right'><a href='$_SERVER[PHP_SELF]'>$langBack</a></p>";
+	$tool_content .= "<br/><p align='right'><a href='$_SERVER[PHP_SELF]'>$langBack</a></p>";
 }
 
 
@@ -966,10 +955,10 @@ function show_student_assignments()
                 $k = 0;
                 while ($row = mysql_fetch_array($result)) {
                         $title_temp = q($row['title']);
-                        if ($k%2==0) {
-                                $tool_content .= "\n      <tr>";
+                        if ($k%2 == 0) {
+                                $tool_content .= "\n<tr>";
                         } else {
-                                $tool_content .= "\n      <tr class='odd'>";
+                                $tool_content .= "\n<tr class='odd'>";
                         }
                         $tool_content .= "<td width='1'><img style='padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet' /></td>
                                 <td><a href='$_SERVER[PHP_SELF]?id=$row[id]'>$title_temp</a></td>
@@ -983,20 +972,29 @@ function show_student_assignments()
                         } else {
                                 $tool_content .= " (<span class='expired_today'><b>$m[today]</b></span>)";
                         }
-                        $tool_content .= "</td><td width='10%' align='center'>";
-                        $grade = ' - ';
+                        $tool_content .= "</td><td width='15%' align='center'>";
+                        
                         if ($submission = find_submissions(is_group_assignment($row['id']), $uid, $row['id'], $gids)) {
-                                $tool_content .= "<img src='../../template/classic/img/checkbox_on.gif' alt='$m[yes]' />";
-                                $grade = submission_grade($submission);
-                                if (!$grade) {
-                                        $grade = ' - ';
+                            foreach ($submission as $sub) {
+                                if (isset($sub['group_id'])) { // if is a group assignment
+                                    $tool_content .= "<div style='padding-bottom: 5px;padding-top:5px;font-size:9px;'>($m[groupsubmit] ".
+                                        "<a href='../group/group_space.php?group_id=$sub[group_id]'>".
+                                        "$m[ofgroup] ".gid_to_name($sub['group_id'])."</a>)</div>";
                                 }
+                                $tool_content .= "<img src='../../template/classic/img/checkbox_on.gif' alt='$m[yes]' /><br />";
+                            }
                         } else {
                                 $tool_content .= "<img src='../../template/classic/img/checkbox_off.gif' alt='$m[no]' />";
                         }
-                        $tool_content .= "</td>
-                                <td width='10%' align='center'>$grade</td>
-                                </tr>";
+                        $tool_content .= "</td><td width='5%' align='center'>";
+                        foreach ($submission as $sub) {
+                            $grade = submission_grade($sub['id']);
+                                if (!$grade) {                
+                                    $grade = "<div style='padding-bottom: 5px;padding-top:5px;'> - </div>";
+                                }
+                            $tool_content .= "<div style='padding-bottom: 5px;padding-top:5px;'>$grade</div>";
+                        }
+                        $tool_content .= "</td></tr>";
                         $k++;
                 }
                 $tool_content .= '</tbody></table>';
@@ -1073,8 +1071,7 @@ cData;
 				$activate_temp = htmlspecialchars($m['activate']);
 				$tool_content .= "<a href='$_SERVER[PHP_SELF]?choice=enable&amp;id=$row[id]'><img src='../../template/classic/img/invisible.gif' title='$activate_temp' /></a>";
 			}
-			$tool_content .= "&nbsp;</td>
-    </tr>";
+			$tool_content .= "&nbsp;</td></tr>";
                         $index++;
                 }
                 $tool_content .= '

@@ -93,3 +93,15 @@ function user_group_info($uid, $cours_id)
 	}
 	return $gids;
 }
+
+// returns group name gives its group id
+function gid_to_name($gid)
+{
+	global $mysqlMainDb;
+	
+	if ($res = mysql_fetch_row(db_query("SELECT name FROM `group` WHERE id = $gid", $mysqlMainDb))) {
+		return $res[0];
+	} else {
+		return false;
+	}
+}

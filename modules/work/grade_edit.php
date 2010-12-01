@@ -36,8 +36,8 @@
 $require_current_course = TRUE;
 
 include '../../include/baseTheme.php';
-$tool_content = "";
-include('work_functions.php');
+include 'work_functions.php';
+include '../group/group_functions.php';
 
 $nameTools = $m['grades'];
 mysql_select_db($currentCourseID);
@@ -67,11 +67,11 @@ function show_edit_form($id, $sid, $assign)
 	global $m, $langGradeOk, $tool_content, $langGradeWork;
 
 	if ($sub = mysql_fetch_array(db_query("SELECT * FROM assignment_submit WHERE id = '$sid'"))) {		
-		$uid_2_name = uid_to_name($sub['uid']);
+		$uid_2_name = display_user($sub['uid']);
 		if (!empty($sub['group_id'])) {
 				$group_submission = "($m[groupsubmit] ".
 					"<a href='../group/group_space.php?group_id=$sub[group_id]'>".
-					"$m[ofgroup] $sub[group_id]</a>)";
+					"$m[ofgroup] ".gid_to_name($sub['group_id'])."</a>)";
 		} else $group_submission = "";
 			$tool_content .= "
 			<form method='post' action='work.php'>
@@ -93,7 +93,7 @@ function show_edit_form($id, $sid, $assign)
 			  <th class='left'>${m['filename']}:</th>
 			  <td><a href='work.php?get=${sub['id']}'>${sub['file_name']}</a></td>
 			</tr>";
-			$tool_content .= "<tr>
+		        $tool_content .= "<tr>
 			  <th class='left'>$m[grade]:</th>
 			  <td><input type='text' name='grade' maxlength='3' size='3' value='$sub[grade]' class='FormData_InputText'></td>
 			</tr>
