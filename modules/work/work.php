@@ -947,7 +947,7 @@ function show_student_assignments()
                                   <thead>
                                   <tr><th colspan='2'><div align='left'>&nbsp;&nbsp;$m[title]</div></th>
                                       <th><div align='left'>$m[deadline]</div></th>
-                                      <th>$m[submitted]</th>
+                                      <th><div align='center'>$m[submitted]</div></th>
                                       <th>$m[grade]</th>
                                   </tr>
                                   </thead>
@@ -972,7 +972,7 @@ function show_student_assignments()
                         } else {
                                 $tool_content .= " (<span class='expired_today'><b>$m[today]</b></span>)";
                         }
-                        $tool_content .= "</td><td width='15%' align='center'>";
+                        $tool_content .= "</td><td width='25%' align='center'>";
                         
                         if ($submission = find_submissions(is_group_assignment($row['id']), $uid, $row['id'], $gids)) {
                             foreach ($submission as $sub) {

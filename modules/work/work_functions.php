@@ -300,7 +300,7 @@ function was_submitted($uid, $gid, $id)
 {
 	global $tool_content, $currentCourseID;
 	
-	$q = db_query("SELECT uid, gid
+	$q = db_query("SELECT uid, group_id
 			      FROM `$currentCourseID`.assignment_submit
 			      WHERE assignment_id = $id AND
 				    (uid = $uid or group_id = $gid)");
