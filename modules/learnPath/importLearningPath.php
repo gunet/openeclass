@@ -1255,9 +1255,8 @@ else // if method == 'post'
      *  IMPORT SCORM DIRECTLY FROM DOCUMENTS
      *****************************************/
     $basedir = $webDir . 'courses/' . $currentCourseID . '/document';
-
     /*** Retrieve file info for current directory from database and disk ***/
-    $sql = db_query("SELECT * FROM document WHERE format='zip' ORDER BY filename");
+    $sql = db_query("SELECT * FROM document WHERE format='zip' AND course_id = $cours_id ORDER BY filename", $mysqlMainDb);
 
     $fileinfo = array();
     while($row = mysql_fetch_array($sql, MYSQL_ASSOC)) {
