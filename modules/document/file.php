@@ -86,6 +86,7 @@ $depth = 1;
 $path = '';
 foreach ($path_components as $component) {
         $component = urldecode(str_replace(chr(1), '/', $component));
+        echo $component;
         $q = db_query("SELECT path, visibility, format,
                                     (LENGTH(path) - LENGTH(REPLACE(path, '/', ''))) AS depth
                               FROM document WHERE course_id = $cours_id AND
@@ -99,6 +100,7 @@ foreach ($path_components as $component) {
         $path = $r['path'];
         $depth++;
 }
+
 if ($r['visibility'] != 'v' and !$is_adminOfCourse) {
         error($langNoRead);
 }
@@ -112,7 +114,7 @@ $action->record('MODULE_ID_DOCS');
 
 restore_saved_course();
 if (file_exists($basedir . $r['path'])) {
-        send_file_to_client($basedir . $r['path'], $component, true);
+//        send_file_to_client($basedir . $r['path'], $component, true);
 } else {
         header('Location: ', $urlServer);
 }

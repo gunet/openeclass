@@ -48,7 +48,7 @@
     
 ==============================================================================*/
 
-function send_file_to_client($real_filename, $filename, $send_inline = false, $send_name = false)
+function send_file_to_client($real_filename, $filename, $send_inline = false, $send_name = false, $delete = false)
 {
         if(!file_exists($real_filename))
         {
@@ -88,6 +88,11 @@ function send_file_to_client($real_filename, $filename, $send_inline = false, $s
         header('Content-length: ' . filesize($real_filename));
         $fp = fopen($real_filename, 'r');
         fpassthru($fp);
+	fclose($fp);
+	
+	if ($delete) { 
+		unlink($real_filename);
+	}
         return true;
 }
 

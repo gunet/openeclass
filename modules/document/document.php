@@ -45,6 +45,19 @@ if (!defined('GROUP_DOCUMENTS')) {
         define('GROUP_DOCUMENTS', false);
 }
 
+// file manager basic variables definition
+$local_head = '
+<script type="text/javascript">
+function confirmation (name)
+{
+    if (confirm("'.$langConfirmDelete.'" + name))
+        {return true;}
+    else
+        {return false;}
+}
+</script>
+';
+
 /**** The following is added for statistics purposes ***/
 include '../../include/action.php';
 $action = new action();
@@ -101,48 +114,86 @@ if (isset($_GET['showQuota'])) {
 	exit;
 }
 
-// -------------------------
-// download action2
-// --------------------------
-if (@$action2=="download")
-{
-	$real_file = $basedir . $id;
-	if (strpos($real_file, '/../') === FALSE) {
-		//fortwma tou pragmatikou onomatos tou arxeiou pou vrisketai apothikevmeno sth vash
-                $result = db_query ("FIXME SELECT filename FROM document
-                                                        WHERE course_id = $cours_id AND
-                                                              path = '$id'");
-		$row = mysql_fetch_array($result);
-		if (!empty($row['filename']))
-		{
-			$id = $row['filename'];
+// ---------------------------
+// download directory action
+// ---------------------------
+if (isset($_GET['downloadDir'])) {
+	include("../../include/pclzip/pclzip.lib.php");
+	$downloadDir = $_GET['downloadDir'];
+	list($real_filename) = mysql_fetch_array(db_query("SELECT filename FROM document
+					WHERE course_id = $cours_id AND path = '$downloadDir'"));
+	$real_filename = $real_filename.".zip";
+	$map_filenames = map_to_real_filename();
+	
+	chdir("../../courses/$currentCourseID/document/");
+	$zip_filename = '../temp'.safe_filename('zip');
+	$zipfile = new PclZip($zip_filename);
+	
+	$v = $zipfile->create(substr($downloadDir, 1), PCLZIP_CB_PRE_ADD, "convert_to_real_filename");
+		if ($v == 0) {
+			die("error: ".$zipfile->errorInfo(true));
 		}
-		send_file_to_client($real_file, my_basename($id));
-		exit;
-	} else {
-		header("Refresh: ${urlServer}modules/document/document.php");
+	// delete invisible files from zip file
+	$files_to_exclude = array();
+	$sql = db_query("SELECT filename FROM document WHERE course_id=$cours_id
+		 AND path LIKE '%$downloadDir%' AND visibility='i'");
+	while ($files = mysql_fetch_array($sql, MYSQL_ASSOC)) {
+		array_push($files_to_exclude, $files['filename']);		
 	}
+	foreach ($files_to_exclude as $files_to_delete) {
+		$zipfile->delete(PCLZIP_OPT_BY_NAME, greek_to_latin($files_to_delete));
+	}
+	// download file
+	send_file_to_client($zip_filename, $real_filename, false, true, true);
+	exit;
 }
-
 
 if($can_upload)  {
 	if (@$uncompress == 1)
 		include("../../include/pclzip/pclzip.lib.php");
 }
 
-// file manager basic variables definition
-$local_head = '
-<script type="text/javascript">
-function confirmation (name)
-{
-    if (confirm("'.$langConfirmDelete.'" + name))
-        {return true;}
-    else
-        {return false;}
+//----------------------------------------------------------------
+/// creates mapping between encoded filenames and real filenames
+//----------------------------------------------------------------
+function map_to_real_filename() {
+	
+	global $cours_id, $downloadDir;
+	
+	$encoded_filenames = $temp = $filename = array();
+	
+	$sql = db_query("SELECT path, filename FROM document WHERE course_id = $cours_id
+		 AND path LIKE '%$downloadDir%'");
+	while ($files = mysql_fetch_array($sql)) {
+		array_push($encoded_filenames, $files['path']);
+		array_push($filename, $files['filename']);
+	}
+	$temp = $encoded_filenames;	
+	foreach ($encoded_filenames as $position => $name) {	
+		$last_name_component = substr(strrchr($name, "/"), 1);
+		foreach ($encoded_filenames as &$newname) {
+			$newname = str_replace($last_name_component, $filename[$position], $newname);
+		}
+		unset($newname);
+	}
+	//creates array with mappings
+	$map_filenames = array_combine($temp, $encoded_filenames);
+	return($map_filenames);
 }
-</script>
-';
 
+//-------------------------------------------------------------------------
+// pclzip callback function to store filenames with real filenames
+//-------------------------------------------------------------------------
+function convert_to_real_filename($p_event, &$p_header) {
+	
+	global $cours_id, $map_filenames;
+	
+	$filename = "/".$p_header['filename'];
+	foreach ($p_header as $real_name) {
+		$p_header['stored_filename'] = substr(greek_to_latin($map_filenames[$filename]), 1);
+	}
+	return 1;
+}
 
 // Actions to do before extracting file from zip archive
 // Create database entries and set extracted file path to
@@ -922,12 +973,14 @@ if ($doc_count == 0) {
                                 $image = '../../template/classic/img/folder.gif';
                                 $file_url = $base_url . "openDir=$cmdDirName";
                                 $link_extra = '';
-
-                                $link_text = $entry['filename'];
+				$link_text = $entry['filename'];
+				$img_download = "<img src='../../template/classic/img/download.gif' width='15' height='15' align='middle' alt='$langDownloadDir' title='$langDownloadDir'>";
+				$download_url = $base_url . "downloadDir=$cmdDirName";
                         } else {
                                 $image = $urlAppend . '/modules/document/img/' . choose_image('.' . $entry['format']);
                                 $file_url = file_url($cmdDirName, $entry['filename']);
                                 $link_extra = " title='$langSave' target='_blank'";
+				$img_download = '';
                                 if (empty($entry['title'])) {
                                         $link_text = $entry['filename'];
                                 } else {
@@ -937,11 +990,13 @@ if ($doc_count == 0) {
                                         $link_text .= " <img src='$urlAppend/modules/document/img/copyrighted.jpg' />";
                                 }
                         }
-
-                        $tool_content .= "\n    <tr $style>";
-                        $tool_content .= "\n      <td class='center' valign='top'><a href='$file_url'$style$link_extra><img src='$image' /></a></td>";
-                        $tool_content .= "\n      <td><a href='$file_url'$link_extra>$link_text</a>";
-
+                        $tool_content .= "\n<tr $style>";
+                        $tool_content .= "\n<td class='center' valign='top'><a href='$file_url'$style$link_extra><img src='$image' /></a></td>";
+                        $tool_content .= "\n<td><a href='$file_url'$link_extra>$link_text</a>";
+			if ($is_dir) {
+				$tool_content .= "&nbsp;<a href='$download_url'>$img_download</a>";
+			}
+			
                         /*** comments ***/
                         if (!empty($entry['comment'])) {
                                 $tool_content .= "<br /><span class='comment'>" .
@@ -951,14 +1006,14 @@ if ($doc_count == 0) {
                         $tool_content .= "</td>";
                         if ($is_dir) {
                                 // skip display of date and time for directories
-                                $tool_content .= "\n      <td>&nbsp;</td>\n      <td>&nbsp;</td>";
+                                $tool_content .= "\n<td>&nbsp;</td>\n<td>&nbsp;</td>";
                         } else {
                                 $size = format_file_size($entry['size']);
                                 $date = format_date($entry['date']);
-                                $tool_content .= "\n      <td class='center'>$size</td>\n      <td class='center'>$date</td>";
+                                $tool_content .= "\n<td class='center'>$size</td>\n<td class='center'>$date</td>";
                         }
                         if ($can_upload) {
-                                $tool_content .= "\n      <td class='right' valign='top'><form action='document.php' method='post'>" . $group_hidden_input .
+                                $tool_content .= "\n<td class='right' valign='top'><form action='document.php' method='post'>" . $group_hidden_input .
                                                  "<input type='hidden' name='filePath' value='$cmdDirName' />";
                                 if (!$is_dir) {
                                         /*** replace/overwrite command, only applies to files ***/
@@ -992,7 +1047,7 @@ if ($doc_count == 0) {
 								 "title='$langVisible' alt='$langVisible' /></a>";
 	                                }
 				}
-				if ($is_member) {
+				if (isset($is_member) and ($is_member)) {
 	                                $tool_content .= "<a href='$urlAppend/modules/work/group_work.php?" .
 							 "gid=$group_id&amp;submit=$cmdDirName'>" .
 							 "<img src='../../template/classic/img/book.gif' " .
