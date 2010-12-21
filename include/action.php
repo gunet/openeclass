@@ -6,6 +6,10 @@ class action {
 
     function record($module_name, $action_name = "access") {
         global $uid, $currentCourseID;
+
+        if (!isset($currentCourseID)) {
+                return;
+        }
         $action_type = new action_type();
         $action_type_id = $action_type->get_action_type_id($action_name);
         $exit = $action_type->get_action_type_id('exit');
