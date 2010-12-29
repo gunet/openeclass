@@ -75,10 +75,11 @@ if (isset($_GET['a'])) {
 	}
 }
 // Give administrator a link to add a new faculty
-$tool_content .= "<div id='operations_container'>
-    <ul id='opslist'>
-    <li><a href='$_SERVER[PHP_SELF]?a=1'>".$langAdd."</a></li>
-    </ul>
+$tool_content .= "
+    <div id='operations_container'>
+     <ul id='opslist'>
+      <li><a href='$_SERVER[PHP_SELF]?a=1'>".$langAdd."</a></li>
+     </ul>
     </div>";
 
 // Display all available faculties
@@ -86,17 +87,20 @@ if (!isset($_GET['a'])) {
 	// Count available faculties
 	$a = mysql_fetch_array(db_query("SELECT COUNT(*) FROM faculte"));
 	// Construct a table
-	$tool_content .= "<table width='99%' class='FormData' align='left'>
-	<tbody>
+	$tool_content .= "
+        <table width='99%' class='tbl'>
 	<tr>
-	<td class='odd'><b>".$langFaculteCatalog."</b>:
-	<div align='right'><i>".$langManyExist.": <b>$a[0]</b> ".$langFaculties."</i></div></td>
+	  <td class='odd'>
+            <div align='left'><b>".$langFaculteCatalog."</b>:</div>
+	    <div align='right'>".$langManyExist.": <b>$a[0]</b> ".$langFaculties."</div>
+          </td>
 	</tr>
-	</tbody>
 	</table>
-	<br />";
-	$tool_content .= "<table width='99%' class='FormData' align='left'>
-	<tbody><tr>
+        <br />
+	";
+	$tool_content .= "
+        <table width='99%' class='tbl_alt'>
+	<tr>
 	<th scope='col' colspan='2'><div align='left'>&nbsp;&nbsp;".$langFaculty."</div></th scope='col'>
 	<th scope='col'>$langCode</th>
 	<th>".$langActions."</th>
@@ -112,21 +116,21 @@ if (!isset($_GET['a'])) {
 			$tool_content .= "\n<tr class='odd'>";
 		}
 		$tool_content .= "\n<td width='1'>
-		<img style='border:0px; padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'></td>";
+		<img style='border:0px; padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet' /></td>";
 		$tool_content .= "\n<td>".htmlspecialchars($logs[1])."</td>";
 		$tool_content .= "\n<td align='center'>".htmlspecialchars($logs[0])."</td>";
 		// Give administrator a link to delete or edit a faculty
 		$tool_content .= "\n<td width='15%' align='center' nowrap>
 		<a href='$_SERVER[PHP_SELF]?a=2&c=".$logs['id']."'>
-		<img src='../../template/classic/img/delete.gif' title='$langDelete'></img></a>&nbsp;&nbsp;
+		<img src='../../template/classic/img/delete.gif' title='$langDelete' /></a>&nbsp;&nbsp;
 		<a href='$_SERVER[PHP_SELF]?a=3&c=".$logs['id']."'>
-		<img src='../../template/classic/img/edit.gif' title='$langEdit'></img></a></td>
+		<img src='../../template/classic/img/edit.gif' title='$langEdit' /></a></td>
 		</tr>\n";
 		$k++;
 	}
 	// Close table correctly
-	$tool_content .= "</tbody></table><br />";
-	$tool_content .= "<br /><p align=\"right\"><a href=\"index.php\">".$langBack."</a></p>";
+	$tool_content .= "</table>\n";
+	$tool_content .= "<p align=\"right\"><a href=\"index.php\">".$langBack."</a></p>";
 }
 // Add a new faculty
 elseif (isset($_GET['a']) and $_GET['a'] == 1)  {
@@ -135,54 +139,54 @@ elseif (isset($_GET['a']) and $_GET['a'] == 1)  {
 		$faculte = $_POST['faculte'];
 		// Check for empty fields
 		if (empty($codefaculte) or empty($faculte)) {
-			$tool_content .= "<p>".$langEmptyFaculte."</p><br />";
-			$tool_content .= "<center><p>
-			<a href=\"$_SERVER[PHP_SELF]?a=1\">".$langReturnToAddFaculte."</a></p></center>";
+			$tool_content .= "<p class='caution'>".$langEmptyFaculte."<br />";
+			$tool_content .= "
+			<a href=\"$_SERVER[PHP_SELF]?a=1\">".$langReturnToAddFaculte."</a></p>";
 			}
 		// Check for greek letters
 		elseif (!preg_match("/^[A-Z0-9a-z_-]+$/", $codefaculte)) {
-			$tool_content .= "<p>".$langGreekCode."</p><br />";
-			$tool_content .= "<center><p><a href=\"$_SERVER[PHP_SELF]?a=1\">".$langReturnToAddFaculte."</a></p></center>";
+			$tool_content .= "<p class='caution'>".$langGreekCode."<br />";
+			$tool_content .= "<a href=\"$_SERVER[PHP_SELF]?a=1\">".$langReturnToAddFaculte."</a></p>";
 			}
 		// Check if faculty code already exists
 		elseif (mysql_num_rows(db_query("SELECT * from faculte WHERE code=" . autoquote($codefaculte))) > 0) {
-			$tool_content .= "<p>".$langFCodeExists."</p><br />";
-			$tool_content .= "<center><p><a href=\"$_SERVER[PHP_SELF]?a=1\">".$langReturnToAddFaculte."</a></p></center>";
+			$tool_content .= "<p class='caution'>".$langFCodeExists."<br />";
+			$tool_content .= "<a href=\"$_SERVER[PHP_SELF]?a=1\">".$langReturnToAddFaculte."</a></p>";
 			}
 		// Check if faculty name already exists
 		elseif (mysql_num_rows(db_query("SELECT * from faculte WHERE name=" . autoquote($faculte))) > 0) {
-			$tool_content .= "<p>".$langFaculteExists."</p><br />";
-			$tool_content .= "<center><p><a href=\"$_SERVER[PHP_SELF]?a=1\">".$langReturnToAddFaculte."</a></p></center>";
+			$tool_content .= "<p class='caution'>".$langFaculteExists."<br />";
+			$tool_content .= "<a href=\"$_SERVER[PHP_SELF]?a=1\">".$langReturnToAddFaculte."</a></p>";
 		} else {
 		// OK Create the new faculty
 			db_query("INSERT into faculte(code,name,generator,number) VALUES(" . autoquote($codefaculte) . ',' . autoquote($faculte) . ",'100','1000')")
 				or die ($langNoSuccess);
-			$tool_content .= "<p>".$langAddSuccess."</p><br />";
+			$tool_content .= "<p class='success'>".$langAddSuccess."</p>";
 			}
 	} else {
 		// Display form for new faculty information
-		$tool_content .= "<form method=\"post\" action=\"".$_SERVER['PHP_SELF']."?a=1\">";
-		$tool_content .= "<table width='99%' class='FormData'>
-		<tbody><tr>
-		<th width=\"220\">&nbsp;</th>
-		<td colspan=\"2\"><b>$langFaculteIns</b></td>
-		<tr>
-		<th class='left'>".$langCodeFaculte1.":</th>
-		<td><input class='FormData_InputText' type='text' name='codefaculte' value='".@$codefaculte."' /></td><td><i>".$langCodeFaculte2."</i></td>
-		</tr>
-		<tr>
-		<th class='left'>".$langFaculty.":</th>
-		<td><input class='FormData_InputText' type='text' name='faculte' value='".@$faculte."' /></td><td><i>".$langFaculte2."</i></td>
-		</tr>
-		<tr>
-		<th>&nbsp;</th>
-		<td><input type='submit' name='add' value='".$langAdd."' /></td>
-		</tr>
-		</tbody>
-		</table>
-		</form>";
+		$tool_content .= "
+        <form method=\"post\" action=\"".$_SERVER['PHP_SELF']."?a=1\">
+        <fieldset>
+          <legend>$langFaculteIns</legend>
+          <table width='99%' class='tbl'>
+	  <tr>
+            <th width=\"180\" class='left'>".$langCodeFaculte1.":</th>
+	    <td><input type='text' name='codefaculte' value='".@$codefaculte."' /> <i>".$langCodeFaculte2."</i></td>
+	  </tr>
+	  <tr>
+	    <th class='left'>".$langFaculty.":</th>
+	    <td><input type='text' name='faculte' value='".@$faculte."' /> <i>".$langFaculte2."</i></td>
+          </tr>
+	  <tr>
+	    <th>&nbsp;</th>
+	    <td><input type='submit' name='add' value='".$langAdd."' /></td>
+	  </tr>
+	</table>
+        </fieldset>
+	</form>";
 	}
-	$tool_content .= "<br /><p align='right'><a href='$_SERVER[PHP_SELF]'>".$langBack."</a></p>";
+	$tool_content .= "<p align='right'><a href='$_SERVER[PHP_SELF]'>".$langBack."</a></p>";
 }
 // Delete faculty
 elseif (isset($_GET['a']) and $_GET['a'] == 2)  {
@@ -196,9 +200,9 @@ elseif (isset($_GET['a']) and $_GET['a'] == 2)  {
 	} else {
 		// The faculty can be deleted
 		db_query("DELETE from faculte WHERE id=$c");
-		$tool_content .= "<p>$langErase</p><br />";
+		$tool_content .= "<p class='success'>$langErase</p>";
 	}
-	$tool_content .= "<br><p align='right'><a href='$_SERVER[PHP_SELF]'>".$langBack."</a></p>";
+	$tool_content .= "<p align='right'><a href='$_SERVER[PHP_SELF]'>".$langBack."</a></p>";
 }
 // Edit a faculty
 elseif (isset($_GET['a']) and $_GET['a'] == 3)  {
@@ -207,14 +211,14 @@ elseif (isset($_GET['a']) and $_GET['a'] == 3)  {
 		// Check for empty fields
                 $faculte = $_POST['faculte'];
 		if (empty($faculte)) {
-			$tool_content .= "<p>".$langEmptyFaculte."</p><br>";
-			$tool_content .= "<p align='right'><a href='$_SERVER[PHP_SELF]?a=3&c=$c'>$langReturnToEditFaculte</a></p>";
+			$tool_content .= "<p class='caution'>".$langEmptyFaculte."<br />";
+			$tool_content .= "<a href='$_SERVER[PHP_SELF]?a=3&c=$c'>$langReturnToEditFaculte</a></p>";
 			}
 		// Check if faculty name already exists
 		elseif (mysql_num_rows(db_query("SELECT * from faculte WHERE id <> $c
 					AND name=" . autoquote($faculte))) > 0) {
-			$tool_content .= "<p>".$langFaculteExists."</p><br>";
-			$tool_content .= "<p align='right'><a href='$_SERVER[PHP_SELF]?a=3&amp;c=$c'>$langReturnToEditFaculte</a></p>";
+			$tool_content .= "<p class='caution'>".$langFaculteExists."<br />";
+			$tool_content .= "<a href='$_SERVER[PHP_SELF]?a=3&amp;c=$c'>$langReturnToEditFaculte</a></p>";
 		} else {
 		// OK Update the faculty
 			db_query("UPDATE faculte SET name = " .
@@ -223,7 +227,7 @@ elseif (isset($_GET['a']) and $_GET['a'] == 3)  {
 			db_query("UPDATE cours SET faculte = " .
                                     autoquote($faculte) . " WHERE faculteid=$c")
 				or die ($langNoSuccess);
-			$tool_content .= "<p>$langEditFacSucces</p><br>";
+			$tool_content .= "<p class='success'>$langEditFacSucces</p><br />";
 			}
 	} else {
 		// Get faculty information
@@ -232,32 +236,30 @@ elseif (isset($_GET['a']) and $_GET['a'] == 3)  {
 		$result = db_query($sql);
 		$myrow = mysql_fetch_array($result);
 		// Display form for edit faculty information
-		$tool_content .= "<form method='post' action='$_SERVER[PHP_SELF]?a=3'>";
-		$tool_content .= "<table width='99%' class='FormData'>
-		<tbody>
-		<tr>
-		<th width='220'>&nbsp;</th>
-		<td colspan='2'><b>$langFaculteEdit</b></td>
-		</tr>
-		<tr>
-		<th class='left'>".$langCodeFaculte1.":</th>
+		$tool_content .= "
+           <form method='post' action='$_SERVER[PHP_SELF]?a=3'>
+           <fieldset>
+           <legend>$langFaculteEdit</legend>
+           <table width='99%' class='tbl'>
+	   <tr>
+		<th class='left' width='180'>".$langCodeFaculte1.":</th>
 		<td><input type='text' name='codefaculte' value='".$myrow['code']."' readonly='1' />&nbsp;<i>".$langCodeFaculte2."</i></td>
-		</tr>
-		<tr>
+	   </tr>
+	   <tr>
 		<th class='left'>".$langFaculty.":</th>
 		<td><input type='text' name='faculte' value='".htmlspecialchars($myrow['name'], ENT_QUOTES)."' />&nbsp;<i>".$langFaculte2."</i></td>
-		</tr>
-		<tr>
+	   </tr>
+	   <tr>
 		<th>&nbsp;</th>
 		<td><input type='hidden' name='c' value='$c' />
 		<input type='submit' name='edit' value='$langAcceptChanges' />
 		</td>
-		</tr>
-		</tbody>
-		</table>
-		</form>";
+	   </tr>
+	   </table>
+           </fieldset>
+	   </form>";
 	}
-$tool_content .= "<br /><p align='right'><a href='$_SERVER[PHP_SELF]'>".$langBack."</a></p>";
+$tool_content .= "<p align='right'><a href='$_SERVER[PHP_SELF]'>".$langBack."</a></p>";
 }
 
 draw($tool_content,3);

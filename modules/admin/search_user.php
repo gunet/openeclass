@@ -71,15 +71,15 @@ $tool_content .= "
   <table class='tbl' width=\"99%\">
   <tr>
     <th class='left' width=\"180\">$langSurname:</th>
-    <td><input type=\"text\" class='FormData_InputText' name=\"user_surname\" size=\"40\" value=\"".$user_surname."\"></td>
+    <td><input type=\"text\" name=\"user_surname\" size=\"40\" value=\"".$user_surname."\"></td>
   </tr>
   <tr>
     <th class='left'>$langName:</th>
-    <td><input type=\"text\" class='FormData_InputText' name=\"user_firstname\" size=\"40\" value=\"".$user_firstname."\"></td>
+    <td><input type=\"text\" name=\"user_firstname\" size=\"40\" value=\"".$user_firstname."\"></td>
   </tr>
   <tr>
     <th class='left'>$langAm:</th>
-    <td><input type=\"text\" class='FormData_InputText' name=\"user_am\" size=\"30\" value=\"".$user_am."\"></td>
+    <td><input type=\"text\" name=\"user_am\" size=\"30\" value=\"".$user_am."\"></td>
   </tr>
   <tr>
     <th class='left'>$langUserType:</th>
@@ -123,11 +123,11 @@ $tool_content .= "\n  </tr>";
 $tool_content .= "
   <tr>
     <th class='left'>$langEmail:</th>
-    <td><input type=\"text\" class='FormData_InputText' name=\"user_email\" size=\"40\" value=\"".$user_email."\"></td>
+    <td><input type=\"text\" name=\"user_email\" size=\"40\" value=\"".$user_email."\"></td>
   </tr>
   <tr>
     <th class='left'><b>$langUsername:</b></th>
-    <td><input type=\"text\" name=\"user_username\" class='FormData_InputText' size=\"40\" value=\"".$user_username."\"></td>
+    <td><input type=\"text\" name=\"user_username\" size=\"40\" value=\"".$user_username."\"></td>
   </tr>
   <tr>
     <th>&nbsp;</th>

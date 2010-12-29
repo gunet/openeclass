@@ -61,7 +61,7 @@ if (isset($send_archive) and $_FILES['archiveZipped']['size'] > 0) {
 		$tool_content .= "<tr><td>".unpack_zip_show_files($pathToArchive)."</td></tr>";
 		$tool_content .= "<tbody></table><br />";
 	} else {
-		$tool_content .= $langFileNotFound;
+		$tool_content .= "<p class='caution'>$langFileNotFound</p>";
 	}
 } elseif (isset($create_dir_for_course)) {
 	$r = $restoreThis."/html";
@@ -114,30 +114,43 @@ elseif (isset($_POST['pathOf4path'])) {
 // -------------------------------------
 // Displaying Form
 // -------------------------------------
-	$tool_content .= "<table width='99%' class='FormData'>
-	<tbody><tr><th>&nbsp;</th><td><b>$langFirstMethod</b></td></tr>
-	<tr><th>&nbsp;</th><td>$langRequest1
-	<br /><br />
-	<form action='".$_SERVER['PHP_SELF']."' method='post' name='sendZip' enctype='multipart/form-data'>
-	<input type='file' name='archiveZipped' />
-	<input type='submit' name='send_archive' value='".$langSend."' />
-	</form>
-	</td>
-	</tr>
-	</tbody></table>
-	<br />
-	<table width='99%' class='FormData'><tbody>
-	<tr><th>&nbsp;</th><td><b>$langSecondMethod</b></td></tr>
+	$tool_content .= "
+        <br />        
+        <table width='99%' class='tbl'>
 	<tr>
-	<th>&nbsp;</th>
-	<td>$langRequest2
-	<br /><br />
-	<form action='".$_SERVER['PHP_SELF']."' method='post'>
-	<input type='text' name='pathToArchive' />
-	<input type='submit' name='send_path' value='".$langSend."' />
-	</form>
-	</td></tr>
-	</tbody></table><br />";
+          <th>&nbsp;</th>
+          <td><b>$langFirstMethod</b></td>
+        </tr>
+	<tr>
+          <th>&nbsp;</th>
+          <td>$langRequest1
+	  <br /><br />
+	  <form action='".$_SERVER['PHP_SELF']."' method='post' name='sendZip' enctype='multipart/form-data'>
+	    <input type='file' name='archiveZipped' />
+	    <input type='submit' name='send_archive' value='".$langSend."' />
+	  </form>
+	  </td>
+	</tr>
+	</table>
+	<br />
+	
+        <table width='99%' class='tbl'>
+	<tr>
+          <th>&nbsp;</th>
+          <td><b>$langSecondMethod</b></td>
+        </tr>
+	<tr>
+	  <th>&nbsp;</th>
+	  <td>$langRequest2
+	  <br /><br />
+	  <form action='".$_SERVER['PHP_SELF']."' method='post'>
+	    <input type='text' name='pathToArchive' />
+	    <input type='submit' name='send_path' value='".$langSend."' />
+	  </form>
+	  </td>
+        </tr>
+	</table>
+        <br />";
 }
 mysql_select_db($mysqlMainDb);
 draw($tool_content,3, 'admin');
@@ -182,7 +195,7 @@ function course_details($code, $lang, $title, $desc, $fac, $vis, $prof, $type) {
         // display the restoring form
 	if (!$action) {
 		echo "<form action='$_SERVER[PHP_SELF]' method='post'>";
-  		echo "<table width='99%' class='FormData'><tbody>";
+  		echo "<table width='99%' class='tbl'><tbody>";
 		echo "<tr><td align='justify' colspan='2'>$langInfo1</td></tr>";
 		echo "<tr><td align='justify' colspan='2'>$langInfo2</td></tr>";
 		echo "<tr><td>&nbsp;</td></tr>";

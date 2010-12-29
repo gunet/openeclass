@@ -96,9 +96,8 @@ if (!empty($show) && ($show=="closed")) {
 		$sql = db_query("UPDATE prof_request set status='1', date_closed=NULL WHERE rid='$id'");
 		$tool_content = "<p class=\"success_small\">$langReintroductionApplication</p>";
 	} else {
-		$tool_content .= "<table class=\"FormData\" width=\"99%\" align=\"left\">";
+		$tool_content .= "<table class=\"tbl_alt\" width=\"99%\">";
 		$tool_content .= table_header(1, $langDateClosed_small);
-		$tool_content .= "<tbody>";
  		$sql = db_query("SELECT rid,profname,profsurname,profuname,profemail,proftmima,
 				profcomm, am, date_open, date_closed, comment
 				FROM prof_request
@@ -106,7 +105,7 @@ if (!empty($show) && ($show=="closed")) {
         	$k = 0;
 		while ($req = mysql_fetch_array($sql)) {
 			if ($k%2 == 0) {
-	              		$tool_content .= "\n  <tr>";
+	              		$tool_content .= "\n  <tr class='even'>";
 	            	} else {
 	              		$tool_content .= "\n  <tr class=\"odd\">";
 	            	}
@@ -123,7 +122,7 @@ if (!empty($show) && ($show=="closed")) {
 		$k++;
 		}
 	}
-	$tool_content .= "\n  </tbody>\n  </table>\n";
+	$tool_content .= "\n  </table>\n";
 
 // -----------------------------------
 // display rejected requests 
@@ -135,9 +134,8 @@ if (!empty($show) && ($show=="closed")) {
 		$tool_content = "<table><tbody><tr>
 		<td class=\"success\">$langReintroductionApplication</td></tr></tbody></table>";
 	} else {
-		$tool_content .= "<table class=\"FormData\" width=\"99%\" align=\"left\">";
+		$tool_content .= "<table class=\"tbl_alt\" width=\"99%\" align=\"left\">";
 		$tool_content .= table_header(1, $langDateReject_small);
-		$tool_content .= "<tbody>";
 
  		$sql = db_query("SELECT rid,profname, profsurname, profuname, profemail,
 				proftmima, profcomm, am, date_open, date_closed, comment
@@ -147,7 +145,7 @@ if (!empty($show) && ($show=="closed")) {
         	$k = 0;
 		while ($req = mysql_fetch_array($sql)) {
 			if ($k%2==0) {
-	              		$tool_content .= "\n  <tr>";
+	              		$tool_content .= "\n  <tr class='even'>";
 	            	} else {
 	              		$tool_content .= "\n  <tr class=\"odd\">";
 	            	}
@@ -165,7 +163,7 @@ if (!empty($show) && ($show=="closed")) {
 			$k++;
 		}
 	}
-	$tool_content .= "</tbody></table>";
+	$tool_content .= "</table>";
 
 // ------------------------------
 // close request
@@ -212,8 +210,8 @@ $langEmail: $emailhelpdesk";
 			$d = mysql_fetch_assoc($r);
                         $warning = ($d['statut'] == 5)? $langWarnReject: $langGoingRejectRequest;
 			$tool_content .= "<form action='$_SERVER[PHP_SELF]' method='post'>
-			<table width='99%' class='FormData'>
-			<tbody><tr>
+			<table width='99%' class='tbl_alt'>
+			<tr>
 			<th width='220'>&nbsp;</th>
 			<td><b>$warning</b></td></tr>
 			<tr><th class='left'>$langName</th>
@@ -236,7 +234,7 @@ $langEmail: $emailhelpdesk";
 			</td></tr>
 			<tr><th class='left'>&nbsp;</th>
 			<td><input type='submit' name='submit' value='$langRejectRequest'>&nbsp;&nbsp;<small>($langRequestDisplayMessage)</small></td>
-			</tr></tbody></table>
+			</tr></table>
 			</form>";
 			}
 		break;
@@ -251,15 +249,14 @@ $langEmail: $emailhelpdesk";
 
 else
 {
-	$tool_content .= "<table class='FormData' width='99%' align='left'>";
+	$tool_content .= "<table class='tbl_alt' width='99%'>";
 	$tool_content .= table_header();
-	$tool_content .= "<tbody>";
  	$sql = db_query("SELECT rid, profname, profsurname, proftmima, date_open, comment, profpassword FROM prof_request
                         WHERE (status = 1 AND statut = $list_statut)");
     	$k = 0;
 	while ($req = mysql_fetch_array($sql)) {
 		if ($k%2 == 0) {
-	              $tool_content .= "\n<tr>";
+	              $tool_content .= "\n<tr class='even'>";
 	        } else {
 	              $tool_content .= "\n<tr class='odd'>";
 	        }
@@ -287,7 +284,7 @@ else
 		}
 		$k++;
 	}
-	$tool_content .= "\n  </tbody>\n  </table>\n";
+	$tool_content .= "\n  </table>\n";
 
 }
 
@@ -311,7 +308,7 @@ function table_header($addon = FALSE, $message = FALSE) {
 	$string = "";
 	if ($addon) { 
 		$rowspan=2;
-		$datestring = "<th align='center' colspan='2'>$langDate</th>
+		$datestring = "<th colspan='2'>$langDate</th>
 		<th scope='col' rowspan='$rowspan' align='center'>$langActions</th>
 		</tr><tr>
 		<th>$langDateRequest_small</th>
@@ -322,11 +319,11 @@ function table_header($addon = FALSE, $message = FALSE) {
 		<th scope='col' align='center'>$langActions</th>";
 	}
 
-	$string .= "<thead><tr>
-	<th scope='col' colspan='2' rowspan='$rowspan' class='left'>&nbsp;&nbsp;$langName $langSurname</th>
-	<th scope='col' rowspan='$rowspan' class='left'>$langFaculty</th>";
+	$string .= "<tr>
+	<th scope='col' colspan='2' rowspan='$rowspan'><div align='left'>&nbsp;&nbsp;$langName $langSurname</div></th>
+	<th scope='col' rowspan='$rowspan'><div align='left'>$langFaculty</div></th>";
 	$string .= $datestring; 
-	$string .= "</tr></thead>";
+	$string .= "</tr>";
 
 return $string;
 }
