@@ -58,8 +58,6 @@ $tool_content .= <<<lCont
 <p align='justify'>$langInfoAbout</p>
 lCont;
 
-$tool_content .='<br />';
-
 $qlang = ($language == "greek")? 'el': 'en';
 $sql = "SELECT `id`, `date`, `title` , `body` FROM `admin_announcements`
         WHERE `visible` = 'V' AND lang='$qlang' ORDER BY `date` DESC";

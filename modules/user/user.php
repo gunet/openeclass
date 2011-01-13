@@ -183,7 +183,8 @@ if ($is_adminOfCourse) {
 		default: $order = 'ORDER  BY nom, prenom';
 			break;
 	}
-	$result = db_query("SELECT user.user_id, user.nom, user.prenom, user.email, user.am, cours_user.statut,
+	$result = db_query("SELECT user.user_id, user.nom, user.prenom, user.email,
+				   user.am, user.has_icon, cours_user.statut,
 				   cours_user.tutor, cours_user.reg_date
 			    FROM cours_user, user
 			    WHERE `user`.`user_id` = `cours_user`.`user_id` AND `cours_user`.`cours_id` = $cours_id"

@@ -1039,6 +1039,7 @@ $langReplacePicture="Αντικατάσταση της εικόνας";
 $langDeletePicture="Διαγραφή της εικόνας";
 $langQuestionDescription="Προαιρετικό σχόλιο";
 $langGiveQuestion="Δώστε την ερώτηση";
+$langInvalidPicture = "Μη υποστηριζόμενος τύπος εικόνας";
 
 // answer_admin.inc.php
 $langWeightingForEachBlank="Δώστε ένα βάρος σε κάθε κενό";
@@ -2154,7 +2155,7 @@ $langProfileReg="Οι αλλαγές στο προφίλ σας αποθηκεύ
 $langOldPass="Παρόν συνθηματικό";
 $langChangePass="Αλλαγή συνθηματικού πρόσβασης";
 $langUserProfile = 'Στοιχεία χρήστη';
-
+$langDisplayProfile = "Δημόσια Εμφάνιση Προφίλ";
 // user.php
 $langNewUser = "Εγγραφή Χρήστη";
 $langModRight="Αλλαγή των δικαιωμάτων διαχειριστή του";

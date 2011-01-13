@@ -662,8 +662,9 @@ elseif (isset($_REQUEST['install1']) || isset($_REQUEST['back1']))
         mkdir_or_error('../config', $langWarningInstall3);
 	mkdir_or_error('../courses', $langWarningInstall4);
 	mkdir_or_error('../courses/temp', $langWarningInstall4);
+	mkdir_or_error('../courses/userimg', $langWarningInstall4);
         mkdir_or_error('../video', $langWarningInstall5);
-
+	
 	if($configErrorExists) {
 		$tool_content .= implode("<br/>", $errorContent);
 		$tool_content .= "</form>";

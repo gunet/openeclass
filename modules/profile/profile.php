@@ -52,6 +52,7 @@ function redirect_to_message($id) {
 
 if (isset($_POST['submit'])) {
         // First do personalization and language changes
+	$image_path = $webDir."courses/userimg/".$_SESSION['uid'];
         $perso_status = ($_POST['persoStatus'] == 'yes')? 'yes': 'no';
         $old_language = $language;
         $language = $_SESSION['langswitch'] = langcode_to_name($_POST['userLanguage']);
@@ -68,7 +69,27 @@ if (isset($_POST['submit'])) {
                 'prenom_form' => true,
                 'username_form' => true,
 		'department' => true), 'all');
+	
+	// upload user picture
+	if (isset($_FILES['userimage']) && is_uploaded_file($_FILES['userimage']['tmp_name'])) {
+		$type = $_FILES['userimage']['type'];
+		$image_file = $_FILES['userimage']['tmp_name'];
 
+		if (!copy_resized_image($image_file, $type, IMAGESIZE_LARGE, IMAGESIZE_LARGE,
+					$image_path . '_' . IMAGESIZE_LARGE . '.jpg')) {
+			redirect_to_message(7);
+		}
+		if (!copy_resized_image($image_file, $type, IMAGESIZE_SMALL, IMAGESIZE_SMALL,
+					$image_path . '_' . IMAGESIZE_SMALL . '.jpg')) {
+			redirect_to_message(7);
+		}
+		db_query("UPDATE user SET has_icon = 1 WHERE user_id = $_SESSION[uid]");
+	}
+	if (isset($_POST['delimage'])) {
+		@unlink($image_path . '_' . IMAGESIZE_LARGE . '.jpg');
+		@unlink($image_path . '_' . IMAGESIZE_SMALL . '.jpg');
+		db_query("UPDATE user SET has_icon = 0 WHERE user_id = $uid");
+	}
 	// check if there are empty fields
 	if (!$all_ok) {
                 redirect_to_message(4);
@@ -125,12 +146,12 @@ if (isset($_POST['submit'])) {
 //Show message if exists
 if (isset($_GET['msg'])) {
         $urlText = '';
-        $type = 'caution_small';
+        $type = 'caution';
         switch ($_GET['msg']) {
             case 1: //profile information changed successfully
                 $message = $langProfileReg;
                 $urlText = "<br /><a href='$urlServer'>$langHome</a>";
-                $type = "success_small";
+                $type = "success";
                 break;
             case 3: //pass too easy
                 $message = $langPassTooEasy.": <strong>" . create_pass() . "</strong>";
@@ -144,6 +165,9 @@ if (isset($_GET['msg'])) {
             case 6: //email not valid
                 $message = $langEmailWrong;
                 break;
+            case 7: //invalid image
+                $message = $langInvalidPicture;
+                break;
             case 10: // invalid characters
                 $message = $langInvalidCharsUsername;
                 break;
@@ -154,7 +178,7 @@ if (isset($_GET['msg'])) {
 	$tool_content .=  "<p class='$type'>$message$urlText</p><br/>";
 }
 
-$result = db_query("SELECT nom, prenom, username, email, am, perso, lang, department, statut
+$result = db_query("SELECT nom, prenom, username, email, am, perso, lang, department, statut, has_icon
                     FROM user WHERE user_id = $uid");
 $myrow = mysql_fetch_array($result);
 
@@ -164,6 +188,7 @@ $username_form = q($myrow['username']);
 $email_form = q($myrow['email']);
 $am_form = q($myrow['am']);
 $userLang = $myrow['lang'];
+$icon = $myrow['has_icon'];
 
 if ($myrow['perso'] == 'yes')  {
 	$checkedClassic = " checked='yes'";
@@ -176,9 +201,8 @@ if ($myrow['perso'] == 'yes')  {
 $sec = $urlSecure . 'modules/profile/profile.php';
 $passurl = $urlSecure . 'modules/profile/password.php';
 
-$tool_content .= "
-    <div id='operations_container'>
-     <ul id='opslist'>";
+$tool_content .= "<div id='operations_container'><ul id='opslist'>";
+$tool_content .= "<li><a href='display_profile.php'>$langDisplayProfile</a></li>";
 if ($allow_password_change) {
         $tool_content .= "
         <li><a href='$passurl'>$langChangePass</a></li>";
@@ -186,7 +210,7 @@ if ($allow_password_change) {
 $tool_content .= "<li><a href='../unreguser/unreguser.php'>$langUnregUser</a></li>";
 $tool_content .= "</ul></div>";
 $tool_content .= "
-   <form method='post' action='$sec'>
+   <form method='post' enctype='multipart/form-data' action='$sec'>
    <fieldset>
      <legend>$langUserData</legend>
         <table class='tbl'>
@@ -271,21 +295,26 @@ if (isset($_SESSION['perso_is_active'])) {
         </tr>";
 }
 
-if ($myrow['statut'] == 5) { // students can change their faculties
-	$tool_content .= "<tr><td>$langFaculty</td><td>";
-	$tool_content .= list_departments($myrow['department']);
-	$tool_content .= "</td></tr>";
-}
+
+$tool_content .= "<tr><td>$langFaculty</td><td>";
+$tool_content .= list_departments($myrow['department']);
+$tool_content .= "</td></tr>";
+
 
 ##[END personalisation modification]############
-$tool_content .= "
-        <tr>
-          <td>$langLanguage</td>
-          <td>" . lang_select_options('userLanguage') . "          </td>
-        </tr>
-	<tr>
-          <td>&nbsp;</td>
-          <td><input type='submit' name='submit' value='$langModify' /></td>
+$tool_content .= "<tr><td>$langLanguage</td><td>" . lang_select_options('userLanguage') . "</td></tr>";
+if ($icon) {
+	$message_pic = $langReplacePicture;
+	$picture = profile_image($uid, IMAGESIZE_SMALL) . "&nbsp;&nbsp;";
+	$delete = "<tr><td>$langDeletePicture</td><td><input type=checkbox name='delimage'></td></tr>";
+} else {
+	$picture = $delete = '';
+	$message_pic = $langAddPicture;
+}
+$tool_content .= "<tr><td>$message_pic</td><td>$picture<input type='file' name='userimage' size='30'></td></tr>";
+$tool_content .= $delete;
+$tool_content .= "<tr><td>&nbsp;</td>
+        <td><input type='submit' name='submit' value='$langModify' /></td>
         </tr>
         </table>
         </fieldset>

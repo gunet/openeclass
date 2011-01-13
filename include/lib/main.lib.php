@@ -37,6 +37,9 @@ define('ECLASS_VERSION', '2.3.2');
 // MySQL debug level
 define('FULL', 1);
 
+define('IMAGESIZE_LARGE', 256);
+define('IMAGESIZE_SMALL', 32);
+
 // Show query string and then do MySQL query
 function db_query2($sql, $db = FALSE)
 {
@@ -255,7 +258,7 @@ function uid_to_username($uid)
 // email, or an array of user ids or user info arrays
 function display_user($user, $print_email = false)
 {
-        global $mysqlMainDb, $langAnonymous, $urlAppend;
+        global $mysqlMainDb, $langAnonymous, $langAm, $urlAppend;
 
         if (count($user) == 0) {
                 return '-';
@@ -272,7 +275,7 @@ function display_user($user, $print_email = false)
                 }
                 return $html;
         } elseif (!is_array($user)) {
-	        $r = db_query("SELECT user_id, nom, prenom, email FROM user WHERE user_id = $user", $mysqlMainDb);
+	        $r = db_query("SELECT user_id, nom, prenom, email, has_icon FROM user WHERE user_id = $user", $mysqlMainDb);
                 if ($r and mysql_num_rows($r) > 0) {
                         $user = mysql_fetch_array($r);
                 } else {
@@ -284,7 +287,12 @@ function display_user($user, $print_email = false)
                 $email = trim($user['email']);
                 $print_email = $print_email && !empty($email);
         }
-        return "<a href='$urlAppend/modules/user/profile.php?id=$user[user_id]'>" . q("$user[prenom] $user[nom]") . "</a>" .
+	if ($user['has_icon']) {
+		$icon = profile_image($user['user_id'], IMAGESIZE_SMALL) . '&nbsp;';
+	} else {
+		$icon = '';
+	}
+        return "$icon<a href='$urlAppend/modules/profile/display_profile.php?id=$user[user_id]'>" . q("$user[prenom] $user[nom]") . "</a>" .
                 ($print_email? (' (' . mailto(trim($user['email']), 'e-mail address hidden') . ')'): '');
 
 }
@@ -1669,4 +1677,48 @@ function recurse_copy($src, $dst, $exclude = '') {
         }
     }
     closedir($dir);
+}
+
+function copy_resized_image($source_file, $type, $maxwidth, $maxheight, $target_file)
+{
+	if ($type == 'image/jpeg') {
+		$image = @imagecreatefromjpeg($source_file);
+	} elseif ($type == 'image/png') {
+		$image = @imagecreatefrompng($source_file);
+	} elseif ($type == 'image/gif') {
+		$image = @imagecreatefromgif($source_file);
+	} elseif ($type == 'image/png') {
+		$image = @imagecreatefrompng($source_file);
+	} elseif ($type == 'image/bmp') {
+		$image = @imagecreatefromwbmp($source_file);
+	}
+	if (!isset($image) or !$image) {
+		return false;
+	}
+	$width = imagesx($image);
+	$height = imagesy($image);
+	if ($width > $maxwidth or $height > $maxheight) {
+		$xscale = $maxwidth / $width;
+		$yscale = $maxheight / $height;
+		if ($yscale < $xscale) {
+			$newwidth = round($width * $yscale);
+			$newheight = round($height * $yscale);
+		} else {
+			$newwidth = round($width * $xscale);
+			$newheight = round($height * $xscale);
+		}
+		$resized = imagecreatetruecolor($newwidth, $newheight);
+		imagecopyresampled($resized, $image, 0, 0, 0, 0, $newwidth, $newheight, $width, $height);
+		return imagejpeg($resized, $target_file);
+	} elseif ($type != 'image/jpeg') {
+		return imagejpeg($image, $target_file);
+	} else {
+		return copy($source_file, $target_file);
+	}
+}
+
+function profile_image($uid, $size)
+{
+	global $urlServer;
+	return "<img src='${urlServer}courses/userimg/${uid}_$size.jpg' alt='' />";	
 }

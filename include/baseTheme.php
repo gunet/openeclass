@@ -214,7 +214,6 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
                         $t->set_var ('LANG_LOGOUT', $langLogin);
 		        $t->set_var ('LOGOUT_LINK', $relPath . 'login_form.php');
                 }
-
 		//set the text and icon on the third bar (header)
 		if ($menuTypeID == 2) {
 			$t->set_var ( 'THIRD_BAR_TEXT', q(ellipsize($intitule, 64)) );

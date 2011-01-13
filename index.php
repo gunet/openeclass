@@ -240,5 +240,5 @@ if (isset($uid) AND !isset($_GET['logout'])) {
 	$require_help = true;
 	$helpTopic = "Init";
 	include "include/logged_out_content.php";
-	draw($tool_content, 0,'index');
+	draw($tool_content, 0);
 }
