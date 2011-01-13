@@ -93,14 +93,16 @@ if(!isset($_GET['pid']) || !is_numeric($_GET['pid'])) die();
 					$answer_text[] = $theAnswer['answer'];
 				}
 			}
-			$chart = new PieChart(500, 300);
-			$chart->setMargin(5);
+                        $chart = new PieChart(500, 300);
+                        $dataSet = new XYDataSet();
+			// $chart->setMargin(5);
 			$chart->setTitle('');
 			foreach ($answer_counts as $i => $count) {
 				$percentage = 100 * ($count / $answer_total);
 				$label = sprintf("$answer_text[$i] (%2.1f%%)", $percentage);
-				$chart->addPoint(new Point($label, $percentage));
-			}
+				$dataSet->addPoint(new Point($label, $percentage));
+                        }
+                        $chart->setDataSet($dataSet);
 			$chart_path = 'courses/'.$currentCourseID.'/temp/chart_'.md5(serialize($chart)).'.png';
 			$chart->render($webDir.$chart_path);
 			$tool_content .= '<img src="'.$urlServer.$chart_path.'" /><br />';
