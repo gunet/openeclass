@@ -244,8 +244,9 @@ db_query("CREATE TABLE monthly_summary (
 
 db_query("CREATE TABLE IF NOT EXISTS `document` (
                 `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                `course_id` INT(11) NOT NULL,
-                `group_id` INT(11) DEFAULT NULL,
+                `course_id` INT(11) NOT NULL DEFAULT 0,
+		`subsystem` TINYINT(4) NOT NULL,	
+                `subsystem_id` INT(11) DEFAULT NULL,
                 `path` VARCHAR(255) NOT NULL,
                 `filename` VARCHAR(255) NOT NULL,
                 `visibility` CHAR(1) NOT NULL DEFAULT 'v',
@@ -325,6 +326,7 @@ db_query('CREATE TABLE IF NOT EXISTS ebook_section (
                 `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 `ebook_id` INT(11) NOT NULL,
                 `public_id` VARCHAR(11) NOT NULL,
+		`file` VARCHAR(128),
                 `title` TEXT)');
 db_query('CREATE TABLE IF NOT EXISTS ebook_subsection (
                 `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,

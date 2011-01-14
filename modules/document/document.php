@@ -36,14 +36,14 @@ $require_current_course = TRUE;
 $guest_allowed = true;
 
 include '../../include/baseTheme.php';
+/**** The following is added for statistics purposes ***/
+include '../../include/action.php';
+$action = new action();
+include 'doc_init.php';
 include '../../include/lib/forcedownload.php';
 include "../../include/lib/fileDisplayLib.inc.php";
 include "../../include/lib/fileManageLib.inc.php";
 include "../../include/lib/fileUploadLib.inc.php";
-
-if (!defined('GROUP_DOCUMENTS')) {
-        define('GROUP_DOCUMENTS', false);
-}
 
 // file manager basic variables definition
 $local_head = '
@@ -57,40 +57,6 @@ function confirmation (name)
 }
 </script>
 ';
-
-/**** The following is added for statistics purposes ***/
-include '../../include/action.php';
-$action = new action();
-
-$can_upload = $is_adminOfCourse;
-if (GROUP_DOCUMENTS) {
-        include '../group/group_functions.php';
-        $action->record('MODULE_ID_GROUPS');
-        mysql_select_db($mysqlMainDb);
-
-        initialize_group_id('gid');
-        initialize_group_info($group_id);
-        $navigation[] = array ('url' => 'group.php', 'name' => $langGroups);
-        $navigation[] = array ('url' => 'group_space.php?group_id=' . $group_id, 'name' => q($group_name));
-        $groupset = "gid=$group_id&amp;";
-        $base_url = $_SERVER['PHP_SELF'] . '?' . $groupset;
-        $group_sql = "group_id = $group_id";
-        $group_hidden_input = "<input type='hidden' name='gid' value='$group_id' />";
-        $basedir = $webDir . 'courses/' . $currentCourseID . '/group/' . $secret_directory;
-	$can_upload = $can_upload || $is_member;
-        $nameTools = $langGroupDocumentsLink;
-} else {
-        $action->record('MODULE_ID_DOCS');
-        mysql_select_db($mysqlMainDb);
-
-        $base_url = $_SERVER['PHP_SELF'] . '?';
-        $group_id = 'NULL';
-        $groupset = '';
-        $group_sql = "group_id IS NULL";
-        $group_hidden_input = '';
-        $basedir = $webDir . 'courses/' . $currentCourseID . '/document';
-        $nameTools = $langDoc;
-}
 
 
 $require_help = TRUE;
@@ -121,7 +87,9 @@ if (isset($_GET['downloadDir'])) {
 	include("../../include/pclzip/pclzip.lib.php");
 	$downloadDir = $_GET['downloadDir'];
 	list($real_filename) = mysql_fetch_array(db_query("SELECT filename FROM document
-					WHERE course_id = $cours_id AND path = '$downloadDir'"));
+					WHERE course_id = $cours_id AND
+					      subsystem = $subsystem AND
+					      path = '$downloadDir'"));
 	$real_filename = $real_filename.".zip";
 	$map_filenames = map_to_real_filename();
 	
@@ -135,8 +103,11 @@ if (isset($_GET['downloadDir'])) {
 		}
 	// delete invisible files from zip file
 	$files_to_exclude = array();
-	$sql = db_query("SELECT filename FROM document WHERE course_id=$cours_id
-		 AND path LIKE '%$downloadDir%' AND visibility='i'");
+	$sql = db_query("SELECT filename FROM document
+				WHERE course_id = $cours_id AND
+				      subsystem = $subsystem AND
+				      path LIKE '%$downloadDir%' AND
+				      visibility='i'");
 	while ($files = mysql_fetch_array($sql, MYSQL_ASSOC)) {
 		array_push($files_to_exclude, $files['filename']);		
 	}
@@ -158,12 +129,14 @@ if($can_upload)  {
 //----------------------------------------------------------------
 function map_to_real_filename() {
 	
-	global $cours_id, $downloadDir;
+	global $cours_id, $downloadDir, $subsystem;
 	
 	$encoded_filenames = $temp = $filename = array();
 	
-	$sql = db_query("SELECT path, filename FROM document WHERE course_id = $cours_id
-		 AND path LIKE '%$downloadDir%'");
+	$sql = db_query("SELECT path, filename FROM document
+			WHERE course_id = $cours_id AND
+			      subsystem = $subsystem AND
+			      path LIKE '%$downloadDir%'");
 	while ($files = mysql_fetch_array($sql)) {
 		array_push($encoded_filenames, $files['path']);
 		array_push($filename, $files['filename']);
@@ -203,7 +176,7 @@ function process_extracted_file($p_event, &$p_header) {
         global $file_comment, $file_category, $file_creator, $file_date, $file_subject,
                $file_title, $file_description, $file_author, $file_language,
                $file_copyrighted, $uploadPath, $realFileSize, $basedir, $cours_id,
-               $group_id;
+               $group_id, $subsystem;
 
         $realFileSize += $p_header['size'];
         $stored_filename = $p_header['stored_filename'];
@@ -223,7 +196,8 @@ function process_extracted_file($p_event, &$p_header) {
                 $path .= '/' . safe_filename($format);
                 db_query("INSERT INTO document SET
                                  course_id = $cours_id,
-                                 group_id = $group_id,
+				 subsystem = $subsystem,
+                                 subsystem_id = $group_id,
                                  path = '$path',
                                  filename = " . quote($filename) .",
                                  visibility = 'v',
@@ -252,7 +226,7 @@ function process_extracted_file($p_event, &$p_header) {
 // Returns the full encoded path created.
 function make_path($path, $path_components)
 {
-        global $basedir, $nom, $prenom, $path_already_exists, $cours_id, $group_id, $group_sql;
+        global $basedir, $nom, $prenom, $path_already_exists, $cours_id, $group_id, $group_sql, $subsystem;
 
         $path_already_exists = true;
         $depth = 1 + substr_count($path, '/');
@@ -260,7 +234,7 @@ function make_path($path, $path_components)
                 $q = db_query("SELECT path, visibility, format,
                                       (LENGTH(path) - LENGTH(REPLACE(path, '/', ''))) AS depth
                                       FROM document
-                                      WHERE course_id = $cours_id AND $group_sql AND
+                                      WHERE $group_sql AND
                                             filename = " . quote($component) . " AND
                                             path LIKE '$path%' HAVING depth = $depth");
                 if (mysql_num_rows($q) > 0) {
@@ -274,7 +248,8 @@ function make_path($path, $path_components)
                         mkdir($basedir . $path, 0775);
                         db_query("INSERT INTO document SET
                                           course_id = $cours_id,
-                                          group_id = $group_id,
+					  subsystem = $subsystem,
+                                          subsystem_id = $group_id,
                                           path='$path',
                                           filename=" . quote($component) . ",
                                           visibility='v',
@@ -355,7 +330,7 @@ if($can_upload) {
                                 // Check if upload path exists
                                 if (!empty($uploadPath)) {
                                         $result = mysql_fetch_row(db_query("SELECT count(*) FROM document
-                                                        WHERE course_id = $cours_id AND $group_sql AND
+                                                        WHERE $group_sql AND
                                                               path = " . autoquote($uploadPath)));
                                         if (!$result[0]) {
                                                 $error = $langImpossible;
@@ -364,7 +339,6 @@ if($can_upload) {
                                 if (!$error) {
                                         // Check if file already exists
                                         $result = db_query("SELECT filename FROM document WHERE
-                                                                   course_id = $cours_id AND
                                                                    $group_sql AND
                                                                    path REGEXP '" . escapeSimple($uploadPath) . "/.*$' AND
                                                                    filename = " . autoquote($fileName));
@@ -392,7 +366,8 @@ if($can_upload) {
                                         $file_date = date("Y\-m\-d G\:i\:s");
                                         db_query("INSERT INTO document SET
                                                         course_id = $cours_id,
-                                                        group_id = $group_id,
+							subsystem = $subsystem,
+                                                        subsystem_id = $group_id,
                                                         path = " . quote($uploadPath2) . ",
                                                         filename = " . autoquote($fileName) . ",
                                                         visibility = 'v',
@@ -448,9 +423,8 @@ if($can_upload) {
         if (isset($_GET['move'])) {
                 $move = $_GET['move'];
 		// h $move periexei to onoma tou arxeiou. anazhthsh onomatos arxeiou sth vash
-                $result = mysql_query("SELECT * FROM document WHERE course_id = $cours_id AND
-                                                                    $group_sql AND
-                                                                    path=" . autoquote($move));
+                $result = mysql_query("SELECT * FROM document
+						WHERE $group_sql AND path=" . autoquote($move));
 		$res = mysql_fetch_array($result);
 		$moveFileNameAlias = $res['filename'];
 		$dialogBox .= form_dir_list_exclude('document', 'source', $move, "moveTo", $basedir, $move);
@@ -462,9 +436,8 @@ if($can_upload) {
         if (isset($_POST['delete'])) {
                 $delete = str_replace('..', '', $_POST['filePath']);
 		// Check if file actually exists
-                $result = db_query("SELECT path, format FROM document WHERE course_id = $cours_id AND
-                                                                            $group_sql AND
-                                                                            path=" . autoquote($delete));
+                $result = db_query("SELECT path, format FROM document
+					WHERE $group_sql AND path=" . autoquote($delete));
                 if (mysql_num_rows($result) > 0) {
                         if (my_delete($basedir . $delete) or !file_exists($basedir . $delete)) {
                                 update_db_info('document', 'delete', $delete);
@@ -480,15 +453,15 @@ if($can_upload) {
 	if (isset($_POST['renameTo'])) {
 		db_query("UPDATE document SET filename=" .
                          autoquote(canonicalize_whitespace($_POST['renameTo'])) .
-                         " WHERE course_id = $cours_id AND $group_sql AND path=" . autoquote($_POST['sourceFile']));
+                         " WHERE $group_sql AND path=" . autoquote($_POST['sourceFile']));
 		$action_message = "<p class='success'>$langElRen</p><br />";
 	}
 
 	// Step 1: Show rename dialog box
         if (isset($_GET['rename'])) {
-                $result = mysql_query("SELECT * FROM document WHERE course_id = $cours_id AND
-                                                                    $group_sql AND
-                                                                    path = " . autoquote($_GET['rename']));
+                $result = db_query("SELECT * FROM document
+						WHERE $group_sql AND
+						      path = " . autoquote($_GET['rename']));
 		$res = mysql_fetch_array($result);
 		$fileName = $res['filename'];
 		$dialogBox .= "
@@ -545,7 +518,9 @@ if($can_upload) {
 	if (isset($_POST['commentPath'])) {
                 $commentPath = $_POST['commentPath'];
 		//elegxos ean yparxei eggrafh sth vash gia to arxeio
-		$result = db_query("SELECT * FROM document WHERE path=" . autoquote($commentPath));
+		$result = db_query("SELECT * FROM document
+					     WHERE $group_sql AND
+					           path=" . autoquote($commentPath));
 		$res = mysql_fetch_array($result);
 		if(!empty($res)) {
                         if (!isset($language_codes[$_POST['file_language']])) {
@@ -563,7 +538,8 @@ if($can_upload) {
                                                 author = " . autoquote($_POST['file_author']) . ",
                                                 language = '$file_language',
                                                 copyrighted = " . intval($_POST['file_copyrighted']) . "
-                                        WHERE path = '$commentPath'");
+                                        WHERE $group_sql AND
+					      path = '$commentPath'");
 			$action_message = "<p class='success'>$langComMod</p>";
                 }
 	}
@@ -573,7 +549,9 @@ if($can_upload) {
             is_uploaded_file($_FILES['newFile']['tmp_name'])) {
                 $replacePath = $_POST['replacePath'];
 		// Check if file actually exists
-                $result = db_query("SELECT path, format FROM document WHERE format <> '.dir' AND
+                $result = db_query("SELECT path, format FROM document WHERE
+					$group_sql AND
+					format <> '.dir' AND
                                         path=" . autoquote($replacePath));
                 if (mysql_num_rows($result) > 0) {
         		list($oldpath, $oldformat) = mysql_fetch_row($result);
@@ -593,7 +571,8 @@ if($can_upload) {
                                     !db_query("UPDATE document SET path = " . quote($newpath) . ",
                                                                    format = " . quote($newformat) . ",
                                                                    filename = " . autoquote($_FILES['newFile']['name']) . "
-                                                              WHERE path = " . quote($oldpath))) {
+                                                              WHERE $group_sql AND
+							       path = " . quote($oldpath))) {
                                         $action_message = "<p class='caution'>$dropbox_lang[generalError]</p>";
                                 } else {
                                         $action_message = "<p class='success'>$langReplaceOK</p>";
@@ -604,8 +583,10 @@ if($can_upload) {
 
 	// Display form to replace/overwrite an existing file
 	if (isset($_GET['replace'])) {
-                $result = db_query("SELECT filename FROM document WHERE format <> '.dir' AND
-                                        path = " . autoquote($_GET['replace']));
+                $result = db_query("SELECT filename FROM document
+					WHERE $group_sql AND
+						format <> '.dir' AND
+						path = " . autoquote($_GET['replace']));
                 if (mysql_num_rows($result) > 0) {
                         list($filename) = mysql_fetch_row($result);
                         $filename = q($filename);
@@ -633,7 +614,7 @@ if($can_upload) {
                 $comment = $_GET['comment'];
 		$oldComment='';
 		/*** Retrieve the old comment and metadata ***/
-		$result = db_query("SELECT * FROM document WHERE path = " . autoquote($comment));
+		$result = db_query("SELECT * FROM document WHERE $group_sql AND path = " . autoquote($comment));
                 if (mysql_num_rows($result) > 0) {
                         $row = mysql_fetch_array($result);
                         $oldFilename = q($row['filename']);
@@ -654,48 +635,48 @@ if($can_upload) {
                         $fileName = my_basename($comment);
                         if (empty($oldFilename)) $oldFilename = $fileName;
                         $dialogBox .= "
-        <form method='post' action='document.php'>
-        <fieldset>
-          <input type='hidden' name='commentPath' value='" . q($comment) . "' />
-          <input type='hidden' size='80' name='file_filename' value='$oldFilename' />
-          <legend>$langAddComment</legend>
-          <table class='tbl' width='99%'>
-          <tr>
-            <th>$langWorkFile:</th>
-	    <td>$oldFilename</td>
-          </tr>
-          <tr>
-            <th>$langComment:</th>
-            <td><input type='text' size='60' name='file_comment' value='$oldComment' /></td>
-          </tr>
-          <tr>
-            <th>$langTitle:</th>
-            <td><input type='text' size='60' name='file_title' value='$oldTitle' /></td>
-          </tr>
-          <tr>
-            <th>$langCategory:</th>
-            <td>" .
-                        selection(array('0' => $langCategoryOther,
-                                        '1' => $langCategoryExcercise,
-                                        '2' => $langCategoryLecture,
-                                        '3' => $langCategoryEssay,
-                                        '4' => $langCategoryDescription,
-                                        '5' => $langCategoryExample,
-                                        '6' => $langCategoryTheory),
-                                  'file_category', $oldCategory) . "</td>
-          </tr>
-          <tr>
-            <th>$langSubject : </th>
-            <td><input type='text' size='60' name='file_subject' value='$oldSubject' /></td>
-          </tr>
-          <tr>
-            <th>$langDescription : </th>
-            <td><input type='text' size='60' name='file_description' value='$oldDescription' /></td>
-          </tr>
-          <tr>
-            <th>$langAuthor : </th>
-            <td><input type='text' size='60' name='file_author' value='$oldAuthor' /></td>
-          </tr>";
+			<form method='post' action='document.php'>
+			<fieldset>
+			  <input type='hidden' name='commentPath' value='" . q($comment) . "' />
+			  <input type='hidden' size='80' name='file_filename' value='$oldFilename' />
+			  <legend>$langAddComment</legend>
+			  <table class='tbl' width='99%'>
+			  <tr>
+			    <th>$langWorkFile:</th>
+			    <td>$oldFilename</td>
+			  </tr>
+			  <tr>
+			    <th>$langComment:</th>
+			    <td><input type='text' size='60' name='file_comment' value='$oldComment' /></td>
+			  </tr>
+			  <tr>
+			    <th>$langTitle:</th>
+			    <td><input type='text' size='60' name='file_title' value='$oldTitle' /></td>
+			  </tr>
+			  <tr>
+			    <th>$langCategory:</th>
+			    <td>" .
+				selection(array('0' => $langCategoryOther,
+						'1' => $langCategoryExcercise,
+						'2' => $langCategoryLecture,
+						'3' => $langCategoryEssay,
+						'4' => $langCategoryDescription,
+						'5' => $langCategoryExample,
+						'6' => $langCategoryTheory),
+					  'file_category', $oldCategory) . "</td>
+			  </tr>
+			  <tr>
+			    <th>$langSubject : </th>
+			    <td><input type='text' size='60' name='file_subject' value='$oldSubject' /></td>
+			  </tr>
+			  <tr>
+			    <th>$langDescription : </th>
+			    <td><input type='text' size='60' name='file_description' value='$oldDescription' /></td>
+			  </tr>
+			  <tr>
+			    <th>$langAuthor : </th>
+			    <td><input type='text' size='60' name='file_author' value='$oldAuthor' /></td>
+			  </tr>";
 		  
                         $dialogBox .= "
           <tr>
@@ -751,7 +732,9 @@ if($can_upload) {
                         $newVisibilityStatus = "i";
                         $visibilityPath = $_GET['mkInvisibl'];
                 }
-		db_query("UPDATE document SET visibility='$newVisibilityStatus' WHERE path = " . autoquote($visibilityPath));
+		db_query("UPDATE document SET visibility='$newVisibilityStatus'
+					  WHERE $group_sql AND
+					        path = " . autoquote($visibilityPath));
 		$action_message = "<p class='success'>$langViMod</p>";
 	}
 } // teacher only
@@ -830,8 +813,9 @@ if (isset($_GET['rev'])) {
 
 /*** Retrieve file info for current directory from database and disk ***/
 $result = db_query("SELECT * FROM document
-    	WHERE course_id = $cours_id AND $group_sql AND path LIKE '$curDirPath/%'
-        AND path NOT LIKE '$curDirPath/%/%' $order");
+			WHERE $group_sql AND
+				path LIKE '$curDirPath/%' AND
+				path NOT LIKE '$curDirPath/%/%' $order");
 
 $fileinfo = array();
 while($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
@@ -887,7 +871,7 @@ if($can_upload) {
 }
 
 // check if there are documents
-list($doc_count) = mysql_fetch_row(db_query("SELECT COUNT(*) FROM document WHERE course_id = $cours_id" .
+list($doc_count) = mysql_fetch_row(db_query("SELECT COUNT(*) FROM document WHERE $group_sql" .
 				            ($is_adminOfCourse? '': " AND visibility='v'")));
 if ($doc_count == 0) {
 	$tool_content .= "\n    <p class='alert1'>$langNoDocuments</p>";

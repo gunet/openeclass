@@ -50,7 +50,6 @@ if (isset($_GET['uploadPath'])) {
 $can_upload = $is_adminOfCourse;
 if (defined('GROUP_DOCUMENTS')) {
         include '../group/group_functions.php';
-
         initialize_group_id('gid');
         initialize_group_info($group_id);
 	$can_upload = $is_member;

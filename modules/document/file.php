@@ -46,11 +46,9 @@ $cinfo_components = explode(',', $cinfo);
 $_SESSION['dbname'] = $cinfo_components[0];
 if (isset($cinfo_components[1])) {
         $group_id = intval($cinfo_components[1]);
-        $group_sql = '= ' . $group_id;
         define('GROUP_DOCUMENTS', true);
 } else {
         unset($group_id);
-        $group_sql = 'IS NULL';
         define('GROUP_DOCUMENTS', false);
 }
 
@@ -58,24 +56,15 @@ $require_current_course = true;
 $guest_allowed = true;
 
 include '../../include/init.php';
-include '../../include/lib/forcedownload.php';
 include '../../include/action.php';
-
-mysql_select_db($mysqlMainDb);
+include 'doc_init.php';
+include '../../include/lib/forcedownload.php';
 
 if (GROUP_DOCUMENTS) {
-        list($secret_directory) = mysql_fetch_row(db_query("SELECT secret_directory FROM `group`
-                                                                WHERE id = $group_id AND course_id = $cours_id"));
-        if (!$secret_directory) {
-                not_found();
-        }
-        $basedir = "{$webDir}courses/$dbname/group/$secret_directory";
         if (!$uid) {
                 error($langNoRead);
         }
-        list($member) = mysql_fetch_row(db_query("SELECT COUNT(*) FROM group_members WHERE
-                                                         group_id = $group_id AND user_id = $uid"));
-        if (!($is_adminOfCourse or $member)) {
+        if (!($is_adminOfCourse or $is_member)) {
                 error($langNoRead);
         }
 } else {
@@ -88,11 +77,11 @@ foreach ($path_components as $component) {
         $component = urldecode(str_replace(chr(1), '/', $component));
         echo $component;
         $q = db_query("SELECT path, visibility, format,
-                                    (LENGTH(path) - LENGTH(REPLACE(path, '/', ''))) AS depth
-                              FROM document WHERE course_id = $cours_id AND
-                                                  group_id $group_sql AND
-                                                  filename = " . quote($component) . " AND
-                                                  path LIKE '$path%' HAVING depth = $depth");
+                              (LENGTH(path) - LENGTH(REPLACE(path, '/', ''))) AS depth
+                              FROM document
+                              WHERE $group_sql AND
+                                    filename = " . quote($component) . " AND
+                                    path LIKE '$path%' HAVING depth = $depth");
         if (!$q or mysql_num_rows($q) == 0) {
                 not_found();
         }
