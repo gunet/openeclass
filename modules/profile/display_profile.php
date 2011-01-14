@@ -33,6 +33,8 @@ if (isset($_GET['id'])) {
         $tool_content .= "<br /><br />$langFaculty: ".find_faculty_by_id($userdata['department']);
         if ($userdata['has_icon']) {
                 $tool_content .= "<br /><br />" . profile_image($uid, IMAGESIZE_LARGE);
+        } else {
+                $tool_content .= "<br /><br />" . profile_image($uid, IMAGESIZE_LARGE, true);
         }
 
 draw($tool_content, 1);

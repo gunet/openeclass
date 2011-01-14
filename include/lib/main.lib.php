@@ -1,9 +1,9 @@
 <?php
 /*
-=============================================================================
-GUnet eClass 2.0
-E-learning and Course Management Program
-================================================================================
+* ========================================================================
+* Open eClass 2.4 - E-learning and Course Management System
+* ========================================================================
+ 
 Copyright(c) 2003-2010  Greek Universities Network - GUnet
 A full copyright notice can be read in "/info/copyright.txt".
 
@@ -36,7 +36,7 @@ define('ECLASS_VERSION', '2.3.2');
 
 // MySQL debug level
 define('FULL', 1);
-
+// resized user image 
 define('IMAGESIZE_LARGE', 256);
 define('IMAGESIZE_SMALL', 32);
 
@@ -233,11 +233,6 @@ function js_escape($s)
         return q(str_replace("'", "\\'", $s));
 }
 
-
-// ------------------------------------------------------
-// Other useful functions. We use it in various scripts.
-// -----------------------------------------------------
-
 // Translate uid to username
 function uid_to_username($uid)
 {
@@ -290,7 +285,7 @@ function display_user($user, $print_email = false)
 	if ($user['has_icon']) {
 		$icon = profile_image($user['user_id'], IMAGESIZE_SMALL) . '&nbsp;';
 	} else {
-		$icon = '';
+		$icon = profile_image($user['user_id'], IMAGESIZE_SMALL, true) . '&nbsp;';
 	}
         return "$icon<a href='$urlAppend/modules/profile/display_profile.php?id=$user[user_id]'>" . q("$user[prenom] $user[nom]") . "</a>" .
                 ($print_email? (' (' . mailto(trim($user['email']), 'e-mail address hidden') . ')'): '');
@@ -1679,6 +1674,7 @@ function recurse_copy($src, $dst, $exclude = '') {
     closedir($dir);
 }
 
+// resize an image ($source_file) of type $type to a new size ($maxheight and $maxwidth) and copies it to path $target_file
 function copy_resized_image($source_file, $type, $maxwidth, $maxheight, $target_file)
 {
 	if ($type == 'image/jpeg') {
@@ -1717,8 +1713,14 @@ function copy_resized_image($source_file, $type, $maxwidth, $maxheight, $target_
 	}
 }
 
-function profile_image($uid, $size)
+// Link for displaying user profile
+function profile_image($uid, $size, $default = FALSE)
 {
 	global $urlServer;
-	return "<img src='${urlServer}courses/userimg/${uid}_$size.jpg' alt='' />";	
+	
+	if (!$default) {
+		return "<img src='${urlServer}courses/userimg/${uid}_$size.jpg' alt='' />";
+	} else {
+		return "<img src='${urlServer}template/classic/img/default_$size.jpg' alt='' />";
+	}
 }
