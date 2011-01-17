@@ -120,8 +120,9 @@ if (isset($_GET['downloadDir'])) {
 }
 
 if($can_upload)  {
-	if (@$uncompress == 1)
-		include("../../include/pclzip/pclzip.lib.php");
+        if (isset($_POST['uncompress'])) {
+                include("../../include/pclzip/pclzip.lib.php");
+        }
 }
 
 //----------------------------------------------------------------
