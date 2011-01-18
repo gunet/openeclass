@@ -57,6 +57,11 @@ $guest_allowed = true;
 
 include '../../include/init.php';
 include '../../include/action.php';
+
+// record file access
+$action = new action();
+$action->record('MODULE_ID_DOCS');
+
 include 'doc_init.php';
 include '../../include/lib/forcedownload.php';
 
@@ -75,7 +80,6 @@ $depth = 1;
 $path = '';
 foreach ($path_components as $component) {
         $component = urldecode(str_replace(chr(1), '/', $component));
-        echo $component;
         $q = db_query("SELECT path, visibility, format,
                               (LENGTH(path) - LENGTH(REPLACE(path, '/', ''))) AS depth
                               FROM document
@@ -97,13 +101,9 @@ if (!preg_match("/\.$r[format]$/", $component)) {
         $component .= '.' . $r['format'];
 }
 
-// record file access
-$action = new action();
-$action->record('MODULE_ID_DOCS');
-
 restore_saved_course();
 if (file_exists($basedir . $r['path'])) {
-//        send_file_to_client($basedir . $r['path'], $component, true);
+        send_file_to_client($basedir . $r['path'], $component, true);
 } else {
         header('Location: ', $urlServer);
 }

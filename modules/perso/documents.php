@@ -84,15 +84,15 @@ function getUserDocuments($param)
 function docsHtmlInterface($date)
 {
 	global $urlServer, $langNoDocsExist, $uid, $currentCourseID, $cours_id;
-        global $mysqlMainDb, $maxValue;
+        global $mysqlMainDb, $maxValue, $subsystem;
 
         $q = db_query("SELECT path, course_id, code, filename, title, date_modified, intitule
                        FROM document, cours_user, cours
                        WHERE document.course_id = cours_user.cours_id AND
                              cours_user.user_id = $uid AND
                              cours.cours_id = cours_user.cours_id AND
-                             group_id IS NULL AND
-                             visibility = 'v' AND
+			     subsystem = '$subsystem' AND
+			     visibility = 'v' AND
                              date_modified >= '$date' AND
 			     format <> '.dir'
                        ORDER BY course_id, date_modified DESC", $mysqlMainDb);

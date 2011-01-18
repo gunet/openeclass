@@ -39,6 +39,7 @@
 if (!defined('INDEX_START')) {
 	die("Action not allowed!");
 }
+define('MAIN', 0);
 
 include "redirector.php";
 
@@ -56,6 +57,7 @@ if ($result2 and mysql_num_rows($result2) > 0) {
 }
 
 $_SESSION['status'] = $status;
+$subsystem = MAIN;
 
 include "lib/textLib.inc.php";
 include "lib/fileDisplayLib.inc.php";
