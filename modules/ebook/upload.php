@@ -29,21 +29,29 @@ $require_current_course = true;
 
 require_once '../../include/baseTheme.php';
 require_once '../../include/pclzip/pclzip.lib.php';
+include '../../include/lib/fileUploadLib.inc.php';
+
+$nameTools = $langEBookCreate;
+$navigation[] = array('url' => 'index.php', 'name' => $langEBook);
+define('EBOOK_DOCUMENTS', true);
 
 mysql_select_db($mysqlMainDb);
-$basedir = $webDir . 'courses/' . $currentCourseID . '/ebook';
 
-if (!$is_adminOfCourse or !isset($_FILES['file'])) {
+if (!$is_adminOfCourse) {
         redirect_to_home_page();
 } else {
+        $title = trim(@$_POST['title']);
+        if (empty($title) or !isset($_FILES['file'])) {
+                $tool_content .= "<p class='caution'>$langFieldsMissing</p>";
+        }
         if (!preg_match('/\.zip$/i', $_FILES['file']['name'])) {
-                echo "Error no zip...";
-                die;
+                $tool_content .= "<p class='caution'>$langUnwantedFiletype: " .
+                                 q($_FILES['file']['name']) . "</p>";
         }
-        if (!is_dir($basedir)) {
-                mkdir($basedir, 0775);
+        if (!empty($tool_content)) {
+                draw($tool_content, 2);
+                exit;
         }
-        chdir($basedir);
 
         list($order) = mysql_fetch_row(db_query("SELECT MAX(`order`) FROM ebook WHERE course_id = $cours_id"));
         if (!$order) {
@@ -52,15 +60,22 @@ if (!$is_adminOfCourse or !isset($_FILES['file'])) {
                 $order++;
         }
         db_query("INSERT INTO ebook SET `order` = $order, `course_id` = $cours_id, `title` = " .
-                         autoquote($_POST['title']));
-        $id = mysql_insert_id();
-        mkdir($id, 0777);
-        chdir($id);
-        $zip = new pclZip($_FILES['file']['tmp_name']);
-        if (!$zip->extract()) {
-                echo 'Error extracting...';
-                db_query("DELETE FROM ebook WHERE id = $id");
-                die;
+                         autoquote($title));
+        $ebook_id = mysql_insert_id();
+
+        // Initialize document subsystem global variables
+        include '../document/doc_init.php';
+
+        if (!mkdir($basedir, 0775, true)) {
+                db_query("DELETE FROM ebook WHERE course_id = $cours_id AND id = $ebook_id");
+                $tool_content .= "<p class='caution'>$langImpossible</p>";
+                draw($tool_content, 2);
+                exit;
         }
-        header("Location: $urlAppend/modules/ebook/edit.php?id=$id");
+
+        chdir($basedir);
+        $zipFile = new pclZip($_FILES['file']['tmp_name']);
+        $realFileSize = 0;
+        $zipFile->extract(PCLZIP_CB_PRE_EXTRACT, 'process_extracted_file');
+        header("Location: $urlAppend/modules/ebook/edit.php?id=$ebook_id");
 }

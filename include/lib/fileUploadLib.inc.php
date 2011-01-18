@@ -230,22 +230,6 @@ function add_ext_on_mime($fileName, $userFile = 'userFile')
 	return $fileName;
 }
 
-/*
- * change the file named .htacess in htacess.txt
- * Useful to secure a site working on Apache.
- *
- * @author - Hugues Peeters <peeters@ipm.ucl.ac.be>
- * @param  - fileName (string) name of a file
- * @return - string 'Apache safe' file name
- */
-
-
-function htaccess2txt($fileName)
-{
-    $fileName = str_ireplace('.htaccess', 'htaccess.txt', $fileName);
-    return $fileName;
-}
-
 /**
  * Replace str_ireplace()
  * Backported from Claroline 1.7.x claro_main.lib.php
@@ -486,4 +470,100 @@ function unwanted_file($filename)
         return preg_match('/\.(ade|adp|bas|bat|chm|cmd|com|cpl|crt|exe|hlp|hta|' .
                               'inf|ins|isp|jse|lnk|mdb|mde|msc|msi|msp|mst|pcd|pif|reg|scr|sct|shs|' .
                               'shb|url|vbe|vbs|wsc|wsf|wsh)$/', $filename);
+}
+
+
+// Actions to do before extracting file from zip archive
+// Create database entries and set extracted file path to
+// a new safe filename
+function process_extracted_file($p_event, &$p_header) {
+
+        global $file_comment, $file_category, $file_creator, $file_date, $file_subject,
+               $file_title, $file_description, $file_author, $file_language,
+               $file_copyrighted, $uploadPath, $realFileSize, $basedir, $cours_id,
+               $subsystem, $subsystem_id;
+
+        $realFileSize += $p_header['size'];
+        $stored_filename = $p_header['stored_filename'];
+        if (invalid_utf8($stored_filename)) {
+                $stored_filename = cp737_to_utf8($stored_filename);
+        }
+        $path_components = explode('/', $stored_filename);
+        $filename = array_pop($path_components);
+        $file_date = date("Y\-m\-d G\:i\:s", $p_header['mtime']);
+        $path = make_path($uploadPath, $path_components);
+        if ($p_header['folder']) {
+                // Directory has been created by make_path(),
+                // no need to do anything else
+                return 0;
+        } else {
+                $format = get_file_extension($filename);
+                $path .= '/' . safe_filename($format);
+                db_query("INSERT INTO document SET
+                                 course_id = $cours_id,
+				 subsystem = $subsystem,
+                                 subsystem_id = $subsystem_id,
+                                 path = '$path',
+                                 filename = " . quote($filename) .",
+                                 visibility = 'v',
+                                 comment = " . quote($file_comment) . ",
+                                 category = " . quote($file_category) . ",
+                                 title = " . quote($file_title) . ",
+                                 creator = " . quote($file_creator) . ",
+                                 date = " . quote($file_date) . ",
+                                 date_modified = " . quote($file_date) . ",
+                                 subject = " . quote($file_subject) . ",
+                                 description = " . quote($file_description) . ",
+                                 author = " . quote($file_author) . ",
+                                 format = '$format',
+                                 language = " . quote($file_language) . ",
+                                 copyrighted = " . quote($file_copyrighted));
+                // File will be extracted with new encoded filename
+                $p_header['filename'] = $basedir . $path;
+                return 1;
+        }
+}
+
+
+// Create a path with directory names given in array $path_components
+// under base path $path, inserting the appropriate entries in 
+// document table.
+// Returns the full encoded path created.
+function make_path($path, $path_components)
+{
+        global $basedir, $nom, $prenom, $path_already_exists, $cours_id, $group_sql, $subsystem, $subsystem_id;
+
+        $path_already_exists = true;
+        $depth = 1 + substr_count($path, '/');
+        foreach ($path_components as $component) {
+                $q = db_query("SELECT path, visibility, format,
+                                      (LENGTH(path) - LENGTH(REPLACE(path, '/', ''))) AS depth
+                                      FROM document
+                                      WHERE $group_sql AND
+                                            filename = " . quote($component) . " AND
+                                            path LIKE '$path%' HAVING depth = $depth");
+                if (mysql_num_rows($q) > 0) {
+                        // Path component already exists in database
+                        $r = mysql_fetch_array($q);
+                        $path = $r['path'];
+                        $depth++;
+                } else {
+                        // Path component must be created
+                        $path .= '/' . safe_filename();
+                        mkdir($basedir . $path, 0775);
+                        db_query("INSERT INTO document SET
+                                          course_id = $cours_id,
+					  subsystem = $subsystem,
+                                          subsystem_id = $subsystem_id,
+                                          path='$path',
+                                          filename=" . quote($component) . ",
+                                          visibility='v',
+                                          creator=" . quote($prenom." ".$nom) . ",
+                                          date=NOW(),
+                                          date_modified=NOW(),
+                                          format='.dir'");
+                        $path_already_exists = false;
+                }
+        }
+        return $path;
 }

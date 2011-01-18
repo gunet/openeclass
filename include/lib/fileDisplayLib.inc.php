@@ -45,10 +45,6 @@
 ==============================================================================
 */
 
-if (!defined('GROUP_DOCUMENTS')) {
-        define('GROUP_DOCUMENTS', false);
-}
-
 /*****************************************
    GENERIC FUNCTION :STRIP SUBMIT VALUE
 *****************************************/
@@ -234,6 +230,6 @@ function file_url($path, $filename = null)
                                                      path = '$path'");
                 list($filename) = mysql_fetch_row($q);
         }
-        $gid = GROUP_DOCUMENTS? ",$group_id": '';
+        $gid = defined('GROUP_DOCUMENTS')? ",$group_id": '';
 	return htmlspecialchars($urlServer . "modules/document/file.php?/$currentCourseID$gid$dirname/" . file_url_escape($filename), ENT_QUOTES);
 }

@@ -58,19 +58,18 @@ function confirmation (name)
 </script>
 ';
 
-
 $require_help = TRUE;
 $helpTopic = 'Doc';
 
 // check for quotas
 $diskUsed = dir_total_space($basedir);
-$type = GROUP_DOCUMENTS? 'group_quota': 'doc_quota';
+$type = ($subsystem == GROUP)? 'group_quota': 'doc_quota';
 $d = mysql_fetch_row(mysql_query("SELECT $type FROM cours WHERE cours_id = $cours_id"));
 $diskQuotaDocument = $d[0];
 
 if (isset($_GET['showQuota'])) {
         $nameTools = $langQuotaBar;
-        if (GROUP_DOCUMENTS) {
+        if ($subsystem == GROUP) {
         	$navigation[] = array ('url' => 'document.php?gid=' . $group_id, 'name' => $langDoc);
         } else {
         	$navigation[] = array ('url' => 'document.php', 'name' => $langDoc);
@@ -169,106 +168,11 @@ function convert_to_real_filename($p_event, &$p_header) {
 	return 1;
 }
 
-// Actions to do before extracting file from zip archive
-// Create database entries and set extracted file path to
-// a new safe filename
-function process_extracted_file($p_event, &$p_header) {
-
-        global $file_comment, $file_category, $file_creator, $file_date, $file_subject,
-               $file_title, $file_description, $file_author, $file_language,
-               $file_copyrighted, $uploadPath, $realFileSize, $basedir, $cours_id,
-               $group_id, $subsystem;
-
-        $realFileSize += $p_header['size'];
-        $stored_filename = $p_header['stored_filename'];
-        if (invalid_utf8($stored_filename)) {
-                $stored_filename = cp737_to_utf8($stored_filename);
-        }
-        $path_components = explode('/', $stored_filename);
-        $filename = array_pop($path_components);
-        $file_date = date("Y\-m\-d G\:i\:s", $p_header['mtime']);
-        $path = make_path($uploadPath, $path_components);
-        if ($p_header['folder']) {
-                // Directory has been created by make_path(),
-                // no need to do anything else
-                return 0;
-        } else {
-                $format = get_file_extension($filename);
-                $path .= '/' . safe_filename($format);
-                db_query("INSERT INTO document SET
-                                 course_id = $cours_id,
-				 subsystem = $subsystem,
-                                 subsystem_id = $group_id,
-                                 path = '$path',
-                                 filename = " . quote($filename) .",
-                                 visibility = 'v',
-                                 comment = " . quote($file_comment) . ",
-                                 category = " . quote($file_category) . ",
-                                 title = " . quote($file_title) . ",
-                                 creator = " . quote($file_creator) . ",
-                                 date = " . quote($file_date) . ",
-                                 date_modified = " . quote($file_date) . ",
-                                 subject = " . quote($file_subject) . ",
-                                 description = " . quote($file_description) . ",
-                                 author = " . quote($file_author) . ",
-                                 format = '$format',
-                                 language = " . quote($file_language) . ",
-                                 copyrighted = " . quote($file_copyrighted));
-                // File will be extracted with new encoded filename
-                $p_header['filename'] = $basedir . $path;
-                return 1;
-        }
-}
-
-
-// Create a path with directory names given in array $path_components
-// under base path $path, inserting the appropriate entries in 
-// document table.
-// Returns the full encoded path created.
-function make_path($path, $path_components)
-{
-        global $basedir, $nom, $prenom, $path_already_exists, $cours_id, $group_id, $group_sql, $subsystem;
-
-        $path_already_exists = true;
-        $depth = 1 + substr_count($path, '/');
-        foreach ($path_components as $component) {
-                $q = db_query("SELECT path, visibility, format,
-                                      (LENGTH(path) - LENGTH(REPLACE(path, '/', ''))) AS depth
-                                      FROM document
-                                      WHERE $group_sql AND
-                                            filename = " . quote($component) . " AND
-                                            path LIKE '$path%' HAVING depth = $depth");
-                if (mysql_num_rows($q) > 0) {
-                        // Path component already exists in database
-                        $r = mysql_fetch_array($q);
-                        $path = $r['path'];
-                        $depth++;
-                } else {
-                        // Path component must be created
-                        $path .= '/' . safe_filename();
-                        mkdir($basedir . $path, 0775);
-                        db_query("INSERT INTO document SET
-                                          course_id = $cours_id,
-					  subsystem = $subsystem,
-                                          subsystem_id = $group_id,
-                                          path='$path',
-                                          filename=" . quote($component) . ",
-                                          visibility='v',
-                                          creator=" . quote($prenom." ".$nom) . ",
-                                          date=NOW(),
-                                          date_modified=NOW(),
-                                          format='.dir'");
-                        $path_already_exists = false;
-                }
-        }
-        return $path;
-}
-
 
 // Used in documents path navigation bar
 function make_clickable_path($path)
 {
-	global $langRoot, $group_id, $base_url, $group_sql;
+	global $langRoot, $base_url, $group_sql;
 
 	$cur = $out = '';
 	foreach (explode('/', $path) as $component) {
@@ -368,7 +272,7 @@ if($can_upload) {
                                         db_query("INSERT INTO document SET
                                                         course_id = $cours_id,
 							subsystem = $subsystem,
-                                                        subsystem_id = $group_id,
+                                                        subsystem_id = $subsystem_id,
                                                         path = " . quote($uploadPath2) . ",
                                                         filename = " . autoquote($fileName) . ",
                                                         visibility = 'v',
@@ -1032,7 +936,7 @@ if ($doc_count == 0) {
 								 "title='$langVisible' alt='$langVisible' /></a>";
 	                                }
 				}
-				if (isset($is_member) and ($is_member)) {
+				if ($subsystem == GROUP and isset($is_member) and ($is_member)) {
 	                                $tool_content .= "<a href='$urlAppend/modules/work/group_work.php?" .
 							 "gid=$group_id&amp;submit=$cmdDirName'>" .
 							 "<img src='../../template/classic/img/book.gif' " .

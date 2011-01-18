@@ -28,7 +28,6 @@
 Units display module	
 */
 
-define('GROUP_DOCUMENTS', false);
 $require_current_course = true;
 $require_help = TRUE;
 $helpTopic = 'AddCourseUnitscontent';

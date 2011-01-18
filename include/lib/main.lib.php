@@ -1050,6 +1050,17 @@ function safe_filename($extension = '')
         }
 }
 
+function get_file_extension($filename)
+{
+	$matches = array();
+	if (preg_match('/\.(tar\.(z|gz|bz|bz2))$/i', $filename, $matches)) {
+                return strtolower($matches[1]);
+        } elseif (preg_match('/\.([a-zA-Z0-9_-]{1,8})$/i', $filename, $matches)) {
+		return strtolower($matches[1]);
+	} else {
+		return '';
+	}
+}
 
 // Wrap each $item with single quote
 function wrap_each(&$item)

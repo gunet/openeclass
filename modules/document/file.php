@@ -49,7 +49,6 @@ if (isset($cinfo_components[1])) {
         define('GROUP_DOCUMENTS', true);
 } else {
         unset($group_id);
-        define('GROUP_DOCUMENTS', false);
 }
 
 $require_current_course = true;
@@ -65,7 +64,7 @@ $action->record('MODULE_ID_DOCS');
 include 'doc_init.php';
 include '../../include/lib/forcedownload.php';
 
-if (GROUP_DOCUMENTS) {
+if (defined('GROUP_DOCUMENTS')) {
         if (!$uid) {
                 error($langNoRead);
         }
