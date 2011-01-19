@@ -468,13 +468,13 @@ function create_course($code, $lang, $title, $desc, $fac, $vis, $prof, $type) {
 	return array($repertoire, $cid);
 }
 
-// crating course index.php file
+// creating course index.php file
 function course_index($dir, $code) {
 	$f = fopen("$dir/index.php", "w");
 	fputs($f, "<?php
 session_start();
 \$dbname=\"$code\";
-session_register(\"dbname\");
+\$_SESSION['dbname']=\"$dbname\";
 include(\"../../modules/course_home/course_home.php\");
 ?>
 ");

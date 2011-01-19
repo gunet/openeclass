@@ -223,7 +223,7 @@ if (isset($uid) AND !isset($_GET['logout'])) {
 			if (mysql_num_rows($guestSQL) > 0) {
 				$sql_row = mysql_fetch_row($guestSQL);
 				$dbname = $sql_row[0];
-				session_register("dbname");
+				$_SESSION['dbname'] = $dbname;
 				header("Location: {$urlServer}courses/$dbname/index.php");
 			} else { // if course was deleted stop guest account
 				$warning = "<br><font color='red'>$langInvalidGuestAccount</font><br>";
