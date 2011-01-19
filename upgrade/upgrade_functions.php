@@ -333,10 +333,10 @@ function upgrade_course_2_4($code, $lang, $extramessage = '')
                         $doc_id = 1;
                 }
                 db_query("INSERT INTO `$mysqlMainDb`.document
-                                (`id`, `course_id`, `group_id`, `path`, `filename`, `visibility`, `comment`,
+                                (`id`, `course_id`, `subsystem`, `subsystem_id`, `path`, `filename`, `visibility`, `comment`,
                                  `category`, `title`, `creator`, `date`, `date_modified`, `subject`,
                                  `description`, `author`, `format`, `language`, `copyrighted`)
-                                SELECT $doc_id + id, $course_id, NULL, `path`, `filename`, `visibility`, `comment`,
+                                SELECT $doc_id + id, $course_id, 0, NULL, `path`, `filename`, `visibility`, `comment`,
                                        `category`, `title`, `creator`, `date`, `date_modified`, `subject`,
                                        `description`, `author`, `format`, `language`, `copyrighted` FROM document") and
                        db_query("DROP TABLE document");
@@ -369,15 +369,15 @@ function upgrade_course_2_4($code, $lang, $extramessage = '')
                                               old.secretDirectory = new.secret_directory");
 
                 $ok = db_query("INSERT INTO `$mysqlMainDb`.group_members
-                                        (group_id, user_id, is_tutor)
+                                        (subsystem, subsystem_id, user_id, is_tutor)
                                         SELECT new_id, tutor, 1
                                                 FROM student_group, group_map
                                                 WHERE student_group.id = group_map.old_id AND
                                                       tutor IS NOT NULL") && $ok;
 
                 $ok = db_query("INSERT INTO `$mysqlMainDb`.group_members
-                                        (group_id, user_id, is_tutor)
-                                        SELECT new_id, user, 0
+                                        (subsystem, group_id, user_id, is_tutor)
+                                        SELECT 1, new_id, user, 0
                                                 FROM user_group, group_map
                                                 WHERE user_group.team = group_map.old_id") && $ok;
 
