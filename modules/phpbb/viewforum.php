@@ -255,11 +255,11 @@ $tool_content .= "
 			}
 			$pagination .= "&nbsp;</span></strong>";
 		}
-		$tool_content .= "\n       <td><a href='$topiclink'>$topic_title</a>$pagination</td>";
-		$tool_content .= "\n       <td>$replys</td>";
-		$tool_content .= "\n       <td class='center'>$myrow[prenom] $myrow[nom]</td>";
-		$tool_content .= "\n       <td class='center'>$myrow[topic_views]</td>";
-		$tool_content .= "\n       <td class='center'>$myrow[prenom1] $myrow[nom1]<br />$last_post</td>";
+		$tool_content .= "\n<td><a href='$topiclink'>$topic_title</a>$pagination</td>";
+		$tool_content .= "\n<td class='center'>$replys</td>";
+		$tool_content .= "\n<td class='center'>$myrow[prenom] $myrow[nom]</td>";
+		$tool_content .= "\n<td class='center'>$myrow[topic_views]</td>";
+		$tool_content .= "\n<td class='center'>$myrow[prenom1] $myrow[nom1]<br />$last_post</td>";
 		list($topic_action_notify) = mysql_fetch_row(db_query("SELECT notify_sent FROM forum_notify 
 			WHERE user_id = $uid AND topic_id = $myrow[topic_id] AND course_id = $cours_id", $mysqlMainDb));
 		if (!isset($topic_action_notify)) {

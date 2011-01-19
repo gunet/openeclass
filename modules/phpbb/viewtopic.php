@@ -256,16 +256,13 @@ if ($paging and $total > $posts_per_page ) {
 	$tool_content .= "</td></tr></table>";
 }
 
-$tool_content .= <<<cData
-
-    <table WIDTH="99%" class="tbl_border">
+$tool_content .= "<table width='99%' class='tbl_border'>
     <thead>
     <tr>
-      <th width="150">$langAuthor</th>
+      <th width='150'>$langAuthor</th>
       <th>$langMessage</th>
-      <th width="70" class="right">$langActions</th>
-    </tr>
-cData;
+      <th width='70' class='right'>$langActions</th>
+    </tr>";
 
 if (isset($_GET['all'])) {
     $sql = "SELECT p.*, pt.post_text FROM posts p, posts_text pt 
@@ -292,31 +289,29 @@ if (!$result = db_query($sql, $currentCourseID)) {
 $myrow = mysql_fetch_array($result);
 $count = 0;
 do {
-       if ($count%2==1) {
-         $tool_content .= "\n    <tr class=\"even\">";
-       } else {
-         $tool_content .= "\n    <tr class=\"odd\">";
-       }
-
-	$tool_content .= "\n      <td valign='top'><b>" . $myrow["prenom"] . " " . $myrow["nom"] . "</b></td>";
+	if ($count%2 == 1) {
+		$tool_content .= "\n<tr class='even'>";
+	} else {
+		$tool_content .= "\n<tr class='odd'>";
+	}
+	$tool_content .= "\n<td valign='top'>".display_user($myrow['poster_id'])."</td>";
 	$message = own_stripslashes($myrow["post_text"]);
 	// support for math symbols
 	$message = mathfilter($message, 12, "../../courses/mathimg/");
-
 	if ($count == 0) {
 		$postTitle = "$langPostTitle: <b>$topic_subject</b>";
 	} else {
 		$postTitle = "";
 	}
 
-	$tool_content .= "\n      <td>
+	$tool_content .= "\n<td>
 	  <div class='post_massage'>
 	    <img src='$posticon' alt='' />
 	    <em>$langSent: " . $myrow["post_time"] . "</em>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$postTitle
 	  </div>
-	  <br />$message<br /><br />
-      </td>
-      <td width='40'i valign='top'><div align='right'>";
+	  <br />$message<br />
+	</td>
+	<td width='40'i valign='top'><div align='right'>";
 	if ($is_adminOfCourse) { // course admin
 		$tool_content .= "<a href=\"editpost.php?post_id=".$myrow["post_id"]."&amp;topic=$topic&amp;forum=$forum\"><img src='../../template/classic/img/edit.gif' title='$langModify' alt='$langModify' /></a>";
 		$tool_content .= "&nbsp;<a href='$_SERVER[PHP_SELF]?post_id=".$myrow["post_id"]."&amp;topic=$topic&amp;forum=$forum&amp;delete=on' onClick='return confirmation()'>
@@ -333,15 +328,11 @@ $tool_content .= "\n    </table>";
 
 if ($paging and $total > $posts_per_page) {
 	$times = 1;
-	$tool_content .= <<<cData
-
-    <table WIDTH="99%" class="tbl">
-    <thead>
-    <tr>
-    <td WIDTH="50%" align=\"right\">
-      <span class='row'><strong class='pagination'>
-       <span>
-cData;
+	$tool_content .= "<table width='99%' class='tbl'><thead>
+	<tr>
+	<td width='50%' align='right'>
+	<span class='row'><strong class='pagination'><span>";
+	
 	$last_page = $start - $posts_per_page;
 	$tool_content .= "$langPages: ";
 

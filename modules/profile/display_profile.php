@@ -18,7 +18,7 @@ $userdata = array();
 
 if (isset($_GET['id'])) {
         $id = intval($_GET['id']);
-        $sql = "SELECT nom, prenom, email, am, department FROM user WHERE user_id = $id";
+        $sql = "SELECT nom, prenom, email, am, department, has_icon FROM user WHERE user_id = $id";
         $userdata = db_query_get_single_row($sql);
 } else {
         $navigation[] = array("url" => "profile.php", "name" => $langModifProfile);
