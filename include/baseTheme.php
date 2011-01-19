@@ -211,8 +211,10 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 			$t->set_var ('LANG_LOGOUT', $langLogout);
 		        $t->set_var ('LOGOUT_LINK', $relPath . 'index.php?logout=yes');
                 } else {
-                        $t->set_var ('LANG_LOGOUT', $langLogin);
-		        $t->set_var ('LOGOUT_LINK', $relPath . 'login_form.php');
+			if (get_config('dont_display_login_form')) {
+				$t->set_var ('LANG_LOGOUT', $langLogin);
+				$t->set_var ('LOGOUT_LINK', $relPath . 'login_form.php');
+			}
                 }
 		//set the text and icon on the third bar (header)
 		if ($menuTypeID == 2) {

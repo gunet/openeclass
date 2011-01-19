@@ -97,35 +97,29 @@ if ($shibactive['auth_default'] == 1) {
 	$shibboleth_link = "";
 }
 
-$tool_content .= <<<lCont2
-</div>
-</div>
-<div id="navigation">
+$tool_content .= "</div></div>";
 
- <table width="99%" class='tbl'>
- <tr>
-   <th class="LoginHead"><b>$langUserLogin </b></th>
- </tr>
- <tr>
-   <td class="LoginData">
-   <form action="${urlSecure}index.php" method="post">
-   $langUsername <br />
-   <input class="Login" name="uname" size="20" /><br />
-   $langPass <br />
-   <input class="Login" name="pass" type="password" size="20" /><br /><br />
-   <input class="Login" name="submit" type="submit" size="20" value="$langEnter" /><br />
-   $warning<br />$shibboleth_link
-   <a href="modules/auth/lostpass.php">$lang_forgot_pass</a>
-   </form>
-   </td>
- </tr>
-</table>
+if (!get_config('dont_display_login_form')) {
+	$tool_content .= "<div id='navigation'>
+	 <table width='99%' class='tbl'>
+	 <tr>
+	   <th class='LoginHead'><b>$langUserLogin </b></th>
+	 </tr>
+	 <tr>
+	   <td class='LoginData'>
+	   <form action='${urlSecure}index.php' method = 'post'>
+	   $langUsername <br />
+	   <input class='Login' name='uname' size='20' /><br />
+	   $langPass <br />
+	   <input class='Login' name='pass' type = 'password' size = '20' /><br /><br />
+	   <input class='Login' name='submit' type = 'submit' size = '20' value = '$langEnter' /><br />
+	   $warning<br />$shibboleth_link
+	   <a href='modules/auth/lostpass.php'>$lang_forgot_pass</a>
+	   </form>
+	   </td>
+	 </tr>
+	</table>
+	</div>";
+}
 
-</div>
-<div id="extra">
-{ECLASS_HOME_EXTRAS_RIGHT}
-</div>
-
-</div>
-
-lCont2;
+$tool_content .= "<div id='extra'>{ECLASS_HOME_EXTRAS_RIGHT}</div></div>";

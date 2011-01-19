@@ -452,6 +452,8 @@ db_query("CREATE TABLE `config` (
 
 db_query("INSERT INTO `config` (`key`, `value`)
                VALUES ('version', '" . ECLASS_VERSION ."')");
+db_query("INSERT INTO `config` (`key`, `value`)
+               VALUES ('dont_display_login_form', '0')");
 
 
 #

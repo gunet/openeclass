@@ -473,7 +473,7 @@ if (!isset($_POST['submit2'])) {
 		if (mysql_table_exists($mysqlMainDb, 'cours_faculte')) {
 			db_query("DROP TABLE cours_faculte");	
 		}
-		
+		db_query("INSERT INTO `config` (`key`, `value`) VALUES ('dont_display_login_form', '0')");
         }
 
         // **********************************************
