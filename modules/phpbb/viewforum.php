@@ -269,7 +269,7 @@ $tool_content .= "
 			$topic_link_notify = toggle_link($topic_action_notify);
 			$topic_icon = toggle_icon($topic_action_notify);
 		}
-		$tool_content .= "\n       <td class='center'>";
+		$tool_content .= "\n<td class='center'>";
 		if (isset($_GET['start']) and $_GET['start'] > 0) {
 			$tool_content .= "<a href='$_SERVER[PHP_SELF]?forum=$forum_id&amp;start=$_GET[start]&amp;topicnotify=$topic_link_notify&amp;topic_id=$myrow[topic_id]'><img src='../../template/classic/img/announcements$topic_icon.gif' title='$langNotify'></img></a>";
 		} else {

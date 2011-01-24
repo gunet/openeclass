@@ -46,17 +46,7 @@
 	(viewforum, viewtopic, post_reply, newtopic); the time cost is
 	enormous for both core phpBB code upgrades and migration from an
 	existing (phpBB-based) to a new eclass forum :-(
-
-    @Comments:
-
-    @todo:
 ==============================================================================
-*/
-
-
-/******************************************************************************
- * Actual code starts here
- *****************************************************************************/
 
 /*
  * Gets the total number of topics in a form
@@ -810,33 +800,6 @@ function check_priv_forum_auth($userid, $forumid, $is_posting, $db)
 
 }
 
-/**
- * Displays an error message and exits the script. Used in the posting files.
- */
-function error_die($msg){
-	global $tablewidth, $table_bgcolor;
-	global $db, $user_logged_in;
-	global $FontFace, $FontSize3, $textcolor, $phpbbversion;
-	global $starttime;
-	if ( !isset($tool_content) ) {
-		$tool_content = "";
-	}
-	$tool_content .= "<br>
-		<TABLE BORDER=\"0\" CELLPADDING=\"1\" CELLSPACING=\"0\" ALIGN=\"CENTER\" VALIGN=\"TOP\" WIDTH=\"$tablewidth\">
-		<TR><TD BGCOLOR=\"$table_bgcolor\">
-			<TABLE BORDER=\"0\" CALLPADDING=\"1\" CELLSPACEING=\"1\" WIDTH=\"100%\">
-			<TR ALIGN=\"LEFT\">
-			<TD>
-			<p><font face=\"Verdana\" size=\"2\"><ul>$msg</ul></font></P>
-			</TD>
-			</TR>
-			</TABLE>
-		</TD></TR>
-	 	</TABLE>
-	 	<br>";
-	draw($tool_content, 2);
-	exit();
-}
 
 function get_syslang_string($sys_lang, $string) {
 	include('language/lang_' . $sys_lang . '.php');
@@ -848,92 +811,54 @@ function sync($thedb, $id, $type) {
    switch($type) {
    	case 'forum':
    		$sql = "SELECT max(post_id) AS last_post FROM posts WHERE forum_id = $id";
-   		if(!$result = db_query($sql, $thedb))
-   		{
-   			error_die("Could not get post ID");
-   		}
-   		if($row = mysql_fetch_array($result))
-   		{
+   		$result = db_query($sql, $thedb);
+   		if($row = mysql_fetch_array($result)) {
    			$last_post = $row["last_post"];
    		}
-   		
    		$sql = "SELECT count(post_id) AS total FROM posts WHERE forum_id = $id";
-   		if(!$result = db_query($sql, $thedb))
-   		{
-   			error_die("Could not get post count");
-   		}
-   		if($row = mysql_fetch_array($result))
-   		{
+   		$result = db_query($sql, $thedb);
+   		if($row = mysql_fetch_array($result)) {
    			$total_posts = $row["total"];
    		}
-   		
    		$sql = "SELECT count(topic_id) AS total FROM topics WHERE forum_id = $id";
-   		if(!$result = db_query($sql, $thedb))
-   		{
-   			error_die("Could not get topic count");
-   		}
-   		if($row = mysql_fetch_array($result))
-   		{
+   		$result = db_query($sql, $thedb);
+   		if($row = mysql_fetch_array($result)) {
    			$total_topics = $row["total"];
    		}
-   		
    		$sql = "UPDATE forums
 			SET forum_last_post_id = '$last_post', forum_posts = $total_posts, forum_topics = $total_topics
 			WHERE forum_id = $id";
-   		if(!$result = db_query($sql, $thedb))
-   		{
-   			error_die("Could not update forum $id");
-   		}
+   		$result = db_query($sql, $thedb);
    	break;
 
    	case 'topic':
    		$sql = "SELECT max(post_id) AS last_post FROM posts WHERE topic_id = $id";
-   		if(!$result = db_query($sql, $thedb))
-   		{
-   			error_die("Could not get post ID");
-   		}
-   		if($row = mysql_fetch_array($result))
-   		{
+		$result = db_query($sql, $thedb);
+   		if($row = mysql_fetch_array($result)) {
    			$last_post = $row["last_post"];
    		}
-   		
    		$sql = "SELECT count(post_id) AS total FROM posts WHERE topic_id = $id";
-   		if(!$result = db_query($sql, $thedb))
-   		{
-   			error_die("Could not get post count");
-   		}
-   		if($row = mysql_fetch_array($result))
-   		{
+   		$result = db_query($sql, $thedb);
+   		if($row = mysql_fetch_array($result)) {
    			$total_posts = $row["total"];
    		}
    		$total_posts -= 1;
    		$sql = "UPDATE topics SET topic_replies = $total_posts, topic_last_post_id = $last_post WHERE topic_id = $id";
-   		if(!$result = db_query($sql, $thedb))
-   		{
-   			error_die("Could not update topic $id");
-   		}
+   		$result = db_query($sql, $thedb);
    	break;
 
    	case 'all forums':
    		$sql = "SELECT forum_id FROM forums";
-   		if(!$result = db_query($sql, $thedb))
-   		{
-   			error_die("Could not get forum IDs");
-   		}
-   		while($row = mysql_fetch_array($result))
-   		{
+   		$result = db_query($sql, $thedb);
+   		while($row = mysql_fetch_array($result)) {
    			$id = $row["forum_id"];
    			sync($thedb, $id, "forum");
    		}
    	break;
    	case 'all topics':
    		$sql = "SELECT topic_id FROM topics";
-   		if(!$result = db_query($sql, $thedb))
-   		{
-   			error_die("Could not get topic ID's");
-   		}
-   		while($row = mysql_fetch_array($result))
-   		{
+   		$result = db_query($sql, $thedb);
+   		while($row = mysql_fetch_array($result)) {
    			$id = $row["topic_id"];
    			sync($thedb, $id, "topic");
    		}
