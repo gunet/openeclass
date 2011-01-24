@@ -37,7 +37,8 @@
 *               HOME PAGE OF ECLASS		               *
 ****************************************************************
 */
-define ("INDEX_START", 1);
+define('INDEX_START', 1);
+define('HIDE_TOOL_TITLE', 1);
 $guest_allowed = true;
 $path2add = 0;
 include "include/baseTheme.php";
@@ -201,7 +202,6 @@ if (isset($language)) {
         }
 
 }
-$nameTools = $langWelcomeToEclass;
 
 //----------------------------------------------------------------
 // if login succesful display courses lists

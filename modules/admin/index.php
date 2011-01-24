@@ -36,8 +36,7 @@ $require_admin = true;
 include '../../include/baseTheme.php';
 // Define $nameTools
 $nameTools = $langAdmin;
-// Initialise $tool_content
-$tool_content = "";
+define('HIDE_TOOL_TITLE', 1);
 
 /*****************************************************************************
         MAIN BODY
@@ -170,4 +169,4 @@ $tool_content .= "
 // $tool_content: the content to display
 // 3: display administrator menu
 // admin: use tool.css from admin folder
-draw($tool_content,3,'admin');
+draw($tool_content,3);

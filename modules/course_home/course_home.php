@@ -35,6 +35,7 @@
 
 $require_current_course = TRUE;
 $guest_allowed = true;
+define('HIDE_TOOL_TITLE', 1);
 
 //$courseHome is used by the breadcrumb logic
 //See function draw() in baseTheme.php for details
@@ -355,4 +356,4 @@ $tool_content .= "
 
 </div>
 ";
-draw($tool_content, 2,'course_home', $head_content);
+draw($tool_content, 2, '', $head_content);

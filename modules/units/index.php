@@ -27,7 +27,7 @@
 /*
 Units display module	
 */
-
+define('HIDE_TOOL_TITLE', 1);
 $require_current_course = true;
 $require_help = TRUE;
 $helpTopic = 'AddCourseUnitscontent';
@@ -35,7 +35,6 @@ include '../../include/baseTheme.php';
 include '../../include/lib/fileDisplayLib.inc.php';
 include '../../include/action.php';
 include 'functions.php';
-$tool_content = $head_content = '';
 
 $action = new action();
 $action->record('MODULE_ID_UNITS');
@@ -227,5 +226,5 @@ $tool_content .= "</select>
     </table>
  </form>";
 
-draw($tool_content, 2, 'units', $head_content);
+draw($tool_content, 2, '', $head_content);
 
