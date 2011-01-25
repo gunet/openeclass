@@ -382,7 +382,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 
 		//Add the optional tool-specific css of the tool, if it's set
 		if (isset ( $tool_css )) {
-			$t->set_var ( 'TOOL_CSS', "<link href=\"{TOOL_PATH}modules/$tool_css/tool.css\" rel=\"stylesheet\" type=\"text/css\" />" );
+			$t->set_var ( 'TOOL_CSS', "<link href=\"{TOOL_PATH}modules/$tool_css/tool.css\" rel=\"stylesheet\" type=\"text/css\" >" );
 		}
 
 		$t->set_var ( 'TOOL_PATH', $relPath );
