@@ -63,17 +63,20 @@ if ($is_adminOfCourse) {
     if (isset($_POST['submit'])) {
         db_query("INSERT INTO glossary SET term = '$_POST[term]', definition='$_POST[definition]',
                 `order` = '".findorder($cours_id)."', datestamp = NOW(), course_id = $cours_id");
+        invalidate_glossary_cache();
         $tool_content .= "<div class='success'>$langGlossaryAdded</div><br />";
     }
     if (isset($_POST['edit_submit'])) {
         $sql = db_query("UPDATE glossary SET term='$_POST[term]', definition='$_POST[definition]',
                  datestamp=NOW() WHERE id='$_POST[id]' AND course_id = $cours_id");
+        invalidate_glossary_cache();
         if (mysql_affected_rows() > 0) {
             $tool_content .= "<div class='success'>$langGlossaryUpdated</div><br />";    
         }
     }
     if (isset($_GET['delete'])) {
         $sql = db_query("DELETE FROM glossary WHERE id = '$_GET[delete]' AND course_id = $cours_id");
+        invalidate_glossary_cache();
         if (mysql_affected_rows() > 0) {
             $tool_content .= "<div class='success'>$langGlossaryDeleted</div><br />";    
         }

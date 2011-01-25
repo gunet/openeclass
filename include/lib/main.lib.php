@@ -1616,18 +1616,49 @@ function purify($text)
 // Expand glossry terms to HTML for tooltips with the definition
 function glossary_expand($text)
 {
-        # FIXME: Use actual terms from glossary subsystem
-        $terms = array('κοκ[οό]', 'λαλ[αά]', 'koko', 'lala');
-        $terms_regexp = '/' . implode('|', $terms) . '/ui';
+        global $cours_id;
 
-        return preg_replace_callback($terms_regexp, 'glossary_expand_callback', $text);
+        if (!isset($_SESSION['glossary']) or
+            $_SESSION['glossary_course_id'] != $cours_id) {
+                get_glossary_terms($cours_id);
+                $_SESSION['glossary_terms_regexp'] = '/' .
+                        implode('|', array_keys($_SESSION['glossary'])) .
+                        '/ui';
+        }
+        if ($_SESSION['glossary_terms_regexp'] != '//ui') {
+                return preg_replace_callback($_SESSION['glossary_terms_regexp'],
+                                             'glossary_expand_callback', $text);
+        } else {
+                return $text;
+        }
 }
 
 function glossary_expand_callback($matches)
 {
-        return '<span style="background-color: #FCC;" title=\'Glossary definition for term "' .
-                $matches[0] . '"\'>' . $matches[0] . '</span>';
+        $term = mb_strtolower($matches[0]);
+        $definition = q($_SESSION['glossary'][$term]);
+        return '<span style="background-color: #FCC;" title="' .
+                $definition . '">' . $matches[0] . '</span>';
+}
 
+function get_glossary_terms($cours_id)
+{
+	global $mysqlMainDb;
+
+        $q = db_query("SELECT term, definition FROM `$mysqlMainDb`.glossary
+                              WHERE course_id = $cours_id");
+        
+        $_SESSION['glossary'] = array();
+        while ($row = mysql_fetch_array($q)) {
+                $term = mb_strtolower($row['term']);
+                $_SESSION['glossary'][$term] = $row['definition'];
+        }
+        $_SESSION['glossary_course_id'] = $cours_id;
+}
+
+function invalidate_glossary_cache()
+{
+        unset($_SESSION['glossary']); 
 }
 
 function redirect_to_home_page($path = '')
