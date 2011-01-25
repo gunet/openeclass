@@ -1642,7 +1642,13 @@ function glossary_expand($text)
 
 function glossary_expand_callback($matches)
 {
+        static $glossary_seen_terms;
+
         $term = mb_strtolower($matches[0]);
+        if (isset($glossary_seen_terms[$term])) {
+                return $matches[0];
+        }
+        $glossary_seen_terms[$term] = true;
         $definition = q($_SESSION['glossary'][$term]);
         return '<span style="background-color: #FCC;" title="' .
                 $definition . '">' . $matches[0] . '</span>';
