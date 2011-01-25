@@ -1621,9 +1621,16 @@ function glossary_expand($text)
         if (!isset($_SESSION['glossary']) or
             $_SESSION['glossary_course_id'] != $cours_id) {
                 get_glossary_terms($cours_id);
-                $_SESSION['glossary_terms_regexp'] = '/' .
-                        implode('|', array_keys($_SESSION['glossary'])) .
-                        '/ui';
+                $_SESSION['glossary_terms_regexp'] = '/';
+                $begin = true;
+                foreach (array_keys($_SESSION['glossary']) as $term) {
+                        $_SESSION['glossary_terms_regexp'] .= ($begin? '': '|') .
+                                                              '\b' . $term . '\b';
+                        if ($begin) {
+                                $begin = false;
+                        }
+                }
+                $_SESSION['glossary_terms_regexp'] .= '/ui';
         }
         if ($_SESSION['glossary_terms_regexp'] != '//ui') {
                 return preg_replace_callback($_SESSION['glossary_terms_regexp'],
