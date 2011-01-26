@@ -1613,12 +1613,14 @@ function purify($text)
         return $purifier->purify($text);
 }
 
-// Expand glossry terms to HTML for tooltips with the definition
+// Expand glossary terms to HTML for tooltips with the definition
 function glossary_expand($text)
 {
         global $cours_id;
 
-        if (!isset($_SESSION['glossary']) or
+	if (!isset($cours_id)) {
+		unset($_SESSION['glossary_terms_regexp']);
+	} elseif (!isset($_SESSION['glossary']) or
             $_SESSION['glossary_course_id'] != $cours_id) {
                 get_glossary_terms($cours_id);
                 $_SESSION['glossary_terms_regexp'] = '/';
@@ -1631,8 +1633,12 @@ function glossary_expand($text)
                         }
                 }
                 $_SESSION['glossary_terms_regexp'] .= '/ui';
+		if ($_SESSION['glossary_terms_regexp'] == '//ui') {
+			unset($_SESSION['glossary_terms_regexp']);
+		}
         }
-        if ($_SESSION['glossary_terms_regexp'] != '//ui') {
+        if (isset($_SESSION['glossary_terms_regexp'])) {
+
                 return preg_replace_callback($_SESSION['glossary_terms_regexp'],
                                              'glossary_expand_callback', $text);
         } else {
@@ -1644,12 +1650,12 @@ function glossary_expand_callback($matches)
 {
         static $glossary_seen_terms;
 
-        $term = mb_strtolower($matches[0]);
+        $term = mb_strtolower($matches[0], 'UTF-8');
         if (isset($glossary_seen_terms[$term])) {
                 return $matches[0];
         }
         $glossary_seen_terms[$term] = true;
-        $definition = q($_SESSION['glossary'][$term]);
+        $definition = q($_SESSION['glossary'][$term]);	
         return '<span style="background-color: #FCC;" title="' .
                 $definition . '">' . $matches[0] . '</span>';
 }
@@ -1663,7 +1669,7 @@ function get_glossary_terms($cours_id)
         
         $_SESSION['glossary'] = array();
         while ($row = mysql_fetch_array($q)) {
-                $term = mb_strtolower($row['term']);
+                $term = mb_strtolower($row['term'], 'UTF-8');
                 $_SESSION['glossary'][$term] = $row['definition'];
         }
         $_SESSION['glossary_course_id'] = $cours_id;
