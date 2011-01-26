@@ -106,7 +106,7 @@ if (isset($_POST['delete'])) {
 $q = db_query("SELECT * FROM `ebook` WHERE course_id = $cours_id AND id = $id");
 
 if (mysql_num_rows($q) == 0) {
-        $tool_content .= "<p class='alert1'>$langNoEBook</p>\n";
+        $tool_content .= "\n    <p class='alert1'>$langNoEBook</p>\n";
 } else {
         $info = mysql_fetch_array($q);
         $basedir = $webDir . 'courses/' . $currentCourseID . '/ebook/' . $id;
@@ -114,14 +114,21 @@ if (mysql_num_rows($q) == 0) {
         $html_files = find_html_files($basedir);
         sort($html_files, SORT_STRING);
 
-        $tool_content .= "<div id='operations_container'><ul id='opslist'>
-                             <li><a href='replace.php?id=$id'>$langEBookReplace</a></li></ul></div>
-                          <form method='post' action='edit.php'>
-                             <p><input type='hidden' name='id' value='$id' /><br />
-                                $langTitle: <input type='text' name='ebook_title' size='53' value='" . q($info['title']) . "' />
-                                <input name='title_submit' type='submit' value='$langModify' />
-                             </p>
-                          </form>
+        $tool_content .= "
+    <div id='operations_container'>
+      <ul id='opslist'>
+        <li><a href='replace.php?id=$id'>$langEBookReplace</a></li>
+      </ul>
+    </div>
+    
+    <form method='post' action='edit.php'>
+    <fieldset>
+         <input type='hidden' name='id' value='$id' />
+         $langTitle: <input type='text' name='ebook_title' size='53' value='" . q($info['title']) . "' />
+                     <input name='title_submit' type='submit' value='$langModify' />
+      </p>
+    </fieldset>
+    </form>
 
                           <form method='post' action='edit.php'>
                           <input type='hidden' name='id' value='$id' /><br />
