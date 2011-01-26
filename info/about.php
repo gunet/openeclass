@@ -34,7 +34,7 @@ $tool_content ="";
     <p>$langIntro</p>
     <br />
 
-          <table class='tbl_border' width='500'>
+          <table class='tbl_border'>
           <tr>
             <th>&nbsp;</th>
             <td><b>$langStoixeia</b></td>
