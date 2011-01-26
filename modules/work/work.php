@@ -943,7 +943,7 @@ function show_student_assignments()
                                    WHERE active = '1' ORDER BY submission_date");
 
         if (mysql_num_rows($result)) {
-                $tool_content .= "<table class='WorkSum' align='left' width='99%'>
+                $tool_content .= "<table align='left' width='99%'>
                                   <thead>
                                   <tr><th colspan='2'><div align='left'>&nbsp;&nbsp;$m[title]</div></th>
                                       <th><div align='left'>$m[deadline]</div></th>

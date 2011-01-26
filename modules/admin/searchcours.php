@@ -73,16 +73,19 @@ if (isset($searchtitle) && isset($searchcode) && isset($searchtype) && isset($se
 }
 
 // search form
-$tool_content .= "<form action=\"listcours.php?search=yes\" method=\"post\">";
-$tool_content .= "<table width='99%' class='FormData' align='left'><tbody><tr>
-<th width='220'>&nbsp;</th><td><b>".$langSearchCriteria." ".@$newsearch."</b></td></tr>";
-
-$tool_content .= "<tr><th class='left'>$langTitle:</th>
-<td><input type=\"text\" class='FormData_InputText' name=\"formsearchtitle\" size=\"40\" value=\"".@$searchtitle."\"></td>
-</tr>";
-$tool_content .= "<tr><th class='left'><b>$langCourseCode:</b></th>
-<td><input class='FormData_InputText' type=\"text\" name=\"formsearchcode\" size=\"40\" value=\"".@$searchcode."\"></td>
-</tr>";
+$tool_content .= "
+    <form action=\"listcours.php?search=yes\" method=\"post\">
+    <fieldset>
+      <legend>".$langSearchCriteria." ".@$newsearch."</legend>
+      <table width='99%' class='tbl'>
+      <tr>
+        <th class='left' width='150'>$langTitle:</th>
+        <td><input type=\"text\" name=\"formsearchtitle\" size=\"40\" value=\"".@$searchtitle."\"></td>
+      </tr>
+      <tr>
+        <th class='left'><b>$langCourseCode:</b></th>
+        <td><input type=\"text\" name=\"formsearchcode\" size=\"40\" value=\"".@$searchcode."\"></td>
+      </tr>";
 
 switch (@$searchcode) {
 	case "2":
@@ -99,36 +102,53 @@ switch (@$searchcode) {
 		break;
 }
 
-$tool_content .= "<tr><th class='left'><b>$langCourseVis:</b></td>
-<td>
-<select name=\"formsearchtype\" class=\"auth_input\">
-<option value=\"-1\" ".$typeSel[-1].">$langAllTypes</option>
-<option value=\"2\" ".@$typeSel[2].">$langTypeOpen</option>
-<option value=\"1\" ".@$typeSel[1].">$langTypeRegistration</option>
-<option value=\"0\" ".@$typeSel[0].">$langTypeClosed</option>
-</select>
-</td></tr>";
+$tool_content .= "
+      <tr>
+        <th class='left'><b>$langCourseVis:</b></td>
+        <td>
+          <select name=\"formsearchtype\">
+           <option value=\"-1\" ".$typeSel[-1].">$langAllTypes</option>
+           <option value=\"2\" ".@$typeSel[2].">$langTypeOpen</option>
+           <option value=\"1\" ".@$typeSel[1].">$langTypeRegistration</option>
+           <option value=\"0\" ".@$typeSel[0].">$langTypeClosed</option>
+          </select>
+        </td>
+      </tr>";
 
-$tool_content .= "<tr><th class='left'><b>".$langFaculty.":</b></th>
-<td><select name=\"formsearchfaculte\" class=\"auth_input\">
-<option value=\"0\">$langAllFacultes</option>\n";
+$tool_content .= "
+      <tr>
+        <th class='left'><b>".$langFaculty.":</b></th>
+        <td>
+          <select name=\"formsearchfaculte\">
+           <option value=\"0\">$langAllFacultes</option>\n";
 
 $resultFac=mysql_query("SELECT name FROM faculte ORDER BY number");
 while ($myfac = mysql_fetch_array($resultFac)) {
 	if($myfac['name'] == @$searchfaculte)
-		$tool_content .= "<option selected>$myfac[name]</option>";
+		$tool_content .= "
+           <option selected>$myfac[name]</option>";
 	else
-		$tool_content .= "<option>$myfac[name]</option>";
+		$tool_content .= "
+           <option>$myfac[name]</option>";
 }
 
-$tool_content .= "</select></td></tr>";
+$tool_content .= "
+          </select>
+        </td>
+      </tr>";
 
-$tool_content .= "<tr><th>&nbsp;</th><td>
-	<input type='submit' name='search_submit' value='$langSearch'></td></tr>";
-$tool_content .= "</tbody></table></form>";
+$tool_content .= "
+      <tr>
+        <th>&nbsp;</th>
+        <td><input type='submit' name='search_submit' value='$langSearch'></td>
+      </tr>";
+$tool_content .= "
+      </table>
+      </fieldset>
+      </form>";
 
 // Display link to go back to index.php
-$tool_content .= "<p align=\"right\"><a href=\"index.php\">".$langBack."</a></p>";
+$tool_content .= "\n    <p align=\"right\"><a href=\"index.php\">".$langBack."</a></p>";
 
 draw($tool_content, 3);
 ?>

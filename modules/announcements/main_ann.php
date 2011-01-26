@@ -49,7 +49,7 @@ if (mysql_num_rows($result) > 0) {
 		array_push($announceArr, $eclassAnnounce);
 	}
         $tool_content .= "<br/>
-        <table width='99%' class='AnnouncementsList'>
+        <table width='99%'>
 	<thead><tr><th width='180'>$langAnnouncements
 	</th><th>&nbsp;</th></tr></thead>
 	<tbody>";

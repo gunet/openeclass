@@ -68,7 +68,7 @@ if (mysql_num_rows($result) > 0) {
 		array_push($announceArr, $eclassAnnounce);
 	}
         $tool_content .= "<br/>
-        <table width='99%' class='AnnouncementsList'>
+        <table width='99%'>
 	<thead><tr><th width='180'>$langAnnouncements
 	<span class='feed'><a href='${urlServer}rss.php'>
 	<img src='${urlServer}template/classic/img/feed.png' alt='RSS Feed' title='RSS Feed' />

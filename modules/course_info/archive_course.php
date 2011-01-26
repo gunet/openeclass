@@ -49,7 +49,7 @@ if($is_adminOfCourse) {
 	$shortDateBackuping  = date("YzBs"); // YEAR - Day in Year - Swatch - second
 	$archiveDir .= "/".$currentCourseID."/".$dateBackuping;
 	$zipfile = $webDir."courses/archive/$currentCourseID/archive.$currentCourseID.$shortDateBackuping.zip";
-	$tool_content .= "<table class='Deps' align='center'><tbody><tr><th align=\"left\"><ol>\n";
+	$tool_content .= "<table class='tbl' align='center'><tbody><tr><th align=\"left\"><ol>\n";
 
 	$dirArchive = realpath("../..").$archiveDir;
 	mkpath($dirArchive);

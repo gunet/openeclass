@@ -114,7 +114,7 @@ function show_assignments()
 	    <tr>
 	      <th class='left'>$langWorks ($m[select]):</th>
 	      <td>
-	    <table width='99%' class='WorkSum align='left'>
+	    <table width='99%' align='left'>
 	    <thead>
 	    <tr>
 		<th class='left' colspan='2'>$m[title]</th>
