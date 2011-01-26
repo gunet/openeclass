@@ -559,9 +559,7 @@ table.CourseDescr td {
 	color: #727266;
 	vertical-align: middle;
 }
-
 /* ----- END course_description ----- */
-
 
 /* ----- START course_home ----- */
 div#content_login { margin-right: 200px; }
@@ -1152,13 +1150,6 @@ table.Documents img {
 	vertical-align: middle; 
 } 
 /* ----- END learnpath ----- */
-
-
-/* ----- START link ----- */
-.linkimg {
-	vertical-align:top; 
-}
-/* ----- END link ----- */
 
 
 /* ----- START phpbb ----- */
