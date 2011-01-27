@@ -408,9 +408,10 @@ if (!isset($_POST['submit2'])) {
                                 `description` TEXT,
                                 PRIMARY KEY (`group_id`, `user_id`))");
                 db_query("CREATE TABLE IF NOT EXISTS `glossary` (
-			       `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+			       `id` MEDIUMINT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
 			       `term` VARCHAR(255) NOT NULL,
-			       `definition` TEXT,
+			       `definition` text NOT NULL,
+			       `url` text,
                                `order` INT(11) NOT NULL DEFAULT 0,
                                `datestamp` DATE NOT NULL,
                                `course_id` INT(11) NOT NULL)");

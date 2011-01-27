@@ -1427,7 +1427,8 @@ tinyMCE.init({
 		mode : 'textareas',
 		theme : 'advanced',
 		plugins : 'pagebreak,style,save,advimage,advlink,inlinepopups,media,print,contextmenu,paste,noneditable,visualchars,nonbreaking,xhtmlxtras,template,wordcount,advlist,emotions,preview',
-
+		entity_encoding : 'raw',
+	
 		// Theme options
 		theme_advanced_buttons1 : 'bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,styleselect,formatselect,fontsizeselect,forecolor,backcolor,removeformat,hr',
 		theme_advanced_buttons2 : 'pasteword,|,bullist,numlist,|indent,blockquote,|,sub,sup,|,undo,redo,|,link,unlink,|,charmap,media,emotions,image,|,preview,cleanup,code',
@@ -1638,7 +1639,6 @@ function glossary_expand($text)
 		}
         }
         if (isset($_SESSION['glossary_terms_regexp'])) {
-
                 return preg_replace_callback($_SESSION['glossary_terms_regexp'],
                                              'glossary_expand_callback', $text);
         } else {
@@ -1655,22 +1655,36 @@ function glossary_expand_callback($matches)
                 return $matches[0];
         }
         $glossary_seen_terms[$term] = true;
-        $definition = q($_SESSION['glossary'][$term]);	
-        return '<span style="background-color: #FCC;" title="' .
-                $definition . '">' . $matches[0] . '</span>';
+	if (!empty($_SESSION['glossary'][$term])) {
+		$definition = ' title="' . q($_SESSION['glossary'][$term]) . '"';
+	} else {
+		$definition = '';
+	}
+	if (isset($_SESSION['glossary_url'][$term])) {
+		return '<a href="' . q($_SESSION['glossary_url'][$term]) .
+		       '" target="_blank" class="glossary"' .
+		        $definition . '>' . $matches[0] . '</a>';
+	} else {
+		return '<span class="glossary"' .
+			$definition . '>' . $matches[0] . '</span>';
+	}
 }
 
 function get_glossary_terms($cours_id)
 {
 	global $mysqlMainDb;
 
-        $q = db_query("SELECT term, definition FROM `$mysqlMainDb`.glossary
+        $q = db_query("SELECT term, definition, url FROM `$mysqlMainDb`.glossary
                               WHERE course_id = $cours_id");
         
         $_SESSION['glossary'] = array();
+	$_SESSION['glossary_url'] = array();
         while ($row = mysql_fetch_array($q)) {
                 $term = mb_strtolower($row['term'], 'UTF-8');
                 $_SESSION['glossary'][$term] = $row['definition'];
+		if (!empty($row['url'])) {
+			$_SESSION['glossary_url'][$term] = $row['url'];
+		}
         }
         $_SESSION['glossary_course_id'] = $cours_id;
 }
@@ -1783,5 +1797,14 @@ function profile_image($uid, $size, $default = FALSE)
 		return "<img src='${urlServer}courses/userimg/${uid}_$size.jpg' alt='' />";
 	} else {
 		return "<img src='${urlServer}template/classic/img/default_$size.jpg' alt='' />";
+	}
+}
+
+function canonicalize_url($url)
+{
+        if (!preg_match('/^[a-zA-Z0-9_-]+:/', $url)) {
+                return 'http://' . $url;
+        } else {
+		return $url;
 	}
 }

@@ -367,9 +367,7 @@ function submit_link()
                                         'title' => true,
                                         'description' => true,
                                         'selectcategory' => true), 'all', 'trim');
-        if (!preg_match('/^[a-zA-Z0-9_-]+:/', $urllink)) {
-                $urllink = 'http://' . $urllink;
-        }
+	$urllink = canonicalize_link($urllink);
         $set_sql = "SET url = " . autoquote($urllink) . ",
                         title = " . autoquote($title) . ",
                         description = " . autoquote($description) . ",

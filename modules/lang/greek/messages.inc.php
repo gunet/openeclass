@@ -3110,7 +3110,7 @@ $langEditGlossaryTerm = "Διόρθωση όρου";
 $langGlossaryAdded = "Η προσθήκη όρου πραγματοποιήθηκε";
 $langGlossaryUpdated = "Η αλλαγή πραγματοποιήθηκε με επιτυχία";
 $langGlossaryDeleted = "Η διαγραφή πραγματοποιήθηκε με επιτυχία";
-
+$langGlossaryUrl = "URL ορισμού";
 $langEBook = 'Ηλεκτρονικό Βιβλίο';
 $langEBookCreate = "Δημιουργία Ηλεκτρονικού Βιβλίου";
 $langEBookEdit = 'Διόρθωση Ηλεκτρονικού Βιβλίου';
