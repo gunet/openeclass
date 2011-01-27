@@ -56,7 +56,7 @@
 
 function replace_dangerous_char($string)
 {
-	return preg_replace('/[?*<>\\/\\\\"|:]/', '-', $string);
+	return preg_replace('/[?*<>\\/\\\\"|:\']/', '_', $string);
 }
 
 //------------------------------------------------------------------------------
