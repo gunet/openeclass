@@ -98,7 +98,7 @@ if (isset($_SESSION['shib_uname'])) { // authenticate via shibboleth
 	if(!empty($submit)) {
 		unset($uid);
 		$sqlLogin= "SELECT user_id, nom, username, password, prenom, statut, email, perso, lang
-			FROM user WHERE username=" . quote($uname);
+			FROM user WHERE username COLLATE utf8_bin = " . quote($uname);
 		$result = mysql_query($sqlLogin);
 		$check_passwords = array('pop3', 'imap', 'ldap', 'db');
 		$warning = '';

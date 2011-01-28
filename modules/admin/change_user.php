@@ -40,9 +40,8 @@ $tool_content = '';
 
 if (isset($_POST['username'])) {
 	$result = db_query("SELECT user_id, nom, username, password, prenom, statut, email, iduser is_admin, perso, lang
-                FROM user LEFT JOIN admin
-                ON user.user_id = admin.iduser
-                WHERE username=" . autoquote($_POST['username']));
+                                   FROM user LEFT JOIN admin ON user.user_id = admin.iduser
+                                   WHERE username COLLATE utf8_bin = " . autoquote($_POST['username']));
 	if (mysql_num_rows($result) > 0) {
                 $myrow = mysql_fetch_array($result);
                 $_SESSION['uid'] = $myrow["user_id"];
