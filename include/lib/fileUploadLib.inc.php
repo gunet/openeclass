@@ -481,8 +481,11 @@ function process_extracted_file($p_event, &$p_header) {
         global $file_comment, $file_category, $file_creator, $file_date, $file_subject,
                $file_title, $file_description, $file_author, $file_language,
                $file_copyrighted, $uploadPath, $realFileSize, $basedir, $cours_id,
-               $subsystem, $subsystem_id;
+               $subsystem, $subsystem_id, $uploadPath;
 
+        if (!isset($uploadPath)) {
+                $uploadPath = '';
+        }
         $realFileSize += $p_header['size'];
         $stored_filename = $p_header['stored_filename'];
         if (invalid_utf8($stored_filename)) {
@@ -498,7 +501,7 @@ function process_extracted_file($p_event, &$p_header) {
                 return 0;
         } else {
                 $format = get_file_extension($filename);
-                $path .= '/' . safe_filename($format);
+                $path .= ($uploadPath? $uploadPath: '/') . safe_filename($format);
                 db_query("INSERT INTO document SET
                                  course_id = $cours_id,
 				 subsystem = $subsystem,

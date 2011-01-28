@@ -213,13 +213,14 @@ if($can_upload) {
 		if ($diskUsed + @$_FILES['userFile']['size'] > $diskQuotaDocument) {
 			$action_message .= "<p class='caution'>$langNoSpace</p>";
 		} else {
+                        $uploadPath = str_replace('\'', '', $_POST['uploadPath']);
+
                         if (unwanted_file($_FILES['userFile']['name'])) {
                                 $action_message .= "<p class='caution'>$langUnwantedFiletype: " .
                                                    q($_FILES['userFile']['name']) . "</p>";
-                        }
-                        /*** Unzipping stage ***/
-                        elseif (isset($_POST['uncompress']) and $_POST['uncompress'] == 1
-                                and preg_match('/\.zip$/i', $_FILES['userFile']['name'])) {
+                        } elseif (isset($_POST['uncompress']) and $_POST['uncompress'] == 1
+                                  and preg_match('/\.zip$/i', $_FILES['userFile']['name'])) {
+                                /*** Unzipping stage ***/
                                 $zipFile = new pclZip($userFile);
                                 $realFileSize = 0;
                                 $zipFile->extract(PCLZIP_CB_PRE_EXTRACT, 'process_extracted_file');
@@ -231,7 +232,6 @@ if($can_upload) {
                         } else {
                                 $error = false;
                                 $fileName = canonicalize_whitespace($_FILES['userFile']['name']);
-                                $uploadPath = $_POST['uploadPath'];
                                 // Check if upload path exists
                                 if (!empty($uploadPath)) {
                                         $result = mysql_fetch_row(db_query("SELECT count(*) FROM document

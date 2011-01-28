@@ -199,33 +199,41 @@ function file_url_escape($name)
                            rawurlencode($name));
 }
 
+
 function public_file_path($disk_path, $filename = null)
 {
 	global $mysqlMainDb, $group_sql;
-	static $oldpath = '', $dirname;
+        static $seen_paths;
+
 	$dirpath = dirname($disk_path);
 	if ($dirpath == '/') {
-		$oldpath = $dirpath = '';
 		$dirname = '';
 	} else {
-		if ($dirpath != $oldpath) {
+		if (!isset($seen_paths[$disk_path])) {
 			$components = explode('/', $dirpath);
 			array_shift($components);
 			$partial_path = '';
 			$dirname = '';
 			foreach ($components as $c) {
 				$partial_path .= '/' . $c;
-                                $q = db_query("SELECT filename FROM `$mysqlMainDb`.document
-                                                               WHERE $group_sql AND
-                                                                     path = '$partial_path'");
-				list($name) = mysql_fetch_row($q);
-				$dirname .= '/' . file_url_escape($name);
-			}
-		}
+                                if (!isset($seen_paths[$partial_path])) {
+                                        $q = db_query("SELECT filename FROM `$mysqlMainDb`.document
+                                                                       WHERE $group_sql AND
+                                                                             path = '$partial_path'");
+                                        list($name) = mysql_fetch_row($q);
+                                        $dirname .= '/' . file_url_escape($name);
+                                        $seen_paths[$partial_path] = $dirname;
+                                } else {
+                                        $dirname = $seen_paths[$partial_path];
+                                }
+                        }
+                        $seen_paths[$partial_path] = $dirpath;
+                }
+
         }
         if (!isset($filename)) {
                 $q = db_query("SELECT filename FROM `$mysqlMainDb`.document
-                                               WHERE course_id = $cours_id AND
+                                               WHERE $group_sql AND
                                                      path = '$disk_path'");
                 list($filename) = mysql_fetch_row($q);
         }
