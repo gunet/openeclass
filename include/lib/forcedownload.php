@@ -84,8 +84,8 @@ function send_file_to_client($real_filename, $filename, $send_inline = false, $s
                 header('Cache-Control: no-store, no-cache, no-transform, must-revalidate, private');
                 header('Expires: 0');
         }
-	ob_end_flush();
         header('Content-length: ' . filesize($real_filename));
+	ob_end_flush();
         readfile($real_filename);
 	
 	if ($delete) { 
@@ -302,3 +302,65 @@ function text_charset($filename)
         fclose($f);
         return mb_detect_encoding($contents, 'ASCII,UTF-8,ISO-8859-7,ISO-8859-1');
 }
+
+function public_path_to_disk_path($path_components, $path = '')
+{
+        global $group_sql;
+
+        $depth = substr_count($path, '/') + 1;
+        foreach ($path_components as $component) {
+                $component = urldecode(str_replace(chr(1), '/', $component));
+                $q = db_query("SELECT path, visibility, format,
+                                      (LENGTH(path) - LENGTH(REPLACE(path, '/', ''))) AS depth
+                                      FROM document
+                                      WHERE $group_sql AND
+                                            filename = " . quote($component) . " AND
+                                            path LIKE '$path%' HAVING depth = $depth");
+                if (!$q or mysql_num_rows($q) == 0) {
+                        not_found('/' . implode('/', $path_components));
+                }
+                $r = mysql_fetch_array($q);
+                $path = $r['path'];
+                $depth++;
+        }
+
+        if (!preg_match("/\.$r[format]$/", $component)) {
+                $component .= '.' . $r['format'];
+        }
+        $r['filename'] = $component;
+
+        return $r;
+}
+
+function not_found($path)
+{
+        global $uri;
+        restore_saved_course();
+        header("HTTP/1.0 404 Not Found");
+        echo '<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN"><html><head>',
+             '<title>404 Not Found</title></head><body>',
+             '<h1>Not Found</h1><p>The requested path "',
+             htmlspecialchars($path),
+             '" was not found.</p></body></html>';
+        exit;
+}
+
+function error($message)
+{
+        global $urlServer;
+        $_SESSION['errMessage'] = $message;
+        restore_saved_course();
+        session_write_close();
+        header("Location: $urlServer" );
+        exit;
+}
+
+
+// Restore current course
+function restore_saved_course()
+{
+        if (defined('old_dbname')) {
+                $_SESSION['dbname'] = old_dbname;
+        }
+}
+

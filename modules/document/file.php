@@ -75,65 +75,16 @@ if (defined('GROUP_DOCUMENTS')) {
         $basedir = "{$webDir}courses/$dbname/document";
 }
 
-$depth = 1;
-$path = '';
-foreach ($path_components as $component) {
-        $component = urldecode(str_replace(chr(1), '/', $component));
-        $q = db_query("SELECT path, visibility, format,
-                              (LENGTH(path) - LENGTH(REPLACE(path, '/', ''))) AS depth
-                              FROM document
-                              WHERE $group_sql AND
-                                    filename = " . quote($component) . " AND
-                                    path LIKE '$path%' HAVING depth = $depth");
-        if (!$q or mysql_num_rows($q) == 0) {
-                not_found();
-        }
-        $r = mysql_fetch_array($q);
-        $path = $r['path'];
-        $depth++;
-}
+$file_info = public_path_to_disk_path($path_components);
 
-if ($r['visibility'] != 'v' and !$is_adminOfCourse) {
+if ($file_info['visibility'] != 'v' and !$is_adminOfCourse) {
         error($langNoRead);
-}
-if (!preg_match("/\.$r[format]$/", $component)) {
-        $component .= '.' . $r['format'];
 }
 
 restore_saved_course();
-if (file_exists($basedir . $r['path'])) {
-        send_file_to_client($basedir . $r['path'], $component, true);
+if (file_exists($basedir . $file_info['path'])) {
+        send_file_to_client($basedir . $file_info['path'], $file_info['filename'], true);
 } else {
-        header('Location: ', $urlServer);
+        not_found(preg_replace('/^.*file\.php/', '', $uri));
 }
 
-// Restore current course
-function restore_saved_course()
-{
-        if (defined('old_dbname')) {
-                $_SESSION['dbname'] = old_dbname;
-        }
-}
-
-function not_found()
-{
-        global $uri;
-        restore_saved_course();
-        header("HTTP/1.0 404 Not Found");
-        echo '<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN"><html><head>',
-             '<title>404 Not Found</title></head><body>',
-             '<h1>Not Found</h1><p>The requested path "',
-             htmlspecialchars(preg_replace('/^.*file\.php/', '', $uri)),
-             '" was not found.</p></body></html>';
-        exit;
-}
-
-function error($message)
-{
-        global $urlServer;
-        $_SESSION['errMessage'] = $message;
-        restore_saved_course();
-        session_write_close();
-        header("Location: $urlServer" );
-        exit;
-}

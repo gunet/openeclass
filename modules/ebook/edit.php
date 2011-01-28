@@ -29,6 +29,7 @@ $helpTopic = 'EBook';
 $guest_allowed = true;
 
 include '../../include/baseTheme.php';
+include '../../include/lib/fileDisplayLib.inc.php';
 
 mysql_select_db($mysqlMainDb);
 
@@ -40,98 +41,103 @@ if (!$is_adminOfCourse) {
 }
 
 if (isset($_REQUEST['id'])) {
-        $id = intval($_REQUEST['id']);
+        $ebook_id = intval($_REQUEST['id']);
 } else {
         redirect_to_home_page();
 }
 
+define('EBOOK_DOCUMENTS', true);
+include '../document/doc_init.php';
+
 if (isset($_POST['delete'])) {
-        db_query("DELETE FROM ebook_section WHERE ebook_id = $id AND id = " . autoquote($_POST['delete']));
+        db_query("DELETE FROM ebook_section WHERE ebook_id = $ebook_id AND id = " . autoquote($_POST['delete']));
 } elseif (isset($_POST['new_section_submit'])) {
         if (isset($_POST['csid'])) {
                 db_query("UPDATE ebook_section
                                  SET public_id = " . autoquote($_POST['new_section_id']) . ",
                                      title = " . autoquote($_POST['new_section_title']) . "
-                                 WHERE ebook_id = $id AND id = " . intval($_POST['csid']));
+                                 WHERE ebook_id = $ebook_id AND id = " . intval($_POST['csid']));
         } else {
-                db_query("INSERT INTO ebook_section SET ebook_id = $id,
+                db_query("INSERT INTO ebook_section SET ebook_id = $ebook_id,
                                                         public_id = " . autoquote($_POST['new_section_id']) . ",
                                                         title = " . autoquote($_POST['new_section_title']));
         }
-        header("Location: " . $urlAppend . '/modules/ebook/edit.php?id=' . $id);
+        header("Location: " . $urlAppend . '/modules/ebook/edit.php?id=' . $ebook_id);
         exit;
 } elseif (isset($_POST['title_submit'])) {
-        $info = mysql_fetch_array(db_query("SELECT * FROM `ebook` WHERE course_id = $cours_id AND id = $id"));
+        $info = mysql_fetch_array(db_query("SELECT * FROM `ebook` WHERE course_id = $cours_id AND id = $ebook_id"));
         $ebook_title = trim(autounquote($_POST['ebook_title']));
         if (!empty($ebook_title) and $info['title'] != $ebook_title) {
                 db_query("UPDATE `ebook` SET title = " . quote($ebook_title) . " WHERE id = $info[id]");
         }
 } elseif (isset($_POST['submit'])) {
-        $basedir = $webDir . 'courses/' . $currentCourseID . '/ebook/' . $id;
-        $html_files = find_html_files($basedir);
-        sort($html_files, SORT_STRING);
-        foreach ($_POST['sid'] as $key => $sid) {
+        $basedir = $webDir . 'courses/' . $currentCourseID . '/ebook/' . $ebook_id;
+        list($paths, $files, $file_ids, $id_map) = find_html_files();
+        foreach ($_POST['sid'] as $file_id => $sid) {
                 if (!empty($sid)) {
                         $sid = intval($sid);
-                        $qssid = quote($_POST['ssid'][$key]);
-                        $qtitle = quote($_POST['title'][$key]);
-                        $qfile = quote($html_files[$key]);
-                        if (isset($_POST['oldssid'][$key])) {
-                                $oldssid = intval($_POST['oldssid'][$key]);
+                        $file_id = intval($file_id);
+                        $qssid = quote($_POST['ssid'][$file_id]);
+                        $qtitle = quote($_POST['title'][$file_id]);
+                        if (isset($_POST['oldssid'][$file_id])) {
+                                $oldssid = intval($_POST['oldssid'][$file_id]);
                                 db_query("UPDATE ebook_subsection
                                                  SET section_id = $sid,
                                                      public_id = $qssid,
                                                      title = $qtitle,
-                                                     file = $qfile
+                                                     file_id = $file_id
                                                  WHERE id = $oldssid");
-                                unset($_POST['oldssid'][$key]);
+                                unset($_POST['oldssid'][$file_id]);
                         } else {
                                 db_query("INSERT INTO ebook_subsection
                                                  SET section_id = $sid,
                                                      public_id = $qssid,
                                                      title = $qtitle,
-                                                     file = $qfile");
+                                                     file_id = $file_id");
                         }
                 }
         }
-        $oldssids = array();
-        foreach ($_POST['oldssid'] as $key => $oldssid) {
-                $oldssids[] = intval($oldssid);
-        }
-        if (count($oldssids)) {
-                db_query('DELETE FROM ebook_subsection WHERE id IN (' . implode(', ', $oldssids) . ')');
+        if (isset($_POST['oldssid'])) {
+                $oldssids = array();
+                foreach ($_POST['oldssid'] as $key => $oldssid) {
+                        $oldssids[] = intval($oldssid);
+                }
+                if (count($oldssids)) {
+                        db_query('DELETE FROM ebook_subsection WHERE id IN (' . implode(', ', $oldssids) . ')');
+                }
         }
 } 
 
-$q = db_query("SELECT * FROM `ebook` WHERE course_id = $cours_id AND id = $id");
+$q = db_query("SELECT * FROM `ebook` WHERE course_id = $cours_id AND id = $ebook_id");
 
 if (mysql_num_rows($q) == 0) {
         $tool_content .= "\n    <p class='alert1'>$langNoEBook</p>\n";
 } else {
         $info = mysql_fetch_array($q);
-        $basedir = $webDir . 'courses/' . $currentCourseID . '/ebook/' . $id;
+        $basedir = $webDir . 'courses/' . $currentCourseID . '/ebook/' . $ebook_id;
         $k = 0;
-        $html_files = find_html_files($basedir);
-        sort($html_files, SORT_STRING);
+        list($paths, $files, $file_ids, $id_map) = find_html_files();
 
+        // Form #1 - edit ebook title
         $tool_content .= "
     <div id='operations_container'>
       <ul id='opslist'>
-        <li><a href='replace.php?id=$id'>$langEBookReplace</a></li>
+        <li><a href='replace.php?id=$ebook_id'>$langEBookReplace</a></li>
       </ul>
     </div>
     
     <form method='post' action='edit.php'>
     <fieldset>
-         <input type='hidden' name='id' value='$id' />
+         <input type='hidden' name='id' value='$ebook_id' />
          $langTitle: <input type='text' name='ebook_title' size='53' value='" . q($info['title']) . "' />
                      <input name='title_submit' type='submit' value='$langModify' />
       </p>
     </fieldset>
-    </form>
+    </form>";
 
-                          <form method='post' action='edit.php'>
-                          <input type='hidden' name='id' value='$id' /><br />
+        // Form #2 - edit sections
+        $tool_content .= "<form method='post' action='edit.php'>
+                          <input type='hidden' name='id' value='$ebook_id' /><br />
                           <table>
                              <tr><th>$langID</th><th>$langTitle</th><th>&nbsp;</th></tr>\n";
         $q = db_query("SELECT id, public_id, title FROM ebook_section
@@ -164,7 +170,7 @@ if (mysql_num_rows($q) == 0) {
                                      onclick=\"javascript:if(!confirm('".
                                          js_escape(sprintf($langEBookSectionDelConfirm, $section['title'])) ."')) return false;\"" .
                                      " />
-                                     &nbsp;<a href='edit.php?id=$id&amp;s=$sid'><img
+                                     &nbsp;<a href='edit.php?id=$ebook_id&amp;s=$sid'><img
                                      src='../../template/classic/img/edit.gif'
                                      alt='$langModify' title='$langModify' /></a></td></tr>\n";
         }
@@ -172,9 +178,11 @@ if (mysql_num_rows($q) == 0) {
                 $tool_content .= "<tr><td><input type='text' size='5' name='new_section_id' /></td>
                                       <td><input type='text' size='35' name='new_section_title' /></td><td>&nbsp;</td></tr>";
         }
-        $tool_content .= "<tr><td colspan='3' class='right'><input type='submit' name='new_section_submit' value='$langAdd' /></td></tr>
-                          </table>
-                          <table>
+        $tool_content .= "<tr><td colspan='3' class='right'>" .
+                         "<input type='submit' name='new_section_submit' value='$langAdd' /></td></tr></table>";
+
+        // Form #3 - edit subsection file assignment
+        $tool_content .= "<table>
                              <tr><th>$langFileName</th><th>$langTitle</th><th>$langSection</th><th>$langID</th></tr>\n";
         $q = db_query("SELECT ebook_section.id AS sid,
                               ebook_section.id AS psid,
@@ -182,7 +190,7 @@ if (mysql_num_rows($q) == 0) {
                               ebook_subsection.id AS ssid,
                               ebook_subsection.public_id AS pssid,
                               ebook_subsection.title AS subsection_title,
-                              ebook_subsection.file
+                              ebook_subsection.file_id
                        FROM ebook_section, ebook_subsection
                        WHERE ebook_section.ebook_id = $info[id] AND
                              ebook_section.id = ebook_subsection.section_id
@@ -190,27 +198,27 @@ if (mysql_num_rows($q) == 0) {
                                       CONVERT(pssid, UNSIGNED), pssid");
         while ($r = mysql_fetch_array($q)) {
                 $class = odd_even($k); 
-                $key = array_search($r['file'], $html_files);
+                $file_id = $r['file_id'];
                 $display_id = $r['sid'] . ',' . $r['ssid'];
-                $tool_content .= "<tr$class><td><a href='show.php/$currentCourseID/$id/$display_id/'
-                                                   target='_blank'>" . q($r['file']) . "</a></td>
-                                     <td><input type='text' name='title[$key]' size='30' value='" . q($r['subsection_title']) . "' /></td>
-                                     <td>" .  selection($sections, "sid[$key]", $r['sid']) . "</td>
-                                     <td><input type='hidden' name='oldssid[$key]' value='$r[ssid]' />
-                                     <input type='text' name='ssid[$key]' size='3' value='" . q($r['pssid']) . "' /></td></tr>\n";
-                if ($key !== false) {
-                        unset($html_files[$key]);
-                }
+                $tool_content .= "<tr$class><td><a href='show.php/$currentCourseID/$ebook_id/$display_id/'
+                                                   target='_blank'>" . q($files[$id_map[$file_id]]) . "</a></td>
+                                     <td><input type='text' name='title[$file_id]' size='30' value='" . q($r['subsection_title']) . "' /></td>
+                                     <td>" .  selection($sections, "sid[$file_id]", $r['sid']) . "</td>
+                                     <td><input type='hidden' name='oldssid[$file_id]' value='$r[ssid]' />
+                                     <input type='text' name='ssid[$file_id]' size='3' value='" . q($r['pssid']) . "' /></td></tr>\n";
+                unset($files[$id_map[$file_id]]);
                 $k++;
         }
-        foreach ($html_files as $key => $file) {
+        foreach ($files as $key => $file) {
                 $class = odd_even($k); 
-                $title = get_html_title($basedir . '/' . $file);
-                $tool_content .= "<tr$class><td><a href='show.php/$currentCourseID/$id/_/" . q($file) .
+                $path = $paths[$key];
+                $file_id = $file_ids[$key];
+                $title = get_html_title($basedir . $path);
+                $tool_content .= "<tr$class><td><a href='show.php/$currentCourseID/$ebook_id/_" . q($file) .
                                       "' target='_blank'>" . q($file) . "</a></td>
-                        <td><input type='text' name='title[$key]' size='30' value='" . q($title) . "' /></td>
-                        <td>" . selection($sections, "sid[$key]") . "</td>
-                        <td><input type='text' name='ssid[$key]' size='5' /></td></tr>\n";
+                        <td><input type='text' name='title[$file_id]' size='30' value='" . q($title) . "' /></td>
+                        <td>" . selection($sections, "sid[$file_id]") . "</td>
+                        <td><input type='text' name='ssid[$file_id]' size='5' /></td></tr>\n";
 
                 $k++;
         }
@@ -219,20 +227,22 @@ if (mysql_num_rows($q) == 0) {
 
 draw($tool_content, 2, '', $head_content);
 
-function find_html_files($base, $prepend = '')
+function find_html_files()
 {
-        $files = array();
-        if ($handle = opendir($base)) {
-                while (($file = readdir($handle)) !== false){
-                        if (is_dir($base . '/' . $file) and $file != '.' and $file != '..'){
-                                $files = array_merge($files, find_html_files($base . '/' . $file, $prepend . $file . '/'));
-                        } elseif (preg_match('/\.html?$/i', $file)) {
-                                $files[] = $prepend . $file;
-                        }
-                }
-                closedir($handle);
+        global $group_sql;
+
+        $disk_paths = array();
+        $public_paths = array();
+        $file_ids = array();
+        $q = db_query("SELECT id, path, filename FROM document WHERE $group_sql AND format = 'html' OR format = 'htm'");
+        while ($row = mysql_fetch_array($q)) {
+                $disk_paths[] = $row['path'];
+                $public_paths[] = public_file_path($row['path'], $row['filename']);
+                $file_ids[] = $row['id'];
         }
-        return $files;
+        array_multisort($public_paths, $disk_paths, $file_ids);
+        $id_map = array_flip($file_ids);
+        return array(&$disk_paths, &$public_paths, &$file_ids, &$id_map);
 }
 
 function get_html_title($file)

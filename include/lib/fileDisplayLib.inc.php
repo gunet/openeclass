@@ -199,12 +199,11 @@ function file_url_escape($name)
                            rawurlencode($name));
 }
 
-function file_url($path, $filename = null)
+function public_file_path($disk_path, $filename = null)
 {
-	global $mysqlMainDb, $currentCourseID, $cours_id, $urlServer, $group_id;
+	global $mysqlMainDb, $group_sql;
 	static $oldpath = '', $dirname;
-
-	$dirpath = dirname($path);
+	$dirpath = dirname($disk_path);
 	if ($dirpath == '/') {
 		$oldpath = $dirpath = '';
 		$dirname = '';
@@ -217,7 +216,7 @@ function file_url($path, $filename = null)
 			foreach ($components as $c) {
 				$partial_path .= '/' . $c;
                                 $q = db_query("SELECT filename FROM `$mysqlMainDb`.document
-                                                               WHERE course_id = $cours_id AND
+                                                               WHERE $group_sql AND
                                                                      path = '$partial_path'");
 				list($name) = mysql_fetch_row($q);
 				$dirname .= '/' . file_url_escape($name);
@@ -227,9 +226,20 @@ function file_url($path, $filename = null)
         if (!isset($filename)) {
                 $q = db_query("SELECT filename FROM `$mysqlMainDb`.document
                                                WHERE course_id = $cours_id AND
-                                                     path = '$path'");
+                                                     path = '$disk_path'");
                 list($filename) = mysql_fetch_row($q);
         }
-        $gid = defined('GROUP_DOCUMENTS')? ",$group_id": '';
-	return htmlspecialchars($urlServer . "modules/document/file.php?/$currentCourseID$gid$dirname/" . file_url_escape($filename), ENT_QUOTES);
+	return $dirname . '/' . file_url_escape($filename);
 }
+
+
+function file_url($path, $filename = null)
+{
+	global $currentCourseID, $urlServer, $group_id;
+
+        $gid = defined('GROUP_DOCUMENTS')? ",$group_id": '';
+        return htmlspecialchars($urlServer . "modules/document/file.php/$currentCourseID$gid" .
+                                        public_file_path($path, $filename),
+                                ENT_QUOTES);
+}
+

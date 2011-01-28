@@ -42,19 +42,18 @@ if (count($path_components) >= 4) {
 
 $require_current_course = true;
 $guest_allowed = true;
+define('EBOOK_DOCUMENTS', true);
 
 include '../../include/baseTheme.php';
 include '../../include/lib/forcedownload.php';
+include '../../include/lib/fileDisplayLib.inc.php';
+include '../document/doc_init.php';
 mysql_select_db($mysqlMainDb);
 
 $ebook_url_base = "{$urlServer}modules/ebook/show.php/$currentCourseID/$ebook_id/";
 
 if ($show_orphan_file and $file_path) {
-        $disk_path = "{$webDir}courses/$currentCourseID/ebook/$ebook_id/$file_path";
-	if (!send_file_to_client($disk_path, $file_path, true, false)) {
-                not_found($file_path);
-	}
-	exit;
+        send_file_by_url_file_path($file_path);
 }
 
 $nameTools = 'Ηλεκτρονικό Βιβλίο';
@@ -72,18 +71,23 @@ $q = db_query("SELECT ebook_section.id AS sid,
                       ebook_subsection.id AS ssid,
                       ebook_subsection.public_id AS pssid,
                       ebook_subsection.title AS subsection_title,
-                      ebook_subsection.file
-               FROM ebook, ebook_section, ebook_subsection
+                      document.path,
+                      document.filename
+               FROM ebook, ebook_section, ebook_subsection, document
                WHERE ebook.id = $ebook_id AND
                      ebook.course_id = $cours_id AND
                      ebook_section.ebook_id = ebook.id AND
-                     ebook_section.id = ebook_subsection.section_id
+                     ebook_section.id = ebook_subsection.section_id AND
+                     document.id = ebook_subsection.file_id AND
+                     document.course_id = $cours_id AND
+                     document.subsystem = $subsystem
                      ORDER BY CONVERT(psid, UNSIGNED), psid,
                               CONVERT(pssid, UNSIGNED), pssid");
 if (!$q or mysql_num_rows($q) == 0) {
         not_found($uri);
 }
 while ($row = mysql_fetch_array($q)) {
+        $url_filename = public_file_path($row['path'], $row['filename']);
 	$sid = $row['sid'];
 	$ssid = $row['ssid'];
 	if (!isset($current_sid)) {
@@ -102,17 +106,17 @@ while ($row = mysql_fetch_array($q)) {
 	} else {
 		$class_active = '';
 	}
-	if ($fragment_pos = strpos($row['file'], '#')) {
+	if ($fragment_pos = strpos($url_filename, '#')) {
 		$display_id = $section_id;
-		$fragment = substr($row['file'], $fragment_pos);
-		$file = substr($row['file'], 0, $fragment_pos);
+		$fragment = substr($url_filename, $fragment_pos);
+		$file = substr($url_filename, 0, $fragment_pos);
 	} else {
 		$fragment = '';
-		$file = $row['file'];
+		$file = $url_filename;
 	}
 	$subsections[$sid][$ssid] = array(
 		'title' => $row['subsection_title'],
-		'file' => "{$webDir}courses/$currentCourseID/ebook/$ebook_id/$file",
+		'path' => $row['path'],
 		'url' => $ebook_url_base . $display_id . '/' . $unit_parameter . $fragment,
                 'class' => $class_active,
                 'psid' => $row['psid'],
@@ -139,12 +143,8 @@ if (!$full_url_found) {
 }
 
 if ($file_path) {
-        $disk_path = preg_replace('#/[^/]*$#', '/', $subsections[$current_sid][$current_ssid]['file']) .
-                     $file_path;
-	if (!send_file_to_client($disk_path, $file_path, true, false)) {
-                not_found($file_path);
-	}
-	exit;
+        $initial_path = preg_replace('#/[^/]*$#', '', $subsections[$current_sid][$current_ssid]['path']);
+        send_file_by_url_file_path($file_path, $initial_path);
 }
 
 $t = new Template();
@@ -177,7 +177,7 @@ if (isset($next_section_id)) {
 $ebook_body = '';
 $ebook_head = '';
 $dom = new DOMDocument();
-@$dom->loadHTMLFile($subsections[$current_sid][$current_ssid]['file']);
+@$dom->loadHTMLFile($basedir . $subsections[$current_sid][$current_ssid]['path']);
 foreach ($dom->getElementsByTagName('link') as $element) {
 	 $ebook_head .= $dom->saveXML($element);
 }
@@ -219,23 +219,14 @@ if (count($subsections[$current_sid]) == 1) {
 
 $t->pparse('Output', 'page');
 
-function not_found($path)
+function send_file_by_url_file_path($file_path, $initial_path = '')
 {
-        header("HTTP/1.0 404 Not Found");
-        echo '<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN"><html><head>',
-                '<title>404 Not Found</title></head><body>',
-                '<h1>Not Found</h1><p>The requested path "',
-                htmlspecialchars($path),
-                '" was not found.</p></body></html>';
-        restore_saved_course();
-        exit;
-}
+        global $basedir;
 
-// Restore current course
-function restore_saved_course()
-{
-        if (defined('old_dbname')) {
-                $_SESSION['dbname'] = old_dbname;
-        }
+        $path_components = explode('/', str_replace('//', chr(1), $file_path));
+        $file_info = public_path_to_disk_path($path_components, $initial_path);
+	if (!send_file_to_client($basedir . $file_info['path'], $file_info['filename'], true, false)) {
+                not_found($file_path);
+	}
+	exit;
 }
-
