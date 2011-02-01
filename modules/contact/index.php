@@ -24,17 +24,26 @@
 *  			eMail: info@openeclass.org
 * =========================================================================*/
 
-$require_current_course = TRUE;
+if (isset($_REQUEST['from_reg'])) {
+	$from_reg = $_REQUEST['from_reg'];
+	$cours_id = $_REQUEST['cours_id'];
+}
 
-$require_help = TRUE;
-$helpTopic = 'Contact';
+if (isset($from_reg)) {
+	$require_login = TRUE;
+} else {
+	$require_current_course = TRUE;
+	$require_help = TRUE;
+	$helpTopic = 'Contact';
+}
+
 include '../../include/baseTheme.php';
 include '../../include/sendMail.inc.php';
 
+if (isset($from_reg)) {
+	$intitule = course_id_to_title($cours_id);
+}
 $nameTools = $langContactProf;
-
-// Initialise $tool_content
-$tool_content = "";
 
 $userdata = mysql_fetch_array(db_query("SELECT nom, prenom, email FROM user WHERE user_id=$uid", $mysqlMainDb));
 
@@ -59,33 +68,46 @@ if (empty($userdata['email'])) {
 	$tool_content .= form();
 }
 
-draw($tool_content, 2);
+if (isset($from_reg)) {
+	draw($tool_content, 1);
+} else {
+	draw($tool_content, 2);
+}
 
 
 // display form
 function form()
 {
-  $ret = "
-  <form method='post' action='$_SERVER[PHP_SELF]'>
+	global $from_reg, $cours_id, $langInfoAboutRegistration, $langContactMessage, $langIntroMessage, $langSendMessage;
 
-  <table class=\"FormData\" width=\"99%\" align=\"left\">
-  <tbody>
-  <tr>
-    <th>&nbsp;</th>
-    <td>$GLOBALS[langContactMessage]</td>
-  </tr>
-  <tr>
-    <th class=\"left\">$GLOBALS[langIntroMessage]</th>
-    <td><textarea class=auth_input name='content' rows='10' cols='80'></textarea></td>
-  </tr>
-  <tr>
-    <th>&nbsp;</th>
-    <td><input type='submit' name='submit' value='$GLOBALS[langSendMessage]' /></td>
-  </tr>
-  </tbody>
-  </table>
-
-  </form>";
+	if (isset($from_reg)) {
+		$message = $langInfoAboutRegistration;
+		$hidden = "<input type='hidden' name='from_reg' value='$from_reg'>
+			<input type='hidden' name='cours_id' value='$cours_id'>";
+	} else {
+		$message = $langContactMessage;
+		$hidden = '';
+	}
+	
+	$ret = "<form method='post' action='$_SERVER[PHP_SELF]'>
+	$hidden
+	<table class='FormData' width='99%' align='left'>
+	<tbody>
+	<tr>
+	  <th>&nbsp;</th>
+	  <td>$message</td>
+	</tr>
+	<tr>
+	  <th class='left'>$langIntroMessage</th>
+	  <td><textarea class=auth_input name='content' rows='10' cols='80'></textarea></td>
+	</tr>
+	<tr>
+	  <th>&nbsp;</th>
+	  <td><input type='submit' name='submit' value='$langSendMessage' /></td>
+	</tr>
+	</tbody>
+	</table>
+	</form>";
 
 return $ret;
 }

@@ -60,14 +60,9 @@ if (isset($_POST["submit"])) {
         foreach ($changeCourse as $key => $value) {
                 $cid = intval($value);
                 if (!in_array($cid, $selectCourse)) {
-                        // check if user tries to unregister from restricted course
-                        if (is_restricted($cid)) {
-                                $tool_content .= "(restricted unsub $cid) ";
-                        } else {
-                                db_query("DELETE FROM cours_user
-                                                WHERE statut <> 1 AND statut <> 10 AND
-                                                user_id = $uid AND cours_id = $cid");
-                        }
+			db_query("DELETE FROM cours_user
+					WHERE statut <> 1 AND statut <> 10
+					AND user_id = $uid AND cours_id = $cid");
                 }
         }
 
@@ -115,9 +110,9 @@ if (isset($_POST["submit"])) {
 			$k = 0;
 			while ($fac = mysql_fetch_array($result)) {
 				if ($k%2==0) {
-					$tool_content .= "\n        <tr class='even'>";
+					$tool_content .= "\n<tr class='even'>";
 				} else {
-					$tool_content .= "\n        <tr class='odd'>";
+					$tool_content .= "\n<tr class='odd'>";
 				}
 				$tool_content .= "\n<td>&nbsp;<img src='../../template/classic/img/arrow_blue.gif' />&nbsp;
 					<a href='$_SERVER[PHP_SELF]?fc=$fac[id]'>" . htmlspecialchars($fac['name']) . "</a>&nbsp;
@@ -207,8 +202,7 @@ function expanded_faculte($fac_name, $facid, $uid) {
 
 	// get the different course types available for this faculte
 	$typesresult = db_query("SELECT DISTINCT type FROM cours
-                                 WHERE cours.faculteid = '$facid' AND cours.visible <> 0
-                                 ORDER BY cours.type");
+                                 WHERE cours.faculteid = '$facid' ORDER BY cours.type");
 
 	// count the number of different types
 	$numoftypes = mysql_num_rows($typesresult);
@@ -228,9 +222,7 @@ function expanded_faculte($fac_name, $facid, $uid) {
 				$retString .= "<a href=\"#".$t."\">".${'lang'.$ts}."</a>";
 				$counter++;
 			}
-		$retString .= "</div></th>
-           </tr>
-           </table>\n\n";
+		$retString .= "</div></th></tr></table>\n\n";
 	} else {
 		$retString .= "\n</table>\n";
 	}
@@ -254,7 +246,6 @@ function expanded_faculte($fac_name, $facid, $uid) {
                                   FROM cours
                                   WHERE cours.faculteid = $facid
 				  AND cours.type = '$type'
-				  AND cours.visible <> '0'
                                   ORDER BY cours.intitule, cours.titulaires");
 
                 if (mysql_num_rows($result) == 0) {
@@ -292,20 +283,24 @@ function expanded_faculte($fac_name, $facid, $uid) {
                         $cid = $mycours['cid'];
                         $course_title = q($mycours['i']);
                         $password = q($mycours['password']);
-                        if ($mycours['visible'] == 2 or $uid == 1) {
+			// link creation
+                        if ($mycours['visible'] == 2 or $uid == 1) { //open course
                                 $codelink = "<a href='../../courses/$mycours[k]/' target='_blank'>" . q($course_title) . "</a>";
+                        } elseif ($mycours['visible'] == 0) { //closed course
+                                $codelink = "<a href='../contact/index.php?from_reg=true&cours_id=$cid'>" . q($course_title) . "</a>";
                         } else {
                                 $codelink = q($course_title);
                         }
-                        if ($k%2==0) {
-                                $retString .= "\n    <tr class='even'>";
+			// end of link creation
+                        if ($k%2 == 0) {
+                                $retString .= "\n<tr class='even'>";
                         } else {
-                                $retString .= "\n    <tr class='odd'>";
+                                $retString .= "\n<tr class='odd'>";
                         }
-                        $retString .= "\n      <td align='center'>";
+                        $retString .= "\n<td align='center'>";
                         $requirepassword = "";
                         if (isset($myCourses[$cid])) {
-                                if ($myCourses[$cid]['statut'] != 1) {
+                                if ($myCourses[$cid]['statut'] != 1) { // display registered courses
                                         // password needed
                                         if (!empty($password) and $mycours['visible'] == 1) {
                                                 $requirepassword = "<br />$m[code]: <input type='password' name='pass$cid' value='$password' />";
@@ -313,38 +308,42 @@ function expanded_faculte($fac_name, $facid, $uid) {
                                                 $requirepassword = '';
                                         }
                                         $retString .= "<input type='checkbox' name='selectCourse[]' value='$cid' checked='checked' />";
+					if ($mycours['visible'] == 0) {
+						$codelink = "<a href='../../courses/$mycours[k]/' target='_blank'>" . q($course_title) . "</a>";
+					}
                                 } else {
                                         $retString .= "<img src='../../template/classic/img/teacher.gif' alt='$langTutor' title='$langTutor' />";
                                 }
-                        } else {
+                        } else { // display unregistered courses
                                 if (!empty($password) and $mycours['visible'] == 1) {
                                         $requirepassword = "<br />$m[code]: <input type='password' name='pass$cid' />";
                                 } else {
                                         $requirepassword = '';
                                 }
-                                if ($mycours['visible'] or isset($myCourses[$cid])) {
+				if ($mycours['visible'] == 0) {
+					$retString .= "<input type='checkbox' disabled />";
+				}
+                                if (($mycours['visible'] == 1) or ($mycours['visible'] == 2)) {
                                         $retString .= "<input type='checkbox' name='selectCourse[]' value='$cid' />";
                                 }
                         }
                         $retString .= "<input type='hidden' name='changeCourse[]' value='$cid' />";
                         $retString .= "</td>";
-                        $retString .= "\n      <td>$codelink (" . q($mycours['fake_code']) .
+                        $retString .= "\n<td>$codelink (" . q($mycours['fake_code']) .
                                 ")$requirepassword</td>";
-                        $retString .= "\n      <td>" . q($mycours['t']) . "</td>";
-                        $retString .= "\n      <td align='center'>";
+                        $retString .= "\n<td>" . q($mycours['t']) . "</td>";
+                        $retString .= "\n<td align='center'>";
                         // show the necessary access icon
                         foreach ($icons as $visible => $image) {
                                 if ($visible == $mycours['visible']) {
                                         $retString .= $image;
                                 }
                         }
-                        $retString .= "</td>";
-                        $retString .= "\n    </tr>";
+                        $retString .= "</td></tr>";
                         $k++;
                 } // END of while
                 $retString .= "\n</table>";
         } // end of foreach
-
         return $retString;
 }
 
@@ -359,8 +358,6 @@ function collapsed_facultes_horiz($fc) {
 	$retString .= dep_selection($fc);
 	$retString .=  "\n    </li>";
 	$retString .= "\n    </ul>\n  </div>\n";
-
-
   	$retString .= "\n    </form>";
 
         return $retString;
