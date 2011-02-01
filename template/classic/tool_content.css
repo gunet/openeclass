@@ -284,24 +284,6 @@ table.FormData td {
 }
 	
 	
-
-table.resources td, table.resources tr  {
-    border: 0;
-    padding: .2em;
-}
-table.resources th  {
-    padding: .2em;
-    background: none;
-    text-align: center;
-}
-
-table.resources td  {
-    padding: .2em;
-    background: none;
-    text-align: justify;
-}
-
-
 /* ----- START admin ----- */
 .invisible {
 	background: #F7F9FC !important;
@@ -878,15 +860,6 @@ div#footer{clear:both;width:100%}
 
 
 /* ----- START learnpath ----- */
-#course_topic_title_id {
-    border-bottom: 1px dotted #a2a2a3;
-    background: #ffffff;
-    padding:2px;
-    padding-top:5px;
-    color: #627aad;
-    font-size: 11px;
-    font-weight:bold;
-}
 
 .invisible { 
     color: #999999 !important;
@@ -1747,15 +1720,6 @@ table.Question td {
 	color: #727266;
 	vertical-align: middle;
 }
-
-#question_title_id {
-    padding:2px;
-    padding-top:5px;
-    color: #627aad;
-    font-size: 11px;
-    font-weight: bold;
-}
-
 /* ----- END Wiki ----- */
 
 
@@ -1942,7 +1906,6 @@ table.dropbox td {
 .expired_today {
 	color: #FF8000;
 }
-
 /* ----- End Work ----- */
 
 

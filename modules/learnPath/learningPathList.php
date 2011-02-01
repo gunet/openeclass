@@ -281,26 +281,23 @@ if ($is_adminOfCourse) {
 					$nameTools = $langCreateNewLearningPath;
 					$dialogBox = "
     <form action='$_SERVER[PHP_SELF]' method='POST'>
-    <table width='99%' align='left' class='FormData'>
-    <tbody>
+    <fieldset>
+    <legend>$langLearningPathData</legend>
+    <table width='99%' class='tbl'>
     <tr>
-      <th width='220'>&nbsp;</th>
-      <td><b>$langLearningPathData</b></td>
+      <th width='180'><label for='newPathName'>$langLearningPathName</label> :</th>
+      <td><input type='text' name='newPathName' id='newPathName' size='33' maxlength='255'></input></td>
     </tr>
     <tr>
-      <th class='left'><label for='newPathName'>$langLearningPathName</label> :</th>
-      <td><input type='text' name='newPathName' id='newPathName' size='33' maxlength='255' class='FormData_InputText'></input></td>
+      <th><label for='newComment'>$langComment</label> :</th>
+      <td><textarea id='newComment' name='newComment' rows='2' cols='30'></textarea></td>
     </tr>
     <tr>
-      <th class='left'><label for='newComment'>$langComment</label> :</th>
-      <td><textarea id='newComment' name='newComment' rows='2' cols='30' class='FormData_InputText'></textarea></td>
-    </tr>
-    <tr>
-      <th class='left'>&nbsp;</th>
+      <th>&nbsp;</th>
       <td><input type='hidden' name='cmd' value='create'><input type='submit' value='$langCreate'></input></td>
     </tr>
-    </tbody>
     </table>
+    </fieldset>
     </form>";
 					}
 				break;
