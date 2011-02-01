@@ -30,9 +30,9 @@ $nameTools = $langChoiceLesson;
 $navigation[] = array ("url"=>"courses.php", "name"=> $langChoiceDepartment);
 
 $icons = array(
-        2 => "<img src='../../template/classic/img/OpenCourse.gif' alt='' />",
-        1 => "<img src='../../template/classic/img/Registration.gif' alt='' />",
-        0 => "<img src='../../template/classic/img/ClosedCourse.gif' alt=''>"
+        2 => "<img src='../../template/classic/img/OpenCourse.gif' alt='" . $m['legopen'] . "' title='" . $m['legopen'] . "' />",
+        1 => "<img src='../../template/classic/img/Registration.gif' alt='" . $m['legrestricted'] . "' title='" . $m['legrestricted'] . "' />",
+        0 => "<img src='../../template/classic/img/ClosedCourse.gif' alt='" . $m['legclosed'] . "' title='" . $m['legclosed'] . "' />"
 );
 
 if (isset($_REQUEST['fc'])) {
