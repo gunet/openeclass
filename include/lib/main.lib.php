@@ -1624,19 +1624,17 @@ function glossary_expand($text)
 	} elseif (!isset($_SESSION['glossary']) or
             $_SESSION['glossary_course_id'] != $cours_id) {
                 get_glossary_terms($cours_id);
-                //$_SESSION['glossary_terms_regexp'] = '/\b(';
-                $_SESSION['glossary_terms_regexp'] = '/(';
+                $_SESSION['glossary_terms_regexp'] = chr(1) . '(';
                 $begin = true;
                 foreach (array_keys($_SESSION['glossary']) as $term) {
                         $_SESSION['glossary_terms_regexp'] .= ($begin? '': '|') .
-                                                              $term;
+                                                              preg_quote($term);
                         if ($begin) {
                                 $begin = false;
                         }
                 }
-//                $_SESSION['glossary_terms_regexp'] .= ')\b/ui';
-                $_SESSION['glossary_terms_regexp'] .= ')/ui';
-		if ($begin) {
+                $_SESSION['glossary_terms_regexp'] .= ')' . chr(1) . 'ui';
+                if ($begin) {
 			unset($_SESSION['glossary_terms_regexp']);
 		}
         }
