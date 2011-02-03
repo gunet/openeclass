@@ -65,7 +65,7 @@ function group_tutors($group_id)
 	global $mysqlMainDb;
 	
 	$tutors = array();
-	$res = db_query("SELECT user.user_id, nom, prenom FROM `$mysqlMainDb`.group_members, `$mysqlMainDb`.user
+	$res = db_query("SELECT user.user_id, nom, prenom, has_icon FROM `$mysqlMainDb`.group_members, `$mysqlMainDb`.user
 			 WHERE group_id = $group_id AND
 			       is_tutor = 1 AND
 			       group_members.user_id = user.user_id
