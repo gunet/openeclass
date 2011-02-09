@@ -371,18 +371,16 @@ $query = db_query($sql);
 $LPDetails = mysql_fetch_array($query);
 
 $tool_content .="
-    <table width=\"99%\" class=\"FormData\">
-    <tbody>
-    <tr>
-      <th width=\"100\" class=\"left\" height=\"32\"></th>
-      <td class=\"left\"><b>$langLearningPathData</b></td>
-    </tr>";
+ 
+  <fieldset>
+  <legend>$langLearningPathData</legend>
+    <table width=\"99%\" class=\"tbl\">";
 
 
 //############################ LEARNING PATH NAME BOX ################################\\
 $tool_content .="
     <tr>
-      <th class=\"left\" height=\"32\">$langTitle :</th>";
+      <th class=\"left\" width=\"80\">$langTitle :</th>";
 
 if ($cmd == "updateName")
 {
@@ -414,8 +412,14 @@ if ($cmd == "updatecomment")
     $tool_content .= commentBox(LEARNINGPATH_, DISPLAY_);
 }
 
-$tool_content .= "</td></tr>";
-$tool_content .= "<tr><td colspan=\"2\">&nbsp;</td></tr>";
+$tool_content .= "</td>
+    </tr>
+    </table>
+    </fieldset>
+
+    <fieldset>
+    <legend>$langLearningPathConfigure</legend>
+    <table>";
 
 $tool_content .= "<tr><th class=\"left\">&nbsp;</th><td><b>$langLearningPathConfigure</b></td></tr>";
 
@@ -694,6 +698,7 @@ foreach ($flatElementList as $module)
 } // end of foreach
 
 $tool_content .= "</tbody></table>";
-$tool_content .="</td></tr></tbody></table>";
+$tool_content .="</td></tr></tbody></table>
+</fieldset>";
 draw($tool_content, 2, '', $head_content, $body_action);
 ?>

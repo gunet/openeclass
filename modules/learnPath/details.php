@@ -98,12 +98,11 @@ if( $learnPathName )
 	mysql_select_db($currentCourseID);
 
 	// display tab header
-	$tool_content .= '    <table width="99%" class="LearnPathSum">'."\n\n"
-		.'    <tbody>'."\n"
+	$tool_content .= '    <table width="99%" class="tbl_alt">'."\n\n"
 		.'    <tr class="odd">'."\n"
-		.'      <td colspan="4" class="left">'.$langLearnPath.': <b>';
+		.'      <th colspan="4"><div align="left">'.$langLearnPath.': <b>';
 	$tool_content .= disp_tool_title($titleTab);
-	$tool_content .= '</b></td>'."\n"
+	$tool_content .= '</b></div></th>'."\n"
 		.'    </tr>'."\n"
 		.'    <tr>'."\n"
 		.'      <th>&nbsp;</th>'."\n"
@@ -117,7 +116,7 @@ if( $learnPathName )
 	{
 		$lpProgress = get_learnPath_progress($path_id,$user['user_id']);
 			if ($k%2==0) {
-	           $tool_content .= "\n    <tr>";
+	           $tool_content .= "\n    <tr class=\"even\">";
 	        } else {
 	           $tool_content .= "\n    <tr class=\"odd\">";
             }
@@ -132,7 +131,7 @@ if( $learnPathName )
 		$k++;
 	}
 	// foot of table
-	$tool_content .= '    </tbody>'."\n\n".'    </table>'."\n\n";
+	$tool_content .= '    '."\n\n".'    </table>'."\n\n";
 }
 
 draw($tool_content, 2, '', $head_content);

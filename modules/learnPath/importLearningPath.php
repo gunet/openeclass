@@ -1226,27 +1226,28 @@ else // if method == 'post'
      --------------------------------------*/
     $tool_content .= "
     <form enctype=\"multipart/form-data\" action=\"".$_SERVER['PHP_SELF']."\" method=\"post\">
-    <table width=\"99%\" align=\"left\" class=\"FormData\">
-    <tbody>
+    <fieldset>
+    <legend>$langImport</legend>
+    <table width=\"99%\" class=\"tbl\">
     <tr>
-      <th width=\"30%\">&nbsp;</th>
-      <td><b>$langAskUserFile</b></td>
-    </tr>
-    <tr>
-      <th class=\"left\">$langLearningPathUploadFile :</th>
+      <th width=\"100\">$langAskUserFile :</th>
       <td>
           <input type=\"hidden\" name=\"claroFormId\" value=\"".uniqid('')."\" >
           <input type=\"file\" name=\"uploadedPackage\">
+          <br />
+          $langLearningPathUploadFile
       </td>
     </tr>
     <tr>
       <th class=\"left\">&nbsp;</th>
       <td><input type=\"submit\" value=\"".$langImport."\"></td>
     </tr>
-    </tbody>
+    <tr>
+      <th>&nbsp;</th>
+      <td class=\"right\">$langMaxFileSize ".ini_get('upload_max_filesize')."</td>
+    </tr>
     </table>
-    <p align=\"right\"><small>$langMaxFileSize ".ini_get('upload_max_filesize')."</small></p>
-    <br />
+    </fieldset>
     </form>
     <p>";
     
@@ -1276,15 +1277,14 @@ else // if method == 'post'
     if (mysql_num_rows($sql) != 0) {
 		$tool_content .= "\n<div class=\"fileman\">";
 		$tool_content .= "\n<form action='importFromDocument.php' method='post'>";
-		$tool_content .= "\n  <table width=\"99%\" align='left' class=\"Documents\">";
-		$tool_content .= "\n  <tbody>";
+		$tool_content .= "\n  <table width=\"99%\" class=\"tbl\">";
 		$tool_content .= "\n  <tr><th height='18' colspan='5'><div align='left'><strong>$langLearningPathImportFromDocuments</strong</div></th></tr>";
 		$tool_content .= "\n  <tr>";
-		$tool_content .= "\n    <td></td>";
-		$tool_content .= "\n    <td width='10%' class='DocHead'><div align='center'><b>$langType</b></div></td>";
-		$tool_content .= "\n    <td class='DocHead'><div align='left'><b>$langName</b></div></td>";
-		$tool_content .= "\n    <td width='15%' class='DocHead'><div align='center'><b>$langSize</b></div></td>";
-		$tool_content .= "\n    <td width='15%' class='DocHead'><div align='center'><b>$langDate</b></div></td>";
+		$tool_content .= "\n    <th></th>";
+		$tool_content .= "\n    <th width='10%'><div align='center'><b>$langType</b></div></th>";
+		$tool_content .= "\n    <th><div align='left'><b>$langName</b></div></th>";
+		$tool_content .= "\n    <th width='15%'><div align='center'><b>$langSize</b></div></th>";
+		$tool_content .= "\n    <th width='15%'><div align='center'><b>$langDate</b></div></th>";
 		$tool_content .= "\n  </tr>";
 
 		foreach ($fileinfo as $entry) {
@@ -1326,7 +1326,6 @@ else // if method == 'post'
 		$tool_content .= "\n    <td colspan='2'></td>";
 		$tool_content .= "\n    <td colspan='3'><div align='left'><input type='submit' value='".$langImport."'></div></td>";
 		$tool_content .=  "\n  </tr>";
-		$tool_content .=  "\n  </tbody>";
 		$tool_content .=  "\n  </table>";
 		$tool_content .= "\n</form>";
 		$tool_content .=  "\n</div>";
