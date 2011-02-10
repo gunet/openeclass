@@ -271,14 +271,14 @@ function submit_work($id)
         $res = db_query("SELECT title, group_submissions FROM assignments WHERE id = '$id'");
         $row = mysql_fetch_array($res);
         $group_sub = $row['group_submissions'];
-        $nav[] = array("url"=>"$_SERVER[PHP_SELF]", "name"=> $langWorks);
-        $nav[] = array("url"=>"$_SERVER[PHP_SELF]?id=$id", "name"=> $row['title']);
+        $nav[] = array('url' => $_SERVER['PHP_SELF'], 'name' => $langWorks);
+        $nav[] = array('url' => "$_SERVER[PHP_SELF]?id=$id", 'name' => $row['title']);
 
-        if($submit_ok) { //only if passed the above validity checks...
+        if ($submit_ok) { // if passed the above validity checks...
                 if ($group_sub) {
-                    $group_id = intval($_POST['gid']);
+                    $group_id = isset($_POST['gid'])? intval($_POST['gid']): -1;
                     $gids = user_group_info($uid, $cours_id);
-                    $local_name = greek_to_latin($gids[$group_id]);
+                    $local_name = isset($gids[$group_id])? greek_to_latin($gids[$group_id]): '';
                 } else {
                     $local_name = greek_to_latin(uid_to_name($uid));
                     $am = mysql_fetch_array(db_query("SELECT am FROM user WHERE user_id = '$uid'"));
@@ -571,7 +571,8 @@ function show_submission_form($id, $user_group_info)
                $urlAppend, $langGroupSpaceLink;
 
         $group_select_hidden_input = $group_select_form = '';
-        if (is_group_assignment($id)) {
+        $is_group_assignment = is_group_assignment($id);
+        if ($is_group_assignment) {
                 if (count($user_group_info) == 1) {
                         $gids = array_keys($user_group_info);
                         $group_link = $urlAppend . '/modules/group/document.php?gid=' . $gids[0];
@@ -581,35 +582,39 @@ function show_submission_form($id, $user_group_info)
                         $group_select_form = "<tr><th class='left'>$langGroupSpaceLink:</th><td>" .
                                              selection($user_group_info, 'gid') . "</td></tr>";
                 }
-		$tool_content .= "\n  <p>$m[this_is_group_assignment] ".
-                                 "<a href='$group_link'>".
-                                 "$m[group_documents]</a> $m[select_publish]</p>";
+                        $tool_content .= "<p>$m[this_is_group_assignment] " .
+                                sprintf(count($user_group_info)?
+                                        $m['group_assignment_publish']:
+                                        $m['group_assignment_no_groups'], $group_link) .
+                                "</p>\n";
 	}
-	$tool_content .= "
-             <form enctype='multipart/form-data' action='$_SERVER[PHP_SELF]' method='post'>
-                <input type='hidden' name='id' value='$id' />$group_select_hidden_input
-                <table width='99%'>
-                <tr>
-                  <th width='220'>&nbsp;</th>
-                  <td><b>$langSubmit</b></td>
-                </tr>$group_select_form 
-                <tr>
-                  <th class='left'>$langWorkFile:</th>
-                  <td><input type='file' name='userfile' class='FormData_InputText' /></td>
-                </tr>
-                <tr>
-                  <th class='left'>$m[comments]:</th>
-                  <td><textarea name='stud_comments' rows='5' cols='55' class='FormData_InputText'></textarea></td>
-                </tr>
-                <tr>
-                  <th>&nbsp;</th>
-                  <td><input type='submit' value='$langSubmit' name='work_submit' /><br />$langNotice3</td>
-                </tr>
-                </table>
-                <br/>
-             </form>
-	     <p align='right'><small>$GLOBALS[langMaxFileSize] " .
-                        ini_get('upload_max_filesize') . "</small></p>";
+        if (!$is_group_assignment or count($user_group_info)) {
+                $tool_content .= "
+                     <form enctype='multipart/form-data' action='$_SERVER[PHP_SELF]' method='post'>
+                        <input type='hidden' name='id' value='$id' />$group_select_hidden_input
+                        <table width='99%'>
+                        <tr>
+                          <th width='220'>&nbsp;</th>
+                          <td><b>$langSubmit</b></td>
+                        </tr>$group_select_form 
+                        <tr>
+                          <th class='left'>$langWorkFile:</th>
+                          <td><input type='file' name='userfile' class='FormData_InputText' /></td>
+                        </tr>
+                        <tr>
+                          <th class='left'>$m[comments]:</th>
+                          <td><textarea name='stud_comments' rows='5' cols='55' class='FormData_InputText'></textarea></td>
+                        </tr>
+                        <tr>
+                          <th>&nbsp;</th>
+                          <td><input type='submit' value='$langSubmit' name='work_submit' /><br />$langNotice3</td>
+                        </tr>
+                        </table>
+                        <br/>
+                     </form>
+                     <p align='right'><small>$GLOBALS[langMaxFileSize] " .
+                                ini_get('upload_max_filesize') . "</small></p>";
+        }
 }
 
 
@@ -621,10 +626,11 @@ function assignment_details($id, $row, $message = null)
 
 	if ($is_adminOfCourse) {
             $tool_content .= "
-            <div id=\"operations_container\">
-              <ul id=\"opslist\">
-                <li><a href=\"$_SERVER[PHP_SELF]?id=$id&amp;choice=do_delete\" onClick=\"return confirmation('".addslashes($row['title'])."');\">$langDelAssign</a></li>
-                <li><a href=\"$_SERVER[PHP_SELF]?download=$id\">$langZipDownload</a></li>
+            <div id='operations_container'>
+              <ul id='opslist'>
+              <li><a href='$_SERVER[PHP_SELF]?id=$id&amp;choice=do_delete' onClick='return confirmation(\"" .
+                js_escape($row['title']) . "\");'>$langDelAssign</a></li>
+                <li><a href='$_SERVER[PHP_SELF]?download=$id'>$langZipDownload</a></li>
               </ul>
             </div>";
 	}

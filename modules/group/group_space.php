@@ -90,7 +90,7 @@ $tool_content .=  "<br /><table width='99%' class='FormData'>
 
 $tutors = array();
 $members = array();
-$q = db_query("SELECT user.user_id, nom, prenom, email, am, is_tutor,
+$q = db_query("SELECT user.user_id, nom, prenom, email, am, is_tutor, has_icon,
 		      group_members.description
                       FROM group_members, user
                       WHERE group_id = $group_id AND
