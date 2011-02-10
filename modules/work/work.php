@@ -305,17 +305,17 @@ function submit_work($id)
                                         (uid, assignment_id, submission_date, submission_ip, file_path,
                                         file_name, comments, group_id)
                                         VALUES
-                                        ($uid, $id, NOW(), '$_SERVER[REMOTE_ADDR]',
-                                        ".autoquote($filename).",'".$_FILES['userfile']['name']."',
-                                        ".autoquote($stud_comments).", $group_id)", $currentCourseID);    
+                                        ($uid, $id, NOW(), " . quote($_SERVER['REMOTE_ADDR']) . ",
+                                        " . quote($filename) . ", ". autoquote($_FILES['userfile']['name']) . ",
+                                        " . autoquote($stud_comments) . ", $group_id)", $currentCourseID);    
                             }
                         } else {
                                 $msg1 = delete_submissions_by_uid($uid, -1, $id);  
                                 db_query("INSERT INTO assignment_submit
                                         (uid, assignment_id, submission_date, submission_ip, file_path,
-                                        file_name, comments) VALUES ('$uid','$id', NOW(), '".$_SERVER['REMOTE_ADDR']."',
-                                        '$filename','".$_FILES['userfile']['name'].
-                                        "', '$stud_comments')", $currentCourseID);
+                                        file_name, comments) VALUES ($uid, $id, NOW(), " . quote($_SERVER['REMOTE_ADDR']) . ",
+                                        " . quote($filename) . ", " . autoquote($_FILES['userfile']['name']) . ",
+                                        " . autoquote($stud_comments) . ")", $currentCourseID);
                         }
                         $tool_content .= "<p class='success'>$msg2<br />$msg1<br /><a href='$_SERVER[PHP_SELF]'>$langBack</a></p><br />";
                 } else {
@@ -1141,17 +1141,18 @@ function submit_grades($grades_id, $grades)
 // functions for downloading
 function send_file($id)
 {
-	global $tool_content, $currentCourseID;
-	mysql_select_db($currentCourseID);
-	$info = mysql_fetch_array(mysql_query("SELECT * FROM assignment_submit WHERE id = '$id'"));
+        global $tool_content, $currentCourseID;
+        mysql_select_db($currentCourseID);
+        $info = mysql_fetch_array(mysql_query("SELECT * FROM assignment_submit WHERE id = '$id'"));
         // Add quotes to filename if it contains spaces
         if (strpos($info[file_name], ' ') !== false) {
-            $info['file_name'] = '"' . $info['file_name'] . '"';
+                $info['file_name'] = '"' . $info['file_name'] . '"';
         }
-	header("Content-Type: application/octet-stream");
-	header("Content-Disposition: attachment; filename=".basename($info['file_name']));
-	readfile("$GLOBALS[workPath]/$info[file_path]");
-	exit();
+        header("Content-Type: application/octet-stream");
+        header("Content-Disposition: attachment; filename=".basename($info['file_name']));
+        ob_end_flush();
+        readfile("$GLOBALS[workPath]/$info[file_path]");
+        exit();
 }
 
 

@@ -152,13 +152,13 @@ function delete_submissions_by_uid($uid, $gid, $id, $new_filename = '')
 function find_submissions($is_group_assignment, $uid, $id, $gids)
 {
         global $cours_id, $currentCourseID;
-        if ($is_group_assignment) {
+        if ($is_group_assignment AND count($gids)) {
                 $groups_sql = join(', ', array_keys($gids));
                 $res = db_query("SELECT id, uid, group_id, submission_date,
 					file_path, file_name, comments, grade,
 					grade_comments, grade_submission_date
 					FROM `$currentCourseID`.assignment_submit
-                                        WHERE assignment_id = '$id' AND
+                                        WHERE assignment_id = $id AND
                                               group_id IN ($groups_sql)");
         } else {
                 $res = db_query("SELECT id FROM `$currentCourseID`.assignment_submit
