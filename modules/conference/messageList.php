@@ -88,8 +88,12 @@ if (isset($_GET['store']) && $is_adminOfCourse) {
                 $alert_div= $langSaveErrorMessage;
         }
 	echo $alert_div;
-	db_query("INSERT INTO document SET path='/$chat_filename', filename='$saveIn',
-		date=NOW(), date_modified=NOW()", $currentCourseID);
+	db_query("INSERT INTO $mysqlMainDb.document SET
+			course_id = $cours_id,
+			path = '/$chat_filename',
+			filename = '$saveIn',
+			date = NOW(),
+			date_modified=NOW()");
 	exit;
 }
 
