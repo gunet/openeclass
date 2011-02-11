@@ -1218,6 +1218,7 @@ $langAddDescription = "Προσθήκη περιγραφής";
 $langGroupDescInfo = "Πληκτρολογήστε μια περιγραφή ή ένα σχόλιο σχετικά με εσάς ή/και με την ομάδα χρηστών.
 Σημειώστε ότι, θα είναι ορατό στον υπεύθυνο της ομάδας χρηστών και στα υπόλοιπα μέλη της ομάδας";
 $langNoChanges = "Δεν πραγματοποιήθηκαν αλλαγές";
+$langGroupMembersUnchanged = "Τα μέλη της ομάδας είναι περισσότερα από τον μέγιστο αριθμό που δώσατε. Ο αριθμός ορίστηκε ίσος με το τρέχον πλήθος μελών.";
 
 // Group Properties
 $langGroupProperties="Ρυθμίσεις ομάδων χρηστών";
@@ -1248,7 +1249,7 @@ $langGroupStudentsInGroup=" ".$langsStudents." εγγεγραμμένοι σε �
 $langGroupStudentsRegistered=" ".$langsStudents." εγγεγραμμένοι στο μάθημα";
 $langGroupNoGroup="μη εγγεγραμμένοι ".$langsStudents." ";
 $langGroupUsersList="Βλέπε <a href=../user/user.php>Χρήστες</a>";
-$langGroupTooMuchMembers="Ο αριθμός που προτάθηκε υπερβαίνει το μέγιστο επιτρεπόμενο (μπορείτε να το αλλάξετε παρακάτω).
+$langGroupTooManyMembers="Ο αριθμός που προτάθηκε υπερβαίνει το μέγιστο επιτρεπόμενο (μπορείτε να το αλλάξετε παρακάτω).
 	Η σύνθεση της ομάδας δεν άλλαξε";
 $langGroupTutor="Υπεύθυνος ομάδας";
 $langGroupNoTutor="κανένας";

@@ -136,13 +136,16 @@ function checkrequired(which, entry) {
 </script>
 hCont;
 
+$message = '';
 // Once modifications have been done, the user validates and arrives here
 if (isset($_POST['modify'])) {
 	// Update main group settings
         register_posted_variables(array('name' => true, 'description' => true), 'all', 'autoquote');
         register_posted_variables(array('maxStudent' => true), 'all', 'intval');
-        if ($member_count > $maxStudent) {
-                $maxStudent = $max_members;
+        $student_members = $member_count - count($tutors);
+        if ($maxStudent != 0 and $student_members > $maxStudent) {
+                $maxStudent = $student_members;
+                $message .= "<p class='alert1'>$langGroupMembersUnchanged</p>";
         }
         $updateStudentGroup = db_query("UPDATE `group` SET name = $name, description = $description,
                                                            max_members = $maxStudent
@@ -165,7 +168,7 @@ if (isset($_POST['modify'])) {
 	// Insert new list of members
 	if ($maxStudent < $numberMembers and $maxStudent != 0) {
 		// More members than max allowed
-		$langGroupEdited = $langGroupTooMuchMembers;
+		$message .= "<p class='alert1'>$langGroupTooManyMembers</p>";
 	} else {
                 // Delete all members of this group
                 $delGroupUsers = db_query("DELETE FROM group_members WHERE group_id = $group_id AND is_tutor = 0");
@@ -176,9 +179,8 @@ if (isset($_POST['modify'])) {
                                   VALUES (" . intval($_POST['ingroup'][$i]) . ", $group_id)");
                 }
 
-		$langGroupEdited = $langGroupSettingsModified;
+                $message .= "<p class='success'>$langGroupSettingsModified</p>";
         }
-        $message = $langGroupEdited;
         initialize_group_info($group_id);
 }
 
@@ -186,14 +188,14 @@ $tool_content_group_name = q($group_name);
 
 if ($is_adminOfCourse) {
         $tool_content_tutor = "<select name='tutor[]' multiple='multiple'>\n";
-        $q = db_query("SELECT user.user_id, nom, prenom, is_tutor
-                              FROM cours_user, user LEFT JOIN group_members
-                                        ON group_members.user_id = user.user_id
+        $q = db_query("SELECT user.user_id, nom, prenom,
+                                   user.user_id IN (SELECT user_id FROM group_members
+                                                                   WHERE group_id = $group_id AND
+                                                                         is_tutor = 1) AS is_tutor
+                              FROM cours_user, user
                               WHERE cours_user.user_id = user.user_id AND
                                     cours_user.tutor = 1 AND
-                                    cours_user.cours_id = $cours_id AND
-                                    (group_members.group_id = $group_id OR
-                                     group_members.group_id IS NULL)
+                                    cours_user.cours_id = $cours_id
                               ORDER BY nom, prenom, user_id");
         while ($row = mysql_fetch_array($q)) {
                 $selected = $row['is_tutor']? ' selected="selected"': '';
@@ -259,8 +261,8 @@ while ($member = mysql_fetch_array($q)) {
                                        "</option>\n";
 }
 
-if (isset($message)) {
-        $tool_content .= "<p class='success_small'>$message</p>";
+if (!empty($message)) {
+        $tool_content .= $message;
 }
 
 $tool_content .= "
@@ -332,7 +334,7 @@ $tool_content .="
     </tr>
     <tr>
       <th class=\"left\">&nbsp;</th>
-      <td><input type='submit' value='$langModify'  name='modify' onClick=\"selectAll(this.form.elements[$element2],true)\" /></td>
+      <td><input type='submit' name='modify' value='$langModify' onClick=\"selectAll(this.form.elements[$element2],true)\" /></td>
     </tr>
     </thead>
     </table>
