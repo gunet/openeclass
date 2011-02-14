@@ -545,7 +545,7 @@ for ($i=0 ; $i < sizeof($flatElementList) ; $i++)
 $tool_content .="
     <table width=\"99%\" class=\"tbl_alt\">
     <tr>
-      <th colspan=\"".($maxDeep+2)."\">".$langContents."</th>
+      <th colspan=\"".($maxDeep+1)."\"><div align=\"left\">&nbsp;".$langContents."</div></th>
       <th width='50'><div align=\"center\">".$langBlock."</div></th>
       <th width='80' colspan=\"3\"><div align='center'>".$langMove."</div></th>
       <th width='50' colspan=\"3\"><div align=\"center\">".$langActions."</div></th>
@@ -579,10 +579,17 @@ foreach ($flatElementList as $module)
       <td width='5'>&nbsp;</td>";
 
     $colspan = $maxDeep - $module['children']+1;
+
+     if ($ind%2 == 0) {
+         $classvis = 'class="even"';
+     } else {
+         $classvis = 'class="odd"';
+     }
+
+
     $tool_content .= "
-    <tr ".$style.">".$spacingString."
-      <td width=\"3\">$ind.</td>
-      <td colspan=\"".$colspan."\">";
+    <tr $classvis ".$style.">".$spacingString."
+      <td colspan=\"".$colspan."\">&nbsp;&nbsp;&nbsp;";
 
     if ($module['contentType'] == CTLABEL_) // chapter head
     {
@@ -607,7 +614,7 @@ foreach ($flatElementList as $module)
     $tool_content .= "</td>"; // end of td of module name
 
     // LOCK
-    $tool_content .= "<td width='10'>";
+    $tool_content .= "<td width='10' class='center'>";
 
     if ($module['contentType'] == CTLABEL_)
     {
@@ -627,7 +634,7 @@ foreach ($flatElementList as $module)
 
     // ORDER COMMANDS
     // DISPLAY CATEGORY MOVE COMMAND
-    	$tool_content .= "<td width='10'>
+    	$tool_content .= "<td width='10' class='center'>
 	<a href=\"".$_SERVER['PHP_SELF']."?cmd=changePos&amp;cmdid=".$module['learnPath_module_id']."\">
 	<img src=\"".$imgRepositoryWeb."move.gif\" alt=\"$langMove\" title=\"$langMove\" border=0 /></a></td>";
 
@@ -699,6 +706,6 @@ foreach ($flatElementList as $module)
 $ind++;
 } // end of foreach
 
-$tool_content .= "</table>";
+$tool_content .= "</table><br />";
 draw($tool_content, 2, '', $head_content, $body_action);
 ?>
