@@ -657,9 +657,9 @@ if (!$is_adminOfCourse && $iterator != 1 && isset($uid)) {
         $total = round($globalprog / ($iterator-1));
         $tool_content .= "
     <tr class='odd'>
-      <td colspan='2'><div align='right'><b>$langPathsInCourseProg</b>:</div></td>
-      <td><div align='right'>".disp_progress_bar($total, 1)."</div></td>
-      <td><div align='left'>$total%</div></td>
+      <th colspan='2'><div align='right'><b>$langPathsInCourseProg</b>:</div></th>
+      <th><div align='right'>".disp_progress_bar($total, 1)."</div></th>
+      <th><div align='left'>$total%</div></th>
     </tr>\n";
 }
 $tool_content .= "\n     </table>\n";
