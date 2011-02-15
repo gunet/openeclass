@@ -166,9 +166,9 @@ while ($iterator <= $_REQUEST['maxDocForm'])
                         VALUES ('". (int)$_SESSION['path_id']."', '".(int)$insertedModule_id."','".addslashes($langDefaultModuleAddedComment)."', ".(int)$order.", 'OPEN')";
                 $query = db_query($sql);
                 $addedDoc = $filenameDocument;
-                $InfoBox = $addedDoc ." ".$langDocInsertedAsModule."<br>";
+                $InfoBox = $addedDoc ." ".$langDocInsertedAsModule."<br />";
                 $style = "success";
-                $tool_content .= "<table width=\"99%\"><tr>";
+                $tool_content .= "<table width=\"99%\" class=\"tbl\"><tr>";
                 $tool_content .= disp_message_box($InfoBox, $style);
                 $tool_content .= "</td></tr></table>";
                 $tool_content .= "<br />";
@@ -201,18 +201,18 @@ while ($iterator <= $_REQUEST['maxDocForm'])
                             VALUES ('". (int)$_SESSION['path_id']."', '". (int)$thisDocumentModule['module_id']."','".addslashes($langDefaultModuleAddedComment)."', ".(int)$order.",'OPEN')";
                     $query = db_query($sql);
                     $addedDoc =  $filenameDocument;
-                    $InfoBox = $addedDoc ." ".$langDocInsertedAsModule."<br>";
-                    $style = "success_small";
-                    $tool_content .= "<table width=\"99%\"><tr>";
+                    $InfoBox = $addedDoc ." ".$langDocInsertedAsModule."<br />";
+                    $style = "success";
+                    $tool_content .= "<table width=\"99%\" class=\"tbl\"><tr>";
                     $tool_content .= disp_message_box($InfoBox, $style);
                     $tool_content .= "</td></tr></table>";
                     $tool_content .= "<br />";
                 }
                 else
                 {
-                    $InfoBox = "<b>$filenameDocument</b>: ".$langDocumentAlreadyUsed."<br>";
-                    $style = "caution_small";
-                    $tool_content .= "<table width=\"99%\"><tr>";
+                    $InfoBox = "<b>$filenameDocument</b>: ".$langDocumentAlreadyUsed."<br />";
+                    $style = "caution";
+                    $tool_content .= "<table width=\"99%\" class=\"tbl\"><tr>";
                     $tool_content .= disp_message_box($InfoBox, $style);
                     $tool_content .= "</td></tr></table>";
                     $tool_content .= "<br />";

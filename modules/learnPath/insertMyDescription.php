@@ -142,10 +142,10 @@ else
 
     }
 }
-$tool_content = "<table width=\"99%\"><tbody><tr><td class=\"success\">";
+$tool_content = "<table width=\"99%\" class=\"tbl\"><tr><td class=\"success\">";
 
 $tool_content .= disp_tool_title($langLinkInsertedAsModule);
-$tool_content .= "</td></tr></tbody></table>";
+$tool_content .= "</td></tr></table>";
 	$tool_content .= "
     <br />
     <p align=\"right\"><a href=\"learningPathAdmin.php\">$langBackToLPAdmin</a></p>";

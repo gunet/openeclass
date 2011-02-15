@@ -217,7 +217,7 @@ switch($cmd)
                             `rank` = " . (int)$order . "
                         WHERE `learnPath_module_id` = ". (int)$_REQUEST['cmdid'];
                 $query = db_query($sql);
-                $dialogBox .= "<p class=\"success_small\">$langModuleMoved</p><br />";
+                $dialogBox .= "<p class=\"success\">$langModuleMoved</p>";
             }
 
         }
@@ -474,6 +474,7 @@ $tool_content .="
 if (isset($displayChangePosForm) && $displayChangePosForm)
 {
     $dialogBox = "
+    <table class=\"tbl\">
     <tr>
       <th>".$langMove." :</th>
       <td>
@@ -486,7 +487,8 @@ if (isset($displayChangePosForm) && $displayChangePosForm)
          <input type=\"submit\" value=\"".$langOk."\" />
         </form>
       </td>
-    </tr>";
+    </tr>
+    </table>";
 }
 
 

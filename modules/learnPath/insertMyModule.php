@@ -162,26 +162,31 @@ if (isset($_REQUEST['cmdglobal']) && ($_REQUEST['cmdglobal'] == 'add'))
 $result = db_query(buildRequestModules());
 
 $tool_content .= '    <form name="addmodule" action="'.$_SERVER['PHP_SELF'].'?cmdglobal=add">'."\n\n";
-$tool_content .= '    <table width="99%" class="LearnPathSum">'."\n"
-       .'    <thead>'."\n"
-       .'    <tr class="LP_header">'."\n"
-       .'      <td><div align="left">'
+$tool_content .= '    <table width="99%" class="tbl_alt">'."\n"
+       .'    <tr>'."\n"
+       .'      <th><div align="left">'
        .$langLearningModule
-       .'</div></td>'."\n"
-       .'      <td width="30%"><div align="center">'
+       .'</div></th>'."\n"
+       .'      <th width="10"><div align="center">'
        .$langSelection
-       .'</div></td>'."\n"
-       .'    </tr>'."\n"
-       .'    </thead>'."\n"
-       .'    <tbody>'."\n";
+       .'</div></th>'."\n"
+       .'    </tr>'."\n";
 
 // Display available modules
 
 
 $atleastOne = FALSE;
 
+$ind=1;
 while ($list=mysql_fetch_array($result))
 {
+     if ($ind%2 == 0) {
+         $style = 'class="even"';
+     } else {
+         $style = 'class="odd"';
+     }
+
+
     //CHECKBOX, NAME, RENAME, COMMENT
     if($list['contentType'] == CTEXERCISE_ )
         $moduleImg = "exercise_on.gif";
@@ -194,7 +199,7 @@ while ($list=mysql_fetch_array($result))
 
     $contentType_alt = selectAlt($list['contentType']);
 
-    $tool_content .= '    <tr>'."\n"
+    $tool_content .= '    <tr '.$style.'>'."\n"
         .'      <td align="left">'."\n"
         .'        <label for="check_'.$list['module_id'].'" ><img src="'.$imgRepositoryWeb.$moduleImg.'" alt="'.$contentType_alt.'" />&nbsp;'.$list['name'].'</label>'."\n";
 
@@ -202,7 +207,7 @@ while ($list=mysql_fetch_array($result))
     if ($list['comment'] != null)
     {
         $tool_content .= '      <br />'."\n"
-            .'        <small style=\"color: #a19b99;\"><b>'.$langComments.'</b>: <small class="comments">'.$list['comment'].'</small>'."\n";
+            .'        <b>'.$langComments.'</b>: <br />'.$list['comment'].''."\n";
     }
     $tool_content .= '      </td>'."\n"
         .'      <td align="center">'."\n"
@@ -212,6 +217,7 @@ while ($list=mysql_fetch_array($result))
 
     $atleastOne = TRUE;
 
+    $ind++;
 }//end while another module to display
 
 //$tool_content .= '    </tbody>'."\n".'    <tfoot>'."\n";
@@ -230,19 +236,17 @@ if ( !$atleastOne )
 if ( $atleastOne )
 {
     $tool_content .= '    <tr>'."\n"
-        .'      <td>&nbsp;</td>'."\n"
-        .'      <td>'."\n"
+        .'      <th colspan="2"><div align="right">'."\n"
         .'        <input type="submit" value="'.$langReuse.'" class="LP_button" />'."\n"
-        .'        <input type="hidden" name="cmdglobal" value="add">'."\n"
-        .'      </td>'."\n"
+        .'        <input type="hidden" name="cmdglobal" value="add"></div>'."\n"
+        .'      </th>'."\n"
         .'    </tr>'."\n";
 }
 
-$tool_content .= "\n".'    </tbody>'."\n".'    </table>'."\n".'    </form>';
+$tool_content .= "\n".'    </table>'."\n".'    </form>';
 
 
 	$tool_content .= "
-        <br />
         <p align=\"right\"><a href=\"learningPathAdmin.php\">$langBackToLPAdmin</p>
     ";
 //####################################################################################\\

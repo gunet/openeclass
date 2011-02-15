@@ -135,19 +135,18 @@ for ( $i = 0 ; $i < sizeof($flatElementList) ; $i++ )
 
 // -------------------- table header ----------------------------
 $tool_content .= '
-    <table width="99%" class="LearnPathSum">'."\n"
-	.'    <tbody>'."\n"
-          // ------------------- some user details --------------------------
+    <table width="99%" class="tbl_alt">'."\n"
+    // ------------------- some user details --------------------------
 	.'    <tr class="odd">'."\n"
 	.'      <td colspan="'.($maxDeep+1).'" class="left"><small><b>'.$langLearnPath.'</b>:&nbsp;'.$LPname.'</small></td>'."\n"
-	.'      <td colspan="'.($maxDeep+3).'" class="right"><small><b>'.$langStudent.'</b>: '.$uDetails['lastname'].' '.$uDetails['firstname'].' ('.$uDetails['email'].')</small></td>'."\n"
+	.'      <td colspan="'.($maxDeep+4).'" class="right"><small><b>'.$langStudent.'</b>: '.$uDetails['lastname'].' '.$uDetails['firstname'].' ('.$uDetails['email'].')</small></td>'."\n"
 	.'    </tr>'."\n"
 	.'    <tr>'."\n"
-	.'      <th width="30%" colspan="'.($maxDeep+1).'">'.$langLearningObjects.'</th>'."\n"
-	.'      <th width="15%">'.$langLastSessionTimeSpent.'</th>'."\n"
-	.'      <th width="15%">'.$langTotalTimeSpent.'</th>'."\n"
-	.'      <th width="15%">'.$langLessonStatus.'</th>'."\n"
-	.'      <th width="25%" colspan="2">'.$langProgress.'</th>'."\n"
+	.'      <th colspan="'.($maxDeep+1).'">'.$langLearningObjects.'</th>'."\n"
+	.'      <th>'.$langLastSessionTimeSpent.'</th>'."\n"
+	.'      <th>'.$langTotalTimeSpent.'</th>'."\n"
+	.'      <th>'.$langLessonStatus.'</th>'."\n"
+	.'      <th colspan="2">'.$langProgress.'</th>'."\n"
 	.'    </tr>'."\n";
 
 // ---------------- display list of elements ------------------------
@@ -180,7 +179,7 @@ foreach ($flatElementList as $module)
 	$spacingString .= '      <td width="5">&nbsp;</td>'."\n";
 	$colspan = $maxDeep - $module['children']+1;
 
-	$tool_content .= '    <tr align="center">'."\n".$spacingString.'      <td colspan="'.$colspan.'" align="left">';
+	$tool_content .= '    <tr '."\n".$spacingString.'      <td colspan="'.$colspan.'" align="left">';
 	//-- if chapter head
 	if ( $module['contentType'] == CTLABEL_ )
 	{
@@ -230,11 +229,11 @@ foreach ($flatElementList as $module)
 			}
 		}
 		//-- session_time
-		$tool_content .= '      <td><small>'.$session_time.'<small></td>'."\n";
+		$tool_content .= '      <td>'.$session_time.'</td>'."\n";
 		//-- total_time
-		$tool_content .= '      <td><small>'.$total_time.'</small></td>'."\n";
+		$tool_content .= '      <td>'.$total_time.'</td>'."\n";
 		//-- status
-		$tool_content .= '      <td><small>';
+		$tool_content .= '      <td>';
 		if($module['contentType'] == CTEXERCISE_ && $module['lesson_status'] != "" ) {
 			if ($module['lesson_status']=="NOT ATTEMPTED") {
 				$tool_content .= $langNotAttempted;
@@ -281,13 +280,13 @@ foreach ($flatElementList as $module)
 				$tool_content .= strtolower($module['lesson_status']);
 			}
 		}
-		$tool_content .= '</small></td>'."\n";
+		$tool_content .= '</td>'."\n";
 		//-- progression
 		if($module['contentType'] != CTLABEL_ )
 		{
 			// display the progress value for current module
-			$tool_content .= '<td align="right">'.disp_progress_bar($progress, 1).'</td>'."\n";
-			$tool_content .= '<td align="left"><small>&nbsp;'.$progress.'%</small></td>'."\n";
+			$tool_content .= '<td align="right" width="120">'.disp_progress_bar($progress, 1).'</td>'."\n";
+			$tool_content .= '<td align="left" width="10">&nbsp;'.$progress.'%</td>'."\n";
 		}
 		else // label
 		{

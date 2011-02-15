@@ -92,7 +92,7 @@ $tool_content .= "
   <tr>
     <th>&nbsp;</th>
     <th class='left'><div align='left'>$langStudent</div></th>
-    <th>$langAm</th>
+    <th width='120'>$langAm</th>
     <th>$langGroup</th>
     <th colspan='2'>$langProgress&nbsp;&nbsp;</th>
   </tr>\n";
@@ -134,12 +134,12 @@ foreach ($usersList as $user)
 		$total = round($globalprog/($iterator-1));
 		$tool_content .= '    <td width="1"><img src="../../template/classic/img/arrow_grey.gif" alt="bullet" title="bullet" border="0"></td>'."\n"
 		.'    <td><a href="detailsUser.php?uInfo='.$user['user_id'].'">'.$user['nom'].' '.$user['prenom'].'</a></td>'."\n"
-		.'    <td>'.uid_to_am($user['user_id']).'</td>'."\n"
+		.'    <td class="center">'.uid_to_am($user['user_id']).'</td>'."\n"
 		.'    <td align="center">'.user_groups($cours_id, $user['user_id']).'</td>'."\n"
-		.'    <td align="right">'
+		.'    <td class="right" width=\'120\'>'
 		.disp_progress_bar($total, 1)
 		.'</td>'."\n"
-		.'    <td align="left"><small>'.$total.'%</small></td>'."\n"
+		.'    <td align="left" width=\'10\'>'.$total.'%</td>'."\n"
 		.'</tr>'."\n";
 	}
 	$k++;

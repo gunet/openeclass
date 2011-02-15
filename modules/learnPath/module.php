@@ -190,16 +190,13 @@ if( !$is_adminOfCourse
 }
 
 $tool_content .="
-    <table width=\"99%\" class=\"FormData\">
-    <tbody>
-    <tr>
-      <th width=\"220\" class=\"left\" height=\"32\"></th>
-      <td class=\"left\"><b>$langLearningObjectData</b></td>
-    </tr>";
+    <fieldset>
+    <legend>$langLearningObjectData</legend>
+    <table width=\"99%\" class=\"tbl\">";
 //################################## MODULE NAME BOX #################################\\
 $tool_content .="
     <tr>
-      <th class=\"left\" height=\"32\">$langTitle :</th>
+      <th class=\"left\" height=\"32\" width=\"220\">$langTitle :</th>
       <td>";
       $cmd = ( isset($_REQUEST['cmd']) && is_string($_REQUEST['cmd']) )? (string)$_REQUEST['cmd'] : '';
 
@@ -291,34 +288,31 @@ if($module['contentType'] != CTLABEL_) //
 
 
 		$tool_content .= ''."\n\n"
-			.'        <table class="LearnPathSum">'."\n"
-			.'        <thead>'."\n"
-			.'        <tr class="LP_header">'."\n"
-			.'          <td><div align="center">'.$langInfoProgNameTitle.'</div></td>'."\n"
-			.'          <td>&nbsp;</td>'."\n"
-			.'          <td><div align="center">'.$langPersoValue.'</div></td>'."\n"
-			.'        </tr>'."\n"
-			.'        </thead>'."\n\n"
-			.'        <tbody>'."\n\n";
+			.'        <table class="tbl_alt">'."\n"
+			.'        <tr>'."\n"
+			.'          <th><div align="center">'.$langInfoProgNameTitle.'</div></th>'."\n"
+			.'          <th>&nbsp;</th>'."\n"
+			.'          <th><div align="center">'.$langPersoValue.'</div></th>'."\n"
+			.'        </tr>'."\n";
 
         //display type of the module
-		$tool_content .= '        <tr>'."\n"
-            .'          <td>'.$langTypeOfModule.'</td>'."\n"
-            .'          <td>:</td>'."\n"
+		$tool_content .= '        <tr class="even">'."\n"
+                        .'          <td>'.$langTypeOfModule.'</td>'."\n"
+                        .'          <td>:</td>'."\n"
 			.'          <td align="right"><img src="'.$imgRepositoryWeb.$contentType_img.'" alt="'.$contentType_alt.'" title="'.$contentType_alt.'" border="0" />&nbsp;&nbsp;'.$contentDescType.'</td>'."\n"
 			.'        </tr>'."\n\n";
 
         //display total time already spent in the module
-		$tool_content .= '        <tr>'."\n"
+		$tool_content .= '        <tr class="even">'."\n"
 			.'          <td>'.$langTotalTimeSpent.'</td>'."\n"
-            .'          <td>:</td>'."\n"
+                        .'          <td>:</td>'."\n"
 			.'          <td align="right">'.$resultBrowsed['total_time'].'</td>'."\n"
 			.'        </tr>'."\n\n";
 
         //display time passed in last session
-		$tool_content .= '        <tr>'."\n"
+		$tool_content .= '        <tr class="even">'."\n"
 			.'          <td>'.$langLastSessionTimeSpent.'</td>'."\n"
-            .'          <td>:</td>'."\n"
+                        .'          <td>:</td>'."\n"
 			.'          <td align="right">'.$resultBrowsed['session_time'].'</td>'."\n"
 			.'        </tr>'."\n\n";
 
@@ -379,12 +373,11 @@ if($module['contentType'] != CTLABEL_) //
             $statusToDisplay = $resultBrowsed['lesson_status'];
         }
 
-		$tool_content .= '        <tr>'."\n"
+		$tool_content .= '        <tr class="even">'."\n"
 			.'          <td>'.$langLessonStatus.'</td>'."\n"
             .'          <td>:</td>'."\n"
 			.'          <td align="right">'.$statusToDisplay.'</td>'."\n"
 			.'        </tr>'."\n\n"
-			.'        </tbody>'."\n\n"
 			.'        </table>'."\n\n";
 
     } //end display stats
@@ -448,8 +441,8 @@ if( $is_adminOfCourse ) // for teacher only
 */
 
     $tool_content .= "
-    </tbody>
-    </table>";
+    </table>
+    </fieldset>";
 //back button
 if ($is_adminOfCourse)
 {
@@ -460,7 +453,6 @@ else
 	$pathBack = "./learningPath.php";
 }
 		$tool_content .= "
-    <br />
     <p align=\"right\"><a href=\"".$pathBack."\">".$langBackToLPAdmin."</p>";
 draw($tool_content, 2, '', $head_content, $body_action);
 ?>

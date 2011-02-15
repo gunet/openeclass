@@ -144,15 +144,20 @@ switch( $cmd )
 			$list = mysql_fetch_array($result);
 
 			$tool_content .= disp_message_box("
-				<form method=\"post\" name=\"rename\" action=\"".$_SERVER['PHP_SELF']."\">
-                <table width=\"99%\" class=\"FormData\"><tbody><tr><th class=\"left\" width=\"220\">
-                    <label for=\"newName\">".$langInsertNewModuleName."</label> :</th><td>
-				    <input type=\"text\" size=\"40\" class=\"auth_input\"name=\"newName\" id=\"newName\" value=\"".htmlspecialchars($list['name'])."\"></input></td><td class=\"right\">
-				    <input type=\"submit\" value=\"".$langImport."\" name=\"submit\">
-                    <input type=\"hidden\" name=\"cmd\" value=\"exRename\">
-				    <input type=\"hidden\" name=\"module_id\" value=\"".(int)$_GET['module_id']."\">
-                </td></tr></thead></table>
-				</form>")."";
+   <form method=\"post\" name=\"rename\" action=\"".$_SERVER['PHP_SELF']."\">
+   
+   <table width=\"99%\" class=\"tbl\">
+   <tr>
+     <td class=\"odd\" width=\"160\"><label for=\"newName\">".$langInsertNewModuleName."</label> :</td>
+     <td><input type=\"text\" size=\"40\" name=\"newName\" id=\"newName\" value=\"".htmlspecialchars($list['name'])."\"></input>
+        <input type=\"submit\" value=\"".$langImport."\" name=\"submit\">
+        <input type=\"hidden\" name=\"cmd\" value=\"exRename\">
+	<input type=\"hidden\" name=\"module_id\" value=\"".(int)$_GET['module_id']."\">
+     </td>
+   </tr>
+   </table>
+   </form>
+   <br />")."";
         }
         break;
 
@@ -208,13 +213,13 @@ switch( $cmd )
             {
 
                 $tool_content .= "<form method=\"post\" action=\"".$_SERVER['PHP_SELF']."\">\n"
-                    .'    <table width="99%" class="FormData"><tbody><tr><th class="left" width="160">'.$langComments.' :</th><td>'."\n"
+                    .'<table width="99%" class="tbl"><tr><th class="left" width="160">'.$langComments.' :</th><td width="100">'."\n"
                     .disp_html_area('comment', $comment['comment'], 2, 40)
                     ."<input type=\"hidden\" name=\"cmd\" value=\"exComment\">\n"
                     ."<input type=\"hidden\" name=\"module_id\" value=\"".(int)$_GET['module_id']."\">\n"
-                    ."<input type=\"submit\" value=\"".$langImport."\">\n"
-                    ."</td></tr></tbody></table>\n"
-                    ."</form>\n";
+                    ."</td><td><input type=\"submit\" value=\"".$langImport."\">\n"
+                    ."</td></tr></table>\n"
+                    ."</form><br />\n";
 
                  $head_content .= disp_html_area_head("comment");
 
@@ -273,25 +278,29 @@ $num_results = mysql_numrows($query_num_results);
 if (!$num_results == 0) {
 
 $tool_content .= "
-    <table width=\"99%\" class=\"LearnPathSum\">
-    <thead>
-    <tr class=\"LP_header\">
-      <td colspan=\"2\"><div align=\"left\"><b>".$langLearningObjects."</b></div></td>
-      <td width=\"10%\"><div align=\"right\"><b>".$langTools."</b>&nbsp;&nbsp;&nbsp;</div></td>\n";
-$tool_content .="    </tr>\n".
-      "    </thead>\n".
-      "    <tbody>";
+    <table width=\"99%\" class=\"tbl_alt\">
+    <tr>
+      <th colspan=\"2\"><div align=\"left\">&nbsp;&nbsp;<b>".$langLearningObjects."</b></div></th>
+      <th width=\"10%\"><div align=\"right\"><b>".$langTools."</b>&nbsp;&nbsp;&nbsp;</div></th>
+    </tr>\n";
 }
 // Display modules of the pool of this course
 
+$ind=1;
 while ($list = mysql_fetch_array($result))
 {
+                   if ($ind%2 == 0) {
+                       $style = 'class="even"';
+                   } else {
+                       $style = 'class="odd"';
+                   }
+
     //DELETE , RENAME, COMMENT
 
     $contentType_img = selectImage($list['contentType']);
     $contentType_alt = selectAlt($list['contentType']);
     $tool_content .= "
-    <tr>
+    <tr $style>
       <td align=\"left\" width=\"1%\" valign=\"top\"><img src=\"".$imgRepositoryWeb.$contentType_img."\" alt=\"".$contentType_alt."\" title=\"".$contentType_alt."\" /></td>
       <td align=\"left\"><b>".$list['name']."</b>";
 
@@ -305,10 +314,11 @@ while ($list = mysql_fetch_array($result))
     $tool_content .= "    </tr>";
 
     $atleastOne = true;
+    $ind++;
 } //end while another module to display
 
 $tool_content .= "
-    </tbody>\n    </table>";
+    </table>";
 
 if ($atleastOne == false) {
     $tool_content .= "

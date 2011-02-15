@@ -119,15 +119,12 @@ $sql = "SELECT LP.`name`, LP.`learnPath_id`
 $lpList = db_query_fetch_all($sql);
 
 // table header
-$tool_content .= '<table width="99%" class="LearnPathSum">'."\n"
-	.'      <thead>'."\n"
+$tool_content .= '<table width="99%" class="tbl_alt">'."\n"
 	.'      <tr>'."\n"
 	.'        <th>&nbsp;</th>'."\n"
 	.'        <th align="left"><div align="left">'.$langLearningPath.'</div></th>'."\n"
-	.'        <th colspan="2" width="30%">'.$langProgress.'</th>'."\n"
-	.'      </tr>'."\n"
-	.'      </thead>'."\n"
-	.'      <tbody>'."\n";
+	.'        <th colspan="2">'.$langProgress.'</th>'."\n"
+	.'      </tr>'."\n";
 if(sizeof($lpList) == 0)
 {
 $tool_content .= '    <tr>'."\n"
@@ -141,24 +138,23 @@ else
 	foreach($lpList as $lpDetails)
 	{
 		if ($k%2==0) {
-	       $tool_content .= "      <tr>";
+	       $tool_content .= "      <tr class=\"even\">";
 	    } else {
 	       $tool_content .= "      <tr class=\"odd\">";
         }
 		$lpProgress = get_learnPath_progress($lpDetails['learnPath_id'],$_GET['uInfo']);
 		$tool_content .= ''."\n"
-			.'        <td width="1%"><img src="../../template/classic/img/arrow_grey.gif" alt="" border="0" /></td>'."\n"
+			.'        <td width="1"><img src="../../template/classic/img/arrow_grey.gif" alt="" border="0" /></td>'."\n"
 			.'        <td><a href="detailsUserPath.php?uInfo='.$_GET['uInfo'].'&path_id='.$lpDetails['learnPath_id'].'">'.htmlspecialchars($lpDetails['name']).'</a></td>'."\n"
-			.'        <td align="right">'.""
+			.'        <td align="right" width="120">'.""
 			.disp_progress_bar($lpProgress, 1)
 			.'</td>'."\n"
-			.'        <td align="left"><small>'.$lpProgress.'%</small></td>'."\n"
+			.'        <td align="left" width="10">'.$lpProgress.'%</td>'."\n"
 			.'      </tr>'."\n";
 		$k++;
 	}
 }
-$tool_content .= '      </tbody>'."\n"
-            	.'      </table>'."\n";
+$tool_content .= '      </table>'."\n";
 
 
 draw($tool_content, 2, '', $head_content);

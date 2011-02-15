@@ -440,6 +440,7 @@ $LPNumber = mysql_num_rows($result);
 $iterator = 1;
 
 $is_blocked = false;
+$ind=1;
 while ($list = mysql_fetch_array($result)) // while ... learning path list
 {
     if ($list['visibility'] == 'HIDE') {
@@ -455,6 +456,13 @@ while ($list = mysql_fetch_array($result)) // while ... learning path list
         $style="class='even'";
         $image_bullet = "arrow_grey.gif";
     }
+
+     if ($ind%2 == 0) {
+         $style = 'class="even"';
+     } else {
+         $style = 'class="odd"';
+     }
+
 
     $tool_content .= "    <tr ".$style.">";
 
@@ -635,12 +643,13 @@ while ($list = mysql_fetch_array($result)) // while ... learning path list
         if ($prog >= 0) {
             $globalprog += $prog;
         }
-        $tool_content .= "<td class='right'>".disp_progress_bar($prog, 1)."</td>\n";
-        $tool_content .= "<td class='left'><small> ".$prog."% </small></td>";
+        $tool_content .= "<td class='right' width='120'>".disp_progress_bar($prog, 1)."</td>\n";
+        $tool_content .= "<td class='left' width='10'>".$prog."% </td>";
     }
     $tool_content .= "
     </tr>\n";
     $iterator++;
+    $ind++;
 } // end while
 
 if (!$is_adminOfCourse && $iterator != 1 && isset($uid)) {

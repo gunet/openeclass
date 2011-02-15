@@ -98,12 +98,11 @@ if( $learnPathName )
 	mysql_select_db($currentCourseID);
 
 	// display tab header
-	$tool_content .= '    <table width="99%" class="tbl_alt">'."\n\n"
-		.'    <tr class="odd">'."\n"
-		.'      <th colspan="4"><div align="left">'.$langLearnPath.': <b>';
+	$tool_content .= ''."\n\n"
+		.'      <p>'.$langLearnPath.': <b>';
 	$tool_content .= disp_tool_title($titleTab);
-	$tool_content .= '</b></div></th>'."\n"
-		.'    </tr>'."\n"
+	$tool_content .= '</b></p>'."\n"
+		.'    <table width="99%" class="tbl_alt">'."\n"
 		.'    <tr>'."\n"
 		.'      <th>&nbsp;</th>'."\n"
 		.'      <th><div align="left">'.$langStudent.'</div></th>'."\n"

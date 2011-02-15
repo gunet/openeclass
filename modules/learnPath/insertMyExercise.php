@@ -148,7 +148,7 @@ while ($listex = mysql_fetch_array($resultex) )
 
             $MessBox .= $exercise['titre'] ." :  ".$langExInsertedAsModule."<br>";
             $style = "success";
-            $tool_content .= "<table width=\"99%\"><tr>";
+            $tool_content .= "<table width=\"99%\" class=\"tbl\"><tr>";
             $tool_content .= disp_message_box($MessBox, $style);
             $tool_content .= "</td></tr></table>";
             $tool_content .= "<br />";
@@ -190,7 +190,7 @@ while ($listex = mysql_fetch_array($resultex) )
                 $exercise = mysql_fetch_array($result);
                 $MessBox .= $exercise['titre']." : ".$langExInsertedAsModule."<br>";
                 $style = "success";
-                $tool_content .= "<table width=\"99%\"><tr>";
+                $tool_content .= "<table width=\"99%\" class=\"tbl\"><tr>";
                 $tool_content .= disp_message_box($MessBox, $style);
                 $tool_content .= "</td></tr></table>";
                 $tool_content .= "<br />";
@@ -199,7 +199,7 @@ while ($listex = mysql_fetch_array($resultex) )
             {
                 $MessBox .= $listex['titre']." : ".$langExAlreadyUsed."<br>";
                 $style = "caution";
-                $tool_content .= "<table width=\"99%\"><tr>";
+                $tool_content .= "<table width=\"99%\" class=\"tbl\"><tr>";
                 $tool_content .= disp_message_box($MessBox, $style);
                 $tool_content .= "</td></tr></table>";
                 $tool_content .= "<br />";
@@ -219,7 +219,6 @@ $tool_content .= display_my_exercises($dialogBox, $style);
 //$tool_content .= display_path_content();
 
 	$tool_content .= "
-    <br />
     <p align=\"right\"><a href=\"learningPathAdmin.php\">$langBackToLPAdmin</p>";
 
 draw($tool_content, 2);
