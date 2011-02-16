@@ -239,7 +239,9 @@ if (isset($uid) AND !isset($_GET['logout'])) {
 	}
 } else {
 	$require_help = true;
-	$helpTopic = "Init";
+        $helpTopic = "Init";
+        $rss_link = "<link rel='alternate' type='application/rss+xml' title='RSS-Feed' href='" .
+                    $urlServer . "rss.php' />";
 	include "include/logged_out_content.php";
-	draw($tool_content, 0);
+	draw($tool_content, 0, '', $rss_link);
 }

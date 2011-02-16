@@ -46,7 +46,7 @@ hContent;
 $displayAnnouncementList = true;
 $displayForm = true;
 
-foreach (array('title', 'newContent') as $var) {
+foreach (array('title', 'newContent', 'lang_admin_ann') as $var) {
         if (isset($_POST[$var])) {
                 $GLOBALS[$var] = autoquote($_POST[$var]);
         } else {
@@ -70,16 +70,16 @@ if (isset($_GET['vis'])) {
 if (isset($_GET['delete'])) {
         // delete announcement command
         $id = intval($_GET['delete']);
-        $result =  db_query("DELETE FROM admin_announcements WHERE id='$id'", $mysqlMainDb);
+        $result =  db_query("DELETE FROM admin_announcements WHERE id = $id", $mysqlMainDb);
         $message = $langAdminAnnDel;
 } elseif (isset($_GET['modify'])) {
         // modify announcement command
         $id = intval($_GET['modify']);
-        $result = db_query("SELECT * FROM admin_announcements WHERE id='$id'", $mysqlMainDb);
+        $result = db_query("SELECT * FROM admin_announcements WHERE id = $id", $mysqlMainDb);
         $myrow = mysql_fetch_array($result);
         if ($myrow) {
                 $titleToModify = q($myrow['title']);
-                $contentToModify = $myrow['body'];
+                $contentToModify = standard_text_escape($myrow['body']);
                 $displayAnnouncementList = true;
         }
 } elseif (isset($_POST['submitAnnouncement'])) {
@@ -89,7 +89,7 @@ if (isset($_GET['delete'])) {
                 $id = intval($_POST['id']);
                 db_query("UPDATE admin_announcements
                         SET title = $title, body = $newContent,
-			lang = '".$_POST['lang_admin_ann']."', 
+			lang = $lang_admin_ann, 
 			date = NOW()
                         WHERE id = $id", $mysqlMainDb);
                 $message = $langAdminAnnModify;
@@ -97,7 +97,7 @@ if (isset($_GET['delete'])) {
                 // add new announcement
                 db_query("INSERT INTO admin_announcements
                         SET title = $title, body = $newContent,
-			visible = 'V', lang = '".$_POST['lang_admin_ann']."', date = NOW()");
+			visible = 'V', lang = $lang_admin_ann, date = NOW()");
                 $message = $langAdminAnnAdd;
         }
 }
@@ -178,7 +178,7 @@ if ($displayAnnouncementList == true) {
 			$myrow['date'] = claro_format_locale_date($dateFormatLong, strtotime($myrow['date']));
 			$tool_content .= "<tr class='$classvis'>";
 			$tool_content .= "<td><b>".q($myrow['title'])."</b>&nbsp;&nbsp;<small>($myrow[date])</small></td>";
-			$tool_content .= "<td>$myrow[body]</td>";
+			$tool_content .= "<td>" . standard_text_escape($myrow['body']) . "</td>";
 			$tool_content .=  "<td>
 			<a href='$_SERVER[PHP_SELF]?modify=$myrow[id]'>
 			<img src='../../template/classic/img/edit.gif' title='$langModify' style='vertical-align:middle;' />
