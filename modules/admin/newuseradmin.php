@@ -125,6 +125,7 @@ $langEmail : $emailhelpdesk
 
 } else {
         $lang = false;
+        $ps = $pn = $pu = $pe = $pt = $pam = $pphone = $pcom = $lang = '';
         if (isset($_GET['id'])) { // if we come from prof request
                 $id = $_GET['id'];
                 // display actions toolbar
