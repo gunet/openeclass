@@ -447,7 +447,7 @@ if (!isset($_POST['submit2'])) {
                                 `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                                 `section_id` VARCHAR(11) NOT NULL,
                                 `public_id` VARCHAR(11) NOT NULL,
-                                `file` VARCHAR(128),
+                                `file_id` INT(11) NOT NULL,
                                 `title` TEXT)');
 
                 // Upgrade table admin_announcements if needed

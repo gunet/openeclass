@@ -243,11 +243,20 @@ function public_file_path($disk_path, $filename = null)
 
 function file_url($path, $filename = null)
 {
-	global $currentCourseID, $urlServer, $group_id;
+	global $currentCourseID, $urlServer, $group_id, $ebook_id;
 
-        $gid = defined('GROUP_DOCUMENTS')? ",$group_id": '';
-        return htmlspecialchars($urlServer . "modules/document/file.php/$currentCourseID$gid" .
-                                        public_file_path($path, $filename),
-                                ENT_QUOTES);
+	if (defined('EBOOK_DOCUMENTS')) {
+		return htmlspecialchars($urlServer .
+						"modules/ebook/show.php/$currentCourseID/$ebook_id/_" .
+						public_file_path($path, $filename),
+					ENT_QUOTES);
+	} else {
+		$gid = defined('GROUP_DOCUMENTS')? ",$group_id": '';
+		
+		return htmlspecialchars($urlServer .
+						"modules/document/file.php/$currentCourseID$gid" .
+	                                        public_file_path($path, $filename),
+	                                ENT_QUOTES);
+	}
 }
 

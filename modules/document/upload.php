@@ -38,7 +38,7 @@
 
 $require_current_course = true;
 $require_login = true;
-
+define('EBOOK', 2);
 include "../../include/baseTheme.php";
 
 if (isset($_GET['uploadPath'])) {
@@ -57,6 +57,14 @@ if (defined('GROUP_DOCUMENTS')) {
         $navigation[] = array ('url' => 'group.php', 'name' => $langGroups);
         $navigation[] = array ('url' => 'group_space.php?group_id=' . $group_id, 'name' => q($group_name));
 	$navigation[] = array ('url' => "document.php?gid=$group_id&amp;openDir=$uploadPath", 'name' => $langDoc);
+} elseif (defined('EBOOK_DOCUMENTS')) {
+	if (isset($_REQUEST['ebook_id'])) {    
+            $ebook_id = intval($_REQUEST['ebook_id']);
+        }
+	$subsystem = EBOOK;
+        $subsystem_id = $ebook_id;
+        $group_sql = "course_id = $cours_id AND subsystem = $subsystem AND subsystem_id = $subsystem_id";
+        $group_hidden_input = "<input type='hidden' name='ebook_id' value='$ebook_id' />";
 } else {
 	$navigation[] = array ('url' => "document.php?openDir=$uploadPath", 'name' => $langDoc);
         $group_hidden_input = '';

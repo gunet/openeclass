@@ -576,7 +576,7 @@ elseif(isset($_REQUEST['install7']))
 		$user_registration = $reguser? 'TRUE': 'FALSE';
 		$stringConfig='<?php
 /* ========================================================
- * OpeneClass 2.2 configuration file
+ * OpeneClass 2.4 configuration file
  * Automatically created by install on '.date('Y-m-d H:i').'
  * ======================================================== */
 
@@ -645,6 +645,11 @@ elseif (isset($_REQUEST['install1']) || isset($_REQUEST['back1']))
 	$_SESSION['step'] = 1;
 	$configErrorExists = false;
 
+	if (!ini_get('short_open_tag')) {
+		$errorContent[]= "<p class='caution_small'>$langWarningInstall2 $langWarnInstallNotice1
+		<a href='$install_info_file'>$langHere</a> $langWarnInstallNotice2</p>";
+			$configErrorExists = true;
+        }
 	$tool_content .= "<form action='$_SERVER[PHP_SELF]?alreadyVisited=1' method='post'>";
 
         function mkdir_or_error($dirname, $warn_message) {

@@ -28,6 +28,8 @@ $require_help = true;
 $helpTopic = 'EBook';
 $guest_allowed = true;
 
+define('EBOOK', 2);
+
 include '../../include/baseTheme.php';
 include '../../include/lib/fileManageLib.inc.php';
 
@@ -60,11 +62,15 @@ if ($is_adminOfCourse) {
                         db_query("DELETE FROM ebook WHERE id = $id");
                         $basedir = $webDir . 'courses/' . $currentCourseID . '/ebook/' . $id;
                         my_delete($basedir);
+                        db_query("DELETE FROM document WHERE
+                                 subsystem = ".EBOOK." AND
+                                 subsystem_id = $id AND
+                                 course_id = $cours_id");
                         $tool_content .= "\n    <p class='success'>" . q(sprintf($langEBookDeleted, $title)) . "</p>";
                 }
         } elseif (isset($_GET['create'])) {
                 $tool_content .= "
-   <form method='post' action='upload.php' enctype='multipart/form-data'>
+   <form method='post' action='create.php' enctype='multipart/form-data'>
      <fieldset>
      <legend>$langUpload</legend>
      

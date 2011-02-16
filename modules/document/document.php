@@ -79,6 +79,12 @@ if (isset($_GET['showQuota'])) {
 	exit;
 }
 
+if ($subsystem == EBOOK) {
+	$nameTools = $langFileAdmin;
+	$navigation[] = array('url' => 'index.php', 'name' => $langEBook);
+        $navigation[] = array('url' => 'edit.php?id=' . $ebook_id, 'name' => $langEBookEdit);
+}
+
 // ---------------------------
 // download directory action
 // ---------------------------
@@ -372,10 +378,12 @@ if($can_upload) {
 		$dialogBox .= "
             <form method='post' action='document.php'>
             <input type='hidden' name='sourceFile' value='$_GET[rename]' />
+	    $group_hidden_input
             <fieldset>
 		<table class='tbl' width='99%'>
                 <tr>
-		  <td>$langRename: &nbsp;&nbsp;&nbsp;<b>".q($fileName)."</b>&nbsp;&nbsp;&nbsp; $langIn:<input type='text' name='renameTo' value='$fileName' size='50' /></td>
+		  <td>$langRename: &nbsp;&nbsp;&nbsp;<b>".q($fileName)."</b>&nbsp;&nbsp;&nbsp; $langIn:
+		  <input type='text' name='renameTo' value='$fileName' size='50' /></td>
 		  <td class='right'><input type='submit' value='$langRename' /></td>
 		</tr>
 		</table>
@@ -402,7 +410,7 @@ if($can_upload) {
         if (isset($_GET['createDir'])) {
                 $createDir = q($_GET['createDir']);
                 $dialogBox .= "
-			<form actsion='document.php' method='post'>
+			<form action='document.php' method='post'>
             $group_hidden_input
 			<fieldset>
 				<input type='hidden' name='newDirPath' value='$createDir' />
@@ -544,6 +552,7 @@ if($can_upload) {
 			<fieldset>
 			  <input type='hidden' name='commentPath' value='" . q($comment) . "' />
 			  <input type='hidden' size='80' name='file_filename' value='$oldFilename' />
+			  $group_hidden_input
 			  <legend>$langAddComment</legend>
 			  <table class='tbl' width='99%'>
 			  <tr>
@@ -759,7 +768,7 @@ if($can_upload) {
 	gia ta metadata symfwna me Dublin Core)
 	------------------------------------------------------------------*/
 	$tool_content .= "\n  <div id='operations_container'>\n    <ul id='opslist'>";
-	$tool_content .= "\n      <li><a href='upload.php?{$groupset}uploadPath=$curDirPath'>$langDownloadFile</a></li>";
+	$tool_content .= "\n  <li><a href='upload.php?{$groupset}uploadPath=$curDirPath'>$langDownloadFile</a></li>";
 	/*----------------------------------------
 	Create new folder
 	--------------------------------------*/

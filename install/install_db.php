@@ -333,7 +333,7 @@ db_query('CREATE TABLE IF NOT EXISTS ebook_subsection (
                 `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 `section_id` VARCHAR(11) NOT NULL,
                 `public_id` VARCHAR(11) NOT NULL,
-                `file` VARCHAR(128),
+                `file_id` INT(11) NOT NULL,
                 `title` TEXT)');
 
 // encrypt the admin password into DB
@@ -471,7 +471,7 @@ db_query("CREATE TABLE `passwd_reset` (
 db_query("CREATE TABLE `course_units` (
 	`id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
 	`title` VARCHAR(255) NOT NULL DEFAULT '',
-	`comments` MEDIUMTEXT NOT NULL DEFAULT '',
+	`comments` MEDIUMTEXT,
 	`visibility` CHAR(1) NOT NULL DEFAULT 'v',
 	`order` INT(11) NOT NULL DEFAULT 0,
 	`course_id` INT(11) NOT NULL) $charset_spec");
@@ -480,7 +480,7 @@ db_query("CREATE TABLE `course_units` (
 	`id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
 	`unit_id` INT(11) NOT NULL ,
 	`title` VARCHAR(255) NOT NULL DEFAULT '',
-	`comments` MEDIUMTEXT NOT NULL DEFAULT '',
+	`comments` MEDIUMTEXT,
 	`res_id` INT(11) NOT NULL,
 	`type` VARCHAR(255) NOT NULL DEFAULT '',
 	`visibility` CHAR(1) NOT NULL DEFAULT 'v',

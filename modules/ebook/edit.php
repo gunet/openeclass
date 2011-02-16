@@ -70,6 +70,7 @@ if (isset($_POST['delete'])) {
         if (!empty($ebook_title) and $info['title'] != $ebook_title) {
                 db_query("UPDATE `ebook` SET title = " . quote($ebook_title) . " WHERE id = $info[id]");
         }
+        $tool_content .= "<p class='success'>$langEBookTitleModified</p>";
 } elseif (isset($_POST['submit'])) {
         $basedir = $webDir . 'courses/' . $currentCourseID . '/ebook/' . $ebook_id;
         list($paths, $files, $file_ids, $id_map) = find_html_files();
@@ -106,6 +107,7 @@ if (isset($_POST['delete'])) {
                         db_query('DELETE FROM ebook_subsection WHERE id IN (' . implode(', ', $oldssids) . ')');
                 }
         }
+        $tool_content .= "<p class='success'>$langEBookSectionsModified</p>";
 } 
 
 $q = db_query("SELECT * FROM `ebook` WHERE course_id = $cours_id AND id = $ebook_id");
@@ -117,26 +119,24 @@ if (mysql_num_rows($q) == 0) {
         $basedir = $webDir . 'courses/' . $currentCourseID . '/ebook/' . $ebook_id;
         $k = 0;
         list($paths, $files, $file_ids, $id_map) = find_html_files();
-
         // Form #1 - edit ebook title
         $tool_content .= "
     <div id='operations_container'>
       <ul id='opslist'>
-        <li><a href='replace.php?id=$ebook_id'>$langEBookReplace</a></li>
+      <li><a href='document.php?ebook_id=$ebook_id'>$langFileAdmin</a></li>
       </ul>
     </div>
     
-    <form method='post' action='edit.php'>
+    <form method='post' action='$_SERVER[PHP_SELF]'>
     <fieldset>
          <input type='hidden' name='id' value='$ebook_id' />
          $langTitle: <input type='text' name='ebook_title' size='53' value='" . q($info['title']) . "' />
                      <input name='title_submit' type='submit' value='$langModify' />
-      </p>
     </fieldset>
     </form>";
 
         // Form #2 - edit sections
-        $tool_content .= "<form method='post' action='edit.php'>
+        $tool_content .= "<form method='post' action='$_SERVER[PHP_SELF]'>
                           <input type='hidden' name='id' value='$ebook_id' /><br />
                           <table>
                              <tr><th>$langID</th><th>$langTitle</th><th>&nbsp;</th></tr>\n";

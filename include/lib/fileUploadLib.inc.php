@@ -510,7 +510,7 @@ function process_extracted_file($p_event, &$p_header) {
                                  filename = " . quote($filename) .",
                                  visibility = 'v',
                                  comment = " . quote($file_comment) . ",
-                                 category = " . quote($file_category) . ",
+                                 category = " . intval($file_category) . ",
                                  title = " . quote($file_title) . ",
                                  creator = " . quote($file_creator) . ",
                                  date = " . quote($file_date) . ",
@@ -520,7 +520,7 @@ function process_extracted_file($p_event, &$p_header) {
                                  author = " . quote($file_author) . ",
                                  format = '$format',
                                  language = " . quote($file_language) . ",
-                                 copyrighted = " . quote($file_copyrighted));
+                                 copyrighted = " . intval($file_copyrighted));
                 // File will be extracted with new encoded filename
                 $p_header['filename'] = $basedir . $path;
                 return 1;
