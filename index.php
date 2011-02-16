@@ -164,7 +164,8 @@ if (isset($_SESSION['shib_uname'])) { // authenticate via shibboleth
 		if (isset($_SESSION['perso_is_active']) and (isset($userPerso))) {
 			$_SESSION['user_perso_active'] = $userPerso;
 		}
-		##[END personalisation modification]############
+                ##[END personalisation modification]############
+                redirect_to_home_page();
 	}  // end of user authentication
 } 
 	
