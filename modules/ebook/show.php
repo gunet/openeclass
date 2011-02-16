@@ -179,10 +179,14 @@ $ebook_head = '';
 $dom = new DOMDocument();
 @$dom->loadHTMLFile($basedir . $subsections[$current_sid][$current_ssid]['path']);
 foreach ($dom->getElementsByTagName('link') as $element) {
-	 $ebook_head .= $dom->saveXML($element);
+        $ebook_head .= $dom->saveXML($element);
+}
+foreach ($dom->getElementsByTagName('style') as $element) {
+        $ebook_head .= str_replace(array('<![CDATA[', ']]>'), array('', ''),
+                                   $dom->saveXML($element));
 }
 foreach ($dom->getElementsByTagName('script') as $element) {
-	 $ebook_head .= $dom->saveXML($element);
+        $ebook_head .= $dom->saveXML($element);
 }
 $body_node = $dom->getElementsByTagName('body')->item(0);
 foreach ($body_node->childNodes as $element) {
