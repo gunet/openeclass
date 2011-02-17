@@ -57,6 +57,7 @@ if (mysql_num_rows($result) > 0) {
 	$numOfAnnouncements = count($announceArr);
 	for($i=0; $i < $numOfAnnouncements; $i++) {
 		$tool_content .= "<tr><td colspan='2'>
+		
 		<img style='border:0px;' src='${urlAppend}/template/classic/img/arrow_grey.gif' alt='' />
 		<b>".q($announceArr[$i]['title'])."</b>
 		&nbsp;(".claro_format_locale_date($dateFormatLong, strtotime($announceArr[$i]['date'])).")
