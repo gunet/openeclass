@@ -52,7 +52,7 @@ if (defined('GROUP_DOCUMENTS')) {
         include '../group/group_functions.php';
         initialize_group_id('gid');
         initialize_group_info($group_id);
-	$can_upload = $is_member;
+	$can_upload = $can_upload || $is_member;
         $group_hidden_input = "<input type='hidden' name='gid' value='$group_id' />";
         $navigation[] = array ('url' => 'group.php', 'name' => $langGroups);
         $navigation[] = array ('url' => 'group_space.php?group_id=' . $group_id, 'name' => q($group_name));
