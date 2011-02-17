@@ -25,13 +25,6 @@
 * =========================================================================*/
 
 
-/*===========================================================================
-document.php
- * @version $Id$
-@last update: 20-12-2006 by Evelthon Prodromou
-@authors list: Agorastos Sakis <th_agorastos@hotmail.com>
-*/
-
 $require_current_course = TRUE;
 $guest_allowed = true;
 
@@ -71,7 +64,9 @@ if (isset($_GET['showQuota'])) {
         $nameTools = $langQuotaBar;
         if ($subsystem == GROUP) {
         	$navigation[] = array ('url' => 'document.php?gid=' . $group_id, 'name' => $langDoc);
-        } else {
+        } elseif ($subsystem == EBOOK) {
+		$navigation[] = array ('url' => 'document.php?ebook_id=' . $ebook_id, 'name' => $langDoc);
+	} else {
         	$navigation[] = array ('url' => 'document.php', 'name' => $langDoc);
         }
 	$tool_content .= showquota($diskQuotaDocument, $diskUsed);

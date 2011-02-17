@@ -51,10 +51,7 @@ if (isset($_SESSION['langswitch'])) {
 include('lib/textLib.inc.php');
 
 $tool_content .= <<<lCont
-<div id="container_login">
 
-<div id="wrapper">
-<div id="content_login">
 <p align='justify'>$langInfoAbout</p>
 lCont;
 
@@ -68,7 +65,7 @@ if (mysql_num_rows($result) > 0) {
 		array_push($announceArr, $eclassAnnounce);
 	}
         $tool_content .= "<br/>
-        <table width='99%'>
+        <table width='99%' class='AnnouncementsList'>
 	<thead><tr><th width='180'>$langAnnouncements
 	<span class='feed'><a href='${urlServer}rss.php'>
 	<img src='${urlServer}template/classic/img/feed.png' alt='RSS Feed' title='RSS Feed' />
@@ -97,10 +94,10 @@ if ($shibactive['auth_default'] == 1) {
 	$shibboleth_link = "";
 }
 
-$tool_content .= "</div></div>";
+
 
 if (!get_config('dont_display_login_form')) {
-	$tool_content .= "<div id='navigation'>
+	$tool_content .= "</div><div id='rightbar'>
 	 <table width='99%' class='tbl'>
 	 <tr>
 	   <th class='LoginHead'><b>$langUserLogin </b></th>
@@ -119,7 +116,7 @@ if (!get_config('dont_display_login_form')) {
 	   </td>
 	 </tr>
 	</table>
-	</div>";
+	";
 }
 
-$tool_content .= "<div id='extra'>{ECLASS_HOME_EXTRAS_RIGHT}</div></div>";
+$tool_content .= "<div id='extra'>{ECLASS_HOME_EXTRAS_RIGHT}</div>";
