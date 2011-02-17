@@ -274,16 +274,12 @@ $tool_content .= "
 
 $tool_content .="
   <form name='groupedit' method='post' action='".$_SERVER['PHP_SELF']."?group_id=$group_id' onsubmit=\"return checkrequired(this,'name');\">
-    <br />
-    <table width='99%' class='FormData'>
-    <thead>
-    <tr>
-      <th width='220'>&nbsp;</th>
-      <td><b>$langGroupInfo</b></td>
-    </tr>
+    <fieldset>
+    <legend>$langGroupInfo</legend>
+    <table width='99%' class='tbl'>
     <tr>
       <th class='left'>$langGroupName:</th>
-      <td><input type=text name='name' size=40 value='$tool_content_group_name' class='FormData_InputText' /></td>
+      <td><input type=text name='name' size=40 value='$tool_content_group_name' /></td>
     </tr>
     <tr>
       <th class='left'>$langGroupTutor:</th>
@@ -293,42 +289,36 @@ $tool_content .="
     </tr>
     <tr>
       <th class='left'>$langMax $langGroupPlacesThis:</th>
-      <td><input type=text name='maxStudent' size=2 value='$tool_content_max_student'  class='auth_input' /></td>
+      <td><input type=text name='maxStudent' size=2 value='$tool_content_max_student' /></td>
     </tr>
     <tr>
       <th class='left'>$langDescription $langUncompulsory:</th>
-      <td><textarea name='description' rows='2' cols='60' class='FormData_InputText'>$tool_content_group_description</textarea></td>
+      <td><textarea name='description' rows='2' cols='60'>$tool_content_group_description</textarea></td>
     </tr>
     <tr>
       <th class='left' valign='top'>$langGroupMembers :</th>
       <td>
-          <table width='99%' align='center' class='GroupSum'>
-          <thead>
+          <table width='99%' align='center' class='tbl_border'>
           <tr>
-            <td><b>$langNoGroupStudents</b></td>
-            <td width='100'><div align='center'><b>$langMove</b></div></td>
-            <td><div align='right'><b>$langGroupMembers</b></div></td>
+            <th class='center'>$langNoGroupStudents</th>
+            <th width='100' class='center'>$langMove</th>
+            <th class='center'>$langGroupMembers</th>
           </tr>
-          </thead>
-          <tbody>
           <tr>
-            <td><div align='left'>
+            <td>
               <select name='nogroup[]' size='15' multiple='1'>
                 $tool_content_not_Member
-              </select></div>
+              </select>
             </td>
-            <td>
-              <div align='center'>
+            <td class='center'>
               <input type='button' onClick=\"move(this.form.elements[$element1],this.form.elements[$element2])\" value='   &gt;&gt;   ' /><br /><input type='button' onClick=\"move(this.form.elements[$element2],this.form.elements[$element1])\" value='   &lt;&lt;   ' />
-              </div>
             </td>
-            <td><div align='right'>
+            <td class='right'>
               <select name='ingroup[]' size='15' multiple='1'>
                 $tool_content_group_members
-              </select></div>
+              </select>
             </td>
           </tr>
-          </tbody>
           </table>
       </td>
     </tr>
@@ -336,8 +326,8 @@ $tool_content .="
       <th class=\"left\">&nbsp;</th>
       <td><input type='submit' name='modify' value='$langModify' onClick=\"selectAll(this.form.elements[$element2],true)\" /></td>
     </tr>
-    </thead>
     </table>
+    </fieldset>
 </form>
 ";
 

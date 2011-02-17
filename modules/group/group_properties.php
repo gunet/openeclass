@@ -55,14 +55,11 @@ $checked['private_forum_no'] = $private_forum? '': ' checked="1"';
 if ($is_adminOfCourse) {
 	$tool_content = "
 <form method='post' action='group.php'>
-    <table width='99%' align='left' class='FormData'>
-    <tbody>
+    <fieldset>
+    <legend>$langGroupProperties / $langTools</legened>
+    <table width='99%' align='left' class='tbl'>
     <tr>
-      <th width='220'>&nbsp;</th>
-      <td><b>$langGroupProperties</b></td>
-    </tr>
-    <tr>
-      <th class='left'>$langGroupStudentRegistrationType :</th>
+      <th class='left' width='180'>$langGroupStudentRegistrationType :</th>
       <td>
        <input type='checkbox' name='self_reg' value='1'$checked[self_reg] />&nbsp;$langGroupAllowStudentRegistration<br />
        <input type='checkbox' name='multi_reg' value='1'$checked[multi_reg] />&nbsp;$langGroupAllowMultipleRegistration<br />
@@ -71,10 +68,6 @@ if ($is_adminOfCourse) {
     <tr>
       <td>&nbsp;</td>
       <td>&nbsp;</td>
-    </tr>
-    <tr>
-      <th width='220'>&nbsp;</th>
-      <td><b>$langTools</b></td>
     </tr>
     <tr>
     <th class='left'>$langGroupForum :</th>
@@ -101,10 +94,8 @@ if ($is_adminOfCourse) {
       <th>&nbsp;</th>
       <td><input type='submit' name='properties' value='$langModify' /></td>
     </tr>
-    </tbody>
     </table>
-    <br />
-    
+    </fieldset>    
     </form>";
         draw($tool_content, 2);
 } else {

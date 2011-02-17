@@ -50,27 +50,23 @@ $tool_content = "";
 $tool_content = <<<tCont
 
     <form method="post" action="group.php">
-    <table width="100%" align="left" class="FormData">
-    <tbody>
-    <tr>
-      <th width="220">&nbsp;</th>
-      <td><b>$langNewGroupCreateData</b></td>
-    </tr>
+    <fieldset>
+    <legend>$langNewGroupCreateData</legend>
+    <table width="99%" class="tbl">
     <tr> 
-      <th class="left">$langNewGroups :</th>
-      <td><input type="text" name="group_quantity" size="3" value="1" class="FormData_InputText"></td>
+      <th width="160" class="left">$langNewGroups :</th>
+      <td><input type="text" name="group_quantity" size="3" value="1"></td>
     </tr>
     <tr> 
       <th class="left">$langNewGroupMembers :</th>
-      <td><input type="text" name="group_max" size="3" value="8" class="FormData_InputText">&nbsp;<small>$langMax $langPlaces</small></td>
+      <td><input type="text" name="group_max" size="3" value="8">&nbsp;$langMax $langPlaces</td>
     </tr>
     <tr>
       <th>&nbsp;</th>
       <td><input type="submit" value=$langCreate name="creation"></td>
     </tr>
-    </tbody>
     </table>
-    <br />
+    </fieldset>
     </form>
 
 tCont;

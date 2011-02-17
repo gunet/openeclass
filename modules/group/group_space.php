@@ -78,15 +78,14 @@ if ($is_adminOfCourse or $is_tutor) {
 }
 
 $tool_content .= loadGroupTools();
-$tool_content .=  "<br /><table width='99%' class='FormData'>
-	<thead><tr>
-	<th width='220'>&nbsp;</th>
-	<td><b>$langGroupInfo</b></td>
-	</tr>
-	<tr>
-	<th class='left'>$langGroupName :</th>
-	<td>" . q($group_name) . "</td>
-	</tr>";
+$tool_content .=  "<br />
+    <fieldset>
+    <legend>$langGroupInfo</legend>
+    <table width='99%' class='tbl'>
+    <tr>
+      <th class='left' width='180'>$langGroupName :</th>
+      <td>" . q($group_name) . "</td>
+    </tr>";
 
 $tutors = array();
 $members = array();
@@ -110,8 +109,11 @@ if ($tutors) {
         $tool_content_tutor =  $langGroupNoTutor;
 }
 
-$tool_content .= "<tr><th class='left'>$langGroupTutor :</th>
-<td>$tool_content_tutor</td></tr>";
+$tool_content .= "
+    <tr>
+      <th class='left'>$langGroupTutor :</th>
+      <td>$tool_content_tutor</td>
+    </tr>";
 
 $group_description = trim($group_description);
 if (empty($group_description)) {
@@ -120,49 +122,65 @@ if (empty($group_description)) {
         $tool_content_description = q($group_description);
 }
 
-$tool_content .= "<tr><th class='left'>$langDescription :</th>
-<td>$tool_content_description</td></tr>";
+$tool_content .= "
+    <tr>
+      <th class='left'>$langDescription :</th>
+      <td>$tool_content_description</td>
+    </tr>";
 
 // members
-$tool_content .= "<tr><th class='left' valign='top'>$langGroupMembers :</th>
-<td><table width='99%' align='center' class='GroupSum'>
-<thead>
-<tr>
-<td><b>$langNameSurname</b></td>
-<td width='100'><div align='center'><b>$langAm</b></div></td>
-<td><div align='center'><b>$langEmail</b></div></td>
-</tr>
-</thead>
-<tbody>";
+$tool_content .= "
+    <tr>
+      <th class='left' valign='top'>$langGroupMembers :</th>
+      <td>
+        <table width='99%' align='center' class='tbl_border'>
+        <tr>
+          <th>$langNameSurname</th>
+          <th width='100' class='center'>$langAm</th>
+          <th class='center'><b>$langEmail</th>
+        </tr>";
 
 if ($members) {
 	foreach ($members as $member){
 		$user_group_description = $member['description'];
-		$tool_content .= "<tr><td>" . display_user($member);  
+		$tool_content .= "
+        <tr>
+          <td>" . display_user($member);  
 		if ($user_group_description) {
 			$tool_content .= "<br />".q($user_group_description);
 		}
-                $tool_content .= "</td><td class='center'>";
+                $tool_content .= "</td>
+          <td class='center'>";
 		if (!empty($member['am'])) {
 			$tool_content .=  q($member['am']);
 		} else {
 			$tool_content .= '-';
 		}
-                $tool_content .= "</td><td class='center'>";
+                $tool_content .= "</td>
+          <td class='center'>";
                 $email = q(trim($member['email']));
                 if (!empty($email)) {
                         $tool_content .= "<a href='mailto:$email'>$email</a>";
                 } else {
                         $tool_content .= '-';
                 }
-                $tool_content .= "</td></tr>\n";
+                $tool_content .= "</td>
+        </tr>\n";
 	}
 } else {
-	$tool_content .= "<tr><td colspan='3'>$langGroupNoneMasc</td></tr>";
+	$tool_content .= "
+        <tr>
+          <td colspan='3'>$langGroupNoneMasc</td>
+        </tr>";
 }
 
-$tool_content .=  "</tbody></table>";
-$tool_content .= "</td></tr></thead></table>";
+$tool_content .=  "
+        </table>";
+$tool_content .= "
+      </td>
+    </tr>
+    </table>
+    </fieldset>";
 draw($tool_content, 2);
 
 
