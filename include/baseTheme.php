@@ -173,6 +173,8 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 		if (isset ( $hideLeftNav )) {
 			$t->clear_var ( 'leftNav' );
 			$t->set_var ( 'CONTENT_MAIN_CSS', 'content_main_no_nav' );
+		} elseif ($homePage) {
+			$t->set_var ( 'CONTENT_MAIN_CSS', 'content_main_first' );
 		} else {
 			$t->set_var ( 'CONTENT_MAIN_CSS', 'content_main' );
 		}
