@@ -1,15 +1,10 @@
 <?php
 /*========================================================================
-*   Open eClass 2.1
+*   Open eClass 2.4
 *   E-learning and Course Management System
 * ========================================================================
-*  Copyright(c) 2003-2008  Greek Universities Network - GUnet
+*  Copyright(c) 2003-2011  Greek Universities Network - GUnet
 *  A full copyright notice can be read in "/info/copyright.txt".
-*
-*  Developers Group:	Costas Tsibanis <k.tsibanis@noc.uoa.gr>
-*			Yannis Exidaridis <jexi@noc.uoa.gr>
-*			Alexandros Diamantidis <adia@noc.uoa.gr>
-*			Tilemachos Raptis <traptis@noc.uoa.gr>
 *
 *  For a full list of contributors, see "credits.txt".
 *
