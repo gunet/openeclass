@@ -201,15 +201,19 @@ if ($is_adminOfCourse) {
                                 $placeAvailableInGroups[$idGroup] = $places;
                         }
                 }
-                $resUserSansGroupe= db_query("SELECT DISTINCT u.user_id
-                                                FROM (user u, cours_user cu)
-                                                LEFT JOIN group_members ug
-                                                     ON u.user_id = ug.user_id
-                                                WHERE ug.user_id IS NULL AND
-                                                      cu.cours_id = $cours_id AND
-                                                      cu.user_id = u.user_id AND
-                                                      cu.statut = 5 AND
-                                                      cu.tutor = 0");
+                // Course members not registered to any group
+                $resUserSansGroupe= db_query("
+                        SELECT u.user_id, u.nom, u.prenom
+                                FROM (user u, cours_user cu)
+                                WHERE cu.cours_id = $cours_id AND
+                                      cu.user_id = u.user_id AND
+                                      cu.statut = 5 AND
+                                      cu.tutor = 0 AND
+                                      u.user_id NOT IN (SELECT user_id FROM group_members, `group`
+                                                                       WHERE `group`.id = group_members.group_id AND
+                                                                       `group`.course_id = $cours_id)
+                                GROUP BY u.user_id
+                                ORDER BY u.nom, u.prenom");
                 while (isset($placeAvailableInGroups) and is_array($placeAvailableInGroups) and (!empty($placeAvailableInGroups)) and list($idUser) = mysql_fetch_array($resUserSansGroupe)) {
                         $idGroupChoisi = array_keys($placeAvailableInGroups, max($placeAvailableInGroups));
                         $idGroupChoisi = $idGroupChoisi[0];

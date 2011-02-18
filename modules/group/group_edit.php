@@ -204,12 +204,12 @@ if ($is_adminOfCourse) {
 
         }
         $tool_content_tutor .= '</select>';
-        $element1 = 4;
-        $element2 = 7;
+        $element1 = 5;
+        $element2 = 8;
 } else {
         $tool_content_tutor = display_user($tutors);
-        $element1 = 3;
-        $element2 = 6;
+        $element1 = 4;
+        $element2 = 7;
 }
 
 $tool_content_max_student = $max_members? $max_members: '-';
@@ -218,7 +218,7 @@ $tool_content_group_description = q($group_description);
 
 if ($multi_reg) {
         // Students registered to the course but not members of this group
-        $sqll = "SELECT DISTINCT u.user_id ,u.nom, u.prenom
+        $sqll = "SELECT u.user_id ,u.nom, u.prenom
                         FROM user u, cours_user cu, group_members ug
                         WHERE cu.cours_id = $cours_id AND
                               cu.user_id = u.user_id AND
@@ -226,18 +226,20 @@ if ($multi_reg) {
                               ug.user_id NOT IN (SELECT user_id FROM group_members WHERE group_id = $group_id) AND
                               cu.statut = 5 AND
                               cu.tutor = 0
+                        GROUP BY u.user_id
                         ORDER BY u.nom, u.prenom";
 } else {
         // Students registered to the course but members no group
-        $sqll = "SELECT DISTINCT u.user_id, u.nom, u.prenom
+        $sqll = "SELECT u.user_id, u.nom, u.prenom
                         FROM (user u, cours_user cu)
-                        LEFT JOIN group_members ug
-                             ON u.user_id = ug.user_id
-                        WHERE ug.user_id IS NULL AND
-                              cu.cours_id = $cours_id AND
+                        WHERE cu.cours_id = $cours_id AND
                               cu.user_id = u.user_id AND
                               cu.statut = 5 AND
-                              cu.tutor = 0
+                              cu.tutor = 0 AND
+                              u.user_id NOT IN (SELECT user_id FROM group_members, `group`
+                                                               WHERE `group`.id = group_members.group_id AND
+                                                               `group`.course_id = $cours_id)
+                        GROUP BY u.user_id
                         ORDER BY u.nom, u.prenom";
 }
 
