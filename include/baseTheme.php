@@ -215,7 +215,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
                 }
 		//set the text and icon on the third bar (header)
 		if ($menuTypeID == 2) {
-			$t->set_var ( 'THIRD_BAR_TEXT', q(ellipsize($intitule, 64)) );
+			$t->set_var ( 'THIRD_BAR_TEXT', "<a href='$urlServer/courses/$currentCourseID/'>" . q(ellipsize($intitule, 64)) . '</a>' );
 			$t->set_var ( 'THIRDBAR_LEFT_ICON', 'lesson_icon' );
 		} elseif ($menuTypeID == 3) {
 			$t->set_var ( 'THIRD_BAR_TEXT', $langAdmin );
