@@ -114,10 +114,10 @@ if ($is_adminOfCourse) {
                                 $res = db_query("SELECT id FROM `group` WHERE name = '$langGroup $group_num'");
                         } while (mysql_num_rows($res) > 0);
 
-                        db_query("INSERT INTO `$currentCourseID`.forums (forum_id, forum_name, forum_desc, forum_access,
+                        db_query("INSERT INTO `$currentCourseID`.forums (forum_name, forum_desc, forum_access,
                                                       forum_moderator, forum_topics, forum_posts,
                                                       forum_last_post_id, cat_id, forum_type)
-                                  VALUES ('', '$langForumGroup $group_num', '', 2, 1, 0, 0, 1, $cat_id, 0)");
+                                  VALUES ('$langForumGroup $group_num', '', 2, 1, 0, 0, 1, $cat_id, 0)");
                         $forum_id = mysql_insert_id();
 
                         // Create a unique path to group documents to try (!)
