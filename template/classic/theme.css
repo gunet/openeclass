@@ -38,7 +38,7 @@ pre { max-width: 55em; overflow: auto;}
 table {
 	border-collapse: collapse;
 	border-spacing: 0;
-        border: 1px solid red;
+        border: 1px solid red; 
 }
 
 /*-------------------------------------
@@ -290,7 +290,7 @@ fieldset table.th {
 
 #content_main_first {
 	float: left;
-    width: 580px;
+    width: 550px;
     padding:5px;
     margin: 5px;
 }
@@ -298,16 +298,16 @@ fieldset table.th {
 /* right */
 
 #rightbar {
-    float: right;
-	width: 160px;
-	padding:10px;
-    margin: 10px;
-    background-color:#cccccc;
-    behavior: url(border-radius.htc);
-    -moz-border-radius: 10px;
-    -webkit-border-radius: 10px;
-    -khtml-border-radius: 10px;
-    border-radius: 10px;
+	float: right;
+	width: 190px;
+	padding: 10px;
+	margin: 10px;
+	background-color:#cccccc;
+	behavior: url(border-radius.htc); 
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+	-khtml-border-radius: 10px;
+	border-radius: 10px; 
 }
 
 /* Login Module */

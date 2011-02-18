@@ -231,9 +231,9 @@ function add_assignment($title, $desc, $deadline, $group_submissions)
 
 	$secret = uniqid("");
 	db_query("INSERT INTO assignments
-		(title, description, deadline, submission_date, secret_directory,
+		(title, description, comments, deadline, submission_date, secret_directory,
 			group_submissions) VALUES
-		(".autoquote($title).", ".autoquote($desc).", ".autoquote($deadline).", NOW(), '$secret',
+		(".autoquote(trim($title)).", ".autoquote(trim($desc)).", ' ', ".autoquote($deadline).", NOW(), '$secret',
 			".autoquote($group_submissions).")");
 	mkdir("$workPath/$secret",0777);
 }
@@ -303,19 +303,19 @@ function submit_work($id)
                                     $msg1 = delete_submissions_by_uid(-1, $group_id, $id);
                                     db_query("INSERT INTO assignment_submit
                                         (uid, assignment_id, submission_date, submission_ip, file_path,
-                                        file_name, comments, group_id)
+                                        file_name, comments, grade_comments, group_id)
                                         VALUES
                                         ($uid, $id, NOW(), " . quote($_SERVER['REMOTE_ADDR']) . ",
                                         " . quote($filename) . ", ". autoquote($_FILES['userfile']['name']) . ",
-                                        " . autoquote($stud_comments) . ", $group_id)", $currentCourseID);    
+                                        " . autoquote($stud_comments) . ", '', $group_id)", $currentCourseID);    
                             }
                         } else {
                                 $msg1 = delete_submissions_by_uid($uid, -1, $id);  
                                 db_query("INSERT INTO assignment_submit
                                         (uid, assignment_id, submission_date, submission_ip, file_path,
-                                        file_name, comments) VALUES ($uid, $id, NOW(), " . quote($_SERVER['REMOTE_ADDR']) . ",
+                                        file_name, comments, grade_comments) VALUES ($uid, $id, NOW(), " . quote($_SERVER['REMOTE_ADDR']) . ",
                                         " . quote($filename) . ", " . autoquote($_FILES['userfile']['name']) . ",
-                                        " . autoquote($stud_comments) . ")", $currentCourseID);
+                                        " . autoquote($stud_comments) . ", '')", $currentCourseID);
                         }
                         $tool_content .= "<p class='success'>$msg2<br />$msg1<br /><a href='$_SERVER[PHP_SELF]'>$langBack</a></p><br />";
                 } else {
@@ -435,12 +435,12 @@ function show_edit_assignment($id)
       <td>$textarea</td>
     </tr>
 cData;
-
-        if (!empty($row['comments'])) {
+	$comments = trim($row['comments']);
+        if (!empty($comments)) {
                 $tool_content .= "
     <tr>
       <th>$m[comments]:</th>
-      <td>" .  rich_text_editor('comments', 5, 65, $row['comments']) .  "</td>
+      <td>" .  rich_text_editor('comments', 5, 65, $comments) .  "</td>
     </tr>";
         }
 
@@ -486,10 +486,10 @@ function edit_assignment($id)
         if (!isset($_POST['comments'])) {
                 $comments = "''";
         } else {
-                $comments = autoquote($_POST['comments']);
+                $comments = autoquote(trim($_POST['comments']));
         }
-	if (db_query("UPDATE assignments SET title=".autoquote($_POST['title']).",
-		description=".autoquote($_POST['desc']).", group_submissions=".autoquote($_POST['group_submissions']).",
+	if (db_query("UPDATE assignments SET title=".autoquote(trim($_POST['title'])).",
+		description=".autoquote(trim($_POST['desc'])).", group_submissions=".autoquote($_POST['group_submissions']).",
 		comments=$comments, deadline=".autoquote($_POST['WorkEnd'])." WHERE id='$id'")) {
 
         $title = autounquote($_POST['title']);

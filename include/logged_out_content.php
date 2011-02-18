@@ -95,10 +95,10 @@ if ($shibactive['auth_default'] == 1) {
 }
 
 
-
+$tool_content .= "</div>";
 if (!get_config('dont_display_login_form')) {
-	$tool_content .= "</div><div id='rightbar'>
-	 <table width='99%' class='tbl'>
+	$tool_content .= "<div id='rightbar'>
+	 <table class='tbl'>
 	 <tr>
 	   <th class='LoginHead'><b>$langUserLogin </b></th>
 	 </tr>

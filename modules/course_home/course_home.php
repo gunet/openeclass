@@ -98,7 +98,7 @@ if ($res and mysql_num_rows($res) > 0) {
         }
 }
 if ($is_adminOfCourse) {
-        $edit_link = "&nbsp;<a href='../../modules/course_description/editdesc.php'><img src='../../template/classic/img/edit.gif' title='$langEdit'></img></a>";
+        $edit_link = "&nbsp;<a href='../../modules/course_description/editdesc.php'><img src='../../template/classic/img/edit.gif' title='$langEdit' /></a>";
 } else {
         $edit_link = '';
 }
@@ -200,18 +200,18 @@ while ($cu = mysql_fetch_array($sql)) {
                                 "\n        <td width='16'><a href='$_SERVER[PHP_SELF]?del=$cu[id]' " .
                                 "onClick=\"return confirmation();\">" .
                                 "<img src='../../template/classic/img/delete.gif' " .
-                                "title='$langDelete'></img></a></td>" .
+                                "title='$langDelete' /></a></td>" .
                                 "\n        <td width='16'><a href='$_SERVER[PHP_SELF]?vis=$cu[id]'>" .
                                 "<img src='../../template/classic/img/$icon_vis' " .
-                                "title='$langVisibility'></img></a></td>";
+                                "title='$langVisibility' /></a></td>";
                         if ($cu['id'] != $last_id) {
                                 $cunits_content .= "\n        <td width='16'><a href='$_SERVER[PHP_SELF]?down=$cu[id]'>" .
-                                "<img src='../../template/classic/img/down.gif' title='$langDown'></img></a></td>";
+                                "<img src='../../template/classic/img/down.gif' title='$langDown' /></a></td>";
                         } else {
                                 $cunits_content .= "\n        <td width='16'>&nbsp;&nbsp;&nbsp;&nbsp;</td>";
                         }
                         if (!$first) {
-                                $cunits_content .= "\n        <td width='16'><a href='$_SERVER[PHP_SELF]?up=$cu[id]'><img src='../../template/classic/img/up.gif' title='$langUp'></img></a></td>";
+                                $cunits_content .= "\n        <td width='16'><a href='$_SERVER[PHP_SELF]?up=$cu[id]'><img src='../../template/classic/img/up.gif' title='$langUp' /></a></td>";
                         } else {
                                 $cunits_content .= "\n        <td width='16'>&nbsp;&nbsp;&nbsp;&nbsp;</td>";
                         }

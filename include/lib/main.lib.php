@@ -155,6 +155,7 @@ function quote($s) {
 
 // Quote string for SQL query if needed (if magic quotes are on)
 function autoquote($s) {
+	$s = trim($s);
         if (get_magic_quotes_gpc()) {
         	return "'$s'";
         } else {
@@ -1698,7 +1699,7 @@ function redirect_to_home_page($path = '')
 {
         global $urlServer;
 
-        header("Location: $urlServer");
+        header("Location: $urlServer$path");
         exit;
 }
 

@@ -161,7 +161,7 @@ function find_submissions($is_group_assignment, $uid, $id, $gids)
                                         WHERE assignment_id = $id AND
                                               group_id IN ($groups_sql)");
         } else {
-                $res = db_query("SELECT id FROM `$currentCourseID`.assignment_submit
+                $res = db_query("SELECT id, grade FROM `$currentCourseID`.assignment_submit
                                         WHERE assignment_id = '$id' AND uid = '$uid'");
         }
 	$subs = array();

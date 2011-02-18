@@ -79,7 +79,7 @@ if(!empty($auth)) {
         }
 }
 
-$tool_content .= "\n<br></p>
+$tool_content .= "\n<br />
   <p>&nbsp;</p>
   <p class='title1'>".$langProfAccount." ".$langUserAccountInfo1."</p>";
 
@@ -96,7 +96,7 @@ if(!empty($auth)) {
                         if ($v == 6)  { // shibboleth method
                                 $tool_content .= "(<a href='{$urlServer}secure/index.php'>".get_auth_info($v)."</a>)";
                         } else {
-                                $tool_content .= "(<a href='ldapnewuser.php?p=TRUE&auth=".$v."'>".get_auth_info($v)."</a>)";
+                                $tool_content .= "(<a href='ldapnewuser.php?p=TRUE&amp;auth=".$v."'>".get_auth_info($v)."</a>)";
                         }
                         $tool_content .= "</p>";
                 }
@@ -105,6 +105,4 @@ if(!empty($auth)) {
         $tool_content .= "<p>$langCannotUseAuthMethods </p>";
 }
 
-$tool_content .= "<br></p>";
 draw($tool_content, 0);
-?>
