@@ -173,8 +173,8 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 		if (isset ( $hideLeftNav )) {
 			$t->clear_var ( 'leftNav' );
 			$t->set_var ( 'CONTENT_MAIN_CSS', 'content_main_no_nav' );
-		} elseif ($homePage) {
-			$t->set_var ( 'CONTENT_MAIN_CSS', 'content_main_first' );
+		} elseif ($homePage && !isset($_SESSION['uid'])) {  
+            $t->set_var ( 'CONTENT_MAIN_CSS', 'content_main_first' );  
 		} else {
 			$t->set_var ( 'CONTENT_MAIN_CSS', 'content_main' );
 		}
@@ -233,6 +233,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 			$t->set_var ( 'THIRDBAR_LEFT_ICON', 'briefcase_icon' );
 		} else {
 			$t->set_var ( 'THIRD_BAR_TEXT', $langEclass );
+			$t->set_var ( 'THIRDBAR_LEFT_ICON', 'logo_icon' );
 		}
 
 		//set the appropriate search action for the searchBox form
