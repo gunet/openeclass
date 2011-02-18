@@ -85,7 +85,9 @@ db_query("CREATE TABLE admin_announcements (
 	id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	title VARCHAR(255) NOT NULL,
 	body TEXT,
-	`date` DATE NOT NULL,
+        `date` DATETIME NOT NULL,
+        `begin` DATETIME DEFAULT NULL,
+        `end` DATETIME DEFAULT NULL,
 	`lang` VARCHAR(10) NOT NULL DEFAULT 'el',
 	visible ENUM('V', 'I') NOT NULL) $charset_spec");
 

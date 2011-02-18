@@ -454,12 +454,14 @@ if (!isset($_POST['submit2'])) {
                 if (mysql_field_exists($mysqlMainDb, 'admin_announcements', 'gr_body')) {
                         db_query("RENAME TABLE `admin_announcements` TO `admin_announcements_old`");
                         db_query("CREATE TABLE IF NOT EXISTS `admin_announcements` (
-                                        `id` int(11) NOT NULL auto_increment,
-                                        `title` varchar(255) default NULL,
-                                        `body` mediumtext,
-                                        `date` date NOT NULL,
-                                        `visible` enum('V','I') NOT NULL,
-                                        `lang` varchar(10) NOT NULL default 'el',
+                                        `id` INT(11) NOT NULL AUTO_INCREMENT,
+                                        `title` VARCHAR(255) DEFAULT NULL,
+                                        `body` TEXT,
+                                        `date` DATETIME NOT NULL,
+                                        `begin` DATETIME DEFAULT NULL,
+                                        `end` DATETIME DEFAULT NULL,
+                                        `visible` ENUM('V','I') NOT NULL,
+                                        `lang` VARCHAR(10) NOT NULL DEFAULT 'el',
                                         PRIMARY KEY (`id`))");
                         
                         $aq = db_query("INSERT INTO admin_announcements (title, body, `date`, visible, lang)

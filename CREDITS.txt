@@ -85,6 +85,8 @@ phpSysInfo:
   Copyright (c), 1999-2001, Matthew Snelham (infinite@valinux.com)
 
 JSCalendar: Copyright Mihai Bazon, 2002-2005
+Distributed under the GNU Lesser General Public License.
+http://www.dynarch.com/projects/calendar/old/
 
 POP3 class : Manuel Lemos (http://www.manuellemos.net)  <WebMaster@E-na.Net>
 

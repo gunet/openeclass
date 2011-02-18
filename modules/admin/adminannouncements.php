@@ -26,7 +26,9 @@
 
 $require_admin = TRUE;
 include '../../include/baseTheme.php';
-include('../../include/lib/textLib.inc.php');
+include '../../include/lib/textLib.inc.php';
+include '../../include/jscalendar/calendar.php';
+
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
 $nameTools = $langAdminAn;
 
@@ -38,6 +40,12 @@ function confirmation ()
                 {return true;}
         else
                 {return false;}
+}
+
+function toggle(id, checkbox, name)
+{
+        var f = document.getElementById('f-calendar-field-' + id);
+        f.disabled = !checkbox.checked;
 }
 </script>
 hContent;
@@ -83,21 +91,24 @@ if (isset($_GET['delete'])) {
                 $displayAnnouncementList = true;
         }
 } elseif (isset($_POST['submitAnnouncement'])) {
-	// submit announcement command
+        // submit announcement command
+        $start_sql = 'begin = ' . (isset($_POST['start_date_active'])? autoquote($_POST['start_date']): 'NULL');
+        $end_sql = 'end = ' . (isset($_POST['end_date_active'])? autoquote($_POST['end_date']): 'NULL');
         if (isset($_POST['id'])) {
                 // modify announcement
                 $id = intval($_POST['id']);
                 db_query("UPDATE admin_announcements
                         SET title = $title, body = $newContent,
 			lang = $lang_admin_ann, 
-			date = NOW()
+			`date` = NOW(), $start_sql, $end_sql
                         WHERE id = $id", $mysqlMainDb);
                 $message = $langAdminAnnModify;
         } else {
                 // add new announcement
                 db_query("INSERT INTO admin_announcements
                         SET title = $title, body = $newContent,
-			visible = 'V', lang = $lang_admin_ann, date = NOW()");
+                        visible = 'V', lang = $lang_admin_ann,
+                        `date` = NOW(), $start_sql, $end_sql");
                 $message = $langAdminAnnAdd;
         }
 }
@@ -129,27 +140,46 @@ if ($displayForm && isset($_GET['addAnnounce']) || isset($_GET['modify'])) {
 	}
 
         $tool_content .= "<form method='post' action='$_SERVER[PHP_SELF]'>";
+	if (isset($_GET['modify'])) {
+		$tool_content .= "<input type='hidden' name='id' value='$id' />";
+	}
 	$tool_content .= "<fieldset><legend>$titleform</legend>";
         $tool_content .= "<table width='99%' class='tbl'>";
-        $tool_content .= "<tr><td>$langTitle<br />
+        $tool_content .= "<tr><td><b>$langTitle</b>
 		<input type='text' name='title' value='$titleToModify' size='50' /></td></tr>
-		<tr><td>$langAnnouncement <br />".
-		rich_text_editor('newContent', 4, 20, $contentToModify)
-		."</td></tr></table></fieldset>";
-	if (isset($_GET['modify'])) {
-		$tool_content .= "<input type='hidden' name='id' value='$id'>";
-	}
-	$tool_content .= "<fieldset><legend>$langLanguage</legend>
-	<table class='tbl'><tr><td>$langOptions&nbsp;:</td>
-	<td width='1'>";
+		<tr><td><b>$langAnnouncement</b><br />".
+		rich_text_editor('newContent', 5, 40, q($contentToModify))
+		."</td></tr>";
+	$tool_content .= "<tr><td><b>$langLanguage</b><br />$langOptions&nbsp;:";
 	if (isset($_GET['modify'])) {
 		$tool_content .= lang_select_options('lang_admin_ann', '', $myrow['lang']);
 	} else {
 		$tool_content .= lang_select_options('lang_admin_ann');
 	}
-	$tool_content .= "</td><td>$langTipLangAdminAnn</td></tr></table></fieldset>";
-        $tool_content .= "<tr><td><input type='submit' name='submitAnnouncement' value='$langSubmit' /></td></tr>              
-	</table</fieldset></form>";
+        $tool_content .= " $langTipLangAdminAnn</td></tr>";
+
+        $lang_jscalendar = langname_to_code($language);
+        $jscalendar = new DHTML_Calendar($urlServer.'include/jscalendar/', $lang_jscalendar, 'calendar-blue2', false);
+        $head_content .= $jscalendar->get_load_files_code();
+        $datetoday = date("Y-n-j",time());
+        function make_calendar($id, $label, $name) {
+                global $datetoday, $jscalendar, $langActivate;
+                return "<tr><td><b>" . $label . "</b><br />" .
+                        $jscalendar->make_input_field(
+                        array('showOthers' => true,
+                              'showsTime' => true,
+                              'align' => 'Tl',
+                              'ifFormat' => '%Y-%m-%d %H:%m'),
+                        array('name' => $name,
+                              'value' => $datetoday,
+                              'style' => 'width: 8em; color: #727266; background-color: #fbfbfb; border: 1px solid #C0C0C0; text-align: center')) .
+                        "&nbsp;<input type='checkbox' name='{$name}_active' onClick=\"toggle($id,this,'$name')\"/>&nbsp;".
+                        $langActivate . "</td></tr>";
+        }
+        $tool_content .= make_calendar(1, $langStartDate, 'start_date') .
+                         make_calendar(2, $langEndDate, 'end_date') .
+                         "<tr><td><input type='submit' name='submitAnnouncement' value='$langSubmit' />" .
+                         "</td></tr></table></fieldset></form>";
 }
 
 // display admin announcements
@@ -192,4 +222,4 @@ if ($displayAnnouncementList == true) {
 		$tool_content .= "</tbody></table>";
 	}
 }
-draw($tool_content, 3, '', $head_content);
+draw($tool_content, 3, null, $head_content);

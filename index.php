@@ -243,5 +243,5 @@ if (isset($uid) AND !isset($_GET['logout'])) {
         $rss_link = "<link rel='alternate' type='application/rss+xml' title='RSS-Feed' href='" .
                     $urlServer . "rss.php' />";
 	include "include/logged_out_content.php";
-	draw($tool_content, 0, '', $rss_link);
+	draw($tool_content, 0, null, $rss_link);
 }
