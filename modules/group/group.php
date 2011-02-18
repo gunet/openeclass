@@ -305,7 +305,7 @@ if ($is_adminOfCourse) {
                 $tool_content .= "$langDoc</td><td align='right'><font color='red'>$langNo</font>";
         }
         $tool_content .= "</td></tr>";
-	$tool_content .= "</tbody></table>";
+	$tool_content .= "</table>";
 
 	$groupSelect = db_query("SELECT id FROM `group` WHERE course_id = $cours_id ORDER BY id");
 	$myIterator = 0;
@@ -367,7 +367,7 @@ if ($is_adminOfCourse) {
                               cu.cours_id = $cours_id AND
                               cu.user_id = u.user_id AND
                               cu.statut = 5 AND
-                              cu.tutor = 0"));
+                              ug.is_tutor = 0"));
 	$registered_students = $total_students - $unregistered_students;
 	$tool_content .= "<p>&nbsp;<br />" .
 	                 "<table width='99%' class='tbl_border'>

@@ -45,7 +45,6 @@ if (!$is_adminOfCourse) {
 
 $nameTools = $langNewGroupCreate;
 $navigation[]= array ("url"=>"group.php", "name"=> $langGroups);
-$tool_content = "";
 
 $tool_content = <<<tCont
 
@@ -71,6 +70,4 @@ $tool_content = <<<tCont
 
 tCont;
 
-draw($tool_content, 2, 'group');
-
-?>
+draw($tool_content, 2);
