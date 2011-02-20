@@ -129,6 +129,11 @@ if($is_adminOfCourse) {
 	$tool_content .= "";
 }
 
+if(!$nbrExercises) {
+    $tool_content .= "<p class=\"alert1\">${langNoEx}</p>";
+}else{
+
+
 $maxpage = 1 + intval($num_of_ex / $limitExPage);
 if ($maxpage > 0) {
 	$prevpage = $page - 1;
@@ -168,7 +173,7 @@ if(!$nbrExercises) {
       <td";
 	if($is_adminOfCourse)
 		$tool_content .= " colspan=\"4\"";
-		$tool_content .= " class=\"empty\">${langNoEx}</td>
+		$tool_content .= " class=\"alert1\">${langNoEx}</td>
     </tr>";
 }
 
@@ -278,7 +283,8 @@ cData;
 $k++;
 }	// end while()
 
-$tool_content .= "</tbody></table>";
+$tool_content .= "</table>";
+}
 add_units_navigation(TRUE);
 draw($tool_content, 2);
 ?>
