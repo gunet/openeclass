@@ -55,6 +55,12 @@ $tool_content .= "
       <td>".mailto($emailhelpdesk, str_replace('@', ' &lt;at> ', $emailhelpdesk))."</td>
   </tr>
   </table>
+<div id='contact'>
+<p><b>$langPostMail</b> $Institution &nbsp; $postaddress 
+<br><b>$langPhone:</b> $fax 
+<br><b>$langFax</b> $telephone 
+<br><b>$langEmail:</b> ".mailto($emailhelpdesk, str_replace('@', ' &lt;at> ', $emailhelpdesk))."</p>
+</div>
 
 ";
 
