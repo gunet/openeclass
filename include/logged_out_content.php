@@ -95,10 +95,10 @@ if ($shibactive['auth_default'] == 1) {
 }
 
 
-$tool_content .= "</div>";
+
 if (!get_config('dont_display_login_form')) {
-	$tool_content .= "<div id='rightbar'>
-	 <table class='tbl'>
+	$tool_content .= "</div><div id='rightbar'>
+	 <table width='99%' class='tbl'>
 	 <tr>
 	   <th class='LoginHead'><b>$langUserLogin </b></th>
 	 </tr>
@@ -106,10 +106,10 @@ if (!get_config('dont_display_login_form')) {
 	   <td class='LoginData'>
 	   <form action='${urlSecure}index.php' method = 'post'>
 	   $langUsername <br />
-	   <input class='Login' name='uname' size='20' /><br />
+	   <input class='Login' name='uname' size='17' /><br />
 	   $langPass <br />
-	   <input class='Login' name='pass' type = 'password' size = '20' /><br /><br />
-	   <input class='Login' name='submit' type = 'submit' size = '20' value = '$langEnter' /><br />
+	   <input class='Login' name='pass' type = 'password' size = '17' /><br /><br />
+	   <input class='Login' name='submit' type = 'submit' size = 17' value = '$langEnter' /><br />
 	   $warning<br />$shibboleth_link
 	   <a href='modules/auth/lostpass.php'>$lang_forgot_pass</a>
 	   </form>
