@@ -78,69 +78,69 @@ $tool_content .= "
 
 <p class='title1'>$langTutorials $langOfTeacher</p>
 <p class='sub_title1'>$langCreateAccount</p>
-<p><img style='vertical-align: bottom;' src='../template/classic/img/pdf.png' width='20' height='20'>
+<p><img style='vertical-align: bottom;' src='../template/classic/img/pdf.png' width='20' height='20' alt='icon'>
                 <a href='http://www.openeclass.org/guides/pdf/create_teacher_account.pdf' target='_blank'>$langTut</a>
                 <strong>|</strong>
-                <img src='../template/classic/img/video.png' width='20' height='20'>
+                <img src='../template/classic/img/video.png' width='20' height='20' alt='icon'>
                 <a href='http://www.openeclass.org/guides/video/create_teacher_account' target='_blank'>$langScormVideo</a>
-                <strong>| <img src='../template/classic/img/scorm.png' width='20' height='20'></strong>
+                <strong>| <img src='../template/classic/img/scorm.png' width='20' height='20' alt='icon'></strong>
                 <a href='http://www.openeclass.org/guides/scorm/create_teacher_account.zip'>Scorm Package</a>
 </p>
 <p class='sub_title1'>$langCourseCreate</p>
-<p><img style='vertical-align: bottom;' src='../template/classic/img/pdf.png' width='20' height='20'>
+<p><img style='vertical-align: bottom;' src='../template/classic/img/pdf.png' width='20' height='20' alt='icon'>
                 <a href='http://www.openeclass.org/guides/pdf/create_course.pdf' target='_blank'>$langTut</a>
                 <strong>|</strong>
-                <img src='../template/classic/img/video.png' width='20' height='20'>
+                <img src='../template/classic/img/video.png' width='20' height='20' alt='icon'>
                 <a href='http://www.openeclass.org/guides/video/create_course' target='_blank'>$langScormVideo</a>
-                <strong>| <img src='../template/classic/img/scorm.png' width='20' height='20'></strong>
+                <strong>| <img src='../template/classic/img/scorm.png' width='20' height='20' alt='icon'></strong>
                 <a href='http://www.openeclass.org/guides/scorm/create_course.zip'>Scorm Package</a>
 </p>
 <p class='sub_title1'>$langPersonalisedBriefcase</p>
-<p><img style='vertical-align: bottom;' src='../template/classic/img/pdf.png' width='20' height='20'>
+<p><img style='vertical-align: bottom;' src='../template/classic/img/pdf.png' width='20' height='20' alt='icon'>
                 <a href='http://www.openeclass.org/guides/pdf/teacher_portfolio.pdf' target='_blank'>$langTut</a>
                 <strong>|</strong>
-                <img src='../template/classic/img/video.png' width='20' height='20'>
+                <img src='../template/classic/img/video.png' width='20' height='20' alt='icon'>
                 <a href='http://www.openeclass.org/guides/video/teacher_portfolio' target='_blank'>$langScormVideo</a>
-                <strong>| <img src='../template/classic/img/scorm.png' width='20' height='20'></strong>
+                <strong>| <img src='../template/classic/img/scorm.png' width='20' height='20' alt='icon'></strong>
                 <a href='http://www.openeclass.org/guides/scorm/teacher_portfolio.zip'>Scorm Package</a>
 </p>
 <p class='sub_title1'>$langAdministratorCourse</p>
-<p><img style='vertical-align: bottom;' src='../template/classic/img/pdf.png' width='20' height='20'>
+<p><img style='vertical-align: bottom;' src='../template/classic/img/pdf.png' width='20' height='20' alt='icon'>
                 <a href='http://www.openeclass.org/guides/pdf/manage_course.pdf' target='_blank'>$langTut</a>
                 <strong>|</strong>
-                <img src='../template/classic/img/video.png' width='20' height='20'>
+                <img src='../template/classic/img/video.png' width='20' height='20' alt='icon'>
                 <a href='http://www.openeclass.org/guides/video/manage_course' target='_blank'>$langScormVideo</a>
-                <strong>| <img src='../template/classic/img/scorm.png' width='20' height='20'></strong>
+                <strong>| <img src='../template/classic/img/scorm.png' width='20' height='20' alt='icon'></strong>
                 <a href='http://www.openeclass.org/guides/scorm/manage_course.zip'>Scorm Package</a>
 </p>
 
 
 <p class='title1'>$langTutorials $langOfStudent</p>
 <p class='sub_title1'>$langRegCourses</p>
-<p><img style='vertical-align: bottom;' src='../template/classic/img/pdf.png' width='20' height='20'>
+<p><img style='vertical-align: bottom;' src='../template/classic/img/pdf.png' width='20' height='20' alt='icon'>
                 <a href='http://www.openeclass.org/guides/pdf/course_registration.pdf' target='_blank'>$langTut</a>
                 <strong>|</strong>
-                <img src='../template/classic/img/video.png' width='20' height='20'>
+                <img src='../template/classic/img/video.png' width='20' height='20' alt='icon'>
                 <a href='http://www.openeclass.org/guides/video/course_registration' target='_blank'>$langScormVideo</a>
-                <strong>| <img src='../template/classic/img/scorm.png' width='20' height='20'></strong>
+                <strong>| <img src='../template/classic/img/scorm.png' width='20' height='20' alt='icon'></strong>
                 <a href='http://www.openeclass.org/guides/scorm/course_registration.zip'>Scorm Package</a>
 </p>
 <p class='sub_title1'>$langPersonalisedBriefcase</p>
-<p><img style='vertical-align: bottom;' src='../template/classic/img/pdf.png' width='20' height='20'>
+<p><img style='vertical-align: bottom;' src='../template/classic/img/pdf.png' width='20' height='20' alt='icon'>
                 <a href='http://www.openeclass.org/guides/pdf/student_portfolio.pdf' target='_blank'>$langTut</a>
                 <strong>|</strong>
-                <img src='../template/classic/img/video.png' width='20' height='20'>
+                <img src='../template/classic/img/video.png' width='20' height='20' alt='icon'>
                 <a href='http://www.openeclass.org/guides/video/student_portfolio' target='_blank'>$langScormVideo</a>
-                <strong>| <img src='../template/classic/img/scorm.png' width='20' height='20'></strong>
+                <strong>| <img src='../template/classic/img/scorm.png' width='20' height='20' alt='icon'></strong>
                 <a href='http://www.openeclass.org/guides/scorm/student_portfolio.zip'>Scorm Package</a>
 </p>
 <p class='sub_title1'>$langIntroToCourse</p>
-<p><img style='vertical-align: bottom;' src='../template/classic/img/pdf.png' width='20' height='20'>
+<p><img style='vertical-align: bottom;' src='../template/classic/img/pdf.png' width='20' height='20' alt='icon'>
                 <a href='http://www.openeclass.org/guides/pdf/view_course.pdf' target='_blank'>$langTut</a>
                 <strong>|</strong>
-                <img src='../template/classic/img/video.png' width='20' height='20'>
+                <img src='../template/classic/img/video.png' width='20' height='20' alt='icon'>
                 <a href='http://www.openeclass.org/guides/video/view_course' target='_blank'>$langScormVideo</a>
-                <strong>| <img src='../template/classic/img/scorm.png' width='20' height='20'></strong>
+                <strong>| <img src='../template/classic/img/scorm.png' width='20' height='20' alt='icon'></strong>
                 <a href='http://www.openeclass.org/guides/scorm/view_course.zip'>Scorm Package</a>
 </p>
 
@@ -152,7 +152,7 @@ $tool_content .= "
 
 
 
-$tool_content .= "<p><b>$langNote: </b><br/>$langAcrobat <img src='../template/classic/img/acrobat.png' width='16' height='16' /> $langWhere <a href='http://www.adobe.com/products/acrobat/readstep2.html' target='_blank'>
+$tool_content .= "<p><b>$langNote: </b><br/>$langAcrobat <img src='../template/classic/img/acrobat.png' width='16' height='16' alt='icon' /> $langWhere <a href='http://www.adobe.com/products/acrobat/readstep2.html' target='_blank'>
 		<span class='explanationtext'>$langHere</span></a>.</p>";
 
 if (isset($uid) and $uid) {
