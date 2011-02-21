@@ -423,7 +423,8 @@ border: 1px solid red;}
 
 .sub_title1 {
         padding: 5px;
-        border-bottom: 1px dotted #dfdfdf; /* BEIGE  */
+        border-bottom: 1px dotted #dfdfdf;
+        font-weight: bold;
 }
 
 .descr_title {
