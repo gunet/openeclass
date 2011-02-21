@@ -312,7 +312,7 @@ function expanded_faculte($fac_name, $facid, $uid) {
 						$codelink = "<a href='../../courses/$mycours[k]/' target='_blank'>" . q($course_title) . "</a>";
 					}
                                 } else {
-                                        $retString .= "<img src='../../template/classic/img/teacher.gif' alt='$langTutor' title='$langTutor' />";
+                                        $retString .= "<img src='../../template/classic/img/teacher.png' alt='$langTutor' title='$langTutor' />";
                                 }
                         } else { // display unregistered courses
                                 if (!empty($password) and $mycours['visible'] == 1) {

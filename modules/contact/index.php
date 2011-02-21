@@ -131,7 +131,7 @@ function email_profs($cours_id, $content, $from_name, $from_address)
 
 	while ($prof = mysql_fetch_array($profs)) {
 		$to_name = $prof['prenom'].' '.$prof['nom'];
-		$ret .= "<p><img src=../../template/classic/img/teacher.gif> $to_name</p><br>\n";
+		$ret .= "<p><img src=../../template/classic/img/teacher.png> $to_name</p><br>\n";
 		if (!send_mail($from_name,
                                $from_address,
                                $to_name,
