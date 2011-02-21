@@ -924,7 +924,7 @@ if ($doc_count == 0) {
 						 "title='$langMove' alt='$langMove' /></a>&nbsp;";
                                 /*** rename command ***/
                                 $tool_content .=  "<a href='{$base_url}rename=$cmdDirName'>";
-                                $tool_content .=  "<img src='../../template/classic/img/edit.gif' " .
+                                $tool_content .=  "<img src='../../template/classic/img/edit.png' " .
 					          "title='$langRename' alt='$langRename' /></a>&nbsp;";
                                 /*** comment command ***/
                                 $tool_content .= "<a href='{$base_url}comment=$cmdDirName'>";

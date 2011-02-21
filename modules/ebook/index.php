@@ -141,7 +141,7 @@ function tools($id, $title, $k, $num)
                 $num--;
                 return "\n        <td width='70' class='center'>\n<form action='$_SERVER[PHP_SELF]' method='post'>\n" .
                        "<input type='hidden' name='id' value='$id' />\n<a href='edit.php?id=$id'>" .
-                       "<img src='../../template/classic/img/edit.gif' alt='$langModify' title='$langModify' />" .
+                       "<img src='../../template/classic/img/edit.png' alt='$langModify' title='$langModify' />" .
                        "</a>&nbsp;<input type='image' src='../../template/classic/img/delete.gif'
                                          alt='$langDelete' title='$langDelete' name='delete' value='$id'
                                          onclick=\"javascript:if(!confirm('".

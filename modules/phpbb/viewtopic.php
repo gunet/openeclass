@@ -313,7 +313,7 @@ do {
 	</td>
 	<td width='40'i valign='top'><div align='right'>";
 	if ($is_adminOfCourse) { // course admin
-		$tool_content .= "<a href=\"editpost.php?post_id=".$myrow["post_id"]."&amp;topic=$topic&amp;forum=$forum\"><img src='../../template/classic/img/edit.gif' title='$langModify' alt='$langModify' /></a>";
+		$tool_content .= "<a href=\"editpost.php?post_id=".$myrow["post_id"]."&amp;topic=$topic&amp;forum=$forum\"><img src='../../template/classic/img/edit.png' title='$langModify' alt='$langModify' /></a>";
 		$tool_content .= "&nbsp;<a href='$_SERVER[PHP_SELF]?post_id=".$myrow["post_id"]."&amp;topic=$topic&amp;forum=$forum&amp;delete=on' onClick='return confirmation()'>
 			<img src='../../template/classic/img/delete.gif' title='$langDelete' /></a>";
 	}

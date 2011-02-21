@@ -207,7 +207,7 @@ while ($g = mysql_fetch_array($sql)) {
     if ($is_adminOfCourse) {
         $tool_content .= "
                    <td align='center' valign='top'><a href='$_SERVER[PHP_SELF]?edit=$g[id]'>
-                   <img src='../../template/classic/img/edit.gif' /></a>&nbsp;&nbsp;
+                   <img src='../../template/classic/img/edit.png' /></a>&nbsp;&nbsp;
                    <a href='$_SERVER[PHP_SELF]?delete=$g[id]' onClick=\"return confirmation();\">
                    <img src='../../template/classic/img/delete.gif' /></a></td>";
     }

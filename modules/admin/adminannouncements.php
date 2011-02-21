@@ -211,7 +211,7 @@ if ($displayAnnouncementList == true) {
 			$tool_content .= "<td>" . standard_text_escape($myrow['body']) . "</td>";
 			$tool_content .=  "<td>
 			<a href='$_SERVER[PHP_SELF]?modify=$myrow[id]'>
-			<img src='../../template/classic/img/edit.gif' title='$langModify' style='vertical-align:middle;' />
+			<img src='../../template/classic/img/edit.png' title='$langModify' style='vertical-align:middle;' />
 			</a>&nbsp;
 			<a href='$_SERVER[PHP_SELF]?delete=$myrow[id]' onClick='return confirmation();'>
 			<img src='../../template/classic/img/delete.gif' title='$langDelete' style='vertical-align:middle;' /></a>

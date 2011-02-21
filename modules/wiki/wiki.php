@@ -564,7 +564,7 @@ function confirmation (name)
                         $tool_content .= '<a href="'.$_SERVER['PHP_SELF'].'?wikiId='
                             . $entry['id'].'&amp;action=rqEdit'
                             . '">'
-                            . '<img src="'.$imgRepositoryWeb.'/edit.gif" border="0" alt="'.$langWikiEditProperties.'" title="'.$langWikiEditProperties.'" />'
+                            . '<img src="'.$imgRepositoryWeb.'/edit.png" border="0" alt="'.$langWikiEditProperties.'" title="'.$langWikiEditProperties.'" />'
                             . '</a>'
                             ;
 

@@ -353,7 +353,7 @@ hContent;
 	    if ($is_adminOfCourse) {
 		$tool_content .= "          <td width='70' class='right'>
 		<a href='$_SERVER[PHP_SELF]?modify=" . $myrow['id'] . "'>
-		<img src='../../template/classic/img/edit.gif' title='" . $langModify . "' /></a>&nbsp;
+		<img src='../../template/classic/img/edit.png' title='" . $langModify . "' /></a>&nbsp;
 		<a href='$_SERVER[PHP_SELF]?delete=" . $myrow['id'] . "' onClick=\"return confirmation('');\">
 		<img src='../../template/classic/img/delete.gif' title='" . $langDelete . "' /></a>&nbsp;
 		<a href='$_SERVER[PHP_SELF]?mkvis=$myrow[id]&amp;vis=$visibility'>

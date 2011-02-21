@@ -171,7 +171,7 @@ if (mysql_num_rows($q) == 0) {
                                          js_escape(sprintf($langEBookSectionDelConfirm, $section['title'])) ."')) return false;\"" .
                                      " />
                                      &nbsp;<a href='edit.php?id=$ebook_id&amp;s=$sid'><img
-                                     src='../../template/classic/img/edit.gif'
+                                     src='../../template/classic/img/edit.png'
                                      alt='$langModify' title='$langModify' /></a></td></tr>\n";
         }
         if (!$section_editing) {

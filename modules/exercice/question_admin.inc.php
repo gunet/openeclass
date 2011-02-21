@@ -107,7 +107,7 @@ if(isset($usedInSeveralExercises)) {
         // doesn't show the edit link if we come from the question pool to pick a question for an exercise
         if(!isset($fromExercise)) {
                 $tool_content .= "<a href=\"".$_SERVER['PHP_SELF']."?modifyQuestion=".$questionId."\">
-                <img src='../../template/classic/img/edit.gif' align='absmiddle' title='$langModify'></a>";
+                <img src='../../template/classic/img/edit.png' align='absmiddle' title='$langModify'></a>";
         }
 
         $tool_content .= "</legend>
@@ -127,7 +127,7 @@ if(isset($usedInSeveralExercises)) {
 	// doesn't show the edit link if we come from the question pool to pick a question for an exercise
 	if(!isset($fromExercise)) {
 		$tool_content .= "&nbsp;&nbsp;<a href='$_SERVER[PHP_SELF]?modifyAnswers=$questionId'>
-		<img src='../../template/classic/img/edit.gif' align='absmiddle' title='$langModify'></a>";
+		<img src='../../template/classic/img/edit.png' align='absmiddle' title='$langModify'></a>";
 	}
         $tool_content .= "<br/></th>
     </tr>

@@ -572,7 +572,7 @@ function actions($res_type, $resource_id, $status, $res_id = false)
         }
 
         if ($status != 'del') {
-                $content = "\n          <td width='3'><a href='$edit_link'>" .  "<img src='../../template/classic/img/edit.gif' title='$langEdit' /></a></td>";
+                $content = "\n          <td width='3'><a href='$edit_link'>" .  "<img src='../../template/classic/img/edit.png' title='$langEdit' /></a></td>";
         } else {
                 $content = "\n          <td width='3'>&nbsp;</td>";
         }

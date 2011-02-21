@@ -95,7 +95,7 @@ $tool_content .= "
       <td> ".$objQuestionTmp->selectTitle()."<br />
 	   ".$aType[$objQuestionTmp->selectType()-1]."</td>
       <td class=\"right\" width=\"50\"><a href=\"".$_SERVER['PHP_SELF']."?editQuestion=".$id."\">".
-		"<img src='../../template/classic/img/edit.gif' align='absmiddle' title='$langModify'></a>".
+		"<img src='../../template/classic/img/edit.png' align='absmiddle' title='$langModify'></a>".
 		" <a href=\"".$_SERVER['PHP_SELF']."?deleteQuestion=".$id."\" "."onclick=\"javascript:if(!confirm('".addslashes(htmlspecialchars($langConfirmYourChoice))."')) return false;\">".
 		"<img src='../../template/classic/img/delete.gif' align='absmiddle' title='$langDelete'></a></td>
       <td width='20'>";

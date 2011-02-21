@@ -198,7 +198,7 @@ if(isset($modifyExercise) or isset($_GET['NewExercise'])) {
 	$tool_content .= "
         <fieldset>
         <legend>$langInfoExercise&nbsp;<a href='$_SERVER[PHP_SELF]?modifyExercise=yes'>
-              <img src='../../template/classic/img/edit.gif' border='0' align='absmiddle' title='$langModify'></a></legend>
+              <img src='../../template/classic/img/edit.png' border='0' align='absmiddle' title='$langModify'></a></legend>
         <table width='99%' class='tbl'>
 	<tr>
 	  <th width='180'>$langExerciseName :</th>

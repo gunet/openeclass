@@ -171,7 +171,7 @@ foreach (array('previous', 'next') as $i) {
 }
 
 if ($is_adminOfCourse) {
-        $comment_edit_link = "<td valign='top' width='20'><a href='info.php?edit=$id&amp;next=1'><img src='../../template/classic/img/edit.gif' title='' alt='' /></a></td>";
+        $comment_edit_link = "<td valign='top' width='20'><a href='info.php?edit=$id&amp;next=1'><img src='../../template/classic/img/edit.png' title='' alt='' /></a></td>";
         $units_class = 'tbl';
 } else {
         $units_class = 'tbl';

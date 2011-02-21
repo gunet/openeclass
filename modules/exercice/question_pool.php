@@ -237,7 +237,7 @@ if($is_adminOfCourse) {
 	<a href=\"admin.php?editQuestion=".$row['id']."&fromExercise=\"\">".$row['question']."</a><br/>".$answerType."
       </td>
       <td width='3'><div align='center'><a href=\"admin.php?editQuestion=".$row['id']."\">
-	<img src='../../template/classic/img/edit.gif' title='$langModify'></a></div>
+	<img src='../../template/classic/img/edit.png' title='$langModify'></a></div>
       </td>";
 			} else {
 				$tool_content .= "

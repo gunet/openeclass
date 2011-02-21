@@ -699,7 +699,7 @@
         if ( $action == "show" || $action == "history" || $action == "diff" )
         {
             $tool_content .= '&nbsp;&nbsp;&nbsp;'
-                . '<img src="'.$imgRepositoryWeb.'/edit.gif" border="0" align="absmiddle" />&nbsp;'
+                . '<img src="'.$imgRepositoryWeb.'/edit.png" border="0" align="absmiddle" />&nbsp;'
                 . '<a class="claroCmd" href="'
                 . $_SERVER['PHP_SELF']
                 . '?wikiId=' . $wiki->getWikiId()
@@ -714,7 +714,7 @@
         //else
         //{
         //    $tool_content .= '&nbsp;&nbsp;&nbsp;<span class="claroCmdDisabled">'
-        //        . '<img src="'.$imgRepositoryWeb.'/edit.gif" border="0" align="absmiddle" />&nbsp;'
+        //        . '<img src="'.$imgRepositoryWeb.'/edit.png" border="0" align="absmiddle" />&nbsp;'
         //        . $langWikiEditPage . '</span>'
         //        ;
         //}
@@ -722,7 +722,7 @@
     //else
     //{
     //    $tool_content .= '&nbsp;|&nbsp;<span class="claroCmdDisabled">'
-    //        . '<img src="'.$imgRepositoryWeb.'/edit.gif" border="0"  />&nbsp;'
+    //        . '<img src="'.$imgRepositoryWeb.'/edit.png" border="0"  />&nbsp;'
     //        . $langWikiEditPage . '</span>'
     //        ;
     //}

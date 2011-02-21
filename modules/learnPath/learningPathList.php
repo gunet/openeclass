@@ -586,7 +586,7 @@ while ($list = mysql_fetch_array($result)) // while ... learning path list
         // Modify command / go to other page
         $tool_content .= "      <td class='center' width='1'>"
              ."<a href='learningPathAdmin.php?path_id=".$list['learnPath_id']."'>"
-             ."<img src='../../template/classic/img/edit.gif' alt='$langModify' title='$langModify' />"
+             ."<img src='../../template/classic/img/edit.png' alt='$langModify' title='$langModify' />"
              ."</a>"
              ."</td>\n";
 

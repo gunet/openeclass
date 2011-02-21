@@ -197,7 +197,7 @@ for ($j = 0; $j < mysql_num_rows($sql); $j++) {
 	<img src='../../template/classic/img/delete.gif' title='$langDelete'></a>
       </td>
       <td align=\"center\" width='20'><a href='editcours.php?c=".$logs[1]."".$searchurl."'>
-	<img src='../../template/classic/img/edit.gif' title='$langEdit'></a>
+	<img src='../../template/classic/img/edit.png' title='$langEdit'></a>
       </td>";
 	$k++;
 }

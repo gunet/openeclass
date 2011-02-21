@@ -211,7 +211,7 @@ function commentBox($type, $mode)
             if ( $is_adminOfCourse )
             {
                 $output .= '&nbsp;&nbsp;&nbsp;<a href="' . $_SERVER['PHP_SELF'] . '?cmd=update' . $col_name . '">' . "\n"
-                .    '<img src="../../template/classic/img/edit.gif" alt="' . $langModify . '" title="'.$langModify.'" />'
+                .    '<img src="../../template/classic/img/edit.png" alt="' . $langModify . '" title="'.$langModify.'" />'
                 .    '</a>' . "\n"
                 .    '<a href="' . $_SERVER['PHP_SELF'].'?cmd=del' . $col_name . '" '
                 .    ' onclick="javascript:if(!confirm(\''.clean_str_for_javascript($langConfirmYourChoice).'\')) return false;">' . "\n"
@@ -339,7 +339,7 @@ function nameBox($type, $mode, $formlabel = FALSE)
 
         if ( $is_adminOfCourse )
             $output .= '&nbsp;&nbsp;&nbsp;<a href="' . $_SERVER['PHP_SELF'] . '?cmd=updateName">'
-            .    '<img src="../../template/classic/img/edit.gif" alt="' . $langModify . '" title="' . $langModify . '" />'
+            .    '<img src="../../template/classic/img/edit.png" alt="' . $langModify . '" title="' . $langModify . '" />'
             .    '</a>' . "\n";
         //$output .= '</strong>'."\n\n";
     }

@@ -220,7 +220,7 @@ while($row = mysql_fetch_array($result)) {
 	$tool_content .= <<<cData
 
         <td align="right">
-          <a href="admin.php?exerciseId=${row['id']}"><img src="../../template/classic/img/edit.gif" alt="${langModify_temp}" title="${langModify_temp}" /></a>
+          <a href="admin.php?exerciseId=${row['id']}"><img src="../../template/classic/img/edit.png" alt="${langModify_temp}" title="${langModify_temp}" /></a>
           <a href="$_SERVER[PHP_SELF]?choice=delete&amp;exerciseId=${row['id']}"  onclick="javascript:if(!confirm('${langConfirmYourChoice_temp}')) return false;"><img src="../../template/classic/img/delete.gif" alt="${langDelete_temp}" title="${langDelete_temp}" /></a>
 cData;
 

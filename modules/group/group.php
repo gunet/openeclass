@@ -258,7 +258,7 @@ if ($is_adminOfCourse) {
         <table class='tbl_border' align='center'>
 	<tr>
 	  <th colspan='2' class='right'><a href='group_properties.php'>$langPropModify</a> 
-            <a href='group_properties.php'><img src='../../template/classic/img/edit.gif' align='middle' alt='$langEdit' title='$langEdit' /></a></th>
+            <a href='group_properties.php'><img src='../../template/classic/img/edit.png' align='middle' alt='$langEdit' title='$langEdit' /></a></th>
 	</tr>
 	<tr class='odd'>
 	  <td><b>$langGroupsProperties</b></td>
@@ -370,7 +370,7 @@ if ($is_adminOfCourse) {
                         $tool_content .= "
                   <td class='center'>
                         <a href='group_edit.php?group_id=$group[id]'>
-                        <img src='../../template/classic/img/edit.gif' alt='$langEdit' title='$langEdit' /></a>
+                        <img src='../../template/classic/img/edit.png' alt='$langEdit' title='$langEdit' /></a>
                         <a href='$_SERVER[PHP_SELF]?delete=$group[id]' onClick=\"return confirmation('" .
                                 js_escape($group_name) . "');\">
                         <img src='../../template/classic/img/delete.gif' alt='$langDelete' title='$langDelete' /></a></td>
@@ -457,7 +457,7 @@ if ($is_adminOfCourse) {
 			if ($user_group_description) {
 				$tool_content .= "<br />".q($user_group_description)."&nbsp;&nbsp;
 					<a href='group_description.php?group_id=$row[0]'>
-						<img src='../../template/classic/img/edit.gif' title='$langModify' /></a>
+						<img src='../../template/classic/img/edit.png' title='$langModify' /></a>
 					<a href='group_description.php?group_id=$row[0]&amp;delete=true' onClick=\"return confirm_delete();\">
 						<img src='../../template/classic/img/delete.gif' title='$langDelete' /></a>";
 			} elseif ($is_member) {

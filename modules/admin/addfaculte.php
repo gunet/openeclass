@@ -124,7 +124,7 @@ if (!isset($_GET['a'])) {
 		<a href='$_SERVER[PHP_SELF]?a=2&c=".$logs['id']."'>
 		<img src='../../template/classic/img/delete.gif' title='$langDelete' /></a>&nbsp;&nbsp;
 		<a href='$_SERVER[PHP_SELF]?a=3&c=".$logs['id']."'>
-		<img src='../../template/classic/img/edit.gif' title='$langEdit' /></a></td>
+		<img src='../../template/classic/img/edit.png' title='$langEdit' /></a></td>
 		</tr>\n";
 		$k++;
 	}

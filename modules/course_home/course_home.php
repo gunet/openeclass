@@ -98,7 +98,7 @@ if ($res and mysql_num_rows($res) > 0) {
         }
 }
 if ($is_adminOfCourse) {
-        $edit_link = "&nbsp;<a href='../../modules/course_description/editdesc.php'><img src='../../template/classic/img/edit.gif' title='$langEdit' alt='icon' /></a>";
+        $edit_link = "&nbsp;<a href='../../modules/course_description/editdesc.php'><img src='../../template/classic/img/edit.png' title='$langEdit' alt='icon' /></a>";
 } else {
         $edit_link = '';
 }
@@ -196,7 +196,7 @@ while ($cu = mysql_fetch_array($sql)) {
                 if ($is_adminOfCourse) { // display actions
                         $cunits_content .= "\n        <td width='16'>".
                                 "<a href='../../modules/units/info.php?edit=$cu[id]'>" .
-                                "<img src='../../template/classic/img/edit.gif' title='$langEdit' /></a></td>" .
+                                "<img src='../../template/classic/img/edit.png' title='$langEdit' /></a></td>" .
                                 "\n        <td width='16'><a href='$_SERVER[PHP_SELF]?del=$cu[id]' " .
                                 "onClick=\"return confirmation();\">" .
                                 "<img src='../../template/classic/img/delete.gif' " .

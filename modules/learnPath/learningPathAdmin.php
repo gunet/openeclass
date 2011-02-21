@@ -666,7 +666,7 @@ foreach ($flatElementList as $module)
 
     // Modify command / go to other page
     $tool_content .= "
-      <td width='10'><a href=\"module.php?module_id=".$module['module_id']."\"><img src=\"".$imgRepositoryWeb."edit.gif\" border=0 alt=\"".$langModify."\" title=\"".$langModify."\" /></a></td>";
+      <td width='10'><a href=\"module.php?module_id=".$module['module_id']."\"><img src=\"".$imgRepositoryWeb."edit.png\" border=0 alt=\"".$langModify."\" title=\"".$langModify."\" /></a></td>";
 
     // DELETE ROW
    //in case of SCORM module, the pop-up window to confirm must be different as the action will be different on the server
