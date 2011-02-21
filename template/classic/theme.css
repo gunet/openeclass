@@ -22,7 +22,7 @@ del, dfn, em, font, img, ins, kbd, q, s, samp,
 small, strike, strong, sub, sup, tt, var,
 b, u, i, center,
 dl, dt, dd, ol, ul, li,
-fieldset, form, label, legend
+fieldset, form, label, legend,
 {
 	margin: 0;
 	padding: 0;
@@ -33,12 +33,9 @@ fieldset, form, label, legend
 	background: transparent;
 }
 
-pre { max-width: 55em; overflow: auto;}
-
 table {
 	border-collapse: collapse;
 	border-spacing: 0;
-        border: 1px solid red; 
 }
 
 /*-------------------------------------
@@ -53,13 +50,13 @@ table {
 html {
     margin-bottom: 1px;
 	height: 100%!important; /*For Firefox*/
-	background-color: #3a4c72;
+	background-color: #dfdfdf;
 }
 
 body {
 	font-family: "Trebuchet MS", Tahoma, Arial, Helvetica, sans-serif;
 	font-size: 13px;
-	color: #897a7a;
+	color: #777777;
 	line-height: 16px;
     margin: 0;
 	padding: 0;
@@ -97,53 +94,52 @@ img {
 /* 2.3 Links */ 
 
 a:link, a:active, a:visited {
-        color: #a33134;
+        color: #73849b;
         text-decoration: none;
 }
 
 a:hover {
     	text-decoration: underline;
-        color: #a33134;
+        color: #73849b;
 }
 
 /* 2.4 Forms */ 
 
 input[type=submit] {
 	color: #ffffff;
-	font-size: 11px;
-	font-weight: bold;
-	font-family: "Tahoma", Arial, Helvetica, sans-serif;
-	background-color: #727266;
-	border: 1px solid #cac3b5;
+	font-size: 12px;
+	border: 1px solid #8597A5;
+    background-color: #687A92;
 	padding: 3px;
 }
 
 input[type=reset] {
 	color: #ffffff;
-	font-size: 11px;
-	font-weight: bold;
-	font-family: "Tahoma", Arial, Helvetica, sans-serif;
-	background-color: #727266;
-	border: 1px solid #cac3b5;
+	font-size: 12px;
+	border: 1px solid #687a92;
+    background-color: #8597A5;
 	padding: 3px;
 }
+
 
 legend {
 	color: #ffffff;
 	padding: 8px;
 	font-weight: bold;
-	background-color: #727266;	
+	background-color: #8597A5;	
 }
 
 fieldset {
 	padding: 10px;
 	font-weight: normal;
-	background-color: #edecdf;
+	background-color: #f8f8f8;
 	margin-bottom: 20px;
+    padding: 7px; 
+    border: 1px solid #ebebeb;    
 }
 
 fieldset table.th {
-       background-color: #edecdf !important;
+       background-color: #f8f8f8 !important;
        font-weight: normal;
 }
 
@@ -175,19 +171,18 @@ fieldset table.th {
 	margin: 20px auto;
 	width: 1000px;  /*fixed width*/
     background-color: #ffffff;
-	border: 1px solid #b3b3b3;
+	border: 1px solid #8597A5;
 }
 
 #header {
 	height: 120px;
 	width:100%;
-    background-color: #edecdf;    
 }
 
 .user {
     font-size: 12px;
     color: #ffffff;
-    background-color: #666666;
+    background-color: #73849b;
     padding: 5px;
     height: 20px;
     line-height: 20px;
@@ -243,7 +238,9 @@ fieldset table.th {
 
 #bread {
 	padding: 5px;
-    background-color: #cccccc;
+    background-color: #f1f1f1;
+    border-bottom: 1px dashed #dfdfdf;
+    border-top: 1px dashed #dfdfdf;    
     font-size: 12px;
 }
 
@@ -255,7 +252,7 @@ fieldset table.th {
 
 #bread a:hover {
 	text-decoration: underline;
-	color: #a33134;
+	color: #8597A5;
 	font-weight: bold;
 }
 
@@ -283,46 +280,49 @@ fieldset table.th {
 
 #content_main {
 	float: left;
-    width: 760px;
+    width: 770px;
     padding:5px;
     margin: 5px;
 }
 
 #content_main_first {
 	float: left;
-    width: 550px;
+    width: 574px;
     padding:5px;
     margin: 5px;
 }
+#content_course {
+border: 1px solid red;}
 
 /* right */
 
 #rightbar {
-	float: right;
-	width: 190px;
-	padding: 10px;
-	margin: 10px;
-	background-color:#cccccc;
-	behavior: url(border-radius.htc); 
-	-moz-border-radius: 10px;
-	-webkit-border-radius: 10px;
-	-khtml-border-radius: 10px;
-	border-radius: 10px; 
-}
+    float: right;
+	width: 170px;
+	padding:8px;
+    margin: 10px;
+    border: 1px dashed #dfdfdf;    
+    /* background-color:#dfdfdf;
+    behavior: url(border-radius.htc);
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -khtml-border-radius: 10px;
+    border-radius: 10px;*/
+} 
 
 /* Login Module */
 
 .Login {
-	border: 1px solid #cac3b5;
-	color: #727266; /* DARK BEIGE */
+	border: 1px solid #dfdfdf;
 } 
 
 .LoginHead {
-	border-bottom: 1px solid #cac3b5;	
+	border-bottom: 2px solid #687A92;
+    color: #ffffff;
+    background-color: #8597A5 !important;   
 }
 
 .LoginData {
-    border-bottom: 2px solid #a33134;
     font-size: 11px;
 }
 
@@ -331,14 +331,15 @@ fieldset table.th {
 #leftnav {
     float: left;
 	width: 160px;
-	padding:10px;
+	padding:8px;
     margin: 10px;
-    background-color:#cccccc;
+    border: 1px dashed #dfdfdf;    
+   /* background-color:#dfdfdf;
     behavior: url(border-radius.htc);
     -moz-border-radius: 10px;
     -webkit-border-radius: 10px;
     -khtml-border-radius: 10px;
-    border-radius: 10px;
+    border-radius: 10px;*/
 }
 
 #navcontainer {
@@ -356,7 +357,7 @@ fieldset table.th {
 	padding: 3px;
 	margin-top: 2px;
 	margin-left: -8px;
-    color: #727266;
+    color: #73849b;
     text-decoration: none;   
 }
 
@@ -384,7 +385,7 @@ fieldset table.th {
 	width:100%;
 	height: 50px;
 	background-color: #ffffff;
-	border-top: 3px solid #A33033;
+	border-top: 3px solid #73849b;
 }
 
 #footer a {
@@ -400,41 +401,44 @@ fieldset table.th {
 -------------------------------------*/
 
 .lesson {
-	font-size:16px;
-	color:#a33134;
+	font-size:18px;
+	color:#8597A5;
+    padding: 5px 0;
+    border-bottom: 1px dashed #dfdfdf;
 }
 
 #tool_title {
-    margin-top: 10px;
-    margin-bottom: 10px;
+    margin: 10px 0;
     font-size: 16px;
     color: #727266;
 }
 
 .title1 {
-        background-color:#edecdf;
+        background-color:#8597A5;
+        color: #ffffff;
         font-weight: bold;
         padding: 5px;
-        border-bottom: 1px solid #cac3b5; /* BEIGE  */ 
+        border-bottom: 2px solid #73849b; /* BEIGE  */ 
 }
 
 .sub_title1 {
         padding: 5px;
-        border-bottom: 1px dotted #cac3b5; /* BEIGE  */
+        border-bottom: 1px dotted #dfdfdf; /* BEIGE  */
 }
 
 .descr_title {
-        background-color:#edecdf;
+        background-color:#8597A5;
+        color: #ffffff;
         font-weight: bold;
         padding: 5px;
-        border-bottom: 1px solid #cac3b5; /* BEIGE  */
+        border-bottom: 2px solid #687A92; /* BEIGE  */
 }
 
 .unit_title {
         font-weight: bold;
         padding: 5px;
         background-color:#ffffff;
-        border-bottom: 1px dotted #cac3b5; /* BEIGE  */
+        border-bottom: 1px dotted #dfdfdf; /* BEIGE  */
         font-size: 14px;
         text-align: center;
 }
@@ -575,36 +579,36 @@ fieldset table.th {
 }
 
 .tbl_border {
-	border: 1px solid #cac3b5;
+	border: 1px solid #dfdfdf;
 }
 
 .tbl_courseid {
-	border: 1px solid #cac3b5;
-    background-color: #edecdf;
+	border: 1px solid #dfdfdf;
+    background-color: #f8f8f8;
 }
 
 .tbl_courseid th {
     font-weight: bold;
-    background-color: #cac3b5;
+    background-color: #dfdfdf;
     padding: 3px;
 }
 
 .tbl_header_row {
 	font-weight: bold;
 	text-align: center;
-	background-color: #edecdf; /* LIGHTER BEIGE  */
+	background-color: #f8f8f8; /* LIGHTER BEIGE  */
 	padding: 3px;
 }
 
 .tbl th {
 	font-weight: bold;
-	background-color: #edecdf; /* BEIGE  */
+	background-color: #f8f8f8; /* BEIGE  */
 	padding: 3px;
 }
 
 .tbl_border th {
         font-weight: bold;
-        background-color: #cac3b5; /* BEIGE  */
+        background-color: #f8f8f8; /* BEIGE  */
         padding: 3px;
 }
 
@@ -618,12 +622,12 @@ fieldset table.th {
 .tbl_alt {
     padding: 5px;
     border: none;
-	border: 1px solid #cac3b5; 
+	border: 1px solid #dfdfdf; 
 }	
 	
 .tbl_alt th {
     font-weight: bold;
-    background-color: #cac3b5; /* BEIGE  */
+    background-color: #dfdfdf; /* BEIGE  */
     text-align: center;
     padding: 3px;
 }
@@ -633,7 +637,7 @@ fieldset table.th {
 }
 
 .tbl_alt .odd {
-	background-color: #edecdf; /* LIGHTER BEIGE  */
+	background-color: #f8f8f8; /* LIGHTER BEIGE  */
 }	
 	
 .tbl_alt .even {
@@ -642,13 +646,13 @@ fieldset table.th {
 
 .tbl_alt_border {
     background-color: #ffffff; /* WHITE  */
-    border-bottom: 1px dotted #cac3b5; /* BEIGE  */
+    border-bottom: 1px dotted #dfdfdf; /* BEIGE  */
 }
 	
 /*	Hover effect to table rows */	
 
 .tbl_alt tr:hover td { 
-    background-color: #ffeb96;
+    background-color: #edf1f6;
 } 
 
 /* Alternating Table Row NO_Border   */
@@ -659,12 +663,12 @@ fieldset table.th {
 }
 
 .tbl_alt_bordless tr{
-    border-bottom: 1px dotted #cac3b5; /* BEIGE  */;
+    border-bottom: 1px dotted #dfdfdf; /* BEIGE  */;
 }
 
 .tbl_alt_bordless th {
     font-weight: bold;
-    background-color: #cac3b5; /* BEIGE  */
+    background-color: #dfdfdf; /* BEIGE  */
     text-align: center;
     padding: 3px;
 }
@@ -674,7 +678,7 @@ fieldset table.th {
 }
 
 .tbl_alt_bordless .odd {
-    background-color: #edecdf; /* LIGHTER BEIGE  */
+    background-color: #f8f8f8; /* LIGHTER BEIGE  */
 }
 
 .tbl_alt_bordless .even {
@@ -684,18 +688,19 @@ fieldset table.th {
 /* Hover effect to table rows */
 
 .tbl_alt_bordless tr:hover td {
-    background-color: #ffeb96;
+    background-color: #edf1f6;
 }
 
 /*	Sortable Table*/	
 
 .sortable {
-    border: 1px solid #cac3b5;
+    border: 1px solid #dfdfdf;
 }
 
 table.sortable a.sortheader {
-    background-color: #cac3b5;
-    color: #727266;
+    background-color: #8597A5;
+    color: #ffffff;
+    font-size: 13px;
     font-weight: bold;
     text-decoration: none;
     padding : 0px;
@@ -703,23 +708,23 @@ table.sortable a.sortheader {
 }
 
 table.sortable tr:hover td {
-    background-color: #ffeb96
+    background-color: #edf1f6;
 }
  
 table.sortable_odd {
-    background-color: #edecdf; /* LIGHTER BEIGE  */
+    background-color: #f8f8f8; /* LIGHTER BEIGE  */
 }
 
 table.sortable_even {
-    background-color: #cac3b5; /* BEIGE  */
+    background-color: #dfdfdf; /* BEIGE  */
 }
 
 .sortable th {
-    background-color: #cac3b5; /* BEIGE  */
+    background-color: #8597A5;
 }
 
 a.sortheader, a.sortheader:link, a.sortheader:active, a.sortheader:visited {
-    background-color: #cac3b5;
+    background-color: #dfdfdf;
     color: #727266;
     font-weight: bold;
     text-decoration: underline;
@@ -740,19 +745,19 @@ table.sortable span.sortarrow {
 /*  Table */
 
 tr.odd {
-    background: #edecdf;
+    background-color: #f8f8f8;
 }
 
 tr.even {
-    background: #ffffff;
+    background-color: #ffffff;
 }
 
 td.odd {
-    background: #edecdf;
+    background-color: #f8f8f8;
 }
 
 td.even {
-    background: #ffffff;
+    background-color: #ffffff;
 }
 
 th {
@@ -774,7 +779,7 @@ td.bold {
 #operations_container {
     text-align: right;
     padding: 8px;
-    background: #727266;
+    background: #8597A5;
     font-size: 11px;
     color: #ffffff;
     margin-bottom: 15px;
