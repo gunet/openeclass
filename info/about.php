@@ -12,7 +12,7 @@
 *			Tilemachos Raptis <traptis@noc.uoa.gr>
 *
 *  For a full list of contributors, see "credits.txt".
-*
+*i
 *  Open eClass is an open platform distributed in the hope that it will
 *  be useful (without any warranty), under the terms of the GNU (General
 *  Public License) as published by the Free Software Foundation.
@@ -33,22 +33,20 @@ $tool_content ="";
     $tool_content .= "
     <p>$langIntro</p>
     <br />
-
-          <table class='tbl_border'>
+<table class='tbl1' width='99%'>
           <tr>
-            <th>&nbsp;</th>
-            <td><b>$langStoixeia</b></td>
+            <td colspan='2' class='title1'><b>$langStoixeia</b></td>
+           </tr>
+          <tr>
+            <td valign='top' width='200'><strong>$langVersion:</strong></td>
+            <td>$langAboutText:&nbsp;<b><a href='http://www.openeclass.org/' title='Open eClass Portal' target='_blank'>$siteName " . ECLASS_VERSION . "&raquo;</a></b></td>
           </tr>
           <tr>
-            <th>$langVersion:</th>
-            <td>$langAboutText:&nbsp;<b>$siteName " . ECLASS_VERSION . "</b>&nbsp;&nbsp;(<a href='http://www.openeclass.org/' title='Open eClass Portal' target='_blank'>>></a>)</td>
-          </tr>
-          <tr>
-            <th>$langCoursesHeader:</th>
+            <td valign='top'><strong>$langCoursesHeader:</strong></td>
             <td>";
 
   /*
-  * Make table with general platform information
+  * Make table witd general platform information
   * ophelia neofytou - 2006/09/26
   */
 
@@ -76,7 +74,7 @@ $d=mysql_fetch_array(mysql_query("SELECT COUNT(*) FROM user where statut='10'"))
 
     $tool_content .= "
           <tr>
-            <th>$langUsers:</th>
+            <td valign='top'><strong>$langUsers:</strong></td>
             <td>$langAboutUsers <b>$e[0]</b> $langUsers
               <ul>
                 <li><b>$b[0]</b> $langTeachers, </li>
@@ -85,12 +83,12 @@ $d=mysql_fetch_array(mysql_query("SELECT COUNT(*) FROM user where statut='10'"))
               </ul></td>
           </tr>
           <tr>
-            <th>$langSupportUser</th>
+            <td valign='top'><strong>$langSupportUser</strong></td>
             <td>$administratorName $administratorSurname</td>
           </tr>
           </table>
-          
-          <br />";
+        "
+;
 
 
 if (isset($uid) and $uid) {
