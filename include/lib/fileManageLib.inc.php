@@ -365,6 +365,7 @@ function copyDirTo($origDirPath, $destination)
 
 function index_dir($path)
 {
+	global $webDir; 
 	chdir($path);
 	$handle = opendir($path);
 
@@ -387,11 +388,10 @@ function index_dir($path)
 			$dirArray  =  array_merge( $dirArray , $subDirArray ) ;	// data merge
 		}
 	}
-
-	chdir("..") ;
-
+	
+	//chdir("..");
+	chdir($webDir."modules/document/");
 	return $dirArray ;
-
 }
 
 
@@ -439,9 +439,9 @@ function form_dir_list_exclude($dbTable, $sourceType, $sourceComponent, $command
         }
 	$dirList = index_and_sort_dir($baseWorkDir);
 	$dialogBox = "
-      <form action='$_SERVER[PHP_SELF]$groupset' method='post'>
-      <fieldset>
-      <input type='hidden' name='".$sourceType."' value='".$sourceComponent."'>
+	<form action='$_SERVER[PHP_SELF]$groupset' method='post'>
+	<fieldset>
+	<input type='hidden' name='".$sourceType."' value='".$sourceComponent."'>
         <table class='tbl' width='99%'>
         <tr>
           <td>$langMoveFrom &nbsp;&nbsp;<b>$moveFileNameAlias</b>&nbsp;&nbsp; $langTo:";
@@ -469,10 +469,8 @@ function form_dir_list_exclude($dbTable, $sourceType, $sourceComponent, $command
 				{
 					$tab .= "&nbsp;&nbsp;";
 				}
-			
-//			$tool_content .= $baseWorkDir.$path;
 			if ($pathValue != $entryToExclude and (!is_file($baseWorkDir.$path)))
-				$dialogBox .= "            <option value='$path'>$tab>$filename</option>\n";
+				$dialogBox .= "<option value='$path'>$tab>$filename</option>\n";
 			}
 		}
 	}
@@ -484,7 +482,7 @@ function form_dir_list_exclude($dbTable, $sourceType, $sourceComponent, $command
         </tr>
         </table>
         </fieldset>
-      </form>";
+	</form>";
 	return $dialogBox;
 }
 
