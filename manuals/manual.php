@@ -152,7 +152,7 @@ $tool_content .= "
 
 
 
-$tool_content .= "<p><b>$langNote: </b><br/>$langAcrobat <img src='../template/classic/img/acrobat.png' width='32' height='32' /> $langWhere <a href='http://www.adobe.com/products/acrobat/readstep2.html' target='_blank'>
+$tool_content .= "<p><b>$langNote: </b><br/>$langAcrobat <img src='../template/classic/img/acrobat.png' width='16' height='16' /> $langWhere <a href='http://www.adobe.com/products/acrobat/readstep2.html' target='_blank'>
 		<span class='explanationtext'>$langHere</span></a>.</p>";
 
 if (isset($uid) and $uid) {
