@@ -55,14 +55,11 @@ $lang = langname_to_code($language);
 // display form
 if (!isset($_POST['submit'])) {
 	@$tool_content .= "<form action='$_SERVER[PHP_SELF]' method='post'>
-	<table width='99%' style='border: 1px solid #edecdf;'>
-	<thead>
+        <fieldset>
+        <legend>$langUserData</legend>
+	<table width='99%' align='left' class='tbl'>
 	<tr>
-	<td>
-	<table width='100%' align='left' class='FormData'>
-	<thead>
-	<tr>
-	<th class='left' width='220'>$langName</th>
+	<th class='left' width='180'>$langName</th>
 	<td colspan='2'><input type='text' name='prenom_form' value='".$_GET['prenom_form']."' class='FormData_InputText' />&nbsp;&nbsp;<small>(*)</small></td>
 	</tr>
 	<tr>
@@ -112,10 +109,8 @@ if (!isset($_POST['submit'])) {
 	<input type='submit' name='submit' value='".$langRegistration."' />
 	</td>
 	</tr>
-	</thead>
 	</table>
 	<div align='right'><small>$langRequiredFields</small></div>
-	</td></tr></thead></table>
 	</form>";
 } else {
 
@@ -185,15 +180,15 @@ if (!isset($_POST['submit'])) {
 	$_SESSION['nom'] = $nom;
 	$_SESSION['uname'] = $uname;
 	// registration form
-	$tool_content .= "<table width='99%'><tbody><tr>" .
+	$tool_content .= "<table width='99%' class='tbl'><tr>" .
 			"<td class='well-done' height='60'>" .
 			"<p>$langDear $prenom $nom,</p>" .
 			"<p>$langPersonalSettings</p></td>" .
-			"</tr></tbody></table><br /><br />" .
+			"</tr></table><br /><br />" .
 			"<p>$langPersonalSettingsMore</p>";
 	} else {
 		// errors exist - registration failed
-		$tool_content .= "<table width='99%'><tbody><tr>" .
+		$tool_content .= "<table width='99%' class='tbl'><tbody><tr>" .
 			"<td class='caution' height='60'>";
 		foreach ($registration_errors as $error) {
 			$tool_content .= "<p>$error</p>";
