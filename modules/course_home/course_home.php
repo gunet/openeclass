@@ -98,7 +98,7 @@ if ($res and mysql_num_rows($res) > 0) {
         }
 }
 if ($is_adminOfCourse) {
-        $edit_link = "&nbsp;<a href='../../modules/course_description/editdesc.php'><img src='../../template/classic/img/edit.gif' title='$langEdit' /></a>";
+        $edit_link = "&nbsp;<a href='../../modules/course_description/editdesc.php'><img src='../../template/classic/img/edit.gif' title='$langEdit' alt='icon' /></a>";
 } else {
         $edit_link = '';
 }
@@ -284,10 +284,10 @@ if ($is_adminOfCourse) {
 $tool_content .= "
 <div id='content_course'>
 
-   <table width='99%'>
+   <table width='755'>
    <tr>
       <td valign='top'>$main_content</td>
-      <td width='180' valign='top' style='border: 1px solid green'>
+      <td width='200' valign='top'>
 
         <table class='tbl_courseid' width='200'>
         <tr>
@@ -304,7 +304,7 @@ $tool_content .= "
         <tr>
           <th width='3'></th>
           <td align='left'>$langContactProf: (<a href='../../modules/contact/index.php'>$langEmail</a>)</td>
-        </tr>
+          </tr>
         </table>
 
         <br />\n";
@@ -317,7 +317,7 @@ if ($is_adminOfCourse or
                 $button_message = $langStudentViewEnable;
         }
         $tool_content .="
-        <table width='200' class='tbl_border'>
+        <table width='180' class='tbl_border'>
         <tr>
           <th width='3' align='right'></th>
           <td align='left'>
@@ -343,7 +343,7 @@ $tool_content .= "
       <td colspan='3' valign='top'>
         <p>&nbsp;</p>
 
-        <table width='99%' class='tbl'>
+        <table width='745' class='tbl'>
         <tr>
           <td>$cunits_content</td>
         </tr>
