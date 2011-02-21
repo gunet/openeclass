@@ -34,7 +34,7 @@ if (defined('GROUP_DOCUMENTS')) {
         $action->record('MODULE_ID_GROUPS');
 	$subsystem = GROUP;
         initialize_group_id('gid');
-        initialize_group_info($group_id);
+        initialize_group_info($group_id);        
         $subsystem_id = $group_id;
         $navigation[] = array('url' => 'group.php', 'name' => $langGroups);
         $navigation[] = array('url' => 'group_space.php?group_id=' . $group_id, 'name' => q($group_name));
@@ -66,5 +66,5 @@ if (defined('GROUP_DOCUMENTS')) {
         $group_hidden_input = '';
         $basedir = $webDir . 'courses/' . $currentCourseID . '/document';
         $nameTools = $langDoc;
-}
+}       
 mysql_select_db($mysqlMainDb);

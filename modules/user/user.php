@@ -86,7 +86,10 @@ if ($is_adminOfCourse) {
                 $new_tutor_gid = intval($_GET['giveTutor']);
                 db_query("UPDATE cours_user SET tutor = 1
                                 WHERE user_id = $new_tutor_gid AND cours_id = $cours_id", $mysqlMainDb);
-                db_query("DELETE FROM user_group WHERE user = $new_tutor_gid");
+                db_query("UPDATE group_members, `group` SET is_tutor = 0
+				WHERE `group`.id = group_members.group_id AND 
+				      `group`.course_id = $cours_id AND
+				      group_members.user_id = $new_tutor_gid");
         } elseif (isset($_GET['removeAdmin'])) {
                 $removed_admin_gid = intval($_GET['removeAdmin']);
                 db_query("UPDATE cours_user SET statut = 5

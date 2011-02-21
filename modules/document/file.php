@@ -44,6 +44,7 @@ $path_components = explode('/', $uri);
 $cinfo = addslashes(array_shift($path_components));
 $cinfo_components = explode(',', $cinfo);
 $_SESSION['dbname'] = $cinfo_components[0];
+
 if (isset($cinfo_components[1])) {
         $group_id = intval($cinfo_components[1]);
         define('GROUP_DOCUMENTS', true);
@@ -76,7 +77,6 @@ if (defined('GROUP_DOCUMENTS')) {
 }
 
 $file_info = public_path_to_disk_path($path_components);
-
 if ($file_info['visibility'] != 'v' and !$is_adminOfCourse) {
         error($langNoRead);
 }

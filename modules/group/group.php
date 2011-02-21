@@ -387,18 +387,19 @@ if ($is_adminOfCourse) {
 
 
         list($total_students) = mysql_fetch_row(db_query(
-                "SELECT count(*) FROM cours_user
+                "SELECT COUNT(*) FROM cours_user
                  WHERE cours_id = $cours_id AND statut = 5 AND tutor = 0"));
         list($unregistered_students) = mysql_fetch_row(db_query(
-                "SELECT COUNT(DISTINCT u.user_id)
-                        FROM (user u, cours_user cu)
-                        LEFT JOIN group_members ug
-                             ON u.user_id = ug.user_id
-                        WHERE ug.user_id IS NULL AND
-                              cu.cours_id = $cours_id AND
-                              cu.user_id = u.user_id AND
-                              cu.statut = 5 AND
-                              ug.is_tutor = 0"));
+			"SELECT COUNT(*)
+                                FROM (user u, cours_user cu)
+                                WHERE cu.cours_id = $cours_id AND
+                                      cu.user_id = u.user_id AND
+                                      cu.statut = 5 AND
+                                      cu.tutor = 0 AND
+                                      u.user_id NOT IN (SELECT user_id FROM group_members, `group`
+                                                                       WHERE `group`.id = group_members.group_id AND
+                                                                       `group`.course_id = $cours_id)"));
+	
 	$registered_students = $total_students - $unregistered_students;
 	$tool_content .= "" .
 	                 "

@@ -195,10 +195,10 @@ function submit_work($uid, $gid, $id, $file) {
         delete_submissions_by_uid($uid, $gid, $id, $destination);
         if (copy($source, "$workPath/$destination")) {
                 db_query("INSERT INTO `$currentCourseID`.assignment_submit (uid, assignment_id, submission_date,
-                                     submission_ip, file_path, file_name, comments, group_id)
+                                     submission_ip, file_path, file_name, comments, group_id, grade_comments)
                                  VALUES ('$uid','$id', NOW(), '$_SERVER[REMOTE_ADDR]', '$destination'," .
                                          quote($original_filename) . ', ' .
-                                         autoquote($_POST['comments']) . ", $gid)",
+                                         autoquote($_POST['comments']) . ", $gid, '')",
                         $currentCourseID);
 
 		$tool_content .="<p class=\"success_small\">$langUploadSuccess
