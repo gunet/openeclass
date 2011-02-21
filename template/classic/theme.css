@@ -460,6 +460,14 @@ border: 1px solid red;}
     border-top: 1px solid #94a3c4;
 }
 
+#contact {
+    border: 1px dotted #dfdfdf;
+    padding: 20px;
+    background-image:url(img/contact.png);
+	background-repeat:no-repeat;
+    background-position:right bottom;
+}
+
 /* icons */ 
 
 .briefcase_icon {
