@@ -284,10 +284,10 @@ if ($is_adminOfCourse) {
 $tool_content .= "
 <div id='content_course'>
 
-   <table width='755'>
+   <table width='99%'>
    <tr>
       <td valign='top'>$main_content</td>
-      <td width='200' valign='top'>
+      <td width='180' valign='top'>
 
         <table class='tbl_courseid' width='200'>
         <tr>
@@ -343,7 +343,7 @@ $tool_content .= "
       <td colspan='3' valign='top'>
         <p>&nbsp;</p>
 
-        <table width='745' class='tbl'>
+        <table width='99%' class='tbl'>
         <tr>
           <td>$cunits_content</td>
         </tr>
