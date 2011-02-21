@@ -34,7 +34,7 @@ $tool_content .= "
 <p>$introcontact</p>
 
 <div id='contact'>
-<p><b>$langPostMail</b> $Institution &nbsp; $postaddress 
+<p>$langPostMail $Institution &nbsp; $postaddress 
 <br><b>$langPhone:</b> $fax 
 <br><b>$langFax</b> $telephone 
 <br><b>$langEmail:</b> ".mailto($emailhelpdesk, str_replace('@', ' &lt;at> ', $emailhelpdesk))."</p>
