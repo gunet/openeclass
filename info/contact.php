@@ -28,16 +28,19 @@ $path2add=2;
 include '../include/baseTheme.php';
 
 $nameTools = $contactpoint;
-$tool_content = "";
+if (!empty($postaddress)) {
+    $message = "| ".$postaddress;
+}
+
 
 $tool_content .= "
 <p>$introcontact</p>
 
 <div id='contact'>
-<p>$langPostMail $Institution &nbsp; $postaddress 
-<br><b>$langPhone:</b> $fax 
-<br><b>$langFax</b> $telephone 
-<br><b>$langEmail:</b> ".mailto($emailhelpdesk, str_replace('@', ' &lt;at> ', $emailhelpdesk))."</p>
+<br>$langPostMail $Institution $message 
+<br><b>$langPhone:</b> $telephone 
+<br>$langFax</b> $fax 
+<br><b>$langEmail:</b> ".mailto($emailhelpdesk, str_replace('@', ' &lt;at> ', $emailhelpdesk))."
 </div>
 
 ";
