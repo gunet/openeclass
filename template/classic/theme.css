@@ -467,6 +467,14 @@ border: 1px solid red;}
     background-position:right bottom;
 }
 
+#info {
+    background-image:url(img/info.png);
+	background-repeat:no-repeat;
+    background-position:right;
+}
+
+
+
 /* icons */ 
 
 .briefcase_icon {
