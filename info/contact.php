@@ -39,7 +39,7 @@ $tool_content .= "
 <div id='contact'>
 <br>$langPostMail $Institution $message 
 <br><b>$langPhone:</b> $telephone 
-<br>$langFax</b> $fax 
+<br>$langFax $fax 
 <br><b>$langEmail:</b> ".mailto($emailhelpdesk, str_replace('@', ' &lt;at> ', $emailhelpdesk))."
 </div>
 
