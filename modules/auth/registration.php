@@ -79,7 +79,7 @@ if(!empty($auth)) {
         }
 }
 
-$tool_content .= "\n</p>
+$tool_content .= "\n
  
   <p class='title1'>".$langProfAccount." ".$langUserAccountInfo1."</p>";
 
