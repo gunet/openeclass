@@ -461,7 +461,6 @@ border: 1px solid red;}
 }
 
 #contact {
-    border-top: 1px dashed #dfdfdf;
     padding: 20px 100px 10px 10px;
     background-image:url(img/contact.png);
 	background-repeat:no-repeat;
