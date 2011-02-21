@@ -292,6 +292,10 @@ fieldset table.th {
     margin: 5px;
 }
 #content_course {
+    padding: 5px;
+    margin-top: 20px;
+    border: 1px dashed #dfdfdf;    
+    
 }
 
 /* right */
