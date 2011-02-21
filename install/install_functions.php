@@ -114,7 +114,7 @@ function installerMenu(){
 		} else {
 			if ($i == $_SESSION['step']-1) $currentStep[$i] = true;
 			else $currentStep[$i] = false;
-			$stepImg[$i] = "black-arrow1.gif";
+			$stepImg[$i] = "&raquo;";
 		}
 	}
 
