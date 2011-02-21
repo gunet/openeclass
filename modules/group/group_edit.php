@@ -52,89 +52,9 @@ if (!($is_adminOfCourse or $is_tutor)) {
         exit;
 }
 
-$tool_content = '';
-$head_content = <<<hCont
-<script type="text/javascript" language="JavaScript">
-<!-- // Begin javascript menu swapper
-function move(fbox, tbox) {
-   var arrFbox = new Array();
-   var arrTbox = new Array();
-   var arrLookup = new Array();
-   var i;
-   for (i = 0; i < tbox.options.length; i++) {
-      arrLookup[tbox.options[i].text] = tbox.options[i].value;
-      arrTbox[i] = tbox.options[i].text;
-   }
-   var fLength = 0;
-   var tLength = arrTbox.length;
-   for(i = 0; i < fbox.options.length; i++) {
-      arrLookup[fbox.options[i].text] = fbox.options[i].value;
-      if (fbox.options[i].selected && fbox.options[i].value != "") {
-         arrTbox[tLength] = fbox.options[i].text;
-         tLength++;
-      } else {
-         arrFbox[fLength] = fbox.options[i].text;
-         fLength++;
-      }
-   }
-   arrFbox.sort();
-   arrTbox.sort();
-   fbox.length = 0;
-   tbox.length = 0;
-   var c;
-   for(c = 0; c < arrFbox.length; c++) {
-      var no = new Option();
-      no.value = arrLookup[arrFbox[c]];
-      no.text = arrFbox[c];
-      fbox[c] = no;
-   }
-   for(c = 0; c < arrTbox.length; c++) {
-      var no = new Option();
-      no.value = arrLookup[arrTbox[c]];
-      no.text = arrTbox[c];
-      tbox[c] = no;
-   }
-}
-//  End -->
-</script>
-
-<script type="text/javascript" language="JavaScript">
-
-function selectAll(cbList,bSelect) {
-  for (var i=0; i<cbList.length; i++)
-    cbList[i].selected = cbList[i].checked = bSelect
-}
-
-function reverseAll(cbList) {
-  for (var i=0; i<cbList.length; i++) {
-    cbList[i].checked = !(cbList[i].checked)
-    cbList[i].selected = !(cbList[i].selected)
-  }
-}
-</script>
-<script type="text/javascript">
-function checkrequired(which, entry) {
-	var pass=true;
-	if (document.images) {
-		for (i=0;i<which.length;i++) {
-			var tempobj=which.elements[i];
-			if (tempobj.name == entry) {
-				if (tempobj.type=="text"&&tempobj.value=='') {
-					pass=false;
-					break;
-		  		}
-	  		}
-		}
-	}
-	if (!pass) {
-		alert("$langEmptyGroupName");
-		return false;
-	} else {
-		return true;
-	}
-}
-</script>
-hCont;
+$head_content .= "<script type='text/javascript' src='$urlAppend/js/tools.js'></script>\n" .
+        "<script type='text/javascript'>var langEmptyGroupName = '" .
+        js_escape($langEmptyGroupName) . "';</script>\n";
 
 $message = '';
 // Once modifications have been done, the user validates and arrives here
@@ -204,12 +124,8 @@ if ($is_adminOfCourse) {
 
         }
         $tool_content_tutor .= '</select>';
-        $element1 = 5;
-        $element2 = 8;
 } else {
         $tool_content_tutor = display_user($tutors);
-        $element1 = 4;
-        $element2 = 7;
 }
 
 $tool_content_max_student = $max_members? $max_members: '-';
@@ -308,15 +224,15 @@ $tool_content .="
           </tr>
           <tr>
             <td>
-              <select name='nogroup[]' size='15' multiple='1'>
+              <select id='users_box' name='nogroup[]' size='15' multiple='1'>
                 $tool_content_not_Member
               </select>
             </td>
             <td class='center'>
-              <input type='button' onClick=\"move(this.form.elements[$element1],this.form.elements[$element2])\" value='   &gt;&gt;   ' /><br /><input type='button' onClick=\"move(this.form.elements[$element2],this.form.elements[$element1])\" value='   &lt;&lt;   ' />
+              <input type='button' onClick=\"move('users_box','members_box')\" value='   &gt;&gt;   ' /><br /><input type='button' onClick=\"move('members_box','users_box')\" value='   &lt;&lt;   ' />
             </td>
             <td class='right'>
-              <select name='ingroup[]' size='15' multiple='1'>
+              <select id='members_box' name='ingroup[]' size='15' multiple='1'>
                 $tool_content_group_members
               </select>
             </td>
@@ -326,7 +242,7 @@ $tool_content .="
     </tr>
     <tr>
       <th class=\"left\">&nbsp;</th>
-      <td><input type='submit' name='modify' value='$langModify' onClick=\"selectAll(this.form.elements[$element2],true)\" /></td>
+      <td><input type='submit' name='modify' value='$langModify' onClick=\"selectAll('members_box',true)\" /></td>
     </tr>
     </table>
     </fieldset>

@@ -49,74 +49,8 @@ include '../../include/baseTheme.php';
 
 $nameTools = $langToolManagement;
 add_units_navigation(TRUE);
-$tool_content = "";
-$head_content = <<<hCont
-<script type="text/javascript">
 
-<!-- Begin javascript menu swapper
-function move(fbox, tbox) {
-  var arrFbox = new Array();
-  var arrTbox = new Array();
-  var arrLookup = new Array();
-  var i;
-  for (i = 0; i < tbox.options.length; i++) {
-    arrLookup[tbox.options[i].text] = tbox.options[i].value;
-    arrTbox[i] = tbox.options[i].text;
-  }
-  var fLength = 0;
-  var tLength = arrTbox.length;
-  for(i = 0; i < fbox.options.length; i++) {
-    arrLookup[fbox.options[i].text] = fbox.options[i].value;
-    if (fbox.options[i].selected && fbox.options[i].value != "") {
-      arrTbox[tLength] = fbox.options[i].text;
-      tLength++;
-    } else {
-      arrFbox[fLength] = fbox.options[i].text;
-      fLength++;
-    }
-  }
-  arrFbox.sort();
-  arrTbox.sort();
-  fbox.length = 0;
-  tbox.length = 0;
-  var c;
-  for(c = 0; c < arrFbox.length; c++) {
-    var no = new Option();
-    no.value = arrLookup[arrFbox[c]];
-    no.text = arrFbox[c];
-    fbox[c] = no;
-  }
-  for(c = 0; c < arrTbox.length; c++) {
-    var no = new Option();
-    no.value = arrLookup[arrTbox[c]];
-    no.text = arrTbox[c];
-    tbox[c] = no;
-  }
-}
-
-function selectAll(cbList,bSelect) {
-  for (var i=0; i<cbList.length; i++)
-    cbList[i].selected = cbList[i].checked = bSelect
-}
-
-function reverseAll(cbList) {
-  for (var i=0; i<cbList.length; i++) {
-    cbList[i].checked = !(cbList[i].checked)
-    cbList[i].selected = !(cbList[i].selected)
-  }
-}
-
-function confirmation (name)
-{
-	if (confirm("$langDeleteLink " + name + "?"))
-        {return true;}
-    	else
-        {return false;}
-
-}
-</script>
-hCont;
-
+$head_content .= "<script type='text/javascript' src='$urlAppend/js/tools.js'></script>\n";
 
 if ($is_adminOfCourse) {
         if (isset($_GET['action'])) {
@@ -355,33 +289,26 @@ if ($is_adminOfCourse) {
                 exit();
         }
 
-	$activeTools = $inactiveTools = '';
 	$toolArr = getSideMenu(2);
-	$numOfToolGroups = count($toolArr);
 
 	if (is_array($toolArr)) {
 		$externalLinks = array(); // array used to populate the external tools table afterwards
-		for ($i=1; $i< $numOfToolGroups; $i++){
+		for ($i = 0; $i <= 1; $i++){
+                        $toolSelection[$i] = '';
 			$numOfTools = count($toolArr[$i][1]);
-			for ($j = 0; $j < $numOfTools; $j++){
+			for ($j = 0; $j < $numOfTools; $j++) {
                                 if ($toolArr[$i][4][$j] < 100) {
                                         $class = '';
                                 } else {
+                                        // External links that are not admin tools
                                         $class = ' class="emphasised"';
-                                        if ($i != 3) { // External links that are not admin tools
-                                                array_push($externalLinks, array(
-                                                        'text' => q($toolArr[$i][1][$j]),
-                                                        'id' => $toolArr[$i][4][$j]));
-                                        }
+                                        array_push($externalLinks,
+                                                   array('text' => q($toolArr[$i][1][$j]),
+                                                         'id' => $toolArr[$i][4][$j]));
                                 } 
-				if ($i == 1) { // active tools
-                                        $activeTools .= "<option$class value='" . $toolArr[$i][4][$j] . "'>" .
-                                                        q($toolArr[$i][1][$j]) . "</option>\n";
+                                $toolSelection[$i] .= "<option$class value='" . $toolArr[$i][4][$j] . "'>" .
+                                                      q($toolArr[$i][1][$j]) . "</option>\n";
 
-				} elseif ($i == 2) { // inactive tools
-                                        $inactiveTools .= "<option$class value='" . $toolArr[$i][4][$j] . "'>" .
-                                                          q($toolArr[$i][1][$j]) . "</option>\n";
-                                }
 			}
 		}
 	}
@@ -405,20 +332,20 @@ if ($is_adminOfCourse) {
   </tr>
   <tr>
     <td class="center">
-        <select name="toolStatInactive[]" size=17 multiple>\n$inactiveTools        </select>
+        <select name="toolStatInactive[]" id='inactive_box' size='17' multiple>\n$toolSelection[1]</select>
     </td>
     <td class="center">
-        <input type="button" onClick="move(this.form.elements[0],this.form.elements[3])" value="   >>   " /><br/>
-        <input type="button" onClick="move(this.form.elements[3],this.form.elements[0])" value="   <<   " />
+        <input type="button" onClick="move('inactive_box','active_box')" value="   >>   " /><br/>
+        <input type="button" onClick="move('active_box','inactive_box')" value="   <<   " />
     </td>
     <td class="center">
-        <select name="toolStatActive[]" size="17" multiple>\n$activeTools        </select>
+        <select name="toolStatActive[]" id='active_box' size='17' multiple>\n$toolSelection[0]</select>
     </td>
   </tr>
   <tr>
     <td>&nbsp;</td>
     <td class="center">
-        <input type=submit value="$langSubmitChanges" name="toolStatus" onClick="selectAll(this.form.elements[3],true)" />
+        <input type=submit value="$langSubmitChanges" name="toolStatus" onClick="selectAll('active_box',true)" />
     </td>
     <td>&nbsp;</td>
   </tr>
@@ -449,12 +376,13 @@ tForm;
 			}
 			$tool_content .= "                          <td width='1'>
                                 <img src='../../template/classic/img/external_link_on.gif' title='$langTitle' /></th>
-                                <td class='left'>".$externalLinks[$i]['text']."</td>
+                                <td class='left'>{$externalLinks[$i]['text']}</td>
                                 <td align='center'><form method='post' action='course_tools.php'>
                                    <input type='hidden' name='delete' value='{$externalLinks[$i]['id']}' />
                                    <input type='image' src='../../template/classic/img/delete.gif' name='delete_button' 
-                                       onClick='return confirmation(\"" .  addslashes($externalLinks[$i]['text']) .
-                                               "\");' title='$langDelete' /></form></td>
+                                          onClick=\"return confirmation('" .
+                                                    js_escape("$langDeleteLink {$externalLinks[$i]['text']}?") .
+                                               "');\" title='$langDelete' /></form></td>
                              </tr>\n";
                 }
 		$tool_content .= "                        </table>\n";
