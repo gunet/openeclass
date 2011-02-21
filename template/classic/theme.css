@@ -825,3 +825,27 @@ td.bold {
 
 #opslist li:before { content: " | "; }
 #opslist li:first-child:before { content: ""; }
+
+.course_info {
+        margin-bottom: 1em;
+}
+.course_info h1 {
+        color: #8597A5;
+        font-weight: bold;
+        padding: 5px;
+        border-bottom: 1px dashed #687A92; 
+        font-size: 12px;
+}
+.course_info h1 a {
+        font-size: 12px;
+        font-weight: bold;
+        color: #627aad;
+}
+
+.course_info h4 {
+        padding: 0px 0px;
+        color: #627aad;
+        font-weight: bold;
+        background: none !important;
+        border-bottom: none !important;
+}
