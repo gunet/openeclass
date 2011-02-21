@@ -198,19 +198,19 @@ function loggedInMenu(){
 
 	array_push($sideMenuText, $GLOBALS['langListCourses']);
 	array_push($sideMenuLink, $urlServer."modules/auth/courses.php");
-	array_push($sideMenuImg, "black-arrow1.gif");
+	array_push($sideMenuImg, "arrow.png");
 
 	array_push($sideMenuText, $GLOBALS['langManuals']);
 	array_push($sideMenuLink, $urlServer."manuals/manual.php");
-	array_push($sideMenuImg, "black-arrow1.gif");
+	array_push($sideMenuImg, "arrow.png");
 	
 	array_push($sideMenuText, $GLOBALS['langPlatformIdentity']);
 	array_push($sideMenuLink, $urlServer."info/about.php");
-	array_push($sideMenuImg, "black-arrow1.gif");
+	array_push($sideMenuImg, "arrow.png");
 
 	array_push($sideMenuText, $GLOBALS['langContact']);
 	array_push($sideMenuLink, $urlServer."info/contact.php");
-	array_push($sideMenuImg, "black-arrow1.gif");
+	array_push($sideMenuImg, "arrow.png");
 
 	array_push($sideMenuSubGroup, $sideMenuText);
 	array_push($sideMenuSubGroup, $sideMenuLink);
