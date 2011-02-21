@@ -95,7 +95,7 @@ class myGauge {
        $fg_width = Round($this->Width * $percentage_val);
        $bg_width = $this->Width - $fg_width;
 
-       $RenderHtml = "<table cellspacing=0 cellpadding=0 width=" . $this->Width . " height=" . $this->Height . "><tr>";
+       $RenderHtml = "<table class='tbl' cellspacing=0 cellpadding=0 width=" . $this->Width . " height=" . $this->Height . "><tr>";
        if ($fg_width > 0) {
            $RenderHtml = $RenderHtml . "<td width=" . $fg_width . " height=" . $this->Height . " bgcolor=" . $this->FgColor .
                "><img src=\"../../template/classic/img/shim.gif\"></td>";

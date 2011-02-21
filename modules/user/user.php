@@ -122,26 +122,30 @@ if ($is_adminOfCourse) {
                 }
         }
         // show help link and link to Add new user, search new user and management page of groups
-	$tool_content .= "<table width='99%' align='left' class='Users_Operations'><thead>
+	$tool_content .= "
+        <table width='99%' align='left' class='tbl_border'>
 	<tr>
-	<td colspan='3'>&nbsp;<b>$langDumpUser $langCsv:</b>
-	<br />&nbsp;&nbsp;1.&nbsp;<a href='dumpuser2.php'>$langcsvenc2</a>
-	&nbsp;&nbsp;2.&nbsp;<a href='dumpuser2.php?enc=1253'>$langcsvenc1</a>
-	</td>
+	  <th colspan='3'>
+            &nbsp;<b>$langDumpUser $langCsv:</b>
+	    <br />&nbsp;&nbsp;1.&nbsp;<a href='dumpuser2.php'>$langcsvenc2</a>
+	    &nbsp;&nbsp;2.&nbsp;<a href='dumpuser2.php?enc=1253'>$langcsvenc1</a>
+	  </th>
 	</tr>
 	<tr>
-	<td width='20%'><a href='../group/group.php'><b>$langGroupUserManagement</b></a></td>
-	<td width='15%'><a href='searchuser.php'><b>$langSearchUser</b></a></td>
-	<td><b>$langAdd:</b>&nbsp; <a href='adduser.php'>$langOneUser</a>, <a href='muladduser.php'>$langManyUsers</a>, <a href='guestuser.php'>$langGUser</a>&nbsp;</td>
-	</tr></thead></table>";
+	  <th width='180'><a href='../group/group.php'><b>$langGroupUserManagement</b></a></th>
+	  <th width='150'><a href='searchuser.php'><b>$langSearchUser</b></a></th>
+	  <th class='right'><b>$langAdd:</b>&nbsp; <a href='adduser.php'>$langOneUser</a>, <a href='muladduser.php'>$langManyUsers</a>, <a href='guestuser.php'>$langGUser</a>&nbsp;</th>
+	</tr>
+        </table>\n\n";
 	// display number of users
-	$tool_content .= "<table width='99%' class='FormData' style='border: 1px solid #CAC3B5;'>
-	<tbody><tr>
-	<td class='odd'>
-	<p>$langThereAre <b>$teachers</b> $langTeachers, <b>$students</b> $langStudents, <b>$visitors</b> $langVisitors</p>
-	<div align='right'>$langTotal: <b>$countUser</b> $langUsers</div>
-	</td>
-	</tr></tbody>
+	$tool_content .= "
+        <table width='99%' class='tbl'>
+	<tr>
+	  <td class='odd'>
+	    <p>$langThereAre <b>$teachers</b> $langTeachers, <b>$students</b> $langStudents, <b>$visitors</b> $langVisitors</p>
+	    <div align='right'>$langTotal: <b>$countUser</b> $langUsers</div>
+	  </td>
+	</tr>
 	</table><br />";
 
 	// display navigation links if course users > COURSE_USERS_PER_PAGE
@@ -156,16 +160,21 @@ if ($is_adminOfCourse) {
 		$extra_link = "&amp;limit=".$limit;
 	}
 
-	$tool_content .= "<table width='99%' class='tbl_alt'><tr class='odd'>
-	     <th rowspan='2'>$langID</th>
-	     <th rowspan='2'><div align='left'><a href='$_SERVER[PHP_SELF]?ord=s$extra_link'>$langName<br />$langSurname</a></div></th>";
-	$tool_content .= "<th rowspan='2'><a href='$_SERVER[PHP_SELF]?ord=e$extra_link'>$langEmail</a></th>";
-	$tool_content .= "<th rowspan='2'><a href='$_SERVER[PHP_SELF]?ord=am$extra_link'>$langAm</a></th>
-		<th rowspan='2'>$langGroup</th>
-		<th rowspan='2'><a href='$_SERVER[PHP_SELF]?ord=rd$extra_link'>$langCourseRegistrationDate</a></th>";
-	$tool_content .= "<th colspan='2'>$langUserPermitions</th><th rowspan='2'>$langActions</th>";
-	$tool_content .= "</tr>";
-	$tool_content .= "<tr><th>$langTutor</th><th>$langAdministrator</th></tr>";
+	$tool_content .= "
+        <table width='99%' class='tbl_alt'>
+        <tr class='odd'>
+	  <th rowspan='2'>$langID</th>
+	  <th rowspan='2'><div align='left'><a href='$_SERVER[PHP_SELF]?ord=s$extra_link'>$langName<br />$langSurname</a></div></th>
+	  <th rowspan='2'><a href='$_SERVER[PHP_SELF]?ord=e$extra_link'>$langEmail</a></th>
+	  <th rowspan='2'><a href='$_SERVER[PHP_SELF]?ord=am$extra_link'>$langAm</a></th>
+	  <th rowspan='2'>$langGroup</th>
+	  <th rowspan='2'><a href='$_SERVER[PHP_SELF]?ord=rd$extra_link'>$langCourseRegistrationDate</a></th>
+	  <th colspan='2'>$langUserPermitions</th><th rowspan='2'>$langActions</th>
+	</tr>
+	<tr>
+          <th>$langTutor</th>
+          <th>$langAdministrator</th>
+        </tr>";
 	
 	// Numerating the items in the list to show: starts at 1 and not 0
 	$i = $limit + 1;
@@ -193,12 +202,15 @@ if ($is_adminOfCourse) {
 	while ($myrow = mysql_fetch_array($result)) {
 		// bi colored table
 		if ($i%2 == 0) {
-			$tool_content .= "<tr class='tbl_alt_even'>";
+			$tool_content .= "
+        <tr class='tbl_alt_even'>";
 		} else {
-			$tool_content .= "<tr class='tbl_alt_odd'>";
+			$tool_content .= "
+        <tr class='tbl_alt_odd'>";
 		}
 		// show public list of users
-		$tool_content .= "<td valign='top' align='right'>$i.</td>\n" .
+		$tool_content .= "
+          <td valign='top' align='right'>$i.</td>\n" .
 			"<td valign='top'>" . display_user($myrow) . "</td>\n";
 		$tool_content .= "<td valign='top' align='center'>" . mailto($myrow['email']) . "</td>";
 		$tool_content .= "<td valign='top' align='center'>" . q($myrow['am']) . "</td>\n" .

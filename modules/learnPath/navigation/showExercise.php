@@ -224,14 +224,12 @@ if(@$_POST['questionNum']) {
 	$exerciseDescription_temp = nl2br(make_clickable($exerciseDescription));
 	echo <<<cData
 
-      <table width="99%" class="Exercise">
-      <thead>
+      <table width="99%" class="tbl_border">
       <tr>
         <td colspan=\"2\"><b>${exerciseTitle}</b>
         <br/>
         ${exerciseDescription_temp}</td>
       </tr>
-      </thead>
       </table>
 
 		<form method="post" action="${_SERVER['PHP_SELF']}" autocomplete="off">
@@ -268,7 +266,7 @@ foreach($questionList as $questionId) {
 		// shows the question and its answers
 
 	echo "<br/>
-	<table width=\"99%\" class=\"Question\">
+	<table width=\"99%\" class=\"tbl\">
 	<thead>
 	<tr>
 		<td colspan=\"2\"><b><u>".$langQuestion."</u>: ".$i."</b></td>
@@ -289,13 +287,13 @@ foreach($questionList as $questionId) {
 }	// end foreach()
 
 if (!$questionList) {
-	$tool_content .= "<table width=\"99%\" class=\"Question\">
-	<thead><tr>
+	$tool_content .= "<table width=\"99%\" class=\"tbl\">
+	<tr>
 	<td colspan='2'><font color='red'>$langNoAnswer</font></td>
-	</tr></thead>
+	</tr>
 	</table>";
 } else {
-	echo "<br/><table width=\"99%\" class=\"Exercise\">
+	echo "<br/><table width=\"99%\" class=\"tbl\">
 	<tr>
 	<td><div align=\"center\"><input type=\"submit\" value=\"";
 	if ($exerciseType == 1 || $nbrQuestions == $questionNum)
@@ -380,14 +378,12 @@ cData;
 	echo <<<cData
       <tr>
         <td colspan="2">
-        <table width="100%">
-        <thead>
+        <table width="100%" class="tbl">
         <tr>
           <td width="44%" class="left"><u><b>$langColumnA</b></u></td>
           <td width="12%"><div align="center"><b>$langMakeCorrespond</b></div></td>
           <td width="44%" class="left"><u><b>$langColumnB</b></u></td>
         </tr>
-        </thead>
         </table>
         </td>
       </tr>
@@ -449,8 +445,7 @@ cData;
 
       <tr>
         <td colspan="2">
-        <table width="100%">
-        <thead>
+        <table width="100%" class="tbl">
         <tr>
           <td width="44%"><b>${cpt2}.</b> ${answer}</td>
           <td width="12%"><div align="center">
@@ -475,7 +470,6 @@ cData;
 		  echo	"
           </td>
         </tr>
-        </thead>
         </table>
         </td>
       </tr>";

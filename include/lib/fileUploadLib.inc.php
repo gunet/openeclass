@@ -443,19 +443,19 @@ function showquota($quota, $used) {
 	//telos diamorfwshs ths grafikh mparas kai twn arithmitikwn statistikwn stoixeiwn
 	//ektypwsh pinaka me arithmitika stoixeia + thn grafikh bara
 	$retstring .= "
-        <table class='tbl'>
+        <table class='tbl_border'>
 	<tr>
-          <th>$langQuotaUsed :</th>
+          <td>$langQuotaUsed :</td>
 	  <td>$used</td>
         </tr>
 	<tr>
-          <th valign='top'>$langQuotaPercentage :</th>
+          <td valign='top'>$langQuotaPercentage :</td>
 	  <td align='center'>";
 	$retstring .= $oGauge->display();
 	$retstring .= "$diskUsedPercentage</td>
 	</tr>
 	<tr>
-	  <th>$langQuotaTotal :</th>
+	  <td>$langQuotaTotal :</td>
 	  <td>$quota</td>
 	</tr>
         </table>";

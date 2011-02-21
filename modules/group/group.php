@@ -242,70 +242,93 @@ if ($is_adminOfCourse) {
 	}
 
 	$tool_content .= "
-        <table width='99%' align='left' class='tbl_border'>
+        <table width='99%' class='tbl_border' border=0>
 	<tr>
-	  <th width='50%'>&nbsp;<a href='group_creation.php'>$langNewGroupCreate</a></th>
-	  <th width='50%'><div align='right'><a href='$_SERVER[PHP_SELF]?delete_all=yes' onClick=\"return confirmation('delall');\">$langDeleteGroups</a>&nbsp;</div></th>
+	  <th>&nbsp;<a href='group_creation.php'>$langNewGroupCreate</a></th>
+	  <th class='right'><a href='$_SERVER[PHP_SELF]?delete_all=yes' onClick=\"return confirmation('delall');\">$langDeleteGroups</a>&nbsp;</th>
 	</tr>
 	<tr>
 	  <th>&nbsp;<a href='$_SERVER[PHP_SELF]?fill=yes'>$langFillGroups</a></th>
-	  <th><div align='right'><a href='$_SERVER[PHP_SELF]?empty=yes' onClick=\"return confirmation('emptyall');\">$langEmtpyGroups</a>&nbsp;</div></th>
+	  <th class='right'><a href='$_SERVER[PHP_SELF]?empty=yes' onClick=\"return confirmation('emptyall');\">$langEmtpyGroups</a>&nbsp;</div></th>
 	</tr>
 	</table>
-        <p>&nbsp;</p>
         <p>&nbsp;</p>";
 
 	// ---------- display properties ------------------------
 	$tool_content .= "
         <table class='tbl_border' align='center'>
 	<tr>
-	<th colspan='2' class='right'><a href='group_properties.php'>$langPropModify</a> 
-        <a href='group_properties.php'><img src='../../template/classic/img/edit.gif' align='middle' alt='$langEdit' title='$langEdit' /></a></th>
+	  <th colspan='2' class='right'><a href='group_properties.php'>$langPropModify</a> 
+            <a href='group_properties.php'><img src='../../template/classic/img/edit.gif' align='middle' alt='$langEdit' title='$langEdit' /></a></th>
 	</tr>
-	<tr>
-	<td><b>$langGroupsProperties</b></td>
-	<td align='right'><b>$langGroupAccess</b></td>
+	<tr class='odd'>
+	  <td><b>$langGroupsProperties</b></td>
+	  <td align='right'><b>$langGroupAccess</b></td>
 	</tr>";
 
-        $tool_content .= "<tr><td>$langGroupAllowStudentRegistration</td><td align='right'>";
+        $tool_content .= "
+        <tr>
+          <td>$langGroupAllowStudentRegistration</td> 
+          <td align='right'>";
         if ($self_reg) {
                 $tool_content .= "<font color='green'>$langYes</font>";
         } else {
                 $tool_content .= "<font color='red'>$langNo</font>";
         }
-        $tool_content .= "</td></tr>
-        <tr><td>$langGroupAllowMultipleRegistration</td><td align='right'>";
+        $tool_content .= "</td>
+        </tr>
+        <tr>
+          <td>$langGroupAllowMultipleRegistration</td>
+          <td align='right'>";
 
         if ($multi_reg) {
                 $tool_content .= "<font color='green'>$langYes</font>";
         } else {
                 $tool_content .= "<font color='red'>$langNo</font>";
         }
-        $tool_content .= "</td></tr>
-        <tr><td colspan=2 class='left'><b>$langTools</b></td></tr>
-        <tr><td>";
+        $tool_content .= "</td>
+        </tr>
+        <tr class='odd'>
+          <td colspan=2 class='left'><b>$langTools</b></td>
+        </tr>
+        <tr>
+          <td>";
 
         if ($has_forum) {
-                $tool_content .= "$langGroupForum</td><td align='right'><font color='green'>$langYes</font>";
+                $tool_content .= "$langGroupForum</td>
+          <td align='right'><font color='green'>$langYes</font>";
                 $fontColor="black";
         } else {
-                $tool_content .= "$langGroupForum</td><td align='right'>
+                $tool_content .= "$langGroupForum</td>
+          <td align='right'>
                 <font color='red'>$langNo</font>";$fontColor="silver";
         }
-        $tool_content .= "</td></tr><tr><td>";
+        $tool_content .= "</td>
+        </tr>
+        <tr>
+          <td>";
         if ($private_forum) {
-                $tool_content .= "$langForumType</td><td align='right'>$langForumClosed";
+                $tool_content .= "$langForumType</td>
+          <td align='right'>$langForumClosed";
         } else {
-                $tool_content .= "$langForumType</td><td align='right'>$langForumOpen";
+                $tool_content .= "$langForumType</td>
+          <td align='right'>$langForumOpen";
         }
-        $tool_content .= "</td></tr><tr><td>";
+        $tool_content .= "</td>
+        </tr>
+        <tr>
+          <td>";
         if ($documents) {
-                $tool_content .= "$langDoc</td><td align='right'><font color='green'>$langYes</font>";
+                $tool_content .= "$langDoc</td>
+          <td align='right'><font color='green'>$langYes</font>";
         } else {
-                $tool_content .= "$langDoc</td><td align='right'><font color='red'>$langNo</font>";
+                $tool_content .= "$langDoc</td>
+          <td align='right'><font color='red'>$langNo</font>";
         }
-        $tool_content .= "</td></tr>";
-	$tool_content .= "</table>";
+        $tool_content .= "</td>
+        </tr>";
+	$tool_content .= "
+        </table>";
 
 	$groupSelect = db_query("SELECT id FROM `group` WHERE course_id = $cours_id ORDER BY id");
 	$myIterator = 0;
@@ -325,33 +348,43 @@ if ($is_adminOfCourse) {
                 while ($group = mysql_fetch_array($groupSelect)) {
                         initialize_group_info($group['id']);
                         if ($myIterator % 2 == 0) {
-                                $tool_content .= "<tr class='even'>";
+                                $tool_content .= "
+                <tr class='even'>";
                         } else {
-                                $tool_content .= "<tr class='odd'>";
+                                $tool_content .= "
+                <tr class='odd'>";
                         }
-                        $tool_content .= "<td>
+                        $tool_content .= "
+                  <td>
                         <img src='../../template/classic/img/arrow_grey.gif' alt='' /></td><td>
                         <a href='group_space.php?group_id=$group[id]'>".q($group_name)."</a></td>";
-                        $tool_content .= "<td>" . display_user($tutors) . "</td>" .
-                                         "<td class='center'>$member_count</td>";
+                        $tool_content .= "
+                  <td>" . display_user($tutors) . "</td>" . "
+                  <td class='center'>$member_count</td>";
                         if ($max_members == 0) {
-                                $tool_content .= "<td>-</td>";
+                                $tool_content .= "
+                  <td>-</td>";
                         } else {
-                                $tool_content .= "<td><div class='cellpos'>$max_members</div></td>";
+                                $tool_content .= "
+                  <td>$max_members</td>";
                         }
-                        $tool_content .= "<td class='center'>
+                        $tool_content .= "
+                  <td class='center'>
                         <a href='group_edit.php?group_id=$group[id]'>
                         <img src='../../template/classic/img/edit.gif' alt='$langEdit' title='$langEdit' /></a>
                         <a href='$_SERVER[PHP_SELF]?delete=$group[id]' onClick=\"return confirmation('" .
                                 js_escape($group_name) . "');\">
                         <img src='../../template/classic/img/delete.gif' alt='$langDelete' title='$langDelete' /></a></td>
-                        </tr>";
+                </tr>";
                         $totalRegistered += $member_count;
                         $myIterator++;
                 }
-                $tool_content .= "</table>\n";
+                $tool_content .= "
+              </table><br />\n";
 	} else {
-		$tool_content .= "<p>&nbsp;</p><p class='caution'>$langNoGroup</p>";
+		$tool_content .= "
+              <p>&nbsp;</p>
+              <p class='caution'>$langNoGroup</p>";
 	}
 
 
@@ -370,12 +403,14 @@ if ($is_adminOfCourse) {
                               ug.is_tutor = 0"));
 	$registered_students = $total_students - $unregistered_students;
 	$tool_content .= "<p>&nbsp;<br />" .
-	                 "<table width='99%' class='tbl_border'>
+	                 "
+        <table width='99%' class='tbl'>
         <tr>
-	  <td class='odd'>
-	    <p><b>$registered_students</b> $langGroupStudentsInGroup</p>
-	    <p><b>$unregistered_students</b> $langGroupNoGroup</p>
-	    <p><b>$total_students</b> $langGroupStudentsRegistered</p><div align='right'>($langGroupUsersList)</div>
+	  <td class='even'>
+	    <b>$registered_students</b> $langGroupStudentsInGroup<br />
+	    <b>$unregistered_students</b> $langGroupNoGroup<br />
+	    <b>$total_students</b> $langGroupStudentsRegistered<br />
+            <div align='right'>($langGroupUsersList)</div>
 	  </td>
         </tr>
         </table>\n";
