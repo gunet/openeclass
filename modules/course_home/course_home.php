@@ -282,15 +282,14 @@ if ($is_adminOfCourse) {
 }
 
 $tool_content .= "
-<div id='container_login'>
+<div id='content_course'>
 
    <table width='99%'>
    <tr>
       <td valign='top'>$main_content</td>
-      <td width='30'>&nbsp;</td>
-      <td width='200' valign='top'>
+      <td width='180' valign='top' style='border: 1px solid green'>
 
-        <table class='tbl_courseid'>
+        <table class='tbl_courseid' width='200'>
         <tr>
           <th>$langIdentity</th>
         </tr>
