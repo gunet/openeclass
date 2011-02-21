@@ -77,14 +77,11 @@ function show_edit_form($id, $sid, $assign)
 			<form method='post' action='work.php'>
 			<input type='hidden' name='assignment' value='$id'>
 			<input type='hidden' name='submission' value='$sid'>
-			<table width='99%' class='FormData'>
-			<tbody>
+                        <fieldset>
+                        <legend>$m[addgradecomments]</legend>
+			<table width='99%' class='tbl'>
 			<tr>
-			  <th width='220'>&nbsp;</th>
-			   <td><b>$m[addgradecomments]</b></td>
-			</tr>
-			<tr>
-			  <th class='left'>${m['username']}:</th>
+			  <th class='left' width='180'>${m['username']}:</th>
 			  <td>${uid_2_name} $group_submission</td></tr>
 			<tr>
 			  <th class='left'>${m['sub_date']}:</th>
@@ -95,22 +92,22 @@ function show_edit_form($id, $sid, $assign)
 			</tr>";
 		        $tool_content .= "<tr>
 			  <th class='left'>$m[grade]:</th>
-			  <td><input type='text' name='grade' maxlength='3' size='3' value='$sub[grade]' class='FormData_InputText'></td>
+			  <td><input type='text' name='grade' maxlength='3' size='3' value='$sub[grade]'></td>
 			</tr>
 			<tr>
 			  <th class='left'>$m[gradecomments]:</th>
-			  <td><textarea cols='60' rows='3' name='comments' class='FormData_InputText'>$sub[grade_comments]</textarea></td>
+			  <td><textarea cols='60' rows='3' name='comments'>$sub[grade_comments]</textarea></td>
 			</tr>
 			<tr>
 			  <th class='left'>&nbsp;</th>
 			  <td><input type='submit' name='grade_comments' value='$langGradeOk'></td>
 			</tr>
-			</tbody>
 			</table>
+                        </fieldset>
 			</form>
 			<br/>";
 	} else {
-		$tool_content .= "<p>error - no such submission with id $sid</p>\n";
+		$tool_content .= "<p class='caution'>error - no such submission with id $sid</p>\n";
 	}
 }
 ?>

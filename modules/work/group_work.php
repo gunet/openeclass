@@ -105,8 +105,7 @@ function show_assignments()
 	$tool_content .= "<form action='$_SERVER[PHP_SELF]' method='post'>
 		<input type='hidden' name='file' value='$_GET[submit]'>
 		<input type='hidden' name='gid' value='$gid'>
-	    <table class='FormData' width='99%'>
-	    <tbody>
+	    <table class='tbl' width='99%'>
 	    <tr>
 	      <th class='left' width='170'>&nbsp;</th>
 	      <td>&nbsp;</td>
@@ -115,15 +114,12 @@ function show_assignments()
 	      <th class='left'>$langWorks ($m[select]):</th>
 	      <td>
 	    <table width='99%' align='left'>
-	    <thead>
 	    <tr>
 		<th class='left' colspan='2'>$m[title]</th>
 		<th align='center' width='30%'>$m[deadline]</th>
 		<th align='center' width='10%'>$m[submitted]</th>
 		<th align='center' width='10%'>$m[select]</th>
-		</tr>
-		</thead>
-		<tbody>";
+		</tr>";
 	
 	while ($row = mysql_fetch_array($res)) {
 		if (!$row['active']) {
@@ -161,7 +157,7 @@ function show_assignments()
 		}
 		$tool_content .= "</td>\n    </tr>";
 	}
-	$tool_content .= "\n    </tbody>\n    </table>";
+	$tool_content .= "\n    </table>";
 	$tool_content .= "</td></tr>
 	<tr>
 	  <th class='left'>".$m['comments'].":</th>
@@ -171,7 +167,6 @@ function show_assignments()
 	  <th>&nbsp;</th>
 	  <td><input type='submit' name='submit' value='$langSubmit'></td>
 	</tr>
-	</tbody>
 	</table>
 	</form>";
 }
@@ -201,11 +196,11 @@ function submit_work($uid, $gid, $id, $file) {
                                          autoquote($_POST['comments']) . ", $gid, '')",
                         $currentCourseID);
 
-		$tool_content .="<p class=\"success_small\">$langUploadSuccess
+		$tool_content .="<p class=\"success\">$langUploadSuccess
 			<br />$m[the_file] \"$original_filename\" $m[was_submitted]<br />
 			<a href='work.php'>$langBack</a></p><br />";
 	} else {
-		$tool_content .="<p class=\"caution_small\">$langUploadError<br />
+		$tool_content .="<p class=\"caution\">$langUploadError<br />
 		<a href='work.php'>$langBack</a></p><br />";
 	}
 }
