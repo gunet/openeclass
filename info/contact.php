@@ -32,29 +32,7 @@ $tool_content = "";
 
 $tool_content .= "
 <p>$introcontact</p>
-<br />
 
-    <table width='500' class='tbl_border'> 
-    <tr>
-      <th>$langPostMail</th>
-      <td>
-        $Institution<br />
-        $postaddress
-      </td>
-    </tr>
-    <tr>
-      <th>$langPhone:</th>
-      <td>$telephone</td>
-    </tr>
-    <tr>
-      <th>$langFax</th>
-      <td>$fax</td>
-    </tr>
-    <tr>
-      <th>$langEmail:</th>
-      <td>".mailto($emailhelpdesk, str_replace('@', ' &lt;at> ', $emailhelpdesk))."</td>
-  </tr>
-  </table>
 <div id='contact'>
 <p><b>$langPostMail</b> $Institution &nbsp; $postaddress 
 <br><b>$langPhone:</b> $fax 
