@@ -290,19 +290,18 @@ $tool_content .= "
       <td width='180' valign='top'>
 
         <table class='tbl_courseid' width='200'>
-        <tr>
-          <th>$langIdentity</th>
+        <tr class='title1'>
+          <td  class='title1'>$langIdentity</td>
         </tr>
         <tr>
-          <td>$bar_content</td>
+          <td class='smaller'>$bar_content</td>
         </tr>
         </table>
 
         <br />
 
-        <table class='tbl_border'>
+        <table class='smaller'>
         <tr>
-          <th width='3'></th>
           <td align='left'>$langContactProf: (<a href='../../modules/contact/index.php'>$langEmail</a>)</td>
           </tr>
         </table>
@@ -317,10 +316,9 @@ if ($is_adminOfCourse or
                 $button_message = $langStudentViewEnable;
         }
         $tool_content .="
-        <table width='180' class='tbl_border'>
+        <table class='smaller'>
         <tr>
-          <th width='3' align='right'></th>
-          <td align='left'>
+          <td>
             <form action='{$urlServer}student_view.php' method='post'>$button_message
               <input class=\"Login\" type='submit' name='submit' value='>' />
             </form>
