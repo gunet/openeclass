@@ -592,7 +592,9 @@ fieldset table.th {
 /*-------------------------------------
    5. Tables
 -------------------------------------*/
-	
+.smaller {
+font-size: 11px;
+}	
 .tbl {
 	padding: 5px;
 	border: none;
@@ -603,8 +605,9 @@ fieldset table.th {
 }
 
 .tbl_courseid {
-	border: 1px solid #dfdfdf;
-    background-color: #f8f8f8;
+    background-color: #ebebeb;
+    margin: 0;
+    padding: 0;
 }
 
 .tbl_courseid th {
