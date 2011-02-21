@@ -251,8 +251,7 @@ if ($is_adminOfCourse) {
 	  <th>&nbsp;<a href='$_SERVER[PHP_SELF]?fill=yes'>$langFillGroups</a></th>
 	  <th class='right'><a href='$_SERVER[PHP_SELF]?empty=yes' onClick=\"return confirmation('emptyall');\">$langEmtpyGroups</a>&nbsp;</div></th>
 	</tr>
-	</table>
-        <p>&nbsp;</p>";
+	</table><br />";
 
 	// ---------- display properties ------------------------
 	$tool_content .= "
@@ -383,8 +382,7 @@ if ($is_adminOfCourse) {
               </table><br />\n";
 	} else {
 		$tool_content .= "
-              <p>&nbsp;</p>
-              <p class='caution'>$langNoGroup</p>";
+              <p class='alert1'>$langNoGroup</p>";
 	}
 
 
@@ -402,16 +400,16 @@ if ($is_adminOfCourse) {
                               cu.statut = 5 AND
                               ug.is_tutor = 0"));
 	$registered_students = $total_students - $unregistered_students;
-	$tool_content .= "<p>&nbsp;<br />" .
+	$tool_content .= "" .
 	                 "
-        <table width='99%' class='tbl'>
+        <table width='99%' class='tbl_alt'>
         <tr>
-	  <td class='even'>
+	  <th><div align='left'>
 	    <b>$registered_students</b> $langGroupStudentsInGroup<br />
 	    <b>$unregistered_students</b> $langGroupNoGroup<br />
-	    <b>$total_students</b> $langGroupStudentsRegistered<br />
+	    <b>$total_students</b> $langGroupStudentsRegistered</div>
             <div align='right'>($langGroupUsersList)</div>
-	  </td>
+	  </th>
         </tr>
         </table>\n";
 

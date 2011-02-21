@@ -78,40 +78,37 @@ if(empty($or_search_terms) && empty($not_search_terms)) {
 
 	$tool_content .= "
     <form method=\"post\" action=\"$_SERVER[PHP_SELF]\">
-	<table width=\"99%\">
-    <tbody>
-	<tr>
-      <th width=\"120\" class='left'>&nbsp;</th>
-	  <td><b>$langSearchCriteria</b></td>
+    <fieldset>
+    <legend>$langSearchCriteria</legend>
+    <table width=\"99%\" class='tbl'>
+    <tr>
+      <th class='left' width=\"120\">$langOR</th>
+      <td colspan=\"2\"><input name=\"or_search_terms\" type=\"text\" size=\"80\"/></td>
     </tr>
     <tr>
-      <th class='left'>$langOR</th>
-	  <td colspan=\"2\"><input class='FormData_InputText' name=\"or_search_terms\" type=\"text\" size=\"80\"/></td>
-	</tr>
-	<tr>
-	  <th width=\"30%\" class='left' valign=\"top\" rowspan=\"4\">$langSearchIn</th>
-	  <td width=\"35%\"><input type=\"checkbox\" name=\"subsystems[]\" value=\"7\" checked=\"checked\" />$langAnnouncements</td>
-	  <td width=\"35%\"><input name=\"subsystems[]\" type=\"checkbox\" value=\"1\" checked=\"checked\" />$langAgenda</td>
+      <th width=\"30%\" class='left' valign=\"top\" rowspan=\"4\">$langSearchIn</th>
+      <td width=\"35%\"><input type=\"checkbox\" name=\"subsystems[]\" value=\"7\" checked=\"checked\" />$langAnnouncements</td>
+      <td width=\"35%\"><input name=\"subsystems[]\" type=\"checkbox\" value=\"1\" checked=\"checked\" />$langAgenda</td>
     </tr>
-	<tr>
-	  <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"20\" checked=\"checked\" />$langCourseDescription</td>
+    <tr>
+      <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"20\" checked=\"checked\" />$langCourseDescription</td>
       <td><input name=\"subsystems[]\" type=\"checkbox\" value=\"3\" checked=\"checked\" />$langDoc</td>
     </tr>
-	<tr>
-	  <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"9\" checked=\"checked\" />$langForums</td>
+    <tr>
+      <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"9\" checked=\"checked\" />$langForums</td>
       <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"10\" checked=\"checked\" />$langExercices</td>
     </tr>
-	<tr>
-	  <td><input name=\"subsystems[]\" type=\"checkbox\" value=\"4\" checked=\"checked\" />$langVideo</td>
+   <tr>
+      <td><input name=\"subsystems[]\" type=\"checkbox\" value=\"4\" checked=\"checked\" />$langVideo</td>
       <td><input name=\"subsystems[]\" type=\"checkbox\" value=\"2\" checked=\"checked\" />$langLinks</td>
-    </tr>
-	<tr>
-	  <th>&nbsp;</th>
-	  <td colspan=\"2\"><input type=\"Submit\" name=\"submit\" value=\"$langDoSearch\" />&nbsp;<input type=\"Submit\" name=\"submit\" value=\"$langNewSearch\" /></td>
-    </tr>
-	</tbody>
-    </table>
-    </form>";
+   </tr>
+   <tr>
+     <th>&nbsp;</th>
+     <td colspan=\"2\"><input type=\"Submit\" name=\"submit\" value=\"$langDoSearch\" />&nbsp;<input type=\"Submit\" name=\"submit\" value=\"$langNewSearch\" /></td>
+   </tr>
+   </table>
+   </fieldset>
+   </form>";
 
 } else {
 /**********************************************************************************************
@@ -181,8 +178,7 @@ if(empty($or_search_terms) && empty($not_search_terms)) {
 		// h anazhthsh perilamvanei MONO to paron mathima
 		//-------------------------------------------------------------------------------------------------
 	$tmp_result = "\n
-    <table width=\"99%\" class=\"FormData\" align=\"left\">
-    <tbody>
+    <table width=\"99%\" class=\"tbl\" align=\"left\">
     <tr>
       <th width=\"180\" class=\"left\">$langAnnouncements:</th>
       <td><div class=\"Results\">";
@@ -207,7 +203,6 @@ if(empty($or_search_terms) && empty($not_search_terms)) {
 	   if ($c != 0) {
 		$tool_content .= $tmp_result .= "\n</div></td>
 		<tr>
-		</tbody>
 		</table>\n";
         }
 	}
@@ -217,11 +212,11 @@ if(empty($or_search_terms) && empty($not_search_terms)) {
 
 	if($sbsystems["1"] == "1") {
 		//anazhthsh ston pinaka agenda
-		$tmp_result = "\n<table width=\"99%\" class=\"FormData\" align=\"left\">
-		<tbody>
+		$tmp_result = "\n
+                <table width=\"99%\" class=\"tbl\" align=\"left\">
 		<tr>
-		<th width=\"180\" class=\"left\">$langAgenda:</th>
-		<td><div class=\"Results\">";
+		  <th width=\"180\" class=\"left\">$langAgenda:</th>
+		  <td><div class=\"Results\">";
 		$myquery = "SELECT * FROM agenda WHERE MATCH (titre,contenu)".$query;
 		$result = mysql_query($myquery);
 		$c = 0;
@@ -235,15 +230,15 @@ if(empty($or_search_terms) && empty($not_search_terms)) {
 		if ($c != 0) {
 			$tool_content .= $tmp_result .= "\n</div></td>
 			<tr>
-			</tbody>
 			</table>\n";
 		}
 	}
 
 	if($sbsystems["20"] == "1") {
 		//anazhthsh ston pinaka course_description
-		$tmp_result = "\n<table width=\"99%\" class=\"FormData\" align=\"left\"><tbody>
-		<tr><th width=\"180\" class=\"left\">$langCourseDescription:</th>
+		$tmp_result = "\n
+                <table width=\"99%\" class=\"tbl\" align=\"left\">
+                <tr><th width=\"180\" class=\"left\">$langCourseDescription:</th>
 		<td><div class=\"Results\">";
 		$myquery = "SELECT * FROM course_description WHERE MATCH (title,content)".$query;
 		$result = mysql_query($myquery);
@@ -258,7 +253,6 @@ if(empty($or_search_terms) && empty($not_search_terms)) {
 		if ($c != 0) {
 			$tool_content .= $tmp_result .= "\n</div></td>
 			<tr>
-			</tbody>
 			</table>\n";
 		}
 	}
@@ -266,7 +260,9 @@ if(empty($or_search_terms) && empty($not_search_terms)) {
 	if($sbsystems["3"] == "1")
 	{
 		//anazhthsh ston pinaka documents (perioxh eggrafwn)
-		$tmp_result = "\n<table width=\"99%\" class=\"FormData\" align=\"left\"><tbody><tr>
+		$tmp_result = "\n
+                <table width=\"99%\" class=\"tbl\" align=\"left\">
+                <tr>
 		<th width=\"180\" class=\"left\">$langDoc:</th>
 		<td><div class=\"Results\">";
 		$myquery = "SELECT * FROM document WHERE MATCH (filename,comment,title,creator,subject,description,author,language)".$query;
@@ -296,16 +292,18 @@ if(empty($or_search_terms) && empty($not_search_terms)) {
 			}
 		}
 		if ($c != 0) {
-        		$tool_content .= $tmp_result .= "\n</div></td><tr></tbody></table>\n";
+        		$tool_content .= $tmp_result .= "\n</div></td></tr></table>\n";
         	}
 	}
 
 	if($sbsystems["10"] == 1)
 	{
 		//anazhthsh ston pinaka excercises
-		$tmp_result = "\n<table width=\"99%\" class=\"FormData\" align=\"left\"><tbody><tr>
-		<th width=\"180\" class=\"left\">$langExercices:</th>
-		<td><div class=\"Results\">";
+		$tmp_result = "\n
+                <table width=\"99%\" class=\"tbl\" align=\"left\">
+                <tr>
+		  <th width=\"180\" class=\"left\">$langExercices:</th>
+		  <td><div class=\"Results\">";
 			$myquery = "SELECT * FROM exercices WHERE MATCH (titre,description)".$query;
 			$result = mysql_query($myquery);
 			$c = 0;
@@ -327,7 +325,6 @@ if(empty($or_search_terms) && empty($not_search_terms)) {
 		if ($c != 0) {
 			$tool_content .= $tmp_result .= "\n</div></td>
 			<tr>
-			</tbody>
 			</table>\n";
 		}
 	}
@@ -336,8 +333,8 @@ if(empty($or_search_terms) && empty($not_search_terms)) {
 	if($sbsystems["9"] == 1)
 	{
 		//anazhthsh ston pinaka posts_text (periexomeno mhnymatwn gia ta forums)
-		$tmp_result = "\n<table width=\"99%\" class=\"FormData\" align=\"left\">
-		<tbody>
+		$tmp_result = "\n
+                <table width=\"99%\" class=\"tbl\" align=\"left\">
 		<tr>
 		<th width=\"180\" class=\"left\">$langForum:</th>
 		<td><div class=\"Results\">";
@@ -374,7 +371,6 @@ if(empty($or_search_terms) && empty($not_search_terms)) {
 			}
 		if ($c != 0) {
 			$tool_content .= $tmp_result .= "\n</div></td><tr>
-			</tbody>
 			</table>\n";
 		}
 	}
@@ -382,8 +378,8 @@ if(empty($or_search_terms) && empty($not_search_terms)) {
 	if($sbsystems["2"] == 1)
 	{
 		//anazhthsh ston pinaka liens (syndesmoi sto internet)
-		$tmp_result = "\n<table width=\"99%\" class=\"FormData\" align=\"left\">
-		<tbody>
+		$tmp_result = "\n
+                <table width=\"99%\" class=\"tbl\" align=\"left\">
 		<tr><th width=\"180\" class=\"left\">$langLinks:</th><td><div class=\"Results\">";
 		$myquery = "SELECT * FROM liens WHERE MATCH (url,titre,description)".$query;
 		$result = mysql_query($myquery);
@@ -404,14 +400,15 @@ if(empty($or_search_terms) && empty($not_search_terms)) {
 		}
 		if ($c != 0) {
 			$tool_content .= $tmp_result .= "\n</div></td><tr>
-			</tbody></table>\n";
+			</table>\n";
 		}
 	}
 
 	if($sbsystems["4"] == 1)
 	{
 		//anazhthsh ston pinaka video
-		$tmp_result = "\n<table width=\"99%\" class=\"FormData\" align=\"left\"><tbody><tr>
+		$tmp_result = "\n
+                <table width=\"99%\" class=\"tbl\" align=\"left\"><tr>
 		<th width=\"180\" class=\"left\">$langVideo:</th>
 		<td><div class=\"Results\">";
 		$myquery = "SELECT * FROM video WHERE MATCH (url,titre,description)".$query;
@@ -433,15 +430,13 @@ if(empty($or_search_terms) && empty($not_search_terms)) {
 		}
 	if ($c != 0) {
 		$tool_content .= $tmp_result .= "\n</div></td><tr>
-		</tbody>
 		</table>\n";
         }
 
 
 	//anazhthsh ston pinaka videolinks
 	$tmp_result = "\n
-    <table width=\"99%\" class=\"FormData\" align=\"left\">
-    <tbody>
+    <table width=\"99%\" class=\"tbl\" align=\"left\">
     <tr>
       <th width=\"180\" class=\"left\">$langVideo $langLinks:</th>
       <td><div class=\"Results\">";
@@ -464,13 +459,13 @@ if(empty($or_search_terms) && empty($not_search_terms)) {
 			}
 		}
 	if ($c != 0) {
-		$tool_content .= $tmp_result .= "\n</div></td><tr></tbody></table>\n";
+		$tool_content .= $tmp_result .= "\n</div></td><tr></table>\n";
         }
 	}//telos if($sbsystems["3"] == 1) <- theorw pws videos & videolinks perilamvanetai sto idio checkbox
 
 	//ean den vrethikan apotelesmata, emfanish analogou mhnymatos
 	if(stristr($tool_content, "Results") === FALSE) {
-    $tool_content .= "<br /><p class=\"caution_small\">$langNoResult</p>";
+    $tool_content .= "<br /><p class=\"caution\">$langNoResult</p>";
     }
 
 }//telos anazhthshs (if empty($search_terms) = false)
