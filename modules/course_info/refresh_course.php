@@ -89,7 +89,7 @@ if(isset($_POST['submit'])) {
 	  <td>$langUserDelCourse</td>
 	</tr>
 	<tr>
-	  <th class='left'><img src=\"../../template/classic/img/announcements_on.gif\" alt=\"\" border=\"0\" height=\"16\" width=\"16\"> $langAnnouncements</th>
+	  <th class='left'><img src=\"../../template/classic/img/announcements_on.png\" alt=\"\" border=\"0\" height=\"16\" width=\"16\"> $langAnnouncements</th>
 	  <td><input type='checkbox' name='delannounces'></td>
 	  <td>$langAnnouncesDel</td>
 	</tr>

@@ -279,7 +279,7 @@ if (isset($_POST['back1']) or !isset($_POST['visit'])) {
 	    <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"21\" /></td>
 	  </tr>
 	  <tr class='even'>
-	    <td><img src=\"../../template/classic/img/announcements_on.gif\" alt=\"\" height=\"16\" width=\"16\" /></td>
+	    <td><img src=\"../../template/classic/img/announcements_on.png\" alt=\"\" height=\"16\" width=\"16\" /></td>
 	    <td>$langAnnouncements</td>
 	    <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"7\" checked=\"checked\"/></td>
 	    <th>&nbsp;</th>
