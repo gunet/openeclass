@@ -105,7 +105,7 @@ $langPortfolioContent="<p>Σε αυτή τη σελίδα εμφανίζοντα
 να δείτε συγκεντρωτικά τις ανακοινώσεις και το ημερολόγιο των μαθημάτων
 σας.</p>
 <p>Σε κάθε ενότητα, δίπλα σε κάθε μάθημα, στην στήλη ενέργειες, υπάρχει 
-το εικονίδιο (<img style='border:0px;' src='template/classic/img/referencement.gif' width=10 height=10 align=basename border='0'></img>)
+το εικονίδιο (<img style='border:0px;' src='template/classic/img/tools.png' width=16 height=16 align=basename border='0'></img>)
 . Ανάλογα με τα προνόμια του χρήστη επιτρέπονται διαφορετικές λειτουργίες.
 ";
 $langHPortfolio_student = $langHPortfolio;

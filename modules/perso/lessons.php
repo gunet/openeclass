@@ -153,7 +153,7 @@ lCont;
         </tr>";
 			} elseif ($data[4][$i] == '1') {
 				$lesson_content .= "
-          <td align='center'><a href=\"${urlServer}modules/course_info/infocours.php?from_home=TRUE&cid=".$data[2][$i]."\"><img style='border:0px;' src='${urlAppend}/template/classic/img/referencement.gif' title='$langAdm'></img></a></td>
+          <td align='center'><a href=\"${urlServer}modules/course_info/infocours.php?from_home=TRUE&cid=".$data[2][$i]."\"><img style='border:0px;' src='${urlAppend}/template/classic/img/tools.png' title='$langAdm'></img></a></td>
         </tr>";
 			}
 		}
