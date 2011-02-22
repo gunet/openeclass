@@ -63,7 +63,7 @@ $diskQuotaDocument = $d[0];
 if (isset($_GET['showQuota'])) {
         $nameTools = $langQuotaBar;
         if ($subsystem == GROUP) {
-        	$navigation[] = array ('url' => 'document.php?gid=' . $group_id, 'name' => $langDoc);
+        	$navigation[] = array ('url' => 'document.php?group_id=' . $group_id, 'name' => $langDoc);
         } elseif ($subsystem == EBOOK) {
 		$navigation[] = array ('url' => 'document.php?ebook_id=' . $ebook_id, 'name' => $langDoc);
 	} else {
@@ -307,6 +307,7 @@ if($can_upload) {
 	MOVE FILE OR DIRECTORY : STEP 2
 	--------------------------------------*/
         if (isset($_POST['moveTo'])) {
+		
                 $moveTo = $_POST['moveTo'];
                 $source = $_POST['source'];
 		//elegxos ean source kai destintation einai to idio
@@ -329,7 +330,7 @@ if($can_upload) {
         if (isset($_GET['move'])) {
                 $move = $_GET['move'];
 		// h $move periexei to onoma tou arxeiou. anazhthsh onomatos arxeiou sth vash
-                $result = mysql_query("SELECT * FROM document
+                $result = db_query("SELECT * FROM document
 						WHERE $group_sql AND path=" . autoquote($move));
 		$res = mysql_fetch_array($result);
 		$moveFileNameAlias = $res['filename'];
@@ -944,7 +945,7 @@ if ($doc_count == 0) {
 				}
 				if ($subsystem == GROUP and isset($is_member) and ($is_member)) {
 	                                $tool_content .= "<a href='$urlAppend/modules/work/group_work.php?" .
-							 "gid=$group_id&amp;submit=$cmdDirName'>" .
+							 "group_id=$group_id&amp;submit=$cmdDirName'>" .
 							 "<img src='../../template/classic/img/book.gif' " .
 							 "title='$langPublish' alt='$langPublish' /></a>";			
 				}

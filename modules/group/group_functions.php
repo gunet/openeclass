@@ -10,12 +10,14 @@ function initialize_group_id($param = 'group_id')
 {
         global $group_id, $urlServer;
 
-        if (isset($_REQUEST[$param])) {
-                $group_id = intval($_REQUEST[$param]);
-        } else {
-                header("Location: {$urlServer}modules/group/group.php");
-                exit;
-        }
+	if (!isset($group_id)) {
+		if (isset($_REQUEST[$param])) {
+			$group_id = intval($_REQUEST[$param]);
+		} else {
+			header("Location: {$urlServer}modules/group/group.php");
+			exit;
+		}
+	}
 }
 
 function initialize_group_info($group_id = false)

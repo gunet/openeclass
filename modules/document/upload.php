@@ -50,13 +50,13 @@ if (isset($_GET['uploadPath'])) {
 $can_upload = $is_adminOfCourse;
 if (defined('GROUP_DOCUMENTS')) {
         include '../group/group_functions.php';
-        initialize_group_id('gid');
+        initialize_group_id();
         initialize_group_info($group_id);
 	$can_upload = $can_upload || $is_member;
-        $group_hidden_input = "<input type='hidden' name='gid' value='$group_id' />";
+        $group_hidden_input = "<input type='hidden' name='group_id' value='$group_id' />";
         $navigation[] = array ('url' => 'group.php', 'name' => $langGroups);
         $navigation[] = array ('url' => 'group_space.php?group_id=' . $group_id, 'name' => q($group_name));
-	$navigation[] = array ('url' => "document.php?gid=$group_id&amp;openDir=$uploadPath", 'name' => $langDoc);
+	$navigation[] = array ('url' => "document.php?group_id=$group_id&amp;openDir=$uploadPath", 'name' => $langDoc);
 } elseif (defined('EBOOK_DOCUMENTS')) {
 	if (isset($_REQUEST['ebook_id'])) {    
             $ebook_id = intval($_REQUEST['ebook_id']);

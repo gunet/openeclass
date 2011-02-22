@@ -195,8 +195,9 @@ function loadGroupTools(){
         }
         // Drive members into their own File Manager
         if ($documents) {
-                $group_tools .=  "<li><a href='document.php?gid=$group_id'>$langGroupDocumentsLink</a></li>";
+                $group_tools .=  "<li><a href='document.php?group_id=$group_id'>$langGroupDocumentsLink</a></li>";
         }
+	
         if ($is_adminOfCourse or $is_tutor) {
                 $group_tools .=  "<li><a href='group_email.php?group_id=$group_id'>$langEmailGroup</a></li>
                 <li><a href='group_usage.php?group_id=$group_id'>$langUsage</a></li>";
