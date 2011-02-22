@@ -870,7 +870,7 @@ if ($doc_count == 0) {
                                 $file_url = $base_url . "openDir=$cmdDirName";
                                 $link_extra = '';
 				$link_text = $entry['filename'];
-				$img_download = "<img src='../../template/classic/img/download.gif' width='15' height='15' align='middle' alt='$langDownloadDir' title='$langDownloadDir'>";
+				$img_download = "<img src='../../template/classic/img/download.png' width='16' height='16' align='middle' alt='$langDownloadDir' title='$langDownloadDir'>";
 				$download_url = $base_url . "downloadDir=$cmdDirName";
                         } else {
                                 $image = $urlAppend . '/modules/document/img/' . choose_image('.' . $entry['format']);
