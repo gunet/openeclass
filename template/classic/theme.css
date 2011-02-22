@@ -864,3 +864,61 @@ td.bold {
         background: none !important;
         border-bottom: none !important;
 }
+
+
+.invisible { 
+    color: #999999 !important;
+    background-color: #f9f8ea !important;
+}
+
+.invisible a,
+.invisible a:link,
+.invisible a:visited,
+a.invisible,
+a:link.invisible,
+a:visited.invisible
+{
+   color: #999999;
+}
+
+a.unit_link, a.unit_link:link, a.unit_link:active, a.unit_link:visited {
+    color: #627aad;
+    font-size: 11px;
+    font-weight: bold;
+    text-decoration: none;
+	padding: 5px;
+	
+}
+
+a.unit_link:hover {
+    color: #627aad !important;
+    font-size: 11px;
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+a.unit_link_invisible, a.unit_link_invisible:link, a.unit_link_invisible:active, a.unit_link_invisible:visited {
+    font-style: italic;
+    color: silver !important;
+    font-size: 11px;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+a.unit_link_invisible:hover {
+    color: silver !important;
+    font-style: italic;
+    font-size: 11px;
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+*/
+
+
+/* ----- START admin ----- */
+.invisible {
+	background: #F7F9FC !important;
+	color: silver !important;
+}
+
