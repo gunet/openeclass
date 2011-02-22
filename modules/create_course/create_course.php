@@ -274,7 +274,7 @@ if (isset($_POST['back1']) or !isset($_POST['visit'])) {
 	    <td>$langWorks</td>
 	    <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"5\" /></td>
 	    <th>&nbsp;</th>
-	    <td>&nbsp;<img src=\"../../template/classic/img/questionnaire_on.gif\" alt=\"\" height=\"16\" width=\"16\" /></td>
+	    <td>&nbsp;<img src=\"../../template/classic/img/questionnaire_on.png\" alt=\"\" height=\"16\" width=\"16\" /></td>
 	    <td>$langQuestionnaire</td>
 	    <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"21\" /></td>
 	  </tr>
@@ -306,7 +306,7 @@ if (isset($_POST['back1']) or !isset($_POST['visit'])) {
 	    <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"17\" checked=\"checked\" /></td>
 	  </tr>
 	  <tr class='even'>
-	    <td><img src=\"../../template/classic/img/ebook_on.gif\" alt=\"\" height=\"16\" width=\"16\" /></td>
+	    <td><img src=\"../../template/classic/img/ebook_on.png\" alt=\"\" height=\"16\" width=\"16\" /></td>
 	    <td>$langEBook</td>
 	    <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"18\" /></td>
 	    <th>&nbsp;</th>
