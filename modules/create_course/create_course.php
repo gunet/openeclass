@@ -234,7 +234,7 @@ if (isset($_POST['back1']) or !isset($_POST['visit'])) {
 	<td>
  	  <table class='tbl_border'>
 	  <tr class='even'>
-	    <td width='30' ><img src=\"../../template/classic/img/calendar_on.gif\" alt=\"\" height=\"16\" width=\"16\" /></td>
+	    <td width='30' ><img src=\"../../template/classic/img/calendar_on.png\" alt=\"\" height=\"16\" width=\"16\" /></td>
 	    <td width='150'>$langAgenda</td>
 	    <td width='30' ><input name=\"subsystems[]\" type=\"checkbox\" value=\"1\" checked=\"checked\" /></td>
 	    <th width='2' >&nbsp;</th>

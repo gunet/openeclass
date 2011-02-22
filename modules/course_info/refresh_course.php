@@ -94,7 +94,7 @@ if(isset($_POST['submit'])) {
 	  <td>$langAnnouncesDel</td>
 	</tr>
 	<tr>
-	  <th class='left'><img src=\"../../template/classic/img/calendar_on.gif\" alt=\"\" border=\"0\" height=\"16\" width=\"16\"> $langAgenda</th>
+	  <th class='left'><img src=\"../../template/classic/img/calendar_on.png\" alt=\"\" border=\"0\" height=\"16\" width=\"16\"> $langAgenda</th>
 	  <td><input type='checkbox' name='delagenda'></td>
 	  <td>$langAgendaDel</td>
 	</tr>
