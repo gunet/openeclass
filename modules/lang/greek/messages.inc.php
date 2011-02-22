@@ -3054,8 +3054,8 @@ $langUnknownResType = "Πρόβλημα! Άγνωστος πόρος θεματ�
 $langNoExercises = "Δεν υπάρχουν ασκήσεις";
 
 $langVia = 'μέσω';
-$langStudentViewEnable = "Μετάβαση σε περιβάλλον<br /><b>$langsOfStudent</b>";
-$langStudentViewDisable = "Επιστροφή σε περιβάλλον<br /><b>$langsOfTeacher</b>";
+$langStudentViewEnable = "Περιβάλλον <b>$langsOfStudent</b>";
+$langStudentViewDisable = "Περιβάλλον <b>$langsOfTeacher</b>";
 
 /**********************************************************************
  BetaCMS Bridge
