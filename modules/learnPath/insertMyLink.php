@@ -219,7 +219,7 @@ function showlinks($tbl_link)
 		$myrow[3] = parse_tex($myrow[3]);
 		$output .= 	"
     <tr>
-      <td valign=\"top\"><img src=\"../../template/classic/img/links_on.gif\" border=\"0\"></td>
+      <td valign=\"top\"><img src=\"../../template/classic/img/links_on.png\" border=\"0\"></td>
       <td align=\"left\" valign=\"top\"><a href=\"../link/link_goto.php?link_id=".$myrow[0]."&link_url=".urlencode($myrow[1])."\" target=\"_blank\">".$myrow[2]."</a>
       <br />
       <small class=\"comments\">".$myrow[3]."</small></td>";

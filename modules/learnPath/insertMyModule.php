@@ -191,7 +191,7 @@ while ($list=mysql_fetch_array($result))
     if($list['contentType'] == CTEXERCISE_ )
         $moduleImg = "exercise_on.gif";
     else if($list['contentType'] == CTLINK_ )
-        $moduleImg = "links_on.gif";
+        $moduleImg = "links_on.png";
     else if($list['contentType'] == CTCOURSE_DESCRIPTION_ )
        	$moduleImg = "description_on.gif";
     else

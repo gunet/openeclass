@@ -58,7 +58,7 @@ function display_links()
 				$sql2 = db_query("SELECT * FROM link WHERE course_id = $cours_id AND category = $catrow[id]");
 				while($linkcatrow = mysql_fetch_array($sql2, MYSQL_ASSOC)) {
 					$tool_content .= "\n  <tr class='even'>";
-					$tool_content .= "\n    <td>&nbsp;&nbsp;&nbsp;&nbsp;<img src='../../template/classic/img/links_on.gif' />&nbsp;&nbsp;<a href='" . q($linkcatrow['url']) . "' target='_blank'>" . q($linkcatrow['title']) . "</a></td>";
+					$tool_content .= "\n    <td>&nbsp;&nbsp;&nbsp;&nbsp;<img src='../../template/classic/img/links_on.png' />&nbsp;&nbsp;<a href='" . q($linkcatrow['url']) . "' target='_blank'>" . q($linkcatrow['title']) . "</a></td>";
 					$tool_content .= "\n    <td>" . standard_text_escape($linkcatrow['description']) . "</td>";
 					$tool_content .= "\n    <td align='center'><input type='checkbox' name='link[]' value='$linkcatrow[id]' /></td>";
 					$tool_content .= "\n  </tr>";	
@@ -81,7 +81,7 @@ function display_links()
                                          "\n  </tr>";
 			foreach ($linkinfo as $entry) { 
 				$tool_content .= "\n  <tr class='even'>" .
-                                                 "\n    <td>&nbsp;&nbsp;&nbsp;&nbsp;<img src='../../template/classic/img/links_on.gif' />&nbsp;&nbsp;<a href='" . q($entry['url']) . "' target=_blank>" . q($entry['title']) . "</a></td>" .
+                                                 "\n    <td>&nbsp;&nbsp;&nbsp;&nbsp;<img src='../../template/classic/img/links_on.png' />&nbsp;&nbsp;<a href='" . q($entry['url']) . "' target=_blank>" . q($entry['title']) . "</a></td>" .
 				                 "\n  <td>" . standard_text_escape($entry['comment']) . "</td>" .
                                                  "\n  <td align='center'><input type='checkbox' name='link[]' value='$entry[id]' /></td>";
                                                  "\n  </tr>";

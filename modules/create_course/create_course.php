@@ -243,7 +243,7 @@ if (isset($_POST['back1']) or !isset($_POST['visit'])) {
  	    <td width='30' ><input type=\"checkbox\" name=\"subsystems[]\" value=\"16\" /></td>
 	  </tr>
 	  <tr class='even'>
-	    <td><img src=\"../../template/classic/img/links_on.gif\" alt=\"\" height=\"16\" width=\"16\" /></td>
+	    <td><img src=\"../../template/classic/img/links_on.png\" alt=\"\" height=\"16\" width=\"16\" /></td>
 	    <td>$langLinks</td>
 	    <td><input name=\"subsystems[]\" type=\"checkbox\" value=\"2\" checked=\"checked\" /></td>
 	    <th>&nbsp;</th>

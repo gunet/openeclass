@@ -512,7 +512,7 @@ function lessonToolsMenu(){
 
 		array_push($sideMenuText, q($toolsRow['rubrique']));
 		array_push($sideMenuLink, q($toolsRow['lien']));
-		array_push($sideMenuImg, $toolsRow['image'].'_on.gif');
+		array_push($sideMenuImg, $toolsRow['image'].'_on.png');
 		array_push($sideMenuID, $toolsRow['id']);
 	}
 
@@ -555,7 +555,7 @@ function lessonToolsMenu(){
 
 			array_push($sideMenuText, q($toolsRow['rubrique']));
 			array_push($sideMenuLink, q($toolsRow['lien']));
-			array_push($sideMenuImg, $toolsRow['image'].'_off.gif');
+			array_push($sideMenuImg, $toolsRow['image'].'_off.png');
 			array_push($sideMenuID, $toolsRow['id']);
 		}
 
@@ -584,7 +584,7 @@ function lessonToolsMenu(){
 
 			array_push($sideMenuText, q($toolsRow['rubrique']));
 			array_push($sideMenuLink, q($toolsRow['lien']));
-			array_push($sideMenuImg, $toolsRow['image'].'_on.gif');
+			array_push($sideMenuImg, $toolsRow['image'].'_on.png');
 			array_push($sideMenuID, $toolsRow['id']);
 		}
 
