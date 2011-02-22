@@ -72,7 +72,7 @@ function display_docs()
                         $dirname = "/".htmlspecialchars($dirname);
                         $parentlink = $_SERVER['PHP_SELF'] . "?type=doc&amp;id=$id&amp;path=" . $parentpath;
                         $parenthtml = "<th class='right'><a href='$parentlink'>$langUp</a> <a href='$parentlink'>" .
-                                      "<img src='../../template/classic/img/parent.gif' height='20' width='20' /></a></th>";
+                                      "<img src='../../template/classic/img/folder_up.png' height='16' width='16' alt='icon' /></a></th>";
                         $colspan = 4;
                 }
 		$tool_content .= "\n    <form action='insert.php' method='post'><input type='hidden' name='id' value='$id' />" .

@@ -828,7 +828,7 @@ if ($doc_count == 0) {
         if ($curDirName) // if the $curDirName is empty, we're in the root point and we can't go to a parent dir
         {
                 $parentlink = $base_url . 'openDir=' . $cmdParentDir;
-                $tool_content .=  "<a href='$parentlink'>$langUp</a> <a href='$parentlink'><img src='../../template/classic/img/parent.gif' height='20' width='20' /></a>";
+                $tool_content .=  "<a href='$parentlink'>$langUp</a> <a href='$parentlink'><img src='../../template/classic/img/folder_up.png' height='16' width='16' alt='icon'/></a>";
         }
         $tool_content .= "</div></th>
     </tr>

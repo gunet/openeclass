@@ -166,7 +166,7 @@ function show_doc($title, $comments, $resource_id, $file_id)
                 $file = mysql_fetch_array($r, MYSQL_ASSOC);
                 $status = $file['visibility'];
                 if ($file['format'] == '.dir') {
-                        $image = '../../template/classic/img/folder.gif';
+                        $image = '../../template/classic/img/folder.png';
                         $link = "<a href='{$urlServer}modules/document/document.php?openDir=$file[path]&amp;unit=$id'>";
                 } else {
                         $image = '../document/img/' .

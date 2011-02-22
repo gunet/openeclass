@@ -812,7 +812,7 @@ function display_my_documents($dialogBox, $style)
     and we can't go to a parent dir */
     {
         $output .= '
-      <td width="1" ><img src="' . $imgRepositoryWeb . 'parent.gif" border="0" align="absbottom" hspace="5" alt="" /></td>
+      <td width="1" ><img src="' . $imgRepositoryWeb . 'folder_up.png" border="0" align="absbottom" hspace="5" alt="" /></td>
       <td width="10" class="right"><a href="' . $_SERVER['PHP_SELF'] . '?openDir=' . $cmdParentDir . '"><small>' . $langUp . '</small></a></td>';
     }
         $output .= '

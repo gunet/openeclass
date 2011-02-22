@@ -445,7 +445,7 @@ foreach ($dropbox_person -> sentWork as $w)
 	if ( $w->recipients[0]['id'] > $dropbox_cnf["mailingIdBase"])
 	{
 		$ahref = "index.php?mailing=" . urlencode($w->recipients[0]['id']);
-		$imgsrc = '../../images/folder.gif';
+		$imgsrc = '../../images/folder.png';
 	}
 	else
 	{
