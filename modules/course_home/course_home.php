@@ -302,7 +302,7 @@ $tool_content .= "
 
         <table class='smaller'>
         <tr>
-          <td align='left'>$langContactProf: (<a href='../../modules/contact/index.php'>$langEmail</a>)</td>
+          <td align='left'>$langContactProf: <a href='../../modules/contact/index.php'><img src='../../template/classic/img/email.png' alt='icon' title='$langEmail' /></a></td>
           </tr>
         </table>
 
@@ -320,7 +320,7 @@ if ($is_adminOfCourse or
         <tr>
           <td>
             <form action='{$urlServer}student_view.php' method='post'>$button_message
-              <input class=\"Login\" type='submit' name='submit' value='>' />
+              <input class='transfer_btn' type='submit' name='submit' value='&raquo;' />
             </form>
           </td>
         </tr>

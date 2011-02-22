@@ -121,6 +121,12 @@ input[type=reset] {
 	padding: 3px;
 }
 
+.transfer_btn {
+    background-color: #ebebeb !important;
+    border: none !important;
+    color: #000000!important;
+}
+
 
 legend {
 	color: #ffffff;
