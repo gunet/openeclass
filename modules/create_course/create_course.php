@@ -252,7 +252,7 @@ if (isset($_POST['back1']) or !isset($_POST['visit'])) {
 	    <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"15\" /></td>
 	  </tr>
 	  <tr class='even'>
-	    <td><img src=\"../../template/classic/img/docs_on.gif\" alt=\"\" height=\"16\" width=\"16\" /></td>
+	    <td><img src=\"../../template/classic/img/docs_on.png\" alt=\"\" height=\"16\" width=\"16\" /></td>
 	    <td>$langDoc</td>
 	    <td><input name=\"subsystems[]\" type=\"checkbox\" value=\"3\" checked=\"checked\" /></td>
 	    <th>&nbsp;</th>
@@ -283,7 +283,7 @@ if (isset($_POST['back1']) or !isset($_POST['visit'])) {
 	    <td>$langAnnouncements</td>
 	    <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"7\" checked=\"checked\"/></td>
 	    <th>&nbsp;</th>
-	    <td>&nbsp;<img src=\"../../template/classic/img/lp_on.gif\" alt=\"\" height=\"16\" width=\"16\" /></td>
+	    <td>&nbsp;<img src=\"../../template/classic/img/lp_on.png\" alt=\"\" height=\"16\" width=\"16\" /></td>
 	    <td>$langLearnPath</td>
 	    <td><input type=\"checkbox\" name=\"subsystems[]\"  value=\"23\" /></td>
 	  </tr>

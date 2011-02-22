@@ -64,7 +64,7 @@ function display_lp()
 					}
 				}
 				$tool_content .= "\n  <tr class='$vis'>";
-				$tool_content .= "\n    <td>&nbsp;<img src='../../template/classic/img/lp_on.gif' />&nbsp;&nbsp;<a href='${urlServer}/modules/learnPath/learningPath.php?path_id=$entry[id]'>$entry[name]</a></td>";
+				$tool_content .= "\n    <td>&nbsp;<img src='../../template/classic/img/lp_on.png' />&nbsp;&nbsp;<a href='${urlServer}/modules/learnPath/learningPath.php?path_id=$entry[id]'>$entry[name]</a></td>";
 				$tool_content .= "\n    <td>$entry[comment]</td>";
 				$tool_content .= "\n    <td align='center'><input type='checkbox' name='lp[]' value='$entry[id]'></td>";
 				$tool_content .= "\n  </tr>";

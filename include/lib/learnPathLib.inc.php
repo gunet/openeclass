@@ -362,7 +362,7 @@ function nameBox($type, $mode, $formlabel = FALSE)
  function selectImage($contentType)
  {
 
-      $imgList[CTDOCUMENT_] = "docs_on.gif";
+      $imgList[CTDOCUMENT_] = "docs_on.png";
       $imgList[CTCLARODOC_] = "clarodoc.gif";
       $imgList[CTEXERCISE_] = "exercise_on.gif";
       $imgList[CTSCORM_] = "scorm.gif";
@@ -375,7 +375,7 @@ function nameBox($type, $mode, $formlabel = FALSE)
           return $imgList[$contentType];
       }
 
-      return "docs_on.gif";
+      return "docs_on.png";
 
  }
  /*
