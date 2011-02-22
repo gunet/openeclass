@@ -258,7 +258,7 @@ foreach ($flatElementList as $module)
         else if($module['contentType'] == CTLINK_ )
         	$moduleImg = "links_on.png";
         else if($module['contentType'] == CTCOURSE_DESCRIPTION_ )
-        	$moduleImg = "description_on.gif";
+        	$moduleImg = "description_on.png";
         else
             $moduleImg = choose_image(basename($module['path']));
 
@@ -293,7 +293,7 @@ foreach ($flatElementList as $module)
         else if($module['contentType'] == CTLINK_ )
         	$moduleImg = "links_on.png";
         else if($module['contentType'] == CTCOURSE_DESCRIPTION_ )
-        	$moduleImg = "description_on.gif";
+        	$moduleImg = "description_on.png";
        else
             $moduleImg = choose_image(basename($module['path']));
 

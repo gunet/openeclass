@@ -368,7 +368,7 @@ function nameBox($type, $mode, $formlabel = FALSE)
       $imgList[CTSCORM_] = "scorm.gif";
       $imgList[CTSCORMASSET_] = "scorm.gif";
       $imgList[CTLINK_] = "links_on.png";
-      $imgList[CTCOURSE_DESCRIPTION_] = "description_on.gif";
+      $imgList[CTCOURSE_DESCRIPTION_] = "description_on.png";
 
       if (array_key_exists( $contentType , $imgList ))
       {
@@ -510,7 +510,7 @@ function display_path_content()
             else if($module['contentType'] == CTLINK_ )
         		$moduleImg = "links_on.png";
         	else if($module['contentType'] == CTCOURSE_DESCRIPTION_ )
-        		$moduleImg = "description_on.gif";
+        		$moduleImg = "description_on.png";
             else
             	$moduleImg = choose_image(basename($module['path']));
 

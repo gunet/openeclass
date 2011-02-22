@@ -58,7 +58,7 @@ function display_wiki()
                                 $rowClass = "class='even'";
                         }
 			$tool_content .= "\n  <tr $rowClass>";
-			$tool_content .= "\n    <td>&nbsp;<img src='../../template/classic/img/wiki_on.gif' />&nbsp;&nbsp;<a href='${urlServer}modules/wiki/page.php?wikiId=$entry[id]&action=show'>$entry[title]</a></td>";
+			$tool_content .= "\n    <td>&nbsp;<img src='../../template/classic/img/wiki_on.png' />&nbsp;&nbsp;<a href='${urlServer}modules/wiki/page.php?wikiId=$entry[id]&action=show'>$entry[title]</a></td>";
 			$tool_content .= "\n    <td>$entry[description]</td>";
 			$tool_content .= "\n    <td align='center'><input type='checkbox' name='wiki[]' value='$entry[id]'></td>";
 			$tool_content .= "\n  </tr>";

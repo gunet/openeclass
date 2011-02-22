@@ -193,7 +193,7 @@ while ($list=mysql_fetch_array($result))
     else if($list['contentType'] == CTLINK_ )
         $moduleImg = "links_on.png";
     else if($list['contentType'] == CTCOURSE_DESCRIPTION_ )
-       	$moduleImg = "description_on.gif";
+       	$moduleImg = "description_on.png";
     else
         $moduleImg = choose_image(basename($list['path']));
 

@@ -265,7 +265,7 @@ if (isset($_POST['back1']) or !isset($_POST['visit'])) {
 	    <td>$langVideo</td>
 	    <td><input name=\"subsystems[]\" type=\"checkbox\" value=\"4\"  /></td>
 	    <th>&nbsp;</th>
-	    <td>&nbsp;<img src=\"../../template/classic/img/description_on.gif\" alt=\"\" height=\"16\" width=\"16\" /></td>
+	    <td>&nbsp;<img src=\"../../template/classic/img/description_on.png\" alt=\"\" height=\"16\" width=\"16\" /></td>
 	    <td>$langCourseDescription</td>
 	    <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"20\" checked=\"checked\" /></td>
 	  </tr>
@@ -292,7 +292,7 @@ if (isset($_POST['back1']) or !isset($_POST['visit'])) {
 	    <td>$langForums</td>
 	    <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"9\" /></td>
 	    <th>&nbsp;</th>
-	    <td>&nbsp;<img src=\"../../template/classic/img/wiki_on.gif\" alt=\"\" height=\"16\" width=\"16\" /></td>
+	    <td>&nbsp;<img src=\"../../template/classic/img/wiki_on.png\" alt=\"\" height=\"16\" width=\"16\" /></td>
 	    <td>$langWiki</td>
 	    <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"26\" /></td>
 	  </tr>
