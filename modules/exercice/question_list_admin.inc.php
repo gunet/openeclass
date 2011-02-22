@@ -97,7 +97,7 @@ $tool_content .= "
       <td class=\"right\" width=\"50\"><a href=\"".$_SERVER['PHP_SELF']."?editQuestion=".$id."\">".
 		"<img src='../../template/classic/img/edit.png' align='absmiddle' title='$langModify'></a>".
 		" <a href=\"".$_SERVER['PHP_SELF']."?deleteQuestion=".$id."\" "."onclick=\"javascript:if(!confirm('".addslashes(htmlspecialchars($langConfirmYourChoice))."')) return false;\">".
-		"<img src='../../template/classic/img/delete.gif' align='absmiddle' title='$langDelete'></a></td>
+		"<img src='../../template/classic/img/delete.png' align='absmiddle' title='$langDelete'></a></td>
       <td width='20'>";
 		if($i != 1) {
 			$tool_content .= "<a href=\"".$_SERVER['PHP_SELF']."?moveUp=".$id."\">

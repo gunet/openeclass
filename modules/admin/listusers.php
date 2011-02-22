@@ -426,7 +426,7 @@ if($sql) {
 				}
 				$tool_content .= "</td>
         <td><a href=\"edituser.php?u=".$logs['user_id']."\"><img src='../../template/classic/img/edit.png' title='$langEdit'></a></td>
- 	<td><a href='unreguser.php?u=".$logs['user_id']."'><img src='../../template/classic/img/delete.gif' title='$langDelete'></img></a></td>
+ 	<td><a href='unreguser.php?u=".$logs['user_id']."'><img src='../../template/classic/img/delete.png' title='$langDelete'></img></a></td>
 	<td align='center'><a href='userstats.php?u=".$logs['user_id']."'><img src='../../template/classic/img/platform_stats.gif' title='$langStat'></img></a></td>\n";
 				$tool_content .= "
       </tr>";

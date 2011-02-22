@@ -199,7 +199,7 @@ while ($cu = mysql_fetch_array($sql)) {
                                 "<img src='../../template/classic/img/edit.png' title='$langEdit' /></a></td>" .
                                 "\n        <td width='16'><a href='$_SERVER[PHP_SELF]?del=$cu[id]' " .
                                 "onClick=\"return confirmation();\">" .
-                                "<img src='../../template/classic/img/delete.gif' " .
+                                "<img src='../../template/classic/img/delete.png' " .
                                 "title='$langDelete' /></a></td>" .
                                 "\n        <td width='16'><a href='$_SERVER[PHP_SELF]?vis=$cu[id]'>" .
                                 "<img src='../../template/classic/img/$icon_vis' " .

@@ -379,7 +379,7 @@ tForm;
                                 <td class='left'>{$externalLinks[$i]['text']}</td>
                                 <td align='center'><form method='post' action='course_tools.php'>
                                    <input type='hidden' name='delete' value='{$externalLinks[$i]['id']}' />
-                                   <input type='image' src='../../template/classic/img/delete.gif' name='delete_button' 
+                                   <input type='image' src='../../template/classic/img/delete.png' name='delete_button' 
                                           onClick=\"return confirmation('" .
                                                     js_escape("$langDeleteLink {$externalLinks[$i]['text']}?") .
                                                "');\" title='$langDelete' /></form></td>

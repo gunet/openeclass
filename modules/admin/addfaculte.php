@@ -122,7 +122,7 @@ if (!isset($_GET['a'])) {
 		// Give administrator a link to delete or edit a faculty
 		$tool_content .= "\n<td width='15%' align='center' nowrap>
 		<a href='$_SERVER[PHP_SELF]?a=2&c=".$logs['id']."'>
-		<img src='../../template/classic/img/delete.gif' title='$langDelete' /></a>&nbsp;&nbsp;
+		<img src='../../template/classic/img/delete.png' title='$langDelete' /></a>&nbsp;&nbsp;
 		<a href='$_SERVER[PHP_SELF]?a=3&c=".$logs['id']."'>
 		<img src='../../template/classic/img/edit.png' title='$langEdit' /></a></td>
 		</tr>\n";

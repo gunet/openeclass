@@ -373,7 +373,7 @@ if ($is_adminOfCourse) {
                         <img src='../../template/classic/img/edit.png' alt='$langEdit' title='$langEdit' /></a>
                         <a href='$_SERVER[PHP_SELF]?delete=$group[id]' onClick=\"return confirmation('" .
                                 js_escape($group_name) . "');\">
-                        <img src='../../template/classic/img/delete.gif' alt='$langDelete' title='$langDelete' /></a></td>
+                        <img src='../../template/classic/img/delete.png' alt='$langDelete' title='$langDelete' /></a></td>
                 </tr>";
                         $totalRegistered += $member_count;
                         $myIterator++;
@@ -459,7 +459,7 @@ if ($is_adminOfCourse) {
 					<a href='group_description.php?group_id=$row[0]'>
 						<img src='../../template/classic/img/edit.png' title='$langModify' /></a>
 					<a href='group_description.php?group_id=$row[0]&amp;delete=true' onClick=\"return confirm_delete();\">
-						<img src='../../template/classic/img/delete.gif' title='$langDelete' /></a>";
+						<img src='../../template/classic/img/delete.png' title='$langDelete' /></a>";
 			} elseif ($is_member) {
 				$tool_content .= "<br /><a href='group_description.php?group_id=$row[0]'><i>$langAddDescription</i></a>";
 			}

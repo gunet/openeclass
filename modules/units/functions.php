@@ -160,7 +160,7 @@ function show_doc($title, $comments, $resource_id, $file_id)
                         return '';
                 }
                 $status = 'del';
-                $image = '../../template/classic/img/delete.gif';
+                $image = '../../template/classic/img/delete.png';
                 $link = "<span class='invisible'>$title ($langWasDeleted)</span>";
         } else {
                 $file = mysql_fetch_array($r, MYSQL_ASSOC);
@@ -235,7 +235,7 @@ function show_lp($title, $comments, $resource_id, $lp_id)
 			return '';
 		} else {
 			$status = 'del';
-			$imagelink = "<img src='../../template/classic/img/delete.gif' />";
+			$imagelink = "<img src='../../template/classic/img/delete.png' />";
 			$link = "<span class='invisible'>$title ($langWasDeleted)</span>";
 		}
 	} else {
@@ -285,7 +285,7 @@ function show_video($table, $title, $comments, $resource_id, $video_id, $visibil
                         return;
                 }
                 $videolink = $title;
-                $imagelink = "<img src='../../template/classic/img/delete.gif' />";
+                $imagelink = "<img src='../../template/classic/img/delete.png' />";
                 $visibility = 'del';
         }
         $class_vis = ($visibility == 'v')? ' class="even"': ' class="invisible"';
@@ -319,7 +319,7 @@ function show_work($title, $comments, $resource_id, $work_id, $visibility)
 			return '';
 		} else {
 			$status = 'del';
-			$imagelink = "<img src='../../template/classic/img/delete.gif' />";
+			$imagelink = "<img src='../../template/classic/img/delete.png' />";
 			$exlink = "<span class='invisible'>$title ($langWasDeleted)</span>";
 		}
 	} else {
@@ -361,7 +361,7 @@ function show_exercise($title, $comments, $resource_id, $exercise_id, $visibilit
 			return '';
 		} else {
 			$status = 'del';
-			$imagelink = "<img src='../../template/classic/img/delete.gif' />";
+			$imagelink = "<img src='../../template/classic/img/delete.png' />";
 			$exlink = "<span class='invisible'>$title ($langWasDeleted)</span>";
 		}
 	} else {
@@ -441,7 +441,7 @@ function show_wiki($title, $comments, $resource_id, $wiki_id, $visibility)
 			return '';
 		} else {
 			$status = 'del';
-			$imagelink = "<img src='../../template/classic/img/delete.gif' />";
+			$imagelink = "<img src='../../template/classic/img/delete.png' />";
 			$exlink = "<span class='invisible'>$title ($langWasDeleted)</span>";
 		}
 	} else {
@@ -481,7 +481,7 @@ function show_link($title, $comments, $resource_id, $link_id, $visibility)
 			return '';
 		} else {
 			$status = 'del';
-			$imagelink = "<img src='../../template/classic/img/delete.gif' />";
+			$imagelink = "<img src='../../template/classic/img/delete.png' />";
 			$exlink = "<span class='invisible'>" . q($title) . " ($langWasDeleted)</span>";
 		}
 	} else {
@@ -523,7 +523,7 @@ function show_linkcat($title, $comments, $resource_id, $linkcat_id, $visibility)
 			return '';
 		} else {
 			$status = 'del';
-			$imagelink = "<img src='../../template/classic/img/delete.gif' />";
+			$imagelink = "<img src='../../template/classic/img/delete.png' />";
 			$exlink = "<span class='invisible'>" . q($title) . " ($langWasDeleted)</span>";
 		}
 	} else {
@@ -578,7 +578,7 @@ function actions($res_type, $resource_id, $status, $res_id = false)
         }
         $content .= "\n          <td width='3'><a href='$_SERVER[PHP_SELF]?del=$resource_id'" .
                     " onClick=\"return confirmation();\">" .
-                    "<img src='../../template/classic/img/delete.gif' " .
+                    "<img src='../../template/classic/img/delete.png' " .
                     "title='$langDelete'></img></a></td>";
 	 
 	if ($status != 'del') {

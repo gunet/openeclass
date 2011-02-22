@@ -209,7 +209,7 @@ while ($g = mysql_fetch_array($sql)) {
                    <td align='center' valign='top'><a href='$_SERVER[PHP_SELF]?edit=$g[id]'>
                    <img src='../../template/classic/img/edit.png' /></a>&nbsp;&nbsp;
                    <a href='$_SERVER[PHP_SELF]?delete=$g[id]' onClick=\"return confirmation();\">
-                   <img src='../../template/classic/img/delete.gif' /></a></td>";
+                   <img src='../../template/classic/img/delete.png' /></a></td>";
     }
     $tool_content .= "
                  </tr>";

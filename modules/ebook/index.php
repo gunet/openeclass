@@ -142,7 +142,7 @@ function tools($id, $title, $k, $num)
                 return "\n        <td width='70' class='center'>\n<form action='$_SERVER[PHP_SELF]' method='post'>\n" .
                        "<input type='hidden' name='id' value='$id' />\n<a href='edit.php?id=$id'>" .
                        "<img src='../../template/classic/img/edit.png' alt='$langModify' title='$langModify' />" .
-                       "</a>&nbsp;<input type='image' src='../../template/classic/img/delete.gif'
+                       "</a>&nbsp;<input type='image' src='../../template/classic/img/delete.png'
                                          alt='$langDelete' title='$langDelete' name='delete' value='$id'
                                          onclick=\"javascript:if(!confirm('".
                        js_escape(sprintf($langEBookDelConfirm, $title)) ."')) return false;\" />" .

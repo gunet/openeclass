@@ -681,7 +681,7 @@ foreach ($flatElementList as $module)
     else
         $tool_content .= clean_str_for_javascript($langAreYouSureToRemoveStd);
 
-    $tool_content .=   "');\"><img src=\"".$imgRepositoryWeb."delete.gif\" border=0 alt=\"".$langRemove."\" title=\"".$langRemove."\" /></a></td>";
+    $tool_content .=   "');\"><img src=\"".$imgRepositoryWeb."delete.png\" border=0 alt=\"".$langRemove."\" title=\"".$langRemove."\" /></a></td>";
 
     // VISIBILITY
     $tool_content .= "<td width='10'>";

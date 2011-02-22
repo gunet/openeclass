@@ -576,7 +576,7 @@ function confirmation (name)
                         $tool_content .= '<a href="'.$_SERVER['PHP_SELF'].'?wikiId='
                             . $entry['id'].'&amp;action=exDelete'
                             . '">'
-                            . '<img src="'.$imgRepositoryWeb.'/delete.gif" border="0" alt="'.$langDelete.'" title="'.$langDelete.'" onClick="return confirmation();"/>'
+                            . '<img src="'.$imgRepositoryWeb.'/delete.png" border="0" alt="'.$langDelete.'" title="'.$langDelete.'" onClick="return confirmation();"/>'
                             . '</a>'
                             ;
                         $tool_content .= '</td>' . "\n";

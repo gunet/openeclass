@@ -256,7 +256,7 @@ if (!isset($_GET['mailing']))  // RH: Mailing detail: no received files
 		$tool_content .= "
 		<th width='3' style='border: 1px solid #edecdf'>
 		<a href='dropbox_submit.php?deleteReceived=all&amp;dropbox_unid=$dr_unid' onClick=\"return confirmationall();\">
-		<img src='../../template/classic/img/delete.gif' title='$langDelete' /></a></th>";
+		<img src='../../template/classic/img/delete.png' title='$langDelete' /></a></th>";
 	}
 
 	$tool_content .= "</tr></thead></table>
@@ -352,7 +352,7 @@ $tool_content .= "
         <th width='3' style='border: 1px solid #edecdf'>
             <a href='dropbox_submit.php?deleteSent=all&amp;dropbox_unid=".urlencode( $dropbox_unid).$mailingInUrl."'
 	onClick=\"return confirmationall();\">
-            <img src='../../template/classic/img/delete.gif' title='$langDelete' /></a>
+            <img src='../../template/classic/img/delete.png' title='$langDelete' /></a>
         </th>";
 	}
 

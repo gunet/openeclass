@@ -598,7 +598,7 @@ while ($list = mysql_fetch_array($result)) // while ... learning path list
             $tool_content .=  "      <td class='center' width='1'>"
                   ."<a href='".$_SERVER['PHP_SELF']."?cmd=delete&amp;del_path_id=".$list['learnPath_id']."' "
                   ."onClick=\"return scormConfirmation('".clean_str_for_javascript($list['name'])."');\">"
-                  ."<img src='../../template/classic/img/delete.gif' alt='$langDelete' title='$langDelete' />"
+                  ."<img src='../../template/classic/img/delete.png' alt='$langDelete' title='$langDelete' />"
                   ."</a>"
                   ."</td>\n";
 
@@ -606,7 +606,7 @@ while ($list = mysql_fetch_array($result)) // while ... learning path list
             $tool_content .=  "      <td class='center' width='1'>"
                   ."<a href='".$_SERVER['PHP_SELF']."?cmd=delete&amp;del_path_id=".$list['learnPath_id']."' "
                   ."onClick=\"return confirmation('".clean_str_for_javascript($list['name'])."');\">"
-                  ."<img src='../../template/classic/img/delete.gif' alt='$langDelete' title='$langDelete' />"
+                  ."<img src='../../template/classic/img/delete.png' alt='$langDelete' title='$langDelete' />"
                   ."</a>"
                   ."</td>\n";
         }

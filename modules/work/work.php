@@ -1067,7 +1067,7 @@ cData;
 			$tool_content .= $row_title = q($row['title']);
 			$tool_content .= "</a></td>
        <td class='center'>".nice_format($row['deadline'])."</td>
-       <td class='right'><a href='$_SERVER[PHP_SELF]?id=$row[id]&amp;choice=edit'><img src='../../template/classic/img/edit.png' alt='$m[edit]' /></a> <a href='$_SERVER[PHP_SELF]?id=$row[id]&amp;choice=do_delete' onClick='return confirmation(\"".addslashes($row_title)."\");'><img src='../../template/classic/img/delete.gif' alt='$m[delete]' /></a>";
+       <td class='right'><a href='$_SERVER[PHP_SELF]?id=$row[id]&amp;choice=edit'><img src='../../template/classic/img/edit.png' alt='$m[edit]' /></a> <a href='$_SERVER[PHP_SELF]?id=$row[id]&amp;choice=do_delete' onClick='return confirmation(\"".addslashes($row_title)."\");'><img src='../../template/classic/img/delete.png' alt='$m[delete]' /></a>";
 
 			if ($row['active']) {
 				$deactivate_temp = htmlspecialchars($m['deactivate']);

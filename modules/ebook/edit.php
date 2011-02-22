@@ -165,7 +165,7 @@ if (mysql_num_rows($q) == 0) {
                         $section_title = $qstitle;
                 }
                 $tool_content .= "<tr><td>$section_id</td><td>$section_title</td><td><input type='image'
-                                     src='../../template/classic/img/delete.gif'
+                                     src='../../template/classic/img/delete.png'
                                      alt='$langDelete' title='$langDelete' name='delete' value='$sid'
                                      onclick=\"javascript:if(!confirm('".
                                          js_escape(sprintf($langEBookSectionDelConfirm, $section['title'])) ."')) return false;\"" .

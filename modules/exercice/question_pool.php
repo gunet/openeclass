@@ -256,7 +256,7 @@ if($is_adminOfCourse) {
       <td width='3'><div align='center'>
 	<a href=\"".$_SERVER['PHP_SELF']."?exerciseId=".$exerciseId."&delete=".$row['id']."\"". 
 	" onclick=\"javascript:if(!confirm('".addslashes(htmlspecialchars($langConfirmYourChoice)).
-	"')) return false;\"><img src='../../template/classic/img/delete.gif' title='$langDelete'></a></div>
+	"')) return false;\"><img src='../../template/classic/img/delete.png' title='$langDelete'></a></div>
       </td>";
 			}
 			$tool_content .= "

@@ -918,7 +918,7 @@ if ($doc_count == 0) {
 							 "title='$langReplace' alt='$langReplace' /></a>&nbsp;";
                                 }
                                 /*** delete command ***/
-                                $tool_content .= "<input type='image' src='../../template/classic/img/delete.gif' alt='$langDelete' title='$langDelete' name='delete' value='1' onClick=\"return confirmation('".addslashes($entry['filename'])."');\" />&nbsp;";
+                                $tool_content .= "<input type='image' src='../../template/classic/img/delete.png' alt='$langDelete' title='$langDelete' name='delete' value='1' onClick=\"return confirmation('".addslashes($entry['filename'])."');\" />&nbsp;";
                                 /*** copy command ***/
                                 $tool_content .= "<a href='{$base_url}move=$cmdDirName'>" .
                                                  "<img src='../../template/classic/img/move_doc.gif' " .

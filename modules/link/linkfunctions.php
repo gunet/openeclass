@@ -83,7 +83,7 @@ function showlinksofcategory($catid)
                                 $tool_content .=  "<a href='$_SERVER[PHP_SELF]?action=editlink&amp;id=$myrow[0]&amp;urlview=$urlview'>";
                         }
 
-                        $tool_content .= "<img src='../../template/classic/img/edit.png' title='$langModify' alt='$langModify' /></a>&nbsp;&nbsp;<a href='$_SERVER[PHP_SELF]?action=deletelink&amp;id=$myrow[0]&amp;urlview=$urlview' onclick=\"javascript:if(!confirm('".$langLinkDelconfirm."')) return false;\"><img src='../../template/classic/img/delete.gif' title='$langDelete' alt='$langDelete' /></a></td>" .
+                        $tool_content .= "<img src='../../template/classic/img/edit.png' title='$langModify' alt='$langModify' /></a>&nbsp;&nbsp;<a href='$_SERVER[PHP_SELF]?action=deletelink&amp;id=$myrow[0]&amp;urlview=$urlview' onclick=\"javascript:if(!confirm('".$langLinkDelconfirm."')) return false;\"><img src='../../template/classic/img/delete.png' title='$langDelete' alt='$langDelete' /></a></td>" .
                                          "<td width='45' valign='top' align='right'>";
                         // Display move up command only if it is not the top link
                         if ($i != 1) {
@@ -112,7 +112,7 @@ function showcategoryadmintools($categoryid)
 	global $tool_content;
 
 	$tool_content .=  "
-		  <th width='45' valign='top'><div align='right'><a href=\"$_SERVER[PHP_SELF]?action=editcategory&amp;id=$categoryid&amp;urlview=$urlview\"><img src=\"../../template/classic/img/edit.png\" title=\"".$langModify."\" /></a>&nbsp;&nbsp;<a href=\"".$_SERVER['PHP_SELF']."?action=deletecategory&amp;id=".$categoryid."&amp;urlview=".$urlview."\" onclick=\"javascript:if(!confirm('".$langCatDel."')) return false;\">". "<img src=\"../../template/classic/img/delete.gif\" title=\"".$langDelete."\" /></a></div></th>";
+		  <th width='45' valign='top'><div align='right'><a href=\"$_SERVER[PHP_SELF]?action=editcategory&amp;id=$categoryid&amp;urlview=$urlview\"><img src=\"../../template/classic/img/edit.png\" title=\"".$langModify."\" /></a>&nbsp;&nbsp;<a href=\"".$_SERVER['PHP_SELF']."?action=deletecategory&amp;id=".$categoryid."&amp;urlview=".$urlview."\" onclick=\"javascript:if(!confirm('".$langCatDel."')) return false;\">". "<img src=\"../../template/classic/img/delete.png\" title=\"".$langDelete."\" /></a></div></th>";
 
 
 	$tool_content .= "<th width='45' valign='top'><div align='right'>";

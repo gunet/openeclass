@@ -118,7 +118,7 @@ if(isset($_GET['forumgo'])) {
 		   <a href='$_SERVER[PHP_SELF]?forumgoedit=yes&forum_id=$forum_id&cat_id=$cat_id'>
 		   <img src='../../template/classic/img/edit.png' title='$langModify' border='0'></img></a>&nbsp;
 		   <a href='$_SERVER[PHP_SELF]?forumgodel=yes&forum_id=$forum_id&cat_id=$cat_id' onClick='return confirmation();'>
-		   <img src='../../template/classic/img/delete.gif' title='$langDelete' border='0'></img></a></td>
+		   <img src='../../template/classic/img/delete.png' title='$langDelete' border='0'></img></a></td>
 		</tr>";
 			$i++;
 			}
@@ -356,7 +356,7 @@ if(isset($_GET['forumgo'])) {
 			<a href='$_SERVER[PHP_SELF]?forumcatedit=yes&cat_id=$cat_id'>
 			<img src='../../template/classic/img/edit.png' border='0' title='$langModify'></img></a>&nbsp;
 			<a href='$_SERVER[PHP_SELF]?forumcatdel=yes&cat_id=$cat_id' onClick='return confirmation();'>
-			<img src='../../template/classic/img/delete.gif' border='0' title='$langDelete'></img></a>
+			<img src='../../template/classic/img/delete.png' border='0' title='$langDelete'></img></a>
 			<a href='$_SERVER[PHP_SELF]?forumcatnotify=$link_notify&cat_id=$cat_id'>	
 			<img src='../../template/classic/img/announcements$icon.gif' border='0' title='$langNotify'></img></a>
                   </td>

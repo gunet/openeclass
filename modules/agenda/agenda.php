@@ -493,7 +493,7 @@ if (mysql_num_rows($result) > 0) {
             <a href='$_SERVER[PHP_SELF]?id=".$myrow['id']."&amp;edit=true'>
             <img src='../../template/classic/img/edit.png' border='0' title='".$langModify."'></a>&nbsp;
             <a href='$_SERVER[PHP_SELF]?id=".$myrow[0]."&amp;delete=yes' onClick='return confirmation();'>
-            <img src='../../template/classic/img/delete.gif' border='0' title='".$langDelete."'></a>&nbsp;";
+            <img src='../../template/classic/img/delete.png' border='0' title='".$langDelete."'></a>&nbsp;";
 			if ($myrow["visibility"] == 'v') {
 				$tool_content .= "
             <a href='$_SERVER[PHP_SELF]?id=".$myrow[0]."&amp;mkInvisibl=true'>

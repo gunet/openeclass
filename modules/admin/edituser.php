@@ -265,14 +265,14 @@ $tool_content .= "
 						$tool_content .= $langStudent;
 						$tool_content .= "</td><td align='center'>
 						<a href='unreguser.php?u=$u&amp;c=$logs[cours_id]'>
-						<img src='../../template/classic/img/delete.gif' title='$langDelete'></img></a></td>
+						<img src='../../template/classic/img/delete.png' title='$langDelete'></img></a></td>
   						</tr>\n";
 						break;
 					default:
 						$tool_content .= $langVisitor;
 						$tool_content .= "</td><td align='center'>
 						<a href='unreguser.php?u=$u&amp;c=$logs[cours_id]'>
-						<img src='../../template/classic/img/delete.gif' title='$langDelete'></img></a></td></tr>\n";
+						<img src='../../template/classic/img/delete.png' title='$langDelete'></img></a></td></tr>\n";
 						break;
 				}
                         $k++;

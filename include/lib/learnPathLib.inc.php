@@ -215,7 +215,7 @@ function commentBox($type, $mode)
                 .    '</a>' . "\n"
                 .    '<a href="' . $_SERVER['PHP_SELF'].'?cmd=del' . $col_name . '" '
                 .    ' onclick="javascript:if(!confirm(\''.clean_str_for_javascript($langConfirmYourChoice).'\')) return false;">' . "\n"
-                .    '<img src="../../template/classic/img/delete.gif" alt="'.$langDelete.'" title="'.$langDelete.'" /></a>' . "\n"
+                .    '<img src="../../template/classic/img/delete.png" alt="'.$langDelete.'" title="'.$langDelete.'" /></a>' . "\n"
                 ;
             }
         }
