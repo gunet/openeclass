@@ -370,7 +370,7 @@ function new_assignment()
         </table>
         </fieldset>
       </form>
-      <br/>";
+      <br />";
   	$tool_content .= "\n      <p align='right'><a href='$_SERVER[PHP_SELF]'>$langBack</a></p>";
 }
 
@@ -1016,7 +1016,7 @@ function show_assignments($message = null)
 	$result = db_query("SELECT * FROM assignments ORDER BY id");
 
 	if (isset($message)) {
-		$tool_content .="<p class='success'>$message</p><br/>";
+		$tool_content .="<p class='success'>$message</p><br />";
 	}
 
 	$tool_content .="
@@ -1024,7 +1024,7 @@ function show_assignments($message = null)
       <ul id='opslist'>
         <li><a href='$_SERVER[PHP_SELF]?add=1'>$langNewAssign</a></li>
       </ul>
-    </div><br />";
+    </div>";
 
 
 	if (mysql_num_rows($result)) {

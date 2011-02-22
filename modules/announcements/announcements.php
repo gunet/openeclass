@@ -244,10 +244,6 @@ hContent;
         $displayForm = false; //do not show form
     }
 
-    /* display actions toolbar */
-    $tool_content .= "<div id='operations_container'><ul id='opslist'>
-        <li><a href='" . $_SERVER['PHP_SELF'] . "?addAnnounce=1'>" . $langAddAnn . "</a></li>";
-    $tool_content .= "</ul></div>";
 
     /* display form */
     if ($displayForm and (isset($_GET['addAnnounce']) or isset($_GET['modify']))) {
@@ -284,7 +280,15 @@ hContent;
 	<input type='hidden' name='id' value='$AnnouncementToModify' />
         </fieldset>
 	</form>";
-    }
+    }else{
+    /* display actions toolbar */
+    $tool_content .= "
+    <div id='operations_container'>
+      <ul id='opslist'>
+        <li><a href='" . $_SERVER['PHP_SELF'] . "?addAnnounce=1'>" . $langAddAnn . "</a></li>
+      </ul>
+    </div>";
+}
 } // end: teacher only
 
     /* display announcements */

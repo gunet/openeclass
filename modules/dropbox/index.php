@@ -133,8 +133,7 @@ elseif(isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1)
     <form method="post" action="dropbox_submit.php" enctype="multipart/form-data" onsubmit="return checkForm(this)">
 tCont2;
 	$tool_content .= "
-    <table width='99%' class='FormData'>
-    <tbody>
+    <table width='99%' class='tbl'>
     <tr>
       <th class='left' width='220'>&nbsp;</th>
       <td><b>".$dropbox_lang["uploadFile"]."</b></td>
@@ -221,7 +220,7 @@ tCont2;
 	<th>&nbsp;</th>
 	<input type='hidden' name='authors' value='".getUserNameFromId($uid)."' />
 	<td><input type='Submit' name='submitWork' value='".$dropbox_lang["ok"]."' /></td>
-	</tr></tbody></table></form>
+	</tr></table></form>
 	<p align='right'><small>$langMaxFileSize ".ini_get('upload_max_filesize')."</small></p>";
 	//==========================================================================
 	//END of send_file form
@@ -243,33 +242,28 @@ if (!isset($_GET['mailing']))  // RH: Mailing detail: no received files
 {
 	$numberDisplayed = count($dropbox_person -> receivedWork);
 	$tool_content .= "
-    <table width='99%' class='FormData'>
-    <thead>
+    <table width='99%' class='tbl'>
     <tr>
-      <th class='left' width='220' style='border: 1px solid #edecdf'><u>
- 	".strtoupper($dropbox_lang["receivedTitle"])."</u></th>";
+      <td class='left' colspan='2'><u>
+ 	".strtoupper($dropbox_lang["receivedTitle"])."</u>";
 
 	// check if there are received documents. If yes then display the icon deleteall
 	$dr_unid = urlencode($dropbox_unid);
 	if ($numberDisplayed > 0) {
 		$dr_lang_all = addslashes( $dropbox_lang["all"]);
 		$tool_content .= "
-		<th width='3' style='border: 1px solid #edecdf'>
 		<a href='dropbox_submit.php?deleteReceived=all&amp;dropbox_unid=$dr_unid' onClick=\"return confirmationall();\">
-		<img src='../../template/classic/img/delete.png' title='$langDelete' /></a></th>";
+		<img src='../../template/classic/img/delete.png' title='$langDelete' /></a></td>";
 	}
 
-	$tool_content .= "</tr></thead></table>
-	<table width='99%' class='dropbox'>
-	<thead>
+	$tool_content .= "</tr></table>
+	<table width='99%' class='tbl_alt'>
 	<tr>
-         <th colspan='2' class='left'>&nbsp;$dropbox_lang[file]</th>
+         <th colspan='2'><div align='left'>&nbsp;$dropbox_lang[file]</div></th>
          <th width='130' class='left'>$dropbox_lang[authors]</th>
          <th width='130'>$dropbox_lang[date]</th>
          <th width='20'>$langDelete</th>
-	</tr>
-	</thead>
-	<tbody>";
+	</tr>";
 
  /*
  * --------------------------------------
@@ -341,19 +335,18 @@ $tool_content .= "
 
       <br />
 
-      <table width='99%' class='FormData'>
+      <table width='99%' class='tbl'>
       <tr>
-        <th class='left' width='220' style='border: 1px solid #edecdf'><u>";
+        <td class='left' width='220'xx><u>";
         $tool_content .= strtoupper($dropbox_lang["sentTitle"]);
-        $tool_content .="</u></th>";
+        $tool_content .="</u>";
 	// if the user has sent files then display the icon deleteall
 	if ($numSent > 0) {
 	$tool_content .= "
-        <th width='3' style='border: 1px solid #edecdf'>
             <a href='dropbox_submit.php?deleteSent=all&amp;dropbox_unid=".urlencode( $dropbox_unid).$mailingInUrl."'
 	onClick=\"return confirmationall();\">
             <img src='../../template/classic/img/delete.png' title='$langDelete' /></a>
-        </th>";
+        </td>";
 	}
 
 	/* exoume vgalei to sort
@@ -418,16 +411,13 @@ $tool_content .= "
       </tr>
       </table>
 
-      <table width=99% class='dropbox'>
-      <thead>
+      <table width=99% class='tbl_alt'>
       <tr>
-        <th colspan='2' class='left'>&nbsp;$dropbox_lang[file]</th>
+        <th colspan='2><div align='left'>&nbsp;$dropbox_lang[file]</div></th>
         <th width='130' class='left'>$dropbox_lang[col_recipient]</th>
         <th width='130'>$dropbox_lang[date]</th>
         <th width='20'>$langDelete</th>
       </tr>
-      </thead>
-      <tbody>
 	";
 
 /*
@@ -501,7 +491,7 @@ if (count($dropbox_person->sentWork)==0) {
 	<td colspan=\"6\">".$dropbox_lang['tableEmpty']."</td></tr>";
 }
 
-$tool_content .= "</tbody></table>";
+$tool_content .= "</table>";
 add_units_navigation(TRUE);
 draw($tool_content, 2, '', $head_content);
 

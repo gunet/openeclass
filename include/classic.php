@@ -131,9 +131,9 @@ if ($result2 and mysql_num_rows($result2) > 0) {
 
 if (count($status) > 0) {
         $announce_table_header = "
-        <table width='99%' class='tbl_border'>
+        <table width='99%' class='sortable' id='t3'>
         <tr>
-           <td class='title1' colspan='2'>$langLastAnnouncements</td>
+           <th colspan='2'>$langLastAnnouncements</th>
         </tr>\n";
 
         $logindate = last_login($uid);
@@ -158,23 +158,23 @@ if (count($status) > 0) {
                         $la = 0;
                         while ($ann = mysql_fetch_array($result)) {
                                         $content = standard_text_escape($ann['contenu']);
-                                        if ($la%2 == 0) {
-                                                $tool_content .= "<tr class='even'>\n";
+                                        if ($la%2==0) {
+                                                $tool_content .= "         <tr class='bordless'>\n";
                                         } else {
-                                                $tool_content .= "<tr class='odd'>\n";
+                                                $tool_content .= "         <tr class='tbl_alt_bordless''>\n";
                                         }
-                                        $tool_content .= "<td width='1' class='square_bullet2'>&nbsp;</td>" .
-                                                         "<td class='announce_pos'>" .
-                                                         claro_format_locale_date($dateFormatLong, strtotime($ann['temps'])) .
-                                                         "&nbsp;&nbsp;&nbsp;<b>$ann[title]</b><br />
-							 &nbsp;&nbsp;&nbsp;&nbsp;$langCourse: <b>{$titles[$code]}</b>
-							 | $langTutor: <b>" . q($profs[$code]) . "</b><br />$content</td>\n</tr>";
+                                        $tool_content .= "           <td width='1' class='square_bullet2'>&nbsp;</td>\n" .
+                                                         "           <td>" .  claro_format_locale_date($dateFormatLong, strtotime($ann['temps'])) ."&nbsp;(<small>$langCourse: <b>{$titles[$code]}</b> | $langTutor: <b>" . q($profs[$code]) . "</b></small>)<br />\n".
+                                                         "             <b>$ann[title]</b>\n".
+							 "             $content\n".
+                                                         "           </td>\n" .
+                                                         "         </tr>\n";
                                         $la++;
                                 }
                         }
         }
         if (!$table_begin) {
-                $tool_content .= "\n</table>";
+                $tool_content .= "\n         </table>";
         }
 }
 
