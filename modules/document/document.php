@@ -929,7 +929,7 @@ if ($doc_count == 0) {
 					          "title='$langRename' alt='$langRename' /></a>&nbsp;";
                                 /*** comment command ***/
                                 $tool_content .= "<a href='{$base_url}comment=$cmdDirName'>";
-                                $tool_content .= "<img src='../../template/classic/img/information.gif' " .
+                                $tool_content .= "<img src='../../template/classic/img/information.png' " .
 					         "title='$langComment' alt='$langComment' /></a>&nbsp;";
                                 /*** visibility command ***/
                                 if ($is_adminOfCourse) {

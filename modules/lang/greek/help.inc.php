@@ -181,8 +181,8 @@ Excel, Acrobat, Flash, Quicktime, κ.λπ.). Ο μόνος σας περιορι
 </ul>
     <h4>Προσθήκη ή τροποποίηση σχολίου σε ένα αρχείο (ή σε ένα κατάλογο)</h4>
     <ul>
-  <li>Κάντε κλικ στο εικονίδιο 'Σχόλιο' (<img src='../../template/classic/img/information.gif' width=10
- height=10 align=baseline>)
+  <li>Κάντε κλικ στο εικονίδιο 'Σχόλιο' (<img src='../../template/classic/img/information.png' width=16
+ height=16 align=baseline>)
     στη στήλη </li>
       <li>Πληκτρολογήστε καινούριο σχόλιο στο αντίστοιχο πεδίο (πάνω δεξιά).</li>
       </ul>
