@@ -120,17 +120,14 @@ if($is_adminOfCourse) {
 		$tool_content .= "<input type='hidden' name='fromExercise' value='$fromExercise'>";
 	}
 	
-	$tool_content .= "
-        <table width='99%' class='tbl_alt'>
-        <tr>
-	  <th colspan='";
-                if (isset($fromExercise)) {
-                        $tool_content .= "3";
-                } else {
-                        $tool_content .= "4";
-                }
-        $tool_content .= "''><div align=\"right\"><b>".$langFilter."</b>:
-	   <select name=\"exerciseId\" class=\"FormData_InputText\">"."
+	$tool_content .= "<table width='99%' class='tbl_alt'><tr>";
+	if (isset($fromExercise)) {
+		$tool_content .= "<th colspan='3'>";
+	} else {
+		$tool_content .= "<th colspan='4'>";
+	}
+        $tool_content .= "<div align='right'><b>".$langFilter."</b>:
+	   <select name='exerciseId' class='FormData_InputText'>"."
 	     <option value=\"0\">-- ".$langAllExercises." --</option>"."
 	     <option value=\"-1\" ";
 		
@@ -156,11 +153,8 @@ if($is_adminOfCourse) {
 		}
 		$tool_content .= ">".$row['titre']."</option>\n";
 	}
-	$tool_content .= "
-           </select>
-           <input type='submit' value='$langQuestionView'></div>
-          </th>
-        </tr>\n";
+	$tool_content .= "</select>
+	<input type='submit' value='$langQuestionView'></div></th></tr>\n";
 
 	$from = $page * QUESTIONS_PER_PAGE;
 	
@@ -193,20 +187,16 @@ if($is_adminOfCourse) {
 	$nbrQuestions = mysql_num_rows($result);
 	
 	$tool_content .= "
-    <tr>
-      <th>&nbsp;</th>
-      <th><div align='left'>$langQuesList</div></th>";
+	<tr>
+	  <th>&nbsp;</th>
+	  <th><div align='left'>$langQuesList</div></th>";
 	
 	if(isset($fromExercise)) {
-		$tool_content .= "
-       <th width='70'>$langReuse</th>";
+		$tool_content .= "<th width='70'>$langReuse</th>";
 	} else {
-		$tool_content .= "
-       <th colspan='2' width='30'>$langActions</th>";
+		$tool_content .= "<th colspan='2' width='30'>$langActions</th>";
 	}
-
-	$tool_content .= "
-    </tr>";
+	$tool_content .= "</tr>";
 	$i = 1;
 	while ($row = mysql_fetch_array($result)) {
 		if(isset($fromExercise) || !is_object(@$objExercise) || !$objExercise->isInList($row['id'])) {
@@ -221,46 +211,44 @@ if($is_adminOfCourse) {
 			} elseif ($row['type'] == 5) {
 				$answerType = $langTrueFalse;
 			}
-                    if ($i%2 == 0) {
-                       $tool_content .= "\n    <tr class='even'>";
-                    } else {
-                       $tool_content .= "\n    <tr class='odd'>";
-                    }
+			if ($i%2 == 0) {
+				$tool_content .= "\n    <tr class='even'>";
+			} else {
+				$tool_content .= "\n    <tr class='odd'>";
+			}
 
 			if(!isset($fromExercise)) {
-
 				$tool_content .= "
-      <td width='1'><div style='padding-top:4px;'>
-	<img src='../../template/classic/img/arrow_grey.gif' alt='bullet'></div>
-      </td>
-      <td>
-	<a href=\"admin.php?editQuestion=".$row['id']."&fromExercise=\"\">".$row['question']."</a><br/>".$answerType."
-      </td>
-      <td width='3'><div align='center'><a href=\"admin.php?editQuestion=".$row['id']."\">
-	<img src='../../template/classic/img/edit.png' title='$langModify'></a></div>
-      </td>";
+				<td width='1'><div style='padding-top:4px;'>
+				  <img src='../../template/classic/img/arrow_grey.gif' alt='bullet'></div>
+				</td>
+				<td>
+				  <a href=\"admin.php?editQuestion=".$row['id']."&fromExercise=\"\">".$row['question']."</a><br/>".$answerType."
+				</td>
+				<td width='3'><div align='center'><a href=\"admin.php?editQuestion=".$row['id']."\">
+				  <img src='../../template/classic/img/edit.png' title='$langModify'></a></div>
+				</td>";
 			} else {
 				$tool_content .= "
-      <td width='1'><div style='padding-top:4px;'>
-	<img src='../../template/classic/img/arrow_grey.gif'></div>
-      </td>
-      <td><a href=\"admin.php?editQuestion=".$row['id']."&fromExercise=".$fromExercise."\">".$row['question']."</a><br/>".$answerType."</td>
-      <td class='center'><div align='center'>
-        <a href=\"".$_SERVER['PHP_SELF']."?recup=".$row['id'].
-					"&fromExercise=".$fromExercise."\"><img src='../../template/classic/img/enroll.gif' title='$langReuse'></a>
-      </td>";
+				<td width='1'><div style='padding-top:4px;'>
+				  <img src='../../template/classic/img/arrow_grey.gif'></div>
+				</td>
+				<td><a href=\"admin.php?editQuestion=".$row['id']."&fromExercise=".$fromExercise."\">".$row['question']."</a><br/>".$answerType."</td>
+				<td class='center'><div align='center'>
+				  <a href=\"".$_SERVER['PHP_SELF']."?recup=".$row['id'].
+								  "&fromExercise=".$fromExercise."\"><img src='../../template/classic/img/enroll.gif' title='$langReuse'></a>
+				</td>";
 			}
 			//$tool_content .= "</td>";	
 			if(!isset($fromExercise)) {
 				$tool_content .= "
-      <td width='3'><div align='center'>
-	<a href=\"".$_SERVER['PHP_SELF']."?exerciseId=".$exerciseId."&delete=".$row['id']."\"". 
-	" onclick=\"javascript:if(!confirm('".addslashes(htmlspecialchars($langConfirmYourChoice)).
-	"')) return false;\"><img src='../../template/classic/img/delete.png' title='$langDelete'></a></div>
-      </td>";
+				<td width='3'><div align='center'>
+				  <a href=\"".$_SERVER['PHP_SELF']."?exerciseId=".$exerciseId."&delete=".$row['id']."\"". 
+				  " onclick=\"javascript:if(!confirm('".addslashes(htmlspecialchars($langConfirmYourChoice)).
+				  "')) return false;\"><img src='../../template/classic/img/delete.png' title='$langDelete'></a></div>
+				</td>";
 			}
-			$tool_content .= "
-    </tr>";
+			$tool_content .= "</tr>";
 			// skips the last question,only used to know if we must create a link "Next page"
 			if($i == QUESTIONS_PER_PAGE) {
 				break;
@@ -269,29 +257,24 @@ if($is_adminOfCourse) {
 		}
 	}
 	if(!$nbrQuestions) {
-		$tool_content .= "
-    <tr>
-      <td colspan='";
+		$tool_content .= "<tr>";
 		if (isset($fromExercise) && ($fromExercise)) {
-			$tool_content .= "3";
+			$tool_content .= "<td colspan='3'>";
 		} else {
-			$tool_content .= "4";
+			$tool_content .= "<td colspan='4'>";
 		}	
-		$tool_content .= "\">".$langNoQuestion."</td>
-    </tr>";
+		$tool_content .= $langNoQuestion."</td></tr>";
 	}
 	// questions pagination 
 	$numpages = intval($num_of_questions / QUESTIONS_PER_PAGE);
 	if ($numpages > 0) {
-		$tool_content .= "
-    <tr>
-      <th align='right' colspan='";
+		$tool_content .= "<tr>";
 		if (isset($fromExercise)) {
-			$tool_content .= "3";
+			$tool_content .= "<th align='right' colspan='3'>";
 		} else {
-			$tool_content .= "4";
+			$tool_content .= "<th align='right' colspan='4'>";
 		}
-		$tool_content .= "'><div align='center'>";
+		$tool_content .= "<div align='center'>";
 		if ($page > 0) {
 			$prevpage = $page-1;
 			if (isset($fromExercise)) {
@@ -319,14 +302,9 @@ if($is_adminOfCourse) {
 			}
 		}
 	}	 
-	$tool_content .= "</div>
-      </th>
-    </tr>";
-	$tool_content .= "
-    </table>
-    </form>";
+	$tool_content .= "</div></th></tr>";
+	$tool_content .= "</table></form>";
 } else { // if not admin of course
 	$tool_content .= $langNotAllowed;
 }
 draw($tool_content, 2);
-?>
