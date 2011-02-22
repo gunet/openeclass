@@ -866,7 +866,7 @@ if ($doc_count == 0) {
                         }
                         $copyright_icon = '';
                         if ($is_dir) {
-                                $image = '../../template/classic/img/folder.gif';
+                                $image = '../../template/classic/img/folder.png';
                                 $file_url = $base_url . "openDir=$cmdDirName";
                                 $link_extra = '';
 				$link_text = $entry['filename'];

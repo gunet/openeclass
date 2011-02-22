@@ -878,7 +878,7 @@ function display_my_documents($dialogBox, $style)
             }
             elseif ($fileList['type'][$fileKey] == A_DIRECTORY)
             {
-                $image       = 'folder.gif';
+                $image       = 'folder.png';
                 $size        = '&nbsp;';
                 $date        = '&nbsp;';
                 $urlFileName = $_SERVER['PHP_SELF'] . '?openDir=' . $cmdFileName;
