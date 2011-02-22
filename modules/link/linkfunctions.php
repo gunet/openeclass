@@ -87,11 +87,11 @@ function showlinksofcategory($catid)
                                          "<td width='45' valign='top' align='right'>";
                         // Display move up command only if it is not the top link
                         if ($i != 1) {
-                                $tool_content .= "<a href='$_SERVER[PHP_SELF]?urlview=$urlview&amp;up=$myrow[id]'><img src='../../template/classic/img/up.gif' title='$langUp' alt='$langUp' /></a>";
+                                $tool_content .= "<a href='$_SERVER[PHP_SELF]?urlview=$urlview&amp;up=$myrow[id]'><img src='../../template/classic/img/up.png' title='$langUp' alt='$langUp' /></a>";
                         }
                         // Display move down command only if it is not the bottom link
                         if ($i < $numberoflinks) {
-                                $tool_content .= "<a href='$_SERVER[PHP_SELF]?urlview=$urlview&amp;down=$myrow[id]'><img src='../../template/classic/img/down.gif' title='$langDown' alt='$langDown' /></a>";
+                                $tool_content .= "<a href='$_SERVER[PHP_SELF]?urlview=$urlview&amp;down=$myrow[id]'><img src='../../template/classic/img/down.png' title='$langDown' alt='$langDown' /></a>";
                         }
                         $tool_content .= "</td>";
                 } else {
@@ -118,11 +118,11 @@ function showcategoryadmintools($categoryid)
 	$tool_content .= "<th width='45' valign='top'><div align='right'>";
 	// Display move up command only if it is not the top link
 	if ($catcounter != 1) {
-		$tool_content .= "<a href='$_SERVER[PHP_SELF]?urlview=$urlview&amp;cup=$categoryid'><img src='../../template/classic/img/up.gif' title='$langUp' alt='$$langUp' /></a>";
+		$tool_content .= "<a href='$_SERVER[PHP_SELF]?urlview=$urlview&amp;cup=$categoryid'><img src='../../template/classic/img/up.png' title='$langUp' alt='$$langUp' /></a>";
 	}
 	// Display move down command only if it is not the bottom link
 	if ($catcounter < $aantalcategories) {
-		$tool_content .=  "<a href='$_SERVER[PHP_SELF]?urlview=$urlview&amp;cdown=$categoryid'><img src='../../template/classic/img/down.gif' title='$langDown' alt='$langDown' /></a>";
+		$tool_content .=  "<a href='$_SERVER[PHP_SELF]?urlview=$urlview&amp;cdown=$categoryid'><img src='../../template/classic/img/down.png' title='$langDown' alt='$langDown' /></a>";
 	}
         $tool_content .=  "</div></th></tr>";
 	$catcounter++;

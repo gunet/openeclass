@@ -594,13 +594,13 @@ function actions($res_type, $resource_id, $status, $res_id = false)
         }
         if ($resource_id != $GLOBALS['max_resource_id']) {
                 $content .= "\n          <td width='12'><div align='right'><a href='$_SERVER[PHP_SELF]?down=$resource_id'>" .
-                            "<img src='../../template/classic/img/down.gif' title='$langDown'></img></a></div></td>";
+                            "<img src='../../template/classic/img/down.png' title='$langDown'></img></a></div></td>";
 	} else {
 		$content .= "\n          <td width='12'>&nbsp;</td>";
 	}
         if (!$first) {
                 $content .= "<td width='12'><div align='left'><a href='$_SERVER[PHP_SELF]?up=$resource_id'>" .
-                            "<img src='../../template/classic/img/up.gif' title='$langUp'></img></a></div></td>";
+                            "<img src='../../template/classic/img/up.png' title='$langUp'></img></a></div></td>";
         } else {
                 $content .= "\n          <td width='12'>&nbsp;</td>";
         }

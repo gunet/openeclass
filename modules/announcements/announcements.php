@@ -366,11 +366,11 @@ hContent;
 	if ($is_adminOfCourse) {
 	    if ($iterator != 1)  {
 		$tool_content .= "<a href='$_SERVER[PHP_SELF]?up=" . $myrow["id"] . "'>
-		<img class='displayed' src='../../template/classic/img/up.gif' title='" . $langUp . "' /></a>";
+		<img class='displayed' src='../../template/classic/img/up.png' title='" . $langUp . "' /></a>";
 	    }
 	    if ($iterator < $bottomAnnouncement) {
 		$tool_content .= "<a href='$_SERVER[PHP_SELF]?down=" . $myrow["id"] . "'>
-		<img class='displayed' src='../../template/classic/img/down.gif' title='" . $langDown . "' /></a>";
+		<img class='displayed' src='../../template/classic/img/down.png' title='" . $langDown . "' /></a>";
 	    }
 	    if ($announcementNumber > 1) {
 		    $tool_content .= "</td>\n";

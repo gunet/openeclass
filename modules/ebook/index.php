@@ -148,11 +148,11 @@ function tools($id, $title, $k, $num)
                        js_escape(sprintf($langEBookDelConfirm, $title)) ."')) return false;\" />" .
                        "</form></td>\n        <td class='center'>" .
                        (($k < $num)? "<a href='$_SERVER[PHP_SELF]?down=$id'>
-                                      <img class='displayed' src='../../template/classic/img/down.gif'
+                                      <img class='displayed' src='../../template/classic/img/down.png'
                                            title='$langDown' alt='$langDown' /></a>":
                                      '') . '&nbsp;' .
                        (($k > 0)? "<a href='$_SERVER[PHP_SELF]?up=$id'>
-                                   <img class='displayed' src='../../template/classic/img/up.gif'
+                                   <img class='displayed' src='../../template/classic/img/up.png'
                                         title='$langUp' alt='$langUp' /></a>":
                                   '') . '</td>';
         }

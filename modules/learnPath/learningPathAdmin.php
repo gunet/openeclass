@@ -645,7 +645,7 @@ foreach ($flatElementList as $module)
     {
         $tool_content .= "<td width='10' align=\"right\">
 	<a href=\"".$_SERVER['PHP_SELF']."?cmd=moveUp&amp;cmdid=".$module['learnPath_module_id']."\">
-	<img src=\"".$imgRepositoryWeb."up.gif\" alt=\"$langUp\" title=\"$langUp\" border=0 /></a></td>";
+	<img src=\"".$imgRepositoryWeb."up.png\" alt=\"$langUp\" title=\"$langUp\" border=0 /></a></td>";
     }
     else
     {
@@ -657,7 +657,7 @@ foreach ($flatElementList as $module)
     {
         $tool_content .= "<td width='10'>
 	<a href=\"".$_SERVER['PHP_SELF']."?cmd=moveDown&amp;cmdid=".$module['learnPath_module_id']."\">
-	<img src=\"".$imgRepositoryWeb."down.gif\" alt=\"$langDown\" title=\"$langDown\" border=0 /></a></td>";
+	<img src=\"".$imgRepositoryWeb."down.png\" alt=\"$langDown\" title=\"$langDown\" border=0 /></a></td>";
     }
     else
     {

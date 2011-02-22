@@ -101,13 +101,13 @@ $tool_content .= "
       <td width='20'>";
 		if($i != 1) {
 			$tool_content .= "<a href=\"".$_SERVER['PHP_SELF']."?moveUp=".$id."\">
-   			<img src=\"../../template/classic/img/up.gif\" border=\"0\" align=\"absmiddle\" title=\"".$langUp."\"></a> ";
+   			<img src=\"../../template/classic/img/up.png\" border=\"0\" align=\"absmiddle\" title=\"".$langUp."\"></a> ";
 		}
 		$tool_content .= "</td>
       <td width='20'>";
 		if($i != $nbrQuestions)	{
 			$tool_content .= "<a href=\"".$_SERVER['PHP_SELF']."?moveDown=".$id."\">
-			<img src=\"../../template/classic/img/down.gif\" border=\"0\" align=\"absmiddle\" title=\"".$langDown."\"></a> ";
+			<img src=\"../../template/classic/img/down.png\" border=\"0\" align=\"absmiddle\" title=\"".$langDown."\"></a> ";
 		}
 		$tool_content .= "</td>
     </tr>";

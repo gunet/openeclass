@@ -206,12 +206,12 @@ while ($cu = mysql_fetch_array($sql)) {
                                 "title='$langVisibility' /></a></td>";
                         if ($cu['id'] != $last_id) {
                                 $cunits_content .= "\n        <td width='16'><a href='$_SERVER[PHP_SELF]?down=$cu[id]'>" .
-                                "<img src='../../template/classic/img/down.gif' title='$langDown' /></a></td>";
+                                "<img src='../../template/classic/img/down.png' title='$langDown' /></a></td>";
                         } else {
                                 $cunits_content .= "\n        <td width='16'>&nbsp;&nbsp;&nbsp;&nbsp;</td>";
                         }
                         if (!$first) {
-                                $cunits_content .= "\n        <td width='16'><a href='$_SERVER[PHP_SELF]?up=$cu[id]'><img src='../../template/classic/img/up.gif' title='$langUp' /></a></td>";
+                                $cunits_content .= "\n        <td width='16'><a href='$_SERVER[PHP_SELF]?up=$cu[id]'><img src='../../template/classic/img/up.png' title='$langUp' /></a></td>";
                         } else {
                                 $cunits_content .= "\n        <td width='16'>&nbsp;&nbsp;&nbsp;&nbsp;</td>";
                         }

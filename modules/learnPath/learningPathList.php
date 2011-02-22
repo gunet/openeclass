@@ -616,7 +616,7 @@ while ($list = mysql_fetch_array($result)) // while ... learning path list
         if ($iterator != 1) {
             $tool_content .= "      <td class='right' width='1'>"
                   ."<a href='".$_SERVER['PHP_SELF']."?cmd=moveUp&amp;move_path_id=".$list['learnPath_id']."'>"
-                  ."<img src='../../template/classic/img/up.gif' alt='$langUp' title='$langUp' />"
+                  ."<img src='../../template/classic/img/up.png' alt='$langUp' title='$langUp' />"
                   ."</a>"
                   ."</td>\n";
         }
@@ -628,7 +628,7 @@ while ($list = mysql_fetch_array($result)) // while ... learning path list
         if($iterator < $LPNumber) {
             $tool_content .= "      <td width='1'>"
                   ."<a href='".$_SERVER['PHP_SELF']."?cmd=moveDown&amp;move_path_id=".$list['learnPath_id']."'>"
-                  ."<img src='../../template/classic/img/down.gif' alt='$langDown' title='$langDown' />"
+                  ."<img src='../../template/classic/img/down.png' alt='$langDown' title='$langDown' />"
                   ."</a>"
                   ."</td>";
         }
