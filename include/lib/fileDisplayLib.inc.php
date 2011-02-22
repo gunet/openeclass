@@ -97,7 +97,7 @@ function choose_image($fileName)
 		$image['word'      ] = 'doc.gif';
 		$image['web'       ] = 'html.gif';
 		$image['css'       ] = 'css.gif';
-		$image['image'     ] = 'gif.gif';
+		$image['image'     ] = 'gif.png';
 		$image['audio'     ] = 'wav.gif';
 		$image['midi'      ] = 'midi.gif';
 		$image['video'     ] = 'mpg.gif';
