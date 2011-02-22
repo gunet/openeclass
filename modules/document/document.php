@@ -840,7 +840,7 @@ if ($doc_count == 0) {
         $tool_content .= "\n      <th width='60' class='center'><b>$langSize</b></th>";
         $tool_content .= "\n      <th width='80' class='center'><b>" . headlink($langDate, 'date') . '</b></th>';
 	if($can_upload) {
-		$tool_content .= "\n      <th width='120' class='center'><b>$langCommands</b></th>";
+		$tool_content .= "\n      <th width='150' class='center'><b>$langCommands</b></th>";
 	}
 	$tool_content .= "\n    </tr>";
 
