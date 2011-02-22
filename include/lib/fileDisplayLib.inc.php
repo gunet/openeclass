@@ -94,7 +94,7 @@ function choose_image($fileName)
 		$type['powerpoint'] = array('ppt', 'pptx', 'pps', 'ppsx');
 		$type['text'      ] = array('txt');
 
-		$image['word'      ] = 'doc.gif';
+		$image['word'      ] = 'doc.png';
 		$image['web'       ] = 'html.gif';
 		$image['css'       ] = 'css.gif';
 		$image['image'     ] = 'gif.png';
