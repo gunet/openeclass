@@ -352,7 +352,7 @@ if(isset($_GET['forumgo'])) {
                   <td><div align='left'>$cat_title &nbsp;</div></td>
                   <td><div align='center'>$numbers[total]</div></td>
                   <td><a href='forum_admin.php?forumgo=yes&cat_id=$cat_id'>
-			<img src='../../template/classic/img/forum_on.gif' border='0' title='$langForums'></img></a>&nbsp;
+			<img src='../../template/classic/img/forum_on.png' border='0' title='$langForums'></img></a>&nbsp;
 			<a href='$_SERVER[PHP_SELF]?forumcatedit=yes&cat_id=$cat_id'>
 			<img src='../../template/classic/img/edit.png' border='0' title='$langModify'></img></a>&nbsp;
 			<a href='$_SERVER[PHP_SELF]?forumcatdel=yes&cat_id=$cat_id' onClick='return confirmation();'>

@@ -875,7 +875,7 @@ function show_assignment($id, $message = FALSE)
                         <table align='left' width='100%' class='Info'>
                         <tbody>
                         <tr>
-                          <td width='1' class='left'><img src='../../template/classic/img/forum_on.gif' alt='$m[comments]' title='$m[comments]' /></td>
+                          <td width='1' class='left'><img src='../../template/classic/img/forum_on.png' alt='$m[comments]' title='$m[comments]' /></td>
                           <td>$prof_comment</td>
                         <tr>
                         </table>
