@@ -113,7 +113,7 @@ if ($numoftypes > 0) {
         if (mysql_num_rows($result) == 0) {
             continue;
         }
-        $tool_content .= "\n  <br />\n\n
+        $tool_content .= "\n\n\n
            <table width=99% class='tbl_course_type'>
            <tr>
             <td>";
