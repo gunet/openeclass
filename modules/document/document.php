@@ -935,11 +935,11 @@ if ($doc_count == 0) {
                                 if ($is_adminOfCourse) {
 					if ($entry['visible']) {
 						$tool_content .= "<a href='{$base_url}mkInvisibl=$cmdDirName'>" .
-								 "<img src='../../template/classic/img/visible.gif' " .
+								 "<img src='../../template/classic/img/visible.png' " .
 								 "title='$langVisible' alt='$langVisible' /></a>";
 	                                } else {
 	                                        $tool_content .= "<a href='{$base_url}mkVisibl=$cmdDirName'>" .
-								 "<img src='../../template/classic/img/invisible.gif' " .
+								 "<img src='../../template/classic/img/invisible.png' " .
 								 "title='$langVisible' alt='$langVisible' /></a>";
 	                                }
 				}

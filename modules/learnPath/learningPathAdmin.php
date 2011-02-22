@@ -687,7 +687,7 @@ foreach ($flatElementList as $module)
     $tool_content .= "<td width='10'>";
 
     if ($module['visibility'] == 'HIDE') {
-        $tool_content .= "<a href=\"".$_SERVER['PHP_SELF']."?cmd=mkVisibl&amp;cmdid=".$module['module_id']."\"><img src=\"".$imgRepositoryWeb."invisible.gif\" alt=\"$langVisible\" title=\"$langVisible\" border=\"0\" /></a>";
+        $tool_content .= "<a href=\"".$_SERVER['PHP_SELF']."?cmd=mkVisibl&amp;cmdid=".$module['module_id']."\"><img src=\"".$imgRepositoryWeb."invisible.png\" alt=\"$langVisible\" title=\"$langVisible\" border=\"0\" /></a>";
     }
     else
     {
@@ -699,7 +699,7 @@ foreach ($flatElementList as $module)
         {
             $onclick = "";
         }
-        $tool_content .= "<a href=\"".$_SERVER['PHP_SELF']."?cmd=mkInvisibl&amp;cmdid=".$module['module_id']."\" ".$onclick. " ><img src=\"".$imgRepositoryWeb."visible.gif\" alt=\"$langVisible\" title=\"$langVisible\" border=0 /></a>";
+        $tool_content .= "<a href=\"".$_SERVER['PHP_SELF']."?cmd=mkInvisibl&amp;cmdid=".$module['module_id']."\" ".$onclick. " ><img src=\"".$imgRepositoryWeb."visible.png\" alt=\"$langVisible\" title=\"$langVisible\" border=0 /></a>";
     }
 
     $tool_content .= "</td>";

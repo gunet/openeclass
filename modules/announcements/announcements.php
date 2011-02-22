@@ -326,11 +326,11 @@ hContent;
 	    if ($is_adminOfCourse) {
 		if ($myrow['visibility'] == 'i') {
 		    $visibility = 1;
-		    $vis_icon = 'invisible.gif';
+		    $vis_icon = 'invisible.png';
 		    $classvis = 'invisible';
 		} else {
 		    $visibility = 0;
-		    $vis_icon = 'visible.gif';
+		    $vis_icon = 'visible.png';
 		    $classvis = 'visible';
 		}
 	    }

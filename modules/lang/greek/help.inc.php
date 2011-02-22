@@ -189,10 +189,10 @@ Excel, Acrobat, Flash, Quicktime, κ.λπ.). Ο μόνος σας περιορι
 
     <h4>Μετατροπή  αρχείου (ή καταλόγου) σε αόρατο για τους φοιτητές</h4>
     <ul>
-  <li>Κάντε κλικ στο εικονίδιο 'Ορατό/Αόρατο' (<img src='../../template/classic/img/visible.gif' width=10 height=10 align=baseline>)
+  <li>Κάντε κλικ στο εικονίδιο 'Ορατό/Αόρατο' (<img src='../../template/classic/img/visible.png' width=10 height=10 align=baseline>)
 </li>
    <li>Μετά την παραπάνω ενέργεια το αρχείου (ή κατάλογο) θα υπάρχει αλλά δεν θα είναι ορατό από τους φοιτητές.</li>
-  <li>Γα να το κάνετε αόρατο ξανά, κάντε κλικ στο εικονίδιο 'Ορατό/Αόρατο' (<img src='../../template/classic/img/invisible.gif' width=14 height=10 align=baseline>
+  <li>Γα να το κάνετε αόρατο ξανά, κάντε κλικ στο εικονίδιο 'Ορατό/Αόρατο' (<img src='../../template/classic/img/invisible.png' width=14 height=10 align=baseline>
   </li>
     </ul>
     <hr>
@@ -331,7 +331,7 @@ $langExerciseContent="<p>Το εργαλείο των ασκήσεων σας ε
 <hr>
 <p><b>Ενεργοποίηση Άσκησης</b></p>
 <p>Για να χρησιμοποιηθεί η άσκησή σας από τους μαθητές, πρέπει να την ενεργοποιήσετε κάνοντας κλικ στην εικόνα
-<img src=\"../../template/classic/img/invisible.gif\" border=\"0\" align=\"absmiddle\"> δίπλα από την άσκηση για να την ενεργοποιήσετε.</p>
+<img src=\"../../template/classic/img/invisible.png\" border=\"0\" align=\"absmiddle\"> δίπλα από την άσκηση για να την ενεργοποιήσετε.</p>
 <hr>
 <p><b>Δοκιμή της Άσκησης</b></p>
 <p>Μπορείτε να δοκιμάσετε την άσκησή σας κάνοντας κλικ στο όνομά της.</p>
@@ -367,7 +367,7 @@ $langWorkContent = "<p>Το υποσύστημα των εργασιών είν�
 Συμπληρώστε τον τίλο της εργασίας, καθορίστε την ημερομηνία υποβολής και προεραιτικά προσθέστε και ένα
 σχόλιο.</p>
 <p>Όταν ολοκληρωθεί η δημιουργία της εργασίας, μην παραλείψετε να την ενεργοποιήσετε κάνοντας κλικ
-στο εικονίδιο <img src=\"../../template/classic/img/invisible.gif\" border=\"0\" align=\"absmiddle\">. Η εργασία θα είναι ορατή και
+στο εικονίδιο <img src=\"../../template/classic/img/invisible.png\" border=\"0\" align=\"absmiddle\">. Η εργασία θα είναι ορατή και
 προσβάσιμη από τους φοιτητές μόνο όταν την ενεργοποιήσετε. Μπορείτε ανά πάσα στιγμή να διορθώσετε την
 εργασία κάνοντας κλικ στο εικονίδιο <img src=\"../../template/classic/img/edit.png\" border=\"0\" align=\"middle\"> ή να την
 διαγράψετε κάνοντας κλικ στο εικονίδιο <img src=\"../../template/classic/img/delete.png\" border=\"0\" align=\"middle\">.

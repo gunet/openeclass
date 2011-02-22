@@ -227,18 +227,18 @@ cData;
 	// if active
 	if($row['active']) {
 		if (isset($page)) {
-			$tool_content .= "<a href=\"$_SERVER[PHP_SELF]?choice=disable&amp;page=${page}&amp;exerciseId=".$row['id']."\">"."<img src='../../template/classic/img/visible.gif' alt='$langVisible' title='$langVisible' /></a>&nbsp;";
+			$tool_content .= "<a href=\"$_SERVER[PHP_SELF]?choice=disable&amp;page=${page}&amp;exerciseId=".$row['id']."\">"."<img src='../../template/classic/img/visible.png' alt='$langVisible' title='$langVisible' /></a>&nbsp;";
 		} else {
 			$tool_content .= "
-			<a href='$_SERVER[PHP_SELF]?choice=disable&amp;exerciseId=".$row['id']."'>"."<img src='../../template/classic/img/visible.gif' alt='$langVisible' title='$langVisible' /></a>&nbsp;";
+			<a href='$_SERVER[PHP_SELF]?choice=disable&amp;exerciseId=".$row['id']."'>"."<img src='../../template/classic/img/visible.png' alt='$langVisible' title='$langVisible' /></a>&nbsp;";
 		}
 	} else { // else if not active
 		if (isset($page)) {
 			$tool_content .= "
-			<a href='$_SERVER[PHP_SELF]?choice=enable&amp;page=${page}&amp;exerciseId=".$row['id']."'>"."<img src='../../template/classic/img/invisible.gif' alt='$langVisible' title='$langVisible' /></a>&nbsp;";
+			<a href='$_SERVER[PHP_SELF]?choice=enable&amp;page=${page}&amp;exerciseId=".$row['id']."'>"."<img src='../../template/classic/img/invisible.png' alt='$langVisible' title='$langVisible' /></a>&nbsp;";
 		} else {
 			$tool_content .= "
-			<a href='$_SERVER[PHP_SELF]?choice=enable&amp;exerciseId=".$row['id']."'>"."<img src='../../template/classic/img/invisible.gif' alt='$langVisible' title='$langVisible' /></a>&nbsp;";
+			<a href='$_SERVER[PHP_SELF]?choice=enable&amp;exerciseId=".$row['id']."'>"."<img src='../../template/classic/img/invisible.png' alt='$langVisible' title='$langVisible' /></a>&nbsp;";
 		}
 	}
 	$tool_content .= "</td></tr>";

@@ -48,8 +48,8 @@ function display_assignments()
                 $i = 0;
                 while($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
                         $visible = $row['active']?
-                                "<img title='$langActive' src='../../template/classic/img/visible.gif' />":
-                                "<img title='$langInactive' src='../../template/classic/img/invisible.gif' />";
+                                "<img title='$langActive' src='../../template/classic/img/visible.png' />":
+                                "<img title='$langInactive' src='../../template/classic/img/invisible.png' />";
                         $description = empty($row['description'])? '':
                                 "<div>$row[description]</div>";
                         if ($i%2) {

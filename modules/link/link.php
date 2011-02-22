@@ -231,10 +231,10 @@ if (mysql_num_rows($resultcategories) > 0) {
                 <table width='99%' class='tbl'>
 		<tr>
 		  <td class='bold'>$langCategorisedLinks</td>
-		  <td width='1'><img src='../../template/classic/img/closeddir.gif' title='$showall' /></td>
+		  <td width='1'><img src='../../template/classic/img/folder_closed.png' title='$showall' /></td>
 		  <td width='60'><a href='$_SERVER[PHP_SELF]?urlview=" . str_repeat('0', $aantalcategories) .
 	              "'>$shownone</a></td>
-		  <td width='1'><img src='../../template/classic/img/opendir.gif' title='$showall' /></td>
+		  <td width='1'><img src='../../template/classic/img/folder_open.png' title='$showall' /></td>
 		  <td width='60'><a href='$_SERVER[PHP_SELF]?urlview=" . str_repeat('1', $aantalcategories) .
 		      "'>$showall</a></td>
 		</tr>
@@ -247,7 +247,7 @@ if (mysql_num_rows($resultcategories) > 0) {
 		$tool_content .= "\n
 		<table width='99%' class='tbl_alt'>
 		<tr>
-		  <th width='15'><img src='../../template/classic/img/opendir.gif' title='$langNoCategory' /></th>
+		  <th width='15'><img src='../../template/classic/img/folder_open.png' title='$langNoCategory' /></th>
 		  <th colspan='6'><div align='left'>$langNoCategory</div></th>
 		</tr>";
 		showlinksofcategory(0);
@@ -275,7 +275,7 @@ if (mysql_num_rows($resultcategories) > 0) {
 			$newurlview[$i] = '0';
 			$tool_content .= "
                 <tr>
-		  <th width='15' valign='top'><img src='../../template/classic/img/opendir.gif' title='$shownone' /></th>
+		  <th width='15' valign='top'><img src='../../template/classic/img/folder_open.png' title='$shownone' /></th>
 		  <th colspan='2' valign='top'><div class='left'><a href='$_SERVER[PHP_SELF]?urlview=$newurlview'>".q($myrow['name'])."</a>";
                         if (!empty($description)) {
                                 $tool_content .= "<br />$description</div></th>";
@@ -292,7 +292,7 @@ if (mysql_num_rows($resultcategories) > 0) {
 		} else {
 			$tool_content .=  "
 		  <tr>
-		    <th width='15' valign='top'><img src='../../template/classic/img/closeddir.gif' title='$showall' /></th>
+		    <th width='15' valign='top'><img src='../../template/classic/img/folder_closed.png' title='$showall' /></th>
 		    <th colspan='2' valign='top'><div class='left'><a href='$_SERVER[PHP_SELF]?urlview=";
 			$tool_content .=  is_array($view)?implode('',$view):$view;
 			$tool_content .=  "'>" . q($myrow['name']) . "</a>";
@@ -319,7 +319,7 @@ if (mysql_num_rows($resultcategories) > 0) {
 		$tool_content .=  "
                 <table width=\"99%\">
 		<tr>
-		  <td width='1'><img src='../../template/classic/img/opendir.gif' title='$langNoCategory' /></td>
+		  <td width='1'><img src='../../template/classic/img/folder_open.png' title='$langNoCategory' /></td>
 		  <td colspan='4'><b>$langLinks</b></td>
 		</tr>";
 		showlinksofcategory(0);

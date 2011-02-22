@@ -1070,10 +1070,10 @@ cData;
 			if ($row['active']) {
 				$deactivate_temp = htmlspecialchars($m['deactivate']);
 				$activate_temp = htmlspecialchars($m['activate']);
-				$tool_content .= "<a href='$_SERVER[PHP_SELF]?choice=disable&amp;id=$row[id]'><img src='../../template/classic/img/visible.gif' title='$deactivate_temp' /></a>";
+				$tool_content .= "<a href='$_SERVER[PHP_SELF]?choice=disable&amp;id=$row[id]'><img src='../../template/classic/img/visible.png' title='$deactivate_temp' /></a>";
 			} else {
 				$activate_temp = htmlspecialchars($m['activate']);
-				$tool_content .= "<a href='$_SERVER[PHP_SELF]?choice=enable&amp;id=$row[id]'><img src='../../template/classic/img/invisible.gif' title='$activate_temp' /></a>";
+				$tool_content .= "<a href='$_SERVER[PHP_SELF]?choice=enable&amp;id=$row[id]'><img src='../../template/classic/img/invisible.png' title='$activate_temp' /></a>";
 			}
 			$tool_content .= "&nbsp;</td></tr>";
                         $index++;

@@ -805,7 +805,7 @@ function display_my_documents($dialogBox, $style)
         $output .= '
     <table width="99%" class="tbl">
     <tr>
-      <td width="1" class="right"><img src="' . $imgRepositoryWeb . 'opendir.gif" align="absbottom" vspace=2 hspace=5 alt="" /></td>
+      <td width="1" class="right"><img src="' . $imgRepositoryWeb . 'folder_open.png" align="absbottom" vspace=2 hspace=5 alt="" /></td>
       <td>'.$langDirectory.': <b>'.$dspCurDirName.'</b></td>';
     /* GO TO PARENT DIRECTORY */
     if ($curDirName) /* if the $curDirName is empty, we're in the root point

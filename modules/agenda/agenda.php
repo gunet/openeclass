@@ -497,11 +497,11 @@ if (mysql_num_rows($result) > 0) {
 			if ($myrow["visibility"] == 'v') {
 				$tool_content .= "
             <a href='$_SERVER[PHP_SELF]?id=".$myrow[0]."&amp;mkInvisibl=true'>
-            <img src='../../template/classic/img/visible.gif' border='0' title='".$langVisible."'></a>";
+            <img src='../../template/classic/img/visible.png' border='0' title='".$langVisible."'></a>";
 			} else {
 				$tool_content .= "
             <a href='$_SERVER[PHP_SELF]?id=".$myrow[0]."&amp;mkVisibl=true'>
-            <img src='../../template/classic/img/invisible.gif' border='0' title='".$langVisible."'></a>";
+            <img src='../../template/classic/img/invisible.png' border='0' title='".$langVisible."'></a>";
 			}
 			$tool_content .= "
           </td>";

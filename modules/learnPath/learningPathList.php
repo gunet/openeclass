@@ -567,7 +567,7 @@ while ($list = mysql_fetch_array($result)) // while ... learning path list
         $tool_content .= "      <td class='center' width='1'>";
         if ( $list['visibility'] == 'HIDE') {
             $tool_content .= "<a href='".$_SERVER['PHP_SELF']."?cmd=mkVisibl&amp;visibility_path_id=".$list['learnPath_id']."'>"
-                  ."<img src='../../template/classic/img/invisible.gif' alt='$langVisible' title='$langVisible' />"
+                  ."<img src='../../template/classic/img/invisible.png' alt='$langVisible' title='$langVisible' />"
                   ."</a>";
         } else {
             if ($list['lock']=='CLOSE') {
@@ -578,7 +578,7 @@ while ($list = mysql_fetch_array($result)) // while ... learning path list
             }
 
             $tool_content .= "<a href='".$_SERVER['PHP_SELF']."?cmd=mkInvisibl&amp;visibility_path_id=".$list['learnPath_id']."' ".$onclick. " >"
-                 ."<img src='../../template/classic/img/visible.gif' alt='$langVisible' title='$langVisible' />"
+                 ."<img src='../../template/classic/img/visible.png' alt='$langVisible' title='$langVisible' />"
                  ."</a>";
         }
         $tool_content .= "</td>\n";

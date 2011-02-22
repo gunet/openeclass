@@ -50,7 +50,7 @@ function display_links()
                                          "\n  </tr>";
 			while ($catrow = mysql_fetch_array($sql, MYSQL_ASSOC)) {
 				$tool_content .= "\n  <tr class='even'>";
-                                $tool_content .= "\n    <td><img src='../../template/classic/img/opendir.gif' />&nbsp;&nbsp;" .
+                                $tool_content .= "\n    <td><img src='../../template/classic/img/folder_open.png' />&nbsp;&nbsp;" .
                                                  q($catrow['name']) . "</td>";
 				$tool_content .= "\n    <td>" . standard_text_escape($catrow['description']) . "</td>";
 				$tool_content .= "\n    <td align='center'><input type='checkbox' name='catlink[]' value='$catrow[id]' /></td>";

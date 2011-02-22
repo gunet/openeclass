@@ -199,11 +199,11 @@ if ($displayAnnouncementList == true) {
 			if ($myrow['visible'] == 'V') {
 				$visibility = 0;
 				$classvis = 'visible';
-				$icon = 'visible.gif';
+				$icon = 'visible.png';
 			} else {
 				$visibility = 1;
 				$classvis = 'invisible';
-				$icon = 'invisible.gif';
+				$icon = 'invisible.png';
 			}
 			$myrow['date'] = claro_format_locale_date($dateFormatLong, strtotime($myrow['date']));
 			$tool_content .= "<tr class='$classvis'>";

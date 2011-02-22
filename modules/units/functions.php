@@ -531,7 +531,7 @@ function show_linkcat($title, $comments, $resource_id, $linkcat_id, $visibility)
 		while ($lcat = mysql_fetch_array($sql)) {
 			$content .= "
         <tr$class_vis>
-          <td width='1'><img src='../../template/classic/img/opendir.gif' /></td>
+          <td width='1'><img src='../../template/classic/img/folder_open.png' /></td>
           <td>" . q($lcat['name']);
 			if (!empty($lcat['description'])) {
 				$comment_box = "<br />$lcat[description]";
@@ -567,7 +567,7 @@ function actions($res_type, $resource_id, $status, $res_id = false)
                 $icon_vis = ($status == 'v')? 'checkbox_on.gif': 'checkbox_off.gif';
                 $edit_link = "edit.php?numBloc=$res_id";
         } else {
-                $icon_vis = ($status == 'v')? 'visible.gif': 'invisible.gif';
+                $icon_vis = ($status == 'v')? 'visible.png': 'invisible.png';
                 $edit_link = "$_SERVER[PHP_SELF]?edit=$resource_id";
         }
 

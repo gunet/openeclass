@@ -173,7 +173,7 @@ $count_index = 1;
 while ($cu = mysql_fetch_array($sql)) {
                 // Visibility icon
                 $vis = $cu['visibility'];
-                $icon_vis = ($vis == 'v')? 'visible.gif': 'invisible.gif';
+                $icon_vis = ($vis == 'v')? 'visible.png': 'invisible.png';
                 $class1_vis = ($vis == 'i')? ' class="invisible"': '';
                 $class_vis = ($vis == 'i')? 'invisible': '';
                 $cunits_content .= "\n\n\n      <table ";
