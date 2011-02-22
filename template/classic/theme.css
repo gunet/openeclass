@@ -337,7 +337,8 @@ fieldset table.th {
 	width: 160px;
 	padding:8px;
     margin: 10px;
-    border: 1px dashed #dfdfdf;    
+    border: 1px dashed #dfdfdf;
+    background-color: #f1f1f1;    
    /* background-color:#dfdfdf;
     behavior: url(border-radius.htc);
     -moz-border-radius: 10px;
@@ -370,11 +371,11 @@ fieldset table.th {
 }
 
 #navcontainer li.category {
-	display: block;
-	padding: 4px;
 	color: #727266;
     font-weight: bold;
-    font-size: 13px;
+    border-bottom: 1px dashed #cccccc;
+    padding: 5px;
+    background-color: #dfdfdf;  
 }
 
 #navcontainer li img {
