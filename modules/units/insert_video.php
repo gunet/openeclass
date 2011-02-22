@@ -59,7 +59,7 @@ function display_video()
                               $tool_content .= "\n  <tr class='odd'>";
                           }
 
-                        $tool_content .= "\n    <td>&nbsp;<img src='../../template/classic/img/videos_on.gif' />&nbsp;&nbsp;" . $videolink . "</td>".
+                        $tool_content .= "\n    <td>&nbsp;<img src='../../template/classic/img/videos_on.png' />&nbsp;&nbsp;" . $videolink . "</td>".
                                          "\n    <td>" . htmlspecialchars($row['description']) . "</td>".
                                          "\n    <td class='center'>" . format_date(strtotime($row['date'])) . "</td>" .
                                          "\n    <td class='center'><input type='checkbox' name='video[]' value='$table:$row[id]' /></td>\n" .
