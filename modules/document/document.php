@@ -883,7 +883,7 @@ if ($doc_count == 0) {
                                         $link_text = q($entry['title']);
                                 }
                                 if ($entry['copyrighted']) {
-                                        $link_text .= " <img src='$urlAppend/modules/document/img/copyrighted.jpg' />";
+                                        $link_text .= " <img src='$urlAppend/modules/document/img/copyrighted.png' />";
                                 }
                         }
                         $tool_content .= "\n<tr $style>";

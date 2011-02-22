@@ -1308,7 +1308,7 @@ else // if method == 'post'
 				$link_text = $entry['title'];
 
 			if ($entry['copyrighted'])
-				$link_text .= " <img src='../document/img/copyrighted.jpg' />";
+				$link_text .= " <img src='../document/img/copyrighted.png' />";
 
 		    $tool_content .= "\n  <tr$style>";
 		    $tool_content .= "\n    <td><input type='radio' name='selectedDocument' value='".$entry['path']."'/></td>";
