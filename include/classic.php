@@ -133,7 +133,7 @@ if (count($status) > 0) {
         $announce_table_header = "
         <table width='99%' class='tbl_border'>
         <tr>
-           <th colspan='2'>$langMyPersoAnnouncements</th>
+           <td class='title1' colspan='2'>$langLastAnnouncements</td>
         </tr>\n";
 
         $logindate = last_login($uid);
@@ -159,20 +159,22 @@ if (count($status) > 0) {
                         while ($ann = mysql_fetch_array($result)) {
                                         $content = standard_text_escape($ann['contenu']);
                                         if ($la%2 == 0) {
-                                                $tool_content .= "        <tr class='even'>\n";
+                                                $tool_content .= "<tr class='even'>\n";
                                         } else {
-                                                $tool_content .= "        <tr class='odd'>\n";
+                                                $tool_content .= "<tr class='odd'>\n";
                                         }
                                         $tool_content .= "<td width='1' class='square_bullet2'>&nbsp;</td>" .
-                                                         "<td class='announce_pos'><b>$ann[title]</b> " .
+                                                         "<td class='announce_pos'>" .
                                                          claro_format_locale_date($dateFormatLong, strtotime($ann['temps'])) .
-                                                         "&nbsp;&nbsp;&nbsp;&nbsp;($langCourse: <b>{$titles[$code]}</b> | $langTutor: <b>" . q($profs[$code]) . "</b>)<br />$content</td>\n</tr>";
+                                                         "&nbsp;&nbsp;&nbsp;<b>$ann[title]</b><br />
+							 &nbsp;&nbsp;&nbsp;&nbsp;$langCourse: <b>{$titles[$code]}</b>
+							 | $langTutor: <b>" . q($profs[$code]) . "</b><br />$content</td>\n</tr>";
                                         $la++;
                                 }
                         }
         }
         if (!$table_begin) {
-                $tool_content .= "\n        </table>";
+                $tool_content .= "\n</table>";
         }
 }
 
