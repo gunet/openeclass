@@ -238,7 +238,7 @@ if (isset($_POST['back1']) or !isset($_POST['visit'])) {
 	    <td width='150'>$langAgenda</td>
 	    <td width='30' ><input name=\"subsystems[]\" type=\"checkbox\" value=\"1\" checked=\"checked\" /></td>
 	    <th width='2' >&nbsp;</th>
-	    <td width='30' >&nbsp;<img src=\"../../template/classic/img/dropbox_on.gif\" alt=\"\" height=\"16\" width=\"16\" /></td>
+	    <td width='30' >&nbsp;<img src=\"../../template/classic/img/dropbox_on.png\" alt=\"\" height=\"16\" width=\"16\" /></td>
 	    <td width='150'>$langDropBox</td>
  	    <td width='30' ><input type=\"checkbox\" name=\"subsystems[]\" value=\"16\" /></td>
 	  </tr>
@@ -270,7 +270,7 @@ if (isset($_POST['back1']) or !isset($_POST['visit'])) {
 	    <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"20\" checked=\"checked\" /></td>
 	  </tr>
 	  <tr class='even'>
-	    <td><img src=\"../../template/classic/img/assignments_on.gif\" alt=\"\" height=\"16\" width=\"16\" /></td>
+	    <td><img src=\"../../template/classic/img/assignments_on.png\" alt=\"\" height=\"16\" width=\"16\" /></td>
 	    <td>$langWorks</td>
 	    <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"5\" /></td>
 	    <th>&nbsp;</th>
@@ -297,7 +297,7 @@ if (isset($_POST['back1']) or !isset($_POST['visit'])) {
 	    <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"26\" /></td>
 	  </tr>
 	  <tr class='even'>
-	    <td><img src=\"../../template/classic/img/exercise_on.gif\" alt=\"\" height=\"16\" width=\"16\" /></td>
+	    <td><img src=\"../../template/classic/img/exercise_on.png\" alt=\"\" height=\"16\" width=\"16\" /></td>
 	    <td>$langExercices</td>
 	    <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"10\" /></td>
 	    <th>&nbsp;</th>

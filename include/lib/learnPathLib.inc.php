@@ -364,7 +364,7 @@ function nameBox($type, $mode, $formlabel = FALSE)
 
       $imgList[CTDOCUMENT_] = "docs_on.png";
       $imgList[CTCLARODOC_] = "clarodoc.gif";
-      $imgList[CTEXERCISE_] = "exercise_on.gif";
+      $imgList[CTEXERCISE_] = "exercise_on.png";
       $imgList[CTSCORM_] = "scorm.gif";
       $imgList[CTSCORMASSET_] = "scorm.gif";
       $imgList[CTLINK_] = "links_on.png";
@@ -506,7 +506,7 @@ function display_path_content()
         else // module
         {
             if($module['contentType'] == CTEXERCISE_ )
-            	$moduleImg = 'exercise_on.gif';
+            	$moduleImg = 'exercise_on.png';
             else if($module['contentType'] == CTLINK_ )
         		$moduleImg = "links_on.png";
         	else if($module['contentType'] == CTCOURSE_DESCRIPTION_ )
@@ -686,7 +686,7 @@ function display_my_exercises($dialogBox, $style)
 	        $output .= '    <tr '.$style.'>'."\n"
 	        .    '      <td align="left">'
 	        .    '<label for="check_'.$exercise['id'].'" >'
-	        .    '<img src="' . $imgRepositoryWeb . 'exercise_on.gif" alt="' . $langExercise . '" title="' . $langExercise . '" />&nbsp;'
+	        .    '<img src="' . $imgRepositoryWeb . 'exercise_on.png" alt="' . $langExercise . '" title="' . $langExercise . '" />&nbsp;'
 	        .    $exercise['title']
 	        .    '</label>'
 	        .    '<br />'."\n";

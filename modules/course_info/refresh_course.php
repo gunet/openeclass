@@ -99,7 +99,7 @@ if(isset($_POST['submit'])) {
 	  <td>$langAgendaDel</td>
 	</tr>
 	<tr>
-	  <th class='left'><img src=\"../../template/classic/img/assignments_on.gif\" alt=\"\" border=\"0\" height=\"16\" width=\"16\"> $langWorks</th>
+	  <th class='left'><img src=\"../../template/classic/img/assignments_on.png\" alt=\"\" border=\"0\" height=\"16\" width=\"16\"> $langWorks</th>
 	  <td><input type='checkbox' name='hideworks'></td>
 	  <td>$langHideWork</td>
 	</tr>

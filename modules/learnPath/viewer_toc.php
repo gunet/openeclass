@@ -151,7 +151,7 @@ $nextModule = ""; // module id that will be used in the next link
 foreach ($flatElementList as $module)
 {
 	if($module['contentType'] == CTEXERCISE_ )
-		$moduleImg = 'exercise_on.gif';
+		$moduleImg = 'exercise_on.png';
 	else if($module['contentType'] == CTLINK_ )
 		$moduleImg = "links_on.png";
 	else if($module['contentType'] == CTCOURSE_DESCRIPTION_ )

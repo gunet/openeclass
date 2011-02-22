@@ -189,7 +189,7 @@ while ($list=mysql_fetch_array($result))
 
     //CHECKBOX, NAME, RENAME, COMMENT
     if($list['contentType'] == CTEXERCISE_ )
-        $moduleImg = "exercise_on.gif";
+        $moduleImg = "exercise_on.png";
     else if($list['contentType'] == CTLINK_ )
         $moduleImg = "links_on.png";
     else if($list['contentType'] == CTCOURSE_DESCRIPTION_ )
