@@ -52,6 +52,9 @@ function redirect_to_message($id) {
 
 if (isset($_POST['submit'])) {
         // First do personalization and language changes
+	if (!file_exists($webDir."courses/userimg/")) {
+		mkdir($webDir."courses/userimg/", 0775);
+	}
 	$image_path = $webDir."courses/userimg/".$_SESSION['uid'];
         $perso_status = ($_POST['persoStatus'] == 'yes')? 'yes': 'no';
         $old_language = $language;
