@@ -78,7 +78,7 @@ if($is_adminOfCourse) {
 		draw($tool_content, 2, 'course_info');
 		exit;
 	} else {
-		$tool_content .= "<br /><p class='success_small'>$langBackupSuccesfull</p><div align=\"left\"><a href='$urlServer/courses/archive/$currentCourseID/archive.$currentCourseID.$shortDateBackuping.zip'>$langDownloadIt</a><img src='../../template/classic/img/download.gif' title='$langDownloadIt' width='30' height='29'></div>";
+		$tool_content .= "<br /><p class='success_small'>$langBackupSuccesfull</p><div align=\"left\"><a href='$urlServer/courses/archive/$currentCourseID/archive.$currentCourseID.$shortDateBackuping.zip'>$langDownloadIt</a><img src='../../template/classic/img/download.png' title='$langDownloadIt' width='24' height='24' alt='icon'></div>";
 	}
 
 	$tool_content .= "<p align=\"right\">";
