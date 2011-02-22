@@ -107,7 +107,7 @@ function choose_image($fileName)
 		$image['compressed'] = 'zip.gif';
 		$image['rar'       ] = 'rar.gif';
 		$image['code'      ] = 'js.gif';
-		$image['acrobat'   ] = 'pdf.gif';
+		$image['acrobat'   ] = 'pdf.png';
 		$image['powerpoint'] = 'ppt.gif';
 		$image['text'      ] = 'txt.png';
 
