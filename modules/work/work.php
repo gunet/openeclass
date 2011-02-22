@@ -582,7 +582,7 @@ function show_submission_form($id, $user_group_info)
                         $group_select_form = "<tr><th class='left'>$langGroupSpaceLink:</th><td>" .
                                              selection($user_group_info, 'gid') . "</td></tr>";
                 }
-                        $tool_content .= "<p>$m[this_is_group_assignment] " .
+                        $tool_content .= "<p class='alert1'>$m[this_is_group_assignment] <br />" .
                                 sprintf(count($user_group_info)?
                                         $m['group_assignment_publish']:
                                         $m['group_assignment_no_groups'], $group_link) .
@@ -592,25 +592,24 @@ function show_submission_form($id, $user_group_info)
                 $tool_content .= "
                      <form enctype='multipart/form-data' action='$_SERVER[PHP_SELF]' method='post'>
                         <input type='hidden' name='id' value='$id' />$group_select_hidden_input
-                        <table width='99%'>
+                        <fieldset>
+                        <legend>$langSubmit</legend>
+                        <table width='99%' class='tbl'>
+                        $group_select_form 
                         <tr>
-                          <th width='220'>&nbsp;</th>
-                          <td><b>$langSubmit</b></td>
-                        </tr>$group_select_form 
-                        <tr>
-                          <th class='left'>$langWorkFile:</th>
-                          <td><input type='file' name='userfile' class='FormData_InputText' /></td>
+                          <th class='left' width='150'>$langWorkFile:</th>
+                          <td><input type='file' name='userfile' /></td>
                         </tr>
                         <tr>
                           <th class='left'>$m[comments]:</th>
-                          <td><textarea name='stud_comments' rows='5' cols='55' class='FormData_InputText'></textarea></td>
+                          <td><textarea name='stud_comments' rows='5' cols='55'></textarea></td>
                         </tr>
                         <tr>
                           <th>&nbsp;</th>
                           <td><input type='submit' value='$langSubmit' name='work_submit' /><br />$langNotice3</td>
                         </tr>
                         </table>
-                        <br/>
+                        </fieldset>
                      </form>
                      <p align='right'><small>$GLOBALS[langMaxFileSize] " .
                                 ini_get('upload_max_filesize') . "</small></p>";
@@ -637,7 +636,7 @@ function assignment_details($id, $row, $message = null)
 
 	if (isset($message)) {
 		$tool_content .="
-                <table width=\"99%\">
+                <table width=\"99%\" class='tbl'>
                 <tr>
                   <td class=\"success\"><p><b>$langSaved</b></p></td>
                 </tr>
@@ -811,16 +810,13 @@ function show_assignment($id, $message = FALSE)
 		$tool_content .= "<form action='$_SERVER[PHP_SELF]' method='post'>
                 <input type='hidden' name='grades_id' value='$id' />
                 <br />
-                <table class='FormData' width='99%'>
-                <tbody>
+                <table class='tbl' width='99%'>
                 <tr>
                   <th class='left' width='220'>$langSubmissions:</th>
                   <td>$num_of_submissions</td>
                 </tr>
-                </tbody>
                 </table>";
-		$tool_content .= "<table width=\"99%\" class=\"Work_List\">
-                <tbody>
+		$tool_content .= "<table width=\"99%\" class=\"tbl\">
                 <tr>
                 <td width=\"3\">&nbsp;</td>";
                 sort_link($m['username'], 'nom', 'align=left');
@@ -862,7 +858,7 @@ function show_assignment($id, $message = FALSE)
 			if (trim($row['comments'] != '')) {
 			    $tool_content .= "
                             <br />
-                            <table align=\"left\" width=\"100%\" class=\"Info\">
+                            <table align=\"left\" width=\"100%\"  class=\"tbl\">
                             <tbody>
                             <tr>
                               <td width=\"1\" class=\"left\"><img src='../../template/classic/img/forum_off.gif' alt='$m[comments]' title=\"$m[comments]\" /></td>
@@ -882,7 +878,6 @@ function show_assignment($id, $message = FALSE)
                           <td width='1' class='left'><img src='../../template/classic/img/forum_on.gif' alt='$m[comments]' title='$m[comments]' /></td>
                           <td>$prof_comment</td>
                         <tr>
-                        </tbody>
                         </table>
                     </td>
                   </tr>";
@@ -892,8 +887,7 @@ function show_assignment($id, $message = FALSE)
 	$tool_content .="</tbody></table>";
 
 	$tool_content .= "<br />
-            <table class='FormData' width='99%'>
-            <tbody>
+            <table class='tbl' width='99%'>
             <tr>
               <th class='left' width='220'>&nbsp;</th>
               <td><input type='submit' name='submit_grades' value='$langGradeOk'></td>
@@ -916,8 +910,7 @@ function show_assignment($id, $message = FALSE)
                         $chart->setDataSet($dataSet);
 			$chart->render($webDir.$chart_path);
 			$tool_content .= "
-                        <table width='99%' class='FormData'>
-                        <tbody>
+                        <table width='99%' class='tbl'>
                         <tr>
                           <td align='right'><img src='$urlServer$chart_path' /></td>
                         </tr>
@@ -925,12 +918,12 @@ function show_assignment($id, $message = FALSE)
                         </table>";
 		}
 	} else {
-		$tool_content .= "<br /><table class='FormData' width='99%'>
-                    <tbody><tr>
+		$tool_content .= "<br /><table class='tbl' width='99%'>
+                    <tr>
                 <th class='left' width='220'>$langSubmissions:</th>
                 <td class='empty'>$langNoSubmissions</td>
                 </tr>
-            </tbody></table>";
+            </table>";
 	}
 	$tool_content .= "<br/><p align='right'><a href='$_SERVER[PHP_SELF]'>$langBack</a></p>";
 }
@@ -949,26 +942,27 @@ function show_student_assignments()
                                    WHERE active = '1' ORDER BY submission_date");
 
         if (mysql_num_rows($result)) {
-                $tool_content .= "<table align='left' width='99%'>
-                                  <thead>
-                                  <tr><th colspan='2'><div align='left'>&nbsp;&nbsp;$m[title]</div></th>
+                $tool_content .= "<table class='tbl_alt' width='99%'>
+                                  <tr>
+                                      <th colspan='2'><div align='left'>&nbsp;&nbsp;$m[title]</div></th>
                                       <th><div align='left'>$m[deadline]</div></th>
                                       <th><div align='center'>$m[submitted]</div></th>
                                       <th>$m[grade]</th>
-                                  </tr>
-                                  </thead>
-                                  <tbody>";
+                                  </tr>";
                 $k = 0;
                 while ($row = mysql_fetch_array($result)) {
                         $title_temp = q($row['title']);
                         if ($k%2 == 0) {
-                                $tool_content .= "\n<tr>";
+                                $tool_content .= "\n
+                                  <tr class='even'>";
                         } else {
-                                $tool_content .= "\n<tr class='odd'>";
+                                $tool_content .= "\n
+                                  <tr class='odd'>";
                         }
-                        $tool_content .= "<td width='1'><img style='padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet' /></td>
-                                <td><a href='$_SERVER[PHP_SELF]?id=$row[id]'>$title_temp</a></td>
-                                <td width='30%'>".nice_format($row['deadline']);
+                        $tool_content .= "
+                                    <td width='1'><img style='padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet' /></td>
+                                    <td><a href='$_SERVER[PHP_SELF]?id=$row[id]'>$title_temp</a></td>
+                                    <td width='30%'>".nice_format($row['deadline']);
                         if ($row['days'] > 1) {
                                 $tool_content .= " (<span class='not_expired'>$m[in]&nbsp;$row[days]&nbsp;$langDays</span>";
                         } elseif ($row['days'] < 0) {
@@ -978,7 +972,8 @@ function show_student_assignments()
                         } else {
                                 $tool_content .= " (<span class='expired_today'><b>$m[today]</b></span>)";
                         }
-                        $tool_content .= "</td><td width='25%' align='center'>";
+                        $tool_content .= "</td>
+                                    <td width='25%' align='center'>";
                         
                         if ($submission = find_submissions(is_group_assignment($row['id']), $uid, $row['id'], $gids)) {
                             foreach ($submission as $sub) {
@@ -992,7 +987,8 @@ function show_student_assignments()
                         } else {
                                 $tool_content .= "<img src='../../template/classic/img/checkbox_off.gif' alt='$m[no]' />";
                         }
-                        $tool_content .= "</td><td width='5%' align='center'>";
+                        $tool_content .= "</td>
+                                    <td width='5%' align='center'>";
                         foreach ($submission as $sub) {
                             $grade = submission_grade($sub['id']);
                                 if (!$grade) {                
@@ -1000,10 +996,12 @@ function show_student_assignments()
                                 }
                             $tool_content .= "<div style='padding-bottom: 5px;padding-top:5px;'>$grade</div>";
                         }
-                        $tool_content .= "</td></tr>";
+                        $tool_content .= "</td>
+                                  </tr>";
                         $k++;
                 }
-                $tool_content .= '</tbody></table>';
+                $tool_content .= '
+                                  </table>';
         } else {
                 $tool_content .= "<p class='alert1'>$langNoAssign</p>";
         }
@@ -1199,19 +1197,18 @@ function create_zip_index($path, $id, $online = FALSE)
 		<meta http-equiv="Content-Type" content="text/html; charset='.$charset.'">
 	</head>
 	<body>
-		<table border="1" width="95%">
-			<thead><tr>
+		<table width="95%" class="tbl">
+			<tr>
 				<th>'.$m['username'].'</th>
 				<th>'.$m['am'].'</th>
 				<th>'.$m['filename'].'</th>
 				<th>'.$m['sub_date'].'</th>
 				<th>'.$m['grade'].'</th>
-			</tr></thead>');
+			</tr>');
 
 	$result = db_query("SELECT * FROM assignment_submit
 		WHERE assignment_id='$id' ORDER BY id");
 
-	$tool_content .= "<tbody>";
 
 	while ($row = mysql_fetch_array($result)) {
 		$filename = basename($row['file_path']);
@@ -1239,7 +1236,7 @@ function create_zip_index($path, $id, $online = FALSE)
                                    "$m[ofgroup] $row[group_id]</td></tr>\n");
 		}
 	}
-	fputs($fp, ' </tbody></table></body></html>');
+	fputs($fp, ' </table></body></html>');
 	fclose($fp);
 }
 

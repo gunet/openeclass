@@ -89,9 +89,12 @@ if ($is_adminOfCourse) {
             $tool_content .= "<div class='success'>$langGlossaryDeleted</div><br />";    
         }
     }
-    $tool_content .= "<div id='operations_container'><ul id='opslist'>
-        <li><a href='" . $_SERVER['PHP_SELF'] . "?add=1'>" . $langAddGlossaryTerm . "</a></li>";
-    $tool_content .= "</ul></div>";
+    $tool_content .= "
+       <div id='operations_container'>
+         <ul id='opslist'>
+           <li><a href='" . $_SERVER['PHP_SELF'] . "?add=1'>" . $langAddGlossaryTerm . "</a></li>
+         </ul>
+       </div>";
     
     // display form for adding a glossary term
     if (isset($_GET['add']))  {
@@ -117,7 +120,8 @@ if ($is_adminOfCourse) {
         $tool_content .= "\n
                    </td>
                  </tr>
-                 <tr><th>$langGlossaryUrl</th>
+                 <tr>
+                   <th>$langGlossaryUrl</th>
                  <td>
                  <input type='text' name='url' value='$url' size='50'>
                  </td>
@@ -179,10 +183,10 @@ if ($is_adminOfCourse) {
 *************************************************/
 
 $tool_content .= "
-                 <table class='tbl' width='99%'>";
+                 <table class='tbl_alt' width='99%'>";
 $tool_content .= "
                  <tr>
-                   <th>$langGlossaryTerm - $langGlossaryDefinition</th>";
+                   <th><div align='left'>$langGlossaryTerm - $langGlossaryDefinition</div></th>";
 if ($is_adminOfCourse) {
     $tool_content .= "
                    <th width='20'>$langActions</th>";
@@ -202,8 +206,8 @@ while ($g = mysql_fetch_array($sql)) {
         } else {
             $urllink = '';
         }
-    $tool_content .= "<tr><td><strong>" . q($g['term']) . "</strong>: " .
-                     q($g['definition']) . " $urllink</td>";
+    $tool_content .= "<tr $rowClass><td><strong>" . q($g['term']) . "</strong> <br /><em>" .
+                     q($g['definition']) . "</em><div align='right'> $urllink</div></td>";
     if ($is_adminOfCourse) {
         $tool_content .= "
                    <td align='center' valign='top'><a href='$_SERVER[PHP_SELF]?edit=$g[id]'>
