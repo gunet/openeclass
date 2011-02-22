@@ -95,20 +95,20 @@ function choose_image($fileName)
 		$type['text'      ] = array('txt');
 
 		$image['word'      ] = 'doc.png';
-		$image['web'       ] = 'html.gif';
-		$image['css'       ] = 'css.gif';
+		$image['web'       ] = 'html.png';
+		$image['css'       ] = 'css.png';
 		$image['image'     ] = 'gif.png';
-		$image['audio'     ] = 'wav.gif';
-		$image['midi'      ] = 'midi.gif';
-		$image['video'     ] = 'mpg.gif';
-		$image['rar'       ] = 'ram.gif';
-		$image['flash'     ] = 'flash.gif';
-		$image['excel'     ] = 'xls.gif';
-		$image['compressed'] = 'zip.gif';
-		$image['rar'       ] = 'rar.gif';
-		$image['code'      ] = 'js.gif';
+		$image['audio'     ] = 'wav.png';
+		$image['midi'      ] = 'midi.png';
+		$image['video'     ] = 'mpg.png';
+		$image['ram'       ] = 'ram.png';
+		$image['flash'     ] = 'flash.png';
+		$image['excel'     ] = 'xls.png';
+		$image['compressed'] = 'zip.png';
+		$image['rar'       ] = 'rar.png';
+		$image['code'      ] = 'js.png';
 		$image['acrobat'   ] = 'pdf.png';
-		$image['powerpoint'] = 'ppt.gif';
+		$image['powerpoint'] = 'ppt.png';
 		$image['text'      ] = 'txt.png';
 
 	}
