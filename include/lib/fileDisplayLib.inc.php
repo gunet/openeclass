@@ -204,7 +204,6 @@ function public_file_path($disk_path, $filename = null)
 {
 	global $mysqlMainDb, $group_sql;
         static $seen_paths;
-
 	$dirpath = dirname($disk_path);
 	if ($dirpath == '/') {
 		$dirname = '';
@@ -227,9 +226,9 @@ function public_file_path($disk_path, $filename = null)
                                         $dirname = $seen_paths[$partial_path];
                                 }
                         }
-                        $seen_paths[$partial_path] = $dirpath;
+                } else {
+                        $dirname = $seen_paths[$partial_path];
                 }
-
         }
         if (!isset($filename)) {
                 $q = db_query("SELECT filename FROM `$mysqlMainDb`.document
