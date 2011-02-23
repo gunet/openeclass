@@ -26,11 +26,13 @@
 
 $path2add=2;
 include '../include/baseTheme.php';
-
 $nameTools = $contactpoint;
+
 if (!empty($postaddress)) {
     $message = "| ".$postaddress;
-} else $message = '';
+} else {
+    $message = '';
+}
 
 
 $tool_content .= "<table class='tbl1' width='99%'>

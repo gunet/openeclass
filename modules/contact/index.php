@@ -90,23 +90,23 @@ function form()
 	}
 	
 	$ret = "<form method='post' action='$_SERVER[PHP_SELF]'>
+	<fieldset>
+	<legend>$langIntroMessage</legend>
 	$hidden
 	<table class='FormData' width='99%' align='left'>
 	<tbody>
 	<tr>
-	  <th>&nbsp;</th>
 	  <td>$message</td>
 	</tr>
 	<tr>
-	  <th class='left'>$langIntroMessage</th>
 	  <td><textarea class=auth_input name='content' rows='10' cols='80'></textarea></td>
 	</tr>
 	<tr>
-	  <th>&nbsp;</th>
 	  <td><input type='submit' name='submit' value='$langSendMessage' /></td>
 	</tr>
 	</tbody>
 	</table>
+	</fieldset>
 	</form>";
 
 return $ret;
