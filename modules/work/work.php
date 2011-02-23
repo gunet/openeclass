@@ -956,7 +956,7 @@ function show_student_assignments()
                                   <tr class='odd'>";
                         }
                         $tool_content .= "
-                                    <td width='1'><img style='padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.png' title='bullet' /></td>
+                                    <td width='1'><img style='padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet' /></td>
                                     <td><a href='$_SERVER[PHP_SELF]?id=$row[id]'>$title_temp</a></td>
                                     <td width='160' align='center'>".nice_format($row['deadline']);
                         if ($row['days'] > 1) {
@@ -1055,7 +1055,7 @@ cData;
                         }
 
 			$tool_content .= "
-       <td width='1'><img style='border:0px; padding-top:3px;' src='$urlServer/template/classic/img/$visibility_image.png' title='bullet' /></td>
+       <td width='1'><img style='border:0px; padding-top:3px;' src='$urlServer/template/classic/img/$visibility_image.gif' title='bullet' /></td>
        <td ".$visibility_css."><a href='$_SERVER[PHP_SELF]?id=${row['id']}' ";
 			$tool_content .= ">";
 			$tool_content .= $row_title = q($row['title']);
