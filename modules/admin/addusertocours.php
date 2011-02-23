@@ -49,9 +49,13 @@ if (isset($_POST['submit']))  {
 	// Remove unneded users - guest user (statut == 10) is never removed
         if ($reglist) {
                 $reglist = "AND user_id NOT IN ($reglist)";
+                db_query("DELETE FROM group_members
+                                 WHERE group_id IN (SELECT id FROM `group` WHERE course_id = $cid)
+                                       $reglist");
         }
-        $sql = db_query("DELETE FROM cours_user
+        db_query("DELETE FROM cours_user
                          WHERE cours_id = $cid AND statut <> 10 $reglist");
+
 
         function regusers($cid, $users, $statut)
         {

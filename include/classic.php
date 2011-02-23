@@ -54,6 +54,7 @@ function cours_table_header($statut)
                 $manage = $langUnregCourse;
         } else {
                 $legend = "(? $statut ?)";
+                $manage = '';
         }
 
 	$tool_content .= "\n        <p><b>$legend</b></p>

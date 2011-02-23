@@ -68,7 +68,7 @@ if($is_adminOfCourse) {
 		</td>
 		</tr>
 		<tr>
-		<th rowspan='2' class='left' width='220'>$langConfirmDel :</th>
+		<th rowspan='2' class='left' width='220'>$langConfirmDel:</th>
                 <td width='52' align='center'>
 		<form method='post' action='delete_course.php'>
                 <input type='submit' name='delete' value='$langDelete' /></form></td>

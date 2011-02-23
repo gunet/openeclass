@@ -208,32 +208,32 @@ if (isset($language)) {
 // if login succesful display courses lists
 // --------------------------------------------------------------
 if (isset($uid) AND !isset($_GET['logout'])) {
+        if (check_guest()) {
+                //if the user is a guest send him straight to the corresponding lesson
+                $guestSQL = db_query("SELECT code FROM cours_user, cours
+                                      WHERE cours.cours_id = cours_user.cours_id AND
+                                            user_id = $uid", $mysqlMainDb);
+                if (mysql_num_rows($guestSQL) > 0) {
+                        $sql_row = mysql_fetch_row($guestSQL);
+                        $dbname = $sql_row[0];
+                        $_SESSION['dbname'] = $dbname;
+                        header("Location: {$urlServer}courses/$dbname/index.php");
+                        exit;
+                } else { // if course was deleted stop guest account
+                        $warning = "<br><font color='red'>$langInvalidGuestAccount</font><br>";
+                        include "include/logged_out_content.php";
+                        draw($tool_content, 0,'index');
+                }
+        }
 	$nameTools = $langWelcomeToPortfolio;
 	$require_help = true;
 	$helpTopic="Portfolio";
 	if (isset($_SESSION['user_perso_active']) and $_SESSION['user_perso_active'] == 'no') {
-		if (!check_guest()){
-			//if the user is not a guest, load classic view
-			include "include/logged_in_content.php";
-			draw($tool_content,1,null,null,null,null,$perso_tool_content);
-		} else {
-			//if the user is a guest send him straight to the corresponding lesson
-			$guestSQL = db_query("SELECT code FROM cours_user, cours
-				              WHERE cours.cours_id = cours_user.cours_id AND
-                                                    user_id = $uid", $mysqlMainDb);
-			if (mysql_num_rows($guestSQL) > 0) {
-				$sql_row = mysql_fetch_row($guestSQL);
-				$dbname = $sql_row[0];
-				$_SESSION['dbname'] = $dbname;
-				header("Location: {$urlServer}courses/$dbname/index.php");
-			} else { // if course was deleted stop guest account
-				$warning = "<br><font color='red'>$langInvalidGuestAccount</font><br>";
-				include "include/logged_out_content.php";
-				draw($tool_content, 0,'index');
-			}
-		}
+                // if the user is not a guest, load classic view
+                include "include/logged_in_content.php";
+                draw($tool_content,1,null,null,null,null,$perso_tool_content);
 	} else {
-		//load classic view
+		// load classic view
 		include "include/classic.php";
 		draw($tool_content, 1, 'index');
 	}
