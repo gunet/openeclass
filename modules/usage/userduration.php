@@ -105,7 +105,7 @@ if ($result) {
                         } else {
                                 $tool_content .= "\n<tr class='odd'>";
                         }
-                        $tool_content .= "<td class='bullet'>" . display_user($row) . "</td>
+                        $tool_content .= "<td class='bullet'>" . display_user($row['user_id']) . "</td>
                                 <td class='center'>$row[am]</td>
                                 <td class='center'>$grp_name</td>
                                 <td class='center'>" . format_time_duration(0 + $row['duration']) . "</td>

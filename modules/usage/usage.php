@@ -44,7 +44,6 @@ $require_login = true;
 $require_prof = true;
 include '../../include/baseTheme.php';
 
-$tool_content = '';
 $tool_content .= "
 <div id='operations_container'>
   <ul id='opslist'>
@@ -84,4 +83,4 @@ if (isset($_POST['u_analyze']) && isset($_POST['user_id']) && $_POST['user_id'] 
     }
 }
 add_units_navigation(TRUE);
-draw($tool_content, 2, 'usage', $local_head, '');
+draw($tool_content, 2, '', $local_head);

@@ -43,7 +43,7 @@ class action {
                     user_id = $uid,
                     action_type_id = $action_type_id,
                     date_time = NOW(),
-                    duration = " . $duration;
+                    duration = ".$duration;
         db_query($sql, $currentCourseID);
     }
 
@@ -84,11 +84,11 @@ class action {
                     " date_time < '$end_date' ";
                     
                 $result_2 = db_query($sql_2, $currentCourseID);
-                while ($row2 = mysql_fetch_assoc($result_2)) {
-                    $visits = $row2['visits'];
-                    $total_dur = $row2['total_dur'];
-                }
+                $row2 = mysql_fetch_assoc($result_2);
+                $visits = $row2['visits'];
+                $total_dur = intval($row2['total_dur']);                
                 mysql_free_result($result_2);
+		
                 $sql_3 = "INSERT INTO actions_summary SET ".
                     " module_id = $module_id, ".
                     " visits = $visits, ".

@@ -42,7 +42,7 @@ include '../../include/sendMail.inc.php';
 
 $group_id = intval($_REQUEST['group_id']);
 
-$nameTools = $langGroupMail;
+$nameTools = $langEmailGroup;
 $navigation[]= array ("url"=>"group.php", "name"=> $langGroupSpace,
 "url"=>"group_space.php?group_id=$group_id", "name"=>$langGroupSpace);
 
@@ -78,28 +78,29 @@ if ($is_adminOfCourse or $is_tutor)  {
 	} else {
 		$tool_content .= "
 		<form action='$_SERVER[PHP_SELF]' method='post'>
+		<fieldset>
+		<legend>$langTypeMessage</legend>
 		<input type='hidden' name='group_id' value='$group_id'>
-		  <table width='99%' class='FormData'>
-		  <thead>
-		  <tr>
-		    <th width='220'>&nbsp;</th>
-		    <td><b>$langTypeMessage</b></td>
-		  </tr>
-		  <tr>
-		    <th class='left'>$langMailSubject</th>
+		<table width='99%' class='FormData'>
+		<thead>
+		<tr>
+		  <td class='left'>$langMailSubject</td></tr>
+		</tr>
+		<tr>
 		    <td><input type='text' name='subject' size='58' class='FormData_InputText'></input></td>
-		  </tr>
-		  <tr>
-		    <th class='left' valign='top'>$langMailBody</th>
-		    <td><textarea name='body_mail' rows='10' cols='73' class='FormData_InputText'></textarea></td>
-		  </tr>
-		  <tr>
-		    <th>&nbsp;</th>
-		    <td><input type='submit' name='submit' value='$langSend'></input></td>
-		  </tr>
-		  </thead>
-		  </table>
-		 <br />
+		</tr>
+		<tr>
+		  <td class='left'>$langMailBody</td>
+		</tr>
+		<tr>
+		  <td><textarea name='body_mail' rows='10' cols='73' class='FormData_InputText'></textarea></td>
+		</tr>
+		<tr>
+		  <td><input type='submit' name='submit' value='$langSend'></input></td>
+		</tr>
+		</thead>
+		</table>
+		</fieldset>
 		 </form>";
 	}
 }

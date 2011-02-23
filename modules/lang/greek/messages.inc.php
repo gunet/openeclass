@@ -1273,7 +1273,6 @@ $langTypeMessage = "Πληκτρολογήστε το μήνυμά σας παρ
 $langSend = "Αποστολή";
 $langEmailSuccess = "Το e-mail σας στάλθηκε με επιτυχία !";
 $langMailError = "Σφάλμα κατά την αποστολή e-mail !";
-$langGroupMail = "Mail στην Ομάδα Χρηστών";
 $langMailSubject = "Θέμα: ";
 $langMailBody = "Μήνυμα: ";
 $langProfLesson = "Διδάσκων του μαθήματος";

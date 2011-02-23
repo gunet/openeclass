@@ -108,4 +108,3 @@ $tool_content .= '
   </table>
 </fieldset>
 </form>';
-?>

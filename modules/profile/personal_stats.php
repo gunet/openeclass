@@ -30,7 +30,6 @@ $helpTopic = 'Personal Statistics';
 include '../../include/baseTheme.php';
 include "../auth/auth.inc.php";
 $require_valid_uid = TRUE;
-$tool_content = "";
 
 check_uid();
 
@@ -60,6 +59,7 @@ if (!extension_loaded('gd')) {
 			$sql = "SELECT COUNT(*) AS cnt FROM actions WHERE user_id = '$uid'";
 			$result = db_query($sql, $course_code);
 			while ($row = mysql_fetch_assoc($result)) {
+				
 				$totalHits += $row['cnt'];
 				$hits[$course_code] = $row['cnt'];
 			}
@@ -95,46 +95,42 @@ if (!extension_loaded('gd')) {
 
     $totalDuration = format_time_duration(0 + $totalDuration);
     $tool_content .= "
-
-  <p class='title1'>$langPlatformGenStats</p>
-  <table class='tbl' width='99%'>
-  <tr>
-    <td width='250'>$langTotalVisitsCourses:</td>
-    <td class='bold'>$totalHits</td>
-  </tr>
-  <tr>
-    <td>$langDurationVisits:</td>
-    <td class='bold'>$totalDuration</td>
-  </tr>
-  <tr>
-    <td valign='top'>$langDurationVisitsPerCourse:</td>
-    <td>
+	<p class='title1'>$langPlatformGenStats</p>
+	<table class='tbl' width='99%'>
+	<tr>
+	  <td width='250'>$langTotalVisitsCourses:</td>
+	  <td class='bold'>$totalHits</td>
+	</tr>
+	<tr>
+	  <td>$langDurationVisits:</td>
+	  <td class='bold'>$totalDuration</td>
+	</tr>
+	<tr>
+	  <td valign='top'>$langDurationVisitsPerCourse:</td>
+	  <td>
             <table class='tbl_alt' width='400'>
             <tr>
               <th>&nbsp;</th><th>$langCourseTitle</th>
               <th>$langDuration</th>
             </tr>";
-
-
                 $i = 0;
                 foreach ($duration as $code => $time) {
                         if ($i%2==0) {
-                                $tool_content .= "\n    <tr class=\"even\">";
+                                $tool_content .= "\n<tr class='even'>";
                         } else {
-                                $tool_content .= "\n    <tr class=\"odd\">";
+                                $tool_content .= "\n<tr class='odd'>";
                         }
                         $i++;
                         $tool_content .= "
-              <td width='1'><img style='border:0px; padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif' alt=''></td>
-              <td>" . course_code_to_title($code) . "</td>
-              <td class='center'>" . format_time_duration(0 + $time) . "</td>
-           </tr>";
+			<td width='1'><img style='border:0px; padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.png' alt='' /></td>
+			<td>" . course_code_to_title($code) . "</td>
+			<td class='center'>" . format_time_duration(0 + $time) . "</td>
+		     </tr>";
                 }
-
-                $tool_content .= "\n              </table>
-    </td>
-  </tr>
-  </table>";
+        $tool_content .= "\n</table>
+	</td>
+	</tr>
+	</table>";
 	}
 }
 // End of chart display; chart unlinked at end of script.
@@ -145,10 +141,8 @@ $sql = "SELECT * FROM loginout
 
 $leResultat = db_query($sql, $mysqlMainDb);
 
-
-    $tool_content .= "
-  <table class=\"tbl\" width=\"99%\">
-  <tr>
+    $tool_content .= "<table class=\"tbl\" width=\"99%\">
+	<tr>
     <td width=\"250\" valign=\"top\">$langLastVisits:</td>
     <td>";
 
@@ -175,31 +169,10 @@ $leResultat = db_query($sql, $mysqlMainDb);
         <td width=\"1\"><img style='border:0px; padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif' alt=''></td>
         <td>".strftime("%d/%m/%Y (%H:%M:%S) ", strtotime($when))."</td>
         <td>".$nomAction[$action]."</td>
-    </tr>";
+	</tr>";
 	$i++;
     }
 
 $tool_content .= "\n    </tbody>\n    </table>\n";
-
-
-    $tool_content .= "
-    </td>
-  </tr>
-  </thead>
-  </table>";
-
-
-
+$tool_content .= "</td></tr></thead></table>";
 draw($tool_content, 1);
-
-// Unlink chart file - haniotak
-/*if ($made_chart) {
-	while (ob_get_level() > 0) {
-  	 ob_end_flush();
-	}
-	ob_flush();
-	flush();
-	sleep(5);
-	unlink($webDir.$chart_path);
-}
-*/

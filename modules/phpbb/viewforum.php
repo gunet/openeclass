@@ -271,9 +271,9 @@ $tool_content .= "
 		}
 		$tool_content .= "\n<td class='center'>";
 		if (isset($_GET['start']) and $_GET['start'] > 0) {
-			$tool_content .= "<a href='$_SERVER[PHP_SELF]?forum=$forum_id&amp;start=$_GET[start]&amp;topicnotify=$topic_link_notify&amp;topic_id=$myrow[topic_id]'><img src='../../template/classic/img/announcements$topic_icon.gif' title='$langNotify'></img></a>";
+			$tool_content .= "<a href='$_SERVER[PHP_SELF]?forum=$forum_id&amp;start=$_GET[start]&amp;topicnotify=$topic_link_notify&amp;topic_id=$myrow[topic_id]'><img src='../../template/classic/img/announcements$topic_icon.png' title='$langNotify'></img></a>";
 		} else {
-			$tool_content .= "<a href='$_SERVER[PHP_SELF]?forum=$forum_id&amp;topicnotify=$topic_link_notify&amp;topic_id=$myrow[topic_id]'><img src='../../template/classic/img/announcements$topic_icon.gif' title='$langNotify'></img></a>";
+			$tool_content .= "<a href='$_SERVER[PHP_SELF]?forum=$forum_id&amp;topicnotify=$topic_link_notify&amp;topic_id=$myrow[topic_id]'><img src='../../template/classic/img/announcements$topic_icon.png' title='$langNotify'></img></a>";
 		}
 		$tool_content .= "</td>\n     </tr>";
                 $i++;

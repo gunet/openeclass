@@ -82,7 +82,6 @@ mysql_free_result($result);
 
 $min_t = date("d-m-Y", $min_time);
 
-
 $dateNow = date("d-m-Y / H:i:s",time());
 $nameTools = $langUsage;
 $local_style = '
@@ -101,171 +100,154 @@ if ($language == 'greek') {
 $jscalendar = new DHTML_Calendar($urlServer.'include/jscalendar/', $lang, 'calendar-blue2', false);
 $local_head = $jscalendar->get_load_files_code();
 
- if (!extension_loaded('gd')) {
-        $tool_content .= "<p>$langGDRequired</p>";
- } else {
-        $made_chart = true;
+if (!extension_loaded('gd')) {
+       $tool_content .= "<p>$langGDRequired</p>";
+} else {
+       $made_chart = true;
 
-        //make chart
-        require_once '../../include/libchart/libchart.php';
-        $usage_defaults = array (
-            'u_stats_value' => 'visits',
-            'u_module_id' => -1,
-            'u_date_start' => strftime('%Y-%m-%d', strtotime('now -2 year')),
-            'u_date_end' => strftime('%Y-%m-%d', strtotime('now -8 month')),
-        );
+       //make chart
+       require_once '../../include/libchart/libchart.php';
+       $usage_defaults = array (
+	   'u_stats_value' => 'visits',
+	   'u_module_id' => -1,
+	   'u_date_start' => strftime('%Y-%m-%d', strtotime('now -2 year')),
+	   'u_date_end' => strftime('%Y-%m-%d', strtotime('now -8 month')),
+       );
 
-        foreach ($usage_defaults as $key => $val) {
-            if (!isset($_POST[$key])) {
-                $$key = $val;
-            } else {
-                $$key = $_POST[$key];
-            }
-        }
+       foreach ($usage_defaults as $key => $val) {
+	   if (!isset($_POST[$key])) {
+	       $$key = $val;
+	   } else {
+	       $$key = $_POST[$key];
+	   }
+       }
 
-    $date_fmt = '%Y-%m-%d';
-    $date_where = " (start_date BETWEEN '$u_date_start 00:00:00' AND '$u_date_end 23:59:59') ";   #AUTO PREPEI NA ALLA#EI
+   $date_fmt = '%Y-%m-%d';
+   $date_where = " (start_date BETWEEN '$u_date_start 00:00:00' AND '$u_date_end 23:59:59') ";   #AUTO PREPEI NA ALLA#EI
 
 
-   if ($u_module_id != -1) {
-    $mod_where = " (module_id = '$u_module_id') ";
-   } else {
-    $mod_where = " (1) ";
+  if ($u_module_id != -1) {
+   $mod_where = " (module_id = '$u_module_id') ";
+  } else {
+   $mod_where = " (1) ";
+  }
+
+   #check if statistics exist
+   $chart_content=0;
+
+   switch ($u_stats_value) {
+       case "visits":
+	       $query = "SELECT module_id, MONTH(start_date) AS month, YEAR(start_date) AS year, SUM(visits) AS visits FROM actions_summary ".
+	       " WHERE $date_where AND $mod_where GROUP BY MONTH(start_date)";
+	       
+	       $result = db_query($query, $currentCourseID);
+	       $chart = new PieChart(600, 300);
+	       $dataSet = new XYDataSet();
+	   while ($row = mysql_fetch_assoc($result)) {
+	       $mont = $langMonths[$row['month']];
+	       $dataSet->addPoint(new Point($mont." - ".$row['year'], $row['visits']));
+	       $chart->width += 20;
+	       $chart->setDataSet($dataSet);
+	       $chart_content = 5;
+	   }
+	   $chart->setTitle("$langOldStats");
+       break;
+
+       case "duration":
+	   $query = "SELECT module_id, MONTH(start_date) AS month, YEAR(start_date) AS year, ".
+		    " SUM(duration) AS tot_dur FROM actions_summary ".
+		    " WHERE $date_where AND $mod_where GROUP BY MONTH(start_date)";
+
+	   $result = db_query($query, $currentCourseID);
+	       $chart = new PieChart(600, 300);
+	       $dataSet = new XYDataSet();
+	   while ($row = mysql_fetch_assoc($result)) {
+	       $mont = $langMonths[$row['month']];
+	       $dataSet->addPoint(new Point($mont." - ".$row['year'], $row['tot_dur']));
+	       $chart->width += 20;
+	       $chart->setDataSet($dataSet);
+	       $chart_content = 5;
+	   }
+	   $chart->setTitle("$langOldStats");
+	   $tool_content .= "<p>$langDurationExpl</p>";
+       break;
    }
+   mysql_free_result($result);
+   $chart_path = 'courses/'.$currentCourseID.'/temp/chart_'.md5(serialize($chart)).'.png';
 
-    #check if statistics exist
-    $chart_content=0;
+   $chart->render($webDir.$chart_path);
 
-    switch ($u_stats_value) {
-        case "visits":
-            $query = "SELECT module_id, MONTH(start_date) AS month, YEAR(start_date) AS year, SUM(visits) AS visits FROM actions_summary ".
-            " WHERE $date_where AND $mod_where GROUP BY MONTH(start_date)";
+   if ($chart_content) {
+       $tool_content .= "<p>$langOldStatsExpl</p>";
+       $tool_content .= '<img src="'.$urlServer.$chart_path.'" />';
+   } elseif (isset($btnUsage) and $chart_content == 0) {
+     $tool_content .='<p class="alert1">'.$langNoStatistics.'</p>';
+   }
+   //make form
+   $start_cal = $jscalendar->make_input_field(
+	  array('showsTime'      => false,
+		'showOthers'     => true,
+		'ifFormat'       => '%Y-%m-%d',
+		'timeFormat'     => '24'),
+	  array('style'  => 'width: 10em; color: #727266; background-color: #fbfbfb; border: 1px solid #CAC3B5; text-align: center',
+		'name'   => 'u_date_start',
+		'value'  => $u_date_start));
 
-            $result = db_query($query, $currentCourseID);
+   $end_cal = $jscalendar->make_input_field(
+	  array('showsTime'      => false,
+		'showOthers'     => true,
+		'ifFormat'       => '%Y-%m-%d',
+		'timeFormat'     => '24'),
+	  array('style'  => 'width: 10em; color: #727266; background-color: #fbfbfb; border: 1px solid #CAC3B5; text-align: center',
+		'name'   => 'u_date_end',
+		'value' => $u_date_end));
 
-            $chart = new VerticalBarChart(200, 300);
+   $qry = "SELECT id, rubrique AS name FROM accueil WHERE define_var != '' AND visible = 1 ORDER BY name ";
 
-            while ($row = mysql_fetch_assoc($result)) {
-                $mont = $langMonths[$row['month']];
-                $chart->addPoint(new Point($mont." - ".$row['year'], $row['visits']));
-                $chart->width += 20;
-                $chart_content=5;
-            }
-            $chart->setTitle("$langOldStats");
+   $mod_opts = '<option value="-1">'.$langAllModules."</option>\n";
+   $result = db_query($qry, $currentCourseID);
+   while ($row = mysql_fetch_assoc($result)) {
+       if ($u_module_id == $row['id']) { $selected = 'selected'; } else { $selected = ''; }
+       $mod_opts .= '<option '.$selected.' value="'.$row["id"].'">'.$row['name']."</option>\n";
+   }
+   @mysql_free_result($qry);
 
-        break;
+   $statsValueOptions =
+       '<option value="visits" '.	 (($u_stats_value=='visits')?('selected'):(''))	  .'>'.$langVisits."</option>\n".
+       '<option value="duration" '.(($u_stats_value=='duration')?('selected'):('')) .'>'.$langDuration."</option>\n";
 
-        case "duration":
-            $query = "SELECT module_id, MONTH(start_date) AS month, YEAR(start_date) AS year, ".
-                     " SUM(duration) AS tot_dur FROM actions_summary ".
-                     " WHERE $date_where AND $mod_where GROUP BY MONTH(start_date)";
-
-            $result = db_query($query, $currentCourseID);
-
-            $chart = new VerticalBarChart(200, 300);
-
-            while ($row = mysql_fetch_assoc($result)) {
-                $mont = $langMonths[$row['month']];
-                $chart->addPoint(new Point($mont." - ".$row['year'], $row['tot_dur']));
-                $chart->width += 20;
-                $chart_content=5;
-            }
-
-            $chart->setTitle("$langOldStats");
-            $tool_content .= "<p>$langDurationExpl</p>";
-
-        break;
+   $tool_content .= '
+       <form method="post">
+       <fieldset>
+	 <legend>'.$langOldStats.'</legend>
+	 <table class="tbl">
+	 <tr>
+	   <th>&nbsp;</th>
+	   <td>'.$langCreateStatsGraph.':</td>
+	 </tr>
+	 <tr>
+	   <th>'.$langValueType.'</th>
+	   <td><select name="u_stats_value">'.$statsValueOptions.'</select></td>
+	 </tr>
+	 <tr>
+	   <th>'.$langStartDate.'</th>
+	   <td>'."$start_cal".'</td>
+	 </tr>
+	 <tr>
+	    <th>'.$langEndDate.'</th>
+	    <td>'."$end_cal".'</td>
+	 </tr>
+	 <tr>
+	   <th>'.$langModule.'</th>
+	   <td><select name="u_module_id">'.$mod_opts.'</select></td>
+	 </tr>
+	 <tr>
+	   <th>&nbsp;</th>
+	   <td><input type="submit" name="btnUsage" value="'.$langSubmit.'"></td>
+	 </tr>
+	 </table>
+       </fieldset>
+       </form>';
     }
-    mysql_free_result($result);
-    $chart_path = 'courses/'.$currentCourseID.'/temp/chart_'.md5(serialize($chart)).'.png';
 
-    $chart->render($webDir.$chart_path);
-
-    if ($chart_content) {
-        $tool_content .= "<p>$langOldStatsExpl</p>";
-        $tool_content .= '<img src="'.$urlServer.$chart_path.'" />';
-    } elseif (isset($btnUsage) and $chart_content == 0) {
-      $tool_content .='<p class="alert1">'.$langNoStatistics.'</p>';
-    }
-    //$tool_content .= '<br>';
-
-    //make form
-    $start_cal = $jscalendar->make_input_field(
-           array('showsTime'      => false,
-                 'showOthers'     => true,
-                 'ifFormat'       => '%Y-%m-%d',
-                 'timeFormat'     => '24'),
-           array('style'  => 'width: 10em; color: #727266; background-color: #fbfbfb; border: 1px solid #CAC3B5; text-align: center',
-                 'name'   => 'u_date_start',
-                 'value'  => $u_date_start));
-
-    $end_cal = $jscalendar->make_input_field(
-           array('showsTime'      => false,
-                 'showOthers'     => true,
-                 'ifFormat'       => '%Y-%m-%d',
-                 'timeFormat'     => '24'),
-           array('style'  => 'width: 10em; color: #727266; background-color: #fbfbfb; border: 1px solid #CAC3B5; text-align: center',
-                 'name'   => 'u_date_end',
-                 'value' => $u_date_end));
-
-    $qry = "SELECT id, rubrique AS name FROM accueil WHERE define_var != '' AND visible = 1 ORDER BY name ";
-
-    $mod_opts = '<option value="-1">'.$langAllModules."</option>\n";
-    $result = db_query($qry, $currentCourseID);
-    while ($row = mysql_fetch_assoc($result)) {
-        if ($u_module_id == $row['id']) { $selected = 'selected'; } else { $selected = ''; }
-        $mod_opts .= '<option '.$selected.' value="'.$row["id"].'">'.$row['name']."</option>\n";
-    }
-    @mysql_free_result($qry);
-
-    $statsValueOptions =
-        '<option value="visits" '.	 (($u_stats_value=='visits')?('selected'):(''))	  .'>'.$langVisits."</option>\n".
-        '<option value="duration" '.(($u_stats_value=='duration')?('selected'):('')) .'>'.$langDuration."</option>\n";
-
-    $tool_content .= '
-<form method="post">
-<fieldset>
-  <legend>'.$langOldStats.'</legend>
-  <table class="tbl">
-  <tr>
-    <th>&nbsp;</th>
-    <td>'.$langCreateStatsGraph.':</td>
-  </tr>
-  <tr>
-    <th>'.$langValueType.'</th>
-    <td><select name="u_stats_value">'.$statsValueOptions.'</select></td>
-  </tr>
-  <tr>
-    <th>'.$langStartDate.'</th>
-    <td>'."$start_cal".'</td>
-  </tr>
-  <tr>
-     <th>'.$langEndDate.'</th>
-     <td>'."$end_cal".'</td>
-  </tr>
-  <tr>
-    <th>'.$langModule.'</th>
-    <td><select name="u_module_id">'.$mod_opts.'</select></td>
-  </tr>
-  <tr>
-    <th>&nbsp;</th>
-    <td><input type="submit" name="btnUsage" value="'.$langSubmit.'"></td>
-  </tr>
-  </table>
-</fieldset>
-</form>';
-     }
-
-draw($tool_content, 2, '', $local_head, '');
-/*
-if ($made_chart) {
-		while (ob_get_level() > 0) {
-    	 ob_end_flush();
-    }
-    ob_flush();
-    flush();
-    sleep(5);
-    unlink ($webDir.$chart_path);
-}
-*/
-?>
+draw($tool_content, 2, '', $local_head);
