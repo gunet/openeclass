@@ -472,16 +472,16 @@ fieldset table.th {
 }
 
 #contact {
-    padding: 10px; 
     background-image:url(img/contact.png);
 	background-repeat:no-repeat;
-    background-position:right bottom;
+    background-position:right top;
 }
 
 #info {
     background-image:url(img/info.png);
 	background-repeat:no-repeat;
-    background-position:right;
+    background-position:right top;
+    padding-left: 140px;
 }
 
 

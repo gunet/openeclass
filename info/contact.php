@@ -35,13 +35,17 @@ if (!empty($postaddress)) {
 }
 
 
-$tool_content .= "<table class='tbl1' width='99%'>
-<tr><td class='title1' colspan='3'>$langContactInfo</td><td width='150' rowspan='3' id='contact'>&nbsp;</td></tr>
-<tr><td valign='top' width='200'>$langPostMail</td><td> $Institution $message </td><td>&nbsp;</td></tr>
-<tr><td valign='top' width='200'><b>$langPhone:</b></td><td> $telephone</td><td>&nbsp;</td></tr>
-<tr><td>$langFax</td><td> $fax</td><td>&nbsp;</td></tr>
+$tool_content .= "
+<table class='tbl1' width='99%'>
+<tr><td class='title1' colspan='3'>$langContactInfo</td>
+<tr><td valign='top' width='200'>$langPostMail</td><td> $Institution $message </td>
+<td width='150' rowspan='5' valign='top' id='contact'>&nbsp;</td></tr>
+<tr><td valign='top' width='200'><b>$langPhone:</b></td><td> $telephone</td></tr>
+<tr><td>$langFax</td><td> $fax</td></tr>
 <tr><td><b>$langEmail</b></td><td>".mailto($emailhelpdesk, str_replace('@', ' &lt;at> ', $emailhelpdesk))."</td>
-<td>&nbsp;</td>
+<tr>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
 </tr></table>";
 
 if (isset($uid) and $uid) {
