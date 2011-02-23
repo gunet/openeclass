@@ -109,9 +109,8 @@ if(isset($_POST['submit'])) {
 	</tr>
 	</tbody>
 	</table>
-	</form>";
-	
-	$tool_content .= "<p align=\"right\"><a href=\"infocours.php\">$langBack</a></p>";
+	</form>";	
+	$tool_content .= "<p align='right'><a href='infocours.php'>$langBack</a></p>";
 }
 
 draw($tool_content, 2);
