@@ -56,7 +56,7 @@ if ($is_adminOfCourse) {
 	$tool_content = "
 <form method='post' action='group.php'>
     <fieldset>
-    <legend>$langGroupProperties / $langTools</legened>
+    <legend>$langGroupProperties / $langTools</legend>
     <table width='99%' align='left' class='tbl'>
     <tr>
       <th class='left' width='180'>$langGroupStudentRegistrationType :</th>
@@ -73,22 +73,22 @@ if ($is_adminOfCourse) {
     <th class='left'>$langGroupForum :</th>
       <td>
         <input type='checkbox' name='has_forum' value='1'$checked[has_forum] />
-        </td>
+      </td>
     </tr>
     <tr>
       <th class='left'>$langPrivate_1 :</th>
       <td>
         <input type='radio' name='private_forum' value='1'$checked[private_forum_yes] />
-		&nbsp;$langPrivate_2&nbsp;<br />
-		<input type='radio' name='private_forum' value='0'$checked[private_forum_no] />
-		&nbsp;$langPrivate_3
-        </td>
+                &nbsp;$langPrivate_2&nbsp;<br />
+        <input type='radio' name='private_forum' value='0'$checked[private_forum_no] />
+                &nbsp;$langPrivate_3
+      </td>
     </tr>
     <tr>
       <th class='left'>$langDoc :</th>
       <td>
         <input type='checkbox' name='documents' value='1'$checked[documents] />
-        </td>
+      </td>
     </tr>
     <tr>
       <th>&nbsp;</th>
