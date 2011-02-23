@@ -149,7 +149,7 @@ lCont;
           <td align='left' style=\"padding-left: 0px; padding-top: 2px; padding-bottom: 2px; padding-right: 0px;\"><a href=\"${urlServer}courses/".$data[2][$i]."/\">".$lesson_fCode[$i]." - ".$data[1][$i]."</a><cite class=\"content_pos\">".$data[3][$i]."</cite></td>";
 			if ($data[4][$i] == '5') {
 				$lesson_content .= "
-          <td align='center'><a href=\"${urlServer}modules/unreguser/unregcours.php?cid=".$data[2][$i]."&amp;uid=".$uid."\"><img style='border:0px;' src='${urlAppend}/template/classic/img/cunregister.gif' title='$langUnregCourse'></img></a></td>
+          <td align='center'><a href=\"${urlServer}modules/unreguser/unregcours.php?cid=".$data[2][$i]."&amp;uid=".$uid."\"><img style='border:0px;' src='${urlAppend}/template/classic/img/cunregister.png' title='$langUnregCourse'></img></a></td>
         </tr>";
 			} elseif ($data[4][$i] == '1') {
 				$lesson_content .= "

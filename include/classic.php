@@ -111,7 +111,7 @@ if ($result2 and mysql_num_rows($result2) > 0) {
                         $manage_title = $langAdm;
                 } else {
                         $manage_link = "${urlServer}modules/unreguser/unregcours.php?cid=$code&amp;u=$uid";
-                        $manage_icon = 'template/classic/img/cunregister.gif';
+                        $manage_icon = 'template/classic/img/cunregister.png';
                         $manage_title = $langUnregCourse;
                 }
 		$tool_content .="          <td width='5'><img src='${urlAppend}/template/classic/img/arrow_grey.gif' alt='' /></td>";
