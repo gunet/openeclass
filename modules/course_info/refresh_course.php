@@ -119,7 +119,10 @@ draw($tool_content, 2);
 function delete_users() {
 	global $cours_id, $langUsersDeleted;
 
-	db_query("DELETE FROM cours_user WHERE cours_id = $cours_id and statut <> '1'");
+        db_query("DELETE FROM cours_user WHERE cours_id = $cours_id AND statut <> 1 AND statut <> 10");
+        db_query("DELETE FROM group_members
+                         WHERE group_id IN (SELECT id FROM `group` WHERE course_id = $cours_id) AND
+                               user_id NOT IN (SELECT user_id FROM cours_user WHERE cours_id = $cours_id)");
 	return "<p>$langUsersDeleted</p>";
 }
 
