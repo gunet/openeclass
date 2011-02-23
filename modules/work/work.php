@@ -276,7 +276,7 @@ function submit_work($id)
 
         if ($submit_ok) { // if passed the above validity checks...
                 if ($group_sub) {
-                    $group_id = isset($_POST['gid'])? intval($_POST['gid']): -1;
+                    $group_id = isset($_POST['group_id'])? intval($_POST['group_id']): -1;
                     $gids = user_group_info($uid, $cours_id);
                     $local_name = isset($gids[$group_id])? greek_to_latin($gids[$group_id]): '';
                 } else {
@@ -576,11 +576,11 @@ function show_submission_form($id, $user_group_info)
                 if (count($user_group_info) == 1) {
                         $gids = array_keys($user_group_info);
                         $group_link = $urlAppend . '/modules/group/document.php?gid=' . $gids[0];
-                        $group_select_hidden_input = "<input type='hidden' name='gid' value='$gids[0]' />";
+                        $group_select_hidden_input = "<input type='hidden' name='group_id' value='$gids[0]' />";
                 } else {
                         $group_link = $urlAppend . '/modules/group/group.php';
                         $group_select_form = "<tr><th class='left'>$langGroupSpaceLink:</th><td>" .
-                                             selection($user_group_info, 'gid') . "</td></tr>";
+                                             selection($user_group_info, 'group_id') . "</td></tr>";
                 }
                         $tool_content .= "<p class='alert1'>$m[this_is_group_assignment] <br />" .
                                 sprintf(count($user_group_info)?

@@ -66,7 +66,7 @@ include '../../include/lib/forcedownload.php';
 
 mysql_select_db($currentCourseID);
 
-$gid = intval($_REQUEST['gid']);
+$gid = intval($_REQUEST['group_id']);
 
 $coursePath = $webDir."/courses/".$currentCourseID;
 if (!file_exists($coursePath))
@@ -104,7 +104,7 @@ function show_assignments()
 
 	$tool_content .= "<form action='$_SERVER[PHP_SELF]' method='post'>
 		<input type='hidden' name='file' value='$_GET[submit]'>
-		<input type='hidden' name='gid' value='$gid'>
+		<input type='hidden' name='group_id' value='$gid'>
 	    <table class='tbl' width='99%'>
 	    <tr>
 	      <th class='left' width='170'>&nbsp;</th>
