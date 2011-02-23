@@ -86,10 +86,10 @@ h5 {
 
 /* 2.2 Images */
 
-img {
+img, input[type=image] {
 	border: none;
 	vertical-align: middle;
-	}
+}
 
 /* 2.3 Links */ 
 
