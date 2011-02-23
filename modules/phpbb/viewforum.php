@@ -76,7 +76,7 @@ include("functions.php");
 $forum_id = intval($_GET['forum']);
 $is_member = false;
 $group_id = init_forum_group_info($forum_id);
-if ($private_forum and !$is_member) {
+if ($private_forum and !($is_member or $is_adminOfCourse)) {
 	$tool_content .= "<div class='caution'>$langPrivateForum</div>";
 	draw($tool_content, 2);
 	exit;

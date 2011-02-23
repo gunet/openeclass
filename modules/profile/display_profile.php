@@ -28,7 +28,9 @@ if (isset($_GET['id'])) {
         if (!empty($userdata['email'])) {
                 $tool_content .= "&nbsp;($userdata[email])";
         }
-        $tool_content .= "<br /><br />$langAm: $userdata[am]";
+        if (!empty($userdata['am'])) {
+                $tool_content .= "<br /><br />$langAm: " . q($userdata['am']);
+        }
         $tool_content .= "<br /><br />$langFaculty: ".find_faculty_by_id($userdata['department']);
         $tool_content .= "<br /><br />" . profile_image($id, IMAGESIZE_LARGE, !$userdata['has_icon']);
 
