@@ -593,7 +593,7 @@ fieldset table.th {
 /* colors */ 
 
 .red {
-    color: #ff0000; !important;
+    color: #ff0000 !important;
 }
 
 /*-------------------------------------
@@ -609,6 +609,11 @@ font-size: 11px;
 
 .tbl_border {
 	border: 1px solid #dfdfdf;
+}
+
+.tbl_white {
+        border: 1px solid #dfdfdf;
+        background-color: #ffffff !important;
 }
 
 .tbl_courseid {
@@ -928,4 +933,32 @@ a.unit_link_invisible:hover {
 	background: #F7F9FC !important;
 	color: silver !important;
 }
+
+/* ----- START agenda ----- */
+.today1 {
+    background-color:#ffffff;
+    color: #FAEDED !important;
+}
+
+.monthLabel {
+    text-align: center;
+    color: #627aad;
+    background-color:#FAEDED;
+    border-top: 1px dotted #F0C9C1;
+    border-bottom: 1px dotted #F0C9C1;
+
+}
+
+.day {
+  border-bottom: 1px dotted #727266;
+}
+
+.event {
+  padding: 4px 0px 0px 4px;
+}
+
+.agendaBody {;
+  padding: 0px 0px 0px 4px;
+}
+/* ----- END agenda ----- */
 

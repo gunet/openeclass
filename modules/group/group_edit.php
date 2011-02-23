@@ -216,11 +216,11 @@ $tool_content .="
     <tr>
       <th class='left' valign='top'>$langGroupMembers :</th>
       <td>
-          <table width='99%' align='center' class='tbl_border'>
-          <tr>
-            <th class='center'>$langNoGroupStudents</th>
-            <th width='100' class='center'>$langMove</th>
-            <th class='center'>$langGroupMembers</th>
+          <table width='99%' align='center' class='tbl_white'>
+          <tr class='title1'>
+            <td>$langNoGroupStudents</td>
+            <td width='100' class='center'>$langMove</td>
+            <td class='right'>$langGroupMembers</td>
           </tr>
           <tr>
             <td>

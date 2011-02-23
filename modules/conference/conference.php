@@ -44,21 +44,12 @@ $nameTools = $langConference;
 
 // guest user not allowed
 if (check_guest()) {
-	$tool_content .= "<table width=\"99%\"><tbody>
-	<tr><td class=\"extraMessage\"><p>$langNoGuest</p></td></tr>
-	</tbody></table>";
+	$tool_content .= "<p class='caution'>$langNoGuest</p>";
 	draw($tool_content, 2, 'conference');
 }
 
 if (!($uid) or !($_SESSION['uid'])) {
-	$tool_content .= "
-	<table width=\"99%\">
-	<tbody>
-	<tr>
-        <td class=\"extraMessage\"><p>$langNoAliens</p></td>
-	</tr>
-	</tbody>
-	</table>";
+	$tool_content .= "<p class=\"alert1\">$langNoAliens</p>";
 	draw($tool_content, 2);
 }
 

@@ -625,7 +625,7 @@ $encryptedPasswd = true;
 	fwrite($fd, $stringConfig);
 	// message
 	$tool_content .= "
-    <p class=\"extraMessageOK\">$langInstallSuccess
+    <p class=\"caution\">$langInstallSuccess
     <br />
     <br />
     <b>$langProtect</b></p>

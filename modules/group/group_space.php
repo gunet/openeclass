@@ -130,18 +130,26 @@ $tool_content .= "
     <tr>
       <th class='left' valign='top'>$langGroupMembers :</th>
       <td>
-        <table width='99%' align='center' class='tbl_border'>
+        <table width='99%' align='center' class=\"tbl_alt\">
         <tr>
-          <th>$langNameSurname</th>
-          <th width='100' class='center'>$langAm</th>
-          <th class='center'><b>$langEmail</th>
+          <th><div align='left'>$langNameSurname</div></th>
+          <th width='120'>$langAm</th>
+          <th>$langEmail</th>
         </tr>";
 
 if ($members) {
+$myIndex = 0;
 	foreach ($members as $member){
 		$user_group_description = $member['description'];
+                if ($myIndex % 2 == 0) {
+                    $tool_content .= "
+        <tr class='even'>";
+                } else {
+                    $tool_content .= "
+        <tr class='odd'>";
+                }
+
 		$tool_content .= "
-        <tr>
           <td>" . display_user($member);  
 		if ($user_group_description) {
 			$tool_content .= "<br />".q($user_group_description);
@@ -163,6 +171,7 @@ if ($members) {
                 }
                 $tool_content .= "</td>
         </tr>\n";
+        $myIndex++;
 	}
 } else {
 	$tool_content .= "

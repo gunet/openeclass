@@ -242,14 +242,16 @@ if ($is_adminOfCourse) {
 	}
 
 	$tool_content .= "
-        <table width='99%' class='tbl_border' border=0>
+        <table width='99%' id='operations_container' border=0>
 	<tr>
-	  <th>&nbsp;<a href='group_creation.php'>$langNewGroupCreate</a></th>
-	  <th class='right'><a href='$_SERVER[PHP_SELF]?delete_all=yes' onClick=\"return confirmation('delall');\">$langDeleteGroups</a>&nbsp;</th>
+          <td>&nbsp;&nbsp;</td>
+	  <td class='left'>&nbsp;<a href='group_creation.php'>$langNewGroupCreate</a></td>
+	  <td class='right'><a href='$_SERVER[PHP_SELF]?delete_all=yes' onClick=\"return confirmation('delall');\">$langDeleteGroups</a>&nbsp;</td>
 	</tr>
 	<tr>
-	  <th>&nbsp;<a href='$_SERVER[PHP_SELF]?fill=yes'>$langFillGroups</a></th>
-	  <th class='right'><a href='$_SERVER[PHP_SELF]?empty=yes' onClick=\"return confirmation('emptyall');\">$langEmtpyGroups</a>&nbsp;</div></th>
+          <td>&nbsp;&nbsp;</td>
+	  <td class='left'>&nbsp;<a href='$_SERVER[PHP_SELF]?fill=yes'>$langFillGroups</a></td>
+	  <td class='right'><a href='$_SERVER[PHP_SELF]?empty=yes' onClick=\"return confirmation('emptyall');\">$langEmtpyGroups</a>&nbsp;</div></td>
 	</tr>
 	</table><br />";
 
