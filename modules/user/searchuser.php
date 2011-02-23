@@ -101,30 +101,30 @@ if($is_adminOfCourse) {
 	if(!isset($search_prenom)) $search_prenom = "";
 	if(!isset($search_uname)) $search_uname = ""; 
 	
-	$tool_content .= "<form method='post' action='$_SERVER[PHP_SELF]'>";
-	$tool_content .= "<table width='99%' class='FormData'><tbody>
+	$tool_content .= "
+        <form method='post' action='$_SERVER[PHP_SELF]'>";
+	$tool_content .= "
+        <fieldset>
+        <legend>$langUserData</legend>
+        <table width='99%' class='tbl'>
 	<tr>
-	<th width='220'>&nbsp;</th>
-	<td><b>$langUserData</b></td>
+	  <th class='left' width='180'>$langSurname</th>
+	  <td><input type='text' name='search_nom' value='$search_nom'></td>
 	</tr>
 	<tr>
-	<th class='left'>$langSurname</th>
-	<td><input type='text' name='search_nom' value='$search_nom' class='FormData_InputText'></td>
+	  <th class='left'>$langName</th>
+	  <td><input type='text' name='search_prenom' value='$search_prenom'></td>
 	</tr>
 	<tr>
-	<th class='left'>$langName</th>
-	<td><input type='text' name='search_prenom' value='$search_prenom' class='FormData_InputText'></td>
+	  <th class='left'>$langUsername</th>
+	  <td><input type='text' name='search_uname' value='$search_uname'></td>
 	</tr>
 	<tr>
-	<th class='left'>$langUsername</th>
-	<td><input type='text' name='search_uname' value='$search_uname' class='FormData_InputText'></td>
+	  <th class='left'>&nbsp;</th>
+	  <td><input type='submit' value='$langSearch'></td>
 	</tr>
-	<tr>
-	<th class='left'>&nbsp;</th>
-	<td><input type='submit' value='$langSearch'></td>
-	</tr>
-	</tbody>
-	</table><br />
+	</table>
+        </fieldset>
 	</form>";
 
 	mysql_select_db($mysqlMainDb);
@@ -156,10 +156,9 @@ if($is_adminOfCourse) {
 			AND `cours_user`.`cours_id` = $cours_id AND $query
 			ORDER BY nom, prenom");
 		if (mysql_num_rows($result) == 0) {
-			$tool_content .= "<p class='caution_small'>$langNoUsersFound2</p>\n";
+			$tool_content .= "<p class='caution'>$langNoUsersFound2</p>\n";
 		} else {
-			$tool_content .= "<table width=99% class=\"FormData\" style=\"border: 1px solid #CAC3B5;\">
-			<thead>
+			$tool_content .= "<table width=99% class=\"tbl\">
 			<tr class='odd'>
 			<td rowspan='2' class='UsersHead'>$langID</td>
 			<td rowspan='2' class='UsersHead'><div align=\"left\">$langSurname<br>$langName</div></td>";
@@ -172,11 +171,10 @@ if($is_adminOfCourse) {
 			$tool_content .= "<tr><td class='UsersHead'>$langTutor</td>
 			<td class='UsersHead'>$langAdministrator</td>
 			</tr>";
-			$tool_content .= "</thead>";
 			$i = 1;
 			while ($myrow = mysql_fetch_array($result)) {
 				if ($i%2 == 0) {
-					$tool_content .= "<tr>";
+					$tool_content .= "<tr class='even'>";
 				} else {
 					$tool_content .= "<tr class='odd'>";
 				}
@@ -231,7 +229,7 @@ if($is_adminOfCourse) {
 				$tool_content .= "</td></tr>";
 				$i++;	
 			}
-			$tool_content .= "</tbody></table>";
+			$tool_content .= "</table>";
 		}
 	} 
 }

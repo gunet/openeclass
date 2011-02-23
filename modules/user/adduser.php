@@ -53,7 +53,7 @@ if (isset($_GET['add'])) {
 			$emailbody = "$langNotifyRegUser1 '".course_id_to_title($cours_id). "' $langNotifyRegUser2 $langFormula \n$gunet";
 			send_mail('', '', '', $email, $emailsubject, $emailbody, $charset);
 		}	
-		$tool_content .= "<p class=\"success_small\">";
+		$tool_content .= "<p class=\"success\">";
 		
 	if ($result) {
 		$tool_content .=  "$langTheU $langAdded";
@@ -72,31 +72,30 @@ if (isset($_GET['add'])) {
 
         $tool_content .= <<<tCont
 
-    <table width="99%" class="FormData">
-    <tbody>
+    <fieldset>
+    <legend>$langUserData</legend>
+    <table width="99%" class="tbl">
     <tr>
-      <th width="220">&nbsp;</th>
-      <td>$langAskUser<br /><br /><b>$langUserData</b></td>
+      <td colspan='2'>$langAskUser<br /><br /></td>
     </tr>
     <tr>
-      <th class="left">$langSurname</th>
-      <td><input type="text" name="search_nom" value="$search_nom" class="FormData_InputText" /></td>
+      <th class="left" width="180">$langSurname</th>
+      <td><input type="text" name="search_nom" value="$search_nom" /></td>
     </tr>
 	<tr>
       <th class="left">$langName</th>
-      <td><input type="text" name="search_prenom" value="$search_prenom" class="FormData_InputText" /></td>
+      <td><input type="text" name="search_prenom" value="$search_prenom" /></td>
     </tr>
 	<tr>
       <th class="left">$langUsername</th>
-      <td><input type="text" name="search_uname" value="$search_uname" class="FormData_InputText" /></td>
+      <td><input type="text" name="search_uname" value="$search_uname"  /></td>
     </tr>
     <tr>
       <th class="left">&nbsp;</th>
       <td><input type='submit' name='search' value='$langSearch' /></td>
     </tr>
-	</tbody>
-	</table>
-	<br />
+    </table>
+    </fieldset>
 
     </form>
 
@@ -123,12 +122,11 @@ tCont;
 			user u LEFT JOIN lala c ON u.user_id = c.user_id WHERE
 			c.user_id IS NULL AND $query");
 			if (mysql_num_rows($result) == 0) {
-				$tool_content .= "<p class=\"caution_small\">$langNoUsersFound</p>\n";
+				$tool_content .= "<p class=\"caution\">$langNoUsersFound</p>\n";
 			} else {
 				$tool_content .= <<<tCont3
 
-    <table width=99% class="FormData">
-    <tbody>
+    <table width=99% class="tbl">
     <tr>
       <th class="right" width="2%">$langID</th>
       <th class="left">$langName</th>
@@ -140,7 +138,7 @@ tCont3;
 			$i = 1;
 			while ($myrow = mysql_fetch_array($result)) {
 				if ($i % 2 == 0) {
-					$tool_content .= "<tr>";
+					$tool_content .= "<tr class='even'>";
 		        	} else {
 					$tool_content .= "<tr class='odd'>";
 				}
@@ -149,7 +147,6 @@ tCont3;
                                                  <a href='$_SERVER[PHP_SELF]?add=$myrow[user_id]'>$langRegister</a></td></tr>\n";
 				$i++;
 			}
-			$tool_content .= "</tbody>";
 			$tool_content .= "</table>";
         		}
 			db_query("DROP TABLE lala");

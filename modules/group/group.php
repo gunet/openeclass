@@ -467,7 +467,7 @@ if ($is_adminOfCourse) {
 			}
                         $tool_content .= "</td>";
                         $tool_content .= "
-                  <td>" . display_user($tutors) . "</td>";
+                  <td class='center'>" . display_user($tutors) . "</td>";
 			
                         // If self-registration and multi registration allowed by admin and group is not full
                         $tool_content .= "

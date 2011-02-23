@@ -636,12 +636,8 @@ function assignment_details($id, $row, $message = null)
 
 	if (isset($message)) {
 		$tool_content .="
-                <table width=\"99%\" class='tbl'>
-                <tr>
-                  <td class=\"success\"><p><b>$langSaved</b></p></td>
-                </tr>
-                </table>
-                <br/>";
+                <p class=\"success\">$langSaved</p>
+                ";
             }
 	$tool_content .= "
         <fieldset>
@@ -717,10 +713,10 @@ function sort_link($title, $opt, $attrib = '')
 			$r = 1;
 		}
 		$tool_content .= "
-      <td $attrib><a href='$_SERVER[PHP_SELF]?sort=$opt&rev=$r$i'>" ."$title</a></td>";
+                  <th $attrib><a href='$_SERVER[PHP_SELF]?sort=$opt&rev=$r$i'>" ."$title</a></th>";
 	} else {
 		$tool_content .= "
-      <td $attrib><a href='$_SERVER[PHP_SELF]?sort=$opt$i'>$title</a></td>";
+                  <th $attrib><a href='$_SERVER[PHP_SELF]?sort=$opt$i'>$title</a></th>";
 	}
 }
 
@@ -807,24 +803,24 @@ function show_assignment($id, $message = FALSE)
                                 WHERE assign.assignment_id='$id' AND user.user_id = assign.uid
                                 ORDER BY $order $rev");
 
-		$tool_content .= "<form action='$_SERVER[PHP_SELF]' method='post'>
-                <input type='hidden' name='grades_id' value='$id' />
-                <br />
-                <table class='tbl' width='99%'>
+		$tool_content .= "
+                <form action='$_SERVER[PHP_SELF]' method='post'>
+                  <input type='hidden' name='grades_id' value='$id' />
+                  <p><div class='sub_title1'>$langSubmissions:</div><p>
+                  <p>$num_of_submissions</p>
+                ";
+		$tool_content .= "
+                <table width=\"99%\" class=\"tbl_border\">
                 <tr>
-                  <th class='left' width='220'>$langSubmissions:</th>
-                  <td>$num_of_submissions</td>
-                </tr>
-                </table>";
-		$tool_content .= "<table width=\"99%\" class=\"tbl\">
-                <tr>
-                <td width=\"3\">&nbsp;</td>";
+                  <th width=\"3\">&nbsp;</th>";
                 sort_link($m['username'], 'nom', 'align=left');
                 sort_link($m['am'], 'am', 'align=left');
-                $tool_content .= "<td align=\"center\"><div class='left'><b>".$m['filename']."</b></div></td>";
+                $tool_content .= "
+                  <th align=\"center\"><div class='center'><b>".$m['filename']."</b></div></th>";
                 sort_link($m['sub_date'], 'date', 'align=center');
-                sort_link($m['grade'], 'grade', 'align=center class=grade');
-		$tool_content .= "</tr>";
+                sort_link($m['grade'], 'grade', 'align=center');
+		$tool_content .= "
+                </tr>";
 
 		$i = 1;
 		while ($row = mysql_fetch_array($result))
@@ -838,9 +834,11 @@ function show_assignment($id, $message = FALSE)
 
 			//professor comments
 			if (trim($row['grade_comments'] != '')) {
-				$prof_comment = standard_text_escape($row['grade_comments']).
-				" (<a href='grade_edit.php?assignment=$id&submission=$row[id]'>".
-				"$m[edit]</a>)";
+				$prof_comment = 
+				" <a href='grade_edit.php?assignment=$id&submission=$row[id]'>".
+				"<img src='../../template/classic/img/edit.png' alt='$m[edit]' /></a><br />".
+                                "<div class='smaller'>".standard_text_escape($row['grade_comments'])."</div>"
+                                ;
 			} else {
 				$prof_comment = "
 				<a href='grade_edit.php?assignment=$id&submission=$row[id]'>".
@@ -848,52 +846,50 @@ function show_assignment($id, $message = FALSE)
 			}
                         $uid_2_name = display_user($row['uid']);
 			$stud_am = mysql_fetch_array(db_query("SELECT am from $mysqlMainDb.user WHERE user_id = '$row[uid]'"));
+                        if ($i%2 == 1) {
+                                $row_color = "class='even'";
+                        } else {
+                                $row_color = "class='odd'";
+                        }
+
 			$tool_content .= "
-                        <tr>
-                          <td align='right' width='4'>$i.</td>
-                          <td>${uid_2_name} $subContentGroup</td>
-                          <td width='75' align='left'>${stud_am[0]}</td>
-                          <td width='180'><a href='$_SERVER[PHP_SELF]?get=$row[id]'>${row['file_name']}</a>";
+                <tr $row_color>
+                  <td align='right' width='4' rowspan='2' valign='top'>$i.</td>
+                  <td>${uid_2_name}</td>
+                  <td width='85' align='center'>${stud_am[0]}</td>
+                  <td width='180' align='center'><a href='$_SERVER[PHP_SELF]?get=$row[id]'>${row['file_name']}</a>";
                           
 			if (trim($row['comments'] != '')) {
 			    $tool_content .= "
                             <br />
                             <table align=\"left\" width=\"100%\"  class=\"tbl\">
-                            <tbody>
                             <tr>
                               <td width=\"1\" class=\"left\"><img src='../../template/classic/img/forum_off.gif' alt='$m[comments]' title=\"$m[comments]\" /></td>
                               <td>$row[comments]</td>
                             <tr>
-                            </tbody>
                             </table>";
 			}
                     $tool_content .= "
-                    </td>
-                    <td width='75' align='center'>".nice_format($row['submission_date'])."</td>
-                    <td width='180' align='left' class='grade'>
-                        <div align='center'><input type='text' value='{$row['grade']}' maxlength='3' size='3' name='grades[{$row['id']}]' class='grade_input'></div>
-                        <table align='left' width='100%' class='Info'>
-                        <tbody>
-                        <tr>
-                          <td width='1' class='left'><img src='../../template/classic/img/forum_on.png' alt='$m[comments]' title='$m[comments]' /></td>
-                          <td>$prof_comment</td>
-                        <tr>
-                        </table>
-                    </td>
-                  </tr>";
+                  </td>
+                  <td width='110' align='center'>".nice_format($row['submission_date'])."</td>
+                  <td width='5' align='left'>
+                     <div align='center'><input type='text' value='{$row['grade']}' maxlength='3' size='3' name='grades[{$row['id']}]'></div>
+                  </td>
+                </tr>
+                <tr $row_color>
+                  <td colspan='5'><div class='smaller'>$subContentGroup</div><br />
+                    <img src='../../template/classic/img/forum_on.png' alt='$m[comments]' title='$m[comments]' />&nbsp;<b>$m[gradecomments]</b>:
+                    $prof_comment
+                  </td>
+                </tr>";
                 $i++;
 		} //END of While
 
-	$tool_content .="</tbody></table>";
+	$tool_content .="
+                </table>";
 
-	$tool_content .= "<br />
-            <table class='tbl' width='99%'>
-            <tr>
-              <th class='left' width='220'>&nbsp;</th>
-              <td><input type='submit' name='submit_grades' value='$langGradeOk'></td>
-            </tr>
-            </tbody>
-            </table>
+	$tool_content .= "
+            <p><input type='submit' name='submit_grades' value='$langGradeOk'></p>
             </form>";
 
 		if ($gradesExists) {
@@ -914,18 +910,17 @@ function show_assignment($id, $message = FALSE)
                         <tr>
                           <td align='right'><img src='$urlServer$chart_path' /></td>
                         </tr>
-                        </tbody>
                         </table>";
 		}
 	} else {
-		$tool_content .= "<br /><table class='tbl' width='99%'>
-                    <tr>
-                <th class='left' width='220'>$langSubmissions:</th>
-                <td class='empty'>$langNoSubmissions</td>
-                </tr>
-            </table>";
+		$tool_content .= "
+            <p class='sub_title1'>$langSubmissions:</p>
+            <p class='alert1'>$langNoSubmissions</p>
+            ";
 	}
-	$tool_content .= "<br/><p align='right'><a href='$_SERVER[PHP_SELF]'>$langBack</a></p>";
+	$tool_content .= "
+        <br/>
+        <p align='right'><a href='$_SERVER[PHP_SELF]'>$langBack</a></p>";
 }
 
 
@@ -942,10 +937,11 @@ function show_student_assignments()
                                    WHERE active = '1' ORDER BY submission_date");
 
         if (mysql_num_rows($result)) {
-                $tool_content .= "<table class='tbl_alt' width='99%'>
+                $tool_content .= "
+                                  <table class='tbl_alt' width='99%'>
                                   <tr>
                                       <th colspan='2'><div align='left'>&nbsp;&nbsp;$m[title]</div></th>
-                                      <th><div align='left'>$m[deadline]</div></th>
+                                      <th><div align='center'>$m[deadline]</div></th>
                                       <th><div align='center'>$m[submitted]</div></th>
                                       <th>$m[grade]</th>
                                   </tr>";
@@ -962,7 +958,7 @@ function show_student_assignments()
                         $tool_content .= "
                                     <td width='1'><img style='padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet' /></td>
                                     <td><a href='$_SERVER[PHP_SELF]?id=$row[id]'>$title_temp</a></td>
-                                    <td width='30%'>".nice_format($row['deadline']);
+                                    <td width='160' align='center'>".nice_format($row['deadline']);
                         if ($row['days'] > 1) {
                                 $tool_content .= " (<span class='not_expired'>$m[in]&nbsp;$row[days]&nbsp;$langDays</span>";
                         } elseif ($row['days'] < 0) {
@@ -973,7 +969,7 @@ function show_student_assignments()
                                 $tool_content .= " (<span class='expired_today'><b>$m[today]</b></span>)";
                         }
                         $tool_content .= "</td>
-                                    <td width='25%' align='center'>";
+                                    <td width='170' align='center'>";
                         
                         if ($submission = find_submissions(is_group_assignment($row['id']), $uid, $row['id'], $gids)) {
                             foreach ($submission as $sub) {
@@ -988,7 +984,7 @@ function show_student_assignments()
                                 $tool_content .= "<img src='../../template/classic/img/checkbox_off.gif' alt='$m[no]' />";
                         }
                         $tool_content .= "</td>
-                                    <td width='5%' align='center'>";
+                                    <td width='30' align='center'>";
                         foreach ($submission as $sub) {
                             $grade = submission_grade($sub['id']);
                                 if (!$grade) {                

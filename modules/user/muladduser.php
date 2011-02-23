@@ -39,16 +39,13 @@ $tool_content = "";
 if($is_adminOfCourse) {
     $tool_content .= "
     <form method='post' action='".$_SERVER['PHP_SELF']."' enctype='multipart/form-data'>";
-    $tool_content .= "<table width='99%' class='FormData'>
-    <tbody>
+    $tool_content .= "
+    <fieldset>
+    <legend>$langUsersData</legend>
+    <table width='99%' class='tbl'>
     <tr>
-      <th width='220'>&nbsp;</th>
-      <td><b>$langUsersData</b></td>
-      <td align='right'>&nbsp;</td>
-    </tr>
-    <tr>
-      <th class='left'>$langAskUserFile</th>
-      <td><input type='file' name='users_file' class=FormData_InputText'></td>
+      <th width='180' class='left'>$langAskUserFile</th>
+      <td><input type='file' name='users_file'></td>
       <td align='justify'><small>$langAskManyUsers</small></td>
     </tr>
     <tr>
@@ -56,9 +53,8 @@ if($is_adminOfCourse) {
       <td><input type='submit' value='$langAdd'></td>
       <td align='right'>&nbsp;</td>
     </tr>
-    </tbody>
     </table>
-    <br />
+    </fieldset>
     </form>
     <p>$langAskManyUsers1<br />$langAskManyUsers2</small></p>";
 

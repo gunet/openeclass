@@ -52,7 +52,7 @@ if (isset($_GET['selfReg'])) {
 			$regDone = $is_member = true;
 		}
 	} else { 
-		$tool_content .= $langForbidden;
+		$tool_content .= "<p class='caution'>$langForbidden</p>";
 		draw($tool_content, 2);
 		exit;
 	}

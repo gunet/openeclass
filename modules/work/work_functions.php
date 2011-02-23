@@ -255,21 +255,34 @@ function show_submission_details($id)
 			"$m[your_group]</a> (".display_user($sub['uid']).")";
 	} else $sub_notice = "";
 	
-	$tool_content .= "<br /><table width=\"99%\" class=\"FormData\"><tbody>";
-	$tool_content .= "<tr>
-		  <th width=\"220\">&nbsp;</th>
-		  <td><b>$m[SubmissionWorkInfo]</b></td>
-		</tr>
-		<tr>
-		  <th class=\"left\">$m[SubmissionStatusWorkInfo]:</th>
-		  <td>$notice</td>
-		</tr>";
-		    table_row($m['grade'], $sub['grade']);
-		    table_row($m['gradecomments'], $sub['grade_comments']);
-		    table_row($m['sub_date'], $sub['submission_date']);
-		    table_row($m['filename'], $sub['file_name']);
+	$tool_content .= "
+        <fieldset>
+        <legend>$m[SubmissionWorkInfo]</legend>
+        <table width=\"99%\" class=\"tbl\">
+	<tr>
+	  <th width='150'>$m[SubmissionStatusWorkInfo]:</th>
+	  <td valign='top'>$notice</td>
+	</tr>
+        <tr>
+          <th>".$m['grade'].":</th>
+          <td>".$sub['grade']."</td>
+        </tr>
+        <tr>
+          <th valign='top'>".$m['gradecomments'].":</th>
+          <td>".$sub['grade_comments']."</td>
+        </tr>
+        <tr>
+          <th>".$m['sub_date'].":</th>
+          <td>".$sub['submission_date']."</td>
+        </tr>
+        <tr>
+          <th>".$m['filename'].":</th>
+          <td>".$sub['file_name']."</td>
+        </tr>";
 		    table_row($m['comments'], $sub['comments'], true);
-	$tool_content .= "</tbody></table> $sub_notice";
+	$tool_content .= "
+        </table>
+        </fieldset> $sub_notice";
 	mysql_select_db($currentCourseID);
 }
 
