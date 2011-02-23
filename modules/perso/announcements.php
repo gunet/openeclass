@@ -112,7 +112,7 @@ function getUserAnnouncements($param = null, $type) {
 	if ($getNewAnnounce) {
 		$announceGroup = array();
 		array_push($announceGroup, $announceSubGroup);
-		$sqlNowDate = eregi_replace(" ", "-",$usr_lst_login);
+		$sqlNowDate = str_replace(' ', '-', $usr_lst_login);
 		$sql = "UPDATE `user` SET `announce_flag` = '$sqlNowDate' WHERE `user_id` = $uid ";
 		db_query($sql, $mysqlMainDb);
 

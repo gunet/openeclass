@@ -98,7 +98,7 @@ function getUserForumPosts($param, $type)
 	}
 
 	if ($getNewPosts) {
-		$sqlNowDate = eregi_replace(" ", "-",$usr_lst_login);
+		$sqlNowDate = str_replace(' ', '-', $usr_lst_login);
 		$sql = "UPDATE `user` SET `forum_flag` = '$sqlNowDate' WHERE `user_id` = $uid ";
 		db_query($sql, $mysqlMainDb);
 	} elseif (!$getNewPosts) {
