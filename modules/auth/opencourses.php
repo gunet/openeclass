@@ -36,7 +36,7 @@
 
 include '../../include/baseTheme.php';
 $nameTools = $langListCourses;
-$navigation[] = array ("url" => "listfaculte.php", "name" => $langListFac);
+$navigation[] = array ("url" => "listfaculte.php", "name" => $langSelectFac);
 if (isset($_GET['fc'])) {
     $fc = intval($_GET['fc']);
 }
@@ -59,9 +59,9 @@ $tool_content = "";
 // use the following array for the legend icons
 /*
 */
-$icons = array(2 => "<img src='../../template/classic/img/OpenCourse.gif'   alt='" . $m['legopen'] . "' title='" . $m['legopen'] . "' width='16' height='16'>",
-    1 => "<img src='../../template/classic/img/Registration.gif' alt='" . $m['legrestricted'] . "' title='" . $m['legrestricted'] . "' width='16' height='16'>",
-    0 => "<img src='../../template/classic/img/ClosedCourse.gif' alt='" . $m['legclosed'] . "' title='" . $m['legclosed'] . "' width='16' height='16'>"
+$icons = array(2 => "<img src='../../template/classic/img/OpenCourse.gif'   alt='" . $m['legopen'] . "' title='" . $m['legopen'] . "' width='16' height='16' />",
+    1 => "<img src='../../template/classic/img/Registration.gif' alt='" . $m['legrestricted'] . "' title='" . $m['legrestricted'] . "' width='16' height='16' />",
+    0 => "<img src='../../template/classic/img/ClosedCourse.gif' alt='" . $m['legclosed'] . "' title='" . $m['legclosed'] . "' width='16' height='16' />"
     );
 
 $tool_content .= "
@@ -162,12 +162,12 @@ if ($numoftypes > 0) {
             // that's it!
             // upatras.gr patch end here, atkyritsis@upnet.gr, daskalou@upnet.gr
         }
-        $tool_content .= "\n</table>\n<br />\n";
+        $tool_content .= "\n</table>\n";
     } // end of foreach
 } else {
     $tool_content .= "&nbsp;</div></th></tr></table>\n\n";
-    $tool_content .= "\n<br/>";
-    $tool_content .= "\n<br/>\n<p class='alert1'>$m[nolessons]</p>";
+    $tool_content .= "
+    <p class='alert1'>$m[nolessons]</p>";
 }
 
 $tool_content .= "\n<br>";

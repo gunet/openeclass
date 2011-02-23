@@ -25,7 +25,7 @@
 * =========================================================================*/
 
 include '../../include/baseTheme.php';
-$nameTools = $langListFac;
+$nameTools = $langSelectFac;
 $result = db_query("SELECT id, name, code FROM faculte ORDER BY name");
 $numrows = mysql_num_rows($result);
 

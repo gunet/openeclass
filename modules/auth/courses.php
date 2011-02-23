@@ -350,7 +350,7 @@ function expanded_faculte($fac_name, $facid, $uid) {
 
 function collapsed_facultes_horiz($fc) {
 
-	global $langListFac, $langSelectFac;
+	global $langSelectFac;
 
 	$retString = "\n   <form name='depform' action='$_SERVER[PHP_SELF]' method='get'>\n";
 	$retString .= "\n  <div id='operations_container'>\n    <ul id='opslist'>";
