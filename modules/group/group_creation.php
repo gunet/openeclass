@@ -53,11 +53,11 @@ $tool_content = <<<tCont
     <legend>$langNewGroupCreateData</legend>
     <table width="99%" class="tbl">
     <tr> 
-      <th width="160" class="left">$langNewGroups :</th>
+      <th width="160" class="left">$langNewGroups:</th>
       <td><input type="text" name="group_quantity" size="3" value="1"></td>
     </tr>
     <tr> 
-      <th class="left">$langNewGroupMembers :</th>
+      <th class="left">$langNewGroupMembers:</th>
       <td><input type="text" name="group_max" size="3" value="8">&nbsp;$langMax $langPlaces</td>
     </tr>
     <tr>
