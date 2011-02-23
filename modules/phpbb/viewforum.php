@@ -162,7 +162,7 @@ if(isset($_GET['topicnotify'])) { // modify topic notification
 	$rows = mysql_num_rows(db_query("SELECT * FROM forum_notify 
 		WHERE user_id = $uid AND topic_id = $topic_id AND course_id = $cours_id", $mysqlMainDb));
 	if ($rows > 0) {
-		db_query("UPDATE forum_notify SET notify_sent = '$_GET[topicnotify]' 
+		db_query("UPDATE forum_notify SET notify_sent = " . intval($_GET['topicnotify']) . " 
 			WHERE user_id = $uid AND topic_id = $topic_id AND course_id = $cours_id", $mysqlMainDb);
 	} else {
 		db_query("INSERT INTO forum_notify SET user_id = $uid,

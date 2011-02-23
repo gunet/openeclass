@@ -94,7 +94,7 @@ if(isset($_GET['forumcatnotify'])) { // modify forum category notification
 		$rows = mysql_num_rows(db_query("SELECT * FROM forum_notify 
 			WHERE user_id = $uid AND cat_id = $cat_id AND course_id = $cours_id", $mysqlMainDb));
 		if ($rows > 0) {
-			db_query("UPDATE forum_notify SET notify_sent = '$_GET[forumcatnotify]' 
+			db_query("UPDATE forum_notify SET notify_sent = " . intval($_GET['forumcatnotify']) . "
 				WHERE user_id = $uid AND cat_id = $cat_id AND course_id = $cours_id", $mysqlMainDb);
 	} else {
 		db_query("INSERT INTO forum_notify SET user_id = $uid,
@@ -107,7 +107,7 @@ if(isset($_GET['forumcatnotify'])) { // modify forum category notification
 	$rows = mysql_num_rows(db_query("SELECT * FROM forum_notify 
 		WHERE user_id = $uid AND forum_id = $forum_id AND course_id = $cours_id", $mysqlMainDb));
 	if ($rows > 0) {
-		db_query("UPDATE forum_notify SET notify_sent = '$_GET[forumnotify]' 
+		db_query("UPDATE forum_notify SET notify_sent = " . intval($_GET['forumnotify']) . "
 			WHERE user_id = $uid AND forum_id = $forum_id AND course_id = $cours_id", $mysqlMainDb);
 	} else {
 		db_query("INSERT INTO forum_notify SET user_id = $uid,
@@ -181,7 +181,7 @@ if ($total_categories) {
 		}
 		$tool_content .= "         <tr class='odd'>
            <td colspan='5'>&nbsp;<b>$title</b></td>
-           <td class='center'><a href='$_SERVER[PHP_SELF]?forumcatnotify=$link_notify&amp;cat_id=$catNum'><img src='../../template/classic/img/announcements$icon.gif' title='$langNotify' alt='$langNotify' /></a></td>
+           <td class='center'><a href='$_SERVER[PHP_SELF]?forumcatnotify=$link_notify&amp;cat_id=$catNum'><img src='../../template/classic/img/announcements$icon.png' title='$langNotify' alt='$langNotify' /></a></td>
          </tr>\n";
 			
 		@reset($forum_row);
@@ -251,7 +251,7 @@ if ($total_categories) {
 					$forum_link_notify = toggle_link($forum_action_notify);
 					$forum_icon = toggle_icon($forum_action_notify);
 				}
-				$tool_content .= "           <td class='center'><a href='$_SERVER[PHP_SELF]?forumnotify=$forum_link_notify&amp;forum_id=$forum_id'><img src='../../template/classic/img/announcements$forum_icon.gif' title='$langNotify' alt='$langNotify' /></a></td>\n" .
+				$tool_content .= "           <td class='center'><a href='$_SERVER[PHP_SELF]?forumnotify=$forum_link_notify&amp;forum_id=$forum_id'><img src='../../template/classic/img/announcements$forum_icon.png' title='$langNotify' alt='$langNotify' /></a></td>\n" .
 				                 "         </tr>\n";
 			}
 		}
