@@ -27,69 +27,67 @@
 $path2add=2;
 include '../include/baseTheme.php';
 $nameTools = $langInfo;
-$tool_content ="";
-
-
-    $tool_content .= "
-    <p>$langIntro</p>
- <table class='tbl1' width='99%'>
-          <tr>
-            <td colspan='3' class='title1'><b>$langStoixeia</b></td>
-           </tr>
-          <tr>
-            <td valign='top' width='200'><strong>$langVersion:</strong></td>
-            <td>$langAboutText:&nbsp;<b><a href='http://www.openeclass.org/' title='Open eClass Portal' target='_blank'>$siteName " . ECLASS_VERSION . "&raquo;</a></b></td>
-            <td width='150' rowspan='4' valign='top' id='info'>&nbsp;</td>
-          </tr>
-          <tr>
-            <td valign='top'><strong>$langCoursesHeader:</strong></td>
-            <td>";
-              
-              /*
-              * Make table witd general platform information
-              * ophelia neofytou - 2006/09/26
-              */
-              
-              mysql_select_db($mysqlMainDb);
-              
-              $a=mysql_fetch_array(mysql_query("SELECT COUNT(*) FROM cours"));
-              $a1=mysql_fetch_array(mysql_query("SELECT COUNT(*) FROM cours WHERE visible='2'"));
-              $a2=mysql_fetch_array(mysql_query("SELECT COUNT(*) FROM cours WHERE visible='1'"));
-              $a3=mysql_fetch_array(mysql_query("SELECT COUNT(*) FROM cours WHERE visible='0'"));
-              
-              $tool_content .= "$langAboutCourses <b>$a[0]</b> $langCourses<br />";
-              $tool_content .= "
-              <ul>
-                <li><b>$a1[0]</b> $langOpen,</li>
-                <li><b>$a2[0]</b> $langSemiopen,</li>
-                <li><b>$a3[0]</b> $langClosed </li>
-              </ul>
-            </td>
-          </tr>
-          ";
+$tool_content .= "<table class='tbl1' width='99%'>
+      <tr>
+        <td colspan='3' class='title1'><b>$langStoixeia</b></td>
+       </tr>
+       <tr>
+       <td valign='top' width='200'><strong>$langCampusName:</strong></td>
+       <td><b>$siteName&nbsp;</b>(<a href=\"$InstitutionUrl\" target=\"_blank\" class=mainpage>$Institution</a>)</td>
+       </tr>
+      <tr>
+        <td valign='top' width='200'><strong>$langVersion:</strong></td>
+        <td><b><a href='http://www.openeclass.org/' title='Open eClass Portal' target='_blank'>Open eClass " . ECLASS_VERSION . "&raquo;</a></b></td>
+        <td width='150' rowspan='4' valign='top' id='info'>&nbsp;</td>
+      </tr><tr>
+        <td valign='top'><strong>$langCoursesHeader:</strong></td>
+        <td>";
+ 
+          /*
+          * Make table witd general platform information
+          * ophelia neofytou - 2006/09/26
+          */
+          
+          mysql_select_db($mysqlMainDb);
+          
+          $a=mysql_fetch_array(mysql_query("SELECT COUNT(*) FROM cours"));
+          $a1=mysql_fetch_array(mysql_query("SELECT COUNT(*) FROM cours WHERE visible='2'"));
+          $a2=mysql_fetch_array(mysql_query("SELECT COUNT(*) FROM cours WHERE visible='1'"));
+          $a3=mysql_fetch_array(mysql_query("SELECT COUNT(*) FROM cours WHERE visible='0'"));
+          
+          $tool_content .= "$langAboutCourses <b>$a[0]</b> $langCourses<br />";
+          $tool_content .= "
+          <ul>
+            <li><b>$a1[0]</b> $langOpen,</li>
+            <li><b>$a2[0]</b> $langSemiopen,</li>
+            <li><b>$a3[0]</b> $langClosed </li>
+          </ul>
+        </td>
+      </tr>
+      ";
 
 $e=mysql_fetch_array(mysql_query("SELECT COUNT(*) FROM user"));
 $b=mysql_fetch_array(mysql_query("SELECT COUNT(*) FROM user where statut='1'"));
 $c=mysql_fetch_array(mysql_query("SELECT COUNT(*) FROM user where statut='5'"));
 $d=mysql_fetch_array(mysql_query("SELECT COUNT(*) FROM user where statut='10'"));
 
-    $tool_content .= "
-          <tr>
-            <td valign='top'><strong>$langUsers:</strong></td>
-            <td>$langAboutUsers <b>$e[0]</b> $langUsers
-              <ul>
-                <li><b>$b[0]</b> $langTeachers, </li>
-                <li><b>$c[0]</b> $langStudents $langAnd </li>
-                <li><b>$d[0]</b> $langGuest </li>
-              </ul></td>
-          </tr>
-          <tr>
-            <td valign='top'><strong>$langSupportUser</strong></td>
-            <td>$administratorName $administratorSurname</td>
-          </tr>
-          </table>
+$tool_content .= "
+      <tr>
+        <td valign='top'><strong>$langUsers:</strong></td>
+        <td>$langAboutUsers <b>$e[0]</b> $langUsers
+          <ul>
+            <li><b>$b[0]</b> $langTeachers, </li>
+            <li><b>$c[0]</b> $langStudents $langAnd </li>
+            <li><b>$d[0]</b> $langGuest </li>
+          </ul></td>
+      </tr>
+      <tr>
+        <td valign='top'><strong>$langSupportUser</strong></td>
+        <td>$administratorName $administratorSurname</td>
+      </tr>
+      </table>
 
-        "
+    "
 ;
 
 

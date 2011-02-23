@@ -38,7 +38,6 @@ $path2add=2;
 include '../include/baseTheme.php';
 $nameTools = $langManuals;
 
-$tool_content = "";
 $urlServerTemp = strrev(substr(strrev($urlServer),1));
 
 $ext = langname_to_code($language);
@@ -63,8 +62,6 @@ if (isset($language) and $language == 'greek') {
 }
 
 $tool_content .= "
-
-<p>$langIntroMan</p>
 
 <p class='title1'>$langAllTutorials</p>
 ". manlink('OpeneClass23', $ext, $langFinalDesc) ."

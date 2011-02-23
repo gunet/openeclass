@@ -30,20 +30,17 @@ include '../include/baseTheme.php';
 $nameTools = $contactpoint;
 if (!empty($postaddress)) {
     $message = "| ".$postaddress;
-}
+} else $message = '';
 
 
-$tool_content .= "
-<p>$introcontact</p>
-
-<div id='contact'>
-<br>$langPostMail $Institution $message 
-<br><b>$langPhone:</b> $telephone 
-<br>$langFax $fax 
-<br><b>$langEmail:</b> ".mailto($emailhelpdesk, str_replace('@', ' &lt;at> ', $emailhelpdesk))."
-</div>
-
-";
+$tool_content .= "<table class='tbl1' width='99%'>
+<tr><td class='title1' colspan='3'>$langContactInfo</td></tr>
+<tr><td valign='top' width='200'>$langPostMail</td><td> $Institution $message </td></tr>
+<tr><td valign='top' width='200'><b>$langPhone:</b></td><td> $telephone</td></tr>
+<tr><td>$langFax</td><td> $fax</td></tr>
+<tr><td><b>$langEmail</b></td><td>".mailto($emailhelpdesk, str_replace('@', ' &lt;at> ', $emailhelpdesk))."</td>
+<td width='150' rowspan='3' valign='top' id='contact'>&nbsp;</td>
+</tr></table>";
 
 if (isset($uid) and $uid) {
         draw($tool_content, 1);
