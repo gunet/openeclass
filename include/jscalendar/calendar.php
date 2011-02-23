@@ -77,7 +77,7 @@ class DHTML_Calendar {
                                                             'type' => 'text')));
         $code .= '<input ' . $attrstr .'/>';
         $code .= '<a href="#" id="'. $this->_trigger_id($id) . '">' .
-            '<img align="middle" border="0" src="' . $this->calendar_lib_path . 'img.gif" alt="" /></a>';
+            '<img align="middle" border="0" src="' . $this->calendar_lib_path . 'calendar.png" alt="" /></a>';
 
         $options = array_merge($cal_options,
                                array('inputField' => $this->_field_id($id),
