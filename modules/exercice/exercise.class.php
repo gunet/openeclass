@@ -448,7 +448,7 @@ class Exercise
 		{
 			mysql_select_db($currentCourseID);
 			$sql="INSERT INTO `$TBL_EXERCICES`
-				VALUES ('', '$exercise','$description',$type,'$StartDate','$EndDate',
+				VALUES (NULL, '$exercise','$description',$type,'$StartDate','$EndDate',
 					$TimeConstrain, $AttemptsAllowed, $random, $active, $results, $score)";
 			db_query($sql);
 			$this->id=mysql_insert_id();
