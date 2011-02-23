@@ -41,7 +41,7 @@ if (isset($_POST['localize'])) {
 $auth = get_auth_id();
 
 // display form
-if (!isset($submit)) {
+if (!isset($_POST['submit'])) {
 
 @$tool_content .= "
 <form action=\"$_SERVER[PHP_SELF]\" method=\"post\">
@@ -110,10 +110,10 @@ if (!isset($submit)) {
 $registration_errors = array();
 
     // check if there are empty fields
-    if (empty($nom_form) or empty($prenom_form) or empty($userphone)
-	 or empty($usercomment) or empty($uname) or (empty($email_form))) {
-      $registration_errors[]=$langEmptyFields;
-	   }
+    if (empty($_POST['nom_form']) or empty($_POST['prenom_form']) or empty($_POST['userphone'])
+	 or empty($_POST['usercomment']) or empty($_POST['uname']) or (empty($_POST['email_form']))) {
+		$registration_errors[]=$langEmptyFields;
+	}
 
     if (count($registration_errors) == 0) {    // registration is ok
             // ------------------- Update table prof_request ------------------------------
@@ -134,25 +134,25 @@ $registration_errors = array();
             }
 
             db_query('INSERT INTO prof_request SET
-                                profname = ' . autoquote($prenom_form). ',
-                                profsurname = ' . autoquote($nom_form). ',
-                                profuname = ' . autoquote($uname). ',
-                                profemail = ' . autoquote($email_form). ',
-                                proftmima = ' . autoquote($department). ',
-                                profcomm = ' . autoquote($userphone). ',
+                                profname = ' . autoquote($_POST['prenom_form']). ',
+                                profsurname = ' . autoquote($_POST['nom_form']). ',
+                                profuname = ' . autoquote($_POST['uname']). ',
+                                profemail = ' . autoquote($_POST['email_form']). ',
+                                proftmima = ' . autoquote($_POST['department']). ',
+                                profcomm = ' . autoquote($_POST['userphone']). ',
                                 status = 1,
                                 statut = 1,
                                 date_open = NOW(),
-                                comment = ' . autoquote($usercomment). ',
-                                lang = ' . autoquote($proflang),
+                                comment = ' . autoquote($_POST['usercomment']). ',
+                                lang = ' . autoquote($_POST['proflang']),
                      $mysqlMainDb);
 
             //----------------------------- Email Message --------------------------
-            $MailMessage = $mailbody1 . $mailbody2 . "$prenom_form $nom_form\n\n" . $mailbody3 .
+            $MailMessage = $mailbody1 . $mailbody2 . "$_POST[prenom_form] $_POST[nom_form]\n\n" . $mailbody3 .
                     $mailbody4 . $mailbody5 . "$mailbody6\n\n" . "$langFaculty: " .
-                    find_faculty_by_id($department) . "\n$langComments: $usercomment\n" .
-                    "$langProfUname: $uname\n$langProfEmail: $email_form\n" .
-                    "$contactphone: $userphone\n\n\n$logo\n\n";
+                    find_faculty_by_id($_POST['department']) . "\n$langComments: $_POST[usercomment]\n" .
+                    "$langProfUname: $_POST[uname]\n$langProfEmail: $_POST[email_form]\n" .
+                    "$contactphone: $_POST[userphone]\n\n\n$logo\n\n";
 
             if (!send_mail('', $emailhelpdesk, $gunet, $emailhelpdesk, $mailsubject, $MailMessage, $charset))
             {
