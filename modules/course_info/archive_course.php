@@ -33,6 +33,7 @@ if (isset($c) && ($c!="")) {
 $require_current_course = TRUE;
 $require_prof = TRUE;
 include '../../include/baseTheme.php';
+include '../../include/lib/fileManageLib.inc.php';
 
 $nameTools = $langArchiveCourse;
 $navigation[] = array("url" => "infocours.php", "name" => $langModifInfo);
@@ -43,42 +44,41 @@ if (extension_loaded("zlib")) {
 	include("../../include/pclzip/pclzip.lib.php");
 }
 
-// check if you are admin
-if($is_adminOfCourse) {
-	$dateBackuping  = date("Y-m-d-H-i-(B)-s");
-	$shortDateBackuping  = date("YzBs"); // YEAR - Day in Year - Swatch - second
-	$archiveDir .= "/".$currentCourseID."/".$dateBackuping;
-	$zipfile = $webDir."courses/archive/$currentCourseID/archive.$currentCourseID.$shortDateBackuping.zip";
-	$tool_content .= "<table class='tbl' align='center'><tbody><tr><th align=\"left\"><ol>\n";
+if ($is_adminOfCourse) {
+        $basedir = "${webDir}courses/archive/$currentCourseID";
+        cleanup($basedir, 60);
 
-	$dirArchive = realpath("../..").$archiveDir;
-	mkpath($dirArchive);
+	$backup_date = date("Y-m-d-H-i-(B)-s");
+	$backup_date_short = date("YzBs"); // YEAR - Day in Year - Swatch - second
+
+	$archivedir = $basedir . '/' . $backup_date;
+	mkpath($archivedir);
+
+	$zipfile = $basedir . "/archive.$currentCourseID.$backup_date_short.zip";
+	$tool_content .= "<table class='tbl' align='center'><tbody><tr><th align='left'><ol>\n";
 
 	// creation of the sql queries will all the data dumped
-	create_backup_file("$webDir/$archiveDir/backup.php");
+	create_backup_file($archivedir . '/backup.php');
 
-    	$dirhtml = realpath("../..").$archiveDir."/html";
+    	$htmldir = $archivedir . '/html';
 
 	$tool_content .= "<li>".$langBUCourseDataOfMainBase."  ".$currentCourseID."</li>\n";
 
-	// we can copy file of course
-	$tool_content .= "<li>".$langCopyDirectoryCourse."<br>(";
-	$nbFiles = copydir(realpath("../../courses/".$currentCourseID."/"), $dirhtml);
-	$tool_content .= "<strong>".$nbFiles."</strong> ".$langFileCopied.")</li>\n";
-	$tool_content .= "<li>".$langBackupOfDataBase." ".$currentCourseID;
-	$tool_content .= "</li></ol></th><td>&nbsp;</td></tr></tbody></table>";
+	// Copy course files
+	$nbFiles = copydir("../../courses/$currentCourseID", $htmldir);
+        $tool_content .= "<li>$langCopyDirectoryCourse<br />
+                              (<strong>$nbFiles</strong> $langFileCopied)</li>
+                          <li>$langBackupOfDataBase $currentCourseID</li></ol></th>
+                          <td>&nbsp;</td></tr></tbody></table>";
 
-//-----------------------------------------
-// create zip file
-// ----------------------------------------
-
+        // create zip file
 	$zipCourse = new PclZip($zipfile);
-	if ($zipCourse->create($webDir.$archiveDir, PCLZIP_OPT_REMOVE_PATH, "$webDir") == 0) {
+	if ($zipCourse->create($archivedir, PCLZIP_OPT_REMOVE_PATH, $webDir) == 0) {
 		$tool_content .= "Error: ".$zipCourse->errorInfo(true);
-		draw($tool_content, 2, 'course_info');
+		draw($tool_content, 2);
 		exit;
 	} else {
-		$tool_content .= "<br /><p class='success_small'>$langBackupSuccesfull</p><div align=\"left\"><a href='$urlServer/courses/archive/$currentCourseID/archive.$currentCourseID.$shortDateBackuping.zip'>$langDownloadIt</a><img src='../../template/classic/img/download.png' title='$langDownloadIt' width='24' height='24' alt='icon'></div>";
+		$tool_content .= "<br /><p class='success_small'>$langBackupSuccesfull</p><div align=\"left\"><a href='$urlAppend/courses/archive/$currentCourseID/archive.$currentCourseID.$backup_date_short.zip'>$langDownloadIt <img src='../../template/classic/img/download.png' title='$langDownloadIt' alt=''></a></div>";
 	}
 
 	$tool_content .= "<p align=\"right\">";
@@ -157,28 +157,28 @@ function create_backup_file($file) {
 function backup_annonces($f, $cours_id) {
 	global $mysqlMainDb;
 
-	$res = mysql_query("SELECT * FROM `$mysqlMainDb`.annonces
+	$res = db_query("SELECT * FROM `$mysqlMainDb`.annonces
 				    WHERE cours_id = $cours_id");
 	while($q = mysql_fetch_array($res)) {
 		fputs($f, "announcement(".
-			quote_not_double($q['contenu']).",\n".
-			quote_not_double($q['temps']).", ".
-			quote_not_double($q['ordre']).", ".
-			quote_not_double($q['title']).");\n");
+			inner_quote($q['contenu']).",\n".
+			inner_quote($q['temps']).", ".
+			inner_quote($q['ordre']).", ".
+			inner_quote($q['title']).");\n");
 	}
 }
 
 function backup_course_units($f) {
 	global $mysqlMainDb, $cours_id;
 	
-	$res = mysql_query("SELECT * FROM `$mysqlMainDb`.course_units
+	$res = db_query("SELECT * FROM `$mysqlMainDb`.course_units
 				    WHERE course_id = $cours_id");
 	while($q = mysql_fetch_array($res)) {
 		fputs($f, "course_units(".
-			quote_not_double($q['title']).", ".
-			quote_not_double($q['comments']).", ".
-			quote_not_double($q['visibility']).", ".
-			quote_not_double($q['order']).", array(");
+			inner_quote($q['title']).", ".
+			inner_quote($q['comments']).", ".
+			inner_quote($q['visibility']).", ".
+			inner_quote($q['order']).", array(");
 		$res2 = db_query("SELECT * FROM unit_resources WHERE unit_id = $q[id]", $mysqlMainDb);
 		$begin = true;
 		while($q2 = mysql_fetch_array($res2)) {
@@ -189,13 +189,13 @@ function backup_course_units($f) {
 				fputs($f, ",\n");
 			}
 			fputs($f, "array(".
-			quote_not_double($q2['title']).", ".
-			quote_not_double($q2['comments']).", ".
-			quote_not_double($q2['res_id']).", ".
-			quote_not_double($q2['type']).", ".
-			quote_not_double($q2['visibility']).", ".
-			quote_not_double($q2['order']).", ".
-			quote_not_double($q2['date']).")");
+			inner_quote($q2['title']).", ".
+			inner_quote($q2['comments']).", ".
+			inner_quote($q2['res_id']).", ".
+			inner_quote($q2['type']).", ".
+			inner_quote($q2['visibility']).", ".
+			inner_quote($q2['order']).", ".
+			inner_quote($q2['date']).")");
 		}
 		fputs($f,"));\n");
 	}
@@ -203,25 +203,25 @@ function backup_course_units($f) {
 
 
 function backup_groups($f) {
-	$res = mysql_query("SELECT * FROM user_group");
+	$res = db_query("SELECT * FROM user_group");
 		while($row = mysql_fetch_assoc($res)) {
 		fputs($f, "group(".
 			$row['user'].", ".
 			$row['team'].", ".
 			$row['status'].", ".
-			quote_not_double($row['role']).");\n");
+			inner_quote($row['role']).");\n");
 	}
 }
 
 function backup_assignment_submit($f) {
-	$res = mysql_query("SELECT * FROM assignment_submit");
+	$res = db_query("SELECT * FROM assignment_submit");
 		while($row = mysql_fetch_assoc($res)) {
 		$values = array();
 		foreach (array('assignment_id', 'submission_date',
 			'submission_ip', 'file_path', 'file_name', 'comments',
 			'grade', 'grade_comments', 'grade_submission_date',
 			'grade_submission_ip') as $field) {
-			$values[] = quote_not_double($row[$field]);
+			$values[] = inner_quote($row[$field]);
 		}
 		fputs($f, "assignment_submit($row[uid], ".
 			join(", ", $values).
@@ -231,35 +231,35 @@ function backup_assignment_submit($f) {
 
 
 function backup_dropbox_file($f) {
-	$res = mysql_query("SELECT * FROM dropbox_file");
+	$res = db_query("SELECT * FROM dropbox_file");
 	while ($row = mysql_fetch_array($res)) {
 		fputs ($f, "dropbox_file(".
-			quote_not_double($row['uploaderId']).", ".
-			quote_not_double($row['filename']).", ".
-			quote_not_double($row['filesize']).", ".
-			quote_not_double($row['title']).", ".
-			quote_not_double($row['description']).", ".
-			quote_not_double($row['author']).", ".
-			quote_not_double($row['uploadDate']).", ".
-			quote_not_double($row['lastUploadDate']).");\n");
+			inner_quote($row['uploaderId']).", ".
+			inner_quote($row['filename']).", ".
+			inner_quote($row['filesize']).", ".
+			inner_quote($row['title']).", ".
+			inner_quote($row['description']).", ".
+			inner_quote($row['author']).", ".
+			inner_quote($row['uploadDate']).", ".
+			inner_quote($row['lastUploadDate']).");\n");
 		}
 }
 
 function backup_dropbox_person($f) {
-	$res = mysql_query("SELECT * FROM dropbox_person");
+	$res = db_query("SELECT * FROM dropbox_person");
 	while ($row = mysql_fetch_array($res)) {
 		fputs ($f, "dropbox_person(".
-			quote_not_double($row['fileId']).", ".
-			quote_not_double($row['personId']).");\n");
+			inner_quote($row['fileId']).", ".
+			inner_quote($row['personId']).");\n");
 		}
 }
 
 function backup_dropbox_post($f) {
-	$res = mysql_query("SELECT * FROM dropbox_post");
+	$res = db_query("SELECT * FROM dropbox_post");
 	while ($row = mysql_fetch_array($res)) {
 		fputs ($f, "dropbox_post(".
-			quote_not_double($row['fileId']).", ".
-			quote_not_double($row['recipientId']).");\n");
+			inner_quote($row['fileId']).", ".
+			inner_quote($row['recipientId']).");\n");
 	}
 }
 
@@ -267,23 +267,23 @@ function backup_dropbox_post($f) {
 function backup_users($f, $cours_id) {
 	global $mysqlMainDb;
 
-	$res = mysql_query("SELECT user.*, cours_user.statut as cours_statut
+	$res = db_query("SELECT user.*, cours_user.statut as cours_statut
 		FROM `$mysqlMainDb`.user, `$mysqlMainDb`.cours_user
 		WHERE user.user_id=cours_user.user_id
 		AND cours_user.cours_id = $cours_id");
 	while($q = mysql_fetch_array($res)) {
 		fputs($f, "user(".
-			quote_not_double($q['user_id']).", ".
-			quote_not_double($q['nom']).", ".
-			quote_not_double($q['prenom']).", ".
-			quote_not_double($q['username']).", ".
-			quote_not_double($q['password']).", ".
-			quote_not_double($q['email']).", ".
-			quote_not_double($q['cours_statut']).", ".
-			quote_not_double($q['phone']).", ".
-			quote_not_double($q['department']).", ".
-			quote_not_double($q['registered_at']).", ".
-			quote_not_double($q['expires_at']).");\n");
+			inner_quote($q['user_id']).", ".
+			inner_quote($q['nom']).", ".
+			inner_quote($q['prenom']).", ".
+			inner_quote($q['username']).", ".
+			inner_quote($q['password']).", ".
+			inner_quote($q['email']).", ".
+			inner_quote($q['cours_statut']).", ".
+			inner_quote($q['phone']).", ".
+			inner_quote($q['department']).", ".
+			inner_quote($q['registered_at']).", ".
+			inner_quote($q['expires_at']).");\n");
 	}
 }
 
@@ -294,7 +294,7 @@ function backup_course_db($f, $course) {
 	while ($r = mysql_fetch_row($res_tables)) {
 		$tablename = $r[0];
 		fwrite($f, "query(\"DROP TABLE IF EXISTS `$tablename`\");\n");
-		$res_create = mysql_fetch_array(mysql_query("SHOW CREATE TABLE $tablename"));
+		$res_create = mysql_fetch_array(db_query("SHOW CREATE TABLE $tablename"));
 		$schema = $res_create[1];
 		fwrite($f, "query(\"$schema\");\n");
 		if ($tablename == 'user_group') {
@@ -308,7 +308,7 @@ function backup_course_db($f, $course) {
 		} elseif ($tablename == 'dropbox_post') {
 			backup_dropbox_post($f);
 		} else {
-			$res = mysql_query("SELECT * FROM $tablename");
+			$res = db_query("SELECT * FROM $tablename");
 			if (mysql_num_rows($res) > 0) {
 				$fieldnames = "";
 				$num_fields = mysql_num_fields($res);
@@ -331,7 +331,7 @@ function backup_course_db($f, $course) {
 					}
 					$counter++;
 					for ($j = 0; $j < $num_fields; $j++) {
-						fputs($f, quote_not_double($rowdata[$j]));
+						fputs($f, inner_quote($rowdata[$j]));
 						if ($j < ($num_fields - 1)) {
 							fputs($f, ', ');
 						}
@@ -348,23 +348,41 @@ function backup_course_db($f, $course) {
 function backup_course_details($f, $course) {
 	global $mysqlMainDb;
 
-	$res = mysql_query("SELECT * FROM `$mysqlMainDb`.cours
-				    WHERE code = '$course'");
+	$res = db_query("SELECT * FROM `$mysqlMainDb`.cours
+                                  WHERE code = '$course'");
 	$q = mysql_fetch_array($res);
 	fputs($f, "course_details('$course',\t// Course code\n\t".
-		quote_not_double($q['languageCourse']).",\t// Language\n\t".
-		quote_not_double($q['intitule']).",\t// Title\n\t".
-		quote_not_double($q['description']).",\t// Description\n\t".
-		quote_not_double($q['faculte']).",\t// Faculty\n\t".
-		quote_not_double($q['visible']).",\t// Visible?\n\t".
-		quote_not_double($q['titulaires']).",\t// Professor\n\t".
-		quote_not_double($q['type']).");\t// Type\n");
+		inner_quote($q['languageCourse']).",\t// Language\n\t".
+		inner_quote($q['intitule']).",\t// Title\n\t".
+		inner_quote($q['description']).",\t// Description\n\t".
+		inner_quote($q['faculte']).",\t// Faculty\n\t".
+		inner_quote($q['visible']).",\t// Visible?\n\t".
+		inner_quote($q['titulaires']).",\t// Professor\n\t".
+		inner_quote($q['type']).");\t// Type\n");
 }
 
 
-function quote_not_double($s)
+function inner_quote($s)
 {
-        return "'" . str_replace(array('\\', '\'', "\0"),
-                array('\\\\', '\\\'', "\\\0"),
+        return "'" . str_replace(array('\\', '\'', '"', "\0"),
+                array('\\\\', '\\\'', '\\"', "\\\0"),
                 $s) . "'";
+}
+
+// Delete everything in $basedir older than $age seconds
+function cleanup($basedir, $age)
+{
+        if ($handle = opendir($basedir)) {
+                while (($file = readdir($handle)) !== false) {
+                        $entry = "$basedir/$file";
+                        if ($file != '.' and $file != '..' and
+                            (time() - filemtime($entry) > $age)) {
+                                if (is_dir($entry)) {
+                                        removeDir($entry);
+                                } else {
+                                        unlink($entry);
+                                }
+                        }
+                }
+        }
 }
