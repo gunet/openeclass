@@ -43,17 +43,17 @@ $tool_content = "";
 // Default backup version
 $version = 1;
 $encoding = 'ISO-8859-7';
-
-if (isset($send_archive) and $_FILES['archiveZipped']['size'] > 0) {
-	$tool_content .= "<table width='99%'><caption>".$langFileSent."</caption><tbody>
-	<tr><td width='3%'>$langFileSentName</td><td>".$_FILES['archiveZipped']['name']."</td></tr>
-	<tr><td width='3%'>$langFileSentSize</td><td>".$_FILES['archiveZipped']['size']."</td></tr>
-	<tr><td width='3%'>$langFileSentType</td><td>".$_FILES['archiveZipped']['type']."</td></tr><tr>
-	<td width='3%'>$langFileSentTName</td><td>".$_FILES['archiveZipped']['tmp_name']."</td></tr>";
-	$tool_content .= "</tbody></table><br />";
-	$tool_content .= "<table width='99%'><caption>".$langFileUnzipping."</caption><tbody>";
-	$tool_content .= "<tr><td>".unpack_zip_show_files($archiveZipped)."</td></tr>";
-	$tool_content .= "<tbody></table><br />";
+if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
+        $tool_content .= "
+                <table width='99%'><caption>".$langFileSent."</caption><tbody>
+                   <tr><td width='3%'>$langFileSentName</td><td>".$_FILES['archiveZipped']['name']."</td></tr>
+                   <tr><td width='3%'>$langFileSentSize</td><td>".$_FILES['archiveZipped']['size']."</td></tr>
+                   <tr><td width='3%'>$langFileSentType</td><td>".$_FILES['archiveZipped']['type']."</td></tr>
+                   <tr><td width='3%'>$langFileSentTName</td><td>".$_FILES['archiveZipped']['tmp_name']."</td></tr>
+	        </tbody></table><br />
+                <table width='99%'><caption>$langFileUnzipping</caption><tbody>
+                    <tr><td>".unpack_zip_show_files($_FILES['archiveZipped']['tmp_name'])."</td></tr>
+                </tbody></table><br />";
 } elseif (isset($_POST['send_path']) and isset($_POST['pathToArchive'])) {
         $pathToArchive = $_POST['pathToArchive'];
 	if (file_exists($pathToArchive)) {
@@ -63,12 +63,22 @@ if (isset($send_archive) and $_FILES['archiveZipped']['size'] > 0) {
 	} else {
 		$tool_content .= "<p class='caution'>$langFileNotFound</p>";
 	}
-} elseif (isset($create_dir_for_course)) {
-	$r = $restoreThis."/html";
+} elseif (isset($_POST['create_restored_course'])) {
+        register_posted_variables(array('restoreThis' => true,
+                                        'course_code' => true,
+                                        'course_lang' => true,
+                                        'course_title' => true,
+                                        'course_desc' => true,
+                                        'course_fac' => true,
+                                        'course_vis' => true,
+                                        'course_prof' => true,
+                                        'course_type' => true));
+	$r = $restoreThis . '/html';
 	list($new_course_code, $new_course_id) = create_course($course_code, $course_lang, $course_title,
 		$course_desc, intval($course_fac), $course_vis, $course_prof, $course_type);
-	move_dir($r, "$webDir/courses/$new_course_code");
-	course_index("$webDir/courses/$new_course_code", $new_course_code);
+        $coursedir = "${webDir}courses/$new_course_code";
+	move_dir($r, $coursedir);
+	course_index($coursedir, $new_course_code);
 	$tool_content .= "<p>$langCopyFiles $webDir/courses/$new_course_code</p><br /><p>";
 	$action = 1;
 	$userid_map = array();
@@ -97,11 +107,12 @@ if (isset($send_archive) and $_FILES['archiveZipped']['size'] > 0) {
 	$tool_content .= "<br /><center><p><a href='../admin/index.php'>$langBack</p></center>";
 }
 
-elseif (isset($_POST['pathOf4path'])) {
-	// we know where is the 4 paths to restore  the  course.
-	// 2 Show content
-	// $_POST['restoreThis']: contains the path of the archived course
-
+elseif (isset($_POST['do_restore'])) {
+        if (!file_exists($_POST['restoreThis'] . '/backup.php')) {
+                $tool_content .= "<p class='alert1'>$dropbox_lang[generalError]</p>";
+                draw($tool_content, 3);
+                exit;
+        }
 	// If $action == 0, the course isn't restored - the user just
 	// gets a form with the archived course details.
 	$action = 0;
@@ -125,7 +136,7 @@ elseif (isset($_POST['pathOf4path'])) {
           <th>&nbsp;</th>
           <td>$langRequest1
 	  <br /><br />
-	  <form action='".$_SERVER['PHP_SELF']."' method='post' name='sendZip' enctype='multipart/form-data'>
+	  <form action='".$_SERVER['PHP_SELF']."' method='post' enctype='multipart/form-data'>
 	    <input type='file' name='archiveZipped' />
 	    <input type='submit' name='send_archive' value='".$langSend."' />
 	  </form>
@@ -153,12 +164,12 @@ elseif (isset($_POST['pathOf4path'])) {
         <br />";
 }
 mysql_select_db($mysqlMainDb);
-draw($tool_content,3, 'admin');
+draw($tool_content, 3);
 
 // Functions restoring
 function course_details($code, $lang, $title, $desc, $fac, $vis, $prof, $type) {
 
-	global $action, $restoreThis, $langNameOfLang, $encoding, $version;
+	global $action, $langNameOfLang, $encoding, $version;
 	global $siteName, $InstitutionUrl, $Institution;
 
         include("../lang/greek/common.inc.php");
@@ -212,8 +223,8 @@ function course_details($code, $lang, $title, $desc, $fac, $vis, $prof, $type) {
 		echo "<tr><td colspan='2'><input type='checkbox' name='course_addusers' checked='1' />$langUsersWillAdd </td></tr>";
 		echo "<tr><td colspan='2'><input type='checkbox' name='course_prefix' />$langUserPrefix</td></tr>";
 		echo "<tr><td>&nbsp;</td></tr><tr><td>";
-		echo "<input type='submit' name='create_dir_for_course' value='$langOk' />";
-		echo "<input type='hidden' name='restoreThis' value='$restoreThis' />";
+		echo "<input type='submit' name='create_restored_course' value='$langOk' />";
+		echo "<input type='hidden' name='restoreThis' value='$_POST[restoreThis]' />";
 		echo "</td></tr></tbody></table></form>";
 	}
 }
@@ -222,7 +233,7 @@ function course_details($code, $lang, $title, $desc, $fac, $vis, $prof, $type) {
 function announcement($text, $date, $order, $title = '') {
 	global $action, $new_course_id, $mysqlMainDb;
 	if (!$action) return;
-	db_query("INSERT into `$mysqlMainDb`.annonces
+	db_query("INSERT INTO `$mysqlMainDb`.annonces
 		(title, contenu, temps, cours_id, ordre)
 		VALUES (".
 		join(", ", array(
@@ -240,7 +251,7 @@ function course_units($title, $comments, $visibility, $order, $resource_units) {
 	
 	if (!$action) return;
 	
-	db_query("INSERT into `$mysqlMainDb`.course_units
+	db_query("INSERT INTO `$mysqlMainDb`.course_units
 		(title, comments, visibility, `order`, course_id)
 		VALUES (".
 		join(", ", array(
@@ -252,7 +263,7 @@ function course_units($title, $comments, $visibility, $order, $resource_units) {
 			")");
 	$unit_id = mysql_insert_id();
 	foreach ($resource_units as $key => $units_array) {
-		db_query("INSERT into `$mysqlMainDb`.unit_resources (unit_id, title, comments, res_id, type, visibility, `order`, date)
+		db_query("INSERT INTO `$mysqlMainDb`.unit_resources (unit_id, title, comments, res_id, type, visibility, `order`, date)
 			VALUES (".$unit_id.",".join(", ", array_map('quote',$units_array)).");\n");
 	}
 }
@@ -297,12 +308,13 @@ function user($userid, $name, $surname, $login, $password, $email, $statut, $pho
 		$res = mysql_fetch_array($u);
 		$userid_map[$userid] = $res['user_id'];
 		echo "<br />";
-		echo "$langUserAlready <b>$login</b>. $langUName <i>$res[1] $res[2]</i>  !\n";
+                echo "<b>" . q($login) . "</b>: $langUserAlready. <i>" .
+                     q("$res[1] $res[2]") . "</i>!\n";
 	} else {
 		if ($version == 1) { // if we come from a archive < 2.x encrypt user password
 			$password = md5($password);
 		}
-		db_query("INSERT into `$mysqlMainDb`.user
+		db_query("INSERT INTO `$mysqlMainDb`.user
 			(nom, prenom, username, password, email, statut, phone, department, registered_at, expires_at)
 			VALUES (".
 			join(", ", array(
@@ -321,9 +333,9 @@ function user($userid, $name, $surname, $login, $password, $email, $statut, $pho
 		$userid_map[$userid] = mysql_insert_id();
 	}
 
-	db_query("INSERT into `$mysqlMainDb`.cours_user
-		(cours_id, user_id, statut)
-		VALUES ($new_course_id, $userid_map[$userid], $statut)");
+	db_query("INSERT INTO `$mysqlMainDb`.cours_user
+		(cours_id, user_id, statut, reg_date)
+		VALUES ($new_course_id, $userid_map[$userid], $statut, NOW())");
 	echo "<br /> $langUserName=$login, $langPrevId=$userid, $langNewId=$userid_map[$userid]\n";
 }
 
@@ -457,9 +469,6 @@ function create_course($code, $lang, $title, $desc, $fac, $vis, $prof, $type) {
 			quote($type))).
 		")");
         $cid = mysql_insert_id();
-	db_query("INSERT into `$mysqlMainDb`.cours_faculte
-		(faculte, code, facid)
-		VALUES (" . quote($fac_name) . ', ' . quote($repertoire) . ", $fac)");
 
 	if (!db_query("CREATE DATABASE `$repertoire`")) {
 		echo "Database $repertoire creation failure ";
@@ -474,9 +483,8 @@ function course_index($dir, $code) {
 	fputs($f, "<?php
 session_start();
 \$dbname=\"$code\";
-\$_SESSION['dbname']=\"$dbname\";
+\$_SESSION['dbname']=\"$code\";
 include(\"../../modules/course_home/course_home.php\");
-?>
 ");
 	fclose($f);
 }
@@ -543,43 +551,47 @@ function unpack_zip_show_files($zipfile)
 {
 	global $webDir, $uid, $langEndFileUnzip, $langLesFound, $langRestore, $langLesFiles;
 
-	$retString = "";
+	$retString = '';
 
-	$destdir = $webDir."courses/tmpUnzipping/".$uid;
-	mkpath("$destdir");
+	$destdir = $webDir.'courses/tmpUnzipping/'.$uid;
+	mkpath($destdir);
 	$zip = new pclZip($zipfile);
 	chdir($destdir);	
-	$state = $zip->extract(PCLZIP_OPT_PATH, "courses/");
-	$retString .= "<br />$langEndFileUnzip<br /><br />$langLesFound<ol>";
-	$dirnameCourse = realpath("$destdir/archive/");
-	if($dirnameCourse[strlen($dirnameCourse)-1] != '/')
-		$dirnameCourse .= '/';
-	$handle = opendir($dirnameCourse);
-
-	while ($entries = readdir($handle)) {
-		if ($entries == '.' or $entries == '..' or $entries == 'CVS')
-			continue;
-		if (is_dir($dirnameCourse.$entries))
-			$retString .= "<li>".$entries."<br />".$langLesFiles."
-			<form action='".$_SERVER['PHP_SELF']."' method='post' name='restoreThis'>
-			<ol>";
-			$dirnameArchive = realpath("$destdir/archive/$entries/");
-			if($dirnameArchive[strlen($dirnameArchive)-1]!='/')
-				$dirnameArchive.='/';
-			$handle2=opendir($dirnameArchive);
-			while ($entries = readdir($handle2)) {
-				if ($entries=='.'||$entries=='..'||$entries=='CVS')
-					continue;
-				if (is_dir($dirnameArchive.$entries))
-					$retString.= "<li>
-					<input type='radio' checked='1' name='restoreThis' value='".realpath($dirnameArchive.$entries)."' /> ".$entries."
-				</li>";
-			}
-		closedir($handle2);
-		$retString .= "</ol><br /><input type='submit' value='$langRestore' name='pathOf4path' /></form></li>";
+	$state = $zip->extract();
+        $retString .= "<br />$langEndFileUnzip<br /><br />$langLesFound
+                       <form action='$_SERVER[PHP_SELF]' method='post'>
+                         <ol>";
+        foreach (find_backup_folders($destdir) as $folder) {
+                $path = q($folder['path'] . '/' . $folder['dir']);
+                $file = q($folder['dir']);
+                $course = q(preg_replace('|^.*/|', '', $folder['path']));
+                $retString .= "<li>$langLesFiles <input type='radio' name='restoreThis' value='$path' />
+                                   <b>$course</b> ($file)</li>\n";
 	}
-	closedir($handle);
-	$retString .= "</ol>\n";
-	chdir($webDir."modules/course_info");
+        $retString .= "</ol><br /><input type='submit' name='do_restore' value='$langRestore' /></form>";
+	chdir($webDir . "modules/course_info");
 	return $retString;
+}
+
+
+// Find folders under $basedir containing a "backup.php" file
+function find_backup_folders($basedir)
+{
+        $dirlist = array();
+        if (is_dir($basedir) and $handle = opendir($basedir)) {
+                while (($file = readdir($handle)) !== false) {
+                        $entry = "$basedir/$file";
+                        if (is_dir($entry) and $file != '.' and $file != '..') {
+                                if (file_exists("$entry/backup.php")) {
+                                        $dirlist[] = array('path' => $basedir,
+                                                           'dir' => $file);
+                                } else {
+                                        $dirlist = array_merge($dirlist,
+                                                               find_backup_folders($entry));
+                                }
+                        }
+                }
+                closedir($handle);
+        }
+        return $dirlist;
 }

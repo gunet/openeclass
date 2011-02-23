@@ -46,6 +46,7 @@ if (extension_loaded("zlib")) {
 
 if ($is_adminOfCourse) {
         $basedir = "${webDir}courses/archive/$currentCourseID";
+	mkpath($basedir);
         cleanup($basedir, 60);
 
 	$backup_date = date("Y-m-d-H-i-(B)-s");

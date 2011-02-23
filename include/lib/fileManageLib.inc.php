@@ -133,21 +133,15 @@ function removeDir($dirPath)
 	if (!@rmdir($dirPath)) // If PHP can not manage to remove the dir...
 	{
                 $cwd = getcwd();
-		chdir($dirPath);
+                chdir($dirPath);
 		$handle = opendir($dirPath) ;
 
-		while ($element = readdir($handle) )
-		{
-			if ( $element == "." || $element == "..")
-			{
+		while ($element = readdir($handle)) {
+			if ( $element == "." || $element == "..") {
 				continue;	// skip current and parent directories
-			}
-			elseif ( is_file($element) )
-			{
+			} elseif (is_file($element)) {
 				unlink($element);
-			}
-			elseif (is_dir ($element) )
-			{
+			} elseif (is_dir($element)) {
 				$dirToRemove[] = $dirPath."/".$element;
 			}
 		}
@@ -155,9 +149,8 @@ function removeDir($dirPath)
 		closedir ($handle) ;
                 chdir($cwd);
 
-		if (isset($dirToRemove) and sizeof($dirToRemove) > 0)
-		{
-			foreach($dirToRemove as $j) removedir($j) ; // recursivity
+		if (isset($dirToRemove) and sizeof($dirToRemove) > 0) {
+			foreach($dirToRemove as $j) removeDir($j) ; // recursivity
 		}
 
 		rmdir( $dirPath ) ;
