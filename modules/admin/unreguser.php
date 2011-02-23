@@ -213,7 +213,7 @@ if (!$doit) {
                 if (mysql_affected_rows() > 0) {
                         db_query("DELETE FROM group_members
                                          WHERE user_id = $u AND
-                                               group_id IN (SELECT id FROM `group` WHERE course_id = 1)");
+                                               group_id IN (SELECT id FROM `group` WHERE course_id = $c)");
                         $tool_content .= "<p>$langUserWithId $u $langWasCourseDeleted <em>".q(course_id_to_title($c))."</em></p>\n";
                         $m = 1;
                 }
