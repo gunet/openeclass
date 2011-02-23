@@ -842,14 +842,16 @@ if ($doc_count == 0) {
         $tool_content .= "\n      <th width='60' class='center'><b>$langSize</b></th>";
         $tool_content .= "\n      <th width='80' class='center'><b>" . headlink($langDate, 'date') . '</b></th>';
 	if($can_upload) {
-		$tool_content .= "\n      <th width='150' class='center'><b>$langCommands</b></th>";
+		$tool_content .= "\n<th width='150' class='center'><b>$langCommands</b></th>";
+	} else {
+		$tool_content .= "\n<th width='50' class='center'><b>$langCommands</b></th>";
 	}
-	$tool_content .= "\n    </tr>";
+	$tool_content .= "\n</tr>";
 
         // -------------------------------------
         // Display directories first, then files
         // -------------------------------------
-        $counter=0;
+        $counter = 0;
         foreach (array(true, false) as $is_dir) {
                 foreach ($fileinfo as $entry) {
                         if (($entry['is_dir'] != $is_dir) or
@@ -891,9 +893,6 @@ if ($doc_count == 0) {
                         $tool_content .= "\n<tr $style>";
                         $tool_content .= "\n<td class='center' valign='top'><a href='$file_url'$style$link_extra><img src='$image' /></a></td>";
                         $tool_content .= "\n<td><a href='$file_url'$link_extra>$link_text</a>";
-			if ($is_dir) {
-				$tool_content .= "&nbsp;<a href='$download_url'>$img_download</a>";
-			}
 			
                         /*** comments ***/
                         if (!empty($entry['comment'])) {
@@ -909,10 +908,14 @@ if ($doc_count == 0) {
                                 $size = format_file_size($entry['size']);
                                 $date = format_date($entry['date']);
                                 $tool_content .= "\n<td class='center'>$size</td>\n<td class='center'>$date</td>";
+				
                         }
                         if ($can_upload) {
                                 $tool_content .= "\n<td class='right' valign='top'><form action='document.php' method='post'>" . $group_hidden_input .
                                                  "<input type='hidden' name='filePath' value='$cmdDirName' />";
+				if ($is_dir) {
+					$tool_content .= "<a href='$download_url'>$img_download</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+				} 
                                 if (!$is_dir) {
                                         /*** replace/overwrite command, only applies to files ***/
                                         $tool_content .= "<a href='{$base_url}replace=$cmdDirName'>" .
@@ -953,7 +956,13 @@ if ($doc_count == 0) {
 				}
                                 $tool_content .= "</form></td>";
                                 $tool_content .= "\n    </tr>";
-                        }
+                        } else { // only for students
+				if ($is_dir) { 
+					$tool_content .= "<td class='center'><a href='$download_url'>$img_download</a></td></tr>";
+				} else {
+					$tool_content .= "<td class='center'>&nbsp;</td></tr>";
+				}
+			}
                         $counter++;
                 }
         }
