@@ -89,8 +89,8 @@ if (!$doit) {
                                         }
                                 }
 
-                                if ($v>0) {
-                                        if ($s>0) {
+                                if ($v > 0) {
+                                        if ($s > 0) {
                                                 //display list
                                                 $tool_content .= "$langUnregFirst <br/ ><br />";
                                                 $sql = db_query("SELECT a.code, a.intitule, b.statut, a.cours_id, b.tutor
@@ -195,7 +195,7 @@ if (!$doit) {
                                 default: $m = 0; break;
                         }
 
-                        if($u!=1) {
+                        if ($u != 1) {
                                 db_query("DELETE from admin WHERE idUser = '".mysql_real_escape_string($u)."'");
                         }
                         if (mysql_affected_rows() > 0) {
@@ -203,7 +203,7 @@ if (!$doit) {
                         }
 
                         // delete guest user from cours_user
-                        if($u_statut == '10') {
+                        if ($u_statut == '10') {
                                 $sql = db_query("DELETE from cours_user WHERE user_id = $u");
                         }
                 }
@@ -211,6 +211,9 @@ if (!$doit) {
         } elseif ($c and $u) {
                 $q = db_query("DELETE from cours_user WHERE user_id = $u AND cours_id = $c");
                 if (mysql_affected_rows() > 0) {
+                        db_query("DELETE FROM group_members
+                                         WHERE user_id = $u AND
+                                               group_id IN (SELECT id FROM `group` WHERE course_id = 1)");
                         $tool_content .= "<p>$langUserWithId $u $langWasCourseDeleted <em>".q(course_id_to_title($c))."</em></p>\n";
                         $m = 1;
                 }
