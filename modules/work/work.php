@@ -864,7 +864,7 @@ function show_assignment($id, $message = FALSE)
                             <br />
                             <table align=\"left\" width=\"100%\"  class=\"tbl\">
                             <tr>
-                              <td width=\"1\" class=\"left\"><img src='../../template/classic/img/forum_off.gif' alt='$m[comments]' title=\"$m[comments]\" /></td>
+                              <td width=\"1\" class=\"left\"><img src='../../template/classic/img/forum_off.png' alt='$m[comments]' title=\"$m[comments]\" /></td>
                               <td>$row[comments]</td>
                             <tr>
                             </table>";
@@ -956,7 +956,7 @@ function show_student_assignments()
                                   <tr class='odd'>";
                         }
                         $tool_content .= "
-                                    <td width='1'><img style='padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet' /></td>
+                                    <td width='1'><img style='padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.png' title='bullet' /></td>
                                     <td><a href='$_SERVER[PHP_SELF]?id=$row[id]'>$title_temp</a></td>
                                     <td width='160' align='center'>".nice_format($row['deadline']);
                         if ($row['days'] > 1) {
@@ -978,10 +978,10 @@ function show_student_assignments()
                                         "<a href='../group/group_space.php?group_id=$sub[group_id]'>".
                                         "$m[ofgroup] ".gid_to_name($sub['group_id'])."</a>)</div>";
                                 }
-                                $tool_content .= "<img src='../../template/classic/img/checkbox_on.gif' alt='$m[yes]' /><br />";
+                                $tool_content .= "<img src='../../template/classic/img/checkbox_on.png' alt='$m[yes]' /><br />";
                             }
                         } else {
-                                $tool_content .= "<img src='../../template/classic/img/checkbox_off.gif' alt='$m[no]' />";
+                                $tool_content .= "<img src='../../template/classic/img/checkbox_off.png' alt='$m[no]' />";
                         }
                         $tool_content .= "</td>
                                     <td width='30' align='center'>";
@@ -1055,7 +1055,7 @@ cData;
                         }
 
 			$tool_content .= "
-       <td width='1'><img style='border:0px; padding-top:3px;' src='$urlServer/template/classic/img/$visibility_image.gif' title='bullet' /></td>
+       <td width='1'><img style='border:0px; padding-top:3px;' src='$urlServer/template/classic/img/$visibility_image.png' title='bullet' /></td>
        <td ".$visibility_css."><a href='$_SERVER[PHP_SELF]?id=${row['id']}' ";
 			$tool_content .= ">";
 			$tool_content .= $row_title = q($row['title']);
