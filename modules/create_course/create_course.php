@@ -301,7 +301,7 @@ if (isset($_POST['back1']) or !isset($_POST['visit'])) {
 	    <td>$langExercices</td>
 	    <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"10\" /></td>
 	    <th>&nbsp;</th>
-            <td>&nbsp;<img src=\"../../template/classic/img/glossary_on.gif\" alt=\"\" height=\"16\" width=\"16\" /></td>
+            <td>&nbsp;<img src=\"../../template/classic/img/glossary_on.png\" alt=\"\" height=\"16\" width=\"16\" /></td>
 	    <td>$langGlossary</td>
 	    <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"17\" checked=\"checked\" /></td>
 	  </tr>
