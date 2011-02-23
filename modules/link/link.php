@@ -367,7 +367,7 @@ function submit_link()
                                         'title' => true,
                                         'description' => true,
                                         'selectcategory' => true), 'all', 'trim');
-	$urllink = canonicalize_link($urllink);
+	$urllink = canonicalize_url($urllink);
         $set_sql = "SET url = " . autoquote($urllink) . ",
                         title = " . autoquote($title) . ",
                         description = " . autoquote($description) . ",

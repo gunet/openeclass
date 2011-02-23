@@ -64,12 +64,12 @@ function showlinksofcategory($catid)
                 } else {
                         $tool_content .= "<tr class='odd'>";
                 }
-
+                $title = empty($myrow['title'])? $myrow['url']: $myrow['title'];
                 $tool_content .= "
                   <td>&nbsp;</td>
                   <td width='1' valign='top'><img src='$urlServer/template/classic/img/arrow_grey.gif' alt='' /></td>
                   <td valign='top'><a href='go.php?c=$currentCourseID&amp;id=$myrow[id]&amp;url=" .
-                  urlencode($myrow['url']) . "' target='_blank'>" . q($myrow['title']) . "</a>";
+                  urlencode($myrow['url']) . "' target='_blank'>" . q($title) . "</a>";
                 if (!empty($myrow['description'])) {
                         $tool_content .= "<br />" . standard_text_escape($myrow['description']);
                 }
