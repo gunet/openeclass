@@ -951,7 +951,7 @@ if ($doc_count == 0) {
 				if ($subsystem == GROUP and isset($is_member) and ($is_member)) {
 	                                $tool_content .= "<a href='$urlAppend/modules/work/group_work.php?" .
 							 "group_id=$group_id&amp;submit=$cmdDirName'>" .
-							 "<img src='../../template/classic/img/book.gif' " .
+							 "<img src='../../template/classic/img/book.png' " .
 							 "title='$langPublish' alt='$langPublish' /></a>";			
 				}
                                 $tool_content .= "</form></td>";

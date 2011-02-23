@@ -651,7 +651,7 @@
         ;
 
     $tool_content .= '          <li>'
-        . '<img src="'.$imgRepositoryWeb.'/book.gif" border="0" align="absmiddle" />&nbsp;<a class="claroCmd" href="'
+        . '<img src="'.$imgRepositoryWeb.'/book.png" border="0" align="absmiddle" />&nbsp;<a class="claroCmd" href="'
         . $_SERVER['PHP_SELF']
         . '?wikiId=' . $wiki->getWikiId()
         . '&amp;action=all">'
