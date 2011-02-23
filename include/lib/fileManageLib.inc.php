@@ -348,131 +348,53 @@ function copyDirTo($origDirPath, $destination)
 
 
 
-/* NOTE: These functions batch is used to automatically build HTML forms
- * with a list of the directories contained on the course Directory.
- *
- * From a thechnical point of view, form_dir_lists calls sort_dir wich calls index_dir
- */
-
-/*
- * Indexes all the directories and subdirectories
- * contented in a given directory
- * 
- * @author - Hugues Peeters <peeters@ipm.ucl.ac.be>
- * @param  - path (string) - directory path of the one to index
- * @return - an array containing the path of all the subdirectories
- */
-
-function index_dir($path)
+// Return a list of all directories
+function directory_list()
 {
-	global $webDir; 
-	chdir($path);
-	$handle = opendir($path);
+        global $group_sql;
 
-	// reads directory content end record subdirectoies names in $dir_array
 	$dirArray = array();
-	while ($element = readdir($handle) )
-	{
-		if ( $element == "." || $element == "..") continue;	// skip the current and parent directories
-		if ( is_dir($element) )	 $dirArray[] = $path."/".$element;
-	}
 
-	closedir($handle) ;
-	// recursive operation if subdirectories exist
-	$dirNumber = count($dirArray);
-	if ( $dirNumber > 0 )
-	{
-		for ($i = 0 ; $i < $dirNumber ; $i++ )
-		{
-			$subDirArray = index_dir( $dirArray [$i] ) ;			// function recursivity
-			$dirArray  =  array_merge( $dirArray , $subDirArray ) ;	// data merge
-		}
+        $r = db_query("SELECT filename, path FROM document WHERE $group_sql AND format = '.dir' ORDER BY path");
+	while ($row = mysql_fetch_array($r)) {
+                $dirArray[$row['path']] = $row['filename'];
 	}
-	
-	//chdir("..");
-	chdir($webDir."modules/document/");
 	return $dirArray ;
 }
 
-
 /*
- * Indexes all the directories and subdirectories
- * contented in a given directory, and sort them alphabetically
- *
- * @author - Hugues Peeters <peeters@ipm.ucl.ac.be>
- * @param  - path (string) - directory path of the one to index
- * @return - an array containing the path of all the subdirectories sorted
- *           false, if there is no directory
- * @see    - index_and_sort_dir uses the index_dir() function
+ * Returns HTML form select element listing all directories in current course documents
+ * excluding the one with path $entryToExclude
  */
-
-function index_and_sort_dir($path)
-{
-	$dir_list = index_dir($path);
-
-	if ($dir_list)
-	{
-		sort($dir_list);
-		return $dir_list;
-	}
-	else
-	{
-		return false;
-	}
-}
-
-
-/*
- * build an html form listing all directories of a given directory
- *
- */
-//afth h function dhmiourgei mia lista se combo box me tous fakelous enos path. sth sygkekrimenh exei prostethei to orisma $entryToExclude prokeimenou na mhn emfanizetai mia eggrafh
-function form_dir_list_exclude($dbTable, $sourceType, $sourceComponent, $command, $baseWorkDir, $entryToExclude)
+function directory_selection($source_value, $command, $entryToExclude)
 {
 	global $langParentDir, $langTo, $langMoveFrom, $langMove, $moveFileNameAlias;
-	global $tool_content, $group_id;
+	global $tool_content, $groupset;
 
-        if (isset($group_id)) {
-                $groupset = '?group_id=' . $group_id;
-        } else {
-                $groupset = '';
+        if (!empty($groupset)) {
+                $groupset = '?' . $groupset;
         }
-	$dirList = index_and_sort_dir($baseWorkDir);
+	$dirList = directory_list();
 	$dialogBox = "
 	<form action='$_SERVER[PHP_SELF]$groupset' method='post'>
 	<fieldset>
-	<input type='hidden' name='".$sourceType."' value='".$sourceComponent."'>
+	<input type='hidden' name='source' value='$source_value'>
         <table class='tbl' width='99%'>
         <tr>
           <td>$langMoveFrom &nbsp;&nbsp;<b>$moveFileNameAlias</b>&nbsp;&nbsp; $langTo:";
 	$dialogBox .= "
-            <select name='".$command."'>" ;
-	$dialogBox .= "
-            <option value=''>".$langParentDir."\n";
-	$bwdLen = strlen($baseWorkDir) ;
+            <select name='$command'>" ;
+        if ($entryToExclude != '/') {
+                $dialogBox .= "<option value=''>$langParentDir</option>\n";
+        }
 	
 	/* build html form inputs */
-	if ($dirList)
-	{
-		while (list( , $pathValue) = each($dirList))
-		{
-			$pathValue = substr($pathValue , $bwdLen);
-			$dirname = basename($pathValue);
-			$sql = db_query("SELECT path, filename FROM $dbTable 
-				WHERE path LIKE '%/$dirname%'"); 
-			while ($r = mysql_fetch_array($sql)) {
-				$filename = $r['filename'];
-				$path = $r['path']; 
-				$tab = "";	
-				$depth = substr_count($pathValue, "/");
-				for ($h=0; $h<$depth; $h++)
-				{
-					$tab .= "&nbsp;&nbsp;";
-				}
-			if ($pathValue != $entryToExclude and (!is_file($baseWorkDir.$path)))
-				$dialogBox .= "<option value='$path'>$tab>$filename</option>\n";
-			}
-		}
+        foreach ($dirList as $path => $filename) {
+                $depth = substr_count($path, '/');
+                $tab = str_repeat('&nbsp;&nbsp;&nbsp;', $depth);
+                if ($path != $entryToExclude) {
+                        $dialogBox .= "<option value='$path'>$tab$filename</option>\n";
+                }
 	}
 
 	$dialogBox .= "

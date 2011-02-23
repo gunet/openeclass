@@ -84,16 +84,18 @@ if ($subsystem == EBOOK) {
 // download directory action
 // ---------------------------
 if (isset($_GET['downloadDir'])) {
-	include("../../include/pclzip/pclzip.lib.php");
-	$downloadDir = $_GET['downloadDir'];
-	list($real_filename) = mysql_fetch_array(db_query("SELECT filename FROM document
-					WHERE course_id = $cours_id AND
-					      subsystem = $subsystem AND
-					      path = '$downloadDir'"));
-	$real_filename = $real_filename.".zip";
+        include("../../include/pclzip/pclzip.lib.php");
+
+        // Make sure $downloadDir doesn't contain /..
+	$downloadDir = str_replace('.', '', $_GET['downloadDir']);
+
+	list($real_filename) = mysql_fetch_row(db_query("SELECT filename FROM document
+                                                                WHERE $group_sql AND
+                                                                      path = " . autoquote($downloadDir)));
+	$real_filename = $real_filename.'.zip';
 	$map_filenames = map_to_real_filename();
 	
-	chdir("../../courses/$currentCourseID/document/");
+	chdir($basedir);
 	$zip_filename = '../temp'.safe_filename('zip');
 	$zipfile = new PclZip($zip_filename);
 	
@@ -330,11 +332,11 @@ if($can_upload) {
         if (isset($_GET['move'])) {
                 $move = $_GET['move'];
 		// h $move periexei to onoma tou arxeiou. anazhthsh onomatos arxeiou sth vash
-                $result = db_query("SELECT * FROM document
+                $result = db_query("SELECT filename FROM document
 						WHERE $group_sql AND path=" . autoquote($move));
 		$res = mysql_fetch_array($result);
 		$moveFileNameAlias = $res['filename'];
-		$dialogBox .= form_dir_list_exclude('document', 'source', $move, "moveTo", $basedir, $move);
+		$dialogBox .= directory_selection($move, 'moveTo', dirname($move));
 	}
 
 	/**************************************

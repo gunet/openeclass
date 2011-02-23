@@ -402,7 +402,7 @@ function nameBox($type, $mode, $formlabel = FALSE)
           return $altList[$contentType];
       }
 
-      return "default.gif";
+      return "default.png";
  }
 
 
