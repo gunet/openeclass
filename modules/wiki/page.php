@@ -642,7 +642,7 @@
         . $langWikiMainPage.'</a></li>' . "\n"
         ;
     $tool_content .= '          <li>'
-        . '<img src="'.$imgRepositoryWeb.'/history.gif" border="0" align="absmiddle" />&nbsp;<a class="claroCmd" href="'
+        . '<img src="'.$imgRepositoryWeb.'/history.png" border="0" align="absmiddle" />&nbsp;<a class="claroCmd" href="'
         . $_SERVER['PHP_SELF']
         . '?wikiId=' . $wiki->getWikiId()
         . '&amp;action=recent'

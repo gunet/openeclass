@@ -548,7 +548,7 @@ function confirmation (name)
                     $tool_content .= '<a href="page.php?wikiId='
                         . $entry['id'].'&amp;action=recent'
                         . '">'
-                        . '<img src="' . $imgRepositoryWeb . '/history.gif" border="0" alt="'.$langWikiRecentChanges.'" title="'.$langWikiRecentChanges.'" />'
+                        . '<img src="' . $imgRepositoryWeb . '/history.png" border="0" alt="'.$langWikiRecentChanges.'" title="'.$langWikiRecentChanges.'" />'
                         . '</a>'
                         ;
                         ;
