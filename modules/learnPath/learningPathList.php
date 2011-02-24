@@ -554,13 +554,13 @@ while ($list = mysql_fetch_array($result)) // while ... learning path list
 
         // EXPORT links
         $tool_content .= '      <td class="center" width="50"><a href="'.$_SERVER['PHP_SELF'].'?cmd=export&amp;path_id=' . $list['learnPath_id'] . '" >'
-            .'<img src="../../template/classic/img/export.gif" alt="'.$langExport2004.'" title="'.$langExport2004.'" /></a>' .""
+            .'<img src="../../template/classic/img/export.png" alt="'.$langExport2004.'" title="'.$langExport2004.'" /></a>' .""
             .'<a href="' . $_SERVER['PHP_SELF'] . '?cmd=export12&amp;path_id=' . $list['learnPath_id'] . '" >'
-            .'<img src="../../template/classic/img/export.gif" alt="'.$langExport12.'" title="'.$langExport12.'" /></a>' .""
+            .'<img src="../../template/classic/img/export.png" alt="'.$langExport12.'" title="'.$langExport12.'" /></a>' .""
             .'</td>' . "\n";
 
         // statistics links
-        $tool_content .= "      <td class='center' width='1'><a href='details.php?path_id=".$list['learnPath_id']."'><img src='../../template/classic/img/statistics.gif' alt='$langTracking' title='$langTracking' /></a></td>\n";
+        $tool_content .= "      <td class='center' width='1'><a href='details.php?path_id=".$list['learnPath_id']."'><img src='../../template/classic/img/monitor.png' alt='$langTracking' title='$langTracking' /></a></td>\n";
 
 
         // VISIBILITY link
