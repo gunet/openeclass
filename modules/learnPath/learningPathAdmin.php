@@ -638,7 +638,7 @@ foreach ($flatElementList as $module)
     // DISPLAY CATEGORY MOVE COMMAND
     	$tool_content .= "<td width='10' class='center'>
 	<a href=\"".$_SERVER['PHP_SELF']."?cmd=changePos&amp;cmdid=".$module['learnPath_module_id']."\">
-	<img src=\"".$imgRepositoryWeb."move.gif\" alt=\"$langMove\" title=\"$langMove\" border=0 /></a></td>";
+	<img src=\"".$imgRepositoryWeb."move.png\" alt=\"$langMove\" title=\"$langMove\" border=0 /></a></td>";
 
     // DISPLAY MOVE UP COMMAND only if it is not the top learning path
     if ($module['up'])

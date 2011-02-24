@@ -247,7 +247,7 @@ if (isset($_POST['back1']) or !isset($_POST['visit'])) {
 	    <td>$langLinks</td>
 	    <td><input name=\"subsystems[]\" type=\"checkbox\" value=\"2\" checked=\"checked\" /></td>
 	    <th>&nbsp;</th>
-	    <td>&nbsp;<img src=\"../../template/classic/img/groups_on.gif\" alt=\"\" height=\"16\" width=\"16\" /></td>
+	    <td>&nbsp;<img src=\"../../template/classic/img/groups_on.png\" alt=\"\" height=\"16\" width=\"16\" /></td>
 	    <td>$langGroups</td>
 	    <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"15\" /></td>
 	  </tr>
@@ -256,7 +256,7 @@ if (isset($_POST['back1']) or !isset($_POST['visit'])) {
 	    <td>$langDoc</td>
 	    <td><input name=\"subsystems[]\" type=\"checkbox\" value=\"3\" checked=\"checked\" /></td>
 	    <th>&nbsp;</th>
-	    <td>&nbsp;<img src=\"../../template/classic/img/chat_on.gif\" alt=\"\" height=\"16\" width=\"16\" /></td>
+	    <td>&nbsp;<img src=\"../../template/classic/img/conference_on.png\" alt=\"\" height=\"16\" width=\"16\" /></td>
 	    <td>$langConference</td>
 	    <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"19\" /></td>
 	  </tr>
