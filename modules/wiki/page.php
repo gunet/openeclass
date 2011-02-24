@@ -731,7 +731,7 @@
     {
         // active
         $tool_content .= '&nbsp;&nbsp;&nbsp;'
-                . '<img src="'.$imgRepositoryWeb.'/version.gif" border="0" align="absmiddle" />&nbsp;'
+                . '<img src="'.$imgRepositoryWeb.'/version.png" border="0" align="absmiddle" />&nbsp;'
                 . '<a class="claroCmd" href="'
                 . $_SERVER['PHP_SELF']
                 . '?wikiId=' . $wiki->getWikiId()
@@ -745,7 +745,7 @@
     //{
     //    // inactive
     //    $tool_content .= '&nbsp;|&nbsp;<span class="claroCmdDisabled">'
-    //        . '<img src="'.$imgRepositoryWeb.'/version.gif" border="0" align="absmiddle" />&nbsp;'
+    //        . '<img src="'.$imgRepositoryWeb.'/version.png" border="0" align="absmiddle" />&nbsp;'
     //        . $langWikiPageHistory . '</span>'
     //        ;
     //}
