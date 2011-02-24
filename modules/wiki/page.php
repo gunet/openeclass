@@ -633,7 +633,7 @@
       <div id="operations_container">
         <ul id="opslist">' . "\n";
     $tool_content .= '          <li>'
-        . '<img src="'.$imgRepositoryWeb.'/wiki.gif" border="0" align="absmiddle" />&nbsp;<a class="claroCmd" href="'
+        . '<img src="'.$imgRepositoryWeb.'/wiki.png" border="0" align="absmiddle" />&nbsp;<a class="claroCmd" href="'
         . $_SERVER['PHP_SELF']
         . '?wikiId=' . $wiki->getWikiId()
         . '&amp;action=show'
@@ -659,7 +659,7 @@
         ;
 
     $tool_content .= '          <li>'
-        . '<img src="'.$imgRepositoryWeb.'/info.gif" border="0" align="absmiddle" />&nbsp;<a class="claroCmd" href="'
+        . '<img src="'.$imgRepositoryWeb.'/list.png" border="0" align="absmiddle" />&nbsp;<a class="claroCmd" href="'
         . 'wiki.php'
         . '">'
         . $langWikiList .'</a></li>' . "\n"
@@ -676,7 +676,7 @@
     if ( $action == "edit" || $action == "diff" || $action == "history" )
     {
         $tool_content .= ''
-            . '<img src="'.$imgRepositoryWeb.'/back.gif" border="0" align="absmiddle" />&nbsp;'
+            . '<img src="'.$imgRepositoryWeb.'/back.png" border="0" align="absmiddle" />&nbsp;'
             . '<a class="claroCmd" href="'
             . $_SERVER['PHP_SELF']
             . '?wikiId=' . $wiki->getWikiId()
