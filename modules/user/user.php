@@ -211,10 +211,11 @@ if ($is_adminOfCourse) {
 			$tool_content .= "
         <tr class='odd'>";
 		}
-		// show public list of users
+                // show public list of users
+                $am_message = empty($myrow['am'])? '': ("<div class='smaller'>($langAm: " . q($myrow['am']) . ")</div>");
 		$tool_content .= "
           <td class='smaller' valign='top' align='right'>$i.</td>\n" .
-			"<td valign='top'>" . display_user($myrow) . "<div class='smaller'>" . mailto($myrow['email']) . "</div> <div class='smaller'>($langAm: " . q($myrow['am']) . ")</div></td>\n";
+			"<td valign='top'>" . display_user($myrow) . "<div class='smaller'>" . mailto($myrow['email']) . "</div>$am_message</td>\n";
 		$tool_content .= "\n" .
 			"<td class='smaller' valign=top align='center' width='150' class='smaller'>" . user_groups($cours_id, $myrow['user_id']) . "</td>\n" .
 			"<td align='center' width='90' class='smaller'>";
@@ -246,7 +247,9 @@ if ($is_adminOfCourse) {
 		}
 		$tool_content .= "<td valign='top' align='center' class='smaller'>";
 		$alert_uname = $myrow['prenom'] . " " . $myrow['nom'];
-		$tool_content .= "<a href='$_SERVER[PHP_SELF]?unregister=$myrow[user_id]$extra_link' onClick=\"return confirmation('".addslashes($alert_uname)."');\"><img src='../../template/classic/img/delete.png' title='$langDelete' /></a>";
+                $tool_content .= "<a href='$_SERVER[PHP_SELF]?unregister=$myrow[user_id]$extra_link'
+                                 onClick=\"return confirmation('" . js_escape($alert_uname) .
+                                 "');\"><img src='../../template/classic/img/delete.png' title='$langDelete' /></a>";
                 $tool_content .= "</td></tr>";
                 $i++;
 	}
