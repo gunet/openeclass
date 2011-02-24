@@ -31,7 +31,6 @@ define('EBOOK', 2);
 $can_upload = $is_adminOfCourse;
 if (defined('GROUP_DOCUMENTS')) {
         include '../group/group_functions.php';
-        $action->record('MODULE_ID_GROUPS');
 	$subsystem = GROUP;
         initialize_group_id();
         initialize_group_info($group_id);        
@@ -57,7 +56,6 @@ if (defined('GROUP_DOCUMENTS')) {
         $group_hidden_input = "<input type='hidden' name='ebook_id' value='$ebook_id' />";
         $basedir = $webDir . 'courses/' . $currentCourseID . '/ebook/' . $ebook_id;
 } else {
-        $action->record('MODULE_ID_DOCS');
 	$subsystem = MAIN;
         $base_url = $_SERVER['PHP_SELF'] . '?';
         $subsystem_id = 'NULL';

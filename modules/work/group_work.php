@@ -62,18 +62,22 @@ $require_login = true;
 
 include 'work_functions.php' ;
 include '../../include/baseTheme.php';
+include '../../include/pclzip/pclzip.lib.php';
+include '../../include/lib/fileManageLib.inc.php';
 include '../../include/lib/forcedownload.php';
 
 mysql_select_db($currentCourseID);
 
-$gid = intval($_REQUEST['group_id']);
+define('GROUP_DOCUMENTS', true);
+$group_id = intval($_REQUEST['group_id']);
+include '../document/doc_init.php';
 
 $coursePath = $webDir."/courses/".$currentCourseID;
 if (!file_exists($coursePath))
 	mkdir("$coursePath",0777);
 
 $workPath = $coursePath."/work";
-$groupPath = $coursePath."/group/".group_secret($gid);
+$groupPath = $coursePath."/group/".group_secret($group_id);
 
 $nameTools = $langGroupSubmit;
 
@@ -82,7 +86,7 @@ if (isset($_GET['submit'])) {
 	show_assignments();
 	draw($tool_content, 2);
 } elseif (isset($_POST['assign'])) {
-	submit_work($uid, $gid, $_POST['assign'], $_POST['file']);
+	submit_work($uid, $group_id, $_POST['assign'], $_POST['file']);
 	draw($tool_content, 2);
 } else {
 	header("Location: work.php");
@@ -92,7 +96,7 @@ if (isset($_GET['submit'])) {
 // show non-expired assignments list to allow selection
 function show_assignments()
 {
-	global $m, $uid, $gid, $langSubmit, $langDays, $langNoAssign, $tool_content, $langWorks, $currentCourseID;
+	global $m, $uid, $group_id, $langSubmit, $langDays, $langNoAssign, $tool_content, $langWorks, $currentCourseID;
 
 	$res = db_query("SELECT *, (TO_DAYS(deadline) - TO_DAYS(NOW())) AS days
 		FROM `$currentCourseID`.assignments");
@@ -104,7 +108,7 @@ function show_assignments()
 
 	$tool_content .= "<form action='$_SERVER[PHP_SELF]' method='post'>
 		<input type='hidden' name='file' value='$_GET[submit]'>
-		<input type='hidden' name='group_id' value='$gid'>
+		<input type='hidden' name='group_id' value='$group_id'>
 	    <table class='tbl' width='99%'>
 	    <tr>
 	      <th class='left' width='170'>&nbsp;</th>
@@ -141,7 +145,7 @@ function show_assignments()
 		}
 
 		$tool_content .= "</div></td>\n      <td align=\"center\">";
-		$subm = was_submitted($uid, $gid, $row['id']);
+		$subm = was_submitted($uid, $group_id, $row['id']);
 		if ($subm == 'user') {
 			$tool_content .=  $m['yes'];
 		} elseif ($subm == 'group') {
@@ -173,27 +177,35 @@ function show_assignments()
 
 
 // Insert a group work submitted by user uid to assignment id
-function submit_work($uid, $gid, $id, $file) {
+function submit_work($uid, $group_id, $id, $file) {
 	global $groupPath, $langUploadError, $langUploadSuccess,
-		$langBack, $m, $currentCourseID, $tool_content, $workPath;
+                $langBack, $m, $currentCourseID, $tool_content, $workPath,
+                $group_sql, $mysqlMainDb, $webDir;
 
         $ext = get_file_extension($file);
-	$local_name = greek_to_latin('Group '. $gid . (empty($ext)? '': '.' . $ext));
+	$local_name = greek_to_latin('Group '. $group_id . (empty($ext)? '': '.' . $ext));
 
-        $r = mysql_fetch_row(db_query('SELECT filename FROM document WHERE path = ' .
-                                      autoquote($file)));
-        $original_filename = $r[0];
-
+        mysql_select_db($mysqlMainDb);
+        list($original_filename) = mysql_fetch_row(db_query("SELECT filename FROM document
+                                                                WHERE $group_sql AND
+                                                                      path = " . autoquote($file)));
 	$source = $groupPath.$file;
 	$destination = work_secret($id)."/$local_name";
 
-        delete_submissions_by_uid($uid, $gid, $id, $destination);
+        delete_submissions_by_uid($uid, $group_id, $id, $destination);
+        mysql_select_db($mysqlMainDb);
+        if (is_dir($source)) {
+                $original_filename = $original_filename.'.zip';
+                $zip_filename = $webDir . 'courses/temp/'.safe_filename('zip');
+                zip_documents_directory($zip_filename, $file);
+                $source = $zip_filename;
+        }
         if (copy($source, "$workPath/$destination")) {
                 db_query("INSERT INTO `$currentCourseID`.assignment_submit (uid, assignment_id, submission_date,
                                      submission_ip, file_path, file_name, comments, group_id, grade_comments)
                                  VALUES ('$uid','$id', NOW(), '$_SERVER[REMOTE_ADDR]', '$destination'," .
                                          quote($original_filename) . ', ' .
-                                         autoquote($_POST['comments']) . ", $gid, '')",
+                                         autoquote($_POST['comments']) . ", $group_id, '')",
                         $currentCourseID);
 
 		$tool_content .="<p class=\"success\">$langUploadSuccess

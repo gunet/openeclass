@@ -401,6 +401,79 @@ function directory_selection($source_value, $command, $entryToExclude)
 	return $dialogBox;
 }
 
+// Create a zip file with the contents of documents path $downloadDir
+function zip_documents_directory($zip_filename, $downloadDir)
+{
+        global $basedir, $group_sql;
+
+        $GLOBALS['map_filenames'] = map_to_real_filename($downloadDir);
+
+        $cwd = getcwd();
+        chdir($basedir);
+
+        $zipfile = new PclZip($zip_filename);
+        $v = $zipfile->create(substr($downloadDir, 1),
+                              PCLZIP_CB_PRE_ADD, 'convert_to_real_filename');
+        if (!$v) {
+                die("error: ".$zipfile->errorInfo(true));
+        }
+
+        // delete invisible files from zip file
+        $files_to_exclude = array();
+        $sql = db_query("SELECT filename FROM document
+                                WHERE $group_sql AND
+                                      path LIKE '%$downloadDir%' AND
+                                      visibility='i'");
+        while ($files = mysql_fetch_array($sql, MYSQL_ASSOC)) {
+                array_push($files_to_exclude, $files['filename']);
+        }
+        foreach ($files_to_exclude as $files_to_delete) {
+                $zipfile->delete(PCLZIP_OPT_BY_NAME, greek_to_latin($files_to_delete));
+        }
+        chdir($cwd);
+}
+
+// Creates mapping between encoded filenames and real filenames
+function map_to_real_filename($downloadDir) {
+
+        global $group_sql;
+
+        $encoded_filenames = $temp = $filename = array();
+
+        $sql = db_query("SELECT path, filename FROM document
+                                WHERE $group_sql AND
+                                      path LIKE '%$downloadDir%'");
+        while ($files = mysql_fetch_array($sql)) {
+                array_push($encoded_filenames, $files['path']);
+                array_push($filename, $files['filename']);
+        }
+        $temp = $encoded_filenames;
+        foreach ($encoded_filenames as $position => $name) {
+                $last_name_component = substr(strrchr($name, "/"), 1);
+                foreach ($encoded_filenames as &$newname) {
+                        $newname = str_replace($last_name_component, $filename[$position], $newname);
+                }
+                unset($newname);
+        }
+        // create array with mappings
+        $map_filenames = array_combine($temp, $encoded_filenames);
+        return($map_filenames);
+}
+
+// PclZip callback function to store filenames with real filenames
+function convert_to_real_filename($p_event, &$p_header)
+{
+        global $map_filenames;
+
+        $filename = '/' . $p_header['filename'];
+        foreach ($p_header as $real_name) {
+                $p_header['stored_filename'] = substr(greek_to_latin($map_filenames[$filename]), 1);
+        }
+        return 1;
+}
+
+
+
 //------------------------------------------------------------------------------
 /* --------------- backported functions from Claroline 1.7.x --------------- */
 

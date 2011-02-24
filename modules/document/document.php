@@ -93,82 +93,19 @@ if (isset($_GET['downloadDir'])) {
                                                                 WHERE $group_sql AND
                                                                       path = " . autoquote($downloadDir)));
 	$real_filename = $real_filename.'.zip';
-	$map_filenames = map_to_real_filename();
-	
-	chdir($basedir);
-	$zip_filename = '../temp'.safe_filename('zip');
-	$zipfile = new PclZip($zip_filename);
-	
-	$v = $zipfile->create(substr($downloadDir, 1), PCLZIP_CB_PRE_ADD, "convert_to_real_filename");
-		if ($v == 0) {
-			die("error: ".$zipfile->errorInfo(true));
-		}
-	// delete invisible files from zip file
-	$files_to_exclude = array();
-	$sql = db_query("SELECT filename FROM document
-				WHERE course_id = $cours_id AND
-				      subsystem = $subsystem AND
-				      path LIKE '%$downloadDir%' AND
-				      visibility='i'");
-	while ($files = mysql_fetch_array($sql, MYSQL_ASSOC)) {
-		array_push($files_to_exclude, $files['filename']);		
-	}
-	foreach ($files_to_exclude as $files_to_delete) {
-		$zipfile->delete(PCLZIP_OPT_BY_NAME, greek_to_latin($files_to_delete));
-	}
+	$zip_filename = $webDir . 'courses/temp/'.safe_filename('zip');
+
+        zip_documents_directory($zip_filename, $downloadDir);
+
 	// download file
 	send_file_to_client($zip_filename, $real_filename, false, true, true);
 	exit;
 }
 
-if($can_upload)  {
+if ($can_upload)  {
         if (isset($_POST['uncompress'])) {
                 include("../../include/pclzip/pclzip.lib.php");
         }
-}
-
-//----------------------------------------------------------------
-/// creates mapping between encoded filenames and real filenames
-//----------------------------------------------------------------
-function map_to_real_filename() {
-	
-	global $cours_id, $downloadDir, $subsystem;
-	
-	$encoded_filenames = $temp = $filename = array();
-	
-	$sql = db_query("SELECT path, filename FROM document
-			WHERE course_id = $cours_id AND
-			      subsystem = $subsystem AND
-			      path LIKE '%$downloadDir%'");
-	while ($files = mysql_fetch_array($sql)) {
-		array_push($encoded_filenames, $files['path']);
-		array_push($filename, $files['filename']);
-	}
-	$temp = $encoded_filenames;	
-	foreach ($encoded_filenames as $position => $name) {	
-		$last_name_component = substr(strrchr($name, "/"), 1);
-		foreach ($encoded_filenames as &$newname) {
-			$newname = str_replace($last_name_component, $filename[$position], $newname);
-		}
-		unset($newname);
-	}
-	//creates array with mappings
-	$map_filenames = array_combine($temp, $encoded_filenames);
-	return($map_filenames);
-}
-
-//-------------------------------------------------------------------------
-// pclzip callback function to store filenames with real filenames
-//-------------------------------------------------------------------------
-function convert_to_real_filename($p_event, &$p_header) {
-	
-	global $cours_id, $map_filenames;
-	
-	$filename = "/".$p_header['filename'];
-	foreach ($p_header as $real_name) {
-		$p_header['stored_filename'] = substr(greek_to_latin($map_filenames[$filename]), 1);
-	}
-	return 1;
 }
 
 

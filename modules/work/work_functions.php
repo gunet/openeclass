@@ -277,7 +277,7 @@ function show_submission_details($id)
         </tr>
         <tr>
           <th>".$m['filename'].":</th>
-          <td>".$sub['file_name']."</td>
+          <td><a href='$_SERVER[PHP_SELF]?get=$sub[id]'>".q($sub['file_name'])."</a></td>
         </tr>";
 		    table_row($m['comments'], $sub['comments'], true);
 	$tool_content .= "

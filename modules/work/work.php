@@ -96,14 +96,17 @@ include('../group/group_functions.php');
 
 $workPath = $webDir."courses/".$currentCourseID."/work";
 
-if ($is_adminOfCourse) { //Only course admins can download assignments
-  if (isset($_GET['get'])) {
-	send_file($_GET['get']);
-  }
+if (isset($_GET['get'])) {
+        if (!send_file(intval($_GET['get']))) {
+                $tool_content .= "<p class='caution'>$langFileNotFound</p>";
+        }
+}
 
+// Only course admins can download all assignments in a zip file
+if ($is_adminOfCourse) {
   if (isset($_GET['download'])) {
 	include "../../include/pclzip/pclzip.lib.php";
-	download_assignments($_GET['download']);
+	download_assignments(intval($_GET['download']));
   }
 }
 
@@ -176,7 +179,7 @@ if ($is_adminOfCourse) {
 	}
 } else {
 	if (isset($_REQUEST['id'])) {
-            $id = $_REQUEST['id'];
+            $id = intval($_REQUEST['id']);
 		if (isset($_POST['work_submit'])) {
 			$nameTools = $m['SubmissionStatusWorkInfo'];
 			$navigation[] = array("url"=>"$_SERVER[PHP_SELF]", "name"=> $langWorks);
@@ -862,9 +865,9 @@ function show_assignment($id, $message = FALSE)
 			if (trim($row['comments'] != '')) {
 			    $tool_content .= "
                             <br />
-                            <table align=\"left\" width=\"100%\"  class=\"tbl\">
+                            <table align='left' width='100%'  class='tbl'>
                             <tr>
-                              <td width=\"1\" class=\"left\"><img src='../../template/classic/img/forum_off.png' alt='$m[comments]' title=\"$m[comments]\" /></td>
+                              <td width='1' class='left'><img src='../../template/classic/img/forum_off.png' alt='$m[comments]' title='$m[comments]' /></td>
                               <td>$row[comments]</td>
                             <tr>
                             </table>";
@@ -1141,11 +1144,21 @@ function submit_grades($grades_id, $grades)
 // functions for downloading
 function send_file($id)
 {
-        global $tool_content, $currentCourseID;
+        global $tool_content, $currentCourseID, $uid, $is_adminOfCourse;
         mysql_select_db($currentCourseID);
-        $info = mysql_fetch_array(mysql_query("SELECT * FROM assignment_submit WHERE id = '$id'"));
+        $q = mysql_query("SELECT * FROM assignment_submit WHERE id = $id");
+        if (!$q or !mysql_num_rows($q)) {
+                return false;
+        }
+        $info = mysql_fetch_array($q);
+        if ($info['group_id']) {
+                initialize_group_info($info['group_id']);
+        }
+        if (!($is_adminOfCourse or $info['uid'] == $uid or $GLOBALS['is_member'])) {
+                return false;
+        }
         // Add quotes to filename if it contains spaces
-        if (strpos($info[file_name], ' ') !== false) {
+        if (strpos($info['file_name'], ' ') !== false) {
                 $info['file_name'] = '"' . $info['file_name'] . '"';
         }
         header("Content-Type: application/octet-stream");
@@ -1247,3 +1260,4 @@ function show_plain_view($id)
 	readfile("$workPath/$secret/index.html");
 	exit;
 }
+
