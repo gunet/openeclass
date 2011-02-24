@@ -1429,6 +1429,7 @@ tinyMCE.init({
 		theme : 'advanced',
 		plugins : 'pagebreak,style,save,advimage,advlink,inlinepopups,media,print,contextmenu,paste,noneditable,visualchars,nonbreaking,xhtmlxtras,template,wordcount,advlist,emotions,preview',
 		entity_encoding : 'raw',
+                relative_urls : false,
 	
 		// Theme options
 		theme_advanced_buttons1 : 'bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,styleselect,formatselect,fontsizeselect,forecolor,backcolor,removeformat,hr',
