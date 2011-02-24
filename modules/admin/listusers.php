@@ -420,8 +420,8 @@ if($sql) {
 				switch ($logs['statut'])
 				{
 					case 1:	$tool_content .= "<img src='../../template/classic/img/teacher.png' title='$langTeacher'></img>";break;
-	   				case 5:	$tool_content .= "<img src='../../template/classic/img/student.gif' title='$langStudent'></img>";break;
-					case 10: $tool_content .= "<img src='../../template/classic/img/guest.gif' title='$langVisitor'></img>";break;
+	   				case 5:	$tool_content .= "<img src='../../template/classic/img/student.png' title='$langStudent'></img>";break;
+					case 10: $tool_content .= "<img src='../../template/classic/img/guest.png' title='$langVisitor'></img>";break;
 	   				default: $tool_content .= "$langOther ($logs[6])";break;
 				}
 				$tool_content .= "</td>
