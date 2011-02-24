@@ -285,7 +285,7 @@ if (!isset($_GET['mailing']))  // RH: Mailing detail: no received files
 	           $tool_content .= "\n       <tr class=\"odd\">";
 		}
 	$tool_content .= "<td width=\"3\">
-	<img src=\"../../template/classic/img/inbox.gif\" title=\"$dropbox_lang[receivedTitle]\" /></td>
+	<img src=\"../../template/classic/img/inbox.png\" title=\"$dropbox_lang[receivedTitle]\" /></td>
         <td>";
 
 		$tool_content .= "<a href='dropbox_download.php?id=".urlencode($w->id)."' target=_blank>".$w->title."</a>";
@@ -310,7 +310,7 @@ tCont9;
 
 	$tool_content .= "
         <a href=\"dropbox_submit.php?deleteReceived=".urlencode($w->id)."&amp;dropbox_unid=".urlencode($dropbox_unid)."\" onClick='return confirmation(\"$w->title\");'>
-        <img src=\"../../template/classic/img/delete-small.png\" title=\"$langDelete\" /></a>";
+        <img src=\"../../template/classic/img/delete.png\" title=\"$langDelete\" /></a>";
 
 	$tool_content .= "</div></td></tr>";
 	$i++;
@@ -440,7 +440,7 @@ foreach ($dropbox_person -> sentWork as $w)
 	else
 	{
 		$ahref = "dropbox_download.php?id=" . urlencode($w->id) . $mailingInUrl;
-		$imgsrc = '../../template/classic/img/outbox.gif';
+		$imgsrc = '../../template/classic/img/outbox.png';
 	}
 	$fSize = ceil(($w->filesize)/1024);
 		if ($i%2==0) {
@@ -450,7 +450,7 @@ foreach ($dropbox_person -> sentWork as $w)
             	}
 	$tool_content .= <<<tCont12
 
-		<td width="3"><img src="../../template/classic/img/outbox.gif" title="$w->title" /></td>
+		<td width="3"><img src="../../template/classic/img/outbox.png" title="$w->title" /></td>
 		<td ><a href="$ahref" target="_blank">
 		$w->title</a>
         <small>&nbsp;&nbsp;&nbsp;($fSize kB)</small>
@@ -474,7 +474,7 @@ tCont12;
 	$tool_content .= "
 	<a href=\"dropbox_submit.php?deleteSent=".urlencode($w->id)."&amp;dropbox_unid=".urlencode($dropbox_unid) . $mailingInUrl."\"
 		onClick='return confirmation(\"$w->title\");'>
-		<img src=\"../../template/classic/img/delete-small.png\" title=\"$langDelete\" /></a>";
+		<img src=\"../../template/classic/img/delete.png\" title=\"$langDelete\" /></a>";
 	$tool_content .= "</div></td></tr>";
 
 	// RH: Mailing: clickable images for examine and send
