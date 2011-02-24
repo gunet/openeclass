@@ -84,7 +84,7 @@ if(isset($_POST['submit'])) {
 	  <td colspan='2'>$langRefreshInfo<br /><br /><b>$langRefreshInfo_A :</b></td>
 	</tr>
 	<tr>
-	  <th class='left'><img src=\"../../template/classic/img/users_on.gif\" alt=\"\" border=\"0\" height=\"16\" width=\"16\"> $langUsers</th>
+	  <th class='left'><img src=\"../../template/classic/img/groups_on.png\" alt=\"\" border=\"0\" height=\"16\" width=\"16\"> $langUsers</th>
 	  <td width='1%'><input type='checkbox' name='delusers'></td>
 	  <td>$langUserDelCourse</td>
 	</tr>

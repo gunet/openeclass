@@ -191,7 +191,7 @@ for ($j = 0; $j < mysql_num_rows($sql); $j++) {
 	// Add links to course users, delete course and course edit
 	$tool_content .= "
       <td align='center'><a href='listusers.php?c=".$logs['cours_id']."'>
-	<img src='../../template/classic/img/user_list.gif' title='$langUsers' /></a>
+	<img src='../../template/classic/img/user_list.png' title='$langUsers' /></a>
       </td>
       <td align=\"center\" width='10'><a href='delcours.php?c=".$logs['cours_id']."'>
 	<img src='../../template/classic/img/delete.png' title='$langDelete'></a>
