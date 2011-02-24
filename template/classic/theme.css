@@ -962,4 +962,139 @@ a.unit_link_invisible:hover {
 }
 /* ----- END agenda ----- */
 
+/* ----- START phpbb ----- */
+
+.Forum_leftside {
+	background : #F7F7F7; 
+	text-align: center;
+	vertical-align: middle;
+	font-size:11px;
+}
+
+.Forum_post {
+	background : #F7F7F7 !important;
+	text-align: center;
+	vertical-align: middle !important;
+	font-size:9px !important;
+}
+
+.Forum_leftside1 {
+	background : #F4F4F4 !important;
+	text-align: center;
+	vertical-align: middle !important;
+	font-size:11px !important;
+}
+
+.topic_row1 {
+	background : #F7F7F7 !important;
+	text-align: left;
+	vertical-align: top !important;
+	font-size:11px !important;
+}
+
+.topic_row2 {
+	background : #FBFBFB !important;
+	text-align: left;
+	vertical-align: top !important;
+	font-size:11px !important;
+}
+
+.post_massage {
+	border-bottom: 1px dotted #D1D7DC;
+}
+
+.forum_category {
+	margin-top: 8px;
+	margin-left: 4px;
+	margin-bottom: 8px;
+	text-align: center;
+	padding: 4px;
+	color: #000000 !important;
+	background-color: #d8dfea !important;;
+	font-weight: normal;
+		font-size:11px !important;
+}
+
+   /* ----- Pagination ----- */
+.pagination {
+	height: 1%; /* IE tweak (holly hack) */
+	width: auto;
+	text-align: right;
+	margin-top: 5px;
+	float: right;
+}
+
+.pagination span.page-sep {
+	display: none;
+}
+
+li.pagination {
+	margin-top: 0;
+}
+
+.pagination strong, .pagination b {
+	font-weight: normal;
+}
+
+.pagination span strong {
+	padding: 0 2px;
+	margin: 0 2px;
+	font-weight: normal;
+	color: #FFFFFF;
+	background-color: #bfbfbf;
+	border: 1px solid #bfbfbf;
+	font-size: 0.9em;
+}
+
+.pagination span a, .pagination span a:link, .pagination span a:visited, .pagination span a:active {
+	font-weight: normal;
+	text-decoration: none;
+	color: #747474;
+	margin: 0 2px;
+	padding: 0 2px;
+	background-color: #eeeeee;
+	border: 1px solid #bababa;
+	font-size: 0.9em;
+	line-height: 1.5em;
+}
+
+.pagination span a:hover {
+	border-color: #d2d2d2;
+	background-color: #d2d2d2;
+	color: #FFF;
+	text-decoration: none;
+}
+
+.pagination img {
+	vertical-align: middle;
+}
+
+/* Pagination in viewforum for multipage topics */
+.row .pagination {
+	display: block;
+	float: left;
+	width: auto;
+	margin-top: 0;
+	padding: 1px 0px 1px 0px;
+	font-size: 0.9em;
+	background: none no-repeat;
+}
+
+.pages{
+	float: right;
+	width: auto;
+	margin-top: 0;
+	padding: 1px 1px 1px 1px;
+	font-size: 0.9em;
+}
+
+.row .pagination span a, li.pagination span a {
+	background-color: #FFFFFF;
+}
+
+.row .pagination span a:hover, li.pagination span a:hover {
+	background-color: #d2d2d2;
+}
+
+/* ----- END phpbb ----- */
 
