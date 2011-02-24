@@ -543,11 +543,11 @@ while ($list = mysql_fetch_array($result)) // while ... learning path list
 
         if ($list['lock'] == 'OPEN') {
             $tool_content .= "<a href='".$_SERVER['PHP_SELF']."?cmd=mkBlock&amp;cmdid=".$list['learnPath_id']."'>"
-                  ."<img src='../../template/classic/img/unblock.png' alt='$langBlock' title='$langBlock' />"
+                  ."<img src='../../template/classic/img/bullet_unblock.png' alt='$langBlock' title='$langBlock' />"
                   ."</a>";
         } else {
             $tool_content .= "<a href='".$_SERVER['PHP_SELF']."?cmd=mkUnblock&amp;cmdid=".$list['learnPath_id']."'>"
-            ."<img src='../../template/classic/img/block.png' alt='$langAltMakeNotBlocking' title='$langAltMakeNotBlocking' />"
+            ."<img src='../../template/classic/img/bullet_block.png' alt='$langAltMakeNotBlocking' title='$langAltMakeNotBlocking' />"
             ."</a>";
         }
         $tool_content .= "</td>\n";

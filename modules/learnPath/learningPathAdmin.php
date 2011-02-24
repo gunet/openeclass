@@ -625,12 +625,12 @@ foreach ($flatElementList as $module)
     elseif ( $module['lock'] == 'OPEN')
     {
         $tool_content .= "<a href=\"".$_SERVER['PHP_SELF']."?cmd=mkBlock&amp;cmdid=".$module['learnPath_module_id']."\">
-	<img src=\"".$imgRepositoryWeb."unblock.gif\" alt=\"$langBlock\" title=\"$langBlock\" border=0 /></a>";
+	<img src=\"".$imgRepositoryWeb."bullet_unblock.png\" alt=\"$langBlock\" title=\"$langBlock\" border=0 /></a>";
     }
     elseif( $module['lock'] == 'CLOSE')
     {
         $tool_content .= "<a href=\"".$_SERVER['PHP_SELF']."?cmd=mkUnblock&amp;cmdid=".$module['learnPath_module_id']."\">
-	<img src=\"".$imgRepositoryWeb."block.gif\" alt=\"$langAltMakeNotBlocking\" title=\"$langAltMakeNotBlocking\" border=0 /></a>";
+	<img src=\"".$imgRepositoryWeb."bullet_block.png\" alt=\"$langAltMakeNotBlocking\" title=\"$langAltMakeNotBlocking\" border=0 /></a>";
     }
     $tool_content .= "</td>";
 
