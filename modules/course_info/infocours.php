@@ -190,12 +190,12 @@ if (isset($_POST['submit'])) {
 	    <legend>$langConfidentiality</legend>
 	    <table class='tbl'>
 	    <tr>
-		<td><img src='../../template/classic/img/OpenCourse.gif' alt='$m[legopen]' title='$m[legopen]' width='16' height='16' />&nbsp;$m[legopen]&nbsp;:</td>
+		<td><img src='../../template/classic/img/lock_open.png' alt='$m[legopen]' title='$m[legopen]' width='16' height='16' />&nbsp;$m[legopen]&nbsp;:</td>
 		<td width='1'><input type='radio' name='formvisible' value='2'".@$visibleChecked[2]." /></td>
 		<td>$langPublic&nbsp;</td>
 	    </tr>
 	    <tr>
-		<td rowspan='2' valign='top'><img src='../../template/classic/img/Registration.gif' alt='$m[legrestricted]' title='$m[legrestricted]' width='16' height='16' />&nbsp;$m[legrestricted]&nbsp;:</td>
+		<td rowspan='2' valign='top'><img src='../../template/classic/img/lock_registration.png' alt='$m[legrestricted]' title='$m[legrestricted]' width='16' height='16' />&nbsp;$m[legrestricted]&nbsp;:</td>
 		<td><input type='radio' name='formvisible' value='1'".@$visibleChecked[1]." /></td>
 		<td>$langPrivOpen</td>
 	    </tr>
@@ -204,7 +204,7 @@ if (isset($_POST['submit'])) {
 		<td>&nbsp;$langOptPassword&nbsp;<input type='text' name='password' value='$password' /></td>
 	    </tr>
 	    <tr>
-		<td><img src='../../template/classic/img/ClosedCourse.gif' alt='$m[legclosed]' title='$m[legclosed]' width='16' height='16' />&nbsp;$m[legclosed]&nbsp;:</td>
+		<td><img src='../../template/classic/img/lock_closed.png' alt='$m[legclosed]' title='$m[legclosed]' width='16' height='16' />&nbsp;$m[legclosed]&nbsp;:</td>
 		<td><input type='radio' name='formvisible' value='0'".@$visibleChecked[0]." /></td>
 		<td>$langPrivate&nbsp;</td>
 	    </tr>

@@ -203,13 +203,13 @@ if (isset($_POST['back1']) or !isset($_POST['visit'])) {
 	<td>
 	  <table class='tbl_alt' width='99%'>
 	  <tr class='even'>
-	    <td><img src=\"../../template/classic/img/OpenCourse.gif\" title=\"".$m['legopen']."\" width=\"16\" height=\"16\" /></td>
+	    <td><img src=\"../../template/classic/img/lock_open.png\" title=\"".$m['legopen']."\" width=\"16\" height=\"16\" /></td>
 	    <td width='100'>".$m['legopen']."</td>
 	    <td><input name=\"formvisible\" type=\"radio\" value=\"2\" checked=\"checked\" /></td>
 	    <td class='right'>$langPublic</td>
 	  </tr>
 	  <tr class='even'>
-	    <td valign='top'><img src=\"../../template/classic/img/Registration.gif\" title=\"".$m['legrestricted']."\" width=\"16\" height=\"16\" /></td>
+	    <td valign='top'><img src=\"../../template/classic/img/lock_registration.png\" title=\"".$m['legrestricted']."\" width=\"16\" height=\"16\" /></td>
 	    <td valign='top'>".$m['legrestricted']."</td>
 	    <td valign='top'><input name=\"formvisible\" type=\"radio\" value=\"1\" /></td>
 	    <td class='right'>
@@ -218,7 +218,7 @@ if (isset($_POST['back1']) or !isset($_POST['visit'])) {
             </td>
           </tr>
 	  <tr class='even'>
-	    <td valign='top'><img src=\"../../template/classic/img/ClosedCourse.gif\" title=\"".$m['legclosed']."\" width=\"16\" height=\"16\" /></td>
+	    <td valign='top'><img src=\"../../template/classic/img/lock_closed.png\" title=\"".$m['legclosed']."\" width=\"16\" height=\"16\" /></td>
 	    <td valign='top'>".$m['legclosed']."</td>
 	    <td valign='top'><input name=\"formvisible\" type=\"radio\" value=\"0\" /></td>
 	    <td class='right'>$langPrivate</td>

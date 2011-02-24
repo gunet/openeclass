@@ -176,13 +176,13 @@ for ($j = 0; $j < mysql_num_rows($sql); $j++) {
 	// Define course type
 	switch ($logs[4]) {
 		case 2:
-			$tool_content .= "<img src='../../template/classic/img/OpenCourse.gif' title='$langOpenCourse' />";
+			$tool_content .= "<img src='../../template/classic/img/lock_open.png' title='$langOpenCourse' />";
 			break;
 		case 1:
-			$tool_content .= "<img src='../../template/classic/img/Registration.gif' title='$langRegCourse' />";
+			$tool_content .= "<img src='../../template/classic/img/lock_registration.png' title='$langRegCourse' />";
 			break;
 		case 0:
-			$tool_content .= "<img src='../../template/classic/img/ClosedCourse.gif' title='$langClosedCourse' />";
+			$tool_content .= "<img src='../../template/classic/img/lock_closed.png' title='$langClosedCourse' />";
 			break;
 	}
 	$tool_content .= "
