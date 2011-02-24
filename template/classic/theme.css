@@ -501,7 +501,7 @@ fieldset table.th {
     float: left;
 	width: 32px;
 	height: 32px;
-	background-image: url(img/lesson_icon.gif);
+	background-image: url(img/lesson_icon.png);
 	background-repeat: no-repeat;
 	overflow:visible;
 }
@@ -509,7 +509,7 @@ fieldset table.th {
 .admin_bar_icon {
 	float: left;
 	width: 32px;
-	background-image: url(img/admin-tools.gif);
+	background-image: url(img/admin_tools.png);
 	background-repeat: no-repeat;
 	overflow:visible;
 }
@@ -518,7 +518,7 @@ fieldset table.th {
 	float: left;
 	width: 24px;
 	height: 24px;
-	background-image: url(img/logo_icon.gif);
+	background-image: url(img/logo_icon.png);
 	background-repeat: no-repeat;
 	overflow:visible;
 }

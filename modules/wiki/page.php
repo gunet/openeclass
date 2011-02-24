@@ -753,7 +753,7 @@
     if ( $action == "edit" || $action == "diff" )
     {
         /*$tool_content .= '&nbsp;&nbsp;&nbsp;'
-            . '<img src="'.$imgRepositoryWeb.'/help_little.gif" border="0" alt="history" />&nbsp;'
+            . '<img src="'.$imgRepositoryWeb.'/help.png" border="0" alt="history" />&nbsp;'
             . '<a class="claroCmd" href="#" onClick="MyWindow=window.open(\''
             . '../help/help.php?topic=WikiSyntax&amp;language=' . $language
             . '\',\'MyWindow\',\'toolbar=no,location=no,directories=no,status=yes,menubar=no'
