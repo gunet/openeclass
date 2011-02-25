@@ -856,7 +856,7 @@ if ($doc_count == 0) {
                                 if (!$is_dir) {
                                         /*** replace/overwrite command, only applies to files ***/
                                         $tool_content .= "<a href='{$base_url}replace=$cmdDirName'>" .
-                                                         "<img src='../../template/classic/img/add.png' " .
+                                                         "<img src='../../template/classic/img/replace.png' " .
 							 "title='$langReplace' alt='$langReplace' /></a>&nbsp;";
                                 }
                                 /*** delete command ***/
