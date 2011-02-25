@@ -63,7 +63,6 @@ $langUserS = "χρήστης";
 $langSupportUser = "Υπεύθυνος Υποστήριξης:";
 $langAdminUsers = "Διαχείριση Χρηστών";
 
-
 /********************************************
 * addadmin.inc.php
 *********************************************/
@@ -198,6 +197,7 @@ $langFollow50 = "Επόμενοι";
 $langAll="όλοι";
 $langNoSuchUsers = "Δεν υπάρχουν χρήστες σύμφωνα με τα κριτήρια που ορίσατε";
 $langAsInactive = "ως μη ενεργοί";
+$langChanges = "αλλαγές";
 
 // listcours
 $langOpenCourse = "Ανοιχτό";
