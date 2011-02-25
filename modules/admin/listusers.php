@@ -22,34 +22,17 @@
 *  			Network Operations Center, University of Athens,
 *  			Panepistimiopolis Ilissia, 15784, Athens, Greece
 *  			eMail: info@openeclass.org
-* =========================================================================*/
+* =========================================================================
 
-/*===========================================================================
 	listusers.php
 	@last update: 27-06-2006 by Karatzidis Stratos
 	@authors list: Karatzidis Stratos <kstratos@uom.gr>
 		       Vagelis Pitsioygas <vagpits@uom.gr>
-==============================================================================
-  @Description: List Users (eclass version)
-
- 	This script displays information about User Info / List.
-	The list allows the admin to:
-	- edit user data
-	- display the course modules list for each user
-	- Register/Unregister from a course
-	- Statistics per user
-	- delete the user
-	- Register/Unregister the user from the platform
-
-	@todo: update the link for user statistics
-==============================================================================
 */
 
 $require_admin = TRUE;
 include '../../include/baseTheme.php';
 include 'admin.inc.php';
-
-$tool_content = "";
 
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
 $nameTools = $langListUsersActions;
@@ -335,25 +318,14 @@ if($sql) {
 		$caption .= "$langThereAre: <b>$teachers</b> $langTeachers, <b>$students</b> $langStudents 
 			$langAnd <b>$visitors</b> $langVisitors<br />";
 		$caption .= "$langTotal: <b>$countUser</b> $langUsers<br />";
-
-		if($countUser > 0)
-		{
-			if($c == 'inactive')
-			{
-				$caption .= "&nbsp;$langAsInactive<br />";
-				$caption .= "<a href='updatetheinactive.php?activate=1'>".$langAddSixMonths."</a><br />";
-			}
-			else
-			{
-				$caption .= " ";
-			}
+		if($c == 'inactive') {
+			$caption .= "&nbsp;$langAsInactive<br />";
+			$caption .= "<a href='updatetheinactive.php?activate=1'>".$langAddSixMonths."</a><br />";
+		} else {
+			$caption .= " ";
 		}
-		else
-		{
-			$caption .= "";
-		}
-
-		@$str = "&user_surname=$user_surname&user_firstname=$user_firstname&user_username=$user_username&user_am=$user_am&user_email=$user_email&user_type=$user_type&user_registered_at_flag=$user_registered_at_flag";
+		
+		@$str = "&amp;user_surname=$user_surname&amp;user_firstname=$user_firstname&amp;user_username=$user_username&amp;user_am=$user_am&amp;user_email=$user_email&amp;user_type=$user_type&amp;user_registered_at_flag=$user_registered_at_flag";
 
 		if ($countUser >= USERS_PER_PAGE) { // display navigation links if more than USERS_PER_PAGE
 			$tool_content .= show_paging($limit, USERS_PER_PAGE, $countUser, "$_SERVER[PHP_SELF]", "$str");
@@ -389,19 +361,19 @@ if($sql) {
 			$str .= "&c=$c";	
 		}
 		$tool_content .= "
-      <table class='tbl_alt' width='99%'>
-      <tr>
-        <th colspan='9'><div align='right'>".$caption."</div></th>
-      </tr>
-      <tr>
-        <th width='1'>&nbsp;</th>
-        <th scope='col'><div align='left'><a href='$_SERVER[PHP_SELF]?ord=n$str'>$langSurname</a></div></th>
-	<th><div align='left'><a href='$_SERVER[PHP_SELF]?ord=p$str'>$langName</a></div></th>
-	<th><div align='left'><a href='$_SERVER[PHP_SELF]?ord=u$str'>$langUsername</a></div></th>
-	<th scope='col'>$langEmail</th>
-	<th scope='col'><a href='$_SERVER[PHP_SELF]?ord=s$str'>$langProperty</a></th>
-	<th scope='col' colspan='3'>$langActions</th>
-      </tr>";
+		<table class='tbl_alt' width='99%'>
+		<tr>
+		  <th colspan='9'><div align='right'>".$caption."</div></th>
+		</tr>
+		<tr>
+		  <th width='1'>&nbsp;</th>
+		  <th scope='col'><div align='left'><a href='$_SERVER[PHP_SELF]?ord=n$str'>$langSurname</a></div></th>
+		  <th><div align='left'><a href='$_SERVER[PHP_SELF]?ord=p$str'>$langName</a></div></th>
+		  <th><div align='left'><a href='$_SERVER[PHP_SELF]?ord=u$str'>$langUsername</a></div></th>
+		  <th scope='col'>$langEmail</th>
+		  <th scope='col'><a href='$_SERVER[PHP_SELF]?ord=s$str'>$langProperty</a></th>
+		  <th scope='col' colspan='3'>$langActions</th>
+		</tr>";
         	$k = 0;
 		for ($j = 0; $j < mysql_num_rows($sql); $j++) {
 			while($logs = mysql_fetch_array($sql, MYSQL_ASSOC)) {
@@ -410,31 +382,35 @@ if($sql) {
 	            		} else {
 		                	$tool_content .= "\n      <tr class='odd'>";
 	            		}
-				$tool_content .= "
-        <td width='1'><img style='border:0px; margin:4px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'></td>
-    	<td>".htmlspecialchars($logs['nom'])."</td>
-    	<td>".htmlspecialchars($logs['prenom'])."</td>
-    	<td>".htmlspecialchars($logs['username'])."</td>
-    	<td>".htmlspecialchars($logs['email'])."</td>
-    	<td align='center'>";
+				$tool_content .= "<td width='1'>
+					<img style='border:0px; margin:4px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet' /></td>
+					<td>".htmlspecialchars($logs['nom'])."</td>
+					<td>".htmlspecialchars($logs['prenom'])."</td>
+					<td>".htmlspecialchars($logs['username'])."</td>
+					<td>".htmlspecialchars($logs['email'])."</td>
+					<td align='center'>";
 				switch ($logs['statut'])
 				{
-					case 1:	$tool_content .= "<img src='../../template/classic/img/teacher.png' title='$langTeacher'></img>";break;
-	   				case 5:	$tool_content .= "<img src='../../template/classic/img/student.png' title='$langStudent'></img>";break;
-					case 10: $tool_content .= "<img src='../../template/classic/img/guest.png' title='$langVisitor'></img>";break;
+					case 1:	$tool_content .= "<img src='../../template/classic/img/teacher.png' title='$langTeacher' />";break;
+	   				case 5:	$tool_content .= "<img src='../../template/classic/img/student.png' title='$langStudent' />";break;
+					case 10: $tool_content .= "<img src='../../template/classic/img/guest.png' title='$langVisitor' />";break;
 	   				default: $tool_content .= "$langOther ($logs[6])";break;
 				}
 				$tool_content .= "</td>
-        <td><a href=\"edituser.php?u=".$logs['user_id']."\"><img src='../../template/classic/img/edit.png' title='$langEdit'></a></td>
- 	<td><a href='unreguser.php?u=".$logs['user_id']."'><img src='../../template/classic/img/delete.png' title='$langDelete'></img></a></td>
-	<td align='center'><a href='userstats.php?u=".$logs['user_id']."'><img src='../../template/classic/img/platform_stats.png' title='$langStat'></img></a></td>\n";
-				$tool_content .= "
-      </tr>";
+					<td><a href=\"edituser.php?u=".$logs['user_id']."\">
+					<img src='../../template/classic/img/edit.png' title='$langEdit' /></a>
+					</td>
+					<td><a href='unreguser.php?u=".$logs['user_id']."'>
+					<img src='../../template/classic/img/delete.png' title='$langDelete' />
+					</a></td>
+					<td align='center'><a href='userstats.php?u=".$logs['user_id']."'>
+					<img src='../../template/classic/img/platform_stats.png' title='$langStat' /></a>
+					</td>\n";
+				$tool_content .= "</tr>";
                         $k++;
 			}
 		}
-		$tool_content .= "
-      </table>";
+		$tool_content .= "</table>";
 		if ($countUser >= USERS_PER_PAGE) { // display navigation links if more than USERS_PER_PAGE
 			$tool_content .= show_paging($limit, USERS_PER_PAGE, $countUser, "$_SERVER[PHP_SELF]", "$str");
 		}  
@@ -447,4 +423,3 @@ if($sql) {
 $tool_content .= "<p align='right'><a href='index.php'>$langBack</a></p>";
 
 draw($tool_content, 3);
-?>

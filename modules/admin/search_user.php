@@ -67,7 +67,7 @@ $tool_content .= "
 
 <form action=\"listusers.php?search=".$new."\" method=\"post\" name=\"user_search\">
 <fieldset>
-  <legend>$langUserData</legend?
+  <legend>$langUserData</legend>
   <table class='tbl' width=\"99%\">
   <tr>
     <th class='left' width=\"180\">$langSurname:</th>
