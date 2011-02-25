@@ -117,7 +117,7 @@ if (mysql_num_rows($q) == 0) {
                 $tool_content .= "
      <tr" . odd_even($k) . ">
        <td width='1' valign='top'>" .
-                                 "<img style='padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif' " .
+                                 "<img style='padding-top:3px;' src='${urlServer}/template/classic/img/arrow.png' " .
                                  " alt='' /></td>
        <td><a href='show.php/$currentCourseID/$r[id]/'>" .
                                  q($r['title']) . "</a>

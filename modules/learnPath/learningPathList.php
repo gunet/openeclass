@@ -454,7 +454,7 @@ while ($list = mysql_fetch_array($result)) // while ... learning path list
     }
     else {
         $style="class='even'";
-        $image_bullet = "arrow_grey.gif";
+        $image_bullet = "arrow.png";
     }
 
      if ($ind%2 == 0) {
@@ -530,7 +530,7 @@ while ($list = mysql_fetch_array($result)) // while ... learning path list
         }
     }
     else {  //else of !$is_blocked condition , we have already been blocked before, so we continue beeing blocked : we don't display any links to next paths any longer
-        $tool_content .= "      <td><img src='../../template/classic/img/arrow_grey.gif' alt='' /> ".$list['name'].$list['minRaw']."</td>\n";
+        $tool_content .= "      <td><img src='../../template/classic/img/arrow.png' alt='' /> ".$list['name'].$list['minRaw']."</td>\n";
     }
 
     // DISPLAY ADMIN LINK-----------------------------------------------------------

@@ -57,7 +57,7 @@ if (isset($close_user_registration) and $close_user_registration) {
 }
 
 $tool_content .= "</p>
-  <p><img style='border:0px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet' alt='bullet'>&nbsp;&nbsp;<a href=\"$newuser\">$langNewAccount</a></p>";
+  <p><img style='border:0px;' src='${urlServer}/template/classic/img/arrow.png' title='bullet' alt='bullet'>&nbsp;&nbsp;<a href=\"$newuser\">$langNewAccount</a></p>";
 
 if(!empty($auth)) {
         if (count($auth) > 1) {
@@ -84,7 +84,7 @@ $tool_content .= "\n
   <p class='title1'>".$langProfAccount." ".$langUserAccountInfo1."</p>";
 
 if(!empty($auth)) {
-        $tool_content .= "<p><img style='border:0px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'  alt='bullet'>&nbsp;&nbsp;<a href=\"newprof.php\">$langNewAccount</a></p>";
+        $tool_content .= "<p><img style='border:0px;' src='${urlServer}/template/classic/img/arrow.png' title='bullet'  alt='bullet'>&nbsp;&nbsp;<a href=\"newprof.php\">$langNewAccount</a></p>";
         if (count($auth) > 1) {
                 $tool_content .= "  <p class='sub_title1'>$langUserAccountInfo3&nbsp;:</p>";
         }

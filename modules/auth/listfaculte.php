@@ -43,7 +43,7 @@ if (isset($result))  {
 		        $tool_content .= "\n  <tr class='odd'>";
 		}
 		$tool_content .= "<td width='1'>
-		<img style='border:0px;' src='${urlServer}/template/classic/img/arrow_grey.gif' alt='bullet'></td>
+		<img style='border:0px;' src='${urlServer}/template/classic/img/arrow.png' alt='bullet'></td>
 		<td><a href='opencourses.php?fc=$fac[id]'>$fac[name]</a>&nbsp;&nbsp;<small>
 		($fac[code])";
 		$n = db_query("SELECT COUNT(*) FROM cours WHERE faculteid = $fac[id]");

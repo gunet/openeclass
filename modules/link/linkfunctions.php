@@ -67,7 +67,7 @@ function showlinksofcategory($catid)
                 $title = empty($myrow['title'])? $myrow['url']: $myrow['title'];
                 $tool_content .= "
                   <td>&nbsp;</td>
-                  <td width='1' valign='top'><img src='$urlServer/template/classic/img/arrow_grey.gif' alt='' /></td>
+                  <td width='1' valign='top'><img src='$urlServer/template/classic/img/arrow.png' alt='' /></td>
                   <td valign='top'><a href='go.php?c=$currentCourseID&amp;id=$myrow[id]&amp;url=" .
                   urlencode($myrow['url']) . "' target='_blank'>" . q($title) . "</a>";
                 if (!empty($myrow['description'])) {

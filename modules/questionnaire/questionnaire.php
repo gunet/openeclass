@@ -199,7 +199,7 @@ global $tool_content, $currentCourse, $langCreatePoll, $langPollsActive,
                         <td><a href='pollresults.php?pid=$pid'>$thepoll[name]</a>";
 					} else {
 						$tool_content .= "
-                        <td><img style='border:0px; padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet' /></td>
+                        <td><img style='border:0px; padding-top:3px;' src='${urlServer}/template/classic/img/arrow.png' title='bullet' /></td>
                         <td>";
 						if (($has_participated[0] == 0) and $poll_ended == 0) {
 							$tool_content .= "<a href='pollparticipate.php?UseCase=1&pid=$pid'>$thepoll[name]</a>";

@@ -145,7 +145,7 @@ lCont;
 		for ($i=0; $i<$data[0]; $i++) {
  			$lesson_content .= "
         <tr style=\"background-color: transparent;\" onmouseover=\"this.style.backgroundColor='#fbfbfb'\" onmouseout=\"this.style.backgroundColor='transparent'\">
-          <td valign=\"top\" align='left' width=\"2\" style=\"padding-left: 4px; padding-right: 0px;\"><img src='${urlAppend}/template/classic/img/arrow_grey.gif' alt='' /></td>
+          <td valign=\"top\" align='left' width=\"2\" style=\"padding-left: 4px; padding-right: 0px;\"><img src='${urlAppend}/template/classic/img/arrow.png' alt='' /></td>
           <td align='left' style=\"padding-left: 0px; padding-top: 2px; padding-bottom: 2px; padding-right: 0px;\"><a href=\"${urlServer}courses/".$data[2][$i]."/\">".$lesson_fCode[$i]." - ".$data[1][$i]."</a><cite class=\"content_pos\">".$data[3][$i]."</cite></td>";
 			if ($data[4][$i] == '5') {
 				$lesson_content .= "
@@ -170,12 +170,12 @@ lCont;
         <thead>";
 		if ($statut == 1) {
  			$lesson_content .= "\n        <tr style=\"background-color: transparent;\">";
- 		    $lesson_content .= "\n          <td valign=\"top\" align='left' width=\"10\" style=\"padding-left: 4px; padding-right: 0px;\"><img src='${urlAppend}/template/classic/img/arrow_grey.gif' alt='' /></td>";
+ 		    $lesson_content .= "\n          <td valign=\"top\" align='left' width=\"10\" style=\"padding-left: 4px; padding-right: 0px;\"><img src='${urlAppend}/template/classic/img/arrow.png' alt='' /></td>";
 			$lesson_content .= "\n          <td align='left' style=\"padding-left: 0px; padding-top: 2px; padding-bottom: 2px; padding-right: 0px;\">$langWelcomeProfPerso</td>";
  			$lesson_content .= "\n        </tr>";
 		}
  			$lesson_content .= "\n        <tr style=\"background-color: transparent;\">";
- 		    $lesson_content .= "\n          <td valign=\"top\" align='left' width=\"10\" style=\"padding-left: 4px; padding-right: 0px;\"><img style='border:0px;' src='${urlAppend}/template/classic/img/arrow_grey.gif' alt=''></td>";
+ 		    $lesson_content .= "\n          <td valign=\"top\" align='left' width=\"10\" style=\"padding-left: 4px; padding-right: 0px;\"><img style='border:0px;' src='${urlAppend}/template/classic/img/arrow.png' alt=''></td>";
 		$lesson_content .= "\n          <td align='left' style=\"padding-left: 0px; padding-top: 2px; padding-bottom: 2px; padding-right: 0px;\">$langWelcomeStudPerso</td>";
  			$lesson_content .= "\n        </tr>";
 		$lesson_content .= "

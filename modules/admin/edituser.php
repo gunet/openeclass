@@ -247,7 +247,7 @@ $tool_content .= "
                                 }
 
 				$tool_content .= "
-                                        <td width='1'><img style='border:0px; margin:4px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'></td>
+                                        <td width='1'><img style='border:0px; margin:4px;' src='${urlServer}/template/classic/img/arrow.png' title='bullet'></td>
 					<td>".htmlspecialchars($logs[0])."</td>
 					<td>".htmlspecialchars($logs[1])."</td><td align='center'>";
 				if ($logs[2] == '0000-00-00')

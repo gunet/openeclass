@@ -461,7 +461,7 @@ if (isset($_GET['id']) and isset($_GET['table_edit']))  {
 				$rowClass = "class='even'";
 			}
 				$tool_content .= "\n        <tr $rowClass>";
-				$tool_content .= "\n          <td width=\"1\" valign='top'><img style='border:0px; padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'></td>";
+				$tool_content .= "\n          <td width=\"1\" valign='top'><img style='border:0px; padding-top:3px;' src='${urlServer}/template/classic/img/arrow.png' title='bullet'></td>";
 				$tool_content .= $link_to_add;
 				$tool_content .= "\n          <td align='center'><a href='$_SERVER[PHP_SELF]?id=$myrow[0]&table_edit=$table'><img src='../../template/classic/img/edit.png' border='0' title='$langModify'></img></a>&nbsp;&nbsp;<a href='$_SERVER[PHP_SELF]?id=$myrow[0]&delete=yes&table=$table' onClick='return confirmation(\"".addslashes($myrow[2])."\");'><img src='../../template/classic/img/delete.png' border='0' title='$langDelete'></img></a></td>";
                                 $tool_content .= "\n        </tr>";
@@ -516,7 +516,7 @@ else {
 					$rowClass = "class='even'";
 				}
 				$tool_content .= "\n                <tr $rowClass>";
-				$tool_content .= "\n                  <td width=\"1\" valign='top'><img style='border:0px; padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'></td>";
+				$tool_content .= "\n                  <td width=\"1\" valign='top'><img style='border:0px; padding-top:3px;' src='${urlServer}/template/classic/img/arrow.png' title='bullet'></td>";
 				$tool_content .= $link_to_add;
 				$tool_content .= "\n                </tr>";
 				$i++;

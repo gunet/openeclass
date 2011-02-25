@@ -154,7 +154,7 @@ while ($row = mysql_fetch_assoc($result)) {
                 $table_cont .= "<tr class='odd'>";
         }
         $table_cont .= "
-                <td width=\"1\"><img src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'></td>
+                <td width=\"1\"><img src='${urlServer}/template/classic/img/arrow.png' title='bullet'></td>
                 <td>";
         if ($known) {
                 $table_cont .= $user;
@@ -183,7 +183,7 @@ if ($exist_stat_accueil){
   <tr class=\"odd\">";
 	}
         $table2_cont .= "
-    <td width=\"1\"><img style='border:0px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'></td>
+    <td width=\"1\"><img style='border:0px;' src='${urlServer}/template/classic/img/arrow.png' title='bullet'></td>
     <td>".$row['host']."</td>
     <td align=\"center\">".$row['address']."</td>
     <td align=\"center\">".$row['date']."</td>

@@ -200,7 +200,7 @@ while($row = mysql_fetch_array($result)) {
 			<div class=\"inactive\">
 			<a href=\"exercice_submit.php?exerciseId=${row['id']}\">".$row['titre']."</a>$descr</div></td>";
 		} else {
-			$tool_content .= "<td width=\"1\"><img style='padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif' alt='' /></td><td>
+			$tool_content .= "<td width=\"1\"><img style='padding-top:3px;' src='${urlServer}/template/classic/img/arrow.png' alt='' /></td><td>
 			<a href=\"exercice_submit.php?exerciseId=${row['id']}\">".$row['titre']."</a>$descr</td>";
 		}
 		$eid = $row['id'];
@@ -251,11 +251,11 @@ cData;
 		$temp_EndDate = mktime(0, 0, 0, substr($row['EndDate'], 5,2),substr($row['EndDate'], 8,2),substr($row['EndDate'], 0,4));
 		$CurrentDate = mktime(0, 0 , 0,substr($CurrentDate, 5,2), substr($CurrentDate, 8,2),substr($CurrentDate, 0,4));
 		if (($CurrentDate >= $temp_StartDate) && ($CurrentDate <= $temp_EndDate)) {
-			$tool_content .= "<td width=\"1\"><img style='padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif' alt='' /></td>
+			$tool_content .= "<td width=\"1\"><img style='padding-top:3px;' src='${urlServer}/template/classic/img/arrow.png' alt='' /></td>
 			<td><a href=\"exercice_submit.php?exerciseId=".$row['id']."\">".$row['titre']."</a>";
 		} else {
 			$tool_content .= "<td width='1'>
-				<img style='padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif' alt='' />
+				<img style='padding-top:3px;' src='${urlServer}/template/classic/img/arrow.png' alt='' />
 				</td><td>".$row['titre']."&nbsp;&nbsp;(<font color=\"red\">$m[expired]</font>)";
 		}
 		$tool_content .= "<br/>$row[description]</td>

@@ -144,7 +144,7 @@ else
         }
 		$lpProgress = get_learnPath_progress($lpDetails['learnPath_id'],$_GET['uInfo']);
 		$tool_content .= ''."\n"
-			.'        <td width="1"><img src="../../template/classic/img/arrow_grey.gif" alt="" border="0" /></td>'."\n"
+			.'        <td width="1"><img src="../../template/classic/img/arrow.png" alt="" border="0" /></td>'."\n"
 			.'        <td><a href="detailsUserPath.php?uInfo='.$_GET['uInfo'].'&path_id='.$lpDetails['learnPath_id'].'">'.htmlspecialchars($lpDetails['name']).'</a></td>'."\n"
 			.'        <td align="right" width="120">'.""
 			.disp_progress_bar($lpProgress, 1)

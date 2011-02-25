@@ -515,7 +515,7 @@ function confirmation (name)
                     }
 
                     $tool_content .= '          <td>';
-                    $tool_content .= '<img src="' . $imgRepositoryWeb . '/arrow_grey.gif" alt="'.$langWiki.'" title="'.$langWiki.'" border="0" />';
+                    $tool_content .= '<img src="' . $imgRepositoryWeb . '/arrow.png" alt="'.$langWiki.'" title="'.$langWiki.'" border="0" />';
                     $tool_content .= '</td>' . "\n";
 
                     $tool_content .= '          <td>';

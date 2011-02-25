@@ -116,7 +116,7 @@ if (!isset($_GET['a'])) {
 			$tool_content .= "\n<tr class='odd'>";
 		}
 		$tool_content .= "\n<td width='1'>
-		<img style='border:0px; padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet' /></td>";
+		<img style='border:0px; padding-top:3px;' src='${urlServer}/template/classic/img/arrow.png' title='bullet' /></td>";
 		$tool_content .= "\n<td>".htmlspecialchars($logs[1])."</td>";
 		$tool_content .= "\n<td align='center'>".htmlspecialchars($logs[0])."</td>";
 		// Give administrator a link to delete or edit a faculty

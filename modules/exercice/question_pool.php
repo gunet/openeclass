@@ -220,7 +220,7 @@ if($is_adminOfCourse) {
 			if(!isset($fromExercise)) {
 				$tool_content .= "
 				<td width='1'><div style='padding-top:4px;'>
-				  <img src='../../template/classic/img/arrow_grey.gif' alt='bullet'></div>
+				  <img src='../../template/classic/img/arrow.png' alt='bullet'></div>
 				</td>
 				<td>
 				  <a href=\"admin.php?editQuestion=".$row['id']."&fromExercise=\"\">".$row['question']."</a><br/>".$answerType."
@@ -231,7 +231,7 @@ if($is_adminOfCourse) {
 			} else {
 				$tool_content .= "
 				<td width='1'><div style='padding-top:4px;'>
-				  <img src='../../template/classic/img/arrow_grey.gif'></div>
+				  <img src='../../template/classic/img/arrow.png'></div>
 				</td>
 				<td><a href=\"admin.php?editQuestion=".$row['id']."&fromExercise=".$fromExercise."\">".$row['question']."</a><br/>".$answerType."</td>
 				<td class='center'><div align='center'>

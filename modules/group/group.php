@@ -357,7 +357,7 @@ if ($is_adminOfCourse) {
                         }
                         $tool_content .= "
                   <td>
-                        <img src='../../template/classic/img/arrow_grey.gif' alt='' /></td><td>
+                        <img src='../../template/classic/img/arrow.png' alt='' /></td><td>
                         <a href='group_space.php?group_id=$group[id]'>".q($group_name)."</a></td>";
                         $tool_content .= "
                   <td>" . display_user($tutors) . "</td>" . "
@@ -447,7 +447,7 @@ if ($is_adminOfCourse) {
                 <tr class='odd'>";
                         }
                         $tool_content .= "
-                  <td width='2'><img src='../../template/classic/img/arrow_grey.gif' alt='' /></td>
+                  <td width='2'><img src='../../template/classic/img/arrow.png' alt='' /></td>
                   <td class='left'>";
                         // Allow student to enter group only if member
                         if ($is_member) {

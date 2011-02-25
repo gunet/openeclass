@@ -178,7 +178,7 @@ if (!register_posted_variables(array('search_terms' => false,
                         } else {
                                 $tool_content .= "<tr>";
                         }
-                        $tool_content .= "<td><img src='../../template/classic/img/arrow_grey.gif' alt=''  /></td>" .
+                        $tool_content .= "<td><img src='../../template/classic/img/arrow.png' alt=''  /></td>" .
                                 "<td><a href='../../courses/$mycours[code]/'>" . q($mycours['intitule']) .
                                 "</a> (" . q($mycours['fake_code']) . ")</td>" .
                                 "<td>" . q($mycours['titulaires']) . "</td>" .

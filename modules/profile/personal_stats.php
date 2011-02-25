@@ -166,7 +166,7 @@ $leResultat = db_query($sql, $mysqlMainDb);
 		$tool_content .= "\n    <tr class=\"odd\">";
 	   }
 	   $tool_content .= "
-        <td width=\"1\"><img style='border:0px; padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif' alt=''></td>
+        <td width=\"1\"><img style='border:0px; padding-top:3px;' src='${urlServer}/template/classic/img/arrow.png' alt=''></td>
         <td>".strftime("%d/%m/%Y (%H:%M:%S) ", strtotime($when))."</td>
         <td>".$nomAction[$action]."</td>
 	</tr>";

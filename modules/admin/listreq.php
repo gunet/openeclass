@@ -110,7 +110,7 @@ if (!empty($show) && ($show=="closed")) {
 	              		$tool_content .= "\n  <tr class=\"odd\">";
 	            	}
 	        	$tool_content .= "<td width=\"1\">
-			<img style='border:0px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'></td>";
+			<img style='border:0px;' src='${urlServer}/template/classic/img/arrow.png' title='bullet'></td>";
 			$tool_content .= "<td>".htmlspecialchars($req['profname'])."&nbsp;".htmlspecialchars($req['profsurname'])."";
 			$tool_content .= "<td>".htmlspecialchars($req['proftmima'])."</td>";
 			$tool_content .= "<td align=\"center\">
@@ -150,7 +150,7 @@ if (!empty($show) && ($show=="closed")) {
 	              		$tool_content .= "\n  <tr class=\"odd\">";
 	            	}
 	    		$tool_content .= "<td width='1'>
-			<img style='border:0px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'></td>";
+			<img style='border:0px;' src='${urlServer}/template/classic/img/arrow.png' title='bullet'></td>";
 			$tool_content .= "<td>".htmlspecialchars($req['profname'])."&nbsp;".htmlspecialchars($req['profsurname'])."";
 			$tool_content .= "<td>".htmlspecialchars($req['proftmima'])."</td>";
 			$tool_content .= "<td align=\"center\">
@@ -261,7 +261,7 @@ else
 	              $tool_content .= "\n<tr class='odd'>";
 	        }
 	    	$tool_content .= "<td align='right' width='1'>
-		<img style='border:0px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'></td>";
+		<img style='border:0px;' src='${urlServer}/template/classic/img/arrow.png' title='bullet'></td>";
 	     	$tool_content .= "<td>".htmlspecialchars($req['profname'])."&nbsp;".htmlspecialchars($req['profsurname'])."</td>";
 		$tool_content .= "<td>".htmlspecialchars(find_faculty_by_id($req['proftmima']))."</td>";
 		$tool_content .= "<td align='center'>
