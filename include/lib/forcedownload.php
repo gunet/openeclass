@@ -335,7 +335,6 @@ function public_path_to_disk_path($path_components, $path = '')
 function not_found($path)
 {
         global $uri;
-        restore_saved_course();
         header("HTTP/1.0 404 Not Found");
         echo '<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN"><html><head>',
              '<title>404 Not Found</title></head><body>',
@@ -349,18 +348,8 @@ function error($message)
 {
         global $urlServer;
         $_SESSION['errMessage'] = $message;
-        restore_saved_course();
         session_write_close();
         header("Location: $urlServer" );
         exit;
-}
-
-
-// Restore current course
-function restore_saved_course()
-{
-        if (defined('old_dbname')) {
-                $_SESSION['dbname'] = old_dbname;
-        }
 }
 

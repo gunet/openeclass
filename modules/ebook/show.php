@@ -36,8 +36,10 @@ if (count($path_components) >= 4) {
                         $file_path = implode('/', array_slice($path_components, 5));
                 }
         }
+        $not_found = false;
 } else {
-        not_found($uri);
+        $not_found = true;
+        $ebook_id = 0;
 }
 
 $require_current_course = true;
@@ -48,6 +50,11 @@ include '../../include/baseTheme.php';
 include '../../include/lib/forcedownload.php';
 include '../../include/lib/fileDisplayLib.inc.php';
 include '../document/doc_init.php';
+
+if ($not_found) {
+        not_found($uri);
+}
+
 mysql_select_db($mysqlMainDb);
 
 $ebook_url_base = "{$urlServer}modules/ebook/show.php/$currentCourseID/$ebook_id/";
@@ -56,7 +63,7 @@ if ($show_orphan_file and $file_path) {
         send_file_by_url_file_path($file_path);
 }
 
-$nameTools = 'Ηλεκτρονικό Βιβλίο';
+$nameTools = $langEBook;
 
 if ($unit !== false) {
 	$exit_fullscreen_link = $urlAppend . '/modules/units/?id=' . $unit;
@@ -134,8 +141,6 @@ while ($row = mysql_fetch_array($q)) {
 	$last_display_id = $display_id;
 	$last_title = $row['subsection_title'];
 }
-
-restore_saved_course();
 
 if (!$full_url_found) {
 	header('Location: ' . $ebook_url_base . $current_display_id . '/' . $unit_parameter);

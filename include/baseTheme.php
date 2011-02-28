@@ -442,7 +442,6 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 	}
 }
 
-
 /**
  * Function dumpArray
  *

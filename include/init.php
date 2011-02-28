@@ -167,6 +167,25 @@ if (!isset($guest_allowed) || $guest_allowed!= true){
 	}
 }
 
+// Restore saved old_dbname function
+function restore_dbname_override($do_unset = false)
+{
+        if (defined('old_dbname')) {
+                $_SESSION['dbname'] = old_dbname;
+        } elseif ($do_unset) {
+                unset($_SESSION['dbname']);
+        }
+}
+
+// Temporary dbname override
+if (isset($_GET['c'])) {
+        if (isset($_SESSION['dbname'])) {
+                define('old_dbname', $_SESSION['dbname']);
+        }
+        $_SESSION['dbname'] = $_GET['c'];
+}
+register_shutdown_function('restore_dbname_override');
+
 // If $require_current_course is true, initialise course settings
 // Read properties of current course
 if (isset($require_current_course) and $require_current_course) {
@@ -178,28 +197,24 @@ if (isset($require_current_course) and $require_current_course) {
 		$result = db_query("SELECT cours_id, code, fake_code, intitule, faculte,
                                            titulaires, languageCourse,
                                            departmentUrlName, departmentUrl, visible
-                                    FROM cours WHERE cours.code='$dbname'");
+                                    FROM cours WHERE cours.code=" . autoquote($dbname));
 
                 if (!$result or mysql_num_rows($result) == 0) {
-                        if (defined('old_dbname')) {
-                                $_SESSION['dbname'] = old_dbname;
-                        } else {
-                                unset($_SESSION['dbname']);
-                        }
+                        restore_dbname_override(true);
                         header('Location: ' . $urlServer);
                         exit;
                 }
 
 		while ($theCourse = mysql_fetch_array($result)) {
-                        $cours_id = $theCourse["cours_id"];
-			$fake_code = $theCourse["fake_code"];
-			$code_cours = $theCourse["code"];
-			$intitule = $theCourse["intitule"];
-			$fac = $theCourse["faculte"];
-			$titulaires = $theCourse["titulaires"];
-			$languageInterface = $theCourse["languageCourse"];
-			$departmentUrl= $theCourse["departmentUrl"];
-			$departmentUrlName= $theCourse["departmentUrlName"];
+                        $cours_id = $theCourse['cours_id'];
+			$fake_code = $theCourse['fake_code'];
+			$code_cours = $theCourse['code'];
+			$intitule = $theCourse['intitule'];
+			$fac = $theCourse['faculte'];
+			$titulaires = $theCourse['titulaires'];
+			$languageInterface = $theCourse['languageCourse'];
+			$departmentUrl= $theCourse['departmentUrl'];
+			$departmentUrlName= $theCourse['departmentUrlName'];
 			$visible = $theCourse['visible'];
 			// New variables
 			$currentCourseCode = $fake_code ;
