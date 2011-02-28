@@ -45,9 +45,11 @@ if (extension_loaded("zlib")) {
 }
 
 if ($is_adminOfCourse) {
+        // Remove previous back-ups older than 10 minutes
+        cleanup("${webDir}courses/archive", 600);
+
         $basedir = "${webDir}courses/archive/$currentCourseID";
 	mkpath($basedir);
-        cleanup($basedir, 60);
 
 	$backup_date = date("Y-m-d-H-i-(B)-s");
 	$backup_date_short = date("YzBs"); // YEAR - Day in Year - Swatch - second
@@ -74,7 +76,9 @@ if ($is_adminOfCourse) {
 
         // create zip file
 	$zipCourse = new PclZip($zipfile);
-	if ($zipCourse->create($archivedir, PCLZIP_OPT_REMOVE_PATH, $webDir) == 0) {
+        $result = $zipCourse->create($archivedir, PCLZIP_OPT_REMOVE_PATH, $webDir);
+        removeDir($archivedir);
+	if (!$result) {
 		$tool_content .= "Error: ".$zipCourse->errorInfo(true);
 		draw($tool_content, 2);
 		exit;
