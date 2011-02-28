@@ -106,10 +106,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 
 
 	if (strlen ( $extraMessage ) > 0) {
-		$messageBox = "<table width='99%'>
-		<tbody><tr><td class='extraMessage'>
-		$extraMessage</td></tr>
-		</tbody></table><br/>";
+		$messageBox = "$extraMessage";
 	}
 
 	//get the left side menu from tools.php

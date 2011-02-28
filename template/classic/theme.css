@@ -1098,3 +1098,11 @@ li.pagination {
 
 /* ----- END phpbb ----- */
 
+
+.today {
+    color: #627aad;
+    background-color:#FAEDED;
+    border-top: 1px dotted #F0C9C1;
+    border-bottom: 1px dotted #F0C9C1;
+}
+
