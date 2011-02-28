@@ -303,11 +303,11 @@ if ($is_adminOfCourse) {
                                         // External links that are not admin tools
                                         $class = ' class="emphasised"';
                                         array_push($externalLinks,
-                                                   array('text' => q($toolArr[$i][1][$j]),
+                                                   array('text' => $toolArr[$i][1][$j],
                                                          'id' => $toolArr[$i][4][$j]));
                                 } 
                                 $toolSelection[$i] .= "<option$class value='" . $toolArr[$i][4][$j] . "'>" .
-                                                      q($toolArr[$i][1][$j]) . "</option>\n";
+                                                      $toolArr[$i][1][$j] . "</option>\n";
 
 			}
 		}
@@ -365,7 +365,7 @@ tForm;
                         </tr>
                         <tr>
                           <th>&nbsp;</th>
-                          <th><div align=\"left\">$langTitle</div></th>
+                          <th><div align='left'>$langTitle</div></th>
                           <th width='20'>$langDelete</th>
                         </tr>\n";
 		for ($i=0; $i < $extToolsCount; $i++) {
@@ -374,7 +374,7 @@ tForm;
 			} elseif ($i % 2 == 1) {
 				$tool_content .= "                        <tr class='odd'>\n";
 			}
-			$tool_content .= "                          <td width='1'>
+			$tool_content .= "                          <th width='1'>
                                 <img src='../../template/classic/img/external_link_on.gif' title='$langTitle' /></th>
                                 <td class='left'>{$externalLinks[$i]['text']}</td>
                                 <td align='center'><form method='post' action='course_tools.php'>

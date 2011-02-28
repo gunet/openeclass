@@ -495,12 +495,12 @@ if($can_upload) {
 			    <td>$oldFilename</td>
 			  </tr>
 			  <tr>
-			    <th>$langComment:</th>
-			    <td><input type='text' size='60' name='file_comment' value='$oldComment' /></td>
-			  </tr>
-			  <tr>
 			    <th>$langTitle:</th>
 			    <td><input type='text' size='60' name='file_title' value='$oldTitle' /></td>
+			  </tr>
+			  <tr>
+			    <th>$langComment:</th>
+			    <td><input type='text' size='60' name='file_comment' value='$oldComment' /></td>
 			  </tr>
 			  <tr>
 			    <th>$langCategory:</th>

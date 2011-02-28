@@ -50,12 +50,12 @@ if (!isset($_POST['submit'])) {
   <legend>$langUserData</legend>
   <table class='tbl'> 
   <tr>
-   <th>$langSurname</th>
-   <td><input size='35' type='text' name='nom_form' value='$nom_form'>&nbsp;&nbsp;(*)</td>
-  </tr>
-  <tr>
     <th>$langName</th>
     <td><input size='35' type='text' name='prenom_form' value='$prenom_form'>&nbsp;&nbsp;(*)</td>
+  </tr>
+  <tr>
+   <th>$langSurname</th>
+   <td><input size='35' type='text' name='nom_form' value='$nom_form'>&nbsp;&nbsp;(*)</td>
   </tr>
   <tr>
     <th>$langPhone</th>

@@ -64,11 +64,11 @@ if($view == 2)	// coming from search_user.php(search with criteria)
 {
 	if((!empty($search)) && ($search="yes"))
 	{
-	  	$date = explode("-",  $_POST['date']);
+	  	$date = explode('-',  $_POST['date']);
 		if (array_key_exists(1, $date)) {
-    			$day=$date[0];
-		    	$month=$date[1];
-    			$year=$date[2];
+    			$day = $date[0];
+		    	$month = $date[1];
+    			$year = $date[2];
 		    	$mytime = mktime($hour, $minute, 0, $month, $day, $year);
 		 } else {
 		    	$mytime = mktime($hour, $minute, 0, 0, 0, 0);
@@ -76,7 +76,7 @@ if($view == 2)	// coming from search_user.php(search with criteria)
 		if(!empty($mytime)) {
 			$user_registered_at = $mytime;
 		} else {
-			$user_registered_at = "";
+			$user_registered_at = '';
 		}
 		// end format date/time
 	}
@@ -87,7 +87,7 @@ $tool_content .= "
   <div id='operations_container'>
     <ul id='opslist'>
       <li><a href='search_user.php'>$langSearchUser</a></li>
-      <li><a href='listusers.php?c=inactive'>".$langInactiveUsers."</a></li>
+      <li><a href='listusers.php?c=inactive'>$langInactiveUsers</a></li>
     </ul>
   </div>";
 
@@ -99,7 +99,7 @@ $criteria = 0;
 // surname search
 if(!empty($user_surname))
 {
-	$user_surname_qry = " nom LIKE '".$user_surname."%'";
+	$user_surname_qry = " nom LIKE " . autoquote($user_surname . '%');
 	$criteria++;
 }
 else
@@ -119,7 +119,7 @@ if(!empty($user_firstname))
 		$user_firstname_qry = "";
 	}
 	$criteria++;
-	$user_firstname_qry .= " prenom LIKE '".$user_firstname."%'";
+	$user_firstname_qry .= " prenom LIKE " . autoquote($user_firstname . '%');
 }
 else
 {
@@ -138,7 +138,7 @@ if(!empty($user_username))
 		$user_username_qry = "";
 	}
 	$criteria++;
-	$user_username_qry .= " username LIKE '".$user_username."%'";
+	$user_username_qry .= " username LIKE " . autoquote($user_username . '%');
 }
 else
 {
@@ -157,7 +157,7 @@ if(!empty($user_am))
 		$user_am_qry = "";
 	}
 	$criteria++;
-	$user_am_qry .= " am='".$user_am."'";
+	$user_am_qry .= " am=" . autoquote($user_am);
 }
 else
 {
@@ -176,7 +176,7 @@ if(!empty($user_type))
 		$user_type_qry = "";
 	}
 	$criteria++;
-	$user_type_qry .= " statut=".$user_type;
+	$user_type_qry .= " statut=" . intval($user_type);
 }
 else
 {
@@ -196,7 +196,7 @@ if(!empty($user_email))
 		$user_email_qry = "";
 	}
 	$criteria++;
-	$user_email_qry .= " email LIKE '".$user_email."%'";
+	$user_email_qry .= " email LIKE " . autoquote($user_email . '%');
 }
 else
 {

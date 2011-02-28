@@ -166,10 +166,10 @@ $langEmail : $emailhelpdesk
         <table width='99%' align='left' class='FormData'>
         <tr><th width='220'>&nbsp;</th>
             <td><b>$title</b></td></tr>
+        <tr><th class='left'><b>$langName</b></th>
+            <td><input class='FormData_InputText' type='text' name='prenom_form' value='".q($pn)."' />&nbsp;(*)</td></tr>
         <tr><th class='left'><b>$langSurname</b></th>
             <td><input class='FormData_InputText' type='text' name='nom_form' value='".q($ps)."' />&nbsp;(*)</td></tr>
-        <tr><th class='left'><b>".$langName."</b></th>
-            <td><input class='FormData_InputText' type='text' name='prenom_form' value='".q($pn)."' />&nbsp;(*)</td></tr>
         <tr><th class='left'><b>$langUsername</b></th>
             <td><input class='FormData_InputText' type='text' name='uname' value='".q($pu)."' />&nbsp;(*)</td></tr>
         <tr><th class='left'><b>$langPass</b></th>

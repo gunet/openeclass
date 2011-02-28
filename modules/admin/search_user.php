@@ -65,21 +65,21 @@ $user_surname = $user_firstname = $user_username = $user_am = $user_type = $user
 // display the search form
 $tool_content .= "
 
-<form action=\"listusers.php?search=".$new."\" method=\"post\" name=\"user_search\">
+<form action='listusers.php?search=$new' method='post' name='user_search'>
 <fieldset>
   <legend>$langUserData</legend>
-  <table class='tbl' width=\"99%\">
-  <tr>
-    <th class='left' width=\"180\">$langSurname:</th>
-    <td><input type=\"text\" name=\"user_surname\" size=\"40\" value=\"".$user_surname."\"></td>
-  </tr>
+  <table class='tbl' width='99%'>
   <tr>
     <th class='left'>$langName:</th>
-    <td><input type=\"text\" name=\"user_firstname\" size=\"40\" value=\"".$user_firstname."\"></td>
+    <td><input type='text' name='user_firstname' size='40' value='".q($user_firstname)."'></td>
+  </tr>
+  <tr>
+    <th class='left' width='180'>$langSurname:</th>
+    <td><input type='text' name='user_surname' size='40' value='".q($user_surname)."'></td>
   </tr>
   <tr>
     <th class='left'>$langAm:</th>
-    <td><input type=\"text\" name=\"user_am\" size=\"30\" value=\"".$user_am."\"></td>
+    <td><input type='text' name='user_am' size='30' value='".q($user_am)."'></td>
   </tr>
   <tr>
     <th class='left'>$langUserType:</th>
@@ -114,7 +114,7 @@ $tool_content .= $start_cal."&nbsp;&nbsp;&nbsp;";
 for ($h=0; $h<=24; $h++)
 $tool_content .= "\n      <option value='$h'>$h</option>";
 $tool_content .= "</select>&nbsp;&nbsp;&nbsp;";
-@$tool_content .= "<select name=\"minute\">";
+@$tool_content .= "<select name='minute'>";
 for ($m=0; $m<=55; $m=$m+5)
 	$tool_content .= "<option value='$m'>$m</option>";
 $tool_content .= "</select>\n    </td>";
@@ -123,17 +123,17 @@ $tool_content .= "\n  </tr>";
 $tool_content .= "
   <tr>
     <th class='left'>$langEmail:</th>
-    <td><input type=\"text\" name=\"user_email\" size=\"40\" value=\"".$user_email."\"></td>
+    <td><input type='text' name='user_email' size='40' value='".q($user_email)."'></td>
   </tr>
   <tr>
     <th class='left'><b>$langUsername:</b></th>
-    <td><input type=\"text\" name=\"user_username\" size=\"40\" value=\"".$user_username."\"></td>
+    <td><input type='text' name='user_username' size='40' value='".q($user_username)."'></td>
   </tr>
   <tr>
     <th>&nbsp;</th>
-    <td colspan=\"2\">
-      <input type=\"hidden\" name=\"c\" value=\"searchlist\">
-      <input type=\"submit\" name=\"search_submit\" value=\"$langSearch\">
+    <td colspan='2'>
+      <input type='hidden' name='c' value='searchlist'>
+      <input type='submit' name='search_submit' value='$langSearch'>
     </td>
   </tr>
   </table>
@@ -141,8 +141,7 @@ $tool_content .= "
 </form>";
 // end form
 
-$tool_content .= "<p align=\"right\"><a href=\"index.php\">$langBack</a></p>";
+$tool_content .= "<p align='right'><a href='index.php'>$langBack</a></p>";
 
 // 3: display administrator menu
-draw($tool_content,3, '', $head_content);
-?>
+draw($tool_content, 3, null, $head_content);
