@@ -35,22 +35,22 @@
  *
  */
 if (!defined('INDEX_START')) {
-	die ("Action not allowed!");
+	die('Action not allowed!');
 }
 
 $tool_content = "";
 include "perso.php";
 
 $tool_content = "
-<div id=\"leftnav_perso\">
-  <table width=\"99%\">
+<div id='leftnav_perso'>
+  <table width='99%'>
   <thead>
   <tr>
-    <th class=\"persoBoxTitle\">{LANG_MY_PERSO_LESSONS}</th>
+    <th class='persoBoxTitle'>{LANG_MY_PERSO_LESSONS}</th>
   </tr>
   </thead>
   <tbody>
-  <tr class=\"odd\">
+  <tr class='odd'>
     <td>{LESSON_CONTENT}</td>
   </tr>
   </tbody>
@@ -58,14 +58,14 @@ $tool_content = "
 
   <br />
 
-  <table width=\"99%\">
+  <table width='99%'>
   <thead>
   <tr>
-    <th class=\"persoBoxTitle\">{LANG_MY_PERSO_ANNOUNCEMENTS}</th>
+    <th class='persoBoxTitle'>{LANG_MY_PERSO_ANNOUNCEMENTS}</th>
   </tr>
   </thead>
   <tbody>
-  <tr class=\"odd\">
+  <tr class='odd'>
     <td>{ANNOUNCE_CONTENT}</td>
   </tr>
   </tbody>
@@ -73,14 +73,14 @@ $tool_content = "
 
   <br />
 
-  <table width=\"99%\">
+  <table width='99%'>
   <thead>
   <tr>
-    <th class=\"persoBoxTitle\">{LANG_MY_PERSO_AGENDA}</th>
+    <th class='persoBoxTitle'>{LANG_MY_PERSO_AGENDA}</th>
   </tr>
   </thead>
   <tbody>
-  <tr class=\"odd\">
+  <tr class='odd'>
     <td>{AGENDA_CONTENT}
     </td>
   </tr>
@@ -90,15 +90,15 @@ $tool_content = "
 </div>
 
 
-<div id=\"content_main_perso\">
-  <table width=\"99%\">
+<div id='content_main_perso'>
+  <table width='99%'>
   <thead>
   <tr>
-    <th class=\"persoBoxTitle\">{LANG_MY_PERSO_DEADLINES}</th>
+    <th class='persoBoxTitle'>{LANG_MY_PERSO_DEADLINES}</th>
   </tr>
   </thead>
   <tbody>
-  <tr class=\"odd\">
+  <tr class='odd'>
     <td>{ASSIGN_CONTENT}
     </td>
   </tr>
@@ -107,14 +107,14 @@ $tool_content = "
 
   <br />
 
-  <table width=\"99%\">
+  <table width='99%'>
   <thead>
   <tr>
-    <th class=\"persoBoxTitle\">{LANG_MY_PERSO_DOCS}</th>
+    <th class='persoBoxTitle'>{LANG_MY_PERSO_DOCS}</th>
   </tr>
   </thead>
   <tbody>
-  <tr class=\"odd\">
+  <tr class='odd'>
     <td>{DOCS_CONTENT}
     </td>
   </tr>
@@ -123,14 +123,14 @@ $tool_content = "
 
   <br />
 
-  <table width=\"99%\">
+  <table width='99%'>
   <thead>
   <tr>
-    <th class=\"persoBoxTitle\">{LANG_PERSO_FORUM}</th>
+    <th class='persoBoxTitle'>{LANG_PERSO_FORUM}</th>
   </tr>
   </thead>
   <tbody>
-  <tr class=\"odd\">
+  <tr class='odd'>
     <td>{FORUM_CONTENT}
     </td>
   </tr>
@@ -138,4 +138,3 @@ $tool_content = "
   </table>
 
 </div>";
-?>

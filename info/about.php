@@ -24,7 +24,7 @@
 *  			eMail: info@openeclass.org
 * =========================================================================*/
 
-$path2add=2;
+$path2add = 2;
 include '../include/baseTheme.php';
 $nameTools = $langInfo;
 $tool_content .= "<table class='tbl1' width='99%'>
@@ -33,7 +33,7 @@ $tool_content .= "<table class='tbl1' width='99%'>
        </tr>
        <tr>
        <td valign='top' width='200'><strong>$langCampusName:</strong></td>
-       <td><b>$siteName&nbsp;</b>(<a href=\"$InstitutionUrl\" target=\"_blank\" class=mainpage>$Institution</a>)</td>
+       <td><b>$siteName&nbsp;</b>(<a href='$InstitutionUrl' target='_blank' class='mainpage'>$Institution</a>)</td>
        </tr>
       <tr>
         <td valign='top' width='200'><strong>$langVersion:</strong></td>
@@ -44,19 +44,18 @@ $tool_content .= "<table class='tbl1' width='99%'>
         <td>";
  
           /*
-          * Make table witd general platform information
+          * Make table with general platform information
           * ophelia neofytou - 2006/09/26
           */
           
           mysql_select_db($mysqlMainDb);
           
-          $a=mysql_fetch_array(mysql_query("SELECT COUNT(*) FROM cours"));
-          $a1=mysql_fetch_array(mysql_query("SELECT COUNT(*) FROM cours WHERE visible='2'"));
-          $a2=mysql_fetch_array(mysql_query("SELECT COUNT(*) FROM cours WHERE visible='1'"));
-          $a3=mysql_fetch_array(mysql_query("SELECT COUNT(*) FROM cours WHERE visible='0'"));
+          $a = mysql_fetch_row(mysql_query("SELECT COUNT(*) FROM cours"));
+          $a1 = mysql_fetch_row(mysql_query("SELECT COUNT(*) FROM cours WHERE visible='2'"));
+          $a2 = mysql_fetch_row(mysql_query("SELECT COUNT(*) FROM cours WHERE visible='1'"));
+          $a3 = mysql_fetch_row(mysql_query("SELECT COUNT(*) FROM cours WHERE visible='0'"));
           
-          $tool_content .= "$langAboutCourses <b>$a[0]</b> $langCourses<br />";
-          $tool_content .= "
+          $tool_content .= "$langAboutCourses <b>$a[0]</b> $langCourses<br />
           <ul>
             <li><b>$a1[0]</b> $langOpen,</li>
             <li><b>$a2[0]</b> $langSemiopen,</li>
@@ -66,10 +65,10 @@ $tool_content .= "<table class='tbl1' width='99%'>
       </tr>
       ";
 
-$e=mysql_fetch_array(mysql_query("SELECT COUNT(*) FROM user"));
-$b=mysql_fetch_array(mysql_query("SELECT COUNT(*) FROM user where statut='1'"));
-$c=mysql_fetch_array(mysql_query("SELECT COUNT(*) FROM user where statut='5'"));
-$d=mysql_fetch_array(mysql_query("SELECT COUNT(*) FROM user where statut='10'"));
+$e = mysql_fetch_row(mysql_query('SELECT COUNT(*) FROM user'));
+$b = mysql_fetch_row(mysql_query('SELECT COUNT(*) FROM user WHERE statut=1'));
+$c = mysql_fetch_row(mysql_query('SELECT COUNT(*) FROM user WHERE statut=5'));
+$d = mysql_fetch_row(mysql_query('SELECT COUNT(*) FROM user WHERE statut=10'));
 
 $tool_content .= "
       <tr>
@@ -86,10 +85,7 @@ $tool_content .= "
         <td>$administratorName $administratorSurname</td>
       </tr>
       </table>
-
-    "
-;
-
+    ";
 
 if (isset($uid) and $uid) {
         draw($tool_content, 1);
