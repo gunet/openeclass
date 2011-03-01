@@ -55,11 +55,12 @@ if (!$result or mysql_num_rows($result) == 0) {
 </head><body><div style='text-align: center; font-size: 150%; border: 1px solid black; padding: 1 em;'>$langUpdatingStatistics<br />
 $langPleaseWait</div>
 ";
-	flush();
+        ob_end_flush();
+        flush();
         $current_month = date('Y-m-01 00:00:00');
         $prev_month = date('Y-m-01 00:00:00', $lmon);
 
-        $login_sum=0;
+        $login_sum = 0;
         $cours_sum = 0;
         $prof_sum = 0;
         $stud_sum = 0;
@@ -144,7 +145,7 @@ $langPleaseWait</div>
         $mtext = quote($mtext);
         $sql = "INSERT INTO monthly_summary SET month='$last_month', profesNum = '$prof_sum', studNum = '$stud_sum',
             visitorsNum = '$vis_sum', coursNum = '$cours_sum', logins = '$login_sum', details = $mtext";
-        $result= db_query($sql, $mysqlMainDb);
+        $result = db_query($sql, $mysqlMainDb);
         @mysql_free_result($result);
 	echo "<div style='text-align: center; padding: 2em;'><a href='{$urlServer}modules/admin/'>$langCont</a></div></body></html>\n";
 	exit;
