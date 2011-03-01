@@ -313,7 +313,7 @@ function upgrade_course($code, $lang)
 
 function upgrade_course_2_4($code, $lang, $extramessage = '')
 {
-	global $langUpgCourse, $mysqlMainDb, $global_messages;
+	global $langUpgCourse, $mysqlMainDb, $global_messages, $webDir;
 
         $course_id = course_code_to_id($code);
 	mysql_select_db($code);
@@ -431,6 +431,15 @@ function upgrade_course_2_4($code, $lang, $extramessage = '')
         }
 	// upgrade poll_question
 	db_query("ALTER TABLE `poll_question` CHANGE `pqid` `pqid` BIGINT(12) NOT NULL AUTO_INCREMENT", $code);
+
+        // move old chat files
+        $courses_dir = "${webDir}/courses/";
+        foreach (array('chat.txt', 'tmpChatArchive.txt') as $f) {
+                $old_chat = $courses_dir . $code . '.' . $f;
+                if (file_exists($old_chat)) {
+                        rename($old_chat, $courses_dir . $code . '/' . $f);
+                }
+        }
 }
 
 function upgrade_course_2_3($code, $extramessage = '') {

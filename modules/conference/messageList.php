@@ -42,8 +42,8 @@ body { font-family: Verdana, Arial, Helvetica, sans-serif; }
 include '../../include/lib/textLib.inc.php';
 
 $coursePath = $webDir."courses";
-$fileChatName = $coursePath.'/'.$currentCourseID.'.chat.txt';
-$tmpArchiveFile = $coursePath.'/'.$currentCourseID.'.tmpChatArchive.txt';
+$fileChatName = $coursePath.'/'.$currentCourseID.'/chat.txt';
+$tmpArchiveFile = $coursePath.'/'.$currentCourseID.'/tmpChatArchive.txt';
 $pathToSaveChat = $coursePath.'/'.$currentCourseID.'/document/';
 
 $nick = uid_to_name($uid);
@@ -132,10 +132,10 @@ echo "</body></html>\n";
  */
 
 if ($FileNbLine > MAX_LINE_IN_FILE) {
-	buffer(implode("",$tmp), $tmpArchiveFile);
+	buffer(implode('', $tmp), $tmpArchiveFile);
 	// clean the original file
 	$fp = fopen($fileChatName, "w");
-	fwrite($fp, implode("", $fileContent));
+	fwrite($fp, implode('', $fileContent));
 }
 
 function buffer($content, $tmpFile) {
