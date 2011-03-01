@@ -147,13 +147,13 @@ foreach ($flatElementList as $module)
     else // module
     {
         if($module['contentType'] == CTEXERCISE_ )
-            $moduleImg = "exercise_$image_bullet.gif";
+            $moduleImg = "exercise_$image_bullet.png";
         else if($module['contentType'] == CTLINK_ )
-        	$moduleImg = "links_$image_bullet.gif";
+        	$moduleImg = "links_$image_bullet.png";
         else if($module['contentType'] == CTCOURSE_DESCRIPTION_ )
-        	$moduleImg = "description_$image_bullet.gif";
+        	$moduleImg = "description_$image_bullet.png";
         else if($module['contentType'] == CTDOCUMENT_ )
-        	$moduleImg = "docs_$image_bullet.gif";
+        	$moduleImg = "docs_$image_bullet.png";
         else if($module['contentType'] == CTSCORM_ || $module['contentType'] == CTSCORMASSET_) // eidika otan einai scorm module, deixnoume allo eikonidio pou exei na kanei me thn proodo
         	$moduleImg = "lp_notattempted.gif";
         else

@@ -63,7 +63,10 @@ $clarolineRepositoryWeb = $urlServer."courses/".$currentCourseID;
 
 // lib of this tool
 require_once '../../../include/lib/fileDisplayLib.inc.php';
-require_once("../../../include/lib/learnPathLib.inc.php");
+require_once '../../../include/lib/learnPathLib.inc.php';
+
+include '../../document/doc_init.php';
+
 mysql_select_db($currentCourseID);
 
 function directly_pass_lp_module($table, $userid, $lpmid) {
