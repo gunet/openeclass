@@ -932,12 +932,10 @@ function mkpath($path)  {
 	$path = str_replace("/","\\",$path);
 	$dirs = explode("\\",$path);
 	$path = $dirs[0];
-	for($i = 1;$i < count($dirs);$i++)
-	{
+	for ($i = 1;$i < count($dirs);$i++) {
 		$path .= "/".$dirs[$i];
-		if(!is_dir($path))
-		{
-			mkdir($path, 0755);
+		if (!is_dir($path)) {
+			mkdir($path, 0775);
 		}
 	}
 }
@@ -1312,7 +1310,7 @@ function course_id_to_title($cid)
 }
 
 // find the course code from its id
-function course_id_to_code ($cid)
+function course_id_to_code($cid)
 {
 	global $mysqlMainDb;
         $r = db_query("SELECT code FROM cours WHERE cours_id = $cid ", $mysqlMainDb);
@@ -1322,6 +1320,46 @@ function course_id_to_code ($cid)
 	} else {
                 return false;
 	}
+}
+
+// Delete course with id = $cid
+function delete_course($cid)
+{
+        global $mysqlMainDb, $webDir;
+
+	$course_code = course_id_to_code($cid);
+	db_query("DROP DATABASE `$course_code`");
+
+        mysql_select_db($mysqlMainDb);
+	db_query("DELETE FROM annonces WHERE cours_id = $cid");
+	db_query("DELETE FROM document WHERE course_id = $cid");
+        db_query("DELETE FROM ebook_subsection WHERE section_id IN
+                         (SELECT ebook_section.id FROM ebook_section, ebook
+                                 WHERE ebook_section.ebook_id = ebook.id AND
+                                       ebook.course_id = $cid)");
+        db_query("DELETE FROM ebook_section WHERE id IN
+                         (SELECT id FROM ebook WHERE course_id = $cid)");
+	db_query("DELETE FROM ebook WHERE course_id = $cid");
+	db_query("DELETE FROM forum_notify WHERE course_id = $cid");
+	db_query("DELETE FROM glossary WHERE course_id = $cid");
+        db_query("DELETE FROM group_members WHERE group_id IN
+                         (SELECT id FROM `group` WHERE course_id = $cid)");
+	db_query("DELETE FROM `group` WHERE course_id = $cid");
+	db_query("DELETE FROM group_properties WHERE course_id = $cid");
+	db_query("DELETE FROM link WHERE course_id = $cid");
+	db_query("DELETE FROM link_category WHERE course_id = $cid");
+	db_query("DELETE FROM agenda WHERE lesson_code = '$course_code'");
+        db_query("DELETE FROM unit_resources WHERE unit_id IN
+                         (SELECT id FROM course_units WHERE course_id = $cid)");
+        db_query("DELETE FROM course_units WHERE course_id = $cid");
+	db_query("DELETE FROM cours_user WHERE cours_id = $cid");
+	db_query("DELETE FROM cours WHERE cours_id = $cid");
+
+        $garbage = "${webDir}courses/garbage";
+        if (!is_dir($garbage)) {
+                mkdir($garbage, 0775);
+        }
+	rename("${webDir}courses/$course_code", "$garbage/$course_code");
 }
 
 function csv_escape($string, $force = false)
