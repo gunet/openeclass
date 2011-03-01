@@ -41,7 +41,6 @@ include '../../include/baseTheme.php';
 $require_current_course = FALSE;
 
 $nameTools = $langSearch;
-$tool_content = "";
 
 //elegxos ean *yparxoun* oroi anazhthshs
 if (!register_posted_variables(array('search_terms' => false,
@@ -53,7 +52,7 @@ if (!register_posted_variables(array('search_terms' => false,
 /**********************************************************************************************
 	emfanish formas anahzthshs ean oi oroi anazhthshs einai kenoi
 ***********************************************************************************************/
-	$tool_content .= "
+    $tool_content .= "
     <form method='post' action='$_SERVER[PHP_SELF]'>
     <fieldset>
      <legend>$langSearchCriteria</legend>
@@ -196,4 +195,4 @@ if (!empty($search_terms_description)) {
         db_query('DROP TEMPORARY TABLE desc_search_tmp');
 }
 
-draw($tool_content, 0, 'search');
+draw($tool_content, 0);

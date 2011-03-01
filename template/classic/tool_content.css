@@ -1481,37 +1481,6 @@ li.pagination {
 /* ----- END phpbb ----- */
 
 
-/* ----- START Search ----- */
-.Results {
-    padding: 2px 1px 1px 14px;
-    list-style: disc;
-    color: #727266;
-}
-
-table.Search{
-    padding: 0px 0px 0px 0px;
-    border-top: 1px solid #f1f2f2;
-    border-bottom: 1px solid #f1f2f2;
-    border-left: 1px solid #f1f2f2;
-    border-right: 1px solid #f1f2f2;
-}
-
-table.Search th {
-    text-align: center !important;
-    border-top: 1px solid #f1f2f2;
-    border-bottom: 1px solid #f1f2f2;
-    border-left: 1px solid #f1f2f2;
-    border-right: 1px solid #f1f2f2;
-}
-
-table.Search td {
-    color: #727266;
-    vertical-align: top;
-    padding : 5px 4px 4px 4px;
-    font-size: 11px;
-}
-/* ----- END Search ----- */
-
 
 /* ----- START user ----- */
 td.highlight {
