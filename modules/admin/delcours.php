@@ -51,36 +51,19 @@ $require_admin = TRUE;
 include '../../include/baseTheme.php';
 
 if(isset($_GET['c'])) {
-	$cours_id = $_GET['c'];
+	$cours_id = intval($_GET['c']);
 } else {
 	$cours_id = '';
 }
 
 $nameTools = $langCourseDel;
-$navigation[] = array("url" => "index.php", "name" => $langAdmin);
-$navigation[] = array("url" => "listcours.php", "name" => $langListCours);
+$navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
+$navigation[] = array('url' => 'listcours.php', 'name' => $langListCours);
 
 // Delete course
-if (isset($_GET['delete']) && isset($_GET['c']))  {
-	$course_code = course_id_to_code($cours_id);
-	
-	db_query("DROP DATABASE `$course_code`");
-        mysql_select_db($mysqlMainDb);
-	db_query("DELETE FROM cours_user WHERE cours_id = $cours_id");
-	db_query("DELETE FROM annonces WHERE cours_id = $cours_id");
-	db_query("DELETE FROM document WHERE course_id = $cours_id");
-	db_query("DELETE FROM ebook WHERE course_id = $cours_id");
-	db_query("DELETE FROM forum_notify WHERE course_id = $cours_id");
-	db_query("DELETE FROM glossary WHERE course_id = $cours_id");
-	db_query("DELETE FROM `group` WHERE course_id = $cours_id");
-	db_query("DELETE FROM group_properties WHERE course_id = $cours_id");
-	db_query("DELETE FROM link WHERE course_id = $cours_id");
-	db_query("DELETE FROM link_category WHERE course_id = $cours_id");
-	db_query("DELETE FROM agenda WHERE lesson_code = '$course_code'");
-	db_query("DELETE FROM cours WHERE cours_id = $cours_id");
-	@mkdir("../../courses/garbage");
-	rename("../../courses/".$course_code, "../../courses/garbage/".$course_code);
-	$tool_content .= "<p>".$langCourseDelSuccess."</p>";
+if (isset($_GET['delete']) && $cours_id)  {
+        delete_course($cours_id);
+        $tool_content .= "<p>".$langCourseDelSuccess."</p>";
 }
 // Display confirmatiom message for course deletion
 else {
