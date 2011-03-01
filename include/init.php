@@ -178,11 +178,11 @@ function restore_dbname_override($do_unset = false)
 }
 
 // Temporary dbname override
-if (isset($_GET['c'])) {
+if (isset($_GET['course'])) {
         if (isset($_SESSION['dbname'])) {
                 define('old_dbname', $_SESSION['dbname']);
         }
-        $_SESSION['dbname'] = $_GET['c'];
+        $_SESSION['dbname'] = $_GET['course'];
 }
 register_shutdown_function('restore_dbname_override');
 
