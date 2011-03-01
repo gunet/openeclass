@@ -30,29 +30,9 @@ include '../../include/baseTheme.php';
 
 $nameTools = $langDelCourse;
 
-if($is_adminOfCourse) {
-	if(isset($_POST['delete'])) {
-		mysql_select_db($mysqlMainDb);
-                db_query("DELETE FROM unit_resources WHERE unit_id IN
-                                (SELECT id FROM course_units WHERE course_id = $cours_id)");
-		db_query("DELETE FROM course_units WHERE course_id = $cours_id");
-		db_query("DELETE FROM annonces WHERE cours_id = $cours_id");
-		db_query("DELETE FROM document WHERE course_id = $cours_id");
-		db_query("DELETE FROM ebook WHERE course_id = $cours_id");
-		db_query("DELETE FROM forum_notify WHERE course_id = $cours_id");
-		db_query("DELETE FROM glossary WHERE course_id = $cours_id");
-		db_query("DELETE FROM `group` WHERE course_id = $cours_id");
-		db_query("DELETE FROM group_properties WHERE course_id = $cours_id");
-		db_query("DELETE FROM link WHERE course_id = $cours_id");
-		db_query("DELETE FROM link_category WHERE course_id = $cours_id");
-		db_query("DELETE FROM cours_user WHERE cours_id = $cours_id");
-		db_query("DELETE FROM cours WHERE cours_id = $cours_id");
-		##[BEGIN personalisation modification]############
-		db_query("DELETE FROM `$mysqlMainDb`.agenda WHERE lesson_code='$currentCourseID'");
-		##[END personalisation modification]############
-		db_query("DROP DATABASE `$currentCourseID`");
-		@mkdir('../../courses/garbage');
-		rename("../../courses/$currentCourseID", "../../courses/garbage/$currentCourseID");
+if ($is_adminOfCourse) {
+        if(isset($_POST['delete'])) {
+                delete_course($cours_id);
                 $tool_content .= "<p class='success_small'>$langTheCourse <b>($intitule $currentCourseID)</b> $langHasDel</p>
                                   <br /><p align='right'><a href='../../index.php'>$langBackHome $siteName</a></p>";
                 unset($currentCourseID);
