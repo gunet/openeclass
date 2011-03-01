@@ -667,8 +667,8 @@ db_query("CREATE TABLE `assignment_submit` (
      $charset_spec");
 
     mysql_query("CREATE TABLE dropbox_post (
-      fileId int(11) unsigned NOT NULL default '0',
-      recipientId int(11) unsigned NOT NULL default '0',
+      fileId int(11) unsigned NOT NULL default 0,
+      recipientId int(11) unsigned NOT NULL default 0,
       PRIMARY KEY  (fileId,recipientId))
      $charset_spec");
 
@@ -676,30 +676,30 @@ db_query("CREATE TABLE `assignment_submit` (
 
 mysql_query("CREATE TABLE poll (
       pid int(11) NOT NULL auto_increment,
-      creator_id mediumint(8) unsigned NOT NULL default '0',
-      course_id varchar(20) NOT NULL default '0',
+      creator_id mediumint(8) unsigned NOT NULL default 0,
+      course_id varchar(20) NOT NULL default 0,
       name varchar(255) NOT NULL default '',
       creation_date date NOT NULL default '0000-00-00',
       start_date date NOT NULL default '0000-00-00',
       end_date date NOT NULL default '0000-00-00',
-      active int(11) NOT NULL default '0',
+      active int(11) NOT NULL default 0,
       PRIMARY KEY  (pid))
      $charset_spec");
 
     mysql_query("CREATE TABLE poll_answer_record (
       arid int(11) NOT NULL auto_increment,
-	pid int(11) NOT NULL default '0',
-	qid int(11) NOT NULL default '0',
-      	aid int(11) NOT NULL default '0',
-	answer_text text NOT NULL default '',
-	user_id int(11) NOT NULL default '0',
+	pid int(11) NOT NULL default 0,
+	qid int(11) NOT NULL default 0,
+      	aid int(11) NOT NULL default 0,
+	answer_text TEXT NOT NULL,
+	user_id int(11) NOT NULL default 0,
       submit_date date NOT NULL default '0000-00-00',
       PRIMARY KEY  (arid))
      $charset_spec");
 
     mysql_query("CREATE TABLE poll_question (
-      pqid bigint(12) NOT NULL auto_increment,
-      pid int(11) NOT NULL default '0',
+      pqid bigint(12) NOT NULL AUTO_INCREMENT,
+      pid int(11) NOT NULL DEFAULT 0,
       question_text varchar(250) NOT NULL default '',
       qtype ENUM('multiple', 'fill') NOT NULL,
       PRIMARY KEY  (pqid))
@@ -707,8 +707,8 @@ mysql_query("CREATE TABLE poll (
 
     mysql_query("CREATE TABLE poll_question_answer (
       pqaid int(11) NOT NULL auto_increment,
-      pqid int(11) NOT NULL default '0',
-      answer_text text NOT NULL,
+      pqid int(11) NOT NULL default 0,
+      answer_text TEXT NOT NULL,
       PRIMARY KEY  (pqaid))
      $charset_spec");
 
@@ -720,7 +720,7 @@ mysql_query("CREATE TABLE `lp_module` (
               `name` varchar(255) NOT NULL default '',
               `comment` text NOT NULL,
               `accessibility` enum('PRIVATE','PUBLIC') NOT NULL default 'PRIVATE',
-              `startAsset_id` int(11) NOT NULL default '0',
+              `startAsset_id` int(11) NOT NULL default 0,
               `contentType` enum('CLARODOC','DOCUMENT','EXERCISE','HANDMADE','SCORM','SCORM_ASSET','LABEL','COURSE_DESCRIPTION','LINK') NOT NULL,
               `launch_data` text NOT NULL,
               PRIMARY KEY  (`module_id`)
@@ -733,19 +733,19 @@ mysql_query("CREATE TABLE `lp_learnPath` (
               `comment` text NOT NULL,
               `lock` enum('OPEN','CLOSE') NOT NULL default 'OPEN',
               `visibility` enum('HIDE','SHOW') NOT NULL default 'SHOW',
-              `rank` int(11) NOT NULL default '0',
+              `rank` int(11) NOT NULL default 0,
               PRIMARY KEY  (`learnPath_id`),
               UNIQUE KEY rank (`rank`)
             )  $charset_spec");
             //COMMENT='List of learning Paths';
 
 mysql_query("CREATE TABLE `lp_rel_learnPath_module` (
-                `learnPath_module_id` int(11) NOT NULL auto_increment,
-                `learnPath_id` int(11) NOT NULL default '0',
-                `module_id` int(11) NOT NULL default '0',
-                `lock` enum('OPEN','CLOSE') NOT NULL default 'OPEN',
-                `visibility` enum('HIDE','SHOW') NOT NULL default 'SHOW',
-                `specificComment` text NOT NULL,
+                `learnPath_module_id` int(11) NOT NULL AUTO_INCREMENT,
+                `learnPath_id` int(11) NOT NULL DEFAULT 0,
+                `module_id` int(11) NOT NULL DEFAULT 0,
+                `lock` enum('OPEN','CLOSE') NOT NULL DEFAULT 'OPEN',
+                `visibility` enum('HIDE','SHOW') NOT NULL DEFAULT 'SHOW',
+                `specificComment` TEXT NOT NULL,
                 `rank` int(11) NOT NULL default '0',
                 `parent` int(11) NOT NULL default '0',
                 `raw_to_pass` tinyint(4) NOT NULL default '50',
@@ -799,26 +799,26 @@ mysql_query("CREATE TABLE `wiki_acls` (
             )  $charset_spec");
 
 mysql_query("CREATE TABLE `wiki_pages` (
-              `id` int(11) unsigned NOT NULL auto_increment,
-              `wiki_id` int(11) unsigned NOT NULL default '0',
-              `owner_id` int(11) unsigned NOT NULL default '0',
-              `title` varchar(255) NOT NULL default '',
-              `ctime` datetime NOT NULL default '0000-00-00 00:00:00',
-              `last_version` int(11) unsigned NOT NULL default '0',
-              `last_mtime` datetime NOT NULL default '0000-00-00 00:00:00',
+              `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+              `wiki_id` INT(11) UNSIGNED NOT NULL DEFAULT 0,
+              `owner_id` INT(11) UNSIGNED NOT NULL DEFAULT 0,
+              `title` VARCHAR(255) NOT NULL DEFAULT '',
+              `ctime` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
+              `last_version` INT(11) UNSIGNED NOT NULL DEFAULT 0,
+              `last_mtime` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
               PRIMARY KEY  (`id`)
             )  $charset_spec");
 
 mysql_query("CREATE TABLE `wiki_pages_content` (
-              `id` int(11) unsigned NOT NULL auto_increment,
-              `pid` int(11) unsigned NOT NULL default '0',
-              `editor_id` int(11) NOT NULL default '0',
-              `mtime` datetime NOT NULL default '0000-00-00 00:00:00',
-              `content` text NOT NULL,
+              `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+              `pid` INT(11) UNSIGNED NOT NULL DEFAULT 0,
+              `editor_id` INT(11) NOT NULL DEFAULT 0,
+              `mtime` DATETIME NOT NULL default '0000-00-00 00:00:00',
+              `content` TEXT NOT NULL,
               PRIMARY KEY  (`id`)
             )  $charset_spec");
 
-//dhmiourgia full text indexes gia th diadikasia ths anazhthshs
+// dhmiourgia full text indexes gia th diadikasia ths anazhthshs
 mysql_query("ALTER TABLE `agenda` ADD FULLTEXT `agenda` (`titre` ,`contenu`)");
 mysql_query("ALTER TABLE `course_description` ADD FULLTEXT `course_description` (`title` ,`content`)");
 mysql_query("ALTER TABLE `exercices` ADD FULLTEXT `exercices` (`titre`,`description`)");
@@ -831,5 +831,3 @@ mysql_query("ALTER TABLE `videolinks` ADD FULLTEXT `videolinks` (`url` ,`titre` 
 // creation of indexes 
 mysql_query("ALTER TABLE `lp_user_module_progress` ADD INDEX `optimize` (`user_id` , `learnPath_module_id`)");
 mysql_query("ALTER TABLE `actions` ADD INDEX `actionsindex` (`module_id` , `date_time`)"); 
-
-?>
