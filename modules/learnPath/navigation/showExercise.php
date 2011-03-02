@@ -31,7 +31,7 @@
 	               Dionysios G. Synodinos <synodinos@gmail.com>
 ==============================================================================
     @Description: This script is a replicate from
-                  exercice/exercice.php, but it is modified for the
+                  exercice/exercice_submit.php, but it is modified for the
                   displaying needs of the learning path tool. The core
                   application logic remains the same.
                   It also contains a replicate from exercice/exercise.lib.php
@@ -53,10 +53,11 @@ require_once('../../exercice/answer.class.php');
 require_once('../../../include/lib/textLib.inc.php');
 
 // answer types
-define('UNIQUE_ANSWER',1);
-define('MULTIPLE_ANSWER',2);
-define('FILL_IN_BLANKS',3);
-define('MATCHING',4);
+define('UNIQUE_ANSWER', 1);
+define('MULTIPLE_ANSWER', 2);
+define('FILL_IN_BLANKS', 3);
+define('MATCHING', 4);
+define('TRUE_FALSE', 5);
 $tool_content = "";
 $nameTools = $langExercice;
 $picturePath='../../'.$currentCourseID.'/image';
@@ -70,37 +71,66 @@ $TBL_EXERCICES='exercices';
 $TBL_QUESTIONS='questions';
 $TBL_REPONSES='reponses';
 
+if (isset($_GET['exerciseId'])) {
+	$exerciseId = $_GET['exerciseId'];
+}
+
 // if the user has clicked on the "Cancel" button
-if(isset($buttonCancel)) {
+if(isset($_POST['buttonCancel'])) {
 	// returns to the exercise list
 	header('Location: backFromExercise.php?op=cancel');
 	exit();
 }
 
-// if the user has submitted the form
-if(isset($formSent)) {
-	// initializing
-	if(!is_array(@$exerciseResult)) {
-		$exerciseResult=array();
-	}
+if (!isset($_SESSION['exercise_begin_time'])) {
+	$_SESSION['exercise_begin_time'] = time();
+}
 
+// if the user has submitted the form
+if (isset($_POST['formSent'])) {
+	$exerciseType = isset($_POST['exerciseType'])?$_POST['exerciseType']:'';
+	$questionNum  = isset($_POST['questionNum'])?$_POST['questionNum']:'';
+	$nbrQuestions = isset($_POST['nbrQuestions'])?$_POST['nbrQuestions']:'';
+	$exerciseTimeConstrain = isset($_POST['exerciseTimeConstrain'])?$_POST['exerciseTimeConstrain']:'';
+	$eid_temp = isset($_POST['eid_temp'])?$_POST['eid_temp']:'';
+	$RecordStartDate = isset($_POST['RecordStartDate'])?$_POST['RecordStartDate']:'';
+	$choice = isset($_POST['choice'])?$_POST['choice']:'';
+	if (isset($_SESSION['exerciseResult'])) {
+		$exerciseResult = $_SESSION['exerciseResult'];
+	} else {
+		$exerciseResult = array();
+	}
+	
+	if (isset($exerciseTimeConstrain) and $exerciseTimeConstrain != 0) { 
+		$exerciseTimeConstrain = $exerciseTimeConstrain*60;
+		$exerciseTimeConstrainSecs = time() - $exerciseTimeConstrain;
+		$_SESSION['exercise_end_time'] = $exerciseTimeConstrainSecs;
+		if ($_SESSION['exercise_end_time'] - $_SESSION['exercise_begin_time'] > $exerciseTimeConstrain) {
+			unset($_SESSION['exercise_begin_time']);
+			unset($_SESSION['exercise_end_time']);
+			header('Location: exercise_redirect.php');
+			exit();
+		} 
+	}
+	$RecordEndDate = date("Y-m-d H:i:s", time());
+	/*if (($exerciseType == 1) or (($exerciseType == 2) and ($nbrQuestions == $questionNum))) { // record
+		mysql_select_db($currentCourseID); 
+		$sql="INSERT INTO exercise_user_record(eid, uid, RecordStartDate, RecordEndDate, attempt)
+			VALUES ('$eid_temp','$uid','$RecordStartDate','$RecordEndDate', 1)";
+		$result=db_query($sql);
+	}*/	
+	
 	// if the user has answered at least one question
-	if(@is_array($choice))
-	{
-		if($exerciseType == 1)
-		{
+	if(is_array($choice)) {
+		if($exerciseType == 1) {
 			// $exerciseResult receives the content of the form.
 			// Each choice of the student is stored into the array $choice
 			$exerciseResult=$choice;
-		}
-		else
-		{
+		} else {
 			// gets the question ID from $choice. It is the key of the array
 			list($key)=array_keys($choice);
-
 			// if the user didn't already answer this question
-			if(!isset($exerciseResult[$key]))
-			{
+			if(!isset($exerciseResult[$key])) {
 				// stores the user answer into the array
 				$exerciseResult[$key]=$choice[$key];
 			}
@@ -108,94 +138,70 @@ if(isset($formSent)) {
 	}
 
 	// the script "exercise_result.php" will take the variable $exerciseResult from the session
-	session_register('exerciseResult');
-
+	$_SESSION['exerciseResult'] = $exerciseResult;
 	// if it is the last question (only for a sequential exercise)
 	if($exerciseType == 1 || $questionNum >= $nbrQuestions) {
 		// goes to the script that will show the result of the exercise
 		header('Location: showExerciseResult.php');
 		exit();
 	}
-}
+} // end of submit
 
+if (isset($_SESSION['objExercise'])) {
+	$objExercise = $_SESSION['objExercise'];
+}
 
 // if the object is not in the session
 if(!isset($_SESSION['objExercise'])) {
 	// construction of Exercise
 	$objExercise=new Exercise();
-
 	// if the specified exercise doesn't exist or is disabled
-	//if(!$objExercise->read($exerciseId) || (!$objExercise->selectStatus() && !$is_allowedToEdit))
-	if(!$objExercise->read($exerciseId) && (!$is_allowedToEdit)) {
-		$tool_content .= "<p>$langExerciseNotFound</p>";	
-		draw($tool_content, 2, 'exercice');
+	if(!$objExercise->read($exerciseId) && (!$is_adminOfCourse)) {
+		$tool_content .= $langExerciseNotFound;
+		draw($tool_content, 2);
 		exit();
 	}
-
 	// saves the object into the session
 	$_SESSION['objExercise'] = $objExercise;
 }
 
-$exerciseTitle=$objExercise->selectTitle();
-$exerciseDescription=$objExercise->selectDescription();
-$randomQuestions=$objExercise->isRandom();
-$exerciseType=$objExercise->selectType();
-$exerciseTimeConstrain=$objExercise->selectTimeConstrain();
-$exerciseAllowedAttemtps=$objExercise->selectAttemptsAllowed();
+$exerciseTitle = $objExercise->selectTitle();
+$exerciseDescription = $objExercise->selectDescription();
+$exerciseType = $objExercise->selectType();
+$exerciseTimeConstrain = $objExercise->selectTimeConstrain();
+$exerciseAllowedAttempts = $objExercise->selectAttemptsAllowed();
 $eid_temp = $objExercise->selectId();
-$exerciseTimeConstrainSecs = time() + ($exerciseTimeConstrain*60);
-$RecordStartDate = date("Y-m-d H:i:s",time());
+$RecordStartDate = date("Y-m-d H:i:s", time());
 
-// start time of the exercise (use session because in post it could be modified
-// easily by user using a development bar in mozilla for an example)
-// need to check if it already exists in session for sequential exercises
-if(!isset($_SESSION['exeStartTime'])) {
-   $_SESSION['exeStartTime'] = time();
-}
-
-//if ((!$is_adminOfCourse)&&(isset($uid))) { //if registered student
-if ((isset($uid))) { //if registered student
-$CurrentAttempt = mysql_fetch_array(db_query("SELECT COUNT(*) FROM exercise_user_record WHERE eid='$eid_temp' AND uid='$uid'", $currentCourseID));
+// check if exercise has expired 
+$CurrentAttempt = mysql_fetch_array(db_query("SELECT COUNT(*) FROM exercise_user_record 
+		WHERE eid='$eid_temp' AND uid='$uid'", $currentCourseID));
 ++$CurrentAttempt[0];
-	if (!isset($_COOKIE['marvelous_cookie'])) { // either expired or begin again
-		if ((!$exerciseAllowedAttemtps)||($CurrentAttempt[0] <= $exerciseAllowedAttemtps)) { // if it is allowed begin again
-			if (!$exerciseTimeConstrainSecs)
-				$exerciseTimeConstrainSecs = 9999999;
-				$CookieLife=time()+$exerciseTimeConstrainSecs;
-			if (!setcookie("marvelous_cookie", $eid_temp, $CookieLife, "/")) {
-				echo <<<cData
-<h3>${exerciseTitle}</h3><p>${langExerciseExpired}</p>
-<p><center><a href='../learningPathList.php' target=top>${langBack}</a></center></p>
-cData;
-
-			exit();
-			}
-			// record start of exercise
-			mysql_select_db($currentCourseID);
-			$sql="INSERT INTO `exercise_user_record` (eurid,eid,uid,RecordStartDate,RecordEndDate,".
-				"TotalScore,TotalWeighting,attempt) VALUES".
-				"(0,'$eid_temp','$uid','$RecordStartDate','','','',1)";
-			$result=mysql_query($sql) or die("Error : SELECT in file ".__FILE__." at line ".__LINE__);
-		} else {  // not allowed begin again
-				echo <<<cData
-<h3>${exerciseTitle}</h3><p>${langExerciseExpired}</p>
-<p><center><a href='../learningPathList.php' target=top>${langBack}</a></center></p>
-cData;
-			//header('Location: ../../exercice/exercise_redirect.php');
-			exit();
-		}
-	}
+if ($exerciseAllowedAttempts > 0 and $CurrentAttempt[0] > $exerciseAllowedAttempts) { 
+	echo ("
+  <br/>
+    <table width='99%' class='tbl'>
+    <tr>
+      <td class='alert1'>$langExerciseExpired</td>
+    </tr>
+    <tr>
+      <td><br/><br/><br/><div align='center'><a href='../learningPathList.php' target=top>$langBack</a></div></td>
+    </tr>
+    </table>");
+	exit();
 }
 
+if (isset($_SESSION['questionList'])) {
+	$questionList = $_SESSION['questionList'];
+}
 if (!isset($_SESSION['questionList'])) {
 	// selects the list of question ID
-	$questionList=$randomQuestions?$objExercise->selectRandomList():$objExercise->selectQuestionList();
+	$questionList = $objExercise->selectQuestionList();
 	// saves the question list into the session
 	$_SESSION['questionList'] = $questionList;
-	
 }
 
-$nbrQuestions=sizeof($questionList);
+$nbrQuestions = sizeof($questionList);
 
 // if questionNum comes from POST and not from GET
 if(!isset($questionNum) || $_POST['questionNum']) {
@@ -207,6 +213,12 @@ if(!isset($questionNum) || $_POST['questionNum']) {
 	}
 }
 
+if(@$_POST['questionNum']) {
+	$QUERY_STRING="questionNum=$questionNum";
+}
+
+$exerciseDescription_temp = standard_text_escape($exerciseDescription);
+
 echo "<html>"."\n"
     .'<head>'."\n"
     .'<meta http-equiv="Content-Type" content="text/html; charset='.$charset.'">'."\n"
@@ -217,27 +229,24 @@ echo "<html>"."\n"
     .'<body style="margin: 2px;">'."\n"
     .'<div align="left">';
 
-if(@$_POST['questionNum']) {
-	$QUERY_STRING="questionNum=$questionNum";
-}
+echo ("
+  <table width='99%' class='tbl_border'>
+  <tr class='odd'>
+    <td colspan=\"2\"><b>$exerciseTitle</b>
+    <br/>
+    $exerciseDescription_temp</td>
+  </tr>
+  </table>
+  <br />
 
-	$exerciseDescription_temp = nl2br(make_clickable($exerciseDescription));
-	echo <<<cData
-
-      <table width="99%" class="tbl_border">
-      <tr>
-        <td colspan=\"2\"><b>${exerciseTitle}</b>
-        <br/>
-        ${exerciseDescription_temp}</td>
-      </tr>
-      </table>
-
-		<form method="post" action="${_SERVER['PHP_SELF']}" autocomplete="off">
-		<input type="hidden" name="formSent" value="1">
-		<input type="hidden" name="exerciseType" value="${exerciseType}">
-		<input type="hidden" name="questionNum" value="${questionNum}">
-		<input type="hidden" name="nbrQuestions" value="${nbrQuestions}">
-cData;
+  <form method='post' action='$_SERVER[PHP_SELF]'>
+  <input type='hidden' name='formSent' value='1' />
+  <input type='hidden' name='exerciseType' value='$exerciseType' />	
+  <input type='hidden' name='questionNum' value='$questionNum' />
+  <input type='hidden' name='nbrQuestions' value='$nbrQuestions' />
+  <input type='hidden' name='exerciseTimeConstrain' value='$exerciseTimeConstrain' />
+  <input type='hidden' name='eid_temp' value='$eid_temp' />
+  <input type='hidden' name='RecordStartDate' value='$RecordStartDate' />");
 
 $i=0;
 foreach($questionList as $questionId) {
@@ -257,28 +266,28 @@ foreach($questionList as $questionId) {
 				$questionName=$objQuestionTmp->selectTitle();
 				// destruction of the Question object
 				unset($objQuestionTmp);
-				echo '<tr><td>'.$langAlreadyAnswered.' &quot;'.$questionName.'&quot;</td></tr>';
+				echo '<div class\"alert1\" '.$langAlreadyAnswered.' &quot;'.$questionName.'&quot;</div>';
 				break;
 			}
 		}
 	}
-
-		// shows the question and its answers
-
-	echo "<br/>
-	<table width=\"99%\" class=\"tbl\">
-	<thead>
-	<tr>
-		<td colspan=\"2\"><b><u>".$langQuestion."</u>: ".$i."</b></td>
-	</tr>";
-
-	if($exerciseType == 2)
-		echo " / ".$nbrQuestions;
-	//echo "</thead></table>";
-
 	// shows the question and its answers
-	showQuestion($questionId);
+	echo ("
+  <table width=\"99%\" class=\"tbl\">
+  <tr class='odd'>
+    <td colspan=\"2\"><b><u>".$langQuestion."</u>: ".$i);
 
+	if($exerciseType == 2) { 
+		echo ("/".$nbrQuestions);
+	}
+	echo ("</b></td>
+  </tr>");
+	showQuestion($questionId);
+	echo ("
+  <tr>
+    <td class='even' colspan=\"2\">&nbsp;</td>
+  </tr>
+  </table>");
 	// for sequential exercises
 	if($exerciseType == 2) {
 		// quits the loop
@@ -287,36 +296,37 @@ foreach($questionList as $questionId) {
 }	// end foreach()
 
 if (!$questionList) {
-	$tool_content .= "<table width=\"99%\" class=\"tbl\">
-	<tr>
-	<td colspan='2'><font color='red'>$langNoAnswer</font></td>
-	</tr>
-	</table>";
+	echo ("
+  <table width=\"99%\" class=\"tbl\">
+  <tr class='odd'>
+    <td colspan='2'>
+      <p class='caution'>'$langNoAnswer</p>
+    </td>
+  </tr>
+  </table>");	 
 } else {
-	echo "<br/><table width=\"99%\" class=\"tbl\">
-	<tr>
-	<td><div align=\"center\"><input type=\"submit\" value=\"";
-	if ($exerciseType == 1 || $nbrQuestions == $questionNum)
-		echo "$langCont\">&nbsp;";
-	else
-		$tool_content .= $langNext." &gt;"."\">";
-	echo "<input type=\"submit\" name=\"buttonCancel\" value=\"$langCancel\"></div>
-	</td>
-	</tr></table>";
-}
+	echo ("
+  <br/>
+  <table width=\"99%\" class=\"tbl\">
+  <tr>
+    <td><div align=\"center\"><input type=\"submit\" value=\"");
+		if ($exerciseType == 1 || $nbrQuestions == $questionNum) {
+			echo "$langCont\" />&nbsp;";
+		} else {
+			echo $langNext." &gt;"."\" />";
+		}
+	echo ("<input type='submit' name='buttonCancel' value='$langCancel' /></div>
+    </td>
+  </tr>
+  <tr>
+    <td colspan=\"2\">&nbsp;</td>
+  </tr>
+  </table>");
+}	
 
-    /*
-	echo "</table></td></tr><tr><td align=\"center\"><br><input type=\"submit\" value=\"";
-	if ($exerciseType == 1 || $nbrQuestions == $questionNum)
-		echo $langOk." &gt;"."\">";
-	else
-		echo $langNext." &gt;"."\">";
-
- 	echo " <input type=\"submit\" name=\"buttonCancel\" value=\"${langCancel}\">";
-	echo "</td></tr></form></table>";
-	*/
-	echo "</div></body>"."\n";
-	echo "</html>"."\n";
+echo ("</form>");
+echo ("</div></body>"."\n");
+echo ("</html>"."\n");
 
 
 function showQuestion($questionId, $onlyAnswers=false)
