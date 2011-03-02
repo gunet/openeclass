@@ -358,9 +358,9 @@ function add_multiple_choice_question($i, $text)
           <td>&nbsp;</td>
           <td>";
 	foreach ($answers as $j => $answertext) {
-	    $tool_content .= "<img src='../../template/classic/img/arrow_blue.gif' title='$langPollNumAnswers'>&nbsp;&nbsp;<input type='text' name='answer${i}[]' value='$answertext' size='50'><br /><br />";
+	    $tool_content .= "<img src='../../template/classic/img/arrow.png' title='$langPollNumAnswers'>&nbsp;&nbsp;<input type='text' name='answer${i}[]' value='$answertext' size='50'><br /><br />";
 	}
-	$tool_content .= "<img src='../../template/classic/img/arrow_blue.gif' title='$langPollNumAnswers'>&nbsp;&nbsp;$langPollUnknown
+	$tool_content .= "<img src='../../template/classic/img/arrow.png' title='$langPollNumAnswers'>&nbsp;&nbsp;$langPollUnknown
           </td>
           <td>&nbsp;</td>
         </tr>";

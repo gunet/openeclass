@@ -114,7 +114,7 @@ if (isset($_POST["submit"])) {
 				} else {
 					$tool_content .= "\n<tr class='odd'>";
 				}
-				$tool_content .= "\n<td>&nbsp;<img src='../../template/classic/img/arrow_blue.gif' />&nbsp;
+				$tool_content .= "\n<td>&nbsp;<img src='../../template/classic/img/arrow.png' />&nbsp;
 					<a href='$_SERVER[PHP_SELF]?fc=$fac[id]'>" . htmlspecialchars($fac['name']) . "</a>&nbsp;
 					<small><font color='#a33033'>($fac[code])</font></small>";
 				$n = db_query("SELECT COUNT(*) FROM cours

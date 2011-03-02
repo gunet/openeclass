@@ -67,7 +67,7 @@ if(!empty($auth)) {
                 if ($v == 1) {	// bypass the eclass auth method, as it has already been displayed
                         continue;
                 } else {
-                        $tool_content .= "<p><img src='../../template/classic/img/arrow_blue.gif' title='bullet' alt='bullet'>&nbsp;&nbsp;$langNewAccount&nbsp;";
+                        $tool_content .= "<p><img src='../../template/classic/img/arrow.png' title='bullet' alt='bullet'>&nbsp;&nbsp;$langNewAccount&nbsp;";
                         if ($v == 6)  { // shibboleth method
                                 $tool_content .= "(<a href='{$urlServer}secure/index.php'>".get_auth_info($v)."</a>)";
                         } else {
@@ -92,7 +92,7 @@ if(!empty($auth)) {
                 if ($v == 1) {	// bypass the eclass auth method, as it has already been displayed
                         continue;
                 } else {
-                        $tool_content .= "<p><img src='../../template/classic/img/arrow_blue.gif  alt='bullet''>&nbsp;&nbsp;$langNewAccount&nbsp;";
+                        $tool_content .= "<p><img src='../../template/classic/img/arrow.png  alt='bullet''>&nbsp;&nbsp;$langNewAccount&nbsp;";
                         if ($v == 6)  { // shibboleth method
                                 $tool_content .= "(<a href='{$urlServer}secure/index.php'>".get_auth_info($v)."</a>)";
                         } else {
