@@ -183,6 +183,20 @@ $ebook_body = '';
 $ebook_head = '';
 $dom = new DOMDocument();
 @$dom->loadHTMLFile($basedir . $subsections[$current_sid][$current_ssid]['path']);
+
+$xpath = new DOMXpath($dom);
+$textNodes = $xpath->query('//text()');
+foreach ($textNodes as $textNode) {
+	if (!empty($textNode->data)) {
+	        $new_contents = glossary_expand($textNode->data);
+		if ($new_contents != $textNode->data) {
+			$newdoc = DOMDocument::loadXML('<span>' . $new_contents . '</span>');
+			$newnode = $dom->importNode($newdoc->getElementsByTagName('span')->item(0), true);
+			$textNode->parentNode->replaceChild($newnode, $textNode);
+		}
+	}
+}        
+
 foreach ($dom->getElementsByTagName('link') as $element) {
         $ebook_head .= $dom->saveXML($element);
 }
