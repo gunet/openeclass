@@ -309,7 +309,7 @@ $tool_content .= "<tr><td>$langLanguage</td><td>" . lang_select_options('userLan
 if ($icon) {
 	$message_pic = $langReplacePicture;
 	$picture = profile_image($uid, IMAGESIZE_SMALL) . "&nbsp;&nbsp;";
-	$delete = "<tr><td>$langDeletePicture</td><td><input type=checkbox name='delimage'></td></tr>";
+	$delete = "<tr><td>$langDeletePicture</td><td><input type='checkbox' name='delimage'></td></tr>";
 } else {
 	$picture = $delete = '';
 	$message_pic = $langAddPicture;

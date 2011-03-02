@@ -51,7 +51,7 @@ if ($is_adminOfCourse) {
      </ul>
    </div>";
 
-        if (isset($_POST['delete']) or isset($_POST['delete.x'])) {
+        if (isset($_POST['delete']) or isset($_POST['delete_x'])) {
                 $id = intval($_POST['id']);
                 $r = db_query("SELECT title FROM ebook WHERE course_id = $cours_id AND id = $id");
                 if (mysql_num_rows($r) > 0) {

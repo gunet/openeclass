@@ -279,7 +279,7 @@ if($can_upload) {
 	/**************************************
 	DELETE FILE OR DIRECTORY
 	**************************************/
-        if (isset($_POST['delete'])) {
+        if (isset($_POST['delete']) or isset($_POST['delete_x'])) {
                 $delete = str_replace('..', '', $_POST['filePath']);
 		// Check if file actually exists
                 $result = db_query("SELECT path, format FROM document
