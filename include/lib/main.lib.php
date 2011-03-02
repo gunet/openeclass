@@ -1798,8 +1798,6 @@ function copy_resized_image($source_file, $type, $maxwidth, $maxheight, $target_
 		$image = @imagecreatefrompng($source_file);
 	} elseif ($type == 'image/gif') {
 		$image = @imagecreatefromgif($source_file);
-	} elseif ($type == 'image/png') {
-		$image = @imagecreatefrompng($source_file);
 	} elseif ($type == 'image/bmp') {
 		$image = @imagecreatefromwbmp($source_file);
 	}
