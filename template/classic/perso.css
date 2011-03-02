@@ -59,7 +59,7 @@ div.statut a{
 	padding: 2px 5px;
 }
 
-div.statut a:link{
+div.statut a:link {
 	color: #333333; 
 	background-color:#CCFF99; 
 }
@@ -199,8 +199,7 @@ table.assign {
 
 
 .title_pos {
-	display: block;
-	padding-left: 14px;
+	padding-left: 24px;
 	color: #727266;
 	font-weight: bold;
     overflow: hidden;
