@@ -307,7 +307,8 @@ $tool_content .= "
           <td  class='title1'>$langTools</td>
         </tr>
         <tr>
-          <td class='smaller'>$langContactProf: <a href='../../modules/contact/index.php'><img src='../../template/classic/img/email.png' alt='icon' title='$langEmail' /></a></td>
+          <td class='smaller'>
+            <label for='email_btn'>$langContactProf:</label> <a href='../../modules/contact/index.php' id='email_btn'><img src='../../template/classic/img/email.png' alt='icon' title='$langEmail' /></a></td>
           </tr>";
 
 if ($is_adminOfCourse or
@@ -320,8 +321,9 @@ if ($is_adminOfCourse or
         $tool_content .="
         <tr>
           <td class='smaller'>
-            <form action='{$urlServer}student_view.php' method='post'>$button_message
-              <input class='transfer_btn' type='submit' name='submit' value='&raquo;' />
+            <form action='{$urlServer}student_view.php' method='post'>
+              <label for='view_btn'>$button_message</label>
+              <input id='view_btn' type='image' src='../../template/classic/img/switch.png' name='submit' />
             </form>
           </td>
         </tr>";

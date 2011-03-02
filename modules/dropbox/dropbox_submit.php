@@ -206,12 +206,12 @@ if (!isset( $_POST['authors']) || !isset( $_POST['description']))
 	} //end if(!$error)
 
 	if (!$error) {
-		$tool_content .= "<p class=\"success_small\">".$dropbox_lang["docAdd"]."<br />
+		$tool_content .= "<p class=\"success\">".$dropbox_lang["docAdd"]."<br />
 		<a href='index.php'>".$dropbox_lang['backList']."</a></p><br/>";
 	}
 	else
 	{
-		$tool_content .= "<p class=\"caution_small\">".$errormsg."<br /><br />
+		$tool_content .= "<p class=\"caution\">".$errormsg."<br /><br />
 		<a href='index.php'>".$dropbox_lang['backList']."</a><br/>";
 	}
 }
@@ -521,7 +521,7 @@ if (isset($_GET['deleteReceived']) || isset($_GET['deleteSent']))
      * DELETE FILE FEEDBACK
      * ========================================
      */
-	$tool_content .= "<p class=\"success_small\">".$dropbox_lang["fileDeleted"]."<br />
+	$tool_content .= "<p class=\"success\">".$dropbox_lang["fileDeleted"]."<br />
 	<a href='index.php'>".$dropbox_lang['backList']."</a></p><br/>";
 }
 draw($tool_content, 2, '', $head_content);
