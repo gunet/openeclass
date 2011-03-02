@@ -196,7 +196,7 @@ while($row = mysql_fetch_array($result)) {
                         $descr = '';
                 }
 		if(!$row['active']) {
-			$tool_content .= "<td width=\"1\"><img style='padding-top:3px;' src='${urlServer}/template/classic/img/arrow_red.gif' alt='' /></td><td>
+			$tool_content .= "<td width=\"1\"><img style='padding-top:3px;' src='${urlServer}/template/classic/img/arrow.png' alt='' /></td><td>
 			<div class=\"inactive\">
 			<a href=\"exercice_submit.php?exerciseId=${row['id']}\">".$row['titre']."</a>$descr</div></td>";
 		} else {

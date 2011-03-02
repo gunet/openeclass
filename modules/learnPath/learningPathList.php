@@ -446,7 +446,7 @@ while ($list = mysql_fetch_array($result)) // while ... learning path list
     if ($list['visibility'] == 'HIDE') {
         if ($is_adminOfCourse) {
             $style = "class='invisible'";
-            $image_bullet = "arrow_red.gif";
+            $image_bullet = "arrow.png";
         }
         else {
             continue; // skip the display of this file
