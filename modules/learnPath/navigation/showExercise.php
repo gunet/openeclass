@@ -328,121 +328,99 @@ echo ("</form>");
 echo ("</div></body>"."\n");
 echo ("</html>"."\n");
 
-
-function showQuestion($questionId, $onlyAnswers=false)
-{
-	global $picturePath, $webDir, $langColumnA, $langColumnB, $langMakeCorrespond;
- 	require_once "$webDir"."/modules/latexrender/latex.php";
+function showQuestion($questionId, $onlyAnswers = false) {
+	global $picturePath;
+	global $langNoAnswer, $langColumnA, $langColumnB, $langMakeCorrespond;
 
 	// construction of the Question object
 	$objQuestionTmp=new Question();
-
 	// reads question informations
-	if(!$objQuestionTmp->read($questionId))
-	{
+	if(!$objQuestionTmp->read($questionId)) {
 		// question not found
 		return false;
 	}
-
 	$answerType=$objQuestionTmp->selectType();
 
-	if(!$onlyAnswers)
-	{
+	if(!$onlyAnswers) {
 		$questionName=$objQuestionTmp->selectTitle();
-		$questionDescription=$objQuestionTmp->selectDescription();
-	// latex support
-		$questionName=latex_content($questionName);
-		$questionDescription=latex_content($questionDescription);
-
-	$questionDescription_temp = nl2br(make_clickable($questionDescription));
-	echo <<<cData
-		<tr>
-		  <td valign="top" colspan="2">
-				${questionName}
-		  </td>
-		</tr>
-		<tr>
-		  <td valign="top" colspan="2">
-			<i>${questionDescription_temp}</i>
-		  </td>
-		</tr>
-cData;
-
+		$questionDescription=$objQuestionTmp->selectDescription();	
+		$questionDescription_temp = standard_text_escape($questionDescription);
+		echo ("
+  <tr class='even'>
+    <td colspan='2'>
+		<b>$questionName</b><br />
+		$questionDescription_temp
+    </td>
+  </tr>");
 		if(file_exists($picturePath.'/quiz-'.$questionId)) {
-			echo "<tr><td align=\"center\" colspan=\"2\"><img src=\"".
-			${picturePath}."/quiz-".${questionId}."\" border=\"0\"></td></tr>";
+			echo ("
+  <tr class='even'>
+    <td class='center' colspan='2'><img src='".${'picturePath'}."/quiz-".${'questionId'}."'></td>
+  </tr>");
 		}
 	}  // end if(!$onlyAnswers)
 
 	// construction of the Answer object
 	$objAnswerTmp=new Answer($questionId);
-
 	$nbrAnswers=$objAnswerTmp->selectNbrAnswers();
 
 	// only used for the answer type "Matching"
-	if($answerType == MATCHING)
-	{
+	if($answerType == MATCHING) {
 		$cpt1='A';
 		$cpt2=1;
 		$Select=array();
-	echo <<<cData
+		echo ("
+  <tr class='even'>
+    <td colspan='2'>
+      <table class='tbl'>
       <tr>
-        <td colspan="2">
-        <table width="100%" class="tbl">
-        <tr>
-          <td width="44%" class="left"><u><b>$langColumnA</b></u></td>
-          <td width="12%"><div align="center"><b>$langMakeCorrespond</b></div></td>
-          <td width="44%" class="left"><u><b>$langColumnB</b></u></td>
-        </tr>
-        </table>
-        </td>
+        <td width='200'><b>$langColumnA</b></td>
+        <td class='center' width='130'><b>$langMakeCorrespond</b></td>
+        <td width='200'><b>$langColumnB</b></td>
       </tr>
-cData;
+      </table>
+    </td>
+  </tr>");
 	}
 
-	for($answerId=1;$answerId <= $nbrAnswers;$answerId++)
-	{
-		$answer=$objAnswerTmp->selectAnswer($answerId);
+	for($answerId=1;$answerId <= $nbrAnswers;$answerId++) {
+		$answer = standard_text_escape($objAnswerTmp->selectAnswer($answerId));
 		$answerCorrect=$objAnswerTmp->isCorrect($answerId);
-		// latex support
-		$answer=latex_content($answer);
-		if($answerType == FILL_IN_BLANKS)
-		{
+		if($answerType == FILL_IN_BLANKS) {
 			// splits text and weightings that are joined with the character '::'
 			list($answer)=explode('::',$answer);
-
 			// replaces [blank] by an input field
-			$answer = preg_replace('/\[[^]]+\]/', '<input type="text" name="choice['.$questionId.'][]" size="10">', nl2br($answer));
+                        $answer = preg_replace('/\[[^]]+\]/', '<input type="text" name="choice['.$questionId.'][]" size="10" />', nl2br(q($answer)));
 		}
-
 		// unique answer
-		if($answerType == UNIQUE_ANSWER)
-		{
-	echo <<<cData
-
-      <tr>
-        <td width="1%" align="center"><input type="radio" name="choice[${questionId}]" value="${answerId}"></td>
-        <td width="99%">${answer}</td>
-      </tr>
-cData;
+		if($answerType == UNIQUE_ANSWER) {
+			echo ("
+  <tr class='even'>
+    <td class='center' width='1'>
+      <input type='radio' name='choice[${questionId}]' value='${answerId}' />
+    </td>
+    <td>${answer}</td>
+  </tr>");
 		}
 		// multiple answers
-		elseif($answerType == MULTIPLE_ANSWER)
-		{
-	echo <<<cData
-
-      <tr>
-        <td width="1%" align="center"><input type="checkbox" name="choice[${questionId}][${answerId}]" value="1"></td>
-        <td width="99%">${answer}</td>
-      </tr>
-cData;
+		elseif($answerType == MULTIPLE_ANSWER) {
+			echo ("
+  <tr class='even'>
+    <td width='1' align='center'>
+      <input type='checkbox' name='choice[${questionId}][${answerId}]' value='1' />
+    </td>
+    <td>${answer}</td>
+  </tr>");
 		}
 		// fill in blanks
 		elseif($answerType == FILL_IN_BLANKS) {
-			echo "<tr><td colspan=\"2\">${answer}</td></tr>";
+			echo ("
+  <tr class='even'>
+    <td colspan='2'>${answer}</td>
+  </tr>");
 		}
 		// matching
-		else {
+		elseif($answerType == MATCHING) { 
 			if(!$answerCorrect) {
 				// options (A, B, C, ...) that will be put into the list-box
 				$Select[$answerId]['Lettre']=$cpt1++;
@@ -451,59 +429,76 @@ cData;
 			}
 			else
 			{
-				echo <<<cData
-
+				echo ("
+  <tr class='even'>
+    <td colspan='2'>
+      <table class='tbl'>
       <tr>
-        <td colspan="2">
-        <table width="100%" class="tbl">
-        <tr>
-          <td width="44%"><b>${cpt2}.</b> ${answer}</td>
-          <td width="12%"><div align="center">
-            <select name="choice[${questionId}][${answerId}]">
-            <option value="0">--</option>
-cData;
+        <td width='200'><b>${cpt2}.</b> ${answer}</td>
+        <td width='130'><div align='center'>
+         <select name='choice[${questionId}][${answerId}]'>
+           <option value='0'>--</option>");
 
-	            // fills the list-box
-	            foreach($Select as $key=>$val) {
-			echo "<option value=\"${key}\">${val['Lettre']}</option>";
-		     }  // end foreach()
-		  echo "
-            </select></div>
-          </td>
-          <td width=\"44%\">";
-
-		  if(isset($Select[$cpt2]))
-		  	echo '<b>'.$Select[$cpt2]['Lettre'].'.</b> '.$Select[$cpt2]['Reponse'];
-		  else
-		  	echo '&nbsp;';
-
-		  echo	"
-          </td>
-        </tr>
-        </table>
+				// fills the list-box
+				 foreach($Select as $key=>$val) {
+					 echo ("
+           <option value=\"${key}\">${val['Lettre']}</option>");
+				 }
+				 echo ("
+         </select></div>
         </td>
-      </tr>";
+        <td width='200'>");
+				 if(isset($Select[$cpt2]))
+				       echo ('<b>'.$Select[$cpt2]['Lettre'].'.</b> '.$Select[$cpt2]['Reponse']);
+				 else
+				       echo ('&nbsp;');
+
+				echo ("
+        </td>
+      </tr>
+      </table>
+    </td>
+  </tr>");
 				$cpt2++;
 				// if the left side of the "matching" has been completely shown
-				if($answerId == $nbrAnswers)
-				{
+				if($answerId == $nbrAnswers) {
 					// if it remains answers to shown at the right side
-					while(isset($Select[$cpt2])) {
-	  echo "
-      <tr>
-        <td colspan=\"2\">".
-			"<table>".
-			"<tr><td width=\"60%\" colspan=\"2\">&nbsp;</td><td width=\"40%\" align=\"right\" valign=\"top\">".
-			"<b>".$Select[$cpt2]['Lettre'].".</b> ".$Select[$cpt2]['Reponse']."</td></tr></table>
+					while(isset($Select[$cpt2])) 	{
+						echo ("
+      <tr class='even'>
+        <td colspan='2'>
+          <table>
+          <tr>
+            <td width='60%' colspan='2'>&nbsp;</td>
+            <td width='40%' align='right' valign='top'>".
+              "<b>".$Select[$cpt2]['Lettre'].".</b> ".$Select[$cpt2]['Reponse']."</td>
+          </tr>
+          </table>
         </td>
-      </tr>";
-	  $cpt2++;
+      </tr>");
+						$cpt2++;
 					}	// end while()
 				}  // end if()
 			}
+                               // echo (" </table>");
+		}
+		elseif($answerType == TRUE_FALSE) {
+			echo ("
+  <tr class='even'>
+    <td width='1' align='center'>
+      <input type='radio' name='choice[${questionId}]' value='${answerId}' />
+    </td>
+    <td>$answer</td>
+  </tr>");
 		}
 	}	// end for()
 
+	if(!$nbrAnswers) {
+		echo ("
+  <tr>
+    <td colspan='2'><p class='caution'>$langNoAnswer</td>
+  </tr>");
+	}
 	// destruction of the Answer object
 	unset($objAnswerTmp);
 	// destruction of the Question object
