@@ -230,7 +230,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 
 		//set the appropriate search action for the searchBox form
 		if ($menuTypeID == 2) {
-			$searchAction = "search_incourse.php";
+			$searchAction = "search_incourse.php?all=true";
 			$searchAdvancedURL = $searchAction;
 		} elseif ($menuTypeID == 1 || $menuTypeID == 3) {
 			$searchAction = "search.php";
@@ -483,6 +483,18 @@ function print_a($TheArray) {
 		echo "</tr>n";
 	}
 	echo "</table>n";
+}
+
+/**
+ * Function print_html_r
+ *
+ * Used for debugging purposes. Dumps array to browser
+ *
+ * @param array $arr
+ */
+function print_html_r($TheArray) {
+	echo nl2br(eregi_replace(" ", " ", print_r($TheArray, TRUE)));
+	echo "<br /><br />";
 }
 
 /*
