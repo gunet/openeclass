@@ -59,12 +59,20 @@ $nameTools = $langGlossary;
 ********************************************/
 
 if ($is_adminOfCourse) {
+	if (isset($_POST['url'])) {
+		$url = trim($_POST['url']);
+		if (!empty($url)) {
+			$url = canonicalize_url($url);
+		}
+	} else {
+		$url = '';
+	}
     
     if (isset($_POST['submit'])) {
         db_query("INSERT INTO glossary SET term = " .
                     autoquote(trim($_POST['term'])) . ", definition = " .
                     autoquote(trim($_POST['definition'])) . ", url = " .
-                    autoquote(canonicalize_url(trim($_POST['url']))) . ", `order` = " .
+                    autoquote($url) . ", `order` = " .
                     findorder($cours_id ) .", datestamp = NOW(), course_id = $cours_id");
         invalidate_glossary_cache();
         $tool_content .= "<div class='success'>$langGlossaryAdded</div><br />";
@@ -74,7 +82,7 @@ if ($is_adminOfCourse) {
         $sql = db_query("UPDATE glossary SET term = " .
                             autoquote(trim($_POST['term'])) . ", definition = " .
                             autoquote(trim($_POST['definition'])) . ", url = " .
-                            autoquote(canonicalize_url(trim($_POST['url']))) . ",
+                            autoquote($url) . ",
                             datestamp = NOW()
                         WHERE id = $id AND course_id = $cours_id");
         invalidate_glossary_cache();
