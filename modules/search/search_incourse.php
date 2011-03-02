@@ -50,25 +50,23 @@ register_posted_variables(array('announcements' => true,
 				'documents' => true,
 				'exercises' => true,
 				'forums' => true,
-				'links' => true),
-			  'all', 'intval');
+				'links' => true,
+				'video' => true),
+			  'all');
+
+if (isset($_GET['all'])) {
+	$all = intval($_GET['all']);
+	$announcements = $agenda = $course_units = $documents = $exercises = $forums = $links = $video = 1; 		     
+}
 
 if(isset($_POST['search_terms'])) {
-	$search_terms = $_POST['search_terms'];
-	$or_search_terms = mysql_real_escape_string($search_terms);
+	$search_terms = mysql_real_escape_string($_POST['search_terms']);
+	$query = " AGAINST ('".$search_terms." ";
+	$query .= "' IN BOOLEAN MODE)";
 }
 
-if(isset($_POST['or_search_terms'])) {
-	$or_search_terms = mysql_real_escape_string($_POST['or_search_terms']);
-}
 
-if (isset($or_search_terms)) {
-	$query = " AGAINST ('".$or_search_terms." ";
-}
-
-$query .= "' IN BOOLEAN MODE)";
-
-if(empty($or_search_terms)) {
+if(empty($search_terms)) {
 	
 	// display form
 	$tool_content .= "
@@ -78,24 +76,24 @@ if(empty($or_search_terms)) {
 	    <table width='99%' class='tbl'>
 	    <tr>
 	      <th class='left' width='120'>$langOR</th>
-	      <td colspan='2'><input name='or_search_terms' type='text' size='80'/></td>
+	      <td colspan='2'><input name='search_terms' type='text' size='80'/></td>
 	    </tr>
 	    <tr>
 	      <th width='30%' class='left' valign='top' rowspan='4'>$langSearchIn</th>
-	      <td width='35%'><input type='checkbox' name='anouncements' value='1' checked='checked' />$langAnnouncements</td>
-	      <td width='35%'><input type='checkbox' name='agenda' value='1' checked='checked' />$langAgenda</td>
+	      <td width='35%'><input type='checkbox' name='anouncements' checked='checked' />$langAnnouncements</td>
+	      <td width='35%'><input type='checkbox' name='agenda' checked='checked' />$langAgenda</td>
 	    </tr>
 	    <tr>
-	      <td><input type='checkbox' name='course_units' value='1' checked='checked' />$langCourseUnits</td>
-	      <td><input type='checkbox' name='documents' value='1' checked='checked' />$langDoc</td>
+	      <td><input type='checkbox' name='course_units' checked='checked' />$langCourseUnits</td>
+	      <td><input type='checkbox' name='documents' checked='checked' />$langDoc</td>
 	    </tr>
 	    <tr>
-	      <td><input type='checkbox' name='forums' value='1' checked='checked' />$langForums</td>
-	      <td><input type='checkbox' name='exercises' value='1' checked='checked' />$langExercices</td>
+	      <td><input type='checkbox' name='forums' checked='checked' />$langForums</td>
+	      <td><input type='checkbox' name='exercises' checked='checked' />$langExercices</td>
 	    </tr>
 	   <tr>
-	      <td><input type='checkbox' name='video' value='1' checked='checked' />$langVideo</td>
-	      <td><input type='checkbox' name='links' value='1' checked='checked' />$langLinks</td>
+	      <td><input type='checkbox' name='video' checked='checked' />$langVideo</td>
+	      <td><input type='checkbox' name='links' checked='checked' />$langLinks</td>
 	   </tr>
 	   <tr>
 	     <th>&nbsp;</th>
@@ -121,7 +119,7 @@ if(empty($or_search_terms)) {
 	    </table>";
 	
 	// search in announcements
-	if (isset($announcements)) 
+	if ($announcements) 
 	{
 		$myquery = "SELECT title, contenu, temps FROM annonces
 				WHERE cours_id = $cours_id
@@ -143,9 +141,8 @@ if(empty($or_search_terms)) {
 		$found = true;
 		}
 	}
-
 	// search in agenda
-	if (isset($agenda)) {
+	if ($agenda) {
 		$myquery = "SELECT titre, contenu FROM agenda
 				WHERE visibility = 'v'
 				AND MATCH (titre, contenu)".$query;
@@ -163,9 +160,8 @@ if(empty($or_search_terms)) {
 			$found = true;
 		}
 	}
-
 	// search in documents
-	if (isset($documents)) {
+	if ($documents) {
 		$myquery = "SELECT * FROM document
 				WHERE course_id = $cours_id
 				AND subsystem = 0
@@ -175,7 +171,7 @@ if(empty($or_search_terms)) {
 		if(mysql_num_rows($result) > 0) {
 			$tool_content .= "<table width='99%' class='Search' align='left'>
 			<tr>
-			<th width=\"180\" class=\"left\">$langDoc:</th></tr>
+			<th width='180' class='left'>$langDoc:</th></tr>
 			<tr><td>";
 			while($res = mysql_fetch_array($result))
 			{
@@ -184,8 +180,8 @@ if(empty($or_search_terms)) {
 				} else {
 					$add_comment = ": ($res[comment])";
 				}
-				$link_document = "{$urlServer}modules/document/document.php?action2=download&id=$res[path]";
-				$tool_content .= "><div class='Results'><b>
+				$link_document = "{$urlServer}modules/document/document.php?action2=download&amp;id=$res[path]";
+				$tool_content .= "<div class='Results'><b>
 					<a href='$link_document'>".$res['filename']."</a></b>$add_comment</div>";
 			}		
 			$tool_content .= "</td></tr></table>";
@@ -194,7 +190,7 @@ if(empty($or_search_terms)) {
 	}
 
 	// search in exercises	
-	if (isset($exercises)) {
+	if ($exercises) {
 		$myquery = "SELECT * FROM exercices
 				WHERE active = '1'
 				AND MATCH (titre, description)".$query;
@@ -221,7 +217,7 @@ if(empty($or_search_terms)) {
 	}
 
 	// search in forums
-	if (isset($forums)) {
+	if ($forums) {
 		$myquery = "SELECT * FROM posts_text WHERE MATCH (post_text)".$query;
 		$result = db_query($myquery, $currentCourseID);
 		if(mysql_num_rows($result) > 0) {
@@ -251,7 +247,7 @@ if(empty($or_search_terms)) {
 	}
 
 	// search in links
-	if (isset($links)) {
+	if ($links) {
 		$myquery = "SELECT * FROM link
 				WHERE course_id = $cours_id
 				AND MATCH (url, title, description)".$query;
@@ -279,7 +275,7 @@ if(empty($or_search_terms)) {
 	}
 
 	// search in video and videolinks
-	if (isset($video))
+	if ($video)
 	{
 		$myquery = "SELECT * FROM video WHERE MATCH (url, titre, description)".$query;
 		$result = db_query($myquery, $currentCourseID);
@@ -295,31 +291,34 @@ if(empty($or_search_terms)) {
 				} else {
 					$desc_text = "($res[description])";
 				}
-				$link_video = "${urlServer}modules/video/video.php?action2=download&id=$res[path]";				
+				$link_video = "${urlServer}modules/video/video.php?action2=download&amp;id=$res[path]";				
 				$tool_content .= "<div class='Results'><a href='$link_video'>".$res['titre']."</a> $desc_text</div>";
 			}
+			$tool_content .= "</td></tr></table>";
+			$found = true;
 		}
-		$tool_content .= "</td><tr></table>";
-		$tool_content .= "<table width='99%' class='Results' align='left'>
-		<tr>
-		<th width='180' class='left'>$langVideo $langLinks:</th></tr>
-		<tr><td>";
 		$myquery = "SELECT * FROM videolinks WHERE MATCH (url, titre, description)".$query;
 		$result = db_query($myquery, $currentCourseID);
-		while($res = mysql_fetch_array($result))
+		if(mysql_num_rows($result) > 0)
 		{
-			if (empty($res['description'])) {
-				$desc_text = "";
-			} else {
-				$desc_text = "($res[description])";
+			$tool_content .= "<table width='99%' class='Search' align='left'>
+			<tr><th width='180' class='left'>$langLinks:</th></tr>
+			<tr><td>";
+			while($res = mysql_fetch_array($result))
+			{
+				if (empty($res['description'])) {
+					$desc_text = "";
+				} else {
+					$desc_text = "($res[description])";
+				}
+				$link_video = $res['url'];
+				$tool_content .= "<div class='Results'>
+					<a href='$link_video' target=_blank>".$res['titre']."</a> $desc_text
+					</div>";
 			}
-			$link_video = $res['url'];
-			$tool_content .= "<div class='Results'>
-				<a href='$link_video' target=_blank>".$res['titre']."</a> $desc_text
-				</div>";
+			$tool_content .= "</td><tr></table>\n";
+			$found = true;
 		}
-		$tool_content .= "</td><tr></table>\n";
-		$found = true;
 	}
 	//ean den vrethikan apotelesmata, emfanish analogou mhnymatos
 	if ($found == false) {
