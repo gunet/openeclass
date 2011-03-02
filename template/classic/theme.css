@@ -122,9 +122,11 @@ input[type=reset] {
 }
 
 .transfer_btn {
-    background-color: #ebebeb !important;
-    border: none !important;
-    color: #000000!important;
+    background-color: #dfdfdf !important;
+    border: 1px solid #687a92 !important;
+    color: #727266 !important;
+    padding: 3px;
+    margin: 0px;
 }
 
 
@@ -140,8 +142,8 @@ fieldset {
 	font-weight: normal;
 	background-color: #f8f8f8;
 	margin-bottom: 20px;
-    padding: 7px; 
-    border: 1px solid #ebebeb;    
+        padding: 7px; 
+        border: 1px solid #ebebeb;    
 }
 
 fieldset table.th {
@@ -377,7 +379,7 @@ fieldset table.th {
 }
 
 #navcontainer li.category {
-	color: #727266;
+    color: #727266;
     font-weight: bold;
     border-bottom: 1px dashed #cccccc;
     padding: 5px;
@@ -657,7 +659,7 @@ font-size: 11px;
 .tbl_alt {
     padding: 5px;
     border: none;
-	border: 1px solid #dfdfdf; 
+    border: 1px solid #dfdfdf; 
 }	
 	
 .tbl_alt th {
@@ -668,15 +670,15 @@ font-size: 11px;
 }
 
 .tbl_alt td, .tbl_alt th {
-	vertical-align: top;
+    vertical-align: top;
 }
 
 .tbl_alt .odd {
-	background-color: #f8f8f8; /* LIGHTER BEIGE  */
+    background-color: #f8f8f8; /* LIGHTER BEIGE  */
 }	
 	
 .tbl_alt .even {
-	background-color: #ffffff; /* WHITE  */
+    background-color: #ffffff; /* WHITE  */
 }	
 
 .tbl_alt_border {

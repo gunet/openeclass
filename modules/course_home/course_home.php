@@ -302,13 +302,13 @@ $tool_content .= "
 
         <br />
 
-        <table class='smaller'>
+        <table class='tbl_courseid' width='200'>
+        <tr class='title1'>
+          <td  class='title1'>$langTools</td>
+        </tr>
         <tr>
-          <td align='left'>$langContactProf: <a href='../../modules/contact/index.php'><img src='../../template/classic/img/email.png' alt='icon' title='$langEmail' /></a></td>
-          </tr>
-        </table>
-
-        <br />\n";
+          <td class='smaller'>$langContactProf: <a href='../../modules/contact/index.php'><img src='../../template/classic/img/email.png' alt='icon' title='$langEmail' /></a></td>
+          </tr>";
 
 if ($is_adminOfCourse or
     (isset($_SESSION['saved_statut']) and $_SESSION['saved_statut'] == 1)) {
@@ -318,23 +318,17 @@ if ($is_adminOfCourse or
                 $button_message = $langStudentViewEnable;
         }
         $tool_content .="
-        <table class='smaller'>
         <tr>
-          <td>
+          <td class='smaller'>
             <form action='{$urlServer}student_view.php' method='post'>$button_message
               <input class='transfer_btn' type='submit' name='submit' value='&raquo;' />
             </form>
           </td>
-        </tr>
-        </table> ";
-        /*
-        $tool_content .=
-                "<tr><td colspan='3' style='text-align: right'>" .
-                "<form action='{$urlServer}student_view.php' method='post'>" .
-                "<input type='submit' name='submit' value='$button_message' />" .
-                "</form></td></tr>\n";
-        */
+        </tr>";
 }
+        $tool_content .="
+        </table>
+        <br />\n";
 
 $tool_content .= "
       </td>

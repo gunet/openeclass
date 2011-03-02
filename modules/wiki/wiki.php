@@ -458,8 +458,14 @@ function confirmation (name)
                ';
             }
 
-    // O titlos tis othonis wiki
-    //$tool_content .= disp_tool_title($toolTitle) . "\n";
+
+            // wiki list not empty
+            if ( is_array( $wikiList ) && count( $wikiList ) > 0 )
+            {
+
+
+            // O titlos tis othonis wiki
+            //$tool_content .= disp_tool_title($toolTitle) . "\n";
             // display list in a table
             $tool_content .= '
         <table width="99%" class="tbl_alt">' . "\n";
@@ -489,10 +495,6 @@ function confirmation (name)
                     . '        </tr>' . "\n" ;
             }
 
-
-            // wiki list not empty
-            if ( is_array( $wikiList ) && count( $wikiList ) > 0 )
-            {
                 $k=0;
                 foreach ( $wikiList as $entry )
                 {
@@ -585,14 +587,13 @@ function confirmation (name)
                     $tool_content .= '        </tr>' . "\n";
                 $k++;
                 }
+            $tool_content .= '        </table>' . "\n" . "\n";
             }
             // wiki list empty
             else
             {
-                $tool_content .= '        <tr><td colspan="5" style="text-align: center;">'.$langWikiNoWiki.'</td></tr>' . "\n";
+                $tool_content .= '        <p class="alert1">'.$langWikiNoWiki.'</p>' . "\n";
             }
-
-            $tool_content .= '        </table>' . "\n" . "\n";
 
             break;
         }
