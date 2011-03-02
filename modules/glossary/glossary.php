@@ -191,17 +191,16 @@ if ($is_adminOfCourse) {
 *************************************************/
 
 $tool_content .= "
-                 <table class='tbl_alt_bordless' width='99%'>";
-/*
+       <table class='tbl_alt' width='99%'>";
 $tool_content .= "
-                 <tr>
-                   <th><div align='left'>$langGlossaryTerm - $langGlossaryDefinition</div></th>";
+       <tr>
+         <th colspan='2'><div align='left'>$langGlossaryTerm</div></th>
+         <th><div align='left'>$langGlossaryDefinition</div></th>";
 if ($is_adminOfCourse) {
     $tool_content .= "
-                   <th width='20'>$langActions</th>";
+         <th width='20'>$langActions</th>";
 }
 $tool_content .= "</tr>";
-*/
 $sql = db_query("SELECT id, term, definition, url FROM glossary WHERE course_id = '$cours_id'");
 $i=0;
 while ($g = mysql_fetch_array($sql)) {
@@ -217,24 +216,25 @@ while ($g = mysql_fetch_array($sql)) {
             $urllink = '';
         }
     $tool_content .= "
-                 <tr $rowClass>
-                   <td><strong>" . q($g['term']) . "</strong> 
-                    <br /><em>" . q($g['definition']) . "</em><br /><span align='left' class='smaller'> $urllink</span>
-                   </td>";
+       <tr $rowClass>
+         <td class='bold' width='120'>" . q($g['term']) . "</td> 
+         <td width='1'>:</td>
+         <td><em>" . q($g['definition']) . "</em><br /><span align='left' class='smaller'> $urllink</span></td>";
     if ($is_adminOfCourse) {
         $tool_content .= "
-                   <td align='center' valign='top' width='50'><a href='$_SERVER[PHP_SELF]?edit=$g[id]'>
-                   <img src='../../template/classic/img/edit.png' /></a>
-                   <a href='$_SERVER[PHP_SELF]?delete=$g[id]' onClick=\"return confirmation();\">
-                   <img src='../../template/classic/img/delete.png' /></a></td>";
+         <td align='center' valign='top' width='50'><a href='$_SERVER[PHP_SELF]?edit=$g[id]'>
+            <img src='../../template/classic/img/edit.png' /></a>
+            <a href='$_SERVER[PHP_SELF]?delete=$g[id]' onClick=\"return confirmation();\">
+            <img src='../../template/classic/img/delete.png' /></a>
+         </td>";
     }
     $tool_content .= "
-                 </tr>";
+       </tr>";
     $i++;
 }
 $tool_content .= "
-                 </table>
-                 <br />\n";
+       </table>
+       <br />\n";
 
 draw($tool_content, 2, '', $head_content);
 

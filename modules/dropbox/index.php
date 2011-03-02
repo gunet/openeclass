@@ -133,13 +133,11 @@ elseif(isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1)
     <form method="post" action="dropbox_submit.php" enctype="multipart/form-data" onsubmit="return checkForm(this)">
 tCont2;
 	$tool_content .= "
+    <fieldset>
+    <legend>".$dropbox_lang["uploadFile"]."</legend>
     <table width='99%' class='tbl'>
     <tr>
-      <th class='left' width='220'>&nbsp;</th>
-      <td><b>".$dropbox_lang["uploadFile"]."</b></td>
-    </tr>
-    <tr>
-      <th class='left'>".$dropbox_lang['file']." :</th>
+      <th class='left' width='160'>".$dropbox_lang['file']." :</th>
       <td><input type='file' name='file' size='35' />
           <input type='hidden' name='dropbox_unid' value='$dropbox_unid' />
       </td>
@@ -162,7 +160,7 @@ tCont2;
 	</tr>
 	<tr>
 	  <th class='left'>".$dropbox_lang["description"]." :</th>
-	  <td><textarea name='description' cols='37' rows='2' class='FormData_InputText'></textarea></td>
+	  <td><textarea name='description' cols='37' rows='2'></textarea></td>
 	</tr>
 	<tr>
 	  <th class='left'>".$dropbox_lang["sendTo"]." :</th>
@@ -217,10 +215,17 @@ tCont2;
 
 	$tool_content .= "</select></td></tr>
 	<tr>
-	<th>&nbsp;</th>
-	<input type='hidden' name='authors' value='".getUserNameFromId($uid)."' />
-	<td><input type='Submit' name='submitWork' value='".$dropbox_lang["ok"]."' /></td>
-	</tr></table></form>
+	  <th>&nbsp;</th>
+	  <input type='hidden' name='authors' value='".getUserNameFromId($uid)."' />
+	  <td><input type='Submit' name='submitWork' value='".$dropbox_lang["ok"]."' /></td>
+	</tr>
+        <tr>
+          <td colspan='2'>$langMaxFileSize ".ini_get('upload_max_filesize')."</td>
+        </td>
+        </table>
+        </fieldset>
+        </form>
+
 	<p align='right'><small>$langMaxFileSize ".ini_get('upload_max_filesize')."</small></p>";
 	//==========================================================================
 	//END of send_file form
@@ -316,7 +321,7 @@ tCont9;
 	$i++;
 	} //end of foreach
 	if ($numberDisplayed == 0) {  // RH
-		$tool_content .= "<tr><td colspan=\"6\">".$dropbox_lang['tableEmpty']."</td></tr>";
+		$tool_content .= "<tr><td colspan=\"6\" class='alert1'>".$dropbox_lang['tableEmpty']."</td></tr>";
 	}
 	$tool_content .= "
       </tbody>
@@ -488,7 +493,7 @@ tCont12;
 
 if (count($dropbox_person->sentWork)==0) {
 	$tool_content .= "<tr>
-	<td colspan=\"6\">".$dropbox_lang['tableEmpty']."</td></tr>";
+	<td colspan=\"6\" class='alert1'>".$dropbox_lang['tableEmpty']."</td></tr>";
 }
 
 $tool_content .= "</table>";

@@ -475,11 +475,11 @@ function confirmation (name)
             {
                 $tool_content .= '' . "\n"
                     . '        <tr>' . "\n"
-                    . '          <th width="1%">&nbsp;</th>' . "\n"
-                    . '          <th><div align="left">'.$langTitle.'</div></th>' . "\n"
+                    . '          <th width="1">&nbsp;</th>' . "\n"
+                    . '          <th width="250"><div align="left">'.$langTitle.'</div></th>' . "\n"
                     . '          <th>'.$langDescription.'</th>' . "\n"
-                    . '          <th width="15%"><div align="center">'.$langPages.'</div></th>' . "\n"
-                    . '          <th width="15%" colspan="3" ><div align="center">'.$langActions.'</div></th>'
+                    . '          <th width="70"><div align="center">'.$langPages.'</div></th>' . "\n"
+                    . '          <th colspan="3" ><div align="center">'.$langActions.'</div></th>'
                     . '        </tr>' . "\n" ;
             }
             // else display title only
@@ -487,11 +487,11 @@ function confirmation (name)
             {
                 $tool_content .= '' . "\n"
                     . '        <tr>' . "\n"
-                    . '          <td width="1%">&nbsp;</td>' . "\n"
-                    . '          <td><div align="left">'.$langTitle.'</div></td>' . "\n"
-                    . '          <td>'.$langDescription.'</td>' . "\n"
-                    . '          <td width="20%"><div align="center">'.$langWikiNumberOfPages.'</div></td>' . "\n"
-                    . '          <td width="20%"><div align="center">'.$langWikiRecentChanges.'</div></td>' . "\n"
+                    . '          <th width="1">&nbsp;</th>' . "\n"
+                    . '          <th width="250"><div align="left">'.$langTitle.'</div></th>' . "\n"
+                    . '          <th>'.$langDescription.'</th>' . "\n"
+                    . '          <th width="80"><div align="center">'.$langWikiNumberOfPages.'</div></th>' . "\n"
+                    . '          <th width="80"><div align="center">'.$langWikiRecentChanges.'</div></th>' . "\n"
                     . '        </tr>' . "\n" ;
             }
 
@@ -545,7 +545,7 @@ function confirmation (name)
                     $tool_content .= '</a>';
                     $tool_content .= '</div></td>' . "\n";
 
-                    $tool_content .= '          <td style="text-align: center;">';
+                    $tool_content .= '          <td width="5" style="text-align: center;">';
                     // display direct link to main page
                     $tool_content .= '<a href="page.php?wikiId='
                         . $entry['id'].'&amp;action=recent'
@@ -562,7 +562,7 @@ function confirmation (name)
                     {
                         // edit link
 
-                        $tool_content .= '          <td style="text-align: center;">';
+                        $tool_content .= '          <td width="5" style="text-align: center;">';
                         $tool_content .= '<a href="'.$_SERVER['PHP_SELF'].'?wikiId='
                             . $entry['id'].'&amp;action=rqEdit'
                             . '">'
@@ -574,7 +574,7 @@ function confirmation (name)
 
                         // delete link
 
-                        $tool_content .= '<td style="text-align: center;">';
+                        $tool_content .= '<td width="5" style="text-align: center;">';
                         $tool_content .= '<a href="'.$_SERVER['PHP_SELF'].'?wikiId='
                             . $entry['id'].'&amp;action=exDelete'
                             . '">'
