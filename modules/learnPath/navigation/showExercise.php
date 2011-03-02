@@ -47,6 +47,10 @@ $require_current_course = TRUE;
 $path2add = 3;
 include("../../../include/init.php");
 
+// Genikws o kwdikas apo edw kai katw kanei akribws o,ti kai to
+// exercice_submit.php. Oi mones diafores einai xrhsh twn echo
+// anti gia to tool_content kai kapoies mikrodiafores opou xreiazetai
+ 
 require_once('../../exercice/exercise.class.php');
 require_once('../../exercice/question.class.php');
 require_once('../../exercice/answer.class.php');
@@ -328,6 +332,13 @@ echo ("</form>");
 echo ("</div></body>"."\n");
 echo ("</html>"."\n");
 
+// auth edw h function einai kata bash idia me thn antistoixh sto
+// exercise.lib.php, mono pou anti gia xrhsh tou tool_content kanei 
+// echo ton html kwdika epeidh 8eloume na ton deixnoume mesa sto 
+// iframe tou learningPath.
+// ta global vars pou orizontai, den exoun na kanoun se kati me to
+// register_globals, apla einai scoping twn metablhtwn pou yparxoun
+// pio panw se auto edw to php arxeio.
 function showQuestion($questionId, $onlyAnswers = false) {
 	global $picturePath;
 	global $langNoAnswer, $langColumnA, $langColumnB, $langMakeCorrespond;
