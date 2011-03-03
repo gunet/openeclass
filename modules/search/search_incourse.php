@@ -65,7 +65,6 @@ if(isset($_POST['search_terms'])) {
 	$query .= "' IN BOOLEAN MODE)";
 }
 
-
 if(empty($search_terms)) {
 	
 	// display form
@@ -227,7 +226,7 @@ if(empty($search_terms)) {
 			<tr><td>";
 			while($res = mysql_fetch_array($result))
 			{
-				$tool_content .= "<td><div class='Results'><li>".$res['post_text']."</li></div></td>";
+				$tool_content .= "<div class='Results'>".$res['post_text']."</div>";
 			}
 			$myquery = "SELECT * FROM forums WHERE MATCH (forum_name, forum_desc)".$query;
 			$result = db_query($myquery);		
@@ -320,7 +319,48 @@ if(empty($search_terms)) {
 			$found = true;
 		}
 	}
-	//ean den vrethikan apotelesmata, emfanish analogou mhnymatos
+	// search in cours_units and unit_resources
+	if ($course_units)
+	{
+		$myquery = "SELECT id, title, comments FROM course_units
+				WHERE course_id = $cours_id
+				AND visibility = 'v' 
+				AND MATCH (title, comments)".$query;
+		$result = db_query($myquery, $mysqlMainDb);
+		if(mysql_num_rows($result) > 0)
+		{
+			$tool_content .= "<table width='99%' class='Search' align='left'>
+			<tr><th width='180' class='left'>$langCourseUnits:</th></tr>
+			<tr><td>";
+			while($res = mysql_fetch_array($result))
+			{
+				if (empty($res['comments'])) {
+					$comments_text = "";
+				} else {
+					$comments_text = " $res[comments]";
+				}
+				$link = "${urlServer}modules/units/?id=$res[id]";				
+				$tool_content .= "<div class='Results'><a href='$link'>".$res['title']."</a> $comments_text</div>";
+				$myquery2 = "SELECT unit_id, title, comments FROM unit_resources
+						WHERE unit_id = $res[id]
+						AND MATCH(title, comments)".$query;
+				$result2 = db_query($myquery2, $mysqlMainDb);
+				if (mysql_num_rows($result2) > 0) {
+					while ($res2 = mysql_fetch_array($result2)) {
+						if (empty($res2['comments'])) {
+							$comments_text = "";
+						} else {
+							$comments_text = " $res2[comments]";
+						}
+						$tool_content .= "<div class='Results'>$res2[title] $comments_text</div>";	
+					}
+				}
+			}
+			$tool_content .= "</td></tr></table>";
+			$found = true;
+		}
+	}
+	// else ... no results found
 	if ($found == false) {
 		$tool_content .= "<br /><p class='alert1'>$langNoResult</p>";
 	}
