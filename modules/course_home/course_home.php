@@ -301,7 +301,7 @@ $tool_content .= "
         </table>
 
     
-
+<br>
         <table class='tbl_courseid' width='200'>
         <tr class='title1'>
         <td  class='title1'>$langTools
@@ -319,11 +319,12 @@ if ($is_adminOfCourse or
         $tool_content .="
         <tr>
           <td>
-        <div align='right' class='smaller'>
+          <div align='right' class='smaller'>
+                        <form action='{$urlServer}student_view.php' method='post'>
+              <input id='view_btn' type='image' src='../../template/classic/img/switch.png' name='submit' title='$button_message'/> | 
+            
            <a href='../../modules/contact/index.php' id='email_btn'><img src='../../template/classic/img/email.png' alt='icon' title='$langContactProf' /></a>
-              <form action='{$urlServer}student_view.php' method='post'>
-              <input id='view_btn' type='image' src='../../template/classic/img/switch.png' name='submit' title='$button_message'/>
-            </form>
+</form>
         </div>
           </td>
         </tr>";
