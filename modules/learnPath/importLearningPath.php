@@ -1196,12 +1196,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST) )
     $tool_content .= "\n<p><!-- Messages -->\n";
     foreach ( $okMsgs as $msg)
     {
-        $tool_content .= "\n<b>[</b><span class=\"correct\">$langSuccessOk</span><b>]</b>&nbsp;&nbsp;&nbsp;".$msg."<br />";
+        $tool_content .= "\n<span class=\"correct\">$langSuccessOk</span>".$msg."<br />";
     }
 
     foreach ( $errorMsgs as $msg)
     {
-        $tool_content .= "\n<b>[</b><span class=\"error\">$langError</span><b>]</b>&nbsp;&nbsp;&nbsp;".$msg."<br />";
+        $tool_content .= "\n<span class=\"error\">$langError</span>;".$msg."<br />";
     }
 
     $tool_content .= "\n<!-- End messages -->\n";

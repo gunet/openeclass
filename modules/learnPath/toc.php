@@ -155,7 +155,7 @@ foreach ($flatElementList as $module)
         else if($module['contentType'] == CTDOCUMENT_ )
         	$moduleImg = "docs_$image_bullet.png";
         else if($module['contentType'] == CTSCORM_ || $module['contentType'] == CTSCORMASSET_) // eidika otan einai scorm module, deixnoume allo eikonidio pou exei na kanei me thn proodo
-        	$moduleImg = "lp_notattempted.gif";
+        	$moduleImg = "lp_check.png";
         else
             $moduleImg = choose_image(basename($module['path']));
 
@@ -165,13 +165,13 @@ foreach ($flatElementList as $module)
 		unset($imagePassed);
 		if($module['credit'] == 'CREDIT' || $module['lesson_status'] == 'COMPLETED' || $module['lesson_status'] == 'PASSED') {
 			if ($module['contentType'] == CTSCORM_ || $module['contentType'] == CTSCORMASSET_)
-				$moduleImg = "lp_completed.gif";
+				$moduleImg = "lp_completed.png";
 			else
-				$imagePassed = '<img src="'.$imgRepositoryWeb.'tick1.gif" alt="'.$module['lesson_status'].'" title="'.$module['lesson_status'].'" />';
+				$imagePassed = '<img src="'.$imgRepositoryWeb.'tick.png" alt="'.$module['lesson_status'].'" title="'.$module['lesson_status'].'" />';
 		}
 
 		if(($module['contentType'] == CTSCORM_ || $module['contentType'] == CTSCORMASSET_) && $module['lesson_status'] == 'FAILED')
-			$moduleImg = "lp_failed.gif";
+			$moduleImg = "lp_failed.png";
 
 		if(isset($imagePassed))
 			echo $imagePassed;
