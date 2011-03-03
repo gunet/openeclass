@@ -245,10 +245,10 @@ switch ($type){
 	}
 }
 
-$bar_content .= "\n            <img src='../../template/classic/img/arrow.png' alt='icon'/><b>".$langCode."</b>: ".$fake_code."<br>".
-                "\n            <img src='../../template/classic/img/arrow.png' alt='icon'/><b>".$langTeachers."</b>: ".$professor."<br>".
-                "\n            <img src='../../template/classic/img/arrow.png' alt='icon'/><b>".$langFaculty."</b>: ".$faculte."<br>".
-                "\n            <img src='../../template/classic/img/arrow.png' alt='icon'/><b>".$langType."</b>: ".$lessonType."<br>";
+$bar_content .= "\n      <ul class='custom_list'><li><b>".$langCode."</b>: ".$fake_code."</li>".
+                "\n          <li><b>".$langTeachers."</b>: ".$professor."</li>".
+                "\n          <li><b>".$langFaculty."</b>: ".$faculte."</li>".
+                "\n          <li> <b>".$langType."</b>: ".$lessonType."</li>";
 
 $require_help = TRUE;
 $helpTopic = 'course_home';
@@ -279,8 +279,8 @@ if ($is_adminOfCourse) {
 			break;
 		}
 	}
-	$bar_content .= "\n            <b>$langConfidentiality</b>: $lessonStatus<br>";
-	$bar_content .= "\n            <b>$langUsers</b>: <a href='$urlAppend/modules/user/user.php'>$numUsers $langRegistered</a><br>";
+	$bar_content .= "\n           <li><b>$langConfidentiality</b>: $lessonStatus</li>";
+	$bar_content .= "\n           <li><b>$langUsers</b>: <a href='$urlAppend/modules/user/user.php'>$numUsers $langRegistered</a></li></ul>";
 }
 
 $tool_content .= "
