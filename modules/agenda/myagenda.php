@@ -140,7 +140,7 @@ function display_monthcalendar($agendaitems, $month, $year, $weekdaynames, $mont
 	$backwardsURL = "$_SERVER[PHP_SELF]?month=".($month==1 ? 12 : $month-1)."&amp;year=".($month==1 ? $year-1 : $year);
 	$forewardsURL = "$_SERVER[PHP_SELF]?month=".($month==12 ? 1 : $month+1)."&amp;year=".($month==12 ? $year+1 : $year);
 
-	$tool_content .=  "\n  <table width=99% class=\"tbl_border\">\n";
+	$tool_content .=  "\n  <table width=99% class=\"title1\">\n";
   	$tool_content .=  "\n  <tr>";
 	$tool_content .=  "\n    <th width='5'><a href=$backwardsURL>&lt;&lt;</a></th>";
 	$tool_content .=  "\n    <th class='center'><b>$monthName $year</b></th>";
