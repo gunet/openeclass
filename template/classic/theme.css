@@ -121,14 +121,6 @@ input[type=reset] {
 	padding: 3px;
 }
 
-.transfer_btn {
-    background-color: #dfdfdf !important;
-    border: 1px solid #687a92 !important;
-    color: #727266 !important;
-    padding: 3px;
-    margin: 0px;
-}
-
 
 legend {
 	color: #ffffff;
@@ -487,7 +479,6 @@ fieldset table.th {
 }
 
 
-
 /* icons */ 
 
 .briefcase_icon {
@@ -524,9 +515,6 @@ fieldset table.th {
 	background-repeat: no-repeat;
 	overflow:visible;
 }
-/* .HelpIcon {
-  padding-bottom: 0px;
-}*/
 
 /* messages and alerts */ 
 
@@ -602,8 +590,9 @@ fieldset table.th {
    5. Tables
 -------------------------------------*/
 .smaller {
-font-size: 11px;
-}	
+    font-size: 11px;
+}
+
 .tbl {
 	padding: 5px;
 	border: none;
@@ -664,9 +653,14 @@ font-size: 11px;
 	
 .tbl_alt th {
     font-weight: bold;
-    background-color: #dfdfdf; /* BEIGE  */
+    background-color: #73849b;
+    color: #ffffff;
     text-align: center;
-    padding: 3px;
+    padding: 8px;
+}
+
+.tbl_alt th a {
+    color: #ffffff;
 }
 
 .tbl_alt td, .tbl_alt th {
@@ -1138,3 +1132,20 @@ table.Search td {
     font-size: 11px;
 }
 /* ----- END Search ----- */
+
+
+
+/* ----- Learning Path ----- */
+
+.correct{ color: #749d1e;
+    background-image: url(img/tick.png); 
+    background-repeat: no-repeat;
+    padding-left: 20px;
+    margin-right: 20px;
+}
+.error{  color: #e66d08;
+    background-image: url(img/error.png); 
+    background-repeat: no-repeat;
+    padding-left: 20px;
+    margin-right: 20px; }
+
