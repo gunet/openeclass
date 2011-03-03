@@ -247,7 +247,7 @@ if (!isset($_GET['mailing']))  // RH: Mailing detail: no received files
 {
 	$numberDisplayed = count($dropbox_person -> receivedWork);
 	$tool_content .= "
-      <p class='sub_title1'>".strtoupper($dropbox_lang["receivedTitle"])."";
+      <p class='sub_title1'><img src=\"../../template/classic/img/inbox.png\">".strtoupper($dropbox_lang["receivedTitle"])."";
 
 	// check if there are received documents. If yes then display the icon deleteall
 	$dr_unid = urlencode($dropbox_unid);
@@ -339,7 +339,7 @@ $numSent = count($dropbox_person -> sentWork);
 $tool_content .= "
 
       <br />
-      <p class='sub_title1'>";
+      <p class='sub_title1'><img src=\"../../template/classic/img/outbox.png\">";
         $tool_content .= strtoupper($dropbox_lang["sentTitle"]);
         $tool_content .="</u>";
 	// if the user has sent files then display the icon deleteall
