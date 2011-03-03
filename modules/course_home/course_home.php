@@ -245,10 +245,10 @@ switch ($type){
 	}
 }
 
-$bar_content .= "\n            <p><b>".$langCode."</b>: ".$fake_code."</p>".
-                "\n            <p><b>".$langTeachers."</b>:<br /> ".$professor."</p>".
-                "\n            <p><b>".$langFaculty."</b>: ".$faculte."</p>".
-                "\n            <p><b>".$langType."</b>: ".$lessonType."</p>";
+$bar_content .= "\n            <b>".$langCode."</b>: ".$fake_code."<br>".
+                "\n            <b>".$langTeachers."</b>:<br /> ".$professor."<br>".
+                "\n            <b>".$langFaculty."</b>: ".$faculte."<br>".
+                "\n            <b>".$langType."</b>: ".$lessonType."<br>";
 
 $require_help = TRUE;
 $helpTopic = 'course_home';
@@ -279,8 +279,8 @@ if ($is_adminOfCourse) {
 			break;
 		}
 	}
-	$bar_content .= "\n            <p><b>$langConfidentiality</b>: $lessonStatus</p>";
-	$bar_content .= "\n            <p><b>$langUsers</b>: <a href='$urlAppend/modules/user/user.php'>$numUsers $langRegistered</a></p>";
+	$bar_content .= "\n            <b>$langConfidentiality</b>: $lessonStatus<br>";
+	$bar_content .= "\n            <b>$langUsers</b>: <a href='$urlAppend/modules/user/user.php'>$numUsers $langRegistered</a><br>";
 }
 
 $tool_content .= "
@@ -304,12 +304,10 @@ $tool_content .= "
 
         <table class='tbl_courseid' width='200'>
         <tr class='title1'>
-          <td  class='title1'>$langTools</td>
+        <td  class='title1'>$langTools:
+        </td>
         </tr>
-        <tr>
-          <td class='smaller'>
-            <label for='email_btn'>$langContactProf:</label> <a href='../../modules/contact/index.php' id='email_btn'><img src='../../template/classic/img/email.png' alt='icon' title='$langEmail' /></a></td>
-          </tr>";
+        ";
 
 if ($is_adminOfCourse or
     (isset($_SESSION['saved_statut']) and $_SESSION['saved_statut'] == 1)) {
@@ -320,11 +318,14 @@ if ($is_adminOfCourse or
         }
         $tool_content .="
         <tr>
-          <td class='smaller'>
-            <form action='{$urlServer}student_view.php' method='post'>
+          <td>
+        <div align='right' class='smaller'>
+        <label for='email_btn'></label> <a href='../../modules/contact/index.php' id='email_btn'><img src='../../template/classic/img/email.png' alt='icon' title='$langContactProf' /></a>
+              <form action='{$urlServer}student_view.php' method='post'>
               <label for='view_btn'>$button_message</label>
               <input id='view_btn' type='image' src='../../template/classic/img/switch.png' name='submit' />
             </form>
+        </div>
           </td>
         </tr>";
 }
