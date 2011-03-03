@@ -245,10 +245,10 @@ switch ($type){
 	}
 }
 
-$bar_content .= "\n            <b>".$langCode."</b>: ".$fake_code."<br>".
-                "\n            <b>".$langTeachers."</b>:<br /> ".$professor."<br>".
-                "\n            <b>".$langFaculty."</b>: ".$faculte."<br>".
-                "\n            <b>".$langType."</b>: ".$lessonType."<br>";
+$bar_content .= "\n            <img src='../../template/classic/img/arrow.png' alt='icon'/><b>".$langCode."</b>: ".$fake_code."<br>".
+                "\n            <img src='../../template/classic/img/arrow.png' alt='icon'/><b>".$langTeachers."</b>: ".$professor."<br>".
+                "\n            <img src='../../template/classic/img/arrow.png' alt='icon'/><b>".$langFaculty."</b>: ".$faculte."<br>".
+                "\n            <img src='../../template/classic/img/arrow.png' alt='icon'/><b>".$langType."</b>: ".$lessonType."<br>";
 
 $require_help = TRUE;
 $helpTopic = 'course_home';
