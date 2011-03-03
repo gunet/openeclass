@@ -1152,3 +1152,18 @@ table.Search td {
     padding-left: 20px;
     margin-right: 20px; }
 
+
+.custom_list {
+    padding: 0 15px 0 15px;
+    margin: 0 5px;
+}
+
+.custom_list ul {
+    margin: 0;
+    padding: 0;
+}
+
+.custom_list li {
+	list-style-image:url(img/arrow_bullet.png);
+}
+
