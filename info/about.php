@@ -38,7 +38,7 @@ $tool_content .= "<table class='tbl1' width='99%'>
       <tr>
         <td valign='top' width='200'><strong>$langVersion:</strong></td>
         <td><b><a href='http://www.openeclass.org/' title='Open eClass Portal' target='_blank'>Open eClass " . ECLASS_VERSION . "&raquo;</a></b></td>
-        <td width='150' rowspan='4' valign='top' id='info'>&nbsp;</td>
+        <td rowspan='4' valign='top' id='info'>&nbsp;</td>
       </tr><tr>
         <td valign='top'><strong>$langCoursesHeader:</strong></td>
         <td>";
