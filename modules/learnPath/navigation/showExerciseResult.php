@@ -41,19 +41,24 @@
     @todo:
 ==============================================================================
 */
-$require_current_course = TRUE;
-$path2add = 3;
-include("../../../include/init.php");
 
+// Ta objects prepei na ginoun include prin thn init
+// gia logous pou sxetizontai me to object loading 
+// apo to session
 require_once('../../exercice/exercise.class.php');
 require_once('../../exercice/question.class.php');
 require_once('../../exercice/answer.class.php');
+
+$require_current_course = TRUE;
+$path2add = 3;
+include("../../../include/init.php");
 
 // answer types
 define('UNIQUE_ANSWER',	1);
 define('MULTIPLE_ANSWER', 2);
 define('FILL_IN_BLANKS', 3);
 define('MATCHING', 4);
+define('TRUE_FALSE', 5);
 
 $TBL_EXERCICE_QUESTION='exercice_question';
 $TBL_EXERCICES='exercices';
@@ -69,415 +74,346 @@ $TABLEUSERMODULEPROGRESS= "lp_user_module_progress";
 require_once('../../../include/lib/learnPathLib.inc.php');
 require_once('../../../include/lib/textLib.inc.php');
 
-$nameTools = $langExercices;
-// calculate time needed to complete the exercise
-if (isset($_SESSION['exeStartTime']))
-{
-   $timeToCompleteExe =  time() - $_SESSION['exeStartTime'];
-}
-
-// Destroy cookie
-if (!setcookie("marvelous_cookie", "", time()-3600, "/")) {
-	header('Location: ../../exercice/exercise_redirect.php');
-	exit();
-}
-
-// latex support
-include_once "$webDir"."/modules/latexrender/latex.php";
-
+// Ksekiname to diko mas html output giati probaloume mesa se iframe
 echo "<html>"."\n"
     .'<head>'."\n"
     .'<meta http-equiv="Content-Type" content="text/html; charset='.$charset.'">'."\n"
     .'<link href="../../../template/classic/tool_content.css" rel="stylesheet" type="text/css" />'."\n"
     .'<link href="../tool.css" rel="stylesheet" type="text/css" />'."\n"
-    .'<title>'.$langExercices.'</title>'."\n"
+    .'<title>'.$langExercicesResult.'</title>'."\n"
     .'</head>'."\n"
     .'<body style="margin: 2px;">'."\n"
     .'<div align="left">';
+    
+// ypologismos tou xronou pou xreiasthke o xrhsths gia thn oloklhrwsh ths askhshs
+if (isset($_SESSION['exercise_begin_time'])) {
+   $timeToCompleteExe = time() - $_SESSION['exercise_begin_time'];
+}
 
+$nameTools = $langExercicesResult;
+if (isset($_SESSION['objExercise'])) {
+    $objExercise = $_SESSION['objExercise'];
+}
 
 // if the above variables are empty or incorrect, stops the script
-if(!is_array($exerciseResult) || !is_array($questionList) || !is_object($objExercise))
-{
-	die($langExerciseNotFound);
+if(!is_array($_SESSION['exerciseResult']) || !is_array($_SESSION['questionList']) || !is_object($objExercise)) {
+	echo ($langExerciseNotFound);
+	exit();
 }
 
-$exerciseTitle=$objExercise->selectTitle();
-$exerciseId=$objExercise->selectId();
+$exerciseTitle = $objExercise->selectTitle();
+$exerciseDescription = $objExercise->selectDescription();
+$exerciseDescription_temp = nl2br(make_clickable($exerciseDescription));
+$exerciseDescription_temp = mathfilter($exerciseDescription_temp, 12, "../../courses/mathimg/");
+$displayResults = $objExercise->selectResults();
+$displayScore = $objExercise->selectScore(); 
 
-// ------------ calculata exercise constrains ----------------------------
-$eid=$objExercise->selectId();
-mysql_select_db($currentCourseID);
-$sql="SELECT RecordStartDate FROM `exercise_user_record` WHERE eid='$eid' AND uid='$uid'";
-$result=db_query($sql, $currentCourseID);
-$attempt = count($result);
-$row=mysql_fetch_array($result);
-$RecordStartDate = ($RecordStartTime_temp = $row[count($result)-1]);
-$RecordStartTime_temp = mktime(substr($RecordStartTime_temp, 11,2),substr($RecordStartTime_temp, 14,2),substr($RecordStartTime_temp, 17,2),substr($RecordStartTime_temp, 5,2),substr($RecordStartTime_temp, 8,2),substr($RecordStartTime_temp, 0,4));
-$exerciseTimeConstrain=$objExercise->selectTimeConstrain();
-$exerciseTimeConstrain = $exerciseTimeConstrain*60;
-$RecordEndDate = ($SubmitDate = date("Y-m-d H:i:s"));
-$SubmitDate = mktime(substr($SubmitDate, 11,2),substr($SubmitDate, 14,2),substr($SubmitDate, 17,2),substr($SubmitDate, 5,2),substr($SubmitDate, 8,2),substr($SubmitDate, 0,4));
-if (!$exerciseTimeConstrain) {
-  $exerciseTimeConstrain = (7 * 24 * 60 * 60);
-}
-$OnTime = $RecordStartTime_temp + $exerciseTimeConstrain - $SubmitDate;
+echo ("
+  <table class=\"tbl_border\" width=\"99%\">
+  <tr class='odd'>
+    <td colspan=\"2\"><b>".stripslashes($exerciseTitle)."</b>
+    <br/>".stripslashes($exerciseDescription_temp)."
+    </td>
+  </tr>
+  </table>");
 
-if ($OnTime <= 0)  { // exercise time limit has expired
-
-echo <<<cData
-      <br/>
-      <table width="99%" class="Question">
-      <thead>
-      <tr>
-        <td class="alert1">${langExerciseExpiredTime}</td>
-      </tr>
-      </thead>
-      </table>
-  <h3>${exerciseTitle}</h3>
-  <p>${langExerciseExpired}</p>
-cData;
-
-exit;
-
-} else {
-
-    echo "
-      <table class=\"Exercise\" width=\"99%\">
-      <thead>
-      <tr>
-        <td colspan=\"2\">
-        <b>".stripslashes($exerciseTitle)."</b>
-        <br/><br/>
-        ".stripslashes($exerciseDescription_temp)."
-        </td>
-      </tr>
-      </thead>
-      </table>";
-
-
+// probaloume th dikia mas forma me to diko mas action 
+// kai me to katallhlo hidden pedio
 echo "
 	<form method=\"GET\" action=\"backFromExercise.php\">".
 	"<input type=\"hidden\" name=\"op\" value=\"finish\">";
 
-	$i=$totalScore=$totalWeighting=0;
+$i=$totalScore=$totalWeighting=0;
 
-	// for each question
-	foreach($questionList as $questionId)
+// for each question
+
+foreach($_SESSION['questionList'] as $questionId) {
+	// gets the student choice for this question
+	$choice = @$_SESSION['exerciseResult'][$questionId];
+	// creates a temporary Question object
+	$objQuestionTmp=new Question();
+	$objQuestionTmp->read($questionId);
+
+	$questionName=$objQuestionTmp->selectTitle();
+	$questionName=$questionName;
+	$questionDescription=$objQuestionTmp->selectDescription();
+	$questionDescription=$questionDescription;
+	$questionDescription_temp = nl2br(make_clickable($questionDescription));
+	$questionDescription_temp = mathfilter($questionDescription_temp, 12, "../../courses/mathimg/");
+	$questionWeighting=$objQuestionTmp->selectWeighting();
+	$answerType=$objQuestionTmp->selectType();
+
+	// destruction of the Question object
+	unset($objQuestionTmp);
+
+	if($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER || $answerType == TRUE_FALSE)
 	{
-		// gets the student choice for this question
-		$choice=@$exerciseResult[$questionId];
-
-		// creates a temporary Question object
-		$objQuestionTmp=new Question();
-
-		$objQuestionTmp->read($questionId);
-
-		$questionName=$objQuestionTmp->selectTitle();
-		$questionName=latex_content($questionName);
-		$questionWeighting=$objQuestionTmp->selectWeighting();
-		$answerType=$objQuestionTmp->selectType();
-
-		// destruction of the Question object
-		unset($objQuestionTmp);
-
-		if($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER)
-		{
-			$colspan=4;
-		}
-		elseif($answerType == MATCHING)
-		{
-			$colspan=2;
-		}
-		else
-		{
-			$colspan=1;
-		}
-$iplus = $i+1;
-echo <<<cData
-      <br/>
-      <table width="99%" class="Question">
-      <thead>
-      <tr>
-        <td colspan="${colspan}"><b><u>$langQuestion</u>: $iplus</b></td>
-      </tr>
-      <tr>
-        <td colspan="${colspan}"><b>${questionName}</b><br/>
-        <small>${questionDescription_temp}</small><br/><br/></td>
-      </tr>
-      </thead>
-      <tbody>
-cData;
-
-		if($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER)
-		{
-echo <<<cData
-      <tr>
-        <td width="5%" align="center" style="background: #fff;"><b>${langChoice}</b></td>
-        <td width="5%" align="center" style="background: #fff;"><b>${langExpectedChoice}</b></td>
-        <td width="45%" align="center" style="background: #fff;"><b>${langAnswer}</b></td>
-        <td width="45%" align="center" style="background: #fff;"><b>${langComment}</b></td>
-      </tr>
-cData;
-
+		$colspan=4;
 	}
-	elseif($answerType == FILL_IN_BLANKS)
+	elseif($answerType == MATCHING)
 	{
+		$colspan=2;
+	}
+	else
+	{
+		$colspan=1;
+	}
+	$iplus=$i+1;
+	echo ("
+    <br/>
+    <table width='99%' class='tbl'>
+    <tr class='odd'>
+      <td colspan='${colspan}'><b><u>$langQuestion</u>: $iplus</b></td>
+    </tr>
+    <tr>
+      <td class='even' colspan='${colspan}'>
+        <b>$questionName</b>
+        <br />
+        $questionDescription_temp
+        <br/><br/>
+      </td>
+    </tr>");
 
-echo <<<cData
-      <tr>
-        <td style="background: #fff;"><b>${langAnswer}</b></td>
-      </tr>
-cData;
+	$questionScore=0;
 
-	} else {
-
-echo <<<cData
-      <tr>
-        <td width="50%" style="background: #fff;"><b>${langElementList}</b></td>
-        <td width="50%" style="background: #fff;"><b>${langCorrespondsTo}</b></td>
-      </tr>
-cData;
-
+	if ($displayResults == 1) {
+		if($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER || $answerType == TRUE_FALSE) {
+			echo ("
+    <tr class='even'>
+      <td width='50' valign='top'><b>$langChoice</b></td>
+      <td width='50' class='center' valign='top'><b>$langExpectedChoice</b></td>
+      <td valign='top'><b>$langAnswer</b></td>
+      <td valign='top'><b>$langComment</b></td>
+    </tr>");
+		} elseif($answerType == FILL_IN_BLANKS) {
+			echo ("
+    <tr>
+      <td class='even'><b>$langAnswer</b></td>
+    </tr>");
+		} else {
+			echo ("
+    <tr class='even'>
+      <td><b>$langElementList</b></td>
+      <td><b>$langCorrespondsTo</b></td>
+    </tr>");
 		}
-		// construction of the Answer object
-		$objAnswerTmp=new Answer($questionId);
-		$nbrAnswers=$objAnswerTmp->selectNbrAnswers();
-		$questionScore=0;
-		for($answerId=1;$answerId <= $nbrAnswers;$answerId++)
+	}
+	// construction of the Answer object
+	$objAnswerTmp=new Answer($questionId);
+	$nbrAnswers=$objAnswerTmp->selectNbrAnswers();
+	
+	for($answerId=1;$answerId <= $nbrAnswers;$answerId++) {
+		$answer=$objAnswerTmp->selectAnswer($answerId);
+		$answerComment=$objAnswerTmp->selectComment($answerId);
+		$answerCorrect=$objAnswerTmp->isCorrect($answerId);
+		$answerWeighting=$objAnswerTmp->selectWeighting($answerId);
+		// support for math symbols
+		$answer = mathfilter($answer, 12, "../../courses/mathimg/");
+		$answerComment = mathfilter($answerComment, 12, "../../courses/mathimg/");
+
+		switch($answerType)
 		{
-			$answer=$objAnswerTmp->selectAnswer($answerId);
-			$answerComment=$objAnswerTmp->selectComment($answerId);
-			$answerCorrect=$objAnswerTmp->isCorrect($answerId);
-			$answerWeighting=$objAnswerTmp->selectWeighting($answerId);
-			$answer=latex_content($answer);
-
-			switch($answerType)
-			{
-				// for unique answer
-				case UNIQUE_ANSWER :	$studentChoice=($choice == $answerId)?1:0;
-
-								if($studentChoice)
-								{
-							  	$questionScore+=$answerWeighting;
-								$totalScore+=$answerWeighting;
-								}
-								break;
-				// for multiple answers
-				case MULTIPLE_ANSWER :	$studentChoice=@$choice[$answerId];
-							if($studentChoice)
-							{
-								$questionScore+=$answerWeighting;
-								$totalScore+=$answerWeighting;
-							}
-							break;
-				// for fill in the blanks
-				case FILL_IN_BLANKS :	// splits text and weightings that are joined with the character '::'
+			// for unique answer
+			case UNIQUE_ANSWER :	$studentChoice=($choice == $answerId)?1:0;
+				if($studentChoice) {
+					$questionScore+=$answerWeighting;
+					$totalScore+=$answerWeighting;
+				}
+				break;
+			// for multiple answers
+			case MULTIPLE_ANSWER :	$studentChoice=@$choice[$answerId];
+				if($studentChoice) {
+					$questionScore+=$answerWeighting;
+					$totalScore+=$answerWeighting;
+					}
+				break;
+			// for fill in the blanks
+			case FILL_IN_BLANKS : // splits text and weightings that are joined with the char '::'
 					list($answer,$answerWeighting)=explode('::',$answer);
-
 					// splits weightings that are joined with a comma
 					$answerWeighting=explode(',',$answerWeighting);
-
 					// we save the answer because it will be modified
 					$temp=$answer;
 					$answer='';
 					$j=0;
 					// the loop will stop at the end of the text
-						while(1)
-						{
-						// quits the loop if there are no more blanks
-						if(($pos = strpos($temp,'[')) === false)
-							{
-							// adds the end of the text
-							$answer.=$temp;
-							break;
-							}
-					// adds the piece of text that is before the blank and ended by [
-							$answer.=substr($temp,0,$pos+1);
-							$temp=substr($temp,$pos+1);
+					while(1)
+					{
 					// quits the loop if there are no more blanks
-						if(($pos = strpos($temp,']')) === false)
-							{
-							// adds the end of the text
-							$answer.=$temp;
-							break;
-							}
-							$choice[$j]=trim(stripslashes($choice[$j]));
-					// if the word entered by the student IS the same as the one defined by the professor
-						if(strtolower(substr($temp,0,$pos)) == strtolower($choice[$j]))
-						{
-						// gives the related weighting to the student
-						$questionScore+=$answerWeighting[$j];
-						// increments total score
-						$totalScore+=$answerWeighting[$j];
-						// adds the word in green at the end of the string
-						$answer.=$choice[$j];
-						}
-					// else if the word entered by the student IS NOT the same as the one defined by the professor
-						elseif(!empty($choice[$j]))
-						{
+					if(($pos = strpos($temp,'[')) === false) {
+						// adds the end of the text
+						$answer.=$temp;
+						break;
+					}
+				// adds the piece of text that is before the blank and ended by [
+					$answer.=substr($temp,0,$pos+1);
+					$temp=substr($temp,$pos+1);
+					// quits the loop if there are no more blanks
+					if(($pos = strpos($temp,']')) === false) {
+						// adds the end of the text
+						$answer.=$temp;
+						break;
+					}
+					$choice[$j]=trim(stripslashes($choice[$j]));
+				// if the word entered is the same as the one defined by the professor
+				if(strtolower(substr($temp,0,$pos)) == strtolower($choice[$j])) {
+					// gives the related weighting to the student
+					$questionScore+=$answerWeighting[$j];
+					// increments total score
+					$totalScore+=$answerWeighting[$j];
+					// adds the word in green at the end of the string
+					$answer.=$choice[$j];
+				}
+			// else if the word entered is not the same as the one defined by the professor
+					elseif(!empty($choice[$j])) {
 						// adds the word in red at the end of the string, and strikes it
 						$answer.='<font color="red"><s>'.$choice[$j].'</s></font>';
-						}
-						else
-						{
+					} else {
 						// adds a tabulation if no word has been typed by the student
 						$answer.='&nbsp;&nbsp;&nbsp;';
+					}
+					// adds the correct word, followed by ] to close the blank
+					$answer.=' / <font color="green"><b>'.substr($temp,0,$pos).'</b></font>]';
+					$j++;
+					$temp=substr($temp,$pos+1);
+					}
+				break;
+			// for matching
+			case MATCHING :	if($answerCorrect) {
+						if($answerCorrect == $choice[$answerId]) {
+							$questionScore+=$answerWeighting;
+							$totalScore+=$answerWeighting;
+							$choice[$answerId]=$matching[$choice[$answerId]];
 						}
-						// adds the correct word, followed by ] to close the blank
-						$answer.=' / <font color="green"><b>'.substr($temp,0,$pos).'</b></font>]';
-						$j++;
-						$temp=substr($temp,$pos+1);
+						elseif(!$choice[$answerId]) {
+							$choice[$answerId]='&nbsp;&nbsp;&nbsp;';
+						} else {
+							$choice[$answerId]='<font color="red">
+							<s>'.$matching[$choice[$answerId]].'</s>
+							</font>';
 						}
-						break;
-				// for matching
-				case MATCHING :	if($answerCorrect)
-						{
-							if($answerCorrect == $choice[$answerId])
-								{
-								$questionScore+=$answerWeighting;
-									$totalScore+=$answerWeighting;
-									$choice[$answerId]=$matching[$choice[$answerId]];
-								}
-									elseif(!$choice[$answerId])
-									{
-									$choice[$answerId]='&nbsp;&nbsp;&nbsp;';
-									}
-									else
-									{
-									$choice[$answerId]='<font color="red"><s>'.$matching[$choice[$answerId]].'</s></font>';
-									}
-								}
-								else
-								{
-									$matching[$answerId]=$answer;
-								}
-							break;
-			}	// end switch()
-
-			if($answerType != MATCHING || $answerCorrect)
-			{
-				if($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER)
-				{
-echo <<<cData
-      <tr>
-        <td width="5%" style="background: #fff;"><div align="center">
-        <img src="../../../template/classic/img/
-cData;
-
-	if ($answerType == UNIQUE_ANSWER)
-		echo "radio";
-	else
-		echo "checkbox";
-
-	if ($studentChoice)
-		echo "_on";
-	else
-		echo '_off';
-
-	echo <<<cData
-		.gif" border="0"></div>
-        </td>
-        <td width="5%" style="background: #fff;"><div align="center">
-cData;
-
-
-	if ($answerType == UNIQUE_ANSWER)
-		echo "<img src=\"../../../template/classic/img/radio";
-	else
-		echo "<img src=\"../../../template/classic/img/checkbox";
-	if ($answerCorrect)
-		echo "_on";
-	else
-		echo "_off";
-
-	echo ".gif\" border=\"0\">";
-
-  echo <<<cData
-        </td>
-        <td width="45%" style="background: #fff;">${answer}</td>
-        <td width="45%" style="background: #fff;">
-cData;
-
-if($studentChoice)
-	echo nl2br(make_clickable($answerComment));
-else
-	echo '&nbsp;';
-
-  echo "</td></tr>";
-
-	} elseif($answerType == FILL_IN_BLANKS) {
-
-echo "
-      <tr>
-        <td style=\"background: #fff;\">".nl2br($answer)."</td>
-      </tr>";
-
-	} else {
-
-echo <<<cData
-      <tr>
-        <td width="50%" style="background: #fff;">${answer}</td>
-        <td width="50%" style="background: #fff;">${choice[$answerId]} / <font color="green"><b>${matching[$answerCorrect]}</b></font></td>
-      </tr>
-cData;
-
-		}
+					} else {
+						$matching[$answerId]=$answer;
+					}
+				break;
+			case TRUE_FALSE : $studentChoice=($choice == $answerId)?1:0;
+					if($studentChoice) {
+						$questionScore+=$answerWeighting;
+						$totalScore+=$answerWeighting;
+					}
+				break;
+		}	// end switch()
+		if ($displayResults == 1) { 
+			if($answerType != MATCHING || $answerCorrect) {
+				if($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER || $answerType == TRUE_FALSE) {
+					echo ("
+    <tr class='even'>
+      <td>
+      <div align='center'><img src='../../../template/classic/img/");
+					if ($answerType == UNIQUE_ANSWER || $answerType == TRUE_FALSE) {
+						echo ("radio");
+					} else {
+						echo ("checkbox");
+					}
+					if ($studentChoice) {
+						echo ("_on");
+					} else {
+						echo ('_off');
+					}
+		
+					echo (".gif' border='0' /></div>
+      </td>
+      <td><div align='center'>");
+	
+					if ($answerType == UNIQUE_ANSWER || $answerType == TRUE_FALSE) {
+						echo ("<img src=\"../../../template/classic/img/radio");
+					} else {
+						echo ("<img src=\"../../../template/classic/img/checkbox");
+					}
+					if ($answerCorrect) {
+						echo ("_on");
+					} else {
+						echo ("_off");	
+					}
+					echo (".gif\" /></div>");	
+					echo ("
+      </td>
+      <td>${answer}</td>
+      <td>");
+					if ($studentChoice) {
+						echo nl2br(make_clickable($answerComment)); 
+					} else { 
+						echo ('&nbsp;');
+					} 
+					echo ("
+      </td>
+    </tr>");
+				} elseif($answerType == FILL_IN_BLANKS) {
+					echo ("
+    <tr class='even'>
+      <td>".nl2br($answer)."</td>
+    </tr>");
+				} else {
+					echo ("
+    <tr class='even'>
+      <td>${answer}</td>
+      <td>${choice[$answerId]} / <font color='green'><b>${matching[$answerCorrect]}</b></font></td>
+    </tr>");
+				}
+			} 
+		} // end of if
+	}	// end for()
+	 if ($displayScore == 1) {
+		echo ("
+    <tr class='even'>
+      <td colspan='$colspan' class='odd'><div align='right'>
+		$langQuestionScore: <b>$questionScore/$questionWeighting</b></div>
+      </td>
+    </tr>");
 	}
-}	// end for()
+	echo ("
+    </table>");
+	// destruction of Answer
+	unset($objAnswerTmp);
+	$i++;
+	$totalWeighting += $questionWeighting;
+}	// end foreach()
 
-echo <<<cData
-      <tr>
-        <td colspan="${colspan}" class="score">
-        ${langQuestionScore}: <b>${questionScore}/${questionWeighting}</b>
-        </td>
-      </tr>
-      </tbody>
-      </table>
-cData;
+// update db with results
+$eid=$objExercise->selectId();
+mysql_select_db($currentCourseID);
 
-		// destruction of Answer
-		unset($objAnswerTmp);
-		$i++;
-		$totalWeighting+=$questionWeighting;
-	}	// end foreach()
+$sql="SELECT RecordStartDate FROM `exercise_user_record` WHERE eid='$eid' AND uid='$uid'";
+$result=db_query($sql);
+$attempt = count($result);
 
+$sql="SELECT MAX(eurid) FROM `exercise_user_record` WHERE eid='$eid' AND uid='$uid'";
+$result = db_query($sql);
+$row= mysql_fetch_row($result);
+$eurid = $row[0];
 
+// record results of exercise
+$sql="UPDATE exercise_user_record SET TotalScore='$totalScore', TotalWeighting='$totalWeighting',
+	attempt='$attempt' WHERE eurid='$eurid'";
+db_query($sql, $currentCourseID);
 
-/////////////////////////////////////////////////////////////////////////////
-// UPDATE results to DB
-/////////////////////////////////////////////////////////////////////////////
+if ($displayScore == 1) {
+	echo ("
+    <br/>
+    <table width='99%' class='tbl'>
+    <tr class='odd'>
+	<td class='right'>$langYourTotalScore: <b>$totalScore/$totalWeighting</b>
+      </td>
+    </tr>
+    </table>");
+}
+echo ("
+  <br/>
+  <div align='center'><input type='submit' value='$langFinish' /></div>
+  <br />
+  </form><br />");
 
-$sql="SELECT eurid FROM `exercise_user_record` WHERE eid='$eid' AND uid='$uid'";
-  $result = mysql_query($sql);
-  $row=mysql_fetch_array($result);
-  $x = $row[count($result)-1];
-  $eurid = $row[count($result)-1];
-  // record end/results of exercise
-  $sql="UPDATE `exercise_user_record` SET RecordEndDate='$RecordEndDate',TotalScore='$totalScore', TotalWeighting='$totalWeighting', attempt='$attempt' WHERE eurid='$eurid'";
-  db_query($sql,$currentCourseID);
-
-echo <<<cData
-      <br/>
-      <table width="99%" class="Exercise">
-      <thead>
-      <tr>
-        <td class="score">
-        ${langYourTotalScore}: <b>${totalScore}/${totalWeighting}</b>
-        </td>
-      </tr>
-      </thead>
-      </table>
-
-      <br/>
-      <div align="center">
-        <input type="submit" value="${langFinish}">
-      </div>
-
-
-      <br/></form><br>
-cData;
-
+// apo edw kai katw einai LP specific
 // record progression
 // update raw in DB to keep the best one, so update only if new raw is better  AND if user NOT anonymous
 if($uid)
@@ -536,6 +472,6 @@ if($uid)
 				AND `user_id` = " . (int)$uid . "";
 	db_query($sql);
 	}
-}
+
 echo "</div></body></html>"."\n";
 ?>

@@ -42,6 +42,13 @@
 ==============================================================================
 */
 
+// Ta objects prepei na ginoun include prin thn init
+// gia logous pou sxetizontai me to object loading 
+// apo to session
+require_once('../../exercice/exercise.class.php');
+require_once('../../exercice/question.class.php');
+require_once('../../exercice/answer.class.php');
+
 $require_current_course = TRUE;
 
 $path2add = 3;
@@ -51,9 +58,6 @@ include("../../../include/init.php");
 // exercice_submit.php. Oi mones diafores einai xrhsh twn echo
 // anti gia to tool_content kai kapoies mikrodiafores opou xreiazetai
  
-require_once('../../exercice/exercise.class.php');
-require_once('../../exercice/question.class.php');
-require_once('../../exercice/answer.class.php');
 require_once('../../../include/lib/textLib.inc.php');
 
 // answer types
