@@ -335,19 +335,12 @@ if ($is_adminOfCourse or
 $tool_content .= "
       </td>
    </tr>
-   <tr>
-      <td colspan='3' valign='top'>
-
-        <table width='99%' class='tbl'>
+   </table>
+<table width='99%' class='tbl'>
         <tr>
           <td>$cunits_content</td>
-        </tr>
-        </table>
-
-      </td>
-   </tr>
-   </table>
-
+    </tr>
+  </table>
 </div>
 ";
 draw($tool_content, 2, '', $head_content);

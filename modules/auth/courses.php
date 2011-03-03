@@ -139,7 +139,7 @@ if (isset($_POST["submit"])) {
 				</form>";
 		} else {
 			if ($fac) {
-				$tool_content .= "<table width='99%' align='left'>
+				$tool_content .= "<table align='left'>
 				<tr>
 				<td><a name='top'>&nbsp;</a>$langFaculty:&nbsp;<b>$fac</b></td>
 				<td>&nbsp;</td>
