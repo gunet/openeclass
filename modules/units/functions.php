@@ -517,7 +517,7 @@ function show_linkcat($title, $comments, $resource_id, $linkcat_id, $visibility)
 	$content = $linkcontent = '';
 	$comment_box = $class_vis = $imagelink = $link = '';
         $title = htmlspecialchars($title);
-	$sql = db_query("SELECT * FROM link_category WHERE course_id = $cours_id AND id = $linkcat_id");
+	$sql = db_query("SELECT * FROM `$mysqlMainDb`.link_category WHERE course_id = $cours_id AND id = $linkcat_id");
 	if (mysql_num_rows($sql) == 0) { // check if it was deleted
 		if (!$is_adminOfCourse) {
 			return '';
@@ -539,7 +539,7 @@ function show_linkcat($title, $comments, $resource_id, $linkcat_id, $visibility)
                                 $comment_box = '';
                         }
 
-			$sql2 = db_query("SELECT * FROM link WHERE course_id = $cours_id AND category = $lcat[id]");
+			$sql2 = db_query("SELECT * FROM `$mysqlMainDb`.link WHERE course_id = $cours_id AND category = $lcat[id]");
 			while ($l = mysql_fetch_array($sql2, MYSQL_ASSOC)) {
 				$imagelink = "<img src='../../template/classic/img/links_" .
 				($visibility == 'i'? 'off': 'on') . ".gif' />";
