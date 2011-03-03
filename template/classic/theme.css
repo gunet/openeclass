@@ -637,9 +637,10 @@ fieldset table.th {
 }
 
 .tbl_border th {
-        font-weight: bold;
-        background-color: #f8f8f8; /* BEIGE  */
-        padding: 3px;
+    font-weight: bold;
+    background-color: #73849b;
+    color: #ffffff;
+    padding: 5px;
 }
 
 .tbl_course_type {
@@ -660,7 +661,7 @@ fieldset table.th {
     background-color: #73849b;
     color: #ffffff;
     text-align: center;
-    padding: 8px;
+    padding: 5px;
 }
 
 .tbl_alt th a {
@@ -1102,8 +1103,6 @@ li.pagination {
 .today {
     color: #627aad;
     background-color:#FAEDED;
-    border-top: 1px dotted #F0C9C1;
-    border-bottom: 1px dotted #F0C9C1;
 }
 
 /* ----- START Search ----- */
