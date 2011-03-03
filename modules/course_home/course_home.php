@@ -289,7 +289,7 @@ $tool_content .= "
    <table width='99%'>
    <tr>
       <td valign='top'>$main_content</td>
-      <td width='180' valign='top'>
+      <td width='200' valign='top'>
 
         <table class='tbl_courseid' width='200'>
         <tr class='title1'>
@@ -300,11 +300,11 @@ $tool_content .= "
         </tr>
         </table>
 
-        <br />
+    
 
         <table class='tbl_courseid' width='200'>
         <tr class='title1'>
-        <td  class='title1'>$langTools:
+        <td  class='title1'>$langTools
         </td>
         </tr>
         ";
@@ -320,10 +320,9 @@ if ($is_adminOfCourse or
         <tr>
           <td>
         <div align='right' class='smaller'>
-        <label for='email_btn'></label> <a href='../../modules/contact/index.php' id='email_btn'><img src='../../template/classic/img/email.png' alt='icon' title='$langContactProf' /></a>
+           <a href='../../modules/contact/index.php' id='email_btn'><img src='../../template/classic/img/email.png' alt='icon' title='$langContactProf' /></a>
               <form action='{$urlServer}student_view.php' method='post'>
-              <label for='view_btn'>$button_message</label>
-              <input id='view_btn' type='image' src='../../template/classic/img/switch.png' name='submit' />
+              <input id='view_btn' type='image' src='../../template/classic/img/switch.png' name='submit' title='$button_message'/>
             </form>
         </div>
           </td>
