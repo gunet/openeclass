@@ -156,7 +156,7 @@ return $m (string)
 ****************************************************************/
 function get_auth_info($auth)
 {
-	global $langViaeClass, $langViaPop, $langViaImap, $langViaLdap, $langViaDB, $langViaShibboleth;
+	global $langViaeClass, $langViaPop, $langViaImap, $langViaLdap, $langViaDB, $langViaShibboleth, $langViaCAS;
 
 	if(!empty($auth)) {
 		switch($auth)
@@ -172,6 +172,8 @@ function get_auth_info($auth)
 			case '5': $m = $langViaDB;
 				break;
 			case '6': $m = $langViaShibboleth;
+				break;
+			case '7': $m = $langViaCAS;
 				break;
 			default: $m = 0;
 				break;
@@ -190,7 +192,8 @@ return $auth_row : an associative array
 ****************************************************************/
 function get_auth_settings($auth)
 {
-	$qry = "SELECT * FROM auth WHERE auth_id = '".mysql_real_escape_string($auth)."'";
+	$auth = intval($auth);
+	$qry = "SELECT * FROM auth WHERE auth_id = ".$auth;
 	$result = db_query($qry);
 	if($result) {
 		if(mysql_num_rows($result)==1) {
@@ -389,6 +392,13 @@ header("Location: ../index.php");
 			}
 		}
 		break;
+	case '7':
+		$testauth = false;
+		cas_authenticate($auth);
+		if (phpCAS::checkAuthentication()) {
+			$testauth = true;
+		}
+		break;
 	default:
 	    $testauth = $auth;
 	    break;
@@ -439,4 +449,110 @@ function get_ldap_attribute($search_result, $attribute)
         } else {
                 return '';
         }
+}
+
+/****************************************************************
+Return CAS settings
+****************************************************************/
+function get_cas_settings($auth)
+{
+	$auth_method_settings = get_auth_settings($auth);
+	$cassettings = $auth_method_settings['auth_settings'];
+	
+	$cas = explode("|", $cassettings);
+	
+	$cas_settings['cas_host'] = str_replace("cas_host=","",$cas[0]);
+	$cas_settings['cas_port'] = str_replace("cas_port=","",$cas[1]);
+	$cas_settings['cas_context'] = str_replace("cas_context=","",$cas[2]);
+	$cas_settings['cas_cachain'] = str_replace("cas_cachain=","",$cas[3]);
+	@$cas_settings['casusermailattr'] = str_replace("casusermailattr=","",$cas[4]);
+	@$cas_settings['casuserfirstattr'] = str_replace("casuserfirstattr=","",$cas[5]);
+	@$cas_settings['casuserlastattr'] = str_replace("casuserlastattr=","",$cas[6]);
+
+	return $cas_settings;
+}
+
+/****************************************************************
+CAS authentication
+****************************************************************/
+function cas_authenticate($auth, $new = false, $cas_host=null, $cas_port=null, $cas_context=null, $cas_cachain=null)
+{
+	
+	if (!$new) {
+		$cas = get_cas_settings($auth);
+	}
+	$cas_host = $cas['cas_host'];
+	$cas_port = $cas['cas_port'];
+	$cas_context = $cas['cas_context'];
+	$cas_cachain = $cas['cas_cachain'];
+	$casusermailattr = $cas['casusermailattr'];
+	$casuserfirstattr = $cas['casuserfirstattr'];
+	$casuserlastattr = $cas['casuserlastattr'];
+
+	$cas_url = 'https://'.$cas_host;
+	$cas_port = intval($cas_port);
+
+	if ($cas_port != '443')
+		$cas_url = $cas_url.':'.$cas_port;
+	$cas_url = $cas_url.$cas_context;
+
+	// The "real" hosts that send SAML logout messages
+	// Assumes the cas server is load balanced across multiple hosts
+	$cas_real_hosts = array($cas_host);
+	
+	// Uncomment to enable debugging
+	// phpCAS::setDebug();
+ 
+	// Initialize phpCAS - keep session in application
+	phpCAS::client(SAML_VERSION_1_1, $cas_host, $cas_port, $cas_context, FALSE);
+
+	// Set the CA certificate that is the issuer of the cert on the CAS server
+	if (isset($cas_cachain) && !empty($cas_cachain) && is_readable($cas_cachain))
+		phpCAS::setCasServerCACert($cas_cachain);
+	else
+		phpCAS::setNoCasServerValidation();
+
+	//phpCAS::handleLogoutRequests(true, $cas_real_hosts);
+
+	// Force CAS authentication on any page that includes this file
+	phpCAS::forceAuthentication();
+}
+
+/****************************************************************
+Return CAS attributes[]
+****************************************************************/
+function get_cas_attrs($phpCASattrs, $settings)
+{
+	if (empty($phpCASattrs) || empty($settings))
+		return null;
+
+	$attrs = array();
+	foreach ($phpCASattrs as $key => $value) {
+		// multivalue: get only the first attribute
+		if (is_array($value)) 
+			$attrs[$key] = $value[0];
+		else
+			$attrs[$key] = $value;
+	}
+
+	$ret = array();
+	if (!empty($settings['casusermailattr']))
+		if (!empty($attrs[$settings['casusermailattr']])) {
+			$ret['casusermailattr'] = $attrs[$settings['casusermailattr']];
+			$GLOBALS['auth_user_info']['email'] = $attrs[$settings['casusermailattr']];
+		}
+
+	if (!empty($settings['casuserfirstattr']))
+		if (!empty($attrs[$settings['casuserfirstattr']])) {
+			$ret['casuserfirstattr'] = $attrs[$settings['casuserfirstattr']];
+			$GLOBALS['auth_user_info']['firstname'] = $attrs[$settings['casuserfirstattr']];
+		}
+
+	if (!empty($settings['casuserlastattr']))
+		if (!empty($attrs[$settings['casuserlastattr']])) {
+			$ret['casuserlastattr'] = $attrs[$settings['casuserlastattr']];
+			$GLOBALS['auth_user_info']['lastname'] = $attrs[$settings['casuserlastattr']];
+		}
+
+	return $ret;
 }

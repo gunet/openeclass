@@ -48,6 +48,7 @@
 
 $require_admin = TRUE;
 include '../../include/baseTheme.php';
+include("../../include/CAS/CAS.php");
 include_once '../auth/auth.inc.php';
 $nameTools = $langAuthSettings;
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
@@ -59,15 +60,30 @@ $step = isset($_POST['step'])?$_POST['step']:'';
 if((!empty($step)) && ($step=='1')) {
 	$auth = isset($_POST['auth'])?$_POST['auth']:'';
 	$auth_submit = isset($_POST['auth_submit'])?$_POST['auth_submit']:'';
-} else {
+	if ($auth==7) {
+		$_SESSION['cas_do'] = true;
+	}
+} 
+else {
 	$auth = isset($_GET['auth'])?$_GET['auth']:'';
+	if ($auth==7) {
+		$_SESSION['cas_do'] = false;
+	}
+}
+
+if (isset($_GET['ticket'])) {
+	$_SESSION['cas_do'] = true;
+}
+
+if (isset($_SESSION['cas_warn'])) {
+		$_SESSION['cas_do'] = false;
 }
 
 $imaphost = isset($_POST['imaphost'])?$_POST['imaphost']:'';
-$auth_instructions = isset($_POST['imapinstructions'])?$_POST['imapinstructions']:'';
+$imapinstructions = isset($_POST['imapinstructions'])?$_POST['imapinstructions']:'';
 
 $pop3host = isset($_POST['pop3host'])?$_POST['pop3host']:'';
-$auth_instructions = isset($_POST['pop3instructions'])?$_POST['pop3instructions']:'';
+$pop3instructions = isset($_POST['pop3instructions'])?$_POST['pop3instructions']:'';
 
 $ldaphost = isset($_POST['ldaphost'])? $_POST['ldaphost']: '';
 $ldap_base = isset($_POST['ldap_base'])? $_POST['ldap_base']: '';
@@ -89,23 +105,69 @@ $dbpass = isset($_POST['dbpass'])?$_POST['dbpass']:'';
 $dbtable = isset($_POST['dbtable'])?$_POST['dbtable']:'';
 $dbfielduser = isset($_POST['dbfielduser'])?$_POST['dbfielduser']:'';
 $dbfieldpass = isset($_POST['dbfieldpass'])?$_POST['dbfieldpass']:'';
-$auth_instructions = isset($_POST['dbinstructions'])?$_POST['dbinstructions']:'';;
+$dbinstructions = isset($_POST['dbinstructions'])?$_POST['dbinstructions']:'';;
 
-$auth_instructions = isset($_POST['shibinstructions'])?$_POST['shibinstructions']:'';;
+$shibinstructions = isset($_POST['shibinstructions'])?$_POST['shibinstructions']:'';;
+
+// set them only from _POST, otherwise they exist in _SESSION
+// _POST is lost after we come back from CAS
+if (isset($_POST['cas_host'])) $cas_host = $_POST['cas_host'];
+if (isset($_POST['cas_port'])) $cas_port = intval($_POST['cas_port']);
+if (isset($_POST['cas_context'])) $cas_context = $_POST['cas_context'];
+if (isset($_POST['cas_cachain'])) $cas_cachain = $_POST['cas_cachain'];
+if (isset($_POST['casinstructions'])) $casinstructions = $_POST['casinstructions'];
+if (isset($_POST['casusermailattr'])) $casusermailattr = $_POST['casusermailattr'];
+if (isset($_POST['casuserfirstattr'])) $casuserfirstattr = $_POST['casuserfirstattr'];
+if (isset($_POST['casuserlastattr'])) $casuserlastattr = $_POST['casuserlastattr'];
 
 $test_username = isset($_POST['test_username'])?$_POST['test_username']:'';
 $test_password = isset($_POST['test_password'])?$_POST['test_password']:'';
 
-if((!empty($auth_submit)) && ($auth_submit==1)) {
+// You have to logout from CAS and preferably close your browser
+// to change CAS settings
+if ((isset($_SESSION['cas_warn']) && $_SESSION['cas_warn'] == "yes" ) && ($auth==7)) {
+	$tool_content .= "<p class=\"alert1\">$langCASnochange</p>";
+	draw($tool_content, 3);
+	exit();
+}
+
+if(((!empty($auth_submit)) && ($auth_submit==1)) || !empty($_SESSION['cas_do'])) {
+ 	if (!empty($_SESSION['cas_do']) && empty($_SESSION['cas_warn'])) {
+		// save _POST to _SESSION
+		if (isset($cas_host)) $_SESSION['cas_host'] = $cas_host;
+		if (isset($cas_port)) $_SESSION['cas_port'] = $cas_port;
+		if (isset($cas_context)) $_SESSION['cas_context'] = $cas_context;
+		if (isset($cas_cachain)) $_SESSION['cas_cachain'] = $cas_cachain;
+		if (isset($casinstructions)) $_SESSION['casinstructions'] = $casinstructions;
+		if (isset($casusermailattr)) $_SESSION['casusermailattr'] = $casusermailattr;
+		if (isset($casuserfirstattr)) $_SESSION['casuserfirstattr'] = $casuserfirstattr;
+		if (isset($casuserlastattr)) $_SESSION['casuserlastattr'] = $casuserlastattr;
+		
+		// cas test new settings
+		//cas_authenticate(7, true, $cas_host, $cas_port, $cas_context, $cas_cachain);
+		cas_authenticate(7, true, $_SESSION['cas_host'], $_SESSION['cas_port'], $_SESSION['cas_context'], $_SESSION['cas_cachain']);
+		if (phpCAS::checkAuthentication()) {
+			$test_username = phpCAS::getUser();
+			$cas_valid = true;
+			$_SESSION['cas_warn'] = "yes";
+		}
+		else
+			$cas_valid = false;
+	}
+
 	$submit = isset($_POST['submit'])?$_POST['submit']:'';
 	// if form is submitted
-	if((array_key_exists('submit', $_POST)) && (!empty($submit))) {
+	if( ((array_key_exists('submit', $_POST)) && (!empty($submit))) || $cas_valid ) {
 		$tool_content .= "<br /><p>$langConnTest</p>";
-		if ($auth == 6) {
+		if ( ($auth == 6) || $cas_valid ) {
 			$test_username = $test_password = " ";
 		}
 		if((!empty($test_username)) && (!empty($test_password))) {
-			$is_valid = auth_user_login($auth, $test_username, $test_password);
+			if ($cas_valid)
+				$is_valid = true;
+			else
+				$is_valid = auth_user_login($auth, $test_username, $test_password);
+
 			if($is_valid) {
 				$auth_allow = 1;
 				$tool_content .= "<table width=\"99%\"><tbody><tr>
@@ -124,8 +186,14 @@ if((!empty($auth_submit)) && ($auth_submit==1)) {
 			$auth_allow = 0;
 		}
 
+		// when we come back from CAS
+		if (isset($_SESSION['cas_do']) && $_SESSION['cas_do']==7) {
+			$auth = 7;
+		}
+
 		// store the values - do the updates //
 		if((!empty($auth_allow))&&($auth_allow==1)) {
+
 			switch($auth) {
 				case '1': $auth_default = 1;
 					$auth_settings = "";
@@ -133,31 +201,41 @@ if((!empty($auth_submit)) && ($auth_submit==1)) {
 					break;
 				case '2': $auth_default = 2;
 					$auth_settings = "pop3host=".$pop3host;					
+					$auth_instructions = $pop3instructions;
 					break;
 				case '3': $auth_default = 3;
 					$auth_settings = "imaphost=".$imaphost;
+					$auth_instructions = $imapinstructions;
 					break;
 				case '4': $auth_default = 4;
 					$auth_settings = "ldaphost=".$ldaphost."|ldap_base=".$ldap_base."|ldapbind_dn=".$ldapbind_dn."|ldapbind_pw=".$ldapbind_pw."|ldap_login_attr=".$ldap_login_attr."|ldap_login_attr2=".$ldap_login_attr2;
+					$auth_instructions = $ldapinstructions;
 					break;
 				case '5': 
 					$auth_default = 5;
 					$auth_settings = "dbhost=".$dbhost."|dbname=".$dbname."|dbuser=".$dbuser."|dbpass=".$dbpass."|dbtable=".$dbtable."|dbfielduser=".$dbfielduser."|dbfieldpass=".$dbfieldpass;
+					$auth_instructions = $dbinstructions;
 					break;
 				case '6': if (isset($checkseparator) && $checkseparator == "on") {
 						$auth_settings = $_POST['shibseparator'];
 					} else {
 						$auth_settings = 'shibboleth';
 					}
+					$auth_instructions = $shibinstructions;
+					break;
+				case '7': $auth_default = 7;
+					$auth_settings = "cas_host=".$_SESSION['cas_host']."|cas_port=".$_SESSION['cas_port']."|cas_context=".$_SESSION['cas_context']."|cas_cachain=".$_SESSION['cas_cachain']."|casusermailattr=".$_SESSION['casusermailattr']."|casuserfirstattr=".$_SESSION['casuserfirstattr']."|casuserlastattr=".$_SESSION['casuserlastattr'];
+					$auth_instructions = $_SESSION['casinstructions'];
 					break;
 				default:
 					break;
 			}
 
 			$qry = "UPDATE auth SET auth_settings='".$auth_settings."',
-				auth_instructions='".$auth_instructions."',auth_default=1 
+					auth_instructions='".$auth_instructions."',
+					auth_default=1 
 				WHERE auth_id=".$auth;
-			$sql2 = mysql_query($qry,$db); // do the update as the default method
+			$sql2 = db_query($qry, $db); // do the update as the default method
 			if($sql2) {
 				if(mysql_affected_rows($db)==1) {
 					$tool_content .= "<p class=\"alert1\">$langHasActivate</p>";
@@ -173,12 +251,13 @@ if((!empty($auth_submit)) && ($auth_submit==1)) {
 else
 {
 	// Display the form 
-	if(isset($auth) and $auth != 6) {
+	//if(isset($auth) and $auth != 6 and $auth != 7) {
+	if(isset($auth) and $auth != 6 and $auth != 7) {
 		$auth_data = get_auth_settings($auth);
 	}
-	$tool_content .= " <table width='99%' class='FormData' align='left'><tbody><tr>
+	$tool_content .= "<form name='authmenu' method='post' action='$_SERVER[PHP_SELF]'>
+	<table width='99%' class='FormData' align='left'><tbody><tr>
 	<th width='220'>
-	<form name=\"authmenu\" method=\"post\" action=\"auth_process.php\">
 	<input type=\"hidden\" name=\"auth_submit\" value=\"1\" />
 	<input type=\"hidden\" name=\"auth\" value=\"".htmlspecialchars($auth)."\" />
 	<input type=\"hidden\" name=\"step\" value=\"1\" />
@@ -197,11 +276,13 @@ else
 			break;
 		case 6: include_once '../auth/methods/shibform.php';
 			break;
+		case 7: include_once '../auth/methods/casform.php';
+			break;
 		default:
 			break;
 	}
 
-	if ($auth != 6) { 
+	if ($auth != 6 && $auth !=7) { 
 		$tool_content .= "<tr><td colspan='2'>&nbsp;</td></tr>";
 		$tool_content .= "<tr><th>&nbsp;</th><td>$langTestAccount</td></tr>
 		<tr><th class='left'>$langUsername: </th>
@@ -209,9 +290,9 @@ else
 		<tr><th class='left'>$langPass: </th>
 		<td><input size='30' class='FormData_InputText' type='password' name='test_password' value='".$test_password."'></td></tr>";
 	}
-	$tool_content .= "<tr><th>&nbsp;</th><td><input type='submit' name='submit' value='$langModify'></form></td></tr>";
-	$tool_content .="<br /></table>";
+	$tool_content .= "<tr><th>&nbsp;</th><td><input type='submit' name='submit' value='$langModify'></td></tr>";
+	$tool_content .= "</table></form>";
 }
 
-draw($tool_content,3,'admin');
+draw($tool_content, 3);
 ?>

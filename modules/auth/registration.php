@@ -70,7 +70,7 @@ if(!empty($auth)) {
                         $tool_content .= "<p><img src='../../template/classic/img/arrow.png' title='bullet' alt='bullet'>&nbsp;&nbsp;$langNewAccount&nbsp;";
                         if ($v == 6)  { // shibboleth method
                                 $tool_content .= "(<a href='{$urlServer}secure/index.php'>".get_auth_info($v)."</a>)";
-                        } else {
+			} else {
                                 $tool_content .= "(<a href='ldapnewuser.php?auth=".$v."'>".get_auth_info($v)."</a>)";
                         }
                         $tool_content .= "</p>";
@@ -95,7 +95,7 @@ if(!empty($auth)) {
                         $tool_content .= "<p><img src='../../template/classic/img/arrow.png  alt='bullet''>&nbsp;&nbsp;$langNewAccount&nbsp;";
                         if ($v == 6)  { // shibboleth method
                                 $tool_content .= "(<a href='{$urlServer}secure/index.php'>".get_auth_info($v)."</a>)";
-                        } else {
+								} else {
                                 $tool_content .= "(<a href='ldapnewuser.php?p=TRUE&amp;auth=".$v."'>".get_auth_info($v)."</a>)";
                         }
                         $tool_content .= "</p>";
