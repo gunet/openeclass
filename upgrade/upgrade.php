@@ -358,7 +358,12 @@ if (!isset($_POST['submit2'])) {
                 mysql_field_exists($mysqlMainDb, 'annonces', 'visibility') or
                         db_query("ALTER TABLE `annonces` ADD `visibility` CHAR(1) NOT NULL DEFAULT 'v'");
                 mysql_field_exists($mysqlMainDb, 'user', 'description') or
-                        db_query("ALTER TABLE `user` ADD description TEXT, ADD has_icon BOOL NOT NULL DEFAULT 0");
+                        db_query("ALTER TABLE `user` ADD description TEXT NOT NULL,
+                                                     ADD has_icon BOOL NOT NULL DEFAULT 0,
+                                                     ADD verified_mail BOOL NOT NULL DEFAULT 0,
+                                                     ADD receive_mail BOOL NOT NULL DEFAULT 1");
+                mysql_field_exists($mysqlMainDb, 'cours_user', 'receive_mail') or
+                        db_query("ALTER TABLE `cours_user` ADD receive_mail BOOL NOT NULL DEFAULT 1");
 		db_query("ALTER TABLE `loginout` CHANGE `ip` `ip` CHAR(39) NOT NULL DEFAULT '0.0.0.0'");
                 db_query("CREATE TABLE IF NOT EXISTS `document` (
                                 `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,

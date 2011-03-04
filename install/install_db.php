@@ -156,12 +156,13 @@ db_query("CREATE TABLE `cours` (
 #
 
 db_query("CREATE TABLE cours_user (
-      `cours_id` int(11) NOT NULL default '0',
-      `user_id` int(11) unsigned NOT NULL default '0',
-      `statut` tinyint(4) NOT NULL default '0',
-      `team` int(11) NOT NULL default '0',
-      `tutor` int(11) NOT NULL default '0',
-      `reg_date` date NOT NULL,
+      `cours_id` INT(11) NOT NULL DEFAULT 0,
+      `user_id` INT(11) UNSIGNED NOT NULL DEFAULT 0,
+      `statut` TINYINT(4) NOT NULL DEFAULT 0,
+      `team` INT(11) NOT NULL DEFAULT 0,
+      `tutor` INT(11) NOT NULL DEFAULT 0,
+      `reg_date` DATE NOT NULL,
+      `receive_mail` BOOL NOT NULL DEFAULT 1,
       PRIMARY KEY (cours_id, user_id)) $charset_spec");
 
 #
@@ -205,8 +206,10 @@ db_query("CREATE TABLE user (
       announce_flag date NOT NULL DEFAULT '0000-00-00',
       doc_flag DATE NOT NULL DEFAULT '0000-00-00',
       forum_flag DATE NOT NULL DEFAULT '0000-00-00',
-      description TEXT,
+      description TEXT NOT NULL,
       has_icon BOOL NOT NULL DEFAULT 0,
+      verified_mail BOOL NOT NULL DEFAULT 0,
+      receive_mail BOOL NOT NULL DEFAULT 1,
       PRIMARY KEY (user_id),
       KEY `user_username` (`username`)) $charset_spec");
 
