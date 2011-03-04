@@ -283,24 +283,19 @@ cite.content_pos {
 .square_bullet {
 	background-image: url(img/arrow.png);
 	background-repeat: no-repeat;
-    width: 16px;
-    height: 16px;
     background-position: 4px 3px; 
 }
 
 .square_bullet2 {
 	background-image: url(img/arrow.png);
 	background-repeat: no-repeat;
-    width: 16px;
-    height: 16px;
+    
     background-position: 4px 3px; 
 }
 
 .square_bullet3 {
 	background-image: url(img/arrow.png);
 	background-repeat: no-repeat;
-    width: 16px;
-    height: 16px;
     background-position: 4px 3px; 
 }
 
