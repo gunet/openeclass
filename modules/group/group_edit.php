@@ -134,18 +134,17 @@ $tool_content_group_description = q($group_description);
 
 if ($multi_reg) {
         // Students registered to the course but not members of this group
-        $sqll = "SELECT u.user_id ,u.nom, u.prenom
-                        FROM user u, cours_user cu, group_members ug
+        $sqll = "SELECT u.user_id, u.nom, u.prenom
+                        FROM user u, cours_user cu
                         WHERE cu.cours_id = $cours_id AND
                               cu.user_id = u.user_id AND
-                              u.user_id = ug.user_id AND
-                              ug.user_id NOT IN (SELECT user_id FROM group_members WHERE group_id = $group_id) AND
+                              u.user_id NOT IN (SELECT user_id FROM group_members WHERE group_id = $group_id) AND
                               cu.statut = 5 AND
                               cu.tutor = 0
                         GROUP BY u.user_id
                         ORDER BY u.nom, u.prenom";
 } else {
-        // Students registered to the course but members no group
+        // Students registered to the course but members of no group
         $sqll = "SELECT u.user_id, u.nom, u.prenom
                         FROM (user u, cours_user cu)
                         WHERE cu.cours_id = $cours_id AND
