@@ -140,8 +140,7 @@ if ($is_adminOfCourse) {
                  </tr>
                  </table>
                </fieldset>
-              </form>
-              <br />\n";    
+              </form>\n";    
     }
     
     // display form for editiong a glossary term
@@ -190,51 +189,65 @@ if ($is_adminOfCourse) {
 // display glossary
 *************************************************/
 
-$tool_content .= "
-       <table class='tbl_alt' width='99%'>";
-$tool_content .= "
-       <tr>
-         <th colspan='2'><div align='left'>$langGlossaryTerm</div></th>
-         <th><div align='left'>$langGlossaryDefinition</div></th>";
-if ($is_adminOfCourse) {
-    $tool_content .= "
-         <th width='20'>$langActions</th>";
-}
-$tool_content .= "</tr>";
 $sql = db_query("SELECT id, term, definition, url FROM glossary WHERE course_id = '$cours_id'");
-$i=0;
-while ($g = mysql_fetch_array($sql)) {
-                if ($i%2) {
-                    $rowClass = "class='odd'";
-                } else {
-                    $rowClass = "class='even'";
-                }
-        if (!empty($g['url'])) {
-            $urllink = "(<a href='" . q($g['url']) .
-                       "' target='_blank'>" . q($g['url']) . "</a>)";
-        } else {
-            $urllink = '';
-        }
-    $tool_content .= "
-       <tr $rowClass>
-         <td class='bold' width='120'>" . q($g['term']) . "</td> 
-         <td width='1'>:</td>
-         <td><em>" . q($g['definition']) . "</em><br /><span align='left' class='smaller'> $urllink</span></td>";
-    if ($is_adminOfCourse) {
-        $tool_content .= "
-         <td align='center' valign='top' width='50'><a href='$_SERVER[PHP_SELF]?edit=$g[id]'>
-            <img src='../../template/classic/img/edit.png' /></a>
-            <a href='$_SERVER[PHP_SELF]?delete=$g[id]' onClick=\"return confirmation();\">
-            <img src='../../template/classic/img/delete.png' /></a>
-         </td>";
-    }
-    $tool_content .= "
-       </tr>";
-    $i++;
+if (mysql_num_rows($sql) > 0) { 
+	$tool_content .= "
+	       <script type='text/javascript' src='../auth/sorttable.js'></script>
+	       <table class='sortable' id='t2' width='99%'>";
+	$tool_content .= "
+	       <tr>
+		 <th colspan='2'><div align='left'>$langGlossaryTerm</div></th>
+		 <th><div align='left'>$langGlossaryDefinition</div></th>";
+	    if ($is_adminOfCourse) {
+		 $tool_content .= "
+		 <th width='20'>$langActions</th>";
+	    }
+	$tool_content .= "
+	       </tr>";
+	$i=0;
+	while ($g = mysql_fetch_array($sql)) {
+		if ($i%2) {
+		   $rowClass = "class='odd'";
+		} else {
+		   $rowClass = "class='even'";
+		}
+		if (!empty($g['url'])) {
+		    $urllink = "(<a href='" . q($g['url']) .
+			       "' target='_blank'>" . q($g['url']) . "</a>)";
+		} else {
+		    $urllink = '';
+		}
+
+		if (!empty($g['definition'])) {
+		    $definition_data = "" . q($g['definition']) ."";
+		} else {
+		    $definition_data = '-';
+		}
+
+	    $tool_content .= "
+	       <tr $rowClass>
+		 <td class='bold' width='120' valign='top'>" . q($g['term']) . "</td> 
+		 <td width='1' valign='top'>:</td>
+		 <td><em>" . $definition_data . "</em><br /><span align='left' class='smaller'> $urllink</span></td>";
+	    if ($is_adminOfCourse) {
+		$tool_content .= "
+		 <td align='center' valign='top' width='50'><a href='$_SERVER[PHP_SELF]?edit=$g[id]'>
+		    <img src='../../template/classic/img/edit.png' /></a>
+		    <a href='$_SERVER[PHP_SELF]?delete=$g[id]' onClick=\"return confirmation();\">
+		    <img src='../../template/classic/img/delete.png' /></a>
+		 </td>";
+	    }
+	    $tool_content .= "
+	       </tr>";
+	    $i++;
+	}
+	$tool_content .= "
+	       </table>
+	       <br />\n";
+
+} else {
+	$tool_content .= "<p class='alert1'>$langNoResult</p>";
 }
-$tool_content .= "
-       </table>
-       <br />\n";
 
 draw($tool_content, 2, '', $head_content);
 

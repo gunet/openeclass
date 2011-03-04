@@ -402,7 +402,7 @@ function get_max_upload_size($maxFilledSpace, $baseWorkDir)
 }
 
 /*
-	function showquota()
+	function s1howquota()
 	param - quota 
 	param - used , how much disp space is used
 	@last update: 18-07-2006 by Sakis Agorastos
@@ -417,7 +417,7 @@ function get_max_upload_size($maxFilledSpace, $baseWorkDir)
 
 function showquota($quota, $used) {
 
-	global $langQuotaUsed, $langQuotaPercentage, $langQuotaTotal;
+	global $langQuotaUsed, $langQuotaPercentage, $langQuotaTotal, $langBack;
 	include 'gaugebar.php';
 
 	$retstring = "";
@@ -442,20 +442,30 @@ function showquota($quota, $used) {
 	format_bytesize($used, '0');
 	//telos diamorfwshs ths grafikh mparas kai twn arithmitikwn statistikwn stoixeiwn
 	//ektypwsh pinaka me arithmitika stoixeia + thn grafikh bara
+    $retstring .= "
+       <div id='operations_container'>
+         <ul id='opslist'>
+           <li><a href='" . $_SERVER['PHP_SELF'] . "'>" . $langBack . "</a></li>
+         </ul>
+       </div>";
+
 	$retstring .= "
-        <table class='tbl_border'>
+        <table class='tbl'>
 	<tr>
-          <td>$langQuotaUsed :</td>
+          <td class='bold'>$langQuotaUsed</td>
+          <td width='1'>:</td>
 	  <td>$used</td>
         </tr>
 	<tr>
-          <td valign='top'>$langQuotaPercentage :</td>
+          <td valign='top' class='bold' height='42'>$langQuotaPercentage</td>
+          <td width='1' valign='top'>:</td>
 	  <td align='center'>";
 	$retstring .= $oGauge->display();
 	$retstring .= "$diskUsedPercentage</td>
 	</tr>
 	<tr>
-	  <td>$langQuotaTotal :</td>
+	  <td class='bold'>$langQuotaTotal</td>
+          <td width='1'>:</td>
 	  <td>$quota</td>
 	</tr>
         </table>";

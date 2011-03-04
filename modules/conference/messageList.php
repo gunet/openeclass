@@ -32,8 +32,8 @@ include '../../include/baseTheme.php';
 <meta http-equiv="refresh" content="30; url=<?php echo $_SERVER['PHP_SELF']; ?>" />
 <title>Chat messages</title>
 <style type="text/css">
-span { color: #727266; }
-div { font-size: 90%; } 
+span { color: #727266; font-size: 11px; }
+div { font-size: 12px; } 
 body { font-family: Verdana, Arial, Helvetica, sans-serif; }
 </style>
 </head>

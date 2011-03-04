@@ -204,14 +204,18 @@ if ($myrow['perso'] == 'yes')  {
 $sec = $urlSecure . 'modules/profile/profile.php';
 $passurl = $urlSecure . 'modules/profile/password.php';
 
-$tool_content .= "<div id='operations_container'><ul id='opslist'>";
-$tool_content .= "<li><a href='display_profile.php'>$langDisplayProfile</a></li>";
+$tool_content .= "
+  <div id='operations_container'>
+    <ul id='opslist'>
+      <li><a href='display_profile.php'>$langDisplayProfile</a></li> ";
 if ($allow_password_change) {
         $tool_content .= "
-        <li><a href='$passurl'>$langChangePass</a></li>";
+        <li><a href='$passurl'>$langChangePass</a></li> ";
 }
-$tool_content .= "<li><a href='../unreguser/unreguser.php'>$langUnregUser</a></li>";
-$tool_content .= "</ul></div>";
+$tool_content .= "
+        <li><a href='../unreguser/unreguser.php'>$langUnregUser</a></li>
+    </ul>
+  </div>\n";
 $tool_content .= "
    <form method='post' enctype='multipart/form-data' action='$sec'>
    <fieldset>

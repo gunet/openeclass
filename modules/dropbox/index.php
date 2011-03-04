@@ -268,7 +268,8 @@ if (!isset($_GET['mailing']))  // RH: Mailing detail: no received files
     } else {
 
         $tool_content .= "
-        <table width='99%' class='tbl_alt'>
+        <script type='text/javascript' src='../auth/sorttable.js'></script>
+        <table width='99%' class='sortable' id='t1'>
         <tr>
          <th colspan='2'><div align='left'>&nbsp;$dropbox_lang[file]</div></th>
          <th width='130' class='left'>$dropbox_lang[authors]</th>
@@ -339,13 +340,12 @@ $numSent = count($dropbox_person -> sentWork);
 $tool_content .= "
 
       <br />
-      <p class='sub_title1'><img src=\"../../template/classic/img/outbox.png\">";
+      <p class='sub_title1'>&nbsp;";
         $tool_content .= strtoupper($dropbox_lang["sentTitle"]);
-        $tool_content .="</u>";
 	// if the user has sent files then display the icon deleteall
 	if ($numSent > 0) {
 	$tool_content .= "<a href='dropbox_submit.php?deleteSent=all&amp;dropbox_unid=".urlencode( $dropbox_unid).$mailingInUrl."'
-	onClick=\"return confirmationall();\"> <img src='../../template/classic/img/delete.png' title='$langDelete' /></a>
+	onClick=\"return confirmationall();\"><img src='../../template/classic/img/delete.png' title='$langDelete' /></a>
         ";
 	}
 
@@ -423,11 +423,12 @@ if (count($dropbox_person->sentWork)==0) {
 } else {
 
 $tool_content .= "
-      <table width=99% class='tbl_alt'>
+      <script type='text/javascript' src='../auth/sorttable.js'></script>
+      <table width=99% class='sortable' id='t2'>
       <tr>
         <th colspan='2'><div align='left'>&nbsp;$dropbox_lang[file]</div></th>
-        <th width='130' class='left'>$dropbox_lang[col_recipient]</th>
-        <th width='130'>$dropbox_lang[date]</th>
+        <th width='130'>$dropbox_lang[col_recipient]</th>
+        <th width='110'>$dropbox_lang[date]</th>
         <th width='20'>$langDelete</th>
       </tr>
         ";
@@ -452,7 +453,7 @@ foreach ($dropbox_person -> sentWork as $w)
 	}
 	$fSize = ceil(($w->filesize)/1024);
 		if ($i%2==0) {
-	           $tool_content .= "\n       <tr>";
+	           $tool_content .= "\n       <tr class=\"even\">";
 	        } else {
 	           $tool_content .= "\n       <tr class=\"odd\">";
             	}
@@ -466,17 +467,15 @@ foreach ($dropbox_person -> sentWork as $w)
         <small>$w->description</small></td>
 
 tCont12;
-	$tool_content .="<td>";
+	$tool_content .="\n         <td class='center'>";
 
 	foreach($w -> recipients as $r)
 	{
-		$tool_content .=  $r["name"] . ", <br>\n";
+		$tool_content .=  $r["name"] . ", <br />\n";
 	}
 	$tool_content = strrev(substr(strrev($tool_content), 7));
 
-	$tool_content .= "</td><td>$w->uploadDate</td>
-
-		<td><div class=\"cellpos\">";
+	$tool_content .= "</td>\n         <td class='center'><span class='smaller'>$w->uploadDate</span></td>\n         <td class='center'><div class=\"cellpos\">";
 	//<!--	Users cannot delete their own sent files -->
 
 	$tool_content .= "
