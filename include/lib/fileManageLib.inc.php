@@ -438,7 +438,8 @@ function map_to_real_filename($downloadDir) {
 
         global $group_sql;
 
-        $encoded_filenames = $temp = $filename = array();
+	$prefix = strlen(preg_replace('|[^/]*$|', '', $downloadDir))-1;
+        $encoded_filenames = $decoded_filenames = $filename = array();
 
         $sql = db_query("SELECT path, filename FROM document
                                 WHERE $group_sql AND
@@ -447,17 +448,22 @@ function map_to_real_filename($downloadDir) {
                 array_push($encoded_filenames, $files['path']);
                 array_push($filename, $files['filename']);
         }
-        $temp = $encoded_filenames;
+        $decoded_filenames = $encoded_filenames;
         foreach ($encoded_filenames as $position => $name) {
                 $last_name_component = substr(strrchr($name, "/"), 1);
-                foreach ($encoded_filenames as &$newname) {
+                foreach ($decoded_filenames as &$newname) {
                         $newname = str_replace($last_name_component, $filename[$position], $newname);
                 }
                 unset($newname);
         }
+	foreach($decoded_filenames as &$s) {
+		$s = substr($s, $prefix);
+	}
+
         // create array with mappings
-        $map_filenames = array_combine($temp, $encoded_filenames);
-        return($map_filenames);
+        $map_filenames = array_combine($encoded_filenames, $decoded_filenames);
+
+	return($map_filenames);
 }
 
 // PclZip callback function to store filenames with real filenames
