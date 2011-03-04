@@ -41,7 +41,7 @@ $require_current_course = TRUE;
 
 $guest_allowed = true;
 include '../../include/baseTheme.php';
-
+include '../../include/lib/textLib.inc.php';
 $nameTools = $langSearch;
 $found = false;
 register_posted_variables(array('announcements' => true,
@@ -61,7 +61,7 @@ if (isset($_GET['all'])) {
 
 if(isset($_POST['search_terms'])) {
 	$search_terms = mysql_real_escape_string($_POST['search_terms']);
-	$query = " AGAINST ('".$search_terms." ";
+	$query = " AGAINST ('".$search_terms."";
 	$query .= "' IN BOOLEAN MODE)";
 }
 
@@ -79,7 +79,7 @@ if(empty($search_terms)) {
 	    </tr>
 	    <tr>
 	      <th width='30%' class='left' valign='top' rowspan='4'>$langSearchIn</th>
-	      <td width='35%'><input type='checkbox' name='anouncements' checked='checked' />$langAnnouncements</td>
+	      <td width='35%'><input type='checkbox' name='announcements' checked='checked' />$langAnnouncements</td>
 	      <td width='35%'><input type='checkbox' name='agenda' checked='checked' />$langAgenda</td>
 	    </tr>
 	    <tr>
@@ -133,8 +133,9 @@ if(empty($search_terms)) {
 			while($res = mysql_fetch_array($result))
 			{
 				$tool_content .= "<div class='Results'><b>" . q($res['title']) ."</b>&nbsp;&nbsp;";	    
-				$tool_content .= "<small>(" . nice_format($res['temps']). ")</small>
-					<br />$res[contenu]<br /></div>";
+				$tool_content .= "<small>("
+				.nice_format(claro_format_locale_date($dateFormatLong, strtotime($res['temps']))).
+				")</small><br />$res[contenu]<br /></div>";
 			}
 		$tool_content .= "</td></tr></table>\n";
 		$found = true;
@@ -142,7 +143,7 @@ if(empty($search_terms)) {
 	}
 	// search in agenda
 	if ($agenda) {
-		$myquery = "SELECT titre, contenu FROM agenda
+		$myquery = "SELECT titre, contenu, day, hour, lasting FROM agenda
 				WHERE visibility = 'v'
 				AND MATCH (titre, contenu)".$query;
 		$result = db_query($myquery, $currentCourseID);	
@@ -153,7 +154,17 @@ if(empty($search_terms)) {
 			<tr><td>";
 			while($res = mysql_fetch_array($result))
 			{
-				$tool_content .= "<div class='Results'>".$res['titre'].": ".$res['contenu']."</div>";
+				$message = $langUnknown;
+				if ($res["lasting"] != "") {
+					if ($res["lasting"] == 1)
+						$message = $langHour;
+					else
+						$message = $langHours;
+				}
+				$tool_content .= "<div class='Results'><span class=day>".
+				ucfirst(claro_format_locale_date($dateFormatLong,strtotime($res["day"]))).
+				"</span> ($langHour: ".ucfirst(date("H:i",strtotime($res["hour"]))).")<br />"				
+				.$res['titre']." (".$langLasting.": ".$res["lasting"]." $message)<br /> ".$res['contenu']."</div>";
 			}
 			$tool_content .= "</td></tr></table>\n";
 			$found = true;
@@ -217,28 +228,50 @@ if(empty($search_terms)) {
 
 	// search in forums
 	if ($forums) {
-		$myquery = "SELECT * FROM posts_text WHERE MATCH (post_text)".$query;
+		$myquery = "SELECT * FROM forums WHERE MATCH (forum_name, forum_desc)".$query;
 		$result = db_query($myquery, $currentCourseID);
 		if(mysql_num_rows($result) > 0) {
 			$tool_content .= "<table width='99%' class='Search' align='left'>
 			<tr>
-			<th width=\"180\" class=\"left\">$langForum:</th></tr>
+			<th width=\"180\" class=\"left\">$langForum ($langCategories):</th></tr>
 			<tr><td>";
-			while($res = mysql_fetch_array($result))
-			{
-				$tool_content .= "<div class='Results'>".$res['post_text']."</div>";
-			}
-			$myquery = "SELECT * FROM forums WHERE MATCH (forum_name, forum_desc)".$query;
-			$result = db_query($myquery);		
 			while($res = mysql_fetch_array($result))
 			{
 				if (empty($res['forum_desc'])) { 
 					$desc_text = "";
 				} else { 
-					$desc_text = ": ($res[forum_desc])";
+					$desc_text = "<br />($res[forum_desc])";
 				}
-				$link_posts = "${urlServer}/modules/phpbb/viewforum.php?forum=$res[forum_id]";
-				$tool_content .= "<div class='Results'><a href='$link_posts'>".$res['forum_name']."</a> $desc_text</div>";
+				$link_forum = "${urlServer}/modules/phpbb/viewforum.php?forum=$res[forum_id]";
+				$tool_content .= "<div class='Results'><a href='$link_forum'>".$res['forum_name']."</a> $desc_text</div>";				
+			}
+			$tool_content .= "</td></tr></table>";
+			$found = true;
+		}
+		$myquery = "SELECT forum_id, topic_title FROM topics WHERE MATCH (topic_title)".$query;		
+		$result = db_query($myquery, $currentCourseID);
+		if(mysql_num_rows($result) > 0) {
+			$tool_content .= "<table width='99%' class='Search' align='left'>
+			<tr>
+			<th width=\"180\" class=\"left\">$langForum ($langSubjects - $langMessages):</th></tr>
+			<tr><td>";
+			while($res = mysql_fetch_array($result))
+			{
+				$link_topic = "${urlServer}/modules/phpbb/viewforum.php?forum=$res[forum_id]";
+				$tool_content .= "<div class='Results'><a href='$link_topic'>".$res['topic_title']."</a></div>";
+				$myquery2 = "SELECT posts.topic_id AS topicid, posts_text.post_text AS posttext
+						FROM posts, posts_text
+						WHERE posts.forum_id = $res[forum_id]
+							AND posts.post_id = posts_text.post_id 
+							AND MATCH (posts_text.post_text)".$query;		
+				$result2 = db_query($myquery2, $currentCourseID);
+				if(mysql_num_rows($result2) > 0) {
+					while($res2 = mysql_fetch_array($result2))
+					{
+						$link_post = "${urlServer}/modules/phpbb/viewtopic.php?topic=$res2[topicid]&amp;forum=$res[forum_id]";
+						$tool_content .= "<div class='Results'><a href='$link_post'>".$res2['posttext']."</a></div>";
+					}
+				}
 			}
 			$tool_content .= "</td></tr></table>";
 			$found = true;
@@ -263,9 +296,9 @@ if(empty($search_terms)) {
 				} else { 
 					$desc_text = "($res[description])";
 				}
-				$link_url = "{$urlServer}modules/link/link_goto.php?link_id=$res[id]&amp;link_url=$res[url]"; 
+				$link_url = "{$urlServer}modules/link/go.php?c=$currentCourseID&amp;id=$res[id]&amp;link_url=$res[url]"; 
 				$tool_content .= "<div class='Results'>
-					<a href='$link_url' target=_blank>".$res['url']."</a>: ".$res['title']." $desc_text
+					<a href='$link_url' target=_blank> ".$res['title']."</a> $desc_text
 					</div>";
 			}
 			$tool_content .= "</td></tr></table>";
@@ -290,7 +323,7 @@ if(empty($search_terms)) {
 				} else {
 					$desc_text = "($res[description])";
 				}
-				$link_video = "${urlServer}modules/video/video.php?action2=download&amp;id=$res[path]";				
+				$link_video = "${urlServer}modules/video/video.php?action=download&amp;id=$res[path]";				
 				$tool_content .= "<div class='Results'><a href='$link_video'>".$res['titre']."</a> $desc_text</div>";
 			}
 			$tool_content .= "</td></tr></table>";
@@ -312,7 +345,7 @@ if(empty($search_terms)) {
 				}
 				$link_video = $res['url'];
 				$tool_content .= "<div class='Results'>
-					<a href='$link_video' target=_blank>".$res['titre']."</a> $desc_text
+					<a href='$link_video' target=_blank>".$res['titre']."</a><br /> $desc_text
 					</div>";
 			}
 			$tool_content .= "</td><tr></table>\n";
