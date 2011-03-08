@@ -243,7 +243,7 @@ function show_lp($title, $comments, $resource_id, $lp_id)
 		$status = ($lp['visibility'] == 'SHOW')? 'v': 'i';
 		$link = "<a href='${urlServer}modules/learnPath/learningPath.php?path_id=$lp_id&amp;unit=$id'>";
 		$imagelink = "<img src='../../template/classic/img/lp_" .
-			($status == 'i'? 'off': 'on') . ".gif' />";
+			($status == 'i'? 'off': 'on') . ".png' />";
 	}
         if ($status != 'v' and !$is_adminOfCourse) {
 			return '';
@@ -279,7 +279,7 @@ function show_video($table, $title, $comments, $resource_id, $video_id, $visibil
                 $videolink = $link . htmlspecialchars($title) . '</a>';
                 $imagelink = $link .
                              "<img src='../../template/classic/img/videos_" .
-                             ($visibility == 'i'? 'off': 'on') . ".gif' /></a>";
+                             ($visibility == 'i'? 'off': 'on') . ".png' /></a>";
         } else {
                 if (!$is_adminOfCourse) {
                         return;
@@ -328,7 +328,7 @@ function show_work($title, $comments, $resource_id, $work_id, $visibility)
                 $exlink = $link . "$title</a>";
 		$imagelink = $link .
                         "<img src='../../template/classic/img/assignments_" .
-			($visibility == 'i'? 'off': 'on') . ".gif' /></a>";
+			($visibility == 'i'? 'off': 'on') . ".png' /></a>";
 	}
 	$class_vis = ($visibility == 'v')? ' class="even"': ' class="invisible"';
 
@@ -370,7 +370,7 @@ function show_exercise($title, $comments, $resource_id, $exercise_id, $visibilit
                 $exlink = $link . "$title</a>";
 		$imagelink = $link .
                         "<img src='../../template/classic/img/exercise_" .
-			($visibility == 'i'? 'off': 'on') . ".gif' /></a>";
+			($visibility == 'i'? 'off': 'on') . ".png' /></a>";
 	}
 	$class_vis = ($visibility == 'v')? ' class="even"': ' class="invisible"';
 
@@ -407,7 +407,7 @@ function show_forum($type, $title, $comments, $resource_id, $ft_id, $visibility)
 	}
 
 	$imagelink = $link . "<img src='../../template/classic/img/forum_" .
-			($visibility == 'i'? 'off': 'on') . ".gif' /></a>";
+			($visibility == 'i'? 'off': 'on') . ".png' /></a>";
 
 
         if (!empty($comments)) {
@@ -450,7 +450,7 @@ function show_wiki($title, $comments, $resource_id, $wiki_id, $visibility)
                 $wikilink = $link . "$title</a>";
 		$imagelink = $link .
                         "<img src='../../template/classic/img/wiki_" .
-			($visibility == 'i'? 'off': 'on') . ".gif' /></a>";
+			($visibility == 'i'? 'off': 'on') . ".png' /></a>";
 	}
 
         if (!empty($comments)) {
@@ -490,7 +490,7 @@ function show_link($title, $comments, $resource_id, $link_id, $visibility)
                 $exlink = $link . "$title</a>";
 		$imagelink = $link .
                         "<img src='../../template/classic/img/links_" .
-			($visibility == 'i'? 'off': 'on') . ".gif' /></a>";
+			($visibility == 'i'? 'off': 'on') . ".png' /></a>";
 	}
 	$class_vis = ($visibility == 'v')? ' class="even"': ' class="invisible"';
 
@@ -542,7 +542,7 @@ function show_linkcat($title, $comments, $resource_id, $linkcat_id, $visibility)
 			$sql2 = db_query("SELECT * FROM `$mysqlMainDb`.link WHERE course_id = $cours_id AND category = $lcat[id]");
 			while ($l = mysql_fetch_array($sql2, MYSQL_ASSOC)) {
 				$imagelink = "<img src='../../template/classic/img/links_" .
-				($visibility == 'i'? 'off': 'on') . ".gif' />";
+				($visibility == 'i'? 'off': 'on') . ".png' />";
 				$linkcontent .= "<br />$imagelink&nbsp;&nbsp;<a href='${urlServer}modules/link/go.php?c=$currentCourseID&amp;id=$l[id]&amp;url=$l[url]' target='_blank'>" . q($l['title']) . "</a>";
 			}
 		}
