@@ -121,9 +121,9 @@ if (!isset($_GET['a'])) {
 		$tool_content .= "\n<td align='center'>".htmlspecialchars($logs[0])."</td>";
 		// Give administrator a link to delete or edit a faculty
 		$tool_content .= "\n<td width='15%' align='center' nowrap>
-		<a href='$_SERVER[PHP_SELF]?a=2&c=".$logs['id']."'>
+		<a href='$_SERVER[PHP_SELF]?a=2&amp;c=".$logs['id']."'>
 		<img src='../../template/classic/img/delete.png' title='$langDelete' /></a>&nbsp;&nbsp;
-		<a href='$_SERVER[PHP_SELF]?a=3&c=".$logs['id']."'>
+		<a href='$_SERVER[PHP_SELF]?a=3&amp;c=".$logs['id']."'>
 		<img src='../../template/classic/img/edit.png' title='$langEdit' /></a></td>
 		</tr>\n";
 		$k++;
@@ -212,7 +212,7 @@ elseif (isset($_GET['a']) and $_GET['a'] == 3)  {
                 $faculte = $_POST['faculte'];
 		if (empty($faculte)) {
 			$tool_content .= "<p class='caution'>".$langEmptyFaculte."<br />";
-			$tool_content .= "<a href='$_SERVER[PHP_SELF]?a=3&c=$c'>$langReturnToEditFaculte</a></p>";
+			$tool_content .= "<a href='$_SERVER[PHP_SELF]?a=3&amp;c=$c'>$langReturnToEditFaculte</a></p>";
 			}
 		// Check if faculty name already exists
 		elseif (mysql_num_rows(db_query("SELECT * from faculte WHERE id <> $c

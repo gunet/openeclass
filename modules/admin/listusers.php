@@ -358,7 +358,7 @@ if($sql) {
 		$sql = db_query($qry);
 		
 		if ($view == 3) {
-			$str .= "&c=$c";	
+			$str .= "&amp;c=$c";	
 		}
 		$tool_content .= "
 		<table class='tbl_alt' width='99%'>

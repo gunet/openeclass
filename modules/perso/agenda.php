@@ -152,7 +152,7 @@ agCont;
 			$agenda_content .= "\n<li class=\"category\">".claro_format_locale_date($dateFormatLong, strtotime($data[$i][0][2]))."</li>";
 			$iterator =  count($data[$i]);
 			for ($j=0; $j < $iterator; $j++){
-				$url = $urlServer . "index.php?perso=4&c=" . $data[$i][$j][5];
+				$url = $urlServer . "index.php?perso=4&amp;c=" . $data[$i][$j][5];
 				if (strlen($data[$i][$j][4]) == 0) {
 					$data[$i][$j][4] = "$langUnknown";
 				}
