@@ -504,54 +504,74 @@ if(empty($search_terms)) {
 		$result = db_query($myquery, $mysqlMainDb);
 		if(mysql_num_rows($result) > 0)
 		{
-		  $tool_content .= "
-                  <script type='text/javascript' src='../auth/sorttable.js'></script>
-                  <table width='99%' class='sortable' id='t11' align='left'>
-		  <tr>
-                    <th colspan='2' class='left'>$langCourseUnits:</th>
-                  </tr>";
-                  $numLine = 0;
-		  while($res = mysql_fetch_array($result))
-		  {
-                    if ($numLine%2 == 0) {
-                       $class_view = 'class="even"';
-                    } else {
-                       $class_view = 'class="odd"';
-                    }
-                  $tool_content .= "
-                  <tr $class_view>
-                    <td width='1' valign='top'><img style='padding-top:3px;' src='${urlServer}/template/classic/img/arrow.png' title='bullet' /></td>
-                    <td>";
-
-		    if (empty($res['comments'])) {
-			$comments_text = "";
-		    } else {
-			$comments_text = " $res[comments]";
-		    }
-			$link = "${urlServer}modules/units/?id=$res[id]";				
-			$tool_content .= "<a href='$link'>".$res['title']."</a> $comments_text";
-			$myquery2 = "SELECT unit_id, title, comments FROM unit_resources
-					WHERE unit_id = $res[id]
-					AND MATCH(title, comments)".$query;
-			$result2 = db_query($myquery2, $mysqlMainDb);
-			if (mysql_num_rows($result2) > 0) {
-				while ($res2 = mysql_fetch_array($result2)) {
-					if (empty($res2['comments'])) {
-						$comments_text = "";
-					} else {
-						$comments_text = "<span class='smaller'> $res2[comments]</span>";
-					}
-				$tool_content .= "$res2[title] $comments_text";	
-			        }
-			}
-                  $tool_content .= "
-                    </td>
-                  </tr>";
-
-                  $numLine++;
-		  }
 			$tool_content .= "
-                  </table>\n\n\n";
+			<script type='text/javascript' src='../auth/sorttable.js'></script>
+			<table width='99%' class='sortable' id='t11' align='left'>
+			<tr>
+			  <th colspan='2' class='left'>$langCourseUnits:</th>
+			</tr>";
+			$numLine = 0;
+			while($res = mysql_fetch_array($result))
+			{
+			      if ($numLine%2 == 0) {
+				 $class_view = 'class="even"';
+			      } else {
+				 $class_view = 'class="odd"';
+			      }
+			    $tool_content .= "
+			    <tr $class_view>
+			      <td width='1' valign='top'><img style='padding-top:3px;' src='${urlServer}/template/classic/img/arrow.png' title='bullet' /></td>
+			      <td>";
+	  
+			      if (empty($res['comments'])) {
+				  $comments_text = "";
+			      } else {
+				  $comments_text = " $res[comments]";
+			      }
+				  $link = "${urlServer}modules/units/?id=$res[id]";
+				  $tool_content .= "<a href='$link'>".$res['title']."</a> $comments_text</td></tr>";
+			      $numLine++;
+			}
+			$tool_content .= "</table>\n\n\n";
+			$found = true;
+		}
+		$myquery2 = $myquery2 = "SELECT unit_resources.unit_id AS id,
+				unit_resources.title AS title,
+				unit_resources.comments AS comments
+			FROM unit_resources, course_units
+				WHERE unit_resources.unit_id = course_units.id
+				AND course_units.course_id = $cours_id
+				AND course_units.visibility = 'v'
+			AND MATCH(unit_resources.title, unit_resources.comments)".$query;
+		$result2 = db_query($myquery2, $mysqlMainDb);
+		if (mysql_num_rows($result2) > 0) {
+						$tool_content .= "
+			<script type='text/javascript' src='../auth/sorttable.js'></script>
+			<table width='99%' class='sortable' id='t11' align='left'>
+			<tr>
+			  <th colspan='2' class='left'>$langCourseUnits:</th>
+			</tr>";
+			$numLine = 0;
+			while ($res2 = mysql_fetch_array($result2)) {
+				if ($numLine%2 == 0) {
+				 $class_view = 'class="even"';
+			      } else {
+				 $class_view = 'class="odd"';
+			      }
+			      $tool_content .= "
+				<tr $class_view>
+			      <td width='1' valign='top'><img style='padding-top:3px;' src='${urlServer}/template/classic/img/arrow.png' title='bullet' /></td>
+			      <td>";
+				if (empty($res2['comments'])) {
+					$comments_text = "";
+				} else {
+					$comments_text = "<span class='smaller'> $res2[comments]</span>";
+				}
+				$unitlink = "${urlServer}modules/units/?id=$res2[id]";				
+				$tool_content .= "$res2[title]<a href='$unitlink'>".$comments_text."</a></td></tr>";
+				$numLine++;
+			}
+			$tool_content .= "</table>\n\n\n";
 			$found = true;
 		}
 	}
