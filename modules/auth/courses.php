@@ -88,12 +88,12 @@ if (isset($_POST["submit"])) {
         }
 
 	if ($errorExists) {
-                $tool_content .= "<p class='caution_small'>$langWrongPassCourse " .
+                $tool_content .= "<p class='caution'>$langWrongPassCourse " .
                                  join(', ', $restrictedCourses) . "</p><br />";
         } else {
-                $tool_content .= "<p class='success_small'>$langRegDone</p><br />";
+                $tool_content .= "<p class='success'>$langRegDone</p>";
         }
-        $tool_content .= "<div align=right><a href='../../index.php'>$langHome</a></div>";
+        $tool_content .= "<div><a href='../../index.php'>$langHome</a></div>";
 
 } else {
         $fac = getfacfromfc($fc);
@@ -106,24 +106,33 @@ if (isset($_POST["submit"])) {
 			$tool_content .= "
 			<script type='text/javascript' src='sorttable.js'></script>
 			<table width='99%' class='sortable' id='t1'>
-			  <tr><th class='left'><b>$langFaculty</b></th></tr>";
+			  <tr>
+                            <th class='left'>$langFaculty</th>
+                          </tr>\n";
 			$k = 0;
 			while ($fac = mysql_fetch_array($result)) {
 				if ($k%2==0) {
-					$tool_content .= "\n<tr class='even'>";
+					$tool_content .= "
+                          <tr class='even'>";
 				} else {
-					$tool_content .= "\n<tr class='odd'>";
+					$tool_content .= "
+                          <tr class='odd'>";
 				}
-				$tool_content .= "\n<td>&nbsp;<img src='../../template/classic/img/arrow.png' />&nbsp;
-					<a href='$_SERVER[PHP_SELF]?fc=$fac[id]'>" . htmlspecialchars($fac['name']) . "</a>&nbsp;
-					<small><font color='#a33033'>($fac[code])</font></small>";
+				$tool_content .= "
+                            <td>&nbsp;<img src='../../template/classic/img/arrow.png' />&nbsp;
+				<a href='$_SERVER[PHP_SELF]?fc=$fac[id]'>" . htmlspecialchars($fac['name']) . "</a>&nbsp;
+				<span class='smaller'>($fac[code])</span>";
 				$n = db_query("SELECT COUNT(*) FROM cours
 					WHERE faculteid = $fac[id] AND (cours.visible = '1' OR cours.visible = '2')");
 				$r = mysql_fetch_array($n);
-				$tool_content .= " <small><font color='#a5a5a5'>&nbsp;($r[0]  ". ($r[0] == 1? $langAvCours: $langAvCourses) . ")</font><small></td></tr>";
-				$k++;
+				$tool_content .= " 
+                                <span class='smaller'>&nbsp;($r[0]  ". ($r[0] == 1? $langAvCours: $langAvCourses) . ") </span>
+                            </td>
+                          </tr>";
+			$k++;
 			}
-			$tool_content .= "\n</table>";
+			$tool_content .= "
+                          </table>";
 		}
 		$tool_content .= "<br /><br />\n";
 	} else {
@@ -293,11 +302,11 @@ function expanded_faculte($fac_name, $facid, $uid) {
                         }
 			// end of link creation
                         if ($k%2 == 0) {
-                                $retString .= "\n<tr class='even'>";
+                                $retString .= "\n    <tr class='even'>";
                         } else {
-                                $retString .= "\n<tr class='odd'>";
+                                $retString .= "\n    <tr class='odd'>";
                         }
-                        $retString .= "\n<td align='center'>";
+                        $retString .= "\n      <td align='center'>";
                         $requirepassword = "";
                         if (isset($myCourses[$cid])) {
                                 if ($myCourses[$cid]['statut'] != 1) { // display registered courses
@@ -329,20 +338,20 @@ function expanded_faculte($fac_name, $facid, $uid) {
                         }
                         $retString .= "<input type='hidden' name='changeCourse[]' value='$cid' />";
                         $retString .= "</td>";
-                        $retString .= "\n<td>$codelink (" . q($mycours['fake_code']) .
+                        $retString .= "\n      <td>$codelink (" . q($mycours['fake_code']) .
                                 ")$requirepassword</td>";
-                        $retString .= "\n<td>" . q($mycours['t']) . "</td>";
-                        $retString .= "\n<td align='center'>";
+                        $retString .= "\n      <td>" . q($mycours['t']) . "</td>";
+                        $retString .= "\n      <td align='center'>";
                         // show the necessary access icon
                         foreach ($icons as $visible => $image) {
                                 if ($visible == $mycours['visible']) {
                                         $retString .= $image;
                                 }
                         }
-                        $retString .= "</td></tr>";
+                        $retString .= "</td>\n    </tr>";
                         $k++;
                 } // END of while
-                $retString .= "\n</table>";
+                $retString .= "\n    </table>";
         } // end of foreach
         return $retString;
 }

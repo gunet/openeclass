@@ -339,14 +339,13 @@ hContent;
 		    $classvis = 'visible';
 		}
 	    }
-	    if ($is_adminOfCourse) {
-		$tool_content .= "        <tr class='$classvis'>\n";
-	    } elseif ($k%2 == 0) {
-	           $tool_content .= "        <tr class='even'>\n";
-	        } else {
-	           $tool_content .= "        <tr class='odd'>\n";
+            if ($k%2 == 0) {
+                   $tool_content .= "        <tr class='even'>\n";
+                } else {
+                   $tool_content .= "        <tr class='odd'>\n";
             }
-            $tool_content .= "<td width='1' valign='top'><img style='padding-top:3px;' src='${urlServer}/template/classic/img/arrow.png' title='bullet' /></td>
+
+            $tool_content .= "<td width='1' valign='top' class='$classvis'><img style='padding-top:3px;' src='${urlServer}/template/classic/img/arrow.png' title='bullet' /></td>
           <td><b>";
             if (empty($myrow['title'])) {
                 $tool_content .= $langAnnouncementNoTille;

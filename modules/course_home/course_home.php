@@ -304,9 +304,9 @@ $tool_content .= "
 <br>
         <table class='tbl_courseid' width='200'>
         <tr class='title1'>
-        <td  class='title1'>$langTools
-        </td>
-        </tr>
+          <td class='title1'>$langTools</td>
+          <td class='right' ><span class='feed'><a href='${urlServer}modules/announcements/rss.php?c=$currentCourseID'><img src='${urlServer}template/classic/img/feed.png' alt='RSS Feed' title='RSS Feed' /></a></span>|</td>
+          <td class='left' width='50'>
         ";
 
 if ($is_adminOfCourse or
@@ -317,19 +317,15 @@ if ($is_adminOfCourse or
                 $button_message = $langStudentViewEnable;
         }
         $tool_content .="
-        <tr>
-          <td>
-          <div align='right' class='smaller'>
-                        <form action='{$urlServer}student_view.php' method='post'>
+            <form action='{$urlServer}student_view.php' method='post'>
               <input id='view_btn' type='image' src='../../template/classic/img/switch.png' name='submit' title='$button_message'/> | 
             
            <a href='../../modules/contact/index.php' id='email_btn'><img src='../../template/classic/img/email.png' alt='icon' title='$langContactProf' /></a>
-</form>
-        </div>
-          </td>
-        </tr>";
+</form>";
 }
         $tool_content .="
+          </td>
+        </tr>
         </table>
         <br />\n";
 

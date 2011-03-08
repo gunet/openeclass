@@ -44,14 +44,14 @@ include("./include/lib/textLib.inc.php");
 function cours_table_header($statut)
 {
         global $langCourseCode, $langMyCoursesProf, $langMyCoursesUser, $langCourseCode,
-               $langTeacher, $langAdm, $langUnregCourse, $tool_content;
+               $langTeacher, $langAdm, $langUnregCourse, $langUnCourse, $tool_content;
 
         if ($statut == 1) {
                 $legend = $langMyCoursesProf;
                 $manage = $langAdm;
         } elseif ($statut == 5) {
                 $legend = $langMyCoursesUser;
-                $manage = $langUnregCourse;
+                $manage = $langUnCourse;
         } else {
                 $legend = "(? $statut ?)";
                 $manage = '';
@@ -63,8 +63,8 @@ function cours_table_header($statut)
         <table width='99%' class='sortable' id='t1'>
         <tr>
           <th colspan='2'>$langCourseCode</th>
-          <th width='220'>$langTeacher</th>
-          <th width='150' class='center'>$manage</th>
+          <th width='190'>$langTeacher</th>
+          <th width='50' class='center'>$manage</th>
         </tr>\n";
 }
 
@@ -115,8 +115,8 @@ if ($result2 and mysql_num_rows($result2) > 0) {
                         $manage_title = $langUnregCourse;
                 }
 		$tool_content .="          <td width='5'><img src='${urlAppend}/template/classic/img/arrow.png' alt='' /></td>";
-		$tool_content .= "\n          <td><a href='${urlServer}courses/$code'>".q($title)."</a> (".q($mycours['fake_code']).")</td>";
-		$tool_content .= "\n          <td>".q($mycours['profs'])."</td>";
+		$tool_content .= "\n          <td><a href='${urlServer}courses/$code'>".q($title)."</a> <span class='smaller'>(".q($mycours['fake_code']).")</span></td>";
+		$tool_content .= "\n          <td class='smaller'>".q($mycours['profs'])."</td>";
 		$tool_content .= "\n          <td align='center'><a href='$manage_link'><img src='$manage_icon' title='$manage_title' alt='$manage_title' /></a></td>";
 		$tool_content .= "\n        </tr>";
 		$k++;
@@ -124,10 +124,10 @@ if ($result2 and mysql_num_rows($result2) > 0) {
         cours_table_end();
 }  elseif ($_SESSION['statut'] == '5') {
         // if are loging in for the first time as student...
-	$tool_content .= "\n        <p>$langWelcomeStud</p>\n";
+	$tool_content .= "\n        <p class='success'>$langWelcomeStud</p>\n";
 }  elseif ($_SESSION['statut'] == '1') {
         // ...or as professor
-        $tool_content .= "\n        <p>$langWelcomeProf</p>\n";
+        $tool_content .= "\n        <p class='success'>$langWelcomeProf</p>\n";
 }
 
 if (count($status) > 0) {
@@ -160,12 +160,12 @@ if (count($status) > 0) {
                         while ($ann = mysql_fetch_array($result)) {
                                         $content = standard_text_escape($ann['contenu']);
                                         if ($la%2==0) {
-                                                $tool_content .= "         <tr class='bordless'>\n";
+                                                $tool_content .= "         <tr class='even'>\n";
                                         } else {
-                                                $tool_content .= "         <tr class='tbl_alt_bordless''>\n";
+                                                $tool_content .= "         <tr class='odd'>\n";
                                         }
                                         $tool_content .= "           <td width='1' class='square_bullet2'>&nbsp;</td>\n" .
-                                                         "           <td>" .  claro_format_locale_date($dateFormatLong, strtotime($ann['temps'])) ."&nbsp;(<small>$langCourse: <b>{$titles[$code]}</b> | $langTutor: <b>" . q($profs[$code]) . "</b></small>)<br />\n".
+                                                         "           <td>" .  claro_format_locale_date($dateFormatLong, strtotime($ann['temps'])) ."&nbsp;(<span class='smaller'>$langCourse: <b>{$titles[$code]}</b> | $langTutor: <b>" . q($profs[$code]) . "</b></span>)<br />\n".
                                                          "             <b>$ann[title]</b>\n".
 							 "             $content\n".
                                                          "           </td>\n" .
