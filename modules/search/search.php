@@ -159,35 +159,42 @@ if (!register_posted_variables(array('search_terms' => false,
         if (!$result or mysql_num_rows($result) == 0) {
                 $tool_content .= "<p class='alert1'>$langNoResult</p>";
         } else {
+               $tool_content .= "
+              <div id='operations_container'>
+                <ul id='opslist'>
+                   <li><a href='search.php'>$langNewSearch</a></li>
+                </ul>
+              </div>";
+
                 $tool_content .= "
-                        <table width='99%' class='Search' align='left'>
-                        <tr class='odd'>
-                                <td colspan='4'>$langDoSearch:&nbsp;<b>$langResults</b></td>
-                        </tr>
-                        <tr>
-                                <th width='1%'>&nbsp;</th>
-                                <th width='40%'><div align='left'>".$langCourse." ($langCode)</div></th>
-                                <th width='30%'><div align='left'>$langTeacher</div></th>
-                                <th width='30%'><div align='left'>$langKeywords</div></th>
-                        </tr>";
+                  <p class='sub_title1'>$langDoSearch:&nbsp;<b>$langResults</b></p>
+                  <script type='text/javascript' src='../auth/sorttable.js'></script>
+                  <table width='99%' class='sortable' id='t1' align='left'>
+                  <tr>
+                    <th width='1'>&nbsp;</th>
+                    <th><div align='left'>".$langCourse." ($langCode)</div></th>
+                    <th width='200'><div align='left'>$langTeacher</div></th>
+                    <th width='150'><div align='left'>$langKeywords</div></th>
+                  </tr>";
                 $k = 0;
                 while ($mycours = mysql_fetch_array($result)) {
                         if ($k % 2) {
-                                $tool_content .= "<tr class='odd'>";
+                                $tool_content .= "
+                  <tr class='odd'>";
                         } else {
-                                $tool_content .= "<tr>";
+                                $tool_content .= "
+                  <tr class='even'>";
                         }
                         $tool_content .= "<td><img src='../../template/classic/img/arrow.png' alt=''  /></td>" .
                                 "<td><a href='../../courses/$mycours[code]/'>" . q($mycours['intitule']) .
                                 "</a> (" . q($mycours['fake_code']) . ")</td>" .
                                 "<td>" . q($mycours['titulaires']) . "</td>" .
-                                "<td>" . q($mycours['course_keywords']) . "</td></tr>";
+                                "<td>" . q($mycours['course_keywords']) . "</td>
+                  </tr>";
                         $k++;
                 }
-                $tool_content .= "</table>
-                        <div id='operations_container'><ul id='opslist'>
-                             <li><a href='search.php'>$langNewSearch</a></li>
-                        </ul></div>";
+                $tool_content .= "
+                </table>";
         }
 }
 

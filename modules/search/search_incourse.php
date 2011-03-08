@@ -52,7 +52,7 @@ register_posted_variables(array('announcements' => true,
 				'forums' => true,
 				'links' => true,
 				'video' => true),
-			  'all');
+			        'all');
 
 if (isset($_GET['all'])) {
 	$all = intval($_GET['all']);
@@ -102,20 +102,14 @@ if(empty($search_terms)) {
 	   </fieldset>
 	   </form>";
 } else {
-	$tool_content .= "<div id=\"operations_container\">
+	$tool_content .= "
+        <div id=\"operations_container\">
 	  <ul id='opslist'>
 	    <li><a href='$_SERVER[PHP_SELF]'>$langNewSearch</a></li>
 	  </ul>
 	</div>";
 	$tool_content .= "
-	    <table width='99%' class='FormData' align='left'>
-	    <tbody>
-	    <tr>
-	      <th width='180' class='left'>&nbsp;</th>
-	      <td><b>$langResults</b></td>
-	    </tr>
-	    </tbody>
-	    </table>";
+        <p class='sub_title1'>$langResults</p>";
 	
 	// search in announcements
 	if ($announcements) 
@@ -126,18 +120,34 @@ if(empty($search_terms)) {
 				AND MATCH (title, contenu)".$query;
 		$result = db_query($myquery, $mysqlMainDb);
 		if(mysql_num_rows($result) > 0) {
-			$tool_content .= "<table width=\"99%\" class=\"Search\" align=\"left\">
-			<tr>
-			<th width=\"180\">$langAnnouncements:</th></tr>
-			<tr><td>";
+		$tool_content .= "
+                  <script type='text/javascript' src='../auth/sorttable.js'></script>
+                  <table width=\"99%\" class=\"sortable\" id='t1' align=\"left\">
+		  <tr>
+		    <th colspan='2'>$langAnnouncements:</th>
+                  </tr>";
+                        $numLine = 0;
 			while($res = mysql_fetch_array($result))
 			{
-				$tool_content .= "<div class='Results'><b>" . q($res['title']) ."</b>&nbsp;&nbsp;";	    
+                             if ($numLine%2 == 0) {
+                               $class_view = 'class="even"';
+                             } else {
+                               $class_view = 'class="odd"';
+                             }
+
+		  $tool_content .= "
+                  <tr $class_view>
+                    <td width='1' valign='top'><img style='padding-top:3px;' src='${urlServer}/template/classic/img/arrow.png' title='bullet' /></td>
+                    <td><b>" . q($res['title']) ."</b>&nbsp;&nbsp;";	    
 				$tool_content .= "<small>("
 				.nice_format(claro_format_locale_date($dateFormatLong, strtotime($res['temps']))).
-				")</small><br />$res[contenu]<br /></div>";
+				")</small><br />$res[contenu]
+                    </td>
+                  </tr>";
+                        $numLine++;
 			}
-		$tool_content .= "</td></tr></table>\n";
+		$tool_content .= "
+                  </table>\n\n\n";
 		$found = true;
 		}
 	}
@@ -148,12 +158,24 @@ if(empty($search_terms)) {
 				AND MATCH (titre, contenu)".$query;
 		$result = db_query($myquery, $currentCourseID);	
 		if(mysql_num_rows($result) > 0) {
-			$tool_content .= "<table width='99%' class='Search' align='left'>
-			<tr>
-			<th width=\"180\" class=\"left\">$langAgenda:</th></tr>
-			<tr><td>";
+			$tool_content .= "
+                  <script type='text/javascript' src='../auth/sorttable.js'></script>
+                  <table width='99%' class='sortable' id='t2' align='left'>
+		  <tr>
+		    <th colspan='2' class=\"left\">$langAgenda:</th>
+                  </tr>";
+                        $numLine = 0;
 			while($res = mysql_fetch_array($result))
 			{
+                             if ($numLine%2 == 0) {
+                               $class_view = 'class="even"';
+                             } else {
+                               $class_view = 'class="odd"';
+                             }
+                  $tool_content .= "
+                  <tr $class_view>
+                    <td width='1' valign='top'><img style='padding-top:3px;' src='${urlServer}/template/classic/img/arrow.png' title='bullet' /></td>
+                    <td>";
 				$message = $langUnknown;
 				if ($res["lasting"] != "") {
 					if ($res["lasting"] == 1)
@@ -161,13 +183,17 @@ if(empty($search_terms)) {
 					else
 						$message = $langHours;
 				}
-				$tool_content .= "<div class='Results'><span class=day>".
+				$tool_content .= "<span class=day>".
 				ucfirst(claro_format_locale_date($dateFormatLong,strtotime($res["day"]))).
 				"</span> ($langHour: ".ucfirst(date("H:i",strtotime($res["hour"]))).")<br />"				
-				.$res['titre']." (".$langLasting.": ".$res["lasting"]." $message)<br /> ".$res['contenu']."</div>";
+				.$res['titre']." (".$langLasting.": ".$res["lasting"]." $message) ".$res['contenu']."
+                    </td>
+                  </tr>";
+                        $numLine++;
 			}
-			$tool_content .= "</td></tr></table>\n";
-			$found = true;
+			$tool_content .= "
+                  </table>\n\n\n";
+		  $found = true;
 		}
 	}
 	// search in documents
@@ -179,23 +205,38 @@ if(empty($search_terms)) {
 				AND MATCH (filename, comment, title, creator, subject, description, author, language)".$query;
 		$result = db_query($myquery, $mysqlMainDb);
 		if(mysql_num_rows($result) > 0) {
-			$tool_content .= "<table width='99%' class='Search' align='left'>
-			<tr>
-			<th width='180' class='left'>$langDoc:</th></tr>
-			<tr><td>";
-			while($res = mysql_fetch_array($result))
-			{
+			$tool_content .= "
+                <script type='text/javascript' src='../auth/sorttable.js'></script>
+                <table width='99%' class='sortable' id='t3' align='left'>
+		<tr>
+		  <th colspan='2' class='left'>$langDoc:</th>
+                </tr>";
+                $numLine = 0;
+		while($res = mysql_fetch_array($result))
+		{
+                   if ($numLine%2 == 0) {
+                      $class_view = 'class="even"';
+                   } else {
+                      $class_view = 'class="odd"';
+                   }
+                $tool_content .= "
+                <tr $class_view>
+                  <td width='1' valign='top'><img style='padding-top:3px;' src='${urlServer}/template/classic/img/arrow.png' title='bullet' /></td>
+                  <td>";
 				if (empty($res['comment']))  { 
 					$add_comment = "";
 				} else {
-					$add_comment = ": ($res[comment])";
+					$add_comment = "<br /><span class='smaller'> ($res[comment])</span>";
 				}
 				$link_document = "{$urlServer}modules/document/document.php?action2=download&amp;id=$res[path]";
-				$tool_content .= "<div class='Results'><b>
-					<a href='$link_document'>".$res['filename']."</a></b>$add_comment</div>";
-			}		
-			$tool_content .= "</td></tr></table>";
-			$found = true;
+				$tool_content .= "<a href='$link_document'>".$res['filename']."</a>$add_comment
+                  </td>
+                </tr>";
+                $numLine++;
+		}		
+		$tool_content .= "
+                </table>\n\n\n";
+		$found = true;
 		}
 	}
 
@@ -206,23 +247,39 @@ if(empty($search_terms)) {
 				AND MATCH (titre, description)".$query;
 		$result = db_query($myquery, $currentCourseID);
 		if(mysql_num_rows($result) > 0) {
-			$tool_content .= "<table width=\"99%\" class='Search' align='left'>
-			<tr>
-			<th width='180' class='left'>$langExercices:</th></tr>
-			<tr><td>";
-			while($res = mysql_fetch_array($result))
-			{
+			$tool_content .= "
+                <script type='text/javascript' src='../auth/sorttable.js'></script>
+                <table width=\"99%\" class='sortable' id='t4' align='left'>
+		<tr>
+		  <th colspan='2' class='left'>$langExercices:</th>
+                </tr>";
+                $numLine = 0;
+		while($res = mysql_fetch_array($result))
+		{
+                   if ($numLine%2 == 0) {
+                      $class_view = 'class="even"';
+                   } else {
+                      $class_view = 'class="odd"';
+                   }
+                $tool_content .= "
+                <tr $class_view>
+                  <td width='1' valign='top'><img style='padding-top:3px;' src='${urlServer}/template/classic/img/arrow.png' title='bullet' /></td>
+                  <td>";
+
 				if (empty($res['description'])) { 
 					$desc_text = "";
 				} else { 
-					$desc_text = ": ($res[description])";
+					$desc_text = "<br /> <span class='smaller'>($res[description])</span>";
 				}
 				$link_exercise =" ${urlServer}/modules/exercice/exercice_submit.php?exerciseId=$res[id]";
-				$tool_content .= "<div class='Results'><b>
-				<a href='$link_exercise'>".$res['titre']."</a>$desc_text</b></div>";
-			}
-			$tool_content .= "</td></tr></table>";
-			$found = true;
+				$tool_content .= "<a href='$link_exercise'>".$res['titre']."</a>$desc_text
+                  </td>
+                </tr>";
+                $numLine++;
+		}
+		$tool_content .= "
+                </table>\n\n\n";
+		$found = true;
 		}
 	}
 
@@ -231,50 +288,85 @@ if(empty($search_terms)) {
 		$myquery = "SELECT * FROM forums WHERE MATCH (forum_name, forum_desc)".$query;
 		$result = db_query($myquery, $currentCourseID);
 		if(mysql_num_rows($result) > 0) {
-			$tool_content .= "<table width='99%' class='Search' align='left'>
-			<tr>
-			<th width=\"180\" class=\"left\">$langForum ($langCategories):</th></tr>
-			<tr><td>";
-			while($res = mysql_fetch_array($result))
-			{
+		  $tool_content .= "
+                  <script type='text/javascript' src='../auth/sorttable.js'></script>
+                  <table width='99%' class='sortable' id='t5' align='left'>
+		  <tr>
+		    <th colspan='2' class=\"left\">$langForum ($langCategories):</th>
+                  </tr>";
+        
+                  $numLine = 0;
+		  while($res = mysql_fetch_array($result))
+		  {
+                   if ($numLine%2 == 0) {
+                      $class_view = 'class="even"';
+                   } else {
+                      $class_view = 'class="odd"';
+                   }
+                  $tool_content .= "
+                  <tr $class_view>
+                    <td width='1' valign='top'><img style='padding-top:3px;' src='${urlServer}/template/classic/img/arrow.png' title='bullet' /></td>
+                    <td>";
+
 				if (empty($res['forum_desc'])) { 
 					$desc_text = "";
 				} else { 
-					$desc_text = "<br />($res[forum_desc])";
+					$desc_text = "<br /><span class='smaller'>($res[forum_desc])</span>";
 				}
 				$link_forum = "${urlServer}/modules/phpbb/viewforum.php?forum=$res[forum_id]";
-				$tool_content .= "<div class='Results'><a href='$link_forum'>".$res['forum_name']."</a> $desc_text</div>";				
-			}
-			$tool_content .= "</td></tr></table>";
-			$found = true;
+				$tool_content .= "<a href='$link_forum'>".$res['forum_name']."</a> $desc_text
+                    </td>
+                  </tr>";				
+                  $numLine++;
+		  }
+		  $tool_content .= "
+                  </table>\n\n\n";
+		  $found = true;
 		}
 		$myquery = "SELECT forum_id, topic_title FROM topics WHERE MATCH (topic_title)".$query;		
 		$result = db_query($myquery, $currentCourseID);
 		if(mysql_num_rows($result) > 0) {
-			$tool_content .= "<table width='99%' class='Search' align='left'>
-			<tr>
-			<th width=\"180\" class=\"left\">$langForum ($langSubjects - $langMessages):</th></tr>
-			<tr><td>";
-			while($res = mysql_fetch_array($result))
+			$tool_content .= "
+                <script type='text/javascript' src='../auth/sorttable.js'></script>
+                <table width='99%' class='sortable' id='t6' align='left'>
+		<tr>
+		  <th colspan='2' class=\"left\">$langForum ($langSubjects - $langMessages):</th>
+                </tr>";
+                $numLine = 0;
+		while($res = mysql_fetch_array($result))
+		{
+                   if ($numLine%2 == 0) {
+                      $class_view = 'class="even"';
+                   } else {
+                      $class_view = 'class="odd"';
+                   }
+                  $tool_content .= "
+                  <tr $class_view>
+                    <td width='1' valign='top'><img style='padding-top:3px;' src='${urlServer}/template/classic/img/arrow.png' title='bullet' /></td>
+                    <td>";
+			$link_topic = "${urlServer}/modules/phpbb/viewforum.php?forum=$res[forum_id]";
+			$tool_content .= "<strong>$langSubject</strong>: <a href='$link_topic'>".$res['topic_title']."</a>";
+			$myquery2 = "SELECT posts.topic_id AS topicid, posts_text.post_text AS posttext
+					FROM posts, posts_text
+					WHERE posts.forum_id = $res[forum_id]
+						AND posts.post_id = posts_text.post_id 
+						AND MATCH (posts_text.post_text)".$query;		
+			$result2 = db_query($myquery2, $currentCourseID);
+			if(mysql_num_rows($result2) > 0) {
+			while($res2 = mysql_fetch_array($result2))
 			{
-				$link_topic = "${urlServer}/modules/phpbb/viewforum.php?forum=$res[forum_id]";
-				$tool_content .= "<div class='Results'><a href='$link_topic'>".$res['topic_title']."</a></div>";
-				$myquery2 = "SELECT posts.topic_id AS topicid, posts_text.post_text AS posttext
-						FROM posts, posts_text
-						WHERE posts.forum_id = $res[forum_id]
-							AND posts.post_id = posts_text.post_id 
-							AND MATCH (posts_text.post_text)".$query;		
-				$result2 = db_query($myquery2, $currentCourseID);
-				if(mysql_num_rows($result2) > 0) {
-					while($res2 = mysql_fetch_array($result2))
-					{
-						$link_post = "${urlServer}/modules/phpbb/viewtopic.php?topic=$res2[topicid]&amp;forum=$res[forum_id]";
-						$tool_content .= "<div class='Results'><a href='$link_post'>".$res2['posttext']."</a></div>";
-					}
-				}
+			  $link_post = "${urlServer}/modules/phpbb/viewtopic.php?topic=$res2[topicid]&amp;forum=$res[forum_id]";
+			  $tool_content .= "<br /><strong>$langMessage</strong> <a href='$link_post'>".$res2['posttext']."</a>";
 			}
-			$tool_content .= "</td></tr></table>";
-			$found = true;
+	          }
+                  $tool_content .= "
+                    </td>
+                  </tr>";
+                  $numLine++;
+		  }
+		  $tool_content .= "
+                  </table>";
+		  $found = true;
 		}
 	}
 
@@ -286,22 +378,38 @@ if(empty($search_terms)) {
 		$result = db_query($myquery, $mysqlMainDb);
 		if(mysql_num_rows($result) > 0)
 		{
-			$tool_content .= "<table width='99%' class='Search' align='left'>
-			<tr><th width='180' class='left'>$langLinks:</th></tr>
-			<tr><td>";
-			while($res = mysql_fetch_array($result))
-			{
+		$tool_content .= "
+                <script type='text/javascript' src='../auth/sorttable.js'></script>
+                <table width='99%' class='sortable' id='t7' align='left'>
+		<tr>
+                  <th colspan='2' class='left'>$langLinks:</th>
+                </tr>";
+                $numLine = 0;
+		while($res = mysql_fetch_array($result))
+		{
+                   if ($numLine%2 == 0) {
+                      $class_view = 'class="even"';
+                   } else {
+                      $class_view = 'class="odd"';
+                   }
+                  $tool_content .= "
+                  <tr $class_view>
+                    <td width='1' valign='top'><img style='padding-top:3px;' src='${urlServer}/template/classic/img/arrow.png' title='bullet' /></td>
+                    <td>";
+
 				if (empty($res['description'])) { 
 					$desc_text = "";
 				} else { 
-					$desc_text = "($res[description])";
+					$desc_text = "<span class='smaller'>($res[description])</span>";
 				}
 				$link_url = "{$urlServer}modules/link/go.php?c=$currentCourseID&amp;id=$res[id]&amp;link_url=$res[url]"; 
-				$tool_content .= "<div class='Results'>
-					<a href='$link_url' target=_blank> ".$res['title']."</a> $desc_text
-					</div>";
-			}
-			$tool_content .= "</td></tr></table>";
+				$tool_content .= "<a href='$link_url' target=_blank> ".$res['title']."</a> $desc_text
+                  </td>
+                </tr>";
+                 $numLine++;
+		 }
+		$tool_content .= "
+                </table>\n\n\n";
 			$found = true;
 		}
 	}
@@ -313,42 +421,76 @@ if(empty($search_terms)) {
 		$result = db_query($myquery, $currentCourseID);
 		if(mysql_num_rows($result) > 0)
 		{
-			$tool_content .= "<table width='99%' class='Search' align='left'>
-			<tr><th width='180' class='left'>$langVideo:</th></tr>
-			<tr><td>";
-			while($res = mysql_fetch_array($result))
-			{
+		$tool_content .= "
+                <script type='text/javascript' src='../auth/sorttable.js'></script>
+                <table width='99%' class='sortable'  id='t8' align='left'>
+		<tr>
+                  <th colspan='2' class='left'>$langVideo:</th>
+                </tr>";
+                $numLine = 0;
+		while($res = mysql_fetch_array($result))
+		{
+                   if ($numLine%2 == 0) {
+                      $class_view = 'class="even"';
+                   } else {
+                      $class_view = 'class="odd"';
+                   }
+                  $tool_content .= "
+                  <tr $class_view>
+                    <td width='1' valign='top'><img style='padding-top:3px;' src='${urlServer}/template/classic/img/arrow.png' title='bullet' /></td>
+                    <td>";
+
 				if (empty($res['description'])) {
 					$desc_text = "";
 				} else {
-					$desc_text = "($res[description])";
+					$desc_text = "<span class='smaller'>($res[description])</span>";
 				}
 				$link_video = "${urlServer}modules/video/video.php?action=download&amp;id=$res[path]";				
-				$tool_content .= "<div class='Results'><a href='$link_video'>".$res['titre']."</a> $desc_text</div>";
-			}
-			$tool_content .= "</td></tr></table>";
+				$tool_content .= "<a href='$link_video'>".$res['titre']."</a> $desc_text
+                  </td>
+                </tr>";
+                $numLine++;
+		}
+			$tool_content .= "
+                </table>\n\n\n";
 			$found = true;
 		}
 		$myquery = "SELECT * FROM videolinks WHERE MATCH (url, titre, description)".$query;
 		$result = db_query($myquery, $currentCourseID);
 		if(mysql_num_rows($result) > 0)
 		{
-			$tool_content .= "<table width='99%' class='Search' align='left'>
-			<tr><th width='180' class='left'>$langLinks:</th></tr>
-			<tr><td>";
-			while($res = mysql_fetch_array($result))
-			{
-				if (empty($res['description'])) {
-					$desc_text = "";
-				} else {
-					$desc_text = "($res[description])";
-				}
-				$link_video = $res['url'];
-				$tool_content .= "<div class='Results'>
-					<a href='$link_video' target=_blank>".$res['titre']."</a><br /> $desc_text
-					</div>";
-			}
-			$tool_content .= "</td><tr></table>\n";
+		  $tool_content .= "
+                  <script type='text/javascript' src='../auth/sorttable.js'></script>
+                  <table width='99%' class='sortable' id='t9' align='left'>
+		  <tr>
+                    <th colspan='2' class='left'>$langLinks:</th>
+                  </tr>";
+                $numLine =0;
+		while($res = mysql_fetch_array($result))
+		{
+                    if ($numLine%2 == 0) {
+                       $class_view = 'class="even"';
+                    } else {
+                       $class_view = 'class="odd"';
+                    }
+                  $tool_content .= "
+                  <tr $class_view>
+                    <td width='1' valign='top'><img style='padding-top:3px;' src='${urlServer}/template/classic/img/arrow.png' title='bullet' /></td>
+                    <td>";
+
+		    if (empty($res['description'])) {
+		 	$desc_text = "";
+		    } else {
+			$desc_text = "<span class='smaller'>($res[description])</span>";
+		    }
+		    $link_video = $res['url'];
+		  $tool_content .= "<a href='$link_video' target=_blank>".$res['titre']."</a><br /> $desc_text
+                  </td>
+                </tr>";
+                  $numLine++;
+		}
+		$tool_content .= "
+                  </table>\n\n\n";
 			$found = true;
 		}
 	}
@@ -362,40 +504,60 @@ if(empty($search_terms)) {
 		$result = db_query($myquery, $mysqlMainDb);
 		if(mysql_num_rows($result) > 0)
 		{
-			$tool_content .= "<table width='99%' class='Search' align='left'>
-			<tr><th width='180' class='left'>$langCourseUnits:</th></tr>
-			<tr><td>";
-			while($res = mysql_fetch_array($result))
-			{
-				if (empty($res['comments'])) {
-					$comments_text = "";
-				} else {
-					$comments_text = " $res[comments]";
-				}
-				$link = "${urlServer}modules/units/?id=$res[id]";				
-				$tool_content .= "<div class='Results'><a href='$link'>".$res['title']."</a> $comments_text</div>";
-				$myquery2 = "SELECT unit_id, title, comments FROM unit_resources
-						WHERE unit_id = $res[id]
-						AND MATCH(title, comments)".$query;
-				$result2 = db_query($myquery2, $mysqlMainDb);
-				if (mysql_num_rows($result2) > 0) {
-					while ($res2 = mysql_fetch_array($result2)) {
-						if (empty($res2['comments'])) {
-							$comments_text = "";
-						} else {
-							$comments_text = " $res2[comments]";
-						}
-						$tool_content .= "<div class='Results'>$res2[title] $comments_text</div>";	
+		  $tool_content .= "
+                  <script type='text/javascript' src='../auth/sorttable.js'></script>
+                  <table width='99%' class='sortable' id='t11' align='left'>
+		  <tr>
+                    <th colspan='2' class='left'>$langCourseUnits:</th>
+                  </tr>";
+                  $numLine = 0;
+		  while($res = mysql_fetch_array($result))
+		  {
+                    if ($numLine%2 == 0) {
+                       $class_view = 'class="even"';
+                    } else {
+                       $class_view = 'class="odd"';
+                    }
+                  $tool_content .= "
+                  <tr $class_view>
+                    <td width='1' valign='top'><img style='padding-top:3px;' src='${urlServer}/template/classic/img/arrow.png' title='bullet' /></td>
+                    <td>";
+
+		    if (empty($res['comments'])) {
+			$comments_text = "";
+		    } else {
+			$comments_text = " $res[comments]";
+		    }
+			$link = "${urlServer}modules/units/?id=$res[id]";				
+			$tool_content .= "<a href='$link'>".$res['title']."</a> $comments_text";
+			$myquery2 = "SELECT unit_id, title, comments FROM unit_resources
+					WHERE unit_id = $res[id]
+					AND MATCH(title, comments)".$query;
+			$result2 = db_query($myquery2, $mysqlMainDb);
+			if (mysql_num_rows($result2) > 0) {
+				while ($res2 = mysql_fetch_array($result2)) {
+					if (empty($res2['comments'])) {
+						$comments_text = "";
+					} else {
+						$comments_text = "<span class='smaller'> $res2[comments]</span>";
 					}
-				}
+				$tool_content .= "$res2[title] $comments_text";	
+			        }
 			}
-			$tool_content .= "</td></tr></table>";
+                  $tool_content .= "
+                    </td>
+                  </tr>";
+
+                  $numLine++;
+		  }
+			$tool_content .= "
+                  </table>\n\n\n";
 			$found = true;
 		}
 	}
 	// else ... no results found
 	if ($found == false) {
-		$tool_content .= "<br /><p class='alert1'>$langNoResult</p>";
+		$tool_content .= "<p class='alert1'>$langNoResult</p>";
 	}
 } // end of search
 

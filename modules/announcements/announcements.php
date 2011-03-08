@@ -301,7 +301,8 @@ hContent;
         $bottomAnnouncement = $announcementNumber = mysql_num_rows($result);
 
 	$tool_content .= "
-        <table width='99%' class='tbl_alt'>";
+        <script type='text/javascript' src='../auth/sorttable.js'></script>
+        <table width='99%' class='sortable' id='t1'>";
 	if ($is_adminOfCourse) {
 		$colspan = 1;
 	} else {
