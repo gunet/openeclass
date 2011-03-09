@@ -861,7 +861,8 @@ td.bold {
         color: #8597A5;
         font-weight: bold;
         padding: 5px;
-        border-bottom: 1px dashed #687A92; 
+        border-bottom: 1px dashed #dfdfdf;    
+
 }
 .course_info h1 a {
         font-weight: bold;
