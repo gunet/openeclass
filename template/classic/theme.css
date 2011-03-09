@@ -658,15 +658,14 @@ fieldset table.th {
 	
 .tbl_alt th {
     font-weight: bold;
-    background-color: #73849b;
-    color: #ffffff;
+    color: #73849b;
     text-align: center;
     padding: 5px;
+    background-color: #f1f1f1;
+    border-bottom: 1px dashed #dfdfdf;
 }
 
-.tbl_alt th a {
-    color: #ffffff;
-}
+
 
 .tbl_alt td, .tbl_alt th {
     vertical-align: top;
