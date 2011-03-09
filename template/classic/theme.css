@@ -733,10 +733,9 @@ fieldset table.th {
 }
 
 table.sortable a.sortheader {
-    background-color: #8597A5;
-    color: #ffffff;
-    font-size: 13px;
     font-weight: bold;
+    color: #73849b;
+    background-color: #f1f1f1;
     text-decoration: none;
     padding : 0px;
     display: block;
@@ -755,7 +754,10 @@ table.sortable_even {
 }
 
 .sortable th {
-    background-color: #8597A5;
+    background-color: #f1f1f1;
+    border-bottom: 1px dashed #dfdfdf;
+    
+
 }
 
 a.sortheader, a.sortheader:link, a.sortheader:active, a.sortheader:visited {

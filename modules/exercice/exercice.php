@@ -147,7 +147,7 @@ if ($maxpage > 0) {
 }
 
 $tool_content .= "
-    <table width='99%' class='tbl_alt'>
+    <table width='100%' class='tbl_alt'>
     <tr>";
 
 // shows the title bar only for the administrator

@@ -251,7 +251,7 @@ if (isset($_POST['add_submit'])) {  // add
               <form method=\"POST\" action=\"$_SERVER[PHP_SELF]\" enctype=\"multipart/form-data\" onsubmit=\"return checkrequired(this, 'titre');\">
               <fieldset>
               <legend>$langAddV</legend>
-		<table width=\"99%\" class=\"tbl\">
+		<table width=\"100%\" class=\"tbl\">
 		<tr>
 		  <th valign='top'>$langWorkFile :</th>
 		  <td>
@@ -298,7 +298,7 @@ if (isset($_POST['add_submit'])) {  // add
 		<form method=\"POST\" action=\"$_SERVER[PHP_SELF]\" onsubmit=\"return checkrequired(this, 'titre');\">
                 <fieldset>
                 <legend>$langAddVideoLink</legend>
-		<table width=\"99%\" class=\"tbl\">
+		<table width=\"100%\" class=\"tbl\">
 		<tr>
 		  <th valign='top'>$langGiveURL<input type=\"hidden\" name=\"id\" value=\"\"></th>
 		  <td><input type=\"text\" name=\"URL\" size=\"55\">
@@ -364,7 +364,7 @@ if (isset($_GET['id']) and isset($_GET['table_edit']))  {
            <fieldset>
            <legend>$langModify</legend>
 
-           <table width=\"99%\" class=\"tbl\">";
+           <table width=\"100%\" class=\"tbl\">";
 		if ($table_edit == 'videolinks') {
 			$tool_content .= "
            <tr>
@@ -428,7 +428,7 @@ if (isset($_GET['id']) and isset($_GET['table_edit']))  {
 		$i=0;
 		$count_video_presented_for_admin=1;
 		$tool_content.= "
-        <table width=\"99%\" class=\"tbl_alt\">
+        <table width=\"100%\" class=\"tbl_alt\">
         <tr>
           <th>&nbsp;</th>
           <th><div align=\"left\">$langDirectory $langVideo</div></th>
@@ -485,7 +485,7 @@ else {
 			ORDER BY titre",$currentCourseID));
 	if ($count_video[0]<>0 || $count_video_links[0]<>0) {
 		$tool_content .= "
-		<table width=\"99%\" class=\"tbl_alt\">
+		<table width=\"100%\" class=\"tbl_alt\">
 		<tr>
                   <th>&nbsp;</th>
                   <th><div align=\"left\">$langDirectory $langVideo</div></th>
