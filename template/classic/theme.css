@@ -1166,3 +1166,8 @@ table.Search td {
 	list-style-image:url(img/arrow_bullet.png);
 }
 
+.glossary {
+}
+
+.glossary a {
+border-bottom: 1px dotted #333333;}
