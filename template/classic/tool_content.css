@@ -2,7 +2,8 @@
 /* ----------------Open eClass tool_content CSS----------------- */
 
 
-
+#tool_title {
+color: red;}
 
 #tool_content li {
     list-style-type: square; 
