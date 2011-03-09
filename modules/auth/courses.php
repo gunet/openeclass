@@ -105,7 +105,7 @@ if (isset($_POST["submit"])) {
 		if (isset($result))  {
 			$tool_content .= "
 			<script type='text/javascript' src='sorttable.js'></script>
-			<table width='99%' class='sortable' id='t1'>
+			<table width='100%' class='sortable' id='t1'>
 			  <tr>
                             <th class='left'>$langFaculty</th>
                           </tr>\n";
@@ -205,7 +205,7 @@ function expanded_faculte($fac_name, $facid, $uid) {
 	}
 
 	$retString .= "
-           <table width='99%' class='tbl_border'>
+           <table width='100%' class='tbl_border'>
            <tr>
              <th class='smaller'><a name='top'> </a>$langFaculty: <b>$fac_name</b>&nbsp;&nbsp;</th>";
 
@@ -262,7 +262,7 @@ function expanded_faculte($fac_name, $facid, $uid) {
                 }
 
                 if ($numoftypes > 1) {
-                        $retString .= "\n    <table width='99%' class='tbl_course_type'>";
+                        $retString .= "\n    <table width='100%' class='tbl_course_type'>";
                         $retString .= "\n    <tr>";
                         $retString .= "\n      <td><a name='$type'></a><b>$message</b></td>";
                         $retString .= "\n      <td align='right'><a href='#top'>$langBegin</a>&nbsp;</td>";
@@ -270,7 +270,7 @@ function expanded_faculte($fac_name, $facid, $uid) {
                         $retString .= "\n    </table>\n";
                 } else {
                         $retString .= "\n    <br />";
-                        $retString .= "\n    <table width='99%' class='tbl_course_type'>";
+                        $retString .= "\n    <table width='100%' class='tbl_course_type'>";
                         $retString .= "\n    <tr>";
                         $retString .= "\n      <td><a name='$type'></a><b>$message</b></td>";
                         $retString .= "\n      <td>&nbsp;</td>";
@@ -280,7 +280,7 @@ function expanded_faculte($fac_name, $facid, $uid) {
 
                 // legend
                 $retString .= "\n    <script type='text/javascript' src='sorttable.js'></script>";
-                $retString .= "\n    <table class='sortable' id='t1$type' width='99%'>";
+                $retString .= "\n    <table class='sortable' id='t1$type' width='100%'>";
                 $retString .= "\n    <tr>";
                 $retString .= "\n      <th width='50' align='center'>$langRegistration</th>";
                 $retString .= "\n      <th>$langCourseCode</th>";
