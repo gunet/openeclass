@@ -753,7 +753,7 @@ if ($doc_count == 0) {
                 if ($sort == $this_sort) {
                         $this_reverse = !$reverse;
                         $indicator = ' <img src="../../template/classic/img/arrow_' . 
-                                ($reverse? 'up': 'down') . '.gif" />';
+                                ($reverse? 'up': 'down') . '.png" />';
                 } else {
                         $this_reverse = $reverse;
                         $indicator = '';
