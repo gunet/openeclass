@@ -727,7 +727,7 @@ if ($doc_count == 0) {
 } else {
 	// Current Directory Line
 	$tool_content .= "
-    <table width='99%' class='tbl_alt'>\n";
+    <table width='99%' class='tbl'>\n";
 
         if ($can_upload) {
                 $cols = 4;
@@ -737,8 +737,8 @@ if ($doc_count == 0) {
 
 	$tool_content .= "
     <tr>
-      <th colspan='$cols'><div align='left'>$langDirectory: " . make_clickable_path($curDirPath) . "</div></th>
-      <th><div align='right'>";
+      <td colspan='$cols'><div align='left'>$langDirectory: " . make_clickable_path($curDirPath) . "</div></d>
+      <td><div align='right'>";
 
         // Link for sortable table headings
         function headlink($label, $this_sort)
@@ -769,7 +769,7 @@ if ($doc_count == 0) {
                 $parentlink = $base_url . 'openDir=' . $cmdParentDir;
                 $tool_content .=  "<a href='$parentlink'>$langUp</a> <a href='$parentlink'><img src='../../template/classic/img/folder_up.png' height='16' width='16' alt='icon'/></a>";
         }
-        $tool_content .= "</div></th>
+        $tool_content .= "</div></td>
     </tr>
     </table>
     <table width='99%' class='tbl_alt'>
