@@ -55,21 +55,20 @@ $title = $GLOBALS["langH" . str_replace('_student', '', $_GET['topic'])];
 
 		<style type='text/css'>
 			html {
-                                background-color: #727266;
+                                background-color: #687A92;
                                 padding: 5px 5px 5px 5px;
                            }
                       body {
                                 background-color: #ffffff;
-                                color: #727266;
+                                color: #666666;
                                 font-size: 10px; font-family: Verdana, Arial;
                                 line-height: 1.3;
                            }
 
                         h3 {
-                                color: #727266;
-                                background : #edecdf;
+                                background : #dfdfdf;
                                 font-size : 14pt;
-                                border-bottom : 3px solid #a33033;
+                                border-bottom : 3px solid #687A92;
                                 padding : 8px;
                                 font-variant : normal;
                                 font-weight : bold;
@@ -81,9 +80,7 @@ $title = $GLOBALS["langH" . str_replace('_student', '', $_GET['topic'])];
                         }
 
 			h4 {
-				background-color: white;
                 font-family: Verdana, Arial, Helvetica;
-                color: #727266;
 				font-size: 12px;
                 padding: 10px;
                 border-bottom : 1px dotted silver;

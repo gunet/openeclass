@@ -1168,7 +1168,10 @@ table.Search td {
 }
 
 .glossary {
-}
+    border-bottom: 1px dotted #727266;
+    text-decoration: none;
+    color: #999999 !important;  
+    text-decoration: none !important;
+    cursor:help; }
 
-.glossary a {
-border-bottom: 1px dotted #333333;}
+
