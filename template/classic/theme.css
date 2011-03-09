@@ -626,20 +626,19 @@ fieldset table.th {
 .tbl_header_row {
 	font-weight: bold;
 	text-align: center;
-	background-color: #f8f8f8; /* LIGHTER BEIGE  */
+	background-color: #f8f8f8; 
 	padding: 3px;
 }
 
 .tbl th {
 	font-weight: bold;
-	background-color: #f8f8f8; /* BEIGE  */
+	background-color: #f8f8f8; 
 	padding: 3px;
 }
 
 .tbl_border th {
     font-weight: bold;
-    background-color: #73849b;
-    color: #ffffff;
+    background-color: #f8f8f8;
     padding: 5px;
 }
 
