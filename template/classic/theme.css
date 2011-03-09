@@ -409,13 +409,14 @@ fieldset table.th {
 	font-size:18px;
 	color:#8597A5;
     padding: 5px 0;
-    border-bottom: 1px dashed #dfdfdf;
 }
 
 #tool_title {
     margin: 10px 0;
-    font-size: 16px;
-    color: #727266;
+	font-size:16px;
+	color:#8597A5;
+    padding: 5px 0;
+    border-bottom: 1px dashed #dfdfdf;
 }
 
 .title1 {
@@ -423,7 +424,7 @@ fieldset table.th {
         color: #ffffff;
         font-weight: bold;
         padding: 5px;
-        border-bottom: 2px solid #73849b; /* BEIGE  */ 
+        border-bottom: 2px solid #73849b;
 }
 
 .title1 a { 
