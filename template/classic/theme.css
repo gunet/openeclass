@@ -859,8 +859,9 @@ td.bold {
 .course_info h1 {
         color: #8597A5;
         font-weight: bold;
-        padding: 5px;
-        border-bottom: 1px dashed #dfdfdf;    
+        padding-bottom: 5px;
+        border-bottom: 1px dashed #dfdfdf;
+        font-size: 13px;   
 
 }
 .course_info h1 a {

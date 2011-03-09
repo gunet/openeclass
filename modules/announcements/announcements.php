@@ -302,7 +302,7 @@ hContent;
 
 	$tool_content .= "
         <script type='text/javascript' src='../auth/sorttable.js'></script>
-        <table width='99%' class='sortable' id='t1'>";
+        <table width='100%' class='sortable' id='t1'>";
 	if ($is_adminOfCourse) {
 		$colspan = 1;
 	} else {

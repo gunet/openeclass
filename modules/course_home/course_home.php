@@ -184,7 +184,7 @@ while ($cu = mysql_fetch_array($sql)) {
                 } else {
                     $cunits_content .= "class='tbl'";
                 }
-                $cunits_content .= " width='99%'>";
+                $cunits_content .= " width='100%'>";
                 if ($is_adminOfCourse) {
                 $cunits_content .= "\n      <tr>".
                                    "\n        <th width='3%' class='right'>&nbsp;<b>$count_index.</b>&nbsp;</th>" .
@@ -286,7 +286,7 @@ if ($is_adminOfCourse) {
 $tool_content .= "
 <div id='content_course'>
 
-   <table width='99%'>
+   <table width='100%'>
    <tr>
       <td valign='top'>$main_content</td>
       <td width='200' valign='top'>
@@ -333,7 +333,7 @@ $tool_content .= "
       </td>
    </tr>
    </table>
-<table width='99%' class='tbl'>
+<table width='100%' class='tbl'>
         <tr>
           <td>$cunits_content</td>
     </tr>
