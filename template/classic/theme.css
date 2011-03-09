@@ -862,10 +862,8 @@ td.bold {
         font-weight: bold;
         padding: 5px;
         border-bottom: 1px dashed #687A92; 
-        font-size: 12px;
 }
 .course_info h1 a {
-        font-size: 12px;
         font-weight: bold;
         color: #627aad;
 }
