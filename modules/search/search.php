@@ -167,9 +167,9 @@ if (!register_posted_variables(array('search_terms' => false,
               </div>";
 
                 $tool_content .= "
-                  <p class='sub_title1'>$langDoSearch:&nbsp;<b>$langResults</b></p>
+                  <p>$langDoSearch:&nbsp;<b>$langResults</b></p>
                   <script type='text/javascript' src='../auth/sorttable.js'></script>
-                  <table width='99%' class='sortable' id='t1' align='left'>
+                  <table width='100%' class='sortable' id='t1' align='left'>
                   <tr>
                     <th width='1'>&nbsp;</th>
                     <th><div align='left'>".$langCourse." ($langCode)</div></th>
