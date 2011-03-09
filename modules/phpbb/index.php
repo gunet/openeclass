@@ -128,7 +128,7 @@ $total_categories = mysql_num_rows($result);
 
 if ($total_categories) {
 	$tool_content .= "
-         <table width='99%' class='tbl_border'>
+         <table width='100%' class='tbl_border'>
 	 <tr>
 	   <th colspan='2'>&nbsp;$langForums</th>
 	   <th class='center'>$langSubjects</th>

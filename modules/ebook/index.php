@@ -74,7 +74,7 @@ if ($is_adminOfCourse) {
      <fieldset>
      <legend>$langUpload</legend>
      
-     <table width='99%' class='tbl'>
+     <table width='100%' class='tbl'>
      <tr>
        <th>$langTitle:</th>
        <td><input type='text' name='title' size='53' /></td></tr>
@@ -102,7 +102,7 @@ if (mysql_num_rows($q) == 0) {
         $tool_content .= "\n    <p class='alert1'>$langNoEBook</p>\n";
 } else {
         $tool_content .= "
-     <table width='99%' class='tbl_alt'>
+     <table width='100%' class='tbl_alt'>
      <tr>
        <th>&nbsp;</th>
        <th><div align='left'>$langEBook</div></th>" .  ($is_adminOfCourse? "

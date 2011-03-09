@@ -468,7 +468,7 @@ function confirmation (name)
             //$tool_content .= disp_tool_title($toolTitle) . "\n";
             // display list in a table
             $tool_content .= '
-        <table width="99%" class="tbl_alt">' . "\n";
+        <table width="100%" class="tbl_alt">' . "\n";
 
             // if admin, display title, edit and delete
             if ( $is_allowedToAdmin )

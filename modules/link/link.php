@@ -159,7 +159,7 @@ if ($is_adminOfCourse) {
                 } 
 
                 $tool_content .= "<fieldset><legend>$form_legend</legend>
-                        <table width='99%' class='tbl'>
+                        <table width='100%' class='tbl'>
                         <tr><th>URL:</th>
                             <td><input type='text' name='urllink' size='53'$form_url /></td></tr>
                         <tr><th>$langLinkName:</th>
@@ -193,7 +193,7 @@ if ($is_adminOfCourse) {
                         $form_legend = $langCategoryAdd;
                 } 
                 $tool_content .=  "<fieldset><legend>$form_legend</legend>
-                                   <table width='99%' class='tbl'>
+                                   <table width='100%' class='tbl'>
                                    <tr><th>$langCategoryName:</th>
                                        <td><input type='text' name='categoryname' size='53'$form_name /></td></tr>
                                    <tr><th>$langDescription:</th>
@@ -228,7 +228,7 @@ if (mysql_num_rows($resultcategories) > 0) {
 
 	if ($aantalcategories > 0) {
 		$more_less = "
-                <table width='99%' class='tbl'>
+                <table width='100%' class='tbl'>
 		<tr>
 		  <td class='bold'>$langCategorisedLinks</td>
 		  <td width='1'><img src='../../template/classic/img/folder_closed.png' title='$showall' /></td>
@@ -245,7 +245,7 @@ if (mysql_num_rows($resultcategories) > 0) {
     // Edw fiaxnei ton pinaka me tis Genikes kathgories
 	if ($numberofzerocategory !== 0) {
 		$tool_content .= "\n
-		<table width='99%' class='tbl_alt'>
+		<table width='100%' class='tbl_alt'>
 		<tr>
 		  <th width='15'><img src='../../template/classic/img/folder_open.png' title='$langNoCategory' /></th>
 		  <th colspan='6'><div align='left'>$langNoCategory</div></th>
@@ -256,7 +256,7 @@ if (mysql_num_rows($resultcategories) > 0) {
 
 	// Edw fiaxnei to tool bar me tin emfanisi apokripsi
 	$tool_content .= "<br />$more_less
-	        <table width=\"99%\" class='tbl_alt'>";
+	        <table width=\"100%\" class='tbl_alt'>";
 	$i = 0;
 	$catcounter = 1;
 	while ($myrow = mysql_fetch_array($resultcategories)) {
@@ -317,7 +317,7 @@ if (mysql_num_rows($resultcategories) > 0) {
 } else {   // no category
    if (getNumberOfLinks(0) > 0) {
 		$tool_content .=  "
-                <table width=\"99%\">
+                <table width=\"100%\">
 		<tr>
 		  <td width='1'><img src='../../template/classic/img/folder_open.png' title='$langNoCategory' /></td>
 		  <td colspan='4'><b>$langLinks</b></td>
