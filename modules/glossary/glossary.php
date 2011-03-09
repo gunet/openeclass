@@ -193,7 +193,7 @@ $sql = db_query("SELECT id, term, definition, url FROM glossary WHERE course_id 
 if (mysql_num_rows($sql) > 0) { 
 	$tool_content .= "
 	       <script type='text/javascript' src='../auth/sorttable.js'></script>
-	       <table class='sortable' id='t2' width='99%'>";
+	       <table class='sortable' id='t2' width='100%'>";
 	$tool_content .= "
 	       <tr>
 		 <th colspan='2'><div align='left'>$langGlossaryTerm</div></th>

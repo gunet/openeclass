@@ -128,7 +128,7 @@ global $tool_content, $currentCourse, $langCreatePoll, $langPollsActive,
 		} else {
 			// Print active polls
 				$tool_content .= "
-		      <table align='left' width='99%' class='tbl_alt'>
+		      <table align='left' width='100%' class='tbl_alt'>
 		      <tr>
 			<th colspan='2'><div align='left'>&nbsp;$langTitle</div></th>
 			<th width='120'>$langPollCreator</th>
@@ -170,7 +170,7 @@ global $tool_content, $currentCourse, $langCreatePoll, $langPollsActive,
                       <tr $visibility_css>";
 					} else {
 						$tool_content .= "
-                      <tr class=\"odd\">";
+                      <tr class=\"even\">";
 					}			
 					$temp_CurrentDate = date("Y-m-d");
 					$temp_StartDate = $thepoll["start_date"];

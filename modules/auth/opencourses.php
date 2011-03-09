@@ -65,7 +65,7 @@ $icons = array(2 => "<img src='../../template/classic/img/lock_open.png'   alt='
     );
 
 $tool_content .= "
-  <table width=99% class='tbl_border'>
+  <table width=100% class='tbl_border'>
   <tr>
     <th><a name='top'>&nbsp;</a>$langFaculty:&nbsp;<b>$fac</b></th>
     <th><div align='right'>";
@@ -114,7 +114,7 @@ if ($numoftypes > 0) {
             continue;
         }
         $tool_content .= "\n\n\n
-           <table width=99% class='tbl_course_type'>
+           <table width=100% class='tbl_course_type'>
            <tr>
             <td>";
         // We changed the style a bit here and we output types as the title
@@ -126,7 +126,7 @@ if ($numoftypes > 0) {
         $tool_content .= "
     
         <script type='text/javascript' src='sorttable.js'></script>
-            <table width=99% class='sortable' id='t1'>
+            <table width=100% class='sortable' id='t1'>
             <tr>
                 <th class='left' colspan='2'>$m[lessoncode]</th>
                 <th class='left' width='200'>$m[professor]</th>

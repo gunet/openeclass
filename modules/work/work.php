@@ -597,7 +597,7 @@ function show_submission_form($id, $user_group_info)
                         <input type='hidden' name='id' value='$id' />$group_select_hidden_input
                         <fieldset>
                         <legend>$langSubmit</legend>
-                        <table width='99%' class='tbl'>
+                        <table width='100%' class='tbl'>
                         $group_select_form 
                         <tr>
                           <th class='left' width='150'>$langWorkFile:</th>
@@ -645,7 +645,7 @@ function assignment_details($id, $row, $message = null)
 	$tool_content .= "
         <fieldset>
         <legend>".$m['WorkInfo']."</legend>
-        <table width=\"99%\" class=\"tbl\">
+        <table width=\"100%\" class=\"tbl\">
         <tr>
           <th width='150'>$m[title]:</th>
           <td>$row[title]</td>
@@ -813,7 +813,7 @@ function show_assignment($id, $message = FALSE)
                   <p>$num_of_submissions</p>
                 ";
 		$tool_content .= "
-                <table width=\"99%\" class=\"tbl_border\">
+                <table width=\"100%\" class=\"tbl_border\">
                 <tr>
                   <th width=\"3\">&nbsp;</th>";
                 sort_link($m['username'], 'nom', 'align=left');
@@ -909,7 +909,7 @@ function show_assignment($id, $message = FALSE)
                         $chart->setDataSet($dataSet);
 			$chart->render($webDir.$chart_path);
 			$tool_content .= "
-                        <table width='99%' class='tbl'>
+                        <table width='100%' class='tbl'>
                         <tr>
                           <td align='right'><img src='$urlServer$chart_path' /></td>
                         </tr>
@@ -941,7 +941,7 @@ function show_student_assignments()
 
         if (mysql_num_rows($result)) {
                 $tool_content .= "
-                                  <table class='tbl_alt' width='99%'>
+                                  <table class='tbl_alt' width='100%'>
                                   <tr>
                                       <th colspan='2'><div align='left'>&nbsp;&nbsp;$m[title]</div></th>
                                       <th><div align='center'>$m[deadline]</div></th>
@@ -1030,7 +1030,7 @@ function show_assignments($message = null)
 
 		$tool_content .= <<<cData
 
-    <table width="99%" class="tbl_alt" align="left">
+    <table width="100%" class="tbl_alt" align="left">
     <tr>
       <th colspan="2"><div align="left">&nbsp;&nbsp;&nbsp;&nbsp;${m['title']}</div></th>
       <th width="150">${m['deadline']}</th>

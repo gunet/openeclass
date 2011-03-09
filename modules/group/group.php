@@ -242,7 +242,7 @@ if ($is_adminOfCourse) {
 	}
 
 	$tool_content .= "
-        <table width='99%' id='operations_container' border=0>
+        <table width='100%' id='operations_container' border=0>
 	<tr>
           <td>&nbsp;&nbsp;</td>
 	  <td class='left'>&nbsp;<a href='group_creation.php'>$langNewGroupCreate</a></td>
@@ -337,11 +337,11 @@ if ($is_adminOfCourse) {
 	// groups list
 	if ($num_of_groups > 0) {
 		$tool_content .= "<br />
-		<table width='99%' align='left' class='tbl_alt'>
+		<table width='100%' align='left' class='tbl_alt'>
 		<tr>
                   <th width='1'>&nbsp;</th>
 		  <th><div align='left'>$langGroupName</div></th>
-		  <th width='150'>$langGroupTutor</th>
+		  <th width='250'>$langGroupTutor</th>
 		  <th width='30'>$langRegistered</th>
 		  <th width='30'>$langMax</th>
 		  <th width='30'>$langActions</th>
@@ -405,7 +405,7 @@ if ($is_adminOfCourse) {
 	$registered_students = $total_students - $unregistered_students;
 	$tool_content .= "" .
 	                 "
-        <table width='99%' class='tbl_alt'>
+        <table width='100%' class='tbl_alt'>
         <tr>
 	  <th><div align='left'>
 	    <b>$registered_students</b> $langGroupStudentsInGroup<br />
@@ -423,10 +423,10 @@ if ($is_adminOfCourse) {
                 $tool_content .= "<p class='alert1'>$langNoGroup</p>";
         } else {
 		$tool_content .= "
-                <table width='99%' align='left' class='tbl_alt'>
+                <table width='100%' align='left' class='tbl_alt'>
                 <tr>
                   <th colspan='2'><div align='left'>$langGroupName</div></th>
-                  <th width='150'>$langGroupTutor</th>";
+                  <th width='250'>$langGroupTutor</th>";
 		// If self-registration allowed by admin
 		if ($self_reg) {
 			$tool_content .= "

@@ -315,7 +315,7 @@ if($can_upload) {
             <input type='hidden' name='sourceFile' value='$_GET[rename]' />
 	    $group_hidden_input
             <fieldset>
-		<table class='tbl' width='99%'>
+		<table class='tbl' width='100%'>
                 <tr>
 		  <td>$langRename: &nbsp;&nbsp;&nbsp;<b>".q($fileName)."</b>&nbsp;&nbsp;&nbsp; $langIn:
 		  <input type='text' name='renameTo' value='$fileName' size='50' /></td>
@@ -489,7 +489,7 @@ if($can_upload) {
 			  <input type='hidden' size='80' name='file_filename' value='$oldFilename' />
 			  $group_hidden_input
 			  <legend>$langAddComment</legend>
-			  <table class='tbl' width='99%'>
+			  <table class='tbl' width='100%'>
 			  <tr>
 			    <th>$langWorkFile:</th>
 			    <td>$oldFilename</td>
@@ -727,7 +727,7 @@ if ($doc_count == 0) {
 } else {
 	// Current Directory Line
 	$tool_content .= "
-    <table width='99%' class='tbl'>\n";
+    <table width='100%' class='tbl'>\n";
 
         if ($can_upload) {
                 $cols = 4;
@@ -772,7 +772,7 @@ if ($doc_count == 0) {
         $tool_content .= "</div></td>
     </tr>
     </table>
-    <table width='99%' class='tbl_alt'>
+    <table width='100%' class='tbl_alt'>
     <tr>";
         $tool_content .= "\n      <th width='50' class='center'><b>" . headlink($langType, 'type') . '</b></th>';
         $tool_content .= "\n      <th><div align='left'>" . headlink($langName, 'name') . '</div></th>';

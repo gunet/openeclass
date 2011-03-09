@@ -283,7 +283,7 @@ if ($is_adminOfCourse) {
     <form action='$_SERVER[PHP_SELF]' method='POST'>
     <fieldset>
     <legend>$langLearningPathData</legend>
-    <table width='99%' class='tbl'>
+    <table width='100%' class='tbl'>
     <tr>
       <th width='180'><label for='newPathName'>$langLearningPathName</label> :</th>
       <td><input type='text' name='newPathName' id='newPathName' size='33' maxlength='255'></input></td>
@@ -386,7 +386,7 @@ if ((mysql_num_rows($l) == 0)) {
 
 
 $tool_content .= "
-    <table width='99%' class='tbl_alt'>
+    <table width='100%' class='tbl_alt'>
     <tr>
       <th width='1'>&nbsp;</th>
       <th><div align='left'>$langLearningPaths</div></th>\n";
