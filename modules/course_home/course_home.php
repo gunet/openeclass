@@ -46,17 +46,10 @@ include '../../include/baseTheme.php';
 $nameTools = $langIdentity;
 $tool_content = $head_content = $main_content = $cunits_content = $bar_content = "";
 add_units_navigation(TRUE);
-$head_content .= '
-<script type="text/javascript">
-function confirmation ()
-{
-    if (confirm("'.$langConfirmDelete.'"))
-        {return true;}
-    else
-        {return false;}
-}
-</script>
-';
+$head_content .= "<script type='text/javascript' src='$urlAppend/js/tools.js'></script>
+<script type='text/javascript' src='$urlAppend/js/jquery-1.4.3.min.js'></script>
+<script type='text/javascript'>$(document).ready(add_bookmark);</script>
+";
 
 //For statistics: record login
 $sql_log = "INSERT INTO logins SET user_id='$uid', ip='$_SERVER[REMOTE_ADDR]', date_time=NOW()";
@@ -200,7 +193,7 @@ while ($cu = mysql_fetch_array($sql)) {
                                 "<a href='../../modules/units/info.php?edit=$cu[id]'>" .
                                 "<img src='../../template/classic/img/edit.png' title='$langEdit' /></a></td>" .
                                 "\n        <th width='16'><a href='$_SERVER[PHP_SELF]?del=$cu[id]' " .
-                                "onClick=\"return confirmation();\">" .
+                                "onClick=\"return confirmation('$langConfirmDelete');\">" .
                                 "<img src='../../template/classic/img/delete.png' " .
                                 "title='$langDelete' /></a></th>" .
                                 "\n        <th width='16'><a href='$_SERVER[PHP_SELF]?vis=$cu[id]'>" .
@@ -299,32 +292,32 @@ $tool_content .= "
           <td class='smaller'>$bar_content</td>
         </tr>
         </table>
-
     
-<br>
+        <br />
+
         <table class='tbl_courseid' width='200'>
         <tr class='title1'>
           <td class='title1'>$langTools</td>
-          <td class='right' ><span class='feed'><a href='${urlServer}modules/announcements/rss.php?c=$currentCourseID'><img src='${urlServer}template/classic/img/feed.png' alt='RSS Feed' title='RSS Feed' /></a></span>|</td>
-          <td class='left' width='50'>
         ";
 
 if ($is_adminOfCourse or
     (isset($_SESSION['saved_statut']) and $_SESSION['saved_statut'] == 1)) {
         if (isset($_SESSION['saved_statut'])) {
                 $button_message = $langStudentViewDisable;
+                $button_image = "switch_t";
         } else {
                 $button_message = $langStudentViewEnable;
+                $button_image = "switch_s";
         }
         $tool_content .="
+          <td class='right' width='50'>
             <form action='{$urlServer}student_view.php' method='post'>
-              <input id='view_btn' type='image' src='../../template/classic/img/switch.png' name='submit' title='$button_message'/> | 
-            
-           <a href='../../modules/contact/index.php' id='email_btn'><img src='../../template/classic/img/email.png' alt='icon' title='$langContactProf' /></a>
-</form>";
+              <input id='view_btn' type='image' src='../../template/classic/img/$button_image.png' name='submit' title='$button_message'/>&nbsp;&nbsp;<a href='../../modules/contact/index.php' id='email_btn'><img src='../../template/classic/img/email.png' alt='icon' title='$langContactProf' /></a>
+            </form>
+          </td>";
 }
-        $tool_content .="
-          </td>
+        $tool_content .= "
+          <td class='left' width='45'><a href='$_SERVER[PHP_SELF]' title='" . q($intitule) . "' class='jqbookmark'><img src='${urlServer}template/classic/img/bookmark.png' alt='Add as Bookmark' title='Add as Bookmark' /></a>&nbsp;&nbsp;<span class='feed'><a href='${urlServer}modules/announcements/rss.php?c=$currentCourseID'><img src='${urlServer}template/classic/img/feed.png' alt='RSS Feed' title='RSS Feed' /></a></span>&nbsp;</td>
         </tr>
         </table>
         <br />\n";
