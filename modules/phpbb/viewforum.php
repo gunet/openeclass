@@ -123,7 +123,7 @@ if (isset($_GET['start'])) {
 
 if ($total_topics > $topics_per_page) { // navigation
 	$base_url = "viewforum.php?forum=$forum_id&amp;start="; 
-	$tool_content .= "<table width='99%'><tr>";
+	$tool_content .= "<table width='100%'><tr>";
 	$tool_content .= "<td width='50%' align='left'><span class='row'><strong class='pagination'>
 		<span class='pagination'>$langPages:&nbsp;";
 	$current_page = $first_topic / $topics_per_page + 1; // current page 
@@ -181,7 +181,7 @@ $result = db_query($sql, $currentCourseID);
 if (mysql_num_rows($result) > 0) { // topics found
 // header
 $tool_content .= "
-     <table width='99%' class='tbl_border'>
+     <table width='100%' class='tbl_border'>
      <tr>
        <th colspan='2'>&nbsp;$langSubject</th>
        <th width='100' class='center'>$langAnswers</th>

@@ -1,7 +1,7 @@
 
 #leftnav_perso {
 	float: left;
-	width: 48.4%;
+	width: 49%;
 	margin: 0;
 	margin-left:1%;
 	padding-top: 1em;
@@ -10,7 +10,7 @@
 #content_main_perso {
 	float:right;
 	clear:right;
-	width:48.5%;
+	width:49%;
 	margin:0;
 	padding-top: 1em;
 }

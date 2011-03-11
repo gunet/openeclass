@@ -196,7 +196,7 @@ if (isset($_SESSION['message'])) {
 if ($paging and $total > $posts_per_page ) {
 	$times = 1;
 	$tool_content .= "
-        <table width='99%' class='tbl'>
+        <table width='100%' class='tbl'>
 	<tr>
           <td width='50%' align='left'>
 	  <span class='row'><strong class='pagination'>
@@ -243,7 +243,7 @@ if ($paging and $total > $posts_per_page ) {
 	</table>";
 } else {
 	$tool_content .= "
-        <table width=\"99%\" class='tbl'>
+        <table width=\"100%\" class='tbl'>
 	<tr>
 	<td WIDTH=\"60%\" align=\"left\">
 	<span class='row'><strong class='pagination'>&nbsp;</strong></span></td>
@@ -256,7 +256,7 @@ if ($paging and $total > $posts_per_page ) {
 	$tool_content .= "</td></tr></table>";
 }
 
-$tool_content .= "<table width='99%' class='tbl_border'>
+$tool_content .= "<table width='100%' class='tbl_border'>
     <thead>
     <tr>
       <th width='150'>$langAuthor</th>
@@ -328,7 +328,7 @@ $tool_content .= "\n    </table>";
 
 if ($paging and $total > $posts_per_page) {
 	$times = 1;
-	$tool_content .= "<table width='99%' class='tbl'><thead>
+	$tool_content .= "<table width='100%' class='tbl'><thead>
 	<tr>
 	<td width='50%' align='right'>
 	<span class='row'><strong class='pagination'><span>";
@@ -364,7 +364,7 @@ if ($paging and $total > $posts_per_page) {
 	</span>
 	</td></tr></thead></table>";
 } else {
-	$tool_content .= "<table width=\"99%\" class=\"tbl\">
+	$tool_content .= "<table width=\"100%\" class=\"tbl\">
 	<tr>
 	<td width=\"60%\" align=\"left\">
 	<span class='row'><strong class='pagination'>&nbsp;</strong>
