@@ -83,6 +83,8 @@ if (isset($persoIsActive)) {
 $warning = '';
 if (isset($_SESSION['shib_uname'])) { // authenticate via shibboleth
 	include 'include/shib_login.php';
+} else if (isset($_SESSION['cas_uname']) && !isset($_GET['logout'])) { // authenticate via cas
+	include 'include/cas_login.php';
 } else { // normal authentication
 	if (isset($_POST['uname'])) {
 		$uname = unescapeSimple(preg_replace('/ +/', ' ', trim($_POST['uname'])));

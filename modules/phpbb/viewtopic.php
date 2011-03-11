@@ -177,7 +177,7 @@ $nameTools = $topic_subject;
 	$tool_content .= "
    <div id='operations_container'>
      <ul id='opslist'>
-       <li><a href='newtopic.php?topic=$topic&forum=$forum'>$langNewTopic</a></li>
+       <li><a href='newtopic.php?topic=$topic&amp;forum=$forum'>$langNewTopic</a></li>
        <li>";
 	if($lock_state != 1) {
 		$tool_content .= "<a href='reply.php?topic=$topic&amp;forum=$forum'>$langAnswer</a>";
@@ -311,7 +311,7 @@ do {
 	  </div>
 	  <br />$message<br />
 	</td>
-	<td width='40'i valign='top'><div align='right'>";
+	<td width='40' valign='top'><div align='right'>";
 	if ($is_adminOfCourse) { // course admin
 		$tool_content .= "<a href=\"editpost.php?post_id=".$myrow["post_id"]."&amp;topic=$topic&amp;forum=$forum\"><img src='../../template/classic/img/edit.png' title='$langModify' alt='$langModify' /></a>";
 		$tool_content .= "&nbsp;<a href='$_SERVER[PHP_SELF]?post_id=".$myrow["post_id"]."&amp;topic=$topic&amp;forum=$forum&amp;delete=on' onClick='return confirmation()'>

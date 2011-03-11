@@ -38,7 +38,6 @@
 
 
 $require_current_course = TRUE;
-
 $guest_allowed = true;
 include '../../include/baseTheme.php';
 include '../../include/lib/textLib.inc.php';
@@ -269,7 +268,7 @@ if(empty($search_terms)) {
 				if (empty($res['description'])) { 
 					$desc_text = "";
 				} else { 
-					$desc_text = "<br /> <span class='smaller'>($res[description])</span>";
+					$desc_text = "<br /> <span class='smaller'>$res[description]</span>";
 				}
 				$link_exercise =" ${urlServer}/modules/exercice/exercice_submit.php?exerciseId=$res[id]";
 				$tool_content .= "<a href='$link_exercise'>".$res['titre']."</a>$desc_text
@@ -400,7 +399,7 @@ if(empty($search_terms)) {
 				if (empty($res['description'])) { 
 					$desc_text = "";
 				} else { 
-					$desc_text = "<span class='smaller'>($res[description])</span>";
+					$desc_text = "<span class='smaller'>$res[description]</span>";
 				}
 				$link_url = "{$urlServer}modules/link/go.php?c=$currentCourseID&amp;id=$res[id]&amp;link_url=$res[url]"; 
 				$tool_content .= "<a href='$link_url' target=_blank> ".$res['title']."</a> $desc_text

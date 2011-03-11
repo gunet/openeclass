@@ -338,6 +338,8 @@ hContent;
 		    $vis_icon = 'visible.png';
 		    $classvis = 'visible';
 		}
+	    } else  {
+		$classvis = 'visile';
 	    }
             if ($k%2 == 0) {
                    $tool_content .= "        <tr class='even'>\n";
@@ -345,7 +347,7 @@ hContent;
                    $tool_content .= "        <tr class='odd'>\n";
             }
 
-            $tool_content .= "<td width='1' valign='top' class='$classvis'><img style='padding-top:3px;' src='${urlServer}/template/classic/img/arrow.png' title='bullet' /></td>
+            $tool_content .= "<td width='1' valign='top' class=$classvis><img style='padding-top:3px;' src='${urlServer}/template/classic/img/arrow.png' title='bullet' /></td>
           <td><b>";
             if (empty($myrow['title'])) {
                 $tool_content .= $langAnnouncementNoTille;

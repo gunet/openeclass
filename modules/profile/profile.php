@@ -31,7 +31,7 @@ include '../../include/baseTheme.php';
 include "../auth/auth.inc.php";
 $require_valid_uid = TRUE;
 
-$authmethods = array('imap', 'pop3', 'ldap', 'db', 'shibboleth');
+$authmethods = array('imap', 'pop3', 'ldap', 'db', 'shibboleth', 'cas');
 
 check_uid();
 $nameTools = $langModifProfile;
@@ -230,6 +230,12 @@ if (isset($_SESSION['shib_user'])) {
           <td class='caution_small'>&nbsp;&nbsp;&nbsp;&nbsp;<b>$prenom_form</b> [$auth_text]
             <input type='hidden' name='prenom_form' value='$prenom_form' />
           </td>";
+} elseif (isset($_SESSION['cas_user'])) {
+		$auth_text = "CAS user";
+        $tool_content .= "
+          <td class='caution_small'>&nbsp;&nbsp;&nbsp;&nbsp;<b>$prenom_form</b> [$auth_text]
+            <input type='hidden' name='prenom_form' value='$prenom_form' />
+          </td>";
 } else {
         $tool_content .= "
           <td><input type='text' size='40' name='prenom_form' value='$prenom_form' /></td>";
@@ -238,6 +244,11 @@ if (isset($_SESSION['shib_user'])) {
 $tool_content .= "</tr><tr><td>$langSurname</td>";
 if (isset($_SESSION['shib_user'])) {
         $auth_text = "Shibboleth user";
+        $tool_content .= "
+          <td class='caution_small'>&nbsp;&nbsp;&nbsp;&nbsp;<b>".$nom_form."</b> [".$auth_text."]
+            <input type='hidden' name='nom_form' value='$nom_form' /></td>";
+} elseif (isset($_SESSION['cas_user'])) {
+        $auth_text = "CAS user";
         $tool_content .= "
           <td class='caution_small'>&nbsp;&nbsp;&nbsp;&nbsp;<b>".$nom_form."</b> [".$auth_text."]
             <input type='hidden' name='nom_form' value='$nom_form' /></td>";
@@ -259,11 +270,14 @@ if ($allow_username_change) {
                 case "imap": $auth = 3; break;
                 case "ldap": $auth = 4; break;
                 case "db": $auth = 5; break;
+                case "cas": $auth = 7; break;
                 default: $auth = 1; break;
         }
         if (isset($_SESSION['shib_user'])) {
                 $auth_text = 'Shibboleth user';
-        } else {
+        } elseif (isset($_SESSION['cas_user'])) {
+                $auth_text = 'CAS user';
+		  } else {
                 $auth_text = get_auth_info($auth);
         }
         $tool_content .= "
@@ -282,6 +296,13 @@ if (isset($_SESSION['shib_user'])) {
            <td class='caution_small'>&nbsp;&nbsp;&nbsp;&nbsp;<b>$email_form</b> [$auth_text]
              <input type='hidden' name='email_form' value='$email_form' />
            </td>";
+// only update e-mail if CAS provides with e-mail
+} elseif (isset($_SESSION['cas_email'])) {
+        $tool_content .= "
+           <td class='caution_small'>&nbsp;&nbsp;&nbsp;&nbsp;<b>$email_form</b> [$auth_text]
+             <input type='hidden' name='email_form' value='$email_form' />
+           </td>";
+
 } else {
         $tool_content .= "<td><input type='text' size='40' name='email_form' value='$email_form' /></td>";
 }

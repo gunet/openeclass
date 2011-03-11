@@ -66,7 +66,7 @@ $head_content .= $jscalendar->get_load_files_code();
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
 $navigation[] = array("url" => "listusers.php", "name" => $langListUsersActions);
 $nameTools = $langEditUser;
-$authmethods = array("imap","pop3","ldap","db");
+$authmethods = array("imap","pop3","ldap","db", "cas");
 
 $u_submitted = isset($_POST['u_submitted'])?$_POST['u_submitted']:'';
 
@@ -119,6 +119,7 @@ if (!empty($u))
 		    case "imap": $auth=3;break;
 		    case "ldap": $auth=4;break;
 		    case "db": $auth=5;break;
+		    case "cas": $auth=7;break;
 		    default: $auth=1;break;
 		  }
 		  

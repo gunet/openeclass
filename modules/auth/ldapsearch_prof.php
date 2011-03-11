@@ -37,13 +37,17 @@
 
 include '../../include/baseTheme.php';
 include '../../include/sendMail.inc.php';
+include('../../include/CAS/CAS.php');
 require_once 'auth.inc.php';
 
-if (!isset($_POST['auth'])) {
-        header('Location: ' . $urlServer);
-        exit;
-} else {
-        $auth = intval($_POST['auth']);
+// like in ldapsearch.php
+if (isset($_POST['auth'])) {
+	$auth = intval($_POST['auth']);
+	$_SESSION['u_tmp'] = $auth;
+}
+if(!isset($_POST['auth'])) {
+	$auth = 0;
+	$auth = $_SESSION['u_tmp'];
 }
 
 $msg = "$langReqRegProf (".(get_auth_info($auth)).")";
@@ -55,21 +59,24 @@ $tool_content = "";
 
 $lang = langname_to_code($language);
 
-$is_submit = isset($_POST['is_submit'])?$_POST['is_submit']:'';
 $ldap_email = isset($_POST['ldap_email'])?$_POST['ldap_email']:'';
 $ldap_passwd = isset($_POST['ldap_passwd'])?$_POST['ldap_passwd']:'';
+$is_submit = isset($_POST['is_submit'])?$_POST['is_submit']:'';
+$submit = isset($_POST['submit'])?$_POST['submit']:'';
 
 $lastpage = 'ldapnewuser.php?p=TRUE&amp;auth='.$auth.'&amp;ldap_email='.$ldap_email;
 $errormessage = "<br/><p>$ldapback <a href='$lastpage'>$ldaplastpage</a></p>";
 
-if(!empty($is_submit)) {
-	if (empty($ldap_email) or empty($ldap_passwd)) // check for empty username-password
+if( !empty($is_submit) || (($auth == 7) && (empty($submit))) )
+{
+	if ( ($auth !=7 ) && (empty($ldap_email) or empty($ldap_passwd)) ) // check for empty username-password
 	{
 		$tool_content .= "
 		<p class='caution'>$ldapempty  $errormessage </p>";
 		draw($tool_content,0);
 		exit();
-	}  else  {
+	}  else 
+		{
 		// try to authenticate user
 		$auth_method_settings = get_auth_settings($auth);
 		switch($auth)
@@ -97,11 +104,25 @@ if(!empty($is_submit)) {
 				$dbfielduser = str_replace("dbfielduser=","",$edb[5]);//dbfielduser
 				$dbfieldpass = str_replace("dbfieldpass=","",$edb[6]);//dbfieldpass
 				break;
+			case '7':
+				break;
 			default:
 				break;
 		}
 		$is_valid = auth_user_login($auth,$ldap_email,$ldap_passwd);
 	}	
+
+	if ($auth == 7) {
+		if (phpCAS::checkAuthentication()) {
+			$ldap_email = phpCAS::getUser();
+			$cas = get_cas_settings($auth);
+			// store CAS released attributes in $GLOBALS['auth_user_info']
+			get_cas_attrs(phpCAS::getAttributes(), $cas);
+			$is_valid = true;
+		}
+		else
+			$is_valid = false;
+	}
 
 	if ($is_valid) { // connection successful	
 		$tool_content .= "
@@ -207,6 +228,8 @@ if (isset($_POST['submit']))  {
 			case '4': $password = "ldap";
 			break;
 			case '5': $password = "db";
+			break;
+			case '7': $password = "cas";
 			break;
 			default:  $password = "";
 			break;

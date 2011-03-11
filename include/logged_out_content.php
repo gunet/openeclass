@@ -89,10 +89,24 @@ if (mysql_num_rows($result) > 0) {
 
 $shibactive = mysql_fetch_array(db_query("SELECT auth_default FROM auth WHERE auth_name='shibboleth'"));
 if ($shibactive['auth_default'] == 1) {
-	$shibboleth_link = "<a href='{$urlServer}secure/index.php'>$langShibboleth</a><br /><br />";
+	$shibboleth_link = "<a href='{$urlServer}secure/index.php'>$langShibboleth</a><br />";
 } else {
 	$shibboleth_link = "";
 }
+$casactive = mysql_fetch_array(db_query("SELECT auth_default FROM auth WHERE auth_name='cas'"));
+if ($casactive['auth_default'] == 1) {
+	$cas_link = "<a href='{$urlServer}secure/cas.php'>$langCAS</a><br /><br />";
+} else {
+	$cas_link = "";
+}
+
+$casactive = mysql_fetch_array(db_query("SELECT auth_default FROM auth WHERE auth_name='cas'"));
+if ($casactive['auth_default'] == 1) {
+	$cas_link = "<a href='{$urlServer}secure/cas.php'>$langCAS</a><br /><br />";
+} else {
+	$cas_link = "";
+}
+
 
 
 
@@ -111,6 +125,7 @@ if (!get_config('dont_display_login_form')) {
 	   <input class='Login' name='pass' type = 'password' size = '17' /><br /><br />
 	   <input class='Login' name='submit' type = 'submit' size = '17' value = '$langEnter' /><br />
 	   $warning<br />$shibboleth_link
+	   $warning<br />$cas_link
 	   <a href='modules/auth/lostpass.php'>$lang_forgot_pass</a>
 	   </form>
 	   </td>

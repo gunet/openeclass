@@ -35,6 +35,7 @@
 
 include '../../include/baseTheme.php';
 include '../../include/sendMail.inc.php' ;
+include('../../include/CAS/CAS.php');
 require_once 'auth.inc.php';
 
 $tool_content = "";
@@ -56,13 +57,14 @@ $nameTools = $langUserData;
 $ldap_email = isset($_POST['ldap_email'])?$_POST['ldap_email']:'';
 $ldap_passwd = isset($_POST['ldap_passwd'])?$_POST['ldap_passwd']:'';
 $is_submit = isset($_POST['is_submit'])?$_POST['is_submit']:'';
+$submit = isset($_POST['submit'])?$_POST['submit']:'';
 
 $lastpage = 'ldapnewuser.php?auth='.$auth.'&ldap_email='.$ldap_email;
 $errormessage = "<br/><p>$ldapback <a href=\"$lastpage\">$ldaplastpage</a></p>";
 
-if(!empty($is_submit))
+if( !empty($is_submit) || (($auth == 7) && (empty($submit))) )
 {
-	if (empty($ldap_email) or empty($ldap_passwd)) // check for empty username-password
+	if ( ($auth !=7 ) && (empty($ldap_email) or empty($ldap_passwd)) ) // check for empty username-password
 	{
 		$tool_content .= "
 		  <p class=\"caution\"$ldapempty  $errormessage</p>";
@@ -96,11 +98,25 @@ if(!empty($is_submit))
 				$dbfielduser = str_replace("dbfielduser=","",$edb[5]);//dbfielduser
 				$dbfieldpass = str_replace("dbfieldpass=","",$edb[6]);//dbfieldpass
 				break;
+			case '7':
+				break;
 			default:
 				break;
 		}
 		
 		$is_valid = auth_user_login($auth,$ldap_email,$ldap_passwd);
+
+		if ($auth == 7) {
+			if (phpCAS::checkAuthentication()) {
+				$ldap_email = phpCAS::getUser();
+				$cas = get_cas_settings($auth);
+				// store CAS released attributes in $GLOBALS['auth_user_info']
+				get_cas_attrs(phpCAS::getAttributes(), $cas);
+				$is_valid = true;
+			}
+			else
+				$is_valid = false;
+		}
 
 		if($is_valid) {  // Successfully connected
 			$tool_content .= "
@@ -177,7 +193,7 @@ if(!empty($is_submit))
 // registration
 // ----------------------------------------------
 
-if (isset($_POST['submit'])) {
+if (!empty($submit)) {
 	$uname = $_POST['uname'];
 	$email = isset($_POST['email'])?$_POST['email']:'';
 	$am = isset($_POST['am'])?$_POST['am']:'';

@@ -493,5 +493,5 @@ db_query("CREATE TABLE `course_units` (
 	`date` DATETIME NOT NULL DEFAULT '0000-00-00') $charset_spec");
  
 //dhmiourgia full text indexes
-db_query("ALTER TABLE `annonces` ADD FULLTEXT `annonces` (`contenu`)");
+db_query("ALTER TABLE `annonces` ADD FULLTEXT `annonces` (`contenu`, `title`)");
 db_query("ALTER TABLE `cours` ADD FULLTEXT `cours` (`code` ,`description` ,`intitule` ,`course_keywords`, `course_addon`)");

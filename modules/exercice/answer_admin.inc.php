@@ -114,7 +114,9 @@ if(isset($submitAnswers) || isset($buttonBack)) {
 			}
 
 			// checks if field is empty
-			if(empty($reponse[$i])) {
+			//if(empty($reponse[$i])) {
+			// '0' might be a valid answer
+			if(!isset($reponse[$i]) || ($reponse[$i] === null)) {
 				$msgErr=$langGiveAnswers;
 				// clears answers already recorded into the Answer object
 				$objAnswer->cancel();
@@ -294,7 +296,9 @@ if(isset($submitAnswers) || isset($buttonBack)) {
 				$weighting[$i]=0-abs($weighting[$i]);
 			}
 			// checks if field is empty
-			if(empty($reponse[$i])) {
+			//if(empty($reponse[$i])) {
+			// '0' might be a valid answer
+			if(!isset($reponse[$i]) || ($reponse[$i] === null)) {
 				$msgErr=$langGiveAnswers;
 				// clears answers already recorded into the Answer object
 				$objAnswer->cancel();

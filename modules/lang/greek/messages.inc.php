@@ -292,8 +292,8 @@ $langMethods = "Ενεργοί τρόποι πιστοποίησης:";
 $langActivate = "Ενεργοποίηση";
 $langDeactivate = "Απενεργοποίηση";
 $langChooseAuthMethod = "Επιλέξτε τον τρόπο πιστοποίησης χρηστών και καθορίστε τις ρυθμίσεις του";
-$langConnYes = "ΕΠΙΤΥΧΗΣ ΣΥΝΔΕΣΗ";
-$langConnNo = "H ΣΥΝΔΕΣΗ ΔΕΝ ΛΕΙΤΟΥΡΓΕΙ!";
+$langConnYes = "Επιτυχής σύνδεση";
+$langConnNo = "Η σύνδεση δεν λειτουργεί";
 $langAuthNoValidUser = "Τα στοιχεία του χρήστη δεν είναι σωστά. Η εγγραφή δεν πραγματοποιήθηκε.";
 $langConnTest = "Γίνεται δοκιμή του τρόπου πιστοποίησης...";
 $langAuthMethod = "Τρόπος πιστοποίησης χρηστών";
@@ -316,6 +316,13 @@ $langldap_bind_dn = "DN χρήστη για LDAP binding";
 $langldap_bind_pw = "Συνθηματικό για LDAP binding";
 $langldap_login_attr = "Attribute για το username του χρήστη";
 $langldap_login_attr2 = "Εναλλακτικό Attribute για το username του χρήστη";
+$langcas_host = "Εξυπηρέτης CAS";
+$langcas_port = "Πόρτα λειτουργίας CAS";
+$langcas_context = "Διεύθυνση σελίδας εισόδου";
+$langcas_cachain = "Αρχείο Αλυσίδας Πιστοποιητικών του εξυπηρετητή CAS";
+$langcasusermailattr = "CAS SAML attribute για το E-mail";
+$langcasuserfirstattr = "CAS SAML attribute για το Όνομα";
+$langcasuserlastattr = "CAS SAML attribute για το Επώνυμο";
 $langUserAuthentication = "Πιστοποίηση Χρηστών";
 $langChangeUser = 'Σύνδεση με λογαριασμό άλλου χρήστη';
 $langChangeUserNotFound = 'Δε βρέθηκε λογαριασμός με όνομα χρήστη "%s"';
@@ -354,11 +361,15 @@ $langDeactSuccess = "Μόλις απενεργοποιήσατε την ";
 $langThe = "Η ";
 $langActFailure = "διότι δεν έχετε καθορίσει τις ρυθμίσεις του";
 $langLdapNotWork = "Προειδοποίση: Η php δεν έχει υποστήριξη για ldap. Βεβαιωθείτε ότι η ldap υποστήριξη είναι εγκατεστημένη και ενεργοποιημένη.";
+$langCASLoggedIN = "Προειδοποίση: Θα πρέπει να βγείτε από το CAS πριν αλλάξετε τις ρυθμίσεις του";
+$langCASNotWork = "Προειδοποίση: Η PHP δεν έχει υποστήριξη για CAS. Βεβαιωθείτε ότι η phpCAS είναι εγκατεστημένη.";
 $langShibEmail = "Shibboleth Email";
 $langShibUsername = "Shibboleth User Name";
 $langShibCn = "Shibboleth Canonical Name";
 $langShibboleth = "Πιστοποίηση μέσω Shibboleth";
-
+$langCAS = "Πιστοποίηση μέσω CAS Single Sign On";
+$langConnectWith = "γίνεται σύνδεση με";
+$langNotSSL = "Δεν πραγματοποιήθηκε σύνδεση μέσω SSL γιατί δεν δόθηκε πιστοποιητικό ή το πιστοποιητικό δεν μπορεί να διαβαστεί";
 // other
 $langVisitors = "Επισκέπτες";
 $langVisitor = "Επισκέπτης";
@@ -541,8 +552,10 @@ $langViaImap = "με πιστοποίηση μέσω IMAP";
 $langViaLdap = "με πιστοποίηση μέσω LDAP";
 $langViaDB = "με πιστοποίηση μέσω άλλης Βάσης Δεδομένων";
 $langViaShibboleth = "με πιστοποίηση μέσω Shibboleth";
+$langViaCAS = "με πιστοποίηση μέσω CAS Single Sign On";
 $langHasActivate = "O τρόπος πιστοποίησης που επιλέξατε, έχει ενεργοποιηθεί";
 $langAlreadyActiv = "O τρόπος πιστοποίησης που επιλέξατε, είναι ήδη ενεργοποιημένος";
+$langCASnochange = "Πρέπει να κλείσετε τον browser σας για να αλλάξετε τις ρυθμίσεις του CAS";
 $langErrActiv ="Σφάλμα! Ο τρόπος πιστοποίησης δεν μπορεί να ενεργοποιηθεί";
 $langAuthSettings = "Ρυθμίσεις πιστοποίησης";
 $langWrongAuth = "Πληκτρολογήσατε λάθος όνομα χρήστη / συνθηματικό";
@@ -1391,11 +1404,11 @@ $langCourseCode = "Μάθημα (Κωδικός)";
 $langWelcomeProf = "<br>Καλωσήλθατε στο περιβάλλον της πλατφόρμας <b>$siteName</b>.<br><br>
                     Επιλέξτε \"Δημιουργία Μαθήματος\" για να δημιουργήσετε τα ηλεκτρονικά σας μαθήματα.";
 */
-$langWelcomeStud = "Επιλέξτε \"Εγγραφή σε μάθημα\" για να παρακολουθήσετε τα διαθέσιμα ηλεκτρονικά μαθήματα.";
-$langWelcomeProf = "Επιλέξτε \"Δημιουργία Μαθήματος\" για να δημιουργήσετε τα ηλεκτρονικά σας μαθήματα.";
+$langWelcomeStud = "Επιλέξτε $langListCourses για να παρακολουθήσετε τα διαθέσιμα ηλεκτρονικά μαθήματα.";
+$langWelcomeProf = "Επιλέξτε $langCourseCreate για να δημιουργήσετε τα ηλεκτρονικά σας μαθήματα.";
 $langWelcomeSelect = "Επιλέξτε";
 $langWelcomeStudPerso = "<b>\"Εγγραφή σε μάθημα\"</b> για να παρακολουθήσετε τα διαθέσιμα ηλεκτρονικά μαθήματα.";
-$langWelcomeProfPerso = "<b>\"Δημιουργία Μαθήματος\"</b> για να δημιουργήσετε τα ηλεκτρονικά σας μαθήματα.";
+$langWelcomeProfPerso = "<b>$langCourseCreate</b> για να δημιουργήσετε τα ηλεκτρονικά σας μαθήματα.";
 $langBasicOptions = "Βασικές Επιλογές";
 $langUserOptions = "Επιλογές Χρήστη";
 $langAdminOptions = "Επιλογές Διαχείρισης";
@@ -2659,6 +2672,7 @@ $langConfirmUnregCours = "Θέλετε σίγουρα να απεγγραφεί�
  $langAllUsers = "Όλοι οι Χρήστες";
  $langAllCourses = "Όλα τα μαθήματα";
  $langSubmit = "Υποβολή";
+ $langCheck = "Έλεγχος";
  $langModule = "Υποσύστημα";
  $langAllModules = "Όλα τα Υποσυστήματα";
  $langValueType = "Είδος Στατιστικών";
@@ -3050,8 +3064,8 @@ $langUnknownResType = "Πρόβλημα! Άγνωστος πόρος θεματ�
 $langNoExercises = "Δεν υπάρχουν ασκήσεις";
 
 $langVia = 'μέσω';
-$langStudentViewEnable = "Περιβάλλον $langsOfStudent";
-$langStudentViewDisable = "Περιβάλλον $langsOfTeacher";
+$langStudentViewEnable = "Περιβάλλον <b>$langsOfStudent</b>";
+$langStudentViewDisable = "Περιβάλλον <b>$langsOfTeacher</b>";
 
 /**********************************************************************
  BetaCMS Bridge

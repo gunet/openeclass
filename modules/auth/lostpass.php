@@ -42,7 +42,7 @@ $nameTools = $lang_remind_pass;
 
 function check_password_editable($password)
 {
-	$authmethods = array("pop3","imap","ldap","db","shibboleth");
+	$authmethods = array("pop3","imap","ldap","db","shibboleth","cas");
 	if(in_array($password,$authmethods))
 	{
 		return false; // it is not editable, because it belongs in external auth method
@@ -162,6 +162,10 @@ if (isset($_GET['do']) and $_GET['do'] == 'go') {
 					}
 					case 'shibboleth': {
 						$auth = 6;
+						break;
+					}
+					case 'cas': {
+						$auth = 7;
 						break;
 					}
 					default:{

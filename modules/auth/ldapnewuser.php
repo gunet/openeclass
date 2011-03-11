@@ -69,20 +69,33 @@ if (isset($_GET['p']) and ($_GET['p'] == true)) {
 @$tool_content .= "
 <fieldset>
 <legend>".$settings['auth_instructions']."</legend>
-  <table class='tbl'>
-  <tr>
+  <table class='tbl'>";
+if ($auth !=7 ) {
+	@$tool_content .= "
+	<tr>
     <td>$langAuthUserName</td>
     <td><input type='text' name='ldap_email' value='$ldap_email'></td>
   </tr>
   <tr>
      <td>$langAuthPassword</td>
      <td><input type='password' name='ldap_passwd' value='$ldap_passwd'></td>
-  </tr>
+  </tr>";
+}
+
+@$tool_content .= "
   <tr>
      <td>&nbsp;</td>
      <td>
-       <input type='hidden' name='auth' value='".$auth."'>
-       <input type='submit' name='is_submit' value='".$langSubmit."'>
+       <input type='hidden' name='auth' value='".$auth."'>";
+
+if ($auth !=7 )
+	@$tool_content .= "
+       <input type='submit' name='is_submit' value='".$langSubmit."'>";
+else
+	@$tool_content .= "
+       <input type='submit' name='is_submit' value='".$langCheck."'>";
+
+@$tool_content .= "
      </td>
   </tr>
   </table>

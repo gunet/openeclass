@@ -1675,7 +1675,7 @@ function glossary_expand($text)
                 $begin = true;
                 foreach (array_keys($_SESSION['glossary']) as $term) {
                         $_SESSION['glossary_terms_regexp'] .= ($begin? '': '|') .
-                                                              preg_quote($term);
+                                                              '\b'.preg_quote($term).'\b';
                         if ($begin) {
                                 $begin = false;
                         }

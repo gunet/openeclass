@@ -83,6 +83,8 @@ if ($submit)  {
             break;
           case '5': $password = "db";
             break;
+          case '7': $password = "cas";
+            break;
           default:  $password = "";
             break;
         }

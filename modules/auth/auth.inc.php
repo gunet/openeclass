@@ -44,7 +44,7 @@ require("methods/pop3.php");
 
 /****************************************************************
 find/return the id of the default authentication method
-return $auth_id (a value between 1 and 5: 1-eclass,2-pop3,3-imap,4-ldap,5-db)
+return $auth_id (a value between 1 and 7: 1-eclass,2-pop3,3-imap,4-ldap,5-db,6-shibboleth,7-cas)
 ****************************************************************/
 function get_auth_id()
 {
@@ -97,6 +97,23 @@ function get_auth_active_methods()
         } else {
                 return 0;
         }
+}
+
+/****************************************************************
+check if method $auth is active
+****************************************************************/
+function check_auth_active($auth)
+{
+	global $db;
+	$sql = "SELECT auth_default,auth_settings FROM auth WHERE auth_id=$auth";
+	$active_auth = mysql_query($sql,$db);
+	if($active_auth) {
+		$authrow = mysql_fetch_row($active_auth);
+		// return true only if method is valid,not empty settings
+		if(($authrow[0]==1) && !empty($authrow[1]))
+			return true;
+	}
+	return false;
 }
 
 /****************************************************************
@@ -187,7 +204,7 @@ function get_auth_info($auth)
 /****************************************************************
 find/return the settings of the default authentication method
 
-$auth : integer a value between 1 and 5: 1-eclass,2-pop3,3-imap,4-ldap,5-db)
+$auth : integer a value between 1 and 7: 1-eclass,2-pop3,3-imap,4-ldap,5-db,6-shibboleth,7-cas)
 return $auth_row : an associative array
 ****************************************************************/
 function get_auth_settings($auth)
@@ -211,7 +228,7 @@ function get_auth_settings($auth)
 Try to authenticate the user with the admin-defined auth method
 true (the user is authenticated) / false (not authenticated)
 
-$auth an integer-value for auth method(1:eclass, 2:pop3, 3:imap, 4:ldap, 5:db)
+$auth an integer-value for auth method(1:eclass, 2:pop3, 3:imap, 4:ldap, 5:db, 6:shibboleth, 7:cas)
 $test_username
 $test_password
 return $testauth (boolean: true-is authenticated, false-is not)
@@ -456,7 +473,7 @@ Return CAS settings
 ****************************************************************/
 function get_cas_settings($auth)
 {
-	$auth_method_settings = get_auth_settings($auth);
+if ($auth_method_settings = get_auth_settings($auth)) {
 	$cassettings = $auth_method_settings['auth_settings'];
 	
 	$cas = explode("|", $cassettings);
@@ -470,30 +487,37 @@ function get_cas_settings($auth)
 	@$cas_settings['casuserlastattr'] = str_replace("casuserlastattr=","",$cas[6]);
 
 	return $cas_settings;
+} else 
+	return 0;
 }
 
 /****************************************************************
 CAS authentication
+if $new is false then we use stored settings from db
+if $new in true then we use new connection settings 
+from the rest of the arguments
+Returns array of messages, errors
 ****************************************************************/
 function cas_authenticate($auth, $new = false, $cas_host=null, $cas_port=null, $cas_context=null, $cas_cachain=null)
 {
-	
-	if (!$new) {
-		$cas = get_cas_settings($auth);
+	global $langConnectWith, $langNotSSL;
+// SESSION does not exist if user has not been authenticated
+	$ret = array();
+	if(!$new) {
+		$cas = get_cas_settings($auth);  
+		$cas_host = $cas['cas_host'];
+		$cas_port = $cas['cas_port'];
+		$cas_context = $cas['cas_context'];
+		$cas_cachain = $cas['cas_cachain'];
+		$casusermailattr = $cas['casusermailattr'];
+		$casuserfirstattr = $cas['casuserfirstattr'];
+		$casuserlastattr = $cas['casuserlastattr'];
 	}
-	$cas_host = $cas['cas_host'];
-	$cas_port = $cas['cas_port'];
-	$cas_context = $cas['cas_context'];
-	$cas_cachain = $cas['cas_cachain'];
-	$casusermailattr = $cas['casusermailattr'];
-	$casuserfirstattr = $cas['casuserfirstattr'];
-	$casuserlastattr = $cas['casuserlastattr'];
-
 	$cas_url = 'https://'.$cas_host;
 	$cas_port = intval($cas_port);
-
-	if ($cas_port != '443')
+	if ($cas_port != '443') {
 		$cas_url = $cas_url.':'.$cas_port;
+	}
 	$cas_url = $cas_url.$cas_context;
 
 	// The "real" hosts that send SAML logout messages
@@ -502,20 +526,25 @@ function cas_authenticate($auth, $new = false, $cas_host=null, $cas_port=null, $
 	
 	// Uncomment to enable debugging
 	// phpCAS::setDebug();
- 
+
 	// Initialize phpCAS - keep session in application
+	// we will add $lang error message later
+	$ret['message'] = "$langConnectWith $cas_url";
 	phpCAS::client(SAML_VERSION_1_1, $cas_host, $cas_port, $cas_context, FALSE);
 
 	// Set the CA certificate that is the issuer of the cert on the CAS server
 	if (isset($cas_cachain) && !empty($cas_cachain) && is_readable($cas_cachain))
 		phpCAS::setCasServerCACert($cas_cachain);
-	else
+	else {
 		phpCAS::setNoCasServerValidation();
-
+		// we will add $lang error message later
+		$ret['error'] = "$langNotSSL";
+	}	
+	// Single Sign Out
 	//phpCAS::handleLogoutRequests(true, $cas_real_hosts);
-
 	// Force CAS authentication on any page that includes this file
 	phpCAS::forceAuthentication();
+	return $ret;
 }
 
 /****************************************************************

@@ -277,6 +277,9 @@ else
 			case 'imap': $tool_content .= "<a href='../auth/ldapnewprofadmin.php?id=".urlencode($req['rid'])."&amp;auth=3'>
 					$langRegistration<br>($langViaImap)</td>\n  </tr>";
 				break;
+			case 'cas': $tool_content .= "<a href='../auth/ldapnewprofadmin.php?id=".urlencode($req['rid'])."&amp;auth=7'>
+					$langRegistration<br>($langViaCAS)</td>\n  </tr>";
+				break;
 			default:  $tool_content .= "<a href='newuseradmin.php?id=".urlencode($req['rid'])."'>
 					$langRegistration
 					</a></td>\n  </tr>";

@@ -35,10 +35,25 @@ switch ($myrow["password"]) {
 	case 'imap': $auth = 3; break;
 	case 'ldap': $auth = 4; break;
 	case 'db': $auth = 5; break;
+	case 'cas': $auth = 7; break;
 	default: break;
 }
 $auth_method_settings = get_auth_settings($auth);
-if ($myrow['password'] == $auth_method_settings['auth_name']) {
+
+// a CAS user might enter a username/password in the form, instead of doing CAS login
+// check auth according to the defined alternative authentication method of CAS
+if($auth==7) {
+	$cas = explode("|", $auth_method_settings['auth_settings']);
+	$cas_altauth = intval(str_replace("cas_altauth=","",$cas[7]));
+	// check if alt auth is valid and active
+	if(($cas_altauth>0) && check_auth_active($cas_altauth)) {
+		$auth = $cas_altauth;
+		// fetch settings of alt auth
+		$auth_method_settings = get_auth_settings($auth);
+	}
+}
+
+if (($myrow['password'] == $auth_method_settings['auth_name']) || !empty($cas_altauth)) {
         switch ($auth) {
             case 2:
                 $pop3host = str_replace('pop3host=', '', $auth_method_settings['auth_settings']);

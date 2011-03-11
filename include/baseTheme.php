@@ -497,6 +497,32 @@ function print_html_r($TheArray) {
 	echo "<br /><br />";
 }
 
+/**
+ * Function array2str
+ *
+ * Used for debugging purposes. Returns an html string with array keys and values
+ * handling multidimensional arrays as well.
+ *
+ * @param array $arr
+ *
+ * Returns string $str
+ */
+function array2html($TheArray) {
+	$str = '';
+	foreach ($TheArray as $key => $value) {
+		if (is_array($value)) {
+			$str .=  '<li>'. $key. ':<ol>';
+			foreach ($value as $item)
+				$str .= '<li>'. $item. '</li>';
+			$str .= '</ol></li>';
+		}
+		else {
+			$str .= '<li>'. $key. ': '. $value. '</li>';
+		}
+	}
+	return $str;
+}
+
 /*
  * Function lang_selections
  *
