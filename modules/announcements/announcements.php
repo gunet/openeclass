@@ -56,7 +56,7 @@ $action->record('MODULE_ID_ANNOUNCE');
  */
 
 define ('RSS', 'modules/announcements/rss.php?c='.$currentCourseID);
-
+$fake_code = course_id_to_fake_code($cours_id);
 $nameTools = $langAnnouncements;
 
 if ($is_adminOfCourse) { // check teacher status
@@ -195,7 +195,7 @@ hContent;
             $emailContent = autounquote($_POST['antitle']) .
                             "<br><br>" .
                             autounquote($_POST['newContent']);
-            $emailSubject = "$professorMessage ($currentCourseID - $intitule)";
+            $emailSubject = "$professorMessage ($fake_code - $intitule)";
             // select students email list
             $sqlUserOfCourse = "SELECT user.email FROM cours_user, user
                                 WHERE cours_id = $cours_id AND cours_user.user_id = user.user_id";
