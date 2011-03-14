@@ -27,7 +27,7 @@
 $path2add = 2;
 include '../include/baseTheme.php';
 $nameTools = $langInfo;
-$tool_content .= "<table class='tbl1' width='99%'>
+$tool_content .= "<table class='tbl1' width='100%'>
       <tr>
         <td colspan='3' class='title1'><b>$langStoixeia</b></td>
        </tr>

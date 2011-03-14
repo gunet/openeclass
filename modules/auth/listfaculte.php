@@ -31,7 +31,7 @@ $numrows = mysql_num_rows($result);
 
 if (isset($result))  {
 	$tool_content .= "<script type='text/javascript' src='sorttable.js'></script>
-	<table class='sortable' id='t1' width=\"99%\">
+	<table class='sortable' id='t1' width=\"100%\">
 	<tr>
 	  <th colspan='2'>$langFaculty</th>
 	</tr>";
