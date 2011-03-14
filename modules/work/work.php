@@ -1163,7 +1163,7 @@ function send_file($id)
         }
         header("Content-Type: application/octet-stream");
         header("Content-Disposition: attachment; filename=".basename($info['file_name']));
-        ob_end_flush();
+        stop_output_buffering();
         readfile("$GLOBALS[workPath]/$info[file_path]");
         exit();
 }

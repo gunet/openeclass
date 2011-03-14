@@ -55,7 +55,7 @@ if (!$result or mysql_num_rows($result) == 0) {
 </head><body><div style='text-align: center; font-size: 150%; border: 1px solid black; padding: 1 em;'>$langUpdatingStatistics<br />
 $langPleaseWait</div>
 ";
-        ob_end_flush();
+        stop_output_buffering();
         flush();
         $current_month = date('Y-m-01 00:00:00');
         $prev_month = date('Y-m-01 00:00:00', $lmon);

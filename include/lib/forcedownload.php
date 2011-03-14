@@ -85,7 +85,7 @@ function send_file_to_client($real_filename, $filename, $send_inline = false, $s
                 header('Expires: 0');
         }
         header('Content-length: ' . filesize($real_filename));
-	ob_end_flush();
+	stop_output_buffering();
         readfile($real_filename);
 	
 	if ($delete) { 

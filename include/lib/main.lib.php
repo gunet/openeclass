@@ -1853,3 +1853,10 @@ function canonicalize_url($url)
 		return $url;
 	}
 }
+
+function stop_output_buffering()
+{
+        while (ob_get_level() > 0) {
+                ob_end_flush();
+        }
+}
