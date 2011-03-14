@@ -253,6 +253,7 @@ $langcas_cachain = "CAS server certificate chain file";
 $langcasusermailattr = "CAS SAML attribute for E-mail";
 $langcasuserfirstattr = "CAS SAML attribute for Name";
 $langcasuserlastattr = "CAS SAML attribute for Sirname";
+$langcas_altauth = "Alternative Authentication method";
 $langUserAuthentication = "User Authentication";
 $langChangeUser = 'Login as a different user';
 $langChangeUserNotFound = 'Account with user name "%s"not found';
