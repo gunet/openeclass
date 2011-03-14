@@ -30,9 +30,6 @@ include '../../include/baseTheme.php';
 include '../../include/sendMail.inc.php';
 $navigation[] = array("url" => "../admin/index.php", "name" => $langAdmin);
 
-// Initialise $tool_content
-$tool_content = "";
-
 $all_set = register_posted_variables(array(
         'auth' => true,
         'uname' => true,
@@ -42,6 +39,7 @@ $all_set = register_posted_variables(array(
         'language' => true,
         'department' => true,
         'am' => false,
+        'phone' => false,
         'password' => true,
         'pstatut' => true,
         'rid' => false,
@@ -80,13 +78,13 @@ if($submit) {
                 $expires_at = time() + $durationAccount;
                 $password_encrypted = md5($password);
                 $inscr_user = db_query("INSERT INTO `$mysqlMainDb`.user
-                                (nom, prenom, username, password, email, statut, department, am, registered_at, expires_at,lang)
+                                (nom, prenom, username, password, email, statut, phone, department, am, registered_at, expires_at,lang)
                                 VALUES (" .
                                 autoquote($nom_form) . ', ' .
                                 autoquote($prenom_form) . ', ' .
                                 autoquote($uname) . ", '$password_encrypted', " .
                                 autoquote($email_form) .
-                                ", $pstatut, $depid, " . autoquote($am) . ", $registered_at, $expires_at, '$proflanguage')");
+                                ", $pstatut, " .autoquote($phone). ", $depid, " . autoquote($am) . ", $registered_at, $expires_at, '$proflanguage')");
 
                 // close request
                 $rid = intval($_POST['rid']);
@@ -209,6 +207,7 @@ $langEmail : $emailhelpdesk
             <td><input type='submit' name='submit' value='$langSubmit' />
                 <small>$langRequiredFields</small></td></tr>
         </table>
+        <input type='hidden' name='phone' value='".@$pphone."' />
         <input type='hidden' name='rid' value='".@$id."' />
         <input type='hidden' name='pstatut' value='$pstatut' />
         <input type='hidden' name='auth' value='1' />
