@@ -1702,3 +1702,12 @@ function group_documents_main_db($path, $course_id, $group_id, $type)
                 $group_document_upgrade_ok = false;
         }
 }
+
+function mkdir_or_error($dirname) {
+        global $langErrorCreatingDirectory;
+        if (!is_dir($dirname)) {
+                if (!mkdir($dirname, 0775)) {
+                        echo "<p class='caution'>$langErrorCreatingDirectory $dirname</p>";
+                }
+        }
+}

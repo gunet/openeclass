@@ -123,6 +123,9 @@ if (!file_exists('../video')) {
         die("$langUpgNoVideoDir3");
 }
 
+mkdir_or_error('../courses/temp');
+mkdir_or_error('../courses/userimg');
+
 // ********************************************
 // upgrade config.php
 // *******************************************
