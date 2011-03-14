@@ -120,11 +120,11 @@ if($is_adminOfCourse) {
 		$tool_content .= "<input type='hidden' name='fromExercise' value='$fromExercise'>";
 	}
 	
-	$tool_content .= "<table width='99%' class='tbl_alt'><tr>";
+	$tool_content .= "<table width='100%' class='tbl_alt'><tr>";
 	if (isset($fromExercise)) {
-		$tool_content .= "<th colspan='3'>";
+		$tool_content .= "<td colspan='3'>";
 	} else {
-		$tool_content .= "<th colspan='4'>";
+		$tool_content .= "<td colspan='4'>";
 	}
         $tool_content .= "<div align='right'><b>".$langFilter."</b>:
 	   <select name='exerciseId' class='FormData_InputText'>"."
@@ -154,7 +154,7 @@ if($is_adminOfCourse) {
 		$tool_content .= ">".$row['titre']."</option>\n";
 	}
 	$tool_content .= "</select>
-	<input type='submit' value='$langQuestionView'></div></th></tr>\n";
+	<input type='submit' value='$langQuestionView'></div></td></tr>\n";
 
 	$from = $page * QUESTIONS_PER_PAGE;
 	
