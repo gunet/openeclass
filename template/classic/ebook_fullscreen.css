@@ -5,11 +5,14 @@ html {
 }
 
 body {
-        margin: 0;
+        margin: 0 auto;
         padding: 0;
+        width: 980px;
         margin-bottom: 1px;
         height: 100%!important; /* For Firefox */
         height: auto;
+        background-color: #dfdfdf;
+
 }
 
 #menu_right a, .tools a {
@@ -44,18 +47,19 @@ a img {
 
 .tools {
         position: fixed;
-        top: 0; left: 0;
-        height: 80px;
-        width: 100%;
-        background-color:#3b5998;
-        border-bottom: 3px solid #e5eaf0;
+        top: 0;
+        height: 120px;
+        width: 980px;
+        margin: 0 auto;
+        border-bottom: 3px solid #73849b;
         font-family: "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
-        font-size: 16px;
+        font-size: 13px;
         z-index: 1;
+        background-color: #ffffff;
 }
 
 .tools a {
-        color:#ffffff;
+        color: #73849b;
         text-decoration:none;
 }
 .tools a:hover {
@@ -98,7 +102,7 @@ a img {
 a.trigger {
         position: fixed;
         text-decoration: none;
-        top: 80px; right: 0;
+        top: 120px; right: 0;
         padding: 10px 15px 10px 40px;
         background: #eceff5 url(img/ebook/show.png) 15% 55% no-repeat;
         display: block;
@@ -120,6 +124,8 @@ a.trigger.active {
 }
 
 .ebook_body {
-        margin-top: 80px;
+        margin-top: 120px;
         clear: both;
+        background-color: #ffffff;
+        
 }
