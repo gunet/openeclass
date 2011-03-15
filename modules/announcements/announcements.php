@@ -251,7 +251,7 @@ hContent;
         <form method='post' action='$_SERVER[PHP_SELF]' onsubmit=\"return checkrequired(this, 'antitle');\">
         <fieldset>
         <legend>$langAnnouncement</legend>
-	<table class='tbl'>";
+	<table class='tbl_alt'>";
         if (isset($_GET['modify'])) {
             $langAdd = $nameTools = $langModifAnn;
         } else {
@@ -302,7 +302,7 @@ hContent;
 
 	$tool_content .= "
         <script type='text/javascript' src='../auth/sorttable.js'></script>
-        <table width='100%' class='sortable' id='t1'>";
+        <table width='100%' class='tbl_alt'>";
 	if ($is_adminOfCourse) {
 		$colspan = 1;
 	} else {
@@ -311,8 +311,8 @@ hContent;
 	if ($announcementNumber > 0) {
 		$tool_content .= "
         <tr>
-          <th>&nbsp;</th>
-          <th colspan='$colspan'><div align='left'>$langAnnouncement</th>";
+          
+          <th colspan='2'><div align='left'>$langAnnouncement</th>";
 		if ($is_adminOfCourse) {
 		    $tool_content .= "
           <th width='70'>$langActions</th>";
