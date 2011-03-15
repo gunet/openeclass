@@ -34,15 +34,14 @@ Pitsiougas Vagelis <vagpits@uom.gr>
 
 ==============================================================================*/
 
-$require_current_course=TRUE;
-$require_login=TRUE;
+$require_current_course = TRUE;
+$require_login = TRUE;
 $require_prof = true;
 
 include '../../include/baseTheme.php';
+include '../../include/jscalendar/calendar.php';
 
 $nameTools = $langRefreshCourse;
-
-$tool_content = "";
 
 if (!$is_adminOfCourse)
 {
@@ -53,53 +52,68 @@ if (!$is_adminOfCourse)
 if(isset($_POST['submit'])) {
 	$output = array();
 	mysql_select_db($mysqlMainDb);
-	if (isset($_POST['delusers']))
-		$output[] = delete_users();
-	if (isset($_POST['delannounces']))
+	if (isset($_POST['delusers'])) {
+		if (isset($_POST['before_date'])) {
+			$output[] = delete_users($_POST['before_date']);
+		} else {
+			$output[] = delete_users();
+		}
+	}
+	if (isset($_POST['delannounces'])) {
 		$output[] = delete_announcements();
+	}
 
 	mysql_select_db($currentCourseID);
-	if (isset($_POST['delagenda']))
+	if (isset($_POST['delagenda'])) {
 		$output[] = delete_agenda();
-	if (isset($_POST['hideworks']))
+	}
+	if (isset($_POST['hideworks'])) {
 		$output[] = hide_work();
+	}
 
 	if (($count_events = count($output)) > 0 ) {
 		$tool_content .=  "<p class='success_small'>$langRefreshSuccess
 		<ul class='listBullet'>";
 		for ($i=0; $i< $count_events; $i++) {
-			$tool_content .= "
-			<li>$output[$i]</li>";
+			$tool_content .= "<li>$output[$i]</li>";
 		}
 		$tool_content .= "\n</ul>\n</p><br />";
 	}
-	$tool_content .="<p align=\"right\"><a href='infocours.php'>$langBack</a></p>";
+	$tool_content .= "<p align='right'><a href='infocours.php'>$langBack</a></p>";
 
 } else {
+	$lang_jscalendar = langname_to_code($language);
+        $jscalendar = new DHTML_Calendar($urlServer.'include/jscalendar/', $lang_jscalendar, 'calendar-blue2', false);
+        $head_content .= $jscalendar->get_load_files_code();
+        $datetoday = date("Y-n-j",time());
+	
 	$tool_content .= "<form action='$_SERVER[PHP_SELF]' method='post'>
-	<table width=\"99%\" class=\"FormData\">
+	<table width='100%' class=\"FormData\">
 	<tbody>
 	<tr>
 	  <th width='220'>&nbsp;</th>
 	  <td colspan='2'>$langRefreshInfo<br /><br /><b>$langRefreshInfo_A :</b></td>
 	</tr>
 	<tr>
-	  <th class='left'><img src=\"../../template/classic/img/groups_on.png\" alt=\"\" border=\"0\" height=\"16\" width=\"16\"> $langUsers</th>
+	  <th class='left'><img src=\"../../template/classic/img/groups_on.png\" alt=\"\" height=\"16\" width=\"16\"> $langUsers</th>
 	  <td width='1%'><input type='checkbox' name='delusers'></td>
-	  <td>$langUserDelCourse</td>
+	  <td>$langUserDelCourse </td>
 	</tr>
 	<tr>
-	  <th class='left'><img src=\"../../template/classic/img/announcements_on.png\" alt=\"\" border=\"0\" height=\"16\" width=\"16\"> $langAnnouncements</th>
+	  <th><td>&nbsp;</th><td>". make_calendar('before_date')."</td>
+	</tr>
+	<tr>
+	  <th class='left'><img src=\"../../template/classic/img/announcements_on.png\" alt=\"\" height=\"16\" width=\"16\"> $langAnnouncements</th>
 	  <td><input type='checkbox' name='delannounces'></td>
 	  <td>$langAnnouncesDel</td>
 	</tr>
 	<tr>
-	  <th class='left'><img src=\"../../template/classic/img/calendar_on.png\" alt=\"\" border=\"0\" height=\"16\" width=\"16\"> $langAgenda</th>
+	  <th class='left'><img src=\"../../template/classic/img/calendar_on.png\" alt=\"\" height=\"16\" width=\"16\"> $langAgenda</th>
 	  <td><input type='checkbox' name='delagenda'></td>
 	  <td>$langAgendaDel</td>
 	</tr>
 	<tr>
-	  <th class='left'><img src=\"../../template/classic/img/assignments_on.png\" alt=\"\" border=\"0\" height=\"16\" width=\"16\"> $langWorks</th>
+	  <th class='left'><img src=\"../../template/classic/img/assignments_on.png\" alt=\"\" height=\"16\" width=\"16\"> $langWorks</th>
 	  <td><input type='checkbox' name='hideworks'></td>
 	  <td>$langHideWork</td>
 	</tr>
@@ -113,16 +127,22 @@ if(isset($_POST['submit'])) {
 	$tool_content .= "<p align='right'><a href='infocours.php'>$langBack</a></p>";
 }
 
-draw($tool_content, 2);
+draw($tool_content, 2, null, $head_content);
 
-
-function delete_users() {
+function delete_users($date = '') {
 	global $cours_id, $langUsersDeleted;
 
-        db_query("DELETE FROM cours_user WHERE cours_id = $cours_id AND statut <> 1 AND statut <> 10");
+	if (isset($date)) {
+		db_query("DELETE FROM cours_user WHERE cours_id = $cours_id
+				AND statut <> 1
+				AND statut <> 10
+				AND reg_date < '$date'");	  
+	} else {
+		db_query("DELETE FROM cours_user WHERE cours_id = $cours_id AND statut <> 1 AND statut <> 10");
+	}
         db_query("DELETE FROM group_members
                          WHERE group_id IN (SELECT id FROM `group` WHERE course_id = $cours_id) AND
-                               user_id NOT IN (SELECT user_id FROM cours_user WHERE cours_id = $cours_id)");
+                               user_id NOT IN (SELECT user_id FROM cours_user WHERE cours_id = $cours_id)"); 
 	return "<p>$langUsersDeleted</p>";
 }
 
@@ -137,7 +157,6 @@ function delete_agenda() {
 	global $langAgendaDeleted, $currentCourseID, $mysqlMainDb;
 
 	db_query("DELETE FROM agenda");
-
 	##[BEGIN personalisation modification]############
 	db_query("DELETE FROM ".$mysqlMainDb.".agenda WHERE lesson_code='$currentCourseID'");
 	##[END personalisation modification]############
@@ -156,4 +175,20 @@ function hide_work()  {
 
 	db_query("UPDATE assignments SET active=0");
 	return "<p>$langWorksDeleted</p>";
+}
+
+function make_calendar($name) {
+	
+	global $datetoday, $jscalendar, $langBeforeRegDate;
+	
+	return "$langBeforeRegDate ".
+		$jscalendar->make_input_field(
+		array('showOthers' => true,
+		      'showsTime' => false,
+		      'align' => 'Tl',
+		      'ifFormat' => '%Y-%m-%d'),
+		array('name' => $name,
+		      'value' => $datetoday,
+		      'style' => 'width: 8em; color: #727266; background-color: #fbfbfb; border: 1px solid #C0C0C0; text-align: center')) .
+		"";
 }
