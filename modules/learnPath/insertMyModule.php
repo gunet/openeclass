@@ -162,7 +162,7 @@ if (isset($_REQUEST['cmdglobal']) && ($_REQUEST['cmdglobal'] == 'add'))
 $result = db_query(buildRequestModules());
 
 $tool_content .= '    <form name="addmodule" action="'.$_SERVER['PHP_SELF'].'?cmdglobal=add">'."\n\n";
-$tool_content .= '    <table width="99%" class="tbl_alt">'."\n"
+$tool_content .= '    <table width="100%" class="tbl_alt">'."\n"
        .'    <tr>'."\n"
        .'      <th><div align="left">'
        .$langLearningModule
@@ -201,13 +201,13 @@ while ($list=mysql_fetch_array($result))
 
     $tool_content .= '    <tr '.$style.'>'."\n"
         .'      <td align="left">'."\n"
-        .'        <label for="check_'.$list['module_id'].'" ><img src="'.$imgRepositoryWeb.$moduleImg.'" alt="'.$contentType_alt.'" />&nbsp;'.$list['name'].'</label>'."\n";
+        .'        <label for="check_'.$list['module_id'].'" ><img src="'.$imgRepositoryWeb.$moduleImg.'" alt="'.$contentType_alt.'" />&nbsp;<b>'.$list['name'].'</b></label>'."\n";
 
     // COMMENT
     if ($list['comment'] != null)
     {
-        $tool_content .= '      <br />'."\n"
-            .'        <b>'.$langComments.'</b>: <br />'.$list['comment'].''."\n";
+        $tool_content .= '     <br /> <br />'."\n"
+            .'        <em>'.$langComments.'</em>: <br />'.$list['comment'].''."\n";
     }
     $tool_content .= '      </td>'."\n"
         .'      <td align="center">'."\n"
