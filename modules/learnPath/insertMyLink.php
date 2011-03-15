@@ -50,7 +50,6 @@ $TABLELEARNPATHMODULE   = "lp_rel_learnPath_module";
 $TABLEASSET             = "lp_asset";
 $TABLEUSERMODULEPROGRESS= "lp_user_module_progress";
 
-$tbl_link               = "liens";
 $imgRepositoryWeb       = "../../template/classic/img/";
 
 require_once("../../include/baseTheme.php");
@@ -70,14 +69,14 @@ while ($iterator <= $_POST['maxLinkForm']) {
 	if (isset($_POST['submitInsertedLink']) && isset($_POST['insertLink_'.$iterator])) {
 
 		// get from DB everything related to the link
-		$sql = "SELECT * FROM `".$tbl_link."` WHERE `id` = \""
-			.$_POST['insertLink_'.$iterator] ."\"";
+		$sql = "SELECT * FROM `$mysqlMainDb`.link WHERE course_id = $cours_id AND `id` = \""
+			. intval($_POST['insertLink_'.$iterator]) ."\"";
 		$row = db_query_get_single_row($sql);
 
 		// check if this link is already a module
 		$sql = "SELECT * FROM `".$TABLEMODULE."` AS M, `".$TABLEASSET."` AS A
         		WHERE A.`module_id` = M.`module_id`
-        		AND M.`name` LIKE \"" .addslashes($row['titre']) ."\"
+        		AND M.`name` LIKE \"" .addslashes($row['title']) ."\"
         		AND M.`comment` LIKE \"" .addslashes($row['description']) ."\"
         		AND A.`path` LIKE \"" .addslashes($row['url']) ."\"
         		AND M.`contentType` = \"".CTLINK_."\"";
@@ -88,7 +87,7 @@ while ($iterator <= $_POST['maxLinkForm']) {
 			// create new module
 			$sql = "INSERT INTO `".$TABLEMODULE."`
 					(`name` , `comment`, `contentType`, `launch_data`)
-					VALUES ('". addslashes($row['titre']) ."' , '"
+					VALUES ('". addslashes($row['title']) ."' , '"
 					.addslashes($row['description']) . "', '".CTLINK_."','')";
 			$query = db_query($sql);
 
@@ -122,7 +121,7 @@ while ($iterator <= $_POST['maxLinkForm']) {
 				."', ".(int)$order.", 'OPEN')";
 			$query = db_query($sql);
 
-			$dialogBox .= $row['titre']." : ".$langLinkInsertedAsModule."<br />";
+			$dialogBox .= q($row['title'])." : ".$langLinkInsertedAsModule."<br />";
 			$style = "success";
         }
         else {
@@ -156,11 +155,11 @@ while ($iterator <= $_POST['maxLinkForm']) {
 					."', ".(int)$order.",'OPEN')";
 				$query = db_query($sql);
 
-				$dialogBox .= $row['titre']." : ".$langLinkInsertedAsModule."<br />";
+				$dialogBox .= q($row['title'])." : ".$langLinkInsertedAsModule."<br />";
 				$style = "success";
 			}
 			else {
-				$dialogBox .= $row['titre']." : ".$langLinkAlreadyUsed."<br />";
+				$dialogBox .= q($row['title'])." : ".$langLinkAlreadyUsed."<br />";
 				$style = "caution";
 			}
         	}
@@ -177,7 +176,7 @@ if (isset($dialogBox) && $dialogBox != "") {
     $tool_content .= "<br />";
 }
 
-$tool_content .= showlinks($tbl_link);
+$tool_content .= showlinks();
 //$tool_content .= "<br />";
 //$tool_content .= disp_tool_title($langPathContentTitle);
 //$tool_content .= '<a href="learningPathAdmin.php">&lt;&lt;&nbsp;'.$langBackToLPAdmin.'</a>';
@@ -190,50 +189,47 @@ $tool_content .= showlinks($tbl_link);
 draw($tool_content, 2);
 
 
-function showlinks($tbl_link)
+function showlinks()
 {
-	global $langComment;
-	global $langAddModule;
-	global $langName, $langSelection;
-	global $langAddModulesButton;
+	global $langComment, $langAddModule, $langName, $langSelection,
+               $langAddModulesButton, $cours_id, $mysqlMainDb;
 
-	$sqlLinks = "SELECT * FROM `".$tbl_link."` ORDER BY ordre DESC";
+        $sqlLinks = "SELECT * FROM `$mysqlMainDb`.link
+                              WHERE course_id = $cours_id ORDER BY `order` DESC";
 	$result = db_query($sqlLinks);
 	$numberoflinks=mysql_num_rows($result);
 
-	$output = "";
-	$output .= '<form action="' . $_SERVER['PHP_SELF'] . '" method="POST">';
-	$output .= "
-    <table width=\"99%\" class=\"LearnPathSum\">
-    <thead>
-    <tr align=\"center\" class=\"LP_header\">
-      <td width=\"1%\">&nbsp;</td>
-      <td><div align=\"left\">$langName</div></td>
-      <td width=\"20%\"><div align=\"center\">$langSelection</div></td>
-    </tr>
-    </thead>
-    <tbody>";
+	$output = "<form action='$_SERVER[PHP_SELF]' method='POST'>
+                      <table width='99%' class='LearnPathSum'>
+                      <thead>
+                      <tr align='center' class='LP_header'>
+                        <td width='1%'>&nbsp;</td>
+                        <td><div align='left'>$langName</div></td>
+                        <td width='20%'><div align='center'>$langSelection</div></td>
+                      </tr>
+                      </thead>
+                      <tbody>";
 	$i=1;
 	while ($myrow = mysql_fetch_array($result))
 	{
 		$myrow[3] = parse_tex($myrow[3]);
 		$output .= 	"
     <tr>
-      <td valign=\"top\"><img src=\"../../template/classic/img/links_on.png\" border=\"0\"></td>
-      <td align=\"left\" valign=\"top\"><a href=\"../link/link_goto.php?link_id=".$myrow[0]."&link_url=".urlencode($myrow[1])."\" target=\"_blank\">".$myrow[2]."</a>
+      <td valign='top'><img src='../../template/classic/img/links_on.png' border='0'></td>
+      <td align='left' valign='top'><a href='../link/link_goto.php?link_id=".$myrow[0]."&link_url=".urlencode($myrow[1])."' target='_blank'>".q($myrow[2])."</a>
       <br />
-      <small class=\"comments\">".$myrow[3]."</small></td>";
+      <small class='comments'>".q($myrow[3])."</small></td>";
 		$output .= 	"
-      <td><div align=\"center\"><input type=\"checkbox\" name=\"insertLink_".$i."\" id=\"insertLink_".$i."\" value=\"$myrow[0]\" /></div></td>
+      <td><div align='center'><input type='checkbox' name='insertLink_".$i."' id='insertLink_".$i."' value='$myrow[0]' /></div></td>
     </tr>";
 		$i++;
 	}
 	$output .= "
     <tr>
-      <td colspan=\"2\">&nbsp;</td>
-      <td align=\"right\">
-        <input type=\"hidden\" name=\"maxLinkForm\" value =\"" .($i-1) ."\" />
-        <input type=\"submit\" name=\"submitInsertedLink\" value=\"$langAddModulesButton\" class=\"LP_button\"/>
+      <td colspan='2'>&nbsp;</td>
+      <td align='right'>
+        <input type='hidden' name='maxLinkForm' value ='" . ($i-1) ."' />
+        <input type='submit' name='submitInsertedLink' value='$langAddModulesButton' class='LP_button'/>
       </td>
     </tr>
     </tbody>
@@ -241,5 +237,3 @@ function showlinks($tbl_link)
     </form>";
 	return $output;
 }
-
-?>
