@@ -27,20 +27,16 @@
 $path2add = 2;
 include '../include/baseTheme.php';
 $nameTools = $langInfo;
-$tool_content .= "<table class='tbl1' width='100%'>
-      <tr>
-        <td colspan='3' class='title1'><b>$langStoixeia</b></td>
-       </tr>
-       <tr>
-       <td valign='top' width='200'><strong>$langCampusName:</strong></td>
+$tool_content .= "<table class='tbl_alt' width='100%'>
+       <tr'>
+       <th width='200' class='left'><strong>$langCampusName:</strong></th>
        <td><b>$siteName&nbsp;</b>(<a href='$InstitutionUrl' target='_blank' class='mainpage'>$Institution</a>)</td>
-       </tr>
-      <tr>
-        <td valign='top' width='200'><strong>$langVersion:</strong></td>
-        <td><b><a href='http://www.openeclass.org/' title='Open eClass Portal' target='_blank'>Open eClass " . ECLASS_VERSION . "&raquo;</a></b></td>
-        <td rowspan='4' valign='top' id='info'>&nbsp;</td>
-      </tr><tr>
-        <td valign='top'><strong>$langCoursesHeader:</strong></td>
+  </tr>
+<tr>
+        <th width='200' class='left'><strong>$langVersion:</strong></th>
+    <td><b><a href='http://www.openeclass.org/' title='Open eClass Portal' target='_blank'>Open eClass " . ECLASS_VERSION . "&raquo;</a></b></td>
+        <tr>
+        <th width='200' class='left'><strong>$langCoursesHeader:</strong></th>
         <td>";
  
           /*
@@ -62,7 +58,7 @@ $tool_content .= "<table class='tbl1' width='100%'>
             <li><b>$a3[0]</b> $langClosed </li>
           </ul>
         </td>
-      </tr>
+  </tr>
       ";
 
 $e = mysql_fetch_row(mysql_query('SELECT COUNT(*) FROM user'));
@@ -72,20 +68,19 @@ $d = mysql_fetch_row(mysql_query('SELECT COUNT(*) FROM user WHERE statut=10'));
 
 $tool_content .= "
       <tr>
-        <td valign='top'><strong>$langUsers:</strong></td>
+        <th class='left'><strong>$langUsers:</strong></th>
         <td>$langAboutUsers <b>$e[0]</b> $langUsers
           <ul>
             <li><b>$b[0]</b> $langTeachers, </li>
             <li><b>$c[0]</b> $langStudents $langAnd </li>
             <li><b>$d[0]</b> $langGuest </li>
-          </ul></td>
-      </tr>
+        </ul></td>
+  </tr>
       <tr>
-        <td valign='top'><strong>$langSupportUser</strong></td>
+        <th class='left'><strong>$langSupportUser</strong></th>
         <td>$administratorName $administratorSurname</td>
-      </tr>
-      </table>
-    ";
+  </tr>
+   </table>";
 
 if (isset($uid) and $uid) {
         draw($tool_content, 1);

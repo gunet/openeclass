@@ -31,10 +31,8 @@ $numrows = mysql_num_rows($result);
 
 if (isset($result))  {
 	$tool_content .= "<script type='text/javascript' src='sorttable.js'></script>
-	<table class='sortable' id='t1' width=\"100%\">
-	<tr>
-	  <th colspan='2'>$langFaculty</th>
-	</tr>";
+<table class='tbl_alt' width=\"100%\">
+	";
 	$k = 0;
 	while ($fac = mysql_fetch_array($result)) {
 		if ($k%2 == 0) {
@@ -43,7 +41,7 @@ if (isset($result))  {
 		        $tool_content .= "\n  <tr class='odd'>";
 		}
 		$tool_content .= "<td width='1'>
-		<img style='border:0px;' src='${urlServer}/template/classic/img/arrow.png' alt='bullet'></td>
+		<img src='${urlServer}/template/classic/img/arrow.png' alt='arrow'></td>
 		<td><a href='opencourses.php?fc=$fac[id]'>$fac[name]</a>&nbsp;&nbsp;<small>
 		($fac[code])";
 		$n = db_query("SELECT COUNT(*) FROM cours WHERE faculteid = $fac[id]");

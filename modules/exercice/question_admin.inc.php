@@ -75,7 +75,7 @@ if(isset($usedInSeveralExercises)) {
 	} // end submit answers
 
 	$tool_content .= "<input type='hidden' name='answerType' value='$answerType'>
-	<table width='99%'><tr>
+	<table width='100%'><tr>
 	<td>$langUsedInSeveralExercises :</td>
 	</tr>
 	<tr>
@@ -121,7 +121,7 @@ if(isset($usedInSeveralExercises)) {
 	}
 	$tool_content .= "
       </fieldset>
-    <table width='99%' class='tbl'>
+    <table width='100%' class='tbl'>
     <tr>
       <th><b><u>$langQuestionAnswers</u>:</b>";
 	// doesn't show the edit link if we come from the question pool to pick a question for an exercise

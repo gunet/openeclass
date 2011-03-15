@@ -655,7 +655,8 @@ fieldset table.th {
     border: none;
     border: 1px solid #dfdfdf; 
 }	
-	
+
+
 .tbl_alt th {
     font-weight: bold;
     color: #73849b;
@@ -669,7 +670,8 @@ fieldset table.th {
 
 .tbl_alt td, .tbl_alt th {
     vertical-align: top;
-    border-right: 1px dashed #dfdfdf;    
+    border-right: 1px dashed #dfdfdf;
+    border-bottom: 1px dashed #dfdfdf    
 }
 
 .tbl_alt .odd {
