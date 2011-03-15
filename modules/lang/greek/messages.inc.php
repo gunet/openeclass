@@ -1400,17 +1400,11 @@ $langWelcomeToPortfolio = "Καλωσορίσατε στο προσωπικό σ
 $langUnregCourse = "Απεγγραφή από μάθημα";
 $langUnCourse = "Απεγγραφή";
 $langCourseCode = "Μάθημα (Κωδικός)";
-
-/*$langWelcomeStud = "<br>Καλωσήλθατε στο περιβάλλον της πλατφόρμας <b>$siteName</b>.<br><br>
-                    Επιλέξτε \"Εγγραφή σε μάθημα\" για να παρακολουθήσετε τα διαθέσιμα ηλεκτρονικά μαθήματα.";
-$langWelcomeProf = "<br>Καλωσήλθατε στο περιβάλλον της πλατφόρμας <b>$siteName</b>.<br><br>
-                    Επιλέξτε \"Δημιουργία Μαθήματος\" για να δημιουργήσετε τα ηλεκτρονικά σας μαθήματα.";
-*/
-$langWelcomeStud = "Επιλέξτε $langListCourses για να παρακολουθήσετε τα διαθέσιμα ηλεκτρονικά μαθήματα.";
-$langWelcomeProf = "Επιλέξτε $langCourseCreate για να δημιουργήσετε τα ηλεκτρονικά σας μαθήματα.";
+$langWelcomeStud = "Επιλέξτε «<b>$langListCourses</b>» για να παρακολουθήσετε τα διαθέσιμα ηλεκτρονικά μαθήματα.";
+$langWelcomeProf = "Επιλέξτε «<b>$langCourseCreate<b>» για να δημιουργήσετε τα ηλεκτρονικά σας μαθήματα.";
 $langWelcomeSelect = "Επιλέξτε";
-$langWelcomeStudPerso = "<b>\"Εγγραφή σε μάθημα\"</b> για να παρακολουθήσετε τα διαθέσιμα ηλεκτρονικά μαθήματα.";
-$langWelcomeProfPerso = "<b>$langCourseCreate</b> για να δημιουργήσετε τα ηλεκτρονικά σας μαθήματα.";
+$langWelcomeStudPerso = "«<b>Εγγραφή σε μάθημα</b>» για να παρακολουθήσετε τα διαθέσιμα ηλεκτρονικά μαθήματα.";
+$langWelcomeProfPerso = "«<b>$langCourseCreate</b>» για να δημιουργήσετε τα ηλεκτρονικά σας μαθήματα.";
 $langBasicOptions = "Βασικές Επιλογές";
 $langUserOptions = "Επιλογές Χρήστη";
 $langAdminOptions = "Επιλογές Διαχείρισης";

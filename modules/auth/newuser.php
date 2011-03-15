@@ -90,7 +90,7 @@ if (!isset($_POST['submit'])) {
 	<tr>
 	<th class='left'>$langFaculty</th>
 		<td colspan='2'><select name='department'>";
-	$deps = mysql_query("SELECT name, id FROM faculte ORDER BY id");
+	$deps = db_query("SELECT name, id FROM faculte ORDER BY id");
 	while ($dep = mysql_fetch_array($deps)) {
 		$tool_content .= "\n<option value='".$dep[1]."'>".$dep[0]."</option>";
 	}
@@ -114,23 +114,22 @@ if (!isset($_POST['submit'])) {
 	</form>";
 } else {
 
-	// trim white spaces in the end and in the beginning of the word
-	$uname = preg_replace('/\ +/', ' ', trim(isset($_POST['uname'])?$_POST['uname']:''));
-	$nom_form = isset($_POST['nom_form'])?$_POST['nom_form']:'';
-	$prenom_form = isset($_POST['prenom_form'])?$_POST['prenom_form']:'';
-	$password = isset($_POST['password'])?$_POST['password']:'';
-	$email = isset($_POST['email'])?$_POST['email']:'';
-	$department = isset($_POST['department'])?$_POST['department']:'';
-	$am = isset($_POST['am'])?$_POST['am']:'';
-	
+	$missing = register_posted_variables(array('uname' => true,
+					'nom_form' => true,
+					'prenom_form' => true,
+					'password' => true,
+					'password1' => true,
+					'email' => false,
+					'department' => true,
+					'am' => false));	
 	$registration_errors = array();
 	// check if there are empty fields
-	if (empty($nom_form) or empty($prenom_form) or empty($password) or empty($uname)) {
+	if (!$missing) {
 		$registration_errors[] = $langEmptyFields;
 	} else {
 		// check if the username is already in use
-		$q2 = "SELECT username FROM `$mysqlMainDb`.user WHERE username='".escapeSimple($uname)."'";
-		$username_check = mysql_query($q2);
+		$q2 = "SELECT username FROM `$mysqlMainDb`.user WHERE username = ".autoquote($uname);
+		$username_check = db_query($q2);
 		if ($myusername = mysql_fetch_array($username_check)) {
 			$registration_errors[] = $langUserFree;
 		}
@@ -161,19 +160,27 @@ if (!isset($_POST['submit'])) {
 	$password_encrypted = md5($password);
 	
 	$q1 = "INSERT INTO `$mysqlMainDb`.user
-		(user_id, nom, prenom, username, password, email, statut, department, am, registered_at, expires_at, lang)
-		VALUES ('NULL', '$nom_form', '$prenom_form', '$uname', '$password_encrypted', '$email','5',
-			'$department','$am',".$registered_at.",".$expires_at.",'$lang')";
-	$inscr_user = mysql_query($q1);
+		(nom, prenom, username, password, email, statut, department, am, registered_at, expires_at, lang)
+		VALUES (". autoquote($nom_form) .",
+			". autoquote($prenom_form) .",
+			". autoquote($uname) .",
+			'$password_encrypted',
+			". autoquote($email) .",
+			5,
+			". intval($department) .",
+			". autoquote($am) .",
+			$registered_at, $expires_at,
+			'$lang')";
+	$inscr_user = db_query($q1);
 	$last_id = mysql_insert_id();
-	$result = mysql_query("SELECT user_id, nom, prenom FROM `$mysqlMainDb`.user WHERE user_id='$last_id'");
+	$result = db_query("SELECT user_id, nom, prenom FROM `$mysqlMainDb`.user WHERE user_id = $last_id");
 	while ($myrow = mysql_fetch_array($result)) {
 		$uid = $myrow[0];
 		$nom = $myrow[1];
 		$prenom = $myrow[2];
 	}
-	mysql_query("INSERT INTO `$mysqlMainDb`.loginout (loginout.idLog, loginout.id_user, loginout.ip, loginout.when, loginout.action)
-		VALUES ('', '".$uid."', '".$_SERVER['REMOTE_ADDR']."', NOW(), 'LOGIN')");
+	db_query("INSERT INTO `$mysqlMainDb`.loginout (loginout.id_user, loginout.ip, loginout.when, loginout.action)
+		VALUES ($uid, '".$_SERVER['REMOTE_ADDR']."', NOW(), 'LOGIN')");
 	$_SESSION['uid'] = $uid;
 	$_SESSION['statut'] = 5;
 	$_SESSION['prenom'] = $prenom;
@@ -182,7 +189,7 @@ if (!isset($_POST['submit'])) {
 	// registration form
 	$tool_content .= "<table width='99%' class='tbl'><tr>" .
 			"<td class='well-done' height='60'>" .
-			"<p>$langDear $prenom $nom,</p>" .
+			"<p>$langDear " . q("$prenom $nom") . ",</p>" .
 			"<p>$langPersonalSettings</p></td>" .
 			"</tr></table><br /><br />" .
 			"<p>$langPersonalSettingsMore</p>";
@@ -199,4 +206,3 @@ if (!isset($_POST['submit'])) {
 } // end of registration
 
 draw($tool_content,0);
-?>
