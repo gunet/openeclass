@@ -190,13 +190,13 @@ if( !$is_adminOfCourse
 }
 
 $tool_content .="
-    <fieldset>
+<fieldset>
     <legend>$langLearningObjectData</legend>
     <table width=\"99%\" class=\"tbl\">";
 //################################## MODULE NAME BOX #################################\\
 $tool_content .="
     <tr>
-      <th class=\"left\" height=\"32\" width=\"220\">$langTitle :</th>
+      <th class=\"left\" height=\"32\">$langTitle:</th>
       <td>";
       $cmd = ( isset($_REQUEST['cmd']) && is_string($_REQUEST['cmd']) )? (string)$_REQUEST['cmd'] : '';
 
@@ -214,7 +214,7 @@ $tool_content .= "
     </tr>";
 $tool_content .="
     <tr>
-      <th class=\"left\" height=\"32\">$langComments :</th>
+      <th class=\"left\" height=\"32\">$langComments:</th>
       <td class=\"left\">";
 if($module['contentType'] != CTLABEL_ )
 {
@@ -266,7 +266,7 @@ $tool_content .= "
     </tr>";
     $tool_content .="
     <tr>
-      <th class=\"left\">$langProgInModuleTitle :</th>
+      <th class=\"left\">$langProgInModuleTitle:</th>
       <td>";
 //############################ PROGRESS  AND  START LINK #############################\\
 
@@ -291,28 +291,28 @@ if($module['contentType'] != CTLABEL_) //
 			.'        <table class="tbl_alt">'."\n"
 			.'        <tr>'."\n"
 			.'          <th><div align="center">'.$langInfoProgNameTitle.'</div></th>'."\n"
-			.'          <th>&nbsp;</th>'."\n"
+			.'          '."\n"
 			.'          <th><div align="center">'.$langPersoValue.'</div></th>'."\n"
 			.'        </tr>'."\n";
 
         //display type of the module
 		$tool_content .= '        <tr class="even">'."\n"
                         .'          <td>'.$langTypeOfModule.'</td>'."\n"
-                        .'          <td>:</td>'."\n"
+                        .'          '."\n"
 			.'          <td align="right"><img src="'.$imgRepositoryWeb.$contentType_img.'" alt="'.$contentType_alt.'" title="'.$contentType_alt.'" border="0" />&nbsp;&nbsp;'.$contentDescType.'</td>'."\n"
 			.'        </tr>'."\n\n";
 
         //display total time already spent in the module
 		$tool_content .= '        <tr class="even">'."\n"
 			.'          <td>'.$langTotalTimeSpent.'</td>'."\n"
-                        .'          <td>:</td>'."\n"
+                        .'          '."\n"
 			.'          <td align="right">'.$resultBrowsed['total_time'].'</td>'."\n"
 			.'        </tr>'."\n\n";
 
         //display time passed in last session
 		$tool_content .= '        <tr class="even">'."\n"
 			.'          <td>'.$langLastSessionTimeSpent.'</td>'."\n"
-                        .'          <td>:</td>'."\n"
+                        .'          '."\n"
 			.'          <td align="right">'.$resultBrowsed['session_time'].'</td>'."\n"
 			.'        </tr>'."\n\n";
 
@@ -342,7 +342,7 @@ if($module['contentType'] != CTLABEL_) //
         {
 		$tool_content .= '<tr>'."\n"
 			.'          <td>'.$langYourBestScore.'</td>'."\n"
-            .'          <td>:</td>'."\n"
+            .'          '."\n"
 			.'          <td>'.disp_progress_bar($raw, 1).' '.$raw.'%</td>'."\n"
 			.'        </tr>'."\n\n";
         }
@@ -375,7 +375,7 @@ if($module['contentType'] != CTLABEL_) //
 
 		$tool_content .= '        <tr class="even">'."\n"
 			.'          <td>'.$langLessonStatus.'</td>'."\n"
-            .'          <td>:</td>'."\n"
+            .'          '."\n"
 			.'          <td align="right">'.$statusToDisplay.'</td>'."\n"
 			.'        </tr>'."\n\n"
 			.'        </table>'."\n\n";
@@ -396,7 +396,7 @@ $tool_content .= "
     </tr>";
     $tool_content .="
     <tr>
-      <th class=\"left\">$langPreview :</th>
+      <th class=\"left\">$langPreview:</th>
       <td>";
     if( $module['startAsset_id'] != "" && $asset['asset_id'] == $module['startAsset_id'] )
     {
@@ -442,7 +442,8 @@ if( $is_adminOfCourse ) // for teacher only
 
     $tool_content .= "
     </table>
-    </fieldset>";
+    </fieldset>"
+  ;
 //back button
 if ($is_adminOfCourse)
 {

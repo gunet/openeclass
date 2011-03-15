@@ -365,8 +365,8 @@ function nameBox($type, $mode, $formlabel = FALSE)
       $imgList[CTDOCUMENT_] = "docs_on.png";
       $imgList[CTCLARODOC_] = "clarodoc.gif";
       $imgList[CTEXERCISE_] = "exercise_on.png";
-      $imgList[CTSCORM_] = "scorm.gif";
-      $imgList[CTSCORMASSET_] = "scorm.gif";
+      $imgList[CTSCORM_] = "scorm.png";
+      $imgList[CTSCORMASSET_] = "scorm.png";
       $imgList[CTLINK_] = "links_on.png";
       $imgList[CTCOURSE_DESCRIPTION_] = "description_on.png";
 

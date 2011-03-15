@@ -336,11 +336,11 @@ else
 	."</a>"
 	.'&nbsp;&nbsp;'
 	.'<a href="viewer.php?fullscreen=1" target="_top">'
-	.'<img src="'.$imgRepositoryWeb.'scormfullscreen.jpg" border="0" title="'.$langFullScreen.'">'
+	.'<img src="'.$imgRepositoryWeb.'fullscreen.png" border="0" title="'.$langFullScreen.'">'
 	.'</a>'
 	.'&nbsp;&nbsp;'
 	.'<a href="viewer.php?fullscreen=0" target="_top">'
-	.'<img src="'.$imgRepositoryWeb.'scormexitfullscreen.jpg" border="0" title="'.$langInFrames.'">'
+	.'<img src="'.$imgRepositoryWeb.'fullscreen_exit.png" border="0" title="'.$langInFrames.'">'
 	.'</a>&nbsp;&nbsp;&nbsp;'."\n"
     .'&nbsp;</div></td>'
     .'<td><div align="center">';

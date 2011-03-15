@@ -164,7 +164,7 @@ foreach ($flatElementList as $module)
 		unset($imagePassed);
 		if($module['credit'] == 'CREDIT' || $module['lesson_status'] == 'COMPLETED' || $module['lesson_status'] == 'PASSED') {
 			if ($module['contentType'] == CTSCORM_ || $module['contentType'] == CTSCORMASSET_)
-				$moduleImg = "lp_completed.png";
+				$moduleImg = "tick.png";
 			else
 				$imagePassed = '<img src="'.$imgRepositoryWeb.'tick.png" alt="'.$module['lesson_status'].'" title="'.$module['lesson_status'].'" />';
 		}
