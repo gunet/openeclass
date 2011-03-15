@@ -77,7 +77,7 @@ echo '<html>'."\n"
     .'<head>'."\n"
     .'<meta http-equiv="Content-Type" content="text/html; charset='.$charset.'">'."\n"
     .'<link href="../../template/classic/theme.css" rel="stylesheet" type="text/css" />'."\n"
-    .'<link href="./tool.css" rel="stylesheet" type="text/css" />'."\n"
+
     .'</head>'."\n"
     .'<body style="margin: 2px;">'."\n";
 
@@ -332,7 +332,7 @@ else
     .$prevNextString
     ."&nbsp;&nbsp;"
 	."<a href=\"navigation/viewModule.php?go=".$returl."\" target=\"scoFrame\">"
-	.'<img src="'.$imgRepositoryWeb.'scormrestart.jpg" border="0" title="'.$langQuitViewer.'">'
+	.'<img src="'.$imgRepositoryWeb.'return.png" border="0" title="'.$langQuitViewer.'">'
 	."</a>"
 	.'&nbsp;&nbsp;'
 	.'<a href="viewer.php?fullscreen=1" target="_top">'

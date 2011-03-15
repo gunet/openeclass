@@ -45,8 +45,7 @@ require_once("../../include/baseTheme.php");
 require_once("../../include/lib/learnPathLib.inc.php");
 require_once("../../include/lib/fileDisplayLib.inc.php");
 
-echo "<link rel='stylesheet' href='../../template/classic/tool_content.css' type='text/css'>";
-echo "<link rel='stylesheet' href='tool.css' type='text/css'>";
+echo "<link rel='stylesheet' href='../../template/classic/theme.css' type='text/css'>";
 
 $TABLEMODULE            = "lp_module";
 $TABLELEARNPATHMODULE   = "lp_rel_learnPath_module";
@@ -105,7 +104,7 @@ for ($i=0 ; $i < sizeof($flatElementList) ; $i++)
 }
 
 // -------------------------- learning path list header ----------------------------
-echo "<table width=\"99%\" class=\"LearnPathSum\"><thead>
+echo "<table width=\"99%\" class=\"tbl_alt\"><thead>
 <tr class=\"LP_header\">
 <td colspan=\"".($maxDeep+1)."\"><div align=\"center\">".$langContents."</div></td>
 </tr></thead><tbody>";
