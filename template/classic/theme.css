@@ -145,9 +145,9 @@ fieldset table.th {
 
 /* 2.5 Alignments */ 
 
-.left   {text-align: left; !important;}
-.center {text-align: center; !important;}
-.right  {text-align: right; !important;}
+.left   {text-align: left !important;}
+.center {text-align: center !important;}
+.right  {text-align: right !important;}
 
 /*-------------------------------------
    3. Page Layout (UP to BOTTOM)

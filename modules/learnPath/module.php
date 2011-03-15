@@ -192,11 +192,11 @@ if( !$is_adminOfCourse
 $tool_content .="
 <fieldset>
     <legend>$langLearningObjectData</legend>
-    <table width=\"99%\" class=\"tbl\">";
+    <table width=\"100%\" class=\"tbl_alt\">";
 //################################## MODULE NAME BOX #################################\\
 $tool_content .="
     <tr>
-      <th class=\"left\" height=\"32\">$langTitle:</th>
+      <th width=\"250\" class=\"left\">$langTitle:</th>
       <td>";
       $cmd = ( isset($_REQUEST['cmd']) && is_string($_REQUEST['cmd']) )? (string)$_REQUEST['cmd'] : '';
 
@@ -214,7 +214,7 @@ $tool_content .= "
     </tr>";
 $tool_content .="
     <tr>
-      <th class=\"left\" height=\"32\">$langComments:</th>
+      <th class=\"left\">$langComments:</th>
       <td class=\"left\">";
 if($module['contentType'] != CTLABEL_ )
 {
@@ -241,7 +241,7 @@ $tool_content .="
     </tr>";
 $tool_content .="
     <tr>
-      <th class=\"left\" height=\"32\">$langComments - $langInstructions:<br /><small>($langModuleComment_inCurrentLP)</small></th>
+      <th class=\"left\">$langComments - $langInstructions:<br /><small>($langModuleComment_inCurrentLP)</small></th>
       <td class=\"left\">";
     //#### ADDED COMMENT #### courseAdmin can always modify this ####\\
     // this is a comment for THIS module in THIS learning path
@@ -290,9 +290,9 @@ if($module['contentType'] != CTLABEL_) //
 		$tool_content .= ''."\n\n"
 			.'        <table class="tbl_alt">'."\n"
 			.'        <tr>'."\n"
-			.'          <th><div align="center">'.$langInfoProgNameTitle.'</div></th>'."\n"
+			.'          <th>'.$langInfoProgNameTitle.'</th>'."\n"
 			.'          '."\n"
-			.'          <th><div align="center">'.$langPersoValue.'</div></th>'."\n"
+			.'          <th>'.$langPersoValue.'</th>'."\n"
 			.'        </tr>'."\n";
 
         //display type of the module

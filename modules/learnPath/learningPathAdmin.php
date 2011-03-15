@@ -476,7 +476,7 @@ if (isset($displayChangePosForm) && $displayChangePosForm)
     $dialogBox = "
     <table class=\"tbl\">
     <tr>
-      <th>".$langMove." :</th>
+      <th>".$langMove.":</th>
       <td>
         <form action=\"".$_SERVER['PHP_SELF']."\" method=\"post\">\"<b>".$moduleInfos['name']."</b>\" &nbsp;".$langTo.":&nbsp;&nbsp;";
     // build select input - $elementList has been declared in the previous big cmd case
@@ -503,7 +503,7 @@ if (isset($dialogBox) && $dialogBox!="")
 
 
 $tool_content .="
-     <h3>$langLearningPathStructure :</h3>
+     <p class='sub_title1'>$langLearningPathStructure:</p>
      ";
 
 //  -------------------------- learning path list content ----------------------------
