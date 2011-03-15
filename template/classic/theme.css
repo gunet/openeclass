@@ -1179,3 +1179,133 @@ table.Search td {
     cursor:help; }
 
 
+
+/* ----- Lesson Layout ----- */
+
+.image_kef {
+        padding: 5px !important;
+        margin-right: 10px !important;
+        }
+
+ul.main
+{
+        list-style-type: none !important;
+
+}
+li.main
+{
+        background-image: url(img/list_main.gif) !important;
+        background-repeat: no-repeat !important;
+        background-position: 0px 5px !important;
+        padding-left: 20px !important;
+        font-size: 11px !important;
+}
+
+#keywords {
+        line-height: 15px;
+        padding: 5px;
+        height: auto;
+        background-image:url(img/keywords.png);
+        background-repeat: no-repeat;
+        background-position: 10px 10px;
+        padding-left: 50px;
+        margin-top: 10px !important;
+        font-size: 11px !important;
+}
+        
+#goals {
+        line-height: 15px;
+        padding: 5px;
+        margin-top: 10px !important;
+        height: auto;
+        background-image:url(img/target.png);
+        background-repeat: no-repeat;
+        background-position: 10px 10px;
+        padding-left: 50px;
+        font-size: 11px !important;
+}
+        
+#aps {
+        line-height: 15px;
+        padding: 5px;
+        margin-top: 2px;
+        height: auto;
+        background-image:url(img/aps.png);
+        background-repeat: no-repeat;
+        background-position: 10px 10px;
+        padding-left: 50px;
+        margin-top: 10px !important;
+        font-size: 11px !important;
+}
+
+#material {
+        line-height: 15px;
+        padding: 5px;
+        height: auto;
+        background-image:url(img/material.png);
+        background-repeat: no-repeat;
+        background-position: 10px 10px;
+        padding-left: 50px;
+        margin-top: 10px !important;
+        font-size: 11px !important;
+}
+        
+.definitions {
+        line-height: 15px;
+        padding: 5px;
+        margin-top: 10px !important;
+        height: auto;
+        min-height: 32px;  
+        background-image:url(img/definitions.png);
+        background-repeat: no-repeat;
+        background-position: 10px 10px;
+        padding-left: 50px;
+        font-size: 11px !important;
+}
+
+
+.description {
+        font-weight: bold;
+        border-bottom: 1px solid #cccccc;
+        color:#e79544;
+        padding: 3px;
+}
+
+
+.meros {
+
+    border: 2px solid #e5eaf1 !important;
+	color:#627aad;
+	background-color: #f2f5fa;
+}
+
+.meros a {
+	color:#627aad;
+}	
+
+.image_exof {
+        padding: 5px !important;
+        border: 2px solid #e5eaf1 !important;
+        margin-left: 0px !important;
+        margin-right: 10px !important;
+}
+
+.image_kef {
+        padding: 5px !important;
+        border: 2px solid #e5eaf1 !important;
+        margin-left: 10px !important;
+        margin-right: 0px !important;
+        float: right;
+}
+
+
+.image_cover {
+        clear: both;
+        padding: 10px !important;
+        border: 2px solid #d2dbe8 !important;
+        margin-left: 10px !important;
+        margin-right: 0px !important;
+        float: right;
+}
+
+/* ----- End Lesson Layout ----- */

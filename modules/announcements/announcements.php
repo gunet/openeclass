@@ -312,7 +312,7 @@ hContent;
 		$tool_content .= "
         <tr>
           
-          <th colspan='2'><div align='left'>$langAnnouncement</th>";
+          <th colspan='2'>$langAnnouncement</th>";
 		if ($is_adminOfCourse) {
 		    $tool_content .= "
           <th width='70'>$langActions</th>";

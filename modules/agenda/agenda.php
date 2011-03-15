@@ -402,7 +402,7 @@ if (mysql_num_rows($result) > 0) {
 	$barreMois = "";
 	$nowBarShowed = FALSE;
         $tool_content .= "
-        <table width='99%' align='left' class='tbl_alt'>
+        <table width='100%' align='left' class='tbl_alt'>
         <tr>
           <th><div align='left'><b>$langEvents</b></div></th>";
         if ($is_adminOfCourse) {
