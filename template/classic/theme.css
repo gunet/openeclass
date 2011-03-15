@@ -669,6 +669,7 @@ fieldset table.th {
 
 .tbl_alt td, .tbl_alt th {
     vertical-align: top;
+    border-right: 1px dashed #dfdfdf;    
 }
 
 .tbl_alt .odd {

@@ -487,8 +487,8 @@ else {
 		$tool_content .= "
 		<table width=\"100%\" class=\"tbl_alt\">
 		<tr>
-                  <th>&nbsp;</th>
-                  <th><div align=\"left\">$langDirectory $langVideo</div></th>
+                 
+                  <th colspan='2'><div align=\"left\">$langDirectory $langVideo</div></th>
 		</tr>";
 		$i=0;
 		$count_video_presented=1;
