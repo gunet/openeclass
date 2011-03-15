@@ -256,7 +256,7 @@ if ($is_adminOfCourse) {
 		db_query($perso_sql, $mysqlMainDb);
 		##[END personalisation modification]############
 
-		$tool_content .= "<p class='success_small'>$langDeleteOK</p><br />";
+		$tool_content .= "<p class='success'>$langDeleteOK</p><br />";
 		unset($addEvent);
 	}
 //Make top tool links
@@ -272,22 +272,6 @@ function confirmation ()
 }
 </script>
 ';
-
-	$tool_content .= "\n  <div id='operations_container'>\n    <ul id='opslist'>";
-	if ((!isset($addEvent) && @$addEvent != 1) || isset($_POST['submit'])) {
-		$tool_content .= "\n      <li><a href='$_SERVER[PHP_SELF]?addEvent=1'>".$langAddEvent."</a></li>";
-	}
-	$sens =" ASC";
-	$result = db_query("SELECT id FROM agenda", $currentCourseID);
-	if (mysql_num_rows($result) > 1) {
-		if (isset($_GET["sens"]) && $_GET["sens"]=="d") {
-			$tool_content .= "\n      <li><a href='$_SERVER[PHP_SELF]?sens=' >$langOldToNew</a></li>";
-			$sens=" DESC ";
-		} else {
-			$tool_content .= "\n      <li><a href='$_SERVER[PHP_SELF]?sens=d' >$langOldToNew</a></li>";
-		}
-	}
-	$tool_content .= "\n    </ul>\n  </div>\n";
 }
 	if (isset($id) && $id) {
 		$sql = "SELECT id, titre, contenu, day, hour, lasting FROM agenda WHERE id=$id";
@@ -307,7 +291,24 @@ function confirmation ()
           array('style' => 'width: 8em; color: #727266; background-color: #fbfbfb; border: 1px solid #C0C0C0; text-align: center',
                  'name' => 'date',
                  'value' => $dayAncient));
-	}
+	} else {
+        $tool_content .= "\n  <div id='operations_container'>\n    <ul id='opslist'>";
+        if ((!isset($addEvent) && @$addEvent != 1) || isset($_POST['submit'])) {
+                $tool_content .= "\n      <li><a href='$_SERVER[PHP_SELF]?addEvent=1'>".$langAddEvent."</a></li>";
+        }
+        $sens =" ASC";
+        $result = db_query("SELECT id FROM agenda", $currentCourseID);
+        if (mysql_num_rows($result) > 1) {
+                if (isset($_GET["sens"]) && $_GET["sens"]=="d") {
+                        $tool_content .= "\n      <li><a href='$_SERVER[PHP_SELF]?sens=' >$langOldToNew</a></li>";
+                        $sens=" DESC ";
+                } else {
+                        $tool_content .= "\n      <li><a href='$_SERVER[PHP_SELF]?sens=d' >$langOldToNew</a></li>";
+                }
+        }
+        $tool_content .= "\n    </ul>\n  </div>\n";
+
+        }
 
 	if (!isset($id)) {
 		$id="";
@@ -447,6 +448,7 @@ if (mysql_num_rows($result) > 0) {
 			$tool_content .= "\n        </tr>";
 		}
 
+                $classvis = 'class="visible"';
 		if ($is_adminOfCourse) {
 			if ($myrow["visibility"] == 'i') {
 				$classvis = 'class="invisible"';
@@ -475,14 +477,13 @@ if (mysql_num_rows($result) > 0) {
 			else
 				$message = $langHours;
 		}
-		$tool_content .=  "\n              <p class='event'><b>";
+		$tool_content .=  "\n              <br /><br /><div class='event'><b>";
 		if ($myrow["titre"]=="") {
 		    $tool_content .= "".$langAgendaNoTitle."";
 		} else {
 		    $tool_content .= "".$myrow["titre"]."";
 		}
-		$tool_content .= "</b> (".$langLasting.": ".$myrow["lasting"]." ".$message.")</p>
-              <p class='agendaBody'>$contenu</p></td>";
+		$tool_content .= "</b> (".$langLasting.": ".$myrow["lasting"]." ".$message.")$contenu</div></td>";
 
 	//agenda event functions
 	//added icons next to each function

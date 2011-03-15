@@ -152,76 +152,75 @@ if (isset($_POST['submit'])) {
 	<legend>$langCourseIden</legend>
 	<table class='tbl'>
 	    <tr>
-		<td>$langCode&nbsp;:</td>
+		<th width='170'>$langCode&nbsp;:</th>
 		<td><input type='text' name='fcode' value='$fake_code' size='60' /></td>
-		<td>&nbsp;</td>
 	    </tr>
 	    <tr>
-		<td>$langCourseTitle&nbsp;:</td>
+		<th>$langCourseTitle&nbsp;:</th>
 		<td><input type='text' name='title' value='$title' size='60' /></td>
-		<td>&nbsp;</td>
 	    </tr>
 	    <tr>
-		<td>$langTeachers&nbsp;:</td>
+		<th>$langTeachers&nbsp;:</th>
 		<td><input type='text' name='titulary' value='$titulary' size='60' /></td>
-		<td>&nbsp;</td>
 	    </tr>
 	    <tr>
-	<tr><td>$langFaculty</td><td>";
+                <th>$langFaculty&nbsp;:</th>
+                <td>";
 	$tool_content .= list_departments($department);
-	$tool_content .= "</td></tr>
-	</td>
-	</tr>
-	<tr>
-	<td>$langType&nbsp;:</td>
-	<td>";
+	$tool_content .= "
+                </td>
+            </tr>
+	    <tr>
+	        <th>$langType&nbsp;:</th>
+	        <td>";
 	$tool_content .= selection(array('pre' => $langpre, 'post' => $langpost, 'other' => $langother), 'type', $type);
-	$tool_content .= "</td>
-		<td>&nbsp;</td>
+	$tool_content .= "
+                </td>
 	    </tr>
 	    <tr>
-		<td>$langCourseKeywords&nbsp;</td>
+		<th>$langCourseKeywords&nbsp;</th>
 		<td><input type='text' name='course_keywords' value='$course_keywords' size='60' /></td>
-		<td>&nbsp;</td>
 	    </tr>
 	    </table>
-	    </fieldset>
-	    <fieldset>
-	    <legend>$langConfidentiality</legend>
+	</fieldset>
+
+	<fieldset>
+	<legend>$langConfidentiality</legend>
 	    <table class='tbl'>
 	    <tr>
-		<td><img src='../../template/classic/img/lock_open.png' alt='$m[legopen]' title='$m[legopen]' width='16' height='16' />&nbsp;$m[legopen]&nbsp;:</td>
+		<th width='170'><img src='../../template/classic/img/lock_open.png' alt='$m[legopen]' title='$m[legopen]' width='16' height='16' />&nbsp;$m[legopen]&nbsp;:</th>
 		<td width='1'><input type='radio' name='formvisible' value='2'".@$visibleChecked[2]." /></td>
 		<td>$langPublic&nbsp;</td>
 	    </tr>
 	    <tr>
-		<td rowspan='2' valign='top'><img src='../../template/classic/img/lock_registration.png' alt='$m[legrestricted]' title='$m[legrestricted]' width='16' height='16' />&nbsp;$m[legrestricted]&nbsp;:</td>
+		<th rowspan='2' valign='top'><img src='../../template/classic/img/lock_registration.png' alt='$m[legrestricted]' title='$m[legrestricted]' width='16' height='16' />&nbsp;$m[legrestricted]&nbsp;:</th>
 		<td><input type='radio' name='formvisible' value='1'".@$visibleChecked[1]." /></td>
 		<td>$langPrivOpen</td>
 	    </tr>
 	    <tr>
 		<td>&nbsp;</td>
-		<td>&nbsp;$langOptPassword&nbsp;<input type='text' name='password' value='$password' /></td>
+		<td><i>$langOptPassword</i>&nbsp;<input type='text' name='password' value='$password' /></td>
 	    </tr>
 	    <tr>
-		<td><img src='../../template/classic/img/lock_closed.png' alt='$m[legclosed]' title='$m[legclosed]' width='16' height='16' />&nbsp;$m[legclosed]&nbsp;:</td>
+		<th><img src='../../template/classic/img/lock_closed.png' alt='$m[legclosed]' title='$m[legclosed]' width='16' height='16' />&nbsp;$m[legclosed]&nbsp;:</th>
 		<td><input type='radio' name='formvisible' value='0'".@$visibleChecked[0]." /></td>
 		<td>$langPrivate&nbsp;</td>
 	    </tr>
 	    </table>
-	    </fieldset>
-	    <fieldset>
+	</fieldset>
+
+	<fieldset>
 	    <legend>$langLanguage</legend>
 	    <table class='tbl'>
 	    <tr>
-		<td>$langOptions&nbsp;:</td>
+		<th width='170'>$langOptions&nbsp;:</th>
 		<td width='1'>";
 	$language = $c['languageCourse'];
 	$tool_content .= lang_select_options('localize');
 	$tool_content .= "
-	</td>
-	<td>$langTipLang</td>
-	</tr>
+	        </td>
+	        <td>$langTipLang</td>
+	    </tr>
 	</table>
 	</fieldset>
 	<p align='right'><input type='submit' name='submit' value='$langSubmit' /></p>
