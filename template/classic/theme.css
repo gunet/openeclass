@@ -757,8 +757,11 @@ table.sortable_even {
 .sortable th {
     background-color: #f1f1f1;
     border-bottom: 1px dashed #dfdfdf;
+    text-align: center;
     
-
+}
+.sortable td, th {
+    border-right: 1px dashed #dfdfdf;    
 }
 
 a.sortheader, a.sortheader:link, a.sortheader:active, a.sortheader:visited {

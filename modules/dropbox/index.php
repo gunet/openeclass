@@ -135,9 +135,9 @@ tCont2;
 	$tool_content .= "
     <fieldset>
     <legend>".$dropbox_lang["uploadFile"]."</legend>
-    <table width='100%' class='tbl'>
+    <table width='100%' class='tbl_alt'>
     <tr>
-      <th class='left' width='160'>".$dropbox_lang['file']." :</th>
+      <th class='left' width='160'>".$dropbox_lang['file'].":</th>
       <td><input type='file' name='file' size='35' />
           <input type='hidden' name='dropbox_unid' value='$dropbox_unid' />
       </td>
@@ -155,15 +155,15 @@ tCont2;
 
 	$tool_content .= "
 	<tr>
-	  <th class='left'>".$dropbox_lang["authors"]." :</th>
+	  <th class='left'>".$dropbox_lang["authors"].":</th>
 	  <td>".getUserNameFromId($uid)."</td>
 	</tr>
 	<tr>
-	  <th class='left'>".$dropbox_lang["description"]." :</th>
+	  <th class='left'>".$dropbox_lang["description"].":</th>
 	  <td><textarea name='description' cols='37' rows='2'></textarea></td>
 	</tr>
 	<tr>
-	  <th class='left'>".$dropbox_lang["sendTo"]." :</th>
+	  <th class='left'>".$dropbox_lang["sendTo"].":</th>
 	  <td>
 	<select name='recipients[]' size='$reciepientsSize' multiple='true'  class='auth_input'>";
 
@@ -219,9 +219,7 @@ tCont2;
 	  <input type='hidden' name='authors' value='".getUserNameFromId($uid)."' />
 	  <td><input type='Submit' name='submitWork' value='".$dropbox_lang["ok"]."' /></td>
 	</tr>
-        <tr>
-          <td colspan='2'>$langMaxFileSize ".ini_get('upload_max_filesize')."</td>
-        </td>
+
         </table>
         </fieldset>
         </form>
@@ -271,8 +269,8 @@ if (!isset($_GET['mailing']))  // RH: Mailing detail: no received files
         <script type='text/javascript' src='../auth/sorttable.js'></script>
         <table width='100%' class='sortable' id='t1'>
         <tr>
-         <th colspan='2'><div align='left'>&nbsp;$dropbox_lang[file]</div></th>
-         <th width='130' class='left'>$dropbox_lang[authors]</th>
+         <th colspan='2' class='left'>&nbsp;$dropbox_lang[file]</th>
+         <th width='130'>$dropbox_lang[authors]</th>
          <th width='130'>$dropbox_lang[date]</th>
          <th width='20'>$langDelete</th>
         </tr>";
@@ -304,7 +302,7 @@ if (!isset($_GET['mailing']))  // RH: Mailing detail: no received files
         <small>$w->description</small>
         </td>
 tCont9;
-		$tool_content .= "<td>$w->author</td><td>".$w->uploadDate;
+		$tool_content .= "<td class='center' width='200'>$w->author</td><td class='center'>".$w->uploadDate;
 
 		if ($w->uploadDate != $w->lastUploadDate)
 		{
@@ -313,13 +311,13 @@ tCont9;
 
 		$tool_content .= "
         </td>
-        <td><div class=\"cellpos\">";
+        <td class='center'>";
 
 	$tool_content .= "
         <a href=\"dropbox_submit.php?deleteReceived=".urlencode($w->id)."&amp;dropbox_unid=".urlencode($dropbox_unid)."\" onClick='return confirmation(\"$w->title\");'>
         <img src=\"../../template/classic/img/delete.png\" title=\"$langDelete\" /></a>";
 
-	$tool_content .= "</div></td></tr>";
+	$tool_content .= "</td></tr>";
 	$i++;
 	} //end of foreach
 	$tool_content .= "
@@ -426,7 +424,7 @@ $tool_content .= "
       <script type='text/javascript' src='../auth/sorttable.js'></script>
       <table width=100% class='sortable' id='t2'>
       <tr>
-        <th colspan='2'><div align='left'>&nbsp;$dropbox_lang[file]</div></th>
+        <th colspan='2' class='left'>&nbsp;$dropbox_lang[file]</th>
         <th width='130'>$dropbox_lang[col_recipient]</th>
         <th width='110'>$dropbox_lang[date]</th>
         <th width='20'>$langDelete</th>
