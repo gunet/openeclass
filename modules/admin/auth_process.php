@@ -120,11 +120,7 @@ if (isset($_POST['casinstructions'])) $casinstructions = $_POST['casinstructions
 if (isset($_POST['casusermailattr'])) $casusermailattr = $_POST['casusermailattr'];
 if (isset($_POST['casuserfirstattr'])) $casuserfirstattr = $_POST['casuserfirstattr'];
 if (isset($_POST['casuserlastattr'])) $casuserlastattr = $_POST['casuserlastattr'];
-if (isset($_POST['cas_altauth'])) {
-	$cas_altauth = $_POST['cas_altauth'];
-} else {
-	$cas_altauth = '';
-}
+if (isset($_POST['cas_altauth'])) $cas_altauth = $_POST['cas_altauth'];
 
 $test_username = isset($_POST['test_username'])?$_POST['test_username']:'';
 $test_password = isset($_POST['test_password'])?$_POST['test_password']:'';
@@ -148,6 +144,7 @@ if(((!empty($auth_submit)) && ($auth_submit==1)) || !empty($_SESSION['cas_do']))
 		if (isset($casusermailattr)) $_SESSION['casusermailattr'] = $casusermailattr;
 		if (isset($casuserfirstattr)) $_SESSION['casuserfirstattr'] = $casuserfirstattr;
 		if (isset($casuserlastattr)) $_SESSION['casuserlastattr'] = $casuserlastattr;
+		if (isset($cas_altauth)) $_SESSION['cas_altauth'] = $cas_altauth;
 		
 		// cas test new settings
 		//cas_authenticate(7, true, $cas_host, $cas_port, $cas_context, $cas_cachain);
@@ -155,19 +152,16 @@ if(((!empty($auth_submit)) && ($auth_submit==1)) || !empty($_SESSION['cas_do']))
 		if (phpCAS::checkAuthentication()) {
 			$test_username = phpCAS::getUser();
 			$cas_valid = true;
-			$_SESSION['cas_warn'] = "yes";
+			$_SESSION['cas_warn'] = true;
 		}
 		else {
 			$cas_valid = false;
 		}
-		if (!empty($cas_ret['message'])) {
-			$tool_content .= "<br /><p>{$cas_ret['message']}</p>";
-		}
-		if (!empty($cas_ret['error'])) {
-			$tool_content .= "<p class='alert1'>{$cas_ret['error']}</p>";
-		}
+
+		if (!empty($cas_ret['error']))
+			$tool_content .= "<p class=\"alert1\">{$cas_ret['error']}</p>";
 	}
-	
+
 	// if form is submitted
 	if(isset($_POST['submit']) or $cas_valid == true) {
 		$tool_content .= "<br /><p>$langConnTest</p>";
@@ -264,13 +258,20 @@ if(((!empty($auth_submit)) && ($auth_submit==1)) || !empty($_SESSION['cas_do']))
 					$tool_content .= "<p class='alert1'>$langAlreadyActiv</p>";
 				}
 			} else {
-				$tool_content .= "<p class=\"alert1\">$langErrActiv</p>";
+				$tool_content .= "<p class='alert1'>$langErrActiv</p>";
 			}
 		}
 	}
 }
 else
 {
+	// handle reloads on auth_process.php after authentication check
+	// also handles requests with empty $auth
+	// without this, a form with just username/password is displayed
+	if(empty($auth)) {
+		header('Location: ../admin/auth.php');
+		exit;
+	}
 	// Display the form 
 	// we need to load auth=7 settings
 	if(isset($auth) and $auth != 6) {

@@ -498,7 +498,7 @@ function print_html_r($TheArray) {
 }
 
 /**
- * Function array2str
+ * Function array2html
  *
  * Used for debugging purposes. Returns an html string with array keys and values
  * handling multidimensional arrays as well.

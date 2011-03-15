@@ -485,6 +485,7 @@ if ($auth_method_settings = get_auth_settings($auth)) {
 	@$cas_settings['casusermailattr'] = str_replace("casusermailattr=","",$cas[4]);
 	@$cas_settings['casuserfirstattr'] = str_replace("casuserfirstattr=","",$cas[5]);
 	@$cas_settings['casuserlastattr'] = str_replace("casuserlastattr=","",$cas[6]);
+	@$cas_settings['cas_altauth'] = str_replace("cas_altauth=","",$cas[7]);
 
 	return $cas_settings;
 } else 
@@ -503,8 +504,9 @@ function cas_authenticate($auth, $new = false, $cas_host=null, $cas_port=null, $
 	global $langConnectWith, $langNotSSL;
 // SESSION does not exist if user has not been authenticated
 	$ret = array();
+
+if($cas = get_cas_settings($auth)) {
 	if(!$new) {
-		$cas = get_cas_settings($auth);  
 		$cas_host = $cas['cas_host'];
 		$cas_port = $cas['cas_port'];
 		$cas_context = $cas['cas_context'];
@@ -512,6 +514,7 @@ function cas_authenticate($auth, $new = false, $cas_host=null, $cas_port=null, $
 		$casusermailattr = $cas['casusermailattr'];
 		$casuserfirstattr = $cas['casuserfirstattr'];
 		$casuserlastattr = $cas['casuserlastattr'];
+		$cas_altauth = $cas['cas_altauth'];
 	}
 	$cas_url = 'https://'.$cas_host;
 	$cas_port = intval($cas_port);
@@ -528,7 +531,6 @@ function cas_authenticate($auth, $new = false, $cas_host=null, $cas_port=null, $
 	// phpCAS::setDebug();
 
 	// Initialize phpCAS - keep session in application
-	// we will add $lang error message later
 	$ret['message'] = "$langConnectWith $cas_url";
 	phpCAS::client(SAML_VERSION_1_1, $cas_host, $cas_port, $cas_context, FALSE);
 
@@ -537,14 +539,21 @@ function cas_authenticate($auth, $new = false, $cas_host=null, $cas_port=null, $
 		phpCAS::setCasServerCACert($cas_cachain);
 	else {
 		phpCAS::setNoCasServerValidation();
-		// we will add $lang error message later
 		$ret['error'] = "$langNotSSL";
-	}	
+	}
 	// Single Sign Out
 	//phpCAS::handleLogoutRequests(true, $cas_real_hosts);
 	// Force CAS authentication on any page that includes this file
 	phpCAS::forceAuthentication();
+
+	//$ret['attrs'] = get_cas_attrs(phpCAS::getAttributes(), $cas);
+	if (phpCAS::checkAuthentication())
+		$ret['attrs'] = phpCAS::getAttributes();
+
 	return $ret;
+}
+else
+	return null;
 }
 
 /****************************************************************

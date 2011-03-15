@@ -61,7 +61,7 @@ $tool_content .= "</p>
 
 if(!empty($auth)) {
         if (count($auth) > 1) {
-                $tool_content .= "\n  <p class='sub_title1'>$langUserAccountInfo3&nbsp;: </p>";
+                $tool_content .= "\n  <p class='sub_title1'>$langUserAccountInfo3&nbsp;:</p>";
         }
         foreach($auth as $k => $v) {
                 if ($v == 1) {	// bypass the eclass auth method, as it has already been displayed

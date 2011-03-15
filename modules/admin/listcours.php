@@ -135,7 +135,7 @@ else {
 
 $key=mysql_num_rows($sql);
 if ($key==0) {
-  $tool_content .= "<p>dsdsds</p>";
+  $tool_content .= "<p>$langNoCourses</p>";
 
 } else {
 // Construct course list table

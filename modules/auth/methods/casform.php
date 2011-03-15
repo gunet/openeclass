@@ -35,34 +35,39 @@ $casinstructions = $casdata['auth_instructions'];
 
 if(!empty($cassettings))
 {
-    $cas = explode("|",$cassettings);
-    //cas_host
-    $cas_host = str_replace("cas_host=","",$cas[0]);
-    //cas_port
-    $cas_port = str_replace("cas_port=","",$cas[1]);
-	 if (empty($cas_port))
+// tabs
+	$cas = explode("|",$cassettings);
+	//cas_host
+	$cas_host = str_replace("cas_host=","",$cas[0]);
+	//cas_port
+	$cas_port = str_replace("cas_port=","",$cas[1]);
+	if (empty($cas_port))
 		$cas_port = 443;
-    //cas_context
-    $cas_context = str_replace("cas_context=","",$cas[2]);
-	 if (empty($cas_context))
+	//cas_context
+	$cas_context = str_replace("cas_context=","",$cas[2]);
+	if (empty($cas_context))
 		$cas_context = "/cas/";
-    //cas_cachain
-    $cas_cachain = str_replace("cas_cachain=","",$cas[3]);
-    //casusermailattr
-    $casusermailattr = str_replace("casusermailattr=","",$cas[4]);
-    //casuserfirstattr
-    $casuserfirstattr = str_replace("casuserfirstattr=","",$cas[5]);
-    //casuserlastattr
-    $casuserlastattr = str_replace("casuserlastattr=","",$cas[6]);
+	//cas_cachain
+	$cas_cachain = str_replace("cas_cachain=","",$cas[3]);
+	//casusermailattr
+	$casusermailattr = str_replace("casusermailattr=","",$cas[4]);
+	//casuserfirstattr
+	$casuserfirstattr = str_replace("casuserfirstattr=","",$cas[5]);
+	//casuserlastattr
+	$casuserlastattr = str_replace("casuserlastattr=","",$cas[6]);
+	//cas_altauth
+	$cas_altauth = intval(str_replace("cas_altauth=","",$cas[7]));
 } else {
-    $cashost = $cassettings;
-    $cas_port = 443;
-    $cas_context = "";
-    $cas_host = "";
-    $cas_cachain = "";
-    $casusermailattr = "mail";
-    $casuserfirstattr = "givenname";
-    $casuserlastattr = "sn";
+	// empty host
+	$cashost = "";
+	$cas_port = 443;
+  	$cas_context = "/cas/";
+	$cas_cachain = "";
+	$casusermailattr = "mail";
+	// givenName is the default for LDAP not givename
+	$casuserfirstattr = "givenName";
+	$casuserlastattr = "sn";
+	$cas_altauth = 0;
 }
 
 $tool_content .= "
@@ -95,6 +100,21 @@ $tool_content .= "
       <td><input class=\"FormData_InputText\" name=\"casuserlastattr\" type=\"text\" size=\"30\" value=\"".$casuserlastattr."\"></td>
     </tr>
     <tr>
-      <th class=\"left\">$langInstructionsAuth:</th>
-      <td><textarea class=\"FormData_InputText\" name=\"casinstructions\" cols=\"30\" rows=\"10\">".$casinstructions."</textarea>   </td>
+      <th class=\"left\">$langcas_altauth:</th>
+      <td>";
+		
+$cas_altauth_data = array();
+$cas_altauth_data[0] = "-";
+$cas_altauth_data[1] = "Eclass";
+$cas_altauth_data[2] = "POP3";
+$cas_altauth_data[3] = "IMAP";
+$cas_altauth_data[4] = "LDAP";
+$cas_altauth_data[5] = "External DB";
+$tool_content .= selection($cas_altauth_data,"cas_altauth",$cas_altauth);
+$tool_content .= "    </td>
+    </tr>
+    <tr>
+      <th class=\"left\">$langInstructionsAuth:</td>
+      <td><textarea class=\"FormData_InputText\" name=\"casinstructions\" cols=\"30\" rows=\"10\">".$casinstructions."</textarea></td>
     </tr>";
+?>

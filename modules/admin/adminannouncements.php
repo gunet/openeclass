@@ -74,7 +74,6 @@ if (isset($_GET['vis'])) {
 	db_query("UPDATE admin_announcements SET visible = '$vis' WHERE id = '$id'", $mysqlMainDb);
 }
 
-
 if (isset($_GET['delete'])) {
         // delete announcement command
         $id = intval($_GET['delete']);
@@ -105,10 +104,14 @@ if (isset($_GET['delete'])) {
                 $message = $langAdminAnnModify;
         } else {
                 // add new announcement
+                // order
+                $result = db_query("SELECT MAX(ordre) FROM admin_announcements", $mysqlMainDb);
+                list($orderMax) = mysql_fetch_row($result);
+                $order = $orderMax + 1;
                 db_query("INSERT INTO admin_announcements
                         SET title = $title, body = $newContent,
                         visible = 'V', lang = $lang_admin_ann,
-                        `date` = NOW(), $start_sql, $end_sql");
+                        `date` = NOW(), ordre = $order, $start_sql, $end_sql");
                 $message = $langAdminAnnAdd;
         }
 }
@@ -182,10 +185,48 @@ if ($displayForm && isset($_GET['addAnnounce']) || isset($_GET['modify'])) {
                          "</td></tr></table></fieldset></form>";
 }
 
+// modify order taken from announcements.php
+if (isset($_GET['down'])) {
+	$thisAnnouncementId = $_GET['down'];
+	$sortDirection = "DESC";
+}
+if (isset($_GET['up'])) {
+	$thisAnnouncementId = $_GET['up'];
+	$sortDirection = "ASC";
+}
+
+// if there are announcements without ordering -> order by id, latest is first
+$result = db_query("SELECT id, ordre FROM admin_announcements WHERE ordre=0");
+$no_order = mysql_fetch_row($result);
+if (!empty($no_order)) {
+	db_query("UPDATE admin_announcements SET `ordre`=`id`+1");
+}
+
+if (isset($thisAnnouncementId) && $thisAnnouncementId && isset($sortDirection) && $sortDirection) {
+	$result = db_query("SELECT id, ordre FROM admin_announcements ORDER BY ordre $sortDirection", $mysqlMainDb);
+
+	while (list($announcementId, $announcementOrder) = mysql_fetch_row($result)) {
+		if (isset($thisAnnouncementOrderFound) && $thisAnnouncementOrderFound == true) {
+			$nextAnnouncementId = $announcementId;
+			$nextAnnouncementOrder = $announcementOrder;
+			db_query("UPDATE admin_announcements SET ordre = '$nextAnnouncementOrder' WHERE id = '$thisAnnouncementId'", $mysqlMainDb);
+			db_query("UPDATE admin_announcements SET ordre = '$thisAnnouncementOrder' WHERE id = '$nextAnnouncementId'", $mysqlMainDb);
+			break;
+		}
+		// find the order
+		if ($announcementId == $thisAnnouncementId) {
+			$thisAnnouncementOrder = $announcementOrder;
+			$thisAnnouncementOrderFound = true;
+		}
+	}
+}
+
 // display admin announcements
 if ($displayAnnouncementList == true) {
-        $result = db_query("SELECT * FROM admin_announcements ORDER BY id DESC", $mysqlMainDb);
-        $announcementNumber = mysql_num_rows($result);
+        $result = db_query("SELECT * FROM admin_announcements ORDER BY ordre DESC", $mysqlMainDb);
+		  // announcement order taken from announcements.php
+		  $iterator = 1;
+        $bottomAnnouncement = $announcementNumber = mysql_num_rows($result);
         if (!isset($_GET['addAnnounce'])) {
                 $tool_content .= "<div id='operations_container'>
                 <ul id='opslist'><li>";
@@ -193,8 +234,11 @@ if ($displayAnnouncementList == true) {
                 $tool_content .= "</li></ul></div>";
         }
         if ($announcementNumber > 0) {
-                $tool_content .= "<table class='FormData' width='99%' align='left'><tbody>";
-		$tool_content .= "<th>$langTitle</th><th>$langAnnouncement</th><th>$langActions</th>";
+                $tool_content .= "<table class='FormData' width='100%' align='left'><tbody>";
+		$tool_content .= "<th>$langTitle</th><th>$langAnnouncement</th><th width='100'>$langActions</th>";
+		if ($announcementNumber > 1) {
+			$tool_content .= "<th width='70'>$langMove</th>";
+		}
 		while ($myrow = mysql_fetch_array($result)) {
 			if ($myrow['visible'] == 'V') {
 				$visibility = 0;
@@ -217,8 +261,21 @@ if ($displayAnnouncementList == true) {
 			<img src='../../template/classic/img/delete.png' title='$langDelete' style='vertical-align:middle;' /></a>
 			&nbsp;
 			<a href='$_SERVER[PHP_SELF]?id=$myrow[id]&amp;vis=$visibility'>
-			<img src='../../template/classic/img/$icon' title='$langVisibility'/></a></td></tr>";
-	        }
+			<img src='../../template/classic/img/$icon' title='$langVisibility'/></a>";
+			if ($announcementNumber > 1) {
+				$tool_content .= "<td align='center'>";
+			}
+			if ($iterator != 1) {
+				$tool_content .= "<a href='$_SERVER[PHP_SELF]?up=" . $myrow["id"] . "'>
+				<img class='displayed' src='../../template/classic/img/up.png' title='" . $langUp . "' /></a>";
+			}
+			if ($iterator < $bottomAnnouncement) {
+				$tool_content .= "<a href='$_SERVER[PHP_SELF]?down=" . $myrow["id"] . "'>
+				<img class='displayed' src='../../template/classic/img/down.png' title='" . $langDown . "' /></a>";
+			}
+			$tool_content .= "</td></tr>";
+			$iterator ++;
+	        } // end of while
 		$tool_content .= "</tbody></table>";
 	}
 }

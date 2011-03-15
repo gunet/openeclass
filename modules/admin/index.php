@@ -96,7 +96,11 @@ if ($count_prof_requests > 0) {
 $sql = "SELECT code, intitule, titulaires FROM cours ORDER BY cours_id DESC LIMIT 0,1";
 $result = mysql_query($sql);
 $myrow = mysql_fetch_array($result);
-$last_course_info = "<b>".$myrow['intitule']."</b> (".$myrow['code'].", ".$myrow['titulaires'].")";
+if (empty($myrow)) {
+	$last_course_info = $langNoCourses;
+} else {
+	$last_course_info = "<b>".$myrow['intitule']."</b> (".$myrow['code'].", ".$myrow['titulaires'].")";
+}
 
 // Find last prof registration
 $sql = "SELECT prenom, nom, email, registered_at FROM user WHERE statut = 1 ORDER BY user_id DESC LIMIT 0,1";

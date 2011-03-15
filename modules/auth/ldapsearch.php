@@ -275,8 +275,8 @@ if (!empty($submit)) {
 		    <p>$langPersonalSettingsMore</p>";
 	} else {
 		// errors exist - registration failed
-		$tool_content .= "\
-                      <p class='alert1''>";
+		// to backslash typwnete sthn othonh
+		$tool_content .= "<p class='alert1'>";
 		foreach ($registration_errors as $error) {
 			$tool_content .= "<p>$error</p>";
 		}

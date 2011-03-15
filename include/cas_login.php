@@ -37,41 +37,33 @@ $sqlLogin= "SELECT user_id, nom, username, password, prenom, statut, email, idus
 
 $r = db_query($sqlLogin); 
 if (mysql_num_rows($r) > 0) { // if cas user found 
-	while ($myrow = mysql_fetch_array($r)) {
-		if ($myrow['password'] == 'cas') {
-			// update user information
-			$update_query = "UPDATE user SET nom = '$cas_nom', prenom = '$cas_prenom' ";
-			if (!empty($cas_email)) {
-				$update_query .= ",email = '$cas_email' ";
-			}
-			$update_query .= " WHERE username = '$cas_uname'";
-			db_query($update_query);
-			$r2 = db_query($sqlLogin);
-			while ($myrow2 = mysql_fetch_array($r2)) {
-				$uid = $myrow2["user_id"];
-				$is_admin = $myrow2["is_admin"];
-				$userPerso = $myrow2["perso"];
-				$nom = $myrow2["nom"];
-				$prenom = $myrow2["prenom"];
-				if (isset($_SESSION['langswitch'])) {
-					$language = $_SESSION['langswitch'];
-				} else {
-					$language = langcode_to_name($myrow["lang"]);
-				}
-			}
-		} else {
-			$tool_content .= "<table width='99%'><tbody><tr><td class='caution' height='60'>";
-			$tool_content .= "<p>$langUserFree</p></td></tr></table>";
+	$myrow = mysql_fetch_array($r);
+		// update user information. set also password to cas
+		$update_query = "UPDATE user SET nom='$cas_nom', prenom='$cas_prenom', password='cas' ";
+		if (!empty($cas_email)) {
+			$update_query .= ",email = '$cas_email' ";
 		}
-	}	
-} else { // else create him
-	db_query("INSERT INTO user SET nom='$cas_nom', prenom='$cas_prenom',
-		password='cas', username='$cas_uname', email='$cas_email', statut=5, lang='el'");
-	$uid = mysql_insert_id();
-	$userPerso = 'yes';
-	$nom = $cas_nom;
-	$prenom = $cas_prenom;
-	$language = $_SESSION['langswitch'] = langcode_to_name('el');
+		$update_query .= " WHERE username = '$cas_uname'";
+		db_query($update_query);
+		$r2 = db_query($sqlLogin);
+		$myrow2 = mysql_fetch_array($r2);
+		$uid = $myrow2["user_id"];
+		$is_admin = $myrow2["is_admin"];
+		$userPerso = $myrow2["perso"];
+		$nom = $myrow2["nom"];
+		$prenom = $myrow2["prenom"];
+		if (isset($_SESSION['langswitch'])) {
+			$language = $_SESSION['langswitch'];
+		} else {
+			$language = langcode_to_name($myrow["lang"]);
+		}
+} else { // CAS auth ok but user not registered. Let's do the normal procedure
+	foreach(array_keys($_SESSION) as $key)
+		unset($_SESSION[$key]);
+	session_destroy();
+	unset($uid);
+	header('Location: ../modules/auth/registration.php');
+	exit;
 }
 $_SESSION['uid'] = $uid;
 $_SESSION['nom'] = $nom;

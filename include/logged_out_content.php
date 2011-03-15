@@ -56,8 +56,12 @@ $tool_content .= <<<lCont
 lCont;
 
 $qlang = ($language == "greek")? 'el': 'en';
-$sql = "SELECT `id`, `date`, `title` , `body` FROM `admin_announcements`
-        WHERE `visible` = 'V' AND lang='$qlang' ORDER BY `date` DESC";
+$sql = "SELECT `id`, `date`, `title`, `body`, `ordre` FROM `admin_announcements`
+        WHERE `visible` = 'V'
+		AND lang='$qlang'
+		AND `begin` <= CURDATE()
+		AND CURDATE() <= `end`  
+	ORDER BY `ordre` DESC";
 $result = db_query($sql, $mysqlMainDb);
 if (mysql_num_rows($result) > 0) {
 	$announceArr = array();
@@ -65,7 +69,7 @@ if (mysql_num_rows($result) > 0) {
 		array_push($announceArr, $eclassAnnounce);
 	}
         $tool_content .= "<br/>
-        <table width='99%' class='AnnouncementsList'>
+        <table width='100%' class='AnnouncementsList'>
 	<thead><tr><th width='180'>$langAnnouncements
 	<span class='feed'><a href='${urlServer}rss.php'>
 	<img src='${urlServer}template/classic/img/feed.png' alt='RSS Feed' title='RSS Feed' />
@@ -93,22 +97,13 @@ if ($shibactive['auth_default'] == 1) {
 } else {
 	$shibboleth_link = "";
 }
-$casactive = mysql_fetch_array(db_query("SELECT auth_default FROM auth WHERE auth_name='cas'"));
-if ($casactive['auth_default'] == 1) {
-	$cas_link = "<a href='{$urlServer}secure/cas.php'>$langCAS</a><br /><br />";
-} else {
-	$cas_link = "";
-}
 
 $casactive = mysql_fetch_array(db_query("SELECT auth_default FROM auth WHERE auth_name='cas'"));
 if ($casactive['auth_default'] == 1) {
-	$cas_link = "<a href='{$urlServer}secure/cas.php'>$langCAS</a><br /><br />";
+	$cas_link = "<a href='{$urlServer}secure/cas.php'>$langCAS</a><br />";
 } else {
 	$cas_link = "";
 }
-
-
-
 
 if (!get_config('dont_display_login_form')) {
 	$tool_content .= "</div><div id='rightbar'>

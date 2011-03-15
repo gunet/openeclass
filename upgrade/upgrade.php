@@ -347,6 +347,11 @@ if (!isset($_POST['submit2'])) {
 			db_query('ALTER TABLE `prof_request` ADD `am` VARCHAR(20) NULL AFTER profcomm');
 		}
         }
+//if ($oldversion < '2.3.2') {
+//		db_query("INSERT INTO `auth` VALUES (7, 'cas', '', '', 0)");
+//		mysql_field_exists($mysqlMainDb, 'admin_announcements', 'ordre') or
+//			db_query("ALTER TABLE `admin_announcements` ADD `ordre` MEDIUMINT(11) NOT NULL AFTER `lang`");
+//}
         if ($oldversion < '2.4') {
                 mysql_index_exists('user', 'user_username') or
                         db_query('CREATE INDEX user_username ON user (username)');
@@ -470,6 +475,7 @@ if (!isset($_POST['submit2'])) {
                                         `end` DATETIME DEFAULT NULL,
                                         `visible` ENUM('V','I') NOT NULL,
                                         `lang` VARCHAR(10) NOT NULL DEFAULT 'el',
+													 `ordre` MEDIUMINT(11) NOT NULL,
                                         PRIMARY KEY (`id`))");
                         
                         $aq = db_query("INSERT INTO admin_announcements (title, body, `date`, visible, lang)

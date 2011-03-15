@@ -67,29 +67,28 @@ $charset_spec = 'DEFAULT CHARACTER SET=utf8';
 #
 
 db_query("CREATE TABLE annonces (
-      `id` MEDIUMINT(11) NOT NULL auto_increment,
-      `title` VARCHAR(255) DEFAULT NULL,
-      `contenu` TEXT,
-      `temps` DATE DEFAULT NULL,
-      `cours_id` INT(11) NOT NULL default '0',
-      `ordre` MEDIUMINT(11) NOT NULL,
-      `visibility` CHAR(1) NOT NULL DEFAULT 'v',
-       PRIMARY KEY (id))
-      $charset_spec");
-
+	`id` MEDIUMINT(11) NOT NULL auto_increment,
+	`title` VARCHAR(255) DEFAULT NULL,
+	`contenu` TEXT,
+	`temps` DATE DEFAULT NULL,
+	`cours_id` INT(11) NOT NULL default '0',
+	`ordre` MEDIUMINT(11) NOT NULL,
+	`visibility` CHAR(1) NOT NULL DEFAULT 'v',
+	PRIMARY KEY (id)) $charset_spec");
 
 #
 # table admin_announcements
 #
 db_query("CREATE TABLE admin_announcements (
-	id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-	title VARCHAR(255) NOT NULL,
-	body TEXT,
-        `date` DATETIME NOT NULL,
-        `begin` DATETIME DEFAULT NULL,
-        `end` DATETIME DEFAULT NULL,
+	`id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	`title` VARCHAR(255) NOT NULL,
+	`body` TEXT,
+	`date` DATETIME NOT NULL,
+	`begin` DATETIME DEFAULT NULL,
+	`end` DATETIME DEFAULT NULL,
 	`lang` VARCHAR(10) NOT NULL DEFAULT 'el',
-	visible ENUM('V', 'I') NOT NULL) $charset_spec");
+	`ordre` MEDIUMINT(11) NOT NULL,
+	`visible` ENUM('V', 'I') NOT NULL) $charset_spec");
 
 #
 # table `agenda`
