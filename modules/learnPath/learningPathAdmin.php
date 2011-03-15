@@ -374,13 +374,13 @@ $tool_content .="
  
   <fieldset>
   <legend>$langLearningPathData</legend>
-    <table width=\"99%\" class=\"tbl\">";
+    <table width=\"100%\" class=\"tbl_alt\">";
 
 
 //############################ LEARNING PATH NAME BOX ################################\\
 $tool_content .="
     <tr>
-      <th width=\"90\">$langTitle :</th>";
+      <th width=\"90\">$langTitle:</th>";
 
 if ($cmd == "updateName")
 {
@@ -399,7 +399,7 @@ $tool_content .= "
 //############################ LEARNING PATH COMMENT BOX #############################\\
 $tool_content .="
     <tr>
-      <th width=\"90\">$langComments :</th>
+      <th width=\"90\">$langComments:</th>
       <td>";
 if ($cmd == "updatecomment")
 {
@@ -420,14 +420,14 @@ $tool_content .= "</td>
 
     <fieldset>
     <legend>$langLearningPathConfigure</legend>
-    <table width=\"99%\" class=\"tbl\">";
+    <table width=\"100%\" class=\"tbl_alt\">";
 
 // -------------------- create label -------------------
 if (isset($displayCreateLabelForm) && $displayCreateLabelForm)
 {
     $tool_content .= "
     <tr>
-      <th width=\"90\" height=\"36\">$langLabel :</th>
+      <th width=\"200\">$langLabel:</th>
       <td>
         <form action=\"".$_SERVER['PHP_SELF']."\" method=\"post\">
           <label for=\"newLabel\">".$langNewLabel.": </label>&nbsp;
@@ -449,13 +449,13 @@ if (!isset($displayCreateLabelForm))
 
     $tool_content .="
     <tr>
-      <th width=\"90\" height=\"36\">$langLabel :</th>
+      <th width=\"200\">$langLabel:</th>
       <td><a href=\"".$_SERVER['PHP_SELF']."?cmd=createLabel\">".$langCreate."</a></td>
     </tr>";
 }
     $tool_content .="
     <tr>
-      <th rowspan=\"2\">$langLearningObjects :</th>
+      <th rowspan=\"2\">$langLearningObjects:</th>
       <td>";
     $tool_content .= "$langAdd: <a href=\"insertMyDoc.php\" title=\"$langDocumentAsModule\">".$langDocumentAsModuleLabel."</a> | <a href=\"insertMyExercise.php\" title=\"$langExerciseAsModule\">".$langExerciseAsModuleLabel."</a> | <a href=\"insertMyLink.php\" title=\"$langLinkAsModule\">".$langLinkAsModuleLabel."</a> | <a href=\"insertMyDescription.php\" title=\"$langCourseDescriptionAsModule\">".$langCourseDescriptionAsModuleLabel."</a>
       </td>
