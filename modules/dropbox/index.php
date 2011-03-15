@@ -135,7 +135,7 @@ tCont2;
 	$tool_content .= "
     <fieldset>
     <legend>".$dropbox_lang["uploadFile"]."</legend>
-    <table width='99%' class='tbl'>
+    <table width='100%' class='tbl'>
     <tr>
       <th class='left' width='160'>".$dropbox_lang['file']." :</th>
       <td><input type='file' name='file' size='35' />
@@ -269,7 +269,7 @@ if (!isset($_GET['mailing']))  // RH: Mailing detail: no received files
 
         $tool_content .= "
         <script type='text/javascript' src='../auth/sorttable.js'></script>
-        <table width='99%' class='sortable' id='t1'>
+        <table width='100%' class='sortable' id='t1'>
         <tr>
          <th colspan='2'><div align='left'>&nbsp;$dropbox_lang[file]</div></th>
          <th width='130' class='left'>$dropbox_lang[authors]</th>
@@ -424,7 +424,7 @@ if (count($dropbox_person->sentWork)==0) {
 
 $tool_content .= "
       <script type='text/javascript' src='../auth/sorttable.js'></script>
-      <table width=99% class='sortable' id='t2'>
+      <table width=100% class='sortable' id='t2'>
       <tr>
         <th colspan='2'><div align='left'>&nbsp;$dropbox_lang[file]</div></th>
         <th width='130'>$dropbox_lang[col_recipient]</th>
