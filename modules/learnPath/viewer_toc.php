@@ -76,7 +76,7 @@ mysql_select_db($currentCourseID);
 echo '<html>'."\n"
     .'<head>'."\n"
     .'<meta http-equiv="Content-Type" content="text/html; charset='.$charset.'">'."\n"
-    .'<link href="../../template/classic/tool_content.css" rel="stylesheet" type="text/css" />'."\n"
+    .'<link href="../../template/classic/theme.css" rel="stylesheet" type="text/css" />'."\n"
     .'<link href="./tool.css" rel="stylesheet" type="text/css" />'."\n"
     .'</head>'."\n"
     .'<body style="margin: 2px;">'."\n";
@@ -229,7 +229,7 @@ foreach ($flatElementList as $module)
 
 				if($module['credit'] == 'CREDIT' || $module['lesson_status'] == 'COMPLETED' || $module['lesson_status'] == 'PASSED')
 				{
-					$imagePassed = '&nbsp;<img src="'.$imgRepositoryWeb.'tick1.gif" alt="'.$module['lesson_status'].'" title="'.$module['lesson_status'].'" />';
+					$imagePassed = '&nbsp;<img src="'.$imgRepositoryWeb.'tick.png" alt="'.$module['lesson_status'].'" title="'.$module['lesson_status'].'" />';
 				}
 			}
 			// store next value if user has the right to access it
@@ -294,8 +294,8 @@ $prevNextString = ""/*' - '.$currentName.*//*"&nbsp;&nbsp;&nbsp;"*/;
 // display previous and next links only if there is more than one module
 if ( $moduleNb > 1 )
 {
-	$imgPrevious = '<img src="'.$imgRepositoryWeb.'previous.gif" border="0" title="'.$langPrevious.'">';
-	$imgNext = '<img src="'.$imgRepositoryWeb.'next.gif" border="0" title="'.$langNext.'">';
+	$imgPrevious = '<img src="'.$imgRepositoryWeb.'previous.png" border="0" title="'.$langPrevious.'">';
+	$imgNext = '<img src="'.$imgRepositoryWeb.'next.png" border="0" title="'.$langNext.'">';
 
 	if( $previousModule != '' )
 	{
@@ -324,7 +324,7 @@ if ( $is_adminOfCourse )
 else
 	$returl = 'learningPath';
 
-	echo '<table width="99%" align="left" class="LP_Operations">'
+	echo '<table width="100%" align="left" class="operations_container">'
     .'<thead>'
     .'<tr>'
     .'<td height="32" width="1"><div align="right">&nbsp;&nbsp;<b>'.$langCommands.'</b>: </div></td>'

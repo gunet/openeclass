@@ -388,8 +388,7 @@ if ((mysql_num_rows($l) == 0)) {
 $tool_content .= "
     <table width='100%' class='tbl_alt'>
     <tr>
-      <th width='1'>&nbsp;</th>
-      <th><div align='left'>$langLearningPaths</div></th>\n";
+      <th colspan='2'><div align='left'>$langLearningPaths</div></th>\n";
 
 
 if($is_adminOfCourse) {
@@ -469,7 +468,7 @@ while ($list = mysql_fetch_array($result)) // while ... learning path list
     //Display current learning path name
     if (!$is_blocked) {
         $tool_content .= "
-      <td><img src='../../template/classic/img/".$image_bullet."' alt='' /></td>
+      <td width='20'><img src='../../template/classic/img/".$image_bullet."' alt='' /></td>
       <td><a href='learningPath.php?path_id=".$list['learnPath_id']."'".$style.">".htmlspecialchars($list['name'])."</a></td>\n";
 
         // --------------TEST IF FOLLOWING PATH MUST BE BLOCKED------------------
