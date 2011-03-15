@@ -600,13 +600,13 @@ foreach ($flatElementList as $module)
     else // module
     {
         if($module['contentType'] == CTEXERCISE_ )
-            $moduleImg = "exercise_$image_bullet.gif";
+            $moduleImg = "exercise_$image_bullet.png";
         else if($module['contentType'] == CTLINK_ )
-        	$moduleImg = "links_$image_bullet.gif";
+        	$moduleImg = "links_$image_bullet.png";
         else if($module['contentType'] == CTCOURSE_DESCRIPTION_ )
-        	$moduleImg = "description_$image_bullet.gif";
+        	$moduleImg = "description_$image_bullet.png";
         else if($module['contentType'] == CTDOCUMENT_ )
-        	$moduleImg = "docs_$image_bullet.gif";
+        	$moduleImg = "docs_$image_bullet.png";
         else
             $moduleImg = choose_image(basename($module['path']));
 
