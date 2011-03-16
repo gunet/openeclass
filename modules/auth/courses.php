@@ -150,7 +150,7 @@ if (isset($_POST["submit"])) {
 			if ($fac) {
 				$tool_content .= "<table width='100%' class='tbl_border'>
 				<tr>
-				<th><a name='top'></a>$langFaculty:<b>$fac</b></th>
+				<th><a name='top'></a><b>$langFaculty:</b> $fac</th>
 				</tr></table>";
 				$tool_content .= "<br /><br />
 				<div class=alert1>$langNoCoursesAvailable</div>\n";
