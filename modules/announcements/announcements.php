@@ -280,15 +280,15 @@ hContent;
 	<input type='hidden' name='id' value='$AnnouncementToModify' />
         </fieldset>
 	</form>";
-    }else{
-    /* display actions toolbar */
-    $tool_content .= "
-    <div id='operations_container'>
-      <ul id='opslist'>
-        <li><a href='" . $_SERVER['PHP_SELF'] . "?addAnnounce=1'>" . $langAddAnn . "</a></li>
-      </ul>
-    </div>";
-}
+    } else {
+	/* display actions toolbar */
+	$tool_content .= "
+	<div id='operations_container'>
+	  <ul id='opslist'>
+	    <li><a href='" . $_SERVER['PHP_SELF'] . "?addAnnounce=1'>" . $langAddAnn . "</a></li>
+	  </ul>
+	</div>";
+    }
 } // end: teacher only
 
     /* display announcements */
@@ -303,90 +303,78 @@ hContent;
 	$tool_content .= "
         <script type='text/javascript' src='../auth/sorttable.js'></script>
         <table width='100%' class='tbl_alt'>";
-	if ($is_adminOfCourse) {
-		$colspan = 1;
-	} else {
-		$colspan = 2;
-	}
 	if ($announcementNumber > 0) {
-		$tool_content .= "
-        <tr>
-          
-          <th colspan='2'>$langAnnouncement</th>";
+		$tool_content .= "<tr>
+		<th colspan = '2'>$langAnnouncement</th>";
 		if ($is_adminOfCourse) {
-		    $tool_content .= "
-          <th width='70'>$langActions</th>";
+		    $tool_content .= "<th width='70'>$langActions</th>";
 		    if ($announcementNumber > 1) {
-			    $tool_content .= "
-          <th width='70'>$langMove</th>";
+			    $tool_content .= "<th width='70'>$langMove</th>";
 		    }
 		}
-		$tool_content .= "
-        </tr>\n";
+		$tool_content .= "</tr>\n";
 	}
 	$k = 0;
         while ($myrow = mysql_fetch_array($result)) {
-            $content = standard_text_escape($myrow['contenu']);
-	    $myrow['temps'] = claro_format_locale_date($dateFormatLong, strtotime($myrow['temps']));
-	    if ($is_adminOfCourse) {
-		if ($myrow['visibility'] == 'i') {
-		    $visibility = 1;
-		    $vis_icon = 'invisible.png';
-		    $classvis = 'invisible';
-		} else {
-		    $visibility = 0;
-		    $vis_icon = 'visible.png';
-		    $classvis = 'visible';
+		$content = standard_text_escape($myrow['contenu']);
+		$myrow['temps'] = claro_format_locale_date($dateFormatLong, strtotime($myrow['temps']));
+		if ($is_adminOfCourse) {
+		    if ($myrow['visibility'] == 'i') {
+			$visibility = 1;
+			$vis_icon = 'invisible.png';
+			$classvis = 'invisible';
+		    } else {
+			$visibility = 0;
+			$vis_icon = 'visible.png';
+			$classvis = 'visible';
+		    }
+		} else  {
+		    $classvis = 'visile';
 		}
-	    } else  {
-		$classvis = 'visile';
-	    }
-            if ($k%2 == 0) {
-                   $tool_content .= "        <tr class='even'>\n";
-                } else {
-                   $tool_content .= "        <tr class='odd'>\n";
-            }
-
-            $tool_content .= "<td width='1' valign='top' class=$classvis><img style='padding-top:3px;' src='${urlServer}/template/classic/img/arrow.png' title='bullet' /></td>
-          <td><b>";
-            if (empty($myrow['title'])) {
-                $tool_content .= $langAnnouncementNoTille;
-            } else {
-                $tool_content .= q($myrow['title']);
-            }
-	    
-            $tool_content .= "</b>&nbsp;<small>(" . nice_format($myrow["temps"]). ")</small><br />$content</td>\n";
-	    if ($is_adminOfCourse) {
-		$tool_content .= "          <td width='70' class='right'>
-		<a href='$_SERVER[PHP_SELF]?modify=" . $myrow['id'] . "'>
-		<img src='../../template/classic/img/edit.png' title='" . $langModify . "' /></a>&nbsp;
-		<a href='$_SERVER[PHP_SELF]?delete=" . $myrow['id'] . "' onClick=\"return confirmation('');\">
-		<img src='../../template/classic/img/delete.png' title='" . $langDelete . "' /></a>&nbsp;
-		<a href='$_SERVER[PHP_SELF]?mkvis=$myrow[id]&amp;vis=$visibility'>
-		<img src='../../template/classic/img/$vis_icon' title='$langVisible' /></a>
-		</td>\n";
-	    }
-	if ($announcementNumber > 1)  {
-		$tool_content .= "        <td align='center' width='70' class='right'>";
-	}
-	if ($is_adminOfCourse) {
-	    if ($iterator != 1)  {
-		$tool_content .= "<a href='$_SERVER[PHP_SELF]?up=" . $myrow["id"] . "'>
-		<img class='displayed' src='../../template/classic/img/up.png' title='" . $langUp . "' /></a>";
-	    }
-	    if ($iterator < $bottomAnnouncement) {
-		$tool_content .= "<a href='$_SERVER[PHP_SELF]?down=" . $myrow["id"] . "'>
-		<img class='displayed' src='../../template/classic/img/down.png' title='" . $langDown . "' /></a>";
-	    }
-	    if ($announcementNumber > 1) {
-		    $tool_content .= "</td>\n";
-	    }
-	}
-	$tool_content .= "        </tr>\n";
-        $iterator ++;
-        $k++;
+		if ($k%2 == 0) {
+		       $tool_content .= "        <tr class='even'>\n";
+		    } else {
+		       $tool_content .= "        <tr class='odd'>\n";
+		}
+	
+		$tool_content .= "<td width='1' valign='top' class=$classvis><img style='padding-top:3px;' src='${urlServer}/template/classic/img/arrow.png' title='bullet' /></td>
+		    <td><b>";
+		if (empty($myrow['title'])) {
+		    $tool_content .= $langAnnouncementNoTille;
+		} else {
+		    $tool_content .= q($myrow['title']);
+		}
+		
+		$tool_content .= "</b>&nbsp;<small>(" . nice_format($myrow["temps"]). ")</small><br />$content</td>\n";
+		if ($is_adminOfCourse) {
+			$tool_content .= "<td width='70' class='right'>
+			<a href='$_SERVER[PHP_SELF]?modify=" . $myrow['id'] . "'>
+			<img src='../../template/classic/img/edit.png' title='" . $langModify . "' /></a>&nbsp;
+			<a href='$_SERVER[PHP_SELF]?delete=" . $myrow['id'] . "' onClick=\"return confirmation('');\">
+			<img src='../../template/classic/img/delete.png' title='" . $langDelete . "' /></a>&nbsp;
+			<a href='$_SERVER[PHP_SELF]?mkvis=$myrow[id]&amp;vis=$visibility'>
+			<img src='../../template/classic/img/$vis_icon' title='$langVisible' /></a>
+			</td>\n";
+			if ($announcementNumber > 1)  {
+				$tool_content .= "<td align='center' width='70' class='right'>";
+			}
+			if ($iterator != 1)  {
+			    $tool_content .= "<a href='$_SERVER[PHP_SELF]?up=" . $myrow["id"] . "'>
+			    <img class='displayed' src='../../template/classic/img/up.png' title='" . $langUp . "' /></a>";
+			}
+			if ($iterator < $bottomAnnouncement) {
+			    $tool_content .= "<a href='$_SERVER[PHP_SELF]?down=" . $myrow["id"] . "'>
+			    <img class='displayed' src='../../template/classic/img/down.png' title='" . $langDown . "' /></a>";
+			}
+			if ($announcementNumber > 1) {
+				$tool_content .= "</td>\n";
+			}
+		}
+		$tool_content .= "</tr>\n";
+		$iterator ++;
+		$k++;
         } // end of while 
-        $tool_content .= "        </table>\n";
+        $tool_content .= "</table>\n";
     
     if ($announcementNumber < 1) {
         $no_content = true;
