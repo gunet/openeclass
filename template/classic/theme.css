@@ -673,7 +673,8 @@ fieldset table.th {
 
 .tbl_course_type {
          border: none;
-         margin: 13px 0;
+         margin: 10px 0;
+         border-bottom: 1px dashed #dfdfdf;
 }
 
 /* Alternating Table Row   */
@@ -832,7 +833,7 @@ td.even {
 }
 
 th {
-    text-align: left;
+    text-align: left !important;
 }
 
 td, th {

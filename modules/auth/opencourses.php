@@ -67,7 +67,7 @@ $icons = array(2 => "<img src='../../template/classic/img/lock_open.png'   alt='
 $tool_content .= "
   <table width=100% class='tbl_border'>
   <tr>
-    <th><a name='top'>&nbsp;</a>$langFaculty:&nbsp;<b>$fac</b></th>
+    <th><a name='top'></a>$langFaculty:&nbsp;<b>$fac</b></th>
     <th><div align='right'>";
 // get the different course types available for this faculte
 $typesresult = db_query("SELECT DISTINCT cours.type types FROM cours WHERE cours.faculteid = $fc ORDER BY cours.type");
@@ -86,7 +86,7 @@ if ($numoftypes > 0) {
         if ($counter != 1) {
             $tool_content .= " | ";
         }
-        $tool_content .= "<a href='#$t'>" . ${'lang'.$ts} . "</a>&nbsp;";
+        $tool_content .= "<a href='#$t'>" . ${'lang'.$ts} . "</a>";
         $counter++;
     }
     $tool_content .= "</div></th>
@@ -116,11 +116,11 @@ if ($numoftypes > 0) {
         $tool_content .= "\n\n\n
            <table width=100% class='tbl_course_type'>
            <tr>
-            <td class='sub_title1'>";
+            <td>";
         // We changed the style a bit here and we output types as the title
         $tool_content .= "<a name='$type'></a><b>$message</b></td>\n";
         // output a top href link if necessary
-        $tool_content .= "\n<td align='right'><a href='#top'>$m[begin]</a>&nbsp;</td>";
+        $tool_content .= "\n<td align='right'><a href='#top'>$m[begin]</a></td>";
         $tool_content .= "</tr>\n";
         $tool_content .= "</table>\n\n";
         $tool_content .= "
