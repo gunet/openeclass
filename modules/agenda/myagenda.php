@@ -142,9 +142,9 @@ function display_monthcalendar($agendaitems, $month, $year, $weekdaynames, $mont
 
 	$tool_content .=  "\n  <table width=100% class=\"title1\">\n";
   	$tool_content .=  "\n  <tr>";
-	$tool_content .=  "\n    <th width='5'><a href=$backwardsURL>&laquo;</a></th>";
-	$tool_content .=  "\n    <th class='center'><b>$monthName $year</b></th>";
-	$tool_content .=  "\n    <th width='5'><a href=$forewardsURL>&raquo;</a></th>";
+	$tool_content .=  "\n    <td width='250'><a href=$backwardsURL>&laquo;</a></td>";
+	$tool_content .=  "\n    <td class='center'><b>$monthName $year</b></td>";
+	$tool_content .=  "\n    <td width='250' class='right'><a href=$forewardsURL>&raquo;</a></td>";
 	$tool_content .=  "\n  </tr>";
 	$tool_content .=  "\n  </table>\n  <br />\n\n";
 
