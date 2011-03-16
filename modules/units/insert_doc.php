@@ -24,23 +24,25 @@
  *  			eMail: info@openeclass.org
  * =========================================================================*/
 
+include '../document/doc_init.php';
 
 function display_docs()
 {
         global $id, $webDir, $currentCourseID, $cours_id, $tool_content,
-               $langDirectory, $langUp, $langName, $langSize, $langDate, $langType, $langAddModulesButton, $langChoice, $langNoDocuments;
+               $group_sql, $langDirectory, $langUp, $langName, $langSize,
+               $langDate, $langType, $langAddModulesButton, $langChoice, $langNoDocuments;
 
         $basedir = $webDir . 'courses/' . $currentCourseID . '/document';
         if (isset($_GET['path'])) {
                 $path = escapeSimple($_GET['path']);
-                if ($path == '/') {
+                if ($path == '/' or $path == '\\') {
 			$path = '';
 		}
         } else {
                 $path = "";
         }
         $result = db_query("SELECT * FROM document
-                            WHERE course_id = $cours_id AND
+                            WHERE $group_sql AND
 			          path LIKE '$path/%' AND
                                   path NOT LIKE '$path/%/%'");
         $fileinfo = array();
@@ -67,7 +69,7 @@ function display_docs()
                         $colspan = 5;
                 } else {
                         list($dirname) = mysql_fetch_row(db_query("SELECT filename FROM document
-                                                                   WHERE course_id = $cours_id AND path = '$path'"));
+                                                                   WHERE $group_sql AND path = '$path'"));
 			$parentpath = dirname($path);
                         $dirname = "/".htmlspecialchars($dirname);
                         $parentlink = $_SERVER['PHP_SELF'] . "?type=doc&amp;id=$id&amp;path=" . $parentpath;

@@ -35,6 +35,7 @@ include '../../include/baseTheme.php';
 include '../../include/lib/fileDisplayLib.inc.php';
 include '../../include/action.php';
 include 'functions.php';
+include '../document/doc_init.php';
 
 $action = new action();
 $action->record('MODULE_ID_UNITS');
