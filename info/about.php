@@ -29,7 +29,7 @@ include '../include/baseTheme.php';
 $nameTools = $langInfo;
 $tool_content .= "<table class='tbl' width='100%'>
        <tr'>
-       <th width='170' class='left'><strong>$langCampusName:</strong></th>
+       <th width='160' class='left'><strong>$langCampusName:</strong></th>
        <td><b>$siteName&nbsp;</b>(<a href='$InstitutionUrl' target='_blank' class='mainpage'>$Institution</a>)</td>
   </tr>
 <tr>

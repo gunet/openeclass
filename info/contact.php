@@ -37,11 +37,11 @@ if (!empty($postaddress)) {
 
 $tool_content .= "
 <table class='tbl' width='100%'>
-<tr><th width='155'>$langPostMail</th><td> $Institution $message </td>
+<tr><th width='155'>$langPostMail</th><td> $Institution<br> $message </td>
 </tr>
 <tr><th><b>$langPhone:</b></td><td> $telephone</th></tr>
 <tr><th>$langFax</th><td> $fax</td></tr>
-<tr><th><b>$langEmail</b></th><td>".mailto($emailhelpdesk, str_replace('@', ' &lt;at> ', $emailhelpdesk))."</td>
+<tr><th><b>$langEmail:</b></th><td>".mailto($emailhelpdesk, str_replace('@', ' &lt;at> ', $emailhelpdesk))."</td>
 </table>";
 
 if (isset($uid) and $uid) {
