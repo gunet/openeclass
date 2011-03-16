@@ -57,13 +57,13 @@ $langsstudent_acc = "εκπαιδευόμενο";
 $langGuest = "Χρήστης Επισκέπτης";
 $langGuests = "Χρήστες Επισκέπτες";
 
-$langFaculty = "Σχολή / Τμήμα";
-$langOfFaculty = "Σχολής / Τμήματος";
-$langOfFaculties = "Σχολών / Τμημάτων";
-$langFaculties = "Σχολές / Τμήματα";
+$langFaculty = "Σχολή - Τμήμα";
+$langOfFaculty = "Σχολής - Τμήματος";
+$langOfFaculties = "Σχολών - Τμημάτων";
+$langFaculties = "Σχολές - Τμήματα";
 
-$langsFaculty = "σχολή / τμήμα";
-$langsFaculties = "σχολές / τμήματα";
+$langsFaculty = "σχολή - τμήμα";
+$langsFaculties = "σχολές - τμήματα";
 
 $langpres = "Προπτυχιακά";
 $langposts = "Μεταπτυχιακά";
