@@ -27,16 +27,16 @@
 $path2add = 2;
 include '../include/baseTheme.php';
 $nameTools = $langInfo;
-$tool_content .= "<table class='tbl_alt' width='100%'>
+$tool_content .= "<table class='tbl' width='100%'>
        <tr'>
-       <th width='200' class='left'><strong>$langCampusName:</strong></th>
+       <th width='170' class='left'><strong>$langCampusName:</strong></th>
        <td><b>$siteName&nbsp;</b>(<a href='$InstitutionUrl' target='_blank' class='mainpage'>$Institution</a>)</td>
   </tr>
 <tr>
-        <th width='200' class='left'><strong>$langVersion:</strong></th>
+        <th class='left'><strong>$langVersion:</strong></th>
     <td><b><a href='http://www.openeclass.org/' title='Open eClass Portal' target='_blank'>Open eClass " . ECLASS_VERSION . "&raquo;</a></b></td>
         <tr>
-        <th width='200' class='left'><strong>$langCoursesHeader:</strong></th>
+        <th class='left'><strong>$langCoursesHeader:</strong></th>
         <td>";
  
           /*

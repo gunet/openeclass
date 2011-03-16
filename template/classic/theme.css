@@ -603,6 +603,16 @@ fieldset table.th {
 	border: none;
 }
 
+
+.tbl td {
+     border: 1px dashed #dfdfdf;
+   }
+
+.tbl th {
+     background-color: #f0f0f0;
+     border: 1px dashed #dfdfdf;
+   }
+
 .tbl_border {
 	border: 1px solid #dfdfdf;
 }
@@ -671,7 +681,7 @@ fieldset table.th {
 .tbl_alt td, .tbl_alt th {
     vertical-align: top;
     border-right: 1px dashed #dfdfdf;
-    border-bottom: 1px dashed #dfdfdf    
+    border-bottom: 1px dashed #dfdfdf;    
 }
 
 .tbl_alt .odd {

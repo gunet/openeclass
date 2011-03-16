@@ -36,17 +36,13 @@ if (!empty($postaddress)) {
 
 
 $tool_content .= "
-<table class='tbl1' width='100%'>
-<tr><td class='title1' colspan='3'>$langContactInfo</td>
-<tr><td valign='top' width='200'>$langPostMail</td><td> $Institution $message </td>
-<td width='150' rowspan='5' valign='top' id='contact'>&nbsp;</td></tr>
-<tr><td valign='top' width='200'><b>$langPhone:</b></td><td> $telephone</td></tr>
-<tr><td>$langFax</td><td> $fax</td></tr>
-<tr><td><b>$langEmail</b></td><td>".mailto($emailhelpdesk, str_replace('@', ' &lt;at> ', $emailhelpdesk))."</td>
-<tr>
-  <td>&nbsp;</td>
-  <td>&nbsp;</td>
-</tr></table>";
+<table class='tbl' width='100%'>
+<tr><th width='155'>$langPostMail</th><td> $Institution $message </td>
+</tr>
+<tr><th><b>$langPhone:</b></td><td> $telephone</th></tr>
+<tr><th>$langFax</th><td> $fax</td></tr>
+<tr><th><b>$langEmail</b></th><td>".mailto($emailhelpdesk, str_replace('@', ' &lt;at> ', $emailhelpdesk))."</td>
+</table>";
 
 if (isset($uid) and $uid) {
         draw($tool_content, 1);
