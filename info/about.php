@@ -27,7 +27,7 @@
 $path2add = 2;
 include '../include/baseTheme.php';
 $nameTools = $langInfo;
-$tool_content .= "<table class='tbl' width='100%'>
+$tool_content .= "<table class='tbl_1' width='100%'>
        <tr'>
        <th width='160' class='left'><strong>$langCampusName:</strong></th>
        <td><b>$siteName&nbsp;</b>(<a href='$InstitutionUrl' target='_blank' class='mainpage'>$Institution</a>)</td>

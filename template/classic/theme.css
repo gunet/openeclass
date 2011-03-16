@@ -609,16 +609,27 @@ fieldset table.th {
 	border: none;
 }
 
+.tbl th {
+     vertical-align: top;
+   }
 
-.tbl td {
+
+.tbl_1 {
+	padding: 5px;
+	border: none;
+}
+
+
+.tbl_1 td {
      border: 1px dashed #dfdfdf;
    }
 
-.tbl th {
+.tbl_1 th {
      background-color: #f0f0f0;
      border: 1px dashed #dfdfdf;
      vertical-align: top;
    }
+
 
 .tbl_border {
 	border: 1px solid #dfdfdf;

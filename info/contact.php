@@ -36,7 +36,7 @@ if (!empty($postaddress)) {
 
 
 $tool_content .= "
-<table class='tbl' width='100%'>
+<table class='tbl_1' width='100%'>
 <tr><th width='155'>$langPostMail</th><td> $Institution<br> $message </td>
 </tr>
 <tr><th><b>$langPhone:</b></td><td> $telephone</th></tr>

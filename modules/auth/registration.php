@@ -43,7 +43,7 @@ include '../../include/baseTheme.php';
 include 'auth.inc.php';
 
 $nameTools = $langNewUser;
-$tool_content .= "<p class='title1'>$langUserAccount ";
+$tool_content .= "<p class='sub_title1'>$langUserAccount ";
 
 $auth = get_auth_active_methods();
 
@@ -61,7 +61,7 @@ $tool_content .= "</p>
 
 if(!empty($auth)) {
         if (count($auth) > 1) {
-                $tool_content .= "\n  <p class='sub_title1'>$langUserAccountInfo3&nbsp;:</p>";
+                $tool_content .= "\n  <p><b>$langUserAccountInfo3:</b></p>";
         }
         foreach($auth as $k => $v) {
                 if ($v == 1) {	// bypass the eclass auth method, as it has already been displayed
@@ -79,12 +79,12 @@ if(!empty($auth)) {
         }
 }
 
-$tool_content .= "\n<p class='title1'>".$langProfAccount." ".$langUserAccountInfo1."</p>";
+$tool_content .= "\n<p class='sub_title1'>".$langProfAccount." ".$langUserAccountInfo1."</p>";
 
 if(!empty($auth)) {
         $tool_content .= "<p><img src='${urlServer}/template/classic/img/arrow.png' title='bullet'  alt='bullet' />&nbsp;&nbsp;<a href='newprof.php'>$langNewAccount</a></p>";
         if (count($auth) > 1) {
-                $tool_content .= "  <p class='sub_title1'>$langUserAccountInfo3&nbsp;:</p>";
+                $tool_content .= "  <p><b>$langUserAccountInfo3:</b></p>";
         }
         foreach($auth as $k=>$v) {
                 if ($v == 1) {	// bypass the eclass auth method, as it has already been displayed
