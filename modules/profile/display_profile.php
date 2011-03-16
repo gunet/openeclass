@@ -31,7 +31,16 @@ if (isset($_GET['id'])) {
         if (!empty($userdata['am'])) {
                 $tool_content .= "<br /><br />$langAm: " . q($userdata['am']);
         }
-        $tool_content .= "<br /><br />$langFaculty: ".find_faculty_by_id($userdata['department']);
-        $tool_content .= "<br /><br />" . profile_image($id, IMAGESIZE_LARGE, !$userdata['has_icon']);
+
+
+        $tool_content .= "<table width='100%' class='tbl_1'> <tr>";
+        $tool_content .= "<th rowspan='3' width='256'>" . profile_image($id, IMAGESIZE_LARGE, !$userdata['has_icon']);
+        $tool_content .= "</th>";
+        $tool_content .= "<td>&nbsp;";
+        $tool_content .= "</td></tr><tr>";
+        $tool_content .= "<td>&nbsp;";
+        $tool_content .= "</td></tr><tr>";
+        $tool_content .= "<td>$langFaculty: ".find_faculty_by_id($userdata['department']);
+        $tool_content .= "</td></tr></table>";
 
 draw($tool_content, 1);
