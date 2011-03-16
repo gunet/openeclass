@@ -116,9 +116,9 @@ if ($numoftypes > 0) {
         $tool_content .= "\n\n\n
            <table width=100% class='tbl_course_type'>
            <tr>
-            <td>";
+            <td class='sub_title1'>";
         // We changed the style a bit here and we output types as the title
-        $tool_content .= "<a name='$type'>&nbsp;</a><b>$message</b></td>\n";
+        $tool_content .= "<a name='$type'></a><b>$message</b></td>\n";
         // output a top href link if necessary
         $tool_content .= "\n<td align='right'><a href='#top'>$m[begin]</a>&nbsp;</td>";
         $tool_content .= "</tr>\n";
@@ -146,7 +146,7 @@ if ($numoftypes > 0) {
             } else {
                 $tool_content .= "\n<tr class='odd'>";
             }
-            $tool_content .= "\n<td width='1'><img style='border:0px;' src='${urlServer}/template/classic/img/arrow.png' title='bullet'></td>";
+            $tool_content .= "\n<td width='16'><img src='${urlServer}/template/classic/img/arrow.png' title='bullet'></td>";
             $tool_content .= "\n<td>" . $codelink . "</td>";
             $tool_content .= "\n<td>$mycours[t]</td>";
             $tool_content .= "\n<td align='center'>";

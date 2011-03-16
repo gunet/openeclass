@@ -673,7 +673,7 @@ fieldset table.th {
 
 .tbl_course_type {
          border: none;
-         margin-top: 13px;
+         margin: 13px 0;
 }
 
 /* Alternating Table Row   */
