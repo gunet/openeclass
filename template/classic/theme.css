@@ -439,7 +439,7 @@ fieldset table.th {
 
 .sub_title1 {
         padding: 5px;
-        border-bottom: 1px dotted #dfdfdf;
+        border-bottom: 1px dashed #dfdfdf;
         font-weight: bold;
 }
 
