@@ -148,10 +148,9 @@ if (isset($_POST["submit"])) {
 				</form>";
 		} else {
 			if ($fac) {
-				$tool_content .= "<table align='left'>
+				$tool_content .= "<table width='100%' class='tbl_border'>
 				<tr>
-				<td><a name='top'>&nbsp;</a>$langFaculty:&nbsp;<b>$fac</b></td>
-				<td>&nbsp;</td>
+				<th><a name='top'></a>$langFaculty:<b>$fac</b></th>
 				</tr></table>";
 				$tool_content .= "<br /><br />
 				<div class=alert1>$langNoCoursesAvailable</div>\n";
@@ -207,7 +206,7 @@ function expanded_faculte($fac_name, $facid, $uid) {
 	$retString .= "
            <table width='100%' class='tbl_border'>
            <tr>
-             <th class='smaller'><a name='top'> </a>$langFaculty: <b>$fac_name</b>&nbsp;&nbsp;</th>";
+             <th><a name='top'> </a>$langFaculty: <b>$fac_name</b></th>";
 
 	// get the different course types available for this faculte
 	$typesresult = db_query("SELECT DISTINCT type FROM cours
