@@ -39,12 +39,6 @@ include('exercise.lib.php');
 
 $require_current_course = TRUE;
 include '../../include/baseTheme.php';
-
-$local_style = '
-    .month { font-weight : bold; color: #FFFFFF; background-color: #000066;
-     padding-left: 15px; padding-right : 15px; }
-    .content {position: relative; left: 25px; }';
-
 include '../../include/jscalendar/calendar.php';
 
 if ($language == 'greek') {
@@ -55,22 +49,6 @@ if ($language == 'greek') {
 
 $jscalendar = new DHTML_Calendar($urlServer.'include/jscalendar/', $lang, 'calendar-blue2', false);
 $head_content = $jscalendar->get_load_files_code();
-
-$head_content .= "
-<script language=\"JavaScript\">
-function validate() {
-	if (document.forms[0].intitule.value==\"\") {
-   		alert(\"$langAlertTitle\"); 
-   		return false;
- 	}	
- 	if (document.forms[0].titulaires.value==\"\") {
-   		alert(\"$langAlertAdmin\"); 
-   		return false;
- 	}
- 	return true;
-}
-</script>
-";
 
 $nameTools = $langExercices;
 $navigation[]= array ("url"=>"exercice.php", "name"=> $langExercices);
@@ -131,7 +109,6 @@ if(@(!is_object($objExercise))) {
 	$_SESSION['objExercise'] = $objExercise;
 }
 
-///////////////////////////////////////////////////////
 // doesn't select the exercise ID if we come from the question pool
 if(!isset($fromExercise)) {
 	// gets the right exercise ID, and if 0 creates a new exercise
@@ -139,7 +116,6 @@ if(!isset($fromExercise)) {
 		$modifyExercise='yes';
 	}
 }
-///////////////////////////////////////////////////////
 
 $nbrQuestions=$objExercise->selectNbrQuestions();
 

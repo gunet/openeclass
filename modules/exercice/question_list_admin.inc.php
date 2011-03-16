@@ -72,15 +72,13 @@ $tool_content .= "
 if($nbrQuestions) {
 	$questionList=$objExercise->selectQuestionList();
 	$i=1;
-
-$tool_content .= "
-    <table width='99%' class='tbl_alt'>
-    <tr>
-      <th colspan='2'><div align='left'>$langQuestionList</div></th>
-      <th colspan='4' class='right'>$langActions</th>
-    </tr>";
-
-
+	$tool_content .= "
+	    <table width='100%' class='tbl_alt'>
+	    <tr>
+	      <th colspan='2' class='left'>$langQuestionList</th>
+	      <th colspan='4' class='right'>$langActions</th>
+	    </tr>";
+	    
 	foreach($questionList as $id) {
 		$objQuestionTmp=new Question();
 		$objQuestionTmp->read($id);
@@ -91,36 +89,29 @@ $tool_content .= "
                     }
 
 		$tool_content .= "
-      <td align=\"right\" width=\"1\">".$i.".</td>
-      <td> ".$objQuestionTmp->selectTitle()."<br />
-	   ".$aType[$objQuestionTmp->selectType()-1]."</td>
-      <td class=\"right\" width=\"50\"><a href=\"".$_SERVER['PHP_SELF']."?editQuestion=".$id."\">".
-		"<img src='../../template/classic/img/edit.png' align='absmiddle' title='$langModify'></a>".
-		" <a href=\"".$_SERVER['PHP_SELF']."?deleteQuestion=".$id."\" "."onclick=\"javascript:if(!confirm('".addslashes(htmlspecialchars($langConfirmYourChoice))."')) return false;\">".
-		"<img src='../../template/classic/img/delete.png' align='absmiddle' title='$langDelete'></a></td>
-      <td width='20'>";
+			<td align=\"right\" width=\"1\">".$i.".</td>
+			<td> ".$objQuestionTmp->selectTitle()."<br />
+			".$aType[$objQuestionTmp->selectType()-1]."</td>
+			<td class=\"right\" width=\"50\"><a href=\"".$_SERVER['PHP_SELF']."?editQuestion=".$id."\">".
+			"<img src='../../template/classic/img/edit.png' align='middle' title='$langModify' /></a>".
+			" <a href=\"".$_SERVER['PHP_SELF']."?deleteQuestion=".$id."\" "."onclick=\"javascript:if(!confirm('".addslashes(htmlspecialchars($langConfirmYourChoice))."')) return false;\">".
+			"<img src='../../template/classic/img/delete.png' align='middle' title='$langDelete' /></a></td>
+		<td width='20'>";
 		if($i != 1) {
 			$tool_content .= "<a href=\"".$_SERVER['PHP_SELF']."?moveUp=".$id."\">
-   			<img src=\"../../template/classic/img/up.png\" border=\"0\" align=\"absmiddle\" title=\"".$langUp."\"></a> ";
+   			<img src='../../template/classic/img/up.png' align='middle' title='$langUp' /></a> ";
 		}
-		$tool_content .= "</td>
-      <td width='20'>";
+		$tool_content .= "</td><td width='20'>";
 		if($i != $nbrQuestions)	{
 			$tool_content .= "<a href=\"".$_SERVER['PHP_SELF']."?moveDown=".$id."\">
-			<img src=\"../../template/classic/img/down.png\" border=\"0\" align=\"absmiddle\" title=\"".$langDown."\"></a> ";
+			<img src='../../template/classic/img/down.png' align='middle' title='$langDown' /></a> ";
 		}
-		$tool_content .= "</td>
-    </tr>";
+		$tool_content .= "</td></tr>";
 		$i++;
 		unset($objQuestionTmp);
 	}
+	$tool_content .= "</table>";
 }
-
 if(!isset($i)) {
-	$tool_content .= "
-      <p class='alert1'>$langNoQuestion</p>";
+	$tool_content .= "<p class='alert1'>$langNoQuestion</p>";
 }
-
-$tool_content .= "
-    </table>";
-?>

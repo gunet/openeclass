@@ -98,31 +98,28 @@ if(isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
 	$questionId = $objQuestion->selectId();
 	// is picture set ?
 	$okPicture = file_exists($picturePath.'/quiz-'.$questionId)?true:false;
-
         // if there is an error message
         if(!empty($msgErr)) {
-                $tool_content .= "
-   <p class='caution'>$msgErr</p>\n";
+                $tool_content .= "<p class='caution'>$msgErr</p>\n";
         }
 
-
 	@$tool_content .= "
-    <form enctype='multipart/form-data' method='post' action='$_SERVER[PHP_SELF]?modifyQuestion=$_GET[modifyQuestion]&newQuestion=$_GET[newQuestion]'>
-    <fieldset>
-      <legend>$langInfoQuestion</legend>
-      <table width='99%' class='tbl'>
-      <tr>
-	<th>".$langQuestion." :</th>
-	<td><input type=\"text\" name=\"questionName\"" ."size=\"50\" maxlength=\"200\" value=\"".htmlspecialchars($questionName)."\"></td>
-      </tr>
-      <tr>
-        <th valign='top'>$langQuestionDescription:</th>
-        <td>"
-	.rich_text_editor('questionDescription', 4, 50, $questionDescription, "style='width:400px;' class='FormData_InputText'").
-	"</td>
-      </tr>
-      <tr>
-        <th valign='top'>";
+	<form enctype='multipart/form-data' method='post' action='$_SERVER[PHP_SELF]?modifyQuestion=$_GET[modifyQuestion]&amp;newQuestion=$_GET[newQuestion]'>
+	<fieldset>
+	  <legend>$langInfoQuestion</legend>
+	  <table width='99%' class='tbl'>
+	  <tr>
+	    <th>".$langQuestion." :</th>
+	    <td><input type=\"text\" name=\"questionName\"" ."size=\"50\" maxlength=\"200\" value=\"".htmlspecialchars($questionName)."\"></td>
+	  </tr>
+	  <tr>
+	    <th valign='top'>$langQuestionDescription:</th>
+	    <td>"
+	    .rich_text_editor('questionDescription', 4, 50, $questionDescription, "style='width:400px;' class='FormData_InputText'").
+	    "</td>
+	  </tr>
+	  <tr>
+	    <th valign='top'>";
 
 	if ($okPicture) {
 		$tool_content .= "$langReplacePicture";
@@ -135,23 +132,19 @@ if(isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
 	if($okPicture) {
 		$tool_content .= "<img src='$picturePath/quiz-$questionId' border='0'><br/><br/>";
 	}
-	$tool_content .= "<input type='file' name='imageUpload' size='30'></td>
-      </tr>";
+	$tool_content .= "<input type='file' name='imageUpload' size='30'></td></tr>";
 
 	if ($okPicture) {
-		$tool_content .= "
-      <tr>
-        <th>$langDeletePicture :</th>
-	<td><input type=\"checkbox\" name=\"deletePicture\" value=\"1\" ";
+		$tool_content .= "<tr>
+		<th>$langDeletePicture :</th>
+		<td><input type=\"checkbox\" name=\"deletePicture\" value=\"1\" ";
 		if(isset($_POST['deletePicture'])) {
 			$tool_content .= 'checked="checked"'; 
 		}
 		$tool_content .= "> ";
-		$tool_content .= "</td>
-      </tr>";
+		$tool_content .= "</td></tr>";
 	}
-	$tool_content .= "
-      <tr>
+	$tool_content .= "<tr>
         <th valign='top'>$langAnswerType :</th>
 	<td><input type='radio' name='answerType' value='1' ";
         if ($answerType == 1) {
@@ -183,14 +176,13 @@ if(isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
 	$tool_content .= "> ".$langTrueFalse;
 	$tool_content .= "</td>
       <tr>
-        <th>&nbsp;</td>
+        <th>&nbsp;</th>
         <td>
 	  <input type='submit' name='submitQuestion' value='$langOk'>
 	  &nbsp;&nbsp;<input type='submit' name='cancelQuestion' value='$langCancel'>
 	</td>
-      </tr>
-      </table>
-    </fieldset>
-    </form>";
+	</tr>
+	</table>
+	</fieldset>
+	</form>";
 }
-?>

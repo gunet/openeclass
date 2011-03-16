@@ -75,18 +75,16 @@ if (isset($_GET['modifyExercise'])) {
 }
 // shows the form to modify the exercise
 if(isset($modifyExercise) or isset($_GET['NewExercise'])) {
-	$tool_content .= "
-      <form method='post' action='$_SERVER[PHP_SELF]?modifyExercise=$modifyExercise'>
-      <fieldset>
+	$tool_content .= "<form method='post' action='$_SERVER[PHP_SELF]?modifyExercise=$modifyExercise'>
+	<fieldset>
         <legend>$langInfoExercise </legend>
 	<table width='99%' class='tbl'>";
 	if(!empty($msgErr)) {
 		$tool_content .= "
-        <tr>
-          <td colspan='2'><p class='caution'>$msgErr</td>
-        </tr>";
+		<tr>
+		  <td colspan='2'><p class='caution'>$msgErr</td>
+		</tr>";
 	}
-
 	$tool_content .= "
 	<tr>
           <th width='180'>".$langExerciseName.":</th>
@@ -198,7 +196,7 @@ if(isset($modifyExercise) or isset($_GET['NewExercise'])) {
 	$tool_content .= "
         <fieldset>
         <legend>$langInfoExercise&nbsp;<a href='$_SERVER[PHP_SELF]?modifyExercise=yes'>
-              <img src='../../template/classic/img/edit.png' border='0' align='absmiddle' title='$langModify'></a></legend>
+              <img src='../../template/classic/img/edit.png' align='middle' title='$langModify' /></a></legend>
         <table width='99%' class='tbl'>
 	<tr>
 	  <th width='180'>$langExerciseName :</th>
@@ -241,4 +239,3 @@ if(isset($modifyExercise) or isset($_GET['NewExercise'])) {
 	</table>
         </fieldset>";
 }
-?>
