@@ -121,12 +121,12 @@ if (isset($_POST['back1']) or !isset($_POST['visit'])) {
       <legend>$langCreateCourseStep1Title</legend>
         <table class='tbl'>
 	<tr>
-	  <td>$langTitle&nbsp;:</td>
+	  <th>$langTitle&nbsp;:</th>
 	  <td><input type='text' name='intitule' size='60' value='".@$intitule."' /></td>
-	  <td>$langEx</td>
+	  <td class='smaller'>$langEx</td>
 	</tr>
 	<tr>
-	  <td>$langFaculty&nbsp;:</td>
+	  <th>$langFaculty&nbsp;:</th>
 	  <td>";
 	$facs = db_query("SELECT id, name FROM faculte order by id");
 	while ($n = mysql_fetch_array($facs)) {
@@ -139,29 +139,29 @@ if (isset($_POST['back1']) or !isset($_POST['visit'])) {
 	unset($repertoire);
 	$tool_content .= "
         <tr>
-	  <td>$langTeachers&nbsp;:</td>
+	  <th>$langTeachers&nbsp;:</th>
 	  <td><input type='text' name='titulaires' size='60' value='" . q($titulaires) . "' /></td>
 	  <td>&nbsp;</td>
         </tr>
 	<tr>
-	  <td class='left'>$langType&nbsp;:</td>
+	  <th class='left'>$langType&nbsp;:</th>
 	  <td>" .  selection(array('pre' => $langpre, 'post' => $langpost, 'other' => $langother), 'type', $type) . "</td>
 	  <td>&nbsp;</td>
         </tr>
 	<tr>
-	  <td class='left'>$langLanguage&nbsp;:</td>
+	  <th class='left'>$langLanguage&nbsp;:</th>
 	  <td>" . lang_select_options('languageCourse', '', $languageCourse) . "</td>
           <td>&nbsp;</td>
         </tr>
 	<tr>
-          <td>&nbsp;</td>
+          <th>&nbsp;</th>
 	  <td><input type='submit' name='create2' value='$langNextStep >' /><input type='hidden' name='visit' value='true' /></td>
 	  <td>&nbsp;</td>
         </tr>
         </table>
+        <div align='right' class='smaller'>(*) &nbsp;$langFieldsRequ</div>
       </fieldset>
-      <div align='right'>(*) &nbsp;$langFieldsRequ</div>
-        <br />";
+      <br />";
 }
 
 // --------------------------------
@@ -186,8 +186,8 @@ if (isset($_POST['back1']) or !isset($_POST['visit'])) {
 	<td><input type='submit' name='back1' value='< $langPreviousStep ' />&nbsp;<input type='submit' name='create3' value='$langNextStep >' /></td>
       </tr>
       </table>
+    <div align='right' class='smaller'>$langFieldsOptionalNote</div>
     </fieldset>
-    <div align='right'>$langFieldsOptionalNote</div>
     <br />";
 
 }  elseif (isset($_POST['create3']) or isset($_POST['back2'])) {
@@ -201,27 +201,27 @@ if (isset($_POST['back1']) or !isset($_POST['visit'])) {
       </tr>
       <tr>
 	<td>
-	  <table class='tbl_alt' width='99%'>
+	  <table class='tbl_border' width='99%'>
 	  <tr class='even'>
-	    <td><img src=\"../../template/classic/img/lock_open.png\" title=\"".$m['legopen']."\" width=\"16\" height=\"16\" /></td>
-	    <td width='100'>".$m['legopen']."</td>
+	    <th><img src=\"../../template/classic/img/lock_open.png\" title=\"".$m['legopen']."\" width=\"16\" height=\"16\" /></th>
+	    <th width='140'>".$m['legopen']."</th>
 	    <td><input name=\"formvisible\" type=\"radio\" value=\"2\" checked=\"checked\" /></td>
-	    <td class='right'>$langPublic</td>
+	    <td>$langPublic</td>
 	  </tr>
 	  <tr class='even'>
-	    <td valign='top'><img src=\"../../template/classic/img/lock_registration.png\" title=\"".$m['legrestricted']."\" width=\"16\" height=\"16\" /></td>
-	    <td valign='top'>".$m['legrestricted']."</td>
+	    <th valign='top'><img src=\"../../template/classic/img/lock_registration.png\" title=\"".$m['legrestricted']."\" width=\"16\" height=\"16\" /></th>
+	    <th valign='top'>".$m['legrestricted']."</th>
 	    <td valign='top'><input name=\"formvisible\" type=\"radio\" value=\"1\" /></td>
-	    <td class='right'>
+	    <td>
               $langPrivOpen<br />
-              $langOptPassword <input type='text' name='password' value='".q($password)."' class='FormData_InputText' />
+              <i>$langOptPassword</i> <input type='text' name='password' value='".q($password)."' class='FormData_InputText' />
             </td>
           </tr>
 	  <tr class='even'>
-	    <td valign='top'><img src=\"../../template/classic/img/lock_closed.png\" title=\"".$m['legclosed']."\" width=\"16\" height=\"16\" /></td>
-	    <td valign='top'>".$m['legclosed']."</td>
+	    <th valign='top'><img src=\"../../template/classic/img/lock_closed.png\" title=\"".$m['legclosed']."\" width=\"16\" height=\"16\" /></th>
+	    <th valign='top'>".$m['legclosed']."</th>
 	    <td valign='top'><input name=\"formvisible\" type=\"radio\" value=\"0\" /></td>
-	    <td class='right'>$langPrivate</td>
+	    <td>$langPrivate</td>
 	  </tr>
 	  </table>
 	  <br />
@@ -430,7 +430,7 @@ if (isset($_POST['create_course'])) {
         // --------------------------------------------------
         $tool_content .= "
                 <p class=\"success\">$langJustCreated: &nbsp;<b>$intitule</b></p>
-                <p><small>$langEnterMetadata</small></p><br />
+                <p class='smaller'>$langEnterMetadata</p><br />
                 <p align='center'>&nbsp;<a href='../../courses/$repertoire/index.php' class=mainpage>$langEnter</a>&nbsp;</p>";
 } // end of submit
 

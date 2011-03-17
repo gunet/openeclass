@@ -223,7 +223,7 @@ if (isset($_POST['submit'])) {
 	    </tr>
 	</table>
 	</fieldset>
-	<p align='right'><input type='submit' name='submit' value='$langSubmit' /></p>
+	<p align='left'><input type='submit' name='submit' value='$langSubmit' /></p>
 	</form>";
 }
 add_units_navigation(TRUE);

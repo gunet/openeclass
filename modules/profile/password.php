@@ -84,32 +84,32 @@ if(isset($_GET['msg'])) {
 		case 1: {//passwords do not match
 			$message = $langPassTwo;
 			$urlText = "";
-			$type = "caution_small";
+			$type = "caution";
 			break;
 		}
 
 		case 2: { // admin tools
 			$message = $langFields;
 			$urlText = "";
-			$type = "caution_small";
+			$type = "caution";
 			break;
 		}
 		case 3: {//wrong old password entered
 			$message = $langPassOldWrong;
 			$urlText = "";
-			$type = "caution_small";
+			$type = "caution";
 			break;
 		}
 
 		case 4: {//password successfully changed
 			$message = $langPassChanged;
 			$urlText = $langHome;
-			$type = "success_small";
+			$type = "success";
 			break;
 		}
 		default:die("invalid message id");
 	}
-	$tool_content .=  "\n         <p class=\"$type\">$message<br><a href=\"$urlServer\">$urlText</a></p>";
+	$tool_content .=  "\n         <p class=\"$type\">$message<br /><a href=\"$urlServer\">$urlText</a></p>";
 }
 
 if (!isset($_POST['changePass'])) {
@@ -119,20 +119,20 @@ if (!isset($_POST['changePass'])) {
         <legend>$langPassword</legend>
 	<table class=\"tbl\">
 	<tr>
-	   <td>$langOldPass</td>
+	   <th>$langOldPass</th>
 	   <td><input type=\"password\" size=\"40\" name=\"old_pass\" value=\"\"></td>
 	</tr>
 	<tr>
-	   <td>$langNewPass1</td>
+	   <th>$langNewPass1</th>
 	   <td>";
 	$tool_content .= "<input type=\"password\" size=\"40\" name=\"password_form\" value=\"\"></td>
 	</tr>
 	<tr>
-	   <td>$langNewPass2</td>
+	   <th>$langNewPass2</th>
 	   <td><input type=\"password\" size=\"40\" name=\"password_form1\" value=\"\"></td>
 	</tr>
 	<tr>
-	   <td>&nbsp;</td>
+	   <th>&nbsp;</th>
 	   <td><input type=\"submit\" name=\"submit\" value=\"$langModify\"></td>
 	</tr>
 	</table>

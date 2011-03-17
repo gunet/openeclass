@@ -222,18 +222,18 @@ $tool_content .= "
      <legend>$langUserData</legend>
         <table class='tbl'>
         <tr>
-          <td>$langName</td>";
+          <th>$langName</th>";
 
 if (isset($_SESSION['shib_user'])) {
         $auth_text = "Shibboleth user";
         $tool_content .= "
-          <td class='caution_small'>&nbsp;&nbsp;&nbsp;&nbsp;<b>$prenom_form</b> [$auth_text]
+          <td class='caution'>&nbsp;&nbsp;&nbsp;&nbsp;<b>$prenom_form</b> [$auth_text]
             <input type='hidden' name='prenom_form' value='$prenom_form' />
           </td>";
 } elseif (isset($_SESSION['cas_user'])) {
 		$auth_text = "CAS user";
         $tool_content .= "
-          <td class='caution_small'>&nbsp;&nbsp;&nbsp;&nbsp;<b>$prenom_form</b> [$auth_text]
+          <td class='caution'>&nbsp;&nbsp;&nbsp;&nbsp;<b>$prenom_form</b> [$auth_text]
             <input type='hidden' name='prenom_form' value='$prenom_form' />
           </td>";
 } else {
@@ -241,26 +241,31 @@ if (isset($_SESSION['shib_user'])) {
           <td><input type='text' size='40' name='prenom_form' value='$prenom_form' /></td>";
 }
 
-$tool_content .= "</tr><tr><td>$langSurname</td>";
+$tool_content .= "
+        </tr>
+        <tr>
+          <th>$langSurname</th>";
 if (isset($_SESSION['shib_user'])) {
         $auth_text = "Shibboleth user";
         $tool_content .= "
-          <td class='caution_small'>&nbsp;&nbsp;&nbsp;&nbsp;<b>".$nom_form."</b> [".$auth_text."]
+          <td class='caution'>&nbsp;&nbsp;&nbsp;&nbsp;<b>".$nom_form."</b> [".$auth_text."]
             <input type='hidden' name='nom_form' value='$nom_form' /></td>";
 } elseif (isset($_SESSION['cas_user'])) {
         $auth_text = "CAS user";
         $tool_content .= "
-          <td class='caution_small'>&nbsp;&nbsp;&nbsp;&nbsp;<b>".$nom_form."</b> [".$auth_text."]
+          <td class='caution'>&nbsp;&nbsp;&nbsp;&nbsp;<b>".$nom_form."</b> [".$auth_text."]
             <input type='hidden' name='nom_form' value='$nom_form' /></td>";
 } else {
-        $tool_content .= "<td><input type='text' size='40' name='nom_form' value='$nom_form' /></td>";
+        $tool_content .= "
+          <td><input type='text' size='40' name='nom_form' value='$nom_form' /></td>";
 }
-$tool_content .= "</tr>";
+$tool_content .= "
+        </tr>";
 
 if ($allow_username_change) {
         $tool_content .= "
         <tr>
-          <td>$langUsername</td>
+          <th>$langUsername</th>
           <td><input type='text' size='40' name='username_form' value='$username_form' /></td>
         </tr>";
 } else {
@@ -283,40 +288,43 @@ if ($allow_username_change) {
         $tool_content .= "
         <tr>
           <th class='left'>$langUsername</th>
-          <td class='caution_small'>&nbsp;&nbsp;&nbsp;&nbsp;<b>$username_form</b> [$auth_text]
+          <td class='caution'>&nbsp;&nbsp;&nbsp;&nbsp;<b>$username_form</b> [$auth_text]
             <input type='hidden' name='username_form' value='$username_form' />
           </td>
         </tr>";
 }
 
-$tool_content .= "<tr><td>$langEmail</td>";
+$tool_content .= "
+        <tr>
+          <th>$langEmail</th>";
 
 if (isset($_SESSION['shib_user'])) {
         $tool_content .= "
-           <td class='caution_small'>&nbsp;&nbsp;&nbsp;&nbsp;<b>$email_form</b> [$auth_text]
+           <td class='caution'>&nbsp;&nbsp;&nbsp;&nbsp;<b>$email_form</b> [$auth_text]
              <input type='hidden' name='email_form' value='$email_form' />
            </td>";
 // only update e-mail if CAS provides with e-mail
 } elseif (isset($_SESSION['cas_email'])) {
         $tool_content .= "
-           <td class='caution_small'>&nbsp;&nbsp;&nbsp;&nbsp;<b>$email_form</b> [$auth_text]
+           <td class='caution'>&nbsp;&nbsp;&nbsp;&nbsp;<b>$email_form</b> [$auth_text]
              <input type='hidden' name='email_form' value='$email_form' />
            </td>";
 
 } else {
-        $tool_content .= "<td><input type='text' size='40' name='email_form' value='$email_form' /></td>";
+        $tool_content .= "
+          <td><input type='text' size='40' name='email_form' value='$email_form' /></td>";
 }
 $tool_content .= "
         </tr>
         <tr>
-          <td>$langAm</td>
+          <th>$langAm</th>
           <td><input type='text' size='40' name='am_form' value='$am_form' /></td>
         </tr>";
 ##[BEGIN personalisation modification]############
 if (isset($_SESSION['perso_is_active'])) {
         $tool_content .= "
         <tr>
-          <td>$langPerso</td>
+          <th>$langPerso</th>
           <td><input type=radio name='persoStatus' value='no'$checkedPerso />$langModern&nbsp;
               <input type=radio name='persoStatus' value='yes'$checkedClassic />$langClassic
           </td>
@@ -324,25 +332,43 @@ if (isset($_SESSION['perso_is_active'])) {
 }
 
 
-$tool_content .= "<tr><td>$langFaculty</td><td>";
+$tool_content .= "
+        <tr>
+          <th>$langFaculty</th>
+          <td>";
 $tool_content .= list_departments($myrow['department']);
-$tool_content .= "</td></tr>";
+$tool_content .= "</td>
+        </tr>";
 
 
 ##[END personalisation modification]############
-$tool_content .= "<tr><td>$langLanguage</td><td>" . lang_select_options('userLanguage') . "</td></tr>";
+$tool_content .= "
+        <tr>
+          <th>$langLanguage</th>
+          <td>" . lang_select_options('userLanguage') . "</td>
+        </tr>";
 if ($icon) {
 	$message_pic = $langReplacePicture;
 	$picture = profile_image($uid, IMAGESIZE_SMALL) . "&nbsp;&nbsp;";
-	$delete = "<tr><td>$langDeletePicture</td><td><input type='checkbox' name='delimage'></td></tr>";
+	$delete = "
+        <tr>
+          <th>$langDeletePicture</th>
+          <td><input type='checkbox' name='delimage'></td>
+        </tr>";
 } else {
 	$picture = $delete = '';
 	$message_pic = $langAddPicture;
 }
-$tool_content .= "<tr><td>$message_pic</td><td>$picture<input type='file' name='userimage' size='30'></td></tr>";
+$tool_content .= "
+        <tr>
+          <th>$message_pic</th>
+          <td>$picture<input type='file' name='userimage' size='30'></td>
+        </tr>";
 $tool_content .= $delete;
-$tool_content .= "<tr><td>&nbsp;</td>
-        <td><input type='submit' name='submit' value='$langModify' /></td>
+$tool_content .= "
+        <tr> 
+          <td>&nbsp;</td>
+          <td><input type='submit' name='submit' value='$langModify' /></td>
         </tr>
         </table>
         </fieldset>

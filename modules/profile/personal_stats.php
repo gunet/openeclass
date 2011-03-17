@@ -95,42 +95,46 @@ if (!extension_loaded('gd')) {
 
     $totalDuration = format_time_duration(0 + $totalDuration);
     $tool_content .= "
-	<p class='title1'>$langPlatformGenStats</p>
+        <fieldset>
+	<legend>$langPlatformGenStats</legend>
 	<table class='tbl' width='99%'>
 	<tr>
-	  <td width='250'>$langTotalVisitsCourses:</td>
-	  <td class='bold'>$totalHits</td>
+	  <th>$langTotalVisitsCourses:</th>
+	  <td>$totalHits</td>
 	</tr>
 	<tr>
-	  <td>$langDurationVisits:</td>
-	  <td class='bold'>$totalDuration</td>
+	  <th>$langDurationVisits:</th>
+	  <td>$totalDuration</td>
 	</tr>
 	<tr>
-	  <td valign='top'>$langDurationVisitsPerCourse:</td>
+	  <th valign='top'>$langDurationVisitsPerCourse:</th>
 	  <td>
-            <table class='tbl_alt' width='400'>
+            <table class='tbl_alt' width='550'>
             <tr>
-              <th>&nbsp;</th><th>$langCourseTitle</th>
-              <th>$langDuration</th>
+              <th>&nbsp;</th>
+              <th class='left'>$langCourseTitle</th>
+              <th width='150'>$langDuration</th>
             </tr>";
                 $i = 0;
                 foreach ($duration as $code => $time) {
                         if ($i%2==0) {
-                                $tool_content .= "\n<tr class='even'>";
+                                $tool_content .= "
+            <tr class='even'>";
                         } else {
-                                $tool_content .= "\n<tr class='odd'>";
+                                $tool_content .= "
+            <tr class='odd'>";
                         }
                         $i++;
                         $tool_content .= "
-			<td width='1'><img style='border:0px; padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.png' alt='' /></td>
-			<td>" . course_code_to_title($code) . "</td>
-			<td class='center'>" . format_time_duration(0 + $time) . "</td>
-		     </tr>";
+	      <td width='1'><img style='border:0px; padding-top:3px;' src='${urlServer}/template/classic/img/arrow.png' alt=''></td>
+	      <td>" . course_code_to_title($code) . "</td>
+	      <td class='center'>" . format_time_duration(0 + $time) . "</td>
+            </tr>";
                 }
-        $tool_content .= "\n</table>
-	</td>
-	</tr>
-	</table>";
+        $tool_content .= "
+            </table>
+	  </td>
+	</tr>";
 	}
 }
 // End of chart display; chart unlinked at end of script.
@@ -141,17 +145,18 @@ $sql = "SELECT * FROM loginout
 
 $leResultat = db_query($sql, $mysqlMainDb);
 
-    $tool_content .= "<table class=\"tbl\" width=\"99%\">
+    $tool_content .= "
 	<tr>
-    <td width=\"250\" valign=\"top\">$langLastVisits:</td>
-    <td>";
+          <td valign=\"top\">$langLastVisits:</td>
+          <td>";
 
     $tool_content .= "
-    <table class=\"tbl_alt\" width='400'>
-    <tr>
-        <th colspan=\"2\" class=\"left\">&nbsp;&nbsp;&nbsp;&nbsp;$langDate</th>
-        <th>$langAction</th>
-    </tr>";
+            <table class=\"tbl_alt\" width='550'>
+            <tr>
+              <th>&nbsp;</th>
+              <th class=\"left\">$langDate</th>
+              <th width='150'>$langAction</th>
+            </tr>";
     $i = 0;
 
     $nomAction["LOGIN"] = "<div align=\"center\"><font color=\"#008000\">$langLogIn</font></div>";
@@ -161,18 +166,26 @@ $leResultat = db_query($sql, $mysqlMainDb);
 	   $when = $leRecord["when"];
 	   $action = $leRecord["action"];
 	   if ($i%2==0) {
-		$tool_content .= "\n    <tr class=\"even\">";
+		$tool_content .= "
+            <tr class=\"even\">";
 	   } else {
-		$tool_content .= "\n    <tr class=\"odd\">";
+		$tool_content .= "
+            <tr class=\"odd\">";
 	   }
 	   $tool_content .= "
-        <td width=\"1\"><img style='border:0px; padding-top:3px;' src='${urlServer}/template/classic/img/arrow.png' alt=''></td>
-        <td>".strftime("%d/%m/%Y (%H:%M:%S) ", strtotime($when))."</td>
-        <td>".$nomAction[$action]."</td>
-	</tr>";
+              <td width=\"1\"><img style='border:0px; padding-top:3px;' src='${urlServer}/template/classic/img/arrow.png' alt=''></td>
+              <td>".strftime("%d/%m/%Y (%H:%M:%S) ", strtotime($when))."</td>
+              <td>".$nomAction[$action]."</td>
+	    </tr>";
 	$i++;
     }
 
-$tool_content .= "\n    </tbody>\n    </table>\n";
-$tool_content .= "</td></tr></thead></table>";
+$tool_content .= "
+            </table>\n";
+$tool_content .= "
+          </td>
+        </tr>
+        </table>
+        </fieldset>";
+   
 draw($tool_content, 1);

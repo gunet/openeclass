@@ -148,7 +148,7 @@ function display_monthcalendar($agendaitems, $month, $year, $weekdaynames, $mont
 	$tool_content .=  "\n  </tr>";
 	$tool_content .=  "\n  </table>\n  <br />\n\n";
 
-	$tool_content .=  "\n  <table width=100% class=\"tbl_alt\">\n  <tr>";
+	$tool_content .=  "\n  <table width=100% class=\"tbl\">\n  <tr>";
 	for ($ii=1;$ii<8; $ii++)
 	{
     	$tool_content .=  "\n    <th class='center'>".$weekdaynames[$ii%7]."</th>";
