@@ -36,12 +36,11 @@ $require_admin = TRUE;
 include '../../include/baseTheme.php';
 $nameTools = $langChangeUser;
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
-$tool_content = '';
 
-if (isset($_POST['username'])) {
+if (isset($_REQUEST['username'])) {
 	$result = db_query("SELECT user_id, nom, username, password, prenom, statut, email, iduser is_admin, perso, lang
                                    FROM user LEFT JOIN admin ON user.user_id = admin.iduser
-                                   WHERE username COLLATE utf8_bin = " . autoquote($_POST['username']));
+                                   WHERE username COLLATE utf8_bin = " . autoquote($_REQUEST['username']));
 	if (mysql_num_rows($result) > 0) {
                 $myrow = mysql_fetch_array($result);
                 $_SESSION['uid'] = $myrow["user_id"];
@@ -75,4 +74,4 @@ if (isset($_POST['username'])) {
 } 
 
 $tool_content .= "<form action='$_SERVER[PHP_SELF]' method='post'>$langUsername: <input type='text' name='username' /></form>";
-draw($tool_content,3,'admin');
+draw($tool_content, 3);

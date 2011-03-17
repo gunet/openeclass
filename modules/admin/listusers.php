@@ -361,9 +361,9 @@ if($sql) {
 			$str .= "&amp;c=$c";	
 		}
 		$tool_content .= "
-		<table class='tbl_alt' width='99%'>
+		<table class='tbl_alt' width='100%'>
 		<tr>
-		  <th colspan='9'><div align='right'>".$caption."</div></th>
+		  <th colspan='10'><div align='right'>".$caption."</div></th>
 		</tr>
 		<tr>
 		  <th width='1'>&nbsp;</th>
@@ -372,7 +372,7 @@ if($sql) {
 		  <th><div align='left'><a href='$_SERVER[PHP_SELF]?ord=u$str'>$langUsername</a></div></th>
 		  <th scope='col'>$langEmail</th>
 		  <th scope='col'><a href='$_SERVER[PHP_SELF]?ord=s$str'>$langProperty</a></th>
-		  <th scope='col' colspan='3'>$langActions</th>
+		  <th scope='col' colspan='4'>$langActions</th>
 		</tr>";
         	$k = 0;
 		for ($j = 0; $j < mysql_num_rows($sql); $j++) {
@@ -405,9 +405,12 @@ if($sql) {
 					</a></td>
 					<td align='center'><a href='userstats.php?u=".$logs['user_id']."'>
 					<img src='../../template/classic/img/platform_stats.png' title='$langStat' /></a>
+					</td>
+					<td align='center'><a href='change_user.php?username=".$logs['username']."'>
+					<img src='../../template/classic/img/platform_stats.png' title='$langChangeUserAs $logs[username]' /></a>
 					</td>\n";
 				$tool_content .= "</tr>";
-                        $k++;
+				$k++;
 			}
 		}
 		$tool_content .= "</table>";

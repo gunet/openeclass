@@ -326,6 +326,7 @@ $langcasuserfirstattr = "CAS SAML attribute για το Όνομα";
 $langcasuserlastattr = "CAS SAML attribute για το Επώνυμο";
 $langUserAuthentication = "Πιστοποίηση Χρηστών";
 $langChangeUser = 'Σύνδεση με λογαριασμό άλλου χρήστη';
+$langChangeUserAs = 'Σύνδεση σαν';
 $langChangeUserNotFound = 'Δε βρέθηκε λογαριασμός με όνομα χρήστη "%s"';
 $langMultiRegUser = 'Μαζική δημιουργία λογαριασμών χρηστών';
 $langMultiRegUserInfo = "<p>Εισαγάγετε στην παρακάτω περιοχή έναν κατάλογο με
@@ -3060,8 +3061,8 @@ $langUnknownResType = "Πρόβλημα! Άγνωστος πόρος θεματ�
 $langNoExercises = "Δεν υπάρχουν ασκήσεις";
 
 $langVia = 'μέσω';
-$langStudentViewEnable = "Περιβάλλον <b>$langsOfStudent</b>";
-$langStudentViewDisable = "Περιβάλλον <b>$langsOfTeacher</b>";
+$langStudentViewEnable = "Περιβάλλον $langsOfStudent";
+$langStudentViewDisable = "Περιβάλλον $langsOfTeacher";
 
 /**********************************************************************
  BetaCMS Bridge
