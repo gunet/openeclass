@@ -71,8 +71,12 @@ if (mysql_num_rows($r) > 0) { // if shibboleth user found
 		}
 	}	
 } else { // else create him
-	db_query("INSERT INTO user SET nom='$shib_nom', prenom='$shib_prenom', password='shibboleth', 
-		username='$shib_uname',email='$shib_email', statut=5, lang='el'");
+	$registered_at = time();
+	$expires_at = time() + $durationAccount;  
+	db_query("INSERT INTO user SET nom='$shib_nom', prenom='$shib_prenom',
+			password='shibboleth', username='$shib_uname',
+			email='$shib_email', statut=5, lang='el',
+			registered_at=$registered_at, expires_at=$expires_at");
 	$uid = mysql_insert_id();
 	$userPerso = 'yes';
 	$nom = $shib_nom;

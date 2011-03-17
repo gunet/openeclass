@@ -48,7 +48,7 @@ include '../../include/baseTheme.php';
 include 'admin.inc.php';
 include '../../include/jscalendar/calendar.php';
 
-$tool_content = $head_content = "";
+$head_content = "";
 $lang_jscalendar = langname_to_code($language);
 
 $jscalendar = new DHTML_Calendar($urlServer.'include/jscalendar/', $lang_jscalendar, 'calendar-blue2', false);

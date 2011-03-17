@@ -184,7 +184,7 @@ if(((!empty($auth_submit)) && ($auth_submit==1)) || !empty($_SESSION['cas_do']))
 					if (!empty($cas_ret['message']))
 						$tool_content .= "<p>{$cas_ret['message']}</p>";
 					if (!empty($cas_ret['attrs']) && is_array($cas_ret['attrs'])) {
-						$tmp_attrs = "<p>Attributes returned by CAS:<br />" . array2html($cas_ret['attrs']);
+						$tmp_attrs = "<p>$langCASRetAttr:<br />" . array2html($cas_ret['attrs']);
 						$tool_content .= "$tmp_attrs</p>";
 					}
 				}

@@ -59,7 +59,7 @@ if(!empty($cassettings))
 	$cas_altauth = intval(str_replace("cas_altauth=","",$cas[7]));
 } else {
 	// empty host
-	$cashost = "";
+	$cas_host = "";
 	$cas_port = 443;
   	$cas_context = "/cas/";
 	$cas_cachain = "";
@@ -105,7 +105,7 @@ $tool_content .= "
 		
 $cas_altauth_data = array();
 $cas_altauth_data[0] = "-";
-$cas_altauth_data[1] = "Eclass";
+$cas_altauth_data[1] = "eClass";
 $cas_altauth_data[2] = "POP3";
 $cas_altauth_data[3] = "IMAP";
 $cas_altauth_data[4] = "LDAP";

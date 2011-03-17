@@ -43,9 +43,6 @@ include 'auth.inc.php';
 
 $navigation[]= array ("url"=>"registration.php", "name"=> "$langNewUser");
 
-// Initialise $tool_content
-$tool_content = "";
-
 if (isset($_REQUEST['auth'])) {
 	$auth = intval($_REQUEST['auth']);
 	$_SESSION['u_tmp'] = $auth;
@@ -88,18 +85,17 @@ if ($auth !=7 ) {
      <td>
        <input type='hidden' name='auth' value='".$auth."'>";
 
-if ($auth !=7 )
-	@$tool_content .= "
-       <input type='submit' name='is_submit' value='".$langSubmit."'>";
-else
-	@$tool_content .= "
-       <input type='submit' name='is_submit' value='".$langCheck."'>";
+if ($auth != 7) {
+	@$tool_content .= "<input type='submit' name='is_submit' value='".$langSubmit."'>";
+} else {
+	@$tool_content .= "<input type='submit' name='is_submit' value='".$langCheck."'>";
+}
 
-@$tool_content .= "
+$tool_content .= "
      </td>
   </tr>
   </table>
+  </fieldset>
 </form>";
 
 draw($tool_content, 0);
-?>

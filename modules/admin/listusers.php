@@ -295,7 +295,6 @@ if($view == 3) { // users per course
 }
 
 $sql = db_query($qry);
-
 if($sql) {
 	$countUser = mysql_num_rows($sql);
 	$teachers = 0;
@@ -356,7 +355,6 @@ if($sql) {
 		$qry .= " ORDER BY $order LIMIT $limit, ".USERS_PER_PAGE."";
 		mysql_free_result($sql);
 		$sql = db_query($qry);
-		
 		if ($view == 3) {
 			$str .= "&amp;c=$c";	
 		}

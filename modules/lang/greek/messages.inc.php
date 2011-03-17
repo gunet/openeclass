@@ -372,6 +372,7 @@ $langShibboleth = "Πιστοποίηση μέσω Shibboleth";
 $langCAS = "Πιστοποίηση μέσω CAS Single Sign On";
 $langConnectWith = "γίνεται σύνδεση με";
 $langNotSSL = "Δεν πραγματοποιήθηκε σύνδεση μέσω SSL γιατί δεν δόθηκε πιστοποιητικό ή το πιστοποιητικό δεν μπορεί να διαβαστεί";
+$langCASRetAttr = "Ο εξυπηρέτης CAS επέστρεψε τις παρακάτω ιδιότητες";
 // other
 $langVisitors = "Επισκέπτες";
 $langVisitor = "Επισκέπτης";
