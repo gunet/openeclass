@@ -25,6 +25,9 @@
 * =========================================================================*/
 
 $require_current_course = true;
+$require_help = true;
+$helpTopic = 'Glossary';
+
 
 include '../../include/baseTheme.php';
 

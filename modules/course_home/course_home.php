@@ -143,11 +143,11 @@ if ($is_adminOfCourse) {
 
 // add course units
 if ($is_adminOfCourse) {
-        $cunits_content .= "\n  <div id='operations_container'>\n    <ul id='opslist'>" .
-                        "\n      <li>$langCourseUnits : <a href='{$urlServer}modules/units/info.php'>$langAddUnit</a>&nbsp;<a href='{$urlServer}modules/units/info.php'><img src='../../template/classic/img/add.png' width='16' height='16 alt='icon'' title='$langAddUnit' alt='$langAddUnit' /></a></li>" .
-                        "\n    </ul>\n  </div>\n";
+        $cunits_content .= "
+    <p class='descr_title'>$langCourseUnits: <a href='{$urlServer}modules/units/info.php'><img src='../../template/classic/img/add.png' width='16' height='16 alt='icon' title='$langAddUnit' alt='$langAddUnit' /></a></p>\n";
+
 } else {
-        $cunits_content .= "\n  <p class='title1'>$langCourseUnits</p>";
+        $cunits_content .= "\n  <p class='descr_title'>$langCourseUnits</p>";
 }
         //$cunits_content .= "</p>\n\n\n";
 if ($is_adminOfCourse) {

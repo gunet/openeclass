@@ -102,7 +102,8 @@ if (mysql_num_rows($q) == 0) {
         $tool_content .= "\n    <p class='alert1'>$langNoEBook</p>\n";
 } else {
         $tool_content .= "
-     <table width='100%' class='tbl_alt'>
+     <script type='text/javascript' src='../auth/sorttable.js'></script>
+     <table width='100%' class='sortable' id='t1'>
      <tr>
        <th>&nbsp;</th>
        <th><div align='left'>$langEBook</div></th>" .  ($is_adminOfCourse? "
@@ -146,11 +147,11 @@ function tools($id, $title, $k, $num)
                                          alt='$langDelete' title='$langDelete' name='delete' value='$id'
                                          onclick=\"javascript:if(!confirm('".
                        js_escape(sprintf($langEBookDelConfirm, $title)) ."')) return false;\" />" .
-                       "</form></td>\n        <td class='center'>" .
+                       "</form></td>\n        <td class='right'>" .
                        (($k < $num)? "<a href='$_SERVER[PHP_SELF]?down=$id'>
                                       <img class='displayed' src='../../template/classic/img/down.png'
                                            title='$langDown' alt='$langDown' /></a>":
-                                     '') . '&nbsp;' .
+                                     '') . 
                        (($k > 0)? "<a href='$_SERVER[PHP_SELF]?up=$id'>
                                    <img class='displayed' src='../../template/classic/img/up.png'
                                         title='$langUp' alt='$langUp' /></a>":

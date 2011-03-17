@@ -251,7 +251,7 @@ hContent;
         <form method='post' action='$_SERVER[PHP_SELF]' onsubmit=\"return checkrequired(this, 'antitle');\">
         <fieldset>
         <legend>$langAnnouncement</legend>
-	<table class='tbl_alt'>";
+	<table class='tbl'>";
         if (isset($_GET['modify'])) {
             $langAdd = $nameTools = $langModifAnn;
         } else {
@@ -264,14 +264,19 @@ hContent;
 
         $tool_content .= "
         <tr>
-          <td>$langAnnTitle:<br />
-	      <input type='text' name='antitle' value='$titleToModify' size='50' /></td>
+          <th>$langAnnTitle:</th>
+        </tr>
+        <tr>
+          <td><input type='text' name='antitle' value='$titleToModify' size='50' /></td>
 	</tr>
 	<tr>
-          <td>$langAnnBody:<br />".rich_text_editor('newContent', 4, 20, $contentToModify)."</td>
+          <th>$langAnnBody:</th>
+        </tr>
+        <tr>
+          <td>".rich_text_editor('newContent', 4, 20, $contentToModify)."</td>
         </tr>
 	<tr>
-          <td><input type='checkbox' value='1' name='emailOption' /> $langEmailOption</td>
+          <td>$langEmailOption: <input type='checkbox' value='1' name='emailOption' /></td>
         </tr>
 	<tr>
           <td><input type='submit' name='submitAnnouncement' value='$langAdd' /></td>

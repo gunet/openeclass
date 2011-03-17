@@ -136,10 +136,15 @@ if (mysql_num_rows($q) == 0) {
     </form>";
 
         // Form #2 - edit sections
-        $tool_content .= "<form method='post' action='$_SERVER[PHP_SELF]'>
-                          <input type='hidden' name='id' value='$ebook_id' /><br />
-                          <table>
-                             <tr><th>$langID</th><th>$langTitle</th><th>&nbsp;</th></tr>\n";
+        $tool_content .= "
+    <form method='post' action='$_SERVER[PHP_SELF]'>
+    <input type='hidden' name='id' value='$ebook_id' /><br />
+      <table width='100%' class='tbl'>
+      <tr>
+        <th width='1'>$langID</th>
+        <th>$langTitle</th>
+        <th>$langActions</th>
+      </tr>\n";
         $q = db_query("SELECT id, public_id, title FROM ebook_section
                        WHERE ebook_id = $info[id]
                        ORDER BY CONVERT(public_id, UNSIGNED), public_id");
@@ -157,32 +162,37 @@ if (mysql_num_rows($q) == 0) {
                 $sections[$sid] = $qsid . '. ' . ellipsize($section['title'], 25);
                 if ($sid === $edit_section) {
                         $section_id = "<input type='hidden' name='csid' value='$sid' />" .
-                                      "<input type='text size='5' name='new_section_id' value='$qsid' />";
+                                      "<input type='text size='3' name='new_section_id' value='$qsid' />";
                         $section_title = "<input type='text size='5' name='new_section_title' value='$qstitle' />";
                         $section_editing = true;
                 } else {
                         $section_id = $qsid;
                         $section_title = $qstitle;
                 }
-                $tool_content .= "<tr><td>$section_id</td><td>$section_title</td><td><input type='image'
-                                     src='../../template/classic/img/delete.png'
-                                     alt='$langDelete' title='$langDelete' name='delete' value='$sid'
-                                     onclick=\"javascript:if(!confirm('".
-                                         js_escape(sprintf($langEBookSectionDelConfirm, $section['title'])) ."')) return false;\"" .
-                                     " />
-                                     &nbsp;<a href='edit.php?id=$ebook_id&amp;s=$sid'><img
-                                     src='../../template/classic/img/edit.png'
-                                     alt='$langModify' title='$langModify' /></a></td></tr>\n";
+                $tool_content .= "
+      <tr>
+        <td>$section_id</td>
+        <td>$section_title</td>
+        <td><input type='image' src='../../template/classic/img/delete.png' alt='$langDelete' title='$langDelete' name='delete' value='$sid' onclick=\"javascript:if(!confirm('".  js_escape(sprintf($langEBookSectionDelConfirm, $section['title'])) ."')) return false;\"" .  " /> &nbsp;<a href='edit.php?id=$ebook_id&amp;s=$sid'><img src='../../template/classic/img/edit.png' alt='$langModify' title='$langModify' /></a></td>
+      </tr>";
         }
         if (!$section_editing) {
-                $tool_content .= "<tr><td><input type='text' size='5' name='new_section_id' /></td>
-                                      <td><input type='text' size='35' name='new_section_title' /></td><td>&nbsp;</td></tr>";
+                $tool_content .= "
+      <tr>
+        <td><input type='text' size='5' name='new_section_id' /></td>
+        <td><input type='text' size='35' name='new_section_title' /></td>
+        <td>&nbsp;</td>
+      </tr>";
         }
-        $tool_content .= "<tr><td colspan='3' class='right'>" .
-                         "<input type='submit' name='new_section_submit' value='$langAdd' /></td></tr></table>";
+        $tool_content .= "
+      <tr>
+        <td colspan='3' class='right'>" . "<input type='submit' name='new_section_submit' value='$langAdd' /></td>
+      </tr>
+      </table>";
 
         // Form #3 - edit subsection file assignment
-        $tool_content .= "<table>
+        $tool_content .= "
+     <table width='100%' class='tbl'>
                              <tr><th>$langFileName</th><th>$langTitle</th><th>$langSection</th><th>$langID</th></tr>\n";
         $q = db_query("SELECT ebook_section.id AS sid,
                               ebook_section.id AS psid,
