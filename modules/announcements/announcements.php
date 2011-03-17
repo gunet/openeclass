@@ -308,6 +308,7 @@ hContent;
         <tr>
           <th>&nbsp;</th>
           <th>$langAnnouncement</th>";
+
 		if ($is_adminOfCourse) {
 		    $tool_content .= "
           <th width='70'>$langActions</th>";
