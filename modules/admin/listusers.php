@@ -407,7 +407,7 @@ if($sql) {
 					<img src='../../template/classic/img/platform_stats.png' title='$langStat' /></a>
 					</td>
 					<td align='center'><a href='change_user.php?username=".$logs['username']."'>
-					<img src='../../template/classic/img/platform_stats.png' title='$langChangeUserAs $logs[username]' /></a>
+					<img src='../../template/classic/img/log_as.png' title='$langChangeUserAs $logs[username]' /></a>
 					</td>\n";
 				$tool_content .= "</tr>";
 				$k++;
