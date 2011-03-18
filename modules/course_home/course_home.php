@@ -58,6 +58,10 @@ include '../../include/action.php';
 $action = new action();
 $action->record('MODULE_ID_UNITS');
 
+if (isset($_GET['from_search'])) { // if we come from home page search
+        header("Location: {$urlServer}modules/search/search_incourse.php?all=true&search_terms=$_GET[from_search]");
+}
+
 $res = db_query("SELECT course_keywords, faculte, type, visible, titulaires, fake_code
                  FROM cours WHERE cours_id = $cours_id", $mysqlMainDb);
 $result = mysql_fetch_array($res);
@@ -241,7 +245,7 @@ switch ($type){
 $bar_content .= "\n      <ul class='custom_list'><li><b>".$langCode."</b>: ".$fake_code."</li>".
                 "\n          <li><b>".$langTeachers."</b>: ".$professor."</li>".
                 "\n          <li><b>".$langFaculty."</b>: ".$faculte."</li>".
-                "\n          <li> <b>".$langType."</b>: ".$lessonType."</li>";
+                "\n          <li> <b>".$langType."</b>: ".$lessonType."</li></ul>";
 
 $require_help = TRUE;
 $helpTopic = 'course_home';

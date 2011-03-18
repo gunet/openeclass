@@ -479,7 +479,7 @@ if ($auth_method_settings = get_auth_settings($auth)) {
 	$cas = explode("|", $cassettings);
 	
 	$cas_settings['cas_host'] = str_replace("cas_host=","",$cas[0]);
-	$cas_settings['cas_port'] = str_replace("cas_port=","",$cas[1]);
+	@$cas_settings['cas_port'] = str_replace("cas_port=","",$cas[1]);
 	@$cas_settings['cas_context'] = str_replace("cas_context=","",$cas[2]);
 	@$cas_settings['cas_cachain'] = str_replace("cas_cachain=","",$cas[3]);
 	@$cas_settings['casusermailattr'] = str_replace("casusermailattr=","",$cas[4]);

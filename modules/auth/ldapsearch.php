@@ -275,12 +275,13 @@ if (!empty($submit)) {
 		    <p>$langPersonalSettingsMore</p>";
 	} else {
 		// errors exist - registration failed
-		// to backslash typwnete sthn othonh
-		$tool_content .= "<p class='alert1'>";
+		// ta error fainontai katw apo to alert kai to alert einai keno
+		// epishs to ekana caution opws einai kai sto ldapsearch_prof
+		$tool_content .= "<p class='caution'>";
 		foreach ($registration_errors as $error) {
-			$tool_content .= "<p>$error</p>";
+			$tool_content .= "$error";
 		}
-		$tool_content .= "<br /><a href='javascript:history.go(-1)'>&laquo; $langAgain</a></p>" .
+		$tool_content .= "</p><br /><a href='javascript:history.go(-1)'>&laquo; $langAgain</a>" .
 		"";
 	}
 } // end of submit

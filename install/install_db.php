@@ -447,6 +447,7 @@ db_query("INSERT INTO `auth` VALUES (3, 'imap', '', '', 0)");
 db_query("INSERT INTO `auth` VALUES (4, 'ldap', '', '', 0)");
 db_query("INSERT INTO `auth` VALUES (5, 'db', '', '', 0)");
 db_query("INSERT INTO `auth` VALUES (6, 'shibboleth', '', '', 0)");
+db_query("INSERT INTO `auth` VALUES (7, 'cas', '', '', 0)");
 
 
 db_query("CREATE TABLE `config` (

@@ -58,8 +58,8 @@ if (isset($_GET['all'])) {
 	$announcements = $agenda = $course_units = $documents = $exercises = $forums = $links = $video = 1; 		     
 }
 
-if(isset($_POST['search_terms'])) {
-	$search_terms = mysql_real_escape_string($_POST['search_terms']);
+if(isset($_REQUEST['search_terms'])) {
+	$search_terms = mysql_real_escape_string($_REQUEST['search_terms']);
 	$query = " AGAINST ('".$search_terms."";
 	$query .= "' IN BOOLEAN MODE)";
 }

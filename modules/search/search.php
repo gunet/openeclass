@@ -186,7 +186,7 @@ if (!register_posted_variables(array('search_terms' => false,
                   <tr class='even'>";
                         }
                         $tool_content .= "<td><img src='../../template/classic/img/arrow.png' alt=''  /></td>" .
-                                "<td><a href='../../courses/$mycours[code]/'>" . q($mycours['intitule']) .
+                                "<td><a href='../../courses/$mycours[code]/?from_search=".urlencode($search_terms)."'>" . q($mycours['intitule']) .
                                 "</a> (" . q($mycours['fake_code']) . ")</td>" .
                                 "<td>" . q($mycours['titulaires']) . "</td>" .
                                 "<td>" . q($mycours['course_keywords']) . "</td>

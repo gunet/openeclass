@@ -251,7 +251,8 @@ else
 {
 	$tool_content .= "<table class='tbl_alt' width='99%'>";
 	$tool_content .= table_header();
- 	$sql = db_query("SELECT rid, profname, profsurname, proftmima, date_open, comment, profpassword FROM prof_request
+	// show username as well (usefull)
+ 	$sql = db_query("SELECT rid, profname, profsurname, profuname, proftmima, date_open, comment, profpassword FROM prof_request
                         WHERE (status = 1 AND statut = $list_statut)");
     	$k = 0;
 	while ($req = mysql_fetch_array($sql)) {
@@ -263,6 +264,7 @@ else
 	    	$tool_content .= "<td align='right' width='1'>
 		<img style='border:0px;' src='${urlServer}/template/classic/img/arrow.png' title='bullet'></td>";
 	     	$tool_content .= "<td>".htmlspecialchars($req['profname'])."&nbsp;".htmlspecialchars($req['profsurname'])."</td>";
+		$tool_content .= "<td>".htmlspecialchars($req['profuname'])."</td>";
 		$tool_content .= "<td>".htmlspecialchars(find_faculty_by_id($req['proftmima']))."</td>";
 		$tool_content .= "<td align='center'>
 			<small>".nice_format(date("Y-m-d", strtotime($req['date_open'])))."</small></td>";
@@ -293,7 +295,7 @@ else
 
 // If show is set then we return to listreq, else return to admin index.php
 //if (isset($close) or isset($closed)) {
-if (!empty($show)) {
+if (!empty($show) or !empty($close)) {
 	$tool_content .= "<p align='right'><a href='$_SERVER[PHP_SELF]$linkget'>$langBackRequests</a></p><br>";
 }
 $tool_content .= "<p align='right'><a href='index.php'>$langBack</a></p>";
@@ -305,7 +307,7 @@ draw($tool_content, 3, null, $head_content);
 
 function table_header($addon = FALSE, $message = FALSE) {
 	
-	global $langName, $langSurname, $langFaculty, $langDate, $langActions, $langComments;
+	global $langName, $langSurname, $langFaculty, $langDate, $langActions, $langComments, $langUsername;
 	global $langDateRequest_small, $list_statut;
 
 	$string = "";
@@ -324,6 +326,7 @@ function table_header($addon = FALSE, $message = FALSE) {
 
 	$string .= "<tr>
 	<th scope='col' colspan='2' rowspan='$rowspan'><div align='left'>&nbsp;&nbsp;$langName $langSurname</div></th>
+	<th scope='col' rowspan='$rowspan'><div align='left'>$langUsername</div></th>
 	<th scope='col' rowspan='$rowspan'><div align='left'>$langFaculty</div></th>";
 	$string .= $datestring; 
 	$string .= "</tr>";

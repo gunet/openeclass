@@ -204,7 +204,7 @@ if(((!empty($auth_submit)) && ($auth_submit==1)) || !empty($_SESSION['cas_do']))
 		// when we come back from CAS
 		if (isset($_SESSION['cas_do']) && $_SESSION['cas_do']==7) {
 			$auth = 7;
-			$auth_allow = 1;
+			// $auth_allow = 1; 
 		}
 
 		// store the values - do the updates //
