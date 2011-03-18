@@ -303,14 +303,7 @@ if (isset($_SESSION['shib_user'])) {
            <td><b>$email_form</b> [$auth_text]
              <input type='hidden' name='email_form' value='$email_form' />
            </td>";
-// only update e-mail if CAS provides with e-mail
-} elseif (isset($_SESSION['cas_email'])) {
-        $tool_content .= "
-           <td><b>$email_form</b> [$auth_text]
-             <input type='hidden' name='email_form' value='$email_form' />
-           </td>";
-
-} else {
+} else { // allow user to change his e-mail
         $tool_content .= "
           <td><input type='text' size='40' name='email_form' value='$email_form' /></td>";
 }

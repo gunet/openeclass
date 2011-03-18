@@ -105,9 +105,9 @@ if ($submit)  {
 	//  Update table prof_request 
 	$rid = intval($_POST['rid']);
 	db_query("UPDATE prof_request set status = '2',date_closed = NOW() WHERE rid = '$rid'");
-		$emailbody = "$langDestination $pu $ps\n" .
+		$emailbody = "$langDestination $pn $ps\n" .
                                 "$langYouAreReg $siteName $langSettings $pu\n" .
-                                "$langPass: $password\n$langAddress $siteName: " .
+                                "$langPass: $langPassSameAuth\n$langAddress $siteName: " .
                                 "$urlServer\n$langProblem\n$langFormula" .
                                 "$administratorName $administratorSurname" .
                                 "$langManager $siteName \n$langTel $telephone \n" .

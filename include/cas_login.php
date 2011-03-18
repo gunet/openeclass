@@ -40,7 +40,8 @@ if (mysql_num_rows($r) > 0) { // if cas user found
 	$myrow = mysql_fetch_array($r);
 		// update user information. set also password to cas
 		$update_query = "UPDATE user SET nom='$cas_nom', prenom='$cas_prenom', password='cas' ";
-		if (!empty($cas_email)) {
+		// get email from CAS only if there is no e-mail for user. User might want different e-mail
+		if (!empty($cas_email) && empty($myrow['email'])) {
 			$update_query .= ",email = '$cas_email' ";
 		}
 		$update_query .= " WHERE username = '$cas_uname'";
