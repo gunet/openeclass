@@ -22,7 +22,7 @@ if(!empty($submit)) {
 	$sqlLogin= "SELECT user_id, nom, username, password, prenom, statut, email, perso, lang
 		FROM user WHERE username='".$uname."'";
 	$result = mysql_query($sqlLogin);
-	$check_passwords = array("pop3","imap","ldap","db");
+	$check_passwords = array('pop3', 'imap', 'ldap', 'db', 'cas');
 	$warning = "";
 	$auth_allow = 0;
 	$exists = 0;
@@ -76,8 +76,8 @@ if(!empty($submit)) {
 		$_SESSION['statut'] = $statut;
 		$_SESSION['is_admin'] = $is_admin;
 		$_SESSION['uid'] = $uid;
-		mysql_query("INSERT INTO loginout (loginout.idLog, loginout.id_user, loginout.ip, loginout.when, loginout.action)
-		VALUES ('', '$uid', '$_SERVER[REMOTE_ADDR]', NOW(), 'LOGIN')");
+		db_query("INSERT INTO loginout (loginout.id_user, loginout.ip, loginout.when, loginout.action)
+		VALUES ('$uid', '$_SERVER[REMOTE_ADDR]', NOW(), 'LOGIN')");
 	}
 
 	//if user has activated the personalised interface

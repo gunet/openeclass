@@ -196,8 +196,8 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 			$t->set_var ( 'USER_NAME', q($_SESSION['prenom']) );
 			$t->set_var ( 'USER_SURNAME', q($_SESSION['nom']) . ", " );
 		} else {
-                        $t->set_var ( 'LANG_USER', '' );
-			$t->set_var ( 'USER_NAME', '&nbsp;' );
+                        $t->set_var ('LANG_LOGOUT', $langLogin);
+			$t->set_var ('LOGOUT_LINK', $relPath . 'login_form.php');
                 }
 
 		//if user is logged in display the logout option

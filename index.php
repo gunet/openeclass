@@ -101,7 +101,7 @@ if (isset($_SESSION['shib_uname'])) { // authenticate via shibboleth
 		unset($uid);
 		$sqlLogin= "SELECT user_id, nom, username, password, prenom, statut, email, perso, lang
 			FROM user WHERE username COLLATE utf8_bin = " . quote($uname);
-		$result = mysql_query($sqlLogin);
+		$result = db_query($sqlLogin);
 		// cas might have alternative authentication defined
 		$check_passwords = array('pop3', 'imap', 'ldap', 'db', 'cas');
 		$warning = '';
@@ -157,8 +157,8 @@ if (isset($_SESSION['shib_uname'])) { // authenticate via shibboleth
 			$_SESSION['is_admin'] = $is_admin;
 			$_SESSION['uid'] = $uid;
                         $_SESSION['uname'] = $uname;
-			mysql_query("INSERT INTO loginout (loginout.idLog, loginout.id_user, loginout.ip, loginout.when, loginout.action)
-			VALUES ('', '$uid', '$_SERVER[REMOTE_ADDR]', NOW(), 'LOGIN')");
+			db_query("INSERT INTO loginout (loginout.id_user, loginout.ip, loginout.when, loginout.action)
+			VALUES ('$uid', '$_SERVER[REMOTE_ADDR]', NOW(), 'LOGIN')");
 		}
 	
 		##[BEGIN personalisation modification]############
@@ -179,9 +179,9 @@ if (isset($_SESSION['uid'])) {
 }
 
 if (isset($_GET['logout']) and isset($uid)) {
-        mysql_query("INSERT INTO loginout (loginout.idLog, loginout.id_user,
+        mysql_query("INSERT INTO loginout (loginout.id_user,
                 loginout.ip, loginout.when, loginout.action)
-                VALUES ('', $uid, '$_SERVER[REMOTE_ADDR]', NOW(), 'LOGOUT')");
+                VALUES ($uid, '$_SERVER[REMOTE_ADDR]', NOW(), 'LOGOUT')");
 	foreach(array_keys($_SESSION) as $key) {
 		unset($_SESSION[$key]);
 	}
