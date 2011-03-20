@@ -6,9 +6,11 @@
 *	Copyright(c) 2003-2010  Greek Universities Network - GUnet
 *	A full copyright notice can be read in "/info/copyright.txt".
 *
-*  	Authors:	Costas Tsibanis <k.tsibanis@noc.uoa.gr>
+*  	Authors:		Costas Tsibanis <k.tsibanis@noc.uoa.gr>
 *				Yannis Exidaridis <jexi@noc.uoa.gr>
 *				Alexandros Diamantidis <adia@noc.uoa.gr>
+*                       	Tilemachos Raptis <traptis@noc.uoa.gr>
+
 *
 *	For a full list of contributors, see "credits.txt".
 *
@@ -245,7 +247,7 @@ switch ($type){
 $bar_content .= "\n      <ul class='custom_list'><li><b>".$langCode."</b>: ".$fake_code."</li>".
                 "\n          <li><b>".$langTeachers."</b>: ".$professor."</li>".
                 "\n          <li><b>".$langFaculty."</b>: ".$faculte."</li>".
-                "\n          <li> <b>".$langType."</b>: ".$lessonType."</li></ul>";
+                "\n          <li> <b>".$langType."</b>: ".$lessonType."</li>";
 
 $require_help = TRUE;
 $helpTopic = 'course_home';

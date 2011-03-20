@@ -129,8 +129,9 @@ if (mysql_num_rows($q) == 0) {
     
     <form method='post' action='$_SERVER[PHP_SELF]'>
     <fieldset>
+    <legend>$langTitle</legend>
          <input type='hidden' name='id' value='$ebook_id' />
-         $langTitle: <input type='text' name='ebook_title' size='53' value='" . q($info['title']) . "' />
+         <input type='text' name='ebook_title' size='53' value='" . q($info['title']) . "' />
                      <input name='title_submit' type='submit' value='$langModify' />
     </fieldset>
     </form>";
@@ -138,12 +139,14 @@ if (mysql_num_rows($q) == 0) {
         // Form #2 - edit sections
         $tool_content .= "
     <form method='post' action='$_SERVER[PHP_SELF]'>
-    <input type='hidden' name='id' value='$ebook_id' /><br />
-      <table width='100%' class='tbl'>
+    <fieldset>
+    <legend>$langSections</legend>
+    <input type='hidden' name='id' value='$ebook_id' />
+      <table width='100%' class='tbl_alt'>
       <tr>
-        <th width='1'>$langID</th>
+        <th width='1' class='right'>$langID</th>
         <th>$langTitle</th>
-        <th>$langActions</th>
+        <th width='50'>$langActions</th>
       </tr>\n";
         $q = db_query("SELECT id, public_id, title FROM ebook_section
                        WHERE ebook_id = $info[id]
@@ -169,31 +172,39 @@ if (mysql_num_rows($q) == 0) {
                         $section_id = $qsid;
                         $section_title = $qstitle;
                 }
+                $class = odd_even($k);
                 $tool_content .= "
-      <tr>
-        <td>$section_id</td>
+      <tr $class>
+        <td class='right'>$section_id</td>
         <td>$section_title</td>
-        <td><input type='image' src='../../template/classic/img/delete.png' alt='$langDelete' title='$langDelete' name='delete' value='$sid' onclick=\"javascript:if(!confirm('".  js_escape(sprintf($langEBookSectionDelConfirm, $section['title'])) ."')) return false;\"" .  " /> &nbsp;<a href='edit.php?id=$ebook_id&amp;s=$sid'><img src='../../template/classic/img/edit.png' alt='$langModify' title='$langModify' /></a></td>
+        <td class='center'><input type='image' src='../../template/classic/img/delete.png' alt='$langDelete' title='$langDelete' name='delete' value='$sid' onclick=\"javascript:if(!confirm('".  js_escape(sprintf($langEBookSectionDelConfirm, $section['title'])) ."')) return false;\"" .  " /> &nbsp;<a href='edit.php?id=$ebook_id&amp;s=$sid'><img src='../../template/classic/img/edit.png' alt='$langModify' title='$langModify' /></a></td>
       </tr>";
+        $k++;
         }
         if (!$section_editing) {
                 $tool_content .= "
       <tr>
-        <td><input type='text' size='5' name='new_section_id' /></td>
+        <td><input type='text' size='2' name='new_section_id' /></td>
         <td><input type='text' size='35' name='new_section_title' /></td>
-        <td>&nbsp;</td>
+        <td><input type='submit' name='new_section_submit' value='$langAdd' /></td>
       </tr>";
         }
         $tool_content .= "
-      <tr>
-        <td colspan='3' class='right'>" . "<input type='submit' name='new_section_submit' value='$langAdd' /></td>
-      </tr>
-      </table>";
+      </table>
+      </fieldset>";
 
         // Form #3 - edit subsection file assignment
         $tool_content .= "
-     <table width='100%' class='tbl'>
-                             <tr><th>$langFileName</th><th>$langTitle</th><th>$langSection</th><th>$langID</th></tr>\n";
+     <fieldset>
+     <legend>$langEBookMenuTitle</legend>
+     <table width='100%' class='tbl_alt'>
+     <tr>
+       <th>&nbsp;</th>
+       <th>$langFileName</th>
+       <th>$langTitle</th>
+       <th>$langSection</th>
+       <th>$langSubsection</th>
+     </tr>\n";
         $q = db_query("SELECT ebook_section.id AS sid,
                               ebook_section.id AS psid,
                               ebook_section.title AS section_title,
@@ -210,12 +221,15 @@ if (mysql_num_rows($q) == 0) {
                 $class = odd_even($k); 
                 $file_id = $r['file_id'];
                 $display_id = $r['sid'] . ',' . $r['ssid'];
-                $tool_content .= "<tr$class><td><a href='show.php/$currentCourseID/$ebook_id/$display_id/'
-                                                   target='_blank'>" . q($files[$id_map[$file_id]]) . "</a></td>
-                                     <td><input type='text' name='title[$file_id]' size='30' value='" . q($r['subsection_title']) . "' /></td>
-                                     <td>" .  selection($sections, "sid[$file_id]", $r['sid']) . "</td>
-                                     <td><input type='hidden' name='oldssid[$file_id]' value='$r[ssid]' />
-                                     <input type='text' name='ssid[$file_id]' size='3' value='" . q($r['pssid']) . "' /></td></tr>\n";
+                $tool_content .= "
+     <tr$class>
+       <td width='1' valign='top'><img style='padding-top:3px;' src='${urlServer}/template/classic/img/arrow.png' title='bullet' /></td>
+       <td class='smaller'><a href='show.php/$currentCourseID/$ebook_id/$display_id/' target='_blank'>" . q($files[$id_map[$file_id]]) . "</a></td>
+       <td><input type='text' name='title[$file_id]' size='30' value='" . q($r['subsection_title']) . "' /></td>
+       <td>" .  selection($sections, "sid[$file_id]", $r['sid']) . "</td>
+       <td><input type='hidden' name='oldssid[$file_id]' value='$r[ssid]' />
+           <input type='text' name='ssid[$file_id]' size='3' value='" . q($r['pssid']) . "' /></td>
+     </tr>\n";
                 unset($files[$id_map[$file_id]]);
                 $k++;
         }
@@ -224,15 +238,23 @@ if (mysql_num_rows($q) == 0) {
                 $path = $paths[$key];
                 $file_id = $file_ids[$key];
                 $title = get_html_title($basedir . $path);
-                $tool_content .= "<tr$class><td><a href='show.php/$currentCourseID/$ebook_id/_" . q($file) .
-                                      "' target='_blank'>" . q($file) . "</a></td>
-                        <td><input type='text' name='title[$file_id]' size='30' value='" . q($title) . "' /></td>
-                        <td>" . selection($sections, "sid[$file_id]") . "</td>
-                        <td><input type='text' name='ssid[$file_id]' size='5' /></td></tr>\n";
-
-                $k++;
+                $tool_content .= "
+     <tr$class>
+       <td width='1' valign='top'><img style='padding-top:3px;' src='${urlServer}/template/classic/img/arrow.png' title='bullet' /></td>
+       <td class='smaller'><a href='show.php/$currentCourseID/$ebook_id/_" . q($file) .  "' target='_blank'>" . q($file) . "</a></td>
+       <td><input type='text' name='title[$file_id]' size='30' value='" . q($title) . "' /></td>
+       <td>" . selection($sections, "sid[$file_id]") . "</td>
+       <td><input type='text' name='ssid[$file_id]' size='5' /></td>
+     </tr>\n";
+        $k++;
         }
-        $tool_content .= "</table><input type='submit' name='submit' value='$langSubmit' /></form>\n";
+        $tool_content .= "
+     <tr>
+       <td colspan='4'>&nbsp;</td>
+       <td><input type='submit' name='submit' value='$langSubmit' /></td>
+     </table>
+     </fieldset>
+     </form>\n";
 }
 
 draw($tool_content, 2, '', $head_content);

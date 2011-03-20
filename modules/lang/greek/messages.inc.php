@@ -3139,6 +3139,7 @@ $langLeave = 'Έξοδος';
 $langZipFile = 'Αρχείο ZIP';
 $langSection = 'Ενότητα';
 $langSubsection = 'Υποενότητα';
+$langSections = 'Ενότητες';
 $langEBookDelConfirm = 'Επιβεβαίωση διαγραφής ηλεκτρονικού βιβλίου «%s»';
 $langEBookSectionDelConfirm = 'Επιβεβαίωση διαγραφής κεφαλαίου «%s»';
 $langEBookDeleted = 'Το βιβλίο με τίτλο «%s» διαγράφτηκε.';
