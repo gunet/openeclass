@@ -426,7 +426,7 @@ $tool_content .= "
       <tr>
         <th colspan='2' class='left'>&nbsp;$dropbox_lang[file]</th>
         <th width='130'>$dropbox_lang[col_recipient]</th>
-        <th width='110'>$dropbox_lang[date]</th>
+        <th width='130'>$dropbox_lang[date]</th>
         <th width='20'>$langDelete</th>
       </tr>
         ";
