@@ -257,10 +257,10 @@ if ($is_adminOfCourse) {
 
 	// ---------- display properties ------------------------
 	$tool_content .= "
-        <table class='tbl_border' align='center'>
+        <table class='tbl_border' width='100%'>
 	<tr>
-	  <th colspan='2' class='right'><a href='group_properties.php'>$langPropModify</a> 
-            <a href='group_properties.php'><img src='../../template/classic/img/edit.png' align='middle' alt='$langEdit' title='$langEdit' /></a></th>
+	  <td colspan='2' class='right'><a href='group_properties.php'>$langPropModify</a> 
+            <a href='group_properties.php'><img src='../../template/classic/img/edit.png' align='middle' alt='$langEdit' title='$langEdit' /></a></td>
 	</tr>
 	<tr class='odd'>
 	  <td><b>$langGroupsProperties</b></td>
@@ -405,14 +405,14 @@ if ($is_adminOfCourse) {
 	$registered_students = $total_students - $unregistered_students;
 	$tool_content .= "" .
 	                 "
-        <table width='100%' class='tbl_alt'>
+        <table width='100%' class='tbl'>
         <tr>
-	  <th><div align='left'>
+	  <td><div align='left'>
 	    <b>$registered_students</b> $langGroupStudentsInGroup<br />
 	    <b>$unregistered_students</b> $langGroupNoGroup<br />
 	    <b>$total_students</b> $langGroupStudentsRegistered</div>
             <div align='right'>($langGroupUsersList)</div>
-	  </th>
+	  </td>
         </tr>
         </table>\n";
 
