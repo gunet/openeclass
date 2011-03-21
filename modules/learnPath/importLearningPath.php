@@ -1228,23 +1228,23 @@ else // if method == 'post'
     <form enctype=\"multipart/form-data\" action=\"".$_SERVER['PHP_SELF']."\" method=\"post\">
     <fieldset>
     <legend>$langImport</legend>
-    <table width=\"99%\" class=\"tbl\">
+    <table width=\"100%\" class=\"tbl\">
     <tr>
-      <th width=\"100\">$langAskUserFile :</th>
+      <th width=\"120\">$langAskUserFile:</th>
       <td>
           <input type=\"hidden\" name=\"claroFormId\" value=\"".uniqid('')."\" >
           <input type=\"file\" name=\"uploadedPackage\">
           <br />
-          $langLearningPathUploadFile
+          <span class='smaller'>$langLearningPathUploadFile</span>
       </td>
     </tr>
     <tr>
       <th class=\"left\">&nbsp;</th>
-      <td><input type=\"submit\" value=\"".$langImport."\"></td>
+      <td class='right'><input type=\"submit\" value=\"".$langImport."\"></td>
     </tr>
     <tr>
       <th>&nbsp;</th>
-      <td class=\"right\">$langMaxFileSize ".ini_get('upload_max_filesize')."</td>
+      <td class='right smaller'>$langMaxFileSize ".ini_get('upload_max_filesize')."</td>
     </tr>
     </table>
     </fieldset>
@@ -1277,8 +1277,8 @@ else // if method == 'post'
     if (mysql_num_rows($sql) != 0) {
 		$tool_content .= "\n<div class=\"fileman\">";
 		$tool_content .= "\n<form action='importFromDocument.php' method='post'>";
-		$tool_content .= "\n  <table width=\"99%\" class=\"tbl\">";
-		$tool_content .= "\n  <tr><th height='18' colspan='5'><div align='left'><strong>$langLearningPathImportFromDocuments</strong</div></th></tr>";
+		$tool_content .= "\n  <table width=\"100%\" class=\"tbl\">";
+		$tool_content .= "\n  <tr><td height='18' colspan='5'><div align='left'><strong>$langLearningPathImportFromDocuments</strong</div></td></tr>";
 		$tool_content .= "\n  <tr>";
 		$tool_content .= "\n    <th></th>";
 		$tool_content .= "\n    <th width='10%'><div align='center'><b>$langType</b></div></th>";
@@ -1324,7 +1324,7 @@ else // if method == 'post'
 
 		$tool_content .=  "\n  <tr>";
 		$tool_content .= "\n    <td colspan='2'></td>";
-		$tool_content .= "\n    <td colspan='3'><div align='left'><input type='submit' value='".$langImport."'></div></td>";
+		$tool_content .= "\n    <td colspan='3' class='right'><input type='submit' value='".$langImport."'></td>";
 		$tool_content .=  "\n  </tr>";
 		$tool_content .=  "\n  </table>";
 		$tool_content .= "\n</form>";
@@ -1332,8 +1332,8 @@ else // if method == 'post'
 	}
     
 	$tool_content .= "</p>
-		<p><u>$langNote</u> :</p>
-		<p>$langScormIntroTextForDummies</p>";
+		<p class='right smaller'>$langNote:<br>
+		$langScormIntroTextForDummies</p>";
 
 } // else if method == 'post'
 

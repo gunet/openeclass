@@ -155,15 +155,15 @@ tCont2;
 
 	$tool_content .= "
 	<tr>
-	  <th class='left'>".$dropbox_lang["authors"].":</th>
+	  <th>".$dropbox_lang["authors"].":</th>
 	  <td>".getUserNameFromId($uid)."</td>
 	</tr>
 	<tr>
-	  <th class='left'>".$dropbox_lang["description"].":</th>
+	  <th>".$dropbox_lang["description"].":</th>
 	  <td><textarea name='description' cols='37' rows='2'></textarea></td>
 	</tr>
 	<tr>
-	  <th class='left'>".$dropbox_lang["sendTo"].":</th>
+	  <th>".$dropbox_lang["sendTo"].":</th>
 	  <td>
 	<select name='recipients[]' size='$reciepientsSize' multiple='true'  class='auth_input'>";
 
