@@ -76,12 +76,12 @@ if(isset($_POST['submitQuestion'])) {
 			$nbrQuestions++;
 		}
 	}
-	if($newQuestion) {
+	if(isset($_GET['newQuestion'])) {
 		// goes to answer administration
-		$modifyAnswers=$questionId;
+		$_GET['modifyAnswers'] = $questionId;
 	} else {
 		// goes to exercise viewing
-		$editQuestion=$questionId;
+		$editQuestion = $questionId;
 	}
 	unset($_GET['newQuestion'], $_GET['modifyQuestion']);
 }
