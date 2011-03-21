@@ -92,6 +92,20 @@ if(!empty($submit)) {
 	
 }  // end of user authentication
 
+$shibactive = mysql_fetch_array(db_query("SELECT auth_default FROM auth WHERE auth_name='shibboleth'"));
+if ($shibactive['auth_default'] == 1) {
+	$shibboleth_link = "<a href='{$urlServer}secure/index.php'>$langShibboleth</a><br />";
+} else {
+	$shibboleth_link = "";
+}
+
+$casactive = mysql_fetch_array(db_query("SELECT auth_default FROM auth WHERE auth_name='cas'"));
+if ($casactive['auth_default'] == 1) {
+	$cas_link = "<a href='{$urlServer}secure/cas.php'>$langCAS</a><br />";
+} else {
+	$cas_link = "";
+}
+
 $tool_content .= "
   <table class='tbl' width='30%' align='center'>
   <tr>
@@ -105,7 +119,8 @@ $tool_content .= "
         $langPass <br />
         <input class='Login' name='pass' type='password' size='20' /><br /><br />
         <input class='Login' name='submit' type='submit' size='20' value='$langEnter' /><br />
-        $warning<br />
+	$warning<br />$shibboleth_link
+	$warning<br />$cas_link 
         <a href='${urlServer}modules/auth/lostpass.php'>$lang_forgot_pass</a>
       </form>
     </td>
