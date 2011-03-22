@@ -869,6 +869,9 @@ td, th {
     padding: 4px;
 }
 
+td, tr {
+vertical-align: top;}
+
 td.bold {
     font-weight: bold;
 }

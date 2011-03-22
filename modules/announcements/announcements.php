@@ -251,7 +251,7 @@ hContent;
         <form method='post' action='$_SERVER[PHP_SELF]' onsubmit=\"return checkrequired(this, 'antitle');\">
         <fieldset>
         <legend>$langAnnouncement</legend>
-	<table class='tbl'>";
+	<table class='tbl' width='100%'>";
         if (isset($_GET['modify'])) {
             $langAdd = $nameTools = $langModifAnn;
         } else {
@@ -276,10 +276,10 @@ hContent;
           <td>".rich_text_editor('newContent', 4, 20, $contentToModify)."</td>
         </tr>
 	<tr>
-          <td>$langEmailOption: <input type='checkbox' value='1' name='emailOption' /></td>
+          <td class='smaller right'><img src='${urlServer}/template/classic/img/email.png' title='email' /> $langEmailOption: <input type='checkbox' value='1' name='emailOption' /></td>
         </tr>
 	<tr>
-          <td><input type='submit' name='submitAnnouncement' value='$langAdd' /></td>
+          <td class='right'><input type='submit' name='submitAnnouncement' value='$langAdd' /></td>
 	</tr>
 	</table>
 	<input type='hidden' name='id' value='$AnnouncementToModify' />
@@ -311,8 +311,8 @@ hContent;
 	if ($announcementNumber > 0) {
 		$tool_content .= "
         <tr>
-          <th>&nbsp;</th>
-          <th>$langAnnouncement</th>";
+          
+          <th colspan='2'>$langAnnouncement</th>";
 
 		if ($is_adminOfCourse) {
 		    $tool_content .= "
@@ -351,7 +351,7 @@ hContent;
 		}
 	
 		$tool_content .= "
-          <td width='1' valign='top' class=$classvis><img style='padding-top:3px;' src='${urlServer}/template/classic/img/arrow.png' title='bullet' /></td>
+          <td width='16' valign='top' class=$classvis><img style='padding-top:3px;' src='${urlServer}/template/classic/img/arrow.png' title='bullet' /></td>
 	  <td><b>";
 		if (empty($myrow['title'])) {
 		    $tool_content .= $langAnnouncementNoTille;
@@ -359,7 +359,7 @@ hContent;
 		    $tool_content .= q($myrow['title']);
 		}
 		
-		$tool_content .= "</b>&nbsp;<small>(" . nice_format($myrow["temps"]). ")</small><br />$content</td>";
+		$tool_content .= "</b><div class='smaller'>" . nice_format($myrow["temps"]). "</div>$content</td>";
 		if ($is_adminOfCourse) {
 			$tool_content .= "
           <td width='70' class='right'>
