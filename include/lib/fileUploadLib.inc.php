@@ -449,26 +449,25 @@ function showquota($quota, $used) {
          </ul>
        </div>";
 
-	$retstring .= "
-        <table class='tbl'>
+    $retstring .= "
+<table class='tbl_alt'>
 	<tr>
-          <td class='bold'>$langQuotaUsed</td>
-          <td width='1'>:</td>
-	  <td>$used</td>
+          <th>$langQuotaUsed:</th>
+      <td>$used</td>
         </tr>
 	<tr>
-          <td valign='top' class='bold' height='42'>$langQuotaPercentage</td>
-          <td width='1' valign='top'>:</td>
-	  <td align='center'>";
-	$retstring .= $oGauge->display();
-	$retstring .= "$diskUsedPercentage</td>
+          <th>$langQuotaPercentage:</th>
+      <td align='center'>";
+            $retstring .= $oGauge->display();
+      $retstring .= "$diskUsedPercentage</td>
 	</tr>
 	<tr>
-	  <td class='bold'>$langQuotaTotal</td>
-          <td width='1'>:</td>
-	  <td>$quota</td>
+	  <th>$langQuotaTotal:</th>
+      <td>$quota</td>
 	</tr>
-        </table>";
+        </table>
+
+       ";
 	$tmp_cwd = getcwd();
 	
 	return $retstring;

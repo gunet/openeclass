@@ -269,7 +269,7 @@ if (!isset($_GET['mailing']))  // RH: Mailing detail: no received files
         <script type='text/javascript' src='../auth/sorttable.js'></script>
         <table width='100%' class='sortable' id='t1'>
         <tr>
-         <th colspan='2' class='left'>&nbsp;$dropbox_lang[file]</th>
+         <th colspan='2' class='left' width='200'>$dropbox_lang[file]</th>
          <th width='130'>$dropbox_lang[authors]</th>
          <th width='130'>$dropbox_lang[date]</th>
          <th width='20'>$langDelete</th>
@@ -289,7 +289,7 @@ if (!isset($_GET['mailing']))  // RH: Mailing detail: no received files
 	        } else {
 	           $tool_content .= "\n       <tr class=\"odd\">";
 		}
-	$tool_content .= "<td width=\"3\">
+	$tool_content .= "<td width='16'>
 	<img src=\"../../template/classic/img/inbox.png\" title=\"$dropbox_lang[receivedTitle]\" /></td>
         <td>";
 
@@ -302,7 +302,7 @@ if (!isset($_GET['mailing']))  // RH: Mailing detail: no received files
         <small>$w->description</small>
         </td>
 tCont9;
-		$tool_content .= "<td class='center' width='200'>$w->author</td><td class='center'>".$w->uploadDate;
+		$tool_content .= "<td>$w->author</td><td>".$w->uploadDate;
 
 		if ($w->uploadDate != $w->lastUploadDate)
 		{
@@ -424,7 +424,7 @@ $tool_content .= "
       <script type='text/javascript' src='../auth/sorttable.js'></script>
       <table width=100% class='sortable' id='t2'>
       <tr>
-        <th colspan='2' class='left'>&nbsp;$dropbox_lang[file]</th>
+        <th colspan='2' class='left'>$dropbox_lang[file]</th>
         <th width='130'>$dropbox_lang[col_recipient]</th>
         <th width='130'>$dropbox_lang[date]</th>
         <th width='20'>$langDelete</th>
@@ -457,7 +457,7 @@ foreach ($dropbox_person -> sentWork as $w)
             	}
 	$tool_content .= <<<tCont12
 
-		<td width="3"><img src="../../template/classic/img/outbox.png" title="$w->title" /></td>
+		<td width="16"><img src="../../template/classic/img/outbox.png" title="$w->title" /></td>
 		<td ><a href="$ahref" target="_blank">
 		$w->title</a>
         <small>&nbsp;&nbsp;&nbsp;($fSize kB)</small>
@@ -465,15 +465,15 @@ foreach ($dropbox_person -> sentWork as $w)
         <small>$w->description</small></td>
 
 tCont12;
-	$tool_content .="\n         <td class='center'>";
+	$tool_content .="\n         <td>";
 
 	foreach($w -> recipients as $r)
 	{
-		$tool_content .=  $r["name"] . ", <br />\n";
+		$tool_content .=  $r["name"] . " <br />\n";
 	}
 	$tool_content = strrev(substr(strrev($tool_content), 7));
 
-	$tool_content .= "</td>\n         <td class='center'><span class='smaller'>$w->uploadDate</span></td>\n         <td class='center'><div class=\"cellpos\">";
+	$tool_content .= "</td>\n         <td class='center'>$w->uploadDate</td>\n         <td class='center'><div class=\"cellpos\">";
 	//<!--	Users cannot delete their own sent files -->
 
 	$tool_content .= "
