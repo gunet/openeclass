@@ -117,16 +117,18 @@ $tool_content .= $intitule_html .
 if (isset($_POST['back1']) or !isset($_POST['visit'])) {
    // display form
     $tool_content .= "
-      <fieldset>
+
+
+  <fieldset>
       <legend>$langCreateCourseStep1Title</legend>
-        <table class='tbl'>
+        <table class='tbl' width='100%'>
 	<tr>
-	  <th>$langTitle&nbsp;:</th>
+	  <th>$langTitle:</th>
 	  <td><input type='text' name='intitule' size='60' value='".@$intitule."' /></td>
 	  <td class='smaller'>$langEx</td>
 	</tr>
 	<tr>
-	  <th>$langFaculty&nbsp;:</th>
+	  <th>$langFaculty:</th>
 	  <td>";
 	$facs = db_query("SELECT id, name FROM faculte order by id");
 	while ($n = mysql_fetch_array($facs)) {
@@ -139,28 +141,34 @@ if (isset($_POST['back1']) or !isset($_POST['visit'])) {
 	unset($repertoire);
 	$tool_content .= "
         <tr>
-	  <th>$langTeachers&nbsp;:</th>
+	  <th>$langTeachers:</th>
 	  <td><input type='text' name='titulaires' size='60' value='" . q($titulaires) . "' /></td>
 	  <td>&nbsp;</td>
         </tr>
 	<tr>
-	  <th class='left'>$langType&nbsp;:</th>
+	  <th class='left'>$langType:</th>
 	  <td>" .  selection(array('pre' => $langpre, 'post' => $langpost, 'other' => $langother), 'type', $type) . "</td>
 	  <td>&nbsp;</td>
         </tr>
 	<tr>
-	  <th class='left'>$langLanguage&nbsp;:</th>
+	  <th class='left'>$langLanguage:</th>
 	  <td>" . lang_select_options('languageCourse', '', $languageCourse) . "</td>
           <td>&nbsp;</td>
         </tr>
 	<tr>
           <th>&nbsp;</th>
-	  <td><input type='submit' name='create2' value='$langNextStep >' /><input type='hidden' name='visit' value='true' /></td>
-	  <td>&nbsp;</td>
+	  <td class='right'>&nbsp;</td>
+	  <td class='right'>
+	    <input type='submit' name='create2' value='$langNextStep &raquo;' />
+	    <input type='hidden' name='visit' value='true' />
+	  </td>
         </tr>
         </table>
+              </fieldset>
         <div align='right' class='smaller'>(*) &nbsp;$langFieldsRequ</div>
-      </fieldset>
+
+
+
       <br />";
 }
 
@@ -173,7 +181,7 @@ if (isset($_POST['back1']) or !isset($_POST['visit'])) {
 	$tool_content .= "
     <fieldset>
       <legend>$langCreateCourseStep2Title</legend>
-      <table class='tbl'>
+      <table class='tbl' width=100%'>
       <tr>
         <td>$langDescrInfo&nbsp;:<br /> ".  rich_text_editor('description', 4, 20, $description)."</td>
       </tr>
@@ -183,9 +191,10 @@ if (isset($_POST['back1']) or !isset($_POST['visit'])) {
         </td>
       </tr>
       <tr>
-	<td><input type='submit' name='back1' value='< $langPreviousStep ' />&nbsp;<input type='submit' name='create3' value='$langNextStep >' /></td>
+	<td class='right'><input type='submit' name='back1' value='&laquo; $langPreviousStep ' />&nbsp;<input type='submit' name='create3' value='$langNextStep &raquo;' /></td>
       </tr>
       </table>
+       </fieldset>
     <div align='right' class='smaller'>$langFieldsOptionalNote</div>
     </fieldset>
     <br />";

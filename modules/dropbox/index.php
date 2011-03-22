@@ -251,7 +251,7 @@ if (!isset($_GET['mailing']))  // RH: Mailing detail: no received files
 	$dr_unid = urlencode($dropbox_unid);
 	if ($numberDisplayed > 0) {
 		$dr_lang_all = addslashes( $dropbox_lang["all"]);
-		$tool_content .= "<a href='dropbox_submit.php?deleteReceived=all&amp;dropbox_unid=$dr_unid' onClick=\"return confirmationall();\"><img src='../../template/classic/img/delete.png' title='$langDelete' /></a>";
+		$tool_content .= "&nbsp;<a href='dropbox_submit.php?deleteReceived=all&amp;dropbox_unid=$dr_unid' onClick=\"return confirmationall();\"><img src='../../template/classic/img/delete.png' title='$langDelete' /></a>";
 	}
 	$tool_content .= "</p>";
 
@@ -338,11 +338,11 @@ $numSent = count($dropbox_person -> sentWork);
 $tool_content .= "
 
       <br />
-      <p class='sub_title1'>&nbsp;";
+      <p class='sub_title1'>";
         $tool_content .= strtoupper($dropbox_lang["sentTitle"]);
 	// if the user has sent files then display the icon deleteall
 	if ($numSent > 0) {
-	$tool_content .= "<a href='dropbox_submit.php?deleteSent=all&amp;dropbox_unid=".urlencode( $dropbox_unid).$mailingInUrl."'
+	$tool_content .= "&nbsp;<a href='dropbox_submit.php?deleteSent=all&amp;dropbox_unid=".urlencode( $dropbox_unid).$mailingInUrl."'
 	onClick=\"return confirmationall();\"><img src='../../template/classic/img/delete.png' title='$langDelete' /></a>
         ";
 	}
