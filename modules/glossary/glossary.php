@@ -117,29 +117,29 @@ if ($is_adminOfCourse) {
               <form action='$_SERVER[PHP_SELF]' method='post'>
                <fieldset>
                  <legend>$langAddGlossaryTerm</legend>
-                 <table class='tbl'>
+                 <table class='tbl' width='100%'>
                  <tr>
-                   <th>$langGlossaryTerm</th>
+                   <th width='90'>$langGlossaryTerm:</th>
                    <td>
                      <input type='text' name='term' value='$term' size='60'>
                    </td>
                  </tr>
                  <tr>
-                   <th valign='top'>$langGlossaryDefinition</th>
+                   <th valign='top'>$langGlossaryDefinition:</th>
                    <td>\n";
         $tool_content .= text_area('definition', 4, 60, $definition);
         $tool_content .= "\n
                    </td>
                  </tr>
                  <tr>
-                   <th>$langGlossaryUrl</th>
+                   <th>$langGlossaryUrl:</th>
                  <td>
                  <input type='text' name='url' value='$url' size='50'>
                  </td>
                  </tr>
                  <tr>
                    <th>&nbsp;</th>
-                   <td><input type='submit' name='submit' value='$langSubmit'></td>
+                   <td class='right'><input type='submit' name='submit' value='$langSubmit'></td>
                  </tr>
                  </table>
                </fieldset>
@@ -158,26 +158,26 @@ if ($is_adminOfCourse) {
                <form action='$_SERVER[PHP_SELF]' method='post'>
                <fieldset>
                  <legend>$langModify</legend>
-                 <table class='tbl'>
+                 <table class='tbl' width='100%'>
                  <tr>
-                   <th>$langGlossaryTerm</th>
+                   <th width='90'>$langGlossaryTerm:</th>
                    <td><input type='text' name='term' value='$data[term]' size='60'></td>
                  </tr>
                  <tr>
-                   <th valign='top'>$langGlossaryDefinition</th>
+                   <th valign='top'>$langGlossaryDefinition:</th>
                    <td valign='top'>\n";
         $tool_content .= text_area('definition', 4, 60, $data['definition']);
         $tool_content .= "\n
                    </td>
                  </tr>
-                 <tr><th>$langGlossaryUrl</th>
+                 <tr><th>$langGlossaryUrl:</th>
                  <td>
                  <input type='text' name='url' value='$data[url]' size='50'>
                  </td>
                  </tr>
                  <tr>
                    <th>&nbsp;</th>
-                   <td>
+                   <td class='right'>
                     <input type='submit' name='edit_submit' value='$langModify'>
                     <input type = 'hidden' name='id' value='$_GET[edit]'>
                    </td>
@@ -196,10 +196,10 @@ $sql = db_query("SELECT id, term, definition, url FROM glossary WHERE course_id 
 if (mysql_num_rows($sql) > 0) { 
 	$tool_content .= "
 	       <script type='text/javascript' src='../auth/sorttable.js'></script>
-	       <table class='sortable' id='t2' width='100%'>";
+  <table class='sortable' id='t2' width='100%'>";
 	$tool_content .= "
 	       <tr>
-		 <th colspan='2'><div align='left'>$langGlossaryTerm</div></th>
+		 <th><div align='left'>$langGlossaryTerm</div></th>
 		 <th><div align='left'>$langGlossaryDefinition</div></th>";
 	    if ($is_adminOfCourse) {
 		 $tool_content .= "
@@ -229,8 +229,7 @@ if (mysql_num_rows($sql) > 0) {
 
 	    $tool_content .= "
 	       <tr $rowClass>
-		 <td class='bold' width='120' valign='top'>" . q($g['term']) . "</td> 
-		 <td width='1' valign='top'>:</td>
+		 <th width='150'>" . q($g['term']) . "</th> 
 		 <td><em>" . $definition_data . "</em><br /><span align='left' class='smaller'> $urllink</span></td>";
 	    if ($is_adminOfCourse) {
 		$tool_content .= "
@@ -246,6 +245,7 @@ if (mysql_num_rows($sql) > 0) {
 	}
 	$tool_content .= "
 	       </table>
+	     
 	       <br />\n";
 
 } else {

@@ -78,7 +78,7 @@ if ($can_upload) {
 	<input type='hidden' name='uploadPath' value='$uploadPath' />
         $group_hidden_input
         <legend>$dropbox_lang[uploadFile]</legend>
-	<table class='tbl' width='99%'>
+	<table class='tbl' width='100%'>
 	<tr>
 	  <th width='200'>$langPathUploadFile:</th>
 	  <td><input type='file' name='userFile' size='35' /></td>
@@ -158,11 +158,12 @@ if ($can_upload) {
 	</tr>
 	<tr>
 	  <th>&nbsp;</th>
-	  <td colspan='2'><input type='submit' value='$langUpload' /><p align='right'>$langNotRequired<br />$langMaxFileSize ".
-        ini_get('upload_max_filesize')."</p></td>
+      <td colspan='2' class='right'><input type='submit' value='$langUpload' /></td>
 	</tr>
 	</table>
-	</fieldset>";
+    </fieldset>
+          <div class='right smaller'>$langNotRequired<br />$langMaxFileSize ".
+        ini_get('upload_max_filesize')."</div>";
 	$tool_content .=  "\n        </form>";
 } else {
 	$tool_content .= "<span class='caution'>$langNotAllowed</span>";
