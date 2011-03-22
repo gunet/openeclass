@@ -253,44 +253,42 @@ if (isset($_POST['add_submit'])) {  // add
               <legend>$langAddV</legend>
 		<table width=\"100%\" class=\"tbl\">
 		<tr>
-		  <th valign='top'>$langWorkFile :</th>
+		  <th valign='top'>$langWorkFile:</th>
 		  <td>
 		    <input type=\"hidden\" name=\"id\" value=\"\">
 		    <input type=\"file\" name=\"userFile\" size=\"38\">
                     <br />
-                    $langPathUploadFile
+                   <span class='smaller'> $langPathUploadFile</span>
 		  </td>
 		<tr>
 		  <th>$langVideoTitle:</th>
 		  <td><input type=\"text\" name=\"titre\" value=\"\" size=\"55\"></td>
 		</tr>
 		<tr>
-		  <th>$langDescr&nbsp;:</th>
+		  <th>$langDescr:</th>
 		  <td><textarea wrap=\"physical\" rows=\"3\" name=\"description\" cols=\"52\"></textarea></td>
 		</tr>
 		<tr>
-		  <th>$langcreator&nbsp;:</th>
+		  <th>$langcreator:</th>
 		  <td><input type=\"text\" name=\"creator\" value=\"$nick\" size=\"55\"></td>
 		</tr>
 		<tr>
-		  <th>$langpublisher &nbsp;:</th>
+		  <th>$langpublisher:</th>
 		  <td><input type=\"text\" name=\"publisher\" value=\"$nick\" size=\"55\"></td>
 		</tr>
 		<tr>
-		  <th>$langdate &nbsp;:</th>
+		  <th>$langdate:</th>
 		  <td><input type=\"text\" name=\"date\" value=\"".date("Y-m-d G:i:s")."\" size=\"55\"></td>
 		</tr>
 		<tr>
 		  <th>&nbsp;</th>
-		  <td><input type=\"submit\" name=\"add_submit\" value=\"$dropbox_lang[uploadFile]\"></td>
+		  <td class='right'><input type=\"submit\" name=\"add_submit\" value=\"$dropbox_lang[uploadFile]\"></td>
 		</tr>
-                <tr>
-                  <th>&nbsp;</th>
-                  <td><div align='right'>$langMaxFileSize <b>". ini_get('upload_max_filesize') . "</b></div></td>
-                </tr>
+
 		</table>
-              </fieldset>
-	      </form>";
+        </fieldset>
+              <div class='smaller right'>$langMaxFileSize ". ini_get('upload_max_filesize') . "</div></form> <br>";        
+              
 	} elseif (isset($_GET['form_input']) && $_GET['form_input'] == "url") { // display video links form
 		$nameTools = $langAddVideoLink;
 		$navigation[] = array ("url"=>"video.php", "name"=> $langVideo);
@@ -300,34 +298,34 @@ if (isset($_POST['add_submit'])) {  // add
                 <legend>$langAddVideoLink</legend>
 		<table width=\"100%\" class=\"tbl\">
 		<tr>
-		  <th valign='top'>$langGiveURL<input type=\"hidden\" name=\"id\" value=\"\"></th>
-		  <td><input type=\"text\" name=\"URL\" size=\"55\">
+		  <th valign='top' width='190'>$langGiveURL:<input type=\"hidden\" name=\"id\" value=\"\"></th>
+		  <td class='smaller'><input type=\"text\" name=\"URL\" size=\"55\">
                       <br />
                       $langURL
                   </td>
 		<tr>
-		  <th>$langVideoTitle :</th>
+		  <th>$langVideoTitle:</th>
 		  <td><input type=\"text\" name=\"titre\" value=\"\" size=\"55\"></td>
 		</tr>
 		<tr>
-		  <th>$langDescr :</th>
+		  <th>$langDescr:</th>
 		  <td><textarea wrap=\"physical\" rows=\"3\" name=\"description\" cols=\"52\"></textarea></td>
 		</tr>
 		<tr>
-		  <th>$langcreator :</th>
+		  <th>$langcreator:</th>
 		  <td><input type=\"text\" name=\"creator\" value=\"$nick\" size=\"55\"></td>
 		</tr>
 		<tr>
-		  <th>$langpublisher :</th>
+		  <th>$langpublisher:</th>
 		  <td><input type=\"text\" name=\"publisher\" value=\"$nick\" size=\"55\"></td>
 		</tr>
 		<tr>
-		  <th>$langdate :</th>
+		  <th>$langdate:</th>
 		  <td><input type=\"text\" name=\"date\" value=\"".date("Y-m-d G:i")."\" size=\"55\"></td>
 		</tr>
 		<tr>
 		  <th>&nbsp;</th>
-		  <td><input type=\"submit\" name=\"add_submit\" value=\"$langAdd\"></td>
+		  <td class='right'><input type=\"submit\" name=\"add_submit\" value=\"$langAdd\"></td>
 		</tr>
 		</table>
                 </fieldset>
@@ -377,24 +375,24 @@ if (isset($_GET['id']) and isset($_GET['table_edit']))  {
 		}
 		@$tool_content .= "
            <tr>
-             <th>$langVideoTitle:</th>
+             <th width='90'>$langVideoTitle:</th>
              <td><input type=\"text\" name=\"titre\" value=\"".$titre."\" size=\"55\"></td>
 	   </tr>
            <tr>
-             <th>$langDescr&nbsp;:</th>
+             <th>$langDescr:</th>
              <td><textarea wrap=\"physical\" rows=\"3\" name=\"description\" cols=\"52\">".$description."</textarea></td>
           </tr>
           <tr>
-            <th>$langcreator&nbsp;:</th>
+            <th>$langcreator:</th>
             <td><input type=\"text\" name=\"creator\" value=\"".$creator."\" size=\"55\"></td>
           </tr>
           <tr>
-            <th>$langpublisher &nbsp;:</th>
+            <th>$langpublisher:</th>
             <td><input type=\"text\" name=\"publisher\" value=\"".$publisher."\" size=\"55\"></td>
           </tr>
           <tr>
             <th>&nbsp;</th>
-            <td><input type=\"submit\" name=\"edit_submit\" value=\"$langModify\">
+            <td class='right'><input type=\"submit\" name=\"edit_submit\" value=\"$langModify\">
 		<input type=\"hidden\" name=\"id\" value=\"".$id."\">
 		<input type=\"hidden\" name=\"table\" value=\"".$table_edit."\">
             </td>
@@ -430,8 +428,8 @@ if (isset($_GET['id']) and isset($_GET['table_edit']))  {
 		$tool_content.= "
         <table width=\"100%\" class=\"tbl_alt\">
         <tr>
-          <th>&nbsp;</th>
-          <th><div align=\"left\">$langDirectory $langVideo</div></th>
+        
+          <th colspan='2'><div align=\"left\">$langDirectory $langVideo</div></th>
           <th width=\"150\"><div align=\"left\">$langcreator</div></th>
           <th width=\"150\"><div align=\"left\">$langpublisher</div></th>
           <th width=\"70\">$langdate</th>
