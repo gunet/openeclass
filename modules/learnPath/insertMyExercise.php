@@ -148,7 +148,7 @@ while ($listex = mysql_fetch_array($resultex) )
 
             $MessBox .= $exercise['titre'] ." :  ".$langExInsertedAsModule."<br>";
             $style = "success";
-            $tool_content .= "<table width=\"99%\" class=\"tbl\"><tr>";
+            $tool_content .= "<table width=\"100%\" class=\"tbl\"><tr>";
             $tool_content .= disp_message_box($MessBox, $style);
             $tool_content .= "</td></tr></table>";
             $tool_content .= "<br />";

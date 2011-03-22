@@ -236,10 +236,10 @@ if ( !$atleastOne )
 if ( $atleastOne )
 {
     $tool_content .= '    <tr>'."\n"
-        .'      <td colspan="2"><div align="right">'."\n"
+        .'      <th colspan="2"><div align="right">'."\n"
         .'        <input type="submit" value="'.$langReuse.'" />'."\n"
         .'        <input type="hidden" name="cmdglobal" value="add"></div>'."\n"
-        .'      </td>'."\n"
+        .'      </th>'."\n"
         .'    </tr>'."\n";
 }
 

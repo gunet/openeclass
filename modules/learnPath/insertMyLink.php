@@ -225,13 +225,17 @@ function showlinks()
 		$i++;
 	}
 	$output .= "
- </table>
-        <div align='right' style='padding-top: 10px;'>
+    <tr>
+      <th colspan='3'>
+        <div align='right'>
           <input type='hidden' name='maxLinkForm' value ='" . ($i-1) ."' />
-          <input type='submit' name='submitInsertedLink' value='$langAddModulesButton' class='LP_button'/>
-        </div>
-
+          <input type='submit' name='submitInsertedLink' value='$langAddModulesButton'/>
+        </div></th>
+      </tr>
+    </tbody>
+    </table>
     </form>
+
     
         
         ";
