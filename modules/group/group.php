@@ -257,7 +257,7 @@ if ($is_adminOfCourse) {
 
 	// ---------- display properties ------------------------
 	$tool_content .= "
-        <table class='tbl_alt' width='100%'>
+        <table class='tbl_border' width='100%'>
 	<tr>
 	  <td colspan='2' class='right'><a href='group_properties.php'>$langPropModify</a> 
             <a href='group_properties.php'><img src='../../template/classic/img/edit.png' align='middle' alt='$langEdit' title='$langEdit' /></a></td>
@@ -339,8 +339,8 @@ if ($is_adminOfCourse) {
 		$tool_content .= "<br />
 		<table width='100%' align='left' class='tbl_alt'>
 		<tr>
-                  <th width='1'>&nbsp;</th>
-		  <th><div align='left'>$langGroupName</div></th>
+           
+		  <th colspan='2'><div align='left'>$langGroupName</div></th>
 		  <th width='250'>$langGroupTutor</th>
 		  <th width='30'>$langRegistered</th>
 		  <th width='30'>$langMax</th>
@@ -356,7 +356,7 @@ if ($is_adminOfCourse) {
                 <tr class='odd'>";
                         }
                         $tool_content .= "
-                  <td>
+                  <td width='16'>
                         <img src='../../template/classic/img/arrow.png' alt='' /></td><td>
                         <a href='group_space.php?group_id=$group[id]'>".q($group_name)."</a></td>";
                         $tool_content .= "
