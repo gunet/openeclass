@@ -374,13 +374,13 @@ $tool_content .="
  
   <fieldset>
   <legend>$langLearningPathData</legend>
-    <table width=\"100%\" class=\"tbl_alt\">";
+    <table width=\"100%\" class=\"tbl\">";
 
 
 //############################ LEARNING PATH NAME BOX ################################\\
 $tool_content .="
     <tr>
-      <th width=\"90\">$langTitle:</th>";
+      <th width=\"70\">$langTitle:</th>";
 
 if ($cmd == "updateName")
 {
@@ -420,7 +420,7 @@ $tool_content .= "</td>
 
     <fieldset>
     <legend>$langLearningPathConfigure</legend>
-    <table width=\"100%\" class=\"tbl_alt\">";
+    <table width=\"100%\" class=\"tbl\">";
 
 // -------------------- create label -------------------
 if (isset($displayCreateLabelForm) && $displayCreateLabelForm)
