@@ -1278,9 +1278,9 @@ else // if method == 'post'
 		$tool_content .= "\n<div class=\"fileman\">";
 		$tool_content .= "\n<form action='importFromDocument.php' method='post'>";
 		$tool_content .= "\n  <table width=\"100%\" class=\"tbl\">";
-		$tool_content .= "\n  <tr><td height='18' colspan='5'><div align='left'><strong>$langLearningPathImportFromDocuments</strong</div></td></tr>";
+		$tool_content .= "\n  <tr><td colspan='5' class='sub_title1' style='padding-bottom: 10px;'>$langLearningPathImportFromDocuments</td></tr>";
 		$tool_content .= "\n  <tr>";
-		$tool_content .= "\n    <th></th>";
+		$tool_content .= "\n    <th width='50'>&nbsp;</th>";
 		$tool_content .= "\n    <th width='10%'><div align='center'><b>$langType</b></div></th>";
 		$tool_content .= "\n    <th><div align='left'><b>$langName</b></div></th>";
 		$tool_content .= "\n    <th width='15%'><div align='center'><b>$langSize</b></div></th>";

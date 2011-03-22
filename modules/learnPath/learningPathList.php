@@ -285,11 +285,11 @@ if ($is_adminOfCourse) {
     <legend>$langLearningPathData</legend>
     <table width='100%' class='tbl'>
     <tr>
-      <th width='180'><label for='newPathName'>$langLearningPathName</label> :</th>
+      <th width='200'><label for='newPathName'>$langLearningPathName</label>:</th>
       <td><input type='text' name='newPathName' id='newPathName' size='33' maxlength='255'></input></td>
     </tr>
     <tr>
-      <th><label for='newComment'>$langComment</label> :</th>
+      <th><label for='newComment'>$langComment</label>:</th>
       <td><textarea id='newComment' name='newComment' rows='2' cols='30'></textarea></td>
     </tr>
     <tr>
