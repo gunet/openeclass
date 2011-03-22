@@ -916,8 +916,8 @@ td.bold {
 
 
 .invisible { 
-    color: #999999 !important;
-    background-color: #f9f8ea !important;
+    color: #cccccc !important;
+   background-color: #ebebeb; 
 }
 
 .invisible a,
@@ -927,7 +927,7 @@ a.invisible,
 a:link.invisible,
 a:visited.invisible
 {
-   color: #999999;
+   color: #cccccc;
 }
 
 a.unit_link, a.unit_link:link, a.unit_link:active, a.unit_link:visited {
