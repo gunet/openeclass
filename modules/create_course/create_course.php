@@ -204,35 +204,32 @@ if (isset($_POST['back1']) or !isset($_POST['visit'])) {
 	@$tool_content .= "
     <fieldset>
       <legend>$langCreateCourseStep3Title</legend>
-      <table class='tbl' width='99%'>
+		      <table class='tbl' width='100%'>
       <tr>
-        <td>$langAvailableTypes</td>
+      <td class='sub_title1'>$langAvailableTypes<br></td>
       </tr>
       <tr>
 	<td>
-	  <table class='tbl_border' width='99%'>
+	  <table class='tbl_alt' width='100%'>
 	  <tr class='even'>
-	    <th><img src=\"../../template/classic/img/lock_open.png\" title=\"".$m['legopen']."\" width=\"16\" height=\"16\" /></th>
-	    <th width='140'>".$m['legopen']."</th>
+	    <th width='200'><img src=\"../../template/classic/img/lock_open.png\" title=\"".$m['legopen']."\" width=\"16\" height=\"16\" /> ".$m['legopen']."</th>
 	    <td><input name=\"formvisible\" type=\"radio\" value=\"2\" checked=\"checked\" /></td>
 	    <td>$langPublic</td>
 	  </tr>
 	  <tr class='even'>
-	    <th valign='top'><img src=\"../../template/classic/img/lock_registration.png\" title=\"".$m['legrestricted']."\" width=\"16\" height=\"16\" /></th>
-	    <th valign='top'>".$m['legrestricted']."</th>
+	    <th valign='top'><img src=\"../../template/classic/img/lock_registration.png\" title=\"".$m['legrestricted']."\" width=\"16\" height=\"16\" / > ".$m['legrestricted']."</th>
 	    <td valign='top'><input name=\"formvisible\" type=\"radio\" value=\"1\" /></td>
 	    <td>
-              $langPrivOpen<br />
-              <i>$langOptPassword</i> <input type='text' name='password' value='".q($password)."' class='FormData_InputText' />
+              $langPrivOpen<br /><br />
+              <div class='smaller right'>$langOptPassword <input type='text' name='password' value='".q($password)."' class='FormData_InputText' /></div>
             </td>
           </tr>
 	  <tr class='even'>
-	    <th valign='top'><img src=\"../../template/classic/img/lock_closed.png\" title=\"".$m['legclosed']."\" width=\"16\" height=\"16\" /></th>
-	    <th valign='top'>".$m['legclosed']."</th>
+	    <th valign='top'><img src=\"../../template/classic/img/lock_closed.png\" title=\"".$m['legclosed']."\" width=\"16\" height=\"16\" /> ".$m['legclosed']."</th>
 	    <td valign='top'><input name=\"formvisible\" type=\"radio\" value=\"0\" /></td>
 	    <td>$langPrivate</td>
 	  </tr>
-	  </table>
+	  </table>      
 	  <br />
 	</td>
       </tr>
@@ -328,14 +325,14 @@ if (isset($_POST['back1']) or !isset($_POST['visit'])) {
 	</td>
       </tr>
       <tr>
-	<td>
-          <input type='submit' name='back2' value='< $langPreviousStep ' />&nbsp;
+	<td class='right'>
+          <input type='submit' name='back2' value='&laquo; $langPreviousStep ' />&nbsp;
 	  <input type='submit' name='create_course' value=\"$langFinalize\" />
         </td>
       </tr>
       </table>
       </fieldset>
-      <div align='right'>$langFieldsOptionalNote</div>
+      <div class='right smaller'>$langFieldsOptionalNote</div>
       <br />";
 } // end of create3
 

@@ -122,6 +122,21 @@ input[type=reset] {
 }
 
 
+input[type=text] {
+	color: #999999;
+	font-size: 13px;
+	border: 1px solid #cccccc;
+    padding: 3px;
+}
+
+select {
+	color: #666666;
+	font-size: 13px;
+	border: 1px solid #cccccc;
+    padding: 3px;
+}
+
+
 legend {
 	color: #ffffff;
 	padding: 8px;
