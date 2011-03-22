@@ -248,7 +248,7 @@ function send_file_by_url_file_path($file_path, $initial_path = '')
 
         $path_components = explode('/', str_replace('//', chr(1), $file_path));
         $file_info = public_path_to_disk_path($path_components, $initial_path);
-	if (!send_file_to_client($basedir . $file_info['path'], $file_info['filename'], true, false)) {
+	if (!send_file_to_client($basedir . $file_info['path'], $file_info['filename'], null, false)) {
                 not_found($file_path);
 	}
 	exit;

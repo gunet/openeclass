@@ -98,7 +98,7 @@ if (isset($_GET['downloadDir'])) {
         zip_documents_directory($zip_filename, $downloadDir);
 
 	// download file
-	send_file_to_client($zip_filename, $real_filename, false, true, true);
+	send_file_to_client($zip_filename, $real_filename, null, true, true);
 	exit;
 }
 

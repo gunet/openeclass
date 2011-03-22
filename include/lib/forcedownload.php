@@ -48,14 +48,13 @@
     
 ==============================================================================*/
 
-function send_file_to_client($real_filename, $filename, $send_inline = false, $send_name = false, $delete = false)
+function send_file_to_client($real_filename, $filename, $disposition = null, $send_name = false, $delete = false)
 {
-        if(!file_exists($real_filename))
-        {
+        if(!file_exists($real_filename)) {
                 return false;
         }
-        $content_type = get_mime_type($filename);
 
+        $content_type = get_mime_type($filename);
         if ($content_type == 'text/html') {
                 $charset = '; charset=' . html_charset($real_filename);
         } elseif ($content_type == 'text/plain') {
@@ -64,29 +63,40 @@ function send_file_to_client($real_filename, $filename, $send_inline = false, $s
                 $charset = '';
         }
         
-        $disposition = $send_inline? 'inline': 'attachment';
 	if ($send_name) {
                 // Add quotes to filename if it contains spaces
                 if (strpos($filename, ' ') !== false) {
                         $filename = '"' . $filename . '"';
                 }
                 $filenameattr = '; filename=' . $filename;
+                if (!isset($disposition)) {
+                        $disposition = 'attachment';
+                }
 	} else {
                 $filenameattr = '';
         }
         header("Content-type: $content_type$charset");
-        header("Content-Disposition: $disposition$filenameattr");
-
-        // IE cannot download from sessions without a cache
-        if (strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE'))
-        {
-                header('Pragma: public');
-                header('Cache-Control: no-store, no-cache, no-transform, must-revalidate, private');
-                header('Expires: 0');
+        if (isset($disposition)) {
+                header("Content-Disposition: $disposition$filenameattr");
         }
+
+        header('Pragma:');
+        header('Cache-Control: public');
+
         header('Content-length: ' . filesize($real_filename));
-	stop_output_buffering();
-        readfile($real_filename);
+        $mtime = filemtime($real_filename);
+        $etag = md5_file($real_filename);
+        header('Last-Modified: ' . gmdate('D, d M Y H:i:s', $mtime) . ' GMT');
+        header("Etag: $etag");
+
+        if ((array_key_exists('HTTP_IF_MODIFIED_SINCE', $_SERVER) and
+             strtotime(preg_replace('/;.*$/', '', $_SERVER['HTTP_IF_MODIFIED_SINCE'])) >= $mtime) or
+            trim($_SERVER['HTTP_IF_NONE_MATCH']) == $etag) {
+                header("HTTP/1.0 304 Not Modified");
+        } else {
+                stop_output_buffering();
+                readfile($real_filename);
+        }
 	
 	if ($delete) { 
 		unlink($real_filename);

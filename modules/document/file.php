@@ -82,7 +82,7 @@ if ($file_info['visibility'] != 'v' and !$is_adminOfCourse) {
 }
 
 if (file_exists($basedir . $file_info['path'])) {
-        send_file_to_client($basedir . $file_info['path'], $file_info['filename'], true);
+        send_file_to_client($basedir . $file_info['path'], $file_info['filename']);
 } else {
         not_found(preg_replace('/^.*file\.php/', '', $uri));
 }
