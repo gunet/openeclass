@@ -403,15 +403,15 @@ if (mysql_num_rows($result) > 0) {
 	$barreMois = "";
 	$nowBarShowed = FALSE;
         $tool_content .= "
-        <table width='100%' align='left' class='tbl_alt'>
+        <table width='100%' class='tbl_alt'>
         <tr>
           <th><div align='left'><b>$langEvents</b></div></th>";
         if ($is_adminOfCourse) {
               $tool_content .= "
-          <th width='60' class='right'><b>$langActions</b></th>";
+          <th width='50'><b>$langActions</b></th>";
         } else {
               $tool_content .= "
-          <th width='60' class='right'>&nbsp;</th>";
+          <th width='50>&nbsp;</th>";
         }
        
         $tool_content .= "
@@ -429,7 +429,7 @@ if (mysql_num_rows($result) > 0) {
 				((strtotime($myrow["day"]." ".$myrow["hour"]) < time()) && ($sens==" DESC "))) {
 				if ($barreMois!=date("m",time())) {
 					$barreMois=date("m",time());
-					$tool_content .= "\n        <tr class='odd'>";
+					$tool_content .= "\n        <tr>";
 					// current month
 					$tool_content .= "\n          <td colspan='2' class='monthLabel'>".$langCalendar."&nbsp;<b>".ucfirst(claro_format_locale_date("%B %Y",time()))."</b></td>";
 					$tool_content .= "\n        </tr>";
@@ -490,7 +490,7 @@ if (mysql_num_rows($result) > 0) {
 	//(evelthon, 12/05/2006)
 		if ($is_adminOfCourse) {
 			$tool_content .=  "
-          <td class='right' width='80'>
+          <td class='right' width='70'>
             <a href='$_SERVER[PHP_SELF]?id=".$myrow['id']."&amp;edit=true'>
             <img src='../../template/classic/img/edit.png' border='0' title='".$langModify."'></a>&nbsp;
             <a href='$_SERVER[PHP_SELF]?id=".$myrow[0]."&amp;delete=yes' onClick='return confirmation();'>

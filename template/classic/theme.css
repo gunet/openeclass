@@ -1013,9 +1013,9 @@ a.unit_link_invisible:hover {
 .monthLabel {
     text-align: center;
     color: #627aad;
-    background-color:#FAEDED;
-    border-top: 1px dotted #F0C9C1;
-    border-bottom: 1px dotted #F0C9C1;
+    background-color:#fff9ae;
+    padding: 10px;
+    border: 1px solid #ddd685;
 }
 
 .day {
