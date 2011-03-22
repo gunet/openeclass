@@ -31,7 +31,7 @@ if(isset($usedInSeveralExercises)) {
 	@$tool_content .= "
   <h3>$questionName</h3>
   <form method='post' action='$_SERVER[PHP_SELF]?modifyQuestion=$_GET[modifyQuestion]&amp;modifyAnswers=$_GET[modifyAnswers]'>
-  <table width='99%'><tr><td>";
+  <table class='tbl' width='100%'><tr><td>";
 
 	// submit question
 	if(isset($_POST['submitQuestion'])) {
@@ -75,8 +75,8 @@ if(isset($usedInSeveralExercises)) {
 	} // end submit answers
 
 	$tool_content .= "<input type='hidden' name='answerType' value='$answerType'>
-	<table width='100%'><tr>
-	<td>$langUsedInSeveralExercises :</td>
+	<table width='100%' class='tbl'><tr>
+	<td>$langUsedInSeveralExercises:</td>
 	</tr>
 	<tr>
 	<td><input type='radio' name='modifyIn' value='allExercises'>
