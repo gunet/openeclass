@@ -280,8 +280,8 @@ if (!$num_results == 0) {
 $tool_content .= "
     <table width=\"100%\" class=\"tbl_alt\">
     <tr>
-      <th colspan=\"2\"><div align=\"left\">&nbsp;&nbsp;<b>".$langLearningObjects."</b></div></th>
-      <th width=\"10%\"><div align=\"right\"><b>".$langTools."</b>&nbsp;&nbsp;&nbsp;</div></th>
+      <th colspan=\"2\">".$langLearningObjects."</th>
+      <th width=\"65\">".$langTools."</th>
     </tr>\n";
 }
 // Display modules of the pool of this course
@@ -290,9 +290,9 @@ $ind=1;
 while ($list = mysql_fetch_array($result))
 {
                    if ($ind%2 == 0) {
-                       $style = 'class="even"';
-                   } else {
                        $style = 'class="odd"';
+                   } else {
+                       $style = 'class="even"';
                    }
 
     //DELETE , RENAME, COMMENT
@@ -310,7 +310,7 @@ while ($list = mysql_fetch_array($result))
     }
 
     $tool_content .= "</td>
-      <td align='right'><a href=\"".$_SERVER['PHP_SELF']."?cmd=eraseModule&amp;cmdid=".$list['module_id']."\" onClick=\"return confirmation('".clean_str_for_javascript($list['name'] . $langUsedInLearningPaths . $list['timesUsed'])."');\"><img src=\"".$imgRepositoryWeb."delete.png\" border=\"0\" alt=\"".$langDelete."\" title=\"".$langDelete."\" /></a>&nbsp;&nbsp;<a href=\"".$_SERVER['PHP_SELF']."?cmd=rqRename&amp;module_id=".$list['module_id']."\"><img src=\"".$imgRepositoryWeb."edit.png\" border=0 alt=\"$langRename\" title=\"$langRename\" /></a>&nbsp;&nbsp;<a href=\"".$_SERVER['PHP_SELF']."?cmd=rqComment&amp;module_id=".$list['module_id']."\"><img src=\"".$imgRepositoryWeb."comment.gif\" border=0 alt=\"$langComment\" title=\"$langComment\" /></a></td>\n";
+      <td><a href=\"".$_SERVER['PHP_SELF']."?cmd=eraseModule&amp;cmdid=".$list['module_id']."\" onClick=\"return confirmation('".clean_str_for_javascript($list['name'] . $langUsedInLearningPaths . $list['timesUsed'])."');\"><img src=\"".$imgRepositoryWeb."delete.png\" border=\"0\" alt=\"".$langDelete."\" title=\"".$langDelete."\" /></a>&nbsp;&nbsp;<a href=\"".$_SERVER['PHP_SELF']."?cmd=rqRename&amp;module_id=".$list['module_id']."\"><img src=\"".$imgRepositoryWeb."rename.png\" border=0 alt=\"$langRename\" title=\"$langRename\" /></a>&nbsp;&nbsp;<a href=\"".$_SERVER['PHP_SELF']."?cmd=rqComment&amp;module_id=".$list['module_id']."\"><img src=\"".$imgRepositoryWeb."comment_edit.png\" border=0 alt=\"$langComment\" title=\"$langComment\" /></a></td>\n";
     $tool_content .= "    </tr>";
 
     $atleastOne = true;
