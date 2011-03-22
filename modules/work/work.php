@@ -348,7 +348,7 @@ function new_assignment()
         <form action='$_SERVER[PHP_SELF]' method='post' onsubmit='return checkrequired(this, \"title\");'>
         <fieldset>
         <legend>$m[WorkInfo]</legend>
-        <table class='tbl'>
+        <table class='tbl' width='100%'>
         <tr>
           <th>$m[title]:</th>
           <td><input type='text' name='title' size='55' /></td>
@@ -368,7 +368,7 @@ function new_assignment()
         </tr>
         <tr>
           <th>&nbsp;</th>
-          <td><input type='submit' name='new_assign' value='$langAdd' /></td>
+          <td class='right'><input type='submit' name='new_assign' value='$langAdd' /></td>
         </tr>
         </table>
         </fieldset>
@@ -867,7 +867,7 @@ function show_assignment($id, $message = FALSE)
                             <br />
                             <table align='left' width='100%'  class='tbl'>
                             <tr>
-                              <td width='1' class='left'><img src='../../template/classic/img/forum_off.png' alt='$m[comments]' title='$m[comments]' /></td>
+                              <td width='1' class='left'><img src='../../template/classic/img/arrow.png' alt='$m[comments]' title='$m[comments]' /></td>
                               <td>$row[comments]</td>
                             <tr>
                             </table>";
@@ -881,7 +881,7 @@ function show_assignment($id, $message = FALSE)
                 </tr>
                 <tr $row_color>
                   <td colspan='5'><div class='smaller'>$subContentGroup</div><br />
-                    <img src='../../template/classic/img/forum_on.png' alt='$m[comments]' title='$m[comments]' />&nbsp;<b>$m[gradecomments]</b>:
+                    <img src='../../template/classic/img/arrown.png' alt='$m[comments]' title='$m[comments]' />&nbsp;<b>$m[gradecomments]</b>:
                     $prof_comment
                   </td>
                 </tr>";
@@ -959,7 +959,7 @@ function show_student_assignments()
                                   <tr class='odd'>";
                         }
                         $tool_content .= "
-                                    <td width='1'><img style='padding-top:3px;' src='${urlServer}/template/classic/img/arrow.png' title='bullet' /></td>
+                                    <td width='16'><img style='padding-top:3px;' src='${urlServer}/template/classic/img/arrow.png' title='bullet' /></td>
                                     <td><a href='$_SERVER[PHP_SELF]?id=$row[id]'>$title_temp</a></td>
                                     <td width='160' align='center'>".nice_format($row['deadline']);
                         if ($row['days'] > 1) {
@@ -1058,7 +1058,7 @@ cData;
                         }
 
 			$tool_content .= "
-       <td width='1'><img style='border:0px; padding-top:3px;' src='$urlServer/template/classic/img/$visibility_image.gif' title='bullet' /></td>
+       <td width='1'><img style='border:0px; padding-top:3px;' src='$urlServer/template/classic/img/$visibility_image.png' title='bullet' /></td>
        <td ".$visibility_css."><a href='$_SERVER[PHP_SELF]?id=${row['id']}' ";
 			$tool_content .= ">";
 			$tool_content .= $row_title = q($row['title']);
