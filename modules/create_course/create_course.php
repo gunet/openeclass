@@ -435,9 +435,9 @@ if (isset($_POST['create_course'])) {
         $tool_content .= doImportFromBetaCMSAfterCourseCreation($repertoire, $mysqlMainDb, $webDir);
         // --------------------------------------------------
         $tool_content .= "
-                <p class='success'>$langJustCreated: <b>$intitule</b><br>
-                <span class='right smaller'>$langEnterMetadata</span></p>
-                <p align='center'><a href='../../courses/$repertoire/index.php' class='button'>$langEnter</a></p>";
+                <p class='success'><b>$langJustCreated:</b> $intitule<br>
+                <span class='smaller'>$langEnterMetadata</span></p>
+                <p class='button'><a href='../../courses/$repertoire/index.php'>$langEnter</a></p>";
 } // end of submit
 
 $tool_content .= "</form>";
