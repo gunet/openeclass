@@ -221,7 +221,7 @@ if(isset($submitAnswers) || isset($buttonBack)) {
 		}
 		else
 		{
-			unset($setWeighting); //tsou
+			unset($setWeighting);
 		}
 	}
 	elseif($answerType == MATCHING)
@@ -239,7 +239,6 @@ if(isset($submitAnswers) || isset($buttonBack)) {
 				$objAnswer->createAnswer($option[$i],0,'',0,$i);
 			}
 		}
-
 		$questionWeighting=0;
 		if(empty($msgErr)) {
 			for($j=1;$j <= $nbrMatches;$i++,$j++) {
@@ -261,7 +260,6 @@ if(isset($submitAnswers) || isset($buttonBack)) {
 				}
 			}
 		}
-
 		if(empty($msgErr)) {
 			// checks if the question is used in several exercises
 			if($exerciseId && !isset($_POST['modifyIn']) && $objQuestion->selectNbrExercises() > 1) {
@@ -308,7 +306,6 @@ if(isset($submitAnswers) || isset($buttonBack)) {
 				$objAnswer->createAnswer($reponse[$i],$goodAnswer,$comment[$i],$weighting[$i],$i);
 			}
 		}  // end for()
-
 		if(empty($msgErr)) {
 			if(!$nbrGoodAnswers) {
 				$msgErr=($answerType == TRUE_FALSE)?$langChooseGoodAnswer:$langChooseGoodAnswers;
@@ -368,17 +365,14 @@ if(isset($_GET['modifyAnswers'])) {
 				}
 			}
 		}
-
 		if(isset($lessAnswers))
 		{
 			$nbrAnswers--;
 		}
-
 		if(isset($moreAnswers))
 		{
 			$nbrAnswers++;
 		}
-
 		// minimum 2 answers
 		if($nbrAnswers < 2)
 		{
@@ -514,7 +508,7 @@ if(isset($_GET['modifyAnswers'])) {
 	if(!isset($usedInSeveralExercises)) {
 		if($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER) {
 			$tool_content .= "
-			<form method='post' action='$_SERVER[PHP_SELF]?modifyAnswers=$_GET[modifyAnswers]'>
+			<form method='post' action='$_SERVER[PHP_SELF]'>
 			<input type='hidden' name='formSent' value='1' />
 			<input type='hidden' name='nbrAnswers' value='$nbrAnswers' />
 		     
@@ -583,9 +577,9 @@ if(isset($_GET['modifyAnswers'])) {
 					}
 				
 				$tool_content .= "
-      <td>". text_area("reponse[$i]", 7, 40, @$reponse[$i], "class=''") ."</td>
-      <td class='center'>". text_area("comment[$i]", 7, 25, @$comment[$i], "class=''") ."</td>
-      <td valign='top' class='center'><input type='text' name=\"weighting[".$i."]\" size=\"5\" value=\"";
+				<td>". text_area("reponse[$i]", 7, 40, @$reponse[$i], "class=''") ."</td>
+				<td class='center'>". text_area("comment[$i]", 7, 25, @$comment[$i], "class=''") ."</td>
+				<td valign='top' class='center'><input type='text' name=\"weighting[".$i."]\" size=\"5\" value=\"";
 				if (isset($weighting[$i])) {
 					$tool_content .= $weighting[$i];
 				} else {	
@@ -617,73 +611,65 @@ if(isset($_GET['modifyAnswers'])) {
 		}
 		elseif($answerType == FILL_IN_BLANKS) {
 			$tool_content .= "
-    <form name=\"formulaire\" method=\"post\" action=\"".$_SERVER['PHP_SELF']."?modifyAnswers=".$_GET['modifyAnswers']."\">\n";
+			<form name='formulaire' method='post' action='$_SERVER[PHP_SELF]'>\n";
 			if(!isset($setWeighting)) {
 				$tempSW = "";
 			} else {
 				$tempSW = $setWeighting;	
 			}
 			$tool_content .= "
-    <input type='hidden' name='formSent' value='1' />\n
-    <input type='hidden' name='setWeighting' value='$tempSW' />\n";
-			if(!isset($setWeighting)) {
+			<input type='hidden' name='formSent' value='1' />\n
+			<input type='hidden' name='setWeighting' value='$tempSW' />\n";
+					    if(!isset($setWeighting)) {
+						    $tool_content .= "
+			<input type=\"hidden\" name=\"weighting\" value=\"\" />\n";
+						    $tool_content .= "
+			<fieldset>
+			<legend>$langQuestion</legend>
+			 <b>$questionName</b>
+			 <br />";
+			if($okPicture) {
+				$tool_content .= "<div align=\"center\"><img src=\"".$picturePath."/quiz-".$questionId."\"></div>";
+			}
+			$tool_content .= "</fieldset>";
+			$tool_content .= "
+			<fieldset>
+			<legend>$langQuestionAnswers</legend>
+			<table class='tbl' width='99%'>
+			<tr>
+			  <td>$langTypeTextBelow, $langAnd $langUseTagForBlank :<br/><br/>
+			  <textarea name='reponse' cols='70' rows='6'>";
+
+			if(!isset($submitAnswers) && empty($reponse)) 
+			      $tool_content .= $langDefaultTextInBlanks; 
+			else 
+			      $tool_content .= htmlspecialchars($reponse);
+			$tool_content .= "</textarea></td></tr>";
+			// if there is an error message
+			if(!empty($msgErr)) {
+				$tool_content .= "\n";
 				$tool_content .= "
-    <input type=\"hidden\" name=\"weighting\" value=\"\" />\n";
-				$tool_content .= "
-    <fieldset>
-    <legend>$langQuestion</legend>
-     <b>$questionName</b>
-     <br />";
-				if($okPicture) {
-					$tool_content .= "<div align=\"center\"><img src=\"".$picturePath."/quiz-".$questionId."\"></div>";
-				}
-                                $tool_content .= "</fieldset>";
-				$tool_content .= "
-				<fieldset>
-				<legend>$langQuestionAnswers</legend>
-				<table class='tbl' width='99%'>
 				<tr>
-				  <td>$langTypeTextBelow, $langAnd $langUseTagForBlank :<br/><br/>
-				  <textarea name='reponse' cols='70' rows='6'>";
-
-				if(!isset($submitAnswers) && empty($reponse)) 
-				      $tool_content .= $langDefaultTextInBlanks; 
-				else 
-				      $tool_content .= htmlspecialchars($reponse);
-				$tool_content .= "</textarea></td></tr>";
-				// if there is an error message
-				if(!empty($msgErr)) {
-					$tool_content .= "\n";
-					$tool_content .= "
-					<tr>
-					  <td>
-					    <table border='0' cellpadding='3' align='center' width='400' bgcolor='#FFCC00'>
-					      <tr><td>$msgErr</td></tr>
-					    </table>
-					  </td>
-					</tr>";
-				}
-
-
-
-$tool_content .= <<<cData
-
-    <tr>
-      <td>
-          <input type="submit" name="submitAnswers" value="${langNext} &gt;" />
-          &nbsp;&nbsp;<input type="submit" name="cancelAnswers" value="${langCancel}" />
-      </td>
-    </tr>
-    </table>
-    </fieldset>
-    </form>
-cData;
-
+				  <td>
+				    <table border='0' cellpadding='3' align='center' width='400' bgcolor='#FFCC00'>
+				      <tr><td>$msgErr</td></tr>
+				    </table>
+				  </td>
+				</tr>";
+			}
+			$tool_content .= "<tr><td>
+				  <input type='submit' name='submitAnswers' value='$langNext &gt;' />
+				  &nbsp;&nbsp;<input type='submit' name='cancelAnswers' value='$langCancel' />
+			      </td>
+			    </tr>
+			    </table>
+			    </fieldset>
+			    </form>";
 	} else {
 		$tool_content .= "
-    <input type=\"hidden\" name=\"blanks\" value=\"".htmlspecialchars(serialize($blanks))."\" />";
+		<input type=\"hidden\" name=\"blanks\" value=\"".htmlspecialchars(serialize($blanks))."\" />";
 		$tool_content .= "
-    <input type=\"hidden\" name=\"reponse\" value=\"".htmlspecialchars($reponse)."\" />";
+		<input type=\"hidden\" name=\"reponse\" value=\"".htmlspecialchars($reponse)."\" />";
 		// if there is an error message
 		if(!empty($msgErr)) {
 			$tool_content .= "
@@ -692,9 +678,9 @@ cData;
 			</table>";
 		} else {
 			$tool_content .= "
-    <fieldset>
-    <legend>$langWeightingForEachBlank</legend>
-    <table class='tbl' width='99%'>";
+			<fieldset>
+			<legend>$langWeightingForEachBlank</legend>
+			<table class='tbl' width='99%'>";
 	
 			foreach($blanks as $i=>$blank) {
 				$tool_content .= "
@@ -704,63 +690,55 @@ cData;
 				</tr>";
 			}
 			$tool_content .= "
-    <tr>
-      <td>&nbsp;</td>
-      <td>
-	<input type='submit' name='buttonBack' value='&lt; $langBack'' />&nbsp;&nbsp;
-	<input type='submit' name='submitAnswers' value='$langCreate' />&nbsp;&nbsp;
-	<input type='submit' name='cancelAnswers' value='$langCancel' />
-      </td>
-    </tr>
-    </table>";
+			<tr>
+			  <td>&nbsp;</td>
+			  <td>
+			    <input type='submit' name='buttonBack' value='&lt; $langBack'' />&nbsp;&nbsp;
+			    <input type='submit' name='submitAnswers' value='$langCreate' />&nbsp;&nbsp;
+			    <input type='submit' name='cancelAnswers' value='$langCancel' />
+			  </td>
+			</tr>
+			</table>";
 		}
-	$tool_content .= "
-    </fieldset>
-    </form>";
+		$tool_content .= "</fieldset></form>";
         }
-
-		} //END FILL_IN_BLANKS !!!
-		elseif($answerType == MATCHING)
+} //END FILL_IN_BLANKS !!!
+	elseif($answerType == MATCHING)
 		{
-$tool_content .= <<<cData
-
-
-
-  
-    <form method="post" action="$_SERVER[PHP_SELF]?modifyAnswers=$_GET[modifyAnswers]">
-    <input type="hidden" name="formSent" value="1" />
-    <input type="hidden" name="nbrOptions" value="$nbrOptions" />
-    <input type="hidden" name="nbrMatches" value="$nbrMatches" />
-	
-    <fieldset>
-    <legend>$langQuestion</legend>
-    $questionName
-    </fieldset>	
-    
-    <fieldset>
-    <legend>$langAnswer</legend>
-    <table width="99%" class="tbl">
-cData;
-
-	if($okPicture) {
 		$tool_content .= "
-		<tr>
-		  <td colspan='4' class='center'><img src='${picturePath}/quiz-${questionId}'></td>
-		</tr>";
-	}
+		    <form method='post' action='$_SERVER[PHP_SELF]'>
+		    <input type='hidden' name='formSent' value='1' />
+		    <input type='hidden' name='nbrOptions' value='$nbrOptions' />
+		    <input type='hidden' name='nbrMatches' value='$nbrMatches' />
+			
+		    <fieldset>
+		    <legend>$langQuestion</legend>
+		    $questionName
+		    </fieldset>	
+		    
+		    <fieldset>
+		    <legend>$langAnswer</legend>
+		    <table width='99%' class='tbl'>";
+
+		if($okPicture) {
+			$tool_content .= "
+			<tr>
+			  <td colspan='4' class='center'><img src='${picturePath}/quiz-${questionId}'></td>
+			</tr>";
+		}
 
 	// if there is an error message
 	if(!empty($msgErr)) {
 		$tool_content .= "
-    <tr>
-      <td colspan='4'>
-        <table border='0' cellpadding='3' align='center' width='400'>
-        <tr>
-          <td>$msgErr</td>
-        </tr>
-        </table>
-      </td>
-    </tr>";
+	<tr>
+	  <td colspan='4'>
+	    <table border='0' cellpadding='3' align='center' width='400'>
+	    <tr>
+	      <td>$msgErr</td>
+	    </tr>
+	    </table>
+	  </td>
+	</tr>";
 	}
 	$listeOptions=Array();
 	// creates an array with the option letters
@@ -855,7 +833,7 @@ cData;
 		
 		elseif ($answerType == TRUE_FALSE) {
 			$tool_content .= "
-   <form method='post' action='$_SERVER[PHP_SELF]?modifyAnswers=$_GET[modifyAnswers]'>
+   <form method='post' action='$_SERVER[PHP_SELF]'>
    <input type='hidden' name='formSent' value='1' />
    <input type='hidden' name='nbrAnswers' value='$nbrAnswers' />
    <fieldset>

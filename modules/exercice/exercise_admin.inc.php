@@ -70,12 +70,9 @@ else
 	$displayScore=$objExercise->selectScore();
 }
 
-if (isset($_GET['modifyExercise'])) {
-	$modifyExercise = $_GET['modifyExercise'];
-}
 // shows the form to modify the exercise
-if(isset($modifyExercise) or isset($_GET['NewExercise'])) {
-	$tool_content .= "<form method='post' action='$_SERVER[PHP_SELF]?modifyExercise=$modifyExercise'>
+if(isset($_GET['modifyExercise']) or isset($_GET['NewExercise']) or !isset($_POST['submitExercise'])) {
+	@$tool_content .= "<form method='post' action='$_SERVER[PHP_SELF]?modifyExercise=$_GET[modifyExercise]'>
 	<fieldset>
         <legend>$langInfoExercise </legend>
 	<table width='99%' class='tbl'>";
@@ -172,9 +169,13 @@ if(isset($modifyExercise) or isset($_GET['NewExercise'])) {
 	  </td>
 	</tr>
 	<tr>
-          <th>&nbsp;</th>
-	  <td><input type='submit' name='submitExercise' value='$langModify'>&nbsp;&nbsp;
-	      <input type='submit' name='cancelExercise' value='$langCancel'></td>
+          <th>&nbsp;</th>";
+	if (isset($_GET['NewExercise'])) {
+		$tool_content .= "<td><input type='submit' name='submitExercise' value='$langCreate'>&nbsp;&nbsp;";
+	} else {
+		$tool_content .= "<td><input type='submit' name='submitExercise' value='$langModify'>&nbsp;&nbsp;";	
+	}
+	$tool_content .= "<input type='submit' name='cancelExercise' value='$langCancel'></td>
 	</tr>
         </table>
       </fieldset>
