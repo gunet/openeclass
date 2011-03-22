@@ -257,7 +257,7 @@ if ($is_adminOfCourse) {
 
 	// ---------- display properties ------------------------
 	$tool_content .= "
-        <table class='tbl_border' width='100%'>
+        <table class='tbl_alt' width='100%'>
 	<tr>
 	  <td colspan='2' class='right'><a href='group_properties.php'>$langPropModify</a> 
             <a href='group_properties.php'><img src='../../template/classic/img/edit.png' align='middle' alt='$langEdit' title='$langEdit' /></a></td>

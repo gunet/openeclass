@@ -99,9 +99,9 @@ if ($q and mysql_num_rows($q) > 0) {
                                         WHERE unit_id = $unit_id ORDER BY `order` DESC LIMIT 1"));
 	while ($row = mysql_fetch_array($q)) {
           $tool_content .= "
-        <table width='100%' class='tbl'>
-        <tr class='odd'>
-           <td><b>" . q($row['title']) . "</b></td>\n" .
+        <table width='100%' class='tbl_border'>
+        <tr class='sub_title1'>
+           <td>" . q($row['title']) . "</td>\n" .
            actions('description', $row['id'], $row['visibility'], $row['res_id']) . "
         </tr>
         <tr>";
