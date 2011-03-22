@@ -349,7 +349,7 @@ if($can_upload) {
             $group_hidden_input
 			<fieldset>
 				<input type='hidden' name='newDirPath' value='$createDir' />
-				<table class='tbl'>
+				<table class='tbl' width='100%'>
 				<tr>
 					<th>$langNameDir</th>
 					<td width='1'><input type='text' name='newDirName' /></td>
@@ -444,7 +444,7 @@ if($can_upload) {
 				<fieldset>
 				<input type='hidden' name='replacePath' value='" . q($_GET['replace']) . "' />
 				$group_hidden_input
-					<table class='tbl'>
+					<table class='tbl' width='100%'>
 					<tr>
 						<td>$replacemessage</td>
 						<td><input type='file' name='newFile' size='35' /></td>
@@ -737,7 +737,7 @@ if ($doc_count == 0) {
 
 	$tool_content .= "
     <tr>
-      <td colspan='$cols'><div align='left'>$langDirectory: " . make_clickable_path($curDirPath) . "</div></d>
+      <td colspan='$cols'><div class='sub_title1'><b>$langDirectory:<b> " . make_clickable_path($curDirPath) . "<br></div></td>
       <td><div align='right'>";
 
         // Link for sortable table headings
@@ -905,7 +905,7 @@ if ($doc_count == 0) {
         }
         $tool_content .=  "\n    </table>\n";
 	if ($can_upload) {
-		$tool_content .= "\n    <p align='right'>$langMaxFileSize " . ini_get('upload_max_filesize') . "</p>\n";
+		$tool_content .= "\n    <br><div class='right smaller'>$langMaxFileSize " . ini_get('upload_max_filesize') . "</div>\n";
 	}
         $tool_content .= "\n    <br />";
 }
