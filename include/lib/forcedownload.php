@@ -91,7 +91,8 @@ function send_file_to_client($real_filename, $filename, $disposition = null, $se
 
         if ((array_key_exists('HTTP_IF_MODIFIED_SINCE', $_SERVER) and
              strtotime(preg_replace('/;.*$/', '', $_SERVER['HTTP_IF_MODIFIED_SINCE'])) >= $mtime) or
-            trim($_SERVER['HTTP_IF_NONE_MATCH']) == $etag) {
+            (array_key_exists('HTTP_IF_NONE_MATCH', $_SERVER) and
+             trim($_SERVER['HTTP_IF_NONE_MATCH']) == $etag)) {
                 header("HTTP/1.0 304 Not Modified");
         } else {
                 stop_output_buffering();
