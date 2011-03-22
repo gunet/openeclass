@@ -135,9 +135,9 @@ tCont2;
 	$tool_content .= "
     <fieldset>
     <legend>".$dropbox_lang["uploadFile"]."</legend>
-    <table width='100%' class='tbl_alt'>
+    <table width='100%' class='tbl'>
     <tr>
-      <th class='left' width='160'>".$dropbox_lang['file'].":</th>
+      <th width='160'>".$dropbox_lang['file'].":</th>
       <td><input type='file' name='file' size='35' />
           <input type='hidden' name='dropbox_unid' value='$dropbox_unid' />
       </td>
@@ -217,14 +217,14 @@ tCont2;
 	<tr>
 	  <th>&nbsp;</th>
 	  <input type='hidden' name='authors' value='".getUserNameFromId($uid)."' />
-	  <td><input type='Submit' name='submitWork' value='".$dropbox_lang["ok"]."' /></td>
+	  <td class='right'><input type='Submit' name='submitWork' value='".$dropbox_lang["ok"]."' /></td>
 	</tr>
 
         </table>
         </fieldset>
         </form>
 
-	<p align='right'><small>$langMaxFileSize ".ini_get('upload_max_filesize')."</small></p>";
+	<p class='right smaller'>$langMaxFileSize ".ini_get('upload_max_filesize')."</p>";
 	//==========================================================================
 	//END of send_file form
 	//==========================================================================
