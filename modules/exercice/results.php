@@ -66,9 +66,12 @@ $exerciseDescription=$objExercise->selectDescription();
 $exerciseDescription_temp = nl2br(make_clickable($exerciseDescription));
 	
 $tool_content .= "
-    <table class=\"tbl_border\" width=\"99%\">
-    <tr class='odd'>
-      <td><b>$exerciseTitle</b><br/><br/>${exerciseDescription_temp}</td>
+    <table class=\"tbl_border\" width=\"100%\">
+    <tr>
+    <th>$exerciseTitle</th>
+    </tr>
+    <tr>
+    <td>${exerciseDescription_temp}</td>
     </tr>
     </table>
     <br/>";
@@ -89,18 +92,18 @@ while($row=mysql_fetch_array($result)) {
 	$result2 = db_query($sql2);
 	if (mysql_num_rows($result2) > 0) { // if users found
 		$tool_content .= "
-    <table class='tbl' width='99%'>";
+    <table class='tbl_alt' width='100%'>";
 		$tool_content .= "
     <tr>
-      <th colspan='3'>";
+      <td colspan='3'>";
 		if (!$sid) {
 			$tool_content .= "$langNoGroupStudents";
 		} else {
 			if ($theStudent['am'] == '') $studentam = '-';
 			else $studentam = $theStudent['am'];
-			$tool_content .= "$langUser: <b>$theStudent[nom] $theStudent[prenom] </b> ($langAm: $studentam)";
+			$tool_content .= "<b>$langUser:</b> $theStudent[nom] $theStudent[prenom]  <div class='smaller'>($langAm: $studentam)</div>";
 		}
-		$tool_content .= "</th>
+		$tool_content .= "</td>
     </tr>
     <tr>
       <th width='150' class='center'>".$langExerciseStart."</td>
