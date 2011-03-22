@@ -69,11 +69,11 @@ function showQuestion($questionId, $onlyAnswers = false) {
 		$tool_content .= "
   <tr class='even'>
     <td colspan='2'>
-      <table class='tbl'>
+      <table class='tbl_border' width='100%'>
       <tr>
-        <td width='200'><b>$langColumnA</b></td>
-        <td class='center' width='130'><b>$langMakeCorrespond</b></td>
-        <td width='200'><b>$langColumnB</b></td>
+        <th width='200'>$langColumnA</th>
+        <th width='130'>$langMakeCorrespond</th>
+        <th width='200'>$langColumnB</th>
       </tr>
       </table>
     </td>

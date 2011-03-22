@@ -174,7 +174,7 @@ $CurrentAttempt = mysql_fetch_array(db_query("SELECT COUNT(*) FROM exercise_user
 if ($exerciseAllowedAttempts > 0 and $CurrentAttempt[0] > $exerciseAllowedAttempts) { 
 	$tool_content .= "
   <br/>
-    <table width='99%' class='tbl'>
+    <table width='100%' class='tbl'>
     <tr>
       <td class='alert1'>$langExerciseExpired</td>
     </tr>
@@ -214,13 +214,15 @@ if(@$_POST['questionNum']) {
 
 $exerciseDescription_temp = standard_text_escape($exerciseDescription);
 $tool_content .= "
-  <table width='99%' class='tbl_border'>
+ <table width='100%' class='tbl_border'>
   <tr class='odd'>
-    <td colspan=\"2\"><b>$exerciseTitle</b>
-    <br/>
-    $exerciseDescription_temp</td>
+    <th colspan=\"2\">$exerciseTitle</th>
+  </tr>
+  <tr class='even'>
+    <td colspan=\"2\">$exerciseDescription_temp</td>
   </tr>
   </table>
+
   <br />
 
   <form method='post' action='$_SERVER[PHP_SELF]'>
@@ -257,19 +259,19 @@ foreach($questionList as $questionId) {
 	}
 	// shows the question and its answers
 	$tool_content .= "
-  <table width=\"99%\" class=\"tbl\">
-  <tr class='odd'>
-    <td colspan=\"2\"><b><u>".$langQuestion."</u>: ".$i; 
+  <table width=\"100%\" class=\"tbl\">
+  <tr class='sub_title1'>
+    <td colspan=\"2\">".$langQuestion.": ".$i; 
 	
 	if($exerciseType == 2) { 
 		$tool_content .= "/".$nbrQuestions;
 	}
-	$tool_content .= "</b></td>
+	$tool_content .= "</td>
   </tr>";
 	showQuestion($questionId);
 	$tool_content .= "
   <tr>
-    <td class='even' colspan=\"2\">&nbsp;</td>
+    <td colspan=\"2\">&nbsp;</td>
   </tr>
   </table>";
 	// for sequential exercises
@@ -281,19 +283,19 @@ foreach($questionList as $questionId) {
 
 if (!$questionList) {
 	$tool_content .= "
-  <table width=\"99%\" class=\"tbl\">
-  <tr class='odd'>
+  <table width=\"100%\">
+  <tr>
     <td colspan='2'>
-      <p class='caution'>'$langNoAnswer</p>
+      <p class='caution'>$langNoAnswer</p>
     </td>
   </tr>
   </table>";	 
 } else {
 	$tool_content .= "
   <br/>
-  <table width=\"99%\" class=\"tbl\">
+  <table width=\"100%\" class=\"tbl\">
   <tr>
-    <td><div align=\"center\"><input type=\"submit\" value=\"";
+    <td><div class='right'><input type=\"submit\" value=\"";
 		if ($exerciseType == 1 || $nbrQuestions == $questionNum) {
 			$tool_content .= "$langCont\" />&nbsp;";
 		} else {
