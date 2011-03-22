@@ -1169,8 +1169,9 @@ li.pagination {
 
 
 .today {
-    color: #627aad;
-    background-color:#FAEDED;
+    color: #73849b;
+    padding: 5px;
+    text-align: center;
 }
 
 /* ----- START Search ----- */

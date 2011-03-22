@@ -322,7 +322,7 @@ function confirmation ()
 		<input type='hidden' name='id' value='$id' />
                 <fieldset>
                   <legend>$langOptions</legend>
-		  <table class='tbl'>";
+		  <table class='tbl' width='100%'>";
 		$day	= date("d");
 		$hours	= date("H");
 		$minutes= date("i");
@@ -364,7 +364,7 @@ function confirmation ()
                     </td>
                   </tr>
                   <tr>
-                    <th>$langLasting $langInHour:</td>
+                    <th>$langLasting <small> $langInHour</small>:</td>
                     <td><input type='text' name='lasting' value='".@$myrow['lasting']."' size='2' maxlength='2' /></td>
                   </tr>";
     		if (!isset($contenu)) {
@@ -377,7 +377,7 @@ function confirmation ()
                   </tr>
 		  <tr>
                     <th>&nbsp;</th>
-                    <td><input type='submit' name='submit' value='$langAddModify' /></td>
+                    <td class='right'><input type='submit' name='submit' value='$langAddModify' /></td>
                   </tr>
 		  </table>
                 </fieldset>
@@ -436,7 +436,7 @@ if (mysql_num_rows($result) > 0) {
 				}
 				$nowBarShowed = TRUE;
 				$tool_content .= "\n        <tr>";
-				$tool_content .= "\n          <td colspan=2 class='today'><b>$langDateNow : $dateNow</b></td>";
+				$tool_content .= "\n          <td colspan=2 class='today'><b>$langDateNow</b> $dateNow</td>";
 				$tool_content .= "\n        </tr>";
 			}
 		}
