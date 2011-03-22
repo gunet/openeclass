@@ -210,21 +210,21 @@ if (isset($_POST['back1']) or !isset($_POST['visit'])) {
       </tr>
       <tr>
 	<td>
-	  <table class='tbl_alt' width='100%'>
-	  <tr class='even'>
-	    <th width='200'><img src=\"../../template/classic/img/lock_open.png\" title=\"".$m['legopen']."\" width=\"16\" height=\"16\" /> ".$m['legopen']."</th>
+	  <table class='tbl' width='100%'>
+	  <tr class='smaller'>
+	    <th width='130'><img src=\"../../template/classic/img/lock_open.png\" title=\"".$m['legopen']."\" width=\"16\" height=\"16\" /> ".$m['legopen']."</th>
 	    <td><input name=\"formvisible\" type=\"radio\" value=\"2\" checked=\"checked\" /></td>
 	    <td>$langPublic</td>
 	  </tr>
-	  <tr class='even'>
+	  <tr class='smaller'>
 	    <th valign='top'><img src=\"../../template/classic/img/lock_registration.png\" title=\"".$m['legrestricted']."\" width=\"16\" height=\"16\" / > ".$m['legrestricted']."</th>
 	    <td valign='top'><input name=\"formvisible\" type=\"radio\" value=\"1\" /></td>
 	    <td>
-              $langPrivOpen<br /><br />
-              <div class='smaller right'>$langOptPassword <input type='text' name='password' value='".q($password)."' class='FormData_InputText' /></div>
+              $langPrivOpen<br />
+              <div class='smaller' style='padding: 3px;'><em>$langOptPassword</em> <input type='text' name='password' value='".q($password)."' class='FormData_InputText' /></div>
             </td>
           </tr>
-	  <tr class='even'>
+	  <tr class='smaller'>
 	    <th valign='top'><img src=\"../../template/classic/img/lock_closed.png\" title=\"".$m['legclosed']."\" width=\"16\" height=\"16\" /> ".$m['legclosed']."</th>
 	    <td valign='top'><input name=\"formvisible\" type=\"radio\" value=\"0\" /></td>
 	    <td>$langPrivate</td>
@@ -234,21 +234,21 @@ if (isset($_POST['back1']) or !isset($_POST['visit'])) {
 	</td>
       </tr>
       <tr>
-	<td>$langSubsystems</td>
+	<td  class='sub_title1'>$langSubsystems</td>
       </tr>
       <tr>
 	<td>
- 	  <table class='tbl_border'>
-	  <tr class='even'>
-	    <td width='30' ><img src=\"../../template/classic/img/calendar_on.png\" alt=\"\" height=\"16\" width=\"16\" /></td>
+ 	  <table class='tbl smaller' width='100%'>
+	  <tr>
+	    <td width='10' ><img src=\"../../template/classic/img/calendar_on.png\" alt=\"\" height=\"16\" width=\"16\" /></td>
 	    <td width='150'>$langAgenda</td>
 	    <td width='30' ><input name=\"subsystems[]\" type=\"checkbox\" value=\"1\" checked=\"checked\" /></td>
 	    <th width='2' >&nbsp;</th>
-	    <td width='30' >&nbsp;<img src=\"../../template/classic/img/dropbox_on.png\" alt=\"\" height=\"16\" width=\"16\" /></td>
+	    <td width='10' >&nbsp;<img src=\"../../template/classic/img/dropbox_on.png\" alt=\"\" height=\"16\" width=\"16\" /></td>
 	    <td width='150'>$langDropBox</td>
  	    <td width='30' ><input type=\"checkbox\" name=\"subsystems[]\" value=\"16\" /></td>
 	  </tr>
-	  <tr class='even'>
+	  <tr  class='even'>
 	    <td><img src=\"../../template/classic/img/links_on.png\" alt=\"\" height=\"16\" width=\"16\" /></td>
 	    <td>$langLinks</td>
 	    <td><input name=\"subsystems[]\" type=\"checkbox\" value=\"2\" checked=\"checked\" /></td>
@@ -257,7 +257,7 @@ if (isset($_POST['back1']) or !isset($_POST['visit'])) {
 	    <td>$langGroups</td>
 	    <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"15\" /></td>
 	  </tr>
-	  <tr class='even'>
+	  <tr>
 	    <td><img src=\"../../template/classic/img/docs_on.png\" alt=\"\" height=\"16\" width=\"16\" /></td>
 	    <td>$langDoc</td>
 	    <td><input name=\"subsystems[]\" type=\"checkbox\" value=\"3\" checked=\"checked\" /></td>
@@ -275,7 +275,7 @@ if (isset($_POST['back1']) or !isset($_POST['visit'])) {
 	    <td>$langCourseDescription</td>
 	    <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"20\" checked=\"checked\" /></td>
 	  </tr>
-	  <tr class='even'>
+	  <tr>
 	    <td><img src=\"../../template/classic/img/assignments_on.png\" alt=\"\" height=\"16\" width=\"16\" /></td>
 	    <td>$langWorks</td>
 	    <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"5\" /></td>
@@ -284,7 +284,7 @@ if (isset($_POST['back1']) or !isset($_POST['visit'])) {
 	    <td>$langQuestionnaire</td>
 	    <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"21\" /></td>
 	  </tr>
-	  <tr class='even'>
+	  <tr  class='even'>
 	    <td><img src=\"../../template/classic/img/announcements_on.png\" alt=\"\" height=\"16\" width=\"16\" /></td>
 	    <td>$langAnnouncements</td>
 	    <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"7\" checked=\"checked\"/></td>
@@ -293,7 +293,7 @@ if (isset($_POST['back1']) or !isset($_POST['visit'])) {
 	    <td>$langLearnPath</td>
 	    <td><input type=\"checkbox\" name=\"subsystems[]\"  value=\"23\" /></td>
 	  </tr>
-	  <tr class='even'>
+	  <tr>
 	    <td><img src=\"../../template/classic/img/forum_on.png\" alt=\"\" height=\"16\" width=\"16\" /></td>
 	    <td>$langForums</td>
 	    <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"9\" /></td>
@@ -311,7 +311,7 @@ if (isset($_POST['back1']) or !isset($_POST['visit'])) {
 	    <td>$langGlossary</td>
 	    <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"17\" checked=\"checked\" /></td>
 	  </tr>
-	  <tr class='even'>
+	  <tr>
 	    <td><img src=\"../../template/classic/img/ebook_on.png\" alt=\"\" height=\"16\" width=\"16\" /></td>
 	    <td>$langEBook</td>
 	    <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"18\" /></td>
@@ -435,9 +435,9 @@ if (isset($_POST['create_course'])) {
         $tool_content .= doImportFromBetaCMSAfterCourseCreation($repertoire, $mysqlMainDb, $webDir);
         // --------------------------------------------------
         $tool_content .= "
-                <p class=\"success\">$langJustCreated: &nbsp;<b>$intitule</b></p>
-                <p class='smaller'>$langEnterMetadata</p><br />
-                <p align='center'>&nbsp;<a href='../../courses/$repertoire/index.php' class=mainpage>$langEnter</a>&nbsp;</p>";
+                <p class='success'>$langJustCreated: <b>$intitule</b><br>
+                <span class='right smaller'>$langEnterMetadata</span></p>
+                <p align='center'><a href='../../courses/$repertoire/index.php' class='button'>$langEnter</a></p>";
 } // end of submit
 
 $tool_content .= "</form>";

@@ -113,6 +113,18 @@ input[type=submit] {
 	padding: 3px;
 }
 
+.button {
+	color: #ffffff;
+	font-size: 12px;
+	border: 1px solid #8597A5;
+    background-color: #687A92;
+	padding: 3px;
+}
+
+.button a:link {
+	color: #ffffff !important;
+}
+
 input[type=reset] {
 	color: #ffffff;
 	font-size: 12px;
