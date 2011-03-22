@@ -146,7 +146,7 @@ switch( $cmd )
 			$tool_content .= disp_message_box("
    <form method=\"post\" name=\"rename\" action=\"".$_SERVER['PHP_SELF']."\">
    
-   <table width=\"99%\" class=\"tbl\">
+   <table width=\"100%\" class=\"tbl\">
    <tr>
      <td class=\"odd\" width=\"160\"><label for=\"newName\">".$langInsertNewModuleName."</label> :</td>
      <td><input type=\"text\" size=\"40\" name=\"newName\" id=\"newName\" value=\"".htmlspecialchars($list['name'])."\"></input>
@@ -278,7 +278,7 @@ $num_results = mysql_numrows($query_num_results);
 if (!$num_results == 0) {
 
 $tool_content .= "
-    <table width=\"99%\" class=\"tbl_alt\">
+    <table width=\"100%\" class=\"tbl_alt\">
     <tr>
       <th colspan=\"2\"><div align=\"left\">&nbsp;&nbsp;<b>".$langLearningObjects."</b></div></th>
       <th width=\"10%\"><div align=\"right\"><b>".$langTools."</b>&nbsp;&nbsp;&nbsp;</div></th>
