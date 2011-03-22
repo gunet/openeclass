@@ -235,11 +235,11 @@ if(isset($_GET['editQuestion']) || isset($usedInSeveralExercises)) {
 
 if(!isset($_GET['newQuestion']) && !isset($_GET['modifyQuestion']) &&
 	    !isset($_GET['editQuestion']) && !isset($_GET['modifyAnswers'])) {
-	// exercise management
+	    // exercise management
 	include('exercise_admin.inc.php');
-	if(!isset($_GET['modifyExercise'])) {
-		// question list management
-		include('question_list_admin.inc.php');
+	if(!isset($_GET['modifyExercise']) and !isset($_GET['NewExercise'])) {
+	    // question list management
+	    include('question_list_admin.inc.php');
 	}
 }
 draw($tool_content, 2, '', $head_content);
