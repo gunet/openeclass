@@ -1182,9 +1182,10 @@ function download_assignments($id)
 	$flag = $zip->create($secret, "work_$id", $secret);
 	header("Content-Type: application/x-zip");
 	header("Content-Disposition: attachment; filename=$filename");
+        stop_output_buffering();
 	readfile($filename);
 	unlink($filename);
-	exit();
+	exit;
 }
 
 
