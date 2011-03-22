@@ -199,15 +199,15 @@ function showlinks()
 	$result = db_query($sqlLinks);
 	$numberoflinks=mysql_num_rows($result);
 
-	$output = "<form action='$_SERVER[PHP_SELF]' method='POST'>
-                      <table width='99%' class='LearnPathSum'>
-                      <thead>
-                      <tr align='center' class='LP_header'>
-                        <td width='1%'>&nbsp;</td>
-                        <td><div align='left'>$langName</div></td>
-                        <td width='20%'><div align='center'>$langSelection</div></td>
+    $output = "
+<form action='$_SERVER[PHP_SELF]' method='POST'>
+                      <table width='100%' class='tbl_alt'>
+                    
+                      <tr>
+                        <th colspan='2'>$langName</th>
+                        <th width='50'>$langSelection</th>
                       </tr>
-                      </thead>
+                      
                       <tbody>";
 	$i=1;
 	while ($myrow = mysql_fetch_array($result))
@@ -215,7 +215,7 @@ function showlinks()
 		$myrow[3] = parse_tex($myrow[3]);
 		$output .= 	"
     <tr>
-      <td valign='top'><img src='../../template/classic/img/links_on.png' border='0'></td>
+      <td width='1' valign='top'><img src='../../template/classic/img/links_on.png' border='0'></td>
       <td align='left' valign='top'><a href='../link/link_goto.php?link_id=".$myrow[0]."&link_url=".urlencode($myrow[1])."' target='_blank'>".q($myrow[2])."</a>
       <br />
       <small class='comments'>".q($myrow[3])."</small></td>";
@@ -225,15 +225,15 @@ function showlinks()
 		$i++;
 	}
 	$output .= "
-    <tr>
-      <td colspan='2'>&nbsp;</td>
-      <td align='right'>
-        <input type='hidden' name='maxLinkForm' value ='" . ($i-1) ."' />
-        <input type='submit' name='submitInsertedLink' value='$langAddModulesButton' class='LP_button'/>
-      </td>
-    </tr>
-    </tbody>
-    </table>
-    </form>";
+ </table>
+        <div align='right' style='padding-top: 10px;'>
+          <input type='hidden' name='maxLinkForm' value ='" . ($i-1) ."' />
+          <input type='submit' name='submitInsertedLink' value='$langAddModulesButton' class='LP_button'/>
+        </div>
+
+    </form>
+    
+        
+        ";
 	return $output;
 }
