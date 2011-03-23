@@ -156,13 +156,13 @@ global $tool_content, $currentCourse, $langCreatePoll, $langPollsActive,
 						$visibility_css = " class=\"even\"";
 						$visibility_gif = "visible";
 						$visibility_func = "deactivate";
-						$arrow_gif = "arrow_grey";
+						$arrow_png = "arrow";
 						$k++;
 					} else {
 						$visibility_css = " class=\"invisible\"";
 						$visibility_gif = "invisible";
 						$visibility_func = "activate";
-						$arrow_gif = "arrow_red";
+						$arrow_png = "arrow";
 						$k++;
 					}
 					if ($k%2 == 0) {
@@ -195,7 +195,7 @@ global $tool_content, $currentCourse, $langCreatePoll, $langPollsActive,
 					}
 					if ($is_adminOfCourse) {
 						$tool_content .= "
-                        <td width='1'><img style='border:0px; padding-top:3px;' src='${urlServer}/template/classic/img/$arrow_gif.gif' title='bullet' /></td>
+                        <td width='16'><img src='${urlServer}/template/classic/img/$arrow_png.png' title='bullet' /></td>
                         <td><a href='pollresults.php?pid=$pid'>$thepoll[name]</a>";
 					} else {
 						$tool_content .= "

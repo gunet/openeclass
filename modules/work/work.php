@@ -1046,10 +1046,10 @@ cData;
 			$hasUnevaluatedSubmissions = $row_s[0];
 			if(!$row['active']) {
 				$visibility_css = "style='color: #CAC3B5;'";
-				$visibility_image = "arrow_red";
+				$visibility_image = "arrow";
 			} else {
 				$visibility_css = "";
-				$visibility_image = "arrow_grey";
+				$visibility_image = "arrow";
 			}
 			    if ($index%2==0) {
 	                       $tool_content .= "\n    <tr class='even' ".$visibility_css.">";
