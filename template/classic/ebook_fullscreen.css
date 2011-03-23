@@ -140,3 +140,15 @@ a.trigger.active {
         background-color: #ffffff;
         
 }
+
+.glossary {
+    border-bottom: 1px dotted #727266;
+    color: #cc333333 !important;  
+    text-decoration: none !important;
+    cursor:help; }
+
+.glossary a {
+    border-bottom: 1px dotted #727266;
+    color: #cc333333 !important;  
+    text-decoration: none !important;
+    cursor:help; }
