@@ -354,15 +354,15 @@ function new_assignment()
           <td><input type='text' name='title' size='55' /></td>
         </tr>
         <tr>
-          <th valign='top'>$m[description]:</th>
+          <th>$m[description]:</th>
           <td>" . rich_text_editor('desc', 4, 20, $desc) . " </td>
         </tr>
         <tr>
-          <th valign='top'>$m[deadline]:</th>
+          <th>$m[deadline]:</th>
           <td>$end_cal_Work</td>
         </tr>
         <tr>
-          <th valign='top'>$m[group_or_user]:</th>
+          <th>$m[group_or_user]:</th>
           <td><input type='radio' name='group_submissions' value='0' checked='1' />$m[user_work]
           <br /><input type='radio' name='group_submissions' value='1' />$m[group_work]</td>
         </tr>
@@ -1058,7 +1058,7 @@ cData;
                         }
 
 			$tool_content .= "
-       <td width='1'><img style='border:0px; padding-top:3px;' src='$urlServer/template/classic/img/$visibility_image.png' title='bullet' /></td>
+       <td width='16'><img src='$urlServer/template/classic/img/$visibility_image.png' title='bullet' /></td>
        <td ".$visibility_css."><a href='$_SERVER[PHP_SELF]?id=${row['id']}' ";
 			$tool_content .= ">";
 			$tool_content .= $row_title = q($row['title']);
