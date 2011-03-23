@@ -131,10 +131,10 @@ global $tool_content, $currentCourse, $langCreatePoll, $langPollsActive,
 		      <table align='left' width='100%' class='tbl_alt'>
 		      <tr>
 			<th colspan='2'><div align='left'>&nbsp;$langTitle</div></th>
-			<th width='120'>$langPollCreator</th>
-			<th width='120'>$langPollCreation</th>
-			<th width='70'>$langPollStart</th>
-			<th width='70'>$langPollEnd</th>";
+			<th width='150' class='center'>$langPollCreator</th>
+			<th width='120' class='center'>$langPollCreation</th>
+			<th width='70' class='center'>$langPollStart</th>
+			<th width='70' class='center'>$langPollEnd</th>";
 		
 			if ($is_adminOfCourse) {
 				$tool_content .= "
