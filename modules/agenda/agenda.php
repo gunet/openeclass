@@ -444,7 +444,7 @@ if (mysql_num_rows($result) > 0) {
 			$barreMois=date("m",strtotime($myrow["day"]));
             		// month LABEL
 			$tool_content .= "\n        <tr>";
-			$tool_content .= "\n          <td colspan='2' class='monthLabel'><div align='center'>".$langCalendar."&nbsp;<b>".ucfirst(claro_format_locale_date("%B %Y",strtotime($myrow["day"])))."</b></div></td>";
+			$tool_content .= "\n          <td class='monthLabel'><div align='center'>".$langCalendar."&nbsp;<b>".ucfirst(claro_format_locale_date("%B %Y",strtotime($myrow["day"])))."</b></div></td>";
 			$tool_content .= "\n        </tr>";
 		}
 

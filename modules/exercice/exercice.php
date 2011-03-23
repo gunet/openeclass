@@ -160,10 +160,10 @@ if($is_adminOfCourse) {
 } else { // student view
 	$tool_content .= "
       <th colspan=\"2\">$langExerciseName</th>
-      <th>$langExerciseStart</th>
-      <th>$langExerciseEnd</th>
-      <th>$langExerciseConstrain</th>
-      <th>$langExerciseAttemptsAllowed</th>
+      <th width='70'class='center'>$langExerciseStart</th>
+      <th width='70'class='center'>$langExerciseEnd</th>
+      <th width='140'class='center'>$langExerciseConstrain</th>
+      <th width='180'class='center'>$langExerciseAttemptsAllowed</th>
     </tr>";
 }
 
