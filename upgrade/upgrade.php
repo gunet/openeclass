@@ -491,6 +491,8 @@ if (!isset($_POST['submit2'])) {
 			db_query("DROP TABLE cours_faculte");	
 		}
 		db_query("INSERT INTO `config` (`key`, `value`) VALUES ('dont_display_login_form', '0')");
+		db_query("INSERT INTO `config` (`key`, `value`) VALUES ('email_required', '0')");
+		db_query("INSERT INTO `config` (`key`, `value`) VALUES ('am_required', '0')");
         }
 
         // **********************************************

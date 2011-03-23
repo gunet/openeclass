@@ -54,6 +54,16 @@ $lang = langname_to_code($language);
 
 // display form
 if (!isset($_POST['submit'])) {
+	if (get_config("email_required")) {
+		$email_message = "(*)";
+	} else {
+		$email_message = $langEmailNotice;
+	}
+	if (get_config("am_required")) {
+		$am_message = "&nbsp;&nbsp;<small>(*)</small>";
+	} else {
+		$am_message = '';
+	}
 	@$tool_content .= "<form action='$_SERVER[PHP_SELF]' method='post'>
         <fieldset>
         <legend>$langUserData</legend>
@@ -81,11 +91,11 @@ if (!isset($_POST['submit'])) {
 	<tr>
 	<th class='left'>$langEmail</th>
 	<td valign='top'><input type='text' name='email' value='".$_GET['email']."' class='FormData_InputText' /></td>
-	<td><small>$langEmailNotice</small></td>
+	<td><small>$email_message</small></td>
 	</tr>
 	<tr>
 	<th class='left'>$langAm</th>
-	<td colspan='2' valign='top'><input type='text' name='am' value='".$_GET['am']."' class='FormData_InputText' /></td>
+	<td colspan='2' valign='top'><input type='text' name='am' value='".$_GET['am']."' class='FormData_InputText' />$am_message</td>
 	</tr>
 	<tr>
 	<th class='left'>$langFaculty</th>
@@ -111,17 +121,27 @@ if (!isset($_POST['submit'])) {
 	</tr>
 	</table>
 	<div align='right'><small>$langRequiredFields</small></div>
+	</fieldset>
 	</form>";
 } else {
-
+	if (get_config("email_required")) {
+		$email_arr_value = true;
+	} else {
+		$email_arr_value = false;
+	}
+	if (get_config("am_required")) {
+		$am_arr_value = true;
+	} else {
+		$am_arr_value = false;
+	}
 	$missing = register_posted_variables(array('uname' => true,
 					'nom_form' => true,
 					'prenom_form' => true,
 					'password' => true,
 					'password1' => true,
-					'email' => false,
+					'email' => $email_arr_value,
 					'department' => true,
-					'am' => false));	
+					'am' => $am_arr_value));	
 	$registration_errors = array();
 	// check if there are empty fields
 	if (!$missing) {
@@ -195,12 +215,12 @@ if (!isset($_POST['submit'])) {
 			"<p>$langPersonalSettingsMore</p>";
 	} else {
 		// errors exist - registration failed
-		$tool_content .= "<table width='99%' class='tbl'><tbody><tr>" .
+		$tool_content .= "<table width='100%' class='tbl'><tbody><tr>" .
 			"<td class='caution' height='60'>";
 		foreach ($registration_errors as $error) {
 			$tool_content .= "<p>$error</p>";
 		}
-		$tool_content .= "<p><a href='$_SERVER[PHP_SELF]?prenom_form=$_POST[prenom_form]&nom_form=$_POST[nom_form]&uname=$_POST[uname]&email=$_POST[email]&am=$_POST[am]'>$langAgain</a></p>" .
+		$tool_content .= "<p><a href='$_SERVER[PHP_SELF]?prenom_form=$_POST[prenom_form]&amp;nom_form=$_POST[nom_form]&amp;uname=$_POST[uname]&amp;email=$_POST[email]&amp;am=$_POST[am]'>$langAgain</a></p>" .
 				"</td></tr></tbody></table><br /><br />";
 	}
 } // end of registration
