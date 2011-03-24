@@ -733,6 +733,16 @@ fieldset table.th {
     border-bottom: 1px dashed #dfdfdf;    
 }
 
+ .tbl_alt th {
+    vertical-align: top;
+    border-right: 1px dashed #dfdfdf;
+    border-bottom: 1px dashed #dfdfdf;
+    padding: 8px;    
+}
+
+
+   
+
 .tbl_alt .odd {
     background-color: #f8f8f8; /* LIGHTER BEIGE  */
 }	
@@ -864,9 +874,10 @@ td.even {
 
 th {
     text-align: left !important;
+    padding: 8px;
 }
 
-td, th {
+td {
     padding: 4px;
 }
 
