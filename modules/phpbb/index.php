@@ -129,12 +129,12 @@ $total_categories = mysql_num_rows($result);
 if ($total_categories) {
 	$tool_content .= "
          <table width='100%' class='tbl_border'>
-	 <tr>
-	   <th colspan='2'>&nbsp;$langForums</th>
-	   <th class='center'>$langSubjects</th>
-	   <th class='center'>$langPosts</th>
-	   <th class='center'>$langLastPost</th>
-	   <th class='center' width='5'>$langNotifyActions</th>
+	 <tr class='sub_title1'>
+	   <td colspan='2'>$langForums</td>
+	   <td class='center'>$langSubjects</td>
+	   <td class='center'>$langPosts</td>
+	   <td class='center'>$langLastPost</td>
+	   <td class='center'>$langNotifyActions</td>
  	 </tr>\n";
 
 	if (isset($viewcat)) {
@@ -163,7 +163,7 @@ if ($total_categories) {
 			if ($categories[$i][cat_id] != $viewcat) {
 				$title = stripslashes($categories[$i][cat_title]);
 				$tool_content .= "        <tr>
-          <td colspan='6'>&nbsp;$title</td>
+          <td colspan='6'>$title</td>
         </tr>";
 				continue;
 			}
@@ -180,7 +180,7 @@ if ($total_categories) {
 			$icon = toggle_icon($action_notify);
 		}
 		$tool_content .= "         <tr class='odd'>
-           <td colspan='5'>&nbsp;<b>$title</b></td>
+           <td colspan='5'><b>$title</b></td>
            <td class='center'><a href='$_SERVER[PHP_SELF]?forumcatnotify=$link_notify&amp;cat_id=$catNum'><img src='../../template/classic/img/announcements$icon.png' title='$langNotify' alt='$langNotify' /></a></td>
          </tr>\n";
 			
@@ -228,11 +228,11 @@ if ($total_categories) {
 				//     - forum is not private or
 				//     - user is member of group
                                 if ($is_adminOfCourse or !$group_id or ($has_forum and (!$private_forum or $is_member))) {
-                                        $tool_content .= "<a href='viewforum.php?forum=$forum_id'>$forum_name</a>" . $member;
+                                        $tool_content .= "<a href='viewforum.php?forum=$forum_id'><b>$forum_name</b></a><div class='smaller'>" . $member;
                                 } else {
                                         $tool_content .= $forum_name;
                                 }
-				$tool_content .= "<br />$desc";
+				$tool_content .= "</div><br /><div class='smaller'>$desc</div>";
 				$tool_content .= "</td>\n";
 				$tool_content .= "<td width='65' class='center'>$total_topics</td>\n";
 				$tool_content .= "<td width='65' class='center'>$total_posts</td>\n";

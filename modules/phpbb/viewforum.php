@@ -182,13 +182,13 @@ if (mysql_num_rows($result) > 0) { // topics found
 // header
 $tool_content .= "
      <table width='100%' class='tbl_border'>
-     <tr>
-       <th colspan='2'>&nbsp;$langSubject</th>
-       <th width='100' class='center'>$langAnswers</th>
-       <th width='100' class='center'>$langSender</th>
-       <th width='100' class='center'>$langSeen</th>
-       <th width='100' class='center'>$langLastMsg</th>
-       <th width='20' class='center'>$langNotifyActions</th>
+     <tr class='sub_title1'>
+       <td colspan='2'>&nbsp;$langSubject</td>
+       <td width='90' class='center'>$langAnswers</td>
+       <td width='90' class='center'>$langSender</td>
+       <td width='90' class='center'>$langSeen</td>
+       <td width='120' class='center'>$langLastMsg</td>
+       <td width='20' class='center'>$langNotifyActions</td>
      </tr>";
 
         $i=0;
@@ -255,7 +255,7 @@ $tool_content .= "
 			}
 			$pagination .= "&nbsp;</span></strong>";
 		}
-		$tool_content .= "\n<td><a href='$topiclink'>$topic_title</a>$pagination</td>";
+		$tool_content .= "\n<td><a href='$topiclink'><b>$topic_title</b></a>$pagination</td>";
 		$tool_content .= "\n<td class='center'>$replys</td>";
 		$tool_content .= "\n<td class='center'>$myrow[prenom] $myrow[nom]</td>";
 		$tool_content .= "\n<td class='center'>$myrow[topic_views]</td>";
