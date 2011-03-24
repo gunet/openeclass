@@ -57,10 +57,10 @@ if ($is_adminOfCourse) {
 <form method='post' action='group.php'>
     <fieldset>
     <legend>$langGroupProperties / $langTools</legend>
-    <table width='99%' align='left' class='tbl'>
+    <table width='100%' class='tbl'>
     <tr>
-      <th class='left' width='180'>$langGroupStudentRegistrationType :</th>
-      <td>
+      <th class='left' width='180'>$langGroupStudentRegistrationType:</th>
+      <td class='smaller'>
        <input type='checkbox' name='self_reg' value='1'$checked[self_reg] />&nbsp;$langGroupAllowStudentRegistration<br />
        <input type='checkbox' name='multi_reg' value='1'$checked[multi_reg] />&nbsp;$langGroupAllowMultipleRegistration<br />
        </td>
@@ -70,14 +70,14 @@ if ($is_adminOfCourse) {
       <td>&nbsp;</td>
     </tr>
     <tr>
-    <th class='left'>$langGroupForum :</th>
+    <th class='left'>$langGroupForum:</th>
       <td>
         <input type='checkbox' name='has_forum' value='1'$checked[has_forum] />
       </td>
     </tr>
     <tr>
-      <th class='left'>$langPrivate_1 :</th>
-      <td>
+      <th class='left'>$langPrivate_1:</th>
+      <td class='smaller'>
         <input type='radio' name='private_forum' value='1'$checked[private_forum_yes] />
                 &nbsp;$langPrivate_2&nbsp;<br />
         <input type='radio' name='private_forum' value='0'$checked[private_forum_no] />
@@ -85,14 +85,14 @@ if ($is_adminOfCourse) {
       </td>
     </tr>
     <tr>
-      <th class='left'>$langDoc :</th>
+      <th class='left'>$langDoc:</th>
       <td>
         <input type='checkbox' name='documents' value='1'$checked[documents] />
       </td>
     </tr>
     <tr>
       <th>&nbsp;</th>
-      <td><input type='submit' name='properties' value='$langModify' /></td>
+      <td class='right'><input type='submit' name='properties' value='$langModify' /></td>
     </tr>
     </table>
     </fieldset>    

@@ -78,9 +78,9 @@ $tool_content .= loadGroupTools();
 $tool_content .=  "<br />
     <fieldset>
     <legend>$langGroupInfo</legend>
-    <table width='99%' class='tbl'>
+    <table width='100%' class='tbl'>
     <tr>
-      <th class='left' width='180'>$langGroupName :</th>
+      <th class='left' width='180'>$langGroupName:</th>
       <td>" . q($group_name) . "</td>
     </tr>";
 
@@ -108,7 +108,7 @@ if ($tutors) {
 
 $tool_content .= "
     <tr>
-      <th class='left'>$langGroupTutor :</th>
+      <th class='left'>$langGroupTutor:</th>
       <td>$tool_content_tutor</td>
     </tr>";
 
@@ -121,20 +121,20 @@ if (empty($group_description)) {
 
 $tool_content .= "
     <tr>
-      <th class='left'>$langDescription :</th>
+      <th class='left'>$langDescription:</th>
       <td>$tool_content_description</td>
     </tr>";
 
 // members
 $tool_content .= "
     <tr>
-      <th class='left' valign='top'>$langGroupMembers :</th>
+      <th class='left' valign='top'>$langGroupMembers:</th>
       <td>
-        <table width='99%' align='center' class=\"tbl_alt\">
+        <table width='100%' align='center' class=\"tbl_alt\">
         <tr>
-          <th><div align='left'>$langNameSurname</div></th>
-          <th width='120'>$langAm</th>
-          <th>$langEmail</th>
+          <th class='left'>$langNameSurname</th>
+          <th class='center' width='120'>$langAm</th>
+          <th class='center' width='150'>$langEmail</th>
         </tr>";
 
 if ($members) {

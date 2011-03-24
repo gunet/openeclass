@@ -405,7 +405,7 @@ if ($is_adminOfCourse) {
 	$registered_students = $total_students - $unregistered_students;
 	$tool_content .= "" .
 	                 "
-        <table width='100%' class='tbl'>
+        <table width='100%' class='tbl smaller'>
         <tr>
 	  <td><div align='left'>
 	    <b>$registered_students</b> $langGroupStudentsInGroup<br />

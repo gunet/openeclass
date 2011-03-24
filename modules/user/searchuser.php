@@ -106,22 +106,22 @@ if($is_adminOfCourse) {
 	$tool_content .= "
         <fieldset>
         <legend>$langUserData</legend>
-        <table width='99%' class='tbl'>
+        <table width='100%' class='tbl'>
 	<tr>
-	  <th class='left' width='180'>$langSurname</th>
+	  <th class='left' width='180'>$langSurname:</th>
 	  <td><input type='text' name='search_nom' value='$search_nom'></td>
 	</tr>
 	<tr>
-	  <th class='left'>$langName</th>
+	  <th class='left'>$langName:</th>
 	  <td><input type='text' name='search_prenom' value='$search_prenom'></td>
 	</tr>
 	<tr>
-	  <th class='left'>$langUsername</th>
+	  <th class='left'>$langUsername:</th>
 	  <td><input type='text' name='search_uname' value='$search_uname'></td>
 	</tr>
 	<tr>
 	  <th class='left'>&nbsp;</th>
-	  <td><input type='submit' value='$langSearch'></td>
+	  <td class='right'><input type='submit' value='$langSearch'></td>
 	</tr>
 	</table>
         </fieldset>

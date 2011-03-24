@@ -84,7 +84,7 @@ if ($is_adminOfCourse) {
      </tr>
      <tr>
        <th>&nbsp;</th>
-       <td><input type='submit' name='submit' value='$langSend' /></td>
+       <td class='right'><input type='submit' name='submit' value='$langSend' /></td>
      </tr>
      </table>
      </fieldset>
@@ -105,8 +105,7 @@ if (mysql_num_rows($q) == 0) {
      <script type='text/javascript' src='../auth/sorttable.js'></script>
      <table width='100%' class='sortable' id='t1'>
      <tr>
-       <th>&nbsp;</th>
-       <th><div align='left'>$langEBook</div></th>" .  ($is_adminOfCourse? "
+       <th colspan='2'><div align='left'>$langEBook</div></th>" .  ($is_adminOfCourse? "
        <th width='70'>$langActions</th>
        <th width='70'>$langMove</th>":
                                                      '') .  "
@@ -117,7 +116,7 @@ if (mysql_num_rows($q) == 0) {
         while ($r = mysql_fetch_array($q)) {
                 $tool_content .= "
      <tr" . odd_even($k) . ">
-       <td width='1' valign='top'>" .
+       <td width='16' valign='top'>" .
                                  "<img style='padding-top:3px;' src='${urlServer}/template/classic/img/arrow.png' " .
                                  " alt='' /></td>
        <td><a href='show.php/$currentCourseID/$r[id]/'>" .
