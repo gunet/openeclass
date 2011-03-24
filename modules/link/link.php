@@ -179,7 +179,7 @@ if ($is_adminOfCourse) {
                 }
                 $tool_content .=  "</select></td></tr>
                         <tr><th>&nbsp;</th>
-                            <td><input type='submit' name='submitLink' value='$submit_label' /></td></tr>
+                            <td class='right'><input type='submit' name='submitLink' value='$submit_label' /></td></tr>
                      </table></fieldset></form>";
 
         } elseif (in_array($action, array('addcategory', 'editcategory'))) {
@@ -199,7 +199,7 @@ if ($is_adminOfCourse) {
                                    <tr><th>$langDescription:</th>
                                        <td><textarea rows='5' cols='50' name='description'>$form_description</textarea></td></tr>
                                    <tr><th>&nbsp;</th>
-                                       <td><input type='submit' name='submitCategory' value='$form_legend' /></td></tr>
+                                       <td class='right'><input type='submit' name='submitCategory' value='$form_legend' /></td></tr>
                                 </table></fieldset></form>";
         }
 }

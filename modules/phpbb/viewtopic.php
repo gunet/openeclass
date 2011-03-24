@@ -257,11 +257,10 @@ if ($paging and $total > $posts_per_page ) {
 }
 
 $tool_content .= "<table width='100%' class='tbl_border'>
-    <thead>
-    <tr>
-      <th width='150'>$langAuthor</th>
-      <th>$langMessage</th>
-      <th width='70' class='right'>$langActions</th>
+    <tr class='sub_title1'>
+      <td width='220'>$langAuthor</td>
+      <td>$langMessage</td>
+      <td width='70' class='right'>$langActions</td>
     </tr>";
 
 if (isset($_GET['all'])) {
@@ -299,7 +298,7 @@ do {
 	// support for math symbols
 	$message = mathfilter($message, 12, "../../courses/mathimg/");
 	if ($count == 0) {
-		$postTitle = "$langPostTitle: <b>$topic_subject</b>";
+		$postTitle = "<b>$langPostTitle: </b>$topic_subject";
 	} else {
 		$postTitle = "";
 	}
@@ -307,7 +306,7 @@ do {
 	$tool_content .= "\n<td>
 	  <div class='post_massage'>
 	    <img src='$posticon' alt='' />
-	    <em>$langSent: " . $myrow["post_time"] . "</em>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$postTitle
+	    $langSent: " . $myrow["post_time"] . "<br>$postTitle
 	  </div>
 	  <br />$message<br />
 	</td>
@@ -328,9 +327,9 @@ $tool_content .= "\n    </table>";
 
 if ($paging and $total > $posts_per_page) {
 	$times = 1;
-	$tool_content .= "<table width='100%' class='tbl'><thead>
+	$tool_content .= "<table width='100%' class='tbl'>
 	<tr>
-	<td width='50%' align='right'>
+	<td width='200'>
 	<span class='row'><strong class='pagination'><span>";
 	
 	$last_page = $start - $posts_per_page;
@@ -362,7 +361,7 @@ if ($paging and $total > $posts_per_page) {
 	}
 	$tool_content .= "&nbsp;<a href=\"$_SERVER[PHP_SELF]?topic=$topic&amp;forum=$forum&amp;all=true\">$langAllOfThem</a>
 	</span>
-	</td></tr></thead></table>";
+	</td></tr></table>";
 } else {
 	$tool_content .= "<table width=\"100%\" class=\"tbl\">
 	<tr>
