@@ -266,14 +266,14 @@ if ($is_adminOfCourse) {
                   <form method='post' action='$_SERVER[PHP_SELF]?action=2'>
                     <fieldset>
                     <legend>$langExplanation_4</legend>
-                    <table width='99%' class='tbl'>
+                    <table width='100%' class='tbl'>
                     <tr>
-                      <th>$langLink&nbsp;:</th>
+                      <th>$langLink:</th>
                       <td><input type='text' name='link' size='50' value='http://'></td>
                       <td>&nbsp;</td>
                     </tr>
                     <tr>
-                      <th>$langName&nbsp;:</th>
+                      <th>$langName:</th>
                       <td><input type='Text' name='name_link' size='50'></td>
                       <td>&nbsp;</td>
                     </tr>
@@ -324,7 +324,7 @@ if ($is_adminOfCourse) {
 
 	$tool_content .= <<<tForm
 <form name="courseTools" action="$_SERVER[PHP_SELF]" method="post" enctype="multipart/form-data">
-  <table class="tbl_border" width="99%">
+  <table class="tbl_border" width="100%">
   <tr>
     <th width="45%" class="center">$langInactiveTools</th>
     <th width="10%" class="center">$langMove</th>
@@ -358,7 +358,7 @@ tForm;
 		// show table to edit/delete external links
                 $tool_content .= "
                 <br/>
-                        <table class='tbl_alt' width='99%'>
+                        <table class='tbl_alt' width='100%'>
                         <tr>
                           <th>&nbsp;</th>
                           <th colspan='2'>$langOperations</th>
@@ -375,7 +375,7 @@ tForm;
 				$tool_content .= "                        <tr class='odd'>\n";
 			}
 			$tool_content .= "                          <th width='1'>
-                                <img src='../../template/classic/img/external_link_on.gif' title='$langTitle' /></th>
+                                <img src='../../template/classic/img/external_link_on.png' title='$langTitle' /></th>
                                 <td class='left'>{$externalLinks[$i]['text']}</td>
                                 <td align='center'><form method='post' action='course_tools.php'>
                                    <input type='hidden' name='delete' value='{$externalLinks[$i]['id']}' />
