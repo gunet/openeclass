@@ -150,35 +150,35 @@ if (isset($_POST['submit'])) {
 	<form method='post' action='$_SERVER[PHP_SELF]'>
 	<fieldset>
 	<legend>$langCourseIden</legend>
-	<table class='tbl'>
+	<table class='tbl' width='100%'>
 	    <tr>
-		<th width='170'>$langCode&nbsp;:</th>
+		<th width='170'>$langCode:</th>
 		<td><input type='text' name='fcode' value='$fake_code' size='60' /></td>
 	    </tr>
 	    <tr>
-		<th>$langCourseTitle&nbsp;:</th>
+		<th>$langCourseTitle:</th>
 		<td><input type='text' name='title' value='$title' size='60' /></td>
 	    </tr>
 	    <tr>
-		<th>$langTeachers&nbsp;:</th>
+		<th>$langTeachers:</th>
 		<td><input type='text' name='titulary' value='$titulary' size='60' /></td>
 	    </tr>
 	    <tr>
-                <th>$langFaculty&nbsp;:</th>
+                <th>$langFaculty:</th>
                 <td>";
 	$tool_content .= list_departments($department);
 	$tool_content .= "
                 </td>
             </tr>
 	    <tr>
-	        <th>$langType&nbsp;:</th>
+	        <th>$langType:</th>
 	        <td>";
 	$tool_content .= selection(array('pre' => $langpre, 'post' => $langpost, 'other' => $langother), 'type', $type);
 	$tool_content .= "
                 </td>
 	    </tr>
 	    <tr>
-		<th>$langCourseKeywords&nbsp;</th>
+		<th>$langCourseKeywords</th>
 		<td><input type='text' name='course_keywords' value='$course_keywords' size='60' /></td>
 	    </tr>
 	    </table>
@@ -186,25 +186,25 @@ if (isset($_POST['submit'])) {
 
 	<fieldset>
 	<legend>$langConfidentiality</legend>
-	    <table class='tbl'>
+	    <table class='tbl' width='100%'>
 	    <tr>
-		<th width='170'><img src='../../template/classic/img/lock_open.png' alt='$m[legopen]' title='$m[legopen]' width='16' height='16' />&nbsp;$m[legopen]&nbsp;:</th>
+		<th width='170'><img src='../../template/classic/img/lock_open.png' alt='$m[legopen]' title='$m[legopen]' width='16' height='16' />&nbsp;$m[legopen]:</th>
 		<td width='1'><input type='radio' name='formvisible' value='2'".@$visibleChecked[2]." /></td>
-		<td>$langPublic&nbsp;</td>
+		<td class='smaller'>$langPublic</td>
 	    </tr>
 	    <tr>
-		<th rowspan='2' valign='top'><img src='../../template/classic/img/lock_registration.png' alt='$m[legrestricted]' title='$m[legrestricted]' width='16' height='16' />&nbsp;$m[legrestricted]&nbsp;:</th>
+		<th rowspan='2' valign='top'><img src='../../template/classic/img/lock_registration.png' alt='$m[legrestricted]' title='$m[legrestricted]' width='16' height='16' />&nbsp;$m[legrestricted]:</th>
 		<td><input type='radio' name='formvisible' value='1'".@$visibleChecked[1]." /></td>
-		<td>$langPrivOpen</td>
+		<td class='smaller'>$langPrivOpen</td>
 	    </tr>
 	    <tr>
 		<td>&nbsp;</td>
-		<td><i>$langOptPassword</i>&nbsp;<input type='text' name='password' value='$password' /></td>
+		<td class='smaller'><i>$langOptPassword</i>&nbsp;<input type='text' name='password' value='$password' /></td>
 	    </tr>
 	    <tr>
-		<th><img src='../../template/classic/img/lock_closed.png' alt='$m[legclosed]' title='$m[legclosed]' width='16' height='16' />&nbsp;$m[legclosed]&nbsp;:</th>
+		<th><img src='../../template/classic/img/lock_closed.png' alt='$m[legclosed]' title='$m[legclosed]' width='16' height='16' />&nbsp;$m[legclosed]:</th>
 		<td><input type='radio' name='formvisible' value='0'".@$visibleChecked[0]." /></td>
-		<td>$langPrivate&nbsp;</td>
+		<td class='smaller'>$langPrivate</td>
 	    </tr>
 	    </table>
 	</fieldset>
@@ -213,17 +213,17 @@ if (isset($_POST['submit'])) {
 	    <legend>$langLanguage</legend>
 	    <table class='tbl'>
 	    <tr>
-		<th width='170'>$langOptions&nbsp;:</th>
+		<th width='170'>$langOptions:</th>
 		<td width='1'>";
 	$language = $c['languageCourse'];
 	$tool_content .= lang_select_options('localize');
 	$tool_content .= "
 	        </td>
-	        <td>$langTipLang</td>
+	        <td class='smaller'>$langTipLang</td>
 	    </tr>
 	</table>
 	</fieldset>
-	<p align='left'><input type='submit' name='submit' value='$langSubmit' /></p>
+	<p class='right'><input type='submit' name='submit' value='$langSubmit' /></p>
 	</form>";
 }
 add_units_navigation(TRUE);

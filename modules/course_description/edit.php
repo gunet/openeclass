@@ -148,7 +148,7 @@ if (isset($_POST['edIdBloc'])) {
         
         <table class='tbl'>
         <tr>
-           <th>$langTitle:</th>";
+           <th width='100'>$langTitle:</th>";
         if ($edit_title) {
                 $tool_content .= "
            <td><input type='text' name='edTitleBloc' $edit_title /></td>
@@ -168,7 +168,7 @@ if (isset($_POST['edIdBloc'])) {
         </tr>
         <tr>
            <td>&nbsp;</td>
-           <td><input class='Login' type='submit' name='save' value='$langAdd' />&nbsp;&nbsp;
+           <td class='right'><input class='Login' type='submit' name='save' value='$langAdd' />&nbsp;&nbsp;
               <input class='Login' type='submit' name='ignore' value='$langBackAndForget' />
            </td>
         </tr>
@@ -202,7 +202,7 @@ function display_add_block_form()
           <legend>$langAddCat</legend>
           <table class='tbl'>
           <tr>
-            <th>$langSelection :</th>
+            <th>$langSelection:</th>
             <td><select name='numBloc' size='1'>";
         while (list($numBloc,) = each($titreBloc)) {
                 if (!isset($blocState[$numBloc])) {
