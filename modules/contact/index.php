@@ -93,16 +93,16 @@ function form()
 	<fieldset>
 	<legend>$langIntroMessage</legend>
 	$hidden
-	<table class='FormData' width='99%' align='left'>
+	<table class='tbl' width='100%'>
 	<tbody>
 	<tr>
-	  <td>$message</td>
+	  <td class='smaller'>$message</td>
 	</tr>
 	<tr>
 	  <td><textarea class=auth_input name='content' rows='10' cols='80'></textarea></td>
 	</tr>
 	<tr>
-	  <td><input type='submit' name='submit' value='$langSendMessage' /></td>
+	  <td class='right'><input type='submit' name='submit' value='$langSendMessage' /></td>
 	</tr>
 	</tbody>
 	</table>

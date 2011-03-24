@@ -140,7 +140,7 @@ if ($key==0) {
 } else {
 // Construct course list table
 $tool_content .= "
-    <table class=\"tbl_alt\" width=\"99%\">
+    <table class=\"tbl_alt\" width=\"100%\">
     <tr>
       <th colspan='7'>
         <div align=\"right\">".$caption."</div>
