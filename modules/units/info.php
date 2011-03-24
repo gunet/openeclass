@@ -142,7 +142,7 @@ if (isset($unit_id)) {
     <input type='hidden' name='unit_id' value='$unit_id'>";
 }
 $tool_content .= "
-    <table class='tbl'>
+    <table class='tbl' width='100%'>
     <tr>
       <th width='150'>$langUnitTitle:</th>
     </tr>
@@ -156,7 +156,7 @@ $tool_content .= "
       <td>".  rich_text_editor('unitdescr', 4, 20, $unitdescr) ."</td>
     </tr>
     <tr>
-      <td><input type='submit' name='edit_submit' value='$button'></td>
+      <td class='right'><input type='submit' name='edit_submit' value='$button'></td>
     </tr>
     </table>
     </fieldset>

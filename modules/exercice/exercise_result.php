@@ -116,7 +116,7 @@ foreach($_SESSION['questionList'] as $questionId) {
 	$iplus=$i+1;
 	$tool_content .= "
     <br/>
-    <table width='99%' class='tbl'>
+    <table width='100%' class='tbl'>
     <tr class='odd'>
       <td colspan='${colspan}'><b><u>$langQuestion</u>: $iplus</b></td>
     </tr>
@@ -276,7 +276,7 @@ foreach($_SESSION['questionList'] as $questionId) {
 						$tool_content .= '_off';
 					}
 		
-					$tool_content .= ".gif' border='0' /></div>
+					$tool_content .= ".png' border='0' /></div>
       </td>
       <td><div align='center'>";
 	
@@ -290,7 +290,7 @@ foreach($_SESSION['questionList'] as $questionId) {
 					} else {
 						$tool_content .= "_off";	
 					}
-					$tool_content .= ".gif\" /></div>";	
+					$tool_content .= ".png\" /></div>";	
 					$tool_content .= "
       </td>
       <td>${answer}</td>
@@ -355,7 +355,7 @@ db_query($sql, $currentCourseID);
 if ($displayScore == 1) {
 	$tool_content .= "
     <br/>
-    <table width='99%' class='tbl'>
+    <table width='100%' class='tbl'>
     <tr class='odd'>
 	<td class='right'>$langYourTotalScore: <b>$totalScore/$totalWeighting</b>
       </td>
