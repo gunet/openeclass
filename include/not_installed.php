@@ -54,7 +54,7 @@ $tool_content = "
     <td>&nbsp;</td>
   </tr>
   <tr>
-    <td><div align=\"center\"><img style='border:0px;' src='template/classic/img/caution_alert.gif' title='caution-alert'></div></td>
+    <td><div align=\"center\"><img src='template/classic/img/caution_alert.gif' title='caution-alert' /></div></td>
   </tr>
   <tr>
     <td><div align=\"center\"><h4>Η πλατφόρμα ασύγχρονης τηλεκπαίδευσης Open eClass δεν λειτουργεί !</h4></div></td>
@@ -69,25 +69,23 @@ $tool_content = "
       <td><b>Αντιμετώπιση</b></td>
     </tr>
     <tr>
-      <td class=\"odd\" class=\"left\">Υπάρχει πρόβλημα με την <b>MySQL</b>:</td>
+      <td class=\"left\">Υπάρχει πρόβλημα με την <b>MySQL</b>:</td>
       <td>Eπικοινωνήστε με το διαχειριστή του συστήματος.</td>
     </tr>
     <tr>
-      <td class=\"odd\" class=\"left\">Πρόβλημα στο αρχείο \"<b>config.php</b>\":</td>
+      <td class=\"left\">Πρόβλημα στο αρχείο \"<b>config.php</b>\":</td>
       <td>Το αρχείο δεν υπάρχει ή δεν μπορεί να διαβαστεί.</td>
     </tr>
     <tr>
-      <td class=\"odd\" class=\"left\">Xρησιμοποιείτε την πλατφόρμα <br />για <b>πρώτη</b> φορά:</td>
+      <td class=\"left\">Xρησιμοποιείτε την πλατφόρμα <br />για <b>πρώτη</b> φορά:</td>
       <td>Επιλέξτε τον <a href=\"./install/\" class=\"installer\">Οδηγό Εγκατάστασης</a><br /> για να ξεκινήσετε το πρόγραμμα εγκατάστασης</td>
     </tr>
     </tbody>
     </table>
-
     </td>
   </tr>
   </thead>
   </table>
-
   </body>
 </html>
 ";

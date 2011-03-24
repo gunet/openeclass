@@ -92,7 +92,7 @@ if (file_exists("../config/config.php")) {
     <td>&nbsp;</td>
   </tr>
   <tr>
-    <td><div align='center'><img style='border:0px;' src='../template/classic/img/caution_alert.gif' title='caution-alert'></div></td>
+    <td><div align='center'><img src='../template/classic/img/caution_alert.gif' title='caution-alert' /></div></td>
   </tr>
   <tr>
     <td><div align='center'><h4>$langWarnConfig3 !</h4></div></td>
@@ -132,7 +132,7 @@ if (isset($_POST['welcomeScreen'])) {
 	$phpSysInfoURL = '../admin/sysinfo/';
 	// extract the path to append to the url if it is not installed on the web root directory
 	$urlAppendPath = str_replace('/install/index.php', '', $_SERVER['PHP_SELF']);
-	$urlForm = "http://$_SERVER[SERVER_NAME]$urlAppendPath/";
+	$urlForm = "http://".$_SERVER['SERVER_NAME']."$urlAppendPath/";
 	$pathForm = realpath('../') . '/';
 	$emailForm = $_SERVER['SERVER_ADMIN'];
 	$nameForm = 'Διαχειριστής';
@@ -144,7 +144,7 @@ if (isset($_POST['welcomeScreen'])) {
 	$institutionForm = 'Ακαδημαϊκό Διαδίκτυο GUNet ';
         $institutionUrlForm = 'http://www.gunet.gr/';
         $reguser = $dbPassForm = $helpdeskmail = $faxForm = 
-                   $postaddressForm = $vodServerForm = '';
+        $postaddressForm = '';
 } else {
        register_posted_variables(array(
                 'dbHostForm' => true,
@@ -168,36 +168,34 @@ if (isset($_POST['welcomeScreen'])) {
                 'faxForm' => true,
                 'postaddressForm' => true,
                 'institutionForm' => true,
-                'institutionUrlForm' => true,
-                'vodServerForm' => true), 'all');
+                'institutionUrlForm' => true), 'all');
 }
 
 if (isset($_GET['alreadyVisited'])) {
 	$tool_content .= "<form action='$_SERVER[PHP_SELF]?alreadyVisited=1' method='post'>";
 	$tool_content .= "
-            <input type='hidden' name='urlAppendPath' value='$urlAppendPath' />
-            <input type='hidden' name='pathForm' value='".str_replace("\\", "/", realpath($pathForm) . "/") . "' />
-            <input type='hidden' name='dbHostForm' value='$dbHostForm' />
-            <input type='hidden' name='dbUsernameForm' value='$dbUsernameForm' />
-            <input type='hidden' name='dbNameForm' value='$dbNameForm' />
-            <input type='hidden' name='dbMyAdmin' value='$dbMyAdmin' />
-            <input type='hidden' name='dbPassForm' value='" . q($dbPassForm) . "' />
-            <input type='hidden' name='urlForm' value='$urlForm' />
-            <input type='hidden' name='emailForm' value='$emailForm' />
-            <input type='hidden' name='nameForm' value='$nameForm' />
-            <input type='hidden' name='surnameForm' value='$surnameForm' />
-            <input type='hidden' name='loginForm' value='$loginForm' />
-            <input type='hidden' name='passForm' value='" . q($passForm) . "' />
-            <input type='hidden' name='phpSysInfoURL' value='$phpSysInfoURL' />
-            <input type='hidden' name='campusForm' value='$campusForm' />
-            <input type='hidden' name='helpdeskForm' value='$helpdeskForm' />
-            <input type='hidden' name='helpdeskmail' value='$helpdeskmail' />
-            <input type='hidden' name='institutionForm' value='$institutionForm' />
-            <input type='hidden' name='institutionUrlForm' value='$institutionUrlForm' />
-            <input type='hidden' name='faxForm' value='$faxForm' />
-            <input type='hidden' name='postaddressForm' value='$postaddressForm' />
-            <input type='hidden' name='reguser' value='$reguser' />
-            <input type='hidden' name='vodServer' value='$vodServerForm' />";
+	<input type='hidden' name='urlAppendPath' value='$urlAppendPath' />
+	<input type='hidden' name='pathForm' value='".str_replace("\\", "/", realpath($pathForm) . "/") . "' />
+	<input type='hidden' name='dbHostForm' value='$dbHostForm' />
+	<input type='hidden' name='dbUsernameForm' value='$dbUsernameForm' />
+	<input type='hidden' name='dbNameForm' value='$dbNameForm' />
+	<input type='hidden' name='dbMyAdmin' value='$dbMyAdmin' />
+	<input type='hidden' name='dbPassForm' value='" . q($dbPassForm) . "' />
+	<input type='hidden' name='urlForm' value='$urlForm' />
+	<input type='hidden' name='emailForm' value='$emailForm' />
+	<input type='hidden' name='nameForm' value='$nameForm' />
+	<input type='hidden' name='surnameForm' value='$surnameForm' />
+	<input type='hidden' name='loginForm' value='$loginForm' />
+	<input type='hidden' name='passForm' value='" . q($passForm) . "' />
+	<input type='hidden' name='phpSysInfoURL' value='$phpSysInfoURL' />
+	<input type='hidden' name='campusForm' value='$campusForm' />
+	<input type='hidden' name='helpdeskForm' value='$helpdeskForm' />
+	<input type='hidden' name='helpdeskmail' value='$helpdeskmail' />
+	<input type='hidden' name='institutionForm' value='$institutionForm' />
+	<input type='hidden' name='institutionUrlForm' value='$institutionUrlForm' />
+	<input type='hidden' name='faxForm' value='$faxForm' />
+	<input type='hidden' name='postaddressForm' value='$postaddressForm' />
+	<input type='hidden' name='reguser' value='$reguser' />";
 }
 
 // step 2 license
@@ -216,7 +214,7 @@ if(isset($_REQUEST['install2']) OR isset($_REQUEST['back2']))
 	</tr>
 	<tr>
 	<th class='left'></th>
-	<td><textarea wrap='virtual' cols='75' rows='15' class='FormData_InputText'>";
+	<td><textarea cols='75' rows='15' class='FormData_InputText'>";
 	$tool_content .= file_get_contents('../info/license/gpl.txt');
 	$tool_content .= "</textarea></td>
 	</tr>
@@ -237,7 +235,7 @@ elseif(isset($_REQUEST['install3']) OR isset($_REQUEST['back3'])) {
 	$langStepTitle = $langDBSetting;
 	$langStep = $langStep3;
 	$_SESSION['step']=3;
-	$tool_content .= "<p></p>
+	$tool_content .= "
 	<table width='99%' class='FormData' align='left'>
 	<tbody>
 	<tr>
@@ -246,31 +244,31 @@ elseif(isset($_REQUEST['install3']) OR isset($_REQUEST['back3'])) {
 	</tr>
 	<tr>
 	<th class='left'>$langdbhost</th>
-	<td><input type='text' class='FormData_InputText' size='25' name='dbHostForm' value='$dbHostForm'>&nbsp;&nbsp;$langEG localhost</td>
+	<td><input type='text' class='FormData_InputText' size='25' name='dbHostForm' value='$dbHostForm' />&nbsp;&nbsp;$langEG localhost</td>
 	</tr>
 	<tr>
 	<th class='left'>$langDBLogin</th>
-	<td><input type='text' class='FormData_InputText' size='25' name='dbUsernameForm' value='$dbUsernameForm'>&nbsp;&nbsp;$langEG root </td>
+	<td><input type='text' class='FormData_InputText' size='25' name='dbUsernameForm' value='$dbUsernameForm' />&nbsp;&nbsp;$langEG root </td>
 	</tr>
 	<tr>
 	<th class='left'>$langDBPassword</th>
-	<td><input type='text' class='FormData_InputText' size='25' name='dbPassForm' value='" . q($dbPassForm) . "'>&nbsp;&nbsp;$langEG ".create_pass()."</td>
+	<td><input type='text' class='FormData_InputText' size='25' name='dbPassForm' value='" . q($dbPassForm) . "' />&nbsp;&nbsp;$langEG ".create_pass()."</td>
 	</tr>
 	<tr>
 	<th class='left'>$langMainDB</th>
-	<td><input type='text' class='FormData_InputText' size='25' name='dbNameForm' value='$dbNameForm'>&nbsp;&nbsp;($langNeedChangeDB)</td>
+	<td><input type='text' class='FormData_InputText' size='25' name='dbNameForm' value='$dbNameForm' />&nbsp;&nbsp;($langNeedChangeDB)</td>
 	</tr>
 	<tr>
 	<th class='left'>URL του phpMyAdmin</th>
-	<td><input type='text' class='FormData_InputText' size='25' name='dbMyAdmin' value='$dbMyAdmin'>&nbsp;&nbsp;$langNotNeedChange</td>
+	<td><input type='text' class='FormData_InputText' size='25' name='dbMyAdmin' value='$dbMyAdmin' />&nbsp;&nbsp;$langNotNeedChange</td>
 	</tr>
 	<tr>
 	<th class='left'>URL του System info</th>
-	<td><input type='text' class='FormData_InputText' size='25' name='phpSysInfoURL' value='$phpSysInfoURL'>&nbsp;&nbsp;$langNotNeedChange</td>
+	<td><input type='text' class='FormData_InputText' size='25' name='phpSysInfoURL' value='$phpSysInfoURL' />&nbsp;&nbsp;$langNotNeedChange</td>
 	</tr>
 	<tr>
 	<th class='left'>&nbsp;</th>
-	<td><input type='submit' name='back2' value='< $langPreviousStep'>&nbsp;<input type='submit' name='install5' value='$langNextStep >'><div align='right'>(*) $langAllFieldsRequired</div></td>
+	<td><input type='submit' name='back2' value='< $langPreviousStep' />&nbsp;<input type='submit' name='install5' value='$langNextStep >' /><div align='right'>(*) $langAllFieldsRequired</div></td>
 	</tr>
 	</tbody>
 	</table>
@@ -298,55 +296,55 @@ elseif(isset($_REQUEST['install5']) OR isset($_REQUEST['back4']))
 	</tr>
 	<tr>
 	<th class='left'>$langSiteUrl</th>
-	<td><input type='text' class='FormData_InputText' size='40' name='urlForm' value='$urlForm'>&nbsp;&nbsp;(*)</td>
+	<td><input type='text' class='FormData_InputText' size='40' name='urlForm' value='$urlForm' />&nbsp;&nbsp;(*)</td>
 	</tr>
 	<tr>
 	<th class='left'>$langLocalPath</th>
-	<td><input type='text' size='40' class='FormData_InputText' name='pathForm' value='" . realpath($pathForm) . "/'>&nbsp;&nbsp;(*)</td>
+	<td><input type='text' size='40' class='FormData_InputText' name='pathForm' value='" . realpath($pathForm) . "/' />&nbsp;&nbsp;(*)</td>
 	</tr>
 	<tr>
 	<th class='left'>$langAdminName</th>
-	<td><input type='text' class='FormData_InputText' size='40' name='nameForm' value='$nameForm'></td>
+	<td><input type='text' class='FormData_InputText' size='40' name='nameForm' value='$nameForm' /></td>
 	</tr>
 	<tr>
 	<th class='left'>$langAdminSurname</th>
-	<td><input type='text' class='FormData_InputText' size='40' name='surnameForm' value='$surnameForm'></td>
+	<td><input type='text' class='FormData_InputText' size='40' name='surnameForm' value='$surnameForm' /></td>
 	</tr>
 	<tr>
 	<th class='left'>$langAdminEmail</th>
-	<td><input type=text class='FormData_InputText' size=40 name='emailForm' value='$emailForm'></td>
+	<td><input type=text class='FormData_InputText' size=40 name='emailForm' value='$emailForm' /></td>
 	</tr>
 	<tr>
 	<th class='left'>$langAdminLogin</th>
-	<td><input type='text' class='FormData_InputText' size='40' name='loginForm' value='$loginForm'></td>
+	<td><input type='text' class='FormData_InputText' size='40' name='loginForm' value='$loginForm' /></td>
 	</tr>
 	<tr>
 	<th class='left'>$langAdminPass</th>
-	<td><input type='text' class='FormData_InputText' size='40' name='passForm' value='" . q($passForm) . "'></td>
+	<td><input type='text' class='FormData_InputText' size='40' name='passForm' value='" . q($passForm) . "'/></td>
 	</tr>
 	<tr>
 	<th class='left'>$langCampusName</th>
-	<td><input type='text' class='FormData_InputText' size='40' name='campusForm' value='$campusForm'><td>
+	<td><input type='text' class='FormData_InputText' size='40' name='campusForm' value='$campusForm' /><td>
 	</tr>
 	<tr>
 	<th class='left'>$langHelpDeskPhone</th>
-	<td><input type='text' class='FormData_InputText' size='40' name='helpdeskForm' value='$helpdeskForm'></td>
+	<td><input type='text' class='FormData_InputText' size='40' name='helpdeskForm' value='$helpdeskForm' /></td>
 	</tr>
 	<tr>
 	<th class='left'>$langHelpDeskFax</th>
-	<td><input type='text' class='FormData_InputText' size='40' name='faxForm' value='$faxForm'></td>
+	<td><input type='text' class='FormData_InputText' size='40' name='faxForm' value='$faxForm' /></td>
 	</tr>
 	<tr>
 	<th class='left'>$langHelpDeskEmail</th>
-	<td><input type='text' class='FormData_InputText' size='40' name='helpdeskmail' value='$helpdeskmail'>&nbsp;&nbsp;(**)</td>
+	<td><input type='text' class='FormData_InputText' size='40' name='helpdeskmail' value='$helpdeskmail' />&nbsp;&nbsp;(**)</td>
 	</tr>
 	<tr>
 	<th class='left'>$langInstituteShortName</th>
-	<td><input type=text class='FormData_InputText' size='40' name='institutionForm' value='$institutionForm'></td>
+	<td><input type=text class='FormData_InputText' size='40' name='institutionForm' value='$institutionForm' /></td>
 	</tr>
 	<tr>
 	<th class='left'>$langInstituteName</th>
-	<td><input type='text' class='FormData_InputText' size='40' name='institutionUrlForm' value='$institutionUrlForm'></td>
+	<td><input type='text' class='FormData_InputText' size='40' name='institutionUrlForm' value='$institutionUrlForm' /></td>
 	</tr>
 	<tr>
 	<th class='left'>$langInstitutePostAddress</th>
@@ -354,62 +352,18 @@ elseif(isset($_REQUEST['install5']) OR isset($_REQUEST['back4']))
 	</tr>
 	<tr>
 	<th class='left'>$langViaReq</th>
-	<td><input type='checkbox' name='reguser'></td>
+	<td><input type='checkbox' name='reguser' /></td>
 	</tr>";
-	/*
-    <tr>
-      <th class=\"left\">$langVod</th>
-      <td>
-        <script>
-function set_video_input()
-	{
-		if(document.getElementById(\"video_check\").checked==true)
-		{
-			document.getElementById(\"video_input_div_text\").innerHTML='Πρόθεμα του τελικού URL με το οποίο θα εξυπηρετούνται τα αποθηκευμένα στον εξυπηρέτη video streaming αρχεία';
-			document.getElementById(\"video_input_div_input\").innerHTML='<input type=\"text\" class=\"FormData_InputText\" size=\"20\" name=\"vodServerForm\" value=\"$vodServer\">&nbsp;&nbsp;(*)<br />Πχ. mms://windows_media.server.gr/, rtsp://real.server.gr';
-		}
-		else{ document.getElementById(\"video_input_div_text\").innerHTML='';
-		      document.getElementById(\"video_input_div_input\").innerHTML='';
-		}
-	}
-        </script>
-	    <input type=\"checkbox\" id=\"video_check\" onclick=\"set_video_input();\"/>
-      </td>
-    </tr>
-    <tr>
-	  <th class=\"left\"><div id=\"video_input_div_text\"></div></th>
-	  <td><div id=\"video_input_div_input\"></td>
-	</tr>
-    <tr>
-      <th class=\"left\">$langMCU</th><td>
-        <script>
-function set_MCU()
-	{
-		if(document.getElementById(\"MCU_check\").checked==true)
-		{
-			document.getElementById(\"MCU_div_text\").innerHTML='Διεύθυνση MCU';
-			document.getElementById(\"MCU_div_input\").innerHTML='<input type=\"text\" class=\"FormData_InputText\" size=\"20\" name=\"MCUForm\" value=\"$MCU\">&nbsp;&nbsp;(*)<br />Πχ. rts.grnet.gr';
-		}
-		else{ document.getElementById(\"MCU_div_text\").innerHTML='';
-		      document.getElementById(\"MCU_div_input\").innerHTML='';
-		}
-	}
-        </script>
-        <input type=\"checkbox\" id=\"MCU_check\" onclick=\"set_MCU();\"/><br />
-      </td>
-    </tr>
-	<tr>
-      <th class=\"left\"><div id=\"MCU_div_text\"></div></th>
-	  <td><div id=\"MCU_div_input\"></td>
-    </tr>*/
-    $tool_content .= "<tr><th class='left'>&nbsp;</th>
+	
+	$tool_content .= "<tr><th class='left'>&nbsp;</th>
 	<td><input type='submit' name='back3' value='< $langPreviousStep' />
 	<input type='submit' name='install6' value='$langNextStep >' />
 	<div align='left'>$langRequiredFields.</div>
 	<div align='left'>(**) $langWarnHelpDesk</div></td>
 	</tr>
 	</tbody>
-	</table>";
+	</table>
+	</form>";
 	draw($tool_content);
 }
 
@@ -507,14 +461,7 @@ elseif(isset($_REQUEST['install6']))
 	<th class='left'>$langGroupStudentRegistrationType</th>
 	<td>$mes_add</td>
 	</tr>";
-    /*<tr>
-	  <th class=\"left\">MCU:</th>
-	  <td>".@$MCUForm."</td>
-	</tr>
-    <tr>
-	  <th class=\"left\">$langVod:</th>
-	  <td>".@$vodServerForm."</td>
-	</tr> */
+    
     $tool_content .= "<tr><th class='left'>&nbsp;</th>
 	<td><input type='submit' name='back4' value='&lt; $langPreviousStep' />
 	<input type='submit' name='install7' value='$langInstall >' /></td>
@@ -561,11 +508,9 @@ elseif(isset($_REQUEST['install7']))
 		draw($tool_content);
 		exit();
 	}
-
 	$mysqlMainDb = $dbNameForm;
 	// create main database
 	require "install_db.php";
-
 	// create config.php
 	$fd=@fopen("../config/config.php", "w");
 	$langStepTitle = $langInstallEnd;
@@ -616,22 +561,16 @@ define("UTF8", true);
 
 $encryptedPasswd = true;
 ';
-
-// was in config
-//'.($vodServer==''?'//':'').'$vodServer = "'.$vodServer.'";
-//'.($MCU==''?'//':'').'$MCU = "'.$MCU.'";
-
 	// write to file
 	fwrite($fd, $stringConfig);
 	// message
 	$tool_content .= "
-    <p class=\"caution\">$langInstallSuccess
-    <br />
-    <br />
-    <b>$langProtect</b></p>
-    </form>
-    <form action='../'><input type='submit' value='$langEnterFirstTime'></form>";
-
+	<p class=\"caution\">$langInstallSuccess
+	<br />
+	<br />
+	<b>$langProtect</b></p>
+	</form>
+	<form action='../'><input type='submit' value='$langEnterFirstTime'></form>";
 	draw($tool_content);
 	}
 }	// end of step 6
@@ -706,7 +645,6 @@ elseif (isset($_REQUEST['install1']) || isset($_REQUEST['back1']))
 	</ul>
 	<b>$langAddOnStreaming:</b>
 	<ul class='installBullet'>
-	<li>$langAddOnExpl</li>
 	<li>$langExpPhpMyAdmin</li></ul>
 	<p>$langBeforeInstall1<a href='$install_info_file' target=_blank>$langInstallInstr</a>.</p>
 	<p>$langBeforeInstall2<a href='../README.txt' target=_blank>$langHere</a>.</p>

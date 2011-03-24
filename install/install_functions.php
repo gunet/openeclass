@@ -112,9 +112,12 @@ function installerMenu(){
 			$currentStep[$i] = false;
 			$stepImg[$i] = "tick.gif";
 		} else {
-			if ($i == $_SESSION['step']-1) $currentStep[$i] = true;
-			else $currentStep[$i] = false;
-			$stepImg[$i] = "&raquo;";
+			if ($i == $_SESSION['step']-1) {
+				$currentStep[$i] = true;
+			} else {
+				$currentStep[$i] = false;	
+			}
+			$stepImg[$i] = "";
 		}
 	}
 

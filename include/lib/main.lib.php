@@ -35,7 +35,7 @@ Defines standard functions and validates variables
 define('ECLASS_VERSION', '2.3.2');
 
 // MySQL debug level
-define('FULL', 1);
+define('DEBUG_MYSQL', 1);
 // resized user image 
 define('IMAGESIZE_LARGE', 256);
 define('IMAGESIZE_SMALL', 32);
@@ -64,11 +64,11 @@ function db_query($sql, $db = FALSE) {
 	}
 	$r = mysql_query($sql);
 
-        if (defined('DEBUG_MYSQL') and DEBUG_MYSQL === FULL) {
+        if (defined('DEBUG_MYSQL') and DEBUG_MYSQL === 'FULL') {
                 echo "<hr /><pre>$sql</pre><hr />";
         }
         if (mysql_errno()) {
-                if ($GLOBALS['is_admin'] or defined('DEBUG_MYSQL')) {
+                if (isset($GLOBALS['is_admin']) or defined('DEBUG_MYSQL')) {
                         echo '<hr />' . mysql_errno() . ': ' . mysql_error()
                                 . "<br /><pre>$sql</pre><hr />";
                 } else {
