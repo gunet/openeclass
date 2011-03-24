@@ -609,7 +609,7 @@ function show_submission_form($id, $user_group_info)
                         </tr>
                         <tr>
                           <th>&nbsp;</th>
-                          <td><input type='submit' value='$langSubmit' name='work_submit' /><br />$langNotice3</td>
+                          <td align='right'><input type='submit' value='$langSubmit' name='work_submit' /><br />$langNotice3</td>
                         </tr>
                         </table>
                         </fieldset>
@@ -865,16 +865,16 @@ function show_assignment($id, $message = FALSE)
 			if (trim($row['comments'] != '')) {
 			    $tool_content .= "
                             <br />
-                            <table align='left' width='100%'  class='tbl'>
+                            <table width='100%'  class='tbl'>
                             <tr>
-                              <td width='1' class='left'><img src='../../template/classic/img/arrow.png' alt='$m[comments]' title='$m[comments]' /></td>
+                              <td width='16'><img src='../../template/classic/img/arrow.png' alt='$m[comments]' title='$m[comments]' /></td>
                               <td>$row[comments]</td>
                             <tr>
                             </table>";
 			}
                     $tool_content .= "
                   </td>
-                  <td width='110' align='center'>".nice_format($row['submission_date'])."</td>
+                  <td width='100' align='center'>".nice_format($row['submission_date'])."</td>
                   <td width='5' align='left'>
                      <div align='center'><input type='text' value='{$row['grade']}' maxlength='3' size='3' name='grades[{$row['id']}]'></div>
                   </td>
@@ -943,9 +943,9 @@ function show_student_assignments()
                 $tool_content .= "
                                   <table class='tbl_alt' width='100%'>
                                   <tr>
-                                      <th colspan='2'><div align='left'>&nbsp;&nbsp;$m[title]</div></th>
-                                      <th><div align='center'>$m[deadline]</div></th>
-                                      <th><div align='center'>$m[submitted]</div></th>
+                                      <th colspan='2'>$m[title]</th>
+                                      <th class='center'>$m[deadline]</th>
+                                      <th class='center'>$m[submitted]</th>
                                       <th>$m[grade]</th>
                                   </tr>";
                 $k = 0;
@@ -959,9 +959,9 @@ function show_student_assignments()
                                   <tr class='odd'>";
                         }
                         $tool_content .= "
-                                    <td width='16'><img style='padding-top:3px;' src='${urlServer}/template/classic/img/arrow.png' title='bullet' /></td>
+                                    <td width='16'><img src='${urlServer}/template/classic/img/arrow.png' title='bullet' /></td>
                                     <td><a href='$_SERVER[PHP_SELF]?id=$row[id]'>$title_temp</a></td>
-                                    <td width='160' align='center'>".nice_format($row['deadline']);
+                                    <td width='150' align='center'>".nice_format($row['deadline']);
                         if ($row['days'] > 1) {
                                 $tool_content .= " (<span class='not_expired'>$m[in]&nbsp;$row[days]&nbsp;$langDays</span>";
                         } elseif ($row['days'] < 0) {
@@ -1030,11 +1030,11 @@ function show_assignments($message = null)
 
 		$tool_content .= <<<cData
 
-    <table width="100%" class="tbl_alt" align="left">
+    <table width="100%" class="tbl_alt">
     <tr>
-      <th colspan="2"><div align="left">&nbsp;&nbsp;&nbsp;&nbsp;${m['title']}</div></th>
-      <th width="150">${m['deadline']}</th>
-      <th width="110"><div align="right">$langCommands &nbsp;</div></th>
+      <th colspan="2">${m['title']}</th>
+      <th width="130">${m['deadline']}</th>
+      <th width="60">$langCommands</th>
     </tr>
 cData;
        $index = 0;
