@@ -97,10 +97,10 @@ if(empty($auth)) {
 	}
 }
 
-$tool_content .= "<table width='99%' class='FormData' align='left'>
-<tbody><tr><th width='220'>&nbsp;</th>
-<td colspan=\"2\"><b>$langChooseAuthMethod</b></td>
-</tr><tr><th class=\"left\">POP3:</th><td>[";
+$tool_content .= "<table width='100%' class='tbl_alt'>
+<tr>
+<th colspan='3'>$langChooseAuthMethod</th>
+</tr><tr width='50'><td>POP3:</td><td>[";
 
 $tool_content .= in_array("2",$auth_methods)? "<a class=\"add\" href=\"auth.php?auth=2&amp;active=no\">".$langDeactivate."</a>]":"<a class=\"revoke\"  href=\"auth.php?auth=2&amp;active=yes\">".$langActivate."</a>]";
 
@@ -108,32 +108,32 @@ $tool_content .= "</td><td><div align=\"right\">";
 
 $tool_content .= "&nbsp;&nbsp;<a href=\"auth_process.php?auth=2\">$langAuthSettings</a>";
 $tool_content .= "</div></td></tr>
-<tr><th class=\"left\">IMAP:</th><td>[";
+<tr><td>IMAP:</td><td>[";
 
 $tool_content .= in_array("3",$auth_methods)? "<a class=\"add\" href=\"auth.php?auth=3&amp;active=no\">".$langDeactivate."</a>]":"<a class=\"revoke\" href=\"auth.php?auth=3&amp;active=yes\">".$langActivate."</a>]";
 $tool_content .= "</td><td><div align=\"right\">";
 
 $tool_content .= "&nbsp;&nbsp;<a href=\"auth_process.php?auth=3\">$langAuthSettings</a>";
-$tool_content .= "</div></td></tr><tr><th class=\"left\">LDAP:</th><td>[";
+$tool_content .= "</div></td></tr><tr><td>LDAP:</td><td>[";
 
 $tool_content .= in_array("4",$auth_methods)? "<a class=\"add\" href=\"auth.php?auth=4&amp;active=no\">".$langDeactivate."</a>]":"<a class=\"revoke\" href=\"auth.php?auth=4&amp;active=yes\">".$langActivate."</a>]";
 $tool_content .= "</td><td><div align=\"right\">";
 
 $tool_content .= "&nbsp;&nbsp;<a href=\"auth_process.php?auth=4\">$langAuthSettings</a>";	
-$tool_content .= "</div></td></tr><tr><th class=\"left\">External DB:</th><td>[";
+$tool_content .= "</div></td></tr><tr><td>External DB:</td><td>[";
 
 $tool_content .= in_array("5",$auth_methods)? "<a class=\"add\" href=\"auth.php?auth=5&amp;active=no\">".$langDeactivate."</a>]":"<a class=\"revoke\" href=\"auth.php?auth=5&amp;active=yes\">".$langActivate."</a>]";
 $tool_content .= "</td><td><div align=\"right\">";
 
 $tool_content .= "<a href=\"auth_process.php?auth=5\">$langAuthSettings</a>";
 
-$tool_content .= "</div></td></tr><tr><th class=\"left\">Shibboleth:</th><td>[";
+$tool_content .= "</div></td></tr><tr><td>Shibboleth:</td><td>[";
 
 $tool_content .= in_array("6",$auth_methods)? "<a class=\"add\" href=\"auth.php?auth=6&amp;active=no\">".$langDeactivate."</a>]":"<a class=\"revoke\" href=\"auth.php?auth=6&amp;active=yes\">".$langActivate."</a>]";
 $tool_content .= "</td><td><div align=\"right\">";
 
 $tool_content .= "<a href=\"auth_process.php?auth=6\">$langAuthSettings</a>";
-$tool_content .= "</div></td></tr><tr><th class=\"left\">CAS:</th><td>[";
+$tool_content .= "</div></td></tr><tr><td>CAS:</td><td>[";
 
 $tool_content .= in_array("7",$auth_methods)? "<a class=\"add\" href=\"auth.php?auth=7&amp;active=no\">".$langDeactivate."</a>]":"<a class=\"revoke\" href=\"auth.php?auth=7&amp;active=yes\">".$langActivate."</a>]";
 $tool_content .= "</td><td><div align=\"right\">";
