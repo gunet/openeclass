@@ -361,13 +361,9 @@ if($sql) {
 		$tool_content .= "
 		<table class='tbl_alt' width='100%'>
 		<tr>
-		  <th colspan='10'><div align='right'>".$caption."</div></th>
-		</tr>
-		<tr>
-		  <th width='1'>&nbsp;</th>
-		  <th scope='col'><div align='left'><a href='$_SERVER[PHP_SELF]?ord=n$str'>$langSurname</a></div></th>
-		  <th><div align='left'><a href='$_SERVER[PHP_SELF]?ord=p$str'>$langName</a></div></th>
-		  <th><div align='left'><a href='$_SERVER[PHP_SELF]?ord=u$str'>$langUsername</a></div></th>
+		  <th colspan='2' width='150'><div align='left'><a href='$_SERVER[PHP_SELF]?ord=n$str'>$langSurname</a></div></th>
+		  <th width='100'><div align='left'><a href='$_SERVER[PHP_SELF]?ord=p$str'>$langName</a></div></th>
+		  <th width='170'><div align='left'><a href='$_SERVER[PHP_SELF]?ord=u$str'>$langUsername</a></div></th>
 		  <th scope='col'>$langEmail</th>
 		  <th scope='col'><a href='$_SERVER[PHP_SELF]?ord=s$str'>$langProperty</a></th>
 		  <th scope='col' colspan='4'>$langActions</th>
@@ -381,7 +377,7 @@ if($sql) {
 		                	$tool_content .= "\n      <tr class='odd'>";
 	            		}
 				$tool_content .= "<td width='1'>
-					<img style='border:0px; margin:4px;' src='${urlServer}/template/classic/img/arrow.png' title='bullet' /></td>
+					<img src='${urlServer}/template/classic/img/arrow.png' title='bullet' /></td>
 					<td>".htmlspecialchars($logs['nom'])."</td>
 					<td>".htmlspecialchars($logs['prenom'])."</td>
 					<td>".htmlspecialchars($logs['username'])."</td>
@@ -395,23 +391,23 @@ if($sql) {
 	   				default: $tool_content .= "$langOther ($logs[6])";break;
 				}
 				$tool_content .= "</td>
-					<td><a href=\"edituser.php?u=".$logs['user_id']."\">
+					<td width='80'><a href=\"edituser.php?u=".$logs['user_id']."\">
 					<img src='../../template/classic/img/edit.png' title='$langEdit' /></a>
-					</td>
-					<td><a href='unreguser.php?u=".$logs['user_id']."'>
+					
+					<a href='unreguser.php?u=".$logs['user_id']."'>
 					<img src='../../template/classic/img/delete.png' title='$langDelete' />
-					</a></td>
-					<td align='center'><a href='userstats.php?u=".$logs['user_id']."'>
+					</a>
+					<a href='userstats.php?u=".$logs['user_id']."'>
 					<img src='../../template/classic/img/platform_stats.png' title='$langStat' /></a>
-					</td>
-					<td align='center'><a href='change_user.php?username=".$logs['username']."'>
+					
+					<a href='change_user.php?username=".$logs['username']."'>
 					<img src='../../template/classic/img/log_as.png' title='$langChangeUserAs $logs[username]' /></a>
 					</td>\n";
 				$tool_content .= "</tr>";
 				$k++;
 			}
 		}
-		$tool_content .= "</table>";
+		$tool_content .= "</table> <br><div class='right smaller'>".$caption."</div>";
 		if ($countUser >= USERS_PER_PAGE) { // display navigation links if more than USERS_PER_PAGE
 			$tool_content .= show_paging($limit, USERS_PER_PAGE, $countUser, "$_SERVER[PHP_SELF]", "$str");
 		}  
