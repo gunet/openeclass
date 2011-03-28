@@ -68,7 +68,7 @@ $tool_content .= "
 <form action='listusers.php?search=$new' method='post' name='user_search'>
 <fieldset>
   <legend>$langUserData</legend>
-  <table class='tbl' width='99%'>
+  <table class='tbl' width='100%'>
   <tr>
     <th class='left'>$langName:</th>
     <td><input type='text' name='user_firstname' size='40' value='".q($user_firstname)."'></td>
@@ -105,7 +105,7 @@ $start_cal = $jscalendar->make_input_field(
 array('showOthers' => true,
 		'align' => 'Tl',
 		'ifFormat' => '%d-%m-%Y'),
-array('style' => 'width: 15em; color: #840; background-color: #ff8; border: 1px solid #000; text-align: center',
+array('style' => 'width: 15em; text-align: center',
 		'name' => 'date',
 		'value' => ' '));
 
@@ -131,7 +131,7 @@ $tool_content .= "
   </tr>
   <tr>
     <th>&nbsp;</th>
-    <td colspan='2'>
+    <td colspan='2' class='right'>
       <input type='hidden' name='c' value='searchlist'>
       <input type='submit' name='search_submit' value='$langSearch'>
     </td>
