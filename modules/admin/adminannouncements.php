@@ -88,6 +88,8 @@ if (isset($_GET['delete'])) {
                 $titleToModify = q($myrow['title']);
                 $contentToModify = standard_text_escape($myrow['body']);
                 $displayAnnouncementList = true;
+                $begindate = $myrow['begin'];
+                $enddate = $myrow['end'];
         }
 } elseif (isset($_POST['submitAnnouncement'])) {
         // submit announcement command
@@ -155,8 +157,23 @@ if ($displayForm && isset($_GET['addAnnounce']) || isset($_GET['modify'])) {
 		."</td></tr>";
 	$tool_content .= "<tr><td><b>$langLanguage</b><br />$langOptions&nbsp;:";
 	if (isset($_GET['modify'])) {
+                if (isset($begindate)) {
+                    $start_checkbox = 'checked';
+                    $start_date = $begindate;
+                } else {
+                    $start_checkbox = '';
+                    $start_date = date("Y-n-j",time());
+                }
+                if (isset($enddate)) {
+                    $end_checkbox = 'checked';
+                    $end_date = $enddate;
+                } else {
+                    $end_checkbox = '';
+                    $end_date = date("Y-n-j",time());
+                }
 		$tool_content .= lang_select_options('lang_admin_ann', '', $myrow['lang']);
 	} else {
+                $start_checkbox = $end_checkbox = $end_date = $start_date = '';
 		$tool_content .= lang_select_options('lang_admin_ann');
 	}
         $tool_content .= " $langTipLangAdminAnn</td></tr>";
@@ -164,9 +181,11 @@ if ($displayForm && isset($_GET['addAnnounce']) || isset($_GET['modify'])) {
         $lang_jscalendar = langname_to_code($language);
         $jscalendar = new DHTML_Calendar($urlServer.'include/jscalendar/', $lang_jscalendar, 'calendar-blue2', false);
         $head_content .= $jscalendar->get_load_files_code();
+        
         $datetoday = date("Y-n-j",time());
-        function make_calendar($id, $label, $name) {
-                global $datetoday, $jscalendar, $langActivate;
+        function make_calendar($id, $label, $name, $checkbox, $datetoday) {
+                global $jscalendar, $langActivate;
+                
                 return "<tr><td><b>" . $label . "</b><br />" .
                         $jscalendar->make_input_field(
                         array('showOthers' => true,
@@ -176,11 +195,11 @@ if ($displayForm && isset($_GET['addAnnounce']) || isset($_GET['modify'])) {
                         array('name' => $name,
                               'value' => $datetoday,
                               'style' => 'width: 8em; color: #727266; background-color: #fbfbfb; border: 1px solid #C0C0C0; text-align: center')) .
-                        "&nbsp;<input type='checkbox' name='{$name}_active' onClick=\"toggle($id,this,'$name')\"/>&nbsp;".
+                        "&nbsp;<input type='checkbox' name='{$name}_active' $checkbox onClick=\"toggle($id,this,'$name')\"/>&nbsp;".
                         $langActivate . "</td></tr>";
         }
-        $tool_content .= make_calendar(1, $langStartDate, 'start_date') .
-                         make_calendar(2, $langEndDate, 'end_date') .
+        $tool_content .= make_calendar(1, $langStartDate, 'start_date', $start_checkbox, $start_date) .
+                         make_calendar(2, $langEndDate, 'end_date', $end_checkbox, $end_date) .
                          "<tr><td><input type='submit' name='submitAnnouncement' value='$langSubmit' />" .
                          "</td></tr></table></fieldset></form>";
 }
