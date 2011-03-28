@@ -474,6 +474,7 @@ function adminMenu(){
 function lessonToolsMenu(){
 	global $is_admin, $is_adminOfCourse, $uid, $mysqlMainDb;
 	global $webDir, $language;
+	global $currentCourseID;
 
 	$sideMenuGroup = array();
 	$sideMenuSubGroup = array();
@@ -511,7 +512,7 @@ function lessonToolsMenu(){
 		if(!defined($toolsRow['define_var'])) define($toolsRow['define_var'], $toolsRow['id']);
 
 		array_push($sideMenuText, q($toolsRow['rubrique']));
-		array_push($sideMenuLink, q($toolsRow['lien']));
+		array_push($sideMenuLink, q($toolsRow['lien']."?course=".$currentCourseID));
 		array_push($sideMenuImg, $toolsRow['image'].'_on.png');
 		array_push($sideMenuID, $toolsRow['id']);
 	}
@@ -554,7 +555,7 @@ function lessonToolsMenu(){
 			}
 
 			array_push($sideMenuText, q($toolsRow['rubrique']));
-			array_push($sideMenuLink, q($toolsRow['lien']));
+			array_push($sideMenuLink, q($toolsRow['lien']."?course=".$currentCourseID));
 			array_push($sideMenuImg, $toolsRow['image'].'_off.png');
 			array_push($sideMenuID, $toolsRow['id']);
 		}
@@ -583,7 +584,7 @@ function lessonToolsMenu(){
 			if(!defined($toolsRow['define_var'])) define($toolsRow['define_var'], $toolsRow['id']);
 
 			array_push($sideMenuText, q($toolsRow['rubrique']));
-			array_push($sideMenuLink, q($toolsRow['lien']));
+			array_push($sideMenuLink, q($toolsRow['lien']."?course=".$currentCourseID));
 			array_push($sideMenuImg, $toolsRow['image'].'_on.png');
 			array_push($sideMenuID, $toolsRow['id']);
 		}
