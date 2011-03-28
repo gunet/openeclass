@@ -147,7 +147,7 @@ if ($displayForm && isset($_GET['addAnnounce']) || isset($_GET['modify'])) {
 		$tool_content .= "<input type='hidden' name='id' value='$id' />";
 	}
 	$tool_content .= "<fieldset><legend>$titleform</legend>";
-        $tool_content .= "<table width='99%' class='tbl'>";
+        $tool_content .= "<table width='100%' class='tbl'>";
         $tool_content .= "<tr><td><b>$langTitle</b>
 		<input type='text' name='title' value='$titleToModify' size='50' /></td></tr>
 		<tr><td><b>$langAnnouncement</b><br />".

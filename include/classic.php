@@ -164,7 +164,7 @@ if (count($status) > 0) {
                                         } else {
                                                 $tool_content .= "         <tr class='odd'>\n";
                                         }
-                                        $tool_content .= "           <td width='1' class='square_bullet2'>&nbsp;</td>\n" .
+                                        $tool_content .= "           <td width='16'><img src='${urlAppend}/template/classic/img/arrow.png' alt='' /></td>\n" .
                                                          "           <td>" .  claro_format_locale_date($dateFormatLong, strtotime($ann['temps'])) ."&nbsp;(<span class='smaller'>$langCourse: <b>{$titles[$code]}</b> | $langTutor: <b>" . q($profs[$code]) . "</b></span>)<br />\n".
                                                          "             <b>$ann[title]</b>\n".
 							 "             $content\n".
