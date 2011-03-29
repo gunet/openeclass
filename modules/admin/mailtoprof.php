@@ -87,34 +87,31 @@ $langEmail : $emailhelpdesk
 ";
 		if (!send_mail('', '', '', $to,
 			$emailsubject, $emailbody, $charset)) {
-				$tool_content .= "<p class=\"caution_small\">".$langEmailNotSend." ".$to."!</p>";
+				$tool_content .= "<p class=\"caution\">".$langEmailNotSend." ".$to."!</p>";
 		}
 	}
 	// Display result and close table correctly
-	$tool_content .= "<p class=\"success_small\">$emailsuccess</p>";
+	$tool_content .= "<p class=\"success\">$emailsuccess</p>";
 } else {
         // Display form to administrator
-        $tool_content .= "
-	<form action='$_SERVER[PHP_SELF]' method='post'>
-        <fieldset>
+        $tool_content .= "<form action='$_SERVER[PHP_SELF]' method='post'>
+      <fieldset>
         <legend>$langMessage</legend>
-	<table class='tbl'>
+	<table class='tbl' width='100%'>
 	<tr>
-	  <th colspan='2'>$typeyourmessage<br />
-	      <textarea name='body_mail' rows='10' cols='60'></textarea></th>
+	  <td>$typeyourmessage<br />
+	      <textarea name='body_mail' rows='10' cols='60'></textarea></td>
 	</tr>
 	<tr>
-	  <th width='140'>$langSendMessageTo</th>
-	  <td><select name='sendTo'>
-	        <option value='1'>$langProfOnly</option>
-	        <option value='0'>$langToAllUsers</option>
-	      </select>
-	  </td>
-	</tr>
+	  <td>$langSendMessageTo
+	    <select name='sendTo'>
+	      <option value='1'>$langProfOnly</option>
+	      <option value='0'>$langToAllUsers</option>
+	      </select>	    </td>
+	  </tr>
 	<tr>
-	  <th>&nbsp;</th>
-	  <td><input type=\"submit\" name=\"submit\" value=\"$langSend\"></input></td>
-	</tr>
+	  <td class='right'><input type=\"submit\" name=\"submit\" value=\"$langSend\"></input></td>
+	  </tr>
 	</table>
         </fieldset>
 	</form>";
