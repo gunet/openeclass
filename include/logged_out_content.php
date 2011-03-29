@@ -106,7 +106,7 @@ if ($casactive['auth_default'] == 1) {
 
 if (!get_config('dont_display_login_form')) {
 	$tool_content .= "</div><div id='rightbar'>
-	 <table width='99%' class='tbl'>
+	 <table width='100%' class='tbl'>
 	 <tr>
 	   <th class='LoginHead'><b>$langUserLogin </b></th>
 	 </tr>
