@@ -69,11 +69,10 @@ if (mysql_num_rows($result) > 0) {
 		array_push($announceArr, $eclassAnnounce);
 	}
         $tool_content .= "<br/>
-        <table width='100%' class='AnnouncementsList'>
-	<thead><tr><th width='180'>$langAnnouncements
-	<span class='feed'><a href='${urlServer}rss.php'>
+        <table width='100%' class='tbl_alt'>
+	<tr><th width='180'>$langAnnouncements <a href='${urlServer}rss.php'>
 	<img src='${urlServer}template/classic/img/feed.png' alt='RSS Feed' title='RSS Feed' />
-	</a></span></th><th>&nbsp;</th></tr></thead>
+	</a></th><th>&nbsp;</th></tr>
 	<tbody>";
 
 	$numOfAnnouncements = count($announceArr);
@@ -88,7 +87,7 @@ if (mysql_num_rows($result) > 0) {
 		</td>
 		</tr>";
 	}
-	$tool_content .= "</tbody></table>";
+	$tool_content .= "</table>";
 }
 
 $shibactive = mysql_fetch_array(db_query("SELECT auth_default FROM auth WHERE auth_name='shibboleth'"));
