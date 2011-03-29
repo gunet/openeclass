@@ -120,7 +120,7 @@ if (isset($_GET['delete'])) {
 
 // action message
 if (isset($message) && !empty($message)) {
-        $tool_content .= "<p class='success_small'>$message</p><br/>";
+        $tool_content .= "<p class='success'>$message</p><br/>";
         $displayAnnouncementList = true;
         $displayForm = false; //do not show form
 }
@@ -253,8 +253,8 @@ if ($displayAnnouncementList == true) {
                 $tool_content .= "</li></ul></div>";
         }
         if ($announcementNumber > 0) {
-                $tool_content .= "<table class='FormData' width='100%' align='left'><tbody>";
-		$tool_content .= "<th>$langTitle</th><th>$langAnnouncement</th><th width='100'>$langActions</th>";
+                $tool_content .= "<table class='tbl_alt' width='100%'>";
+		$tool_content .= "<th width='180'>$langTitle</th><th>$langAnnouncement</th><th width='70'>$langActions</th>";
 		if ($announcementNumber > 1) {
 			$tool_content .= "<th width='70'>$langMove</th>";
 		}
@@ -270,15 +270,15 @@ if ($displayAnnouncementList == true) {
 			}
 			$myrow['date'] = claro_format_locale_date($dateFormatLong, strtotime($myrow['date']));
 			$tool_content .= "<tr class='$classvis'>";
-			$tool_content .= "<td><b>".q($myrow['title'])."</b>&nbsp;&nbsp;<small>($myrow[date])</small></td>";
+			$tool_content .= "<td><b>".q($myrow['title'])."</b><br><span class='smaller'>$myrow[date]</span></td>";
 			$tool_content .= "<td>" . standard_text_escape($myrow['body']) . "</td>";
 			$tool_content .=  "<td>
 			<a href='$_SERVER[PHP_SELF]?modify=$myrow[id]'>
 			<img src='../../template/classic/img/edit.png' title='$langModify' style='vertical-align:middle;' />
-			</a>&nbsp;
+			</a> 
 			<a href='$_SERVER[PHP_SELF]?delete=$myrow[id]' onClick='return confirmation();'>
 			<img src='../../template/classic/img/delete.png' title='$langDelete' style='vertical-align:middle;' /></a>
-			&nbsp;
+			
 			<a href='$_SERVER[PHP_SELF]?id=$myrow[id]&amp;vis=$visibility'>
 			<img src='../../template/classic/img/$icon' title='$langVisibility'/></a>";
 			if ($announcementNumber > 1) {
