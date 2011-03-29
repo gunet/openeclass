@@ -65,10 +65,10 @@ if($submit) {
 
         // check if there are empty fields
         if (!$all_set) {
-                $tool_content .= "<p class='caution_small'>$langEmptyFields</p>
+                $tool_content .= "<p class='caution'>$langEmptyFields</p>
                         <br><br><p align='right'><a href='$backlink'>$langAgain</a></p>";
         } elseif ($user_exist) {
-                $tool_content .= "<p class='caution_small'>$langUserFree</p>
+                $tool_content .= "<p class='caution'>$langUserFree</p>
                         <br><br><p align='right'><a href='$backlink'>$langAgain</a></p>";
         } elseif(!email_seems_valid($email_form)) {
                 $tool_content .= "<p class='caution_small'>$langEmailWrong.</p>
@@ -100,7 +100,7 @@ if($submit) {
                         $type_message = '';
                         // $langAsUser;
                 }
-                $tool_content .= "<p class='success_small'>$message</p><br><br><p align='right'><a href='../admin/listreq.php$reqtype'>$langBackRequests</a></p>";
+                $tool_content .= "<p class='success'>$message</p><br><br><p align='right'><a href='../admin/listreq.php$reqtype'>$langBackRequests</a></p>";
                 
                 // send email
                 
@@ -161,7 +161,7 @@ $langEmail : $emailhelpdesk
         }
 
         $tool_content .= "<form action='$_SERVER[PHP_SELF]' method='post'>
-        <table width='99%' align='left' class='FormData'>
+        <table width='100%' align='left' class='tbl'>
         <tr><th width='220'>&nbsp;</th>
             <td><b>$title</b></td></tr>
         <tr><th class='left'><b>$langName</b></th>

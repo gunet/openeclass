@@ -54,9 +54,9 @@ $tool_content .= "
   <br />
   <fieldset>
   <legend>$langPlatformIdentity</legend>
-    <table width='99%' class='tbl'>
+    <table width='100%' class='tbl'>
     <tr>
-      <th width='140'>Version:</th>
+      <th width='110'>Version:</th>
       <td>$langAboutText <b>$siteName " . ECLASS_VERSION . "</b></td>
     </tr>
     <tr>
@@ -136,9 +136,9 @@ $lastregisteredstuds = $myrow['cnt'];
 $tool_content .= "
   <fieldset>
   <legend>$langInfoAdmin</legend>
-    <table width=\"99%\" class=\"tbl\">
+    <table width=\"100%\" class=\"tbl\">
     <tr>
-      <th width=\"240\">$langOpenRequests:</th>
+      <th width=\"260\">$langOpenRequests:</th>
       <td>".$prof_request_msg."</td>
     </tr>
     <tr>
