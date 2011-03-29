@@ -142,14 +142,14 @@ if ($key==0) {
 $tool_content .= "
     <table class=\"tbl_alt\" width=\"100%\">
     <tr>
-      <th colspan='7'>
-        <div align=\"right\">".$caption."</div>
-      </th>
+      <td colspan='7' class='right'>
+        ".$caption."
+      </td>
     </tr>
     <tr>
      <th scope=\"col\" width='1' class=\"odd\">&nbsp;</th>
-     <th scope=\"col\" class=\"odd\"><div align=\"left\">".$langCourseCode."<br />".$langTeacher."</div></th>
-     <th scope=\"col\" width=\"1\" class=\"odd\">".$langCourseVis."</th>
+     <th scope=\"col\" class=\"odd\"><div align=\"left\">".$langCourseCode."</div></th>
+     <th scope=\"col\" width=\"120\" class=\"odd\">".$langCourseVis."</th>
      <th scope=\"col\" width=\"220\" class=\"odd\"><div align=\"left\">".$langFaculty."</div></th>
      <th scope=\"col\" width=\"10\" class=\"odd\">".$langUsers."</th>
      <th scope=\"col\" width=\"30\" colspan='2' class=\"odd\">".$langActions."</th>
@@ -195,8 +195,8 @@ for ($j = 0; $j < mysql_num_rows($sql); $j++) {
       </td>
       <td align=\"center\" width='10'><a href='delcours.php?c=".$logs['cours_id']."'>
 	<img src='../../template/classic/img/delete.png' title='$langDelete'></a>
-      </td>
-      <td align=\"center\" width='20'><a href='editcours.php?c=".$logs[1]."".$searchurl."'>
+      
+     <a href='editcours.php?c=".$logs[1]."".$searchurl."'>
 	<img src='../../template/classic/img/edit.png' title='$langEdit'></a>
       </td>";
 	$k++;

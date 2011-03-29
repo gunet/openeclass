@@ -94,9 +94,9 @@ if (!empty($show) && ($show=="closed")) {
 	if (!empty($id) && ($id>0)) {
 		// restore request
 		$sql = db_query("UPDATE prof_request set status='1', date_closed=NULL WHERE rid='$id'");
-		$tool_content = "<p class=\"success_small\">$langReintroductionApplication</p>";
+		$tool_content = "<p class=\"success\">$langReintroductionApplication</p>";
 	} else {
-		$tool_content .= "<table class=\"tbl_alt\" width=\"99%\">";
+		$tool_content .= "<table class=\"tbl_alt\" width=\"100%\">";
 		$tool_content .= table_header(1, $langDateClosed_small);
  		$sql = db_query("SELECT rid,profname,profsurname,profuname,profemail,proftmima,
 				profcomm, am, date_open, date_closed, comment
@@ -134,7 +134,7 @@ if (!empty($show) && ($show=="closed")) {
 		$tool_content = "<table><tbody><tr>
 		<td class=\"success\">$langReintroductionApplication</td></tr></tbody></table>";
 	} else {
-		$tool_content .= "<table class=\"tbl_alt\" width=\"99%\" align=\"left\">";
+		$tool_content .= "<table class=\"tbl_alt\" width=\"100%\" align=\"left\">";
 		$tool_content .= table_header(1, $langDateReject_small);
 
  		$sql = db_query("SELECT rid,profname, profsurname, profuname, profemail,
@@ -150,7 +150,7 @@ if (!empty($show) && ($show=="closed")) {
 	              		$tool_content .= "\n  <tr class=\"odd\">";
 	            	}
 	    		$tool_content .= "<td width='1'>
-			<img style='border:0px;' src='${urlServer}/template/classic/img/arrow.png' title='bullet'></td>";
+			<img src='${urlServer}/template/classic/img/arrow.png' title='bullet'></td>";
 			$tool_content .= "<td>".htmlspecialchars($req['profname'])."&nbsp;".htmlspecialchars($req['profsurname'])."";
 			$tool_content .= "<td>".htmlspecialchars($req['proftmima'])."</td>";
 			$tool_content .= "<td align=\"center\">
@@ -198,7 +198,7 @@ $langPhone: $telephone
 $langEmail: $emailhelpdesk";
 						send_mail('', '', "$_POST[prof_name] $_POST[prof_surname]", $_POST['prof_email'], $emailsubject, $emailbody, $charset);
 					}
-					$tool_content .= "<p class='success_small'>" .  ($list_statut == 1)? $langTeacherRequestHasRejected: $langRequestReject;
+					$tool_content .= "<p class='success'>" .  ($list_statut == 1)? $langTeacherRequestHasRejected: $langRequestReject;
 					$tool_content .= " $langRequestMessageHasSent <b>$_POST[prof_email]</b></p>";
 					$tool_content .= "<br><p><b>$langComments:</b><br />$_POST[comment]</p>\n";
 				}
@@ -210,7 +210,7 @@ $langEmail: $emailhelpdesk";
 			$d = mysql_fetch_assoc($r);
                         $warning = ($d['statut'] == 5)? $langWarnReject: $langGoingRejectRequest;
 			$tool_content .= "<form action='$_SERVER[PHP_SELF]' method='post'>
-			<table width='99%' class='tbl_alt'>
+			<table width='100%' class='tbl_alt'>
 			<tr>
 			<th width='220'>&nbsp;</th>
 			<td><b>$warning</b></td></tr>
@@ -249,7 +249,7 @@ $langEmail: $emailhelpdesk";
 
 else
 {
-	$tool_content .= "<table class='tbl_alt' width='99%'>";
+	$tool_content .= "<table class='tbl_alt' width='100%'>";
 	$tool_content .= table_header();
 	// show username as well (usefull)
  	$sql = db_query("SELECT rid, profname, profsurname, profuname, proftmima, date_open, comment, profpassword FROM prof_request
@@ -262,7 +262,7 @@ else
 	              $tool_content .= "\n<tr class='odd'>";
 	        }
 	    	$tool_content .= "<td align='right' width='1'>
-		<img style='border:0px;' src='${urlServer}/template/classic/img/arrow.png' title='bullet'></td>";
+		<img src='${urlServer}/template/classic/img/arrow.png' title='bullet'></td>";
 	     	$tool_content .= "<td>".htmlspecialchars($req['profname'])."&nbsp;".htmlspecialchars($req['profsurname'])."</td>";
 		$tool_content .= "<td>".htmlspecialchars($req['profuname'])."</td>";
 		$tool_content .= "<td>".htmlspecialchars(find_faculty_by_id($req['proftmima']))."</td>";
