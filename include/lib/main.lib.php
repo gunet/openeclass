@@ -1677,25 +1677,25 @@ function glossary_expand($text)
 	} elseif (!isset($_SESSION['glossary']) or
             $_SESSION['glossary_course_id'] != $cours_id) {
                 get_glossary_terms($cours_id);
-                // Test whether \b works correctly, workaround if not
-                if (preg_match('/α\b/u', 'α')) {
-                        $spre = $spost = '\b';
-                } else {
-                        $spre = '(?<=[\x01-\x40\x5B-\x60\x7B-\x7F]|^)';
-                        $spost = '(?=[\x01-\x40\x5B-\x60\x7B-\x7F]|$)';
-                }
-                $_SESSION['glossary_terms_regexp'] = chr(1) . $spre . '(';
-                $begin = true;
-                foreach (array_keys($_SESSION['glossary']) as $term) {
-                        $_SESSION['glossary_terms_regexp'] .= ($begin? '': '|') .
-                                                              preg_quote($term);
-                        if ($begin) {
-                                $begin = false;
+                if (count($_SESSION['glossary']) > 0) {
+                        // Test whether \b works correctly, workaround if not
+                        if (preg_match('/α\b/u', 'α')) {
+                                $spre = $spost = '\b';
+                        } else {
+                                $spre = '(?<=[\x01-\x40\x5B-\x60\x7B-\x7F]|^)';
+                                $spost = '(?=[\x01-\x40\x5B-\x60\x7B-\x7F]|$)';
                         }
-                }
-                $_SESSION['glossary_terms_regexp'] .= ')' . $spost . chr(1) . 'ui';
-echo "<pre>" . q($_SESSION['glossary_terms_regexp']) . "</pre>";
-                if ($begin) {
+                        $_SESSION['glossary_terms_regexp'] = chr(1) . $spre . '(';
+                        $begin = true;
+                        foreach (array_keys($_SESSION['glossary']) as $term) {
+                                $_SESSION['glossary_terms_regexp'] .= ($begin? '': '|') .
+                                                                      preg_quote($term);
+                                if ($begin) {
+                                        $begin = false;
+                                }
+                        }
+                        $_SESSION['glossary_terms_regexp'] .= ')' . $spost . chr(1) . 'ui';
+                } else {
 			unset($_SESSION['glossary_terms_regexp']);
 		}
         }
