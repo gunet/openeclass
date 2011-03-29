@@ -51,7 +51,6 @@ $dateNow = date("j-n-Y / H:i",time());
 $datetoday = date("Y-n-j",time());
 
 $nameTools = $langAgenda;
-$tool_content = $head_content = "";
 
 mysql_select_db($dbname);
 
@@ -71,52 +70,6 @@ if ($is_adminOfCourse and (isset($_GET['addEvent']) or isset($_GET['id']))) {
 
 	//--if add event
 $head_content = <<<hContent
-<script type="text/javascript" src="$urlAppend/include/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
-<script type="text/javascript">
-tinyMCE.init({
-	// General options
-		language : "$lang_editor",
-		mode : "textareas",
-		theme : "advanced",
-		plugins : "pagebreak,style,save,advimage,advlink,inlinepopups,media,print,contextmenu,paste,noneditable,visualchars,nonbreaking,xhtmlxtras,template,wordcount,advlist,emotions,preview",
-
-		// Theme options
-		theme_advanced_buttons1 : "bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,styleselect,formatselect,fontsizeselect,forecolor,backcolor,removeformat,hr",
-		theme_advanced_buttons2 : "pasteword,|,bullist,numlist,|indent,blockquote,|,sub,sup,|,undo,redo,|,link,unlink,|,charmap,media,emotions,image,|,preview,cleanup,code",
-		theme_advanced_buttons3 : "",
-		theme_advanced_toolbar_location : "top",
-		theme_advanced_toolbar_align : "left",
-		theme_advanced_statusbar_location : "bottom",
-		theme_advanced_resizing : true,
-
-		// Example content CSS (should be your site CSS)
-		content_css : "$urlAppend/template/classic/img/tool.css",
-
-		// Drop lists for link/image/media/template dialogs
-		template_external_list_url : "lists/template_list.js",
-		external_link_list_url : "lists/link_list.js",
-		external_image_list_url : "lists/image_list.js",
-		media_external_list_url : "lists/media_list.js",
-
-		// Style formats
-		style_formats : [
-			{title : 'Bold text', inline : 'b'},
-			{title : 'Red text', inline : 'span', styles : {color : '#ff0000'}},
-			{title : 'Red header', block : 'h1', styles : {color : '#ff0000'}},
-			{title : 'Example 1', inline : 'span', classes : 'example1'},
-			{title : 'Example 2', inline : 'span', classes : 'example2'},
-			{title : 'Table styles'},
-			{title : 'Table row 1', selector : 'tr', classes : 'tablerow1'}
-		],
-
-		// Replace values for the template plugin
-		template_replace_values : {
-			username : "Open eClass",
-			staffid : "991234"
-		}
-});
-</script>
-
 <script type="text/javascript">
 function checkrequired(which, entry) {
 	var pass=true;
@@ -262,16 +215,15 @@ if ($is_adminOfCourse) {
 //Make top tool links
 if ($is_adminOfCourse) {
 	$head_content .= '
-<script type="text/javascript">
-function confirmation ()
-{
-    if (confirm("'.$langConfirmDelete.'"))
-        {return true;}
-    else
-        {return false;}
-}
-</script>
-';
+	<script type="text/javascript">
+	function confirmation ()
+	{
+	    if (confirm("'.$langConfirmDelete.'"))
+		{return true;}
+	    else
+		{return false;}
+	}
+	</script>';
 }
 	if (isset($id) && $id) {
 		$sql = "SELECT id, titre, contenu, day, hour, lasting FROM agenda WHERE id=$id";
@@ -283,33 +235,30 @@ function confirmation ()
 		$hourAncient=$myrow["hour"];
 		$dayAncient=$myrow["day"];
 		$lastingAncient=$myrow["lasting"];
-
 		$start_cal = $jscalendar->make_input_field(
-          array('showOthers' => true,
-                'align' => 'Tl',
-                 'ifFormat' => '%Y-%m-%d'),
-          array('style' => 'width: 8em; color: #727266; background-color: #fbfbfb; border: 1px solid #C0C0C0; text-align: center',
-                 'name' => 'date',
-                 'value' => $dayAncient));
+		array('showOthers' => true,
+		      'align' => 'Tl',
+		       'ifFormat' => '%Y-%m-%d'),
+		array('style' => 'width: 8em; color: #727266; background-color: #fbfbfb; border: 1px solid #C0C0C0; text-align: center',
+		       'name' => 'date',
+		       'value' => $dayAncient));
 	} else {
-        $tool_content .= "\n  <div id='operations_container'>\n    <ul id='opslist'>";
-        if ((!isset($addEvent) && @$addEvent != 1) || isset($_POST['submit'])) {
-                $tool_content .= "\n      <li><a href='$_SERVER[PHP_SELF]?addEvent=1'>".$langAddEvent."</a></li>";
+		$tool_content .= "\n  <div id='operations_container'>\n    <ul id='opslist'>";
+		if ((!isset($addEvent) && @$addEvent != 1) || isset($_POST['submit'])) {
+			$tool_content .= "\n<li><a href='$_SERVER[PHP_SELF]?addEvent=1'>".$langAddEvent."</a></li>";
+		}
+		$sens =" ASC";
+		$result = db_query("SELECT id FROM agenda", $currentCourseID);
+		if (mysql_num_rows($result) > 1) {
+			if (isset($_GET["sens"]) && $_GET["sens"]=="d") {
+				$tool_content .= "\n      <li><a href='$_SERVER[PHP_SELF]?sens=' >$langOldToNew</a></li>";
+				$sens=" DESC ";
+			} else {
+				$tool_content .= "\n      <li><a href='$_SERVER[PHP_SELF]?sens=d' >$langOldToNew</a></li>";
+			}
+		}
+		$tool_content .= "\n    </ul>\n  </div>\n";
         }
-        $sens =" ASC";
-        $result = db_query("SELECT id FROM agenda", $currentCourseID);
-        if (mysql_num_rows($result) > 1) {
-                if (isset($_GET["sens"]) && $_GET["sens"]=="d") {
-                        $tool_content .= "\n      <li><a href='$_SERVER[PHP_SELF]?sens=' >$langOldToNew</a></li>";
-                        $sens=" DESC ";
-                } else {
-                        $tool_content .= "\n      <li><a href='$_SERVER[PHP_SELF]?sens=d' >$langOldToNew</a></li>";
-                }
-        }
-        $tool_content .= "\n    </ul>\n  </div>\n";
-
-        }
-
 	if (!isset($id)) {
 		$id="";
 	}
@@ -326,7 +275,6 @@ function confirmation ()
 		$day	= date("d");
 		$hours	= date("H");
 		$minutes= date("i");
-
 		if (isset($hourAncient) && $hourAncient) {
 			$hourAncient = explode(":", $hourAncient);
 			$hours=$hourAncient[0];
@@ -399,23 +347,19 @@ if ($is_adminOfCourse) {
 }
 
 if (mysql_num_rows($result) > 0) {
-	$numLine=0;
-	$barreMois = "";
+	$numLine = 0;
+	$barMonth = "";
 	$nowBarShowed = FALSE;
         $tool_content .= "
         <table width='100%' class='tbl_alt'>
         <tr>
           <th><div align='left'><b>$langEvents</b></div></th>";
         if ($is_adminOfCourse) {
-              $tool_content .= "
-          <th width='50'><b>$langActions</b></th>";
+              $tool_content .= "<th width='50'><b>$langActions</b></th>";
         } else {
-              $tool_content .= "
-          <th width='50>&nbsp;</th>";
+              $tool_content .= "<th width='50'>&nbsp;</th>";
         }
-       
-        $tool_content .= "
-        </tr>";
+        $tool_content .= "</tr>";
 
 	while ($myrow = mysql_fetch_array($result)) {
 		$contenu = $myrow["contenu"];
@@ -427,27 +371,31 @@ if (mysql_num_rows($result) > 0) {
 			// Following order
 			if (((strtotime($myrow["day"]." ".$myrow["hour"]) > time()) && ($sens==" ASC")) ||
 				((strtotime($myrow["day"]." ".$myrow["hour"]) < time()) && ($sens==" DESC "))) {
-				if ($barreMois!=date("m",time())) {
-					$barreMois=date("m",time());
-					$tool_content .= "\n        <tr>";
+				if ($barMonth != date("m",time())) {
+					$barMonth = date("m",time());
+					$tool_content .= "\n<tr>";
 					// current month
-					$tool_content .= "\n          <td colspan='2' class='monthLabel'>".$langCalendar."&nbsp;<b>".ucfirst(claro_format_locale_date("%B %Y",time()))."</b></td>";
-					$tool_content .= "\n        </tr>";
+					$tool_content .= "\n<td class='monthLabel'>".$langCalendar."&nbsp;<b>".ucfirst(claro_format_locale_date("%B %Y",time()))."</b></td>";
+					$tool_content .= "\n</tr>";
 				}
 				$nowBarShowed = TRUE;
-				$tool_content .= "\n        <tr>";
-				$tool_content .= "\n          <td colspan=2 class='today'><b>$langDateNow</b> $dateNow</td>";
-				$tool_content .= "\n        </tr>";
+				$tool_content .= "\n<tr>";
+				$tool_content .= "\n<td class='today'><b>$langDateNow</b> $dateNow</td>";
+				$tool_content .= "\n</tr>";
 			}
 		}
-		if ($barreMois!=date("m",strtotime($myrow["day"]))) {
-			$barreMois=date("m",strtotime($myrow["day"]));
+		if ($barMonth != date("m",strtotime($myrow["day"]))) {
+			$barMonth = date("m",strtotime($myrow["day"]));
             		// month LABEL
-			$tool_content .= "\n        <tr>";
-			$tool_content .= "\n          <td class='monthLabel'><div align='center'>".$langCalendar."&nbsp;<b>".ucfirst(claro_format_locale_date("%B %Y",strtotime($myrow["day"])))."</b></div></td>";
-			$tool_content .= "\n        </tr>";
+			$tool_content .= "\n<tr>";
+			if ($is_adminOfCourse) {
+				$tool_content .= "\n<td class='monthLabel'>";
+			} else {
+				$tool_content .= "\n<td colspan='2' class='monthLabel'>";
+			}
+			$tool_content .= "<div align='center'>".$langCalendar."&nbsp;<b>".ucfirst(claro_format_locale_date("%B %Y",strtotime($myrow["day"])))."</b></div></td>";
+			$tool_content .= "\n</tr>";
 		}
-
                 $classvis = 'class="visible"';
 		if ($is_adminOfCourse) {
 			if ($myrow["visibility"] == 'i') {
@@ -461,15 +409,15 @@ if (mysql_num_rows($result) > 0) {
 			}
 			$tool_content .= "\n        <tr $classvis>\n          <td valign='top'>";
 		} else {
-                            if ($numLine%2 == 0) {
-                              $tool_content .= "\n        <tr class='even'>";
-                            } else {
-                              $tool_content .= "\n        <tr class='odd'>";
-                            }
+			if ($numLine%2 == 0) {
+			  $tool_content .= "\n        <tr class='even'>";
+			} else {
+			  $tool_content .= "\n        <tr class='odd'>";
+			}
                         $tool_content .= "\n          <td valign='top' colspan='2'>";
 		}
 
-		$tool_content .= "\n              <span class='day'>".ucfirst(claro_format_locale_date($dateFormatLong,strtotime($myrow["day"])))."</span> ($langHour: ".ucfirst(date("H:i",strtotime($myrow["hour"]))).")";
+		$tool_content .= "\n<span class='day'>".ucfirst(claro_format_locale_date($dateFormatLong,strtotime($myrow["day"])))."</span> ($langHour: ".ucfirst(date("H:i",strtotime($myrow["hour"]))).")";
 		$message = "$langUnknown";
 		if ($myrow["lasting"] != "") {
 			if ($myrow["lasting"] == 1)
@@ -477,8 +425,8 @@ if (mysql_num_rows($result) > 0) {
 			else
 				$message = $langHours;
 		}
-		$tool_content .=  "\n              <br /><br /><div class='event'><b>";
-		if ($myrow["titre"]=="") {
+		$tool_content .=  "\n<br /><br /><div class='event'><b>";
+		if ($myrow["titre"] == "") {
 		    $tool_content .= "".$langAgendaNoTitle."";
 		} else {
 		    $tool_content .= "".$myrow["titre"]."";
@@ -490,28 +438,27 @@ if (mysql_num_rows($result) > 0) {
 	//(evelthon, 12/05/2006)
 		if ($is_adminOfCourse) {
 			$tool_content .=  "
-          <td class='right' width='70'>
-            <a href='$_SERVER[PHP_SELF]?id=".$myrow['id']."&amp;edit=true'>
-            <img src='../../template/classic/img/edit.png' border='0' title='".$langModify."'></a>&nbsp;
-            <a href='$_SERVER[PHP_SELF]?id=".$myrow[0]."&amp;delete=yes' onClick='return confirmation();'>
-            <img src='../../template/classic/img/delete.png' border='0' title='".$langDelete."'></a>&nbsp;";
-			if ($myrow["visibility"] == 'v') {
-				$tool_content .= "
-            <a href='$_SERVER[PHP_SELF]?id=".$myrow[0]."&amp;mkInvisibl=true'>
-            <img src='../../template/classic/img/visible.png' border='0' title='".$langVisible."'></a>";
-			} else {
-				$tool_content .= "
-            <a href='$_SERVER[PHP_SELF]?id=".$myrow[0]."&amp;mkVisibl=true'>
-            <img src='../../template/classic/img/invisible.png' border='0' title='".$langVisible."'></a>";
-			}
-			$tool_content .= "
-          </td>";
+			<td class='right' width='70'>
+			  <a href='$_SERVER[PHP_SELF]?id=".$myrow['id']."&amp;edit=true'>
+			  <img src='../../template/classic/img/edit.png' border='0' title='".$langModify."'></a>&nbsp;
+			  <a href='$_SERVER[PHP_SELF]?id=".$myrow[0]."&amp;delete=yes' onClick='return confirmation();'>
+			  <img src='../../template/classic/img/delete.png' border='0' title='".$langDelete."'></a>&nbsp;";
+				      if ($myrow["visibility"] == 'v') {
+					      $tool_content .= "
+			  <a href='$_SERVER[PHP_SELF]?id=".$myrow[0]."&amp;mkInvisibl=true'>
+			  <img src='../../template/classic/img/visible.png' border='0' title='".$langVisible."'></a>";
+				      } else {
+					      $tool_content .= "
+			  <a href='$_SERVER[PHP_SELF]?id=".$myrow[0]."&amp;mkVisibl=true'>
+			  <img src='../../template/classic/img/invisible.png' border='0' title='".$langVisible."'></a>";
+				      }
+				      $tool_content .= "
+			</td>";
 		}
 		$tool_content .= "\n        </tr>";
 		$numLine++;
 	} 	// while
 	$tool_content .= "\n        </table>";
-
 } else  {
 	$tool_content .= "\n          <p class='alert1'>$langNoEvents</p>";
 }
