@@ -698,7 +698,7 @@ fieldset table.th {
 .tbl_border th {
     font-weight: bold;
     background-color: #f8f8f8;
-    padding: 5px;
+    padding: 3px;
 }
 
 .tbl_course_type {
@@ -737,7 +737,7 @@ fieldset table.th {
     vertical-align: top;
     border-right: 1px dashed #dfdfdf;
     border-bottom: 1px dashed #dfdfdf;
-    padding: 8px;    
+    padding: 3px;    
 }
 
 
@@ -874,7 +874,6 @@ td.even {
 
 th {
     text-align: left !important;
-    padding: 8px;
 }
 
 td {
