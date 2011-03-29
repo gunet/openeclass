@@ -1688,12 +1688,13 @@ function glossary_expand($text)
                 $begin = true;
                 foreach (array_keys($_SESSION['glossary']) as $term) {
                         $_SESSION['glossary_terms_regexp'] .= ($begin? '': '|') .
-                                                              '\b'.preg_quote($term).'\b';
+                                                              preg_quote($term);
                         if ($begin) {
                                 $begin = false;
                         }
                 }
                 $_SESSION['glossary_terms_regexp'] .= ')' . $spost . chr(1) . 'ui';
+echo "<pre>" . q($_SESSION['glossary_terms_regexp']) . "</pre>";
                 if ($begin) {
 			unset($_SESSION['glossary_terms_regexp']);
 		}
