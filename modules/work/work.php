@@ -1039,33 +1039,32 @@ function show_assignments($message = null)
 cData;
        $index = 0;
 		while ($row = mysql_fetch_array($result)) {
-			// Check if assignement contains unevaluatde (incoming) submissions
+			// Check if assignement contains submissions
 			$AssignementId = $row['id'];
 			$result_s = db_query("SELECT COUNT(*) FROM assignment_submit WHERE assignment_id='$AssignementId' AND grade=''");
 			$row_s = mysql_fetch_array($result_s);
 			$hasUnevaluatedSubmissions = $row_s[0];
 			if(!$row['active']) {
-				$visibility_css = "style='color: #CAC3B5;'";
-				$visibility_image = "arrow";
+				 $tool_content .= "\n<tr class = 'invisible'>";
 			} else {
-				$visibility_css = "";
-				$visibility_image = "arrow";
+			  if ($index%2==0) {
+				 $tool_content .= "\n<tr class='even'>";
+			      } else {
+				 $tool_content .= "\n<tr class='odd'>";
+			  }
 			}
-			    if ($index%2==0) {
-	                       $tool_content .= "\n    <tr class='even' ".$visibility_css.">";
-	                    } else {
-	                       $tool_content .= "\n    <tr class='odd' ".$visibility_css.">";
-                        }
 
 			$tool_content .= "
-       <td width='16'><img src='$urlServer/template/classic/img/$visibility_image.png' title='bullet' /></td>
-       <td ".$visibility_css."><a href='$_SERVER[PHP_SELF]?id=${row['id']}' ";
+			  <td width='16'><img src='$urlServer/template/classic/img/arrow.png' title='bullet' /></td>
+			  <td><a href='$_SERVER[PHP_SELF]?id=${row['id']}' ";
 			$tool_content .= ">";
 			$tool_content .= $row_title = q($row['title']);
 			$tool_content .= "</a></td>
-       <td class='center'>".nice_format($row['deadline'])."</td>
-       <td class='right'><a href='$_SERVER[PHP_SELF]?id=$row[id]&amp;choice=edit'><img src='../../template/classic/img/edit.png' alt='$m[edit]' /></a> <a href='$_SERVER[PHP_SELF]?id=$row[id]&amp;choice=do_delete' onClick='return confirmation(\"".addslashes($row_title)."\");'><img src='../../template/classic/img/delete.png' alt='$m[delete]' /></a>";
-
+			  <td class='center'>".nice_format($row['deadline'])."</td>
+			  <td class='right'><a href='$_SERVER[PHP_SELF]?id=$row[id]&amp;choice=edit'>
+			  <img src='../../template/classic/img/edit.png' alt='$m[edit]' />
+			  </a> <a href='$_SERVER[PHP_SELF]?id=$row[id]&amp;choice=do_delete' onClick='return confirmation(\"".addslashes($row_title)."\");'>
+			  <img src='../../template/classic/img/delete.png' alt='$m[delete]' /></a>";
 			if ($row['active']) {
 				$deactivate_temp = htmlspecialchars($m['deactivate']);
 				$activate_temp = htmlspecialchars($m['activate']);
@@ -1077,8 +1076,7 @@ cData;
 			$tool_content .= "&nbsp;</td></tr>";
                         $index++;
                 }
-                $tool_content .= '
-    </table>';
+                $tool_content .= '</table>';
         } else {
                 $tool_content .= "\n    <p class=\"alert1\">$langNoAssign</p>";
         }
