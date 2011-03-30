@@ -68,26 +68,31 @@ if (mysql_num_rows($result) > 0) {
 	while ($eclassAnnounce = mysql_fetch_array($result)) {
 		array_push($announceArr, $eclassAnnounce);
 	}
-        $tool_content .= "<br/>
+        $tool_content .= "
+        <br />
         <table width='100%' class='tbl_alt'>
-	<tr><th width='180'>$langAnnouncements <a href='${urlServer}rss.php'>
-	<img src='${urlServer}template/classic/img/feed.png' alt='RSS Feed' title='RSS Feed' />
-	</a></th><th>&nbsp;</th></tr>
-	<tbody>";
+	<tr>
+          <th colspan='2'>$langAnnouncements <a href='${urlServer}rss.php'>
+	    <img src='${urlServer}template/classic/img/feed.png' alt='RSS Feed' title='RSS Feed' />
+	    </a>
+          </th>
+        </tr>";
 
 	$numOfAnnouncements = count($announceArr);
 	for($i=0; $i < $numOfAnnouncements; $i++) {
 		$aid = $announceArr[$i]['id'];
-		$tool_content .= "<tr><td colspan='2'>
-		<img style='border:0px;' src='${urlAppend}/template/classic/img/arrow.png' alt='' />
-		<b><a href='modules/announcements/main_ann.php?aid=$aid'>".q($announceArr[$i]['title'])."</a></b>
-		&nbsp;(".claro_format_locale_date($dateFormatLong, strtotime($announceArr[$i]['date'])).")
-		<p>
-		".standard_text_escape(ellipsize($announceArr[$i]['body'], 150, "<strong>&nbsp;<a href='modules/announcements/main_ann.php?aid=$aid'>....</a></strong>"))."<br /></p>
-		</td>
-		</tr>";
+		$tool_content .= "
+        <tr>
+          <td width='1'><img style='border:0px;' src='${urlAppend}/template/classic/img/arrow.png' alt='' /></td>
+          <td>
+	    <b><a href='modules/announcements/main_ann.php?aid=$aid'>".q($announceArr[$i]['title'])."</a></b>
+	    &nbsp;(".claro_format_locale_date($dateFormatLong, strtotime($announceArr[$i]['date'])).")
+		".standard_text_escape(ellipsize($announceArr[$i]['body'], 150, "<strong>&nbsp;<a href='modules/announcements/main_ann.php?aid=$aid'>...</a></strong>"))."
+	  </td>
+	</tr>";
 	}
-	$tool_content .= "</table>";
+	$tool_content .= "
+        </table>";
 }
 
 $shibactive = mysql_fetch_array(db_query("SELECT auth_default FROM auth WHERE auth_name='shibboleth'"));
