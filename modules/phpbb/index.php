@@ -82,7 +82,7 @@ if ($is_adminOfCourse || $is_admin) {
 	$tool_content .= "
     <div id='operations_container'>
       <ul id='opslist'>
-        <li><a href='../forum_admin/forum_admin.php'>$langAdm</a></li>
+        <li><a href='../forum_admin/forum_admin.php'>$langCatForumAdmin</a></li>
       </ul>
     </div>";
 }

@@ -25,7 +25,6 @@
 * =========================================================================*/
 
 /* @version $Id$
-@last update: 2006-12-19 by Evelthon Prodromou
 */
 
 $require_current_course = TRUE;
@@ -37,7 +36,7 @@ include '../../include/baseTheme.php';
 include '../../include/sendMail.inc.php';
 include '../phpbb/functions.php';
 
-$nameTools = $langOrganisation;
+$nameTools = $langCatForumAdmin;
 $navigation[]= array ("url"=>"../phpbb/index.php", "name"=> $langForums);
 
 $forum_id = isset($_GET['forum_id'])?intval($_GET['forum_id']):'';
@@ -46,7 +45,7 @@ $cat_id = isset($_GET['cat_id'])?intval($_GET['cat_id']):'';
 if($is_adminOfCourse) {
 
 $head_content .= '
-<script>
+<script type="text/javascript">
 function confirmation ()
 {
     if (confirm("'.$langConfirmDelete.'"))
@@ -85,13 +84,13 @@ hContent;
 	// forum go
 if(isset($_GET['forumgo'])) {
 	$nameTools = $langAdd;
-	$navigation[]= array ("url"=>"../forum_admin/forum_admin.php", "name"=> $langOrganisation);
+	$navigation[]= array ("url"=>"../forum_admin/forum_admin.php", "name"=> $langCatForumAdmin);
 	$result = db_query("SELECT forum_id, forum_name, forum_desc, forum_access, forum_moderator, forum_type 
 			FROM forums WHERE cat_id='$cat_id'", $currentCourseID);
 	$ctg = category_name($cat_id);
 	if ($result and mysql_num_rows($result) > 0) {
 		$tool_content .= "
-              <form action=\"$_SERVER[PHP_SELF]?forumgoadd=yes&cat_id=$cat_id\" method=post>
+              <form action=\"$_SERVER[PHP_SELF]?forumgoadd=yes&amp;cat_id=$cat_id\" method=post>
 		<table width=99% class=\"tbl_alt\">
 		<tr>
 		  <th colspan=\"4\">$langForCat: <b>$ctg</b></th>
@@ -111,27 +110,27 @@ if(isset($_GET['forumgo'])) {
 					$tool_content .= "\n<tr class=\"odd\">";
 				}
 				$tool_content .= "
-                  <td class='right'>$i.</td>
-                  <td>$forum_name</td>
-                  <td>$forum_desc&nbsp;</td>
-                  <td class='center'>
-		   <a href='$_SERVER[PHP_SELF]?forumgoedit=yes&forum_id=$forum_id&cat_id=$cat_id'>
-		   <img src='../../template/classic/img/edit.png' title='$langModify' border='0'></img></a>&nbsp;
-		   <a href='$_SERVER[PHP_SELF]?forumgodel=yes&forum_id=$forum_id&cat_id=$cat_id' onClick='return confirmation();'>
-		   <img src='../../template/classic/img/delete.png' title='$langDelete' border='0'></img></a></td>
-		</tr>";
-			$i++;
+				<td class='right'>$i.</td>
+				<td>$forum_name</td>
+				<td>$forum_desc&nbsp;</td>
+				<td class='center'>
+				 <a href='$_SERVER[PHP_SELF]?forumgoedit=yes&amp;forum_id=$forum_id&amp;cat_id=$cat_id'>
+				 <img src='../../template/classic/img/edit.png' title='$langModify' /></a>&nbsp;
+				 <a href='$_SERVER[PHP_SELF]?forumgodel=yes&amp;forum_id=$forum_id&amp;cat_id=$cat_id' onClick='return confirmation();'>
+				 <img src='../../template/classic/img/delete.png' title='$langDelete' /></a></td>
+			      </tr>";
+				$i++;
 			}
 			$tool_content .= "
-                </table>
-                </form>
-                <br/>";
+			</table>
+			</form>
+			<br/>";
 		} else {
 			$tool_content .= "\n  <p class=\"alert1\">$langNoForumsCat</p>";
 		}
 
 		$tool_content .= "
-	      <form action=\"$_SERVER[PHP_SELF]?forumgoadd=yes&cat_id=$cat_id\" method=post onsubmit=\"return checkrequired(this,'forum_name');\">
+	      <form action=\"$_SERVER[PHP_SELF]?forumgoadd=yes&amp;cat_id=$cat_id\" method=post onsubmit=\"return checkrequired(this,'forum_name');\">
               <fieldset>
                 <legend>$langAddForCat</legend>    
 		<table class=\"tbl\">
@@ -159,14 +158,13 @@ if(isset($_GET['forumgo'])) {
 	// forum go edit
 	elseif(isset($_GET['forumgoedit'])) {
 		$nameTools = $langEditForum;
-		$navigation[]= array ("url"=>"../forum_admin/forum_admin.php", "name"=> $langOrganisation);
-		$result = db_query("SELECT forum_id, forum_name, forum_desc, forum_access, forum_moderator,
-    		cat_id, forum_type
+		$navigation[]= array ("url"=>"../forum_admin/forum_admin.php", "name"=> $langCatForumAdmin);
+		$result = db_query("SELECT forum_id, forum_name, forum_desc, forum_access, forum_moderator, cat_id, forum_type
 			FROM forums WHERE forum_id='$forum_id'", $currentCourseID);
 		list($forum_id, $forum_name, $forum_desc, $forum_access, $forum_moderator, $cat_id_1,
 		$forum_type) = mysql_fetch_row($result);
 		$tool_content .= "
-		<form action=\"$_SERVER[PHP_SELF]?forumgosave=yes&cat_id=".@$cat_id."\" method=post onsubmit=\"return checkrequired(this,'forum_name');\">
+		<form action=\"$_SERVER[PHP_SELF]?forumgosave=yes&amp;cat_id=".@$cat_id."\" method=post onsubmit=\"return checkrequired(this,'forum_name');\">
 		<input type=hidden name=forum_id value=$forum_id>
                 <fieldset>
                   <legend>$langChangeForum</legend>
@@ -196,7 +194,7 @@ if(isset($_GET['forumgo'])) {
                   </tr>
 		  <tr>
                     <th>&nbsp;</th>
-                    <td><input type=submit value='$langSave'></td>
+                    <td><input type=submit value='$langModify'></td>
 		  </tr>
                   </table>
                 </fieldset>
@@ -219,7 +217,7 @@ if(isset($_GET['forumgo'])) {
     		</tr>
     		<tr>
       		  <th>&nbsp;</th>
-      		  <td><input type=submit value='$langSave'></td>
+      		  <td><input type=submit value='$langModify'></td>
     		</tr>
     		</table>
                 </fieldset>
@@ -236,14 +234,14 @@ if(isset($_GET['forumgo'])) {
 	// forum go save
 	elseif(isset($_GET['forumgosave'])) {
 		$nameTools = $langDelete;
-		$navigation[]= array ("url"=>"../forum_admin/forum_admin.php", "name"=> $langOrganisation);
+		$navigation[]= array ("url"=>"../forum_admin/forum_admin.php", "name"=> $langCatForumAdmin);
 		$result = @db_query("SELECT user_id FROM users WHERE username='$forum_moderator'", $currentCourseID);
 		list($forum_moderator) = mysql_fetch_row($result);
 		db_query("UPDATE forums SET forum_name='$_POST[forum_name]', forum_desc='$_POST[forum_desc]',
 			forum_access='2', forum_moderator='1', cat_id='$_POST[cat_id]'
 			WHERE forum_id='$_POST[forum_id]'", $currentCourseID);
 		$tool_content .= "\n<p class='success'>$langForumDataChanged</p>
-		<p>&laquo; <a href=\"$_SERVER[PHP_SELF]?forumgo=yes&cat_id=$cat_id\">$langBack</a></p>";
+		<p>&laquo; <a href=\"$_SERVER[PHP_SELF]?forumgo=yes&amp;cat_id=$cat_id\">$langBack</a></p>";
 	}
 
 	// forum add category
@@ -256,7 +254,7 @@ if(isset($_GET['forumgo'])) {
 	// forum go add
 	elseif(isset($_GET['forumgoadd'])) {
 		$nameTools = $langAdd;
-		$navigation[]= array ("url"=>"../forum_admin/forum_admin.php", "name"=> $langOrganisation);
+		$navigation[]= array ("url"=>"../forum_admin/forum_admin.php", "name"=> $langCatForumAdmin);
 		$ctg = category_name($_GET['cat_id']);
 		$result = @db_query("SELECT user_id FROM users WHERE username='$forum_moderator'", $currentCourseID);
 		list($forum_moderator) = mysql_fetch_row($result);
@@ -282,7 +280,7 @@ if(isset($_GET['forumgo'])) {
 		// end of notification
 		
 		$tool_content .= "\n  <p class='success'>$langForumCategoryAdded</p>
-		<p>&laquo; <a href='$_SERVER[PHP_SELF]?forumgo=yes&cat_id=$_GET[cat_id]'>$langBack</a></p>";
+		<p>&laquo; <a href='$_SERVER[PHP_SELF]?forumgo=yes&amp;cat_id=$_GET[cat_id]'>$langBack</a></p>";
 	}
 
 	// forum delete category
@@ -300,12 +298,12 @@ if(isset($_GET['forumgo'])) {
 	// forum delete
 	elseif(isset($_GET['forumgodel'])) {
 		$nameTools = $langDelete;
-		$navigation[]= array ("url"=>"../forum_admin/forum_admin.php", "name"=> $langOrganisation);
+		$navigation[]= array ("url"=>"../forum_admin/forum_admin.php", "name"=> $langCatForumAdmin);
 		db_query("DELETE FROM topics WHERE forum_id = $forum_id", $currentCourseID);
 		db_query("DELETE FROM forums WHERE forum_id = $forum_id", $currentCourseID);
 		db_query("UPDATE `group` SET forum_id=0 WHERE forum_id = $forum_id", $mysqlMainDb);
 		$tool_content .= "\n<p class=\"success\">$langForumDelete</p>
-		\n<p>&laquo; <a href=\"$_SERVER[PHP_SELF]?forumgo=yes&cat_id=$cat_id\">$langBack</a></p>";
+		\n<p>&laquo; <a href=\"$_SERVER[PHP_SELF]?forumgo=yes&amp;cat_id=$cat_id\">$langBack</a></p>";
 	} else {
 		if(isset($_GET['forumcatnotify'])) { // modify forum category notification
 			$rows = mysql_num_rows(db_query("SELECT * FROM forum_notify 
@@ -318,12 +316,12 @@ if(isset($_GET['forumgo'])) {
 				cat_id = $cat_id, notify_sent = 1, course_id = $cours_id");
 			}
 		}
-		$tool_content .= "<form action='$_SERVER[PHP_SELF]' method=post></td><tr><td>";
+		$tool_content .= "<form action='$_SERVER[PHP_SELF]' method=post>";
 		$tool_content .= "
-                <table width=99% class=\"tbl_alt\">
+                <table width=100% class=\"tbl_alt\">
     		<tr>
                   <th width='2'>$langID</th>
-      		  <th><div align='left'>$langForCategories</div></th>
+      		  <th><div align='left'>$langCategories</div></th>
       		  <th width='25'>$langNbFor</th>
       		  <th width='85'>$langActions</th>
     		</tr>";
@@ -351,14 +349,14 @@ if(isset($_GET['forumgo'])) {
                   <td><div align='right'>$i.</div></td>
                   <td><div align='left'>$cat_title &nbsp;</div></td>
                   <td><div align='center'>$numbers[total]</div></td>
-                  <td><a href='forum_admin.php?forumgo=yes&cat_id=$cat_id'>
-			<img src='../../template/classic/img/forum_on.png' border='0' title='$langForums'></img></a>&nbsp;
-			<a href='$_SERVER[PHP_SELF]?forumcatedit=yes&cat_id=$cat_id'>
-			<img src='../../template/classic/img/edit.png' border='0' title='$langModify'></img></a>&nbsp;
-			<a href='$_SERVER[PHP_SELF]?forumcatdel=yes&cat_id=$cat_id' onClick='return confirmation();'>
-			<img src='../../template/classic/img/delete.png' border='0' title='$langDelete'></img></a>
-			<a href='$_SERVER[PHP_SELF]?forumcatnotify=$link_notify&cat_id=$cat_id'>	
-			<img src='../../template/classic/img/announcements$icon.gif' border='0' title='$langNotify'></img></a>
+                  <td><a href='forum_admin.php?forumgo=yes&amp;cat_id=$cat_id'>
+			<img src='../../template/classic/img/forum_on.png' title='$langForumAdmin' /></a>&nbsp;
+			<a href='$_SERVER[PHP_SELF]?forumcatedit=yes&amp;cat_id=$cat_id'>
+			<img src='../../template/classic/img/edit.png' title='$langModify' /></a>&nbsp;
+			<a href='$_SERVER[PHP_SELF]?forumcatdel=yes&amp;cat_id=$cat_id' onClick='return confirmation();'>
+			<img src='../../template/classic/img/delete.png' title='$langDelete' /></a>
+			<a href='$_SERVER[PHP_SELF]?forumcatnotify=$link_notify&amp;cat_id=$cat_id'>	
+			<img src='../../template/classic/img/announcements$icon.gif' title='$langNotify' /></a>
                   </td>
                 </tr>";
 			$i++;
@@ -380,13 +378,13 @@ if(isset($_GET['forumgo'])) {
 		</table>
                 </fieldset>
                 </form>
-		<p><b><u>$langNote</u>:</b> ($langForCategories)<br/>
+		<p><b><u>$langNote</u>:</b><br/>
 		<em>$langAddForums</em></p>";
 	}
 } else {
 	$tool_content .= "$langNotAllowed<br>";
 }
-if($is_adminOfCourse && isset($head_content)) {
+if($is_adminOfCourse) {
 	draw($tool_content, 2, '', $head_content);
 } else {
 	draw($tool_content, 2);

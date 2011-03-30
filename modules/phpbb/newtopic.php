@@ -199,7 +199,7 @@ if (isset($_POST['submit'])) {
 	$tool_content .= "
 	<p class='success'>$langStored</p>
 	<p class='back'>&laquo; $langClick <a href='viewtopic.php?topic=$topic_id&amp;forum=$forum&amp;$total_topic'>$langHere</a>$langViewMsg</p>
-	<p class='back'>&laquo; $langClick <a href='viewforum.php?forum=$forum_id'>$langHere</a> $langReturnTopic</p>
+	<p class='back'>&laquo; <a href='viewforum.php?forum=$forum_id'>$langReturnTopic</a></p>
 	"; 
 } elseif (isset($_POST['cancel'])) {
 	header("Location: viewtopic.php?topic=$topic&forum=$forum");	

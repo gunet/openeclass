@@ -66,7 +66,6 @@ if (!add_units_navigation(TRUE)) {
 	$navigation[]= array ("url"=>"index.php", "name"=> $langForums);
 }
 
-$tool_content = "";
 $paging = true;
 $next = 0;
 
@@ -84,12 +83,7 @@ if ($private_forum and !($is_member or $is_adminOfCourse)) {
 $tool_content .= "
     <div id=\"operations_container\">
       <ul id=\"opslist\">";
-
-if ($is_adminOfCourse || $is_admin) {
-	$tool_content .= "
-        <li><a href='../forum_admin/forum_admin.php'>$langAdm</a></li>";
-}
-
+      
 if ($can_post) {
 	$tool_content .= "<li><a href='newtopic.php?forum=$forum_id'>$langNewTopic</a></li>\n";	
 }
@@ -275,14 +269,13 @@ $tool_content .= "
 		} else {
 			$tool_content .= "<a href='$_SERVER[PHP_SELF]?forum=$forum_id&amp;topicnotify=$topic_link_notify&amp;topic_id=$myrow[topic_id]'><img src='../../template/classic/img/announcements$topic_icon.png' title='$langNotify'></img></a>";
 		}
-		$tool_content .= "</td>\n     </tr>";
+		$tool_content .= "</td>\n</tr>";
                 $i++;
 	} // end of while
-$tool_content .= "\n       </table>";
+	$tool_content .= "\n</table>";
 } else {
 	$tool_content .= "\n<p class='alert1'>$langNoTopics" .
 			($can_post? ' ' . $langStartNewTopic: '') .
 			"</p>\n";
 }
-$tool_content .= "</tbody></table>";
 draw($tool_content, 2);

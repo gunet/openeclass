@@ -103,7 +103,7 @@ if ($private_forum and !$is_member and !$is_adminOfCourse) {
 $nameTools = $langReply;
 $navigation[]= array ("url"=>"index.php", "name"=> $langForums);
 $navigation[]= array ("url"=>"viewforum.php?forum=$forum", "name"=> $forum_name);
-$navigation[]= array ("url"=>"viewtopic.php?&topic=$topic&forum=$forum", "name"=> $topic_title);
+$navigation[]= array ("url"=>"viewtopic.php?topic=$topic&amp;forum=$forum", "name"=> $topic_title);
 
 
 if (!does_exists($forum, $currentCourseID, "forum") || !does_exists($topic, $currentCourseID, "topic")) {
@@ -253,7 +253,7 @@ if (isset($_POST['submit'])) {
 	$tool_content .= "
     <div id=\"operations_container\">
 	<ul id=\"opslist\">
-          <li><a href=\"viewtopic.php?topic=$topic&forum=$forum\" target=\"_blank\">$langTopicReview</a></li>
+          <li><a href=\"viewtopic.php?topic=$topic&amp;forum=$forum\" target=\"_blank\">$langTopicReview</a></li>
 	</ul>
     </div>";
 	$tool_content .= "

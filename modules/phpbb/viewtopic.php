@@ -146,7 +146,7 @@ if (isset($_GET['delete'])) {
 	if (@!$topic_removed) {
 		sync($currentCourseID, $topic, 'topic');
 	}
-	$tool_content .= "<div id='operations_container'><p class='success'>$langDeletedMessage</p></div>";
+	$tool_content .= "<p class='success'>$langDeletedMessage</p>";
 }
 
 $sql = "SELECT topic_title, topic_status

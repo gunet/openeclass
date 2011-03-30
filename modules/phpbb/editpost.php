@@ -315,7 +315,7 @@ if ($is_adminOfCourse) { // course admin
 		</ul>
 		</div>
 		<br />";
-		$tool_content .= "<form action='$_SERVER[PHP_SELF]?post_id=$post_id&forum=$forum' method='post'>
+		$tool_content .= "<form action='$_SERVER[PHP_SELF]?post_id=$post_id&amp;forum=$forum' method='post'>
 		<table class='framed'>
 		<thead>
 		<tr><td><b>$langReplyEdit</b></td></tr>";
