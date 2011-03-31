@@ -82,18 +82,6 @@ if ($is_adminOfCourse) {
 	';
 }
 
-/*
-* First, some decoration
-*/
-if ($is_adminOfCourse || $is_admin) {
-	$tool_content .= "
-	<div id='operations_container'>
-	<ul id='opslist'>
-        <li><a href='../forum_admin/forum_admin.php'>$langCatForumAdmin</a></li>
-	</ul>
-	</div>";
-}
-
 if(isset($_GET['forumcatnotify'])) { // modify forum category notification
 		if (isset($_GET['cat_id'])) {
 			$cat_id = intval($_GET['cat_id']);
@@ -125,10 +113,7 @@ if(isset($_GET['forumcatnotify'])) { // modify forum category notification
 /*
 * Populate data with forum categories
 */
-$sql = "SELECT c.* FROM catagories c, forums f
-	 WHERE f.cat_id=c.cat_id
-	 GROUP BY c.cat_id, c.cat_title, c.cat_order
-	 ORDER BY cat_order, c.cat_id DESC";
+$sql = "SELECT c.cat_id, c.cat_title FROM catagories c ORDER BY c.cat_id DESC";
 
 $result = db_query($sql, $currentCourseID); 
 $total_categories = mysql_num_rows($result);
@@ -152,7 +137,7 @@ if ($total_categories) {
 	$sql = "SELECT f.*, p.post_time, p.nom, p.prenom, p.topic_id
 		FROM forums f LEFT JOIN posts p ON p.post_id = f.forum_last_post_id
 		$limit_forums ORDER BY f.cat_id, f.forum_id";
-	$f_res = db_query($sql, $currentCourseID); 
+	$f_res = db_query($sql, $currentCourseID);
 	while ($forum_data = mysql_fetch_array($f_res)) {
 		$forum_row[] = $forum_data;
 	}
@@ -183,7 +168,12 @@ if ($total_categories) {
 		if ($is_adminOfCourse) {
 			$tool_content .= "<a href='forum_admin.php'>
 			<img src='../../template/classic/img/addcategory.png' title='$langAddCategory' alt='$langAddCategory' />
-			</a>&nbsp;";
+			</a>&nbsp;
+			<a href='forum_admin.php?forumcatedit=yes&amp;cat_id=$catNum'>
+			<img src='../../template/classic/img/edit.png' title='$langModify' alt='$langModify' /></a>
+			&nbsp;
+			<a href='forum_admin.php?forumcatdel=yes&amp;cat_id=$catNum' onClick='return confirmation();'>
+			<img src='../../template/classic/img/delete.png' title='$langDelete' /></a>";
 		}
 		$tool_content .= "<a href='$_SERVER[PHP_SELF]?forumcatnotify=$link_notify&amp;cat_id=$catNum'>
 		<img src='../../template/classic/img/email$icon.png' title='$langNotify' alt='$langNotify' />
@@ -251,7 +241,10 @@ if ($total_categories) {
 				$tool_content .= "<td width='65' class='center'>$total_posts</td>\n";
 				$tool_content .= "<td width='200' class='center'>";
 				if ($total_topics > 0 && $total_posts > 0) {
-					$tool_content .= "$last_post_prenom $last_post_nom <a href='viewtopic.php?topic=$last_post_topic_id&amp;forum=$forum_id'> <img src='$icon_topic_latest' /></a><br />$human_last_post_time</td>\n";
+					$tool_content .= "$last_post_prenom $last_post_nom <a href='viewtopic.php?topic=$last_post_topic_id&amp;forum=$forum_id'>&nbsp;
+					<img src='$icon_topic_latest' />
+					</a>
+					<br />$human_last_post_time</td>\n";
 				} else {
 					$tool_content .= "<div class='inactive'>$langNoPosts</div></td>";
 				}
