@@ -37,7 +37,7 @@ include '../units/functions.php';
 
 $tool_content = $head_content = "";
 $nameTools = $langEditCourseProgram ;
-$navigation[] = array ('url' => 'index.php', 'name' => $langCourseProgram);
+$navigation[] = array ('url' => 'index.php?course='.$code_cours, 'name' => $langCourseProgram);
 
 $lang_editor = langname_to_code($language);
 
@@ -123,7 +123,7 @@ if ($q and mysql_num_rows($q) > 0) {
 
 $tool_content = "
 
- <form method='post' action='index.php'>
+ <form method='post' action='index.php?course=$code_cours'>
  <input type='hidden' name='edIdBloc' value='-1' />
  <input type='hidden' name='edTitleBloc' value='$langDescription' />
    <fieldset>

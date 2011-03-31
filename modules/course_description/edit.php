@@ -46,7 +46,7 @@ include '../../include/lib/textLib.inc.php';
 
 $tool_content = $head_content = '';
 $nameTools = $langEditCourseProgram ;
-$navigation[] = array ('url' => 'index.php', 'name' => $langCourseProgram);
+$navigation[] = array ('url' => 'index.php?course='.$code_cours, 'name' => $langCourseProgram);
 
 $lang_editor = langname_to_code($language);
 
@@ -142,7 +142,7 @@ if (isset($_POST['edIdBloc'])) {
                 }
         }
         $tool_content .= "
-      <form method='post' action='index.php'>
+      <form method='post' action='index.php?course=$code_cours'>
       <input type='hidden' name='edIdBloc' value='$numBloc' />
         <fieldset>
         
@@ -185,7 +185,7 @@ draw($tool_content, 2, '', $head_content);
 // Display form to to add a new block
 function display_add_block_form()
 {
-        global $cours_id, $tool_content, $titreBloc, $langAddCat, $langAdd, $langSelection, $titreBlocNotEditable;
+        global $cours_id, $code_cours, $tool_content, $titreBloc, $langAddCat, $langAdd, $langSelection, $titreBlocNotEditable;
         $q = db_query("SELECT res_id FROM unit_resources WHERE unit_id =
                                 (SELECT id FROM course_units WHERE course_id = $cours_id AND `order` = -1)
                        ORDER BY `order`");
@@ -196,7 +196,7 @@ function display_add_block_form()
         }
 
         $tool_content .= "
-        <form method='post' action='$_SERVER[PHP_SELF]'>
+        <form method='post' action='$_SERVER[PHP_SELF]?course=$code_cours'>
         <input type='hidden' name='add' value='1' />
         <fieldset>
           <legend>$langAddCat</legend>

@@ -61,7 +61,7 @@ if ($is_adminOfCourse) {
 	$tool_content .= "
   <div id='operations_container'>
     <ul id='opslist'>
-	  <li><a href='edit.php'>$langEditCourseProgram</a></li>
+	  <li><a href='edit.php?course=$code_cours'>$langEditCourseProgram</a></li>
     </ul>
   </div>";
 
