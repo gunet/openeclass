@@ -265,7 +265,7 @@ if ($is_adminOfCourse) {
 
 	if (isset($_GET['addEvent']) or isset($_GET['edit'])) {
 		$nameTools = $langAddEvent;
-		$navigation[] = array ("url" => $_SERVER['PHP_SELF'], "name" => $langAgenda);
+		$navigation[] = array ("url" => $_SERVER['PHP_SELF']."?course=$code_cours", "name" => $langAgenda);
 		$tool_content .= "
 		<form method='post' action='$_SERVER[PHP_SELF]?course=$code_cours' onsubmit='return checkrequired(this, \"titre\");'>
 		<input type='hidden' name='id' value='$id' />

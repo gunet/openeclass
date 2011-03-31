@@ -110,7 +110,7 @@ if ($is_adminOfCourse) {
     // display form for adding a glossary term
     if (isset($_GET['add']))  {
         $term = $definition = $url = '';
-        $navigation[] = array("url" => "$_SERVER[PHP_SELF]", "name" => $langGlossary);
+        $navigation[] = array("url" => "$_SERVER[PHP_SELF]?course=$code_cours", "name" => $langGlossary);
         $nameTools = $langAddGlossaryTerm;
         
         $tool_content .= "
@@ -148,7 +148,7 @@ if ($is_adminOfCourse) {
     
     // display form for editiong a glossary term
     if (isset($_GET['edit']))  {
-        $navigation[] = array("url" => "$_SERVER[PHP_SELF]", "name" => $langGlossary);
+        $navigation[] = array("url" => "$_SERVER[PHP_SELF]?course=$code_cours", "name" => $langGlossary);
         $nameTools = $langEditGlossaryTerm;
         
         $sql = db_query("SELECT term, definition, url FROM glossary WHERE id='$_GET[edit]'");

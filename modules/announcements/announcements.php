@@ -257,7 +257,7 @@ hContent;
         } else {
 	    $nameTools = $langAddAnn;
         }
-	$navigation[] = array("url" => "announcements.php", "name" => $langAnnouncements);
+	$navigation[] = array("url" => "announcements.php?course=$code_cours", "name" => $langAnnouncements);
         if (!isset($AnnouncementToModify)) $AnnouncementToModify = "";
         if (!isset($contentToModify)) $contentToModify = "";
         if (!isset($titleToModify)) $titleToModify = "";
