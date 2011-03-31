@@ -248,7 +248,7 @@ hContent;
     /* display form */
     if ($displayForm and (isset($_GET['addAnnounce']) or isset($_GET['modify']))) {
         $tool_content .= "
-        <form method='post' action='$_SERVER[PHP_SELF]?course=".$fake_code."' onsubmit=\"return checkrequired(this, 'antitle');\">
+        <form method='post' action='$_SERVER[PHP_SELF]?course=".$code_cours."' onsubmit=\"return checkrequired(this, 'antitle');\">
         <fieldset>
         <legend>$langAnnouncement</legend>
 	<table class='tbl' width='100%'>";
@@ -290,7 +290,7 @@ hContent;
 	$tool_content .= "
 	<div id='operations_container'>
 	  <ul id='opslist'>
-	    <li><a href='" . $_SERVER['PHP_SELF'] . "?course=" .$fake_code . "&addAnnounce=1'>" . $langAddAnn . "</a></li>
+	    <li><a href='" . $_SERVER['PHP_SELF'] . "?course=" .$code_cours . "&addAnnounce=1'>" . $langAddAnn . "</a></li>
 	  </ul>
 	</div>";
     }
@@ -363,11 +363,11 @@ hContent;
 		if ($is_adminOfCourse) {
 			$tool_content .= "
           <td width='70' class='right'>
-		<a href='$_SERVER[PHP_SELF]?course=".$fake_code ."&modify=" . $myrow['id'] . "'>
+		<a href='$_SERVER[PHP_SELF]?course=".$code_cours ."&modify=" . $myrow['id'] . "'>
 		<img src='../../template/classic/img/edit.png' title='" . $langModify . "' /></a>&nbsp;
-		<a href='$_SERVER[PHP_SELF]?course=".$fake_code ."&delete=" . $myrow['id'] . "' onClick=\"return confirmation('');\">
+		<a href='$_SERVER[PHP_SELF]?course=".$code_cours ."&delete=" . $myrow['id'] . "' onClick=\"return confirmation('');\">
 		<img src='../../template/classic/img/delete.png' title='" . $langDelete . "' /></a>&nbsp;
-		<a href='$_SERVER[PHP_SELF]?course=".$fake_code ."&mkvis=$myrow[id]&amp;vis=$visibility'>
+		<a href='$_SERVER[PHP_SELF]?course=".$code_cours ."&mkvis=$myrow[id]&amp;vis=$visibility'>
 		<img src='../../template/classic/img/$vis_icon' title='$langVisible' /></a>
 	  </td>";
 			if ($announcementNumber > 1)  {
@@ -375,10 +375,10 @@ hContent;
           <td align='center' width='70' class='right'>";
 			}
 			if ($iterator != 1)  {
-			    $tool_content .= "<a href='$_SERVER[PHP_SELF]?course=".$fake_code ."&up=" . $myrow["id"] . "'><img class='displayed' src='../../template/classic/img/up.png' title='" . $langUp . "' /></a>";
+			    $tool_content .= "<a href='$_SERVER[PHP_SELF]?course=".$code_cours ."&up=" . $myrow["id"] . "'><img class='displayed' src='../../template/classic/img/up.png' title='" . $langUp . "' /></a>";
 			}
 			if ($iterator < $bottomAnnouncement) {
-			    $tool_content .= "<a href='$_SERVER[PHP_SELF]?course=".$fake_code ."&down=" . $myrow["id"] . "'><img class='displayed' src='../../template/classic/img/down.png' title='" . $langDown . "' /></a>";
+			    $tool_content .= "<a href='$_SERVER[PHP_SELF]?course=".$code_cours ."&down=" . $myrow["id"] . "'><img class='displayed' src='../../template/classic/img/down.png' title='" . $langDown . "' /></a>";
 			}
 			if ($announcementNumber > 1) {
 				$tool_content .= "</td>";
