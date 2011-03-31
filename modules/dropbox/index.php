@@ -49,7 +49,7 @@ $action->record('MODULE_ID_DROPBOX');
 
 if (isset($_GET['showQuota']) and $_GET['showQuota'] == TRUE) {
 	$nameTools = $langQuotaBar;
-	$navigation[]= array ("url"=>"$_SERVER[PHP_SELF]", "name"=> $dropbox_lang["dropbox"]);
+	$navigation[]= array ("url"=>"$_SERVER[PHP_SELF]?course=$code_cours", "name"=> $dropbox_lang["dropbox"]);
 	$tool_content .= showquota($diskQuotaDropbox, $diskUsed);
 	draw($tool_content, 2);
 	exit;
@@ -59,8 +59,8 @@ if (isset($_GET['showQuota']) and $_GET['showQuota'] == TRUE) {
 $tool_content .="
 <div id=\"operations_container\">
   <ul id=\"opslist\">
-    <li><a href=\"".$_SERVER['PHP_SELF']."?upload=1\">".$dropbox_lang['uploadFile']."</a></li>
-    <li><a href='$_SERVER[PHP_SELF]?showQuota=TRUE'>$langQuotaBar</a></li>
+    <li><a href=\"".$_SERVER['PHP_SELF']."?course=$code_cours&amp;upload=1\">".$dropbox_lang['uploadFile']."</a></li>
+    <li><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;showQuota=TRUE'>$langQuotaBar</a></li>
   </ul>
 </div>";
 
@@ -124,13 +124,13 @@ $dropbox_unid = md5(uniqid(rand(), true));	//this var is used to give a unique v
 if (isset($_GET['mailing']))  // RH: Mailing detail: no form upload
 {
 	$tool_content .= "<h3>". htmlspecialchars(getUserNameFromId($_GET['mailing'])). "</h3>";
-	$tool_content .= "<a href='index.php'>".$dropbox_lang["mailingBackToDropbox"].'</a><br><br>';
+	$tool_content .= "<a href='index.php?course=$code_cours'>".$dropbox_lang["mailingBackToDropbox"].'</a><br><br>';
 }
 elseif(isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1)
 {
 
 	$tool_content .= <<<tCont2
-    <form method="post" action="dropbox_submit.php" enctype="multipart/form-data" onsubmit="return checkForm(this)">
+    <form method="post" action="dropbox_submit.php?course=$code_cours" enctype="multipart/form-data" onsubmit="return checkForm(this)">
 tCont2;
 	$tool_content .= "
     <fieldset>
@@ -251,7 +251,7 @@ if (!isset($_GET['mailing']))  // RH: Mailing detail: no received files
 	$dr_unid = urlencode($dropbox_unid);
 	if ($numberDisplayed > 0) {
 		$dr_lang_all = addslashes( $dropbox_lang["all"]);
-		$tool_content .= "&nbsp;<a href='dropbox_submit.php?deleteReceived=all&amp;dropbox_unid=$dr_unid' onClick=\"return confirmationall();\"><img src='../../template/classic/img/delete.png' title='$langDelete' /></a>";
+		$tool_content .= "&nbsp;<a href='dropbox_submit.php?course=$code_cours&amp;deleteReceived=all&amp;dropbox_unid=$dr_unid' onClick=\"return confirmationall();\"><img src='../../template/classic/img/delete.png' title='$langDelete' /></a>";
 	}
 	$tool_content .= "</p>";
 
@@ -293,7 +293,7 @@ if (!isset($_GET['mailing']))  // RH: Mailing detail: no received files
 	<img src=\"../../template/classic/img/inbox.png\" title=\"$dropbox_lang[receivedTitle]\" /></td>
         <td>";
 
-		$tool_content .= "<a href='dropbox_download.php?id=".urlencode($w->id)."' target=_blank>".$w->title."</a>";
+		$tool_content .= "<a href='dropbox_download.php?course=$code_cours&amp;id=".urlencode($w->id)."' target=_blank>".$w->title."</a>";
 
 		$fSize = ceil(($w->filesize)/1024);
 		$tool_content .= <<<tCont9
@@ -314,7 +314,7 @@ tCont9;
         <td class='center'>";
 
 	$tool_content .= "
-        <a href=\"dropbox_submit.php?deleteReceived=".urlencode($w->id)."&amp;dropbox_unid=".urlencode($dropbox_unid)."\" onClick='return confirmation(\"$w->title\");'>
+        <a href=\"dropbox_submit.php?course=$code_cours&amp;deleteReceived=".urlencode($w->id)."&amp;dropbox_unid=".urlencode($dropbox_unid)."\" onClick='return confirmation(\"$w->title\");'>
         <img src=\"../../template/classic/img/delete.png\" title=\"$langDelete\" /></a>";
 
 	$tool_content .= "</td></tr>";
@@ -342,7 +342,7 @@ $tool_content .= "
         $tool_content .= strtoupper($dropbox_lang["sentTitle"]);
 	// if the user has sent files then display the icon deleteall
 	if ($numSent > 0) {
-	$tool_content .= "&nbsp;<a href='dropbox_submit.php?deleteSent=all&amp;dropbox_unid=".urlencode( $dropbox_unid).$mailingInUrl."'
+	$tool_content .= "&nbsp;<a href='dropbox_submit.php?course=$code_cours&amp;deleteSent=all&amp;dropbox_unid=".urlencode( $dropbox_unid).$mailingInUrl."'
 	onClick=\"return confirmationall();\"><img src='../../template/classic/img/delete.png' title='$langDelete' /></a>
         ";
 	}
@@ -441,12 +441,12 @@ foreach ($dropbox_person -> sentWork as $w)
 
 	if ( $w->recipients[0]['id'] > $dropbox_cnf["mailingIdBase"])
 	{
-		$ahref = "index.php?mailing=" . urlencode($w->recipients[0]['id']);
+		$ahref = "index.php?course=$code_cours&amp;mailing=" . urlencode($w->recipients[0]['id']);
 		$imgsrc = '../../images/folder.png';
 	}
 	else
 	{
-		$ahref = "dropbox_download.php?id=" . urlencode($w->id) . $mailingInUrl;
+		$ahref = "dropbox_download.php?course=$code_cours&amp;id=" . urlencode($w->id) . $mailingInUrl;
 		$imgsrc = '../../template/classic/img/outbox.png';
 	}
 	$fSize = ceil(($w->filesize)/1024);
@@ -477,7 +477,7 @@ tCont12;
 	//<!--	Users cannot delete their own sent files -->
 
 	$tool_content .= "
-	<a href=\"dropbox_submit.php?deleteSent=".urlencode($w->id)."&amp;dropbox_unid=".urlencode($dropbox_unid) . $mailingInUrl."\"
+	<a href=\"dropbox_submit.php?course=$code_cours&amp;deleteSent=".urlencode($w->id)."&amp;dropbox_unid=".urlencode($dropbox_unid) . $mailingInUrl."\"
 		onClick='return confirmation(\"$w->title\");'>
 		<img src=\"../../template/classic/img/delete.png\" title=\"$langDelete\" /></a>";
 	$tool_content .= "</div></td></tr>";

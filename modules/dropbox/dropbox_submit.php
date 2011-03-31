@@ -207,12 +207,12 @@ if (!isset( $_POST['authors']) || !isset( $_POST['description']))
 
 	if (!$error) {
 		$tool_content .= "<p class=\"success\">".$dropbox_lang["docAdd"]."<br />
-		<a href='index.php'>".$dropbox_lang['backList']."</a></p><br/>";
+		<a href='index.php?course=$code_cours'>".$dropbox_lang['backList']."</a></p><br/>";
 	}
 	else
 	{
 		$tool_content .= "<p class=\"caution\">".$errormsg."<br /><br />
-		<a href='index.php'>".$dropbox_lang['backList']."</a><br/>";
+		<a href='index.php?course=$code_cours'>".$dropbox_lang['backList']."</a><br/>";
 	}
 }
 
@@ -234,7 +234,7 @@ if (isset($_GET['mailingIndex']))  // examine or send
 	$mailing_title = $mailing_item->title;
 	$mailing_file = $dropbox_cnf["sysPath"] . '/' . $mailing_item->filename;
 	$errormsg = '<b>' . $mailing_item->recipients[0]['name'] . ' ('
-	. "<a href='dropbox_download.php?id=".urlencode($mailing_item->id)."'>'"
+	. "<a href='dropbox_download.php?course=$code_cours&amp;id=".urlencode($mailing_item->id)."'>'"
 	. $mailing_title . '</a>):</b><br><br>';
 
 	if (!preg_match($dropbox_cnf["mailingZipRegexp"], $mailing_title, $nameParts))
@@ -446,12 +446,12 @@ if (isset($_GET['mailingIndex']))  // examine or send
      */
 	if ($error) {
 		$tool_content.="<b><font color=\"#FF0000\">$errormsg</font></b><br><br>
-		<a href=\"index.php\">".$dropbox_lang["backList"]."></a><br>";
+		<a href=\"index.php?course=$code_cours\">".$dropbox_lang["backList"]."></a><br>";
 	}
 	else
 	{
 		$tool_content .= "$errormsg<br><br>
-		<a href=\"index.php\">".$dropbox_lang["backList"]."</a><br>";
+		<a href=\"index.php?course=$code_cours\">".$dropbox_lang["backList"]."</a><br>";
 	}
 }
 
@@ -522,7 +522,7 @@ if (isset($_GET['deleteReceived']) || isset($_GET['deleteSent']))
      * ========================================
      */
 	$tool_content .= "<p class=\"success\">".$dropbox_lang["fileDeleted"]."<br />
-	<a href='index.php'>".$dropbox_lang['backList']."</a></p><br/>";
+	<a href='index.php?course=$code_cours'>".$dropbox_lang['backList']."</a></p><br/>";
 }
 draw($tool_content, 2, '', $head_content);
 ?>
