@@ -80,14 +80,6 @@ if ($private_forum and !($is_member or $is_adminOfCourse)) {
 	draw($tool_content, 2);
 	exit;
 }
-$tool_content .= "
-    <div id=\"operations_container\">
-      <ul id=\"opslist\">";
-      
-if ($can_post) {
-	$tool_content .= "<li><a href='newtopic.php?forum=$forum_id'>$langNewTopic</a></li>\n";	
-}
-$tool_content .= "</ul></div>";
 /*
 * Retrieve and present data from course's forum
 */
@@ -172,7 +164,6 @@ $sql = "SELECT t.*, p.post_time, p.nom AS nom1, p.prenom AS prenom1
 
 $result = db_query($sql, $currentCourseID);
 
-if (mysql_num_rows($result) > 0) { // topics found
 // header
 $tool_content .= "
      <table width='100%' class='tbl_border'>
@@ -182,9 +173,11 @@ $tool_content .= "
        <td width='90' class='center'>$langSender</td>
        <td width='90' class='center'>$langSeen</td>
        <td width='120' class='center'>$langLastMsg</td>
-       <td width='20' class='center'>$langNotifyActions</td>
-     </tr>";
+       <td width='20' class='center'>$langActions</td>
+     </tr></table>";
 
+if (mysql_num_rows($result) > 0) { // topics found
+	$tool_content .= "<table width='100%' class='tbl_border'>";
         $i=0;
 	while($myrow = mysql_fetch_array($result)) {
                 if ($i%2==1) {
@@ -264,18 +257,30 @@ $tool_content .= "
 			$topic_icon = toggle_icon($topic_action_notify);
 		}
 		$tool_content .= "\n<td class='center'>";
+		if ($can_post) {
+			$tool_content .= "<a href='newtopic.php?forum=$forum_id'>
+			<img src='../../template/classic/img/newtopic.png' title='$langNewTopic' alt='$langNewTopic' />
+			</a>";
+		}
 		if (isset($_GET['start']) and $_GET['start'] > 0) {
-			$tool_content .= "<a href='$_SERVER[PHP_SELF]?forum=$forum_id&amp;start=$_GET[start]&amp;topicnotify=$topic_link_notify&amp;topic_id=$myrow[topic_id]'><img src='../../template/classic/img/announcements$topic_icon.png' title='$langNotify'></img></a>";
+			$tool_content .= "
+			<a href='$_SERVER[PHP_SELF]?forum=$forum_id&amp;start=$_GET[start]&amp;topicnotify=$topic_link_notify&amp;topic_id=$myrow[topic_id]'>
+			<img src='../../template/classic/img/announcements$topic_icon.png' title='$langNotify' />
+			</a>";
 		} else {
-			$tool_content .= "<a href='$_SERVER[PHP_SELF]?forum=$forum_id&amp;topicnotify=$topic_link_notify&amp;topic_id=$myrow[topic_id]'><img src='../../template/classic/img/announcements$topic_icon.png' title='$langNotify'></img></a>";
+			$tool_content .= "<a href='$_SERVER[PHP_SELF]?forum=$forum_id&amp;topicnotify=$topic_link_notify&amp;topic_id=$myrow[topic_id]'>
+			<img src='../../template/classic/img/announcements$topic_icon.png' title='$langNotify' />
+			</a>";
 		}
 		$tool_content .= "</td>\n</tr>";
                 $i++;
 	} // end of while
-	$tool_content .= "\n</table>";
+	$tool_content .= "</table>";
 } else {
-	$tool_content .= "\n<p class='alert1'>$langNoTopics" .
-			($can_post? ' ' . $langStartNewTopic: '') .
-			"</p>\n";
+	$tool_content .= "<p class='alert1'>$langNoTopics";
+	if ($can_post) {
+		$tool_content .= " <a href='newtopic.php?forum=$forum_id'>$langStartNewTopic</a>";
+	}
+	$tool_content .= "</p>";
 }
 draw($tool_content, 2);

@@ -47,10 +47,6 @@ Currently we use only a fraction of phpBB tables and functionality
 enormous for both core phpBB code upgrades and migration from an
 existing (phpBB-based) to a new eclass forum :-(
 
-@Comments:
-
-@todo:
-==============================================================================
 */
 
 /*
@@ -62,29 +58,40 @@ $require_help = TRUE;
 $helpTopic = 'For';
 include '../../include/baseTheme.php';
 $nameTools = $langForums;
-$tool_content = "";
-
 /**** The following is added for statistics purposes ***/
 include('../../include/action.php');
 $action = new action();
 $action->record('MODULE_ID_FORUM');
 /**************************************/
 
-
 include_once("./config.php");
 include "functions.php";
 include "../group/group_functions.php";
+
+if ($is_adminOfCourse) {
+	$head_content .= '
+	<script type="text/javascript">
+	function confirmation ()
+	{
+	    if (confirm("'.$langConfirmDelete.'"))
+		{return true;}
+	    else
+		{return false;}
+	}
+	</script>
+	';
+}
 
 /*
 * First, some decoration
 */
 if ($is_adminOfCourse || $is_admin) {
 	$tool_content .= "
-    <div id='operations_container'>
-      <ul id='opslist'>
+	<div id='operations_container'>
+	<ul id='opslist'>
         <li><a href='../forum_admin/forum_admin.php'>$langCatForumAdmin</a></li>
-      </ul>
-    </div>";
+	</ul>
+	</div>";
 }
 
 if(isset($_GET['forumcatnotify'])) { // modify forum category notification
@@ -127,16 +134,7 @@ $result = db_query($sql, $currentCourseID);
 $total_categories = mysql_num_rows($result);
 
 if ($total_categories) {
-	$tool_content .= "
-         <table width='100%' class='tbl_border'>
-	 <tr class='sub_title1'>
-	   <td colspan='2'>$langForums</td>
-	   <td class='center'>$langSubjects</td>
-	   <td class='center'>$langPosts</td>
-	   <td class='center'>$langLastPost</td>
-	   <td class='center'>$langNotifyActions</td>
- 	 </tr>\n";
-
+	$tool_content .= "<table width='100%' class='tbl_border'>";
 	if (isset($viewcat)) {
 		if (!$viewcat) {
 			$viewcat = -1;
@@ -162,9 +160,9 @@ if ($total_categories) {
 		if ($viewcat != -1) {
 			if ($categories[$i][cat_id] != $viewcat) {
 				$title = stripslashes($categories[$i][cat_title]);
-				$tool_content .= "        <tr>
-          <td colspan='6'>$title</td>
-        </tr>";
+				$tool_content .= "<tr>
+				<td colspan='6'>$title</td>
+				</tr>";
 				continue;
 			}
 		}
@@ -179,10 +177,25 @@ if ($total_categories) {
 			$link_notify = toggle_link($action_notify);
 			$icon = toggle_icon($action_notify);
 		}
-		$tool_content .= "         <tr class='odd'>
-           <td colspan='5'><b>$title</b></td>
-           <td class='center'><a href='$_SERVER[PHP_SELF]?forumcatnotify=$link_notify&amp;cat_id=$catNum'><img src='../../template/classic/img/announcements$icon.png' title='$langNotify' alt='$langNotify' /></a></td>
-         </tr>\n";
+		$tool_content .= "<tr class='odd'>
+		<td colspan='5'><b>$title</b></td>
+		<td class='center'>";
+		if ($is_adminOfCourse) {
+			$tool_content .= "<a href='forum_admin.php'>
+			<img src='../../template/classic/img/addcategory.png' title='$langAddCategory' alt='$langAddCategory' />
+			</a>&nbsp;";
+		}
+		$tool_content .= "<a href='$_SERVER[PHP_SELF]?forumcatnotify=$link_notify&amp;cat_id=$catNum'>
+		<img src='../../template/classic/img/announcements$icon.png' title='$langNotify' alt='$langNotify' />
+		</a></td>
+		</tr>\n";
+		$tool_content .= "<tr class='sub_title1'>
+		<td colspan='2'>$langForums</td>
+		<td class='center'>$langSubjects</td>
+		<td class='center'>$langPosts</td>
+		<td class='center'>$langLastPost</td>
+		<td class='center'>$langActions</td>
+		</tr>";
 			
 		@reset($forum_row);
 		for ($x=0; $x < count($forum_row); $x++) {
@@ -200,7 +213,7 @@ if ($total_categories) {
 				if (empty($last_post)) {
 					$last_post = $langNoPosts;
 				}
-				$tool_content .= "         <tr class='even'>\n";
+				$tool_content .= "<tr class='even'>\n";
 				if (!isset($last_visit)) {
 					$last_visit = 0;
 				}
@@ -251,14 +264,30 @@ if ($total_categories) {
 					$forum_link_notify = toggle_link($forum_action_notify);
 					$forum_icon = toggle_icon($forum_action_notify);
 				}
-				$tool_content .= "           <td class='center'><a href='$_SERVER[PHP_SELF]?forumnotify=$forum_link_notify&amp;forum_id=$forum_id'><img src='../../template/classic/img/announcements$forum_icon.png' title='$langNotify' alt='$langNotify' /></a></td>\n" .
-				                 "         </tr>\n";
+				$tool_content .= "<td class='center'>";
+				if ($is_adminOfCourse) { // admin actions
+					$tool_content .= "<a href='forum_admin.php?forumgo=yes&amp;cat_id=$catNum'>
+					<img src='../../template/classic/img/newtopic.png' title='$langNewForum' alt='$langNewForum' />
+					</a>&nbsp;
+					<a href='forum_admin.php?forumgoedit=yes&amp;forum_id=$forum_id&amp;cat_id=$catNum'>
+					<img src='../../template/classic/img/edit.png' title='$langModify' />
+					</a>&nbsp;
+					<a href='forum_admin.php?forumgodel=yes&amp;forum_id=$forum_id&amp;cat_id=$catNum' onClick='return confirmation();'>
+					 <img src='../../template/classic/img/delete.png' title='$langDelete' /></a>&nbsp;";
+				}
+				$tool_content .= "<a href='$_SERVER[PHP_SELF]?forumnotify=$forum_link_notify&amp;forum_id=$forum_id'>
+				<img src='../../template/classic/img/announcements$forum_icon.png' title='$langNotify' alt='$langNotify' /></a>
+				</td></tr>\n";
 			}
 		}
 	}
 } else {
-	$tool_content .= "\n   <p class='alert1'>$langNoForums</p>";
+	$tool_content .= "\n<p class='alert1'>$langNoForums</p>";
 }
-$tool_content .= "         </table>";
+$tool_content .= "</table>";
 add_units_navigation(true);
-draw($tool_content, 2);
+if($is_adminOfCourse) {
+	draw($tool_content, 2, '', $head_content);
+} else {
+	draw($tool_content, 2);
+}

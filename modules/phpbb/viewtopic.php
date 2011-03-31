@@ -174,20 +174,6 @@ if (!add_units_navigation(TRUE)) {
 }
 $nameTools = $topic_subject;
 
-	$tool_content .= "
-   <div id='operations_container'>
-     <ul id='opslist'>
-       <li><a href='newtopic.php?topic=$topic&amp;forum=$forum'>$langNewTopic</a></li>
-       <li>";
-	if($lock_state != 1) {
-		$tool_content .= "<a href='reply.php?topic=$topic&amp;forum=$forum'>$langAnswer</a>";
-	} else {
-		$tool_content .= "<img src='$reply_locked_image' alt='' />";
-	}				
-	$tool_content .= "</li>
-     </ul>
-   </div>";
-
 if (isset($_SESSION['message'])) {
 	$tool_content .= $_SESSION['message'];
 	unset($_SESSION['message']);
@@ -311,12 +297,19 @@ do {
 	  <br />$message<br />
 	</td>
 	<td width='40' valign='top'><div align='right'>";
+	if($lock_state != 1) {
+		$tool_content .= "<a href='reply.php?topic=$topic&amp;forum=$forum'>
+		<img src='../../template/classic/img/reply.png' title='$langAnswer' alt='$langAnswer' /></a>";
+	} else {
+		$tool_content .= "<img src='$reply_locked_image' alt='' />";
+	}				
 	if ($is_adminOfCourse) { // course admin
-		$tool_content .= "<a href=\"editpost.php?post_id=".$myrow["post_id"]."&amp;topic=$topic&amp;forum=$forum\"><img src='../../template/classic/img/edit.png' title='$langModify' alt='$langModify' /></a>";
+		$tool_content .= "<a href=\"editpost.php?post_id=".$myrow["post_id"]."&amp;topic=$topic&amp;forum=$forum\">
+		<img src='../../template/classic/img/edit.png' title='$langModify' alt='$langModify' /></a>";
 		$tool_content .= "&nbsp;<a href='$_SERVER[PHP_SELF]?post_id=".$myrow["post_id"]."&amp;topic=$topic&amp;forum=$forum&amp;delete=on' onClick='return confirmation()'>
-			<img src='../../template/classic/img/delete.png' title='$langDelete' /></a>";
+		<img src='../../template/classic/img/delete.png' title='$langDelete' /></a>";
 	}
-	$tool_content .= "</div></td>\n    </tr>";
+	$tool_content .= "</div></td>\n</tr>";
 	$count++;
 } while($myrow = mysql_fetch_array($result));
 
