@@ -1155,15 +1155,8 @@ function send_file($id)
         if (!($is_adminOfCourse or $info['uid'] == $uid or $GLOBALS['is_member'])) {
                 return false;
         }
-        // Add quotes to filename if it contains spaces
-        if (strpos($info['file_name'], ' ') !== false) {
-                $info['file_name'] = '"' . $info['file_name'] . '"';
-        }
-        header("Content-Type: application/octet-stream");
-        header("Content-Disposition: attachment; filename=".basename($info['file_name']));
-        stop_output_buffering();
-        readfile("$GLOBALS[workPath]/$info[file_path]");
-        exit();
+        send_file_to_client("$GLOBALS[workPath]/$info[file_path]", $info['file_name'], null, true);
+        exit;
 }
 
 

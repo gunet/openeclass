@@ -62,8 +62,11 @@ function send_file_to_client($real_filename, $filename, $disposition = null, $se
         } else {
                 $charset = '';
         }
-        
 	if ($send_name) {
+                if (preg_match('/[^\x20-\x7E]/', $filename) and
+                    strstr($_SERVER['HTTP_USER_AGENT'], 'MSIE') !== false) {
+                        $filename = urlencode($filename);
+                }
                 // Add quotes to filename if it contains spaces
                 if (strpos($filename, ' ') !== false) {
                         $filename = '"' . $filename . '"';
@@ -75,7 +78,7 @@ function send_file_to_client($real_filename, $filename, $disposition = null, $se
 	} else {
                 $filenameattr = '';
         }
-        header("Content-type: $content_type$charset");
+        // header("Content-type: $content_type$charset");
         if (isset($disposition)) {
                 header("Content-Disposition: $disposition$filenameattr");
         }
