@@ -38,7 +38,7 @@ if (defined('GROUP_DOCUMENTS')) {
         $navigation[] = array('url' => 'group.php', 'name' => $langGroups);
         $navigation[] = array('url' => 'group_space.php?group_id=' . $group_id, 'name' => q($group_name));
         $groupset = "group_id=$group_id&amp;";
-        $base_url = $_SERVER['PHP_SELF'] . '?' . $groupset;
+        $base_url = $_SERVER['PHP_SELF'] . '?course=' .$code_cours .'&amp;' . $groupset;
         $group_sql = "course_id = $cours_id AND subsystem = $subsystem AND subsystem_id = $subsystem_id";
         $group_hidden_input = "<input type='hidden' name='group_id' value='$group_id' />";
         $basedir = $webDir . 'courses/' . $currentCourseID . '/group/' . $secret_directory;
@@ -51,13 +51,13 @@ if (defined('GROUP_DOCUMENTS')) {
 	$subsystem = EBOOK;
         $subsystem_id = $ebook_id;
         $groupset = "ebook_id=$ebook_id&amp;";
-        $base_url = $_SERVER['PHP_SELF'] . '?' . $groupset;
+        $base_url = $_SERVER['PHP_SELF'] . '?course=' .$code_cours .'&amp;' . $groupset;
         $group_sql = "course_id = $cours_id AND subsystem = $subsystem AND subsystem_id = $subsystem_id";
         $group_hidden_input = "<input type='hidden' name='ebook_id' value='$ebook_id' />";
         $basedir = $webDir . 'courses/' . $currentCourseID . '/ebook/' . $ebook_id;
 } else {
 	$subsystem = MAIN;
-        $base_url = $_SERVER['PHP_SELF'] . '?';
+        $base_url = $_SERVER['PHP_SELF'] . '?course=' .$code_cours .'&amp;';
         $subsystem_id = 'NULL';
         $groupset = '';
         $group_sql = "course_id = $cours_id AND subsystem = $subsystem";
