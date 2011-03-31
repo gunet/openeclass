@@ -167,9 +167,24 @@ if (!isset($guest_allowed) || $guest_allowed!= true){
 	}
 }
 
-if (isset($_GET['course'])) {
-        $_SESSION['dbname'] = escapeSimple($_GET['course']);
+// Restore saved old_dbname function
+function restore_dbname_override($do_unset = false)
+{
+        if (defined('old_dbname')) {
+                $_SESSION['dbname'] = old_dbname;
+        } elseif ($do_unset) {
+                unset($_SESSION['dbname']);
+        }
 }
+
+// Temporary dbname override
+if (isset($_GET['course'])) {
+        if (isset($_SESSION['dbname'])) {
+                define('old_dbname', $_SESSION['dbname']);
+        }
+        $_SESSION['dbname'] = $_GET['course'];
+}
+register_shutdown_function('restore_dbname_override');
 
 // If $require_current_course is true, initialise course settings
 // Read properties of current course
