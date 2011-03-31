@@ -186,7 +186,7 @@ if ($total_categories) {
 			</a>&nbsp;";
 		}
 		$tool_content .= "<a href='$_SERVER[PHP_SELF]?forumcatnotify=$link_notify&amp;cat_id=$catNum'>
-		<img src='../../template/classic/img/announcements$icon.png' title='$langNotify' alt='$langNotify' />
+		<img src='../../template/classic/img/email$icon.png' title='$langNotify' alt='$langNotify' />
 		</a></td>
 		</tr>\n";
 		$tool_content .= "<tr class='sub_title1'>
@@ -276,7 +276,7 @@ if ($total_categories) {
 					 <img src='../../template/classic/img/delete.png' title='$langDelete' /></a>&nbsp;";
 				}
 				$tool_content .= "<a href='$_SERVER[PHP_SELF]?forumnotify=$forum_link_notify&amp;forum_id=$forum_id'>
-				<img src='../../template/classic/img/announcements$forum_icon.png' title='$langNotify' alt='$langNotify' /></a>
+				<img src='../../template/classic/img/email$forum_icon.png' title='$langNotify' alt='$langNotify' /></a>
 				</td></tr>\n";
 			}
 		}

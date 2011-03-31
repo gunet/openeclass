@@ -88,7 +88,7 @@ if (!isset($_GET['a'])) {
 	$a = mysql_fetch_array(db_query("SELECT COUNT(*) FROM faculte"));
 	// Construct a table
 	$tool_content .= "
-        <table width='99%' class='tbl'>
+        <table width='100%' class='tbl'>
 	<tr>
 	  <td class='odd'>
             <div align='left'><b>".$langFaculteCatalog."</b>:</div>
@@ -99,7 +99,7 @@ if (!isset($_GET['a'])) {
         <br />
 	";
 	$tool_content .= "
-        <table width='99%' class='tbl_alt'>
+        <table width='100%' class='tbl_alt'>
 	<tr>
 	<th scope='col' colspan='2'><div align='left'>&nbsp;&nbsp;".$langFaculty."</div></th scope='col'>
 	<th scope='col'>$langCode</th>
@@ -116,7 +116,7 @@ if (!isset($_GET['a'])) {
 			$tool_content .= "\n<tr class='odd'>";
 		}
 		$tool_content .= "\n<td width='1'>
-		<img style='border:0px; padding-top:3px;' src='${urlServer}/template/classic/img/arrow.png' title='bullet' /></td>";
+		<img src='${urlServer}/template/classic/img/arrow.png' title='bullet' /></td>";
 		$tool_content .= "\n<td>".htmlspecialchars($logs[1])."</td>";
 		$tool_content .= "\n<td align='center'>".htmlspecialchars($logs[0])."</td>";
 		// Give administrator a link to delete or edit a faculty
@@ -169,7 +169,7 @@ elseif (isset($_GET['a']) and $_GET['a'] == 1)  {
         <form method=\"post\" action=\"".$_SERVER['PHP_SELF']."?a=1\">
         <fieldset>
           <legend>$langFaculteIns</legend>
-          <table width='99%' class='tbl'>
+          <table width='100%' class='tbl'>
 	  <tr>
             <th width=\"180\" class='left'>".$langCodeFaculte1.":</th>
 	    <td><input type='text' name='codefaculte' value='".@$codefaculte."' /> <i>".$langCodeFaculte2."</i></td>
@@ -240,7 +240,7 @@ elseif (isset($_GET['a']) and $_GET['a'] == 3)  {
            <form method='post' action='$_SERVER[PHP_SELF]?a=3'>
            <fieldset>
            <legend>$langFaculteEdit</legend>
-           <table width='99%' class='tbl'>
+           <table width='100%' class='tbl'>
 	   <tr>
 		<th class='left' width='180'>".$langCodeFaculte1.":</th>
 		<td><input type='text' name='codefaculte' value='".$myrow['code']."' readonly='1' />&nbsp;<i>".$langCodeFaculte2."</i></td>
