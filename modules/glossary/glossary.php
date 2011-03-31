@@ -103,7 +103,7 @@ if ($is_adminOfCourse) {
     $tool_content .= "
        <div id='operations_container'>
          <ul id='opslist'>
-           <li><a href='" . $_SERVER['PHP_SELF'] . "?course=$code_cours&add=1'>" . $langAddGlossaryTerm . "</a></li>
+           <li><a href='" . $_SERVER['PHP_SELF'] . "?course=$code_cours&amp;add=1'>" . $langAddGlossaryTerm . "</a></li>
          </ul>
        </div>";
     
@@ -233,9 +233,9 @@ if (mysql_num_rows($sql) > 0) {
 		 <td><em>" . $definition_data . "</em><br /><span align='left' class='smaller'> $urllink</span></td>";
 	    if ($is_adminOfCourse) {
 		$tool_content .= "
-		 <td align='center' valign='top' width='50'><a href='$_SERVER[PHP_SELF]?course=$code_cours&edit=$g[id]'>
+		 <td align='center' valign='top' width='50'><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;edit=$g[id]'>
 		    <img src='../../template/classic/img/edit.png' /></a>
-		    <a href='$_SERVER[PHP_SELF]?course=$code_cours&delete=$g[id]' onClick=\"return confirmation();\">
+		    <a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;delete=$g[id]' onClick=\"return confirmation();\">
 		    <img src='../../template/classic/img/delete.png' /></a>
 		 </td>";
 	    }
