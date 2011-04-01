@@ -142,7 +142,7 @@ if ($total_categories) {
 			$link_notify = toggle_link($action_notify);
 			$icon = toggle_icon($action_notify);
 		}
-		$tool_content .= "<table width='100%' class='tbl_alt'>";
+		$tool_content .= "<table width='100%' class='tbl_alt'  style='margin-bottom: 20px;'>";
 		$tool_content .= "<tr class='odd'>
 		<th colspan='5'><b>$title</b></th>
 		<td width='80'>";
@@ -220,7 +220,7 @@ if ($total_categories) {
 					} else {
 						$tool_content .= $forum_name;
 					}
-					$tool_content .= "</div><br /><div class='smaller'>$desc</div>";
+					$tool_content .= "</div><div class='smaller'>$desc</div>";
 					$tool_content .= "</td>\n";
 					$tool_content .= "<td width='65' class='center'>$total_topics</td>\n";
 					$tool_content .= "<td width='65' class='center'>$total_posts</td>\n";
@@ -262,7 +262,7 @@ if ($total_categories) {
 			} else {
 				$tool_content .= "<tr>";
 				if ($is_adminOfCourse) { // admin actions
-					$tool_content .= "<td colspan='5'>$langNoForumsCat</td>&nbsp;";
+					$tool_content .= "<td colspan='5'>$langNoForumsCat</td>";
 					$tool_content .= "<td><a href='forum_admin.php?forumgo=yes&amp;cat_id=$catNum'>
 					<img src='../../template/classic/img/newtopic.png' title='$langNewForum' alt='$langNewForum' />
 					</a></td>"; 
@@ -273,7 +273,7 @@ if ($total_categories) {
 				break;
 			}
 		}
-		$tool_content .= "</table><br />";
+		$tool_content .= "</table>";
 	}
 	
 } else {
