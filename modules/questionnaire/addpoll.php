@@ -48,7 +48,7 @@ if ($language == 'greek') {
 $jscalendar = new DHTML_Calendar($urlServer.'include/jscalendar/', $lang, 'calendar-blue2', false);
 $local_head = $jscalendar->get_load_files_code();
 
-$navigation[] = array("url"=>"questionnaire.php", "name"=> $langQuestionnaire);
+$navigation[] = array("url"=>"questionnaire.php?course=$code_cours", "name"=> $langQuestionnaire);
 $nameTools = $langCreatePoll;
 
 if (isset($_REQUEST['pid'])) {
@@ -59,7 +59,7 @@ if (isset($_REQUEST['pid'])) {
 if (isset($_GET['edit']) and isset($pid))  {
 	if (check_poll_participants($pid)) {
 		$tool_content .= "$langThereAreParticipants";
-		$tool_content .= "<br ><br /><div align='right'><a href='questionnaire.php'>$langBack</a></div>";
+		$tool_content .= "<br ><br /><div align='right'><a href='questionnaire.php?course=$code_cours'>$langBack</a></div>";
 		draw($tool_content, 2, '', $local_head);
 		exit();
 	} else {
@@ -139,7 +139,7 @@ function jscal_html($name, $u_date = FALSE) {
 function printPollCreationForm() {
 	global $tool_content, $langTitle, $langPollStart, $langPollAddMultiple, $langPollAddFill,
 		$langPollEnd, $langPollMC, $langPollFillText, $langPollContinue, $langCreatePoll,
-		$nameTools, $pid, $langSurvey, $langSelection;
+		$nameTools, $pid, $langSurvey, $langSelection, $code_cours;
 
 	if(isset($_POST['PollName'])) {
 		$PollName = htmlspecialchars($_POST['PollName']);
@@ -161,7 +161,7 @@ function printPollCreationForm() {
 	} else {
 		$pidvar = '';
 	}
-	$tool_content .= "<form action='$_SERVER[PHP_SELF]' id='poll' method='post'>";
+	$tool_content .= "<form action='$_SERVER[PHP_SELF]?course=$code_cours' id='poll' method='post'>";
 	$tool_content .= "
         <div id=\"operations_container\">
           <ul id=\"opslist\">

@@ -32,7 +32,7 @@ include '../../include/baseTheme.php';
 require_once '../../include/libchart/libchart.php';
 
 $nameTools = $langPollCharts;
-$navigation[] = array("url"=>"questionnaire.php", "name"=> $langQuestionnaire);
+$navigation[] = array("url"=>"questionnaire.php?course=$code_cours", "name"=> $langQuestionnaire);
 
 $total_answers = 0;
 $questions = array();

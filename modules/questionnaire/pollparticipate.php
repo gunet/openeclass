@@ -38,7 +38,7 @@ $helpTopic = 'Questionnaire';
 include '../../include/baseTheme.php';
 
 $nameTools = $langParticipate;
-$navigation[] = array("url"=>"questionnaire.php", "name"=> $langQuestionnaire);
+$navigation[] = array("url"=>"questionnaire.php?course=$code_cours", "name"=> $langQuestionnaire);
 
 if(!isset($_REQUEST['UseCase'])) $_REQUEST['UseCase'] = "";
 if(!isset($_REQUEST['pid'])) die();
@@ -57,7 +57,7 @@ default:
 draw($tool_content, 2); 
 
 function printPollForm() {
-	global $currentCourse, $tool_content, $langPollStart, 
+	global $currentCourse, $code_cours, $tool_content, $langPollStart, 
 	$langPollEnd, $langSubmit, $langPollInactive, $langPollUnknown;
 	
 	$pid = intval($_REQUEST['pid']);
@@ -78,7 +78,7 @@ function printPollForm() {
 	
 	if (($temp_CurrentDate >= $temp_StartDate) && ($temp_CurrentDate < $temp_EndDate)) {
 		$tool_content .= "
-	<form action='$_SERVER[PHP_SELF]' id='poll' method='post'>
+	<form action='$_SERVER[PHP_SELF]?course=$code_cours' id='poll' method='post'>
 	<input type='hidden' value='2' name='UseCase' />
 	<input type='hidden' value='$pid' name='pid' />
 
