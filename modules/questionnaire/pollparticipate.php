@@ -122,7 +122,7 @@ function printPollForm() {
 
 
 function submitPoll() {
-	global $tool_content, $user_id ;
+	global $tool_content, $code_cours, $user_id, $langPollSubmitted, $langBack;
 	
 	// first populate poll_answer
 	$user_id = $GLOBALS['uid'];
@@ -142,5 +142,5 @@ function submitPoll() {
 		db_query("INSERT INTO poll_answer_record (pid, qid, aid, answer_text, user_id, submit_date)
 			VALUES ($pid, $pqid, $aid, $answer_text, $user_id , '$CreationDate')");
 	}
-	$GLOBALS["tool_content"] .= "<p class='alert1'>".$GLOBALS["langPollSubmitted"]."</p>";
+	$tool_content .= "<p class='alert1'>"."<p class='success'>".$langPollSubmitted."<br /><a href=\"questionnaire.php?course=$code_cours\">".$langBack."</a></p>"."</p>";
 }

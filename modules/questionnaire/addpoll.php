@@ -278,7 +278,7 @@ function insertPollQuestions($pid, $questions, $question_types)
 // Create a Poll
 // ----------------------------------------
 function createPoll($questions, $question_types) {
-	global $tool_content;
+	global $tool_content, $code_cours, $langPollCreated, $langBack;
 
 	$CreationDate = date("Y-m-d");
 	$PollName = $_POST['PollName'];
@@ -299,7 +299,7 @@ function createPoll($questions, $question_types) {
 		mysql_real_escape_string($PollActive) ."')");
 	$pid = mysql_insert_id();
 	insertPollQuestions($pid, $questions, $question_types);
-	$GLOBALS["tool_content"] .= $GLOBALS["langPollCreated"];
+	$tool_content .= "<p class='success'>".$langPollCreated."<br /><a href=\"questionnaire.php?course=$code_cours\">".$langBack."</a></p>";
 }
 
 
@@ -307,7 +307,8 @@ function createPoll($questions, $question_types) {
 // Modify existing Poll
 // ----------------------------------------
 function editPoll($pid, $questions, $question_types) {
-	global $pid;
+	global $pid, $tool_content, $code_cours, $langPollEdited, $langBack;
+	
 	$PollName = $_POST['PollName'];
 	$StartDate = $_POST['PollStart'];
 	$EndDate = $_POST['PollEnd'];
@@ -319,7 +320,7 @@ function editPoll($pid, $questions, $question_types) {
 		(SELECT pqid FROM poll_question WHERE pid='$pid')");
 	db_query("DELETE FROM poll_question WHERE pid='$pid'");
  	insertPollQuestions($pid, $questions, $question_types);
-	$GLOBALS["tool_content"] .= $GLOBALS["langPollEdited"];
+	$tool_content .= "<p class='success'>".$langPollEdited."<br /><a href=\"questionnaire.php?course=$code_cours\">".$langBack."</a></p>";
 }
 
 

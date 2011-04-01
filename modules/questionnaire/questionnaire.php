@@ -83,7 +83,7 @@ if (isset($_GET['delete']) and $_GET['delete'] == 'yes')  {
 	db_query("DELETE FROM poll WHERE pid=$pid");
 	db_query("DELETE FROM poll_question WHERE pid='$pid'");
 	db_query("DELETE FROM poll_answer_record WHERE pid='$pid'");
-        $GLOBALS["tool_content"] .= "".$GLOBALS["langPollDeleted"]."";
+    $tool_content .= "<p class='success'>".$langPollDeleted."<br /><a href=\"questionnaire.php?course=$code_cours\">".$langBack."</a></p>";
 	draw($tool_content, 2, '', $head_content);
 	exit();
 }
