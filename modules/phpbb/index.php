@@ -145,14 +145,14 @@ if ($total_categories) {
 		$tool_content .= "<table width='100%' class='tbl_alt'>";
 		$tool_content .= "<tr class='odd'>
 		<th colspan='5'><b>$title</b></th>
-		<td width='100'>";
+		<td width='90'>";
 		if ($is_adminOfCourse) {
 			$tool_content .= "<a href='forum_admin.php'>
 			<img src='../../template/classic/img/addcategory.png' title='$langAddCategory' alt='$langAddCategory' />
-			</a>&nbsp;
+			</a> &nbsp;
 			<a href='forum_admin.php?forumcatedit=yes&amp;cat_id=$catNum'>
 			<img src='../../template/classic/img/edit.png' title='$langModify' alt='$langModify' /></a>
-			&nbsp;
+			
 			<a href='forum_admin.php?forumcatdel=yes&amp;cat_id=$catNum' onClick='return confirmation();'>
 			<img src='../../template/classic/img/delete.png' title='$langDelete' /></a>";
 		}
@@ -161,7 +161,7 @@ if ($total_categories) {
 		</a></td>
 		</tr>\n";
 		$tool_content .= "<tr class='sub_title1'>
-		<td colspan='2'>$langForums</td>
+		<td colspan='2' width='150'>$langForums</td>
 		<td class='center'>$langSubjects</td>
 		<td class='center'>$langPosts</td>
 		<td class='center'>$langLastPost</td>
@@ -248,12 +248,12 @@ if ($total_categories) {
 					if ($is_adminOfCourse) { // admin actions
 						$tool_content .= "<a href='forum_admin.php?forumgo=yes&amp;cat_id=$catNum'>
 						<img src='../../template/classic/img/newtopic.png' title='$langNewForum' alt='$langNewForum' />
-						</a>&nbsp;
+						</a>
 						<a href='forum_admin.php?forumgoedit=yes&amp;forum_id=$forum_id&amp;cat_id=$catNum'>
 						<img src='../../template/classic/img/edit.png' title='$langModify' />
-						</a>&nbsp;
+						</a>
 						<a href='forum_admin.php?forumgodel=yes&amp;forum_id=$forum_id&amp;cat_id=$catNum' onClick='return confirmation();'>
-						 <img src='../../template/classic/img/delete.png' title='$langDelete' /></a>&nbsp;";
+						 <img src='../../template/classic/img/delete.png' title='$langDelete' /></a>";
 					}
 					$tool_content .= "<a href='$_SERVER[PHP_SELF]?forumnotify=$forum_link_notify&amp;forum_id=$forum_id'>
 					<img src='../../template/classic/img/email$forum_icon.png' title='$langNotify' alt='$langNotify' /></a>
