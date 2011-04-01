@@ -238,11 +238,11 @@ if ($paging and $total > $posts_per_page ) {
 	$tool_content .= "</td></tr></table>";
 }
 
-$tool_content .= "<table width='100%' class='tbl_border'>
-    <tr class='sub_title1'>
-      <td width='220'>$langAuthor</td>
-      <td>$langMessage</td>
-      <td width='70' class='right'>$langActions</td>
+$tool_content .= "<table width='100%' class='tbl_alt'>
+    <tr>
+      <th width='220'>$langAuthor</th>
+      <th>$langMessage</th>
+      <th width='60'>$langActions</th>
     </tr>";
 
 if (isset($_GET['all'])) {
@@ -271,9 +271,9 @@ $myrow = mysql_fetch_array($result);
 $count = 0;
 do {
 	if ($count%2 == 1) {
-		$tool_content .= "\n<tr class='even'>";
-	} else {
 		$tool_content .= "\n<tr class='odd'>";
+	} else {
+		$tool_content .= "\n<tr class='even'>";
 	}
 	$tool_content .= "\n<td valign='top'>".display_user($myrow['poster_id'])."</td>";
 	$message = own_stripslashes($myrow["post_text"]);
@@ -286,13 +286,13 @@ do {
 	}
 
 	$tool_content .= "\n<td>
-	  <div class='post_massage'>
-	    <img src='$posticon' alt='' />
-	    $langSent: " . $myrow["post_time"] . "<br>$postTitle
+	  <div>
+	    
+	    <b>$langSent: </b>" . $myrow["post_time"] . "<br>$postTitle
 	  </div>
 	  <br />$message<br />
 	</td>
-	<td width='40' valign='top'><div align='right'>";
+	<td width='40' valign='top'>";
 	if($lock_state != 1) {
 		$tool_content .= "<a href='reply.php?course=$code_cours&amp;topic=$topic&amp;forum=$forum'>
 		<img src='../../template/classic/img/reply.png' title='$langAnswer' alt='$langAnswer' /></a>";
@@ -305,7 +305,7 @@ do {
 		$tool_content .= "&nbsp;<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;post_id=".$myrow["post_id"]."&amp;topic=$topic&amp;forum=$forum&amp;delete=on' onClick='return confirmation()'>
 		<img src='../../template/classic/img/delete.png' title='$langDelete' /></a>";
 	}
-	$tool_content .= "</div></td>\n</tr>";
+	$tool_content .= "</td>\n</tr>";
 	$count++;
 } while($myrow = mysql_fetch_array($result));
 
