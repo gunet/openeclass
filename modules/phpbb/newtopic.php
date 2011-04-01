@@ -98,8 +98,8 @@ if ($private_forum and !($is_member or $is_adminOfCourse)) {
 
 
 $nameTools = $langNewTopic;
-$navigation[]= array ("url"=>"index.php", "name"=> $langForums);
-$navigation[]= array ("url"=>"viewforum.php?forum=$forum_id", "name"=> $forum_name);
+$navigation[]= array ("url"=>"index.php?course=$code_cours", "name"=> $langForums);
+$navigation[]= array ("url"=>"viewforum.php?course=$code_cours&amp;forum=$forum_id", "name"=> $forum_name);
 
 if (!does_exists($forum, $currentCourseID, "forum")) {
 	$tool_content .= "<div class='caution'>$langErrorPost</div>";
@@ -113,7 +113,7 @@ if (isset($_POST['submit'])) {
 	if (empty($message) or empty($subject)) {
 		$tool_content .= "
                 <p class='alert1'>$langEmptyMsg</p>
-                <p class='back'>&laquo; $langClick <a href='newtopic.php?forum=$forum_id'>$langHere</a> $langReturnTopic</p>";
+                <p class='back'>&laquo; $langClick <a href='newtopic.php?course=$code_cours&amp;forum=$forum_id'>$langHere</a> $langReturnTopic</p>";
 		draw($tool_content, 2);
 		exit;
 	}
@@ -198,14 +198,14 @@ if (isset($_POST['submit'])) {
 	
 	$tool_content .= "
 	<p class='success'>$langStored</p>
-	<p class='back'>&laquo; $langClick <a href='viewtopic.php?topic=$topic_id&amp;forum=$forum&amp;$total_topic'>$langHere</a>$langViewMsg</p>
-	<p class='back'>&laquo; <a href='viewforum.php?forum=$forum_id'>$langReturnTopic</a></p>
+	<p class='back'>&laquo; $langClick <a href='viewtopic.php?course=$code_cours&amp;topic=$topic_id&amp;forum=$forum&amp;$total_topic'>$langHere</a>$langViewMsg</p>
+	<p class='back'>&laquo; <a href='viewforum.php?course=$code_cours&amp;forum=$forum_id'>$langReturnTopic</a></p>
 	"; 
 } elseif (isset($_POST['cancel'])) {
 	header("Location: viewtopic.php?topic=$topic&forum=$forum");	
 } else {
 	$tool_content .= "
-        <form action='$_SERVER[PHP_SELF]?topic=$topic&forum=$forum' method='post'>
+        <form action='$_SERVER[PHP_SELF]?course=$code_cours&amp;topic=$topic&forum=$forum' method='post'>
         <fieldset>
           <legend>$langTopicData</legend>
 	  <table class='tbl'>

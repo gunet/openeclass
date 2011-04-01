@@ -165,8 +165,8 @@ $topic_subject = own_stripslashes($myrow["topic_title"]);
 $lock_state = $myrow["topic_status"];
 
 if (!add_units_navigation(TRUE)) {
-	$navigation[]= array ("url"=>"index.php", "name"=> $langForums);
-	$navigation[]= array ("url"=>"viewforum.php?forum=$forum", "name"=> $forum_name);
+	$navigation[]= array ("url"=>"index.php?course=$code_cours", "name"=> $langForums);
+	$navigation[]= array ("url"=>"viewforum.php?course=$code_cours&amp;forum=$forum", "name"=> $forum_name);
 }
 $nameTools = $topic_subject;
 
@@ -202,7 +202,7 @@ if ($paging and $total > $posts_per_page ) {
 		} else if($start == 0 && $x == 0) {
 			$tool_content .= "1";
 		} else {
-			$tool_content .= "\n<a href=\"$_SERVER[PHP_SELF]?topic=$topic&amp;forum=$forum&amp;start=$x\">$times</a>";
+			$tool_content .= "\n<a href=\"$_SERVER[PHP_SELF]?course=$code_cours&amp;topic=$topic&amp;forum=$forum&amp;start=$x\">$times</a>";
 		}
 		$times++;
 	}
@@ -211,15 +211,15 @@ if ($paging and $total > $posts_per_page ) {
 	<td align=\"right\">
 	<span class='pages'>$langGoToPage: &nbsp;&nbsp;";
 	if (isset($start) && $start > 0 ) {
-		$tool_content .= "\n<a href=\"$_SERVER[PHP_SELF]?topic=$topic&amp;forum=$forum&amp;start=$last_page\">$langPreviousPage</a>&nbsp;|";
+		$tool_content .= "\n<a href=\"$_SERVER[PHP_SELF]?course=$code_cours&amp;topic=$topic&amp;forum=$forum&amp;start=$last_page\">$langPreviousPage</a>&nbsp;|";
 	} else {
 		$start = 0;
 	}	
 	if (($start + $posts_per_page) < $total) {
 		$next_page = $start + $posts_per_page;
-		$tool_content .= "\n<a href=\"$_SERVER[PHP_SELF]?topic=$topic&amp;forum=$forum&amp;start=$next_page\">$langNextPage</a>&nbsp;|";
+		$tool_content .= "\n<a href=\"$_SERVER[PHP_SELF]?course=$code_cours&amp;topic=$topic&amp;forum=$forum&amp;start=$next_page\">$langNextPage</a>&nbsp;|";
 	}
-	$tool_content .= "&nbsp;<a href=\"$_SERVER[PHP_SELF]?topic=$topic&amp;forum=$forum&amp;all=true\">$langAllOfThem</a></span>
+	$tool_content .= "&nbsp;<a href=\"$_SERVER[PHP_SELF]?course=$code_cours&amp;topic=$topic&amp;forum=$forum&amp;all=true\">$langAllOfThem</a></span>
 	</td>
 	</tr>
 	</table>";
@@ -232,7 +232,7 @@ if ($paging and $total > $posts_per_page ) {
 	<td align=\"right\">";
 	if ($total > $posts_per_page) {	
 		$tool_content .= "<span class='pages'>
-		&nbsp;<a href=\"$_SERVER[PHP_SELF]?topic=$topic&amp;forum=$forum&amp;start=0\">$langPages</a>
+		&nbsp;<a href=\"$_SERVER[PHP_SELF]?course=$code_cours&amp;topic=$topic&amp;forum=$forum&amp;start=0\">$langPages</a>
 		</span>";
 	}
 	$tool_content .= "</td></tr></table>";
@@ -294,15 +294,15 @@ do {
 	</td>
 	<td width='40' valign='top'><div align='right'>";
 	if($lock_state != 1) {
-		$tool_content .= "<a href='reply.php?topic=$topic&amp;forum=$forum'>
+		$tool_content .= "<a href='reply.php?course=$code_cours&amp;topic=$topic&amp;forum=$forum'>
 		<img src='../../template/classic/img/reply.png' title='$langAnswer' alt='$langAnswer' /></a>";
 	} else {
 		$tool_content .= "<img src='$reply_locked_image' alt='' />";
 	}				
 	if ($is_adminOfCourse) { // course admin
-		$tool_content .= "<a href=\"editpost.php?post_id=".$myrow["post_id"]."&amp;topic=$topic&amp;forum=$forum\">
+		$tool_content .= "<a href=\"editpost.php?course=$code_cours&amp;post_id=".$myrow["post_id"]."&amp;topic=$topic&amp;forum=$forum\">
 		<img src='../../template/classic/img/edit.png' title='$langModify' alt='$langModify' /></a>";
-		$tool_content .= "&nbsp;<a href='$_SERVER[PHP_SELF]?post_id=".$myrow["post_id"]."&amp;topic=$topic&amp;forum=$forum&amp;delete=on' onClick='return confirmation()'>
+		$tool_content .= "&nbsp;<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;post_id=".$myrow["post_id"]."&amp;topic=$topic&amp;forum=$forum&amp;delete=on' onClick='return confirmation()'>
 		<img src='../../template/classic/img/delete.png' title='$langDelete' /></a>";
 	}
 	$tool_content .= "</div></td>\n</tr>";
@@ -333,22 +333,22 @@ if ($paging and $total > $posts_per_page) {
 		} else if($start == 0 && $x == 0) {
 			$tool_content .= "1";
 		} else {
-			$tool_content .= "\n<a href=\"$_SERVER[PHP_SELF]?topic=$topic&amp;forum=$forum&amp;start=$x\">$times</a>";
+			$tool_content .= "\n<a href=\"$_SERVER[PHP_SELF]?course=$code_cours&amp;topic=$topic&amp;forum=$forum&amp;start=$x\">$times</a>";
 		}
 		$times++;
 	}
 	$tool_content .= "</span></strong></span></td>
 	<td><span class='pages'>$langGoToPage: &nbsp;&nbsp;";
 	if (isset($start) && $start > 0) {
-		$tool_content .= "\n<a href=\"$_SERVER[PHP_SELF]?topic=$topic&amp;forum=$forum&amp;start=$last_page\">$langPreviousPage</a>&nbsp;|";
+		$tool_content .= "\n<a href=\"$_SERVER[PHP_SELF]?course=$code_cours&amp;topic=$topic&amp;forum=$forum&amp;start=$last_page\">$langPreviousPage</a>&nbsp;|";
 	} else {
 		$start = 0;
 	}	
 	if (($start + $posts_per_page) < $total) {
 		$next_page = $start + $posts_per_page;
-		$tool_content .= "\n<a href=\"$_SERVER[PHP_SELF]?topic=$topic&amp;forum=$forum&amp;start=$next_page\">$langNextPage</a>&nbsp;|";
+		$tool_content .= "\n<a href=\"$_SERVER[PHP_SELF]?course=$code_cours&amp;topic=$topic&amp;forum=$forum&amp;start=$next_page\">$langNextPage</a>&nbsp;|";
 	}
-	$tool_content .= "&nbsp;<a href=\"$_SERVER[PHP_SELF]?topic=$topic&amp;forum=$forum&amp;all=true\">$langAllOfThem</a>
+	$tool_content .= "&nbsp;<a href=\"$_SERVER[PHP_SELF]?course=$code_cours&amp;topic=$topic&amp;forum=$forum&amp;all=true\">$langAllOfThem</a>
 	</span>
 	</td></tr></table>";
 } else {
@@ -360,7 +360,7 @@ if ($paging and $total > $posts_per_page) {
 	<td align=\"right\">
 	<span class='pages'>";
 	if ($total > $posts_per_page) {	
-		$tool_content .= "&nbsp;<a href=\"$_SERVER[PHP_SELF]?topic=$topic&amp;forum=$forum&amp;start=0\">$langPages</a>";
+		$tool_content .= "&nbsp;<a href=\"$_SERVER[PHP_SELF]?course=$code_cours&amp;topic=$topic&amp;forum=$forum&amp;start=0\">$langPages</a>";
         } else {
                 $tool_content .= '&nbsp;';
         }

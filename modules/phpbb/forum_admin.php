@@ -37,7 +37,7 @@ include '../../include/sendMail.inc.php';
 include 'functions.php';
 
 $nameTools = $langCatForumAdmin;
-$navigation[]= array ("url"=>"index.php", "name"=> $langForums);
+$navigation[]= array ("url"=>"index.php?course=$code_cours", "name"=> $langForums);
 
 $forum_id = isset($_GET['forum_id'])?intval($_GET['forum_id']):'';
 $cat_id = isset($_GET['cat_id'])?intval($_GET['cat_id']):'';
@@ -73,7 +73,7 @@ hContent;
 	if(isset($_GET['forumgo'])) {
 		$ctg = category_name($cat_id);
 		$tool_content .= "
-		<form action=\"$_SERVER[PHP_SELF]?forumgoadd=yes&amp;cat_id=$cat_id\" method=post onsubmit=\"return checkrequired(this,'forum_name');\">
+		<form action=\"$_SERVER[PHP_SELF]?course=$code_cours&amp;forumgoadd=yes&amp;cat_id=$cat_id\" method=post onsubmit=\"return checkrequired(this,'forum_name');\">
 		<fieldset>
 		  <legend>$langAddForCat</legend>    
 		  <table class=\"tbl\">
@@ -96,7 +96,7 @@ hContent;
 		  </table>
 		</fieldset>
 		</form>
-		<p>&laquo; <a href='index.php'>$langBack</a></p>";
+		<p>&laquo; <a href='index.php?course=$code_cours'>$langBack</a></p>";
 	}
 	// forum go edit
 	elseif(isset($_GET['forumgoedit'])) {
@@ -105,7 +105,7 @@ hContent;
 		list($forum_id, $forum_name, $forum_desc, $forum_access, $forum_moderator, $cat_id_1,
 		$forum_type) = mysql_fetch_row($result);
 		$tool_content .= "
-		<form action=\"$_SERVER[PHP_SELF]?forumgosave=yes&amp;cat_id=".@$cat_id."\" method=post onsubmit=\"return checkrequired(this,'forum_name');\">
+		<form action=\"$_SERVER[PHP_SELF]?course=$code_cours&amp;forumgosave=yes&amp;cat_id=".@$cat_id."\" method=post onsubmit=\"return checkrequired(this,'forum_name');\">
 		<input type=hidden name=forum_id value=$forum_id>
 		<fieldset>
 		  <legend>$langChangeForum</legend>
@@ -147,7 +147,7 @@ hContent;
 		$result = db_query("select cat_id, cat_title from catagories where cat_id='$cat_id'", $currentCourseID);
 		list($cat_id, $cat_title) = mysql_fetch_row($result);
 		$tool_content .= "
-  		<form action='$_SERVER[PHP_SELF]?forumcatsave=yes' method=post onsubmit=\"return checkrequired(this,'cat_title');\">
+  		<form action='$_SERVER[PHP_SELF]?course=$code_cours&amp;forumcatsave=yes' method=post onsubmit=\"return checkrequired(this,'cat_title');\">
     		<input type=hidden name=cat_id value=$cat_id>
                 <fieldset>
                 <legend>$langModCatName</legend>
@@ -169,33 +169,33 @@ hContent;
 	elseif (isset($_GET['forumcatsave'])) {
 		db_query("UPDATE catagories SET cat_title='$_POST[cat_title]' WHERE cat_id='$_POST[cat_id]'", $currentCourseID);
 		$tool_content .= "\n<p class=\"success\">$langNameCatMod</p>
-		\n <p>&laquo; <a href='index.php'>$langBack</a></p>";
+		\n <p>&laquo; <a href='index.php?course=$code_cours'>$langBack</a></p>";
 	}
 
 	// forum go save
 	elseif(isset($_GET['forumgosave'])) {
 		$nameTools = $langDelete;
-		$navigation[]= array ("url"=>"../forum_admin/forum_admin.php", "name"=> $langCatForumAdmin);
+		$navigation[]= array ("url"=>"../forum_admin/forum_admin.php?course=$code_cours", "name"=> $langCatForumAdmin);
 		$result = @db_query("SELECT user_id FROM users WHERE username='$forum_moderator'", $currentCourseID);
 		list($forum_moderator) = mysql_fetch_row($result);
 		db_query("UPDATE forums SET forum_name='$_POST[forum_name]', forum_desc='$_POST[forum_desc]',
 			forum_access='2', forum_moderator='1', cat_id='$_POST[cat_id]'
 			WHERE forum_id='$_POST[forum_id]'", $currentCourseID);
 		$tool_content .= "\n<p class='success'>$langForumDataChanged</p>
-		<p>&laquo; <a href=\"$_SERVER[PHP_SELF]?forumgo=yes&amp;cat_id=$cat_id\">$langBack</a></p>";
+		<p>&laquo; <a href=\"$_SERVER[PHP_SELF]?course=$code_cours&amp;forumgo=yes&amp;cat_id=$cat_id\">$langBack</a></p>";
 	}
 
 	// forum add category
 	elseif(isset($_GET['forumcatadd'])) {
 		db_query("INSERT INTO catagories VALUES (NULL, '$_POST[catagories]', NULL)", $currentCourseID);
 		$tool_content .= "\n<p class='success'>$langCatAdded</p>
-		\n  <p>&laquo; <a href='index.php'>$langBack</a></p>";
+		\n  <p>&laquo; <a href='index.php?course=$code_cours'>$langBack</a></p>";
 	}
 
 	// forum go add
 	elseif(isset($_GET['forumgoadd'])) {
 		$nameTools = $langAdd;
-		$navigation[]= array ("url"=>"../forum_admin/forum_admin.php", "name"=> $langCatForumAdmin);
+		$navigation[]= array ("url"=>"../forum_admin/forum_admin.php?course=$code_cours", "name"=> $langCatForumAdmin);
 		$ctg = category_name($_GET['cat_id']);
 		$result = @db_query("SELECT user_id FROM users WHERE username='$forum_moderator'", $currentCourseID);
 		list($forum_moderator) = mysql_fetch_row($result);
@@ -220,7 +220,7 @@ hContent;
 		}
 		// end of notification
 		$tool_content .= "\n  <p class='success'>$langForumCategoryAdded</p>
-		<p>&laquo; <a href='index.php'>$langBack</a></p>";
+		<p>&laquo; <a href='index.php?course=$code_cours'>$langBack</a></p>";
 	}
 
 	// forum delete category
@@ -232,21 +232,21 @@ hContent;
 		db_query("DELETE FROM forums where cat_id=$cat_id", $currentCourseID);
 		db_query("DELETE FROM catagories where cat_id=$cat_id", $currentCourseID);
 		$tool_content .= "\n  <p class=\"success\">$langCatForumDelete</p>
-		\n  <p>&laquo; <a href='index.php'>$langBack</a></p>";
+		\n  <p>&laquo; <a href='index.php?course=$code_cours'>$langBack</a></p>";
 	}
 
 	// forum delete
 	elseif(isset($_GET['forumgodel'])) {
 		$nameTools = $langDelete;
-		$navigation[]= array ("url"=>"../forum_admin/forum_admin.php", "name"=> $langCatForumAdmin);
+		$navigation[]= array ("url"=>"../forum_admin/forum_admin.php?course=$code_cours", "name"=> $langCatForumAdmin);
 		db_query("DELETE FROM topics WHERE forum_id = $forum_id", $currentCourseID);
 		db_query("DELETE FROM forums WHERE forum_id = $forum_id", $currentCourseID);
 		db_query("UPDATE `group` SET forum_id=0 WHERE forum_id = $forum_id", $mysqlMainDb);
 		$tool_content .= "\n<p class='success'>$langForumDelete</p>
-		\n<p>&laquo; <a href='index.php'>$langBack</a></p>";
+		\n<p>&laquo; <a href='index.php?course=$code_cours'>$langBack</a></p>";
 	} else {
                 $tool_content .= "
-		<form action=\"$_SERVER[PHP_SELF]?forumcatadd=yes\" method=post onsubmit=\"return checkrequired(this,'catagories');\">
+		<form action=\"$_SERVER[PHP_SELF]?course=$code_cours&amp;forumcatadd=yes\" method=post onsubmit=\"return checkrequired(this,'catagories');\">
                 <fieldset>
                 <legend>$langAddCategory</legend>
 		<table class=\"tbl\">

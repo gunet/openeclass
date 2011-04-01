@@ -105,9 +105,9 @@ if ($is_adminOfCourse) { // course admin
 		$topic_title = $row2[0];
 	
 		$nameTools = $langReply;
-		$navigation[] = array ("url"=>"index.php", "name"=> $langForums);
-		$navigation[] = array ("url"=>"viewforum.php?forum=$forum_id", "name"=> $forum_name);
-		$navigation[] = array ("url"=>"viewtopic.php?topic=$topic_id&amp;forum=$forum_id", "name"=> $topic_title);
+		$navigation[] = array ("url"=>"index.php?course=$code_cours", "name"=> $langForums);
+		$navigation[] = array ("url"=>"viewforum.php?course=$code_cours&amp;forum=$forum_id", "name"=> $forum_name);
+		$navigation[] = array ("url"=>"viewtopic.php?course=$code_cours&amp;topic=$topic_id&amp;forum=$forum_id", "name"=> $topic_title);
 	
 		$is_html_disabled = false;
 		if ((isset($allow_html) && $allow_html == 0) || isset($html)) {
@@ -151,8 +151,8 @@ if ($is_adminOfCourse) { // course admin
 			
 			$tool_content .= "<div id='operations_container'>
 			<ul id='opslist'>
-			<li><a href='viewtopic.php?topic=$topic_id&amp;forum=$forum_id'>$langViewMsg1</a></li>
-			<li><a href='viewforum.php?forum=$forum_id'>$langReturnTopic</a></li>
+			<li><a href='viewtopic.php?course=$code_cours&amp;topic=$topic_id&amp;forum=$forum_id'>$langViewMsg1</a></li>
+			<li><a href='viewforum.php?course=$code_cours&amp;forum=$forum_id'>$langReturnTopic</a></li>
 			</ul>
 			</div>
 			<br />";
@@ -204,8 +204,8 @@ if ($is_adminOfCourse) { // course admin
 			}
 			$tool_content .= "<div id='operations_container'>
 			<ul id='opslist'>
-			<li><a href='viewforum.php?forum=$forum_id'>$langReturnTopic</a></li>
-			<li><a href='index.php'>$langReturnIndex</a></li>
+			<li><a href='viewforum.php?course=$code_cours&amp;forum=$forum_id'>$langReturnTopic</a></li>
+			<li><a href='index.php?course=$code_cours'>$langReturnIndex</a></li>
 			</ul></div><br />";
 			$tool_content .= "<table width='99%'><tbody>
 			<tr>
@@ -232,13 +232,13 @@ if ($is_adminOfCourse) { // course admin
 		}
 		
 		$nameTools = $langReply;
-		$navigation[]= array ("url"=>"index.php", "name"=> $langForums);
-		$navigation[]= array ("url"=>"viewforum.php?forum=$forum", "name"=> $myrow['forum_name']);
-		$navigation[]= array ("url"=>"viewtopic.php?topic=$topic&amp;forum=$forum", "name"=> $myrow['topic_title']);
+		$navigation[]= array ("url"=>"index.php?course=$code_cours", "name"=> $langForums);
+		$navigation[]= array ("url"=>"viewforum.php?course=$code_cours&amp;forum=$forum", "name"=> $myrow['forum_name']);
+		$navigation[]= array ("url"=>"viewtopic.php?course=$code_cours&amp;topic=$topic&amp;forum=$forum", "name"=> $myrow['topic_title']);
 	
 		if (($myrow["forum_type"] == 1) && !$user_logged_in && !$logging_in) {
 			// Private forum, no valid session, and login form not submitted...
-			$tool_content .= "<form action='$_SERVER[PHP_SELF]' method='post'>
+			$tool_content .= "<form action='$_SERVER[PHP_SELF]?course=$code_cours' method='post'>
 			<table width='99%'>
 			<tr><td>$langPrivateNotice</td></tr>
 			<tr><td>
@@ -311,11 +311,11 @@ if ($is_adminOfCourse) { // course admin
 		list($day, $time) = explode(' ', $myrow["post_time"]);
 		
 		$tool_content .= "<div id='operations_container'><ul id='opslist'>
-		<li><a href='viewtopic.php?topic=$topic&amp;forum=$forum' target='_blank'>$langTopicReview</a></li>
+		<li><a href='viewtopic.php?course=$code_cours&amp;topic=$topic&amp;forum=$forum' target='_blank'>$langTopicReview</a></li>
 		</ul>
 		</div>
 		<br />";
-		$tool_content .= "<form action='$_SERVER[PHP_SELF]?post_id=$post_id&amp;forum=$forum' method='post'>
+		$tool_content .= "<form action='$_SERVER[PHP_SELF]?course=$code_cours&amp;post_id=$post_id&amp;forum=$forum' method='post'>
 		<table class='framed'>
 		<thead>
 		<tr><td><b>$langReplyEdit</b></td></tr>";

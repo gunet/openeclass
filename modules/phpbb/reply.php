@@ -101,9 +101,9 @@ if ($private_forum and !$is_member and !$is_adminOfCourse) {
 }
 
 $nameTools = $langReply;
-$navigation[]= array ("url"=>"index.php", "name"=> $langForums);
-$navigation[]= array ("url"=>"viewforum.php?forum=$forum", "name"=> $forum_name);
-$navigation[]= array ("url"=>"viewtopic.php?topic=$topic&amp;forum=$forum", "name"=> $topic_title);
+$navigation[]= array ("url"=>"index.php?course=$code_cours", "name"=> $langForums);
+$navigation[]= array ("url"=>"viewforum.php?course=$code_cours&amp;forum=$forum", "name"=> $forum_name);
+$navigation[]= array ("url"=>"viewtopic.php?course=$code_cours&amp;topic=$topic&amp;forum=$forum", "name"=> $topic_title);
 
 
 if (!does_exists($forum, $currentCourseID, "forum") || !does_exists($topic, $currentCourseID, "topic")) {
@@ -118,7 +118,7 @@ if (isset($_POST['submit'])) {
 	if (trim($message) == '') {
                 $tool_content .= "
                 <p class='alert1'>$langEmptyMsg</p>
-                <p class='back'>&laquo; $langClick <a href='newtopic.php?forum=$forum_id'>$langHere</a> $langReturnTopic</p>";
+                <p class='back'>&laquo; $langClick <a href='newtopic.php?course=$code_cours&amp;forum=$forum_id'>$langHere</a> $langReturnTopic</p>";
 		draw($tool_content, 2, '', $head_content);
 		exit();
 	}
@@ -218,7 +218,7 @@ if (isset($_POST['submit'])) {
 	// Private forum logic here.
 	if (($forum_type == 1) && !$user_logged_in && !$logging_in) {
 		$tool_content .= "
-        <form action='$_SERVER[PHP_SELF]' method='post'>
+        <form action='$_SERVER[PHP_SELF]?course=$code_cours' method='post'>
         <fieldset>
            <legend></legend>     
 		<table align='left' width='99%'>
@@ -253,11 +253,11 @@ if (isset($_POST['submit'])) {
 	$tool_content .= "
     <div id=\"operations_container\">
 	<ul id=\"opslist\">
-          <li><a href=\"viewtopic.php?topic=$topic&amp;forum=$forum\" target=\"_blank\">$langTopicReview</a></li>
+          <li><a href=\"viewtopic.php?course=$code_cours&amp;topic=$topic&amp;forum=$forum\" target=\"_blank\">$langTopicReview</a></li>
 	</ul>
     </div>";
 	$tool_content .= "
-    <form action='$_SERVER[PHP_SELF]?topic=$topic&forum=$forum' method='post'>
+    <form action='$_SERVER[PHP_SELF]?course=$code_cours&amp;topic=$topic&forum=$forum' method='post'>
     <fieldset>
         <legend>$langTopicAnswer: $topic_title</legend>
 	<table class='tbl'>
