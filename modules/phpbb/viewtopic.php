@@ -111,11 +111,7 @@ if (isset($_GET['delete'])) {
 	list($day, $time) = explode(' ', $this_post_time);
 		
 	$sql = "DELETE FROM posts WHERE post_id = '$post_id'";
-	if (!$r = db_query($sql, $currentCourseID)){
-		$tool_content .= $langUnableDeletePost;
-		draw($tool_content, 2, '', $head_content);
-		exit();
-	}
+	
 	$sql = "DELETE FROM posts_text
 		WHERE post_id = '$post_id'";
 	if (!$r = db_query($sql, $currentCourseID)) {
@@ -123,7 +119,7 @@ if (isset($_GET['delete'])) {
 		draw($tool_content, 2, '', $head_content);
 		exit();
 	} else if ($last_post_in_thread == $this_post_time) {
-		$topic_time_fixed = get_last_post($topic, $currentCourseID, "time_fix");
+		$topic_time_fixed = $last_post_in_thread;
 		$sql = "UPDATE topics
 			SET topic_time = '$topic_time_fixed'
 			WHERE topic_id = '$topic'";

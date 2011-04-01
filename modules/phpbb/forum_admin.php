@@ -242,8 +242,8 @@ hContent;
 		db_query("DELETE FROM topics WHERE forum_id = $forum_id", $currentCourseID);
 		db_query("DELETE FROM forums WHERE forum_id = $forum_id", $currentCourseID);
 		db_query("UPDATE `group` SET forum_id=0 WHERE forum_id = $forum_id", $mysqlMainDb);
-		$tool_content .= "\n<p class=\"success\">$langForumDelete</p>
-		\n<p>&laquo; <a href=\"$_SERVER[PHP_SELF]?forumgo=yes&amp;cat_id=$cat_id\">$langBack</a></p>";
+		$tool_content .= "\n<p class='success'>$langForumDelete</p>
+		\n<p>&laquo; <a href='index.php'>$langBack</a></p>";
 	} else {
                 $tool_content .= "
 		<form action=\"$_SERVER[PHP_SELF]?forumcatadd=yes\" method=post onsubmit=\"return checkrequired(this,'catagories');\">
