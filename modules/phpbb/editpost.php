@@ -120,99 +120,39 @@ if ($is_adminOfCourse) { // course admin
 		if (isset($message)) {
 			$message = format_message($message);
 		}
-		if (!isset($_GET['delete']) and !isset($_POST['delete'])) {	
-			$forward = 1;
-			$topic = $topic_id;
-			$forum = $forum_id;
-			$sql = "UPDATE posts_text SET post_text = " . autoquote($message) . "
-				WHERE (post_id = '$post_id')";
-			if (!$result = db_query($sql, $currentCourseID)) {
-				$tool_content .= $langUnableUpadatePost;
-				draw($tool_content, 2, '', $head_content);
-				exit();
-			}
-			if (isset($subject)) {
-				$subject = strip_tags($subject);
-			}
-			if (isset($subject) && (trim($subject) != '')) {
-				if(!isset($notify)) {
-					$notify = 0;
-				} else {
-					$notify = 1;
-				}
-				$subject = addslashes($subject);
-				$sql = "UPDATE topics
-					SET topic_title = '$subject', topic_notify = '$notify'
-					WHERE topic_id = '$topic_id'";
-				if (!$result = db_query($sql, $currentCourseID)) {
-					$tool_content .= $langUnableUpadateTopic;
-				}
-			}
-			
-			$tool_content .= "<div id='operations_container'>
-			<ul id='opslist'>
-			<li><a href='viewtopic.php?course=$code_cours&amp;topic=$topic_id&amp;forum=$forum_id'>$langViewMsg1</a></li>
-			<li><a href='viewforum.php?course=$code_cours&amp;forum=$forum_id'>$langReturnTopic</a></li>
-			</ul>
-			</div>
-			<br />";
-			$tool_content .= "<table width='99%'>
-			<tbody><tr><td class='success'>$langStored</td>
-			</tr></tbody></table>";
-		} else {
-			$now_hour = date("H");
-			$now_min = date("i");
-			list($hour, $min) = explode(':', $time);
-			$last_post_in_thread = get_last_post($topic_id, $currentCourseID, "time_fix");
-			$sql = "DELETE FROM posts
-				WHERE post_id = '$post_id'";
-			if (!$r = db_query($sql, $currentCourseID)){
-				$tool_content .= $langUnableDeletePost;
-				draw($tool_content, 2, '', $head_content);
-				exit();
-			}
-			$sql = "DELETE FROM posts_text
-				WHERE post_id = '$post_id'";
-			if (!$r = db_query($sql, $currentCourseID)) {
-				$tool_content .= $langUnableDeletePost;
-				draw($tool_content, 2, '', $head_content);
-				exit();
-			} else if ($last_post_in_thread == $this_post_time) {
-				$topic_time_fixed = get_last_post($topic_id, $currentCourseID, "time_fix");
-				$sql = "UPDATE topics
-					SET topic_time = '$topic_time_fixed'
-					WHERE topic_id = '$topic_id'";
-				if (!$r = db_query($sql, $currentCourseID)) {
-					$tool_content .= $langPostRemoved;
-					draw($tool_content, 2, '', $head_content);
-					exit();
-				}
-			}
-			if (get_total_posts($topic_id, $currentCourseID, "topic") == 0) {
-				$sql = "DELETE FROM topics
-					WHERE topic_id = '$topic_id'";
-				if (!$r = db_query($sql, $currentCourseID)) {
-					$tool_content .= $langUnableDeleteTopic;
-					draw($tool_content, 2, '', $head_content);
-					exit();
-				}
-				$topic_removed = TRUE;
-			}
-			sync($currentCourseID, $forum, 'forum');
-			if (@!$topic_removed) {
-				sync($currentCourseID, $topic_id, 'topic');
-			}
-			$tool_content .= "<div id='operations_container'>
-			<ul id='opslist'>
-			<li><a href='viewforum.php?course=$code_cours&amp;forum=$forum_id'>$langReturnTopic</a></li>
-			<li><a href='index.php?course=$code_cours'>$langReturnIndex</a></li>
-			</ul></div><br />";
-			$tool_content .= "<table width='99%'><tbody>
-			<tr>
-			<td class='success'>$langDeletedMessage</td>
-			</tr>
-			</tbody></table>";
+		
+		$forward = 1;
+		$topic = $topic_id;
+		$forum = $forum_id;
+		$sql = "UPDATE posts_text SET post_text = " . autoquote($message) . "
+			WHERE (post_id = '$post_id')";
+		if (!$result = db_query($sql, $currentCourseID)) {
+			$tool_content .= $langUnableUpadatePost;
+			draw($tool_content, 2, '', $head_content);
+			exit();
 		}
+		if (isset($subject)) {
+			$subject = strip_tags($subject);
+		}
+		if (isset($subject) && (trim($subject) != '')) {
+			if(!isset($notify)) {
+				$notify = 0;
+			} else {
+				$notify = 1;
+			}
+			$subject = addslashes($subject);
+			$sql = "UPDATE topics
+				SET topic_title = '$subject', topic_notify = '$notify'
+				WHERE topic_id = '$topic_id'";
+			if (!$result = db_query($sql, $currentCourseID)) {
+				$tool_content .= $langUnableUpadateTopic;
+			}
+		}
+		$tool_content .= "<table width='99%'>
+		<tbody><tr><td class='success'>$langStored</td>
+		</tr></tbody></table>";
+		header("Location: {$urlServer}modules/phpbb/viewtopic.php?topic=$topic&forum=$forum" . $page);
+		exit;
 	} else {
 		// Gotta handle private forums right here. They're naturally covered on submit, but not in this part.
 		$sql = "SELECT f.forum_type, f.forum_name, t.topic_title
@@ -309,12 +249,6 @@ if ($is_adminOfCourse) { // course admin
 		// Special handling for </textarea> tags in the message, which can break the editing form..
 		$message = preg_replace('#</textarea>#si', '&lt;/TEXTAREA&gt;', $message);
 		list($day, $time) = explode(' ', $myrow["post_time"]);
-		
-		$tool_content .= "<div id='operations_container'><ul id='opslist'>
-		<li><a href='viewtopic.php?course=$code_cours&amp;topic=$topic&amp;forum=$forum' target='_blank'>$langTopicReview</a></li>
-		</ul>
-		</div>
-		<br />";
 		$tool_content .= "<form action='$_SERVER[PHP_SELF]?course=$code_cours&amp;post_id=$post_id&amp;forum=$forum' method='post'>
 		<table class='framed'>
 		<thead>
@@ -329,10 +263,6 @@ if ($is_adminOfCourse) { // course admin
 		rich_text_editor('message', 10, 50, $message, "class='FormData_InputText'")
 		."	
 		</td></tr>
-		<tr>
-		<td>$langDeleteMessage:<br />
-		<input type='checkbox' name='delete' /></td>
-		</tr>
 		<tr><td>";
 		$tool_content .= "<input class='Login' type='submit' name='submit' value='$langSubmit' />
 		</td></tr>

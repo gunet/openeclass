@@ -80,6 +80,9 @@ if ($private_forum and !($is_member or $is_adminOfCourse)) {
 	draw($tool_content, 2);
 	exit;
 }
+if (isset($_GET['empty'])) {// if we come from newtopic.php
+	$tool_content .= "<p class='alert1'>$langEmptyNewTopic</p>";
+}
 /*
 * Retrieve and present data from course's forum
 */

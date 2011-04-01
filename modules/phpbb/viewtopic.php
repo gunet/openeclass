@@ -105,20 +105,14 @@ if (isset($_GET['delete'])) {
 	$post_id = $_GET['post_id'];
 	$last_post_in_thread = get_last_post($topic, $currentCourseID, "time_fix");
 	
-	$result = db_query("SELECT * FROM posts WHERE post_id = '$post_id'", $currentCourseID);
+	$result = db_query("SELECT post_time FROM posts WHERE post_id = '$post_id'", $currentCourseID);
 	$myrow = mysql_fetch_array($result);
 	$this_post_time = $myrow["post_time"];
 	list($day, $time) = explode(' ', $this_post_time);
 		
-	$sql = "DELETE FROM posts WHERE post_id = '$post_id'";
-	
-	$sql = "DELETE FROM posts_text
-		WHERE post_id = '$post_id'";
-	if (!$r = db_query($sql, $currentCourseID)) {
-		$tool_content .= $langUnableDeletePost;
-		draw($tool_content, 2, '', $head_content);
-		exit();
-	} else if ($last_post_in_thread == $this_post_time) {
+	db_query("DELETE FROM posts WHERE post_id = $post_id", $currentCourseID);
+	db_query("DELETE FROM posts_text WHERE post_id = $post_id", $currentCourseID);
+	if ($last_post_in_thread == $this_post_time) {
 		$topic_time_fixed = $last_post_in_thread;
 		$sql = "UPDATE topics
 			SET topic_time = '$topic_time_fixed'
@@ -129,6 +123,7 @@ if (isset($_GET['delete'])) {
 			exit();
 		}
 	}
+	$total = get_total_posts($topic, $currentCourseID, "topic");
 	if (get_total_posts($topic, $currentCourseID, "topic") == 0) {
 		$sql = "DELETE FROM topics WHERE topic_id = '$topic'";
 		if (!$r = db_query($sql, $currentCourseID)) {
@@ -136,12 +131,10 @@ if (isset($_GET['delete'])) {
 			draw($tool_content, 2, '', $head_content);
 			exit();
 		}
-		$topic_removed = TRUE;
+		header("Location: viewforum.php?forum=$forum");
 	}
 	sync($currentCourseID, $forum, 'forum');
-	if (@!$topic_removed) {
-		sync($currentCourseID, $topic, 'topic');
-	}
+	sync($currentCourseID, $topic, 'topic');	
 	$tool_content .= "<p class='success'>$langDeletedMessage</p>";
 }
 

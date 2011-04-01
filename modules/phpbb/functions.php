@@ -68,29 +68,18 @@ function get_total_topics($forum_id, $thedb) {
  */ 
 function get_total_posts($id, $thedb, $type) {
    switch($type) {
-    case 'users':
-      $sql = "SELECT count(*) AS total FROM users WHERE (user_id != -1) AND (user_level != -1)";
-      break;
-    case 'all':
-      $sql = "SELECT count(*) AS total FROM posts";
-      break;
     case 'forum':
       $sql = "SELECT count(*) AS total FROM posts WHERE forum_id = '$id'";
       break;
     case 'topic':
       $sql = "SELECT count(*) AS total FROM posts WHERE topic_id = '$id'";
       break;
-   // Old, we should never get this.   
-    case 'user':
-      error_die("Should be using the users.user_posts column for this.");
    }
    if(!$result = db_query($sql, $thedb))
      return("ERROR");
    if(!$myrow = mysql_fetch_array($result))
      return("0");
-   
    return($myrow["total"]);
-   
 }
 
 /*
@@ -800,13 +789,6 @@ function check_priv_forum_auth($userid, $forumid, $is_posting, $db)
 
 }
 
-
-function get_syslang_string($sys_lang, $string) {
-	include('language/lang_' . $sys_lang . '.php');
-	$ret_string = $$string;
-	return($ret_string);
-}
-
 function sync($thedb, $id, $type) {
    switch($type) {
    	case 'forum':
@@ -843,25 +825,9 @@ function sync($thedb, $id, $type) {
    			$total_posts = $row["total"];
    		}
    		$total_posts -= 1;
-   		$sql = "UPDATE topics SET topic_replies = $total_posts, topic_last_post_id = $last_post WHERE topic_id = $id";
+   		$sql = "UPDATE topics SET topic_replies = $total_posts, topic_last_post_id = $last_post
+			WHERE topic_id = $id";
    		$result = db_query($sql, $thedb);
-   	break;
-
-   	case 'all forums':
-   		$sql = "SELECT forum_id FROM forums";
-   		$result = db_query($sql, $thedb);
-   		while($row = mysql_fetch_array($result)) {
-   			$id = $row["forum_id"];
-   			sync($thedb, $id, "forum");
-   		}
-   	break;
-   	case 'all topics':
-   		$sql = "SELECT topic_id FROM topics";
-   		$result = db_query($sql, $thedb);
-   		while($row = mysql_fetch_array($result)) {
-   			$id = $row["topic_id"];
-   			sync($thedb, $id, "topic");
-   		}
    	break;
    }
    return(TRUE);

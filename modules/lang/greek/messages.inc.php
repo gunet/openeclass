@@ -1911,12 +1911,14 @@ $langPrivateNotice = "$langPrivateForum<br>Σημείωση: πρέπει να �
 $langSent = "Στάλθηκε";
 $langViewMessage = "Εμφάνιση μηνύματος";
 $langNotEdit = "Δεν μπορείτε να αλλάξετε μήνυμα που δεν είναι δικό σας.";
-$langStored = "Το μήνυμα αποθηκεύτηκε";
+$langStored = "Το μήνυμα στάλθηκε";
+$langReturnMessages = "Επιστροφή στο θέμα";
 $langViewMsg = " για να εμφανίσετε το μήνυμα";
 $langViewMsg1 = "Εμφάνιση μηνύματος";
 $langDeletedMessage = "Το μήνυμα διαγράφηκε";
 $langDeleteMessage = "Διαγραφή του μηνύματος";
 $langEmptyMsg = "Για να στείλετε ένα μήνυμα πρέπει να γράψετε κάποιο κείμενο. Δεν μπορείτε να στείλετε κενό μήνυμα.";
+$langEmptyNewTopic = "Δεν πληκτρολογήσατε τίτλο θέματος ή/και μήνυμα";
 $langCancelPost	= "Ακύρωση αποστολής";
 $langTopicReview  = "Ανασκόπηση θέματος";
 $langReply = "Απάντηση";
@@ -1950,6 +1952,7 @@ $langID = "Α/Α";
 $langForumOpen = "Ανοικτή";
 $langForumClosed = "Κλειστή";
 $langNewForum = "Νέα περιοχή συζητήσεων";
+$langEditedBy = "Διορθώθηκε από";
 
 /*****************************************************************
 * questionnaire.php

@@ -187,7 +187,7 @@ hContent;
 
 	// forum add category
 	elseif(isset($_GET['forumcatadd'])) {
-		db_query("INSERT INTO catagories VALUES (NULL, '$_POST[catagories]', NULL)", $currentCourseID);
+		db_query("INSERT INTO catagories SET cat_title='$_POST[catagories]'", $currentCourseID);
 		$tool_content .= "\n<p class='success'>$langCatAdded</p>
 		\n  <p>&laquo; <a href='index.php?course=$code_cours'>$langBack</a></p>";
 	}

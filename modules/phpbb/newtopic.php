@@ -63,7 +63,7 @@ include '../../include/sendMail.inc.php';
 include '../group/group_functions.php';
 
 include_once("./config.php");
-include("functions.php"); // application logic for phpBB
+include("functions.php"); 
 
 /******************************************************************************
  * Actual code starts here
@@ -73,7 +73,9 @@ if (isset($_GET['forum'])) {
 }
 if (isset($_GET['topic'])) {
 	$topic = intval($_GET['topic']);
-} else $topic = '';
+} else {
+	$topic = '';
+}
 
 $sql = "SELECT forum_name, forum_access, forum_type FROM forums
 	WHERE (forum_id = '$forum')";
@@ -96,10 +98,9 @@ if ($private_forum and !($is_member or $is_adminOfCourse)) {
 	exit;
 }
 
-
 $nameTools = $langNewTopic;
-$navigation[]= array ("url"=>"index.php?course=$code_cours", "name"=> $langForums);
-$navigation[]= array ("url"=>"viewforum.php?course=$code_cours&amp;forum=$forum_id", "name"=> $forum_name);
+$navigation[]= array('url' => "index.php?course=$code_cours", 'name' => $langForums);
+$navigation[]= array('url' => "viewforum.php?course=$code_cours&amp;forum=$forum_id", 'name' => $forum_name);
 
 if (!does_exists($forum, $currentCourseID, "forum")) {
 	$tool_content .= "<div class='caution'>$langErrorPost</div>";
@@ -111,10 +112,7 @@ if (isset($_POST['submit'])) {
 	$subject = trim($_POST['subject']);
 	$message = trim($_POST['message']);
 	if (empty($message) or empty($subject)) {
-		$tool_content .= "
-                <p class='alert1'>$langEmptyMsg</p>
-                <p class='back'>&laquo; $langClick <a href='newtopic.php?course=$code_cours&amp;forum=$forum_id'>$langHere</a> $langReturnTopic</p>";
-		draw($tool_content, 2);
+		header("Location: viewforum.php?forum=$forum&empty=true");
 		exit;
 	}
 	
@@ -173,7 +171,7 @@ if (isset($_POST['submit'])) {
 	$topic = $topic_id;
 	$total_forum = get_total_topics($forum, $currentCourseID);
 	$total_topic = get_total_posts($topic, $currentCourseID, "topic")-1;  
-	// Subtract 1 because we want the nr of replies, not the nr of posts.
+	// subtract 1 because we want the number of replies, not the number of posts.
 	$forward = 1;
 
 	// --------------------------------
@@ -196,13 +194,12 @@ if (isset($_POST['submit'])) {
 	}
 	// end of notification
 	
-	$tool_content .= "
-	<p class='success'>$langStored</p>
-	<p class='back'>&laquo; $langClick <a href='viewtopic.php?course=$code_cours&amp;topic=$topic_id&amp;forum=$forum&amp;$total_topic'>$langHere</a>$langViewMsg</p>
-	<p class='back'>&laquo; <a href='viewforum.php?course=$code_cours&amp;forum=$forum_id'>$langReturnTopic</a></p>
-	"; 
+	$tool_content .= "<p class='success'>$langStored</p>
+		<p class='back'>&laquo; <a href='viewtopic.php?course=$code_cours&amp;topic=$topic_id&amp;forum=$forum&amp;$total_topic'>$langReturnMessages</a></p>
+		<p class='back'>&laquo; <a href='viewforum.php?course=$code_cours&amp;forum=$forum_id'>$langReturnTopic</a></p>"; 
 } elseif (isset($_POST['cancel'])) {
-	header("Location: viewtopic.php?topic=$topic&forum=$forum");	
+	header("Location: viewforum.php?forum=$forum");
+	exit;
 } else {
 	$tool_content .= "
         <form action='$_SERVER[PHP_SELF]?course=$code_cours&amp;topic=$topic&forum=$forum' method='post'>
@@ -215,7 +212,7 @@ if (isset($_POST['submit'])) {
 	  </tr>
 	  <tr>
             <th valign='top'>$langBodyMessage:</th>
-            <td>".  rich_text_editor('message', 14, 50, '', "") ."            </td>
+            <td>".  rich_text_editor('message', 14, 50, '', "") ."</td>
           </tr>
 	  <tr>
             <th>&nbsp;</th>

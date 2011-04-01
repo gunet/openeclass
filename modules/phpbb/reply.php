@@ -144,10 +144,9 @@ if (isset($_POST['submit'])) {
 		$message = htmlspecialchars($message);
 		$is_html_disabled = true;
 		if (isset($quote) && $quote) {
-			$edit_by = get_syslang_string($sys_lang, "l_editedby");
 			// If it's been edited more than once, there might be old "edited by" strings with
 			// escaped HTML code in them. We want to fix this up right here:
-			$message = preg_replace("#&lt;font\ size\=-1&gt;\[\ $edit_by(.*?)\ \]&lt;/font&gt;#si", '[ ' . $edit_by . '\1 ]', $message);
+			$message = preg_replace("#&lt;font\ size\=-1&gt;\[\ $langEditedBy(.*?)\ \]&lt;/font&gt;#si", '[ ' . $langEditedBy . '\1 ]', $message);
 		}
 	}
 	if ((isset($allow_bbcode) && $allow_bbcode == 1) && !isset($bbcode)) {
@@ -218,24 +217,24 @@ if (isset($_POST['submit'])) {
 	// Private forum logic here.
 	if (($forum_type == 1) && !$user_logged_in && !$logging_in) {
 		$tool_content .= "
-        <form action='$_SERVER[PHP_SELF]?course=$code_cours' method='post'>
-        <fieldset>
-           <legend></legend>     
-		<table align='left' width='99%'>
-		<tr><td>
-		<table width='100%'><tr><td>$langPrivateNotice</td></tr>
-		<tr><td>&nbsp;</td></tr>
-		<tr>
-		<td>
-		<input type='hidden' name='forum' value='$forum'>
-		<input type='hidden' name='topic' value='$topic'>
-		<input type='hidden' name='post' value='$post'>
-		<input type='hidden' name='quote' value='$quote'>
-		<input type='SUBMIT' name='logging_in' value='$langEnter'>
-		</td></tr></table>
-		</td></tr></table>
-        </fieldset>
-        </form>";
+		<form action='$_SERVER[PHP_SELF]?course=$code_cours' method='post'>
+		<fieldset>
+		   <legend></legend>     
+			<table align='left' width='99%'>
+			<tr><td>
+			<table width='100%'><tr><td>$langPrivateNotice</td></tr>
+			<tr><td>&nbsp;</td></tr>
+			<tr>
+			<td>
+			<input type='hidden' name='forum' value='$forum'>
+			<input type='hidden' name='topic' value='$topic'>
+			<input type='hidden' name='post' value='$post'>
+			<input type='hidden' name='quote' value='$quote'>
+			<input type='SUBMIT' name='logging_in' value='$langEnter'>
+			</td></tr></table>
+			</td></tr></table>
+		</fieldset>
+		</form>";
 		draw($tool_content, 2, '', $head_content);
 		exit();
 	} else {
@@ -256,13 +255,13 @@ if (isset($_POST['submit'])) {
           <li><a href=\"viewtopic.php?course=$code_cours&amp;topic=$topic&amp;forum=$forum\" target=\"_blank\">$langTopicReview</a></li>
 	</ul>
     </div>";
-	$tool_content .= "
-    <form action='$_SERVER[PHP_SELF]?course=$code_cours&amp;topic=$topic&forum=$forum' method='post'>
-    <fieldset>
+
+	$tool_content .= "<form action='$_SERVER[PHP_SELF]?course=$code_cours&amp;topic=$topic&forum=$forum' method='post'>
+	<fieldset>
         <legend>$langTopicAnswer: $topic_title</legend>
 	<table class='tbl' width='100%'>
         <tr>
-          <td>$langBodyMessage:";
+        <td>$langBodyMessage:";
 	if (isset($quote) && $quote) {
 		$sql = "SELECT pt.post_text, p.post_time, u.username 
 			FROM posts p, posts_text pt 
@@ -275,8 +274,7 @@ if (isset($_POST['submit'])) {
 			$text = bbdecode($text);
 			$text = undo_make_clickable($text);
 			$text = str_replace("[addsig]", "", $text);
-			$syslang_quotemsg = get_syslang_string($sys_lang, "langQuoteMsg");
-			eval("\$reply = \"$syslang_quotemsg\";");
+			eval("\$reply = \"$langQuoteMsg\";");
 		} else {
 			$tool_content .= $langErrorConnectForumDatabase;
 			draw($tool_content, 2, '', $head_content);
@@ -305,6 +303,4 @@ if (isset($_POST['submit'])) {
         </fieldset>
 	</form>";
 }
-
 draw($tool_content, 2, '', $head_content);
-
