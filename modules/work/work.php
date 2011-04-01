@@ -245,7 +245,7 @@ function add_assignment($title, $desc, $deadline, $group_submissions)
 
 function submit_work($id)
 {
-        global $tool_content, $workPath, $uid, $cours_id, $stud_comments,
+        global $tool_content, $workPath, $uid, $cours_id,
                 $langUploadSuccess, $langBack, $langWorks, $langUploadError, $currentCourseID,
                 $langExerciseNotPermit, $langUnwantedFiletype;
 
@@ -310,7 +310,7 @@ function submit_work($id)
                                         VALUES
                                         ($uid, $id, NOW(), " . quote($_SERVER['REMOTE_ADDR']) . ",
                                         " . quote($filename) . ", ". autoquote($_FILES['userfile']['name']) . ",
-                                        " . autoquote($stud_comments) . ", '', $group_id)", $currentCourseID);    
+                                        " . autoquote($_POST['stud_comments']) . ", '', $group_id)", $currentCourseID);    
                             }
                         } else {
                                 $msg1 = delete_submissions_by_uid($uid, -1, $id);  
@@ -318,7 +318,7 @@ function submit_work($id)
                                         (uid, assignment_id, submission_date, submission_ip, file_path,
                                         file_name, comments, grade_comments) VALUES ($uid, $id, NOW(), " . quote($_SERVER['REMOTE_ADDR']) . ",
                                         " . quote($filename) . ", " . autoquote($_FILES['userfile']['name']) . ",
-                                        " . autoquote($stud_comments) . ", '')", $currentCourseID);
+                                        " . autoquote($_POST['stud_comments']) . ", '')", $currentCourseID);
                         }
                         $tool_content .= "<p class='success'>$msg2<br />$msg1<br /><a href='$_SERVER[PHP_SELF]'>$langBack</a></p><br />";
                 } else {
@@ -750,6 +750,8 @@ function show_assignment($id, $message = FALSE)
 			$order = 'submission_date';
 		} elseif ($_REQUEST['sort'] == 'grade') {
 			$order = 'grade';
+		} elseif ($_REQUEST['sort'] == 'filename') {
+			$order = 'file_name';
 		} else {
 			$order = 'nom';
 		}
@@ -813,15 +815,14 @@ function show_assignment($id, $message = FALSE)
                   <p>$num_of_submissions</p>
                 ";
 		$tool_content .= "
-                <table width=\"100%\" class=\"tbl_border\">
+                <table width='100%' class='sortable'>
                 <tr>
-                  <th width=\"3\">&nbsp;</th>";
-                sort_link($m['username'], 'nom', 'align=left');
-                sort_link($m['am'], 'am', 'align=left');
-                $tool_content .= "
-                  <th align=\"center\"><div class='center'><b>".$m['filename']."</b></div></th>";
-                sort_link($m['sub_date'], 'date', 'align=center');
-                sort_link($m['grade'], 'grade', 'align=center');
+                  <th width='3'>&nbsp;</th>";
+                sort_link($m['username'], 'nom');
+                sort_link($m['am'], 'am');
+                sort_link($m['filename'], 'filename');
+                sort_link($m['sub_date'], 'date');
+                sort_link($m['grade'], 'grade');
 		$tool_content .= "
                 </tr>";
 
@@ -830,23 +831,11 @@ function show_assignment($id, $message = FALSE)
 		{
 			//is it a group assignment?
 			if (!empty($row['group_id'])) {
-				$subContentGroup = "($m[groupsubmit] ".
+				$subContentGroup = "$m[groupsubmit] ".
 				"<a href='../group/group_space.php?group_id=$row[group_id]'>".
-				"$m[ofgroup] ".gid_to_name($row['group_id'])."</a>)";
+				"$m[ofgroup] ".gid_to_name($row['group_id'])."</a>";
 			} else $subContentGroup = "";
 
-			//professor comments
-			if (trim($row['grade_comments'] != '')) {
-				$prof_comment = 
-				" <a href='grade_edit.php?assignment=$id&submission=$row[id]'>".
-				"<img src='../../template/classic/img/edit.png' alt='$m[edit]' /></a><br />".
-                                "<div class='smaller'>".standard_text_escape($row['grade_comments'])."</div>"
-                                ;
-			} else {
-				$prof_comment = "
-				<a href='grade_edit.php?assignment=$id&submission=$row[id]'>".
-				$m['comments']."</a> (+)";
-			}
                         $uid_2_name = display_user($row['uid']);
 			$stud_am = mysql_fetch_array(db_query("SELECT am from $mysqlMainDb.user WHERE user_id = '$row[uid]'"));
                         if ($i%2 == 1) {
@@ -859,30 +848,33 @@ function show_assignment($id, $message = FALSE)
                 <tr $row_color>
                   <td align='right' width='4' rowspan='2' valign='top'>$i.</td>
                   <td>${uid_2_name}</td>
-                  <td width='85' align='center'>${stud_am[0]}</td>
-                  <td width='180' align='center'><a href='$_SERVER[PHP_SELF]?get=$row[id]'>${row['file_name']}</a>";
-                          
-			if (trim($row['comments'] != '')) {
-			    $tool_content .= "
-                            <br />
-                            <table width='100%'  class='tbl'>
-                            <tr>
-                              <td width='16'><img src='../../template/classic/img/arrow.png' alt='$m[comments]' title='$m[comments]' /></td>
-                              <td>$row[comments]</td>
-                            <tr>
-                            </table>";
-			}
-                    $tool_content .= "
-                  </td>
-                  <td width='100' align='center'>".nice_format($row['submission_date'])."</td>
-                  <td width='5' align='left'>
+                  <td width='85'>" . q($stud_am[0]) . "</td>
+                  <td width='180'><a href='$_SERVER[PHP_SELF]?get=$row[id]'>" . q($row['file_name']) . "</a></td>
+                  <td width='100'>".nice_format($row['submission_date'])."</td>
+                  <td width='5'>
                      <div align='center'><input type='text' value='{$row['grade']}' maxlength='3' size='3' name='grades[{$row['id']}]'></div>
                   </td>
                 </tr>
                 <tr $row_color>
-                  <td colspan='5'><div class='smaller'>$subContentGroup</div><br />
-                    <img src='../../template/classic/img/arrown.png' alt='$m[comments]' title='$m[comments]' />&nbsp;<b>$m[gradecomments]</b>:
-                    $prof_comment
+                  <td colspan='5'>
+                    <div>$subContentGroup</div>";
+                        if (trim($row['comments'] != '')) {
+                                $tool_content .= "<div style='margin-top: .5em;'><b>$m[comments]:</b> " .
+                                        q($row['comments']) . '</div>';
+                        }
+			//professor comments
+			if (trim($row['grade_comments'])) {
+                                $label = $m['gradecomments'] . ':';
+                                $icon = 'edit.png';
+                                $comments = "<div class='smaller'>".standard_text_escape($row['grade_comments'])."</div>";
+                        } else {
+                                $label = $m['addgradecomments'];
+                                $icon = 'add.png';
+                                $comments = '';
+                        }
+                        $tool_content .= "<div style='padding-top: .5em;'><b>$label</b>
+                                <a href='grade_edit.php?assignment=$id&amp;submission=$row[id]'><img src='../../template/classic/img/$icon'></a>
+                                $comments
                   </td>
                 </tr>";
                 $i++;
