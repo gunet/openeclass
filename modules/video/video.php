@@ -139,7 +139,7 @@ $diskUsed = dir_total_space($updir);
 
 if (isset($_GET['showQuota']) and $_GET['showQuota'] == TRUE) {
 	$nameTools = $langQuotaBar;
-	$navigation[]= array ("url"=>"$_SERVER[PHP_SELF]", "name"=> $langVideo);
+	$navigation[]= array ("url"=>"$_SERVER[PHP_SELF]?course=$code_cours", "name"=> $langVideo);
 	$tool_content .= showquota($diskQuotaVideo, $diskUsed);
 	draw($tool_content, 2);
 	exit;
@@ -190,7 +190,7 @@ if (isset($_POST['add_submit'])) {  // add
 			if (isset($_FILES['userFile']) && is_uploaded_file($_FILES['userFile']['tmp_name'])) {
 				if ($diskUsed + @$_FILES['userFile']['size'] > $diskQuotaVideo) {
 					$tool_content .= "<p class=\"caution\">$langNoSpace<br />
-						<a href=\"$_SERVER[PHP_SELF]\">$langBack</a></p><br />";
+						<a href=\"$_SERVER[PHP_SELF]?course=$code_cours\">$langBack</a></p><br />";
 						draw($tool_content, 2, '', $head_content);
 						exit;
 				} else {
@@ -201,7 +201,7 @@ if (isset($_POST['add_submit'])) {  // add
 					// check for dangerous file extensions
 					if (preg_match('/\.(ade|adp|bas|bat|chm|cmd|com|cpl|crt|exe|hlp|hta|' .'inf|ins|isp|jse|lnk|mdb|mde|msc|msi|msp|mst|pcd|pif|reg|scr|sct|shs|' .'shb|url|vbe|vbs|wsc|wsf|wsh)$/', $file_name)) {
 						$tool_content .= "<p class=\"caution\">$langUnwantedFiletype:  $file_name<br />";
-						$tool_content .= "<a href=\"$_SERVER[PHP_SELF]\">$langBack</a></p><br />";
+						$tool_content .= "<a href=\"$_SERVER[PHP_SELF]?course=$code_cours\">$langBack</a></p><br />";
 						draw($tool_content, 2, '', $head_content);
 						exit;
 					}
@@ -212,7 +212,7 @@ if (isset($_POST['add_submit'])) {  // add
 					$iscopy = copy("$tmpfile", "$updir/$safe_filename");
 					if(!$iscopy) {
 						$tool_content .= "<p class=\"success\">$langFileNot<br />
-						<a href=\"$_SERVER[PHP_SELF]\">$langBack</a></p><br />";
+						<a href=\"$_SERVER[PHP_SELF]?course=$code_cours\">$langBack</a></p><br />";
 						draw($tool_content, 2, '', $head_content);
 						exit;
 					}
@@ -246,9 +246,9 @@ if (isset($_POST['add_submit'])) {  // add
 		$id="";
 	} elseif (isset($_GET['form_input']) && $_GET['form_input'] == "file") { // display video form
 		$nameTools = $langAddV;
-		$navigation[] = array ("url"=>"video.php", "name"=> $langVideo);
+		$navigation[] = array ("url"=>"video.php?course=$code_cours", "name"=> $langVideo);
 		$tool_content .= "
-              <form method=\"POST\" action=\"$_SERVER[PHP_SELF]\" enctype=\"multipart/form-data\" onsubmit=\"return checkrequired(this, 'titre');\">
+              <form method=\"POST\" action=\"$_SERVER[PHP_SELF]?course=$code_cours\" enctype=\"multipart/form-data\" onsubmit=\"return checkrequired(this, 'titre');\">
               <fieldset>
               <legend>$langAddV</legend>
 		<table width=\"100%\" class=\"tbl\">
@@ -291,9 +291,9 @@ if (isset($_POST['add_submit'])) {  // add
               
 	} elseif (isset($_GET['form_input']) && $_GET['form_input'] == "url") { // display video links form
 		$nameTools = $langAddVideoLink;
-		$navigation[] = array ("url"=>"video.php", "name"=> $langVideo);
+		$navigation[] = array ("url"=>"video.php?course=$code_cours", "name"=> $langVideo);
 		$tool_content .= "
-		<form method=\"POST\" action=\"$_SERVER[PHP_SELF]\" onsubmit=\"return checkrequired(this, 'titre');\">
+		<form method=\"POST\" action=\"$_SERVER[PHP_SELF]?course=$code_cours\" onsubmit=\"return checkrequired(this, 'titre');\">
                 <fieldset>
                 <legend>$langAddVideoLink</legend>
 		<table width=\"100%\" class=\"tbl\">
@@ -356,9 +356,9 @@ if (isset($_GET['id']) and isset($_GET['table_edit']))  {
 			$publisher = $myrow[6];
 		}
 		$nameTools = $langModify;
-		$navigation[] = array ("url"=>"video.php", "name"=> $langVideo);
+		$navigation[] = array ("url"=>"video.php?course=$code_cours", "name"=> $langVideo);
 		$tool_content .= "
-           <form method='POST' action='$_SERVER[PHP_SELF]' onsubmit=\"return checkrequired(this, 'titre');\">
+           <form method='POST' action='$_SERVER[PHP_SELF]?course=$code_cours' onsubmit=\"return checkrequired(this, 'titre');\">
            <fieldset>
            <legend>$langModify</legend>
 
@@ -408,9 +408,9 @@ if (isset($_GET['id']) and isset($_GET['table_edit']))  {
           $tool_content .= "
         <div id='operations_container'>
 	  <ul id='opslist'>
-	    <li><a href='$_SERVER[PHP_SELF]?form_input=file'>$langAddV</a></li>
-	    <li><a href='$_SERVER[PHP_SELF]?form_input=url'>$langAddVideoLink</a></li>
-	    <li><a href='$_SERVER[PHP_SELF]?showQuota=TRUE'>$langQuotaBar</a></li>
+	    <li><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;form_input=file'>$langAddV</a></li>
+	    <li><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;form_input=url'>$langAddVideoLink</a></li>
+	    <li><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;showQuota=TRUE'>$langQuotaBar</a></li>
 	  </ul>
 	</div>";
 	}
@@ -442,7 +442,7 @@ if (isset($_GET['id']) and isset($_GET['table_edit']))  {
 					if(isset($vodServer)) {
 						$videoURL=$vodServer."$currentCourseID/".$myrow[1];
 					} else {
-						$videoURL = "'$_SERVER[PHP_SELF]?action=download&id=$myrow[1]'";
+						$videoURL = "'$_SERVER[PHP_SELF]?course=$code_cours&amp;action=download&id=$myrow[1]'";
 					}
 					$link_to_add = "\n          <td><a href= $videoURL>$myrow[3]</a><br>\n$myrow[4]</td>\n      <td>$myrow[5]</td>\n      <td>$myrow[6]</td>\n<td align='center'>".nice_format(date("Y-m-d", strtotime($myrow[7])))."</td>";
 					break;
@@ -461,7 +461,7 @@ if (isset($_GET['id']) and isset($_GET['table_edit']))  {
 				$tool_content .= "\n        <tr $rowClass>";
 				$tool_content .= "\n          <td width=\"1\" valign='top'><img style='border:0px; padding-top:3px;' src='${urlServer}/template/classic/img/arrow.png' title='bullet'></td>";
 				$tool_content .= $link_to_add;
-				$tool_content .= "\n          <td align='center'><a href='$_SERVER[PHP_SELF]?id=$myrow[0]&table_edit=$table'><img src='../../template/classic/img/edit.png' border='0' title='$langModify'></img></a>&nbsp;&nbsp;<a href='$_SERVER[PHP_SELF]?id=$myrow[0]&delete=yes&table=$table' onClick='return confirmation(\"".addslashes($myrow[2])."\");'><img src='../../template/classic/img/delete.png' border='0' title='$langDelete'></img></a></td>";
+				$tool_content .= "\n          <td align='center'><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;id=$myrow[0]&table_edit=$table'><img src='../../template/classic/img/edit.png' border='0' title='$langModify'></img></a>&nbsp;&nbsp;<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;id=$myrow[0]&delete=yes&table=$table' onClick='return confirmation(\"".addslashes($myrow[2])."\");'><img src='../../template/classic/img/delete.png' border='0' title='$langDelete'></img></a></td>";
                                 $tool_content .= "\n        </tr>";
 			$i++;
 			$count_video_presented_for_admin++;
@@ -497,7 +497,7 @@ else {
 						if(isset($vodServer)) {
 							$videoURL=$vodServer."$currentCourseID/".$myrow[1];
 						} else {
-							$videoURL = "'$_SERVER[PHP_SELF]?action=download&id=$myrow[1]'";
+							$videoURL = "'$_SERVER[PHP_SELF]?course=$code_cours&amp;action=download&id=$myrow[1]'";
 						}
 						$link_to_add = "\n                  <td><a href=$videoURL>$myrow[3]</a><br /><small>$myrow[4]</small></td>";
 						break;

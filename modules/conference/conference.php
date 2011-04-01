@@ -66,20 +66,20 @@ if ($is_adminOfCourse) {
 	$tool_content .= "
    <div id=\"operations_container\">
      <ul id=\"opslist\">
-       <li><a href='messageList.php?reset=true' target='messageList' class=small_tools>$langWash</a></li>
-       <li><a href='messageList.php?store=true' target='messageList' class=small_tools>$langSave</a></li>
+       <li><a href='messageList.php?course=$code_cours&amp;reset=true' target='messageList' class=small_tools>$langWash</a></li>
+       <li><a href='messageList.php?course=$code_cours&amp;store=true' target='messageList' class=small_tools>$langSave</a></li>
      </ul>
    </div>";
 }
 
 $tool_content .= "
-   <form name='chatForm' action='messageList.php' method='get' target='messageList' onSubmit='return prepare_message();'>
+   <form name='chatForm' action='messageList.php?course=$code_cours' method='get' target='messageList' onSubmit='return prepare_message();'>
    <fieldset>
     <legend>$langTypeMessage</legend>
       <input type='text' name='msg' size='80'>
       <input type='hidden' name='chatLine'>
       <input type='submit' value=' &raquo;  '><br /><br />
-      <iframe frameborder='0' src='messageList.php' width='100%' height='300' name='messageList' style='border: 1px solid #CAC3B5;'><a href='messageList.php'>Message list</a></iframe></td>
+      <iframe frameborder='0' src='messageList.php' width='100%' height='300' name='messageList' style='border: 1px solid #CAC3B5;'><a href='messageList.php?course=$code_cours'>Message list</a></iframe></td>
    </fieldset>
    </form>";
 add_units_navigation(TRUE);
