@@ -142,10 +142,10 @@ if ($total_categories) {
 			$link_notify = toggle_link($action_notify);
 			$icon = toggle_icon($action_notify);
 		}
-		$tool_content .= "<table width='100%' class='tbl_border'>";
+		$tool_content .= "<table width='100%' class='tbl_alt'>";
 		$tool_content .= "<tr class='odd'>
-		<td colspan='5'><b>$title</b></td>
-		<td class='center'>";
+		<th colspan='5'><b>$title</b></th>
+		<td width='100'>";
 		if ($is_adminOfCourse) {
 			$tool_content .= "<a href='forum_admin.php'>
 			<img src='../../template/classic/img/addcategory.png' title='$langAddCategory' alt='$langAddCategory' />
