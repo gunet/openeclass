@@ -145,11 +145,11 @@ if ($total_categories) {
 		$tool_content .= "<table width='100%' class='tbl_alt'>";
 		$tool_content .= "<tr class='odd'>
 		<th colspan='5'><b>$title</b></th>
-		<td width='90'>";
+		<td width='80'>";
 		if ($is_adminOfCourse) {
 			$tool_content .= "<a href='forum_admin.php'>
 			<img src='../../template/classic/img/addcategory.png' title='$langAddCategory' alt='$langAddCategory' />
-			</a> &nbsp;
+			</a>
 			<a href='forum_admin.php?forumcatedit=yes&amp;cat_id=$catNum'>
 			<img src='../../template/classic/img/edit.png' title='$langModify' alt='$langModify' /></a>
 			
@@ -244,7 +244,7 @@ if ($total_categories) {
 						$forum_link_notify = toggle_link($forum_action_notify);
 						$forum_icon = toggle_icon($forum_action_notify);
 					}
-					$tool_content .= "<td class='center'>";
+					$tool_content .= "<td>";
 					if ($is_adminOfCourse) { // admin actions
 						$tool_content .= "<a href='forum_admin.php?forumgo=yes&amp;cat_id=$catNum'>
 						<img src='../../template/classic/img/newtopic.png' title='$langNewForum' alt='$langNewForum' />
