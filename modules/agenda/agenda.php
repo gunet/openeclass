@@ -353,7 +353,7 @@ if (mysql_num_rows($result) > 0) {
         $tool_content .= "
         <table width='100%' class='tbl_alt'>
         <tr>
-          <th><div align='left'><b>$langEvents</b></div></th>";
+          <th class='center'>$langEvents</th>";
         if ($is_adminOfCourse) {
               $tool_content .= "<th width='50'><b>$langActions</b></th>";
         } else {
