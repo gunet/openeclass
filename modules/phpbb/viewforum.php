@@ -172,12 +172,12 @@ $tool_content .= "
        <th width='70' class='center'>$langAnswers</th>
        <th width='150' class='center'>$langSender</th>
        <th width='80' class='center'>$langSeen</th>
-       <th width='150' class='center'>$langLastMsg</th>
-       <th width='20' class='center'>$langActions</th>
-     </tr></table>";
+       <th width='200' class='center'>$langLastMsg</th>
+       <th width='70' class='center'>$langActions</th>
+     </tr>";
 
 if (mysql_num_rows($result) > 0) { // topics found
-	$tool_content .= "<table width='100%' class='tbl_alt'>";
+	$tool_content .= "";
         $i=0;
 	while($myrow = mysql_fetch_array($result)) {
                 if ($i%2==1) {

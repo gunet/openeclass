@@ -76,7 +76,7 @@ hContent;
 		<form action=\"$_SERVER[PHP_SELF]?course=$code_cours&amp;forumgoadd=yes&amp;cat_id=$cat_id\" method=post onsubmit=\"return checkrequired(this,'forum_name');\">
 		<fieldset>
 		  <legend>$langAddForCat</legend>    
-		  <table class=\"tbl\">
+		  <table class=\"tbl\" width='100%'>
 		  <tr>
 		    <th>$langCat:</th>
 		    <td>$ctg</td>
@@ -91,7 +91,7 @@ hContent;
 		  </tr>
 		  <tr>
 		    <th>&nbsp;</th>
-		    <td><input type=submit value=$langAdd></td>
+		    <td class='right'><input type=submit value=$langAdd></td>
 		  </tr>
 		  </table>
 		</fieldset>
@@ -109,7 +109,7 @@ hContent;
 		<input type=hidden name=forum_id value=$forum_id>
 		<fieldset>
 		  <legend>$langChangeForum</legend>
-		  <table class='tbl'>
+		  <table class='tbl' width='100%'>
 		  <tr>
 		    <th>$langForName</th>
 		    <td><input type=text name=forum_name size=50 value='$forum_name'></td>
@@ -135,7 +135,7 @@ hContent;
 		</tr>
 		  <tr>
 		    <th>&nbsp;</th>
-		    <td><input type=submit value='$langModify'></td>
+		    <td class='right'><input type=submit value='$langModify'></td>
 		  </tr>
 		  </table>
 		</fieldset>
@@ -151,14 +151,14 @@ hContent;
     		<input type=hidden name=cat_id value=$cat_id>
                 <fieldset>
                 <legend>$langModCatName</legend>
-    		<table class=\"tbl\">
+    		<table class=\"tbl\" width='100%'>
     		<tr>
       		  <th>$langCat</th>
       		  <td><input type=text name=cat_title size=55 value='$cat_title' class=\"FormData_InputText\"></td>
     		</tr>
     		<tr>
       		  <th>&nbsp;</th>
-      		  <td><input type=submit value='$langModify'></td>
+      		  <td class='right'><input type=submit value='$langModify'></td>
     		</tr>
     		</table>
                 </fieldset>
@@ -249,14 +249,14 @@ hContent;
 		<form action=\"$_SERVER[PHP_SELF]?course=$code_cours&amp;forumcatadd=yes\" method=post onsubmit=\"return checkrequired(this,'catagories');\">
                 <fieldset>
                 <legend>$langAddCategory</legend>
-		<table class=\"tbl\">
+		<table class=\"tbl\" width='100%'>
 		<tr>
-		  <th class='left'>$langCat</th>
+		  <th>$langCat</th>
 		  <td><input type=text name=catagories size=50></td>
 		</tr>
 	        <tr>
                   <th>&nbsp;</th>
-		  <td><input type=submit value='$langAdd'></td>
+		  <td class='right'><input type=submit value='$langAdd'></td>
 		</tr>
 		</table>
                 </fieldset>
