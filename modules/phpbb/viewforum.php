@@ -166,24 +166,24 @@ $result = db_query($sql, $currentCourseID);
 
 // header
 $tool_content .= "
-     <table width='100%' class='tbl_border'>
-     <tr class='sub_title1'>
-       <td colspan='2'>&nbsp;$langSubject</td>
-       <td width='90' class='center'>$langAnswers</td>
-       <td width='90' class='center'>$langSender</td>
-       <td width='90' class='center'>$langSeen</td>
-       <td width='120' class='center'>$langLastMsg</td>
-       <td width='20' class='center'>$langActions</td>
+     <table width='100%' class='tbl_alt'>
+     <tr>
+       <th colspan='2'>&nbsp;$langSubject</th>
+       <th width='70' class='center'>$langAnswers</th>
+       <th width='150' class='center'>$langSender</th>
+       <th width='80' class='center'>$langSeen</th>
+       <th width='150' class='center'>$langLastMsg</th>
+       <th width='20' class='center'>$langActions</th>
      </tr></table>";
 
 if (mysql_num_rows($result) > 0) { // topics found
-	$tool_content .= "<table width='100%' class='tbl_border'>";
+	$tool_content .= "<table width='100%' class='tbl_alt'>";
         $i=0;
 	while($myrow = mysql_fetch_array($result)) {
                 if ($i%2==1) {
-                   $tool_content .= "\n     <tr class=\"even\">";
-                } else {
                    $tool_content .= "\n     <tr class=\"odd\">";
+                } else {
+                   $tool_content .= "\n     <tr class=\"even\">";
                 }
 		$replys = $myrow["topic_replies"];
 		$last_post = $myrow["post_time"];
