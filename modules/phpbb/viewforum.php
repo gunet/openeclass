@@ -63,7 +63,7 @@ include '../../include/baseTheme.php';
 include '../group/group_functions.php';
 
 if (!add_units_navigation(TRUE)) {
-	$navigation[]= array ("url"=>"index.php", "name"=> $langForums);
+	$navigation[]= array ("url"=>"index.php?course=$code_cours", "name"=> $langForums);
 }
 
 $paging = true;
@@ -108,7 +108,7 @@ if (isset($_GET['start'])) {
 }
 
 if ($total_topics > $topics_per_page) { // navigation
-	$base_url = "viewforum.php?forum=$forum_id&amp;start="; 
+	$base_url = "viewforum.php?course=$code_cours&amp;forum=$forum_id&amp;start="; 
 	$tool_content .= "<table width='100%'><tr>";
 	$tool_content .= "<td width='50%' align='left'><span class='row'><strong class='pagination'>
 		<span class='pagination'>$langPages:&nbsp;";
@@ -214,7 +214,7 @@ if (mysql_num_rows($result) > 0) { // topics found
 		$topic_title = own_stripslashes($myrow["topic_title"]);
 		$pagination = '';
 		$start = '';
-		$topiclink = "viewtopic.php?topic=" . $myrow["topic_id"] . "&amp;forum=$forum_id";
+		$topiclink = "viewtopic.php?course=$code_cours&amp;topic=" . $myrow["topic_id"] . "&amp;forum=$forum_id";
 		if($replys+1 > $posts_per_page) {
 			$pagination .= "\n<strong class='pagination'><span>\n<img src='$posticon_more' />";
 			$pagenr = 1;
@@ -258,17 +258,17 @@ if (mysql_num_rows($result) > 0) { // topics found
 		}
 		$tool_content .= "\n<td class='center'>";
 		if ($can_post) {
-			$tool_content .= "<a href='newtopic.php?forum=$forum_id'>
+			$tool_content .= "<a href='newtopic.php?course=$code_cours&amp;forum=$forum_id'>
 			<img src='../../template/classic/img/newtopic.png' title='$langNewTopic' alt='$langNewTopic' />
 			</a>";
 		}
 		if (isset($_GET['start']) and $_GET['start'] > 0) {
 			$tool_content .= "
-			<a href='$_SERVER[PHP_SELF]?forum=$forum_id&amp;start=$_GET[start]&amp;topicnotify=$topic_link_notify&amp;topic_id=$myrow[topic_id]'>
+			<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;forum=$forum_id&amp;start=$_GET[start]&amp;topicnotify=$topic_link_notify&amp;topic_id=$myrow[topic_id]'>
 			<img src='../../template/classic/img/email$topic_icon.png' title='$langNotify' />
 			</a>";
 		} else {
-			$tool_content .= "<a href='$_SERVER[PHP_SELF]?forum=$forum_id&amp;topicnotify=$topic_link_notify&amp;topic_id=$myrow[topic_id]'>
+			$tool_content .= "<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;forum=$forum_id&amp;topicnotify=$topic_link_notify&amp;topic_id=$myrow[topic_id]'>
 			<img src='../../template/classic/img/email$topic_icon.png' title='$langNotify' />
 			</a>";
 		}
@@ -279,7 +279,7 @@ if (mysql_num_rows($result) > 0) { // topics found
 } else {
 	$tool_content .= "<p class='alert1'>$langNoTopics";
 	if ($can_post) {
-		$tool_content .= " <a href='newtopic.php?forum=$forum_id'>$langStartNewTopic</a>";
+		$tool_content .= " <a href='newtopic.php?course=$code_cours&amp;forum=$forum_id'>$langStartNewTopic</a>";
 	}
 	$tool_content .= "</p>";
 }

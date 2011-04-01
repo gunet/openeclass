@@ -147,16 +147,16 @@ if ($total_categories) {
 		<th colspan='5'><b>$title</b></th>
 		<td width='80'>";
 		if ($is_adminOfCourse) {
-			$tool_content .= "<a href='forum_admin.php'>
+			$tool_content .= "<a href='forum_admin.php?course=$code_cours'>
 			<img src='../../template/classic/img/addcategory.png' title='$langAddCategory' alt='$langAddCategory' />
 			</a>
-			<a href='forum_admin.php?forumcatedit=yes&amp;cat_id=$catNum'>
+			<a href='forum_admin.php?course=$code_cours&amp;forumcatedit=yes&amp;cat_id=$catNum'>
 			<img src='../../template/classic/img/edit.png' title='$langModify' alt='$langModify' /></a>
 			
-			<a href='forum_admin.php?forumcatdel=yes&amp;cat_id=$catNum' onClick='return confirmation();'>
+			<a href='forum_admin.php?course=$code_cours&amp;forumcatdel=yes&amp;cat_id=$catNum' onClick='return confirmation();'>
 			<img src='../../template/classic/img/delete.png' title='$langDelete' /></a>";
 		}
-		$tool_content .= "<a href='$_SERVER[PHP_SELF]?forumcatnotify=$link_notify&amp;cat_id=$catNum'>
+		$tool_content .= "<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;forumcatnotify=$link_notify&amp;cat_id=$catNum'>
 		<img src='../../template/classic/img/email$icon.png' title='$langNotify' alt='$langNotify' />
 		</a></td>
 		</tr>\n";
@@ -216,7 +216,7 @@ if ($total_categories) {
 					//     - forum is not private or
 					//     - user is member of group
 					if ($is_adminOfCourse or !$group_id or ($has_forum and (!$private_forum or $is_member))) {
-						$tool_content .= "<a href='viewforum.php?forum=$forum_id'><b>$forum_name</b></a><div class='smaller'>" . $member;
+						$tool_content .= "<a href='viewforum.php?course=$code_cours&amp;forum=$forum_id'><b>$forum_name</b></a><div class='smaller'>" . $member;
 					} else {
 						$tool_content .= $forum_name;
 					}
@@ -226,7 +226,7 @@ if ($total_categories) {
 					$tool_content .= "<td width='65' class='center'>$total_posts</td>\n";
 					$tool_content .= "<td width='200' class='center'>";
 					if ($total_topics > 0 && $total_posts > 0) {
-						$tool_content .= "$last_post_prenom $last_post_nom &nbsp;<a href='viewtopic.php?topic=$last_post_topic_id&amp;forum=$forum_id'>
+						$tool_content .= "$last_post_prenom $last_post_nom &nbsp;<a href='viewtopic.php?course=$code_cours&amp;topic=$last_post_topic_id&amp;forum=$forum_id'>
 						<img src='$icon_topic_latest' />
 						</a>
 						<br />$human_last_post_time</td>\n";
@@ -246,16 +246,16 @@ if ($total_categories) {
 					}
 					$tool_content .= "<td>";
 					if ($is_adminOfCourse) { // admin actions
-						$tool_content .= "<a href='forum_admin.php?forumgo=yes&amp;cat_id=$catNum'>
+						$tool_content .= "<a href='forum_admin.php?course=$code_cours&amp;forumgo=yes&amp;cat_id=$catNum'>
 						<img src='../../template/classic/img/newtopic.png' title='$langNewForum' alt='$langNewForum' />
 						</a>
-						<a href='forum_admin.php?forumgoedit=yes&amp;forum_id=$forum_id&amp;cat_id=$catNum'>
+						<a href='forum_admin.php?course=$code_cours&amp;forumgoedit=yes&amp;forum_id=$forum_id&amp;cat_id=$catNum'>
 						<img src='../../template/classic/img/edit.png' title='$langModify' />
 						</a>
-						<a href='forum_admin.php?forumgodel=yes&amp;forum_id=$forum_id&amp;cat_id=$catNum' onClick='return confirmation();'>
+						<a href='forum_admin.php?course=$code_cours&amp;forumgodel=yes&amp;forum_id=$forum_id&amp;cat_id=$catNum' onClick='return confirmation();'>
 						 <img src='../../template/classic/img/delete.png' title='$langDelete' /></a>";
 					}
-					$tool_content .= "<a href='$_SERVER[PHP_SELF]?forumnotify=$forum_link_notify&amp;forum_id=$forum_id'>
+					$tool_content .= "<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;forumnotify=$forum_link_notify&amp;forum_id=$forum_id'>
 					<img src='../../template/classic/img/email$forum_icon.png' title='$langNotify' alt='$langNotify' /></a>
 					</td></tr>\n";
 				}
@@ -263,7 +263,7 @@ if ($total_categories) {
 				$tool_content .= "<tr>";
 				if ($is_adminOfCourse) { // admin actions
 					$tool_content .= "<td colspan='5'>$langNoForumsCat</td>";
-					$tool_content .= "<td><a href='forum_admin.php?forumgo=yes&amp;cat_id=$catNum'>
+					$tool_content .= "<td><a href='forum_admin.php?course=$code_cours&amp;forumgo=yes&amp;cat_id=$catNum'>
 					<img src='../../template/classic/img/newtopic.png' title='$langNewForum' alt='$langNewForum' />
 					</a></td>"; 
 				} else {
