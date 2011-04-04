@@ -37,6 +37,7 @@
  
 require_once("dropbox_init1.inc.php");
 require_once("dropbox_class.inc.php");
+include '../../include/lib/forcedownload.php';
 
 /**
  * ========================================
@@ -66,57 +67,5 @@ $work = new Dropbox_work($_GET['id']);
 $path = $dropbox_cnf["sysPath"] . "/" . $work -> filename; //path to file as stored on server
 $file = $work->title;
 
-// check that this file exists and that it doesn't include any special characters
-if ( !is_file( $path))
-{
-    die($dropbox_lang["generalError"]);
-}
-
-
-/**
- * ========================================
- * SEND HEADERS
- * ========================================
- */
-require_once("mime.inc.php"); 
-
-$fileparts = explode( '.', $file);
-$filepartscount = count( $fileparts);
-
-if (($filepartscount > 1) && isset($mimetype[$fileparts [$filepartscount - 1]]))
-{ 
-    // give hint to browser about filetype
-    header( "Content-type: " . $mimetype[$fileparts [$filepartscount - 1]] . "\n");
-    header( "Content-Disposition: inline; filename=$file\n");
-}
-else
-{ 
-	//no information about filetype: force a download dialog window in browser
-	header( "Content-type: application/octet-stream\n");
-	header( "Content-Disposition: inline; filename=$file\n");
-}
-
-/**
- * Note that if you use these two headers from a previous example:
- * header('Cache-Control: no-cache, must-revalidate');
- * header('Pragma: no-cache');
- * before sending a file to the browser, the "Open" option on Internet Explorer's file download dialog will not work properly. If the user clicks "Open" instead of "Save," the target application will open an empty file, because the downloaded file was not cached. The user will have to save the file to their hard drive in order to use it. 
- * Make sure to leave these headers out if you'd like your visitors to be able to use IE's "Open" option.
- */
-header("Pragma: \n");
-header("Cache-Control: \n");
-header("Cache-Control: public\n"); // IE cannot download from sessions without a cache
-
-header("Content-Description: " . trim(htmlentities($file)) . "\n");
-header("Content-Transfer-Encoding: binary\n");
-header("Content-Length: " . filesize( $path)."\n" );
-
-/**
- * ========================================
- * SEND FILE
- * ========================================
- */
-$fp = fopen($path, "rb");
-fpassthru($fp);
-exit( );
-?>
+send_file_to_client($path, $file, null, true);
+exit;
