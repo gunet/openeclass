@@ -78,7 +78,7 @@ function send_file_to_client($real_filename, $filename, $disposition = null, $se
 	} else {
                 $filenameattr = '';
         }
-        // header("Content-type: $content_type$charset");
+        header("Content-type: $content_type$charset");
         if (isset($disposition)) {
                 header("Content-Disposition: $disposition$filenameattr");
         }
