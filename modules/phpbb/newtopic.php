@@ -205,7 +205,7 @@ if (isset($_POST['submit'])) {
         <form action='$_SERVER[PHP_SELF]?course=$code_cours&amp;topic=$topic&forum=$forum' method='post'>
         <fieldset>
           <legend>$langTopicData</legend>
-	  <table class='tbl'>
+	  <table class='tbl' width='100%'>
 	  <tr>
 	    <th>$langSubject:</th>
 	    <td><input type='text' name='subject' size='53' maxlength='100' /></td>
@@ -216,7 +216,7 @@ if (isset($_POST['submit'])) {
           </tr>
 	  <tr>
             <th>&nbsp;</th>
-	    <td>
+	    <td class='right'>
 	       <input class='Login' type='submit' name='submit' value='$langSubmit' />&nbsp;
 	       <input class='Login' type='submit' name='cancel' value='$langCancelPost' />
 	    </td>
