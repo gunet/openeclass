@@ -83,6 +83,19 @@ if ($private_forum and !($is_member or $is_adminOfCourse)) {
 if (isset($_GET['empty'])) {// if we come from newtopic.php
 	$tool_content .= "<p class='alert1'>$langEmptyNewTopic</p>";
 }
+
+if ($can_post) {
+	$tool_content .= " 	        
+	<div id='operations_container'> 	
+	<ul id='opslist'>
+	<li>
+	<a href='newtopic.php?course=$code_cours&amp;forum=$forum_id'>$langNewTopic
+	<img src='../../template/classic/img/newtopic.png' title='$langNewTopic' alt='$langNewTopic' />
+	</a>
+	</li>
+	</ul> 	         
+	</div>"; 	         
+}
 /*
 * Retrieve and present data from course's forum
 */
@@ -260,11 +273,6 @@ if (mysql_num_rows($result) > 0) { // topics found
 			$topic_icon = toggle_icon($topic_action_notify);
 		}
 		$tool_content .= "\n<td class='center'>";
-		if ($can_post) {
-			$tool_content .= "<a href='newtopic.php?course=$code_cours&amp;forum=$forum_id'>
-			<img src='../../template/classic/img/newtopic.png' title='$langNewTopic' alt='$langNewTopic' />
-			</a>";
-		}
 		if (isset($_GET['start']) and $_GET['start'] > 0) {
 			$tool_content .= "
 			<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;forum=$forum_id&amp;start=$_GET[start]&amp;topicnotify=$topic_link_notify&amp;topic_id=$myrow[topic_id]'>

@@ -88,12 +88,9 @@ if (isset($_GET['topic'])) {
 $sql = "SELECT f.forum_type, f.forum_name
 	FROM forums f, topics t 
 	WHERE (f.forum_id = '$forum') AND (t.topic_id = $topic) AND (t.forum_id = f.forum_id)";
-if (!$result = db_query($sql, $currentCourseID)) {
-	$tool_content .= "
-           <p class='caution'>$langErrorConnectForumDatabase</p>";
-	draw($tool_content, 2);
-	exit();
-}
+	
+$result = db_query($sql, $currentCourseID);
+	
 if (!$myrow = mysql_fetch_array($result)) {
         $tool_content .= "<p class='alert1'>$langErrorTopicSelect</p>";
 	draw($tool_content, 2);
@@ -168,6 +165,16 @@ if (isset($_SESSION['message'])) {
 	unset($_SESSION['message']);
 }
 
+$tool_content .= "<div id='operations_container'> 	
+	<ul id='opslist'>
+	<li><a href='reply.php?course=$code_cours&amp;topic=$topic&amp;forum=$forum'>";
+if($lock_state != 1) {	
+		$tool_content .= "<img src='../../template/classic/img/reply.png' title='$langAnswer' alt='$langAnswer' />";
+} else {
+	$tool_content .= "<img src='$reply_locked_image' alt='' />";
+}
+$tool_content .= "</a></li></ul></div>";
+	
 if ($paging and $total > $posts_per_page ) {
 	$times = 1;
 	$tool_content .= "
@@ -202,7 +209,7 @@ if ($paging and $total > $posts_per_page ) {
 
 	$tool_content .= "</span></strong></span></td>
 	<td align=\"right\">
-	<span class='pages'>$langGoToPage: &nbsp;&nbsp;";
+	<span class='pages'>";
 	if (isset($start) && $start > 0 ) {
 		$tool_content .= "\n<a href=\"$_SERVER[PHP_SELF]?course=$code_cours&amp;topic=$topic&amp;forum=$forum&amp;start=$last_page\">$langPreviousPage</a>&nbsp;|";
 	} else {
@@ -286,12 +293,6 @@ do {
 	  <br />$message<br />
 	</td>
 	<td width='40' valign='top'>";
-	if($lock_state != 1) {
-		$tool_content .= "<a href='reply.php?course=$code_cours&amp;topic=$topic&amp;forum=$forum'>
-		<img src='../../template/classic/img/reply.png' title='$langAnswer' alt='$langAnswer' /></a>";
-	} else {
-		$tool_content .= "<img src='$reply_locked_image' alt='' />";
-	}				
 	if ($is_adminOfCourse) { // course admin
 		$tool_content .= "<a href=\"editpost.php?course=$code_cours&amp;post_id=".$myrow["post_id"]."&amp;topic=$topic&amp;forum=$forum\">
 		<img src='../../template/classic/img/edit.png' title='$langModify' alt='$langModify' /></a>";
@@ -331,7 +332,7 @@ if ($paging and $total > $posts_per_page) {
 		$times++;
 	}
 	$tool_content .= "</span></strong></span></td>
-	<td><span class='pages'>$langGoToPage: &nbsp;&nbsp;";
+	<td><span class='pages'>";
 	if (isset($start) && $start > 0) {
 		$tool_content .= "\n<a href=\"$_SERVER[PHP_SELF]?course=$code_cours&amp;topic=$topic&amp;forum=$forum&amp;start=$last_page\">$langPreviousPage</a>&nbsp;|";
 	} else {

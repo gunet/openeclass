@@ -82,6 +82,19 @@ if ($is_adminOfCourse) {
 	';
 }
 
+if ($is_adminOfCourse) { 	
+         $tool_content .= " 	        
+	<div id='operations_container'> 	
+	<ul id='opslist'>
+	<li><a href='forum_admin.php?course=$code_cours'>$langAddCategory
+	<img src='../../template/classic/img/addcategory.png' title='$langAddCategory' alt='$langAddCategory' />
+	</a>
+	</li>
+	</ul> 	         
+	</div>"; 	         
+}
+ 
+ 
 if(isset($_GET['forumcatnotify'])) { // modify forum category notification
 	if (isset($_GET['cat_id'])) {
 		$cat_id = intval($_GET['cat_id']);
@@ -147,12 +160,10 @@ if ($total_categories) {
 		<th colspan='5'><b>$title</b></th>
 		<td width='80'>";
 		if ($is_adminOfCourse) {
-			$tool_content .= "<a href='forum_admin.php?course=$code_cours'>
-			<img src='../../template/classic/img/addcategory.png' title='$langAddCategory' alt='$langAddCategory' />
-			</a>
+			$tool_content .= "<a href='forum_admin.php?course=$code_cours&amp;forumgo=yes&amp;cat_id=$catNum'>
+			<img src='../../template/classic/img/newtopic.png' title='$langNewForum' alt='$langNewForum' /></a>
 			<a href='forum_admin.php?course=$code_cours&amp;forumcatedit=yes&amp;cat_id=$catNum'>
 			<img src='../../template/classic/img/edit.png' title='$langModify' alt='$langModify' /></a>
-			
 			<a href='forum_admin.php?course=$code_cours&amp;forumcatdel=yes&amp;cat_id=$catNum' onClick='return confirmation();'>
 			<img src='../../template/classic/img/delete.png' title='$langDelete' /></a>";
 		}
@@ -246,10 +257,7 @@ if ($total_categories) {
 					}
 					$tool_content .= "<td>";
 					if ($is_adminOfCourse) { // admin actions
-						$tool_content .= "<a href='forum_admin.php?course=$code_cours&amp;forumgo=yes&amp;cat_id=$catNum'>
-						<img src='../../template/classic/img/newtopic.png' title='$langNewForum' alt='$langNewForum' />
-						</a>
-						<a href='forum_admin.php?course=$code_cours&amp;forumgoedit=yes&amp;forum_id=$forum_id&amp;cat_id=$catNum'>
+						$tool_content .= "<a href='forum_admin.php?course=$code_cours&amp;forumgoedit=yes&amp;forum_id=$forum_id&amp;cat_id=$catNum'>
 						<img src='../../template/classic/img/edit.png' title='$langModify' />
 						</a>
 						<a href='forum_admin.php?course=$code_cours&amp;forumgodel=yes&amp;forum_id=$forum_id&amp;cat_id=$catNum' onClick='return confirmation();'>
