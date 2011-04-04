@@ -178,8 +178,8 @@ if ($total_categories) {
 		<td class='center'>$langLastPost</td>
 		<td class='center'>$langActions</td>
 		</tr>";
-			
-		reset($forum_row);
+		
+		@reset($forum_row);
 		// display forum topics
 		for ($x=0; $x < count($forum_row); $x++) {
 			unset($last_post);
@@ -278,7 +278,7 @@ if ($total_categories) {
 	}
 	
 } else {
-	$tool_content .= "\n<p class='alert1'>$langNoForums</p>";
+	$tool_content .= "<p class='alert1'>$langNoForums</p>";
 }
 add_units_navigation(true);
 if($is_adminOfCourse) {
