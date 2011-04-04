@@ -97,7 +97,7 @@ if ($res and mysql_num_rows($res) > 0) {
         }
 }
 if ($is_adminOfCourse) {
-        $edit_link = "&nbsp;<a href='../../modules/course_description/editdesc.php'><img src='../../template/classic/img/edit.png' title='$langEdit' alt='icon' /></a>";
+        $edit_link = "&nbsp;<a href='../../modules/course_description/editdesc.php'><img src='../../template/classic/img/edit.png' title='$langEdit' alt='$langEdit' /></a>";
 } else {
         $edit_link = '';
 }
@@ -150,7 +150,7 @@ if ($is_adminOfCourse) {
 // add course units
 if ($is_adminOfCourse) {
         $cunits_content .= "
-    <p class='descr_title'>$langCourseUnits: <a href='{$urlServer}modules/units/info.php'><img src='../../template/classic/img/add.png' width='16' height='16 alt='icon' title='$langAddUnit' alt='$langAddUnit' /></a></p>\n";
+    <p class='descr_title'>$langCourseUnits: <a href='{$urlServer}modules/units/info.php'><img src='../../template/classic/img/add.png' width='16' height='16' title='$langAddUnit' alt='$langAddUnit' /></a></p>\n";
 
 } else {
         $cunits_content .= "\n  <p class='descr_title'>$langCourseUnits</p>";
@@ -197,7 +197,7 @@ while ($cu = mysql_fetch_array($sql)) {
                 if ($is_adminOfCourse) { // display actions
                         $cunits_content .= "\n        <th width='16'>".
                                 "<a href='../../modules/units/info.php?edit=$cu[id]'>" .
-                                "<img src='../../template/classic/img/edit.png' title='$langEdit' /></a></td>" .
+                                "<img src='../../template/classic/img/edit.png' title='$langEdit' /></a></th>" .
                                 "\n        <th width='16'><a href='$_SERVER[PHP_SELF]?del=$cu[id]' " .
                                 "onClick=\"return confirmation('$langConfirmDelete');\">" .
                                 "<img src='../../template/classic/img/delete.png' " .
@@ -282,6 +282,22 @@ if ($is_adminOfCourse) {
 	$bar_content .= "\n           <li><b>$langUsers</b>: <a href='$urlAppend/modules/user/user.php'>$numUsers $langRegistered</a></li></ul>";
 }
 
+if ($is_adminOfCourse or
+    (isset($_SESSION['saved_statut']) and $_SESSION['saved_statut'] == 1)) {
+        if (isset($_SESSION['saved_statut'])) {
+                $button_message = $langStudentViewDisable;
+                $button_image = "switch_t";
+        } else {
+                $button_message = $langStudentViewEnable;
+                $button_image = "switch_s";
+        }
+        $toggle_student_view = "<form action='{$urlServer}student_view.php' method='post'>
+                <input id='view_btn' type='image' src='../../template/classic/img/$button_image.png' name='submit' title='$button_message'/>&nbsp;&nbsp;";
+        $toggle_student_view_close = '</form>';
+    } else {
+        $toggle_student_view = $toggle_student_view_close = '';
+}
+
 $tool_content .= "
 <div id='content_course'>
 
@@ -304,26 +320,10 @@ $tool_content .= "
         <table class='tbl_courseid' width='200'>
         <tr class='title1'>
           <td class='title1'>$langTools</td>
-        ";
-
-if ($is_adminOfCourse or
-    (isset($_SESSION['saved_statut']) and $_SESSION['saved_statut'] == 1)) {
-        if (isset($_SESSION['saved_statut'])) {
-                $button_message = $langStudentViewDisable;
-                $button_image = "switch_t";
-        } else {
-                $button_message = $langStudentViewEnable;
-                $button_image = "switch_s";
-        }
-        $tool_content .="
-          <td class='right' width='50'>
-            <form action='{$urlServer}student_view.php' method='post'>
-              <input id='view_btn' type='image' src='../../template/classic/img/$button_image.png' name='submit' title='$button_message'/>&nbsp;&nbsp;<a href='../../modules/contact/index.php' id='email_btn'><img src='../../template/classic/img/email.png' alt='icon' title='$langContactProf' /></a>
-            </form>
-          </td>";
-}
-        $tool_content .= "
-          <td class='left' width='45'><a href='$_SERVER[PHP_SELF]' title='" . q($intitule) . "' class='jqbookmark'><img src='${urlServer}template/classic/img/bookmark.png' alt='Add as Bookmark' title='Add as Bookmark' /></a>&nbsp;&nbsp;<span class='feed'><a href='${urlServer}modules/announcements/rss.php?c=$currentCourseID'><img src='${urlServer}template/classic/img/feed.png' alt='RSS Feed' title='RSS Feed' /></a></span>&nbsp;</td>
+          <td class='left'>$toggle_student_view
+             <a href='../../modules/contact/index.php' id='email_btn'><img src='../../template/classic/img/email.png' alt='$langContactProf' title='$langContactProf' /></a>&nbsp;&nbsp;
+             <a href='$_SERVER[PHP_SELF]' title='" . q($intitule) . "' class='jqbookmark'><img src='${urlServer}template/classic/img/bookmark.png' alt='$langAddAsBookmark' title='$langAddAsBookmark' /></a>&nbsp;&nbsp;
+             <span class='feed'><a href='${urlServer}modules/announcements/rss.php?c=$currentCourseID'><img src='${urlServer}template/classic/img/feed.png' alt='$langRSSFeed' title='$langRSSFeed' /></a></span>&nbsp;$toggle_student_view_close</td>
         </tr>
         </table>
         <br />\n";

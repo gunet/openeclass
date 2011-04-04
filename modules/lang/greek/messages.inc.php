@@ -636,6 +636,8 @@ $langRegistered = "εγγεγραμμένοι";
 $langOneRegistered = "εγγεγραμμένος";
 $langIdentity = "Ταυτότητα Μαθήματος";
 $langCourseS = "μάθημα";
+$langRSSFeed = 'Ροή RSS';
+$langAddAsBookmark = 'Προσθήκη στους σελιδοδείκτες';
 
 /*********************************************
 * course_info.php
