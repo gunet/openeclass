@@ -126,7 +126,7 @@ if(isset($_GET['forumcatnotify'])) { // modify forum category notification
 /*
 * Populate data with forum categories
 */
-$sql = "SELECT c.cat_id, c.cat_title FROM catagories c ORDER BY c.cat_id DESC";
+$sql = "SELECT c.cat_id, c.cat_title FROM catagories c ORDER BY c.cat_id";
 
 $result = db_query($sql, $currentCourseID); 
 $total_categories = mysql_num_rows($result);
