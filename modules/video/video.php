@@ -89,7 +89,7 @@ if (isset($_GET['action']) and $_GET['action'] == "download") {
 		send_file_to_client($real_file, my_basename($id));
 		exit;
 	} else {
-		header("Refresh: ${urlServer}modules/video/video.php");
+		header("Refresh: ${urlServer}modules/video/video.php?course=$code_cours");
 	}
 }
 
