@@ -269,14 +269,7 @@ if ($total_categories) {
 				}
 			} else {
 				$tool_content .= "<tr>";
-				if ($is_adminOfCourse) { // admin actions
-					$tool_content .= "<td colspan='5'>$langNoForumsCat</td>";
-					$tool_content .= "<td><a href='forum_admin.php?course=$code_cours&amp;forumgo=yes&amp;cat_id=$catNum'>
-					<img src='../../template/classic/img/newtopic.png' title='$langNewForum' alt='$langNewForum' />
-					</a></td>"; 
-				} else {
-					$tool_content .= "<td colspan='6'>$langNoForumsCat</td>";
-				}
+				$tool_content .= "<td colspan='6'>$langNoForumsCat</td>";
 				$tool_content .= "</tr>";
 				break;
 			}

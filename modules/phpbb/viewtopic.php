@@ -109,6 +109,7 @@ if (isset($_GET['delete'])) {
 		
 	db_query("DELETE FROM posts WHERE post_id = $post_id", $currentCourseID);
 	db_query("DELETE FROM posts_text WHERE post_id = $post_id", $currentCourseID);
+	db_query("UPDATE forums SET forum_posts = forum_posts-1 WHERE forum_id=$forum");
 	if ($last_post_in_thread == $this_post_time) {
 		$topic_time_fixed = $last_post_in_thread;
 		$sql = "UPDATE topics
@@ -122,12 +123,8 @@ if (isset($_GET['delete'])) {
 	}
 	$total = get_total_posts($topic, $currentCourseID, "topic");
 	if (get_total_posts($topic, $currentCourseID, "topic") == 0) {
-		$sql = "DELETE FROM topics WHERE topic_id = '$topic'";
-		if (!$r = db_query($sql, $currentCourseID)) {
-			$tool_content .= $langUnableDeleteTopic;
-			draw($tool_content, 2, '', $head_content);
-			exit();
-		}
+		db_query("DELETE FROM topics WHERE topic_id = '$topic'", $currentCourseID);
+		db_query("UPDATE forums SET forum_topics = forum_topics-1 WHERE forum_id= $forum");
 		header("Location: viewforum.php?forum=$forum");
 	}
 	sync($currentCourseID, $forum, 'forum');

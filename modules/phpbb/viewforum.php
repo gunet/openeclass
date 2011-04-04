@@ -180,20 +180,20 @@ $sql = "SELECT t.*, p.post_time, p.nom AS nom1, p.prenom AS prenom1
 
 $result = db_query($sql, $currentCourseID);
 
-// header
-$tool_content .= "
-     <table width='100%' class='tbl_alt'>
-     <tr>
-       <th colspan='2'>&nbsp;$langSubject</th>
-       <th width='70' class='center'>$langAnswers</th>
-       <th width='150' class='center'>$langSender</th>
-       <th width='80' class='center'>$langSeen</th>
-       <th width='200' class='center'>$langLastMsg</th>
-       <th width='70' class='center'>$langActions</th>
-     </tr>";
+
 
 if (mysql_num_rows($result) > 0) { // topics found
-	$tool_content .= "";
+	// header
+	$tool_content .= "
+	<table width='100%' class='tbl_alt'>
+	<tr>
+	  <th colspan='2'>&nbsp;$langSubject</th>
+	  <th width='70' class='center'>$langAnswers</th>
+	  <th width='150' class='center'>$langSender</th>
+	  <th width='80' class='center'>$langSeen</th>
+	  <th width='200' class='center'>$langLastMsg</th>
+	  <th width='70' class='center'>$langActions</th>
+	</tr>";
         $i=0;
 	while($myrow = mysql_fetch_array($result)) {
                 if ($i%2==1) {
@@ -288,10 +288,6 @@ if (mysql_num_rows($result) > 0) { // topics found
 	} // end of while
 	$tool_content .= "</table>";
 } else {
-	$tool_content .= "<p class='alert1'>$langNoTopics";
-	if ($can_post) {
-		$tool_content .= " <a href='newtopic.php?course=$code_cours&amp;forum=$forum_id'>$langStartNewTopic</a>";
-	}
-	$tool_content .= "</p>";
+	$tool_content .= "<div class='alert1'>$langNoTopics</div>";
 }
 draw($tool_content, 2);
