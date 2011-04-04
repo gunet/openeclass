@@ -94,7 +94,7 @@ if (!empty($u))
     <form name='edituser' method='post' action='$_SERVER[PHP_SELF]'>
     <fieldset>
     <legend>$langEditUser: ".q($info[2])."</legend>
-    <table class='tbl'>
+    <table class='tbl' width='100%'>
     <tr>
       <th width='170' class='left'>$langSurname:</th>
       <td><input type='text' name='lname' size='50' value='".q($info['nom'])."' /></td>
@@ -127,7 +127,7 @@ if (!empty($u))
 		$tool_content .= "
    <tr>
      <th class='left'>".$langUsername. "</th>
-     <td class='caution_small'>&nbsp;&nbsp;&nbsp;&nbsp;<b>".q($info['username'])."</b> [".$auth_text."] <input type='hidden' name='username' value='".q($info['username'])."' /> </td>
+     <td class='caution'>&nbsp;&nbsp;&nbsp;&nbsp;<b>".q($info['username'])."</b> [".$auth_text."] <input type='hidden' name='username' value='".q($info['username'])."' /> </td>
    </tr>";
 	}
 
@@ -169,7 +169,7 @@ $tool_content .= "
 	$tool_content .= "
      <tr>
        <th class='left'>$langRegistrationDate:</th>
-       <td><span style='color:green;font-weight:bold;'>".date("j/n/Y H:i",$info['registered_at'])."</span></td>
+       <td>".date("j/n/Y H:i",$info['registered_at'])."</td>
      </tr>
      <tr>
       <th class='left'>$langExpirationDate: </th>
@@ -183,8 +183,7 @@ $tool_content .= "
                 array('showOthers' => true,
                       'align' => 'Tl',
                       'ifFormat' => '%d-%m-%Y'),
-                array('style' => 'width: 15em; color: #840; background-color: #ff8; border: 1px solid #000; text-align: center',
-                      'name' => 'date',
+                array('name' => 'date',
                       'value' => $dateregistration));
 
 	$tool_content .= $start_cal."&nbsp;&nbsp;&nbsp;";
@@ -203,12 +202,12 @@ $tool_content .= "
 
 	$tool_content .= "</tr>
      <tr>
-       <th class='left'>$langUserID: </th>
+       <th>$langUserID: </th>
        <td>$u</td>
      </tr>
      <tr>
-       <th class='left'>&nbsp;</th>
-       <td>
+       <th>&nbsp;</th>
+       <td class='right'>
 	    <input type='hidden' name='u' value='$u' />
 	    <input type='hidden' name='u_submitted' value='1' />
 	    <input type='hidden' name='registered_at' value='".$info['registered_at']."' />
@@ -229,10 +228,10 @@ $tool_content .= "
 		{
 			$tool_content .= "
                         <p class='title1'>$langStudentParticipation</p>
-			<table class='tbl_alt' align='left' width='99%'>
+			<table class='tbl_alt' width='100%'>
 			<tr>
-                        <th width='1'>&nbsp;</th>
-			<th><div align='left'>$langLessonCode</div></th>
+                        
+			<th colspan='2'><div align='left'>$langLessonCode</div></th>
 			<th><div align='left'>$langLessonName</div></th>
 			<th>$langCourseRegistrationDate</th><th>$langProperty</th><th>$langActions</th>
 			</tr>";
@@ -248,7 +247,7 @@ $tool_content .= "
                                 }
 
 				$tool_content .= "
-                                        <td width='1'><img style='border:0px; margin:4px;' src='${urlServer}/template/classic/img/arrow.png' title='bullet'></td>
+                                        <td width='1'><img src='${urlServer}/template/classic/img/arrow.png' title='bullet'></td>
 					<td>".htmlspecialchars($logs[0])."</td>
 					<td>".htmlspecialchars($logs[1])."</td><td align='center'>";
 				if ($logs[2] == '0000-00-00')
@@ -336,7 +335,7 @@ $tool_content .= "
 		  exit();
 	      }
 	elseif(isset($user_exist) AND $user_exist == TRUE) {
-	       $tool_content .= "<table width='99%'><tbody><tr>
+	       $tool_content .= "<table width='100%'><tbody><tr>
 	       <td class='caution' height='60'><p>$langUserFree</p>
 	       <p><a href='$_SERVER[PHP_SELF]'>$langAgain</a></p></td></tr></tbody></table><br /><br />";
 	       draw($tool_content, 3, ' ', $head_content);
