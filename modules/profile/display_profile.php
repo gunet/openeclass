@@ -19,24 +19,28 @@ $userdata = array();
 if (isset($_GET['id'])) {
         $id = intval($_GET['id']);
 } else {
-        $navigation[] = array("url" => "profile.php", "name" => $langModifProfile);
+        $navigation[] = array('url' => 'profile.php', 'name' => $langModifProfile);
         $id = $uid;
 }
-        $sql = "SELECT nom, prenom, email, am, department, has_icon FROM user WHERE user_id = $id";
-        $userdata = db_query_get_single_row($sql);
-        $tool_content .= "<table width='100%' class='tbl_1'> <tr>";
-        $tool_content .= "<th rowspan='3' width='256'>" . profile_image($id, IMAGESIZE_LARGE, !$userdata['has_icon']);
-        $tool_content .= "</th>";        
-        $tool_content .= "<td>".q("$userdata[prenom] $userdata[nom]");
-        $tool_content .= "</td></tr><tr><td>";
-        if (!empty($userdata['email'])) {
-                $tool_content .= "&nbsp;($userdata[email])";
-        }
-        if (!empty($userdata['am'])) {
-                $tool_content .= "<br /><br />$langAm: " . q($userdata['am']);
-        }
-        $tool_content .= "</td></tr><tr>";
-        $tool_content .= "<td>$langFaculty: ".find_faculty_by_id($userdata['department']);
-        $tool_content .= "</td></tr></table>";
+$sql = "SELECT nom, prenom, email, am, department, has_icon, description FROM user WHERE user_id = $id";
+$userdata = db_query_get_single_row($sql);
+$tool_content .= "<table width='100%' class='tbl_1'>
+        <tr>
+            <td width='280'>" . profile_image($id, IMAGESIZE_LARGE, !$userdata['has_icon']) . "</td>
+            <td><b>" . q("$userdata[prenom] $userdata[nom]") . "</b><br>";
+if (!empty($userdata['email'])) {
+        $tool_content .= "<b>$langEmail:</b> " . mailto($userdata['email']) . "<br>";
+}
+if (!empty($userdata['am'])) {
+        $tool_content .= "<b>$langAm:</b> " . q($userdata['am']) . "<br>";
+}
+$tool_content .= "<b>$langFaculty:</b> " . find_faculty_by_id($userdata['department']) . "<br>";
+if (!empty($userdata['description'])) {
+        $tool_content .= standard_text_escape($userdata['description']);
+}
+$tool_content .= "
+            </td>
+        </tr>
+     </table>";
 
 draw($tool_content, 1);

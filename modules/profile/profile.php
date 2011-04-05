@@ -67,6 +67,7 @@ if (isset($_POST['submit'])) {
                               WHERE user_id = $uid");
         $all_ok = register_posted_variables(array(
                 'am_form' => false,
+                'desc_form' => false,
                 'email_form' => check_prof(),
                 'nom_form' => true,
                 'prenom_form' => true,
@@ -132,6 +133,7 @@ if (isset($_POST['submit'])) {
                                 username = " . autoquote($username_form) . ",
                                 email = " . autoquote($email_form) . ",
                                 am = " . autoquote($am_form) . ",
+                                description = " . autoquote($desc_form) . ",
 				department = $department
                         WHERE user_id = $_SESSION[uid]")) {
                 $_SESSION['uname'] = $username_form;
@@ -181,8 +183,9 @@ if (isset($_GET['msg'])) {
 	$tool_content .=  "<p class='$type'>$message$urlText</p><br/>";
 }
 
-$result = db_query("SELECT nom, prenom, username, email, am, perso, lang, department, statut, has_icon
-                    FROM user WHERE user_id = $uid");
+$result = db_query("SELECT nom, prenom, username, email, am, perso,
+                           lang, department, statut, has_icon, description
+                        FROM user WHERE user_id = $uid");
 $myrow = mysql_fetch_array($result);
 
 $nom_form = q($myrow['nom']);
@@ -190,6 +193,7 @@ $prenom_form = q($myrow['prenom']);
 $username_form = q($myrow['username']);
 $email_form = q($myrow['email']);
 $am_form = q($myrow['am']);
+$desc_form = q($myrow['description']);
 $userLang = $myrow['lang'];
 $icon = $myrow['has_icon'];
 
@@ -356,9 +360,12 @@ $tool_content .= "
         <tr>
           <th>$message_pic</th>
           <td>$picture<input type='file' name='userimage' size='30'></td>
-        </tr>";
-$tool_content .= $delete;
-$tool_content .= "
+        </tr>
+        $delete
+        <tr>
+          <th>$langDescription</th>
+          <td>" . rich_text_editor('desc_form', 5, 20, $desc_form) . "</td>
+        </tr>
         <tr> 
           <td>&nbsp;</td>
           <td><input type='submit' name='submit' value='$langModify' /></td>
@@ -367,4 +374,4 @@ $tool_content .= "
         </fieldset>
         </form>";
 
-draw($tool_content, 1);
+draw($tool_content, 1, null, $head_content);
