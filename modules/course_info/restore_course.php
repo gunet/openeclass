@@ -45,19 +45,19 @@ $version = 1;
 $encoding = 'ISO-8859-7';
 if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
         $tool_content .= "
-                <table width='100%'><caption>".$langFileSent."</caption><tbody>
+                <table width='100%' class='tbl'><caption>".$langFileSent."</caption>
                    <tr><td width='3%'>$langFileSentName</td><td>".$_FILES['archiveZipped']['name']."</td></tr>
                    <tr><td width='3%'>$langFileSentSize</td><td>".$_FILES['archiveZipped']['size']."</td></tr>
                    <tr><td width='3%'>$langFileSentType</td><td>".$_FILES['archiveZipped']['type']."</td></tr>
                    <tr><td width='3%'>$langFileSentTName</td><td>".$_FILES['archiveZipped']['tmp_name']."</td></tr>
-	        </tbody></table><br />
-                <table width='100%'><caption>$langFileUnzipping</caption><tbody>
+	        </table><br />
+                <table width='100%' class='tbl'><caption>$langFileUnzipping</caption><tbody>
                     <tr><td>".unpack_zip_show_files($_FILES['archiveZipped']['tmp_name'])."</td></tr>
                 </tbody></table><br />";
 } elseif (isset($_POST['send_path']) and isset($_POST['pathToArchive'])) {
         $pathToArchive = $_POST['pathToArchive'];
 	if (file_exists($pathToArchive)) {
-		$tool_content .= "<table width='99%'><caption>".$langFileUnzipping."</caption><tbody>";
+		$tool_content .= "<table width='100%' class='tbl'><caption>".$langFileUnzipping."</caption><tbody>";
 		$tool_content .= "<tr><td>".unpack_zip_show_files($pathToArchive)."</td></tr>";
 		$tool_content .= "<tbody></table><br />";
 	} else {
