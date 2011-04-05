@@ -44,7 +44,6 @@
  * 
  * - Dropbox_SentWork extends Dropbox_Work
  * 		. recipients	=> array of ["id"]["name"] lists the recipients of the work
- * 		// RH: Mailing: or mailing pseudo_id
  * - Dropbox_Person:
  * 		. userId
  * 		. receivedWork 	=> array of Dropbox_Work objects
@@ -520,7 +519,6 @@ class Dropbox_Person {
 		foreach ($this->sentWork as $w) {
 			db_query("DELETE FROM `".$dropbox_cnf["personTbl"]."` 
 				WHERE personId='".$this->userId."' AND fileId='".$w->id."'", $currentCourseID);
-			removeMoreIfMailing($w->id);  // RH: Mailing: see init1
 		}		
 		removeUnusedFiles();	//check for unused files
 
@@ -544,10 +542,7 @@ class Dropbox_Person {
 		//delete entries in person table concerning sent works
 		db_query("DELETE FROM `".$dropbox_cnf["personTbl"]."` 
 				WHERE personId='".$this->userId."' AND fileId='".$id."'", $currentCourseID);
-		
-		removeMoreIfMailing($id);  // RH: Mailing: see init1
 		removeUnusedFiles();	//check for unused files
 	}
 }
-
 ?>

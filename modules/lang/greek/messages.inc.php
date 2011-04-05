@@ -943,31 +943,10 @@ $dropbox_lang['recipient'] = "τον παραλήπτη";
 $dropbox_lang['docAdd'] = "Το αρχείο στάλθηκε με επιτυχία";
 $dropbox_lang['fileDeleted'] = "Το επιλεγμένο αρχείο έχει διαγραφεί από το Χώρο Ανταλλαγής Αρχείων.";
 $dropbox_lang['backList'] = "Επιστροφή στο Χώρο Ανταλλαγής Αρχείων";
-$dropbox_lang['mailingAsUsername'] = "Mailing ";
-$dropbox_lang['mailingInSelect'] = "---Mailing---";
-$dropbox_lang['mailingSelectNoOther'] = "Η αποστολή μηνύματος δεν μπορεί να συνδιαστεί με αποστολή σε άλλους παραλήπτες";
-$dropbox_lang['mailingNonMailingError'] = "Mailing cannot be overwritten by non-mailing and vice-versa";
-$dropbox_lang['mailingNotYetSent'] = "Mailing content files have not yet been sent out...";
-$dropbox_lang['mailingSend'] = "Send content files";
-$dropbox_lang['mailingConfirmSend'] = "Send content files to individual destinations ?";
-$dropbox_lang['mailingBackToDropbox'] = "(back to Dropbox main window)";
-$dropbox_lang['mailingWrongZipfile'] = "Mailing must be zipfile with STUDENTID or LOGINNAME";
-$dropbox_lang['mailingZipEmptyOrCorrupt'] = "Mailing zipfile is empty or not a valid zipfile";
-$dropbox_lang['mailingZipPhp'] = "Mailing zipfile must not contain php files - it will not be sent";
-$dropbox_lang['mailingZipDups'] = "Mailing zipfile must not contain duplicate files - it will not be sent";
-$dropbox_lang['mailingFileFunny'] = "no name, or extension not 1-4 letters or digits";
-$dropbox_lang['mailingFileNoPrefix'] = "name does not start with ";
-$dropbox_lang['mailingFileNoPostfix'] = "name does not end with ";
-$dropbox_lang['mailingFileNoRecip'] = "name does not contain any recipient-id";
-$dropbox_lang['mailingFileRecipNotFound'] = "no such student with ";
-$dropbox_lang['mailingFileRecipDup'] = "multiple users have ";
-$dropbox_lang['mailingFileIsFor'] = "is for ";
-$dropbox_lang['mailingFileSentTo'] = "sent to ";
-$dropbox_lang['mailingFileNotRegistered'] = " (not registered for this course)";
-$dropbox_lang['mailingNothingFor'] = "Nothing for";
 $dropbox_lang['justUploadInSelect'] = "--- Ανέβασμα αρχείου ---";
 $dropbox_lang['justUploadInList'] = "Ανέβασμα αρχείου από τον/την";
 $dropbox_lang['mailingJustUploadNoOther'] = "Το ανέβασμα αρχείου δεν μπορεί να συνδυαστεί με αποστολή σε άλλους παραλήπτες";
+$dropbox_lang['mailtousers'] = "Να ειδοποιηθούν (μέσω email) οι χρήστες";
 
 /**********************************************************
 * exercice.php

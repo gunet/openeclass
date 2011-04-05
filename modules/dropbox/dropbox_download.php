@@ -34,26 +34,15 @@
  * 5. Send file
  * 
  */
- 
-require_once("dropbox_init1.inc.php");
+
+require_once("functions.php");
 require_once("dropbox_class.inc.php");
 include '../../include/lib/forcedownload.php';
 
-/**
- * ========================================
- * AUTHORISATION SECTION
- * ========================================
- */
 if (!isset($uid))
 {
     exit();
 }
-
-if (isset($_GET['mailing'])) 
-{
-	checkUserOwnsThisMailing($_GET['mailing'], $uid);
-}
-
 
 /**
  * ========================================
