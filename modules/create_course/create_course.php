@@ -181,7 +181,7 @@ if (isset($_POST['back1']) or !isset($_POST['visit'])) {
 	$tool_content .= "
     <fieldset>
       <legend>$langCreateCourseStep2Title</legend>
-      <table class='tbl' width=100%'>
+      <table class='tbl' width='100%'>
       <tr>
         <td>$langDescrInfo&nbsp;:<br /> ".  rich_text_editor('description', 4, 20, $description)."</td>
       </tr>
@@ -194,9 +194,8 @@ if (isset($_POST['back1']) or !isset($_POST['visit'])) {
 	<td class='right'><input type='submit' name='back1' value='&laquo; $langPreviousStep ' />&nbsp;<input type='submit' name='create3' value='$langNextStep &raquo;' /></td>
       </tr>
       </table>
-       </fieldset>
-    <div align='right' class='smaller'>$langFieldsOptionalNote</div>
     </fieldset>
+    <div align='right' class='smaller'>$langFieldsOptionalNote</div>
     <br />";
 
 }  elseif (isset($_POST['create3']) or isset($_POST['back2'])) {
@@ -217,7 +216,7 @@ if (isset($_POST['back1']) or !isset($_POST['visit'])) {
 	    <td>$langPublic</td>
 	  </tr>
 	  <tr class='smaller'>
-	    <th valign='top'><img src=\"../../template/classic/img/lock_registration.png\" title=\"".$m['legrestricted']."\" width=\"16\" height=\"16\" / > ".$m['legrestricted']."</th>
+	    <th valign='top'><img src=\"../../template/classic/img/lock_registration.png\" title=\"".$m['legrestricted']."\" width=\"16\" height=\"16\" /> ".$m['legrestricted']."</th>
 	    <td valign='top'><input name=\"formvisible\" type=\"radio\" value=\"1\" /></td>
 	    <td>
               $langPrivOpen<br />
