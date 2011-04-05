@@ -80,13 +80,13 @@ if (isset($_GET['action']) and $_GET['action'] == "download") {
 	$id = $_GET['id'];
 	$real_file = $webDir."/video/".$currentCourseID."/".$id;
 	if (strpos($real_file, '/../') === FALSE) {
-		$result = db_query ("SELECT url FROM video WHERE path = '$id'", $currentCourseID);
+                $result = db_query("SELECT url FROM video WHERE path = " .
+                                   autoquote($id), $currentCourseID);
 		$row = mysql_fetch_array($result);
-		if (!empty($row['url']))
-		{
+		if (!empty($row['url'])) {
 			$id = $row['url'];
 		}
-		send_file_to_client($real_file, my_basename($id));
+		send_file_to_client($real_file, my_basename($id), 'inline', true);
 		exit;
 	} else {
 		header("Refresh: ${urlServer}modules/video/video.php?course=$code_cours");

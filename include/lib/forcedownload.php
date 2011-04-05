@@ -286,7 +286,8 @@ function get_mime_type($filename)
                 'wm' => 'video/x-ms-wm',
                 'wmx' => 'video/x-ms-wmx',
                 'wmz' => 'application/x-ms-wmz',
-                'wmd' => 'application/x-ms-wmd');
+                'wmd' => 'application/x-ms-wmd',
+                'mp4' => 'video/mp4');
         $ext = get_file_extension($filename);
         if (isset($f[$ext])) {
                 return $f[$ext];
