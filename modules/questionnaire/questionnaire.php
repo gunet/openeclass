@@ -217,7 +217,7 @@ global $tool_content, $currentCourse, $code_cours, $langCreatePoll, $langPollsAc
                         <td class='center'>".nice_format(date("Y-m-d", strtotime($thepoll["end_date"])))."</td>";
 					if ($is_adminOfCourse)  {
 						$tool_content .= "
-                        <td class='center'><a href='addpoll.php?course=$code_cours&amp;edit=yes&pid=$pid'><img src='../../template/classic/img/edit.png' title='$langEdit' border='0' /></a>&nbsp;<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;delete=yes&pid=$pid' onClick='return confirmation();'><img src='../../template/classic/img/delete.png' title='$langDelete' border='0' /></a>&nbsp;<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;visibility=$visibility_func&pid={$pid}'><img src='../../template/classic/img/".$visibility_gif.".gif' border='0' title=\"".$langVisible."\" /></a></td>
+                        <td class='center'><a href='addpoll.php?course=$code_cours&amp;edit=yes&pid=$pid'><img src='../../template/classic/img/edit.png' title='$langEdit' border='0' /></a>&nbsp;<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;delete=yes&pid=$pid' onClick='return confirmation();'><img src='../../template/classic/img/delete.png' title='$langDelete' border='0' /></a>&nbsp;<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;visibility=$visibility_func&pid={$pid}'><img src='../../template/classic/img/".$visibility_gif.".png' border='0' title=\"".$langVisible."\" /></a></td>
                       </tr>";
 					} else {
 						$tool_content .= "
