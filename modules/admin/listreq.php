@@ -90,13 +90,13 @@ switch ($show) {
 // -----------------------------------
 // display closed requests 
 // ----------------------------------
-if (!empty($show) && ($show=="closed")) {
-	if (!empty($id) && ($id>0)) {
+if (!empty($show) and $show == 'closed') {
+	if (!empty($id) and $id > 0) {
 		// restore request
 		$sql = db_query("UPDATE prof_request set status='1', date_closed=NULL WHERE rid='$id'");
-		$tool_content = "<p class=\"success\">$langReintroductionApplication</p>";
+		$tool_content = "<p class='success'>$langReintroductionApplication</p>";
 	} else {
-		$tool_content .= "<table class=\"tbl_alt\" width=\"100%\">";
+		$tool_content .= "<table class='tbl_alt' width='100%'>";
 		$tool_content .= table_header(1, $langDateClosed_small);
  		$sql = db_query("SELECT rid,profname,profsurname,profuname,profemail,proftmima,
 				profcomm, am, date_open, date_closed, comment
@@ -109,16 +109,17 @@ if (!empty($show) && ($show=="closed")) {
 	            	} else {
 	              		$tool_content .= "\n  <tr class=\"odd\">";
 	            	}
-	        	$tool_content .= "<td width=\"1\">
+	        	$tool_content .= "<td width='1'>
 			<img style='border:0px;' src='${urlServer}/template/classic/img/arrow.png' title='bullet'></td>";
-			$tool_content .= "<td>".htmlspecialchars($req['profname'])."&nbsp;".htmlspecialchars($req['profsurname'])."";
-			$tool_content .= "<td>".htmlspecialchars($req['proftmima'])."</td>";
-			$tool_content .= "<td align=\"center\">
+			$tool_content .= '<td>'.q($req['profname'])."&nbsp;".htmlspecialchars($req['profsurname'])."";
+			$tool_content .= '<td>'.q($req['profuname']).'</td>';
+			$tool_content .= '<td>'.find_faculty_by_id($req['proftmima']).'</td>';
+			$tool_content .= "<td align='center'>
 				<small>".nice_format(date("Y-m-d", strtotime($req['date_open'])))."</small></td>";
-            		$tool_content .= "<td align=\"center\">
+            		$tool_content .= "<td align='center'>
 				<small>".nice_format(date("Y-m-d", strtotime($req['date_closed'])))."</small></td>";
-			$tool_content .= "<td align=center>
-			<a href='$_SERVER[PHP_SELF]?id=$req[rid]&show=closed$reqtype'>$langRestore</a></td>\n  </tr>";
+			$tool_content .= "<td align='center'>
+			<a href='$_SERVER[PHP_SELF]?id=$req[rid]&amp;show=closed$reqtype'>$langRestore</a></td>\n  </tr>";
 		$k++;
 		}
 	}
@@ -158,7 +159,7 @@ if (!empty($show) && ($show=="closed")) {
                 	$tool_content .= "<td align=\"center\">
 				<small>".nice_format(date("Y-m-d", strtotime($req['date_closed'])))."</small></td>";
 			$tool_content .= "<td align=center>
-			<a href='$_SERVER[PHP_SELF]?id=$req[rid]&show=closed$reqtype'>$langRestore</a>
+			<a href='$_SERVER[PHP_SELF]?id=$req[rid]&amp;show=closed$reqtype'>$langRestore</a>
 			</td></tr>";
 			$k++;
 		}
