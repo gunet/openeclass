@@ -160,16 +160,17 @@ if (count($status) > 0) {
                         while ($ann = mysql_fetch_array($result)) {
                                         $content = standard_text_escape($ann['contenu']);
                                         if ($la%2==0) {
-                                                $tool_content .= "         <tr class='even'>\n";
+                                                $tool_content .= "<tr class='even'>\n";
                                         } else {
-                                                $tool_content .= "         <tr class='odd'>\n";
+                                                $tool_content .= "<tr class='odd'>\n";
                                         }
-                                        $tool_content .= "           <td width='16'><img src='${urlAppend}/template/classic/img/arrow.png' alt='' /></td>\n" .
-                                                         "           <td>" .  claro_format_locale_date($dateFormatLong, strtotime($ann['temps'])) ."&nbsp;(<span class='smaller'>$langCourse: <b>{$titles[$code]}</b> | $langTutor: <b>" . q($profs[$code]) . "</b></span>)<br />\n".
-                                                         "             <b>$ann[title]</b>\n".
-							 "             $content\n".
-                                                         "           </td>\n" .
-                                                         "         </tr>\n";
+                                        $tool_content .= "
+                        <td width='16'>
+                            <img src='${urlAppend}/template/classic/img/arrow.png' alt='' /></td>
+                        <td><b>" . q($ann['title']) . "</b><br>" . "<span class='smaller'>" .
+                            claro_format_locale_date($dateFormatLong, strtotime($ann['temps'])) .
+                            "&nbsp;($langCourse: <b>" . q($titles[$code]) . "</b>, $langTutor: <b>" .
+                            q($profs[$code]) . "</b></span>)<br />$content</td></tr>\n";
                                         $la++;
                                 }
                         }
