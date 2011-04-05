@@ -70,7 +70,19 @@ $paging = true;
 $next = 0;
 
 include_once("./config.php");
-include("functions.php"); 
+include("functions.php");
+
+$local_head = '
+<script type="text/javascript">
+function confirmation()
+{
+    if (confirm("'.$langConfirmDelete.'"))
+        {return true;}
+    else
+        {return false;}
+}
+</script>
+';
 
 $forum_id = intval($_GET['forum']);
 $is_member = false;
@@ -157,7 +169,29 @@ if ($total_topics > $topics_per_page) { // navigation
 	$tool_content .= "</td></tr></table>";
 }
 
-if(isset($_GET['topicnotify'])) { // modify topic notification
+// delete topic
+if (($is_adminOfCourse) and isset($_GET['topicdel'])) {
+	if (isset($_GET['topic_id'])) {
+		$topic_id = intval($_GET['topic_id']);
+	}
+	$number_of_posts = get_total_posts($topic_id, $currentCourseID, "topic");
+	$sql = db_query("SELECT posts_text.post_id AS post_id FROM posts_text, posts
+		WHERE posts.post_id = posts_text.post_id
+		AND posts.topic_id = $topic_id", $currentCourseID);
+	while ($r = mysql_fetch_array($sql)) {
+		db_query("DELETE FROM posts_text WHERE post_id = $r[post_id]");
+	}
+	db_query("DELETE FROM posts WHERE topic_id = $topic_id", $currentCourseID);
+	db_query("DELETE FROM topics WHERE topic_id = $topic_id", $currentCourseID);
+	db_query("UPDATE forums SET forum_topics = forum_topics-1
+		 WHERE forum_id = $forum_id", $currentCourseID);
+	db_query("UPDATE forums SET forum_posts = forum_posts-$number_of_posts
+		 WHERE forum_id = $forum_id", $currentCourseID);
+}
+
+
+// modify topic notification
+if(isset($_GET['topicnotify'])) { 
 	if (isset($_GET['topic_id'])) {
 		$topic_id = intval($_GET['topic_id']);
 	}
@@ -273,6 +307,12 @@ if (mysql_num_rows($result) > 0) { // topics found
 			$topic_icon = toggle_icon($topic_action_notify);
 		}
 		$tool_content .= "\n<td class='center'>";
+		if ($is_adminOfCourse) {
+			$tool_content .= "
+			<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;forum=$forum_id&amp;topic_id=$myrow[topic_id]&amp;topicdel=yes' onClick='return confirmation()'>
+			<img src='../../template/classic/img/delete.png' title='$langDelete' alt='$langDelete' />
+			</a>";
+		}
 		if (isset($_GET['start']) and $_GET['start'] > 0) {
 			$tool_content .= "
 			<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;forum=$forum_id&amp;start=$_GET[start]&amp;topicnotify=$topic_link_notify&amp;topic_id=$myrow[topic_id]'>
@@ -290,4 +330,4 @@ if (mysql_num_rows($result) > 0) { // topics found
 } else {
 	$tool_content .= "<div class='alert1'>$langNoTopics</div>";
 }
-draw($tool_content, 2);
+draw($tool_content, 2, '', $local_head);
