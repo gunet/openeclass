@@ -155,7 +155,6 @@ if ($is_adminOfCourse) {
 } else {
         $cunits_content .= "\n  <p class='descr_title'>$langCourseUnits</p>";
 }
-        //$cunits_content .= "</p>\n\n\n";
 if ($is_adminOfCourse) {
         list($last_id) = mysql_fetch_row(db_query("SELECT id FROM course_units
                                                    WHERE course_id = $cours_id AND `order` >= 0
@@ -172,62 +171,65 @@ $sql = db_query($query);
 $first = true;
 $count_index = 1;
 while ($cu = mysql_fetch_array($sql)) {
-                // Visibility icon
-                $vis = $cu['visibility'];
-                $icon_vis = ($vis == 'v')? 'visible.png': 'invisible.png';
-                $class1_vis = ($vis == 'i')? ' class="invisible"': '';
-                $class_vis = ($vis == 'i')? 'invisible': '';
-                $cunits_content .= "\n\n\n      <table ";
-                if ($is_adminOfCourse) {
-                    $cunits_content .= "class='tbl'";
-                } else {
-                    $cunits_content .= "class='tbl'";
-                }
-                $cunits_content .= " width='100%'>";
-                if ($is_adminOfCourse) {
-                $cunits_content .= "\n      <tr>".
-                                   "\n        <th width='3%' class='right'>&nbsp;<b>$count_index.</b>&nbsp;</th>" .
-                                   "\n        <th><a class=\"$class_vis\" href='${urlServer}modules/units/?id=$cu[id]'>" . q($cu['title']) . "</a></th>";
-                } else {
-                $cunits_content .= "\n      <tr>".
-                                   "\n        <th width='3%' class='right'>&nbsp;<b>$count_index.</b>&nbsp;</th>".
-                                   "\n        <th><a class=\"$class_vis\" href='${urlServer}modules/units/?id=$cu[id]'>" . q($cu['title']) . "</a></th>";
-                }
-
-                if ($is_adminOfCourse) { // display actions
-                        $cunits_content .= "\n        <th width='16'>".
-                                "<a href='../../modules/units/info.php?edit=$cu[id]'>" .
-                                "<img src='../../template/classic/img/edit.png' title='$langEdit' /></a></th>" .
-                                "\n        <th width='16'><a href='$_SERVER[PHP_SELF]?del=$cu[id]' " .
-                                "onClick=\"return confirmation('$langConfirmDelete');\">" .
-                                "<img src='../../template/classic/img/delete.png' " .
-                                "title='$langDelete' /></a></th>" .
-                                "\n        <th width='16'><a href='$_SERVER[PHP_SELF]?vis=$cu[id]'>" .
-                                "<img src='../../template/classic/img/$icon_vis' " .
-                                "title='$langVisibility' /></a></th>";
-                        if ($cu['id'] != $last_id) {
-                                $cunits_content .= "\n        <th width='16'><a href='$_SERVER[PHP_SELF]?down=$cu[id]'>" .
-                                "<img src='../../template/classic/img/down.png' title='$langDown' /></a></th>";
-                        } else {
-                                $cunits_content .= "\n        <th width='16'>&nbsp;&nbsp;&nbsp;&nbsp;</th>";
-                        }
-                        if (!$first) {
-                                $cunits_content .= "\n        <th width='16'><a href='$_SERVER[PHP_SELF]?up=$cu[id]'><img src='../../template/classic/img/up.png' title='$langUp' /></a></th>";
-                        } else {
-                                $cunits_content .= "\n        <th width='16'>&nbsp;&nbsp;&nbsp;&nbsp;</th>";
-                        }
-                }
-                $cunits_content .= "\n      </tr>\n      <tr>\n        <td ";
-                if ($is_adminOfCourse) {
-                    $cunits_content .= "colspan='7' $class1_vis>";
-                } else {
-                    $cunits_content .= "colspan='2'>";
-                }
-                $cunits_content .= standard_text_escape($cu['comments']) . "\n    </td>\n  </tr>\n" .
-                                   "\n  </table>\n";
-                $first = false;
-                $count_index++;
+        // Visibility icon
+        $vis = $cu['visibility'];
+        $icon_vis = ($vis == 'v')? 'visible.png': 'invisible.png';
+        $class1_vis = ($vis == 'i')? ' class="invisible"': '';
+        $class_vis = ($vis == 'i')? 'invisible': '';
+        $cunits_content .= "\n\n\n      <table ";
+        if ($is_adminOfCourse) {
+            $cunits_content .= "class='tbl'";
+        } else {
+            $cunits_content .= "class='tbl'";
         }
+        $cunits_content .= " width='100%'>";
+        if ($is_adminOfCourse) {
+        $cunits_content .= "\n      <tr>".
+                           "\n        <th width='3%' class='right'>&nbsp;<b>$count_index.</b>&nbsp;</th>" .
+                           "\n        <th><a class=\"$class_vis\" href='${urlServer}modules/units/?id=$cu[id]'>" . q($cu['title']) . "</a></th>";
+        } else {
+        $cunits_content .= "\n      <tr>".
+                           "\n        <th width='3%' class='right'>&nbsp;<b>$count_index.</b>&nbsp;</th>".
+                           "\n        <th><a class=\"$class_vis\" href='${urlServer}modules/units/?id=$cu[id]'>" . q($cu['title']) . "</a></th>";
+        }
+
+        if ($is_adminOfCourse) { // display actions
+                $cunits_content .= "\n        <th width='16'>".
+                        "<a href='../../modules/units/info.php?edit=$cu[id]'>" .
+                        "<img src='../../template/classic/img/edit.png' title='$langEdit' /></a></th>" .
+                        "\n        <th width='16'><a href='$_SERVER[PHP_SELF]?del=$cu[id]' " .
+                        "onClick=\"return confirmation('$langConfirmDelete');\">" .
+                        "<img src='../../template/classic/img/delete.png' " .
+                        "title='$langDelete' /></a></th>" .
+                        "\n        <th width='16'><a href='$_SERVER[PHP_SELF]?vis=$cu[id]'>" .
+                        "<img src='../../template/classic/img/$icon_vis' " .
+                        "title='$langVisibility' /></a></th>";
+                if ($cu['id'] != $last_id) {
+                        $cunits_content .= "\n        <th width='16'><a href='$_SERVER[PHP_SELF]?down=$cu[id]'>" .
+                        "<img src='../../template/classic/img/down.png' title='$langDown' /></a></th>";
+                } else {
+                        $cunits_content .= "\n        <th width='16'>&nbsp;&nbsp;&nbsp;&nbsp;</th>";
+                }
+                if (!$first) {
+                        $cunits_content .= "\n        <th width='16'><a href='$_SERVER[PHP_SELF]?up=$cu[id]'><img src='../../template/classic/img/up.png' title='$langUp' /></a></th>";
+                } else {
+                        $cunits_content .= "\n        <th width='16'>&nbsp;&nbsp;&nbsp;&nbsp;</th>";
+                }
+        }
+        $cunits_content .= "\n      </tr>\n      <tr>\n        <td ";
+        if ($is_adminOfCourse) {
+            $cunits_content .= "colspan='7' $class1_vis>";
+        } else {
+            $cunits_content .= "colspan='2'>";
+        }
+        $cunits_content .= standard_text_escape($cu['comments']) . "\n    </td>\n  </tr>\n" .
+                           "\n  </table>\n";
+        $first = false;
+        $count_index++;
+}
+if ($first and !$is_adminOfCourse) {
+        $cunits_content = '';
+}
 
 switch ($type){
 	case 'pre': { //pre
