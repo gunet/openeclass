@@ -77,7 +77,7 @@ $tool_content .= "
     <form action=\"listcours.php?search=yes\" method=\"post\">
     <fieldset>
       <legend>".$langSearchCriteria." ".@$newsearch."</legend>
-      <table width='99%' class='tbl'>
+      <table width='100%' class='tbl'>
       <tr>
         <th class='left' width='150'>$langTitle:</th>
         <td><input type=\"text\" name=\"formsearchtitle\" size=\"40\" value=\"".@$searchtitle."\"></td>
@@ -140,7 +140,7 @@ $tool_content .= "
 $tool_content .= "
       <tr>
         <th>&nbsp;</th>
-        <td><input type='submit' name='search_submit' value='$langSearch'></td>
+        <td class='right'><input type='submit' name='search_submit' value='$langSearch'></td>
       </tr>";
 $tool_content .= "
       </table>
