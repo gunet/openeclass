@@ -564,7 +564,7 @@ function actions($res_type, $resource_id, $status, $res_id = false)
 	}
 
         if ($res_type == 'description') {
-                $icon_vis = ($status == 'v')? 'checkbox_on.png': 'checkbox_off.png';
+                $icon_vis = ($status == 'v')? 'publish.png': 'unpublish.png';
                 $edit_link = "edit.php?numBloc=$res_id";
         } else {
                 $icon_vis = ($status == 'v')? 'visible.png': 'invisible.png';
