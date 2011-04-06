@@ -208,21 +208,18 @@ if (!isset($_POST['submit'])) {
 	$_SESSION['nom'] = $nom;
 	$_SESSION['uname'] = $uname;
 	// registration form
-	$tool_content .= "<table width='99%' class='tbl'><tr>" .
-			"<td class='well-done' height='60'>" .
-			"<p>$langDear " . q("$prenom $nom") . ",</p>" .
-			"<p>$langPersonalSettings</p></td>" .
-			"</tr></table><br /><br />" .
+	$tool_content .= "<p>$langDear " . q("$prenom $nom") . ",</p>" .
+			"<div class='success'>" .
+			"<p>$langPersonalSettings</p>" .
+			"</div>" .
 			"<p>$langPersonalSettingsMore</p>";
 	} else {
 		// errors exist - registration failed
-		$tool_content .= "<table width='100%' class='tbl'><tbody><tr>" .
-			"<td class='caution' height='60'>";
+		$tool_content .= "<p class='caution'>";
 		foreach ($registration_errors as $error) {
-			$tool_content .= "<p>$error</p>";
+			$tool_content .= "$error";
 		}
-		$tool_content .= "<p><a href='$_SERVER[PHP_SELF]?prenom_form=$_POST[prenom_form]&amp;nom_form=$_POST[nom_form]&amp;uname=$_POST[uname]&amp;email=$_POST[email]&amp;am=$_POST[am]'>$langAgain</a></p>" .
-				"</td></tr></tbody></table><br /><br />";
+		$tool_content .= "<p><a href='$_SERVER[PHP_SELF]?prenom_form=$_POST[prenom_form]&amp;nom_form=$_POST[nom_form]&amp;uname=$_POST[uname]&amp;email=$_POST[email]&amp;am=$_POST[am]'>$langAgain</a></p>";
 	}
 } // end of registration
 
