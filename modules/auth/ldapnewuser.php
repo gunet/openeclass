@@ -70,7 +70,7 @@ if (isset($_GET['p']) and ($_GET['p'] == true)) {
 if ($auth !=7 ) {
 	@$tool_content .= "
 	<tr>
-    <th width='150'>$langAuthUserName</th>
+    <th width='180'>$langAuthUserName</th>
     <td><input type='text' name='ldap_email' value='$ldap_email'></td>
   </tr>
   <tr>

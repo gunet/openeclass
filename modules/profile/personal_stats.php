@@ -97,23 +97,22 @@ if (!extension_loaded('gd')) {
     $tool_content .= "
         <fieldset>
 	<legend>$langPlatformGenStats</legend>
-	<table class='tbl' width='99%'>
+	<table width='100%'>
 	<tr>
 	  <th>$langTotalVisitsCourses:</th>
-	  <td>$totalHits</td>
+	  <td>$totalHits:</td>
 	</tr>
 	<tr>
 	  <th>$langDurationVisits:</th>
-	  <td>$totalDuration</td>
+	  <td>$totalDuration:</td>
 	</tr>
 	<tr>
 	  <th valign='top'>$langDurationVisitsPerCourse:</th>
 	  <td>
             <table class='tbl_alt' width='550'>
             <tr>
-              <th>&nbsp;</th>
-              <th class='left'>$langCourseTitle</th>
-              <th width='150'>$langDuration</th>
+              <th colspan='2'>$langCourseTitle</th>
+              <th width='160'>$langDuration</th>
             </tr>";
                 $i = 0;
                 foreach ($duration as $code => $time) {
@@ -126,9 +125,9 @@ if (!extension_loaded('gd')) {
                         }
                         $i++;
                         $tool_content .= "
-	      <td width='1'><img style='border:0px; padding-top:3px;' src='${urlServer}/template/classic/img/arrow.png' alt=''></td>
+	      <td width='16'><img src='${urlServer}/template/classic/img/arrow.png' alt=''></td>
 	      <td>" . course_code_to_title($code) . "</td>
-	      <td class='center'>" . format_time_duration(0 + $time) . "</td>
+	      <td width='140'>" . format_time_duration(0 + $time) . "</td>
             </tr>";
                 }
         $tool_content .= "
@@ -147,20 +146,19 @@ $leResultat = db_query($sql, $mysqlMainDb);
 
     $tool_content .= "
 	<tr>
-          <td valign=\"top\">$langLastVisits:</td>
+          <th valign=\"top\">$langLastVisits:</th>
           <td>";
 
     $tool_content .= "
             <table class=\"tbl_alt\" width='550'>
             <tr>
-              <th>&nbsp;</th>
-              <th class=\"left\">$langDate</th>
-              <th width='150'>$langAction</th>
+              <th colspan='2'>$langDate</th>
+              <th width='140'>$langAction</th>
             </tr>";
     $i = 0;
 
-    $nomAction["LOGIN"] = "<div align=\"center\"><font color=\"#008000\">$langLogIn</font></div>";
-    $nomAction["LOGOUT"] = "<div align=\"center\"><font color=\"#FF0000\">$langLogout</font></div>";
+    $nomAction["LOGIN"] = "<font color=\"#008000\">$langLogIn</font>";
+    $nomAction["LOGOUT"] = "<font color=\"#FF0000\">$langLogout</font>";
     $i=0;
     while ($leRecord = mysql_fetch_array($leResultat)) {
 	   $when = $leRecord["when"];
@@ -173,7 +171,7 @@ $leResultat = db_query($sql, $mysqlMainDb);
             <tr class=\"odd\">";
 	   }
 	   $tool_content .= "
-              <td width=\"1\"><img style='border:0px; padding-top:3px;' src='${urlServer}/template/classic/img/arrow.png' alt=''></td>
+              <td width=\"16\"><img src='${urlServer}/template/classic/img/arrow.png' alt=''></td>
               <td>".strftime("%d/%m/%Y (%H:%M:%S) ", strtotime($when))."</td>
               <td>".$nomAction[$action]."</td>
 	    </tr>";
