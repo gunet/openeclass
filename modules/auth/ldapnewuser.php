@@ -66,15 +66,15 @@ if (isset($_GET['p']) and ($_GET['p'] == true)) {
 @$tool_content .= "
 <fieldset>
 <legend>".$settings['auth_instructions']."</legend>
-  <table class='tbl'>";
+  <table class='tbl' width='100%'>";
 if ($auth !=7 ) {
 	@$tool_content .= "
 	<tr>
-    <td>$langAuthUserName</td>
+    <th>$langAuthUserName:</th>
     <td><input type='text' name='ldap_email' value='$ldap_email'></td>
   </tr>
   <tr>
-     <td>$langAuthPassword</td>
+     <th>$langAuthPassword:</th>
      <td><input type='password' name='ldap_passwd' value='$ldap_passwd'></td>
   </tr>";
 }
@@ -82,7 +82,7 @@ if ($auth !=7 ) {
 @$tool_content .= "
   <tr>
      <td>&nbsp;</td>
-     <td>
+     <td class='right'>
        <input type='hidden' name='auth' value='".$auth."'>";
 
 if ($auth != 7) {

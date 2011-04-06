@@ -164,7 +164,7 @@ $registration_errors = array();
 
             //------------------------------------User Message ----------------------------------------
             $tool_content .= "
-                    <p class='success'>$langDearProf<br />$success<br />$infoprof<br />
+                    <p class='success'>$langDearProf<br />$success<br />$infoprof<br /></p>
                     <p>&laquo; <a href='$urlServer'>$langBack</a></p>";
     }
 
