@@ -286,11 +286,11 @@ $tool_content .= "
 			if ($u > 1)
 			{
 				if (isset($logs))
-					$tool_content .= "<center>
-					<a href='unreguser.php?u=$u&amp;c=$logs[0]'>$langDelete</a></center>";
+					$tool_content .= "<p class='button'>
+					<a href='unreguser.php?u=$u&amp;c=$logs[0]'>$langDelete</a></p>";
 				else
-					$tool_content .= "<center>
-					<a href='unreguser.php?u=$u'>$langDelete</a></center>";
+					$tool_content .= "<p class='button'>
+					<a href='unreguser.php?u=$u'>$langDelete</a></p>";
 			}
 			else
 			{

@@ -63,18 +63,18 @@ if (!isset($_POST['changePass'])) {
 <fieldset>
   <legend>$lang_remind_pass</legend>
   <input type='hidden' name='userid' value='$_GET[userid]' />
-  <table class='tbl' width='99%'>
+  <table class='tbl' width='100%'>
   <tr>
-    <th class='left' width='140'>$langNewPass1</th>
+    <th class='left' width='160'>$langNewPass1:</th>
     <td><input type='password' size='40' name='password_form' value='' /></td>
   </tr>
   <tr>
-    <th class='left'>$langNewPass2</th>
+    <th class='left'>$langNewPass2:</th>
     <td><input type='password' size='40' name='password_form1' value='' /></td>
   </tr>
   <tr>
     <th class='left'>&nbsp;</th>
-    <td><input type='submit' name='changePass' value='$langModify' /></td>
+    <td class='right'><input type='submit' name='changePass' value='$langModify' /></td>
   </tr>
   </table>
 </fieldset>
@@ -95,7 +95,7 @@ if (!isset($_POST['changePass'])) {
 	$new_pass = md5($_POST['password_form']);
 	$sql = "UPDATE `user` SET `password` = '$new_pass' WHERE `user_id` = $userid";
 	db_query($sql, $mysqlMainDb);
-	$tool_content .= mes($langPassChanged, $langHome, 'success_small');
+	$tool_content .= mes($langPassChanged, $langHome, 'success');
 	draw($tool_content, 3);
 	exit();
 }
@@ -105,6 +105,6 @@ draw($tool_content, 3);
 function mes($message, $urlText, $type) {
 	global $urlServer, $langBack, $userid;
 
- 	$str = "<p class='$type'>$message<br /><a href='$urlServer'>$urlText</a><br /><a href='$_SERVER[PHP_SELF]?userid=$userid'>$langBack</a></p><br />";
+ 	$str = "<p class='$type'>$message</p><br /><a href='$_SERVER[PHP_SELF]?userid=$userid'>$langBack</a></p>";
 	return $str;
 }
