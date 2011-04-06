@@ -43,7 +43,7 @@ include '../../include/baseTheme.php';
 include 'auth.inc.php';
 
 $nameTools = $langNewUser;
-$tool_content .= "<p class='sub_title1'>$langUserAccount ";
+$tool_content .= "<p class='sub_title1'><img src='${urlServer}/template/classic/img/student.png' alt=''>&nbsp;&nbsp;$langUserAccount ";
 
 $auth = get_auth_active_methods();
 
@@ -79,7 +79,7 @@ if(!empty($auth)) {
         }
 }
 
-$tool_content .= "\n<p class='sub_title1'>".$langProfAccount." ".$langUserAccountInfo1."</p>";
+$tool_content .= "\n<p class='sub_title1'><img src='${urlServer}/template/classic/img/teacher.png' alt=''>&nbsp;&nbsp;".$langProfAccount." ".$langUserAccountInfo1."</p>";
 
 if(!empty($auth)) {
         $tool_content .= "<p><img src='${urlServer}/template/classic/img/arrow.png' title='bullet'  alt='bullet' />&nbsp;&nbsp;<a href='newprof.php'>$langNewAccount</a></p>";

@@ -67,38 +67,38 @@ if (!isset($_POST['submit'])) {
 	@$tool_content .= "<form action='$_SERVER[PHP_SELF]' method='post'>
         <fieldset>
         <legend>$langUserData</legend>
-	<table width='99%' align='left' class='tbl'>
+	<table width='100%' class='tbl'>
 	<tr>
-	<th class='left' width='180'>$langName</th>
+	<th class='left' width='180'>$langName:</th>
 	<td colspan='2'><input type='text' name='prenom_form' value='".$_GET['prenom_form']."' class='FormData_InputText' />&nbsp;&nbsp;<small>(*)</small></td>
 	</tr>
 	<tr>
-	<th class='left'>$langSurname</th>
+	<th class='left'>$langSurname:</th>
 	<td colspan='2'><input type='text' name='nom_form' value='".$_GET['nom_form']."' class='FormData_InputText' />&nbsp;&nbsp;<small>(*)</small></td>
 	</tr>
 	<tr>
-	<th class='left'>$langUsername</th>
+	<th class='left'>$langUsername:</th>
 	<td colspan='2'><input type='text' name='uname' value='".$_GET['uname']."' size='20' maxlength='20' class='FormData_InputText' />&nbsp;&nbsp;<small>(*) $langUserNotice</small></td>
 	</tr>
 	<tr>
-	<th class='left'>$langPass</th>
+	<th class='left'>$langPass:</th>
 	<td colspan='2'><input type='password' name='password1' size='20' maxlength='20' class='FormData_InputText' />&nbsp;&nbsp;<small>(*)</small></td>
 	</tr>
 	<tr>
-	<th class='left'>$langConfirmation</th>
+	<th class='left'>$langConfirmation:</th>
 	<td colspan='2'><input type='password' name='password' size='20' maxlength='20' class='FormData_InputText' />&nbsp;&nbsp;<small>(*) $langUserNotice</small></td>
 	</tr>
 	<tr>
-	<th class='left'>$langEmail</th>
+	<th class='left'>$langEmail:</th>
 	<td valign='top'><input type='text' name='email' value='".$_GET['email']."' class='FormData_InputText' /></td>
 	<td><small>$email_message</small></td>
 	</tr>
 	<tr>
-	<th class='left'>$langAm</th>
+	<th class='left'>$langAm:</th>
 	<td colspan='2' valign='top'><input type='text' name='am' value='".$_GET['am']."' class='FormData_InputText' />$am_message</td>
 	</tr>
 	<tr>
-	<th class='left'>$langFaculty</th>
+	<th class='left'>$langFaculty:</th>
 		<td colspan='2'><select name='department'>";
 	$deps = db_query("SELECT name, id FROM faculte ORDER BY id");
 	while ($dep = mysql_fetch_array($deps)) {
@@ -107,7 +107,7 @@ if (!isset($_POST['submit'])) {
 	$tool_content .= "\n</select>
 	</td></tr>
 	<tr>
-	<th class='left'>$langLanguage</th>
+	<th class='left'>$langLanguage:</th>
 	<td width='1'>";
 	$tool_content .= lang_select_options('localize');
 	$tool_content .= "</td>
@@ -115,14 +115,15 @@ if (!isset($_POST['submit'])) {
 	</tr>
 	<tr>
 	<th class='left'>&nbsp;</th>
-	<td colspan='2'>
+	<td colspan='2' class='right'>
 	<input type='submit' name='submit' value='".$langRegistration."' />
 	</td>
 	</tr>
 	</table>
-	<div align='right'><small>$langRequiredFields</small></div>
 	</fieldset>
-	</form>";
+	</form>
+<div class='right smaller'>$langRequiredFields</div>
+";
 } else {
 	if (get_config("email_required")) {
 		$email_arr_value = true;
