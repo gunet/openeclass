@@ -127,7 +127,7 @@ function jscal_html($name, $u_date = FALSE) {
            array('showsTime' => false,
                  'showOthers' => true,
                  'ifFormat' => '%Y-%m-%d'),
-           array('style' => 'width: 15em; color: #840; background-color: #fff; border: 1px dotted #000; text-align: center',
+           array('style' => '',
                  'name' => $name,
                  'value' => $u_date));
 	return $cal;
@@ -174,16 +174,16 @@ function printPollCreationForm() {
 
         <fieldset>
         <legend>$langSurvey</legend>
-	<table width=\"99%\" class='tbl'>
+	<table width=\"100%\" class='tbl'>
 	<tr>
-	  <th width='80'>$langTitle</th>
+	  <th width='100'>$langTitle:</th>
 	  <td><input type='text' size='50' name='PollName' value='$PollName'></td>
 	</tr>
 	<tr>
-	  <th>$langPollStart</th>
+	  <th>$langPollStart:</th>
 	  <td>$PollStart</td></tr>
 	<tr>
-	  <th>$langPollEnd</th>
+	  <th>$langPollEnd:</th>
 	  <td>$PollEnd</td>
 	</tr>
 	</table>
@@ -210,10 +210,10 @@ function printPollCreationForm() {
 	}
     	$tool_content .= '
         <hr />
-        <table width="99%" class="tbl">
+        <table width="100%" class="tbl">
 	<tr>
-	  <th width="80">&nbsp;</th>
-	  <td>
+	  <th>&nbsp;</th>
+	  <td class="right">
 	  <input type="submit" name="PollCreate" value="'.$nameTools.'">
 	  </td>
 	</tr>
@@ -299,7 +299,7 @@ function createPoll($questions, $question_types) {
 		mysql_real_escape_string($PollActive) ."')");
 	$pid = mysql_insert_id();
 	insertPollQuestions($pid, $questions, $question_types);
-	$tool_content .= "<p class='success'>".$langPollCreated."<br /><a href=\"questionnaire.php?course=$code_cours\">".$langBack."</a></p>";
+	$tool_content .= "<p class='success'>".$langPollCreated."</p><a href=\"questionnaire.php?course=$code_cours\">".$langBack."</a>";
 }
 
 
@@ -320,7 +320,7 @@ function editPoll($pid, $questions, $question_types) {
 		(SELECT pqid FROM poll_question WHERE pid='$pid')");
 	db_query("DELETE FROM poll_question WHERE pid='$pid'");
  	insertPollQuestions($pid, $questions, $question_types);
-	$tool_content .= "<p class='success'>".$langPollEdited."<br /><a href=\"questionnaire.php?course=$code_cours\">".$langBack."</a></p>";
+	$tool_content .= "<p class='success'>".$langPollEdited."</p><a href=\"questionnaire.php?course=$code_cours\">".$langBack."</a>";
 }
 
 
@@ -333,9 +333,9 @@ function add_multiple_choice_question($i, $text)
 
 	$tool_content .= "
         <hr />
-        <table width=\"99%\" class='tbl'>
+        <table width=\"100%\" class='tbl'>
 	<tr>
-	  <td width='80'><b>$langQuestion #" . ($i+1) ."</b>&nbsp;&nbsp;&nbsp;</td>
+	  <td width='150'><b>$langQuestion #" . ($i+1) ."</b>&nbsp;&nbsp;&nbsp;</td>
           <td> 
 	    <input type='text' name='question[$i]' value='$text' size='52' />" ."
 	    <input type='hidden' name='question_type[$i]' value='1' />&nbsp;($langPollMC)
@@ -379,9 +379,9 @@ function add_fill_text_question($i, $text)
 
 	$tool_content .= "
         <hr />
-        <table width=\"99%\" class='tbl'>
+        <table width=\"100%\" class='tbl'>
 	<tr>
-	  <td width=\"80\"><b>$langQuestion #" . ($i+1) ."</b></td>
+	  <td width=\"120\"><b>$langQuestion #" . ($i+1) ."</b></td>
 	  <td>
 	  <input type='text' name='question[$i]' value='$text' size='52' />" . "
 	  <input type='hidden' name='question_type[$i]' value='2'> ($langPollFillText)

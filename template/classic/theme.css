@@ -84,6 +84,11 @@ h5 {
     font-size:11px;
 }
 
+hr {
+    height: 1px;
+    color: #cccccc;
+}
+
 /* 2.2 Images */
 
 img, input[type=image] {
