@@ -53,12 +53,12 @@ if (isset($_GET['add'])) {
 			$emailbody = "$langNotifyRegUser1 '".course_id_to_title($cours_id). "' $langNotifyRegUser2 $langFormula \n$gunet";
 			send_mail('', '', '', $email, $emailsubject, $emailbody, $charset);
 		}	
-		$tool_content .= "<p class=\"success\">";
+		$tool_content .= "";
 		
 	if ($result) {
-		$tool_content .=  "$langTheU $langAdded";
+		$tool_content .=  "<p class=\"success\">$langTheU $langAdded</p>";
 	} else {
-		$tool_content .=  "$langAddError";
+		$tool_content .=  "<p class=\"alert1\">$langAddError</p>";
 	}
 		$tool_content .= "<br /><a href=\"adduser.php\">$langAddBack</a></p><br />\n";
 
@@ -74,25 +74,25 @@ if (isset($_GET['add'])) {
 
     <fieldset>
     <legend>$langUserData</legend>
-    <table width="99%" class="tbl">
+    <table width="100%" class="tbl">
     <tr>
       <td colspan='2'>$langAskUser<br /><br /></td>
     </tr>
     <tr>
-      <th class="left" width="180">$langSurname</th>
+      <th class="left" width="180">$langSurname:</th>
       <td><input type="text" name="search_nom" value="$search_nom" /></td>
     </tr>
 	<tr>
-      <th class="left">$langName</th>
+      <th class="left">$langName:</th>
       <td><input type="text" name="search_prenom" value="$search_prenom" /></td>
     </tr>
 	<tr>
-      <th class="left">$langUsername</th>
+      <th class="left">$langUsername:</th>
       <td><input type="text" name="search_uname" value="$search_uname"  /></td>
     </tr>
     <tr>
       <th class="left">&nbsp;</th>
-      <td><input type='submit' name='search' value='$langSearch' /></td>
+      <td class='right'><input type='submit' name='search' value='$langSearch' /></td>
     </tr>
     </table>
     </fieldset>
@@ -126,13 +126,13 @@ tCont;
 			} else {
 				$tool_content .= <<<tCont3
 
-    <table width=99% class="tbl">
+    <table width=100% class="tbl_alt">
     <tr>
-      <th class="right" width="2%">$langID</th>
-      <th class="left">$langName</th>
-      <th class="left">$langSurname</th>
-      <th class="left">$langUsername</th>
-      <th>$langActions</th>
+      <th width="20">$langID</th>
+      <th width="150">$langName</th>
+      <th width="150">$langSurname</th>
+      <th>$langUsername</th>
+      <th width="200">$langActions</th>
     </tr>
 tCont3;
 			$i = 1;
