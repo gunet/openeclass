@@ -56,7 +56,7 @@ if($is_adminOfCourse) {
 
     </fieldset>
     </form>
-    <p>$langAskManyUsers1<br />$langAskManyUsers2</p>";
+    <p class='noteit'>$langAskManyUsers1<br />$langAskManyUsers2</p>";
 
     mysql_select_db($mysqlMainDb);
     

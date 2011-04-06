@@ -622,13 +622,13 @@ fieldset table.th {
 }
 
 .noteit {
-	background-color:#fbdfdf;
-	border-top: 2px solid #f2804d;
-	border-bottom: 2px solid #f2804d;
+	background-color:#fffcd5;
+	border-top: 2px solid #ffd04f;
+	border-bottom: 2px solid #ffd04f;
 	padding: 10px 50px;
 	background-image:url(img/noteit.png); 
     background-repeat:no-repeat; 
-    background-position: left;
+    background-position: left top;
 }
 
 /* colors */ 
