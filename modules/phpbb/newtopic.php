@@ -186,8 +186,8 @@ if (isset($_POST['submit'])) {
 	$c = course_code_to_title($currentCourseID);
 	$forum_message = "-------- $langBodyMessage ($langSender: $prenom $nom)\n$message--------";
 	$plain_forum_message = html2text($forum_message);
-	$body_topic_notify = "$langBodyForumNotify $langInForums '$forum_name' $langInCat '$cat_name' $langTo $langCourseS '$c' <br /><br />$forum_message<br /><br />$gunet<br /><a href='{$urlServer}$currentCourseID'>{$urlServer}$currentCourseID</a>";
-	$plain_body_topic_notify = "$langBodyForumNotify $langInForums '$forum_name' $langInCat '$cat_name' $langTo $langCourseS '$c' \n\n$plain_forum_message \n\n$gunet\n<a href='{$urlServer}$currentCourseID'>{$urlServer}$currentCourseID</a>";
+	$body_topic_notify = "$langBodyForumNotify $langInForums '$forum_name' $langInCat '$cat_name' $langTo $langCourseS '$c' <br /><br />$forum_message<br /><br />$gunet<br /><a href='{$urlServer}courses/$currentCourseID'>{$urlServer}courses/$currentCourseID</a>";
+	$plain_body_topic_notify = "$langBodyForumNotify $langInForums '$forum_name' $langInCat '$cat_name' $langTo $langCourseS '$c' \n\n$plain_forum_message \n\n$gunet\n<a href='{$urlServer}courses/$currentCourseID'>{$urlServer}courses/$currentCourseID</a>";
 	while ($r = mysql_fetch_array($sql)) {
 		$emailaddr = uid_to_email($r['user_id']);
 		send_mail_multipart('', '', '', $emailaddr, $subject_notify, $plain_body_topic_notify, $body_topic_notify, $charset);

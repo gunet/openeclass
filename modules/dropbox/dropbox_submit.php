@@ -37,6 +37,7 @@
 
 require_once("functions.php");
 include "../../include/lib/forcedownload.php";
+include '../../include/sendMail.inc.php';
 $nameTools = $dropbox_lang["dropbox"];
 
 /**
@@ -77,23 +78,19 @@ $_SESSION['dropbox_uniqueid'] = $dropbox_uniqueid;
 require_once("dropbox_class.inc.php");
 
 /*
- * ========================================
- * FORM SUBMIT
- * ========================================
- * - VALIDATE POSTED DATA
- * - UPLOAD NEW FILE
- */
+ form submission
+*/
 if (isset($_POST["submitWork"]))
 {
 	$error = FALSE;
 	$errormsg = '';
 
-	if (!isset( $_POST['authors']) || !isset( $_POST['description']))
+	if (!isset($_POST['authors']) || !isset($_POST['description']))
 	{
 		$error = TRUE;
 		$errormsg = $dropbox_lang["badFormData"];
 	}
-	elseif ( !isset( $_POST['recipients']) || count( $_POST['recipients']) <= 0)
+	elseif (!isset( $_POST['recipients']) || count( $_POST['recipients']) <= 0)
 	{
 		$error = TRUE;
 		$errormsg = $dropbox_lang["noUserSelected"];
@@ -107,7 +104,6 @@ if (isset($_POST["submitWork"]))
 			{
 				$thisIsJustUpload = TRUE;
 			}
-			elseif ( !isCourseMember( $rec)) die( $dropbox_lang["badFormData"]);
 		}
 		if ($thisIsJustUpload && ( count($_POST['recipients']) != 1))
 		{
@@ -145,31 +141,38 @@ if (isset($_POST["submitWork"]))
 			die ($dropbox_lang["badFormData"]);
 		}
 
+		// set title
+		$dropbox_title = $dropbox_filename;
+		$format = get_file_extension($dropbox_filename);
+		$dropbox_filename = safe_filename($format);
+		// set author
+		if ($_POST['authors'] == '')
+		{
+			$_POST['authors'] = uid_to_name($uid);
+		}
+		if ($error) {}
+		elseif ($thisIsJustUpload)  // RH: $newWorkRecipients is empty array
+		{
+			$newWorkRecipients = array();
+		} else {
+			$newWorkRecipients = $_POST["recipients"];
+		}
+		//After uploading the file, create the db entries
 		if (!$error) {
-			// set title
-			$dropbox_title = $dropbox_filename;
-			$format = get_file_extension($dropbox_filename);
-                	$dropbox_filename = safe_filename($format);
-			// set author
-			if ($_POST['authors'] == '')
-			{
-				$_POST['authors'] = getUserNameFromId($uid);
-			}
-			if ($error) {}
-			elseif ($thisIsJustUpload)  // RH: $newWorkRecipients is empty array
-			{
-				$newWorkRecipients = array();
-			} else {
-				$newWorkRecipients = $_POST["recipients"];
-			}
-
-			//After uploading the file, create the db entries
-                        if (!$error) {
-                                $filename_final = $dropbox_cnf['sysPath'] . '/' . $dropbox_filename;
-				move_uploaded_file($dropbox_filetmpname, $filename_final)
-                                        or die($dropbox_lang["uploadError"]);
-                                @chmod($filename_final, 0644);
-				new Dropbox_SentWork($uid, $dropbox_title, $_POST['description'], $_POST['authors'], $dropbox_filename, $dropbox_filesize, $newWorkRecipients);
+			$subject_dropbox = "$logo - $dropbox_lang[newDropboxFile]";
+			$c = course_code_to_title($currentCourseID);
+			$filename_final = $dropbox_cnf['sysPath'] . '/' . $dropbox_filename;
+			move_uploaded_file($dropbox_filetmpname, $filename_final)
+				or die($dropbox_lang["uploadError"]);
+			@chmod($filename_final, 0644);
+			new Dropbox_SentWork($uid, $dropbox_title, $_POST['description'], $_POST['authors'], $dropbox_filename, $dropbox_filesize, $newWorkRecipients);
+			if (isset($_POST['mailing']) and $_POST['mailing']) {	// send mail to recipients of dropbox file
+				foreach($newWorkRecipients as $userid) {
+					$body_dropbox_message = "$langInCourses '$c' (<a href='{$urlServer}courses/$currentCourseID'>{$urlServer}courses/$currentCourseID</a>) $dropbox_lang[mailnotify] <br /><br />$gunet";
+					$plain_body_dropbox_message = "$langInCourses '$c' (\n<a href='{$urlServer}courses/$currentCourseID'>{$urlServer}courses/$currentCourseID</a>) $dropbox_lang[mailnotify] \n\n$gunet";
+					$emailaddr = uid_to_email($userid);
+					send_mail_multipart('', '', '', $emailaddr, $subject_dropbox, $plain_body_dropbox_message, $body_dropbox_message, $charset);	
+				}
 			}
 		}
 		chdir ($cwd);
@@ -234,12 +237,6 @@ if (isset($_GET['deleteReceived']) || isset($_GET['deleteSent']))
 			die($dropbox_lang["generalError"]);
 		}
 	}
-
-     /*
-     * ========================================
-     * DELETE FILE FEEDBACK
-     * ========================================
-     */
 	$tool_content .= "<p class=\"success\">".$dropbox_lang["fileDeleted"]."<br />
 	<a href='index.php?course=$code_cours'>".$dropbox_lang['backList']."</a></p><br/>";
 }

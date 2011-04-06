@@ -43,6 +43,8 @@ $langAboutCourses = "Η πλατφόρμα υποστηρίζει συνολικ
 $langAboutUsers = "H πλατφόρμα διαθέτει";
 $langOperation ="Λειτουργία";
 $langContactInfo = "Στοιχεία επικοινωνίας";
+$langInCourses = "Στο μάθημα";
+$langOfSite = "της πλατφόρμας";
 
 
 #For the logged-out user:
@@ -947,7 +949,8 @@ $dropbox_lang['justUploadInSelect'] = "--- Ανέβασμα αρχείου ---";
 $dropbox_lang['justUploadInList'] = "Ανέβασμα αρχείου από τον/την";
 $dropbox_lang['mailingJustUploadNoOther'] = "Το ανέβασμα αρχείου δεν μπορεί να συνδυαστεί με αποστολή σε άλλους παραλήπτες";
 $dropbox_lang['mailtousers'] = "Να ειδοποιηθούν (μέσω email) οι χρήστες";
-
+$dropbox_lang['mailnotify'] = "σας έχει αποσταλλεί ένα καινούριο αρχείο. Θα το βρείτε στο υποσύστημα 'Ανταλλαγή Αρχείων' αφού προηγουμένως κάνετε login στην πλατφόρμα.";
+$dropbox_lang['newDropboxFile'] = "Ειδοποίηση για καινούριο αρχείο";
 /**********************************************************
 * exercice.php
 **********************************************************/

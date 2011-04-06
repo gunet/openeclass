@@ -28,8 +28,8 @@ $require_current_course = TRUE;
 $guest_allowed = FALSE;
 $require_help = TRUE;
 $helpTopic = 'Dropbox';
-include_once '../../include/baseTheme.php';
-include_once "../../include/lib/fileUploadLib.inc.php";
+include '../../include/baseTheme.php';
+include "../../include/lib/fileUploadLib.inc.php";
 
 // javascript functions
 $head_content ='<script type="text/javascript">
@@ -72,17 +72,12 @@ $head_content ='<script type="text/javascript">
 $dropbox_cnf["postTbl"] = "dropbox_post";
 $dropbox_cnf["fileTbl"] = "dropbox_file";
 $dropbox_cnf["personTbl"] = "dropbox_person";
-$dropbox_cnf["introTbl"] = "tool_intro";
-$dropbox_cnf["userTbl"] = "user";
-$dropbox_cnf["courseUserTbl"] = "cours_user";
 
 /**
  * --------------------------------------
  *       INITIALISE OTHER VARIABLES & CONSTANTS
  * --------------------------------------
  */
-$dropbox_cnf["courseId"] = $currentCourseID;
-$dropbox_cnf["cid"] = $cours_id;
 $dropbox_cnf["sysPath"] = $webDir."courses/".$currentCourseID."/dropbox"; 
 if (!is_dir($dropbox_cnf["sysPath"])) {
 	mkdir($dropbox_cnf["sysPath"]);
@@ -99,55 +94,6 @@ if (get_config('dropbox_allow_student_to_student') == true) {
 }
 $basedir = $webDir . 'courses/' . $currentCourseID . '/dropbox';
 $diskUsed = dir_total_space($basedir);
-
-/*
-* returns username or false if user isn't registered anymore
-*/
-function getUserNameFromId ($id)  
-{
-    global $dropbox_cnf, $dropbox_lang, $mysqlMainDb;
-
-    $sql = "SELECT CONCAT(nom,' ', prenom) AS name
-		FROM `" . $dropbox_cnf["userTbl"] . "` WHERE user_id='" . addslashes($id) . "'";
-    $result = db_query($sql, $mysqlMainDb);
-    $res = mysql_fetch_array($result);
-    if ($res == FALSE) return FALSE;
-    return stripslashes($res["name"]);
-}
-
-/*
-* returns loginname or false if user isn't registered anymore
-*/
-function getLoginFromId ($id)
-{
-    global $dropbox_cnf, $dropbox_lang, $mysqlMainDb;
-
-    $sql = "SELECT username FROM `" . $dropbox_cnf["userTbl"] . "` WHERE user_id='" . addslashes($id) . "'";
-    $result = db_query($sql,$mysqlMainDb);
-    $res = mysql_fetch_array($result);
-    if ($res == FALSE) return FALSE;
-    return stripslashes( $res["username"]);
-}
-
-/*
-* returns boolean indicating if user with user_id=$id is a course member
-*/
-function isCourseMember($id)
-{
-    global $dropbox_cnf, $dropbox_lang, $mysqlMainDb;
-
-    $sql = "SELECT * FROM `" . $dropbox_cnf["courseUserTbl"] . "`
-		WHERE user_id = '" . addslashes( $id) . "' AND cours_id = '" . $dropbox_cnf["cid"] . "'";
-    $result = db_query($sql, $mysqlMainDb); 
-    if (mysql_num_rows($result) == 1)
-    {
-        return TRUE;
-    }
-    else
-    {
-        return FALSE;
-    }
-}
 
 /*
 * Checks if there are files in the dropbox_file table that aren't used anymore in dropbox_person table.

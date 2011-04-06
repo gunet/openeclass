@@ -95,7 +95,7 @@ class Dropbox_Work {
 		* Fill in the properties
 		*/
 		$this->uploaderId = $uploaderId; 
-		$this->uploaderName = getUserNameFromId($this->uploaderId);
+		$this->uploaderName = uid_to_name($this->uploaderId);
 		$this->filename = $filename;
 		$this->filesize = $filesize;
 		$this->title = $title;
@@ -199,7 +199,7 @@ class Dropbox_Work {
 		* Check if uploader is still in claroline system
 		*/
 		$uploaderId = stripslashes($res["uploaderId"]);    
-		$uploaderName = getUserNameFromId($uploaderId);
+		$uploaderName = uid_to_name($uploaderId);
 		if ($uploaderName == FALSE) {
 			//deleted user
 			$this->uploaderId = -1;
@@ -270,9 +270,7 @@ class Dropbox_SentWork extends Dropbox_Work {
 		if (! is_array($recipientIds) || count($recipientIds) == 0) die($dropbox_lang["generalError"]);
 		foreach ($recipientIds as $rec) {
 			if (empty($rec)) die($dropbox_lang["generalError"]);
-			//if (!isCourseMember($rec)) die(); //cannot sent document to someone outside of course
-				//this check is done when validating submitted data
-			$this->recipients[] = array("id"=>$rec, "name"=>getUserNameFromId($rec));
+			$this->recipients[] = array("id"=>$rec, "name"=>uid_to_name($rec));
 		}
 		
 		/*
@@ -322,7 +320,7 @@ class Dropbox_SentWork extends Dropbox_Work {
 			* check for deleted users
 			*/
 			$recipientId = $res["recipientId"];
-			$recipientName = getUserNameFromId($recipientId);
+			$recipientName = uid_to_name($recipientId);
 			if ($recipientName == FALSE) {
 				$this->recipients[] = array("id"=>-1, "name"=> $dropbox_lang["anonymous"]);
 			} else {
