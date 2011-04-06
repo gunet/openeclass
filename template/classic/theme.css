@@ -621,6 +621,16 @@ fieldset table.th {
     background-position: left;
 }
 
+.noteit {
+	background-color:#fbdfdf;
+	border-top: 2px solid #f2804d;
+	border-bottom: 2px solid #f2804d;
+	padding: 10px 50px;
+	background-image:url(img/noteit.png); 
+    background-repeat:no-repeat; 
+    background-position: left;
+}
+
 /* colors */ 
 
 .red {
