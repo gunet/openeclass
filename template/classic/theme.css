@@ -655,9 +655,12 @@ fieldset table.th {
    }
 
 .tbl_1 th {
-     background-color: #f0f0f0;
-     border: 1px dashed #dfdfdf;
-     vertical-align: top;
+    font-weight: bold;
+    color: #73849b;
+    text-align: center;
+    padding: 5px;
+    background-color: #f1f1f1;
+    border-bottom: 1px dashed #dfdfdf;
    }
 
 
@@ -1016,9 +1019,8 @@ a.unit_link_invisible:hover {
 }
 
 /* ----- START agenda ----- */
-.today1 {
-    background-color:#ffffff;
-    color: #FAEDED !important;
+.today {
+    background-color:#d9e5f5;
 }
 
 .monthLabel {
