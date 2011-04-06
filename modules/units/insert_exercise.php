@@ -43,7 +43,7 @@ function display_exercises()
         if (count($quizinfo) == 0) {
                 $tool_content .= "\n  <p class='alert1'>$langNoExercises</p>";
         } else {
-                $tool_content .= "\n  <form action='insert.php' method='post'><input type='hidden' name='id' value='$id'" .
+                $tool_content .= "\n  <form action='insert.php' method='post'><input type='hidden' name='id' value='$id'>" .
                                  "\n  <table width='99%' class='tbl_alt'>" .
                                  "\n  <tr>" .
                                  "\n    <th><div align='left'>&nbsp;$langExercices</div></th>" .
