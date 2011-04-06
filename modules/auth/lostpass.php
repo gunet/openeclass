@@ -71,26 +71,17 @@ if (isset($_GET['do']) and $_GET['do'] == 'go') {
 			$res = db_query("SELECT `email` FROM user WHERE `user_id` = ".$myrow['user_id']."", $mysqlMainDb);
 			$myrow2 = mysql_fetch_array($res);
 			$text = "$langPassEmail1 <em>$myrow[password]</em><br>$langPassEmail2";
-			$tool_content .= "
-                        <table width=\"99%\" class=\"tbl\">
-			<tr>
-                          <td class=\"success\">
+			$tool_content .= "<div class='success'>
                             <p>$langAccountResetSuccess1</p>
 			    <p>$text</p>
-    			    <p><a href=\"../../index.php\">$langHome</a></p>
-			  </td>
-			</tr>
-                        </table>";
+    			    <p><a href=\"../../index.php\">$langHome</a></p></div>";
 			db_query("DELETE FROM `passwd_reset` WHERE `user_id` = '$myrow[user_id]'", $mysqlMainDb);
 			// delete passws_reset entries older from 2 days
 			db_query("DELETE FROM `passwd_reset` 
 				WHERE DATE_SUB(CURDATE(),INTERVAL 2 DAY) > `datetime`", $mysqlMainDb);
 		}
 	} else {
-		$tool_content = "<table width=\"99%\" class=\"tbl\"><tr>
-		<td class=\"caution\">$langAccountResetInvalidLink <br /><a href=\"../../index.php\">$langHome</a></td>
-		</tr>
-		</table>";
+		$tool_content = "<div class='caution'>$langAccountResetInvalidLink </div><a href=\"../../index.php\">$langHome</a></td>";
 	}
 } elseif ((!isset($email) || !isset($userName) || empty($userName)) && !isset($_POST['do'])) {
 	/***** Email address entry form *****/
@@ -98,21 +89,20 @@ if (isset($_GET['do']) and $_GET['do'] == 'go') {
 	$tool_content .= "<form method='post' action='$_SERVER[PHP_SELF]'>
         <fieldset>
           <legend>$langUserData</legend>
-	  <table class='tbl'>
+	  <table class='tbl' width='100%'>
 	  <tr>
-            <td>$lang_username:</td>
+            <th width='100'>$lang_username:</th>
 	    <td><input type=\"text\" name=\"userName\" size=\"40\" /></td>
           </tr>
 	  <tr>
-	    <td>$lang_email: </td>
+	    <th>$lang_email: </th>
 	    <td><input type=\"text\" name=\"email\" size=\"40\" /></td>
           </tr>
           <tr>
             <td>&nbsp;</td>
-            <td><input type=\"submit\" name=\"do\" value=\"".$lang_pass_submit."\" /></td>
+            <td class='right'><input type=\"submit\" name=\"do\" value=\"".$lang_pass_submit."\" /></td>
           </tr>
 	  </table>
-	  <br/>
         </fieldset>
 	</form>";
 
@@ -173,15 +163,11 @@ if (isset($_GET['do']) and $_GET['do'] == 'go') {
 						break;
 					}
 				}
-				$tool_content = "<table width=\"99%\" class=\"tbl\">
-				<tr>
-                                  <td class=\"caution\">
+				$tool_content = "<div class='caution'>
 				    <p><strong>$langPassCannotChange1</strong></p>
 				    <p>$langPassCannotChange2 ".get_auth_info($auth).". $langPassCannotChange3 <a href='mailto:$emailhelpdesk'>$emailhelpdesk</a> $langPassCannotChange4</p>
 				    <p><a href=\"../../index.php\">$langHome</a></p>
-				  </td>
-				</tr>
-                                </table>";
+</div>";
 			}
 		}
 
@@ -189,45 +175,27 @@ if (isset($_GET['do']) and $_GET['do'] == 'go') {
         if ($found_editable_password) {
                 $emailsubject = $lang_remind_pass;
                 if (!send_mail('', '', '', $email, $emailsubject, $text, $charset)) {
-                        $tool_content = "<table width=\"99%\" class=\"tbl\">
-                                <tr>
-                                <td class=\"caution\">
+                        $tool_content = "<div class='caution'>
                                 <p><strong>$langAccountEmailError1</strong></p>
                                 <p>$langAccountEmailError2 $email.</p>
-                                <p>$langAccountEmailError3 <a href='mailto:$emailhelpdesk'>$emailhelpdesk</a>.</p>
-                                <p><a href=\"../../index.php\">$langHome</a></p>
-                                </td>
-                                </tr></table>";
+                                <p>$langAccountEmailError3 <a href='mailto:$emailhelpdesk'>$emailhelpdesk</a>.</p></div>
+                                <p><a href=\"../../index.php\">$langHome</a></p>";
                 } elseif (!isset($auth)) {
-                    $tool_content .= "<table width=\"99%\" class=\"tbl\">
-                                <tr>
-                                <td class=\"success\">$lang_pass_email_ok <strong>$email</strong><br/><br/><a href=\"../../index.php\">$langHome</a></td>
-                                </tr>
-                                </table><br/>";
+                    $tool_content .= "<div class='success'>$lang_pass_email_ok <strong>$email</strong><br/><br/><a href=\"../../index.php\">$langHome</a></div>";
                         }
                 }
        } else {
-		$tool_content .= "<table width=\"99%\" class=\"tbl\">
-		<tr>
-                  <td class=\"caution\">
+		$tool_content .= "<div class='caution'>
 		    <p><strong>$langAccountNotFound1 ($userName / $email)</strong></p>
-		    <p>$langAccountNotFound2 <a href='mailto: $emailhelpdesk'>$emailhelpdesk</a>, $langAccountNotFound3</p>
-		    <p><a href=\"../../index.php\">$langHome</a></p>
-		  </td>
-		</tr>
-		</table>";
+		    <p>$langAccountNotFound2 <a href='mailto: $emailhelpdesk'>$emailhelpdesk</a>, $langAccountNotFound3</p></div>
+		    <p><a href=\"../../index.php\">$langHome</a></p>";
         }
 } else {
-	$tool_content = "<table width=\"99%\" class=\"tbl\">
-	<tr>
-	  <td class=\"caution\">
+	$tool_content = "<div class='caution'>
 	    <p><strong>$langAccountEmailError1</strong></p>
 	    <p>$langAccountEmailError2 $email.</p>
-	    <p>$langAccountEmailError3 <a href='mailto:$emailhelpdesk'>$emailhelpdesk</a>.</p>
-	    <p><a href=\"../../index.php\">$langHome</a></p>
-	  </td>
-	</tr>
-	</table>";
+	    <p>$langAccountEmailError3 <a href='mailto:$emailhelpdesk'>$emailhelpdesk</a>.</p></div>
+	    <p><a href=\"../../index.php\">$langHome</a></p>";
 }
 draw($tool_content,0);
 ?>
