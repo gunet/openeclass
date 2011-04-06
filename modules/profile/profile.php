@@ -224,9 +224,9 @@ $tool_content .= "
    <form method='post' enctype='multipart/form-data' action='$sec'>
    <fieldset>
      <legend>$langUserData</legend>
-        <table class='tbl'>
+        <table class='tbl' width='100%'>
         <tr>
-          <th>$langName</th>";
+          <th>$langName:</th>";
 
 if (isset($_SESSION['shib_user'])) {
         $auth_text = "Shibboleth user";
@@ -248,7 +248,7 @@ if (isset($_SESSION['shib_user'])) {
 $tool_content .= "
         </tr>
         <tr>
-          <th>$langSurname</th>";
+          <th>$langSurname:</th>";
 if (isset($_SESSION['shib_user'])) {
         $auth_text = "Shibboleth user";
         $tool_content .= "
@@ -269,7 +269,7 @@ $tool_content .= "
 if ($allow_username_change) {
         $tool_content .= "
         <tr>
-          <th>$langUsername</th>
+          <th>$langUsername:</th>
           <td><input type='text' size='40' name='username_form' value='$username_form' /></td>
         </tr>";
 } else {
@@ -291,7 +291,7 @@ if ($allow_username_change) {
         }
         $tool_content .= "
         <tr>
-          <th class='left'>$langUsername</th>
+          <th class='left'>$langUsername:</th>
           <td><b>$username_form</b> [$auth_text]
             <input type='hidden' name='username_form' value='$username_form' />
           </td>
@@ -300,7 +300,7 @@ if ($allow_username_change) {
 
 $tool_content .= "
         <tr>
-          <th>$langEmail</th>";
+          <th>$langEmail:</th>";
 
 if (isset($_SESSION['shib_user'])) {
         $tool_content .= "
@@ -321,7 +321,7 @@ $tool_content .= "
 if (isset($_SESSION['perso_is_active'])) {
         $tool_content .= "
         <tr>
-          <th>$langPerso</th>
+          <th>$langPerso:</th>
           <td><input type=radio name='persoStatus' value='no'$checkedPerso />$langModern&nbsp;
               <input type=radio name='persoStatus' value='yes'$checkedClassic />$langClassic
           </td>
@@ -331,7 +331,7 @@ if (isset($_SESSION['perso_is_active'])) {
 
 $tool_content .= "
         <tr>
-          <th>$langFaculty</th>
+          <th>$langFaculty:</th>
           <td>";
 $tool_content .= list_departments($myrow['department']);
 $tool_content .= "</td>
@@ -341,7 +341,7 @@ $tool_content .= "</td>
 ##[END personalisation modification]############
 $tool_content .= "
         <tr>
-          <th>$langLanguage</th>
+          <th>$langLanguage:</th>
           <td>" . lang_select_options('userLanguage') . "</td>
         </tr>";
 if ($icon) {
@@ -363,12 +363,12 @@ $tool_content .= "
         </tr>
         $delete
         <tr>
-          <th>$langDescription</th>
+          <th>$langDescription:</th>
           <td>" . rich_text_editor('desc_form', 5, 20, $desc_form) . "</td>
         </tr>
         <tr> 
           <td>&nbsp;</td>
-          <td><input type='submit' name='submit' value='$langModify' /></td>
+          <td class='right'><input type='submit' name='submit' value='$langModify' /></td>
         </tr>
         </table>
         </fieldset>

@@ -24,9 +24,9 @@ if (isset($_GET['id'])) {
 }
 $sql = "SELECT nom, prenom, email, am, department, has_icon, description FROM user WHERE user_id = $id";
 $userdata = db_query_get_single_row($sql);
-$tool_content .= "<table width='100%' class='tbl_1'>
+$tool_content .= "<table class='tbl'>
         <tr>
-            <td width='280'>" . profile_image($id, IMAGESIZE_LARGE, !$userdata['has_icon']) . "</td>
+            <td>" . profile_image($id, IMAGESIZE_LARGE, !$userdata['has_icon']) . "</td>
             <td><b>" . q("$userdata[prenom] $userdata[nom]") . "</b><br>";
 if (!empty($userdata['email'])) {
         $tool_content .= "<b>$langEmail:</b> " . mailto($userdata['email']) . "<br>";
