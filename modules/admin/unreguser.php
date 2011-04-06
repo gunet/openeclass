@@ -58,15 +58,16 @@ $u_statut = get_uid_statut($u);
 $t = 0;
 
 if (!$doit) {
-        $tool_content .= "<p class='title1'>$langConfirmDelete</p><p>$langConfirmDeleteQuestion1 <em>$u_realname ($u_account)</em>";
+    $tool_content .= "<p class='title1'>$langConfirmDelete</p>
+        <div class='alert1'>$langConfirmDeleteQuestion1 <em>$u_realname ($u_account)</em>";
         if($c) {
-                $tool_content .= " $langConfirmDeleteQuestion2 <em>".q(course_id_to_title($c))."</em>";
+                $tool_content .= "<div class='alert1'> $langConfirmDeleteQuestion2 <em>".q(course_id_to_title($c))."</em>";
         }
-        $tool_content .= ";</p>
-                <ul>
-                <li>$langYes: <a href='$_SERVER[PHP_SELF]?u=$u&amp;c=$c&amp;doit=yes'>$langDelete</a><br />&nbsp;</li>
-                <li>$langNo: <a href='edituser.php?u=$u'>$langBack</a></li>
-                </ul>";
+        $tool_content .= ";</div>
+                
+                <p class='button'><a href='$_SERVER[PHP_SELF]?u=$u&amp;c=$c&amp;doit=yes'>$langDelete</a></p>
+                <div class='right'> <a href='edituser.php?u=$u'>$langBack</a></div>
+                ";
 } else {
         if (!$c) {
                 if ($u == 1) {

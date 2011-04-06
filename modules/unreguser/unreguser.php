@@ -33,17 +33,13 @@ $tool_content = "";
 
 if (!isset($_GET['doit']) or $_GET['doit'] != "yes") {
 	$tool_content .=  "
-        <table class='tbl'>
-	<tr>
-          <td class=\"caution\">";
+        <div class='caution'>";
 
 	// admin cannot be deleted
 	if ($is_admin) {
-		$tool_content .=  "<p><b>$langAdminNo</b></p>";
+		$tool_content .=  "$langAdminNo</div>";
 		$tool_content .=  "<p class='right'><a href='../profile/profile.php'>$langBack</a></p>";
-		$tool_content .= "</td>
-        </tr>
-        </table>\n";
+
 		draw($tool_content,1);
 		exit;
 	} else {
