@@ -48,33 +48,33 @@ if (!isset($_POST['submit'])) {
 
  <fieldset>
   <legend>$langUserData</legend>
-  <table class='tbl'> 
+  <table class='tbl' width='100%'> 
   <tr>
-    <th>$langName</th>
-    <td><input size='35' type='text' name='prenom_form' value='$prenom_form'>&nbsp;&nbsp;(*)</td>
+    <th>$langName:</th>
+    <td><input size='35' type='text' name='prenom_form' value='$prenom_form'>&nbsp;&nbsp;<small>(*)</small></td>
   </tr>
   <tr>
-   <th>$langSurname</th>
-   <td><input size='35' type='text' name='nom_form' value='$nom_form'>&nbsp;&nbsp;(*)</td>
+   <th>$langSurname:</th>
+   <td><input size='35' type='text' name='nom_form' value='$nom_form'>&nbsp;&nbsp;<small>(*)</small></td>
   </tr>
   <tr>
-    <th>$langPhone</th>
-    <td><input size='35' type='text' name='userphone' value='$userphone'>&nbsp;&nbsp;(*)</td>
+    <th>$langPhone:</th>
+    <td><input size='35' type='text' name='userphone' value='$userphone'>&nbsp;&nbsp;<small>(*)</small></td>
   </tr>
   <tr>
-    <th>$langUsername</th>
-    <td><input size='35' type='text' name='uname' value='$uname'>&nbsp;&nbsp;(*)</td>
+    <th>$langUsername:</th>
+    <td><input size='35' type='text' name='uname' value='$uname'>&nbsp;&nbsp;<small>(*)</small></td>
   </tr>
   <tr>
-    <th>$langEmail</th>
-    <td><input size='35' type='text' name='email_form' value='$email_form'>&nbsp;&nbsp;(*)</td>
+    <th>$langEmail:</th>
+    <td><input size='35' type='text' name='email_form' value='$email_form'>&nbsp;&nbsp;<small>(*)</small></td>
   </tr>
   <tr>
-    <th>$langComments</th>
-    <td><textarea name='usercomment' COLS='32' ROWS='4' WRAP='SOFT'>$usercomment</textarea>&nbsp;&nbsp;(*) $profreason</td>
+    <th>$langComments:</th>
+    <td><textarea name='usercomment' COLS='32' ROWS='4' WRAP='SOFT'>$usercomment</textarea>&nbsp;&nbsp;<small>(*) $profreason</small></td>
   </tr>
   <tr>
-    <th>$langFaculty</th>
+    <th>$langFaculty:</th>
     <td><select name='department'>";
         $deps=mysql_query("SELECT id, name FROM faculte order by id");
         while ($dep = mysql_fetch_array($deps))
@@ -85,24 +85,22 @@ if (!isset($_POST['submit'])) {
     </td>
   </tr>
 <tr>
-      <th>$langLanguage</th>
+      <th>$langLanguage:</th>
       <td>";
 	$tool_content .= lang_select_options('proflang');
 	$tool_content .= "</td>
     </tr>
   <tr>
     <th>&nbsp;</th>
-    <td>
+    <td class='right'>
       <input type='submit' name='submit' value='$langSubmitNew' />
       <input type='hidden' name='auth' value='1' />
     </td>
   </tr>
   </table>
- <div align='right'>$langRequiredFields</div>
  </fieldset>
 </form>
-
-<br>";
+<div class='right smaller'>$langRequiredFields</div>";
 
 } else {
 
@@ -171,11 +169,11 @@ $registration_errors = array();
     }
 
 	else	{  // errors exist - registration failed
-            $tool_content .= "<p class='caution'>";
+            $tool_content .= "<div class='caution'>";
                 foreach ($registration_errors as $error) {
-                        $tool_content .= "$error<br />";
+                        $tool_content .= "$error</div>";
                 }
-	       $tool_content .= "<a href='$_SERVER[PHP_SELF]?prenom_form=$_POST[prenom_form]&amp;nom_form=$_POST[nom_form]&amp;userphone=$_POST[userphone]&amp;uname=$_POST[uname]&amp;email_form=$_POST[email_form]&amp;usercomment=$_POST[usercomment]'>$langAgain</a><br />" .
+	       $tool_content .= "<p><a href='$_SERVER[PHP_SELF]?prenom_form=$_POST[prenom_form]&amp;nom_form=$_POST[nom_form]&amp;userphone=$_POST[userphone]&amp;uname=$_POST[uname]&amp;email_form=$_POST[email_form]&amp;usercomment=$_POST[usercomment]'>$langAgain</a>" .
                 "</p>";
 	}
 
