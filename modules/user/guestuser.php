@@ -39,13 +39,13 @@ if ($is_adminOfCourse) {
         if (isset($_POST['submit'])) {
                 $password = autounquote($_POST['guestpassword']);
                 createguest($default_guest_username, $cours_id, $password);
-                $tool_content .= "<p class='success_small'>$langGuestSuccess<br />" .
-                                 "<a href='user.php'>$langBackUser</a></p>";
+                $tool_content .= "<p class='success'>$langGuestSuccess</p>" .
+                                 "<a href='user.php'>$langBackUser</a>";
         } else {
                 $guest_info = guestinfo($cours_id);
                 if ($guest_info) {
                         $tool_content .= "
-                                <p class='caution_small'>$langGuestExist<br />
+                                <p class='caution'>$langGuestExist<br />
                                 <a href='user.php'>$langBackUser</a></p>";
                         $submit_label = $langModify;
                 } else {
@@ -55,13 +55,9 @@ if ($is_adminOfCourse) {
                         $submit_label = $langAdd;
                 }
                 $tool_content .= "<form method='post' action='$_SERVER[PHP_SELF]'>
-                <table class='FormData'>
-                <tbody>
-                <tr>
-                <th width='220'>&nbsp;</th>
-                <td><b>$langUserData</b></td>
-                <td>&nbsp;</td>
-                </tr>
+                    <fieldset>
+                    <legend>$langUserData</legend>
+                <table width='100%' class='tbl'>
                 <tr>
                 <th class='left'>$langName:</th>
                 <td>$guest_info[prenom]</td>
@@ -80,14 +76,18 @@ if ($is_adminOfCourse) {
                 <tr>
                 <th class='left'>$langPass:</th>
                 <td><input type='text' name='guestpassword' value='' class='FormData_InputText' /></td>
-                <td align='right'><small>$langAskGuest</small></td>
+                <td class='smaller'>$langAskGuest</td>
                 </tr>
                 <tr>
                 <th>&nbsp;</th>
-                <td><input type='submit' name='submit' value='$submit_label' /></td>
-                <td>&nbsp;</td>
+                <td class='right'>&nbsp;</td>
+                <td class='right'>
+                  <input type='submit' name='submit' value='$submit_label' />
+                </td>
                 </tr>
                 </table>
+                
+                </fieldset>
                 </form>";
         }
         draw($tool_content, 2);
