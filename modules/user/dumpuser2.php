@@ -42,26 +42,24 @@ if($is_adminOfCourse) {
 	
 	echo join(';', array_map("csv_escape", array($langSurname, $langName, $langEmail, $langAm, $langUsername, $langGroups))),
 	     $crlf;
-	$sql = db_query("SELECT  user.nom, user.prenom, user.email, user.am, user.username, user_group.team
-			FROM cours_user, user LEFT JOIN `$currentCourseID`.user_group ON `user`.user_id = user_group.user
-			WHERE `user`.`user_id` = `cours_user`.`user_id` AND `cours_user`.`cours_id` = $cours_id
-			ORDER BY user.nom,user.prenom", $mysqlMainDb);
+	$sql = db_query("SELECT user.user_id, user.nom, user.prenom, user.email, user.am, user.username
+			FROM cours_user, user
+				WHERE `user`.`user_id` = `cours_user`.`user_id`
+				AND `cours_user`.`cours_id` = $cours_id ORDER BY user.nom,user.prenom", $mysqlMainDb);
 	$r=0;
 	while ($r < mysql_num_rows($sql)) {
 		$a = mysql_fetch_array($sql);
 		echo "$crlf";
-		$f=0;
+		$f = 1;
 		while ($f < mysql_num_fields($sql)) {
-			if ($f > 0) {
+			if ($f > 1) {
 				echo ';';
 			}
-			if ($f == mysql_num_fields($sql)-1) {
-				echo csv_escape(gid_to_name($a[$f]));
-			} else {
-				echo csv_escape($a[$f]);
-			}
+			echo csv_escape($a[$f]);
 			$f++;
 		}
+		echo ';';
+		echo csv_escape(user_groups($cours_id, $a['user_id'], 'txt'));
 		$r++;
 	}
 	echo "$crlf";
