@@ -49,8 +49,8 @@ if (isset($_REQUEST['id'])) {
 define('EBOOK_DOCUMENTS', true);
 include '../document/doc_init.php';
 
-if (isset($_POST['delete'])) {
-        db_query("DELETE FROM ebook_section WHERE ebook_id = $ebook_id AND id = " . autoquote($_POST['delete']));
+if (isset($_GET['delete'])) {
+        db_query("DELETE FROM ebook_section WHERE ebook_id = $ebook_id AND id = " . intval($_GET['delete']));
 } elseif (isset($_POST['new_section_submit'])) {
         if (isset($_POST['csid'])) {
                 db_query("UPDATE ebook_section
@@ -168,16 +168,18 @@ if (mysql_num_rows($q) == 0) {
                                       "<input type='text size='3' name='new_section_id' value='$qsid' />";
                         $section_title = "<input type='text size='5' name='new_section_title' value='$qstitle' />";
                         $section_editing = true;
+                        $section_tools = "<input type='submit' name='new_section_submit' value='$langModify' />";
                 } else {
                         $section_id = $qsid;
                         $section_title = $qstitle;
+                        $section_tools = "<a href='edit.php?course=$currentCourseID&amp;id=$ebook_id&amp;delete=$sid' onclick=\"javascript:if(!confirm('".js_escape(sprintf($langEBookSectionDelConfirm, $section['title']))."')) return false;\"><img src='../../template/classic/img/delete.png' alt='$langDelete' title='$langDelete' /></a>&nbsp;<a href='edit.php?course=$currentCourseID&amp;id=$ebook_id&amp;s=$sid'><img src='../../template/classic/img/edit.png' alt='$langModify' title='$langModify' /></a>";
                 }
                 $class = odd_even($k);
                 $tool_content .= "
       <tr $class>
         <td class='right'>$section_id</td>
         <td>$section_title</td>
-        <td class='center'><input type='image' src='../../template/classic/img/delete.png' alt='$langDelete' title='$langDelete' name='delete' value='$sid' onclick=\"javascript:if(!confirm('".  js_escape(sprintf($langEBookSectionDelConfirm, $section['title'])) ."')) return false;\"" .  " /> &nbsp;<a href='edit.php?id=$ebook_id&amp;s=$sid'><img src='../../template/classic/img/edit.png' alt='$langModify' title='$langModify' /></a></td>
+        <td class='center'>$section_tools</td>
       </tr>";
         $k++;
         }
