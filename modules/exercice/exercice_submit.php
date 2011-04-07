@@ -50,9 +50,9 @@ include '../../include/lib/textLib.inc.php';
 
 $nameTools = $langExercicesView;
 $picturePath='../../courses/'.$currentCourseID.'/image';
- 
+
 if (isset($_GET['exerciseId'])) {
-	$exerciseId = $_GET['exerciseId'];
+	$exerciseId = intval($_GET['exerciseId']);
 }
 
 if (isset($exerciseId)) {
@@ -65,8 +65,8 @@ if (isset($exerciseId)) {
 	} 
 }
 
-if (!isset($_SESSION['exercise_begin_time'])) {
-	$_SESSION['exercise_begin_time'] = time();
+if (!isset($_SESSION['exercise_begin_time'][$exerciseId])) {
+	$_SESSION['exercise_begin_time'][$exerciseId] = time();
 }
 
 // if the user has clicked on the "Cancel" button
@@ -78,6 +78,7 @@ if(isset($_POST['buttonCancel'])) {
 	
 // if the user has submitted the form
 if (isset($_POST['formSent'])) {
+	$exerciseId = isset($_POST['exerciseId'])?intval($_POST['exerciseId']):'';
 	$exerciseType = isset($_POST['exerciseType'])?$_POST['exerciseType']:'';
 	$questionNum  = isset($_POST['questionNum'])?$_POST['questionNum']:'';
 	$nbrQuestions = isset($_POST['nbrQuestions'])?$_POST['nbrQuestions']:'';
@@ -85,20 +86,20 @@ if (isset($_POST['formSent'])) {
 	$eid_temp = isset($_POST['eid_temp'])?$_POST['eid_temp']:'';
 	$RecordStartDate = isset($_POST['RecordStartDate'])?$_POST['RecordStartDate']:'';
 	$choice = isset($_POST['choice'])?$_POST['choice']:'';
-	if (isset($_SESSION['exerciseResult'])) {
-		$exerciseResult = $_SESSION['exerciseResult'];
+	if (isset($_SESSION['exerciseResult'][$exerciseId])) {
+		$exerciseResult = $_SESSION['exerciseResult'][$exerciseId];
 	} else {
 		$exerciseResult = array();
 	}
-	
 	if (isset($exerciseTimeConstrain) and $exerciseTimeConstrain != 0) { 
 		$exerciseTimeConstrain = $exerciseTimeConstrain*60;
 		$exerciseTimeConstrainSecs = time() - $exerciseTimeConstrain;
-		$_SESSION['exercise_end_time'] = $exerciseTimeConstrainSecs;
-		if ($_SESSION['exercise_end_time'] - $_SESSION['exercise_begin_time'] > $exerciseTimeConstrain) {
+		$_SESSION['exercise_end_time'][$exerciseId] = $exerciseTimeConstrainSecs;
+	
+		if ($_SESSION['exercise_end_time'][$exerciseId] - $_SESSION['exercise_begin_time'][$exerciseId] > $exerciseTimeConstrain) {
 			unset($_SESSION['exercise_begin_time']);
 			unset($_SESSION['exercise_end_time']);
-			header('Location: exercise_redirect.php');
+			header('Location: exercise_redirect.php?exerciseId='.$exerciseId);
 			exit();
 		} 
 	}
@@ -126,13 +127,12 @@ if (isset($_POST['formSent'])) {
 			}
 		}
 	}
-
 	// the script "exercise_result.php" will take the variable $exerciseResult from the session
-	$_SESSION['exerciseResult'] = $exerciseResult;
+	$_SESSION['exerciseResult'][$exerciseId] = $exerciseResult;
 	// if it is the last question (only for a sequential exercise)
 	if($exerciseType == 1 || $questionNum >= $nbrQuestions) {
 		// goes to the script that will show the result of the exercise
-		header('Location: exercise_result.php');
+		header('Location: exercise_result.php?exerciseId='.$exerciseId);
 		exit();
 	}
 } // end of submit
@@ -141,14 +141,14 @@ if (!add_units_navigation()) {
 	$navigation[]=array("url" => "exercice.php","name" => $langExercices);
 }
 
-if (isset($_SESSION['objExercise'])) {
-	$objExercise = $_SESSION['objExercise'];
+if (isset($_SESSION['objExercise'][$exerciseId])) {
+	$objExercise = $_SESSION['objExercise'][$exerciseId];
 }
 
 // if the object is not in the session
-if(!isset($_SESSION['objExercise'])) {
+if(!isset($_SESSION['objExercise'][$exerciseId])) {
 	// construction of Exercise
-	$objExercise=new Exercise();
+	$objExercise = new Exercise();
 	// if the specified exercise doesn't exist or is disabled
 	if(!$objExercise->read($exerciseId) && (!$is_adminOfCourse)) {
 		$tool_content .= $langExerciseNotFound;
@@ -156,7 +156,7 @@ if(!isset($_SESSION['objExercise'])) {
 		exit();
 	}
 	// saves the object into the session
-	$_SESSION['objExercise'] = $objExercise;
+	$_SESSION['objExercise'][$exerciseId] = $objExercise;
 }
 
 $exerciseTitle = $objExercise->selectTitle();
@@ -186,14 +186,14 @@ if ($exerciseAllowedAttempts > 0 and $CurrentAttempt[0] > $exerciseAllowedAttemp
 	exit();
 }
 
-if (isset($_SESSION['questionList'])) {
-	$questionList = $_SESSION['questionList'];
+if (isset($_SESSION['questionList'][$exerciseId])) {
+	$questionList = $_SESSION['questionList'][$exerciseId];
 }
-if (!isset($_SESSION['questionList'])) {
+if (!isset($_SESSION['questionList'][$exerciseId])) {
 	// selects the list of question ID
 	$questionList = $objExercise->selectQuestionList();
 	// saves the question list into the session
-	$_SESSION['questionList'] = $questionList;
+	$_SESSION['questionList'][$exerciseId] = $questionList;
 }
 
 $nbrQuestions = sizeof($questionList);
@@ -227,6 +227,7 @@ $tool_content .= "
 
   <form method='post' action='$_SERVER[PHP_SELF]'>
   <input type='hidden' name='formSent' value='1' />
+  <input type='hidden' name='exerciseId' value='$exerciseId' />	
   <input type='hidden' name='exerciseType' value='$exerciseType' />	
   <input type='hidden' name='questionNum' value='$questionNum' />
   <input type='hidden' name='nbrQuestions' value='$nbrQuestions' />

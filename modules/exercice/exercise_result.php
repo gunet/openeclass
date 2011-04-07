@@ -47,13 +47,16 @@ $nameTools = $langExercicesResult;
 $navigation[] = array ("url"=>"exercice.php", "name"=> $langExercices);
 
 include('../../include/lib/textLib.inc.php');
+if (isset($_GET['exerciseId'])) {
+	$exerciseId = intval($_GET['exerciseId']);
+}
 
-if (isset($_SESSION['objExercise'])) {
-    $objExercise = $_SESSION['objExercise'];
+if (isset($_SESSION['objExercise'][$exerciseId])) {
+    $objExercise = $_SESSION['objExercise'][$exerciseId];
 }
 
 // if the above variables are empty or incorrect, stops the script
-if(!is_array($_SESSION['exerciseResult']) || !is_array($_SESSION['questionList']) || !is_object($objExercise)) {
+if(!is_array($_SESSION['exerciseResult'][$exerciseId]) || !is_array($_SESSION['questionList'][$exerciseId]) || !is_object($objExercise)) {
 	$tool_content .= $langExerciseNotFound;
 	draw($tool_content, 2);
 	exit();
@@ -82,9 +85,9 @@ $i=$totalScore=$totalWeighting=0;
 
 // for each question
 
-foreach($_SESSION['questionList'] as $questionId) {
+foreach($_SESSION['questionList'][$exerciseId] as $questionId) {
 	// gets the student choice for this question
-	$choice = @$_SESSION['exerciseResult'][$questionId];
+	$choice = @$_SESSION['exerciseResult'][$exerciseId][$questionId];
 	// creates a temporary Question object
 	$objQuestionTmp=new Question();
 	$objQuestionTmp->read($questionId);
@@ -115,19 +118,19 @@ foreach($_SESSION['questionList'] as $questionId) {
 	}
 	$iplus=$i+1;
 	$tool_content .= "
-    <br/>
-    <table width='100%' class='tbl'>
-    <tr class='odd'>
-      <td colspan='${colspan}'><b><u>$langQuestion</u>: $iplus</b></td>
-    </tr>
-    <tr>
-      <td class='even' colspan='${colspan}'>
-        <b>$questionName</b>
-        <br />
-        $questionDescription_temp
-        <br/><br/>
-      </td>
-    </tr>";
+	<br/>
+	<table width='100%' class='tbl'>
+	<tr class='odd'>
+	  <td colspan='${colspan}'><b><u>$langQuestion</u>: $iplus</b></td>
+	</tr>
+	<tr>
+	  <td class='even' colspan='${colspan}'>
+	    <b>$questionName</b>
+	    <br />
+	    $questionDescription_temp
+	    <br/><br/>
+	  </td>
+	</tr>";
 
 	$questionScore=0;
 

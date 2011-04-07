@@ -56,7 +56,6 @@ $navigation[]= array ("url"=>"exercice.php", "name"=> $langExercices);
 $picturePath='../../courses/'.$currentCourseID.'/image';
 // the 4 types of answers
 $aType=array($langUniqueSelect, $langMultipleSelect, $langFillBlanks, $langMatching, $langTrueFalse);
-
 // tables used in the exercise tool
 $TBL_EXERCICE_QUESTION='exercice_question';
 $TBL_EXERCICES='exercices';
@@ -106,6 +105,7 @@ if(@(!is_object($objExercise))) {
 	    $objExercise->read($exerciseId);
 	}
 	// saves the object into the session
+	//$_SESSION['objExercise'][$exerciseId] = $objExercise;
 	$_SESSION['objExercise'] = $objExercise;
 }
 
@@ -120,12 +120,11 @@ if(!isset($fromExercise)) {
 $nbrQuestions=$objExercise->selectNbrQuestions();
 
 // intializes the Question object
-
 if(isset($_GET['editQuestion']) || isset($_GET['newQuestion'])) {
     // construction of the Question object
     $objQuestion=new Question();
     // saves the object into the session
-    $_SESSION['objQuestion'] = $objQuestion;
+    $_SESSION['objQuestion'][$exerciseId] = $objQuestion;
     // reads question data
     if(isset($_GET['editQuestion'])) {
 	    // question not found
@@ -137,8 +136,8 @@ if(isset($_GET['editQuestion']) || isset($_GET['newQuestion'])) {
     }
 }
     
-if (isset($_SESSION['objQuestion'])) {
-    $objQuestion = $_SESSION['objQuestion'];
+if (isset($_SESSION['objQuestion'][$exerciseId])) {
+    $objQuestion = $_SESSION['objQuestion'][$exerciseId];
 }    
     
 if (isset($_GET['modifyQuestion']) || isset($_GET['modifyAnswers'])) {

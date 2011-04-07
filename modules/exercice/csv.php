@@ -28,7 +28,7 @@ $require_current_course = TRUE;
 include '../../include/init.php';
 
 // IF PROF ONLY
-if($is_adminOfCourse) {
+if ($is_adminOfCourse) {
 
 	header("Content-disposition: filename=".$currentCourse."_".$_GET['exerciseId']."_".date("Y-m-d").".xls");
 	header("Content-type: text/csv; charset=UTF-16");
@@ -42,9 +42,9 @@ if($is_adminOfCourse) {
 	$output .=  "$crlf";
 	
 	mysql_select_db($currentCourseID);
-	$sql="SELECT DISTINCT uid FROM `exercise_user_record` WHERE eid='".mysql_real_escape_string($_GET['exerciseId'])."'";
+	$sql="SELECT DISTINCT uid FROM `exercise_user_record` WHERE eid=".intval($_GET['exerciseId']);
 	$result = mysql_query($sql);
-	while($row=mysql_fetch_array($result)) {
+	while ($row=mysql_fetch_array($result)) {
 		$sid = $row['uid'];
 		$StudentName = db_query("select nom, prenom from user where user_id='$sid'", $mysqlMainDb);
 		$theStudent = mysql_fetch_array($StudentName);	
@@ -54,9 +54,9 @@ if($is_adminOfCourse) {
 		$sql2="SELECT DATE_FORMAT(RecordStartDate, '%Y-%m-%d / %H:%i') AS RecordStartDate, 
 			RecordEndDate, TIME_TO_SEC(TIMEDIFF(RecordEndDate,RecordStartDate)) AS TimeDuration, 
 			TotalScore, TotalWeighting 
-			FROM `exercise_user_record` WHERE uid='$sid' AND eid='".mysql_real_escape_string($_GET['exerciseId'])."'";
+			FROM `exercise_user_record` WHERE uid='$sid' AND eid=".intval($_GET['exerciseId']);
 		$result2 = mysql_query($sql2);
-		while($row2=mysql_fetch_array($result2)) {
+		while ($row2=mysql_fetch_array($result2)) {
 			$output .= csv_escape($prenom) ."\t";
 			$output .= csv_escape($nom) ."\t";
 			$RecordStartDate = $row2['RecordStartDate'];

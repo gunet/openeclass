@@ -46,7 +46,7 @@ if (isset($_GET['exerciseId'])) {
 }
 
 // if the object is not in the session
-if(!isset($_SESSION['objExercise'])) {
+if(!isset($_SESSION['objExercise'][$exerciseId])) {
 	// construction of Exercise
 	$objExercise = new Exercise();
 	// if the specified exercise doesn't exist or is disabled
@@ -57,8 +57,8 @@ if(!isset($_SESSION['objExercise'])) {
 	}
 }
 
-if (isset($_SESSION['objExercise'])) {
-	$objExercise = $_SESSION['objExercise'];
+if (isset($_SESSION['objExercise'][$exerciseId])) {
+	$objExercise = $_SESSION['objExercise'][$exerciseId];
 }
 
 $exerciseTitle=$objExercise->selectTitle();

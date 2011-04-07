@@ -72,6 +72,7 @@ else
 
 // shows the form to modify the exercise
 if(isset($_GET['modifyExercise']) or isset($_GET['NewExercise']) or !isset($_POST['submitExercise'])) {
+	//@$tool_content .= "<form method='post' action='$_SERVER[PHP_SELF]?modifyExercise=$exerciseId'>
 	@$tool_content .= "<form method='post' action='$_SERVER[PHP_SELF]?modifyExercise=$_GET[modifyExercise]'>
 	<fieldset>
         <legend>$langInfoExercise </legend>

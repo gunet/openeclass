@@ -48,8 +48,15 @@ $TBL_REPONSES='reponses';
 
 $navigation[]=array("url" => "exercice.php","name" => $langExercices);
 
+if (isset($_GET['exerciseId'])) {
+	$exerciseId = intval($_GET['exerciseId']);
+}
+
+if (isset($_SESSION['objExercise'][$exerciseId])) {
+	$objExercise = $_SESSION['objExercise'][$exerciseId];
+}
 // if the object is not in the session
-if(!isset($_SESSION['objExercise'])) {
+if(!isset($_SESSION['objExercise'][$exerciseId])) {
 	// construction of Exercise
 	$objExercise=new Exercise();
 	// if the specified exercise doesn't exist or is disabled
@@ -59,7 +66,7 @@ if(!isset($_SESSION['objExercise'])) {
 		exit();
 	}
 	// saves the object into the session
-	$_SESSION['objExercise'] = $objExercise;
+	$_SESSION['objExercise'][$exerciseId] = $objExercise;
 }
 
 $exerciseTitle = $objExercise->selectTitle();
