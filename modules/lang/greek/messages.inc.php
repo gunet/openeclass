@@ -1,6 +1,6 @@
 <?php
 /*========================================================================
-*   OpeneClass 2.1
+*   Open eClass 2.4
 *   E-learning and Course Management System
 * ========================================================================
 *  Copyright(c) 2003-2008  Greek Universities Network - GUnet
@@ -13,7 +13,7 @@
 *
 *  For a full list of contributors, see "credits.txt".
 *
-*  OpeneClass is an open platform distributed in the hope that it will
+*  Open eClass is an open platform distributed in the hope that it will
 *  be useful (without any warranty), under the terms of the GNU (General
 *  Public License) as published by the Free Software Foundation.
 *  The full license can be read in "/info/license/license_gpl.txt".
@@ -135,7 +135,7 @@ $langLastStud = "Τελευταία εγγραφή ".$langsOfStudent.":";
 $langAfterLastLogin = "Μετά την τελευταία σας είσοδο έχουν εγγραφεί στην πλατφόρμα:";
 $langAfterLastLoginInfo = "Στοιχεία μετά την τελευταία σας είσοδο:";
 $langOtherActions = "Άλλες Ενέργειες";
-$langTutorialDesc = "Επίσης, στον παρακάτω σύνδεσμο, θα βρείτε χρήσιμους οδηγούς λειτουργίας και διαχείρισης της πλατφόρμας OpeneClass με πρακτικά παραδείγματα που διευκολύνουν τόσο τους εκπαιδευτές και τους εκπαιδευόμενους όσο και τους υπεύθυνους διαχειριστές. Οι οδηγοί αυτοί είναι διαθέσιμοι σε 3 διαφορετικές μορφές: α) εικονογραφημένοι οδηγοί, β) βιντεοπαρουσιάσεις και γ) SCORM Packages.";
+$langTutorialDesc = "Επίσης, στον παρακάτω σύνδεσμο, θα βρείτε χρήσιμους οδηγούς λειτουργίας και διαχείρισης της πλατφόρμας Open eClass με πρακτικά παραδείγματα που διευκολύνουν τόσο τους εκπαιδευτές και τους εκπαιδευόμενους όσο και τους υπεύθυνους διαχειριστές. Οι οδηγοί αυτοί είναι διαθέσιμοι σε 3 διαφορετικές μορφές: α) εικονογραφημένοι οδηγοί, β) βιντεοπαρουσιάσεις και γ) SCORM Packages.";
 $langTutorial = "Χρήσιμοι Οδηγοί";
 // Stat
 $langStat4eClass = "Στατιστικά πλατφόρμας";
@@ -552,12 +552,12 @@ $langBackupEnd = "Ολοκληρώθηκε το αντίγραφο ασφαλε�
 * auth_methods.php
 **********************************************/
 $langViaeClass = "μέσω πλατφόρμας";
-$langViaPop = "με πιστοποίηση μέσω POP3";
-$langViaImap = "με πιστοποίηση μέσω IMAP";
-$langViaLdap = "με πιστοποίηση μέσω LDAP";
-$langViaDB = "με πιστοποίηση μέσω άλλης Βάσης Δεδομένων";
-$langViaShibboleth = "με πιστοποίηση μέσω Shibboleth";
-$langViaCAS = "με πιστοποίηση μέσω CAS Single Sign On";
+$langViaPop = "πιστοποίηση μέσω POP3";
+$langViaImap = "πιστοποίηση μέσω IMAP";
+$langViaLdap = "πιστοποίηση μέσω LDAP";
+$langViaDB = "πιστοποίηση μέσω άλλης Βάσης Δεδομένων";
+$langViaShibboleth = "πιστοποίηση μέσω Shibboleth";
+$langViaCAS = "πιστοποίηση μέσω CAS Single Sign On";
 $langHasActivate = "O τρόπος πιστοποίησης που επιλέξατε, έχει ενεργοποιηθεί";
 $langAlreadyActiv = "O τρόπος πιστοποίησης που επιλέξατε, είναι ήδη ενεργοποιημένος";
 $langCASnochange = "Πρέπει να κλείσετε τον browser σας για να αλλάξετε τις ρυθμίσεις του CAS";
@@ -599,8 +599,8 @@ $langNoGuest = "Οι χρήστες - επισκέπτες δεν μπορούν
 ******************************************************************/
 $langCopyright = "Πληροφορίες Πνευματικών Δικαιωμάτων";
 $langCopyrightNotice = '
-<a href="http://www.openeclass.org" target=_blank>OpeneClass</a> © 2003 - 2011<br>&nbsp;<br>
-Η πλατφόρμα '.$siteName.' βασίζεται στην ανοικτή πλατφόρμα <a href="http://www.openeclass.org" target=_blank>OpeneClass</a>
+<a href="http://www.openeclass.org" target=_blank>Open eClass</a> © 2003 - 2011<br>&nbsp;<br>
+Η πλατφόρμα '.$siteName.' βασίζεται στην ανοικτή πλατφόρμα <a href="http://www.openeclass.org" target=_blank>Open eClass</a>
 η οποία είναι ένα ολοκληρωμένο Σύστημα Διαχείρισης Ηλεκτρονικών Μαθημάτων και αποτελεί
 την πρόταση του Ακαδημαϊκού Διαδικτύου GUnet για την υποστήριξη της Υπηρεσίας
 Ασύγχρονης Τηλεκπαίδευσης. Aναπτύχθηκε και υποστηρίζεται ενεργά από την Ομάδα
@@ -1367,8 +1367,8 @@ $langCourseOptions = "Επιλογές Μαθήματος";
 /***********************************************************
 * install.php
 ***********************************************************/
-$langTitleInstall = "Οδηγός εγκατάστασης OpeneClass";
-$langWelcomeWizard = "Καλωσορίσατε στον οδηγό εγκατάστασης του OpeneClass!";
+$langTitleInstall = "Οδηγός εγκατάστασης Open eClass";
+$langWelcomeWizard = "Καλωσορίσατε στον οδηγό εγκατάστασης του Open eClass!";
 $langInstallProgress = "Πορεία εγκατάστασης";
 $langThisWizard = "Ο οδηγός αυτός:";
 $langWizardHelp1 = "Θα σας βοηθήσει να ορίσετε τις ρυθμίσεις για τη βάση δεδομένων";
@@ -1379,17 +1379,17 @@ $langOptionalPHP = "Προαιρετικά PHP modules";
 $langOtherReq = "Άλλες απαιτήσεις συστήματος";
 $langInstallBullet1 = "Μια βάση δεδομένων MySQL, στην οποία έχετε λογαριασμό με δικαιώματα να δημιουργείτε και να διαγράφετε βάσεις δεδομένων.";
 $langInstallBullet2 = "Δικαιώματα εγγραφής στον κατάλογο <tt>include/</tt>.";
-$langInstallBullet3 = "Δικαιώματα εγγραφής στον κατάλογο όπου το OpeneClass έχει αποσυμπιεστεί.";
-$langCheckReq = "Έλεγχος προαπαιτούμενων προγραμμάτων για τη λειτουργία του OpeneClass";
-$langInfoLicence = "Tο OpeneClass είναι ελεύθερη εφαρμογή και διανέμεται σύμφωνα με την άδεια GNU General Public Licence (GPL). <br />Παρακαλούμε διαβάστε την άδεια και κάνετε κλίκ στο 'Αποδοχή'";
+$langInstallBullet3 = "Δικαιώματα εγγραφής στον κατάλογο όπου το Open eClass έχει αποσυμπιεστεί.";
+$langCheckReq = "Έλεγχος προαπαιτούμενων προγραμμάτων για τη λειτουργία του Open eClass";
+$langInfoLicence = "Tο Open eClass είναι ελεύθερη εφαρμογή και διανέμεται σύμφωνα με την άδεια GNU General Public Licence (GPL). <br />Παρακαλούμε διαβάστε την άδεια και κάνετε κλίκ στο 'Αποδοχή'";
 $langAccept = "Αποδοχή";
 $langEG	= "π.χ.";
 $langDBLogin = "Όνομα Χρήστη για τη Βάση Δεδομένων";
 $langDBPassword	= "Συνθηματικό για τη Βάση Δεδομένων";
-$langMainDB = "Κύρια Βάση Δεδομένων του OpeneClass";
+$langMainDB = "Κύρια Βάση Δεδομένων του Open eClass";
 $langAllFieldsRequired	= "όλα τα πεδία είναι υποχρεωτικά";
 $langPrintVers = "Εκτυπώσιμη μορφή";
-$langLocalPath	= "Path του OpeneClass στον εξυπηρετητή";
+$langLocalPath	= "Path του Open eClass στον εξυπηρετητή";
 $langAdminEmail	= "Email Διαχειριστή";
 $langAdminName = "Όνομα Διαχειριστή";
 $langAdminSurname = "Επώνυμο Διαχειριστή";
@@ -1403,7 +1403,7 @@ $langInstituteShortName  = "Όνομα Ιδρύματος - Οργανισμού
 $langInstituteName = "Website Ιδρύματος - Οργανισμού";
 $langInstitutePostAddress = "Ταχ. Διεύθυνση Ιδρύματος - Οργανισμού";
 $langWarnHelpDesk = "Προσοχή: στο \"Email Helpdesk\" στέλνονται οι αιτήσεις καθηγητών για λογαριασμό στην πλατφόρμα";
-$langDBSettingIntro = "Το πρόγραμμα εγκατάστασης θα δημιουργήσει την κύρια βάση δεδομένων του OpeneClass. Έχετε υπ'όψιν σας ότι κατά τη λειτουργία της πλατφόρμας θα χρειαστεί να δημιουργηθούν νέες βάσεις δεδομένων (μία για κάθε μάθημα) ";
+$langDBSettingIntro = "Το πρόγραμμα εγκατάστασης θα δημιουργήσει την κύρια βάση δεδομένων του Open eClass. Έχετε υπ'όψιν σας ότι κατά τη λειτουργία της πλατφόρμας θα χρειαστεί να δημιουργηθούν νέες βάσεις δεδομένων (μία για κάθε μάθημα) ";
 $langStep1 = "Βήμα 1 από 6";
 $langStep2 = "Βήμα 2 από 6";
 $langStep3 = "Βήμα 3 από 6";
@@ -1423,26 +1423,26 @@ $langWarnConfig = "Προσοχή !! Το αρχείο <b>config.php</b> υπά�
 $langWarnConfig1 = "Το αρχείο <b>config.php</b> υπάρχει ήδη στο σύστημά σας";
 $langWarnConfig2 = "Αν θέλετε να ξανατρέξετε την εγκατάσταση της πλατφόρμας, παρακαλούμε διαγράψτε το αρχείο <b>config.php</b>";
 $langWarnConfig3 = "Το πρόγραμμα εγκατάστασης δεν πραγματοποιεί αναβάθμιση";
-$langErrorConfig = "<br><b>Παρουσιάστηκε σφάλμα!</b><br><br>Δεν είναι δυνατή η δημιουργία του αρχείου config.php.<br><br>Παρακαλούμε ελέγξτε τα δικαιώματα πρόσβασης στους υποκαταλόγους του OpeneClass και δοκιμάστε ξανά την εγκατάσταση.";
+$langErrorConfig = "<br><b>Παρουσιάστηκε σφάλμα!</b><br><br>Δεν είναι δυνατή η δημιουργία του αρχείου config.php.<br><br>Παρακαλούμε ελέγξτε τα δικαιώματα πρόσβασης στους υποκαταλόγους του Open eClass και δοκιμάστε ξανά την εγκατάσταση.";
 $langErrorMysql = "Η MySQL  δεν λειτουργεί ή το όνομα χρήστη/συνθηματικό δεν είναι σωστό.<br/>Παρακαλούμε ελέγξετε τα στοιχεία σας:";
 $langBackStep3 = "Επιστροφή στο βήμα 3";
 $langBackStep3_2 = "Eπιστρέψτε στο βήμα 3 για να τα διορθώσετε.";
 $langNotNeedChange = "Δεν χρειάζεται να το αλλάξετε";
 $langNeedChangeDB = "αν υπάρχει ήδη κάποια Β.Δ. με το όνομα eclass αλλάξτε το";
 $langWillWrite = "Τα παρακάτω θα γραφτούν στο αρχείο <b>config.php</b>";
-$langProtect = "Συμβουλή: Για να προστατέψετε το OpeneClass, αλλάξτε τα δικαιώματα πρόσβασης των αρχείων
+$langProtect = "Συμβουλή: Για να προστατέψετε το Open eClass, αλλάξτε τα δικαιώματα πρόσβασης των αρχείων
            <tt>/config/config.php</tt> και <tt>/install/index.php</tt> και
            επιτρέψτε μόνο ανάγνωση (CHMOD 444).";
-$langInstallSuccess = "Η εγκατάσταση ολοκληρώθηκε με επιτυχία! Κάντε κλίκ παρακάτω για να μπείτε στο OpeneClass";
-$langEnterFirstTime = "Είσοδος στο OpeneClass";
+$langInstallSuccess = "Η εγκατάσταση ολοκληρώθηκε με επιτυχία! Κάντε κλίκ παρακάτω για να μπείτε στο Open eClass";
+$langEnterFirstTime = "Είσοδος στο Open eClass";
 $langMCU = "MCU (μονάδα ελέγχου για τηλεδιάσκεψη)";
 $langVod = "Εξυπηρέτης Vod ";
-$langSiteUrl = "URL του OpeneClass";
-$langInstall = "Eγκατάσταση του OpeneClass";
+$langSiteUrl = "URL του Open eClass";
+$langInstall = "Eγκατάσταση του Open eClass";
 $langAddOnStreaming = "Επιπρόσθετη λειτουργικότητα";
 $langAddOnExpl = "Εάν επιθυμείτε να υποστηρίζετε streaming για τα αρχεία video που θα αποτελούν μέρος του υλικού των αποθηκευμένων μαθημάτων θα πρέπει να υπάρχει εγκατεστημένος streaming server.";
 
-$langWarningInstall2 = "<b>Προσοχή!</b> Φαίνεται πως η επιλογή short_open_tag στο αρχείο php.ini δεν είναι ενεργοποιημένη.Χωρίς αυτήν το OpeneClass δεν μπορεί να λειτουργήσει. Παρακαλούμε διορθώστε το αρχείο php.ini ώστε να περιέχει τη γραμμή:<em>short_open_tag = On</b></p>";
+$langWarningInstall2 = "<b>Προσοχή!</b> Φαίνεται πως η επιλογή short_open_tag στο αρχείο php.ini δεν είναι ενεργοποιημένη.Χωρίς αυτήν το Open eClass δεν μπορεί να λειτουργήσει. Παρακαλούμε διορθώστε το αρχείο php.ini ώστε να περιέχει τη γραμμή:<em>short_open_tag = On</b></p>";
 $langWarningInstall3 = "<b>Προσοχή!</b> Φαίνεται πως ο οδηγός εγκατάστασης δεν έχει δικαιώματα δημιουργίας του κατάλογου <b>/config</b>.<br/>Χωρίς δικαιώματα δημιουργίας, ο οδηγός εγκατάστασης δεν μπορεί να συνεχίσει. Παρακαλούμε διορθώστε τα δικαιώματα.<br/>";
 $langWarningInstall4 = "<b>Προσοχή!</b> Φαίνεται πως ο οδηγός εγκατάστασης δεν έχει δικαιώματα δημιουργίας του κατάλογου <b>/courses</b>.<br/>Χωρίς δικαιώματα δημιουργίας, ο οδηγός εγκατάστασης δεν μπορεί να συνεχίσει. Παρακαλούμε διορθώστε τα δικαιώματα.<br/>";
 $langWarningInstall5 = "<b>Προσοχή!</b> Φαίνεται πως ο οδηγός εγκατάστασης δεν έχει δικαιώματα δημιουργίας του κατάλογου <b>/video</b>.<br/>Χωρίς δικαιώματα δημιουργίας, ο οδηγός εγκατάστασης δεν μπορεί να συνεχίσει. Παρακαλούμε διορθώστε τα δικαιώματα.<br/>";
@@ -1454,7 +1454,7 @@ $langReviewSettings = "Τα στοιχεία που δηλώσατε είναι 
 $langToReq = "Η εγγραφή χρηστών θα γίνεται με αίτηση προς τον διαχειριστή της πλατφόρμας";
 $langLDAPBaseDn = "Base DN του LDAP Εξυπηρέτη";
 $langChooseLang = "Επιλογή Γλώσσας";
-$langExpPhpMyAdmin = "Το OpeneClass θα εγκαταστήσει το δικό του διαχειριστικό εργαλείο μέσω web των βάσεων δεδομένων MySQL (<a href=\"http://www.phpmyadmin.net\" target=_blank>phpMyAdmin</a>) αλλά μπορείτε να χρησιμοποιήσετε και το δικό σας.";
+$langExpPhpMyAdmin = "Το Open eClass θα εγκαταστήσει το δικό του διαχειριστικό εργαλείο μέσω web των βάσεων δεδομένων MySQL (<a href=\"http://www.phpmyadmin.net\" target=_blank>phpMyAdmin</a>) αλλά μπορείτε να χρησιμοποιήσετε και το δικό σας.";
 $langBeforeInstall1 = "Πριν προχωρήσετε στην εγκατάσταση τυπώστε και διαβάστε προσεκτικά τις ";
 $langBeforeInstall2 = "Επίσης, γενικές οδηγίες για την πλατφόρμα μπορείτε να διαβάσετε ";
 $langInstallInstr = "Οδηγίες Εγκατάστασης";
@@ -2312,9 +2312,10 @@ $langUserData = "Στοιχεία χρήστη";
 $langUsersData = "Στοιχεία χρηστών";
 $langUserAccount = "Λογαριασμός $langOfStudent";
 $langProfAccount = "Λογαριασμός $langOfTeacher";
-$langUserAccountInfo1 = '(Αίτηση)&nbsp;';
-$langUserAccountInfo2 = '(Δημιουργία)&nbsp;';
+$langUserAccountInfo1 = 'Αίτηση Νέου Λογαριασμού';
+$langUserAccountInfo2 = 'Δημιουργία Νέου Λογαριασμού';
 $langUserAccountInfo3 = 'Εναλλακτικά, μπορείτε να επιλέξετε';
+$langUserAccountInfo4 = 'Σύνδεση με Άλλο Λογαριασμό';
 $langNewAccount = 'Νέος Λογαριασμός';
 $langNewAccountActivation = 'Ενεργοποίηση Λογαριασμού';
 $langNewUserAccountActivation = "Ενεργοποίηση Λογαριασμού $langOfStudent";
@@ -2500,7 +2501,7 @@ $langConfigError1 = "Δεν ήταν δυνατή η λειτουργία αντ
 $langConfigError2 = "Το αρχείο ρυθμίσεων config.php δεν μπόρεσε να διαβαστεί! Ελέγξτε τα δικαιώματα πρόσβασης.";
 $langConfigError3 = "Δεν πραγματοποιήθηκε η εγγραφή των αλλαγών στο αρχείο ρυθμίσεων config.php! Ελέγξτε τα δικαιώματα πρόσβασης.";
 $langUpgradeSuccess = "Η αναβάθμιση των βάσεων δεδομένων του eClass πραγματοποιήθηκε!";
-$langUpgReady = "Είστε πλέον έτοιμοι να χρησιμοποιήσετε την καινούρια έκδοση του OpeneClass!";
+$langUpgReady = "Είστε πλέον έτοιμοι να χρησιμοποιήσετε την καινούρια έκδοση του Open eClass!";
 $langUpgSucNotice = "Αν παρουσιάστηκε κάποιο σφάλμα, πιθανόν κάποιο μάθημα να μην δουλεύει εντελώς σωστά.<br>
                 Σε αυτή την περίπτωση επικοινωνήστε μαζί μας στο <a href='mailto:eclass@gunet.gr'>eclass@gunet.gr</a><br>
                 περιγράφοντας το πρόβλημα που παρουσιάστηκε<br> και στέλνοντας (αν είναι δυνατόν) όλα τα μηνύματα που εμφανίστηκαν στην οθόνη σας";
@@ -2543,7 +2544,7 @@ $langChangeDBCharset = "Αλλαγή κωδικοποίησης βάσης δε�
 $langToUTF = "σε UTF-8";
 $langEncryptPass = "Κωδικοποίηση των συνθηματικών των χρηστών";
 $langNotEncrypted = "ΠΡΟΣΟΧΗ! Η διαδικασία αναβάθμισης δεν μπόρεσε να κρυπτογραφήσει τα password και η πλατφόρμα δεν μπορεί να λειτουργήσει. Αφαιρέστε τη γραμμή «\$encryptedPasswd = true;» από το αρχείο ρυθμίσεων config.php";
-$langUpgradeStart = 'Έναρξη αναβάθμισης OpeneClass';
+$langUpgradeStart = 'Έναρξη αναβάθμισης Open eClass';
 $langUpgradeConfig = 'Αναβάθμιση αρχείου ρυθμίσεων (config.php)';
 
 /*******************************************************************
@@ -2614,7 +2615,7 @@ $langWarnShibUser = "<p class=\"alert1\"><b>Προειδοποίηση:</b> Επ
 
 $langUserBriefcase = "Χαρτοφυλάκιο χρήστη";
 $langPersonalisedBriefcase = "Προσωπικό χαρτοφυλάκιο";
-$langCopyrightFooter="OpeneClass &copy; 2003-2011";
+$langCopyrightFooter="<span class='smaller'>Πληροφορίες Πνευματικών Δικαιωμάτων</span>";
 $langAdvancedSearch="Σύνθετη αναζήτηση";
 $langTitle = "Τίτλος";
 $langType = "Τύπος";

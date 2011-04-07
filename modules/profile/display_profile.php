@@ -39,8 +39,8 @@ if (!empty($userdata['description'])) {
         $tool_content .= standard_text_escape($userdata['description']);
 }
 $tool_content .= "
-            </td>
-        </tr>
+       </td>
+     </tr>
      </table>";
 
 draw($tool_content, 1);

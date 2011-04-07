@@ -830,4 +830,10 @@ $langGlossaryContent = "...";
 
 // Help eBook
 $langHEBook = "Ηλεκτρονικό Βιβλίο";
-$langEBookContent = "...";
+$langEBookContent = "<p>Η δημιουργία (αλλαγή) ενός Ηλεκτρονικού Βιβλίου περιλαμβάνει τρία (3) διακριτά βήματα: </p>
+<p><strong>Βήμα 1</strong>:</p>
+<p>.....</p>
+<p><strong>Βήμα 2</strong>:</p>
+<p>.......</p>
+<p><strong>Βήμα 3</strong>:</p>
+<p>..........</p>";

@@ -50,53 +50,52 @@ $auth = get_auth_active_methods();
 // check for close user registration
 if (isset($close_user_registration) and $close_user_registration) {
         $newuser = "formuser.php";
-        $tool_content .= $langUserAccountInfo1;
+        $user_reg_type = $langUserAccountInfo1;
 } else {
         $newuser = "newuser.php";
-        $tool_content .= $langUserAccountInfo2;
+        $user_reg_type = $langUserAccountInfo2;
 }
 
 $tool_content .= "</p>
-  <p><img src='${urlServer}/template/classic/img/arrow.png' title='bullet' alt='bullet'>&nbsp;&nbsp;<a href=\"$newuser\">$langNewAccount</a></p>";
+  <p><img src='${urlServer}/template/classic/img/arrow.png' title='bullet' alt='bullet'><a href=\"$newuser\">$user_reg_type</a></p>";
 
-if(!empty($auth)) {
-        if (count($auth) > 1) {
-                $tool_content .= "\n  <p><b>$langUserAccountInfo3:</b></p>";
-        }
+    if (count($auth) > 1) {
+       $tool_content .= "<p>&nbsp;&nbsp;&nbsp;&nbsp;$langUserAccountInfo4:";
+    }
+
+    if(!empty($auth)) {
         foreach($auth as $k => $v) {
                 if ($v == 1) {	// bypass the eclass auth method, as it has already been displayed
                         continue;
                 } else {
-                        $tool_content .= "<p><img src='../../template/classic/img/arrow.png' title='bullet' alt='bullet' />&nbsp;&nbsp;$langNewAccount&nbsp;";
                         if ($v == 6)  { // shibboleth method
-                                $tool_content .= "(<a href='{$urlServer}secure/index.php'>".get_auth_info($v)."</a>)";
+                                $tool_content .= "<br />&nbsp;&nbsp;&nbsp;<img src='../../template/classic/img/arrow.png' title='bullet' alt='bullet' />&nbsp;<a href='{$urlServer}secure/index.php'>".get_auth_info($v)."</a>";
 			} else {
-                                $tool_content .= "(<a href='ldapnewuser.php?auth=".$v."'>".get_auth_info($v)."</a>)";
+                                $tool_content .= "<br />&nbsp;&nbsp;&nbsp;<img src='../../template/classic/img/arrow.png' title='bullet' alt='bullet' />&nbsp;<a href='ldapnewuser.php?auth=".$v."'>".get_auth_info($v)."</a>";
                         }
-                        $tool_content .= "</p>";
                 }
                 
         }
-}
+    }
 
-$tool_content .= "\n<p class='sub_title1'><img src='${urlServer}/template/classic/img/teacher.png' alt=''>&nbsp;&nbsp;".$langProfAccount." ".$langUserAccountInfo1."</p>";
+$tool_content .= "\n<p class='sub_title1'><img src='${urlServer}/template/classic/img/teacher.png' alt=''>&nbsp;&nbsp;".$langProfAccount."</p>";
+
+$tool_content .= "<p><img src='${urlServer}/template/classic/img/arrow.png' title='bullet'  alt='bullet' /><a href='newprof.php'>$langUserAccountInfo1</a></p>";
+
+    if (count($auth) > 1) {
+       $tool_content .= "<p>&nbsp;&nbsp;&nbsp;&nbsp;$langUserAccountInfo4:";
+    }
 
 if(!empty($auth)) {
-        $tool_content .= "<p><img src='${urlServer}/template/classic/img/arrow.png' title='bullet'  alt='bullet' />&nbsp;&nbsp;<a href='newprof.php'>$langNewAccount</a></p>";
-        if (count($auth) > 1) {
-                $tool_content .= "  <p><b>$langUserAccountInfo3:</b></p>";
-        }
         foreach($auth as $k=>$v) {
                 if ($v == 1) {	// bypass the eclass auth method, as it has already been displayed
                         continue;
                 } else {
-                        $tool_content .= "<p><img src='${urlServer}/template/classic/img/arrow.png'  alt='bullet' />&nbsp;&nbsp;$langNewAccount&nbsp;";
                         if ($v == 6)  { // shibboleth method
-                                $tool_content .= "(<a href='{$urlServer}secure/index.php'>".get_auth_info($v)."</a>)";
+                                $tool_content .= "<br />&nbsp;&nbsp;&nbsp;<img src='../../template/classic/img/arrow.png' title='bullet' alt='bullet' />&nbsp;<a href='{$urlServer}secure/index.php'>".get_auth_info($v)."</a>";
 			} else {
-                                $tool_content .= "(<a href='ldapnewuser.php?p=TRUE&amp;auth=".$v."'>".get_auth_info($v)."</a>)";
+                                $tool_content .= "<br />&nbsp;&nbsp;&nbsp;<img src='../../template/classic/img/arrow.png' title='bullet' alt='bullet' />&nbsp;<a href='ldapnewuser.php?p=TRUE&amp;auth=".$v."'>".get_auth_info($v)."</a>";
                         }
-                        $tool_content .= "</p>";
                 }
         }
 } else {

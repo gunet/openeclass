@@ -123,16 +123,25 @@ if (mysql_num_rows($q) == 0) {
         $tool_content .= "
     <div id='operations_container'>
       <ul id='opslist'>
-      <li><a href='document.php?ebook_id=$ebook_id'>$langFileAdmin</a></li>
+        <li><a href='document.php?ebook_id=$ebook_id'>$langFileAdmin</a></li>
       </ul>
     </div>
     
     <form method='post' action='$_SERVER[PHP_SELF]'>
     <fieldset>
-    <legend>$langTitle</legend>
+    <legend>$langEBook</legend>
+      <table width='100%' class='tbl_alt'>
+      <tr>
+        <th width='1' class='right'>$langTitle</th>
+        <td>
          <input type='hidden' name='id' value='$ebook_id' />
          <input type='text' name='ebook_title' size='53' value='" . q($info['title']) . "' />
-                     <input name='title_submit' type='submit' value='$langModify' />
+        </td>
+        <td width='75' class='center'>
+         <input name='title_submit' type='submit' value='$langModify' />
+        </td>
+      </tr>
+      </table>
     </fieldset>
     </form>";
 
@@ -146,7 +155,7 @@ if (mysql_num_rows($q) == 0) {
       <tr>
         <th width='1' class='right'>$langID</th>
         <th>$langTitle</th>
-        <th width='50'>$langActions</th>
+        <th width='75' class='center'>$langActions</th>
       </tr>\n";
         $q = db_query("SELECT id, public_id, title FROM ebook_section
                        WHERE ebook_id = $info[id]
@@ -166,7 +175,7 @@ if (mysql_num_rows($q) == 0) {
                 if ($sid === $edit_section) {
                         $section_id = "<input type='hidden' name='csid' value='$sid' />" .
                                       "<input type='text size='3' name='new_section_id' value='$qsid' />";
-                        $section_title = "<input type='text size='5' name='new_section_title' value='$qstitle' />";
+                        $section_title = "<input type='text size='3' name='new_section_title' value='$qstitle' />";
                         $section_editing = true;
                         $section_tools = "<input type='submit' name='new_section_submit' value='$langModify' />";
                 } else {
@@ -188,7 +197,7 @@ if (mysql_num_rows($q) == 0) {
       <tr>
         <td><input type='text' size='2' name='new_section_id' /></td>
         <td><input type='text' size='35' name='new_section_title' /></td>
-        <td><input type='submit' name='new_section_submit' value='$langAdd' /></td>
+        <td class='center'><input type='submit' name='new_section_submit' value='$langAdd' /></td>
       </tr>";
         }
         $tool_content .= "
@@ -229,7 +238,7 @@ if (mysql_num_rows($q) == 0) {
        <td class='smaller'><a href='show.php/$currentCourseID/$ebook_id/$display_id/' target='_blank'>" . q($files[$id_map[$file_id]]) . "</a></td>
        <td><input type='text' name='title[$file_id]' size='30' value='" . q($r['subsection_title']) . "' /></td>
        <td>" .  selection($sections, "sid[$file_id]", $r['sid']) . "</td>
-       <td><input type='hidden' name='oldssid[$file_id]' value='$r[ssid]' />
+       <td class='center'><input type='hidden' name='oldssid[$file_id]' value='$r[ssid]' />
            <input type='text' name='ssid[$file_id]' size='3' value='" . q($r['pssid']) . "' /></td>
      </tr>\n";
                 unset($files[$id_map[$file_id]]);
@@ -246,7 +255,7 @@ if (mysql_num_rows($q) == 0) {
        <td class='smaller'><a href='show.php/$currentCourseID/$ebook_id/_" . q($file) .  "' target='_blank'>" . q($file) . "</a></td>
        <td><input type='text' name='title[$file_id]' size='30' value='" . q($title) . "' /></td>
        <td>" . selection($sections, "sid[$file_id]") . "</td>
-       <td><input type='text' name='ssid[$file_id]' size='5' /></td>
+       <td class='center'><input type='text' name='ssid[$file_id]' size='3' /></td>
      </tr>\n";
         $k++;
         }
