@@ -2235,7 +2235,7 @@ $langGroupUserManagement="Διαχείριση ομάδας χρηστών";
 $langRegDone="Οι αλλαγές σας κατοχυρώθηκαν.";
 $langPassTooEasy ="Το συνθηματικό σας είναι πολύ απλό. Χρησιμοποιήστε ένα συνθηματικό σαν και αυτό";
 $langChoiceLesson ="Επιλογή Μαθημάτων";
-$langRegCourses = "Εγγραφή σε μάθημα";
+$langRegCourses = "Εγγραφή σε Μάθημα";
 $langChoiceDepartment ="Επιλογή $langOfFaculty";
 $langCoursesRegistered="Η εγγραφή σας στα μαθήματα που επιλέξατε έγινε με επιτυχία!";
 $langNoCoursesRegistered="<p>Δεν επιλέξατε μάθημα για εγγραφή.</p><p> Μπορείτε να εγγραφείτε σε μάθημα, την
@@ -2614,7 +2614,7 @@ $langCheckPublicTools = "
 $langWarnShibUser = "<p class=\"alert1\"><b>Προειδοποίηση:</b> Επειδή η πιστοποίησή σας έγινε μέσω Shibboleth δεν έχετε αποσυνδεθεί από την πλατφόρμα!<br>Για να αποσυνδεθείτε θα πρέπει να κλείσετε τον browser σας.</p>";
 
 $langUserBriefcase = "Χαρτοφυλάκιο χρήστη";
-$langPersonalisedBriefcase = "Προσωπικό χαρτοφυλάκιο";
+$langPersonalisedBriefcase = "Προσωπικό Χαρτοφυλάκιο";
 $langCopyrightFooter="<span class='smaller'>Πληροφορίες Πνευματικών Δικαιωμάτων</span>";
 $langAdvancedSearch="Σύνθετη αναζήτηση";
 $langTitle = "Τίτλος";
