@@ -110,7 +110,7 @@ if(isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
 	  <table width='99%' class='tbl'>
 	  <tr>
 	    <th>".$langQuestion." :</th>
-	    <td><input type=\"text\" name=\"questionName\"" ."size=\"50\" maxlength=\"200\" value=\"".htmlspecialchars($questionName)."\"></td>
+	    <td><input type=\"text\" name=\"questionName\"" ."size=\"50\" value=\"".htmlspecialchars($questionName)."\"></td>
 	  </tr>
 	  <tr>
 	    <th valign='top'>$langQuestionDescription:</th>
