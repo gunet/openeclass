@@ -73,6 +73,8 @@ if ($is_adminOfCourse or $is_tutor)  {
                                 $tool_content .= "<h4>$langMailError</h4>";
 			}
 		}
+		// aldo send email to professor 
+		send_mail($sender_name, $sender_email,'', $sender_email, $emailsubject, $emailbody, $charset);
 		$tool_content .= "<p class='success_small'>$langEmailSuccess<br />";
 		$tool_content .= "<a href='group.php'>$langBack</a></p>";
 	} else {
