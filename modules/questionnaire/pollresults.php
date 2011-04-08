@@ -44,33 +44,33 @@ if(!isset($_GET['pid']) || !is_numeric($_GET['pid'])) die();
 
 	$tool_content .= "
         <p class=\"sub_title1\">$langSurvey</p>
-	<table width=\"99%\" class='tbl'>
+	<table width=\"100%\" class='tbl_border'>
 	<tr>
-	  <td width='120' class='bold'>$langTitle:</td>
+	  <th width='150'>$langTitle:</th>
 	  <td>" . $thePoll["name"] . "</td>
 	</tr>
 	<tr>
-	  <td class='bold'>$langPollCreation:</td>
+	  <th>$langPollCreation:</th>
 	  <td>".nice_format(date("Y-m-d", strtotime($thePoll["creation_date"])))."</td>
 	</tr>
 	<tr>
-	  <td class='bold'>$langPollStart:</td>
+	  <th>$langPollStart:</th>
 	  <td>".nice_format(date("Y-m-d", strtotime($thePoll["start_date"])))."</td>
 	</tr>
 	<tr>
-	  <td class='bold'>$langPollEnd:</td>
+	  <th>$langPollEnd:</th>
 	  <td>".nice_format(date("Y-m-d", strtotime($thePoll["end_date"])))."</td>
 	</tr>
 	</table>
 	<p class=\"sub_title1\">$langAnswers</p>";
 	$tool_content .= "
-	<table width=\"99%\" class='tbl'>";
+	<table width=\"100%\" class='tbl'>";
 
 	$questions = db_query("SELECT * FROM poll_question WHERE pid=$pid");
 	while ($theQuestion = mysql_fetch_array($questions)) {
 		$tool_content .= "
         <tr>
-	  <td class='bold' width=\"120\">$langQuestion:</th>
+	  <td width=\"50\"><b>$langQuestion:</b></td>
 	  <td>$theQuestion[question_text]</td>
 	</tr>
 	<tr>
@@ -120,7 +120,7 @@ if(!isset($_GET['pid']) || !is_numeric($_GET['pid'])) die();
          </tr>";}
 		$tool_content .= "
 	<tr>
-	  <th class='bold' colspan='2'>$langPollTotalAnswers: $answer_total</th>
+	  <th colspan='2'>$langPollTotalAnswers: $answer_total</th>
 	</tr>
 	</table>
         <br />
