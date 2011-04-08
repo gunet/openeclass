@@ -86,9 +86,7 @@ if ($is_adminOfCourse) {
          $tool_content .= " 	        
 	<div id='operations_container'> 	
 	<ul id='opslist'>
-	<li><a href='forum_admin.php?course=$code_cours'>$langAddCategory
-	<img src='../../template/classic/img/addcategory.png' title='$langAddCategory' alt='$langAddCategory' />
-	</a>
+	<li><a href='forum_admin.php?course=$code_cours'>$langAddCategory</a>
 	</li>
 	</ul> 	         
 	</div>"; 	         
@@ -161,7 +159,7 @@ if ($total_categories) {
 		<td width='80'>";
 		if ($is_adminOfCourse) {
 			$tool_content .= "<a href='forum_admin.php?course=$code_cours&amp;forumgo=yes&amp;cat_id=$catNum'>
-			<img src='../../template/classic/img/newtopic.png' title='$langNewForum' alt='$langNewForum' /></a>
+			<img src='../../template/classic/img/add.png' title='$langNewForum' alt='$langNewForum' /></a>
 			<a href='forum_admin.php?course=$code_cours&amp;forumcatedit=yes&amp;cat_id=$catNum'>
 			<img src='../../template/classic/img/edit.png' title='$langModify' alt='$langModify' /></a>
 			<a href='forum_admin.php?course=$code_cours&amp;forumcatdel=yes&amp;cat_id=$catNum' onClick='return confirmation();'>

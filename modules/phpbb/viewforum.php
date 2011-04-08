@@ -101,9 +101,7 @@ if ($can_post) {
 	<div id='operations_container'> 	
 	<ul id='opslist'>
 	<li>
-	<a href='newtopic.php?course=$code_cours&amp;forum=$forum_id'>$langNewTopic
-	<img src='../../template/classic/img/newtopic.png' title='$langNewTopic' alt='$langNewTopic' />
-	</a>
+	<a href='newtopic.php?course=$code_cours&amp;forum=$forum_id'>$langNewTopic</a>
 	</li>
 	</ul> 	         
 	</div>"; 	         

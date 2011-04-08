@@ -165,11 +165,7 @@ if (isset($_SESSION['message'])) {
 $tool_content .= "<div id='operations_container'> 	
 	<ul id='opslist'>
 	<li><a href='reply.php?course=$code_cours&amp;topic=$topic&amp;forum=$forum'>$langReply";
-if($lock_state != 1) {	
-	$tool_content .= "<img src='../../template/classic/img/reply.png' title='$langAnswer' alt='$langAnswer' />";
-} else {
-	$tool_content .= "<img src='$reply_locked_image' alt='' />";
-}
+
 $tool_content .= "</a></li></ul></div>";
 	
 if ($paging and $total > $posts_per_page ) {
