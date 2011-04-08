@@ -179,7 +179,7 @@ if ($is_adminOfCourse) { // course admin
 		if (($myrow["forum_type"] == 1) && !$user_logged_in && !$logging_in) {
 			// Private forum, no valid session, and login form not submitted...
 			$tool_content .= "<form action='$_SERVER[PHP_SELF]?course=$code_cours' method='post'>
-			<table width='99%'>
+			<table width='100%' class='tbl'>
 			<tr><td>$langPrivateNotice</td></tr>
 			<tr><td>
 			<table width='99%'>
@@ -250,23 +250,25 @@ if ($is_adminOfCourse) { // course admin
 		$message = preg_replace('#</textarea>#si', '&lt;/TEXTAREA&gt;', $message);
 		list($day, $time) = explode(' ', $myrow["post_time"]);
 		$tool_content .= "<form action='$_SERVER[PHP_SELF]?course=$code_cours&amp;post_id=$post_id&amp;forum=$forum' method='post'>
-		<table class='framed'>
-		<thead>
-		<tr><td><b>$langReplyEdit</b></td></tr>";
+        <fieldset>
+        <legend>$langReplyEdit </legend>
+ <table width='100%' class='tbl'>
+		";
 		$first_post = is_first_post($topic, $post_id, $currentCourseID);
 		if($first_post) {
-			$tool_content .= "<tr><td>$langSubject:<br />
-			<input type='text' name='subject' size='53' maxlength='100' value='" . stripslashes($myrow["topic_title"]) . "'  class='FormData_InputText' /></td>
+			$tool_content .= "<tr><td><b>$langSubject:</b><br /><br />
+			<input type='text' name='subject' size='53' maxlength='100' value='" . stripslashes($myrow["topic_title"]) . "'  class='FormData_InputText' /></th>
 			</tr>";
 		}
-		$tool_content .= "<tr><td>$langBodyMessage:<br />".
+		$tool_content .= "<tr><td><b>$langBodyMessage:</b><br /><br />".
 		rich_text_editor('message', 10, 50, $message, "class='FormData_InputText'")
 		."	
 		</td></tr>
-		<tr><td>";
+		<tr><td class='right'>";
 		$tool_content .= "<input class='Login' type='submit' name='submit' value='$langSubmit' />
 		</td></tr>
-		</thead></table></form>";
+		</table>
+       </fieldset></form>";
 	}
 } else {
 	$tool_content .= $langForbidden;
