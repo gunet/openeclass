@@ -94,8 +94,8 @@ if ($all_set) {
         }
 
         // User Message
-        $tool_content .= "<div class='well-done'><p>$langDearUser!</p><p>$success</p></div>
-                <p>$infoprof</p><p>$click <a href='$urlServer' class='mainpage'>$langHere</a> $langBackPage</p>";
+        $tool_content .= "<div class='success'>$langDearUser!<br />$success</div>
+                <p>$infoprof<br /><br />$click <a href='$urlServer' class='mainpage'>$langHere</a> $langBackPage</p>";
 
         draw($tool_content, 0);
         exit();

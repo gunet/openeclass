@@ -32,13 +32,11 @@ $navigation[]= array ("url"=>"../profile/profile.php", "name"=> $langModifProfil
 $tool_content = "";
 
 if (!isset($_GET['doit']) or $_GET['doit'] != "yes") {
-	$tool_content .=  "
-        <div class='caution'>";
 
 	// admin cannot be deleted
 	if ($is_admin) {
-		$tool_content .=  "$langAdminNo</div>";
-		$tool_content .=  "<p class='right'><a href='../profile/profile.php'>$langBack</a></p>";
+		$tool_content .=  "<div class='caution'>$langAdminNo";
+		$tool_content .=  "<br /><a href='../profile/profile.php'>$langBack</a></div>";
 
 		draw($tool_content,1);
 		exit;
@@ -56,30 +54,26 @@ if (!isset($_GET['doit']) or $_GET['doit'] != "yes") {
 			$tool_content .=  "</li>\n        </ul>";
 			$tool_content .= "</td>\n        </tr>\n        </table>\n";
 		} else {
-			$tool_content .=  "        <p><b>$langNotice: </b>";
-			$tool_content .=  "$langExplain</p>\n";
-			$tool_content .=  "        <p class='right'><a href='../profile/profile.php'>$langBack</a></p>\n";
-			$tool_content .= "</td>\n        </tr>\n        </table>\n";
+			$tool_content .=  "        <div class='caution'><b>$langNotice: </b> ";
+			$tool_content .=  "$langExplain<br />\n";
+			$tool_content .=  "        <span class='right'><a href='../profile/profile.php'>$langBack</a></span></div>\n";
 		}
 	}  //endif is admin
 } else {
 	if (isset($uid)) {
-		$tool_content .=  "        <table class='tbl'>\n";
-		$tool_content .=  "        <tr>\n";
-		$tool_content .=  "          <td class=\"success\">\n";
 		db_query("DELETE from user WHERE user_id = '$uid'");
 		if (mysql_affected_rows() > 0) {
-			$tool_content .=  "        <p><b>$langDelSuccess</b></p>\n";
-			$tool_content .=  "        <p>$langThanks</p>\n";
-			$tool_content .=  "        <br><a href='../../index.php?logout=yes'>$langLogout</a>";
+			$tool_content .=  "        <div class=\"success\"><b>$langDelSuccess</b><br />\n";
+			$tool_content .=  "        $langThanks\n";
+			$tool_content .=  "        <br /><a href='../../index.php?logout=yes'>$langLogout</a></div>";
 			unset($_SESSION['uid']);
 		} else {
 			$tool_content .=  "        <p>$langError</p>\n";
 			$tool_content .=  "        <p class='right'><a href='../profile/profile.php'>$langBack</a></p>\n        <br />\n";
+                        $tool_content .=  "        </div>\n";
 			//			exit;
 		}
 	}
-	$tool_content .= "</td>\n        </tr>\n        </table>\n";
 }
 if (isset($_SESSION['uid'])) {
 	draw($tool_content, 1);

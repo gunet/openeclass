@@ -100,8 +100,8 @@ if ($q and mysql_num_rows($q) > 0) {
 	while ($row = mysql_fetch_array($q)) {
           $tool_content .= "
         <table width='100%' class='tbl_border'>
-        <tr class='sub_title1'>
-           <td>" . q($row['title']) . "</td>\n" .
+        <tr class='odd'>
+           <td class='bold'>" . q($row['title']) . "</td>\n" .
            actions('description', $row['id'], $row['visibility'], $row['res_id']) . "
         </tr>
         <tr>";

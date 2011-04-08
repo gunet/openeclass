@@ -1352,3 +1352,14 @@ table.Search td {
 }
 
 /* ----- End Lesson Layout ----- */
+.add_user a {
+        color: #029516 !important;
+        font-size: 11px;
+}
+
+.add_user a:hover {
+        color: #02c81c !important;
+        text-decoration: underline;
+        font-size: 11px;
+}
+
