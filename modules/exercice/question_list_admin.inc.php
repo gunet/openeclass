@@ -83,9 +83,9 @@ if($nbrQuestions) {
 		$objQuestionTmp=new Question();
 		$objQuestionTmp->read($id);
                     if ($i%2 == 0) {
-                       $tool_content .= "\n    <tr class='even'>";
-                    } else {
                        $tool_content .= "\n    <tr class='odd'>";
+                    } else {
+                       $tool_content .= "\n    <tr class='even'>";
                     }
 
 		$tool_content .= "
