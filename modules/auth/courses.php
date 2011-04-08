@@ -293,11 +293,11 @@ function expanded_faculte($fac_name, $facid, $uid) {
                         $password = q($mycours['password']);
 			// link creation
                         if ($mycours['visible'] == 2 or $uid == 1) { //open course
-                                $codelink = "<a href='../../courses/$mycours[k]/'>" . q($course_title) . "</a>";
+                                $codelink = "<a href='../../courses/$mycours[k]/'>$course_title</a>";
                         } elseif ($mycours['visible'] == 0) { //closed course
-                                $codelink = "<a href='../contact/index.php?from_reg=true&cours_id=$cid'>" . q($course_title) . "</a>";
+                                $codelink = "<a href='../contact/index.php?from_reg=true&cours_id=$cid'>$course_title</a>";
                         } else {
-                                $codelink = q($course_title);
+                                $codelink = $course_title;
                         }
 			// end of link creation
                         if ($k%2 == 0) {
@@ -317,7 +317,7 @@ function expanded_faculte($fac_name, $facid, $uid) {
                                         }
                                         $retString .= "<input type='checkbox' name='selectCourse[]' value='$cid' checked='checked' />";
 					if ($mycours['visible'] == 0) {
-						$codelink = "<a href='../../courses/$mycours[k]/'>" . q($course_title) . "</a>";
+						$codelink = "<a href='../../courses/$mycours[k]/'>$course_title</a>";
 					}
                                 } else {
                                         $retString .= "<img src='../../template/classic/img/teacher.png' alt='$langTutor' title='$langTutor' />";
