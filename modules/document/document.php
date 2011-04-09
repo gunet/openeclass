@@ -779,11 +779,11 @@ if ($doc_count == 0) {
         $tool_content .= "\n      <th width='60' class='center'><b>$langSize</b></th>";
         $tool_content .= "\n      <th width='80' class='center'><b>" . headlink($langDate, 'date') . '</b></th>';
 	if($can_upload) {
-		$tool_content .= "\n<th width='150' class='center'><b>$langCommands</b></th>";
+		$tool_content .= "\n      <th width='135' class='center'><b>$langCommands</b></th>";
 	} else {
-		$tool_content .= "\n<th width='50' class='center'><b>$langCommands</b></th>";
+		$tool_content .= "\n      <th width='50' class='center'><b>$langCommands</b></th>";
 	}
-	$tool_content .= "\n</tr>";
+	$tool_content .= "\n    </tr>";
 
         // -------------------------------------
         // Display directories first, then files

@@ -153,7 +153,11 @@ global $tool_content, $currentCourse, $code_cours, $langCreatePoll, $langPollsAc
 		
 				if (($visibility) or ($is_adminOfCourse)) {
 					if ($visibility) {
-						$visibility_css = " class=\"even\"";
+                                                if ($k%2 == 0) {
+                                                    $visibility_css = " class=\"even\"";
+                                                } else {
+                                                    $visibility_css = " class=\"odd\"";
+                                                }
 						$visibility_gif = "visible";
 						$visibility_func = "deactivate";
 						$arrow_png = "arrow";
@@ -170,7 +174,7 @@ global $tool_content, $currentCourse, $code_cours, $langCreatePoll, $langPollsAc
                       <tr $visibility_css>";
 					} else {
 						$tool_content .= "
-                      <tr class=\"even\">";
+                      <tr $visibility_css>";
 					}			
 					$temp_CurrentDate = date("Y-m-d");
 					$temp_StartDate = $thepoll["start_date"];
