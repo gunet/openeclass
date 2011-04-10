@@ -273,6 +273,8 @@ $langemailbodyBlocked = "Η αίτησή σας για εγγραφή στην �
 $langCloseConf = "Επιβεβαίωση κλεισίματος αίτησης";
 $langReintroductionApplication="Η επαναφορά της αίτησης ολοκληρώθηκε με επιτυχία!";
 $langBackRequests = "Επιστροφή στις αιτήσεις";
+$langElaboration = "Επεξεργασία";
+
 
 // mailtoprof.php
 $langSendMessageTo = "Αποστολή μηνύματος";
@@ -1171,8 +1173,10 @@ $langGroupsDeleted="Ολες οι ομάδες χρηστών έχουν δια�
 $langGroupDel="Η ομάδα χρηστών διαγράφηκε";
 $langGroupsEmptied="Όλες οι ομάδες χρηστών είναι άδειες";
 $langEmtpyGroups="Εκκαθάριση όλων των ομάδων χρηστών";
+$langEmtpyGroupsAll="Εκκαθάριση Όλων";
 $langGroupsFilled="Όλες οι ομάδες χρηστών έχουν συμπληρωθεί";
 $langFillGroups="Συμπλήρωση των ομάδων χρηστών";
+$langFillGroupsAll="Συμπλήρωση Όλων";
 $langGroupsProperties="Ρυθμίσεις ομάδες χρηστών";
 $langStudentRegAllowed="Οι χρήστες επιτρέπεται να γραφτούν στις ομάδες";
 $langStudentRegNotAllowed="Οι χρήστες δεν επιτρέπεται να γραφτούν στις ομάδες";
@@ -1187,6 +1191,8 @@ $langGroupDescInfo = "Πληκτρολογήστε μια περιγραφή ή 
 Σημειώστε ότι, θα είναι ορατό στον υπεύθυνο της ομάδας χρηστών και στα υπόλοιπα μέλη της ομάδας";
 $langNoChanges = "Δεν πραγματοποιήθηκαν αλλαγές";
 $langGroupMembersUnchanged = "Τα μέλη της ομάδας είναι περισσότερα από τον μέγιστο αριθμό που δώσατε. Ο αριθμός ορίστηκε ίσος με το τρέχον πλήθος μελών.";
+$langGroupPrefs = "Λειτουργικά Χαρακτηριστικά Ομάδων";
+$langGroupPropertiesSum = "Σύνοψη Ρυθμίσεων";
 
 // Group Properties
 $langGroupProperties="Ρυθμίσεις ομάδων χρηστών";
@@ -1216,7 +1222,7 @@ $langEmail="email";
 $langGroupStudentsInGroup=" ".$langsStudents." εγγεγραμμένοι σε ομάδες χρηστών";
 $langGroupStudentsRegistered=" ".$langsStudents." εγγεγραμμένοι στο μάθημα";
 $langGroupNoGroup="μη εγγεγραμμένοι ".$langsStudents." ";
-$langGroupUsersList="Βλέπε <a href=../user/user.php>Χρήστες</a>";
+$langGroupUsersList="<a href=../user/user.php>Χρήστες</a>";
 $langGroupTooManyMembers="Ο αριθμός που προτάθηκε υπερβαίνει το μέγιστο επιτρεπόμενο (μπορείτε να το αλλάξετε παρακάτω).
 	Η σύνθεση της ομάδας δεν άλλαξε";
 $langGroupTutor="Υπεύθυνος ομάδας";

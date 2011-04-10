@@ -241,45 +241,63 @@ if ($is_adminOfCourse) {
 		$tool_content .= "<p class='success'>$message</p><br />";
 	}
 
-	$tool_content .= "
-        <table width='100%' id='operations_container' border=0>
-	<tr>
-          <td>&nbsp;&nbsp;</td>
-	  <td class='left'>&nbsp;<a href='group_creation.php'>$langNewGroupCreate</a></td>
-	  <td class='right'><a href='$_SERVER[PHP_SELF]?delete_all=yes' onClick=\"return confirmation('delall');\">$langDeleteGroups</a>&nbsp;</td>
-	</tr>
-	<tr>
-          <td>&nbsp;&nbsp;</td>
-	  <td class='left'>&nbsp;<a href='$_SERVER[PHP_SELF]?fill=yes'>$langFillGroups</a></td>
-	  <td class='right'><a href='$_SERVER[PHP_SELF]?empty=yes' onClick=\"return confirmation('emptyall');\">$langEmtpyGroups</a>&nbsp;</div></td>
-	</tr>
-	</table><br />";
+          $tool_content .= "
+        <div id='operations_container'>
+          <ul id='opslist'>
+            <li><a href='group_creation.php' title='$langNewGroupCreate'>$langCreate</a></li>
+            <li><a href='$_SERVER[PHP_SELF]?delete_all=yes' onClick=\"return confirmation('delall');\" title='$langDeleteGroups'>$langDelete</a></li>
+            <li><a href='$_SERVER[PHP_SELF]?fill=yes' title='$langFillGroups'>$langFillGroupsAll</a></li>
+            <li><a href='$_SERVER[PHP_SELF]?empty=yes' onClick=\"return confirmation('emptyall');\" title='$langEmtpyGroups'>$langEmtpyGroupsAll</a></li>
+          </ul>
+        </div>";
 
 	// ---------- display properties ------------------------
 	$tool_content .= "
-        <table class='tbl_border' width='100%'>
+        <table class='tbl_courseid' width='100%'>
 	<tr>
-	  <td colspan='2' class='right'><a href='group_properties.php'>$langPropModify</a> 
-            <a href='group_properties.php'><img src='../../template/classic/img/edit.png' align='middle' alt='$langEdit' title='$langEdit' /></a></td>
-	</tr>
-	<tr class='odd'>
-	  <td><b>$langGroupsProperties</b></td>
-	  <td align='right'><b>$langGroupAccess</b></td>
+	  <td class='title1' colspan='2'><a href='group_properties.php' title='$langPropModify'>$langGroupPropertiesSum</a>&nbsp;
+              <a href='group_properties.php' title='$langPropModify'><img src='../../template/classic/img/edit.png' align='middle' alt='$langPropModify' title='$langPropModify' /></a>
+          </td>
+          <td rowspan='8' width='50' class='even'>&nbsp;&nbsp;</td>
+          <td class='title1' align='right'>$langGroupUsersList &nbsp;<a href=../user/user.php><img src='../../template/classic/img/switch_s.png' title='$langUsers' alt='$langUsers' /></a></td>
 	</tr>";
+
+        list($total_students) = mysql_fetch_row(db_query(
+                "SELECT COUNT(*) FROM cours_user
+                 WHERE cours_id = $cours_id AND statut = 5 AND tutor = 0"));
+        list($unregistered_students) = mysql_fetch_row(db_query(
+                        "SELECT COUNT(*)
+                                FROM (user u, cours_user cu)
+                                WHERE cu.cours_id = $cours_id AND
+                                      cu.user_id = u.user_id AND
+                                      cu.statut = 5 AND
+                                      cu.tutor = 0 AND
+                                      u.user_id NOT IN (SELECT user_id FROM group_members, `group`
+                                                                       WHERE `group`.id = group_members.group_id AND
+                                                                       `group`.course_id = $cours_id)"));
+
+        $registered_students = $total_students - $unregistered_students;
 
         $tool_content .= "
         <tr>
-          <td>$langGroupAllowStudentRegistration</td> 
-          <td align='right'>";
+          <td colspan='2'><u>$langGroupPrefs</u></td>
+          <td class='smaller'>
+            <img src='../../template/classic/img/arrow.png' alt='' />&nbsp;<b>$registered_students</b> $langGroupStudentsInGroup
+          </td>
+        </tr>
+        <tr class='smaller'>
+          <td><img src='../../template/classic/img/arrow.png' alt='' />&nbsp;$langGroupAllowStudentRegistration</td> 
+          <td align='right' width='50'>";
         if ($self_reg) {
                 $tool_content .= "<font color='green'>$langYes</font>";
         } else {
                 $tool_content .= "<font color='red'>$langNo</font>";
         }
         $tool_content .= "</td>
+          <td><img src='../../template/classic/img/arrow.png' alt='' />&nbsp;<b>$unregistered_students</b> $langGroupNoGroup</td>
         </tr>
-        <tr>
-          <td>$langGroupAllowMultipleRegistration</td>
+        <tr class='smaller'>
+          <td><img src='../../template/classic/img/arrow.png' alt='' />&nbsp;$langGroupAllowMultipleRegistration</td>
           <td align='right'>";
 
         if ($multi_reg) {
@@ -288,12 +306,13 @@ if ($is_adminOfCourse) {
                 $tool_content .= "<font color='red'>$langNo</font>";
         }
         $tool_content .= "</td>
-        </tr>
-        <tr class='odd'>
-          <td colspan=2 class='left'><b>$langTools</b></td>
+          <td><img src='../../template/classic/img/arrow.png' alt='' />&nbsp;<b>$total_students</b> $langGroupStudentsRegistered</td>
         </tr>
         <tr>
-          <td>";
+          <td colspan=2 class='left'><u>$langTools</u></td>
+        </tr>
+        <tr class='smaller'>
+          <td><img src='../../template/classic/img/arrow.png' alt='' />&nbsp;";
 
         if ($has_forum) {
                 $tool_content .= "$langGroupForum</td>
@@ -306,8 +325,8 @@ if ($is_adminOfCourse) {
         }
         $tool_content .= "</td>
         </tr>
-        <tr>
-          <td>";
+        <tr class='smaller'>
+          <td><img src='../../template/classic/img/arrow.png' alt='' />&nbsp;";
         if ($private_forum) {
                 $tool_content .= "$langForumType</td>
           <td align='right'>$langForumClosed";
@@ -317,8 +336,8 @@ if ($is_adminOfCourse) {
         }
         $tool_content .= "</td>
         </tr>
-        <tr>
-          <td>";
+        <tr class='smaller'>
+          <td><img src='../../template/classic/img/arrow.png' alt='' />&nbsp;";
         if ($documents) {
                 $tool_content .= "$langDoc</td>
           <td align='right'><font color='green'>$langYes</font>";
@@ -367,7 +386,7 @@ if ($is_adminOfCourse) {
                   <td>-</td>";
                         } else {
                                 $tool_content .= "
-                  <td>$max_members</td>";
+                  <td class='center'>$max_members</td>";
                         }
                         $tool_content .= "
                   <td class='center'>
@@ -387,34 +406,6 @@ if ($is_adminOfCourse) {
               <p class='alert1'>$langNoGroup</p>";
 	}
 
-
-        list($total_students) = mysql_fetch_row(db_query(
-                "SELECT COUNT(*) FROM cours_user
-                 WHERE cours_id = $cours_id AND statut = 5 AND tutor = 0"));
-        list($unregistered_students) = mysql_fetch_row(db_query(
-			"SELECT COUNT(*)
-                                FROM (user u, cours_user cu)
-                                WHERE cu.cours_id = $cours_id AND
-                                      cu.user_id = u.user_id AND
-                                      cu.statut = 5 AND
-                                      cu.tutor = 0 AND
-                                      u.user_id NOT IN (SELECT user_id FROM group_members, `group`
-                                                                       WHERE `group`.id = group_members.group_id AND
-                                                                       `group`.course_id = $cours_id)"));
-	
-	$registered_students = $total_students - $unregistered_students;
-	$tool_content .= "" .
-	                 "
-        <table width='100%' class='tbl smaller'>
-        <tr>
-	  <td><div align='left'>
-	    <b>$registered_students</b> $langGroupStudentsInGroup<br />
-	    <b>$unregistered_students</b> $langGroupNoGroup<br />
-	    <b>$total_students</b> $langGroupStudentsRegistered</div>
-            <div align='right'>($langGroupUsersList)</div>
-	  </td>
-        </tr>
-        </table>\n";
 
 } else {
         // Begin student view

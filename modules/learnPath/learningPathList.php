@@ -442,6 +442,12 @@ $is_blocked = false;
 $ind=1;
 while ($list = mysql_fetch_array($result)) // while ... learning path list
 {
+     if ($ind%2 == 0) {
+         $style = 'class="even"';
+     } else {
+         $style = 'class="odd"';
+     }
+
     if ($list['visibility'] == 'HIDE') {
         if ($is_adminOfCourse) {
             $style = " class='invisible'";
@@ -459,11 +465,6 @@ while ($list = mysql_fetch_array($result)) // while ... learning path list
         $image_bullet = "arrow.png";
     }
 
-     if ($ind%2 == 0) {
-         $style = 'class="even"';
-     } else {
-         $style = 'class="odd"';
-     }
 
 
     $tool_content .= "    <tr ".$style.">";

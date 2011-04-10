@@ -132,8 +132,8 @@ if (!empty($show) and $show == 'closed') {
 	if (!empty($id) && ($id>0)) {
 	// restore request
 		$sql = db_query("UPDATE prof_request set status='1', date_closed=NULL WHERE rid='$id'");
-		$tool_content = "<table><tbody><tr>
-		<td class=\"success\">$langReintroductionApplication</td></tr></tbody></table>";
+		$tool_content = "
+		<p class=\"success\">$langReintroductionApplication</p>";
 	} else {
 		$tool_content .= "<table class=\"tbl_alt\" width=\"100%\" align=\"left\">";
 		$tool_content .= table_header(1, $langDateReject_small);
@@ -269,22 +269,22 @@ else
 		$tool_content .= "<td>".htmlspecialchars(find_faculty_by_id($req['proftmima']))."</td>";
 		$tool_content .= "<td align='center'>
 			<small>".nice_format(date("Y-m-d", strtotime($req['date_open'])))."</small></td>";
-		$tool_content .= "<td align='center'>";
+		$tool_content .= "<td align='center' class='smaller'>";
 		switch($req['profpassword']) {
 			case 'ldap': $tool_content .= "<a href='../auth/ldapnewprofadmin.php?id=".urlencode($req['rid'])."&amp;auth=4'>
-					$langRegistration<br />($langViaLdap)</td>\n  </tr>";
+					$langElaboration<br />($langViaLdap)</td>\n  </tr>";
 				break;
 			case 'pop3': $tool_content .= "<a href='../auth/ldapnewprofadmin.php?id=".urlencode($req['rid'])."&amp;auth=2'>
-					$langRegistration<br>($langViaPop)</td>\n  </tr>";
+					$langElaboration<br>($langViaPop)</td>\n  </tr>";
 				break;
 			case 'imap': $tool_content .= "<a href='../auth/ldapnewprofadmin.php?id=".urlencode($req['rid'])."&amp;auth=3'>
-					$langRegistration<br>($langViaImap)</td>\n  </tr>";
+					$langElaboration<br>($langViaImap)</td>\n  </tr>";
 				break;
 			case 'cas': $tool_content .= "<a href='../auth/ldapnewprofadmin.php?id=".urlencode($req['rid'])."&amp;auth=7'>
-					$langRegistration<br>($langViaCAS)</td>\n  </tr>";
+					$langElaboration<br>($langViaCAS)</td>\n  </tr>";
 				break;
 			default:  $tool_content .= "<a href='newuseradmin.php?id=".urlencode($req['rid'])."'>
-					$langRegistration
+					$langElaboration 
 					</a></td>\n  </tr>";
 				break;
 		}

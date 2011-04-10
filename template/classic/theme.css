@@ -976,6 +976,11 @@ td.bold {
         border-bottom: none !important;
 }
 
+.invisible_alt {
+    color: #cccccc !important;
+    border: 1px solid #cccccc !important;
+}
+
 
 .invisible { 
     color: #cccccc !important;

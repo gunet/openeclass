@@ -130,8 +130,13 @@ $langEmail : $emailhelpdesk
                 $tool_content .= "<div id='operations_container'>
                 <ul id='opslist'>
                 <li><a href='listreq.php?id=$id&amp;close=1' onclick='return confirmation();'>$langClose</a></li>
-                <li><a href='listreq.php?id=$id&amp;close=2'>$langRejectRequest</a></li>
-                
+                <li><a href='listreq.php?id=$id&amp;close=2'>$langRejectRequest</a></li>";
+        if (isset($_GET['id'])) {
+                $tool_content .= "
+                <li><a href='../admin/listreq.php$reqtype'>$langBackRequests</a></li>";
+        }
+
+                $tool_content .= "
                 </ul></div>";
                 $res = mysql_fetch_array(db_query("SELECT profname, profsurname, profuname, profemail, proftmima, profcomm, am,
                         comment, lang, date_open, statut FROM prof_request WHERE rid='$id'"));
@@ -160,11 +165,12 @@ $langEmail : $emailhelpdesk
                 $title = $langNewProf;
         }
 
-        $tool_content .= "<form action='$_SERVER[PHP_SELF]' method='post'>
+        $tool_content .= "
+      <form action='$_SERVER[PHP_SELF]' method='post'>
+      <fieldset>
+      <legend>$title</legend>  
         <table width='100%' align='left' class='tbl'>
-        <tr><th width='220'>&nbsp;</th>
-            <td><b>$title</b></td></tr>
-        <tr><th class='left'><b>$langName</b></th>
+        <tr><th class='left' width='180'><b>$langName</b></th>
             <td><input class='FormData_InputText' type='text' name='prenom_form' value='".q($pn)."' />&nbsp;(*)</td></tr>
         <tr><th class='left'><b>$langSurname</b></th>
             <td><input class='FormData_InputText' type='text' name='nom_form' value='".q($ps)."' />&nbsp;(*)</td></tr>
@@ -205,8 +211,9 @@ $langEmail : $emailhelpdesk
         $tool_content .= "
         <tr><th>&nbsp;</th>
             <td><input type='submit' name='submit' value='$langSubmit' />
-                <small>$langRequiredFields</small></td></tr>
+                <div align='right'><small>$langRequiredFields</small></div></td></tr>
         </table>
+      </fieldset>
         <input type='hidden' name='phone' value='".@$pphone."' />
         <input type='hidden' name='rid' value='".@$id."' />
         <input type='hidden' name='pstatut' value='$pstatut' />
@@ -217,12 +224,7 @@ $langEmail : $emailhelpdesk
         } else {
                 $reqtype ='';
         }
-        if (isset($_GET['id'])) {
-                $tool_content .= "
-                <br />
-                <p align='right'><a href='../admin/listreq.php$reqtype'>$langBackRequests</a></p>";
-        }
-        $tool_content .= "<br /><p align='right'><a href='../admin/index.php'>$langBack</a></p>";
+        $tool_content .= "<p align='right'><a href='../admin/index.php'>$langBack</a></p>";
 }
 
 draw($tool_content, 3);

@@ -123,12 +123,9 @@ if ($submit)  {
 	}
 
 	// user message
-	$tool_content .= "<table width='99%'><tbody><tr>
-	<td class='well-done' height='60'>
-	<p>$profsuccess</p><br><br>
-	<center><p><a href='../admin/listreq.php'>$langBackRequests</a></p></center>
-	</td>
-	</tr></tbody></table>";
+	$tool_content .= "
+	<p class='success'>$profsuccess<br><br>
+	<a href='../admin/listreq.php'>$langBackRequests</a></p>";
 
 } else { 
 	// if not submit then display the form
@@ -138,7 +135,12 @@ if ($submit)  {
 		$tool_content .= "<div id='operations_container'>
 		<ul id='opslist'>
 		<li><a href='../admin/listreq.php?id=$id&amp;close=1' onclick='return confirmation();'>$langClose</a></li>
-		<li><a href='../admin/listreq.php?id=$id&amp;close=2'>$langRejectRequest</a></li>
+		<li><a href='../admin/listreq.php?id=$id&amp;close=2'>$langRejectRequest</a></li>";
+        if (isset($_GET['id'])) {
+                $tool_content .= "
+                <li><a href='../admin/listreq.php'>$langBackRequests</li>";
+        }
+                $tool_content .= "
 		</ul></div>";
 		$res = mysql_fetch_array(db_query("SELECT profname,profsurname, profuname, profemail, 
 			proftmima, comment, lang, date_open, profcomm, am FROM prof_request WHERE rid='$id'"));
@@ -154,15 +156,13 @@ if ($submit)  {
 		$pdate = nice_format(date("Y-m-d", strtotime($res['date_open'])));
 	}
 	
-	@$tool_content .= "<form action='$_SERVER[PHP_SELF]' method='post'>
-	<table width='99%' class='FormData'>
-	<tbody>
+	@$tool_content .= "
+      <form action='$_SERVER[PHP_SELF]' method='post'>
+      <fieldset>
+      <legend>$langNewProf</legend>
+	<table width='100%' class='tbl'>
 	<tr>
-	<th width='220'>&nbsp;</th>
-	<td><b>$langNewProf</b></td>
-	</tr>
-	<tr>
-	<th class='left'><b>".$langSurname."</b></th>
+	<th class='left' width='180'><b>".$langSurname."</b></th>
 	<td>$ps<input type='hidden' name='ps' value='$ps'></td>
 	</tr>
 	<tr>
@@ -207,12 +207,9 @@ if ($submit)  {
 	<input type='hidden' name='auth' value='$auth' >
 	</td></tr>
 	<input type='hidden' name='rid' value='".@$id."'>
-	</tbody>
 	</table>
-	</form>";
-	if (isset($_GET['id'])) {
-		$tool_content .= "<br /><p align='right'><a href='../admin/listreq.php'>$langBackRequests</p>";
-	}
-	$tool_content .= "<br /><p align='right'><a href='../admin/index.php'>$langBack</p>";
+      </fieldset>
+      </form>";
+	$tool_content .= "<p align='right'><a href='../admin/index.php'>$langBack</p>";
  }
 draw($tool_content, 3);
