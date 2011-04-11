@@ -255,11 +255,11 @@ if ($is_adminOfCourse) {
 	$tool_content .= "
         <table class='tbl_courseid' width='100%'>
 	<tr>
-	  <td class='title1' colspan='2'><a href='group_properties.php' title='$langPropModify'>$langGroupPropertiesSum</a>&nbsp;
+	  <td class='title1' colspan='2'><a href='group_properties.php' title='$langPropModify'>$langGroupProperties</a>&nbsp;
               <a href='group_properties.php' title='$langPropModify'><img src='../../template/classic/img/edit.png' align='middle' alt='$langPropModify' title='$langPropModify' /></a>
           </td>
-          <td rowspan='8' width='50' class='even'>&nbsp;&nbsp;</td>
-          <td class='title1' align='right'>$langGroupUsersList &nbsp;<a href=../user/user.php><img src='../../template/classic/img/switch_s.png' title='$langUsers' alt='$langUsers' /></a></td>
+          <td class='even'>&nbsp;</td>
+          <td class='title1'>$langGroupUsersList</td>
 	</tr>";
 
         list($total_students) = mysql_fetch_row(db_query(
@@ -281,12 +281,13 @@ if ($is_adminOfCourse) {
         $tool_content .= "
         <tr>
           <td colspan='2'><u>$langGroupPrefs</u></td>
-          <td class='smaller'>
+          <td rowspan='7' class='even'>&nbsp;</td>
+          <td>
             <img src='../../template/classic/img/arrow.png' alt='' />&nbsp;<b>$registered_students</b> $langGroupStudentsInGroup
           </td>
         </tr>
-        <tr class='smaller'>
-          <td><img src='../../template/classic/img/arrow.png' alt='' />&nbsp;$langGroupAllowStudentRegistration</td> 
+        <tr>
+          <td class='smaller'><img src='../../template/classic/img/arrow.png' alt='' />&nbsp;$langGroupAllowStudentRegistration</td> 
           <td align='right' width='50'>";
         if ($self_reg) {
                 $tool_content .= "<font color='green'>$langYes</font>";
@@ -296,8 +297,8 @@ if ($is_adminOfCourse) {
         $tool_content .= "</td>
           <td><img src='../../template/classic/img/arrow.png' alt='' />&nbsp;<b>$unregistered_students</b> $langGroupNoGroup</td>
         </tr>
-        <tr class='smaller'>
-          <td><img src='../../template/classic/img/arrow.png' alt='' />&nbsp;$langGroupAllowMultipleRegistration</td>
+        <tr>
+          <td class='smaller'><img src='../../template/classic/img/arrow.png' alt='' />&nbsp;$langGroupAllowMultipleRegistration</td>
           <td align='right'>";
 
         if ($multi_reg) {
@@ -311,8 +312,8 @@ if ($is_adminOfCourse) {
         <tr>
           <td colspan=2 class='left'><u>$langTools</u></td>
         </tr>
-        <tr class='smaller'>
-          <td><img src='../../template/classic/img/arrow.png' alt='' />&nbsp;";
+        <tr>
+          <td class='smaller'><img src='../../template/classic/img/arrow.png' alt='' />&nbsp;";
 
         if ($has_forum) {
                 $tool_content .= "$langGroupForum</td>
@@ -325,19 +326,19 @@ if ($is_adminOfCourse) {
         }
         $tool_content .= "</td>
         </tr>
-        <tr class='smaller'>
-          <td><img src='../../template/classic/img/arrow.png' alt='' />&nbsp;";
+        <tr>
+          <td class='smaller'><img src='../../template/classic/img/arrow.png' alt='' />&nbsp;";
         if ($private_forum) {
                 $tool_content .= "$langForumType</td>
-          <td align='right'>$langForumClosed";
+          <td align='right'><font color='red'>$langForumClosed</font>";
         } else {
                 $tool_content .= "$langForumType</td>
-          <td align='right'>$langForumOpen";
+          <td align='right'><font color='green'>$langForumOpen</font>";
         }
         $tool_content .= "</td>
         </tr>
-        <tr class='smaller'>
-          <td><img src='../../template/classic/img/arrow.png' alt='' />&nbsp;";
+        <tr>
+          <td class='smaller'><img src='../../template/classic/img/arrow.png' alt='' />&nbsp;";
         if ($documents) {
                 $tool_content .= "$langDoc</td>
           <td align='right'><font color='green'>$langYes</font>";

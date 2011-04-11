@@ -1198,7 +1198,7 @@ $langGroupPrefs = "Λειτουργικά Χαρακτηριστικά Ομάδ�
 $langGroupPropertiesSum = "Σύνοψη Ρυθμίσεων";
 
 // Group Properties
-$langGroupProperties="Ρυθμίσεις ομάδων χρηστών";
+$langGroupProperties="Ρυθμίσεις Ομάδων Χρηστών";
 $langGroupAllowStudentRegistration="Οι ".$langsStudents." επιτρέπονται να εγγραφούν στις ομάδες χρηστών";
 $langGroupAllowMultipleRegistration="Δυνατότητα εγγραφής σε περισσότερες από μία ομάδες";
 $langGroupStudentRegistrationType="Δυνατότητα Εγγραφής";
