@@ -151,7 +151,7 @@ if ($is_adminOfCourse) { // course admin
 		$tool_content .= "<table width='99%'>
 		<tbody><tr><td class='success'>$langStored</td>
 		</tr></tbody></table>";
-		header("Location: {$urlServer}modules/phpbb/viewtopic.php?topic=$topic&forum=$forum" . $page);
+		header("Location: {$urlServer}modules/phpbb/viewtopic.php?course=$code_cours&amp;topic=$topic&amp;forum=$forum" . $page);
 		exit;
 	} else {
 		// Gotta handle private forums right here. They're naturally covered on submit, but not in this part.
