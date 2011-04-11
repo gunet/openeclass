@@ -400,8 +400,9 @@ if($sql) {
 					<a href='userstats.php?u=".$logs['user_id']."'>
 					<img src='../../template/classic/img/platform_stats.png' title='$langStat' /></a>
 					
-					<a href='change_user.php?username=".$logs['username']."'>
-					<img src='../../template/classic/img/log_as.png' title='$langChangeUserAs $logs[username]' /></a>
+					<a href='change_user.php?username=".urlencode($logs['username'])."'>
+                                        <img src='../../template/classic/img/log_as.png' title='$langChangeUserAs ".
+                                                q($logs['username'])."' /></a>
 					</td>\n";
 				$tool_content .= "</tr>";
 				$k++;
