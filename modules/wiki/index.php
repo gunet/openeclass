@@ -44,5 +44,5 @@
 ==============================================================================
 */
 
-header( "Location: wiki.php" );
+header( "Location: wiki.php?course=$code_cours" );
 exit();

@@ -92,8 +92,8 @@ function confirmation (name)
         // group context
         $groupId = (int) $_gid;
 
-        $navigation[]  = array ('url' => '../group/group.php', 'name' => $langGroups);
-        $navigation[]  = array ('url' => '../group/group_space.php', 'name' => $_group['name']);
+        $navigation[]  = array ('url' => '../group/group.php?course='.$code_cours, 'name' => $langGroups);
+        $navigation[]  = array ('url' => '../group/group_space.php?course='.$code_cours, 'name' => $_group['name']);
     }
     elseif ($_gid && ! $is_groupAllowed)
     {
@@ -352,7 +352,7 @@ function confirmation (name)
     {
         case "rqEdit":
         {
-            $navigation[] = array ('url' => 'wiki.php', 'name' => $langWiki );
+            $navigation[] = array ('url' => 'wiki.php?course='.$code_cours, 'name' => $langWiki );
             $navigation[] = array ('url' => NULL
                 , 'name' => $wikiTitle);
             $nameTools = $langWikiProperties;
@@ -447,9 +447,7 @@ function confirmation (name)
                 $tool_content .= '
               <div id="operations_container">
                 <ul id="opslist">
-                  <li><a href="'
-                    . $_SERVER['PHP_SELF']
-                    . '?action=rqEdit'
+                  <li><a href="'.$_SERVER['PHP_SELF'].'?course='.$code_cours.'&amp;action=rqEdit'
                     . '">'
                     . $langWikiCreateNewWiki
                     . '</a></li>
@@ -522,7 +520,7 @@ function confirmation (name)
 
                     $tool_content .= '          <td>';
                     // display direct link to main page
-                    $tool_content .= '<a class="item'.$classItem.'" href="page.php?wikiId='
+                    $tool_content .= '<a class="item'.$classItem.'" href="page.php?course='.$code_cours.'&amp;wikiId='
                         . $entry['id'].'&amp;action=show'
                         . '">'
                         . $entry['title'] . '</a>'
@@ -540,14 +538,14 @@ function confirmation (name)
                     $tool_content .= '</td>' . "\n";
 
                     $tool_content .= '          <td><div align="center">';
-                    $tool_content .= '<a href="page.php?wikiId=' . $entry['id'] . '&amp;action=all">';
+                    $tool_content .= '<a href="page.php?course='.$code_cours.'&amp;wikiId=' . $entry['id'] . '&amp;action=all">';
                     $tool_content .= $wikiStore->getNumberOfPagesInWiki( $entry['id'] );
                     $tool_content .= '</a>';
                     $tool_content .= '</div></td>' . "\n";
 
                     $tool_content .= '          <td width="5" style="text-align: center;">';
                     // display direct link to main page
-                    $tool_content .= '<a href="page.php?wikiId='
+                    $tool_content .= '<a href="page.php?course='.$code_cours.'&amp;wikiId='
                         . $entry['id'].'&amp;action=recent'
                         . '">'
                         . '<img src="' . $imgRepositoryWeb . '/history.png" border="0" alt="'.$langWikiRecentChanges.'" title="'.$langWikiRecentChanges.'" />'
@@ -563,7 +561,7 @@ function confirmation (name)
                         // edit link
 
                         $tool_content .= '          <td width="5" style="text-align: center;">';
-                        $tool_content .= '<a href="'.$_SERVER['PHP_SELF'].'?wikiId='
+                        $tool_content .= '<a href="'.$_SERVER['PHP_SELF'].'?course='.$code_cours.'&amp;wikiId='
                             . $entry['id'].'&amp;action=rqEdit'
                             . '">'
                             . '<img src="'.$imgRepositoryWeb.'/edit.png" border="0" alt="'.$langWikiEditProperties.'" title="'.$langWikiEditProperties.'" />'
@@ -575,7 +573,7 @@ function confirmation (name)
                         // delete link
 
                         $tool_content .= '<td width="5" style="text-align: center;">';
-                        $tool_content .= '<a href="'.$_SERVER['PHP_SELF'].'?wikiId='
+                        $tool_content .= '<a href="'.$_SERVER['PHP_SELF'].'?course='.$code_cours.'&amp;wikiId='
                             . $entry['id'].'&amp;action=exDelete'
                             . '">'
                             . '<img src="'.$imgRepositoryWeb.'/delete.png" border="0" alt="'.$langDelete.'" title="'.$langDelete.'" onClick="return confirmation();"/>'

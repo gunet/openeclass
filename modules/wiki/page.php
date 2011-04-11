@@ -70,7 +70,7 @@
     // check and set user access level for the tool
     if ( ! isset( $_REQUEST['wikiId'] ) )
     {
-        header( "Location: wiki.php" );
+        header( "Location: wiki.php?course=$code_cours" );
         exit();
     }
 
@@ -82,8 +82,8 @@
     {
         // group context
         $grouId = $_gid;
-        $navigation[]  = array ('url' => '../group/group.php', 'name' => $langGroups);
-        $navigation[]= array ('url' => '../group/group_space.php', 'name' => $_group['name']);
+        $navigation[]  = array ('url' => '../group/group.php?course='.$code_cours, 'name' => $langGroups);
+        $navigation[]= array ('url' => '../group/group_space.php?course='.$code_cours, 'name' => $_group['name']);
     }
     elseif ($_gid && ! $is_groupAllowed )
     {
@@ -515,7 +515,7 @@
         ;
     // Breadcrumps
 	if (!add_units_navigation()) {
-		$navigation[]= array ( 'url' => 'wiki.php', 'name' => $langWiki);
+		$navigation[]= array ( 'url' => 'wiki.php?course='.$code_cours, 'name' => $langWiki);
 		$navigation[]= array ( 'url' => NULL, 'name' => $wiki->getTitle() );
 	}
 	mysql_select_db($currentCourseID);
@@ -525,7 +525,7 @@
         case "edit":
         {
             $dispTitle = ( $title == "__MainPage__" ) ? $langWikiMainPage : $title;
-            $navigation[]= array ( 'url' => 'page.php?action=show&amp;wikiId='
+            $navigation[]= array ( 'url' => 'page.php?course='.$code_cours.'&amp;action=show&amp;wikiId='
                 . $wikiId . '&amp;title=' . $title
                 , 'name' => $dispTitle );
 
@@ -548,7 +548,7 @@
         case "history":
         {
             $dispTitle = ( $title == "__MainPage__" ) ? $langWikiMainPage : $title;
-            $navigation[]= array ( 'url' => 'page.php?action=show&amp;wikiId='
+            $navigation[]= array ( 'url' => 'page.php?course='.$code_cours.'&amp;action=show&amp;wikiId='
                 . $wikiId . '&amp;title=' . $title
                 , 'name' => $dispTitle );
             $nameTools = $langWikiPageHistory;
@@ -633,34 +633,30 @@
       <div id="operations_container">
         <ul id="opslist">' . "\n";
     $tool_content .= '          <li>'
-        . '<img src="'.$imgRepositoryWeb.'/wiki.png" border="0" align="absmiddle" />&nbsp;<a class="claroCmd" href="'
-        . $_SERVER['PHP_SELF']
-        . '?wikiId=' . $wiki->getWikiId()
+        . '<img src="'.$imgRepositoryWeb.'/wiki.png" border="0" align="absmiddle" />&nbsp;<a class="claroCmd" href="'.$_SERVER['PHP_SELF'].'?course='.$code_cours
+        . '&amp;wikiId=' . $wiki->getWikiId()
         . '&amp;action=show'
         . '&amp;title=__MainPage__'
         . '">'
         . $langWikiMainPage.'</a></li>' . "\n"
         ;
     $tool_content .= '          <li>'
-        . '<img src="'.$imgRepositoryWeb.'/history.png" border="0" align="absmiddle" />&nbsp;<a class="claroCmd" href="'
-        . $_SERVER['PHP_SELF']
-        . '?wikiId=' . $wiki->getWikiId()
+        . '<img src="'.$imgRepositoryWeb.'/history.png" border="0" align="absmiddle" />&nbsp;<a class="claroCmd" href="'.$_SERVER['PHP_SELF'].'?course='.$code_cours
+        . '&amp;wikiId=' . $wiki->getWikiId()
         . '&amp;action=recent'
         . '">'
         . $langWikiRecentChanges.'</a></li>' . "\n"
         ;
 
     $tool_content .= '          <li>'
-        . '<img src="'.$imgRepositoryWeb.'/book.png" border="0" align="absmiddle" />&nbsp;<a class="claroCmd" href="'
-        . $_SERVER['PHP_SELF']
-        . '?wikiId=' . $wiki->getWikiId()
+        . '<img src="'.$imgRepositoryWeb.'/book.png" border="0" align="absmiddle" />&nbsp;<a class="claroCmd" href="'.$_SERVER['PHP_SELF'].'?course='.$code_cours
+        . '&amp;wikiId=' . $wiki->getWikiId()
         . '&amp;action=all">'
         . $langWikiAllPages.'</a></li>' . "\n"
         ;
 
     $tool_content .= '          <li>'
-        . '<img src="'.$imgRepositoryWeb.'/list.png" border="0" align="absmiddle" />&nbsp;<a class="claroCmd" href="'
-        . 'wiki.php'
+        . '<img src="'.$imgRepositoryWeb.'/list.png" border="0" align="absmiddle" />&nbsp;<a class="claroCmd" href="'.'wiki.php?course='.$code_cours
         . '">'
         . $langWikiList .'</a></li>' . "\n"
         ;
@@ -677,9 +673,8 @@
     {
         $tool_content .= ''
             . '<img src="'.$imgRepositoryWeb.'/back.png" border="0" align="absmiddle" />&nbsp;'
-            . '<a class="claroCmd" href="'
-            . $_SERVER['PHP_SELF']
-            . '?wikiId=' . $wiki->getWikiId()
+            . '<a class="claroCmd" href="'.$_SERVER['PHP_SELF'].'?course='.$code_cours
+            . '&amp;wikiId=' . $wiki->getWikiId()
             . '&amp;action=show'
             . '&amp;title=' . rawurlencode($title)
             . '">'.$langWikiBackToPage.'</a>'
@@ -700,9 +695,8 @@
         {
             $tool_content .= '&nbsp;&nbsp;&nbsp;'
                 . '<img src="'.$imgRepositoryWeb.'/edit.png" border="0" align="absmiddle" />&nbsp;'
-                . '<a class="claroCmd" href="'
-                . $_SERVER['PHP_SELF']
-                . '?wikiId=' . $wiki->getWikiId()
+                . '<a class="claroCmd" href="'.$_SERVER['PHP_SELF'].'?course='.$code_cours
+                . '&amp;wikiId=' . $wiki->getWikiId()
                 . '&amp;action=edit'
                 . '&amp;title=' . rawurlencode( $title )
                 . '&amp;versionId=' . $versionId
@@ -732,9 +726,8 @@
         // active
         $tool_content .= '&nbsp;&nbsp;&nbsp;'
                 . '<img src="'.$imgRepositoryWeb.'/version.png" border="0" align="absmiddle" />&nbsp;'
-                . '<a class="claroCmd" href="'
-                . $_SERVER['PHP_SELF']
-                . '?wikiId=' . $wiki->getWikiId()
+                . '<a class="claroCmd" href="'.$_SERVER['PHP_SELF'].'?course='.$code_cours
+                . '&amp;wikiId=' . $wiki->getWikiId()
                 . '&amp;action=history'
                 . '&amp;title=' . rawurlencode( $title )
                 . '">'
@@ -790,7 +783,7 @@
             $tool_content .= '</div>' . "\n";
             $message = $langWikiConflictHowTo;
             $tool_content .= disp_message_box ( $message ) . '<br />' . "\n";
-            $tool_content .= '<form id="editConflict" action="'.$_SERVER['PHP_SELF'].'" method="POST">';
+            $tool_content .= '<form id="editConflict" action="'.$_SERVER['PHP_SELF'].'?course='.$code_cours.'" method="POST">';
             $tool_content .= '<textarea name="conflictContent" id="wiki_content"'
                  . ' cols="80" rows="15" wrap="virtual">'
                  ;
@@ -801,7 +794,8 @@
             $tool_content .= '<input type="hidden" name="title" value="'.$title.'" />' . "\n";
             $tool_content .= '<input type="submit" name="action[edit]" value="'.$langWikiEditLastVersion.'" />' . "\n";
             $url = $_SERVER['PHP_SELF']
-                . '?wikiId=' . $wikiId
+                . '?course='.$code_cours
+                . '&amp;wikiId=' . $wikiId
                 . '&amp;title=' . $title
                 . '&amp;action=show'
                 ;
@@ -884,7 +878,7 @@
                         : $recentChange['title']
                         ;
 
-                    $entry = '<strong><a href="'.$_SERVER['PHP_SELF'].'?wikiId='
+                    $entry = '<strong><a href="'.$_SERVER['PHP_SELF'].'?course='.$code_cours.'&amp;wikiId='
                         . $wikiId . '&amp;title=' . rawurlencode( $recentChange['title'] )
                         . '&amp;action=show"'
                         . '>'.$pgtitle.'</a></strong>'
@@ -914,8 +908,8 @@
         {
             // handle main page
 
-            $tool_content .= '<ul><li><a href="'.$_SERVER['PHP_SELF']
-                . '?wikiId=' . $wikiId
+            $tool_content .= '<ul><li><a href="'.$_SERVER['PHP_SELF'].'?course='.$code_cours
+                . '&amp;wikiId=' . $wikiId
                 . '&amp;title=' . rawurlencode("__MainPage__")
                 . '&amp;action=show">'
                 . $langWikiMainPage
@@ -938,7 +932,7 @@
 
                     $pgtitle = rawurlencode( $page['title'] );
 
-                    $link = '<a href="'.$_SERVER['PHP_SELF'].'?wikiId='
+                    $link = '<a href="'.$_SERVER['PHP_SELF'].'?course='.$code_cours.'&amp;wikiId='
                         . $wikiId . '&amp;title=' . $pgtitle . '&amp;action=show"'
                         . '>' . $page['title'] . '</a>'
                         ;
@@ -962,7 +956,7 @@
             }
             else
             {
-                $script = $_SERVER['PHP_SELF'];
+                $script = $_SERVER['PHP_SELF']."?course=$code_cours";
 
                 $tool_content .= claro_disp_wiki_editor( $wikiId, $title, $versionId, $content, $script
                     , true, false )
@@ -1071,6 +1065,7 @@
                 ;
 
             $tool_content .= '<div>' . "\n"
+                . '<input type="hidden" name="course" value="'.$code_cours.'" />' . "\n"
                 . '<input type="hidden" name="wikiId" value="'.$wikiId.'" />' . "\n"
                 . '<input type="hidden" name="title" value="'.$title.'" />' . "\n"
                 . '<input type="submit" name="action[diff]" value="'.$langWikiShowDifferences.'" />' . "\n"
@@ -1116,7 +1111,7 @@
 
                     $userUrl = $userStr;
 
-                    $versionUrl = '<a href="' . $_SERVER['PHP_SELF'] . '?wikiId='
+                    $versionUrl = '<a href="' . $_SERVER['PHP_SELF'] . '?course='.$code_cours.'&amp;wikiId='
                         . $wikiId . '&amp;title=' . rawurlencode( $title )
                         . '&amp;action=show&amp;versionId=' . $version['id']
                         . '">'

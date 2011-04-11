@@ -63,10 +63,10 @@
         , $content, $script = null, $showWikiToolBar = true
         , $forcePreview = true )
     {
-        global $langPreview, $langCancel, $langSave, $langWikiMainPage;
+        global $langPreview, $langCancel, $langSave, $langWikiMainPage, $code_cours;
 
         // create script
-        $script = ( is_null( $script ) ) ? $_SERVER['PHP_SELF'] : $script;
+        $script = ( is_null( $script ) ) ? $_SERVER['PHP_SELF']."?course=$code_cours" : $script;
         $script = add_request_variable_to_url( $script, "title", rawurlencode($title) );
 
         // set display title
@@ -188,9 +188,9 @@
      */
     function claro_disp_wiki_preview_buttons( $wikiId, $title, $content, $script = null )
     {
-        global $langSave,$langEdit,$langCancel;
+        global $langSave,$langEdit,$langCancel, $code_cours;
 
-        $script = ( is_null( $script ) ) ? $_SERVER['PHP_SELF'] : $script;
+        $script = ( is_null( $script ) ) ? $_SERVER['PHP_SELF']."?course=$code_cours" : $script;
 
         $out = '<br><div><form method="POST" action="' . $script
             . '" name="previewform" id="previewform">' . "\n"
@@ -247,7 +247,7 @@
             , $langWikiCourseMembers, $langWikiGroupMembers, $langWikiOtherUsers
             , $langWikiOtherUsersText, $langWikiReadPrivilege, $langWikiEditPrivilege
             , $langWikiCreatePrivilege, $langCancel, $langSave, $langWikiDefaultTitle
-            , $langWikiDefaultDescription
+            , $langWikiDefaultDescription, $code_cours
             ;
 
         $title = ( $title != '' ) ? $title : $langWikiDefaultTitle;
@@ -274,7 +274,7 @@
         $other_edit_checked = ( $acl['other_edit'] == true ) ? ' checked="checked"' : '';
         $other_create_checked = ( $acl['other_create'] == true ) ? ' checked="checked"' : '';
 
-        $script = ( is_null( $script ) ) ? $_SERVER['PHP_SELF'] : $script;
+        $script = ( is_null( $script ) ) ? $_SERVER['PHP_SELF']."?course=$code_cours" : $script;
 
         $form = '   <form method="POST" id="wikiProperties" action="'.$script.'">' . "\n"
               . '   <fieldset>' . "\n"
@@ -382,7 +382,7 @@
 
 
         $form .= '        <input type="submit" name="action[exEdit]" value="' . $langSave . '" />' . "\n"
-            . disp_button ($_SERVER['PHP_SELF'] . '?action=list', $langCancel) . "\n"
+            . disp_button ($_SERVER['PHP_SELF'] . '?course='.$code_cours.'&amp;action=list', $langCancel) . "\n"
             ;
 
         $form .= '        </td>' . "\n"
