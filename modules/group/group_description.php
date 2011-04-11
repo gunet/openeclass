@@ -30,7 +30,7 @@ include '../../include/baseTheme.php';
 include '../../include/sendMail.inc.php';
 
 $nameTools = $langAddDescription;
-$navigation[] = array("url" => "group.php", "name" => $langGroups);
+$navigation[] = array("url" => "group.php?course=$code_cours", "name" => $langGroups);
 $group_id = isset($_REQUEST['group_id'])?intval($_REQUEST['group_id']):'';
 
 if (isset($_GET['delete'])) {
@@ -39,7 +39,7 @@ if (isset($_GET['delete'])) {
 	if (mysql_affected_rows() > 0) {
 		$tool_content .= "<div class='success'>$langBlockDeleted<br /><br />";
 	}
-	$tool_content .= "<a href='group.php'>$langBack</a></div>";	
+	$tool_content .= "<a href='group.php?course=$code_cours'>$langBack</a></div>";	
 } else if (isset($_POST['submit'])) {
 		$sql = db_query("UPDATE group_members SET description = '".q($_POST['group_desc'])."'
 			WHERE group_id = $group_id AND user_id = $uid", $mysqlMainDb);
@@ -48,13 +48,13 @@ if (isset($_GET['delete'])) {
 		} else {
 			$tool_content .= "<div class='caution'>$langNoChanges<br /><br />";
 		}
-		$tool_content .= "<a href='group.php'>$langBack</a></div>";	
+		$tool_content .= "<a href='group.php?course=$code_cours'>$langBack</a></div>";	
 } else { // display form
 	$sql = db_query("SELECT description FROM group_members
 			WHERE group_id = $group_id AND user_id = $uid", $mysqlMainDb);
 	list($description) = mysql_fetch_array($sql);
 	
-	$tool_content .= "<form method='post' action='$_SERVER[PHP_SELF]'>
+	$tool_content .= "<form method='post' action='$_SERVER[PHP_SELF]?course=$code_cours'>
 	  <table class='FormData' width='99%' align='left'>
 	  <tbody>
 	  <tr>

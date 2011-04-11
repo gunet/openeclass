@@ -44,11 +44,11 @@ include 'group_functions.php';
 initialize_group_id();
 initialize_group_info($group_id);
 
-$navigation[] = array ('url' => 'group.php', 'name' => $langGroups);
-$navigation[] = array ('url' => "group_space.php?group_id=$group_id", 'name' => q($group_name));
+$navigation[] = array ('url' => 'group.php?course='.$code_cours, 'name' => $langGroups);
+$navigation[] = array ('url' => "group_space.php?course=$code_cours&amp;group_id=$group_id", 'name' => q($group_name));
 
 if (!($is_adminOfCourse or $is_tutor)) {
-        header('Location: group_space.php?group_id=' . $group_id);
+        header('Location: group_space.php?course='.$code_cours.'&amp;group_id=' . $group_id);
         exit;
 }
 
@@ -185,12 +185,12 @@ if (!empty($message)) {
 $tool_content .= "
     <div id='operations_container'>
       <ul id='opslist'>
-        <li><a href='group_space.php?group_id=$group_id'>$langGroupThisSpace</a></li>" .
-                ($is_adminOfCourse? "<li><a href='../user/user.php'>$langAddTutors</a></li>": '') . "</ul></div>";
+        <li><a href='group_space.php?course=$code_cours&amp;group_id=$group_id'>$langGroupThisSpace</a></li>" .
+                ($is_adminOfCourse? "<li><a href='../user/user.php?course=$code_cours'>$langAddTutors</a></li>": '') . "</ul></div>";
 
 
 $tool_content .="
-  <form name='groupedit' method='post' action='".$_SERVER['PHP_SELF']."?group_id=$group_id' onsubmit=\"return checkrequired(this,'name');\">
+  <form name='groupedit' method='post' action='".$_SERVER['PHP_SELF']."?course=$code_cours&amp;group_id=$group_id' onsubmit=\"return checkrequired(this,'name');\">
     <fieldset>
     <legend>$langGroupInfo</legend>
     <table width='99%' class='tbl'>

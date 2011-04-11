@@ -244,10 +244,10 @@ if ($is_adminOfCourse) {
           $tool_content .= "
         <div id='operations_container'>
           <ul id='opslist'>
-            <li><a href='group_creation.php' title='$langNewGroupCreate'>$langCreate</a></li>
-            <li><a href='$_SERVER[PHP_SELF]?delete_all=yes' onClick=\"return confirmation('delall');\" title='$langDeleteGroups'>$langDelete</a></li>
-            <li><a href='$_SERVER[PHP_SELF]?fill=yes' title='$langFillGroups'>$langFillGroupsAll</a></li>
-            <li><a href='$_SERVER[PHP_SELF]?empty=yes' onClick=\"return confirmation('emptyall');\" title='$langEmtpyGroups'>$langEmtpyGroupsAll</a></li>
+            <li><a href='group_creation.php?course=$code_cours' title='$langNewGroupCreate'>$langCreate</a></li>
+            <li><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;delete_all=yes' onClick=\"return confirmation('delall');\" title='$langDeleteGroups'>$langDelete</a></li>
+            <li><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;fill=yes' title='$langFillGroups'>$langFillGroupsAll</a></li>
+            <li><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;?empty=yes' onClick=\"return confirmation('emptyall');\" title='$langEmtpyGroups'>$langEmtpyGroupsAll</a></li>
           </ul>
         </div>";
 
@@ -255,8 +255,8 @@ if ($is_adminOfCourse) {
 	$tool_content .= "
         <table class='tbl_courseid' width='100%'>
 	<tr>
-	  <td class='title1' colspan='2'><a href='group_properties.php' title='$langPropModify'>$langGroupProperties</a>&nbsp;
-              <a href='group_properties.php' title='$langPropModify'><img src='../../template/classic/img/edit.png' align='middle' alt='$langPropModify' title='$langPropModify' /></a>
+	  <td class='title1' colspan='2'><a href='group_properties.php?course=$code_cours' title='$langPropModify'>$langGroupProperties</a>&nbsp;
+              <a href='group_properties.php?course=$code_cours' title='$langPropModify'><img src='../../template/classic/img/edit.png' align='middle' alt='$langPropModify' title='$langPropModify' /></a>
           </td>
           <td class='even'>&nbsp;</td>
           <td class='title1'>$langGroupUsersList</td>
@@ -378,7 +378,7 @@ if ($is_adminOfCourse) {
                         $tool_content .= "
                   <td width='16'>
                         <img src='../../template/classic/img/arrow.png' alt='' /></td><td>
-                        <a href='group_space.php?group_id=$group[id]'>".q($group_name)."</a></td>";
+                        <a href='group_space.php?course=$code_cours&amp;group_id=$group[id]'>".q($group_name)."</a></td>";
                         $tool_content .= "
                   <td>" . display_user($tutors) . "</td>" . "
                   <td class='center'>$member_count</td>";
@@ -391,9 +391,9 @@ if ($is_adminOfCourse) {
                         }
                         $tool_content .= "
                   <td class='center'>
-                        <a href='group_edit.php?group_id=$group[id]'>
+                        <a href='group_edit.php?course=$code_cours&amp;group_id=$group[id]'>
                         <img src='../../template/classic/img/edit.png' alt='$langEdit' title='$langEdit' /></a>
-                        <a href='$_SERVER[PHP_SELF]?delete=$group[id]' onClick=\"return confirmation('" .
+                        <a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;delete=$group[id]' onClick=\"return confirmation('" .
                                 js_escape($group_name) . "');\">
                         <img src='../../template/classic/img/delete.png' alt='$langDelete' title='$langDelete' /></a></td>
                 </tr>";
@@ -443,19 +443,19 @@ if ($is_adminOfCourse) {
                   <td class='left'>";
                         // Allow student to enter group only if member
                         if ($is_member) {
-                                $tool_content .= "<a href='group_space.php?group_id=$row[0]'>" . q($group_name) .
+                                $tool_content .= "<a href='group_space.php?course=$code_cours&amp;group_id=$row[0]'>" . q($group_name) .
                                         "</a> <span style='color:#900; weight:bold;'>($langMyGroup)</span>";
 			} else {
 				$tool_content .= q($group_name);
 			}
 			if ($user_group_description) {
 				$tool_content .= "<br />".q($user_group_description)."&nbsp;&nbsp;
-					<a href='group_description.php?group_id=$row[0]'>
+					<a href='group_description.php?course=$code_cours&amp;group_id=$row[0]'>
 						<img src='../../template/classic/img/edit.png' title='$langModify' /></a>
-					<a href='group_description.php?group_id=$row[0]&amp;delete=true' onClick=\"return confirm_delete();\">
+					<a href='group_description.php?course=$code_cours&amp;group_id=$row[0]&amp;delete=true' onClick=\"return confirm_delete();\">
 						<img src='../../template/classic/img/delete.png' title='$langDelete' /></a>";
 			} elseif ($is_member) {
-				$tool_content .= "<br /><a href='group_description.php?group_id=$row[0]'><i>$langAddDescription</i></a>";
+				$tool_content .= "<br /><a href='group_description.php?course=$code_cours&amp;group_id=$row[0]'><i>$langAddDescription</i></a>";
 			}
                         $tool_content .= "</td>";
                         $tool_content .= "
@@ -469,7 +469,7 @@ if ($is_adminOfCourse) {
 			    (!$user_groups or $multi_reg) and
 			    !$is_member and
 			    (!$max_members or $member_count < $max_members)) {
-                                        $tool_content .= "<a href='group_space.php?selfReg=1&amp;group_id=$row[0]'>$langRegistration</a>";
+                                        $tool_content .= "<a href='group_space.php?course=$code_cours&amp;selfReg=1&amp;group_id=$row[0]'>$langRegistration</a>";
 			} else {
                                         $tool_content .= "-";
 			}

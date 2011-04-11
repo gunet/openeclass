@@ -44,11 +44,11 @@ if (!$is_adminOfCourse) {
 }
 
 $nameTools = $langNewGroupCreate;
-$navigation[]= array ("url"=>"group.php", "name"=> $langGroups);
+$navigation[]= array ("url"=>"group.php?course=$code_cours", "name"=> $langGroups);
 
 $tool_content = <<<tCont
 
-    <form method="post" action="group.php">
+    <form method="post" action="group.php?course=$code_cours">
     <fieldset>
     <legend>$langNewGroupCreateData</legend>
     <table width="99%" class="tbl">

@@ -43,14 +43,14 @@ include '../../include/sendMail.inc.php';
 $group_id = intval($_REQUEST['group_id']);
 
 $nameTools = $langEmailGroup;
-$navigation[]= array ("url"=>"group.php", "name"=> $langGroupSpace,
+$navigation[]= array ("url"=>"group.php?course=$code_cours", "name"=> $langGroupSpace,
 "url"=>"group_space.php?group_id=$group_id", "name"=>$langGroupSpace);
 
 list($tutor_id) = mysql_fetch_row(db_query("SELECT is_tutor FROM group_members WHERE group_id='$group_id'", $mysqlMainDb));
 $is_tutor = ($tutor_id == 1)?TRUE:FALSE;
 
 if (!$is_adminOfCourse and !$is_tutor) {
-        header('Location: group_space.php?group_id=' . $group_id);
+        header('Location: group_space.php?course='.$code_cours.'&amp;group_id=' . $group_id);
         exit;
 }
 
@@ -76,10 +76,10 @@ if ($is_adminOfCourse or $is_tutor)  {
 		// aldo send email to professor 
 		send_mail($sender_name, $sender_email,'', $sender_email, $emailsubject, $emailbody, $charset);
 		$tool_content .= "<p class='success_small'>$langEmailSuccess<br />";
-		$tool_content .= "<a href='group.php'>$langBack</a></p>";
+		$tool_content .= "<a href='group.php?course=$code_cours'>$langBack</a></p>";
 	} else {
 		$tool_content .= "
-		<form action='$_SERVER[PHP_SELF]' method='post'>
+		<form action='$_SERVER[PHP_SELF]?course=$code_cours' method='post'>
 		<fieldset>
 		<legend>$langTypeMessage</legend>
 		<input type='hidden' name='group_id' value='$group_id'>

@@ -39,19 +39,19 @@ include '../usage/duration_query.php';
 $group_id = intval($_REQUEST['group_id']);
 
 if (isset($_GET['module']) and $_GET['module'] == 'usage') {
-        $navigation[] = array('url' => '../usage/usage.php', 'name'=> $langUsage);
-        $navigation[] = array('url' => '../usage/group.php', 'name'=> $langGroupUsage);
+        $navigation[] = array('url' => '../usage/usage.php?course='.$code_cours, 'name'=> $langUsage);
+        $navigation[] = array('url' => '../usage/group.php?course='.$code_cours, 'name'=> $langGroupUsage);
         $module = 'module=usage&amp;';
 } else {
-        $navigation[] = array('url' => 'group.php', 'name'=> $langGroupSpace);
-        $navigation[] = array('url' => "group_space.php?group_id=$group_id", 'name'=> $langGroupSpace);
+        $navigation[] = array('url' => 'group.php?course='.$code_cours, 'name'=> $langGroupSpace);
+        $navigation[] = array('url' => "group_space.php?course=$code_cours&amp;group_id=$group_id", 'name'=> $langGroupSpace);
         $module = '';
 }
 
 initialize_group_info($group_id);
 
 if (!$is_adminOfCourse and !$is_tutor) {
-        header('Location: group_space.php?group_id=' . $group_id);
+        header('Location: group_space.php?course='.$code_cours.'&amp;group_id=' . $group_id);
         exit;
 }
 
@@ -64,7 +64,7 @@ if (isset($_GET['type']) and in_array($_GET['type'], array('duration', 'visits',
 
 $head_content = '<script type="text/javascript" src="../auth/sorttable.js"></script>';
 
-$base = $_SERVER['PHP_SELF'].'?' . $module . 'group_id=' . $group_id . '&amp;type=';
+$base = $_SERVER['PHP_SELF'].'?course='.$code_cours.'&amp;' . $module . 'group_id=' . $group_id . '&amp;type=';
 
 function link_current($title, $this_type)
 {
@@ -76,11 +76,11 @@ function link_current($title, $this_type)
         }
 }
 if (isset($_POST['u_date_start']) and isset($_POST['u_date_end'])) {
-	$link = "<li>$langDumpUserDurationToFile (<a href='dumpgroupduration.php?group_id=$group_id&u_date_start=$_POST[u_date_start]&u_date_end=$_POST[u_date_end]'>$langCodeUTF</a>
-	&nbsp;<a href='dumpgroupduration.php?group_id=$group_id&enc=1253&u_date_start=$_POST[u_date_start]&u_date_end=$_POST[u_date_end]'>$langCodeWin</a>)</li>";
+	$link = "<li>$langDumpUserDurationToFile (<a href='dumpgroupduration.php?course=$code_cours&amp;group_id=$group_id&u_date_start=$_POST[u_date_start]&u_date_end=$_POST[u_date_end]'>$langCodeUTF</a>
+	&nbsp;<a href='dumpgroupduration.php?course=$code_cours&amp;group_id=$group_id&enc=1253&u_date_start=$_POST[u_date_start]&u_date_end=$_POST[u_date_end]'>$langCodeWin</a>)</li>";
 } else {
-	$link = "<li>$langDumpUserDurationToFile (<a href='dumpgroupduration.php?group_id=$group_id'>$langCodeUTF</a>
-	&nbsp;<a href='dumpgroupduration.php?group_id=$group_id&enc=1253'>$langCodeWin</a>)</li>";
+	$link = "<li>$langDumpUserDurationToFile (<a href='dumpgroupduration.php?course=$code_cours&amp;group_id=$group_id'>$langCodeUTF</a>
+	&nbsp;<a href='dumpgroupduration.php?course=$code_cours&amp;group_id=$group_id&enc=1253'>$langCodeWin</a>)</li>";
 }
 
 $tool_content .= "<div id='operations_container'><ul id='opslist'>" .

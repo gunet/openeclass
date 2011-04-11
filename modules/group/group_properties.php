@@ -40,7 +40,7 @@ $require_prof = true;
 
 include '../../include/baseTheme.php';
 $nameTools = $langGroupProperties;
-$navigation[] = array ("url"=>"group.php", "name"=> $langGroupManagement);
+$navigation[] = array ("url"=>"group.php?course=$code_cours", "name"=> $langGroupManagement);
 
 include 'group_functions.php';
 initialize_group_info();
@@ -54,7 +54,7 @@ $checked['private_forum_no'] = $private_forum? '': ' checked="1"';
 
 if ($is_adminOfCourse) {
 	$tool_content = "
-<form method='post' action='group.php'>
+<form method='post' action='group.php?course=$code_cours'>
     <fieldset>
     <legend>$langGroupProperties / $langTools</legend>
     <table width='100%' class='tbl'>
