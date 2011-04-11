@@ -47,7 +47,7 @@ if ($is_adminOfCourse) {
         $tool_content .= "
    <div id='operations_container'>
      <ul id='opslist'>
-       <li><a href='index.php?create=1'>$langCreate</a>
+       <li><a href='index.php?course=$code_cours&amp;create=1'>$langCreate</a>
      </ul>
    </div>";
 
@@ -70,7 +70,7 @@ if ($is_adminOfCourse) {
                 }
         } elseif (isset($_GET['create'])) {
                 $tool_content .= "
-   <form method='post' action='create.php' enctype='multipart/form-data'>
+   <form method='post' action='create.php?course=$code_cours' enctype='multipart/form-data'>
      <fieldset>
      <legend>$langUpload</legend>
      
@@ -133,25 +133,25 @@ draw($tool_content, 2, '', $head_content);
 
 function tools($id, $title, $k, $num)
 {
-        global $is_adminOfCourse, $langModify, $langDelete, $langDown, $langUp, $langEBookDelConfirm;
+        global $is_adminOfCourse, $langModify, $langDelete, $langDown, $langUp, $langEBookDelConfirm, $code_cours;
 
         if (!$is_adminOfCourse) {
                 return '';
         } else {
                 $num--;
-                return "\n        <td width='70' class='center'>\n<form action='$_SERVER[PHP_SELF]' method='post'>\n" .
-                       "<input type='hidden' name='id' value='$id' />\n<a href='edit.php?id=$id'>" .
+                return "\n        <td width='70' class='center'>\n<form action='$_SERVER[PHP_SELF]?course=$code_cours' method='post'>\n" .
+                       "<input type='hidden' name='id' value='$id' />\n<a href='edit.php?course=$code_cours&amp;id=$id'>" .
                        "<img src='../../template/classic/img/edit.png' alt='$langModify' title='$langModify' />" .
                        "</a>&nbsp;<input type='image' src='../../template/classic/img/delete.png'
                                          alt='$langDelete' title='$langDelete' name='delete' value='$id'
                                          onclick=\"javascript:if(!confirm('".
                        js_escape(sprintf($langEBookDelConfirm, $title)) ."')) return false;\" />" .
                        "</form></td>\n        <td class='right'>" .
-                       (($k < $num)? "<a href='$_SERVER[PHP_SELF]?down=$id'>
+                       (($k < $num)? "<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;down=$id'>
                                       <img class='displayed' src='../../template/classic/img/down.png'
                                            title='$langDown' alt='$langDown' /></a>":
                                      '') . 
-                       (($k > 0)? "<a href='$_SERVER[PHP_SELF]?up=$id'>
+                       (($k > 0)? "<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;up=$id'>
                                    <img class='displayed' src='../../template/classic/img/up.png'
                                         title='$langUp' alt='$langUp' /></a>":
                                   '') . '</td>';

@@ -34,7 +34,7 @@ include '../../include/lib/fileDisplayLib.inc.php';
 mysql_select_db($mysqlMainDb);
 
 $nameTools = $langEBookEdit;
-$navigation[] = array('url' => 'index.php', 'name' => $langEBook);
+$navigation[] = array('url' => 'index.php?course='.$code_cours, 'name' => $langEBook);
 
 if (!$is_adminOfCourse) {
         redirect_to_home_page();
@@ -62,7 +62,7 @@ if (isset($_GET['delete'])) {
                                                         public_id = " . autoquote($_POST['new_section_id']) . ",
                                                         title = " . autoquote($_POST['new_section_title']));
         }
-        header("Location: " . $urlAppend . '/modules/ebook/edit.php?id=' . $ebook_id);
+        header("Location: " . $urlAppend . '/modules/ebook/edit.php?course='.$code_cours.'&amp;id=' . $ebook_id);
         exit;
 } elseif (isset($_POST['title_submit'])) {
         $info = mysql_fetch_array(db_query("SELECT * FROM `ebook` WHERE course_id = $cours_id AND id = $ebook_id"));
@@ -123,11 +123,11 @@ if (mysql_num_rows($q) == 0) {
         $tool_content .= "
     <div id='operations_container'>
       <ul id='opslist'>
-        <li><a href='document.php?ebook_id=$ebook_id'>$langFileAdmin</a></li>
+        <li><a href='document.php?course=$code_cours&amp;ebook_id=$ebook_id'>$langFileAdmin</a></li>
       </ul>
     </div>
     
-    <form method='post' action='$_SERVER[PHP_SELF]'>
+    <form method='post' action='$_SERVER[PHP_SELF]?course=$code_cours'>
     <fieldset>
     <legend>$langEBook</legend>
       <table width='100%' class='tbl_alt'>
@@ -147,7 +147,7 @@ if (mysql_num_rows($q) == 0) {
 
         // Form #2 - edit sections
         $tool_content .= "
-    <form method='post' action='$_SERVER[PHP_SELF]'>
+    <form method='post' action='$_SERVER[PHP_SELF]?course=$code_cours'>
     <fieldset>
     <legend>$langSections</legend>
     <input type='hidden' name='id' value='$ebook_id' />
