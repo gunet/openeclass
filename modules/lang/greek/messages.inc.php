@@ -658,6 +658,7 @@ $langCourseTitle="Τίτλος Μαθήματος";
 $langDescription="Περιγραφή";
 $langConfidentiality="Πρόσβαση στο μάθημα";
 $langPrivOpen="Ελεύθερη Πρόσβαση (με εγγραφή) σε όσους διαθέτουν λογαριασμό στην πλατφόρμα";
+$langPrivOpenShort="Ελεύθερη (με εγγραφή)";
 $langForbidden="Μη επιτρεπτή ενέργεια";
 $langConfTip="Επιλέξτε τον τύπο πρόσβασης του μαθήματος από τους χρήστες.";
 $langOptPassword = "Προαιρετικό συνθηματικό: ";
@@ -808,7 +809,9 @@ $langFinalize="Δημιουργία μαθήματος!";
 $langCourseCategory="Η κατηγορία στην οποία ανήκει το μάθημα";
 $langProfessorsInfo="Ονοματεπώνυμα $langsOfTeachers του μαθήματος χωρισμένα με κόμματα (π.χ.<i>Νίκος Τζικόπουλος, Κώστας Αδαμόπουλος</i>)";
 $langPublic="Ελεύθερη Πρόσβαση (χωρίς εγγραφή) από τη αρχική σελίδα χωρίς συνθηματικό";
+$langPublicShort="Ελεύθερη (χωρίς εγγραφή)";
 $langPrivate="Πρόσβαση στο μάθημα (για εγγραφή) έχουν μόνο όσοι βρίσκονται στη Λίστα Χρηστών του μαθήματος";
+$langPrivateShort="Περιορισμένη (με Λίστα Χρηστών)";
 $langAlertTitle = "Παρακαλώ συμπληρώστε τον τίτλο του μαθήματος!";
 $langAlertProf = "Παρακαλώ συμπληρώστε τον διδάσκοντα του μαθήματος!";
 
@@ -2328,6 +2331,7 @@ $langNewUserAccountActivation = "Ενεργοποίηση Λογαριασμού
 $langNewProfAccountActivation = "Ενεργοποίηση Λογαριασμού $langOfTeacher";
 $langNewAccountActivation1 = "την ενεργοποίηση λογαριασμού σας";
 $langUserExistingAccount = "Στοιχεία Εισόδου";
+$langMultiRegUserData ="Στοιχεία Λογαριασμών Χρηστών";
 
 // list requests
 $langDateRequest = "Ημ/νία αίτησης";

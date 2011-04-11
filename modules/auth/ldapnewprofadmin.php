@@ -67,7 +67,7 @@ if ($submit)  {
     	$username_check = db_query("SELECT username FROM `$mysqlMainDb`.user 
 			WHERE username=".autoquote($pu));
 	if (mysql_num_rows($username_check) > 0) {
-		$tool_content .= "<p class='caution_small'>$langUserFree</p><br><br><p align='right'>
+		$tool_content .= "<p class='caution'>$langUserFree</p><br><br><p align='right'>
 		<a href='../admin/listreq.php'>$langBackRequests</a></p>";
 		draw($tool_content, 3);
 		exit();

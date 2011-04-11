@@ -605,6 +605,14 @@ fieldset table.th {
     background-repeat:no-repeat;
     background-position: left;
 }
+
+.alert2 {
+        padding: 10px 50px;
+        background-image:url(img/warning.png);
+        background-repeat:no-repeat;
+        background-position: left;
+}
+
     
 .caution {
 	background-color:#fbdfdf;

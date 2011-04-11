@@ -154,7 +154,7 @@ hContent;
     		<table class=\"tbl\" width='100%'>
     		<tr>
       		  <th>$langCat</th>
-      		  <td><input type=text name=cat_title size=55 value='$cat_title' class=\"FormData_InputText\"></td>
+      		  <td><input type=text name=cat_title size=55 value='$cat_title' /></td>
     		</tr>
     		<tr>
       		  <th>&nbsp;</th>

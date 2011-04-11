@@ -266,17 +266,17 @@ if ($is_adminOfCourse) {
 	//set the lang var for lessons visibility status
 	switch ($visible){
 		case 0: { //closed
-			$lessonStatus = $langPrivate;
+			$lessonStatus = "<span title='$langPrivate'>$langPrivateShort</span>";
 			break;
 		}
 
 		case 1: {//open with registration
-			$lessonStatus = $langPrivOpen;
+			$lessonStatus = "<span title='$langPrivOpen'>$langPrivOpenShort</span>";
 			break;
 		}
 
 		case 2: { //open
-			$lessonStatus = $langPublic;
+			$lessonStatus = "<span title='$langPublic'>$langPublicShort</span>";
 			break;
 		}
 	}

@@ -118,7 +118,7 @@ if (isset($_POST['submit'])) {
         $tool_content .= "$langMultiRegUserInfo
             <form method='post' action='$_SERVER[PHP_SELF]'>
             <fieldset>
-  <legend>...</legend>
+  <legend>$langMultiRegUserData</legend>
 <table class='tbl' width='100%'>
 <tr><th>$langMultiRegFields:</th>
     <td><input type='text' name='fields' size='50' value='first last id email phone' /></td>

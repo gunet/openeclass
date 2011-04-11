@@ -156,7 +156,7 @@ if ($total_categories) {
 		$tool_content .= "<table width='100%' class='tbl_alt'  style='margin-bottom: 20px;'>";
 		$tool_content .= "<tr class='odd'>
 		<th colspan='5'><b>$title</b></th>
-		<td width='80'>";
+		<th width='80' class='right'>";
 		if ($is_adminOfCourse) {
 			$tool_content .= "<a href='forum_admin.php?course=$code_cours&amp;forumgo=yes&amp;cat_id=$catNum'>
 			<img src='../../template/classic/img/add.png' title='$langNewForum' alt='$langNewForum' /></a>
@@ -167,7 +167,7 @@ if ($total_categories) {
 		}
 		$tool_content .= "<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;forumcatnotify=$link_notify&amp;cat_id=$catNum'>
 		<img src='../../template/classic/img/email$icon.png' title='$langNotify' alt='$langNotify' />
-		</a></td>
+		</a></th>
 		</tr>\n";
 		$tool_content .= "<tr class='sub_title1'>
 		<td colspan='2' width='150'>$langForums</td>
@@ -253,7 +253,7 @@ if ($total_categories) {
 						$forum_link_notify = toggle_link($forum_action_notify);
 						$forum_icon = toggle_icon($forum_action_notify);
 					}
-					$tool_content .= "<td>";
+					$tool_content .= "<td class='right'>";
 					if ($is_adminOfCourse) { // admin actions
 						$tool_content .= "<a href='forum_admin.php?course=$code_cours&amp;forumgoedit=yes&amp;forum_id=$forum_id&amp;cat_id=$catNum'>
 						<img src='../../template/classic/img/edit.png' title='$langModify' />
@@ -267,7 +267,7 @@ if ($total_categories) {
 				}
 			} else {
 				$tool_content .= "<tr>";
-				$tool_content .= "<td colspan='6'>$langNoForumsCat</td>";
+				$tool_content .= "<td colspan='6' class='alert2'>$langNoForumsCat</td>";
 				$tool_content .= "</tr>";
 				break;
 			}
