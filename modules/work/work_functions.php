@@ -234,7 +234,7 @@ function was_graded($uid, $id, $ret_val = FALSE)
 // Show details of a submission
 function show_submission_details($id)
 {
-	global $uid, $m, $currentCourseID, $langSubmittedAndGraded, $tool_content;
+	global $uid, $m, $currentCourseID, $langSubmittedAndGraded, $tool_content, $code_cours;
 	$sub = mysql_fetch_array(
 		db_query("SELECT * FROM `$currentCourseID`.assignment_submit
 			           WHERE id = '$id'"));
@@ -251,7 +251,7 @@ function show_submission_details($id)
 	
 	if ($sub['uid'] != $uid) {
 		$sub_notice = "$m[submitted_by_other_member] ".
-			"<a href='../group/group_space.php?group_id=$sub[group_id]'>".
+			"<a href='../group/group_space.php?course=$code_cours&amp;group_id=$sub[group_id]'>".
 			"$m[your_group]</a> (".display_user($sub['uid']).")";
 	} else $sub_notice = "";
 	
@@ -277,7 +277,7 @@ function show_submission_details($id)
         </tr>
         <tr>
           <th>".$m['filename'].":</th>
-          <td><a href='$_SERVER[PHP_SELF]?get=$sub[id]'>".q($sub['file_name'])."</a></td>
+          <td><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;get=$sub[id]'>".q($sub['file_name'])."</a></td>
         </tr>";
 		    table_row($m['comments'], $sub['comments'], true);
 	$tool_content .= "

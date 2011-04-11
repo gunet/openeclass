@@ -89,14 +89,14 @@ if (isset($_GET['submit'])) {
 	submit_work($uid, $group_id, $_POST['assign'], $_POST['file']);
 	draw($tool_content, 2);
 } else {
-	header("Location: work.php");
+	header("Location: work.php?course=$code_cours");
 }
 
 
 // show non-expired assignments list to allow selection
 function show_assignments()
 {
-	global $m, $uid, $group_id, $langSubmit, $langDays, $langNoAssign, $tool_content, $langWorks, $currentCourseID;
+	global $m, $uid, $group_id, $langSubmit, $langDays, $langNoAssign, $tool_content, $langWorks, $currentCourseID, $code_cours;
 
 	$res = db_query("SELECT *, (TO_DAYS(deadline) - TO_DAYS(NOW())) AS days
 		FROM `$currentCourseID`.assignments");
@@ -106,7 +106,7 @@ function show_assignments()
 		return;
 	}
 
-	$tool_content .= "<form action='$_SERVER[PHP_SELF]' method='post'>
+	$tool_content .= "<form action='$_SERVER[PHP_SELF]?course=$code_cours' method='post'>
 		<input type='hidden' name='file' value='$_GET[submit]'>
 		<input type='hidden' name='group_id' value='$group_id'>
 	    <table class='tbl' width='99%'>
@@ -132,7 +132,7 @@ function show_assignments()
 
 		$tool_content .= "<tr><td width=\"1%\">
 			<img style='border:0px; padding-top:2px;' src='../../template/classic/img/arrow.png' title='bullet'></td>
-			<td><div align=\"left\"><a href=\"work.php?id=".$row['id']."\">".htmlspecialchars($row['title'])."</a></td>
+			<td><div align=\"left\"><a href=\"work.php?course=$code_cours&amp;id=".$row['id']."\">".htmlspecialchars($row['title'])."</a></td>
 			<td align=\"center\">".nice_format($row['deadline']);
 		if ($row['days'] > 1) {
 			$tool_content .=  " ($m[in]&nbsp;$row[days]&nbsp;$langDays";
@@ -180,7 +180,7 @@ function show_assignments()
 function submit_work($uid, $group_id, $id, $file) {
 	global $groupPath, $langUploadError, $langUploadSuccess,
                 $langBack, $m, $currentCourseID, $tool_content, $workPath,
-                $group_sql, $mysqlMainDb, $webDir;
+                $group_sql, $mysqlMainDb, $webDir, $code_cours;
 
         $ext = get_file_extension($file);
 	$local_name = greek_to_latin('Group '. $group_id . (empty($ext)? '': '.' . $ext));
@@ -210,9 +210,9 @@ function submit_work($uid, $group_id, $id, $file) {
 
 		$tool_content .="<p class=\"success\">$langUploadSuccess
 			<br />$m[the_file] \"$original_filename\" $m[was_submitted]<br />
-			<a href='work.php'>$langBack</a></p><br />";
+			<a href='work.php?course=$code_cours'>$langBack</a></p><br />";
 	} else {
 		$tool_content .="<p class=\"caution\">$langUploadError<br />
-		<a href='work.php'>$langBack</a></p><br />";
+		<a href='work.php?course=$code_cours'>$langBack</a></p><br />";
 	}
 }
