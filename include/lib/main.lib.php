@@ -1678,8 +1678,7 @@ function glossary_expand($text)
 		unset($_SESSION['glossary_terms_regexp']);
 	} elseif (!isset($_SESSION['glossary']) or
             $_SESSION['glossary_course_id'] != $cours_id) {
-                get_glossary_terms($cours_id);
-                if (count($_SESSION['glossary']) > 0) {
+                if (get_glossary_terms($cours_id) and count($_SESSION['glossary']) > 0) {
                         // Test whether \b works correctly, workaround if not
                         if (preg_match('/α\b/u', 'α')) {
                                 $spre = $spost = '\b';
@@ -1737,6 +1736,12 @@ function get_glossary_terms($cours_id)
 {
 	global $mysqlMainDb;
 
+        list($expand) = mysql_fetch_row(db_query("SELECT expand_glossary FROM `$mysqlMainDb`.cours
+                                                         WHERE cours_id = $cours_id"));
+        if (!$expand) {
+                return false;
+        }
+
         $q = db_query("SELECT term, definition, url FROM `$mysqlMainDb`.glossary
                               WHERE course_id = $cours_id");
         
@@ -1750,6 +1755,7 @@ function get_glossary_terms($cours_id)
 		}
         }
         $_SESSION['glossary_course_id'] = $cours_id;
+        return true;
 }
 
 function invalidate_glossary_cache()

@@ -3105,16 +3105,17 @@ $langNoCookies = 'Προσοχή! Έχετε απενεργοποιημένα τ
  Glossary
  *************************************/
 
-$langGlossary = "Γλωσσάριο";
-$langGlossaryTerm = "Όρος";
-$langGlossaryDefinition = "Ορισμός";
-$langAddGlossaryTerm = "Προσθήκη όρου";
-$langEditGlossaryTerm = "Διόρθωση όρου";
-$langGlossaryAdded = "Η προσθήκη όρου πραγματοποιήθηκε";
-$langGlossaryUpdated = "Η αλλαγή πραγματοποιήθηκε με επιτυχία";
-$langGlossaryDeleted = "Η διαγραφή πραγματοποιήθηκε με επιτυχία";
-$langGlossaryUrl = "URL ορισμού";
-
+$langGlossary = 'Γλωσσάριο';
+$langGlossaryTerm = 'Όρος';
+$langGlossaryDefinition = 'Ορισμός';
+$langAddGlossaryTerm = 'Προσθήκη όρου';
+$langEditGlossaryTerm = 'Διόρθωση όρου';
+$langGlossaryAdded = 'Η προσθήκη όρου πραγματοποιήθηκε';
+$langGlossaryUpdated = 'Η αλλαγή πραγματοποιήθηκε με επιτυχία';
+$langGlossaryDeleted = 'Η διαγραφή πραγματοποιήθηκε με επιτυχία';
+$langGlossaryUrl = 'URL ορισμού';
+$langGlossaryExpand = 'Εμφάνιση ορισμών στις σελίδες του μαθήματος';
+$langConfig = 'Ρυθμίσεις';
 
 /********************************************
  Ebook

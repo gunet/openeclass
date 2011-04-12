@@ -62,50 +62,85 @@ $nameTools = $langGlossary;
 ********************************************/
 
 if ($is_adminOfCourse) {
-	if (isset($_POST['url'])) {
-		$url = trim($_POST['url']);
-		if (!empty($url)) {
-			$url = canonicalize_url($url);
-		}
-	} else {
-		$url = '';
-	}
-    
-    if (isset($_POST['submit'])) {
-        db_query("INSERT INTO glossary SET term = " .
-                    autoquote(trim($_POST['term'])) . ", definition = " .
-                    autoquote(trim($_POST['definition'])) . ", url = " .
-                    autoquote($url) . ", `order` = " .
-                    findorder($cours_id ) .", datestamp = NOW(), course_id = $cours_id");
-        invalidate_glossary_cache();
-        $tool_content .= "<div class='success'>$langGlossaryAdded</div><br />";
-    }
-    if (isset($_POST['edit_submit'])) {
-        $id = intval($_POST['id']);
-        $sql = db_query("UPDATE glossary SET term = " .
-                            autoquote(trim($_POST['term'])) . ", definition = " .
-                            autoquote(trim($_POST['definition'])) . ", url = " .
-                            autoquote($url) . ",
-                            datestamp = NOW()
-                        WHERE id = $id AND course_id = $cours_id");
-        invalidate_glossary_cache();
-        if (mysql_affected_rows() > 0) {
-            $tool_content .= "<div class='success'>$langGlossaryUpdated</div><br />";    
+        if (isset($_POST['url'])) {
+                $url = trim($_POST['url']);
+                if (!empty($url)) {
+                        $url = canonicalize_url($url);
+                }
+        } else {
+                $url = '';
         }
-    }
-    if (isset($_GET['delete'])) {
-        $sql = db_query("DELETE FROM glossary WHERE id = '$_GET[delete]' AND course_id = $cours_id");
-        invalidate_glossary_cache();
-        if (mysql_affected_rows() > 0) {
-            $tool_content .= "<div class='success'>$langGlossaryDeleted</div><br />";    
+
+        if (isset($_POST['submit_expand'])) {
+                db_query("UPDATE cours SET expand_glossary = " . (isset($_POST['expand'])? 1: 0));
+                invalidate_glossary_cache();
+                $tool_content .= "<div class='success'>$langQuotaSuccess</div>";
         }
-    }
-    $tool_content .= "
+
+
+        if (isset($_POST['submit'])) {
+                db_query("INSERT INTO glossary SET term = " .
+                        autoquote(trim($_POST['term'])) . ", definition = " .
+                        autoquote(trim($_POST['definition'])) . ", url = " .
+                        autoquote($url) . ", `order` = " .
+                        findorder($cours_id ) .", datestamp = NOW(), course_id = $cours_id");
+                invalidate_glossary_cache();
+                $tool_content .= "<div class='success'>$langGlossaryAdded</div>";
+        }
+        if (isset($_POST['edit_submit'])) {
+                $id = intval($_POST['id']);
+                $sql = db_query("UPDATE glossary SET term = " .
+                        autoquote(trim($_POST['term'])) . ", definition = " .
+                        autoquote(trim($_POST['definition'])) . ", url = " .
+                        autoquote($url) . ",
+                                datestamp = NOW()
+                                WHERE id = $id AND course_id = $cours_id");
+                invalidate_glossary_cache();
+                if (mysql_affected_rows() > 0) {
+                        $tool_content .= "<div class='success'>$langGlossaryUpdated</div><br />";    
+                }
+        }
+        if (isset($_GET['delete'])) {
+                $sql = db_query("DELETE FROM glossary WHERE id = '$_GET[delete]' AND course_id = $cours_id");
+                invalidate_glossary_cache();
+                if (mysql_affected_rows() > 0) {
+                        $tool_content .= "<div class='success'>$langGlossaryDeleted</div><br />";    
+                }
+        }
+        $tool_content .= "
        <div id='operations_container'>
          <ul id='opslist'>
-           <li><a href='" . $_SERVER['PHP_SELF'] . "?course=$code_cours&amp;add=1'>" . $langAddGlossaryTerm . "</a></li>
+           <li><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;config=1'>$langConfig</a></li>
+           <li><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;add=1'>$langAddGlossaryTerm</a></li>
          </ul>
        </div>";
+
+    // display configuration form
+    if (isset($_GET['config']))  {
+        $navigation[] = array("url" => "$_SERVER[PHP_SELF]?course=$code_cours", "name" => $langGlossary);
+        $nameTools = $langConfig;
+        list($expand) = mysql_fetch_row(db_query("SELECT expand_glossary FROM `$mysqlMainDb`.cours
+                                                         WHERE cours_id = $cours_id"));
+        $checked = $expand? ' checked="1"': '';
+        $tool_content .= "
+              <form action='$_SERVER[PHP_SELF]?course=$code_cours' method='post'>
+               <fieldset>
+                 <legend>$langConfig</legend>
+                 <table class='tbl' width='100%'>
+                 <tr>
+                   <th>$langGlossaryExpand:</th>
+                   <td>
+                     <input type='checkbox' name='expand' value='yes'$checked>
+                   </td>
+                 </tr>
+                 <tr>
+                   <th>&nbsp;</th>
+                   <td class='right'><input type='submit' name='submit_expand' value='$langSubmit'></td>
+                 </tr>
+                 </table>
+               </fieldset>
+              </form>\n";    
+    }
     
     // display form for adding a glossary term
     if (isset($_GET['add']))  {

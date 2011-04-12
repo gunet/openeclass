@@ -147,6 +147,7 @@ db_query("CREATE TABLE `cours` (
   `dropbox_quota` float NOT NULL default '104857600',
   `password` varchar(50) default NULL,
   `faculteid` int(11) NOT NULL default '0',
+  `expand_glossary` BOOL NOT NULL DEFAULT 0,
   PRIMARY KEY  (`cours_id`)) $charset_spec");
 
 

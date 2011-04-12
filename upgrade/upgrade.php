@@ -350,6 +350,8 @@ if (!isset($_POST['submit2'])) {
 	db_query("INSERT IGNORE INTO `auth` VALUES (7, 'cas', '', '', 0)");
         mysql_field_exists($mysqlMainDb, 'admin_announcements', 'ordre') or
                 db_query("ALTER TABLE `admin_announcements` ADD `ordre` MEDIUMINT(11) NOT NULL AFTER `lang`");
+        mysql_field_exists($mysqlMainDb, 'cours', 'expand_glossary') or
+                db_query("ALTER TABLE `cours` ADD `expand_glossary` BOOL NOT NULL DEFAULT 0");
         if ($oldversion < '2.4') {
                 mysql_index_exists('user', 'user_username') or
                         db_query('CREATE INDEX user_username ON user (username)');
