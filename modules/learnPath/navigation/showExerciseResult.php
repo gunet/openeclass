@@ -120,7 +120,7 @@ echo ("
 // probaloume th dikia mas forma me to diko mas action 
 // kai me to katallhlo hidden pedio
 echo "
-	<form method=\"GET\" action=\"backFromExercise.php\">".
+	<form method=\"GET\" action=\"backFromExercise.php\"><input type=\"hidden\" name=\"course\" value=\"$code_cours\">".
 	"<input type=\"hidden\" name=\"op\" value=\"finish\">";
 
 $i=$totalScore=$totalWeighting=0;

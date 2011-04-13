@@ -86,7 +86,7 @@ if (isset($_GET['exerciseId'])) {
 // if the user has clicked on the "Cancel" button
 if(isset($_POST['buttonCancel'])) {
 	// returns to the exercise list
-	header('Location: backFromExercise.php?op=cancel');
+	header('Location: backFromExercise.php?course='.$code_cours.'&amp;op=cancel');
 	exit();
 }
 
@@ -116,7 +116,7 @@ if (isset($_POST['formSent'])) {
 		if ($_SESSION['exercise_end_time'] - $_SESSION['exercise_begin_time'] > $exerciseTimeConstrain) {
 			unset($_SESSION['exercise_begin_time']);
 			unset($_SESSION['exercise_end_time']);
-			header('Location: exercise_redirect.php');
+			header('Location: exercise_redirect.php?course='.$code_cours);
 			exit();
 		} 
 	}
@@ -150,7 +150,7 @@ if (isset($_POST['formSent'])) {
 	// if it is the last question (only for a sequential exercise)
 	if($exerciseType == 1 || $questionNum >= $nbrQuestions) {
 		// goes to the script that will show the result of the exercise
-		header('Location: showExerciseResult.php');
+		header('Location: showExerciseResult.php?course='.$code_cours);
 		exit();
 	}
 } // end of submit
@@ -193,7 +193,7 @@ if ($exerciseAllowedAttempts > 0 and $CurrentAttempt[0] > $exerciseAllowedAttemp
       <td class='alert1'>$langExerciseExpired</td>
     </tr>
     <tr>
-      <td><br/><br/><br/><div align='center'><a href='../learningPathList.php' target=top>$langBack</a></div></td>
+      <td><br/><br/><br/><div align='center'><a href='../learningPathList.php?course=$code_cours' target=top>$langBack</a></div></td>
     </tr>
     </table>");
 	exit();
@@ -247,7 +247,7 @@ echo ("
   </table>
   <br />
 
-  <form method='post' action='$_SERVER[PHP_SELF]'>
+  <form method='post' action='$_SERVER[PHP_SELF]?course=$code_cours'>
   <input type='hidden' name='formSent' value='1' />
   <input type='hidden' name='exerciseType' value='$exerciseType' />	
   <input type='hidden' name='questionNum' value='$questionNum' />

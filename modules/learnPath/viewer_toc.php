@@ -299,7 +299,7 @@ if ( $moduleNb > 1 )
 
 	if( $previousModule != '' )
 	{
-		$prevNextString .= '<a href="navigation/viewModule.php?viewModule_id='.$previousModule.'" target="scoFrame">'.$imgPrevious.'</a>';
+		$prevNextString .= '<a href="navigation/viewModule.php?course='.$code_cours.'&amp;viewModule_id='.$previousModule.'" target="scoFrame">'.$imgPrevious.'</a>';
 	}
 	else
 	{
@@ -309,7 +309,7 @@ if ( $moduleNb > 1 )
 
 	if( $nextModule != '' )
 	{
-		$prevNextString .=  '<a href="navigation/viewModule.php?viewModule_id='.$nextModule.'" target="scoFrame">'.$imgNext.'</a>';
+		$prevNextString .=  '<a href="navigation/viewModule.php?course='.$code_cours.'&amp;viewModule_id='.$nextModule.'" target="scoFrame">'.$imgNext.'</a>';
 	}
 	else
 	{
@@ -331,15 +331,15 @@ else
     .'<td><div align="left">&nbsp;&nbsp;'
     .$prevNextString
     ."&nbsp;&nbsp;"
-	."<a href=\"navigation/viewModule.php?go=".$returl."\" target=\"scoFrame\">"
+	."<a href=\"navigation/viewModule.php?course=$code_cours&amp;go=".$returl."\" target=\"scoFrame\">"
 	.'<img src="'.$imgRepositoryWeb.'return.png" border="0" title="'.$langQuitViewer.'">'
 	."</a>"
 	.'&nbsp;&nbsp;'
-	.'<a href="viewer.php?fullscreen=1" target="_top">'
+	.'<a href="viewer.php?course='.$code_cours.'&amp;fullscreen=1" target="_top">'
 	.'<img src="'.$imgRepositoryWeb.'fullscreen.png" border="0" title="'.$langFullScreen.'">'
 	.'</a>'
 	.'&nbsp;&nbsp;'
-	.'<a href="viewer.php?fullscreen=0" target="_top">'
+	.'<a href="viewer.php?course='.$code_cours.'&amp;fullscreen=0" target="_top">'
 	.'<img src="'.$imgRepositoryWeb.'fullscreen_exit.png" border="0" title="'.$langInFrames.'">'
 	.'</a>&nbsp;&nbsp;&nbsp;'."\n"
     .'&nbsp;</div></td>'

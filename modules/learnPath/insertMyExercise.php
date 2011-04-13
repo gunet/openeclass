@@ -73,8 +73,8 @@ $dialogBox = "";
 $style = "";
 $MessBox = "";
 
-$navigation[] = array("url"=>"learningPathList.php", "name"=> $langLearningPath);
-$navigation[] = array("url"=>"learningPathAdmin.php", "name"=> $langAdm);
+$navigation[] = array("url"=>"learningPathList.php?course=$code_cours", "name"=> $langLearningPath);
+$navigation[] = array("url"=>"learningPathAdmin.php?course=$code_cours", "name"=> $langAdm);
 $nameTools = $langInsertMyExerciseToolName;
 
 
@@ -213,13 +213,13 @@ $tool_content .= display_my_exercises($dialogBox, $style);
 
 //STEP TWO : display learning path content
 //$tool_content .= disp_tool_title($langPathContentTitle);
-//$tool_content .= '<a href="learningPathAdmin.php">&lt;&lt;&nbsp;'.$langBackToLPAdmin.'</a>';
+//$tool_content .= '<a href="learningPathAdmin.php?course=$code_cours">&lt;&lt;&nbsp;'.$langBackToLPAdmin.'</a>';
 
 // display list of modules used by this learning path
 //$tool_content .= display_path_content();
 
 	$tool_content .= "
-    <p align=\"right\"><a href=\"learningPathAdmin.php\">$langBackToLPAdmin</p>";
+    <p align=\"right\"><a href=\"learningPathAdmin.php?course=$code_cours\">$langBackToLPAdmin</p>";
 
 draw($tool_content, 2);
 

@@ -81,7 +81,7 @@ if (isset($_GET['path_id']) && $_GET['path_id'] > 0)
 elseif((!isset($_SESSION['path_id']) || $_SESSION['path_id'] == ""))
 {
     // if path id not set, redirect user to the home page of learning path
-    header("Location: ./learningPathList.php");
+    header("Location: ./learningPathList.php?course=$code_cours");
     exit();
 }
 
@@ -89,7 +89,7 @@ $l = db_query("SELECT name FROM $TABLELEARNPATH WHERE learnPath_id = '".(int)$_S
 $lpname = mysql_fetch_array($l);
 $nameTools = $lpname['name'];
 if (!add_units_navigation(TRUE)) {
-	$navigation[] = array("url"=>"learningPathList.php", "name"=> $langLearningPaths);
+	$navigation[] = array("url"=>"learningPathList.php?course=$code_cours", "name"=> $langLearningPaths);
 }
 
 
@@ -97,7 +97,7 @@ if (!add_units_navigation(TRUE)) {
 if ( $is_adminOfCourse )
 {
     // if the fct return true it means that user is a course manager and than view mode is set to COURSE_ADMIN
-    header("Location: ./learningPathAdmin.php?path_id=".$_SESSION['path_id']);
+    header("Location: ./learningPathAdmin.php?course=$code_cours&amp;path_id=".$_SESSION['path_id']);
     exit();
 }
 
@@ -264,7 +264,7 @@ foreach ($flatElementList as $module)
 
         $contentType_alt = selectAlt($module['contentType']);
         $tool_content .= '<span style="vertical-align: middle;"><img src="'.$imgRepositoryWeb.$moduleImg.'" alt="'.$contentType_alt.'" title="'.$contentType_alt.'" border="0" /></span>&nbsp;'
-        .'<a href="module.php?module_id='.$module['module_id'].'">'.htmlspecialchars($module['name']).'</a>'."";
+        .'<a href="module.php?course='.$code_cours.'&amp;module_id='.$module['module_id'].'">'.htmlspecialchars($module['name']).'</a>'."";
         // a module ALLOW access to the following modules if
         // document module : credit == CREDIT || lesson_status == 'completed'
         // exercise module : credit == CREDIT || lesson_status == 'passed'

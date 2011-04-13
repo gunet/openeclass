@@ -72,14 +72,14 @@ $body_action = "";
 
 $nameTools = $langLearningObject;
 if (!add_units_navigation()) {
-	$navigation[] = array("url"=>"learningPathList.php", "name"=> $langLearningPaths);
+	$navigation[] = array("url"=>"learningPathList.php?course=$code_cours", "name"=> $langLearningPaths);
 	if ($is_adminOfCourse)
 	{
-	$navigation[]= array ("url"=>"learningPathAdmin.php", "name"=> $langAdm);
+	$navigation[]= array ("url"=>"learningPathAdmin.php?course=$code_cours", "name"=> $langAdm);
 	}
 	else
 	{
-	$navigation[]= array ("url"=>"learningPath.php", "name"=> $langAdm);
+	$navigation[]= array ("url"=>"learningPath.php?course=$code_cours", "name"=> $langAdm);
 	}
 }
 
@@ -185,7 +185,7 @@ if( !$is_adminOfCourse
 	&& !$noStartAsset
 	)
 {
-    header("Location:./viewer.php");
+    header("Location:./viewer.php?course=$code_cours");
     exit();
 }
 
@@ -401,7 +401,7 @@ $tool_content .= "
     if( $module['startAsset_id'] != "" && $asset['asset_id'] == $module['startAsset_id'] )
     {
 	$tool_content .= ''."\n"
-		.'        <form action="./viewer.php" method="post">'."\n"
+		.'        <form action="./viewer.php?course='.$code_cours.'" method="post">'."\n"
 		.'        <input type="submit" value="'.$langStartModule.'" />'."\n"
 		.'        </form>'."\n";
     }
@@ -454,6 +454,6 @@ else
 	$pathBack = "./learningPath.php";
 }
 		$tool_content .= "
-    <p align=\"right\"><a href=\"".$pathBack."\">".$langBackToLPAdmin."</p>";
+    <p align=\"right\"><a href=\"".$pathBack."?course=$code_cours\">".$langBackToLPAdmin."</p>";
 draw($tool_content, 2, '', $head_content, $body_action);
 ?>

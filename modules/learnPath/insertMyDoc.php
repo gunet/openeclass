@@ -67,8 +67,8 @@ $pwd = getcwd();
 $courseDir   = "courses/".$currentCourseID."/document";
 $baseWorkDir = $webDir.$courseDir;
 $InfoBox = "";
-$navigation[] = array("url"=>"learningPathList.php", "name"=> $langLearningPath);
-$navigation[] = array("url"=>"learningPathAdmin.php", "name"=> $langAdm);
+$navigation[] = array("url"=>"learningPathList.php?course=$code_cours", "name"=> $langLearningPath);
+$navigation[] = array("url"=>"learningPathAdmin.php?course=$code_cours", "name"=> $langAdm);
 $nameTools = $langInsertMyDocToolName;
 
 mysql_select_db($currentCourseID);
@@ -359,13 +359,13 @@ $tool_content .= display_my_documents($dialogBox, $style) ;
 
 	$tool_content .= "
     <br />
-    <p align=\"right\"><a href=\"learningPathAdmin.php\">$langBackToLPAdmin</p>";
+    <p align=\"right\"><a href=\"learningPathAdmin.php?course=$code_cours\">$langBackToLPAdmin</p>";
 
 //################################## MODULES LIST ####################################\\
 
 //$tool_content .= "<br />";
 //$tool_content .= disp_tool_title($langPathContentTitle);
-//$tool_content .= '<a href="learningPathAdmin.php">&lt;&lt;&nbsp;'.$langBackToLPAdmin.'</a>';
+//$tool_content .= '<a href="learningPathAdmin.php?course=$code_cours">&lt;&lt;&nbsp;'.$langBackToLPAdmin.'</a>';
 
 // display list of modules used by this learning path
 //$tool_content .= display_path_content();

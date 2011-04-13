@@ -61,13 +61,13 @@ require_once("../../include/baseTheme.php");
 $head_content = "";
 $tool_content = "";
 
-$navigation[] = array("url"=>"learningPathList.php", "name"=> $langLearningPaths);
+$navigation[] = array("url"=>"learningPathList.php?course=$code_cours", "name"=> $langLearningPaths);
 $nameTools = $langStatsOfLearnPath;
 
 // path id can not be empty, return to the list of learning paths
 if( empty($_REQUEST['path_id']) )
 {
-	header("Location: ./learningPathList.php");
+	header("Location: ./learningPathList.php?course=$code_cours");
 	exit();
 }
 
@@ -121,7 +121,7 @@ if( $learnPathName )
             }
 		$tool_content .= ''."\n"
 		.'      <td width="1"><img src="../../template/classic/img/arrow.png" alt="bullet" title="bullet" border="0"></td>'."\n"
-		.'      <td><a href="detailsUserPath.php?uInfo='.$user['user_id'].'&amp;path_id='.$path_id.'">'.$user['nom'].' '.$user['prenom'].'</a></td>'."\n"
+		.'      <td><a href="detailsUserPath.php?course='.$code_cours.'&amp;uInfo='.$user['user_id'].'&amp;path_id='.$path_id.'">'.$user['nom'].' '.$user['prenom'].'</a></td>'."\n"
 		.'      <td align="right">'
 		.disp_progress_bar($lpProgress, 1)
 		.'</td>'."\n"

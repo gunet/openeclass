@@ -68,7 +68,7 @@ require_once("../../include/baseTheme.php");
 $tool_content = "";
 $pwd = getcwd();
 
-$navigation[]= array ("url"=>"learningPathList.php", "name"=> $langLearningPaths);
+$navigation[]= array ("url"=>"learningPathList.php?course=$code_cours", "name"=> $langLearningPaths);
 $nameTools = $langimportLearningPath;
 
 mysql_select_db($currentCourseID);
@@ -1210,13 +1210,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST) )
     if ( !$errorFound )
     {
         $tool_content .= "\n<br /><center><b>".$langInstalled."</b></center>";
-        $tool_content .= "\n<br /><br ><center><a href=\"learningPathAdmin.php?path_id=".$tempPathId."\">".$lpName."</a></center>";
+        $tool_content .= "\n<br /><br ><center><a href=\"learningPathAdmin.php?course=$code_cours&amp;path_id=".$tempPathId."\">".$lpName."</a></center>";
     }
     else
     {
         $tool_content .= "\n<br /><center><b>".$langNotInstalled."</b></center>";
     }
-    $tool_content .= "\n<br /><a href=\"learningPathList.php\">$langBack</a></p>";
+    $tool_content .= "\n<br /><a href=\"learningPathList.php?course=$code_cours\">$langBack</a></p>";
 }
 else // if method == 'post'
 {
@@ -1225,7 +1225,7 @@ else // if method == 'post'
       UPLOAD FORM
      --------------------------------------*/
     $tool_content .= "
-    <form enctype=\"multipart/form-data\" action=\"".$_SERVER['PHP_SELF']."\" method=\"post\">
+    <form enctype=\"multipart/form-data\" action=\"".$_SERVER['PHP_SELF']."?course=$code_cours\" method=\"post\">
     <fieldset>
     <legend>$langImport</legend>
     <table width=\"100%\" class=\"tbl\">
@@ -1276,7 +1276,7 @@ else // if method == 'post'
     
     if (mysql_num_rows($sql) != 0) {
 		$tool_content .= "\n<div class=\"fileman\">";
-		$tool_content .= "\n<form action='importFromDocument.php' method='post'>";
+		$tool_content .= "\n<form action='importFromDocument.php?course=$code_cours' method='post'>";
 		$tool_content .= "\n  <table width=\"100%\" class=\"tbl\">";
 		$tool_content .= "\n  <tr><td colspan='5' class='sub_title1' style='padding-bottom: 10px;'>$langLearningPathImportFromDocuments</td></tr>";
 		$tool_content .= "\n  <tr>";

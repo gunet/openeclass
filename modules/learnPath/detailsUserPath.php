@@ -62,13 +62,13 @@ require_once("../../include/baseTheme.php");
 $head_content = "";
 $tool_content = "";
 
-$navigation[] = array("url"=>"learningPathList.php", "name"=> $langLearningPaths);
-$navigation[] = array("url"=>"details.php?path_id=".$_REQUEST['path_id'], "name"=> $langStatsOfLearnPath);
+$navigation[] = array("url"=>"learningPathList.php?course=$code_cours", "name"=> $langLearningPaths);
+$navigation[] = array("url"=>"details.php?course=$code_cours&amp;path_id=".$_REQUEST['path_id'], "name"=> $langStatsOfLearnPath);
 $nameTools = $langTrackUser;
 
 if( empty($_REQUEST['uInfo']) || empty($_REQUEST['path_id']) )
 {
-	header("Location: ./learningPathList.php");
+	header("Location: ./learningPathList.php?course=$code_cours");
 	exit();
 }
 

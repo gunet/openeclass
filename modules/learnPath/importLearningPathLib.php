@@ -537,6 +537,7 @@ function doImport($currentCourseID, $mysqlMainDb, $webDir, $scoFileSize, $scoFil
 	global $itemsPile;
 	global $manifestData;
 	global $iterator;
+	global $code_cours;
 	
 	$pwd = getcwd();
 	mysql_select_db($currentCourseID);
@@ -1233,14 +1234,14 @@ function doImport($currentCourseID, $mysqlMainDb, $webDir, $scoFileSize, $scoFil
     {
         $importMessages .= "\n<br /><center><b>".$langInstalled."</b></center>";
         if ($displayExtraMessages == true)
-        	$importMessages .= "\n<br /><br ><center><a href=\"learningPathAdmin.php?path_id=".$tempPathId."\">".$lpName."</a></center>";
+        	$importMessages .= "\n<br /><br ><center><a href=\"learningPathAdmin.php?course=$code_cours&amp;path_id=".$tempPathId."\">".$lpName."</a></center>";
         $importMessages .= "\n<br /><br >";
     }
     else
     {
         $importMessages .= "\n<br /><center><b>".$langNotInstalled."</b></center>";
     }
-    //$importMessages .= "\n<br /><a href=\"learningPathList.php\">$langBack</a></p>";
+    //$importMessages .= "\n<br /><a href=\"learningPathList.php?course=$code_cours\">$langBack</a></p>";
     $importMessages .= "\n<br /></p>";
     
     mysql_select_db($mysqlMainDb);

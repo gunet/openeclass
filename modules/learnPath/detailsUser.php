@@ -66,14 +66,14 @@ require_once("../../include/baseTheme.php");
 $head_content = "";
 $tool_content = "";
 
-$navigation[] = array("url"=>"learningPathList.php", "name"=> $langLearningPaths);
-$navigation[] = array("url"=>"detailsAll.php", "name"=> $langTrackAllPathExplanation);
+$navigation[] = array("url"=>"learningPathList.php?course=$code_cours", "name"=> $langLearningPaths);
+$navigation[] = array("url"=>"detailsAll.php?course=$code_cours", "name"=> $langTrackAllPathExplanation);
 $nameTools = $langTrackUser;
 
 // user info can not be empty, return to the list of details
 if( empty($_REQUEST['uInfo']) )
 {
-	header("Location: ./detailsAll.php");
+	header("Location: ./detailsAll.php?course=$code_cours");
 	exit();
 }
 
@@ -89,7 +89,7 @@ $results = db_query_fetch_all($sql);
 
 if( empty($results) )
 {
-	header("Location: ./detailsAll.php");
+	header("Location: ./detailsAll.php?course=$code_cours");
 	exit();
 }
 
@@ -145,7 +145,7 @@ else
 		$lpProgress = get_learnPath_progress($lpDetails['learnPath_id'],$_GET['uInfo']);
 		$tool_content .= ''."\n"
 			.'        <td width="1"><img src="../../template/classic/img/arrow.png" alt="" border="0" /></td>'."\n"
-			.'        <td><a href="detailsUserPath.php?uInfo='.$_GET['uInfo'].'&path_id='.$lpDetails['learnPath_id'].'">'.htmlspecialchars($lpDetails['name']).'</a></td>'."\n"
+			.'        <td><a href="detailsUserPath.php?course='.$code_cours.'&amp;uInfo='.$_GET['uInfo'].'&path_id='.$lpDetails['learnPath_id'].'">'.htmlspecialchars($lpDetails['name']).'</a></td>'."\n"
 			.'        <td align="right" width="120">'.""
 			.disp_progress_bar($lpProgress, 1)
 			.'</td>'."\n"

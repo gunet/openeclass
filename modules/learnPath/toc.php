@@ -182,7 +182,7 @@ foreach ($flatElementList as $module)
 		if ( $_SESSION['lp_module_id'] == $module['module_id'] )
 			echo "<em>".htmlspecialchars($module['name'])."</em>";
 		else        
-			echo "<a href='navigation/viewModule.php?viewModule_id=$module[module_id]'".$style." target='scoFrame'>". htmlspecialchars($module['name']). "</a>";
+			echo "<a href='navigation/viewModule.php?course=$code_cours&amp;viewModule_id=$module[module_id]'".$style." target='scoFrame'>". htmlspecialchars($module['name']). "</a>";
 
     }
 echo "</td></tr>";

@@ -62,7 +62,7 @@ require_once("../../include/baseTheme.php");
 $head_content = "";
 $tool_content = "";
 
-$navigation[] = array("url"=>"learningPathList.php", "name"=> $langLearningPaths);
+$navigation[] = array("url"=>"learningPathList.php?course=$code_cours", "name"=> $langLearningPaths);
 $nameTools = $langTrackAllPathExplanation;
 
 // display a list of user and their respective progress
@@ -79,8 +79,8 @@ $usersList = get_limited_list($sql, 30);
 $tool_content .= "
   <div id=\"operations_container\">
     <ul id=\"opslist\">
-      <li>$langDumpUserDurationToFile: <a href='dumpuserlearnpathdetails.php'>$langcsvenc2</a></li>
-      <li><a href='dumpuserlearnpathdetails.php?enc=1253'>$langcsvenc1</a></li>
+      <li>$langDumpUserDurationToFile: <a href='dumpuserlearnpathdetails.php?course=$code_cours'>$langcsvenc2</a></li>
+      <li><a href='dumpuserlearnpathdetails.php?course=$code_cours&amp;enc=1253'>$langcsvenc1</a></li>
     </ul>
   </div>
 ";
@@ -133,7 +133,7 @@ foreach ($usersList as $user)
 	{
 		$total = round($globalprog/($iterator-1));
 		$tool_content .= '    <td width="1"><img src="../../template/classic/img/arrow.png" alt="bullet" title="bullet" border="0"></td>'."\n"
-		.'    <td><a href="detailsUser.php?uInfo='.$user['user_id'].'">'.$user['nom'].' '.$user['prenom'].'</a></td>'."\n"
+		.'    <td><a href="detailsUser.php?course='.$code_cours.'&amp;uInfo='.$user['user_id'].'">'.$user['nom'].' '.$user['prenom'].'</a></td>'."\n"
 		.'    <td class="center">'.uid_to_am($user['user_id']).'</td>'."\n"
 		.'    <td align="center">'.user_groups($cours_id, $user['user_id']).'</td>'."\n"
 		.'    <td class="right" width=\'120\'>'

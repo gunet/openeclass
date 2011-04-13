@@ -144,7 +144,7 @@ switch ($module['contentType'])
 		unset($_SESSION['exerciseResult']);
 		unset($_SESSION['exeStartTime'	]);
 
-		$moduleStartAssetPage = "showExercise.php?exerciseId=".$assetPath;
+		$moduleStartAssetPage = "showExercise.php?course=$code_cours&amp;exerciseId=".$assetPath;
 		break;
 	case CTSCORMASSET_ :
 		if($uid) { // Directly pass this module
@@ -164,7 +164,7 @@ switch ($module['contentType'])
 			directly_pass_lp_module($TABLEUSERMODULEPROGRESS, (int)$uid, (int)$learnPathModuleId);
 		} // else anonymous : record nothing
 
-		$moduleStartAssetPage = "showCourseDescription.php";
+		$moduleStartAssetPage = "showCourseDescription.php?course=$code_cours";
 		break;
 	case CTLINK_ :
 		if($uid) { // Directly pass this module
@@ -182,14 +182,14 @@ echo "<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Frameset//EN''http://www.w3.o
 if ($module['contentType'] == CTSCORM_ || $module['contentType'] == CTSCORMASSET_) {
 	require_once("scormAPI.inc.php");
 	echo "<frameset border='0' rows='0,75,*' frameborder='no'>
-		<frame src='updateProgress.php' name='upFrame'>";
+		<frame src='updateProgress.php?course=$code_cours' name='upFrame'>";
 } else {
 	echo "<frameset border='0' rows='95,*' frameborder='no'>";
 }
 
-echo "<frame src='../viewer_toc.php' name='tocFrame' scrolling='no' />";
+echo "<frame src='../viewer_toc.php?course=$code_cours' name='tocFrame' scrolling='no' />";
 echo "<frameset border='0' cols='180,*' frameborder='0'>";
-echo "<frame src='../toc.php' name='tocleftFrame'>";
+echo "<frame src='../toc.php?course=$code_cours' name='tocleftFrame'>";
 echo "<frame src='$moduleStartAssetPage' name='scoFrame'>";
 echo "</frameset>"; 
 echo "</frameset>";

@@ -58,7 +58,7 @@ include("../../../include/init.php");
  <link href="../tool.css" rel="stylesheet" type="text/css" />
  <script>
   <!-- //
-   parent.tocFrame.location.href="../viewer_toc.php";
+   parent.tocFrame.location.href="../viewer_toc.php?course=".$code_cours;
   //-->
  </script>
 </head>

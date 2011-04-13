@@ -63,8 +63,8 @@ $lpname = mysql_fetch_array($l);
 
 $nameTools = $langPreview;
 if (!add_units_navigation()) {
-	$navigation[] = array("url"=>"learningPathList.php", "name"=> $langLearningPaths);
-	$navigation[] = array("url"=>"learningPath.php", "name"=> $langAdm);
+	$navigation[] = array("url"=>"learningPathList.php?course=$code_cours", "name"=> $langLearningPaths);
+	$navigation[] = array("url"=>"learningPath.php?course=$code_cours", "name"=> $langAdm);
 }
 
 if (!isset($titlePage)) $titlePage = '';
@@ -92,11 +92,11 @@ else
 
 if ($displayFull == 0)
 {
-	$tool_content .= "<iframe src=\"navigation/startModule.php\" name=\"mainFrame\" "
+	$tool_content .= "<iframe src=\"navigation/startModule.php?course=$code_cours\" name=\"mainFrame\" "
 		."width=\"100%\" height=\"550\" scrolling=\"no\" frameborder=\"0\">"
 		.$langBrowserCannotSeeFrames
 		."<br />"."\n"
-		."      <a href=\"module.php\">".$langBack."</a>"."\n"
+		."      <a href=\"module.php?course=$code_cours\">".$langBack."</a>"."\n"
 		."      </iframe>"."\n";
 	draw($tool_content, 2, '', $head_content);
 }
@@ -111,13 +111,13 @@ else
 	."<title>".$titlePage."</title>"."\n"
 	."</head>"."\n"
 	."<frameset cols=\"*\" border=\"0\">"."\n"
-	."<frame src=\"navigation/startModule.php\" name=\"mainFrame\" />"."\n"
+	."<frame src=\"navigation/startModule.php?course=$code_cours\" name=\"mainFrame\" />"."\n"
 	."</frameset>"."\n"
 	."<noframes>"."\n"
 	."<body>"."\n"
 	.$langBrowserCannotSeeFrames
 	."<br />"."\n"
-	."<a href=\"module.php\">".$langBack."</a>"."\n"
+	."<a href=\"module.php?course=$code_cours\">".$langBack."</a>"."\n"
 	."</body>"."\n"
 	."</noframes>"."\n"
 	."</html>"."\n";

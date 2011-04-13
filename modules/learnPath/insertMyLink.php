@@ -56,8 +56,8 @@ require_once("../../include/baseTheme.php");
 $tool_content = "";
 $dialogBox = "";
 
-$navigation[] = array("url"=>"learningPathList.php", "name"=> $langLearningPath);
-$navigation[] = array("url"=>"learningPathAdmin.php", "name"=> $langAdm);
+$navigation[] = array("url"=>"learningPathList.php?course=$code_cours", "name"=> $langLearningPath);
+$navigation[] = array("url"=>"learningPathAdmin.php?course=$code_cours", "name"=> $langAdm);
 $nameTools = $langInsertMyLinkToolName;
 
 mysql_select_db($currentCourseID);
@@ -179,20 +179,20 @@ if (isset($dialogBox) && $dialogBox != "") {
 $tool_content .= showlinks();
 //$tool_content .= "<br />";
 //$tool_content .= disp_tool_title($langPathContentTitle);
-//$tool_content .= '<a href="learningPathAdmin.php">&lt;&lt;&nbsp;'.$langBackToLPAdmin.'</a>';
+//$tool_content .= '<a href="learningPathAdmin.php?course=$code_cours">&lt;&lt;&nbsp;'.$langBackToLPAdmin.'</a>';
 // display list of modules used by this learning path
 //$tool_content .= display_path_content();
 
 	$tool_content .= "
     <br />
-    <p align=\"right\"><a href=\"learningPathAdmin.php\">$langBackToLPAdmin</a>";
+    <p align=\"right\"><a href=\"learningPathAdmin.php?course=$code_cours\">$langBackToLPAdmin</a>";
 draw($tool_content, 2);
 
 
 function showlinks()
 {
 	global $langComment, $langAddModule, $langName, $langSelection,
-               $langAddModulesButton, $cours_id, $mysqlMainDb;
+               $langAddModulesButton, $cours_id, $mysqlMainDb, $code_cours;
 
         $sqlLinks = "SELECT * FROM `$mysqlMainDb`.link
                               WHERE course_id = $cours_id ORDER BY `order` DESC";
@@ -200,7 +200,7 @@ function showlinks()
 	$numberoflinks=mysql_num_rows($result);
 
     $output = "
-<form action='$_SERVER[PHP_SELF]' method='POST'>
+<form action='$_SERVER[PHP_SELF]?course=$code_cours' method='POST'>
                       <table width='100%' class='tbl_alt'>
                     
                       <tr>
@@ -216,7 +216,7 @@ function showlinks()
 		$output .= 	"
     <tr>
       <td width='1' valign='top'><img src='../../template/classic/img/links_on.png' border='0'></td>
-      <td align='left' valign='top'><a href='../link/link_goto.php?link_id=".$myrow[0]."&link_url=".urlencode($myrow[1])."' target='_blank'>".q($myrow[2])."</a>
+      <td align='left' valign='top'><a href='../link/link_goto.php?course=$code_cours&amp;link_id=".$myrow[0]."&link_url=".urlencode($myrow[1])."' target='_blank'>".q($myrow[2])."</a>
       <br />
       <small class='comments'>".q($myrow[3])."</small></td>";
 		$output .= 	"

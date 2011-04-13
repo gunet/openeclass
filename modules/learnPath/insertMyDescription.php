@@ -52,8 +52,8 @@ $TABLEUSERMODULEPROGRESS= "lp_user_module_progress";
 require_once("../../include/baseTheme.php");
 $tool_content = "";
 
-$navigation[] = array("url"=>"learningPathList.php", "name"=> $langLearningPaths);
-$navigation[] = array("url"=>"learningPathAdmin.php", "name"=> $langAdm);
+$navigation[] = array("url"=>"learningPathList.php?course=$code_cours", "name"=> $langLearningPaths);
+$navigation[] = array("url"=>"learningPathAdmin.php?course=$code_cours", "name"=> $langAdm);
 $nameTools = $langInsertMyDescToolName;
 
 
@@ -148,6 +148,6 @@ $tool_content .= disp_tool_title($langLinkInsertedAsModule);
 $tool_content .= "</td></tr></table>";
 	$tool_content .= "
     <br />
-    <p align=\"right\"><a href=\"learningPathAdmin.php\">$langBackToLPAdmin</a></p>";
+    <p align=\"right\"><a href=\"learningPathAdmin.php?course=$code_cours\">$langBackToLPAdmin</a></p>";
 draw($tool_content, 2);
 ?>

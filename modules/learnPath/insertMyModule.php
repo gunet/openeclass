@@ -62,8 +62,8 @@ $imgRepositoryWeb       = "../../template/classic/img/";
 require_once("../../include/baseTheme.php");
 $tool_content = "";
 
-$navigation[]= array ("url"=>"learningPathList.php", "name"=> $langLearningPath);
-$navigation[]= array ("url"=>"learningPathAdmin.php", "name"=> $langAdm);
+$navigation[]= array ("url"=>"learningPathList.php?course=$code_cours", "name"=> $langLearningPath);
+$navigation[]= array ("url"=>"learningPathAdmin.php?course=$code_cours", "name"=> $langAdm);
 $nameTools = $langInsertMyModulesTitle;
 
 
@@ -161,7 +161,7 @@ if (isset($_REQUEST['cmdglobal']) && ($_REQUEST['cmdglobal'] == 'add'))
 
 $result = db_query(buildRequestModules());
 
-$tool_content .= '    <form name="addmodule" action="'.$_SERVER['PHP_SELF'].'?cmdglobal=add">'."\n\n";
+$tool_content .= '    <form name="addmodule" action="'.$_SERVER['PHP_SELF'].'?course='.$code_cours.'&amp;cmdglobal=add">'."\n\n";
 $tool_content .= '    <table width="100%" class="tbl_alt">'."\n"
        .'    <tr>'."\n"
        .'      <th><div align="left">'
@@ -247,7 +247,7 @@ $tool_content .= "\n".'    </table>'."\n".'    </form>';
 
 
 	$tool_content .= "
-        <p align=\"right\"><a href=\"learningPathAdmin.php\">$langBackToLPAdmin</p>
+        <p align=\"right\"><a href=\"learningPathAdmin.php?course=$code_cours\">$langBackToLPAdmin</p>
     ";
 //####################################################################################\\
 //################################## MODULES LIST ####################################\\
