@@ -28,7 +28,6 @@ $require_current_course = true;
 $require_help = true;
 $helpTopic = 'Glossary';
 
-
 include '../../include/baseTheme.php';
 
 /*
@@ -110,8 +109,9 @@ if ($is_adminOfCourse) {
         $tool_content .= "
        <div id='operations_container'>
          <ul id='opslist'>
-           <li><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;config=1'>$langConfig</a></li>
            <li><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;add=1'>$langAddGlossaryTerm</a></li>
+           <li><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;config=1'>$langConfig</a></li>
+           <li>$langGlossaryToCsv (<a href='dumpglossary.php?course=$code_cours'>UTF8</a>&nbsp;-&nbsp;<a href='dumpglossary.php?course=$code_cours&amp;enc=1253'>Windows 1253</a>)</li>  
          </ul>
        </div>";
 

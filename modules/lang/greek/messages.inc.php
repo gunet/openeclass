@@ -3116,6 +3116,7 @@ $langGlossaryDeleted = 'Η διαγραφή πραγματοποιήθηκε μ�
 $langGlossaryUrl = 'URL ορισμού';
 $langGlossaryExpand = 'Εμφάνιση ορισμών στις σελίδες του μαθήματος';
 $langConfig = 'Ρυθμίσεις';
+$langGlossaryToCsv = "Όροι σε μορφή csv";
 
 /********************************************
  Ebook
