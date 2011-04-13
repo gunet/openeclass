@@ -73,7 +73,7 @@ if ($is_adminOfCourse) {
 }
 
 $tool_content .= "
-   <form name='chatForm' action='messageList.php?course=$code_cours' method='get' target='messageList' onSubmit='return prepare_message();'>
+   <form name='chatForm' action='messageList.php' method='get' target='messageList' onSubmit='return prepare_message();'><input type='hidden' name='course' value='$code_cours'/>
    <fieldset>
     <legend>$langTypeMessage</legend>
       <input type='text' name='msg' size='80'>
