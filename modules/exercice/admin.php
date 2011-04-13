@@ -51,7 +51,7 @@ $jscalendar = new DHTML_Calendar($urlServer.'include/jscalendar/', $lang, 'calen
 $head_content = $jscalendar->get_load_files_code();
 
 $nameTools = $langExercices;
-$navigation[]= array ("url"=>"exercice.php", "name"=> $langExercices);
+$navigation[]= array ("url"=>"exercice.php?course=$code_cours", "name"=> $langExercices);
 // picture path
 $picturePath='../../courses/'.$currentCourseID.'/image';
 // the 4 types of answers
@@ -159,7 +159,7 @@ if(isset($_POST['cancelExercise'])) {
 		unset($_GET['modifyExercise']);
 	} else {
 		// goes back to the exercise list
-		header('Location: exercice.php');
+		header('Location: exercice.php?course='.$code_cours);
 		exit();
 	}
 }
@@ -169,7 +169,7 @@ if(isset($_POST['cancelQuestion'])) {
 	// if we are creating a new question from the question pool
 	if(!$exerciseId && !$questionId) {
 		// goes back to the question pool
-		header('Location: question_pool.php');
+		header('Location: question_pool.php?course='.$code_cours);
 		exit();
 	} else {
 		// goes back to the question viewing
@@ -188,18 +188,18 @@ if(isset($_POST['cancelAnswers'])) {
 // modifies the query string that is used in the link of tool name
 if(isset($_GET['editQuestion']) || isset($_GET['modifyQuestion']) || isset($_GET['modifyAnswers'])) {
 	$nameTools=$langQuestionManagement;
-	$navigation[]= array ("url" => "admin.php?exerciseId=$exerciseId", "name" => $langExerciseManagement);
+	$navigation[]= array ("url" => "admin.php?course=$code_cours&amp;exerciseId=$exerciseId", "name" => $langExerciseManagement);
 	@$QUERY_STRING=$questionId?'editQuestion='.$questionId.'&fromExercise='.$fromExercise:'newQuestion=yes';
 } elseif(isset($_GET['newQuestion'])) {
 	$nameTools=$langNewQu;
-	$navigation[]= array ("url" => "admin.php?exerciseId=$exerciseId", "name" => $langExerciseManagement);
+	$navigation[]= array ("url" => "admin.php?course=$code_cours&amp;exerciseId=$exerciseId", "name" => $langExerciseManagement);
 	@$QUERY_STRING=$questionId?'editQuestion='.$questionId.'&fromExercise='.$fromExercise:'newQuestion=yes';
 } elseif(isset($_GET['NewExercise'])) {
 	$nameTools=$langNewEx;
 	$QUERY_STRING='';
 } elseif(isset($_GET['modifyExercise'])) {
 	$nameTools=$langInfoExercise;
-	$navigation[]= array ("url" => "admin.php?exerciseId=$exerciseId", "name" => $langExerciseManagement);
+	$navigation[]= array ("url" => "admin.php?course=$code_cours&amp;exerciseId=$exerciseId", "name" => $langExerciseManagement);
 	$QUERY_STRING='';
 } else {
 	$nameTools=$langExerciseManagement;

@@ -60,7 +60,7 @@ if (isset($exerciseId)) {
 	$active = mysql_fetch_array(db_query("SELECT active FROM `$TBL_EXERCICES` 
 		WHERE id='$exerciseId'", $currentCourseID));
 	if (($active['active'] == 0) and (!$is_adminOfCourse)) {
-		header('Location: exercice.php');
+		header('Location: exercice.php?course='.$code_cours);
 		exit();
 	} 
 }
@@ -72,7 +72,7 @@ if (!isset($_SESSION['exercise_begin_time'][$exerciseId])) {
 // if the user has clicked on the "Cancel" button
 if(isset($_POST['buttonCancel'])) {
 	// returns to the exercise list
-	header('Location: exercice.php');
+	header('Location: exercice.php?course='.$code_cours);
 	exit();
 }
 	
@@ -99,7 +99,7 @@ if (isset($_POST['formSent'])) {
 		if ($_SESSION['exercise_end_time'][$exerciseId] - $_SESSION['exercise_begin_time'][$exerciseId] > $exerciseTimeConstrain) {
 			unset($_SESSION['exercise_begin_time']);
 			unset($_SESSION['exercise_end_time']);
-			header('Location: exercise_redirect.php?exerciseId='.$exerciseId);
+			header('Location: exercise_redirect.php?course='.$code_cours.'&exerciseId='.$exerciseId);
 			exit();
 		} 
 	}
@@ -132,13 +132,13 @@ if (isset($_POST['formSent'])) {
 	// if it is the last question (only for a sequential exercise)
 	if($exerciseType == 1 || $questionNum >= $nbrQuestions) {
 		// goes to the script that will show the result of the exercise
-		header('Location: exercise_result.php?exerciseId='.$exerciseId);
+		header('Location: exercise_result.php?course='.$code_cours.'&exerciseId='.$exerciseId);
 		exit();
 	}
 } // end of submit
 
 if (!add_units_navigation()) {
-	$navigation[]=array("url" => "exercice.php","name" => $langExercices);
+	$navigation[]=array("url" => "exercice.php?course=$code_cours","name" => $langExercices);
 }
 
 if (isset($_SESSION['objExercise'][$exerciseId])) {
@@ -179,7 +179,7 @@ if ($exerciseAllowedAttempts > 0 and $CurrentAttempt[0] > $exerciseAllowedAttemp
       <td class='alert1'>$langExerciseExpired</td>
     </tr>
     <tr>
-      <td><br/><br/><br/><div align='center'><a href='exercice.php'>$langBack</a></div></td>
+      <td><br/><br/><br/><div align='center'><a href='exercice.php?course=$code_cours'>$langBack</a></div></td>
     </tr>
     </table>";
 	draw($tool_content, 2);
@@ -225,7 +225,7 @@ $tool_content .= "
 
   <br />
 
-  <form method='post' action='$_SERVER[PHP_SELF]'>
+  <form method='post' action='$_SERVER[PHP_SELF]?course=$code_cours'>
   <input type='hidden' name='formSent' value='1' />
   <input type='hidden' name='exerciseId' value='$exerciseId' />	
   <input type='hidden' name='exerciseType' value='$exerciseType' />	

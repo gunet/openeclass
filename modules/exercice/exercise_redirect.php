@@ -46,7 +46,7 @@ $TBL_EXERCICES='exercices';
 $TBL_QUESTIONS='questions';
 $TBL_REPONSES='reponses';
 
-$navigation[]=array("url" => "exercice.php","name" => $langExercices);
+$navigation[]=array("url" => "exercice.php?course=$code_cours","name" => $langExercices);
 
 if (isset($_GET['exerciseId'])) {
 	$exerciseId = intval($_GET['exerciseId']);
@@ -88,7 +88,7 @@ $tool_content .= "<br/><table width='99%' class='Question'>
 <td class='alert1'>$langExerciseExpiredTime</td>
 </tr>
 <tr>
-<td><br/><br/><br/><div align='center'><a href='exercice.php'>$langBack</a></div></td>
+<td><br/><br/><br/><div align='center'><a href='exercice.php?course=$code_cours'>$langBack</a></div></td>
 </tr>
 </thead></table>"; 
 
