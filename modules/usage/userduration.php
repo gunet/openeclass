@@ -70,10 +70,10 @@ if (isset($_GET['format']) and $_GET['format'] == 'csv') {
         $tool_content .= "
           <div id='operations_container'>
             <ul id='opslist'>
-              <li><a href='usage.php'>".$langUsageVisits."</a></li>
-              <li><a href='favourite.php?first='>".$langFavourite."</a></li>
-              <li><a href='userduration.php'>".$langUserDuration."</a></li>
-              <li>$langDumpUserDurationToFile&nbsp;(<a href='userduration.php?format=csv'>$langCodeUTF</a>&nbsp;<a href='userduration.php?format=csv&amp;enc=1253'>$langCodeWin</a>)</li>
+              <li><a href='usage.php?course=$code_cours'>".$langUsageVisits."</a></li>
+              <li><a href='favourite.php?course=$code_cours&amp;first='>".$langFavourite."</a></li>
+              <li><a href='userduration.php?course=$code_cours'>".$langUserDuration."</a></li>
+              <li>$langDumpUserDurationToFile&nbsp;(<a href='userduration.php?course=$code_cours&amp;format=csv'>$langCodeUTF</a>&nbsp;<a href='userduration.php?course=$code_cours&amp;format=csv&amp;enc=1253'>$langCodeWin</a>)</li>
             </ul>
           </div>\n";
 

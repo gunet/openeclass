@@ -51,9 +51,9 @@ $tool_content = '';
 $tool_content .= "
   <div id=\"operations_container\">
     <ul id=\"opslist\">
-      <li><a href='usage.php'>".$langUsageVisits."</a></li>
-      <li><a href='favourite.php?first='>".$langFavourite."</a></li>
-      <li><a href='userlogins.php?first='>".$langUserLogins."</a></li>
+      <li><a href='usage.php?course=$code_cours'>".$langUsageVisits."</a></li>
+      <li><a href='favourite.php?course=$code_cours&amp;first='>".$langFavourite."</a></li>
+      <li><a href='userlogins.php?course=$code_cours&amp;first='>".$langUserLogins."</a></li>
     </ul>
   </div>";
 
@@ -217,7 +217,7 @@ if (!extension_loaded('gd')) {
        '<option value="duration" '.(($u_stats_value=='duration')?('selected'):('')) .'>'.$langDuration."</option>\n";
 
    $tool_content .= '
-       <form method="post">
+       <form method="post" action="'.$_SERVER[PHP_SELF].'?course='.$code_cours.'">
        <fieldset>
 	 <legend>'.$langOldStats.'</legend>
 	 <table class="tbl">

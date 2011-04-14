@@ -37,7 +37,7 @@ $require_prof = true;
 include '../../include/baseTheme.php';
 include '../group/group_functions.php';
 
-$navigation[] = array('url' => 'usage.php', 'name' => $langUsage);
+$navigation[] = array('url' => 'usage.php?course='.$code_cours, 'name' => $langUsage);
 $nameTools = $langGroupUsage;
 $head_content = '<script type="text/javascript" src="../auth/sorttable.js"></script>';
 initialize_group_info();
@@ -63,7 +63,7 @@ if (mysql_num_rows($q) > 0) {
 			$tool_content .= "<tr class='odd'>\n";
 		}
 		$tool_content .= "<td class='arrow'>
-			<a href='../group/group_usage.php?module=usage&amp;group_id=$group[id]'>".
+			<a href='../group/group_usage.php?course=$code_cours&amp;module=usage&amp;group_id=$group[id]'>".
 			q($group['name'])."</a></td>\n";
 		$tool_content .= "<td>".display_user(group_tutors($group['id']))."</td>\n";
       		$tool_content .= "<td class='center'>$group[registered]</td>\n";

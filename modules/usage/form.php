@@ -71,7 +71,7 @@ $statsIntervalOptions =
     '<option value="summary" '.(($u_interval=='summary')?('selected'):('')).'>'.$langSummary."</option>\n";
 
 $tool_content .= '
-<form method="post">
+<form method="post" action="'.$_SERVER[PHP_SELF].'?course='.$code_cours.'">
 <fieldset>
   <legend>'.$langUsageVisits.'</legend>
   <table class="tbl">
@@ -102,7 +102,7 @@ $tool_content .= '
   <tr>
     <th>&nbsp;</th>
     <td><input type="submit" name="btnUsage" value="'.$langSubmit.'">
-        <div><br /><a href="oldStats.php">'.$langOldStats.'</a></div>
+        <div><br /><a href="oldStats.php?course='.$code_cours.'">'.$langOldStats.'</a></div>
     </td>
   </tr>
   </table>

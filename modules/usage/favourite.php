@@ -52,9 +52,9 @@ $tool_content = '';
 $tool_content .= "
   <div id=\"operations_container\">
     <ul id=\"opslist\">
-      <li><a href='usage.php'>".$langUsageVisits."</a></li>
-      <li><a href='userlogins.php?first='>".$langUserLogins."</a></li>
-      <li><a href='userduration.php'>".$langUserDuration."</a></li>
+      <li><a href='usage.php?course=$code_cours'>".$langUsageVisits."</a></li>
+      <li><a href='userlogins.php?course=$code_cours&amp;first='>".$langUserLogins."</a></li>
+      <li><a href='userduration.php?course=$code_cours'>".$langUserDuration."</a></li>
     </ul>
   </div>";
 
@@ -193,7 +193,7 @@ $local_head = $jscalendar->get_load_files_code();
     $letterlinks = '';
     while ($row = mysql_fetch_assoc($result)) {
         $first_letter = $row['first_letter'];
-        $letterlinks .= '<a href="?first='.$first_letter.'">'.$first_letter.'</a> ';
+        $letterlinks .= '<a href="?course='.$code_cours.'&amp;first='.$first_letter.'">'.$first_letter.'</a> ';
     }
 
     if (isset($_GET['first'])) {
@@ -221,7 +221,7 @@ $local_head = $jscalendar->get_load_files_code();
 
 
     $tool_content .= '
- <form method="post">
+ <form method="post" action="'.$_SERVER[PHP_SELF].'?course='.$code_cours.'">
  <fieldset>
   <legend>'.$langFavourite.'</legend>
   <table class="tbl">
@@ -251,7 +251,7 @@ $local_head = $jscalendar->get_load_files_code();
   <tr>
     <td>&nbsp;</td>
     <td><input type="submit" name="btnUsage" value="'.$langSubmit.'">
-        <div><br /><a href="oldStats.php">'.$langOldStats.'</a></div>
+        <div><br /><a href="oldStats.php?course='.$code_cours.'">'.$langOldStats.'</a></div>
     </td>
   </tr>
   </table>

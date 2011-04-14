@@ -50,9 +50,9 @@ $tool_content = '';
 $tool_content .= "
   <div id=\"operations_container\">
     <ul id=\"opslist\">
-      <li><a href='usage.php'>".$langUsageVisits."</a></li>
-      <li><a href='favourite.php?first='>".$langFavourite."</a></li>
-      <li><a href='userduration.php'>".$langUserDuration."</a></li>
+      <li><a href='usage.php?course=$code_cours'>".$langUsageVisits."</a></li>
+      <li><a href='favourite.php?course=$code_cours&amp;first='>".$langFavourite."</a></li>
+      <li><a href='userduration.php?course=$code_cours'>".$langUserDuration."</a></li>
     </ul>
   </div>\n";
 
@@ -266,7 +266,7 @@ if (!($table_cont || $table2_cont)) {
     $letterlinks = '';
     while ($row = mysql_fetch_assoc($result)) {
         $first_letter = $row['first_letter'];
-        $letterlinks .= '<a href="?first='.$first_letter.'">'.$first_letter.'</a> ';
+        $letterlinks .= '<a href="?course='.$code_cours.'&amp;first='.$first_letter.'">'.$first_letter.'</a> ';
     }
 
     if (isset($_GET['first'])) {
@@ -289,7 +289,7 @@ if (!($table_cont || $table2_cont)) {
     }
 
     $tool_content .= '
-<form method="post">
+<form method="post" action="'.$_SERVER[PHP_SELF].'?course='.$code_cours.'">
 <fieldset>
   <legend>'.$langUserLogins.'</legend>
 
@@ -314,7 +314,7 @@ if (!($table_cont || $table2_cont)) {
   <tr>
     <th>&nbsp;</th>
     <td><input type="submit" name="btnUsage" value="'.$langSubmit.'">
-        <div><br /><a href="oldStats.php">'.$langOldStats.'</a></div>
+        <div><br /><a href="oldStats.php?course='.$code_cours.'">'.$langOldStats.'</a></div>
     </td>
   </tr>
   </table>
