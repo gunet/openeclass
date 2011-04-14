@@ -78,18 +78,15 @@ if(!empty($submit)) {
 		$_SESSION['uid'] = $uid;
 		db_query("INSERT INTO loginout (loginout.id_user, loginout.ip, loginout.when, loginout.action)
 		VALUES ('$uid', '$_SERVER[REMOTE_ADDR]', NOW(), 'LOGIN')");
+		//if user has activated the personalised interface
+		//register a control session for it
+		if (isset($_SESSION['perso_is_active']) and (isset($userPerso))) {
+			$_SESSION['user_perso_active'] = $userPerso;
+		}
+		if ($login_user == TRUE) {
+			redirect_to_home_page();
+		}
 	}
-
-	//if user has activated the personalised interface
-	//register a control session for it
-	if (isset($_SESSION['perso_is_active']) and (isset($userPerso))) {
-		$_SESSION['user_perso_active'] = $userPerso;
-	}
-
-	if ($login_user == TRUE) {
-		header("location:".$urlServer."index.php");
-	}
-	
 }  // end of user authentication
 
 $shibactive = mysql_fetch_array(db_query("SELECT auth_default FROM auth WHERE auth_name='shibboleth'"));
@@ -120,7 +117,7 @@ $tool_content .= "
         <input class='Login' name='pass' type='password' size='20' /><br /><br />
         <input class='Login' name='submit' type='submit' size='20' value='$langEnter' /><br />
 	$warning<br />$shibboleth_link
-	$warning<br />$cas_link 
+	<br />$cas_link 
         <a href='${urlServer}modules/auth/lostpass.php'>$lang_forgot_pass</a>
       </form>
     </td>

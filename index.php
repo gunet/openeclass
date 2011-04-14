@@ -46,7 +46,6 @@ include "modules/auth/auth.inc.php";
 //$homePage is used by baseTheme.php to parse correctly the breadcrumb
 $homePage = true;
 $tool_content = "";
-
 // first check
 // check if we can connect to database. If not then eclass is most likely not installed
 if (isset($mysqlServer) and isset($mysqlUser) and isset($mysqlPassword)) {
@@ -104,7 +103,7 @@ if (isset($_SESSION['shib_uname'])) { // authenticate via shibboleth
 		$result = db_query($sqlLogin);
 		// cas might have alternative authentication defined
 		$check_passwords = array('pop3', 'imap', 'ldap', 'db', 'cas');
-		$warning = '';
+		//$warning = '';
 		$auth_allow = 0;
 		$exists = 0;
 		if (!isset($_COOKIE) or count($_COOKIE) == 0) {
@@ -159,16 +158,13 @@ if (isset($_SESSION['shib_uname'])) { // authenticate via shibboleth
                         $_SESSION['uname'] = $uname;
 			db_query("INSERT INTO loginout (loginout.id_user, loginout.ip, loginout.when, loginout.action)
 			VALUES ('$uid', '$_SERVER[REMOTE_ADDR]', NOW(), 'LOGIN')");
-		}
-	
-		##[BEGIN personalisation modification]############
-		//if user has activated the personalised interface
-		//register a control session for it
-		if (isset($_SESSION['perso_is_active']) and (isset($userPerso))) {
-			$_SESSION['user_perso_active'] = $userPerso;
-		}
-                ##[END personalisation modification]############
-                redirect_to_home_page();
+			//if user has activated the personalised interface
+			//register a control session for it
+			if (isset($_SESSION['perso_is_active']) and (isset($userPerso))) {
+				$_SESSION['user_perso_active'] = $userPerso;
+			}
+			redirect_to_home_page();	
+		}                
 	}  // end of user authentication
 } 
 	
@@ -225,7 +221,7 @@ if (isset($uid) AND !isset($_GET['logout'])) {
                 } else { // if course was deleted stop guest account
                         $warning = "<br><font color='red'>$langInvalidGuestAccount</font><br>";
                         include "include/logged_out_content.php";
-                        draw($tool_content, 0,'index');
+                        draw($tool_content, 0);
                 }
         }
 	$nameTools = $langWelcomeToPortfolio;
@@ -238,7 +234,7 @@ if (isset($uid) AND !isset($_GET['logout'])) {
 	} else {
 		// load classic view
 		include "include/classic.php";
-		draw($tool_content, 1, 'index');
+		draw($tool_content, 1);
 	}
 } else {
 	$require_help = true;

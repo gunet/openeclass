@@ -124,7 +124,7 @@ if (!get_config('dont_display_login_form')) {
 	   <input class='Login' name='pass' type = 'password' size = '17' /><br /><br />
 	   <input class='Login' name='submit' type = 'submit' size = '17' value = '$langEnter' /><br />
 	   $warning<br />$shibboleth_link
-	   $warning<br />$cas_link
+	   <br />$cas_link
 	   <a href='modules/auth/lostpass.php'>$lang_forgot_pass</a>
 	   </form>
 	   </td>
