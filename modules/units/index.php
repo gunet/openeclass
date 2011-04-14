@@ -48,51 +48,6 @@ if (isset($_REQUEST['id'])) {
 $lang_editor = langname_to_code($language);
 
 $head_content = <<<hContent
-<script type="text/javascript" src="$urlAppend/include/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
-<script type="text/javascript">
-tinyMCE.init({
-	// General options
-		language : "$lang_editor",
-		mode : "textareas",
-		theme : "advanced",
-		plugins : "pagebreak,style,save,advimage,advlink,inlinepopups,media,print,contextmenu,paste,noneditable,visualchars,nonbreaking,xhtmlxtras,template,wordcount,advlist,emotions,preview",
-
-		// Theme options
-		theme_advanced_buttons1 : "bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,styleselect,formatselect,fontsizeselect,forecolor,backcolor,removeformat,hr",
-		theme_advanced_buttons2 : "pasteword,|,bullist,numlist,|indent,blockquote,|,sub,sup,|,undo,redo,|,link,unlink,|,charmap,media,emotions,image,|,preview,cleanup,code",
-		theme_advanced_buttons3 : "",
-		theme_advanced_toolbar_location : "top",
-		theme_advanced_toolbar_align : "left",
-		theme_advanced_statusbar_location : "bottom",
-		theme_advanced_resizing : true,
-
-		// Example content CSS (should be your site CSS)
-		content_css : "$urlAppend/template/classic/img/tool.css",
-
-		// Drop lists for link/image/media/template dialogs
-		template_external_list_url : "lists/template_list.js",
-		external_link_list_url : "lists/link_list.js",
-		external_image_list_url : "lists/image_list.js",
-		media_external_list_url : "lists/media_list.js",
-
-		// Style formats
-		style_formats : [
-			{title : 'Bold text', inline : 'b'},
-			{title : 'Red text', inline : 'span', styles : {color : '#ff0000'}},
-			{title : 'Red header', block : 'h1', styles : {color : '#ff0000'}},
-			{title : 'Example 1', inline : 'span', classes : 'example1'},
-			{title : 'Example 2', inline : 'span', classes : 'example2'},
-			{title : 'Table styles'},
-			{title : 'Table row 1', selector : 'tr', classes : 'tablerow1'}
-		],
-
-		// Replace values for the template plugin
-		template_replace_values : {
-			username : "Open eClass",
-			staffid : "991234"
-		}
-});
-</script>
 <script type="text/javascript">
 function confirmation () {
         if (confirm("'.$langConfirmDelete.'"))
@@ -111,18 +66,25 @@ if (isset($_REQUEST['edit_submit'])) {
 $form = process_actions();
 
 if ($is_adminOfCourse) {
-        $tool_content .= "\n  <div id='operations_container'>\n    <ul id='opslist'>" .
-                        "\n      <li>$langAdd: <a href='insert.php?type=doc&amp;id=$id'>$langInsertDoc</a></li>" .
-                        "\n      <li><a href='insert.php?type=exercise&amp;id=$id'>$langInsertExercise</a></li>" .
-                        "\n      <li><a href='insert.php?type=text&amp;id=$id'>$langInsertText</a></li>" .
-			"\n      <li><a href='insert.php?type=link&amp;id=$id'>$langInsertLink</a></li>" .
-			"\n      <li><a href='insert.php?type=lp&amp;id=$id'>$langLearningPath1</a></li>" .
-			"\n      <li><a href='insert.php?type=video&amp;id=$id'>$langInsertVideo</a></li>" .
-			"\n      <li><a href='insert.php?type=forum&amp;id=$id'>$langInsertForum</a></li>" .
-			"\n      <li><a href='insert.php?type=work&amp;id=$id'>$langInsertWork</a></li>" .
-			"\n      <li><a href='insert.php?type=wiki&amp;id=$id'>$langInsertWiki</a></li>" .
-                        "\n    </ul>\n  </div>\n" .
-		        $form;
+	$tool_content .= "&nbsp;<div id='operations_container'>
+		<form name='resinsert' action='{$urlServer}modules/units/insert.php' method='get'>
+		<select name='type' onChange='document.resinsert.submit();'>
+			<option>-- $langAdd --</option>
+			<option value='doc'>$langInsertDoc</option>
+			<option value='exercise'>$langInsertExercise</option>
+			<option value='text'>$langInsertText</option>
+			<option value='link'>$langInsertLink</option>
+			<option value='lp'>$langLearningPath1</option>
+			<option value='video'>$langInsertVideo</option>
+			<option value='forum'>$langInsertForum</option>
+			<option value='work'>$langInsertWork</option>
+			<option value='wiki'>$langInsertWiki</option>
+		</select>
+		<input type='hidden' name='id' value='$id'>
+		<input type='hidden' name='course' value='$code_cours'>
+		</form>
+		</div>".
+		$form; 
 }
 
 if ($is_adminOfCourse) {
