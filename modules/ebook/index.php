@@ -106,8 +106,7 @@ if (mysql_num_rows($q) == 0) {
      <table width='100%' class='sortable' id='t1'>
      <tr>
        <th colspan='2'><div align='left'>$langEBook</div></th>" .  ($is_adminOfCourse? "
-       <th width='70'>$langActions</th>
-       <th width='70'>$langMove</th>":
+       <th width='70' colspan='2' class='center'>$langActions</th>":
                                                      '') .  "
      </tr>\n";
 
@@ -133,27 +132,27 @@ draw($tool_content, 2, '', $head_content);
 
 function tools($id, $title, $k, $num)
 {
-        global $is_adminOfCourse, $langModify, $langDelete, $langDown, $langUp, $langEBookDelConfirm, $code_cours;
+        global $is_adminOfCourse, $langModify, $langDelete, $langMove, $langDown, $langUp, $langEBookDelConfirm, $code_cours;
 
         if (!$is_adminOfCourse) {
                 return '';
         } else {
                 $num--;
-                return "\n        <td width='70' class='center'>\n<form action='$_SERVER[PHP_SELF]?course=$code_cours' method='post'>\n" .
+                return "\n        <td width='60' class='center'>\n<form action='$_SERVER[PHP_SELF]?course=$code_cours' method='post'>\n" .
                        "<input type='hidden' name='id' value='$id' />\n<a href='edit.php?course=$code_cours&amp;id=$id'>" .
                        "<img src='../../template/classic/img/edit.png' alt='$langModify' title='$langModify' />" .
                        "</a>&nbsp;<input type='image' src='../../template/classic/img/delete.png'
                                          alt='$langDelete' title='$langDelete' name='delete' value='$id'
                                          onclick=\"javascript:if(!confirm('".
                        js_escape(sprintf($langEBookDelConfirm, $title)) ."')) return false;\" />" .
-                       "</form></td>\n        <td class='right'>" .
+                       "</form></td>\n        <td class='right' width='40'>" .
                        (($k < $num)? "<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;down=$id'>
                                       <img class='displayed' src='../../template/classic/img/down.png'
-                                           title='$langDown' alt='$langDown' /></a>":
+                                           title='$langMove $langDown' alt='$langMove $langDown' /></a>":
                                      '') . 
                        (($k > 0)? "<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;up=$id'>
                                    <img class='displayed' src='../../template/classic/img/up.png'
-                                        title='$langUp' alt='$langUp' /></a>":
+                                        title='$langMove $langUp' alt='$langMove $langUp' /></a>":
                                   '') . '</td>';
         }
 }

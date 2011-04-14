@@ -314,13 +314,15 @@ hContent;
           
           <th colspan='2'>$langAnnouncement</th>";
 
+                if ($announcementNumber > 1) {
+                    $colsNum= 2;
+                } else {
+                    $colsNum= 2;
+                }
+
 		if ($is_adminOfCourse) {
 		    $tool_content .= "
-          <th width='70'>$langActions</th>";
-		    if ($announcementNumber > 1) {
-			    $tool_content .= "
-          <th width='70'>$langMove</th>";
-		    }
+          <th width='60' colspan='$colsNum' class='center'>$langActions</th>";
 		}
 		$tool_content .= "
         </tr>\n";
@@ -372,13 +374,13 @@ hContent;
 	  </td>";
 			if ($announcementNumber > 1)  {
 				$tool_content .= "
-          <td align='center' width='70' class='right'>";
+          <td align='center' width='35' class='right'>";
 			}
 			if ($iterator != 1)  {
-			    $tool_content .= "<a href='$_SERVER[PHP_SELF]?course=".$code_cours ."&amp;up=" . $myrow["id"] . "'><img class='displayed' src='../../template/classic/img/up.png' title='" . $langUp . "' /></a>";
+			    $tool_content .= "<a href='$_SERVER[PHP_SELF]?course=".$code_cours ."&amp;up=" . $myrow["id"] . "'><img class='displayed' src='../../template/classic/img/up.png' title='" . $langMove ." ". $langUp . "' /></a>";
 			}
 			if ($iterator < $bottomAnnouncement) {
-			    $tool_content .= "<a href='$_SERVER[PHP_SELF]?course=".$code_cours ."&amp;down=" . $myrow["id"] . "'><img class='displayed' src='../../template/classic/img/down.png' title='" . $langDown . "' /></a>";
+			    $tool_content .= "<a href='$_SERVER[PHP_SELF]?course=".$code_cours ."&amp;down=" . $myrow["id"] . "'><img class='displayed' src='../../template/classic/img/down.png' title='" . $langMove ." ". $langDown . "' /></a>";
 			}
 			if ($announcementNumber > 1) {
 				$tool_content .= "</td>";
