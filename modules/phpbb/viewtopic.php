@@ -125,7 +125,7 @@ if (isset($_GET['delete'])) {
 	if (get_total_posts($topic, $currentCourseID, "topic") == 0) {
 		db_query("DELETE FROM topics WHERE topic_id = '$topic'", $currentCourseID);
 		db_query("UPDATE forums SET forum_topics = forum_topics-1 WHERE forum_id= $forum");
-		header("Location: viewforum.php?course=$code_cours&amp;forum=$forum");
+		header("Location: viewforum.php?course=$code_cours&forum=$forum");
 	}
 	sync($currentCourseID, $forum, 'forum');
 	sync($currentCourseID, $topic, 'topic');	

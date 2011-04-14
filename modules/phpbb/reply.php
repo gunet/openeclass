@@ -209,10 +209,10 @@ if (isset($_POST['submit'])) {
 		$page = '';
 	}
 	$_SESSION['message'] = "<p class='success'>$langStored</p>";
-	header("Location: {$urlServer}modules/phpbb/viewtopic.php?course=$code_cours&amp;topic=$topic&amp;forum=$forum" . $page);
+	header("Location: {$urlServer}modules/phpbb/viewtopic.php?course=$code_cours&topic=$topic&forum=$forum" . $page);
 	exit;
 } elseif (isset($_POST['cancel'])) {
-	header("Location: viewtopic.php?course=$code_cours&amp;topic=$topic&amp;forum=$forum");	
+	header("Location: viewtopic.php?course=$code_cours&topic=$topic&forum=$forum");	
 } else {
 	// Private forum logic here.
 	if (($forum_type == 1) && !$user_logged_in && !$logging_in) {

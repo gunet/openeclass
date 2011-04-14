@@ -112,7 +112,7 @@ if (isset($_POST['submit'])) {
 	$subject = trim($_POST['subject']);
 	$message = trim($_POST['message']);
 	if (empty($message) or empty($subject)) {
-		header("Location: viewforum.php?course=$code_cours&amp;forum=$forum&amp;empty=true");
+		header("Location: viewforum.php?course=$code_cours&forum=$forum&empty=true");
 		exit;
 	}
 	
@@ -198,7 +198,7 @@ if (isset($_POST['submit'])) {
 		<p class='back'>&laquo; <a href='viewtopic.php?course=$code_cours&amp;topic=$topic_id&amp;forum=$forum&amp;$total_topic'>$langReturnMessages</a></p>
 		<p class='back'>&laquo; <a href='viewforum.php?course=$code_cours&amp;forum=$forum_id'>$langReturnTopic</a></p>"; 
 } elseif (isset($_POST['cancel'])) {
-	header("Location: viewforum.php?course=$code_cours&amp;forum=$forum");
+	header("Location: viewforum.php?course=$code_cours&forum=$forum");
 	exit;
 } else {
 	$tool_content .= "
