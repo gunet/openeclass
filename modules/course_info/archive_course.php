@@ -36,7 +36,7 @@ include '../../include/baseTheme.php';
 include '../../include/lib/fileManageLib.inc.php';
 
 $nameTools = $langArchiveCourse;
-$navigation[] = array("url" => "infocours.php", "name" => $langModifInfo);
+$navigation[] = array("url" => "infocours.php?course=$code_cours", "name" => $langModifInfo);
 $tool_content = "";
 $archiveDir = "/courses/archive";
 
@@ -92,7 +92,7 @@ if ($is_adminOfCourse) {
 		else $searchurl = "";
 		$tool_content .= "<a href=\"../admin/editcours.php?c=".$c."".$searchurl."\">$langBack</a>";
 	} else {
-		$tool_content .= "<a href=\"infocours.php\">$langBack</a>";
+		$tool_content .= "<a href=\"infocours.php?course=$code_cours\">$langBack</a>";
 	}
 	$tool_content .= "</p>";
 

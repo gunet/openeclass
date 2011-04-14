@@ -79,7 +79,7 @@ if(isset($_POST['submit'])) {
 		}
 		$tool_content .= "\n</ul>\n</p><br />";
 	}
-	$tool_content .= "<p align='right'><a href='infocours.php'>$langBack</a></p>";
+	$tool_content .= "<p align='right'><a href='infocours.php?course=$code_cours'>$langBack</a></p>";
 
 } else {
 	$lang_jscalendar = langname_to_code($language);
@@ -87,7 +87,7 @@ if(isset($_POST['submit'])) {
         $head_content .= $jscalendar->get_load_files_code();
         $datetoday = date("Y-n-j",time());
 	
-	$tool_content .= "<form action='$_SERVER[PHP_SELF]' method='post'>
+	$tool_content .= "<form action='$_SERVER[PHP_SELF]?course=$code_cours' method='post'>
 	<table width='100%' class=\"FormData\">
 	<tbody>
 	<tr>
@@ -124,7 +124,7 @@ if(isset($_POST['submit'])) {
 	</tbody>
 	</table>
 	</form>";	
-	$tool_content .= "<p align='right'><a href='infocours.php'>$langBack</a></p>";
+	$tool_content .= "<p align='right'><a href='infocours.php?course=$code_cours'>$langBack</a></p>";
 }
 
 draw($tool_content, 2, null, $head_content);

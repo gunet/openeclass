@@ -50,17 +50,17 @@ if ($is_adminOfCourse) {
 		<tr>
 		<th rowspan='2' class='left' width='220'>$langConfirmDel:</th>
                 <td width='52' align='center'>
-		<form method='post' action='delete_course.php'>
+		<form method='post' action='delete_course.php?course=$code_cours'>
                 <input type='submit' name='delete' value='$langDelete' /></form></td>
 		<td><small>$langByDel</small></td>
 		</tr>
 		<tr>
-                <td align='center'><form method='get' action='infocours.php'>
+                <td align='center'><form method='get' action='infocours.php'><input type='hidden' name='course' value='$code_cours'/>
                                 <input type='submit' name='dont_delete' value='$langCancel' /></form></td>
 		<td>&nbsp;</td>
 		</tr>
 		</table>";
-		$tool_content .= "<p align='right'><a href='infocours.php'>$langBack</a></p>
+		$tool_content .= "<p align='right'><a href='infocours.php?course=$code_cours'>$langBack</a></p>
 		</ul>
 		</div>";
 	} // else

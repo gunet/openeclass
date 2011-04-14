@@ -48,7 +48,7 @@ $lang_editor = langname_to_code($language);
 if (isset($_POST['submit'])) {
         if (empty($_POST['title'])) {
                 $tool_content .= "<p class='caution'>$langNoCourseTitle</p>
-                                  <p>&laquo; <a href='$_SERVER[PHP_SELF]'>$langAgain</a></p>";
+                                  <p>&laquo; <a href='$_SERVER[PHP_SELF]?course=$code_cours'>$langAgain</a></p>";
         } else {
                 if (isset($_POST['localize'])) {
                         $newlang = $language = langcode_to_name($_POST['localize']);
@@ -116,16 +116,16 @@ if (isset($_POST['submit'])) {
                 db_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langEBook' WHERE define_var='MODULE_ID_EBOOK'");
 
                 $tool_content .= "<p class='success'>$langModifDone</p>
-                        <p>&laquo; <a href='".$_SERVER['PHP_SELF']."'>$langBack</a></p>
+                        <p>&laquo; <a href='".$_SERVER['PHP_SELF']."?course=$code_cours'>$langBack</a></p>
                         <p>&laquo; <a href='{$urlServer}courses/$currentCourseID/index.php'>$langBackCourse</a></p>";
         }
 } else {
 	$tool_content .= "
 	<div id='operations_container'>
 	  <ul id='opslist'>
-	    <li><a href='archive_course.php'>$langBackupCourse</a></li>
-	    <li><a href='delete_course.php'>$langDelCourse</a></li>
-	    <li><a href='refresh_course.php'>$langRefreshCourse</a></li>
+	    <li><a href='archive_course.php?course=$code_cours'>$langBackupCourse</a></li>
+	    <li><a href='delete_course.php?course=$code_cours'>$langDelCourse</a></li>
+	    <li><a href='refresh_course.php?course=$code_cours'>$langRefreshCourse</a></li>
 	  </ul>
 	</div>";
 
@@ -147,7 +147,7 @@ if (isset($_POST['submit'])) {
 	$password = q($c['password']);
 
 	$tool_content .="
-	<form method='post' action='$_SERVER[PHP_SELF]'>
+	<form method='post' action='$_SERVER[PHP_SELF]?course=$code_cours'>
 	<fieldset>
 	<legend>$langCourseIden</legend>
 	<table class='tbl' width='100%'>
