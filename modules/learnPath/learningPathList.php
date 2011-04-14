@@ -556,9 +556,9 @@ while ($list = mysql_fetch_array($result)) // while ... learning path list
         $tool_content .= "</td>\n";
 
         // EXPORT links
-        $tool_content .= '      <td class="center" width="50"><a href="'.$_SERVER['PHP_SELF'].'?course=$code_cours&amp;cmd=export&amp;path_id=' . $list['learnPath_id'] . '" >'
+        $tool_content .= '      <td class="center" width="50"><a href="'.$_SERVER['PHP_SELF'].'?course='.$code_cours.'&amp;cmd=export&amp;path_id=' . $list['learnPath_id'] . '" >'
             .'<img src="../../template/classic/img/export.png" alt="'.$langExport2004.'" title="'.$langExport2004.'" /></a>' .""
-            .'<a href="' . $_SERVER['PHP_SELF'] . '?course=$code_cours&amp;cmd=export12&amp;path_id=' . $list['learnPath_id'] . '" >'
+            .'<a href="' . $_SERVER['PHP_SELF'] . '?course='.$code_cours.'&amp;cmd=export12&amp;path_id=' . $list['learnPath_id'] . '" >'
             .'<img src="../../template/classic/img/export.png" alt="'.$langExport12.'" title="'.$langExport12.'" /></a>' .""
             .'</td>' . "\n";
 
