@@ -50,6 +50,7 @@
 $require_current_course = TRUE;
 $path2add = 3;
 include("../../../include/init.php");
+$TOCurl = "../viewer_toc.php?course=$code_cours";
 ?>
 <html>
 <head>
@@ -58,7 +59,7 @@ include("../../../include/init.php");
  <link href="../tool.css" rel="stylesheet" type="text/css" />
  <script>
   <!-- //
-   parent.tocFrame.location.href="../viewer_toc.php?course=".$code_cours;
+   parent.tocFrame.location.href="<?php echo $TOCurl; ?>";
   //-->
  </script>
 </head>

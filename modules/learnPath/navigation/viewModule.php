@@ -64,12 +64,12 @@ $clarolineRepositoryWeb = $urlServer."courses/".$currentCourseID;
 require_once("../../../include/lib/learnPathLib.inc.php");
 mysql_select_db($currentCourseID);
 
-$unit_parm = isset($_SESSION['unit'])? ('&amp;unit=' . $_SESSION['unit']): '';
+$unit_parm = isset($_SESSION['unit'])? ('&unit=' . $_SESSION['unit']): '';
 
 if (isset($_GET['go']) and strlen($_GET['go']) > 0) {
 	$redirect = "../".$_GET['go'].".php?course=$code_cours" . $unit_parm;
 } else {
-	$redirect="startModule.php?course=$code_cours&amp;viewModule_id=".$_GET['viewModule_id'];
+	$redirect="startModule.php?course=$code_cours&viewModule_id=".$_GET['viewModule_id'];
 }
 
 echo "<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN'>
