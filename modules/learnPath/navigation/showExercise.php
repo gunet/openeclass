@@ -86,7 +86,7 @@ if (isset($_GET['exerciseId'])) {
 // if the user has clicked on the "Cancel" button
 if(isset($_POST['buttonCancel'])) {
 	// returns to the exercise list
-	header('Location: backFromExercise.php?course='.$code_cours.'&amp;op=cancel');
+	header('Location: backFromExercise.php?course='.$code_cours.'&op=cancel');
 	exit();
 }
 

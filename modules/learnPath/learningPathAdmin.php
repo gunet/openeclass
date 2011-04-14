@@ -93,7 +93,7 @@ if ( !$is_adminOfCourse )
 {
     if ( isset($_SESSION['path_id']) )
     {
-        header("Location: ./learningPath.php?course=$code_cours&amp;path_id=".$_SESSION['path_id']);
+        header("Location: ./learningPath.php?course=$code_cours&path_id=".$_SESSION['path_id']);
     }
     else
     {

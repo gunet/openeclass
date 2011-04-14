@@ -77,5 +77,5 @@ if (!$is_adminOfCourse) {
         $zipFile = new pclZip($_FILES['file']['tmp_name']);
         $realFileSize = 0;
         $zipFile->extract(PCLZIP_CB_PRE_EXTRACT, 'process_extracted_file');
-        header("Location: $urlAppend/modules/ebook/edit.php?course=$code_cours&amp;id=$ebook_id");
+        header("Location: $urlAppend/modules/ebook/edit.php?course=$code_cours&id=$ebook_id");
 }

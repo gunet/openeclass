@@ -62,7 +62,7 @@ if (isset($_GET['delete'])) {
                                                         public_id = " . autoquote($_POST['new_section_id']) . ",
                                                         title = " . autoquote($_POST['new_section_title']));
         }
-        header("Location: " . $urlAppend . '/modules/ebook/edit.php?course='.$code_cours.'&amp;id=' . $ebook_id);
+        header("Location: " . $urlAppend . '/modules/ebook/edit.php?course='.$code_cours.'&id=' . $ebook_id);
         exit;
 } elseif (isset($_POST['title_submit'])) {
         $info = mysql_fetch_array(db_query("SELECT * FROM `ebook` WHERE course_id = $cours_id AND id = $ebook_id"));

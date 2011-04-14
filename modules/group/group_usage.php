@@ -51,7 +51,7 @@ if (isset($_GET['module']) and $_GET['module'] == 'usage') {
 initialize_group_info($group_id);
 
 if (!$is_adminOfCourse and !$is_tutor) {
-        header('Location: group_space.php?course='.$code_cours.'&amp;group_id=' . $group_id);
+        header('Location: group_space.php?course='.$code_cours.'&group_id=' . $group_id);
         exit;
 }
 

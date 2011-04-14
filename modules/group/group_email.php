@@ -50,7 +50,7 @@ list($tutor_id) = mysql_fetch_row(db_query("SELECT is_tutor FROM group_members W
 $is_tutor = ($tutor_id == 1)?TRUE:FALSE;
 
 if (!$is_adminOfCourse and !$is_tutor) {
-        header('Location: group_space.php?course='.$code_cours.'&amp;group_id=' . $group_id);
+        header('Location: group_space.php?course='.$code_cours.'&group_id=' . $group_id);
         exit;
 }
 

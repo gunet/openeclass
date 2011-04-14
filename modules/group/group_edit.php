@@ -48,7 +48,7 @@ $navigation[] = array ('url' => 'group.php?course='.$code_cours, 'name' => $lang
 $navigation[] = array ('url' => "group_space.php?course=$code_cours&amp;group_id=$group_id", 'name' => q($group_name));
 
 if (!($is_adminOfCourse or $is_tutor)) {
-        header('Location: group_space.php?course='.$code_cours.'&amp;group_id=' . $group_id);
+        header('Location: group_space.php?course='.$code_cours.'&group_id=' . $group_id);
         exit;
 }
 
