@@ -12,7 +12,6 @@ function process_actions()
         if (isset($_REQUEST['edit'])) {
                 $res_id = intval($_GET['edit']);
                 if ($id = check_admin_unit_resource($res_id)) {
-                        add_html_editor();
                         return edit_res($res_id);
                 }
         } elseif (isset($_REQUEST['edit_res_submit'])) { // edit resource

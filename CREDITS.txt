@@ -41,18 +41,18 @@ Design & Developement: main template file, engine and css,
 ************************************************************************/
 
 Also Special Credits to:
- Dimitra Kralli <d.kralli@di.uoa.gr> (University of Athens)
  Stevy Georgiadi <stevy@gunet.gr> (University of Athens)
- Victoria Daskalou <daskalou@upnet.gr> (University of Patras)
  Thanos Kyritsis <atkyritsis@upnet.gr> (University of Patras)
 
 Also Credits to:
+ Dimitra Kralli <d.kralli@di.uoa.gr> (University of Athens)
+ Victoria Daskalou <daskalou@upnet.gr> (University of Patras)
+ Yannis Kapetanakis <bilias@edu.physics.uoc.gr> (Technological Education of Crete)
  Artemios Vogiatzis <bogart@upatras.gr (University of Patras)
- George Doukas <geodoukas@upatras.gr> (University of Patras)
+ Vangelis Chaniotakis <haniotak@ucnet.uoc.gr> (University of Crete)
  Stratos Karatzidis <kstratos@uom.gr> (University of Macedonia)
  Pitsiougas Vagelis <vagpits@uom.gr> (University of Macedonia)
  Ophelia Neofytou <ophelia@ucnet.uoc.gr> (Universify of Crete)
- Vangelis Chaniotakis <haniotak@ucnet.uoc.gr> (University of Crete)
  Sakis Agorastos <th_agorastos@hotmail.com> (University of Piraeus)
  Dimitris Daskopoulos <dimitris@ccf.auth.gr> (Aristotele University of Thessaloniki)
  Savvas Anastasiadis <sanastas@ccf.auth.gr> (Aristotele University of Thessaloniki)
@@ -62,15 +62,11 @@ Also Credits to:
  Michalis Psaltakis <mpsaltakis@aegean.gr> (University of the Aegean)
  Konstantinidis K. (Aristotele University of Thessaloniki)
  Emmanuela Patiniotaki <aporoemm@hotmail.com> (University of Athens)
+ George Doukas <geodoukas@upatras.gr> (University of Patras)
  Kostantinos Tsakaloglou <tsakf@yahoo.com>
- Yannis Kapetanakis <bilias@edu.physics.uoc.gr> (Technological Education of Crete)
 
-Xinha:
- Xinha was originally based on work by Mihai Bazon who produced htmlArea for Interactive Tools.
- Currently leading the Xinha project is James Sleeman.
- Raimund Meyer (ray) has contributed somewhat to the advancement of Xinha recently.
-     Copyright (c) 2003-2004 dynarch.com.
-     Copyright (c) 2002-2003 interactivetools.com, inc.
+Messages translated to spanish language by: 
+Ana Serrado Bayes <ana.serrado@uca.es>
 
 Template Engine: Copyright 1999-2000 NetUSE GmbH Kristian Koehntopp
 
@@ -137,5 +133,8 @@ HTML Purify: (include/htmlpurifier-4.1.1-standalone)
  version 2.1 or later.
  http://htmlpurifier.org/
 
-Messages translated to spanish language by: 
-Ana Serrado Bayes <ana.serrado@uca.es>
+PHP CAS Library - Copyright 2003 - 2010, The ESUP-Portail consortium & the JA-SIG Collaborative.
+Licensed under the New BSD License, an OSI-certified ("open") and Gnu/FSF-recognized ("free") license
+https://wiki.jasig.org/display/CASC/phpCAS
+version 1.2.0
+

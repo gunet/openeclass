@@ -1464,36 +1464,16 @@ function register_posted_variables($var_array, $what = 'all', $callback = null)
 }
 
 
-// Add rich html editor JavaScript to global variable $head_content
-function add_html_editor()
-{
-        global $head_content, $language, $urlAppend;
-
-        if ($language == 'greek') {
-                $lang_editor = 'el';
-        } else {
-                $lang_editor = 'en';
-        }
-
-        $head_content .= "<script type='text/javascript'>
-_editor_url  = '$urlAppend/include/xinha/';
-_editor_lang = '$lang_editor';
-</script>
-<script type='text/javascript' src='$urlAppend/include/xinha/XinhaCore.js'></script>
-<script type='text/javascript' src='$urlAppend/include/xinha/my_config.js'></script>";
-}
-
-
 // Display a textarea with name $name using the rich text editor
 // Apply automatically various fixes for the text to be edited
 function rich_text_editor($name, $rows, $cols, $text, $extra = '')
 {
-	global $head_content, $language, $urlAppend, $purifier;
+	global $head_content, $language, $purifier;
 	
 	$lang_editor = langname_to_code($language);
 	
+	load_js('tinymce/jscripts/tiny_mce/tiny_mce.js');
 	$head_content .= "
-<script type='text/javascript' src='$urlAppend/include/tinymce/jscripts/tiny_mce/tiny_mce.js'></script>
 <script type='text/javascript'>
 tinyMCE.init({
 	// General options
@@ -1512,9 +1492,6 @@ tinyMCE.init({
 		theme_advanced_toolbar_align : 'left',
 		theme_advanced_statusbar_location : 'bottom',
 		theme_advanced_resizing : true,
-
-		// Example content CSS (should be your site CSS)
-		content_css : '$urlAppend/template/classic/img/tool.css',
 
 		// Drop lists for link/image/media/template dialogs
 		template_external_list_url : 'lists/template_list.js',
