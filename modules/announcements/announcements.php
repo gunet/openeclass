@@ -46,98 +46,54 @@ include '../../include/baseTheme.php';
 include('../../include/lib/textLib.inc.php');
 include('../../include/sendMail.inc.php');
 
-/*
- * *** The following is added for statistics purposes **
- */
+// The following is added for statistics purposes
 include('../../include/action.php');
 $action = new action();
 $action->record('MODULE_ID_ANNOUNCE');
-/*
- */
 
 define ('RSS', 'modules/announcements/rss.php?c='.$currentCourseID);
 $fake_code = course_id_to_fake_code($cours_id);
 $nameTools = $langAnnouncements;
 
-if ($is_adminOfCourse) { // check teacher status
-        $head_content .= '
-<script type="text/javascript">
-function confirmation ()
-{
-    	if (confirm("' . $langSureToDelAnnounce . ' ?"))
-	    {return true;}
-    	else
-            {return false;}	
-}
-
-</script>
-';
-
-$head_content .= <<<hContent
-<script type="text/javascript">
-function checkrequired(which, entry) {
-	var pass=true;
-	if (document.images) {
-		for (i=0;i<which.length;i++) {
-			var tempobj=which.elements[i];
-			if (tempobj.name == entry) {
-				if (tempobj.type=="text"&&tempobj.value=='') {
-					pass=false;
-					break;
-		  		}
-	  		}
-		}
-	}
-	if (!pass) {
-		alert("$langEmptyAnTitle");
-		return false;
-	} else {
-		return true;
-	}
-}
-
-</script>
-hContent;
-
-    if ($is_adminOfCourse) {
+if ($is_adminOfCourse) {
+	load_js('tools.js');
+	$head_content .= '<script type="text/javascript">var langEmptyGroupName = "' .
+			 $langEmptyAnTitle . '";</script>';
+	
 	$result = db_query("SELECT count(*) FROM annonces WHERE cours_id = $cours_id", $mysqlMainDb);
-    } else {
-	$result = db_query("SELECT count(*) FROM annonces WHERE cours_id = $cours_id AND visibility = 'v'", $mysqlMainDb);
-    }
-    
-    list($announcementNumber) = mysql_fetch_row($result);
-    mysql_free_result($result);
+	
+	list($announcementNumber) = mysql_fetch_row($result);
+	mysql_free_result($result);
+	
+	$displayForm = true;
+	/* up and down commands */
+	if (isset($_GET['down'])) {
+		$thisAnnouncementId = $_GET['down'];
+		$sortDirection = "DESC";
+	}
+	if (isset($_GET['up'])) {
+		$thisAnnouncementId = $_GET['up'];
+		$sortDirection = "ASC";
+	}
 
-    $displayForm = true;
-    /* up and down commands */
-    if (isset($_GET['down'])) {
-        $thisAnnouncementId = $_GET['down'];
-        $sortDirection = "DESC";
-    }
-    if (isset($_GET['up'])) {
-        $thisAnnouncementId = $_GET['up'];
-        $sortDirection = "ASC";
-    }
-
-    if (isset($thisAnnouncementId) && $thisAnnouncementId && isset($sortDirection) && $sortDirection) {
-        $result = db_query("SELECT id, ordre FROM annonces WHERE cours_id = $cours_id
+	if (isset($thisAnnouncementId) && $thisAnnouncementId && isset($sortDirection) && $sortDirection) {
+	    $result = db_query("SELECT id, ordre FROM annonces WHERE cours_id = $cours_id
 		ORDER BY ordre $sortDirection", $mysqlMainDb);
-
-        while (list ($announcementId, $announcementOrder) = mysql_fetch_row($result)) {
-            if (isset($thisAnnouncementOrderFound) && $thisAnnouncementOrderFound == true) {
-                $nextAnnouncementId = $announcementId;
-                $nextAnnouncementOrder = $announcementOrder;
-                db_query("UPDATE annonces SET ordre = '$nextAnnouncementOrder' WHERE id = '$thisAnnouncementId'", $mysqlMainDb);
-                db_query("UPDATE annonces SET ordre = '$thisAnnouncementOrder' WHERE id = '$nextAnnouncementId'", $mysqlMainDb);
-                break;
-            }
-            // find the order
-            if ($announcementId == $thisAnnouncementId) {
-                $thisAnnouncementOrder = $announcementOrder;
-                $thisAnnouncementOrderFound = true;
-            }
-        }
-    }
+		while (list ($announcementId, $announcementOrder) = mysql_fetch_row($result)) {
+			if (isset($thisAnnouncementOrderFound) && $thisAnnouncementOrderFound == true) {
+			    $nextAnnouncementId = $announcementId;
+			    $nextAnnouncementOrder = $announcementOrder;
+			    db_query("UPDATE annonces SET ordre = '$nextAnnouncementOrder' WHERE id = '$thisAnnouncementId'", $mysqlMainDb);
+			    db_query("UPDATE annonces SET ordre = '$thisAnnouncementOrder' WHERE id = '$nextAnnouncementId'", $mysqlMainDb);
+			    break;
+			}
+			// find the order
+			if ($announcementId == $thisAnnouncementId) {
+			    $thisAnnouncementOrder = $announcementOrder;
+			    $thisAnnouncementOrderFound = true;
+			}
+		}	
+	}
 
     /* modify visibility */
     if (isset($_GET['mkvis'])) {
@@ -371,7 +327,7 @@ hContent;
 			<td width='70' class='right'>
 			      <a href='$_SERVER[PHP_SELF]?course=".$code_cours ."&amp;modify=" . $myrow['id'] . "'>
 			      <img src='../../template/classic/img/edit.png' title='" . $langModify . "' /></a>&nbsp;
-			      <a href='$_SERVER[PHP_SELF]?course=".$code_cours ."&amp;delete=" . $myrow['id'] . "' onClick=\"return confirmation('');\">
+			      <a href='$_SERVER[PHP_SELF]?course=".$code_cours ."&amp;delete=" . $myrow['id'] . "' onClick=\"return confirmation('$langSureToDelAnnounce');\">
 			      <img src='../../template/classic/img/delete.png' title='" . $langDelete . "' /></a>&nbsp;
 			      <a href='$_SERVER[PHP_SELF]?course=".$code_cours ."&amp;mkvis=$myrow[id]&amp;vis=$visibility'>
 			      <img src='../../template/classic/img/$vis_icon' title='$langVisible' /></a>
