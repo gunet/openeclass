@@ -42,10 +42,9 @@ include '../admin/admin.inc.php';
 
 define ('COURSE_USERS_PER_PAGE', 15);
 
-$limit = isset($_REQUEST['limit'])?$_REQUEST['limit']:0;
+$limit = isset($_REQUEST['limit'])? $_REQUEST['limit']: 0;
 
 $nameTools = $langAdminUsers;
-$q = '';
 
 $head_content = '
 <script type="text/javascript">
@@ -66,9 +65,8 @@ $countUser = mysql_num_rows($result_numb);
 
 $teachers = $students = $visitors = 0;
 
-while ($numrows=mysql_fetch_array($result_numb)) {
-	switch ($numrows['statut'])
-	{
+while ($numrows = mysql_fetch_array($result_numb)) {
+	switch ($numrows['statut']) {
 		case 1:	 $teachers++; break;
 		case 5:	 $students++; break;
 		case 10: $visitors++; break;
@@ -77,6 +75,7 @@ while ($numrows=mysql_fetch_array($result_numb)) {
 }
 
 if ($is_adminOfCourse) {
+        $limit_sql = '';
         // Handle user removal / status change
         if (isset($_GET['giveAdmin'])) {
                 $new_admin_gid = intval($_GET['giveAdmin']);
@@ -129,10 +128,10 @@ if ($is_adminOfCourse) {
 
         <div id='operations_container'>
           <ul id='opslist'>
-            <li>$langAdd:</b>&nbsp; <a href='adduser.php'>$langOneUser</a></li>
+            <li><b>$langAdd:</b>&nbsp; <a href='adduser.php'>$langOneUser</a></li>
             <li><a href='muladduser.php'>$langManyUsers</a></li>
             <li><a href='guestuser.php'>$langGUser</a>&nbsp;</li>
-            <li><a href='searchuser.php'>$langSearchUser</a></li>
+            <li><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;search=1'>$langSearchUser</a></li>
             <li><a href='../group/group.php'>$langGroupUserManagement</a></li>
           </ul>
         </div>";
@@ -150,17 +149,72 @@ if ($is_adminOfCourse) {
 	</table>
         <br />";
 
+        // display and handle search form if needed
+        $search_sql = '';
+        if (isset($_GET['search'])) {
+                $search_params = "&amp;search=1";
+                $search_nom = $search_prenom = $search_uname = ''; 
+                if (!empty($_REQUEST['search_nom'])) {
+                        $search_nom = ' value="' . q($_REQUEST['search_nom']) . '"';
+                        $search_sql .= " AND user.nom LIKE " . autoquote(mysql_escape_string($_REQUEST['search_nom']).'%');
+                        $search_params .= "&amp;search_nom=" . urlencode($_REQUEST['search_nom']);
+                }
+                if (!empty($_REQUEST['search_prenom'])) {
+                        $search_prenom = ' value="' . q($_REQUEST['search_prenom']) . '"';
+                        $search_sql .= " AND user.prenom LIKE " . autoquote(mysql_escape_string($_REQUEST['search_prenom']).'%');
+                        $search_params .= "&amp;search_prenom=" . urlencode($_REQUEST['search_prenom']);
+                }
+                if (!empty($_REQUEST['search_uname'])) {
+                        $search_uname = ' value="' . q($_REQUEST['search_uname']) . '"';
+                        $search_sql .= " AND user.username LIKE " . autoquote(mysql_escape_string($_REQUEST['search_uname']).'%');
+                        $search_params .= "&amp;search_uname=" . urlencode($_REQUEST['search_uname']);
+                }
+
+                $q = db_query("SELECT COUNT(*) FROM cours_user, user
+                                      WHERE cours_user.cours_id = $cours_id AND
+                                            cours_user.user_id = user.user_id
+                                            $search_sql");
+                list($countUser) = mysql_fetch_row($q);
+
+                $tool_content .= "<form method='post' action='$_SERVER[PHP_SELF]?course=$code_cours&amp;search=1'>
+                <fieldset>
+                <legend>$langUserData</legend>
+                <table width='100%' class='tbl'>
+                <tr>
+                  <th class='left' width='180'>$langSurname:</th>
+                  <td><input type='text' name='search_nom'$search_nom></td>
+                </tr>
+                <tr>
+                  <th class='left'>$langName:</th>
+                  <td><input type='text' name='search_prenom'$search_prenom></td>
+                </tr>
+                <tr>
+                  <th class='left'>$langUsername:</th>
+                  <td><input type='text' name='search_uname'$search_uname></td>
+                </tr>
+                <tr>
+                  <th class='left'>&nbsp;</th>
+                  <td class='right'><input type='submit' value='$langSearch'></td>
+                </tr>
+                </table>
+                </fieldset>
+                </form>";
+        } else {
+                $search_params = '';
+        }
+
 	// display navigation links if course users > COURSE_USERS_PER_PAGE
 	if ($countUser > COURSE_USERS_PER_PAGE and !isset($_GET['all'])) {
-		$q = "LIMIT $limit, " . COURSE_USERS_PER_PAGE;
-		$tool_content .= show_paging($limit, COURSE_USERS_PER_PAGE, $countUser, "$_SERVER[PHP_SELF]", '', TRUE);
+		$limit_sql = "LIMIT $limit, " . COURSE_USERS_PER_PAGE;
+                $tool_content .= show_paging($limit, COURSE_USERS_PER_PAGE, $countUser,
+                                             $_SERVER['PHP_SELF'], $search_params, TRUE);
 	}
 	
-	if (isset($_GET['all']) and $_GET['all'] == true) {
-		$extra_link = '&amp;all=true';
+	if (isset($_GET['all'])) {
+		$extra_link = '&amp;all=true' . $search_params;
 	} else {
-		$extra_link = "&amp;limit=".$limit;
-	}
+		$extra_link = '&amp;limit=' . $limit . $search_params;
+        }
 
 	$tool_content .= "
         <table width='99%' class='tbl_alt'>
@@ -182,23 +236,23 @@ if ($is_adminOfCourse) {
 	$ord = isset($_GET['ord'])?$_GET['ord']:'';
 	
 	switch ($ord) {
-		case 's': $order = 'ORDER BY nom';
+		case 's': $order_sql = 'ORDER BY nom';
 			break;
-		case 'e': $order = 'ORDER BY email';
+		case 'e': $order_sql = 'ORDER BY email';
 			break;
-		case 'am': $order = 'ORDER BY am';
+		case 'am': $order_sql = 'ORDER BY am';
 			break;
-		case 'rd': $order = 'ORDER BY cours_user.reg_date DESC';
+		case 'rd': $order_sql = 'ORDER BY cours_user.reg_date DESC';
 			break;
-		default: $order = 'ORDER  BY nom, prenom';
+		default: $order_sql = 'ORDER BY nom, prenom';
 			break;
 	}
 	$result = db_query("SELECT user.user_id, user.nom, user.prenom, user.email,
 				   user.am, user.has_icon, cours_user.statut,
 				   cours_user.tutor, cours_user.reg_date
 			    FROM cours_user, user
-			    WHERE `user`.`user_id` = `cours_user`.`user_id` AND `cours_user`.`cours_id` = $cours_id"
-			   ." ".$order." ".$q); 
+                            WHERE `user`.`user_id` = `cours_user`.`user_id` AND `cours_user`.`cours_id` = $cours_id
+                            $search_sql $order_sql $limit_sql"); 
 
 	while ($myrow = mysql_fetch_array($result)) {
 		// bi colored table
@@ -215,7 +269,7 @@ if ($is_adminOfCourse) {
           <td class='smaller' valign='top' align='right'>$i.</td>\n" .
 			"<td valign='top' class='smaller'>" . display_user($myrow) . "&nbsp;&nbsp;(". mailto($myrow['email']) . ")  $am_message</td>\n";
 		$tool_content .= "\n" .
-			"<td class='smaller' valign=top align='center' width='150' class='smaller'>" . user_groups($cours_id, $myrow['user_id']) . "</td>\n" .
+			"<td class='smaller' valign='top' align='center' width='150'>" . user_groups($cours_id, $myrow['user_id']) . "</td>\n" .
 			"<td align='center' class='smaller'>";
 		if ($myrow['reg_date'] == '0000-00-00') {
 			$tool_content .= $langUnknownDate;
@@ -253,5 +307,5 @@ if ($is_adminOfCourse) {
 	}
 	$tool_content .= "</table>";
 }
-add_units_navigation(true);
+
 draw($tool_content, 2, '', $head_content);
