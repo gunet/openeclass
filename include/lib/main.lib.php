@@ -34,8 +34,6 @@ Defines standard functions and validates variables
 
 define('ECLASS_VERSION', '2.3.2');
 
-// MySQL debug level
-define('DEBUG_MYSQL', 1);
 // resized user image 
 define('IMAGESIZE_LARGE', 256);
 define('IMAGESIZE_SMALL', 32);
@@ -57,20 +55,24 @@ If error happens just display the error and the code
 -----------------------------------------------------------------------
 */
 
-function db_query($sql, $db = FALSE) {
-
-	if ($db) {
+function db_query($sql, $db = null)
+{
+	if (isset($db)) {
 		mysql_select_db($db);
 	}
 	$r = mysql_query($sql);
-
+        $printed_sql = false;
         if (defined('DEBUG_MYSQL') and DEBUG_MYSQL === 'FULL') {
-                echo "<hr /><pre>$sql</pre><hr />";
+                echo '<hr /><pre>', q($sql), '</pre><hr />';
+                $printed_sql = true;
         }
         if (mysql_errno()) {
-                if (isset($GLOBALS['is_admin']) or defined('DEBUG_MYSQL')) {
-                        echo '<hr />' . mysql_errno() . ': ' . mysql_error()
-                                . "<br /><pre>$sql</pre><hr />";
+                if ((isset($GLOBALS['is_admin']) and $GLOBALS['is_admin']) or
+                    (defined('DEBUG_MYSQL') and DEBUG_MYSQL)) {
+                        echo '<hr />' . mysql_errno() . ': ' . mysql_error();
+                        if (!$printed_sql) {
+                                echo '<br /><pre>', q($sql), '</pre><hr />';
+                        }
                 } else {
                         echo '<hr />Database error<hr />';
                 }
@@ -149,13 +151,13 @@ function db_query_fetch_all($sqlQuery, $db = FALSE) {
 
 // Quote string for SQL query
 function quote($s) {
-	return "'".addslashes($s)."'";
+	return "'".addslashes(canonicalize_whitespace($s))."'";
 }
 
 
 // Quote string for SQL query if needed (if magic quotes are on)
 function autoquote($s) {
-	$s = trim($s);
+	$s = canonicalize_whitespace($s);
         if (get_magic_quotes_gpc()) {
         	return "'$s'";
         } else {
@@ -165,6 +167,7 @@ function autoquote($s) {
 
 // Unquote string if needed (if magic quotes are on)
 function autounquote($s) {
+        $s = canonicalize_whitespace($s);
         if (get_magic_quotes_gpc()) {
         	return stripslashes($s);
         } else {
@@ -218,20 +221,33 @@ function escapeSimpleSelect($str)
 }
 
 
-function unescapeSimple($str) {
-
-if (get_magic_quotes_gpc()) {
-		return stripslashes($str);
-	} else {
-	return $str;
-	}
-
+function unescapeSimple($str)
+{
+        $str = canonicalize_whitespace($str);
+        if (get_magic_quotes_gpc()) {
+                return stripslashes($str);
+        } else {
+                return $str;
+        }
 }
 
 // Escape string to use as JavaScript argument
 function js_escape($s)
 {
         return q(str_replace("'", "\\'", $s));
+}
+
+// Include a JavaScript file from the main js directory
+function load_js($file)
+{
+        global $head_content, $urlAppend;
+
+        if ($file == 'jquery') {
+                $file = 'jquery-1.4.3.min.js';
+        } elseif ($file == 'jquery-ui') {
+                $file = 'jquery-ui-1.8.1.custom.min.js';
+        }
+        $head_content .= "<script type='text/javascript' src='$urlAppend/js/$file'></script>\n";
 }
 
 // Translate uid to username
@@ -1068,11 +1084,15 @@ function wrap_each(&$item)
 }
 
 
-// Remove whitespace from start and end of string and convert
+// Remove whitespace from start and end of string, convert
 // sequences of whitespace characters to single spaces
+// and remove non-printable characters, while preserving new lines
 function canonicalize_whitespace($s)
 {
-        return preg_replace('/[ \t\n\r\0\x0B]+/', ' ', trim($s));
+        return str_replace(array(" \1 ", " \1", "\1 ", "\1"), "\n",
+                  preg_replace('/\s+/', ' ',
+                     str_replace(array("\r\n", "\n", "\r"), "\1",
+                        trim(preg_replace('/[\x00-\x09\x0C\x0E-\x1F\x7F]/', '', $s)))));
 }
 
 

@@ -117,6 +117,20 @@ Function user_get_data(): Mathieu Laurent <laurent@cerdecam.be>
 Javascript SortTable (sorttable.js): Stuart Langridge (licenced as X11)
  http://www.kryogenix.org/code/browser/sorttable/
 
+jQuery JavaScript Library v1.4.3 - Copyright 2010, John Resig
+Dual licensed under the MIT or GPL Version 2 licenses.
+http://jquery.com/
+Includes Sizzle.js - Copyright 2010, The Dojo Foundation
+Released under the MIT, BSD, and GPL Licenses.
+http://sizzlejs.com/
+
+jQuery UI 1.8.1 - Copyright (c) 2010 (http://jqueryui.com/about)
+Dual licensed under the MIT and GPL licenses.
+
+jQuery MultiSelect UI Widget 1.9, Copyright (c) 2011 Eric Hynds
+Dual licensed under the MIT and GPL licenses.
+http://www.erichynds.com/jquery/jquery-ui-multiselect-widget/
+
 HTML Purify: (include/htmlpurifier-4.1.1-standalone)
  Copyright (C) 2006-2008 Edward Z. Yang
  Distributed under the GNU Lesser General Public (LGPL)

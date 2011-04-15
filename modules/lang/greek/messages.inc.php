@@ -3141,3 +3141,12 @@ $langEBookTitleModified = "Η αλλαγή του τίτλου του ηλεκτ
 $langEBookSectionsModified = "Οι αλλαγές στις ενότητες του ηλεκτρονικού βιβλίου πραγματοποιήθηκαν";
 $langEBookAdmin = "Διαχείριση ηλεκτρονικού βιβλίου";
 $langFileAdmin = "Διαχείριση αρχείων";
+
+/********************************************
+ Messages for jQuery tools
+ *******************************************/
+
+$langJQSelectNum = 'Επιλέχτηκαν # από #';
+$langJQNoneSelected = 'Επιλέξτε παραλήπτες';
+$langJQCheckAll = 'Επιλογή όλων';
+$langJQUncheckAll = 'Αφαίρεση όλων';

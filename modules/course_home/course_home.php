@@ -43,15 +43,17 @@ define('HIDE_TOOL_TITLE', 1);
 //See function draw() in baseTheme.php for details
 //$courseHome = true;
 //$path2add is used in init.php to fix relative paths
-$path2add=1;
+$path2add = 1;
 include '../../include/baseTheme.php';
+
 $nameTools = $langIdentity;
-$tool_content = $head_content = $main_content = $cunits_content = $bar_content = "";
+$main_content = $cunits_content = $bar_content = "";
+
 add_units_navigation(TRUE);
-$head_content .= "<script type='text/javascript' src='$urlAppend/js/tools.js'></script>
-<script type='text/javascript' src='$urlAppend/js/jquery-1.4.3.min.js'></script>
-<script type='text/javascript'>$(document).ready(add_bookmark);</script>
-";
+
+load_js('tools.js');
+load_js('jquery');
+$head_content .= "<script type='text/javascript'>$(document).ready(add_bookmark);</script>";
 
 //For statistics: record login
 $sql_log = "INSERT INTO logins SET user_id='$uid', ip='$_SERVER[REMOTE_ADDR]', date_time=NOW()";

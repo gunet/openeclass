@@ -122,15 +122,6 @@ if(isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {
 	  </td>
 	</tr>";
 
-	if ($dropbox_person -> isCourseTutor || $dropbox_person -> isCourseAdmin)
-	{
-		$reciepientsSize = 5;
-	}
-	else
-	{
-		$reciepientsSize = 3;
-	}
-
 	$tool_content .= "
 	<tr>
 	  <th>".$dropbox_lang["authors"].":</th>
@@ -143,7 +134,7 @@ if(isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {
 	<tr>
 	  <th>".$dropbox_lang["sendTo"].":</th>
 	  <td>
-	<select name='recipients[]' size='$reciepientsSize' multiple='true'  class='auth_input'>";
+	<select name='recipients[]' multiple='true' class='auth_input' id='select-recipients'>";
 
 	/*
 	*  if current user is a teacher then show all users of current course
@@ -175,7 +166,7 @@ if(isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {
 	$result = db_query($sql);
 	while ($res = mysql_fetch_array($result))
 	{
-		$tool_content .= "<option value=".$res['user_id'].">".$res['name']."</option>";
+		$tool_content .= "<option value=".$res['user_id'].">".q($res['name'])."</option>";
 	}
 	
 	if ($dropbox_cnf["allowJustUpload"])  // RH
@@ -357,5 +348,18 @@ foreach ($dropbox_person -> sentWork as $w)
 $tool_content .= "</table>";
 }
 
-add_units_navigation(TRUE);
+load_js('jquery');
+load_js('jquery-ui');
+load_js('jquery.multiselect.min.js');
+$head_content .= "<script type='text/javascript'>$(document).ready(function () {
+        $('#select-recipients').multiselect({
+                selectedText: '$langJQSelectNum',
+                noneSelectedText: '$langJQNoneSelected',
+                checkAllText: '$langJQCheckAll',
+                uncheckAllText: '$langJQUncheckAll'
+        });
+});</script>
+<link href='../../js/jquery-ui.css' rel='stylesheet' type='text/css'>
+<link href='../../js/jquery.multiselect.css' rel='stylesheet' type='text/css'>";
+
 draw($tool_content, 2, '', $head_content);
