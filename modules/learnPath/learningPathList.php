@@ -473,7 +473,7 @@ while ($list = mysql_fetch_array($result)) // while ... learning path list
     if (!$is_blocked) {
         $tool_content .= "
       <td width='20'><img src='../../template/classic/img/".$image_bullet."' alt='' /></td>
-      <td><a href='learningPath.php?course=$code_cours&amp;path_id=".$list['learnPath_id']."'".$style.">".htmlspecialchars($list['name'])."</a></td>\n";
+      <td><a href='learningPath.php?course=$code_cours&amp;path_id=".$list['learnPath_id']."'>".htmlspecialchars($list['name'])."</a></td>\n";
 
         // --------------TEST IF FOLLOWING PATH MUST BE BLOCKED------------------
         // ---------------------(MUST BE OPTIMIZED)------------------------------
@@ -565,9 +565,8 @@ while ($list = mysql_fetch_array($result)) // while ... learning path list
         // statistics links
         $tool_content .= "      <td class='center' width='1'><a href='details.php?course=$code_cours&amp;path_id=".$list['learnPath_id']."'><img src='../../template/classic/img/monitor.png' alt='$langTracking' title='$langTracking' /></a></td>\n";
 
-
         // VISIBILITY link
-        $tool_content .= "      <td class='center' width='1'>";
+        $tool_content .= "      <td class='center' width='60'>";
         if ( $list['visibility'] == 'HIDE') {
             $tool_content .= "<a href='".$_SERVER['PHP_SELF']."?course=$code_cours&amp;cmd=mkVisibl&amp;visibility_path_id=".$list['learnPath_id']."'>"
                   ."<img src='../../template/classic/img/invisible.png' alt='$langVisible' title='$langVisible' />"
@@ -584,30 +583,27 @@ while ($list = mysql_fetch_array($result)) // while ... learning path list
                  ."<img src='../../template/classic/img/visible.png' alt='$langVisible' title='$langVisible' />"
                  ."</a>";
         }
-        $tool_content .= "</td>\n";
 
         // Modify command / go to other page
-        $tool_content .= "      <td class='center' width='1'>"
-             ."<a href='learningPathAdmin.php?course=$code_cours&amp;path_id=".$list['learnPath_id']."'>"
+        $tool_content .= "&nbsp;&nbsp;<a href='learningPathAdmin.php?course=$code_cours&amp;path_id=".$list['learnPath_id']."'>"
              ."<img src='../../template/classic/img/edit.png' alt='$langModify' title='$langModify' />"
-             ."</a>"
-             ."</td>\n";
+             ."</a>\n";
 
         // DELETE link
         $real = realpath($webDir."courses/".$currentCourseID."/scormPackages/path_".$list['learnPath_id']);
 
         // check if the learning path is of a Scorm import package and add right popup:
         if (is_dir($real)) {
-            $tool_content .=  "      <td class='center' width='1'>"
-                  ."<a href='".$_SERVER['PHP_SELF']."?course=$code_cours&amp;cmd=delete&amp;del_path_id=".$list['learnPath_id']."' "
+            $tool_content .=  
+                   "<a href='".$_SERVER['PHP_SELF']."?course=$code_cours&amp;cmd=delete&amp;del_path_id=".$list['learnPath_id']."' "
                   ."onClick=\"return scormConfirmation('".clean_str_for_javascript($list['name'])."');\">"
                   ."<img src='../../template/classic/img/delete.png' alt='$langDelete' title='$langDelete' />"
                   ."</a>"
                   ."</td>\n";
 
         } else {
-            $tool_content .=  "      <td class='center' width='1'>"
-                  ."<a href='".$_SERVER['PHP_SELF']."?course=$code_cours&amp;cmd=delete&amp;del_path_id=".$list['learnPath_id']."' "
+            $tool_content .=  
+                   "<a href='".$_SERVER['PHP_SELF']."?course=$code_cours&amp;cmd=delete&amp;del_path_id=".$list['learnPath_id']."' "
                   ."onClick=\"return confirmation('".clean_str_for_javascript($list['name'])."');\">"
                   ."<img src='../../template/classic/img/delete.png' alt='$langDelete' title='$langDelete' />"
                   ."</a>"

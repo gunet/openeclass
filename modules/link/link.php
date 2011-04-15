@@ -158,7 +158,9 @@ if ($is_adminOfCourse) {
                         $submit_label = $langAdd;
                 } 
 
-                $tool_content .= "<fieldset><legend>$form_legend</legend>
+                $tool_content .= "
+                      <fieldset>
+                      <legend>$form_legend</legend>
                         <table width='100%' class='tbl'>
                         <tr><th>URL:</th>
                             <td><input type='text' name='urllink' size='53'$form_url /></td></tr>
@@ -177,10 +179,16 @@ if ($is_adminOfCourse) {
                         }
                         $tool_content .= '>' . q($myrow['name']) . "</option>\n";
                 }
-                $tool_content .=  "</select></td></tr>
-                        <tr><th>&nbsp;</th>
-                            <td class='right'><input type='submit' name='submitLink' value='$submit_label' /></td></tr>
-                     </table></fieldset></form>";
+                $tool_content .=  "</select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>&nbsp;</th>
+                            <td class='right'><input type='submit' name='submitLink' value='$submit_label' /></td>
+                        </tr>
+                        </table>
+                      </fieldset>
+                      </form>";
 
         } elseif (in_array($action, array('addcategory', 'editcategory'))) {
                 $tool_content .=  "<form method='post' action='$_SERVER[PHP_SELF]?course=$code_cours&urlview=$urlview'>\n";
@@ -284,29 +292,26 @@ if (mysql_num_rows($resultcategories) > 0) {
                                 showcategoryadmintools($myrow["id"]);
                         } else {
                                 $tool_content .=  "
-                  <th width='45'>&nbsp;</th>
-                  <th width='45'>&nbsp;</th>
                 </tr>";
                         }
 			showlinksofcategory($myrow["id"]);
 		} else {
 			$tool_content .=  "
-		  <tr>
-		    <th width='15' valign='top'><img src='../../template/classic/img/folder_closed.png' title='$showall' /></th>
-		    <th colspan='2' valign='top'><div class='left'><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;urlview=";
+		<tr>
+		  <th width='15' valign='top'><img src='../../template/classic/img/folder_closed.png' title='$showall' /></th>
+		  <th colspan='2' valign='top'><div class='left'><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;urlview=";
 			$tool_content .=  is_array($view)?implode('',$view):$view;
 			$tool_content .=  "'>" . q($myrow['name']) . "</a>";
 		        $description = standard_text_escape($myrow['description']);
                         if (!empty($description)) {
-                                $tool_content .= "<br />$description</div></th>";
+                                $tool_content .= "<br />$description</div>
+                  </th>";
                         }
 			if ($is_adminOfCourse) {
 			showcategoryadmintools($myrow["id"]);
-			} else {
-				$tool_content .=  "
-		    <th width='45'>&nbsp;</th>
-		    <th width='45'>&nbsp;</th>
-		  </tr>";
+                        } else {
+                                $tool_content .=  "
+                </tr>";
 			}
 		}
 		// displaying the link of the category

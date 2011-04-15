@@ -60,23 +60,32 @@ function showlinksofcategory($catid)
 	$i=1;
 	while ($myrow = mysql_fetch_array($result)) {
                 if ($i % 2 == 0) {
-                        $tool_content .= "<tr class='even'>";
+                        $tool_content .= "
+                <tr class='even'>";
                 } else {
-                        $tool_content .= "<tr class='odd'>";
+                        $tool_content .= "
+                <tr class='odd'>";
                 }
                 $title = empty($myrow['title'])? $myrow['url']: $myrow['title'];
                 $tool_content .= "
                   <td>&nbsp;</td>
-                  <td width='1' valign='top'><img src='$urlServer/template/classic/img/arrow.png' alt='' /></td>
-                  <td valign='top'><a href='go.php?c=$currentCourseID&amp;id=$myrow[id]&amp;url=" .
+                  <td width='1' valign='top'><img src='$urlServer/template/classic/img/arrow.png' alt='' /></td>";
+                if ($is_adminOfCourse) {
+                    $num_merge_cols = 1;
+                } else {
+                    $num_merge_cols = 1;
+                }
+                $tool_content .= "
+                  <td valign='top' colspan='$num_merge_cols'><a href='go.php?c=$currentCourseID&amp;id=$myrow[id]&amp;url=" .
                   urlencode($myrow['url']) . "' target='_blank'>" . q($title) . "</a>";
                 if (!empty($myrow['description'])) {
                         $tool_content .= "<br />" . standard_text_escape($myrow['description']);
                 }
-                $tool_content .= "</td>\n";
+                $tool_content .= "</td>";
 
                 if ($is_adminOfCourse) {
-                        $tool_content .=  "<td width='45' valign='top' align='right'>";
+                        $tool_content .=  "
+                  <td width='45' valign='top' align='right'>";
                         if (isset($category)) {
                                 $tool_content .=  "<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;action=editlink&amp;category=$category&amp;id=$myrow[0]&amp;urlview=$urlview'>";
                         } else {
@@ -84,7 +93,7 @@ function showlinksofcategory($catid)
                         }
 
                         $tool_content .= "<img src='../../template/classic/img/edit.png' title='$langModify' alt='$langModify' /></a>&nbsp;&nbsp;<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;action=deletelink&amp;id=$myrow[0]&amp;urlview=$urlview' onclick=\"javascript:if(!confirm('".$langLinkDelconfirm."')) return false;\"><img src='../../template/classic/img/delete.png' title='$langDelete' alt='$langDelete' /></a></td>" .
-                                         "<td width='45' valign='top' align='right'>";
+                                         "<td width='35' valign='top' align='right'>";
                         // Display move up command only if it is not the top link
                         if ($i != 1) {
                                 $tool_content .= "<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;urlview=$urlview&amp;up=$myrow[id]'><img src='../../template/classic/img/up.png' title='$langUp' alt='$langUp' /></a>";
@@ -93,12 +102,12 @@ function showlinksofcategory($catid)
                         if ($i < $numberoflinks) {
                                 $tool_content .= "<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;urlview=$urlview&amp;down=$myrow[id]'><img src='../../template/classic/img/down.png' title='$langDown' alt='$langDown' /></a>";
                         }
-                        $tool_content .= "</td>";
-                } else {
-                        $tool_content .= "<td width='1' align='right' colspan='4'>&nbsp;</td>";
+                        $tool_content .= "
+                  </td>";
                 }
 
-                $tool_content .= "</tr>\n";
+                $tool_content .= "
+                </tr>";
                 $i++;
         }
 }
@@ -116,7 +125,7 @@ function showcategoryadmintools($categoryid)
 		  <th width='45' valign='top'><div align='right'><a href=\"$_SERVER[PHP_SELF]?course=$code_cours&amp;action=editcategory&amp;id=$categoryid&amp;urlview=$urlview\"><img src=\"../../template/classic/img/edit.png\" title=\"".$langModify."\" /></a>&nbsp;&nbsp;<a href=\"".$_SERVER['PHP_SELF']."?course=$code_cours&amp;action=deletecategory&amp;id=".$categoryid."&amp;urlview=".$urlview."\" onclick=\"javascript:if(!confirm('".$langCatDel."')) return false;\">". "<img src=\"../../template/classic/img/delete.png\" title=\"".$langDelete."\" /></a></div></th>";
 
 
-	$tool_content .= "<th width='45' valign='top'><div align='right'>";
+	$tool_content .= "<th width='35' valign='top'><div align='right'>";
 	// Display move up command only if it is not the top link
 	if ($catcounter != 1) {
 		$tool_content .= "<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;urlview=$urlview&amp;cup=$categoryid'><img src='../../template/classic/img/up.png' title='$langUp' alt='$$langUp' /></a>";
@@ -125,7 +134,8 @@ function showcategoryadmintools($categoryid)
 	if ($catcounter < $aantalcategories) {
 		$tool_content .=  "<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;urlview=$urlview&amp;cdown=$categoryid'><img src='../../template/classic/img/down.png' title='$langDown' alt='$langDown' /></a>";
 	}
-        $tool_content .=  "</div></th></tr>";
+        $tool_content .=  "</div>
+                  </th>";
 	$catcounter++;
 }
 

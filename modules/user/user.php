@@ -168,7 +168,7 @@ if ($is_adminOfCourse) {
 	  <th rowspan='2' width='1'>$langID</th>
 	  <th rowspan='2'><div align='left'><a href='$_SERVER[PHP_SELF]?ord=s$extra_link'>$langName $langSurname</a></div></th>
 	  <th rowspan='2' class='center'>$langGroup</th>
-	  <th rowspan='2' class='center'><a href='$_SERVER[PHP_SELF]?ord=rd$extra_link'>$langRegistrationDate</a></th>
+	  <th rowspan='2' class='center' width='10'><a href='$_SERVER[PHP_SELF]?ord=rd$extra_link'>$langRegistrationDateShort</a></th>
 	  <th colspan='2' class='center'>$langUserPermitions</th>
           <th rowspan='2' width='10'>$langActions</th>
 	</tr>
@@ -210,13 +210,13 @@ if ($is_adminOfCourse) {
         <tr class='odd'>";
 		}
                 // show public list of users
-                $am_message = empty($myrow['am'])? '': ("<div class='smaller'>($langAm: " . q($myrow['am']) . ")</div>");
+                $am_message = empty($myrow['am'])? '': ("<div class='right'>($langAm: " . q($myrow['am']) . ")</div>");
 		$tool_content .= "
           <td class='smaller' valign='top' align='right'>$i.</td>\n" .
-			"<td valign='top'>" . display_user($myrow) . "<div class='smaller'>" . mailto($myrow['email']) . "</div>$am_message</td>\n";
+			"<td valign='top' class='smaller'>" . display_user($myrow) . "&nbsp;&nbsp;(". mailto($myrow['email']) . ")  $am_message</td>\n";
 		$tool_content .= "\n" .
 			"<td class='smaller' valign=top align='center' width='150' class='smaller'>" . user_groups($cours_id, $myrow['user_id']) . "</td>\n" .
-			"<td align='center' width='90' class='smaller'>";
+			"<td align='center' class='smaller'>";
 		if ($myrow['reg_date'] == '0000-00-00') {
 			$tool_content .= $langUnknownDate;
 		} else {
@@ -227,7 +227,7 @@ if ($is_adminOfCourse) {
 		if ($myrow['tutor'] == '0') {
 			$tool_content .= "<td valign='top' align='center' class='add_user'><a href='$_SERVER[PHP_SELF]?giveTutor=$myrow[user_id]$extra_link' title='$langGiveTutor'>$langAdd</a></td>";
 		} else {
-			$tool_content .= "<td class='monthLabel' align='center'>$langTutor<br /><a href='$_SERVER[PHP_SELF]?removeTutor=$myrow[user_id]$extra_link' title='$langRemoveRight'>$langRemove</a></td>";
+			$tool_content .= "<td class='add_teacherLabel' align='center'>$langTutor<br /><a href='$_SERVER[PHP_SELF]?removeTutor=$myrow[user_id]$extra_link' title='$langRemoveRight'>$langRemove</a></td>";
 		}
 		// admin right
 		if ($myrow['user_id'] != $_SESSION["uid"]) {
@@ -238,7 +238,7 @@ if ($is_adminOfCourse) {
 			}
 		} else {
 			if ($myrow['statut']=='1') {
-				$tool_content .= "<td valign='top' class='monthLabel' align='center' title='$langAdmR'><b>$langAdministrator</b></td>";
+				$tool_content .= "<td valign='top' class='add_teacherLabel' align='center' title='$langAdmR'><b>$langAdministrator</b></td>";
 			} else {
 				$tool_content .= "<td class='smaller' valign='top' align='center'><a href='$_SERVER[PHP_SELF]?giveAdmin=$myrow[user_id]$extra_link'>$langGiveAdmin</a></td>";
 			}

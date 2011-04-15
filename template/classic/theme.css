@@ -1365,6 +1365,8 @@ table.Search td {
 }
 
 /* ----- End Lesson Layout ----- */
+
+
 .add_user a {
         color: #029516 !important;
         font-size: 11px;
@@ -1374,5 +1376,14 @@ table.Search td {
         color: #02c81c !important;
         text-decoration: underline;
         font-size: 11px;
+}
+
+.add_teacherLabel {
+    text-align: center;
+    color: #627aad;
+    background-color:#fff9ae;
+    padding: 1px;
+    font-size: 11px;
+    border: 1px solid #ddd685;
 }
 

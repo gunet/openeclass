@@ -2355,6 +2355,7 @@ $langNoSuchRequest = "Δεν υπάρχει κάποια σχετική αίτη
 $langTeacherRequestHasRejected = "Η αίτηση του $langsOfTeacher απορρίφθηκε";
 $langRequestMessageHasSent = " και στάλθηκε ενημερωτικό μήνυμα στη διεύθυνση ";
 $langRequestHasRejected = "Η αίτησή σας για εγγραφή στην πλατφόρμα $siteName απορρίφθηκε.";
+$langRegistrationDateShort = "Ημερομηνία <br />εγγραφής";
 $langRegistrationDate = "Ημερομηνία εγγραφής";
 $langExpirationDate = "Ημερομηνία λήξης";
 $langCourseRegistrationDate = "Ημ/νία εγγραφής στο μάθημα";
