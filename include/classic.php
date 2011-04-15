@@ -142,7 +142,7 @@ if (count($status) > 0) {
         $table_begin = true;
         foreach ($status as $code => $code_statut) {
                 $cid = $cours_id_map[$code];
-                $result = db_query("SELECT contenu, temps, title
+                $result = db_query("SELECT annonces.id, contenu, temps, title
                                 FROM `$mysqlMainDb`.annonces, `$code`.accueil
                                 WHERE cours_id = $cid
 				AND `$mysqlMainDb`.annonces.visibility = 'v'
@@ -165,23 +165,23 @@ if (count($status) > 0) {
                                                 $tool_content .= "<tr class='odd'>\n";
                                         }
                                         $tool_content .= "
-                        <td width='16'>
-                            <img src='${urlAppend}/template/classic/img/arrow.png' alt='' /></td>
-                        <td><b>" . q($ann['title']) . "</b><br>" . "<span class='smaller'>" .
-                            claro_format_locale_date($dateFormatLong, strtotime($ann['temps'])) .
-                            "&nbsp;($langCourse: <b>" . q($titles[$code]) . "</b>, $langTutor: <b>" .
-                            q($profs[$code]) . "</b></span>)<br />$content</td></tr>\n";
+					<td width='16'>
+					    <img src='${urlAppend}/template/classic/img/arrow.png' alt='' /></td><td>
+						<b><a href='modules/announcements/announcements.php?course=$code&amp;an_id=$ann[id]'>".q($ann['title'])."</a></b>
+						<br>" . "<span class='smaller'>" .
+					    claro_format_locale_date($dateFormatLong, strtotime($ann['temps'])) .
+					    "&nbsp;($langCourse: <b>" . q($titles[$code]) . "</b>, $langTutor: <b>" .
+					    q($profs[$code]) . "</b></span>)<br />".
+					    standard_text_escape(ellipsize($content, 250, "<strong>&nbsp;...<a href='modules/announcements/announcements.php?course=$code&amp;an_id=$ann[id]'>
+						[$langMore]</a></strong>"))."</td></tr>\n";
                                         $la++;
                                 }
                         }
         }
         if (!$table_begin) {
-                $tool_content .= "\n         </table>";
+                $tool_content .= "\n</table>";
         }
 }
-
-//$tool_content .= "</td></tr></table><br />";
 if (isset($status)) {
 	$_SESSION['status'] = $status;
 }
-

@@ -70,7 +70,7 @@ $sql = db_query("SELECT id, title, contenu, DATE_FORMAT(temps,'%a, %d %b %Y %T +
 while ($r = mysql_fetch_array($sql)) {
 	echo "<item>";
 	echo "<title>".$r['title']."</title>";
-	echo "<link>".$urlServer."modules/announcements/rss.php?c=".$code."</link>";
+	echo "<link>".$urlServer."modules/announcements/announcements.php?an_id=".$r['id']."&amp;c=".$code."</link>";
 	echo "<description>".html2text($r['contenu'])."</description>";	
 	echo "<pubDate>".$r['dateformat']."</pubDate>";
 	echo "<guid isPermaLink='false'>".$r['dateformat'].$r['id']."</guid>";

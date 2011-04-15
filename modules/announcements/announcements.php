@@ -98,6 +98,7 @@ function checkrequired(which, entry) {
 
 </script>
 hContent;
+
     if ($is_adminOfCourse) {
 	$result = db_query("SELECT count(*) FROM annonces WHERE cours_id = $cours_id", $mysqlMainDb);
     } else {
@@ -244,7 +245,6 @@ hContent;
         $displayForm = false; //do not show form
     }
 
-
     /* display form */
     if ($displayForm and (isset($_GET['addAnnounce']) or isset($_GET['modify']))) {
         $tool_content .= "
@@ -276,7 +276,8 @@ hContent;
           <td>".rich_text_editor('newContent', 4, 20, $contentToModify)."</td>
         </tr>
 	<tr>
-          <td class='smaller right'><img src='${urlServer}/template/classic/img/email.png' title='email' /> $langEmailOption: <input type='checkbox' value='1' name='emailOption' /></td>
+          <td class='smaller right'>
+	  <img src='${urlServer}/template/classic/img/email.png' title='email' /> $langEmailOption: <input type='checkbox' value='1' name='emailOption' /></td>
         </tr>
 	<tr>
           <td class='right'><input type='submit' name='submitAnnouncement' value='$langAdd' /></td>
@@ -298,9 +299,17 @@ hContent;
 
     /* display announcements */
 	if ($is_adminOfCourse) {
-	    $result = db_query("SELECT * FROM annonces WHERE cours_id = $cours_id ORDER BY ordre DESC", $mysqlMainDb);
+		if (isset($_GET['an_id'])) {
+			$result = db_query("SELECT * FROM annonces WHERE cours_id = $cours_id AND id = $_GET[an_id]", $mysqlMainDb);
+		} else {
+			$result = db_query("SELECT * FROM annonces WHERE cours_id = $cours_id ORDER BY ordre DESC", $mysqlMainDb);
+		}
 	} else {
-	    $result = db_query("SELECT * FROM annonces WHERE cours_id = $cours_id AND visibility = 'v' ORDER BY ordre DESC", $mysqlMainDb);
+		if (isset($_GET['an_id'])) {
+			$result = db_query("SELECT * FROM annonces WHERE cours_id = $cours_id AND id = $_GET[an_id] AND visibility = 'v'", $mysqlMainDb);
+		} else {
+			$result = db_query("SELECT * FROM annonces WHERE cours_id = $cours_id AND visibility = 'v' ORDER BY ordre DESC", $mysqlMainDb);
+		}
 	}
         $iterator = 1;
         $bottomAnnouncement = $announcementNumber = mysql_num_rows($result);
@@ -309,23 +318,16 @@ hContent;
         <script type='text/javascript' src='../auth/sorttable.js'></script>
         <table width='100%' class='sortable' id='t1'>";
 	if ($announcementNumber > 0) {
-		$tool_content .= "
-        <tr>
-          
-          <th colspan='2'>$langAnnouncement</th>";
-
+		$tool_content .= "<tr><th colspan='2'>$langAnnouncement</th>";
                 if ($announcementNumber > 1) {
                     $colsNum= 2;
                 } else {
                     $colsNum= 2;
                 }
-
 		if ($is_adminOfCourse) {
-		    $tool_content .= "
-          <th width='60' colspan='$colsNum' class='center'>$langActions</th>";
+		    $tool_content .= "<th width='60' colspan='$colsNum' class='center'>$langActions</th>";
 		}
-		$tool_content .= "
-        </tr>\n";
+		$tool_content .= "</tr>\n";
 	}
 	$k = 0;
         while ($myrow = mysql_fetch_array($result)) {
@@ -335,64 +337,67 @@ hContent;
 		    if ($myrow['visibility'] == 'i') {
 			$visibility = 1;
 			$vis_icon = 'invisible.png';
-			$classvis = 'invisible';
+			$tool_content .= "<tr class='invisible'>";
 		    } else {
 			$visibility = 0;
 			$vis_icon = 'visible.png';
-			$classvis = 'visible';
+			if ($k%2 == 0) {
+			       $tool_content .= "<tr class='even'>";
+			} else {
+			       $tool_content .= "<tr class='odd'>";
+			}
 		    }
-		} else  {
-		    $classvis = 'visile';
 		}
-		if ($k%2 == 0) {
-		       $tool_content .= "
-        <tr class='even'>";
-		    } else {
-		       $tool_content .= "
-        <tr class='odd'>";
-		}
-	
-		$tool_content .= "
-          <td width='16' valign='top' class=$classvis><img style='padding-top:3px;' src='${urlServer}/template/classic/img/arrow.png' title='bullet' /></td>
-	  <td><b>";
+		$tool_content .= "<td width='16' valign='top'>
+			<img style='padding-top:3px;' src='${urlServer}/template/classic/img/arrow.png' title='bullet' /></td>
+			<td><b>";
 		if (empty($myrow['title'])) {
 		    $tool_content .= $langAnnouncementNoTille;
 		} else {
-		    $tool_content .= q($myrow['title']);
+		    $tool_content .= "<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;an_id=$myrow[id]'>".q($myrow['title'])."</a>";
 		}
+		$tool_content .= "</b><div class='smaller'>" . nice_format($myrow["temps"]). "</div>";
+		if (isset($_GET['an_id'])) {
+			$navigation[] = array("url" => "announcements.php?course=$code_cours", "name" => $langAnnouncements);
+			$nameTools = q($myrow['title']);
+			$tool_content .= $content;
+		} else {
+			$tool_content .= standard_text_escape(ellipsize($content, 250, "<strong>&nbsp;...<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;an_id=$myrow[id]'>[$langMore]</a></strong>"));		
+		}
+		$tool_content .= "</td>";
 		
-		$tool_content .= "</b><div class='smaller'>" . nice_format($myrow["temps"]). "</div>$content</td>";
 		if ($is_adminOfCourse) {
 			$tool_content .= "
-          <td width='70' class='right'>
-		<a href='$_SERVER[PHP_SELF]?course=".$code_cours ."&amp;modify=" . $myrow['id'] . "'>
-		<img src='../../template/classic/img/edit.png' title='" . $langModify . "' /></a>&nbsp;
-		<a href='$_SERVER[PHP_SELF]?course=".$code_cours ."&amp;delete=" . $myrow['id'] . "' onClick=\"return confirmation('');\">
-		<img src='../../template/classic/img/delete.png' title='" . $langDelete . "' /></a>&nbsp;
-		<a href='$_SERVER[PHP_SELF]?course=".$code_cours ."&amp;mkvis=$myrow[id]&amp;vis=$visibility'>
-		<img src='../../template/classic/img/$vis_icon' title='$langVisible' /></a>
-	  </td>";
+			<td width='70' class='right'>
+			      <a href='$_SERVER[PHP_SELF]?course=".$code_cours ."&amp;modify=" . $myrow['id'] . "'>
+			      <img src='../../template/classic/img/edit.png' title='" . $langModify . "' /></a>&nbsp;
+			      <a href='$_SERVER[PHP_SELF]?course=".$code_cours ."&amp;delete=" . $myrow['id'] . "' onClick=\"return confirmation('');\">
+			      <img src='../../template/classic/img/delete.png' title='" . $langDelete . "' /></a>&nbsp;
+			      <a href='$_SERVER[PHP_SELF]?course=".$code_cours ."&amp;mkvis=$myrow[id]&amp;vis=$visibility'>
+			      <img src='../../template/classic/img/$vis_icon' title='$langVisible' /></a>
+			</td>";
 			if ($announcementNumber > 1)  {
-				$tool_content .= "
-          <td align='center' width='35' class='right'>";
+				$tool_content .= "<td align='center' width='35' class='right'>";
 			}
 			if ($iterator != 1)  {
-			    $tool_content .= "<a href='$_SERVER[PHP_SELF]?course=".$code_cours ."&amp;up=" . $myrow["id"] . "'><img class='displayed' src='../../template/classic/img/up.png' title='" . $langMove ." ". $langUp . "' /></a>";
+			    $tool_content .= "<a href='$_SERVER[PHP_SELF]?course=".$code_cours ."&amp;up=" . $myrow["id"] . "'>
+			    <img class='displayed' src='../../template/classic/img/up.png' title='" . $langMove ." ". $langUp . "' />
+			    </a>";
 			}
 			if ($iterator < $bottomAnnouncement) {
-			    $tool_content .= "<a href='$_SERVER[PHP_SELF]?course=".$code_cours ."&amp;down=" . $myrow["id"] . "'><img class='displayed' src='../../template/classic/img/down.png' title='" . $langMove ." ". $langDown . "' /></a>";
+			    $tool_content .= "<a href='$_SERVER[PHP_SELF]?course=".$code_cours ."&amp;down=" . $myrow["id"] . "'>
+			    <img class='displayed' src='../../template/classic/img/down.png' title='" . $langMove ." ". $langDown . "' />
+			    </a>";
 			}
 			if ($announcementNumber > 1) {
 				$tool_content .= "</td>";
 			}
 		}
-		$tool_content .= "
-        </tr>";
+		$tool_content .= "</tr>";
 		$iterator ++;
 		$k++;
         } // end of while 
-        $tool_content .= "
-        </table>\n";
+        $tool_content .= "</table>\n";
     
     if ($announcementNumber < 1) {
         $no_content = true;
@@ -402,7 +407,7 @@ hContent;
         if (isset($_GET['modify'])) {
             $no_content = false;
         }
-        if ($no_content) $tool_content .= "    <p class='alert1'>$langNoAnnounce</p>\n";
+        if ($no_content) $tool_content .= "<p class='alert1'>$langNoAnnounce</p>\n";
     }
 add_units_navigation(TRUE);
 if ($is_adminOfCourse) {

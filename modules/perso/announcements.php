@@ -158,7 +158,7 @@ function getUserAnnouncements($param = null, $type) {
  * @see function getUserAnnouncements()
  */
 function announceHtmlInterface($data) {
-	global $urlServer, $langNoAnnouncementsExist, $langMore, $dateFormatLong;
+	global $urlAppend, $langNoAnnouncementsExist, $langMore, $dateFormatLong;
 	$announceExist = false;
 	$assign_content= '<div class="datacontainer"><ul>';
 
@@ -168,26 +168,18 @@ function announceHtmlInterface($data) {
 		if ($iterator > 0) {
 			$announceExist = true;
 			$assign_content .= "\n          <li class='category'>".$data[$i][0]."</li>";
-			$url = $urlServer . "index.php?perso=2&amp;c=" .$data[$i][1];
-			for ($j=0; $j < $iterator; $j++){
-				if(strlen($data[$i][2][$j][1]) > 150) {
-					$data[$i][2][$j][1] = substr($data[$i][2][$j][1], 0, 150);
-					$data[$i][2][$j][1] .= "... <a href='$url'>[$langMore]</a>";
-				}
-				if(strlen($data[$i][2][$j][0]) > 50) {
-					$data[$i][2][$j][0] = substr($data[$i][2][$j][0], 0, 50);
-					$data[$i][2][$j][0] .= "...";
-				}
-
-			$assign_content .= "\n<li><a class='square_bullet2' href='$url'>" .
+			$url = $urlAppend . "/modules/announcements/announcements.php?course=" .$data[$i][1]."&amp;an_id=";
+			for ($j=0; $j < $iterator; $j++) {
+				$an_id = $data[$i][2][$j][3];
+				$assign_content .= "\n<li><a class='square_bullet2' href='$url$an_id'>" .
                                            "<strong class='title_pos'>" . $data[$i][2][$j][0] .
                                            autoCloseTags($data[$i][2][$j][0]) .
                                            " <span class='announce_date'> (" .
                                            claro_format_locale_date($dateFormatLong, strtotime($data[$i][2][$j][2])) .
-                                           ")</span></strong></a><p class='content_pos'>" .
-                                           unescapeSimple($data[$i][2][$j][1]) .
-                                           autoCloseTags($data[$i][2][$j][1]) .
-                                           "</p></li>";
+                                           ")</span></strong></a>".
+						standard_text_escape(
+	                                           ellipsize($data[$i][2][$j][1], 250, "<strong>&nbsp;...<a href='$url$an_id'>[$langMore]</a></strong>")) .
+					   "</li>";
 			}
 		}
 	}
@@ -229,7 +221,7 @@ function createQueries($queryParam){
 			$dateVar = $date;
 		}
 
-		$announce_query[$i] = "SELECT title, contenu, temps
+		$announce_query[$i] = "SELECT title, contenu, temps, annonces.id
                         FROM `$mysqlMainDb`.annonces, `$lesson_code[$i]`.accueil
                         WHERE cours_id = $lesson_id[$i]
 				AND visibility = 'v'
