@@ -197,15 +197,11 @@ foreach ($textNodes as $textNode) {
 	}
 }        
 
-foreach ($dom->getElementsByTagName('link') as $element) {
-        $ebook_head .= $dom->saveXML($element);
-}
-foreach ($dom->getElementsByTagName('style') as $element) {
-        $ebook_head .= str_replace(array('<![CDATA[', ']]>'), array('', ''),
-                                   $dom->saveXML($element));
-}
-foreach ($dom->getElementsByTagName('script') as $element) {
-        $ebook_head .= $dom->saveXML($element);
+for (array('link', 'style', 'script') as $tagname) {
+        foreach ($dom->getElementsByTagName($tagname) as $element) {
+                $ebook_head .= str_replace(array('<![CDATA[', ']]>'), array('', ''),
+                                           $dom->saveXML($element));
+        }
 }
 $body_node = $dom->getElementsByTagName('body')->item(0);
 foreach ($body_node->childNodes as $element) {
