@@ -1421,7 +1421,7 @@ function get_config($key)
 {
 	global $mysqlMainDb;
 	
-        $r = db_query("SELECT value FROM config WHERE `key` = '$key'", $mysqlMainDb);
+        $r = db_query("SELECT value FROM `$mysqlMainDb`.config WHERE `key` = '$key'");
         if ($r and mysql_num_rows($r) > 0) {
                 $row = mysql_fetch_row($r);
                 return $row[0];
@@ -1430,6 +1430,14 @@ function get_config($key)
         }
 }
 
+// Set the value of a key in the config table
+function set_config($key, $value)
+{
+	global $mysqlMainDb;
+	
+        db_query("REPLACE INTO `$mysqlMainDb`.config VALUES (`key`, '" .
+                        mysql_real_escape_string($value) . ')');
+}
 
 // Copy variables from $_POST[] to $GLOBALS[], trimming and canonicalizing whitespace
 // $var_array = array('var1' => true, 'var2' => false, [varname] => required...)
@@ -1878,4 +1886,14 @@ function stop_output_buffering()
         while (ob_get_level() > 0) {
                 ob_end_flush();
         }
+}
+
+// Generate a 25-character random alphanumeric string
+function generate_secret_key()
+{
+        $key = '';
+        for ($i = 0; $i < 5; $i++) {
+                $key .= base_convert(mt_rand(0x19A100, 0x39AA3FF), 10, 36);
+        }
+        return $key;
 }

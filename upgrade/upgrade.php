@@ -250,31 +250,46 @@ if (!isset($_POST['submit2'])) {
         fclose($fp);
 
 
-
         // ****************************************************
         // 		upgrade eclass main database
         // ****************************************************
 
 	echo "<p>$langUpgradeBase <b>$mysqlMainDb</b></p>";
 	flush();
-	
-	// creation of config table 
+        mysql_select_db($mysqlMainDb);
+
+	// Create or upgrade config table
 	if (!mysql_table_exists($mysqlMainDb, 'config')) {
-		db_query("CREATE TABLE `config` (
-			`id` MEDIUMINT NOT NULL AUTO_INCREMENT,
-			`key` VARCHAR( 255 ) NOT NULL,
-			`value` VARCHAR( 255 ) NOT NULL,
-			PRIMARY KEY (`id`))", $mysqlMainDb);
-		db_query("INSERT INTO `config` (`key`, `value`)
-			VALUES ('version', '2.1.2')", $mysqlMainDb);
+                db_query("CREATE TABLE `config`
+                                (`key` VARCHAR(32) NOT NULL,
+                                 `value` VARCHAR(255) NOT NULL,
+                                 PRIMARY KEY (`key`))");
+                db_query("INSERT INTO `config` (`key`, `value`)
+                                 VALUES ('version', '2.1.2')");
                 $oldversion = '2.1.2';
 	        db_query('SET NAMES greek');
         	// old queries
         	require "upgrade_main_db_old.php";
 	} else {
-                $r = mysql_fetch_row(db_query("SELECT `value` FROM config WHERE `key`='version'"));
-                $oldversion = $r[0];
+                if (mysql_field_exists($mysqlMainDb, 'config', 'id')) {
+                        db_query("RENAME TABLE config TO old_config");
+                        db_query("CREATE TABLE `config`
+                                        (`key` VARCHAR(32) NOT NULL,
+                                         `value` VARCHAR(255) NOT NULL,
+                                         PRIMARY KEY (`key`))");
+                        db_query("INSERT INTO config
+                                         SELECT `key`, `value` FROM old_config
+                                         GROUP BY `key`");
+                        db_query("DROP TABLE old_config");
+                }
+                $oldversion = get_config('version');
         }
+        db_query("INSERT IGNORE INTO `config` (`key`, `value`) VALUES
+                        ('dont_display_login_form', '0'),
+                        ('email_required', '0'),
+                        ('am_required', '0'),
+                        ('dropbox_allow_student_to_student', '0'),
+                        ('secret_key', '" . generate_secret_key() . "')");
 
         if ($oldversion < '2.1.3') {
         	// delete useless field
@@ -490,10 +505,6 @@ if (!isset($_POST['submit2'])) {
 		if (mysql_table_exists($mysqlMainDb, 'cours_faculte')) {
 			db_query("DROP TABLE cours_faculte");	
 		}
-		db_query("INSERT INTO `config` (`key`, `value`) VALUES ('dont_display_login_form', '0')");
-		db_query("INSERT INTO `config` (`key`, `value`) VALUES ('email_required', '0')");
-		db_query("INSERT INTO `config` (`key`, `value`) VALUES ('am_required', '0')");
-		db_query("INSERT INTO `config` (`key`, `value`) VALUES ('dropbox_allow_student_to_student', '0')");
         }
 
         // **********************************************

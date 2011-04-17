@@ -442,37 +442,28 @@ db_query("CREATE TABLE `auth` (
                   PRIMARY KEY (`auth_id`))
                   $charset_spec");
 
-db_query("INSERT INTO `auth` VALUES (1, 'eclass', '', '', 1)");
-db_query("INSERT INTO `auth` VALUES (2, 'pop3', '', '', 0)");
-db_query("INSERT INTO `auth` VALUES (3, 'imap', '', '', 0)");
-db_query("INSERT INTO `auth` VALUES (4, 'ldap', '', '', 0)");
-db_query("INSERT INTO `auth` VALUES (5, 'db', '', '', 0)");
-db_query("INSERT INTO `auth` VALUES (6, 'shibboleth', '', '', 0)");
-db_query("INSERT INTO `auth` VALUES (7, 'cas', '', '', 0)");
+db_query("INSERT INTO `auth` VALUES
+                (1, 'eclass', '', '', 1)
+                (2, 'pop3', '', '', 0)
+                (3, 'imap', '', '', 0)
+                (4, 'ldap', '', '', 0)
+                (5, 'db', '', '', 0)
+                (6, 'shibboleth', '', '', 0)
+                (7, 'cas', '', '', 0)");
 
+db_query("CREATE TABLE `config`
+                (`key` VARCHAR(32) NOT NULL,
+                 `value` VARCHAR(255) NOT NULL,
+                 PRIMARY KEY (`key`))");
+db_query("INSERT INTO `config` (`key`, `value`) VALUES
+                ('dont_display_login_form', '0'),
+                ('email_required', '0'),
+                ('am_required', '0'),
+                ('dropbox_allow_student_to_student', '0'),
+                ('secret_key', '" . generate_secret_key() . "',
+                ('version', '" . ECLASS_VERSION ."')");
 
-db_query("CREATE TABLE `config` (
-               `id` MEDIUMINT NOT NULL AUTO_INCREMENT,
-               `key` VARCHAR( 255 ) NOT NULL,
-               `value` VARCHAR( 255 ) NOT NULL,
-               PRIMARY KEY (`id`)) $charset_spec");
-
-db_query("INSERT INTO `config` (`key`, `value`)
-               VALUES ('version', '" . ECLASS_VERSION ."')");
-db_query("INSERT INTO `config` (`key`, `value`)
-               VALUES ('dont_display_login_form', '0')");
-db_query("INSERT INTO `config` (`key`, `value`)
-               VALUES ('email_required', '0')");
-db_query("INSERT INTO `config` (`key`, `value`)
-               VALUES ('am_required', '0')");
-db_query("INSERT INTO `config` (`key`, `value`)
-               VALUES ('dropbox_allow_student_to_student', '0')");
-
-
-#
-# Table passwd_reset (used by the password reset module)
-#
-
+// Table passwd_reset (used by the password reset module)
 db_query("CREATE TABLE `passwd_reset` (
                 `user_id` INT(11) NOT NULL,
                 `hash` VARCHAR(40) NOT NULL,
@@ -499,6 +490,6 @@ db_query("CREATE TABLE `course_units` (
 	`order` INT(11) NOT NULL DEFAULT 0,
 	`date` DATETIME NOT NULL DEFAULT '0000-00-00') $charset_spec");
  
-//dhmiourgia full text indexes
+// Create full text indexes
 db_query("ALTER TABLE `annonces` ADD FULLTEXT `annonces` (`contenu`, `title`)");
 db_query("ALTER TABLE `cours` ADD FULLTEXT `cours` (`code` ,`description` ,`intitule` ,`course_keywords`, `course_addon`)");
