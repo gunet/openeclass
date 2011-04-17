@@ -197,7 +197,7 @@ foreach ($textNodes as $textNode) {
 	}
 }        
 
-for (array('link', 'style', 'script') as $tagname) {
+foreach (array('link', 'style', 'script') as $tagname) {
         foreach ($dom->getElementsByTagName($tagname) as $element) {
                 $ebook_head .= str_replace(array('<![CDATA[', ']]>'), array('', ''),
                                            $dom->saveXML($element));
