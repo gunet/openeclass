@@ -443,12 +443,12 @@ db_query("CREATE TABLE `auth` (
                   $charset_spec");
 
 db_query("INSERT INTO `auth` VALUES
-                (1, 'eclass', '', '', 1)
-                (2, 'pop3', '', '', 0)
-                (3, 'imap', '', '', 0)
-                (4, 'ldap', '', '', 0)
-                (5, 'db', '', '', 0)
-                (6, 'shibboleth', '', '', 0)
+                (1, 'eclass', '', '', 1),
+                (2, 'pop3', '', '', 0),
+                (3, 'imap', '', '', 0),
+                (4, 'ldap', '', '', 0),
+                (5, 'db', '', '', 0),
+                (6, 'shibboleth', '', '', 0),
                 (7, 'cas', '', '', 0)");
 
 db_query("CREATE TABLE `config`
