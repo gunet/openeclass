@@ -30,12 +30,12 @@ function display_text()
 	global $tool_content, $id, $langContent, $langAdd;
 
 	$tool_content .= "
-        <form action='insert.php' method='post'><input type='hidden' name='id' value='$id'";
+        <form action='insert.php' method='post'><input type='hidden' name='id' value='$id'>";
 	$tool_content .= "
         <fieldset>
         <legend>$langContent:</legend>".  rich_text_editor('comments', 4, 20, '') ."
 	<br />
-        <input type='submit' name='submit_text' value='$langAdd'></td></tr>
+        <input type='submit' name='submit_text' value='$langAdd'>
 	</fieldset>
 	</form>";
 }

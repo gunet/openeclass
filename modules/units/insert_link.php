@@ -36,7 +36,8 @@ function display_links()
         if (mysql_num_rows($result) == 0) {
                 $tool_content .= "\n<p class='alert1'>$langNoLinksExist</p>";
         } else {
-                $tool_content .= "\n  <form action='insert.php' method='post'><input type='hidden' name='id' value='$id' />" .
+                $tool_content .= "\n  <form action='insert.php' method='post'>
+				<input type='hidden' name='id' value='$id' />" .
                                  "\n  <table class='tbl_alt' width='99%'>" .
                                  "\n  <tr>" .
                                  "\n    <th align='left'>&nbsp;$langLinks</th>" .
