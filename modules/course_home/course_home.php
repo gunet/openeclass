@@ -187,35 +187,35 @@ while ($cu = mysql_fetch_array($sql)) {
         $cunits_content .= " width='100%'>";
         if ($is_adminOfCourse) {
         $cunits_content .= "\n      <tr>".
-                           "\n        <th width='3%' class='right'>&nbsp;<b>$count_index.</b>&nbsp;</th>" .
+                           "\n        <th width='25' class='right'>$count_index.</th>" .
                            "\n        <th><a class=\"$class_vis\" href='${urlServer}modules/units/?id=$cu[id]'>" . q($cu['title']) . "</a></th>";
         } else {
         $cunits_content .= "\n      <tr>".
-                           "\n        <th width='3%' class='right'>&nbsp;<b>$count_index.</b>&nbsp;</th>".
+                           "\n        <th width='25' class='right'>$count_index.</th>".
                            "\n        <th><a class=\"$class_vis\" href='${urlServer}modules/units/?id=$cu[id]'>" . q($cu['title']) . "</a></th>";
         }
 
         if ($is_adminOfCourse) { // display actions
-                $cunits_content .= "\n        <th width='16'>".
+                $cunits_content .= "\n        <th width='70' class='center'>".
                         "<a href='../../modules/units/info.php?edit=$cu[id]'>" .
-                        "<img src='../../template/classic/img/edit.png' title='$langEdit' /></a></th>" .
-                        "\n        <th width='16'><a href='$_SERVER[PHP_SELF]?del=$cu[id]' " .
+                        "<img src='../../template/classic/img/edit.png' title='$langEdit' /></a>" .
+                        "\n        <a href='$_SERVER[PHP_SELF]?del=$cu[id]' " .
                         "onClick=\"return confirmation('$langConfirmDelete');\">" .
                         "<img src='../../template/classic/img/delete.png' " .
-                        "title='$langDelete' /></a></th>" .
-                        "\n        <th width='16'><a href='$_SERVER[PHP_SELF]?vis=$cu[id]'>" .
+                        "title='$langDelete' /></a>" .
+                        "\n        <a href='$_SERVER[PHP_SELF]?vis=$cu[id]'>" .
                         "<img src='../../template/classic/img/$icon_vis' " .
                         "title='$langVisibility' /></a></th>";
                 if ($cu['id'] != $last_id) {
-                        $cunits_content .= "\n        <th width='16'><a href='$_SERVER[PHP_SELF]?down=$cu[id]'>" .
-                        "<img src='../../template/classic/img/down.png' title='$langDown' /></a></th>";
+                        $cunits_content .= "\n        <th width='40' class='right'><a href='$_SERVER[PHP_SELF]?down=$cu[id]'>" .
+                        "<img src='../../template/classic/img/down.png' title='$langDown' /></a>";
                 } else {
-                        $cunits_content .= "\n        <th width='16'>&nbsp;&nbsp;&nbsp;&nbsp;</th>";
+                        $cunits_content .= "\n        <th width='40' class='right'>&nbsp;&nbsp;&nbsp;&nbsp;";
                 }
                 if (!$first) {
-                        $cunits_content .= "\n        <th width='16'><a href='$_SERVER[PHP_SELF]?up=$cu[id]'><img src='../../template/classic/img/up.png' title='$langUp' /></a></th>";
+                        $cunits_content .= "\n        <a href='$_SERVER[PHP_SELF]?up=$cu[id]'><img src='../../template/classic/img/up.png' title='$langUp' /></a></th>";
                 } else {
-                        $cunits_content .= "\n        <th width='16'>&nbsp;&nbsp;&nbsp;&nbsp;</th>";
+                        $cunits_content .= "\n        &nbsp;&nbsp;&nbsp;&nbsp;</th>";
                 }
         }
         $cunits_content .= "\n      </tr>\n      <tr>\n        <td ";
@@ -336,10 +336,11 @@ $tool_content .= "
       </td>
    </tr>
    </table>
-<table width='100%' class='tbl'>
-        <tr>
-          <td>$cunits_content</td>
-    </tr>
+
+   <table width='100%' class='tbl'>
+   <tr>
+     <td>$cunits_content</td>
+   </tr>
   </table>
 </div>
 ";
