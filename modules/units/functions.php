@@ -579,8 +579,7 @@ function show_ebook($title, $comments, $resource_id, $ebook_id, $visibility)
 			$exlink = "<span class='invisible'>$title ($langWasDeleted)</span>";
 		}
 	} else {
-                $exercise = mysql_fetch_array($r, MYSQL_ASSOC);
-		$link = "<a href='${urlServer}modules/ebook/show.php/$currentCourseID/$ebook_id'>";
+		$link = "<a href='${urlServer}modules/ebook/show.php/$currentCourseID/$ebook_id/unit=$id'>";
                 $exlink = $link . "$title</a>";
 		$imagelink = $link .
                         "<img src='../../template/classic/img/ebook_" .
@@ -604,7 +603,7 @@ function show_ebook($title, $comments, $resource_id, $ebook_id, $visibility)
 
 function show_ebook_section($title, $comments, $resource_id, $section_id, $visibility)
 {
-	global $cours_id, $mysqlMainDb;
+	global $id, $cours_id, $mysqlMainDb;
 	$r = db_query("SELECT ebook.id AS ebook_id, ebook_subsection.id AS ssid
 				FROM ebook, ebook_section, ebook_subsection
 				WHERE ebook.course_id = $cours_id AND
@@ -666,7 +665,7 @@ function show_ebook_resource($title, $comments, $resource_id, $ebook_id,
 			$exlink = "<span class='invisible'>$title ($langWasDeleted)</span>";
 		}
 	} else {
-		$link = "<a href='${urlServer}modules/ebook/show.php/$currentCourseID/$ebook_id/$display_id/'>";
+		$link = "<a href='${urlServer}modules/ebook/show.php/$currentCourseID/$ebook_id/$display_id/unit=$id'>";
                 $exlink = $link . q($title) . '</a>';
 		$imagelink = $link .
                         "<img src='../../template/classic/img/ebook_" .
