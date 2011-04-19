@@ -2996,7 +2996,7 @@ $langErrorDataTwo="Λάθος στην ανάκτηση των στοιχείω�
 $langUnableUpadatePost="Αδύνατο να ανανεωθεί το μήνυμά σας στη βάση δεδομένων ";
 $langUnableUpadateTopic="Αδύνατο να ανανέωθεί το θέμα σας στη βάση δεδομένων";
 $langUnableDeletePost="Αδύνατο να διαγραφεί το μήνυμα σας στη βάση δεδομένων";
-$langPostRemoved="Αδύνατο να ανανεωθεί το προηγούμενο μηνυμα σας - το τελευταίο μήνυμα έχει μεταφερθεί ";
+$langPostRemoved="Αδύνατο να ανανεωθεί το προηγούμενο μήνυμα σας - το τελευταίο μήνυμα έχει μεταφερθεί ";
 $langUnableDeleteTopic="Αδύνατο να διαγραφεί το θέμα απο τη βάση δεδομένων ";
 $langTopicInformation="Δεν ήταν δυνατή η ερώτηση στην βάση δεδομένων.";
 $langUserTopicInformation="<p>Δεν ήταν δυνατή η ερώτηση στην βάση δεδομένων.";
@@ -3048,6 +3048,7 @@ $langInsertForum = "περιοχής συζητήσεων";
 $langInsertWork = 'εργασίας';
 $langInsertWiki = 'wiki';
 $langInsertLink = "συνδέσμου";
+$langInsertEBook = "ηλεκτρονικού βιβλίου";
 $langUnknownResType = "Πρόβλημα! Άγνωστος πόρος θεματικής ενότητας";
 $langNoExercises = "Δεν υπάρχουν ασκήσεις";
 
@@ -3098,9 +3099,7 @@ $langBetaCMSUnitScormFiles = "Αρχεία Scorm Eνότητας";
 $langBetaCMSUnitDocumentFiles = "Έγγραφα Ενότητας";
 $langBetaCMSUnitTexts = "Κείμενα Ενότητας";
 $langBetaCMSText = "Κείμενο";
-
 $langNoCookies = 'Προσοχή! Έχετε απενεργοποιημένα τα cookies στο πρόγραμμα πλοήγησης που χρησιμοποιείτε. Η σύνδεση δεν είναι δυνατή.';
-
 
 /**************************************
  Glossary

@@ -64,6 +64,8 @@ if (isset($_POST['submit_doc'])) {
         insert_wiki($id);
 } elseif (isset($_POST['submit_link'])) {
 	insert_link($id);
+}  elseif (isset($_POST['submit_ebook'])) {
+	insert_ebook($id);
 }
 
 
@@ -73,44 +75,48 @@ $navigation[] = array("url"=>"index.php?id=$id", "name"=> htmlspecialchars($info
 switch ($_GET['type']) {
         case 'work': $nameTools = "$langAdd $langInsertWork";
                 include 'insert_work.php';
-                display_assignments();
+                list_assignments();
                 break;
         case 'doc': $nameTools = "$langAdd $langInsertDoc";
                 include 'insert_doc.php';
-                display_docs();
+                list_docs();
                 break;
         case 'exercise': $nameTools = "$langAdd $langInsertExercise";
                 include 'insert_exercise.php';
-                display_exercises();
+                list_exercises();
                 break;
         case 'text': $nameTools = "$langAdd $langInsertText";
                 include 'insert_text.php';
-                display_text();
+                display_text_form();
                 break;
 	case 'link': $nameTools = "$langAdd $langInsertLink";
 		include 'insert_link.php';
-		display_links();
+		list_links();
 		break;
 	case 'lp': $nameTools = "$langAdd $langLearningPath1";
                 include 'insert_lp.php';
-                display_lp();
+                list_lps();
                 break;
 	case 'video': $nameTools = "$langAddV";
                 include 'insert_video.php';
-                display_video();
+                list_videos();
+                break;
+        case 'ebook': $nameTools = "$langAdd $langInsertEBook";
+                include 'insert_ebook.php';
+                list_ebooks();
                 break;
 	case 'forum': $nameTools = "$langAdd $langInsertForum";
                 include 'insert_forum.php';
-                display_forum();
+                list_forums();
                 break;
         case 'wiki': $nameTools = "$langAdd $langInsertWiki";
                 include 'insert_wiki.php';
-                display_wiki();
+                list_wikis();
                 break;
         default: break;
 }
 
-draw($tool_content, 2, 'units', $head_content);
+draw($tool_content, 2, null, $head_content);
 
 // insert docs in database
 function insert_docs($id)
@@ -302,7 +308,7 @@ function insert_link($id)
                         $sql = db_query("SELECT * FROM link_category WHERE course_id = $cours_id AND id =" . intval($catlink_id));
                         $linkcat = mysql_fetch_array($sql);
                         db_query("INSERT INTO unit_resources SET unit_id = $id, type='linkcategory', title = " .
-                                quote($linkcat['name']) . ", comments = " . quote($linkcat['description']) .
+                                quote($linkcat['name']) . ", comments = " . autoquote($linkcat['description']) .
                                 ", visibility='v', `order` = $order, `date` = NOW(), res_id = $linkcat[id]");
                 }
         }
@@ -313,10 +319,30 @@ function insert_link($id)
                         $link = mysql_fetch_array(db_query("SELECT * FROM link
                                 WHERE course_id = $cours_id AND id =" . intval($link_id)), MYSQL_ASSOC);
                         db_query("INSERT INTO unit_resources SET unit_id = $id, type = 'link', title = " .
-                                quote($link['title']) . ", comments = " . quote($link['description']) .
+                                quote($link['title']) . ", comments = " . autoquote($link['description']) .
                                 ", visibility='v', `order` = $order, `date` = NOW(), res_id = $link[id]");
                 }
 	}
+	header('Location: index.php?id=' . $id);
+	exit;
+}
+
+// insert ebook in database
+function insert_ebook($id)
+{
+        global $cours_id, $mysqlMainDb;
+	list($order) = mysql_fetch_array(db_query("SELECT MAX(`order`) FROM unit_resources WHERE unit_id = $id"));
+        foreach (array('ebook', 'section', 'subsection') as $type) {
+            if (isset($_POST[$type]) and count($_POST[$type]) > 0) {
+                    foreach ($_POST[$type] as $ebook_id) {
+                            $order++;
+                            db_query("INSERT INTO unit_resources SET unit_id = $id, type = '$type',
+                                        title = " . autoquote($_POST[$type.'_title'][$ebook_id]) . ", comments = '',
+                                        visibility='v', `order` = $order, `date` = NOW(),
+                                        res_id = " . intval($ebook_id));
+                    }
+            }
+        }
 	header('Location: index.php?id=' . $id);
 	exit;
 }

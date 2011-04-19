@@ -25,7 +25,7 @@
  * =========================================================================*/
 
 
-function display_assignments()
+function list_assignments()
 {
         global $id, $tool_content, $currentCourseID, $langTitle, $langChoice, $m,
                $langAddModulesButton, $langNoAssign, $langActive, $langInactive,

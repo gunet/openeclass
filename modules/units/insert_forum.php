@@ -25,7 +25,7 @@
  * =========================================================================*/
 
 
-function display_forum()
+function list_forums()
 {
         global $id, $currentCourseID, $tool_content, $urlServer,
                $langComments, $langAddModulesButton, $langChoice, $langNoForums, $langForums;

@@ -1387,3 +1387,9 @@ table.Search td {
     border: 1px solid #ddd685;
 }
 
+td.section {
+	padding-left: 20px;
+}
+td.subsection {
+	padding-left: 40px;
+}

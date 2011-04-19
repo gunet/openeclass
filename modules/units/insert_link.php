@@ -25,7 +25,7 @@
  * =========================================================================*/
 
 
-function display_links()
+function list_links()
 {
         global $id, $cours_id, $currentCourseID, $tool_content, $urlServer, $mysqlMainDb,
                $langNoCategory, $langCategorisedLinks, $langComments, $langAddModulesButton,

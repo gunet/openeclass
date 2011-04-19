@@ -25,7 +25,7 @@
  * =========================================================================*/
 
 
-function display_exercises()
+function list_exercises()
 {
         global $id, $currentCourseID, $tool_content, $urlServer,
                $langComments, $langAddModulesButton, $langChoice, $langNoExercises, $langExercices;

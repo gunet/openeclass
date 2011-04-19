@@ -25,7 +25,7 @@
  * =========================================================================*/
 
 
-function display_text()
+function display_text_form()
 {
 	global $tool_content, $id, $langContent, $langAdd;
 

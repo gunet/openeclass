@@ -78,8 +78,8 @@ if (isset($_GET['delete'])) {
                 if (!empty($sid)) {
                         $sid = intval($sid);
                         $file_id = intval($file_id);
-                        $qssid = quote($_POST['ssid'][$file_id]);
-                        $qtitle = quote($_POST['title'][$file_id]);
+                        $qssid = autoquote($_POST['ssid'][$file_id]);
+                        $qtitle = autoquote($_POST['title'][$file_id]);
                         if (isset($_POST['oldssid'][$file_id])) {
                                 $oldssid = intval($_POST['oldssid'][$file_id]);
                                 db_query("UPDATE ebook_subsection

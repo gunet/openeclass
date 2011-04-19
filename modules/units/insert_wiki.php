@@ -25,7 +25,7 @@
  * =========================================================================*/
 
 
-function display_wiki()
+function list_wikis()
 {
         global $id, $currentCourseID, $tool_content, $urlServer,
                $langWikis, $langAddModulesButton, $langChoice, $langWikiNoWiki, $langWikiDescriptionForm;

@@ -46,17 +46,7 @@ if (isset($_REQUEST['id'])) {
 	$id = intval($_REQUEST['id']);
 }
 $lang_editor = langname_to_code($language);
-
-$head_content = <<<hContent
-<script type="text/javascript">
-function confirmation () {
-        if (confirm("'.$langConfirmDelete.'"))
-                {return true;}
-        else
-                {return false;}
-}
-</script>
-hContent;
+load_js('tools.js');
 
 if (isset($_REQUEST['edit_submit'])) {
         units_set_maxorder();
@@ -77,6 +67,7 @@ if ($is_adminOfCourse) {
 			<option value='lp'>$langLearningPath1</option>
 			<option value='video'>$langInsertVideo</option>
 			<option value='forum'>$langInsertForum</option>
+			<option value='ebook'>$langInsertEBook</option>
 			<option value='work'>$langInsertWork</option>
 			<option value='wiki'>$langInsertWiki</option>
 		</select>
@@ -92,11 +83,16 @@ if ($is_adminOfCourse) {
 } else {
         $visibility_check = "AND visibility='v'";
 }
-$q = db_query("SELECT * FROM course_units
-               WHERE id = $id AND course_id=$cours_id " . $visibility_check);
+if (isset($id) and $id !== false) {
+	$q = db_query("SELECT * FROM course_units
+		                WHERE id = $id AND course_id=$cours_id " . $visibility_check);
+} else {
+	$q = false;
+}
 if (!$q or mysql_num_rows($q) == 0) {
         $nameTools = $langUnitUnknown;
-        draw('', 2, '', $head_content);
+	$tool_content .= "<p class='caution'>$langUnknownResType</p>";
+        draw($tool_content, 2);
         exit;
 }
 $info = mysql_fetch_array($q);

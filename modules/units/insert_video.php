@@ -25,7 +25,7 @@
  * =========================================================================*/
 
 
-function display_video()
+function list_videos()
 {
         global $id, $currentCourseID, $tool_content, $urlServer,
                $langVideoTitle, $langDescr, $langDate, $langChoice,

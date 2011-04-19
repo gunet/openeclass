@@ -26,7 +26,7 @@
 
 include '../document/doc_init.php';
 
-function display_docs()
+function list_docs()
 {
         global $id, $webDir, $currentCourseID, $cours_id, $tool_content,
                $group_sql, $langDirectory, $langUp, $langName, $langSize,

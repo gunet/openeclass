@@ -8,7 +8,7 @@
 function process_actions()
 {
         global $tool_content, $id, $mysqlMainDb, $langResourceCourseUnitDeleted, $langResourceUnitModified;
-
+	
         if (isset($_REQUEST['edit'])) {
                 $res_id = intval($_GET['edit']);
                 if ($id = check_admin_unit_resource($res_id)) {
@@ -28,7 +28,7 @@ function process_actions()
         } elseif (isset($_REQUEST['del'])) { // delete resource from course unit
                 $res_id = intval($_GET['del']);
                 if ($id = check_admin_unit_resource($res_id)) {
-                        db_query("DELETE FROM unit_resources WHERE id = '$res_id'", $mysqlMainDb);
+                        db_query("DELETE FROM unit_resources WHERE id = $res_id", $mysqlMainDb);
                         $tool_content .= "<p class='success'>$langResourceCourseUnitDeleted</p>";
                 }
         } elseif (isset($_REQUEST['vis'])) { // modify visibility in text resources only 
@@ -138,6 +138,15 @@ function show_resource($info)
                         break;
 		case 'linkcategory':
                         $tool_content .= show_linkcat($info['title'], $info['comments'], $info['id'], $info['res_id'], $info['visibility']);
+                        break;
+		case 'ebook':
+                        $tool_content .= show_ebook($info['title'], $info['comments'], $info['id'], $info['res_id'], $info['visibility']);
+                        break;
+		case 'section':
+                        $tool_content .= show_ebook_section($info['title'], $info['comments'], $info['id'], $info['res_id'], $info['visibility']);
+                        break;
+		case 'subsection':
+                        $tool_content .= show_ebook_subsection($info['title'], $info['comments'], $info['id'], $info['res_id'], $info['visibility']);
                         break;
                 default:
                         $tool_content .= $langUnknownResType;
@@ -551,10 +560,138 @@ function show_linkcat($title, $comments, $resource_id, $linkcat_id, $visibility)
 		'</tr>';
 }
 
+
+// display resource ebook
+function show_ebook($title, $comments, $resource_id, $ebook_id, $visibility)
+{
+	global $id, $tool_content, $mysqlMainDb, $urlServer, $is_adminOfCourse,
+               $langWasDeleted, $currentCourseID;
+
+	$comment_box = $class_vis = $imagelink = $link = '';
+        $title = htmlspecialchars($title);
+	$r = db_query("SELECT * FROM ebook WHERE id = $ebook_id", $mysqlMainDb);
+	if (mysql_num_rows($r) == 0) { // check if it was deleted
+		if (!$is_adminOfCourse) {
+			return '';
+		} else {
+			$status = 'del';
+			$imagelink = "<img src='../../template/classic/img/delete.png' />";
+			$exlink = "<span class='invisible'>$title ($langWasDeleted)</span>";
+		}
+	} else {
+                $exercise = mysql_fetch_array($r, MYSQL_ASSOC);
+		$link = "<a href='${urlServer}modules/ebook/show.php/$currentCourseID/$ebook_id'>";
+                $exlink = $link . "$title</a>";
+		$imagelink = $link .
+                        "<img src='../../template/classic/img/ebook_" .
+			($visibility == 'i'? 'off': 'on') . ".png' /></a>";
+	}
+	$class_vis = ($visibility == 'v')? ' class="even"': ' class="invisible"';
+
+
+        if (!empty($comments)) {
+                $comment_box = "<br />$comments";
+	} else {
+                $comment_box = "";
+        }
+
+	return "
+        <tr$class_vis>
+          <td width='3'>$imagelink</td>
+          <td>$exlink $comment_box</td>" .  actions('ebook', $resource_id, $visibility) . "
+        </tr>";
+}
+
+function show_ebook_section($title, $comments, $resource_id, $section_id, $visibility)
+{
+	global $cours_id, $mysqlMainDb;
+	$r = db_query("SELECT ebook.id AS ebook_id, ebook_subsection.id AS ssid
+				FROM ebook, ebook_section, ebook_subsection
+				WHERE ebook.course_id = $cours_id AND
+				    ebook_section.ebook_id = ebook.id AND
+				    ebook_section.id = ebook_subsection.section_id AND
+				    ebook_section.id = $section_id 
+				ORDER BY CONVERT(ebook_subsection.public_id, UNSIGNED), ebook_subsection.public_id
+				LIMIT 1", $mysqlMainDb);
+	if (mysql_num_rows($r) == 0) { // check if it was deleted
+		$deleted = true;
+		$display_id = $ebook_id = false;
+	} else {
+		$deleted = false;
+		$data = mysql_fetch_array($r, MYSQL_ASSOC);
+		$ebook_id = $data['ebook_id'];
+		$display_id = $section_id . ',' . $data['ssid'];
+	}
+	return show_ebook_resource($title, $comments, $resource_id, $ebook_id,
+		                   $display_id, $visibility, $deleted);
+}
+
+function show_ebook_subsection($title, $comments, $resource_id, $subsection_id, $visibility)
+{
+	global $cours_id, $mysqlMainDb;
+	$r = db_query("SELECT ebook.id AS ebook_id, ebook_section.id AS sid
+				FROM ebook, ebook_section, ebook_subsection
+				WHERE ebook.course_id = $cours_id AND
+				    ebook_section.ebook_id = ebook.id AND
+				    ebook_section.id = ebook_subsection.section_id AND
+				    ebook_subsection.id = $subsection_id
+				LIMIT 1", $mysqlMainDb);
+	if (mysql_num_rows($r) == 0) { // check if it was deleted
+		$deleted = true;
+		$display_id = $ebook_id = false;
+	} else {
+		$deleted = false;
+		$data = mysql_fetch_array($r, MYSQL_ASSOC);
+		$ebook_id = $data['ebook_id'];
+		$display_id = $data['sid'] . ',' . $subsection_id;
+	}
+	return show_ebook_resource($title, $comments, $resource_id, $ebook_id,
+		                   $display_id, $visibility, $deleted);	
+}
+
+// display resource ebook subsection
+function show_ebook_resource($title, $comments, $resource_id, $ebook_id,
+		             $display_id, $visibility, $deleted)
+{
+	global $id, $tool_content, $mysqlMainDb, $urlServer, $is_adminOfCourse,
+               $langWasDeleted, $currentCourseID, $cours_id;
+
+	$comment_box = $class_vis = $imagelink = $link = '';
+	if ($deleted) {
+		if (!$is_adminOfCourse) {
+			return '';
+		} else {
+			$status = 'del';
+			$imagelink = "<img src='../../template/classic/img/delete.png' />";
+			$exlink = "<span class='invisible'>$title ($langWasDeleted)</span>";
+		}
+	} else {
+		$link = "<a href='${urlServer}modules/ebook/show.php/$currentCourseID/$ebook_id/$display_id/'>";
+                $exlink = $link . q($title) . '</a>';
+		$imagelink = $link .
+                        "<img src='../../template/classic/img/ebook_" .
+			($visibility == 'i'? 'off': 'on') . ".png' /></a>";
+	}
+	$class_vis = ($visibility == 'v')? ' class="even"': ' class="invisible"';
+
+        if (!empty($comments)) {
+                $comment_box = "<br />$comments";
+	} else {
+                $comment_box = "";
+        }
+
+	return "
+        <tr$class_vis>
+          <td width='3'>$imagelink</td>
+          <td>$exlink $comment_box</td>" .  actions('section', $resource_id, $visibility) . "
+        </tr>";
+}
+
 // resource actions
 function actions($res_type, $resource_id, $status, $res_id = false)
 {
-        global $is_adminOfCourse, $langEdit, $langDelete, $langVisibility, $langDown, $langUp, $mysqlMainDb;
+        global $is_adminOfCourse, $langEdit, $langDelete, $langVisibility, $langDown, $langUp,
+	       $mysqlMainDb, $langConfirmDelete;
 
         static $first = true;
 
@@ -576,7 +713,7 @@ function actions($res_type, $resource_id, $status, $res_id = false)
                 $content = "\n          <td width='3'>&nbsp;</td>";
         }
         $content .= "\n          <td width='3'><a href='$_SERVER[PHP_SELF]?del=$resource_id'" .
-                    " onClick=\"return confirmation();\">" .
+                    " onClick=\"return confirmation('" . js_escape($langConfirmDelete) . "')\">" .
                     "<img src='../../template/classic/img/delete.png' " .
                     "title='$langDelete'></img></a></td>";
 	 

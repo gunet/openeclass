@@ -25,7 +25,7 @@
  * =========================================================================*/
 
 
-function display_lp()
+function list_lps()
 {
         global $id, $currentCourseID, $tool_content, $urlServer,
                $langComments, $langAddModulesButton, $langChoice, $langNoLearningPath, $langLearningPaths;
