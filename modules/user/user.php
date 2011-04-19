@@ -128,11 +128,11 @@ if ($is_adminOfCourse) {
 
         <div id='operations_container'>
           <ul id='opslist'>
-            <li><b>$langAdd:</b>&nbsp; <a href='adduser.php'>$langOneUser</a></li>
-            <li><a href='muladduser.php'>$langManyUsers</a></li>
-            <li><a href='guestuser.php'>$langGUser</a>&nbsp;</li>
+            <li><b>$langAdd:</b>&nbsp; <a href='adduser.php?course=$code_cours'>$langOneUser</a></li>
+            <li><a href='muladduser.php?course=$code_cours'>$langManyUsers</a></li>
+            <li><a href='guestuser.php?course=$code_cours'>$langGUser</a>&nbsp;</li>
             <li><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;search=1'>$langSearchUser</a></li>
-            <li><a href='../group/group.php'>$langGroupUserManagement</a></li>
+            <li><a href='../group/group.php?course=$code_cours'>$langGroupUserManagement</a></li>
           </ul>
         </div>";
 
@@ -142,8 +142,8 @@ if ($is_adminOfCourse) {
 	<tr class='smaller'>
 	  <th><b>$langTotal</b>: <b>$countUser</b> $langUsers &nbsp;&nbsp;(<b>$teachers</b> $langTeachers, <b>$students</b> $langStudents, <b>$visitors</b> $langVisitors)<br />
           <b>$langDumpUser $langCsv</b>:
-              &nbsp;&nbsp;1.&nbsp;<a href='dumpuser2.php'>$langcsvenc2</a>
-              &nbsp;&nbsp;2.&nbsp;<a href='dumpuser2.php?enc=1253'>$langcsvenc1</a>
+              &nbsp;&nbsp;1.&nbsp;<a href='dumpuser2.php?course=$code_cours'>$langcsvenc2</a>
+              &nbsp;&nbsp;2.&nbsp;<a href='dumpuser2.php?course=$code_cours&amp;enc=1253'>$langcsvenc1</a>
           </th>
         </tr>
 	</table>
@@ -220,9 +220,9 @@ if ($is_adminOfCourse) {
         <table width='99%' class='tbl_alt'>
         <tr class='smaller'>
 	  <th rowspan='2' width='1'>$langID</th>
-	  <th rowspan='2'><div align='left'><a href='$_SERVER[PHP_SELF]?ord=s$extra_link'>$langName $langSurname</a></div></th>
+	  <th rowspan='2'><div align='left'><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;ord=s$extra_link'>$langName $langSurname</a></div></th>
 	  <th rowspan='2' class='center'>$langGroup</th>
-	  <th rowspan='2' class='center' width='10'><a href='$_SERVER[PHP_SELF]?ord=rd$extra_link'>$langRegistrationDateShort</a></th>
+	  <th rowspan='2' class='center' width='10'><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;ord=rd$extra_link'>$langRegistrationDateShort</a></th>
 	  <th colspan='2' class='center'>$langUserPermitions</th>
           <th rowspan='2' width='10'>$langActions</th>
 	</tr>
@@ -279,27 +279,27 @@ if ($is_adminOfCourse) {
 		$tool_content .= "</td>";
 		// tutor right
 		if ($myrow['tutor'] == '0') {
-			$tool_content .= "<td valign='top' align='center' class='add_user'><a href='$_SERVER[PHP_SELF]?giveTutor=$myrow[user_id]$extra_link' title='$langGiveTutor'>$langAdd</a></td>";
+			$tool_content .= "<td valign='top' align='center' class='add_user'><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;giveTutor=$myrow[user_id]$extra_link' title='$langGiveTutor'>$langAdd</a></td>";
 		} else {
-			$tool_content .= "<td class='add_teacherLabel' align='center'>$langTutor<br /><a href='$_SERVER[PHP_SELF]?removeTutor=$myrow[user_id]$extra_link' title='$langRemoveRight'>$langRemove</a></td>";
+			$tool_content .= "<td class='add_teacherLabel' align='center'>$langTutor<br /><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;removeTutor=$myrow[user_id]$extra_link' title='$langRemoveRight'>$langRemove</a></td>";
 		}
 		// admin right
 		if ($myrow['user_id'] != $_SESSION["uid"]) {
 			if ($myrow['statut']=='1') {
-				$tool_content .= "<td class='smaller' align='center'>$langAdministrator<br /><a href='$_SERVER[PHP_SELF]?removeAdmin=$myrow[user_id]$extra_link' title='$langRemoveRight'>$langRemove</a></td>";
+				$tool_content .= "<td class='smaller' align='center'>$langAdministrator<br /><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;removeAdmin=$myrow[user_id]$extra_link' title='$langRemoveRight'>$langRemove</a></td>";
 			} else {
-				$tool_content .= "<td valign='top' align='center' class='add_user'><a href='$_SERVER[PHP_SELF]?giveAdmin=$myrow[user_id]$extra_link' title='$langGiveAdmin'>$langAdd</a></td>";
+				$tool_content .= "<td valign='top' align='center' class='add_user'><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;giveAdmin=$myrow[user_id]$extra_link' title='$langGiveAdmin'>$langAdd</a></td>";
 			}
 		} else {
 			if ($myrow['statut']=='1') {
 				$tool_content .= "<td valign='top' class='add_teacherLabel' align='center' title='$langAdmR'><b>$langAdministrator</b></td>";
 			} else {
-				$tool_content .= "<td class='smaller' valign='top' align='center'><a href='$_SERVER[PHP_SELF]?giveAdmin=$myrow[user_id]$extra_link'>$langGiveAdmin</a></td>";
+				$tool_content .= "<td class='smaller' valign='top' align='center'><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;giveAdmin=$myrow[user_id]$extra_link'>$langGiveAdmin</a></td>";
 			}
 		}
 		$tool_content .= "<td valign='top' align='center' class='smaller'>";
 		$alert_uname = $myrow['prenom'] . " " . $myrow['nom'];
-                $tool_content .= "<a href='$_SERVER[PHP_SELF]?unregister=$myrow[user_id]$extra_link'
+                $tool_content .= "<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;unregister=$myrow[user_id]$extra_link'
                                  onClick=\"return confirmation('" . js_escape($alert_uname) .
                                  "');\"><img src='../../template/classic/img/delete.png' title='$langDelete' /></a>";
                 $tool_content .= "</td></tr>";

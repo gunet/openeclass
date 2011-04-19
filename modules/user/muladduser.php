@@ -31,14 +31,14 @@ $helpTopic = 'User';
 include '../../include/baseTheme.php';
 
 $nameTools = $langAddManyUsers;
-$navigation[] = array ("url"=>"user.php", "name"=> $langAdminUsers);
+$navigation[] = array ("url"=>"user.php?course=$code_cours", "name"=> $langAdminUsers);
 
 $tool_content = "";
 
 // IF PROF ONLY
 if($is_adminOfCourse) {
     $tool_content .= "
-    <form method='post' action='".$_SERVER['PHP_SELF']."' enctype='multipart/form-data'>";
+    <form method='post' action='".$_SERVER['PHP_SELF']."?course=$code_cours' enctype='multipart/form-data'>";
     $tool_content .= "
     <fieldset>
     <legend>$langUsersData</legend>

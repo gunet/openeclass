@@ -34,7 +34,7 @@ include '../../include/baseTheme.php';
 include '../../include/sendMail.inc.php';
 
 $nameTools = $langAddUser;
-$navigation[] = array ("url"=>"user.php", "name"=> $langAdminUsers);
+$navigation[] = array ("url"=>"user.php?course=$code_cours", "name"=> $langAdminUsers);
 
 $tool_content="";
 
@@ -60,11 +60,11 @@ if (isset($_GET['add'])) {
 	} else {
 		$tool_content .=  "<p class=\"alert1\">$langAddError</p>";
 	}
-		$tool_content .= "<br /><a href=\"adduser.php\">$langAddBack</a></p><br />\n";
+		$tool_content .= "<br /><a href=\"adduser.php?course=$code_cours\">$langAddBack</a></p><br />\n";
 
 } else {
 
-	$tool_content .= "<form method='post' action='$_SERVER[PHP_SELF]'>";
+	$tool_content .= "<form method='post' action='$_SERVER[PHP_SELF]?course=$code_cours'>";
 
         register_posted_variables(array('search_nom' => true,
                                         'search_prenom' => true,
@@ -144,7 +144,7 @@ tCont3;
 				}
                                 $tool_content .= "<td align='right'>$i.</td><td>" . q($myrow['prenom']) . "</td><td>" .
                                                  q($myrow['nom']) . "</td><td>" . q($myrow['username']) . "</td><td align='center'>
-                                                 <a href='$_SERVER[PHP_SELF]?add=$myrow[user_id]'>$langRegister</a></td></tr>\n";
+                                                 <a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;add=$myrow[user_id]'>$langRegister</a></td></tr>\n";
 				$i++;
 			}
 			$tool_content .= "</table>";

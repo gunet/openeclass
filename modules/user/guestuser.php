@@ -29,7 +29,7 @@ $helpTopic = 'Guest';
 include '../../include/baseTheme.php';
 
 $nameTools = $langAddGuest;
-$navigation[] = array ("url" => "user.php", "name" => $langAdminUsers);
+$navigation[] = array ("url" => "user.php?course=$code_cours", "name" => $langAdminUsers);
 
 $default_guest_username = $langGuestUserName . $currentCourseID;
 
@@ -40,13 +40,13 @@ if ($is_adminOfCourse) {
                 $password = autounquote($_POST['guestpassword']);
                 createguest($default_guest_username, $cours_id, $password);
                 $tool_content .= "<p class='success'>$langGuestSuccess</p>" .
-                                 "<a href='user.php'>$langBackUser</a>";
+                                 "<a href='user.php?course=$code_cours'>$langBackUser</a>";
         } else {
                 $guest_info = guestinfo($cours_id);
                 if ($guest_info) {
                         $tool_content .= "
                                 <p class='caution'>$langGuestExist<br />
-                                <a href='user.php'>$langBackUser</a></p>";
+                                <a href='user.php?course=$code_cours'>$langBackUser</a></p>";
                         $submit_label = $langModify;
                 } else {
                         $guest_info = array('nom' => $langGuestSurname,
@@ -54,7 +54,7 @@ if ($is_adminOfCourse) {
                                             'username' => $default_guest_username);
                         $submit_label = $langAdd;
                 }
-                $tool_content .= "<form method='post' action='$_SERVER[PHP_SELF]'>
+                $tool_content .= "<form method='post' action='$_SERVER[PHP_SELF]?course=$code_cours'>
                     <fieldset>
                     <legend>$langUserData</legend>
                 <table width='100%' class='tbl'>
