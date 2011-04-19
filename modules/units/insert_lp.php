@@ -45,7 +45,7 @@ function list_lps()
                 $tool_content .= "\n  <p class='alert1'>$langNoLearningPath</p>";
         } else {
                 $tool_content .= "\n  <form action='insert.php' method='post'>" .
-                                 "\n  <input type='hidden' name='id' value='$id'" .
+                                 "\n  <input type='hidden' name='id' value='$id'>" .
                                  "\n  <table width='99%' class='tbl_alt'>" .
                                  "\n  <tr>" .
                                  "\n    <th><div align='left'>&nbsp;$langLearningPaths</div></th>" .
@@ -72,7 +72,7 @@ function list_lps()
 			}
 		$tool_content .= "\n  <tr>" .
                                  "\n    <th colspan='3'><div align='right'>";
-		$tool_content .= "<input type='submit' name='submit_lp' value='$langAddModulesButton'></td>";
+		$tool_content .= "<input type='submit' name='submit_lp' value='$langAddModulesButton'></div></th>";
                 $tool_content .= "\n  </tr>\n  </table>\n  </form>\n";
         }
 }
