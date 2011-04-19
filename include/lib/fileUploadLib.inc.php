@@ -510,7 +510,7 @@ function process_extracted_file($p_event, &$p_header) {
                 return 0;
         } else {
                 $format = get_file_extension($filename);
-                $path .= ($uploadPath? $uploadPath: '/') . safe_filename($format);
+                $path .= '/' . safe_filename($format);
                 db_query("INSERT INTO document SET
                                  course_id = $cours_id,
 				 subsystem = $subsystem,
