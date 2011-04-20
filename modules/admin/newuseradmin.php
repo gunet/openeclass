@@ -30,6 +30,7 @@ include '../../include/baseTheme.php';
 include '../../include/sendMail.inc.php';
 $navigation[] = array("url" => "../admin/index.php", "name" => $langAdmin);
 
+$reqtype = '';
 $all_set = register_posted_variables(array(
         'auth' => true,
         'uname' => true,
