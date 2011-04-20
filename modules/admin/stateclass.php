@@ -294,7 +294,7 @@ if (isset($_GET['stats'])) {
 		break;
 		case 'mlogins':
 			$sqlLoginDouble = "SELECT DISTINCT CONCAT(username, \" -- \", password) AS paire,
-				COUNT(*) AS nb FROM user GROUP BY paire HAVING nb > 1 ORDER BY nb DESC";
+				COUNT(*) AS nb FROM user GROUP BY BINARY paire HAVING nb > 1 ORDER BY nb DESC";
 			$loginDouble = list_ManyResult($sqlLoginDouble);
 			$tool_content .= "<table width='99%' align='center'><thead><tr>
 				<td><table width='100%' align='center' class=\"stateclass\">
@@ -374,10 +374,10 @@ function list_1Result($sql) {
 }
 
 function list_ManyResult($sql) {
-	global $db;
+	global $mysqlMainDb;
 	$resu=array();
 
-	$res = db_query($sql, $db);
+	$res = db_query($sql, $mysqlMainDb);
 	while ($resA = mysql_fetch_array($res))
 	{
 		$resu[$resA[0]]=$resA[1];
