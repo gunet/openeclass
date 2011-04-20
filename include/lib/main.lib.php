@@ -1665,7 +1665,27 @@ function handle_unit_info_edit()
 function standard_text_escape($text, $mathimg = '../../courses/mathimg/')
 {
         global $purifier;
-        return glossary_expand(mathfilter($purifier->purify($text), 12, $mathimg));
+
+        $dom = new DOMDocument();
+        @$dom->loadXML('<div>' . mathfilter($purifier->purify($text), 12, $mathimg) . '</div>');
+
+        $xpath = new DOMXpath($dom);
+        $textNodes = $xpath->query('//text()');
+        foreach ($textNodes as $textNode) {
+                if (!empty($textNode->data)) {
+                        $new_contents = glossary_expand($textNode->data);
+                        if ($new_contents != $textNode->data) {
+                                $newdoc = new DOMDocument();
+                                $newdoc->loadXML('<span>' . $new_contents . '</span>');
+                                $newnode = $dom->importNode($newdoc->getElementsByTagName('span')->item(0), true);
+                                $textNode->parentNode->replaceChild($newnode, $textNode);
+                                unset($newdoc);
+                                unset($newnode);
+                        }
+                }
+        }
+        $base_node = $dom->getElementsByTagName('div')->item(0);
+        return $dom->saveXML($base_node);
 }
 
 function purify($text)
