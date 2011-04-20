@@ -235,7 +235,7 @@ if (isset($_GET['stats'])) {
 			<td colspan='2' width=90%>
 			<table width='100%' align='center' class=\"stateclass\">";
 			$loginDouble = list_ManyResult("SELECT DISTINCT username, count(*) AS nb
-				FROM user GROUP BY username HAVING nb > 1 ORDER BY nb DESC");
+				FROM user GROUP BY BINARY username HAVING nb > 1 ORDER BY nb DESC");
 			$tool_content .= "<tr><th><b>$langMultipleUsers</b></th>
 			<th class='right'><strong>$langResult</strong></th>
 			</tr>
