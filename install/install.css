@@ -8,7 +8,11 @@ body {
 	padding: 0;
 }
 
-
+.install_container {
+	width: 600px;
+	margin: 20px auto;
+	
+	}
 
 .alert {
 	background-color:#fef5be;
@@ -21,13 +25,9 @@ body {
 }
 
 
-
-
-
 .tbl_alt {
     padding: 5px;
     border: none;
-    border: 1px solid #dfdfdf; 
 }	
 
 
@@ -37,25 +37,21 @@ body {
     text-align: center;
     padding: 5px;
     background-color: #f1f1f1;
-    border-bottom: 1px dashed #dfdfdf;
+    border: 1px dashed #dfdfdf;
 }
 
 
 
 .tbl_alt td, .tbl_alt th {
     vertical-align: top;
-    border-right: 1px dashed #dfdfdf;
-    border-bottom: 1px dashed #dfdfdf;    
+    border: 1px dashed #dfdfdf;
 }
 
  .tbl_alt th {
     vertical-align: top;
-    border-right: 1px dashed #dfdfdf;
-    border-bottom: 1px dashed #dfdfdf;
+    border: 1px dashed #dfdfdf;
     padding: 5px;    
 }
-
-
    
 
 .tbl_alt .odd {
@@ -67,7 +63,14 @@ body {
 }
 
 
+a:link, a:active, a:visited {
+        color: #F30;
+        text-decoration: none;
+}
 
+a:hover {
+    	text-decoration: underline;
+}
 
 .installBullet {
 	list-style-image: url(../template/classic/img/arrow.png);
@@ -93,9 +96,6 @@ DIV.outer
       margin-top: -222px;  /* half of height */
 }
 
-a.installer {
-  color: red !important;
-}
 
 
 DIV.welcomeImg {

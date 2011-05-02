@@ -45,13 +45,12 @@ $tool_content = "
 
   </head>
   <body>
-  <p>&nbsp;</p>
+  <div class='install_container'>
+  <p><img src='./install/logo_openeclass.png' alt='logo' /></p>
+  <div class='alert' align='center'>Η πλατφόρμα ασύγχρονης τηλεκπαίδευσης Open eClass δεν λειτουργεί !</div>
       <table width='600' align='center' cellpadding='5' cellspacing='5' class='tbl_alt'>
     <tr>
-      <td colspan='2'><div class='alert'>Η πλατφόρμα ασύγχρονης τηλεκπαίδευσης Open eClass δεν λειτουργεί !</div></td>
-      </tr>
-    <tr>
-      <th width='300px'>Πιθανοί λόγοι</th>
+      <th width='300'>Πιθανοί λόγοι</th>
       <th>Αντιμετώπιση</th>
     </tr>
     <tr>
@@ -64,9 +63,10 @@ $tool_content = "
     </tr>
     <tr>
       <td>Xρησιμοποιείτε την πλατφόρμα για <b>πρώτη</b> φορά:</td>
-      <td>Επιλέξτε τον <a href=\"./install/\" class=\"installer\">Οδηγό Εγκατάστασης</a><br /> για να ξεκινήσετε το πρόγραμμα εγκατάστασης</td>
+      <td>Επιλέξτε τον <a href=\"./install/\" class=\"installer\"><b>Οδηγό Εγκατάστασης</b></a><br /> για να ξεκινήσετε το πρόγραμμα εγκατάστασης</td>
     </tr>
     </table>
+	</div>
   </body>
 </html>
 ";
