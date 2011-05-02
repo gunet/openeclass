@@ -80,13 +80,12 @@ if (file_exists("../config/config.php")) {
 <head>
   <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
   <title>$langWelcomeWizard</title>
-  <link href='../template/classic/tool_content.css' rel='stylesheet' type='text/css' />
   <link href='./install.css' rel='stylesheet' type='text/css' />
 </head>
 <body>
 
-  <p>&nbsp;</p>
-  <table width='65%' class='FormData' align='center' style='border: 1px solid #edecdf;'>
+  <div class='install_container'>
+  <table width='65%' class='FormData' align='center'>
   <thead>
   <tr>
     <td>&nbsp;</td>
@@ -117,7 +116,7 @@ if (file_exists("../config/config.php")) {
   </tr>
   </thead>
   </table>
-
+<div>
 </body>
 </html>";
 	exit($tool_content);
@@ -662,14 +661,13 @@ elseif (isset($_REQUEST['install1']) || isset($_REQUEST['back1']))
         <title>$langWelcomeWizard</title>
         <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
         <link href='./install.css' rel='stylesheet' type='text/css' />
-        <link href='../template/classic/tool_content.css' rel='stylesheet' type='text/css' />
-        <link href='../template/classic/perso.css' rel='stylesheet' type='text/css' />
 </head>
 <body>
-        <table class='FormInput' align='center' style='border: 1px solid #edecdf;'>
-        <tr><td colspan='2'><div align='center' class='welcomeImg'></div></td></tr>
-        <tr><td colspan='2'><div align='center'><h4>$langWelcomeWizard</h4></div>
-               $langThisWizard
+<div class='install_container' align='center'>
+        <table class='tbl_alt' width='400'>
+        <tr><th colspan='2' align='center' ><div class='welcomeImg'></div></th></tr>
+        <tr><td colspan='2'><div class='title'>$langWelcomeWizard</div>
+               <div class='sub_title'>$langThisWizard</div>
                <ul class='installBullet'>
                   <li>$langWizardHelp1</li>
                   <li>$langWizardHelp2</li>
@@ -690,6 +688,7 @@ elseif (isset($_REQUEST['install1']) || isset($_REQUEST['back1']))
                           </form></td></tr>
                   </table></td></tr>
         </table>
+</div>
 </body>
 </html>";
 	echo $tool_content;

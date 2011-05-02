@@ -72,6 +72,22 @@ a:hover {
     	text-decoration: underline;
 }
 
+
+.title {
+        background-color:#8597A5;
+        color: #ffffff;
+        font-weight: bold;
+        padding: 5px;
+        border-bottom: 2px solid #73849b;
+}
+
+
+.sub_title {
+        padding: 5px;
+        border-bottom: 1px dashed #dfdfdf;
+        font-weight: bold;
+}
+
 .installBullet {
 	list-style-image: url(../template/classic/img/arrow.png);
     font-size: 10px !important;
