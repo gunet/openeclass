@@ -205,7 +205,7 @@ if(isset($_REQUEST['install2']) OR isset($_REQUEST['back2']))
 	$langStep = $langStep2;
 	$_SESSION['step'] = 2;
 	$tool_content .= "<form action='$_SERVER[PHP_SELF]?alreadyVisited=1' method='post'>
-	<table width='99%' class='FormData' align='left'>
+	<table width='99%' class='tbl_alt' align='left'>
 	<tbody>
 	<tr>
 	<th class='left' width='50'></th>

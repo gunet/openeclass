@@ -137,7 +137,45 @@ input[type=reset] {
 }
 
 
+/* steps */
 
+#steps {
+	padding: 5px;
+    background-color: #f1f1f1;
+    border-bottom: 1px dashed #dfdfdf;
+    border-top: 1px dashed #dfdfdf;    
+    font-size: 12px;
+}
+
+#steps a {
+	color: #727266;
+	text-decoration: none;
+	font-weight: bold;	
+}
+
+#steps a:hover {
+	text-decoration: underline;
+	color: #8597A5;
+	font-weight: bold;
+}
+
+#steps ul {
+	margin-left: 0;
+	padding-left: 0;
+	display: inline;
+} 
+
+#steps li {
+	margin-left: 0;
+	padding-left: 2px;
+	border: none;
+	list-style: none;
+	display: inline;
+	color:#727266;
+	}
+	
+	
+	
 
 
 fieldset { border:1px solid green }
