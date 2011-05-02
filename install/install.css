@@ -1,3 +1,74 @@
+
+body {
+	font-family: "Trebuchet MS", Tahoma, Arial, Helvetica, sans-serif;
+	font-size: 13px;
+	color: #777777;
+	line-height: 16px;
+    margin: 0;
+	padding: 0;
+}
+
+
+
+.alert {
+	background-color:#fef5be;
+	border-top: 2px solid #fdd425;
+	border-bottom: 2px solid #fdd425;
+	padding: 10px 50px;
+	background-image:url(../template/classic/img/warning.png); 
+    background-repeat:no-repeat;
+    background-position: left;
+}
+
+
+
+
+
+.tbl_alt {
+    padding: 5px;
+    border: none;
+    border: 1px solid #dfdfdf; 
+}	
+
+
+.tbl_alt th {
+    font-weight: bold;
+    color: #73849b;
+    text-align: center;
+    padding: 5px;
+    background-color: #f1f1f1;
+    border-bottom: 1px dashed #dfdfdf;
+}
+
+
+
+.tbl_alt td, .tbl_alt th {
+    vertical-align: top;
+    border-right: 1px dashed #dfdfdf;
+    border-bottom: 1px dashed #dfdfdf;    
+}
+
+ .tbl_alt th {
+    vertical-align: top;
+    border-right: 1px dashed #dfdfdf;
+    border-bottom: 1px dashed #dfdfdf;
+    padding: 5px;    
+}
+
+
+   
+
+.tbl_alt .odd {
+    background-color: #f8f8f8; /* LIGHTER BEIGE  */
+}	
+	
+.tbl_alt .even {
+    background-color: #ffffff; /* WHITE  */
+}
+
+
+
+
 .installBullet {
 	list-style-image: url(../template/classic/img/arrow.png);
     font-size: 10px !important;
@@ -8,8 +79,6 @@ li {
 	font-family: Arial, Helvetica, sans-serif;
 	font-size:10px !important;
 }
-
-body{font-size:12px;font-family: Verdana, Arial, sans-serif;}
 
 fieldset { border:1px solid green }
 

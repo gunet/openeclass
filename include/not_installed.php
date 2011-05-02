@@ -42,50 +42,31 @@ $tool_content = "
     <title>Πλατφόρμα Ασύγχρονης Τηλεκπαίδευσης Open eClass</title>
     <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
     <link href='./install/install.css' rel='stylesheet' type='text/css' />
-    <link href='./template/classic/tool_content.css' rel='stylesheet' type='text/css' />
-    <link href='./template/classic/perso.css' rel='stylesheet' type='text/css' />
 
   </head>
   <body>
   <p>&nbsp;</p>
-  <table width=\"65%\" class=\"FormData\" align=\"center\" style=\"border: 1px solid #edecdf;\">
-  <thead>
-  <tr>
-    <td>&nbsp;</td>
-  </tr>
-  <tr>
-    <td><div align=\"center\"><img src='template/classic/img/caution_alert.gif' title='caution-alert' /></div></td>
-  </tr>
-  <tr>
-    <td><div align=\"center\"><h4>Η πλατφόρμα ασύγχρονης τηλεκπαίδευσης Open eClass δεν λειτουργεί !</h4></div></td>
-  </tr>
-  <tr>
-    <td>
-
-    <table width=\"100%\" class=\"FormInput\" align=\"center\">
-    <tbody>
+      <table width='600' align='center' cellpadding='5' cellspacing='5' class='tbl_alt'>
     <tr>
-      <td width=\"40%\" class=\"odd\"><b>Πιθανοί λόγοι</b></td>
-      <td><b>Αντιμετώπιση</b></td>
+      <td colspan='2'><div class='alert'>Η πλατφόρμα ασύγχρονης τηλεκπαίδευσης Open eClass δεν λειτουργεί !</div></td>
+      </tr>
+    <tr>
+      <th width='300px'>Πιθανοί λόγοι</th>
+      <th>Αντιμετώπιση</th>
     </tr>
     <tr>
-      <td class=\"left\">Υπάρχει πρόβλημα με την <b>MySQL</b>:</td>
+      <td>Υπάρχει πρόβλημα με την <b>MySQL</b>:</td>
       <td>Eπικοινωνήστε με το διαχειριστή του συστήματος.</td>
     </tr>
     <tr>
-      <td class=\"left\">Πρόβλημα στο αρχείο \"<b>config.php</b>\":</td>
+      <td>Πρόβλημα στο αρχείο \"<b>config.php</b>\":</td>
       <td>Το αρχείο δεν υπάρχει ή δεν μπορεί να διαβαστεί.</td>
     </tr>
     <tr>
-      <td class=\"left\">Xρησιμοποιείτε την πλατφόρμα <br />για <b>πρώτη</b> φορά:</td>
+      <td>Xρησιμοποιείτε την πλατφόρμα για <b>πρώτη</b> φορά:</td>
       <td>Επιλέξτε τον <a href=\"./install/\" class=\"installer\">Οδηγό Εγκατάστασης</a><br /> για να ξεκινήσετε το πρόγραμμα εγκατάστασης</td>
     </tr>
-    </tbody>
     </table>
-    </td>
-  </tr>
-  </thead>
-  </table>
   </body>
 </html>
 ";
