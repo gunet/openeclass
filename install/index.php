@@ -673,20 +673,17 @@ elseif (isset($_REQUEST['install1']) || isset($_REQUEST['back1']))
                   <li>$langWizardHelp2</li>
                   <li>$langWizardHelp3</li>
                </ul></td></tr>
-        <tr><td colspan='2'>
-               <table width='100%' class='FormInput' align='center'>
-                  <tr><td width='40%' class='odd'>&nbsp;</td>
-                      <td><b>$langOptions</b></td></tr>
-                  <tr><td class='odd left'>$langChooseLang:</td>
-                  <td><form name='langform' action='$_SERVER[PHP_SELF]' method='post'>" .
+        <tr>
+          <th><div>$langChooseLang:</div> <form name='langform' action='$_SERVER[PHP_SELF]' method='post' class='form_field'>" .
                       selection($langLanguages, 'lang', $lang, 'onChange="document.langform.submit();"') .
-                      "</form></td></tr>
-                  <tr><td class='odd left'>&nbsp;</td>
-                      <td><form action='$_SERVER[PHP_SELF]?alreadyVisited=1' method='post'>
-                          <input type='hidden' name='welcomeScreen' value='welcomeScreen' />
-                          <input type='submit' name='install1' value='$langNextStep >' />
-                          </form></td></tr>
-                  </table></td></tr>
+                      "</form></th>
+        </tr>
+        <tr>
+          <td colspan='2' align='right'><form action='$_SERVER[PHP_SELF]?alreadyVisited=1' method='post'>
+            <input type='hidden' name='welcomeScreen' value='welcomeScreen' />
+            <input type='submit' name='install1' value='$langNextStep >' />
+          </form></td>
+          </tr>
         </table>
 </div>
 </body>

@@ -89,15 +89,56 @@ a:hover {
 }
 
 .installBullet {
-	list-style-image: url(../template/classic/img/arrow.png);
-    font-size: 10px !important;
+	list-style-image: url(../template/classic/img/arrow_bullet.png);
 
 }
 
 li {
-	font-family: Arial, Helvetica, sans-serif;
-	font-size:10px !important;
+	font-size:12px !important;
+	
 }
+
+
+input[type=submit] {
+	color: #ffffff;
+	font-size: 12px;
+	border: 1px solid #8597A5;
+    background-color: #687A92;
+	padding: 3px;
+}
+
+
+.button {
+	color: #ffffff;
+	font-size: 14px;
+	border: 1px solid #8597A5;
+    background-color: #687A92;
+	padding: 5px;
+    width: 100px;
+    margin: 5px auto;
+    text-align: center;
+}
+
+.button a:link {
+	color: #ffffff !important;
+}
+
+input[type=reset] {
+	color: #ffffff;
+	font-size: 12px;
+	border: 1px solid #687a92;
+    background-color: #8597A5;
+	padding: 3px;
+}
+
+
+.form_field {
+    padding: 3px;
+}
+
+
+
+
 
 fieldset { border:1px solid green }
 
