@@ -205,9 +205,9 @@ if(isset($_REQUEST['install2']) OR isset($_REQUEST['back2']))
 	$langStep = $langStep2;
 	$_SESSION['step'] = 2;
 	$tool_content .= "<form action='$_SERVER[PHP_SELF]?alreadyVisited=1' method='post'>
-	<table width='500' class='tbl_border' align='center'>
+	<table width='100%' class='tbl'>
 	<tr>
-	<td>$langInfoLicence<a href='../info/license/gpl_print.txt'> ($langPrintVers)</a></td>
+	<td>$langInfoLicence <a href='../info/license/gpl_print.txt'>($langPrintVers)</a></td>
 	</tr>
 	<tr>
 	<td><textarea cols='75' rows='15' class='FormData_InputText'>";
@@ -230,16 +230,13 @@ elseif(isset($_REQUEST['install3']) OR isset($_REQUEST['back3'])) {
 	$langStep = $langStep3;
 	$_SESSION['step']=3;
 	$tool_content .= "
-	<table width='100%' class='tbl_alt' align='left'>
-	<tbody>
+<div>$langDBSettingIntro</div>
+<br>
+	<table width='100%' class='tbl smaller' align='left'>
 	<tr>
-	<th width='220' class='left'></th>
-	<td>$langDBSettingIntro</td>
-	</tr>
-	<tr>
-	<th class='left'>$langdbhost</th>
-	<td><input type='text' class='FormData_InputText' size='25' name='dbHostForm' value='$dbHostForm' />&nbsp;&nbsp;$langEG localhost</td>
-	</tr>
+	  <th width='220' class='left'>$langdbhost</th>
+	  <td><input type='text' class='FormData_InputText' size='25' name='dbHostForm' value='$dbHostForm' />&nbsp;&nbsp;$langEG localhost</td>
+	  </tr>
 	<tr>
 	<th class='left'>$langDBLogin</th>
 	<td><input type='text' class='FormData_InputText' size='25' name='dbUsernameForm' value='$dbUsernameForm' />&nbsp;&nbsp;$langEG root </td>
@@ -261,11 +258,10 @@ elseif(isset($_REQUEST['install3']) OR isset($_REQUEST['back3'])) {
 	<td><input type='text' class='FormData_InputText' size='25' name='phpSysInfoURL' value='$phpSysInfoURL' />&nbsp;&nbsp;$langNotNeedChange</td>
 	</tr>
 	<tr>
-	<th class='left'>&nbsp;</th>
-	<td><input type='submit' name='back2' value='< $langPreviousStep' />&nbsp;<input type='submit' name='install5' value='$langNextStep >' /><div align='right'>(*) $langAllFieldsRequired</div></td>
+	<td colspan='2' class='right'><input type='submit' name='back2' value='&laquo; $langPreviousStep' />&nbsp;<input type='submit' name='install5' value='$langNextStep &raquo;' /></td>
 	</tr>
-	</tbody>
 	</table>
+	<div class='right smaller'>(*) $langAllFieldsRequired</div>
 	</form>";
 	draw($tool_content);
 }	 // install3
