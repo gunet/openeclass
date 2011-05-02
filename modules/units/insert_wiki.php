@@ -28,7 +28,7 @@
 function list_wikis()
 {
         global $id, $currentCourseID, $tool_content, $urlServer,
-               $langWikis, $langAddModulesButton, $langChoice, $langWikiNoWiki, $langWikiDescriptionForm;
+               $langWikis, $langAddModulesButton, $langChoice, $langWikiNoWiki, $langWikiDescriptionForm, $code_cours;
 
 
         $result = db_query("SELECT * FROM wiki_properties", $currentCourseID);
@@ -42,7 +42,7 @@ function list_wikis()
         if (count($wikiinfo) == 0) {
                 $tool_content .= "\n<p class='alert1'>$langWikiNoWiki</p>";
         } else {
-                $tool_content .= "\n  <form action='insert.php' method='post'>".
+                $tool_content .= "\n  <form action='insert.php?course=$code_cours' method='post'>".
                                  "\n  <input type='hidden' name='id' value='$id'" .
                                  "\n  <table class='tbl_alt' width='99%'>" .
                                  "\n  <tr>".
@@ -58,7 +58,7 @@ function list_wikis()
                                 $rowClass = "class='even'";
                         }
 			$tool_content .= "\n  <tr $rowClass>";
-			$tool_content .= "\n    <td>&nbsp;<img src='../../template/classic/img/wiki_on.png' />&nbsp;&nbsp;<a href='${urlServer}modules/wiki/page.php?wikiId=$entry[id]&action=show'>$entry[title]</a></td>";
+			$tool_content .= "\n    <td>&nbsp;<img src='../../template/classic/img/wiki_on.png' />&nbsp;&nbsp;<a href='${urlServer}modules/wiki/page.php?course=$code_cours&amp;wikiId=$entry[id]&action=show'>$entry[title]</a></td>";
 			$tool_content .= "\n    <td>$entry[description]</td>";
 			$tool_content .= "\n    <td align='center'><input type='checkbox' name='wiki[]' value='$entry[id]'></td>";
 			$tool_content .= "\n  </tr>";

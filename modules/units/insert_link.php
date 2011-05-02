@@ -29,14 +29,14 @@ function list_links()
 {
         global $id, $cours_id, $currentCourseID, $tool_content, $urlServer, $mysqlMainDb,
                $langNoCategory, $langCategorisedLinks, $langComments, $langAddModulesButton,
-               $langChoice, $langNoLinksExist, $langLinks;
+               $langChoice, $langNoLinksExist, $langLinks, $code_cours;
 
         mysql_select_db($mysqlMainDb);
         $result = db_query("SELECT * FROM link WHERE course_id = $cours_id");
         if (mysql_num_rows($result) == 0) {
                 $tool_content .= "\n<p class='alert1'>$langNoLinksExist</p>";
         } else {
-                $tool_content .= "\n  <form action='insert.php' method='post'>
+                $tool_content .= "\n  <form action='insert.php?course=$code_cours' method='post'>
 				<input type='hidden' name='id' value='$id' />" .
                                  "\n  <table class='tbl_alt' width='99%'>" .
                                  "\n  <tr>" .

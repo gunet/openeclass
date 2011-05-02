@@ -158,7 +158,7 @@ function show_resource($info)
 function show_doc($title, $comments, $resource_id, $file_id)
 {
         global $mysqlMainDb, $is_adminOfCourse, $currentCourseID, $cours_id,
-               $langWasDeleted, $visibility_check, $urlServer, $id;
+               $langWasDeleted, $visibility_check, $urlServer, $id, $code_cours;
 
         $title = htmlspecialchars($title);
         $r = db_query("SELECT * FROM `$mysqlMainDb`.document
@@ -175,7 +175,7 @@ function show_doc($title, $comments, $resource_id, $file_id)
                 $status = $file['visibility'];
                 if ($file['format'] == '.dir') {
                         $image = '../../template/classic/img/folder.png';
-                        $link = "<a href='{$urlServer}modules/document/document.php?openDir=$file[path]&amp;unit=$id'>";
+                        $link = "<a href='{$urlServer}modules/document/document.php?course=$code_cours&amp;openDir=$file[path]&amp;unit=$id'>";
                 } else {
                         $image = '../document/img/' .
                                 choose_image('.' . $file['format']);
@@ -232,7 +232,7 @@ function show_description($title, $comments, $id, $res_id, $visibility)
 function show_lp($title, $comments, $resource_id, $lp_id)
 {
 	global $id, $tool_content, $mysqlMainDb, $urlServer, $is_adminOfCourse,
-               $langWasDeleted, $currentCourseID;
+               $langWasDeleted, $currentCourseID, $code_cours;
 
 	$comment_box = $class_vis = $imagelink = $link = '';
         $title = htmlspecialchars($title);
@@ -249,7 +249,7 @@ function show_lp($title, $comments, $resource_id, $lp_id)
 	} else {
                 $lp = mysql_fetch_array($r, MYSQL_ASSOC);
 		$status = ($lp['visibility'] == 'SHOW')? 'v': 'i';
-		$link = "<a href='${urlServer}modules/learnPath/learningPath.php?path_id=$lp_id&amp;unit=$id'>";
+		$link = "<a href='${urlServer}modules/learnPath/learningPath.php?course=$code_cours&amp;path_id=$lp_id&amp;unit=$id'>";
 		$imagelink = "<img src='../../template/classic/img/lp_" .
 			($status == 'i'? 'off': 'on') . ".png' />";
 	}
@@ -316,7 +316,7 @@ function show_video($table, $title, $comments, $resource_id, $video_id, $visibil
 function show_work($title, $comments, $resource_id, $work_id, $visibility)
 {
 	global $id, $tool_content, $mysqlMainDb, $urlServer, $is_adminOfCourse,
-               $langWasDeleted, $currentCourseID;
+               $langWasDeleted, $currentCourseID, $code_cours;
 
 	$comment_box = $class_vis = $imagelink = $link = '';
         $title = htmlspecialchars($title);
@@ -332,7 +332,7 @@ function show_work($title, $comments, $resource_id, $work_id, $visibility)
 		}
 	} else {
                 $work = mysql_fetch_array($r, MYSQL_ASSOC);
-		$link = "<a href='${urlServer}modules/work/work.php?id=$work_id&amp;unit=$id'>";
+		$link = "<a href='${urlServer}modules/work/work.php?course=$code_cours&amp;id=$work_id&amp;unit=$id'>";
                 $exlink = $link . "$title</a>";
 		$imagelink = $link .
                         "<img src='../../template/classic/img/assignments_" .
@@ -358,7 +358,7 @@ function show_work($title, $comments, $resource_id, $work_id, $visibility)
 function show_exercise($title, $comments, $resource_id, $exercise_id, $visibility)
 {
 	global $id, $tool_content, $mysqlMainDb, $urlServer, $is_adminOfCourse,
-               $langWasDeleted, $currentCourseID;
+               $langWasDeleted, $currentCourseID, $code_cours;
 
 	$comment_box = $class_vis = $imagelink = $link = '';
         $title = htmlspecialchars($title);
@@ -374,7 +374,7 @@ function show_exercise($title, $comments, $resource_id, $exercise_id, $visibilit
 		}
 	} else {
                 $exercise = mysql_fetch_array($r, MYSQL_ASSOC);
-		$link = "<a href='${urlServer}modules/exercice/exercice_submit.php?exerciseId=$exercise_id&amp;unit=$id'>";
+		$link = "<a href='${urlServer}modules/exercice/exercice_submit.php?course=$code_cours&amp;exerciseId=$exercise_id&amp;unit=$id'>";
                 $exlink = $link . "$title</a>";
 		$imagelink = $link .
                         "<img src='../../template/classic/img/exercise_" .
@@ -400,17 +400,17 @@ function show_exercise($title, $comments, $resource_id, $exercise_id, $visibilit
 // display resource forum
 function show_forum($type, $title, $comments, $resource_id, $ft_id, $visibility)
 {
-	global $id, $tool_content, $mysqlMainDb, $urlServer, $is_adminOfCourse, $currentCourseID;
+	global $id, $tool_content, $mysqlMainDb, $urlServer, $is_adminOfCourse, $currentCourseID, $code_cours;
 	$comment_box = '';
 	$class_vis = ($visibility == 'i')? ' class="invisible"': ' class="even"';
         $title = htmlspecialchars($title);
 	if ($type == 'forum') {
-		$link = "<a href='${urlServer}modules/phpbb/viewforum.php?forum=$ft_id&amp;unit=$id'>";
+		$link = "<a href='${urlServer}modules/phpbb/viewforum.php?course=$code_cours&amp;forum=$ft_id&amp;unit=$id'>";
                 $forumlink = $link . "$title</a>";
 	} else {
 		$r = db_query("SELECT forum_id FROM topics WHERE topic_id = $ft_id", $currentCourseID);
 		list($forum_id) = mysql_fetch_array($r);
-		$link = "<a href='${urlServer}modules/phpbb/viewtopic.php?topic=$ft_id&amp;forum=$forum_id&amp;unit=$id'>";
+		$link = "<a href='${urlServer}modules/phpbb/viewtopic.php?course=$code_cours&amp;topic=$ft_id&amp;forum=$forum_id&amp;unit=$id'>";
                 $forumlink = $link . "$title</a>";
 	}
 
@@ -437,7 +437,7 @@ function show_forum($type, $title, $comments, $resource_id, $ft_id, $visibility)
 function show_wiki($title, $comments, $resource_id, $wiki_id, $visibility)
 {
 	global $id, $tool_content, $mysqlMainDb, $urlServer, $is_adminOfCourse,
-               $langWasDeleted, $currentCourseID;
+               $langWasDeleted, $currentCourseID, $code_cours;
 
 	$comment_box = $imagelink = $link = $class_vis = '';
 	$class_vis = ($visibility == 'i')? ' class="invisible"': ' class="even"';
@@ -454,7 +454,7 @@ function show_wiki($title, $comments, $resource_id, $wiki_id, $visibility)
 		}
 	} else {
                 $wiki = mysql_fetch_array($r, MYSQL_ASSOC);
-		$link = "<a href='${urlServer}modules/wiki/page.php?wikiId=$wiki_id&amp;action=show&amp;unit=$id'>";
+		$link = "<a href='${urlServer}modules/wiki/page.php?course=$code_cours&amp;wikiId=$wiki_id&amp;action=show&amp;unit=$id'>";
                 $wikilink = $link . "$title</a>";
 		$imagelink = $link .
                         "<img src='../../template/classic/img/wiki_" .
@@ -690,7 +690,7 @@ function show_ebook_resource($title, $comments, $resource_id, $ebook_id,
 function actions($res_type, $resource_id, $status, $res_id = false)
 {
         global $is_adminOfCourse, $langEdit, $langDelete, $langVisibility, $langDown, $langUp,
-	       $mysqlMainDb, $langConfirmDelete;
+	       $mysqlMainDb, $langConfirmDelete, $code_cours;
 
         static $first = true;
 
@@ -700,10 +700,10 @@ function actions($res_type, $resource_id, $status, $res_id = false)
 
         if ($res_type == 'description') {
                 $icon_vis = ($status == 'v')? 'publish.png': 'unpublish.png';
-                $edit_link = "edit.php?numBloc=$res_id";
+                $edit_link = "edit.php?course=$code_cours&amp;numBloc=$res_id";
         } else {
                 $icon_vis = ($status == 'v')? 'visible.png': 'invisible.png';
-                $edit_link = "$_SERVER[PHP_SELF]?edit=$resource_id";
+                $edit_link = "$_SERVER[PHP_SELF]?course=$code_cours&amp;edit=$resource_id";
         }
 
         if ($status != 'del') {
@@ -711,14 +711,14 @@ function actions($res_type, $resource_id, $status, $res_id = false)
         } else {
                 $content = "\n          <td width='3'>&nbsp;</td>";
         }
-        $content .= "\n          <td width='3'><a href='$_SERVER[PHP_SELF]?del=$resource_id'" .
+        $content .= "\n          <td width='3'><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;del=$resource_id'" .
                     " onClick=\"return confirmation('" . js_escape($langConfirmDelete) . "')\">" .
                     "<img src='../../template/classic/img/delete.png' " .
                     "title='$langDelete'></img></a></td>";
 	 
 	if ($status != 'del') {
 		if (in_array($res_type, array('description', 'text', 'video', 'forum', 'topic'))) { 
-			$content .= "\n          <td width='3'><a href='$_SERVER[PHP_SELF]?vis=$resource_id'>" .
+			$content .= "\n          <td width='3'><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;vis=$resource_id'>" .
                                     "<img src='../../template/classic/img/$icon_vis' " .
                                     "title='$langVisibility'></img></a></td>";
 		} else {
@@ -728,13 +728,13 @@ function actions($res_type, $resource_id, $status, $res_id = false)
                 $content .= "\n          <td width='3'>&nbsp;</td>";
         }
         if ($resource_id != $GLOBALS['max_resource_id']) {
-                $content .= "\n          <td width='12'><div align='right'><a href='$_SERVER[PHP_SELF]?down=$resource_id'>" .
+                $content .= "\n          <td width='12'><div align='right'><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;down=$resource_id'>" .
                             "<img src='../../template/classic/img/down.png' title='$langDown'></img></a></div></td>";
 	} else {
 		$content .= "\n          <td width='12'>&nbsp;</td>";
 	}
         if (!$first) {
-                $content .= "<td width='12'><div align='left'><a href='$_SERVER[PHP_SELF]?up=$resource_id'>" .
+                $content .= "<td width='12'><div align='left'><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;up=$resource_id'>" .
                             "<img src='../../template/classic/img/up.png' title='$langUp'></img></a></div></td>";
         } else {
                 $content .= "\n          <td width='12'>&nbsp;</td>";
@@ -747,7 +747,7 @@ function actions($res_type, $resource_id, $status, $res_id = false)
 // edit resource
 function edit_res($resource_id) 
 {
-	global $id, $urlServer, $langTitle, $langDescr, $langEditForum, $langContents, $langModify;
+	global $id, $urlServer, $langTitle, $langDescr, $langEditForum, $langContents, $langModify, $code_cours;
 	 
         $sql = db_query("SELECT id, title, comments, type FROM unit_resources WHERE id='$resource_id'");
         $ru = mysql_fetch_array($sql);
@@ -756,7 +756,7 @@ function edit_res($resource_id)
         $resource_id = $ru['id'];
         $resource_type = $ru['type'];
 
-	$tool_content = "\n  <form method='post' action='${urlServer}modules/units/'>" .
+	$tool_content = "\n  <form method='post' action='${urlServer}modules/units/?course=$code_cours'>" .
                         "\n  <fieldset>".
                         "\n  <legend>$langEditForum</legend>".
 	                "\n    <input type='hidden' name='id' value='$id'>" .

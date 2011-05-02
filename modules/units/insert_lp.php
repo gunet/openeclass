@@ -28,7 +28,7 @@
 function list_lps()
 {
         global $id, $currentCourseID, $tool_content, $urlServer,
-               $langComments, $langAddModulesButton, $langChoice, $langNoLearningPath, $langLearningPaths;
+               $langComments, $langAddModulesButton, $langChoice, $langNoLearningPath, $langLearningPaths, $code_cours;
 
 
         $result = db_query("SELECT * FROM lp_learnPath ORDER BY name", $currentCourseID);
@@ -44,7 +44,7 @@ function list_lps()
         if (count($lpinfo) == 0) {
                 $tool_content .= "\n  <p class='alert1'>$langNoLearningPath</p>";
         } else {
-                $tool_content .= "\n  <form action='insert.php' method='post'>" .
+                $tool_content .= "\n  <form action='insert.php?course=$code_cours' method='post'>" .
                                  "\n  <input type='hidden' name='id' value='$id'>" .
                                  "\n  <table width='99%' class='tbl_alt'>" .
                                  "\n  <tr>" .
@@ -64,7 +64,7 @@ function list_lps()
 					}
 				}
 				$tool_content .= "\n  <tr class='$vis'>";
-				$tool_content .= "\n    <td>&nbsp;<img src='../../template/classic/img/lp_on.png' />&nbsp;&nbsp;<a href='${urlServer}/modules/learnPath/learningPath.php?path_id=$entry[id]'>$entry[name]</a></td>";
+				$tool_content .= "\n    <td>&nbsp;<img src='../../template/classic/img/lp_on.png' />&nbsp;&nbsp;<a href='${urlServer}/modules/learnPath/learningPath.php?course=$code_cours&amp;path_id=$entry[id]'>$entry[name]</a></td>";
 				$tool_content .= "\n    <td>$entry[comment]</td>";
 				$tool_content .= "\n    <td align='center'><input type='checkbox' name='lp[]' value='$entry[id]'></td>";
 				$tool_content .= "\n  </tr>";

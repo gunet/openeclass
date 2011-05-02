@@ -28,7 +28,7 @@
 function list_exercises()
 {
         global $id, $currentCourseID, $tool_content, $urlServer,
-               $langComments, $langAddModulesButton, $langChoice, $langNoExercises, $langExercices;
+               $langComments, $langAddModulesButton, $langChoice, $langNoExercises, $langExercices, $code_cours;
 
 
         $result = db_query("SELECT * FROM exercices", $currentCourseID);
@@ -43,7 +43,7 @@ function list_exercises()
         if (count($quizinfo) == 0) {
                 $tool_content .= "\n  <p class='alert1'>$langNoExercises</p>";
         } else {
-                $tool_content .= "\n  <form action='insert.php' method='post'><input type='hidden' name='id' value='$id'>" .
+                $tool_content .= "\n  <form action='insert.php?course=$code_cours' method='post'><input type='hidden' name='id' value='$id'>" .
                                  "\n  <table width='99%' class='tbl_alt'>" .
                                  "\n  <tr>" .
                                  "\n    <th><div align='left'>&nbsp;$langExercices</div></th>" .
@@ -62,7 +62,7 @@ function list_exercises()
           }
 			}
 			$tool_content .= "\n  <tr class='$vis'>";
-			$tool_content .= "\n    <td>&laquo; <a href='${urlServer}modules/exercice/exercice_submit.php?exerciseId=$entry[id]'>$entry[name]</a></td>";
+			$tool_content .= "\n    <td>&laquo; <a href='${urlServer}modules/exercice/exercice_submit.php?course=$code_cours&amp;exerciseId=$entry[id]'>$entry[name]</a></td>";
 			$tool_content .= "\n    <td><div align='left'>$entry[comment]</div></td>";
 			$tool_content .= "\n    <td class='center'><input type='checkbox' name='exercise[]' value='$entry[id]'></td>";
 			$tool_content .= "\n  </tr>";

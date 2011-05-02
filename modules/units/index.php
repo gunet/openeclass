@@ -57,7 +57,7 @@ $form = process_actions();
 
 if ($is_adminOfCourse) {
 	$tool_content .= "&nbsp;<div id='operations_container'>
-		<form name='resinsert' action='{$urlServer}modules/units/insert.php' method='get'>
+		<form name='resinsert' action='{$urlServer}modules/units/insert.php' method='get'><input type='hidden' name='course' value='$code_cours'/>
 		<select name='type' onChange='document.resinsert.submit();'>
 			<option>-- $langAdd --</option>
 			<option value='doc'>$langInsertDoc</option>
@@ -123,14 +123,14 @@ foreach (array('previous', 'next') as $i) {
         if ($q and mysql_num_rows($q) > 0) {
                 list($q_id, $q_title) = mysql_fetch_row($q);
                 $q_title = htmlspecialchars($q_title);
-                $link[$i] = "<a href='$_SERVER[PHP_SELF]?id=$q_id'>$arrow1$q_title$arrow2</a>";
+                $link[$i] = "<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;id=$q_id'>$arrow1$q_title$arrow2</a>";
         } else {
                 $link[$i] = '&nbsp;';
         }
 }
 
 if ($is_adminOfCourse) {
-        $comment_edit_link = "<td valign='top' width='20'><a href='info.php?edit=$id&amp;next=1'><img src='../../template/classic/img/edit.png' title='' alt='' /></a></td>";
+        $comment_edit_link = "<td valign='top' width='20'><a href='info.php?course=$code_cours&amp;edit=$id&amp;next=1'><img src='../../template/classic/img/edit.png' title='' alt='' /></a></td>";
         $units_class = 'tbl';
 } else {
         $units_class = 'tbl';
@@ -162,7 +162,7 @@ if (!empty($comments)) {
 show_resources($id);
 
 $tool_content .= '
-  <form name="unitselect" action="' .  $urlServer . 'modules/units/" method="get">';
+  <form name="unitselect" action="' .  $urlServer . 'modules/units/" method="get"><input type="hidden" name="course" value="'.$code_cours.'"/>';
 $tool_content .="
     <table width='99%' class='tbl'>
      <tr class='odd'>

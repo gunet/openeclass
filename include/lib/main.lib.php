@@ -1201,8 +1201,9 @@ function format_time_duration($sec)
 // Return the URL for a video found in $table (video or videolinks)
 function video_url($table, $url, $path)
 {
+	global $code_cours;
         if ($table == 'video') {
-                return $GLOBALS['urlServer'] . 'modules/video/video.php?action2=download&amp;id=' . $path;
+                return $GLOBALS['urlServer'] . 'modules/video/video.php?course='.$code_cours.'&amp;action2=download&amp;id=' . $path;
         } else {
                 return $url;
 

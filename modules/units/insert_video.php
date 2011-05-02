@@ -29,7 +29,7 @@ function list_videos()
 {
         global $id, $currentCourseID, $tool_content, $urlServer,
                $langVideoTitle, $langDescr, $langDate, $langChoice,
-               $langAddModulesButton, $langNoVideo; 
+               $langAddModulesButton, $langNoVideo, $code_cours; 
 
         $table_started = false;
         $count = 0;
@@ -39,7 +39,7 @@ function list_videos()
                 $numLine=0;
                 while ($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
                         if (!$table_started) {
-                                $tool_content .= "\n  <form action='insert.php' method='post'><input type='hidden' name='id' value='$id' />";
+                                $tool_content .= "\n  <form action='insert.php?course=$code_cours' method='post'><input type='hidden' name='id' value='$id' />";
                                 $tool_content .= "\n  <table class='tbl_alt' width='99%'>";
                         	$tool_content .= "\n  <tr>" .
                                                  "\n    <th><div align='left'>&nbsp;$langVideoTitle</div></th>" .
