@@ -278,14 +278,10 @@ elseif(isset($_REQUEST['install5']) OR isset($_REQUEST['back4']))
         if (empty($helpdeskmail)) {
                 $helpdeskmail = '';
         }
-	$tool_content .= "<table width='99%' class='FormData' align='left'>
-	<tbody>
+	$tool_content .= "<p> $langWillWrite</p>
+	<table width='100%' class='tbl'>
 	<tr>
-	<th width='220' class='left'>&nbsp;</th>
-	<td>$langWillWrite.</td>
-	</tr>
-	<tr>
-	<th class='left'>$langSiteUrl</th>
+	<th class='left' width='220'>$langSiteUrl</th>
 	<td><input type='text' class='FormData_InputText' size='40' name='urlForm' value='$urlForm' />&nbsp;&nbsp;(*)</td>
 	</tr>
 	<tr>
@@ -345,13 +341,11 @@ elseif(isset($_REQUEST['install5']) OR isset($_REQUEST['back4']))
 	<td><input type='checkbox' name='reguser' /></td>
 	</tr>";
 	
-	$tool_content .= "<tr><th class='left'>&nbsp;</th>
-	<td><input type='submit' name='back3' value='< $langPreviousStep' />
-	<input type='submit' name='install6' value='$langNextStep >' />
-	<div align='left'>$langRequiredFields.</div>
-	<div align='left'>(**) $langWarnHelpDesk</div></td>
+	$tool_content .= "<tr><td colspan='2' class='right'><input type='submit' name='back3' value='&laquo; $langPreviousStep' />
+	  <input type='submit' name='install6' value='$langNextStep &raquo;' />
+	  <div class='smaller'>$langRequiredFields.</div>
+	  <div class='smaller'>(**) $langWarnHelpDesk</div></td>
 	</tr>
-	</tbody>
 	</table>
 	</form>";
 	draw($tool_content);
