@@ -50,21 +50,13 @@
 
 ==============================================================================*/
 
-/*****************************************************************************
-		DEAL WITH  BASETHEME, OTHER INCLUDES AND NAMETOOLS
-******************************************************************************/
 // Check if user is administrator and if yes continue
 // Othewise exit with appropriate message
 $require_admin = TRUE;
-// Include baseTheme
 include '../../include/baseTheme.php';
 $nameTools = $langEclassConf;
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
-// Initialise $tool_content
-$tool_content = "";
-/*****************************************************************************
-		MAIN BODY
-******************************************************************************/
+
 // Save new config.php
 if (isset($_POST['submit']))  {
 	// Make config directory writable
@@ -148,9 +140,13 @@ $active_ui_languages = '.$string_active_ui_languages.'
 ';
 	// Save new config.php
 	fwrite($fd, $stringConfig);
+	
+	@update_config_table('email_required', $_POST['email_required']);
+	@update_config_table('am_required', $_POST['am_required']);
+	@update_config_table('dont_display_login_form', $_POST['dont_display_login_form']);
+	@update_config_table('dropbox_allow_student_to_student', $_POST['dropbox_allow_student_to_student']);
 	// Display result message
 	$tool_content .= "<p>".$langFileUpdatedSuccess."</p>";
-
 }
 	// Display link to go back to index.php
 	$tool_content .= "<center><p><a href=\"index.php\">".$langBack."</a></p></center>";
@@ -158,6 +154,15 @@ $active_ui_languages = '.$string_active_ui_languages.'
 }
 // Display config.php edit form
 else {
+	// Check if a backup file exists
+	if (file_exists("../../config/config_backup.php")) {
+  	// Give option to restore values from backup file
+		$tool_content .= "<div id='operations_container'>
+		<ul id='opslist'>
+		<li><a href=\"eclassconf.php?restore=yes\">$langRestoredValues</a></li>
+		</ul>
+		</div>";
+	}
 	$titleextra = "config.php";
 	// Check if restore has been selected
 	if (isset($_GET['restore']) && $_GET['restore'] == "yes") {
@@ -165,71 +170,62 @@ else {
 		$titleextra = " ($langRestoredValues)";
 		@include("../../config/config_backup.php");
 	}
+	$tool_content .= "<fieldset><legend>$langFileEdit $titleextra</legend>";
 	$tool_content .= "<form action=\"".$_SERVER['PHP_SELF']."\" method=\"post\">";
 	$tool_content .= "
-	<table class=\"FormData\" width=\"99%\" align=\"left\">
+	<table class='tbl' width=\"100%\">
 	<tbody>
 	<tr>
-	  <th width=\"220\" class=\"left\">&nbsp;</th>
-	  <td>".$langFileEdit." <b>".$titleextra."</b></td>
-	</tr>
-	<tr>
-	  <th class=\"left\"><b>\$urlServer:</b></th>
-	  <td><input class=\"FormData_InputText\" type=\"text\" name=\"formurlServer\" size=\"40\" value=\"".$urlServer."\"></td>
+	  <th width='200' class=\"left\"><b>\$urlServer:</b></th>
+	  <td><input class=\"FormData_InputText\" type='text' name=\"formurlServer\" size='40' value=\"".$urlServer."\"></td>
 	</tr>
 	<tr>
 	  <th class=\"left\"><b>\$urlAppend:</b></th>
-	  <td><input class=\"FormData_InputText\" type=\"text\" name=\"formurlAppend\" size=\"40\" value=\"".$urlAppend."\"></td>
+	  <td><input class=\"FormData_InputText\" type='text' name=\"formurlAppend\" size='40' value=\"".$urlAppend."\"></td>
 	</tr>
 	<tr>
 	  <th class=\"left\"><b>\$webDir:</b></th>
-	  <td><input class=\"FormData_InputText\" type=\"text\" name=\"formwebDir\" size=\"40\" value=\"".$webDir."\"></td>
-	</tr>
-	<tr>
-	  <td colspan=\"2\">&nbsp;</td>
+	  <td><input class=\"FormData_InputText\" type='text' name=\"formwebDir\" size='40' value=\"".$webDir."\"></td>
 	</tr>
 	<tr>
 	  <th class=\"left\"><b>\$mysqlServer:</b></th>
-	  <td><input class=\"FormData_InputText\" type=\"text\" name=\"formmysqlServer\" size=\"40\" value=\"".$mysqlServer."\"></td>
+	  <td><input class=\"FormData_InputText\" type='text' name=\"formmysqlServer\" size='40' value=\"".$mysqlServer."\"></td>
 	</tr>
 	<tr>
 	  <th class=\"left\"><b>\$mysqlUser:</b></th>
-	  <td><input class=\"FormData_InputText\" type=\"text\" name=\"formmysqlUser\" size=\"40\" value=\"".$mysqlUser."\"></td>
+	  <td><input class=\"FormData_InputText\" type='text' name=\"formmysqlUser\" size='40' value=\"".$mysqlUser."\"></td>
 	</tr>
 	<tr>
 	  <th class=\"left\"><b>\$mysqlPassword:</b></th>
-	  <td><input class=\"FormData_InputText\" type=\"password\" name=\"formmysqlPassword\" size=\"40\" value=\"".$mysqlPassword."\"></td>
+	  <td><input class=\"FormData_InputText\" type=\"password\" name=\"formmysqlPassword\" size='40' value=\"".$mysqlPassword."\"></td>
 	</tr>
 	<tr>
 	  <th class=\"left\"><b>\$mysqlMainDb:</b></th>
-	  <td><input class=\"FormData_InputText\" type=\"text\" name=\"formmysqlMainDb\" size=\"40\" value=\"".$mysqlMainDb."\"></td>
+	  <td><input class=\"FormData_InputText\" type='text' name=\"formmysqlMainDb\" size='40' value=\"".$mysqlMainDb."\"></td>
 	</tr>";
 	      $tool_content .= "  <tr>
 	  <th class=\"left\"><b>\$phpMyAdminURL:</b></th>
-	  <td><input class=\"FormData_InputText\" type=\"text\" name=\"formphpMyAdminURL\" size=\"40\" value=\"".$phpMyAdminURL."\"></td>
+	  <td><input class=\"FormData_InputText\" type='text' name=\"formphpMyAdminURL\" size='40' value=\"".$phpMyAdminURL."\"></td>
 	</tr>
 	<tr>
 	  <th class=\"left\"><b>\$phpSysInfoURL:</b></th>
-	  <td><input class=\"FormData_InputText\" type=\"text\" name=\"formphpSysInfoURL\" size=\"40\" value=\"".$phpSysInfoURL."\"></td>
+	  <td><input class=\"FormData_InputText\" type='text' name=\"formphpSysInfoURL\" size='40' value=\"".$phpSysInfoURL."\"></td>
 	</tr>
 	<tr>
 	  <th class=\"left\"><b>\$emailAdministrator:</b></th>
-	  <td><input class=\"FormData_InputText\" type=\"text\" name=\"formemailAdministrator\" size=\"40\" value=\"".$emailAdministrator."\"></td>
+	  <td><input class=\"FormData_InputText\" type='text' name=\"formemailAdministrator\" size='40' value=\"".$emailAdministrator."\"></td>
 	</tr>
 	<tr>
 	  <th class=\"left\"><b>\$administratorName:</b></th>
-	  <td><input class=\"FormData_InputText\" type=\"text\" name=\"formadministratorName\" size=\"40\" value=\"".$administratorName."\"></td>
+	  <td><input class=\"FormData_InputText\" type='text' name=\"formadministratorName\" size='40' value=\"".$administratorName."\"></td>
 	</tr>
 	<tr>
 	  <th class=\"left\"><b>\$administratorSurname:</b></th>
-	  <td><input class=\"FormData_InputText\" type=\"text\" name=\"formadministratorSurname\" size=\"40\" value=\"".$administratorSurname."\"></td>
+	  <td><input class=\"FormData_InputText\" type='text' name=\"formadministratorSurname\" size='40' value=\"".$administratorSurname."\"></td>
 	</tr>
 	<tr>
 	  <th class=\"left\"><b>\$siteName:</b></th>
-	  <td><input class=\"FormData_InputText\" type=\"text\" name=\"formsiteName\" size=\"40\" value=\"".$siteName."\"></td>
-	</tr>
-	<tr>
-	  <td colspan=\"2\">&nbsp;</td>
+	  <td><input class=\"FormData_InputText\" type='text' name=\"formsiteName\" size='40' value=\"".$siteName."\"></td>
 	</tr>
 	<tr>
 	  <th class=\"left\"><b>\$postaddress:</b></th>
@@ -237,26 +233,23 @@ else {
 	</tr>
 	<tr>
 	  <th class=\"left\"><b>\$telephone:</b></th>
-	  <td><input class=\"FormData_InputText\" type=\"text\" name=\"formtelephone\" size=\"40\" value=\"".$telephone."\"></td>
+	  <td><input class=\"FormData_InputText\" type='text' name=\"formtelephone\" size='40' value=\"".$telephone."\"></td>
 	</tr>
 	<tr>
 	  <th class=\"left\"><b>\$fax:</b></th>
-	  <td><input class=\"FormData_InputText\" type=\"text\" name=\"formfax\" size=\"40\" value=\"".$fax."\"></td>
+	  <td><input class=\"FormData_InputText\" type='text' name=\"formfax\" size='40' value=\"".$fax."\"></td>
 	</tr>
 	<tr>
 	  <th class=\"left\"><b>\$emailhelpdesk:</b></th>
-	  <td><input class=\"FormData_InputText\" type=\"text\" name=\"formemailhelpdesk\" size=\"40\" value=\"".$emailhelpdesk."\"></td>
+	  <td><input class=\"FormData_InputText\" type='text' name=\"formemailhelpdesk\" size='40' value=\"".$emailhelpdesk."\"></td>
 	</tr>
 	<tr>
 	  <th class=\"left\"><b>\$Institution:</b></th>
-	  <td><input class=\"FormData_InputText\" type=\"text\" name=\"formInstitution\" size=\"40\" value=\"".$Institution."\"></td>
+	  <td><input class=\"FormData_InputText\" type='text' name=\"formInstitution\" size='40' value=\"".$Institution."\"></td>
 	</tr>
 	<tr>
 	  <th class=\"left\"><b>\$InstitutionUrl:</b></th>
-	  <td><input class=\"FormData_InputText\" type=\"text\" name=\"formInstitutionUrl\" size=\"40\" value=\"".$InstitutionUrl."\"></td>
-	</tr>
-	<tr>
-	  <td colspan=\"2\">&nbsp;</td>
+	  <td><input class=\"FormData_InputText\" type='text' name=\"formInstitutionUrl\" size='40' value=\"".$InstitutionUrl."\"></td>
 	</tr>";
 	if ($language=="greek") {
 		$grSel = "selected";
@@ -274,73 +267,78 @@ else {
 	  </select></td>
 	</tr>";
 
-if ($close_user_registration=="true") {
-    $close_user_registrationSelTrue = "selected";
-    $close_user_registrationSelFalse = "";
-  } else {
-    $close_user_registrationSelTrue = "";
-    $close_user_registrationSelFalse = "selected";
-  }
+	if ($close_user_registration=="true") {
+	    $close_user_registrationSelTrue = "selected";
+	    $close_user_registrationSelFalse = "";
+	  } else {
+	    $close_user_registrationSelTrue = "";
+	    $close_user_registrationSelFalse = "selected";
+	  }
 
-$tool_content .= "
-  <tr>
-    <th class=\"left\"><b>\$close_user_registration:</b></th>
-    <td><select name=\"formcloseuserregistration\">
-      <option value=\"true\" ".$close_user_registrationSelTrue.">true</option>
-      <option value=\"false\" ".$close_user_registrationSelFalse.">false</option>
-    </select></td>
-</tr>";
+	$tool_content .= "
+	  <tr>
+	    <th class=\"left\"><b>\$close_user_registration:</b></th>
+	    <td><select name=\"formcloseuserregistration\">
+	      <option value=\"true\" ".$close_user_registrationSelTrue.">true</option>
+	      <option value=\"false\" ".$close_user_registrationSelFalse.">false</option>
+	    </select></td>
+	</tr>";
 
-$sel_en = in_array("en", $active_ui_languages)?'checked':'';
-$sel_es = in_array("es", $active_ui_languages)?'checked':'';
+	$sel_en = in_array("en", $active_ui_languages)?'checked':'';
+	$sel_es = in_array("es", $active_ui_languages)?'checked':'';
+		
+	$tool_content .= "<tr><th class='left'>$langSupportedLanguages</th>";
+	$tool_content .= "<td>";
+	$tool_content .= "<input type='checkbox' value='el' name = 'av_lang[]' checked disabled />$langGreek&nbsp;";
+	$tool_content .= "<input type='checkbox' value='en' name = 'av_lang[]' $sel_en />$langEnglish&nbsp;";
+	$tool_content .= "<input type='checkbox' value='es' name = 'av_lang[]' $sel_es />$langSpanish";
+	$tool_content .= "</td></tr>";
 	
-$tool_content .= "<tr><th class='left'>$langSupportedLanguages</th>";
-$tool_content .= "<td><fieldset>";
-$tool_content .= "<legend>$langAvailLanguages</legend>";
-$tool_content .= "<input type='checkbox' value='el' name = 'av_lang[]' checked disabled />$langGreek&nbsp;";
-$tool_content .= "<input type='checkbox' value='en' name = 'av_lang[]' $sel_en />$langEnglish&nbsp;";
-$tool_content .= "<input type='checkbox' value='es' name = 'av_lang[]' $sel_es />$langSpanish";
-$tool_content .= "</fieldset></td></tr>";
-
-$tool_content .= "
-  <tr>
-    <th class=\"left\"><b>\$durationAccount:</b></th>
-    <td><input type=\"text\" name=\"formdurationAccount\" size=\"40\" value=\"".$durationAccount."\"></td>
-</tr>";
-$tool_content .= "
-  <tr>
-    <th class=\"left\"><b>\$encryptedPasswd:</b></th>
-    <td><input type=\"checkbox\" checked disabled> ".$langencryptedPasswd."</td>
-  </tr>
-  <tr>
-    <td colspan=\"2\">&nbsp;</td>
-  </tr>
-  <tr>
-    <th class=\"left\">".$langReplaceBackupFile."</th>
-    <td><input type=\"checkbox\" name=\"backupfile\" checked></td>
-  </tr>
-  <tr>
-    <th class=\"left\">&nbsp;</th>
-    <td><input type='submit' name='submit' value='$langModify'></td>
-  </tr>
-  </tbody>
-  </table>
-  </form>\n";
-	// Check if a backup file exists
-  if (file_exists("../../config/config_backup.php")) {
-  	// Give option to restore values from backup file
-		$tool_content .= "
-		<table class=\"FormData\" width=\"99%\" align=\"left\">
-		<tbody>
-		<tr>
-		  <th width=\"220\" class=\"left\">".$langOtherActions."</th>
-		  <td><a href=\"eclassconf.php?restore=yes\">$langRestoredValues</a></td>
-		</tr>
-		</tbody>
-		</table>";
-	}
+	$tool_content .= "
+	  <tr>
+	    <th class=\"left\"><b>\$durationAccount:</b></th>
+	    <td><input type='text' name=\"formdurationAccount\" size='40' value=\"".$durationAccount."\"></td>
+	</tr>";
+	
+	$cbox_email_required = get_config('email_required')?'checked':'';
+	$cbox_am_required = get_config('email_required')?'checked':'';
+	$cbox_dont_display_login_form = get_config('dont_display_login_form')?'checked':'';
+	$cbox_dropbox_allow_student_to_student = get_config('dropbox_allow_student_to_student')?'checked':'';
+	
+	$tool_content .= "
+	  <tr>
+	    <th class=\"left\"><b>\$encryptedPasswd:</b></th>
+	    <td><input type=\"checkbox\" checked disabled> ".$langencryptedPasswd."</td>
+	  </tr>
+	  <tr>
+		<th class='left'><b>email_required</b></th>
+		<td><input type='checkbox' name='email_required' $cbox_email_required /></td>
+	  </tr>
+	  <tr>
+		<th class='left'><b>am_required</b></th>
+		<td><input type='checkbox' name='am_required' $cbox_am_required /></td>
+	  </tr>
+	  <tr>
+		<th class='left'><b>dropbox_allow_student_to_student</b></th>
+		<td><input type='checkbox' name='dropbox_allow_student_to_student' $cbox_dropbox_allow_student_to_student /></td>
+	  </tr>
+	  <tr>
+		<th class='left'><b>dont_display_login_form</b></th>
+		<td><input type='checkbox' name='dont_display_login_form' $cbox_dont_display_login_form /></td>
+	  </tr>
+	  <tr>
+	    <th class='left'>$langReplaceBackupFile</th>
+	    <td><input type='checkbox' name='backupfile' checked></td>
+	  </tr>
+	  <tr>
+	    <th class=\"left\">&nbsp;</th>
+	    <td><input type='submit' name='submit' value='$langModify'></td>
+	  </tr>
+	  </tbody>
+	  </table>
+	  </form></fieldset>";
 	// Display link to index.php
-	$tool_content .= "<br><p align=\"right\"><a href=\"index.php\">".$langBack."</a></p>";
+	$tool_content .= "<br><p align='right'><a href='index.php'>$langBack</a></p>";
 	// After restored values have been inserted into form then bring back
 	// values from original config.php, so the rest of the page can be played correctly
 	if (isset($_GET['restore']) && $_GET['restore'] == "yes") {
@@ -348,12 +346,18 @@ $tool_content .= "
 	}
 }
 
-/*****************************************************************************
-		DISPLAY HTML
-******************************************************************************/
-// Call draw function to display the HTML
-// $tool_content: the content to display
-// 3: display administrator menu
-// admin: use tool.css from admin folder
+
+function update_config_table($key, $value) {
+	
+	global $mysqlMainDb;
+	
+	if ($value == "on") {
+		db_query("UPDATE config SET value = 1
+				WHERE `key` = '$key'", $mysqlMainDb);
+	} else {
+		db_query("UPDATE config SET value = 0
+				WHERE `key` = '$key'", $mysqlMainDb);
+	}
+}
+
 draw($tool_content, 3);
-?>
