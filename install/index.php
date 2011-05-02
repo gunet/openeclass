@@ -367,12 +367,8 @@ elseif(isset($_REQUEST['install6']))
   	}
 
 	$tool_content .= "
-		<table width='99%' class='FormData' align='left'>
-	<tbody>
-	<tr>
-	<th width='220' class='left'>&nbsp;</th>
-	<td>$langReviewSettings</td>
-	</tr>
+	<p>$langReviewSettings</p>
+		<table width='100%' class='tbl' align='left'>
 	<tr>
 	<th class='left'>$langdbhost:</th>
 	<td>$dbHostForm</td>
@@ -446,11 +442,10 @@ elseif(isset($_REQUEST['install6']))
 	<td>$mes_add</td>
 	</tr>";
     
-    $tool_content .= "<tr><th class='left'>&nbsp;</th>
-	<td><input type='submit' name='back4' value='&lt; $langPreviousStep' />
-	<input type='submit' name='install7' value='$langInstall >' /></td>
+    $tool_content .= "<tr><td class='right'>&nbsp;</td>
+	<td class='right'><input type='submit' name='back4' value='&laquo; $langPreviousStep' />
+	<input type='submit' name='install7' value='$langInstall &raquo;' /></td>
 	</tr>
-	</tbody>
 	</table>
 	</form>";
 
