@@ -78,7 +78,7 @@ if (isset($from_reg)) {
 // display form
 function form()
 {
-	global $from_reg, $cours_id, $langInfoAboutRegistration, $langContactMessage, $langIntroMessage, $langSendMessage;
+	global $from_reg, $cours_id, $langInfoAboutRegistration, $langContactMessage, $langIntroMessage, $langSendMessage, $code_cours;
 
 	if (isset($from_reg)) {
 		$message = $langInfoAboutRegistration;
@@ -89,7 +89,7 @@ function form()
 		$hidden = '';
 	}
 	
-	$ret = "<form method='post' action='$_SERVER[PHP_SELF]'>
+	$ret = "<form method='post' action='$_SERVER[PHP_SELF]?course=$code_cours'>
 	<fieldset>
 	<legend>$langIntroMessage</legend>
 	$hidden
