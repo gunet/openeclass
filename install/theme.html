@@ -42,68 +42,16 @@
 
 <body {BODY_ACTION}>
 
-
-
 <div id="container"> 
-
-
-
-  <div id="header"> 
-
-                <a id="logo" title="Home page">&nbsp;</a>
-
-
-
-		<div id="fbar_info">
-
-			<div class="user">{LANG_USER} {USER_NAME} {USER_SURNAME}
-
-   				<a href="{LOGOUT_LINK}index.php?logout=yes" title="{LANG_LOGOUT}" >{LANG_LOGOUT}</a>
-
-   			</div>
-
-		</div>
-
-  	</div>
-
-	
-
-	<div id="thirdBar">
-
-		<div id="tbar_info">
-
-			<div id="search">
-
-				<p class="title">{THIRD_BAR_TEXT}</p>
-
-			</div>
-
-		    <div id="bread">
-
-		    {BREAD_TEXT}
-
-			</div>
-
-
-				<div class="lesson">{FOUR_BAR_TEXT}</div>
-
-
-		</div>
-
-
-
-	</div>
-
-
-
-	<div id="content"> 
-
-
-	  		<div id="leftnav"> 
-
-				<div id="navcontainer">
-
-					<ul id="navlist">
+<div id="header"> 
+<div class="user">         
+</div>
+<a href="{URL_PATH}" title="{SITE_NAME}" class="logo"></a></div>
+<div id="bread">{BREAD_TEXT}</div>
+<div id="content"> 
+<div id="leftnav"> 
+<div id="navcontainer">
+	<ul id="navlist">
 
 					<!-- BEGIN leftNavCategoryBlock -->
 
@@ -134,13 +82,8 @@
 
 		<div id="content_main">
 
+				<div class="title">{FOUR_BAR_TEXT} - {CURRENT_STEP_TITLE}</div>
 
-
-		<div id="tool_title">
-
-				{CURRENT_STEP_TITLE}
-
-			</div>
 
 
 

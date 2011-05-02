@@ -99,7 +99,7 @@ if (file_exists("../config/config.php")) {
   <tr>
     <td>
 
-    <table width='100%' class='FormInput' align='center'>
+    <table width='100%' class='tbl_alt' align='center'>
     <tbody>
     <tr>
       <td width='40%' class='odd'><b>Πιθανοί λόγοι</b></td>
@@ -205,25 +205,20 @@ if(isset($_REQUEST['install2']) OR isset($_REQUEST['back2']))
 	$langStep = $langStep2;
 	$_SESSION['step'] = 2;
 	$tool_content .= "<form action='$_SERVER[PHP_SELF]?alreadyVisited=1' method='post'>
-	<table width='99%' class='tbl_alt' align='left'>
-	<tbody>
+	<table width='500' class='tbl_border' align='center'>
 	<tr>
-	<th class='left' width='50'></th>
-	<td>$langInfoLicence<a href='../info/license/gpl_print.txt'>($langPrintVers)</a></td>
+	<td>$langInfoLicence<a href='../info/license/gpl_print.txt'> ($langPrintVers)</a></td>
 	</tr>
 	<tr>
-	<th class='left'></th>
 	<td><textarea cols='75' rows='15' class='FormData_InputText'>";
 	$tool_content .= file_get_contents('../info/license/gpl.txt');
 	$tool_content .= "</textarea></td>
 	</tr>
 	<tr>
-	<th class='left'></th>
-	<td>
-	<input type='submit' name='back1' value='< $langPreviousStep' />
-	<input type='submit' name='install3' value='$langAccept' />
-	</td></tr>
-	</tbody>
+	<td class='right'>
+	  <input type='submit' name='back1' value='&laquo; $langPreviousStep' />
+	  <input type='submit' name='install3' value='$langAccept' />
+	  </td></tr>
 	</table>
 	</form>";
 	draw($tool_content);
@@ -235,7 +230,7 @@ elseif(isset($_REQUEST['install3']) OR isset($_REQUEST['back3'])) {
 	$langStep = $langStep3;
 	$_SESSION['step']=3;
 	$tool_content .= "
-	<table width='99%' class='FormData' align='left'>
+	<table width='100%' class='tbl_alt' align='left'>
 	<tbody>
 	<tr>
 	<th width='220' class='left'></th>
