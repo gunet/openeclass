@@ -208,8 +208,8 @@ DIV.welcomeImg {
 	}
 	
 .currentStep {
-	color:black;
 	font-weight:bold;
+	color: #333333;
 }
 
 .extraMessage {

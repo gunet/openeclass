@@ -110,7 +110,7 @@ function installerMenu(){
 	for($i=0; $i<6; $i++) {
 		if($i < $_SESSION['step']-1) {
 			$currentStep[$i] = false;
-			$stepImg[$i] = "tick.png";
+			$stepImg[$i] = "tick_1.png";
 		} else {
 			if ($i == $_SESSION['step']-1) {
 				$currentStep[$i] = true;

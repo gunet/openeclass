@@ -627,7 +627,7 @@ elseif (isset($_REQUEST['install1']) || isset($_REQUEST['back1']))
 	<li>$langExpPhpMyAdmin</li></ul>
 	<div class='info'>$langBeforeInstall1<a href='$install_info_file' target=_blank>$langInstallInstr</a>.</div>
 	<p class='smaller'>$langBeforeInstall2<a href='../README.txt' target=_blank>$langHere</a>.</p>
-	<br /><input type='submit' name='install2' value='$langNextStep >' />
+	<div class='right'><input type='submit' name='install2' value='$langNextStep &raquo;' /></div>
         </form>\n";
 	draw($tool_content);
 } else {
