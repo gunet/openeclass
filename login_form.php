@@ -55,13 +55,13 @@ if(!empty($submit)) {
 		switch($auth_allow) {
 			case 1 : $warning .= ""; 
 				break;
-			case 2 : $warning .= "<br /><font color='red'>".$langInvalidId ."</font><br />"; 
+			case 2 : $warning .= "<p class='alert1'>".$langInvalidId ."</p>"; 
 				break;
-			case 3 : $warning .= "<br />".$langAccountInactive1." <a href='modules/auth/contactadmin.php?userid=".$user."'>".$langAccountInactive2."</a><br /><br />"; 
+			case 3 : $warning .= "<p class='alert1'>".$langAccountInactive1." <a href='modules/auth/contactadmin.php?userid=".$user."'>".$langAccountInactive2."</a></p>"; 
 				break;
-			case 4 : $warning .= "<br /><font color='red'>". $langInvalidId . "</font><br />"; 
+			case 4 : $warning .= "<p class='alert1'>". $langInvalidId . "</p>"; 
 				break;
-			case 5 : $warning .= "<br /><font color='red'>". $langNoCookies . "</font><br />"; 
+			case 5 : $warning .= "<p class='alert1'>". $langNoCookies . "</p>"; 
 				break;
 			default:
 				break;
@@ -104,7 +104,7 @@ if ($casactive['auth_default'] == 1) {
 }
 
 $tool_content .= "
-  <table class='tbl' width='30%' align='center'>
+  <table class='tbl' width='250' align='center'>
   <tr>
     <th class='LoginHead'><b>$langUserLogin </b></th>
   </tr>
