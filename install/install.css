@@ -64,8 +64,8 @@ body {
 
 
 a:link, a:active, a:visited {
-        color: #F30;
-        text-decoration: none;
+        color: #333333;
+        text-decoration: underline;
 }
 
 a:hover {
@@ -94,7 +94,6 @@ a:hover {
 }
 
 li {
-	font-size:12px !important;
 	
 }
 

@@ -207,12 +207,15 @@ if(isset($_REQUEST['install2']) OR isset($_REQUEST['back2']))
 	$tool_content .= "<form action='$_SERVER[PHP_SELF]?alreadyVisited=1' method='post'>
 	<table width='100%' class='tbl'>
 	<tr>
-	<td>$langInfoLicence <a href='../info/license/gpl_print.txt'>($langPrintVers)</a></td>
+	<td>$langInfoLicence</td>
 	</tr>
 	<tr>
 	<td><textarea cols='75' rows='15' class='FormData_InputText'>";
 	$tool_content .= file_get_contents('../info/license/gpl.txt');
 	$tool_content .= "</textarea></td>
+	</tr>
+		<tr>
+	<td><img src='../template/classic/img/printer.png' alt='print'> <a href='../info/license/gpl_print.txt'>$langPrintVers</a></td>
 	</tr>
 	<tr>
 	<td class='right'>
@@ -231,8 +234,8 @@ elseif(isset($_REQUEST['install3']) OR isset($_REQUEST['back3'])) {
 	$_SESSION['step']=3;
 	$tool_content .= "
 <div>$langDBSettingIntro</div>
-<br>
-	<table width='100%' class='tbl smaller' align='left'>
+<br />
+	<table width='100%' class='tbl'>
 	<tr>
 	  <th width='220' class='left'>$langdbhost</th>
 	  <td><input type='text' class='FormData_InputText' size='25' name='dbHostForm' value='$dbHostForm' />&nbsp;&nbsp;$langEG localhost</td>
@@ -363,7 +366,7 @@ elseif(isset($_REQUEST['install6']))
 	if (!$reguser) {
       		$mes_add ="";
   	} else {
-      		$mes_add = "<br />$langToReq<br >";
+      		$mes_add = "<br />$langToReq<br />";
   	}
 
 	$tool_content .= "
@@ -589,7 +592,7 @@ elseif (isset($_REQUEST['install1']) || isset($_REQUEST['back1']))
         mkdir_or_error('../video', $langWarningInstall5);
 	
 	if($configErrorExists) {
-		$tool_content .= implode("<br/>", $errorContent);
+		$tool_content .= implode("<br />", $errorContent);
 		$tool_content .= "</form>";
 		draw($tool_content);
 		exit();
@@ -625,8 +628,8 @@ elseif (isset($_REQUEST['install1']) || isset($_REQUEST['back1']))
 	<p class='sub_title1'>$langAddOnStreaming:</p>
 	<ul class='installBullet'>
 	<li>$langExpPhpMyAdmin</li></ul>
-	<div class='info'>$langBeforeInstall1<a href='$install_info_file' target=_blank>$langInstallInstr</a>.</div>
-	<p class='smaller'>$langBeforeInstall2<a href='../README.txt' target=_blank>$langHere</a>.</p>
+	<div class='info'>$langBeforeInstall1<a href='$install_info_file' target=_blank>$langInstallInstr</a>.
+	<div class='smaller'>$langBeforeInstall2<a href='../README.txt' target=_blank>$langHere</a>.</div></div><br />
 	<div class='right'><input type='submit' name='install2' value='$langNextStep &raquo;' /></div>
         </form>\n";
 	draw($tool_content);
@@ -661,7 +664,7 @@ elseif (isset($_REQUEST['install1']) || isset($_REQUEST['back1']))
         <tr>
           <td colspan='2' align='right'><form action='$_SERVER[PHP_SELF]?alreadyVisited=1' method='post'>
             <input type='hidden' name='welcomeScreen' value='welcomeScreen' />
-            <input type='submit' name='install1' value='$langNextStep >' />
+            <input type='submit' name='install1' value='$langNextStep &raquo;' />
           </form></td>
           </tr>
         </table>
