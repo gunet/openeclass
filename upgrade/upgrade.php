@@ -289,6 +289,8 @@ if (!isset($_POST['submit2'])) {
                         ('email_required', '0'),
                         ('am_required', '0'),
                         ('dropbox_allow_student_to_student', '0'),
+			('block_username_change', '0'),
+			('betacms', '0'),
                         ('secret_key', '" . generate_secret_key() . "')");
 
         if ($oldversion < '2.1.3') {

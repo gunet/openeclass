@@ -460,6 +460,8 @@ db_query("INSERT INTO `config` (`key`, `value`) VALUES
                 ('email_required', '0'),
                 ('am_required', '0'),
                 ('dropbox_allow_student_to_student', '0'),
+		('block_username_change', '0'),
+		('betacms', '1'),
                 ('secret_key', '" . generate_secret_key() . "'),
                 ('version', '" . ECLASS_VERSION ."')");
 

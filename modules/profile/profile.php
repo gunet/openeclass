@@ -41,7 +41,7 @@ if (in_array($password, $authmethods)) {
         $allow_username_change = false; 
         $allow_password_change = false;
 } else {
-        $allow_username_change = !get_config('block-username-change');
+        $allow_username_change = !get_config('block_username_change');
         $allow_password_change = true;
 }
 

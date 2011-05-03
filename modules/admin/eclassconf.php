@@ -145,6 +145,8 @@ $active_ui_languages = '.$string_active_ui_languages.'
 	@update_config_table('am_required', $_POST['am_required']);
 	@update_config_table('dont_display_login_form', $_POST['dont_display_login_form']);
 	@update_config_table('dropbox_allow_student_to_student', $_POST['dropbox_allow_student_to_student']);
+	@update_config_table('block_username_change', $_POST['block_username_change']);
+	@update_config_table('betacms', $_POST['betacms']);
 	// Display result message
 	$tool_content .= "<p>".$langFileUpdatedSuccess."</p>";
 }
@@ -304,6 +306,8 @@ else {
 	$cbox_am_required = get_config('email_required')?'checked':'';
 	$cbox_dont_display_login_form = get_config('dont_display_login_form')?'checked':'';
 	$cbox_dropbox_allow_student_to_student = get_config('dropbox_allow_student_to_student')?'checked':'';
+	$cbox_block_username_change = get_config('block_username_change')?'checked':'';
+	$cbox_betacms = get_config('betacms')?'checked':'';
 	
 	$tool_content .= "
 	  <tr>
@@ -325,6 +329,14 @@ else {
 	  <tr>
 		<th class='left'><b>dont_display_login_form</b></th>
 		<td><input type='checkbox' name='dont_display_login_form' $cbox_dont_display_login_form /></td>
+	  </tr>
+	  <tr>
+		<th class='left'><b>block_username_change</b></th>
+		<td><input type='checkbox' name='block_username_change' $cbox_block_username_change /></td>
+	  </tr>
+	  <tr>
+		<th class='left'><b>betacms</b></th>
+		<td><input type='checkbox' name='betacms' $cbox_betacms /></td>
 	  </tr>
 	  <tr>
 	    <th class='left'>$langReplaceBackupFile</th>
