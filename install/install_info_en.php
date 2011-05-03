@@ -4,57 +4,16 @@
 <head>
 <META http-equiv=Content-Type content="text/html; charset=UTF-8">
 <title>Installation Instructions Open eClass 2.3</title>
-<style type="text/css">
+<link href="../template/classic/theme.css" rel="stylesheet" type="text/css" />
 
-body {
- font-family: Verdana, Times New Roman;
-  font-size: 12px;
-  font-weight: normal;
- margin-right: 2em;
- margin-left: 2em;
-}
-
-p {
- line-height: 110%;
-}
- 
-ol, ul {
- line-height: 140%;
-}
-
-
-h1, h2, h3, h4, h5 {
- font-weight: bold;
-}
-
-h2 { 
-  font-size: 19px;
-} 
-
-h3 { 
-  font-size: 16px;
-} 
-
-h4 { 
-  font-size: 13px;
-} 
-
-pre {
- margin-left: 3em;
- padding: .5em;
-}
-
-.note {
- background-color: #E6E6E6;
-}
-
-</style>
-<style type="text/css">
- li.c2 {list-style: none}
- div.c1 {text-align: center}
-</style>
   </head>
-  <body>
+<body>
+  
+  <div id="container" style="padding: 30px;">
+  <div id="header"> 
+
+<a href="{URL_PATH}" title="{SITE_NAME}" class="logo"></a></div>
+
     <h2>Installation Instructions Open eClass 2.3</h2>
 <p>The Open eClass platform is a complete Course Management System. It is the solution offered by the Greek Academic Network GUnet to support Asynchronous eLearning Services. It is mainly designed, developed and supported by the GUnet Asynchronous eLearning Group and is distributed for free as open-source software.</p>
     <p>The Asynchronous <b>Open eClass 2.3</b> eLearning platform has been tested and operates wwell in: 
@@ -256,7 +215,7 @@ To give access rights to web server you can type the following commands (if the 
 
 <h4><a name="after_l">How to modify platform logo</a></h4>
 <p> In case some institutes intend to substitute the initial eClass logo with one of its own, they just have to substitute the picture.</p>
-    <pre>(path of Open eClass)/template/classic/img/logo_bg_50.gif</pre> 
+    <pre>(path of Open eClass)/template/classic/img/logo_openeclass.png</pre> 
     <p> with its own. </p>
 
 <h4><a name="after_m">How to modify messages</a></h4>
@@ -320,6 +279,6 @@ If you want to use the platform with a Web server which has the SSL support acti
       </ul>
 
     </div>
-
+</div>
   </body>
 </html>
