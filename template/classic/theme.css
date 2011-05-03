@@ -357,6 +357,7 @@ fieldset table.th {
 
 .LoginHead {
 	border-bottom: 2px solid #687A92;
+	border-right: none;
     color: #ffffff;
     background-color: #8597A5 !important;   
 }
@@ -600,7 +601,7 @@ fieldset table.th {
 	background-color:#fef5be;
 	border-top: 2px solid #fdd425;
 	border-bottom: 2px solid #fdd425;
-	padding: 10px 50px;
+	padding: 10px 20px 10px 50px;
 	background-image:url(img/warning.png); 
     background-repeat:no-repeat;
     background-position: left;

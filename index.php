@@ -135,13 +135,13 @@ if (isset($_SESSION['shib_uname'])) { // authenticate via shibboleth
 			switch($auth_allow) {
 				case 1: $warning .= ""; 
 					break;
-				case 2: $warning .= "<br /><font color='red'>".$langInvalidId ."</font><br />"; 
+				case 2: $warning .= "<p class='alert1'>".$langInvalidId ."</p>"; 
 					break;
-				case 3: $warning .= "<br />".$langAccountInactive1." <a href='modules/auth/contactadmin.php?userid=".$user."'>".$langAccountInactive2."</a><br /><br />"; 
+				case 3: $warning .= "<p class='alert1'>".$langAccountInactive1." <a href='modules/auth/contactadmin.php?userid=".$user."'>".$langAccountInactive2."</a></p>"; 
 					break;
-				case 4: $warning .= "<br /><font color='red'>". $langInvalidId . "</font><br />"; 
+				case 4: $warning .= "<p class='alert1'>". $langInvalidId . "</p>"; 
 					break;
-				case 5: $warning .= "<br /><font color='red'>". $langNoCookies . "</font><br />"; 
+				case 5: $warning .= "<p class='alert1'>". $langNoCookies . "</p>"; 
 					break;
 				default:
 					break;

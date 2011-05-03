@@ -104,7 +104,7 @@ if ($casactive['auth_default'] == 1) {
 }
 
 $tool_content .= "
-  <table class='tbl' width='250' align='center'>
+  <table class='tbl' width='200' align='center'>
   <tr>
     <th class='LoginHead'><b>$langUserLogin </b></th>
   </tr>
@@ -115,7 +115,7 @@ $tool_content .= "
         <input class='Login' name='uname' size='20' /><br />
         $langPass <br />
         <input class='Login' name='pass' type='password' size='20' /><br /><br />
-        <input class='Login' name='submit' type='submit' size='20' value='$langEnter' /><br />
+        <input class='Login' name='submit' type='submit' size='20' value='$langEnter' />
 	$warning<br />$shibboleth_link
 	<br />$cas_link 
         <a href='${urlServer}modules/auth/lostpass.php'>$lang_forgot_pass</a>
