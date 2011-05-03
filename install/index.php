@@ -85,38 +85,19 @@ if (file_exists("../config/config.php")) {
 <body>
 
   <div class='install_container'>
-  <table width='65%' class='FormData' align='center'>
-  <thead>
-  <tr>
-    <td>&nbsp;</td>
-  </tr>
-  <tr>
-    <td><div align='center'><img src='../template/classic/img/caution_alert.gif' title='caution-alert' /></div></td>
-  </tr>
-  <tr>
-    <td><div align='center'><h4>$langWarnConfig3 !</h4></div></td>
-  </tr>
-  <tr>
-    <td>
-
-    <table width='100%' class='tbl_alt' align='center'>
-    <tbody>
+  <p><img src='../template/classic/img/logo_openeclass.png' alt='logo' /></p>
+  <div class='alert' align='center'>$langWarnConfig3!</div>
+  <table width='600' align='center' cellpadding='5' cellspacing='5' class='tbl_alt'>
     <tr>
-      <td width='40%' class='odd'><b>Πιθανοί λόγοι</b></td>
-      <td><b>Αντιμετώπιση</b></td>
+      <th><b>Πιθανοί λόγοι</b></th>
+      <th><b>Αντιμετώπιση</b></th>
     </tr>
     <tr>
-      <td class='odd' class='left'>$langWarnConfig1</td>
+      <td>$langWarnConfig1</td>
       <td>$langWarnConfig2</td>
     </tr>
-    </tbody>
-    </table>
-
-    </td>
-  </tr>
-  </thead>
   </table>
-<div>
+</div>
 </body>
 </html>";
 	exit($tool_content);
@@ -548,9 +529,10 @@ $encryptedPasswd = true;
 	// message
 	$tool_content .= "
 	<div class='success'>$langInstallSuccess</div>
+	
 	<br />
-	<br />
-	<b>$langProtect</b>
+	<div>$langProtect</div>
+	<br /><br />
 	</form>
 	<form action='../'><input type='submit' value='$langEnterFirstTime'></form>";
 	draw($tool_content);
@@ -601,8 +583,8 @@ elseif (isset($_REQUEST['install1']) || isset($_REQUEST['back1']))
 	$tool_content .= "
     <p class='sub_title1'>$langCheckReq</p>
     <ul class='installBullet'>
-        <li>Webserver (<em>$langFoundIt <b>".$_SERVER['SERVER_SOFTWARE']."</b></em>)
-        $langWithPHP (<em>$langFoundIt <b>PHP ".phpversion()."</b></em>).";
+        <li><b>Webserver</b> <br /> <em>$langFoundIt ".$_SERVER['SERVER_SOFTWARE']."</em>)
+        $langWithPHP (<em>$langFoundIt PHP ".phpversion()."</em>).";
 	$tool_content .= "</li></ul>";
 	$tool_content .= "<p class='sub_title1'>$langRequiredPHP</p>";
 	$tool_content .= "<ul class='installBullet'>";
