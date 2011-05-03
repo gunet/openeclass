@@ -29,13 +29,7 @@ search.php
 @authors list: Agorastos Sakis <th_agorastos@hotmail.com>
 ==============================================================================
 
-
-//  elegxos gia to pou vrisketai o xrhsths sto systhma kai redirect sto antistoixo script anazhthshs
-//  oi diathesimes katastaseis einai oi ekseis:
-//
-//  1. sthn kentrikh selida tou systhmatos (den exei ginei log-in)
-//  2. sthn kentrikh selida twn mathimatwn (amesws meta to log-in)
-//*/
+*/
 
 include '../../include/baseTheme.php';
 $require_current_course = FALSE;
@@ -185,12 +179,19 @@ if (!register_posted_variables(array('search_terms' => false,
                                 $tool_content .= "
                   <tr class='even'>";
                         }
-                        $tool_content .= "<td><img src='../../template/classic/img/arrow.png' alt=''  /></td>" .
-                                "<td><a href='../../courses/$mycours[code]/?from_search=".urlencode($search_terms)."'>" . q($mycours['intitule']) .
-                                "</a> (" . q($mycours['fake_code']) . ")</td>" .
+			$cours_id = course_code_to_id($mycours['code']);
+                        $tool_content .= "<td><img src='../../template/classic/img/arrow.png' alt=''  /></td><td>";
+			// search inside course. If at least one result is found then display link for searching inside the course
+			if (search_in_course($search_terms, $cours_id, $mycours['code'])) {
+				$tool_content .= "<a href='../../courses/$mycours[code]/?from_search=".urlencode($search_terms)."'>" . q($mycours['intitule']) .
+                                "</a> (" . q($mycours['fake_code']) . ")";
+			} else {
+				$tool_content .= q($mycours['intitule'])." (".q($mycours['fake_code']).")";
+			}
+			$tool_content .= "</td>" .
                                 "<td>" . q($mycours['titulaires']) . "</td>" .
                                 "<td>" . q($mycours['course_keywords']) . "</td>
-                  </tr>";
+			</tr>";
                         $k++;
                 }
                 $tool_content .= "
@@ -200,6 +201,97 @@ if (!register_posted_variables(array('search_terms' => false,
 
 if (!empty($search_terms_description)) {
         db_query('DROP TEMPORARY TABLE desc_search_tmp');
+}
+
+// -----------------------------
+// search inside course
+// -----------------------------
+function search_in_course($search_terms, $cours_id, $code_cours) {
+	
+	global $mysqlMainDb;
+	
+	$search_terms = mysql_real_escape_string($_REQUEST['search_terms']);
+	$query = " AGAINST ('".$search_terms."";
+	$query .= "' IN BOOLEAN MODE)";
+	
+	$sql = db_query("SELECT title, contenu, temps FROM annonces
+				WHERE cours_id = $cours_id
+				AND visibility = 'v'
+				AND MATCH (title, contenu)".$query, $mysqlMainDb);
+	if (mysql_num_rows($sql) > 0) {
+		return TRUE;
+	}
+	$sql = db_query("SELECT titre, contenu, day, hour, lasting FROM agenda
+				WHERE visibility = 'v'
+				AND MATCH (titre, contenu)".$query, $code_cours);
+	if (mysql_num_rows($sql) > 0) {
+		return TRUE;
+	}
+	$sql = db_query("SELECT * FROM document
+				WHERE course_id = $cours_id
+				AND subsystem = 0
+				AND visibility = 'v'
+				AND MATCH (filename, comment, title, creator, subject, description, author, language)".$query, $mysqlMainDb);
+	if (mysql_num_rows($sql) > 0) {
+		return TRUE;
+	}
+	$sql = db_query("SELECT * FROM exercices
+				WHERE active = '1'
+				AND MATCH (titre, description)".$query, $code_cours);
+	if (mysql_num_rows($sql) > 0) {
+		return TRUE;
+	}
+	$sql = db_query("SELECT * FROM forums WHERE MATCH (forum_name, forum_desc)".$query, $code_cours);
+	if (mysql_num_rows($sql) > 0) {
+		return TRUE;
+	}
+	$sql = db_query("SELECT forum_id, topic_title FROM topics WHERE MATCH (topic_title)".$query, $code_cours);
+	if (mysql_num_rows($sql) > 0) {
+		return TRUE;
+	}
+	while($res = mysql_fetch_array($sql)) {
+		$sql = db_query("SELECT posts.topic_id AS topicid, posts_text.post_text AS posttext
+					FROM posts, posts_text
+					WHERE posts.forum_id = $res[forum_id]
+						AND posts.post_id = posts_text.post_id 
+						AND MATCH (posts_text.post_text)".$query, $code_cours);
+		if (mysql_num_rows($sql) > 0) {
+			return TRUE;
+		}
+	}
+	$sql = db_query("SELECT * FROM link
+				WHERE course_id = $cours_id
+				AND MATCH (url, title, description)".$query, $mysqlMainDb);
+	if (mysql_num_rows($sql) > 0) {
+		return TRUE;
+	}
+	$sql = db_query("SELECT * FROM video WHERE MATCH (url, titre, description)".$query, $code_cours);
+	if (mysql_num_rows($sql) > 0) {
+		return TRUE;
+	}
+	$sql = db_query("SELECT * FROM videolinks WHERE MATCH (url, titre, description)".$query, $code_cours);
+	if (mysql_num_rows($sql) > 0) {
+		return TRUE;
+	}
+	$sql = db_query("SELECT id, title, comments FROM course_units
+				WHERE course_id = $cours_id
+				AND visibility = 'v' 
+				AND MATCH (title, comments)".$query, $mysqlMainDb);
+	if (mysql_num_rows($sql) > 0) {
+		return TRUE;
+	}
+	$sql = db_query("SELECT unit_resources.unit_id AS id,
+				unit_resources.title AS title,
+				unit_resources.comments AS comments
+			FROM unit_resources, course_units
+				WHERE unit_resources.unit_id = course_units.id
+				AND course_units.course_id = $cours_id
+				AND course_units.visibility = 'v'
+			AND MATCH(unit_resources.title, unit_resources.comments)".$query, $mysqlMainDb);
+	if (mysql_num_rows($sql) > 0) {
+		return TRUE;
+	}
+	return FALSE;
 }
 
 draw($tool_content, 0);
