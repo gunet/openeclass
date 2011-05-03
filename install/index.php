@@ -210,7 +210,7 @@ if(isset($_REQUEST['install2']) OR isset($_REQUEST['back2']))
 	<td>$langInfoLicence</td>
 	</tr>
 	<tr>
-	<td><textarea cols='75' rows='15' class='FormData_InputText'>";
+	<td><textarea cols='92' rows='15' class='FormData_InputText'>";
 	$tool_content .= file_get_contents('../info/license/gpl.txt');
 	$tool_content .= "</textarea></td>
 	</tr>
@@ -235,7 +235,7 @@ elseif(isset($_REQUEST['install3']) OR isset($_REQUEST['back3'])) {
 	$tool_content .= "
 <div>$langDBSettingIntro</div>
 <br />
-	<table width='100%' class='tbl'>
+	<table width='100%' class='tbl smaller'>
 	<tr>
 	  <th width='220' class='left'>$langdbhost</th>
 	  <td><input type='text' class='FormData_InputText' size='25' name='dbHostForm' value='$dbHostForm' />&nbsp;&nbsp;$langEG localhost</td>
@@ -281,7 +281,7 @@ elseif(isset($_REQUEST['install5']) OR isset($_REQUEST['back4']))
         if (empty($helpdeskmail)) {
                 $helpdeskmail = '';
         }
-	$tool_content .= "<p> $langWillWrite</p>
+	$tool_content .= "<div> $langWillWrite</div><br />
 	<table width='100%' class='tbl'>
 	<tr>
 	<th class='left' width='220'>$langSiteUrl</th>
@@ -370,7 +370,7 @@ elseif(isset($_REQUEST['install6']))
   	}
 
 	$tool_content .= "
-	<p>$langReviewSettings</p>
+	<div>$langReviewSettings</div> <br />
 		<table width='100%' class='tbl' align='left'>
 	<tr>
 	<th class='left'>$langdbhost:</th>
@@ -547,10 +547,10 @@ $encryptedPasswd = true;
 	fwrite($fd, $stringConfig);
 	// message
 	$tool_content .= "
-	<p class=\"caution\">$langInstallSuccess
+	<div class='success'>$langInstallSuccess</div>
 	<br />
 	<br />
-	<b>$langProtect</b></p>
+	<b>$langProtect</b>
 	</form>
 	<form action='../'><input type='submit' value='$langEnterFirstTime'></form>";
 	draw($tool_content);
