@@ -1,39 +1,27 @@
 
 #leftnav_perso {
 	float: left;
-	width: 49%;
-	margin: 0;
-	margin-left:1%;
-	padding-top: 1em;
+	width: 355px;
+	padding: 5px;
+	margin: 5px;
+	border: 1px solid #cccccc;
 }
 
 #content_main_perso {
 	float:right;
 	clear:right;
-	width:49%;
-	margin:0;
-	padding-top: 1em;
+	width:355px;
+	padding: 5px;
+	margin: 5px;
+	border: 1px solid #cccccc;
 }
 
-table.blocks {
-	border: none !important;
-	border-collapse: separate;
-	font-size:11px;
-}
 
 .persoBoxTitle {
-	text-align: left !important;
-	padding: 6px !important;
-	background: #8597a5 !important;
-	font-size: 11px !important;
-	color: #ffffff !important;
-	border-bottom: 2px solid #687A9 !important;
-	border-left: 1px solid #73849b !important;
-	border-right: 1px solid #73849b !important;
-	margin-bottom: 0.8em !important;
-	font-weight : bold;
-    word-wrap: break-word !important;
-    overflow: hidden !important;
+	padding: 6px;
+	background: #8597a5;
+	color: #ffffff;
+	border: none;
 }
 
 table.blocks a {
