@@ -644,6 +644,17 @@ fieldset table.th {
     background-position: left top;
 }
 
+
+.info {
+	background-color:#e1e9f9;
+	border-top: 2px solid #7fa4e7;
+	border-bottom: 2px solid #7fa4e7;
+	padding: 10px 50px;
+	background-image:url(img/info.png); 
+    background-repeat:no-repeat; 
+    background-position: left top;
+}
+
 /* colors */ 
 
 .red {

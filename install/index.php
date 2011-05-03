@@ -564,7 +564,7 @@ elseif (isset($_REQUEST['install1']) || isset($_REQUEST['back1']))
 	$configErrorExists = false;
 
 	if (!ini_get('short_open_tag')) {
-		$errorContent[]= "<p class='caution_small'>$langWarningInstall2 $langWarnInstallNotice1
+		$errorContent[]= "<p class='caution'>$langWarningInstall2 $langWarnInstallNotice1
 		<a href='$install_info_file'>$langHere</a> $langWarnInstallNotice2</p>";
 			$configErrorExists = true;
         }
@@ -575,7 +575,7 @@ elseif (isset($_REQUEST['install1']) || isset($_REQUEST['back1']))
                        $install_info_file, $langHere, $langWarnInstallNotice2;
                 if (!is_dir($dirname)) {
                         if (@!mkdir($dirname, 0777)) {
-                                $errorContent[] = "<p class='caution_small'>$warn_message $langWarnInstallNotice1 <a href='$install_info_file'>$langHere</a> $langWarnInstallNotice2</p>";
+                                $errorContent[] = "<p class='caution'>$warn_message $langWarnInstallNotice1 <a href='$install_info_file'>$langHere</a> $langWarnInstallNotice2</p>";
                                 $configErrorExists = true;
                         }
                 }
@@ -596,12 +596,12 @@ elseif (isset($_REQUEST['install1']) || isset($_REQUEST['back1']))
 	}
 
 	$tool_content .= "
-    <b>$langCheckReq</b>
+    <p class='sub_title1'>$langCheckReq</p>
     <ul class='installBullet'>
         <li>Webserver (<em>$langFoundIt <b>".$_SERVER['SERVER_SOFTWARE']."</b></em>)
         $langWithPHP (<em>$langFoundIt <b>PHP ".phpversion()."</b></em>).";
 	$tool_content .= "</li></ul>";
-	$tool_content .= "<b>$langRequiredPHP</b>";
+	$tool_content .= "<p class='sub_title1'>$langRequiredPHP</p>";
 	$tool_content .= "<ul class='installBullet'>";
 	warnIfExtNotLoaded('standard');
 	warnIfExtNotLoaded('session');
@@ -610,23 +610,23 @@ elseif (isset($_REQUEST['install1']) || isset($_REQUEST['back1']))
 	warnIfExtNotLoaded('mbstring');
 	warnIfExtNotLoaded('zlib');
 	warnIfExtNotLoaded('pcre');
-	$tool_content .= "</ul><b>$langOptionalPHP</b>";
+	$tool_content .= "</ul><p class='sub_title1'>$langOptionalPHP</p>";
 	$tool_content .= "<ul class='installBullet'>";
 	warnIfExtNotLoaded("ldap");
 	$tool_content .= "</ul>";
 
 	$tool_content .= "
-	<b>$langOtherReq</b>
+	<p class='sub_title1'>$langOtherReq</p>
 	<ul class='installBullet'>
 	<li>$langInstallBullet1</li>
 	<li>$langInstallBullet2</li>
 	<li>$langInstallBullet3</li>
 	</ul>
-	<b>$langAddOnStreaming:</b>
+	<p class='sub_title1'>$langAddOnStreaming:</p>
 	<ul class='installBullet'>
 	<li>$langExpPhpMyAdmin</li></ul>
-	<p>$langBeforeInstall1<a href='$install_info_file' target=_blank>$langInstallInstr</a>.</p>
-	<p>$langBeforeInstall2<a href='../README.txt' target=_blank>$langHere</a>.</p>
+	<div class='info'>$langBeforeInstall1<a href='$install_info_file' target=_blank>$langInstallInstr</a>.</div>
+	<p class='smaller'>$langBeforeInstall2<a href='../README.txt' target=_blank>$langHere</a>.</p>
 	<br /><input type='submit' name='install2' value='$langNextStep >' />
         </form>\n";
 	draw($tool_content);
