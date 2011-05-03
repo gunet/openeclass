@@ -4,57 +4,11 @@
 <head>
 <META http-equiv=Content-Type content="text/html; charset=UTF-8">
 <title>Οδηγίες Εγκατάστασης Πλατφόρμας Open eClass 2.3</title>
-<style type="text/css">
+<link href="../template/classic/theme.css" rel="stylesheet" type="text/css" />
 
-body {
- font-family: Verdana, Times New Roman;
-  font-size: 12px;
-  font-weight: normal;
- margin-right: 2em;
- margin-left: 2em;
-}
-
-p {
- line-height: 110%;
-}
- 
-ol, ul {
- line-height: 140%;
-}
-
-
-h1, h2, h3, h4, h5 {
- font-weight: bold;
-}
-
-h2 { 
-  font-size: 19px;
-} 
-
-h3 { 
-  font-size: 16px;
-} 
-
-h4 { 
-  font-size: 13px;
-} 
-
-pre {
- margin-left: 3em;
- padding: .5em;
-}
-
-.note {
- background-color: #E6E6E6;
-}
-
-</style>
-<style type="text/css">
- li.c2 {list-style: none}
- div.c1 {text-align: center}
-</style>
   </head>
   <body>
+  <div id="container">
     <h2>Οδηγίες Εγκατάστασης Πλατφόρμας Open eClass 2.3</h2>
 <p>Η πλατφόρμα <b>Open eClass</b> είναι ένα ολοκληρωμένο Σύστημα Διαχείρισης Ηλεκτρονικών Μαθημάτων και αποτελεί την πρόταση του Ακαδημαϊκού Διαδικτύου GUnet για την υποστήριξη της Υπηρεσίας Ασύγχρονης Τηλεκπαίδευσης. Αναπτύχθηκε από την Ομάδα Ασύγχρονης Τηλεκπαίδευσης του Ακαδημαϊκού Διαδικτύου, υποστηρίζεται κεντρικά από το GUnet και διανέμεται ελεύθερα ως Λογισμικό Ανοικτού Κώδικα.</p>
     <p>
@@ -452,6 +406,7 @@ $langAboutText = "Τρέχουσα έκδοση της πλατφόρμας";
           <pre>chmod 444 /config/config.php /install/index.php</pre>
         </li>
       </ul>
+    </div>
     </div>
   </body>
 </html>
