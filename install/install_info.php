@@ -8,10 +8,15 @@
 
   </head>
   <body>
-  <div id="container">
-    <h2>Οδηγίες Εγκατάστασης Πλατφόρμας Open eClass 2.3</h2>
+  
+  <div id="container" style="padding: 30px;">
+  <div id="header"> 
+
+<a href="{URL_PATH}" title="{SITE_NAME}" class="logo"></a></div>
+
+    <p class="title1">Οδηγίες Εγκατάστασης Πλατφόρμας Open eClass 2.3</p>
 <p>Η πλατφόρμα <b>Open eClass</b> είναι ένα ολοκληρωμένο Σύστημα Διαχείρισης Ηλεκτρονικών Μαθημάτων και αποτελεί την πρόταση του Ακαδημαϊκού Διαδικτύου GUnet για την υποστήριξη της Υπηρεσίας Ασύγχρονης Τηλεκπαίδευσης. Αναπτύχθηκε από την Ομάδα Ασύγχρονης Τηλεκπαίδευσης του Ακαδημαϊκού Διαδικτύου, υποστηρίζεται κεντρικά από το GUnet και διανέμεται ελεύθερα ως Λογισμικό Ανοικτού Κώδικα.</p>
-    <p>
+    <p class="sub_title1">
       Η Πλατφόρμα Ασύγχρονης Τηλεκπαίδευσης <b>Open eClass
       2.3</b> έχει δοκιμαστεί και λειτουργεί κανονικά
     </p>
@@ -24,8 +29,9 @@
       </li>
       <li>Σε περιβάλλον UNIX (π.χ. <b>Solaris</b>).
       </li>
-    </ul>Στη συνέχεια παρατίθενται αναλυτικά οι οδηγίες
-    εγκατάστασης της πλατφόρμας:<br>
+    </ul>
+    <p class="sub_title1">Στη συνέχεια παρατίθενται αναλυτικά οι οδηγίες
+    εγκατάστασης της πλατφόρμας:</p>
     <ul>
       <li><a href="#before">Ενέργειες πριν την εγκατάσταση - Προαπαιτούμενα</a></li>
       <li><a href="#unix">Για περιβάλλοντα Unix / Linux </a> </li>
@@ -42,17 +48,16 @@
 	<li><a href="#after_other">Άλλες ρυθμίσεις</a></li>
 	</ul>
     </ul>
-    <hr>
-    <h3>
+    <p class="title1">
       <a name="before" id="before">Ενέργειες πριν την εγκατάσταση -
       Προαπαιτούμενα:</a>
-    </h3>
+    </p>
     <p>
 	Για την εγκατάσταση της πλατφόρμας Open eClass 2.3, απαιτείται η ύπαρξη και η καλή λειτουργία μιας σειράς συστημάτων και εφαρμογών. Αυτές είναι οι εξής:
     </p>
-    <h4>
+    <p class="sub_title1">
       1. Web Server (<a href="http://httpd.apache.org/" target="_blank">Apache</a> 1.3.x ή 2.x)
-    </h4>
+    </p>
     <p>
       Ο Apache πρέπει να μπορεί να χειριστεί σελίδες τύπου
       <em>.php .inc</em> Αν δεν τον έχετε ρυθμίσει,
@@ -97,8 +102,8 @@ Options -Indexes
       </p>
 
     </div>
-<h4>2. <a href="http://www.php.net" target="_blank">PHP</a> (εκδόσεις &gt;= 5.0) 
-</h4>
+<p class="sub_title1">2. <a href="http://www.php.net" target="_blank">PHP</a> (εκδόσεις &gt;= 5.0) 
+</p>
 <p> Η πλατφόρμα λειτουργεί χωρίς προβλήματα με εκδόσεις &gt;= <em>5.0 </em></p>
 <p> Ταυτόχρονα με την εγκατάσταση της PHP, απαιτείται και ενεργοποίηση της υποστήριξης 
   του Apache για PHP. Σημειώστε ότι στη PHP, θα πρέπει να ενεργοποιήσετε την υποστήριξη 
@@ -171,8 +176,8 @@ magic_quotes_gpc = on</pre>
     <p>
       Μόλις ολοκληρώσετε τις αλλαγές σας, επανεκκινήστε τον apache.
     </p>
-<h4> 3. <a href="http://www.mysql.com" target="_blank">MySQL</a> (εκδόσεις 4.1.x 
-  ή 5.x) </h4>
+<p class="sub_title1"> 3. <a href="http://www.mysql.com" target="_blank">MySQL</a> (εκδόσεις 4.1.x 
+  ή 5.x) </p>
     <p>
       Παράλληλα με την εγκατάσταση της MySQL θα πρέπει να
       δημιουργηθεί ένας λογαριασμός χρήστη (user account), με
@@ -184,11 +189,11 @@ magic_quotes_gpc = on</pre>
 	για τους χρήστες UNIX και Windows αντίστοιχα. Αν έχει (π.χ. <code>--sql-mode=STRICT_TRANS_TABLES</code>
 	ή <code>--sql-mode=STRICT_ALL_TABLES</code>) τότε αλλάξτε την σε κενή (<code>--sql-mode=""</code>). 
 	</p>
-    <h4>
+<p class="sub_title1">
       4. <a href="http://www.sendmail.org" target=
       "_blank">sendmail</a> ή <a href="http://www.postfix.org"
       target="_blank">postfix</a> (προαιρετικά)
-    </h4>
+    </p>
 
     <p>
       Σε μερικές λειτουργίες της πλατφόρμας (π.χ. κατά την εγγραφή
@@ -203,10 +208,10 @@ magic_quotes_gpc = on</pre>
        <a href="http://www.easyphp.org" target="_blank">EasyPHP</a> ή το πακέτο <a href="http://www.apachefriends.org/en/xampp-windows.html" target="_blank">XAMPP</a>.
       </p>
     </div>
-    <hr>
-    <h3>
+        <p class="title1">
+
       <a name="unix" id="unix">Για περιβάλλοντα Unix / Linux</a>
-    </h3>
+    </p>
     <h3>
       Διαδικασία εγκατάστασης:
     </h3>
@@ -263,10 +268,10 @@ magic_quotes_gpc = on</pre>
     θα μπορούσε να είναι το ίδιο με του διαχειριστή). </li>
   <li>Όνομα και διεύθυνση του ιδρύματος σας.</li>
 </ul>
-    <hr>
-    <h3>
+    <p class="title1">
+
       <a name="win" id="win">Για περιβάλλοντα MsWindows</a>
-    </h3>
+    </p>
     <h3>
       Διαδικασία εγκατάστασης:
     </h3>
@@ -313,10 +318,10 @@ magic_quotes_gpc = on</pre>
     θα μπορούσε να είναι το ίδιο με του διαχειριστή). </li>
   <li>Όνομα και διεύθυνση του ιδρύματος σας.</li>
 </ul>
-    <hr>
-    <h3>
+    <p class="title1">
+
       <a name="after" id="after">Ενέργειες μετά την εγκατάσταση:</a>
-    </h3>
+    </p>
 	<h4><a name="after_f">Αλλαγή δοκιμαστικών σχολών</a></h4>
 	<p>To OpeneClass κατά την εγκατάσταση εισάγει 3 δοκιμαστικές / γενικές Σχολές 
     /Τμήματα. (Τμήμα 1 με κωδικό TMA, Τμήμα 2 με κωδικό TMB κ.λπ.). Εσείς θα πρέπει 
