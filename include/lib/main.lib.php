@@ -923,7 +923,7 @@ function warnIfExtNotLoaded($extensionName) {
 
 	global $tool_content, $langModuleNotInstalled, $langReadHelp, $langHere;
 	if (extension_loaded ($extensionName)) {
-		$tool_content .= "<li> $extensionName - <b>ok!</b> </li> ";
+		$tool_content .= "<li> $extensionName - <img src='../template/classic/img/tick.png' /></li> ";
 	} else {
 		$tool_content .= "
                 <li>$extensionName

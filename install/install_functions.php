@@ -117,7 +117,7 @@ function installerMenu(){
 			} else {
 				$currentStep[$i] = false;	
 			}
-			$stepImg[$i] = "";
+			$stepImg[$i] = "arrow.png";
 		}
 	}
 
