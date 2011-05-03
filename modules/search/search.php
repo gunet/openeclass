@@ -49,36 +49,36 @@ if (!register_posted_variables(array('search_terms' => false,
     $tool_content .= "
     <form method='post' action='$_SERVER[PHP_SELF]'>
     <fieldset>
-     <legend>$langSearchCriteria</legend>
+     <legend>$langSearchCriteria:</legend>
         <table class='tbl'>
             <tr>
-                <td>$langTitle</td>
+                <th width='120'>$langTitle:</th>
                 <td><input name='search_terms_title' type='text' size='50' /></td>
-                <td>$langTitle_Descr</td>
+                <td class='smaller'>$langTitle_Descr</td>
             </tr>
             <tr>
-                <td>$langDescription</td>
+                <th>$langDescription:</th>
                 <td><input name='search_terms_description' type='text' size='50' /></td>
-                <td>$langDescription_Descr</small>
+                <td class='smaller'>$langDescription_Descr</small>
             </tr>
             <tr>
-                <td>$langKeywords</td>
+                <th>$langKeywords:</th>
                 <td><input name='search_terms_keywords' type='text' size='50' /></td>
-                <td>$langKeywords_Descr</td>
+                <td class='smaller'>$langKeywords_Descr</td>
             </tr>
             <tr>
-                <td>$langTeacher</td>
+                <th>$langTeacher:</th>
                 <td><input name='search_terms_instructor' type='text' size='50' /></td>
-                <td>$langInstructor_Descr</td>
+                <td class='smaller'>$langInstructor_Descr</td>
             </tr>
             <tr>
-                <td>$langCourseCode</td>
+                <th>$langCourseCode:</th>
                 <td><input name='search_terms_coursecode' type='text' size='50' /></td>
-                <td>$langCourseCode_Descr</td>
+                <td class='smaller'>$langCourseCode_Descr</td>
             </tr>
             <tr>
               <td>&nbsp;</td>
-              <td colspan=2><input type='submit' name='submit' value='$langDoSearch' />&nbsp;&nbsp;<input type='reset' name='reset' value='$langNewSearch' /></td>
+              <td colspan=2 class='right'><input type='submit' name='submit' value='$langDoSearch' />&nbsp;&nbsp;<input type='reset' name='reset' value='$langNewSearch' /></td>
             </tr>
         </table>
     </fieldset>
