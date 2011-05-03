@@ -71,7 +71,7 @@ if(empty($search_terms)) {
 	    <form method='post' action='$_SERVER[PHP_SELF]'>
 	    <fieldset>
 	    <legend>$langSearchCriteria</legend>
-	    <table width='99%' class='tbl'>
+	    <table width='100%' class='tbl'>
 	    <tr>
 	      <th class='left' width='120'>$langOR</th>
 	      <td colspan='2'><input name='search_terms' type='text' size='80'/></td>
@@ -95,7 +95,7 @@ if(empty($search_terms)) {
 	   </tr>
 	   <tr>
 	     <th>&nbsp;</th>
-	     <td colspan='2'><input type='submit' name='submit' value='$langDoSearch' /></td>
+	     <td colspan='2' class='right'><input type='submit' name='submit' value='$langDoSearch' /></td>
 	   </tr>
 	   </table>
 	   </fieldset>
