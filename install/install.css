@@ -211,27 +211,3 @@ DIV.welcomeImg {
 	color: #333333;
 }
 
-.extraMessage {
-	background-image: url(../template/classic/img/exclamation.gif);
-	background-repeat: no-repeat;
-	background-position: 4px 4px;
-	padding-left : 24px;
-	background-color:#FBEC5D;
-}
-
-.extraMessageOK {
-	background-image: url(../template/classic/img/well-done.gif);
-	background-repeat: no-repeat;
-	background-position: 4px 5px;
-	padding-left : 30px;
-    padding-top : 5px;
-    padding-bottom : 5px;
-	background-color:#CCFF99;
-}
-
-#search p.title {
-	font-weight:bold;
-	font-size: 15px;
-	margin-top:30px;
-	margin-left:10px;
-}

@@ -332,7 +332,7 @@ magic_quotes_gpc = on</pre>
 <h4><a name="after_l">Αλλαγή λογότυπου</a></h4>  
     <p> Aν κάποιο ίδρυμα θέλει να αντικαταστήσει το αρχικό λογότυπο του OpeneClass 
       με το δικό, αρκεί να αντικαταστήσει την εικόνα </p>
-    <code>(path του eClass)/template/classic/img/logo_bg_50.gif</code> 
+    <code>(path του eClass)/template/classic/img/logo_openeclass.png</code> 
     <p> με την δικιά του. </p>
 
 <h4><a name="after_m">Αλλαγή μηνυμάτων</a></h4>
