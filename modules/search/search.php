@@ -36,7 +36,7 @@ $require_current_course = FALSE;
 
 $nameTools = $langSearch;
 
-//elegxos ean *yparxoun* oroi anazhthshs
+
 if (!register_posted_variables(array('search_terms' => false,
                                     'search_terms_title' => false,
                                     'search_terms_keywords' => false,
@@ -186,7 +186,8 @@ if (!register_posted_variables(array('search_terms' => false,
 				$tool_content .= "<a href='../../courses/$mycours[code]/?from_search=".urlencode($search_terms)."'>" . q($mycours['intitule']) .
                                 "</a> (" . q($mycours['fake_code']) . ")";
 			} else {
-				$tool_content .= q($mycours['intitule'])." (".q($mycours['fake_code']).")";
+				$tool_content .= "<a href='../../courses/$mycours[code]/'>" . q($mycours['intitule']) .
+                                "</a> (" . q($mycours['fake_code']) . ")";
 			}
 			$tool_content .= "</td>" .
                                 "<td>" . q($mycours['titulaires']) . "</td>" .
