@@ -4,7 +4,7 @@
 	width: 355px;
 	padding: 5px;
 	margin: 5px;
-	border: 1px solid #cccccc;
+	border: 1px dashed #dfdfdf;
 }
 
 #content_main_perso {
@@ -13,15 +13,16 @@
 	width:355px;
 	padding: 5px;
 	margin: 5px;
-	border: 1px solid #cccccc;
+	border: 1px dashed #dfdfdf;
 }
 
 
 .persoBoxTitle {
-	padding: 6px;
-	background: #8597a5;
-	color: #ffffff;
-	border: none;
+	padding: 5px;
+	margin: 5px
+	background: #f8f8f8;
+	border-bottom: 1px dashed #dfdfdf;
+	color: #687A92;
 }
 
 table.blocks a {

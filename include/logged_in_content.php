@@ -42,23 +42,20 @@ $tool_content = "";
 include "perso.php";
 
 $tool_content = "
-<div id='leftnav_perso'>
-  <table width='99%'>
-  <thead>
+<div style='margin: 20px 0 20px 0;'>
+  <table width='100%' class='tbl_border'>
   <tr>
-    <th class='persoBoxTitle'>{LANG_MY_PERSO_LESSONS}</th>
+    <th>{LANG_MY_PERSO_LESSONS}</th>
   </tr>
-  </thead>
-  <tbody>
-  <tr class='odd'>
+  <tr>
     <td>{LESSON_CONTENT}</td>
   </tr>
-  </tbody>
   </table>
+</div>
 
-  <br />
 
-  <table width='99%'>
+<div id='leftnav_perso'>
+  <table width='100%'>
   <thead>
   <tr>
     <th class='persoBoxTitle'>{LANG_MY_PERSO_ANNOUNCEMENTS}</th>

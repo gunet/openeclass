@@ -1,12 +1,13 @@
 /* ----------------Open eClass default theme CSS----------------- */
 /* ---------- @author Stevy Georgiadi <stevy@gunet.gr> ---------- */
+
 /*
  *     Table Of Sections
  *  -----------------------------------------------------------------
  *  1. Reset 
  *  2. Basic HTML tags
  *  3. Page Layout (UP to BOTTOM)
- *  4. Typography - icon titles - messages | alerts
+ *  4. Typography - messages | alerts
  *  5. Tables
  *  6. Course Stuff
  *  ------------------------------------------------------------------
@@ -318,7 +319,6 @@ fieldset table.th {
     margin: 5px;
 }
 #content_course {
-
     border: 1px dashed #dfdfdf;      
 }
 
@@ -540,6 +540,20 @@ fieldset table.th {
     background-position: left;
 	margin: 10px 0 10px 0;
 }
+
+/* ----- Learning Path ----- */
+
+.correct{ color: #749d1e;
+    background-image: url(img/tick.png); 
+    background-repeat: no-repeat;
+    padding-left: 20px;
+    margin-right: 20px;
+}
+.error{  color: #e66d08;
+    background-image: url(img/error.png); 
+    background-repeat: no-repeat;
+    padding-left: 20px;
+    margin-right: 20px; }
 
 /* colors */ 
 
@@ -912,8 +926,6 @@ a.unit_link_invisible:hover {
     text-decoration: underline;
 }
 
-*/
-
 
 /* ----- START admin ----- */
 .invisible {
@@ -923,7 +935,7 @@ a.unit_link_invisible:hover {
 
 /* ----- START agenda ----- */
 .today {
-    background-color:#d9e5f5;
+    background-color:#f3f3f9;
 }
 
 .monthLabel {
@@ -1085,7 +1097,7 @@ li.pagination {
 
 
 .today {
-    color: #73849b;
+    color: #687A92;
     padding: 5px;
     text-align: center;
 }
@@ -1123,19 +1135,7 @@ table.Search td {
 
 
 
-/* ----- Learning Path ----- */
 
-.correct{ color: #749d1e;
-    background-image: url(img/tick.png); 
-    background-repeat: no-repeat;
-    padding-left: 20px;
-    margin-right: 20px;
-}
-.error{  color: #e66d08;
-    background-image: url(img/error.png); 
-    background-repeat: no-repeat;
-    padding-left: 20px;
-    margin-right: 20px; }
 
 
 .custom_list {
