@@ -189,7 +189,6 @@ table.assign {
 .title_pos {
 	padding-left: 24px;
 	color: #727266;
-	font-weight: bold;
     overflow: hidden;
     white-space: pre;           /* CSS2 */
     white-space: -moz-pre-wrap; /* Mozilla */
@@ -308,7 +307,7 @@ cite.content_pos {
 }
 
 .tick {
-	background-image: url(img/tick.gif);
+	background-image: url(img/tick.png);
 	background-repeat: no-repeat;
 	background-position: 0 50%;
 	background-position: 0px 2px;
