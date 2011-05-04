@@ -137,15 +137,15 @@ function htmlInterface($data, $lesson_fCode)
         <table width="100%" class="FormData">
         <tbody>
         <tr class="lessonslist_header">
-          <td width="90%" colspan="2"><b>$langCourse</b></td>
+          <td width="100%" colspan="2"><b>$langCourse</b></td>
           <td><b>$langActions</b></td>
         </tr>
 lCont;
 
 		for ($i=0; $i<$data[0]; $i++) {
  			$lesson_content .= "
-        <tr style=\"background-color: transparent;\" onmouseover=\"this.style.backgroundColor='#fbfbfb'\" onmouseout=\"this.style.backgroundColor='transparent'\">
-          <td valign=\"top\" align='left' width=\"2\" style=\"padding-left: 4px; padding-right: 0px;\"><img src='${urlAppend}/template/classic/img/arrow.png' alt='' /></td>
+        <tr>
+          <td><img src='${urlAppend}/template/classic/img/arrow.png' alt='' /></td>
           <td align='left' style=\"padding-left: 0px; padding-top: 2px; padding-bottom: 2px; padding-right: 0px;\"><a href=\"${urlServer}courses/".$data[2][$i]."/\">".$lesson_fCode[$i]." - ".$data[1][$i]."</a><cite class=\"content_pos\">".$data[3][$i]."</cite></td>";
 			if ($data[4][$i] == '5') {
 				$lesson_content .= "
