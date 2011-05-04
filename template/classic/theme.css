@@ -318,8 +318,7 @@ fieldset table.th {
     margin: 5px;
 }
 #content_course {
-    padding: 5px;
-    margin-top: 20px;
+
     border: 1px dashed #dfdfdf;      
 }
 
@@ -423,11 +422,11 @@ fieldset table.th {
 .lesson {
 	font-size:18px;
 	color:#687A92;
-    padding: 5px 0 10px 0;
+    padding: 5px 0;
 }
 
 #tool_title {
-    margin: 10px 0;
+    margin: 5px 0;
 	font-size:15px;
 	color:#687A92;
     padding: 5px 0;
@@ -464,6 +463,7 @@ fieldset table.th {
         font-weight: bold;
         padding: 5px;
         border-bottom: 2px solid #687A92;
+		margin-bottom: 10px;
 }
 
 .unit_title {
@@ -591,14 +591,14 @@ fieldset table.th {
 }
 
 .tbl_courseid {
-    background-color: #dfdfdf;
+    background-color: #f8f8f8;
     margin: 0;
     padding: 0;
 }
 
 .tbl_courseid th {
     font-weight: bold;
-    background-color: #dfdfdf;
+    background-color: #f8f8f8;
     padding: 3px;
 }
 
@@ -732,11 +732,11 @@ table.sortable tr:hover td {
 }
  
 table.sortable_odd {
-    background-color: #f8f8f8; /* LIGHTER BEIGE  */
+    background-color: #f8f8f8; 
 }
 
 table.sortable_even {
-    background-color: #dfdfdf; /* BEIGE  */
+    background-color: #dfdfdf; 
 }
 
 .sortable th {
@@ -756,8 +756,6 @@ a.sortheader, a.sortheader:link, a.sortheader:active, a.sortheader:visited {
     font-weight: bold;
     text-decoration: underline;
 }
-
-
 
 /*  Table */
 
