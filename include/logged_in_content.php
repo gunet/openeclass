@@ -42,96 +42,27 @@ $tool_content = "";
 include "perso.php";
 
 $tool_content = "
-<div style='margin: 20px 0 20px 0;'>
-  <table width='100%' class='tbl_border'>
-  <tr>
-    <th>{LANG_MY_PERSO_LESSONS}</th>
-  </tr>
-  <tr>
-    <td>{LESSON_CONTENT}</td>
-  </tr>
-  </table>
+<div class='panel_left'>
+<p class='panel_title'>{LANG_MY_PERSO_LESSONS}</p>
+<div class='panel_content_open'>{LESSON_CONTENT}</div>
 </div>
 
+<div class='panel_right'>
+<p class='panel_title'>{LANG_MY_PERSO_ANNOUNCEMENTS}</p>
+<div class='panel_content_open'>{ANNOUNCE_CONTENT}</div>
 
-<div id='leftnav_perso'>
-  <table width='100%'>
-  <thead>
-  <tr>
-    <th class='persoBoxTitle'>{LANG_MY_PERSO_ANNOUNCEMENTS}</th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr class='odd'>
-    <td>{ANNOUNCE_CONTENT}</td>
-  </tr>
-  </tbody>
-  </table>
+<p class='panel_title'>{LANG_MY_PERSO_AGENDA}</p>
+<div class='panel_content_open'>{AGENDA_CONTENT}</div>
 
-  <br />
-
-  <table width='99%'>
-  <thead>
-  <tr>
-    <th class='persoBoxTitle'>{LANG_MY_PERSO_AGENDA}</th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr class='odd'>
-    <td>{AGENDA_CONTENT}
-    </td>
-  </tr>
-  </tbody>
-  </table>
-
-</div>
+<p class='panel_title'>{LANG_MY_PERSO_DEADLINES}</p>
+<div class='panel_content_open'>{ASSIGN_CONTENT}</div>
 
 
-<div id='content_main_perso'>
-  <table width='99%'>
-  <thead>
-  <tr>
-    <th class='persoBoxTitle'>{LANG_MY_PERSO_DEADLINES}</th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr class='odd'>
-    <td>{ASSIGN_CONTENT}
-    </td>
-  </tr>
-  </tbody>
-  </table>
+<p class='panel_title'>{LANG_MY_PERSO_DOCS}</p>
+<div class='panel_content_open'>{DOCS_CONTENT}</div>
 
-  <br />
+<p class='panel_title'>{LANG_PERSO_FORUM}</p>
+<div class='panel_content_open'>{FORUM_CONTENT}</div>
 
-  <table width='99%'>
-  <thead>
-  <tr>
-    <th class='persoBoxTitle'>{LANG_MY_PERSO_DOCS}</th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr class='odd'>
-    <td>{DOCS_CONTENT}
-    </td>
-  </tr>
-  </tbody>
-  </table>
-
-  <br />
-
-  <table width='99%'>
-  <thead>
-  <tr>
-    <th class='persoBoxTitle'>{LANG_PERSO_FORUM}</th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr class='odd'>
-    <td>{FORUM_CONTENT}
-    </td>
-  </tr>
-  </tbody>
-  </table>
 
 </div>";
