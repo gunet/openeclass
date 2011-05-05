@@ -934,11 +934,13 @@ a.unit_link_invisible:hover {
 .panel_left {
 	float:left;
 	width: 370px;
-	
-	}
+	margin-top: 10px;
+}
+
 .panel_right {
 	float:right;
-		width: 370px;
+	width: 370px;
+	margin-top: 10px;
 }
 
 .panel_title {
@@ -947,11 +949,17 @@ a.unit_link_invisible:hover {
 	padding: 3px 10px;
 	cursor: pointer;
 	position: relative;
-	background-color:#8597A5;
     color: #ffffff;
     font-weight: bold;
    	border-bottom: 2px solid #687A92;
+	background: #8597A5 url(img/up_down.png) no-repeat right -51px;
 }
+
+
+.panel_title.active {
+	background-position: right 5px;
+}
+
 
 .panel_content_open {
 	padding: 5px 10px;
