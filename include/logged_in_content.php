@@ -57,12 +57,10 @@ $tool_content = "
 <p class='panel_title'>{LANG_MY_PERSO_DEADLINES}</p>
 <div class='panel_content_open'>{ASSIGN_CONTENT}</div>
 
-
 <p class='panel_title'>{LANG_MY_PERSO_DOCS}</p>
 <div class='panel_content_open'>{DOCS_CONTENT}</div>
 
 <p class='panel_title'>{LANG_PERSO_FORUM}</p>
 <div class='panel_content_open'>{FORUM_CONTENT}</div>
-
 
 </div>";
