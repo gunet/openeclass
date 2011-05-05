@@ -37,8 +37,19 @@
 if (!defined('INDEX_START')) {
 	die('Action not allowed!');
 }
+load_js('jquery');
+$head_content .= "<script type='text/javascript'>
+jQuery(document).ready(function() {
+  jQuery(\".panel_content\").hide();
+   jQuery(\".panel_content_open\").show();
+  //toggle the componenet with class msg_body
+  jQuery(\".panel_title\").click(function()
+  {
+    jQuery(this).next(\".panel_content\").slideToggle(500);
+  });
+});
+</script>";
 
-$tool_content = "";
 include "perso.php";
 
 $tool_content = "

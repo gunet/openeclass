@@ -228,9 +228,9 @@ if (isset($uid) AND !isset($_GET['logout'])) {
 	$require_help = true;
 	$helpTopic="Portfolio";
 	if (isset($_SESSION['user_perso_active']) and $_SESSION['user_perso_active'] == 'no') {
-                // if the user is not a guest, load classic view
+                // if the user is not a guest, load personalized view
                 include "include/logged_in_content.php";
-                draw($tool_content,1,null,null,null,null,$perso_tool_content);
+                draw($tool_content, 1, null, $head_content, null, null, $perso_tool_content);
 	} else {
 		// load classic view
 		include "include/classic.php";
