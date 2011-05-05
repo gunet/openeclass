@@ -129,70 +129,49 @@ function htmlInterface($data, $lesson_fCode)
 	global $langNotEnrolledToLessons, $langWelcomeProfPerso, $langWelcomeStudPerso, $langWelcomeSelect;
 	global $langCourse, $langActions, $langUnregCourse, $langAdm, $uid;
 
-	$lesson_content = "";
+	$lesson_content = "<div id='assigncontainer'>";
 	if ($data[0] > 0) {
-
-	$lesson_content .= <<<lCont
-<div id="assigncontainer">
-        <table width="100%" class="FormData">
-        <tbody>
-        <tr class="lessonslist_header">
-          <td width="100%" colspan="2"><b>$langCourse</b></td>
-          <td><b>$langActions</b></td>
-        </tr>
-lCont;
-
-		for ($i=0; $i<$data[0]; $i++) {
- 			$lesson_content .= "
-        <tr>
-          <td><img src='${urlAppend}/template/classic/img/arrow.png' alt='' /></td>
-          <td align='left' style=\"padding-left: 0px; padding-top: 2px; padding-bottom: 2px; padding-right: 0px;\"><a href=\"${urlServer}courses/".$data[2][$i]."/\">".$lesson_fCode[$i]." - ".$data[1][$i]."</a><cite class=\"content_pos\">".$data[3][$i]."</cite></td>";
+		$lesson_content .= "<table width='100%' class='FormData'>
+			<tr class='lessonslist_header'>
+			  <td width='5%'>&nbsp;</td><td width='90%'><b>$langCourse</b></td>
+			  <td><b>$langActions</b></td>
+			</tr>";
+		for ($i=0; $i < $data[0]; $i++) {
+			$lesson_content .= "<tr>
+			  <td><img src='${urlAppend}/template/classic/img/arrow.png' alt='' /></td>
+			  <td align='left'>
+			  <a href=\"${urlServer}courses/".$data[2][$i]."/\">".$lesson_fCode[$i]." - ".$data[1][$i]."</a>
+			  <cite class='content_pos'>".$data[3][$i]."</cite></td>";
+			  $lesson_content .= "<td align='center'>";
 			if ($data[4][$i] == '5') {
 				$lesson_content .= "
-          <td align='center'><a href=\"${urlServer}modules/unreguser/unregcours.php?cid=".$data[2][$i]."&amp;uid=".$uid."\"><img style='border:0px;' src='${urlAppend}/template/classic/img/cunregister.png' title='$langUnregCourse'></a></td>
-        </tr>";
+				<a href='${urlServer}modules/unreguser/unregcours.php?cid=".$data[2][$i]."&amp;uid=".$uid."'>
+				<img src='${urlAppend}/template/classic/img/cunregister.png' title='$langUnregCourse' /></a>";
 			} elseif ($data[4][$i] == '1') {
 				$lesson_content .= "
-          <td align='center'><a href=\"${urlServer}modules/course_info/infocours.php?from_home=TRUE&amp;cid=".$data[2][$i]."\"><img style='border:0px;' src='${urlAppend}/template/classic/img/tools.png' title='$langAdm'></a></td>
-        </tr>";
+				<a href='${urlServer}modules/course_info/infocours.php?from_home=TRUE&amp;cid=".$data[2][$i]."'>
+				<img src='${urlAppend}/template/classic/img/tools.png' title='$langAdm'></a>";
 			}
+			$lesson_content .= "</td></tr>";
 		}
-		$lesson_content .= "
-		</tbody>
-        </table>
-        </div>";
-
-	} else {
-		$lesson_content .= "\n    <div id=\"assigncontainer\">";
+		$lesson_content .= "</table>";
+	} else { // if we are not registered to courses
 		$lesson_content .= "\n    <p class=\"alert1\">$langNotEnrolledToLessons !</p><p><u>$langWelcomeSelect</u>:</p>";
-        $lesson_content .= "\n
-        <table width=\"100%\" class=\"FormData\">
-        <thead>";
-		if ($statut == 1) {
- 			$lesson_content .= "\n        <tr style=\"background-color: transparent;\">";
- 		    $lesson_content .= "\n          <td valign=\"top\" align='left' width=\"10\" style=\"padding-left: 4px; padding-right: 0px;\"><img src='${urlAppend}/template/classic/img/arrow.png' alt='' /></td>";
-			$lesson_content .= "\n          <td align='left' style=\"padding-left: 0px; padding-top: 2px; padding-bottom: 2px; padding-right: 0px;\">$langWelcomeProfPerso</td>";
- 			$lesson_content .= "\n        </tr>";
+		$lesson_content .= "\n
+		<table width=\"100%\" class=\"FormData\">
+		<thead>";
+		$lesson_content .= "\n<tr style=\"background-color: transparent;\">";
+		$lesson_content .= "\n<td align='left' width=\"10\">
+			<img src='${urlAppend}/template/classic/img/arrow.png' alt='' />
+			</td>";
+		if ($statut == 1) {	
+			$lesson_content .= "\n<td align='left'>$langWelcomeProfPerso</td>";	
+		} else {
+			$lesson_content .= "\n<td align='left' >$langWelcomeStudPerso</td>";
 		}
- 			$lesson_content .= "\n        <tr style=\"background-color: transparent;\">";
- 		    $lesson_content .= "\n          <td valign=\"top\" align='left' width=\"10\" style=\"padding-left: 4px; padding-right: 0px;\"><img style='border:0px;' src='${urlAppend}/template/classic/img/arrow.png' alt=''></td>";
-		$lesson_content .= "\n          <td align='left' style=\"padding-left: 0px; padding-top: 2px; padding-bottom: 2px; padding-right: 0px;\">$langWelcomeStudPerso</td>";
- 			$lesson_content .= "\n        </tr>";
-		$lesson_content .= "
-		</thead>
-        </table>";
-		$lesson_content .= "\n    </div>";
+		$lesson_content .= "\n</tr>";
+		$lesson_content .= "</thead></table>";
 	}
-
-	//$lesson_content .= "<a class=\"enroll_icon\" href=".$urlServer."modules/auth/courses.php>$langOtherCourses</a>";
-    /*
-	if ($statut == 1) {
-		$lesson_content .= "
-	 | <a class=\"create_lesson\" href=".$urlServer."modules/create_course/create_course.php>$langCourseCreate</a>
-
-	";
-	}
-    */
-
+	$lesson_content .= "\n</div>";
 	return $lesson_content;
 }
