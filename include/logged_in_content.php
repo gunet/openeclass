@@ -40,12 +40,17 @@ if (!defined('INDEX_START')) {
 load_js('jquery');
 $head_content .= "<script type='text/javascript'>
 jQuery(document).ready(function() {
-  jQuery(\".panel_content\").hide();
-   jQuery(\".panel_content_open\").show();
-  //toggle the componenet with class msg_body
-  jQuery(\".panel_title\").click(function()
+  jQuery('.panel_content').hide();
+   jQuery('.panel_content_open').show();
+  jQuery('.panel_title').click(function()
   {
-    jQuery(this).next(\".panel_content\").slideToggle(500);
+    var mypanel = $(this).next();
+    mypanel.slideToggle(100);
+    if($(this).hasClass('active')) {
+    $(this).removeClass('active');
+    } else {
+    $(this).addClass('active');
+    }
   });
 });
 </script>";

@@ -945,14 +945,14 @@ a.unit_link_invisible:hover {
 
 .panel_title {
 	margin: 1px;
-	color: #ffffff;
 	padding: 3px 10px;
 	cursor: pointer;
 	position: relative;
-    color: #ffffff;
+    color: #687A92;
     font-weight: bold;
-   	border-bottom: 2px solid #687A92;
-	background: #8597A5 url(img/up_down.png) no-repeat right -51px;
+   	border-bottom: 1px dashed #dfdfdf;
+    border-top: 1px dashed #dfdfdf; 
+	background: #f8f8f8 url(img/up_down.png) no-repeat right -51px;
 }
 
 
@@ -963,12 +963,10 @@ a.unit_link_invisible:hover {
 
 .panel_content_open {
 	padding: 5px 10px;
-	background-color:#fafafa;
 }
 
 .panel_content {
 	padding: 5px 10px;
-	background-color:#fafafa;
 }
 
 
