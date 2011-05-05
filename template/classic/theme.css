@@ -10,6 +10,7 @@
  *  4. Typography - messages | alerts
  *  5. Tables
  *  6. Course Stuff
+ *  7. Perso
  *  ------------------------------------------------------------------
 
 /*-------------------------------------
@@ -925,6 +926,46 @@ a.unit_link_invisible:hover {
     font-weight: bold;
     text-decoration: underline;
 }
+
+/*-------------------------------------
+   7. Perso
+-------------------------------------*/
+
+.panel_left {
+	float:left;
+	width: 320px;
+	
+	}
+.panel_right {
+	float:right;
+		width: 320px;
+}
+
+.panel_title {
+	margin: 1px;
+	color: #ffffff;
+	padding: 3px 10px;
+	cursor: pointer;
+	position: relative;
+	background-color:#8597A5;
+    color: #ffffff;
+    font-weight: bold;
+   	border-bottom: 2px solid #687A92;
+}
+
+.panel_content_open {
+	padding: 5px 10px;
+	background-color:#fafafa;
+}
+
+.panel_content {
+	padding: 5px 10px;
+	background-color:#fafafa;
+}
+
+
+
+
 
 
 /* ----- START admin ----- */

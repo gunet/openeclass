@@ -50,15 +50,15 @@ if (mysql_num_rows($result) > 0) {
 	}
         $tool_content .= "<br/>
         <table width='100%' class='tbl_border'>
-	<tr><th width='180'>$langAnnouncements
-	</th><th>&nbsp;</th></tr>
+	<tr><th>$langAnnouncements
+	</th></tr>
 	";
 
 	$numOfAnnouncements = count($announceArr);
 	for($i=0; $i < $numOfAnnouncements; $i++) {
-		$tool_content .= "<tr><td colspan='2'>
+		$tool_content .= "<tr><td>
 		
-		<img src='${urlAppend}/template/classic/img/announcements.png' alt='' />
+		<img src='${urlAppend}/template/classic/img/arrow.png' alt='' />
 		<b>".q($announceArr[$i]['title'])."</b>
 		&nbsp;(".claro_format_locale_date($dateFormatLong, strtotime($announceArr[$i]['date'])).")
 		<p>
