@@ -158,12 +158,12 @@ if ($all_set) {
   </tr>
   <tr>
      <td>&nbsp;</td>
-     <td><input type='submit' class='ButtonSubmit' name='submit' value='$langSubmitNew' /></td>
+     <td class='right'><input type='submit' class='ButtonSubmit' name='submit' value='$langSubmitNew' /></td>
   </tr>
   </table>
-  <div align='right'><small>$langRequiredFields</small></div>
   </fieldset>
-  </form>";
+  </form>
+  <div class='right smaller'>$langRequiredFields</div>";
 }
 
 draw($tool_content, 0);

@@ -49,16 +49,16 @@ if (mysql_num_rows($result) > 0) {
 		array_push($announceArr, $eclassAnnounce);
 	}
         $tool_content .= "<br/>
-        <table width='99%'>
-	<thead><tr><th width='180'>$langAnnouncements
-	</th><th>&nbsp;</th></tr></thead>
-	<tbody>";
+        <table width='100%' class='tbl_border'>
+	<tr><th width='180'>$langAnnouncements
+	</th><th>&nbsp;</th></tr>
+	";
 
 	$numOfAnnouncements = count($announceArr);
 	for($i=0; $i < $numOfAnnouncements; $i++) {
 		$tool_content .= "<tr><td colspan='2'>
 		
-		<img style='border:0px;' src='${urlAppend}/template/classic/img/arrow.png' alt='' />
+		<img src='${urlAppend}/template/classic/img/announcements.png' alt='' />
 		<b>".q($announceArr[$i]['title'])."</b>
 		&nbsp;(".claro_format_locale_date($dateFormatLong, strtotime($announceArr[$i]['date'])).")
 		<p>
@@ -66,7 +66,7 @@ if (mysql_num_rows($result) > 0) {
 		</td>
 		</tr>";
 	}
-	$tool_content .= "</tbody></table>";
+	$tool_content .= "</table>";
 }
 draw($tool_content, 0);
 ?>
