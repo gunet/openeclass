@@ -951,7 +951,6 @@ a.unit_link_invisible:hover {
     color: #687A92;
     font-weight: bold;
    	border-bottom: 1px dashed #dfdfdf;
-    border-top: 1px dashed #dfdfdf; 
 	background: #f8f8f8 url(img/up_down.png) no-repeat right -51px;
 }
 
