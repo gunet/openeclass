@@ -962,10 +962,12 @@ a.unit_link_invisible:hover {
 
 .panel_content_open {
 	padding: 5px 10px;
+	margin-bottom: 20px;
 }
 
 .panel_content {
 	padding: 5px 10px;
+	margin-bottom: 20px;
 }
 
 
