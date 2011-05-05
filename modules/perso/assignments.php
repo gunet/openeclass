@@ -157,7 +157,7 @@ aCont;
       </div>";
 
 	if (!$assignmentsExist) {
-		$assign_content .= "<p>$langNoAssignmentsExist</p>";
+		$assign_content .= "<p class='alert1'>$langNoAssignmentsExist</p>";
 	}
 
 	return $assign_content;

@@ -138,7 +138,7 @@ function htmlInterface($data, $lesson_fCode)
 			</tr>";
 		for ($i=0; $i < $data[0]; $i++) {
 			$lesson_content .= "<tr>
-			  <td align='left'><img src='${urlAppend}/template/classic/img/lesson.png' alt='' />
+			  <td align='left'><img src='${urlAppend}/template/classic/img/lesson.png' alt=''  />
 			  <a href=\"${urlServer}courses/".$data[2][$i]."/\"><b>".$lesson_fCode[$i]."</b> - ".$data[1][$i]."</a>
 			  <div class='smaller' style='padding-left: 20px;'>".$data[3][$i]."</div></td>";
 			  $lesson_content .= "<td align='center'>";

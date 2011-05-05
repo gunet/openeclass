@@ -181,7 +181,7 @@ agCont;
         </ul>
       </div> ";
 	} else {
-		$agenda_content = "<p>$langNoEventsExist</p>";
+		$agenda_content = "<p class='alert1'>$langNoEventsExist</p>";
 	}
 	return $agenda_content;
 }

@@ -172,7 +172,7 @@ fCont;
 		}
 		$content .= "</ul></div>";
 	} else {
-		$content .= "<p>$langNoPosts</p>";
+		$content .= "<p class='alert1'>$langNoPosts</p>";
 	}
 
 	return $content;

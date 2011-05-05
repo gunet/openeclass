@@ -189,7 +189,7 @@ function announceHtmlInterface($data) {
       </div> ";
 
 	if (!$announceExist) {
-		$assign_content = "<p>$langNoAnnouncementsExist</p>";
+		$assign_content = "<p class='alert1'>$langNoAnnouncementsExist</p>";
 	}
 	return $assign_content;
 

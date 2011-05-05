@@ -118,6 +118,6 @@ function docsHtmlInterface($date)
                 $content .= "\n</ul></div>\n";
                 return $content;
 	} else {
-		return "\n<p>$langNoDocsExist</p>\n";
+		return "\n<p class='alert1'>$langNoDocsExist</p>\n";
 	}
 }
