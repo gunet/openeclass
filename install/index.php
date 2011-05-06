@@ -123,8 +123,9 @@ if (isset($_POST['welcomeScreen'])) {
 	$helpdeskForm = '+30 2xx xxxx xxx';
 	$institutionForm = 'Ακαδημαϊκό Διαδίκτυο GUNet ';
         $institutionUrlForm = 'http://www.gunet.gr/';
-        $reguser = $dbPassForm = $helpdeskmail = $faxForm = 
-        $postaddressForm = '';
+        $reguser = $dbPassForm = $helpdeskmail = $faxForm = $postaddressForm = '';
+	$email_required = $am_required = $dropbox_allow_student_to_student = $dont_display_login_form = '';
+	$block_username_change = $betacms = '';
 } else {
        register_posted_variables(array(
                 'dbHostForm' => true,
@@ -148,7 +149,13 @@ if (isset($_POST['welcomeScreen'])) {
                 'faxForm' => true,
                 'postaddressForm' => true,
                 'institutionForm' => true,
-                'institutionUrlForm' => true), 'all');
+                'institutionUrlForm' => true,
+		'email_required' => true,
+		'am_required' => true,
+		'dropbox_allow_student_to_student' => true,
+		'dont_display_login_form' => true,
+		'block_username_change' => true,
+		'betacms' => true), 'all');
 }
 
 if (isset($_GET['alreadyVisited'])) {
@@ -175,11 +182,16 @@ if (isset($_GET['alreadyVisited'])) {
 	<input type='hidden' name='institutionUrlForm' value='$institutionUrlForm' />
 	<input type='hidden' name='faxForm' value='$faxForm' />
 	<input type='hidden' name='postaddressForm' value='$postaddressForm' />
-	<input type='hidden' name='reguser' value='$reguser' />";
+	<input type='hidden' name='reguser' value='$reguser' />
+	<input type='hidden' name='email_required'  value='$email_required' />
+	<input type='hidden' name='am_required' value='$am_required' />
+	<input type='hidden' name='dropbox_allow_student_to_student' value='$dropbox_allow_student_to_student' />
+	<input type='hidden' name='dont_display_login_form' value='$dont_display_login_form' /> 
+	<input type='hidden' name='block_username_change' value='$block_username_change' />
+	<input type='hidden' name='betacms' value='$betacms' />";
 }
 
 // step 2 license
-
 if(isset($_REQUEST['install2']) OR isset($_REQUEST['back2']))
 {
 	$langStepTitle = $langLicence;
@@ -208,14 +220,14 @@ if(isset($_REQUEST['install2']) OR isset($_REQUEST['back2']))
 	draw($tool_content);
 }
 
-elseif(isset($_REQUEST['install3']) OR isset($_REQUEST['back3'])) {
-	// step 3 mysql database settings
+// step 3 mysql database settings
+elseif(isset($_REQUEST['install3']) OR isset($_REQUEST['back3'])) {	
 	$langStepTitle = $langDBSetting;
 	$langStep = $langStep3;
 	$_SESSION['step']=3;
 	$tool_content .= "
-<div>$langDBSettingIntro</div>
-<br />
+	<div>$langDBSettingIntro</div>
+	<br />
 	<table width='100%' class='tbl smaller'>
 	<tr>
 	  <th width='220' class='left'>$langdbhost</th>
@@ -242,28 +254,28 @@ elseif(isset($_REQUEST['install3']) OR isset($_REQUEST['back3'])) {
 	<td><input type='text' class='FormData_InputText' size='25' name='phpSysInfoURL' value='$phpSysInfoURL' />&nbsp;&nbsp;$langNotNeedChange</td>
 	</tr>
 	<tr>
-	<td colspan='2' class='right'><input type='submit' name='back2' value='&laquo; $langPreviousStep' />&nbsp;<input type='submit' name='install5' value='$langNextStep &raquo;' /></td>
+	<td colspan='2' class='right'>
+		<input type='submit' name='back2' value='&laquo; $langPreviousStep' />
+		&nbsp;<input type='submit' name='install4' value='$langNextStep &raquo;' />
+	</td>
 	</tr>
 	</table>
 	<div class='right smaller'>(*) $langAllFieldsRequired</div>
 	</form>";
 	draw($tool_content);
-}	 // install3
+}	 
 
-// step 4 config settings
-
-elseif(isset($_REQUEST['install5']) OR isset($_REQUEST['back4']))
+// step 4 basic config settings
+elseif(isset($_REQUEST['install4']) OR isset($_REQUEST['back4']))
 {
-	// Added by vagpits
-
-	$langStepTitle = $langCfgSetting;
+	$langStepTitle = $langBasicCfgSetting;
 	$langStep = $langStep4;
 	$_SESSION['step']=4;
         if (empty($helpdeskmail)) {
                 $helpdeskmail = '';
         }
 	$tool_content .= "<div> $langWillWrite</div><br />
-	<table width='100%' class='tbl'>
+	<table width='100%' class='tbl smaller'>
 	<tr>
 	<th class='left' width='220'>$langSiteUrl</th>
 	<td><input type='text' class='FormData_InputText' size='40' name='urlForm' value='$urlForm' />&nbsp;&nbsp;(*)</td>
@@ -324,9 +336,9 @@ elseif(isset($_REQUEST['install5']) OR isset($_REQUEST['back4']))
 	<th class='left'>$langViaReq</th>
 	<td><input type='checkbox' name='reguser' /></td>
 	</tr>";
-	
-	$tool_content .= "<tr><td colspan='2' class='right'><input type='submit' name='back3' value='&laquo; $langPreviousStep' />
-	  <input type='submit' name='install6' value='$langNextStep &raquo;' />
+	$tool_content .= "<tr><td colspan='2' class='right'>
+	  <input type='submit' name='back3' value='&laquo; $langPreviousStep' />
+	  <input type='submit' name='install5' value='$langNextStep &raquo;' />
 	  <div class='smaller'>$langRequiredFields.</div>
 	  <div class='smaller'>(**) $langWarnHelpDesk</div></td>
 	</tr>
@@ -335,15 +347,55 @@ elseif(isset($_REQUEST['install5']) OR isset($_REQUEST['back4']))
 	draw($tool_content);
 }
 
-// step 5 last check before install
+// step 5 optional config settings
+elseif(isset($_REQUEST['install5']) OR isset($_REQUEST['back5']))
+{
+	$langStepTitle = $langOptionalCfgSetting;
+	$langStep = $langStep5;
+	$_SESSION['step'] = 5;
+	$tool_content .= "<div>$langWillWriteConfig</div><br />
+	<table width='100%' class='tbl smaller'>
+	  <tr>
+		<th class='left' width='550'><b>$lang_email_required</b></th>
+		<td><input type='checkbox' name='email_required' /></td>
+	  </tr>
+	  <tr>
+		<th class='left'><b>$lang_am_required</b></th>
+		<td><input type='checkbox' name='am_required' /></td>
+	  </tr>
+	  <tr>
+		<th class='left'><b>$lang_dropbox_allow_student_to_student</b></th>
+		<td><input type='checkbox' name='dropbox_allow_student_to_student' /></td>
+	  </tr>
+	  <tr>
+		<th class='left'><b>$lang_dont_display_login_form</b></th>
+		<td><input type='checkbox' name='dont_display_login_form' /></td>
+	  </tr>
+	  <tr>
+		<th class='left'><b>$lang_block_username_change</b></th>
+		<td><input type='checkbox' name='block_username_change' /></td>
+	  </tr>
+	  <tr>
+		<th class='left'><b>$lang_betacms</b></th>
+		<td><input type='checkbox' name='betacms' /></td>
+	  </tr>";
+	$tool_content .= "<tr><td colspan='2' class='right'>
+	  <input type='submit' name='back4' value='&laquo; $langPreviousStep' />
+	  <input type='submit' name='install6' value='$langNextStep &raquo;' />
+	  </td>
+	</tr>
+	</table>
+	</form>";
+	draw($tool_content);
+}
 
+// step 6 last check before install
 elseif(isset($_REQUEST['install6']))
 {
 	$pathForm = str_replace("\\\\", "/", $pathForm);
 	$langStepTitle = $langLastCheck;
-	$langStep = $langStep5;
-	$_SESSION['step']=5;
-
+	$langStep = $langStep6;
+	$_SESSION['step'] = 6;
 	if (!$reguser) {
       		$mes_add ="";
   	} else {
@@ -352,7 +404,7 @@ elseif(isset($_REQUEST['install6']))
 
 	$tool_content .= "
 	<div>$langReviewSettings</div> <br />
-		<table width='100%' class='tbl' align='left'>
+		<table width='100%' class='tbl smaller'>
 	<tr>
 	<th class='left'>$langdbhost:</th>
 	<td>$dbHostForm</td>
@@ -425,24 +477,24 @@ elseif(isset($_REQUEST['install6']))
 	<th class='left'>$langGroupStudentRegistrationType</th>
 	<td>$mes_add</td>
 	</tr>";
-    
-    $tool_content .= "<tr><td class='right'>&nbsp;</td>
-	<td class='right'><input type='submit' name='back4' value='&laquo; $langPreviousStep' />
-	<input type='submit' name='install7' value='$langInstall &raquo;' /></td>
+	$tool_content .= "<tr><td class='right'>&nbsp;</td>
+	<td class='right'>
+		<input type='submit' name='back5' value='&laquo; $langPreviousStep' />
+		<input type='submit' name='install7' value='$langInstall &raquo;' />
+	</td>
 	</tr>
 	</table>
 	</form>";
-
-draw($tool_content);
+	draw($tool_content);
 }
-// step 6 installation successful
 
+// step 7 installation successful
 elseif(isset($_REQUEST['install7']))
 {
 	// database creation
 	$langStepTitle = $langInstallEnd;
-	$langStep = $langStep6;
-	$_SESSION['step']=6;
+	$langStep = $langStep7;
+	$_SESSION['step']=7;
 	$db = @mysql_connect($dbHostForm, $dbUsernameForm, autounquote($dbPassForm));
 	if (mysql_errno() > 0) { // problem with server
 		$no = mysql_errno();
@@ -476,8 +528,6 @@ elseif(isset($_REQUEST['install7']))
 	require "install_db.php";
 	// create config.php
 	$fd=@fopen("../config/config.php", "w");
-	$langStepTitle = $langInstallEnd;
-	$langStep = $langStep6;
 	if (!$fd) {
 		$tool_content .= $langErrorConfig;
 	} else {
@@ -534,13 +584,12 @@ $encryptedPasswd = true;
 	<div>$langProtect</div>
 	<br /><br />
 	</form>
-	<form action='../'><input type='submit' value='$langEnterFirstTime'></form>";
+	<form action='../'><input type='submit' value='$langEnterFirstTime' /></form>";
 	draw($tool_content);
 	}
-}	// end of step 6
+}	
 
 // step 1 requirements
-
 elseif (isset($_REQUEST['install1']) || isset($_REQUEST['back1']))
 {
 	$langStepTitle = $langRequirements;
@@ -581,8 +630,8 @@ elseif (isset($_REQUEST['install1']) || isset($_REQUEST['back1']))
 	}
 
 	$tool_content .= "
-    <p class='sub_title1'>$langCheckReq</p>
-    <ul class='installBullet'>
+	<p class='sub_title1'>$langCheckReq</p>
+	<ul class='installBullet'>
         <li><b>Webserver</b> <br /> <em>$langFoundIt ".$_SERVER['SERVER_SOFTWARE']."</em>)
         $langWithPHP (<em>$langFoundIt PHP ".phpversion()."</em>).";
 	$tool_content .= "</li></ul>";
@@ -621,14 +670,14 @@ elseif (isset($_REQUEST['install1']) || isset($_REQUEST['back1']))
 		'english' => 'English (en)');
 
 	$tool_content .= "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
-<html>
-<head>
+	<html>
+	<head>
         <title>$langWelcomeWizard</title>
         <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
         <link href='./install.css' rel='stylesheet' type='text/css' />
-</head>
-<body>
-<div class='install_container' align='center'>
+	</head>
+	<body>
+	<div class='install_container' align='center'>
         <table class='tbl_alt' width='400'>
         <tr><th colspan='2' align='center' ><div class='welcomeImg'></div></th></tr>
         <tr><td colspan='2'><div class='title'>$langWelcomeWizard</div>
@@ -650,8 +699,8 @@ elseif (isset($_REQUEST['install1']) || isset($_REQUEST['back1']))
           </form></td>
           </tr>
         </table>
-</div>
-</body>
-</html>";
+	</div>
+	</body>
+	</html>";
 	echo $tool_content;
 }

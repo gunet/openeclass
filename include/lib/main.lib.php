@@ -32,7 +32,7 @@ Defines standard functions and validates variables
 ---------------------------------------------------------------------
 */
 
-define('ECLASS_VERSION', '2.3.2');
+define('ECLASS_VERSION', '2.4');
 
 // resized user image 
 define('IMAGESIZE_LARGE', 256);

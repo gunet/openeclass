@@ -1413,19 +1413,21 @@ $langInstituteName = "Website Ιδρύματος - Οργανισμού";
 $langInstitutePostAddress = "Ταχ. Διεύθυνση Ιδρύματος - Οργανισμού";
 $langWarnHelpDesk = "Προσοχή: στο \"Email Helpdesk\" στέλνονται οι αιτήσεις καθηγητών για λογαριασμό στην πλατφόρμα";
 $langDBSettingIntro = "Το πρόγραμμα εγκατάστασης θα δημιουργήσει την κύρια βάση δεδομένων του Open eClass. Έχετε υπ'όψιν σας ότι κατά τη λειτουργία της πλατφόρμας θα χρειαστεί να δημιουργηθούν νέες βάσεις δεδομένων (μία για κάθε μάθημα) ";
-$langStep1 = "Βήμα 1 από 6";
-$langStep2 = "Βήμα 2 από 6";
-$langStep3 = "Βήμα 3 από 6";
-$langStep4 = "Βήμα 4 από 6";
-$langStep5  = "Βήμα 5 από 6";
-$langStep6 = "Βήμα 6 από 6";
-$langCfgSetting	= "Ρυθμίσεις Συστήματος";
+$langStep1 = "Βήμα 1 από 7";
+$langStep2 = "Βήμα 2 από 7";
+$langStep3 = "Βήμα 3 από 7";
+$langStep4 = "Βήμα 4 από 7";
+$langStep5 = "Βήμα 5 από 7";
+$langStep6 = "Βήμα 6 από 7";
+$langStep7 = "Βήμα 7 από 7";
+$langBasicCfgSetting	= "Βασικές ρυθμίσεις";
+$langOptionalCfgSetting	= "Προαιρετικές ρυθμίσεις";
 $langDBSetting = "Ρυθμίσεις της MySQL";
 $langMainLang	= "Κύρια Γλώσσα Εγκατάστασης";
 $langLicence = "Άδεια Χρήσης";
-$langLastCheck = "Τελευταίος έλεγχος πριν την εγκατάσταση";
+$langLastCheck = "Τελευταίος έλεγχος";
 $langRequirements = "Απαιτήσεις Συστήματος";
-$langInstallEnd	= "Ολοκλήρωση Εγκατάστασης";
+$langInstallEnd	= "Ολοκλήρωση";
 $langModuleNotInstalled = "Δεν είναι εγκατεστημένο";
 $langReadHelp = "Διαβάστε περισσότερα";
 $langWarnConfig = "Προσοχή !! Το αρχείο <b>config.php</b> υπάρχει ήδη στο σύστημά σας!! Το πρόγραμμα εγκατάστασης δεν πραγματοποιεί αναβάθμιση. Αν θέλετε να ξανατρέξετε την εγκατάσταση της πλατφόρμας, παρακαλούμε διαγράψτε το αρχείο config.php!";
@@ -1439,6 +1441,7 @@ $langBackStep3_2 = "Eπιστρέψτε στο βήμα 3 για να τα δι�
 $langNotNeedChange = "Δεν χρειάζεται να το αλλάξετε";
 $langNeedChangeDB = "αν υπάρχει ήδη κάποια Β.Δ. με το όνομα eclass αλλάξτε το";
 $langWillWrite = "Τα παρακάτω θα γραφτούν στο αρχείο <b>config.php</b>";
+$langWillWriteConfig = "Οι παρακάτω ρυθμίσεις θα αποθηκευθούν στον πίνακα <em>config</em> της βάσης της πλατφόρμας";
 $langProtect = "Συμβουλή: Για να προστατέψετε το Open eClass, αλλάξτε τα δικαιώματα πρόσβασης των αρχείων
            <tt>/config/config.php</tt> και <tt>/install/index.php</tt> και
            επιτρέψτε μόνο ανάγνωση (CHMOD 444).";
@@ -1468,6 +1471,12 @@ $langBeforeInstall1 = "Πριν προχωρήσετε στην εγκατάστ
 $langBeforeInstall2 = "Επίσης, γενικές οδηγίες για την πλατφόρμα μπορείτε να διαβάσετε ";
 $langInstallInstr = "Οδηγίες Εγκατάστασης";
 $langWithPHP = "με υποστήριξη PHP";
+$lang_email_required = "Να είναι υποχρεωτικό το email του $langsOfStudent κατά την εγγραφή";
+$lang_am_required = "Να είναι υποχρεωτικός ο αριθμός μητρώου του $langsOfStudent κατά την εγγραφή";
+$lang_dropbox_allow_student_to_student = "Να επιτρέπεται η ανταλλαγή αρχείων μεταξύ $langsOfStudents στο υποσύστημα 'Ανταλλαγή αρχείων'";
+$lang_dont_display_login_form = "Να μην εμφανίζεται στην αρχική σελίδα της πλατφόρμας η οθόνη σύνδεσης";
+$lang_block_username_change = "Να μην επιτρέπεται να αλλάζουν οι χρήστες το 'όνομα χρήστη'";
+$lang_betacms = "Να γίνεται σύνδεση της πλατφόρμας με το αποθετήριο BetaCMS";
 
 /********************************************************
 * learnpath.php

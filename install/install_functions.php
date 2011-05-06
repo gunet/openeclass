@@ -81,11 +81,9 @@ function draw($toolContent){
 		if (isset($head_content)){
 			$t->set_var('HEAD_EXTRAS', $head_content);
 		}
-
 		if (isset($body_action)){
 			$t->set_var('BODY_ACTION', $body_action);
 		}
-
 		//		At this point all variables are set and we are ready to send the final output
 		//		back to the browser
 		//		-----------------------------------------------------------------------------
@@ -98,7 +96,7 @@ function draw($toolContent){
 function installerMenu(){
 	global $webDir, $language, $uid, $is_admin, $urlServer, $mysqlMainDb;
 	global $langRequirements, $langLicence, $langDBSetting;
-	global $langCfgSetting, $langLastCheck, $langInstallEnd;
+	global $langBasicCfgSetting, $langOptionalCfgSetting, $langLastCheck, $langInstallEnd;
 
 	$sideMenuGroup = array();
 
@@ -107,7 +105,7 @@ function installerMenu(){
 	$sideMenuLink 	= array();
 	$sideMenuImg	= array();
 
-	for($i=0; $i<6; $i++) {
+	for($i = 0; $i<7; $i++) {
 		if($i < $_SESSION['step']-1) {
 			$currentStep[$i] = false;
 			$stepImg[$i] = "tick_1.png";
@@ -133,17 +131,21 @@ function installerMenu(){
 	array_push($sideMenuLink, $currentStep[2]);
 	array_push($sideMenuImg, $stepImg[2]);
 
-	array_push($sideMenuText, $langCfgSetting);
+	array_push($sideMenuText, $langBasicCfgSetting);
 	array_push($sideMenuLink, $currentStep[3]);
 	array_push($sideMenuImg, $stepImg[3]);
-
-	array_push($sideMenuText, $langLastCheck);
+	
+	array_push($sideMenuText, $langOptionalCfgSetting);
 	array_push($sideMenuLink, $currentStep[4]);
 	array_push($sideMenuImg, $stepImg[4]);
 
-	array_push($sideMenuText, $langInstallEnd);
+	array_push($sideMenuText, $langLastCheck);
 	array_push($sideMenuLink, $currentStep[5]);
 	array_push($sideMenuImg, $stepImg[5]);
+
+	array_push($sideMenuText, $langInstallEnd);
+	array_push($sideMenuLink, $currentStep[6]);
+	array_push($sideMenuImg, $stepImg[6]);
 
 	array_push($sideMenuSubGroup, $sideMenuText);
 	array_push($sideMenuSubGroup, $sideMenuLink);
@@ -152,4 +154,3 @@ function installerMenu(){
 
 	return $sideMenuGroup;
 }
-?>

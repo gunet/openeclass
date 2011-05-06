@@ -206,7 +206,7 @@ db_query("CREATE TABLE user (
       announce_flag date NOT NULL DEFAULT '0000-00-00',
       doc_flag DATE NOT NULL DEFAULT '0000-00-00',
       forum_flag DATE NOT NULL DEFAULT '0000-00-00',
-      description TEXT NOT NULL,
+      description TEXT,
       has_icon BOOL NOT NULL DEFAULT 0,
       verified_mail BOOL NOT NULL DEFAULT 0,
       receive_mail BOOL NOT NULL DEFAULT 1,
@@ -322,7 +322,6 @@ db_query("CREATE TABLE IF NOT EXISTS `link_category` (
                 `description` TEXT,
                 `order` INT(6) NOT NULL DEFAULT 0,
                 PRIMARY KEY (`id`, `course_id`))");
-
 db_query('CREATE TABLE IF NOT EXISTS ebook (
                 `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 `course_id` INT(11) NOT NULL,
@@ -345,9 +344,10 @@ db_query('CREATE TABLE IF NOT EXISTS ebook_subsection (
 $password_encrypted = md5($passForm);
 $exp_time = time() + 140000000;
 db_query("INSERT INTO `user` (`prenom`, `nom`, `username`, `password`, `email`, `statut`,`registered_at`,`expires_at`)
-    VALUES ('$nameForm', '$surnameForm', '$loginForm','$password_encrypted','$emailForm','1',".time().",".$exp_time.")");
-$idOfAdmin=mysql_insert_id();
-db_query("INSERT INTO loginout (loginout.idLog, loginout.id_user, loginout.ip, loginout.when, loginout.action) VALUES ('', $idOfAdmin, '$_SERVER[REMOTE_ADDR]', NOW(), 'LOGIN')");
+	VALUES ('$nameForm', '$surnameForm', '$loginForm','$password_encrypted','$emailForm','1',".time().",".$exp_time.")");
+$idOfAdmin = mysql_insert_id();
+db_query("INSERT INTO loginout (loginout.id_user, loginout.ip, loginout.when, loginout.action)
+	 VALUES ($idOfAdmin, '$_SERVER[REMOTE_ADDR]', NOW(), 'LOGIN')");
 
 
 #add admin in list of admin
@@ -451,17 +451,24 @@ db_query("INSERT INTO `auth` VALUES
                 (6, 'shibboleth', '', '', 0),
                 (7, 'cas', '', '', 0)");
 
+$option_dont_display_login_form = (isset($dont_display_login_form) and ($dont_display_login_form == 'on'))? '1': '0';
+$option_email_required = (isset($email_required) and ($email_required == 'on'))? '1': '0';
+$option_am_required = (isset($am_required) and ($am_required == 'on'))? '1': '0';
+$option_dropbox_allow_student_to_student = (isset($dropbox_allow_student_to_student) and ($dropbox_allow_student_to_student == 'on'))? '1': '0';
+$option_block_username_change = (isset($block_username_change) and ($block_username_change == 'on'))? '1': '0';
+$option_betacms = (isset($betacms) and ($betacms == 'on'))? '1': '0';
+
 db_query("CREATE TABLE `config`
                 (`key` VARCHAR(32) NOT NULL,
                  `value` VARCHAR(255) NOT NULL,
                  PRIMARY KEY (`key`))");
 db_query("INSERT INTO `config` (`key`, `value`) VALUES
-                ('dont_display_login_form', '0'),
-                ('email_required', '0'),
-                ('am_required', '0'),
-                ('dropbox_allow_student_to_student', '0'),
-		('block_username_change', '0'),
-		('betacms', '1'),
+                ('dont_display_login_form', $option_dont_display_login_form),
+                ('email_required', $option_email_required),
+                ('am_required', $option_am_required),
+                ('dropbox_allow_student_to_student', $option_dropbox_allow_student_to_student),
+		('block_username_change', $option_block_username_change),
+		('betacms', $option_betacms),
                 ('secret_key', '" . generate_secret_key() . "'),
                 ('version', '" . ECLASS_VERSION ."')");
 
