@@ -173,7 +173,7 @@ agCont;
 
 				}
 
-				$agenda_content .= "<tr><td><a href=\"$url\"><strong>".$data[$i][$j][0]."</strong></a> <p>".$data[$i][$j][6]."&nbsp;-&nbsp;(".$langExerciseStart.":<b>".$data[$i][$j][3]."</b>, $langDuration:<b>".$data[$i][$j][4]."</b>)<br /><span> ".$data[$i][$j][1].autoCloseTags($data[$i][$j][1])."</span></p></td></tr>";
+				$agenda_content .= "<tr><td><ul class='custom_list'><li><a href=\"$url\"><b>".$data[$i][$j][0]."</b></a><br /><b>".$data[$i][$j][6]."</b><div class='smaller'>".$langExerciseStart.":<b>".$data[$i][$j][3]."</b> | $langDuration:<b>".$data[$i][$j][4]."</b><br />".$data[$i][$j][1].autoCloseTags($data[$i][$j][1])."</div></li></ul></td></tr>";
 			}
 		}
 		$agenda_content .= "
