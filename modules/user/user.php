@@ -212,7 +212,7 @@ if ($is_adminOfCourse) {
 
 	$tool_content .= "
         <table width='100%' class='tbl_alt'>
-        <tr class='smaller'>
+        <tr>
 	  <th rowspan='2' width='1'>$langID</th>
 	  <th rowspan='2'><div align='left'><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;ord=s$extra_link'>$langName $langSurname</a></div></th>
 	  <th rowspan='2' class='center'>$langGroup</th>

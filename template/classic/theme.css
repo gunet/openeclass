@@ -528,7 +528,7 @@ fieldset table.th {
 	padding: 10px 50px;
 	background-image:url(img/noteit.png); 
     background-repeat:no-repeat; 
-    background-position: left;
+    background-position: left top;
 	margin: 10px 0 10px 0;
 }
 
