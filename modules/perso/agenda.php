@@ -145,11 +145,10 @@ function agendaHtmlInterface($data)
 	$numOfDays = count($data);
 	if ($numOfDays > 0) {
 		$agenda_content= <<<agCont
-      <div class="datacontainer">
-        <ul class="datalist">
+      <table width="100%">
 agCont;
 		for ($i=0; $i <$numOfDays; $i++) {
-			$agenda_content .= "\n<li class=\"category\">".claro_format_locale_date($dateFormatLong, strtotime($data[$i][0][2]))."</li>";
+			$agenda_content .= "<tr><td class='sub_title1'>".claro_format_locale_date($dateFormatLong, strtotime($data[$i][0][2]))."</td></tr>";
 			$iterator =  count($data[$i]);
 			for ($j=0; $j < $iterator; $j++){
 				$url = $urlServer . "index.php?perso=4&amp;c=" . $data[$i][$j][5];
@@ -174,12 +173,11 @@ agCont;
 
 				}
 
-				$agenda_content .= "\n<li><a class=\"square_bullet2\" href=\"$url\"><strong class=\"title_pos\">".$data[$i][$j][0]."</strong></a> <p class=\"content_pos\"><b class=\"announce_date\">".$data[$i][$j][6]."</b>&nbsp;-&nbsp;(".$langExerciseStart.":<b>".$data[$i][$j][3]."</b>, $langDuration:<b>".$data[$i][$j][4]."</b>)<br /><span class=\"announce_date\"> ".$data[$i][$j][1].autoCloseTags($data[$i][$j][1])."</span></p></li>";
+				$agenda_content .= "<tr><td><ul class='custom_list'><li><a href=\"$url\"><strong>".$data[$i][$j][0]."</strong></a> <p>".$data[$i][$j][6]."&nbsp;-&nbsp;(".$langExerciseStart.":<b>".$data[$i][$j][3]."</b>, $langDuration:<b>".$data[$i][$j][4]."</b>)<br /><span> ".$data[$i][$j][1].autoCloseTags($data[$i][$j][1])."</span></p></li></ul></td></tr>";
 			}
 		}
 		$agenda_content .= "
-        </ul>
-      </div> ";
+        </table>";
 	} else {
 		$agenda_content = "<p class='alert1'>$langNoEventsExist</p>";
 	}

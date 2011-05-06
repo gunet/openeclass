@@ -167,19 +167,19 @@ function announceHtmlInterface($data) {
 		$iterator =  count($data[$i][2]);
 		if ($iterator > 0) {
 			$announceExist = true;
-			$assign_content .= "<tr><td class='sub_title1'><b>".$data[$i][0]."</b></td></tr>";
+			$assign_content .= "<tr><td class='sub_title1'>".$data[$i][0]."</td></tr>";
 			$url = $urlAppend . "/modules/announcements/announcements.php?course=" .$data[$i][1]."&amp;an_id=";
 			for ($j=0; $j < $iterator; $j++) {
 				$an_id = $data[$i][2][$j][3];
-				$assign_content .= "<tr><td><img src='${urlAppend}/template/classic/img/arrow.png' alt=''  /><a href='$url$an_id'>" .
+				$assign_content .= "<tr><td><ul class='custom_list'><li><a href='$url$an_id'>" .
                                            "<b>" . $data[$i][2][$j][0] .
                                            autoCloseTags($data[$i][2][$j][0]) .
-                                           "</b></a><span class='smaller'> - " .
+                                           "</b></a><span class='smaller'><b> - " .
                                            claro_format_locale_date($dateFormatLong, strtotime($data[$i][2][$j][2])) .
-                                           "</span><div class='smaller' style='padding-left: 18px;'".
+                                           "</b></span><div class='smaller'>".
 						standard_text_escape(
 	                                           ellipsize($data[$i][2][$j][1], 250, "<strong>&nbsp;...<a href='$url$an_id'>[$langMore]</a></strong>")) .
-					   "</td></tr>";
+					   "</div></li></ul></td></tr>";
 			}
 		}
 	}

@@ -969,6 +969,8 @@ a.unit_link_invisible:hover {
 .panel_content {
 	padding: 5px 10px;
 	margin-bottom: 20px;
+	max-height: 400px;
+	overflow: auto;
 }
 
 
