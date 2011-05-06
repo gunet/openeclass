@@ -139,7 +139,7 @@ function htmlInterface($data, $lesson_fCode)
 		for ($i=0; $i < $data[0]; $i++) {
 			$lesson_content .= "<tr>
 			  <td align='left'><img src='${urlAppend}/template/classic/img/lesson.png' alt=''  />
-			  <a href=\"${urlServer}courses/".$data[2][$i]."/\"><b>".$lesson_fCode[$i]."</b> - ".$data[1][$i]."</a>
+			  <a href=\"${urlServer}courses/".$data[2][$i]."/\">".$data[1][$i]."</a> <span class='smaller'>(".$lesson_fCode[$i].")</span>
 			  <div class='smaller' style='padding-left: 20px;'>".$data[3][$i]."</div></td>";
 			  $lesson_content .= "<td align='center'>";
 			if ($data[4][$i] == '5') {
@@ -159,8 +159,8 @@ function htmlInterface($data, $lesson_fCode)
 		$lesson_content .= "\n
 		<table width=\"100%\">
 		<thead>";
-		$lesson_content .= "\n<tr style=\"background-color: transparent;\">";
-		$lesson_content .= "\n<td align='left' width=\"10\">
+		$lesson_content .= "\n<tr style='background-color: transparent;'>";
+		$lesson_content .= "\n<td align='left' width='10'>
 			<img src='${urlAppend}/template/classic/img/arrow.png' alt='' />
 			</td>";
 		if ($statut == 1) {	

@@ -149,10 +149,7 @@ function forumHtmlInterface($data)
 	$content = "";
 
 	if($numOfLessons = count($data) > 0) {
-		$content .= <<<fCont
-    <div class="datacontainer">
-      <ul class="datalist">
-fCont;
+		$content .= "<div class='datacontainer'><ul class='datalist'>";
 		$numOfLessons = count($data);
 		for ($i=0; $i <$numOfLessons; $i++) {
 			$content .= "\n          <li class='category'>".$data[$i][0]."</li>";
@@ -168,13 +165,11 @@ fCont;
 				<cite class='content_pos'>".$data[$i][2][0][$j][6]." ".$data[$i][2][0][$j][7]."</cite>
 				</li>";
 			}
-			//if ($i+1 <$numOfLessons) $content .= "<br>";
 		}
 		$content .= "</ul></div>";
 	} else {
 		$content .= "<p class='alert1'>$langNoPosts</p>";
 	}
-
 	return $content;
 }
 

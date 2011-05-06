@@ -1832,11 +1832,11 @@ $titreBlocNotEditable = array(TRUE, TRUE, TRUE, TRUE, TRUE, FALSE);
 *********************************************************************/
 $langPerso = "Αλλαγή εμφάνισης χαρτοφυλακίου";
 $langMyPersoLessons = "Τα μαθήματα μου";
-$langMyPersoDeadlines = "ΟΙ ΔΙΟΡΙΕΣ ΜΟΥ";
-$langMyPersoAnnouncements = "ΟΙ ΤΕΛΕΥΤΑΙΕΣ ΜΟΥ ΑΝΑΚΟΙΝΩΣΕΙΣ";
-$langMyPersoDocs = "ΤΑ ΤΕΛΕΥΤΑΙΑ ΜΟΥ ΕΓΓΡΑΦΑ";
-$langMyPersoAgenda = "Η ΑΤΖΕΝΤΑ ΜΟΥ";
-$langMyPersoForum = "ΟΙ ΣΥΖΗΤΗΣΕΙΣ ΜΟΥ - ΤΕΛΕΥΤΑΙΕΣ ΑΠΟΣΤΟΛΕΣ";
+$langMyPersoDeadlines = "Οι διορίες μου";
+$langMyPersoAnnouncements = "Οι τελευταίες μου ανακοινώσεις";
+$langMyPersoDocs = "Τα τελευταία μου έγγραφα";
+$langMyPersoAgenda = "Η ατζέντα μου";
+$langMyPersoForum = "Οι συζητήσεις μου - Τελευταίες αποστολές";
 $langAssignment = "Εργασία";
 $langDeadline = "Λήξη";
 $langNoEventsExist="Δεν υπάρχουν γεγονότα";
