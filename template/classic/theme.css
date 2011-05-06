@@ -344,7 +344,7 @@ fieldset table.th {
 	border-bottom: 1px dashed #dfdfdf;
 	border-right: none;
     color: #687A92;
-	font-size: 12px;
+	font-size: 13px;
 }
 
 .LoginData {
@@ -391,6 +391,7 @@ fieldset table.th {
 	border-bottom: 1px dashed #dfdfdf;
     color: #687A92;    
 	padding: 5px; 
+	font-size: 13px;
 }
 
 #navcontainer li img {
@@ -933,13 +934,13 @@ a.unit_link_invisible:hover {
 
 .panel_left {
 	float:left;
-	width: 370px;
+	width: 450px;
 	margin-top: 10px;
 }
 
 .panel_right {
 	float:right;
-	width: 370px;
+	width: 300px;
 	margin-top: 10px;
 }
 

@@ -104,11 +104,12 @@ if ($casactive['auth_default'] == 1) {
 }
 
 $tool_content .= "
-  <table class='tbl' width='200' align='center'>
+  <table class='tbl' width='300' align='center'>
   <tr>
-    <th class='LoginHead'><b>$langUserLogin </b></th>
+  <th colspan='2' class='LoginHead' align='center'><b>$langUserLogin </b></th>
   </tr>
   <tr>
+  <td class='LoginData'><img src='{$urlServer}template/classic/img/login.png'></td>
     <td class='LoginData'>
       <form action='$_SERVER[PHP_SELF]' method='post'>
         $langUsername <br />
