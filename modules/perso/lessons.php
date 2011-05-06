@@ -129,7 +129,6 @@ function htmlInterface($data, $lesson_fCode)
 	global $langNotEnrolledToLessons, $langWelcomeProfPerso, $langWelcomeStudPerso, $langWelcomeSelect;
 	global $langCourse, $langActions, $langUnregCourse, $langAdm, $uid;
 
-	$lesson_content = "<div>";
 	if ($data[0] > 0) {
 		$lesson_content .= "<table width='100%' class='tbl'>";
 		for ($i=0; $i < $data[0]; $i++) {
@@ -154,8 +153,8 @@ function htmlInterface($data, $lesson_fCode)
 		$lesson_content .= "\n    <p class=\"alert1\">$langNotEnrolledToLessons !</p><p><u>$langWelcomeSelect</u>:</p>";
 		$lesson_content .= "\n
 		<table width=\"100%\">
-		<thead>";
-		$lesson_content .= "\n<tr style='background-color: transparent;'>";
+		";
+		$lesson_content .= "\n<tr>";
 		$lesson_content .= "\n<td align='left' width='10'>
 			<img src='${urlAppend}/template/classic/img/arrow.png' alt='' />
 			</td>";
@@ -165,8 +164,7 @@ function htmlInterface($data, $lesson_fCode)
 			$lesson_content .= "\n<td align='left' >$langWelcomeStudPerso</td>";
 		}
 		$lesson_content .= "\n</tr>";
-		$lesson_content .= "</thead></table>";
+		$lesson_content .= "</table>";
 	}
-	$lesson_content .= "\n</div>";
 	return $lesson_content;
 }

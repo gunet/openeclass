@@ -160,33 +160,32 @@ function getUserAnnouncements($param = null, $type) {
 function announceHtmlInterface($data) {
 	global $urlAppend, $langNoAnnouncementsExist, $langMore, $dateFormatLong;
 	$announceExist = false;
-	$assign_content= '<div class="datacontainer"><ul>';
+	$assign_content= '<table width="100%">';
 
 	$max_repeat_val = count($data);
 	for ($i=0; $i <$max_repeat_val; $i++) {
 		$iterator =  count($data[$i][2]);
 		if ($iterator > 0) {
 			$announceExist = true;
-			$assign_content .= "\n          <li class='category'>".$data[$i][0]."</li>";
+			$assign_content .= "<tr><td class='sub_title1'><b>".$data[$i][0]."</b></td></tr>";
 			$url = $urlAppend . "/modules/announcements/announcements.php?course=" .$data[$i][1]."&amp;an_id=";
 			for ($j=0; $j < $iterator; $j++) {
 				$an_id = $data[$i][2][$j][3];
-				$assign_content .= "\n<li><a class='square_bullet2' href='$url$an_id'>" .
-                                           "<strong class='title_pos'>" . $data[$i][2][$j][0] .
+				$assign_content .= "<tr><td><img src='${urlAppend}/template/classic/img/arrow.png' alt=''  /><a href='$url$an_id'>" .
+                                           "<b>" . $data[$i][2][$j][0] .
                                            autoCloseTags($data[$i][2][$j][0]) .
-                                           " <span class='announce_date'> (" .
+                                           "</b></a><span class='smaller'> - " .
                                            claro_format_locale_date($dateFormatLong, strtotime($data[$i][2][$j][2])) .
-                                           ")</span></strong></a>".
+                                           "</span><div class='smaller' style='padding-left: 18px;'".
 						standard_text_escape(
 	                                           ellipsize($data[$i][2][$j][1], 250, "<strong>&nbsp;...<a href='$url$an_id'>[$langMore]</a></strong>")) .
-					   "</li>";
+					   "</td></tr>";
 			}
 		}
 	}
 
 	$assign_content .= "
-        </ul>
-      </div> ";
+</table>";
 
 	if (!$announceExist) {
 		$assign_content = "<p class='alert1'>$langNoAnnouncementsExist</p>";
