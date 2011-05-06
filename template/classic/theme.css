@@ -563,6 +563,10 @@ fieldset table.th {
     color: #ff0000 !important;
 }
 
+.grey {
+    color: #CCCCCC !important;
+}
+
 /*-------------------------------------
    5. Tables
 -------------------------------------*/
