@@ -647,6 +647,12 @@ fieldset table.th {
          border-bottom: 1px dashed #dfdfdf;
 }
 
+.tbl_lesson td {
+    border-bottom: 1px dashed #dfdfdf;    
+}
+.tbl_lesson tr:hover td { 
+    background-color: #f3f3f9;
+} 
 /* Alternating Table Row   */
 	
 .tbl_alt {
@@ -966,7 +972,6 @@ a.unit_link_invisible:hover {
 
 
 .panel_content_open {
-	padding: 5px 10px;
 	margin-bottom: 20px;
 }
 

@@ -130,7 +130,7 @@ function htmlInterface($data, $lesson_fCode)
 	global $langCourse, $langActions, $langUnregCourse, $langAdm, $uid;
 
 	if ($data[0] > 0) {
-		$lesson_content .= "<table width='100%' class='tbl'>";
+		$lesson_content .= "<table width='100%' class='tbl_lesson'>";
 		for ($i=0; $i < $data[0]; $i++) {
 			$lesson_content .= "<tr>
 			  <td align='left'><ul class='custom_list'><li>

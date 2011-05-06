@@ -174,7 +174,7 @@ function announceHtmlInterface($data) {
 				$assign_content .= "<tr><td><ul class='custom_list'><li><a href='$url$an_id'>" .
                                            "<b>" . $data[$i][2][$j][0] .
                                            autoCloseTags($data[$i][2][$j][0]) .
-                                           "</b></a><span class='smaller'><b> - " .
+                                           "</b></a><span class='smaller'><b><br />" .
                                            claro_format_locale_date($dateFormatLong, strtotime($data[$i][2][$j][2])) .
                                            "</b></span><div class='smaller'>".
 						standard_text_escape(
