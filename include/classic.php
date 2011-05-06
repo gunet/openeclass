@@ -132,7 +132,7 @@ if ($result2 and mysql_num_rows($result2) > 0) {
 
 if (count($status) > 0) {
         $announce_table_header = "
-        <table width='99%' class='sortable' id='t3'>
+        <table width='100%' class='sortable' id='t3'>
         <tr>
            <th colspan='2'>$langLastAnnouncements</th>
         </tr>\n";

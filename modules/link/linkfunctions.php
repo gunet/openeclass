@@ -61,10 +61,10 @@ function showlinksofcategory($catid)
 	while ($myrow = mysql_fetch_array($result)) {
                 if ($i % 2 == 0) {
                         $tool_content .= "
-                <tr class='even'>";
+                <tr class='odd'>";
                 } else {
                         $tool_content .= "
-                <tr class='odd'>";
+                <tr class='even'>";
                 }
                 $title = empty($myrow['title'])? $myrow['url']: $myrow['title'];
                 $tool_content .= "
