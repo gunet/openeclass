@@ -131,15 +131,11 @@ function htmlInterface($data, $lesson_fCode)
 
 	$lesson_content = "<div>";
 	if ($data[0] > 0) {
-		$lesson_content .= "<table width='100%' class='tbl_alt'>
-			<tr>
-			  <th width='90%'><b>$langCourse</b></th>
-			  <th><b>$langActions</b></th>
-			</tr>";
+		$lesson_content .= "<table width='100%' class='tbl'>";
 		for ($i=0; $i < $data[0]; $i++) {
 			$lesson_content .= "<tr>
 			  <td align='left'><img src='${urlAppend}/template/classic/img/arrow.png' alt=''  />
-			  <a href=\"${urlServer}courses/".$data[2][$i]."/\">".$data[1][$i]."</a> <span class='smaller'>(".$lesson_fCode[$i].")</span>
+			  <b><a href=\"${urlServer}courses/".$data[2][$i]."/\">".$data[1][$i]."</a> </b><span class='smaller'>(".$lesson_fCode[$i].")</span>
 			  <div class='smaller' style='padding-left: 20px;'>".$data[3][$i]."</div></td>";
 			  $lesson_content .= "<td align='center'>";
 			if ($data[4][$i] == '5') {
