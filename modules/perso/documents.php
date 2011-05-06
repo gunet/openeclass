@@ -99,23 +99,23 @@ function docsHtmlInterface($date)
 
         $last_course_id = null;
         if ($q and mysql_num_rows($q) > 0) {
-                $content = '<div class="datacontainer"><ul class="datalist">';
+                $content = '<table width="100%">';
                 while ($row = mysql_fetch_array($q)) {
                         if ($last_course_id != $row['course_id']) {
-                                $content .= "\n<li class='category'>" . q($row['intitule']) . "</li>";
+                                $content .= "<tr><td class='sub_title1'>" . q($row['intitule']) . "</td></tr>";
 				$currentCourseID = $row['code'];
 				$cours_id = $row['course_id'];
                         }
                         $last_course_id = $row['course_id'];
 			$group_sql = "course_id = $cours_id AND subsystem = ".MAIN;
 			$url = file_url($row['path']);
-                        $content .= "\n<li><a class='square_bullet2' href='$url'><strong class='title_pos'>" .
-                                    q($row['filename']) . ' - (' .
+                        $content .= "<tr><td class='smaller'><ul class='custom_list'><li><a href='$url'>" .
+                                    q($row['filename']) . '</a> - (' .
                                     nice_format(date('Y-m-d', strtotime($row['date_modified']))) .
-                                    ")</strong></a></li>";
+                                    ")</li></ul></td></tr>";
 		}
 		unset($currentCourseID);
-                $content .= "\n</ul></div>\n";
+                $content .= "</table>";
                 return $content;
 	} else {
 		return "\n<p class='alert1'>$langNoDocsExist</p>\n";
