@@ -126,35 +126,34 @@ function assignHtmlInterface($data)
 
 	$assign_content = "";
 	$assign_content= <<<aCont
-      <div class="datacontainer">
-        <ul class="datalist">
+      <table width="100%">
 aCont;
 	$assignmentsExist = false;
 	$max_repeat_val = count($data);
  	for ($i=0; $i <$max_repeat_val; $i++) {
 		$iterator = count($data[$i][2]);
-		$assign_content .= "\n          <li class='category'>".$data[$i][0]."</li>";
+		$assign_content .= "<tr><td class='sub_title1'>".$data[$i][0]."</td></tr>";
 		if ($iterator > 0) {
 			$assignmentsExist = true;
 			for ($j=0; $j < $iterator; $j++) {
 				$url = $urlServer . "index.php?perso=1&amp;c=" .$data[$i][1]."&amp;i=".$data[$i][2][$j][0];
 
 				if($data[$i][2][$j][6] == 1) {
-					$submit_status = "&nbsp;(".$langGroupWorkSubmitted.")";
+					$submit_status = "".$langGroupWorkSubmitted."";
 				} elseif ($data[$i][2][$j][6] == 0) {
-					$submit_status = "&nbsp;($langGroupWorkSubmitted1)";
+					$submit_status = "$langGroupWorkSubmitted1";
 				} else {
 					$submit_status = "";
 				}
 				$assign_content .= "";
-				$assign_content .= "\n          <li><a class=\"square_bullet2\" href=\"$url\"><strong class=\"title_pos\">".$data[$i][2][$j][1]."</strong></a>  <p class=\"content_pos\">$langGroupWorkDeadline_of_Submission: <b>".nice_format($data[$i][2][$j][3])."</b>&nbsp;<span style=\"color: #CAC3B5;\">".$submit_status."</span></p></li>";
+				$assign_content .= "<tr><td><ul class='custom_list'><li><a href=\"$url\"><b>".$data[$i][2][$j][1]."</b></a><div class='smaller'>
+				$langGroupWorkDeadline_of_Submission: <b>".nice_format($data[$i][2][$j][3])."</b><div class='grey'>".$submit_status."</div></div></li></ul></td></tr>";
 			}
 			//if ($i+1 <$max_repeat_val) $assign_content .= "<br>";
 		}
 	}
 	$assign_content .= "
-        </ul>
-      </div>";
+        </table>";
 
 	if (!$assignmentsExist) {
 		$assign_content .= "<p class='alert1'>$langNoAssignmentsExist</p>";

@@ -133,9 +133,9 @@ function htmlInterface($data, $lesson_fCode)
 		$lesson_content .= "<table width='100%' class='tbl'>";
 		for ($i=0; $i < $data[0]; $i++) {
 			$lesson_content .= "<tr>
-			  <td align='left'><img src='${urlAppend}/template/classic/img/arrow.png' alt=''  />
+			  <td align='left'><ul class='custom_list'><li>
 			  <b><a href=\"${urlServer}courses/".$data[2][$i]."/\">".$data[1][$i]."</a> </b><span class='smaller'>(".$lesson_fCode[$i].")</span>
-			  <div class='smaller' style='padding-left: 20px;'>".$data[3][$i]."</div></td>";
+			  <div class='smaller'>".$data[3][$i]."</div></td>";
 			  $lesson_content .= "<td align='center'>";
 			if ($data[4][$i] == '5') {
 				$lesson_content .= "
@@ -146,7 +146,7 @@ function htmlInterface($data, $lesson_fCode)
 				<a href='${urlServer}modules/course_info/infocours.php?from_home=TRUE&amp;cid=".$data[2][$i]."'>
 				<img src='${urlAppend}/template/classic/img/tools.png' title='$langAdm'></a>";
 			}
-			$lesson_content .= "</td></tr>";
+			$lesson_content .= "</li></ul></td></tr>";
 		}
 		$lesson_content .= "</table>";
 	} else { // if we are not registered to courses
