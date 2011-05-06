@@ -231,31 +231,31 @@ if ($is_adminOfCourse) {
 
                 $tool_content .= "\n 
                     <form method='post' action='$_SERVER[PHP_SELF]?course=$code_cours&amp;submit=yes&action=1' enctype='multipart/form-data'>
-                      <p>$langExplanation_0</p>
-                      <p>$langExplanation_3</p>
+                      <div class='info'><p>$langExplanation_0</p>
+                      <p>$langExplanation_3</p></div>
                   
                       <fieldset>
                       <legend>$langExplanation_1</legend> 
-                      <table class='tbl'>
+					<table class='tbl'>
                       <tr>
-                        <th>$langSendPage</th>
+                        <th width='170'>$langSendPage</th>
                         <td><input type='file' name='file' size='35' accept='text/html'></td>
-                        <td class='right'>$langNoticeExpl</p></td>
+                        <td class='right'>&nbsp;</td>
                       </tr>
                       <tr>
                         <th>$langPgTitle</th>
                         <td><input type='Text' name='link_name' size='40'></td>
-                        <td class='right'>$langExplanation_2</p></td>
+                        <td class='right smaller'>$langExplanation_2</td>
                       </tr>
                       <tr>
                         <th>&nbsp;</th>
-                        <td><input type='Submit' name='submit' value='$langAdd'></td>
-                        <td>&nbsp;</td>
+                        <td colspan='2' class='right'><input type='Submit' name='submit' value='$langAdd'></td>
                       </tr>
                       </table>
                       </fieldset>
 
-                    </form>";
+                    </form>
+					<div class='right smaller'>$langNoticeExpl</div>'";
                 draw($tool_content, 2);
                 exit();
         } elseif ($action == 2) { // add external link
