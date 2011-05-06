@@ -989,8 +989,8 @@ a.unit_link_invisible:hover {
 
 /* ----- START admin ----- */
 .invisible {
-	background: #F7F9FC !important;
-	color: silver !important;
+	background: #f8f8f8;
+	color: #dfdfdf;
 }
 
 /* ----- START agenda ----- */
