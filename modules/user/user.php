@@ -138,16 +138,10 @@ if ($is_adminOfCourse) {
 
 	// display number of users
 	$tool_content .= "
-        <table width='99%' class='tbl_border'>
-	<tr class='smaller'>
-	  <th><b>$langTotal</b>: <b>$countUser</b> $langUsers &nbsp;&nbsp;(<b>$teachers</b> $langTeachers, <b>$students</b> $langStudents, <b>$visitors</b> $langVisitors)<br />
-          <b>$langDumpUser $langCsv</b>:
-              &nbsp;&nbsp;1.&nbsp;<a href='dumpuser2.php?course=$code_cours'>$langcsvenc2</a>
-              &nbsp;&nbsp;2.&nbsp;<a href='dumpuser2.php?course=$code_cours&amp;enc=1253'>$langcsvenc1</a>
-          </th>
-        </tr>
-	</table>
-        <br />";
+<div class='info'><b>$langTotal</b>: <span class='grey'><b>$countUser </b><em>$langUsers &nbsp;($teachers $langTeachers, $students $langStudents, $visitors $langVisitors)</em></span><br />
+          <b>$langDumpUser $langCsv</b>: 1. <a href='dumpuser2.php?course=$code_cours'>$langcsvenc2</a>
+               2. <a href='dumpuser2.php?course=$code_cours&amp;enc=1253'>$langcsvenc1</a>
+          </div>";
 
         // display and handle search form if needed
         $search_sql = '';
@@ -217,7 +211,7 @@ if ($is_adminOfCourse) {
         }
 
 	$tool_content .= "
-        <table width='99%' class='tbl_alt'>
+        <table width='100%' class='tbl_alt'>
         <tr class='smaller'>
 	  <th rowspan='2' width='1'>$langID</th>
 	  <th rowspan='2'><div align='left'><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;ord=s$extra_link'>$langName $langSurname</a></div></th>
@@ -258,10 +252,10 @@ if ($is_adminOfCourse) {
 		// bi colored table
 		if ($i%2 == 0) {
 			$tool_content .= "
-        <tr class='even'>";
+        <tr class='odd'>";
 		} else {
 			$tool_content .= "
-        <tr class='odd'>";
+        <tr class='even'>";
 		}
                 // show public list of users
                 $am_message = empty($myrow['am'])? '': ("<div class='right'>($langAm: " . q($myrow['am']) . ")</div>");
