@@ -43,15 +43,16 @@ if (isset($_REQUEST['username'])) {
                                    WHERE username COLLATE utf8_bin = " . autoquote($_REQUEST['username']));
 	if (mysql_num_rows($result) > 0) {
                 $myrow = mysql_fetch_array($result);
-                $_SESSION['uid'] = $myrow["user_id"];
-                $_SESSION['nom'] = $myrow["nom"];
-                $_SESSION['prenom'] = $myrow["prenom"];
-                $_SESSION['statut'] = $myrow["statut"];
-                $_SESSION['email'] = $myrow["email"];
-                $_SESSION['is_admin'] = $myrow["is_admin"];
-                $userPerso = $myrow["perso"];
-                $userLanguage = $myrow["lang"];
-	        if ($userPerso == "yes" and isset($_SESSION['perso_is_active'])) {
+                $_SESSION['uid'] = $myrow['user_id'];
+                $_SESSION['nom'] = $myrow['nom'];
+                $_SESSION['prenom'] = $myrow['prenom'];
+                $_SESSION['statut'] = $myrow['statut'];
+                $_SESSION['email'] = $myrow['email'];
+                $_SESSION['is_admin'] = ($myrow['user_id'] == 1 or );
+                $_SESSION['uname'] = $myrow['username'];
+                $userPerso = $myrow['perso'];
+                $userLanguage = $myrow['lang'];
+	        if ($userPerso == 'yes' and isset($_SESSION['perso_is_active'])) {
         		$_SESSION['user_perso_active'] = false;
                 } else {
         		$_SESSION['user_perso_active'] = true;
@@ -65,7 +66,6 @@ if (isset($_REQUEST['username'])) {
 	        	$langChangeLang = $_SESSION['langLinkText'] = "English";
 		        $switchLangURL = $_SESSION['langLinkURL'] = "?localize=en";
         	}
-		$language = $_SESSION['langswitch'];
                 header('Location: ' . $urlServer);
                 exit;
         } else {
