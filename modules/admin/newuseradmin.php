@@ -171,17 +171,17 @@ $langEmail : $emailhelpdesk
       <fieldset>
       <legend>$title</legend>  
         <table width='100%' align='left' class='tbl'>
-        <tr><th class='left' width='180'><b>$langName</b></th>
-            <td><input class='FormData_InputText' type='text' name='prenom_form' value='".q($pn)."' />&nbsp;(*)</td></tr>
-        <tr><th class='left'><b>$langSurname</b></th>
-            <td><input class='FormData_InputText' type='text' name='nom_form' value='".q($ps)."' />&nbsp;(*)</td></tr>
-        <tr><th class='left'><b>$langUsername</b></th>
-            <td><input class='FormData_InputText' type='text' name='uname' value='".q($pu)."' />&nbsp;(*)</td></tr>
-        <tr><th class='left'><b>$langPass</b></th>
+        <tr><th class='left' width='180'><b>$langName:</b></th>
+            <td class='smaller'><input class='FormData_InputText' type='text' name='prenom_form' value='".q($pn)."' />&nbsp;(*)</td></tr>
+        <tr><th class='left'><b>$langSurname:</b></th>
+            <td class='smaller'><input class='FormData_InputText' type='text' name='nom_form' value='".q($ps)."' />&nbsp;(*)</td></tr>
+        <tr><th class='left'><b>$langUsername:</b></th>
+            <td class='smaller'><input class='FormData_InputText' type='text' name='uname' value='".q($pu)."' />&nbsp;(*)</td></tr>
+        <tr><th class='left'><b>$langPass:</b></th>
             <td><input class='FormData_InputText' type='text' name='password' value='".create_pass()."' /></td></tr>
-        <tr><th class='left'><b>$langEmail</b></th>
-            <td><input class='FormData_InputText' type='text' name='email_form' value='".q($pe)."' />&nbsp;(*)</td></tr>
-        <tr><th class='left'>$langFaculty</th>
+        <tr><th class='left'><b>$langEmail:</b></th>
+            <td class='smaller'><input class='FormData_InputText' type='text' name='email_form' value='".q($pe)."' />&nbsp;(*)</td></tr>
+        <tr><th class='left'>$langFaculty:</th>
             <td>";
         
         $dep = array();
@@ -195,9 +195,9 @@ $langEmail : $emailhelpdesk
                 $tool_content .= selection($dep, 'department');
         }
         $tool_content .= "</td></tr>
-        <tr><th class='left'><b>$langAm</b></th>
+        <tr><th class='left'><b>$langAm:</b></th>
             <td><input class='FormData_InputText' type='text' name='am' value='".q($pam)."' />&nbsp;</td></tr>
-        <tr><th class='left'>$langLanguage</th>
+        <tr><th class='left'>$langLanguage:</th>
             <td>";
         $tool_content .= lang_select_options('language', '', $lang);
         $tool_content .= "</td></tr>";
@@ -211,10 +211,10 @@ $langEmail : $emailhelpdesk
         }
         $tool_content .= "
         <tr><th>&nbsp;</th>
-            <td><input type='submit' name='submit' value='$langSubmit' />
-                <div align='right'><small>$langRequiredFields</small></div></td></tr>
+            <td class='right'><input type='submit' name='submit' value='$langSubmit' />
+               </td></tr>
         </table>
-      </fieldset>
+      </fieldset> <div class='right smaller'>$langRequiredFields</div>
         <input type='hidden' name='phone' value='".@$pphone."' />
         <input type='hidden' name='rid' value='".@$id."' />
         <input type='hidden' name='pstatut' value='$pstatut' />
