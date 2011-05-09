@@ -128,7 +128,8 @@ function htmlInterface($data, $lesson_fCode)
 	global $statut, $is_admin, $urlAppend, $urlServer, $langCourseCreate, $langOtherCourses;
 	global $langNotEnrolledToLessons, $langWelcomeProfPerso, $langWelcomeStudPerso, $langWelcomeSelect;
 	global $langCourse, $langActions, $langUnregCourse, $langAdm, $uid;
-
+	
+	$lesson_content = "";
 	if ($data[0] > 0) {
 		$lesson_content .= "<table width='100%' class='tbl_lesson'>";
 		for ($i=0; $i < $data[0]; $i++) {
