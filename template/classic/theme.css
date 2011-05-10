@@ -442,40 +442,40 @@ fieldset table.th {
 }
 
 .title1 {
-        background-color:#8597A5;
-        color: #ffffff;
-        font-weight: bold;
-        padding: 5px;
-        border-bottom: 2px solid #687A92;
+	background-color:#8597A5;
+ 	color: #ffffff;
+	font-weight: bold;
+	padding: 5px;
+	border-bottom: 2px solid #687A92;
 }
 
 .title1 a { 
-        color: #ffffff;    
+	color: #ffffff;    
 }
 
 .sub_title1 {
-        padding: 5px;
-        border-bottom: 1px dashed #dfdfdf;
-        font-weight: bold;
+	padding: 5px;
+	border-bottom: 1px dashed #dfdfdf;
+	font-weight: bold;
 }
 
 .descr_title {
-        background-color:#8597A5;
-        color: #ffffff;
-        font-weight: bold;
-        padding: 5px;
-        border-bottom: 2px solid #687A92;
-		margin-bottom: 10px;
+	background-color:#8597A5;
+	color: #ffffff;
+	font-weight: bold;
+	padding: 5px;
+	border-bottom: 2px solid #687A92;
+	margin-bottom: 10px;
 }
 
 .unit_title {
-        font-weight: bold;
-        padding: 5px;
-        background-color:#ffffff;
-        border-bottom: 1px dashed #dfdfdf;
-        font-size: 14px;
-        text-align: center;
-		color: #8597A5;
+	font-weight: bold;
+	padding: 5px;
+	background-color:#ffffff;
+	border-bottom: 1px dashed #dfdfdf;
+	font-size: 14px;
+	text-align: center;
+	color: #8597A5;
 }
 
 /* messages and alerts */ 
@@ -492,11 +492,11 @@ fieldset table.th {
 }
 
 .alert2 {
-        padding: 10px 50px;
-        background-image:url(img/warning.png);
-        background-repeat:no-repeat;
-        background-position: left;
-		margin: 10px 0 10px 0;
+	padding: 10px 50px;
+	background-image:url(img/warning.png);
+	background-repeat:no-repeat;
+	background-position: left;
+	margin: 10px 0 10px 0;
 }
  
 .caution {
