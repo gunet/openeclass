@@ -227,15 +227,14 @@ if (isset($_GET['stats'])) {
 			<tr>";
 			if (count($loginDouble) > 0) {
 				$tool_content .= tablize($loginDouble);
-				$tool_content .=  "</td><td class='right'>".error_message()." ";
+				$tool_content .=  "</td><td class='right' colspan='2'>".error_message()." ";
 			} else {
-				$tool_content .= "</td><td class='right'>".ok_message()." ";
+				$tool_content .= "</td><td class='right' colspan='2'>".ok_message()." ";
 			}
 			$tool_content .= "</table>";
 		break;
 		case 'percourse':
-			$tool_content .= "<table width='99%' align='center'><thead><tr>
-			<td><table width='100%' align='center' class='stateclass'>
+			$tool_content .= "<table width='100%' class='tbl_1' style='margin-top: 20px;'>
 			<tr><th class='left' colspan='2'><b>$langUsersPerCourse</b></td>";
 			$result = db_query("SELECT cours_id, code, intitule, titulaires FROM cours ORDER BY intitule");
 			while ($row = mysql_fetch_array($result)) {
@@ -250,17 +249,16 @@ if (isset($_GET['stats'])) {
 						default: break;
 					}
 					$cu_key = "$row[intitule] ($row[code]) -- $row[titulaires]";
-					$cu[$cu_key] = "$teachers $langTeachers&nbsp;&nbsp;&nbsp;&nbsp;$students $langStudents&nbsp;&nbsp;&nbsp;&nbsp;$visitors $langGuests ";
+					$cu[$cu_key] = "$teachers $langTeachers | $students $langStudents | $visitors $langGuests ";
 				}
 			}
-			$tool_content .= "</tr>".tablize($cu)."</table></td></tr></table>";
+			$tool_content .= "</tr>".tablize($cu)."</table>";
 		break;
 		case 'memail':
 			$sqlLoginDouble = "SELECT DISTINCT email, COUNT(*) AS nb FROM user GROUP BY email 
 				HAVING nb > 1 ORDER BY nb DESC";
 			$loginDouble = list_ManyResult($sqlLoginDouble);
-			$tool_content .= "<table width='99%' align='center'><thead><tr>
-			<td><table width='100%' align='center' class='stateclass'>
+			$tool_content .= "<table width='100%' class='tbl_1' style='margin-top: 20px;'>
 			<tr>
 			<th><b>$langMultipleAddr e-mail</b></th>
 			<th class='right'><strong>$langResult</strong></th>
@@ -269,23 +267,22 @@ if (isset($_GET['stats'])) {
 				$tool_content .= tablize($loginDouble);
 				$tool_content .= "<tr><td class=right colspan='2'>";
 				$tool_content .= error_message();
-				$tool_content .= "</tr>";
+				$tool_content .= "</td></tr>";
 			} else {
 				$tool_content .= "<tr><td class=right colspan='2'>";
 				$tool_content .= ok_message();
-				$tool_content .= "</tr>";
+				$tool_content .= "</td></tr>";
 			}
-			$tool_content .= "</table></td></tr></table>";
+			$tool_content .= "</table>";
 		break;
 		case 'mlogins':
 			$sqlLoginDouble = "SELECT DISTINCT CONCAT(username, \" -- \", password) AS paire,
 				COUNT(*) AS nb FROM user GROUP BY BINARY paire HAVING nb > 1 ORDER BY nb DESC";
 			$loginDouble = list_ManyResult($sqlLoginDouble);
-			$tool_content .= "<table width='99%' align='center'><thead><tr>
-				<td><table width='100%' align='center' class=\"stateclass\">
+			$tool_content .= "<table width='100%' class='tbl_1' style='margin-top: 20px;'>
 				<tr>
 				<th><b>$langMultiplePairs LOGIN - PASS</b></th>
-				<th class='right'><b>$langResult</b></td>
+				<th class='right'><b>$langResult</b></th>
 				</tr>";
 			if (count($loginDouble) > 0) {
 				$tool_content .=  tablize($loginDouble);
@@ -297,7 +294,7 @@ if (isset($_GET['stats'])) {
 				$tool_content .= ok_message();
 				$tool_content .= "</td></tr>";
 			}
-			$tool_content .= "</table></td></tr></table>";
+			$tool_content .= "</table>";
 		break;
 		default:
 		break;

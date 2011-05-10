@@ -67,18 +67,9 @@ for ($i=0; $i<12; $i++)
 
 $tool_content .= '
 <form method="post">
-  <table class="FormData" width="99%" align="left">
-  <tbody>
-  <tr>
-    <th width="220"  class="left">&nbsp;</th>
-    <td><select name="selectedMonth">'.$months.'</select></td>
-  </tr>
-  <tr>
-    <th class="left">&nbsp;</th>
-    <td><input type="submit" name="btnUsage" value="'.$langSubmit.'"></td>
-  </tr>
-  </tbody>
-  </table>
+<div><select name="selectedMonth">'.$months.'</select>
+<input type="submit" name="btnUsage" value="'.$langSubmit.'">
+</div>
 </form>';
 
 if (isset($_POST["selectedMonth"])) {
@@ -108,7 +99,6 @@ if (isset($_POST["selectedMonth"])) {
 
 	if ($coursNum) {
 		$tool_content .= '
-		<br />
 		<table class="FormData" width="99%" align="left">
 		<tbody>
 		<tr>
@@ -145,14 +135,7 @@ if (isset($_POST["selectedMonth"])) {
 		</tbody>
 		</table>';           //$details includes an html table with all details
     } else {
-        $tool_content .= '<table class="FormData" width="99%" align="left">
-	<tbody>
-	<tr>
-	<th width="220"  class="left">&nbsp;</th>
-	<td>'.$langNoReport.': '.$msg_of_month.' '.$y.'</td>
-	</tr>
-	</tbody>
-	</table>';
+        $tool_content .= '<div class="alert1">'.$langNoReport.': '.$msg_of_month.' '.$y.'</div>';
     }
 }
 
