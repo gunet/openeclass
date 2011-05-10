@@ -177,7 +177,7 @@ if(((!empty($auth_submit)) && ($auth_submit==1)) || !empty($_SESSION['cas_do']))
 			}
 			if($is_valid) {
 				$auth_allow = 1;
-				$tool_content .= "<table width=\"99%\"><tbody><tr>
+				$tool_content .= "<table width='100%'><tbody><tr>
 				<td class=\"success\">$langConnYes</td></tr></tbody></table><br /><br />";
 				// Debugging CAS
 				if ($debugCAS) {
@@ -189,7 +189,7 @@ if(((!empty($auth_submit)) && ($auth_submit==1)) || !empty($_SESSION['cas_do']))
 					}
 				}
 			} else {
-				$tool_content .= "<table width=\"99%\"><tbody><tr><td class=\"caution\">$langConnNo";
+				$tool_content .= "<table width=\"100%\"><tbody><tr><td class=\"caution\">$langConnNo";
 				if (isset($GLOBALS['auth_errors'])) {
 					$tool_content .= "<p>$GLOBALS[auth_errors]</p>";
 				}
@@ -197,7 +197,7 @@ if(((!empty($auth_submit)) && ($auth_submit==1)) || !empty($_SESSION['cas_do']))
 				$auth_allow = 0;
 			}
 		} else {
-			$tool_content .= "<table width=\"99%\"><tbody><tr>
+			$tool_content .= "<table width=\"100%\"><tbody><tr>
 			<td class=\"caution\">$langWrongAuth</td></tr></tbody></table><br /><br />";
 			$auth_allow = 0;
 		}
@@ -278,13 +278,14 @@ else
 		$auth_data = get_auth_settings($auth);
 	}
 	$tool_content .= "<form name='authmenu' method='post' action='$_SERVER[PHP_SELF]'>
-	<table width='99%' class='FormData' align='left'><tbody><tr>
-	<th width='220'>
-	<input type=\"hidden\" name=\"auth_submit\" value=\"1\" />
-	<input type=\"hidden\" name=\"auth\" value=\"".htmlspecialchars($auth)."\" />
-	<input type=\"hidden\" name=\"step\" value=\"1\" />
-	</th>
-	<td><b>".get_auth_info($auth)."</b></td>
+	<fieldset>
+	<legend>".get_auth_info($auth)."</legend>
+<table width='100%' class='tbl'><tr>
+	<th colspan='2'>
+	  <input type=\"hidden\" name=\"auth_submit\" value=\"1\" />
+	  <input type=\"hidden\" name=\"auth\" value=\"".htmlspecialchars($auth)."\" />
+	  <input type=\"hidden\" name=\"step\" value=\"1\" />
+    </th>
 	</tr>";
 	
 	switch($auth) {
@@ -309,15 +310,15 @@ else
 		$tool_content .= "<p class=\"alert1\">$langCASnochange</p>";
 	}
 	if ($auth != 6 && $auth !=7) { 
-		$tool_content .= "<tr><td colspan='2'>&nbsp;</td></tr>";
-		$tool_content .= "<tr><th>&nbsp;</th><td>$langTestAccount</td></tr>
-		<tr><th class='left'>$langUsername: </th>
+		$tool_content .= "";
+		$tool_content .= "<tr><td colspan='2'><div class='info'>$langTestAccount</div></td></tr>
+		<tr><th width='220' class='left'>$langUsername: </th>
 		<td><input size='30' class='FormData_InputText' type='text' autocomplete='off' name='test_username' value='".$test_username."'></td></tr>
 		<tr><th class='left'>$langPass: </th>
 		<td><input size='30' class='FormData_InputText' type='password' autocomplete='off' name='test_password' value='".$test_password."'></td></tr>";
 	}
-	$tool_content .= "<tr><th>&nbsp;</th><td><input type='submit' name='submit' value='$langModify'></td></tr>";
-	$tool_content .= "</table></form>";
+	$tool_content .= "<tr><th>&nbsp;</th><td class='right'><input type='submit' name='submit' value='$langModify'></td></tr>";
+	$tool_content .= "</table></form></fieldset>";
 }
 
 draw($tool_content, 3);

@@ -211,10 +211,8 @@ $langEmail: $emailhelpdesk";
 			$d = mysql_fetch_assoc($r);
                         $warning = ($d['statut'] == 5)? $langWarnReject: $langGoingRejectRequest;
 			$tool_content .= "<form action='$_SERVER[PHP_SELF]' method='post'>
-			<table width='100%' class='tbl_alt'>
-			<tr>
-			<th width='220'>&nbsp;</th>
-			<td><b>$warning</b></td></tr>
+			<div class='alert1'>$warning</div>
+			<table width='100%' class='tbl_border'>
 			<tr><th class='left'>$langName</th>
 			<td>".$d['profname']."</td></tr>
 			<tr><th class='left'>$langSurname</th>
