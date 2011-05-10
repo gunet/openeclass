@@ -924,13 +924,13 @@ function warnIfExtNotLoaded($extensionName) {
 
 	global $tool_content, $langModuleNotInstalled, $langReadHelp, $langHere;
 	if (extension_loaded ($extensionName)) {
-		$tool_content .= "<img src='../template/classic/img/tick_1.png' alt='tick'/> $extensionName <br />";
+		$tool_content .= "<li><img src='../template/classic/img/tick_1.png' alt='tick' /> $extensionName <br /></li>";
 	} else {
 		$tool_content .= "
-                <img src='../template/classic/img/error.png' alt='error'/> $extensionName
+                <li><img src='../template/classic/img/error.png' alt='error' /> $extensionName
                 <font color=\"#FF0000\"> - <b>$langModuleNotInstalled</b></font>
                 (<a href=\"http://www.php.net/$extensionName\" target=_blank>$langReadHelp $langHere)</a>
-                <br />";
+                <br /></li>";
 	}
 }
 

@@ -208,7 +208,7 @@ if(isset($_REQUEST['install2']) OR isset($_REQUEST['back2']))
 	$tool_content .= "</textarea></td>
 	</tr>
 		<tr>
-	<td><img src='../template/classic/img/printer.png' alt='print'> <a href='../info/license/gpl_print.txt'>$langPrintVers</a></td>
+	<td><img src='../template/classic/img/printer.png' alt='print' /> <a href='../info/license/gpl_print.txt'>$langPrintVers</a></td>
 	</tr>
 	<tr>
 	<td class='right'>
@@ -604,17 +604,6 @@ elseif (isset($_REQUEST['install1']) || isset($_REQUEST['back1']))
         }
 	$tool_content .= "<form action='$_SERVER[PHP_SELF]?alreadyVisited=1' method='post'>";
 
-        function mkdir_or_error($dirname, $warn_message) {
-                global $errorContent, $configErrorExists, $langWarnInstallNotice1,
-                       $install_info_file, $langHere, $langWarnInstallNotice2;
-                if (!is_dir($dirname)) {
-                        if (@!mkdir($dirname, 0777)) {
-                                $errorContent[] = "<p class='caution'>$warn_message $langWarnInstallNotice1 <a href='$install_info_file'>$langHere</a> $langWarnInstallNotice2</p>";
-                                $configErrorExists = true;
-                        }
-                }
-        }
-
 	// create config, courses and video catalogs
         mkdir_or_error('../config', $langWarningInstall3);
 	mkdir_or_error('../courses', $langWarningInstall4);
@@ -704,3 +693,21 @@ elseif (isset($_REQUEST['install1']) || isset($_REQUEST['back1']))
 	</html>";
 	echo $tool_content;
 }
+
+
+// -----------------------
+// functions
+// -----------------------
+function mkdir_or_error($dirname, $warn_message) {
+                global $errorContent, $configErrorExists, $langWarnInstallNotice1,
+                       $install_info_file, $langHere, $langWarnInstallNotice2;
+                if (!is_dir($dirname)) {
+                        if (@!mkdir($dirname, 0777)) {
+                                $errorContent[] = "<p class='caution'>$warn_message $langWarnInstallNotice1 <a href='$install_info_file'>$langHere</a> $langWarnInstallNotice2</p>";
+                                $configErrorExists = true;
+                        }
+                }
+        }
+
+
+

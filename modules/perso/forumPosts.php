@@ -66,6 +66,7 @@ function getUserForumPosts($param, $type)
 
 	$forum_query_new 	= createForumQueries($usr_lst_login);
 	$forum_query_memo 	= createForumQueries($usr_memory);
+	//$forum_query_memo 	= createForumQueries($usr_lst_login);
 
 	$forumPosts = array();
 	$getNewPosts = false;
