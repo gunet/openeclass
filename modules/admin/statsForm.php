@@ -30,7 +30,7 @@ $start_cal = $jscalendar->make_input_field(
                  'showOthers'     => true,
                  'ifFormat'       => '%Y-%m-%d',
                  'timeFormat'     => '24'),
-           array('style'       => 'width: 15em; color: #840; background-color: #ff8; border: 1px solid #000; text-align: center',
+           array('style'       => '',
                  'name'        => 'u_date_start',
                  'value'       => $u_date_start));
 
@@ -39,7 +39,7 @@ $end_cal = $jscalendar->make_input_field(
                  'showOthers'     => true,
                  'ifFormat'       => '%Y-%m-%d',
                  'timeFormat'     => '24'),
-           array('style'       => 'width: 15em; color: #840; background-color: #ff8; border: 1px solid #000; text-align: center',
+           array('style'       => '',
                  'name'        => 'u_date_end',
                  'value'       => $u_date_end));
 
