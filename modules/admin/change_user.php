@@ -48,7 +48,7 @@ if (isset($_REQUEST['username'])) {
                 $_SESSION['prenom'] = $myrow['prenom'];
                 $_SESSION['statut'] = $myrow['statut'];
                 $_SESSION['email'] = $myrow['email'];
-                $_SESSION['is_admin'] = ($myrow['user_id'] == 1 or );
+                $_SESSION['is_admin'] = $myrow['is_admin'];
                 $_SESSION['uname'] = $myrow['username'];
                 $userPerso = $myrow['perso'];
                 $userLanguage = $myrow['lang'];
