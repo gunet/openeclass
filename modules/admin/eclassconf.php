@@ -148,10 +148,10 @@ $active_ui_languages = '.$string_active_ui_languages.'
 	@update_config_table('block_username_change', $_POST['block_username_change']);
 	@update_config_table('betacms', $_POST['betacms']);
 	// Display result message
-	$tool_content .= "<p>".$langFileUpdatedSuccess."</p>";
+	$tool_content .= "<p class='success'>".$langFileUpdatedSuccess."</p>";
 }
 	// Display link to go back to index.php
-	$tool_content .= "<center><p><a href=\"index.php\">".$langBack."</a></p></center>";
+	$tool_content .= "<p class='right'><a href=\"index.php\">".$langBack."</a></p>";
 
 }
 // Display config.php edit form
@@ -344,7 +344,7 @@ else {
 	  </tr>
 	  <tr>
 	    <th class=\"left\">&nbsp;</th>
-	    <td><input type='submit' name='submit' value='$langModify'></td>
+	    <td class='right'><input type='submit' name='submit' value='$langModify'></td>
 	  </tr>
 	  </tbody>
 	  </table>
