@@ -83,43 +83,35 @@ if (isset($c)) {
 		"SELECT * FROM cours WHERE code = '".mysql_real_escape_string($c)."'");
 	$row = mysql_fetch_array($sql);
 	// Display course information and link to edit
-	$tool_content .= "<table class=\"FormData\" width=\"99%\" align=\"left\">
-	<tbody>
-	<tr>
-	  <th width=\"220\">&nbsp;</th>
-	  <td>".$langCourseInfo." (<a href=\"infocours.php?c=".htmlspecialchars($c)."".$searchurl."\">".$langModify."</a>)</td>
-	</tr>";
+	$tool_content .= "<fieldset>
+	<legend>".$langCourseInfo." <a href=\"infocours.php?c=".htmlspecialchars($c)."".$searchurl."\"><img src='../../template/classic/img/edit.png' alt='' border='0' title='".$langModify."'></a></legend>
+	<table class='tbl' width='100%'>";
 	$tool_content .= "
 	<tr>
-	  <th class=\"left\">".$langFaculty.":</th>
+	  <th width='250'>".$langFaculty.":</th>
 	  <td>".$row['faculte']."</td>
 	</tr>
 	<tr>
-	  <th class=\"left\">".$langCode.":</th>
+	  <th>".$langCode.":</th>
 	  <td>".$row['code']."</td>
 	</tr>
 	<tr>
-	  <th class=\"left\"><b>".$langTitle.":</b></th>
+	  <th><b>".$langTitle.":</b></th>
 	  <td>".$row['intitule']."</td>
 	</tr>
 	<tr>
-	  <th class=\"left\"><b>".$langTutor.":</b></td>
+	  <th><b>".$langTutor.":</b></th>
 	  <td>".$row['titulaires']."</td>
 	</tr>
-	</tbody>
 	</table>
-	<br />\n";
+	</fieldset>";
 	// Display course quota and link to edit
-	$tool_content .= "
-	<table class=\"FormData\" width=\"99%\" align=\"left\">
-	<tbody>
+	$tool_content .= "<fieldset>
+	<legend>".$langQuota." <a href=\"quotacours.php?c=".htmlspecialchars($c).$searchurl."\"><img src='../../template/classic/img/edit.png' border='0' alt='' title='".$langModify."'></a></legend>
+<table width='100%' class='tbl'>
 	<tr>
-	  <td colspan=\"2\">&nbsp;</td>
-	</tr>
-	<tr>
-	  <th width=\"220\" class=\"left\"><b>$langTheCourse <b>$row[intitule]</b> $langMaxQuota</b></th>
-	  <td>".$langQuota." (<a href=\"quotacours.php?c=".htmlspecialchars($c).$searchurl."\">".$langModify."</a>)</td>
-	</tr>";
+	  <th colspan='2'><div class='sub_title1'>$langTheCourse $row[intitule] $langMaxQuota</div></th>
+	  </tr>";
 	// Get information about course quota
 	$q = mysql_fetch_array(mysql_query("SELECT code,intitule,doc_quota,video_quota,group_quota,dropbox_quota
 			FROM cours WHERE code='".mysql_real_escape_string($c)."'"));
@@ -130,36 +122,30 @@ if (isset($c)) {
 
 	$tool_content .= "
 	<tr>
-	  <th class=\"left\">$langLegend <b>$langDoc</b>:</th>
+	  <td>$langLegend <b>$langDoc</b>:</td>
 	  <td>".$dq."</td>
 	</tr>";
 	$tool_content .= "
 	<tr>
-	  <th class=\"left\">$langLegend <b>$langVideo</b>:</th>
+	  <td>$langLegend <b>$langVideo</b>:</td>
 	  <td>".$vq."</td>
 	</tr>";
 	$tool_content .= "
 	<tr>
-	  <th class=\"left\">$langLegend <b>$langGroups</b>:</th>
+	  <td width='250'>$langLegend <b>$langGroups</b>:</td>
 	  <td>".$gq."</td>
 	</tr>";
 	$tool_content .= "
 	<tr>
-	  <th class=\"left\">$langLegend <b>$langDropBox</b>:</th>
+	  <td>$langLegend <b>$langDropBox</b>:</td>
 	  <td>".$drq."</td>
 	</tr>";
-	$tool_content .= "</tbody></table><br />\n";
+	$tool_content .= "</table></fieldset>";
 	// Display course type and link to edit
-	$tool_content .= "<table class=\"FormData\" width=\"99%\" align=\"left\">
-	<tbody>
-	<tr>
-	  <td colspan=\"2\">&nbsp;</td>
-	</tr>
-	<tr>
-	  <th width=\"220\">&nbsp;</th>
-	  <td>".$langCourseStatus." (<a href=\"statuscours.php?c=".htmlspecialchars($c)."".$searchurl."\">".$langModify."</a>)</td>
-	</tr>";
-	$tool_content .= "<tr><th class=\"left\"><b>".$langCurrentStatus.":</b></th><td>";
+	$tool_content .= "<fieldset>
+	<legend>".$langCourseStatus." <a href=\"statuscours.php?c=".htmlspecialchars($c)."".$searchurl."\"><img src='../../template/classic/img/edit.png' border='0' alt='' title='".$langModify."'></a></legend>
+	<table width='100%' class='tbl'>";
+	$tool_content .= "<tr><th width='250'>".$langCurrentStatus.":</th><td>";
 	switch ($row['visible']) {
 	case 2:
 		$tool_content .= $langOpenCourse;
@@ -171,22 +157,15 @@ if (isset($c)) {
 		$tool_content .= $langClosedCourse;
 		break;
 	}
-	$tool_content .= "</td></tr></tbody></table><br>\n";
+	$tool_content .= "</td></tr></table></fieldset>";
 	// Display other available choices
 	$tool_content .= "
-	<table class=\"FormData\" width=\"99%\" align=\"left\">
-	<tbody>
-	<tr>
-	  <td colspan=\"2\">&nbsp;</td>
-	</tr>
-	<tr>
-	  <th width=\"220\">&nbsp;</th>
-	  <td>".$langOtherActions."</td>
-	</tr>";
+	<fieldset>
+	<legend>".$langOtherActions."</legend>
+<table width='100%' class='tbl'>";
 	// Users list
 	$tool_content .= "
 	<tr>
-	  <th rowspan=\"5\">&nbsp;</th>
 	  <td><a href=\"listusers.php?c=".course_code_to_id($c)."\">".$langListUsersActions."</a></td>
 	</tr>";
   // Register unregister users
@@ -196,14 +175,14 @@ if (isset($c)) {
 	</tr>";
   // Backup course
 	$tool_content .= "<tr>
-	  <td><a href=\"../course_info/archive_course.php?c=".htmlspecialchars($c)."".$searchurl."\">".$langTakeBackup."<a/></td>
+	  <td><a href=\"../course_info/archive_course.php?c=".htmlspecialchars($c)."".$searchurl."\">".$langTakeBackup."</a></td>
 	</tr>";
   // Delete course
 	$tool_content .= "
 	<tr>
 	  <td><a href=\"delcours.php?c=".htmlspecialchars($c)."".$searchurl."\">".$langCourseDelFull."</a></td>
 	</tr>";
-	$tool_content .= "</tbody></table><br>";
+	$tool_content .= "</table></fieldset>";
 
 	// If a search is on display link to go back to listcours with search results
 	if (isset($search) && ($search=="yes")) {
