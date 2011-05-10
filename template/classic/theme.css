@@ -62,7 +62,7 @@ body {
 
 hr {
     height: 1px;
-    color: #dfdfdf;
+    border: 1px dotted #dfdfdf;
 }
 
 /* 2.1 Headings */

@@ -137,27 +137,27 @@ if (!isset($_POST['submit2'])) {
         $closeregdefault = $close_user_registration? ' checked="checked"': '';
         // get old contact values
         $tool_content .= "<form action='$_SERVER[PHP_SELF]' method='post'>" .
-                "<div class='kk'>" .
+                "<div class='info'>" .
                 "<p>$langConfigFound" .
-                "<br />$langConfigMod</p>" .
+                "<br />$langConfigMod</p></div>" .
                 "<fieldset><legend>$langUpgContact</legend>" .
-                "<table><tr><td style='border: 1px solid #FFFFFF;'>$langInstituteShortName:</td>" .
-                "<td style='border: 1px solid #FFFFFF;'>&nbsp;<input class=auth_input_admin type='text' size='40' name='Institution' value='".@$Institution."'></td></tr>" .
-                "<tr><td style='border: 1px solid #FFFFFF;'>$langUpgAddress</td>" .
-                "<td style='border: 1px solid #FFFFFF;'>&nbsp;<textarea rows='3' cols='40' class=auth_input_admin name='postaddress'>".@$postaddress."</textarea></td></tr>" .
-                "<tr><td style='border: 1px solid #FFFFFF;'>$langUpgTel</td>" .
-                "<td style='border: 1px solid #FFFFFF;'>&nbsp;<input class=auth_input_admin type='text' name='telephone' value='".@$telephone."'></td></tr>" .
-                "<tr><td style='border: 1px solid #FFFFFF;'>Fax:</td>" .
-                "<td style='border: 1px solid #FFFFFF;'>&nbsp;<input class=auth_input_admin type='text' name='fax' value='".@$fax."'></td></tr></table></fieldset>
+                "<table width='100%' class='tbl'><tr><th width='220'>$langInstituteShortName:</th>" .
+                "<td><input class=auth_input_admin type='text' size='40' name='Institution' value='".@$Institution."'></td></tr>" .
+                "<tr><th>$langUpgAddress</th>" .
+                "<td><textarea rows='3' cols='40' class=auth_input_admin name='postaddress'>".@$postaddress."</textarea></td></tr>" .
+                "<tr><th>$langUpgTel</th>" .
+                "<td><input class=auth_input_admin type='text' name='telephone' value='".@$telephone."'></td></tr>" .
+                "<tr><th>Fax:</th>" .
+                "<td><input class=auth_input_admin type='text' name='fax' value='".@$fax."'></td></tr></table></fieldset>
+				
                 <fieldset><legend>$langUpgReg</legend>
-                <table cellpadding='1' cellspacing='2' border='0' width='99%'>
-                <tr><td style='border: 1px solid #FFFFFF;''>
-                <span class='explanationtext'>$langViaReq</span></td>
-                <td style='border: 1px solid #FFFFFF;'><input type='checkbox' name='reguser' $closeregdefault></td>
+                <table width='100%' class='tbl'>
+                <tr><th width='220'>$langViaReq:</th>
+                <td><input type='checkbox' name='reguser' $closeregdefault></td>
                 </tr>
                 </table></fieldset>
-                <p><input name='submit2' value='$langCont' type='submit'></p>
-                </div></form>";
+                <div class='right'><input name='submit2' value='$langCont &raquo;' type='submit'></div>
+                </form>";
 } else {
         // Main part of upgrade starts here
 ?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -166,13 +166,16 @@ if (!isset($_POST['submit2'])) {
 <title><?php echo $langUpgrade; ?></title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <link href="../template/classic/theme.css" rel="stylesheet" type="text/css" />
-<link href="../template/classic/tool_content.css" rel="stylesheet" type="text/css" />
 </head>
 <body class='upgrade-main'>
+  <div id="container" style="padding: 30px;">
+  <div id="header"> 
+
+<a href="{URL_PATH}" title="{SITE_NAME}" class="logo"></a></div>
 <?php
 
-        echo "<h1>$langUpgradeStart</h1>",
-             "<p>$langUpgradeConfig</p>";
+        echo "<p class='title1'>$langUpgradeStart</p>",
+             "<p class='sub_title1'>$langUpgradeConfig</p>";
 	flush();
         // backup of config file
         if (!copy("config.php","config_backup.php"))
@@ -254,7 +257,7 @@ if (!isset($_POST['submit2'])) {
         // 		upgrade eclass main database
         // ****************************************************
 
-	echo "<p>$langUpgradeBase <b>$mysqlMainDb</b></p>";
+	echo "<p class='sub_title1'>$langUpgradeBase <b>$mysqlMainDb</b></p>";
 	flush();
         mysql_select_db($mysqlMainDb);
 
@@ -548,12 +551,12 @@ if (!isset($_POST['submit2'])) {
 
         db_query("UPDATE config SET `value` = '" . ECLASS_VERSION ."' WHERE `key`='version'", $mysqlMainDb);
 
-        echo "<hr /><p><em class='success_small' style='font-weight:bold;'>$langUpgradeSuccess</em></p>
-                <p><em style='font-weight:bold;'>$langUpgReady</em></p>
-                <p><em>$langUpgSucNotice</em></p>
-		<center><p><a href='$urlServer?logout=yes'>$langBack</a></p></center>";
+        echo "<hr /><p class='success'>$langUpgradeSuccess
+                <br /><b>$langUpgReady</b></p>
+                <p class='info'>$langUpgSucNotice</p>
+		<p class='right'><a href='$urlServer?logout=yes'>$langBack</a></p>";
 
-        echo '</body></html>';
+        echo '</div></body></html>';
         exit;
 } // end of if not submit
 

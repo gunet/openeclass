@@ -60,11 +60,11 @@ $tool_content .= "
       <td>$langAboutText <b>$siteName " . ECLASS_VERSION . "</b></td>
     </tr>
     <tr>
-      <th class='left' style='border-left: 1px solid #edecdf;'>IP Host:</th>
+      <th>IP Host:</th>
       <td>$langHostName <b>$_SERVER[SERVER_NAME]</b></td>
     </tr>
     <tr>
-      <th class='left' style='border-left: 1px solid #edecdf;'>Web Server:</th>
+      <th>Web Server:</th>
       <td>$langWebVersion <b>$_SERVER[SERVER_SOFTWARE]</b></td>
     </tr>
     <tr>
@@ -156,7 +156,7 @@ $tool_content .= "
     <tr>
       <th>$langAfterLastLoginInfo</th>
       <td>$langAfterLastLogin
-        <ul>
+        <ul class='custom_list'>
           <li><b>".$lastregisteredprofs."</b> $langTeachers</li>
           <li><b>".$lastregisteredstuds."</b> $langUsersS </li>
         </ul>
