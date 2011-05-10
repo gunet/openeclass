@@ -38,32 +38,20 @@ $tool_content = "";
 
 if (isset($_POST['submit'])) {
 	foreach (array('temp' => 2, 'garbage' => 5, 'archive' => 1, 'tmpUnzipping' => 1) as $dir => $days) {
-		$tool_content .= sprintf("<p class=kk>$langCleaningUp</p>", $days,
+		$tool_content .= sprintf("<p class='success'>$langCleaningUp</p>", "<b>$days</b>",
 			($days == 1)? $langDaySing: $langDayPlur, $dir);
-		cleanup("${webDir}courses/$dir", $days);
+		cleanup("<${webDir}courses/$dir", $days);
 	}
 } else {
 	$tool_content .= "
-	<table width='99%' class='FormData' align='left'>
-	<tbody>
-	<tr>
-	  <th width='220'>&nbsp;</th>
-	  <td>$langCleanupInfo</td>
-	</tr>
-	<tr>
-	  <th width='220'>&nbsp;</th>
-	  <td>
+<div class='caution'>$langCleanupInfo</div>
+<div class='center'>
 	     <form method='post' action='$_SERVER[PHP_SELF]'>
 		 <input type='submit' name='submit' value='$langCleanup'>
-	     </form>
-	  </td>
-	</tr>
-	    </tbody>
-	</table>
-	<br />";
+	     </form></div>";
 }
 
-$tool_content .= "<br /><br /><p align=right><a href=\"index.php\" class=mainpage>$langBackAdmin&nbsp;</a></p>";
+$tool_content .= "<br /><p align=right><a href=\"index.php\">$langBackAdmin</a></p>";
 
 draw($tool_content, 3);
 

@@ -105,7 +105,7 @@ if (!isset($_POST['submit2'])) {
         }
 
         if (!is_admin(@$_POST['login'], $newpass, $mysqlMainDb)) {
-                $tool_content .= "<p>$langUpgAdminError</p>
+                $tool_content .= "<p class='alert1'>$langUpgAdminError</p>
                         <center><a href=\"index.php\">$langBack</a></center>";
                 draw($tool_content, 0);
                 exit;

@@ -45,41 +45,44 @@ $tool_content = "";
 
 // Main body
 $tool_content .= "
-<div class='warntitle'>$langWarnUpgrade</div><p>$langExplUpgrade</p>
-<p>$langExpl2Upgrade</p>";
+<div class='alert1'><b>$langWarnUpgrade</b><p>$langExplUpgrade</p>
+<p> &nbsp; </p>
+<p class='red'>$langExpl2Upgrade</p>";
 set_time_limit(0);
 $max_execution_time = ini_get('max_execution_time');
 if ($max_execution_time != 0 and $max_execution_time < 300) {
-	$tool_content .= "<hr><p>$langExecTimeUpgrade</p><hr>";
+	$tool_content .= "<p>$langExecTimeUpgrade</p>";
 	draw($tool_content, 0);
 	exit;
 }
-$tool_content .= "<p>$langUpgToSee <a href='$link_changes_file'>$langHere</a>. $langUpgRead <a href='$upgrade_info_file'>$langUpgMan</a>
+$tool_content .= "<p> &nbsp; </p><p>$langUpgToSee <a href='$link_changes_file'>$langHere</a>. $langUpgRead <a href='$upgrade_info_file'>$langUpgMan</a>
    $langUpgLastStep</p>
-<p>$langUpgradeCont</p>
+<p>$langUpgradeCont</p></div>
 <form method='post' action='upgrade.php'>
-<table width='70%' align='center'>
-<tr><td style='border: 1px solid #FFFFFF;'>
-<fieldset><legend><b>$langUpgDetails</b></legend>
-<table cellpadding='1' cellspacing='2' width='99%'>
-<tr><th style='text-align: left; background: #edecdf; color: #727266; font-size: 90%'>$langUsername :</th>
-<td style=\"border: 1px solid #FFFFFF;\">&nbsp;<input class='auth_input_admin' style='width:200px; heigth:20px;' type='text' name='login' size='20'></td>
+<fieldset>
+<legend><b>$langUpgDetails</b></legend>
+<table class='tbl' width='100%'>
+<tr>
+<th width='200'>$langUsername:</th>
+<td><input class='auth_input_admin' style='width:200px; heigth:20px;' type='text' name='login' size='20'></td>
 </tr>
-<tr><th style='text-align: left; background: #edecdf; color: #727266; font-size: 90%'>$langPass :</th>
-    <td style=\"border: 1px solid #FFFFFF;\">&nbsp;<input class='auth_input_admin' type='password' style='width:200px; heigth:20px;' name='password' size='20'></td>
+<tr>
+<th width='200'>$langPass:</th>
+<td>&nbsp;<input class='auth_input_admin' type='password' style='width:200px; heigth:20px;' name='password' size='20'></td>
 </tr>
-<tr><td colspan='2' style=\"border: 1px solid #FFFFFF;\" align='center'>
-    <input type='submit' name='submit_upgrade' value='$langUpgrade'></td>
-</tr>
+
+<tr>
+  <td class='right' colspan='2'><input type='submit' name='submit_upgrade2' value='$langUpgrade' /></td>
+  </tr>
+
 </table>
-</fieldset>
-</td></tr></table>";
+</fieldset>";
 
 if (isset($from_admin)) {
         $tool_content .= "<input type='hidden' name='from_admin' value='$from_admin'>";
 }
 
-$tool_content .= "</form></td></tr><tr><td style=\"border: 1px solid #FFFFFF;\" colspan=2>";
+$tool_content .= "</form>";
 
 if (isset($from_admin)) {
         $tool_content .= "<p align=right><a href='../modules/admin/index.php' class=mainpage>$langBackAdmin</a></p>";
