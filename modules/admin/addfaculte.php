@@ -130,7 +130,7 @@ if (!isset($_GET['a'])) {
 	}
 	// Close table correctly
 	$tool_content .= "</table>\n";
-	$tool_content .= "<p align=\"right\"><a href=\"index.php\">".$langBack."</a></p>";
+	$tool_content .= "<br /><p class='right'><a href=\"index.php\">".$langBack."</a></p>";
 }
 // Add a new faculty
 elseif (isset($_GET['a']) and $_GET['a'] == 1)  {
@@ -180,7 +180,7 @@ elseif (isset($_GET['a']) and $_GET['a'] == 1)  {
           </tr>
 	  <tr>
 	    <th>&nbsp;</th>
-	    <td><input type='submit' name='add' value='".$langAdd."' /></td>
+	    <td class='right'><input type='submit' name='add' value='".$langAdd."' /></td>
 	  </tr>
 	</table>
         </fieldset>
@@ -251,7 +251,7 @@ elseif (isset($_GET['a']) and $_GET['a'] == 3)  {
 	   </tr>
 	   <tr>
 		<th>&nbsp;</th>
-		<td><input type='hidden' name='c' value='$c' />
+		<td class='right'><input type='hidden' name='c' value='$c' />
 		<input type='submit' name='edit' value='$langAcceptChanges' />
 		</td>
 	   </tr>

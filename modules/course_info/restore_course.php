@@ -52,13 +52,17 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
                    <tr><th>$langFileSentType</td><td>".$_FILES['archiveZipped']['type']."</th></tr>
                    <tr><th>$langFileSentTName</td><td>".$_FILES['archiveZipped']['tmp_name']."</th></tr>
 	        </table></fieldset>
-                <table width='100%' class='tbl'><caption>$langFileUnzipping</caption><tbody>
+			<fieldset>
+	<legend>".$langFileUnzipping."</legend>
+	<table class='tbl' width='100%'>
                     <tr><td>".unpack_zip_show_files($_FILES['archiveZipped']['tmp_name'])."</td></tr>
-                </tbody></table><br />";
+                </table></fieldset>";
 } elseif (isset($_POST['send_path']) and isset($_POST['pathToArchive'])) {
         $pathToArchive = $_POST['pathToArchive'];
 	if (file_exists($pathToArchive)) {
-		$tool_content .= "<table width='100%' class='tbl'><caption>".$langFileUnzipping."</caption><tbody>";
+		$tool_content .= "<fieldset>
+	<legend>".$langFileUnzipping."</legend>
+	<table class='tbl' width='100%'>";
 		$tool_content .= "<tr><td>".unpack_zip_show_files($pathToArchive)."</td></tr>";
 		$tool_content .= "</table></fieldset>";
 	} else {

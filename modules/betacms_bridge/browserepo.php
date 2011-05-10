@@ -44,7 +44,7 @@ require_once("include/bcms.inc.php");
 session_start();
 
 if (!ini_get('allow_url_include')) {
-	$tool_content .= "<p class=\"caution_small\">".
+	$tool_content .= "<p class=\"caution\">".
 		$GLOBALS['langNeedAllowUrlInclude'].
 		"</p>";
 	draw($tool_content,3);
@@ -52,7 +52,7 @@ if (!ini_get('allow_url_include')) {
 }
 
 if (!ini_get('allow_url_fopen')) {
-	$tool_content .= "<p class=\"caution_small\">".
+	$tool_content .= "<p class=\"caution\">".
 		$GLOBALS['langNeedAllowUrlFopen'].
 		"</p>";
 	draw($tool_content,3);
@@ -82,7 +82,7 @@ else {
 	if (empty($_POST[BRIDGE_HOST]) || empty($_POST[BRIDGE_CONTEXT]) 
 		|| empty($_POST[BCMS_HOST]) || empty($_POST[BCMS_REPO]) 
 		|| empty($_POST[BCMS_USER]) || empty($_POST[BCMS_PASS]) ) {
-		$tool_content .= "<p class=\"caution_small\">$langEmptyFields</p>
+		$tool_content .= "<p class=\"caution\">$langEmptyFields</p>
 			<br/><br/><p align=\"right\"><a href='$_SERVER[PHP_SELF]'>$langAgain</a></p>";
 	}
 	else {
@@ -96,7 +96,7 @@ else {
 		);
 		
 		if (!checkConnectivityToRepo($repo)) {
-			$tool_content .= "<p class=\"caution_small\">".
+			$tool_content .= "<p class=\"caution\">".
 				$GLOBALS['langFailConnectBetaCMSBridge'].
 				"</p>".
 				"<br/><br/><p align=\"right\"><a href='$_SERVER[PHP_SELF]'>$langAgain</a></p>";
