@@ -88,14 +88,7 @@ if (!extension_loaded('gd')) {
 } else {
     $made_chart = true;
     $tool_content .= '
-    <table class="FormData" width="99%" align="left">
-    <tbody>
-    <tr>
-      <th width="220"  class="left">&nbsp;</th>
-      <td valign="top">'.$langOldStatsLoginsExpl.'</td>
-    </tr>
-    </tbody>
-    </table>';
+    <div class="info">'.$langOldStatsLoginsExpl.'</div>';
 
     /*****************************************
       start making chart
@@ -149,23 +142,19 @@ if (!extension_loaded('gd')) {
 //check if there are statistics to show
 if ($chart_content) {
     $tool_content .= '
-    <table class="FormData" width="99%" align="left">
-    <tbody>
+    <table width="100%" class="tbl_1">
     <tr>
-      <th width="220"  class="left">'.$langVisits.' :</th>
+      <th width="220"  class="left">'.$langVisits.':</th>
       <td valign="top"><img src="'.$urlServer.$chart_path.'" /></td>
     </tr>
-    </tbody>
     </table>';
 } elseif (isset($btnUsage) and $chart_content == 0) {
     $tool_content .= '
-    <table class="FormData" width="99%" align="left">
-    <tbody>
+    <table width="100%" class="tbl_1">
     <tr>
       <th width="220"  class="left">'.$langVisits.' :</th>
       <td valign="top">'.$langNoStatistics.'</td>
     </tr>
-    </tbody>
     </table>';
 }
     $tool_content .= '<br />';
@@ -193,19 +182,18 @@ if ($chart_content) {
 
 
     $tool_content .= '<form method="post">
-    <table class="FormData" width="99%" align="left">
-    <tbody>
+    <table width="100%" class="tbl">
     <tr>
-      <th width="220" class="left">'.$langStartDate.'</th>
+      <th width="150" class="left">'.$langStartDate.':</th>
       <td>'."$start_cal".'</td>
     </tr>
     <tr>
-      <th class="left">'.$langEndDate.'</th>
+      <th class="left">'.$langEndDate.':</th>
       <td>'."$end_cal".'</td>
     </tr>
     <tr>
-      <th>&nbsp;</th>
-      <td><input type="submit" name="btnUsage" value="'.$langSubmit.'"></td>
+      <td>&nbsp;</td>
+      <td class="right"><input type="submit" name="btnUsage" value="'.$langSubmit.'"></td>
     </tr>
     </table>
     </form>';
