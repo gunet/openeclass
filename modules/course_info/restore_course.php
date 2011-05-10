@@ -44,13 +44,14 @@ $tool_content = "";
 $version = 1;
 $encoding = 'ISO-8859-7';
 if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
-        $tool_content .= "
-                <table width='100%' class='tbl'><caption>".$langFileSent."</caption>
-                   <tr><td width='3%'>$langFileSentName</td><td>".$_FILES['archiveZipped']['name']."</td></tr>
-                   <tr><td width='3%'>$langFileSentSize</td><td>".$_FILES['archiveZipped']['size']."</td></tr>
-                   <tr><td width='3%'>$langFileSentType</td><td>".$_FILES['archiveZipped']['type']."</td></tr>
-                   <tr><td width='3%'>$langFileSentTName</td><td>".$_FILES['archiveZipped']['tmp_name']."</td></tr>
-	        </table><br />
+        $tool_content .= "<fieldset>
+	<legend>".$langFileSent."</legend>
+	<table class='tbl' width='100%'>
+                   <tr><th width='150'>$langFileSentName</td><td>".$_FILES['archiveZipped']['name']."</th></tr>
+                   <tr><th>$langFileSentSize</td><td>".$_FILES['archiveZipped']['size']."</th></tr>
+                   <tr><th>$langFileSentType</td><td>".$_FILES['archiveZipped']['type']."</th></tr>
+                   <tr><th>$langFileSentTName</td><td>".$_FILES['archiveZipped']['tmp_name']."</th></tr>
+	        </table></fieldset>
                 <table width='100%' class='tbl'><caption>$langFileUnzipping</caption><tbody>
                     <tr><td>".unpack_zip_show_files($_FILES['archiveZipped']['tmp_name'])."</td></tr>
                 </tbody></table><br />";
@@ -59,7 +60,7 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
 	if (file_exists($pathToArchive)) {
 		$tool_content .= "<table width='100%' class='tbl'><caption>".$langFileUnzipping."</caption><tbody>";
 		$tool_content .= "<tr><td>".unpack_zip_show_files($pathToArchive)."</td></tr>";
-		$tool_content .= "<tbody></table><br />";
+		$tool_content .= "</table></fieldset>";
 	} else {
 		$tool_content .= "<p class='caution'>$langFileNotFound</p>";
 	}

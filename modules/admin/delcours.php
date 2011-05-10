@@ -63,29 +63,31 @@ $navigation[] = array('url' => 'listcours.php', 'name' => $langListCours);
 // Delete course
 if (isset($_GET['delete']) && $cours_id)  {
         delete_course($cours_id);
-        $tool_content .= "<p>".$langCourseDelSuccess."</p>";
+        $tool_content .= "<p class='success'>".$langCourseDelSuccess."</p>";
 }
 // Display confirmatiom message for course deletion
 else {
 	$row = mysql_fetch_array(db_query("SELECT * FROM cours WHERE cours_id = $cours_id"));
 
-	$tool_content .= "<table><caption>".$langCourseDelConfirm."</caption><tbody>";
+	$tool_content .= "<fieldset>
+	<legend>".$langCourseDelConfirm."</legend>
+	<table class='tbl' width='100%'>";
 	$tool_content .= "<tr><td>
-		<br />".$langCourseDelConfirm2." <em>".course_id_to_title($cours_id)."</em>;
+		<div class='caution'>".$langCourseDelConfirm2." <em>".course_id_to_title($cours_id)."</em>;
 		<br /><br /><i>".$langNoticeDel."</i><br />
-		</td></tr>";
+		</div></td></tr>";
 	$tool_content .= "<tr>
-	<td><ul><li><a href='".$_SERVER['PHP_SELF']."?c=".htmlspecialchars($_GET['c'])."&amp;delete=yes'><b>$langYes</b></a><br />&nbsp;</li>
+	<td><ul class='custom_list'><li><a href='".$_SERVER['PHP_SELF']."?c=".htmlspecialchars($_GET['c'])."&amp;delete=yes'><b>$langYes</b></a></li>
 	<li><a href='listcours.php'><b>$langNo</b></a></li></ul></td>
 	</tr>";
-	$tool_content .= "</tbody></table><br />";
+	$tool_content .= "</table></fieldset>";
 }
 // If course deleted go back to listcours.php
 if (isset($_GET['c']) && !isset($_GET['delete'])) {
-	$tool_content .= "<center><p><a href='listcours.php'>$langBack</a></p></center>";
+	$tool_content .= "<p class='right'><a href='listcours.php'>$langBack</a></p>";
 }
 // Display link to index.php
 else {
-	$tool_content .= "<br /><p align='right'><a href='index.php'>$langBack</a></p>";
+	$tool_content .= "<p class='right'><a href='index.php'>$langBack</a></p>";
 }
 draw($tool_content, 3);
