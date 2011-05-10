@@ -85,10 +85,9 @@ else {
 	$visibleChecked[$visible]="checked";
 	
 	$tool_content .= "<form action=".$_SERVER['PHP_SELF']."?c=".htmlspecialchars($_GET['c'])." method=\"post\">
-	<table class=\"FormData\" width=\"99%\" align=\"left\">
-	<tbody>
-	<tr><th width=\"220\">&nbsp;</th>
-	<td colspan=\"2\"><b>".$langCourseStatusChange."<b></td></tr>";
+<fieldset>
+	<legend>".$langCourseStatusChange."</legend>
+	<table class='tbl' width='100%'>";
 	$tool_content .= "<tr><th class=\"left\" rowspan=\"3\">$langConfTip</th>
 	<td width=\"1\"><input type=\"radio\" name=\"formvisible\" value=\"2\"".@$visibleChecked[2]."></td>
 	<td>".$langPublic."</td>
@@ -103,9 +102,9 @@ else {
 	</tr>
 	<tr>
 	<th>&nbsp;</th>
-	<td colspan=\"2\"><input type='submit' name='submit' value='$langModify'></td>
+	<td colspan=\"2\" class='right'><input type='submit' name='submit' value='$langModify'></td>
 	</tr>
-	</tbody></table>
+	</table></fieldset>
 	</form>";
 }
 // If course selected go back to editcours.php

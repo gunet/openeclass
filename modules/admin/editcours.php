@@ -110,7 +110,7 @@ if (isset($c)) {
 	<legend>".$langQuota." <a href=\"quotacours.php?c=".htmlspecialchars($c).$searchurl."\"><img src='../../template/classic/img/edit.png' border='0' alt='' title='".$langModify."'></a></legend>
 <table width='100%' class='tbl'>
 	<tr>
-	  <th colspan='2'><div class='sub_title1'>$langTheCourse $row[intitule] $langMaxQuota</div></th>
+	  <td colspan='2'><div class='sub_title1'>$langTheCourse $row[intitule] $langMaxQuota</div></td>
 	  </tr>";
 	// Get information about course quota
 	$q = mysql_fetch_array(mysql_query("SELECT code,intitule,doc_quota,video_quota,group_quota,dropbox_quota

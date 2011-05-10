@@ -86,7 +86,7 @@ if (isset($_POST['submit']))  {
 else {
 	$q = mysql_fetch_array(mysql_query("SELECT code,intitule,doc_quota,video_quota,group_quota,dropbox_quota
 			FROM cours WHERE code='".mysql_real_escape_string($_GET['c'])."'"));
-	$quota_info .= "<i>".$langTheCourse." <b>".$q['intitule']."</b> ".$langMaxQuota;
+	$quota_info .= "".$langTheCourse." <b>".$q['intitule']."</b> ".$langMaxQuota;
 	$dq = $q['doc_quota'] / 1000000;
 	$vq = $q['video_quota'] / 1000000;
 	$gq = $q['group_quota'] / 1000000;
@@ -94,39 +94,34 @@ else {
 	
 	$tool_content .= "
 	<form action=".$_SERVER['PHP_SELF']."?c=".htmlspecialchars($_GET['c'])." method=\"post\">
-	<table class=\"FormData\" width=\"99%\" align=\"left\">
-	<tbody>
+<fieldset>
+	<legend>".$langQuotaAdmin."</legend>
+<table width='100%' class='tbl'>
 	<tr>
-	  <th width=\"220\">&nbsp;</th>
-	  <td><b>".$langQuotaAdmin."</b></td>
-	</tr>
+	  <td colspan='2' class='sub_title1'>".$quota_info."</td>
+    </tr>
 	<tr>
-	  <th>&nbsp;</th>
-	  <td>".$quota_info."</td>
-	</tr>
-	<tr>
-	  <th class=\"left\">$langLegend <b>$langDoc</b>:</th>
+	  <td>$langLegend <b>$langDoc</b>:</td>
 	  <td><input type='text' name='dq' value='$dq' size='4' maxlength='4'> Mb.</td>
 	</tr>
 	<tr>
-	  <th class=\"left\">$langLegend <b>$langVideo</b>:</th>
+	  <td width='250'>$langLegend <b>$langVideo</b>:</td>
 	  <td><input type='text' name='vq' value='$vq' size='4' maxlength='4'> Mb.</td>
 	</tr>
 	<tr>
-	  <th class=\"left\">$langLegend <b>$langGroups</b>:</th>
+	  <td>$langLegend <b>$langGroups</b>:</td>
 	  <td><input type='text' name='gq' value='$gq' size='4' maxlength='4'> Mb.</td>
 	</tr>
 	<tr>
-	  <th class=\"left\">$langLegend <b>$langDropBox</b>:</th>
+	  <td>$langLegend <b>$langDropBox</b>:</td>
 	  <td><input type='text' name='drq' value='$drq' size='4' maxlength='4'> Mb.</td>
 	</tr>
 	<tr>
-	  <th>&nbsp;</th>
-	  <td><input type='submit' name='submit' value='$langModify'></td>
+	  <td>&nbsp;</td>
+	  <td class='right'><input type='submit' name='submit' value='$langModify'></td>
 	</tr>
-	</tbody>
 	</table>
-	</form>\n";
+	</form></fieldset>\n";
 }
 // If course selected go back to editcours.php
 if (isset($_GET['c'])) {
