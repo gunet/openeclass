@@ -115,7 +115,7 @@ if (isset($_POST['submit'])) {
         while ($n = mysql_fetch_array($req)) {
                 $facs[$n['id']] = $n['name'];
         }
-        $tool_content .= "$langMultiRegUserInfo
+        $tool_content .= "<div class='noteit'>$langMultiRegUserInfo</div>
             <form method='post' action='$_SERVER[PHP_SELF]'>
             <fieldset>
   <legend>$langMultiRegUserData</legend>
