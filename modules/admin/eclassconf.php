@@ -350,7 +350,7 @@ else {
 	  </table>
 	  </form></fieldset>";
 	// Display link to index.php
-	$tool_content .= "<br><p align='right'><a href='index.php'>$langBack</a></p>";
+	$tool_content .= "<p align='right'><a href='index.php'>$langBack</a></p>";
 	// After restored values have been inserted into form then bring back
 	// values from original config.php, so the rest of the page can be played correctly
 	if (isset($_GET['restore']) && $_GET['restore'] == "yes") {
