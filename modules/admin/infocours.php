@@ -78,33 +78,30 @@ else {
 	$row = mysql_fetch_array(mysql_query("SELECT * FROM cours WHERE code='".mysql_real_escape_string($_GET['c'])."'"));
 	$tool_content .= "
 	<form action=".$_SERVER['PHP_SELF']."?c=".htmlspecialchars($_GET['c'])." method='post'>
-	<table class='FormData' width='99%' align='left'>
-	<tbody>
-	<tr>
-	<th width='220'>&nbsp;</th>
-	<td><b>".$langCourseInfoEdit."</b></td>
-	</tr><tr><th>$langFaculty</th><td>";
+	<fieldset>
+	<legend>".$langCourseInfoEdit."</legend>
+<table width='100%' class='tbl'><tr><th>$langFaculty</th><td>";
 	$tool_content .= list_departments($row['faculteid']);
 	$tool_content .= "</td></tr>
 	<tr>
-	  <th class='left'>".$langCourseCode.":</th>
+	  <th width='150'>".$langCourseCode.":</th>
 	  <td><i>".$row['code']."</i></td>
 	</tr>
 	<tr>
-	  <th class='left'>".$langTitle.":</b></th>
+	  <th>".$langTitle.":</b></th>
 	  <td><input type='text' name='intitule' value='".$row['intitule']."' size='60'></td>
 	</tr>
 	<tr>
-	  <th class='left'>".$langTeacher.":</th>
+	  <th>".$langTeacher.":</th>
 	  <td><input type='text' name='titulaires' value='".$row['titulaires']."' size='60'></td>
 	</tr>
 	<tr>
 	  <th>&nbsp;</th>
-	  <td><input type='submit' name='submit' value='$langModify'></td>
+	  <td class='right'><input type='submit' name='submit' value='$langModify'></td>
 	</tr>
 	</tbody>
 	</table>
-	</form>\n";
+	</form></fieldset>\n";
 }
 // If course selected go back to editcours.php
 if (isset($_GET['c'])) {
