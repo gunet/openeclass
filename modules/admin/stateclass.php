@@ -133,7 +133,7 @@ if (isset($_GET['stats'])) {
 			</tr>
 			<tr>
 			<td>$langFrom ".list_1Result("SELECT loginout.when FROM loginout ORDER BY loginout.when LIMIT 1")."</td>
-			<td class='right' width='25%'><b>".list_1Result("SELECT count(*) FROM loginout 
+			<td class='right' width='200'><b>".list_1Result("SELECT count(*) FROM loginout 
 				WHERE loginout.action ='LOGIN'")."</b></td>
 			</tr>
 			<tr>
@@ -167,7 +167,7 @@ if (isset($_GET['stats'])) {
 			</tr>
 			<tr>
 			<td>$langNbProf</td>
-			<td class='right' width='25%'><b>".list_1Result("SELECT count(*) FROM user
+			<td class='right' width='200'><b>".list_1Result("SELECT count(*) FROM user
 				WHERE statut = 1;")."</b></td>
 			</tr>
 			<tr>
@@ -184,10 +184,7 @@ if (isset($_GET['stats'])) {
 			</table>";
 		break;
 		case 'cours':
-			$tool_content .= "<table width='99%' align='center'>
-			<thead><tr>
-			<td width='49%'>
-			<table width='100%' align='center' class='stateclass'>
+			$tool_content .= "<table width='100%' class='tbl_1' style='margin-top: 20px;'>
 			<tr>
 			<th class='left' colspan='2'><b>$langCoursesHeader</b></th>
 			</tr>
@@ -218,13 +215,10 @@ if (isset($_GET['stats'])) {
 			<td class='left'>$langNbAnnoucement</td>
 			<td class='right'><b>".list_1Result("SELECT count(*) FROM annonces;")."</b></td>
 			</tr>
-			</table></td></tr></table>";
+			</table>";
 		break;
 		case 'musers':
-			$tool_content .= "<table width='99%' align='center'>
-			<thead><tr>
-			<td colspan='2' width=90%>
-			<table width='100%' align='center' class=\"stateclass\">";
+			$tool_content .= "<table width='100%' class='tbl_1' style='margin-top: 20px;'>";
 			$loginDouble = list_ManyResult("SELECT DISTINCT username, count(*) AS nb
 				FROM user GROUP BY BINARY username HAVING nb > 1 ORDER BY nb DESC");
 			$tool_content .= "<tr><th><b>$langMultipleUsers</b></th>
@@ -233,11 +227,11 @@ if (isset($_GET['stats'])) {
 			<tr>";
 			if (count($loginDouble) > 0) {
 				$tool_content .= tablize($loginDouble);
-				$tool_content .=  "</td><td class='right' align='center'>".error_message()." ";
+				$tool_content .=  "</td><td class='right'>".error_message()." ";
 			} else {
-				$tool_content .= "</td><td class='right' align='center'>".ok_message()." ";
+				$tool_content .= "</td><td class='right'>".ok_message()." ";
 			}
-			$tool_content .= "</table></td></tr></table>";
+			$tool_content .= "</table>";
 		break;
 		case 'percourse':
 			$tool_content .= "<table width='99%' align='center'><thead><tr>
