@@ -68,7 +68,7 @@ $tool_content .= "<p> &nbsp; </p><p>$langUpgToSee <a href='$link_changes_file'>$
 </tr>
 <tr>
 <th width='200'>$langPass:</th>
-<td>&nbsp;<input class='auth_input_admin' type='password' style='width:200px; heigth:20px;' name='password' size='20'></td>
+<td><input class='auth_input_admin' type='password' style='width:200px; heigth:20px;' name='password' size='20'></td>
 </tr>
 
 <tr>
