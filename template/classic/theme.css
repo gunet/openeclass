@@ -599,6 +599,7 @@ fieldset table.th {
     padding: 5px;
     background-color: #f8f8f8;
     border-bottom: 1px dashed #dfdfdf;
+	border-right: none;
 }
 
 .tbl_border {

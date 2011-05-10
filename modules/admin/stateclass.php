@@ -62,33 +62,31 @@ $tool_content .= "<div id='operations_container'>
 </ul></div>";
 
 // Actions
-$tool_content .= "<table class='FormData' width='99%' align='left'>
-	<tbody>
-	<tr><td colspan='2'>&nbsp;</td></tr>
-	<tr><th width='220'>&nbsp;</th>
+$tool_content .= "<table class='tbl_alt' width='100%'>
+	<tr><th width='20'><img src='${urlServer}/template/classic/img/arrow.png' alt=''></th>
 	<td><a href='$_SERVER[PHP_SELF]?stats=login'>$langNbLogin</a></td>
 	</tr>
-	<tr><th>&nbsp;</th>
+	<tr><th><img src='${urlServer}/template/classic/img/arrow.png' alt=''></th>
 	<td><a href='$_SERVER[PHP_SELF]?stats=users'>$langUsers</a></td>
 	</tr>
-	<tr><th>&nbsp;</th>
+	<tr><th><img src='${urlServer}/template/classic/img/arrow.png' alt=''></th>
 	<td><a href='$_SERVER[PHP_SELF]?stats=percourse'>$langUsersPerCourse</a></td>
 	</tr>
 	<tr>
-	<th>&nbsp;</th>
+	<th><img src='${urlServer}/template/classic/img/arrow.png' alt=''></th>
 	<td><a href='$_SERVER[PHP_SELF]?stats=cours'>$langStatCour</a></td>
 	</tr>
-	<tr><th>&nbsp;</th>
+	<tr><th><img src='${urlServer}/template/classic/img/arrow.png' alt=''></th>
 	<td>
 	<a href='$_SERVER[PHP_SELF]?stats=musers'>$langMultipleUsers</a></td>
 	</tr>
-	<tr><th>&nbsp;</th>
+	<tr><th><img src='${urlServer}/template/classic/img/arrow.png' alt=''></th>
 	<td><a href='$_SERVER[PHP_SELF]?stats=memail'>$langMultipleAddr e-mail</a></td>
 	</tr>
-	<tr><th>&nbsp;</th>
+	<tr><th><img src='${urlServer}/template/classic/img/arrow.png' alt=''></th>
 	<td><a href='$_SERVER[PHP_SELF]?stats=mlogins'>$langMultiplePairs LOGIN - PASS</a></td>
 	</tr>
-	</tbody></table>";
+	</table>";
 
 // ---------------------
 // actions
@@ -129,12 +127,9 @@ if (isset($_GET['stats'])) {
 			}
 			$uptime = date("d-m-Y", $first_date_time);
 	
-			$tool_content .= "<table width='99%' align='center'>
-			<thead><tr>
-			<td width='49%'>
-			<table width='100%' align='center' class=\"stateclass\" >
+			$tool_content .= "<table width='100%' class='tbl_1' style='margin-top: 20px;'>
 			<tr>
-			<th class='left' colspan='2'><b>$langNbLogin</b></th>
+			<th colspan='2'>$langNbLogin</th>
 			</tr>
 			<tr>
 			<td>$langFrom ".list_1Result("SELECT loginout.when FROM loginout ORDER BY loginout.when LIMIT 1")."</td>
@@ -164,14 +159,10 @@ if (isset($_GET['stats'])) {
 			<td>$langUptime</td>
 			<td class='right'><b>$uptime</b></td>
 			</tr>
-			</table></td></tr></table>";
+			</table>";
 		break;
 		case 'users':
-			$tool_content .= "<table width='99%' align='center'>
-			<thead><tr>
-			<td width='49%'>
-			<table width='100%' align='center' class='stateclass'>
-			<tr>
+			$tool_content .= "<table width='100%' class='tbl_1' style='margin-top: 20px;'>
 			<th class='left' colspan='2'><b>$langUsers</th>
 			</tr>
 			<tr>
@@ -190,7 +181,7 @@ if (isset($_GET['stats'])) {
 			<td>$langTotal</td>
 			<td class='right'><b>".list_1Result("SELECT count(*) FROM user;")."</b></td>
 			</tr>
-			</table></td></tr></table>";
+			</table>";
 		break;
 		case 'cours':
 			$tool_content .= "<table width='99%' align='center'>
@@ -319,7 +310,7 @@ if (isset($_GET['stats'])) {
 	}
 }
 
-$tool_content .= "<div class='right'><a href='index.php' class=mainpage>$langBackAdmin</a></div>";
+$tool_content .= "<br /><p class='right'><a href='index.php' class=mainpage>$langBackAdmin</a></p>";
 
 /*
  * output a <table> with an array
