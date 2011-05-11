@@ -187,7 +187,7 @@ for ($j = 0; $j < mysql_num_rows($sql); $j++) {
 	}
 	$tool_content .= "
       </td>
-      <td>".htmlspecialchars($logs[0])."</td>";
+      <td class='smaller'>".htmlspecialchars($logs[0])."</td>";
 	// Add links to course users, delete course and course edit
 	$tool_content .= "
       <td align='center'><a href='listusers.php?c=".$logs['cours_id']."'>
