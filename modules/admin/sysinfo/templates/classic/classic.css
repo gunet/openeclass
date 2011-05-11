@@ -2,20 +2,17 @@ A {
   text-decoration: none;
 }
 A:link {
-  color: #486591;
-  background-color: transparent;
+  color: #8597A5;
 }
 A:visited {
-  color: #6f6c81;
-  background-color: transparent;
+  color: #8597A5;
 }
-A:active {
-  color: blue;
-  background-color: transparent;
+A:hover {
+  color: 687A92;
 }
 body {
-  color: #000000;
-  background-color: #fefefe;
+  color: #777777;
+  background-color: #ffffff;
   text-decoration: none;
   font-family: Verdana,Helvetica,sans-serif;
   font-size: 11px;
@@ -28,21 +25,21 @@ font {
   font-weight: normal;
 }
 H1 {
-  color: #000000;
+  color: #777777;
   background-color: transparent;
   text-decoration: none;
   font-family: Verdana,Helvetica,sans-serif;
   font-size: 20px;
 }
 select {
-    color: black;
+    color: #777777;
     text-decoration: none;
     font-family: Verdana,Helvetica,sans-serif;
     font-size: 10px;
     font-weight: normal;
 }
 input {
-    color: black;
+    color: #777777;
     text-decoration: none;
     font-family: Verdana,Helvetica,sans-serif;
     font-size: 10px;
@@ -55,7 +52,7 @@ table
   padding: 0px;
 }
 table.box {
-  color: #fefefe;
+  color: #777777;
   background-color: #486591;
   border: none;
   padding: 1px;
@@ -68,6 +65,6 @@ td.boxheader {
   text-align: center;
 }
 tr.boxbody {
-  color: #fefefe;
+  color: #777777;
   background-color: #e6e6e6;
 }
