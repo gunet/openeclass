@@ -154,7 +154,6 @@ $langOthers = "Διάφορα σύνολα";
 $langCoursesPerVis= "Αριθμός μαθημάτων ανά κατάσταση ορατότητας";
 $langUsersPerCourse= "Αριθμός χρηστών ανά μάθημα";
 $langErrors = "Σφάλματα:";
-$langMultEnrol = "Πολλαπλές εγγραφές χρηστών";
 $langMultEmail= "Πολλαπλές εμφανίσεις διευθύνσεων e-mail";
 $langMultLoginPass = "Πολλαπλά ζεύγη LOGIN - PASS";
 $langOk = "Εντάξει";

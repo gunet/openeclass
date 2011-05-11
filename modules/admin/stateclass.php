@@ -35,10 +35,6 @@
 
 ==============================================================================*/
 
-/*****************************************************************************
-        DEAL WITH BASETHEME, OTHER INCLUDES AND NAMETOOLS
-******************************************************************************/
-
 // Check if user is administrator and if yes continue
 // Othewise exit with appropriate message
 $require_admin = TRUE;
@@ -47,9 +43,6 @@ include '../../include/baseTheme.php';
 // Define $nameTools
 $nameTools = $langPlatformGenStats;
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
-// Initialise $tool_content
-$tool_content = "";
-
 /*****************************************************************************
         general statistics
 ******************************************************************************/
@@ -205,8 +198,8 @@ if (isset($_GET['stats'])) {
 			</tr>".tablize(list_ManyResult("SELECT DISTINCT languageCourse, count(*) FROM cours 
 					GROUP BY languageCourse DESC"))."
 			<tr>
-			<th class='left' colspan='2'><b>$langNumEachCat</b></th></tr>
-			<tr>".tablize(list_ManyResult("SELECT DISTINCT type, count(*) FROM cours 
+			<th class='left' colspan='2'><b>$langNumEachCat</b></th>
+			</tr>".tablize(list_ManyResult("SELECT DISTINCT type, count(*) FROM cours 
 					GROUP BY type"))."
 			<tr>
 			<th class='left' colspan='2'><b>$langAnnouncements</b></th>
@@ -223,19 +216,18 @@ if (isset($_GET['stats'])) {
 				FROM user GROUP BY BINARY username HAVING nb > 1 ORDER BY nb DESC");
 			$tool_content .= "<tr><th><b>$langMultipleUsers</b></th>
 			<th class='right'><strong>$langResult</strong></th>
-			</tr>
-			<tr>";
+			</tr>";
 			if (count($loginDouble) > 0) {
 				$tool_content .= tablize($loginDouble);
-				$tool_content .=  "</td><td class='right' colspan='2'>".error_message()." ";
+				$tool_content .=  "<tr><td class='right' colspan='2'>".error_message()."</td></tr>";
 			} else {
-				$tool_content .= "</td><td class='right' colspan='2'>".ok_message()." ";
+				$tool_content .= "<tr><td class='right' colspan='2'>".ok_message()."</td></tr>";
 			}
 			$tool_content .= "</table>";
 		break;
 		case 'percourse':
 			$tool_content .= "<table width='100%' class='tbl_1' style='margin-top: 20px;'>
-			<tr><th class='left' colspan='2'><b>$langUsersPerCourse</b></td>";
+			<tr><th class='left' colspan='2'><b>$langUsersPerCourse</b></th>";
 			$result = db_query("SELECT cours_id, code, intitule, titulaires FROM cours ORDER BY intitule");
 			while ($row = mysql_fetch_array($result)) {
 				$result_numb = db_query("SELECT user.user_id, cours_user.statut FROM cours_user, user
@@ -368,4 +360,3 @@ function list_ManyResult($sql) {
 }
 
 draw($tool_content, 3);
-?>

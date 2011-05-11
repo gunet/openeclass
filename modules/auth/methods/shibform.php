@@ -63,8 +63,8 @@ $tool_content .= sprintf("<tr><td colspan='2'><div class='info'>$langExplainShib
 </tr>
 <tr><td bgcolor='#F8F8F8'><input type='checkbox' name='checkseparator' $checkedshib />
 &nbsp;$langCharSeparator&nbsp;
-<input class='FormData_InputText' name='shibseparator' type='text' size='1' maxlength='2' value='".q($shibseparator)."' /></th>
+<input class='FormData_InputText' name='shibseparator' type='text' size='1' maxlength='2' value='".q($shibseparator)."' /></td>
 </tr>
-<tr><th class='left'>$langInstructionsAuth:</td>
-<td><textarea class='FormData_InputText' name='shibinstructions' cols='30' rows='10' wrap='virtual'>".$shibinstructions."</textarea></td></tr>";
+<tr><th class='left'>$langInstructionsAuth:</th>
+<td><textarea class='FormData_InputText' name='shibinstructions' cols='30' rows='10'>".$shibinstructions."</textarea></td></tr>";
 ?>

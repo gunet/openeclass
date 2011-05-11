@@ -82,11 +82,11 @@ $tool_content .= "
     </tr>
     <tr>
 	 	<th class=\"left\">$langldap_bind_dn:</th>
-		<td><input class=\"FormData_InputText\" name=\"ldapbind_dn\" type=\"text\" autocomplete=\"off\" size=\"30\" value=\"".$ldapbind_dn."\"></td>
+		<td><input class=\"FormData_InputText\" name=\"ldapbind_dn\" type=\"text\" size=\"30\" value=\"".$ldapbind_dn."\"></td>
     </tr>
     <tr>
       <th class=\"left\">$langldap_bind_pw:</th>
-      <td><input class=\"FormData_InputText\" name=\"ldapbind_pw\" type=\"password\" autocomplete=\"off\" size=\"30\" value=\"".$ldapbind_pw."\"></td>
+      <td><input class=\"FormData_InputText\" name=\"ldapbind_pw\" type=\"password\" size=\"30\" value=\"".$ldapbind_pw."\"></td>
     </tr>
 	 <tr>
 		<th class=\"left\">$langldap_login_attr:</th>
@@ -97,8 +97,8 @@ $tool_content .= "
 		<td><input class=\"FormData_InputText\" name=\"ldap_login_attr2\" type=\"text\" size=\"30\" value=\"".$ldap_login_attr2."\"></td>
 	 </tr>
     <tr>
-      <th class=\"left\">$langInstructionsAuth:</td>
-      <td><textarea class=\"FormData_InputText\" name=\"ldapinstructions\" cols=\"30\" rows=\"10\" wrap=\"virtual\">".$ldapinstructions."</textarea>   </td>
+      <th class=\"left\">$langInstructionsAuth:</th>
+      <td><textarea class=\"FormData_InputText\" name=\"ldapinstructions\" cols=\"30\" rows=\"10\">".$ldapinstructions."</textarea>   </td>
     </tr>
 ";
 ?>

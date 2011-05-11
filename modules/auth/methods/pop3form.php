@@ -52,6 +52,6 @@ $tool_content .= "
     </tr>
     <tr>
       <th class=\"left\">$langInstructionsAuth:</th>
-      <td><textarea class=\"FormData_InputText\" name=\"pop3instructions\" cols=\"30\" rows=\"10\" wrap=\"virtual\">".$pop3instructions."</textarea></td>
+      <td><textarea class=\"FormData_InputText\" name=\"pop3instructions\" cols=\"30\" rows=\"10\">".$pop3instructions."</textarea></td>
     </tr>";
 ?>

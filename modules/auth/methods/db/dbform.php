@@ -99,8 +99,7 @@ $tool_content .= "
     </tr>
     <tr>
       <th class=\"left\">$langInstructionsAuth:</th>
-      <td><textarea class=\"FormData_InputText\" name=\"dbinstructions\" cols=\"30\" rows=\"10\" wrap=\"virtual\">".$dbinstructions."</textarea></td>
+      <td><textarea class=\"FormData_InputText\" name=\"dbinstructions\" cols=\"30\" rows=\"10\">".$dbinstructions."</textarea></td>
     </tr>
 ";
-
 ?>

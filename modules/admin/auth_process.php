@@ -313,12 +313,12 @@ else
 		$tool_content .= "";
 		$tool_content .= "<tr><td colspan='2'><div class='info'>$langTestAccount</div></td></tr>
 		<tr><th width='220' class='left'>$langUsername: </th>
-		<td><input size='30' class='FormData_InputText' type='text' autocomplete='off' name='test_username' value='".$test_username."'></td></tr>
+		<td><input size='30' class='FormData_InputText' type='text' name='test_username' value='".$test_username."'></td></tr>
 		<tr><th class='left'>$langPass: </th>
-		<td><input size='30' class='FormData_InputText' type='password' autocomplete='off' name='test_password' value='".$test_password."'></td></tr>";
+		<td><input size='30' class='FormData_InputText' type='password' name='test_password' value='".$test_password."'></td></tr>";
 	}
 	$tool_content .= "<tr><th>&nbsp;</th><td class='right'><input type='submit' name='submit' value='$langModify'></td></tr>";
-	$tool_content .= "</table></form></fieldset>";
+	$tool_content .= "</table></fieldset></form>";
 }
 
 draw($tool_content, 3);

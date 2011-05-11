@@ -56,10 +56,6 @@ if (isset($_GET['type']) and $_GET['type'] == 'user') {
 	$linkget = '';
 }
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
-
-// Initialise $tool_content
-$tool_content = "";
-
 // Main body
 $close = isset($_GET['close'])?$_GET['close']:(isset($_POST['close'])?$_POST['close']:'');
 $id = isset($_GET['id'])?$_GET['id']:(isset($_POST['id'])?$_POST['id']:'');
@@ -120,7 +116,7 @@ if (!empty($show) and $show == 'closed') {
 				<small>".nice_format(date("Y-m-d", strtotime($req['date_closed'])))."</small></td>";
 			$tool_content .= "<td align='center'>
 			<a href='$_SERVER[PHP_SELF]?id=$req[rid]&amp;show=closed$reqtype'>$langRestore</a></td>\n  </tr>";
-		$k++;
+			$k++;
 		}
 	}
 	$tool_content .= "\n  </table>\n";
@@ -129,7 +125,7 @@ if (!empty($show) and $show == 'closed') {
 // display rejected requests 
 // ----------------------------------
 } elseif (!empty($show) && ($show=="rejected")) {
-	if (!empty($id) && ($id>0)) {
+	if (!empty($id) && ($id > 0)) {
 	// restore request
 		$sql = db_query("UPDATE prof_request set status='1', date_closed=NULL WHERE rid='$id'");
 		$tool_content = "
@@ -137,12 +133,10 @@ if (!empty($show) and $show == 'closed') {
 	} else {
 		$tool_content .= "<table class=\"tbl_alt\" width=\"100%\" align=\"left\">";
 		$tool_content .= table_header(1, $langDateReject_small);
-
  		$sql = db_query("SELECT rid,profname, profsurname, profuname, profemail,
 				proftmima, profcomm, am, date_open, date_closed, comment
 				FROM prof_request
                                 WHERE (status = 3 AND statut = $list_statut)");
-
         	$k = 0;
 		while ($req = mysql_fetch_array($sql)) {
 			if ($k%2==0) {
@@ -174,9 +168,9 @@ if (!empty($show) and $show == 'closed') {
 	case '1':
 		$sql = db_query("UPDATE prof_request set status='2', date_closed=NOW() WHERE rid='$id'");
                 if ($list_statut == 1) {
-        		$tool_content .= "<p><center>$langProfessorRequestClosed</p>";
+        		$tool_content .= "<div class='info'>$langProfessorRequestClosed</div>";
                 } else {
-        		$tool_content .= "<p><center>$langRequestStudent</p>";
+        		$tool_content .= "<div class='info'$langRequestStudent</div>";
                 }
 		break;
 	case '2':
@@ -245,7 +239,6 @@ $langEmail: $emailhelpdesk";
 // -----------------------------------
 // display all the requests
 // -----------------------------------
-
 else
 {
 	$tool_content .= "<table class='tbl_alt' width='100%'>";
@@ -270,16 +263,16 @@ else
 		$tool_content .= "<td align='center' class='smaller'>";
 		switch($req['profpassword']) {
 			case 'ldap': $tool_content .= "<a href='../auth/ldapnewprofadmin.php?id=".urlencode($req['rid'])."&amp;auth=4'>
-					$langElaboration<br />($langViaLdap)</td>\n  </tr>";
+					$langElaboration<br />($langViaLdap)</a></td>\n  </tr>";
 				break;
 			case 'pop3': $tool_content .= "<a href='../auth/ldapnewprofadmin.php?id=".urlencode($req['rid'])."&amp;auth=2'>
-					$langElaboration<br>($langViaPop)</td>\n  </tr>";
+					$langElaboration<br>($langViaPop)</a></td>\n  </tr>";
 				break;
 			case 'imap': $tool_content .= "<a href='../auth/ldapnewprofadmin.php?id=".urlencode($req['rid'])."&amp;auth=3'>
-					$langElaboration<br>($langViaImap)</td>\n  </tr>";
+					$langElaboration<br>($langViaImap)</a></td>\n  </tr>";
 				break;
 			case 'cas': $tool_content .= "<a href='../auth/ldapnewprofadmin.php?id=".urlencode($req['rid'])."&amp;auth=7'>
-					$langElaboration<br>($langViaCAS)</td>\n  </tr>";
+					$langElaboration<br>($langViaCAS)</a></td>\n  </tr>";
 				break;
 			default:  $tool_content .= "<a href='newuseradmin.php?id=".urlencode($req['rid'])."'>
 					$langElaboration 
@@ -289,7 +282,6 @@ else
 		$k++;
 	}
 	$tool_content .= "\n  </table>\n";
-
 }
 
 // If show is set then we return to listreq, else return to admin index.php
@@ -303,7 +295,6 @@ draw($tool_content, 3, null, $head_content);
 // --------------------------------------
 // function to display table header
 // --------------------------------------
-
 function table_header($addon = FALSE, $message = FALSE) {
 	
 	global $langName, $langSurname, $langFaculty, $langDate, $langActions, $langComments, $langUsername;

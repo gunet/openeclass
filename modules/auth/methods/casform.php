@@ -114,7 +114,7 @@ $tool_content .= selection($cas_altauth_data,"cas_altauth",$cas_altauth);
 $tool_content .= "    </td>
     </tr>
     <tr>
-      <th class=\"left\">$langInstructionsAuth:</td>
+      <th class=\"left\">$langInstructionsAuth:</th>
       <td><textarea class=\"FormData_InputText\" name=\"casinstructions\" cols=\"30\" rows=\"10\">".$casinstructions."</textarea></td>
     </tr>";
 ?>

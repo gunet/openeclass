@@ -56,13 +56,10 @@ include('../../include/sendMail.inc.php');
 // Define $nameTools
 $nameTools=$sendinfomail;
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
-// Initialise $tool_content
-$tool_content = "";
 
 /*****************************************************************************
 		MAIN BODY
 ******************************************************************************/
-
 // Send email after form post
 if (isset($_POST['submit']) && ($_POST['body_mail'] != "") && ($_POST['submit'] == $langSend)) {
 	// Where to send the email
@@ -91,7 +88,7 @@ $langEmail : $emailhelpdesk
 		}
 	}
 	// Display result and close table correctly
-	$tool_content .= "<p class=\"success\">$emailsuccess</p>";
+	$tool_content .= "<p class='success'>$emailsuccess</p>";
 } else {
         // Display form to administrator
         $tool_content .= "<form action='$_SERVER[PHP_SELF]' method='post'>
@@ -110,7 +107,7 @@ $langEmail : $emailhelpdesk
 	      </select>	    </td>
 	  </tr>
 	<tr>
-	  <td class='right'><input type=\"submit\" name=\"submit\" value=\"$langSend\"></input></td>
+	  <td class='right'><input type='submit' name='submit' value='$langSend' /></td>
 	  </tr>
 	</table>
         </fieldset>
@@ -118,7 +115,5 @@ $langEmail : $emailhelpdesk
 
 }
 // Display link back to index.php
-$tool_content .= "<p align=\"right\"><a href=\"index.php\">".$langBack."</a></p>";
-
+$tool_content .= "<p align='right'><a href='index.php'>".$langBack."</a></p>";
 draw($tool_content,3);
-?>
