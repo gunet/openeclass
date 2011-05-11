@@ -88,21 +88,14 @@ if (!isset($_GET['a'])) {
 	$a = mysql_fetch_array(db_query("SELECT COUNT(*) FROM faculte"));
 	// Construct a table
 	$tool_content .= "
-        <table width='100%' class='tbl'>
-	<tr>
-	  <td class='odd'>
-            <div align='left'><b>".$langFaculteCatalog."</b>:</div>
 	    <div align='right'>".$langManyExist.": <b>$a[0]</b> ".$langFaculties."</div>
-          </td>
-	</tr>
-	</table>
         <br />
 	";
 	$tool_content .= "
         <table width='100%' class='tbl_alt'>
 	<tr>
 	<th scope='col' colspan='2'><div align='left'>&nbsp;&nbsp;".$langFaculty."</div></th scope='col'>
-	<th scope='col'>$langCode</th>
+	<th scope='col' class='center'>$langCode</th>
 	<th>".$langActions."</th>
 	</tr>";
 	$sql = db_query("SELECT code,name,id FROM faculte");
@@ -118,9 +111,9 @@ if (!isset($_GET['a'])) {
 		$tool_content .= "\n<td width='1'>
 		<img src='${urlServer}/template/classic/img/arrow.png' title='bullet' /></td>";
 		$tool_content .= "\n<td>".htmlspecialchars($logs[1])."</td>";
-		$tool_content .= "\n<td align='center'>".htmlspecialchars($logs[0])."</td>";
+		$tool_content .= "\n<td width='100' class='smaller center'>".htmlspecialchars($logs[0])."</td>";
 		// Give administrator a link to delete or edit a faculty
-		$tool_content .= "\n<td width='15%' align='center' nowrap>
+		$tool_content .= "\n<td width='50' align='center' nowrap>
 		<a href='$_SERVER[PHP_SELF]?a=2&amp;c=".$logs['id']."'>
 		<img src='../../template/classic/img/delete.png' title='$langDelete' /></a>&nbsp;&nbsp;
 		<a href='$_SERVER[PHP_SELF]?a=3&amp;c=".$logs['id']."'>
