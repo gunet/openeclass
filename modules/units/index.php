@@ -123,7 +123,7 @@ foreach (array('previous', 'next') as $i) {
         if ($q and mysql_num_rows($q) > 0) {
                 list($q_id, $q_title) = mysql_fetch_row($q);
                 $q_title = htmlspecialchars($q_title);
-                $link[$i] = "<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;id=$q_id'>$arrow1$q_title$arrow2</a>";
+                $link[$i] = "$arrow1<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;id=$q_id'>$q_title</a>$arrow2";
         } else {
                 $link[$i] = '&nbsp;';
         }
@@ -138,11 +138,15 @@ if ($is_adminOfCourse) {
 }
 
 $tool_content .= "
-    <table class='$units_class' width='99%'>
+    <table class='$units_class' width='99%'>";
+if ($link['previous'] != '&nbsp;' or $link['next'] != '&nbsp;') {
+$tool_content .= "
     <tr class='odd'>
       <td class='left'>" .  $link['previous'] . '</td>
       <td class="right">' .  $link['next'] . "</td>
-    </tr>
+    </tr>";
+}
+$tool_content .= "
     <tr>
       <td colspan='2' class='unit_title'>$nameTools</td>
     </tr>
