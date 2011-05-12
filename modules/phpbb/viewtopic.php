@@ -305,7 +305,7 @@ if ($paging and $total > $posts_per_page) {
 	$times = 1;
 	$tool_content .= "<table width='100%' class='tbl'>
 	<tr>
-	<td width='200'>
+	<td width='50%'>
 	<span class='row'><strong class='pagination'><span>";
 	
 	$last_page = $start - $posts_per_page;
