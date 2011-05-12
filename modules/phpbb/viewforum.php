@@ -233,8 +233,9 @@ if (mysql_num_rows($result) > 0) { // topics found
                 } else {
                    $tool_content .= "\n     <tr class=\"even\">";
                 }
-		$replys = $myrow["topic_replies"];
-		$last_post = $myrow["post_time"];
+		$replies = 1 + $myrow['topic_replies'];
+                $last_post = $myrow['post_time'];
+                $topic_id = $myrow['topic_id'];
 		$last_post_datetime = $myrow["post_time"];
 		list($last_post_date, $last_post_time) = explode(' ', $last_post_datetime);
 		list($year, $month, $day) = explode("-", $last_post_date);
@@ -243,7 +244,7 @@ if (mysql_num_rows($result) > 0) { // topics found
 		if (!isset($last_visit)) {
 			$last_visit = 0;
 		}
-		if($replys >= $hot_threshold) {
+		if ($replies >= $hot_threshold) {
 			if ($last_post_time < $last_visit)
 				$image = $hot_folder_image;
 			else
@@ -260,38 +261,22 @@ if (mysql_num_rows($result) > 0) { // topics found
 		}
 		$tool_content .= "\n       <td width='1'><img src='$image' /></td>";
 		$topic_title = own_stripslashes($myrow["topic_title"]);
-		$pagination = '';
-		$start = '';
-		$topiclink = "viewtopic.php?course=$code_cours&amp;topic=" . $myrow["topic_id"] . "&amp;forum=$forum_id";
-		if($replys+1 > $posts_per_page) {
+                $pagination = '';
+                $topiclink = "viewtopic.php?course=$code_cours&amp;topic=$topic_id&amp;forum=$forum_id";
+		if ($replies > $posts_per_page) {
+                        $total_reply_pages = ceil($replies / $posts_per_page);
 			$pagination .= "\n<strong class='pagination'><span>\n<img src='$posticon_more' />";
-			$pagenr = 1;
-			$skippages = 0;
-			for($x = 0; $x < $replys + 1; $x += $posts_per_page) {
-				$lastpage = (($x + $posts_per_page) >= $replys + 1);
-				if ($lastpage) {
-					$start = "&amp;start=$x";
-				} else {
-					if ($x != 0) {
-						$start = "&amp;start=$x";
-					}
-				}
-				if($pagenr > 3 && $skippages != 1) {
-					$pagination .= " ... ";
-					$skippages = 1;
-				}
-				if ($skippages != 1 || $lastpage) {
-					if ($x != -1) {
-						$pagination .= "<a href=\"$topiclink$start\">$pagenr</a>";
-						$pagination .= "<span class='page-sep'>,</span>";
-					}
-					$pagenr++;
-				}
+                        add_topic_link(0, $total_reply_pages);
+                        if ($total_reply_pages > PAGINATION_CONTEXT + 1) {
+                                $pagination .= "&nbsp;...&nbsp;";
+                        }
+			for ($p = max(1, $total_reply_pages - PAGINATION_CONTEXT); $p < $total_reply_pages; $p++) {
+                                add_topic_link($p, $total_reply_pages);
 			}
 			$pagination .= "&nbsp;</span></strong>";
 		}
 		$tool_content .= "\n<td><a href='$topiclink'><b>$topic_title</b></a>$pagination</td>";
-		$tool_content .= "\n<td class='center'>$replys</td>";
+		$tool_content .= "\n<td class='center'>$replies</td>";
 		$tool_content .= "\n<td class='center'>$myrow[prenom] $myrow[nom]</td>";
 		$tool_content .= "\n<td class='center'>$myrow[topic_views]</td>";
 		$tool_content .= "\n<td class='center'>$myrow[prenom1] $myrow[nom1]<br />$last_post</td>";
@@ -329,3 +314,12 @@ if (mysql_num_rows($result) > 0) { // topics found
 	$tool_content .= "<div class='alert1'>$langNoTopics</div>";
 }
 draw($tool_content, 2, '', $local_head);
+
+
+function add_topic_link($pagenr, $total_reply_pages) {
+        global $pagination, $posts_per_page, $topiclink;
+        $start = $pagenr * $posts_per_page;
+        $pagenr++;
+        $pagination .= "<a href='$topiclink&amp;start=$start'>$pagenr</a>" .
+                       (($pagenr < $total_reply_pages)? "<span class='page-sep'>,&nbsp;</span>": '');
+}
