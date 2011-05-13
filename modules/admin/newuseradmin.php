@@ -89,7 +89,7 @@ if($submit) {
 
                 // close request
                 $rid = intval($_POST['rid']);
-                db_query("UPDATE prof_request set status = 2, date_closed = NOW() WHERE rid = '$rid'");
+                db_query("UPDATE user_request set status = 2, date_closed = NOW() WHERE id = $id");
 
                 if ($pstatut == 1) {
                         $message = $profsuccess;
@@ -139,19 +139,19 @@ $langEmail : $emailhelpdesk
 
                 $tool_content .= "
                 </ul></div>";
-                $res = mysql_fetch_array(db_query("SELECT profname, profsurname, profuname, profemail, proftmima, profcomm, am,
-                        comment, lang, date_open, statut FROM prof_request WHERE rid='$id'"));
-                $ps = $res['profsurname'];
-                $pn = $res['profname'];
-                $pu = $res['profuname'];
-                $pe = $res['profemail'];
-                $pt = $res['proftmima'];
+                $res = mysql_fetch_array(db_query("SELECT name, surname, uname, email, faculty_id, phone, am,
+                        comment, lang, date_open, statut FROM user_request WHERE id = $id"));
+                $ps = $res['surname'];
+                $pn = $res['name'];
+                $pu = $res['uname'];
+                $pe = $res['email'];
+                $pt = $res['faculty_id'];
                 $pam = $res['am'];
-                $pphone = $res['profcomm'];
+                $pphone = $res['phone'];
                 $pcom = $res['comment'];
                 $lang = $res['lang'];
                 $pstatut = $res['statut'];
-                $pdate = nice_format(date("Y-m-d", strtotime($res['date_open'])));
+                $pdate = nice_format(date('Y-m-d', strtotime($res['date_open'])));
         } elseif (@$_GET['type'] == 'user') {
                 $pstatut = 5;
         } else {

@@ -308,8 +308,6 @@ if (!isset($_POST['submit2'])) {
         }
 
         if ($oldversion < '2.2') {
-		db_query("ALTER TABLE `user` CHANGE `lang` `lang` VARCHAR(10) NOT NULL DEFAULT 'el'");
-		db_query("ALTER TABLE `prof_request` CHANGE `lang` `lang`  VARCHAR(10) NOT NULL DEFAULT 'el'");
                 // course units
 		db_query("CREATE TABLE IF NOT EXISTS `course_units` (
 			`id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
@@ -373,6 +371,7 @@ if (!isset($_POST['submit2'])) {
         mysql_field_exists($mysqlMainDb, 'cours', 'expand_glossary') or
                 db_query("ALTER TABLE `cours` ADD `expand_glossary` BOOL NOT NULL DEFAULT 0");
         if ($oldversion < '2.4') {
+		db_query("ALTER TABLE user CHANGE lang lang VARCHAR(16) NOT NULL DEFAULT 'el'");
                 mysql_index_exists('user', 'user_username') or
                         db_query('CREATE INDEX user_username ON user (username)');
                 mysql_index_exists('course_units', 'course_units_title') or
@@ -386,7 +385,7 @@ if (!isset($_POST['submit2'])) {
                 mysql_field_exists($mysqlMainDb, 'annonces', 'visibility') or
                         db_query("ALTER TABLE `annonces` ADD `visibility` CHAR(1) NOT NULL DEFAULT 'v'");
                 mysql_field_exists($mysqlMainDb, 'user', 'description') or
-                        db_query("ALTER TABLE `user` ADD description TEXT NOT NULL,
+                        db_query("ALTER TABLE `user` ADD description TEXT NOT NULL DEFAULT '',
                                                      ADD has_icon BOOL NOT NULL DEFAULT 0,
                                                      ADD verified_mail BOOL NOT NULL DEFAULT 0,
                                                      ADD receive_mail BOOL NOT NULL DEFAULT 1");
@@ -430,7 +429,7 @@ if (!isset($_POST['submit2'])) {
                                 `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                                 `course_id` INT(11) NOT NULL DEFAULT 0,
                                 `name` varchar(100) NOT NULL DEFAULT '',
-                                `description` TEXT,
+                                `description` TEXT NOT NULL DEFAULT '',
                                 `forum_id` INT(11) NULL,
                                 `max_members` INT(11) NOT NULL DEFAULT 0,
                                 `secret_directory` varchar(30) NOT NULL DEFAULT '0')");
@@ -438,7 +437,7 @@ if (!isset($_POST['submit2'])) {
                                 `group_id` INT(11) NOT NULL,
                                 `user_id` INT(11) NOT NULL,
                                 `is_tutor` INT(11) NOT NULL DEFAULT 0,
-                                `description` TEXT,
+                                `description` TEXT NOT NULL DEFAULT '',
                                 PRIMARY KEY (`group_id`, `user_id`))");
                 db_query("CREATE TABLE IF NOT EXISTS `glossary` (
 			       `id` MEDIUMINT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -482,6 +481,21 @@ if (!isset($_POST['submit2'])) {
                                 `public_id` VARCHAR(11) NOT NULL,
                                 `file_id` INT(11) NOT NULL,
                                 `title` TEXT)');
+
+                if (mysql_table_exists($mysqlMainDb, 'prof_request')) {
+                        db_query("RENAME TABLE prof_request TO user_request");
+                        db_query("ALTER TABLE user_request
+                                        CHANGE rid id INT(11) NOT NULL auto_increment,
+                                        CHANGE profname name VARCHAR(255) NOT NULL DEFAULT '',
+                                        CHANGE profsurname surname VARCHAR(255) NOT NULL DEFAULT '',
+                                        CHANGE profuname uname VARCHAR(255) NOT NULL DEFAULT '',
+                                        CHANGE profpassword password VARCHAR(255) NOT NULL DEFAULT '',
+                                        CHANGE profemail email varchar(255) NOT NULL DEFAULT '',
+                                        CHANGE proftmima faculty_id INT(11) NOT NULL DEFAULT 0,
+                                        CHANGE profcomm phone VARCHAR(20) NOT NULL DEFAULT '',
+                                        CHANGE lang lang VARCHAR(16) NOT NULL DEFAULT 'el',
+                                        ADD ip_address INT(11) UNSIGNED NOT NULL DEFAULT 0");
+                }
 
                 // Upgrade table admin_announcements if needed
                 if (mysql_field_exists($mysqlMainDb, 'admin_announcements', 'gr_body')) {

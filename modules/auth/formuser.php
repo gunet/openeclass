@@ -65,10 +65,10 @@ if (isset($_POST['submit']) and !$all_set) {
 if ($all_set) {
 
         // register user request
-        db_query("INSERT INTO prof_request
-                        (profname, profsurname, profuname, profemail,
-                         proftmima, profcomm, am, status, date_open,
-                         comment, lang, statut)
+        db_query("INSERT INTO user_request
+                        (name, surname, uname, email,
+                         faculty_id, phone, am, status, date_open,
+                         comment, lang, statut, ip_address)
                   VALUES (".
                   autoquote($name) .', '.
                   autoquote($surname) .', '.
@@ -77,7 +77,7 @@ if ($all_set) {
                   intval($department) .', '.
                   autoquote($userphone) .', '.
                   autoquote($am) .', 1, NOW(), '.
-                  autoquote($usercomment) .", '$lang', 5)");
+                  autoquote($usercomment) .", '$lang', 5, inet_aton('$_SERVER[REMOTE_ADDR]'))");
 
         //----------------------------- Email Message --------------------------
         $department = find_faculty_by_id($department);

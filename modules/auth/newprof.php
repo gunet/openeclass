@@ -114,7 +114,7 @@ $registration_errors = array();
 	}
 
     if (count($registration_errors) == 0) {    // registration is ok
-            // ------------------- Update table prof_request ------------------------------
+            // ------------------- Update table user_request ------------------------------
             $auth = $_POST['auth'];
             if($auth != 1) {
                     switch($auth) {
@@ -133,18 +133,19 @@ $registration_errors = array();
                     }
             }
 
-            db_query('INSERT INTO prof_request SET
-                                profname = ' . autoquote($_POST['prenom_form']). ',
-                                profsurname = ' . autoquote($_POST['nom_form']). ',
-                                profuname = ' . autoquote($_POST['uname']). ',
-                                profemail = ' . autoquote($_POST['email_form']). ',
-                                proftmima = ' . autoquote($_POST['department']). ',
-                                profcomm = ' . autoquote($_POST['userphone']). ',
+            db_query('INSERT INTO user_request SET
+                                name = ' . autoquote($_POST['prenom_form']). ',
+                                surname = ' . autoquote($_POST['nom_form']). ',
+                                uname = ' . autoquote($_POST['uname']). ',
+                                email = ' . autoquote($_POST['email_form']). ',
+                                faculty_id = ' . autoquote($_POST['department']). ',
+                                phone = ' . autoquote($_POST['userphone']). ',
                                 status = 1,
                                 statut = 1,
                                 date_open = NOW(),
                                 comment = ' . autoquote($_POST['usercomment']). ',
-                                lang = ' . autoquote($_POST['proflang']),
+                                lang = ' . autoquote($_POST['proflang']). ",
+                                ip_address = inet_aton('$_SERVER[REMOTE_ADDR]')",
                      $mysqlMainDb);
 
             //----------------------------- Email Message --------------------------

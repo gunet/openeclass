@@ -109,8 +109,8 @@ send_mail('', '', '', $email_form, $emailsubject, $emailbody, $charset);
 
     // close request
         $rid = intval($_POST['rid']);
-        db_query("UPDATE prof_request set status = '2',
-         date_closed = NOW() WHERE rid = '$rid'");
+        db_query("UPDATE user_request set status = 2,
+         date_closed = NOW() WHERE id = '$rid'");
 
     $tool_content .= "<tr><td valign='top' align='center' class='alert1'>$usersuccess
     <br><br><a href='../admin/listreq.php?type=user' class='mainpage'>$langBack</a>";

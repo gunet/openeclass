@@ -201,11 +201,10 @@ if( !empty($is_submit) || (($auth == 7) && (empty($submit))) )
 // -----------------------------------------
 if (isset($_POST['submit']))  {
 	$uname = $_POST['uname'];
-	$uname = escapeSimple($uname);
 	$email = isset($_POST['email'])?$_POST['email']:'';
 	$prenom_form = isset($_POST['prenom_form'])?$_POST['prenom_form']:'';
 	$nom_form = isset($_POST['nom_form'])?$_POST['nom_form']:'';
-	$department = isset($_POST['department'])?$_POST['department']:'';
+	$depid = isset($_POST['department'])? intval($_POST['department']): 0;
 	$usercomment = isset($_POST['usercomment'])?$_POST['usercomment']:'';
 	$userphone = isset($_POST['userphone'])?$_POST['userphone']:'';
 	
@@ -218,44 +217,46 @@ if (isset($_POST['submit']))  {
 		exit();
 	}
 	
-	if($auth!=1) {
-		switch($auth)
-		{
-			case '2': $password = "pop3";
+	if($auth != 1) {
+		switch($auth) {
+			case '2': $password = 'pop3';
 			break;
-			case '3': $password = "imap";
+			case '3': $password = 'imap';
 			break;
-			case '4': $password = "ldap";
+			case '4': $password = 'ldap';
 			break;
-			case '5': $password = "db";
+			case '5': $password = 'db';
 			break;
-			case '7': $password = "cas";
+			case '7': $password = 'cas';
 			break;
-			default:  $password = "";
+			default:  $password = '';
 			break;
 		}
 	}
-	
-	$username = $uname;
-	$usermail = $email;
-	$surname = $nom_form;
-	$name = $prenom_form;
-	$depid = intval($department);
-	
-	$sql = "INSERT INTO prof_request(profname, profsurname, profuname, profpassword,
-		profemail, proftmima, profcomm, status, date_open, comment, lang, statut) VALUES(
-		'$name','$surname','$username','$password','$usermail','$depid','$userphone',
-		1, NOW(), '$usercomment', '$lang', 1)";
-	$upd = db_query($sql,$mysqlMainDb);
-	
+
+        db_query('INSERT INTO user_request SET
+                         name = ' . autoquote($prenom_form). ',
+                         surname = ' . autoquote($nom_form). ',
+                         uname = ' . autoquote($uname). ',
+                         email = ' . autoquote($email). ",
+                         faculty_id = $depid,
+                         phone = " . autoquote($userphone). ',
+                         status = 1,
+                         statut = 1,
+                         date_open = NOW(),
+                         comment = ' . autoquote($usercomment). ",
+                         lang = '$lang',
+                         ip_address = inet_aton('$_SERVER[REMOTE_ADDR]')",
+                 $mysqlMainDb);
+
 	// send email
-        $MailMessage = $mailbody1 . $mailbody2 . "$name $surname\n\n" . $mailbody3
-        . $mailbody4 . $mailbody5 . "$mailbody6\n\n" . "$langFaculty: " . find_faculty_by_id($department) . "
+        $MailMessage = $mailbody1 . $mailbody2 . "$prenom_form $nom_form\n\n" . $mailbody3
+        . $mailbody4 . $mailbody5 . "$mailbody6\n\n" . "$langFaculty: " . find_faculty_by_id($depid) . "
 	\n$langComments: $usercomment\n"
-        . "$langProfUname : $username\n$langProfEmail : $usermail\n" . "$contactphone : $userphone\n\n\n$logo\n\n";
+        . "$langProfUname : $uname\n$langProfEmail : $email\n" . "$contactphone : $userphone\n\n\n$logo\n\n";
 	
 	if (!send_mail('', $emailhelpdesk, $gunet, $emailhelpdesk, $mailsubject, $MailMessage, $charset)) {
-		$tool_content .= "<p class=\"alert1\">$langMailErrorMessage &nbsp; <a href=\"mailto:$emailhelpdesk\">$emailhelpdesk</a></p>";
+		$tool_content .= "<p class='alert1'>$langMailErrorMessage &nbsp; <a href='mailto:$emailhelpdesk'>$emailhelpdesk</a></p>";
 		draw($tool_content,0);
 		exit();
 	}

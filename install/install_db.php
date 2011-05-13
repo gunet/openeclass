@@ -55,6 +55,7 @@ db_query("DROP TABLE IF EXISTS institution");
 db_query("DROP TABLE IF EXISTS loginout");
 db_query("DROP TABLE IF EXISTS loginout_summary");
 db_query("DROP TABLE IF EXISTS monthly_summary");
+db_query("DROP TABLE IF EXISTS user_request");
 db_query("DROP TABLE IF EXISTS prof_request");
 db_query("DROP TABLE IF EXISTS user");
 
@@ -86,7 +87,7 @@ db_query("CREATE TABLE admin_announcements (
 	`date` DATETIME NOT NULL,
 	`begin` DATETIME DEFAULT NULL,
 	`end` DATETIME DEFAULT NULL,
-	`lang` VARCHAR(10) NOT NULL DEFAULT 'el',
+	`lang` VARCHAR(16) NOT NULL DEFAULT 'el',
 	`ordre` MEDIUMINT(11) NOT NULL,
 	`visible` ENUM('V', 'I') NOT NULL) $charset_spec");
 
@@ -125,9 +126,9 @@ db_query("CREATE TABLE `forum_notify` (
 db_query("CREATE TABLE `cours` (
   `cours_id` int(11) NOT NULL auto_increment,
   `code` varchar(20) default NULL,
-  `languageCourse` varchar(15) default NULL,
+  `languageCourse` VARCHAR(16) NOT NULL DEFAULT 'el',
   `intitule` varchar(250) default NULL,
-  `description` text default NULL,
+  `description` text NOT NULL DEFAULT NULL,
   `course_keywords` text default NULL,
   `course_addon` text default NULL,
   `faculte` varchar(100) default NULL,
@@ -202,11 +203,11 @@ db_query("CREATE TABLE user (
       registered_at INT(10) NOT NULL default '0',
       expires_at INT(10) NOT NULL default '0',
       perso ENUM('yes','no') NOT NULL default 'yes',
-      lang ENUM('el','en','es') DEFAULT 'el' NOT NULL,
+      lang VARCHAR(16) NOT NULL DEFAULT 'el',
       announce_flag date NOT NULL DEFAULT '0000-00-00',
       doc_flag DATE NOT NULL DEFAULT '0000-00-00',
       forum_flag DATE NOT NULL DEFAULT '0000-00-00',
-      description TEXT,
+      description TEXT NOT NULL DEFAULT '',
       has_icon BOOL NOT NULL DEFAULT 0,
       verified_mail BOOL NOT NULL DEFAULT 0,
       receive_mail BOOL NOT NULL DEFAULT 1,
@@ -265,7 +266,7 @@ db_query("CREATE TABLE IF NOT EXISTS `document` (
                 `description` TEXT,
                 `author` VARCHAR(255) NOT NULL DEFAULT '',
                 `format` VARCHAR(32) NOT NULL DEFAULT '',
-                `language` VARCHAR(16) NOT NULL DEFAULT '',
+                `language` VARCHAR(16) NOT NULL DEFAULT 'el',
                 `copyrighted` TINYINT(4) NOT NULL DEFAULT 0,
                 FULLTEXT KEY `document`
                         (`filename`, `comment`, `title`, `creator`,
@@ -285,7 +286,7 @@ db_query("CREATE TABLE IF NOT EXISTS `group` (
                 `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 `course_id` INT(11) NOT NULL DEFAULT 0,
                 `name` varchar(100) NOT NULL DEFAULT '',
-                `description` TEXT,
+                `description` TEXT NOT NULL DEFAULT '',
                 `forum_id` int(11) NULL,
                 `max_members` int(11) NOT NULL DEFAULT 0,
                 `secret_directory` varchar(30) NOT NULL DEFAULT '0')");
@@ -293,7 +294,7 @@ db_query("CREATE TABLE IF NOT EXISTS `group_members` (
                 `group_id` int(11) NOT NULL,
                 `user_id` int(11) NOT NULL,
                 `is_tutor` int(11) NOT NULL DEFAULT 0,
-                `description` TEXT,
+                `description` TEXT NOT NULL DEFAULT '',
                 PRIMARY KEY (`group_id`, `user_id`))");
 
 db_query("CREATE TABLE IF NOT EXISTS `glossary` (
@@ -354,26 +355,27 @@ db_query("INSERT INTO loginout (loginout.id_user, loginout.ip, loginout.when, lo
 db_query("INSERT INTO admin VALUES ('".$idOfAdmin."')");
 
 #
-# Table structure for table `prof_request`
+# Table structure for table `user_request`
 #
 
-db_query("CREATE TABLE `prof_request` (
-                `rid` int(11) NOT NULL auto_increment,
-                `profname` varchar(255) NOT NULL default '',
-                `profsurname` varchar(255) NOT NULL default '',
-                `profuname` varchar(255) NOT NULL default '',
-                `profpassword` varchar(255) NOT NULL default '',
-                `profemail` varchar(255) NOT NULL default '',
-                `proftmima` varchar(255) default NULL,
-                `profcomm` varchar(20) default NULL,
-		`am` varchar(20) default NULL,
-                `status` int(11) default NULL,
-                `date_open` datetime default NULL,
-                `date_closed` datetime default NULL,
-                `comment` text default NULL,
-                `lang` ENUM('el', 'en', 'es') NOT NULL DEFAULT 'el',
-                `statut` tinyint(4) NOT NULL default 1,
-                PRIMARY KEY (`rid`)) $charset_spec");
+db_query("CREATE TABLE user_request (
+                id int(11) NOT NULL AUTO_INCREMENT,
+                name varchar(255) NOT NULL DEFAULT '',
+                surname varchar(255) NOT NULL DEFAULT '',
+                uname varchar(255) NOT NULL DEFAULT '',
+                password varchar(255) NOT NULL DEFAULT '',
+                email varchar(255) NOT NULL DEFAULT '',
+                faculty_id INT(11) NOT NULL DEFAULT 0,
+                phone varchar(20) NOT NULL DEFAULT '',
+		am varchar(20) NOT NULL DEFAULT '',
+                status int(11) default NULL,
+                date_open datetime default NULL,
+                date_closed datetime default NULL,
+                comment text,
+                lang varchar(16) NOT NULL DEFAULT 'el',
+                statut tinyint(4) NOT NULL DEFAULT 1,
+                ip_address INT(11) UNSIGNED NOT NULL DEFAULT 0,
+                PRIMARY KEY (id)) $charset_spec");
 
 
 ###############PHPMyAdminTables##################

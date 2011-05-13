@@ -102,9 +102,9 @@ if ($submit)  {
 			autoquote($pe) .
 			", 1, $department, " . autoquote($comment) . ", $registered_at, $expires_at, '$lang')");
 
-	//  Update table prof_request 
+	// Close user request 
 	$rid = intval($_POST['rid']);
-	db_query("UPDATE prof_request set status = '2',date_closed = NOW() WHERE rid = '$rid'");
+	db_query("UPDATE user_request set status = 2, date_closed = NOW() WHERE id = $rid");
 		$emailbody = "$langDestination $pn $ps\n" .
                                 "$langYouAreReg $siteName $langSettings $pu\n" .
                                 "$langPass: $langPassSameAuth\n$langAddress $siteName: " .
@@ -142,18 +142,18 @@ if ($submit)  {
         }
                 $tool_content .= "
 		</ul></div>";
-		$res = mysql_fetch_array(db_query("SELECT profname,profsurname, profuname, profemail, 
-			proftmima, comment, lang, date_open, profcomm, am FROM prof_request WHERE rid='$id'"));
-		$ps = $res['profsurname'];
-		$pn = $res['profname'];
-		$pu = $res['profuname'];
-		$pe = $res['profemail'];
-		$pt = $res['proftmima'];
+		$res = mysql_fetch_array(db_query("SELECT name, surname, uname, email, 
+			faculty_id, comment, lang, date_open, phone, am FROM user_request WHERE id = $id"));
+		$ps = $res['surname'];
+		$pn = $res['name'];
+		$pu = $res['uname'];
+		$pe = $res['email'];
+		$pt = $res['faculty_id'];
 		$pcom = $res['comment'];
 		$pam = $res['am'];
-		$pphone = $res['profcomm'];
+		$pphone = $res['phone'];
 		$lang = $res['lang'];
-		$pdate = nice_format(date("Y-m-d", strtotime($res['date_open'])));
+		$pdate = nice_format(date('Y-m-d', strtotime($res['date_open'])));
 	}
 	
 	@$tool_content .= "

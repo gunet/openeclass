@@ -82,7 +82,7 @@ $tool_content .= "
 
 
 // Count prof requests with status = 1
-$sql = "SELECT COUNT(*) AS cnt FROM prof_request WHERE status=1 AND statut=1";
+$sql = "SELECT COUNT(*) AS cnt FROM user_request WHERE status=1 AND statut=1";
 $result = mysql_query($sql);
 $myrow = mysql_fetch_array($result);
 $count_prof_requests = $myrow['cnt'];

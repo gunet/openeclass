@@ -199,7 +199,7 @@ if (!empty($submit)) {
 	$am = isset($_POST['am'])?$_POST['am']:'';
 	$prenom_form = isset($_POST['prenom_form'])?$_POST['prenom_form']:'';
 	$nom_form = isset($_POST['nom_form'])?$_POST['nom_form']:'';
-	$department = isset($_POST['department'])?$_POST['department']:'';
+	$department = isset($_POST['department'])? intval($_POST['department']): 0;
 	
 	$registration_errors = array();
 		// check if there are empty fields
@@ -233,29 +233,36 @@ if (!empty($submit)) {
 		send_mail('', '', '', $email, $emailsubject, $emailbody, $charset);
 		$registered_at = time();
 		$expires_at = time() + $durationAccount;
-		$authmethods = array("2","3","4","5");
+		$authmethods = array('2', '3', '4', '5');
 		$uname = escapeSimple($uname);
 		$lang = langname_to_code($language);
 	
 		$q1 = "INSERT INTO `$mysqlMainDb`.user 
-			SET nom = '$nom_form', prenom = '$prenom_form', 
-			username = '$uname', password = '$password', email = '$email',
-			statut = '5', department = '$department',
-			am = '$am', registered_at = ".$registered_at.",
-			expires_at = ".$expires_at. ",
-			lang = '$lang'";
+                              SET nom = " . autoquote($nom_form) . ",
+                                  prenom = " . autoquote($prenom_form) . ", 
+                                  username = " . autoquote($uname) . ",
+                                  password = '$password',
+                                  email = " . autoquote($email) . ",
+                                  statut = 5,
+                                  department = $department,
+                                  am = " . autoquote($am) . ",
+                                  registered_at = $registered_at,
+                                  expires_at = $expires_at,
+                                  lang = '$lang',
+                                  description = ''";
 	
 		$inscr_user = db_query($q1);
 		$last_id = mysql_insert_id();
-		$result=mysql_query("SELECT user_id, nom, prenom FROM `$mysqlMainDb`.user WHERE user_id='$last_id'");
+		$result = mysql_query("SELECT user_id, nom, prenom FROM `$mysqlMainDb`.user WHERE user_id = $last_id");
 		while ($myrow = mysql_fetch_array($result)) {
-			$uid=$myrow[0];
-			$nom=$myrow[1];
-			$prenom=$myrow[2];
+			$uid = $myrow[0];
+			$nom = $myrow[1];
+			$prenom = $myrow[2];
 		}
 	
-		db_query("INSERT INTO loginout  SET id_user = '$uid',
-			ip = '".$_SERVER['REMOTE_ADDR']."', `when` = NOW(), action = 'LOGIN'", $mysqlMainDb);
+                db_query("INSERT INTO loginout
+                                 SET id_user = $uid, ip = '$_SERVER[REMOTE_ADDR]',
+                                     `when` = NOW(), action = 'LOGIN'", $mysqlMainDb);
 		$_SESSION['uid'] = $uid;
 		$_SESSION['statut'] = 5;
 		$_SESSION['prenom'] = $prenom;
