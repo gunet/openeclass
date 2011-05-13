@@ -146,7 +146,8 @@ if (!empty($show) and $show == 'closed') {
 	            	}
 	    		$tool_content .= "<td width='1'>
 			<img src='${urlServer}/template/classic/img/arrow.png' title='bullet'></td>";
-			$tool_content .= "<td>".q($req['name'])."&nbsp;".q($req['surname'])."";
+			$tool_content .= "<td>".q($req['name'])."&nbsp;".q($req['surname'])."</td>";
+                        $tool_content .= "<td>".q($req['uname'])."&nbsp;</td>";
 			$tool_content .= "<td>".q(find_faculty_by_id($req['faculty_id']))."</td>";
 			$tool_content .= "<td align='center'>
 				<small>".nice_format(date('Y-m-d', strtotime($req['date_open'])))."</small></td>";
@@ -303,20 +304,20 @@ function table_header($addon = FALSE, $message = FALSE) {
 	if ($addon) { 
 		$rowspan=2;
 		$datestring = "<th colspan='2'>$langDate</th>
-		<th scope='col' rowspan='$rowspan' align='center'>$langActions</th>
+		<th scope='col' rowspan='$rowspan'><div align='center'>$langActions</div></th>
 		</tr><tr>
 		<th>$langDateRequest_small</th>
 		<th>$message</th>";
 	} else {
 		$rowspan=1;
-		$datestring = "<th scope='col' align='center'>$langDate<br />$langDateRequest_small</th>
-		<th scope='col' align='center'>$langActions</th>";
+		$datestring = "<th scope='col'><div align='center'>$langDate<br />$langDateRequest_small</div></th>
+		<th scope='col'><div align='center'>$langActions</div></th>";
 	}
 
 	$string .= "<tr>
 	<th scope='col' colspan='2' rowspan='$rowspan'><div align='left'>&nbsp;&nbsp;$langName $langSurname</div></th>
 	<th scope='col' rowspan='$rowspan'><div align='left'>$langUsername</div></th>
-	<th scope='col' rowspan='$rowspan'><div align='left'>$langFaculty</div></th>";
+	<th scope='col' rowspan='$rowspan'><div align='center'>$langFaculty</div></th>";
 	$string .= $datestring; 
 	$string .= "</tr>";
 

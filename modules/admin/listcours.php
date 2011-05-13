@@ -149,10 +149,9 @@ $tool_content .= "
     <tr>
      <th scope=\"col\" width='1' class=\"odd\">&nbsp;</th>
      <th scope=\"col\" class=\"odd\"><div align=\"left\">".$langCourseCode."</div></th>
-     <th scope=\"col\" width=\"120\" class=\"odd\">".$langCourseVis."</th>
-     <th scope=\"col\" width=\"220\" class=\"odd\"><div align=\"left\">".$langFaculty."</div></th>
-     <th scope=\"col\" width=\"10\" class=\"odd\">".$langUsers."</th>
-     <th scope=\"col\" width=\"30\" colspan='2' class=\"odd\">".$langActions."</th>
+     <th scope=\"col\" width=\"1\" class=\"odd\">".$langGroupAccess."</th>
+     <th scope=\"col\" width=\"280\" class=\"odd\"><div align=\"left\">".$langFaculty."</div></th>
+     <th scope=\"col\" width=\"40\" colspan='2' class=\"odd\">".$langActions."</th>
     </tr>";
 
 $k = 0;
@@ -190,14 +189,10 @@ for ($j = 0; $j < mysql_num_rows($sql); $j++) {
       <td class='smaller'>".htmlspecialchars($logs[0])."</td>";
 	// Add links to course users, delete course and course edit
 	$tool_content .= "
-      <td align='center'><a href='listusers.php?c=".$logs['cours_id']."'>
-	<img src='../../template/classic/img/user_list.png' title='$langUsers' /></a>
-      </td>
-      <td align=\"center\" width='10'><a href='delcours.php?c=".$logs['cours_id']."'>
-	<img src='../../template/classic/img/delete.png' title='$langDelete'></a>
-      
-     <a href='editcours.php?c=".$logs[1]."".$searchurl."'>
-	<img src='../../template/classic/img/edit.png' title='$langEdit'></a>
+      <td align='center' width='40'>
+        <a href='listusers.php?c=".$logs['cours_id']."'><img src='../../template/classic/img/user_list.png' title='$langUsers' /></a>&nbsp;
+        <a href='editcours.php?c=".$logs[1]."".$searchurl."'><img src='../../template/classic/img/edit.png' title='$langEdit'></a>
+        <a href='delcours.php?c=".$logs['cours_id']."'><img src='../../template/classic/img/delete.png' title='$langDelete'></a>
       </td>";
 	$k++;
 }

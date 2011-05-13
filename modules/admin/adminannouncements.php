@@ -250,18 +250,25 @@ if ($displayAnnouncementList == true) {
                 $tool_content .= "<div id='operations_container'>
                 <ul id='opslist'><li>";
                 $tool_content .= "<a href='".$_SERVER['PHP_SELF']."?addAnnounce=1'>".$langAdminAddAnn."</a>";
-                $tool_content .= "</li></ul></div>";
+                $tool_content .= "</li></ul></div>\n";
         }
         if ($announcementNumber > 0) {
-                $tool_content .= "<table class='tbl_alt' width='100%'>";
-		$tool_content .= "<th width='180'>$langTitle</th><th>$langAnnouncement</th><th width='70'>$langActions</th>";
+                $tool_content .= "<table class='tbl_alt' width='100%'>\n";
+		$tool_content .= "<th colspan='2'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$langTitle</th>\n<th>$langAnnouncement</th>\n<th colspan='2'><div align='center'>$langActions</div></th>\n";
+                /*
 		if ($announcementNumber > 1) {
-			$tool_content .= "<th width='70'>$langMove</th>";
+			$tool_content .= "<th width='70'>$langMove</th>\n";
 		}
+                */
 		while ($myrow = mysql_fetch_array($result)) {
 			if ($myrow['visible'] == 'V') {
 				$visibility = 0;
 				$classvis = 'visible';
+                                if ($iterator%2 == 0) {
+                                  $classvis = 'even';
+                                } else {
+                                  $classvis = 'odd';
+                                }
 				$icon = 'visible.png';
 			} else {
 				$visibility = 1;
@@ -269,10 +276,11 @@ if ($displayAnnouncementList == true) {
 				$icon = 'invisible.png';
 			}
 			$myrow['date'] = claro_format_locale_date($dateFormatLong, strtotime($myrow['date']));
-			$tool_content .= "<tr class='$classvis'>";
-			$tool_content .= "<td><b>".q($myrow['title'])."</b><br><span class='smaller'>$myrow[date]</span></td>";
-			$tool_content .= "<td>" . standard_text_escape($myrow['body']) . "</td>";
-			$tool_content .=  "<td>
+			$tool_content .= "<tr class='$classvis'>\n";
+                        $tool_content .= "<td width='1'><img style='margin-top:4px;' src='${urlServer}/template/classic/img/arrow.png' title='bullet' /></td>";
+			$tool_content .= "<td width='180'><b>".q($myrow['title'])."</b><br><span class='smaller'>$myrow[date]</span></td>\n";
+			$tool_content .= "<td>" . standard_text_escape($myrow['body']) . "</td>\n";
+			$tool_content .= "<td width='60'>
 			<a href='$_SERVER[PHP_SELF]?modify=$myrow[id]'>
 			<img src='../../template/classic/img/edit.png' title='$langModify' style='vertical-align:middle;' />
 			</a> 
@@ -282,7 +290,7 @@ if ($displayAnnouncementList == true) {
 			<a href='$_SERVER[PHP_SELF]?id=$myrow[id]&amp;vis=$visibility'>
 			<img src='../../template/classic/img/$icon' title='$langVisibility'/></a>";
 			if ($announcementNumber > 1) {
-				$tool_content .= "<td align='center'>";
+				$tool_content .= "<td align='right' width='40'>";
 			}
 			if ($iterator != 1) {
 				$tool_content .= "<a href='$_SERVER[PHP_SELF]?up=" . $myrow["id"] . "'>
@@ -292,10 +300,10 @@ if ($displayAnnouncementList == true) {
 				$tool_content .= "<a href='$_SERVER[PHP_SELF]?down=" . $myrow["id"] . "'>
 				<img class='displayed' src='../../template/classic/img/down.png' title='" . $langDown . "' /></a>";
 			}
-			$tool_content .= "</td></tr>";
+			$tool_content .= "</td>\n</tr>\n";
 			$iterator ++;
 	        } // end of while
-		$tool_content .= "</tbody></table>";
+		$tool_content .= "</table>\n";
 	}
 }
 draw($tool_content, 3, null, $head_content);
