@@ -1,5 +1,5 @@
 /*========================================================================
-*   Open eClass 2.3
+*   Open eClass 2.4
 *   E-learning and Course Management System
 * ========================================================================
 *  Copyright(c) 2003-2010  Greek Universities Network - GUnet
@@ -89,8 +89,6 @@ POP3 class : Manuel Lemos (http://www.manuellemos.net)  <WebMaster@E-na.Net>
 Libchart - PHP chart library: Copyright 2005-2010 Jean Marc Tr?meaux <jm.tremeaux@gmail.com>
 http://naku.dohcrew.com/libchart/pages/introduction/
 
-LaTeX Rendering: Copyright (c) 2003/2004 Benjamin Zeiss <zeiss@math.uni-goettingen.de>
-
 Dropbox module: Copyright 2004 Jan Bols <jan@ivpv.UGent.be>
 
 Wiki module: Frederic Minne <zefredz@gmail.com>
@@ -102,10 +100,11 @@ Copyright (c) 2004 Olivier Meunier and contributors.
 Learnpath module: Piraux Sebastien <pir@cerdecam.be>
         Lederer Guillaume <led@cerdecam.be>
 
-PHP MathPublisher : Copyright (c) 2005 by Pascal Brachet <pbrachet@xm1math.net> 
-
 Exercise module: Copyright Olivier Brouckaert <oli.brouckaert@skynet.be>
 
+PHP MathPublisher : Copyright (c) 2005 by Pascal Brachet <pbrachet@xm1math.net> 
+  http://www.xm1math.net/phpmathpublisher/
+  
 Function parse_tex(): Patrick Cool <patrick.cool@UGent.be>
 
 Function user_get_data(): Mathieu Laurent <laurent@cerdecam.be>
@@ -113,7 +112,7 @@ Function user_get_data(): Mathieu Laurent <laurent@cerdecam.be>
 Javascript SortTable (sorttable.js): Stuart Langridge (licenced as X11)
  http://www.kryogenix.org/code/browser/sorttable/
 
-jQuery JavaScript Library v1.4.3 - Copyright 2010, John Resig
+jQuery JavaScript Library v1.6 - Copyright 2010, John Resig
   Dual licensed under the MIT or GPL Version 2 licenses.
   http://jquery.com/
   Includes Sizzle.js - Copyright 2010, The Dojo Foundation
@@ -142,5 +141,5 @@ Tiny MCE Editor
 PHP CAS Library - Copyright 2003 - 2010, The ESUP-Portail consortium & the JA-SIG Collaborative.
   Licensed under the New BSD License, an OSI-certified ("open") and Gnu/FSF-recognized ("free") license
   https://wiki.jasig.org/display/CASC/phpCAS
-  version 1.2.0
+  version 1.2.1
 
