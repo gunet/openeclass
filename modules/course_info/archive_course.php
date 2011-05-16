@@ -88,6 +88,7 @@ if ($is_adminOfCourse) {
 
 	// Copy course files
 	$nbFiles = copydir("../../courses/$currentCourseID", $htmldir);
+	$nbFiles += copydir("../../video/$currentCourseID", $archivedir . '/video_files');
         $tool_content .= "<li>$langCopyDirectoryCourse<br />
                               (<strong>$nbFiles</strong> $langFileCopied)</li>
                           <li>$langBackupOfDataBase $currentCourseID</li></ol></th>
