@@ -2410,6 +2410,7 @@ $langAsUser = "(Λογαριασμός $langOfStudent)";
 $langChooseReg = "Επιλογή τρόπου εγγραφής";
 $langTryAgain = "Δοκιμάστε ξανά!";
 $langViaReq = "Εγγραφή χρηστών μέσω αίτησης";
+$langUserDurationAccount = "Χρονική διάρκεια λήξης λογαριασμών";
 
 /************************************************************
 * restore_course.php

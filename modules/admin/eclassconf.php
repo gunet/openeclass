@@ -283,7 +283,7 @@ else {
 	    <td><select name=\"formcloseuserregistration\">
 	      <option value=\"true\" ".$close_user_registrationSelTrue.">true</option>
 	      <option value=\"false\" ".$close_user_registrationSelFalse.">false</option>
-	    </select></td>
+	    </select>&nbsp;&nbsp;$langViaReq</td>
 	</tr>";
 
 	$sel_en = in_array("en", $active_ui_languages)?'checked':'';
@@ -299,7 +299,7 @@ else {
 	$tool_content .= "
 	  <tr>
 	    <th class=\"left\"><b>\$durationAccount:</b></th>
-	    <td><input type='text' name=\"formdurationAccount\" size='40' value=\"".$durationAccount."\"></td>
+	    <td><input type='text' name='formdurationAccount' size='15' value='".$durationAccount."'>&nbsp;&nbsp;$langUserDurationAccount</td>
 	</tr>";
 	
 	$cbox_email_required = get_config('email_required')?'checked':'';
@@ -316,27 +316,27 @@ else {
 	  </tr>
 	  <tr>
 		<th class='left'><b>email_required</b></th>
-		<td><input type='checkbox' name='email_required' $cbox_email_required /></td>
+		<td><input type='checkbox' name='email_required' $cbox_email_required />&nbsp;$lang_email_required</td>
 	  </tr>
 	  <tr>
 		<th class='left'><b>am_required</b></th>
-		<td><input type='checkbox' name='am_required' $cbox_am_required /></td>
+		<td><input type='checkbox' name='am_required' $cbox_am_required />&nbsp;$lang_am_required</td>
 	  </tr>
 	  <tr>
 		<th class='left'><b>dropbox_allow_student_to_student</b></th>
-		<td><input type='checkbox' name='dropbox_allow_student_to_student' $cbox_dropbox_allow_student_to_student /></td>
+		<td><input type='checkbox' name='dropbox_allow_student_to_student' $cbox_dropbox_allow_student_to_student />&nbsp;$lang_dropbox_allow_student_to_student</td>
 	  </tr>
 	  <tr>
 		<th class='left'><b>dont_display_login_form</b></th>
-		<td><input type='checkbox' name='dont_display_login_form' $cbox_dont_display_login_form /></td>
+		<td><input type='checkbox' name='dont_display_login_form' $cbox_dont_display_login_form />&nbsp;$lang_dont_display_login_form</td>
 	  </tr>
 	  <tr>
 		<th class='left'><b>block_username_change</b></th>
-		<td><input type='checkbox' name='block_username_change' $cbox_block_username_change /></td>
+		<td><input type='checkbox' name='block_username_change' $cbox_block_username_change />&nbsp;$lang_block_username_change</td>
 	  </tr>
 	  <tr>
 		<th class='left'><b>betacms</b></th>
-		<td><input type='checkbox' name='betacms' $cbox_betacms /></td>
+		<td><input type='checkbox' name='betacms' $cbox_betacms />&nbsp;$lang_betacms</td>
 	  </tr>
 	  <tr>
 	    <th class='left'>$langReplaceBackupFile</th>
