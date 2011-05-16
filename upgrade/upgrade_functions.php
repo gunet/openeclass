@@ -1,28 +1,23 @@
 <?php
-/*========================================================================
-*   Open eClass 2.3
-*   E-learning and Course Management System
-* ========================================================================
-*  Copyright(c) 2003-2010  Greek Universities Network - GUnet
-*  A full copyright notice can be read in "/info/copyright.txt".
-*
-*  Developers Group:	Costas Tsibanis <k.tsibanis@noc.uoa.gr>
-*			Yannis Exidaridis <jexi@noc.uoa.gr>
-*			Alexandros Diamantidis <adia@noc.uoa.gr>
-*			Tilemachos Raptis <traptis@noc.uoa.gr>
-*
-*  For a full list of contributors, see "credits.txt".
-*
-*  Open eClass is an open platform distributed in the hope that it will
-*  be useful (without any warranty), under the terms of the GNU (General
-*  Public License) as published by the Free Software Foundation.
-*  The full license can be read in "/info/license/license_gpl.txt".
-*
-*  Contact address: 	GUnet Asynchronous eLearning Group,
-*  			Network Operations Center, University of Athens,
-*  			Panepistimiopolis Ilissia, 15784, Athens, Greece
-*  			eMail: info@openeclass.org
-* =========================================================================*/
+/* ========================================================================
+ * Open eClass 2.4
+ * E-learning and Course Management System
+ * ========================================================================
+ * Copyright 2003-2011  Greek Universities Network - GUnet
+ * A full copyright notice can be read in "/info/copyright.txt".
+ * For a full list of contributors, see "credits.txt".
+ *
+ * Open eClass is an open platform distributed in the hope that it will
+ * be useful (without any warranty), under the terms of the GNU (General
+ * Public License) as published by the Free Software Foundation.
+ * The full license can be read in "/info/license/license_gpl.txt".
+ *
+ * Contact address: GUnet Asynchronous eLearning Group,
+ *                  Network Operations Center, University of Athens,
+ *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
+ *                  e-mail: info@openeclass.org
+ * ======================================================================== */
+
 
 
 // ----------------------------------------------------------------
@@ -319,10 +314,11 @@ function upgrade_course_2_4($code, $lang, $extramessage = '')
 	mysql_select_db($code);
 	echo "<hr><p>$langUpgCourse <b>$code</b> (2.4) $extramessage<br />";
 	flush();
+
 	// not needed anymore
-	if (mysql_table_exists($code, 'stat_accueil')) {
-		db_query("DROP TABLE stat_accueil");	
-	}
+        delete_table('stat_accueil');
+        delete_table('users');
+
 	// upgrade polls
 	db_query("ALTER TABLE `poll_answer_record` CHANGE `answer_text` `answer_text` TEXT", $code);
 

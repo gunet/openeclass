@@ -4,7 +4,7 @@
 * Open eClass 2.4 - E-learning and Course Management System
 * ========================================================================
  
-Copyright(c) 2003-2010  Greek Universities Network - GUnet
+Copyright(c) 2003-2011  Greek Universities Network - GUnet
 A full copyright notice can be read in "/info/copyright.txt".
 
 Authors:     Costas Tsibanis <k.tsibanis@noc.uoa.gr>
@@ -32,7 +32,7 @@ Defines standard functions and validates variables
 ---------------------------------------------------------------------
 */
 
-define('ECLASS_VERSION', '2.4');
+define('ECLASS_VERSION', '2.3.99');
 
 // resized user image 
 define('IMAGESIZE_LARGE', 256);
