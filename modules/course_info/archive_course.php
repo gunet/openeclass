@@ -51,8 +51,8 @@ if ($is_adminOfCourse) {
         $basedir = "${webDir}courses/archive/$currentCourseID";
 	mkpath($basedir);
 
-	$backup_date = date("Y-m-d-H-i-(B)-s");
-	$backup_date_short = date("YzBs"); // YEAR - Day in Year - Swatch - second
+	$backup_date = date('Y-m-d-H-i-(B)-s');
+	$backup_date_short = date('YzBs'); // YEAR - Day in Year - Swatch - second
 
 	$archivedir = $basedir . '/' . $backup_date;
 	mkpath($archivedir);
@@ -62,6 +62,31 @@ if ($is_adminOfCourse) {
 
 	// creation of the sql queries will all the data dumped
 	create_backup_file($archivedir . '/backup.php');
+
+        // backup subsystems from main db
+        mysql_select_db($mysqlMainDb);
+        $sql_course = "course_id = $cours_id";
+        foreach (array('group_properties' => $sql_course,
+                       'group' => $sql_course,
+                       'group_members' => "group_id IN (SELECT id FROM `group`
+                                                               WHERE course_id = $cours_id)",
+                       'document' => $sql_course,
+                       'link_category' => $sql_course,
+                       'link' => $sql_course,
+                       'ebook' => $sql_course,
+                       'ebook_section' => "ebook_id IN (SELECT id FROM ebook
+                                                               WHERE course_id = $cours_id)",
+                       'ebook_subsection' => "section_id IN (SELECT ebook_section.id
+                                                                    FROM ebook, ebook_section
+                                                                    WHERE ebook.id = ebook_id AND
+                                                                          course_id = $cours_id)",
+                       'course_units' => $sql_course,
+                       'unit_resources' => "unit_id IN (SELECT id FROM course_units
+                                                               WHERE course_id = $cours_id)",
+                       'forum_notify' => $sql_course)
+             as $table => $condition) {
+                backup_table($archivedir, $table, $condition);
+        }
 
     	$htmldir = $archivedir . '/html';
 
@@ -159,6 +184,23 @@ function create_backup_file($file) {
 	fclose($f);
 }
 
+function backup_table($basedir, $table, $condition) {
+        $q = db_query("SELECT * FROM `$table` WHERE $condition");
+        $backup = array();
+        $num_fields = mysql_num_fields($q);
+        while ($data = mysql_fetch_assoc($q)) {
+                for ($i=0; $i < $num_fields; $i++) {
+                        $type = mysql_field_type($q, $i);
+                        if ($type == 'int') {
+                                $name = mysql_field_name($q, $i);
+                                $data[$name] = intval($data[$name]);
+                        }
+                }
+                $backup[] = $data;
+        }
+        file_put_contents("$basedir/$table", serialize($backup));
+}
+
 function backup_annonces($f, $cours_id) {
 	global $mysqlMainDb;
 
@@ -203,18 +245,6 @@ function backup_course_units($f) {
 			inner_quote($q2['date']).")");
 		}
 		fputs($f,"));\n");
-	}
-}
-
-
-function backup_groups($f) {
-	$res = db_query("SELECT * FROM user_group");
-		while($row = mysql_fetch_assoc($res)) {
-		fputs($f, "group(".
-			$row['user'].", ".
-			$row['team'].", ".
-			$row['status'].", ".
-			inner_quote($row['role']).");\n");
 	}
 }
 
@@ -302,9 +332,7 @@ function backup_course_db($f, $course) {
 		$res_create = mysql_fetch_array(db_query("SHOW CREATE TABLE $tablename"));
 		$schema = $res_create[1];
 		fwrite($f, "query(\"$schema\");\n");
-		if ($tablename == 'user_group') {
-			backup_groups($f);
-		} elseif ($tablename == 'assignment_submit') {
+		if ($tablename == 'assignment_submit') {
 			backup_assignment_submit($f);
 		} elseif ($tablename == 'dropbox_file') {
 			backup_dropbox_file($f);
