@@ -171,16 +171,16 @@ mysql_query("CREATE TABLE `course_description`
 
 #######################ACCUEIL ###########################################
 
-    //arxikopoihsh tou array gia ta checkboxes
-    for ($i=0; $i<=50; $i++)
-    {
+    // arxikopoihsh tou array gia ta checkboxes
+    for ($i = 0; $i <= 50; $i++) {
         $sbsystems[$i] = 0;
     }
 
-    //allagh timwn sto array analoga me to poio checkbox exei epilegei
-    foreach ($_POST['subsystems'] as $sb )
-    {
-        $sbsystems[$sb] = 1;
+    // allagh timwn sto array analoga me to poio checkbox exei epilegei
+    if (isset($_POST['subsystems'])) {
+            foreach ($_POST['subsystems'] as $sb) {
+                    $sbsystems[$sb] = 1;
+            }
     }
 
 mysql_query("CREATE TABLE accueil (
