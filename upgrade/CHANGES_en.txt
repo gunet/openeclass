@@ -3,6 +3,32 @@ Open eClass Platform - CHANGES
 ****************************************
 
 ********************************************************************
+Open eClass 2.4 - Changes List
+********************************************************************
+
+-- Changed in Template and creation of new themes.
+-- New module "E Book"
+-- New module "Glossary".
+-- Add new login page.
+-- RSS feed in module "Announcements" and in "Admin Announcements".
+-- Replace xinha html editor with tinymce.
+-- Various changes in modules "Documents", "Groups" and "Forums".
+-- Users can now participate in multiple groups.
+-- Course units can display ebooks .
+-- Changes in module "Search".
+-- Add user public profile.
+-- Changes in Advances user profile.
+-- Security changes.
+-- Changes in Admin Tool.
+-- Users can now download directories (in .zip format) in module "Document".
+-- Changes in installation wizard.
+-- Changes in online help.
+-- Added support for CAS authentication.
+-- Works with PHP version 5.3.
+-- Works without enabling PHP options register_globals and short_open_tags.
+-- Works in Mysql Strict Mode.
+
+********************************************************************
 Open eClass 2.3 - Changes List
 ********************************************************************
 -- Support for user authentication via Shibboleth
