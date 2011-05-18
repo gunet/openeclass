@@ -92,7 +92,7 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
 	$userid_map = array();
         $user_file = $_POST['restoreThis'] . '/user';
         if (file_exists($user_file)) {
-                $userid_map = restore_users(unserialize(file_get_contents($user_file)));
+                $userid_map = restore_users($course_id, unserialize(file_get_contents($user_file)));
                 $cours_user = unserialize(file_get_contents($_POST['restoreThis'] . '/cours_user'));
                 register_users($course_id, $userid_map, $cours_user);
         }
@@ -510,22 +510,22 @@ function assignment_submit($userid, $assignment_id, $submission_date,
 function create_course($code, $lang, $title, $desc, $fac, $vis, $prof, $type) {
 	global $mysqlMainDb;
 
+        $fac = intval($fac);
 	$repertoire = new_code($fac);
 
 	if (mysql_select_db($repertoire)) {
 		echo $langCourseExists;
 		exit;
         }
-        $fac_name = find_faculty_by_id($fac);
 	db_query("INSERT into `$mysqlMainDb`.cours
-		(code, languageCourse, intitule, description, faculte, faculteid, visible, titulaires, fake_code, type)
+		(code, languageCourse, intitule, description, faculteid, visible, titulaires, fake_code, type)
 		VALUES (".
 		join(", ", array(
 			quote($repertoire),
 			quote($lang),
 			quote($title),
 			quote($desc),
-			quote($fac_name), $fac,
+			$fac,
 			quote($vis),
 			quote($prof),
 			quote($code),
@@ -785,13 +785,14 @@ function restore_users($course_id, $users) {
 	       $langUserWith, $langAlready, $langWithUsername, $langUserisAdmin, $langUsernameSame,
                $langUserAlready, $langUName, $tool_content;
 
+        $userid_map = array();
         foreach ($users as $data) {
                 $u = mysql_query("SELECT * FROM `$mysqlMainDb`.user WHERE BINARY username=".quote($data['username']));
                 if (mysql_num_rows($u) > 0) {
                         $res = mysql_fetch_array($u);
                         $userid_map[$data['user_id']] = $res['user_id'];
-                        $tool_content .= "<p><b>" . q($login) . "</b>: $langUserAlready. <i>" .
-                                         q("$res[nom] $res[prenom]") . "</i>!</p>\n";
+                        $tool_content .= "<p><b>" . q($data['username']) . "</b>: $langUserAlready. <i>" .
+                                         q("$res[prenom] $res[nom]") . "</i>!</p>\n";
                 } else {
                         if ($course_addusers) {
                                 db_query("INSERT INTO `$mysqlMainDb`.user
@@ -809,6 +810,7 @@ function restore_users($course_id, $users) {
                 }
 
         }
+        return $userid_map;
 }
 
 function register_users($course_id, $userid_map, $cours_user)

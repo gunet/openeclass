@@ -60,8 +60,10 @@ if (isset($_GET['from_search'])) { // if we come from home page search
         header("Location: {$urlServer}modules/search/search_incourse.php?all=true&search_terms=$_GET[from_search]");
 }
 
-$res = db_query("SELECT course_keywords, faculte, type, visible, titulaires, fake_code
-                 FROM cours WHERE cours_id = $cours_id", $mysqlMainDb);
+$res = db_query("SELECT course_keywords, faculte.name AS faculte, type, visible, titulaires, fake_code
+                        FROM cours, faculte
+                        WHERE cours_id = $cours_id AND
+                              faculte.id = faculteid", $mysqlMainDb);
 $result = mysql_fetch_array($res);
 $keywords = q(trim($result['course_keywords']));
 $faculte = $result['faculte'];

@@ -93,14 +93,6 @@
                                 WHERE cours.faculte = faculte.name");
         }
 
-        // Add 1 new field into table 'cours_faculte': facid
-        // vagpits: update cours.faculteid with id from faculte
-        if (!mysql_field_exists($mysqlMainDb,'cours_faculte','facid')) {
-                echo add_field('cours_faculte', 'facid', "INT(11)");
-                mysql_query("UPDATE cours_faculte,faculte SET cours_faculte.facid = faculte.id
-                                WHERE cours_faculte.faculte = faculte.name");
-        }
-
         // *****************************
         // new tables added
         // *****************************

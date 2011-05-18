@@ -74,7 +74,6 @@ if (isset($_POST['submit'])) {
                 db_query("UPDATE `$mysqlMainDb`.cours
                           SET intitule = " . autoquote($_POST['title']) .",
                               fake_code = " . autoquote($_POST['fcode']) .",
-                              faculte = " . autoquote($facname) . ",
                               course_keywords = ".autoquote($_POST['course_keywords']) . ",
                               visible = " . intval($_POST['formvisible']) . ",
                               titulaires = " . autoquote($_POST['titulary']) . ",

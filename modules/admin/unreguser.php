@@ -55,8 +55,8 @@ $t = 0;
 if (!$doit) {
     $tool_content .= "<p class='title1'>$langConfirmDelete</p>
         <div class='alert1'>$langConfirmDeleteQuestion1 <em>$u_realname ($u_account)</em>";
-        if($c) {
-                $tool_content .= "<div class='alert1'> $langConfirmDeleteQuestion2 <em>".q(course_id_to_title($c))."</em>";
+        if ($c) {
+                $tool_content .= " $langConfirmDeleteQuestion2 <em>".q(course_id_to_title($c))."</em>";
         }
         $tool_content .= ";</div>
                 
@@ -89,13 +89,15 @@ if (!$doit) {
                                         if ($s > 0) {
                                                 //display list
                                                 $tool_content .= "$langUnregFirst <br/ ><br />";
-                                                $sql = db_query("SELECT a.code, a.intitule, b.statut, a.cours_id, b.tutor
-                                                                 FROM cours AS a LEFT JOIN cours_user AS b ON a.cours_id = b.cours_id
-                                                                 WHERE b.user_id = $u AND b.tutor=0 ORDER BY b.statut, a.faculte");
+                                                $sql = db_query("SELECT a.code, a.intitule, b.statut, a.cours_id
+                                                                        FROM cours AS a JOIN faculte ON a.faculteid = faculte.id
+                                                                             LEFT JOIN cours_user AS b ON a.cours_id = b.cours_id
+                                                                             WHERE b.user_id = $u AND b.tutor = 0
+                                                                        ORDER BY b.statut, faculte.name");
                                                 // αν ο χρήστης συμμετέχει σε μαθήματα τότε παρουσίασε τη λίστα
                                                 if (mysql_num_rows($sql) > 0) {
                                                         $tool_content .= "<h4>$langStudentParticipation</h4>\n".
-                                                                "<table border='1'>\n<tr><th>$langCourseCode</th><th>$langLessonName</th>".
+                                                                "<table>\n<tr><th>$langCourseCode</th><th>$langLessonName</th>".
                                                                 "<th>$langProperty</th><th>$langActions</th></tr>";
                                                         for ($j = 0; $j < mysql_num_rows($sql); $j++) {
                                                                 $logs = mysql_fetch_array($sql);
@@ -122,8 +124,10 @@ if (!$doit) {
                                         } else {
                                                 $tool_content .= "$langUnregTeacher<br />";
                                                 $sql = db_query("SELECT a.code, a.intitule, b.statut, a.cours_id
-                                                                 FROM cours AS a LEFT JOIN cours_user AS b ON a.cours_id = b.cours_id
-                                                                 WHERE b.user_id = $u AND b.statut=1 ORDER BY b.statut, a.faculte");
+                                                                        FROM cours AS a JOIN faculte ON a.faculteid = faculte.id
+                                                                             LEFT JOIN cours_user AS b ON a.cours_id = b.cours_id
+                                                                             WHERE b.user_id = $u AND b.statut = 1
+                                                                        ORDER BY b.statut, faculte.name");
                                                 // αν ο χρήστης συμμετέχει σε μαθήματα τότε παρουσίασε τη λίστα
                                                 if (mysql_num_rows($sql) > 0) {
                                                         $tool_content .= "<h4>$langStudentParticipation</h4>\n".
@@ -144,8 +148,10 @@ if (!$doit) {
                                         // display list
                                         $tool_content .= "$langUnregFirst <br /><br />";
                                         $sql = db_query("SELECT a.code, a.intitule, b.statut, a.cours_id
-                                                        FROM cours AS a LEFT JOIN cours_user AS b ON a.cours_id = b.cours_id
-                                                        WHERE b.user_id = $u order by b.statut, a.faculte");
+                                                                FROM cours AS a JOIN faculte ON a.faculteid = faculte.id
+                                                                     LEFT JOIN cours_user AS b ON a.cours_id = b.cours_id
+                                                                     WHERE b.user_id = $u
+                                                                ORDER BY b.statut, faculte.name");
                                         // αν ο χρήστης συμμετέχει σε μαθήματα τότε παρουσίασε τη λίστα
                                         if (mysql_num_rows($sql) > 0) {
                                                 $tool_content .= "<h4>$langStudentParticipation</h4>\n".

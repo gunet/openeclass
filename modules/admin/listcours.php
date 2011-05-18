@@ -56,12 +56,12 @@ $caption = "";
 // Initialize some variables
 $searchurl = "";
 // Manage list limits
-$countcourses = mysql_fetch_array(mysql_query("SELECT COUNT(*) AS cnt FROM cours"));
+$countcourses = mysql_fetch_array(db_query("SELECT COUNT(*) AS cnt FROM cours"));
 $fulllistsize = $countcourses['cnt'];
 
 define ('COURSES_PER_PAGE', 15);
 
-$limit = isset($_GET['limit'])?$_GET['limit']:0;
+$limit = isset($_GET['limit'])? intval($_GET['limit']): 0;
 
 // Display Actions Toolbar
 $tool_content .= "
@@ -105,21 +105,27 @@ if (isset($_GET['search']) && $_GET['search'] == "yes") {
 	}
 	$query=join(' AND ',$searchcours);
 	if (!empty($query)) {
-		$sql = mysql_query("SELECT faculte, code, intitule, titulaires, visible, cours_id FROM cours 
-			WHERE $query ORDER BY faculte");
+                $sql = db_query("SELECT faculte.name AS faculte, cours.code, intitule, titulaires, visible, cours_id
+                                           FROM cours, faculte
+                                           WHERE faculte.id = cours.faculteid AND $query
+                                           ORDER BY faculte");
 		$caption .= "$langFound ".mysql_num_rows($sql)." $langCourses ";
 	} else {
-		$sql = mysql_query("SELECT faculte, code, intitule,titulaires, visible, cours_id FROM cours 
-				ORDER BY faculte");
+                $sql = db_query("SELECT faculte.name AS faculte, faculte, cours.code, intitule,titulaires, visible, cours_id
+                                        FROM cours, faculte
+                                        WHERE faculte.id = cours.faculteid
+                                        ORDER BY faculte");
 		$caption .= "$langFound ".mysql_num_rows($sql)." $langCourses ";
 	}
 }
 // Normal list, no search, select all courses
 else {
-	$a = mysql_fetch_array(mysql_query("SELECT COUNT(*) FROM cours"));
-	$caption .= "".$langManyExist.": <b>".$a[0]." $langCourses</b>";
-	$sql = mysql_query("SELECT faculte, code, intitule, titulaires, visible, cours_id FROM cours 
-			ORDER BY faculte,code LIMIT ".$limit.",".COURSES_PER_PAGE."");
+	$a = mysql_fetch_array(db_query("SELECT COUNT(*) FROM cours"));
+	$caption .= $langManyExist.": <b>".$a[0]." $langCourses</b>";
+        $sql = db_query("SELECT faculte.name AS faculte, cours.code, intitule, titulaires, visible, cours_id
+                                FROM cours, faculte
+                                WHERE faculte.id = cours.faculteid
+                                ORDER BY faculte,code LIMIT $limit, " . COURSES_PER_PAGE);
         
         //$tool_content .= "<p class='success'>".$caption."</p>";
 	if ($fulllistsize > COURSES_PER_PAGE ) {
@@ -128,7 +134,7 @@ else {
 	}
 }
 
-$key=mysql_num_rows($sql);
+$key = mysql_num_rows($sql);
 if ($key==0) {
   $tool_content .= "<p class='alert1'>$langNoCourses</p>";
 

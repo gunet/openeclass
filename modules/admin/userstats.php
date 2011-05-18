@@ -47,9 +47,11 @@ if(!empty($u))
 	$info = mysql_fetch_array($sql);
     	$tool_content .= "<p class='title1'>$langUserStats: <b>$info[2]</b></p>
 		<p><b>$langStudentParticipation</b></p>";
-	$sql = db_query("SELECT a.code, a.intitule, b.statut, a.cours_id
-		FROM cours AS a LEFT JOIN cours_user AS b ON a.cours_id = b.cours_id
-		WHERE b.user_id = '$u' ORDER BY b.statut, a.faculte");
+        $sql = db_query("SELECT a.code, a.intitule, b.statut, a.cours_id
+                                FROM cours AS a JOIN faculte ON a.faculteid = faculte.id
+                                     LEFT JOIN cours_user AS b ON a.cours_id = b.cours_id
+                                WHERE b.user_id = $u
+                                ORDER BY b.statut, faculte.name");
 
 	// αν ο χρήστης συμμετέχει σε μαθήματα τότε παρουσίασε τη λίστα
 	if (mysql_num_rows($sql) > 0) {
@@ -93,10 +95,11 @@ if(!empty($u))
 		$tool_content .= "$langGDRequired";
 	} else {
 		$totalHits = 0;
-		$sql = "SELECT a.code, a.intitule, b.statut, a.cours_id
-				FROM cours AS a LEFT JOIN cours_user AS b ON a.cours_id = b.cours_id
-				WHERE b.user_id = '$u' ORDER BY b.statut, a.faculte";
-		$result = db_query($sql);
+                $result = db_query("SELECT a.code, a.intitule, b.statut, a.cours_id
+                                           FROM cours AS a JOIN faculte ON a.faculteid = faculte.id
+                                                LEFT JOIN cours_user AS b ON a.cours_id = b.cours_id
+                                           WHERE b.user_id = $u
+                                           ORDER BY b.statut, faculte.name");
 		$hits = array();
 		if (mysql_num_rows($result) > 0) {
 			while ($row = mysql_fetch_assoc($result)) {

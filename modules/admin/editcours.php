@@ -74,29 +74,29 @@ if (isset($c)) {
 		$searchurl = "&search=yes";
 	}
 	// Get information about selected course
-	$sql = mysql_query(
-		"SELECT * FROM cours WHERE code = '".mysql_real_escape_string($c)."'");
+	$sql = mysql_query("SELECT * FROM cours WHERE code = " . quote($c));
 	$row = mysql_fetch_array($sql);
 	// Display course information and link to edit
+        $faculte = find_faculty_by_id($row['faculteid']);
 	$tool_content .= "<fieldset>
 	<legend>".$langCourseInfo." <a href=\"infocours.php?c=".htmlspecialchars($c)."".$searchurl."\"><img src='../../template/classic/img/edit.png' alt='' border='0' title='".$langModify."'></a></legend>
 	<table class='tbl' width='100%'>";
 	$tool_content .= "
 	<tr>
-	  <th width='250'>".$langFaculty.":</th>
-	  <td>".$row['faculte']."</td>
+	  <th width='250'>$langFaculty:</th>
+	  <td>".q($faculte)."</td>
 	</tr>
 	<tr>
-	  <th>".$langCode.":</th>
-	  <td>".$row['code']."</td>
+	  <th>$langCode:</th>
+	  <td>".q($row['code'])."</td>
 	</tr>
 	<tr>
-	  <th><b>".$langTitle.":</b></th>
-	  <td>".$row['intitule']."</td>
+	  <th><b>$langTitle:</b></th>
+	  <td>".q($row['intitule'])."</td>
 	</tr>
 	<tr>
 	  <th><b>".$langTutor.":</b></th>
-	  <td>".$row['titulaires']."</td>
+	  <td>".q($row['titulaires'])."</td>
 	</tr>
 	</table>
 	</fieldset>";

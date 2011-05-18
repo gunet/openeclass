@@ -31,7 +31,7 @@
 
 include '../../include/baseTheme.php';
 $nameTools = $langListCourses;
-$navigation[] = array ("url" => "listfaculte.php", "name" => $langSelectFac);
+$navigation[] = array ('url' => 'listfaculte.php', 'name' => $langSelectFac);
 if (isset($_GET['fc'])) {
     $fc = intval($_GET['fc']);
 }
@@ -94,15 +94,13 @@ if ($numoftypes > 0) {
     foreach (array("pre" => $langpres,
             "post" => $langposts,
             "other" => $langothers) as $type => $message) {
-        $result = db_query("SELECT
-                            cours.code k,
-                            cours.fake_code c,
-                            cours.intitule i,
-                            cours.visible visible,
-                            cours.titulaires t
+        $result = db_query("SELECT cours.code k,
+                                   cours.fake_code c,
+                                   cours.intitule i,
+                                   cours.visible visible,
+                                   cours.titulaires t
                             FROM cours
-                            WHERE cours.faculteid = $fc
-                            AND cours.type = '$type'
+                            WHERE cours.faculteid = $fc AND cours.type = '$type'
                             ORDER BY cours.intitule, cours.titulaires");
     
         if (mysql_num_rows($result) == 0) {

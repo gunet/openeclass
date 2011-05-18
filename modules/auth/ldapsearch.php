@@ -145,7 +145,7 @@ if( !empty($is_submit) || (($auth == 7) && (empty($submit))) )
                             <td>".$langFaculty."</td>
 			    <td>
                               <select name='department'>\n";
-			$deps=mysql_query("SELECT name, id FROM faculte ORDER BY id",$db);
+			$deps=mysql_query("SELECT name, id FROM faculte ORDER BY id", $db);
 			while ($dep = mysql_fetch_array($deps))  {
 				$tool_content .= "                              <option value='$dep[1]'>$dep[0]</option>\n";
 			}

@@ -384,13 +384,12 @@ if (isset($_POST['create_course'])) {
                         languageCourse =" . quote($language) . ",
                         intitule = " . quote($intitule) . ",
                         course_keywords = " . quote($course_keywords) . ",
-                        faculte = " . quote($facname) . ",
                         visible = " . quote($formvisible) . ",
                         titulaires = " . quote($titulaires) . ",
                         fake_code = " . quote($code) . ",
                         type = " . quote($type) . ",
                         password = " . quote($password) . ",
-                        faculteid = '$facid',
+                        faculteid = $facid,
                         first_create = NOW()");
         $new_cours_id = mysql_insert_id();
         db_query("INSERT INTO cours_user SET

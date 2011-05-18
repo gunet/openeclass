@@ -593,11 +593,6 @@ elseif (isset($_REQUEST['install1']) || isset($_REQUEST['back1']))
 	$_SESSION['step'] = 1;
 	$configErrorExists = false;
 
-	if (!ini_get('short_open_tag')) {
-		$errorContent[]= "<p class='caution'>$langWarningInstall2 $langWarnInstallNotice1
-		<a href='$install_info_file'>$langHere</a> $langWarnInstallNotice2</p>";
-			$configErrorExists = true;
-        }
 	$tool_content .= "<form action='$_SERVER[PHP_SELF]?alreadyVisited=1' method='post'>";
 
 	// create config, courses and video catalogs
@@ -638,7 +633,6 @@ elseif (isset($_REQUEST['install1']) || isset($_REQUEST['back1']))
 	<p class='sub_title1'>$langOtherReq</p>
 	<ul class='installBullet'>
 	<li>$langInstallBullet1</li>
-	<li>$langInstallBullet2</li>
 	<li>$langInstallBullet3</li>
 	</ul>
 	<p class='sub_title1'>$langAddOnStreaming:</p>

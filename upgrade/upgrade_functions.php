@@ -319,6 +319,9 @@ function upgrade_course_2_4($code, $lang, $extramessage = '')
         delete_table('stat_accueil');
         delete_table('users');
 
+        db_query("UPDATE accueil SET lien = '../../modules/course_info/infocours.php'
+                                 WHERE id = 14 AND define_var = 'MODULE_ID_COURSEINFO'");
+
 	// upgrade polls
 	db_query("ALTER TABLE `poll_answer_record` CHANGE `answer_text` `answer_text` TEXT", $code);
 
@@ -1629,6 +1632,7 @@ function convert_description_to_units($code, $cours_id)
 
 function upgrade_course_index_php($code)
 {
+        global $langUpgNotIndex, $langCheckPerm;
         $course_base_dir = "$GLOBALS[webDir]courses/$code";
         if (!is_writable($course_base_dir)) {
                 echo "$langUpgNotIndex \"$course_base_dir\"! $langCheckPerm.<br />";

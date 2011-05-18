@@ -307,7 +307,7 @@ if (!isset($_POST['submit2'])) {
 		db_query("CREATE TABLE IF NOT EXISTS `course_units` (
 			`id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
 			`title` VARCHAR(255) NOT NULL DEFAULT '',
-			`comments` MEDIUMTEXT NOT NULL DEFAULT '',
+			`comments` MEDIUMTEXT,
 			`visibility` CHAR(1) NOT NULL DEFAULT 'v',
 			`order` INT(11) NOT NULL DEFAULT 0,
 			`course_id` INT(11) NOT NULL)");
@@ -315,7 +315,7 @@ if (!isset($_POST['submit2'])) {
 			`id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
 			`unit_id` INT(11) NOT NULL ,
 			`title` VARCHAR(255) NOT NULL DEFAULT '',
-			`comments` MEDIUMTEXT NOT NULL DEFAULT '',
+			`comments` MEDIUMTEXT,
 			`res_id` INT(11) NOT NULL,
 			`type` VARCHAR(255) NOT NULL DEFAULT '',
 			`visibility` CHAR(1) NOT NULL DEFAULT 'v',
@@ -366,6 +366,10 @@ if (!isset($_POST['submit2'])) {
         mysql_field_exists($mysqlMainDb, 'cours', 'expand_glossary') or
                 db_query("ALTER TABLE `cours` ADD `expand_glossary` BOOL NOT NULL DEFAULT 0");
         if ($oldversion < '2.4') {
+        	if (mysql_field_exists($mysqlMainDb, 'cours', 'faculte')) {
+	        	echo delete_field('cours', 'faculte');
+                }
+
 		db_query("ALTER TABLE user CHANGE lang lang VARCHAR(16) NOT NULL DEFAULT 'el'");
                 mysql_index_exists('user', 'user_username') or
                         db_query('CREATE INDEX user_username ON user (username)');
@@ -380,7 +384,7 @@ if (!isset($_POST['submit2'])) {
                 mysql_field_exists($mysqlMainDb, 'annonces', 'visibility') or
                         db_query("ALTER TABLE `annonces` ADD `visibility` CHAR(1) NOT NULL DEFAULT 'v'");
                 mysql_field_exists($mysqlMainDb, 'user', 'description') or
-                        db_query("ALTER TABLE `user` ADD description TEXT NOT NULL DEFAULT '',
+                        db_query("ALTER TABLE `user` ADD description TEXT',
                                                      ADD has_icon BOOL NOT NULL DEFAULT 0,
                                                      ADD verified_mail BOOL NOT NULL DEFAULT 0,
                                                      ADD receive_mail BOOL NOT NULL DEFAULT 1");
@@ -424,7 +428,7 @@ if (!isset($_POST['submit2'])) {
                                 `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                                 `course_id` INT(11) NOT NULL DEFAULT 0,
                                 `name` varchar(100) NOT NULL DEFAULT '',
-                                `description` TEXT NOT NULL DEFAULT '',
+                                `description` TEXT,
                                 `forum_id` INT(11) NULL,
                                 `max_members` INT(11) NOT NULL DEFAULT 0,
                                 `secret_directory` varchar(30) NOT NULL DEFAULT '0')");
@@ -432,7 +436,7 @@ if (!isset($_POST['submit2'])) {
                                 `group_id` INT(11) NOT NULL,
                                 `user_id` INT(11) NOT NULL,
                                 `is_tutor` INT(11) NOT NULL DEFAULT 0,
-                                `description` TEXT NOT NULL DEFAULT '',
+                                `description` TEXT,
                                 PRIMARY KEY (`group_id`, `user_id`))");
                 db_query("CREATE TABLE IF NOT EXISTS `glossary` (
 			       `id` MEDIUMINT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,

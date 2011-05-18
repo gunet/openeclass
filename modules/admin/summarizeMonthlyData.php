@@ -18,7 +18,6 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-
 /*
 ===========================================================================
     admin/summarizeMonthlyData.php
@@ -110,11 +109,18 @@ $langPleaseWait</div>
 		<th>".$langTeacher."</th>
 		<th>".$langNbUsers."</th></tr>";
 
-        $sql = "SELECT cours.intitule AS name, cours.visible as visible, cours.type as type, cours.faculte as dept, cours.titulaires as proff, count(user_id) AS cnt FROM cours LEFT JOIN cours_user ON ".
-            " cours.cours_id = cours_user.cours_id GROUP BY cours.cours_id ";
+        $sql = "SELECT cours.intitule AS name,
+                       cours.visible AS visible,
+                       cours.type AS type,
+                       faculte.name AS dept,
+                       cours.titulaires AS proff,
+                       count(user_id) AS cnt
+                FROM cours JOIN faculte ON cours.faculteid = faculte.id
+                           LEFT JOIN cours_user ON cours.cours_id = cours_user.cours_id
+                GROUP BY cours.cours_id ";
         $result = db_query($sql, $mysqlMainDb);
         while ($row = mysql_fetch_assoc($result)) {
-            //declare course type
+            // declare course type
             if ($row['type'] == 'pre') {
               $ctype = $langpre;
             }

@@ -205,7 +205,7 @@ function expanded_faculte($fac_name, $facid, $uid) {
 
 	// get the different course types available for this faculte
 	$typesresult = db_query("SELECT DISTINCT type FROM cours
-                                 WHERE cours.faculteid = '$facid' ORDER BY cours.type");
+                                 WHERE cours.faculteid = $facid ORDER BY cours.type");
 
 	// count the number of different types
 	$numoftypes = mysql_num_rows($typesresult);

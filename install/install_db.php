@@ -123,9 +123,9 @@ db_query("CREATE TABLE `cours` (
   `code` varchar(20) NOT NULL,
   `languageCourse` VARCHAR(16) NOT NULL DEFAULT 'el',
   `intitule` varchar(250) NOT NULL DEFAULT '',
-  `description` text NOT NULL DEFAULT '',
-  `course_keywords` text DEFAULT '',
-  `course_addon` text DEFAULT '',
+  `description` TEXT,
+  `course_keywords` TEXT,
+  `course_addon` TEXT,
   `visible` tinyint(4) NOT NULL,
   `titulaires` varchar(200) NOT NULL DEFAULT '',
   `fake_code` varchar(20) NOT NULL DEFAULT '',
@@ -201,7 +201,7 @@ db_query("CREATE TABLE user (
       announce_flag date NOT NULL DEFAULT '0000-00-00',
       doc_flag DATE NOT NULL DEFAULT '0000-00-00',
       forum_flag DATE NOT NULL DEFAULT '0000-00-00',
-      description TEXT NOT NULL DEFAULT '',
+      description TEXT,
       has_icon BOOL NOT NULL DEFAULT 0,
       verified_mail BOOL NOT NULL DEFAULT 0,
       receive_mail BOOL NOT NULL DEFAULT 1,
@@ -280,7 +280,7 @@ db_query("CREATE TABLE IF NOT EXISTS `group` (
                 `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 `course_id` INT(11) NOT NULL DEFAULT 0,
                 `name` varchar(100) NOT NULL DEFAULT '',
-                `description` TEXT NOT NULL DEFAULT '',
+                `description` TEXT,
                 `forum_id` int(11) NULL,
                 `max_members` int(11) NOT NULL DEFAULT 0,
                 `secret_directory` varchar(30) NOT NULL DEFAULT '0')");
@@ -288,7 +288,7 @@ db_query("CREATE TABLE IF NOT EXISTS `group_members` (
                 `group_id` int(11) NOT NULL,
                 `user_id` int(11) NOT NULL,
                 `is_tutor` int(11) NOT NULL DEFAULT 0,
-                `description` TEXT NOT NULL DEFAULT '',
+                `description` TEXT,
                 PRIMARY KEY (`group_id`, `user_id`))");
 
 db_query("CREATE TABLE IF NOT EXISTS `glossary` (

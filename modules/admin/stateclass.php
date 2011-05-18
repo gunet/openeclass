@@ -186,8 +186,8 @@ if (isset($_GET['stats'])) {
 				FROM cours GROUP BY visible "))."
 			<tr>
 			<th class='left' colspan='2'><b>$langNumEachCourse</b></th>
-			</tr>".tablize(list_ManyResult("SELECT DISTINCT faculte, count(*) 
-				FROM cours GROUP BY faculte"))."
+			</tr>".tablize(list_ManyResult("SELECT DISTINCT faculte.name AS faculte, count(*) 
+				FROM cours, faculte WHERE cours.faculteid = faculte.id GROUP BY faculteid"))."
 			<tr>
 			<th class='left' colspan='2'><b>$langNumEachLang</b></th>
 			</tr>".tablize(list_ManyResult("SELECT DISTINCT languageCourse, count(*) FROM cours 

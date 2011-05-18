@@ -179,7 +179,7 @@ elseif (isset($_GET['a']) and $_GET['a'] == 1)  {
 // Delete faculty
 elseif (isset($_GET['a']) and $_GET['a'] == 2)  {
         $c = intval($_GET['c']);
-	$s = db_query("SELECT * from cours WHERE faculteid=$c");
+	$s = db_query("SELECT * from cours WHERE faculteid = $c");
 	// Check for existing courses of a faculty
 	if (mysql_num_rows($s) > 0)  {
 		// The faculty cannot be deleted
@@ -187,7 +187,7 @@ elseif (isset($_GET['a']) and $_GET['a'] == 2)  {
 		$tool_content .= "<p>".$langNoErase."</p><br />";
 	} else {
 		// The faculty can be deleted
-		db_query("DELETE from faculte WHERE id=$c");
+		db_query("DELETE FROM faculte WHERE id = $c");
 		$tool_content .= "<p class='success'>$langErase</p>";
 	}
 	$tool_content .= "<p align='right'><a href='$_SERVER[PHP_SELF]'>".$langBack."</a></p>";
@@ -201,22 +201,19 @@ elseif (isset($_GET['a']) and $_GET['a'] == 3)  {
 		if (empty($faculte)) {
 			$tool_content .= "<p class='caution'>".$langEmptyFaculte."<br />";
 			$tool_content .= "<a href='$_SERVER[PHP_SELF]?a=3&amp;c=$c'>$langReturnToEditFaculte</a></p>";
-			}
+                }
 		// Check if faculty name already exists
 		elseif (mysql_num_rows(db_query("SELECT * from faculte WHERE id <> $c
 					AND name=" . autoquote($faculte))) > 0) {
 			$tool_content .= "<p class='caution'>".$langFaculteExists."<br />";
 			$tool_content .= "<a href='$_SERVER[PHP_SELF]?a=3&amp;c=$c'>$langReturnToEditFaculte</a></p>";
 		} else {
-		// OK Update the faculty
+                        // OK Update the faculty
 			db_query("UPDATE faculte SET name = " .
-                                    autoquote($faculte) . " WHERE id=$c")
-				or die ($langNoSuccess);
-			db_query("UPDATE cours SET faculte = " .
-                                    autoquote($faculte) . " WHERE faculteid=$c")
-				or die ($langNoSuccess);
+                                         autoquote($faculte) . " WHERE id=$c")
+                                 or die ($langNoSuccess);
 			$tool_content .= "<p class='success'>$langEditFacSucces</p><br />";
-			}
+                }
 	} else {
 		// Get faculty information
                 $c = intval($_GET['c']);

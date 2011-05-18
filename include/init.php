@@ -189,10 +189,11 @@ if (isset($require_current_course) and $require_current_course) {
 		$errorMessagePath = "../../";
 	} else {
 		$currentCourse = $dbname = $_SESSION['dbname'];
-		$result = db_query("SELECT cours_id, code, fake_code, intitule, faculte,
-                                           titulaires, languageCourse,
-                                           departmentUrlName, departmentUrl, visible
-                                    FROM cours WHERE cours.code=" . autoquote($dbname));
+		$result = db_query("SELECT cours_id, cours.code, fake_code, intitule, faculte.name AS faculte,
+                                           titulaires, languageCourse, departmentUrlName, departmentUrl, visible
+                                           FROM cours, faculte
+                                           WHERE cours.faculteid = faculte.id AND
+                                                 cours.code=" . autoquote($dbname));
 
                 if (!$result or mysql_num_rows($result) == 0) {
                         restore_dbname_override(true);

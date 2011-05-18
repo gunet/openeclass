@@ -406,7 +406,7 @@ mysql_query("INSERT INTO accueil VALUES (
 mysql_query("INSERT INTO accueil VALUES (
                '14',
                '$langModifyInfo',
-               '../../modules/course_info/infocours.php?',
+               '../../modules/course_info/infocours.php',
                'course_info',
                '".$sbsystems[14]."',
                '1',

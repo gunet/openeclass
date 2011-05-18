@@ -71,7 +71,7 @@ if (!empty($u))
 	{
 		$sql = mysql_query("SELECT nom, prenom, username, password, email, phone, department,
 				registered_at, expires_at, statut, am
-				FROM user WHERE user_id = '$u'");
+				FROM user WHERE user_id = $u");
 		$info = mysql_fetch_array($sql);
 		$tool_content .= "
     <div id='operations_container'>
@@ -213,14 +213,13 @@ $tool_content .= "
      </fieldset>
      </form>";
 
-	$sql = mysql_query("SELECT nom, prenom, username FROM user WHERE user_id = '$u'");
-	$sql = mysql_query("SELECT a.code, a.intitule, b.reg_date, b.statut, a.cours_id
-		FROM cours AS a LEFT JOIN cours_user AS b ON a.cours_id = b.cours_id
-		WHERE b.user_id = '$u' ORDER BY b.statut, a.faculte");
+	$sql = db_query("SELECT a.code, a.intitule, b.reg_date, b.statut, a.cours_id
+                                FROM cours AS a JOIN faculte ON a.faculteid = faculte.id
+                                     LEFT JOIN cours_user AS b ON a.cours_id = b.cours_id
+                                WHERE b.user_id = $u ORDER BY b.statut, faculte.name");
 
 		// αν ο χρήστης συμμετέχει σε μαθήματα τότε παρουσίασε τη λίστα
-		if (mysql_num_rows($sql) > 0)
-		{
+		if (mysql_num_rows($sql) > 0) {
 			$tool_content .= "
                         <p class='title1'>$langStudentParticipation</p>
 			<table class='tbl_alt' width='100%'>
@@ -339,15 +338,15 @@ $tool_content .= "
 		if($registered_at>$expires_at) {
 			$tool_content .= "<center><br /><b>$langExpireBeforeRegister<br /><br /><a href='edituser.php?u=$u'>$langAgain</a></b><br />";
 		} else {
-			if ($u=='1') $department = 'NULL';
+			if ($u == 1) $department = 'NULL';
 			$sql = "UPDATE user SET nom = ".autoquote($lname).", prenom = ".autoquote($fname).",
-				username = ".autoquote($username).", email = ".autoquote($email).", 
-				statut = ".intval($newstatut).", phone=".autoquote($phone).",
-				department = ".intval($department).", expires_at=".$expires_at.",
-                                am = ".autoquote($am)." WHERE user_id = ".intval($u);
+                                       username = ".autoquote($username).", email = ".autoquote($email).", 
+                                       statut = ".intval($newstatut).", phone=".autoquote($phone).",
+                                       department = ".intval($department).", expires_at=".$expires_at.",
+                                       am = ".autoquote($am)." WHERE user_id = ".intval($u);
 			$qry = db_query($sql);
                         if (!$qry) {
-                                $tool_content .= "$langNoUpdate:".$u."!";
+                                $tool_content .= "$langNoUpdate: $u!";
                         } else {
                                 $num_update = mysql_affected_rows();
                                 if ($num_update == 1) {

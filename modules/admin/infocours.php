@@ -48,9 +48,9 @@ include '../../include/baseTheme.php';
 if(!isset($_GET['c'])) { die(); }
 // Define $nameTools
 $nameTools = $langCourseInfo;
-$navigation[] = array("url" => "index.php", "name" => $langAdmin);
-$navigation[] = array("url" => "listcours.php", "name" => $langListCours);
-$navigation[] = array("url" => "editcours.php?c=".htmlspecialchars($_GET['c']), "name" => $langCourseEdit);
+$navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
+$navigation[] = array('url' => 'listcours.php', 'name' => $langListCours);
+$navigation[] = array('url' => 'editcours.php?c='.q($_GET['c']), 'name' => $langCourseEdit);
 // Initialise $tool_content
 $tool_content = "";
 
@@ -59,11 +59,10 @@ if (isset($_POST['submit']))  {
 	$department = intval($_POST['department']);
 	$facname = find_faculty_by_id($department);
 	// Update query
-	db_query("UPDATE cours SET faculte = ". autoquote($facname) . ",
-		titulaires = " . autoquote($_POST['titulaires']) . ",
-		intitule = ". autoquote($_POST['intitule']) . ",
-		faculteid = $department
-		WHERE code = '".mysql_real_escape_string($_GET['c'])."'");
+	db_query("UPDATE cours SET titulaires = ".autoquote($_POST['titulaires']).",
+                                   intitule = ".autoquote($_POST['intitule']).",
+                                   faculteid = $department
+                               WHERE code = ".autoquote($_GET['c']));
 	
 	$tool_content .= "<p class='success'>$langModifDone</p>
                 <p>&laquo; <a href='editcours.php?c=$_GET[c]'>$langBack</a></p>";
