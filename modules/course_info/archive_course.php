@@ -61,6 +61,8 @@ if ($is_adminOfCourse) {
         mysql_select_db($mysqlMainDb);
         $sql_course = "course_id = $cours_id";
         foreach (array('cours' => "cours_id = $cours_id",
+                       'faculte' => "id = (SELECT faculteid FROM cours
+                                                            WHERE cours_id = $cours_id)",
                        'user' => "user_id IN (SELECT user_id FROM cours_user
                                                              WHERE cours_id = $cours_id)",
                        'cours_user' => "cours_id = $cours_id",
@@ -207,39 +209,6 @@ function backup_annonces($f, $cours_id) {
 			inner_quote($q['temps']).", ".
 			inner_quote($q['ordre']).", ".
 			inner_quote($q['title']).");\n");
-	}
-}
-
-function backup_course_units($f) {
-	global $mysqlMainDb, $cours_id;
-	
-	$res = db_query("SELECT * FROM `$mysqlMainDb`.course_units
-				    WHERE course_id = $cours_id");
-	while($q = mysql_fetch_array($res)) {
-		fputs($f, "course_units(".
-			inner_quote($q['title']).", ".
-			inner_quote($q['comments']).", ".
-			inner_quote($q['visibility']).", ".
-			inner_quote($q['order']).", array(");
-		$res2 = db_query("SELECT * FROM unit_resources WHERE unit_id = $q[id]", $mysqlMainDb);
-		$begin = true;
-		while($q2 = mysql_fetch_array($res2)) {
-			if ($begin) {
-				$begin = !$begin;
-				fputs($f, "\n");
-			} else {
-				fputs($f, ",\n");
-			}
-			fputs($f, "array(".
-			inner_quote($q2['title']).", ".
-			inner_quote($q2['comments']).", ".
-			inner_quote($q2['res_id']).", ".
-			inner_quote($q2['type']).", ".
-			inner_quote($q2['visibility']).", ".
-			inner_quote($q2['order']).", ".
-			inner_quote($q2['date']).")");
-		}
-		fputs($f,"));\n");
 	}
 }
 

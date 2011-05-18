@@ -152,10 +152,6 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
 
         /*************  backups: *************************
                 !!!! FIXME !!!! - need to write restore logic for the following:
-foreach (array('document' => $sql_course,
-                       'link_category' => $sql_course,
-                       'link' => $sql_course,
-                       'ebook' => $sql_course,
                        'ebook_section' => "ebook_id IN (SELECT id FROM ebook
                                                                WHERE course_id = $cours_id)",
                        'ebook_subsection' => "section_id IN (SELECT ebook_section.id
@@ -166,7 +162,6 @@ foreach (array('document' => $sql_course,
                        'unit_resources' => "unit_id IN (SELECT id FROM course_units
                                                                WHERE course_id = $cours_id)",
                        'forum_notify' => $sql_course)
-                       as $table => $condition) { }
          **************************************************************************************/
 
 	if (!isset($eclass_version) or $eclass_version < ECLASS_VERSION) { // if we come from older versions 
@@ -199,8 +194,10 @@ elseif (isset($_POST['do_restore'])) {
                 // New-style backup
                 $data = unserialize(file_get_contents($cours_file));
                 $data = $data[0];
+                $faculte_data = unserialize(file_get_contents($_POST['restoreThis'] . '/faculte'));
+                $old_faculte = $faculte_data[0]['name'];
                 $tool_content = course_details_form($data['fake_code'], $data['intitule'],
-                                                    $data['faculteid'], $data['titulaires'],
+                                                    $old_faculte, $data['titulaires'],
                                                     $data['type'], $data['languageCourse'],
                                                     $data['visible'], $data['description']);
         } else {
@@ -815,7 +812,7 @@ function restore_users($course_id, $users) {
 
 function register_users($course_id, $userid_map, $cours_user)
 {
-        global $mysqlMainDb, $langPrevId, $langNewId;
+        global $mysqlMainDb, $langPrevId, $langNewId, $tool_content;
 
         foreach ($cours_user as $cudata) {
                 $old_id = $cudata['user_id'];
@@ -832,7 +829,7 @@ function register_users($course_id, $userid_map, $cours_user)
                                  SET cours_id = $course_id,
                                      user_id = $new_id,
                                      statut = $statut[$new_id],
-                                     reg_date = ".q($reg_date[$new_id]).",
+                                     reg_date = ".quote($reg_date[$new_id]).",
                                      receive_mail = $receive_mail[$new_id]");
                 $tool_content .=  "<p>$langPrevId=$old_id, $langNewId=$new_id</p>\n";
         }
