@@ -1,10 +1,4 @@
 <?php
- //* @version $Id$
-/*****************************************************************************
-        DEAL WITH  BASETHEME, OTHER INCLUDES AND NAMETOOLS
-******************************************************************************/
-// Check if user is administrator and if yes continue
-
 /* ========================================================================
  * Open eClass 2.4
  * E-learning and Course Management System
@@ -33,18 +27,13 @@ include '../../include/baseTheme.php';
 $nameTools = $langAdmin;
 define('HIDE_TOOL_TITLE', 1);
 
-/*****************************************************************************
-        MAIN BODY
-******************************************************************************/
-
 // This is used for inserting data in 'monthly_report' table.
 // The work is done every time the admin page is called in order to
 // ensure correct (up-to-date) information on the table.
 require_once "summarizeMonthlyData.php";
-
 mysql_select_db($mysqlMainDb);
 
-// Constract a table with platform identification info
+// Construct a table with platform identification info
 $tool_content .= "
   <br />
   <fieldset>
@@ -65,10 +54,7 @@ $tool_content .= "
     <tr>
       <th>Data Base Server:</th>
       <td>";
-        if (extension_loaded('mysql'))
-            $tool_content .= "$langMySqlVersion<b>".mysql_get_server_info()."</b>";
-        else // If not display message no MySQL
-            $tool_content .= "<font color='red'>".$langNoMysql."</font>";
+    $tool_content .= "$langMySqlVersion<b>".mysql_get_server_info()."</b>";
     $tool_content .= "</td>
     </tr>
     </table>
@@ -161,11 +147,4 @@ $tool_content .= "
   </fieldset>
   <br />";
 
-/*****************************************************************************
-        DISPLAY HTML
-******************************************************************************/
-// Call draw function to display the HTML
-// $tool_content: the content to display
-// 3: display administrator menu
-// admin: use tool.css from admin folder
 draw($tool_content,3);
