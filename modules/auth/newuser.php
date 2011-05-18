@@ -109,6 +109,10 @@ if (!isset($_POST['submit'])) {
 	<td><small>$langTipLang2</small></td>
 	</tr>
 	<tr>
+	<th class='left'><img id='captcha' src='../../include/securimage/securimage_show.php' alt='CAPTCHA Image' /></th>
+	<td colspan='2'><input type='text' name='captcha_code' maxlength='6' class='FormData_InputText' />&nbsp;&nbsp;<small>(*)</small></td>
+	</tr>
+	<tr>
 	<th class='left'>&nbsp;</th>
 	<td colspan='2' class='right'>
 	<input type='submit' name='submit' value='".$langRegistration."' />
@@ -137,7 +141,8 @@ if (!isset($_POST['submit'])) {
 					'password1' => true,
 					'email' => $email_arr_value,
 					'department' => true,
-					'am' => $am_arr_value));	
+					'am' => $am_arr_value,
+					'captcha_code' => true));	
 	$registration_errors = array();
 	// check if there are empty fields
 	if (!$missing) {
@@ -149,13 +154,19 @@ if (!isset($_POST['submit'])) {
 		if ($myusername = mysql_fetch_array($username_check)) {
 			$registration_errors[] = $langUserFree;
 		}
+		// captcha check
+		require_once '../../include/securimage/securimage.php';
+		$securimage = new Securimage();
+		if ($securimage->check($_POST['captcha_code']) == false) {
+			$registration_errors[] = $langCaptchaWrong;
+		}
 	}
 	if (!empty($email) and !email_seems_valid($email)) {
 		$registration_errors[] = $langEmailWrong;
 	}
 	if ($password != $_POST['password1']) { // check if the two passwords match
 		$registration_errors[] = $langPassTwice;
-	} 
+	}
 	if (count($registration_errors) == 0) {
 		$emailsubject = "$langYourReg $siteName";
 		$uname = unescapeSimple($uname); 
