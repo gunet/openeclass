@@ -1,29 +1,22 @@
 <?php
-/*========================================================================
-*   Open eClass 2.3
-*   E-learning and Course Management System
-* ========================================================================
-*  Copyright(c) 2003-2010  Greek Universities Network - GUnet
-*  A full copyright notice can be read in "/info/copyright.txt".
-*
-*  Developers Group:	Costas Tsibanis <k.tsibanis@noc.uoa.gr>
-*			Yannis Exidaridis <jexi@noc.uoa.gr>
-*			Alexandros Diamantidis <adia@noc.uoa.gr>
-*			Tilemachos Raptis <traptis@noc.uoa.gr>
-*
-*  For a full list of contributors, see "credits.txt".
-*
-*  Open eClass is an open platform distributed in the hope that it will
-*  be useful (without any warranty), under the terms of the GNU (General
-*  Public License) as published by the Free Software Foundation.
-*  The full license can be read in "/info/license/license_gpl.txt".
-*
-*  Contact address: 	GUnet Asynchronous eLearning Group,
-*  			Network Operations Center, University of Athens,
-*  			Panepistimiopolis Ilissia, 15784, Athens, Greece
-*  			eMail: info@openeclass.org
-* =========================================================================*/
-
+/* ========================================================================
+ * Open eClass 2.4
+ * E-learning and Course Management System
+ * ========================================================================
+ * Copyright 2003-2011  Greek Universities Network - GUnet
+ * A full copyright notice can be read in "/info/copyright.txt".
+ * For a full list of contributors, see "credits.txt".
+ *
+ * Open eClass is an open platform distributed in the hope that it will
+ * be useful (without any warranty), under the terms of the GNU (General
+ * Public License) as published by the Free Software Foundation.
+ * The full license can be read in "/info/license/license_gpl.txt".
+ *
+ * Contact address: GUnet Asynchronous eLearning Group,
+ *                  Network Operations Center, University of Athens,
+ *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
+ *                  e-mail: info@openeclass.org
+ * ======================================================================== */
 
 $require_admin = TRUE;
 include '../../include/baseTheme.php';
@@ -78,21 +71,104 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
                                         'course_vis' => true,
                                         'course_prof' => true,
                                         'course_type' => true));
-	$r = $restoreThis . '/html';
-	list($new_course_code, $new_course_id) = create_course($course_code, $course_lang, $course_title,
-		$course_desc, intval($course_fac), $course_vis, $course_prof, $course_type);
-        $coursedir = "${webDir}courses/$new_course_code";
-	move_dir($r, $coursedir);
-	course_index($coursedir, $new_course_code);
-	$tool_content .= "<p>$langCopyFiles $webDir/courses/$new_course_code</p><br /><p>";
-	$action = 1;
+        $r = $restoreThis . '/html';
+	list($new_course_code, $course_id) = create_course($course_code, $course_lang, $course_title,
+                $course_desc, intval($course_fac), $course_vis, $course_prof, $course_type);
+
+        $cours_file = $_POST['restoreThis'] . '/cours';
+        if (file_exists($cours_file)) {
+                $data = unserialize(file_get_contents($cours_file));
+                $data = $data[0];
+                db_query("UPDATE `$mysqlMainDb`.cours
+                                 SET course_keywords = ".quote($data['course_keywords']).",
+                                     doc_quota = ".floatval($data['doc_quota']).",
+                                     video_quota = ".floatval($data['video_quota']).",
+                                     group_quota = ".floatval($data['group_quota']).",
+                                     dropbox_quota = ".floatval($data['dropbox_quota']).",
+                                     expand_glossary = ".intval($data['expand_glossary'])."
+                                 WHERE cours_id = $course_id");
+        }
+
 	$userid_map = array();
+        $user_file = $_POST['restoreThis'] . '/user';
+        if (file_exists($user_file)) {
+                $userid_map = restore_users(unserialize(file_get_contents($user_file)));
+                $cours_user = unserialize(file_get_contents($_POST['restoreThis'] . '/cours_user'));
+                register_users($course_id, $userid_map, $cours_user);
+        }
+
+        $coursedir = "${webDir}courses/$new_course_code";
+        $videodir = "${webDir}video/$new_course_code";
+	move_dir($r, $coursedir);
+        if (is_dir($restoreThis . '/video_files')) {
+                move_dir($restoreThis . '/video_files', $videodir);
+        } else {
+                mkdir($videodir, 0775);
+        }
+	course_index($coursedir, $new_course_code);
+	$tool_content .= "<p>$langCopyFiles $coursedir</p><br /><p>";
+	$action = 1;
 	// now we include the file for restoring
 	ob_start();
 	include("$restoreThis/backup.php");
 	if ($encoding != 'UTF-8') {
 		db_query('SET NAMES greek');
-	}
+        }
+
+        function document_map_function(&$data, $maps) {
+                // !!!! FIXME !!!! when restoring ebook and group documents, subsystem id's have changed
+        }
+
+        function group_map_function(&$data, $arg) {
+                // !!!! FIXME !!!! when restoring group members, group id's have changed
+        }
+
+        mysql_select_db($mysqlMainDb);
+        restore_table($restoreThis, 'group_properties',
+                array('set' => array('course_id' => $course_id)));
+        $group_map = restore_table($restoreThis, 'group',
+                array('set' => array('course_id' => $course_id),
+                      'return_mapping' => 'id'));
+        restore_table($restoreThis, 'group_members',
+                array('map' => array('group_id' => $group_map,
+                                     'user_id' => $userid_map),
+                      'map_function' => 'group_map_function'));
+        $link_category_map = restore_table($restoreThis, 'link_category',
+                array('set' => array('course_id' => $course_id),
+                      'return_mapping' => 'id'));
+        $link_map = restore_table($restoreThis, 'link',
+                array('set' => array('course_id' => $course_id),
+                      'map' => array('category' => $link_category_map),
+                      'return_mapping' => 'id'));
+        $ebook_map = restore_table($restoreThis, 'ebook',
+                array('set' => array('course_id' => $course_id),
+                      'return_mapping' => 'id'));
+        $document_map = restore_table($restoreThis, 'document',
+                array('set' => array('course_id' => $course_id),
+                      'map_function' => 'document_map_function',
+                      'map_function_data' => array($group_map, $ebook_map),
+                      'return_mapping' => 'id'));
+
+
+        /*************  backups: *************************
+                !!!! FIXME !!!! - need to write restore logic for the following:
+foreach (array('document' => $sql_course,
+                       'link_category' => $sql_course,
+                       'link' => $sql_course,
+                       'ebook' => $sql_course,
+                       'ebook_section' => "ebook_id IN (SELECT id FROM ebook
+                                                               WHERE course_id = $cours_id)",
+                       'ebook_subsection' => "section_id IN (SELECT ebook_section.id
+                                                                    FROM ebook, ebook_section
+                                                                    WHERE ebook.id = ebook_id AND
+                                                                          course_id = $cours_id)",
+                       'course_units' => $sql_course,
+                       'unit_resources' => "unit_id IN (SELECT id FROM course_units
+                                                               WHERE course_id = $cours_id)",
+                       'forum_notify' => $sql_course)
+                       as $table => $condition) { }
+         **************************************************************************************/
+
 	if (!isset($eclass_version) or $eclass_version < ECLASS_VERSION) { // if we come from older versions 
 		if ($version < '2.2') { // if we come from 2.1.x
 			upgrade_course_2_2($new_course_code, $course_lang);
@@ -118,13 +194,25 @@ elseif (isset($_POST['do_restore'])) {
                 draw($tool_content, 3);
                 exit;
         }
-	// If $action == 0, the course isn't restored - the user just
-	// gets a form with the archived course details.
-	$action = 0;
-	ob_start();
-	include($_POST['restoreThis'] . '/backup.php');
-	$tool_content .= ob_get_contents();
-	ob_end_clean();
+        $cours_file = $_POST['restoreThis'] . '/cours';
+        if (file_exists($cours_file)) {
+                // New-style backup
+                $data = unserialize(file_get_contents($cours_file));
+                $data = $data[0];
+                $tool_content = course_details_form($data['fake_code'], $data['intitule'],
+                                                    $data['faculteid'], $data['titulaires'],
+                                                    $data['type'], $data['languageCourse'],
+                                                    $data['visible'], $data['description']);
+        } else {
+                // Old-style backup
+                // If $action == 0, the course isn't restored - the user just
+                // gets a form with the archived course details.
+                $action = 0;
+                ob_start();
+                include($_POST['restoreThis'] . '/backup.php');
+                $tool_content .= ob_get_contents();
+                ob_end_clean();
+        }
 } else {
 
 // -------------------------------------
@@ -194,46 +282,15 @@ function course_details($code, $lang, $title, $desc, $fac, $vis, $prof, $type) {
 		$fac = iconv($encoding, 'UTF-8', $fac);
 	}
 
-	// check for available languages
-	$languages = array();
-        foreach ($GLOBALS['active_ui_languages'] as $langcode) {
-                $entry = langcode_to_name($langcode);
-                if (isset($langNameOfLang[$entry])) {
-                        $languages[$entry] = $langNameOfLang[$entry];
-                } else {
-                        $languages[$entry] = $entry;
-                }
-	}
-
         // display the restoring form
 	if (!$action) {
-		echo "<form action='$_SERVER[PHP_SELF]' method='post'>";
-  		echo "<table width='99%' class='tbl'><tbody>";
-		echo "<tr><td align='justify' colspan='2'>$langInfo1</td></tr>";
-		echo "<tr><td align='justify' colspan='2'>$langInfo2</td></tr>";
-		echo "<tr><td>&nbsp;</td></tr>";
-		echo "<tr><td>$langCourseCode:</td><td><input type='text' name='course_code' value='$code' /></td></tr>";
-		echo "<tr><td>$langLanguage:</td><td>".selection($languages, 'course_lang', $lang)."</td></tr>";
-		echo "<tr><td>$langTitle:</td><td><input type='text' name='course_title' value='$title' size='50' /></td></tr>";
-		echo "<tr><td>$langCourseDescription:</td><td><input type='text' name='course_desc' value='".q($desc)."' size='50' /></td></tr>";
-		echo "<tr><td>$langFaculty:</td><td>".faculty_select($fac)."</td></tr>";
-		echo "<tr><td>$langCourseOldFac:</td><td>$fac</td></tr>";
-		echo "<tr><td>$langCourseVis:</td><td>".visibility_select($vis)."</td></tr>";
-		echo "<tr><td>$langTeacher:</td><td><input type='text' name='course_prof' value='$prof' size='50' /></td></tr>";
-		echo "<tr><td>$langCourseType:</td><td>".type_select($type)."</td></tr>";
-		echo "<tr><td>&nbsp;</td></tr>";
-		echo "<tr><td colspan='2'><input type='checkbox' name='course_addusers' checked='1' />$langUsersWillAdd </td></tr>";
-		echo "<tr><td colspan='2'><input type='checkbox' name='course_prefix' />$langUserPrefix</td></tr>";
-		echo "<tr><td>&nbsp;</td></tr><tr><td>";
-		echo "<input type='submit' name='create_restored_course' value='$langOk' />";
-		echo "<input type='hidden' name='restoreThis' value='$_POST[restoreThis]' />";
-		echo "</td></tr></tbody></table></form>";
+                echo course_details_form($code, $title, $fac, $prof, $type, $lang, $vis, $desc);
 	}
 }
 
 // inserting announcements into the main database
 function announcement($text, $date, $order, $title = '') {
-	global $action, $new_course_id, $mysqlMainDb;
+	global $action, $course_id, $mysqlMainDb;
 	if (!$action) return;
 	db_query("INSERT INTO `$mysqlMainDb`.annonces
 		(title, contenu, temps, cours_id, ordre)
@@ -242,14 +299,14 @@ function announcement($text, $date, $order, $title = '') {
 			quote($title),
 			quote($text),
 			quote($date),
-			$new_course_id,
+			$course_id,
 			quote($order))).
 			")");
 }
 
 // insert course units into the main database
 function course_units($title, $comments, $visibility, $order, $resource_units) {
-	global $action, $new_course_id, $mysqlMainDb;
+	global $action, $course_id, $mysqlMainDb;
 	
 	if (!$action) return;
 	
@@ -261,7 +318,7 @@ function course_units($title, $comments, $visibility, $order, $resource_units) {
 			quote($comments),
 			quote($visibility),
 			quote($order),
-			$new_course_id)).
+			$course_id)).
 			")");
 	$unit_id = mysql_insert_id();
 	foreach ($resource_units as $key => $units_array) {
@@ -273,7 +330,7 @@ function course_units($title, $comments, $visibility, $order, $resource_units) {
 
 // inserting users into the main database
 function user($userid, $name, $surname, $login, $password, $email, $statut, $phone, $department, $registered_at = NULL, $expires_at = NULL, $inst_id = NULL) {
-	global $action, $new_course_code, $new_course_id, $userid_map, $mysqlMainDb, $course_prefix, $course_addusers, $durationAccount, $version, $encoding;
+	global $action, $new_course_code, $course_id, $userid_map, $mysqlMainDb, $course_prefix, $course_addusers, $durationAccount, $version, $encoding;
 	global $langUserWith, $langAlready, $langWithUsername, $langUserisAdmin, $langUsernameSame, $langUserAlready, $langUName, $langPrevId, $langNewId, $langUserName;
 
 	if ($encoding != 'UTF-8') {
@@ -337,13 +394,17 @@ function user($userid, $name, $surname, $login, $password, $email, $statut, $pho
 
 	db_query("INSERT INTO `$mysqlMainDb`.cours_user
 		(cours_id, user_id, statut, reg_date)
-		VALUES ($new_course_id, $userid_map[$userid], $statut, NOW())");
+		VALUES ($course_id, $userid_map[$userid], $statut, NOW())");
 	echo "<br /> $langUserName=$login, $langPrevId=$userid, $langNewId=$userid_map[$userid]\n";
 }
 
 function query($sql) {
 	global $action, $new_course_code, $encoding;
-	if (!$action) return;
+        if (!$action) return;
+        // Skip tables not used any longer
+        if (preg_match('/^(CREATE TABLE|INSERT INTO) `(stat_accueil|users)`/', $sql)) {
+                return;
+        }
 	mysql_select_db($new_course_code);
 	if ($encoding != 'UTF-8') {
 		if (!iconv($encoding, 'UTF-8', $sql)) {
@@ -360,6 +421,7 @@ function group($userid, $team, $status, $role) {
 		return;
 	}
 	mysql_select_db($new_course_code);
+        // !!!!FIXME!!!! add group directly to new table
 	db_query("INSERT into user_group
 		(user,team,status,role)
 		VALUES (".
@@ -403,7 +465,6 @@ function dropbox_person($fileId, $personId) {
 		join(", ", array(
 			quote($fileId),
 			quote($userid_map[$personId]))).")");
-
 }
 
 function dropbox_post($fileId, $recipientId) {
@@ -597,3 +658,181 @@ function find_backup_folders($basedir)
         }
         return $dirlist;
 }
+
+function restore_table($basedir, $table, $options)
+{
+        $set = get_option($options, 'set');
+        $backup = unserialize(file_get_contents("$basedir/$table"));
+        $i = 0;
+        $mapping = array();
+        if (isset($options['return_mapping'])) {
+                $return_mapping = true;
+                $id_var = $options['return_mapping'];
+        } else {
+                $return_mapping = false;
+        }
+
+        foreach ($backup as $data) {
+                if ($return_mapping) {
+                        $old_id = $data[$id_var];
+                        unset($data[$id_var]);
+                }
+                if (!isset($sql_intro)) {
+                        $sql_intro = "INSERT INTO `$table` " .
+                                     field_names($data) . ' VALUES ';
+                }
+                if (isset($options['map'])) {
+                        foreach ($options['map'] as $field => &$map) {
+                                if (isset($map[$data[$field]])) {
+                                        $data[$field] = $map[$data[$field]];
+                                } else {
+                                        break 2;
+                                }
+                        }
+                }
+                db_query($sql_intro . field_values($data, $set));
+                if ($return_mapping) {
+                        $mapping[$old_id] = mysql_insert_id();
+                }
+        }
+        if ($return_mapping) {
+                return $mapping;
+        }
+}
+
+function field_names($data)
+{
+        foreach ($data as $name => $value) {
+                $keys[] = '`' . $name . '`';
+        }
+        return '(' . implode(', ', $keys) . ')';
+}
+
+function field_values($data, $set)
+{
+        foreach ($data as $name => $value) {
+                if (isset($set[$name])) {
+                        $value = $set[$name];
+                }
+                if (is_int($value)) {
+                        $values[] = $value;
+                } else {
+                        $values[] = quote($value);
+                }
+        }
+        return '(' . implode(', ', $values) . ')';
+}
+
+function get_option($options, $name)
+{
+        if (isset($options[$name])) {
+                return $options[$name];
+        } else {
+                return array();
+        }
+}
+
+function course_details_form($code, $title, $fac, $prof, $type, $lang, $vis, $desc)
+{
+        global $langInfo1, $langInfo2, $langCourseCode, $langLanguage, $langTitle,
+               $langCourseDescription, $langFaculty, $langCourseOldFac, $langCourseVis,
+               $langTeacher, $langCourseType, $langUsersWillAdd, $langUserPrefix,
+               $langOk;
+
+	// find available languages
+	$languages = array();
+        foreach ($GLOBALS['active_ui_languages'] as $langcode) {
+                $entry = langcode_to_name($langcode);
+                if (isset($langNameOfLang[$entry])) {
+                        $languages[$entry] = $langNameOfLang[$entry];
+                } else {
+                        $languages[$entry] = $entry;
+                }
+	}
+
+        return "<form action='$_SERVER[PHP_SELF]' method='post'>
+                <table width='99%' class='tbl'><tbody>
+                   <tr><td align='justify' colspan='2'>$langInfo1</td></tr>
+                   <tr><td align='justify' colspan='2'>$langInfo2</td></tr>
+                   <tr><td>&nbsp;</td></tr>
+                   <tr><td>$langCourseCode:</td>
+                       <td><input type='text' name='course_code' value='".q($code)."' /></td></tr>
+                   <tr><td>$langLanguage:</td>
+                       <td>".selection($languages, 'course_lang', $lang)."</td></tr>
+                   <tr><td>$langTitle:</td>
+                       <td><input type='text' name='course_title' value='".q($title)."' size='50' /></td></tr>
+                   <tr><td>$langCourseDescription:</td>
+                       <td><input type='text' name='course_desc' value='".q($desc)."' size='50' /></td></tr>
+                   <tr><td>$langFaculty:</td><td>".faculty_select($fac)."</td></tr>
+                   <tr><td>$langCourseOldFac:</td><td>$fac</td></tr>
+                   <tr><td>$langCourseVis:</td><td>".visibility_select($vis)."</td></tr>
+                   <tr><td>$langTeacher:</td>
+                       <td><input type='text' name='course_prof' value='$prof' size='50' /></td></tr>
+                   <tr><td>$langCourseType:</td><td>".type_select($type)."</td></tr>
+                   <tr><td>&nbsp;</td></tr>
+                   <tr><td colspan='2'><input type='checkbox' name='course_addusers' />$langUsersWillAdd </td></tr>
+                   <tr><td colspan='2'><input type='checkbox' name='course_prefix' />$langUserPrefix</td></tr>
+                   <tr><td>&nbsp;</td></tr>
+                   <tr><td>
+                      <input type='submit' name='create_restored_course' value='$langOk' />
+                      <input type='hidden' name='restoreThis' value='$_POST[restoreThis]' /></td></tr>
+                </tbody></table>
+                </form>";
+}
+
+function restore_users($course_id, $users) {
+	global $mysqlMainDb, $course_prefix, $course_addusers, $durationAccount, $version,
+	       $langUserWith, $langAlready, $langWithUsername, $langUserisAdmin, $langUsernameSame,
+               $langUserAlready, $langUName, $tool_content;
+
+        foreach ($users as $data) {
+                $u = mysql_query("SELECT * FROM `$mysqlMainDb`.user WHERE BINARY username=".quote($data['username']));
+                if (mysql_num_rows($u) > 0) {
+                        $res = mysql_fetch_array($u);
+                        $userid_map[$data['user_id']] = $res['user_id'];
+                        $tool_content .= "<p><b>" . q($login) . "</b>: $langUserAlready. <i>" .
+                                         q("$res[nom] $res[prenom]") . "</i>!</p>\n";
+                } else {
+                        if ($course_addusers) {
+                                db_query("INSERT INTO `$mysqlMainDb`.user
+                                                 SET nom = ".quote($data['nom']).",
+                                                     prenom = ".quote($data['prenom']).",
+                                                     username = ".quote($data['username']).",
+                                                     password = ".quote($data['password']).",
+                                                     email = ".quote($data['email']).",
+                                                     statut = ".quote($data['statut']).",
+                                                     phone = ".quote($data['phone']).",
+                                                     department = ".quote($data['department']).",
+                                                     registered_at = ".quote($data['registered_at']));
+                                $userid_map[$userid] = mysql_insert_id();
+                        }
+                }
+
+        }
+}
+
+function register_users($course_id, $userid_map, $cours_user)
+{
+        global $mysqlMainDb, $langPrevId, $langNewId;
+
+        foreach ($cours_user as $cudata) {
+                $old_id = $cudata['user_id'];
+                if (isset($userid_map[$old_id])) {
+                        $statut[$old_id] = $cudata['statut'];
+                        $tutor[$old_id] = $cudata['tutor'];
+                        $reg_date[$old_id] = $cudata['reg_date'];
+                        $receive_mail[$old_id] = $cudata['receive_mail'];
+                }
+        }
+
+        foreach ($userid_map as $old_id => $new_id) {
+                db_query("INSERT INTO `$mysqlMainDb`.cours_user
+                                 SET cours_id = $course_id,
+                                     user_id = $new_id,
+                                     statut = $statut[$new_id],
+                                     reg_date = ".q($reg_date[$new_id]).",
+                                     receive_mail = $receive_mail[$new_id]");
+                $tool_content .=  "<p>$langPrevId=$old_id, $langNewId=$new_id</p>\n";
+        }
+}
+

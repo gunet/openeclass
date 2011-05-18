@@ -60,7 +60,11 @@ if ($is_adminOfCourse) {
         // backup subsystems from main db
         mysql_select_db($mysqlMainDb);
         $sql_course = "course_id = $cours_id";
-        foreach (array('group_properties' => $sql_course,
+        foreach (array('cours' => "cours_id = $cours_id",
+                       'user' => "user_id IN (SELECT user_id FROM cours_user
+                                                             WHERE cours_id = $cours_id)",
+                       'cours_user' => "cours_id = $cours_id",
+                       'group_properties' => $sql_course,
                        'group' => $sql_course,
                        'group_members' => "group_id IN (SELECT id FROM `group`
                                                                WHERE course_id = $cours_id)",
@@ -170,10 +174,6 @@ function create_backup_file($file) {
 	}
 	list($ver) = mysql_fetch_array(db_query("SELECT `value` FROM `$mysqlMainDb`.config WHERE `key`='version'"));
 	fputs($f, "<?php\n\$eclass_version = '$ver';\n\$version = 2;\n\$encoding = 'UTF-8';\n");
-	backup_course_details($f, $currentCourseID);
-	backup_annonces($f, $cours_id);
-	backup_course_units($f);
-	backup_users($f, $cours_id);
 	backup_course_db($f, $currentCourseID);
 	fputs($f, "?>\n");
 	fclose($f);
@@ -294,29 +294,6 @@ function backup_dropbox_post($f) {
 }
 
 
-function backup_users($f, $cours_id) {
-	global $mysqlMainDb;
-
-	$res = db_query("SELECT user.*, cours_user.statut as cours_statut
-		FROM `$mysqlMainDb`.user, `$mysqlMainDb`.cours_user
-		WHERE user.user_id=cours_user.user_id
-		AND cours_user.cours_id = $cours_id");
-	while($q = mysql_fetch_array($res)) {
-		fputs($f, "user(".
-			inner_quote($q['user_id']).", ".
-			inner_quote($q['nom']).", ".
-			inner_quote($q['prenom']).", ".
-			inner_quote($q['username']).", ".
-			inner_quote($q['password']).", ".
-			inner_quote($q['email']).", ".
-			inner_quote($q['cours_statut']).", ".
-			inner_quote($q['phone']).", ".
-			inner_quote($q['department']).", ".
-			inner_quote($q['registered_at']).", ".
-			inner_quote($q['expires_at']).");\n");
-	}
-}
-
 function backup_course_db($f, $course) {
 	mysql_select_db($course);
 
@@ -371,24 +348,6 @@ function backup_course_db($f, $course) {
 		}
 	}
 }
-
-
-function backup_course_details($f, $course) {
-	global $mysqlMainDb;
-
-	$res = db_query("SELECT * FROM `$mysqlMainDb`.cours
-                                  WHERE code = '$course'");
-	$q = mysql_fetch_array($res);
-	fputs($f, "course_details('$course',\t// Course code\n\t".
-		inner_quote($q['languageCourse']).",\t// Language\n\t".
-		inner_quote($q['intitule']).",\t// Title\n\t".
-		inner_quote($q['description']).",\t// Description\n\t".
-		inner_quote($q['faculte']).",\t// Faculty\n\t".
-		inner_quote($q['visible']).",\t// Visible?\n\t".
-		inner_quote($q['titulaires']).",\t// Professor\n\t".
-		inner_quote($q['type']).");\t// Type\n");
-}
-
 
 function inner_quote($s)
 {
