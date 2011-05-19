@@ -732,7 +732,7 @@ if ($doc_count == 0) {
 
 	$tool_content .= "
     <tr>
-      <td colspan='$cols'><div class='sub_title1'><b>$langDirectory:<b> " . make_clickable_path($curDirPath) . "<br></div></td>
+      <td colspan='$cols'><div class='sub_title1'><b>$langDirectory:</b> " . make_clickable_path($curDirPath) . "<br></div></td>
       <td><div align='right'>";
 
         // Link for sortable table headings
