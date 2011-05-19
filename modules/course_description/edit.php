@@ -69,7 +69,7 @@ if (isset($_POST['edIdBloc'])) {
                $edit_title = false; 
         }
         if (isset($_POST['add']) and @!$titreBlocNotEditable[$numBloc]) {
-                $numBloc = new_description_res_id($cours_id);
+                $numBloc = new_description_res_id(description_unit_id($cours_id));
                 $contentBloc = '';
         } else {
                 $q = db_query("SELECT title, comments FROM unit_resources WHERE unit_id =
