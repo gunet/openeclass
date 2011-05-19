@@ -29,9 +29,10 @@ include '../../include/action.php';
 $action = new action();
 include 'doc_init.php';
 include '../../include/lib/forcedownload.php';
-include "../../include/lib/fileDisplayLib.inc.php";
-include "../../include/lib/fileManageLib.inc.php";
-include "../../include/lib/fileUploadLib.inc.php";
+include '../../include/lib/fileDisplayLib.inc.php';
+include '../../include/lib/fileManageLib.inc.php';
+include '../../include/lib/fileUploadLib.inc.php';
+include '../../include/pclzip/pclzip.lib.php' ;
 
 // file manager basic variables definition
 $local_head = '
@@ -76,31 +77,32 @@ if ($subsystem == EBOOK) {
 }
 
 // ---------------------------
-// download directory action
+// download directory or file
 // ---------------------------
-if (isset($_GET['downloadDir'])) {
-        include("../../include/pclzip/pclzip.lib.php");
-
+if (isset($_GET['download'])) {
         // Make sure $downloadDir doesn't contain /..
-	$downloadDir = str_replace('.', '', $_GET['downloadDir']);
+	$downloadDir = str_replace('/..', '', $_GET['download']);
 
-	list($real_filename) = mysql_fetch_row(db_query("SELECT filename FROM document
-                                                                WHERE $group_sql AND
-                                                                      path = " . autoquote($downloadDir)));
-	$real_filename = $real_filename.'.zip';
-	$zip_filename = $webDir . 'courses/temp/'.safe_filename('zip');
-
-        zip_documents_directory($zip_filename, $downloadDir);
-
-	// download file
-	send_file_to_client($zip_filename, $real_filename, null, true, true);
-	exit;
-}
-
-if ($can_upload)  {
-        if (isset($_POST['uncompress'])) {
-                include("../../include/pclzip/pclzip.lib.php");
+        $q = db_query("SELECT filename, format FROM document
+                              WHERE $group_sql AND
+                                    path = " . autoquote($downloadDir));
+        if (!$q or mysql_num_rows($q) != 1) {
+                not_found($downloadDir);
         }
+        list($real_filename, $format) = mysql_fetch_row($q);
+
+        if ($format == '.dir') {
+                $real_filename = $real_filename.'.zip';
+                $dload_filename = $webDir . 'courses/temp/'.safe_filename('zip');
+                zip_documents_directory($dload_filename, $downloadDir);
+                $delete = true;
+        } else {
+                $dload_filename = $basedir . $downloadDir;
+                $delete = false;
+        }
+
+	send_file_to_client($dload_filename, $real_filename, null, true, $delete);
+	exit;
 }
 
 
@@ -806,13 +808,11 @@ if ($doc_count == 0) {
                                 $file_url = $base_url . "openDir=$cmdDirName";
                                 $link_extra = '';
 				$link_text = $entry['filename'];
-				$img_download = "<img src='../../template/classic/img/download.png' width='16' height='16' align='middle' alt='$langDownloadDir' title='$langDownloadDir'>";
-				$download_url = $base_url . "downloadDir=$cmdDirName";
+                                $dload_msg = $langDownloadDir;
                         } else {
                                 $image = $urlAppend . '/modules/document/img/' . choose_image('.' . $entry['format']);
                                 $file_url = file_url($cmdDirName, $entry['filename']);
                                 $link_extra = " title='$langSave' target='_blank'";
-				$img_download = '';
                                 if (empty($entry['title'])) {
                                         $link_text = $entry['filename'];
                                 } else {
@@ -821,7 +821,10 @@ if ($doc_count == 0) {
                                 if ($entry['copyrighted']) {
                                         $link_text .= " <img src='$urlAppend/modules/document/img/copyrighted.png' />";
                                 }
+                                $dload_msg = $langSave;
                         }
+                        $download_url = $base_url . "download=$cmdDirName";
+                        $download_icon = "<a href='$download_url'><img src='../../template/classic/img/download.png' width='16' height='16' align='middle' alt='$dload_msg' title='$dload_msg'></a>";
                         $tool_content .= "\n<tr $style>";
                         $tool_content .= "\n<td class='center' valign='top'><a href='$file_url'$style$link_extra><img src='$image' /></a></td>";
                         $tool_content .= "\n<td><a href='$file_url'$link_extra>$link_text</a>";
@@ -836,18 +839,17 @@ if ($doc_count == 0) {
                         if ($is_dir) {
                                 // skip display of date and time for directories
                                 $tool_content .= "\n<td>&nbsp;</td>\n<td>&nbsp;</td>";
+                                $padding = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
                         } else {
                                 $size = format_file_size($entry['size']);
                                 $date = format_date($entry['date']);
                                 $tool_content .= "\n<td class='center'>$size</td>\n<td class='center'>$date</td>";
-				
+                                $padding = '&nbsp;';
                         }
                         if ($can_upload) {
                                 $tool_content .= "\n<td class='right' valign='top'><form action='document.php?course=$code_cours' method='post'>" . $group_hidden_input .
-                                                 "<input type='hidden' name='filePath' value='$cmdDirName' />";
-				if ($is_dir) {
-					$tool_content .= "<a href='$download_url'>$img_download</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
-				} 
+                                                 "<input type='hidden' name='filePath' value='$cmdDirName' />" .
+                                                 $download_icon . $padding;
                                 if (!$is_dir) {
                                         /*** replace/overwrite command, only applies to files ***/
                                         $tool_content .= "<a href='{$base_url}replace=$cmdDirName'>" .
@@ -889,11 +891,7 @@ if ($doc_count == 0) {
                                 $tool_content .= "</form></td>";
                                 $tool_content .= "\n    </tr>";
                         } else { // only for students
-				if ($is_dir) { 
-					$tool_content .= "<td class='center'><a href='$download_url'>$img_download</a></td></tr>";
-				} else {
-					$tool_content .= "<td class='center'>&nbsp;</td></tr>";
-				}
+                                $tool_content .= "<td>$download_icon</td>";
 			}
                         $counter++;
                 }
