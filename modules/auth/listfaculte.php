@@ -41,7 +41,7 @@ if (isset($result))  {
 		($fac[code])";
 		$n = db_query("SELECT COUNT(*) FROM cours WHERE faculteid = $fac[id]");
 		$r = mysql_fetch_array($n);
-		$tool_content .= "&nbsp;&nbsp;-&nbsp;&nbsp;$langThereAre $r[0]&nbsp;".  ($r[0] == 1? $langAvCours: $langAvCourses) . "</small></td>
+		$tool_content .= "&nbsp;&nbsp;-&nbsp;&nbsp;$r[0]&nbsp;".  ($r[0] == 1? $langAvCours: $langAvCourses) . "</small></td>
 		</tr>";
 		$k++;
 	}
