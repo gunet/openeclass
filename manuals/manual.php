@@ -61,19 +61,19 @@ if (isset($language) and $language == 'greek') {
 
 $tool_content .= "<table width='100%' class='tbl_alt'>
   <tr>
-    <th width='16px'><img src='../template/classic/img/pdf.png' width='16' height='16' alt='icon'></th>
+    <th width='16'><img src='../template/classic/img/pdf.png' width='16' height='16' alt='icon'></th>
     <td>". manlink('OpeneClass23', $ext, $langFinalDesc) ."</td>
   </tr>
   <tr>
-    <th width='16px'><img src='../template/classic/img/pdf.png' width='16' height='16' alt='icon'></th>
+    <th width='16'><img src='../template/classic/img/pdf.png' width='16' height='16' alt='icon'></th>
     <td> ". manlink('OpeneClass23_short', $ext, $langShortDesc) ."</td>
   </tr>
   <tr>
-    <th width='16px'><img src='../template/classic/img/pdf.png' width='16' height='16' alt='icon'></th>
+    <th width='16'><img src='../template/classic/img/pdf.png' width='16' height='16' alt='icon'></th>
     <td>". manlink('manT/OpeneClass23_ManT', $ext, $langManT) ."</td>
   </tr>
   <tr>
-    <th width='16px'><img src='../template/classic/img/pdf.png' width='16' height='16' alt='icon'></th>
+    <th width='16'><img src='../template/classic/img/pdf.png' width='16' height='16' alt='icon'></th>
     <td> ". manlink('manS/OpeneClass23_ManS', $ext, $langManS) ."</td>
   </tr>
 </table>
@@ -87,19 +87,19 @@ $tool_content .= "
 
 <table width='100%' class='tbl_alt'>
   <tr>
-    <th width='16px'><img src='../template/classic/img/pdf.png' width='16' height='16' alt='icon'></th>
+    <th width='16'><img src='../template/classic/img/pdf.png' width='16' height='16' alt='icon'></th>
     <td><a href='http://www.openeclass.org/guides/pdf/create_teacher_account.pdf' target='_blank'>$langCreateAccount</a></td>
   </tr>
   <tr>
-    <th width='16px'><img src='../template/classic/img/pdf.png' width='16' height='16' alt='icon'></th>
+    <th width='16'><img src='../template/classic/img/pdf.png' width='16' height='16' alt='icon'></th>
     <td> <a href='http://www.openeclass.org/guides/pdf/create_course.pdf' target='_blank'>$langCourseCreate</a></td>
   </tr>
   <tr>
-    <th width='16px'><img src='../template/classic/img/pdf.png' width='16' height='16' alt='icon'></th>
+    <th width='16'><img src='../template/classic/img/pdf.png' width='16' height='16' alt='icon'></th>
     <td><a href='http://www.openeclass.org/guides/pdf/teacher_portfolio.pdf' target='_blank'>$langPersonalisedBriefcase</a></td>
   </tr>
   <tr>
-    <th width='16px'><img src='../template/classic/img/pdf.png' width='16' height='16' alt='icon'></th>
+    <th width='16'><img src='../template/classic/img/pdf.png' width='16' height='16' alt='icon'></th>
     <td> <a href='http://www.openeclass.org/guides/pdf/manage_course.pdf' target='_blank'>$langAdministratorCourse</a></td>
   </tr>
 </table>
@@ -113,15 +113,15 @@ $tool_content .= "
 
 <table width='100%' class='tbl_alt'>
   <tr>
-    <th width='16px'><img src='../template/classic/img/pdf.png' width='16' height='16' alt='icon'></th>
+    <th width='16'><img src='../template/classic/img/pdf.png' width='16' height='16' alt='icon'></th>
     <td><a href='http://www.openeclass.org/guides/pdf/course_registration.pdf' target='_blank'>$langRegCourses</a></td>
   </tr>
   <tr>
-    <th width='16px'><img src='../template/classic/img/pdf.png' width='16' height='16' alt='icon'></th>
+    <th width='16'><img src='../template/classic/img/pdf.png' width='16' height='16' alt='icon'></th>
    <td><a href='http://www.openeclass.org/guides/pdf/student_portfolio.pdf' target='_blank'>$langPersonalisedBriefcase</a></td>
   </tr>
   <tr>
-    <th width='16px'><img src='../template/classic/img/pdf.png' width='16' height='16' alt='icon'></th>
+    <th width='16'><img src='../template/classic/img/pdf.png' width='16' height='16' alt='icon'></th>
     <td><a href='http://www.openeclass.org/guides/pdf/view_course.pdf' target='_blank'>$langIntroToCourse</a>
   </tr>
 </table>
@@ -130,11 +130,12 @@ $tool_content .= "
 
 }
 
-
-
-
-$tool_content .= "<br><p class='smaller right'>$langAcrobat $langWhere <a href='http://www.adobe.com/products/acrobat/readstep2.html' target='_blank'>
-		$langHere</a>.</p>";
+$tool_content .= '<br><p class="smaller right">' .
+                 sprintf($langAcrobat, 
+                         '<a href="http://www.adobe.com/products/acrobat/readstep2.html" target="_blank">',
+                         '</a>',
+                         '<a href="http://pdfreaders.org/" target="_blank">',
+                         '</a>') . '</p>';
 
 if (isset($uid) and $uid) {
         draw($tool_content, 1);
