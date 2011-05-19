@@ -1,5 +1,5 @@
 // --------------------------------------------------------------------------------
-// PclZip 2.8.1 - readme.txt
+// PclZip 2.8.2 - readme.txt
 // --------------------------------------------------------------------------------
 // License GNU/LGPL - August 2009
 // Vincent Blavet - vincent@phpconcept.net
@@ -31,6 +31,15 @@
 
 2 - What's new
 ==============
+
+  Version 2.8.2 :
+    - PCLZIP_CB_PRE_EXTRACT and PCLZIP_CB_POST_EXTRACT are now supported with 
+      extraction as a string (PCLZIP_OPT_EXTRACT_AS_STRING). The string
+      can also be modified in the post-extract call back.
+    **Bugs correction :
+    - PCLZIP_OPT_REMOVE_ALL_PATH was not working correctly    
+    - Remove use of eval() and do direct call to callback functions
+    - Correct support of 64bits systems (Thanks to WordPress team)
 
   Version 2.8.1 :
     - Move option PCLZIP_OPT_BY_EREG to PCLZIP_OPT_BY_PREG because ereg() is
