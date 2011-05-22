@@ -74,7 +74,7 @@ $tool_content .= "
       <input type='text' name='msg' size='80'>
       <input type='hidden' name='chatLine'>
       <input type='submit' value=' &raquo;  '><br /><br />
-      <iframe frameborder='0' src='messageList.php' width='100%' height='300' name='messageList' style='border: 1px solid #CAC3B5;'><a href='messageList.php?course=$code_cours'>Message list</a></iframe></td>
+      <iframe frameborder='0' src='messageList.php' width='100%' height='300' name='messageList' style='border: 1px solid #CAC3B5;'><a href='messageList.php?course=$code_cours'>Message list</a></iframe>
    </fieldset>
    </form>";
 add_units_navigation(TRUE);
