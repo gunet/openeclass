@@ -452,6 +452,7 @@ $option_email_required = (isset($email_required) and ($email_required == 'on'))?
 $option_am_required = (isset($am_required) and ($am_required == 'on'))? '1': '0';
 $option_dropbox_allow_student_to_student = (isset($dropbox_allow_student_to_student) and ($dropbox_allow_student_to_student == 'on'))? '1': '0';
 $option_block_username_change = (isset($block_username_change) and ($block_username_change == 'on'))? '1': '0';
+$option_display_captcha = (isset($display_captcha) and ($display_captcha == 'on'))? '1': '0';
 $option_betacms = (isset($betacms) and ($betacms == 'on'))? '1': '0';
 
 db_query("CREATE TABLE `config`
@@ -466,6 +467,7 @@ db_query("INSERT INTO `config` (`key`, `value`) VALUES
 		('block_username_change', $option_block_username_change),
 		('betacms', $option_betacms),
                 ('secret_key', '" . generate_secret_key() . "'),
+		('display_captcha', $option_display_captcha),
                 ('version', '" . ECLASS_VERSION ."')");
 
 // Table passwd_reset (used by the password reset module)

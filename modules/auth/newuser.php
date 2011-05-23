@@ -107,12 +107,14 @@ if (!isset($_POST['submit'])) {
 	$tool_content .= lang_select_options('localize');
 	$tool_content .= "</td>
 	<td><small>$langTipLang2</small></td>
-	</tr>
-	<tr>
-	<th class='left'><img id='captcha' src='../../include/securimage/securimage_show.php' alt='CAPTCHA Image' /></th>
-	<td colspan='2'><input type='text' name='captcha_code' maxlength='6' class='FormData_InputText' />&nbsp;&nbsp;<small>(*)</small></td>
-	</tr>
-	<tr>
+	</tr>";
+	if (get_config("display_captcha")) {
+		$tool_content .= "<tr>
+		<th class='left'><img id='captcha' src='../../include/securimage/securimage_show.php' alt='CAPTCHA Image' /></th>
+		<td colspan='2'><input type='text' name='captcha_code' maxlength='6' class='FormData_InputText' />&nbsp;&nbsp;<small>(*)&nbsp;$langTipCaptcha</small></td>
+		</tr>";
+	}
+	$tool_content .= "<tr>
 	<th class='left'>&nbsp;</th>
 	<td colspan='2' class='right'>
 	<input type='submit' name='submit' value='".$langRegistration."' />
@@ -141,8 +143,7 @@ if (!isset($_POST['submit'])) {
 					'password1' => true,
 					'email' => $email_arr_value,
 					'department' => true,
-					'am' => $am_arr_value,
-					'captcha_code' => true));	
+					'am' => $am_arr_value));	
 	$registration_errors = array();
 	// check if there are empty fields
 	if (!$missing) {
@@ -154,11 +155,13 @@ if (!isset($_POST['submit'])) {
 		if ($myusername = mysql_fetch_array($username_check)) {
 			$registration_errors[] = $langUserFree;
 		}
-		// captcha check
-		require_once '../../include/securimage/securimage.php';
-		$securimage = new Securimage();
-		if ($securimage->check($_POST['captcha_code']) == false) {
-			$registration_errors[] = $langCaptchaWrong;
+		if (get_config("display_captcha")) {
+			// captcha check
+			require_once '../../include/securimage/securimage.php';
+			$securimage = new Securimage();
+			if ($securimage->check($_POST['captcha_code']) == false) {
+				$registration_errors[] = $langCaptchaWrong;
+			}	
 		}
 	}
 	if (!empty($email) and !email_seems_valid($email)) {

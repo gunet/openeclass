@@ -121,7 +121,7 @@ if (isset($_POST['welcomeScreen'])) {
         $institutionUrlForm = 'http://www.gunet.gr/';
         $reguser = $dbPassForm = $helpdeskmail = $faxForm = $postaddressForm = '';
 	$email_required = $am_required = $dropbox_allow_student_to_student = $dont_display_login_form = '';
-	$block_username_change = $betacms = '';
+	$display_captcha = $block_username_change = $betacms = '';
 } else {
        register_posted_variables(array(
                 'dbHostForm' => true,
@@ -151,6 +151,7 @@ if (isset($_POST['welcomeScreen'])) {
 		'dropbox_allow_student_to_student' => true,
 		'dont_display_login_form' => true,
 		'block_username_change' => true,
+		'display_captcha' => true,
 		'betacms' => true), 'all');
 }
 
@@ -184,6 +185,7 @@ if (isset($_GET['alreadyVisited'])) {
 	<input type='hidden' name='dropbox_allow_student_to_student' value='$dropbox_allow_student_to_student' />
 	<input type='hidden' name='dont_display_login_form' value='$dont_display_login_form' /> 
 	<input type='hidden' name='block_username_change' value='$block_username_change' />
+	<input type='hidden' name='display_captcha' value='$display_captcha' />
 	<input type='hidden' name='betacms' value='$betacms' />";
 }
 
@@ -370,6 +372,10 @@ elseif(isset($_REQUEST['install5']) OR isset($_REQUEST['back5']))
 	  <tr>
 		<th class='left'><b>$lang_block_username_change</b></th>
 		<td><input type='checkbox' name='block_username_change' /></td>
+	  </tr>
+	  <tr>
+		<th class='left'><b>$lang_display_captcha</b></th>
+		<td><input type='checkbox' name='display_captcha' /></td>
 	  </tr>
 	  <tr>
 		<th class='left'><b>$lang_betacms</b></th>

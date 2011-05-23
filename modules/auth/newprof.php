@@ -83,13 +83,15 @@ if (!isset($_POST['submit'])) {
       <th>$langLanguage:</th>
       <td>";
 	$tool_content .= lang_select_options('proflang');
-	$tool_content .= "</td>
-    </tr>
-  <tr>
-    <th class='left'><img id='captcha' src='../../include/securimage/securimage_show.php' alt='CAPTCHA Image' /></th>
-    <td colspan='2'><input type='text' name='captcha_code' maxlength='6' class='FormData_InputText' />&nbsp;&nbsp;<small>(*)</small></td>
-  </tr>
-  <tr>
+	$tool_content .= "</td></tr>";
+	
+    if (get_config("display_captcha")) {
+	$tool_content .= "<tr>
+	<th class='left'><img id='captcha' src='../../include/securimage/securimage_show.php' alt='CAPTCHA Image' /></th>
+	<td colspan='2'><input type='text' name='captcha_code' maxlength='6' class='FormData_InputText' />&nbsp;&nbsp;<small>(*)&nbsp;$langTipCaptcha</small></td>
+      </tr>";
+    }
+  $tool_content .= "<tr>
     <th>&nbsp;</th>
     <td class='right'>
       <input type='submit' name='submit' value='$langSubmitNew' />
@@ -108,16 +110,17 @@ $registration_errors = array();
 
     // check if there are empty fields
     if (empty($_POST['nom_form']) or empty($_POST['prenom_form']) or empty($_POST['userphone'])
-	 or empty($_POST['usercomment']) or empty($_POST['uname']) or (empty($_POST['email_form'])
-	 or empty($_POST['captcha_code']) )) {
+	 or empty($_POST['usercomment']) or empty($_POST['uname']) or (empty($_POST['email_form']))) {
 		$registration_errors[]=$langEmptyFields;
 	}
 	
-	// captcha check
-	require_once '../../include/securimage/securimage.php';
-	$securimage = new Securimage();
-	if ($securimage->check($_POST['captcha_code']) == false) {
-		$registration_errors[] = $langCaptchaWrong;
+	if (get_config("display_captcha")) {
+		// captcha check
+		require_once '../../include/securimage/securimage.php';
+		$securimage = new Securimage();
+		if ($securimage->check($_POST['captcha_code']) == false) {
+			$registration_errors[] = $langCaptchaWrong;
+		}
 	}
 
     if (count($registration_errors) == 0) {    // registration is ok
