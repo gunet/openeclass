@@ -1,5 +1,4 @@
 <?php
-
 /* ========================================================================
  * Open eClass 2.4
  * E-learning and Course Management System
@@ -19,36 +18,12 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-/*===========================================================================
+/* ========================================================================
 	work.php
-    @version $Id$
+        @version $Id$
 	@author : Dionysios G. Synodinos <synodinos@gmail.com>
 	@author : Evelthon Prodromou <eprodromou@upnet.gr>
-==============================================================================
-        @Description: Main script for the work tool
-
- 	This is a tool plugin that allows course administrators - or others with the
- 	same rights
-
- 	The user can : - navigate through files and directories.
-                       - upload a file
-                       - delete, copy a file or a directory
-                       - edit properties & content (name, comments,
-			 html content)
-
- 	@Comments: The script is organised in four sections.
-
- 	1) Execute the command called by the user
-           Note (March 2004) some editing functions (renaming, commenting)
-           are moved to a separate page, edit_document.php. This is also
-           where xml and other stuff should be added.
-   	2) Define the directory to display
-  	3) Read files and directories from the directory defined in part 2
-  	4) Display all of that on an HTML page
-
-  	@TODO: eliminate code duplication between document/document.php, scormdocument.php
-==============================================================================
-*/
+ * ======================================================================== */
 
 
 $require_current_course = TRUE;
@@ -66,12 +41,12 @@ define('GROUP_DOCUMENTS', true);
 $group_id = intval($_REQUEST['group_id']);
 include '../document/doc_init.php';
 
-$coursePath = $webDir."/courses/".$currentCourseID;
+$coursePath = $webDir.'/courses/'.$currentCourseID;
 if (!file_exists($coursePath))
-	mkdir("$coursePath",0777);
+	mkdir($coursePath, 0777);
 
-$workPath = $coursePath."/work";
-$groupPath = $coursePath."/group/".group_secret($group_id);
+$workPath = $coursePath.'/work';
+$groupPath = $coursePath.'/group/'.group_secret($group_id);
 
 $nameTools = $langGroupSubmit;
 
@@ -125,9 +100,9 @@ function show_assignments()
 		}
 
 		$tool_content .= "<tr><td width=\"1%\">
-			<img style='border:0px; padding-top:2px;' src='../../template/classic/img/arrow.png' title='bullet'></td>
-			<td><div align=\"left\"><a href=\"work.php?course=$code_cours&amp;id=".$row['id']."\">".htmlspecialchars($row['title'])."</a></td>
-			<td align=\"center\">".nice_format($row['deadline']);
+			<img style='padding-top:2px;' src='../../template/classic/img/arrow.png' title='bullet'></td>
+			<td><div align='left'><a href='work.php?course=$code_cours&amp;id=$row[id]'>".q($row['title'])."</a></td>
+			<td align='center'>".nice_format($row['deadline']);
 		if ($row['days'] > 1) {
 			$tool_content .=  " ($m[in]&nbsp;$row[days]&nbsp;$langDays";
 		} elseif ($row['days'] < 0) {
