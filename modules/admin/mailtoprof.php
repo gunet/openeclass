@@ -64,6 +64,9 @@ if (isset($_POST['submit']) && ($_POST['body_mail'] != "") && ($_POST['submit'] 
 	} elseif ($_POST['sendTo'] == "1") {
 		// Only professors
 		$sql = mysql_query("SELECT DISTINCT email FROM user where statut='1'");
+	}  elseif ($_POST['sendTo'] == "2") {
+		// Only students
+		$sql = mysql_query("SELECT DISTINCT email FROM user where statut='5'");
 	} else { die(); } // invalid sendTo var
 
 	// Send email to all addresses
@@ -98,6 +101,7 @@ $langEmail : $emailhelpdesk
 	  <td>$langSendMessageTo
 	    <select name='sendTo'>
 	      <option value='1'>$langProfOnly</option>
+		<option value='2'>$langStudentsOnly</option>
 	      <option value='0'>$langToAllUsers</option>
 	      </select>	    </td>
 	  </tr>

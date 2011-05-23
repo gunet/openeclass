@@ -236,7 +236,7 @@ if (isset($_GET['stats'])) {
 						default: break;
 					}
 					$cu_key = "$row[intitule] ($row[code]) -- $row[titulaires]";
-					$cu[$cu_key] = "$teachers $langTeachers | $students $langStudents | $visitors $langGuests ";
+					$cu[$cu_key] = "<small>$teachers $langTeachers | $students $langStudents | $visitors $langGuests </small>";
 				}
 			}
 			$tool_content .= "</tr>".tablize($cu)."</table>";

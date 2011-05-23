@@ -83,12 +83,12 @@ if (!isset($_GET['a'])) {
 	$a = mysql_fetch_array(db_query("SELECT COUNT(*) FROM faculte"));
 	// Construct a table
 	$tool_content .= "
-	    <div align='right'>".$langManyExist.": <b>$a[0]</b> ".$langFaculties."</div>
-        <br />
-	";
-	$tool_content .= "
         <table width='100%' class='tbl_alt'>
-	<tr>
+	<tr>	
+	<td colspan='4' class='right'>
+		$langManyExist: <b>$a[0]</b> $langFaculties
+	</td>
+    	</tr><tr>
 	<th scope='col' colspan='2'><div align='left'>&nbsp;&nbsp;".$langFaculty."</div></th scope='col'>
 	<th scope='col' class='center'>$langCode</th>
 	<th>".$langActions."</th>

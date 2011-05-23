@@ -274,6 +274,7 @@ $langElaboration = "Επεξεργασία";
 $langSendMessageTo = "Αποστολή μηνύματος";
 $langToAllUsers = "σε όλους τους χρήστες";
 $langProfOnly = "μόνο στους ".$langsTeachers." ";
+$langStudentsOnly = "μόνο στους ".$langsOfStudentss." ";
 
 // searchcours.php
 $langSearchCourse = "Αναζήτηση Μαθημάτων";
