@@ -25,9 +25,6 @@ require_once 'auth.inc.php';
 $nameTools = $langReqRegProf;
 $navigation[] = array("url"=>"registration.php", "name"=> $langNewUser);
 
-// Initialise $tool_content
-$tool_content = "";
-
 // security check
 if (isset($_POST['localize'])) {
 	$language = preg_replace('/[^a-z]/', '', $_POST['localize']);

@@ -22,8 +22,6 @@
 include '../../include/baseTheme.php';
 include '../../include/sendMail.inc.php';
 
-$tool_content = "";
-
 $lang = langname_to_code($language);
 
 $nameTools = $langUserRequest;
@@ -32,7 +30,7 @@ $navigation[] = array('url' => 'registration.php', 'name' => $langNewUser);
 // security - show error instead of form if user registration is open
 if (!isset($close_user_registration) or $close_user_registration == false) {
         $tool_content .= "<div class='td_main'>$langForbidden</div></td></tr></table>";
-        draw($tool_content, 0, 'auth');
+        draw($tool_content, 0);
         exit;
 }
 
@@ -51,14 +49,23 @@ if (!email_seems_valid($usermail)) {
 }
 
 if (isset($_POST['submit']) and !$all_set) {
-
         // form submitted but required fields empty
         $tool_content .= "<p class='alert1'>$langFieldsMissing</p>";
 
 }
 
 if ($all_set) {
-
+        if (get_config("display_captcha")) {
+                // captcha check
+                require_once '../../include/securimage/securimage.php';
+                $securimage = new Securimage();
+                if ($securimage->check($_POST['captcha_code']) == false) {
+                        $tool_content .= "<div class='alert1'>$langCaptchaWrong</div>";
+                        $tool_content .= "<p><a href='$_SERVER[PHP_SELF]'>$langAgain</a></p>";
+                        draw($tool_content, 0);
+                        exit;
+                }	
+        }
         // register user request
         db_query("INSERT INTO user_request
                         (name, surname, uname, email,
@@ -91,47 +98,46 @@ if ($all_set) {
         // User Message
         $tool_content .= "<div class='success'>$langDearUser!<br />$success</div>
                 <p>$infoprof<br /><br />$click <a href='$urlServer' class='mainpage'>$langHere</a> $langBackPage</p>";
-
         draw($tool_content, 0);
         exit();
 
 } else {
         // display the form
         $tool_content .= "<p>$langInfoStudReq</p><br />
-<form action='$_SERVER[PHP_SELF]' method='post'>
- <fieldset>
-  <legend>$langUserData</legend>
-  <table class='tbl'>
-  <tr>
-    <th>$langName</th>
-    <td><input type='text' name='name' value='" . q($name) . "' size='33' />&nbsp;&nbsp;(*)</td>
-  </tr>
-  <tr>
-    <th>$langSurname</th>
-    <td><input type='text' name='surname' value='" . q($surname) . "' size='33' />&nbsp;&nbsp;(*)</td>
-  </tr>
-  <tr>
-    <th>$langPhone</th>
-    <td colspan='2'><input type='text' name='userphone' value='" . q($userphone) . "' size='33' /></td>
-  <tr>
-    <th>$langUsername</th>
-    <td><input type='text' name='username' size='33' maxlength='20' value='" . q($username) . "' />&nbsp;&nbsp;(*)&nbsp;$langUserNotice</td>
-  </tr>
-  <tr>
-    <th>$langProfEmail</th>
-    <td><input type='text' name='usermail' value='" . q($usermail) . "' size='33' />&nbsp;&nbsp;(*)</td>
-  </tr>
-  <tr>
-    <th>$langAm</th>
-    <td colspan='2'><input type='text' name='am' value='" . q($am) . "' size='33' /></td>
-  </tr>
-  <tr>
-    <th>$langComments</th>
-    <td><textarea name='usercomment' cols='30' rows='4'>" . q($usercomment) . "</textarea>&nbsp;&nbsp;(*) $profreason</td>
-  </tr>
-  <tr>
-    <th>$langFaculty&nbsp;</th>
-    <td><select name='department'>";
+        <form action='$_SERVER[PHP_SELF]' method='post'>
+         <fieldset>
+          <legend>$langUserData</legend>
+          <table class='tbl'>
+          <tr>
+            <th>$langName</th>
+            <td><input type='text' name='name' value='" . q($name) . "' size='33' />&nbsp;&nbsp;(*)</td>
+          </tr>
+          <tr>
+            <th>$langSurname</th>
+            <td><input type='text' name='surname' value='" . q($surname) . "' size='33' />&nbsp;&nbsp;(*)</td>
+          </tr>
+          <tr>
+            <th>$langPhone</th>
+            <td colspan='2'><input type='text' name='userphone' value='" . q($userphone) . "' size='33' /></td>
+          <tr>
+            <th>$langUsername</th>
+            <td><input type='text' name='username' size='33' maxlength='20' value='" . q($username) . "' />&nbsp;&nbsp;<small>(*)&nbsp;$langUserNotice</small></td>
+          </tr>
+          <tr>
+            <th>$langProfEmail</th>
+            <td><input type='text' name='usermail' value='" . q($usermail) . "' size='33' />&nbsp;&nbsp;(*)</td>
+          </tr>
+          <tr>
+            <th>$langAm</th>
+            <td colspan='2'><input type='text' name='am' value='" . q($am) . "' size='33' /></td>
+          </tr>
+          <tr>
+            <th>$langComments</th>
+            <td><textarea name='usercomment' cols='30' rows='4'>" . q($usercomment) . "</textarea>&nbsp;&nbsp;<small>(*) $profreason</small></td>
+          </tr>
+          <tr>
+            <th>$langFaculty&nbsp;</th>
+            <td><select name='department'>";
         $deps = db_query("SELECT id, name FROM faculte order by name");
         while ($dep = mysql_fetch_array($deps)) {
                 if ($dep['id'] == $department) {
@@ -143,22 +149,28 @@ if ($all_set) {
         }
 
 	 $tool_content .= "\n</select>
-     </td>
-  </tr>
-  <tr>
-     <th>$langLanguage</th>
-     <td>";
-	$tool_content .= lang_select_options('localize');
-	$tool_content .= "</td>
-  </tr>
-  <tr>
-     <td>&nbsp;</td>
-     <td class='right'><input type='submit' class='ButtonSubmit' name='submit' value='$langSubmitNew' /></td>
-  </tr>
-  </table>
-  </fieldset>
-  </form>
-  <div class='right smaller'>$langRequiredFields</div>";
+        </td>
+        </tr>
+        <tr>
+        <th>$langLanguage</th>
+        <td>";
+           $tool_content .= lang_select_options('localize');
+           $tool_content .= "</td>
+        </tr>";
+        if (get_config("display_captcha")) {
+		$tool_content .= "<tr>
+		<th class='left'><img id='captcha' src='../../include/securimage/securimage_show.php' alt='CAPTCHA Image' /></th>
+		<td colspan='2'><input type='text' name='captcha_code' maxlength='6' class='FormData_InputText' />&nbsp;&nbsp;<small>(*)&nbsp;$langTipCaptcha</small></td>
+		</tr>";
+	}
+        $tool_content .= "
+        <tr>
+        <td>&nbsp;</td>
+        <td class='right'><input type='submit' class='ButtonSubmit' name='submit' value='$langSubmitNew' /></td>
+     </tr>
+     </table>
+     </fieldset>
+     </form>
+     <div class='right smaller'>$langRequiredFields</div>";
 }
-
 draw($tool_content, 0);
