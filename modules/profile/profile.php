@@ -51,7 +51,7 @@ if (isset($_POST['submit'])) {
 		mkdir($webDir."courses/userimg/", 0775);
 	}
 	$image_path = $webDir."courses/userimg/".$_SESSION['uid'];
-        $perso_status = (isset($_POST['persoStatus']))? 'yes': 'no';
+        $perso_status = (isset($_POST['persoStatus']) and $_POST['persoStatus'] == 'yes')? 'yes': 'no';
         $old_language = $language;
         $language = $_SESSION['langswitch'] = langcode_to_name($_POST['userLanguage']);
         $langcode = langname_to_code($language);
