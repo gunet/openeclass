@@ -45,8 +45,8 @@ $submit = isset($_POST['submit'])?$_POST['submit']:'';
 
 if($submit) {
         // register user
-        $depid = intval(isset($_POST['department'])?$_POST['department']: 0);
-        $proflanguage = isset($_POST['language'])?$_POST['language']:'';
+        $depid = intval(isset($_POST['department'])? $_POST['department']: 0);
+        $proflanguage = isset($_POST['language'])? $_POST['language']: '';
         if (!isset($native_language_names[$proflanguage])) {
                 $proflanguage = langname_to_code($language);
         }
@@ -74,17 +74,19 @@ if($submit) {
                 $expires_at = time() + $durationAccount;
                 $password_encrypted = md5($password);
                 $inscr_user = db_query("INSERT INTO `$mysqlMainDb`.user
-                                (nom, prenom, username, password, email, statut, phone, department, am, registered_at, expires_at,lang)
+                                (nom, prenom, username, password, email, statut, phone, department, am, registered_at, expires_at, lang, description)
                                 VALUES (" .
-                                autoquote($nom_form) . ', ' .
-                                autoquote($prenom_form) . ', ' .
-                                autoquote($uname) . ", '$password_encrypted', " .
+                                autoquote($nom_form) . ', '.
+                                autoquote($prenom_form) . ', '.
+                                autoquote($uname) . ", '$password_encrypted', ".
                                 autoquote($email_form) .
-                                ", $pstatut, " .autoquote($phone). ", $depid, " . autoquote($am) . ", $registered_at, $expires_at, '$proflanguage')");
+                                ", $pstatut, ".autoquote($phone).", $depid, ".autoquote($am).", $registered_at, $expires_at, '$proflanguage', '')");
 
-                // close request
-                $rid = intval($_POST['rid']);
-                db_query("UPDATE user_request set status = 2, date_closed = NOW() WHERE id = $id");
+                // close request if needed
+                if (!empty($rid)) {
+                        $rid = intval($rid);
+                        db_query("UPDATE user_request set status = 2, date_closed = NOW() WHERE id = $rid");
+                }
 
                 if ($pstatut == 1) {
                         $message = $profsuccess;
@@ -176,6 +178,8 @@ $langEmail : $emailhelpdesk
             <td><input class='FormData_InputText' type='text' name='password' value='".create_pass()."' /></td></tr>
         <tr><th class='left'><b>$langEmail:</b></th>
             <td class='smaller'><input class='FormData_InputText' type='text' name='email_form' value='".q($pe)."' />&nbsp;(*)</td></tr>
+        <tr><th class='left'><b>$langPhone:</b></th>
+            <td class='smaller'><input class='FormData_InputText' type='text' name='phone' value='".q($pphone)."' /></td></tr>
         <tr><th class='left'>$langFaculty:</th>
             <td>";
         
@@ -197,21 +201,21 @@ $langEmail : $emailhelpdesk
         $tool_content .= lang_select_options('language', '', $lang);
         $tool_content .= "</td></tr>";
         if (isset($_GET['id'])) {
-                $tool_content .="<tr><th class='left'><b>$langPhone</b></th>
-                                     <td>".q($pphone)."&nbsp;</td></tr>
-                                 <tr><th class='left'><b>$langComments</b></th>
+                $tool_content .="<tr><th class='left'><b>$langComments</b></th>
                                      <td>".q($pcom)."&nbsp;</td></tr>
                                  <tr><th class='left'><b>$langDate</b></th>
                                      <td>".q($pdate)."&nbsp;</td></tr>";
+                $id_html = "<input type='hidden' name='rid' value='$id' />";
+        } else {
+                $id_html = '';
         }
         $tool_content .= "
         <tr><th>&nbsp;</th>
             <td class='right'><input type='submit' name='submit' value='$langRegistration' />
                </td></tr>
         </table>
-      </fieldset> <div class='right smaller'>$langRequiredFields</div>
-        <input type='hidden' name='phone' value='".@$pphone."' />
-        <input type='hidden' name='rid' value='".@$id."' />
+      </fieldset><div class='right smaller'>$langRequiredFields</div>
+        $id_html
         <input type='hidden' name='pstatut' value='$pstatut' />
         <input type='hidden' name='auth' value='1' />
         </form>";
