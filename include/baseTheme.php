@@ -145,15 +145,19 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 				$t->parse ( 'leftNavCategoryTitle', 'leftNavCategoryTitleBlock', false );
 			}
 
-			$numOfTools = count ( $toolArr [$i] [1] );
-			for($j = 0; $j < $numOfTools; $j ++) {
-
-				$t->set_var ( 'TOOL_LINK', $toolArr [$i] [2] [$j] );
-				$t->set_var ( 'TOOL_TEXT', $toolArr [$i] [1] [$j] );
+			$numOfTools = count ($toolArr[$i][1]);
+			for($j = 0; $j < $numOfTools; $j++) {
+				$t->set_var('TOOL_LINK', $toolArr[$i][2][$j]);
+				$t->set_var('TOOL_TEXT', $toolArr[$i][1][$j]);
+                                if (in_array($toolArr[$i][2][$j],
+                                             array('../admin/sysinfo/', '../admin/mysql/'))) {
+                                        $t->set_var ('TOOL_ATTR', ' target="_blank"');
+                                } else {
+                                        $t->set_var ('TOOL_ATTR', '');
+                                } 
 
 				$t->set_var ( 'IMG_FILE', $toolArr [$i] [3] [$j] );
 				$t->parse ( 'leftNavLink', 'leftNavLinkBlock', true );
-
 			}
 
 			$t->parse ( 'leftNavCategory', 'leftNavCategoryBlock', true );
