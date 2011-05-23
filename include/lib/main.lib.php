@@ -1460,7 +1460,9 @@ function register_posted_variables($var_array, $what = 'all', $callback = null)
                         }
                 } else {
                         $GLOBALS[$varname] = '';
-                        $all_set = false;
+                        if ($required) {
+                                $all_set = false;
+                        }
                 }
                 if (is_callable($callback)) {
                         $GLOBALS[$varname] = $callback($GLOBALS[$varname]);
