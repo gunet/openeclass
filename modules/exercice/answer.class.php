@@ -256,7 +256,7 @@ class Answer
 		}
 
 		$sql=substr($sql,0,-1);
-		mysql_query($sql) or die("Error : INSERT in file ".__FILE__." at line ".__LINE__);
+		db_query($sql) or die("Error : INSERT in file ".__FILE__." at line ".__LINE__);
 
 		// moves $new_* arrays
 		$this->answer=$this->new_answer;
