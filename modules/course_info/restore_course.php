@@ -27,11 +27,7 @@ include '../../include/lib/forcedownload.php';
 include '../../include/pclzip/pclzip.lib.php';
 
 $nameTools = $langRestoreCourse;
-$navigation[] = array("url" => "../admin/index.php", "name" => $langAdmin);
-
-// Initialise $tool_content
-$tool_content = "";
-// Main body
+$navigation[] = array('url' => '../admin/index.php', 'name' => $langAdmin);
 
 // Default backup version
 $version = 1;
@@ -115,64 +111,104 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
 		db_query('SET NAMES greek');
         }
 
-        function document_map_function(&$data, $maps) {
-                // !!!! FIXME !!!! when restoring ebook and group documents, subsystem id's have changed
-        }
-
-        function group_map_function(&$data, $arg) {
-                // !!!! FIXME !!!! when restoring group members, group id's have changed
-        }
-
-        mysql_select_db($mysqlMainDb);
-        restore_table($restoreThis, 'group_properties',
-                array('set' => array('course_id' => $course_id)));
-        $group_map = restore_table($restoreThis, 'group',
-                array('set' => array('course_id' => $course_id),
-                      'return_mapping' => 'id'));
-        restore_table($restoreThis, 'group_members',
-                array('map' => array('group_id' => $group_map,
-                                     'user_id' => $userid_map),
-                      'map_function' => 'group_map_function'));
-        $link_category_map = restore_table($restoreThis, 'link_category',
-                array('set' => array('course_id' => $course_id),
-                      'return_mapping' => 'id'));
-        $link_map = restore_table($restoreThis, 'link',
-                array('set' => array('course_id' => $course_id),
-                      'map' => array('category' => $link_category_map),
-                      'return_mapping' => 'id'));
-        $ebook_map = restore_table($restoreThis, 'ebook',
-                array('set' => array('course_id' => $course_id),
-                      'return_mapping' => 'id'));
-        $document_map = restore_table($restoreThis, 'document',
-                array('set' => array('course_id' => $course_id),
-                      'map_function' => 'document_map_function',
-                      'map_function_data' => array($group_map, $ebook_map),
-                      'return_mapping' => 'id'));
-
-
-        /*************  backups: *************************
-                !!!! FIXME !!!! - need to write restore logic for the following:
-                       'ebook_section' => "ebook_id IN (SELECT id FROM ebook
-                                                               WHERE course_id = $cours_id)",
-                       'ebook_subsection' => "section_id IN (SELECT ebook_section.id
-                                                                    FROM ebook, ebook_section
-                                                                    WHERE ebook.id = ebook_id AND
-                                                                          course_id = $cours_id)",
-                       'course_units' => $sql_course,
-                       'unit_resources' => "unit_id IN (SELECT id FROM course_units
-                                                               WHERE course_id = $cours_id)",
-                       'forum_notify' => $sql_course)
-         **************************************************************************************/
-
-	if (!isset($eclass_version) or $eclass_version < ECLASS_VERSION) { // if we come from older versions 
-		if ($version < '2.2') { // if we come from 2.1.x
-			upgrade_course_2_2($new_course_code, $course_lang);
-		} else {
-			upgrade_course($new_course_code, $course_lang);
-		}
+        if (!isset($eclass_version)) {
+                // if we come from older versions, do all upgrades
+                upgrade_course($new_course_code, $course_lang);
+        } else {
+                if (mysql_table_exists($new_course_code, 'student_group')) {
+                        map_table_field('student_group', 'id', 'tutor', $userid_map);
+                }
+		if ($eclass_version < '2.2') { // if we come from 2.1.x
+                        upgrade_course_2_2($new_course_code, $course_lang);
+                }
+                if ($eclass_version < '2.3') {
+                        upgrade_course_2_3($new_course_code);
+                }
+                if ($eclass_version < '2.4') {
+                        upgrade_course_2_4($new_course_code, $course_lang);
+                }
 	}
 	$tool_content .= ob_get_contents();
 	ob_end_clean();
+
+        if (file_exists("$restoreThis/cours")) {
+                // New-style backup - restore intividual tables
+
+                function document_map_function(&$data, $maps) {
+                        list($group_map, $ebook_map) = $maps;
+                        $sid = $data['subsystem'];
+                        if ($sid == 1) { // Group documents
+                                $data['subsystem_id'] = $group_map[$data['subsystem_id']];
+                        } elseif ($sid == 2) { // Ebook documents
+                                $data['subsystem_id'] = $ebook_map[$data['subsystem_id']];
+                        }
+                }
+
+                function unit_map_function(&$data, $maps) {
+                        list($document_map, $link_category_map, $link_map, $ebook_map, $section_map, $subsection_map) = $maps;
+                        $type = $data['type'];
+                        if ($type = 'doc') {
+                                $data['res_id'] = $document_map[$data['res_id']];
+                        } elseif ($type = 'linkcategory') {
+                                $data['res_id'] = $link_category_map[$data['res_id']];
+                        } elseif ($type = 'link') {
+                                $data['res_id'] = $link_map[$data['res_id']];
+                        } elseif ($type = 'ebook') {
+                                $data['res_id'] = $ebook_map[$data['res_id']];
+                        } elseif ($type = 'section') {
+                                $data['res_id'] = $section_map[$data['res_id']];
+                        } elseif ($type = 'subsection') {
+                                $data['res_id'] = $subsection_map[$data['res_id']];
+                        }
+                }
+
+                mysql_select_db($mysqlMainDb);
+                restore_table($restoreThis, 'group_properties',
+                        array('set' => array('course_id' => $course_id)));
+                $group_map = restore_table($restoreThis, 'group',
+                        array('set' => array('course_id' => $course_id),
+                              'return_mapping' => 'id'));
+                restore_table($restoreThis, 'group_members',
+                        array('map' => array('group_id' => $group_map,
+                                             'user_id' => $userid_map)));
+                restore_table($restoreThis, 'forum_notify',
+                        array('set' => array('course_id' => $course_id),
+                              'map' => array('user_id' => $userid_map)));
+                $link_category_map = restore_table($restoreThis, 'link_category',
+                        array('set' => array('course_id' => $course_id),
+                              'return_mapping' => 'id'));
+                $link_map = restore_table($restoreThis, 'link',
+                        array('set' => array('course_id' => $course_id),
+                              'map' => array('category' => $link_category_map),
+                              'return_mapping' => 'id'));
+                $ebook_map = restore_table($restoreThis, 'ebook',
+                        array('set' => array('course_id' => $course_id),
+                              'return_mapping' => 'id'));
+                $document_map = restore_table($restoreThis, 'document',
+                        array('set' => array('course_id' => $course_id),
+                              'map_function' => 'document_map_function',
+                              'map_function_data' => array($group_map, $ebook_map),
+                              'return_mapping' => 'id'));
+                $ebook_section_map = restore_table($restoreThis, 'ebook_section',
+                        array('map' => array('ebook_id' => $ebook_map),
+                              'return_mapping' => 'id'));
+                $ebook_subsection_map = restore_table($restoreThis, 'ebook_subsection',
+                        array('map' => array('ebook_section' => $ebook_section_map,
+                                             'file_id' => $document_map),
+                              'return_mapping' => 'id'));
+                $unit_map = restore_table($restoreThis, 'course_units',
+                        array('set' => array('course_id' => $course_id),
+                              'return_mapping' => 'id'));
+                restore_table($restoreThis, 'unit_resources',
+                        array('map' => array('unit_id' => $unit_map),
+                              'map_function' => 'unit_map_function',
+                              'map_function_data' => array($document_map,
+                                                           $link_category_map,
+                                                           $link_map,
+                                                           $ebook_map,
+                                                           $ebook_section_map,
+                                                           $ebook_subsection_map)));
+        }
 
 	$tool_content .= "</p>";
 	if (!file_exists($webDir."courses/garbage"))
@@ -371,7 +407,7 @@ function user($userid, $name, $surname, $login, $password, $email, $statut, $pho
 			$password = md5($password);
 		}
 		db_query("INSERT INTO `$mysqlMainDb`.user
-			(nom, prenom, username, password, email, statut, phone, department, registered_at, expires_at)
+			(nom, prenom, username, password, email, statut, phone, department, registered_at, expires_at, description)
 			VALUES (".
 			join(", ", array(
 				quote($name),
@@ -385,7 +421,7 @@ function user($userid, $name, $surname, $login, $password, $email, $statut, $pho
 				quote($registered_at),
 				quote($expires_at)
 				)).
-				")");
+				", '')");
 		$userid_map[$userid] = mysql_insert_id();
 	}
 
@@ -643,6 +679,7 @@ function find_backup_folders($basedir)
                         $entry = "$basedir/$file";
                         if (is_dir($entry) and $file != '.' and $file != '..') {
                                 if (file_exists("$entry/backup.php")) {
+                                        fix_short_open_tag("$entry/backup.php");
                                         $dirlist[] = array('path' => $basedir,
                                                            'dir' => $file);
                                 } else {
@@ -685,6 +722,13 @@ function restore_table($basedir, $table, $options)
                                 } else {
                                         break 2;
                                 }
+                        }
+                }
+                if (isset($options['map_function'])) {
+                        if (isset($options['map_function_data'])) {
+                                $options['map_function']($data, $options['map_function_data']);
+                        } else {
+                                $options['map_function']($data);
                         }
                 }
                 db_query($sql_intro . field_values($data, $set));
@@ -835,3 +879,27 @@ function register_users($course_id, $userid_map, $cours_user)
         }
 }
 
+function fix_short_open_tag($file)
+{
+        $f = fopen($file, 'r');
+        $line = fgets($f);
+        if (!(strpos($line, '<?php') === 0)) {
+                $line = "<?php\n";
+                $out = fopen($file . '.bak', 'w');
+                fputs($out, $line);
+                while (!feof($f)) {
+                        fwrite($out, fread($f, 8192));
+                }
+                fclose($f);
+                fclose($out);
+                rename($file . '.bak', $file);
+        }
+}
+
+function map_table_field($table, $id, $field, $map)
+{
+        $q = db_query("SELECT `$id`, `$field` FROM `$table`");
+        while ($r = mysql_fetch_row($q)) {
+                db_query("UPDATE `$table` SET `$field` = " . $map[$r[1]] . " WHERE `$id` = " . $r[0]);
+        }
+}
