@@ -336,8 +336,8 @@ function upgrade_course_2_4($code, $lang, $extramessage = '')
                                  `category`, `title`, `creator`, `date`, `date_modified`, `subject`,
                                  `description`, `author`, `format`, `language`, `copyrighted`)
                                 SELECT $doc_id + id, $course_id, 0, NULL, `path`, `filename`, `visibility`, `comment`,
-                                       `category`, `title`, `creator`, `date`, `date_modified`, `subject`,
-                                       `description`, `author`, `format`, `language`, `copyrighted` FROM document") and
+                                       0 + `category`, `title`, `creator`, `date`, `date_modified`, `subject`,
+                                       `description`, `author`, `format`, `language`, 0 + `copyrighted` FROM document") and
                        db_query("DROP TABLE document");
                 db_query("UPDATE `$mysqlMainDb`.course_units AS units, `$mysqlMainDb`.unit_resources AS res
                                  SET res_id = res_id + $doc_id
@@ -1695,7 +1695,7 @@ function group_documents_main_db($path, $course_id, $group_id, $type)
         $internal_path = quote(str_replace($group_document_dir, '', $path));
         list($filename) = mysql_fetch_row(db_query("SELECT `filename` FROM group_documents WHERE `path` = " . $internal_path));
         if (!db_query("INSERT INTO `$mysqlMainDb`.document SET
-                              course_id = $course_id, group_id = $group_id,
+                              course_id = $course_id, subsystem = 1, subsystem_id = $group_id,
                               path = $internal_path, filename = " . quote($filename) . ",
                               format = '$type', visibility = 'v',
                               date = $file_date, date_modified = $file_date")) {
