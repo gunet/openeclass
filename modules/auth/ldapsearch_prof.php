@@ -211,7 +211,7 @@ if (isset($_POST['submit']))  {
 		draw($tool_content,0);
 		exit();
 	}
-	
+
 	if($auth != 1) {
 		switch($auth) {
 			case '2': $password = 'pop3';
@@ -232,8 +232,9 @@ if (isset($_POST['submit']))  {
         db_query('INSERT INTO user_request SET
                          name = ' . autoquote($prenom_form). ',
                          surname = ' . autoquote($nom_form). ',
-                         uname = ' . autoquote($uname). ',
-                         email = ' . autoquote($email). ",
+                         uname = ' . autoquote($uname). ",
+			 password = '$password',
+                         email = " . autoquote($email). ",
                          faculty_id = $depid,
                          phone = " . autoquote($userphone). ',
                          status = 1,
