@@ -641,10 +641,10 @@ if($can_upload) {
 			  </tr>
 			  <tr>
 			    <th>$langLanguage:</th>
-			    <td>". selection(array('en' => $langEnglish,
+			    <td>". selection(array('el' => $langGreek,
+						'en' => $langEnglish,
 						'fr' => $langFrench,
 						'de' => $langGerman,
-						'el' => $langGreek,
 						'it' => $langItalian,
 						'es' => $langSpanish), 'meta_language', null) ."</td>
 			  </tr>
