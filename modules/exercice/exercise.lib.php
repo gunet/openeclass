@@ -76,40 +76,42 @@ function showQuestion($questionId, $onlyAnswers = false) {
 	}
 
 	for($answerId=1;$answerId <= $nbrAnswers;$answerId++) {
-		$answer = standard_text_escape($objAnswerTmp->selectAnswer($answerId));
+		$answer = $objAnswerTmp->selectAnswer($answerId);
 		$answerCorrect=$objAnswerTmp->isCorrect($answerId);
 		if($answerType == FILL_IN_BLANKS) {
 			// splits text and weightings that are joined with the character '::'
-			list($answer)=explode('::',$answer);
+			list($answer) = explode('::',$answer);
 			// replaces [blank] by an input field
-                        $answer = preg_replace('/\[[^]]+\]/', '<input type="text" name="choice['.$questionId.'][]" size="10" />', nl2br(q($answer)));
+                        $answer = preg_replace('/\[[^]]+\]/',
+					       '<input type="text" name="choice['.$questionId.'][]" size="10" />',
+					       standard_text_escape(($answer)));
 		}
 		// unique answer
 		if($answerType == UNIQUE_ANSWER) {
 			$tool_content .= "
-  <tr class='even'>
-    <td class='center' width='1'>
-      <input type='radio' name='choice[${questionId}]' value='${answerId}' />
-    </td>
-    <td>${answer}</td>
-  </tr>";
+			<tr class='even'>
+			  <td class='center' width='1'>
+			    <input type='radio' name='choice[${questionId}]' value='${answerId}' />
+			  </td>
+			  <td>${answer}</td>
+			</tr>";
 		}
 		// multiple answers
 		elseif($answerType == MULTIPLE_ANSWER) {
 			$tool_content .= "
-  <tr class='even'>
-    <td width='1' align='center'>
-      <input type='checkbox' name='choice[${questionId}][${answerId}]' value='1' />
-    </td>
-    <td>${answer}</td>
-  </tr>";
+			<tr class='even'>
+			  <td width='1' align='center'>
+			    <input type='checkbox' name='choice[${questionId}][${answerId}]' value='1' />
+			  </td>
+			  <td>${answer}</td>
+			</tr>";
 		}
 		// fill in blanks
 		elseif($answerType == FILL_IN_BLANKS) {
 			$tool_content .= "
-  <tr class='even'>
-    <td colspan='2'>${answer}</td>
-  </tr>";
+			<tr class='even'>
+			  <td colspan='2'>${answer}</td>
+			</tr>";
 		}
 		// matching
 		elseif($answerType == MATCHING) { 
@@ -122,24 +124,24 @@ function showQuestion($questionId, $onlyAnswers = false) {
 			else
 			{
 				$tool_content .= "
-  <tr class='even'>
-    <td colspan='2'>
-      <table class='tbl'>
-      <tr>
-        <td width='200'><b>${cpt2}.</b> ${answer}</td>
-        <td width='130'><div align='center'>
-         <select name='choice[${questionId}][${answerId}]'>
-           <option value='0'>--</option>";
+				<tr class='even'>
+				  <td colspan='2'>
+				    <table class='tbl'>
+				    <tr>
+				      <td width='200'><b>${cpt2}.</b> ${answer}</td>
+				      <td width='130'><div align='center'>
+				       <select name='choice[${questionId}][${answerId}]'>
+					 <option value='0'>--</option>";
 
 				// fills the list-box
 				 foreach($Select as $key=>$val) {
 					 $tool_content .= "
-           <option value=\"${key}\">${val['Lettre']}</option>";
+					<option value=\"${key}\">${val['Lettre']}</option>";
 				 }
 				 $tool_content .= "
-         </select></div>
-        </td>
-        <td width='200'>";
+				</select></div>
+			       </td>
+			       <td width='200'>";
 				 if(isset($Select[$cpt2]))
 				       $tool_content .= '<b>'.$Select[$cpt2]['Lettre'].'.</b> '.$Select[$cpt2]['Reponse'];
 				 else

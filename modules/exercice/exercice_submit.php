@@ -262,14 +262,13 @@ foreach($questionList as $questionId) {
 	if($exerciseType == 2) { 
 		$tool_content .= "/".$nbrQuestions;
 	}
-	$tool_content .= "</td>
-  </tr>";
+	$tool_content .= "</td></tr>";
 	showQuestion($questionId);
 	$tool_content .= "
-  <tr>
-    <td colspan=\"2\">&nbsp;</td>
-  </tr>
-  </table>";
+	<tr>
+	  <td colspan=\"2\">&nbsp;</td>
+	</tr>
+	</table>";
 	// for sequential exercises
 	if($exerciseType == 2) {
 		// quits the loop

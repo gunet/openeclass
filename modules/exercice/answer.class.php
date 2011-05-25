@@ -153,7 +153,12 @@ class Answer
 	 */
 	function selectAnswer($id)
 	{
-		return $this->answer[$id];
+		if (isset($this->answer[$id])) {
+			return $this->answer[$id];	
+		} else {
+			return '::0';
+		}
+		
 	}
 
 	/**
@@ -214,7 +219,7 @@ class Answer
 	 * @param - float $weighting - answer weighting
 	 * @param - integer $position - answer position
 	 */
-	function createAnswer($answer,$correct,$comment,$weighting,$position)
+	function createAnswer($answer, $correct, $comment, $weighting, $position)
 	{
 		$this->new_nbrAnswers++;
 
@@ -237,11 +242,9 @@ class Answer
 		global $TBL_REPONSES, $currentCourseID;
 
 		$questionId=$this->questionId;
-
 		// removes old answers before inserting of new ones
 		$sql="DELETE FROM `$TBL_REPONSES` WHERE question_id='$questionId'";
 		db_query($sql, $currentCourseID);
-
 		// inserts new answers into data base
 		$sql="INSERT INTO `$TBL_REPONSES`(id,question_id,reponse,correct,comment,ponderation,r_position) VALUES";
 
@@ -256,7 +259,7 @@ class Answer
 		}
 
 		$sql=substr($sql,0,-1);
-		db_query($sql) or die("Error : INSERT in file ".__FILE__." at line ".__LINE__);
+		db_query($sql);
 
 		// moves $new_* arrays
 		$this->answer=$this->new_answer;
