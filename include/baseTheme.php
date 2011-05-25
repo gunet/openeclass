@@ -296,7 +296,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 			}
 
 			if (! $homePage) {
-				$t->set_var ( 'BREAD_HREF_FRONT', '<a href="{BREAD_START_LINK}">' );
+				$t->set_var ( 'BREAD_HREF_FRONT', '<a href="{%BREAD_START_LINK%}">' );
 				$t->set_var ( 'BREAD_START_LINK', $urlServer );
 				$t->set_var ( 'BREAD_HREF_END', '</a>' );
 			}
@@ -310,7 +310,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 		$t->set_block ( 'mainBlock', 'breadCrumbStartBlock', 'breadCrumbStart' );
 
 		if (isset ( $currentCourseID ) && ! $courseHome) {
-			$t->set_var ( 'BREAD_HREF_FRONT', '<a href="{BREAD_LINK}">' );
+			$t->set_var ( 'BREAD_HREF_FRONT', '<a href="{%BREAD_LINK%}">' );
 			$t->set_var ( 'BREAD_LINK', $urlServer . 'courses/' . $currentCourseID . '/index.php' );
 			$t->set_var ( 'BREAD_TEXT', q($intitule) );
 			if ($statut == 10)
@@ -339,7 +339,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 		if (isset ( $page_navi ) && is_array ( $page_navi ) && ! $homePage) {
 			foreach ( $page_navi as $step ) {
 
-				$t->set_var ( 'BREAD_HREF_FRONT', '<a href="{BREAD_LINK}">' );
+				$t->set_var ( 'BREAD_HREF_FRONT', '<a href="{%BREAD_LINK%}">' );
 				$t->set_var ( 'BREAD_LINK', $step ["url"] );
 				$t->set_var ( 'BREAD_TEXT', $step ["name"] );
 				$t->set_var ( 'BREAD_ARROW', '&#187;' );
@@ -379,7 +379,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 
 		//Add the optional tool-specific css of the tool, if it's set
 		if (isset ( $tool_css )) {
-			$t->set_var ( 'TOOL_CSS', "<link href=\"{TOOL_PATH}modules/$tool_css/tool.css\" rel=\"stylesheet\" type=\"text/css\" >" );
+			$t->set_var ( 'TOOL_CSS', "<link href=\"{%TOOL_PATH%}modules/$tool_css/tool.css\" rel=\"stylesheet\" type=\"text/css\" >" );
 		}
 
 		$t->set_var ( 'TOOL_PATH', $relPath );
