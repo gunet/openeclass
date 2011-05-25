@@ -316,7 +316,7 @@ class Template
     $str = $this->get_var($parent);
     $reg = "/[ \t]*<!--\s+BEGIN $varname\s+-->\s*?\n?(\s*.*?\n?)\s*<!--\s+END $varname\s+-->\s*?\n?/sm";
     preg_match_all($reg, $str, $m);
-    $str = preg_replace($reg, "{" . "$name}", $str);
+    $str = preg_replace($reg, "{%" . "$name%}", $str);
     $this->set_var($varname, $m[1][0]);
     $this->set_var($parent, $str);
     return true;
@@ -853,7 +853,7 @@ class Template
   * @return    string
   */
   function varname($varname) {
-    return preg_quote("{".$varname."}");
+    return preg_quote("{%".$varname."%}");
   }
 
 
