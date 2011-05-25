@@ -899,6 +899,12 @@ $langDirectory = "Κατάλογος";
 $langAddMetadata = "Προσθήκη / αλλαγή μεταδεδομένων";
 $langMetadata = "Μεταδεδομένα";
 $langMetadataMod = "Τα μεταδεδομένα τροποποιήθηκαν";
+$langLearningResourceType = "Είδος Μαθησιακού Αντικειμένου";
+$langTopic = "Γνωστικό Αντικείμενο";
+$langSubTopic = "Γνωστικό Υποαντικείμενο";
+$langLevel = "Επίπεδο";
+$langTypicalAgeRange = "Ηλικία μαθητών όπου απευθύνεται";
+$langIntentedEndUserRole = "Σε ποιόν απευθύνεται";
 
 /*************************************************
 * dropbox.php
