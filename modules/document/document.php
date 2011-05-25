@@ -388,6 +388,13 @@ if($can_upload) {
 			$action_message = "<p class='success'>$langComMod</p>";
                 }
 	}
+	
+	// add/update/remove metadata
+	// h $metadataPath periexei to path tou arxeiou gia to opoio tha epikyrwthoun ta metadata
+	if (isset($_POST['metadataPath'])) {
+		$metadataPath = $_POST['metadataPath'];
+		$action_message = "<p class='success'>$langMetadataMod</p>";
+	}
 
         if (isset($_POST['replacePath']) and
             isset($_FILES['newFile']) and
@@ -568,6 +575,106 @@ if($can_upload) {
                         $action_message = "<p class='caution'>$langFileNotFound</p>";
                 }
         }
+
+	// Emfanish ths formas gia tropopoihsh metadata
+	if (isset($_GET['metadata'])) {
+		
+		$metadata = $_GET['metadata'];
+		$result = db_query("SELECT * FROM document WHERE $group_sql AND path = " . autoquote($metadata));
+		
+		if (mysql_num_rows($result) > 0) {
+			
+			$row = mysql_fetch_array($result);
+			$oldFilename = q($row['filename']);
+//			$oldComment = q($row['comment']);
+//			$oldCategory = $row['category'];
+//			$oldTitle = q($row['title']);
+//			$oldCreator = q($row['creator']);
+//			$oldDate = q($row['date']);
+//			$oldSubject = q($row['subject']);
+//			$oldDescription = q($row['description']);
+//			$oldAuthor = q($row['author']);
+//			$oldLanguage = q($row['language']);
+//			$oldCopyrighted = $row['copyrighted'];
+
+			// filsystem compability: ean gia to arxeio den yparxoun dedomena sto pedio filename
+			// (ara to arxeio den exei safe_filename (=alfarithmitiko onoma)) xrhsimopoihse to
+			// $fileName gia thn provolh tou onomatos arxeiou
+			$fileName = my_basename($metadata);
+			if (empty($oldFilename)) $oldFilename = $fileName;
+			
+        	$dialogBox .= "
+			<form method='post' action='document.php?course=$code_cours'>
+			<fieldset>
+			  <input type='hidden' name='metadataPath' value='" . q($metadata) . "' />
+			  <input type='hidden' name='file_filename' value='$oldFilename' />
+			  $group_hidden_input
+			  <legend>$langAddMetadata</legend>
+			  <table class='tbl' width='100%'>
+			  <tr>
+			    <th>$langWorkFile:</th>
+			    <td>$oldFilename</td>
+			  </tr>
+			  <tr>
+			    <th>$langTitle:</th>
+			    <td><input type='text' size='60' name='file_title' /></td>
+			  </tr>
+			  <tr>
+			    <th>$langComment:</th>
+			    <td><input type='text' size='60' name='file_comment' /></td>
+			  </tr>
+			  <tr>
+			    <th>$langCategory:</th>
+			    <td>" .
+				selection(array('0' => $langCategoryOther,
+						'1' => $langCategoryExcercise,
+						'2' => $langCategoryLecture,
+						'3' => $langCategoryEssay,
+						'4' => $langCategoryDescription,
+						'5' => $langCategoryExample,
+						'6' => $langCategoryTheory),
+					  'file_category', null) . "</td>
+			  </tr>
+			  <tr>
+			    <th>$langSubject:</th>
+			    <td><input type='text' size='60' name='file_subject' /></td>
+			  </tr>
+			  <tr>
+			    <th>$langDescription:</th>
+			    <td><input type='text' size='60' name='file_description' /></td>
+			  </tr>
+			  <tr>
+			    <th>$langAuthor:</th>
+			    <td><input type='text' size='60' name='file_author' /></td>
+			  </tr>";
+		  
+		$dialogBox .= "
+          <tr>
+            <th>$langLanguage :</th>
+            <td>" .
+                                selection(array('en' => $langEnglish,
+                                                'fr' => $langFrench,
+                                                'de' => $langGerman,
+                                                'el' => $langGreek,
+                                                'it' => $langItalian,
+                                                'es' => $langSpanish), 'file_language', null) .
+                                "</td>
+          </tr>
+          <tr>
+            <th>&nbsp;</th>
+            <td><input type='submit' value='$langOkComment' /></td>
+          </tr>
+          <tr>
+            <th>&nbsp;</th>
+            <td class='right'>$langNotRequired</td>
+          </tr>
+          </table>
+        </fieldset>
+        </form>";
+		} else {
+			$action_message = "<p class='caution'>$langFileNotFound</p>";
+		}
+	}
 
 	// Visibility commands
 	if (isset($_GET['mkVisibl']) || isset($_GET['mkInvisibl'])) {
@@ -776,7 +883,7 @@ if ($doc_count == 0) {
         $tool_content .= "\n      <th width='60' class='center'><b>$langSize</b></th>";
         $tool_content .= "\n      <th width='80' class='center'><b>" . headlink($langDate, 'date') . '</b></th>';
 	if($can_upload) {
-		$tool_content .= "\n      <th width='135' class='center'><b>$langCommands</b></th>";
+		$tool_content .= "\n      <th width='154' class='center'><b>$langCommands</b></th>";
 	} else {
 		$tool_content .= "\n      <th width='50' class='center'><b>$langCommands</b></th>";
 	}
@@ -870,6 +977,10 @@ if ($doc_count == 0) {
                                 $tool_content .= "<a href='{$base_url}comment=$cmdDirName'>";
                                 $tool_content .= "<img src='../../template/classic/img/comment_edit.png' " .
 					         "title='$langComment' alt='$langComment' /></a>&nbsp;";
+                                /*** metadata command ***/
+                                $tool_content .= "<a href='{$base_url}metadata=$cmdDirName'>";
+                                $tool_content .= "<img src='../../template/classic/img/comment_edit.png' " .
+					         "title='$langMetadata' alt='$langMetadata' /></a>&nbsp;";
                                 /*** visibility command ***/
                                 if ($is_adminOfCourse) {
 					if ($entry['visible']) {
