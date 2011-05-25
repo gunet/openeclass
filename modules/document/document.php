@@ -597,7 +597,7 @@ if($can_upload) {
 //			$oldLanguage = q($row['language']);
 //			$oldCopyrighted = $row['copyrighted'];
 
-			// filsystem compability: ean gia to arxeio den yparxoun dedomena sto pedio filename
+			// filesystem compability: ean gia to arxeio den yparxoun dedomena sto pedio filename
 			// (ara to arxeio den exei safe_filename (=alfarithmitiko onoma)) xrhsimopoihse to
 			// $fileName gia thn provolh tou onomatos arxeiou
 			$fileName = my_basename($metadata);
@@ -606,8 +606,8 @@ if($can_upload) {
         	$dialogBox .= "
 			<form method='post' action='document.php?course=$code_cours'>
 			<fieldset>
-			  <input type='hidden' name='metadataPath' value='" . q($metadata) . "' />
-			  <input type='hidden' name='file_filename' value='$oldFilename' />
+			  <input type='hidden' name='metadataPath' value='". q($metadata) ."' />
+			  <input type='hidden' name='meta_filename' value='$oldFilename' />
 			  $group_hidden_input
 			  <legend>$langAddMetadata</legend>
 			  <table class='tbl' width='100%'>
@@ -617,60 +617,124 @@ if($can_upload) {
 			  </tr>
 			  <tr>
 			    <th>$langTitle:</th>
-			    <td><input type='text' size='60' name='file_title' /></td>
+			    <td><textarea cols='68' name='meta_title'></textarea></td>
 			  </tr>
 			  <tr>
-			    <th>$langComment:</th>
-			    <td><input type='text' size='60' name='file_comment' /></td>
-			  </tr>
-			  <tr>
-			    <th>$langCategory:</th>
-			    <td>" .
-				selection(array('0' => $langCategoryOther,
-						'1' => $langCategoryExcercise,
-						'2' => $langCategoryLecture,
-						'3' => $langCategoryEssay,
-						'4' => $langCategoryDescription,
-						'5' => $langCategoryExample,
-						'6' => $langCategoryTheory),
-					  'file_category', null) . "</td>
-			  </tr>
-			  <tr>
-			    <th>$langSubject:</th>
-			    <td><input type='text' size='60' name='file_subject' /></td>
+			    <th></th>
+			    <td>$langTitleHelp</td>
 			  </tr>
 			  <tr>
 			    <th>$langDescription:</th>
-			    <td><input type='text' size='60' name='file_description' /></td>
+			    <td><textarea cols='68' rows='4' name='meta_description'></textarea></td>
+			  </tr>
+			  <tr>
+			    <th></th>
+			    <td>$langDescriptionHelp</td>
 			  </tr>
 			  <tr>
 			    <th>$langAuthor:</th>
-			    <td><input type='text' size='60' name='file_author' /></td>
-			  </tr>";
-		  
-		$dialogBox .= "
-          <tr>
-            <th>$langLanguage :</th>
-            <td>" .
-                                selection(array('en' => $langEnglish,
-                                                'fr' => $langFrench,
-                                                'de' => $langGerman,
-                                                'el' => $langGreek,
-                                                'it' => $langItalian,
-                                                'es' => $langSpanish), 'file_language', null) .
-                                "</td>
-          </tr>
-          <tr>
-            <th>&nbsp;</th>
-            <td><input type='submit' value='$langOkComment' /></td>
-          </tr>
-          <tr>
-            <th>&nbsp;</th>
-            <td class='right'>$langNotRequired</td>
-          </tr>
-          </table>
-        </fieldset>
-        </form>";
+			    <td><textarea cols='68' name='meta_author'></textarea></td>
+			  </tr>
+			  <tr>
+			    <th></th>
+			    <td>$langAuthorHelp</td>
+			  </tr>
+			  <tr>
+			    <th>$langLanguage:</th>
+			    <td>". selection(array('en' => $langEnglish,
+						'fr' => $langFrench,
+						'de' => $langGerman,
+						'el' => $langGreek,
+						'it' => $langItalian,
+						'es' => $langSpanish), 'meta_language', null) ."</td>
+			  </tr>
+			  <tr>
+			    <th></th>
+			    <td>$langLanguageHelp</td>
+			  </tr>
+			  <tr>
+			    <th>$langLearningResourceType:</th>
+			    <td><textarea cols='68' name='meta_learningresourcetype'></textarea></td>
+			  </tr>
+			  <tr>
+			    <th></th>
+			    <td>$langLearningResourceTypeHelp</td>
+			  </tr>
+			  <tr>
+			    <th>$langKeywords:</th>
+			    <td><textarea cols='68' name='meta_keywords'></textarea></td>
+			  </tr>
+			  <tr>
+			    <th></th>
+			    <td>$langKeywordsHelp</td>
+			  </tr>
+			  <tr>
+			    <th>$langTopic:</th>
+			    <td><input type='text' size='60' name='meta_topic' /></td>
+			  </tr>
+			  <tr>
+			    <th></th>
+			    <td>$langTopicHelp</td>
+			  </tr>
+			  <tr>
+			    <th>$langSubTopic:</th>
+			    <td><input type='text' size='60' name='meta_subtopic' /></td>
+			  </tr>
+			  <tr>
+			    <th></th>
+			    <td>$langSubTopicHelp</td>
+			  </tr>
+			  <tr>
+			    <th>$langLevel:</th>
+			    <td><input type='text' size='60' name='meta_level' /></td>
+			  </tr>
+			  <tr>
+			    <th></th>
+			    <td>$langLevelHelp</td>
+			  </tr>
+			  <tr>
+			    <th>$langTypicalAgeRange:</th>
+			    <td><input type='text' size='60' name='meta_typicalagerange' /></td>
+			  </tr>
+			  <tr>
+			    <th></th>
+			    <td>$langTypicalAgeRangeHelp</td>
+			  </tr>
+			  <tr>
+			    <th>$langComment:</th>
+			    <td><textarea cols='68' rows='4' name='meta_notes'></textarea></td>
+			  </tr>
+			  <tr>
+			    <th></th>
+			    <td>$langCommentHelp</td>
+			  </tr>
+			  <tr>
+			    <th>$langCopyright:</th>
+			    <td><textarea cols='68' name='meta_rights'></textarea></td>
+			  </tr>
+			  <tr>
+			    <th></th>
+			    <td>$langCopyrightHelp</td>
+			  </tr>
+			  <tr>
+			    <th>$langIntentedEndUserRole:</th>
+			    <td><input type='text' size='60' name='meta_intentedenduserrole' /></td>
+			  </tr>
+			  <tr>
+			    <th></th>
+			    <td>$langIntentedEndUserRoleHelp</td>
+			  </tr>
+			  <tr>
+			    <th>&nbsp;</th>
+			    <td><input type='submit' value='$langOkComment' /></td>
+			  </tr>
+			  <tr>
+			    <th>&nbsp;</th>
+			    <td class='right'>$langNotRequired</td>
+			  </tr>
+			  </table>
+			</fieldset>
+			</form>";
 		} else {
 			$action_message = "<p class='caution'>$langFileNotFound</p>";
 		}
