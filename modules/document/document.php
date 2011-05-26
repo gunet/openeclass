@@ -669,22 +669,44 @@ if($can_upload) {
 			
 			$row = mysql_fetch_array($result);
 			$oldFilename = q($row['filename']);
-//			$oldComment = q($row['comment']);
-//			$oldCategory = $row['category'];
-//			$oldTitle = q($row['title']);
-//			$oldCreator = q($row['creator']);
-//			$oldDate = q($row['date']);
-//			$oldSubject = q($row['subject']);
-//			$oldDescription = q($row['description']);
-//			$oldAuthor = q($row['author']);
-//			$oldLanguage = q($row['language']);
-//			$oldCopyrighted = $row['copyrighted'];
-
+			
 			// filesystem compability: ean gia to arxeio den yparxoun dedomena sto pedio filename
 			// (ara to arxeio den exei safe_filename (=alfarithmitiko onoma)) xrhsimopoihse to
 			// $fileName gia thn provolh tou onomatos arxeiou
 			$fileName = my_basename($metadata);
 			if (empty($oldFilename)) $oldFilename = $fileName;
+			
+			// variable definitions
+			$metaTitle = "";
+			$metaLanguage = "";
+			$metaDescription = "";
+			$metaKeywords = "";
+			$metaRights = "";
+			$metaLearningResourceType = "";
+			$metaIntendedEndUserRole = "";
+			$metaLevel = "";
+			$metaTypicalAgeRange = "";
+			$metaNotes = "";
+			$metaTopic = "";
+			$metaSubTopic = "";
+			$real_filename = $basedir . str_replace('/..', '', q($metadata));
+			
+			if (file_exists($real_filename.".xml")) {
+				$sxe = simplexml_load_file($real_filename.".xml");
+				
+				$metaTitle = $sxe->general->title->string;
+				$metaLanguage = $sxe->general->language;
+				$metaDescription = $sxe->general->description->string;
+				$metaKeywords = $sxe->general->keyword->string;
+				$metaRights = $sxe->rights->description->string;
+				$metaLearningResourceType = $sxe->educational->learningResourceType->value;
+				$metaIntendedEndUserRole = $sxe->educational->intendedEndUserRole->value;
+				$metaLevel = $sxe->educational->context->value;
+				$metaTypicalAgeRange = $sxe->educational->typicalAgeRange->string;
+				$metaNotes = $sxe->educational->description->string;
+				$metaTopic = $sxe->classification->taxonPath->source->string;
+				$metaSubTopic = $sxe->classification->taxonPath->taxon->entry->string;
+			}
 			
         	$dialogBox .= "
 			<form method='post' action='document.php?course=$code_cours'>
@@ -700,7 +722,7 @@ if($can_upload) {
 			  </tr>
 			  <tr>
 			    <th>$langTitle:</th>
-			    <td><textarea cols='68' name='meta_title'></textarea></td>
+			    <td><textarea cols='68' name='meta_title'>$metaTitle</textarea></td>
 			  </tr>
 			  <tr>
 			    <th></th>
@@ -708,7 +730,7 @@ if($can_upload) {
 			  </tr>
 			  <tr>
 			    <th>$langDescription:</th>
-			    <td><textarea cols='68' rows='4' name='meta_description'></textarea></td>
+			    <td><textarea cols='68' rows='4' name='meta_description'>$metaDescription</textarea></td>
 			  </tr>
 			  <tr>
 			    <th></th>
@@ -729,7 +751,7 @@ if($can_upload) {
 						'fr' => $langFrench,
 						'de' => $langGerman,
 						'it' => $langItalian,
-						'es' => $langSpanish), 'meta_language', null) ."</td>
+						'es' => $langSpanish), 'meta_language', $metaLanguage) ."</td>
 			  </tr>
 			  <tr>
 			    <th></th>
@@ -737,7 +759,7 @@ if($can_upload) {
 			  </tr>
 			  <tr>
 			    <th>$langLearningResourceType:</th>
-			    <td><textarea cols='68' name='meta_learningresourcetype'></textarea></td>
+			    <td><textarea cols='68' name='meta_learningresourcetype'>$metaLearningResourceType</textarea></td>
 			  </tr>
 			  <tr>
 			    <th></th>
@@ -745,7 +767,7 @@ if($can_upload) {
 			  </tr>
 			  <tr>
 			    <th>$langKeywords:</th>
-			    <td><textarea cols='68' name='meta_keywords'></textarea></td>
+			    <td><textarea cols='68' name='meta_keywords'>$metaKeywords</textarea></td>
 			  </tr>
 			  <tr>
 			    <th></th>
@@ -753,7 +775,7 @@ if($can_upload) {
 			  </tr>
 			  <tr>
 			    <th>$langTopic:</th>
-			    <td><input type='text' size='60' name='meta_topic' /></td>
+			    <td><input type='text' size='60' name='meta_topic' value='$metaTopic' /></td>
 			  </tr>
 			  <tr>
 			    <th></th>
@@ -761,7 +783,7 @@ if($can_upload) {
 			  </tr>
 			  <tr>
 			    <th>$langSubTopic:</th>
-			    <td><input type='text' size='60' name='meta_subtopic' /></td>
+			    <td><input type='text' size='60' name='meta_subtopic' value='$metaSubTopic' /></td>
 			  </tr>
 			  <tr>
 			    <th></th>
@@ -769,7 +791,7 @@ if($can_upload) {
 			  </tr>
 			  <tr>
 			    <th>$langLevel:</th>
-			    <td><input type='text' size='60' name='meta_level' /></td>
+			    <td><input type='text' size='60' name='meta_level' value='$metaLevel' /></td>
 			  </tr>
 			  <tr>
 			    <th></th>
@@ -777,7 +799,7 @@ if($can_upload) {
 			  </tr>
 			  <tr>
 			    <th>$langTypicalAgeRange:</th>
-			    <td><input type='text' size='60' name='meta_typicalagerange' /></td>
+			    <td><input type='text' size='60' name='meta_typicalagerange' value='$metaTypicalAgeRange' /></td>
 			  </tr>
 			  <tr>
 			    <th></th>
@@ -785,7 +807,7 @@ if($can_upload) {
 			  </tr>
 			  <tr>
 			    <th>$langComment:</th>
-			    <td><textarea cols='68' rows='4' name='meta_notes'></textarea></td>
+			    <td><textarea cols='68' rows='4' name='meta_notes'>$metaNotes</textarea></td>
 			  </tr>
 			  <tr>
 			    <th></th>
@@ -793,7 +815,7 @@ if($can_upload) {
 			  </tr>
 			  <tr>
 			    <th>$langCopyright:</th>
-			    <td><textarea cols='68' name='meta_rights'></textarea></td>
+			    <td><textarea cols='68' name='meta_rights'>$metaRights</textarea></td>
 			  </tr>
 			  <tr>
 			    <th></th>
@@ -801,7 +823,7 @@ if($can_upload) {
 			  </tr>
 			  <tr>
 			    <th>$langIntentedEndUserRole:</th>
-			    <td><input type='text' size='60' name='meta_intendedenduserrole' /></td>
+			    <td><input type='text' size='60' name='meta_intendedenduserrole' value='$metaIntendedEndUserRole' /></td>
 			  </tr>
 			  <tr>
 			    <th></th>
