@@ -48,14 +48,14 @@ if (isset($_POST['lang'])) {
 }
 
 $lang = $_SESSION['lang'];
-
-include "../include/lib/main.lib.php";
-include "install_functions.php";
 if ($lang == 'english') {
 	$install_info_file = "install_info_en.php";
 } else {
 	$install_info_file = "install_info.php";
 }
+
+include "../include/lib/main.lib.php";
+include "install_functions.php";
 // include_messages
 include("../modules/lang/$lang/common.inc.php");
 $extra_messages = "../config/$lang.inc.php";
@@ -99,6 +99,9 @@ if (file_exists("../config/config.php")) {
 	exit($tool_content);
 }
 
+// Input fields that have already been included in the form, either as hidden or as normal inputs
+$input_fields = array();
+
 // step 0 initialise variables
 if (isset($_POST['welcomeScreen'])) {
 	$dbHostForm = 'localhost';
@@ -117,7 +120,7 @@ if (isset($_POST['welcomeScreen'])) {
 	$passForm = create_pass();
 	$campusForm = 'Open eClass';
 	$helpdeskForm = '+30 2xx xxxx xxx';
-	$institutionForm = 'Ακαδημαϊκό Διαδίκτυο GUNet ';
+	$institutionForm = 'Ακαδημαϊκό Διαδίκτυο GUNet';
         $institutionUrlForm = 'http://www.gunet.gr/';
         $reguser = $dbPassForm = $helpdeskmail = $faxForm = $postaddressForm = '';
 	$email_required = $am_required = $dropbox_allow_student_to_student = $dont_display_login_form = '';
@@ -155,39 +158,47 @@ if (isset($_POST['welcomeScreen'])) {
 		'betacms' => true), 'all');
 }
 
-if (isset($_GET['alreadyVisited'])) {
-	$tool_content .= "<form action='$_SERVER[PHP_SELF]?alreadyVisited=1' method='post'>";
-	$tool_content .= "
-	<input type='hidden' name='urlAppendPath' value='$urlAppendPath' />
-	<input type='hidden' name='pathForm' value='".str_replace("\\", "/", realpath($pathForm) . "/") . "' />
-	<input type='hidden' name='dbHostForm' value='$dbHostForm' />
-	<input type='hidden' name='dbUsernameForm' value='$dbUsernameForm' />
-	<input type='hidden' name='dbNameForm' value='$dbNameForm' />
-	<input type='hidden' name='dbMyAdmin' value='$dbMyAdmin' />
-	<input type='hidden' name='dbPassForm' value='" . q($dbPassForm) . "' />
-	<input type='hidden' name='urlForm' value='$urlForm' />
-	<input type='hidden' name='emailForm' value='$emailForm' />
-	<input type='hidden' name='nameForm' value='$nameForm' />
-	<input type='hidden' name='surnameForm' value='$surnameForm' />
-	<input type='hidden' name='loginForm' value='$loginForm' />
-	<input type='hidden' name='passForm' value='" . q($passForm) . "' />
-	<input type='hidden' name='phpSysInfoURL' value='$phpSysInfoURL' />
-	<input type='hidden' name='campusForm' value='$campusForm' />
-	<input type='hidden' name='helpdeskForm' value='$helpdeskForm' />
-	<input type='hidden' name='helpdeskmail' value='$helpdeskmail' />
-	<input type='hidden' name='institutionForm' value='$institutionForm' />
-	<input type='hidden' name='institutionUrlForm' value='$institutionUrlForm' />
-	<input type='hidden' name='faxForm' value='$faxForm' />
-	<input type='hidden' name='postaddressForm' value='$postaddressForm' />
-	<input type='hidden' name='reguser' value='$reguser' />
-	<input type='hidden' name='email_required'  value='$email_required' />
-	<input type='hidden' name='am_required' value='$am_required' />
-	<input type='hidden' name='dropbox_allow_student_to_student' value='$dropbox_allow_student_to_student' />
-	<input type='hidden' name='dont_display_login_form' value='$dont_display_login_form' /> 
-	<input type='hidden' name='block_username_change' value='$block_username_change' />
-	<input type='hidden' name='display_captcha' value='$display_captcha' />
-	<input type='hidden' name='betacms' value='$betacms' />";
+$pathForm = str_replace("\\", '/', realpath($pathForm) . '/');
+
+function hidden_vars($names)
+{
+        $out = '';
+        foreach ($names as $name) {
+                if (isset($GLOBALS[$name]) and
+                    !isset($GLOBALS['input_fields'][$name])) {
+                        $out .= "<input type='hidden' name='$name' value='" . q($GLOBALS[$name]) . "' />\n";
+                }
+        }
+        return $out;
 }
+
+function checkbox_input($name)
+{
+        $GLOBALS['input_fields'][$name] = true;
+        return "<input type='checkbox' name='$name' value='1'" .
+               ($GLOBALS[$name]? ' checked="1"': '') . " />";
+}
+
+function text_input($name, $size)
+{
+        $GLOBALS['input_fields'][$name] = true;
+        return "<input type='text' class='FormData_InputText' size='$size' name='$name' value='" .
+                q($GLOBALS[$name]) . "' />";
+}
+
+function textarea_input($name, $rows, $cols)
+{
+        $GLOBALS['input_fields'][$name] = true;
+        return "<textarea rows='$rows' cols='$cols' class='FormData_InputText' name='$name'>" .
+               q($GLOBALS[$name]) . "</textarea>";
+}
+
+$all_vars = array('pathForm', 'urlAppendPath', 'dbHostForm', 'dbUsernameForm', 'dbNameForm', 'dbMyAdmin',
+                  'dbPassForm', 'urlForm', 'emailForm', 'nameForm', 'surnameForm', 'loginForm',
+                  'passForm', 'phpSysInfoURL', 'campusForm', 'helpdeskForm', 'helpdeskmail',
+                  'institutionForm', 'institutionUrlForm', 'faxForm', 'postaddressForm', 'reguser',
+                  'email_required', 'am_required', 'dropbox_allow_student_to_student',
+                  'dont_display_login_form', 'block_username_change', 'display_captcha', 'betacms');
 
 // step 2 license
 if(isset($_REQUEST['install2']) OR isset($_REQUEST['back2']))
@@ -196,25 +207,17 @@ if(isset($_REQUEST['install2']) OR isset($_REQUEST['back2']))
 	$langStep = $langStep2;
 	$_SESSION['step'] = 2;
 	$tool_content .= "<form action='$_SERVER[PHP_SELF]?alreadyVisited=1' method='post'>
-	<table width='100%' class='tbl'>
-	<tr>
-	<td>$langInfoLicence</td>
-	</tr>
-	<tr>
-	<td><textarea cols='92' rows='15' class='FormData_InputText'>";
-	$tool_content .= file_get_contents('../info/license/gpl.txt');
-	$tool_content .= "</textarea></td>
-	</tr>
-		<tr>
-	<td><img src='../template/classic/img/printer.png' alt='print' /> <a href='../info/license/gpl_print.txt'>$langPrintVers</a></td>
-	</tr>
-	<tr>
-	<td class='right'>
-	  <input type='submit' name='back1' value='&laquo; $langPreviousStep' />
-	  <input type='submit' name='install3' value='$langAccept' />
-	  </td></tr>
-	</table>
-	</form>";
+             <table width='100%' class='tbl'>
+                   <tr><td>$langInfoLicence</td></tr>
+                <tr><td><textarea cols='92' rows='15' class='FormData_InputText'>" .
+	                file_get_contents('../info/license/gpl.txt') . "
+                        </textarea></td></tr>
+                <tr><td><img src='../template/classic/img/printer.png' alt='print' />
+                        <a href='../info/license/gpl_print.txt'>$langPrintVers</a></td></tr>
+                <tr><td class='right'>
+                        <input type='submit' name='back1' value='&laquo; $langPreviousStep' />
+                        <input type='submit' name='install3' value='$langAccept' /></td></tr>
+             </table>" . hidden_vars($all_vars) . "</form>";
 	draw($tool_content);
 }
 
@@ -226,30 +229,31 @@ elseif(isset($_REQUEST['install3']) OR isset($_REQUEST['back3'])) {
 	$tool_content .= "
 	<div>$langDBSettingIntro</div>
 	<br />
+        <form action='$_SERVER[PHP_SELF]?alreadyVisited=1' method='post'>
 	<table width='100%' class='tbl smaller'>
 	<tr>
 	  <th width='220' class='left'>$langdbhost</th>
-	  <td><input type='text' class='FormData_InputText' size='25' name='dbHostForm' value='$dbHostForm' />&nbsp;&nbsp;$langEG localhost</td>
+	  <td>".text_input('dbHostForm', 25)."&nbsp;&nbsp;$langEG localhost</td>
 	  </tr>
 	<tr>
 	<th class='left'>$langDBLogin</th>
-	<td><input type='text' class='FormData_InputText' size='25' name='dbUsernameForm' value='$dbUsernameForm' />&nbsp;&nbsp;$langEG root </td>
+	<td>".text_input('dbUsernameForm', 25)."&nbsp;&nbsp;$langEG root </td>
 	</tr>
 	<tr>
 	<th class='left'>$langDBPassword</th>
-	<td><input type='text' class='FormData_InputText' size='25' name='dbPassForm' value='" . q($dbPassForm) . "' />&nbsp;&nbsp;$langEG ".create_pass()."</td>
+	<td>".text_input('dbPassForm', 25)."&nbsp;&nbsp;$langEG ".create_pass()."</td>
 	</tr>
 	<tr>
 	<th class='left'>$langMainDB</th>
-	<td><input type='text' class='FormData_InputText' size='25' name='dbNameForm' value='$dbNameForm' />&nbsp;&nbsp;($langNeedChangeDB)</td>
+	<td>".text_input('dbNameForm', 25)."&nbsp;&nbsp;($langNeedChangeDB)</td>
 	</tr>
 	<tr>
 	<th class='left'>URL του phpMyAdmin</th>
-	<td><input type='text' class='FormData_InputText' size='25' name='dbMyAdmin' value='$dbMyAdmin' />&nbsp;&nbsp;$langNotNeedChange</td>
+	<td>".text_input('dbMyAdmin', 25)."&nbsp;&nbsp;$langNotNeedChange</td>
 	</tr>
 	<tr>
 	<th class='left'>URL του System info</th>
-	<td><input type='text' class='FormData_InputText' size='25' name='phpSysInfoURL' value='$phpSysInfoURL' />&nbsp;&nbsp;$langNotNeedChange</td>
+	<td>".text_input('phpSysInfoURL', 25)."&nbsp;&nbsp;$langNotNeedChange</td>
 	</tr>
 	<tr>
 	<td colspan='2' class='right'>
@@ -258,8 +262,8 @@ elseif(isset($_REQUEST['install3']) OR isset($_REQUEST['back3'])) {
 	</td>
 	</tr>
 	</table>
-	<div class='right smaller'>(*) $langAllFieldsRequired</div>
-	</form>";
+        <div class='right smaller'>(*) $langAllFieldsRequired</div>" .
+        hidden_vars($all_vars) . "</form>";
 	draw($tool_content);
 }	 
 
@@ -273,75 +277,48 @@ elseif(isset($_REQUEST['install4']) OR isset($_REQUEST['back4']))
                 $helpdeskmail = '';
         }
 	$tool_content .= "<div> $langWillWrite</div><br />
-	<table width='100%' class='tbl smaller'>
-	<tr>
-	<th class='left' width='220'>$langSiteUrl</th>
-	<td><input type='text' class='FormData_InputText' size='40' name='urlForm' value='$urlForm' />&nbsp;&nbsp;(*)</td>
+                <form action='$_SERVER[PHP_SELF]?alreadyVisited=1' method='post'>
+                <table width='100%' class='tbl smaller'>
+                <tr><th class='left' width='220'>$langSiteUrl</th>
+                    <td>".text_input('urlForm', 40)."&nbsp;&nbsp;(*)</td></tr>
+                <tr><th class='left'>$langLocalPath</th>
+                    <td>".text_input('pathForm', 40)."&nbsp;&nbsp;(*)</td></tr>
+                <tr><th class='left'>$langAdminName</th>
+                    <td>".text_input('nameForm', 40)."</td></tr>
+                <tr><th class='left'>$langAdminSurname</th>
+                    <td>".text_input('surnameForm', 40)."</td></tr>
+                <tr><th class='left'>$langAdminEmail</th>
+                    <td>".text_input('emailForm', 40)."</td></tr>
+                <tr><th class='left'>$langAdminLogin</th>
+                    <td>".text_input('loginForm', 40)."</td></tr>
+                <tr><th class='left'>$langAdminPass</th>
+                    <td>".text_input('passForm', 40)."</td></tr>
+                <tr><th class='left'>$langCampusName</th>
+                    <td>".text_input('campusForm', 40)."</td></tr>
+                <tr><th class='left'>$langHelpDeskPhone</th>
+                    <td>".text_input('helpdeskForm', 40)."</td></tr>
+                <tr><th class='left'>$langHelpDeskFax</th>
+                    <td>".text_input('faxForm', 40)."</td></tr>
+                <tr><th class='left'>$langHelpDeskEmail</th>
+                    <td>".text_input('helpdeskmail', 40)."&nbsp;&nbsp;(**)</td></tr>
+                <tr><th class='left'>$langInstituteShortName</th>
+                    <td>".text_input('institutionForm', 40)."</td></tr>
+                <tr><th class='left'>$langInstituteName</th>
+                    <td>".text_input('institutionUrlForm', 40)."</td></tr>
+                <tr><th class='left'>$langInstitutePostAddress</th>
+                    <td>".textarea_input('postaddressForm', 3, 40)."</td></tr>
+                <tr>
+                <th class='left'>$langViaReq</th>
+                <td>".checkbox_input('reguser')."</td>
 	</tr>
-	<tr>
-	<th class='left'>$langLocalPath</th>
-	<td><input type='text' size='40' class='FormData_InputText' name='pathForm' value='" . realpath($pathForm) . "/' />&nbsp;&nbsp;(*)</td>
-	</tr>
-	<tr>
-	<th class='left'>$langAdminName</th>
-	<td><input type='text' class='FormData_InputText' size='40' name='nameForm' value='$nameForm' /></td>
-	</tr>
-	<tr>
-	<th class='left'>$langAdminSurname</th>
-	<td><input type='text' class='FormData_InputText' size='40' name='surnameForm' value='$surnameForm' /></td>
-	</tr>
-	<tr>
-	<th class='left'>$langAdminEmail</th>
-	<td><input type=text class='FormData_InputText' size=40 name='emailForm' value='$emailForm' /></td>
-	</tr>
-	<tr>
-	<th class='left'>$langAdminLogin</th>
-	<td><input type='text' class='FormData_InputText' size='40' name='loginForm' value='$loginForm' /></td>
-	</tr>
-	<tr>
-	<th class='left'>$langAdminPass</th>
-	<td><input type='text' class='FormData_InputText' size='40' name='passForm' value='" . q($passForm) . "'/></td>
-	</tr>
-	<tr>
-	<th class='left'>$langCampusName</th>
-	<td><input type='text' class='FormData_InputText' size='40' name='campusForm' value='$campusForm' /><td>
-	</tr>
-	<tr>
-	<th class='left'>$langHelpDeskPhone</th>
-	<td><input type='text' class='FormData_InputText' size='40' name='helpdeskForm' value='$helpdeskForm' /></td>
-	</tr>
-	<tr>
-	<th class='left'>$langHelpDeskFax</th>
-	<td><input type='text' class='FormData_InputText' size='40' name='faxForm' value='$faxForm' /></td>
-	</tr>
-	<tr>
-	<th class='left'>$langHelpDeskEmail</th>
-	<td><input type='text' class='FormData_InputText' size='40' name='helpdeskmail' value='$helpdeskmail' />&nbsp;&nbsp;(**)</td>
-	</tr>
-	<tr>
-	<th class='left'>$langInstituteShortName</th>
-	<td><input type=text class='FormData_InputText' size='40' name='institutionForm' value='$institutionForm' /></td>
-	</tr>
-	<tr>
-	<th class='left'>$langInstituteName</th>
-	<td><input type='text' class='FormData_InputText' size='40' name='institutionUrlForm' value='$institutionUrlForm' /></td>
-	</tr>
-	<tr>
-	<th class='left'>$langInstitutePostAddress</th>
-	<td><textarea rows='3' class='FormData_InputText' cols='40' name='postaddressForm'>" . q($postaddressForm) . "</textarea></td>
-	</tr>
-	<tr>
-	<th class='left'>$langViaReq</th>
-	<td><input type='checkbox' name='reguser' /></td>
-	</tr>";
-	$tool_content .= "<tr><td colspan='2' class='right'>
+	<tr><td colspan='2' class='right'>
 	  <input type='submit' name='back3' value='&laquo; $langPreviousStep' />
 	  <input type='submit' name='install5' value='$langNextStep &raquo;' />
 	  <div class='smaller'>$langRequiredFields.</div>
 	  <div class='smaller'>(**) $langWarnHelpDesk</div></td>
 	</tr>
-	</table>
-	</form>";
+        </table>" . hidden_vars($all_vars) . "</form>";
+
 	draw($tool_content);
 }
 
@@ -352,59 +329,59 @@ elseif(isset($_REQUEST['install5']) OR isset($_REQUEST['back5']))
 	$langStep = $langStep5;
 	$_SESSION['step'] = 5;
 	$tool_content .= "<div>$langWillWriteConfig</div><br />
+        <form action='$_SERVER[PHP_SELF]?alreadyVisited=1' method='post'>
 	<table width='100%' class='tbl smaller'>
 	  <tr>
 		<th class='left' width='550'><b>$lang_email_required</b></th>
-		<td><input type='checkbox' name='email_required' /></td>
+		<td>".checkbox_input('email_required')."</td>
 	  </tr>
 	  <tr>
 		<th class='left'><b>$lang_am_required</b></th>
-		<td><input type='checkbox' name='am_required' /></td>
+		<td>".checkbox_input('am_required')."</td>
 	  </tr>
 	  <tr>
 		<th class='left'><b>$lang_dropbox_allow_student_to_student</b></th>
-		<td><input type='checkbox' name='dropbox_allow_student_to_student' /></td>
+		<td>".checkbox_input('dropbox_allow_student_to_student')."</td>
 	  </tr>
 	  <tr>
 		<th class='left'><b>$lang_dont_display_login_form</b></th>
-		<td><input type='checkbox' name='dont_display_login_form' /></td>
+		<td>".checkbox_input('dont_display_login_form')."</td>
 	  </tr>
 	  <tr>
 		<th class='left'><b>$lang_block_username_change</b></th>
-		<td><input type='checkbox' name='block_username_change' /></td>
+		<td>".checkbox_input('block_username_change')."</td>
 	  </tr>
 	  <tr>
 		<th class='left'><b>$lang_display_captcha</b></th>
-		<td><input type='checkbox' name='display_captcha' /></td>
+		<td>".checkbox_input('display_captcha')."</td>
 	  </tr>
 	  <tr>
 		<th class='left'><b>$lang_betacms</b></th>
-		<td><input type='checkbox' name='betacms' /></td>
-	  </tr>";
-	$tool_content .= "<tr><td colspan='2' class='right'>
+		<td>".checkbox_input('betacms')."</td>
+	  </tr>
+	  <tr><td colspan='2' class='right'>
 	  <input type='submit' name='back4' value='&laquo; $langPreviousStep' />
 	  <input type='submit' name='install6' value='$langNextStep &raquo;' />
 	  </td>
 	</tr>
-	</table>
-	</form>";
+	</table>" . hidden_vars($all_vars) . "</form>";
 	draw($tool_content);
 }
 
 // step 6 last check before install
 elseif(isset($_REQUEST['install6']))
 {
-	$pathForm = str_replace("\\\\", "/", $pathForm);
 	$langStepTitle = $langLastCheck;
 	$langStep = $langStep6;
 	$_SESSION['step'] = 6;
 	if (!$reguser) {
-      		$mes_add ="";
+      		$mes_add = $langToReqOpen;
   	} else {
-      		$mes_add = "<br />$langToReq<br />";
+      		$mes_add = $langToReq;
   	}
 
 	$tool_content .= "
+        <form action='$_SERVER[PHP_SELF]?alreadyVisited=1' method='post'>
 	<div>$langReviewSettings</div> <br />
 		<table width='100%' class='tbl smaller'>
 	<tr>
@@ -485,8 +462,8 @@ elseif(isset($_REQUEST['install6']))
 		<input type='submit' name='install7' value='$langInstall &raquo;' />
 	</td>
 	</tr>
-	</table>
-	</form>";
+	</table>" . hidden_vars($all_vars) . "</form>";
+
 	draw($tool_content);
 }
 
@@ -542,7 +519,7 @@ elseif(isset($_REQUEST['install7']))
 
 $urlServer = "'.$urlForm.'";
 $urlAppend = "'.$urlAppendPath.'";
-$webDir    = "'.str_replace("\\","/",realpath($pathForm)."/").'" ;
+$webDir    = "'.$pathForm.'";
 
 $mysqlServer = "'.$dbHostForm.'";
 $mysqlUser = "'.$dbUsernameForm.'";
@@ -599,7 +576,7 @@ elseif (isset($_REQUEST['install1']) || isset($_REQUEST['back1']))
 	$_SESSION['step'] = 1;
 	$configErrorExists = false;
 
-	$tool_content .= "<form action='$_SERVER[PHP_SELF]?alreadyVisited=1' method='post'>";
+        $tool_content .= "<form action='$_SERVER[PHP_SELF]?alreadyVisited=1' method='post'>";
 
 	// create config, courses and video catalogs
         mkdir_or_error('../config', $langWarningInstall3);
@@ -646,8 +623,8 @@ elseif (isset($_REQUEST['install1']) || isset($_REQUEST['back1']))
 	<li>$langExpPhpMyAdmin</li></ul>
 	<div class='info'>$langBeforeInstall1<a href='$install_info_file' target=_blank>$langInstallInstr</a>.
 	<div class='smaller'>$langBeforeInstall2<a href='../README.txt' target=_blank>$langHere</a>.</div></div><br />
-	<div class='right'><input type='submit' name='install2' value='$langNextStep &raquo;' /></div>
-        </form>\n";
+	<div class='right'><input type='submit' name='install2' value='$langNextStep &raquo;' /></div>" .
+        hidden_vars($all_vars) . "</form>\n";
 	draw($tool_content);
 } else {
 	$langLanguages = array(

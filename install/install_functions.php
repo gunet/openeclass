@@ -33,13 +33,16 @@ function draw($toolContent){
 	$numOfToolGroups = count($toolArr);
 
 	$t = new Template();
-	$t->set_file('fh', "theme.html");
+	$t->set_file('fh', 'theme.html');
 	$t->set_block('fh', 'mainBlock', 'main');
+
+        $t->set_var('SITE_NAME', 'Open eClass');
 
 	//	BEGIN constructing the installation wizard steps
 	//	----------------------------------------------------------------------
 	$t->set_block('mainBlock', 'leftNavCategoryBlock', 'leftNavCategory');
 	$t->set_block('leftNavCategoryBlock', 'leftNavLinkBlock', 'leftNavLink');
+
 
 	if (is_array($toolArr)) {
 		for($i=0; $i< $numOfToolGroups; $i++){
@@ -65,7 +68,7 @@ function draw($toolContent){
 		}
 
 		$t->set_var('CURRENT_STEP_TITLE', $toolArr[$i_var][0][$j_var]);
-		$t->set_var('URL_PATH',  $urlServer);
+                $t->set_var('URL_PATH',  empty($urlServer)? 'http://www.openeclass.org/': $urlServer);
 		$t->set_var('TOOL_CONTENT', $toolContent);
 		$t->set_var('THIRD_BAR_TEXT', $langInstallProgress);
 		$t->set_var('BREAD_TEXT',  $langStep);

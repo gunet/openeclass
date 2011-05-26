@@ -16,7 +16,7 @@ p {
   <div id="container" style="padding: 30px;">
   <div id="header"> 
 
-<a href="{URL_PATH}" title="{SITE_NAME}" class="logo"></a></div>
+<a href="http://www.openeclass.org/" title="Open eClass" alt="Open eClass" class="logo"></a></div>
 
   <p class="title1">Installation Instructions Open eClass 2.4</p>
 <p>The Open eClass platform is a complete Course Management System. It is the solution offered by the Greek Academic Network GUnet
