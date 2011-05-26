@@ -721,114 +721,62 @@ if($can_upload) {
 			    <td>$oldFilename</td>
 			  </tr>
 			  <tr>
-			    <th>$langTitle:</th>
+			    <th rowspan='2'>$langTitle:</th>
 			    <td><textarea cols='68' name='meta_title'>$metaTitle</textarea></td>
-			  </tr>
+			  </tr><tr><td>$langTitleHelp</td></tr>
 			  <tr>
-			    <th></th>
-			    <td>$langTitleHelp</td>
-			  </tr>
-			  <tr>
-			    <th>$langDescription:</th>
+			    <th rowspan='2'>$langDescription:</th>
 			    <td><textarea cols='68' rows='4' name='meta_description'>$metaDescription</textarea></td>
-			  </tr>
+			  </tr><tr><td>$langDescriptionHelp</td></tr>
 			  <tr>
-			    <th></th>
-			    <td>$langDescriptionHelp</td>
-			  </tr>
-			  <tr>
-			    <th>$langAuthor:</th>
+			    <th rowspan='2'>$langAuthor:</th>
 			    <td><textarea cols='68' name='meta_author'></textarea></td>
-			  </tr>
+			  </tr><tr><td>$langAuthorHelp</td></tr>
 			  <tr>
-			    <th></th>
-			    <td>$langAuthorHelp</td>
-			  </tr>
-			  <tr>
-			    <th>$langLanguage:</th>
+			    <th rowspan='2'>$langLanguage:</th>
 			    <td>". selection(array('el' => $langGreek,
 						'en' => $langEnglish,
 						'fr' => $langFrench,
 						'de' => $langGerman,
 						'it' => $langItalian,
 						'es' => $langSpanish), 'meta_language', $metaLanguage) ."</td>
-			  </tr>
+			  </tr><tr><td>$langLanguageHelp</td></tr>
 			  <tr>
-			    <th></th>
-			    <td>$langLanguageHelp</td>
-			  </tr>
-			  <tr>
-			    <th>$langLearningResourceType:</th>
+			    <th rowspan='2'>$langLearningResourceType:</th>
 			    <td><textarea cols='68' name='meta_learningresourcetype'>$metaLearningResourceType</textarea></td>
-			  </tr>
+			  </tr><tr><td>$langLearningResourceTypeHelp</td></tr>
 			  <tr>
-			    <th></th>
-			    <td>$langLearningResourceTypeHelp</td>
-			  </tr>
-			  <tr>
-			    <th>$langKeywords:</th>
+			    <th rowspan='2'>$langKeywords:</th>
 			    <td><textarea cols='68' name='meta_keywords'>$metaKeywords</textarea></td>
-			  </tr>
+			  </tr><tr><td>$langKeywordsHelp</td></tr>
 			  <tr>
-			    <th></th>
-			    <td>$langKeywordsHelp</td>
-			  </tr>
-			  <tr>
-			    <th>$langTopic:</th>
+			    <th rowspan='2'>$langTopic:</th>
 			    <td><input type='text' size='60' name='meta_topic' value='$metaTopic' /></td>
-			  </tr>
+			  </tr><tr><td>$langTopicHelp</td></tr>
 			  <tr>
-			    <th></th>
-			    <td>$langTopicHelp</td>
-			  </tr>
-			  <tr>
-			    <th>$langSubTopic:</th>
+			    <th rowspan='2'>$langSubTopic:</th>
 			    <td><input type='text' size='60' name='meta_subtopic' value='$metaSubTopic' /></td>
-			  </tr>
+			  </tr><tr><td>$langSubTopicHelp</td></tr>
 			  <tr>
-			    <th></th>
-			    <td>$langSubTopicHelp</td>
-			  </tr>
-			  <tr>
-			    <th>$langLevel:</th>
+			    <th rowspan='2'>$langLevel:</th>
 			    <td><input type='text' size='60' name='meta_level' value='$metaLevel' /></td>
-			  </tr>
+			  </tr><tr><td>$langLevelHelp</td></tr>
 			  <tr>
-			    <th></th>
-			    <td>$langLevelHelp</td>
-			  </tr>
-			  <tr>
-			    <th>$langTypicalAgeRange:</th>
+			    <th rowspan='2'>$langTypicalAgeRange:</th>
 			    <td><input type='text' size='60' name='meta_typicalagerange' value='$metaTypicalAgeRange' /></td>
-			  </tr>
+			  </tr><tr><td>$langTypicalAgeRangeHelp</td></tr>
 			  <tr>
-			    <th></th>
-			    <td>$langTypicalAgeRangeHelp</td>
-			  </tr>
-			  <tr>
-			    <th>$langComment:</th>
+			    <th rowspan='2'>$langComment:</th>
 			    <td><textarea cols='68' rows='4' name='meta_notes'>$metaNotes</textarea></td>
-			  </tr>
+			  </tr><tr><td>$langCommentHelp</td></tr>
 			  <tr>
-			    <th></th>
-			    <td>$langCommentHelp</td>
-			  </tr>
-			  <tr>
-			    <th>$langCopyright:</th>
+			    <th rowspan='2'>$langCopyright:</th>
 			    <td><textarea cols='68' name='meta_rights'>$metaRights</textarea></td>
-			  </tr>
+			  </tr><tr><td>$langCopyrightHelp</td></tr>
 			  <tr>
-			    <th></th>
-			    <td>$langCopyrightHelp</td>
-			  </tr>
-			  <tr>
-			    <th>$langIntentedEndUserRole:</th>
+			    <th rowspan='2'>$langIntentedEndUserRole:</th>
 			    <td><input type='text' size='60' name='meta_intendedenduserrole' value='$metaIntendedEndUserRole' /></td>
-			  </tr>
-			  <tr>
-			    <th></th>
-			    <td>$langIntentedEndUserRoleHelp</td>
-			  </tr>
+			  </tr><tr><td>$langIntentedEndUserRoleHelp</td></tr>
 			  <tr>
 			    <th>&nbsp;</th>
 			    <td><input type='submit' value='$langOkComment' /></td>
