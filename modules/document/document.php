@@ -392,7 +392,90 @@ if($can_upload) {
 	// add/update/remove metadata
 	// h $metadataPath periexei to path tou arxeiou gia to opoio tha epikyrwthoun ta metadata
 	if (isset($_POST['metadataPath'])) {
+		
 		$metadataPath = $_POST['metadataPath'];
+		$real_filename = $basedir . str_replace('/..', '', $metadataPath);
+		
+		$dom = new DomDocument('1.0', 'utf-8');
+		$lom = $dom->appendChild($dom->createElementNS('http://ltsc.ieee.org/xsd/LOM', 'lom'));
+		$lom->setAttribute('xmlns:xsi', 'http://www.w3.org/2001/XMLSchema-instance');
+		$lom->setAttribute('xsi:schemaLocation', 'http://ltsc.ieee.org/xsd/LOM ity.xsd');
+		// end of lom
+		
+		$general = $lom->appendChild($dom->createElement('general'));
+		
+		$title = $general->appendChild($dom->createElement('title'));
+		$langstring = $title->appendChild($dom->createElement('string', $_POST['meta_title']));
+		$langstring->setAttribute('language', $_POST['meta_language']);
+		
+		$general->appendChild($dom->createElement('language', $_POST['meta_language']));
+		
+		$description = $general->appendChild($dom->createElement('description'));
+		$langstring = $description->appendChild($dom->createElement('string', $_POST['meta_description']));
+		$langstring->setAttribute('language', $_POST['meta_language']);
+		
+		$keyword = $general->appendChild($dom->createElement('keyword'));
+		$langstring = $keyword->appendChild($dom->createElement('string', $_POST['meta_keywords']));
+		$langstring->setAttribute('language', $_POST['meta_language']);
+		// end of general
+		
+		$lifecycle = $lom->appendChild($dom->createElement('lifeCycle'));
+		// end of lifeCycle
+		
+		$rights = $lom->appendChild($dom->createElement('rights'));
+		
+		$copyrightAndOtherRestrictionse = $rights->appendChild($dom->createElement('copyrightAndOtherRestrictions'));
+		$source = $copyrightAndOtherRestrictionse->appendChild($dom->createElement('source', 'LOMv1.0'));
+		$value = $copyrightAndOtherRestrictionse->appendChild($dom->createElement('value', 'yes'));
+		
+		$description = $rights->appendChild($dom->createElement('description'));
+		$langstring = $description->appendChild($dom->createElement('string', $_POST['meta_rights']));
+		$langstring->setAttribute('language', $_POST['meta_language']);
+		// end of rights
+		
+		$educational = $lom->appendChild($dom->createElement('educational'));
+		
+		$learningresourcetype = $educational->appendChild($dom->createElement('learningResourceType'));
+		$source = $learningresourcetype->appendChild($dom->createElement('source', 'LOMv1.0'));
+		$value = $learningresourcetype->appendChild($dom->createElement('value', $_POST['meta_learningresourcetype']));
+		
+		$intendedenduserrole = $educational->appendChild($dom->createElement('intendedEndUserRole'));
+		$source = $intendedenduserrole->appendChild($dom->createElement('source', 'LOMv1.0'));
+		$value = $intendedenduserrole->appendChild($dom->createElement('value', $_POST['meta_intendedenduserrole']));
+		
+		$context = $educational->appendChild($dom->createElement('context'));
+		$source = $context->appendChild($dom->createElement('source', 'LOMv1.0'));
+		$value = $context->appendChild($dom->createElement('value', $_POST['meta_level']));
+		
+		$typicalAgeRange = $educational->appendChild($dom->createElement('typicalAgeRange'));
+		$langstring = $typicalAgeRange->appendChild($dom->createElement('string', $_POST['meta_typicalagerange']));
+		$langstring->setAttribute('language', $_POST['meta_language']);
+		
+		$description = $educational->appendChild($dom->createElement('description'));
+		$langstring = $description->appendChild($dom->createElement('string', $_POST['meta_notes']));
+		$langstring->setAttribute('language', $_POST['meta_language']);
+		// end of educational
+		
+		$classification = $lom->appendChild($dom->createElement('classification'));
+		
+		$purpose = $classification->appendChild($dom->createElement('purpose'));
+		$source = $purpose->appendChild($dom->createElement('source', 'LOMv1.0'));
+		$value = $purpose->appendChild($dom->createElement('value', 'discipline'));
+		
+		$taxonPath = $classification->appendChild($dom->createElement('taxonPath'));
+		$source = $taxonPath->appendChild($dom->createElement('source'));
+		$langstring = $source->appendChild($dom->createElement('string', $_POST['meta_topic']));
+		$langstring->setAttribute('language', $_POST['meta_language']);
+		
+		$taxon = $taxonPath->appendChild($dom->createElement('taxon'));
+		$entry = $taxon->appendChild($dom->createElement('entry'));
+		$langstring = $entry->appendChild($dom->createElement('string', $_POST['meta_subtopic']));
+		$langstring->setAttribute('language', $_POST['meta_language']);
+		// end of classification
+		
+		$dom->formatOutput = true;
+		$dom->save($real_filename.'.xml');
+		
 		$action_message = "<p class='success'>$langMetadataMod</p>";
 	}
 
@@ -718,7 +801,7 @@ if($can_upload) {
 			  </tr>
 			  <tr>
 			    <th>$langIntentedEndUserRole:</th>
-			    <td><input type='text' size='60' name='meta_intentedenduserrole' /></td>
+			    <td><input type='text' size='60' name='meta_intendedenduserrole' /></td>
 			  </tr>
 			  <tr>
 			    <th></th>
