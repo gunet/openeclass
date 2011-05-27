@@ -405,21 +405,24 @@ if($can_upload) {
 		$general = $lom->appendChild($dom->createElement('general'));
 		
 		$title = $general->appendChild($dom->createElement('title'));
-		$langstring = $title->appendChild($dom->createElement('string', htmlspecialchars($_POST['meta_title'], ENT_COMPAT, 'utf-8')));
+		$langstring = $title->appendChild($dom->createElement('string', htmlspecialchars($_POST['meta_title'], ENT_QUOTES, 'utf-8')));
 		$langstring->setAttribute('language', $_POST['meta_language']);
 		
 		$general->appendChild($dom->createElement('language', $_POST['meta_language']));
 		
 		$description = $general->appendChild($dom->createElement('description'));
-		$langstring = $description->appendChild($dom->createElement('string', htmlspecialchars($_POST['meta_description'], ENT_COMPAT, 'utf-8')));
+		$langstring = $description->appendChild($dom->createElement('string', htmlspecialchars($_POST['meta_description'], ENT_QUOTES, 'utf-8')));
 		$langstring->setAttribute('language', $_POST['meta_language']);
 		
 		$keyword = $general->appendChild($dom->createElement('keyword'));
-		$langstring = $keyword->appendChild($dom->createElement('string', htmlspecialchars($_POST['meta_keywords'], ENT_COMPAT, 'utf-8')));
+		$langstring = $keyword->appendChild($dom->createElement('string', htmlspecialchars($_POST['meta_keywords'], ENT_QUOTES, 'utf-8')));
 		$langstring->setAttribute('language', $_POST['meta_language']);
 		// end of general
 		
 		$lifecycle = $lom->appendChild($dom->createElement('lifeCycle'));
+		
+		$contribute = $lifecycle->appendChild($dom->createElement('contribute'));
+		$entity = $contribute->appendChild($dom->createElement('entity', htmlspecialchars($_POST['meta_author'], ENT_QUOTES, 'utf-8')));
 		// end of lifeCycle
 		
 		$rights = $lom->appendChild($dom->createElement('rights'));
@@ -429,7 +432,7 @@ if($can_upload) {
 		$value = $copyrightAndOtherRestrictionse->appendChild($dom->createElement('value', 'yes'));
 		
 		$description = $rights->appendChild($dom->createElement('description'));
-		$langstring = $description->appendChild($dom->createElement('string', htmlspecialchars($_POST['meta_rights'], ENT_COMPAT, 'utf-8')));
+		$langstring = $description->appendChild($dom->createElement('string', htmlspecialchars($_POST['meta_rights'], ENT_QUOTES, 'utf-8')));
 		$langstring->setAttribute('language', $_POST['meta_language']);
 		// end of rights
 		
@@ -437,22 +440,22 @@ if($can_upload) {
 		
 		$learningresourcetype = $educational->appendChild($dom->createElement('learningResourceType'));
 		$source = $learningresourcetype->appendChild($dom->createElement('source', 'LOMv1.0'));
-		$value = $learningresourcetype->appendChild($dom->createElement('value', htmlspecialchars($_POST['meta_learningresourcetype'], ENT_COMPAT, 'utf-8')));
+		$value = $learningresourcetype->appendChild($dom->createElement('value', htmlspecialchars($_POST['meta_learningresourcetype'], ENT_QUOTES, 'utf-8')));
 		
 		$intendedenduserrole = $educational->appendChild($dom->createElement('intendedEndUserRole'));
 		$source = $intendedenduserrole->appendChild($dom->createElement('source', 'LOMv1.0'));
-		$value = $intendedenduserrole->appendChild($dom->createElement('value', htmlspecialchars($_POST['meta_intendedenduserrole'], ENT_COMPAT, 'utf-8')));
+		$value = $intendedenduserrole->appendChild($dom->createElement('value', htmlspecialchars($_POST['meta_intendedenduserrole'], ENT_QUOTES, 'utf-8')));
 		
 		$context = $educational->appendChild($dom->createElement('context'));
 		$source = $context->appendChild($dom->createElement('source', 'LOMv1.0'));
-		$value = $context->appendChild($dom->createElement('value', htmlspecialchars($_POST['meta_level'], ENT_COMPAT, 'utf-8')));
+		$value = $context->appendChild($dom->createElement('value', htmlspecialchars($_POST['meta_level'], ENT_QUOTES, 'utf-8')));
 		
 		$typicalAgeRange = $educational->appendChild($dom->createElement('typicalAgeRange'));
-		$langstring = $typicalAgeRange->appendChild($dom->createElement('string', htmlspecialchars($_POST['meta_typicalagerange'], ENT_COMPAT, 'utf-8')));
+		$langstring = $typicalAgeRange->appendChild($dom->createElement('string', htmlspecialchars($_POST['meta_typicalagerange'], ENT_QUOTES, 'utf-8')));
 		$langstring->setAttribute('language', $_POST['meta_language']);
 		
 		$description = $educational->appendChild($dom->createElement('description'));
-		$langstring = $description->appendChild($dom->createElement('string', htmlspecialchars($_POST['meta_notes'], ENT_COMPAT, 'utf-8')));
+		$langstring = $description->appendChild($dom->createElement('string', htmlspecialchars($_POST['meta_notes'], ENT_QUOTES, 'utf-8')));
 		$langstring->setAttribute('language', $_POST['meta_language']);
 		// end of educational
 		
@@ -464,12 +467,12 @@ if($can_upload) {
 		
 		$taxonPath = $classification->appendChild($dom->createElement('taxonPath'));
 		$source = $taxonPath->appendChild($dom->createElement('source'));
-		$langstring = $source->appendChild($dom->createElement('string', htmlspecialchars($_POST['meta_topic'], ENT_COMPAT, 'utf-8')));
+		$langstring = $source->appendChild($dom->createElement('string', htmlspecialchars($_POST['meta_topic'], ENT_QUOTES, 'utf-8')));
 		$langstring->setAttribute('language', $_POST['meta_language']);
 		
 		$taxon = $taxonPath->appendChild($dom->createElement('taxon'));
 		$entry = $taxon->appendChild($dom->createElement('entry'));
-		$langstring = $entry->appendChild($dom->createElement('string', htmlspecialchars($_POST['meta_subtopic'], ENT_COMPAT, 'utf-8')));
+		$langstring = $entry->appendChild($dom->createElement('string', htmlspecialchars($_POST['meta_subtopic'], ENT_QUOTES, 'utf-8')));
 		$langstring->setAttribute('language', $_POST['meta_language']);
 		// end of classification
 		
@@ -680,6 +683,7 @@ if($can_upload) {
 			$metaTitle = "";
 			$metaLanguage = "";
 			$metaDescription = "";
+			$metaAuthor = "";
 			$metaKeywords = "";
 			$metaRights = "";
 			$metaLearningResourceType = "";
@@ -698,6 +702,7 @@ if($can_upload) {
 					$metaTitle = $sxe->general->title->string;
 					$metaLanguage = $sxe->general->language;
 					$metaDescription = $sxe->general->description->string;
+					$metaAuthor = $sxe->lifeCycle->contribute->entity;
 					$metaKeywords = $sxe->general->keyword->string;
 					$metaRights = $sxe->rights->description->string;
 					$metaLearningResourceType = $sxe->educational->learningResourceType->value;
@@ -732,7 +737,7 @@ if($can_upload) {
 			  </tr><tr><td>$langDescriptionHelp</td></tr>
 			  <tr>
 			    <th rowspan='2'>$langAuthor:</th>
-			    <td><textarea cols='68' name='meta_author'></textarea></td>
+			    <td><textarea cols='68' name='meta_author'>$metaAuthor</textarea></td>
 			  </tr><tr><td>$langAuthorHelp</td></tr>
 			  <tr>
 			    <th rowspan='2'>$langLanguage:</th>
@@ -753,19 +758,19 @@ if($can_upload) {
 			  </tr><tr><td>$langKeywordsHelp</td></tr>
 			  <tr>
 			    <th rowspan='2'>$langTopic:</th>
-			    <td><input type='text' size='60' name='meta_topic' value='$metaTopic' /></td>
+			    <td><input type='text' size='60' name='meta_topic' value='".htmlspecialchars($metaTopic, ENT_QUOTES, 'utf-8')."' /></td>
 			  </tr><tr><td>$langTopicHelp</td></tr>
 			  <tr>
 			    <th rowspan='2'>$langSubTopic:</th>
-			    <td><input type='text' size='60' name='meta_subtopic' value='$metaSubTopic' /></td>
+			    <td><input type='text' size='60' name='meta_subtopic' value='".htmlspecialchars($metaSubTopic, ENT_QUOTES, 'utf-8')."' /></td>
 			  </tr><tr><td>$langSubTopicHelp</td></tr>
 			  <tr>
 			    <th rowspan='2'>$langLevel:</th>
-			    <td><input type='text' size='60' name='meta_level' value='$metaLevel' /></td>
+			    <td><input type='text' size='60' name='meta_level' value='".htmlspecialchars($metaLevel, ENT_QUOTES, 'utf-8')."' /></td>
 			  </tr><tr><td>$langLevelHelp</td></tr>
 			  <tr>
 			    <th rowspan='2'>$langTypicalAgeRange:</th>
-			    <td><input type='text' size='60' name='meta_typicalagerange' value='$metaTypicalAgeRange' /></td>
+			    <td><input type='text' size='60' name='meta_typicalagerange' value='".htmlspecialchars($metaTypicalAgeRange, ENT_QUOTES, 'utf-8')."' /></td>
 			  </tr><tr><td>$langTypicalAgeRangeHelp</td></tr>
 			  <tr>
 			    <th rowspan='2'>$langComment:</th>
@@ -777,7 +782,7 @@ if($can_upload) {
 			  </tr><tr><td>$langCopyrightHelp</td></tr>
 			  <tr>
 			    <th rowspan='2'>$langIntentedEndUserRole:</th>
-			    <td><input type='text' size='60' name='meta_intendedenduserrole' value='$metaIntendedEndUserRole' /></td>
+			    <td><input type='text' size='60' name='meta_intendedenduserrole' value='".htmlspecialchars($metaIntendedEndUserRole, ENT_QUOTES, 'utf-8')."' /></td>
 			  </tr><tr><td>$langIntentedEndUserRoleHelp</td></tr>
 			  <tr>
 			    <th>&nbsp;</th>
