@@ -478,27 +478,18 @@ elseif(isset($_REQUEST['install7']))
 	if (mysql_errno() > 0) { // problem with server
 		$no = mysql_errno();
 		$msg = mysql_error();
-		$tool_content .= "
-		<table width='99%'>
-		<thead>
-		<tr>
-		<td><div align='center'><img style='border:0px;' src='../template/classic/img/caution_alert.gif' title='caution-alert'></div></td>
-		</tr>
-		<tr>
-		<td>
-		<div align='center'><h4>[".$no."] - ".$msg."</div></h4>
-		<p>$langErrorMysql</p>
+		$tool_content .= "[".$no."] - ".$msg."
+		<div class='alert1'>$langErrorMysql</div>
 		<ul class='installBullet'>
 		<li>$langdbhost: $dbHostForm</li>
 		<li>$langDBLogin: $dbUsernameForm</li>
 		<li>$langDBPassword: " . q($dbPassForm) . "</li>
 		</ul>
-		<p>$langBackStep3_2</p></td>
-		</td>
-		</tr>
-		</thead>
-		</table>
-		<input type='submit' name='install3' value='&lt; $langBackStep3' /></form>";
+		<p>$langBackStep3_2</p><br />
+		<form action='$_SERVER[PHP_SELF]?alreadyVisited=1' method='post'>
+		<input type='submit' name='install3' value='&lt; $langBackStep3' />"
+		. hidden_vars($all_vars) .
+		"</form>";
 		draw($tool_content);
 		exit();
 	}
