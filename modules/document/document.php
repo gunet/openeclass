@@ -414,9 +414,16 @@ if($can_upload) {
 		$langstring = $description->appendChild($dom->createElement('string', htmlspecialchars($_POST['meta_description'], ENT_QUOTES, 'utf-8')));
 		$langstring->setAttribute('language', $_POST['meta_language']);
 		
-		$keyword = $general->appendChild($dom->createElement('keyword'));
-		$langstring = $keyword->appendChild($dom->createElement('string', htmlspecialchars($_POST['meta_keywords'], ENT_QUOTES, 'utf-8')));
-		$langstring->setAttribute('language', $_POST['meta_language']);
+		if (strlen(trim($_POST['meta_keywords']))) {
+			$keywords = explode(',', htmlspecialchars($_POST['meta_keywords'], ENT_QUOTES, 'utf-8'));
+			foreach ($keywords as $k) {
+				if (strlen(trim($k))) {
+					$keyword = $general->appendChild($dom->createElement('keyword'));
+					$langstring = $keyword->appendChild($dom->createElement('string', trim($k)));
+					$langstring->setAttribute('language', $_POST['meta_language']);
+				}
+			}
+		}
 		// end of general
 		
 		$lifecycle = $lom->appendChild($dom->createElement('lifeCycle'));
@@ -722,7 +729,7 @@ if($can_upload) {
 					$metaLanguage = $sxe->general->language;
 					$metaDescription = $sxe->general->description->string;
 					$metaAuthors = $sxe->lifeCycle->contribute->entity;
-					$metaKeywords = $sxe->general->keyword->string;
+					$metaKeywords = $sxe->general->keyword;
 					$metaRights = $sxe->rights->description->string;
 					$metaLearningResourceTypes = $sxe->educational->learningResourceType;
 					$metaIntendedEndUserRole = $sxe->educational->intendedEndUserRole->value;
@@ -789,7 +796,15 @@ if($can_upload) {
 			  </tr><tr><td>$langLearningResourceTypeHelp</td></tr>
 			  <tr>
 			    <th rowspan='2'>$langKeywords:</th>
-			    <td><textarea cols='68' name='meta_keywords'>$metaKeywords</textarea></td>
+			    <td><textarea cols='68' name='meta_keywords'>";
+			  $i = 0;
+			  foreach ($metaKeywords as $metaKeyword) {
+			  	$i++;
+			  	$dialogBox .= $metaKeyword->string;
+			  	if ($i < count($metaKeywords))
+			  		$dialogBox .= ", ";
+			  }
+			  $dialogBox .= "</textarea></td>
 			  </tr><tr><td>$langKeywordsHelp</td></tr>
 			  <tr>
 			    <th rowspan='2'>$langTopic:</th>
