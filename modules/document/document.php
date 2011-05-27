@@ -405,17 +405,17 @@ if($can_upload) {
 		$general = $lom->appendChild($dom->createElement('general'));
 		
 		$title = $general->appendChild($dom->createElement('title'));
-		$langstring = $title->appendChild($dom->createElement('string', $_POST['meta_title']));
+		$langstring = $title->appendChild($dom->createElement('string', htmlspecialchars($_POST['meta_title'], ENT_COMPAT, 'utf-8')));
 		$langstring->setAttribute('language', $_POST['meta_language']);
 		
 		$general->appendChild($dom->createElement('language', $_POST['meta_language']));
 		
 		$description = $general->appendChild($dom->createElement('description'));
-		$langstring = $description->appendChild($dom->createElement('string', $_POST['meta_description']));
+		$langstring = $description->appendChild($dom->createElement('string', htmlspecialchars($_POST['meta_description'], ENT_COMPAT, 'utf-8')));
 		$langstring->setAttribute('language', $_POST['meta_language']);
 		
 		$keyword = $general->appendChild($dom->createElement('keyword'));
-		$langstring = $keyword->appendChild($dom->createElement('string', $_POST['meta_keywords']));
+		$langstring = $keyword->appendChild($dom->createElement('string', htmlspecialchars($_POST['meta_keywords'], ENT_COMPAT, 'utf-8')));
 		$langstring->setAttribute('language', $_POST['meta_language']);
 		// end of general
 		
@@ -429,7 +429,7 @@ if($can_upload) {
 		$value = $copyrightAndOtherRestrictionse->appendChild($dom->createElement('value', 'yes'));
 		
 		$description = $rights->appendChild($dom->createElement('description'));
-		$langstring = $description->appendChild($dom->createElement('string', $_POST['meta_rights']));
+		$langstring = $description->appendChild($dom->createElement('string', htmlspecialchars($_POST['meta_rights'], ENT_COMPAT, 'utf-8')));
 		$langstring->setAttribute('language', $_POST['meta_language']);
 		// end of rights
 		
@@ -437,22 +437,22 @@ if($can_upload) {
 		
 		$learningresourcetype = $educational->appendChild($dom->createElement('learningResourceType'));
 		$source = $learningresourcetype->appendChild($dom->createElement('source', 'LOMv1.0'));
-		$value = $learningresourcetype->appendChild($dom->createElement('value', $_POST['meta_learningresourcetype']));
+		$value = $learningresourcetype->appendChild($dom->createElement('value', htmlspecialchars($_POST['meta_learningresourcetype'], ENT_COMPAT, 'utf-8')));
 		
 		$intendedenduserrole = $educational->appendChild($dom->createElement('intendedEndUserRole'));
 		$source = $intendedenduserrole->appendChild($dom->createElement('source', 'LOMv1.0'));
-		$value = $intendedenduserrole->appendChild($dom->createElement('value', $_POST['meta_intendedenduserrole']));
+		$value = $intendedenduserrole->appendChild($dom->createElement('value', htmlspecialchars($_POST['meta_intendedenduserrole'], ENT_COMPAT, 'utf-8')));
 		
 		$context = $educational->appendChild($dom->createElement('context'));
 		$source = $context->appendChild($dom->createElement('source', 'LOMv1.0'));
-		$value = $context->appendChild($dom->createElement('value', $_POST['meta_level']));
+		$value = $context->appendChild($dom->createElement('value', htmlspecialchars($_POST['meta_level'], ENT_COMPAT, 'utf-8')));
 		
 		$typicalAgeRange = $educational->appendChild($dom->createElement('typicalAgeRange'));
-		$langstring = $typicalAgeRange->appendChild($dom->createElement('string', $_POST['meta_typicalagerange']));
+		$langstring = $typicalAgeRange->appendChild($dom->createElement('string', htmlspecialchars($_POST['meta_typicalagerange'], ENT_COMPAT, 'utf-8')));
 		$langstring->setAttribute('language', $_POST['meta_language']);
 		
 		$description = $educational->appendChild($dom->createElement('description'));
-		$langstring = $description->appendChild($dom->createElement('string', $_POST['meta_notes']));
+		$langstring = $description->appendChild($dom->createElement('string', htmlspecialchars($_POST['meta_notes'], ENT_COMPAT, 'utf-8')));
 		$langstring->setAttribute('language', $_POST['meta_language']);
 		// end of educational
 		
@@ -464,12 +464,12 @@ if($can_upload) {
 		
 		$taxonPath = $classification->appendChild($dom->createElement('taxonPath'));
 		$source = $taxonPath->appendChild($dom->createElement('source'));
-		$langstring = $source->appendChild($dom->createElement('string', $_POST['meta_topic']));
+		$langstring = $source->appendChild($dom->createElement('string', htmlspecialchars($_POST['meta_topic'], ENT_COMPAT, 'utf-8')));
 		$langstring->setAttribute('language', $_POST['meta_language']);
 		
 		$taxon = $taxonPath->appendChild($dom->createElement('taxon'));
 		$entry = $taxon->appendChild($dom->createElement('entry'));
-		$langstring = $entry->appendChild($dom->createElement('string', $_POST['meta_subtopic']));
+		$langstring = $entry->appendChild($dom->createElement('string', htmlspecialchars($_POST['meta_subtopic'], ENT_COMPAT, 'utf-8')));
 		$langstring->setAttribute('language', $_POST['meta_language']);
 		// end of classification
 		
@@ -694,18 +694,20 @@ if($can_upload) {
 			if (file_exists($real_filename.".xml")) {
 				$sxe = simplexml_load_file($real_filename.".xml");
 				
-				$metaTitle = $sxe->general->title->string;
-				$metaLanguage = $sxe->general->language;
-				$metaDescription = $sxe->general->description->string;
-				$metaKeywords = $sxe->general->keyword->string;
-				$metaRights = $sxe->rights->description->string;
-				$metaLearningResourceType = $sxe->educational->learningResourceType->value;
-				$metaIntendedEndUserRole = $sxe->educational->intendedEndUserRole->value;
-				$metaLevel = $sxe->educational->context->value;
-				$metaTypicalAgeRange = $sxe->educational->typicalAgeRange->string;
-				$metaNotes = $sxe->educational->description->string;
-				$metaTopic = $sxe->classification->taxonPath->source->string;
-				$metaSubTopic = $sxe->classification->taxonPath->taxon->entry->string;
+				if ($sxe) {
+					$metaTitle = $sxe->general->title->string;
+					$metaLanguage = $sxe->general->language;
+					$metaDescription = $sxe->general->description->string;
+					$metaKeywords = $sxe->general->keyword->string;
+					$metaRights = $sxe->rights->description->string;
+					$metaLearningResourceType = $sxe->educational->learningResourceType->value;
+					$metaIntendedEndUserRole = $sxe->educational->intendedEndUserRole->value;
+					$metaLevel = $sxe->educational->context->value;
+					$metaTypicalAgeRange = $sxe->educational->typicalAgeRange->string;
+					$metaNotes = $sxe->educational->description->string;
+					$metaTopic = $sxe->classification->taxonPath->source->string;
+					$metaSubTopic = $sxe->classification->taxonPath->taxon->entry->string;
+				}
 			}
 			
         	$dialogBox .= "
