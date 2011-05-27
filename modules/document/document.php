@@ -470,7 +470,22 @@ if($can_upload) {
 		
 		$intendedenduserrole = $educational->appendChild($dom->createElement('intendedEndUserRole'));
 		$source = $intendedenduserrole->appendChild($dom->createElement('source', 'LOMv1.0'));
-		$value = $intendedenduserrole->appendChild($dom->createElement('value', htmlspecialchars($_POST['meta_intendedenduserrole'], ENT_QUOTES, 'utf-8')));
+		
+		if (strlen(trim($_POST['meta_intendedenduserrole']))) {
+			$roles = explode(',', htmlspecialchars($_POST['meta_intendedenduserrole'], ENT_QUOTES, 'utf-8'));
+			$i = 0;
+			foreach ($roles as $role) {
+				$i++;
+				if (strlen(trim($role))) {
+					$value = $intendedenduserrole->appendChild($dom->createElement('value', trim($role)));
+					if ($i < count($roles) && strlen(trim($roles[$i]))) {
+						$intendedenduserrole = $educational->appendChild($dom->createElement('intendedEndUserRole'));
+						$source = $intendedenduserrole->appendChild($dom->createElement('source', 'LOMv1.0'));
+					}
+				}
+			}
+		}
+		
 		
 		$context = $educational->appendChild($dom->createElement('context'));
 		$source = $context->appendChild($dom->createElement('source', 'LOMv1.0'));
@@ -721,7 +736,7 @@ if($can_upload) {
 			$metaKeywords = "";
 			$metaRights = "";
 			$metaLearningResourceTypes = "";
-			$metaIntendedEndUserRole = "";
+			$metaIntendedEndUserRoles = "";
 			$metaLevel = "";
 			$metaTypicalAgeRanges = "";
 			$metaNotes = "";
@@ -740,7 +755,7 @@ if($can_upload) {
 					$metaKeywords = $sxe->general->keyword;
 					$metaRights = $sxe->rights->description->string;
 					$metaLearningResourceTypes = $sxe->educational->learningResourceType;
-					$metaIntendedEndUserRole = $sxe->educational->intendedEndUserRole->value;
+					$metaIntendedEndUserRoles = $sxe->educational->intendedEndUserRole;
 					$metaLevel = $sxe->educational->context->value;
 					$metaTypicalAgeRanges = $sxe->educational->typicalAgeRange->string;
 					$metaNotes = $sxe->educational->description->string;
@@ -848,7 +863,15 @@ if($can_upload) {
 			  </tr><tr><td>$langCopyrightHelp</td></tr>
 			  <tr>
 			    <th rowspan='2'>$langIntentedEndUserRole:</th>
-			    <td><input type='text' size='60' name='meta_intendedenduserrole' value='".htmlspecialchars($metaIntendedEndUserRole, ENT_QUOTES, 'utf-8')."' /></td>
+			    <td><input type='text' size='60' name='meta_intendedenduserrole' value='";
+			  $i = 0;
+			  foreach ($metaIntendedEndUserRoles as $metaIntendedEndUserRole) {
+			  	$i++;
+			  	$dialogBox .= htmlspecialchars($metaIntendedEndUserRole->value, ENT_QUOTES, 'utf-8');
+			  	if ($i < count($metaIntendedEndUserRoles))
+			  		$dialogBox .= ", ";
+			  }
+			  $dialogBox .= "' /></td>
 			  </tr><tr><td>$langIntentedEndUserRoleHelp</td></tr>
 			  <tr>
 			    <th>&nbsp;</th>
