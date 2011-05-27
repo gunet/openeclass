@@ -420,9 +420,14 @@ if($can_upload) {
 		// end of general
 		
 		$lifecycle = $lom->appendChild($dom->createElement('lifeCycle'));
-		
 		$contribute = $lifecycle->appendChild($dom->createElement('contribute'));
-		$entity = $contribute->appendChild($dom->createElement('entity', htmlspecialchars($_POST['meta_author'], ENT_QUOTES, 'utf-8')));
+		
+		if (strlen(trim($_POST['meta_author']))) {	
+			$authors = explode(',', htmlspecialchars($_POST['meta_author'], ENT_QUOTES, 'utf-8'));
+			foreach ($authors as $author)
+				if (strlen(trim($author)))
+					$entity = $contribute->appendChild($dom->createElement('entity', trim($author)));
+		}
 		// end of lifeCycle
 		
 		$rights = $lom->appendChild($dom->createElement('rights'));
@@ -440,7 +445,21 @@ if($can_upload) {
 		
 		$learningresourcetype = $educational->appendChild($dom->createElement('learningResourceType'));
 		$source = $learningresourcetype->appendChild($dom->createElement('source', 'LOMv1.0'));
-		$value = $learningresourcetype->appendChild($dom->createElement('value', htmlspecialchars($_POST['meta_learningresourcetype'], ENT_QUOTES, 'utf-8')));
+		
+		if (strlen(trim($_POST['meta_learningresourcetype']))) {
+			$types = explode(',', htmlspecialchars($_POST['meta_learningresourcetype'], ENT_QUOTES, 'utf-8'));
+			$i = 0;
+			foreach ($types as $type) {
+				$i++;
+				if (strlen(trim($type))) {
+					$value = $learningresourcetype->appendChild($dom->createElement('value', trim($type)));
+					if ($i < count($types) && strlen(trim($types[$i]))) {
+						$learningresourcetype = $educational->appendChild($dom->createElement('learningResourceType'));
+						$source = $learningresourcetype->appendChild($dom->createElement('source', 'LOMv1.0'));
+					}
+				}
+			}
+		}
 		
 		$intendedenduserrole = $educational->appendChild($dom->createElement('intendedEndUserRole'));
 		$source = $intendedenduserrole->appendChild($dom->createElement('source', 'LOMv1.0'));
@@ -683,10 +702,10 @@ if($can_upload) {
 			$metaTitle = "";
 			$metaLanguage = "";
 			$metaDescription = "";
-			$metaAuthor = "";
+			$metaAuthors = "";
 			$metaKeywords = "";
 			$metaRights = "";
-			$metaLearningResourceType = "";
+			$metaLearningResourceTypes = "";
 			$metaIntendedEndUserRole = "";
 			$metaLevel = "";
 			$metaTypicalAgeRange = "";
@@ -702,10 +721,10 @@ if($can_upload) {
 					$metaTitle = $sxe->general->title->string;
 					$metaLanguage = $sxe->general->language;
 					$metaDescription = $sxe->general->description->string;
-					$metaAuthor = $sxe->lifeCycle->contribute->entity;
+					$metaAuthors = $sxe->lifeCycle->contribute->entity;
 					$metaKeywords = $sxe->general->keyword->string;
 					$metaRights = $sxe->rights->description->string;
-					$metaLearningResourceType = $sxe->educational->learningResourceType->value;
+					$metaLearningResourceTypes = $sxe->educational->learningResourceType;
 					$metaIntendedEndUserRole = $sxe->educational->intendedEndUserRole->value;
 					$metaLevel = $sxe->educational->context->value;
 					$metaTypicalAgeRange = $sxe->educational->typicalAgeRange->string;
@@ -737,7 +756,15 @@ if($can_upload) {
 			  </tr><tr><td>$langDescriptionHelp</td></tr>
 			  <tr>
 			    <th rowspan='2'>$langAuthor:</th>
-			    <td><textarea cols='68' name='meta_author'>$metaAuthor</textarea></td>
+			    <td><textarea cols='68' name='meta_author'>";
+			  $i = 0;
+			  foreach ($metaAuthors as $metaAuthor) {
+			  	$i++;
+			  	$dialogBox .= $metaAuthor;
+			  	if ($i < count($metaAuthors))
+			  		$dialogBox .= ", ";
+			  }
+			  $dialogBox .= "</textarea></td>
 			  </tr><tr><td>$langAuthorHelp</td></tr>
 			  <tr>
 			    <th rowspan='2'>$langLanguage:</th>
@@ -750,7 +777,15 @@ if($can_upload) {
 			  </tr><tr><td>$langLanguageHelp</td></tr>
 			  <tr>
 			    <th rowspan='2'>$langLearningResourceType:</th>
-			    <td><textarea cols='68' name='meta_learningresourcetype'>$metaLearningResourceType</textarea></td>
+			    <td><textarea cols='68' name='meta_learningresourcetype'>";
+			  $i = 0;
+			  foreach ($metaLearningResourceTypes as $metaLearningResourceType) {
+			  	$i++;
+			  	$dialogBox .= $metaLearningResourceType->value;
+			  	if ($i < count($metaLearningResourceTypes))
+			  		$dialogBox .= ", ";
+			  }
+			  $dialogBox .= "</textarea></td>
 			  </tr><tr><td>$langLearningResourceTypeHelp</td></tr>
 			  <tr>
 			    <th rowspan='2'>$langKeywords:</th>
