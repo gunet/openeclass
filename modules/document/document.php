@@ -477,8 +477,16 @@ if($can_upload) {
 		$value = $context->appendChild($dom->createElement('value', htmlspecialchars($_POST['meta_level'], ENT_QUOTES, 'utf-8')));
 		
 		$typicalAgeRange = $educational->appendChild($dom->createElement('typicalAgeRange'));
-		$langstring = $typicalAgeRange->appendChild($dom->createElement('string', htmlspecialchars($_POST['meta_typicalagerange'], ENT_QUOTES, 'utf-8')));
-		$langstring->setAttribute('language', $_POST['meta_language']);
+		
+		if (strlen(trim($_POST['meta_typicalagerange']))) {	
+			$ranges = explode(',', htmlspecialchars($_POST['meta_typicalagerange'], ENT_QUOTES, 'utf-8'));
+			foreach ($ranges as $range) {
+				if (strlen(trim($range))) {
+					$langstring = $typicalAgeRange->appendChild($dom->createElement('string', trim($range)));
+					$langstring->setAttribute('language', $_POST['meta_language']);
+				}
+			}
+		}
 		
 		$description = $educational->appendChild($dom->createElement('description'));
 		$langstring = $description->appendChild($dom->createElement('string', htmlspecialchars($_POST['meta_notes'], ENT_QUOTES, 'utf-8')));
@@ -715,7 +723,7 @@ if($can_upload) {
 			$metaLearningResourceTypes = "";
 			$metaIntendedEndUserRole = "";
 			$metaLevel = "";
-			$metaTypicalAgeRange = "";
+			$metaTypicalAgeRanges = "";
 			$metaNotes = "";
 			$metaTopic = "";
 			$metaSubTopic = "";
@@ -734,7 +742,7 @@ if($can_upload) {
 					$metaLearningResourceTypes = $sxe->educational->learningResourceType;
 					$metaIntendedEndUserRole = $sxe->educational->intendedEndUserRole->value;
 					$metaLevel = $sxe->educational->context->value;
-					$metaTypicalAgeRange = $sxe->educational->typicalAgeRange->string;
+					$metaTypicalAgeRanges = $sxe->educational->typicalAgeRange->string;
 					$metaNotes = $sxe->educational->description->string;
 					$metaTopic = $sxe->classification->taxonPath->source->string;
 					$metaSubTopic = $sxe->classification->taxonPath->taxon->entry->string;
@@ -820,7 +828,15 @@ if($can_upload) {
 			  </tr><tr><td>$langLevelHelp</td></tr>
 			  <tr>
 			    <th rowspan='2'>$langTypicalAgeRange:</th>
-			    <td><input type='text' size='60' name='meta_typicalagerange' value='".htmlspecialchars($metaTypicalAgeRange, ENT_QUOTES, 'utf-8')."' /></td>
+			    <td><input type='text' size='60' name='meta_typicalagerange' value='";
+			  $i = 0;
+			  foreach ($metaTypicalAgeRanges as $metaTypicalAgeRange) {
+			  	$i++;
+			  	$dialogBox .= htmlspecialchars($metaTypicalAgeRange, ENT_QUOTES, 'utf-8');
+			  	if ($i < count($metaTypicalAgeRanges))
+			  		$dialogBox .= ", ";
+			  }
+			  $dialogBox .= "' /></td>
 			  </tr><tr><td>$langTypicalAgeRangeHelp</td></tr>
 			  <tr>
 			    <th rowspan='2'>$langComment:</th>
