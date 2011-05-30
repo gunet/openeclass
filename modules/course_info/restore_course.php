@@ -111,6 +111,8 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
 		db_query('SET NAMES greek');
         }
 
+        load_global_messages();
+
         if (!isset($eclass_version)) {
                 // if we come from older versions, do all upgrades
                 upgrade_course($new_course_code, $course_lang);
@@ -128,6 +130,7 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
                         upgrade_course_2_4($new_course_code, $course_lang);
                 }
 	}
+        convert_description_to_units($new_course_code, $course_id);
 	$tool_content .= ob_get_contents();
 	ob_end_clean();
 
