@@ -489,7 +489,21 @@ if($can_upload) {
 		
 		$context = $educational->appendChild($dom->createElement('context'));
 		$source = $context->appendChild($dom->createElement('source', 'LOMv1.0'));
-		$value = $context->appendChild($dom->createElement('value', htmlspecialchars($_POST['meta_level'], ENT_QUOTES, 'utf-8')));
+		
+		if (strlen(trim($_POST['meta_level']))) {
+			$levels = explode(',', htmlspecialchars($_POST['meta_level'], ENT_QUOTES, 'utf-8'));
+			$i = 0;
+			foreach($levels as $level) {
+				$i++;
+				if (strlen(trim($level))) {
+					$value = $context->appendChild($dom->createElement('value', trim($level)));
+					if ($i < count($levels) && strlen(trim($levels[$i]))) {
+						$context = $educational->appendChild($dom->createElement('context'));
+						$source = $context->appendChild($dom->createElement('source', 'LOMv1.0'));
+					}
+				}
+			}
+		}
 		
 		$typicalAgeRange = $educational->appendChild($dom->createElement('typicalAgeRange'));
 		
@@ -756,7 +770,7 @@ if($can_upload) {
 					$metaRights = $sxe->rights->description->string;
 					$metaLearningResourceTypes = $sxe->educational->learningResourceType;
 					$metaIntendedEndUserRoles = $sxe->educational->intendedEndUserRole;
-					$metaLevel = $sxe->educational->context->value;
+					$metaLevels = $sxe->educational->context;
 					$metaTypicalAgeRanges = $sxe->educational->typicalAgeRange->string;
 					$metaNotes = $sxe->educational->description->string;
 					$metaTopic = $sxe->classification->taxonPath->source->string;
@@ -839,7 +853,16 @@ if($can_upload) {
 			  </tr><tr><td>$langSubTopicHelp</td></tr>
 			  <tr>
 			    <th rowspan='2'>$langLevel:</th>
-			    <td><input type='text' size='60' name='meta_level' value='".htmlspecialchars($metaLevel, ENT_QUOTES, 'utf-8')."' /></td>
+			    <td><input type='text' size='60' name='meta_level' value='";
+			  $i = 0;
+			  foreach($metaLevels as $metaLevel) {
+			  	$i++;
+			  	$dialogBox .= htmlspecialchars($metaLevel->value, ENT_QUOTES, 'utf-8');
+			  	if ($i < count($metaLevels))
+			  		$dialogBox .= ", ";
+			  }
+			  
+			  $dialogBox .= "' /></td>
 			  </tr><tr><td>$langLevelHelp</td></tr>
 			  <tr>
 			    <th rowspan='2'>$langTypicalAgeRange:</th>
