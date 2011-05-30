@@ -292,7 +292,7 @@ draw($tool_content, 3);
 // Functions restoring
 function course_details($code, $lang, $title, $desc, $fac, $vis, $prof, $type) {
 
-	global $action, $langNameOfLang, $encoding, $version;
+	global $action, $langNameOfLang, $version;
 	global $siteName, $InstitutionUrl, $Institution;
 
         include("../lang/greek/common.inc.php");
@@ -307,13 +307,11 @@ function course_details($code, $lang, $title, $desc, $fac, $vis, $prof, $type) {
                 include $extra_messages;
         }
 
-	if ($encoding != 'UTF-8') {
-		$code = iconv($encoding, 'UTF-8', $code);
-		$title = iconv($encoding, 'UTF-8', $title);
-		$desc = iconv($encoding, 'UTF-8', $desc);
-		$prof = iconv($encoding, 'UTF-8', $prof);
-		$fac = iconv($encoding, 'UTF-8', $fac);
-	}
+        $code = inner_unquote($code);
+        $title = inner_unquote($title);
+        $desc = inner_unquote($desc);
+        $prof = inner_unquote($prof);
+        $fac = inner_unquote($fac);
 
         // display the restoring form
 	if (!$action) {
@@ -329,8 +327,8 @@ function announcement($text, $date, $order, $title = '') {
 		(title, contenu, temps, cours_id, ordre)
 		VALUES (".
 		join(", ", array(
-			quote($title),
-			quote($text),
+			quote(inner_unquote($title)),
+			quote(inner_unquote($text)),
 			quote($date),
 			$course_id,
 			quote($order))).
@@ -347,8 +345,8 @@ function course_units($title, $comments, $visibility, $order, $resource_units) {
 		(title, comments, visibility, `order`, course_id)
 		VALUES (".
 		join(", ", array(
-			quote($title),
-			quote($comments),
+			quote(inner_unquote($title)),
+			quote(inner_unquote($comments)),
 			quote($visibility),
 			quote($order),
 			$course_id)).
@@ -363,14 +361,12 @@ function course_units($title, $comments, $visibility, $order, $resource_units) {
 
 // inserting users into the main database
 function user($userid, $name, $surname, $login, $password, $email, $statut, $phone, $department, $registered_at = NULL, $expires_at = NULL, $inst_id = NULL) {
-	global $action, $new_course_code, $course_id, $userid_map, $mysqlMainDb, $course_prefix, $course_addusers, $durationAccount, $version, $encoding;
+	global $action, $new_course_code, $course_id, $userid_map, $mysqlMainDb, $course_prefix, $course_addusers, $durationAccount, $version;
 	global $langUserWith, $langAlready, $langWithUsername, $langUserisAdmin, $langUsernameSame, $langUserAlready, $langUName, $langPrevId, $langNewId, $langUserName;
 
-	if ($encoding != 'UTF-8') {
-		$name = iconv($encoding, 'UTF-8', $name);
-		$surname = iconv($encoding, 'UTF-8', $surname);
-		$login = iconv($encoding, 'UTF-8', $login);
-	}
+        $name = inner_unquote($name);
+        $surname = inner_unquote($surname);
+        $login = inner_unquote($login);
 
 	if (!$action) return;
 	if (!$course_addusers and $statut != 1)  return;
@@ -902,4 +898,18 @@ function map_table_field($table, $id, $field, $map)
         while ($r = mysql_fetch_row($q)) {
                 db_query("UPDATE `$table` SET `$field` = " . $map[$r[1]] . " WHERE `$id` = " . $r[0]);
         }
+}
+
+function inner_unquote($s)
+{
+        global $encoding;
+
+        if ($encoding != 'UTF-8') {
+		$s = iconv($encoding, 'UTF-8', $s);
+        }
+
+        return str_replace(array('\"', "\\\0"),
+                           array('"', "\0"),
+                           $s);
+
 }
