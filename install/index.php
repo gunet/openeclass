@@ -85,8 +85,8 @@ if (file_exists("../config/config.php")) {
   <div class='alert' align='center'>$langWarnConfig3!</div>
   <table width='600' align='center' cellpadding='5' cellspacing='5' class='tbl_alt'>
     <tr>
-      <th><b>Πιθανοί λόγοι</b></th>
-      <th><b>Αντιμετώπιση</b></th>
+      <th><b>$langPossibleReasons</b></th>
+      <th><b>$langTroubleshooting</b></th>
     </tr>
     <tr>
       <td>$langWarnConfig1</td>
@@ -114,13 +114,13 @@ if (isset($_POST['welcomeScreen'])) {
 	$urlForm = "http://".$_SERVER['SERVER_NAME']."$urlAppendPath/";
 	$pathForm = realpath('../') . '/';
 	$emailForm = $_SERVER['SERVER_ADMIN'];
-	$nameForm = 'Διαχειριστής';
-	$surnameForm = 'Πλατφόρμας';
+	$nameForm = $langDefaultAdminName;
+	$surnameForm = $langDefaultAdminSurname;
 	$loginForm = 'admin';
 	$passForm = create_pass();
 	$campusForm = 'Open eClass';
 	$helpdeskForm = '+30 2xx xxxx xxx';
-	$institutionForm = 'Ακαδημαϊκό Διαδίκτυο GUNet';
+	$institutionForm = $langDefaultInstitutionName;
         $institutionUrlForm = 'http://www.gunet.gr/';
         $reguser = $dbPassForm = $helpdeskmail = $faxForm = $postaddressForm = '';
 	$email_required = $am_required = $dropbox_allow_student_to_student = $dont_display_login_form = '';
@@ -570,11 +570,11 @@ elseif (isset($_REQUEST['install1']) || isset($_REQUEST['back1']))
         $tool_content .= "<form action='$_SERVER[PHP_SELF]?alreadyVisited=1' method='post'>";
 
 	// create config, courses and video catalogs
-        mkdir_or_error('../config', $langWarningInstall3);
-	mkdir_or_error('../courses', $langWarningInstall4);
-	mkdir_or_error('../courses/temp', $langWarningInstall4);
-	mkdir_or_error('../courses/userimg', $langWarningInstall4);
-        mkdir_or_error('../video', $langWarningInstall5);
+        mkdir_or_error('config');
+	mkdir_or_error('courses');
+	mkdir_or_error('courses/temp');
+	mkdir_or_error('courses/userimg');
+        mkdir_or_error('video');
 	
 	if($configErrorExists) {
 		$tool_content .= implode("<br />", $errorContent);
@@ -662,12 +662,13 @@ elseif (isset($_REQUEST['install1']) || isset($_REQUEST['back1']))
 // -----------------------
 // functions
 // -----------------------
-function mkdir_or_error($dirname, $warn_message) {
-                global $errorContent, $configErrorExists, $langWarnInstallNotice1,
-                       $install_info_file, $langHere, $langWarnInstallNotice2;
-                if (!is_dir($dirname)) {
-                        if (@!mkdir($dirname, 0777)) {
-                                $errorContent[] = "<p class='caution'>$warn_message $langWarnInstallNotice1 <a href='$install_info_file'>$langHere</a> $langWarnInstallNotice2</p>";
+function mkdir_or_error($dirname) {
+                global $errorContent, $configErrorExists, $langWarningInstall3, 
+                       $langWarnInstallNotice1, $langWarnInstallNotice2,
+                       $install_info_file, $langHere;
+                if (!is_dir('../' . $dirname)) {
+                        if (@!mkdir('../' . $dirname, 0777)) {
+                                $errorContent[] = sprintf("<p class='caution'>$langWarningInstall3 $langWarnInstallNotice1 <a href='$install_info_file'>$langHere</a> $langWarnInstallNotice2</p>", $dirname);
                                 $configErrorExists = true;
                         }
                 }
