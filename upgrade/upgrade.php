@@ -166,7 +166,7 @@ if (!isset($_POST['submit2'])) {
   <div id="container" style="padding: 30px;">
   <div id="header"> 
 
-<a href="{URL_PATH}" title="{SITE_NAME}" class="logo"></a></div>
+<a href="<?php echo $urlAppend ?>" title="<?php echo q($siteName) ?>" class="logo"></a></div>
 <?php
 
         echo "<p class='title1'>$langUpgradeStart</p>",
@@ -385,7 +385,7 @@ if (!isset($_POST['submit2'])) {
                 mysql_field_exists($mysqlMainDb, 'annonces', 'visibility') or
                         db_query("ALTER TABLE `annonces` ADD `visibility` CHAR(1) NOT NULL DEFAULT 'v'");
                 mysql_field_exists($mysqlMainDb, 'user', 'description') or
-                        db_query("ALTER TABLE `user` ADD description TEXT',
+                        db_query("ALTER TABLE `user` ADD description TEXT,
                                                      ADD has_icon BOOL NOT NULL DEFAULT 0,
                                                      ADD verified_mail BOOL NOT NULL DEFAULT 0,
                                                      ADD receive_mail BOOL NOT NULL DEFAULT 1");

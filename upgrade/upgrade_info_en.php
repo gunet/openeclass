@@ -16,7 +16,7 @@ p {
   <div id="container" style="padding: 30px;">
   <div id="header"> 
 
-<a href="{URL_PATH}" title="{SITE_NAME}" class="logo"></a></div>
+<a href="http://www.openeclass.org/" title="Open eClass" class="logo"></a></div>
     
 <p class="title1">Upgrade Instructions for Open eClass 2.4</p>
 
