@@ -362,8 +362,6 @@ if (!isset($_POST['submit2'])) {
 		}
         }
 	db_query("INSERT IGNORE INTO `auth` VALUES (7, 'cas', '', '', 0)");
-        mysql_field_exists($mysqlMainDb, 'admin_announcements', 'ordre') or
-                db_query("ALTER TABLE `admin_announcements` ADD `ordre` MEDIUMINT(11) NOT NULL AFTER `lang`");
         mysql_field_exists($mysqlMainDb, 'cours', 'expand_glossary') or
                 db_query("ALTER TABLE `cours` ADD `expand_glossary` BOOL NOT NULL DEFAULT 0");
         if ($oldversion < '2.4') {
@@ -509,7 +507,7 @@ if (!isset($_POST['submit2'])) {
                                         `end` DATETIME DEFAULT NULL,
                                         `visible` ENUM('V','I') NOT NULL,
                                         `lang` VARCHAR(10) NOT NULL DEFAULT 'el',
-                                        `ordre` MEDIUMINT(11) NOT NULL,
+                                        `ordre` MEDIUMINT(11) NOT NULL DEFAULT 0,
                                         PRIMARY KEY (`id`))");
                         
                         $aq = db_query("INSERT INTO admin_announcements (title, body, `date`, visible, lang)
@@ -520,6 +518,8 @@ if (!isset($_POST['submit2'])) {
                                          FROM admin_announcements_old WHERE en_title <> '' OR en_body <> ''");     
                         db_query("DROP TABLE admin_announcements_old");
                 }
+                mysql_field_exists($mysqlMainDb, 'admin_announcements', 'ordre') or
+                        db_query("ALTER TABLE `admin_announcements` ADD `ordre` MEDIUMINT(11) NOT NULL DEFAULT 0 AFTER `lang`");
 		// not needed anymore
 		if (mysql_table_exists($mysqlMainDb, 'cours_faculte')) {
 			db_query("DROP TABLE cours_faculte");	
