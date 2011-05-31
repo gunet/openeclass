@@ -86,5 +86,5 @@ $tool_content .= "
     </table>
     </fieldset>
     </form>";
-draw($tool_content, 2, 'units', $head_content);
+draw($tool_content, 2, '', $head_content);
 

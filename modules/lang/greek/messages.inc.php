@@ -3078,7 +3078,7 @@ $langInsertLink = "συνδέσμου";
 $langInsertEBook = "ηλεκτρονικού βιβλίου";
 $langUnknownResType = "Πρόβλημα! Άγνωστος πόρος θεματικής ενότητας";
 $langNoExercises = "Δεν υπάρχουν ασκήσεις";
-
+$langAddToCourseHome = "Προσθήκη στην κεντρική σελίδα του μαθήματος";
 $langVia = 'μέσω';
 $langStudentViewEnable = "Περιβάλλον $langsOfStudent";
 $langStudentViewDisable = "Περιβάλλον $langsOfTeacher";

@@ -689,8 +689,8 @@ function show_ebook_resource($title, $comments, $resource_id, $ebook_id,
 // resource actions
 function actions($res_type, $resource_id, $status, $res_id = false)
 {
-        global $is_adminOfCourse, $langEdit, $langDelete, $langVisibility, $langDown, $langUp,
-	       $mysqlMainDb, $langConfirmDelete, $code_cours;
+        global $is_adminOfCourse, $langEdit, $langDelete, $langVisibility, $langAddToCourseHome,
+		$langDown, $langUp, $mysqlMainDb, $langConfirmDelete, $code_cours;
 
         static $first = true;
 
@@ -717,11 +717,16 @@ function actions($res_type, $resource_id, $status, $res_id = false)
                     "title='$langDelete'></img></a></td>";
 	 
 	if ($status != 'del') {
-		if (in_array($res_type, array('description', 'text', 'video', 'forum', 'topic'))) { 
-			$content .= "\n          <td width='3'><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;vis=$resource_id'>" .
+		if (in_array($res_type, array('text', 'video', 'forum', 'topic'))) { 
+			$content .= "<td width='3'><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;vis=$resource_id'>" .
                                     "<img src='../../template/classic/img/$icon_vis' " .
                                     "title='$langVisibility'></img></a></td>";
+		} elseif(in_array($res_type, array('description'))) { 
+			$content .= "<td width='3'><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;vis=$resource_id'>" .
+                                    "<img src='../../template/classic/img/$icon_vis' " .
+                                    "title='$langAddToCourseHome'></img></a></td>";
 		} else {
+			
 			$content .= "\n          <td width='3'>&nbsp;</td>";
 		}
         } else {

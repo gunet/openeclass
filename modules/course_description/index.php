@@ -44,9 +44,7 @@ include('../../include/action.php');
 $action = new action();
 $action->record('MODULE_ID_DESCRIPTION');
 /**************************************/
-
 $nameTools = $langCourseProgram;
-$head_content = $tool_content = '';
 
 mysql_select_db($mysqlMainDb);
 
@@ -54,11 +52,11 @@ $unit_id = description_unit_id($cours_id);
 
 if ($is_adminOfCourse) {
 	$tool_content .= "
-  <div id='operations_container'>
-    <ul id='opslist'>
-	  <li><a href='edit.php?course=$code_cours'>$langEditCourseProgram</a></li>
-    </ul>
-  </div>";
+	<div id='operations_container'>
+	  <ul id='opslist'>
+		<li><a href='edit.php?course=$code_cours'>$langEditCourseProgram</a></li>
+	  </ul>
+	</div>";
 
         $head_content .= <<<hCont
 <script type="text/javascript">
@@ -93,22 +91,19 @@ if ($q and mysql_num_rows($q) > 0) {
         list($max_resource_id) = mysql_fetch_row(db_query("SELECT id FROM unit_resources
                                         WHERE unit_id = $unit_id ORDER BY `order` DESC LIMIT 1"));
 	while ($row = mysql_fetch_array($q)) {
-          $tool_content .= "
-        <table width='100%' class='tbl_border'>
-        <tr class='odd'>
-           <td class='bold'>" . q($row['title']) . "</td>\n" .
-           actions('description', $row['id'], $row['visibility'], $row['res_id']) . "
-        </tr>
-        <tr>";
-        if ($is_adminOfCourse) {
-           $tool_content .= "\n           <td colspan='6'>" . standard_text_escape($row['comments']) . "</td>";
-        } else {
-           $tool_content .= "\n           <td>" . standard_text_escape($row['comments']) . "</td>";
-        }
-        $tool_content .= "
-        </tr>
-        </table>
-        <br />\n";
+		$tool_content .= "
+		<table width='100%' class='tbl_border'>
+		<tr class='odd'>
+		 <td class='bold'>" . q($row['title']) . "</td>\n" .
+		 actions('description', $row['id'], $row['visibility'], $row['res_id']) . "
+		</tr>
+		<tr>";
+	      if ($is_adminOfCourse) {
+		 $tool_content .= "\n<td colspan='6'>" . standard_text_escape($row['comments']) . "</td>";
+	      } else {
+		 $tool_content .= "\n<td>" . standard_text_escape($row['comments']) . "</td>";
+	      }
+	      $tool_content .= "</tr></table><br />\n";
 	}
 } else {
 	$tool_content .= "   <p class='alert1'>$langThisCourseDescriptionIsEmpty</p>";

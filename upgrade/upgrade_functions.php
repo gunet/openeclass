@@ -368,15 +368,15 @@ function upgrade_course_2_4($code, $lang, $extramessage = '')
                                               old.secretDirectory = new.secret_directory");
 
                 $ok = db_query("INSERT INTO `$mysqlMainDb`.group_members
-                                        (group_id, user_id, is_tutor)
-                                        SELECT DISTINCT new_id, tutor, 1
+                                        (group_id, user_id, is_tutor, description)
+                                        SELECT DISTINCT new_id, tutor, 1, ''
                                                 FROM student_group, group_map
                                                 WHERE student_group.id = group_map.old_id AND
                                                       tutor IS NOT NULL") && $ok;
 
                 $ok = db_query("INSERT INTO `$mysqlMainDb`.group_members
-                                        (group_id, user_id, is_tutor)
-                                        SELECT DISTINCT new_id, user, 0
+                                        (group_id, user_id, is_tutor, description)
+                                        SELECT DISTINCT new_id, user, 0, ''
                                                 FROM user_group, group_map
                                                 WHERE user_group.team = group_map.old_id") && $ok;
 
