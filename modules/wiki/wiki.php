@@ -39,21 +39,17 @@
 ==============================================================================
 */
 
-    $tlabelReq = 'CLWIKI__';
+$tlabelReq = 'CLWIKI__';
 
-    require_once("../../include/lib/learnPathLib.inc.php");
+require_once("../../include/lib/learnPathLib.inc.php");
 
-    $require_current_course = TRUE;
-	$require_help           = TRUE;
-	$helpTopic              = "Wiki";
-
-	require_once("../../include/baseTheme.php");
-
-	$head_content = "";
-	$tool_content = "";
+$require_current_course = TRUE;
+$require_help           = TRUE;
+$helpTopic              = "Wiki";
+require_once("../../include/baseTheme.php");
 
 $head_content .= '
-<script>
+<script type="text/javascript">
 function confirmation (name)
 {
     if (confirm("'.$langConfirmDelete.'"))
@@ -347,8 +343,6 @@ function confirmation (name)
         case "rqEdit":
         {
             $navigation[] = array ('url' => 'wiki.php?course='.$code_cours, 'name' => $langWiki );
-            $navigation[] = array ('url' => NULL
-                , 'name' => $wikiTitle);
             $nameTools = $langWikiProperties;
             $noPHP_SELF = true;
             break;
@@ -432,8 +426,7 @@ function confirmation (name)
 
             if ( ! empty( $message ) )
             {
-              //$tool_content .= disp_message_box( $message, $style ) ."<br />" . "\n";
-              $tool_content .= "\n   <p class=\"success\">$message</p> ";
+              $tool_content .= "<p class=\"success\">$message</p>";
             }
 
             if ( $is_allowedToAdmin )

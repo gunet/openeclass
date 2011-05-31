@@ -147,14 +147,9 @@
         }
 
         $title = "<h1 class=\"wikiTitle\">$langWikiPreviewTitle$title</h1>\n";
-
         $out .= $title;
-
         $out .= '</div>' . "\n";
-
-        $out .= disp_message_box( '<small>'.$langWikiPreviewWarning.'</small>', "caution" )
-            ."<br />". "\n";
-
+        $out .= "<div class='caution'>$langWikiPreviewWarning</div><br />";
         $out .= '<div class="wiki2xhtml">' . "\n";
 
         if ( $content != '' )

@@ -1583,7 +1583,7 @@ function disp_button($url, $text, $confirmMessage = '')
     }
     else
     {
-        return '<nobr>[ <a href="' . $url . '">' . $text . '</a> ]</nobr>';
+        return '[ <a href="' . $url . '">' . $text . '</a> ]';
     }
 }
 

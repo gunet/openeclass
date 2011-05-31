@@ -245,6 +245,8 @@
          */
         function _getWikiPageLink( $pageName )
         {
+	    global $code_cours;
+	    
             // allow links to use wikiwords for wiki page locations
             if ($this->getOpt('active_wikiwords') && $this->getOpt('words_pattern'))
             {
