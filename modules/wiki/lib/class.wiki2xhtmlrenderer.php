@@ -93,7 +93,7 @@
          * @see class.wiki2xhtml.php
          * @return string hypertext reference to wiki page
          */
-        function parseWikiWord( $str, $tag, $attr, $type )
+        function parseWikiWord( $str, &$tag, &$attr, &$type )
         {
             $tag = 'a';
             $attr = ' href="'.$str.'"';
