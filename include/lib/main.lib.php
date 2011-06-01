@@ -1096,6 +1096,13 @@ function canonicalize_whitespace($s)
                         trim(preg_replace('/[\x00-\x09\x0C\x0E-\x1F\x7F]/', '', $s)))));
 }
 
+// Remove characters which can't appear in filenames
+function remove_filename_unsafe_chars($s)
+{
+        return preg_replace('/[<>:"\/\\\\|?*]/', '',
+                            canonicalize_whitespace($s));
+}
+
 
 # Only languages defined below are available for selection in the UI
 # If you add any new languages, make sure they are defined in the

@@ -18,8 +18,6 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-
-
 $require_current_course = TRUE;
 $guest_allowed = true;
 
@@ -84,18 +82,23 @@ if (isset($_GET['download'])) {
         // Make sure $downloadDir doesn't contain /..
 	$downloadDir = str_replace('/..', '', $_GET['download']);
 
-        $q = db_query("SELECT filename, format FROM document
-                              WHERE $group_sql AND
-                                    path = " . autoquote($downloadDir));
-        if (!$q or mysql_num_rows($q) != 1) {
-                not_found($downloadDir);
+        if ($downloadDir == '/') {
+                $format = '.dir';
+                $real_filename = remove_filename_unsafe_chars($langDoc . ' ' . $fake_code);
+        } else {
+                $q = db_query("SELECT filename, format FROM document
+                                      WHERE $group_sql AND
+                                            path = " . autoquote($downloadDir));
+                if (!$q or mysql_num_rows($q) != 1) {
+                        not_found($downloadDir);
+                }
+                list($real_filename, $format) = mysql_fetch_row($q);
         }
-        list($real_filename, $format) = mysql_fetch_row($q);
 
         if ($format == '.dir') {
                 $real_filename = $real_filename.'.zip';
                 $dload_filename = $webDir . 'courses/temp/'.safe_filename('zip');
-                zip_documents_directory($dload_filename, $downloadDir);
+                zip_documents_directory($dload_filename, $downloadDir, $is_adminOfCourse);
                 $delete = true;
         } else {
                 $dload_filename = $basedir . $downloadDir;
@@ -796,9 +799,11 @@ if ($doc_count == 0) {
                 $cols = 3;
         }
 
+        $download_path = empty($curDirPath)? '/': $curDirPath;
 	$tool_content .= "
     <tr>
-      <td colspan='$cols'><div class='sub_title1'><b>$langDirectory:</b> " . make_clickable_path($curDirPath) . "<br></div></td>
+      <td colspan='$cols'><div class='sub_title1'><b>$langDirectory:</b> " . make_clickable_path($curDirPath) .
+      "&nbsp;<a href='{$base_url}download=$download_path'><img src='../../template/classic/img/download.png' width='16' height='16' align='middle' alt='$langDownloadDir' title='$langDownloadDir'></a><br></div></td>
       <td><div align='right'>";
 
         // Link for sortable table headings

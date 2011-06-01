@@ -166,7 +166,7 @@ function submit_work($uid, $group_id, $id, $file) {
         if (is_dir($source)) {
                 $original_filename = $original_filename.'.zip';
                 $zip_filename = $webDir . 'courses/temp/'.safe_filename('zip');
-                zip_documents_directory($zip_filename, $file);
+                zip_documents_directory($zip_filename, $file, $is_adminOfCourse);
                 $source = $zip_filename;
         }
         if (copy($source, "$workPath/$destination")) {

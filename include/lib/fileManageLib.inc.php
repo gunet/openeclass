@@ -397,49 +397,36 @@ function directory_selection($source_value, $command, $entryToExclude)
 }
 
 // Create a zip file with the contents of documents path $downloadDir
-function zip_documents_directory($zip_filename, $downloadDir)
+function zip_documents_directory($zip_filename, $downloadDir, $include_invisible = false)
 {
         global $basedir, $group_sql;
 
-        $GLOBALS['map_filenames'] = map_to_real_filename($downloadDir);
-
-        $cwd = getcwd();
-        chdir($basedir);
+        create_map_to_real_filename($downloadDir, $include_invisible);
+        $GLOBALS['basedir_length'] = strlen($basedir);
+        $topdir = ($downloadDir == '/')? $basedir: ($basedir . $downloadDir);
 
         $zipfile = new PclZip($zip_filename);
-        $v = $zipfile->create(substr($downloadDir, 1),
+        $v = $zipfile->create($topdir,
                               PCLZIP_CB_PRE_ADD, 'convert_to_real_filename');
         if (!$v) {
                 die("error: ".$zipfile->errorInfo(true));
         }
-
-        // delete invisible files from zip file
-        $files_to_exclude = array();
-        $sql = db_query("SELECT filename FROM document
-                                WHERE $group_sql AND
-                                      path LIKE '%$downloadDir%' AND
-                                      visibility='i'");
-        while ($files = mysql_fetch_array($sql, MYSQL_ASSOC)) {
-                array_push($files_to_exclude, $files['filename']);
-        }
-        foreach ($files_to_exclude as $files_to_delete) {
-                $zipfile->delete(PCLZIP_OPT_BY_NAME, greek_to_latin($files_to_delete));
-        }
-        chdir($cwd);
 }
 
 // Creates mapping between encoded filenames and real filenames
-function map_to_real_filename($downloadDir) {
+function create_map_to_real_filename($downloadDir, $include_invisible) {
 
         global $group_sql;
 
 	$prefix = strlen(preg_replace('|[^/]*$|', '', $downloadDir))-1;
         $encoded_filenames = $decoded_filenames = $filename = array();
 
-        $sql = db_query("SELECT path, filename FROM document
+        $sql = db_query("SELECT path, filename, visibility FROM document
                                 WHERE $group_sql AND
                                       path LIKE '%$downloadDir%'");
-        while ($files = mysql_fetch_array($sql)) {
+        while ($files = mysql_fetch_assoc($sql)) {
+                $GLOBALS['path_visibility'][$files['path']] =
+                        ($include_invisible or $files['visibility'] == 'v');
                 array_push($encoded_filenames, $files['path']);
                 array_push($filename, $files['filename']);
         }
@@ -455,21 +442,25 @@ function map_to_real_filename($downloadDir) {
 		$s = substr($s, $prefix);
 	}
 
-        // create array with mappings
-        $map_filenames = array_combine($encoded_filenames, $decoded_filenames);
-
-	return($map_filenames);
+        // create global array with mappings
+        $GLOBALS['map_filenames'] = array_combine($encoded_filenames, $decoded_filenames);
 }
 
 // PclZip callback function to store filenames with real filenames
 function convert_to_real_filename($p_event, &$p_header)
 {
-        global $map_filenames;
+        global $map_filenames, $path_visibility, $basedir_length;
 
-        $filename = '/' . $p_header['filename'];
-        foreach ($p_header as $real_name) {
-                $p_header['stored_filename'] = substr(greek_to_latin($map_filenames[$filename]), 1);
+        $filename = substr($p_header['filename'], $basedir_length);
+
+        if (!isset($path_visibility[$filename]) or
+            !$path_visibility[$filename] or
+            !isset($map_filenames[$filename])) {
+                return 0;
         }
+
+        $p_header['stored_filename'] = substr(greek_to_latin($map_filenames[$filename]), 1);
+
         return 1;
 }
 
