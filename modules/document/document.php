@@ -684,6 +684,7 @@ $curDirPath =
         pathvar($_GET['rename'], true) .
         pathvar($_GET['replace'], true) .
         pathvar($_GET['comment'], true) .
+        pathvar($_GET['metadata'], true) .
         pathvar($_GET['mkInvisibl'], true) .
         pathvar($_GET['mkVisibl'], true) .
         pathvar($_POST['sourceFile'], true) .
@@ -845,7 +846,8 @@ if ($doc_count == 0) {
         $tool_content .= "\n      <th width='60' class='center'><b>$langSize</b></th>";
         $tool_content .= "\n      <th width='80' class='center'><b>" . headlink($langDate, 'date') . '</b></th>';
 	if($can_upload) {
-		$tool_content .= "\n      <th width='154' class='center'><b>$langCommands</b></th>";
+		$width = (get_config("insert_xml_metadata")) ? 154 : 135;
+		$tool_content .= "\n      <th width='$width' class='center'><b>$langCommands</b></th>";
 	} else {
 		$tool_content .= "\n      <th width='50' class='center'><b>$langCommands</b></th>";
 	}
@@ -940,9 +942,11 @@ if ($doc_count == 0) {
                                 $tool_content .= "<img src='../../template/classic/img/comment_edit.png' " .
 					         "title='$langComment' alt='$langComment' /></a>&nbsp;";
                                 /*** metadata command ***/
-                                $tool_content .= "<a href='{$base_url}metadata=$cmdDirName'>";
-                                $tool_content .= "<img src='../../template/classic/img/comment_edit.png' " .
-					         "title='$langMetadata' alt='$langMetadata' /></a>&nbsp;";
+                                if (get_config("insert_xml_metadata")) {
+	                                $tool_content .= "<a href='{$base_url}metadata=$cmdDirName'>";
+	                                $tool_content .= "<img src='../../template/classic/img/comment_edit.png' " .
+	                                "title='$langMetadata' alt='$langMetadata' /></a>&nbsp;";
+                                }
                                 /*** visibility command ***/
                                 if ($is_adminOfCourse) {
 					if ($entry['visible']) {
