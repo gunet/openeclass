@@ -142,6 +142,7 @@ $active_ui_languages = '.$string_active_ui_languages.'
 	@update_config_table('dropbox_allow_student_to_student', $_POST['dropbox_allow_student_to_student']);
 	@update_config_table('block_username_change', $_POST['block_username_change']);
 	@update_config_table('display_captcha', $_POST['display_captcha']);
+	@update_config_table('insert_xml_metadata', $_POST['insert_xml_metadata']);
 	@update_config_table('betacms', $_POST['betacms']);
 	// Display result message
 	$tool_content .= "<p class='success'>".$langFileUpdatedSuccess."</p>";
@@ -304,6 +305,7 @@ else {
 	$cbox_dropbox_allow_student_to_student = get_config('dropbox_allow_student_to_student')?'checked':'';
 	$cbox_block_username_change = get_config('block_username_change')?'checked':'';
 	$cbox_display_captcha = get_config('display_captcha')?'checked':'';
+	$cbox_insert_xml_metadata = get_config('insert_xml_metadata')?'checked':'';
 	$cbox_betacms = get_config('betacms')?'checked':'';
 	
 	$tool_content .= "
@@ -334,6 +336,10 @@ else {
 	  <tr>
 		<th class='left'><b>display_captcha</b></th>
 		<td><input type='checkbox' name='display_captcha' $cbox_display_captcha />&nbsp;$lang_display_captcha</td>
+	  </tr>
+	  <tr>
+		<th class='left'><b>insert_xml_metadata</b></th>
+		<td><input type='checkbox' name='insert_xml_metadata' $cbox_insert_xml_metadata />&nbsp;$lang_insert_xml_metadata</td>
 	  </tr>
 	  <tr>
 		<th class='left'><b>betacms</b></th>

@@ -273,6 +273,7 @@ if (!isset($_POST['submit2'])) {
 			('block_username_change', '0'),
 			('betacms', '0'),
 			('display_captcha', '0'),
+			('insert_xml_metadata', '0'),
                         ('secret_key', '" . generate_secret_key() . "')");
 
         if ($oldversion < '2.1.3') {

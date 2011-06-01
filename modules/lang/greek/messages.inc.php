@@ -1492,6 +1492,7 @@ $lang_dropbox_allow_student_to_student = "Να επιτρέπεται η αντ�
 $lang_dont_display_login_form = "Να μην εμφανίζεται στην αρχική σελίδα της πλατφόρμας η οθόνη σύνδεσης";
 $lang_block_username_change = "Να μην επιτρέπεται να αλλάζουν οι χρήστες το 'όνομα χρήστη'";
 $lang_display_captcha = "Να εμφανίζεται κωδικός ασφάλειας κατά την εγγραφή των χρηστών";
+$lang_insert_xml_metadata = "Να επιτρέπεται στους $langsTeachers να ανεβάσουν  μεταδεδομένα σε αρχεία του υποσύστηματος 'Εγγραφα'";
 $lang_betacms = "Να γίνεται σύνδεση της πλατφόρμας με το αποθετήριο BetaCMS";
 $langPossibleReasons = 'Πιθανοί λόγοι';
 $langTroubleshooting = 'Αντιμετώπιση';

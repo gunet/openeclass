@@ -124,7 +124,7 @@ if (isset($_POST['welcomeScreen'])) {
         $institutionUrlForm = 'http://www.gunet.gr/';
         $reguser = $dbPassForm = $helpdeskmail = $faxForm = $postaddressForm = '';
 	$email_required = $am_required = $dropbox_allow_student_to_student = $dont_display_login_form = '';
-	$display_captcha = $block_username_change = $betacms = '';
+	$display_captcha = $block_username_change = $insert_xml_metadata = $betacms = '';
 } else {
        register_posted_variables(array(
                 'dbHostForm' => true,
@@ -155,6 +155,7 @@ if (isset($_POST['welcomeScreen'])) {
 		'dont_display_login_form' => true,
 		'block_username_change' => true,
 		'display_captcha' => true,
+		'insert_xml_metadata' => true,
 		'betacms' => true), 'all');
 }
 
@@ -198,7 +199,8 @@ $all_vars = array('pathForm', 'urlAppendPath', 'dbHostForm', 'dbUsernameForm', '
                   'passForm', 'phpSysInfoURL', 'campusForm', 'helpdeskForm', 'helpdeskmail',
                   'institutionForm', 'institutionUrlForm', 'faxForm', 'postaddressForm', 'reguser',
                   'email_required', 'am_required', 'dropbox_allow_student_to_student',
-                  'dont_display_login_form', 'block_username_change', 'display_captcha', 'betacms');
+                  'dont_display_login_form', 'block_username_change', 'display_captcha',
+		  'insert_xml_metadata', 'betacms');
 
 // step 2 license
 if(isset($_REQUEST['install2']) OR isset($_REQUEST['back2']))
@@ -354,6 +356,10 @@ elseif(isset($_REQUEST['install5']) OR isset($_REQUEST['back5']))
 	  <tr>
 		<th class='left'><b>$lang_display_captcha</b></th>
 		<td>".checkbox_input('display_captcha')."</td>
+	  </tr>
+	  <tr>
+		<th class='left'><b>$lang_insert_xml_metadata</b></th>
+		<td>".checkbox_input('insert_xml_metadata')."</td>
 	  </tr>
 	  <tr>
 		<th class='left'><b>$lang_betacms</b></th>

@@ -284,6 +284,7 @@ You can change them later in via the admin tool. These settings are:</p>
  <li><em>dont_display_login_form</em>: Login form will not be visible in home page. A link to it, will be appeared.</li>
  <li><em>block_username_change</em>: Users will not be able to change their usernames.</li>
  <li><em>display_captcha</em>: Display a `captcha` code during users registration.</li>
+ <li><em>insert_xml_metadata</em>: Allow teachers to upload metadata in files in 'Documents'.</li>
 </ul>
 By default none of them is enabled.</p>
 
