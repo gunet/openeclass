@@ -42,7 +42,6 @@ $require_prof = true;
 include '../../include/baseTheme.php';
 include('../../include/action.php');
 
-$tool_content = '';
 $tool_content .= "
   <div id=\"operations_container\">
     <ul id=\"opslist\">
@@ -122,14 +121,13 @@ if (!extension_loaded('gd')) {
 
 
   if ($u_module_id != -1) {
-   $mod_where = " (module_id = '$u_module_id') ";
+	$mod_where = " (module_id = '$u_module_id') ";
   } else {
-   $mod_where = " (1) ";
+	$mod_where = " (1) ";
   }
 
    #check if statistics exist
-   $chart_content=0;
-
+   $chart_content = 0;
    switch ($u_stats_value) {
        case "visits":
 	       $query = "SELECT module_id, MONTH(start_date) AS month, YEAR(start_date) AS year, SUM(visits) AS visits FROM actions_summary ".
@@ -170,13 +168,12 @@ if (!extension_loaded('gd')) {
    mysql_free_result($result);
    $chart_path = 'courses/'.$currentCourseID.'/temp/chart_'.md5(serialize($chart)).'.png';
 
-   $chart->render($webDir.$chart_path);
-
    if ($chart_content) {
-       $tool_content .= "<p>$langOldStatsExpl</p>";
-       $tool_content .= '<img src="'.$urlServer.$chart_path.'" />';
+	$chart->render($webDir.$chart_path);
+	$tool_content .= "<p>$langOldStatsExpl</p>";
+	$tool_content .= '<img src="'.$urlServer.$chart_path.'" />';
    } elseif (isset($btnUsage) and $chart_content == 0) {
-     $tool_content .='<p class="alert1">'.$langNoStatistics.'</p>';
+	$tool_content .='<p class="alert1">'.$langNoStatistics.'</p>';
    }
    //make form
    $start_cal = $jscalendar->make_input_field(
@@ -212,7 +209,7 @@ if (!extension_loaded('gd')) {
        '<option value="duration" '.(($u_stats_value=='duration')?('selected'):('')) .'>'.$langDuration."</option>\n";
 
    $tool_content .= '
-       <form method="post" action="'.$_SERVER[PHP_SELF].'?course='.$code_cours.'">
+       <form method="post" action="'.$_SERVER['PHP_SELF'].'?course='.$code_cours.'">
        <fieldset>
 	 <legend>'.$langOldStats.'</legend>
 	 <table class="tbl">

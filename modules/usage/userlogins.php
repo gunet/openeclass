@@ -41,7 +41,6 @@ $require_prof = true;
 
 include '../../include/baseTheme.php';
 include('../../include/action.php');
-$tool_content = '';
 $tool_content .= "
   <div id=\"operations_container\">
     <ul id=\"opslist\">
@@ -171,24 +170,19 @@ if ($exist_stat_accueil){
     $k1=0;
     while ($row = mysql_fetch_assoc($result_4)) {
 	if ($k%2==0) {
-	$table2_cont .= "
-  <tr class=\"even\">";
+            $table2_cont .= "<tr class=\"even\">";
 	} else {
-	$table2_cont .= "
-  <tr class=\"odd\">";
+            $table2_cont .= "<tr class=\"odd\">";
 	}
         $table2_cont .= "
-    <td width=\"1\"><img style='border:0px;' src='${urlServer}/template/classic/img/arrow.png' title='bullet'></td>
-    <td>".$row['host']."</td>
-    <td align=\"center\">".$row['address']."</td>
-    <td align=\"center\">".$row['date']."</td>
-  </tr>";
-
-    $k1++;
+        <td width=\"1\"><img style='border:0px;' src='${urlServer}/template/classic/img/arrow.png' title='bullet'></td>
+        <td>".$row['host']."</td>
+        <td align=\"center\">".$row['address']."</td>
+        <td align=\"center\">".$row['date']."</td>
+        </tr>";
+        $k1++;
     }
 }
-
-//$tool_content .= "<p>$langUserLogins</p>";
 //Records exist?
 if (count($unknown_users) > 0) {
         $tool_content .= "<p>$langAnonymousExplain</p>\n";
@@ -227,7 +221,6 @@ if ($table2_cont) {
   </table>";
 }
 if (!($table_cont || $table2_cont)) {
-
     $tool_content .= '<p class="alert1">'.$langNoLogins.'</p>';
 }
 
@@ -284,7 +277,7 @@ if (!($table_cont || $table2_cont)) {
     }
 
     $tool_content .= '
-<form method="post" action="'.$_SERVER[PHP_SELF].'?course='.$code_cours.'">
+<form method="post" action="'.$_SERVER['PHP_SELF'].'?course='.$code_cours.'">
 <fieldset>
   <legend>'.$langUserLogins.'</legend>
 
@@ -315,7 +308,5 @@ if (!($table_cont || $table2_cont)) {
   </table>
 </fieldset>
 </form>';
-
-
 draw($tool_content, 2, '', $local_head, '');
 ?>

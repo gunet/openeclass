@@ -43,7 +43,6 @@ $require_prof = true;
 include '../../include/baseTheme.php';
 include('../../include/action.php');
 
-$tool_content = '';
 $tool_content .= "
   <div id=\"operations_container\">
     <ul id=\"opslist\">
@@ -71,12 +70,9 @@ $jscalendar = new DHTML_Calendar($urlServer.'include/jscalendar/', $lang, 'calen
 $local_head = $jscalendar->get_load_files_code();
 
     if (!extension_loaded('gd')) {
-
         $tool_content .= "<p class=\"caution_small\">$langGDRequired</p>";
     } else {
-
         $made_chart = true;
-
         //make chart
         require_once '../../include/libchart/libchart.php';
         $usage_defaults = array (
@@ -105,7 +101,7 @@ $local_head = $jscalendar->get_load_files_code();
     }
 
     #check if statistics exist
-    $chart_content=0;
+    $chart_content = 0;
 
     switch ($u_stats_value) {
         case "visits":
@@ -114,14 +110,13 @@ $local_head = $jscalendar->get_load_files_code();
 		WHERE $date_where AND $user_where GROUP BY module_id";
 
             $result = db_query($query, $currentCourseID);
-
             $chart = new PieChart(600, 300);
             $dataSet = new XYDataSet();
             while ($row = mysql_fetch_assoc($result)) {
                 $dataSet->addPoint(new Point($row['name'], $row['cnt']));
                 $chart->width += 7;
                 $chart->setDataSet($dataSet);
-                $chart_content=5;
+                $chart_content = 5;
             }
             $chart->setTitle("$langFavourite");
 
@@ -151,12 +146,12 @@ $local_head = $jscalendar->get_load_files_code();
     $chart_path = 'courses/'.$currentCourseID.'/temp/chart_'.md5(serialize($chart)).'.png';
 
     $chart->render($webDir.$chart_path);
-
+    
     if ($chart_content) {
         $tool_content .= "\n  <p>$langFavouriteExpl</p>\n";
         $tool_content .= '  <p class="center"><img src="'.$urlServer.$chart_path.'" /></p>';
      } elseif (isset($btnUsage) and $chart_content == 0) {
-      $tool_content .='<p class="alert1">'.$langNoStatistics.'</p>';
+        $tool_content .='<p class="alert1">'.$langNoStatistics.'</p>';
     }
 
     //make form
@@ -202,7 +197,6 @@ $local_head = $jscalendar->get_load_files_code();
             WHERE b.cours_id = $cours_id";
     }
 
-
     $user_opts = '<option value="-1">'.$langAllUsers."</option>\n";
     $result = db_query($qry, $mysqlMainDb);
     while ($row = mysql_fetch_assoc($result)) {
@@ -211,47 +205,46 @@ $local_head = $jscalendar->get_load_files_code();
     }
 
     $statsValueOptions =
-        '<option value="visits" '.	 (($u_stats_value=='visits')?('selected'):(''))	  .'>'.$langVisits."</option>\n".
+        '<option value="visits" '. (($u_stats_value=='visits')?('selected'):(''))	  .'>'.$langVisits."</option>\n".
         '<option value="duration" '.(($u_stats_value=='duration')?('selected'):('')) .'>'.$langDuration."</option>\n";
 
-
     $tool_content .= '
- <form method="post" action="'.$_SERVER[PHP_SELF].'?course='.$code_cours.'">
- <fieldset>
-  <legend>'.$langFavourite.'</legend>
-  <table class="tbl">
-  <tr>
-    <td>&nbsp;</td>
-    <td class="bold">'.$langCreateStatsGraph.':</td>
-  </tr>
-  <tr>
-    <td>'.$langValueType.':</td>
-    <td><select name="u_stats_value">'.$statsValueOptions.'</select></td>
-  </tr>
-  <tr>
-    <td>'.$langStartDate.':</td>
-    <td>'."$start_cal".'</td>
-  </tr>
-  <tr>
-    <td>'.$langEndDate.':</td>
-    <td>'."$end_cal".'</td>
-  </tr>
-  <tr>
-    <td rowspan="2" valign="top">'.$langUser.':</td>
-    <td>'.$langFirstLetterUser.': '.$letterlinks.'</td>
-  </tr>
-  <tr>
-    <td><select name="u_user_id">'.$user_opts.'</select></td>
-  </tr>
-  <tr>
-    <td>&nbsp;</td>
-    <td><input type="submit" name="btnUsage" value="'.$langSubmit.'">
-        <div><br /><a href="oldStats.php?course='.$code_cours.'">'.$langOldStats.'</a></div>
-    </td>
-  </tr>
-  </table>
- </fieldset>
- </form>';
+    <form method="post" action="'.$_SERVER['PHP_SELF'].'?course='.$code_cours.'">
+    <fieldset>
+     <legend>'.$langFavourite.'</legend>
+     <table class="tbl">
+     <tr>
+       <td>&nbsp;</td>
+       <td class="bold">'.$langCreateStatsGraph.':</td>
+     </tr>
+     <tr>
+       <td>'.$langValueType.':</td>
+       <td><select name="u_stats_value">'.$statsValueOptions.'</select></td>
+     </tr>
+     <tr>
+       <td>'.$langStartDate.':</td>
+       <td>'."$start_cal".'</td>
+     </tr>
+     <tr>
+       <td>'.$langEndDate.':</td>
+       <td>'."$end_cal".'</td>
+     </tr>
+     <tr>
+       <td rowspan="2" valign="top">'.$langUser.':</td>
+       <td>'.$langFirstLetterUser.': '.$letterlinks.'</td>
+     </tr>
+     <tr>
+       <td><select name="u_user_id">'.$user_opts.'</select></td>
+     </tr>
+     <tr>
+       <td>&nbsp;</td>
+       <td><input type="submit" name="btnUsage" value="'.$langSubmit.'">
+           <div><br /><a href="oldStats.php?course='.$code_cours.'">'.$langOldStats.'</a></div>
+       </td>
+     </tr>
+     </table>
+    </fieldset>
+    </form>';
 }
 draw($tool_content, 2, '', $local_head);
 ?>
