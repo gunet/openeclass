@@ -162,11 +162,11 @@ if(!$nbrExercises) {
 	    </tr>";
 	} else { // student view
 		$tool_content .= "
-	      <th colspan=\"2\">$langExerciseName</th>
-	      <th width='70'class='center'>$langExerciseStart</th>
-	      <th width='70'class='center'>$langExerciseEnd</th>
-	      <th width='140'class='center'>$langExerciseConstrain</th>
-	      <th width='180'class='center'>$langExerciseAttemptsAllowed</th>
+	      <th colspan='2'>$langExerciseName</th>
+	      <th width='70' class='center'>$langExerciseStart</th>
+	      <th width='70' class='center'>$langExerciseEnd</th>
+	      <th width='70' class='center'>$langExerciseConstrain</th>
+	      <th width='70' class='center'>$langExerciseAttemptsAllowed</th>
 	    </tr>";
 	}
 	$tool_content .= "<tbody>";
@@ -256,9 +256,9 @@ if(!$nbrExercises) {
 			} else {
 				$tool_content .= "<td width='16'>
 					<img src='${urlServer}/template/classic/img/arrow.png' alt='' />
-					</td><td>".$row['titre']."&nbsp;&nbsp;(<font color=\"red\">$m[expired]</font>)";
+					</td><td>".$row['titre']."&nbsp;&nbsp;(<font color='red'>$m[expired]</font>)";
 			}
-			$tool_content .= "<br/>$row[description]</td>
+			$tool_content .= "<br />$row[description]</td>
 			<td align='center'>".nice_format($row['StartDate'])."</td>
 			<td align='center'>".nice_format($row['EndDate'])."</td>";
 			// how many attempts we have.
