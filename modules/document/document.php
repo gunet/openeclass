@@ -394,10 +394,35 @@ if($can_upload) {
 	// h $metadataPath periexei to path tou arxeiou gia to opoio tha epikyrwthoun ta metadata
 	if (isset($_POST['metadataPath'])) {
 		
-		$metadataPath = $_POST['metadataPath'];
-		$real_filename = $basedir . str_replace('/..', '', $metadataPath);
+		$metadataPath = $_POST['metadataPath'] . ".xml";
+		$oldFilename = $_POST['meta_filename'] . ".xml";
+		$xml_filename = $basedir . str_replace('/..', '', $metadataPath);
+		$xml_date = date("Y\-m\-d G\:i\:s");
+		$file_format = get_file_extension($oldFilename);
 		
-		metaCreateDomDocument($real_filename);
+		metaCreateDomDocument($xml_filename);
+		
+		$result = db_query("SELECT * FROM document WHERE $group_sql AND path = " . autoquote($metadataPath));
+		if (mysql_num_rows($result) > 0) {
+			db_query("UPDATE document SET
+				creator	= " . autoquote($_SESSION['prenom'] ." ". $_SESSION['nom']) . ",
+				date_modified = NOW(),
+				language = ". autoquote($_POST['meta_language']) ." 
+				WHERE $group_sql AND path = ". autoquote($metadataPath) );
+		} else {
+			db_query("INSERT INTO document SET
+				course_id = $cours_id,
+				subsystem = $subsystem,
+				subsystem_id = $subsystem_id,
+				path = " . quote($metadataPath) . ",
+				filename = " . autoquote($oldFilename) . ",
+				visibility = 'v',
+				creator	= " . autoquote($_SESSION['prenom'] ." ". $_SESSION['nom']) . ",
+				date = '$xml_date',
+				date_modified =	'$xml_date',
+				format = " . autoquote($file_format) . ",
+				language = " . autoquote($_POST['meta_language']));
+		}
 		
 		$action_message = "<p class='success'>$langMetadataMod</p>";
 	}
@@ -660,7 +685,8 @@ $curDirPath =
         pathvar($_GET['mkVisibl'], true) .
         pathvar($_POST['sourceFile'], true) .
         pathvar($_POST['replacePath'], true) .
-        pathvar($_POST['commentPath'], true);
+        pathvar($_POST['commentPath'], true) .
+        pathvar($_POST['metadataPath'], true);
 
 if ($curDirPath == '/' or $curDirPath == '\\') {
         $curDirPath = '';

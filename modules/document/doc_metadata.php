@@ -214,7 +214,7 @@ function metaCreateForm($metadata, $oldFilename, $real_filename) {
 	return $output;
 }
 
-function metaCreateDomDocument($realFilename) {
+function metaCreateDomDocument($xmlFilename) {
 	$dom = new DomDocument('1.0', 'utf-8');
 	$lom = $dom->appendChild($dom->createElementNS('http://ltsc.ieee.org/xsd/LOM', 'lom'));
 	$lom->setAttribute('xmlns:xsi', 'http://www.w3.org/2001/XMLSchema-instance');
@@ -283,7 +283,7 @@ function metaCreateDomDocument($realFilename) {
 	// end of classification
 	
 	$dom->formatOutput = true;
-	$dom->save($realFilename.'.xml');
+	$dom->save($xmlFilename);
 }
 
 function metaLangStringLoop($dom, $parent, $lang, $element, $inputValue) {
