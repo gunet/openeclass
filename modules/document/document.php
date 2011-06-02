@@ -944,7 +944,7 @@ if ($doc_count == 0) {
                                 /*** metadata command ***/
                                 if (get_config("insert_xml_metadata")) {
 	                                $tool_content .= "<a href='{$base_url}metadata=$cmdDirName'>";
-	                                $tool_content .= "<img src='../../template/classic/img/comment_edit.png' " .
+	                                $tool_content .= "<img src='../../template/classic/img/lom.png' " .
 	                                "title='$langMetadata' alt='$langMetadata' /></a>&nbsp;";
                                 }
                                 /*** visibility command ***/
