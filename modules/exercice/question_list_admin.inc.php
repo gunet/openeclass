@@ -41,7 +41,7 @@ if(isset($_GET['moveDown'])) {
 if(isset($_GET['deleteQuestion'])) {
 	$deleteQuestion = $_GET['deleteQuestion'];
 	// construction of the Question object
-	$objQuestionTmp=new Question();
+	$objQuestionTmp = new Question();
 	// if the question exists
 	if($objQuestionTmp->read($deleteQuestion)) {
 		$objQuestionTmp->delete($exerciseId);
@@ -59,7 +59,9 @@ if(isset($_GET['deleteQuestion'])) {
 $tool_content .= "
     <div align=\"left\" id=\"operations_container\">
       <ul id=\"opslist\">
-        <li><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;newQuestion=yes'>$langNewQu</a>&nbsp;|&nbsp;<a href='question_pool.php?course=$code_cours&amp;fromExercise=$exerciseId'>$langGetExistingQuestion</a></li>
+        <li><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;newQuestion=yes'>$langNewQu</a>
+	&nbsp;|&nbsp;
+	<a href='question_pool.php?course=$code_cours&amp;fromExercise=$exerciseId'>$langGetExistingQuestion</a></li>
       </ul>
     </div>";
 

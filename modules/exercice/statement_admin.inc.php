@@ -62,7 +62,10 @@ if(isset($_POST['submitQuestion'])) {
 	if (isset($_POST['deletePicture'])) {
 		$objQuestion->removePicture();
 	} elseif (isset($_FILES['imageUpload']) && is_uploaded_file($_FILES['imageUpload']['tmp_name'])) {
-		$objQuestion->uploadPicture($_FILES['imageUpload']['tmp_name']);
+		$type = $_FILES['imageUpload']['type'];
+		if (!$objQuestion->uploadPicture($_FILES['imageUpload']['tmp_name'], $type)) {
+			$tool_content .= "<div class='caution'>$langInvalidPicture</div>";
+		}
 	}
 	if($exerciseId)  {
 		// adds the question ID into the question list of the Exercise object
@@ -102,15 +105,15 @@ if(isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
 	<form enctype='multipart/form-data' method='post' action='$_SERVER[PHP_SELF]?course=$code_cours&amp;modifyQuestion=$_GET[modifyQuestion]&amp;newQuestion=$_GET[newQuestion]'>
 	<fieldset>
 	  <legend>$langInfoQuestion</legend>
-	  <table width='99%' class='tbl'>
+	  <table class='tbl'>
 	  <tr>
 	    <th>".$langQuestion." :</th>
-	    <td><input type=\"text\" name=\"questionName\"" ."size=\"50\" value=\"".htmlspecialchars($questionName)."\"></td>
+	    <td><input type='text' name=\"questionName\"" ."size='50' value=\"".htmlspecialchars($questionName)."\"></td>
 	  </tr>
 	  <tr>
 	    <th valign='top'>$langQuestionDescription:</th>
 	    <td>"
-	    .rich_text_editor('questionDescription', 4, 50, $questionDescription, "style='width:400px;' class='FormData_InputText'").
+	    .rich_text_editor('questionDescription', 4, 50, $questionDescription).
 	    "</td>
 	  </tr>
 	  <tr>
@@ -125,7 +128,7 @@ if(isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
 	$tool_content .= " :</th>
         <td>";
 	if($okPicture) {
-		$tool_content .= "<img src='$picturePath/quiz-$questionId' border='0'><br/><br/>";
+		$tool_content .= "<img src='$picturePath/quiz-$questionId'><br/><br/>";
 	}
 	$tool_content .= "<input type='file' name='imageUpload' size='30'></td></tr>";
 
@@ -170,7 +173,7 @@ if(isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
 	}
 	$tool_content .= "> ".$langTrueFalse;
 	$tool_content .= "</td>
-      <tr>
+        <tr>
         <th>&nbsp;</th>
         <td>
 	  <input type='submit' name='submitQuestion' value='$langOk'>

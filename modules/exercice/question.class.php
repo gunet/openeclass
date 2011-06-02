@@ -265,20 +265,16 @@ class Question
 	 * @param - string $Picture - temporary path of the picture to upload
 	 * @return - boolean - true if uploaded, otherwise false
 	 */
-	function uploadPicture($Picture)
+	function uploadPicture($picture, $type)
 	{
 		global $picturePath;
-
                 if($this->id) {
-                        // Adding extension to file isn't supported yet
-                        // $filename_final = add_ext_on_mime($picturePath . '/quiz-' . $this->id,
-                        //                                   'imageUpload');
                         $filename_final = $picturePath . '/quiz-' . $this->id;
-                        $result = copy($Picture, $filename_final);
-                        if ($result) {
-                                @chmod($filename_final, 0644);
-                                return true;
-                        }
+			if (!copy_resized_image($picture, $type, 760, 512, $filename_final)) {
+                                return false;
+                        } else {
+				return true;
+			}
 		}
 		return false;
 	}
@@ -296,7 +292,7 @@ class Question
 		// if the question has got an ID and if the picture exists
 		if($this->id && file_exists($picturePath.'/quiz-'.$this->id))
 		{
-			return @unlink($picturePath.'/quiz-'.$this->id)?true:false;
+			return unlink($picturePath.'/quiz-'.$this->id)?true:false;
 		}
 
 		return false;
@@ -462,15 +458,11 @@ class Question
 		{
 			$sql="DELETE FROM `$TBL_EXERCICE_QUESTION` WHERE question_id='$id'";
 			db_query($sql); 
-
 			$sql="DELETE FROM `$TBL_QUESTIONS` WHERE id='$id'";
 			db_query($sql); 
-
 			$sql="DELETE FROM `$TBL_REPONSES` WHERE question_id='$id'";
 			db_query($sql);
-
 			$this->removePicture();
-
 			// resets the object
 			$this->Question();
 		}
