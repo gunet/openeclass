@@ -919,7 +919,7 @@ function show_assignment($id, $message = FALSE)
 }
 
 
-// // show assignment - student view only
+// show assignment - student view only
 function show_student_assignments()
 {
         global $tool_content, $m, $uid, $cours_id, $currentCourseID,
