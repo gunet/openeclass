@@ -1444,8 +1444,8 @@ function set_config($key, $value)
 {
 	global $mysqlMainDb;
 	
-        db_query("REPLACE INTO `$mysqlMainDb`.config VALUES (`key`, '" .
-                        mysql_real_escape_string($value) . ')');
+        db_query("REPLACE INTO `$mysqlMainDb`.config (`key`, `value`)
+                          VALUES ('$key', " . quote($value) . ")");
 }
 
 // Copy variables from $_POST[] to $GLOBALS[], trimming and canonicalizing whitespace

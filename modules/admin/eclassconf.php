@@ -69,7 +69,7 @@ if (isset($_POST['submit']))  {
 	$fd=@fopen("../../config/config.php", "w");
 	if (!$fd) {
 		$tool_content .= $langFileError;
-	} else {
+        } else {
 
                 if ($_POST['formcloseuserregistration'] == 'false') {
                         $user_reg = 'FALSE';
@@ -79,17 +79,17 @@ if (isset($_POST['submit']))  {
                 if (defined('UTF8')) {
                         $utf8define = "define('UTF8', true);";
                 }
-	
-	$string_active_ui_languages = "array('el'";
-	if (isset($_POST['av_lang'])) { 
-		foreach ($_POST['av_lang'] as $langname => $langvalue) {
-			$string_active_ui_languages .= ",'$langvalue'";
-		}
-	}
-	$string_active_ui_languages .= ");";
-	
-		// Prepare config.php content
-		$stringConfig='<?php
+
+                $string_active_ui_languages = "array('el'";
+                if (isset($_POST['av_lang'])) { 
+                        foreach ($_POST['av_lang'] as $langname => $langvalue) {
+                                $string_active_ui_languages .= ",'$langvalue'";
+                        }
+                }
+                $string_active_ui_languages .= ");";
+
+                // Prepare config.php content
+                $stringConfig='<?php
 /*===========================================================================
  *   Open eClass 2.4
  *   E-learning and Course Management System
@@ -97,7 +97,7 @@ if (isset($_POST['submit']))  {
 
  config.php automatically generated on '.date('c').'
 
-*/
+ */
 
 '.$utf8define.'
 $urlServer	=	'.autoquote($_POST['formurlServer']).';
@@ -131,22 +131,29 @@ $encryptedPasswd = "true";
 $persoIsActive = TRUE;
 
 $durationAccount = '.autoquote($_POST['formdurationAccount']).';
-$active_ui_languages = '.$string_active_ui_languages.'
-';
-	// Save new config.php
-	fwrite($fd, $stringConfig);
-	
-	@update_config_table('email_required', $_POST['email_required']);
-	@update_config_table('am_required', $_POST['am_required']);
-	@update_config_table('dont_display_login_form', $_POST['dont_display_login_form']);
-	@update_config_table('dropbox_allow_student_to_student', $_POST['dropbox_allow_student_to_student']);
-	@update_config_table('block_username_change', $_POST['block_username_change']);
-	@update_config_table('display_captcha', $_POST['display_captcha']);
-	@update_config_table('insert_xml_metadata', $_POST['insert_xml_metadata']);
-	@update_config_table('betacms', $_POST['betacms']);
-	// Display result message
-	$tool_content .= "<p class='success'>".$langFileUpdatedSuccess."</p>";
-}
+$active_ui_languages = '.$string_active_ui_languages."\n";
+
+                // Save new config.php
+                fwrite($fd, $stringConfig);
+
+                $config_vars = array('email_required' => true,
+                                     'am_required' => true,
+                                     'dont_display_login_form' => true,
+                                     'dropbox_allow_student_to_student' => true,
+                                     'block_username_change' => true,
+                                     'display_captcha' => true,
+                                     'insert_xml_metadata' => true,
+                                     'betacms' => true);
+
+                register_posted_variables($config_vars, 'all', 'intval');
+
+                foreach ($config_vars as $varname => $what) {
+                        set_config($varname, $GLOBALS[$varname]);
+                }
+
+                // Display result message
+                $tool_content .= "<p class='success'>".$langFileUpdatedSuccess."</p>";
+        }
 	// Display link to go back to index.php
 	$tool_content .= "<p class='right'><a href=\"index.php\">".$langBack."</a></p>";
 
@@ -315,36 +322,37 @@ else {
 	  </tr>
 	  <tr>
 		<th class='left'><b>email_required</b></th>
-		<td><input type='checkbox' name='email_required' $cbox_email_required />&nbsp;$lang_email_required</td>
+		<td><input type='checkbox' name='email_required' value='1' $cbox_email_required />&nbsp;$lang_email_required</td>
 	  </tr>
 	  <tr>
 		<th class='left'><b>am_required</b></th>
-		<td><input type='checkbox' name='am_required' $cbox_am_required />&nbsp;$lang_am_required</td>
+		<td><input type='checkbox' name='am_required' value='1' $cbox_am_required />&nbsp;$lang_am_required</td>
 	  </tr>
 	  <tr>
 		<th class='left'><b>dropbox_allow_student_to_student</b></th>
-		<td><input type='checkbox' name='dropbox_allow_student_to_student' $cbox_dropbox_allow_student_to_student />&nbsp;$lang_dropbox_allow_student_to_student</td>
+		<td><input type='checkbox' name='dropbox_allow_student_to_student' value='1' $cbox_dropbox_allow_student_to_student />&nbsp;$lang_dropbox_allow_student_to_student</td>
 	  </tr>
 	  <tr>
 		<th class='left'><b>dont_display_login_form</b></th>
-		<td><input type='checkbox' name='dont_display_login_form' $cbox_dont_display_login_form />&nbsp;$lang_dont_display_login_form</td>
+		<td><input type='checkbox' name='dont_display_login_form' value='1' $cbox_dont_display_login_form />&nbsp;$lang_dont_display_login_form</td>
 	  </tr>
 	  <tr>
 		<th class='left'><b>block_username_change</b></th>
-		<td><input type='checkbox' name='block_username_change' $cbox_block_username_change />&nbsp;$lang_block_username_change</td>
+		<td><input type='checkbox' name='block_username_change' value='1' $cbox_block_username_change />&nbsp;$lang_block_username_change</td>
 	  </tr>
 	  <tr>
 		<th class='left'><b>display_captcha</b></th>
-		<td><input type='checkbox' name='display_captcha' $cbox_display_captcha />&nbsp;$lang_display_captcha</td>
+		<td><input type='checkbox' name='display_captcha' value='1' $cbox_display_captcha />&nbsp;$lang_display_captcha</td>
 	  </tr>
 	  <tr>
 		<th class='left'><b>insert_xml_metadata</b></th>
-		<td><input type='checkbox' name='insert_xml_metadata' $cbox_insert_xml_metadata />&nbsp;$lang_insert_xml_metadata</td>
+		<td><input type='checkbox' name='insert_xml_metadata' value='1' $cbox_insert_xml_metadata />&nbsp;$lang_insert_xml_metadata</td>
 	  </tr>
 	  <tr>
 		<th class='left'><b>betacms</b></th>
-		<td><input type='checkbox' name='betacms' $cbox_betacms />&nbsp;$lang_betacms</td>
+		<td><input type='checkbox' name='betacms' value='1' $cbox_betacms />&nbsp;$lang_betacms</td>
 	  </tr>
+	  <tr><td colspan='2'><hr></td></tr>
 	  <tr>
 	    <th class='left'>$langReplaceBackupFile</th>
 	    <td><input type='checkbox' name='backupfile' checked></td>
@@ -362,20 +370,6 @@ else {
 	// values from original config.php, so the rest of the page can be played correctly
 	if (isset($_GET['restore']) && $_GET['restore'] == "yes") {
 		@include("../../config/config.php");
-	}
-}
-
-
-function update_config_table($key, $value) {
-	
-	global $mysqlMainDb;
-	
-	if ($value == "on") {
-		db_query("UPDATE config SET value = 1
-				WHERE `key` = '$key'", $mysqlMainDb);
-	} else {
-		db_query("UPDATE config SET value = 0
-				WHERE `key` = '$key'", $mysqlMainDb);
 	}
 }
 
