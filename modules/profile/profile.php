@@ -19,7 +19,7 @@
  * ======================================================================== */
 
 
-$require_help = TRUE;
+$require_help = true;
 $require_login = true;
 $helpTopic = 'Profile';
 include '../../include/baseTheme.php';
@@ -63,6 +63,7 @@ if (isset($_POST['submit'])) {
         $all_ok = register_posted_variables(array(
                 'am_form' => false,
                 'desc_form' => false,
+                'phone_form' => false,
                 'email_form' => check_prof(),
                 'nom_form' => true,
                 'prenom_form' => true,
@@ -128,6 +129,7 @@ if (isset($_POST['submit'])) {
                                 username = " . autoquote($username_form) . ",
                                 email = " . autoquote($email_form) . ",
                                 am = " . autoquote($am_form) . ",
+                                phone = " . autoquote($phone_form) . ",
                                 description = " . autoquote($desc_form) . ",
 				department = $department
                         WHERE user_id = $_SESSION[uid]")) {
@@ -178,16 +180,17 @@ if (isset($_GET['msg'])) {
 	$tool_content .=  "<p class='$type'>$message$urlText</p><br/>";
 }
 
-$result = db_query("SELECT nom, prenom, username, email, am, perso,
+$result = db_query("SELECT nom, prenom, username, email, am, phone, perso,
                            lang, department, statut, has_icon, description
                         FROM user WHERE user_id = $uid");
-$myrow = mysql_fetch_array($result);
+$myrow = mysql_fetch_assoc($result);
 
 $nom_form = q($myrow['nom']);
 $prenom_form = q($myrow['prenom']);
 $username_form = q($myrow['username']);
 $email_form = q($myrow['email']);
 $am_form = q($myrow['am']);
+$phone_form = q($myrow['phone']);
 $desc_form = q($myrow['description']);
 $userLang = $myrow['lang'];
 $icon = $myrow['has_icon'];
@@ -311,14 +314,18 @@ $tool_content .= "
         <tr>
           <th>$langAm</th>
           <td><input type='text' size='40' name='am_form' value='$am_form' /></td>
+        </tr>
+        <tr>
+          <th>$langPhone</th>
+          <td><input type='text' size='40' name='phone_form' value='$phone_form' /></td>
         </tr>";
 ##[BEGIN personalisation modification]############
 if (isset($_SESSION['perso_is_active'])) {
         $tool_content .= "
         <tr>
           <th>$langPerso:</th>
-          <td><input type=radio name='persoStatus' value='no'$checkedPerso />$langModern&nbsp;
-              <input type=radio name='persoStatus' value='yes'$checkedClassic />$langClassic
+          <td><input type='radio' name='persoStatus' id='persoStatus_no' value='no'$checkedPerso /><label for='persoStatus_no'>$langModern</label>&nbsp;
+              <input type='radio' name='persoStatus' id='persoStatus_yes' value='yes'$checkedClassic /><label for='persoStatus_yes'>$langClassic</label>
           </td>
         </tr>";
 }
