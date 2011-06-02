@@ -51,7 +51,7 @@ $tool_content = "";
 // the following constant defines the default display of the learning path browser
 // 0 : display eclass header and footer and table of content, and content
 // 1 : display only table of content and content
-define ('FULL_SCREEN' , 0);
+define ('FULL_SCREEN' , 1);
 
 $l = db_query("SELECT name FROM lp_learnPath WHERE learnPath_id = '".(int)$_SESSION['path_id']."'", $currentCourseID);
 $lpname = mysql_fetch_array($l);
