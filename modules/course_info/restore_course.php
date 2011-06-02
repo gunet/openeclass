@@ -150,18 +150,20 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
                 function unit_map_function(&$data, $maps) {
                         list($document_map, $link_category_map, $link_map, $ebook_map, $section_map, $subsection_map) = $maps;
                         $type = $data['type'];
-                        if ($type = 'doc') {
+                        if ($type == 'doc') {
                                 $data['res_id'] = $document_map[$data['res_id']];
-                        } elseif ($type = 'linkcategory') {
+                        } elseif ($type == 'linkcategory') {
                                 $data['res_id'] = $link_category_map[$data['res_id']];
-                        } elseif ($type = 'link') {
+                        } elseif ($type == 'link') {
                                 $data['res_id'] = $link_map[$data['res_id']];
-                        } elseif ($type = 'ebook') {
+                        } elseif ($type == 'ebook') {
                                 $data['res_id'] = $ebook_map[$data['res_id']];
-                        } elseif ($type = 'section') {
+                        } elseif ($type == 'section') {
                                 $data['res_id'] = $section_map[$data['res_id']];
-                        } elseif ($type = 'subsection') {
+                        } elseif ($type == 'subsection') {
                                 $data['res_id'] = $subsection_map[$data['res_id']];
+			} elseif ($type == 'description') {
+                                $data['res_id'] = 0;
                         }
                 }
 
@@ -203,7 +205,8 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
                         array('set' => array('course_id' => $course_id),
                               'return_mapping' => 'id'));
                 restore_table($restoreThis, 'unit_resources',
-                        array('map' => array('unit_id' => $unit_map),
+                        array('delete' => array('id'),
+			      'map' => array('unit_id' => $unit_map),
                               'map_function' => 'unit_map_function',
                               'map_function_data' => array($document_map,
                                                            $link_category_map,
@@ -709,6 +712,11 @@ function restore_table($basedir, $table, $options)
                 if ($return_mapping) {
                         $old_id = $data[$id_var];
                         unset($data[$id_var]);
+                }
+		if (isset($options['delete'])) {
+                        foreach ($options['delete'] as $field) {
+                                unset($data[$field]);
+                        }
                 }
                 if (!isset($sql_intro)) {
                         $sql_intro = "INSERT INTO `$table` " .
