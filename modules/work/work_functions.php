@@ -244,10 +244,14 @@ function show_submission_details($id)
 	}
 	
 	if ($sub['uid'] != $uid) {
-		$sub_notice = "$m[submitted_by_other_member] ".
+		$notice .= "<br>$m[submitted_by_other_member] " .
 			"<a href='../group/group_space.php?course=$code_cours&amp;group_id=$sub[group_id]'>".
-			"$m[your_group]</a> (".display_user($sub['uid']).")";
-	} else $sub_notice = "";
+			"$m[your_group] ".gid_to_name($sub['group_id'])."</a> (".display_user($sub['uid']).")";
+        } elseif ($sub['group_id']) {
+                $notice .= "<br>$m[groupsubmit] " .
+                        "<a href='../group/group_space.php?course=$code_cours&amp;group_id=$sub[group_id]'>".
+                        "$m[ofgroup] ".gid_to_name($sub['group_id'])."</a>";
+        }
 	
 	$tool_content .= "
         <fieldset>
@@ -276,7 +280,7 @@ function show_submission_details($id)
 		    table_row($m['comments'], $sub['comments'], true);
 	$tool_content .= "
         </table>
-        </fieldset> $sub_notice";
+        </fieldset>";
 	mysql_select_db($currentCourseID);
 }
 
