@@ -73,7 +73,7 @@ function choose_image($fileName)
 	if (!$type || !$image)
 	{
 		$type['word'      ] = array('doc', 'dot', 'rtf', 'mcw', 'wps', 'docx');
-		$type['web'       ] = array('htm', 'html', 'htx', 'xml', 'xsl', 'php', 'phps');
+		$type['web'       ] = array('htm', 'html', 'htx', 'xml', 'xsl', 'php', 'phps', 'meta');
 		$type['css'       ] = array('css');
 		$type['image'     ] = array('gif', 'jpg', 'png', 'bmp', 'jpeg');
 		$type['audio'     ] = array('wav', 'mp2', 'mp3', 'mp4', 'vqf');
