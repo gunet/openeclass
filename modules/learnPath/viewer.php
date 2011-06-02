@@ -53,6 +53,12 @@ $tool_content = "";
 // 1 : display only table of content and content
 define ('FULL_SCREEN' , 1);
 
+// override session vars if get args are present
+if (isset($_GET['path_id']) && !empty($_GET['path_id']))
+    $_SESSION['path_id'] = intval($_GET['path_id']);
+if (isset($_GET['module_id']) && !empty($_GET['module_id']))
+	$_SESSION['lp_module_id'] = intval($_GET['module_id']);
+
 $l = db_query("SELECT name FROM lp_learnPath WHERE learnPath_id = '".(int)$_SESSION['path_id']."'", $currentCourseID);
 $lpname = mysql_fetch_array($l);
 

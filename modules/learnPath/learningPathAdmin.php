@@ -606,7 +606,7 @@ foreach ($flatElementList as $module)
             $moduleImg = choose_image(basename($module['path']));
 
         $contentType_alt = selectAlt($module['contentType']);
-        $tool_content .= "<span style=\"vertical-align: middle;\"><img src=\"".$imgRepositoryWeb."".$moduleImg."\" alt=\"".$contentType_alt."\" title=\"".$contentType_alt."\" border=\"0\" /></span>&nbsp;<a href=\"module.php?course=$code_cours&amp;module_id=".$module['module_id']."\"".$style.">". htmlspecialchars($module['name']). "</a>";
+        $tool_content .= "<span style=\"vertical-align: middle;\"><img src=\"".$imgRepositoryWeb."".$moduleImg."\" alt=\"".$contentType_alt."\" title=\"".$contentType_alt."\" border=\"0\" /></span>&nbsp;<a href=\"viewer.php?course=$code_cours&amp;path_id=".(int)$_SESSION['path_id']."&amp;module_id=".$module['module_id']."\"".$style.">". htmlspecialchars($module['name']). "</a>";
     }
     $tool_content .= "</td>"; // end of td of module name
 
