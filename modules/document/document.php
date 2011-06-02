@@ -804,7 +804,7 @@ if ($doc_count == 0) {
 	$tool_content .= "
     <tr>
       <td colspan='$cols'><div class='sub_title1'><b>$langDirectory:</b> " . make_clickable_path($curDirPath) .
-      "&nbsp;<a href='{$base_url}download=$download_path'><img src='../../template/classic/img/download.png' width='16' height='16' align='middle' alt='$langDownloadDir' title='$langDownloadDir'></a><br></div></td>
+      "&nbsp;<a href='{$base_url}download=$download_path'><img src='../../template/classic/img/save_s.png' width='16' height='16' align='middle' alt='$langDownloadDir' title='$langDownloadDir'></a><br></div></td>
       <td><div align='right'>";
 
         // Link for sortable table headings
@@ -895,7 +895,7 @@ if ($doc_count == 0) {
                                 $dload_msg = $langSave;
                         }
                         $download_url = $base_url . "download=$cmdDirName";
-                        $download_icon = "<a href='$download_url'><img src='../../template/classic/img/download.png' width='16' height='16' align='middle' alt='$dload_msg' title='$dload_msg'></a>";
+                        $download_icon = "<a href='$download_url'><img src='../../template/classic/img/save_s.png' width='16' height='16' align='middle' alt='$dload_msg' title='$dload_msg'></a>";
                         $tool_content .= "\n<tr $style>";
                         $tool_content .= "\n<td class='center' valign='top'><a href='$file_url'$style$link_extra><img src='$image' /></a></td>";
                         $tool_content .= "\n<td><a href='$file_url'$link_extra>$link_text</a>";
