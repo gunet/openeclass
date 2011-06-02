@@ -401,7 +401,7 @@ if($can_upload) {
 		$oldFilename = $_POST['meta_filename'] . ".xml";
 		$xml_filename = $basedir . str_replace('/..', '', $metadataPath);
 		$xml_date = date("Y\-m\-d G\:i\:s");
-		$file_format = get_file_extension($oldFilename);
+		$file_format = ".meta";
 		
 		metaCreateDomDocument($xml_filename);
 		
@@ -410,6 +410,7 @@ if($can_upload) {
 			db_query("UPDATE document SET
 				creator	= " . autoquote($_SESSION['prenom'] ." ". $_SESSION['nom']) . ",
 				date_modified = NOW(),
+				format = " . autoquote($file_format) . ",
 				language = ". autoquote($_POST['meta_language']) ." 
 				WHERE $group_sql AND path = ". autoquote($metadataPath) );
 		} else {
@@ -943,7 +944,8 @@ if ($doc_count == 0) {
 					         "title='$langComment' alt='$langComment' /></a>&nbsp;";
                                 /*** metadata command ***/
                                 if (get_config("insert_xml_metadata")) {
-	                                $tool_content .= "<a href='{$base_url}metadata=$cmdDirName'>";
+                                	$xmlCmdDirName = ($entry['format'] == ".meta" && get_file_extension($cmdDirName) == "xml") ? substr($cmdDirName, 0, -4) : $cmdDirName;
+	                                $tool_content .= "<a href='{$base_url}metadata=$xmlCmdDirName'>";
 	                                $tool_content .= "<img src='../../template/classic/img/lom.png' " .
 	                                "title='$langMetadata' alt='$langMetadata' /></a>&nbsp;";
                                 }
