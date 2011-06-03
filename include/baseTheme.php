@@ -150,7 +150,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 				$t->set_var('TOOL_LINK', $toolArr[$i][2][$j]);
 				$t->set_var('TOOL_TEXT', $toolArr[$i][1][$j]);
                                 if (in_array($toolArr[$i][2][$j],
-                                             array('../admin/sysinfo/', '../admin/mysql/'))) {
+                                             array($GLOBALS['phpMyAdminURL'], $GLOBALS['phpSysInfoURL']))) {
                                         $t->set_var ('TOOL_ATTR', ' target="_blank"');
                                 } else {
                                         $t->set_var ('TOOL_ATTR', '');
