@@ -319,10 +319,10 @@ function upgrade_course_2_4($code, $lang, $extramessage = '')
         delete_table('stat_accueil');
         delete_table('users');
 
-        db_query("UPDATE accueil SET lien = '../../modules/course_info/infocours.php'
+        db_query("UPDATE accueil SET lien = '../../modules/course_info/infocours.php',
+                                     rubrique = " .
+                                        quote($global_messages['langCourseDescription'][$lang]) . "
                                  WHERE id = 14 AND define_var = 'MODULE_ID_COURSEINFO'");
-
-	// upgrade polls
 	db_query("ALTER TABLE `poll_answer_record` CHANGE `answer_text` `answer_text` TEXT", $code);
 
         // move main documents to central table and if successful drop table
@@ -1731,6 +1731,7 @@ function load_global_messages()
                 if ($extra_messages) {
                         include $extra_messages;
                 }
+                $global_messages['langCourseDescription'][$templang] = $langCourseUnits;
                 $global_messages['langCourseUnits'][$templang] = $langCourseUnits;
                 $global_messages['langGlossary'][$templang] = $langGlossary;
                 $global_messages['langEBook'][$templang] = $langEBook;
