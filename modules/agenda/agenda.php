@@ -348,7 +348,7 @@ if (mysql_num_rows($result) > 0) {
         $tool_content .= "
         <table width='100%' class='tbl_alt'>
         <tr>
-          <th class='center'>$langEvents</th>";
+          <th class='left'>$langEvents</th>";
         if ($is_adminOfCourse) {
               $tool_content .= "<th width='50'><b>$langActions</b></th>";
         } else {
@@ -375,7 +375,7 @@ if (mysql_num_rows($result) > 0) {
 				}
 				$nowBarShowed = TRUE;
 				$tool_content .= "\n<tr>";
-				$tool_content .= "\n<td class='today'><b>$langDateNow</b> $dateNow</td>";
+				$tool_content .= "\n<td colspan='2' class='today'><b>$langDateNow</b> $dateNow</td>";
 				$tool_content .= "\n</tr>";
 			}
 		}

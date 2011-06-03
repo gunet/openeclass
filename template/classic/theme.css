@@ -996,9 +996,9 @@ a.unit_link_invisible:hover {
 
 /* ----- START agenda ----- */
 .today {
-    background-color:#8597A5;
-    color: #ffffff;
+    background-color:#f3f3f9;
     font-weight: bold;
+
 }
 
 .monthLabel {

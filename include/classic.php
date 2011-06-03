@@ -51,12 +51,11 @@ function cours_table_header($statut)
                 $manage = '';
         }
 
-	$tool_content .= "\n        <p><b>$legend</b></p>
-
+	$tool_content .= "
         <script type='text/javascript' src='modules/auth/sorttable.js'></script>
         <table width='99%' class='sortable' id='t1'>
         <tr>
-          <th colspan='2'>$langCourseCode</th>
+          <th colspan='2'>$legend</th>
           <th width='190'>$langTeacher</th>
           <th width='50' class='center'>$manage</th>
         </tr>\n";
