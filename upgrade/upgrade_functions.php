@@ -319,10 +319,11 @@ function upgrade_course_2_4($code, $lang, $extramessage = '')
         delete_table('stat_accueil');
         delete_table('users');
 
-        db_query("UPDATE accueil SET lien = '../../modules/course_info/infocours.php',
-                                     rubrique = " .
-                                        quote($global_messages['langCourseDescription'][$lang]) . "
+        db_query("UPDATE accueil SET lien = '../../modules/course_info/infocours.php'
                                  WHERE id = 14 AND define_var = 'MODULE_ID_COURSEINFO'");
+        db_query("UPDATE accueil SET rubrique = " .
+                                        quote($global_messages['langCourseDescription'][$lang]) . "
+                                 WHERE id = 20 AND define_var = 'MODULE_ID_DESCRIPTION'");
 	db_query("ALTER TABLE `poll_answer_record` CHANGE `answer_text` `answer_text` TEXT", $code);
 
         // move main documents to central table and if successful drop table
