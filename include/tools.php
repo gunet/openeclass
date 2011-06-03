@@ -503,10 +503,17 @@ function lessonToolsMenu(){
 	array_push($sideMenuSubGroup, $arrMenuType);
 
 	while ($toolsRow = mysql_fetch_array($result)) {
-		if(!defined($toolsRow['define_var'])) define($toolsRow['define_var'], $toolsRow['id']);
+                if(!defined($toolsRow['define_var'])) {
+                        define($toolsRow['define_var'], $toolsRow['id']);
+                }
+
+                // Add course code only to internal links
+                if (!empty($toolsRow['define_var'])) {
+                        $toolsRow['lien'] .= "?course=".$currentCourseID;
+                }
 
 		array_push($sideMenuText, q($toolsRow['rubrique']));
-		array_push($sideMenuLink, q($toolsRow['lien']."?course=".$currentCourseID));
+		array_push($sideMenuLink, q($toolsRow['lien']));
 		array_push($sideMenuImg, $toolsRow['image'].'_on.png');
 		array_push($sideMenuID, $toolsRow['id']);
 	}
@@ -523,10 +530,6 @@ function lessonToolsMenu(){
 	//	------------------------------------------------------------------
 	//	Get professor's tools
 	//	------------------------------------------------------------------
-
-	$res2 = db_query("SELECT statut FROM user WHERE user_id = '$uid'",$mysqlMainDb);
-
-	if ($row = mysql_fetch_row($res2)) $statut = $row[0];
 
 	if ($is_adminOfCourse) {
 		//get inactive tools
@@ -546,7 +549,12 @@ function lessonToolsMenu(){
 		while ($toolsRow = mysql_fetch_array($result)) {
 			if(!defined($toolsRow['define_var'])) {
 				define($toolsRow['define_var'], $toolsRow['id']);
-			}
+                        }
+
+                        // Add course code only to internal links
+                        if (!empty($toolsRow['define_var'])) {
+                                $toolsRow['lien'] .= "?course=".$currentCourseID;
+                        }
 
 			array_push($sideMenuText, q($toolsRow['rubrique']));
 			array_push($sideMenuLink, q($toolsRow['lien']."?course=".$currentCourseID));
