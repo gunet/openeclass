@@ -29,7 +29,7 @@ $require_valid_uid = TRUE;
 $authmethods = array('imap', 'pop3', 'ldap', 'db', 'shibboleth', 'cas');
 
 check_uid();
-$nameTools = $langModifProfile;
+$nameTools = $langModifyProfile;
 check_guest();
 list($password) = mysql_fetch_row(db_query("SELECT password FROM user WHERE user_id = $uid"));
 if (in_array($password, $authmethods)) {

@@ -22,7 +22,7 @@
 $require_login = TRUE;
 include '../../include/baseTheme.php';
 $nameTools = $langUnregUser;
-$navigation[]= array ("url"=>"../profile/profile.php", "name"=> $langModifProfile);
+$navigation[]= array ("url"=>"../profile/profile.php", "name"=> $langModifyProfile);
 
 $tool_content = "";
 

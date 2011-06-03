@@ -1348,8 +1348,8 @@ $langInvalidId = "Λάθος στοιχεία.<br>Αν δεν είστε γρα�
 $langInvalidGuestAccount = "Το μάθημα για το οποίο έχει δημιουργηθεί ο λογαριασμός 'χρήστη επισκέπτη' δεν υπάρχει πλέον.";
 $langAccountInactive1 = "Μη ενεργός λογαριασμός.";
 $langAccountInactive2 = "Παρακαλώ επικοινωνήστε με τον διαχειριστή για την ενεργοποίηση του λογαριασμού σας";
-$langMyCoursesProf="Τα μαθήματα που υποστηρίζω (".$langTeacher.")";
-$langMyCoursesUser="Τα μαθήματα που παρακολουθώ (".$langStudent.")";
+$langMyCoursesProf="Τα μαθήματα που υποστηρίζω";
+$langMyCoursesUser="Τα μαθήματα που παρακολουθώ";
 $langNoCourses="Δεν υπάρχουν μαθήματα";
 $langCourseCreate="Δημιουργία Μαθήματος";
 $langMyAgenda = "Το Ημερολόγιό μου";
@@ -2673,7 +2673,6 @@ $langConfirm = "Επιβεβαίωση διαγραφής λογαριασμού
 $langDelSuccess = "Ο λογαριασμός σας στην πλατφόρμα έχει διαγραφεί.";
 $langThanks = "Ευχαριστούμε για τη χρήση της πλατφόρμας!";
 $langNotice = "Σημείωση";
-$langModifProfile="Αλλαγή του προφίλ μου";
 
 //unregcours.php
 $langCoursDelSuccess = "Η απεγγραφή σας από το μάθημα έγινε με επιτυχία";
@@ -2797,7 +2796,7 @@ $langGroup = "Ομάδα Χρηστών";
 $langIs = "είναι";
 $langLastname = "Επώνυμο";
 $langLegendRequiredFields = "<span class=\"required\">*</span> δείχνει απαραίτητο πεδίο ";
-$langModifyProfile = "Αλλαγή του προφίλ μου";
+$langModifyProfile = "Αλλαγή του Προφίλ μου";
 $langOfficialCode = "Κωδικός διαχείρισης";
 $langPersonalCourseList = "Προσωπική λίστα μαθήματος";
 $langPreview = "Παρουσίαση/Προβολή";
