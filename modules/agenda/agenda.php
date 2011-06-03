@@ -384,7 +384,7 @@ if (mysql_num_rows($result) > 0) {
             		// month LABEL
 			$tool_content .= "\n<tr>";
 			if ($is_adminOfCourse) {
-				$tool_content .= "\n<td class='monthLabel'>";
+				$tool_content .= "\n<td colspan='2' class='monthLabel'>";
 			} else {
 				$tool_content .= "\n<td colspan='2' class='monthLabel'>";
 			}

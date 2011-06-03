@@ -38,57 +38,68 @@ include '../../include/baseTheme.php';
 include 'auth.inc.php';
 
 $nameTools = $langNewUser;
-$tool_content .= "<p class='sub_title1'><img src='${urlServer}/template/classic/img/student.png' alt=''>&nbsp;&nbsp;$langUserAccount ";
+  $tool_content .= "
+  <table class='tbl_1' width='100%'>
+  <tr>
+    <th width='160'><img src='${urlServer}/template/classic/img/student.png' alt=''>&nbsp;&nbsp;$langOfStudent</th>
+    <td>";
+    $auth = get_auth_active_methods();
 
-$auth = get_auth_active_methods();
-
-// check for close user registration
-if (isset($close_user_registration) and $close_user_registration) {
+    // check for close user registration
+    if (isset($close_user_registration) and $close_user_registration) {
         $newuser = "formuser.php";
         $user_reg_type = $langUserAccountInfo1;
-} else {
+    } else {
         $newuser = "newuser.php";
         $user_reg_type = $langUserAccountInfo2;
-}
+    }
 
-$tool_content .= "</p>
-  <p><img src='${urlServer}/template/classic/img/arrow.png' title='bullet' alt='bullet'><a href=\"$newuser\">$user_reg_type</a></p>";
+    $tool_content .= "
+    <img src='${urlServer}/template/classic/img/arrow.png' title='bullet' alt='bullet'><a href=\"$newuser\">$user_reg_type</a>";
 
     if (count($auth) > 1) {
-       $tool_content .= "<p>&nbsp;&nbsp;&nbsp;&nbsp;$langUserAccountInfo4:";
+       $tool_content .= "<br />&nbsp;&nbsp;&nbsp;&nbsp;$langUserAccountInfo4:";
     }
 
     if(!empty($auth)) {
         foreach($auth as $k => $v) {
-                if ($v == 1) {	// bypass the eclass auth method, as it has already been displayed
+                if ($v == 1) {  // bypass the eclass auth method, as it has already been displayed
                         continue;
                 } else {
                         if ($v == 6)  { // shibboleth method
                                 $tool_content .= "<br />&nbsp;&nbsp;&nbsp;<img src='../../template/classic/img/arrow.png' title='bullet' alt='bullet' />&nbsp;<a href='{$urlServer}secure/index.php'>".get_auth_info($v)."</a>";
-			} else {
+                        } else {
                                 $tool_content .= "<br />&nbsp;&nbsp;&nbsp;<img src='../../template/classic/img/arrow.png' title='bullet' alt='bullet' />&nbsp;<a href='ldapnewuser.php?auth=".$v."'>".get_auth_info($v)."</a>";
                         }
                 }
-                
+
         }
     }
 
-$tool_content .= "\n<p class='sub_title1'><img src='${urlServer}/template/classic/img/teacher.png' alt=''>&nbsp;&nbsp;".$langProfAccount."</p>";
 
-$tool_content .= "<p><img src='${urlServer}/template/classic/img/arrow.png' title='bullet'  alt='bullet' /><a href='newprof.php'>$langUserAccountInfo1</a></p>";
+
+
+  $tool_content .= "
+    </td>
+  </tr>
+  <tr>
+    <th><img src='${urlServer}/template/classic/img/student.png' alt=''>&nbsp;&nbsp;$langOfTeacher</th>
+    <td>";
+
+  $tool_content .= "<img src='${urlServer}/template/classic/img/arrow.png' title='bullet'  alt='bullet' /><a href='newprof.php'>$langUserAccountInfo1</a>";
 
     if (count($auth) > 1) {
-       $tool_content .= "<p>&nbsp;&nbsp;&nbsp;&nbsp;$langUserAccountInfo4:";
+       $tool_content .= "<br />&nbsp;&nbsp;&nbsp;&nbsp;$langUserAccountInfo4:";
     }
 
 if(!empty($auth)) {
         foreach($auth as $k=>$v) {
-                if ($v == 1) {	// bypass the eclass auth method, as it has already been displayed
+                if ($v == 1) {  // bypass the eclass auth method, as it has already been displayed
                         continue;
                 } else {
                         if ($v == 6)  { // shibboleth method
                                 $tool_content .= "<br />&nbsp;&nbsp;&nbsp;<img src='../../template/classic/img/arrow.png' title='bullet' alt='bullet' />&nbsp;<a href='{$urlServer}secure/index.php'>".get_auth_info($v)."</a>";
-			} else {
+                        } else {
                                 $tool_content .= "<br />&nbsp;&nbsp;&nbsp;<img src='../../template/classic/img/arrow.png' title='bullet' alt='bullet' />&nbsp;<a href='ldapnewuser.php?p=TRUE&amp;auth=".$v."'>".get_auth_info($v)."</a>";
                         }
                 }
@@ -96,5 +107,11 @@ if(!empty($auth)) {
 } else {
         $tool_content .= "<p>$langCannotUseAuthMethods </p>";
 }
+
+  $tool_content .= "
+    </td>
+  </tr>
+  </table>";
+
 
 draw($tool_content, 0);

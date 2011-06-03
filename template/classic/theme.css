@@ -996,15 +996,16 @@ a.unit_link_invisible:hover {
 
 /* ----- START agenda ----- */
 .today {
-    background-color:#f3f3f9;
+    background-color:#8597A5;
+    color: #ffffff;
+    font-weight: bold;
 }
 
 .monthLabel {
     text-align: center;
     color: #627aad;
-    background-color:#fff9ae;
+    background-color:#f3f3f9;
     padding: 10px;
-    border: 1px solid #ddd685;
 }
 
 .day {

@@ -43,19 +43,15 @@ if (mysql_num_rows($result) > 0) {
 	while ($eclassAnnounce = mysql_fetch_array($result)) {
 		array_push($announceArr, $eclassAnnounce);
 	}
-        $tool_content .= "<br/>
-        <table width='100%' class='tbl_border'>
-	<tr><th>$langAnnouncements
-	</th></tr>
-	";
+        $tool_content .= "
+        <table width='100%' class='sortable'>";
 
 	$numOfAnnouncements = count($announceArr);
 	for($i=0; $i < $numOfAnnouncements; $i++) {
 		$tool_content .= "<tr><td>
-		
-		<img src='${urlAppend}/template/classic/img/arrow.png' alt='' />
-		<b>".q($announceArr[$i]['title'])."</b>
-		&nbsp;(".claro_format_locale_date($dateFormatLong, strtotime($announceArr[$i]['date'])).")
+		<img src='${urlAppend}/template/classic/img/arrow.png' alt='' /></td>
+		<td><b>".q($announceArr[$i]['title'])."</b>
+		&nbsp;<span class='smaller'>(".claro_format_locale_date($dateFormatLong, strtotime($announceArr[$i]['date'])).")</span>
 		<p>
 		".standard_text_escape($announceArr[$i]['body'])."<br /></p>
 		</td>

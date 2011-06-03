@@ -167,7 +167,7 @@ if (count($status) > 0) {
 					    "&nbsp;($langCourse: <b>" . q($titles[$code]) . "</b>, $langTutor: <b>" .
 					    q($profs[$code]) . "</b></span>)<br />".
 					    standard_text_escape(ellipsize($content, 250, "<strong>&nbsp;...<a href='modules/announcements/announcements.php?course=$code&amp;an_id=$ann[id]'>
-						[$langMore]</a></strong>"))."</td></tr>\n";
+						<span class='smaller'>[$langMore]</span></a></strong>"))."</td></tr>\n";
                                         $la++;
                                 }
                         }
