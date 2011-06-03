@@ -41,7 +41,7 @@ $nameTools = $langNewUser;
   $tool_content .= "
   <table class='tbl_1' width='100%'>
   <tr>
-    <th width='160'><img src='${urlServer}/template/classic/img/student.png' alt=''>&nbsp;&nbsp;$langOfStudent</th>
+    <th width='160'>$langOfStudent</th>
     <td>";
     $auth = get_auth_active_methods();
 
@@ -83,7 +83,7 @@ $nameTools = $langNewUser;
     </td>
   </tr>
   <tr>
-    <th><img src='${urlServer}/template/classic/img/student.png' alt=''>&nbsp;&nbsp;$langOfTeacher</th>
+    <th>$langOfTeacher</th>
     <td>";
 
   $tool_content .= "<img src='${urlServer}/template/classic/img/arrow.png' title='bullet'  alt='bullet' /><a href='newprof.php'>$langUserAccountInfo1</a>";
