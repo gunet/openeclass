@@ -424,21 +424,21 @@ fieldset table.th {
 .lesson {
 	font-size:18px;
 	color:#687A92;
-    padding: 5px 0;
+    padding: 5px 0 15px 0;
 }
 
 #tool_title {
-    margin: 5px 0;
+    margin: 0 0 5px 0;
 	font-size:15px;
 	color:#687A92;
-    padding: 5px 0;
+    padding: 0 0 5px 0;
 }
 
 .tool_title {
-    margin: 10px 0;
+    margin: 0 0 5px 0;
 	font-size:15px;
 	color:#687A92;
-    padding: 5px 0;
+    padding: 0 0 5px 0;
 }
 
 .title1 {
