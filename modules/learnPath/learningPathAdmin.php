@@ -21,7 +21,6 @@
 
 /*===========================================================================
 	learningPathAdmin.php
-	@last update: 30-06-2006 by Thanos Kyritsis
 	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
 
 	based on Claroline version 1.7 licensed under GPL
@@ -49,8 +48,6 @@
                   - access to config page of modules in this learning path
 
     @Comments:
-
-    @todo:
 ==============================================================================
 */
 

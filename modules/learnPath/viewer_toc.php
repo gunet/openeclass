@@ -20,7 +20,6 @@
 
 /*===========================================================================
 	viewer_toc.php
-	@last update: 05-08-2009 by Thanos Kyritsis
 	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
 
 	based on Claroline version 1.7 licensed under GPL
@@ -35,8 +34,6 @@
                   they are browsing a learning path
 
     @Comments:
-
-    @todo:
 ==============================================================================
 */
 
