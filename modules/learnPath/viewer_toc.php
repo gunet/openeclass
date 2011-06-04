@@ -298,7 +298,7 @@ if ( $moduleNb > 1 )
 	{
 		$prevNextString .=  $imgPrevious;
 	}
-	$prevNextString .=  '&nbsp;&nbsp;';
+	$prevNextString .=  '&nbsp;';
 
 	if( $nextModule != '' )
 	{
@@ -318,7 +318,7 @@ else
 	$returl = 'learningPath';
 	
 echo '<div class="lp_left">'.$prevNextString
-	.'<a href="navigation/viewModule.php?course='.$code_cours.'&amp;go='.$returl.'" target="scoFrame"><img src="'.$imgRepositoryWeb.'lp/nofullscreen.png" alt="'.$langQuitViewer.'" title="'.$langQuitViewer.'" /></a>
+	.'&nbsp;<a href="navigation/viewModule.php?course='.$code_cours.'&amp;go='.$returl.'" target="scoFrame"><img src="'.$imgRepositoryWeb.'lp/nofullscreen.png" alt="'.$langQuitViewer.'" title="'.$langQuitViewer.'" /></a>
 	</div>';
 
 /*echo ''
