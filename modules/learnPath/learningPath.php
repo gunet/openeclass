@@ -174,7 +174,7 @@ $tool_content .= "
     <table width=\"99%\" class=\"tbl_alt\">";
 $tool_content .= "
     <tr>
-      <th colspan=\"".($maxDeep+1)."\"><div align=\"left\">&nbsp;&nbsp;<b>".$langLearningObjects."</b></div></th>\n";
+      <th colspan=\"".($maxDeep+2)."\"><div align=\"left\">&nbsp;&nbsp;<b>".$langLearningObjects."</b></div></th>\n";
 
 
 // show only progress column for authenticated users
@@ -236,6 +236,8 @@ foreach ($flatElementList as $module)
     }
 
     $colspan = $maxDeep - $module['children']+1;
+    if ( $module['contentType'] == CTLABEL_ )
+        $colspan++;
 
     $tool_content .= "    <tr $style>".$spacingString."
       <td colspan=\"".$colspan."\" align=\"left\">";
@@ -259,7 +261,7 @@ foreach ($flatElementList as $module)
 
         $contentType_alt = selectAlt($module['contentType']);
         $tool_content .= '<span style="vertical-align: middle;"><img src="'.$imgRepositoryWeb.$moduleImg.'" alt="'.$contentType_alt.'" title="'.$contentType_alt.'" border="0" /></span>&nbsp;'
-        .'<a href="module.php?course='.$code_cours.'&amp;module_id='.$module['module_id'].'">'.htmlspecialchars($module['name']).'</a>'."";
+        .'<a href="viewer.php?course='.$code_cours.'&amp;path_id='.(int)$_SESSION['path_id'].'&amp;module_id='.$module['module_id'].'">'.htmlspecialchars($module['name']).'</a>'."";
         // a module ALLOW access to the following modules if
         // document module : credit == CREDIT || lesson_status == 'completed'
         // exercise module : credit == CREDIT || lesson_status == 'passed'
@@ -299,6 +301,8 @@ foreach ($flatElementList as $module)
 
     if( $uid && ($module['contentType'] != CTLABEL_) )
     {
+        // display actions for current module
+        $tool_content .= "<td width='18'><a href=\"module.php?course=$code_cours&amp;module_id=".$module['module_id']."\"><img src='../../template/classic/img/monitor.png' alt='$langTracking' title='$langTracking' /></a></td>";
         // display the progress value for current module
         $tool_content .= '      <td align="right" width="120">'.disp_progress_bar ($progress, 1).'</td>'."\n"
         	.'      <td align="left" width="10">'
@@ -328,7 +332,7 @@ foreach ($flatElementList as $module)
 if($uid && $moduleNb > 0) {
     // add a blank line between module progression and global progression
     $tool_content .= '    <tr class="odd">'."\n"
-		.'      <th colspan="'.($maxDeep+1).'" align="right"><div align="right">'.$langGlobalProgress.'</div></th>'."\n"
+		.'      <th colspan="'.($maxDeep+2).'" align="right"><div align="right">'.$langGlobalProgress.'</div></th>'."\n"
 		.'      <th align="right" width="120"><div align="right">'
         .disp_progress_bar(round($globalProg / ($moduleNb) ), 1 )
 		.'</div></th>'."\n"
