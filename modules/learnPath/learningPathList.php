@@ -466,8 +466,26 @@ while ($list = mysql_fetch_array($result)) // while ... learning path list
 
     //Display current learning path name
     if (!$is_blocked) {
+        // locate 1st module of current learning path
+        $modulessql = "SELECT M.`module_id`
+                FROM (`$TABLEMODULE` AS M,
+                      `$TABLELEARNPATHMODULE` AS LPM)
+                WHERE M.`module_id` = LPM.`module_id`
+                  AND LPM.`learnPath_id` = ". intval($list['learnPath_id'])."
+                ORDER BY LPM.`rank` ASC";
+        $resultmodules = db_query($modulessql);
+        
+        $play_img = "<img src='../../template/classic/img/".$image_bullet."' alt='' />";
+        
+        if (mysql_num_rows($resultmodules) > 0) {
+            $firstmodule = mysql_fetch_array($resultmodules, MYSQL_ASSOC);
+            $play_button = "<a href='viewer.php?course=$code_cours&amp;path_id=".$list['learnPath_id']."&amp;module_id=".$firstmodule['module_id']."'>$play_img</a>";
+        }
+        else
+            $play_button = $play_img;
+        
         $tool_content .= "
-      <td width='20'><img src='../../template/classic/img/".$image_bullet."' alt='' /></td>
+      <td width='20'>$play_button</td>
       <td><a href='learningPath.php?course=$code_cours&amp;path_id=".$list['learnPath_id']."'>".htmlspecialchars($list['name'])."</a></td>\n";
 
         // --------------TEST IF FOLLOWING PATH MUST BE BLOCKED------------------
