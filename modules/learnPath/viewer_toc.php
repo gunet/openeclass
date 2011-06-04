@@ -69,7 +69,6 @@ echo '<html>'."\n"
     .'<head>'."\n"
     .'<meta http-equiv="Content-Type" content="text/html; charset='.$charset.'">'."\n"
     .'<link href="lp.css" rel="stylesheet" type="text/css" />'."\n"
-
     .'</head>'."\n"
     .'<body>'."\n"
     .'<div class="header">'."\n"

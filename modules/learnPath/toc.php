@@ -40,8 +40,6 @@ require_once("../../include/baseTheme.php");
 require_once("../../include/lib/learnPathLib.inc.php");
 require_once("../../include/lib/fileDisplayLib.inc.php");
 
-echo "<link rel='stylesheet' href='../../template/classic/theme.css' type='text/css'>";
-
 $TABLEMODULE            = "lp_module";
 $TABLELEARNPATHMODULE   = "lp_rel_learnPath_module";
 $TABLEASSET             = "lp_asset";
@@ -49,6 +47,13 @@ $TABLEUSERMODULEPROGRESS= "lp_user_module_progress";
 $imgRepositoryWeb       = "../../template/classic/img/";
 
 mysql_select_db($currentCourseID);
+echo '<html>'."\n"
+    .'<head>'."\n"
+    .'<meta http-equiv="Content-Type" content="text/html; charset='.$charset.'">'."\n"
+    .'<link href="lp.css" rel="stylesheet" type="text/css" />'."\n"
+    .'</head>'."\n"
+    .'<body>'."\n"
+    .'<div class="menu_left">'."\n";
 
 if($uid)
 {
@@ -99,10 +104,11 @@ for ($i=0 ; $i < sizeof($flatElementList) ; $i++)
 }
 
 // -------------------------- learning path list header ----------------------------
-echo "<table width=\"99%\" class=\"tbl_alt\"><thead>
+/*echo "<table width=\"99%\" class=\"tbl_alt\"><thead>
 <tr class=\"LP_header\">
 <td colspan=\"".($maxDeep+1)."\"><div align=\"center\">".$langContents."</div></td>
-</tr></thead><tbody>";
+</tr></thead><tbody>";*/
+echo "<p><strong>$langContents</strong></p><ul>";
 
 // ----------------------- LEARNING PATH LIST DISPLAY ---------------------------------
 foreach ($flatElementList as $module)
@@ -131,12 +137,12 @@ foreach ($flatElementList as $module)
       <td width='5'>&nbsp;</td>";
 
     $colspan = $maxDeep - $module['children']+1;
-    echo "<tr align=\"center\"".$style.">".$spacingString."
-      <td colspan=\"".$colspan."\" align=\"left\">";
+    /*echo "<tr align=\"center\"".$style.">".$spacingString."
+      <td colspan=\"".$colspan."\" align=\"left\">";*/
 
     if ($module['contentType'] == CTLABEL_) // chapter head
     {
-        echo "<font ".$style." style=\"font-weight: bold\">".htmlspecialchars($module['name'])."</font>";
+        echo "<li><font ".$style." style=\"font-weight: bold\">".htmlspecialchars($module['name'])."</font></li>";
     }
     else // module
     {
@@ -167,6 +173,7 @@ foreach ($flatElementList as $module)
 		if(($module['contentType'] == CTSCORM_ || $module['contentType'] == CTSCORMASSET_) && $module['lesson_status'] == 'FAILED')
 			$moduleImg = "lp_failed.png";
 
+		echo "<li>";
 		if(isset($imagePassed))
 			echo $imagePassed;
 
@@ -178,9 +185,11 @@ foreach ($flatElementList as $module)
 			echo "<em>".htmlspecialchars($module['name'])."</em>";
 		else        
 			echo "<a href='navigation/viewModule.php?course=$code_cours&amp;viewModule_id=$module[module_id]'".$style." target='scoFrame'>". htmlspecialchars($module['name']). "</a>";
+		echo "</li>";
 
     }
-echo "</td></tr>";
+//echo "</td></tr>";
 } // end of foreach
-echo "</tbody></table>";
+//echo "</tbody></table>";
+echo "</ul></body></html>"
 ?>

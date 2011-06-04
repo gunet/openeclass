@@ -77,8 +77,8 @@ float: left;}
 }
 
 .menu_left{
-        width: 330px;
-        padding: 20px;
+        /*width: 200px;*/
+        padding: 10px;
         background-color: #eceff5;
         border: #3B5998 1px solid;
 		color: #666666;
