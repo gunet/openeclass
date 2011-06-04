@@ -1,0 +1,95 @@
+html {
+        margin-bottom: 1px;
+        height: 100%!important; /* For Firefox */
+        height: auto;
+}
+
+body {
+        margin: 0 auto;
+        padding: 0;
+        margin-bottom: 1px;
+        height: 100%!important; /* For Firefox */
+        height: auto;
+        background-color: #dfdfdf;
+		font-family: "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+
+}
+
+
+
+.lp_right {
+        float: right;
+        padding: 5px;
+        text-align: right;
+		color: #ffffff;
+		font-size: 12px;
+        }
+
+.lp_left {
+        float: left;
+        padding: 5px;
+        width: 300px;     
+}
+
+
+a img {
+        border: none;
+}
+
+
+.header {
+		width: 100%;
+        top: 0;
+        height: 80px;
+        margin: 0 auto;
+        border-bottom: 3px solid #73849b;
+        background-color: #ffffff;
+        
+}
+
+.tools {
+        height: 30px;
+        width: 100%;
+        font-size: 13px;
+        z-index: 1;
+        background-color: #687A92;
+        float: left;
+        
+}
+
+.tools a {
+        color: #ffffff;
+        text-decoration:none;
+}
+.tools a:hover {
+        text-decoration:underline;
+        color: #ffffff;
+}
+
+.logo {
+float: left;}
+
+.clear {
+        clear: both;
+}
+
+.nofullscreen {
+}
+
+.menu_left{
+        width: 330px;
+        padding: 20px;
+        background-color: #eceff5;
+        border: #3B5998 1px solid;
+		color: #666666;
+		float: left;
+}
+
+
+.main_right {
+		float: left;
+		margin-left: 30px;
+		padding: 20px;
+		color: #666666;	
+	}
+
