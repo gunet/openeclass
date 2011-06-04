@@ -70,11 +70,7 @@ if (!add_units_navigation()) {
 	$navigation[] = array("url"=>"learningPathList.php?course=$code_cours", "name"=> $langLearningPaths);
 	if ($is_adminOfCourse)
 	{
-	$navigation[]= array ("url"=>"learningPathAdmin.php?course=$code_cours", "name"=> $langAdm);
-	}
-	else
-	{
-	$navigation[]= array ("url"=>"learningPath.php?course=$code_cours", "name"=> $langAdm);
+	$navigation[]= array ("url"=>"learningPathAdmin.php?course=$code_cours&amp;path_id=".(int)$_SESSION['path_id'], "name"=> $langAdm);
 	}
 }
 
@@ -90,6 +86,12 @@ if ( isset($_GET['module_id']) && $_GET['module_id'] != '')
 }
 
 mysql_select_db($currentCourseID);
+
+$l = db_query("SELECT name FROM $TABLELEARNPATH WHERE learnPath_id = '".(int)$_SESSION['path_id']."'");
+$lpname = mysql_fetch_array($l);
+if (!add_units_navigation() && !$is_adminOfCourse) {
+	$navigation[] = array("url" => "learningPath.php?course=$code_cours&amp;path_id=".(int)$_SESSION['path_id'], "name" => $lpname['name']);
+}
 
 // main page
 // FIRST WE SEE IF USER MUST SKIP THE PRESENTATION PAGE OR NOT
@@ -163,12 +165,16 @@ $sql = "SELECT `contentType`,
              ";
 $resultBrowsed = db_query_get_single_row($sql);
 
-        if ($module['contentType']== CTSCORM_ || $module['contentType']== CTSCORMASSET_) { $nameTools = "$langModify $langSCORMTypeDesc"; }
-        if ($module['contentType']== CTEXERCISE_ ) { $nameTools = "$langModify $langExerciseAsModuleLabel"; }
-        if ($module['contentType']== CTDOCUMENT_ ) { $nameTools = "$langModify $langDocumentAsModuleLabel"; }
-        if ($module['contentType']== CTLINK_ ) { $nameTools = "$langModify $langLinkAsModuleLabel"; }
-        if ($module['contentType']== CTCOURSE_DESCRIPTION_ ) { $nameTools = "$langModify $langCourseDescriptionAsModuleLabel"; }
-        if ($module['contentType']== CTLABEL_ ) { $nameTools = "$langModify $langModuleOfMyCourseLabel_onom"; }
+        if ($module['contentType']== CTSCORM_ || $module['contentType']== CTSCORMASSET_) { $nameTools = $langSCORMTypeDesc; }
+        if ($module['contentType']== CTEXERCISE_ ) { $nameTools = $langExerciseAsModuleLabel; }
+        if ($module['contentType']== CTDOCUMENT_ ) { $nameTools = $langDocumentAsModuleLabel; }
+        if ($module['contentType']== CTLINK_ ) { $nameTools = $langLinkAsModuleLabel; }
+        if ($module['contentType']== CTCOURSE_DESCRIPTION_ ) { $nameTools = $langCourseDescriptionAsModuleLabel; }
+        if ($module['contentType']== CTLABEL_ ) { $nameTools = $langModuleOfMyCourseLabel_onom; }
+        if ($is_adminOfCourse)
+            $nameTools = $langModify ." ". $nameTools;
+        else
+            $nameTools = $langTracking ." ". $nameTools;
 
 
 
