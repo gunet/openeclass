@@ -71,10 +71,12 @@ mysql_select_db($currentCourseID);
 echo '<html>'."\n"
     .'<head>'."\n"
     .'<meta http-equiv="Content-Type" content="text/html; charset='.$charset.'">'."\n"
-    .'<link href="../../template/classic/theme.css" rel="stylesheet" type="text/css" />'."\n"
+    .'<link href="lp.css" rel="stylesheet" type="text/css" />'."\n"
 
     .'</head>'."\n"
-    .'<body style="margin: 2px;">'."\n";
+    .'<body>'."\n"
+    .'<div class="header">'."\n"
+    .'<div class="tools">'."\n";
 
 
 if($uid)
@@ -289,8 +291,8 @@ $prevNextString = ""/*' - '.$currentName.*//*"&nbsp;&nbsp;&nbsp;"*/;
 // display previous and next links only if there is more than one module
 if ( $moduleNb > 1 )
 {
-	$imgPrevious = '<img src="'.$imgRepositoryWeb.'previous.png" border="0" title="'.$langPrevious.'">';
-	$imgNext = '<img src="'.$imgRepositoryWeb.'next.png" border="0" title="'.$langNext.'">';
+	$imgPrevious = '<img src="'.$imgRepositoryWeb.'lp/back.png" alt="'.$langPrevious.'" title="'.$langPrevious.'">';
+	$imgNext = '<img src="'.$imgRepositoryWeb.'lp/next.png" alt="'.$langNext.'" title="'.$langNext.'">';
 
 	if( $previousModule != '' )
 	{
@@ -318,47 +320,31 @@ if ( $is_adminOfCourse )
 	$returl = 'learningPathAdmin';
 else
 	$returl = 'learningPath';
+	
+echo '<div class="lp_left">'.$prevNextString
+	.'<a href="navigation/viewModule.php?course='.$code_cours.'&amp;go='.$returl.'" target="scoFrame"><img src="'.$imgRepositoryWeb.'lp/nofullscreen.png" alt="'.$langQuitViewer.'" title="'.$langQuitViewer.'" /></a>
+	</div>';
 
-	echo '<table width="100%" align="left" class="operations_container">'
-    .'<thead>'
-    .'<tr>'
-    .'<td height="32" width="1"><div align="right">&nbsp;&nbsp;<b>'.$langCommands.'</b>: </div></td>'
-    .'<td><div align="left">&nbsp;&nbsp;'
-    .$prevNextString
-    ."&nbsp;&nbsp;"
-	."<a href=\"navigation/viewModule.php?course=$code_cours&amp;go=".$returl."\" target=\"scoFrame\">"
-	.'<img src="'.$imgRepositoryWeb.'return.png" border="0" title="'.$langQuitViewer.'">'
-	."</a>"
-	.'&nbsp;&nbsp;'
-	.'<a href="viewer.php?course='.$code_cours.'&amp;fullscreen=1" target="_top">'
-	.'<img src="'.$imgRepositoryWeb.'fullscreen.png" border="0" title="'.$langFullScreen.'">'
-	.'</a>'
-	.'&nbsp;&nbsp;'
-	.'<a href="viewer.php?course='.$code_cours.'&amp;fullscreen=0" target="_top">'
-	.'<img src="'.$imgRepositoryWeb.'fullscreen_exit.png" border="0" title="'.$langInFrames.'">'
-	.'</a>&nbsp;&nbsp;&nbsp;'."\n"
-    .'&nbsp;</div></td>'
-    .'<td><div align="center">';
+/*echo ''
+.'<a href="viewer.php?course='.$code_cours.'&amp;fullscreen=1" target="_top">'
+.'<img src="'.$imgRepositoryWeb.'fullscreen.png" border="0" title="'.$langFullScreen.'">'
+.'</a>'
+.'<a href="viewer.php?course='.$code_cours.'&amp;fullscreen=0" target="_top">'
+.'<img src="'.$imgRepositoryWeb.'fullscreen_exit.png" border="0" title="'.$langInFrames.'">'
+.'</a>&nbsp;&nbsp;&nbsp;'."\n"';*/
 
-      if($uid) {
+if($uid) {
 	$lpProgress = get_learnPath_progress((int)$_SESSION['path_id'],$uid);
-	echo '<small>'
+	echo '<div class="lp_right">'
 		.$langGlobalProgress
 		.disp_progress_bar($lpProgress, 1)
 		."&nbsp;".$lpProgress."%"
-		.'</small>'."\n"; 
+		.'</div>'; 
 }
-      echo'</div></td>'
-    .'</tr>'
-    .'</thead>'
-    .'</table>'
-	.'<br /><br />';
 
+echo '<div class="clear"></div>';
 
-echo '<table align="center" width="99%">'
-    .'<thead>'
-    .'<tr>'
-    .'<td>'
+echo '<div class="logo"><img src="'.$imgRepositoryWeb.'lp/logo_openeclass.png" alt="" title="" />'
     .$learnPath.": ";
 if(isset($currentLabel))
 	echo "<strong>".$currentLabel."</strong> - ";
@@ -366,12 +352,8 @@ if(isset($currentName))
 	echo $currentName;
 if(isset($imagePassed))
 	echo $imagePassed;
-echo '</td>'
-    .'</tr>'
-    .'</thead>';
+echo '</div>';
 
-echo '</table>'
-    .'</body></html>'."\n"
-     ;
+echo '</div></div></body></html>';
 
 ?>
