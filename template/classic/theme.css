@@ -598,8 +598,10 @@ fieldset table.th {
     text-align: center;
     padding: 5px;
     background-color: #f8f8f8;
+    border-left: 1px dashed #dfdfdf;
+    border-top: 1px dashed #dfdfdf;
     border-bottom: 1px dashed #dfdfdf;
-	border-right: none;
+    border-right: none;
 }
 
 .tbl_border {

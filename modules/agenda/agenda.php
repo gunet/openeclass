@@ -370,7 +370,7 @@ if (mysql_num_rows($result) > 0) {
 					$barMonth = date("m",time());
 					$tool_content .= "\n<tr>";
 					// current month
-					$tool_content .= "\n<td class='monthLabel'>".$langCalendar."&nbsp;<b>".ucfirst(claro_format_locale_date("%B %Y",time()))."</b></td>";
+					$tool_content .= "\n<td colspan='2' class='monthLabel'>".$langCalendar."&nbsp;<b>".ucfirst(claro_format_locale_date("%B %Y",time()))."</b></td>";
 					$tool_content .= "\n</tr>";
 				}
 				$nowBarShowed = TRUE;
