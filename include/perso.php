@@ -79,7 +79,6 @@ if ($row = mysql_fetch_row($user_status_query)) {
 $user_lesson_info = getUserLessonInfo($uid, "html");
 //	END Get user's lesson info]=====================================================
 
-
 //if user is registered to at least one lesson
 if ($user_lesson_info[0][0] > 0) {
 	// BEGIN - Get user assignments

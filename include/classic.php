@@ -127,7 +127,7 @@ if (count($status) > 0) {
         $announce_table_header = "
         <table width='100%' class='sortable' id='t3'>
         <tr>
-           <th colspan='2'>$langLastAnnouncements</th>
+           <th colspan='2'>$langMyPersoAnnouncements</th>
         </tr>\n";
 
         $logindate = last_login($uid);

@@ -69,7 +69,6 @@ function getUserAgenda($param, $type)
 		LIMIT $uniqueDates";
 
 	//mysql version 5.x query
-
 	$sql_5 = "SELECT agenda.titre, agenda.contenu, agenda.day, DATE_FORMAT(agenda.hour, '%H:%i'), 
 		agenda.lasting, agenda.lesson_code, cours.intitule
 		FROM agenda, cours WHERE agenda.lesson_code IN ($tbl_lesson_codes) 
@@ -81,17 +80,18 @@ function getUserAgenda($param, $type)
 
 	$ver = mysql_get_server_info();
 
-	if (version_compare("5.0", $ver) <= 0)
-	$sql = $sql_5;//mysql 4 compatible query
-	elseif (version_compare("4.1", $ver) <= 0)
-	$sql = $sql_4;//mysql 5 compatible query
+	if (version_compare("5.0", $ver) <= 0){
+		$sql = $sql_5;//mysql 4 compatible query
+	}
+	elseif (version_compare("4.1", $ver) <= 0) {
+		$sql = $sql_4;//mysql 5 compatible query
+	}
 
 	$mysql_query_result = db_query($sql, $mysqlMainDb);
 	$agendaDateData = array();
 	$previousDate = "0000-00-00";
 	$firstRun = true;
 	while ($myAgenda = mysql_fetch_row($mysql_query_result)) {
-
 		//allow certain html tags that do not cause errors in the
 		//personalised interface
 		$myAgenda[1] = strip_tags($myAgenda[1], '<b><i><u><ol><ul><li><br>');
@@ -99,7 +99,6 @@ function getUserAgenda($param, $type)
 			if (!$firstRun) {
 				@array_push($agendaDateData, $agendaData);
 			}
-
 		}
 
 		if ($firstRun) $firstRun = false;
@@ -139,9 +138,7 @@ function agendaHtmlInterface($data)
 
 	$numOfDays = count($data);
 	if ($numOfDays > 0) {
-		$agenda_content= <<<agCont
-      <table width="100%">
-agCont;
+		$agenda_content= "<table width='100%'>";      
 		for ($i=0; $i <$numOfDays; $i++) {
 			$agenda_content .= "<tr><td class='sub_title1'>".claro_format_locale_date($dateFormatLong, strtotime($data[$i][0][2]))."</td></tr>";
 			$iterator =  count($data[$i]);
@@ -165,14 +162,11 @@ agCont;
 				if(strlen($data[$i][$j][1]) > 150) {
 					$data[$i][$j][1] = substr($data[$i][$j][1], 0, 150);
 					$data[$i][$j][1] .= "... <a href=\"$url\">[$langMore]</a>";
-
 				}
-
 				$agenda_content .= "<tr><td><ul class='custom_list'><li><a href=\"$url\"><b>".$data[$i][$j][0]."</b></a><br /><b>".$data[$i][$j][6]."</b><div class='smaller'>".$langExerciseStart.":<b>".$data[$i][$j][3]."</b> | $langDuration:<b>".$data[$i][$j][4]."</b><br />".$data[$i][$j][1].autoCloseTags($data[$i][$j][1])."</div></li></ul></td></tr>";
 			}
 		}
-		$agenda_content .= "
-        </table>";
+		$agenda_content .= "</table>";
 	} else {
 		$agenda_content = "<p class='alert1'>$langNoEventsExist</p>";
 	}

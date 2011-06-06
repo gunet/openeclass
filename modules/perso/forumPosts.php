@@ -52,30 +52,17 @@ function getUserForumPosts($param, $type)
 	$lesson_code		= $param['lesson_code'];
 	$lesson_professor	= $param['lesson_professor'];
 
-	$usr_lst_login	= $param['usr_lst_login'];
-
-	$usr_memory = $param['usr_memory'];
-
-	//		Generate SQL code for all queries
-	//		----------------------------------------
-
-	$forum_query_new 	= createForumQueries($usr_lst_login);
-	$forum_query_memo 	= createForumQueries($usr_memory);
-	//$forum_query_memo 	= createForumQueries($usr_lst_login);
+	$last_month = strftime('%Y %m %d', strtotime('now -1 month'));
+	$forum_query_new = createForumQueries($last_month);
 
 	$forumPosts = array();
-	$getNewPosts = false;
-	for ($i=0;$i<$max_repeat_val;$i++) {
-
+	
+	for ($i=0; $i < $max_repeat_val; $i++) {
 		$mysql_query_result = db_query($forum_query_new, $lesson_code[$i]);
-
 		if ($num_rows = mysql_num_rows($mysql_query_result) > 0) {
-			$getNewPosts = true;
-
 			$forumData = array();
 			$forumSubData = array();
 			$forumContent = array();
-
 			array_push($forumData, $lesson_title[$i]);
 			array_push($forumData, $lesson_code[$i]);
 		}
@@ -85,39 +72,10 @@ function getUserForumPosts($param, $type)
 				array_push($forumContent, $myForumPosts);
 			}
 		}
-
 		if ($num_rows > 0) {
 			array_push($forumSubData, $forumContent);
 			array_push($forumData, $forumSubData);
 			array_push($forumPosts, $forumData);
-		}
-	}
-
-	if ($getNewPosts) {
-		$sqlNowDate = str_replace(' ', '-', $usr_lst_login);
-		$sql = "UPDATE `user` SET `forum_flag` = '$sqlNowDate' WHERE `user_id` = $uid ";
-		db_query($sql, $mysqlMainDb);
-	} elseif (!$getNewPosts) {
-		//if there are no new announcements, get the last announcements the user had
-		//so that we always have something to display
-		for ($i=0; $i < $max_repeat_val; $i++){
-			$mysql_query_result = db_query($forum_query_memo, $lesson_code[$i]);
-			if (mysql_num_rows($mysql_query_result) >0) {
-				$forumData = array();
-				$forumSubData = array();
-				$forumContent = array();
-
-				array_push($forumData, $lesson_title[$i]);
-				array_push($forumData, $lesson_code[$i]);
-
-				while ($myForumPosts = mysql_fetch_row($mysql_query_result)) {
-					array_push($forumContent, $myForumPosts);
-				}
-
-				array_push($forumSubData, $forumContent);
-				array_push($forumData, $forumSubData);
-				array_push($forumPosts, $forumData);
-			}
 		}
 	}
 
@@ -201,7 +159,7 @@ function createForumQueries($dateVar){
                                AND DATE_FORMAT(posts.post_time, \'%Y %m %d\') >= "'.$dateVar.'"
                                AND accueil.visible = 1
                                AND accueil.id = 9
-                        ORDER BY posts.post_time';
+                        ORDER BY posts.post_time LIMIT 15';
 
 	return $forum_query;
 }

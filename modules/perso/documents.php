@@ -42,27 +42,11 @@
  */
 function getUserDocuments($param)
 {
-	global $mysqlMainDb, $uid;
-
-        $lesson_code = $param['lesson_code'];
-        $max_repeat_val = $param['max_repeat_val'];
-        $usr_lst_login = $param['usr_lst_login'];
-	$usr_memory = $param['usr_memory'];
-
-        // Try to return all the new documents the user had since his last login.
-        // If no items are returned, get the last documents the user had by using
-        // the docs_flag field.
-
-        $new_docs = docsHtmlInterface($usr_lst_login);
-        if (empty($new_docs)) {
-		// if there are no new documents, get the last documents the user had
-		// so that we always have something to display
-        	$new_docs = docsHtmlInterface($usr_memory);
-        } else {
-		$sqlNowDate = str_replace(' ', '-', $usr_lst_login);
-                db_query("UPDATE `user` SET `doc_flag` = '$sqlNowDate' WHERE `user_id` = $uid");
-        }
-
+	
+	$last_month = strftime('%Y-%m-%d', strtotime('now -1 month'));
+	// get user documents newer than one month
+	$new_docs = docsHtmlInterface($last_month);	
+	
         return $new_docs;
 }
 

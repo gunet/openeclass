@@ -525,7 +525,6 @@ $langAnn = "Ανακοινώθηκε την";
 $langEmptyAnTitle = "Παρακαλώ πληκτρολογήστε τον τίτλο της ανακοίνωσης";
 $langAnnouncementNoTille = "Ανακοίνωση χωρίς τίτλο";
 $langCourseAnnouncements = "Ανακοινώσεις μαθήματος";
-$langLastAnnouncements = "Οι τελευταίες μου ανακοινώσεις";
 /*******************************************
 * archive_course.php
 *******************************************/
@@ -1866,7 +1865,7 @@ $langMyPersoDeadlines = "Οι διορίες μου";
 $langMyPersoAnnouncements = "Οι τελευταίες μου ανακοινώσεις";
 $langMyPersoDocs = "Τα τελευταία μου έγγραφα";
 $langMyPersoAgenda = "Η ατζέντα μου";
-$langMyPersoForum = "Οι συζητήσεις μου - Τελευταίες αποστολές";
+$langMyPersoForum = "Οι συζητήσεις μου (τελευταίες αποστολές)";
 $langAssignment = "Εργασία";
 $langDeadline = "Λήξη";
 $langNoEventsExist="Δεν υπάρχουν γεγονότα";
