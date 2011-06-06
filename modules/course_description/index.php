@@ -44,7 +44,7 @@ include('../../include/action.php');
 $action = new action();
 $action->record('MODULE_ID_DESCRIPTION');
 /**************************************/
-$nameTools = $langCourseProgram;
+$nameTools = $langCourseDescription;
 
 mysql_select_db($mysqlMainDb);
 

@@ -1732,7 +1732,7 @@ function load_global_messages()
                 if ($extra_messages) {
                         include $extra_messages;
                 }
-                $global_messages['langCourseDescription'][$templang] = $langCourseUnits;
+                $global_messages['langCourseDescription'][$templang] = $langCourseDescription;
                 $global_messages['langCourseUnits'][$templang] = $langCourseUnits;
                 $global_messages['langGlossary'][$templang] = $langGlossary;
                 $global_messages['langEBook'][$templang] = $langEBook;
