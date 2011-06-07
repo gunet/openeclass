@@ -17,7 +17,9 @@ function change_section() {
 <div class="tools">
 
 <div class='ebook_left'>
-   <a href='{%course_home_link%}'><strong>{%course_title%}</strong></a>
+        <a href='{%course_home_link%}' title='{%course_title%}'>{%course_title_short%}</a> &#187;
+        <a href='{%course_ebook_link%}'>{%course_ebook%}</a> &#187;
+        <span title='{%ebook_title%}'>{%ebook_title_short%}</span>
 </div>
 
 <div class='ebook_right'>
@@ -40,7 +42,6 @@ function change_section() {
 
 <div class="logo"> 
 <img src='{%img_base%}/lp/logo_openeclass.png' alt='{%ds_logo%}' title='{%ds_logo%}' />
-<strong>{%ebook_title%}</strong><br />
 <select name='section' onChange="change_section();">
 <!-- BEGIN chapter_select_options -->
 <option value='{%chapter_id%}'{%chapter_selected%}>{%chapter_title%}</option>

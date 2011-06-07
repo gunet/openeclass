@@ -146,9 +146,12 @@ if ($file_path) {
 
 $t = new Template();
 $t->set_file('page', $webDir . 'template/classic/ebook_fullscreen.html');
-$t->set_var('page_title', $currentCourseName . ': ' . $nameTools);
-$t->set_var('course_title', $currentCourseName);
+$t->set_var('page_title', q($currentCourseName . ': ' . $nameTools));
+$t->set_var('course_title', q($currentCourseName));
+$t->set_var('course_title_short', q(ellipsize($currentCourseName, 35)));
 $t->set_var('course_home_link', $urlAppend . '/courses/' . $currentCourseID . '/');
+$t->set_var('course_ebook', $langEBook);
+$t->set_var('course_ebook_link', $urlAppend . '/modules/ebook/index.php?course=' . $currentCourseID);
 $t->set_var('exit_fullscreen_link', $exit_fullscreen_link);
 $t->set_var('unit_parameter', $unit_parameter);
 $t->set_var('template_base', $urlAppend . '/template/classic/');
@@ -182,7 +185,8 @@ foreach ($textNodes as $textNode) {
 	if (!empty($textNode->data)) {
 	        $new_contents = glossary_expand($textNode->data);
 		if ($new_contents != $textNode->data) {
-			$newdoc = DOMDocument::loadXML('<span>' . $new_contents . '</span>');
+                        $newdoc = new DOMDocument();
+                        $newdoc->loadXML('<span>' . $new_contents . '</span>');
 			$newnode = $dom->importNode($newdoc->getElementsByTagName('span')->item(0), true);
 			$textNode->parentNode->replaceChild($newnode, $textNode);
 		}
@@ -202,7 +206,6 @@ foreach ($body_node->childNodes as $element) {
 unset($dom);
 $t->set_var('ebook_head', $ebook_head);
 $t->set_var('ebook_body', $ebook_body);
-$t->set_var('menu_title', $langEBookMenuTitle);
 
 $t->set_block('page', 'chapter_select_options', 'option_var');
 foreach ($sections as $section_info) {
@@ -219,7 +222,8 @@ foreach ($sections as $section_info) {
 
 $q = db_query("SELECT title FROM ebook WHERE id = $ebook_id");
 list($ebook_title) = mysql_fetch_row($q);
-$t->set_var('ebook_title', $ebook_title);
+$t->set_var('ebook_title', q($ebook_title));
+$t->set_var('ebook_title_short', q(ellipsize($ebook_title, 35)));
 
 $t->pparse('Output', 'page');
 

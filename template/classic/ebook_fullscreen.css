@@ -11,19 +11,18 @@ body {
         height: 100%!important; /* For Firefox */
         height: auto;
         background-color: #dfdfdf;
-
 }
 
 #eclass_ebook_header .ebook_right {
         float: right;
         padding: 5px;
         text-align: right;
-        }
+}
 
 #eclass_ebook_header .ebook_left {
         float: left;
         padding: 5px;
-        width: 300px;     
+        color: #ffffff;
 }
 
 #eclass_ebook_header .controls {
@@ -33,8 +32,8 @@ body {
 
 #eclass_ebook_header a img {
         border: none;
+        background-color: #687A92;
 }
-
 
 #eclass_ebook_header {
         position: fixed;
@@ -45,6 +44,7 @@ body {
         border-bottom: 3px solid #73849b;
         background-color: #ffffff;
         text-align: right;
+        min-width: 800px;
 }
 
 #eclass_ebook_header .tools {
@@ -59,15 +59,18 @@ body {
 
 #eclass_ebook_header .tools a {
         color: #ffffff;
-        text-decoration:none;
+        text-decoration: none;
+        font-weight: bold;
 }
+
 #eclass_ebook_header .tools a:hover {
-        text-decoration:underline;
+        text-decoration: underline;
         color: #ffffff;
 }
 
 #eclass_ebook_header .logo img {
-float: left;}
+        float: left;
+}
 
 .eclass_ebook_clear {
         clear: both;
@@ -79,14 +82,14 @@ float: left;}
         background-color: #ffffff;
 }
 
-.glossary {
-    border-bottom: 1px dotted #727266;
-    color: #cc333333 !important;  
-    text-decoration: none !important;
-    cursor:help; }
+span.glossary, a.glossary {
+        border-bottom: 1px dotted #727266;
+        color: #cc3333 !important;  
+        text-decoration: none !important;
+        cursor: help;
+}
 
-.glossary a {
-    border-bottom: 1px dotted #727266;
-    color: #cc333333 !important;  
-    text-decoration: none !important;
-    cursor:help; }
+a.glossary:hover {
+        border-bottom: 1px solid #727266;
+        cursor: pointer;
+}
