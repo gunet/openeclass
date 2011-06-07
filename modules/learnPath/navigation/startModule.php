@@ -173,10 +173,10 @@ echo "<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Frameset//EN''http://www.w3.o
 // add the update frame if this is a SCORM module
 if ($module['contentType'] == CTSCORM_ || $module['contentType'] == CTSCORMASSET_) {
 	require_once("scormAPI.inc.php");
-	echo "<frameset border='0' rows='0,75,*' frameborder='no'>
+	echo "<frameset border='0' rows='0,85,*' frameborder='no'>
 		<frame src='updateProgress.php?course=$code_cours' name='upFrame'>";
 } else {
-	echo "<frameset border='0' rows='95,*' frameborder='no'>";
+	echo "<frameset border='0' rows='85,*' frameborder='no'>";
 }
 
 echo "<frame src='../viewer_toc.php?course=$code_cours' name='tocFrame' scrolling='no' />";
