@@ -7,7 +7,6 @@ html {
 body {
         margin:  auto;
         padding: 0;
-        width: 980px;
         margin-bottom: 1px;
         height: 100%!important; /* For Firefox */
         height: auto;
@@ -15,130 +14,69 @@ body {
 
 }
 
-#menu_right a, .tools a {
-        text-decoration: none;
-        color: #627aad;
-}
-
-#menu_right a:hover, #menu_right a:focus, .tools a:hover, .tools a:focus  {
-        color: #627aad;
-        text-decoration: underline;
-}
-
-.ebook_right {
+#eclass_ebook_header .ebook_right {
         float: right;
         padding: 5px;
         text-align: right;
         }
 
-.ebook_left {
+#eclass_ebook_header .ebook_left {
         float: left;
         padding: 5px;
         width: 300px;     
 }
 
-.controls {
+#eclass_ebook_header .controls {
         padding-top: 8px;
         text-align: center;
 }
 
-a img {
+#eclass_ebook_header a img {
         border: none;
 }
 
 
-.header {
+#eclass_ebook_header {
         position: fixed;
         top: 0;
-        height: 100px;
-        width: 980px;
+        height: 80px;
         margin: 0 auto;
+        width: 100%;
         border-bottom: 3px solid #73849b;
         background-color: #ffffff;
-        
+        text-align: right;
 }
 
-.tools {
+#eclass_ebook_header .tools {
         height: 30px;
-        width: 980px;
         font-family: "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
         font-size: 13px;
         z-index: 1;
         background-color: #687A92;
         float: left;
-        
+        width: 100%;
 }
 
-.tools a {
+#eclass_ebook_header .tools a {
         color: #ffffff;
         text-decoration:none;
 }
-.tools a:hover {
+#eclass_ebook_header .tools a:hover {
         text-decoration:underline;
         color: #ffffff;
 }
 
-.logo {
+#eclass_ebook_header .logo img {
 float: left;}
 
-.clear {
+.eclass_ebook_clear {
         clear: both;
 }
 
-.nofullscreen {
-}
-
-.menu_right {
-        display: none;
-        width: 330px;
-        height: auto;
-        padding: 20px;
-        background-color: #eceff5;
-        border: #3B5998 1px solid;
-        z-index: 2;
-}
-
-
-.menu_right, a.trigger {
-        font-family: "Tahoma", Verdana, Arial, Helvetica, sans-serif;
-        font-size: 12px;
-}
-.menu_right a, a.trigger {
-        text-decoration: none;
-}
-.menu_right a:hover, a.trigger:hover {
-        text-decoration: underline;
-}
-
-a.trigger {
-        position: fixed;
-        text-decoration: none;
-        top: 120px; right: 0;
-        padding: 10px 15px 10px 40px;
-        background: #eceff5 url(img/ebook/show.png) 15% 55% no-repeat;
-        display: block;
-}
-
-a.trigger:hover {
-        background: #eceff5 url(img/ebook/show.png) 15% 55% no-repeat;
-}
-
-a.trigger.active {
-        background: #eceff5 url(img/ebook/hide.png) 15% 55% no-repeat;
-}
-
-.menu_right .active {
-        background-color: #cfd8ea;
-        padding: 2px;
-        border: 1px solid #ffffff;
-        font-weight: bold;
-}
-
-.ebook_body {
-        margin-top: 100px;
+#eclass_ebook_body {
+        margin-top: 80px;
         clear: both;
         background-color: #ffffff;
-        
 }
 
 .glossary {

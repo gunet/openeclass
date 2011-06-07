@@ -5,90 +5,55 @@
 <title>{%page_title%}</title>
 <link href="{%template_base%}/ebook_fullscreen.css" rel="stylesheet" type="text/css" />
 {%ebook_head%}
-<script type='text/javascript' src='{%js_base%}/jquery-1.4.3.min.js'></script>
-<script type='text/javascript' src='{%js_base%}/jquery-ui-1.8.1.custom.min.js'></script>
-<script type='text/javascript' src='{%js_base%}/jquery.cookie.js'></script>
 <script type='text/javascript'>
 function change_section() {
     top.location='{%ebook_url_base%}'+document.getElementsByName('section')[0].value+'/{%unit_parameter%}';
 }
 </script>
-
 </head>
 
 <body>
-<div class="header">
+<div id="eclass_ebook_header">
 <div class="tools">
 
 <div class='ebook_left'>
-<a href='{%course_home_link%}'><strong>
-{%course_title%}</strong></a>&nbsp;
-<select name='section' onChange="change_section();" class='auth_input'>
+   <a href='{%course_home_link%}'><strong>{%course_title%}</strong></a>
+</div>
+
+<div class='ebook_right'>
+<!-- BEGIN back_link_active -->
+<a href='{%back_chapter_link%}'><img src='{%img_base%}/ebook/back.png' alt='{%back_chapter_title%}' title='{%back_chapter_title%}' /></a>
+<!-- END back_link_active -->
+<!-- BEGIN back_link_inactive -->
+<img src='{%img_base%}/ebook/back_grey.png' alt='' />
+<!-- END back_link_inactive -->
+<!-- BEGIN next_link_active -->
+<a href='{%next_chapter_link%}'><img src='{%img_base%}/ebook/next.png' alt='{%next_chapter_title%}' title='{%next_chapter_title%}' /></a>
+<!-- END next_link_active -->
+<!-- BEGIN next_link_inactive -->
+<img src='{%img_base%}/ebook/next_grey.png' alt='' />
+<!-- END next_link_inactive -->
+<a href='{%exit_fullscreen_link%}'><img src='{%img_base%}/ebook/nofullscreen.png' class="nofullscreen" alt='{%$langLeave%}' title='{%$langBackCourse%}' /></a>
+</div>
+
+<div class="eclass_ebook_clear"> </div>
+
+<div class="logo"> 
+<img src='{%img_base%}/lp/logo_openeclass.png' alt='{%ds_logo%}' title='{%ds_logo%}' />
+<strong>{%ebook_title%}</strong><br />
+<select name='section' onChange="change_section();">
 <!-- BEGIN chapter_select_options -->
 <option value='{%chapter_id%}'{%chapter_selected%}>{%chapter_title%}</option>
 <!-- END chapter_select_options -->
 </select>
 </div>
 
-<div class='ebook_right'>
-<!-- BEGIN back_link_active -->
-<a href='{%back_chapter_link%}'><img src='{%img_base%}/back.png' alt='{%back_chapter_title%}' title='{%back_chapter_title%}' /></a>
-<!-- END back_link_active -->
-<!-- BEGIN back_link_inactive -->
-<img src='{%img_base%}/back_grey.png' alt='' />
-<!-- END back_link_inactive -->
-<!-- BEGIN next_link_active -->
-<a href='{%next_chapter_link%}'><img src='{%img_base%}/next.png' alt='{%next_chapter_title%}' title='{%next_chapter_title%}' /></a>
-<!-- END next_link_active -->
-<!-- BEGIN next_link_inactive -->
-<img src='{%img_base%}/next_grey.png' alt='' />
-<!-- END next_link_inactive -->
-<a href='{%exit_fullscreen_link%}'><img src='{%img_base%}/nofullscreen.png' class="nofullscreen" alt='{%$langLeave%}' title='{%$langBackCourse%}' /></a>
-</div>
-
-<div class="clear"> </div>
-
-<div class="logo"> 
-<img src='{%img_base%}/logo_openeclass.png' alt='{%ds_logo%}' title='{%ds_logo%}' />
-</div>
-
 </div>
 </div>
 
-<div class="clear"> </div>
+<div class='eclass_ebook_clear'> </div>
 
+<div id='eclass_ebook_body'>{%ebook_body%}</div>
 
-<!-- BEGIN section_titles -->
-<div class='menu_right'> 
-<!-- BEGIN section_title_entry -->
-  <div{%class_active%}><a href='{%section_link%}'>{%section_title%}</a></div>
-<!-- END section_title_entry -->
-</div>
-<a class="trigger" href="#">{%menu_title%}</a>
-<!-- END section_titles -->
-
-
-<div class='ebook_body'>{%ebook_body%}</div>
-
-
-<script type='text/javascript'>
-$(document).ready(function(){
-        $(".trigger").click(function(){
-                $(".menu_right").toggle("fast");
-                $(this).toggleClass("active");
-                if ($.cookie('ebook_menu') == 'open') {
-                        $.cookie('ebook_menu', 'closed', { path: '/' });
-                } else {
-                        $.cookie('ebook_menu', 'open', { path: '/' });
-                }
-                return false;
-        });
-});
-
-if ($.cookie('ebook_menu') == 'open') {
-	$('.menu_right').show();
-        $('.trigger').toggleClass("active");
-}
-</script>
 </body>
 </html>

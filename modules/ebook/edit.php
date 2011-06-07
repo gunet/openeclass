@@ -264,7 +264,7 @@ if (mysql_num_rows($q) == 0) {
      </form>\n";
 }
 
-draw($tool_content, 2, '', $head_content);
+draw($tool_content, 2, null, $head_content);
 
 function find_html_files()
 {

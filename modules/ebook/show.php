@@ -93,6 +93,8 @@ $q = db_query("SELECT ebook_section.id AS sid,
 if (!$q or mysql_num_rows($q) == 0) {
         not_found($uri);
 }
+$last_section_id = null;
+$sections = array();
 while ($row = mysql_fetch_array($q)) {
         $url_filename = public_file_path($row['path'], $row['filename']);
 	$sid = $row['sid'];
@@ -107,27 +109,17 @@ while ($row = mysql_fetch_array($q)) {
                 $current_display_id = $sid . ',' . $ssid;
         }
         $display_id = $sid . ',' . $ssid;
-	$sections[$sid] = $row['section_title'];
-	if (isset($current_display_id) and $current_display_id == $display_id) {
-		$class_active = ' class="active"';
-	} else {
-		$class_active = '';
-	}
-	if ($fragment_pos = strpos($url_filename, '#')) {
-		$display_id = $section_id;
-		$fragment = substr($url_filename, $fragment_pos);
-		$file = substr($url_filename, 0, $fragment_pos);
-	} else {
-		$fragment = '';
-		$file = $url_filename;
-	}
-	$subsections[$sid][$ssid] = array(
-		'title' => $row['subsection_title'],
-		'path' => $row['path'],
-		'url' => $ebook_url_base . $display_id . '/' . $unit_parameter . $fragment,
-                'class' => $class_active,
-                'psid' => $row['psid'],
-                'pssid' => $row['pssid']);
+        if ($last_section_id != $row['sid']) {
+                $sections[] = array('id' => $display_id,
+                                    'title' => $row['section_title'],
+                                    'current' => false,
+                                    'indent' => false);
+        }
+        $sections[] = array('id' => $display_id,
+                            'title' => $row['subsection_title'],
+                            'indent' => true,
+                            'current' => (isset($current_display_id) and $current_display_id == $display_id));
+	$subsection_path[$sid][$ssid] = $row['path'];
 	if (isset($last_display_id) and isset($current_display_id)) {
 		if ($current_display_id == $display_id) {
 			$back_section_id = $last_display_id;
@@ -148,7 +140,7 @@ if (!$full_url_found) {
 }
 
 if ($file_path) {
-        $initial_path = preg_replace('#/[^/]*$#', '', $subsections[$current_sid][$current_ssid]['path']);
+        $initial_path = preg_replace('#/[^/]*$#', '', $subsection_path[$current_sid][$current_ssid]);
         send_file_by_url_file_path($file_path, $initial_path);
 }
 
@@ -160,7 +152,7 @@ $t->set_var('course_home_link', $urlAppend . '/courses/' . $currentCourseID . '/
 $t->set_var('exit_fullscreen_link', $exit_fullscreen_link);
 $t->set_var('unit_parameter', $unit_parameter);
 $t->set_var('template_base', $urlAppend . '/template/classic/');
-$t->set_var('img_base', $urlAppend . '/template/classic/img/ebook');
+$t->set_var('img_base', $urlAppend . '/template/classic/img');
 $t->set_var('js_base', $urlAppend . '/js');
 
 $t->set_var('ebook_url_base', $ebook_url_base);
@@ -182,7 +174,7 @@ if (isset($next_section_id)) {
 $ebook_body = '';
 $ebook_head = '';
 $dom = new DOMDocument();
-@$dom->loadHTMLFile($basedir . $subsections[$current_sid][$current_ssid]['path']);
+@$dom->loadHTMLFile($basedir . $subsection_path[$current_sid][$current_ssid]);
 
 $xpath = new DOMXpath($dom);
 $textNodes = $xpath->query('//text()');
@@ -213,10 +205,11 @@ $t->set_var('ebook_body', $ebook_body);
 $t->set_var('menu_title', $langEBookMenuTitle);
 
 $t->set_block('page', 'chapter_select_options', 'option_var');
-foreach ($sections as $section_id => $section_title) {
-	$t->set_var('chapter_title', $section_title);
-	$t->set_var('chapter_id', $section_id);
-	if ($section_id == $current_sid) {
+foreach ($sections as $section_info) {
+        $t->set_var('chapter_title', ($section_info['indent']? '&nbsp;&nbsp;&nbsp;': '') .
+                                     q(ellipsize($section_info['title'], 40)));
+	$t->set_var('chapter_id', $section_info['id']);
+	if ($section_info['current']) {
 		$t->set_var('chapter_selected', ' selected="selected"');
 	} else {
 		$t->set_var('chapter_selected', '');
@@ -224,17 +217,9 @@ foreach ($sections as $section_id => $section_title) {
 	$t->parse('option_var', 'chapter_select_options', true);
 }
 
-if (count($subsections[$current_sid]) == 1) {
-	$t->set_block('page', 'section_titles', 'section_titles_hide');
-} else {
-	$t->set_block('page', 'section_title_entry', 'section_var');
-	foreach ($subsections[$current_sid] as $subsection_id => $info) {
-		$t->set_var('section_link', $info['url']);
-		$t->set_var('section_title', $info['title']);
-		$t->set_var('class_active', $info['class']);
-		$t->parse('section_var', 'section_title_entry', true);
-	}
-}
+$q = db_query("SELECT title FROM ebook WHERE id = $ebook_id");
+list($ebook_title) = mysql_fetch_row($q);
+$t->set_var('ebook_title', $ebook_title);
 
 $t->pparse('Output', 'page');
 
