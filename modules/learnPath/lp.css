@@ -24,6 +24,14 @@ body {
 		color: #ffffff;
 		font-size: 12px;
         }
+        
+.lp_right_grey {
+        float: right;
+        padding: 5px;
+        text-align: right;
+		color: #777777;
+		font-size: 12px;
+        }
 
 .lp_left {
         float: left;

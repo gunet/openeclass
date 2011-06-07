@@ -207,23 +207,9 @@ foreach ($flatElementList as $module)
 			// bold the title of the current displayed module
 			if( $_SESSION['lp_module_id'] == $module['module_id'] )
 			{
-				$sql = "SELECT M.`name`
-				         FROM `".$TABLELEARNPATHMODULE."` AS LPM,
-				         `".$TABLEMODULE."` AS M
-				         WHERE LPM.`learnPath_module_id` = '" .(int)$module['parent'] ."'
-				           AND LPM.`module_id` = M.`module_id`
-				           AND LPM.`learnPath_id` = '" . (int)$_SESSION['path_id'] ."'
-				       ";
-				$currentLabel = db_query_get_single_value($sql);
-
-				$currentName = '<img src="'.$imgRepositoryWeb.$moduleImg.'" alt="'.$contentType_alt.'" title="'.$contentType_alt.'" border="0" /> '.$displayedName;
 				$displayedName = '<b>'.$displayedName.'</b>';
 				$previousModule = $previous;
 
-				if($module['credit'] == 'CREDIT' || $module['lesson_status'] == 'COMPLETED' || $module['lesson_status'] == 'PASSED')
-				{
-					$imagePassed = '&nbsp;<img src="'.$imgRepositoryWeb.'tick.png" alt="'.$module['lesson_status'].'" title="'.$module['lesson_status'].'" />';
-				}
 			}
 			// store next value if user has the right to access it
 			if( $previous == $_SESSION['lp_module_id'] )
@@ -282,7 +268,7 @@ foreach ($flatElementList as $module)
 
 } // end of foreach ($flatElementList as $module)
 
-$prevNextString = ""/*' - '.$currentName.*//*"&nbsp;&nbsp;&nbsp;"*/;
+$prevNextString = "";
 
 // display previous and next links only if there is more than one module
 if ( $moduleNb > 1 )
@@ -317,39 +303,23 @@ if ( $is_adminOfCourse )
 else
 	$returl = 'learningPath';
 	
-echo '<div class="lp_left">'.$prevNextString
+echo '<div class="lp_right">'.$prevNextString
 	.'&nbsp;<a href="navigation/viewModule.php?course='.$code_cours.'&amp;go='.$returl.'" target="scoFrame"><img src="'.$imgRepositoryWeb.'lp/nofullscreen.png" alt="'.$langQuitViewer.'" title="'.$langQuitViewer.'" /></a>
 	</div>';
 
-/*echo ''
-.'<a href="viewer.php?course='.$code_cours.'&amp;fullscreen=1" target="_top">'
-.'<img src="'.$imgRepositoryWeb.'fullscreen.png" border="0" title="'.$langFullScreen.'">'
-.'</a>'
-.'<a href="viewer.php?course='.$code_cours.'&amp;fullscreen=0" target="_top">'
-.'<img src="'.$imgRepositoryWeb.'fullscreen_exit.png" border="0" title="'.$langInFrames.'">'
-.'</a>&nbsp;&nbsp;&nbsp;'."\n"';*/
+echo "<div class='lp_left'><a href=\"". $urlAppend ."/courses/". $currentCourseID ."/\" target='_top'><strong>$currentCourseName</strong></a></div>";
 
+echo "<div class='clear'></div>";
+
+echo "<div class='logo'><img src=\"".$imgRepositoryWeb."lp/logo_openeclass.png\" alt='' title='' /></div>";
+
+echo "<div class='lp_right_grey'>$learnPath";
 if($uid) {
 	$lpProgress = get_learnPath_progress((int)$_SESSION['path_id'],$uid);
-	echo '<div class="lp_right">'
-		.$langGlobalProgress
-		.disp_progress_bar($lpProgress, 1)
-		."&nbsp;".$lpProgress."%"
-		.'</div>'; 
+	echo ": ". disp_progress_bar($lpProgress, 1) ."&nbsp;". $lpProgress ."%";
 }
+echo "</div>";
 
-echo '<div class="clear"></div>';
-
-echo '<div class="logo"><img src="'.$imgRepositoryWeb.'lp/logo_openeclass.png" alt="" title="" />'
-    .$learnPath.": ";
-if(isset($currentLabel))
-	echo "<strong>".$currentLabel."</strong> - ";
-if(isset($currentName))
-	echo $currentName;
-if(isset($imagePassed))
-	echo $imagePassed;
-echo '</div>';
-
-echo '</div></div></body></html>';
+echo "</div></div></body></html>";
 
 ?>
