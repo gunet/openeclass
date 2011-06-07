@@ -1,6 +1,6 @@
 html {
         margin-bottom: 1px;
-        height: 100%!important; /* For Firefox */
+        height: 99%!important; /* For Firefox */
         height: auto;
 }
 
@@ -8,7 +8,7 @@ body {
         margin: 0 auto;
         padding: 0;
         margin-bottom: 1px;
-        height: 100%!important; /* For Firefox */
+        height: 99%!important; /* For Firefox */
         height: auto;
         background-color: #dfdfdf;
 		font-family: "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
