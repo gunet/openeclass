@@ -134,8 +134,7 @@ $sql = "SELECT `name`
       WHERE `learnPath_id` = '". (int)$_SESSION['path_id']."'";
 
 $lpName = db_query_get_single_value($sql);
-
-$learnPath =  '<strong>'.wordwrap($lpName,$moduleNameLength,' ',1).'</strong>';
+$learnPath =  '<strong>'.$lpName.'</strong>';
 
 $previous = ""; // temp id of previous module, used as a buffer in foreach
 $previousModule = ""; // module id that will be used in the previous link
@@ -269,7 +268,6 @@ foreach ($flatElementList as $module)
 } // end of foreach ($flatElementList as $module)
 
 $prevNextString = "";
-
 // display previous and next links only if there is more than one module
 if ( $moduleNb > 1 )
 {
@@ -277,31 +275,19 @@ if ( $moduleNb > 1 )
 	$imgNext = '<img src="'.$imgRepositoryWeb.'lp/next.png" alt="'.$langNext.'" title="'.$langNext.'">';
 
 	if( $previousModule != '' )
-	{
 		$prevNextString .= '<a href="navigation/viewModule.php?course='.$code_cours.'&amp;viewModule_id='.$previousModule.'" target="scoFrame">'.$imgPrevious.'</a>';
-	}
 	else
-	{
 		$prevNextString .=  $imgPrevious;
-	}
 	$prevNextString .=  '&nbsp;';
 
 	if( $nextModule != '' )
-	{
 		$prevNextString .=  '<a href="navigation/viewModule.php?course='.$code_cours.'&amp;viewModule_id='.$nextModule.'" target="scoFrame">'.$imgNext.'</a>';
-	}
 	else
-	{
 		$prevNextString .=  $imgNext;
-		$endOfSteps = $langEndOfSteps;
-	}
 }
 
 //  set redirection link
-if ( $is_adminOfCourse )
-	$returl = 'learningPathAdmin';
-else
-	$returl = 'learningPath';
+$returl = ($is_adminOfCourse) ? 'learningPathAdmin' : 'learningPath';
 	
 echo '<div class="lp_right">'.$prevNextString
 	.'&nbsp;<a href="navigation/viewModule.php?course='.$code_cours.'&amp;go='.$returl.'" target="scoFrame"><img src="'.$imgRepositoryWeb.'lp/nofullscreen.png" alt="'.$langQuitViewer.'" title="'.$langQuitViewer.'" /></a>
