@@ -430,7 +430,7 @@ if (isset($_POST['create_course'])) {
         $tool_content .= "
                 <p class='success'><b>$langJustCreated:</b> $intitule<br>
                 <span class='smaller'>$langEnterMetadata</span></p>
-                <p class='button'><a href='../../courses/$repertoire/index.php'>$langEnter</a></p>";
+                <p class='eclass_button'><a href='../../courses/$repertoire/index.php'>$langEnter</a></p>";
 } // end of submit
 
 $tool_content .= "</form>";

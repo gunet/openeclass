@@ -280,10 +280,10 @@ $tool_content .= "
 			if ($u > 1)
 			{
 				if (isset($logs))
-					$tool_content .= "<p class='button'>
+					$tool_content .= "<p class='eclass_button'>
 					<a href='unreguser.php?u=$u&amp;c=$logs[0]'>$langDelete</a></p>";
 				else
-					$tool_content .= "<p class='button'>
+					$tool_content .= "<p class='eclass_button'>
 					<a href='unreguser.php?u=$u'>$langDelete</a></p>";
 			}
 			else

@@ -60,7 +60,7 @@ if (!$doit) {
         }
         $tool_content .= ";</div>
                 
-                <p class='button'><a href='$_SERVER[PHP_SELF]?u=$u&amp;c=$c&amp;doit=yes'>$langDelete</a></p>
+                <p class='eclass_button'><a href='$_SERVER[PHP_SELF]?u=$u&amp;c=$c&amp;doit=yes'>$langDelete</a></p>
                 <div class='right'> <a href='edituser.php?u=$u'>$langBack</a></div>
                 ";
 } else {

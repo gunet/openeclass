@@ -116,7 +116,7 @@ input[type=submit] {
 	padding: 3px;
 }
 
-.button {
+.eclass_button {
 	color: #ffffff;
 	font-size: 14px;
 	border: 1px solid #8597A5;
@@ -127,7 +127,7 @@ input[type=submit] {
     text-align: center;
 }
 
-.button a:link {
+.eclass_button a:link {
 	color: #ffffff !important;
 }
 
