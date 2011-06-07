@@ -89,6 +89,9 @@ require_once $relPathLib . 'htmlpurifier-4.3.0-standalone/HTMLPurifier.standalon
 $purifier = new HTMLPurifier();
 $purifier->config->set('Cache.SerializerPath', $webDir . 'courses/temp');
 $purifier->config->set('Attr.AllowedFrameTargets', array('_blank'));
+$purifier->config->set('HTML.SafeObject', true);
+$purifier->config->set('Output.FlashCompat', true);
+$purifier->config->set('HTML.FlashAllowFullScreen', true);
 
 // PHP Math Publisher
 include $relPathLib . 'phpmathpublisher/mathpublisher.php';
