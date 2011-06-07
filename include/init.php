@@ -85,9 +85,10 @@ if (!isset($webDir)) {
 }
 
 // HTML Purifier
-require_once $relPathLib . 'htmlpurifier-4.1.1-standalone/HTMLPurifier.standalone.php';
+require_once $relPathLib . 'htmlpurifier-4.3.0-standalone/HTMLPurifier.standalone.php';
 $purifier = new HTMLPurifier();
 $purifier->config->set('Cache.SerializerPath', $webDir . 'courses/temp');
+$purifier->config->set('Attr.AllowedFrameTargets', array('_blank'));
 
 // PHP Math Publisher
 include $relPathLib . 'phpmathpublisher/mathpublisher.php';
