@@ -470,6 +470,10 @@ db_query("INSERT INTO `config` (`key`, `value`) VALUES
                 ('secret_key', '" . generate_secret_key() . "'),
 		('display_captcha', $display_captcha),
 		('insert_xml_metadata', $insert_xml_metadata),
+		('doc_quota', $doc_quota),
+		('video_quota', $video_quota),
+		('group_quota', $group_quota),
+		('dropbox_quota', $dropbox_quota),
                 ('version', '" . ECLASS_VERSION ."')");
 
 // Table passwd_reset (used by the password reset module)

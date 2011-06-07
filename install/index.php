@@ -122,11 +122,15 @@ if (isset($_POST['welcomeScreen'])) {
 	$helpdeskForm = '+30 2xx xxxx xxx';
 	$institutionForm = $langDefaultInstitutionName;
         $institutionUrlForm = 'http://www.gunet.gr/';
+	$doc_quota = 200;
+	$video_quota = 100;
+	$group_quota = 100;
+	$dropbox_quota = 100;
         $reguser = $dbPassForm = $helpdeskmail = $faxForm = $postaddressForm = '';
 	$email_required = $am_required = $dropbox_allow_student_to_student = $dont_display_login_form = '';
 	$display_captcha = $block_username_change = $insert_xml_metadata = $betacms = '';
 } else {
-       register_posted_variables(array(
+	register_posted_variables(array(
                 'dbHostForm' => true,
                 'dbUsernameForm' => true,
                 'dbNameForm' => true,
@@ -156,7 +160,13 @@ if (isset($_POST['welcomeScreen'])) {
 		'block_username_change' => true,
 		'display_captcha' => true,
 		'insert_xml_metadata' => true,
-		'betacms' => true), 'all');
+		'betacms' => true));
+	
+	register_posted_variables(array(
+		'doc_quota' => true,
+		'group_quota' => true,
+		'dropbox_quota' => true,
+		'video_quota' => true), 'all', 'intval');
 }
 
 $pathForm = str_replace("\\", '/', realpath($pathForm) . '/');
@@ -198,6 +208,7 @@ $all_vars = array('pathForm', 'urlAppendPath', 'dbHostForm', 'dbUsernameForm', '
                   'dbPassForm', 'urlForm', 'emailForm', 'nameForm', 'surnameForm', 'loginForm',
                   'passForm', 'phpSysInfoURL', 'campusForm', 'helpdeskForm', 'helpdeskmail',
                   'institutionForm', 'institutionUrlForm', 'faxForm', 'postaddressForm', 'reguser',
+		  'doc_quota', 'video_quota', 'group_quota', 'dropbox_quota',
                   'email_required', 'am_required', 'dropbox_allow_student_to_student',
                   'dont_display_login_form', 'block_username_change', 'display_captcha',
 		  'insert_xml_metadata', 'betacms');
@@ -309,6 +320,14 @@ elseif(isset($_REQUEST['install4']) OR isset($_REQUEST['back4']))
                     <td>".text_input('institutionUrlForm', 40)."</td></tr>
                 <tr><th class='left'>$langInstitutePostAddress</th>
                     <td>".textarea_input('postaddressForm', 3, 40)."</td></tr>
+		<tr><th class='left'>$langDocQuota</th>
+			<td>".text_input('doc_quota', 5)."&nbsp;(Mb)</td></tr>
+		<tr><th class='left'>$langVideoQuota</th>
+			<td>".text_input('video_quota', 5)."&nbsp;(Mb)</td></tr>
+		<tr><th class='left'>$langGroupQuota</th>
+			<td>".text_input('group_quota', 5)."&nbsp;(Mb)</td></tr>
+		<tr><th class='left'>$langDropboxQuota</th>
+			<td>".text_input('dropbox_quota', 5)."&nbsp;(Mb)</td></tr>
                 <tr>
                 <th class='left'>$langViaReq</th>
                 <td>".checkbox_input('reguser')."</td>

@@ -274,6 +274,10 @@ if (!isset($_POST['submit2'])) {
 			('betacms', '0'),
 			('display_captcha', '0'),
 			('insert_xml_metadata', '0'),
+			('doc_quota', '200'),
+			('dropbox_quota', '100'),
+			('video_quota', '100'),
+			('group_quota', '100'),
                         ('secret_key', '" . generate_secret_key() . "')");
 
         if ($oldversion < '2.1.3') {
@@ -507,7 +511,7 @@ if (!isset($_POST['submit2'])) {
 		// not needed anymore
 		if (mysql_table_exists($mysqlMainDb, 'cours_faculte')) {
 			db_query("DROP TABLE cours_faculte");	
-		}
+		}		
         }
 
         // **********************************************

@@ -378,7 +378,13 @@ if (isset($_POST['create_course'])) {
 
         // ------------- update main Db------------
         mysql_select_db("$mysqlMainDb");
-
+        
+        // get default quota values
+        $doc_quota = get_config('doc_quota');
+        $group_quota = get_config('group_quota');
+        $video_quota = get_config('video_quota');
+        $dropbox_quota = get_config('dropbox_quota');
+        
         db_query("INSERT INTO cours SET
                         code = '$code',
                         languageCourse =" . quote($language) . ",
@@ -388,6 +394,10 @@ if (isset($_POST['create_course'])) {
                         titulaires = " . quote($titulaires) . ",
                         fake_code = " . quote($code) . ",
                         type = " . quote($type) . ",
+                        doc_quota = $doc_quota*1024*1024,
+                        video_quota = $video_quota*1024*1024,
+                        group_quota = $group_quota*1024*1024,
+                        dropbox_quota = $dropbox_quota*1024*1024,
                         password = " . quote($password) . ",
                         faculteid = $facid,
                         first_create = NOW()");

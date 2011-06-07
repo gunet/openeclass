@@ -26,7 +26,7 @@ $cdb=mysql_query("CREATE DATABASE `$repertoire` $charset_spec");
 $code=$repertoire;
 
 // select course database
-    mysql_select_db($repertoire);
+  mysql_select_db($repertoire);
 
 // create phpbb 1.4 tables
   mysql_query("CREATE TABLE catagories (

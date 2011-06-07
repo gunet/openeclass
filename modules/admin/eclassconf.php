@@ -143,14 +143,18 @@ $active_ui_languages = '.$string_active_ui_languages."\n";
                                      'block_username_change' => true,
                                      'display_captcha' => true,
                                      'insert_xml_metadata' => true,
-                                     'betacms' => true);
+                                     'betacms' => true,
+				     'doc_quota' => true,
+				     'group_quota' => true,
+				     'video_quota' => true,
+				     'dropbox_quota' => true);
 
-                register_posted_variables($config_vars, 'all', 'intval');
-
+		register_posted_variables($config_vars, 'all', 'intval');
+		
                 foreach ($config_vars as $varname => $what) {
                         set_config($varname, $GLOBALS[$varname]);
                 }
-
+		
                 // Display result message
                 $tool_content .= "<p class='success'>".$langFileUpdatedSuccess."</p>";
         }
@@ -351,6 +355,22 @@ else {
 	  <tr>
 		<th class='left'><b>betacms</b></th>
 		<td><input type='checkbox' name='betacms' value='1' $cbox_betacms />&nbsp;$lang_betacms</td>
+	  </tr>
+	  <tr>
+		<th class='left'><b>$langDocQuota</b></th>
+		<td><input class='FormData_InputText' type='text' name='doc_quota' value='".get_config('doc_quota')."' size='5'/>&nbsp;(Mb)</td>
+	  </tr>
+	  <tr>
+		<th class='left'><b>$langVideoQuota</b></th>
+		<td><input class='FormData_InputText' type='text' name='video_quota' value='".get_config('video_quota')."' size='5' />&nbsp;(Mb)</td>
+	  </tr>
+	  <tr>
+		<th class='left'><b>$langGroupQuota</b></th>
+		<td><input class='FormData_InputText' type='text' name='group_quota' value='".get_config('group_quota')."' size='5' />&nbsp;(Mb)</td>
+	  </tr>
+	  <tr>
+		<th class='left'><b>$langDropboxQuota</b></th>
+		<td><input class='FormData_InputText' type='text' name='dropbox_quota' value='".get_config('dropbox_quota')."' size='5' />&nbsp;(Mb)</td>
 	  </tr>
 	  <tr><td colspan='2'><hr></td></tr>
 	  <tr>
