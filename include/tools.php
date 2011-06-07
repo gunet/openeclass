@@ -480,75 +480,38 @@ function lessonToolsMenu(){
         $arrMenuType = array();
         $arrMenuType['type'] = 'none';
 
-	//	------------------------------------------------------------------
-	//	Get public tools
-	//	------------------------------------------------------------------
-	$result = getToolsArray('Public');
+        if ($is_adminOfCourse) {
+                $tools_sections = array(array('type' => 'Public',
+                                              'title' => $GLOBALS['langActiveTools'],
+                                              'iconext' => '_on.png'),
+                                        array('type' => 'PublicButHide',
+                                              'title' => $GLOBALS['langInactiveTools'],
+                                              'iconext' => '_off.png'),
+                                        array('type' => 'courseAdmin',
+                                              'title' => $GLOBALS['langAdministrationTools'],
+                                              'iconext' => '_on.png'));
+        } else {
+                $tools_sections = array(array('type' => 'Public',
+                                              'title' => $GLOBALS['langCourseOptions'],
+                                              'iconext' => '_on.png'));
+        }
 
-	$sideMenuSubGroup = array();
-	$sideMenuText = array();
-	$sideMenuLink = array();
-	$sideMenuImg = array();
-	$sideMenuID = array();
+        foreach ($tools_sections as $section) {
+                $result = getToolsArray($section['type']);
 
+                $sideMenuSubGroup = array();
+                $sideMenuText = array();
+                $sideMenuLink = array();
+                $sideMenuImg = array();
+                $sideMenuID = array();
 
-	$arrMenuType = array();
-	if ($is_adminOfCourse) {
-		$arrMenuType['type'] = 'text';
-		$arrMenuType['text'] = $GLOBALS['langActiveTools'];
-	} else  {
-		$arrMenuType['type'] = 'text';
-		$arrMenuType['text'] = $GLOBALS['langCourseOptions'];
-	}
-	array_push($sideMenuSubGroup, $arrMenuType);
+                $arrMenuType = array('type' => 'text',
+                                     'text' => $section['title']);
+                array_push($sideMenuSubGroup, $arrMenuType);
 
-	while ($toolsRow = mysql_fetch_array($result)) {
-                if(!defined($toolsRow['define_var'])) {
-                        define($toolsRow['define_var'], $toolsRow['id']);
-                }
-
-                // Add course code only to internal links
-                if (!empty($toolsRow['define_var'])) {
-                        $toolsRow['lien'] .= "?course=".$currentCourseID;
-                }
-
-		array_push($sideMenuText, q($toolsRow['rubrique']));
-		array_push($sideMenuLink, q($toolsRow['lien']));
-		array_push($sideMenuImg, $toolsRow['image'].'_on.png');
-		array_push($sideMenuID, $toolsRow['id']);
-	}
-
-	array_push($sideMenuSubGroup, $sideMenuText);
-	array_push($sideMenuSubGroup, $sideMenuLink);
-	array_push($sideMenuSubGroup, $sideMenuImg);
-	array_push($sideMenuSubGroup, $sideMenuID);
-	array_push($sideMenuGroup, $sideMenuSubGroup);
-	//	------------------------------------------------------------------
-	//	END of Get public tools
-	//	------------------------------------------------------------------
-
-	//	------------------------------------------------------------------
-	//	Get professor's tools
-	//	------------------------------------------------------------------
-
-	if ($is_adminOfCourse) {
-		//get inactive tools
-		$result= getToolsArray('PublicButHide');
-
-		$sideMenuSubGroup = array();
-		$sideMenuText = array();
-		$sideMenuLink = array();
-		$sideMenuImg = array();
-		$sideMenuID = array();
-
-		$arrMenuType = array();
-		$arrMenuType['type'] = 'text';
-		$arrMenuType['text'] = $GLOBALS['langInactiveTools'];
-		array_push($sideMenuSubGroup, $arrMenuType);
-
-		while ($toolsRow = mysql_fetch_array($result)) {
-			if(!defined($toolsRow['define_var'])) {
-				define($toolsRow['define_var'], $toolsRow['id']);
+                while ($toolsRow = mysql_fetch_array($result)) {
+                        if(!defined($toolsRow['define_var'])) {
+                                define($toolsRow['define_var'], $toolsRow['id']);
                         }
 
                         // Add course code only to internal links
@@ -556,51 +519,18 @@ function lessonToolsMenu(){
                                 $toolsRow['lien'] .= "?course=".$currentCourseID;
                         }
 
-			array_push($sideMenuText, q($toolsRow['rubrique']));
-			array_push($sideMenuLink, q($toolsRow['lien']."?course=".$currentCourseID));
-			array_push($sideMenuImg, $toolsRow['image'].'_off.png');
-			array_push($sideMenuID, $toolsRow['id']);
-		}
+                        array_push($sideMenuText, q($toolsRow['rubrique']));
+                        array_push($sideMenuLink, q($toolsRow['lien']));
+                        array_push($sideMenuImg, $toolsRow['image'].$section['iconext']);
+                        array_push($sideMenuID, $toolsRow['id']);
+                }
 
-		array_push($sideMenuSubGroup, $sideMenuText);
-		array_push($sideMenuSubGroup, $sideMenuLink);
-		array_push($sideMenuSubGroup, $sideMenuImg);
-		array_push($sideMenuSubGroup, $sideMenuID);
-		array_push($sideMenuGroup, $sideMenuSubGroup);
-
-		//get course administration tools
-		$result= getToolsArray('courseAdmin');
-
-		$sideMenuSubGroup = array();
-		$sideMenuText = array();
-		$sideMenuLink = array();
-		$sideMenuImg = array();
-		$sideMenuID = array();
-
-		$arrMenuType = array();
-		$arrMenuType['type'] = 'text';
-		$arrMenuType['text'] = $GLOBALS['langAdministrationTools'];
-		array_push($sideMenuSubGroup, $arrMenuType);
-		while ($toolsRow = mysql_fetch_array($result)) {
-
-			if(!defined($toolsRow['define_var'])) define($toolsRow['define_var'], $toolsRow['id']);
-
-			array_push($sideMenuText, q($toolsRow['rubrique']));
-			array_push($sideMenuLink, q($toolsRow['lien']."?course=".$currentCourseID));
-			array_push($sideMenuImg, $toolsRow['image'].'_on.png');
-			array_push($sideMenuID, $toolsRow['id']);
-		}
-
-		array_push($sideMenuSubGroup, $sideMenuText);
-		array_push($sideMenuSubGroup, $sideMenuLink);
-		array_push($sideMenuSubGroup, $sideMenuImg);
-		array_push($sideMenuSubGroup, $sideMenuID);
-		array_push($sideMenuGroup, $sideMenuSubGroup);
-
-	}
-	//	------------------------------------------------------------------
-	//	END of Get professor's tools
-	//	------------------------------------------------------------------
+                array_push($sideMenuSubGroup, $sideMenuText);
+                array_push($sideMenuSubGroup, $sideMenuLink);
+                array_push($sideMenuSubGroup, $sideMenuImg);
+                array_push($sideMenuSubGroup, $sideMenuID);
+                array_push($sideMenuGroup, $sideMenuSubGroup);
+        }
 
 	return $sideMenuGroup;
 }
