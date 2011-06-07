@@ -180,15 +180,15 @@ while ($cu = mysql_fetch_array($sql)) {
         } else {
             $cunits_content .= "class='tbl'";
         }
-        $cunits_content .= " width='100%'>";
+        $cunits_content .= " width='770'>";
         if ($is_adminOfCourse) {
         $cunits_content .= "\n      <tr>".
                            "\n        <th width='25' class='right'>$count_index.</th>" .
-                           "\n        <th><a class=\"$class_vis\" href='${urlServer}modules/units/?course=$code_cours&amp;id=$cu[id]'>" . q($cu['title']) . "</a></th>";
+                           "\n        <th width='635'><a class=\"$class_vis\" href='${urlServer}modules/units/?course=$code_cours&amp;id=$cu[id]'>" . q($cu['title']) . "</a></th>";
         } else {
         $cunits_content .= "\n      <tr>".
                            "\n        <th width='25' class='right'>$count_index.</th>".
-                           "\n        <th><a class=\"$class_vis\" href='${urlServer}modules/units/?course=$code_cours&amp;id=$cu[id]'>" . q($cu['title']) . "</a></th>";
+                           "\n        <th width='729'><a class=\"$class_vis\" href='${urlServer}modules/units/?course=$code_cours&amp;id=$cu[id]'>" . q($cu['title']) . "</a></th>";
         }
 
         if ($is_adminOfCourse) { // display actions

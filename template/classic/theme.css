@@ -906,7 +906,7 @@ a.invisible,
 a:link.invisible,
 a:visited.invisible
 {
-
+   color: silver !important;
 }
 
 a.unit_link, a.unit_link:link, a.unit_link:active, a.unit_link:visited {
