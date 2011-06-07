@@ -65,24 +65,11 @@ require_once("../../include/lib/learnPathLib.inc.php");
 require_once("../../include/lib/fileDisplayLib.inc.php");
 
 mysql_select_db($currentCourseID);
-echo '<html>'."\n"
-    .'<head>'."\n"
-    .'<meta http-equiv="Content-Type" content="text/html; charset='.$charset.'">'."\n"
-    .'<link href="lp.css" rel="stylesheet" type="text/css" />'."\n"
-    .'</head>'."\n"
-    .'<body>'."\n"
-    .'<div class="header">'."\n"
-    .'<div class="tools">'."\n";
-
 
 if($uid)
-{
 	$uidCheckString = "AND UMP.`user_id` = ". (int)$uid;
-}
 else // anonymous
-{
    $uidCheckString = "AND UMP.`user_id` IS NULL ";
-}
 
 // get the list of available modules
 $sql = "SELECT LPM.`learnPath_module_id` ,
@@ -116,17 +103,7 @@ $extendedList = db_query_fetch_all($sql);
 $flatElementList = build_display_element_list(build_element_list($extendedList, 'parent', 'learnPath_module_id'));
 
 $is_blocked = false;
-$atleastOne = false;
 $moduleNb = 0;
-
-// look for maxDeep
-$maxDeep = 1; // used to compute colspan of <td> cells
-for ($i=0 ; $i < sizeof($flatElementList) ; $i++)
-{
-	if ($flatElementList[$i]['children'] > $maxDeep) $maxDeep = $flatElementList[$i]['children'] ;
-}
-
-$moduleNameLength = 255; // size of 'name' to display in the list, the string will be partially displayed if it is more than $moduleNameLength letters long
 
 // get the name of the learning path
 $sql = "SELECT `name`
@@ -142,73 +119,28 @@ $nextModule = ""; // module id that will be used in the next link
 
 foreach ($flatElementList as $module)
 {
-	if($module['contentType'] == CTEXERCISE_ )
-		$moduleImg = 'exercise_on.png';
-	else if($module['contentType'] == CTLINK_ )
-		$moduleImg = "links_on.png";
-	else if($module['contentType'] == CTCOURSE_DESCRIPTION_ )
-		$moduleImg = "description_on.png";
-	else
-		$moduleImg = choose_image(basename($module['path']));
-
-	$contentType_alt = selectAlt($module['contentType']);
-	if( $module['scoreMax'] > 0 && $module['raw'] > 0)
-	{
-		$progress = @round($module['raw']/$module['scoreMax']*100);
-	}
-	else
-	{
-		$progress = 0;
-	}
-
 	if ( $module['contentType'] == CTEXERCISE_ )
-	{
 		$passExercise = ($module['credit']=='CREDIT');
-	}
 	else
-	{
 		$passExercise = false;
-	}
 
 	if ( $module['contentType'] == CTSCORM_ )
 	{
 		if ( $module['lesson_status'] == 'COMPLETED' || $module['lesson_status'] == 'PASSED')
-		{
-			// commenting due to bug. Progress is calculated correctyl above
-			//$progress = 100;
 			$passExercise = true;
-		}
 		else
-		{
-			// commenting due to bug. Progress is calculated correctyl above
-			//$progress = 0;
 			$passExercise = false;
-		}
 	}
-
-	// display the current module name (and link if allowed)
-	$spacingString = '';
-
-	for($i = 0; $i < $module['children']; $i++) $spacingString .= '<td>&nbsp;</td>';
-
-	$colspan = $maxDeep - $module['children']+1;
 
 	// spacing col
 	if ( !$is_blocked )
 	{
 		if($module['contentType'] != CTLABEL_) // chapter head
 		{
-			if ( strlen($module['name']) > $moduleNameLength)
-				$displayedName = substr($module['name'],0,$moduleNameLength)."...";
-			else
-				$displayedName = $module['name'];
-
 			// bold the title of the current displayed module
 			if( $_SESSION['lp_module_id'] == $module['module_id'] )
 			{
-				$displayedName = '<b>'.$displayedName.'</b>';
 				$previousModule = $previous;
-
 			}
 			// store next value if user has the right to access it
 			if( $previous == $_SESSION['lp_module_id'] )
@@ -224,41 +156,14 @@ foreach ($flatElementList as $module)
 		if( $module['lock'] == 'CLOSE' && $module['credit'] != 'CREDIT' && $module['lesson_status'] != 'COMPLETED' && $module['lesson_status'] != 'PASSED' && !$passExercise )
 		{
 			if($uid)
-			{
 				$is_blocked = true; // following modules will be unlinked
-			}
 			else // anonymous : don't display the modules that are unreachable
-			{
-				$atleastOne = true; // trick to avoid having the "no modules" msg to be displayed
-				break ;
-			}
+				break;
 		}
-
-	}
-	else
-	{
-		if($module['contentType'] != CTLABEL_)
-		{
-			if ( strlen($module['name']) > $moduleNameLength)
-				$displayedName = substr($module['name'],0,$moduleNameLength).'...';
-			else
-				$displayedName = $module['name'];
-		}
-	}
-
-	if (!isset($globalProg)) $globalProg = 0;
-
-	if ($progress > 0)
-	{
-		$globalProg =  $globalProg+$progress;
 	}
 
 	if($module['contentType'] != CTLABEL_ )
-	{
 		$moduleNb++; // increment number of modules used to compute global progression except if the module is a title
-	}
-
-	$atleastOne = true;
 
 	// used in the foreach the remember the id of the previous module_id
 	// don't remember if label...
@@ -288,6 +193,16 @@ if ( $moduleNb > 1 )
 
 //  set redirection link
 $returl = ($is_adminOfCourse) ? 'learningPathAdmin' : 'learningPath';
+
+
+echo '<html>'."\n"
+    .'<head>'."\n"
+    .'<meta http-equiv="Content-Type" content="text/html; charset='.$charset.'">'."\n"
+    .'<link href="lp.css" rel="stylesheet" type="text/css" />'."\n"
+    .'</head>'."\n"
+    .'<body>'."\n"
+    .'<div class="header">'."\n"
+    .'<div class="tools">'."\n";
 	
 echo '<div class="lp_right">'.$prevNextString
 	.'&nbsp;<a href="navigation/viewModule.php?course='.$code_cours.'&amp;go='.$returl.'" target="scoFrame"><img src="'.$imgRepositoryWeb.'lp/nofullscreen.png" alt="'.$langQuitViewer.'" title="'.$langQuitViewer.'" /></a>
