@@ -15,23 +15,23 @@ body {
 }
 
 .lp_right {
-        float: right;
-        padding: 5px;
-        text-align: right;
-        color: #ffffff;
-        font-size: 12px;
+	float: right;
+	padding: 5px;
+	text-align: right;
+	color: #ffffff;
+	font-size: 12px;
 }
         
 .lp_right_grey {
-        float: right;
-        padding: 5px;
-        text-align: right;
-        color: #777777;
-        font-size: 12px;
+	float: right;
+	padding: 5px;
+	text-align: right;
+	color: #777777;
+	font-size: 12px;
 }
 
 .lp_left {
-        color: #ffffff;
+	color: #ffffff;
 	float: left;
 	padding: 5px;
 }
@@ -51,7 +51,7 @@ a img {
 	margin: 0 auto;
 	border-bottom: 3px solid #73849b;
 	background-color: #ffffff;
-        min-width: 800px;
+	min-width: 800px;
 }
 
 .tools {
@@ -81,14 +81,14 @@ a img {
 }
 
 .menu_left {
-	width: 94%;
+	width: 92%;
 	padding-left: 10px;
 	margin-left: 1px;
 	background-color: #eceff5;
 	border: #3B5998 1px solid;
 	color: #666666;
 	float: left;
-	font-size: 13px;
+	font-size: 11px;
 }
 
 .menu_left ul {

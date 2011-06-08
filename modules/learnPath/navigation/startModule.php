@@ -180,7 +180,7 @@ if ($module['contentType'] == CTSCORM_ || $module['contentType'] == CTSCORMASSET
 }
 
 echo "<frame src='../viewer_toc.php?course=$code_cours' name='tocFrame' scrolling='no' />";
-echo "<frameset border='0' cols='250,*' frameborder='0'>";
+echo "<frameset border='0' cols='200,*' frameborder='0'>";
 echo "<frame src='../toc.php?course=$code_cours' name='tocleftFrame'>";
 echo "<frame src='$moduleStartAssetPage' name='scoFrame'>";
 echo "</frameset>"; 
