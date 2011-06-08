@@ -254,7 +254,7 @@ if($can_upload) {
 		//elegxos ean source kai destintation einai to idio
 		if($basedir . $source != $basedir . $moveTo or $basedir . $source != $basedir . $moveTo) {
 			if (move($basedir . $source, $basedir . $moveTo)) {
-				if (hasMetaData($source, $basedir, $group_sql) )
+				if (hasMetaData($source, $basedir, $group_sql))
 					move($basedir . $sourceXml, $basedir . $moveTo);
 				update_db_info('document', 'update', $source, $moveTo.'/'.my_basename($source));
 				$action_message = "<p class='success'>$langDirMv</p><br />";
@@ -290,6 +290,8 @@ if($can_upload) {
 					WHERE $group_sql AND path=" . autoquote($delete));
                 if (mysql_num_rows($result) > 0) {
                         if (my_delete($basedir . $delete) or !file_exists($basedir . $delete)) {
+                        		if (hasMetaData($delete, $basedir, $group_sql))
+                                	my_delete($basedir . $delete . ".xml");
                                 update_db_info('document', 'delete', $delete);
                                 $action_message = "<p class='success'>$langDocDeleted</p><br />";
                         }
