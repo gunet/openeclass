@@ -35,41 +35,56 @@
 
 $require_current_course = TRUE;
 $path2add = 3;
-include("../../../include/init.php");
-require_once('../../../include/lib/textLib.inc.php');
+
+require_once "../../../include/init.php";
+require_once '../../../include/lib/textLib.inc.php' ;
+require_once '../../units/functions.php';
 
 $nameTools = $langCourseProgram;
+
+mysql_select_db($mysqlMainDb);
+
+$unit_id = description_unit_id($cours_id);
 
 ?>
 <html>
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=<?php echo $charset?>">
   <link href="../../../template/classic/theme.css" rel="stylesheet" type="text/css" />
-  <link href="../tool.css" rel="stylesheet" type="text/css" />
   <title><?php echo $langCourseProgram ?></title>
 </head>
 <body style="margin: 2px;">
+<div id="content">
 
 <?php
-	mysql_select_db("$currentCourseID",$db);
-	$sql = "SELECT `id`,`title`,`content` FROM `course_description` order by id";
-	$res = db_query($sql);
-	if (mysql_num_rows($res) >0 )
-	{
-		//echo "
-		//	<hr noshade size=\"1\">";
-		while ($bloc = mysql_fetch_array($res))
-		{
-			echo "<p><div id='course_topic_title_id'>".$bloc["title"]."</div></p>
-			<p>".make_clickable(nl2br($bloc["content"]))."</p>";
-		}
-	}
-	else
-	{
-		echo "<p>$langThisCourseDescriptionIsEmpty</p>";
-	}
+$q = db_query("SELECT id, title, comments, res_id, visibility FROM unit_resources WHERE
+                        unit_id = $unit_id AND `order` >= 0 ORDER BY `order`");
 
+if ($q and mysql_num_rows($q) > 0) {
+	list($max_resource_id) = mysql_fetch_row(db_query("SELECT id FROM unit_resources
+			WHERE unit_id = $unit_id ORDER BY `order` DESC LIMIT 1"));
+	
+	while ($row = mysql_fetch_array($q)) {
+		echo "
+			<table width='100%' class='tbl_border'>
+			<tr class='odd'>
+			<td class='bold'>" . q($row['title']) . "</td>\n" .
+			actions('description', $row['id'], $row['visibility'], $row['res_id']) . "
+			</tr>
+			<tr>";
+		
+		if ($is_adminOfCourse) {
+			echo "\n<td colspan='6'>" . standard_text_escape($row['comments']) . "</td>";
+		} else {
+			echo "\n<td>" . standard_text_escape($row['comments']) . "</td>";
+		}
+		echo "</tr></table><br />\n";
+	}
+}
+else {
+	echo "   <p class='alert1'>$langThisCourseDescriptionIsEmpty</p>";
+}
 
 ?>
-    </body></html>
+    </div></body></html>
 

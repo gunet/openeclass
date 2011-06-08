@@ -225,12 +225,11 @@ $exerciseDescription_temp = standard_text_escape($exerciseDescription);
 echo "<html>"."\n"
     .'<head>'."\n"
     .'<meta http-equiv="Content-Type" content="text/html; charset='.$charset.'">'."\n"
-    .'<link href="../../../template/classic/tool_content.css" rel="stylesheet" type="text/css" />'."\n"
-    .'<link href="../tool.css" rel="stylesheet" type="text/css" />'."\n"
+    .'<link href="../../../template/classic/theme.css" rel="stylesheet" type="text/css" />'."\n"
     .'<title>'.$langExercice.'</title>'."\n"
     .'</head>'."\n"
     .'<body style="margin: 2px;">'."\n"
-    .'<div align="left">';
+    .'<div id="content">';
 
 echo ("
   <table width='99%' class='tbl_border'>

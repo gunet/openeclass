@@ -73,12 +73,11 @@ require_once('../../../include/lib/textLib.inc.php');
 echo "<html>"."\n"
     .'<head>'."\n"
     .'<meta http-equiv="Content-Type" content="text/html; charset='.$charset.'">'."\n"
-    .'<link href="../../../template/classic/tool_content.css" rel="stylesheet" type="text/css" />'."\n"
-    .'<link href="../tool.css" rel="stylesheet" type="text/css" />'."\n"
+    .'<link href="../../../template/classic/theme.css" rel="stylesheet" type="text/css" />'."\n"
     .'<title>'.$langExercicesResult.'</title>'."\n"
     .'</head>'."\n"
     .'<body style="margin: 2px;">'."\n"
-    .'<div align="left">';
+    .'<div id="content">';
     
 // ypologismos tou xronou pou xreiasthke o xrhsths gia thn oloklhrwsh ths askhshs
 if (isset($_SESSION['exercise_begin_time'])) {
