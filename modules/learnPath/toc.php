@@ -101,7 +101,7 @@ for ($i=0 ; $i < sizeof($flatElementList) ; $i++)
 }
 
 // -------------------------- learning path list header ----------------------------
-echo "<p><strong>$langContents</strong></p><ul>";
+echo "<ul><li class='category'>$langContents</li>";
 
 // ----------------------- LEARNING PATH LIST DISPLAY ---------------------------------
 foreach ($flatElementList as $module)
@@ -132,8 +132,7 @@ foreach ($flatElementList as $module)
 
     if ($module['contentType'] == CTLABEL_) // chapter head
     {
-    	$labelMargin = -22 + $marginIndent;
-        echo "<li style=\"list-style-type: none; margin-left: ".$labelMargin."px;\"><font ".$style." style=\"font-weight: bold\">".htmlspecialchars($module['name'])."</font></li>";
+        echo "<li style=\"margin-left: ".$marginIndent."px;\"><font ".$style." style=\"font-weight: bold\">".htmlspecialchars($module['name'])."</font></li>";
     }
     else // module
     {
@@ -166,7 +165,7 @@ foreach ($flatElementList as $module)
 		if(($module['contentType'] == CTSCORM_ || $module['contentType'] == CTSCORMASSET_) && $module['lesson_status'] == 'FAILED')
 			$moduleImg = "lp_failed.png";
 
-		echo "<li style=\"list-style-image: url('".$imgRepositoryWeb.$moduleImg."'); margin-left: ".$marginIndent."px;\">";
+		echo "<li style=\"margin-left: ".$marginIndent."px;\"><img src=\"".$imgRepositoryWeb.$moduleImg."\" alt='' title='' />";
 
 		// emphasize currently displayed module or not
 		if ( $_SESSION['lp_module_id'] == $module['module_id'] )
