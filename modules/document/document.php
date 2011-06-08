@@ -250,9 +250,12 @@ if($can_upload) {
 		
                 $moveTo = $_POST['moveTo'];
                 $source = $_POST['source'];
+                $sourceXml = $source . ".xml";
 		//elegxos ean source kai destintation einai to idio
 		if($basedir . $source != $basedir . $moveTo or $basedir . $source != $basedir . $moveTo) {
 			if (move($basedir . $source, $basedir . $moveTo)) {
+				if (hasMetaData($source, $basedir, $group_sql) )
+					move($basedir . $sourceXml, $basedir . $moveTo);
 				update_db_info('document', 'update', $source, $moveTo.'/'.my_basename($source));
 				$action_message = "<p class='success'>$langDirMv</p><br />";
 			} else {

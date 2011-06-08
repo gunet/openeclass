@@ -328,4 +328,20 @@ function metaSourceValueLoop($dom, $parent, $element, $inputValue) {
 	}
 }
 
+function hasMetaData($filename, $basedir, $group_sql) {
+	$xml = $filename.".xml";
+	$real_filename = $basedir . str_replace('/..', '', q($xml));
+	$result = db_query("SELECT * FROM document WHERE $group_sql AND path = " . autoquote($xml));
+		
+	if (file_exists($real_filename) && mysql_num_rows($result) > 0) {
+		
+		$row = mysql_fetch_array($result);
+		if ($row['format'] == ".meta")
+			return true;
+	} else 
+		return false;
+	
+	return false;
+}
+
 ?>
