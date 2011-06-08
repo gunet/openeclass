@@ -141,7 +141,7 @@ Tiny MCE Editor
 PHP CAS Library - Copyright 2003 - 2010, The ESUP-Portail consortium & the JA-SIG Collaborative.
   Licensed under the New BSD License, an OSI-certified ("open") and Gnu/FSF-recognized ("free") license
   https://wiki.jasig.org/display/CASC/phpCAS
-  version 1.2.1
+  version 1.2.2
 
 SecureImage - Copyright 2009 Drew Phillips
   Licenced under GPL
