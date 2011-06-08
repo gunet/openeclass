@@ -21,7 +21,6 @@
 
 /*===========================================================================
 	toc.php
-	@last update: 29-08-2009 by Thanos Kyritsis
 	@authors list: Yannis Exidaridis <jexi@noc.uoa.gr> 
 	               Alexandros Diamantidis <adia@noc.uoa.gr>
 	               Thanos Kyritsis <atkyritsis@upnet.gr>
@@ -30,8 +29,6 @@
                   dhladh lista me ola ta modules ths.
 
     @Comments:
-
-    @todo:
 ==============================================================================
 */
 
@@ -104,10 +101,6 @@ for ($i=0 ; $i < sizeof($flatElementList) ; $i++)
 }
 
 // -------------------------- learning path list header ----------------------------
-/*echo "<table width=\"99%\" class=\"tbl_alt\"><thead>
-<tr class=\"LP_header\">
-<td colspan=\"".($maxDeep+1)."\"><div align=\"center\">".$langContents."</div></td>
-</tr></thead><tbody>";*/
 echo "<p><strong>$langContents</strong></p><ul>";
 
 // ----------------------- LEARNING PATH LIST DISPLAY ---------------------------------
@@ -118,7 +111,7 @@ foreach ($flatElementList as $module)
     {
         if ($is_adminOfCourse)
         {
-            $style=" class=\"invisible\"";
+            $style = " class=\"invisible\"";
             $image_bullet = "off";
         }
         else
@@ -128,21 +121,13 @@ foreach ($flatElementList as $module)
     }
     else
     {
-        $style="";
+        $style = "";
         $image_bullet = "on";
     }
-    $spacingString = "";
-    for($i = 0; $i < $module['children']; $i++)
-           $spacingString .= "
-      <td width='5'>&nbsp;</td>";
-
-    $colspan = $maxDeep - $module['children']+1;
-    /*echo "<tr align=\"center\"".$style.">".$spacingString."
-      <td colspan=\"".$colspan."\" align=\"left\">";*/
 
     if ($module['contentType'] == CTLABEL_) // chapter head
     {
-        echo "<li><font ".$style." style=\"font-weight: bold\">".htmlspecialchars($module['name'])."</font></li>";
+        echo "<li style=\"list-style-type: none;\"><font ".$style." style=\"font-weight: bold\">".htmlspecialchars($module['name'])."</font></li>";
     }
     else // module
     {
@@ -152,8 +137,10 @@ foreach ($flatElementList as $module)
         	$moduleImg = "links_$image_bullet.png";
         else if($module['contentType'] == CTCOURSE_DESCRIPTION_ )
         	$moduleImg = "description_$image_bullet.png";
-        else if($module['contentType'] == CTDOCUMENT_ )
-        	$moduleImg = "docs_$image_bullet.png";
+        else if($module['contentType'] == CTDOCUMENT_ ) {
+        	//$moduleImg = "docs_$image_bullet.png";
+        	$moduleImg = choose_image(basename($module['path']));
+        }
         else if($module['contentType'] == CTSCORM_ || $module['contentType'] == CTSCORMASSET_) // eidika otan einai scorm module, deixnoume allo eikonidio pou exei na kanei me thn proodo
         	$moduleImg = "lp_check.png";
         else
@@ -173,23 +160,18 @@ foreach ($flatElementList as $module)
 		if(($module['contentType'] == CTSCORM_ || $module['contentType'] == CTSCORMASSET_) && $module['lesson_status'] == 'FAILED')
 			$moduleImg = "lp_failed.png";
 
-		echo "<li>";
-		if(isset($imagePassed))
-			echo $imagePassed;
-
-		// eidiko eikonidio tou module pou deixnei ton typo
-		echo "<span style=\"vertical-align: middle;\"><img src=\"".$imgRepositoryWeb."".$moduleImg."\" title=\"".$contentType_alt."\" border=\"0\"></span>&nbsp;";
+		echo "<li style=\"list-style-image: url('".$imgRepositoryWeb.$moduleImg."');\">";
 
 		// emphasize currently displayed module or not
 		if ( $_SESSION['lp_module_id'] == $module['module_id'] )
 			echo "<em>".htmlspecialchars($module['name'])."</em>";
 		else        
 			echo "<a href='navigation/viewModule.php?course=$code_cours&amp;viewModule_id=$module[module_id]'".$style." target='scoFrame'>". htmlspecialchars($module['name']). "</a>";
+		if(isset($imagePassed))
+			echo "&nbsp;&nbsp;".$imagePassed;
 		echo "</li>";
 
     }
-//echo "</td></tr>";
 } // end of foreach
-//echo "</tbody></table>";
 echo "</ul></body></html>"
 ?>

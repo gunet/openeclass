@@ -33,7 +33,7 @@ body {
 .lp_left {
 	float: left;
 	padding: 5px;
-	width: 300px;     
+	width: 300px;
 }
 
 a img {
@@ -76,12 +76,18 @@ a img {
 }
 
 .menu_left {
-	/*width: 200px;*/
-	padding: 10px;
+	width: 94%;
+	padding-left: 10px;
+	margin-left: 1px;
 	background-color: #eceff5;
 	border: #3B5998 1px solid;
 	color: #666666;
 	float: left;
+	font-size: 13px;
+}
+
+.menu_left ul {
+	padding-left: 28px;
 }
 
 .main_right {
