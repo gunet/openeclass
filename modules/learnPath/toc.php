@@ -124,10 +124,16 @@ foreach ($flatElementList as $module)
         $style = "";
         $image_bullet = "on";
     }
+    
+	// indent a child based on label ownership
+	$marginIndent = 0; 	 
+	for($i = 0; $i < $module['children']; $i++) 	 
+		$marginIndent += 10;
 
     if ($module['contentType'] == CTLABEL_) // chapter head
     {
-        echo "<li style=\"list-style-type: none;\"><font ".$style." style=\"font-weight: bold\">".htmlspecialchars($module['name'])."</font></li>";
+    	$labelMargin = -22 + $marginIndent;
+        echo "<li style=\"list-style-type: none; margin-left: ".$labelMargin."px;\"><font ".$style." style=\"font-weight: bold\">".htmlspecialchars($module['name'])."</font></li>";
     }
     else // module
     {
@@ -160,7 +166,7 @@ foreach ($flatElementList as $module)
 		if(($module['contentType'] == CTSCORM_ || $module['contentType'] == CTSCORMASSET_) && $module['lesson_status'] == 'FAILED')
 			$moduleImg = "lp_failed.png";
 
-		echo "<li style=\"list-style-image: url('".$imgRepositoryWeb.$moduleImg."');\">";
+		echo "<li style=\"list-style-image: url('".$imgRepositoryWeb.$moduleImg."'); margin-left: ".$marginIndent."px;\">";
 
 		// emphasize currently displayed module or not
 		if ( $_SESSION['lp_module_id'] == $module['module_id'] )
