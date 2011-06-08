@@ -99,13 +99,11 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 	}
 
 	$messageBox = "";
-
+	
 	//if an error exists (ex., sessions is lost...)
 	//show the error message above the normal tool content
-
-
-	if (strlen ( $extraMessage ) > 0) {
-		$messageBox = "$extraMessage";
+	if (strlen ($extraMessage) > 0) {
+		$messageBox = $extraMessage;
 	}
 
 	//get the left side menu from tools.php
@@ -193,25 +191,18 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 			$t->set_var ( 'ECLASS_HOME_EXTRAS_LEFT', $langExtrasLeft );
 			$t->set_var ( 'ECLASS_HOME_EXTRAS_RIGHT', $langExtrasRight );
 		}
-
-		//show user's name and surname on the user bar
+		
+		//if user is logged in display the logout option
 		if (isset($_SESSION['uid'])) {
 			$t->set_var ( 'LANG_USER', $langUserHeader );
 			$t->set_var ( 'USER_NAME', q($_SESSION['prenom']) );
 			$t->set_var ( 'USER_SURNAME', q($_SESSION['nom']) . ", " );
-		} else {
-                        $t->set_var ('LANG_LOGOUT', $langLogin);
-			$t->set_var ('LOGOUT_LINK', $relPath . 'login_form.php');
-                }
-
-		//if user is logged in display the logout option
-		if (isset($_SESSION['uid'])) {
 			$t->set_var ('LANG_LOGOUT', $langLogout);
-		        $t->set_var ('LOGOUT_LINK', $relPath . 'index.php?logout=yes');
+			$t->set_var ('LOGOUT_LINK', $relPath . 'index.php?logout=yes');
                 } else {
-			if (get_config('dont_display_login_form')) {
+			if (!get_config('dont_display_login_form')) {
 				$t->set_var ('LANG_LOGOUT', $langLogin);
-				$t->set_var ('LOGOUT_LINK', $relPath . 'login_form.php');
+				$t->set_var ('LOGOUT_LINK', $relPath . 'login_form.php');	
 			}
                 }
 		//set the text and icon on the third bar (header)

@@ -318,6 +318,7 @@ $langldap_login_attr2 = "Εναλλακτικό Attribute για το username �
 $langcas_host = "Εξυπηρέτης CAS";
 $langcas_port = "Πόρτα λειτουργίας CAS";
 $langcas_context = "Διεύθυνση σελίδας εισόδου";
+$langcas_logout = "Διεύθυνση σελίδας εξόδου";
 $langcas_cachain = "Αρχείο Αλυσίδας Πιστοποιητικών του εξυπηρετητή CAS";
 $langcas_altauth = "Εναλλακτικός τρόπος πιστοποίησης";
 $langcasusermailattr = "CAS SAML attribute για το E-mail";
@@ -368,7 +369,6 @@ $langShibEmail = "Shibboleth Email";
 $langShibUsername = "Shibboleth User Name";
 $langShibCn = "Shibboleth Canonical Name";
 $langShibboleth = "Πιστοποίηση μέσω Shibboleth";
-$langCAS = "Πιστοποίηση μέσω CAS Single Sign On";
 $langConnectWith = "γίνεται σύνδεση με";
 $langNotSSL = "Δεν πραγματοποιήθηκε σύνδεση μέσω SSL γιατί δεν δόθηκε πιστοποιητικό ή το πιστοποιητικό δεν μπορεί να διαβαστεί";
 $langCASRetAttr = "Ο εξυπηρέτης CAS επέστρεψε τις παρακάτω ιδιότητες";
@@ -552,12 +552,12 @@ $langBackupEnd = "Ολοκληρώθηκε το αντίγραφο ασφαλε�
 * auth_methods.php
 **********************************************/
 $langViaeClass = "μέσω πλατφόρμας";
-$langViaPop = "πιστοποίηση μέσω POP3";
-$langViaImap = "πιστοποίηση μέσω IMAP";
-$langViaLdap = "πιστοποίηση μέσω LDAP";
-$langViaDB = "πιστοποίηση μέσω άλλης Βάσης Δεδομένων";
-$langViaShibboleth = "πιστοποίηση μέσω Shibboleth";
-$langViaCAS = "πιστοποίηση μέσω CAS Single Sign On";
+$langViaPop = "Πιστοποίηση μέσω POP3";
+$langViaImap = "Πιστοποίηση μέσω IMAP";
+$langViaLdap = "Πιστοποίηση μέσω LDAP";
+$langViaDB = "Πιστοποίηση μέσω άλλης Βάσης Δεδομένων";
+$langViaShibboleth = "Πιστοποίηση μέσω Shibboleth";
+$langViaCAS = "Πιστοποίηση μέσω CAS";
 $langHasActivate = "O τρόπος πιστοποίησης που επιλέξατε, έχει ενεργοποιηθεί";
 $langAlreadyActiv = "O τρόπος πιστοποίησης που επιλέξατε, είναι ήδη ενεργοποιημένος";
 $langCASnochange = "Πρέπει να κλείσετε τον browser σας για να αλλάξετε τις ρυθμίσεις του CAS";
@@ -566,6 +566,7 @@ $langAuthSettings = "Ρυθμίσεις πιστοποίησης";
 $langWrongAuth = "Πληκτρολογήσατε λάθος όνομα χρήστη / συνθηματικό";
 $langExplainShib = "Πληκτρολογήστε τα ονόματα των μεταβλητών που επιστρέφει ο εξυπηρέτης Shibboleth. Οι μεταβλητές θα γραφτούν στο αρχείο <em>%ssecure/index.php</em>. Σημειώστε, ότι αν το Shibboleth Canonical Name περιλαμβάνει το ονοματεπώνυμο του χρήστη, τότε θα πρέπει να ορίσετε τον χαρακτήρα που χωρίζει το όνομα από το επώνυμο.";
 $langCharSeparator = "Χαρακτήρας χωρισμού";
+
 
 /************************************************************
  * conference.php
@@ -1348,6 +1349,7 @@ $langPgTitle="Τίτλος σελίδας";
 $langHomePage = "Αρχική Σελίδα";
 $langInvalidId = "Λάθος στοιχεία.<br>Αν δεν είστε γραμμένος, συμπληρώστε τη
         <a href='modules/auth/registration.php'>φόρμα εγγραφής</a>.";
+$langCASUser = "Για να μπείτε στην πλατφόρμα κάντε κλικ";
 $langInvalidGuestAccount = "Το μάθημα για το οποίο έχει δημιουργηθεί ο λογαριασμός 'χρήστη επισκέπτη' δεν υπάρχει πλέον.";
 $langAccountInactive1 = "Μη ενεργός λογαριασμός.";
 $langAccountInactive2 = "Παρακαλώ επικοινωνήστε με τον διαχειριστή για την ενεργοποίηση του λογαριασμού σας";

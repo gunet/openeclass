@@ -37,10 +37,9 @@
 
 $require_admin = TRUE;
 include '../../include/baseTheme.php';
-include_once '../auth/auth.inc.php';
+include_once 'modules/auth/auth.inc.php';
 $nameTools = $langUserAuthentication;
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
-$tool_content = "";
 
 $auth = isset($_GET['auth'])?$_GET['auth']:"";
 $active = isset($_GET['active'])?$_GET['active']:"";

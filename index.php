@@ -38,7 +38,7 @@ define('HIDE_TOOL_TITLE', 1);
 $guest_allowed = true;
 $path2add = 0;
 include "include/baseTheme.php";
-include("include/CAS/CAS.php");
+include "include/CAS/CAS.php";
 include "modules/auth/auth.inc.php";
 //$homePage is used by baseTheme.php to parse correctly the breadcrumb
 $homePage = true;
@@ -140,6 +140,8 @@ if (isset($_SESSION['shib_uname'])) { // authenticate via shibboleth
 					break;
 				case 5: $warning .= "<p class='alert1'>". $langNoCookies . "</p>"; 
 					break;
+				case 6: $warning .= "<p class='alert1'>$langCASUser <a href='{$urlServer}secure/cas.php'>$langHere</a></p>";
+					break;
 				default:
 					break;
 			}
@@ -175,11 +177,19 @@ if (isset($_GET['logout']) and isset($uid)) {
         mysql_query("INSERT INTO loginout (loginout.id_user,
                 loginout.ip, loginout.when, loginout.action)
                 VALUES ($uid, '$_SERVER[REMOTE_ADDR]', NOW(), 'LOGOUT')");
+	if (isset($_SESSION['cas_uname'])) {
+		define('CAS', true);
+	}
 	foreach(array_keys($_SESSION) as $key) {
 		unset($_SESSION[$key]);
 	}
         session_destroy();
 	unset($uid);
+	if (defined('CAS')) {
+		$cas = get_cas_settings(7);
+		phpCAS::client(SAML_VERSION_1_1, $cas['cas_host'], intval($cas['cas_port']), $cas['cas_context'], FALSE);
+		phpCAS::logout(array('url' => $urlServer));
+	}
 }
 
 // if the user logged in include the correct language files

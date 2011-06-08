@@ -356,7 +356,7 @@ function auth_user_login ($auth, $test_username, $test_password)  {
 	    mysql_close($GLOBALS['db']); // close the previous link
 	    $link = mysql_connect($dbhost,$dbuser,$dbpass,$newlink);
 	    if($link) {
-		$db_ext = mysql_select_db($dbname,$link);
+		$db_ext = mysql_select_db($dbname,$GLOBALS['db']);
 		if($db_ext) {
 		    	$qry = "SELECT * FROM ".$dbname.".".$dbtable." 
 				WHERE ".$dbfielduser."='".mysql_real_escape_string($test_username)."' 
@@ -481,6 +481,7 @@ if ($auth_method_settings = get_auth_settings($auth)) {
 	@$cas_settings['casuserfirstattr'] = str_replace("casuserfirstattr=","",$cas[5]);
 	@$cas_settings['casuserlastattr'] = str_replace("casuserlastattr=","",$cas[6]);
 	@$cas_settings['cas_altauth'] = str_replace("cas_altauth=","",$cas[7]);
+	@$cas_settings['cas_logout'] = str_replace("cas_logout=","",$cas[8]);
 
 	return $cas_settings;
 } else 

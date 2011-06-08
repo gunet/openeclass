@@ -98,7 +98,7 @@ if ($shibactive['auth_default'] == 1) {
 
 $casactive = mysql_fetch_array(db_query("SELECT auth_default FROM auth WHERE auth_name='cas'"));
 if ($casactive['auth_default'] == 1) {
-	$cas_link = "<a href='{$urlServer}secure/cas.php'>$langCAS</a><br />";
+	$cas_link = "<a href='{$urlServer}secure/cas.php'>$langViaCAS</a><br />";
 } else {
 	$cas_link = "";
 }

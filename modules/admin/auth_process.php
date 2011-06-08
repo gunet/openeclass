@@ -44,11 +44,10 @@
 $require_admin = TRUE;
 include '../../include/baseTheme.php';
 include("../../include/CAS/CAS.php");
-include_once '../auth/auth.inc.php';
+include_once 'modules/auth/auth.inc.php';
 $nameTools = $langAuthSettings;
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
 $navigation[] = array("url" => "auth.php", "name" => $langUserAuthentication);
-$tool_content = "";
 $debugCAS = true;
 
 // get the values
@@ -62,7 +61,7 @@ if((!empty($step)) && ($step=='1')) {
 } 
 else {
 	$auth = isset($_GET['auth'])?$_GET['auth']:'';
-	if ($auth==7) {
+	if ($auth == 7) {
 		$_SESSION['cas_do'] = false;
 	}
 }
@@ -116,6 +115,7 @@ if (isset($_POST['casusermailattr'])) $casusermailattr = $_POST['casusermailattr
 if (isset($_POST['casuserfirstattr'])) $casuserfirstattr = $_POST['casuserfirstattr'];
 if (isset($_POST['casuserlastattr'])) $casuserlastattr = $_POST['casuserlastattr'];
 if (isset($_POST['cas_altauth'])) $cas_altauth = $_POST['cas_altauth'];
+if (isset($_POST['cas_logout'])) $cas_logout = $_POST['cas_logout'];
 
 $test_username = isset($_POST['test_username'])?$_POST['test_username']:'';
 $test_password = isset($_POST['test_password'])?$_POST['test_password']:'';
@@ -140,6 +140,7 @@ if(((!empty($auth_submit)) && ($auth_submit==1)) || !empty($_SESSION['cas_do']))
 		if (isset($casuserfirstattr)) $_SESSION['casuserfirstattr'] = $casuserfirstattr;
 		if (isset($casuserlastattr)) $_SESSION['casuserlastattr'] = $casuserlastattr;
 		if (isset($cas_altauth)) $_SESSION['cas_altauth'] = $cas_altauth;
+		if (isset($cas_logout)) $_SESSION['cas_logout'] = $cas_logout;
 		
 		// cas test new settings
 		//cas_authenticate(7, true, $cas_host, $cas_port, $cas_context, $cas_cachain);
@@ -234,7 +235,15 @@ if(((!empty($auth_submit)) && ($auth_submit==1)) || !empty($_SESSION['cas_do']))
 					$auth_instructions = $shibinstructions;
 					break;
 				case '7': $auth_default = 7;
-					$auth_settings = "cas_host=".$_SESSION['cas_host']."|cas_port=".$_SESSION['cas_port']."|cas_context=".$_SESSION['cas_context']."|cas_cachain=".$_SESSION['cas_cachain']."|casusermailattr=".$_SESSION['casusermailattr']."|casuserfirstattr=".$_SESSION['casuserfirstattr']."|casuserlastattr=".$_SESSION['casuserlastattr']."|cas_altauth=".$_SESSION['cas_altauth'];
+					$auth_settings = "cas_host=".$_SESSION['cas_host'].
+						"|cas_port=".$_SESSION['cas_port'].
+						"|cas_context=".$_SESSION['cas_context'].
+						"|cas_cachain=".$_SESSION['cas_cachain'].
+						"|casusermailattr=".$_SESSION['casusermailattr'].
+						"|casuserfirstattr=".$_SESSION['casuserfirstattr'].
+						"|casuserlastattr=".$_SESSION['casuserlastattr'].
+						"|cas_altauth=".$_SESSION['cas_altauth'].
+						"|cas_logout=".$_SESSION['cas_logout'];
 					$auth_instructions = $_SESSION['casinstructions'];
 					break;
 				default:
@@ -275,12 +284,12 @@ else
 	$tool_content .= "<form name='authmenu' method='post' action='$_SERVER[PHP_SELF]'>
 	<fieldset>
 	<legend>".get_auth_info($auth)."</legend>
-<table width='100%' class='tbl'><tr>
+	<table width='100%' class='tbl'><tr>
 	<th colspan='2'>
 	  <input type=\"hidden\" name=\"auth_submit\" value=\"1\" />
 	  <input type=\"hidden\" name=\"auth\" value=\"".htmlspecialchars($auth)."\" />
 	  <input type=\"hidden\" name=\"step\" value=\"1\" />
-    </th>
+	</th>
 	</tr>";
 	
 	switch($auth) {
@@ -299,7 +308,6 @@ else
 		default:
 			break;
 	}
-
 	if (!empty($_SESSION['cas_warn']) && $_SESSION['cas_do']) {
 		$auth = 7;
 		$tool_content .= "<p class=\"alert1\">$langCASnochange</p>";
@@ -315,6 +323,5 @@ else
 	$tool_content .= "<tr><th>&nbsp;</th><td class='right'><input type='submit' name='submit' value='$langModify'></td></tr>";
 	$tool_content .= "</table></fieldset></form>";
 }
-
 draw($tool_content, 3);
 ?>
