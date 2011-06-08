@@ -202,7 +202,15 @@ You can change them later in via the admin tool. These settings are:</p>
  <li><em>display_captcha</em>: Display a `captcha` code during users registration.</li>
  <li><em>insert_xml_metadata</em>: Allow teachers to upload metadata in files in 'Documents'.</li>
 </ul>
-By default, none of them is enabled.</p>
+By default none of them is enabled.
+<ul>
+ <li><em>doc_quota</em>: Defines the default quota in 'Documents'. 
+ <li><em>video_quota</em>: Defines the default quota in 'Video'. 
+ <li><em>dropbox_quota</em>: Defines the default quota in 'Dropbox'. 
+ <li><em>group_quota</em>: Defines the default quota in 'Groups'. 
+</ul>
+Note that, administrator can modify these settings per course from the admin tool.
+</p>
 
 <p>Further information for these actions can be found in the Administrator's manual (linked from the platform Admin Tool).
 </p>
