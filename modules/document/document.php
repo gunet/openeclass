@@ -420,7 +420,7 @@ if($can_upload) {
 				subsystem_id = $subsystem_id,
 				path = " . quote($metadataPath) . ",
 				filename = " . autoquote($oldFilename) . ",
-				visibility = 'v',
+				visibility = 'i',
 				creator	= " . autoquote($_SESSION['prenom'] ." ". $_SESSION['nom']) . ",
 				date = '$xml_date',
 				date_modified =	'$xml_date',
