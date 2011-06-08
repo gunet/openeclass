@@ -15,25 +15,29 @@ body {
 }
 
 .lp_right {
-	float: right;
-	padding: 5px;
-	text-align: right;
-	color: #ffffff;
-	font-size: 12px;
+        float: right;
+        padding: 5px;
+        text-align: right;
+        color: #ffffff;
+        font-size: 12px;
 }
         
 .lp_right_grey {
-	float: right;
-	padding: 5px;
-	text-align: right;
-	color: #777777;
-	font-size: 12px;
+        float: right;
+        padding: 5px;
+        text-align: right;
+        color: #777777;
+        font-size: 12px;
 }
 
 .lp_left {
+        color: #ffffff;
 	float: left;
 	padding: 5px;
-	width: 300px;
+}
+
+.lp_left a {
+        font-weight: bold;
 }
 
 a img {
@@ -47,6 +51,7 @@ a img {
 	margin: 0 auto;
 	border-bottom: 3px solid #73849b;
 	background-color: #ffffff;
+        min-width: 800px;
 }
 
 .tools {

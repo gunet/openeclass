@@ -66,10 +66,15 @@ require_once("../../include/lib/fileDisplayLib.inc.php");
 
 mysql_select_db($currentCourseID);
 
-if($uid)
-	$uidCheckString = "AND UMP.`user_id` = ". (int)$uid;
-else // anonymous
-   $uidCheckString = "AND UMP.`user_id` IS NULL ";
+//  set redirection link
+$returl = "navigation/viewModule.php?course=$currentCourseID&amp;go=" . 
+          ($is_adminOfCourse ? 'learningPathAdmin': 'learningPath');
+
+if ($uid) {
+	$uidCheckString = "AND UMP.`user_id` = $uid";
+} else { // anonymous
+        $uidCheckString = "AND UMP.`user_id` IS NULL ";
+}
 
 // get the list of available modules
 $sql = "SELECT LPM.`learnPath_module_id` ,
@@ -111,7 +116,6 @@ $sql = "SELECT `name`
       WHERE `learnPath_id` = '". (int)$_SESSION['path_id']."'";
 
 $lpName = db_query_get_single_value($sql);
-$learnPath =  '<strong>'.$lpName.'</strong>';
 
 $previous = ""; // temp id of previous module, used as a buffer in foreach
 $previousModule = ""; // module id that will be used in the previous link
@@ -191,11 +195,7 @@ if ( $moduleNb > 1 )
 		$prevNextString .=  $imgNext;
 }
 
-//  set redirection link
-$returl = ($is_adminOfCourse) ? 'learningPathAdmin' : 'learningPath';
-
-
-echo '<html>'."\n"
+echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"><html>'."\n"
     .'<head>'."\n"
     .'<meta http-equiv="Content-Type" content="text/html; charset='.$charset.'">'."\n"
     .'<link href="lp.css" rel="stylesheet" type="text/css" />'."\n"
@@ -204,20 +204,23 @@ echo '<html>'."\n"
     .'<div class="header">'."\n"
     .'<div class="tools">'."\n";
 	
-echo '<div class="lp_right">'.$prevNextString
-	.'&nbsp;<a href="navigation/viewModule.php?course='.$code_cours.'&amp;go='.$returl.'" target="scoFrame"><img src="'.$imgRepositoryWeb.'lp/nofullscreen.png" alt="'.$langQuitViewer.'" title="'.$langQuitViewer.'" /></a>
-	</div>';
-
-echo "<div class='lp_left'><a href=\"". $urlAppend ."/courses/". $currentCourseID ."/\" target='_top'><strong>$currentCourseName</strong></a></div>";
+echo "<div class='lp_right'>$prevNextString&nbsp;<a href='$returl' target='_top'>",
+     "<img src='{$imgRepositoryWeb}lp/nofullscreen.png' alt='$langQuitViewer' title='",
+     $langQuitViewer, "' /></a></div>",
+     "<div class='lp_left'><a href=\"". $urlAppend ."/courses/". $currentCourseID ."/\" target='_top' title='" .
+     q($currentCourseName) . "'>" . q(ellipsize($currentCourseName, 35)) .
+     "</a> &#187; <a href='$urlAppend/modules/learnPath/learningPathList.php?course=$currentCourseID' target='_top'>" .
+     $langLearningPaths . "</a> &#187; <a href='$returl' title='" . q($lpName) . "' target='_top'>" .
+     q(ellipsize($lpName, 40)) . "</a></div>";
 
 echo "<div class='clear'></div>";
 
 echo "<div class='logo'><img src=\"".$imgRepositoryWeb."lp/logo_openeclass.png\" alt='' title='' /></div>";
 
-echo "<div class='lp_right_grey'>$learnPath";
+echo "<div class='lp_right_grey'>";
 if($uid) {
 	$lpProgress = get_learnPath_progress((int)$_SESSION['path_id'],$uid);
-	echo ": ". disp_progress_bar($lpProgress, 1) ."&nbsp;". $lpProgress ."%";
+	echo $langProgress . ': ' . disp_progress_bar($lpProgress, 1) ."&nbsp;". $lpProgress ."%";
 }
 echo "</div>";
 
