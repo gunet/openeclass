@@ -908,46 +908,55 @@ if ($doc_count == 0) {
                                         "</span>";
                         }
                         $tool_content .= "</td>";
+                        $padding = '&nbsp;';
+                        $padding2 = '';
                         if ($is_dir) {
                                 // skip display of date and time for directories
                                 $tool_content .= "\n<td>&nbsp;</td>\n<td>&nbsp;</td>";
                                 $padding = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+                        } else if ($entry['format'] == ".meta") {
+                                $size = format_file_size($entry['size']);
+                                $date = format_date($entry['date']);
+                                $tool_content .= "\n<td class='center'>$size</td>\n<td class='center'>$date</td>";
+                                $padding = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+                                $padding2 = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
                         } else {
                                 $size = format_file_size($entry['size']);
                                 $date = format_date($entry['date']);
                                 $tool_content .= "\n<td class='center'>$size</td>\n<td class='center'>$date</td>";
-                                $padding = '&nbsp;';
                         }
                         if ($can_upload) {
                                 $tool_content .= "\n<td class='right' valign='top'><form action='document.php?course=$code_cours' method='post'>" . $group_hidden_input .
                                                  "<input type='hidden' name='filePath' value='$cmdDirName' />" .
                                                  $download_icon . $padding;
-                                if (!$is_dir) {
-                                        /*** replace/overwrite command, only applies to files ***/
-                                        $tool_content .= "<a href='{$base_url}replace=$cmdDirName'>" .
-                                                         "<img src='../../template/classic/img/replace.png' " .
-							 "title='$langReplace' alt='$langReplace' /></a>&nbsp;";
+                                if (!$is_dir && $entry['format'] != ".meta") {
+                                	/*** replace/overwrite command, only applies to files ***/
+                                	$tool_content .= "<a href='{$base_url}replace=$cmdDirName'>" .
+                                	                 "<img src='../../template/classic/img/replace.png' " .
+                                	                 "title='$langReplace' alt='$langReplace' /></a>&nbsp;";
                                 }
                                 /*** delete command ***/
-                                $tool_content .= "<input type='image' src='../../template/classic/img/delete.png' alt='$langDelete' title='$langDelete' name='delete' value='1' onClick=\"return confirmation('".addslashes($entry['filename'])."');\" />&nbsp;";
-                                /*** copy command ***/
-                                $tool_content .= "<a href='{$base_url}move=$cmdDirName'>" .
-                                                 "<img src='../../template/classic/img/move.png' " .
-						 "title='$langMove' alt='$langMove' /></a>&nbsp;";
-                                /*** rename command ***/
-                                $tool_content .=  "<a href='{$base_url}rename=$cmdDirName'>";
-                                $tool_content .=  "<img src='../../template/classic/img/rename.png' " .
-					          "title='$langRename' alt='$langRename' /></a>&nbsp;";
-                                /*** comment command ***/
-                                $tool_content .= "<a href='{$base_url}comment=$cmdDirName'>";
-                                $tool_content .= "<img src='../../template/classic/img/comment_edit.png' " .
-					         "title='$langComment' alt='$langComment' /></a>&nbsp;";
+                                $tool_content .= "<input type='image' src='../../template/classic/img/delete.png' alt='$langDelete' title='$langDelete' name='delete' value='1' onClick=\"return confirmation('".addslashes($entry['filename'])."');\" />&nbsp;" . $padding2;
+                                if ($entry['format'] != ".meta") {
+                                	/*** copy command ***/
+                                	$tool_content .= "<a href='{$base_url}move=$cmdDirName'>" .
+                                	                 "<img src='../../template/classic/img/move.png' " .
+                                	                 "title='$langMove' alt='$langMove' /></a>&nbsp;";
+                                	/*** rename command ***/
+                                	$tool_content .=  "<a href='{$base_url}rename=$cmdDirName'>";
+                                	$tool_content .=  "<img src='../../template/classic/img/rename.png' " .
+                                	                  "title='$langRename' alt='$langRename' /></a>&nbsp;";
+                                	/*** comment command ***/
+                                	$tool_content .= "<a href='{$base_url}comment=$cmdDirName'>";
+                                	$tool_content .= "<img src='../../template/classic/img/comment_edit.png' " .
+                                	                 "title='$langComment' alt='$langComment' /></a>&nbsp;";
+                                }
                                 /*** metadata command ***/
                                 if (get_config("insert_xml_metadata")) {
                                 	$xmlCmdDirName = ($entry['format'] == ".meta" && get_file_extension($cmdDirName) == "xml") ? substr($cmdDirName, 0, -4) : $cmdDirName;
 	                                $tool_content .= "<a href='{$base_url}metadata=$xmlCmdDirName'>";
 	                                $tool_content .= "<img src='../../template/classic/img/lom.png' " .
-	                                "title='$langMetadata' alt='$langMetadata' /></a>&nbsp;";
+	                                                 "title='$langMetadata' alt='$langMetadata' /></a>&nbsp;";
                                 }
                                 /*** visibility command ***/
                                 if ($is_adminOfCourse) {
