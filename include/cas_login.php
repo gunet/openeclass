@@ -1,22 +1,25 @@
 <?php
-/* ========================================================================
- * Open eClass 2.4
- * E-learning and Course Management System
- * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
- * A full copyright notice can be read in "/info/copyright.txt".
- * For a full list of contributors, see "credits.txt".
- *
- * Open eClass is an open platform distributed in the hope that it will
- * be useful (without any warranty), under the terms of the GNU (General
- * Public License) as published by the Free Software Foundation.
- * The full license can be read in "/info/license/license_gpl.txt".
- *
- * Contact address: GUnet Asynchronous eLearning Group,
- *                  Network Operations Center, University of Athens,
- *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
- *                  e-mail: info@openeclass.org
- * ======================================================================== */
+/*========================================================================
+*   Open eClass 2.3
+*   E-learning and Course Management System
+* ========================================================================
+*  Copyright(c) 2003-2010  Greek Universities Network - GUnet
+*  A full copyright notice can be read in "/info/copyright.txt".
+*
+*  Author:				Giannis Kapetanakis <bilias@edu.physics.uoc.gr>
+*
+*  For a full list of contributors, see "credits.txt".
+*
+*  Open eClass is an open platform distributed in the hope that it will
+*  be useful (without any warranty), under the terms of the GNU (General
+*  Public License) as published by the Free Software Foundation.
+*  The full license can be read in "/info/license/license_gpl.txt".
+*
+*  Contact address: 	GUnet Asynchronous eLearning Group,
+*  			Network Operations Center, University of Athens,
+*  			Panepistimiopolis Ilissia, 15784, Athens, Greece
+*  			eMail: info@openeclass.org
+* =========================================================================*/
 
 if (!defined('INDEX_START')) {
 	die ("Action not allowed!");
@@ -37,8 +40,7 @@ if (mysql_num_rows($r) > 0) { // if cas user found
 	$myrow = mysql_fetch_array($r);
 		// update user information. set also password to cas
 		$update_query = "UPDATE user SET nom='$cas_nom', prenom='$cas_prenom', password='cas' ";
-		// get email from CAS only if there is no e-mail for user. User might want different e-mail
-		if (!empty($cas_email) && empty($myrow['email'])) {
+		if (!empty($cas_email)) {
 			$update_query .= ",email = '$cas_email' ";
 		}
 		$update_query .= " WHERE username = '$cas_uname'";
