@@ -38,7 +38,6 @@ $path2add = 3;
 
 require_once "../../../include/init.php";
 require_once '../../../include/lib/textLib.inc.php' ;
-require_once '../../units/functions.php';
 
 $nameTools = $langCourseProgram;
 
@@ -53,7 +52,7 @@ $unit_id = description_unit_id($cours_id);
   <link href="../../../template/classic/theme.css" rel="stylesheet" type="text/css" />
   <title><?php echo $langCourseProgram ?></title>
 </head>
-<body style="margin: 2px;">
+<body style="margin: 2px; height: 99%!important; height: auto; background-color: #ffffff;">
 <div id="content">
 
 <?php
@@ -68,8 +67,7 @@ if ($q and mysql_num_rows($q) > 0) {
 		echo "
 			<table width='100%' class='tbl_border'>
 			<tr class='odd'>
-			<td class='bold'>" . q($row['title']) . "</td>\n" .
-			actions('description', $row['id'], $row['visibility'], $row['res_id']) . "
+			<td class='bold'>" . q($row['title']) . "</td>\n
 			</tr>
 			<tr>";
 		

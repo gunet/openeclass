@@ -228,7 +228,7 @@ echo "<html>"."\n"
     .'<link href="../../../template/classic/theme.css" rel="stylesheet" type="text/css" />'."\n"
     .'<title>'.$langExercice.'</title>'."\n"
     .'</head>'."\n"
-    .'<body style="margin: 2px;">'."\n"
+    .'<body style="margin: 2px; height: 99%!important; height: auto; background-color: #ffffff;">'."\n"
     .'<div id="content">';
 
 echo ("
