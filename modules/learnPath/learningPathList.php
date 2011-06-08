@@ -469,6 +469,7 @@ while ($list = mysql_fetch_array($result)) // while ... learning path list
                       `$TABLELEARNPATHMODULE` AS LPM)
                 WHERE M.`module_id` = LPM.`module_id`
                   AND LPM.`learnPath_id` = ". intval($list['learnPath_id'])."
+                  AND M.`contentType` <> \"LABEL\"
                 ORDER BY LPM.`rank` ASC";
         $resultmodules = db_query($modulessql);
         
