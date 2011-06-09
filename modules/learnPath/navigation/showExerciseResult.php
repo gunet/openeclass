@@ -315,7 +315,7 @@ foreach($_SESSION['questionList'] as $questionId) {
 						echo ('_off');
 					}
 		
-					echo (".gif' border='0' /></div>
+					echo (".png' border='0' /></div>
       </td>
       <td><div align='center'>");
 	
@@ -329,7 +329,7 @@ foreach($_SESSION['questionList'] as $questionId) {
 					} else {
 						echo ("_off");	
 					}
-					echo (".gif\" /></div>");	
+					echo (".png\" /></div>");	
 					echo ("
       </td>
       <td>${answer}</td>
