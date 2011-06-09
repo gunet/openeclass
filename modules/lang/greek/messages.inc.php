@@ -1395,6 +1395,7 @@ $langBasicOptions = "Βασικές Επιλογές";
 $langUserOptions = "Επιλογές Χρήστη";
 $langAdminOptions = "Επιλογές Διαχείρισης";
 $langCourseOptions = "Επιλογές Μαθήματος";
+$langAlternateLogin = "Εναλλακτική σύνδεση";
 
 /***********************************************************
 * install.php

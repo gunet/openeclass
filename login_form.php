@@ -105,7 +105,7 @@ if ($casactive['auth_default'] == 1) {
 	$cas_link = "";
 }
 
-$tool_content .= "
+$tool_content .= "<form action='$_SERVER[PHP_SELF]' method='post'>
   <table class='tbl' width='300' align='center'>
   <tr>
   <th colspan='2' class='LoginHead' align='center'><b>$langUserLogin </b></th>
@@ -113,18 +113,22 @@ $tool_content .= "
   <tr>
   <td class='LoginData'><img src='{$urlServer}template/classic/img/login.png'></td>
     <td class='LoginData'>
-      <form action='$_SERVER[PHP_SELF]' method='post'>
         $langUsername <br />
         <input class='Login' name='uname' size='20' /><br />
         $langPass <br />
         <input class='Login' name='pass' type='password' size='20' /><br /><br />
         <input class='Login' name='submit' type='submit' size='20' value='$langEnter' />
-	$warning<br />$shibboleth_link
-	<br />$cas_link 
-        <a href='${urlServer}modules/auth/lostpass.php'>$lang_forgot_pass</a>
-      </form>
-    </td>
-  </tr>
-  </table>";
+	$warning</td></tr>
+	   <tr><td>&nbsp;</td><td><p class='smaller'><a href='modules/auth/lostpass.php'>$lang_forgot_pass</a></p><br />
+	   </td>
+	 </tr>";
+	 if (!empty($shibboleth_link) or !empty($cas_link)) {
+		$tool_content .= "<tr><th colspan='2' class='LoginHead'><b>$langAlternateLogin </b></th></tr>";
+	 }
+	 $tool_content .= "<tr><td colspan='2' class='LoginData'>
+		$shibboleth_link
+		$cas_link</td></tr>
+		</table>
+		</form>";
 
 draw($tool_content, 0);
