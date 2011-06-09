@@ -66,6 +66,7 @@ if ($is_adminOfCourse) {
                        'user' => "user_id IN (SELECT user_id FROM cours_user
                                                              WHERE cours_id = $cours_id)",
                        'cours_user' => "cours_id = $cours_id",
+                       'annonces' => "cours_id = $cours_id",
                        'group_properties' => $sql_course,
                        'group' => $sql_course,
                        'group_members' => "group_id IN (SELECT id FROM `group`
@@ -198,19 +199,6 @@ function backup_table($basedir, $table, $condition) {
         file_put_contents("$basedir/$table", serialize($backup));
 }
 
-function backup_annonces($f, $cours_id) {
-	global $mysqlMainDb;
-
-	$res = db_query("SELECT * FROM `$mysqlMainDb`.annonces
-				    WHERE cours_id = $cours_id");
-	while($q = mysql_fetch_array($res)) {
-		fputs($f, "announcement(".
-			inner_quote($q['contenu']).",\n".
-			inner_quote($q['temps']).", ".
-			inner_quote($q['ordre']).", ".
-			inner_quote($q['title']).");\n");
-	}
-}
 
 function backup_assignment_submit($f) {
 	$res = db_query("SELECT * FROM assignment_submit");

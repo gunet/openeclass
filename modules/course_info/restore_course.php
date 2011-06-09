@@ -172,11 +172,15 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
                         } elseif ($type == 'subsection') {
                                 $data['res_id'] = $subsection_map[$data['res_id']];
 			} elseif ($type == 'description') {
-                                $data['res_id'] = 0;
+                                $data['res_id'] = intval($data['res_id']);
                         }
+                        return true;
                 }
 
                 mysql_select_db($mysqlMainDb);
+                restore_table($restoreThis, 'annonces',
+                        array('set' => array('cours_id' => $course_id),
+                              'delete' => array('id')));
                 restore_table($restoreThis, 'group_properties',
                         array('set' => array('course_id' => $course_id)));
                 $group_map = restore_table($restoreThis, 'group',
