@@ -154,6 +154,7 @@ if ($is_adminOfCourse) {
         } elseif (isset($_REQUEST['delete_all'])) {
                 db_query("DELETE FROM group_members WHERE group_id IN (SELECT id FROM `group` WHERE course_id = $cours_id)");
                 db_query("DELETE FROM `group` WHERE course_id = $cours_id");
+                db_query("DELETE FROM document WHERE course_id = $cours_id AND subsystem = 1");
                 // FIXME db_query("DELETE FROM forums WHERE cat_id='1'");
 
                 // Move all groups to garbage collector and re-create an empty work directory
@@ -176,8 +177,9 @@ if ($is_adminOfCourse) {
                        "../../courses/garbage/$groupGarbage");
                 // FIXME db_query("DELETE FROM forums WHERE forum_id = $myDir[forum_id]");
 
-                db_query("DELETE FROM `group` WHERE id = $id");
+                db_query("DELETE FROM document WHERE course_id = $cours_id AND subsystem = 1 AND subsystem_id = $id");
                 db_query("DELETE FROM group_members WHERE group_id = $id");
+                db_query("DELETE FROM `group` WHERE id = $id");
                 $message = $langGroupDel;
 
         } elseif (isset($_REQUEST['empty'])) {
