@@ -201,7 +201,7 @@ function metaCreateForm($metadata, $oldFilename, $real_filename) {
 	  </tr><tr><td>$langIntentedEndUserRoleHelp</td></tr>
 	  <tr>
 	    <th>&nbsp;</th>
-	    <td><input type='submit' value='$langOkComment' /></td>
+	    <td class='right'><input type='submit' value='$langOkComment' /></td>
 	  </tr>
 	  <tr>
 	    <th>&nbsp;</th>

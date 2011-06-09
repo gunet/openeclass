@@ -608,7 +608,7 @@ if($can_upload) {
           </tr>
           <tr>
             <th>&nbsp;</th>
-            <td><input type='submit' value='$langOkComment' /></td>
+            <td class='right'><input type='submit' value='$langOkComment' /></td>
           </tr>
           <tr>
             <th>&nbsp;</th>
