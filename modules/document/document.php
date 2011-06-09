@@ -471,7 +471,13 @@ if($can_upload) {
 							       path = " . quote($oldpath))) {
                                         $action_message = "<p class='caution'>$dropbox_lang[generalError]</p>";
                                 } else {
-                                        $action_message = "<p class='success'>$langReplaceOK</p>";
+                                	if (hasMetaData($oldpath, $basedir, $group_sql)) {
+                                		rename($basedir . $oldpath . ".xml", $basedir . $newpath . ".xml");
+                                		db_query("UPDATE document SET path = " . quote($newpath . ".xml") . ",
+                                		      filename=" . autoquote($_FILES['newFile']['name'] . ".xml") .
+                                		    " WHERE $group_sql AND path =" . quote($oldpath . ".xml"));
+                                	}
+                                	$action_message = "<p class='success'>$langReplaceOK</p>";
                                 }
                         }
                 }
