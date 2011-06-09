@@ -118,7 +118,12 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
                 upgrade_course($new_course_code, $course_lang);
         } else {
                 if (mysql_table_exists($new_course_code, 'student_group')) {
-                        map_table_field('student_group', 'id', 'tutor', $userid_map);
+                        if (file_exists("$restoreThis/group_members")) {
+                                // new-style backup - student_group shouldn't exist
+                                db_query('DROP TABLE student_group');
+                        } else {
+                                map_table_field('student_group', 'id', 'tutor', $userid_map);
+                        }
                 }
 		if ($eclass_version < '2.2') { // if we come from 2.1.x
                         upgrade_course_2_2($new_course_code, $course_lang);
@@ -138,13 +143,17 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
                 // New-style backup - restore intividual tables
 
                 function document_map_function(&$data, $maps) {
-                        list($group_map, $ebook_map) = $maps;
-                        $sid = $data['subsystem'];
-                        if ($sid == 1) { // Group documents
-                                $data['subsystem_id'] = $group_map[$data['subsystem_id']];
-                        } elseif ($sid == 2) { // Ebook documents
-                                $data['subsystem_id'] = $ebook_map[$data['subsystem_id']];
+                        // $maps[1]: group map, $maps[2]: ebook map
+                        $stype = $data['subsystem'];
+                        $sid = $data['subsystem_id'];
+                        if ($stype > 0) {
+                                if (isset($maps[$stype][$sid])) {
+                                        $data['subsystem_id'] = $maps[$stype][$sid];
+                                } else {
+                                        return false;
+                                }
                         }
+                        return true;
                 }
 
                 function unit_map_function(&$data, $maps) {
@@ -189,16 +198,19 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
                 $ebook_map = restore_table($restoreThis, 'ebook',
                         array('set' => array('course_id' => $course_id),
                               'return_mapping' => 'id'));
+                foreach ($ebook_map as $old_id => $new_id) {
+                        rename("$coursedir/ebook/$old_id", "$coursedir/ebook/$new_id");
+                }
                 $document_map = restore_table($restoreThis, 'document',
                         array('set' => array('course_id' => $course_id),
                               'map_function' => 'document_map_function',
-                              'map_function_data' => array($group_map, $ebook_map),
+                              'map_function_data' => array(1 => $group_map, 2 => $ebook_map),
                               'return_mapping' => 'id'));
                 $ebook_section_map = restore_table($restoreThis, 'ebook_section',
                         array('map' => array('ebook_id' => $ebook_map),
                               'return_mapping' => 'id'));
                 $ebook_subsection_map = restore_table($restoreThis, 'ebook_subsection',
-                        array('map' => array('ebook_section' => $ebook_section_map,
+                        array('map' => array('section_id' => $ebook_section_map,
                                              'file_id' => $document_map),
                               'return_mapping' => 'id'));
                 $unit_map = restore_table($restoreThis, 'course_units',
@@ -731,14 +743,17 @@ function restore_table($basedir, $table, $options)
                                 }
                         }
                 }
+                $do_insert = true;
                 if (isset($options['map_function'])) {
                         if (isset($options['map_function_data'])) {
-                                $options['map_function']($data, $options['map_function_data']);
+                                $do_insert = $options['map_function']($data, $options['map_function_data']);
                         } else {
-                                $options['map_function']($data);
+                                $do_insert = $options['map_function']($data);
                         }
                 }
-                db_query($sql_intro . field_values($data, $set));
+                if ($do_insert) {
+                        db_query($sql_intro . field_values($data, $set));
+                }
                 if ($return_mapping) {
                         $mapping[$old_id] = mysql_insert_id();
                 }
@@ -879,9 +894,9 @@ function register_users($course_id, $userid_map, $cours_user)
                 db_query("INSERT INTO `$mysqlMainDb`.cours_user
                                  SET cours_id = $course_id,
                                      user_id = $new_id,
-                                     statut = $statut[$new_id],
-                                     reg_date = ".quote($reg_date[$new_id]).",
-                                     receive_mail = $receive_mail[$new_id]");
+                                     statut = $statut[$old_id],
+                                     reg_date = ".quote($reg_date[$old_id]).",
+                                     receive_mail = $receive_mail[$old_id]");
                 $tool_content .=  "<p>$langPrevId=$old_id, $langNewId=$new_id</p>\n";
         }
 }
