@@ -79,38 +79,39 @@ if (($myrow['password'] == $auth_method_settings['auth_name']) || !empty($cas_al
             default:
                 break;
         }
-        $is_valid = auth_user_login($auth, $uname, $pass);
-	
-        if ($is_valid) {
-                $is_active = check_activity($myrow['user_id']);
-                if ($myrow['user_id'] == 1) {
-                        // the admin is always active
-                        $is_active = 1;
-                }
-                if (!empty($is_active)) {
-                        $auth_allow = 1;
-                } else {
-                        $auth_allow = 3;
-                        $user = $myrow["user_id"];
-                }
-        } else {
-                $auth_allow = 2;
-        }
-        if ($auth_allow == 1) {
-                $uid = $myrow["user_id"];
-                $nom = $myrow["nom"];
-                $prenom = $myrow["prenom"];
-                $statut = $myrow["statut"];
-                $email = $myrow["email"];
-                $userPerso = $myrow["perso"];
-                $language = $_SESSION['langswitch'] = langcode_to_name($myrow["lang"]);
-        } elseif ($auth_allow == 2) {
-                ;
-        } elseif ($auth_allow == 3) {
-                ;
-        } else {
-                $tool_content .= $langLoginFatalError."<br />";
-        }
+	if ($auth != 7) { // if we are not CAS user
+		$is_valid = auth_user_login($auth, $uname, $pass);	
+		if ($is_valid) {
+			$is_active = check_activity($myrow['user_id']);
+			if ($myrow['user_id'] == 1) {
+				// the admin is always active
+				$is_active = 1;
+			}
+			if (!empty($is_active)) {
+				$auth_allow = 1;
+			} else {
+				$auth_allow = 3;
+				$user = $myrow["user_id"];
+			}
+		} else {
+			$auth_allow = 2;
+		}
+		if ($auth_allow == 1) {
+			$uid = $myrow["user_id"];
+			$nom = $myrow["nom"];
+			$prenom = $myrow["prenom"];
+			$statut = $myrow["statut"];
+			$email = $myrow["email"];
+			$userPerso = $myrow["perso"];
+			$language = $_SESSION['langswitch'] = langcode_to_name($myrow["lang"]);
+		} elseif ($auth_allow == 2) {
+			;
+		} elseif ($auth_allow == 3) {
+			;
+		} else {
+			$tool_content .= $langLoginFatalError."<br />";
+		}	
+	}
 } else {
 	$warning .= "<br>$langInvalidAuth<br>";
 }

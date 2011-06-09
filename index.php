@@ -177,7 +177,7 @@ if (isset($_GET['logout']) and isset($uid)) {
         mysql_query("INSERT INTO loginout (loginout.id_user,
                 loginout.ip, loginout.when, loginout.action)
                 VALUES ($uid, '$_SERVER[REMOTE_ADDR]', NOW(), 'LOGOUT')");
-	if (isset($_SESSION['cas_uname'])) {
+	if (isset($_SESSION['cas_uname'])) { // if we are CAS user
 		define('CAS', true);
 	}
 	foreach(array_keys($_SESSION) as $key) {

@@ -53,18 +53,20 @@ if(!empty($submit)) {
 	}
 	if (!isset($uid)) {
 		switch($auth_allow) {
-			case 1 : $warning .= ""; 
-				break;
-			case 2 : $warning .= "<p class='alert1'>".$langInvalidId ."</p>"; 
-				break;
-			case 3 : $warning .= "<p class='alert1'>".$langAccountInactive1." <a href='modules/auth/contactadmin.php?userid=".$user."'>".$langAccountInactive2."</a></p>"; 
-				break;
-			case 4 : $warning .= "<p class='alert1'>". $langInvalidId . "</p>"; 
-				break;
-			case 5 : $warning .= "<p class='alert1'>". $langNoCookies . "</p>"; 
-				break;
-			default:
-				break;
+				case 1 : $warning .= ""; 
+					break;
+				case 2 : $warning .= "<p class='alert1'>".$langInvalidId ."</p>"; 
+					break;
+				case 3 : $warning .= "<p class='alert1'>".$langAccountInactive1." <a href='modules/auth/contactadmin.php?userid=".$user."'>".$langAccountInactive2."</a></p>"; 
+					break;
+				case 4 : $warning .= "<p class='alert1'>". $langInvalidId . "</p>"; 
+					break;
+				case 5 : $warning .= "<p class='alert1'>". $langNoCookies . "</p>"; 
+					break;
+				case 6: $warning .= "<p class='alert1'>$langCASUser <a href='{$urlServer}secure/cas.php'>$langHere</a></p>";
+					break;
+				default:
+					break;
 		}
 	} else {
 		$warning = '';
