@@ -306,6 +306,10 @@ if($can_upload) {
 		db_query("UPDATE document SET filename=" .
                          autoquote(canonicalize_whitespace($_POST['renameTo'])) .
                          " WHERE $group_sql AND path=" . autoquote($_POST['sourceFile']));
+		if (hasMetaData($_POST['sourceFile'], $basedir, $group_sql))
+			db_query("UPDATE document SET filename=" .
+                         autoquote(canonicalize_whitespace($_POST['renameTo'] . ".xml")) .
+                         " WHERE $group_sql AND path=" . autoquote($_POST['sourceFile'] . ".xml"));
 		$action_message = "<p class='success'>$langElRen</p><br />";
 	}
 
