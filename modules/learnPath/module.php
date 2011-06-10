@@ -96,13 +96,7 @@ if ( !$is_adminOfCourse && $lp['visibility'] == "HIDE" ) {
 	exit();
 }
 
-$q2 = db_query("SELECT visibility FROM $TABLELEARNPATHMODULE WHERE learnPath_id = '".(int)$_SESSION['path_id']."' AND module_id = '".(int)$_SESSION['lp_module_id']."'");
-$lpm = mysql_fetch_array($q2);
-if (mysql_num_rows($q2) <= 0 || (!$is_adminOfCourse && $lpm['visibility'] == "HIDE")) {
-	// if the combination path/module is invalid, don't allow users in it
-	header("Location: ./learningPathList.php?course=$code_cours");
-	exit();
-}
+check_LPM_validity($is_adminOfCourse, $code_cours);
 
 // main page
 // FIRST WE SEE IF USER MUST SKIP THE PRESENTATION PAGE OR NOT
