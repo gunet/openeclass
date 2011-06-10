@@ -67,7 +67,7 @@ if (mysql_num_rows($result) > 0) {
         <table width='100%' class='tbl_alt'>
 	<tr>
           <th colspan='2'>$langAnnouncements <a href='${urlServer}rss.php'>
-	    <img src='${urlAppend}template/classic/img/feed.png' alt='RSS Feed' title='RSS Feed' />
+	    <img src='${urlAppend}/template/classic/img/feed.png' alt='RSS Feed' title='RSS Feed' />
 	    </a>
           </th>
         </tr>";
