@@ -41,6 +41,7 @@
 $require_current_course = TRUE;
 
 require_once("../../include/baseTheme.php");
+require_once("../../include/lib/learnPathLib.inc.php");
 
 $head_content = "";
 $tool_content = "";
@@ -56,8 +57,7 @@ if (isset($_GET['path_id']) && !empty($_GET['path_id']))
 if (isset($_GET['module_id']) && !empty($_GET['module_id']))
 	$_SESSION['lp_module_id'] = intval($_GET['module_id']);
 
-$l = db_query("SELECT name FROM lp_learnPath WHERE learnPath_id = '".(int)$_SESSION['path_id']."'", $currentCourseID);
-$lpname = mysql_fetch_array($l);
+check_LPM_validity($is_adminOfCourse, $code_cours, true);
 
 $nameTools = $langPreview;
 if (!add_units_navigation()) {
