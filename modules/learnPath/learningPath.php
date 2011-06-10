@@ -66,20 +66,20 @@ if (isset($_GET['unit'])) {
 }
 
 // $_SESSION
-if (isset($_GET['path_id']) && $_GET['path_id'] > 0)
+if (isset($_GET['path_id']))
 {
     $_SESSION['path_id'] = intval($_GET['path_id']);
 }
 elseif((!isset($_SESSION['path_id']) || $_SESSION['path_id'] == ""))
 {
-    // if path id not set, redirect user to the home page of learning path
+    // if path id not set, redirect user to the list of learning paths
     header("Location: ./learningPathList.php?course=$code_cours");
     exit();
 }
 
-$l = db_query("SELECT name FROM $TABLELEARNPATH WHERE learnPath_id = '".(int)$_SESSION['path_id']."'", $currentCourseID);
-$lpname = mysql_fetch_array($l);
-$nameTools = $lpname['name'];
+$q = db_query("SELECT name, visibility FROM $TABLELEARNPATH WHERE learnPath_id = '".(int)$_SESSION['path_id']."'", $currentCourseID);
+$lp = mysql_fetch_array($q);
+$nameTools = $lp['name'];
 if (!add_units_navigation(TRUE)) {
 	$navigation[] = array("url"=>"learningPathList.php?course=$code_cours", "name"=> $langLearningPaths);
 }
@@ -91,6 +91,13 @@ if ( $is_adminOfCourse )
     // if the fct return true it means that user is a course manager and than view mode is set to COURSE_ADMIN
     header("Location: ./learningPathAdmin.php?course=$code_cours&path_id=".$_SESSION['path_id']);
     exit();
+}
+else {
+	if ($lp['visibility'] == "HIDE") {
+		// if the learning path is invisible, don't allow users in it
+		header("Location: ./learningPathList.php?course=$code_cours");
+		exit();
+	}
 }
 
 mysql_select_db($currentCourseID);
