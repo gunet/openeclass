@@ -1957,4 +1957,48 @@ function get_limited_list($sql, $limiter)
 	return db_query_fetch_all($sql);
 }
 
+
+/*
+ * This function checks whether a Learning Path Module exists and is visible 
+ * for a non-teacher user. If requested, the same check can be made for a 
+ * Learning Path, not just the module. Because the Learning Path and Learning
+ * Path Module can be chosen via GET arguments, we are in danger of people 
+ * accessing stuff they shouldn't by guessing ids.
+ * 
+ * @param boolean $is_adminOfCourse contains whether the current user is admin of the current course
+ * @param string $code_cours contains the current course id
+ * @param boolean $extraQuery contains whether the extra check will be made or not
+ * @param boolean $extraDepth contains how far we are from the redirected location
+ * @author Thanos Kyritsis <atkyritsis@upnet.gr>
+ */
+
+function check_LPM_validity($is_adminOfCourse, $code_cours, $extraQuery = false, $extraDepth = false) {
+	
+	$depth = ($extraDepth) ? "../" : "./" ;
+	
+	if (!isset($_SESSION['path_id']) || !isset($_SESSION['lp_module_id']) || empty($_SESSION['path_id']) || empty($_SESSION['lp_module_id']) ) {
+		header("Location: ".$depth."learningPathList.php?course=$code_cours");
+		exit();
+	}
+	
+	if ($extraQuery) {
+		$q = db_query("SELECT visibility FROM lp_learnPath WHERE learnPath_id = '".(int)$_SESSION['path_id']."'", $code_cours);
+		$lp = mysql_fetch_array($q);
+		
+		if ( !$is_adminOfCourse && $lp['visibility'] == "HIDE" ) {
+			// if the learning path is invisible, don't allow users in it
+			header("Location: ".$depth."learningPathList.php?course=$code_cours");
+			exit();
+		}
+	}
+		
+	$q2 = db_query("SELECT visibility FROM lp_rel_learnPath_module WHERE learnPath_id = '".(int)$_SESSION['path_id']."' AND module_id = '".(int)$_SESSION['lp_module_id']."'");
+	$lpm = mysql_fetch_array($q2);
+	if (mysql_num_rows($q2) <= 0 || (!$is_adminOfCourse && $lpm['visibility'] == "HIDE")) {
+		// if the combination path/module is invalid, don't allow users in it
+		header("Location: ".$depth."learningPathList.php?course=$code_cours");
+		exit();
+	}
+}
+
 ?>
