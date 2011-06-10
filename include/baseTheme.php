@@ -85,7 +85,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 	global $langSearch, $langAdvancedSearch;
 	global $langMyPersoLessons, $langMyPersoDeadlines;
 	global $langMyPersoAnnouncements, $langMyPersoDocs, $langMyPersoAgenda, $langMyPersoForum;
-	global $langExtrasLeft, $langExtrasRight;
+	global $langExtrasLeft, $langExtrasRight, $langChooseLang;
 	global $require_current_course, $is_adminOfCourse;
 
 	//get blocks content from $toolContent array
@@ -264,6 +264,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 
 		if ($menuTypeID != 2) {
 			$t->set_var ( 'LANG_SELECT', lang_selections () );
+			$t->set_var ( 'LANG_SELECT_TITLE', "title='$langChooseLang'" );
 		} else {
 			$t->set_var ( 'LANG_SELECT', '' );
 		}
