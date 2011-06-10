@@ -74,20 +74,34 @@ if (!add_units_navigation()) {
 
 if ( isset($_GET['path_id']) && $_GET['path_id'] != '' )
 {
-    $_SESSION['path_id'] = $_GET['path_id'];
+    $_SESSION['path_id'] = intval($_GET['path_id']);
 }
 // module_id
 if ( isset($_GET['module_id']) && $_GET['module_id'] != '')
 {
-    $_SESSION['lp_module_id'] = $_GET['module_id'];
+    $_SESSION['lp_module_id'] = intval($_GET['module_id']);
 }
 
 mysql_select_db($currentCourseID);
 
-$l = db_query("SELECT name FROM $TABLELEARNPATH WHERE learnPath_id = '".(int)$_SESSION['path_id']."'");
-$lpname = mysql_fetch_array($l);
+$q = db_query("SELECT name, visibility FROM $TABLELEARNPATH WHERE learnPath_id = '".(int)$_SESSION['path_id']."'");
+$lp = mysql_fetch_array($q);
 if (!add_units_navigation() && !$is_adminOfCourse) {
-	$navigation[] = array("url" => "learningPath.php?course=$code_cours&amp;path_id=".(int)$_SESSION['path_id'], "name" => $lpname['name']);
+	$navigation[] = array("url" => "learningPath.php?course=$code_cours&amp;path_id=".(int)$_SESSION['path_id'], "name" => $lp['name']);
+}
+
+if ( !$is_adminOfCourse && $lp['visibility'] == "HIDE" ) {
+	// if the learning path is invisible, don't allow users in it
+	header("Location: ./learningPathList.php?course=$code_cours");
+	exit();
+}
+
+$q2 = db_query("SELECT visibility FROM $TABLELEARNPATHMODULE WHERE learnPath_id = '".(int)$_SESSION['path_id']."' AND module_id = '".(int)$_SESSION['lp_module_id']."'");
+$lpm = mysql_fetch_array($q2);
+if (mysql_num_rows($q2) <= 0 || (!$is_adminOfCourse && $lpm['visibility'] == "HIDE")) {
+	// if the combination path/module is invalid, don't allow users in it
+	header("Location: ./learningPathList.php?course=$code_cours");
+	exit();
 }
 
 // main page
