@@ -323,7 +323,7 @@ $tool_content .= "
           <td class='left'>$toggle_student_view
              <a href='../../modules/contact/index.php?course=$code_cours' id='email_btn'><img src='../../template/classic/img/email.png' alt='$langContactProf' title='$langContactProf' /></a>&nbsp;&nbsp;
              <a href='$_SERVER[PHP_SELF]' title='" . q($intitule) . "' class='jqbookmark'><img src='${urlServer}template/classic/img/bookmark.png' alt='$langAddAsBookmark' title='$langAddAsBookmark' /></a>&nbsp;&nbsp;
-             <span class='feed'><a href='${urlServer}modules/announcements/rss.php?c=$currentCourseID'><img src='${urlServer}template/classic/img/feed.png' alt='$langRSSFeed' title='$langRSSFeed' /></a></span>&nbsp;$toggle_student_view_close</td>
+             <span class='feed'><a href='${urlServer}modules/announcements/rss.php?c=$currentCourseID'><img src='${urlAppend}template/classic/img/feed.png' alt='$langRSSFeed' title='$langRSSFeed' /></a></span>&nbsp;$toggle_student_view_close</td>
         </tr>
         </table>
         <br />\n";
