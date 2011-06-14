@@ -38,24 +38,34 @@ $sqlLogin= "SELECT user_id, nom, username, password, prenom, statut, email, idus
 $r = db_query($sqlLogin); 
 if (mysql_num_rows($r) > 0) { // if cas user found 
 	$myrow = mysql_fetch_array($r);
-		// update user information. set also password to cas
-		$update_query = "UPDATE user SET nom='$cas_nom', prenom='$cas_prenom', password='cas' ";
-		if (!empty($cas_email)) {
-			$update_query .= ",email = '$cas_email' ";
-		}
-		$update_query .= " WHERE username = '$cas_uname'";
-		db_query($update_query);
-		$r2 = db_query($sqlLogin);
-		$myrow2 = mysql_fetch_array($r2);
-		$uid = $myrow2['user_id'];
-		$is_admin = $myrow2['is_admin'];
-		$userPerso = $myrow2['perso'];
-		$nom = $myrow2['nom'];
-		$prenom = $myrow2['prenom'];
-		if (isset($_SESSION['langswitch'])) {
-			$language = $_SESSION['langswitch'];
+		if ($myrow['password'] == 'cas') {
+			// update user information. set also password to cas
+			$update_query = "UPDATE user SET nom='$cas_nom', prenom='$cas_prenom', password='cas' ";
+			if (!empty($cas_email)) {
+				$update_query .= ",email = '$cas_email' ";
+			}
+			$update_query .= " WHERE username = '$cas_uname'";
+			db_query($update_query);
+			$r2 = db_query($sqlLogin);
+			while ($myrow2 = mysql_fetch_array($r2)) {
+				$uid = $myrow2['user_id'];
+				$is_admin = $myrow2['is_admin'];
+				$userPerso = $myrow2['perso'];
+				$nom = $myrow2['nom'];
+				$prenom = $myrow2['prenom'];
+				if (isset($_SESSION['langswitch'])) {
+					$language = $_SESSION['langswitch'];
+				} else {
+					$language = langcode_to_name($myrow['lang']);
+				}
+			}
 		} else {
-			$language = langcode_to_name($myrow['lang']);
+			unset($_SESSION['cas_uname']);
+			unset($_SESSION['cas_email']);
+			unset($_SESSION['cas_nom']);
+			unset($_SESSION['cas_prenom']);
+			$_SESSION['errMessage'] = "<div class='caution'>$langUserAltAuth</div>";
+			redirect_to_home_page();
 		}
 } else { // CAS auth ok but user not registered. Let's do the normal procedure
 	foreach(array_keys($_SESSION) as $key)
