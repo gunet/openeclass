@@ -44,7 +44,7 @@ function add_field($table, $field, $type)
 			$retString .= "$langAddField <b>$field</b> $langToTable <b>$table</b>: ";
 			$retString .= " $BAD<br>";
 		}
-	} 
+	}
 	return $retString;
 }
 
@@ -60,7 +60,7 @@ function add_field_after_field($table, $field, $after_field, $type)
 			$retString .= "$langAddField <b>$field</b> $langAfterField <b>$after_field</b> $langToTable <b>$table</b>: ";
 			$retString .= " $BAD<br>";
 		}
-	} 
+	}
 	return $retString;
 }
 
@@ -75,8 +75,8 @@ function rename_field($table, $field, $new_field, $type)
 		if (!db_query("ALTER TABLE `$table` CHANGE  `$field` `$new_field` $type")) {
 			$retString .= "$langRenameField <b>$field</b> $langToA <b>$new_field</b> $langToTable <b>$table</b>: ";
 			$retString .= " $BAD<br>";
-		} 
-	} 
+		}
+	}
 	return $retString;
 }
 
@@ -155,7 +155,7 @@ function mysql_index_exists($table, $index_name)
         }
 }
 
-// add index/indexes in specific table columns 
+// add index/indexes in specific table columns
 function add_index($index, $table, $column)  {
 	global $langIndexAdded, $langIndexExists, $langToTable;
 
@@ -464,9 +464,9 @@ function upgrade_course_2_2($code, $lang, $extramessage = '')
         db_query("INSERT IGNORE INTO action_types SET id=2, name='exit'");
 	
 	// upgrade exercises
- 	db_query("ALTER TABLE `exercise_user_record` 
-		CHANGE `RecordStartDate` `RecordStartDate` DATETIME NOT NULL DEFAULT '0000-00-00'", $code); 
- 	db_query("ALTER TABLE `exercise_user_record` 
+ 	db_query("ALTER TABLE `exercise_user_record`
+		CHANGE `RecordStartDate` `RecordStartDate` DATETIME NOT NULL DEFAULT '0000-00-00'", $code);
+ 	db_query("ALTER TABLE `exercise_user_record`
 		CHANGE `RecordEndDate` `RecordEndDate` DATETIME NOT NULL DEFAULT '0000-00-00'", $code);
 	if (!mysql_field_exists("$code",'exercices','results'))
                 echo add_field('exercices', 'results', "TINYINT(1) NOT NULL DEFAULT '1'");
@@ -519,7 +519,7 @@ function upgrade_course_2_1_3($code, $extramessage = '')
 
 	// upgrade lp_module me to kainourio content type
 	db_query("ALTER TABLE `lp_module`
-		CHANGE `contentType` `contentType` ENUM('CLARODOC','DOCUMENT','EXERCISE','HANDMADE','SCORM','SCORM_ASSET','LABEL','COURSE_DESCRIPTION','LINK')", 
+		CHANGE `contentType` `contentType` ENUM('CLARODOC','DOCUMENT','EXERCISE','HANDMADE','SCORM','SCORM_ASSET','LABEL','COURSE_DESCRIPTION','LINK')",
 		$code);
 }
 
@@ -1214,7 +1214,7 @@ function upgrade_course_old($code, $lang, $extramessage = '')
         /* compatibility update
            a) remove entries modules import, external, videolinks, old statistics
            b) correct agenda and video link
-         */ 
+         */
 
        db_query("DELETE FROM accueil WHERE (id = 12 OR id = 13 OR id = 11 OR id=6)", $code);
         update_field("accueil", "lien", "../../modules/agenda/agenda.php", "id", 1);
@@ -1356,7 +1356,7 @@ function upgrade_course_old($code, $lang, $extramessage = '')
         db_query("DROP TABLE IF EXISTS liste_domaines");
 
         // convert to UTF-8
-        convert_db_utf8($code); 
+        convert_db_utf8($code);
 }
 
 
@@ -1599,7 +1599,7 @@ function convert_description_to_units($code, $cours_id)
         $q = @mysql_query("SELECT * FROM `$code`.course_description");
 
         // If old-style course description data don't exist and course description is
-        // empty, don't do anything 
+        // empty, don't do anything
         if ((!$q or mysql_num_rows($q) == 0) and empty($desc) and empty($addon)) {
                 return;
         }
@@ -1609,7 +1609,8 @@ function convert_description_to_units($code, $cours_id)
         $error = false;
         if (!empty($desc)) {
                 $error = add_unit_resource($id, 'description', -1,
-                                           $GLOBALS['langCourseDescription'], $desc) && $error;
+                                           $GLOBALS['langCourseDescription'],
+                                           html_cleanup($desc)) && $error;
         }
         if (!empty($addon)) {
                 $error = add_unit_resource($id, 'description', false,
@@ -1623,7 +1624,8 @@ function convert_description_to_units($code, $cours_id)
                 $error = false;
                 while ($row = mysql_fetch_array($q, MYSQL_ASSOC)) {
                         $error = add_unit_resource($id, 'description', $row['id'], $row['title'],
-                                                   $row['content'], 'i', $row['upDate']) && $error;
+                                                   html_cleanup($row['content']), 'i',
+                                                   $row['upDate']) && $error;
                 }
                 if (!$error) {
                         db_query("DROP TABLE `$code`.course_description");
@@ -1704,7 +1706,8 @@ function group_documents_main_db($path, $course_id, $group_id, $type)
         }
 }
 
-function mkdir_or_error($dirname) {
+function mkdir_or_error($dirname)
+{
         global $langErrorCreatingDirectory;
         if (!is_dir($dirname)) {
                 if (!mkdir($dirname, 0775)) {
@@ -1737,4 +1740,9 @@ function load_global_messages()
                 $global_messages['langGlossary'][$templang] = $langGlossary;
                 $global_messages['langEBook'][$templang] = $langEBook;
         }
+}
+
+function html_cleanup($s)
+{
+        return str_replace(array('&quot;', '\\', '<pre>', '</pre>'), '', $s);
 }
