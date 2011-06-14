@@ -60,8 +60,11 @@ if (mysql_num_rows($r) > 0) { // if shibboleth user found
 				}
 			}
 		} else {
-			$tool_content .= "<table width='99%'><tbody><tr><td class='caution' height='60'>";
-			$tool_content .= "<p>$langUserFree</p></td></tr></table>";
+			unset($_SESSION['shib_uname']);
+			unset($_SESSION['shib_email']);
+			unset($_SESSION['shib_nom']);
+			$_SESSION['errMessage'] = "<div class='caution'>$langUserAltAuth</div>";
+			redirect_to_home_page();
 		}
 	}	
 } else { // else create him

@@ -22,7 +22,7 @@
 * =========================================================================*/
 
 if (!defined('INDEX_START')) {
-	die ("Action not allowed!");
+	die ('Action not allowed!');
 }
 // user is authenticated, now let's see if he is registered also in db
 $cas_uname = $_SESSION['cas_uname'];
@@ -33,7 +33,7 @@ $cas_email = $_SESSION['cas_email'];
 $sqlLogin= "SELECT user_id, nom, username, password, prenom, statut, email, iduser is_admin, perso, lang
 	FROM user LEFT JOIN admin
 	ON user.user_id = admin.iduser
-	WHERE username='".$cas_uname."'";
+	WHERE username COLLATE utf8_bin = " . quote($cas_uname);
 
 $r = db_query($sqlLogin); 
 if (mysql_num_rows($r) > 0) { // if cas user found 
@@ -47,15 +47,15 @@ if (mysql_num_rows($r) > 0) { // if cas user found
 		db_query($update_query);
 		$r2 = db_query($sqlLogin);
 		$myrow2 = mysql_fetch_array($r2);
-		$uid = $myrow2["user_id"];
-		$is_admin = $myrow2["is_admin"];
-		$userPerso = $myrow2["perso"];
-		$nom = $myrow2["nom"];
-		$prenom = $myrow2["prenom"];
+		$uid = $myrow2['user_id'];
+		$is_admin = $myrow2['is_admin'];
+		$userPerso = $myrow2['perso'];
+		$nom = $myrow2['nom'];
+		$prenom = $myrow2['prenom'];
 		if (isset($_SESSION['langswitch'])) {
 			$language = $_SESSION['langswitch'];
 		} else {
-			$language = langcode_to_name($myrow["lang"]);
+			$language = langcode_to_name($myrow['lang']);
 		}
 } else { // CAS auth ok but user not registered. Let's do the normal procedure
 	foreach(array_keys($_SESSION) as $key)

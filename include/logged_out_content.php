@@ -92,7 +92,7 @@ if (mysql_num_rows($result) > 0) {
 // check for shibboleth
 $shibactive = mysql_fetch_array(db_query("SELECT auth_default FROM auth WHERE auth_name='shibboleth'"));
 if ($shibactive['auth_default'] == 1) {
-	$shibboleth_link = "<a href='{$urlServer}secure/index.php'>$langShibboleth</a><br />";
+	$shibboleth_link = "<a href='{$urlSecure}secure/index.php'>$langShibboleth</a><br />";
 } else {
 	$shibboleth_link = "";
 }
