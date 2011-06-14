@@ -365,7 +365,7 @@ function upgrade_course_2_4($code, $lang, $extramessage = '')
                 db_query("CREATE TEMPORARY TABLE group_map AS
                                 SELECT old.id AS old_id, new.id AS new_id
                                         FROM student_group AS old, `$mysqlMainDb`.`group` AS new
-                                        WHERE new.course_id = 705 AND
+                                        WHERE new.course_id = $course_id AND
                                               old.secretDirectory = new.secret_directory");
 
                 $ok = db_query("INSERT INTO `$mysqlMainDb`.group_members
