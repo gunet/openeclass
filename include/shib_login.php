@@ -59,7 +59,7 @@ if (mysql_num_rows($r) > 0) { // if shibboleth user found
 					$language = langcode_to_name($myrow["lang"]);
 				}
 			}
-		} else {
+		} else { // redirect him to home page
 			unset($_SESSION['shib_uname']);
 			unset($_SESSION['shib_email']);
 			unset($_SESSION['shib_nom']);
