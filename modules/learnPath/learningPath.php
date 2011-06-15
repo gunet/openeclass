@@ -146,6 +146,7 @@ $extendedList = db_query_fetch_all($sql);
 $flatElementList = build_display_element_list(build_element_list($extendedList, 'parent', 'learnPath_module_id'));
 
 $is_blocked = false;
+$first_blocked = false;
 $moduleNb = 0;
 
 // look for maxDeep
@@ -305,8 +306,13 @@ foreach ($flatElementList as $module)
 
     if( $uid && ($module['contentType'] != CTLABEL_) )
     {
-        // display actions for current module
-        $tool_content .= "<td width='18'><a href=\"module.php?course=$code_cours&amp;module_id=".$module['module_id']."\"><img src='../../template/classic/img/monitor.png' alt='$langTracking' title='$langTracking' /></a></td>";
+        // display actions for current module (taking into consideration blocked modules)
+        if (!$is_blocked || !$first_blocked ) 
+          $tool_content .= "<td width='18'><a href=\"module.php?course=$code_cours&amp;module_id=".$module['module_id']."\"><img src='../../template/classic/img/monitor.png' alt='$langTracking' title='$langTracking' /></a></td>";
+        else
+          $tool_content .= "<td></td>";
+        if ($is_blocked)
+          $first_blocked = true;
         // display the progress value for current module
         $tool_content .= '      <td align="right" width="120">'.disp_progress_bar ($progress, 1).'</td>'."\n"
         	.'      <td align="left" width="10">'
