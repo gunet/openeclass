@@ -52,15 +52,9 @@ mysql_select_db($dbname);
 if (isset($_GET['id'])) {
 	$id = intval($_GET['id']);
 }
-$date = isset($_POST['date'])?$_POST['date']:"";
-$fhour = isset($_POST['fhour'])?$_POST['fhour']:"";
-$fminute = isset($_POST['fminute'])?$_POST['fminute']:"";
-$titre = isset($_POST['titre'])?$_POST['titre']:"";
-$contenu = isset($_POST['contenu'])?$_POST['contenu']:"";
-$lasting = isset($_POST['lasting'])?$_POST['lasting']:"";
+
 		
 if ($is_adminOfCourse and (isset($_GET['addEvent']) or isset($_GET['id']))) {
-	$lang_editor = langname_to_code($language);
 	$lang_jscalendar = langname_to_code($language);
 
 	//--if add event
@@ -102,112 +96,89 @@ $start_cal = $jscalendar->make_input_field(
 }
 
 if ($is_adminOfCourse) {
+        register_posted_variables(array('date' => true, 'fhour' => true, 'fminute' => true,
+                                        'titre' => true, 'contenu' => true, 'lasting' => true));
+        $titre = autoquote(canonicalize_whitespace($titre));
+        $contenu = autoquote(canonicalize_whitespace($contenu));
+        $lasting = autoquote(canonicalize_whitespace($lasting));
+        $date = autoquote(canonicalize_whitespace($date));
+        $fhour = intval($fhour);
+        $fminute = intval($fminute);
+
 	// modify visibility
 	if (isset($_GET['mkInvisibl']) and $_GET['mkInvisibl'] == true) {
-		$sql = "UPDATE agenda SET visibility = 'i'
-			WHERE id='".mysql_real_escape_string($id)."'";
-		$p_sql= "DELETE FROM agenda WHERE lesson_code = '$currentCourseID' 
-			AND lesson_event_id ='".mysql_real_escape_string($id)."'";
-		db_query($sql);
-		db_query($p_sql, $mysqlMainDb);
+		db_query("UPDATE agenda SET visibility = 'i'
+                                        WHERE id = $id");
+                db_query("DELETE FROM `$mysqlMainDb`.agenda
+                                 WHERE lesson_code = '$currentCourseID' AND
+                                       lesson_event_id = $id");
 	} elseif (isset($_GET['mkVisibl']) and ($_GET['mkVisibl'] == true)) {
-		$sql = "UPDATE agenda SET visibility = 'v' WHERE id='".mysql_real_escape_string($id)."'";
-		$p_sql = "SELECT id, titre, contenu, DAY, HOUR, lasting
-			FROM agenda WHERE id='".mysql_real_escape_string($id)."'";
-		$perso_result = db_query($p_sql, $currentCourseID);
-		$perso_query_result = mysql_fetch_row($perso_result);
-		$perso_matrix['titre'] = $perso_query_result[1];
-		$perso_matrix['contenu'] = $perso_query_result[2];
-		$perso_matrix['date_selection'] = $perso_query_result[3];
-		$perso_matrix['hour'] = $perso_query_result[4];
-		$perso_matrix['lasting'] = $perso_query_result[5];
-		// Add all data to the main table.
-		$p_sql = "INSERT INTO agenda (lesson_event_id, titre, contenu, day, hour, lasting, lesson_code)
-			VALUES('".$perso_query_result[0]."','".$perso_query_result[1]."',
-			'".$perso_query_result[2]."','".$perso_query_result[3]."',
-			'".$perso_query_result[4]."','".$perso_query_result[5]."',
-			'".$currentCourseID."')";
-		db_query($sql);
-		db_query($p_sql, $mysqlMainDb);
+		db_query("UPDATE agenda SET visibility = 'v' WHERE id = $id");
+                db_query("INSERT INTO `$mysqlMainDb`.agenda
+                                 (lesson_event_id, titre, contenu, day, hour, lasting, lesson_code)
+                                 SELECT id, titre, contenu, day, hour, lasting, '$currentCourseID'
+                                        FROM agenda WHERE id = $id");
 	}
 	if (isset($_POST['submit'])) {
-		$date_selection = $date;
-		$hour = $fhour.":".$fminute;
+		$hour = quote($fhour.':'.$fminute);
 		if (isset($_POST['id']) and !empty($_POST['id'])) {
 			$id = intval($_POST['id']);
-			$sql = "UPDATE agenda
-				SET titre='".mysql_real_escape_string(trim($titre))."',
-				contenu='".mysql_real_escape_string(trim($contenu))."',
-				day='".mysql_real_escape_string($date_selection)."',
-				hour='".mysql_real_escape_string($hour)."',
-				lasting='".mysql_real_escape_string($lasting)."'
-                	WHERE id='".mysql_real_escape_string($id)."'";
+                        db_query("UPDATE agenda
+                                         SET titre = $titre,
+                                             contenu = $contenu,
+                                             day = $date,
+                                             hour = $hour,
+                                             lasting = $lasting
+                                         WHERE id = $id");
 			##[BEGIN personalisation modification]############
-			$perso_sql = "UPDATE $mysqlMainDb.agenda
-				SET titre='".mysql_real_escape_string(trim($titre))."',
-				contenu='".mysql_real_escape_string(trim($contenu))."',
-				day = '".mysql_real_escape_string($date_selection)."',
-				hour= '".mysql_real_escape_string($hour)."',
-				lasting='".mysql_real_escape_string($lasting)."'
-                	WHERE lesson_code= '$currentCourseID'
-               		AND lesson_event_id='".mysql_real_escape_string($id)."' ";
+			db_query("UPDATE $mysqlMainDb.agenda
+                                         SET titre = $titre,
+                                             contenu = $contenu,
+                                             day = $date,
+                                             hour = $hour,
+                                             lasting = $lasting
+                                         WHERE lesson_code= '$currentCourseID' AND
+                                               lesson_event_id = $id");
 			##[END personalisation modification]############
-			unset($id);
 		} else {
-			$sql = "INSERT INTO agenda (titre, contenu, day, hour, lasting)
-        		VALUES ('".mysql_real_escape_string(trim($titre))."',
-				'".mysql_real_escape_string(trim($contenu))."', 
-				'".mysql_real_escape_string($date_selection)."',
-				'".mysql_real_escape_string($hour)."',
-				'".mysql_real_escape_string($lasting)."')";
+			db_query("INSERT INTO agenda
+                                         SET titre = $titre,
+                                             contenu = $contenu,
+                                             day = $date,
+                                             hour = $hour,
+                                             lasting = $lasting");
+                        $id = mysql_insert_id();
+                        db_query("INSERT INTO `$mysqlMainDb`.agenda
+                                         SET titre = $titre,
+                                             contenu = $contenu,
+                                             day = $date,
+                                             hour = $hour,
+                                             lasting = $lasting,
+                                             lesson_code= '$currentCourseID',
+                                             lesson_event_id = $id");
+
 		}
+                unset($id);
 		unset($contenu);
 		unset($titre);
-		$result = db_query($sql, $currentCourseID);
-		##[BEGIN personalisation modification]############
-		if (substr_count($sql,"INSERT") == 1) {
-			$perso_sql = "SELECT id, titre, contenu, DAY, HOUR , lasting
-				FROM agenda ORDER BY id DESC LIMIT 1 ";
-			$perso_result = db_query($perso_sql, $currentCourseID);
-			$perso_query_result = mysql_fetch_row($perso_result);
-			$perso_matrix['titre'] = $perso_query_result[1];
-			$perso_matrix['contenu'] = $perso_query_result[2];
-			$perso_matrix['date_selection'] = $perso_query_result[3];
-			$perso_matrix['hour'] = $perso_query_result[4];
-			$perso_matrix['lasting'] = $perso_query_result[5];
-			// Add all data to the main table.
-			$perso_sql = "INSERT INTO $mysqlMainDb.agenda
-			(lesson_event_id, titre, contenu, day, hour, lasting, lesson_code)
-			VALUES('".$perso_query_result[0]."','".$perso_query_result[1]."',
-			'".$perso_query_result[2]."','".$perso_query_result[3]."',
-			'".$perso_query_result[4]."','".$perso_query_result[5]."',
-			'".$currentCourseID."')";
-		}
-		db_query($perso_sql, $mysqlMainDb);
-
 		unset($perso_matrix);
 		unset($perso_sql_delete);
-		unset($id);
 		##[END personalisation modification]############
-		$tool_content .=  "<p class='success'>$langStoredOK</p><br />";
+		$tool_content .= "<p class='success'>$langStoredOK</p><br />";
 		unset($addEvent);
 	}
 	elseif (isset($_GET['delete']) && $_GET['delete'] == 'yes') {
-		$sql = "DELETE FROM agenda WHERE id=$id";
-		$result = db_query($sql,$currentCourseID);
-
+		db_query("DELETE FROM agenda WHERE id =$id");
 		##[BEGIN personalisation modification]############
-		$perso_sql= "DELETE FROM $mysqlMainDb.agenda
-                      WHERE lesson_code= '$currentCourseID'
-                      AND lesson_event_id='$id' ";
-
-		db_query($perso_sql, $mysqlMainDb);
+		db_query("DELETE FROM $mysqlMainDb.agenda
+                                 WHERE lesson_code= '$currentCourseID' AND
+                                       lesson_event_id = $id");
 		##[END personalisation modification]############
 
 		$tool_content .= "<p class='success'>$langDeleteOK</p><br />";
 		unset($addEvent);
 	}
-//Make top tool links
+// Make top tool links
 if ($is_adminOfCourse) {
 	$head_content .= '
 	<script type="text/javascript">
@@ -224,12 +195,12 @@ if ($is_adminOfCourse) {
 		$sql = "SELECT id, titre, contenu, day, hour, lasting FROM agenda WHERE id=$id";
 		$result= db_query($sql, $currentCourseID);
 		$myrow = mysql_fetch_array($result);
-		$id = $myrow["id"];
-		$titre = $myrow["titre"];
-		$contenu= $myrow["contenu"];
-		$hourAncient=$myrow["hour"];
-		$dayAncient=$myrow["day"];
-		$lastingAncient=$myrow["lasting"];
+		$id = $myrow['id'];
+		$titre = $myrow['titre'];
+		$contenu= $myrow['contenu'];
+		$hourAncient=$myrow['hour'];
+		$dayAncient=$myrow['day'];
+		$lastingAncient=$myrow['lasting'];
 		$start_cal = $jscalendar->make_input_field(
 		array('showOthers' => true,
 		      'align' => 'Tl',
@@ -458,8 +429,5 @@ if (mysql_num_rows($result) > 0) {
 	$tool_content .= "\n          <p class='alert1'>$langNoEvents</p>";
 }
 add_units_navigation(TRUE);
-if($is_adminOfCourse && isset($head_content)) {
-	draw($tool_content, 2, '', $head_content, @$body_action);
-} else {
-	draw($tool_content, 2);
-}
+
+draw($tool_content, 2, null, $head_content);
