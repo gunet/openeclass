@@ -2003,7 +2003,7 @@ function check_LPM_validity($is_adminOfCourse, $code_cours, $extraQuery = false,
 							exit();
 						}
 						else
-							continue;
+							break; // our lp is surely not in the block list
 					}
 					if ($lp['lock'] == "CLOSE")
 						$block_met = true;
