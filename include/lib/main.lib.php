@@ -1677,8 +1677,14 @@ function standard_text_escape($text, $mathimg = '../../courses/mathimg/')
 {
         global $purifier;
 
+        $html = mathfilter($purifier->purify($text), 12, $mathimg);
+
+        if (!isset($_SESSION['glossary_terms_regexp'])) {
+                return $html;
+        }
+
         $dom = new DOMDocument();
-        @$dom->loadXML('<div>' . mathfilter($purifier->purify($text), 12, $mathimg) . '</div>');
+        @$dom->loadHTML('<div>' . $html . '</div>');
 
         $xpath = new DOMXpath($dom);
         $textNodes = $xpath->query('//text()');
@@ -1696,7 +1702,9 @@ function standard_text_escape($text, $mathimg = '../../courses/mathimg/')
                 }
         }
         $base_node = $dom->getElementsByTagName('div')->item(0);
-        return $dom->saveXML($base_node);
+        // iframe hack
+        return preg_replace('#(<iframe [^>]+)/>#', '\\1></iframe>',
+                            $dom->saveXML($base_node));
 }
 
 function purify($text)
@@ -1708,40 +1716,8 @@ function purify($text)
 // Expand glossary terms to HTML for tooltips with the definition
 function glossary_expand($text)
 {
-        global $cours_id;
-
-	if (!isset($cours_id)) {
-		unset($_SESSION['glossary_terms_regexp']);
-	} elseif (!isset($_SESSION['glossary']) or
-            $_SESSION['glossary_course_id'] != $cours_id) {
-                if (get_glossary_terms($cours_id) and count($_SESSION['glossary']) > 0) {
-                        // Test whether \b works correctly, workaround if not
-                        if (preg_match('/α\b/u', 'α')) {
-                                $spre = $spost = '\b';
-                        } else {
-                                $spre = '(?<=[\x01-\x40\x5B-\x60\x7B-\x7F]|^)';
-                                $spost = '(?=[\x01-\x40\x5B-\x60\x7B-\x7F]|$)';
-                        }
-                        $_SESSION['glossary_terms_regexp'] = chr(1) . $spre . '(';
-                        $begin = true;
-                        foreach (array_keys($_SESSION['glossary']) as $term) {
-                                $_SESSION['glossary_terms_regexp'] .= ($begin? '': '|') .
-                                                                      preg_quote($term);
-                                if ($begin) {
-                                        $begin = false;
-                                }
-                        }
-                        $_SESSION['glossary_terms_regexp'] .= ')' . $spost . chr(1) . 'ui';
-                } else {
-			unset($_SESSION['glossary_terms_regexp']);
-		}
-        }
-        if (isset($_SESSION['glossary_terms_regexp'])) {
-                return preg_replace_callback($_SESSION['glossary_terms_regexp'],
-                                             'glossary_expand_callback', $text);
-        } else {
-                return $text;
-        }
+        return preg_replace_callback($_SESSION['glossary_terms_regexp'],
+                'glossary_expand_callback', $text);
 }
 
 function glossary_expand_callback($matches)
@@ -1792,6 +1768,38 @@ function get_glossary_terms($cours_id)
         }
         $_SESSION['glossary_course_id'] = $cours_id;
         return true;
+}
+
+function set_glossary_cache()
+{
+        global $cours_id;
+
+        if (!isset($cours_id)) {
+                unset($_SESSION['glossary_terms_regexp']);
+        } elseif (!isset($_SESSION['glossary']) or
+                  $_SESSION['glossary_course_id'] != $cours_id) {
+                if (get_glossary_terms($cours_id) and count($_SESSION['glossary']) > 0) {
+                        // Test whether \b works correctly, workaround if not
+                        if (preg_match('/α\b/u', 'α')) {
+                                $spre = $spost = '\b';
+                        } else {
+                                $spre = '(?<=[\x01-\x40\x5B-\x60\x7B-\x7F]|^)';
+                                $spost = '(?=[\x01-\x40\x5B-\x60\x7B-\x7F]|$)';
+                        }
+                        $_SESSION['glossary_terms_regexp'] = chr(1) . $spre . '(';
+                        $begin = true;
+                        foreach (array_keys($_SESSION['glossary']) as $term) {
+                                $_SESSION['glossary_terms_regexp'] .= ($begin? '': '|') .
+                                        preg_quote($term);
+                                if ($begin) {
+                                        $begin = false;
+                                }
+                        }
+                        $_SESSION['glossary_terms_regexp'] .= ')' . $spost . chr(1) . 'ui';
+                } else {
+                        unset($_SESSION['glossary_terms_regexp']);
+                }
+        }
 }
 
 function invalidate_glossary_cache()

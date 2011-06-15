@@ -86,12 +86,14 @@ if (!isset($webDir)) {
 
 // HTML Purifier
 require_once $relPathLib . 'htmlpurifier-4.3.0-standalone/HTMLPurifier.standalone.php';
+require_once $relPathLib . 'HTMLPurifier_Filter_MyIframe.php';
 $purifier = new HTMLPurifier();
 $purifier->config->set('Cache.SerializerPath', $webDir . 'courses/temp');
 $purifier->config->set('Attr.AllowedFrameTargets', array('_blank'));
 $purifier->config->set('HTML.SafeObject', true);
 $purifier->config->set('Output.FlashCompat', true);
 $purifier->config->set('HTML.FlashAllowFullScreen', true);
+$purifier->config->set('Filter.Custom', array( new HTMLPurifier_Filter_MyIframe() ));
 
 // PHP Math Publisher
 include $relPathLib . 'phpmathpublisher/mathpublisher.php';
@@ -371,5 +373,7 @@ if(isset($currentCourse) && file_exists($module_ini_dir = getcwd() . "/module.in
 		$errorMessagePath = "../../";
 	}
 }
+
+set_glossary_cache();
 
 $tool_content = $head_content = '';
