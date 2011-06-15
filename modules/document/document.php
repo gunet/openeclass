@@ -322,13 +322,14 @@ if($can_upload) {
 		$fileName = $res['filename'];
 		$dialogBox .= "
             <form method='post' action='document.php?course=$code_cours'>
-            <input type='hidden' name='sourceFile' value='$_GET[rename]' />
+            <input type='hidden' name='sourceFile' value='" .
+                q($_GET['rename']) . "' />
 	    $group_hidden_input
             <fieldset>
 		<table class='tbl' width='100%'>
                 <tr>
 		  <td>$langRename: &nbsp;&nbsp;&nbsp;<b>".q($fileName)."</b>&nbsp;&nbsp;&nbsp; $langIn:
-		  <input type='text' name='renameTo' value='$fileName' size='50' /></td>
+		  <input type='text' name='renameTo' value='".q($fileName)."' size='50' /></td>
 		  <td class='right'><input type='submit' value='$langRename' /></td>
 		</tr>
 		</table>
