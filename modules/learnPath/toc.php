@@ -92,6 +92,7 @@ while ($list = mysql_fetch_array($result, MYSQL_ASSOC))
 
 $flatElementList = build_display_element_list(build_element_list($extendedList, 'parent', 'learnPath_module_id'));
 $i = 0;
+$is_blocked = false;
 
 // look for maxDeep
 $maxDeep = 1; // used to compute colspan of <td> cells
@@ -107,7 +108,7 @@ echo "<ul><li class='category'>$langContents</li>";
 foreach ($flatElementList as $module)
 {
     //-------------visibility-----------------------------
-    if ($module['visibility'] == 'HIDE')
+    if ($module['visibility'] == 'HIDE' || $is_blocked)
     {
         if ($is_adminOfCourse)
         {
@@ -175,6 +176,11 @@ foreach ($flatElementList as $module)
 		if(isset($imagePassed))
 			echo "&nbsp;&nbsp;".$imagePassed;
 		echo "</li>";
+		
+		if ($module['lock'] == 'CLOSE' && $module['credit'] != 'CREDIT' 
+			&& $module['lesson_status'] != 'COMPLETED' && $module['lesson_status'] != 'PASSED') {
+			$is_blocked = true;
+		}
 
     }
 } // end of foreach
