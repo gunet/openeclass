@@ -127,11 +127,12 @@ aCont;
 	$max_repeat_val = count($data);
  	for ($i=0; $i <$max_repeat_val; $i++) {
 		$iterator = count($data[$i][2]);
-		$assign_content .= "<tr><td class='sub_title1'>".$data[$i][0]."</td></tr>";
+		$assign_content .= "<tr><td class='sub_title1'>".q($data[$i][0])."</td></tr>";
 		if ($iterator > 0) {
 			$assignmentsExist = true;
 			for ($j=0; $j < $iterator; $j++) {
-				$url = $urlServer . "index.php?perso=1&amp;c=" .$data[$i][1]."&amp;i=".$data[$i][2][$j][0];
+                                $url = $urlServer . "index.php?perso=1&amp;c=" .
+                                       $data[$i][1] . "&amp;i=" . $data[$i][2][$j][0];
 
 				if($data[$i][2][$j][6] == 1) {
 					$submit_status = "".$langGroupWorkSubmitted."";
@@ -141,8 +142,11 @@ aCont;
 					$submit_status = "";
 				}
 				$assign_content .= "";
-				$assign_content .= "<tr><td><ul class='custom_list'><li><a href=\"$url\"><b>".$data[$i][2][$j][1]."</b></a><div class='smaller'>
-				$langGroupWorkDeadline_of_Submission: <b>".nice_format($data[$i][2][$j][3])."</b><div class='grey'>".$submit_status."</div></div></li></ul></td></tr>";
+                                $assign_content .= "<tr><td><ul class='custom_list'><li><a href='$url'><b>" .
+                                        q($data[$i][2][$j][1]) .
+                                        "</b></a><div class='smaller'>$langGroupWorkDeadline_of_Submission: <b>" .
+                                        nice_format($data[$i][2][$j][3]) . "</b><div class='grey'>" .
+                                        $submit_status . "</div></div></li></ul></td></tr>";
 			}
 			//if ($i+1 <$max_repeat_val) $assign_content .= "<br>";
 		}

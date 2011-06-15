@@ -114,9 +114,11 @@ function forumHtmlInterface($data)
                                 //        "... <b>[$langMore]</b>");
 				$content .= "<tr><td><ul class='custom_list'><li><a href='$url'>
 				<b>".$data[$i][2][0][$j][3]." (".nice_format(date("Y-m-d", strtotime($data[$i][2][0][$j][5]))).")</b>
-				</a><div class='smaller grey'><b>".$data[$i][2][0][$j][6]." ".$data[$i][2][0][$j][7]."</b></div><div class='smaller'>"
-				.standard_text_escape(ellipsize($data[$i][2][0][$j][8], 150, "<b>&nbsp;...<a href=\"$url\">[$langMore]</a></b>"))."
-				</li></ul></td></tr>";
+                                </a><div class='smaller grey'><b>".q($data[$i][2][0][$j][6]." ".$data[$i][2][0][$j][7]).
+                                "</b></div><div class='smaller'>" .
+                                standard_text_escape(ellipsize($data[$i][2][0][$j][8], 150,
+                                                     "<b>&nbsp;...<a href='$url'>[$langMore]</a></b>")) .
+                                "</div></li></ul></td></tr>";
 			}
 		}
 		$content .= "</table>";
