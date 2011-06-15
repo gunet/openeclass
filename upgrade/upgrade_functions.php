@@ -1744,5 +1744,6 @@ function load_global_messages()
 
 function html_cleanup($s)
 {
-        return str_replace(array('&quot;', '\\', '<pre>', '</pre>'), '', $s);
+        // Fixes overescaping introduced by bug in older versions
+        return str_replace(array('&quot;', '\\'), '', $s);
 }
