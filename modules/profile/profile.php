@@ -106,23 +106,19 @@ if (isset($_POST['submit'])) {
                 $username_form = $_SESSION['uname'];
         }
 
+	// If changing username check if the new one is free
         if ($username_form != $_SESSION['uname']) {
                 // check if username exists
                 $username_check = db_query('SELECT username FROM user WHERE username = ' . autoquote($username_form));
-                $user_exist = (mysql_num_rows($username_check) > 0);
-        } else {
-                $user_exist = false;
+                if (mysql_num_rows($username_check) > 0) {
+                        redirect_to_message(5);
+                }
         }
 
         // TODO: Allow admin to configure allowed username format
 	// if (strstr($username_form, "'") or strstr($username_form, '"') or strstr($username_form, '\\')){
 	//	redirect_to_message(10);
 	// }
-
-	// check if username is free
-	if ($user_exist and $username_form == $user_exist and $username_form != $_SESSION['uname']) {
-		redirect_to_message(5);
-	}
 
 	// check if email is valid
 	if (!email_seems_valid($email_form) and check_prof()) {
