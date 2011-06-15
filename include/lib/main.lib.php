@@ -38,6 +38,11 @@ define('ECLASS_VERSION', '2.3.99');
 define('IMAGESIZE_LARGE', 256);
 define('IMAGESIZE_SMALL', 32);
 
+// profile info access
+define('ACCESS_PRIVATE', 0);
+define('ACCESS_PROFS', 1);
+define('ACCESS_USERS', 2);
+
 // Show query string and then do MySQL query
 function db_query2($sql, $db = FALSE)
 {

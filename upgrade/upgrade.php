@@ -350,6 +350,11 @@ if (!isset($_POST['submit2'])) {
 		}
         }
 	db_query("INSERT IGNORE INTO `auth` VALUES (7, 'cas', '', '', 0)");
+        mysql_field_exists($mysqlMainDb, 'user', 'email_public') or
+                db_query("ALTER TABLE `user`
+                                ADD `email_public` TINYINT(1) NOT NULL DEFAULT 0,
+                                ADD `phone_public` TINYINT(1) NOT NULL DEFAULT 0,
+                                ADD `am_public` TINYINT(1) NOT NULL DEFAULT 0");
         mysql_field_exists($mysqlMainDb, 'cours', 'expand_glossary') or
                 db_query("ALTER TABLE `cours` ADD `expand_glossary` BOOL NOT NULL DEFAULT 0");
         if ($oldversion < '2.4') {

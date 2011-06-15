@@ -205,6 +205,9 @@ db_query("CREATE TABLE user (
       has_icon BOOL NOT NULL DEFAULT 0,
       verified_mail BOOL NOT NULL DEFAULT 0,
       receive_mail BOOL NOT NULL DEFAULT 1,
+      email_public TINYINT(1) NOT NULL DEFAULT 0,
+      phone_public TINYINT(1) NOT NULL DEFAULT 0,
+      am_public TINYINT(1) NOT NULL DEFAULT 0,
       PRIMARY KEY (user_id),
       KEY `user_username` (`username`)) $charset_spec");
 

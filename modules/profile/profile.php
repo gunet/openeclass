@@ -68,7 +68,14 @@ if (isset($_POST['submit'])) {
                 'nom_form' => true,
                 'prenom_form' => true,
                 'username_form' => true,
-		'department' => true), 'all');
+                'department' => true,
+                'email_public' => false, 
+                'phone_public' => false, 
+                'am_public' => false), 'all');
+
+        $email_public = valid_access($email_public);
+        $phone_public = valid_access($phone_public);
+        $am_public = valid_access($am_public);
 	
 	// upload user picture
 	if (isset($_FILES['userimage']) && is_uploaded_file($_FILES['userimage']['tmp_name'])) {
@@ -123,16 +130,18 @@ if (isset($_POST['submit'])) {
 	}
 
 	// everything is ok
-        if (db_query("UPDATE user SET
-                                nom = " . autoquote($nom_form) . ",
-                                prenom = " . autoquote($prenom_form) . ",
-                                username = " . autoquote($username_form) . ",
-                                email = " . autoquote($email_form) . ",
-                                am = " . autoquote($am_form) . ",
-                                phone = " . autoquote($phone_form) . ",
-                                description = " . autoquote($desc_form) . ",
-				department = $department
-                        WHERE user_id = $_SESSION[uid]")) {
+        if (db_query("UPDATE user SET nom = " . autoquote($nom_form) . ",
+                                      prenom = " . autoquote($prenom_form) . ",
+                                      username = " . autoquote($username_form) . ",
+                                      email = " . autoquote($email_form) . ",
+                                      am = " . autoquote($am_form) . ",
+                                      phone = " . autoquote($phone_form) . ",
+                                      description = " . autoquote($desc_form) . ",
+                                      department = $department,
+                                      email_public = $email_public,
+                                      phone_public = $phone_public,
+                                      am_public = $am_public
+                             WHERE user_id = $_SESSION[uid]")) {
                 $_SESSION['uname'] = $username_form;
                 $_SESSION['nom'] = $nom_form;
                 $_SESSION['prenom'] = $prenom_form;
@@ -181,7 +190,8 @@ if (isset($_GET['msg'])) {
 }
 
 $result = db_query("SELECT nom, prenom, username, email, am, phone, perso,
-                           lang, department, statut, has_icon, description
+                           lang, department, statut, has_icon, description,
+                           email_public, phone_public, am_public
                         FROM user WHERE user_id = $uid");
 $myrow = mysql_fetch_assoc($result);
 
@@ -296,6 +306,10 @@ if ($allow_username_change) {
         </tr>";
 }
 
+$access_options = array(ACCESS_PRIVATE => $langProfileInfoPrivate,
+                        ACCESS_PROFS => $langProfileInfoProfs,
+                        ACCESS_USERS => $langProfileInfoUsers);
+
 $tool_content .= "
         <tr>
           <th>$langEmail:</th>";
@@ -303,22 +317,20 @@ $tool_content .= "
 if (isset($_SESSION['shib_user'])) {
         $tool_content .= "
            <td><b>$email_form</b> [$auth_text]
-             <input type='hidden' name='email_form' value='$email_form' />
-           </td>";
+               <input type='hidden' name='email_form' value='$email_form' /> ";
 } else { // allow user to change his e-mail
         $tool_content .= "
-          <td><input type='text' size='40' name='email_form' value='$email_form' /></td>";
+          <td><input type='text' size='40' name='email_form' value='$email_form' /> ";
 }
-$tool_content .= "
+$tool_content .= selection($access_options, 'email_public', $myrow['email_public']) . "</td>
         </tr>
-        <tr>
-          <th>$langAm</th>
-          <td><input type='text' size='40' name='am_form' value='$am_form' /></td>
-        </tr>
-        <tr>
-          <th>$langPhone</th>
-          <td><input type='text' size='40' name='phone_form' value='$phone_form' /></td>
-        </tr>";
+        <tr><th>$langAm</th>
+            <td><input type='text' size='40' name='am_form' value='$am_form' /> " .
+                selection($access_options, 'am_public', $myrow['am_public']) . "</td></tr>
+        <tr><th>$langPhone</th>
+            <td><input type='text' size='40' name='phone_form' value='$phone_form' /> " .
+                selection($access_options, 'phone_public', $myrow['phone_public']) . "</td></tr>";
+
 ##[BEGIN personalisation modification]############
 if (isset($_SESSION['perso_is_active'])) {
         $tool_content .= "
@@ -377,3 +389,14 @@ $tool_content .= "
         </form>";
 
 draw($tool_content, 1, null, $head_content);
+
+
+function valid_access($val)
+{
+        $val = intval($val);
+        if (in_array($val, array(ACCESS_PRIVATE, ACCESS_PROFS, ACCESS_USERS))) {
+                return $val;
+        } else {
+                return 0;
+        }
+}

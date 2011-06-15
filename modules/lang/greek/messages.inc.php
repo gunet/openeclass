@@ -2196,6 +2196,10 @@ $langOldPass="Παρόν συνθηματικό";
 $langChangePass="Αλλαγή συνθηματικού πρόσβασης";
 $langUserProfile = 'Στοιχεία χρήστη';
 $langDisplayProfile = "Δημόσια Εμφάνιση Προφίλ";
+$langProfileInfoPrivate = 'ιδιωτικό';
+$langProfileInfoProfs = 'εμφάνιση στους καθηγητές';
+$langProfileInfoUsers = 'εμφάνιση σε όλους';
+
 // user.php
 $langNewUser = "Εγγραφή Χρήστη";
 $langModRight="Αλλαγή των δικαιωμάτων διαχειριστή του";
