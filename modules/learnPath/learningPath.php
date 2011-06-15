@@ -98,6 +98,24 @@ else {
 		header("Location: ./learningPathList.php?course=$code_cours");
 		exit();
 	}
+	
+	$lps = db_query_fetch_all("SELECT `learnPath_id`, `lock` FROM $TABLELEARNPATH ORDER BY `rank`", $currentCourseID);
+	if ($lps != false) {
+		$block_met = false;
+		foreach ($lps as $lp) {
+			if ($lp['learnPath_id'] == $_SESSION['path_id']) {
+				if ($block_met) {
+					// if a previous learning path was blocked, don't allow users in it
+					header("Location: ./learningPathList.php?course=$code_cours");
+					exit();
+				}
+				else
+					continue;
+			}
+			if ($lp['lock'] == "CLOSE")
+				$block_met = true;
+		}
+	}
 }
 
 mysql_select_db($currentCourseID);
