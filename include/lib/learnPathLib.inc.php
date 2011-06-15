@@ -1990,6 +1990,26 @@ function check_LPM_validity($is_adminOfCourse, $code_cours, $extraQuery = false,
 			header("Location: ".$depth."learningPathList.php?course=$code_cours");
 			exit();
 		}
+		
+		if (!$is_adminOfCourse) {
+			$lps = db_query_fetch_all("SELECT `learnPath_id`, `lock` FROM lp_learnPath ORDER BY `rank`", $code_cours);
+			if ($lps != false) {
+				$block_met = false;
+				foreach ($lps as $lp) {
+					if ($lp['learnPath_id'] == $_SESSION['path_id']) {
+						if ($block_met) {
+							// if a previous learning path was blocked, don't allow users in it
+							header("Location: ./learningPathList.php?course=$code_cours");
+							exit();
+						}
+						else
+							continue;
+					}
+					if ($lp['lock'] == "CLOSE")
+						$block_met = true;
+				}
+			}
+		}
 	}
 		
 	$q2 = db_query("SELECT visibility FROM lp_rel_learnPath_module WHERE learnPath_id = '".(int)$_SESSION['path_id']."' AND module_id = '".(int)$_SESSION['lp_module_id']."'");
