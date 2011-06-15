@@ -23,7 +23,7 @@ if (!defined('INDEX_START')) {
 }
 
 // authenticate user via alternate defined methods 
-switch ($myrow["password"]) {
+switch ($myrow['password']) {
 	case 'eclass': $auth = 1; break;
 	case 'pop3': $auth = 2; break;
 	case 'imap': $auth = 3; break;
@@ -37,7 +37,7 @@ $auth_method_settings = get_auth_settings($auth);
 // a CAS user might enter a username/password in the form, instead of doing CAS login
 // check auth according to the defined alternative authentication method of CAS
 if($auth == 7) {
-	$cas = explode("|", $auth_method_settings['auth_settings']);
+	$cas = explode('|', $auth_method_settings['auth_settings']);
 	$cas_altauth = intval(str_replace("cas_altauth=","",$cas[7]));
 	// check if alt auth is valid and active
 	if(($cas_altauth > 0) && check_auth_active($cas_altauth)) {

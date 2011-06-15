@@ -60,10 +60,10 @@ If error happens just display the error and the code
 -----------------------------------------------------------------------
 */
 
-function db_query($sql, $db = null)
+function db_query($sql, $db_name = null)
 {
-	if (isset($db)) {
-		mysql_select_db($db);
+	if (isset($db_name)) {
+		mysql_select_db($db_name);
 	}
 	$r = mysql_query($sql);
         $printed_sql = false;

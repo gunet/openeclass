@@ -45,24 +45,24 @@ if(!isset($_POST['auth'])) {
 }
 
 $nameTools = get_auth_info($auth);
-$navigation[]= array ("url"=>"registration.php", "name"=> "$langNewUser");
-$navigation[]= array ("url"=>"ldapnewuser.php?auth=$auth", "name"=> "$langConfirmUser");
+$navigation[] = array ('url' => 'registration.php', 'name'=> $langNewUser);
+$navigation[] = array ('url' => "ldapnewuser.php?auth=$auth", 'name'=> $langConfirmUser);
 $nameTools = $langUserData;
 
-$ldap_email = isset($_POST['ldap_email'])?$_POST['ldap_email']:'';
-$ldap_passwd = isset($_POST['ldap_passwd'])?$_POST['ldap_passwd']:'';
+$ldap_email = isset($_POST['ldap_email'])? autounquote(canonicalize_whitespace($_POST['ldap_email'])): '';
+$ldap_passwd = isset($_POST['ldap_passwd'])? autounquote($_POST['ldap_passwd']): '';
 $is_submit = isset($_POST['is_submit'])?$_POST['is_submit']:'';
 $submit = isset($_POST['submit'])?$_POST['submit']:'';
 
 $lastpage = 'ldapnewuser.php?auth='.$auth.'&ldap_email='.$ldap_email;
-$errormessage = "<br/><p>$ldapback <a href=\"$lastpage\">$ldaplastpage</a></p>";
+$errormessage = "<br/><p>$ldapback <a href='$lastpage'>$ldaplastpage</a></p>";
 
 if( !empty($is_submit) || (($auth == 7) && (empty($submit))) )
 {
-	if ( ($auth !=7 ) && (empty($ldap_email) or empty($ldap_passwd)) ) // check for empty username-password
+	if ($auth !=7 and ($ldap_email === '' or $ldap_passwd === '')) // check for empty username-password
 	{
 		$tool_content .= "
-		  <p class=\"caution\"$ldapempty  $errormessage</p>";
+		  <p class='caution'>$ldapempty  $errormessage</p>";
 	} 
 	else 
 	{
@@ -99,7 +99,7 @@ if( !empty($is_submit) || (($auth == 7) && (empty($submit))) )
 				break;
 		}
 		
-		$is_valid = auth_user_login($auth,$ldap_email,$ldap_passwd);
+		$is_valid = auth_user_login($auth, $ldap_email, $ldap_passwd);
 
 		if ($auth == 7) {
 			if (phpCAS::checkAuthentication()) {

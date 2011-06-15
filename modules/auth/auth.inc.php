@@ -119,7 +119,7 @@ function is_eclass_unique()
 {
 	global $db;
 	$is_eclass_unique = 0;
-	$sql = "SELECT auth_id,auth_settings FROM auth WHERE auth_default=1";
+	$sql = "SELECT auth_id, auth_settings FROM auth WHERE auth_default=1";
   $auth_method = mysql_query($sql,$db);
   if($auth_method)
   {
@@ -353,23 +353,24 @@ function auth_user_login ($auth, $test_username, $test_password)  {
 	    $dbfielduser = $GLOBALS['dbfielduser'];
 	    $dbfieldpass = $GLOBALS['dbfieldpass'];
 	    $newlink = true;
-	    mysql_close($GLOBALS['db']); // close the previous link
-	    $link = mysql_connect($dbhost,$dbuser,$dbpass,$newlink);
-	    if($link) {
-		$db_ext = mysql_select_db($dbname,$GLOBALS['db']);
-		if($db_ext) {
-		    	$qry = "SELECT * FROM ".$dbname.".".$dbtable." 
-				WHERE ".$dbfielduser."='".mysql_real_escape_string($test_username)."' 
-				AND ".$dbfieldpass."='".mysql_real_escape_string($test_password)."'";
-		    	$res = mysql_query($qry,$link);
+            $link = mysql_connect($dbhost,$dbuser,$dbpass,$newlink);
+	    if ($link) {
+		$db_ext = mysql_select_db($dbname, $link);
+		if ($db_ext) {
+		    	$qry = "SELECT * FROM `$dbname`.`$dbtable`
+                                       WHERE `$dbfielduser` = ".quote($test_username)." AND
+                                             `$dbfieldpass` = ".quote($test_password);
+		    	$res = mysql_query($qry, $link);
 		    	if($res) {
 				if(mysql_num_rows($res)>0) {
 			     		$testauth = true;
 			    		mysql_close($link);
-					// Connect to database
-					$GLOBALS['db'] = mysql_connect($GLOBALS['mysqlServer'], $GLOBALS['mysqlUser'], $GLOBALS['mysqlPassword']);
+                                        // Reconnect to main database
+                                        $GLOBALS['db'] = mysql_connect($GLOBALS['mysqlServer'],
+                                                                       $GLOBALS['mysqlUser'],
+                                                                       $GLOBALS['mysqlPassword']);
 					if (mysql_version()) mysql_query("SET NAMES utf8");
-					mysql_select_db($mysqlMainDb, $GLOBALS['db']);
+					mysql_select_db($mysqlMainDb);
 				}
 		    	} else {
 				$testauth = false;

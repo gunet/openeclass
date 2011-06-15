@@ -83,20 +83,19 @@ if (isset($_SESSION['shib_uname'])) { // authenticate via shibboleth
 	include 'include/cas_login.php';
 } else { // normal authentication
 	if (isset($_POST['uname'])) {
-		$uname = unescapeSimple(preg_replace('/ +/', ' ', trim($_POST['uname'])));
+		$posted_uname = autounquote(canonicalize_whitespace($_POST['uname']));
 	} else {
-		$uname = '';
+		$posted_uname = '';
 	}
 	
-	$pass = isset($_POST['pass'])?$_POST['pass']:'';
-	$submit = isset($_POST['submit'])?$_POST['submit']:'';
+	$pass = isset($_POST['pass'])? autounquote($_POST['pass']): '';
 	$auth = get_auth_active_methods();
 	$is_eclass_unique = is_eclass_unique();
 
-	if(!empty($submit)) {
+	if (isset($_POST['submit'])) {
 		unset($uid);
-		$sqlLogin= "SELECT user_id, nom, username, password, prenom, statut, email, perso, lang
-			FROM user WHERE username COLLATE utf8_bin = " . quote($uname);
+		$sqlLogin = "SELECT user_id, nom, username, password, prenom, statut, email, perso, lang
+			FROM user WHERE username COLLATE utf8_bin = " . quote($posted_uname);
 		$result = db_query($sqlLogin);
 		// cas might have alternative authentication defined
 		$check_passwords = array('pop3', 'imap', 'ldap', 'db', 'cas');
@@ -106,7 +105,7 @@ if (isset($_SESSION['shib_uname'])) { // authenticate via shibboleth
 		if (!isset($_COOKIE) or count($_COOKIE) == 0) {
 			// Disallow login when cookies are disabled
 			$auth_allow = 5;
-		} elseif (empty($pass)) {
+		} elseif ($pass === '') {
 			// Disallow login with empty password
 			$auth_allow = 4;
 		} else {

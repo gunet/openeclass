@@ -46,8 +46,8 @@ include '../../include/baseTheme.php';
 include '../../include/CAS/CAS.php';
 include_once '../../modules/auth/auth.inc.php';
 $nameTools = $langAuthSettings;
-$navigation[] = array("url" => "index.php", "name" => $langAdmin);
-$navigation[] = array("url" => "auth.php", "name" => $langUserAuthentication);
+$navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
+$navigation[] = array('url' => 'auth.php', 'name' => $langUserAuthentication);
 $debugCAS = true;
 
 // get the values
@@ -117,8 +117,8 @@ if (isset($_POST['casuserlastattr'])) $casuserlastattr = $_POST['casuserlastattr
 if (isset($_POST['cas_altauth'])) $cas_altauth = $_POST['cas_altauth'];
 if (isset($_POST['cas_logout'])) $cas_logout = $_POST['cas_logout'];
 
-$test_username = isset($_POST['test_username'])?$_POST['test_username']:'';
-$test_password = isset($_POST['test_password'])?$_POST['test_password']:'';
+$test_username = isset($_POST['test_username'])?autounquote(canonicalize_whitespace($_POST['test_username'])):'';
+$test_password = isset($_POST['test_password'])?autounquote($_POST['test_password']):'';
 
 // You have to logout from CAS and preferably close your browser
 // to change CAS settings
@@ -128,7 +128,7 @@ if (!empty($_SESSION['cas_warn']) && ($auth==7)) {
 	exit();
 }
 
-if(((!empty($auth_submit)) && ($auth_submit==1)) || !empty($_SESSION['cas_do'])) {
+if (((!empty($auth_submit)) && ($auth_submit==1)) || !empty($_SESSION['cas_do'])) {
  	if (!empty($_SESSION['cas_do']) && empty($_SESSION['cas_warn'])) {
 		// save _POST to _SESSION
 		if (isset($cas_host)) $_SESSION['cas_host'] = $cas_host;
@@ -155,26 +155,25 @@ if(((!empty($auth_submit)) && ($auth_submit==1)) || !empty($_SESSION['cas_do']))
 		}
 
 		if (!empty($cas_ret['error']))
-			$tool_content .= "<p class=\"alert1\">{$cas_ret['error']}</p>";
+			$tool_content .= "<p class='alert1'>{$cas_ret['error']}</p>";
 	}
 
 	// if form is submitted
 	if(isset($_POST['submit']) or $cas_valid == true) {
 		$tool_content .= "<br /><p>$langConnTest</p>";
-		if (($auth == 6) or $cas_valid == true) {
+		if (($auth == 6) or (isset($cas_valid) and $cas_valid == true)) {
 			$test_username = $test_password = " ";
 		}
-		if((!empty($test_username)) && (!empty($test_password))) {
-			if ($cas_valid) {
+		if ($test_username !== '' and $test_password !== '') {
+			if (isset($cas_valid) and $cas_valid) {
 				$is_valid = true;
-			}
-			else {
+			} else {
 				$is_valid = auth_user_login($auth, $test_username, $test_password);
 			}
-			if($is_valid) {
+			if ($is_valid) {
 				$auth_allow = 1;
 				$tool_content .= "<table width='100%'><tbody><tr>
-				<td class=\"success\">$langConnYes</td></tr></tbody></table><br /><br />";
+				<td class='success'>$langConnYes</td></tr></tbody></table><br /><br />";
 				// Debugging CAS
 				if ($debugCAS) {
 					if (!empty($cas_ret['message']))
@@ -185,7 +184,7 @@ if(((!empty($auth_submit)) && ($auth_submit==1)) || !empty($_SESSION['cas_do']))
 					}
 				}
 			} else {
-				$tool_content .= "<table width=\"100%\"><tbody><tr><td class=\"caution\">$langConnNo";
+				$tool_content .= "<table width='100%'><tbody><tr><td class='caution'>$langConnNo";
 				if (isset($GLOBALS['auth_errors'])) {
 					$tool_content .= "<p>$GLOBALS[auth_errors]</p>";
 				}
@@ -254,9 +253,9 @@ if(((!empty($auth_submit)) && ($auth_submit==1)) || !empty($_SESSION['cas_do']))
 					auth_instructions='".$auth_instructions."',
 					auth_default=1 
 				WHERE auth_id=".$auth;
-			$sql2 = db_query($qry, $db); // do the update as the default method
+			$sql2 = db_query($qry); // do the update as the default method
 			if($sql2) {
-				if(mysql_affected_rows($db)==1) {
+				if(mysql_affected_rows()==1) {
 					$tool_content .= "<p class='success'>$langHasActivate</p>";
 				} else {
 					$tool_content .= "<p class='alert1'>$langAlreadyActiv</p>";
@@ -299,7 +298,7 @@ else
 			break;
 		case 4: include_once '../auth/methods/ldapform.php';
 			break;
-		case 5: include_once '../auth/methods/db/dbform.php';
+		case 5: include_once '../auth/methods/dbform.php';
 			break;
 		case 6: include_once '../auth/methods/shibform.php';
 			break;
@@ -310,7 +309,7 @@ else
 	}
 	if (!empty($_SESSION['cas_warn']) && $_SESSION['cas_do']) {
 		$auth = 7;
-		$tool_content .= "<p class=\"alert1\">$langCASnochange</p>";
+		$tool_content .= "<p class='alert1'>$langCASnochange</p>";
 	}
 	if ($auth != 6 && $auth !=7) { 
 		$tool_content .= "";
@@ -323,5 +322,5 @@ else
 	$tool_content .= "<tr><th>&nbsp;</th><td class='right'><input type='submit' name='submit' value='$langModify'></td></tr>";
 	$tool_content .= "</table></fieldset></form>";
 }
+
 draw($tool_content, 3);
-?>
