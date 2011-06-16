@@ -863,7 +863,7 @@ if ($doc_count == 0) {
         $tool_content .= "\n      <th width='60' class='center'><b>$langSize</b></th>";
         $tool_content .= "\n      <th width='80' class='center'><b>" . headlink($langDate, 'date') . '</b></th>';
 	if($can_upload) {
-		$width = (get_config("insert_xml_metadata")) ? 154 : 135;
+		$width = (get_config("insert_xml_metadata")) ? 175 : 135;
 		$tool_content .= "\n      <th width='$width' class='center'><b>$langCommands</b></th>";
 	} else {
 		$tool_content .= "\n      <th width='50' class='center'><b>$langCommands</b></th>";
@@ -979,18 +979,18 @@ if ($doc_count == 0) {
 					if ($entry['visible']) {
 						$tool_content .= "<a href='{$base_url}mkInvisibl=$cmdDirName'>" .
 								 "<img src='../../template/classic/img/visible.png' " .
-								 "title='$langVisible' alt='$langVisible' /></a>";
+								 "title='$langVisible' alt='$langVisible' /></a>&nbsp;";
 	                                } else {
 	                                        $tool_content .= "<a href='{$base_url}mkVisibl=$cmdDirName'>" .
 								 "<img src='../../template/classic/img/invisible.png' " .
-								 "title='$langVisible' alt='$langVisible' /></a>";
+								 "title='$langVisible' alt='$langVisible' /></a>&nbsp;";
 	                                }
 				}
 				if ($subsystem == GROUP and isset($is_member) and ($is_member)) {
 	                                $tool_content .= "<a href='$urlAppend/modules/work/group_work.php?course=$code_cours" .
 							 "&amp;group_id=$group_id&amp;submit=$cmdDirName'>" .
 							 "<img src='../../template/classic/img/book.png' " .
-							 "title='$langPublish' alt='$langPublish' /></a>";			
+							 "title='$langGroupSubmit' alt='$langGroupSubmit' /></a>";			
 				}
                                 $tool_content .= "</form></td>";
                                 $tool_content .= "\n    </tr>";

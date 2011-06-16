@@ -96,15 +96,6 @@ $start_cal = $jscalendar->make_input_field(
 }
 
 if ($is_adminOfCourse) {
-        register_posted_variables(array('date' => true, 'fhour' => true, 'fminute' => true,
-                                        'titre' => true, 'contenu' => true, 'lasting' => true));
-        $titre = autoquote(canonicalize_whitespace($titre));
-        $contenu = autoquote(canonicalize_whitespace($contenu));
-        $lasting = autoquote(canonicalize_whitespace($lasting));
-        $date = autoquote(canonicalize_whitespace($date));
-        $fhour = intval($fhour);
-        $fminute = intval($fminute);
-
 	// modify visibility
 	if (isset($_GET['mkInvisibl']) and $_GET['mkInvisibl'] == true) {
 		db_query("UPDATE agenda SET visibility = 'i'
@@ -120,6 +111,14 @@ if ($is_adminOfCourse) {
                                         FROM agenda WHERE id = $id");
 	}
 	if (isset($_POST['submit'])) {
+        register_posted_variables(array('date' => true, 'fhour' => true, 'fminute' => true,
+                                        'titre' => true, 'contenu' => true, 'lasting' => true));
+        $titre = autoquote(canonicalize_whitespace($titre));
+        $contenu = autoquote(canonicalize_whitespace($contenu));
+        $lasting = autoquote(canonicalize_whitespace($lasting));
+        $date = autoquote(canonicalize_whitespace($date));
+        $fhour = intval($fhour);
+        $fminute = intval($fminute);
 		$hour = quote($fhour.':'.$fminute);
 		if (isset($_POST['id']) and !empty($_POST['id'])) {
 			$id = intval($_POST['id']);
@@ -161,8 +160,6 @@ if ($is_adminOfCourse) {
                 unset($id);
 		unset($contenu);
 		unset($titre);
-		unset($perso_matrix);
-		unset($perso_sql_delete);
 		##[END personalisation modification]############
 		$tool_content .= "<p class='success'>$langStoredOK</p><br />";
 		unset($addEvent);
@@ -246,10 +243,15 @@ if ($is_adminOfCourse) {
 			$hours=$hourAncient[0];
 			$minutes=$hourAncient[1];
 		}
+		if (isset($titre)) {
+			$titre_value = ' value="' . q($titre) . '"';
+		} else {
+			$titre_value = '';
+    }
 		$tool_content .= "
                   <tr>
                     <th>$langTitle:</th>
-                    <td><input type='text' size='70' name='titre' value='".@$titre."' /></td>
+                    <td><input type='text' size='70' name='titre'$titre_value /></td>
                   </tr>
 		  <tr>
                     <th>$langDate:</th>
@@ -287,7 +289,7 @@ if ($is_adminOfCourse) {
 		$tool_content .= "
                   <tr>
                     <th>$langDetail:</th>
-                    <th>". rich_text_editor('contenu', 4, 20, $contenu) ."</td>
+                    <td>". rich_text_editor('contenu', 4, 20, $contenu) ."</td>
                   </tr>
 		  <tr>
                     <th>&nbsp;</th>
@@ -393,9 +395,9 @@ if (mysql_num_rows($result) > 0) {
 		}
 		$tool_content .=  "\n<br /><br /><div class='event'><b>";
 		if ($myrow["titre"] == "") {
-		    $tool_content .= "".$langAgendaNoTitle."";
+		    $tool_content .= $langAgendaNoTitle;
 		} else {
-		    $tool_content .= "".$myrow["titre"]."";
+		    $tool_content .= $myrow["titre"];
 		}
 		$tool_content .= "</b> (".$langLasting.": ".$myrow["lasting"]." ".$message.")$contenu</div></td>";
 

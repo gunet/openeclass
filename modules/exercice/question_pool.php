@@ -231,7 +231,7 @@ if($is_adminOfCourse) {
 				<td><a href=\"admin.php?course=$code_cours&amp;editQuestion=".$row['id']."&amp;fromExercise=".$fromExercise."\">".$row['question']."</a><br/>".$answerType."</td>
 				<td class='center'><div align='center'>
 				  <a href=\"".$_SERVER['PHP_SELF']."?course=$code_cours&amp;recup=".$row['id'].
-				"&amp;fromExercise=".$fromExercise."\"><img src='../../template/classic/img/enroll.gif' title='$langReuse' /></a>
+				"&amp;fromExercise=".$fromExercise."\"><img src='../../template/classic/img/enroll.png' title='$langReuse' /></a>
 				</td>";
 			}
 			//$tool_content .= "</td>";	
