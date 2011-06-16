@@ -66,13 +66,12 @@ $nameTools = $langNewUser;
                 if ($v == 1) {  // bypass the eclass auth method, as it has already been displayed
                         continue;
                 } else {
-                        if ($v == 6)  { // shibboleth method
+                    if ($v == 6)  { // shibboleth method
                                 $tool_content .= "<br />&nbsp;&nbsp;&nbsp;<img src='../../template/classic/img/arrow.png' title='bullet' alt='bullet' />&nbsp;<a href='{$urlServer}secure/index.php'>".get_auth_info($v)."</a>";
                         } else {
                                 $tool_content .= "<br />&nbsp;&nbsp;&nbsp;<img src='../../template/classic/img/arrow.png' title='bullet' alt='bullet' />&nbsp;<a href='ldapnewuser.php?auth=".$v."'>".get_auth_info($v)."</a>";
                         }
-                }
-
+							}
         }
     }
 
@@ -97,11 +96,7 @@ if(!empty($auth)) {
                 if ($v == 1) {  // bypass the eclass auth method, as it has already been displayed
                         continue;
                 } else {
-                        if ($v == 6)  { // shibboleth method
-                                $tool_content .= "<br />&nbsp;&nbsp;&nbsp;<img src='../../template/classic/img/arrow.png' title='bullet' alt='bullet' />&nbsp;<a href='{$urlServer}secure/index.php'>".get_auth_info($v)."</a>";
-                        } else {
                                 $tool_content .= "<br />&nbsp;&nbsp;&nbsp;<img src='../../template/classic/img/arrow.png' title='bullet' alt='bullet' />&nbsp;<a href='ldapnewuser.php?p=TRUE&amp;auth=".$v."'>".get_auth_info($v)."</a>";
-                        }
                 }
         }
 } else {

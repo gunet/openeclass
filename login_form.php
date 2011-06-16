@@ -22,7 +22,7 @@ if(!empty($submit)) {
 	$sqlLogin= "SELECT user_id, nom, username, password, prenom, statut, email, perso, lang
 		FROM user WHERE username='".$uname."'";
 	$result = mysql_query($sqlLogin);
-	$check_passwords = array('pop3', 'imap', 'ldap', 'db', 'cas');
+	$check_passwords = array('pop3', 'imap', 'ldap', 'db', 'shibboleth','cas');
 	$warning = "";
 	$auth_allow = 0;
 	$exists = 0;
@@ -63,7 +63,9 @@ if(!empty($submit)) {
 					break;
 				case 5 : $warning .= "<p class='alert1'>". $langNoCookies . "</p>"; 
 					break;
-				case 6: $warning .= "<p class='alert1'>$langCASUser <a href='{$urlServer}secure/cas.php'>$langHere</a></p>";
+				case 6: $warning .= "<p class='alert1'>$langEnterPlatform <a href='{$urlServer}secure/index.php'>$langHere</a></p>";
+					break;
+				case 7: $warning .= "<p class='alert1'>$langEnterPlatform <a href='{$urlServer}secure/cas.php'>$langHere</a></p>";
 					break;
 				default:
 					break;

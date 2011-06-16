@@ -78,6 +78,8 @@ if ($submit)  {
             break;
           case '5': $password = "db";
             break;
+					case '6': $password = "shibboleth";
+						break;
           case '7': $password = "cas";
             break;
           default:  $password = "";
@@ -133,7 +135,7 @@ if ($submit)  {
 		<li><a href='../admin/listreq.php?id=$id&amp;close=2'>$langRejectRequest</a></li>";
         if (isset($_GET['id'])) {
                 $tool_content .= "
-                <li><a href='../admin/listreq.php'>$langBackRequests</li>";
+                <li><a href='../admin/listreq.php'>$langBackRequests</a>";
         }
                 $tool_content .= "
 		</ul></div>";
@@ -170,8 +172,8 @@ if ($submit)  {
 	</tr>
 	<tr>
 	<th class='left'><b>$langEmail</b></th>
-	<td>$pe</b></td>
-	<input type='hidden' name='pe' value='$pe' >
+	<td>$pe
+	<input type='hidden' name='pe' value='$pe' ></td>
 	</tr>
 	<tr>
 	<th class='left'>$langFaculty</th>
@@ -201,10 +203,10 @@ if ($submit)  {
 	<td><input type='submit' name='submit' value='".$langSubmit."' >
 	<input type='hidden' name='auth' value='$auth' >
 	</td></tr>
-	<input type='hidden' name='rid' value='".@$id."'>
 	</table>
+	<input type='hidden' name='rid' value='".@$id."'>
       </fieldset>
       </form>";
-	$tool_content .= "<p align='right'><a href='../admin/index.php'>$langBack</p>";
+	$tool_content .= "<p align='right'><a href='../admin/index.php'>$langBack</a></p>";
  }
 draw($tool_content, 3);

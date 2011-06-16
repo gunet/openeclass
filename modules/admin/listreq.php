@@ -267,6 +267,8 @@ else
 			case 'imap': $tool_content .= "<a href='../auth/ldapnewprofadmin.php?id=$req[id]&amp;auth=3'>
 					$langElaboration<br>($langViaImap)</a></td>\n  </tr>";
 				break;
+			case 'shibboleth': $tool_content .= "<a href='../auth/ldapnewprofadmin.php?id=$req[id]&amp;auth=6'>
+					$langElaboration<br>($langViaShibboleth)</a></td></tr>";
 			case 'cas': $tool_content .= "<a href='../auth/ldapnewprofadmin.php?id=$req[id]&amp;auth=7'>
 					$langElaboration<br>($langViaCAS)</a></td>\n  </tr>";
 				break;

@@ -62,7 +62,7 @@ if (isset($_GET['p']) and ($_GET['p'] == true)) {
 <fieldset>
 <legend>".$settings['auth_instructions']."</legend>
   <table class='tbl' width='100%'>";
-if ($auth !=7 ) {
+if (($auth != 7) and ($auth != 6)) {
 	@$tool_content .= "
 	<tr>
     <th width='180'>$langAuthUserName</th>
@@ -80,10 +80,10 @@ if ($auth !=7 ) {
      <td class='right'>
        <input type='hidden' name='auth' value='".$auth."'>";
 
-if ($auth != 7) {
-	@$tool_content .= "<input type='submit' name='is_submit' value='".$langSubmit."'>";
+if (($auth != 7) and ($auth != 6)) {
+	$tool_content .= "<input type='submit' name='is_submit' value='".$langSubmit."'>";
 } else {
-	@$tool_content .= "<input type='submit' name='is_submit' value='".$langCheck."'>";
+	$tool_content .= "<input type='submit' name='is_submit' value='".$langCheck."'>";
 }
 
 $tool_content .= "

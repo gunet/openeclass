@@ -98,7 +98,7 @@ if (isset($_SESSION['shib_uname'])) { // authenticate via shibboleth
 			FROM user WHERE username COLLATE utf8_bin = " . quote($posted_uname);
 		$result = db_query($sqlLogin);
 		// cas might have alternative authentication defined
-		$check_passwords = array('pop3', 'imap', 'ldap', 'db', 'cas');
+		$check_passwords = array('pop3', 'imap', 'ldap', 'db', 'shibboleth', 'cas');
 		//$warning = '';
 		$auth_allow = 0;
 		$exists = 0;
@@ -139,7 +139,9 @@ if (isset($_SESSION['shib_uname'])) { // authenticate via shibboleth
 					break;
 				case 5: $warning .= "<p class='alert1'>". $langNoCookies . "</p>"; 
 					break;
-				case 6: $warning .= "<p class='alert1'>$langCASUser <a href='{$urlServer}secure/cas.php'>$langHere</a></p>";
+				case 6: $warning .= "<p class='alert1'>$langEnterPlatform <a href='{$urlServer}secure/index.php'>$langHere</a></p>";
+					break;
+				case 7: $warning .= "<p class='alert1'>$langEnterPlatform <a href='{$urlServer}secure/cas.php'>$langHere</a></p>";
 					break;
 				default:
 					break;

@@ -50,8 +50,6 @@ $nameTools = $msg;
 $navigation[]= array ("url"=>"registration.php", "name"=> "$langNewUser");
 $navigation[]= array ("url"=>"ldapnewuser.php?p=TRUE&amp;auth=$auth", "name"=> "$langConfirmUser");
 
-$tool_content = "";
-
 $lang = langname_to_code($language);
 
 $ldap_email = isset($_POST['ldap_email'])?$_POST['ldap_email']:'';
@@ -62,9 +60,24 @@ $submit = isset($_POST['submit'])?$_POST['submit']:'';
 $lastpage = 'ldapnewuser.php?p=TRUE&amp;auth='.$auth.'&amp;ldap_email='.$ldap_email;
 $errormessage = "<br/><p>$ldapback <a href='$lastpage'>$ldaplastpage</a></p>";
 
-if( !empty($is_submit) || (($auth == 7) && (empty($submit))) )
+if (isset($_SESSION['shib_auth']) and $_SESSION['shib_auth'] == true) { // if we are shibboleth user
+	$r = mysql_fetch_array(db_query("SELECT auth_settings FROM auth WHERE auth_id = 6"));
+	$shibsettings = $r['auth_settings'];
+	if ($shibsettings != 'shibboleth' and $shibsettings != "") {
+ 	      $shibseparator = $shibsettings;
+	}
+	if (strpos($_SESSION['shib_nom'], $shibseparator)) {
+        $temp = explode($shibseparator, $_SESSION['shib_nom']);
+				$GLOBALS['auth_user_info']['firstname'] = $temp[0];
+				$GLOBALS['auth_user_info']['lastname'] = $temp[1];
+	}
+  $GLOBALS['auth_user_info']['email'] = $_SESSION['shib_email'];
+	$is_valid = true;
+}
+
+if (!empty($is_submit) or ($auth == 7 and empty($submit)))
 {
-	if ( ($auth !=7 ) && (empty($ldap_email) or empty($ldap_passwd)) ) // check for empty username-password
+	if (($auth !=7 ) and ($auth != 6) and (empty($ldap_email) or empty($ldap_passwd)) ) // check for empty username-password
 	{
 		$tool_content .= "
 		<p class='caution'>$ldapempty  $errormessage </p>";
@@ -99,6 +112,8 @@ if( !empty($is_submit) || (($auth == 7) && (empty($submit))) )
 				$dbfielduser = str_replace("dbfielduser=","",$edb[5]);//dbfielduser
 				$dbfieldpass = str_replace("dbfieldpass=","",$edb[6]);//dbfieldpass
 				break;
+			case '6': header("Location: {$urlServer}secure/index_reg.php");
+				break;
 			case '7':
 				break;
 			default:
@@ -118,7 +133,7 @@ if( !empty($is_submit) || (($auth == 7) && (empty($submit))) )
 		else
 			$is_valid = false;
 	}
-
+}
 	if ($is_valid) { // connection successful	
 		$tool_content .= "
 		<form action='$_SERVER[PHP_SELF]' method='post'>" .
@@ -170,9 +185,13 @@ if( !empty($is_submit) || (($auth == 7) && (empty($submit))) )
                 </tr>	
 		<tr>
 		  <th class='left'>&nbsp;</th>
-		  <td><input type=\"submit\" name=\"submit\" value=\"".$langRegistration."\" />
-		      <input type='hidden' name=\"uname\" value=\"".$ldap_email."\" />
-		      <input type='hidden' name=\"password\" value=\"".$ldap_passwd."\" />
+		  <td><input type=\"submit\" name=\"submit\" value=\"".$langRegistration."\" />";
+			if (isset($_SESSION['shib_uname'])) {
+		  	    $tool_content .= "<input type='hidden' name='uname' value='".$_SESSION['shib_uname']."' />";
+			} else {
+		  	    $tool_content .= "<input type='hidden' name='uname' value='".$ldap_email."' />";
+			}
+		      $tool_content .= "<input type='hidden' name='password' value='".$ldap_passwd."' />
 		      <input type='hidden' name=\"auth\" value=\"".$auth."\" />
 		      </td>
                 </tr>
@@ -187,9 +206,6 @@ if( !empty($is_submit) || (($auth == 7) && (empty($submit))) )
 		$tool_content .= "<p class='caution'>$langConnNo<br/>$langAuthNoValidUser</p>";
 		$tool_content .= "<p>&laquo; <a href='$lastpage'>$langBack</a></p>";
 	}
-	draw($tool_content,0);
-	exit();
-} // end of if(is_submit)
 
 // -----------------------------------------
 // registration
@@ -215,17 +231,19 @@ if (isset($_POST['submit']))  {
 	if($auth != 1) {
 		switch($auth) {
 			case '2': $password = 'pop3';
-			break;
+				break;
 			case '3': $password = 'imap';
-			break;
+				break;
 			case '4': $password = 'ldap';
-			break;
+				break;
 			case '5': $password = 'db';
-			break;
+				break;
+		  case '6': $password = 'shibboleth';
+				break;
 			case '7': $password = 'cas';
-			break;
+				break;
 			default:  $password = '';
-			break;
+				break;
 		}
 	}
 

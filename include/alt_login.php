@@ -29,6 +29,7 @@ switch ($myrow['password']) {
 	case 'imap': $auth = 3; break;
 	case 'ldap': $auth = 4; break;
 	case 'db': $auth = 5; break;
+	case 'shibboleth': $auth = 6; break;
 	case 'cas': $auth = 7; break;
 	default: break;
 }
