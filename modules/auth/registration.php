@@ -38,58 +38,49 @@ include '../../include/baseTheme.php';
 include 'auth.inc.php';
 
 $nameTools = $langNewUser;
-  $tool_content .= "
-  <table class='tbl_1' width='100%'>
-  <tr>
-    <th width='160'>$langOfStudent</th>
-    <td>";
-    $auth = get_auth_active_methods();
+$tool_content .= "
+<table class='tbl_1' width='100%'>
+<tr>
+<th width='160'>$langOfStudent</th>
+<td>";
 
-    // check for close user registration
-    if (isset($close_user_registration) and $close_user_registration) {
-        $newuser = "formuser.php";
-        $user_reg_type = $langUserAccountInfo1;
-    } else {
-        $newuser = "newuser.php";
-        $user_reg_type = $langUserAccountInfo2;
+$auth = get_auth_active_methods();
+
+// check for close user registration
+if (isset($close_user_registration) and $close_user_registration) {
+    $newuser = "formuser.php";
+    $user_reg_type = $langUserAccountInfo1;
+} else {
+    $newuser = "newuser.php";
+    $user_reg_type = $langUserAccountInfo2;
+}
+
+$tool_content .= "<img src='${urlServer}/template/classic/img/arrow.png' title='bullet' alt='bullet'><a href='$newuser'>$user_reg_type</a>";
+
+if (count($auth) > 1) {
+   $tool_content .= "<br />&nbsp;&nbsp;&nbsp;&nbsp;$langUserAccountInfo4:";
+}
+
+if(!empty($auth)) {
+    foreach($auth as $k => $v) {
+            if ($v == 1) {  // bypass the eclass auth method, as it has already been displayed
+                    continue;
+            } else {
+                if ($v == 6)  { // shibboleth method
+                            $tool_content .= "<br />&nbsp;&nbsp;&nbsp;<img src='../../template/classic/img/arrow.png' title='bullet' alt='bullet' />&nbsp;<a href='{$urlServer}secure/index.php'>".get_auth_info($v)."</a>";
+                    } else {
+                            $tool_content .= "<br />&nbsp;&nbsp;&nbsp;<img src='../../template/classic/img/arrow.png' title='bullet' alt='bullet' />&nbsp;<a href='ldapnewuser.php?auth=".$v."'>".get_auth_info($v)."</a>";
+                    }
+            }
     }
+}
 
-    $tool_content .= "
-    <img src='${urlServer}/template/classic/img/arrow.png' title='bullet' alt='bullet'><a href=\"$newuser\">$user_reg_type</a>";
+$tool_content .= "</td></tr><tr><th>$langOfTeacher</th><td>";
+$tool_content .= "<img src='${urlServer}/template/classic/img/arrow.png' title='bullet'  alt='bullet' /><a href='newprof.php'>$langUserAccountInfo1</a>";
 
-    if (count($auth) > 1) {
-       $tool_content .= "<br />&nbsp;&nbsp;&nbsp;&nbsp;$langUserAccountInfo4:";
-    }
-
-    if(!empty($auth)) {
-        foreach($auth as $k => $v) {
-                if ($v == 1) {  // bypass the eclass auth method, as it has already been displayed
-                        continue;
-                } else {
-                    if ($v == 6)  { // shibboleth method
-                                $tool_content .= "<br />&nbsp;&nbsp;&nbsp;<img src='../../template/classic/img/arrow.png' title='bullet' alt='bullet' />&nbsp;<a href='{$urlServer}secure/index.php'>".get_auth_info($v)."</a>";
-                        } else {
-                                $tool_content .= "<br />&nbsp;&nbsp;&nbsp;<img src='../../template/classic/img/arrow.png' title='bullet' alt='bullet' />&nbsp;<a href='ldapnewuser.php?auth=".$v."'>".get_auth_info($v)."</a>";
-                        }
-							}
-        }
-    }
-
-
-
-
-  $tool_content .= "
-    </td>
-  </tr>
-  <tr>
-    <th>$langOfTeacher</th>
-    <td>";
-
-  $tool_content .= "<img src='${urlServer}/template/classic/img/arrow.png' title='bullet'  alt='bullet' /><a href='newprof.php'>$langUserAccountInfo1</a>";
-
-    if (count($auth) > 1) {
-       $tool_content .= "<br />&nbsp;&nbsp;&nbsp;&nbsp;$langUserAccountInfo4:";
-    }
+if (count($auth) > 1) {
+   $tool_content .= "<br />&nbsp;&nbsp;&nbsp;&nbsp;$langUserAccountInfo4:";
+}
 
 if(!empty($auth)) {
         foreach($auth as $k=>$v) {
@@ -103,10 +94,5 @@ if(!empty($auth)) {
         $tool_content .= "<p>$langCannotUseAuthMethods </p>";
 }
 
-  $tool_content .= "
-    </td>
-  </tr>
-  </table>";
-
-
+$tool_content .= "</td></tr></table>";
 draw($tool_content, 0);

@@ -385,12 +385,15 @@ function auth_user_login ($auth, $test_username, $test_password)  {
 	case '6':
 		$path = "${webDir}secure/";
 		if (!file_exists($path)) {
-			if (!mkdir("$path", 0700)) {
+			if (!mkdir($path, 0700)) {
 				$testauth = false;
 			}
 		} else {
+			$indexfile = $path.'index.php';
+			$index_regfile = $path.'index_reg.php';
+			if (!file_exists($indexfile)) {
 			// creation of secure/index.php file
-			$f = fopen("${path}index.php", "w");
+				$f = fopen($indexfile, "w");
 			$filecontents = '<?php
 session_start();
 $_SESSION[\'shib_email\'] = '.autounquote($_POST['shibemail']).';
@@ -398,10 +401,30 @@ $_SESSION[\'shib_uname\'] = '.autounquote($_POST['shibuname']).';
 $_SESSION[\'shib_nom\'] = '.autounquote($_POST['shibcn']).';
 header("Location: ../index.php");
 ';
-			if (!fwrite($f, "$filecontents")) {
-				$testauth = false;
-			} else {
-				$testauth = true;
+				// creation of secure/index_reg.php
+				if (!fwrite($f, $filecontents)) {
+					$testauth = false;
+				} else {
+					$testauth = true;
+				}
+			}
+			if (!file_exists($index_regfile)) {
+				// creation of secure/index_reg.php
+				// used in professor request registration process via shibboleth
+				$f = fopen($index_regfile, "w");
+				$filecontents = '<?php
+session_start();
+$_SESSION[\'shib_email\'] = '.autounquote($_POST['shibemail']).';
+$_SESSION[\'shib_uname\'] = '.autounquote($_POST['shibuname']).';
+$_SESSION[\'shib_nom\'] = '.autounquote($_POST['shibcn']).';
+$_SESSION[\'shib_statut\'] = $_SERVER[\'unscoped-affiliation\'];
+$_SESSION[\'shib_auth\'] = true;
+header("Location: ../modules/auth/ldapsearch_prof.php");
+';				if (!fwrite($f, $filecontents)) {
+					$testauth = false;
+				} else {
+					$testauth = true;
+				}
 			}
 		}
 		break;

@@ -58,27 +58,25 @@ if (isset($_GET['p']) and ($_GET['p'] == true)) {
 } else {
 	$tool_content .= "<form method='post' action='ldapsearch.php'>";
 }
-@$tool_content .= "
-<fieldset>
-<legend>".$settings['auth_instructions']."</legend>
-  <table class='tbl' width='100%'>";
+@$tool_content .= "<fieldset><legend>".$settings['auth_instructions']."</legend>
+<table class='tbl' width='100%'>";
+
 if (($auth != 7) and ($auth != 6)) {
 	@$tool_content .= "
 	<tr>
-    <th width='180'>$langAuthUserName</th>
-    <td><input type='text' name='ldap_email' value='$ldap_email'></td>
-  </tr>
-  <tr>
-     <th>$langAuthPassword</th>
-     <td><input type='password' name='ldap_passwd' value='$ldap_passwd'></td>
-  </tr>";
+	<th width='180'>$langAuthUserName</th>
+	<td><input type='text' name='ldap_email' value='$ldap_email'></td>
+	</tr>
+	<tr>
+	<th>$langAuthPassword</th>
+	<td><input type='password' name='ldap_passwd' value='$ldap_passwd'></td>
+	</tr>";
 }
 
-@$tool_content .= "
-  <tr>
+@$tool_content .= "<tr>
      <td>&nbsp;</td>
      <td class='right'>
-       <input type='hidden' name='auth' value='".$auth."'>";
+<input type='hidden' name='auth' value='".$auth."'>";
 
 if (($auth != 7) and ($auth != 6)) {
 	$tool_content .= "<input type='submit' name='is_submit' value='".$langSubmit."'>";
@@ -86,11 +84,6 @@ if (($auth != 7) and ($auth != 6)) {
 	$tool_content .= "<input type='submit' name='is_submit' value='".$langCheck."'>";
 }
 
-$tool_content .= "
-     </td>
-  </tr>
-  </table>
-  </fieldset>
-</form>";
+$tool_content .= "</td></tr></table></fieldset></form>";
 
 draw($tool_content, 0);
