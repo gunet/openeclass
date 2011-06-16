@@ -1689,7 +1689,7 @@ function standard_text_escape($text, $mathimg = '../../courses/mathimg/')
         }
 
         $dom = new DOMDocument();
-        @$dom->loadHTML('<div>' . $html . '</div>');
+        @$dom->loadHTML('<?xml encoding="UTF-8"><div>' . $html . '</div>');
 
         $xpath = new DOMXpath($dom);
         $textNodes = $xpath->query('//text()');
