@@ -1,34 +1,23 @@
 <?php
-/*========================================================================
-*   Open eClass 2.3
-*   E-learning and Course Management System
-* ========================================================================
-*  Copyright(c) 2003-2010  Greek Universities Network - GUnet
-*  A full copyright notice can be read in "/info/copyright.txt".
-*
-*  Developers Group:	Costas Tsibanis <k.tsibanis@noc.uoa.gr>
-*			Yannis Exidaridis <jexi@noc.uoa.gr>
-*			Alexandros Diamantidis <adia@noc.uoa.gr>
-*			Tilemachos Raptis <traptis@noc.uoa.gr>
-*
-*  For a full list of contributors, see "credits.txt".
-*
-*  Open eClass is an open platform distributed in the hope that it will
-*  be useful (without any warranty), under the terms of the GNU (General
-*  Public License) as published by the Free Software Foundation.
-*  The full license can be read in "/info/license/license_gpl.txt".
-*
-*  Contact address: 	GUnet Asynchronous eLearning Group,
-*  			Network Operations Center, University of Athens,
-*  			Panepistimiopolis Ilissia, 15784, Athens, Greece
-*  			eMail: info@openeclass.org
-* =========================================================================
+/* ========================================================================
+ * Open eClass 2.4
+ * E-learning and Course Management System
+ * ========================================================================
+ * Copyright 2003-2011  Greek Universities Network - GUnet
+ * A full copyright notice can be read in "/info/copyright.txt".
+ * For a full list of contributors, see "credits.txt".
+ *
+ * Open eClass is an open platform distributed in the hope that it will
+ * be useful (without any warranty), under the terms of the GNU (General
+ * Public License) as published by the Free Software Foundation.
+ * The full license can be read in "/info/license/license_gpl.txt".
+ *
+ * Contact address: GUnet Asynchronous eLearning Group,
+ *                  Network Operations Center, University of Athens,
+ *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
+ *                  e-mail: info@openeclass.org
+ * ======================================================================== 
 
-===========================================================================
-work.php
-@version $Id$
-@author : Dionysios G. Synodinos <synodinos@gmail.com>
-@author : Evelthon Prodromou <eprodromou@upnet.gr>
 ============================================================================
 @Description: Main script for the work tool
 ============================================================================
@@ -170,7 +159,12 @@ if ($is_adminOfCourse) {
 		} else {
 			$nameTools = $m['WorkView'];
 			$navigation[] = array("url"=>"$_SERVER[PHP_SELF]?course=$code_cours", "name"=> $langWorks);
-			show_assignment($id);
+			if (isset($_GET['disp_results'])) {
+			  show_assignment($id, false, true);
+			} else {
+			  show_assignment($id);  
+			}
+			
 		}
 	} else {
 		$nameTools = $m['WorkView'];
@@ -624,7 +618,7 @@ function show_submission_form($id, $user_group_info)
 function assignment_details($id, $row, $message = null)
 {
 	global $tool_content, $m, $langDaysLeft, $langDays, $langWEndDeadline, $langNEndDeadLine, $langNEndDeadline, $langEndDeadline;
-	global $langDelAssign, $is_adminOfCourse, $langZipDownload, $langSaved, $code_cours;
+	global $langDelAssign, $is_adminOfCourse, $langZipDownload, $langSaved, $code_cours, $langGraphResults;
 
 	if ($is_adminOfCourse) {
             $tool_content .= "
@@ -633,6 +627,7 @@ function assignment_details($id, $row, $message = null)
               <li><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;id=$id&amp;choice=do_delete' onClick='return confirmation(\"" .
                 js_escape($row['title']) . "\");'>$langDelAssign</a></li>
                 <li><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;download=$id'>$langZipDownload</a></li>
+		<li><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;id=$id&amp;disp_results=true'>$langGraphResults</a></li>
               </ul>
             </div>";
 	}
@@ -726,7 +721,7 @@ function sort_link($title, $opt, $attrib = '')
 
 // show assignment - prof view only
 // the optional message appears insted of assignment details
-function show_assignment($id, $message = FALSE)
+function show_assignment($id, $message = false, $display_graph_results = false)
 {
 	global $tool_content, $m, $langBack, $langNoSubmissions, $langSubmissions, $mysqlMainDb, $langWorks;
 	global $langEndDeadline, $langWEndDeadline, $langNEndDeadline, $langDays, $langDaysLeft, $langGradeOk;
@@ -782,10 +777,6 @@ function show_assignment($id, $message = FALSE)
 			$num_of_submissions = sprintf("$m[more_submissions]", $num_results);
 		}
 
-                $chart = new PieChart(300, 200);
-                $dataSet = new XYDataSet();
-		$chart->setTitle("$langGraphResults");
-
 		$gradeOccurances = array(); // Named array to hold grade occurances/stats
 		$gradesExists = 0;
 		while ($row = mysql_fetch_array($result)) {
@@ -801,117 +792,120 @@ function show_assignment($id, $message = FALSE)
 				}
 			}
 		}
-
-		$result = db_query("SELECT *
-                                FROM `$GLOBALS[code_cours]`.assignment_submit AS assign,
-                                `$mysqlMainDb`.user AS user
-                                WHERE assign.assignment_id='$id' AND user.user_id = assign.uid
-                                ORDER BY $order $rev");
-
+	      if (!$display_graph_results) {
+		  $result = db_query("SELECT *
+				  FROM `$GLOBALS[code_cours]`.assignment_submit AS assign,
+				  `$mysqlMainDb`.user AS user
+				  WHERE assign.assignment_id='$id' AND user.user_id = assign.uid
+				  ORDER BY $order $rev");
+  
+		  $tool_content .= "
+		  <form action='$_SERVER[PHP_SELF]?course=$code_cours' method='post'>
+		    <input type='hidden' name='grades_id' value='$id' />
+		    <p><div class='sub_title1'>$langSubmissions:</div><p>
+		    <p>$num_of_submissions</p>
+		  ";
+		  $tool_content .= "
+		  <table width='100%' class='sortable'>
+		  <tr>
+		    <th width='3'>&nbsp;</th>";
+		  sort_link($m['username'], 'nom');
+		  sort_link($m['am'], 'am');
+		  sort_link($m['filename'], 'filename');
+		  sort_link($m['sub_date'], 'date');
+		  sort_link($m['grade'], 'grade');
+		  $tool_content .= "
+		  </tr>";
+  
+		  $i = 1;
+		  while ($row = mysql_fetch_array($result))
+		  {
+			  //is it a group assignment?
+			  if (!empty($row['group_id'])) {
+				  $subContentGroup = "$m[groupsubmit] ".
+				  "<a href='../group/group_space.php?course=$code_cours&amp;group_id=$row[group_id]'>".
+				  "$m[ofgroup] ".gid_to_name($row['group_id'])."</a>";
+			  } else $subContentGroup = "";
+  
+			  $uid_2_name = display_user($row['uid']);
+			  $stud_am = mysql_fetch_array(db_query("SELECT am from $mysqlMainDb.user WHERE user_id = '$row[uid]'"));
+			  if ($i%2 == 1) {
+				  $row_color = "class='even'";
+			  } else {
+				  $row_color = "class='odd'";
+			  }
+  
+		  $tool_content .= "
+		  <tr $row_color>
+		    <td align='right' width='4' rowspan='2' valign='top'>$i.</td>
+		    <td>${uid_2_name}</td>
+		    <td width='85'>" . q($stud_am[0]) . "</td>
+		    <td width='180'><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;get=$row[id]'>" . q($row['file_name']) . "</a></td>
+		    <td width='100'>".nice_format($row['submission_date'])."</td>
+		    <td width='5'>
+		       <div align='center'><input type='text' value='{$row['grade']}' maxlength='3' size='3' name='grades[{$row['id']}]'></div>
+		    </td>
+		  </tr>
+		  <tr $row_color>
+		    <td colspan='5'>
+		      <div>$subContentGroup</div>";
+			  if (trim($row['comments'] != '')) {
+				  $tool_content .= "<div style='margin-top: .5em;'><b>$m[comments]:</b> " .
+					  q($row['comments']) . '</div>';
+			  }
+			  //professor comments
+			  if (trim($row['grade_comments'])) {
+				  $label = $m['gradecomments'] . ':';
+				  $icon = 'edit.png';
+				  $comments = "<div class='smaller'>".standard_text_escape($row['grade_comments'])."</div>";
+			  } else {
+				  $label = $m['addgradecomments'];
+				  $icon = 'add.png';
+				  $comments = '';
+			  }
+			  $tool_content .= "<div style='padding-top: .5em;'><b>$label</b>
+				  <a href='grade_edit.php?course=$code_cours&amp;assignment=$id&amp;submission=$row[id]'><img src='../../template/classic/img/$icon'></a>
+				  $comments
+		    </td>
+		  </tr>";
+		  $i++;
+		  } //END of While
+  
+		$tool_content .= "</table>";
+      
 		$tool_content .= "
-                <form action='$_SERVER[PHP_SELF]?course=$code_cours' method='post'>
-                  <input type='hidden' name='grades_id' value='$id' />
-                  <p><div class='sub_title1'>$langSubmissions:</div><p>
-                  <p>$num_of_submissions</p>
-                ";
-		$tool_content .= "
-                <table width='100%' class='sortable'>
-                <tr>
-                  <th width='3'>&nbsp;</th>";
-                sort_link($m['username'], 'nom');
-                sort_link($m['am'], 'am');
-                sort_link($m['filename'], 'filename');
-                sort_link($m['sub_date'], 'date');
-                sort_link($m['grade'], 'grade');
-		$tool_content .= "
-                </tr>";
-
-		$i = 1;
-		while ($row = mysql_fetch_array($result))
-		{
-			//is it a group assignment?
-			if (!empty($row['group_id'])) {
-				$subContentGroup = "$m[groupsubmit] ".
-				"<a href='../group/group_space.php?course=$code_cours&amp;group_id=$row[group_id]'>".
-				"$m[ofgroup] ".gid_to_name($row['group_id'])."</a>";
-			} else $subContentGroup = "";
-
-                        $uid_2_name = display_user($row['uid']);
-			$stud_am = mysql_fetch_array(db_query("SELECT am from $mysqlMainDb.user WHERE user_id = '$row[uid]'"));
-                        if ($i%2 == 1) {
-                                $row_color = "class='even'";
-                        } else {
-                                $row_color = "class='odd'";
-                        }
-
-			$tool_content .= "
-                <tr $row_color>
-                  <td align='right' width='4' rowspan='2' valign='top'>$i.</td>
-                  <td>${uid_2_name}</td>
-                  <td width='85'>" . q($stud_am[0]) . "</td>
-                  <td width='180'><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;get=$row[id]'>" . q($row['file_name']) . "</a></td>
-                  <td width='100'>".nice_format($row['submission_date'])."</td>
-                  <td width='5'>
-                     <div align='center'><input type='text' value='{$row['grade']}' maxlength='3' size='3' name='grades[{$row['id']}]'></div>
-                  </td>
-                </tr>
-                <tr $row_color>
-                  <td colspan='5'>
-                    <div>$subContentGroup</div>";
-                        if (trim($row['comments'] != '')) {
-                                $tool_content .= "<div style='margin-top: .5em;'><b>$m[comments]:</b> " .
-                                        q($row['comments']) . '</div>';
-                        }
-			//professor comments
-			if (trim($row['grade_comments'])) {
-                                $label = $m['gradecomments'] . ':';
-                                $icon = 'edit.png';
-                                $comments = "<div class='smaller'>".standard_text_escape($row['grade_comments'])."</div>";
-                        } else {
-                                $label = $m['addgradecomments'];
-                                $icon = 'add.png';
-                                $comments = '';
-                        }
-                        $tool_content .= "<div style='padding-top: .5em;'><b>$label</b>
-                                <a href='grade_edit.php?course=$code_cours&amp;assignment=$id&amp;submission=$row[id]'><img src='../../template/classic/img/$icon'></a>
-                                $comments
-                  </td>
-                </tr>";
-                $i++;
-		} //END of While
-
-	$tool_content .="
-                </table>";
-
-	$tool_content .= "
-            <p><input type='submit' name='submit_grades' value='$langGradeOk'></p>
-            </form>";
-
-		if ($gradesExists) {
-			foreach ( $gradeOccurances as $gradeValue=>$gradeOccurance ) {
-				/*  Changed by nikos. Only the number of works that are graded
-				 * are taken into account to determine the grade distribution
-				 * percentage. */
+		  &nbsp;<p><input type='submit' name='submit_grades' value='$langGradeOk'></p>
+		  </form>";
+	      }
+	      
+	    if ($display_graph_results) { // display pie chart with grades results
+	      if ($gradesExists) {
+		  $chart = new PieChart(300, 200);
+		  $dataSet = new XYDataSet();
+		  $chart->setTitle("$langGraphResults");
+		  foreach ( $gradeOccurances as $gradeValue=>$gradeOccurance ) {
+			  /*  Changed by nikos. Only the number of works that are graded
+			   * are taken into account to determine the grade distribution
+			   * percentage. */
 //				$percentage = 100*($gradeOccurance/$num_results);
-				$percentage = 100*($gradeOccurance/$num_resultsForChart);
-				$dataSet->addPoint(new Point("$gradeValue ($percentage)", $percentage));
-			}
-
-			$chart_path = 'courses/'.$currentCourseID.'/temp/chart_'.md5(serialize($chart)).'.png';
-                        $chart->setDataSet($dataSet);
-			$chart->render($webDir.$chart_path);
-			$tool_content .= "
-                        <table width='100%' class='tbl'>
-                        <tr>
-                          <td align='right'><img src='$urlServer$chart_path' /></td>
-                        </tr>
-                        </table>";
-		}
+			  $percentage = 100*($gradeOccurance/$num_resultsForChart);
+			  $dataSet->addPoint(new Point("$gradeValue ($percentage)", $percentage));
+		  }
+		  $chart_path = 'courses/'.$currentCourseID.'/temp/chart_'.md5(serialize($chart)).'.png';
+		  $chart->setDataSet($dataSet);
+		  $chart->render($webDir.$chart_path);
+		  $tool_content .= "
+		  <table width='100%' class='tbl'>
+		  <tr>
+		    <td><img src='$urlServer$chart_path' /></td>
+		  </tr>
+		  </table>";
+	      }
+	    }
 	} else {
-		$tool_content .= "
-            <p class='sub_title1'>$langSubmissions:</p>
-            <p class='alert1'>$langNoSubmissions</p>
-            ";
+	      $tool_content .= "
+	      <p class='sub_title1'>$langSubmissions:</p>
+	      <p class='alert1'>$langNoSubmissions</p>";
 	}
 	$tool_content .= "
         <br/>
