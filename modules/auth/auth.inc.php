@@ -725,7 +725,6 @@ function alt_login($user_info_array, $uname, $pass)
         }
         $auth_method_settings = get_auth_settings($auth);
         $auth_allow = 1;
-        $settings = array();
 
         // a CAS user might enter a username/password in the form, instead of doing CAS login
         // check auth according to the defined alternative authentication method of CAS
@@ -736,7 +735,7 @@ function alt_login($user_info_array, $uname, $pass)
                 if (($cas_altauth > 0) && check_auth_active($cas_altauth)) {
                         $auth = $cas_altauth;
                         // fetch settings of alt auth
-                        $auth_method_settings = GET_AUTH_settings($auth);
+                        $auth_method_settings = get_auth_settings($auth);
                 } else {
                         return 7; // Redirect to CAS login
                 }
@@ -747,7 +746,7 @@ function alt_login($user_info_array, $uname, $pass)
         }
 
         if (($user_info_array['password'] == $auth_method_settings['auth_name']) || !empty($cas_altauth)) {
-                $is_valid = auth_user_login($auth, $uname, $pass, $settings);
+                $is_valid = auth_user_login($auth, $uname, $pass, $auth_method_settings);
                 if ($is_valid) {
                         $is_active = check_activity($user_info_array['user_id']);
                         if ($user_info_array['user_id'] == 1) {

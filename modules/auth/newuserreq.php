@@ -1,4 +1,4 @@
-<?
+<?php
 /* ========================================================================
  * Open eClass 2.4
  * E-learning and Course Management System
@@ -18,14 +18,12 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-
-
 $require_admin = TRUE;
 include '../../include/baseTheme.php';
 include '../../include/sendMail.inc.php';
 
 $nameTools = $langNewUser;
-$navigation[]= array ("url"=>"../admin/", "name"=> $langAdmin);
+$navigation[] = array ('url' => '../admin/', 'name' => $langAdmin);
 
 // Initialise $tool_content
 $tool_content = "";

@@ -51,6 +51,7 @@ if (isset($_GET['type']) and $_GET['type'] == 'user') {
 	$linkget = '';
 }
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
+
 // Main body
 $close = isset($_GET['close'])?$_GET['close']:(isset($_POST['close'])?$_POST['close']:'');
 $id = isset($_GET['id'])?$_GET['id']:(isset($_POST['id'])?$_POST['id']:'');
@@ -84,7 +85,7 @@ switch ($show) {
 if (!empty($show) and $show == 'closed') {
 	if (!empty($id) and $id > 0) {
 		// restore request
-		$sql = db_query("UPDATE user_request set status = 1 , date_closed = NULL WHERE id = $id");
+		$sql = db_query("UPDATE user_request set status = 1, date_closed = NULL WHERE id = $id");
 		$tool_content = "<p class='success'>$langReintroductionApplication</p>";
 	} else {
 		$tool_content .= "<table class='tbl_alt' width='100%'>";
@@ -258,14 +259,17 @@ else
 			<small>".nice_format(date('Y-m-d', strtotime($req['date_open'])))."</small></td>";
 		$tool_content .= "<td align='center' class='smaller'>";
 		switch($req['password']) {
-			case 'ldap': $tool_content .= "<a href='../auth/ldapnewprofadmin.php?id=$req[id]&amp;auth=4'>
-					$langElaboration<br />($langViaLdap)</a></td>\n  </tr>";
-				break;
 			case 'pop3': $tool_content .= "<a href='../auth/ldapnewprofadmin.php?id=$req[id]&amp;auth=2'>
 					$langElaboration<br>($langViaPop)</a></td>\n  </tr>";
 				break;
 			case 'imap': $tool_content .= "<a href='../auth/ldapnewprofadmin.php?id=$req[id]&amp;auth=3'>
 					$langElaboration<br>($langViaImap)</a></td>\n  </tr>";
+				break;
+			case 'ldap': $tool_content .= "<a href='../auth/ldapnewprofadmin.php?id=$req[id]&amp;auth=4'>
+					$langElaboration<br />($langViaLdap)</a></td>\n  </tr>";
+				break;
+			case 'db': $tool_content .= "<a href='../auth/ldapnewprofadmin.php?id=$req[id]&amp;auth=5'>
+					$langElaboration<br>($langViaDB)</a></td>\n  </tr>";
 				break;
 			case 'shibboleth': $tool_content .= "<a href='../auth/ldapnewprofadmin.php?id=$req[id]&amp;auth=6'>
 					$langElaboration<br>($langViaShibboleth)</a></td></tr>";

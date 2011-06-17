@@ -47,18 +47,17 @@ if(!isset($_POST['auth'])) {
 
 $msg = "$langReqRegProf (".(get_auth_info($auth)).")";
 $nameTools = $msg;
-$navigation[]= array ("url"=>"registration.php", "name"=> "$langNewUser");
-$navigation[]= array ("url"=>"ldapnewuser.php?p=TRUE&amp;auth=$auth", "name"=> "$langConfirmUser");
+$navigation[]= array ('url' => 'registration.php', 'name'=> $langNewUser);
+$navigation[]= array ('url' => "ldapnewuser.php?p=TRUE&amp;auth=$auth", 'name' => $langConfirmUser);
 
 $lang = langname_to_code($language);
 
-$ldap_email = isset($_POST['ldap_email'])?$_POST['ldap_email']:'';
-$ldap_passwd = isset($_POST['ldap_passwd'])?$_POST['ldap_passwd']:'';
-$is_submit = isset($_POST['is_submit'])?$_POST['is_submit']:'';
-$submit = isset($_POST['submit'])?$_POST['submit']:'';
+register_posted_variables(array('ldap_email' => true, 'ldap_passwd' => true,
+                                'is_submit' => true, 'submit' => true));
 
 $lastpage = 'ldapnewuser.php?p=TRUE&amp;auth='.$auth.'&amp;ldap_email='.$ldap_email;
 $errormessage = "<br/><p>$ldapback <a href='$lastpage'>$ldaplastpage</a></p>";
+$is_valid = false;
 
 if (isset($_SESSION['shib_auth']) and $_SESSION['shib_auth'] == true) { // if we are shibboleth user
 	$r = mysql_fetch_array(db_query("SELECT auth_settings FROM auth WHERE auth_id = 6"));
@@ -75,51 +74,20 @@ if (isset($_SESSION['shib_auth']) and $_SESSION['shib_auth'] == true) { // if we
 	$is_valid = true;
 }
 
-if (!empty($is_submit) or ($auth == 7 and empty($submit)))
-{
-	if (($auth !=7 ) and ($auth != 6) and (empty($ldap_email) or empty($ldap_passwd)) ) // check for empty username-password
-	{
+if (!empty($is_submit) or ($auth == 7 and empty($submit))) {
+        if ($auth !=7 and $auth != 6 and
+            ($ldap_email === '' or $ldap_passwd === '')) {
 		$tool_content .= "
-		<p class='caution'>$ldapempty  $errormessage </p>";
+		<p class='caution'>$ldapempty $errormessage</p>";
 		draw($tool_content,0);
 		exit();
-	}  else 
-		{
+	} else {
 		// try to authenticate user
 		$auth_method_settings = get_auth_settings($auth);
-		switch($auth)
-		{
-			case '2':$pop3host = str_replace("pop3host=","",$auth_method_settings['auth_settings']);
-				break;
-			case '3':$imaphost = str_replace("imaphost=","",$auth_method_settings['auth_settings']);
-				break;
-			case '4':$ldapsettings = $auth_method_settings['auth_settings'];
-				$ldap = explode("|",$ldapsettings);
-				$ldaphost = str_replace("ldaphost=","",$ldap[0]);	//ldaphost
-				$ldap_base = str_replace("ldap_base=","",$ldap[1]);  //ldap_base
-				$ldapbind_dn = str_replace("ldapbind_dn=","",$ldap[2]); //ldapbind_dn
-				$ldapbind_pw = str_replace("ldapbind_pw=","",$ldap[3]);	// ldapbind_pw
-				$ldap_login_attr = str_replace("ldap_login_attr=","",$ldap[4]);  // ldap_login_attr
-				$ldap_login_attr2 = str_replace("ldap_login_attr2=","",$ldap[5]);   // ldap_login_attr2
-				break;
-			case '5':$dbsettings = $auth_method_settings['auth_settings'];
-				$edb = explode("|",$dbsettings);
-				$dbhost = str_replace("dbhost=","",$edb[0]);	//dbhost
-				$dbname = str_replace("dbname=","",$edb[1]);	//dbname
-				$dbuser = str_replace("dbuser=","",$edb[2]);//dbuser
-				$dbpass = str_replace("dbpass=","",$edb[3]);// dbpass
-				$dbtable = str_replace("dbtable=","",$edb[4]);//dbtable
-				$dbfielduser = str_replace("dbfielduser=","",$edb[5]);//dbfielduser
-				$dbfieldpass = str_replace("dbfieldpass=","",$edb[6]);//dbfieldpass
-				break;
-			case '6': header("Location: {$urlServer}secure/index_reg.php");
-				break;
-			case '7':
-				break;
-			default:
-				break;
+                if ($auth == 6) {
+			redirect_to_home_page('secure/index_reg.php');
 		}
-		$is_valid = auth_user_login($auth,$ldap_email,$ldap_passwd);
+		$is_valid = auth_user_login($auth, $ldap_email, $ldap_passwd, $auth_method_settings);
 	}	
 
 	if ($auth == 7) {
@@ -129,18 +97,18 @@ if (!empty($is_submit) or ($auth == 7 and empty($submit)))
 			// store CAS released attributes in $GLOBALS['auth_user_info']
 			get_cas_attrs(phpCAS::getAttributes(), $cas);
 			$is_valid = true;
-		}
-		else
-			$is_valid = false;
+                }
 	}
 }
-	if ($is_valid) { // connection successful	
-		$tool_content .= "
+
+if ($is_valid) { // connection successful	
+        $tool_content .= "
 		<form action='$_SERVER[PHP_SELF]' method='post'>" .
 		(isset($GLOBALS['auth_user_info'])?
 		('<input type="hidden" name="prenom_form" value="' . $GLOBALS['auth_user_info']['firstname'] .
 		'" /><input type="hidden" name="nom_form" value="' . $GLOBALS['auth_user_info']['lastname'] .
-		'" /><input type="hidden" name="email" value="' . $GLOBALS['auth_user_info']['email'] . '" />'): '') . "<p class='success'>$langTheUser $ldapfound </p>
+                '" /><input type="hidden" name="email" value="' . $GLOBALS['auth_user_info']['email'] . '" />'): '') .
+                "<p class='success'>$langTheUser $ldapfound </p>
                 <fieldset>
                 <legend>$langUserData</legend>
 		<table width=\"99%\" class='tbl'>
@@ -202,10 +170,10 @@ if (!empty($is_submit) or ($auth == 7 and empty($submit)))
                 </table>
                 </fieldset>
 		</form>";
-	}  else {
-		$tool_content .= "<p class='caution'>$langConnNo<br/>$langAuthNoValidUser</p>";
-		$tool_content .= "<p>&laquo; <a href='$lastpage'>$langBack</a></p>";
-	}
+} else {
+        $tool_content .= "<p class='caution'>$langConnNo<br/>$langAuthNoValidUser</p>" .
+                         "<p>&laquo; <a href='$lastpage'>$langBack</a></p>";
+}
 
 // -----------------------------------------
 // registration

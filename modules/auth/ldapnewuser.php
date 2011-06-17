@@ -58,7 +58,7 @@ if (isset($_GET['p']) and ($_GET['p'] == true)) {
 } else {
 	$tool_content .= "<form method='post' action='ldapsearch.php'>";
 }
-@$tool_content .= "<fieldset><legend>".$settings['auth_instructions']."</legend>
+$tool_content .= "<fieldset><legend>".$settings['auth_instructions']."</legend>
 <table class='tbl' width='100%'>";
 
 if (($auth != 7) and ($auth != 6)) {
@@ -73,15 +73,15 @@ if (($auth != 7) and ($auth != 6)) {
 	</tr>";
 }
 
-@$tool_content .= "<tr>
+$tool_content .= "<tr>
      <td>&nbsp;</td>
      <td class='right'>
 <input type='hidden' name='auth' value='".$auth."'>";
 
 if (($auth != 7) and ($auth != 6)) {
-	$tool_content .= "<input type='submit' name='is_submit' value='".$langSubmit."'>";
+	$tool_content .= "<input type='submit' name='is_submit' value='$langSubmit'>";
 } else {
-	$tool_content .= "<input type='submit' name='is_submit' value='".$langCheck."'>";
+	$tool_content .= "<input type='submit' name='is_submit' value='$langCheck'>";
 }
 
 $tool_content .= "</td></tr></table></fieldset></form>";
