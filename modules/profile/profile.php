@@ -235,7 +235,7 @@ $tool_content .= "
 if (isset($_SESSION['shib_user'])) {
         $auth_text = "Shibboleth user";
         $tool_content .= "
-          <td>&nbsp;&nbsp;&nbsp;&nbsp;<b>$prenom_form</b> [$auth_text]
+          <td><b>$prenom_form</b> [$auth_text]
             <input type='hidden' name='prenom_form' value='$prenom_form' />
           </td>";
 } elseif (isset($_SESSION['cas_user'])) {

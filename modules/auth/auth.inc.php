@@ -818,7 +818,7 @@ Authenticate user via shibboleth
 ****************************************************************/
 function shib_login()
 {
-        global $nom, $prenom, $email, $statut, $language, $is_admin;
+        global $nom, $prenom, $email, $statut, $language, $is_admin, $langUserAltAuth;
 
         $_SESSION['user_perso_active'] = false;
         $shib_uname = $_SESSION['shib_uname'];
@@ -901,7 +901,7 @@ Authenticate user via CAS
 ****************************************************************/
 function cas_login()
 {
-        global $nom, $prenom, $email, $statut, $language, $is_admin;
+        global $nom, $prenom, $email, $statut, $language, $is_admin, $langUserAltAuth;
 
         $_SESSION['user_perso_active'] = false;
         // user is authenticated, now let's see if he is registered also in db
