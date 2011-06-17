@@ -106,7 +106,7 @@ if (isset($_GET['logout']) and $uid) {
         session_destroy();
 	$uid = 0;
 	if (defined('CAS')) {
-		$cas = get_cas_settings(7);
+		$cas = get_auth_settings(7);
 		phpCAS::client(SAML_VERSION_1_1, $cas['cas_host'], intval($cas['cas_port']), $cas['cas_context'], FALSE);
 		phpCAS::logoutWithRedirectService($urlServer);
 		//phpCAS::logout(array('url' => $urlServer)); 

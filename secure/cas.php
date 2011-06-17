@@ -32,7 +32,7 @@ include "../modules/auth/auth.inc.php";
 $auth = 7;
 cas_authenticate($auth);
 if (phpCAS::checkAuthentication()) {
-	$cas = get_cas_settings($auth);
+	$cas = get_auth_settings($auth);
 	$attrs = get_cas_attrs(phpCAS::getAttributes(), $cas);
 	$_SESSION['cas_uname'] = phpCAS::getUser();
 	$_SESSION['uname'] = $_SESSION['cas_uname'];

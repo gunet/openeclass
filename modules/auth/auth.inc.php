@@ -205,39 +205,28 @@ function get_auth_settings($auth)
                                 break;
                             case 4:
                                 $ldap = explode('|', $auth_settings);
-                                $settings = array(
+                                $settings = array_merge($settings, array(
                                         'ldaphost' => str_replace('ldaphost=', '', $ldap[0]),
                                         'ldap_base' => str_replace('ldap_base=', '', $ldap[1]),
                                         'ldapbind_dn' => str_replace('ldapbind_dn=', '', $ldap[2]),
                                         'ldapbind_pw' => str_replace('ldapbind_pw=', '', $ldap[3]),
                                         'ldap_login_attr' => str_replace('ldap_login_attr=', '', $ldap[4]),
-                                        'ldap_login_attr2' => str_replace('ldap_login_attr2=', '', $ldap[5]));
+                                        'ldap_login_attr2' => str_replace('ldap_login_attr2=', '', $ldap[5])));
                                 break;
                             case 5:
                                 $edb = explode('|', $auth_settings);
-                                $settings = array(
+                                $settings = array_merge($settings, array(
                                         'dbhost' => str_replace('dbhost=', '', $edb[0]),
                                         'dbname' => str_replace('dbname=', '', $edb[1]),
                                         'dbuser' => str_replace('dbuser=', '', $edb[2]),
                                         'dbpass' => str_replace('dbpass=', '', $edb[3]),
                                         'dbtable' => str_replace('dbtable=', '', $edb[4]),
                                         'dbfielduser' => str_replace('dbfielduser=', '', $edb[5]),
-                                        'dbfieldpass' => str_replace('dbfieldpass=', '', $edb[6]));
-                                break;
-                            case 5:
-                                $edb = explode('|', $auth_settings);
-                                $settings = array(
-                                        'dbhost' => str_replace('dbhost=', '', $edb[0]),
-                                        'dbname' => str_replace('dbname=', '', $edb[1]),
-                                        'dbuser' => str_replace('dbuser=', '', $edb[2]),
-                                        'dbpass' => str_replace('dbpass=', '', $edb[3]),
-                                        'dbtable' => str_replace('dbtable=', '', $edb[4]),
-                                        'dbfielduser' => str_replace('dbfielduser=', '', $edb[5]),
-                                        'dbfieldpass' => str_replace('dbfieldpass=', '', $edb[6]));
+                                        'dbfieldpass' => str_replace('dbfieldpass=', '', $edb[6])));
                                 break;
                             case 7:
                                 $cas = explode('|', $auth_settings);
-                                $settings = array(
+                                $settings = array_merge($settings, array(
                                         'cas_host' => str_replace('cas_host=', '', $cas[0]),
                                         'cas_port' => str_replace('cas_port=', '', $cas[1]),
                                         'cas_context' => str_replace('cas_context=', '', $cas[2]),
@@ -246,7 +235,7 @@ function get_auth_settings($auth)
                                         'casuserfirstattr' => str_replace('casuserfirstattr=', '', $cas[5]),
                                         'casuserlastattr' => str_replace('casuserlastattr=', '', $cas[6]),
                                         'cas_altauth' => str_replace('cas_altauth=', '', $cas[7]),
-                                        'cas_logout' => str_replace('cas_logout=', '', $cas[8]));
+                                        'cas_logout' => str_replace('cas_logout=', '', $cas[8])));
                                 break;
                         }
 			return $settings;
@@ -485,21 +474,6 @@ function get_ldap_attribute($search_result, $attribute)
         }
 }
 
-/****************************************************************
-Return CAS settings
-****************************************************************/
-function get_cas_settings($auth)
-{
-if ($auth_method_settings = get_auth_settings($auth)) {
-	$cassettings = $auth_method_settings['auth_settings'];
-	
-	$cas = explode("|", $cassettings);
-	
-
-	return $cas_settings;
-} else 
-	return 0;
-}
 
 /****************************************************************
 CAS authentication
@@ -953,7 +927,7 @@ function cas_login()
                         unset($_SESSION[$key]);
                 session_destroy();
                 unset($_SESSION['uid']);
-                header('Location: ../modules/auth/registration.php');
+                header("Location: {$urlServer}modules/auth/registration.php");
                 exit;
         }
         $_SESSION['uname'] = $cas_uname;
