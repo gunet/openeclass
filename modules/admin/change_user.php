@@ -48,9 +48,9 @@ if (isset($_REQUEST['username'])) {
                 $userPerso = $myrow['perso'];
                 $userLanguage = $myrow['lang'];
 	        if ($userPerso == 'yes' and isset($_SESSION['perso_is_active'])) {
-        		$_SESSION['user_perso_active'] = false;
-                } else {
         		$_SESSION['user_perso_active'] = true;
+                } else {
+        		$_SESSION['user_perso_active'] = false;
                 }
         	if ($userLanguage == "en") {
 	        	$_SESSION['langswitch'] = "english";

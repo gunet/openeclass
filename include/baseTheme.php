@@ -168,7 +168,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 			$t->clear_var ( 'leftNav' );
 			$t->set_var ( 'CONTENT_MAIN_CSS', 'content_main_no_nav' );
 		} elseif ($homePage && !isset($_SESSION['uid'])) {  
-            $t->set_var ( 'CONTENT_MAIN_CSS', 'content_main_first' );  
+                        $t->set_var ( 'CONTENT_MAIN_CSS', 'content_main_first' );  
 		} else {
 			$t->set_var ( 'CONTENT_MAIN_CSS', 'content_main' );
 		}
@@ -205,17 +205,17 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 				$t->set_var ('LOGOUT_LINK', $relPath . 'login_form.php');	
 			}
                 }
-		//set the text and icon on the third bar (header)
+		// set the text and icon on the third bar (header)
 		if ($menuTypeID == 2) {
 			$t->set_var ( 'THIRD_BAR_TEXT', "<a href='$urlServer/courses/$currentCourseID/'>" . q($intitule) . '</a>' );
 			$t->set_var ( 'THIRDBAR_LEFT_ICON', 'lesson_icon' );
 		} elseif ($menuTypeID == 3) {
 			$t->set_var ( 'THIRD_BAR_TEXT', $langAdmin );
 			$t->set_var ( 'THIRDBAR_LEFT_ICON', 'admin_bar_icon' );
-		} elseif ($menuTypeID > 0 && $menuTypeID < 3 && !isset($_SESSION['user_perso_active'])) {
+		} elseif ($menuTypeID > 0 and $menuTypeID < 3 and !$_SESSION['user_perso_active']) {
 			$t->set_var ( 'THIRD_BAR_TEXT', $langUserBriefcase );
 			$t->set_var ( 'THIRDBAR_LEFT_ICON', 'briefcase_icon' );
-		} elseif ($menuTypeID > 0 && isset($_SESSION['user_perso_active'])) {
+		} elseif ($menuTypeID > 0 and $_SESSION['user_perso_active']) {
 			$t->set_var ( 'THIRD_BAR_TEXT', $langPersonalisedBriefcase );
 			$t->set_var ( 'THIRDBAR_LEFT_ICON', 'briefcase_icon' );
 		} else {
@@ -271,7 +271,6 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 
 		//START breadcrumb AND page title
 
-
 		if (! $page_navi)
 			$page_navi = $navigation;
 		if (! $page_name)
@@ -280,11 +279,11 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 		$t->set_block ( 'mainBlock', 'breadCrumbHomeBlock', 'breadCrumbHome' );
 
 		if ($statut != 10) {
-			if (!isset($_SESSION['uid']))
+			if (!isset($_SESSION['uid'])) {
 				$t->set_var ( 'BREAD_TEXT', $langHomePage );
-			elseif (isset($_SESSION['uid']) && isset($_SESSION['user_perso_active'])) {
+                        } elseif (isset($_SESSION['uid']) and $_SESSION['user_perso_active']) {
 				$t->set_var ( 'BREAD_TEXT', $langPersonalisedBriefcase );
-			} elseif (isset($_SESSION['uid']) && !isset($_SESSION['user_perso_active'])) {
+			} elseif (isset($_SESSION['uid']) and !$_SESSION['user_perso_active']) {
 				$t->set_var ( 'BREAD_TEXT', $langUserBriefcase );
 			}
 

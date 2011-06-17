@@ -23,7 +23,7 @@ $require_help = true;
 $require_login = true;
 $helpTopic = 'Profile';
 include '../../include/baseTheme.php';
-include "../auth/auth.inc.php";
+include '../auth/auth.inc.php';
 $require_valid_uid = TRUE;
 
 $authmethods = array('imap', 'pop3', 'ldap', 'db', 'shibboleth', 'cas');
@@ -101,7 +101,7 @@ if (isset($_POST['submit'])) {
 	if (!$all_ok) {
                 redirect_to_message(4);
 	}
-                
+
         if (!$allow_username_change) {
                 $username_form = $_SESSION['uname'];
         }

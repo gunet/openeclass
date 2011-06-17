@@ -238,19 +238,17 @@ if (isset($require_current_course) and $require_current_course) {
 
 		// Check for course visibility by current user
 		$statut = 0;
-		if (isset($uid)) {
-                        // The admin can see all courses as adminOfCourse
-                        if ($uid == 1) {
-                                $statut = 1;
-                        } else {
-        			$res2 = db_query("SELECT statut FROM cours_user
-                                                  WHERE user_id = $uid AND
-                                                        cours_id = $cours_id");
-        			if ($res2 and mysql_num_rows($res2) > 0) {
-	        			list($statut) = mysql_fetch_row($res2);
-		        	}
+                // The admin can see all courses as adminOfCourse
+                if ($uid == 1) {
+                        $statut = 1;
+                } else {
+                        $res2 = db_query("SELECT statut FROM cours_user
+                                WHERE user_id = $uid AND
+                                cours_id = $cours_id");
+                        if ($res2 and mysql_num_rows($res2) > 0) {
+                                list($statut) = mysql_fetch_row($res2);
                         }
-		}
+                }
 
 		if ($visible != 2) {
 			if (!$uid) {
@@ -332,7 +330,7 @@ if (isset($_SESSION['saved_statut'])) {
 
 //Security check:: Users that do not have Professor access for a course must not
 //be able to access inactive tools.
-if(isset($currentCourse) && file_exists($module_ini_dir = getcwd() . "/module.ini.php") && !$is_adminOfCourse && @$ignore_module_ini != true) {
+if (isset($currentCourse) && file_exists($module_ini_dir = getcwd() . "/module.ini.php") && !$is_adminOfCourse && @$ignore_module_ini != true) {
 	include($module_ini_dir);
 
 	if (!check_guest()) {

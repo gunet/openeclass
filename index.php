@@ -72,109 +72,28 @@ if (!isset($selectResult)) {
 //if platform admin allows usage of eclass personalised
 //create a session so that each user can activate it for himself.
 if (isset($persoIsActive)) {
-	$_SESSION["perso_is_active"] = $persoIsActive;
+	$_SESSION['perso_is_active'] = $persoIsActive;
 }
 
 // if we try to login... then authenticate user.
 $warning = '';
-if (isset($_SESSION['shib_uname'])) { // authenticate via shibboleth
-	include 'include/shib_login.php';
-} else if (isset($_SESSION['cas_uname']) && !isset($_GET['logout'])) { // authenticate via cas
-	include 'include/cas_login.php';
+if (isset($_SESSION['shib_uname'])) {
+        // authenticate via shibboleth
+	shib_login();
+} elseif (isset($_SESSION['cas_uname']) && !isset($_GET['logout'])) {
+        // authenticate via cas
+	cas_login();
 } else { // normal authentication
-	if (isset($_POST['uname'])) {
-		$posted_uname = autounquote(canonicalize_whitespace($_POST['uname']));
-	} else {
-		$posted_uname = '';
-	}
-	
-	$pass = isset($_POST['pass'])? autounquote($_POST['pass']): '';
-	$auth = get_auth_active_methods();
-	$is_eclass_unique = is_eclass_unique();
-
-	if (isset($_POST['submit'])) {
-		unset($uid);
-		$sqlLogin = "SELECT user_id, nom, username, password, prenom, statut, email, perso, lang
-			FROM user WHERE username COLLATE utf8_bin = " . quote($posted_uname);
-		$result = db_query($sqlLogin);
-		// cas might have alternative authentication defined
-		$check_passwords = array('pop3', 'imap', 'ldap', 'db', 'shibboleth', 'cas');
-		//$warning = '';
-		$auth_allow = 0;
-		$exists = 0;
-		if (!isset($_COOKIE) or count($_COOKIE) == 0) {
-			// Disallow login when cookies are disabled
-			$auth_allow = 5;
-		} elseif ($pass === '') {
-			// Disallow login with empty password
-			$auth_allow = 4;
-		} else {
-			while ($myrow = mysql_fetch_array($result)) {
-				$exists = 1;
-				if(!empty($auth)) {
-					if (!in_array($myrow['password'], $check_passwords)) {
-						// eclass login
-						include "include/login.php"; 
-					} else {
-						// alternate methods login
-						include "include/alt_login.php";
-					}
-				} else {
-					$tool_content .= "<br>$langInvalidAuth<br>";
-				}
-			}
-		}
-		if (empty($exists) and !$auth_allow) {
-			$auth_allow = 4;
-		}
-		if (!isset($uid)) {
-			switch($auth_allow) {
-				case 1: $warning .= ""; 
-					break;
-				case 2: $warning .= "<p class='alert1'>".$langInvalidId ."</p>"; 
-					break;
-				case 3: $warning .= "<p class='alert1'>".$langAccountInactive1." <a href='modules/auth/contactadmin.php?userid=".$user."'>".$langAccountInactive2."</a></p>"; 
-					break;
-				case 4: $warning .= "<p class='alert1'>". $langInvalidId . "</p>"; 
-					break;
-				case 5: $warning .= "<p class='alert1'>". $langNoCookies . "</p>"; 
-					break;
-				case 6: $warning .= "<p class='alert1'>$langEnterPlatform <a href='{$urlServer}secure/index.php'>$langHere</a></p>";
-					break;
-				case 7: $warning .= "<p class='alert1'>$langEnterPlatform <a href='{$urlServer}secure/cas.php'>$langHere</a></p>";
-					break;
-				default:
-					break;
-			}
-		} else {
-			$warning = '';
-			$log = 'yes';
-			$_SESSION['nom'] = $nom;
-			$_SESSION['prenom'] = $prenom;
-			$_SESSION['email'] = $email;
-			$_SESSION['statut'] = $statut;
-			$_SESSION['is_admin'] = $is_admin;
-			$_SESSION['uid'] = $uid;
-                        $_SESSION['uname'] = $uname;
-			db_query("INSERT INTO loginout (loginout.id_user, loginout.ip, loginout.when, loginout.action)
-			VALUES ('$uid', '$_SERVER[REMOTE_ADDR]', NOW(), 'LOGIN')");
-			//if user has activated the personalised interface
-			//register a control session for it
-			if (isset($_SESSION['perso_is_active']) and (isset($userPerso))) {
-				$_SESSION['user_perso_active'] = $userPerso;
-			}
-			redirect_to_home_page();	
-		}                
-	}  // end of user authentication
+        process_login();
 } 
-	
+
 if (isset($_SESSION['uid'])) { 
 	$uid = $_SESSION['uid'];
 } else { 
-	unset($uid);
+	$uid = 0;
 }
 
-if (isset($_GET['logout']) and isset($uid)) {
+if (isset($_GET['logout']) and $uid) {
         mysql_query("INSERT INTO loginout (loginout.id_user,
                 loginout.ip, loginout.when, loginout.action)
                 VALUES ($uid, '$_SERVER[REMOTE_ADDR]', NOW(), 'LOGOUT')");
@@ -185,7 +104,7 @@ if (isset($_GET['logout']) and isset($uid)) {
 		unset($_SESSION[$key]);
 	}
         session_destroy();
-	unset($uid);
+	$uid = 0;
 	if (defined('CAS')) {
 		$cas = get_cas_settings(7);
 		phpCAS::client(SAML_VERSION_1_1, $cas['cas_host'], intval($cas['cas_port']), $cas['cas_context'], FALSE);
@@ -216,9 +135,9 @@ if (isset($language)) {
 //----------------------------------------------------------------
 // if login succesful display courses lists
 // --------------------------------------------------------------
-if (isset($uid) AND !isset($_GET['logout'])) {
+if ($uid AND !isset($_GET['logout'])) {
         if (check_guest()) {
-                //if the user is a guest send him straight to the corresponding lesson
+                // if the user is a guest send him straight to the corresponding lesson
                 $guestSQL = db_query("SELECT code FROM cours_user, cours
                                       WHERE cours.cours_id = cours_user.cours_id AND
                                             user_id = $uid", $mysqlMainDb);
@@ -236,8 +155,9 @@ if (isset($uid) AND !isset($_GET['logout'])) {
         }
 	$nameTools = $langWelcomeToPortfolio;
 	$require_help = true;
-	$helpTopic="Portfolio";
-	if (isset($_SESSION['user_perso_active']) and $_SESSION['user_perso_active'] == 'no') {
+	$helpTopic = 'Portfolio';
+
+        if ($_SESSION['user_perso_active']) {
                 // if the user is not a guest, load personalized view
                 include "include/logged_in_content.php";
                 draw($tool_content, 1, null, $head_content, null, null, $perso_tool_content);

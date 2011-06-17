@@ -68,38 +68,7 @@ if( !empty($is_submit) || (($auth == 7) && (empty($submit))) )
 	{
 		// try to authenticate him
 		$auth_method_settings = get_auth_settings($auth);
-		switch($auth) // now get the connection settings
-		{
-			case '2': $pop3host = str_replace("pop3host=","",$auth_method_settings['auth_settings']);
-				break;
-			case '3': $imaphost = str_replace("imaphost=","",$auth_method_settings['auth_settings']);
-				break;
-			case '4': $ldapsettings = $auth_method_settings['auth_settings'];
-				$ldap = explode("|",$ldapsettings);
-				$ldaphost = str_replace("ldaphost=","",$ldap[0]);	//ldaphost
-				$ldap_base = str_replace("ldap_base=","",$ldap[1]);	//ldap_base
-				$ldapbind_dn = str_replace("ldapbind_dn=","",$ldap[2]);	//ldapbind_dn
-				$ldapbind_pw = str_replace("ldapbind_pw=","",$ldap[3]);	//ldapbind_pw
-				$ldap_login_attr = str_replace("ldap_login_attr=","",$ldap[4]);	//ldap_login_attr
-				$ldap_login_attr2 = str_replace("ldap_login_attr2=","",$ldap[5]);	//ldap_login_attr2
-				break;
-			case '5': $dbsettings = $auth_method_settings['auth_settings'];
-				$edb = explode("|",$dbsettings);
-				$dbhost = str_replace("dbhost=","",$edb[0]);	//dbhost
-				$dbname = str_replace("dbname=","",$edb[1]);	//dbname
-				$dbuser = str_replace("dbuser=","",$edb[2]);//dbuser
-				$dbpass = str_replace("dbpass=","",$edb[3]);// dbpass
-				$dbtable = str_replace("dbtable=","",$edb[4]);//dbtable
-				$dbfielduser = str_replace("dbfielduser=","",$edb[5]);//dbfielduser
-				$dbfieldpass = str_replace("dbfieldpass=","",$edb[6]);//dbfieldpass
-				break;
-			case '7':
-				break;
-			default:
-				break;
-		}
-		
-		$is_valid = auth_user_login($auth, $ldap_email, $ldap_passwd);
+		$is_valid = auth_user_login($auth, $ldap_email, $ldap_passwd, $auth_method_settings);
 
 		if ($auth == 7) {
 			if (phpCAS::checkAuthentication()) {
@@ -197,23 +166,23 @@ if (!empty($submit)) {
 	$department = isset($_POST['department'])? intval($_POST['department']): 0;
 	
 	$registration_errors = array();
-		// check if there are empty fields
-		if (empty($_POST['nom_form']) or empty($_POST['prenom_form']) or empty($uname)) {
-			$registration_errors[] = $langEmptyFields;
-		} else {
-		// check if the username is already in use
-			$q2 = "SELECT username FROM `$mysqlMainDb`.user WHERE username='".escapeSimple($uname)."'";
-			$username_check = mysql_query($q2);
-			if ($myusername = mysql_fetch_array($username_check)) {
-				$registration_errors[] = $langUserFree;
-			}
-		}
-		if (!empty($email) and !email_seems_valid($email)) {
-			$registration_errors[] = $langEmailWrong;
-		}
-	
-		$auth_method_settings = get_auth_settings($auth);
-		$password = $auth_method_settings['auth_name'];
+        // check if there are empty fields
+        if (empty($_POST['nom_form']) or empty($_POST['prenom_form']) or empty($uname)) {
+                $registration_errors[] = $langEmptyFields;
+        } else {
+                // check if the username is already in use
+                $q2 = "SELECT username FROM `$mysqlMainDb`.user WHERE username='".escapeSimple($uname)."'";
+                $username_check = mysql_query($q2);
+                if ($myusername = mysql_fetch_array($username_check)) {
+                        $registration_errors[] = $langUserFree;
+                }
+        }
+        if (!empty($email) and !email_seems_valid($email)) {
+                $registration_errors[] = $langEmailWrong;
+        }
+
+        $auth_method_settings = get_auth_settings($auth);
+        $password = $auth_method_settings['auth_name'];
 	
 	if (count($registration_errors) == 0) {
 		$emailsubject = "$langYourReg $siteName";
@@ -244,6 +213,7 @@ if (!empty($submit)) {
                                   registered_at = $registered_at,
                                   expires_at = $expires_at,
                                   lang = '$lang',
+                                  perso = 'yes',
                                   description = ''";
 	
 		$inscr_user = db_query($q1);
@@ -263,7 +233,8 @@ if (!empty($submit)) {
 		$_SESSION['prenom'] = $prenom;
 		$_SESSION['nom'] = $nom;
 		$_SESSION['uname'] = $uname;
-	
+                $_SESSION['user_perso_active'] = false;
+
 		$tool_content .= "
                     <table width='99%' class='tbl'>
                     <tr>

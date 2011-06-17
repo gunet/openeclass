@@ -36,7 +36,7 @@ if (!defined('INDEX_START')) {
 }
 define('MAIN', 0);
 
-include "redirector.php";
+include 'redirector.php';
 
 $status = array();
 $result2 = db_query("
@@ -66,14 +66,6 @@ include "$webDir/modules/perso/forumPosts.php";
 
 $_user['persoLastLogin'] = last_login($uid);
 $_user['lastLogin'] = str_replace('-', ' ', $_user['persoLastLogin']);
-
-//	BEGIN user's status query]=====================================================
-$user_status_query = db_query("SELECT statut FROM user WHERE user_id = '$uid'", $mysqlMainDb);
-if ($row = mysql_fetch_row($user_status_query)) {
-	$statut = $row[0];
-}
-//	END user's status query]=======================================================
-
 
 //	BEGIN Get user's lesson info]=====================================================
 $user_lesson_info = getUserLessonInfo($uid, "html");
