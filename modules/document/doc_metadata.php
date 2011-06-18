@@ -72,9 +72,7 @@ function metaCreateForm($metadata, $oldFilename, $real_filename) {
 	$checkMap['meta_intendedenduserrole']  = metaBuildCheckMap($metaIntendedEndUserRoles, "meta_intendedenduserrole");
 	$checkMap['meta_level']                = metaBuildCheckMap($metaLevels, "meta_level"); 
 	
-	$output = "";
-	
-	$output .= "
+	$output = "
 	<form method='post' action='document.php?course=$code_cours'>
 	<fieldset>
 	  <input type='hidden' name='metadataPath' value='". q($metadata) ."' />
@@ -88,22 +86,8 @@ function metaCreateForm($metadata, $oldFilename, $real_filename) {
 	  </tr>";
 	  
 	  $output .= metaTextAreaRow($langTitle, "meta_title", $metaTitle, $langTitleHelp)
-	          .  metaTextAreaRow($langDescription, "meta_description", $metaDescription, $langDescriptionHelp, 4);
-	  
-	  $output .= "<tr>
-	    <th rowspan='2'>$langAuthor:</th>
-	    <td><textarea cols='68' name='meta_author'>";
-	  if (!empty($metaAuthors)) {
-		  $i = 0;
-		  foreach ($metaAuthors as $metaAuthor) {
-		  	$i++;
-		  	$output .= $metaAuthor;
-		  	if ($i < count($metaAuthors))
-		  		$output .= ", ";
-		  }
-	  }
-	  $output .= "</textarea></td>
-	  </tr><tr><td>$langAuthorHelp</td></tr>";
+	          .  metaTextAreaRow($langDescription, "meta_description", $metaDescription, $langDescriptionHelp, 4)
+	          .  metaCommaTextAreaRow($langAuthor, "meta_author", $metaAuthors, $langAuthorHelp);
 	  
 	  $cellLang = selection(array('el' => $langGreek,
 				'en' => $langEnglish,
@@ -116,45 +100,15 @@ function metaCreateForm($metadata, $oldFilename, $real_filename) {
 	  $resourceTypes = array("exercise", "simulation", "questionnaire", "diagram", "figure", 
 	    "graph", "index", "slide", "table", "narrative text", "exam", "experiment", 
 	    "problem statement", "self assessment", "lecture");
-	  $output .= metaCheckBoxRow($langLearningResourceType, "meta_learningresourcetype", $resourceTypes, $checkMap, $langLearningResourceTypeHelp);
-	  
-	  $output .= "<tr>
-	    <th rowspan='2'>$langKeywords:</th>
-	    <td><textarea cols='68' name='meta_keywords'>";
-	  if (!empty($metaKeywords)) {
-		  $i = 0;
-		  foreach ($metaKeywords as $metaKeyword) {
-		  	$i++;
-		  	$output .= $metaKeyword->string;
-		  	if ($i < count($metaKeywords))
-		  		$output .= ", ";
-		  }
-	  }
-	  $output .= "</textarea></td>
-	  </tr><tr><td>$langKeywordsHelp</td></tr>";
-	  
-	  $output .= metaInputTextRow($langTopic, "meta_topic", $metaTopic, $langTopicHelp)
+	  $output .= metaCheckBoxRow($langLearningResourceType, "meta_learningresourcetype", $resourceTypes, $checkMap, $langLearningResourceTypeHelp)
+	          .  metaCommaTextAreaRow($langKeywords, "meta_keywords", $metaKeywords, $langKeywordsHelp, 2, "string")
+	          .  metaInputTextRow($langTopic, "meta_topic", $metaTopic, $langTopicHelp)
 	          .  metaInputTextRow($langSubTopic, "meta_subtopic", $metaSubTopic, $langSubTopicHelp);
 	  
 	  $levels = array("school", "higher education", "training", "other");
-	  $output .= metaCheckBoxRow($langLevel, "meta_level", $levels, $checkMap, $langLevelHelp);
-
-	  $output .= "<tr>
-	    <th rowspan='2'>$langTypicalAgeRange:</th>
-	    <td><input type='text' size='60' name='meta_typicalagerange' value='";
-	  if (!empty($metaTypicalAgeRanges)) {
-		  $i = 0;
-		  foreach ($metaTypicalAgeRanges as $metaTypicalAgeRange) {
-		  	$i++;
-		  	$output .= htmlspecialchars($metaTypicalAgeRange->string, ENT_QUOTES, 'utf-8');
-		  	if ($i < count($metaTypicalAgeRanges))
-		  		$output .= ", ";
-		  }
-	  }
-	  $output .= "' /></td>
-	  </tr><tr><td>$langTypicalAgeRangeHelp</td></tr>";
-	  
-	  $output .= metaTextAreaRow($langComment, "meta_notes", $metaNotes, $langCommentHelp, 4)
+	  $output .= metaCheckBoxRow($langLevel, "meta_level", $levels, $checkMap, $langLevelHelp)
+	          .  metaCommaInputTextRow($langTypicalAgeRange, "meta_typicalagerange", $metaTypicalAgeRanges, $langTypicalAgeRangeHelp, "string")
+	          .  metaTextAreaRow($langComment, "meta_notes", $metaNotes, $langCommentHelp, 4)
 	          .  metaTextAreaRow($langCopyright, "meta_rights", $metaRights, $langCopyrightHelp);
 	  
 	  $userRoles = array("teacher", "author", "learner", "manager");
@@ -230,10 +184,56 @@ function metaTextAreaRow($title, $name, $value, $help, $rows = 2) {
 
 
 /*
+ * Create comma separated textarea table row for the Metadata Form
+ */
+function metaCommaTextAreaRow($title, $name, $values, $help, $rows = 2, $element = null) {
+	$cell = "<textarea cols='68' rows='$rows' name='$name'>";
+	
+	if (!empty($values)) {
+		$i = 0;
+		foreach ($values as $value) {
+			$i++;
+			$v = (isset($element)) ? $value->{$element} : $value ;
+			$cell .= $v;
+			if ($i < count($values))
+				$cell .= ", ";
+		}
+	}
+	
+	$cell .= "</textarea>";
+	
+	return metaFormRow($title, $cell, $help);
+}
+
+
+/*
  * Create input text table row for the Metadata Form
  */
 function metaInputTextRow($title, $name, $value, $help) {
 	return metaFormRow($title, "<input type='text' size='60' name='$name' value='".htmlspecialchars($value, ENT_QUOTES, 'utf-8')."' />", $help);
+}
+
+
+/*
+ * Create comma separated input text table row for the Metadata Form
+ */
+function metaCommaInputTextRow($title, $name, $values, $help, $element = null) {
+	$cell = "<input type='text' size='60' name='$name' value='";
+	
+	if (!empty($values)) {
+		$i = 0;
+		foreach ($values as $value) {
+			$i++;
+			$v = (isset($element)) ? $value->{$element} : $value ;
+			$cell .= htmlspecialchars($v, ENT_QUOTES, 'utf-8');
+			if ($i < count($values))
+				$cell .= ", ";
+		}
+	}
+	  
+	$cell .= "' />";
+	  
+	return metaFormRow($title, $cell, $help);
 }
 
 
