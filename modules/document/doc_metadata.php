@@ -70,6 +70,7 @@ function metaCreateForm($metadata, $oldFilename, $real_filename) {
 	
 	$checkMap['meta_learningresourcetype'] = metaBuildCheckMap($metaLearningResourceTypes, "meta_learningresourcetype");
 	$checkMap['meta_intendedenduserrole']  = metaBuildCheckMap($metaIntendedEndUserRoles, "meta_intendedenduserrole");
+	$checkMap['meta_level']                = metaBuildCheckMap($metaLevels, "meta_level"); 
 	
 	$output = "";
 	
@@ -153,17 +154,14 @@ function metaCreateForm($metadata, $oldFilename, $real_filename) {
 	  </tr><tr><td>$langSubTopicHelp</td></tr>
 	  <tr>
 	    <th rowspan='2'>$langLevel:</th>
-	    <td><input type='text' size='60' name='meta_level' value='";
-	  if (!empty($metaLevels)) {
-		  $i = 0;
-		  foreach($metaLevels as $metaLevel) {
-		  	$i++;
-		  	$output .= htmlspecialchars($metaLevel->value, ENT_QUOTES, 'utf-8');
-		  	if ($i < count($metaLevels))
-		  		$output .= ", ";
-		  }
-	  }
-	  $output .= "' /></td>
+	    <td>";
+	  
+	  $levels = array("school", "higher education", "training", "other");
+	  
+	  foreach ($levels as $level)
+	  	$output .= metaCheckBoxInput($checkMap, "meta_level", $level) ."<br/>\n";
+	  
+	  $output .= "</td>
 	  </tr><tr><td>$langLevelHelp</td></tr>
 	  <tr>
 	    <th rowspan='2'>$langTypicalAgeRange:</th>
@@ -287,7 +285,8 @@ function metaCreateDomDocument($xmlFilename) {
 		metaSourceValueArrayLoop($dom, $educational, 'learningResourceType', $_POST['meta_learningresourcetype']);
 	if (isset($_POST['meta_intendedenduserrole']))
 		metaSourceValueArrayLoop($dom, $educational, 'intendedEndUserRole', $_POST['meta_intendedenduserrole']);
-	metaSourceValueLoop($dom, $educational, 'context', $_POST['meta_level']);
+	if (isset($_POST['meta_level']))
+		metaSourceValueArrayLoop($dom, $educational, 'context', $_POST['meta_level']);
 	metaLangStringLoop($dom, $educational, $_POST['meta_language'], 'typicalAgeRange', $_POST['meta_typicalagerange']);
 	
 	$description = $educational->appendChild($dom->createElement('description'));
