@@ -139,16 +139,12 @@ function metaCreateForm($metadata, $oldFilename, $real_filename) {
 		  }
 	  }
 	  $output .= "</textarea></td>
-	  </tr><tr><td>$langKeywordsHelp</td></tr>
-	  <tr>
-	    <th rowspan='2'>$langTopic:</th>
-	    <td><input type='text' size='60' name='meta_topic' value='".htmlspecialchars($metaTopic, ENT_QUOTES, 'utf-8')."' /></td>
-	  </tr><tr><td>$langTopicHelp</td></tr>
-	  <tr>
-	    <th rowspan='2'>$langSubTopic:</th>
-	    <td><input type='text' size='60' name='meta_subtopic' value='".htmlspecialchars($metaSubTopic, ENT_QUOTES, 'utf-8')."' /></td>
-	  </tr><tr><td>$langSubTopicHelp</td></tr>
-	  <tr>
+	  </tr><tr><td>$langKeywordsHelp</td></tr>";
+	  
+	  $output .= metaInputTextRow($langTopic, "meta_topic", $metaTopic, $langTopicHelp)
+	          .  metaInputTextRow($langSubTopic, "meta_subtopic", $metaSubTopic, $langSubTopicHelp);
+	  
+	  $output .= "<tr>
 	    <th rowspan='2'>$langLevel:</th>
 	    <td>";
 	  
@@ -239,6 +235,17 @@ function metaTextAreaRow($title, $name, $value, $help, $rows = 2) {
 	return "<tr>
 	    <th rowspan='2'>$title:</th>
 	    <td><textarea cols='68' rows='$rows' name='$name'>$value</textarea></td>
+	  </tr><tr><td>$help</td></tr>";
+}
+
+
+/*
+ * Create input text table row for the Metadata Form
+ */
+function metaInputTextRow($title, $name, $value, $help) {
+	return "<tr>
+	    <th rowspan='2'>$title:</th>
+	    <td><input type='text' size='60' name='$name' value='".htmlspecialchars($value, ENT_QUOTES, 'utf-8')."' /></td>
 	  </tr><tr><td>$help</td></tr>";
 }
 
