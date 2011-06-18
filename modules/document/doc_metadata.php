@@ -229,13 +229,21 @@ function metaCheckBoxInput($checkMap, $group, $element) {
 
 
 /*
+ * 
+ */
+function makeFormRow($title, $cell, $help) {
+	return "<tr>
+	    <th rowspan='2'>$title:</th>
+	    <td>$cell</td>
+	  </tr><tr><td>$help</td></tr>";
+}
+
+
+/*
  * Create input textarea table row for the Metadata Form
  */
 function metaTextAreaRow($title, $name, $value, $help, $rows = 2) {
-	return "<tr>
-	    <th rowspan='2'>$title:</th>
-	    <td><textarea cols='68' rows='$rows' name='$name'>$value</textarea></td>
-	  </tr><tr><td>$help</td></tr>";
+	return makeFormRow($title, "<textarea cols='68' rows='$rows' name='$name'>$value</textarea>", $help);
 }
 
 
@@ -243,10 +251,7 @@ function metaTextAreaRow($title, $name, $value, $help, $rows = 2) {
  * Create input text table row for the Metadata Form
  */
 function metaInputTextRow($title, $name, $value, $help) {
-	return "<tr>
-	    <th rowspan='2'>$title:</th>
-	    <td><input type='text' size='60' name='$name' value='".htmlspecialchars($value, ENT_QUOTES, 'utf-8')."' /></td>
-	  </tr><tr><td>$help</td></tr>";
+	return makeFormRow($title, "<input type='text' size='60' name='$name' value='".htmlspecialchars($value, ENT_QUOTES, 'utf-8')."' />", $help);
 }
 
 
