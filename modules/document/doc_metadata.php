@@ -103,16 +103,15 @@ function metaCreateForm($metadata, $oldFilename, $real_filename) {
 		  }
 	  }
 	  $output .= "</textarea></td>
-	  </tr><tr><td>$langAuthorHelp</td></tr>
-	  <tr>
-	    <th rowspan='2'>$langLanguage:</th>
-	    <td>". selection(array('el' => $langGreek,
+	  </tr><tr><td>$langAuthorHelp</td></tr>";
+	  
+	  $cellLang = selection(array('el' => $langGreek,
 				'en' => $langEnglish,
 				'fr' => $langFrench,
 				'de' => $langGerman,
 				'it' => $langItalian,
-				'es' => $langSpanish), 'meta_language', $metaLanguage) ."</td>
-	  </tr><tr><td>$langLanguageHelp</td></tr>";
+				'es' => $langSpanish), 'meta_language', $metaLanguage);
+	  $output .= metaFormRow($langLanguage, $cellLang, $langLanguageHelp);
 	  
 	  $resourceTypes = array("exercise", "simulation", "questionnaire", "diagram", "figure", 
 	    "graph", "index", "slide", "table", "narrative text", "exam", "experiment", 
