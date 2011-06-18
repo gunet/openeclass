@@ -112,21 +112,14 @@ function metaCreateForm($metadata, $oldFilename, $real_filename) {
 				'de' => $langGerman,
 				'it' => $langItalian,
 				'es' => $langSpanish), 'meta_language', $metaLanguage) ."</td>
-	  </tr><tr><td>$langLanguageHelp</td></tr>
-	  <tr>
-	    <th rowspan='2'>$langLearningResourceType:</th>
-	    <td>";
+	  </tr><tr><td>$langLanguageHelp</td></tr>";
 	  
 	  $resourceTypes = array("exercise", "simulation", "questionnaire", "diagram", "figure", 
 	    "graph", "index", "slide", "table", "narrative text", "exam", "experiment", 
 	    "problem statement", "self assessment", "lecture");
+	  $output .= metaCheckBoxRow($langLearningResourceType, "meta_learningresourcetype", $resourceTypes, $checkMap, $langLearningResourceTypeHelp);
 	  
-	  foreach ($resourceTypes as $type)
-	    $output .= metaCheckBoxInput($checkMap, "meta_learningresourcetype", $type) ."<br/>\n";
-	    
-	  $output .= "</td>
-	  </tr><tr><td>$langLearningResourceTypeHelp</td></tr>
-	  <tr>
+	  $output .= "<tr>
 	    <th rowspan='2'>$langKeywords:</th>
 	    <td><textarea cols='68' name='meta_keywords'>";
 	  if (!empty($metaKeywords)) {
@@ -144,18 +137,10 @@ function metaCreateForm($metadata, $oldFilename, $real_filename) {
 	  $output .= metaInputTextRow($langTopic, "meta_topic", $metaTopic, $langTopicHelp)
 	          .  metaInputTextRow($langSubTopic, "meta_subtopic", $metaSubTopic, $langSubTopicHelp);
 	  
-	  $output .= "<tr>
-	    <th rowspan='2'>$langLevel:</th>
-	    <td>";
-	  
 	  $levels = array("school", "higher education", "training", "other");
-	  
-	  foreach ($levels as $level)
-	  	$output .= metaCheckBoxInput($checkMap, "meta_level", $level) ."<br/>\n";
-	  
-	  $output .= "</td>
-	  </tr><tr><td>$langLevelHelp</td></tr>
-	  <tr>
+	  $output .= metaCheckBoxRow($langLevel, "meta_level", $levels, $checkMap, $langLevelHelp);
+
+	  $output .= "<tr>
 	    <th rowspan='2'>$langTypicalAgeRange:</th>
 	    <td><input type='text' size='60' name='meta_typicalagerange' value='";
 	  if (!empty($metaTypicalAgeRanges)) {
@@ -173,18 +158,10 @@ function metaCreateForm($metadata, $oldFilename, $real_filename) {
 	  $output .= metaTextAreaRow($langComment, "meta_notes", $metaNotes, $langCommentHelp, 4)
 	          .  metaTextAreaRow($langCopyright, "meta_rights", $metaRights, $langCopyrightHelp);
 	  
-	  $output .= "<tr>
-	    <th rowspan='2'>$langIntentedEndUserRole:</th>
-	    <td>";
-	  
 	  $userRoles = array("teacher", "author", "learner", "manager");
+	  $output .= metaCheckBoxRow($langIntentedEndUserRole, "meta_intendedenduserrole", $userRoles, $checkMap, $langIntentedEndUserRoleHelp);
 	  
-	  foreach ($userRoles as $role)
-	  	$output .= metaCheckBoxInput($checkMap, "meta_intendedenduserrole", $role) ."<br/>\n";
-	  
-	  $output .= "</td>
-	  </tr><tr><td>$langIntentedEndUserRoleHelp</td></tr>
-	  <tr>
+	  $output .= "<tr>
 	    <th>&nbsp;</th>
 	    <td class='right'><input type='submit' value='$langOkComment' /></td>
 	  </tr>
@@ -216,22 +193,9 @@ function metaBuildCheckMap($values, $group){
 
 
 /*
- * Create input checkboxes for the Metadata Form
+ * Create table row for the Metadata Form
  */
-function metaCheckBoxInput($checkMap, $group, $element) {
-	$langElement = "lang".ucfirst(str_replace(" ", "", $element));
-	global $$langElement;
-	
-	$check = (isset($checkMap["$group"]["$element"])) ? " checked='1' " : '';
-	
-	return "<input type='checkbox' name='".$group."[]' value='$element' $check />".$$langElement;
-}
-
-
-/*
- * 
- */
-function makeFormRow($title, $cell, $help) {
+function metaFormRow($title, $cell, $help) {
 	return "<tr>
 	    <th rowspan='2'>$title:</th>
 	    <td>$cell</td>
@@ -240,10 +204,29 @@ function makeFormRow($title, $cell, $help) {
 
 
 /*
+ * Create input checkboxes row for the Metadata Form
+ */
+function metaCheckBoxRow($title, $name, $values, $checkMap, $help) {
+	$cell = "";
+	
+	foreach ($values as $value) {
+		$langElement = "lang".ucfirst(str_replace(" ", "", $value));
+		global $$langElement;
+		
+		$check = (isset($checkMap["$name"]["$value"])) ? " checked='1' " : '';
+		
+		$cell .= "<input type='checkbox' name='".$name."[]' value='$value' $check />".$$langElement  ."<br/>\n";
+	}
+	
+	return metaFormRow($title, $cell, $help);
+}
+
+
+/*
  * Create input textarea table row for the Metadata Form
  */
 function metaTextAreaRow($title, $name, $value, $help, $rows = 2) {
-	return makeFormRow($title, "<textarea cols='68' rows='$rows' name='$name'>$value</textarea>", $help);
+	return metaFormRow($title, "<textarea cols='68' rows='$rows' name='$name'>$value</textarea>", $help);
 }
 
 
@@ -251,7 +234,7 @@ function metaTextAreaRow($title, $name, $value, $help, $rows = 2) {
  * Create input text table row for the Metadata Form
  */
 function metaInputTextRow($title, $name, $value, $help) {
-	return makeFormRow($title, "<input type='text' size='60' name='$name' value='".htmlspecialchars($value, ENT_QUOTES, 'utf-8')."' />", $help);
+	return metaFormRow($title, "<input type='text' size='60' name='$name' value='".htmlspecialchars($value, ENT_QUOTES, 'utf-8')."' />", $help);
 }
 
 
