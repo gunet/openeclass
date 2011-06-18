@@ -67,7 +67,9 @@ function metaCreateForm($metadata, $oldFilename, $real_filename) {
 			$metaSubTopic = $sxe->classification->taxonPath->taxon->entry->string;
 		}
 	}
-			
+	
+	$checkMap['meta_learningresourcetype'] = metaBuildCheckMap($metaLearningResourceTypes, "meta_learningresourcetype");
+	
 	$output = "";
 	
 	$output .= "
@@ -115,17 +117,16 @@ function metaCreateForm($metadata, $oldFilename, $real_filename) {
 	  </tr><tr><td>$langLanguageHelp</td></tr>
 	  <tr>
 	    <th rowspan='2'>$langLearningResourceType:</th>
-	    <td><textarea cols='68' name='meta_learningresourcetype'>";
-	  if (!empty($metaLearningResourceTypes)) {
-		  $i = 0;
-		  foreach ($metaLearningResourceTypes as $metaLearningResourceType) {
-		  	$i++;
-		  	$output .= $metaLearningResourceType->value;
-		  	if ($i < count($metaLearningResourceTypes))
-		  		$output .= ", ";
-		  }
-	  }
-	  $output .= "</textarea></td>
+	    <td>";
+	  
+	  $resourceTypes = array("exercise", "simulation", "questionnaire", "diagram", "figure", 
+	    "graph", "index", "slide", "table", "narrative text", "exam", "experiment", 
+	    "problem statement", "self assessment", "lecture");
+	  
+	  foreach ($resourceTypes as $type)
+	    $output .= metaCheckBoxInput($checkMap, "meta_learningresourcetype", $type) ."<br/>\n";
+	    
+	  $output .= "</td>
 	  </tr><tr><td>$langLearningResourceTypeHelp</td></tr>
 	  <tr>
 	    <th rowspan='2'>$langKeywords:</th>
@@ -214,6 +215,35 @@ function metaCreateForm($metadata, $oldFilename, $real_filename) {
 	return $output;
 }
 
+
+/*
+ * Build Array Map for the Metadata Form to decide which checkboxes should be 
+ * checked when editing a XML file
+ */
+function metaBuildCheckMap($values, $group){
+	$retAr = array();
+	
+	if (!empty($values))
+		foreach ($values as $value)
+			$retAr["$value->value"] = true;
+			
+	return $retAr;
+}
+
+
+/*
+ * Create input checkboxes for the Metadata Form
+ */
+function metaCheckBoxInput($checkMap, $group, $element) {
+	$langElement = "lang".ucfirst(str_replace(" ", "", $element));
+	global $$langElement;
+	
+	$check = (isset($checkMap["$group"]["$element"])) ? " checked='1' " : '';
+	
+	return "<input type='checkbox' name='".$group."[]' value='$element' $check />".$$langElement;
+}
+
+
 function metaCreateDomDocument($xmlFilename) {
 	$dom = new DomDocument('1.0', 'utf-8');
 	$lom = $dom->appendChild($dom->createElementNS('http://ltsc.ieee.org/xsd/LOM', 'lom'));
@@ -254,8 +284,9 @@ function metaCreateDomDocument($xmlFilename) {
 	// end of rights
 	
 	$educational = $lom->appendChild($dom->createElement('educational'));
-	
-	metaSourceValueLoop($dom, $educational, 'learningResourceType', $_POST['meta_learningresourcetype']);
+
+	if (isset($_POST['meta_learningresourcetype']))
+		metaSourceValueArrayLoop($dom, $educational, 'learningResourceType', $_POST['meta_learningresourcetype']);
 	metaSourceValueLoop($dom, $educational, 'intendedEndUserRole', $_POST['meta_intendedenduserrole']);
 	metaSourceValueLoop($dom, $educational, 'context', $_POST['meta_level']);
 	metaLangStringLoop($dom, $educational, $_POST['meta_language'], 'typicalAgeRange', $_POST['meta_typicalagerange']);
@@ -324,6 +355,21 @@ function metaSourceValueLoop($dom, $parent, $element, $inputValue) {
 					$source = $child->appendChild($dom->createElement('source', 'LOMv1.0'));
 				}
 			}
+		}
+	}
+}
+
+function metaSourceValueArrayLoop($dom, $parent, $element, $inputValue) {
+	$child = $parent->appendChild($dom->createElement($element));
+	$source = $child->appendChild($dom->createElement('source', 'LOMv1.0'));
+	
+	$i = 0;
+	foreach ($inputValue as $v) {
+		$i++;
+		$value = $child->appendChild($dom->createElement('value', $v));
+		if ($i < count($inputValue) ) {
+			$child = $parent->appendChild($dom->createElement($element));
+			$source = $child->appendChild($dom->createElement('source', 'LOMv1.0'));
 		}
 	}
 }
