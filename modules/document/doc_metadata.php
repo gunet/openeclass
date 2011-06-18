@@ -87,8 +87,8 @@ function metaCreateForm($metadata, $oldFilename, $real_filename) {
 	    <td>$oldFilename</td>
 	  </tr>";
 	  
-	  $output .= metaTextAreaRow($langTitle, "meta_title", $metaTitle, $langTitleHelp);
-	  $output .= metaTextAreaRow($langDescription, "meta_description", $metaDescription, $langDescriptionHelp, 4);
+	  $output .= metaTextAreaRow($langTitle, "meta_title", $metaTitle, $langTitleHelp)
+	          .  metaTextAreaRow($langDescription, "meta_description", $metaDescription, $langDescriptionHelp, 4);
 	  
 	  $output .= "<tr>
 	    <th rowspan='2'>$langAuthor:</th>
@@ -174,8 +174,8 @@ function metaCreateForm($metadata, $oldFilename, $real_filename) {
 	  $output .= "' /></td>
 	  </tr><tr><td>$langTypicalAgeRangeHelp</td></tr>";
 	  
-	  $output .= metaTextAreaRow($langComment, "meta_notes", $metaNotes, $langCommentHelp, 4);
-	  $output .= metaTextAreaRow($langCopyright, "meta_rights", $metaRights, $langCopyrightHelp);
+	  $output .= metaTextAreaRow($langComment, "meta_notes", $metaNotes, $langCommentHelp, 4)
+	          .  metaTextAreaRow($langCopyright, "meta_rights", $metaRights, $langCopyrightHelp);
 	  
 	  $output .= "<tr>
 	    <th rowspan='2'>$langIntentedEndUserRole:</th>
