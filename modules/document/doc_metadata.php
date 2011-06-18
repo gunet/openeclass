@@ -69,6 +69,7 @@ function metaCreateForm($metadata, $oldFilename, $real_filename) {
 	}
 	
 	$checkMap['meta_learningresourcetype'] = metaBuildCheckMap($metaLearningResourceTypes, "meta_learningresourcetype");
+	$checkMap['meta_intendedenduserrole']  = metaBuildCheckMap($metaIntendedEndUserRoles, "meta_intendedenduserrole");
 	
 	$output = "";
 	
@@ -188,17 +189,14 @@ function metaCreateForm($metadata, $oldFilename, $real_filename) {
 	  </tr><tr><td>$langCopyrightHelp</td></tr>
 	  <tr>
 	    <th rowspan='2'>$langIntentedEndUserRole:</th>
-	    <td><input type='text' size='60' name='meta_intendedenduserrole' value='";
-	  if (!empty($metaIntendedEndUserRoles)) {
-		  $i = 0;
-		  foreach ($metaIntendedEndUserRoles as $metaIntendedEndUserRole) {
-		  	$i++;
-		  	$output .= htmlspecialchars($metaIntendedEndUserRole->value, ENT_QUOTES, 'utf-8');
-		  	if ($i < count($metaIntendedEndUserRoles))
-		  		$output .= ", ";
-		  }
-	  }
-	  $output .= "' /></td>
+	    <td>";
+	  
+	  $userRoles = array("teacher", "author", "learner", "manager");
+	  
+	  foreach ($userRoles as $role)
+	  	$output .= metaCheckBoxInput($checkMap, "meta_intendedenduserrole", $role) ."<br/>\n";
+	  
+	  $output .= "</td>
 	  </tr><tr><td>$langIntentedEndUserRoleHelp</td></tr>
 	  <tr>
 	    <th>&nbsp;</th>
@@ -287,7 +285,8 @@ function metaCreateDomDocument($xmlFilename) {
 
 	if (isset($_POST['meta_learningresourcetype']))
 		metaSourceValueArrayLoop($dom, $educational, 'learningResourceType', $_POST['meta_learningresourcetype']);
-	metaSourceValueLoop($dom, $educational, 'intendedEndUserRole', $_POST['meta_intendedenduserrole']);
+	if (isset($_POST['meta_intendedenduserrole']))
+		metaSourceValueArrayLoop($dom, $educational, 'intendedEndUserRole', $_POST['meta_intendedenduserrole']);
 	metaSourceValueLoop($dom, $educational, 'context', $_POST['meta_level']);
 	metaLangStringLoop($dom, $educational, $_POST['meta_language'], 'typicalAgeRange', $_POST['meta_typicalagerange']);
 	
