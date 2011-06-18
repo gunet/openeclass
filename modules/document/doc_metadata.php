@@ -85,16 +85,12 @@ function metaCreateForm($metadata, $oldFilename, $real_filename) {
 	  <tr>
 	    <th>$langWorkFile:</th>
 	    <td>$oldFilename</td>
-	  </tr>
-	  <tr>
-	    <th rowspan='2'>$langTitle:</th>
-	    <td><textarea cols='68' name='meta_title'>$metaTitle</textarea></td>
-	  </tr><tr><td>$langTitleHelp</td></tr>
-	  <tr>
-	    <th rowspan='2'>$langDescription:</th>
-	    <td><textarea cols='68' rows='4' name='meta_description'>$metaDescription</textarea></td>
-	  </tr><tr><td>$langDescriptionHelp</td></tr>
-	  <tr>
+	  </tr>";
+	  
+	  $output .= metaTextAreaRow($langTitle, "meta_title", $metaTitle, $langTitleHelp);
+	  $output .= metaTextAreaRow($langDescription, "meta_description", $metaDescription, $langDescriptionHelp, 4);
+	  
+	  $output .= "<tr>
 	    <th rowspan='2'>$langAuthor:</th>
 	    <td><textarea cols='68' name='meta_author'>";
 	  if (!empty($metaAuthors)) {
@@ -176,16 +172,12 @@ function metaCreateForm($metadata, $oldFilename, $real_filename) {
 		  }
 	  }
 	  $output .= "' /></td>
-	  </tr><tr><td>$langTypicalAgeRangeHelp</td></tr>
-	  <tr>
-	    <th rowspan='2'>$langComment:</th>
-	    <td><textarea cols='68' rows='4' name='meta_notes'>$metaNotes</textarea></td>
-	  </tr><tr><td>$langCommentHelp</td></tr>
-	  <tr>
-	    <th rowspan='2'>$langCopyright:</th>
-	    <td><textarea cols='68' name='meta_rights'>$metaRights</textarea></td>
-	  </tr><tr><td>$langCopyrightHelp</td></tr>
-	  <tr>
+	  </tr><tr><td>$langTypicalAgeRangeHelp</td></tr>";
+	  
+	  $output .= metaTextAreaRow($langComment, "meta_notes", $metaNotes, $langCommentHelp, 4);
+	  $output .= metaTextAreaRow($langCopyright, "meta_rights", $metaRights, $langCopyrightHelp);
+	  
+	  $output .= "<tr>
 	    <th rowspan='2'>$langIntentedEndUserRole:</th>
 	    <td>";
 	  
@@ -237,6 +229,17 @@ function metaCheckBoxInput($checkMap, $group, $element) {
 	$check = (isset($checkMap["$group"]["$element"])) ? " checked='1' " : '';
 	
 	return "<input type='checkbox' name='".$group."[]' value='$element' $check />".$$langElement;
+}
+
+
+/*
+ * Create input textarea table row for the Metadata Form
+ */
+function metaTextAreaRow($title, $name, $value, $help, $rows = 2) {
+	return "<tr>
+	    <th rowspan='2'>$title:</th>
+	    <td><textarea cols='68' rows='$rows' name='$name'>$value</textarea></td>
+	  </tr><tr><td>$help</td></tr>";
 }
 
 
