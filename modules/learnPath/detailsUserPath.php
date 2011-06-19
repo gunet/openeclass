@@ -51,8 +51,6 @@ $TABLELEARNPATHMODULE   = "lp_rel_learnPath_module";
 $TABLEASSET             = "lp_asset";
 $TABLEUSERMODULEPROGRESS= "lp_user_module_progress";
 
-$imgRepositoryWeb       = "../../template/classic/img/";
-
 require_once("../../include/baseTheme.php");
 $head_content = "";
 $tool_content = "";
@@ -174,7 +172,7 @@ foreach ($flatElementList as $module)
 	$spacingString .= '      <td width="5">&nbsp;</td>'."\n";
 	$colspan = $maxDeep - $module['children']+1;
 
-	$tool_content .= '    <tr '."\n".$spacingString.'      <td colspan="'.$colspan.'" align="left">';
+	$tool_content .= '    <tr>'."\n".$spacingString.'      <td colspan="'.$colspan.'" align="left">';
 	//-- if chapter head
 	if ( $module['contentType'] == CTLABEL_ )
 	{
@@ -192,7 +190,7 @@ foreach ($flatElementList as $module)
 		else
 		$moduleImg = choose_image(basename($module['path']));
 		$contentType_alt = selectAlt($module['contentType']);
-		$tool_content .= '<img src="'.$imgRepositoryWeb.$moduleImg.'" alt="'.$contentType_alt.'" title="'.$contentType_alt.'" border="0" /> <small>'.$module['name'].'</small>';
+		$tool_content .= '<img src="'.$themeimg.'/'.$moduleImg.'" alt="'.$contentType_alt.'" title="'.$contentType_alt.'" border="0" /> <small>'.$module['name'].'</small>';
 	}
 
 		$tool_content .= '</td>'."\n";
@@ -297,7 +295,6 @@ foreach ($flatElementList as $module)
 
 		$tool_content .= '    </tr>'."\n";
 }
-//$tool_content .= '</tbody>'."\n".'<tfoot>'."\n";
 
 if ($moduleNb == 0)
 {
@@ -317,7 +314,7 @@ elseif($moduleNb > 0)
 		.'      <td align="left"><small>&nbsp;'.round($globalProg / ($moduleNb) ) .'%</small></td>'."\n"
 		.'    </tr>';
 }
-$tool_content .= "\n".'    </tbody>'."\n".'    </table>'."\n";
+$tool_content .= "\n</table>\n";
 
 draw($tool_content, 2, '', $head_content);
 ?>

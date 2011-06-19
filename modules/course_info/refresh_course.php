@@ -89,7 +89,7 @@ if(isset($_POST['submit'])) {
 	  <td colspan='2'>$langRefreshInfo<br /><br /><b>$langRefreshInfo_A :</b></td>
 	</tr>
 	<tr>
-	  <th class='left'><img src=\"../../template/classic/img/groups_on.png\" alt=\"\" height=\"16\" width=\"16\"> $langUsers</th>
+	  <th class='left'><img src=\"$themeimg/groups_on.png\" alt=\"\" height=\"16\" width=\"16\"> $langUsers</th>
 	  <td width='1%'><input type='checkbox' name='delusers'></td>
 	  <td>$langUserDelCourse </td>
 	</tr>
@@ -97,17 +97,17 @@ if(isset($_POST['submit'])) {
 	  <th><td>&nbsp;</th><td>". make_calendar('before_date')."</td>
 	</tr>
 	<tr>
-	  <th class='left'><img src=\"../../template/classic/img/announcements_on.png\" alt=\"\" height=\"16\" width=\"16\"> $langAnnouncements</th>
+	  <th class='left'><img src=\"$themeimg/announcements_on.png\" alt=\"\" height=\"16\" width=\"16\"> $langAnnouncements</th>
 	  <td><input type='checkbox' name='delannounces'></td>
 	  <td>$langAnnouncesDel</td>
 	</tr>
 	<tr>
-	  <th class='left'><img src=\"../../template/classic/img/calendar_on.png\" alt=\"\" height=\"16\" width=\"16\"> $langAgenda</th>
+	  <th class='left'><img src=\"$themeimg/calendar_on.png\" alt=\"\" height=\"16\" width=\"16\"> $langAgenda</th>
 	  <td><input type='checkbox' name='delagenda'></td>
 	  <td>$langAgendaDel</td>
 	</tr>
 	<tr>
-	  <th class='left'><img src=\"../../template/classic/img/assignments_on.png\" alt=\"\" height=\"16\" width=\"16\"> $langWorks</th>
+	  <th class='left'><img src=\"$themeimg/assignments_on.png\" alt=\"\" height=\"16\" width=\"16\"> $langWorks</th>
 	  <td><input type='checkbox' name='hideworks'></td>
 	  <td>$langHideWork</td>
 	</tr>

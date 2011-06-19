@@ -45,10 +45,8 @@ $TABLELEARNPATHMODULE   = "lp_rel_learnPath_module";
 $TABLEASSET             = "lp_asset";
 $TABLEUSERMODULEPROGRESS= "lp_user_module_progress";
 
-$imgRepositoryWeb       = "../../template/classic/img/";
-
 require_once("../../include/baseTheme.php");
-$tool_content = "";
+
 $dialogBox = "";
 
 $navigation[] = array("url"=>"learningPathList.php?course=$code_cours", "name"=> $langLearningPath);
@@ -187,7 +185,8 @@ draw($tool_content, 2);
 function showlinks()
 {
 	global $langComment, $langAddModule, $langName, $langSelection,
-               $langAddModulesButton, $cours_id, $mysqlMainDb, $code_cours;
+               $langAddModulesButton, $cours_id, $mysqlMainDb, $code_cours,
+               $themeimg;
 
         $sqlLinks = "SELECT * FROM `$mysqlMainDb`.link
                               WHERE course_id = $cours_id ORDER BY `order` DESC";
@@ -210,8 +209,8 @@ function showlinks()
 		$myrow[3] = parse_tex($myrow[3]);
 		$output .= 	"
     <tr>
-      <td width='1' valign='top'><img src='../../template/classic/img/links_on.png' border='0'></td>
-      <td align='left' valign='top'><a href='../link/link_goto.php?course=$code_cours&amp;link_id=".$myrow[0]."&link_url=".urlencode($myrow[1])."' target='_blank'>".q($myrow[2])."</a>
+      <td width='1' valign='top'><img src='$themeimg/links_on.png' border='0'></td>
+      <td align='left' valign='top'><a href='../link/link_goto.php?course=$code_cours&amp;link_id=".$myrow[0]."&amp;link_url=".urlencode($myrow[1])."' target='_blank'>".q($myrow[2])."</a>
       <br />
       <small class='comments'>".q($myrow[3])."</small></td>";
 		$output .= 	"

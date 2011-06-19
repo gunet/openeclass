@@ -36,7 +36,7 @@ if (isset($result))  {
 		        $tool_content .= "\n  <tr class='odd'>";
 		}
 		$tool_content .= "<th width='16'>
-		<img src='${urlServer}/template/classic/img/arrow.png' alt='arrow'></th>
+		<img src='$themeimg/arrow.png' alt='arrow'></th>
 		<td><a href='opencourses.php?fc=$fac[id]'>$fac[name]</a>&nbsp;&nbsp;<small>
 		($fac[code])";
 		$n = db_query("SELECT COUNT(*) FROM cours WHERE faculteid = $fac[id]");

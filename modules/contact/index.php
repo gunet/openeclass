@@ -110,6 +110,8 @@ return $ret;
 // send email
 function email_profs($cours_id, $content, $from_name, $from_address)
 {
+        global $themeimg;
+
         $q = db_query("SELECT fake_code FROM cours WHERE cours_id = $cours_id");
         list($fake_code) = mysql_fetch_row($q);
 
@@ -126,7 +128,7 @@ function email_profs($cours_id, $content, $from_name, $from_address)
 
 	while ($prof = mysql_fetch_array($profs)) {
 		$to_name = $prof['prenom'].' '.$prof['nom'];
-		$ret .= "<p><img src=../../template/classic/img/teacher.png> $to_name</p><br>\n";
+		$ret .= "<p><img src='$themeimg/teacher.png'> $to_name</p><br>\n";
 		if (!send_mail($from_name,
                                $from_address,
                                $to_name,
@@ -134,8 +136,8 @@ function email_profs($cours_id, $content, $from_name, $from_address)
                                $subject,
                                $message,
                                $GLOBALS['charset'])) {
-                        $ret .= "<p>$GLOBALS[langErrorSendingMessage]</p>\n";
+                        $ret .= "<p class='alert1'>$GLOBALS[langErrorSendingMessage]</p>\n";
 		}
 	}
-return $ret;
+        return $ret;
 }

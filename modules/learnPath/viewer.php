@@ -106,7 +106,7 @@ else
 	."<html>"."\n"
 	."<head>"."\n"
 	.'<meta http-equiv="Content-Type" content="text/html; charset='.$charset.'">'."\n"
-	."<title>".$titlePage."</title>"."\n"
+	."<title>".q($titlePage)."</title>"."\n"
 	."</head>"."\n"
 	."<frameset cols=\"*\" border=\"0\">"."\n"
 	."<frame src=\"navigation/startModule.php?course=$code_cours\" name=\"mainFrame\" />"."\n"

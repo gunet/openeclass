@@ -182,12 +182,12 @@ if (isset($_POST['submit'])) {
 	<legend>$langConfidentiality</legend>
 	    <table class='tbl' width='100%'>
 	    <tr>
-		<th width='170'><img src='../../template/classic/img/lock_open.png' alt='$m[legopen]' title='$m[legopen]' width='16' height='16' />&nbsp;$m[legopen]:</th>
+		<th width='170'><img src='$themeimg/lock_open.png' alt='$m[legopen]' title='$m[legopen]' width='16' height='16' />&nbsp;$m[legopen]:</th>
 		<td width='1'><input type='radio' name='formvisible' value='2'".@$visibleChecked[2]." /></td>
 		<td class='smaller'>$langPublic</td>
 	    </tr>
 	    <tr>
-		<th rowspan='2' valign='top'><img src='../../template/classic/img/lock_registration.png' alt='$m[legrestricted]' title='$m[legrestricted]' width='16' height='16' />&nbsp;$m[legrestricted]:</th>
+		<th rowspan='2' valign='top'><img src='$themeimg/lock_registration.png' alt='$m[legrestricted]' title='$m[legrestricted]' width='16' height='16' />&nbsp;$m[legrestricted]:</th>
 		<td><input type='radio' name='formvisible' value='1'".@$visibleChecked[1]." /></td>
 		<td class='smaller'>$langPrivOpen</td>
 	    </tr>
@@ -196,7 +196,7 @@ if (isset($_POST['submit'])) {
 		<td class='smaller'><i>$langOptPassword</i>&nbsp;<input type='text' name='password' value='$password' /></td>
 	    </tr>
 	    <tr>
-		<th><img src='../../template/classic/img/lock_closed.png' alt='$m[legclosed]' title='$m[legclosed]' width='16' height='16' />&nbsp;$m[legclosed]:</th>
+		<th><img src='$themeimg/lock_closed.png' alt='$m[legclosed]' title='$m[legclosed]' width='16' height='16' />&nbsp;$m[legclosed]:</th>
 		<td><input type='radio' name='formvisible' value='0'".@$visibleChecked[0]." /></td>
 		<td class='smaller'>$langPrivate</td>
 	    </tr>

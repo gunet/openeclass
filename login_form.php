@@ -30,7 +30,7 @@ $tool_content .= "<form action='$_SERVER[PHP_SELF]' method='post'>
   <th colspan='2' class='LoginHead' align='center'><b>$langUserLogin </b></th>
   </tr>
   <tr>
-  <td class='LoginData'><img src='{$urlServer}template/classic/img/login.png'></td>
+  <td class='LoginData'><img src='$themeimg/login.png'></td>
     <td class='LoginData'>
         $langUsername <br />
         <input class='Login' name='uname' size='20' /><br />

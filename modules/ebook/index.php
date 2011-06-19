@@ -112,7 +112,7 @@ if (mysql_num_rows($q) == 0) {
                 $tool_content .= "
      <tr" . odd_even($k) . ">
        <td width='16' valign='top'>" .
-                                 "<img style='padding-top:3px;' src='${urlServer}/template/classic/img/arrow.png' " .
+                                 "<img style='padding-top:3px;' src='$themeimg/arrow.png' " .
                                  " alt='' /></td>
        <td><a href='show.php/$currentCourseID/$r[id]/'>" .
                                  q($r['title']) . "</a>
@@ -124,11 +124,12 @@ if (mysql_num_rows($q) == 0) {
      </table>\n";
 }
 
-draw($tool_content, 2, '', $head_content);
+draw($tool_content, 2, null, $head_content);
 
 function tools($id, $title, $k, $num)
 {
-        global $is_adminOfCourse, $langModify, $langDelete, $langMove, $langDown, $langUp, $langEBookDelConfirm, $code_cours;
+        global $is_adminOfCourse, $langModify, $langDelete, $langMove, $langDown, $langUp, $langEBookDelConfirm,
+               $code_cours, $themeimg;
 
         if (!$is_adminOfCourse) {
                 return '';
@@ -136,18 +137,18 @@ function tools($id, $title, $k, $num)
                 $num--;
                 return "\n        <td width='60' class='center'>\n<form action='$_SERVER[PHP_SELF]?course=$code_cours' method='post'>\n" .
                        "<input type='hidden' name='id' value='$id' />\n<a href='edit.php?course=$code_cours&amp;id=$id'>" .
-                       "<img src='../../template/classic/img/edit.png' alt='$langModify' title='$langModify' />" .
-                       "</a>&nbsp;<input type='image' src='../../template/classic/img/delete.png'
+                       "<img src='$themeimg/edit.png' alt='$langModify' title='$langModify' />" .
+                       "</a>&nbsp;<input type='image' src='$themeimg/delete.png'
                                          alt='$langDelete' title='$langDelete' name='delete' value='$id'
                                          onclick=\"javascript:if(!confirm('".
                        js_escape(sprintf($langEBookDelConfirm, $title)) ."')) return false;\" />" .
                        "</form></td>\n        <td class='right' width='40'>" .
                        (($k < $num)? "<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;down=$id'>
-                                      <img class='displayed' src='../../template/classic/img/down.png'
+                                      <img class='displayed' src='$themeimg/down.png'
                                            title='$langMove $langDown' alt='$langMove $langDown' /></a>":
                                      '') . 
                        (($k > 0)? "<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;up=$id'>
-                                   <img class='displayed' src='../../template/classic/img/up.png'
+                                   <img class='displayed' src='$themeimg/up.png'
                                         title='$langMove $langUp' alt='$langMove $langUp' /></a>":
                                   '') . '</td>';
         }

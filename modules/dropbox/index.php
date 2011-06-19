@@ -195,7 +195,7 @@ if (!isset($_GET['mailing']))
 	if ($numberDisplayed > 0) {
 		$dr_lang_all = addslashes( $dropbox_lang["all"]);
 		$tool_content .= "&nbsp;<a href='dropbox_submit.php?course=$code_cours&amp;deleteReceived=all&amp;dropbox_unid=$dr_unid' onClick=\"return confirmationall();\">
-		<img src='../../template/classic/img/delete.png' title='$langDelete' /></a>";
+		<img src='$themeimg/delete.png' title='$langDelete' /></a>";
 	}
 	$tool_content .= "</p>";
 
@@ -230,7 +230,7 @@ if (!isset($_GET['mailing']))
 	           $tool_content .= "\n<tr class=\"odd\">";
 		}
 		$tool_content .= "<td width='16'>
-		<img src=\"../../template/classic/img/inbox.png\" title=\"$dropbox_lang[receivedTitle]\" /></td>
+		<img src=\"$themeimg/inbox.png\" title=\"$dropbox_lang[receivedTitle]\" /></td>
 		<td>";
 		$tool_content .= "<a href='dropbox_download.php?course=$code_cours&amp;id=".urlencode($w->id)."' target=_blank>".$w->title."</a>";
 		$fSize = ceil(($w->filesize)/1024);
@@ -245,7 +245,7 @@ if (!isset($_GET['mailing']))
 		<td class='center'>";
 		$tool_content .= "
 		<a href=\"dropbox_submit.php?course=$code_cours&amp;deleteReceived=".urlencode($w->id)."&amp;dropbox_unid=".urlencode($dropbox_unid)."\" onClick='return confirmation(\"$w->title\");'>
-		<img src=\"../../template/classic/img/delete.png\" title=\"$langDelete\" /></a>";
+		<img src=\"$themeimg/delete.png\" title=\"$langDelete\" /></a>";
 		$tool_content .= "</td></tr>";
 		$i++;
 	} //end of foreach
@@ -267,7 +267,7 @@ $tool_content .= "
 	// if the user has sent files then display the icon deleteall
 	if ($numSent > 0) {
 		$tool_content .= "&nbsp;<a href='dropbox_submit.php?course=$code_cours&amp;deleteSent=all&amp;dropbox_unid=".urlencode($dropbox_unid)."'
-		onClick=\"return confirmationall();\"><img src='../../template/classic/img/delete.png' title='$langDelete' /></a>
+		onClick=\"return confirmationall();\"><img src='$themeimg/delete.png' title='$langDelete' /></a>
 		";
 	}
 
@@ -301,7 +301,7 @@ foreach ($dropbox_person -> sentWork as $w)
 {
 	$langSentTo = $dropbox_lang["sentTo"] . '&nbsp;';  
 	$ahref = "dropbox_download.php?course=$code_cours&amp;id=" . urlencode($w->id) ;
-	$imgsrc = '../../template/classic/img/outbox.png';
+	$imgsrc = $themeimg . '/outbox.png';
 	$fSize = ceil(($w->filesize)/1024);
 		if ($i%2==0) {
 	           $tool_content .= "\n       <tr class=\"even\">";
@@ -309,7 +309,7 @@ foreach ($dropbox_person -> sentWork as $w)
 	           $tool_content .= "\n       <tr class=\"odd\">";
             	}
 	$tool_content .= "<td width='16'>
-		<img src='../../template/classic/img/outbox.png' title='$w->title' /></td>
+		<img src='$themeimg/outbox.png' title='$w->title' /></td>
 		<td ><a href='$ahref' target='_blank'>
 		$w->title</a>
 		<small>&nbsp;&nbsp;&nbsp;($fSize kB)</small>
@@ -329,7 +329,7 @@ foreach ($dropbox_person -> sentWork as $w)
 	$tool_content .= "
 	<a href=\"dropbox_submit.php?course=$code_cours&amp;deleteSent=".urlencode($w->id)."&amp;dropbox_unid=".urlencode($dropbox_unid) ."\"
 		onClick='return confirmation(\"$w->title\");'>
-		<img src=\"../../template/classic/img/delete.png\" title=\"$langDelete\" /></a>";
+		<img src=\"$themeimg/delete.png\" title=\"$langDelete\" /></a>";
 	$tool_content .= "</div></td></tr>";
 
 	// RH: Mailing: clickable images for examine and send

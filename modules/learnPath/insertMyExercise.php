@@ -59,8 +59,6 @@ $TABLEUSERMODULEPROGRESS= "lp_user_module_progress";
 // exercises table name
 $TABLEEXERCISES         = "exercices";
 
-$imgRepositoryWeb = "../../template/classic/img/";
-
 require_once("../../include/baseTheme.php");
 $head_content = "";
 $tool_content = "";

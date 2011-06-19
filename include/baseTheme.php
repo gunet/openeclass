@@ -86,7 +86,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 	global $langMyPersoLessons, $langMyPersoDeadlines;
 	global $langMyPersoAnnouncements, $langMyPersoDocs, $langMyPersoAgenda, $langMyPersoForum;
 	global $langExtrasLeft, $langExtrasRight, $langChooseLang;
-	global $require_current_course, $is_adminOfCourse;
+	global $require_current_course, $is_adminOfCourse, $theme, $themeimg;
 
 	//get blocks content from $toolContent array
 	if ($perso_tool_content) {
@@ -110,21 +110,21 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 	$toolArr = getSideMenu ( $menuTypeID );
 	$numOfToolGroups = count ( $toolArr );
 
-	$t = new Template ( $relPath . 'template/classic' );
+	$t = new Template($relPath . 'template/' . $theme);
 
-	$t->set_file ( 'fh', 'theme.html' );
+	$t->set_file('fh', 'theme.html');
 
-	$t->set_block ( 'fh', 'mainBlock', 'main' );
+	$t->set_block('fh', 'mainBlock', 'main');
 
 	//	BEGIN constructing of left navigation
 	//	----------------------------------------------------------------------
-	$t->set_block ( 'mainBlock', 'leftNavBlock', 'leftNav' );
-	$t->set_block ( 'leftNavBlock', 'leftNavCategoryBlock', 'leftNavCategory' );
-	$t->set_block ( 'leftNavCategoryBlock', 'leftNavCategoryTitleBlock', 'leftNavCategoryTitle' );
+	$t->set_block('mainBlock', 'leftNavBlock', 'leftNav');
+	$t->set_block('leftNavBlock', 'leftNavCategoryBlock', 'leftNavCategory');
+	$t->set_block('leftNavCategoryBlock', 'leftNavCategoryTitleBlock', 'leftNavCategoryTitle');
 
-	$t->set_block ( 'leftNavCategoryBlock', 'leftNavLinkBlock', 'leftNavLink' );
+	$t->set_block('leftNavCategoryBlock', 'leftNavLinkBlock', 'leftNavLink');
 
-	if (is_array ( $toolArr )) {
+	if (is_array ($toolArr)) {
 
 		for($i = 0; $i < $numOfToolGroups; $i ++) {
 
@@ -136,7 +136,6 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 				$t->set_var ( 'ACTIVE_TOOLS', '&nbsp;' );
 				$t->set_var ( 'NAV_CSS_CAT_CLASS', 'split' );
 				$t->parse ( 'leftNavCategoryTitle', 'leftNavCategoryTitleBlock', false );
-
 			} elseif ($toolArr [$i] [0] ['type'] == 'text') {
 				$t->set_var ( 'ACTIVE_TOOLS', $toolArr [$i] [0] ['text'] );
 				$t->set_var ( 'NAV_CSS_CAT_CLASS', 'category' );
@@ -392,7 +391,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 			}
 			$help_link_icon = " <a  href=\"" . $relPath . "modules/help/help.php?topic=$helpTopic&amp;language=$language\"
         onClick=\"window.open('" . $relPath . "modules/help/help.php?topic=$helpTopic&amp;language=$language','MyWindow','toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=350,height=450,left=300,top=10');
-        return false;\"><img class='HelpIcon' src='" . $relPath . "template/classic/img/help.png' alt=\"$langHelp\"/></a>";
+        return false;\"><img class='HelpIcon' src='$themeimg/help.png' alt='$langHelp' /></a>";
 
 			$t->set_var ( 'HELP_LINK_ICON', $help_link_icon );
 			$t->set_var ( 'LANG_HELP', $langHelp );
@@ -401,7 +400,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 			$t->set_var ( 'LANG_HELP', '' );
 		}
 		if (defined('RSS')) {
-			$t->set_var ('RSS_LINK_ICON', "&nbsp;<span class='feed'><a href='${urlAppend}/" . RSS . "'><img src='${urlAppend}/template/classic/img/feed.png' alt='RSS Feed' title='RSS Feed' /></a></span>");
+			$t->set_var ('RSS_LINK_ICON', "&nbsp;<span class='feed'><a href='${urlAppend}/" . RSS . "'><img src='$themeimg/feed.png' alt='RSS Feed' title='RSS Feed' /></a></span>");
 		}
 
 		if ($perso_tool_content) {

@@ -74,14 +74,14 @@ define ( 'LEARNINGPATHMODULE_', 4 );
  */
 function commentBox($type, $mode)
 {
-    $tbl_lp_learnPath            = "lp_learnPath";
-    $tbl_lp_rel_learnPath_module = "lp_rel_learnPath_module";
-    $tbl_lp_module               = "lp_module";
-    // globals
-    global $is_adminOfCourse;
-    global $langModify, $langOk, $langErrorNameAlreadyExists, $langAdd, $langConfirmYourChoice;
-    global $langDefaultLearningPathComment, $langDefaultModuleComment;
-    global $langDefaultModuleAddedComment, $langDelete, $code_cours;
+    global $is_adminOfCourse, $themeimg, $langModify, $langOk, $langErrorNameAlreadyExists,
+           $langAdd, $langConfirmYourChoice, $langDefaultLearningPathComment,
+           $langDefaultModuleComment, $langDefaultModuleAddedComment, $langDelete, $code_cours;
+
+    $tbl_lp_learnPath            = 'lp_learnPath';
+    $tbl_lp_rel_learnPath_module = 'lp_rel_learnPath_module';
+    $tbl_lp_module               = 'lp_module';
+
     // will be set 'true' if the comment has to be displayed
     $dsp = false;
     $output = "";
@@ -122,7 +122,7 @@ function commentBox($type, $mode)
     // allow to chose between
     // - update and show the comment and the pencil and the delete cross (UPDATE_)
     // - update and nothing displayed after form sent (UPDATENOTSHOWN_)
-    if ( ( $mode == UPDATE_ || $mode == UPDATENOTSHOWN_ )  && $is_adminOfCourse )
+    if ( ( $mode == UPDATE_ || $mode == UPDATENOTSHOWN_ ) && $is_adminOfCourse )
     {
         if ( isset($_POST['insertCommentBox']) )
         {
@@ -206,12 +206,11 @@ function commentBox($type, $mode)
             if ( $is_adminOfCourse )
             {
                 $output .= '&nbsp;&nbsp;&nbsp;<a href="' . $_SERVER['PHP_SELF'] . '?course='.$code_cours.'&amp;cmd=update' . $col_name . '">' . "\n"
-                .    '<img src="../../template/classic/img/edit.png" alt="' . $langModify . '" title="'.$langModify.'" />'
+                .    "<img src='$themeimg/edit.png' alt='$langModify' title='$langModify' />"
                 .    '</a>' . "\n"
                 .    '<a href="' . $_SERVER['PHP_SELF'].'?course='.$code_cours.'&amp;cmd=del' . $col_name . '" '
                 .    ' onclick="javascript:if(!confirm(\''.clean_str_for_javascript($langConfirmYourChoice).'\')) return false;">' . "\n"
-                .    '<img src="../../template/classic/img/delete.png" alt="'.$langDelete.'" title="'.$langDelete.'" /></a>' . "\n"
-                ;
+                .    "<img src='$themeimg/delete.png' alt='$langDelete' title='$langDelete' /></a>\n";
             }
         }
     }
@@ -236,7 +235,7 @@ function nameBox($type, $mode, $formlabel = FALSE)
     $tbl_lp_module               = "lp_module";
 
     // globals
-    global $is_adminOfCourse;
+    global $is_adminOfCourse, $themeimg;
     global $urlAppend, $langLearningPath1;
     global $langModify, $langOk, $langErrorNameAlreadyExists, $code_cours;
 
@@ -332,11 +331,9 @@ function nameBox($type, $mode, $formlabel = FALSE)
         //$output .= '<strong>'
         $output .=  $currentName;
 
-        if ( $is_adminOfCourse )
+        if ($is_adminOfCourse)
             $output .= '&nbsp;&nbsp;&nbsp;<a href="' . $_SERVER['PHP_SELF'] . '?course='.$code_cours.'&amp;cmd=updateName">'
-            .    '<img src="../../template/classic/img/edit.png" alt="' . $langModify . '" title="' . $langModify . '" />'
-            .    '</a>' . "\n";
-        //$output .= '</strong>'."\n\n";
+            .    "<img src='$themeimg/edit.png' alt='$langModify' title='$langModify' /></a>\n";
     }
 
     return $output;
@@ -1600,24 +1597,26 @@ function disp_button($url, $text, $confirmMessage = '')
 
 function disp_progress_bar ($progress, $factor)
 {
+    global $themeimg;
+
     $maxSize  = $factor * 100; //pixels
     $barwidth = $factor * $progress ;
 
     // display progress bar
     // origin of the bar
-    $progressBar = '<img src="../../template/classic/img/bar_1.gif" width="1" height="12" alt="" />';
+    $progressBar = "<img src='$themeimg/bar_1.gif' width='1' height='12' alt='' />";
 
     if($progress != 0)
-            $progressBar .= '<img src="../../template/classic/img/bar_1u.gif" width="' . $barwidth . '" height="12" alt="" />';
+            $progressBar .= "<img src='$themeimg/bar_1u.gif' width='$barwidth' height='12' alt='' />";
     // display 100% bar
 
     if($progress!= 100 && $progress != 0)
-            $progressBar .= '<img src="../../template/classic/img/bar_1m.gif" width="1" height="12" alt="" />';
+            $progressBar .= "<img src='$themeimg/bar_1m.gif' width='1' height='12' alt='' />";
 
     if($progress != 100)
-            $progressBar .= '<img src="../../template/classic/img/bar_1r.gif" width="' . ($maxSize - $barwidth) . '" height="12" alt="" />';
+            $progressBar .= "<img src='$themeimg/bar_1r.gif' width='" . ($maxSize - $barwidth) . "' height='12' alt='' />";
     // end of the bar
-    $progressBar .=  '<img src="../../template/classic/img/bar_1.gif" width="1" height="12" alt="" />';
+    $progressBar .=  "<img src='$themeimg/bar_1.gif' width='1' height='12' alt='' />";
 
     return $progressBar;
 }
@@ -1896,8 +1895,8 @@ function get_limited_page_links($sql, $limiter, $stringPreviousPage, $stringNext
 	}
 
 if (isset($_REQUEST['path_id'])) {
-	$prevstring = "<a href=\"".$url.$prevpage."&path_id=$_REQUEST[path_id]\">".$stringPreviousPage."</a> | ";
-	$nextstring = "<a href=\"".$url.$nextpage."&path_id=$_REQUEST[path_id]\">".$stringNextPage."</a>";
+	$prevstring = "<a href=\"".$url.$prevpage."&amp;path_id=$_REQUEST[path_id]\">".$stringPreviousPage."</a> | ";
+	$nextstring = "<a href=\"".$url.$nextpage."&amp;path_id=$_REQUEST[path_id]\">".$stringNextPage."</a>";
 } else {
 	$prevstring = "<a href=\"".$url.$prevpage."\">".$stringPreviousPage."</a> | ";
 	$nextstring = "<a href=\"".$url.$nextpage."\">".$stringNextPage."</a>";

@@ -96,15 +96,7 @@ if ( !$is_adminOfCourse )
 
 mysql_select_db($currentCourseID);
 
-$head_content .= "<script>
-            function confirmation (txt)
-            {
-                if (confirm(txt))
-                    {return true;}
-                else
-                    {return false;}
-            }
-            </script>";
+load_js('tools.js');
 
 $cmd = ( isset($_REQUEST['cmd']) )? $_REQUEST['cmd'] : '';
 

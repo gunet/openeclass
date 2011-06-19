@@ -145,7 +145,7 @@ if ($file_path) {
 }
 
 $t = new Template();
-$t->set_file('page', $webDir . 'template/classic/ebook_fullscreen.html');
+$t->set_file('page', $webDir . 'template/' . $theme . '/ebook_fullscreen.html');
 $t->set_var('page_title', q($currentCourseName . ': ' . $nameTools));
 $t->set_var('course_title', q($currentCourseName));
 $t->set_var('course_title_short', q(ellipsize($currentCourseName, 35)));
@@ -154,8 +154,8 @@ $t->set_var('course_ebook', $langEBook);
 $t->set_var('course_ebook_link', $urlAppend . '/modules/ebook/index.php?course=' . $currentCourseID);
 $t->set_var('exit_fullscreen_link', $exit_fullscreen_link);
 $t->set_var('unit_parameter', $unit_parameter);
-$t->set_var('template_base', $urlAppend . '/template/classic/');
-$t->set_var('img_base', $urlAppend . '/template/classic/img');
+$t->set_var('template_base', $urlAppend . '/template/' . $theme . '/');
+$t->set_var('img_base', $themeimg);
 $t->set_var('js_base', $urlAppend . '/js');
 
 $t->set_var('ebook_url_base', $ebook_url_base);

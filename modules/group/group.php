@@ -253,7 +253,7 @@ if ($is_adminOfCourse) {
         <table class='tbl_courseid' width='100%'>
 	<tr>
 	  <td class='title1' colspan='2'><a href='group_properties.php?course=$code_cours' title='$langPropModify'>$langGroupProperties</a>&nbsp;
-              <a href='group_properties.php?course=$code_cours' title='$langPropModify'><img src='../../template/classic/img/edit.png' align='middle' alt='$langPropModify' title='$langPropModify' /></a>
+              <a href='group_properties.php?course=$code_cours' title='$langPropModify'><img src='$themeimg/edit.png' align='middle' alt='$langPropModify' title='$langPropModify' /></a>
           </td>
           <td class='even'>&nbsp;</td>
           <td class='title1'>$langGroupUsersList</td>
@@ -280,11 +280,11 @@ if ($is_adminOfCourse) {
           <td colspan='2'><u>$langGroupPrefs</u></td>
           <td rowspan='7' class='even'>&nbsp;</td>
           <td>
-            <img src='../../template/classic/img/arrow.png' alt='' />&nbsp;<b>$registered_students</b> $langGroupStudentsInGroup
+            <img src='$themeimg/arrow.png' alt='' />&nbsp;<b>$registered_students</b> $langGroupStudentsInGroup
           </td>
         </tr>
         <tr>
-          <td class='smaller'><img src='../../template/classic/img/arrow.png' alt='' />&nbsp;$langGroupAllowStudentRegistration</td> 
+          <td class='smaller'><img src='$themeimg/arrow.png' alt='' />&nbsp;$langGroupAllowStudentRegistration</td> 
           <td align='right' width='50'>";
         if ($self_reg) {
                 $tool_content .= "<font color='green'>$langYes</font>";
@@ -292,10 +292,10 @@ if ($is_adminOfCourse) {
                 $tool_content .= "<font color='red'>$langNo</font>";
         }
         $tool_content .= "</td>
-          <td><img src='../../template/classic/img/arrow.png' alt='' />&nbsp;<b>$unregistered_students</b> $langGroupNoGroup</td>
+          <td><img src='$themeimg/arrow.png' alt='' />&nbsp;<b>$unregistered_students</b> $langGroupNoGroup</td>
         </tr>
         <tr>
-          <td class='smaller'><img src='../../template/classic/img/arrow.png' alt='' />&nbsp;$langGroupAllowMultipleRegistration</td>
+          <td class='smaller'><img src='$themeimg/arrow.png' alt='' />&nbsp;$langGroupAllowMultipleRegistration</td>
           <td align='right'>";
 
         if ($multi_reg) {
@@ -304,13 +304,13 @@ if ($is_adminOfCourse) {
                 $tool_content .= "<font color='red'>$langNo</font>";
         }
         $tool_content .= "</td>
-          <td><img src='../../template/classic/img/arrow.png' alt='' />&nbsp;<b>$total_students</b> $langGroupStudentsRegistered</td>
+          <td><img src='$themeimg/arrow.png' alt='' />&nbsp;<b>$total_students</b> $langGroupStudentsRegistered</td>
         </tr>
         <tr>
           <td colspan=2 class='left'><u>$langTools</u></td>
         </tr>
         <tr>
-          <td class='smaller'><img src='../../template/classic/img/arrow.png' alt='' />&nbsp;";
+          <td class='smaller'><img src='$themeimg/arrow.png' alt='' />&nbsp;";
 
         if ($has_forum) {
                 $tool_content .= "$langGroupForum</td>
@@ -324,7 +324,7 @@ if ($is_adminOfCourse) {
         $tool_content .= "</td>
         </tr>
         <tr>
-          <td class='smaller'><img src='../../template/classic/img/arrow.png' alt='' />&nbsp;";
+          <td class='smaller'><img src='$themeimg/arrow.png' alt='' />&nbsp;";
         if ($private_forum) {
                 $tool_content .= "$langForumType</td>
           <td align='right'><font color='red'>$langForumClosed</font>";
@@ -335,7 +335,7 @@ if ($is_adminOfCourse) {
         $tool_content .= "</td>
         </tr>
         <tr>
-          <td class='smaller'><img src='../../template/classic/img/arrow.png' alt='' />&nbsp;";
+          <td class='smaller'><img src='$themeimg/arrow.png' alt='' />&nbsp;";
         if ($documents) {
                 $tool_content .= "$langDoc</td>
           <td align='right'><font color='green'>$langYes</font>";
@@ -374,7 +374,7 @@ if ($is_adminOfCourse) {
                         }
                         $tool_content .= "
                   <td width='16'>
-                        <img src='../../template/classic/img/arrow.png' alt='' /></td><td>
+                        <img src='$themeimg/arrow.png' alt='' /></td><td>
                         <a href='group_space.php?course=$code_cours&amp;group_id=$group[id]'>".q($group_name)."</a></td>";
                         $tool_content .= "
                   <td>" . display_user($tutors) . "</td>" . "
@@ -389,10 +389,10 @@ if ($is_adminOfCourse) {
                         $tool_content .= "
                   <td class='center'>
                         <a href='group_edit.php?course=$code_cours&amp;group_id=$group[id]'>
-                        <img src='../../template/classic/img/edit.png' alt='$langEdit' title='$langEdit' /></a>
+                        <img src='$themeimg/edit.png' alt='$langEdit' title='$langEdit' /></a>
                         <a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;delete=$group[id]' onClick=\"return confirmation('" .
                                 js_escape($group_name) . "');\">
-                        <img src='../../template/classic/img/delete.png' alt='$langDelete' title='$langDelete' /></a></td>
+                        <img src='$themeimg/delete.png' alt='$langDelete' title='$langDelete' /></a></td>
                 </tr>";
                         $totalRegistered += $member_count;
                         $myIterator++;
@@ -436,7 +436,7 @@ if ($is_adminOfCourse) {
                 <tr class='odd'>";
                         }
                         $tool_content .= "
-                  <td width='2'><img src='../../template/classic/img/arrow.png' alt='' /></td>
+                  <td width='2'><img src='$themeimg/arrow.png' alt='' /></td>
                   <td class='left'>";
                         // Allow student to enter group only if member
                         if ($is_member) {
@@ -448,9 +448,9 @@ if ($is_adminOfCourse) {
 			if ($user_group_description) {
 				$tool_content .= "<br />".q($user_group_description)."&nbsp;&nbsp;
 					<a href='group_description.php?course=$code_cours&amp;group_id=$row[0]'>
-						<img src='../../template/classic/img/edit.png' title='$langModify' /></a>
+						<img src='$themeimg/edit.png' title='$langModify' /></a>
 					<a href='group_description.php?course=$code_cours&amp;group_id=$row[0]&amp;delete=true' onClick=\"return confirm_delete();\">
-						<img src='../../template/classic/img/delete.png' title='$langDelete' /></a>";
+						<img src='$themeimg/delete.png' title='$langDelete' /></a>";
 			} elseif ($is_member) {
 				$tool_content .= "<br /><a href='group_description.php?course=$code_cours&amp;group_id=$row[0]'><i>$langAddDescription</i></a>";
 			}

@@ -26,6 +26,12 @@ if (!isset($_GET['language'])) {
 	$language = preg_replace('/[^a-z-]/', '', $_GET['language']);
 }
 
+if (isset($_SESSION['theme'])) {
+        $theme = $_SESSION['theme'];
+} else {
+        $theme = 'classic';
+}
+
 if (file_exists("../lang/$language/help.inc.php")) {
 	include("../lang/$language/help.inc.php");
 } else {
@@ -46,7 +52,7 @@ $title = $GLOBALS['langH' . str_replace('_student', '', $_GET['topic'])];
 <html>
 	<head>
 		<title><?php echo $GLOBALS["langH$_GET[topic]"]; ?></title>
-		<link href="../../template/classic/tool_content.css" rel="stylesheet" type="text/css" />
+                <link href="../../template/<?php echo $theme ?>/tool_content.css" rel="stylesheet" type="text/css" />
 
 		<style type='text/css'>
 			html {

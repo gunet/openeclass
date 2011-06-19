@@ -46,13 +46,14 @@ $require_current_course = TRUE;
 $path2add = 3;
 include("../../../include/init.php");
 $TOCurl = "../viewer_toc.php?course=$code_cours";
-?>
+?><!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
  <meta http-equiv="Content-Type" content="text/html; charset=<?php echo $charset?>">
- <link href="../../../template/classic/tool_content.css" rel="stylesheet" type="text/css" />
+ <title>-</title>
+ <link href="../../../template/<?php echo $theme ?>/tool_content.css" rel="stylesheet" type="text/css" />
  <link href="../tool.css" rel="stylesheet" type="text/css" />
- <script>
+ <script type='text/javascript'>
   <!-- //
    parent.tocFrame.location.href="<?php echo $TOCurl; ?>";
   //-->

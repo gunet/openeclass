@@ -35,18 +35,7 @@ $action->record('MODULE_ID_GLOSSARY');
 mysql_select_db($mysqlMainDb);
 
 if ($is_adminOfCourse) {
-    $head_content .= '
-    <script type="text/javascript">
-    function confirmation ()
-    {
-            if (confirm("'. $langConfirmDelete .'"))
-                {return true;}
-            else
-                {return false;}	
-    }
-    
-    </script>
-    ';
+        load_js('tools.js');
 }
 
 $nameTools = $langGlossary;
@@ -245,8 +234,8 @@ if (mysql_num_rows($sql) > 0) {
 		   $rowClass = "class='even'";
 		}
 		if (!empty($g['url'])) {
-		    $urllink = "(<a href='" . q($g['url']) .
-			       "' target='_blank'>" . q($g['url']) . "</a>)";
+		    $urllink = "<br /><span class='smaller'>(<a href='" . q($g['url']) .
+			       "' target='_blank'>" . q($g['url']) . "</a>)</span>";
 		} else {
 		    $urllink = '';
 		}
@@ -260,13 +249,14 @@ if (mysql_num_rows($sql) > 0) {
 	    $tool_content .= "
 	       <tr $rowClass>
 		 <th width='150'>" . q($g['term']) . "</th> 
-		 <td><em>" . $definition_data . "</em><br /><span align='left' class='smaller'> $urllink</span></td>";
+                 <td><em>$definition_data</em>$urllink</td>";
 	    if ($is_adminOfCourse) {
 		$tool_content .= "
 		 <td align='center' valign='top' width='50'><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;edit=$g[id]'>
-		    <img src='../../template/classic/img/edit.png' /></a>
-		    <a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;delete=$g[id]' onClick=\"return confirmation();\">
-		    <img src='../../template/classic/img/delete.png' /></a>
+		    <img src='$themeimg/edit.png' /></a>
+                    <a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;delete=$g[id]' onClick=\"return confirmation('" .
+                        js_escape($langConfirmDelete) . "');\">
+		    <img src='$themeimg/delete.png' /></a>
 		 </td>";
 	    }
 	    $tool_content .= "

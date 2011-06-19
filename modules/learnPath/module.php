@@ -55,19 +55,16 @@ $TABLEUSERMODULEPROGRESS= "lp_user_module_progress";
 $TABLEQUIZTEST          = "exercices";
 $dbTable                = $TABLEASSET; // for old functions of document tool
 
-$imgRepositoryWeb       = "../../template/classic/img/";
-
 require_once("../../include/baseTheme.php");
-$tool_content = "";
-$head_content = "";
-$body_action = "";
+
+$body_action = '';
 
 $nameTools = $langLearningObject;
 if (!add_units_navigation()) {
-	$navigation[] = array("url"=>"learningPathList.php?course=$code_cours", "name"=> $langLearningPaths);
-	if ($is_adminOfCourse)
-	{
-	$navigation[]= array ("url"=>"learningPathAdmin.php?course=$code_cours&amp;path_id=".(int)$_SESSION['path_id'], "name"=> $langAdm);
+	$navigation[] = array('url' => "learningPathList.php?course=$code_cours", 'name'=> $langLearningPaths);
+	if ($is_adminOfCourse) {
+                $navigation[] = array('url' => "learningPathAdmin.php?course=$code_cours&amp;path_id=".(int)$_SESSION['path_id'],
+                                      'name' => $langAdm);
 	}
 }
 
@@ -305,7 +302,7 @@ if($module['contentType'] != CTLABEL_) //
 		$tool_content .= '        <tr class="even">'."\n"
                         .'          <td>'.$langTypeOfModule.'</td>'."\n"
                         .'          '."\n"
-			.'          <td align="right"><img src="'.$imgRepositoryWeb.$contentType_img.'" alt="'.$contentType_alt.'" title="'.$contentType_alt.'" border="0" />&nbsp;&nbsp;'.$contentDescType.'</td>'."\n"
+			.'          <td align="right"><img src="'.$themeimg.'/'.$contentType_img.'" alt="'.$contentType_alt.'" title="'.$contentType_alt.'" border="0" />&nbsp;&nbsp;'.$contentDescType.'</td>'."\n"
 			.'        </tr>'."\n\n";
 
         //display total time already spent in the module
@@ -450,16 +447,14 @@ if( $is_adminOfCourse ) // for teacher only
     </table>
     </fieldset>"
   ;
+
 //back button
-if ($is_adminOfCourse)
-{
+if ($is_adminOfCourse) {
 	$pathBack = "./learningPathAdmin.php";
-}
-else
-{
+} else {
 	$pathBack = "./learningPath.php";
 }
-		$tool_content .= "
-    <p align=\"right\"><a href=\"".$pathBack."?course=$code_cours\">".$langBackToLPAdmin."</p>";
-draw($tool_content, 2, '', $head_content, $body_action);
-?>
+$tool_content .= "
+    <p align=\"right\"><a href=\"".$pathBack."?course=$code_cours\">".$langBackToLPAdmin."</a></p>";
+
+draw($tool_content, 2, null, $head_content, $body_action);

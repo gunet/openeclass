@@ -100,14 +100,14 @@ if ($result2 and mysql_num_rows($result2) > 0) {
 		}
                 if ($this_statut == 1) {
                         $manage_link = "${urlServer}modules/course_info/infocours.php?from_home=TRUE&amp;cid=$code";
-                        $manage_icon = 'template/classic/img/tools.png';
+                        $manage_icon = $themeimg . '/tools.png';
                         $manage_title = $langAdm;
                 } else {
                         $manage_link = "${urlServer}modules/unreguser/unregcours.php?cid=$code&amp;u=$uid";
-                        $manage_icon = 'template/classic/img/cunregister.png';
+                        $manage_icon = $themeimg . '/cunregister.png';
                         $manage_title = $langUnregCourse;
                 }
-		$tool_content .="          <td width='5'><img src='${urlAppend}/template/classic/img/arrow.png' alt='' /></td>";
+		$tool_content .="          <td width='5'><img src='$themeimg/arrow.png' alt='' /></td>";
 		$tool_content .= "\n          <td><a href='${urlServer}courses/$code'>".q($title)."</a> <span class='smaller'>(".q($mycours['fake_code']).")</span></td>";
 		$tool_content .= "\n          <td class='smaller'>".q($mycours['profs'])."</td>";
 		$tool_content .= "\n          <td align='center'><a href='$manage_link'><img src='$manage_icon' title='$manage_title' alt='$manage_title' /></a></td>";
@@ -159,7 +159,7 @@ if (count($status) > 0) {
                                         }
                                         $tool_content .= "
 					<td width='16'>
-					    <img src='${urlAppend}/template/classic/img/arrow.png' alt='' /></td><td>
+					    <img src='$themeimg/arrow.png' alt='' /></td><td>
 						<b><a href='modules/announcements/announcements.php?course=$code&amp;an_id=$ann[id]'>".q($ann['title'])."</a></b>
 						<br>" . "<span class='smaller'>" .
 					    claro_format_locale_date($dateFormatLong, strtotime($ann['temps'])) .

@@ -67,7 +67,7 @@ if (mysql_num_rows($result) > 0) {
         <table width='100%' class='tbl_alt'>
 	<tr>
           <th colspan='2'>$langAnnouncements <a href='${urlServer}rss.php'>
-	    <img src='${urlAppend}/template/classic/img/feed.png' alt='RSS Feed' title='RSS Feed' />
+	    <img src='$themeimg/feed.png' alt='RSS Feed' title='RSS Feed' />
 	    </a>
           </th>
         </tr>";
@@ -77,7 +77,7 @@ if (mysql_num_rows($result) > 0) {
 		$aid = $announceArr[$i]['id'];
 		$tool_content .= "
         <tr>
-          <td width='1'><img style='border:0px;' src='${urlAppend}/template/classic/img/arrow.png' alt='' /></td>
+          <td width='1'><img style='border:0px;' src='$themeimg/arrow.png' alt='' /></td>
           <td>
 	    <b><a href='modules/announcements/main_ann.php?aid=$aid'>".q($announceArr[$i]['title'])."</a></b>
 	    &nbsp;<span class='smaller'>(".claro_format_locale_date($dateFormatLong, strtotime($announceArr[$i]['date'])).")</span>

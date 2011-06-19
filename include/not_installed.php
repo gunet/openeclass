@@ -40,7 +40,7 @@ $tool_content = "
   </head>
   <body>
   <div class='install_container'>
-  <p><img src='./template/classic/img/logo_openeclass.png' alt='logo' /></p>
+  <p><img src='template/classic/img/logo_openeclass.png' alt='logo' /></p>
   <div class='alert' align='center'>Η πλατφόρμα ασύγχρονης τηλεκπαίδευσης Open eClass δεν λειτουργεί!</div>
       <table width='600' align='center' cellpadding='5' cellspacing='5' class='tbl_alt'>
     <tr>

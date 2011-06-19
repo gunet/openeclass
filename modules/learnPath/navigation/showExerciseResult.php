@@ -70,10 +70,11 @@ require_once('../../../include/lib/learnPathLib.inc.php');
 require_once('../../../include/lib/textLib.inc.php');
 
 // Ksekiname to diko mas html output giati probaloume mesa se iframe
-echo "<html>"."\n"
+echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">'
+    ."\n<html>\n"
     .'<head>'."\n"
     .'<meta http-equiv="Content-Type" content="text/html; charset='.$charset.'">'."\n"
-    .'<link href="../../../template/classic/theme.css" rel="stylesheet" type="text/css" />'."\n"
+    .'<link href="../../../template/'.$theme.'/theme.css" rel="stylesheet" type="text/css" />'."\n"
     .'<title>'.$langExercicesResult.'</title>'."\n"
     .'</head>'."\n"
     .'<body style="margin: 0px; padding-left: 5px; height: 100%!important; height: auto; background-color: #ffffff;">'."\n"
@@ -303,7 +304,7 @@ foreach($_SESSION['questionList'] as $questionId) {
 					echo ("
     <tr class='even'>
       <td>
-      <div align='center'><img src='../../../template/classic/img/");
+      <div align='center'><img src='$themeimg/");
 					if ($answerType == UNIQUE_ANSWER || $answerType == TRUE_FALSE) {
 						echo ("radio");
 					} else {
@@ -320,9 +321,9 @@ foreach($_SESSION['questionList'] as $questionId) {
       <td><div align='center'>");
 	
 					if ($answerType == UNIQUE_ANSWER || $answerType == TRUE_FALSE) {
-						echo ("<img src=\"../../../template/classic/img/radio");
+						echo ("<img src=\"$themeimg/radio");
 					} else {
-						echo ("<img src=\"../../../template/classic/img/checkbox");
+						echo ("<img src=\"$themeimg/checkbox");
 					}
 					if ($answerCorrect) {
 						echo ("_on");

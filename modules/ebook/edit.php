@@ -177,7 +177,7 @@ if (mysql_num_rows($q) == 0) {
                 } else {
                         $section_id = $qsid;
                         $section_title = $qstitle;
-                        $section_tools = "<a href='edit.php?course=$currentCourseID&amp;id=$ebook_id&amp;delete=$sid' onclick=\"javascript:if(!confirm('".js_escape(sprintf($langEBookSectionDelConfirm, $section['title']))."')) return false;\"><img src='../../template/classic/img/delete.png' alt='$langDelete' title='$langDelete' /></a>&nbsp;<a href='edit.php?course=$currentCourseID&amp;id=$ebook_id&amp;s=$sid'><img src='../../template/classic/img/edit.png' alt='$langModify' title='$langModify' /></a>";
+                        $section_tools = "<a href='edit.php?course=$currentCourseID&amp;id=$ebook_id&amp;delete=$sid' onclick=\"javascript:if(!confirm('".js_escape(sprintf($langEBookSectionDelConfirm, $section['title']))."')) return false;\"><img src='$themeimg/delete.png' alt='$langDelete' title='$langDelete' /></a>&nbsp;<a href='edit.php?course=$currentCourseID&amp;id=$ebook_id&amp;s=$sid'><img src='$themeimg/edit.png' alt='$langModify' title='$langModify' /></a>";
                 }
                 $class = odd_even($k);
                 $tool_content .= "
@@ -230,7 +230,7 @@ if (mysql_num_rows($q) == 0) {
                 $display_id = $r['sid'] . ',' . $r['ssid'];
                 $tool_content .= "
      <tr$class>
-       <td width='1' valign='top'><img style='padding-top:3px;' src='${urlServer}/template/classic/img/arrow.png' title='bullet' /></td>
+       <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
        <td class='smaller'><a href='show.php/$currentCourseID/$ebook_id/$display_id/' target='_blank'>" . q($files[$id_map[$file_id]]) . "</a></td>
        <td><input type='text' name='title[$file_id]' size='30' value='" . q($r['subsection_title']) . "' /></td>
        <td>" .  selection($sections, "sid[$file_id]", $r['sid']) . "</td>
@@ -247,7 +247,7 @@ if (mysql_num_rows($q) == 0) {
                 $title = get_html_title($basedir . $path);
                 $tool_content .= "
      <tr$class>
-       <td width='1' valign='top'><img style='padding-top:3px;' src='${urlServer}/template/classic/img/arrow.png' title='bullet' /></td>
+       <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
        <td class='smaller'><a href='show.php/$currentCourseID/$ebook_id/_" . q($file) .  "' target='_blank'>" . q($file) . "</a></td>
        <td><input type='text' name='title[$file_id]' size='30' value='" . q($title) . "' /></td>
        <td>" . selection($sections, "sid[$file_id]") . "</td>

@@ -1907,12 +1907,12 @@ function copy_resized_image($source_file, $type, $maxwidth, $maxheight, $target_
 // Link for displaying user profile
 function profile_image($uid, $size, $default = FALSE)
 {
-	global $urlServer;
+	global $urlServer, $themeimg;
 	
 	if (!$default) {
 		return "<img src='${urlServer}courses/userimg/${uid}_$size.jpg' alt='' />";
 	} else {
-		return "<img src='${urlServer}template/classic/img/default_$size.jpg' alt='' />";
+		return "<img src='$themeimg/default_$size.jpg' alt='' />";
 	}
 }
 

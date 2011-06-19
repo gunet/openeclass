@@ -33,10 +33,10 @@ $require_current_course = TRUE;
 $guest_allowed = true;
 define('HIDE_TOOL_TITLE', 1);
 
-//$courseHome is used by the breadcrumb logic
-//See function draw() in baseTheme.php for details
-//$courseHome = true;
-//$path2add is used in init.php to fix relative paths
+// $courseHome is used by the breadcrumb logic
+// See function draw() in baseTheme.php for details
+// $courseHome = true;
+// $path2add is used in init.php to fix relative paths
 $path2add = 1;
 include '../../include/baseTheme.php';
 
@@ -340,4 +340,4 @@ $tool_content .= "
   </table>
 </div>
 ";
-draw($tool_content, 2, '', $head_content);
+draw($tool_content, 2, null, $head_content);

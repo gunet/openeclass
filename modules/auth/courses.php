@@ -25,9 +25,9 @@ $nameTools = $langChoiceLesson;
 $navigation[] = array ("url"=>"courses.php", "name"=> $langChoiceDepartment);
 
 $icons = array(
-        2 => "<img src='../../template/classic/img/lock_open.png' alt='" . $m['legopen'] . "' title='" . $m['legopen'] . "' />",
-        1 => "<img src='../../template/classic/img/lock_registration.png' alt='" . $m['legrestricted'] . "' title='" . $m['legrestricted'] . "' />",
-        0 => "<img src='../../template/classic/img/lock_closed.png' alt='" . $m['legclosed'] . "' title='" . $m['legclosed'] . "' />"
+        2 => "<img src='$themeimg/lock_open.png' alt='" . $m['legopen'] . "' title='" . $m['legopen'] . "' />",
+        1 => "<img src='$themeimg/lock_registration.png' alt='" . $m['legrestricted'] . "' title='" . $m['legrestricted'] . "' />",
+        0 => "<img src='$themeimg/lock_closed.png' alt='" . $m['legclosed'] . "' title='" . $m['legclosed'] . "' />"
 );
 
 if (isset($_REQUEST['fc'])) {
@@ -114,7 +114,7 @@ if (isset($_POST["submit"])) {
                           <tr class='odd'>";
 				}
 				$tool_content .= "
-                            <td>&nbsp;<img src='../../template/classic/img/arrow.png' />&nbsp;
+                            <td>&nbsp;<img src='$themeimg/arrow.png' />&nbsp;
 				<a href='$_SERVER[PHP_SELF]?fc=$fac[id]'>" . htmlspecialchars($fac['name']) . "</a>&nbsp;
 				<span class='smaller'>($fac[code])</span>";
 				$n = db_query("SELECT COUNT(*) FROM cours
@@ -184,8 +184,8 @@ function getdepnumcourses($fac) {
 
 function expanded_faculte($fac_name, $facid, $uid) {
 	global $m, $icons, $langTutor, $langBegin, $langRegistration, $mysqlMainDb,
-		$langRegistration, $langCourseCode, $langTeacher, $langType, $langFaculty,
-		$langpres, $langposts, $langothers;
+               $langRegistration, $langCourseCode, $langTeacher, $langType, $langFaculty,
+               $langpres, $langposts, $langothers, $themeimg;
 
 	$retString = "";
 
@@ -315,7 +315,7 @@ function expanded_faculte($fac_name, $facid, $uid) {
 						$codelink = "<a href='../../courses/$mycours[k]/'>$course_title</a>";
 					}
                                 } else {
-                                        $retString .= "<img src='../../template/classic/img/teacher.png' alt='$langTutor' title='$langTutor' />";
+                                        $retString .= "<img src='$themeimg/teacher.png' alt='$langTutor' title='$langTutor' />";
                                 }
                         } else { // display unregistered courses
                                 if (!empty($password) and $mycours['visible'] == 1) {

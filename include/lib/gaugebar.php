@@ -66,6 +66,7 @@ class myGauge {
 
    // Render this into HTML as a table.
    function display() {
+       global $themeimg;
 
        // Normalize the properties.
        if ($this->MinVal > $this->MaxVal) {
@@ -88,18 +89,17 @@ class myGauge {
        $fg_width = Round($this->Width * $percentage_val);
        $bg_width = $this->Width - $fg_width;
 
-       $RenderHtml = "<table class='tbl' cellspacing=0 cellpadding=0 width=" . $this->Width . " height=" . $this->Height . "><tr>";
+       $RenderHtml = "<table class='tbl' cellspacing=0 cellpadding=0 width=" . $this->Width . "><tr>";
        if ($fg_width > 0) {
            $RenderHtml = $RenderHtml . "<td width=" . $fg_width . " height=" . $this->Height . " bgcolor=" . $this->FgColor .
-               "><img src=\"../../template/classic/img/shim.gif\"></td>";
+               "><img src=\"$themeimg/shim.gif\"></td>";
        }
        if ($bg_width > 0) {
            $RenderHtml = $RenderHtml . "<td width=" . $bg_width . " height=" .
-           $this->Height . " bgcolor=" . $this->BgColor . "><img src=\"../../template/classic/img/shim.gif\"></td>";
+           $this->Height . " bgcolor=" . $this->BgColor . "><img src=\"$themeimg/shim.gif\"></td>";
        }
        $RenderHtml = $RenderHtml . "</tr></table>";
        return $RenderHtml;
    }
 }
 
-?>

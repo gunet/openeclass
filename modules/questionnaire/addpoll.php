@@ -160,8 +160,8 @@ function printPollCreationForm() {
         <div id=\"operations_container\">
           <ul id=\"opslist\">
            <li>$langSelection:&nbsp;
-               <input type='submit' name='MoreMultiple' value='$langPollAddMultiple' \>&nbsp;&nbsp;
-	       <input type='submit' size=\"5\" name='MoreFill' value='$langPollAddFill' \>
+               <input type='submit' name='MoreMultiple' value='$langPollAddMultiple' />&nbsp;&nbsp;
+	       <input type='submit' size=\"5\" name='MoreFill' value='$langPollAddFill' />
            </li>
 	  </ul>
 	</div>
@@ -323,7 +323,9 @@ function editPoll($pid, $questions, $question_types) {
 ******************************************************************************/
 function add_multiple_choice_question($i, $text)
 {
-    global $tool_content, $langQuestion, $langPollMoreAnswers, $langAnswers, $langPollUnknown, $langPollFillText, $langPollNumAnswers, $langPollAddAnswer, $langPollMC;
+    global $tool_content, $langQuestion, $langPollMoreAnswers, $langAnswers, 
+           $langPollUnknown, $langPollFillText, $langPollNumAnswers, 
+           $langPollAddAnswer, $langPollMC, $themeimg;
 
 	$tool_content .= "
         <hr />
@@ -353,9 +355,9 @@ function add_multiple_choice_question($i, $text)
           <td>&nbsp;</td>
           <td>";
 	foreach ($answers as $j => $answertext) {
-	    $tool_content .= "<img src='../../template/classic/img/arrow.png' title='$langPollNumAnswers'>&nbsp;&nbsp;<input type='text' name='answer${i}[]' value='$answertext' size='50'><br /><br />";
+	    $tool_content .= "<img src='$themeimg/arrow.png' title='$langPollNumAnswers'>&nbsp;&nbsp;<input type='text' name='answer${i}[]' value='$answertext' size='50'><br /><br />";
 	}
-	$tool_content .= "<img src='../../template/classic/img/arrow.png' title='$langPollNumAnswers'>&nbsp;&nbsp;$langPollUnknown
+	$tool_content .= "<img src='$themeimg/arrow.png' title='$langPollNumAnswers'>&nbsp;&nbsp;$langPollUnknown
           </td>
           <td>&nbsp;</td>
         </tr>";

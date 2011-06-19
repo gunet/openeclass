@@ -41,7 +41,6 @@ $TABLEMODULE            = "lp_module";
 $TABLELEARNPATHMODULE   = "lp_rel_learnPath_module";
 $TABLEASSET             = "lp_asset";
 $TABLEUSERMODULEPROGRESS= "lp_user_module_progress";
-$imgRepositoryWeb       = "../../template/classic/img/";
 
 mysql_select_db($currentCourseID);
 echo '<html>'."\n"
@@ -160,13 +159,13 @@ foreach ($flatElementList as $module)
 			if ($module['contentType'] == CTSCORM_ || $module['contentType'] == CTSCORMASSET_)
 				$moduleImg = "tick.png";
 			else
-				$imagePassed = '<img src="'.$imgRepositoryWeb.'tick.png" alt="'.$module['lesson_status'].'" title="'.$module['lesson_status'].'" />';
+				$imagePassed = '<img src="'.$themeimg.'/tick.png" alt="'.$module['lesson_status'].'" title="'.$module['lesson_status'].'" />';
 		}
 
 		if(($module['contentType'] == CTSCORM_ || $module['contentType'] == CTSCORMASSET_) && $module['lesson_status'] == 'FAILED')
 			$moduleImg = "lp_failed.png";
 
-		echo "<li style=\"margin-left: ".$marginIndent."px;\"><img src=\"".$imgRepositoryWeb.$moduleImg."\" alt='' title='' />";
+		echo "<li style=\"margin-left: ".$marginIndent."px;\"><img src=\"".$themeimg.'/'.$moduleImg."\" alt='' title='' />";
 
 		// emphasize currently displayed module or not
 		if ( $_SESSION['lp_module_id'] == $module['module_id'] )

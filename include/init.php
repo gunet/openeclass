@@ -149,6 +149,15 @@ if (isset($_SESSION['is_admin']) and $_SESSION['is_admin']) {
         $is_admin = false;
 }
 
+if (!isset($_SESSION['theme'])) {
+        $_SESSION['theme'] = get_config('theme');
+        if (empty($_SESSION['theme'])) {
+                $_SESSION['theme'] = 'classic';
+        }
+}
+$theme = $_SESSION['theme'];
+$themeimg = $urlAppend . '/template/' . $theme . '/img';
+
 if (isset($require_login) and $require_login and !$uid) {
 	$toolContent_ErrorExists = $langLoginRequired;
 	$errorMessagePath = "../../";

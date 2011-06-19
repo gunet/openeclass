@@ -723,9 +723,10 @@ function sort_link($title, $opt, $attrib = '')
 // the optional message appears insted of assignment details
 function show_assignment($id, $message = false, $display_graph_results = false)
 {
-	global $tool_content, $m, $langBack, $langNoSubmissions, $langSubmissions, $mysqlMainDb, $langWorks;
-	global $langEndDeadline, $langWEndDeadline, $langNEndDeadline, $langDays, $langDaysLeft, $langGradeOk;
-	global $currentCourseID, $webDir, $urlServer, $nameTools, $langGraphResults, $m, $code_cours;
+        global $tool_content, $m, $langBack, $langNoSubmissions, $langSubmissions,
+               $mysqlMainDb, $langWorks, $langEndDeadline, $langWEndDeadline, $langNEndDeadline,
+               $langDays, $langDaysLeft, $langGradeOk, $currentCourseID, $webDir, $urlServer,
+               $nameTools, $langGraphResults, $m, $code_cours, $themeimg;
 
 	$res = db_query("SELECT *, (TO_DAYS(deadline) - TO_DAYS(NOW())) AS days FROM assignments WHERE id = '$id'");
 	$row = mysql_fetch_array($res);
@@ -864,7 +865,7 @@ function show_assignment($id, $message = false, $display_graph_results = false)
 				  $comments = '';
 			  }
 			  $tool_content .= "<div style='padding-top: .5em;'><b>$label</b>
-				  <a href='grade_edit.php?course=$code_cours&amp;assignment=$id&amp;submission=$row[id]'><img src='../../template/classic/img/$icon'></a>
+				  <a href='grade_edit.php?course=$code_cours&amp;assignment=$id&amp;submission=$row[id]'><img src='$themeimg/$icon'></a>
 				  $comments
 		    </td>
 		  </tr>";
@@ -917,7 +918,8 @@ function show_assignment($id, $message = false, $display_graph_results = false)
 function show_student_assignments()
 {
         global $tool_content, $m, $uid, $cours_id, $currentCourseID,
-               $langDaysLeft, $langDays, $langNoAssign, $urlServer, $code_cours;
+               $langDaysLeft, $langDays, $langNoAssign, $urlServer,
+               $code_cours, $themeimg;
 
         $gids = user_group_info($uid, $cours_id);
 
@@ -945,7 +947,7 @@ function show_student_assignments()
                                   <tr class='odd'>";
                         }
                         $tool_content .= "
-                                    <td width='16'><img src='${urlServer}/template/classic/img/arrow.png' title='bullet' /></td>
+                                    <td width='16'><img src='$themeimg/arrow.png' title='bullet' /></td>
                                     <td><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;id=$row[id]'>$title_temp</a></td>
                                     <td width='150' align='center'>".nice_format($row['deadline']);
                         if ($row['days'] > 1) {
@@ -967,10 +969,10 @@ function show_student_assignments()
                                         "<a href='../group/group_space.php?course=$code_cours&amp;group_id=$sub[group_id]'>".
                                         "$m[ofgroup] ".gid_to_name($sub['group_id'])."</a>)</div>";
                                 }
-                                $tool_content .= "<img src='../../template/classic/img/checkbox_on.png' alt='$m[yes]' /><br />";
+                                $tool_content .= "<img src='$themeimg/checkbox_on.png' alt='$m[yes]' /><br />";
                             }
                         } else {
-                                $tool_content .= "<img src='../../template/classic/img/checkbox_off.png' alt='$m[no]' />";
+                                $tool_content .= "<img src='$themeimg/checkbox_off.png' alt='$m[no]' />";
                         }
                         $tool_content .= "</td>
                                     <td width='30' align='center'>";
@@ -996,7 +998,8 @@ function show_student_assignments()
 // show all the assignments
 function show_assignments($message = null)
 {
-	global $tool_content, $m, $langNoAssign, $langNewAssign, $langCommands, $urlServer, $code_cours;
+        global $tool_content, $m, $langNoAssign, $langNewAssign, $langCommands,
+               $code_cours, $themeimg;
 
 	$result = db_query("SELECT * FROM assignments ORDER BY id");
 
@@ -1041,23 +1044,23 @@ cData;
 			}
 
 			$tool_content .= "
-			  <td width='16'><img src='$urlServer/template/classic/img/arrow.png' title='bullet' /></td>
+			  <td width='16'><img src='$themeimg/arrow.png' title='bullet' /></td>
 			  <td><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;id=${row['id']}' ";
 			$tool_content .= ">";
 			$tool_content .= $row_title = q($row['title']);
 			$tool_content .= "</a></td>
 			  <td class='center'>".nice_format($row['deadline'])."</td>
 			  <td class='right'><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;id=$row[id]&amp;choice=edit'>
-			  <img src='../../template/classic/img/edit.png' alt='$m[edit]' />
+			  <img src='$themeimg/edit.png' alt='$m[edit]' />
 			  </a> <a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;id=$row[id]&amp;choice=do_delete' onClick='return confirmation(\"".addslashes($row_title)."\");'>
-			  <img src='../../template/classic/img/delete.png' alt='$m[delete]' /></a>";
+			  <img src='$themeimg/delete.png' alt='$m[delete]' /></a>";
 			if ($row['active']) {
 				$deactivate_temp = htmlspecialchars($m['deactivate']);
 				$activate_temp = htmlspecialchars($m['activate']);
-				$tool_content .= "<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;choice=disable&amp;id=$row[id]'><img src='../../template/classic/img/visible.png' title='$deactivate_temp' /></a>";
+				$tool_content .= "<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;choice=disable&amp;id=$row[id]'><img src='$themeimg/visible.png' title='$deactivate_temp' /></a>";
 			} else {
 				$activate_temp = htmlspecialchars($m['activate']);
-				$tool_content .= "<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;choice=enable&amp;id=$row[id]'><img src='../../template/classic/img/invisible.png' title='$activate_temp' /></a>";
+				$tool_content .= "<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;choice=enable&amp;id=$row[id]'><img src='$themeimg/invisible.png' title='$activate_temp' /></a>";
 			}
 			$tool_content .= "&nbsp;</td></tr>";
                         $index++;

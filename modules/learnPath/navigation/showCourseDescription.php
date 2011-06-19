@@ -49,7 +49,7 @@ $unit_id = description_unit_id($cours_id);
 <html>
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=<?php echo $charset?>">
-  <link href="../../../template/classic/theme.css" rel="stylesheet" type="text/css" />
+  <link href="../../../template/<?php echo $theme ?>/theme.css" rel="stylesheet" type="text/css" />
   <title><?php echo $langCourseProgram ?></title>
 </head>
 <body style="margin: 0px; padding-left: 5px; height: 100%!important; height: auto; background-color: #ffffff;">

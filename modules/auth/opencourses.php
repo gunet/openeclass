@@ -54,9 +54,9 @@ $tool_content = "";
 // use the following array for the legend icons
 /*
 */
-$icons = array(2 => "<img src='../../template/classic/img/lock_open.png'   alt='" . $m['legopen'] . "' title='" . $m['legopen'] . "' width='16' height='16' />",
-    1 => "<img src='../../template/classic/img/lock_registration.png' alt='" . $m['legrestricted'] . "' title='" . $m['legrestricted'] . "' width='16' height='16' />",
-    0 => "<img src='../../template/classic/img/lock_closed.png' alt='" . $m['legclosed'] . "' title='" . $m['legclosed'] . "' width='16' height='16' />"
+$icons = array(2 => "<img src='$themeimg/lock_open.png'   alt='" . $m['legopen'] . "' title='" . $m['legopen'] . "' width='16' height='16' />",
+    1 => "<img src='$themeimg/lock_registration.png' alt='" . $m['legrestricted'] . "' title='" . $m['legrestricted'] . "' width='16' height='16' />",
+    0 => "<img src='$themeimg/lock_closed.png' alt='" . $m['legclosed'] . "' title='" . $m['legclosed'] . "' width='16' height='16' />"
     );
 
 $tool_content .= "
@@ -91,6 +91,7 @@ if ($numoftypes > 0) {
     // this way we sort by the course types
     // then we just select visible
     // and finally we do the secondary sort by course title and but teacher's name
+    $tid = 0;
     foreach (array("pre" => $langpres,
             "post" => $langposts,
             "other" => $langothers) as $type => $message) {
@@ -119,7 +120,7 @@ if ($numoftypes > 0) {
         $tool_content .= "
     
         <script type='text/javascript' src='sorttable.js'></script>
-            <table width=100% class='sortable' id='t1'>
+            <table width='100%' class='sortable' id='t$tid'>
             <tr>
                 <th class='left' colspan='2'>$m[lessoncode]</th>
                 <th class='left' width='200'>$m[professor]</th>
@@ -129,7 +130,8 @@ if ($numoftypes > 0) {
         $k = 0;
         while ($mycours = mysql_fetch_array($result)) {
             if ($mycours['visible'] == 2) {
-                $codelink = "<a href='../../courses/$mycours[k]/'>$mycours[i]</a>&nbsp;<small>(" . $mycours['c'] . ")</small>";
+                    $codelink = "<a href='../../courses/$mycours[k]/'>" .
+                            q($mycours['i'])."</a>&nbsp;<small>(" . $mycours['c'] . ")</small>";
             } else {
                 $codelink = "$mycours[i]&nbsp;<small>(" . $mycours['c'] . ")</small>";
             }
@@ -139,7 +141,7 @@ if ($numoftypes > 0) {
             } else {
                 $tool_content .= "\n<tr class='odd'>";
             }
-            $tool_content .= "\n<td width='16'><img src='${urlServer}/template/classic/img/arrow.png' title='bullet'></td>";
+            $tool_content .= "\n<td width='16'><img src='$themeimg/arrow.png' title='bullet'></td>";
             $tool_content .= "\n<td>" . $codelink . "</td>";
             $tool_content .= "\n<td>$mycours[t]</td>";
             $tool_content .= "\n<td align='center'>";
@@ -156,6 +158,7 @@ if ($numoftypes > 0) {
             // upatras.gr patch end here, atkyritsis@upnet.gr, daskalou@upnet.gr
         }
         $tool_content .= "\n</table>\n";
+        $tid++;
     } // end of foreach
 } else {
     $tool_content .= "&nbsp;</div></th></tr></table>\n\n";

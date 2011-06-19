@@ -290,7 +290,7 @@ if ($is_adminOfCourse) {
 		$alert_uname = $myrow['prenom'] . " " . $myrow['nom'];
                 $tool_content .= "<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;unregister=$myrow[user_id]$extra_link'
                                  onClick=\"return confirmation('" . js_escape($alert_uname) .
-                                 "');\"><img src='../../template/classic/img/delete.png' title='$langDelete' /></a>";
+                                 "');\"><img src='$themeimg/delete.png' title='$langDelete' /></a>";
                 $tool_content .= "</td></tr>";
                 $i++;
 	}

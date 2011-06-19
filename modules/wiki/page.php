@@ -45,8 +45,7 @@ $require_current_course = TRUE;
 $require_help           = TRUE;
 $helpTopic              = "Wiki";
 require_once("../../include/baseTheme.php");
-$style= "";
-$imgRepositoryWeb = "../../template/classic/img";
+$style= '';
 $_gid = null;
 
 if (isset($_SESSION['statut']) && $_SESSION['statut'] != 0 ) {
@@ -503,7 +502,7 @@ $jspath = document_web_path() . '/lib/javascript';
 
 // set image repository
 $head_content .= "<script type=\"text/javascript\">"
-    . "\nvar sImgPath = '".$imgRepositoryWeb . "'"
+    . "\nvar sImgPath = '$themeimg'"
     . "\n</script>\n"
     ;
 //navigation bar
@@ -619,7 +618,7 @@ $tool_content .= '
   <div id="operations_container">
     <ul id="opslist">' . "\n";
 $tool_content .= '          <li>'
-    . '<img src="'.$imgRepositoryWeb.'/wiki.png" align="middle" />&nbsp;<a class="claroCmd" href="'.$_SERVER['PHP_SELF'].'?course='.$code_cours
+    . '<img src="'.$themeimg.'/wiki.png" align="middle" />&nbsp;<a class="claroCmd" href="'.$_SERVER['PHP_SELF'].'?course='.$code_cours
     . '&amp;wikiId=' . $wiki->getWikiId()
     . '&amp;action=show'
     . '&amp;title=__MainPage__'
@@ -627,7 +626,7 @@ $tool_content .= '          <li>'
     . $langWikiMainPage.'</a></li>' . "\n"
     ;
 $tool_content .= '          <li>'
-    . '<img src="'.$imgRepositoryWeb.'/history.png" align="middle" />&nbsp;<a class="claroCmd" href="'.$_SERVER['PHP_SELF'].'?course='.$code_cours
+    . '<img src="'.$themeimg.'/history.png" align="middle" />&nbsp;<a class="claroCmd" href="'.$_SERVER['PHP_SELF'].'?course='.$code_cours
     . '&amp;wikiId=' . $wiki->getWikiId()
     . '&amp;action=recent'
     . '">'
@@ -635,14 +634,14 @@ $tool_content .= '          <li>'
     ;
 
 $tool_content .= '          <li>'
-    . '<img src="'.$imgRepositoryWeb.'/book.png" align="middle" />&nbsp;<a class="claroCmd" href="'.$_SERVER['PHP_SELF'].'?course='.$code_cours
+    . '<img src="'.$themeimg.'/book.png" align="middle" />&nbsp;<a class="claroCmd" href="'.$_SERVER['PHP_SELF'].'?course='.$code_cours
     . '&amp;wikiId=' . $wiki->getWikiId()
     . '&amp;action=all">'
     . $langWikiAllPages.'</a></li>' . "\n"
     ;
 
 $tool_content .= '          <li>'
-    . '<img src="'.$imgRepositoryWeb.'/list.png" align="middle" />&nbsp;<a class="claroCmd" href="'.'wiki.php?course='.$code_cours
+    . '<img src="'.$themeimg.'/list.png" align="middle" />&nbsp;<a class="claroCmd" href="'.'wiki.php?course='.$code_cours
     . '">'
     . $langWikiList .'</a></li>' . "\n"
     ;
@@ -657,7 +656,7 @@ $tool_content .= '<p align="right">';
 if ( $action == "edit" || $action == "diff" || $action == "history" )
 {
     $tool_content .= ''
-	. '<img src="'.$imgRepositoryWeb.'/back.png" align="middle" />&nbsp;'
+	. '<img src="'.$themeimg.'/back.png" align="middle" />&nbsp;'
 	. '<a class="claroCmd" href="'.$_SERVER['PHP_SELF'].'?course='.$code_cours
 	. '&amp;wikiId=' . $wiki->getWikiId()
 	. '&amp;action=show'
@@ -672,7 +671,7 @@ if ( $is_allowedToEdit || $is_allowedToCreate )
     if ( $action == "show" || $action == "history" || $action == "diff" )
     {
 	$tool_content .= '&nbsp;&nbsp;&nbsp;'
-	    . '<img src="'.$imgRepositoryWeb.'/edit.png" align="middle" />&nbsp;'
+	    . '<img src="'.$themeimg.'/edit.png" align="middle" />&nbsp;'
 	    . '<a class="claroCmd" href="'.$_SERVER['PHP_SELF'].'?course='.$code_cours
 	    . '&amp;wikiId=' . $wiki->getWikiId()
 	    . '&amp;action=edit'
@@ -688,7 +687,7 @@ if ( $action == "show" || $action == "edit" || $action == "history" || $action =
 {
     // active
     $tool_content .= '&nbsp;&nbsp;&nbsp;'
-	    . '<img src="'.$imgRepositoryWeb.'/version.png" align="middle" />&nbsp;'
+	    . '<img src="'.$themeimg.'/version.png" align="middle" />&nbsp;'
 	    . '<a class="claroCmd" href="'.$_SERVER['PHP_SELF'].'?course='.$code_cours
 	    . '&amp;wikiId=' . $wiki->getWikiId()
 	    . '&amp;action=history'
@@ -701,7 +700,7 @@ if ( $action == "show" || $action == "edit" || $action == "history" || $action =
 if ( $action == "edit" || $action == "diff" )
 {
     /*$tool_content .= '&nbsp;&nbsp;&nbsp;'
-	. '<img src="'.$imgRepositoryWeb.'/help.png" border="0" alt="history" />&nbsp;'
+	. '<img src="'.$themeimg.'/help.png" border="0" alt="history" />&nbsp;'
 	. '<a class="claroCmd" href="#" onClick="MyWindow=window.open(\''
 	. '../help/help.php?topic=WikiSyntax&amp;language=' . $language
 	. '\',\'MyWindow\',\'toolbar=no,location=no,directories=no,status=yes,menubar=no'

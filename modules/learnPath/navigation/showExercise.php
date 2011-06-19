@@ -222,10 +222,11 @@ if(@$_POST['questionNum']) {
 
 $exerciseDescription_temp = standard_text_escape($exerciseDescription);
 
-echo "<html>"."\n"
+echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Frameset//EN"   "http://www.w3.org/TR/html4/frameset.dtd">'
+    ."\n<html>\n"
     .'<head>'."\n"
     .'<meta http-equiv="Content-Type" content="text/html; charset='.$charset.'">'."\n"
-    .'<link href="../../../template/classic/theme.css" rel="stylesheet" type="text/css" />'."\n"
+    .'<link href="../../../template/'.$theme.'/theme.css" rel="stylesheet" type="text/css" />'."\n"
     .'<title>'.$langExercice.'</title>'."\n"
     .'</head>'."\n"
     .'<body style="margin: 0px; padding-left: 5px; height: 100%!important; height: auto; background-color: #ffffff;">'."\n"

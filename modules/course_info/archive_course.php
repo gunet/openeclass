@@ -110,7 +110,7 @@ if ($is_adminOfCourse) {
 		draw($tool_content, 2);
 		exit;
 	} else {
-		$tool_content .= "<br /><p class='success_small'>$langBackupSuccesfull</p><div align=\"left\"><a href='$urlAppend/courses/archive/$currentCourseID/archive.$currentCourseID.$backup_date_short.zip'>$langDownloadIt <img src='../../template/classic/img/download.png' title='$langDownloadIt' alt=''></a></div>";
+		$tool_content .= "<br /><p class='success_small'>$langBackupSuccesfull</p><div align=\"left\"><a href='$urlAppend/courses/archive/$currentCourseID/archive.$currentCourseID.$backup_date_short.zip'>$langDownloadIt <img src='$themeimg/download.png' title='$langDownloadIt' alt=''></a></div>";
 	}
 
 	$tool_content .= "<p align=\"right\">";

@@ -55,7 +55,7 @@ if (isset($close_user_registration) and $close_user_registration) {
     $user_reg_type = $langUserAccountInfo2;
 }
 
-$tool_content .= "<img src='${urlServer}/template/classic/img/arrow.png' title='bullet' alt='bullet'><a href='$newuser'>$user_reg_type</a>";
+$tool_content .= "<img src='$themeimg/arrow.png' title='bullet' alt='bullet'><a href='$newuser'>$user_reg_type</a>";
 
 if (count($auth) > 1) {
    $tool_content .= "<br />&nbsp;&nbsp;&nbsp;&nbsp;$langUserAccountInfo4:";
@@ -67,16 +67,16 @@ if(!empty($auth)) {
                     continue;
             } else {
                 if ($v == 6)  { // shibboleth method
-                            $tool_content .= "<br />&nbsp;&nbsp;&nbsp;<img src='../../template/classic/img/arrow.png' title='bullet' alt='bullet' />&nbsp;<a href='{$urlServer}secure/index.php'>".get_auth_info($v)."</a>";
+                            $tool_content .= "<br />&nbsp;&nbsp;&nbsp;<img src='$themeimg/arrow.png' title='bullet' alt='bullet' />&nbsp;<a href='{$urlServer}secure/index.php'>".get_auth_info($v)."</a>";
                     } else {
-                            $tool_content .= "<br />&nbsp;&nbsp;&nbsp;<img src='../../template/classic/img/arrow.png' title='bullet' alt='bullet' />&nbsp;<a href='ldapnewuser.php?auth=".$v."'>".get_auth_info($v)."</a>";
+                            $tool_content .= "<br />&nbsp;&nbsp;&nbsp;<img src='$themeimg/arrow.png' title='bullet' alt='bullet' />&nbsp;<a href='ldapnewuser.php?auth=".$v."'>".get_auth_info($v)."</a>";
                     }
             }
     }
 }
 
 $tool_content .= "</td></tr><tr><th>$langOfTeacher</th><td>";
-$tool_content .= "<img src='${urlServer}/template/classic/img/arrow.png' title='bullet'  alt='bullet' /><a href='newprof.php'>$langUserAccountInfo1</a>";
+$tool_content .= "<img src='$themeimg/arrow.png' title='bullet'  alt='bullet' /><a href='newprof.php'>$langUserAccountInfo1</a>";
 
 if (count($auth) > 1) {
    $tool_content .= "<br />&nbsp;&nbsp;&nbsp;&nbsp;$langUserAccountInfo4:";
@@ -87,7 +87,7 @@ if(!empty($auth)) {
                 if ($v == 1) {  // bypass the eclass auth method, as it has already been displayed
                         continue;
                 } else {
-                                $tool_content .= "<br />&nbsp;&nbsp;&nbsp;<img src='../../template/classic/img/arrow.png' title='bullet' alt='bullet' />&nbsp;<a href='ldapnewuser.php?p=TRUE&amp;auth=".$v."'>".get_auth_info($v)."</a>";
+                                $tool_content .= "<br />&nbsp;&nbsp;&nbsp;<img src='$themeimg/arrow.png' title='bullet' alt='bullet' />&nbsp;<a href='ldapnewuser.php?p=TRUE&amp;auth=".$v."'>".get_auth_info($v)."</a>";
                 }
         }
 } else {

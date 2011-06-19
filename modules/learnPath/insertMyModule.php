@@ -52,10 +52,7 @@ $TABLELEARNPATHMODULE   = "lp_rel_learnPath_module";
 $TABLEASSET             = "lp_asset";
 $TABLEUSERMODULEPROGRESS= "lp_user_module_progress";
 
-$imgRepositoryWeb       = "../../template/classic/img/";
-
 require_once("../../include/baseTheme.php");
-$tool_content = "";
 
 $navigation[]= array ("url"=>"learningPathList.php?course=$code_cours", "name"=> $langLearningPath);
 $navigation[]= array ("url"=>"learningPathAdmin.php?course=$code_cours", "name"=> $langAdm);
@@ -196,7 +193,7 @@ while ($list=mysql_fetch_array($result))
 
     $tool_content .= '    <tr '.$style.'>'."\n"
         .'      <td align="left">'."\n"
-        .'        <label for="check_'.$list['module_id'].'" ><img src="'.$imgRepositoryWeb.$moduleImg.'" alt="'.$contentType_alt.'" />&nbsp;<b>'.$list['name'].'</b></label>'."\n";
+        .'        <label for="check_'.$list['module_id'].'" ><img src="'.$themeimg.'/'.$moduleImg.'" alt="'.$contentType_alt.'" />&nbsp;<b>'.$list['name'].'</b></label>'."\n";
 
     // COMMENT
     if ($list['comment'] != null)
@@ -242,7 +239,7 @@ $tool_content .= "\n".'    </table>'."\n".'    </form>';
 
 
 	$tool_content .= "
-        <p align=\"right\"><a href=\"learningPathAdmin.php?course=$code_cours\">$langBackToLPAdmin</p>
+        <p align=\"right\"><a href=\"learningPathAdmin.php?course=$code_cours\">$langBackToLPAdmin</a></p>
     ";
 //####################################################################################\\
 //################################## MODULES LIST ####################################\\

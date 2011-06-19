@@ -175,7 +175,7 @@ if (!register_posted_variables(array('search_terms' => false,
                   <tr class='even'>";
                         }
 			$cours_id = course_code_to_id($mycours['code']);
-                        $tool_content .= "<td><img src='../../template/classic/img/arrow.png' alt=''  /></td><td>";
+                        $tool_content .= "<td><img src='$themeimg/arrow.png' alt=''  /></td><td>";
 			// search inside course. If at least one result is found then display link for searching inside the course
 			if (search_in_course($search_terms, $cours_id, $mycours['code'])) {
 				$tool_content .= "<a href='../../courses/$mycours[code]/?from_search=".urlencode($search_terms)."'>" . q($mycours['intitule']) .

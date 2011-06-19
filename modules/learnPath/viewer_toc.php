@@ -51,7 +51,6 @@ $TABLELEARNPATHMODULE   = "lp_rel_learnPath_module";
 $TABLEASSET             = "lp_asset";
 $TABLEUSERMODULEPROGRESS= "lp_user_module_progress";
 
-$imgRepositoryWeb = "../../template/classic/img/";
 /**** The following is added for statistics purposes ***/
 include('../../include/action.php');
 $action = new action();
@@ -180,8 +179,8 @@ $prevNextString = "";
 // display previous and next links only if there is more than one module
 if ( $moduleNb > 1 )
 {
-	$imgPrevious = '<img src="'.$imgRepositoryWeb.'lp/back.png" alt="'.$langPrevious.'" title="'.$langPrevious.'">';
-	$imgNext = '<img src="'.$imgRepositoryWeb.'lp/next.png" alt="'.$langNext.'" title="'.$langNext.'">';
+	$imgPrevious = '<img src="'.$themeimg.'/lp/back.png" alt="'.$langPrevious.'" title="'.$langPrevious.'">';
+	$imgNext = '<img src="'.$themeimg.'/lp/next.png" alt="'.$langNext.'" title="'.$langNext.'">';
 
 	if( $previousModule != '' )
 		$prevNextString .= '<a href="navigation/viewModule.php?course='.$code_cours.'&amp;viewModule_id='.$previousModule.'" target="scoFrame">'.$imgPrevious.'</a>';
@@ -196,7 +195,7 @@ if ( $moduleNb > 1 )
 }
 
 echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"><html>'."\n"
-    .'<head>'."\n"
+    .'<head><title>-</title>'."\n"
     .'<meta http-equiv="Content-Type" content="text/html; charset='.$charset.'">'."\n"
     .'<link href="lp.css" rel="stylesheet" type="text/css" />'."\n"
     .'</head>'."\n"
@@ -205,7 +204,7 @@ echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www
     .'<div class="tools">'."\n";
 	
 echo "<div class='lp_right'>$prevNextString&nbsp;<a href='$returl' target='_top'>",
-     "<img src='{$imgRepositoryWeb}lp/nofullscreen.png' alt='$langQuitViewer' title='",
+     "<img src='$themeimg/lp/nofullscreen.png' alt='$langQuitViewer' title='",
      $langQuitViewer, "' /></a></div>",
      "<div class='lp_left'><a href=\"". $urlAppend ."/courses/". $currentCourseID ."/\" target='_top' title='" .
      q($currentCourseName) . "'>" . q(ellipsize($currentCourseName, 35)) .
@@ -215,7 +214,7 @@ echo "<div class='lp_right'>$prevNextString&nbsp;<a href='$returl' target='_top'
 
 echo "<div class='clear'></div>";
 
-echo "<div class='logo'><img src=\"".$imgRepositoryWeb."lp/logo_openeclass.png\" alt='' title='' /></div>";
+echo "<div class='logo'><img src='$themeimg/lp/logo_openeclass.png' alt='' title='' /></div>";
 
 echo "<div class='lp_right_grey'>";
 if($uid) {

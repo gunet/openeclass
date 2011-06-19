@@ -65,7 +65,8 @@ if (isset($_GET['submit'])) {
 // show non-expired assignments list to allow selection
 function show_assignments()
 {
-	global $m, $uid, $group_id, $langSubmit, $langDays, $langNoAssign, $tool_content, $langWorks, $currentCourseID, $code_cours;
+        global $m, $uid, $group_id, $langSubmit, $langDays, $langNoAssign, $tool_content,
+               $langWorks, $currentCourseID, $code_cours, $themeimg;
 
 	$res = db_query("SELECT *, (TO_DAYS(deadline) - TO_DAYS(NOW())) AS days
 		FROM `$currentCourseID`.assignments");
@@ -100,7 +101,7 @@ function show_assignments()
 		}
 
 		$tool_content .= "<tr><td width=\"1%\">
-			<img style='padding-top:2px;' src='../../template/classic/img/arrow.png' title='bullet'></td>
+			<img style='padding-top:2px;' src='$themeimg/arrow.png' alt=''></td>
 			<td><div align='left'><a href='work.php?course=$code_cours&amp;id=$row[id]'>".q($row['title'])."</a></td>
 			<td align='center'>".nice_format($row['deadline']);
 		if ($row['days'] > 1) {
