@@ -77,6 +77,7 @@ function metaCreateForm($metadata, $oldFilename, $real_filename) {
 	<fieldset>
 	  <input type='hidden' name='metadataPath' value='". q($metadata) ."' />
 	  <input type='hidden' name='meta_filename' value='$oldFilename' />
+	  <input type='hidden' name='meta_mimetype' value='". get_mime_type($oldFilename) ."' />
 	  $group_hidden_input
 	  <legend>$langAddMetadata</legend>
 	  <table class='tbl' width='100%'>
@@ -279,6 +280,10 @@ function metaCreateDomDocument($xmlFilename) {
 	$langstring = $description->appendChild($dom->createElement('string', htmlspecialchars($_POST['meta_rights'], ENT_QUOTES, 'utf-8')));
 	$langstring->setAttribute('language', $_POST['meta_language']);
 	// end of rights
+	
+	$technical = $lom->appendChild($dom->createElement('technical'));
+	$format = $technical->appendChild($dom->createElement('format', $_POST['meta_mimetype']));
+	// end of technical
 	
 	$educational = $lom->appendChild($dom->createElement('educational'));
 
