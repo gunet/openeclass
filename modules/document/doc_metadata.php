@@ -270,16 +270,8 @@ function metaCreateDomDocument($xmlFilename) {
 	metaSimpleLoop($dom, $contribute, 'entity', $_POST['meta_author']);
 	// end of lifeCycle
 	
-	$rights = $lom->appendChild($dom->createElement('rights'));
-	
-	$copyrightAndOtherRestrictionse = $rights->appendChild($dom->createElement('copyrightAndOtherRestrictions'));
-	$source = $copyrightAndOtherRestrictionse->appendChild($dom->createElement('source', 'LOMv1.0'));
-	$value = $copyrightAndOtherRestrictionse->appendChild($dom->createElement('value', 'yes'));
-	
-	$description = $rights->appendChild($dom->createElement('description'));
-	$langstring = $description->appendChild($dom->createElement('string', htmlspecialchars($_POST['meta_rights'], ENT_QUOTES, 'utf-8')));
-	$langstring->setAttribute('language', $_POST['meta_language']);
-	// end of rights
+	$metametadata = $lom->appendChild($dom->createElement('metaMetadata'));
+	// end of metametadata
 	
 	$technical = $lom->appendChild($dom->createElement('technical'));
 	$format = $technical->appendChild($dom->createElement('format', $_POST['meta_mimetype']));
@@ -299,6 +291,17 @@ function metaCreateDomDocument($xmlFilename) {
 	$langstring = $description->appendChild($dom->createElement('string', htmlspecialchars($_POST['meta_notes'], ENT_QUOTES, 'utf-8')));
 	$langstring->setAttribute('language', $_POST['meta_language']);
 	// end of educational
+	
+	$rights = $lom->appendChild($dom->createElement('rights'));
+	
+	$copyrightAndOtherRestrictionse = $rights->appendChild($dom->createElement('copyrightAndOtherRestrictions'));
+	$source = $copyrightAndOtherRestrictionse->appendChild($dom->createElement('source', 'LOMv1.0'));
+	$value = $copyrightAndOtherRestrictionse->appendChild($dom->createElement('value', 'yes'));
+	
+	$description = $rights->appendChild($dom->createElement('description'));
+	$langstring = $description->appendChild($dom->createElement('string', htmlspecialchars($_POST['meta_rights'], ENT_QUOTES, 'utf-8')));
+	$langstring->setAttribute('language', $_POST['meta_language']);
+	// end of rights
 	
 	$classification = $lom->appendChild($dom->createElement('classification'));
 	
