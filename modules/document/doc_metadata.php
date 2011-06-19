@@ -246,6 +246,10 @@ function metaCreateDomDocument($xmlFilename) {
 	
 	$general = $lom->appendChild($dom->createElement('general'));
 	
+	$identifier = $general->appendChild($dom->createElement('identifier'));
+	$catalog = $identifier->appendChild($dom->createElement('catalog', 'URL'));
+	$entry = $identifier->appendChild($dom->createElement('entry', $_POST['meta_filename']));
+	
 	$title = $general->appendChild($dom->createElement('title'));
 	$langstring = $title->appendChild($dom->createElement('string', htmlspecialchars($_POST['meta_title'], ENT_QUOTES, 'utf-8')));
 	$langstring->setAttribute('language', $_POST['meta_language']);
@@ -383,6 +387,31 @@ function hasMetaData($filename, $basedir, $group_sql) {
 		return false;
 	
 	return false;
+}
+
+
+/*
+ * Update general->identifier->entry when renaming a file with metadata
+ */
+function metaRenameDomDocument($xmlFilename, $newEntry) {
+	if (!file_exists($xmlFilename))
+		return;
+	
+	$sxe = simplexml_load_file($xmlFilename);
+	if ($sxe === false)
+		return;
+	
+	$sxe->general->identifier->entry = $newEntry;
+	
+	$dom_sxe = dom_import_simplexml($sxe);
+ 	if (!$dom_sxe)
+ 		return;
+	
+	$dom = new DOMDocument('1.0');
+	$dom_sxe = $dom->importNode($dom_sxe, true);
+	$dom_sxe = $dom->appendChild($dom_sxe);
+	$dom->formatOutput = true;
+	$dom->save($xmlFilename);
 }
 
 ?>
