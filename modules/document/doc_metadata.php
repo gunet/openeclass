@@ -270,7 +270,11 @@ function metaCreateDomDocument($xmlFilename) {
 	metaSimpleLoop($dom, $contribute, 'entity', $_POST['meta_author']);
 	// end of lifeCycle
 	
-	$metametadata = $lom->appendChild($dom->createElement('metaMetadata'));
+	$metaMetadata = $lom->appendChild($dom->createElement('metaMetadata'));
+	
+	$contribute = $metaMetadata->appendChild($dom->createElement('contribute'));
+	$date = $contribute->appendChild($dom->createElement('date'));
+	$dateTime = $date->appendChild($dom->createElement('dateTime', date('Y-m-d')));
 	// end of metametadata
 	
 	$technical = $lom->appendChild($dom->createElement('technical'));
