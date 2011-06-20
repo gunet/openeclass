@@ -100,10 +100,9 @@ function getUserLessonInfo($uid, $type)
 	$ret_val[8] = $lesson_id;
 
 	//check what sort of data should be returned
-	if ($type == "html") {
+	if ($type == 'html') {
 		return array($ret_val,htmlInterface($ret_val, $lesson_fakeCode));
-		//		return htmlInterface($ret_val);
-	} elseif ($type == "data") {
+	} elseif ($type == 'data') {
 		return $ret_val;
 	}
 }
@@ -122,7 +121,7 @@ function htmlInterface($data, $lesson_fCode)
 	global $langNotEnrolledToLessons, $langWelcomeProfPerso, $langWelcomeStudPerso, $langWelcomeSelect;
 	global $langCourse, $langActions, $langUnregCourse, $langAdm, $uid, $themeimg;
 	
-	$lesson_content = "";
+	$lesson_content = '';
 	if ($data[0] > 0) {
 		$lesson_content .= "<table width='100%' class='tbl_lesson'>";
 		for ($i=0; $i < $data[0]; $i++) {

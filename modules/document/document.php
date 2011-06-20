@@ -33,18 +33,7 @@ include '../../include/lib/fileManageLib.inc.php';
 include '../../include/lib/fileUploadLib.inc.php';
 include '../../include/pclzip/pclzip.lib.php' ;
 
-// file manager basic variables definition
-$local_head = '
-<script type="text/javascript">
-function confirmation (name)
-{
-    if (confirm("'.$langConfirmDelete.'" + name))
-        {return true;}
-    else
-        {return false;}
-}
-</script>
-';
+load_js('tools.js');
 
 $require_help = TRUE;
 $helpTopic = 'Doc';
@@ -823,13 +812,13 @@ if ($doc_count == 0) {
 	$tool_content .= "
     <tr>
       <td colspan='$cols'><div class='sub_title1'><b>$langDirectory:</b> " . make_clickable_path($curDirPath) .
-      "&nbsp;<a href='{$base_url}download=$download_path'><img src='../../template/classic/img/save_s.png' width='16' height='16' align='middle' alt='$langDownloadDir' title='$langDownloadDir'></a><br></div></td>
+      "&nbsp;<a href='{$base_url}download=$download_path'><img src='$themeimg/save_s.png' width='16' height='16' align='middle' alt='$langDownloadDir' title='$langDownloadDir'></a><br></div></td>
       <td><div align='right'>";
 
         // Link for sortable table headings
         function headlink($label, $this_sort)
         {
-                global $sort, $reverse, $curDirPath, $base_url;
+                global $sort, $reverse, $curDirPath, $base_url, $themeimg;
 
                 if (empty($curDirPath)) {
                         $path = '/';
@@ -838,8 +827,8 @@ if ($doc_count == 0) {
                 }
                 if ($sort == $this_sort) {
                         $this_reverse = !$reverse;
-                        $indicator = ' <img src="../../template/classic/img/arrow_' . 
-                                ($reverse? 'up': 'down') . '.png" />';
+                        $indicator = " <img src='$themeimg/arrow_" . 
+                                ($reverse? 'up': 'down') . ".png' />";
                 } else {
                         $this_reverse = $reverse;
                         $indicator = '';
@@ -853,7 +842,7 @@ if ($doc_count == 0) {
         if ($curDirName) // if the $curDirName is empty, we're in the root point and we can't go to a parent dir
         {
                 $parentlink = $base_url . 'openDir=' . $cmdParentDir;
-                $tool_content .=  "<a href='$parentlink'>$langUp</a> <a href='$parentlink'><img src='../../template/classic/img/folder_up.png' height='16' width='16' alt='icon'/></a>";
+                $tool_content .=  "<a href='$parentlink'>$langUp</a> <a href='$parentlink'><img src='$themeimg/folder_up.png' height='16' width='16' alt='icon'/></a>";
         }
         $tool_content .= "</div></td>
     </tr>
@@ -894,7 +883,7 @@ if ($doc_count == 0) {
                         }
                         $copyright_icon = '';
                         if ($is_dir) {
-                                $image = '../../template/classic/img/folder.png';
+                                $image = $themeimg.'/folder.png';
                                 $file_url = $base_url . "openDir=$cmdDirName";
                                 $link_extra = '';
 				$link_text = $entry['filename'];
@@ -914,7 +903,7 @@ if ($doc_count == 0) {
                                 $dload_msg = $langSave;
                         }
                         $download_url = $base_url . "download=$cmdDirName";
-                        $download_icon = "<a href='$download_url'><img src='../../template/classic/img/save_s.png' width='16' height='16' align='middle' alt='$dload_msg' title='$dload_msg'></a>";
+                        $download_icon = "<a href='$download_url'><img src='$themeimg/save_s.png' width='16' height='16' align='middle' alt='$dload_msg' title='$dload_msg'></a>";
                         $tool_content .= "\n<tr $style>";
                         $tool_content .= "\n<td class='center' valign='top'><a href='$file_url'$style$link_extra><img src='$image' /></a></td>";
                         $tool_content .= "\n<td><a href='$file_url'$link_extra>$link_text</a>";
@@ -950,48 +939,48 @@ if ($doc_count == 0) {
                                 if (!$is_dir && $entry['format'] != ".meta") {
                                 	/*** replace/overwrite command, only applies to files ***/
                                 	$tool_content .= "<a href='{$base_url}replace=$cmdDirName'>" .
-                                	                 "<img src='../../template/classic/img/replace.png' " .
+                                	                 "<img src='$themeimg/replace.png' " .
                                 	                 "title='$langReplace' alt='$langReplace' /></a>&nbsp;";
                                 }
                                 /*** delete command ***/
-                                $tool_content .= "<input type='image' src='../../template/classic/img/delete.png' alt='$langDelete' title='$langDelete' name='delete' value='1' onClick=\"return confirmation('".addslashes($entry['filename'])."');\" />&nbsp;" . $padding2;
-                                if ($entry['format'] != ".meta") {
+                                $tool_content .= "<input type='image' src='$themeimg/delete.png' alt='$langDelete' title='$langDelete' name='delete' value='1' onClick=\"return confirmation('".js_escape($langConfirmDelete.' '.$entry['filename'])."');\" />&nbsp;" . $padding2;
+                                if ($entry['format'] != '.meta') {
                                 	/*** copy command ***/
                                 	$tool_content .= "<a href='{$base_url}move=$cmdDirName'>" .
-                                	                 "<img src='../../template/classic/img/move.png' " .
+                                	                 "<img src='$themeimg/move.png' " .
                                 	                 "title='$langMove' alt='$langMove' /></a>&nbsp;";
                                 	/*** rename command ***/
-                                	$tool_content .=  "<a href='{$base_url}rename=$cmdDirName'>";
-                                	$tool_content .=  "<img src='../../template/classic/img/rename.png' " .
-                                	                  "title='$langRename' alt='$langRename' /></a>&nbsp;";
+                                	$tool_content .= "<a href='{$base_url}rename=$cmdDirName'>" .
+                                                         "<img src='$themeimg/rename.png' " .
+                                                         "title='$langRename' alt='$langRename' /></a>&nbsp;";
                                 	/*** comment command ***/
-                                	$tool_content .= "<a href='{$base_url}comment=$cmdDirName'>";
-                                	$tool_content .= "<img src='../../template/classic/img/comment_edit.png' " .
-                                	                 "title='$langComment' alt='$langComment' /></a>&nbsp;";
+                                	$tool_content .= "<a href='{$base_url}comment=$cmdDirName'>" .
+                                                         "<img src='$themeimg/comment_edit.png' " .
+                                                         "title='$langComment' alt='$langComment' /></a>&nbsp;";
                                 }
                                 /*** metadata command ***/
                                 if (get_config("insert_xml_metadata")) {
                                 	$xmlCmdDirName = ($entry['format'] == ".meta" && get_file_extension($cmdDirName) == "xml") ? substr($cmdDirName, 0, -4) : $cmdDirName;
 	                                $tool_content .= "<a href='{$base_url}metadata=$xmlCmdDirName'>";
-	                                $tool_content .= "<img src='../../template/classic/img/lom.png' " .
+	                                $tool_content .= "<img src='$themeimg/lom.png' " .
 	                                                 "title='$langMetadata' alt='$langMetadata' /></a>&nbsp;";
                                 }
                                 /*** visibility command ***/
                                 if ($is_adminOfCourse) {
 					if ($entry['visible']) {
 						$tool_content .= "<a href='{$base_url}mkInvisibl=$cmdDirName'>" .
-								 "<img src='../../template/classic/img/visible.png' " .
+								 "<img src='$themeimg/visible.png' " .
 								 "title='$langVisible' alt='$langVisible' /></a>&nbsp;";
 	                                } else {
 	                                        $tool_content .= "<a href='{$base_url}mkVisibl=$cmdDirName'>" .
-								 "<img src='../../template/classic/img/invisible.png' " .
+								 "<img src='$themeimg/invisible.png' " .
 								 "title='$langVisible' alt='$langVisible' /></a>&nbsp;";
 	                                }
 				}
 				if ($subsystem == GROUP and isset($is_member) and ($is_member)) {
 	                                $tool_content .= "<a href='$urlAppend/modules/work/group_work.php?course=$code_cours" .
 							 "&amp;group_id=$group_id&amp;submit=$cmdDirName'>" .
-							 "<img src='../../template/classic/img/book.png' " .
+							 "<img src='$themeimg/book.png' " .
 							 "title='$langGroupSubmit' alt='$langGroupSubmit' /></a>";			
 				}
                                 $tool_content .= "</form></td>";
@@ -1009,4 +998,4 @@ if ($doc_count == 0) {
         $tool_content .= "\n    <br />";
 }
 add_units_navigation(TRUE);
-draw($tool_content, 2, '', $local_head);
+draw($tool_content, 2, null, $head_content);

@@ -41,12 +41,13 @@ $require_prof = true;
 
 include '../../include/baseTheme.php';
 include('../../include/action.php');
+
 $tool_content .= "
-  <div id=\"operations_container\">
-    <ul id=\"opslist\">
-      <li><a href='usage.php?course=$code_cours'>".$langUsageVisits."</a></li>
-      <li><a href='favourite.php?course=$code_cours&amp;first='>".$langFavourite."</a></li>
-      <li><a href='userduration.php?course=$code_cours'>".$langUserDuration."</a></li>
+  <div id='operations_container'>
+    <ul id='opslist'>
+      <li><a href='usage.php?course=$code_cours'>$langUsageVisits</a></li>
+      <li><a href='favourite.php?course=$code_cours&amp;first='>$langFavourite</a></li>
+      <li><a href='userduration.php?course=$code_cours'>$langUserDuration</a></li>
     </ul>
   </div>\n";
 
@@ -57,6 +58,7 @@ $local_style = '
     .content {position: relative; left: 25px; }';
 
 include('../../include/jscalendar/calendar.php');
+
 if ($language == 'greek') {
     $lang = 'el';
 } else if ($language == 'english') {
@@ -65,9 +67,6 @@ if ($language == 'greek') {
 
 $jscalendar = new DHTML_Calendar($urlServer.'include/jscalendar/', $lang, 'calendar-blue2', false);
 $local_head = $jscalendar->get_load_files_code();
-
-
-
 
 $usage_defaults = array (
     'u_user_id' => -1,
@@ -83,7 +82,6 @@ foreach ($usage_defaults as $key => $val) {
     }
 }
 
-
 $date_fmt = '%Y-%m-%d';
 $date_where = " (date_time BETWEEN '$u_date_start 00:00:00' AND '$u_date_end 23:59:59') ";
 $date_what  = "DATE_FORMAT(MIN(date_time), '$date_fmt') AS date_start, DATE_FORMAT(MAX(date_time), '$date_fmt') AS date_end ";
@@ -95,27 +93,25 @@ if ($u_user_id != -1) {
 }
 
 
-$sql_1=" SELECT user_id, ip, date_time FROM logins AS a WHERE ".$date_where." AND ".$user_where." order by date_time desc";
+$sql_1 = "SELECT user_id, ip, date_time FROM logins AS a
+                 WHERE ".$date_where." AND ".$user_where." ORDER BY date_time DESC";
 
-$sql_2=" SELECT a.user_id as user_id, a.nom as nom, a.prenom as prenom, a.username
-            FROM user AS a LEFT JOIN cours_user AS b ON a.user_id = b.user_id
-            WHERE b.cours_id = $cours_id AND ".$user_where;
+$sql_2 = "SELECT a.user_id as user_id, a.nom as nom, a.prenom as prenom, a.username
+                 FROM user AS a LEFT JOIN cours_user AS b ON a.user_id = b.user_id
+                 WHERE b.cours_id = $cours_id AND ".$user_where;
 
-
-
-$sql_3="SHOW TABLES FROM `$currentCourseID` LIKE 'stat_accueil'";
-$result_3=db_query($sql_3, $currentCourseID);
+$sql_3 = "SHOW TABLES FROM `$currentCourseID` LIKE 'stat_accueil'";
+$result_3 = db_query($sql_3, $currentCourseID);
 $exist_stat_accueil=0;
 if (mysql_fetch_assoc($result_3)) {
     $exist_stat_accueil=1;
 }
 
-$sql_4="  SELECT host, address, `date` FROM stat_accueil WHERE `date` BETWEEN '$u_date_start 00:00:00' AND '$u_date_end 23:59:59' order by `date` desc";
+$sql_4 = "SELECT host, address, `date` FROM stat_accueil
+                 WHERE `date` BETWEEN '$u_date_start 00:00:00' AND '$u_date_end 23:59:59'
+                 ORDER BY `date` DESC";
 
-
-
-
-///Take data from logins
+// Take data from logins
 $result_2= db_query($sql_2, $mysqlMainDb);
 
 $users = array();
@@ -127,7 +123,7 @@ $result = db_query($sql_1, $currentCourseID);
 $table_cont = '';
 $unknown_users = array();
 
-$k=0;
+$k = 0;
 while ($row = mysql_fetch_assoc($result)) {
         $known = false;
         if (isset($users[$row['user_id']])) {
@@ -148,7 +144,7 @@ while ($row = mysql_fetch_assoc($result)) {
                 $table_cont .= "<tr class='odd'>";
         }
         $table_cont .= "
-                <td width=\"1\"><img src='${urlServer}/template/classic/img/arrow.png' title='bullet'></td>
+                <td width=\"1\"><img src='$themeimg/arrow.png' title='bullet'></td>
                 <td>";
         if ($known) {
                 $table_cont .= $user;
@@ -156,8 +152,8 @@ while ($row = mysql_fetch_assoc($result)) {
                 $table_cont .= "<span class='red'>$user</span>";
         }
         $table_cont .= "</td>
-                <td align=\"center\">".$row['ip']."</td>
-                <td align=\"center\">".$row['date_time']."</td>
+                <td align='center'>".$row['ip']."</td>
+                <td align='center'>".$row['date_time']."</td>
                 </tr>";
 
         $k++;
@@ -170,15 +166,15 @@ if ($exist_stat_accueil){
     $k1=0;
     while ($row = mysql_fetch_assoc($result_4)) {
 	if ($k%2==0) {
-            $table2_cont .= "<tr class=\"even\">";
+            $table2_cont .= "<tr class='even'>";
 	} else {
-            $table2_cont .= "<tr class=\"odd\">";
+            $table2_cont .= "<tr class='odd'>";
 	}
         $table2_cont .= "
-        <td width=\"1\"><img style='border:0px;' src='${urlServer}/template/classic/img/arrow.png' title='bullet'></td>
+        <td width='1'><img src='$themeimg/arrow.png' alt=''></td>
         <td>".$row['host']."</td>
-        <td align=\"center\">".$row['address']."</td>
-        <td align=\"center\">".$row['date']."</td>
+        <td align='center'>".$row['address']."</td>
+        <td align='center'>".$row['date']."</td>
         </tr>";
         $k1++;
     }
@@ -190,12 +186,12 @@ if (count($unknown_users) > 0) {
 
 if ($table_cont) {
   $tool_content .= "
-  <table width='99%' class=\"tbl_alt\">
+  <table width='99%' class='tbl_alt'>
   <tr>
-    <th colspan=\"4\">$langUserLogins</th>
+    <th colspan='4'>$langUserLogins</th>
   </tr>
   <tr>
-    <th colspan=\"2\" class=\"left\">".$langUser."</th>
+    <th colspan='2' class='left'>".$langUser."</th>
     <th>".$langAddress."</th>
     <th>".$langLoginDate."</th>
   </tr>";
@@ -205,27 +201,22 @@ if ($table_cont) {
 }
 
 if ($table2_cont) {
-  $tool_content .= "
-  <p>".$langStatAccueil."</p>
-  <table width='99%' class=\"tbl_alt\">
-  <tr>
-    <th colspan=\"4\">$langUserLogins</th>
-  </tr>
-  <tr>
-    <th colspan=\"2\">".$langHost."</th>
-    <th>".$langAddress."</th>
-    <th>".$langLoginDate."</th>
-  </tr>";
-  $tool_content .= "".$table2_cont."";
-  $tool_content .= "
-  </table>";
+        $tool_content .= "
+          <p>$langStatAccueil</p>
+          <table width='99%' class='tbl_alt'>
+             <tr><th colspan='4'>$langUserLogins</th></tr>
+             <tr><th colspan='2'>$langHost</th>
+                 <th>$langAddress</th>
+                 <th>$langLoginDate</th></tr>
+             $table2_cont
+          </table>";
 }
 if (!($table_cont || $table2_cont)) {
-    $tool_content .= '<p class="alert1">'.$langNoLogins.'</p>';
+        $tool_content .= '<p class="alert1">'.$langNoLogins.'</p>';
 }
 
-    //make form
-    $start_cal = $jscalendar->make_input_field(
+//make form
+$start_cal = $jscalendar->make_input_field(
            array('showsTime'      => false,
                  'showOthers'     => true,
                  'ifFormat'       => '%Y-%m-%d',
@@ -254,7 +245,7 @@ if (!($table_cont || $table2_cont)) {
     $letterlinks = '';
     while ($row = mysql_fetch_assoc($result)) {
         $first_letter = $row['first_letter'];
-        $letterlinks .= '<a href="?course='.$code_cours.'&amp;first='.$first_letter.'">'.$first_letter.'</a> ';
+        $letterlinks .= '<a href="?course='.$code_cours.'&amp;first='.urlencode($first_letter).'">'.$first_letter.'</a> ';
     }
 
     if (isset($_GET['first'])) {
@@ -285,7 +276,7 @@ if (!($table_cont || $table2_cont)) {
   <tbody>
   <tr>
     <th>&nbsp;</th>
-    <td><b>'.$langCreateStatsGraph.':</td>
+    <td><b>'.$langCreateStatsGraph.':</b></td>
   </tr>
   <tr>
     <th>'.$langStartDate.':</th>
@@ -308,5 +299,6 @@ if (!($table_cont || $table2_cont)) {
   </table>
 </fieldset>
 </form>';
-draw($tool_content, 2, '', $local_head, '');
-?>
+
+draw($tool_content, 2, null, $local_head);
+

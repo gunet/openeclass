@@ -389,7 +389,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 			    (!isset($require_current_course) and !check_prof())) {
 				$helpTopic .= '_student';
 			}
-			$help_link_icon = " <a  href=\"" . $relPath . "modules/help/help.php?topic=$helpTopic&amp;language=$language\"
+			$help_link_icon = " <a href=\"" . $relPath . "modules/help/help.php?topic=$helpTopic&amp;language=$language\"
         onClick=\"window.open('" . $relPath . "modules/help/help.php?topic=$helpTopic&amp;language=$language','MyWindow','toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=350,height=450,left=300,top=10');
         return false;\"><img class='HelpIcon' src='$themeimg/help.png' alt='$langHelp' /></a>";
 

@@ -154,14 +154,14 @@ if ($total_categories) {
 		<th width='80' class='right'>";
 		if ($is_adminOfCourse) {
 			$tool_content .= "<a href='forum_admin.php?course=$code_cours&amp;forumgo=yes&amp;cat_id=$catNum'>
-			<img src='../../template/classic/img/add.png' title='$langNewForum' alt='$langNewForum' /></a>
+			<img src='$themeimg/add.png' title='$langNewForum' alt='$langNewForum' /></a>
 			<a href='forum_admin.php?course=$code_cours&amp;forumcatedit=yes&amp;cat_id=$catNum'>
-			<img src='../../template/classic/img/edit.png' title='$langModify' alt='$langModify' /></a>
+			<img src='$themeimg/edit.png' title='$langModify' alt='$langModify' /></a>
 			<a href='forum_admin.php?course=$code_cours&amp;forumcatdel=yes&amp;cat_id=$catNum' onClick='return confirmation();'>
-			<img src='../../template/classic/img/delete.png' title='$langDelete' /></a>";
+			<img src='$themeimg/delete.png' title='$langDelete' /></a>";
 		}
 		$tool_content .= "<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;forumcatnotify=$link_notify&amp;cat_id=$catNum'>
-		<img src='../../template/classic/img/email$icon.png' title='$langNotify' alt='$langNotify' />
+		<img src='$themeimg/email$icon.png' title='$langNotify' alt='$langNotify' />
 		</a></th>
 		</tr>\n";
 		$tool_content .= "<tr class='sub_title1'>
@@ -251,13 +251,13 @@ if ($total_categories) {
 					$tool_content .= "<td class='right'>";
 					if ($is_adminOfCourse) { // admin actions
 						$tool_content .= "<a href='forum_admin.php?course=$code_cours&amp;forumgoedit=yes&amp;forum_id=$forum_id&amp;cat_id=$catNum'>
-						<img src='../../template/classic/img/edit.png' title='$langModify' />
+						<img src='$themeimg/edit.png' title='$langModify' />
 						</a>
 						<a href='forum_admin.php?course=$code_cours&amp;forumgodel=yes&amp;forum_id=$forum_id&amp;cat_id=$catNum' onClick='return confirmation();'>
-						 <img src='../../template/classic/img/delete.png' title='$langDelete' /></a>";
+						 <img src='$themeimg/delete.png' title='$langDelete' /></a>";
 					}
 					$tool_content .= "<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;forumnotify=$forum_link_notify&amp;forum_id=$forum_id'>
-					<img src='../../template/classic/img/email$forum_icon.png' title='$langNotify' alt='$langNotify' /></a>
+					<img src='$themeimg/email$forum_icon.png' title='$langNotify' alt='$langNotify' /></a>
 					</td></tr>\n";
 				}
 			} else {
@@ -275,7 +275,7 @@ if ($total_categories) {
 }
 add_units_navigation(true);
 if($is_adminOfCourse) {
-	draw($tool_content, 2, '', $head_content);
+	draw($tool_content, 2, null, $head_content);
 } else {
 	draw($tool_content, 2);
 }

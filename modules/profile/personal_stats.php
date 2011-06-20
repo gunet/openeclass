@@ -18,10 +18,6 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-
-
-$require_help = TRUE;
-$helpTopic = 'Personal Statistics';
 include '../../include/baseTheme.php';
 include "../auth/auth.inc.php";
 $require_valid_uid = TRUE;
@@ -120,8 +116,8 @@ if (!extension_loaded('gd')) {
                         }
                         $i++;
                         $tool_content .= "
-	      <td width='16'><img src='${urlServer}/template/classic/img/arrow.png' alt=''></td>
-	      <td>" . course_code_to_title($code) . "</td>
+	      <td width='16'><img src='$themeimg/arrow.png' alt=''></td>
+	      <td>" . q(course_code_to_title($code)) . "</td>
 	      <td width='140'>" . format_time_duration(0 + $time) . "</td>
             </tr>";
                 }
@@ -166,7 +162,7 @@ $leResultat = db_query($sql, $mysqlMainDb);
             <tr class=\"odd\">";
 	   }
 	   $tool_content .= "
-              <td width=\"16\"><img src='${urlServer}/template/classic/img/arrow.png' alt=''></td>
+              <td width=\"16\"><img src='$themeimg/arrow.png' alt=''></td>
               <td>".strftime("%d/%m/%Y (%H:%M:%S) ", strtotime($when))."</td>
               <td>".$nomAction[$action]."</td>
 	    </tr>";

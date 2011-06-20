@@ -95,7 +95,7 @@ if ($res and mysql_num_rows($res) > 0) {
         }
 }
 if ($is_adminOfCourse) {
-        $edit_link = "&nbsp;<a href='../../modules/course_description/editdesc.php?course=$code_cours'><img src='../../template/classic/img/edit.png' title='$langEdit' alt='$langEdit' /></a>";
+        $edit_link = "&nbsp;<a href='../../modules/course_description/editdesc.php?course=$code_cours'><img src='$themeimg/edit.png' title='$langEdit' alt='$langEdit' /></a>";
 } else {
         $edit_link = '';
 }
@@ -148,7 +148,7 @@ if ($is_adminOfCourse) {
 // add course units
 if ($is_adminOfCourse) {
         $cunits_content .= "
-    <p class='descr_title'>$langCourseUnits: <a href='{$urlServer}modules/units/info.php?course=$code_cours'><img src='../../template/classic/img/add.png' width='16' height='16' title='$langAddUnit' alt='$langAddUnit' /></a></p>\n";
+    <p class='descr_title'>$langCourseUnits: <a href='{$urlServer}modules/units/info.php?course=$code_cours'><img src='$themeimg/add.png' width='16' height='16' title='$langAddUnit' alt='$langAddUnit' /></a></p>\n";
 
 } else {
         $cunits_content .= "\n  <p class='descr_title'>$langCourseUnits</p>";
@@ -194,22 +194,22 @@ while ($cu = mysql_fetch_array($sql)) {
         if ($is_adminOfCourse) { // display actions
                 $cunits_content .= "\n        <th width='70' class='center'>".
                         "<a href='../../modules/units/info.php?course=$code_cours&amp;edit=$cu[id]'>" .
-                        "<img src='../../template/classic/img/edit.png' title='$langEdit' /></a>" .
+                        "<img src='$themeimg/edit.png' title='$langEdit' /></a>" .
                         "\n        <a href='$_SERVER[PHP_SELF]?del=$cu[id]' " .
                         "onClick=\"return confirmation('$langConfirmDelete');\">" .
-                        "<img src='../../template/classic/img/delete.png' " .
+                        "<img src='$themeimg/delete.png' " .
                         "title='$langDelete' /></a>" .
                         "\n        <a href='$_SERVER[PHP_SELF]?vis=$cu[id]'>" .
-                        "<img src='../../template/classic/img/$icon_vis' " .
+                        "<img src='$themeimg/$icon_vis' " .
                         "title='$langVisibility' /></a></th>";
                 if ($cu['id'] != $last_id) {
                         $cunits_content .= "\n        <th width='40' class='right'><a href='$_SERVER[PHP_SELF]?down=$cu[id]'>" .
-                        "<img src='../../template/classic/img/down.png' title='$langDown' /></a>";
+                        "<img src='$themeimg/down.png' title='$langDown' /></a>";
                 } else {
                         $cunits_content .= "\n        <th width='40' class='right'>&nbsp;&nbsp;&nbsp;&nbsp;";
                 }
                 if (!$first) {
-                        $cunits_content .= "\n        <a href='$_SERVER[PHP_SELF]?up=$cu[id]'><img src='../../template/classic/img/up.png' title='$langUp' /></a></th>";
+                        $cunits_content .= "\n        <a href='$_SERVER[PHP_SELF]?up=$cu[id]'><img src='$themeimg/up.png' title='$langUp' /></a></th>";
                 } else {
                         $cunits_content .= "\n        &nbsp;&nbsp;&nbsp;&nbsp;</th>";
                 }
@@ -292,7 +292,7 @@ if ($is_adminOfCourse or
                 $button_image = "switch_s";
         }
         $toggle_student_view = "<form action='{$urlServer}student_view.php?course=$code_cours' method='post'>
-                <input id='view_btn' type='image' src='../../template/classic/img/$button_image.png' name='submit' title='$button_message'/>&nbsp;&nbsp;";
+                <input id='view_btn' type='image' src='$themeimg/$button_image.png' name='submit' title='$button_message'/>&nbsp;&nbsp;";
         $toggle_student_view_close = '</form>';
     } else {
         $toggle_student_view = $toggle_student_view_close = '';
@@ -321,9 +321,9 @@ $tool_content .= "
         <tr class='title1'>
           <td class='title1'>$langTools</td>
           <td class='left'>$toggle_student_view
-             <a href='../../modules/contact/index.php?course=$code_cours' id='email_btn'><img src='../../template/classic/img/email.png' alt='$langContactProf' title='$langContactProf' /></a>&nbsp;&nbsp;
-             <a href='$_SERVER[PHP_SELF]' title='" . q($intitule) . "' class='jqbookmark'><img src='${urlServer}template/classic/img/bookmark.png' alt='$langAddAsBookmark' title='$langAddAsBookmark' /></a>&nbsp;&nbsp;
-             <span class='feed'><a href='${urlServer}modules/announcements/rss.php?c=$currentCourseID'><img src='${urlAppend}/template/classic/img/feed.png' alt='$langRSSFeed' title='$langRSSFeed' /></a></span>&nbsp;$toggle_student_view_close</td>
+             <a href='../../modules/contact/index.php?course=$code_cours' id='email_btn'><img src='$themeimg/email.png' alt='$langContactProf' title='$langContactProf' /></a>&nbsp;&nbsp;
+             <a href='$_SERVER[PHP_SELF]' title='" . q($intitule) . "' class='jqbookmark'><img src='$themeimg/bookmark.png' alt='$langAddAsBookmark' title='$langAddAsBookmark' /></a>&nbsp;&nbsp;
+             <span class='feed'><a href='${urlServer}modules/announcements/rss.php?c=$currentCourseID'><img src='$themeimg/feed.png' alt='$langRSSFeed' title='$langRSSFeed' /></a></span>&nbsp;$toggle_student_view_close</td>
         </tr>
         </table>
         <br />\n";

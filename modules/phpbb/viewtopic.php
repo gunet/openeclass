@@ -112,7 +112,7 @@ if (isset($_GET['delete'])) {
 			WHERE topic_id = '$topic'";
 		if (!$r = db_query($sql, $currentCourseID)) {
 			$tool_content .= $langPostRemoved;
-			draw($tool_content, 2, '', $head_content);
+			draw($tool_content, 2, null, $head_content);
 			exit();
 		}
 	}
@@ -283,9 +283,9 @@ do {
 	<td width='40' valign='top'>";
 	if ($is_adminOfCourse) { // course admin
 		$tool_content .= "<a href=\"editpost.php?course=$code_cours&amp;post_id=".$myrow["post_id"]."&amp;topic=$topic&amp;forum=$forum\">
-		<img src='../../template/classic/img/edit.png' title='$langModify' alt='$langModify' /></a>";
+		<img src='$themeimg/edit.png' title='$langModify' alt='$langModify' /></a>";
 		$tool_content .= "&nbsp;<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;post_id=".$myrow["post_id"]."&amp;topic=$topic&amp;forum=$forum&amp;delete=on' onClick='return confirmation()'>
-		<img src='../../template/classic/img/delete.png' title='$langDelete' /></a>";
+		<img src='$themeimg/delete.png' title='$langDelete' /></a>";
 	}
 	$tool_content .= "</td>\n</tr>";
 	$count++;
@@ -348,4 +348,4 @@ if ($paging and $total > $posts_per_page) {
         }
 	$tool_content .= "</span></td></tr></table>";
 }
-draw($tool_content, 2, '', $local_head);
+draw($tool_content, 2, null, $local_head);

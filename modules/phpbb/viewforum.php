@@ -288,17 +288,17 @@ if (mysql_num_rows($result) > 0) { // topics found
 		if ($is_adminOfCourse) {
 			$tool_content .= "
 			<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;forum=$forum_id&amp;topic_id=$myrow[topic_id]&amp;topicdel=yes' onClick='return confirmation()'>
-			<img src='../../template/classic/img/delete.png' title='$langDelete' alt='$langDelete' />
+			<img src='$themeimg/delete.png' title='$langDelete' alt='$langDelete' />
 			</a>";
 		}
 		if (isset($_GET['start']) and $_GET['start'] > 0) {
 			$tool_content .= "
 			<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;forum=$forum_id&amp;start=$_GET[start]&amp;topicnotify=$topic_link_notify&amp;topic_id=$myrow[topic_id]'>
-			<img src='../../template/classic/img/email$topic_icon.png' title='$langNotify' />
+			<img src='$themeimg/email$topic_icon.png' title='$langNotify' />
 			</a>";
 		} else {
 			$tool_content .= "<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;forum=$forum_id&amp;topicnotify=$topic_link_notify&amp;topic_id=$myrow[topic_id]'>
-			<img src='../../template/classic/img/email$topic_icon.png' title='$langNotify' />
+			<img src='$themeimg/email$topic_icon.png' title='$langNotify' />
 			</a>";
 		}
 		$tool_content .= "</td>\n</tr>";
@@ -308,7 +308,7 @@ if (mysql_num_rows($result) > 0) { // topics found
 } else {
 	$tool_content .= "<div class='alert1'>$langNoTopics</div>";
 }
-draw($tool_content, 2, '', $local_head);
+draw($tool_content, 2, null, $local_head);
 
 
 function add_topic_link($pagenr, $total_reply_pages) {
