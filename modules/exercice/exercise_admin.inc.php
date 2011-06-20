@@ -174,8 +174,8 @@ if(isset($_GET['modifyExercise']) or isset($_GET['NewExercise']) or !isset($_POS
 	$tool_content .= "<input type='submit' name='cancelExercise' value='$langCancel'></td>
 	</tr>
         </table>
-      </fieldset>
-      </form>";
+	</fieldset>
+	</form>";
 
 } else {
 	$displayResults = $objExercise->selectResults();
@@ -193,7 +193,7 @@ if(isset($_GET['modifyExercise']) or isset($_GET['NewExercise']) or !isset($_POS
 	$tool_content .= "
         <fieldset>
         <legend>$langInfoExercise&nbsp;<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;modifyExercise=yes'>
-              <img src='../../template/classic/img/edit.png' align='middle' title='$langModify' /></a></legend>
+              <img src='$themeimg/edit.png' align='middle' title='$langModify' /></a></legend>
         <table width='99%' class='tbl'>
 	<tr>
 	  <th width='180'>$langExerciseName :</th>

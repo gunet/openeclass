@@ -114,7 +114,7 @@ foreach($_SESSION['questionList'][$exerciseId] as $questionId) {
 	$iplus=$i+1;
 	$tool_content .= "
 	<br/>
-	<table width='100%' class='tbl'>
+	<table width='100%' class='tbl_alt'>
 	<tr class='odd'>
 	  <td colspan='${colspan}'><b><u>$langQuestion</u>: $iplus</b></td>
 	</tr>
@@ -132,23 +132,23 @@ foreach($_SESSION['questionList'][$exerciseId] as $questionId) {
 	if ($displayResults == 1) {
 		if($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER || $answerType == TRUE_FALSE) {
 			$tool_content .= "
-    <tr class='even'>
-      <td width='50' valign='top'><b>$langChoice</b></td>
-      <td width='50' class='center' valign='top'><b>$langExpectedChoice</b></td>
-      <td valign='top'><b>$langAnswer</b></td>
-      <td valign='top'><b>$langComment</b></td>
-    </tr>";
+			<tr class='even'>
+			  <td width='50' valign='top'><b>$langChoice</b></td>
+			  <td width='50' class='center' valign='top'><b>$langExpectedChoice</b></td>
+			  <td valign='top'><b>$langAnswer</b></td>
+			  <td valign='top'><b>$langComment</b></td>
+			</tr>";
 		} elseif($answerType == FILL_IN_BLANKS) {
 			$tool_content .= "
-    <tr>
-      <td class='even'><b>$langAnswer</b></td>
-    </tr>";
+			<tr>
+			  <td class='even'><b>$langAnswer</b></td>
+			</tr>";
 		} else {
 			$tool_content .= "
-    <tr class='even'>
-      <td><b>$langElementList</b></td>
-      <td><b>$langCorrespondsTo</b></td>
-    </tr>";
+			<tr class='even'>
+			  <td><b>$langElementList</b></td>
+			  <td><b>$langCorrespondsTo</b></td>
+			</tr>";
 		}
 	}
 	// construction of the Answer object
@@ -260,9 +260,9 @@ foreach($_SESSION['questionList'][$exerciseId] as $questionId) {
 			if($answerType != MATCHING || $answerCorrect) {
 				if($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER || $answerType == TRUE_FALSE) {
 					$tool_content .= "
-    <tr class='even'>
-      <td>
-      <div align='center'><img src='../../template/classic/img/";
+					<tr class='even'>
+					  <td>
+					  <div align='center'><img src='$themeimg/";
 					if ($answerType == UNIQUE_ANSWER || $answerType == TRUE_FALSE) {
 						$tool_content .= "radio";
 					} else {
@@ -271,61 +271,58 @@ foreach($_SESSION['questionList'][$exerciseId] as $questionId) {
 					if ($studentChoice) {
 						$tool_content .= "_on";
 					} else {
-						$tool_content .= '_off';
+						$tool_content .= "_off";
 					}
 		
-					$tool_content .= ".png' border='0' /></div>
-      </td>
-      <td><div align='center'>";
+					$tool_content .= ".png' /></div>
+					</td>
+					<td><div align='center'>";
 	
 					if ($answerType == UNIQUE_ANSWER || $answerType == TRUE_FALSE) {
-						$tool_content .= "<img src=\"../../template/classic/img/radio";
+						$tool_content .= "<img src='$themeimg/radio";
 					} else {
-						$tool_content .= "<img src=\"../../template/classic/img/checkbox";
+						$tool_content .= "<img src='$themeimg/checkbox";
 					}
 					if ($answerCorrect) {
 						$tool_content .= "_on";
 					} else {
 						$tool_content .= "_off";	
 					}
-					$tool_content .= ".png\" /></div>";	
+					$tool_content .= ".png' /></div>";	
 					$tool_content .= "
-      </td>
-      <td>${answer}</td>
-      <td>";
+					</td>
+					<td>${answer}</td>
+					<td>";
 					if ($studentChoice) {
 						$tool_content .= nl2br(make_clickable($answerComment)); 
 					} else { 
 						$tool_content .= '&nbsp;';
 					} 
-					$tool_content .= "
-      </td>
-    </tr>";
+					$tool_content .= "</td></tr>";
 				} elseif($answerType == FILL_IN_BLANKS) {
 					$tool_content .= "
-    <tr class='even'>
-      <td>".nl2br($answer)."</td>
-    </tr>";
+					<tr class='even'>
+					  <td>".nl2br($answer)."</td>
+					</tr>";
 				} else {
 					$tool_content .= "
-    <tr class='even'>
-      <td>${answer}</td>
-      <td>${choice[$answerId]} / <font color='green'><b>${matching[$answerCorrect]}</b></font></td>
-    </tr>";
+					<tr class='even'>
+					  <td>${answer}</td>
+					  <td>${choice[$answerId]} / <font color='green'><b>${matching[$answerCorrect]}</b></font></td>
+					</tr>";
 				}
 			} 
 		} // end of if
 	}	// end for()
 	 if ($displayScore == 1) {
 		$tool_content .= "
-    <tr class='even'>
-      <td colspan='$colspan' class='odd'><div align='right'>
-		$langQuestionScore: <b>$questionScore/$questionWeighting</b></div>
-      </td>
-    </tr>";
+		<tr class='even'>
+		  <th colspan='$colspan' class='odd'><div align='right'>
+			    $langQuestionScore: <b>$questionScore/$questionWeighting</b></div>
+		  </th>
+		</tr>";
 	}
-	$tool_content .= "
-    </table>";
+	$tool_content .= "</table>";
 	// destruction of Answer
 	unset($objAnswerTmp);
 	$i++;
@@ -353,9 +350,9 @@ db_query($sql, $currentCourseID);
 if ($displayScore == 1) {
 	$tool_content .= "
     <br/>
-    <table width='100%' class='tbl'>
+    <table width='100%' class='tbl_alt'>
     <tr class='odd'>
-	<td class='right'>$langYourTotalScore: <b>$totalScore/$totalWeighting</b>
+	<td class='right'><b>$langYourTotalScore: $totalScore/$totalWeighting</b>
       </td>
     </tr>
     </table>";

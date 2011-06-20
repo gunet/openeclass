@@ -86,22 +86,22 @@ if($nbrQuestions) {
                     }
 
 		$tool_content .= "
-			<td align=\"right\" width=\"1\">".$i.".</td>
+			<td align='right' width='1'>".$i.".</td>
 			<td> ".$objQuestionTmp->selectTitle()."<br />
 			".$aType[$objQuestionTmp->selectType()-1]."</td>
 			<td class=\"right\" width=\"50\"><a href=\"".$_SERVER['PHP_SELF']."?course=$code_cours&amp;editQuestion=".$id."\">".
-			"<img src='../../template/classic/img/edit.png' align='middle' title='$langModify' /></a>".
+			"<img src='$themeimg/edit.png' align='middle' title='$langModify' /></a>".
 			" <a href=\"".$_SERVER['PHP_SELF']."?course=$code_cours&amp;deleteQuestion=".$id."\" "."onclick=\"javascript:if(!confirm('".addslashes(htmlspecialchars($langConfirmYourChoice))."')) return false;\">".
-			"<img src='../../template/classic/img/delete.png' align='middle' title='$langDelete' /></a></td>
+			"<img src='$themeimg/delete.png' align='middle' title='$langDelete' /></a></td>
 		<td width='20'>";
 		if($i != 1) {
 			$tool_content .= "<a href=\"".$_SERVER['PHP_SELF']."?course=$code_cours&amp;moveUp=".$id."\">
-   			<img src='../../template/classic/img/up.png' align='middle' title='$langUp' /></a> ";
+   			<img src='$themeimg/up.png' align='middle' title='$langUp' /></a> ";
 		}
 		$tool_content .= "</td><td width='20'>";
 		if($i != $nbrQuestions)	{
 			$tool_content .= "<a href=\"".$_SERVER['PHP_SELF']."?course=$code_cours&amp;moveDown=".$id."\">
-			<img src='../../template/classic/img/down.png' align='middle' title='$langDown' /></a> ";
+			<img src='$themeimg/down.png' align='middle' title='$langDown' /></a> ";
 		}
 		$tool_content .= "</td></tr>";
 		$i++;

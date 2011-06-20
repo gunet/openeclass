@@ -24,9 +24,9 @@
 // if the question we are modifying is used in several exercises
 if(isset($usedInSeveralExercises)) {
 	@$tool_content .= "
-  <h3>$questionName</h3>
-  <form method='post' action='$_SERVER[PHP_SELF]?course=$code_cours&amp;modifyQuestion=$_GET[modifyQuestion]&amp;modifyAnswers=$_GET[modifyAnswers]'>
-  <table class='tbl' width='100%'><tr><td>";
+	<h3>$questionName</h3>
+	<form method='post' action='$_SERVER[PHP_SELF]?course=$code_cours&amp;modifyQuestion=$_GET[modifyQuestion]&amp;modifyAnswers=$_GET[modifyAnswers]'>
+	<table class='tbl' width='100%'><tr><td>";
 
 	// submit question
 	if(isset($_POST['submitQuestion'])) {
@@ -97,12 +97,12 @@ if(isset($usedInSeveralExercises)) {
 	// is picture set ?
 	$okPicture=file_exists($picturePath.'/quiz-'.$questionId)?true:false;
 	$tool_content .= "
-      <fieldset>
+	<fieldset>
         <legend>$langQuestion &nbsp;";
         // doesn't show the edit link if we come from the question pool to pick a question for an exercise
         if(!isset($fromExercise)) {
                 $tool_content .= "<a href=\"".$_SERVER['PHP_SELF']."?course=$code_cours&amp;modifyQuestion=".$questionId."\">
-                <img src='../../template/classic/img/edit.png' align='middle' title='$langModify' /></a>";
+                <img src='$themeimg/edit.png' align='middle' title='$langModify' /></a>";
         }
 
         $tool_content .= "</legend>
@@ -116,14 +116,14 @@ if(isset($usedInSeveralExercises)) {
 	}
 	$tool_content .= "
 	</fieldset>
-      <table width='100%' class='tbl'>
-      <tr>
-      <th><b><u>$langQuestionAnswers</u>:</b>";
+	<table width='100%' class='tbl'>
+	<tr>
+	<th><b><u>$langQuestionAnswers</u>:</b>";
 
 	// doesn't show the edit link if we come from the question pool to pick a question for an exercise
 	if(!isset($fromExercise)) {
 		$tool_content .= "&nbsp;&nbsp;<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;modifyAnswers=$questionId'>
-		<img src='../../template/classic/img/edit.png' align='middle' title='$langModify' /></a>";
+		<img src='$themeimg/edit.png' align='middle' title='$langModify' /></a>";
 	}
         $tool_content .= "<br/></th>
 	</tr>

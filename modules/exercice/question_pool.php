@@ -215,23 +215,23 @@ if($is_adminOfCourse) {
 			if(!isset($fromExercise)) {
 				$tool_content .= "
 				<td width='1'><div style='padding-top:4px;'>
-				  <img src='../../template/classic/img/arrow.png' alt='bullet'></div>
+				  <img src='$themeimg/arrow.png' alt='bullet'></div>
 				</td>
 				<td>
 				  <a href=\"admin.php?course=$code_cours&amp;editQuestion=".$row['id']."&amp;fromExercise=\">".$row['question']."</a><br/>".$answerType."
 				</td>
 				<td width='3'><div align='center'><a href=\"admin.php?course=$code_cours&amp;editQuestion=".$row['id']."\">
-				  <img src='../../template/classic/img/edit.png' title='$langModify' /></a></div>
+				  <img src='$themeimg/edit.png' title='$langModify' /></a></div>
 				</td>";
 			} else {
 				$tool_content .= "
 				<td width='1'><div style='padding-top:4px;'>
-				  <img src='../../template/classic/img/arrow.png'></div>
+				  <img src='$themeimg/arrow.png'></div>
 				</td>
 				<td><a href=\"admin.php?course=$code_cours&amp;editQuestion=".$row['id']."&amp;fromExercise=".$fromExercise."\">".$row['question']."</a><br/>".$answerType."</td>
 				<td class='center'><div align='center'>
 				  <a href=\"".$_SERVER['PHP_SELF']."?course=$code_cours&amp;recup=".$row['id'].
-				"&amp;fromExercise=".$fromExercise."\"><img src='../../template/classic/img/enroll.png' title='$langReuse' /></a>
+				"&amp;fromExercise=".$fromExercise."\"><img src='$themeimg/enroll.png' title='$langReuse' /></a>
 				</td>";
 			}
 			//$tool_content .= "</td>";	
@@ -240,7 +240,7 @@ if($is_adminOfCourse) {
 				<td width='3' align='center'>
 				  <a href=\"".$_SERVER['PHP_SELF']."?course=$code_cours&amp;exerciseId=".$exerciseId."&amp;delete=".$row['id']."\"". 
 				  " onclick=\"javascript:if(!confirm('".addslashes(htmlspecialchars($langConfirmYourChoice)).
-				  "')) return false;\"><img src='../../template/classic/img/delete.png' title='$langDelete' /></a>
+				  "')) return false;\"><img src='$themeimg/delete.png' title='$langDelete' /></a>
 				</td>";
 			}
 			$tool_content .= "</tr>";

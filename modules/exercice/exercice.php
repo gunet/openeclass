@@ -201,45 +201,45 @@ if(!$nbrExercises) {
 				$descr = '';
 			}
 			$tool_content .= "<td width='16'>
-				<img src='${urlServer}/template/classic/img/arrow.png' alt='' /></td>
+				<img src='$themeimg/arrow.png' alt='' /></td>
 				<td><a href=\"exercice_submit.php?course=$code_cours&amp;exerciseId=${row['id']}\">".$row['titre']."</a>$descr</td>";
 			$eid = $row['id'];
 			$NumOfResults = mysql_fetch_array(db_query("SELECT COUNT(*) FROM exercise_user_record 
 				WHERE eid='$eid'", $currentCourseID));
 	
 			if ($NumOfResults[0]) {
-				$tool_content .= "<td align=\"center\"><a href=\"results.php?course=$code_cours&amp;exerciseId=".$row['id']."\">".
+				$tool_content .= "<td align='center'><a href=\"results.php?course=$code_cours&amp;exerciseId=".$row['id']."\">".
 				$langExerciseScores1."</a> | 
 				<a href=\"csv.php?course=$code_cours&amp;exerciseId=".$row['id']."\" target=_blank>".$langExerciseScores3."</a></td>";
 			} else {
-				$tool_content .= "<td align=\"center\">	-&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;- </td>";
+				$tool_content .= "<td align='center'>	-&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;- </td>";
 			}
 			$langModify_temp = htmlspecialchars($langModify);
 			$langConfirmYourChoice_temp = addslashes(htmlspecialchars($langConfirmYourChoice));
 			$langDelete_temp = htmlspecialchars($langDelete);
 			$tool_content .= "<td align = 'right'>
-			  <a href='admin.php?course=$code_cours&amp;exerciseId=$row[id]'><img src='../../template/classic/img/edit.png' alt='$langModify_temp' title='$langModify_temp' />
+			  <a href='admin.php?course=$code_cours&amp;exerciseId=$row[id]'><img src='$themeimg/edit.png' alt='$langModify_temp' title='$langModify_temp' />
 			  </a>
 				<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;choice=delete&amp;exerciseId=$row[id]' onClick='return confirmation();'>          
-			  <img src='../../template/classic/img/delete.png' alt='$langDelete_temp' title='$langDelete_temp' />
+			  <img src='$themeimg/delete.png' alt='$langDelete_temp' title='$langDelete_temp' />
 			  </a>";
 		
 			// if active
 			if($row['active']) {
 				if (isset($page)) {
 					$tool_content .= "<a href=\"$_SERVER[PHP_SELF]?course=$code_cours&amp;choice=disable&amp;page=${page}&amp;exerciseId=".$row['id']."\">
-					<img src='../../template/classic/img/visible.png' alt='$langVisible' title='$langVisible' /></a>&nbsp;";
+					<img src='$themeimg/visible.png' alt='$langVisible' title='$langVisible' /></a>&nbsp;";
 				} else {
 					$tool_content .= "<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;choice=disable&amp;exerciseId=".$row['id']."'>
-					<img src='../../template/classic/img/visible.png' alt='$langVisible' title='$langVisible' /></a>&nbsp;";
+					<img src='$themeimg/visible.png' alt='$langVisible' title='$langVisible' /></a>&nbsp;";
 				}
 			} else { // else if not active
 				if (isset($page)) {
 					$tool_content .= "<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;choice=enable&amp;page=${page}&amp;exerciseId=".$row['id']."'>
-					<img src='../../template/classic/img/invisible.png' alt='$langVisible' title='$langVisible' /></a>&nbsp;";
+					<img src='$themeimg/invisible.png' alt='$langVisible' title='$langVisible' /></a>&nbsp;";
 				} else {
 					$tool_content .= "<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;choice=enable&amp;exerciseId=".$row['id']."'>
-					<img src='../../template/classic/img/invisible.png' alt='$langVisible' title='$langVisible' /></a>&nbsp;";
+					<img src='$themeimg/invisible.png' alt='$langVisible' title='$langVisible' /></a>&nbsp;";
 				}
 			}
 			$tool_content .= "</td></tr>";
@@ -251,11 +251,11 @@ if(!$nbrExercises) {
 			$temp_EndDate = mktime(0, 0, 0, substr($row['EndDate'], 5,2),substr($row['EndDate'], 8,2),substr($row['EndDate'], 0,4));
 			$CurrentDate = mktime(0, 0 , 0,substr($CurrentDate, 5,2), substr($CurrentDate, 8,2),substr($CurrentDate, 0,4));
 			if (($CurrentDate >= $temp_StartDate) && ($CurrentDate <= $temp_EndDate)) {
-				$tool_content .= "<td width=\"16\"><img src='${urlServer}/template/classic/img/arrow.png' alt='' /></td>
+				$tool_content .= "<td width=\"16\"><img src='$themeimg/arrow.png' alt='' /></td>
 				<td><a href=\"exercice_submit.php?course=$code_cours&amp;exerciseId=".$row['id']."\">".$row['titre']."</a>";
 			} else {
 				$tool_content .= "<td width='16'>
-					<img src='${urlServer}/template/classic/img/arrow.png' alt='' />
+					<img src='$themeimg/arrow.png' alt='' />
 					</td><td>".$row['titre']."&nbsp;&nbsp;(<font color='red'>$m[expired]</font>)";
 			}
 			$tool_content .= "<br />$row[description]</td>
