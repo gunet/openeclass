@@ -18,8 +18,6 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-
-
 /*
  * Personalised Lessons Component, eClass Personalised
  *
@@ -122,7 +120,7 @@ function htmlInterface($data, $lesson_fCode)
 {
 	global $statut, $is_admin, $urlAppend, $urlServer, $langCourseCreate, $langOtherCourses;
 	global $langNotEnrolledToLessons, $langWelcomeProfPerso, $langWelcomeStudPerso, $langWelcomeSelect;
-	global $langCourse, $langActions, $langUnregCourse, $langAdm, $uid;
+	global $langCourse, $langActions, $langUnregCourse, $langAdm, $uid, $themeimg;
 	
 	$lesson_content = "";
 	if ($data[0] > 0) {
@@ -136,11 +134,11 @@ function htmlInterface($data, $lesson_fCode)
 			if ($data[4][$i] == '5') {
 				$lesson_content .= "
 				<a href='${urlServer}modules/unreguser/unregcours.php?cid=".$data[2][$i]."&amp;uid=".$uid."'>
-				<img src='${urlAppend}/template/classic/img/cunregister.png' title='$langUnregCourse' /></a>";
+				<img src='$themeimg/cunregister.png' title='$langUnregCourse' alt='$langUnregCourse'></a>";
 			} elseif ($data[4][$i] == '1') {
 				$lesson_content .= "
 				<a href='${urlServer}modules/course_info/infocours.php?from_home=TRUE&amp;cid=".$data[2][$i]."'>
-				<img src='${urlAppend}/template/classic/img/tools.png' title='$langAdm'></a>";
+				<img src='$themeimg/tools.png' title='$langAdm' alt='$langAdm'></a>";
 			}
 			$lesson_content .= "</td></tr>";
 		}
@@ -152,7 +150,7 @@ function htmlInterface($data, $lesson_fCode)
 		";
 		$lesson_content .= "\n<tr>";
 		$lesson_content .= "\n<td align='left' width='10'>
-			<img src='${urlAppend}/template/classic/img/arrow.png' alt='' />
+			<img src='$themeimg/arrow.png' alt='' />
 			</td>";
 		if ($statut == 1) {	
 			$lesson_content .= "\n<td align='left'>$langWelcomeProfPerso</td>";	
