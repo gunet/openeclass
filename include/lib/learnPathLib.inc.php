@@ -430,17 +430,16 @@ function is_num($var)
  */
 function display_path_content()
 {
-    $tbl_lp_learnPath            = "lp_learnPath";
-    $tbl_lp_rel_learnPath_module = "lp_rel_learnPath_module";
-    $tbl_lp_user_module_progress = "lp_user_module_progress";
-    $tbl_lp_module               = "lp_module";
-    $tbl_lp_asset                = "lp_asset";
+    $tbl_lp_learnPath            = 'lp_learnPath';
+    $tbl_lp_rel_learnPath_module = 'lp_rel_learnPath_module';
+    $tbl_lp_user_module_progress = 'lp_user_module_progress';
+    $tbl_lp_module               = 'lp_module';
+    $tbl_lp_asset                = 'lp_asset';
 
-    global $_cid;
-    global $langModule;
-    global $imgRepositoryWeb;
-    $style = "";
-    $output = "";
+    global $_cid, $langModule, $themeimg;
+
+    $style = '';
+    $output = '';
 
     $sql = "SELECT M.`name`, M.`contentType`,
                    LPM.`learnPath_module_id`, LPM.`parent`,
@@ -508,7 +507,7 @@ function display_path_content()
 
             $contentType_alt = selectAlt($module['contentType']);
 
-            $output .= '<img src="' . $imgRepositoryWeb . $moduleImg . '" alt="' .$contentType_alt.'" title="' .$contentType_alt.'" />'
+            $output .= '<img src="'.$themeimg.'/'.$moduleImg.'" alt="'.$contentType_alt.'" title="'.$contentType_alt.'" />'
             .    $module['name']
             ;
         }
@@ -633,7 +632,7 @@ function display_my_exercises($dialogBox, $style)
     global $langExercise;
     global $langNoEx;
     global $langAddOneModuleButton;
-    global $imgRepositoryWeb, $langComment, $langSelection, $code_cours;
+    global $themeimg, $langComment, $langSelection, $code_cours;
     $output = "";
 
     $output .= '<!-- display_my_exercises output -->' . "\n\n";
@@ -678,7 +677,7 @@ function display_my_exercises($dialogBox, $style)
 	        $output .= '    <tr '.$style.'>'."\n"
 	        .    '      <td align="left">'
 	        .    '<label for="check_'.$exercise['id'].'" >'
-	        .    '<img src="' . $imgRepositoryWeb . 'exercise_on.png" alt="' . $langExercise . '" title="' . $langExercise . '" />&nbsp;'
+	        .    '<img src="' . $themeimg . '/exercise_on.png" alt="' . $langExercise . '" title="' . $langExercise . '" />&nbsp;'
 	        .    $exercise['title']
 	        .    '</label>'
 	        .    '<br />'."\n";
@@ -762,10 +761,10 @@ function display_my_documents($dialogBox, $style)
     global $langOk;
     global $langAddModulesButton;
     global $fileList;
-    global $imgRepositoryWeb;
+    global $themeimg;
     global $secureDocumentDownload, $langSelection, $langDirectory, $code_cours;
 
-    $output = "";
+    $output = '';
     /*
      * DISPLAY
      */
@@ -790,22 +789,21 @@ function display_my_documents($dialogBox, $style)
     CURRENT DIRECTORY LINE
     --------------------------------------*/
 
-
-
     /* CURRENT DIRECTORY */
     if ($curDirName) {
         $output .= '
     <table width="99%" class="tbl">
     <tr>
-      <td width="1" class="right"><img src="' . $imgRepositoryWeb . 'folder_open.png" align="absbottom" vspace=2 hspace=5 alt="" /></td>
+      <td width="1" class="right"><img src="' . $themeimg . '/folder_open.png" vspace="2" hspace="5" alt="" /></td>
       <td>'.$langDirectory.': <b>'.$dspCurDirName.'</b></td>';
     /* GO TO PARENT DIRECTORY */
     if ($curDirName) /* if the $curDirName is empty, we're in the root point
     and we can't go to a parent dir */
     {
-        $output .= '
-      <td width="1" ><img src="' . $imgRepositoryWeb . 'folder_up.png" border="0" align="absbottom" hspace="5" alt="" /></td>
-      <td width="10" class="right"><a href="' . $_SERVER['PHP_SELF'] . '?course='.$code_cours.'&amp;openDir=' . $cmdParentDir . '"><small>' . $langUp . '</small></a></td>';
+        $linkup = "<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;openDir=$cmdParentDir'>";
+        $output .= "<td width='1'>$linkup<img src='$themeimg/folder_up.png' " .
+                        "hspace='5' alt='$langUp' title='langUp' /></a></td>" .
+                   "<td width='10' class='right'><small>$linkup$langUp</a></small></td>";
     }
         $output .= '
     </tr>
@@ -878,7 +876,7 @@ function display_my_documents($dialogBox, $style)
 
             $output .= '
     <tr class="even">
-      <td class="center" width="1"><img src="' . $imgRepositoryWeb . $image . '" hspace="5" /></td>
+      <td class="center" width="1"><img src="'.$themeimg.'/'.$image.'" hspace="5" /></td>
       <td align="left"><a href="' . $urlFileName . '" ' . $style . '>'.$dspFileName.'</a></td>
       <td width="80" class="center">' . $size . '</td>
       <td width="80" class="center">' . $date . '</td>';

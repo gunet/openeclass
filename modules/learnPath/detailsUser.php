@@ -49,29 +49,25 @@ require_once("../../include/lib/learnPathLib.inc.php");
 $require_current_course = TRUE;
 $require_prof = TRUE;
 
-$TABLECOURSUSER	        = "cours_user";
-$TABLEUSER              = "user";
-$TABLELEARNPATH         = "lp_learnPath";
-$TABLEMODULE            = "lp_module";
-$TABLELEARNPATHMODULE   = "lp_rel_learnPath_module";
-$TABLEASSET             = "lp_asset";
-$TABLEUSERMODULEPROGRESS= "lp_user_module_progress";
+$TABLECOURSUSER	        = 'cours_user';
+$TABLEUSER              = 'user';
+$TABLELEARNPATH         = 'lp_learnPath';
+$TABLEMODULE            = 'lp_module';
+$TABLELEARNPATHMODULE   = 'lp_rel_learnPath_module';
+$TABLEASSET             = 'lp_asset';
+$TABLEUSERMODULEPROGRESS= 'lp_user_module_progress';
 
-require_once("../../include/baseTheme.php");
-$head_content = "";
-$tool_content = "";
+require_once '../../include/baseTheme.php';
 
-$navigation[] = array("url"=>"learningPathList.php?course=$code_cours", "name"=> $langLearningPaths);
-$navigation[] = array("url"=>"detailsAll.php?course=$code_cours", "name"=> $langTrackAllPathExplanation);
+$navigation[] = array('url' => "learningPathList.php?course=$code_cours", 'name' => $langLearningPaths);
+$navigation[] = array('url' => "detailsAll.php?course=$code_cours", 'name' => $langTrackAllPathExplanation);
 $nameTools = $langTrackUser;
 
 // user info can not be empty, return to the list of details
-if( empty($_REQUEST['uInfo']) )
-{
+if( empty($_REQUEST['uInfo']) ) {
 	header("Location: ./detailsAll.php?course=$code_cours");
 	exit();
 }
-
 
 // check if user is in this course
 $sql = "SELECT `u`.`nom` AS `lastname`,`u`.`prenom` AS `firstname`, `u`.`email`
@@ -139,8 +135,8 @@ else
         }
 		$lpProgress = get_learnPath_progress($lpDetails['learnPath_id'],$_GET['uInfo']);
 		$tool_content .= ''."\n"
-			.'        <td width="1"><img src="../../template/classic/img/arrow.png" alt="" border="0" /></td>'."\n"
-			.'        <td><a href="detailsUserPath.php?course='.$code_cours.'&amp;uInfo='.$_GET['uInfo'].'&path_id='.$lpDetails['learnPath_id'].'">'.htmlspecialchars($lpDetails['name']).'</a></td>'."\n"
+			."        <td width='1'><img src='$themeimg/arrow.png' alt='' /></td>\n"
+			.'        <td><a href="detailsUserPath.php?course='.$code_cours.'&amp;uInfo='.$_GET['uInfo'].'&amp;path_id='.$lpDetails['learnPath_id'].'">'.htmlspecialchars($lpDetails['name']).'</a></td>'."\n"
 			.'        <td align="right" width="120">'.""
 			.disp_progress_bar($lpProgress, 1)
 			.'</td>'."\n"

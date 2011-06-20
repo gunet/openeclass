@@ -41,29 +41,29 @@
 ==============================================================================
 */
 
-require_once("../../include/lib/learnPathLib.inc.php");
-require_once("../../include/lib/fileDisplayLib.inc.php");
-require_once("../../include/lib/fileManageLib.inc.php");
-require_once("../../include/lib/textLib.inc.php");
+require_once '../../include/lib/learnPathLib.inc.php';
+require_once '../../include/lib/fileDisplayLib.inc.php';
+require_once '../../include/lib/fileManageLib.inc.php';
+require_once '../../include/lib/textLib.inc.php';
 
 $require_current_course = TRUE;
 $require_prof = TRUE;
-$TABLELEARNPATH         = "lp_learnPath";
-$TABLEMODULE            = "lp_module";
-$TABLELEARNPATHMODULE   = "lp_rel_learnPath_module";
-$TABLEASSET             = "lp_asset";
-$TABLEUSERMODULEPROGRESS= "lp_user_module_progress";
-$imgRepositoryWeb       = "../../template/classic/img/";
+$TABLELEARNPATH         = 'lp_learnPath';
+$TABLEMODULE            = 'lp_module';
+$TABLELEARNPATHMODULE   = 'lp_rel_learnPath_module';
+$TABLEASSET             = 'lp_asset';
+$TABLEUSERMODULEPROGRESS= 'lp_user_module_progress';
 
-require_once("../../include/baseTheme.php");
-$tool_content = "";
+require_once '../../include/baseTheme.php';
+require_once '../document/doc_init.php';
+
 $pwd = getcwd();
 
 $courseDir   = "courses/".$currentCourseID."/document";
 $baseWorkDir = $webDir.$courseDir;
-$InfoBox = "";
-$navigation[] = array("url"=>"learningPathList.php?course=$code_cours", "name"=> $langLearningPath);
-$navigation[] = array("url"=>"learningPathAdmin.php?course=$code_cours", "name"=> $langAdm);
+$InfoBox = '';
+$navigation[] = array('url' => "learningPathList.php?course=$code_cours", 'name' => $langLearningPath);
+$navigation[] = array('url' => "learningPathAdmin.php?course=$code_cours", 'name' => $langAdm);
 $nameTools = $langInsertMyDocToolName;
 
 mysql_select_db($currentCourseID);
@@ -72,8 +72,6 @@ mysql_select_db($currentCourseID);
 
 // 1)  We select first the modules that must not be displayed because
 // as they are already in this learning path
-
-
 
 function buildRequestModules() {
 
@@ -99,8 +97,8 @@ function buildRequestModules() {
 // -------------------------- documents list ----------------
 
 // evaluate how many form could be sent
-if (!isset($dialogBox)) $dialogBox = "";
-if (!isset($style)) $style = "";
+if (!isset($dialogBox)) $dialogBox = '';
+if (!isset($style)) $style = '';
 
 $iterator = 0;
 
@@ -119,10 +117,10 @@ while ($iterator <= $_REQUEST['maxDocForm'])
         {
             // check if a module of this course already used the same document
             $sql = "SELECT *
-                    FROM `".$TABLEMODULE."` AS M, `".$TABLEASSET."` AS A
+                    FROM `$TABLEMODULE` AS M, `$TABLEASSET` AS A
                     WHERE A.`module_id` = M.`module_id`
-                      AND A.`path` LIKE \"". addslashes($insertDocument)."\"
-                      AND M.`contentType` = \"".CTDOCUMENT_."\"";
+                      AND A.`path` LIKE ".autoquote($insertDocument)."
+                      AND M.`contentType` = '".CTDOCUMENT_."'";
             $query = db_query($sql);
             $num = mysql_numrows($query);
             $basename = substr($insertDocument, strrpos($insertDocument, '/') + 1);
@@ -130,9 +128,9 @@ while ($iterator <= $_REQUEST['maxDocForm'])
             if($num == 0)
             {
                 // create new module
-                $sql = "INSERT INTO `".$TABLEMODULE."`
+                $sql = "INSERT INTO `$TABLEMODULE`
                         (`name` , `comment`, `contentType`, `launch_data`)
-                        VALUES ('". addslashes($filenameDocument) ."' , '". addslashes($langDefaultModuleComment) . "', '".CTDOCUMENT_."','')";
+                        VALUES (".autoquote($filenameDocument).", '". addslashes($langDefaultModuleComment) . "', '".CTDOCUMENT_."','')";
                 $query = db_query($sql);
                 $insertedModule_id = mysql_insert_id();
 
@@ -232,7 +230,7 @@ if ($curDirPath == '/' or $curDirPath == '\\' or strstr($curDirPath, '..')) {
 }
 
 $d = mysql_fetch_array(db_query("SELECT filename FROM `$mysqlMainDb`.document
-                                                 WHERE course_id = $cours_id AND path='$curDirPath'"));
+                                                 WHERE $group_sql AND path=" . autoquote($curDirPath)));
 $curDirName = $d['filename'];
 $parentDir  = dirname($curDirPath);
 
@@ -251,14 +249,13 @@ if ($parentDir == '/' or $parentDir == '\\') {
 
 /* Search infos in the DB about the current directory the user is in */
 $sql = "SELECT * FROM `$mysqlMainDb`.document
-                 WHERE course_id = $cours_id AND
-                       path LIKE '". addslashes($curDirPath) ."/%' AND
-                       path NOT LIKE '". addslashes($curDirPath) ."/%/%'";
+                 WHERE $group_sql AND
+                       path LIKE ".autoquote($curDirPath.'/%')." AND
+                       path NOT LIKE ".autoquote($curDirPath.'/%/%');
 $result = db_query($sql);
 $attribute = array();
 
-while($row = mysql_fetch_array($result, MYSQL_ASSOC))
-{
+while ($row = mysql_fetch_assoc($result)) {
     $attribute['path'      ][] = $row['path'      ];
     $attribute['visibility'][] = $row['visibility'];
     $attribute['comment'   ][] = $row['comment'   ];
@@ -278,8 +275,7 @@ $fileList = array();
 
 while ($file = readdir($handle))
 {
-    if ($file == "." || $file == "..")
-    {
+    if ($file == '.' || $file == '..') {
         continue; // Skip current and parent directories
     }
 
@@ -354,7 +350,7 @@ $tool_content .= display_my_documents($dialogBox, $style) ;
 
 	$tool_content .= "
     <br />
-    <p align=\"right\"><a href=\"learningPathAdmin.php?course=$code_cours\">$langBackToLPAdmin</p>";
+    <p align=\"right\"><a href=\"learningPathAdmin.php?course=$code_cours\">$langBackToLPAdmin</a></p>";
 
 //################################## MODULES LIST ####################################\\
 

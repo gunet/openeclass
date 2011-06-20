@@ -48,37 +48,32 @@ require_once("../../include/lib/learnPathLib.inc.php");
 $require_current_course = TRUE;
 $require_prof = TRUE;
 
-$TABLELEARNPATH         = "lp_learnPath";
-$TABLEMODULE            = "lp_module";
-$TABLELEARNPATHMODULE   = "lp_rel_learnPath_module";
-$TABLEASSET             = "lp_asset";
-$TABLEUSERMODULEPROGRESS= "lp_user_module_progress";
+$TABLELEARNPATH         = 'lp_learnPath';
+$TABLEMODULE            = 'lp_module';
+$TABLELEARNPATHMODULE   = 'lp_rel_learnPath_module';
+$TABLEASSET             = 'lp_asset';
+$TABLEUSERMODULEPROGRESS= 'lp_user_module_progress';
 
-$imgRepositoryWeb = "../../template/classic/img/";
+require_once '../../include/baseTheme.php';
 
-require_once("../../include/baseTheme.php");
-$head_content = "";
-$tool_content = "";
-$body_action = "";
+$body_action = '';
+$head_content .= "
+<script type='text/javascript'>
+function confirmation(name) {
+        if (confirm(\"".clean_str_for_javascript($langAreYouSureDeleteModule)." \"+ name)) {
+                return true;
+        } else {
+                return false;
+        }
+}
+</script>";
 
-$navigation[]= array ("url"=>"learningPathList.php?course=$code_cours", "name"=> $langLearningPaths);
-
+$navigation[] = array('url' => "learningPathList.php?course=$code_cours", 'name'=> $langLearningPaths);
 $nameTools = $langLearningObjectsInUse;
 mysql_select_db($currentCourseID);
-$head_content .= "<script>
-        function confirmation (name)
-        {
-            if (confirm(\"".clean_str_for_javascript($langAreYouSureDeleteModule)."\"+ name))
-                {return true;}
-            else
-                {return false;}
-        }
-        </script>";
-
-
 
 // display use explication text
-$tool_content .= "<p>".$langUseOfPool."</p><br />";
+$tool_content .= "<p>$langUseOfPool</p><br />";
 
 // HANDLE COMMANDS:
 $cmd = ( isset($_REQUEST['cmd']) && is_string($_REQUEST['cmd']) )? (string)$_REQUEST['cmd'] : '';
@@ -296,7 +291,7 @@ while ($list = mysql_fetch_array($result))
     $contentType_alt = selectAlt($list['contentType']);
     $tool_content .= "
     <tr $style>
-      <td align=\"left\" width=\"1%\" valign=\"top\"><img src=\"".$imgRepositoryWeb.$contentType_img."\" alt=\"".$contentType_alt."\" title=\"".$contentType_alt."\" /></td>
+      <td align=\"left\" width=\"1%\" valign=\"top\"><img src=\"".$themeimg.'/'.$contentType_img."\" alt=\"".$contentType_alt."\" title=\"".$contentType_alt."\" /></td>
       <td align=\"left\"><b>".$list['name']."</b>";
 
     if ( $list['comment'] )
@@ -305,7 +300,7 @@ while ($list = mysql_fetch_array($result))
     }
 
     $tool_content .= "</td>
-      <td><a href=\"".$_SERVER['PHP_SELF']."?course=$code_cours&amp;cmd=eraseModule&amp;cmdid=".$list['module_id']."\" onClick=\"return confirmation('".clean_str_for_javascript($list['name'] . $langUsedInLearningPaths . $list['timesUsed'])."');\"><img src=\"".$imgRepositoryWeb."delete.png\" border=\"0\" alt=\"".$langDelete."\" title=\"".$langDelete."\" /></a>&nbsp;&nbsp;<a href=\"".$_SERVER['PHP_SELF']."?course=$code_cours&amp;cmd=rqRename&amp;module_id=".$list['module_id']."\"><img src=\"".$imgRepositoryWeb."rename.png\" border=0 alt=\"$langRename\" title=\"$langRename\" /></a>&nbsp;&nbsp;<a href=\"".$_SERVER['PHP_SELF']."?course=$code_cours&amp;cmd=rqComment&amp;module_id=".$list['module_id']."\"><img src=\"".$imgRepositoryWeb."comment_edit.png\" border=0 alt=\"$langComment\" title=\"$langComment\" /></a></td>\n";
+      <td><a href=\"".$_SERVER['PHP_SELF']."?course=$code_cours&amp;cmd=eraseModule&amp;cmdid=".$list['module_id']."\" onClick=\"return confirmation('".clean_str_for_javascript($list['name'] . ': ' . $langUsedInLearningPaths . $list['timesUsed'])."');\"><img src=\"".$themeimg."/delete.png\" border=\"0\" alt=\"".$langDelete."\" title=\"".$langDelete."\" /></a>&nbsp;&nbsp;<a href=\"".$_SERVER['PHP_SELF']."?course=$code_cours&amp;cmd=rqRename&amp;module_id=".$list['module_id']."\"><img src=\"".$themeimg."/rename.png\" border=0 alt=\"$langRename\" title=\"$langRename\" /></a>&nbsp;&nbsp;<a href=\"".$_SERVER['PHP_SELF']."?course=$code_cours&amp;cmd=rqComment&amp;module_id=".$list['module_id']."\"><img src=\"".$themeimg."/comment_edit.png\" border=0 alt=\"$langComment\" title=\"$langComment\" /></a></td>\n";
     $tool_content .= "    </tr>";
 
     $atleastOne = true;

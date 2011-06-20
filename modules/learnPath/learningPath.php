@@ -43,35 +43,28 @@ require_once("../../include/lib/fileDisplayLib.inc.php");
 
 $require_current_course = TRUE;
 
-$TABLELEARNPATH         = "lp_learnPath";
-$TABLEMODULE            = "lp_module";
-$TABLELEARNPATHMODULE   = "lp_rel_learnPath_module";
-$TABLEASSET             = "lp_asset";
-$TABLEUSERMODULEPROGRESS= "lp_user_module_progress";
+$TABLELEARNPATH         = 'lp_learnPath';
+$TABLEMODULE            = 'lp_module';
+$TABLELEARNPATHMODULE   = 'lp_rel_learnPath_module';
+$TABLEASSET             = 'lp_asset';
+$TABLEUSERMODULEPROGRESS= 'lp_user_module_progress';
 
-$imgRepositoryWeb       = "../../template/classic/img/";
-
-require_once("../../include/baseTheme.php");
+require_once '../../include/baseTheme.php';
 
 /**** The following is added for statistics purposes ***/
-include('../../include/action.php');
+include '../../include/action.php';
 $action = new action();
 $action->record('MODULE_ID_LP');
 /**************************************/
-
-$tool_content = "";
 
 if (isset($_GET['unit'])) {
 	$_SESSION['unit'] = intval($_GET['unit']); 
 }
 
 // $_SESSION
-if (isset($_GET['path_id']))
-{
+if (isset($_GET['path_id'])) {
     $_SESSION['path_id'] = intval($_GET['path_id']);
-}
-elseif((!isset($_SESSION['path_id']) || $_SESSION['path_id'] == ""))
-{
+} elseif ((!isset($_SESSION['path_id']) || $_SESSION['path_id'] == '')) {
     // if path id not set, redirect user to the list of learning paths
     header("Location: ./learningPathList.php?course=$code_cours");
     exit();
@@ -283,7 +276,7 @@ foreach ($flatElementList as $module)
             $moduleImg = choose_image(basename($module['path']));
 
         $contentType_alt = selectAlt($module['contentType']);
-        $tool_content .= '<span style="vertical-align: middle;"><img src="'.$imgRepositoryWeb.$moduleImg.'" alt="'.$contentType_alt.'" title="'.$contentType_alt.'" border="0" /></span>&nbsp;'
+        $tool_content .= '<span style="vertical-align: middle;"><img src="'.$themeimg.'/'.$moduleImg.'" alt="'.$contentType_alt.'" title="'.$contentType_alt.'" border="0" /></span>&nbsp;'
         .'<a href="viewer.php?course='.$code_cours.'&amp;path_id='.(int)$_SESSION['path_id'].'&amp;module_id='.$module['module_id'].'">'.htmlspecialchars($module['name']).'</a>'."";
         // a module ALLOW access to the following modules if
         // document module : credit == CREDIT || lesson_status == 'completed'
@@ -317,7 +310,7 @@ foreach ($flatElementList as $module)
        else
             $moduleImg = choose_image(basename($module['path']));
 
-        $tool_content .= '<span style="vertical-align: middle;"><img src="'.$imgRepositoryWeb.$moduleImg.'" alt="'.$contentType_alt.'" title="'.$contentType_alt.'" border="0" /></span>'." "
+        $tool_content .= '<span style="vertical-align: middle;"><img src="'.$themeimg.'/'.$moduleImg.'" alt="'.$contentType_alt.'" title="'.$contentType_alt.'" border="0" /></span>'." "
              .htmlspecialchars($module['name']);
     }
     $tool_content .= '</td>'."\n";
@@ -326,7 +319,7 @@ foreach ($flatElementList as $module)
     {
         // display actions for current module (taking into consideration blocked modules)
         if (!$is_blocked || !$first_blocked ) 
-          $tool_content .= "<td width='18'><a href=\"module.php?course=$code_cours&amp;module_id=".$module['module_id']."\"><img src='../../template/classic/img/monitor.png' alt='$langTracking' title='$langTracking' /></a></td>";
+          $tool_content .= "<td width='18'><a href=\"module.php?course=$code_cours&amp;module_id=".$module['module_id']."\"><img src='$themeimg/monitor.png' alt='$langTracking' title='$langTracking' /></a></td>";
         else
           $tool_content .= "<td></td>";
         if ($is_blocked)

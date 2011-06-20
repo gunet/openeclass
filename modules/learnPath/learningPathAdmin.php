@@ -56,18 +56,16 @@ require_once("../../include/lib/fileDisplayLib.inc.php");
 
 $require_current_course = TRUE;
 
-$TABLELEARNPATH         = "lp_learnPath";
-$TABLEMODULE            = "lp_module";
-$TABLELEARNPATHMODULE   = "lp_rel_learnPath_module";
-$TABLEASSET             = "lp_asset";
-$TABLEUSERMODULEPROGRESS= "lp_user_module_progress";
-$imgRepositoryWeb       = "../../template/classic/img/";
+$TABLELEARNPATH         = 'lp_learnPath';
+$TABLEMODULE            = 'lp_module';
+$TABLELEARNPATHMODULE   = 'lp_rel_learnPath_module';
+$TABLEASSET             = 'lp_asset';
+$TABLEUSERMODULEPROGRESS= 'lp_user_module_progress';
 
-require_once("../../include/baseTheme.php");
-$head_content = "";
-$tool_content = "";
-$body_action = "";
-$dialogBox = "";
+require_once '../../include/baseTheme.php';
+
+$body_action = '';
+$dialogBox = '';
 
 if (!add_units_navigation()) {
 	$nameTools = $langAdm;
@@ -595,7 +593,7 @@ foreach ($flatElementList as $module)
             $moduleImg = choose_image(basename($module['path']));
 
         $contentType_alt = selectAlt($module['contentType']);
-        $tool_content .= "<span style=\"vertical-align: middle;\"><img src=\"".$imgRepositoryWeb."".$moduleImg."\" alt=\"".$contentType_alt."\" title=\"".$contentType_alt."\" border=\"0\" /></span>&nbsp;<a href=\"viewer.php?course=$code_cours&amp;path_id=".(int)$_SESSION['path_id']."&amp;module_id=".$module['module_id']."\"".$style.">". htmlspecialchars($module['name']). "</a>";
+        $tool_content .= "<span style=\"vertical-align: middle;\"><img src=\"".$themeimg.'/'.$moduleImg."\" alt=\"".$contentType_alt."\" title=\"".$contentType_alt."\" border=\"0\" /></span>&nbsp;<a href=\"viewer.php?course=$code_cours&amp;path_id=".(int)$_SESSION['path_id']."&amp;module_id=".$module['module_id']."\"".$style.">". htmlspecialchars($module['name']). "</a>";
     }
     $tool_content .= "</td>"; // end of td of module name
 
@@ -609,12 +607,12 @@ foreach ($flatElementList as $module)
     elseif ( $module['lock'] == 'OPEN')
     {
         $tool_content .= "<a href=\"".$_SERVER['PHP_SELF']."?course=$code_cours&amp;cmd=mkBlock&amp;cmdid=".$module['learnPath_module_id']."\">
-	<img src=\"".$imgRepositoryWeb."bullet_unblock.png\" alt=\"$langBlock\" title=\"$langBlock\" border=0 /></a>";
+	<img src=\"".$themeimg."/bullet_unblock.png\" alt=\"$langBlock\" title=\"$langBlock\" border=0 /></a>";
     }
     elseif( $module['lock'] == 'CLOSE')
     {
         $tool_content .= "<a href=\"".$_SERVER['PHP_SELF']."?course=$code_cours&amp;cmd=mkUnblock&amp;cmdid=".$module['learnPath_module_id']."\">
-	<img src=\"".$imgRepositoryWeb."bullet_block.png\" alt=\"$langAltMakeNotBlocking\" title=\"$langAltMakeNotBlocking\" border=0 /></a>";
+	<img src=\"".$themeimg."/bullet_block.png\" alt=\"$langAltMakeNotBlocking\" title=\"$langAltMakeNotBlocking\" border=0 /></a>";
     }
     $tool_content .= "</td>";
 
@@ -622,14 +620,14 @@ foreach ($flatElementList as $module)
     // DISPLAY CATEGORY MOVE COMMAND
     	$tool_content .= "<td width='10' class='center'>
 	<a href=\"".$_SERVER['PHP_SELF']."?course=$code_cours&amp;cmd=changePos&amp;cmdid=".$module['learnPath_module_id']."\">
-	<img src=\"".$imgRepositoryWeb."move.png\" alt=\"$langMove\" title=\"$langMove\" border=0 /></a></td>";
+	<img src=\"".$themeimg."/move.png\" alt=\"$langMove\" title=\"$langMove\" border=0 /></a></td>";
 
     // DISPLAY MOVE UP COMMAND only if it is not the top learning path
     if ($module['up'])
     {
         $tool_content .= "<td width='10' align=\"right\">
 	<a href=\"".$_SERVER['PHP_SELF']."?course=$code_cours&amp;cmd=moveUp&amp;cmdid=".$module['learnPath_module_id']."\">
-	<img src=\"".$imgRepositoryWeb."up.png\" alt=\"$langUp\" title=\"$langUp\" border=0 /></a></td>";
+	<img src=\"".$themeimg."/up.png\" alt=\"$langUp\" title=\"$langUp\" border=0 /></a></td>";
     }
     else
     {
@@ -641,7 +639,7 @@ foreach ($flatElementList as $module)
     {
         $tool_content .= "<td width='10'>
 	<a href=\"".$_SERVER['PHP_SELF']."?course=$code_cours&amp;cmd=moveDown&amp;cmdid=".$module['learnPath_module_id']."\">
-	<img src=\"".$imgRepositoryWeb."down.png\" alt=\"$langDown\" title=\"$langDown\" border=0 /></a></td>";
+	<img src=\"".$themeimg."/down.png\" alt=\"$langDown\" title=\"$langDown\" border=0 /></a></td>";
     }
     else
     {
@@ -650,7 +648,7 @@ foreach ($flatElementList as $module)
 
     // Modify command / go to other page
     $tool_content .= "
-      <td width='10'><a href=\"module.php?course=$code_cours&amp;module_id=".$module['module_id']."\"><img src=\"".$imgRepositoryWeb."edit.png\" border=0 alt=\"".$langModify."\" title=\"".$langModify."\" /></a></td>";
+      <td width='10'><a href=\"module.php?course=$code_cours&amp;module_id=".$module['module_id']."\"><img src=\"".$themeimg."/edit.png\" border=0 alt=\"".$langModify."\" title=\"".$langModify."\" /></a></td>";
 
     // DELETE ROW
    //in case of SCORM module, the pop-up window to confirm must be different as the action will be different on the server
@@ -665,13 +663,13 @@ foreach ($flatElementList as $module)
     else
         $tool_content .= clean_str_for_javascript($langAreYouSureToRemoveStd);
 
-    $tool_content .=   "');\"><img src=\"".$imgRepositoryWeb."delete.png\" border=0 alt=\"".$langRemove."\" title=\"".$langRemove."\" /></a></td>";
+    $tool_content .=   "');\"><img src=\"".$themeimg."/delete.png\" border=0 alt=\"".$langRemove."\" title=\"".$langRemove."\" /></a></td>";
 
     // VISIBILITY
     $tool_content .= "<td width='10'>";
 
     if ($module['visibility'] == 'HIDE') {
-        $tool_content .= "<a href=\"".$_SERVER['PHP_SELF']."?course=$code_cours&amp;cmd=mkVisibl&amp;cmdid=".$module['module_id']."\"><img src=\"".$imgRepositoryWeb."invisible.png\" alt=\"$langVisible\" title=\"$langVisible\" border=\"0\" /></a>";
+        $tool_content .= "<a href=\"".$_SERVER['PHP_SELF']."?course=$code_cours&amp;cmd=mkVisibl&amp;cmdid=".$module['module_id']."\"><img src=\"".$themeimg."/invisible.png\" alt=\"$langVisible\" title=\"$langVisible\" border=\"0\" /></a>";
     }
     else
     {
@@ -683,7 +681,7 @@ foreach ($flatElementList as $module)
         {
             $onclick = "";
         }
-        $tool_content .= "<a href=\"".$_SERVER['PHP_SELF']."?course=$code_cours&amp;cmd=mkInvisibl&amp;cmdid=".$module['module_id']."\" ".$onclick. " ><img src=\"".$imgRepositoryWeb."visible.png\" alt=\"$langVisible\" title=\"$langVisible\" border=0 /></a>";
+        $tool_content .= "<a href=\"".$_SERVER['PHP_SELF']."?course=$code_cours&amp;cmd=mkInvisibl&amp;cmdid=".$module['module_id']."\" ".$onclick. " ><img src=\"".$themeimg."/visible.png\" alt=\"$langVisible\" title=\"$langVisible\" border=0 /></a>";
     }
 
     $tool_content .= "</td>";
@@ -693,5 +691,4 @@ $ind++;
 } // end of foreach
 
 $tool_content .= "</table><br />";
-draw($tool_content, 2, '', $head_content, $body_action);
-?>
+draw($tool_content, 2, null, $head_content, $body_action);
