@@ -38,8 +38,8 @@ $helpTopic = 'Announce';
 $guest_allowed = true;
 
 include '../../include/baseTheme.php';
-include('../../include/lib/textLib.inc.php');
-include('../../include/sendMail.inc.php');
+include '../../include/lib/textLib.inc.php';
+include '../../include/sendMail.inc.php';
 
 // The following is added for statistics purposes
 include('../../include/action.php');
@@ -228,7 +228,7 @@ if ($is_adminOfCourse) {
         </tr>
 	<tr>
           <td class='smaller right'>
-	  <img src='${urlServer}/template/classic/img/email.png' title='email' /> $langEmailOption: <input type='checkbox' value='1' name='emailOption' /></td>
+	  <img src='$themeimg/email.png' title='email' /> $langEmailOption: <input type='checkbox' value='1' name='emailOption' /></td>
         </tr>
 	<tr>
           <td class='right'><input type='submit' name='submitAnnouncement' value='$langAdd' /></td>
@@ -300,7 +300,7 @@ if ($is_adminOfCourse) {
 		    }
 		}
 		$tool_content .= "<td width='16' valign='top'>
-			<img style='padding-top:3px;' src='${urlServer}/template/classic/img/arrow.png' title='bullet' /></td>
+			<img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
 			<td><b>";
 		if (empty($myrow['title'])) {
 		    $tool_content .= $langAnnouncementNoTille;
@@ -321,23 +321,23 @@ if ($is_adminOfCourse) {
 			$tool_content .= "
 			<td width='70' class='right'>
 			      <a href='$_SERVER[PHP_SELF]?course=".$code_cours ."&amp;modify=" . $myrow['id'] . "'>
-			      <img src='../../template/classic/img/edit.png' title='" . $langModify . "' /></a>&nbsp;
+			      <img src='$themeimg/edit.png' title='" . $langModify . "' /></a>&nbsp;
 			      <a href='$_SERVER[PHP_SELF]?course=".$code_cours ."&amp;delete=" . $myrow['id'] . "' onClick=\"return confirmation('$langSureToDelAnnounce');\">
-			      <img src='../../template/classic/img/delete.png' title='" . $langDelete . "' /></a>&nbsp;
+			      <img src='$themeimg/delete.png' title='" . $langDelete . "' /></a>&nbsp;
 			      <a href='$_SERVER[PHP_SELF]?course=".$code_cours ."&amp;mkvis=$myrow[id]&amp;vis=$visibility'>
-			      <img src='../../template/classic/img/$vis_icon' title='$langVisible' /></a>
+			      <img src='$themeimg/$vis_icon' title='$langVisible' /></a>
 			</td>";
 			if ($announcementNumber > 1)  {
 				$tool_content .= "<td align='center' width='35' class='right'>";
 			}
 			if ($iterator != 1)  {
 			    $tool_content .= "<a href='$_SERVER[PHP_SELF]?course=".$code_cours ."&amp;up=" . $myrow["id"] . "'>
-			    <img class='displayed' src='../../template/classic/img/up.png' title='" . $langMove ." ". $langUp . "' />
+			    <img class='displayed' src='$themeimg/up.png' title='" . $langMove ." ". $langUp . "' />
 			    </a>";
 			}
 			if ($iterator < $bottomAnnouncement) {
 			    $tool_content .= "<a href='$_SERVER[PHP_SELF]?course=".$code_cours ."&amp;down=" . $myrow["id"] . "'>
-			    <img class='displayed' src='../../template/classic/img/down.png' title='" . $langMove ." ". $langDown . "' />
+			    <img class='displayed' src='$themeimg/down.png' title='" . $langMove ." ". $langDown . "' />
 			    </a>";
 			}
 			if ($announcementNumber > 1) {

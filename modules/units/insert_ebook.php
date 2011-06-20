@@ -23,9 +23,9 @@ define('EBOOK', 2);
 
 function list_ebooks()
 {
-        global $id, $cours_id, $currentCourseID, $tool_content, $urlServer, $mysqlMainDb,
-               $langAddModulesButton,
-               $langChoice, $langNoEbook, $langEBook, $code_cours;
+        global $id, $cours_id, $currentCourseID, $tool_content, $urlServer,
+               $mysqlMainDb, $langAddModulesButton, $langChoice, $langNoEbook,
+               $langEBook, $code_cours, $themeimg;
 
         mysql_select_db($mysqlMainDb);
         $result = db_query("SELECT * FROM ebook WHERE course_id = $cours_id ORDER BY `order`");
@@ -42,7 +42,7 @@ function list_ebooks()
                 $unit_parameter = 'unit=' . $id;
                 while ($catrow = mysql_fetch_array($result, MYSQL_ASSOC)) {
 				$tool_content .= "\n  <tr>";
-                                $tool_content .= "\n    <td class='bold'><img src='../../template/classic/img/folder_open.png' />&nbsp;&nbsp;" .
+                                $tool_content .= "\n    <td class='bold'><img src='$themeimg/folder_open.png' />&nbsp;&nbsp;" .
                                                  q($catrow['title']) . "</td>";
 				$tool_content .= "<td align='center'>
                                                     <input type='checkbox' name='ebook[]' value='$catrow[id]' />
@@ -79,7 +79,7 @@ function list_ebooks()
                                     $surl = $ebook_url_base . $display_id . '/' . $unit_parameter;
                                     if ($old_sid != $sid) {
                                         $tool_content .= "<tr class='even'>
-                                            <td class='section'><img src='../../template/classic/img/links_on.png' />&nbsp;&nbsp;
+                                            <td class='section'><img src='$themeimg/links_on.png' />&nbsp;&nbsp;
                                                 " . q($row['section_title']) . "</td>
                                             <td align='center'><input type='checkbox' name='section[]' value='$sid' />
                                                 <input type='hidden' name='section_title[$sid]'
@@ -87,7 +87,7 @@ function list_ebooks()
                                     }
 
                                     $tool_content .= "<tr class='$class'>
-                                        <td class='subsection'><img src='../../template/classic/img/links_on.png' />&nbsp;&nbsp;
+                                        <td class='subsection'><img src='$themeimg/links_on.png' />&nbsp;&nbsp;
                                         <a href='" . q($surl) . "' target='_blank'>" . q($row['subsection_title']) . "</a></td>
                                         <td align='center'><input type='checkbox' name='subsection[]' value='$ssid' />
                                            <input type='hidden' name='subsection_title[$ssid]'

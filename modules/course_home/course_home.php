@@ -244,9 +244,9 @@ switch ($type){
 	}
 }
 
-$bar_content .= "\n      <ul class='custom_list'><li><b>".$langCode."</b>: ".$fake_code."</li>".
-                "\n          <li><b>".$langTeachers."</b>: ".$professor."</li>".
-                "\n          <li><b>".$langFaculty."</b>: ".$faculte."</li>".
+$bar_content .= "\n      <ul class='custom_list'><li><b>".$langCode."</b>: ".q($fake_code)."</li>".
+                "\n          <li><b>".$langTeachers."</b>: ".q($professor)."</li>".
+                "\n          <li><b>".$langFaculty."</b>: ".q($faculte)."</li>".
                 "\n          <li> <b>".$langType."</b>: ".$lessonType."</li>";
 
 $require_help = TRUE;

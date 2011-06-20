@@ -408,17 +408,17 @@ if (mysql_num_rows($result) > 0) {
 			$tool_content .=  "
 			<td class='right' width='70'>
 			  <a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;id=".$myrow['id']."&amp;edit=true'>
-			  <img src='../../template/classic/img/edit.png' border='0' title='".$langModify."'></a>&nbsp;
+			  <img src='$themeimg/edit.png' border='0' title='".$langModify."'></a>&nbsp;
 			  <a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;id=".$myrow[0]."&amp;delete=yes' onClick='return confirmation();'>
-			  <img src='../../template/classic/img/delete.png' border='0' title='".$langDelete."'></a>&nbsp;";
+			  <img src='$themeimg/delete.png' border='0' title='".$langDelete."'></a>&nbsp;";
 				      if ($myrow["visibility"] == 'v') {
 					      $tool_content .= "
 			  <a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;id=".$myrow[0]."&amp;mkInvisibl=true'>
-			  <img src='../../template/classic/img/visible.png' border='0' title='".$langVisible."'></a>";
+			  <img src='$themeimg/visible.png' border='0' title='".$langVisible."'></a>";
 				      } else {
 					      $tool_content .= "
 			  <a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;id=".$myrow[0]."&amp;mkVisibl=true'>
-			  <img src='../../template/classic/img/invisible.png' border='0' title='".$langVisible."'></a>";
+			  <img src='$themeimg/invisible.png' border='0' title='".$langVisible."'></a>";
 				      }
 				      $tool_content .= "
 			</td>";

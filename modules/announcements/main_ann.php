@@ -18,17 +18,15 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-
-
 $require_help = true;
 $guest_allowed = true;
 
 include '../../include/baseTheme.php';
-include('../../include/lib/textLib.inc.php');
+include '../../include/lib/textLib.inc.php';
 
 $nameTools = $langAnnouncements;
 
-$qlang = ($language == "greek")? 'el': 'en';
+$qlang = ($language == 'greek')? 'el': 'en';
 
 if (isset($_GET['aid'])) {
 	$aid = intval($_GET['aid']);
@@ -49,7 +47,7 @@ if (mysql_num_rows($result) > 0) {
 	$numOfAnnouncements = count($announceArr);
 	for($i=0; $i < $numOfAnnouncements; $i++) {
 		$tool_content .= "<tr><td>
-		<img src='${urlAppend}/template/classic/img/arrow.png' alt='' /></td>
+		<img src='$themeimg/arrow.png' alt='' /></td>
 		<td><b>".q($announceArr[$i]['title'])."</b>
 		&nbsp;<span class='smaller'>(".claro_format_locale_date($dateFormatLong, strtotime($announceArr[$i]['date'])).")</span>
 		<p>
@@ -59,5 +57,5 @@ if (mysql_num_rows($result) > 0) {
 	}
 	$tool_content .= "</table>";
 }
+
 draw($tool_content, 0);
-?>

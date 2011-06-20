@@ -25,7 +25,8 @@ function list_docs()
 {
         global $id, $webDir, $currentCourseID, $cours_id, $tool_content,
                $group_sql, $langDirectory, $langUp, $langName, $langSize,
-               $langDate, $langType, $langAddModulesButton, $langChoice, $langNoDocuments, $code_cours;
+               $langDate, $langType, $langAddModulesButton, $langChoice,
+               $langNoDocuments, $code_cours, $themeimg;
 
         $basedir = $webDir . 'courses/' . $currentCourseID . '/document';
         if (isset($_GET['path'])) {
@@ -69,7 +70,7 @@ function list_docs()
                         $dirname = "/".htmlspecialchars($dirname);
                         $parentlink = $_SERVER['PHP_SELF'] . "?course=$code_cours&amp;type=doc&amp;id=$id&amp;path=" . $parentpath;
                         $parenthtml = "<th class='right'><a href='$parentlink'>$langUp</a> <a href='$parentlink'>" .
-                                      "<img src='../../template/classic/img/folder_up.png' height='16' width='16' alt='icon' /></a></th>";
+                                      "<img src='$themeimg/folder_up.png' height='16' width='16' alt='icon' /></a></th>";
                         $colspan = 4;
                 }
 		$tool_content .= "\n    <form action='insert.php?course=$code_cours' method='post'><input type='hidden' name='id' value='$id' />" .
@@ -93,7 +94,7 @@ function list_docs()
 				}
 				$dir = $entry['path'];
 				if ($is_dir) {
-					$image = '../../template/classic/img/folder.png';
+					$image = $themeimg.'/folder.png';
 					$file_url = "$_SERVER[PHP_SELF]?course=$code_cours&amp;type=doc&amp;id=$id&amp;path=$dir";
 					$link_extra = '';
 					$link_text = $entry['name'];

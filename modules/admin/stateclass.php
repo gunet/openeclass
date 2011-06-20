@@ -18,8 +18,6 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-
-
 /*===========================================================================
     stateclass.php
     @last update: 05-07-2006 by Pitsiougas Vagelis
@@ -38,6 +36,7 @@ include '../../include/baseTheme.php';
 // Define $nameTools
 $nameTools = $langPlatformGenStats;
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
+
 /*****************************************************************************
         general statistics
 ******************************************************************************/
@@ -51,27 +50,27 @@ $tool_content .= "<div id='operations_container'>
 
 // Actions
 $tool_content .= "<table class='tbl_alt' width='100%'>
-	<tr><th width='20'><img src='${urlServer}/template/classic/img/arrow.png' alt=''></th>
+	<tr><th width='20'><img src='$themeimg/arrow.png' alt=''></th>
 	<td><a href='$_SERVER[PHP_SELF]?stats=login'>$langNbLogin</a></td>
 	</tr>
-	<tr><th><img src='${urlServer}/template/classic/img/arrow.png' alt=''></th>
+	<tr><th><img src='$themeimg/arrow.png' alt=''></th>
 	<td><a href='$_SERVER[PHP_SELF]?stats=users'>$langUsers</a></td>
 	</tr>
-	<tr><th><img src='${urlServer}/template/classic/img/arrow.png' alt=''></th>
+	<tr><th><img src='$themeimg/arrow.png' alt=''></th>
 	<td><a href='$_SERVER[PHP_SELF]?stats=percourse'>$langUsersPerCourse</a></td>
 	</tr>
 	<tr>
-	<th><img src='${urlServer}/template/classic/img/arrow.png' alt=''></th>
+	<th><img src='$themeimg/arrow.png' alt=''></th>
 	<td><a href='$_SERVER[PHP_SELF]?stats=cours'>$langStatCour</a></td>
 	</tr>
-	<tr><th><img src='${urlServer}/template/classic/img/arrow.png' alt=''></th>
+	<tr><th><img src='$themeimg/arrow.png' alt=''></th>
 	<td>
 	<a href='$_SERVER[PHP_SELF]?stats=musers'>$langMultipleUsers</a></td>
 	</tr>
-	<tr><th><img src='${urlServer}/template/classic/img/arrow.png' alt=''></th>
+	<tr><th><img src='$themeimg/arrow.png' alt=''></th>
 	<td><a href='$_SERVER[PHP_SELF]?stats=memail'>$langMultipleAddr e-mail</a></td>
 	</tr>
-	<tr><th><img src='${urlServer}/template/classic/img/arrow.png' alt=''></th>
+	<tr><th><img src='$themeimg/arrow.png' alt=''></th>
 	<td><a href='$_SERVER[PHP_SELF]?stats=mlogins'>$langMultiplePairs LOGIN - PASS</a></td>
 	</tr>
 	</table>";
@@ -151,25 +150,24 @@ if (isset($_GET['stats'])) {
 		break;
 		case 'users':
 			$tool_content .= "<table width='100%' class='tbl_1' style='margin-top: 20px;'>
-			<th class='left' colspan='2'><b>$langUsers</th>
-			</tr>
-			<tr>
-			<td>$langNbProf</td>
-			<td class='right' width='200'><b>".list_1Result("SELECT count(*) FROM user
-				WHERE statut = 1;")."</b></td>
-			</tr>
-			<tr>
-			<td>$langNbStudents</td>
-			<td class='right'><b>".list_1Result("SELECT count(*) FROM user WHERE statut = 5;")."</b></td>
-			</tr>
-			<tr>
-			<td>$langNumGuest</td>
-			<td class='right'><b>".list_1Result("SELECT count(*) FROM user WHERE statut = 10;")."</b></td>
-			</tr>
-			<td>$langTotal</td>
-			<td class='right'><b>".list_1Result("SELECT count(*) FROM user;")."</b></td>
-			</tr>
-			</table>";
+                                <tr><th class='left' colspan='2'>$langUsers</th></tr>
+                                <tr><td>$langNbProf</td>
+                                    <td class='right' width='200'><b>" .
+                                        list_1Result("SELECT count(*) FROM user WHERE statut = 1;") .
+                                        "</b></td></tr>
+                                <tr><td>$langNbStudents</td>
+                                    <td class='right'><b>" .
+                                        list_1Result("SELECT count(*) FROM user WHERE statut = 5;") .
+                                        "</b></td></tr>
+                                <tr><td>$langNumGuest</td>
+                                    <td class='right'><b>" .
+                                        list_1Result("SELECT count(*) FROM user WHERE statut = 10;") .
+                                        "</b></td></tr>
+                                <tr><td>$langTotal</td>
+                                    <td class='right'><b>" .
+                                        list_1Result("SELECT count(*) FROM user;") .
+                                        "</b></td></tr>
+                            </table>";
 		break;
 		case 'cours':
 			$tool_content .= "<table width='100%' class='tbl_1' style='margin-top: 20px;'>
@@ -235,7 +233,7 @@ if (isset($_GET['stats'])) {
 						case 10: $visitors++; break;
 						default: break;
 					}
-					$cu_key = "$row[intitule] ($row[code]) -- $row[titulaires]";
+					$cu_key = q("$row[intitule] ($row[code]) -- $row[titulaires]");
 					$cu[$cu_key] = "<small>$teachers $langTeachers | $students $langStudents | $visitors $langGuests </small>";
 				}
 			}

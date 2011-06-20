@@ -226,7 +226,7 @@ $tool_content .= "
 			<table class='tbl_alt' width='100%'>
 			<tr>
                         
-			<th colspan='2'><div align='left'>$langLessonCode</div></th>
+			<th colspan='2'><div align='left'>$langCode</div></th>
 			<th><div align='left'>$langLessonName</div></th>
 			<th>$langCourseRegistrationDate</th><th>$langProperty</th><th>$langActions</th>
 			</tr>";
@@ -242,9 +242,9 @@ $tool_content .= "
                                 }
 
 				$tool_content .= "
-                                        <td width='1'><img src='${urlServer}/template/classic/img/arrow.png' title='bullet'></td>
-					<td>".htmlspecialchars($logs[0])."</td>
-					<td>".htmlspecialchars($logs[1])."</td><td align='center'>";
+                                        <td width='1'><img src='$themeimg/arrow.png' title='bullet'></td>
+					<td><a href='{$urlServer}courses/$logs[0]/'>".q($logs[0])."</a></td>
+					<td>".q($logs[1])."</td><td align='center'>";
 				if ($logs[2] == '0000-00-00')
 					 $tool_content .= $langUnknownDate;
 				else
@@ -260,14 +260,14 @@ $tool_content .= "
 						$tool_content .= $langStudent;
 						$tool_content .= "</td><td align='center'>
 						<a href='unreguser.php?u=$u&amp;c=$logs[cours_id]'>
-						<img src='../../template/classic/img/delete.png' title='$langDelete'></img></a></td>
+						<img src='$themeimg/delete.png' title='$langDelete'></img></a></td>
   						</tr>\n";
 						break;
 					default:
 						$tool_content .= $langVisitor;
 						$tool_content .= "</td><td align='center'>
 						<a href='unreguser.php?u=$u&amp;c=$logs[cours_id]'>
-						<img src='../../template/classic/img/delete.png' title='$langDelete'></img></a></td></tr>\n";
+						<img src='$themeimg/delete.png' title='$langDelete'></img></a></td></tr>\n";
 						break;
 				}
                         $k++;

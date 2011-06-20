@@ -211,5 +211,6 @@ if (isset($_GET['search']) && $_GET['search'] == "yes") {
 
 }
 // Display link to index.php
-$tool_content .= "\n    <p align='right'><a href='index.php'>".$langBack."</a></p>";
+$tool_content .= "<p align='right'><a href='index.php'>$langBack</a></p>";
+
 draw($tool_content,3);

@@ -158,7 +158,8 @@ function show_resource($info)
 function show_doc($title, $comments, $resource_id, $file_id)
 {
         global $mysqlMainDb, $is_adminOfCourse, $currentCourseID, $cours_id,
-               $langWasDeleted, $visibility_check, $urlServer, $id, $code_cours;
+               $langWasDeleted, $visibility_check, $urlServer, $id,
+               $code_cours, $themeimg;
 
         $title = htmlspecialchars($title);
         $r = db_query("SELECT * FROM `$mysqlMainDb`.document
@@ -168,13 +169,13 @@ function show_doc($title, $comments, $resource_id, $file_id)
                         return '';
                 }
                 $status = 'del';
-                $image = '../../template/classic/img/delete.png';
-                $link = "<span class='invisible'>$title ($langWasDeleted)</span>";
+                $image = $themeimg.'/delete.png';
+                $link = "<span class='invisible'>".q($title)." ($langWasDeleted)</span>";
         } else {
                 $file = mysql_fetch_array($r, MYSQL_ASSOC);
                 $status = $file['visibility'];
                 if ($file['format'] == '.dir') {
-                        $image = '../../template/classic/img/folder.png';
+                        $image = $themeimg.'/folder.png';
                         $link = "<a href='{$urlServer}modules/document/document.php?course=$code_cours&amp;openDir=$file[path]&amp;unit=$id'>";
                 } else {
                         $image = '../document/img/' .
@@ -232,7 +233,7 @@ function show_description($title, $comments, $id, $res_id, $visibility)
 function show_lp($title, $comments, $resource_id, $lp_id)
 {
 	global $id, $tool_content, $mysqlMainDb, $urlServer, $is_adminOfCourse,
-               $langWasDeleted, $currentCourseID, $code_cours;
+               $langWasDeleted, $currentCourseID, $code_cours, $themeimg;
 
 	$comment_box = $class_vis = $imagelink = $link = '';
         $title = htmlspecialchars($title);
@@ -243,14 +244,14 @@ function show_lp($title, $comments, $resource_id, $lp_id)
 			return '';
 		} else {
 			$status = 'del';
-			$imagelink = "<img src='../../template/classic/img/delete.png' />";
+			$imagelink = "<img src='$themeimg/delete.png' />";
 			$link = "<span class='invisible'>$title ($langWasDeleted)</span>";
 		}
 	} else {
                 $lp = mysql_fetch_array($r, MYSQL_ASSOC);
 		$status = ($lp['visibility'] == 'SHOW')? 'v': 'i';
 		$link = "<a href='${urlServer}modules/learnPath/learningPath.php?course=$code_cours&amp;path_id=$lp_id&amp;unit=$id'>";
-		$imagelink = "<img src='../../template/classic/img/lp_" .
+		$imagelink = "<img src='$themeimg/lp_" .
 			($status == 'i'? 'off': 'on') . ".png' />";
 	}
         if ($status != 'v' and !$is_adminOfCourse) {
@@ -275,7 +276,7 @@ function show_lp($title, $comments, $resource_id, $lp_id)
 // display resource video
 function show_video($table, $title, $comments, $resource_id, $video_id, $visibility)
 {
-        global $is_adminOfCourse, $currentCourseID, $tool_content;
+        global $is_adminOfCourse, $currentCourseID, $tool_content, $themeimg;
 
         $result = db_query("SELECT * FROM $table WHERE id=$video_id",
                            $currentCourseID);
@@ -286,14 +287,14 @@ function show_video($table, $title, $comments, $resource_id, $video_id, $visibil
                              "' target='_blank'>";
                 $videolink = $link . htmlspecialchars($title) . '</a>';
                 $imagelink = $link .
-                             "<img src='../../template/classic/img/videos_" .
+                             "<img src='$themeimg/videos_" .
                              ($visibility == 'i'? 'off': 'on') . ".png' /></a>";
         } else {
                 if (!$is_adminOfCourse) {
                         return;
                 }
                 $videolink = $title;
-                $imagelink = "<img src='../../template/classic/img/delete.png' />";
+                $imagelink = "<img src='$themeimg/delete.png' />";
                 $visibility = 'del';
         }
         $class_vis = ($visibility == 'v')? ' class="even"': ' class="invisible"';
@@ -316,7 +317,7 @@ function show_video($table, $title, $comments, $resource_id, $video_id, $visibil
 function show_work($title, $comments, $resource_id, $work_id, $visibility)
 {
 	global $id, $tool_content, $mysqlMainDb, $urlServer, $is_adminOfCourse,
-               $langWasDeleted, $currentCourseID, $code_cours;
+               $langWasDeleted, $currentCourseID, $code_cours, $themeimg;
 
 	$comment_box = $class_vis = $imagelink = $link = '';
         $title = htmlspecialchars($title);
@@ -327,7 +328,7 @@ function show_work($title, $comments, $resource_id, $work_id, $visibility)
 			return '';
 		} else {
 			$status = 'del';
-			$imagelink = "<img src='../../template/classic/img/delete.png' />";
+			$imagelink = "<img src='$themeimg/delete.png' />";
 			$exlink = "<span class='invisible'>$title ($langWasDeleted)</span>";
 		}
 	} else {
@@ -335,7 +336,7 @@ function show_work($title, $comments, $resource_id, $work_id, $visibility)
 		$link = "<a href='${urlServer}modules/work/work.php?course=$code_cours&amp;id=$work_id&amp;unit=$id'>";
                 $exlink = $link . "$title</a>";
 		$imagelink = $link .
-                        "<img src='../../template/classic/img/assignments_" .
+                        "<img src='$themeimg/assignments_" .
 			($visibility == 'i'? 'off': 'on') . ".png' /></a>";
 	}
 	$class_vis = ($visibility == 'v')? ' class="even"': ' class="invisible"';
@@ -358,7 +359,7 @@ function show_work($title, $comments, $resource_id, $work_id, $visibility)
 function show_exercise($title, $comments, $resource_id, $exercise_id, $visibility)
 {
 	global $id, $tool_content, $mysqlMainDb, $urlServer, $is_adminOfCourse,
-               $langWasDeleted, $currentCourseID, $code_cours;
+               $langWasDeleted, $currentCourseID, $code_cours, $themeimg;
 
 	$comment_box = $class_vis = $imagelink = $link = '';
         $title = htmlspecialchars($title);
@@ -369,7 +370,7 @@ function show_exercise($title, $comments, $resource_id, $exercise_id, $visibilit
 			return '';
 		} else {
 			$status = 'del';
-			$imagelink = "<img src='../../template/classic/img/delete.png' />";
+			$imagelink = "<img src='$themeimg/delete.png' />";
 			$exlink = "<span class='invisible'>$title ($langWasDeleted)</span>";
 		}
 	} else {
@@ -377,7 +378,7 @@ function show_exercise($title, $comments, $resource_id, $exercise_id, $visibilit
 		$link = "<a href='${urlServer}modules/exercice/exercice_submit.php?course=$code_cours&amp;exerciseId=$exercise_id&amp;unit=$id'>";
                 $exlink = $link . "$title</a>";
 		$imagelink = $link .
-                        "<img src='../../template/classic/img/exercise_" .
+                        "<img src='$themeimg/exercise_" .
 			($visibility == 'i'? 'off': 'on') . ".png' /></a>";
 	}
 	$class_vis = ($visibility == 'v')? ' class="even"': ' class="invisible"';
@@ -400,7 +401,9 @@ function show_exercise($title, $comments, $resource_id, $exercise_id, $visibilit
 // display resource forum
 function show_forum($type, $title, $comments, $resource_id, $ft_id, $visibility)
 {
-	global $id, $tool_content, $mysqlMainDb, $urlServer, $is_adminOfCourse, $currentCourseID, $code_cours;
+	global $id, $tool_content, $mysqlMainDb, $urlServer, $is_adminOfCourse,
+               $currentCourseID, $code_cours, $themeimg;
+
 	$comment_box = '';
 	$class_vis = ($visibility == 'i')? ' class="invisible"': ' class="even"';
         $title = htmlspecialchars($title);
@@ -414,7 +417,7 @@ function show_forum($type, $title, $comments, $resource_id, $ft_id, $visibility)
                 $forumlink = $link . "$title</a>";
 	}
 
-	$imagelink = $link . "<img src='../../template/classic/img/forum_" .
+	$imagelink = $link . "<img src='$themeimg/forum_" .
 			($visibility == 'i'? 'off': 'on') . ".png' /></a>";
 
 
@@ -437,7 +440,7 @@ function show_forum($type, $title, $comments, $resource_id, $ft_id, $visibility)
 function show_wiki($title, $comments, $resource_id, $wiki_id, $visibility)
 {
 	global $id, $tool_content, $mysqlMainDb, $urlServer, $is_adminOfCourse,
-               $langWasDeleted, $currentCourseID, $code_cours;
+               $langWasDeleted, $currentCourseID, $code_cours, $themeimg;
 
 	$comment_box = $imagelink = $link = $class_vis = '';
 	$class_vis = ($visibility == 'i')? ' class="invisible"': ' class="even"';
@@ -449,7 +452,7 @@ function show_wiki($title, $comments, $resource_id, $wiki_id, $visibility)
 			return '';
 		} else {
 			$status = 'del';
-			$imagelink = "<img src='../../template/classic/img/delete.png' />";
+			$imagelink = "<img src='$themeimg/delete.png' />";
 			$exlink = "<span class='invisible'>$title ($langWasDeleted)</span>";
 		}
 	} else {
@@ -457,7 +460,7 @@ function show_wiki($title, $comments, $resource_id, $wiki_id, $visibility)
 		$link = "<a href='${urlServer}modules/wiki/page.php?course=$code_cours&amp;wikiId=$wiki_id&amp;action=show&amp;unit=$id'>";
                 $wikilink = $link . "$title</a>";
 		$imagelink = $link .
-                        "<img src='../../template/classic/img/wiki_" .
+                        "<img src='$themeimg/wiki_" .
 			($visibility == 'i'? 'off': 'on') . ".png' /></a>";
 	}
 
@@ -479,7 +482,7 @@ function show_wiki($title, $comments, $resource_id, $wiki_id, $visibility)
 function show_link($title, $comments, $resource_id, $link_id, $visibility)
 {
 	global $id, $tool_content, $mysqlMainDb, $urlServer, $is_adminOfCourse,
-               $langWasDeleted, $cours_id, $currentCourseID;
+               $langWasDeleted, $cours_id, $currentCourseID, $themeimg;
 
 	$comment_box = $class_vis = $imagelink = $link = '';
         $title = htmlspecialchars($title);
@@ -489,15 +492,18 @@ function show_link($title, $comments, $resource_id, $link_id, $visibility)
 			return '';
 		} else {
 			$status = 'del';
-			$imagelink = "<img src='../../template/classic/img/delete.png' />";
+			$imagelink = "<img src='$themeimg/delete.png' />";
 			$exlink = "<span class='invisible'>" . q($title) . " ($langWasDeleted)</span>";
 		}
 	} else {
                 $l = mysql_fetch_array($r, MYSQL_ASSOC);
 		$link = "<a href='${urlServer}modules/link/go.php?c=$currentCourseID&amp;id=$link_id&amp;url=$l[url]' target='_blank'>";
+                if ($title == '') {
+                        $title = q($l['url']);
+                }
                 $exlink = $link . "$title</a>";
 		$imagelink = $link .
-                        "<img src='../../template/classic/img/links_" .
+                        "<img src='$themeimg/links_" .
 			($visibility == 'i'? 'off': 'on') . ".png' /></a>";
 	}
 	$class_vis = ($visibility == 'v')? ' class="even"': ' class="invisible"';
@@ -520,7 +526,7 @@ function show_link($title, $comments, $resource_id, $link_id, $visibility)
 function show_linkcat($title, $comments, $resource_id, $linkcat_id, $visibility)
 {
 	global $id, $tool_content, $mysqlMainDb, $urlServer, $is_adminOfCourse,
-               $langWasDeleted, $cours_id, $currentCourseID;
+               $langWasDeleted, $cours_id, $currentCourseID, $themeimg;
 	
 	$content = $linkcontent = '';
 	$comment_box = $class_vis = $imagelink = $link = '';
@@ -531,7 +537,7 @@ function show_linkcat($title, $comments, $resource_id, $linkcat_id, $visibility)
 			return '';
 		} else {
 			$status = 'del';
-			$imagelink = "<img src='../../template/classic/img/delete.png' />";
+			$imagelink = "<img src='$themeimg/delete.png' />";
 			$exlink = "<span class='invisible'>" . q($title) . " ($langWasDeleted)</span>";
 		}
 	} else {
@@ -539,7 +545,7 @@ function show_linkcat($title, $comments, $resource_id, $linkcat_id, $visibility)
 		while ($lcat = mysql_fetch_array($sql)) {
 			$content .= "
         <tr$class_vis>
-          <td width='1'><img src='../../template/classic/img/folder_open.png' /></td>
+          <td width='1'><img src='$themeimg/folder_open.png' /></td>
           <td>" . q($lcat['name']);
 			if (!empty($lcat['description'])) {
 				$comment_box = "<br />$lcat[description]";
@@ -549,9 +555,10 @@ function show_linkcat($title, $comments, $resource_id, $linkcat_id, $visibility)
 
 			$sql2 = db_query("SELECT * FROM `$mysqlMainDb`.link WHERE course_id = $cours_id AND category = $lcat[id]");
 			while ($l = mysql_fetch_array($sql2, MYSQL_ASSOC)) {
-				$imagelink = "<img src='../../template/classic/img/links_" .
-				($visibility == 'i'? 'off': 'on') . ".png' />";
-				$linkcontent .= "<br />$imagelink&nbsp;&nbsp;<a href='${urlServer}modules/link/go.php?c=$currentCourseID&amp;id=$l[id]&amp;url=$l[url]' target='_blank'>" . q($l['title']) . "</a>";
+				$imagelink = "<img src='$themeimg/links_" .
+                                             ($visibility == 'i'? 'off': 'on') . ".png' />";
+                                $ltitle = q(($l['title'] == '')? $l['url']: $l['title']);
+				$linkcontent .= "<br />$imagelink&nbsp;&nbsp;<a href='${urlServer}modules/link/go.php?c=$currentCourseID&amp;id=$l[id]&amp;url=$l[url]' target='_blank'>$ltitle</a>";
 			}
 		}
 	}
@@ -565,7 +572,7 @@ function show_linkcat($title, $comments, $resource_id, $linkcat_id, $visibility)
 function show_ebook($title, $comments, $resource_id, $ebook_id, $visibility)
 {
 	global $id, $tool_content, $mysqlMainDb, $urlServer, $is_adminOfCourse,
-               $langWasDeleted, $currentCourseID;
+               $langWasDeleted, $currentCourseID, $themeimg;
 
 	$comment_box = $class_vis = $imagelink = $link = '';
         $title = htmlspecialchars($title);
@@ -575,14 +582,14 @@ function show_ebook($title, $comments, $resource_id, $ebook_id, $visibility)
 			return '';
 		} else {
 			$status = 'del';
-			$imagelink = "<img src='../../template/classic/img/delete.png' />";
+			$imagelink = "<img src='$themeimg/delete.png' />";
 			$exlink = "<span class='invisible'>$title ($langWasDeleted)</span>";
 		}
 	} else {
 		$link = "<a href='${urlServer}modules/ebook/show.php/$currentCourseID/$ebook_id/unit=$id'>";
                 $exlink = $link . "$title</a>";
 		$imagelink = $link .
-                        "<img src='../../template/classic/img/ebook_" .
+                        "<img src='$themeimg/ebook_" .
 			($visibility == 'i'? 'off': 'on') . ".png' /></a>";
 	}
 	$class_vis = ($visibility == 'v')? ' class="even"': ' class="invisible"';
@@ -653,7 +660,7 @@ function show_ebook_resource($title, $comments, $resource_id, $ebook_id,
 		             $display_id, $visibility, $deleted)
 {
 	global $id, $tool_content, $mysqlMainDb, $urlServer, $is_adminOfCourse,
-               $langWasDeleted, $currentCourseID, $cours_id;
+               $langWasDeleted, $currentCourseID, $cours_id, $themeimg;
 
 	$comment_box = $class_vis = $imagelink = $link = '';
 	if ($deleted) {
@@ -661,14 +668,14 @@ function show_ebook_resource($title, $comments, $resource_id, $ebook_id,
 			return '';
 		} else {
 			$status = 'del';
-			$imagelink = "<img src='../../template/classic/img/delete.png' />";
+			$imagelink = "<img src='$themeimg/delete.png' />";
 			$exlink = "<span class='invisible'>$title ($langWasDeleted)</span>";
 		}
 	} else {
 		$link = "<a href='${urlServer}modules/ebook/show.php/$currentCourseID/$ebook_id/$display_id/unit=$id'>";
                 $exlink = $link . q($title) . '</a>';
 		$imagelink = $link .
-                        "<img src='../../template/classic/img/ebook_" .
+                        "<img src='$themeimg/ebook_" .
 			($visibility == 'i'? 'off': 'on') . ".png' /></a>";
 	}
 	$class_vis = ($visibility == 'v')? ' class="even"': ' class="invisible"';
@@ -689,8 +696,9 @@ function show_ebook_resource($title, $comments, $resource_id, $ebook_id,
 // resource actions
 function actions($res_type, $resource_id, $status, $res_id = false)
 {
-        global $is_adminOfCourse, $langEdit, $langDelete, $langVisibility, $langAddToCourseHome,
-		$langDown, $langUp, $mysqlMainDb, $langConfirmDelete, $code_cours;
+        global $is_adminOfCourse, $langEdit, $langDelete, $langVisibility,
+               $langAddToCourseHome, $langDown, $langUp, $mysqlMainDb,
+               $langConfirmDelete, $code_cours, $themeimg;
 
         static $first = true;
 
@@ -707,24 +715,25 @@ function actions($res_type, $resource_id, $status, $res_id = false)
         }
 
         if ($status != 'del') {
-                $content = "\n          <td width='3'><a href='$edit_link'>" .  "<img src='../../template/classic/img/edit.png' title='$langEdit' /></a></td>";
+                $content = "<td width='3'><a href='$edit_link'>" .
+                           "<img src='$themeimg/edit.png' title='$langEdit' /></a></td>";
         } else {
-                $content = "\n          <td width='3'>&nbsp;</td>";
+                $content = "<td width='3'>&nbsp;</td>";
         }
-        $content .= "\n          <td width='3'><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;del=$resource_id'" .
+        $content .= "<td width='3'><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;del=$resource_id'" .
                     " onClick=\"return confirmation('" . js_escape($langConfirmDelete) . "')\">" .
-                    "<img src='../../template/classic/img/delete.png' " .
-                    "title='$langDelete'></img></a></td>";
+                    "<img src='$themeimg/delete.png' " .
+                    "title='$langDelete'></a></td>";
 	 
 	if ($status != 'del') {
 		if (in_array($res_type, array('text', 'video', 'forum', 'topic'))) { 
 			$content .= "<td width='3'><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;vis=$resource_id'>" .
-                                    "<img src='../../template/classic/img/$icon_vis' " .
-                                    "title='$langVisibility'></img></a></td>";
+                                    "<img src='$themeimg/$icon_vis' " .
+                                    "title='$langVisibility'></a></td>";
 		} elseif(in_array($res_type, array('description'))) { 
 			$content .= "<td width='3'><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;vis=$resource_id'>" .
-                                    "<img src='../../template/classic/img/$icon_vis' " .
-                                    "title='$langAddToCourseHome'></img></a></td>";
+                                    "<img src='$themeimg/$icon_vis' " .
+                                    "title='$langAddToCourseHome'></a></td>";
 		} else {
 			
 			$content .= "\n          <td width='3'>&nbsp;</td>";
@@ -734,13 +743,13 @@ function actions($res_type, $resource_id, $status, $res_id = false)
         }
         if ($resource_id != $GLOBALS['max_resource_id']) {
                 $content .= "\n          <td width='12'><div align='right'><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;down=$resource_id'>" .
-                            "<img src='../../template/classic/img/down.png' title='$langDown'></img></a></div></td>";
+                            "<img src='$themeimg/down.png' title='$langDown'></a></div></td>";
 	} else {
 		$content .= "\n          <td width='12'>&nbsp;</td>";
 	}
         if (!$first) {
                 $content .= "<td width='12'><div align='left'><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;up=$resource_id'>" .
-                            "<img src='../../template/classic/img/up.png' title='$langUp'></img></a></div></td>";
+                            "<img src='$themeimg/up.png' title='$langUp'></a></div></td>";
         } else {
                 $content .= "\n          <td width='12'>&nbsp;</td>";
         }
@@ -778,7 +787,7 @@ function edit_res($resource_id)
 	}
         $tool_content .= "\n    <tr>" .
                          "\n      <th>$message:</th>" .
-                         "\n      <td>" .  rich_text_editor('rescomments', 4, 20, $rescomments) . "      </td>" .
+                         "\n      <td>" .  rich_text_editor('rescomments', 4, 20, q($rescomments)) . "      </td>" .
                          "\n    </tr>" .
                          "\n    <tr>" .
                          "\n      <th>&nbsp;</th>" .

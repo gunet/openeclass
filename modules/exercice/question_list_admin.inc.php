@@ -57,8 +57,8 @@ if(isset($_GET['deleteQuestion'])) {
 
 
 $tool_content .= "
-    <div align=\"left\" id=\"operations_container\">
-      <ul id=\"opslist\">
+    <div align='left' id='operations_container'>
+      <ul id='opslist'>
         <li><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;newQuestion=yes'>$langNewQu</a>
 	&nbsp;|&nbsp;
 	<a href='question_pool.php?course=$code_cours&amp;fromExercise=$exerciseId'>$langGetExistingQuestion</a></li>
@@ -67,8 +67,8 @@ $tool_content .= "
 
 
 if($nbrQuestions) {
-	$questionList=$objExercise->selectQuestionList();
-	$i=1;
+	$questionList = $objExercise->selectQuestionList();
+	$i = 1;
 	$tool_content .= "
 	    <table width='100%' class='tbl_alt'>
 	    <tr>

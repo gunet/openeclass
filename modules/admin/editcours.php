@@ -51,7 +51,7 @@ include '../../include/lib/fileDisplayLib.inc.php';
 
 if (isset($_GET['c'])) {
 	$c = $_GET['c'];
-	$_SESSION['c_temp']=$c;
+	$_SESSION['c_temp'] = $c;
 }
 
 if(!isset($c)) {
@@ -60,18 +60,17 @@ if(!isset($c)) {
 
 // Define $nameTools
 $nameTools = $langCourseEdit;
-$navigation[] = array("url" => "index.php", "name" => $langAdmin);
-$navigation[] = array("url" => "listcours.php", "name" => $langListCours);
-// Initialise $tool_content
-$tool_content = "";
+$navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
+$navigation[] = array('url' => 'listcours.php', 'name' => $langListCours);
+
 // Initialize some variables
-$searchurl = "";
+$searchurl = '';
 
 // A course has been selected
 if (isset($c)) {
 	// Define $searchurl to go back to search results
-	if (isset($search) && ($search=="yes")) {
-		$searchurl = "&search=yes";
+	if (isset($search) && ($search=='yes')) {
+		$searchurl = '&search=yes';
 	}
 	// Get information about selected course
 	$sql = mysql_query("SELECT * FROM cours WHERE code = " . quote($c));
@@ -79,7 +78,7 @@ if (isset($c)) {
 	// Display course information and link to edit
         $faculte = find_faculty_by_id($row['faculteid']);
 	$tool_content .= "<fieldset>
-	<legend>".$langCourseInfo." <a href=\"infocours.php?c=".htmlspecialchars($c)."".$searchurl."\"><img src='../../template/classic/img/edit.png' alt='' border='0' title='".$langModify."'></a></legend>
+	<legend>".$langCourseInfo." <a href=\"infocours.php?c=".htmlspecialchars($c)."".$searchurl."\"><img src='$themeimg/edit.png' alt='' border='0' title='".$langModify."'></a></legend>
 	<table class='tbl' width='100%'>";
 	$tool_content .= "
 	<tr>
@@ -102,13 +101,13 @@ if (isset($c)) {
 	</fieldset>";
 	// Display course quota and link to edit
 	$tool_content .= "<fieldset>
-	<legend>".$langQuota." <a href=\"quotacours.php?c=".htmlspecialchars($c).$searchurl."\"><img src='../../template/classic/img/edit.png' border='0' alt='' title='".$langModify."'></a></legend>
+	<legend>".$langQuota." <a href=\"quotacours.php?c=".q($c).$searchurl."\"><img src='$themeimg/edit.png' border='0' alt='' title='".$langModify."'></a></legend>
 <table width='100%' class='tbl'>
 	<tr>
-	  <td colspan='2'><div class='sub_title1'>$langTheCourse $row[intitule] $langMaxQuota</div></td>
+	  <td colspan='2'><div class='sub_title1'>$langTheCourse " . q($row['intitule']) . " $langMaxQuota</div></td>
 	  </tr>";
 	// Get information about course quota
-	$q = mysql_fetch_array(mysql_query("SELECT code,intitule,doc_quota,video_quota,group_quota,dropbox_quota
+	$q = mysql_fetch_array(mysql_query("SELECT code, intitule, doc_quota, video_quota, group_quota, dropbox_quota
 			FROM cours WHERE code='".mysql_real_escape_string($c)."'"));
 	$dq = format_file_size($q['doc_quota']);
 	$vq = format_file_size($q['video_quota']);
@@ -138,8 +137,11 @@ if (isset($c)) {
 	$tool_content .= "</table></fieldset>";
 	// Display course type and link to edit
 	$tool_content .= "<fieldset>
-	<legend>".$langCourseStatus." <a href=\"statuscours.php?c=".htmlspecialchars($c)."".$searchurl."\"><img src='../../template/classic/img/edit.png' border='0' alt='' title='".$langModify."'></a></legend>
-	<table width='100%' class='tbl'>";
+                <legend>$langCourseStatus
+                        <a href='statuscours.php?c=".q($c).
+                                "$searchurl'><img src='$themeimg/edit.png' alt='$langModify' title='$langModify'></a>
+                </legend>
+                <table width='100%' class='tbl'>";
 	$tool_content .= "<tr><th width='250'>".$langCurrentStatus.":</th><td>";
 	switch ($row['visible']) {
 	case 2:
@@ -194,6 +196,4 @@ else {
 	$tool_content .= "<br><p align=\"right\"><a href=\"listcours.php\">$langBack</a></p>";
 }
 
-
 draw($tool_content, 3);
-?>

@@ -26,7 +26,7 @@ $require_help = TRUE;
 $helpTopic = 'CreateCourse';
 
 include '../../include/baseTheme.php';
-require_once("../betacms_bridge/include/bcms.inc.php");
+require_once '../betacms_bridge/include/bcms.inc.php';
 
 $nameTools = $langCreateCourse . " (" . $langCreateCourseStep ." 1 " .$langCreateCourseStep2 . " 3)" ;
 $lang_editor = langname_to_code($language);
@@ -178,11 +178,11 @@ if (isset($_POST['back1']) or !isset($_POST['visit'])) {
       <legend>$langCreateCourseStep2Title</legend>
       <table class='tbl' width='100%'>
       <tr>
-        <td>$langDescrInfo&nbsp;:<br /> ".  rich_text_editor('description', 4, 20, $description)."</td>
+        <td>$langDescrInfo&nbsp;:<br /> ".  rich_text_editor('description', 4, 20, q($description))."</td>
       </tr>
       <tr>
 	<td>$langCourseKeywords&nbsp;<br />
-	  <input type='text' name='course_keywords' size='65' value='$course_keywords' />
+	  <input type='text' name='course_keywords' size='65' value='".q($course_keywords)."' />
         </td>
       </tr>
       <tr>
@@ -206,12 +206,12 @@ if (isset($_POST['back1']) or !isset($_POST['visit'])) {
 	<td>
 	  <table class='tbl' width='100%'>
 	  <tr class='smaller'>
-	    <th width='130'><img src=\"../../template/classic/img/lock_open.png\" title=\"".$m['legopen']."\" width=\"16\" height=\"16\" /> ".$m['legopen']."</th>
+	    <th width='130'><img src=\"$themeimg/lock_open.png\" title=\"".$m['legopen']."\" width=\"16\" height=\"16\" /> ".$m['legopen']."</th>
 	    <td><input name=\"formvisible\" type=\"radio\" value=\"2\" checked=\"checked\" /></td>
 	    <td>$langPublic</td>
 	  </tr>
 	  <tr class='smaller'>
-	    <th valign='top'><img src=\"../../template/classic/img/lock_registration.png\" title=\"".$m['legrestricted']."\" width=\"16\" height=\"16\" /> ".$m['legrestricted']."</th>
+	    <th valign='top'><img src=\"$themeimg/lock_registration.png\" title=\"".$m['legrestricted']."\" width=\"16\" height=\"16\" /> ".$m['legrestricted']."</th>
 	    <td valign='top'><input name=\"formvisible\" type=\"radio\" value=\"1\" /></td>
 	    <td>
               $langPrivOpen<br />
@@ -219,7 +219,7 @@ if (isset($_POST['back1']) or !isset($_POST['visit'])) {
             </td>
           </tr>
 	  <tr class='smaller'>
-	    <th valign='top'><img src=\"../../template/classic/img/lock_closed.png\" title=\"".$m['legclosed']."\" width=\"16\" height=\"16\" /> ".$m['legclosed']."</th>
+	    <th valign='top'><img src=\"$themeimg/lock_closed.png\" title=\"".$m['legclosed']."\" width=\"16\" height=\"16\" /> ".$m['legclosed']."</th>
 	    <td valign='top'><input name=\"formvisible\" type=\"radio\" value=\"0\" /></td>
 	    <td>$langPrivate</td>
 	  </tr>
@@ -234,81 +234,81 @@ if (isset($_POST['back1']) or !isset($_POST['visit'])) {
 	<td>
  	  <table class='tbl smaller' width='100%'>
 	  <tr>
-	    <td width='10' ><img src=\"../../template/classic/img/calendar_on.png\" alt=\"\" height=\"16\" width=\"16\" /></td>
+	    <td width='10' ><img src='$themeimg/calendar_on.png' alt='' height='16' width='16' /></td>
 	    <td width='150'>$langAgenda</td>
-	    <td width='30' ><input name=\"subsystems[]\" type=\"checkbox\" value=\"1\" checked=\"checked\" /></td>
+	    <td width='30' ><input name='subsystems[]' type='checkbox' value='1' checked='checked' /></td>
 	    <th width='2' >&nbsp;</th>
-	    <td width='10' >&nbsp;<img src=\"../../template/classic/img/dropbox_on.png\" alt=\"\" height=\"16\" width=\"16\" /></td>
+	    <td width='10' >&nbsp;<img src='$themeimg/dropbox_on.png' alt='' height='16' width='16' /></td>
 	    <td width='150'>$langDropBox</td>
- 	    <td width='30' ><input type=\"checkbox\" name=\"subsystems[]\" value=\"16\" /></td>
+ 	    <td width='30' ><input type='checkbox' name='subsystems[]' value='16' /></td>
 	  </tr>
 	  <tr  class='even'>
-	    <td><img src=\"../../template/classic/img/links_on.png\" alt=\"\" height=\"16\" width=\"16\" /></td>
+	    <td><img src='$themeimg/links_on.png' alt='' height='16' width='16' /></td>
 	    <td>$langLinks</td>
-	    <td><input name=\"subsystems[]\" type=\"checkbox\" value=\"2\" checked=\"checked\" /></td>
+	    <td><input name='subsystems[]' type='checkbox' value='2' checked='checked' /></td>
 	    <th>&nbsp;</th>
-	    <td>&nbsp;<img src=\"../../template/classic/img/groups_on.png\" alt=\"\" height=\"16\" width=\"16\" /></td>
+	    <td>&nbsp;<img src='$themeimg/groups_on.png' alt='' height='16' width='16' /></td>
 	    <td>$langGroups</td>
-	    <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"15\" /></td>
+	    <td><input type='checkbox' name='subsystems[]' value='15' /></td>
 	  </tr>
 	  <tr>
-	    <td><img src=\"../../template/classic/img/docs_on.png\" alt=\"\" height=\"16\" width=\"16\" /></td>
+	    <td><img src='$themeimg/docs_on.png' alt='' height='16' width='16' /></td>
 	    <td>$langDoc</td>
-	    <td><input name=\"subsystems[]\" type=\"checkbox\" value=\"3\" checked=\"checked\" /></td>
+	    <td><input name='subsystems[]' type='checkbox' value='3' checked='checked' /></td>
 	    <th>&nbsp;</th>
-	    <td>&nbsp;<img src=\"../../template/classic/img/conference_on.png\" alt=\"\" height=\"16\" width=\"16\" /></td>
+	    <td>&nbsp;<img src='$themeimg/conference_on.png' alt='' height='16' width='16' /></td>
 	    <td>$langConference</td>
-	    <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"19\" /></td>
+	    <td><input type='checkbox' name='subsystems[]' value='19' /></td>
 	  </tr>
 	  <tr class='even'>
-	    <td><img src=\"../../template/classic/img/videos_on.png\" alt=\"\" height=\"16\" width=\"16\" /></td>
+	    <td><img src='$themeimg/videos_on.png' alt='' height='16' width='16' /></td>
 	    <td>$langVideo</td>
-	    <td><input name=\"subsystems[]\" type=\"checkbox\" value=\"4\"  /></td>
+	    <td><input name='subsystems[]' type='checkbox' value='4'  /></td>
 	    <th>&nbsp;</th>
-	    <td>&nbsp;<img src=\"../../template/classic/img/description_on.png\" alt=\"\" height=\"16\" width=\"16\" /></td>
+	    <td>&nbsp;<img src='$themeimg/description_on.png' alt='' height='16' width='16' /></td>
 	    <td>$langCourseDescription</td>
-	    <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"20\" checked=\"checked\" /></td>
+	    <td><input type='checkbox' name='subsystems[]' value='20' checked='checked' /></td>
 	  </tr>
 	  <tr>
-	    <td><img src=\"../../template/classic/img/assignments_on.png\" alt=\"\" height=\"16\" width=\"16\" /></td>
+	    <td><img src='$themeimg/assignments_on.png' alt='' height='16' width='16' /></td>
 	    <td>$langWorks</td>
-	    <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"5\" /></td>
+	    <td><input type='checkbox' name='subsystems[]' value='5' /></td>
 	    <th>&nbsp;</th>
-	    <td>&nbsp;<img src=\"../../template/classic/img/questionnaire_on.png\" alt=\"\" height=\"16\" width=\"16\" /></td>
+	    <td>&nbsp;<img src='$themeimg/questionnaire_on.png' alt='' height='16' width='16' /></td>
 	    <td>$langQuestionnaire</td>
-	    <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"21\" /></td>
+	    <td><input type='checkbox' name='subsystems[]' value='21' /></td>
 	  </tr>
 	  <tr  class='even'>
-	    <td><img src=\"../../template/classic/img/announcements_on.png\" alt=\"\" height=\"16\" width=\"16\" /></td>
+	    <td><img src='$themeimg/announcements_on.png' alt='' height='16' width='16' /></td>
 	    <td>$langAnnouncements</td>
-	    <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"7\" checked=\"checked\"/></td>
+	    <td><input type='checkbox' name='subsystems[]' value='7' checked='checked'/></td>
 	    <th>&nbsp;</th>
-	    <td>&nbsp;<img src=\"../../template/classic/img/lp_on.png\" alt=\"\" height=\"16\" width=\"16\" /></td>
+	    <td>&nbsp;<img src='$themeimg/lp_on.png' alt='' height='16' width='16' /></td>
 	    <td>$langLearnPath</td>
-	    <td><input type=\"checkbox\" name=\"subsystems[]\"  value=\"23\" /></td>
+	    <td><input type='checkbox' name='subsystems[]'  value='23' /></td>
 	  </tr>
 	  <tr>
-	    <td><img src=\"../../template/classic/img/forum_on.png\" alt=\"\" height=\"16\" width=\"16\" /></td>
+	    <td><img src='$themeimg/forum_on.png' alt='' height='16' width='16' /></td>
 	    <td>$langForums</td>
-	    <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"9\" /></td>
+	    <td><input type='checkbox' name='subsystems[]' value='9' /></td>
 	    <th>&nbsp;</th>
-	    <td>&nbsp;<img src=\"../../template/classic/img/wiki_on.png\" alt=\"\" height=\"16\" width=\"16\" /></td>
+	    <td>&nbsp;<img src='$themeimg/wiki_on.png' alt='' height='16' width='16' /></td>
 	    <td>$langWiki</td>
-	    <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"26\" /></td>
+	    <td><input type='checkbox' name='subsystems[]' value='26' /></td>
 	  </tr>
 	  <tr class='even'>
-	    <td><img src=\"../../template/classic/img/exercise_on.png\" alt=\"\" height=\"16\" width=\"16\" /></td>
+	    <td><img src='$themeimg/exercise_on.png' alt='' height='16' width='16' /></td>
 	    <td>$langExercices</td>
-	    <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"10\" /></td>
+	    <td><input type='checkbox' name='subsystems[]' value='10' /></td>
 	    <th>&nbsp;</th>
-            <td>&nbsp;<img src=\"../../template/classic/img/glossary_on.png\" alt=\"\" height=\"16\" width=\"16\" /></td>
+            <td>&nbsp;<img src='$themeimg/glossary_on.png' alt='' height='16' width='16' /></td>
 	    <td>$langGlossary</td>
-	    <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"17\" checked=\"checked\" /></td>
+	    <td><input type='checkbox' name='subsystems[]' value='17' checked='checked' /></td>
 	  </tr>
 	  <tr>
-	    <td><img src=\"../../template/classic/img/ebook_on.png\" alt=\"\" height=\"16\" width=\"16\" /></td>
+	    <td><img src='$themeimg/ebook_on.png' alt='' height='16' width='16' /></td>
 	    <td>$langEBook</td>
-	    <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"18\" /></td>
+	    <td><input type='checkbox' name='subsystems[]' value='18' /></td>
 	    <th>&nbsp;</th>
             <td>&nbsp;</td>
 	    <td>&nbsp;</td>
@@ -321,7 +321,7 @@ if (isset($_POST['back1']) or !isset($_POST['visit'])) {
       <tr>
 	<td class='right'>
           <input type='submit' name='back2' value='&laquo; $langPreviousStep ' />&nbsp;
-	  <input type='submit' name='create_course' value=\"$langFinalize\" />
+	  <input type='submit' name='create_course' value='$langFinalize' />
         </td>
       </tr>
       </table>
@@ -368,7 +368,7 @@ if (isset($_POST['create_course'])) {
               mkdir("../../courses/$repertoire/scormPackages", 0777) and
               mkdir("../../video/$repertoire", 0777))) {
                 $tool_content .= "<div class='caution'>$langErrorDir</div>";
-                draw($tool_content, '1', '', $head_content);
+                draw($tool_content, 1, null, $head_content);
                 exit;
         }
         // ---------------------------------------------------------
@@ -445,4 +445,4 @@ if (isset($_POST['create_course'])) {
 
 $tool_content .= "</form>";
 
-draw($tool_content, '1', '', $head_content);
+draw($tool_content, 1, null, $head_content);

@@ -22,8 +22,9 @@
 
 function list_lps()
 {
-        global $id, $currentCourseID, $tool_content, $urlServer,
-               $langComments, $langAddModulesButton, $langChoice, $langNoLearningPath, $langLearningPaths, $code_cours;
+        global $id, $currentCourseID, $tool_content, $urlServer, $langComments,
+               $langAddModulesButton, $langChoice, $langNoLearningPath,
+               $langLearningPaths, $code_cours, $themeimg;
 
 
         $result = db_query("SELECT * FROM lp_learnPath ORDER BY name", $currentCourseID);
@@ -59,7 +60,7 @@ function list_lps()
 					}
 				}
 				$tool_content .= "\n  <tr class='$vis'>";
-				$tool_content .= "\n    <td>&nbsp;<img src='../../template/classic/img/lp_on.png' />&nbsp;&nbsp;<a href='${urlServer}/modules/learnPath/learningPath.php?course=$code_cours&amp;path_id=$entry[id]'>$entry[name]</a></td>";
+				$tool_content .= "\n    <td>&nbsp;<img src='$themeimg/lp_on.png' />&nbsp;&nbsp;<a href='${urlServer}/modules/learnPath/learningPath.php?course=$code_cours&amp;path_id=$entry[id]'>$entry[name]</a></td>";
 				$tool_content .= "\n    <td>$entry[comment]</td>";
 				$tool_content .= "\n    <td align='center'><input type='checkbox' name='lp[]' value='$entry[id]'></td>";
 				$tool_content .= "\n  </tr>";

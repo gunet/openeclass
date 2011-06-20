@@ -18,8 +18,6 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-
-
 /*===========================================================================
 	quotacours.php
 	@last update: 31-05-2006 by Pitsiougas Vagelis
@@ -50,23 +48,23 @@ if(!isset($_GET['c'])) { die(); }
 
 // Define $nameTools
 $nameTools = $langQuota;
-$navigation[] = array("url" => "index.php", "name" => $langAdmin);
-$navigation[] = array("url" => "listcours.php", "name" => $langListCours);
-$navigation[] = array("url" => "editcours.php?c=".htmlspecialchars($_GET['c']), "name" => $langCourseEdit);
-// Initialise $tool_content
-$tool_content = "";
+$navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
+$navigation[] = array('url' => 'listcours.php', 'name' => $langListCours);
+$navigation[] = array('url' => 'editcours.php?c='.q($_GET['c']), 'name' => $langCourseEdit);
+
 // Initialize some variables
-$quota_info = "";
+$quota_info = '';
+define('MB', 1048576);
 
 // Update course quota
 if (isset($_POST['submit']))  {
-	$dq = $_POST['dq'] * 1000000;
-        $vq = $_POST['vq'] * 1000000;
-        $gq = $_POST['gq'] * 1000000;
-        $drq = $_POST['drq'] * 1000000;
+	$dq = $_POST['dq'] * MB;
+        $vq = $_POST['vq'] * MB;
+        $gq = $_POST['gq'] * MB;
+        $drq = $_POST['drq'] * MB;
   // Update query
 	$sql = mysql_query("UPDATE cours SET doc_quota='$dq', video_quota='$vq', group_quota='$gq', dropbox_quota='$drq'
-			WHERE code='".mysql_real_escape_string($_GET['c'])."'");
+			WHERE code = ".autoquote($_GET['c']));
 	// Some changes occured
 	if (mysql_affected_rows() > 0) {
 		$tool_content .= "<p>".$langQuotaSuccess."</p>";
@@ -79,44 +77,32 @@ if (isset($_POST['submit']))  {
 }
 // Display edit form for course quota
 else {
-	$q = mysql_fetch_array(mysql_query("SELECT code,intitule,doc_quota,video_quota,group_quota,dropbox_quota
-			FROM cours WHERE code='".mysql_real_escape_string($_GET['c'])."'"));
-	$quota_info .= "".$langTheCourse." <b>".$q['intitule']."</b> ".$langMaxQuota;
-	$dq = $q['doc_quota'] / 1000000;
-	$vq = $q['video_quota'] / 1000000;
-	$gq = $q['group_quota'] / 1000000;
-	$drq = $q['dropbox_quota'] / 1000000;
+	$q = mysql_fetch_array(mysql_query("SELECT code, intitule, doc_quota, video_quota, group_quota, dropbox_quota
+			FROM cours WHERE code = ".autoquote($_GET['c'])));
+	$quota_info .= $langTheCourse." <b>".q($q['intitule'])."</b> ".$langMaxQuota;
+	$dq = $q['doc_quota'] / MB;
+	$vq = $q['video_quota'] / MB;
+	$gq = $q['group_quota'] / MB;
+	$drq = $q['dropbox_quota'] / MB;
 	
 	$tool_content .= "
-	<form action=".$_SERVER['PHP_SELF']."?c=".htmlspecialchars($_GET['c'])." method=\"post\">
-<fieldset>
-	<legend>".$langQuotaAdmin."</legend>
-<table width='100%' class='tbl'>
-	<tr>
-	  <td colspan='2' class='sub_title1'>".$quota_info."</td>
-    </tr>
-	<tr>
-	  <td>$langLegend <b>$langDoc</b>:</td>
-	  <td><input type='text' name='dq' value='$dq' size='4' maxlength='4'> Mb.</td>
-	</tr>
-	<tr>
-	  <td width='250'>$langLegend <b>$langVideo</b>:</td>
-	  <td><input type='text' name='vq' value='$vq' size='4' maxlength='4'> Mb.</td>
-	</tr>
-	<tr>
-	  <td>$langLegend <b>$langGroups</b>:</td>
-	  <td><input type='text' name='gq' value='$gq' size='4' maxlength='4'> Mb.</td>
-	</tr>
-	<tr>
-	  <td>$langLegend <b>$langDropBox</b>:</td>
-	  <td><input type='text' name='drq' value='$drq' size='4' maxlength='4'> Mb.</td>
-	</tr>
-	<tr>
-	  <td>&nbsp;</td>
-	  <td class='right'><input type='submit' name='submit' value='$langModify'></td>
-	</tr>
-	</table>
-	</form></fieldset>\n";
+	<form action='$_SERVER[PHP_SELF]?c=".q($_GET['c'])."' method='post'>
+        <fieldset>
+            <legend>".$langQuotaAdmin."</legend>
+            <table width='100%' class='tbl'>
+                <tr><td colspan='2' class='sub_title1'>".$quota_info."</td></tr>
+                <tr><td>$langLegend <b>$langDoc</b>:</td>
+                    <td><input type='text' name='dq' value='$dq' size='4' maxlength='4'> Mb.</td></tr>
+                <tr><td width='250'>$langLegend <b>$langVideo</b>:</td>
+                    <td><input type='text' name='vq' value='$vq' size='4' maxlength='4'> Mb.</td></tr>
+                <tr><td>$langLegend <b>$langGroups</b>:</td>
+                    <td><input type='text' name='gq' value='$gq' size='4' maxlength='4'> Mb.</td></tr>
+                <tr><td>$langLegend <b>$langDropBox</b>:</td>
+                    <td><input type='text' name='drq' value='$drq' size='4' maxlength='4'> Mb.</td></tr>
+                <tr><td>&nbsp;</td>
+                    <td class='right'><input type='submit' name='submit' value='$langModify'></td></tr>
+            </table>
+	</fieldset></form>\n";
 }
 // If course selected go back to editcours.php
 if (isset($_GET['c'])) {
@@ -128,4 +114,3 @@ else {
 }
 
 draw($tool_content, 3);
-?>

@@ -436,7 +436,7 @@ if (!isset($_POST['submit2'])) {
 			       `definition` text NOT NULL,
 			       `url` text,
                                `order` INT(11) NOT NULL DEFAULT 0,
-                               `datestamp` DATE NOT NULL,
+                               `datestamp` DATETIME NOT NULL,
                                `course_id` INT(11) NOT NULL)");
                 db_query("CREATE TABLE IF NOT EXISTS `link` (
                                 `id` INT(11) NOT NULL AUTO_INCREMENT,

@@ -370,11 +370,11 @@ tForm;
 				$tool_content .= "                        <tr class='odd'>\n";
 			}
 			$tool_content .= "                          <th width='1'>
-                                <img src='../../template/classic/img/external_link_on.png' title='$langTitle' /></th>
+                                <img src='$themeimg/external_link_on.png' title='$langTitle' /></th>
                                 <td class='left'>{$externalLinks[$i]['text']}</td>
                                 <td align='center'><form method='post' action='course_tools.php?course=$code_cours'>
                                    <input type='hidden' name='delete' value='{$externalLinks[$i]['id']}' />
-                                   <input type='image' src='../../template/classic/img/delete.png' name='delete_button' 
+                                   <input type='image' src='$themeimg/delete.png' name='delete_button' 
                                           onClick=\"return confirmation('" .
                                                     js_escape("$langDeleteLink {$externalLinks[$i]['text']}?") .
                                                "');\" title='$langDelete' /></form></td>
@@ -382,5 +382,5 @@ tForm;
                 }
 		$tool_content .= "                        </table>\n";
 	}
-        draw($tool_content, 2,'', $head_content);
+        draw($tool_content, 2, null, $head_content);
 }

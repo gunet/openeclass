@@ -135,7 +135,7 @@ if($is_adminOfCourse) {
 }
 
 if(!$nbrExercises) {
-    $tool_content .= "<p class=\"alert1\">$langNoEx</p>";
+    $tool_content .= "<p class='alert1'>$langNoEx</p>";
 } else {
 	$maxpage = 1 + intval($num_of_ex / $limitExPage);
 	if ($maxpage > 0) {
@@ -158,7 +158,7 @@ if(!$nbrExercises) {
 		$tool_content .= "
 	      <th colspan='2'><div class='left'>$langExerciseName</div></th>
 	      <th width='65'>${langResults}</th>
-	      <th width='65' class=\"right\">$langCommands&nbsp;</th>
+	      <th width='65' class='right'>$langCommands&nbsp;</th>
 	    </tr>";
 	} else { // student view
 		$tool_content .= "
@@ -202,7 +202,7 @@ if(!$nbrExercises) {
 			}
 			$tool_content .= "<td width='16'>
 				<img src='$themeimg/arrow.png' alt='' /></td>
-				<td><a href=\"exercice_submit.php?course=$code_cours&amp;exerciseId=${row['id']}\">".$row['titre']."</a>$descr</td>";
+				<td><a href=\"exercice_submit.php?course=$code_cours&amp;exerciseId=${row['id']}\">".q($row['titre'])."</a>$descr</td>";
 			$eid = $row['id'];
 			$NumOfResults = mysql_fetch_array(db_query("SELECT COUNT(*) FROM exercise_user_record 
 				WHERE eid='$eid'", $currentCourseID));

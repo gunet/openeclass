@@ -24,7 +24,7 @@ function list_assignments()
 {
         global $id, $tool_content, $currentCourseID, $langTitle, $langChoice, $m,
                $langAddModulesButton, $langNoAssign, $langActive, $langInactive,
-               $langVisible, $code_cours;
+               $langVisible, $code_cours, $themeimg;
 
 
         $result = db_query("SELECT * FROM assignments ORDER BY active, title", $currentCourseID);
@@ -35,7 +35,7 @@ function list_assignments()
                                  "\n  <input type='hidden' name='id' value='$id' />\n" .
                                  "\n    <table width='99%' class='tbl_alt'>" .
                                  "\n    <tr>".
-                                 "\n      <th><div align='left'>&nbsp;$langTitle</th>".
+                                 "\n      <th class='left'>&nbsp;$langTitle</th>".
                                  "\n      <th width='110'>$langVisible</th>".
                                  "\n      <th width='120'>$m[deadline]</th>" .
                                  "\n      <th width='80'>$langChoice</th>".
@@ -43,8 +43,8 @@ function list_assignments()
                 $i = 0;
                 while($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
                         $visible = $row['active']?
-                                "<img title='$langActive' src='../../template/classic/img/visible.png' />":
-                                "<img title='$langInactive' src='../../template/classic/img/invisible.png' />";
+                                "<img title='$langActive' src='$themeimg/visible.png' />":
+                                "<img title='$langInactive' src='$themeimg/invisible.png' />";
                         $description = empty($row['description'])? '':
                                 "<div>$row[description]</div>";
                         if ($i%2) {

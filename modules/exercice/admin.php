@@ -46,16 +46,19 @@ $jscalendar = new DHTML_Calendar($urlServer.'include/jscalendar/', $lang, 'calen
 $head_content = $jscalendar->get_load_files_code();
 
 $nameTools = $langExercices;
-$navigation[]= array ("url"=>"exercice.php?course=$code_cours", "name"=> $langExercices);
+$navigation[] = array ('url' => "exercice.php?course=$code_cours", 'name' => $langExercices);
+
 // picture path
 $picturePath='../../courses/'.$currentCourseID.'/image';
+
 // the 4 types of answers
-$aType=array($langUniqueSelect, $langMultipleSelect, $langFillBlanks, $langMatching, $langTrueFalse);
+$aType = array($langUniqueSelect, $langMultipleSelect, $langFillBlanks, $langMatching, $langTrueFalse);
+
 // tables used in the exercise tool
-$TBL_EXERCICE_QUESTION='exercice_question';
-$TBL_EXERCICES='exercices';
-$TBL_QUESTIONS='questions';
-$TBL_REPONSES='reponses';
+$TBL_EXERCICE_QUESTION = 'exercice_question';
+$TBL_EXERCICES = 'exercices';
+$TBL_QUESTIONS = 'questions';
+$TBL_REPONSES = 'reponses';
 
 if(!$is_adminOfCourse) {
 	$tool_content .= $langNotAllowed;
@@ -105,23 +108,23 @@ if(@(!is_object($objExercise))) {
 }
 
 // doesn't select the exercise ID if we come from the question pool
-if(!isset($fromExercise)) {
+if (!isset($fromExercise)) {
 	// gets the right exercise ID, and if 0 creates a new exercise
-	if(!$exerciseId = $objExercise->selectId()) {
+	if (!$exerciseId = $objExercise->selectId()) {
 		$modifyExercise='yes';
 	}
 }
 
-$nbrQuestions=$objExercise->selectNbrQuestions();
+$nbrQuestions = $objExercise->selectNbrQuestions();
 
 // intializes the Question object
-if(isset($_GET['editQuestion']) || isset($_GET['newQuestion'])) {
+if (isset($_GET['editQuestion']) || isset($_GET['newQuestion'])) {
     // construction of the Question object
     $objQuestion=new Question();
     // saves the object into the session
     $_SESSION['objQuestion'][$exerciseId] = $objQuestion;
     // reads question data
-    if(isset($_GET['editQuestion'])) {
+    if (isset($_GET['editQuestion'])) {
 	    // question not found
 	    if(!$objQuestion->read($_GET['editQuestion'])) {
 		    $tool_content .= $langQuestionNotFound;
@@ -182,34 +185,34 @@ if(isset($_POST['cancelAnswers'])) {
 
 // modifies the query string that is used in the link of tool name
 if(isset($_GET['editQuestion']) || isset($_GET['modifyQuestion']) || isset($_GET['modifyAnswers'])) {
-	$nameTools=$langQuestionManagement;
-	$navigation[]= array ("url" => "admin.php?course=$code_cours&amp;exerciseId=$exerciseId", "name" => $langExerciseManagement);
-	@$QUERY_STRING=$questionId?'editQuestion='.$questionId.'&fromExercise='.$fromExercise:'newQuestion=yes';
+	$nameTools = $langQuestionManagement;
+	$navigation[] = array('url' => "admin.php?course=$code_cours&amp;exerciseId=$exerciseId", 'name' => $langExerciseManagement);
+	@$QUERY_STRING = $questionId?'editQuestion='.$questionId.'&fromExercise='.$fromExercise:'newQuestion=yes';
 } elseif(isset($_GET['newQuestion'])) {
-	$nameTools=$langNewQu;
-	$navigation[]= array ("url" => "admin.php?course=$code_cours&amp;exerciseId=$exerciseId", "name" => $langExerciseManagement);
-	@$QUERY_STRING=$questionId?'editQuestion='.$questionId.'&fromExercise='.$fromExercise:'newQuestion=yes';
+	$nameTools = $langNewQu;
+	$navigation[] = array('url' => "admin.php?course=$code_cours&amp;exerciseId=$exerciseId", 'name' => $langExerciseManagement);
+	@$QUERY_STRING = $questionId?'editQuestion='.$questionId.'&fromExercise='.$fromExercise:'newQuestion=yes';
 } elseif(isset($_GET['NewExercise'])) {
-	$nameTools=$langNewEx;
-	$QUERY_STRING='';
+	$nameTools = $langNewEx;
+	$QUERY_STRING = '';
 } elseif(isset($_GET['modifyExercise'])) {
-	$nameTools=$langInfoExercise;
-	$navigation[]= array ("url" => "admin.php?course=$code_cours&amp;exerciseId=$exerciseId", "name" => $langExerciseManagement);
-	$QUERY_STRING='';
+	$nameTools = $langInfoExercise;
+	$navigation[] = array('url' => "admin.php?course=$code_cours&amp;exerciseId=$exerciseId", 'name' => $langExerciseManagement);
+	$QUERY_STRING = '';
 } else {
-	$nameTools=$langExerciseManagement;
-	$QUERY_STRING='';
+	$nameTools = $langExerciseManagement;
+	$QUERY_STRING = '';
 }
 
 
 // --------- Various Actions ---------------------------
 
 // if the question is duplicated, disable the link of tool name
-if(isset($_POST['modifyIn']) and $_POST['modifyIn'] == 'thisExercise') {
+if (isset($_POST['modifyIn']) and $_POST['modifyIn'] == 'thisExercise') {
 	if (isset($_POST['buttonBack'])) {
-		$modifyIn='allExercises';
+		$modifyIn = 'allExercises';
 	} else {
-		$noPHP_SELF=true;
+		$noPHP_SELF = true;
 	}
 }
    

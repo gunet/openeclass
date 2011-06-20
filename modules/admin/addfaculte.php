@@ -51,20 +51,19 @@ $require_admin = TRUE;
 // Include baseTheme
 include '../../include/baseTheme.php';
 // Define $nameTools
-$nameTools=$langListFaculteActions;
-$navigation[] = array("url" => "index.php", "name" => $langAdmin);
+$nameTools = $langListFaculteActions;
+$navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
+
 if (isset($_GET['a'])) {
+        $navigation[] = array('url' => $_SERVER['PHP_SELF'], 'name' => $langListFaculteActions);
 	switch ($_GET['a']) {
 		case 1:
-			$navigation[] = array("url" => "$_SERVER[PHP_SELF]", "name" => $langListFaculteActions);
 			$nameTools = $langFaculteAdd;
 			break;
 		case 2:
-			$navigation[] = array("url" => "$_SERVER[PHP_SELF]", "name" => $langListFaculteActions);
 			$nameTools = $langFaculteDel;
 			break;
 		case 3:
-			$navigation[] = array("url" => "$_SERVER[PHP_SELF]", "name" => $langListFaculteActions);
 			$nameTools = $langFaculteEdit;
 			break;
 	}
@@ -104,15 +103,15 @@ if (!isset($_GET['a'])) {
 			$tool_content .= "\n<tr class='odd'>";
 		}
 		$tool_content .= "\n<td width='1'>
-		<img src='${urlServer}/template/classic/img/arrow.png' title='bullet' /></td>";
+		<img src='$themeimg/arrow.png' title='bullet' /></td>";
 		$tool_content .= "\n<td>".htmlspecialchars($logs[1])."</td>";
 		$tool_content .= "\n<td width='100' class='smaller center'>".htmlspecialchars($logs[0])."</td>";
 		// Give administrator a link to delete or edit a faculty
 		$tool_content .= "\n<td width='50' align='center' nowrap>
 		<a href='$_SERVER[PHP_SELF]?a=2&amp;c=".$logs['id']."'>
-		<img src='../../template/classic/img/delete.png' title='$langDelete' /></a>&nbsp;&nbsp;
+		<img src='$themeimg/delete.png' title='$langDelete' /></a>&nbsp;&nbsp;
 		<a href='$_SERVER[PHP_SELF]?a=3&amp;c=".$logs['id']."'>
-		<img src='../../template/classic/img/edit.png' title='$langEdit' /></a></td>
+		<img src='$themeimg/edit.png' title='$langEdit' /></a></td>
 		</tr>\n";
 		$k++;
 	}
@@ -247,4 +246,4 @@ elseif (isset($_GET['a']) and $_GET['a'] == 3)  {
 $tool_content .= "<p align='right'><a href='$_SERVER[PHP_SELF]'>".$langBack."</a></p>";
 }
 
-draw($tool_content,3);
+draw($tool_content, 3);
