@@ -203,46 +203,59 @@ if (((!empty($auth_submit)) && ($auth_submit==1)) || !empty($_SESSION['cas_do'])
 		}
 
 		// store the values - do the updates //
-		if((!empty($auth_allow))&&($auth_allow==1)) {
+		if (!empty($auth_allow) and $auth_allow == 1) {
 			switch($auth) {
 				case '1': $auth_default = 1;
-					$auth_settings = "";
-					$auth_instructions = "";
+					$auth_settings = '';
+					$auth_instructions = '';
 					break;
 				case '2': $auth_default = 2;
-					$auth_settings = "pop3host=".$pop3host;					
+					$auth_settings = 'pop3host='.$pop3host;
 					$auth_instructions = $pop3instructions;
 					break;
 				case '3': $auth_default = 3;
-					$auth_settings = "imaphost=".$imaphost;
+					$auth_settings = 'imaphost='.$imaphost;
 					$auth_instructions = $imapinstructions;
 					break;
 				case '4': $auth_default = 4;
-					$auth_settings = "ldaphost=".$ldaphost."|ldap_base=".$ldap_base."|ldapbind_dn=".$ldapbind_dn."|ldapbind_pw=".$ldapbind_pw."|ldap_login_attr=".$ldap_login_attr."|ldap_login_attr2=".$ldap_login_attr2;
+                                        $auth_settings = 'ldaphost='.$ldaphost.
+                                                '|ldap_base='.$ldap_base.
+                                                '|ldapbind_dn='.$ldapbind_dn.
+                                                '|ldapbind_pw='.$ldapbind_pw.
+                                                '|ldap_login_attr='.$ldap_login_attr.
+                                                '|ldap_login_attr2='.$ldap_login_attr2;
 					$auth_instructions = $ldapinstructions;
 					break;
 				case '5': 
 					$auth_default = 5;
-					$auth_settings = "dbhost=".$dbhost."|dbname=".$dbname."|dbuser=".$dbuser."|dbpass=".$dbpass."|dbtable=".$dbtable."|dbfielduser=".$dbfielduser."|dbfieldpass=".$dbfieldpass;
+                                        $auth_settings = 'dbhost='.$dbhost.
+                                                '|dbname='.$dbname.
+                                                '|dbuser='.$dbuser.
+                                                '|dbpass='.$dbpass.
+                                                '|dbtable='.$dbtable.
+                                                '|dbfielduser='.$dbfielduser.
+                                                '|dbfieldpass='.$dbfieldpass;
 					$auth_instructions = $dbinstructions;
 					break;
-				case '6': if (isset($checkseparator) && $checkseparator == "on") {
+                                case '6':
+                                        if (isset($checkseparator) && $checkseparator == 'on') {
 						$auth_settings = $_POST['shibseparator'];
 					} else {
 						$auth_settings = 'shibboleth';
 					}
 					$auth_instructions = $shibinstructions;
 					break;
-				case '7': $auth_default = 7;
-					$auth_settings = "cas_host=".$_SESSION['cas_host'].
-						"|cas_port=".$_SESSION['cas_port'].
-						"|cas_context=".$_SESSION['cas_context'].
-						"|cas_cachain=".$_SESSION['cas_cachain'].
-						"|casusermailattr=".$_SESSION['casusermailattr'].
-						"|casuserfirstattr=".$_SESSION['casuserfirstattr'].
-						"|casuserlastattr=".$_SESSION['casuserlastattr'].
-						"|cas_altauth=".$_SESSION['cas_altauth'].
-						"|cas_logout=".$_SESSION['cas_logout'];
+                                case '7':
+                                        $auth_default = 7;
+					$auth_settings = 'cas_host='.$_SESSION['cas_host'].
+						'|cas_port='.$_SESSION['cas_port'].
+						'|cas_context='.$_SESSION['cas_context'].
+						'|cas_cachain='.$_SESSION['cas_cachain'].
+						'|casusermailattr='.$_SESSION['casusermailattr'].
+						'|casuserfirstattr='.$_SESSION['casuserfirstattr'].
+						'|casuserlastattr='.$_SESSION['casuserlastattr'].
+						'|cas_altauth='.$_SESSION['cas_altauth'].
+						'|cas_logout='.$_SESSION['cas_logout'];
 					$auth_instructions = $_SESSION['casinstructions'];
 					break;
 				default:
