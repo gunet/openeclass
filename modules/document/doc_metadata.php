@@ -273,6 +273,7 @@ function metaCreateDomDocument($xmlFilename) {
 	$metaMetadata = $lom->appendChild($dom->createElement('metaMetadata'));
 	
 	$contribute = $metaMetadata->appendChild($dom->createElement('contribute'));
+	$entity = $contribute->appendChild($dom->createElement('entity', $_SESSION['prenom'] ." ". $_SESSION['nom']));
 	$date = $contribute->appendChild($dom->createElement('date'));
 	$dateTime = $date->appendChild($dom->createElement('dateTime', date('Y-m-d')));
 	// end of metametadata
