@@ -22,7 +22,7 @@ session_start();
 
 //Flag for fixing relative path
 //See init.php to undestand its logic
-$path2add=2;
+$path2add = 2;
 
 include '../include/baseTheme.php';
 include '../include/lib/fileUploadLib.inc.php';
@@ -117,7 +117,7 @@ if (!isset($_POST['submit2'])) {
         $tool_content .= "<form action='$_SERVER[PHP_SELF]' method='post'>" .
                 "<div class='info'>" .
                 "<p>$langConfigFound" .
-                "<br />$langConfigMod</p></div>" .
+                "<br>$langConfigMod</p></div>" .
                 "<fieldset><legend>$langUpgContact</legend>" .
                 "<table width='100%' class='tbl'><tr><th width='220'>$langInstituteShortName:</th>" .
                 "<td><input class=auth_input_admin type='text' size='40' name='Institution' value='".@$Institution."'></td></tr>" .
@@ -138,12 +138,12 @@ if (!isset($_POST['submit2'])) {
                 </form>";
 } else {
         // Main part of upgrade starts here
-?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+?><!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <title><?php echo $langUpgrade; ?></title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<link href="../template/classic/theme.css" rel="stylesheet" type="text/css" />
+<link href="../template/<?php echo $theme ?>/theme.css" rel="stylesheet" type="text/css" />
 </head>
 <body class='upgrade-main'>
   <div id="container" style="padding: 30px;">
@@ -549,17 +549,17 @@ if (!isset($_POST['submit2'])) {
                 echo "</p>\n";
                 $i++;
         }
-	echo "<hr />";
+	echo "<hr>";
 	
         if ($oldversion < '2.1.3') {
-	        echo "<p>$langChangeDBCharset <b>$mysqlMainDb</b> $langToUTF</p><br />";
+	        echo "<p>$langChangeDBCharset <b>$mysqlMainDb</b> $langToUTF</p><br>";
                 convert_db_utf8($mysqlMainDb);
         }
 
         db_query("UPDATE config SET `value` = '" . ECLASS_VERSION ."' WHERE `key`='version'", $mysqlMainDb);
 
-        echo "<hr /><p class='success'>$langUpgradeSuccess
-                <br /><b>$langUpgReady</b></p>
+        echo "<hr><p class='success'>$langUpgradeSuccess
+                <br><b>$langUpgReady</b></p>
                 <p class='info'>$langUpgSucNotice</p>
 		<p class='right'><a href='$urlServer?logout=yes'>$langBack</a></p>";
 

@@ -312,7 +312,7 @@ function upgrade_course_2_4($code, $lang, $extramessage = '')
 
         $course_id = course_code_to_id($code);
 	mysql_select_db($code);
-	echo "<hr><p>$langUpgCourse <b>$code</b> (2.4) $extramessage<br />";
+	echo "<hr><p>$langUpgCourse <b>$code</b> (2.4) $extramessage<br>";
 	flush();
 
 	// not needed anymore
@@ -446,7 +446,7 @@ function upgrade_course_2_3($code, $extramessage = '') {
 	global $langUpgCourse;
 
 	mysql_select_db($code);
-	echo "<hr><p>$langUpgCourse <b>$code</b> (2.3) $extramessage<br />";
+	echo "<hr><p>$langUpgCourse <b>$code</b> (2.3) $extramessage<br>";
 	flush();
 	// upgrade exercises
 	if (!mysql_field_exists("$code",'exercices','score'))
@@ -458,7 +458,7 @@ function upgrade_course_2_2($code, $lang, $extramessage = '')
 	global $langUpgCourse, $global_messages;
 
 	mysql_select_db($code);
-	echo "<hr><p>$langUpgCourse <b>$code</b> (2.2) $extramessage<br />";
+	echo "<hr><p>$langUpgCourse <b>$code</b> (2.2) $extramessage<br>";
 	flush();
 
         db_query("INSERT IGNORE INTO action_types SET id=2, name='exit'");
@@ -503,7 +503,7 @@ function upgrade_course_2_1_3($code, $extramessage = '')
 
         mysql_select_db($code);
 
-        echo "<hr><p>$langUpgCourse <b>$code</b> $extramessage<br />";
+        echo "<hr><p>$langUpgCourse <b>$code</b> $extramessage<br>";
 	flush();
 	
 	// added field visibility in agenda
@@ -544,7 +544,7 @@ function upgrade_course_old($code, $lang, $extramessage = '')
         // modify course_code/index.php
         // ****************************
 
-        echo "<hr><p>$langUpgIndex <b>$code</b> $extramessage<br />";
+        echo "<hr><p>$langUpgIndex <b>$code</b> $extramessage<br>";
 	flush();
 	
 	// added field visibility in agenda
@@ -1638,11 +1638,11 @@ function upgrade_course_index_php($code)
         global $langUpgNotIndex, $langCheckPerm;
         $course_base_dir = "$GLOBALS[webDir]courses/$code";
         if (!is_writable($course_base_dir)) {
-                echo "$langUpgNotIndex \"$course_base_dir\"! $langCheckPerm.<br />";
+                echo "$langUpgNotIndex \"$course_base_dir\"! $langCheckPerm.<br>";
                 return;
         }
         if (!($f = fopen("$course_base_dir/index.php", 'w'))) {
-                echo "$langUpgNotIndex \"$course_base_dir/index.php\"! $langCheckPerm.<br />";
+                echo "$langUpgNotIndex \"$course_base_dir/index.php\"! $langCheckPerm.<br>";
                 return;
         }
         fwrite($f, "<?php\nsession_start();\n\$_SESSION['dbname']='$code';\n" .

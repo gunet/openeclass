@@ -18,9 +18,7 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-
 /*
-
  * Personalised Announcements Component, eClass Personalised
  *
  * @author Evelthon Prodromou <eprodromou@upnet.gr>
@@ -111,24 +109,23 @@ function announceHtmlInterface($data) {
 		if ($iterator > 0) {
 			$announceExist = true;
 			$assign_content .= "<tr><td class='sub_title1'>".q(ellipsize($data[$i][0], 70))."</td></tr>";
-			$url = $urlAppend . "/modules/announcements/announcements.php?course=" .$data[$i][1]."&amp;an_id=";
+			$url = $urlAppend . "/modules/announcements/announcements.php?course=".$data[$i][1]."&amp;an_id=";
 			for ($j=0; $j < $iterator; $j++) {
 				$an_id = $data[$i][2][$j][3];
 				$assign_content .= "<tr><td><ul class='custom_list'><li><a href='$url$an_id'>" .
-                                           "<b>" . $data[$i][2][$j][0] .
-                                           autoCloseTags($data[$i][2][$j][0]) .
+                                           "<b>" . q($data[$i][2][$j][0]) .
+                                           standard_text_escape($data[$i][2][$j][0]) .
                                            "</b></a><span class='smaller'><b><br />" .
                                            claro_format_locale_date($dateFormatLong, strtotime($data[$i][2][$j][2])) .
                                            "</b></span><div class='smaller'>".
-						standard_text_escape(
-	                                           ellipsize($data[$i][2][$j][1], 250, "<strong>&nbsp;...<a href='$url$an_id'>[$langMore]</a></strong>")) .
+                                           standard_text_escape(ellipsize($data[$i][2][$j][1], 250,
+                                                   "<strong>&nbsp;...<a href='$url$an_id'>[$langMore]</a></strong>")) .
 					   "</div></li></ul></td></tr>";
 			}
 		}
 	}
 
-	$assign_content .= "
-</table>";
+	$assign_content .= "</table>";
 
 	if (!$announceExist) {
 		$assign_content = "<p class='alert1'>$langNoAnnouncementsExist</p>";

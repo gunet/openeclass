@@ -142,7 +142,7 @@ if ($is_adminOfCourse) {
 
 	// Display the correct title and form for adding or modifying a category or link.
         if (in_array($action, array('addlink', 'editlink'))) {
-                $tool_content .= "<form method='post' action='$_SERVER[PHP_SELF]?course=$code_cours&urlview=$urlview' onsubmit=\"return checkrequired(this, 'urllink');\">";
+                $tool_content .= "<form method='post' action='$_SERVER[PHP_SELF]?course=$code_cours&amp;urlview=$urlview' onsubmit=\"return checkrequired(this, 'urllink');\">";
                 if ($action == 'editlink') {
                         $tool_content .= "<input type='hidden' name='id' value='$id' />";
                         link_form_defaults($id);
@@ -327,14 +327,12 @@ if (mysql_num_rows($resultcategories) > 0) {
 		$tool_content .=  "
                 </table>";
 	} else {
-		if($is_adminOfCourse){
+                $tool_content .= "<p class='alert1'>$langNoLinksExist</p>";
+		if ($is_adminOfCourse){
 			// if the user is the course administrator instruct him/her
-			// what he can do to add links
-			$tool_content .= "<p class='alert1'>$langProfNoLinksExist</p>";
-		} else {
-			// if the user has no course administrator access
-			// inform him/her that no links exist
-			$tool_content .= "<p class='alert1'>$langNoLinksExist</p>";
+                        // what he can do to add links
+                        $tool_content .= "<p class='center'>
+                                <small>$langProfNoLinksExist</small></p>";
 		}
 	}
 }

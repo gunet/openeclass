@@ -168,21 +168,21 @@ for ($j = 0; $j < mysql_num_rows($sql); $j++) {
 
 	$tool_content .= "
       <td width='1'>
-	<img style='margin-top:4px;' src='${urlServer}/template/classic/img/arrow.png' title='bullet' /></td>
-      <td><a href='{$urlServer}courses/$logs[code]/'><b>".htmlspecialchars($logs[2])."</b>
-	</a> (".htmlspecialchars($logs[1]).")<br /><i>".$logs[3]."</i>
+	<img style='margin-top:4px;' src='$themeimg/arrow.png' title='bullet' /></td>
+      <td><a href='{$urlServer}courses/$logs[code]/'><b>".q($logs[2])."</b>
+	</a> (".q($logs[1]).")<br /><i>".q($logs[3])."</i>
       </td>
       <td align='center'>";
 	// Define course type
 	switch ($logs[4]) {
 		case 2:
-			$tool_content .= "<img src='../../template/classic/img/lock_open.png' title='$langOpenCourse' />";
+			$tool_content .= "<img src='$themeimg/lock_open.png' title='$langOpenCourse' />";
 			break;
 		case 1:
-			$tool_content .= "<img src='../../template/classic/img/lock_registration.png' title='$langRegCourse' />";
+			$tool_content .= "<img src='$themeimg/lock_registration.png' title='$langRegCourse' />";
 			break;
 		case 0:
-			$tool_content .= "<img src='../../template/classic/img/lock_closed.png' title='$langClosedCourse' />";
+			$tool_content .= "<img src='$themeimg/lock_closed.png' title='$langClosedCourse' />";
 			break;
 	}
 	$tool_content .= "
@@ -191,9 +191,9 @@ for ($j = 0; $j < mysql_num_rows($sql); $j++) {
 	// Add links to course users, delete course and course edit
 	$tool_content .= "
       <td align='center' width='40'>
-        <a href='listusers.php?c=".$logs['cours_id']."'><img src='../../template/classic/img/user_list.png' title='$langUsers' /></a>&nbsp;
-        <a href='editcours.php?c=".$logs[1]."".$searchurl."'><img src='../../template/classic/img/edit.png' title='$langEdit'></a>
-        <a href='delcours.php?c=".$logs['cours_id']."'><img src='../../template/classic/img/delete.png' title='$langDelete'></a>
+        <a href='listusers.php?c=$logs[cours_id]'><img src='$themeimg/user_list.png' title='$langUsers' /></a>&nbsp;
+        <a href='editcours.php?c=$logs[1]$searchurl'><img src='$themeimg/edit.png' title='$langEdit'></a>
+        <a href='delcours.php?c=$logs[cours_id]'><img src='$themeimg/delete.png' title='$langDelete'></a>
       </td>";
 	$k++;
 }
