@@ -430,15 +430,15 @@ fieldset table.th {
 #tool_title {
     margin: 0 0 5px 0;
 	font-size:15px;
-	color:#8C2A32;
+	color:#827C78;
     padding: 0 0 5px 0;
 }
 
 .tool_title {
     margin: 0 0 5px 0;
 	font-size:15px;
-	color:#8C2A32;
-    padding: 0 0 5px 0;
+	color:#827C78;
+    padding: 5px 0 5px 0;
 }
 
 .title1 {
@@ -594,7 +594,7 @@ fieldset table.th {
 
 .tbl_1 th {
     font-weight: bold;
-    color: #8C2A32;
+    color: #827C78;
     text-align: center;
     padding: 5px;
     background-color: #f8f8f8;
