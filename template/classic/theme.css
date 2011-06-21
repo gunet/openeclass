@@ -111,16 +111,16 @@ a:hover {
 input[type=submit] {
 	color: #ffffff;
 	font-size: 12px;
-	border: 1px solid #AC1F13;
-    background-color: #8C2A32;
+	border: 1px solid #C0B7B3;
+    background-color: #827C78;
 	padding: 3px;
 }
 
 .eclass_button {
 	color: #ffffff;
 	font-size: 14px;
-	border: 1px solid #AC1F13;
-    background-color: #8C2A32;
+	border: 1px solid #C0B7B3;
+    background-color: #827C78;
 	padding: 5px;
     width: 100px;
     margin: 5px auto;
@@ -134,8 +134,8 @@ input[type=submit] {
 input[type=reset] {
 	color: #ffffff;
 	font-size: 12px;
-	border: 1px solid #8C2A32;
-    background-color: #AC1F13;
+	border: 1px solid #827C78;
+    background-color: #C0B7B3;
 	padding: 3px;
 }
 
