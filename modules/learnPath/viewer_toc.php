@@ -194,35 +194,28 @@ if ( $moduleNb > 1 )
 		$prevNextString .=  $imgNext;
 }
 
-echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"><html>'."\n"
-    .'<head><title>-</title>'."\n"
-    .'<meta http-equiv="Content-Type" content="text/html; charset='.$charset.'">'."\n"
-    .'<link href="lp.css" rel="stylesheet" type="text/css" />'."\n"
-    .'</head>'."\n"
-    .'<body>'."\n"
-    .'<div class="header">'."\n"
-    .'<div class="tools">'."\n";
-	
-echo "<div class='lp_right'>$prevNextString&nbsp;<a href='$returl' target='_top'>",
-     "<img src='$themeimg/lp/nofullscreen.png' alt='$langQuitViewer' title='",
-     $langQuitViewer, "' /></a></div>",
-     "<div class='lp_left'><a href=\"". $urlAppend ."/courses/". $currentCourseID ."/\" target='_top' title='" .
-     q($currentCourseName) . "'>" . q(ellipsize($currentCourseName, 35)) .
-     "</a> &#187; <a href='$urlAppend/modules/learnPath/learningPathList.php?course=$currentCourseID' target='_top'>" .
-     $langLearningPaths . "</a> &#187; <a href='$returl' title='" . q($lpName) . "' target='_top'>" .
-     q(ellipsize($lpName, 40)) . "</a></div>";
-
-echo "<div class='clear'></div>";
-
-echo "<div class='logo'><img src='$themeimg/lp/logo_openeclass.png' alt='' title='' /></div>";
-
-echo "<div class='lp_right_grey'>";
+echo "<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN' 'http://www.w3.org/TR/html4/loose.dtd'>
+<html>
+<head><title>-</title>
+    <meta http-equiv='Content-Type' content='text/html; charset=$charset'>
+    <link href='$urlAppend/template/$theme/lp.css' rel='stylesheet' type='text/css' />
+</head>
+<body>
+<div class='header'>
+    <div class='tools'>
+    <div class='lp_right'>$prevNextString&nbsp;<a href='$returl' target='_top'>
+        <img src='$themeimg/lp/nofullscreen.png' alt='$langQuitViewer' title='$langQuitViewer' /></a></div>
+    <div class='lp_left'>
+        <a href='$urlAppend/courses/$currentCourseID' target='_top' title='" .
+                q($currentCourseName) . "'>" . q(ellipsize($currentCourseName, 35)) . "</a> &#187;
+        <a href='$urlAppend/modules/learnPath/learningPathList.php?course=$currentCourseID' target='_top'>
+                $langLearningPaths</a> &#187;
+        <a href='$returl' title='" . q($lpName) . "' target='_top'>" . q(ellipsize($lpName, 40)) . "</a></div>
+    <div class='clear'></div>
+    <div class='logo'><img src='$themeimg/lp/logo_openeclass.png' alt='' title='' /></div>
+    <div class='lp_right_grey'>";
 if($uid) {
 	$lpProgress = get_learnPath_progress((int)$_SESSION['path_id'],$uid);
 	echo $langProgress . ': ' . disp_progress_bar($lpProgress, 1) ."&nbsp;". $lpProgress ."%";
 }
-echo "</div>";
-
-echo "</div></div></body></html>";
-
-?>
+echo "</div></div></div></body></html>";
