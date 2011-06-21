@@ -124,6 +124,9 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 
 	$t->set_block('leftNavCategoryBlock', 'leftNavLinkBlock', 'leftNavLink');
 
+        $t->set_var('template_base', $urlAppend . '/template/' . $theme);
+        $t->set_var('img_base', $themeimg);
+
 	if (is_array ($toolArr)) {
 
 		for($i = 0; $i < $numOfToolGroups; $i ++) {

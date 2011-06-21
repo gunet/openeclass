@@ -50,13 +50,15 @@
 $require_admin = TRUE;
 include '../../include/baseTheme.php';
 $nameTools = $langEclassConf;
-$navigation[] = array("url" => "index.php", "name" => $langAdmin);
+$navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
+
+$available_themes = active_subdirs("$webDir/template", 'theme.html');
 
 // Save new config.php
 if (isset($_POST['submit']))  {
 	// Make config directory writable
-	@chmod( "../../config",777 );
-	@chmod( "../../config", 0777 );
+	@chmod("../../config", 777);
+	@chmod("../../config", 0777);
 	// Create backup file
 	if (isset($_POST['backupfile']) and $_POST['backupfile'] == "on") {
 		// If a backup already exists delete it
@@ -80,13 +82,16 @@ if (isset($_POST['submit']))  {
                         $utf8define = "define('UTF8', true);";
                 }
 
-                $string_active_ui_languages = "array('el'";
+                $active_lang_codes = array();
                 if (isset($_POST['av_lang'])) { 
                         foreach ($_POST['av_lang'] as $langname => $langvalue) {
-                                $string_active_ui_languages .= ",'$langvalue'";
+                                $active_lang_codes[] = autoquote($langvalue);
                         }
                 }
-                $string_active_ui_languages .= ");";
+                if (!count($active_lang_codes)) {
+                        $active_lang_codes = array("'el'");
+                }
+                $string_active_ui_languages = 'array(' . implode(', ', $active_lang_codes) . ');';
 
                 // Prepare config.php content
                 $stringConfig='<?php
@@ -147,10 +152,12 @@ $active_ui_languages = '.$string_active_ui_languages."\n";
 				     'doc_quota' => true,
 				     'group_quota' => true,
 				     'video_quota' => true,
-				     'dropbox_quota' => true);
+                                     'dropbox_quota' => true,
+                                     'theme' => true);
 
 		register_posted_variables($config_vars, 'all', 'intval');
-		
+                $_SESSION['theme'] = $theme = $available_themes[$theme];
+
                 foreach ($config_vars as $varname => $what) {
                         set_config($varname, $GLOBALS[$varname]);
                 }
@@ -294,21 +301,24 @@ else {
 	    </select>&nbsp;&nbsp;$langViaReq</td>
 	</tr>";
 
-	$sel_en = in_array("en", $active_ui_languages)?'checked':'';
-	$sel_es = in_array("es", $active_ui_languages)?'checked':'';
-		
-	$tool_content .= "<tr><th class='left'>$langSupportedLanguages</th>";
-	$tool_content .= "<td>";
-	$tool_content .= "<input type='checkbox' value='el' name = 'av_lang[]' checked disabled />$langGreek&nbsp;";
-	$tool_content .= "<input type='checkbox' value='en' name = 'av_lang[]' $sel_en />$langEnglish&nbsp;";
-	$tool_content .= "<input type='checkbox' value='es' name = 'av_lang[]' $sel_es />$langSpanish";
-	$tool_content .= "</td></tr>";
-	
-	$tool_content .= "
+        $langdirs = active_subdirs($webDir.'modules/lang', 'messages.inc.php');
+        $sel = array();
+        foreach ($language_codes as $langcode => $langname) {
+                if (in_array($langname, $langdirs)) {
+                        $loclangname = $langNameOfLang[$langname];
+                        $checked = in_array($langcode, $active_ui_languages)? ' checked': '';
+                        $sel[] = "<input type='checkbox' name='av_lang[]' value='$langcode'$checked>$loclangname";
+                }
+        }
+        $tool_content .= "
+          <tr><th class='left'>$langSupportedLanguages</th>
+              <td>" . implode(' ', $sel) . "</td></tr>
 	  <tr>
-	    <th class=\"left\"><b>\$durationAccount:</b></th>
-	    <td><input type='text' name='formdurationAccount' size='15' value='".$durationAccount."'>&nbsp;&nbsp;$langUserDurationAccount</td>
-	</tr>";
+	    <th class='left'><b>\$durationAccount:</b></th>
+            <td><input type='text' name='formdurationAccount' size='15' value='$durationAccount'>&nbsp;&nbsp;$langUserDurationAccount</td></tr>
+          <tr><th class='left'><b>Theme:</b></th>
+              <td>" . selection($available_themes, 'theme',
+                                array_search($theme, $available_themes)) . "</td></tr>";
 	
 	$cbox_email_required = get_config('email_required')?'checked':'';
 	$cbox_am_required = get_config('email_required')?'checked':'';
@@ -394,3 +404,18 @@ else {
 }
 
 draw($tool_content, 3);
+
+// Return a list of all subdirectories of $base which contain a file named $filename
+function active_subdirs($base, $filename)
+{
+        $dir = opendir($base);
+        $out = array();
+        while (($f = readdir($dir)) !== false) {
+                if (is_dir($base . '/' . $f) and $f != '.' and $f != '..' and
+                    file_exists($base . '/' . $f . '/' . $filename)) {
+                        $out[] = $f;
+                }
+        }
+        closedir($dir);
+        return $out;
+}

@@ -8,10 +8,9 @@
 <meta name="copyright" content="Copyright 2003-2009 GUnet - http://www.gunet.gr">
 <meta name="keywords" content="elearning, lms, cms, openeclass, open eclass, eclass, e-class, learning, management, system, asynchronous, synchronous, teleteaching, GUnet">
 <meta name="robots" content="NOFOLLOW,INDEX">
-<link href="{%TOOL_PATH%}template/classic/theme.css" rel="stylesheet" type="text/css">
-<link href="{%TOOL_PATH%}template/classic/perso.css" rel="stylesheet" type="text/css">
+<link href="{%template_base%}/theme.css" rel="stylesheet" type="text/css">
 {%TOOL_CSS%}
-<link rel="SHORTCUT ICON" href="{%URL_PATH%}template/classic/img/eclass-icon.ico">
+<link rel="SHORTCUT ICON" href="{%img_base%}/eclass-icon.ico">
 {%HEAD_EXTRAS%}
 </head>
 
@@ -20,7 +19,7 @@
   <!-- BEGIN HeaderBlock -->
   <div id="header">
             <div class="user"><b><img
-                    src="{%URL_PATH%}template/classic/img/user.png" alt="user"/> {%LANG_USER%}&nbsp;</b>{%USER_NAME%} {%USER_SURNAME%}
+                    src="{%img_base%}/user.png" alt="user"/> {%LANG_USER%}&nbsp;</b>{%USER_NAME%} {%USER_SURNAME%}
             <a href="{%LOGOUT_LINK%}#" title="{%LANG_LOGOUT%}" >{%LANG_LOGOUT%}</a>
             <div class="langSwitch" {%LANG_SELECT_TITLE%}>{%LANG_SELECT%}</div>            
             </div>
@@ -29,7 +28,7 @@
     <div id="search">
       <form name="form1" id="form1" method="post" action="{%URL_PATH%}modules/search/{%SEARCH_ACTION%}">       
       <input type="text" class="key" name="search_terms" size="18"/> <input type="image" name="submit" class="ok" alt="Ok"
-      src="{%URL_PATH%}template/classic/img/search.png" />   
+      src="{%img_base%}/search.png" />   
       <!--<br>
       <a href="{%URL_PATH%}modules/search/{%SEARCH_ADVANCED_URL%}" title="advanced search" >{%SEARCH_ADVANCED%}</a>-->
       </form>
@@ -66,7 +65,7 @@
           <!-- BEGIN leftNavLinkBlock -->
           <li class="{%TOOL_ICON%}">
           <div><a href="{%TOOL_LINK%}"{%TOOL_ATTR%}><img
-                   src="{%TOOL_PATH%}template/classic/img/{%IMG_FILE%}" width="16"
+                   src="{%img_base%}/{%IMG_FILE%}" width="16"
                    height="16" border="0" alt="" style="padding-bottom: 8px;" />{%TOOL_TEXT%}</a></div>
           </li>
           <!-- END leftNavLinkBlock -->
@@ -93,10 +92,10 @@
   	<div id="footer">
         <table width="100%">
           <tr>
-            <td width="33%"><a href="http://www.gunet.gr" target="_blank"><img src="{%TOOL_PATH%}template/classic/img/footer_logo.png" alt="GUnet" /></a></td>
+            <td width="33%"><a href="http://www.gunet.gr" target="_blank"><img src="{%img_base%}/footer_logo.png" alt="GUnet" /></a></td>
             <td align="center"  width="33%" style="padding-top: 15px;"><p><a href="{%TOOL_PATH%}info/copyright.php">{%LANG_COPYRIGHT_NOTICE%}</a></p>
         </td>
-            <td align="right" width="33%"><a href="http://www.openeclass.org" target="_blank"><img src="{%TOOL_PATH%}template/classic/img/powered_by.png" alt="Open eClass" /></a></td>
+            <td align="right" width="33%"><a href="http://www.openeclass.org" target="_blank"><img src="{%img_base%}/powered_by.png" alt="Open eClass" /></a></td>
           </tr>
           </table>
   	</div>
