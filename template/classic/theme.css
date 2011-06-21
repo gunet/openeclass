@@ -54,7 +54,7 @@ html {
 body {
 	font-family: "Trebuchet MS", Tahoma, Arial, Helvetica, sans-serif;
 	font-size: 13px;
-	color: #777777;
+	color: #827C78;
 	line-height: 18px;
     margin: 0;
 	padding: 0;
@@ -97,13 +97,13 @@ img, input[type=image] {
 /* 2.3 Links */ 
 
 a:link, a:active, a:visited {
-        color: #8597A5;
+        color: #AC1F13;
         text-decoration: none;
 }
 
 a:hover {
     	text-decoration: underline;
-        color: #687A92;
+        color: #8C2A32;
 }
 
 /* 2.4 Forms */ 
@@ -111,16 +111,16 @@ a:hover {
 input[type=submit] {
 	color: #ffffff;
 	font-size: 12px;
-	border: 1px solid #8597A5;
-    background-color: #687A92;
+	border: 1px solid #AC1F13;
+    background-color: #8C2A32;
 	padding: 3px;
 }
 
 .eclass_button {
 	color: #ffffff;
 	font-size: 14px;
-	border: 1px solid #8597A5;
-    background-color: #687A92;
+	border: 1px solid #AC1F13;
+    background-color: #8C2A32;
 	padding: 5px;
     width: 100px;
     margin: 5px auto;
@@ -134,8 +134,8 @@ input[type=submit] {
 input[type=reset] {
 	color: #ffffff;
 	font-size: 12px;
-	border: 1px solid #687a92;
-    background-color: #8597A5;
+	border: 1px solid #8C2A32;
+    background-color: #AC1F13;
 	padding: 3px;
 }
 
@@ -156,7 +156,7 @@ legend {
 	color: #ffffff;
 	padding: 8px;
 	font-weight: bold;
-	background-color: #8597A5;	
+	background-color: #827C78;	
 }
 
 fieldset {
@@ -201,7 +201,7 @@ fieldset table.th {
 	margin: 20px auto;
 	width: 1000px;  /*fixed width*/
     background-color: #ffffff;
-	border: 1px solid #8597A5;
+	border: 1px solid #827C78;
 }
 
 #header {
@@ -212,7 +212,7 @@ fieldset table.th {
 .user {
     font-size: 12px;
     color: #ffffff;
-    background-color: #8597A5;
+    background-color: #827C78;
     padding: 5px;
     height: 20px;
     line-height: 20px;
@@ -274,14 +274,14 @@ fieldset table.th {
 }
 
 #bread a {
-	color: #8597A5;
+	color: #AC1F13;
 	text-decoration: none;
 	font-weight: bold;	
 }
 
 #bread a:hover {
 	text-decoration: underline;
-	color: #687A92;
+	color: #8C2A32;
 	font-weight: bold;
 }
 
@@ -343,7 +343,7 @@ fieldset table.th {
 .LoginHead {
 	border-bottom: 1px dashed #dfdfdf;
 	border-right: none;
-    color: #687A92;
+    color: #8C2A32;
 	font-size: 13px;
 }
 
@@ -377,19 +377,19 @@ fieldset table.th {
 	padding: 3px;
 	margin-top: 2px;
 	margin-left: -8px;
-    color: #8597A5;
+    color: #827C78;
     text-decoration: none;   
 }
 
 #navcontainer a:hover {
     text-decoration:underline;
-	color: #687A92; 
+	color: #8C2A32; 
 }
 
 #navcontainer li.category {
     font-weight: bold;
 	border-bottom: 1px dashed #dfdfdf;
-    color: #687A92;    
+    color: #827C78;    
 	padding: 5px; 
 	font-size: 13px;
 }
@@ -406,7 +406,7 @@ fieldset table.th {
 	width:100%;
 	height: 50px;
 	background-color: #ffffff;
-	border-top: 3px solid #8597A5;
+	border-top: 3px solid #AC1F13;
 }
 
 #footer a {
@@ -423,30 +423,30 @@ fieldset table.th {
 
 .lesson {
 	font-size:18px;
-	color:#687A92;
+	color:#8C2A32;
     padding: 5px 0 15px 0;
 }
 
 #tool_title {
     margin: 0 0 5px 0;
 	font-size:15px;
-	color:#687A92;
+	color:#8C2A32;
     padding: 0 0 5px 0;
 }
 
 .tool_title {
     margin: 0 0 5px 0;
 	font-size:15px;
-	color:#687A92;
+	color:#8C2A32;
     padding: 0 0 5px 0;
 }
 
 .title1 {
-	background-color:#8597A5;
+	background-color:#827C78;
  	color: #ffffff;
 	font-weight: bold;
 	padding: 5px;
-	border-bottom: 2px solid #687A92;
+	border-bottom: 2px solid #dfdfdf;
 }
 
 .title1 a { 
@@ -460,11 +460,11 @@ fieldset table.th {
 }
 
 .descr_title {
-	background-color:#8597A5;
+	background-color:#827C78;
 	color: #ffffff;
 	font-weight: bold;
 	padding: 5px;
-	border-bottom: 2px solid #687A92;
+	border-bottom: 2px solid #dfdfdf;
 	margin-bottom: 10px;
 }
 
@@ -475,7 +475,7 @@ fieldset table.th {
 	border-bottom: 1px dashed #dfdfdf;
 	font-size: 14px;
 	text-align: center;
-	color: #8597A5;
+	color: #AC1F13;
 }
 
 /* messages and alerts */ 
@@ -594,7 +594,7 @@ fieldset table.th {
 
 .tbl_1 th {
     font-weight: bold;
-    color: #687A92;
+    color: #8C2A32;
     text-align: center;
     padding: 5px;
     background-color: #f8f8f8;
@@ -666,7 +666,7 @@ fieldset table.th {
 
 .tbl_alt th {
     font-weight: bold;
-    color: #687A92;
+    color: #8C2A32;
     text-align: center;
     padding: 5px;
     background-color: #f8f8f8;
@@ -702,7 +702,7 @@ fieldset table.th {
 /*	Hover effect to table rows */	
 
 .tbl_alt tr:hover td { 
-    background-color: #f3f3f9;
+    background-color: #F5F5DC;
 } 
 
 /* Alternating Table Row NO_Border   */
@@ -749,7 +749,7 @@ fieldset table.th {
 
 table.sortable a.sortheader {
     font-weight: bold;
-    color: #687A92;
+    color: #8C2A32;
     background-color: #f8f8f8;
     text-decoration: none;
     padding : 0px;
@@ -781,7 +781,7 @@ table.sortable_even {
 
 a.sortheader, a.sortheader:link, a.sortheader:active, a.sortheader:visited {
     background-color: #dfdfdf;
-    color: #687A92;
+    color: #8C2A32;
     font-weight: bold;
     text-decoration: underline;
 }
@@ -826,7 +826,7 @@ td.bold {
 #operations_container {
     text-align: right;
     padding: 8px;
-    background: #8597A5;
+    background: #827C78;
     font-size: 11px;
     color: #ffffff;
     margin-bottom: 15px;
@@ -869,7 +869,7 @@ td.bold {
         margin-bottom: 1em;
 }
 .course_info h1 {
-        color: #8597A5;
+        color: #AC1F13;
         font-weight: bold;
         padding-bottom: 5px;
         border-bottom: 1px dashed #dfdfdf;
@@ -878,12 +878,12 @@ td.bold {
 }
 .course_info h1 a {
         font-weight: bold;
-        color: #8597A5;
+        color: #AC1F13;
 }
 
 .course_info h4 {
         padding: 0px 0px;
-        color: #8597A5;
+        color: #AC1F13;
         font-weight: bold;
         background: none !important;
         border-bottom: none !important;
@@ -910,7 +910,7 @@ a:visited.invisible
 }
 
 a.unit_link, a.unit_link:link, a.unit_link:active, a.unit_link:visited {
-    color: #8597A5;
+    color: #AC1F13;
     font-size: 11px;
     font-weight: bold;
     text-decoration: none;
@@ -919,7 +919,7 @@ a.unit_link, a.unit_link:link, a.unit_link:active, a.unit_link:visited {
 }
 
 a.unit_link:hover {
-    color: #8597A5 !important;
+    color: #AC1F13 !important;
     font-size: 11px;
     font-weight: bold;
     text-decoration: underline;
@@ -962,7 +962,7 @@ a.unit_link_invisible:hover {
 	padding: 3px 10px;
 	cursor: pointer;
 	position: relative;
-    color: #687A92;
+    color: #827C78;
     font-weight: bold;
    	border-bottom: 1px dashed #dfdfdf;
 	background: #f8f8f8 url(img/up_down.png) no-repeat right -51px;
@@ -1005,7 +1005,7 @@ a.unit_link_invisible:hover {
 
 .monthLabel {
     text-align: center;
-    color: #627aad;
+    color: #8C2A32;
     background-color:#f3f3f9;
     padding: 10px;
 }
@@ -1161,7 +1161,7 @@ li.pagination {
 
 
 .today {
-    color: #687A92;
+    color: #8C2A32;
     padding: 5px;
     text-align: center;
 }
