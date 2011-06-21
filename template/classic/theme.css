@@ -666,7 +666,7 @@ fieldset table.th {
 
 .tbl_alt th {
     font-weight: bold;
-    color: #8C2A32;
+    color: #827C78;
     text-align: center;
     padding: 5px;
     background-color: #f8f8f8;
@@ -749,7 +749,7 @@ fieldset table.th {
 
 table.sortable a.sortheader {
     font-weight: bold;
-    color: #8C2A32;
+    color: #827C78;
     background-color: #f8f8f8;
     text-decoration: none;
     padding : 0px;
@@ -781,7 +781,7 @@ table.sortable_even {
 
 a.sortheader, a.sortheader:link, a.sortheader:active, a.sortheader:visited {
     background-color: #dfdfdf;
-    color: #8C2A32;
+    color: #827C78;
     font-weight: bold;
     text-decoration: underline;
 }
