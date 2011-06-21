@@ -654,7 +654,7 @@ fieldset table.th {
     border-bottom: 1px dashed #dfdfdf;    
 }
 .tbl_lesson tr:hover td { 
-    background-color: #f3f3f9;
+    background-color: #fffbf4;
 } 
 /* Alternating Table Row   */
 	
@@ -702,7 +702,7 @@ fieldset table.th {
 /*	Hover effect to table rows */	
 
 .tbl_alt tr:hover td { 
-    background-color: #F5F5DC;
+    background-color: #fffbf4;
 } 
 
 /* Alternating Table Row NO_Border   */
@@ -738,7 +738,7 @@ fieldset table.th {
 /* Hover effect to table rows */
 
 .tbl_alt_bordless tr:hover td {
-    background-color: #f3f3f9;
+    background-color: #fffbf4;
 }
 
 /*	Sortable Table*/	
@@ -757,7 +757,7 @@ table.sortable a.sortheader {
 }
 
 table.sortable tr:hover td {
-    background-color: #f3f3f9;
+    background-color: #fffbf4;
 }
  
 table.sortable_odd {
@@ -998,7 +998,7 @@ a.unit_link_invisible:hover {
 
 /* ----- START agenda ----- */
 .today {
-    background-color:#f3f3f9;
+    background-color:#fffbf4;
     font-weight: bold;
 
 }
@@ -1006,7 +1006,7 @@ a.unit_link_invisible:hover {
 .monthLabel {
     text-align: center;
     color: #8C2A32;
-    background-color:#f3f3f9;
+    background-color:#fffbf4;
     padding: 10px;
 }
 
