@@ -18,24 +18,16 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-if (isset($c) && ($c!="")) {
-	session_start();
-	$require_admin = TRUE;
-	$_SESSION['dbname'] = $c;
-}
-
 $require_current_course = TRUE;
 $require_prof = TRUE;
 include '../../include/baseTheme.php';
 include '../../include/lib/fileManageLib.inc.php';
 
 $nameTools = $langArchiveCourse;
-$navigation[] = array("url" => "infocours.php?course=$code_cours", "name" => $langModifInfo);
-$tool_content = "";
-$archiveDir = "/courses/archive";
+$navigation[] = array('url' => "infocours.php?course=$code_cours", 'name' => $langModifInfo);
 
-if (extension_loaded("zlib")) {
-	include("../../include/pclzip/pclzip.lib.php");
+if (extension_loaded('zlib')) {
+	include '../../include/pclzip/pclzip.lib.php';
 }
 
 if ($is_adminOfCourse) {
@@ -88,10 +80,14 @@ if ($is_adminOfCourse) {
              as $table => $condition) {
                 backup_table($archivedir, $table, $condition);
         }
+        file_put_contents("$archivedir/config_vars",
+                serialize(array('urlServer' => $urlServer,
+                                'urlAppend' => $urlAppend,
+                                'siteName' => $siteName)));
 
     	$htmldir = $archivedir . '/html';
 
-	$tool_content .= "<li>".$langBUCourseDataOfMainBase."  ".$currentCourseID."</li>\n";
+	$tool_content .= "<li>$langBUCourseDataOfMainBase  $currentCourseID</li>\n";
 
 	// Copy course files
 	$nbFiles = copydir("../../courses/$currentCourseID", $htmldir);
@@ -113,22 +109,15 @@ if ($is_adminOfCourse) {
 		$tool_content .= "<br /><p class='success_small'>$langBackupSuccesfull</p><div align=\"left\"><a href='$urlAppend/courses/archive/$currentCourseID/archive.$currentCourseID.$backup_date_short.zip'>$langDownloadIt <img src='$themeimg/download.png' title='$langDownloadIt' alt=''></a></div>";
 	}
 
-	$tool_content .= "<p align=\"right\">";
-	if (isset($c) && ($c!="")) {
-		if (isset($search) && ($search=="yes")) $searchurl = "&search=yes";
-		else $searchurl = "";
-		$tool_content .= "<a href=\"../admin/editcours.php?c=".$c."".$searchurl."\">$langBack</a>";
-	} else {
-		$tool_content .= "<a href=\"infocours.php?course=$code_cours\">$langBack</a>";
-	}
-	$tool_content .= "</p>";
+        $tool_content .= "<p align='right'>
+               <a href='infocours.php?course=$code_cours'>$langBack</a></p>";
 
-	draw($tool_content, 2, 'course_info');
+	draw($tool_content, 2);
 }	// end of isadminOfCourse
 else
 {
 	$tool_content .= "<center><p>$langNotAllowed</p></center>";
-	draw($tool_content, 2, 'course_info');
+	draw($tool_content, 2);
 	exit;
 }
 
@@ -165,8 +154,6 @@ function copydir($origine, $destination) {
 	}
 	return $total;
 }
-
-
 
 function create_backup_file($file) {
 	global $currentCourseID, $cours_id, $mysqlMainDb;
