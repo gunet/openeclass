@@ -50,64 +50,14 @@ $title = $GLOBALS['langH' . str_replace('_student', '', $_GET['topic'])];
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
-	<head>
-		<title><?php echo $GLOBALS["langH$_GET[topic]"]; ?></title>
-                <link href="../../template/<?php echo $theme ?>/tool_content.css" rel="stylesheet" type="text/css" />
-
-		<style type='text/css'>
-			html {
-                                background-color: #687A92;
-                                padding: 5px 5px 5px 5px;
-                           }
-                      body {
-                                background-color: #ffffff;
-                                color: #666666;
-                                font-size: 10px; font-family: Verdana, Arial;
-                                line-height: 1.3;
-                           }
-
-                        h3 {
-                                background : #dfdfdf;
-                                font-size : 14pt;
-                                border-bottom : 3px solid #687A92;
-                                padding : 8px;
-                                font-variant : normal;
-                                font-weight : bold;
-                           }
-
-                        p {
-                           padding: 10px;
-                           text-align:justify;
-                        }
-
-			h4 {
-                font-family: Verdana, Arial, Helvetica;
-				font-size: 12px;
-                padding: 10px;
-                border-bottom : 1px dotted silver;
-			   }
-			.helptopic {
-				font-size: 11px; font-family: Verdana, Arial;
-				text-align:justify;
-				line-height: 1.3;
-				margin-right: 10px;
-				margin-left: 10px;
-				}
-			.lihelptopic {
-				font-size: 11px; font-family: Verdana, Arial;
-				text-align:justify;
-				line-height: 1.3;
-				margin-right: 10px;
-				margin-left: 10px;
-				list-style-type: square;
-                                }
-
-		</style>
-	</head>
-	<body>
-		<h3><?php echo $title; ?></h3>
-		<?php echo $GLOBALS["lang$_GET[topic]Content"]; ?>
-		<div align="right"><a href='javascript:window.close();'><?php echo $langWindowClose; ?></a>&nbsp;&nbsp;</div>
-		<br />
-	</body>
+    <head>
+        <title><?php echo $GLOBALS["langH$_GET[topic]"]; ?></title>
+            <link href="../../template/<?php echo $theme ?>/help.css" rel="stylesheet" type="text/css" />
+        </head>
+        <body>
+            <h3><?php echo $title; ?></h3>
+            <?php echo $GLOBALS["lang$_GET[topic]Content"]; ?>
+            <div align="right"><a href='javascript:window.close();'><?php echo $langWindowClose; ?></a>&nbsp;&nbsp;</div>
+            <br />
+        </body>
 </html>
