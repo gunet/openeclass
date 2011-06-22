@@ -41,9 +41,11 @@ p {
       <li><a href="#unix">Για περιβάλλοντα Unix / Linux </a> </li>
       <li><a href="#win">Για περιβάλλοντα MsWindows</a></li>
       <li><a href="#after">Ενέργειες μετά την εγκατάσταση</a></li>
+      <li style="list-style:none;">
 	<ul>
 	<li><a href="#after_f">Αλλαγή δοκιμαστικών σχολών</a></li>
 	<li><a href="#after_l">Αλλαγή λογότυπου</a></li>
+	<li><a href="#after_theme">Αλλαγή θέματος εμφάνισης</a></li>
 	<li><a href="#after_m">Αλλαγή μηνυμάτων</a></li>
 	<li><a href="#after_math">Υποστήριξη μαθηματικών συμβόλων</a></li>
 	<li><a href="#after_lang">Υποστήριξη άλλων γλωσσών</a></li>
@@ -52,6 +54,7 @@ p {
 	<li><a href="#after_tbl_config">Ρυθμίσεις του πίνακα config</a></li>
 	<li><a href="#after_other">Άλλες ρυθμίσεις</a></li>
 	</ul>
+      </li>
     </ul>
     <p class="title1">
       <a name="before" id="before">Ενέργειες πριν την εγκατάσταση -
@@ -310,6 +313,10 @@ magic_quotes_gpc = on</pre>
       με το δικό, αρκεί να αντικαταστήσει την εικόνα </p>
     <code>(path του eClass)/template/classic/img/logo_openeclass.png</code> 
     <p> με την δικιά του. </p>
+<p class='sub_title1'><a name="after_theme">Αλλαγή θέματος εμφάνισης</a></p>
+<p>Εξ'ορισμού η πλατφόρμα έχει σαν θέμα εμφάνισης το «classic». Μπορείτε να το αλλάξετε
+από το διαχειριστικό εργαλείο σε «modern». Σημειώστε ότι στους χρήστες η αλλαγή θα γίνει ορατή
+στην επόμενη είσοδό τους στην πλατφόρμα.</p>
 <p class='sub_title1'><a name="after_m">Αλλαγή μηνυμάτων</a></p>
 <p>Αν θέλετε να αλλάξετε οποιοδήποτε μήνυμα της πλατφόρμας συνίσταται να το κάνετε ως εξής:
 Δημιουργήστε ένα αρχείο τύπου .php με όνομα <em>greek.inc.php</em> (ή <em>english.inc.php</em> αν πρόκειται για αγγλικά μηνύματα)

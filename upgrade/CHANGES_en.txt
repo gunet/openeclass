@@ -24,6 +24,8 @@ Open eClass 2.4 - Changes List
 -- Changes in installation wizard.
 -- Changes in online help.
 -- Added support for CAS authentication.
+-- Better support for Shibboleth authentication.
+-- Add theme 'modern' and theme administration.
 -- Works with PHP version 5.3.
 -- Works without enabling PHP options register_globals and short_open_tags.
 -- Works in Mysql Strict Mode.

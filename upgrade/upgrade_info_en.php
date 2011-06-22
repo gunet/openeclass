@@ -187,6 +187,10 @@ the square root of x-1 will appear. Mathematical symbols syntax can be found in 
 <li>
 To use the platform with a web server with SSL support (e.g. https://eclass.gunet.gr), you define the <em>urlSecure</em> variable in <em>config.php</em>. For example: <code>$urlSecure = "https://eclass.gunet.gr"</code> 
 </li>
+<li>
+<p>The default theme of platform is 'classic'. You can change it later from the admin tool to 'modern'.
+Note the change will be visible to users after next login to platform.</p>
+</li>
 </ul>
 
 <div class='sub_title1'>Settings of table `config`</div>

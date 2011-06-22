@@ -37,9 +37,11 @@ and is distributed for free as open-source software.</p>
       <li><a href="#unix">Installations in Unix / Linux systems</a> </li>
       <li><a href="#win">Installations in Ms Windows systems</a></li>
       <li><a href="#after">Actions after installation</a></li>
+      <li style="list-style:none;">
 	<ul>
 	<li><a href="#after_f">How to modify test courses</a></li>
 	<li><a href="#after_l">How to modify platform logo</a></li>
+	<li><a href="#after_theme">How to modify platform theme</a></li>
 	<li><a href="#after_m">How to modify messages</a></li>
 	<li><a href="#after_math">Support of math symbols</a></li>
 	<li><a href="#after_lang">Multi language support</a></li>
@@ -48,6 +50,7 @@ and is distributed for free as open-source software.</p>
 	<li><a href="#after_tbl_config">Settings of table `config`</a></li>
 	<li><a href="#after_other">Other settings</a></li>
 	</ul>
+      </li>
     </ul>
     <p class="title1">
       <a name="before" id="before">Actions before installation - prequisities</a>
@@ -233,7 +236,9 @@ You will find more and further information for these actions in the Administrato
 <p> In case some institutes intend to substitute the initial eClass logo with one of its own, they just have to substitute the picture.</p>
     <pre>(path of Open eClass)/template/classic/img/logo_openeclass.png</pre> 
     <p> with its own. </p>
-
+<p class='sub_title1'><a name="after_theme">How to modify platform theme</a></p>
+<p>The default theme of platform is 'classic'. You can change it later from the admin tool to 'modern'.
+Note the change will be visible to users after next login to platform.</p>
 <div class='sub_title1'><a name="after_m">How to modify messages</a></div>
 <p>If you want to modify any message of platform then proceed with the following actions:
 Create a file of type .php with name <em>english.inc.php</em> (or <em>greek.inc.php</em>) and place it in directory <em>(eclass path)/config/</em>. Find the varible name which contains the message you wish to change and assing it the new message. e.g. If you want to change message <pre>$langAboutText = "The platform version is";</pre> create <em>english.inc.php</em> in directory (eclass path)/config/ like this:
