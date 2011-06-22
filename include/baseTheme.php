@@ -188,12 +188,12 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 		// If we are on the login page we can define two optional variables 
 		// in common.inc.php (to allow internationalizing messages)
 		// for extra content on the left and right bar.
-		
+
 		if ($homePage  && !isset($_SESSION['uid'])) {
 			$t->set_var ( 'ECLASS_HOME_EXTRAS_LEFT', $langExtrasLeft );
 			$t->set_var ( 'ECLASS_HOME_EXTRAS_RIGHT', $langExtrasRight );
 		}
-		
+
 		//if user is logged in display the logout option
 		if (isset($_SESSION['uid'])) {
 			$t->set_var ( 'LANG_USER', $langUserHeader );

@@ -133,4 +133,4 @@ if (!get_config('dont_display_login_form')) {
 	</form>";
 }
 
-$tool_content .= "<div id='extra'>{ECLASS_HOME_EXTRAS_RIGHT}</div>";
+$tool_content .= "<div id='extra'>{%ECLASS_HOME_EXTRAS_RIGHT%}</div>";
