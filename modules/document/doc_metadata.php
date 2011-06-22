@@ -102,7 +102,7 @@ function metaCreateForm($metadata, $oldFilename, $real_filename) {
 	     "narration", "video", "animation", "3danimation", "slide", "presentation", "lecture", "textbook", "learningscenario",
 	     "simulation", "experiment", "microexperiment", "map", "interactivemap", "exploration", "interactivegame", 
 	     "conceptualmap", "index", "problem statement", "self assessment", "questionnaire", "quiz", "exam", "exercise");
-	  $output .= metaCheckBoxRow($langLearningResourceType, "meta_learningresourcetype", $resourceTypes, $checkMap, $langLearningResourceTypeHelp)
+	  $output .= metaCheckBoxRow($langLearningResourceType, "meta_learningresourcetype", $resourceTypes, $checkMap, $langLearningResourceTypeHelp, true)
 	          .  metaCommaTextAreaRow($langKeywords, "meta_keywords", $metaKeywords, $langKeywordsHelp, 2, "string")
 	          .  metaInputTextRow($langTopic, "meta_topic", $metaTopic, $langTopicHelp)
 	          .  metaInputTextRow($langSubTopic, "meta_subtopic", $metaSubTopic, $langSubTopicHelp);
@@ -161,17 +161,23 @@ function metaFormRow($title, $cell, $help) {
 /*
  * Create input checkboxes row for the Metadata Form
  */
-function metaCheckBoxRow($title, $name, $values, $checkMap, $help) {
-	$cell = "";
+function metaCheckBoxRow($title, $name, $values, $checkMap, $help, $twocols = false) {
+	$cell = "<table class='tbl'>";
+	$i = 0;
 	
 	foreach ($values as $value) {
+		$i++;
 		$langElement = "langMeta".ucfirst(str_replace(" ", "", $value));
 		global $$langElement;
 		
 		$check = (isset($checkMap["$name"]["$value"])) ? " checked='1' " : '';
+		$start = ($twocols && $i%2 == 0) ? "<td>" : "<tr><td>";
+		$end   = ($twocols && $i%2 != 0 && $i < count($values)) ? "</td>\n" : "</td></tr>\n";
 		
-		$cell .= "<input type='checkbox' name='".$name."[]' value='$value' $check />".$$langElement  ."<br/>\n";
+		$cell .= "$start<input type='checkbox' name='".$name."[]' value='$value' $check />".$$langElement . $end;
 	}
+	
+	$cell .= "</table>";
 	
 	return metaFormRow($title, $cell, $help);
 }
