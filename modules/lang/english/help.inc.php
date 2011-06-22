@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language en
-// Generated 2010-04-13 14:03:10
+// Generated 2011-06-22 11:22:18
 
 $langWindowClose = "Close window";
 $langHDefault = 'Help non available';
@@ -34,7 +34,7 @@ $langcourse_home_studentContent = '<p>You are currently in the on-line course ma
 $langcourse_homeContent = '<p class="helptopic">You are currently in the main page of your on-line course. From the side menu options, you can enter any of the modules where you can add your course\'s content. Active tools are visible to the visitors and students of your course, while inactive tools are only visible and accessible to you.</p> <p class="helptopic">Using the administration tools you can activate or inactivate course modules, review and administer registered users, change various options (such as course title, access control, etc.), and view usage statistics.</p>';
 $langHDoc = "Documents";
 $langHDoc_student = $langHDoc ;
-$langDocContent = "<p>The Documents tool is similar to the FileManager of your desktop computer.</p><p>You can upload files of any type (HTML, Word, Powerpoint, Excel, Acrobat, Flash, Quicktime, etc.). Your only concern must be that your students have the corresponding software to read them. Some file types may contain viruses, it is your responsibilty not to upload virus contaminated files. It is a worthwhile precaution to check documents with antivirus software before uploading them.</p> <p>Documents are presented in alphabetical order.<br><b>Tip : </b>If you want to present them in a different order, numerate them: 01, 02, 03...</p> <p>You can :</p> <h4>Upload a document</h4> <ul> <li>Select the file on your computer by clicking on 'Upload file'.</li> <li>In the following form use 'Browse'button to search for the file in your computer.</li> <li>Launch the upload with the 'Upload'button  </li> </ul> <h4>Rename a document (a directory)</h4> <ul> <li> Click on the icon 'Rename'(<img src='../../template/classic/img/edit.png'width=10 height=10 align=baseline>). </li> <li> Type the new name in the field (top left) </li> <li> Validate by clicking 'Rename'button. </li> </ul> <h4> Delete a document (or a directory) </h4> <ul> <li> Click on the icon 'Delete'(<img src='../../template/classic/img/delete.png'width=10 height=10 align=baseline>)</li> </ul> <h4> Make a document (or directory) invisible to students </h4> <ul> <li> Click on the icon 'Visible/invisible'(<img src='../../template/classic/img/visible.png'width=10 height=10 align=baseline>)  </li> <li> After that the document (or directory) still exists but it is not visible by students anymore. </li> <li> To make it invisible back again, click on the icon 'Visible/invisible'(<img src='../../template/classic/img/invisible.png'width=14 height=10 align=baseline>  </li> </ul> <h4> Add or modify a comment to a document (or a directory) </h4> <ul> <li> Click on the 'Comment'icon *(<img src='../../template/classic/img/information.png'width=16 height=16 align=baseline>)</li> <li> Type new comment in the corresponding field (top right). </li> </ul> <hr> <p> You can organise your content through filing. For this: </p> <h4> <b> Create a directory </b> </h4> <ul> <li> Click on the link 'Create a directory'. </li> <li> Type the name of your new directory in the corresponding field (top left) </li> <li> Validate by clicking 'Create directory'button. </li> </ul> <h4> Move a document (or directory) </h4> <ul> <li> Click on the icon 'Move'(<img src='../../template/classic/img/move.png'width=10 height=10 align=basename>) </li> <li> Choose the directory into which you want to move the document (or directory) in the corresponding scrolling menu (top left) (note: the word 'root'means you cannot go upper than that level in the document tree of the server). </li> <li> Validate by clicking on 'Move'</li> </ul> </p>";
+$langDocContent = "<p>The Documents tool is similar to the FileManager of your desktop computer.</p><p>You can upload files of any type (HTML, Word, Powerpoint, Excel, Acrobat, Flash, Quicktime, etc.). Your only concern must be that your students have the corresponding software to read them. Some file types may contain viruses, it is your responsibilty not to upload virus contaminated files. It is a worthwhile precaution to check documents with antivirus software before uploading them.</p> <p>Documents are presented in alphabetical order.<br><b>Tip : </b>If you want to present them in a different order, numerate them: 01, 02, 03...</p> <p>You can :</p> <h4>Upload a document</h4> <ul> <li>Select the file on your computer by clicking on 'Upload file'.</li> <li>In the following form use 'Browse'button to search for the file in your computer.</li> <li>Launch the upload with the 'Upload'button  </li> </ul> <h4>Rename a document (a directory)</h4> <ul> <li> Click on the icon 'Rename'(<img src='../../template/classic/img/edit.gif'width=10 height=10 align=baseline>). </li> <li> Type the new name in the field (top left) </li> <li> Validate by clicking 'Rename'button. </li> </ul> <h4> Delete a document (or a directory) </h4> <ul> <li> Click on the icon 'Delete'(<img src='../../template/classic/img/delete.gif'width=10 height=10 align=baseline>)</li> </ul> <h4> Make a document (or directory) invisible to students </h4> <ul> <li> Click on the icon 'Visible/invisible'(<img src='../../template/classic/img/visible.gif'width=10 height=10 align=baseline>)  </li> <li> After that the document (or directory) still exists but it is not visible by students anymore. </li> <li> To make it invisible back again, click on the icon 'Visible/invisible'(<img src='../../template/classic/img/invisible.gif'width=14 height=10 align=baseline>  </li> </ul> <h4> Add or modify a comment to a document (or a directory) </h4> <ul> <li> Click on the 'Comment'icon *(<img src='../../template/classic/img/information.gif'width=10 height=10 align=baseline>)</li> <li> Type new comment in the corresponding field (top right). </li> </ul> <hr> <p> You can organise your content through filing. For this: </p> <h4> <b> Create a directory </b> </h4> <ul> <li> Click on the link 'Create a directory'. </li> <li> Type the name of your new directory in the corresponding field (top left) </li> <li> Validate by clicking 'Create directory'button. </li> </ul> <h4> Move a document (or directory) </h4> <ul> <li> Click on the icon 'Move'(<img src='../../template/classic/img/move_doc.gif'width=10 height=10 align=basename>) </li> <li> Choose the directory into which you want to move the document (or directory) in the corresponding scrolling menu (top left) (note: the word 'root'means you cannot go upper than that level in the document tree of the server). </li> <li> Validate by clicking on 'Move'</li> </ul> </p>";
 $langDoc_studentContent = "<p>The module “Documents” is the area where the educational material of the course is stored, organized and presented. More specifically, this module provides a useful file organization and grouping mechanism for educational material (texts, presentations, pictures, diagrams, etc) through a folder, sub-folder system.
 </p>" ;
 $langHUser = "Users Administration";
@@ -127,16 +127,16 @@ Give a weighting to each correct matching, and save your answer.</p>
 <b>Exercise modification</b>
 <p>In order to modify an exercise, the principle is the same as for the creation. Just click on the picture <img
 src=\"
-../../template/classic/img/edit.png\" border=\"0\" align=\"absmiddle\"> beside the exercise to modify, and follow instructions
+../../template/classic/img/edit.gif\" border=\"0\" align=\"absmiddle\"> beside the exercise to modify, and follow instructions
 above.</p>
 <hr>
 <b>Exercise deleting</b>
-<p>In order to delete an exercise, click on the picture <img src=\"../../template/classic/img/delete.png\" border=\"0\"
+<p>In order to delete an exercise, click on the picture <img src=\"../../template/classic/img/delete.gif\" border=\"0\"
 align=\"absmiddle\"> beside the exercise to delete.</p>
 <hr>
 <b>Exercise enabling</b>
 <p>So as for an exercise to be used, you have to enable it by clicking on the picture
-<img src=\"../../template/classic/img/invisible.png\" border=\"0\" align=\"absmiddle\"> beside the exercise to enable.</p>
+<img src=\"../../template/classic/img/invisible.gif\" border=\"0\" align=\"absmiddle\"> beside the exercise to enable.</p>
 <hr>
 <b>Exercise running</b>
 <p>You can test your exercise by clicking on its name in the exercise list.</p>
@@ -165,10 +165,10 @@ $langWorkContent = "<p>Assignment tool is a complete tool for creating / submitt
 <p>As a professor, you can create an assignment by clicking on <b>\"New Assignment\"</b>.
 Fill in the title of the assignment, define a deadline and optionally add a comment.</p>
 <p>When the assignment has completed, do not forget to activate it by clicking on the icon
-<img src=\"../../template/classic/img/invisible.png\" border=\"0\" align=\"absmiddle\">. The assignment will be visible
+<img src=\"../../template/classic/img/invisible.gif\" border=\"0\" align=\"absmiddle\">. The assignment will be visible
 and accessible by the students only when it is activated.
-You can edit the assignment by clicking on the icon <img src=\"../../template/classic/img/edit.png\" border=\"0\" align=\"middle\">
-or deleting it by clicking on the icon <img src=\"../../template/classic/img/delete.png\" border=\"0\" align=\"middle\">.
+You can edit the assignment by clicking on the icon <img src=\"../../template/classic/img/edit.gif\" border=\"0\" align=\"middle\">
+or deleting it by clicking on the icon <img src=\"../../template/classic/img/delete.gif\" border=\"0\" align=\"middle\">.
 Clicking on the title of the assignment, you have access to the students submissions.
 The corresponding details are the submission date and the filename.
 Clicking on \"Download assignments (in .zip format)\" you will download all the submitted files by the students
@@ -434,7 +434,7 @@ $langCreateCourseContent = "<p>The Create Course Wizard is one of the most impor
 $langHWiki = "Wiki";
 $langHWiki_student = $langHWiki ;
 $langWikiContent = '<p>To create a new Wiki</p> <ul> <li>Click on the "Create a new Wiki"link. Then enter the Wiki properties:</li> <br>
-<li><b>Wiki Title</b>: choose a title for the Wiki</li> <li><b>Wiki Description</b>: choose a description for the Wiki</li> <li><b>Access control management</b>: set the Wiki access control by checking/uncheking the box (see below)</li> </ul> <p>To enter a Wiki click on the Wiki title from the list.</p> <p>To change the properties of a Wiki click on the icon <img src="../../template/classic/img/edit.png" align="absmiddle" border="0">.</p>  <p>To delete a Wiki click on the icon <img src="../../template/classic/img/delete.png" align="absmiddle" border="0"></p>  <p>To get the list of the last modified pages click on the link "Recent changes".</p>
+<li><b>Wiki Title</b>: choose a title for the Wiki</li> <li><b>Wiki Description</b>: choose a description for the Wiki</li> <li><b>Access control management</b>: set the Wiki access control by checking/uncheking the box (see below)</li> </ul> <p>To enter a Wiki click on the Wiki title from the list.</p> <p>To change the properties of a Wiki click on the icon <img src="../../template/classic/img/edit.gif" align="absmiddle" border="0">.</p>  <p>To delete a Wiki click on the icon <img src="../../template/classic/img/delete.gif" align="absmiddle" border="0"></p>  <p>To get the list of the last modified pages click on the link "Recent changes".</p>
 
 <h4>Basic syntax</h4>
 <p>Creating wiki pages and links between them</p>
@@ -484,3 +484,95 @@ $langHAddCourseUnits = "Add/Edit course unit";
 $langAddCourseUnitsContent = "<p class='helptopic'>To add a new course unit, please enter a title and a short description. Click on 'Add' to create the new unit.</p>";
 $langHAddCourseUnitscontent = "Add course unit content";
 $langAddCourseUnitscontentContent = "<p class='helptopic'>Here you can add content or resources to the selected course unit. The types of resources that can be added are listed next to the 'Add:' label. By clicking on 'Add', you can find resources of the selected type available in your course. Tick the ones you would like to add and click on 'Add selected'. Newly added resources are immediately listed, with edit and delete icons for each one. Please note that when multiple course units exist in a course, links to the next and previous unit appear automatically. You can also use the selection box below to navigate directly to a specific unit.</p>";
+$langHGlossary = "Glossary";
+$langHGlossary_student = $langHGlossary;
+$langGlossaryContent = "<p>
+With module 'glossary' course administrator can define definitions for various keywords in his course.
+</p>
+<p>You can choose if you want to display term definitions in course pages, clicking in 'Settings' and choose 'Display defintions in course pages'. After that clicking in 'submit'. An informative message is displayed<br />
+  <br />
+  <strong><u>Add glossary term</u></strong><br />
+To add a new glossary term</p>
+<ul>
+  <li>Click in 'Add term'. A form is displayed.  </li>
+  <li>Fill in the term, definition and (optionally) a url </li>
+  <li>Click in 'Submit' </li>
+</ul>
+<p>An informative message is displayed.<br />
+  <br />
+  <u><strong>Delete term</strong></u><br />
+  You can delete a term by clicking in icon with symbol red 'X'. Confirmation is required.<br />
+  <br />
+  <strong><u>Download glossary terms in </u></strong><strong><u>csv</u>format</strong><br />
+ Course administrator can download glossary terms in csv (comma seperated values) format. <br />
+</p>
+";
+$langGlossary_studentContent = "
+<p>Glossary displays terms and / or definitions for various keywords in course.</p>
+<p>Glossary terms are displayed by hovering the mouse over a term. Also, sometimes, glossary term includes a hyperlink.</p>";
+$langHEBook = "Ebook";
+$langHEBook_student = $langHEBook;
+$langEBookContent = "<h2>&nbsp;&nbsp;E-Book prerequisites (Step 1)</h2>
+<p>To create an ebook, you must create some html pages. But you must keep in mind the following rules</p>
+<ol>
+  <li>Every html page must include a subsection of ebook.</li>
+  <li>Html page title must be the title of section</li>
+  <li>All html files with pictures and css must be stored in a zip file file.</li>
+</ol>
+<h2>&nbsp;&nbsp;E-Book creation (Step 2)</h2>
+
+<ol>
+  <li>Enter the course as administrator </li>
+  <li>From the right menu, click in <strong>E-Book</strong></li>
+  <li>Choose <strong>Create</strong> and in the displaying form
+    <ul>
+      <li>fill in the <strong>Title</strong> of E-Book and</li>
+      <li>browse the zip file of html files.</li>
+    </ul>
+  </li>
+    <li>Click in <strong>Submit</strong>.</li>
+ <br />
+
+  </li>
+</ol>
+
+<h2>&nbsp;&nbsp;Structure of E-Book (Step 3)</h2>
+
+<p>After step 2 a form is displayed with a table of html files found in zip file. Here we'll define the sctructure of E-Book:</p>
+
+<ol>
+  <li>First define <strong>sections</strong> of E-Book. You can add as many as you need. Define an <strong>incremental number</strong> and <strong>name</strong> of each section in field <strong>ID</strong> and <strong>Title</strong> correspondingly. </li>
+
+  <li>After that you must format  <strong>subsections</strong> of E-Book. You must
+    <ul>
+      <li><strong>correspond</strong> each uploaded file with the previous defined sections.</li>
+      <li> define in each subsection the incremental number of each subsection in section<br />
+</li>
+    </ul>  
+</li>
+  <li>After that click in <strong>Submit</strong>. </li>
+  <li>An informative message will be displayed.</li>
+</ol>
+<h2>&nbsp;&nbsp;E-Book browsing</h2>
+
+<p>Click in the desired E-Book name</p> 
+
+<h2>&nbsp;&nbsp;Modify - Delete of E-Book</h2>
+<p>If you want to modify an E-Book click in icon <strong> Modify </strong>. <br />
+<br />
+In order to <strong>delete</strong> an E-Book click in icon <strong>Delete</strong>.</p>
+<h2>&nbsp;&nbsp;Administration of html files</h2>
+<p>If you want to administrate the uploaded html files in an E-Book then  </p>
+<ul>
+  <li>click in icon <strong> Modification </strong>,</li>
+  <li>choose <strong>File administration</strong>. A page with all uploaded html files will be displayed</li>
+  <li>you can administrate files and directories as in module 'Documents'.</li>
+
+</ul>
+<h2>&nbsp;&nbsp;Linking E-Book with course units</h2>
+<p>You can link a course unit with a <strong>section</strong> of <strong>E-Book</strong>. For accomplishing this click in course unit and from the available tools choose <strong>Add E-Book</strong>. From the displaying form choose the desired E-Book section. After that click in <strong>Add selection</strong>. </p>
+";
+$langEBook_studentContent = "
+<h2>&nbsp;&nbsp;Browse</h2>
+<p>Click from left menu 'Ebook'. A list of ebook will be displayed. To browse an ebook just click in it.</p>
+";
