@@ -922,22 +922,57 @@ $langCommentHelp = "Σημειώστε σχόλια ή οδηγίες για τ�
 $langCopyrightHelp = "Δώστε στοιχεία για τα πνευματικά δικαιώματα και τις συνθήκες χρήσης του μαθησιακού αντικειμένου (έως 1000 χαρακτήρες)";
 $langIntentedEndUserRoleHelp = "Σημειώστε ποιός είναι ο κύριος χρήστης ή η ομάδα χρηστών για τους οποίους σχεδιάστηκε αυτό το μαθησιακό αντικείμενο.";
 
-$langSimulation = "Προσομοίωση";
-$langDiagram = "Διάγραμμα";
-$langFigure = "Σχήμα";
-$langGraph = "Γράφημα";
-$langIndex = "Ευρετήριο";
-$langSlide = "Διαφάνεια";
-$langNarrativetext = "Αφηγηματικό Κείμενο";
-$langExam = "Διαγώνισμα";
-$langExperiment = "Πείραμα";
-$langProblemstatement = "Διατύπωση Προβλήματος";
-$langSelfassessment = "Αυτοαξιολόγηση";
-$langLecture = "Διάλεξη";
-$langLearner = "Μαθητευόμενος";
-$langSchool = "Δευτεροβάθμια Εκπαίδευση";
-$langHighereducation = "Ανώτερη Εκπαίδευση";
-$langTraining = "Ειδική Αγωγή";
+$langMetaOther = "Άλλο";
+// "narrative text", "photo", "image", "figure", "diagram", "graph", "table", "sound", "music", 
+//	     "narration", "video", "animation", "3danimation", "slide", "presentation", "lecture", "textbook", "learningscenario",
+//	     "simulation", "experiment", "microexperiment", "map", "interactivemap", "exploration", "interactivegame", 
+//	     "conceptualmap", "index", "problem statement", "self assessment", "questionnaire", "quiz", "exam", "exercise"
+$langMetaNarrativetext = "Κείμενο";
+$langMetaPhoto = "Φωτογραφία";
+$langMetaImage = "Εικόνα";
+$langMetaFigure = "Σχήμα";
+$langMetaDiagram = "Διάγραμμα";
+$langMetaGraph = "Γράφημα";
+$langMetaTable = "Πίνακας";
+$langMetaSound = "Ήχος";
+$langMetaMusic = "Μουσική";
+$langMetaNarration = "Αφήγηση";
+$langMetaVideo = "Βίντεο";
+$langMetaAnimation = "Κινούμενα γραφικά";
+$langMeta3danimation = "Τρισδιάστατα κινούμενα γραφικά";
+$langMetaSlide = "Διαφάνεια";
+$langMetaPresentation = "Παρουσίαση";
+$langMetaLecture = "Διάλεξη";
+$langMetaTextbook = "Βιβλίο / Ενότητα Βιβλίου";
+$langMetaLearningscenario = "Εκπαιδευτικό Σενάριο";
+$langMetaSimulation = "Προσομοίωση";
+$langMetaExperiment = "Πείραμα";
+$langMetaMicroexperiment = "Μικροπείραμα";
+$langMetaMap = "Χάρτης";
+$langMetaInteractivemap = "Διαδραστικός Χάρτης";
+$langMetaExploration = "Διερεύνηση";
+$langMetaInteractivegame = "Διαδραστικό παιχνίδι";
+$langMetaConceptualmap = "Εννοιολογικός Χάρτης";
+$langMetaIndex = "Ευρετήριο";
+$langMetaProblemstatement = "Διατύπωση Προβλήματος";
+$langMetaSelfassessment = "Αυτοαξιολόγηση";
+$langMetaQuestionnaire = "Ερωτηματολόγιο";
+$langMetaQuiz = "Quiz/test";
+$langMetaExam = "Διαγώνισμα";
+$langMetaExercise = "Άσκηση";
+
+$langMetaTeacher = "Εκπαιδευτικός";
+$langMetaLearner = "Μαθητής";
+$langMetaAuthor = "Συγγραφέας";
+$langMetaManager = "Διαχειριστής";
+
+$langMetaNursery = "Νηπιαγωγείο";
+$langMetaPrimary = "Δημοτικό";
+$langMetaSecondary = "Γυμνάσιο";
+$langMetaHighschool = "Λύκειο";
+$langMetaTechnical = "Τεχνική - Επαγγελματική Εκπαίδευση";
+$langMetaTraining = "Ειδική Αγωγή";
+$langMetaHighereducation = "Ανώτερη/Ανώτατη Εκπαίδευση";
 
 /*************************************************
 * dropbox.php
