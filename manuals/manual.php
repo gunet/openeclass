@@ -132,7 +132,7 @@ $tool_content .= "
 
 $tool_content .= '<br><p class="smaller right">' .
                  sprintf($langAcrobat, 
-                         '<a href="http://www.adobe.com/products/acrobat/readstep2.html" target="_blank">',
+                         '<a href="http://get.adobe.com/reader/" target="_blank">',
                          '</a>',
                          '<a href="http://pdfreaders.org/" target="_blank">',
                          '</a>') . '</p>';
