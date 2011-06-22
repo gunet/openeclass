@@ -98,21 +98,22 @@ function metaCreateForm($metadata, $oldFilename, $real_filename) {
 				'es' => $langSpanish), 'meta_language', $metaLanguage);
 	  $output .= metaFormRow($langLanguage, $cellLang, $langLanguageHelp);
 	  
-	  $resourceTypes = array("exercise", "simulation", "questionnaire", "diagram", "figure", 
-	    "graph", "index", "slide", "table", "narrative text", "exam", "experiment", 
-	    "problem statement", "self assessment", "lecture");
+	  $resourceTypes = array("narrative text", "photo", "image", "figure", "diagram", "graph", "table", "sound", "music", 
+	     "narration", "video", "animation", "3danimation", "slide", "presentation", "lecture", "textbook", "learningscenario",
+	     "simulation", "experiment", "microexperiment", "map", "interactivemap", "exploration", "interactivegame", 
+	     "conceptualmap", "index", "problem statement", "self assessment", "questionnaire", "quiz", "exam", "exercise");
 	  $output .= metaCheckBoxRow($langLearningResourceType, "meta_learningresourcetype", $resourceTypes, $checkMap, $langLearningResourceTypeHelp)
 	          .  metaCommaTextAreaRow($langKeywords, "meta_keywords", $metaKeywords, $langKeywordsHelp, 2, "string")
 	          .  metaInputTextRow($langTopic, "meta_topic", $metaTopic, $langTopicHelp)
 	          .  metaInputTextRow($langSubTopic, "meta_subtopic", $metaSubTopic, $langSubTopicHelp);
 	  
-	  $levels = array("school", "higher education", "training", "other");
+	  $levels = array("nursery", "primary", "secondary", "highschool", "technical", "training", "higher education", "other");
 	  $output .= metaCheckBoxRow($langLevel, "meta_level", $levels, $checkMap, $langLevelHelp)
 	          .  metaCommaInputTextRow($langTypicalAgeRange, "meta_typicalagerange", $metaTypicalAgeRanges, $langTypicalAgeRangeHelp, "string")
 	          .  metaTextAreaRow($langComment, "meta_notes", $metaNotes, $langCommentHelp, 4)
 	          .  metaTextAreaRow($langCopyright, "meta_rights", $metaRights, $langCopyrightHelp);
 	  
-	  $userRoles = array("teacher", "author", "learner", "manager");
+	  $userRoles = array("teacher", "learner", "author", "manager", "other");
 	  $output .= metaCheckBoxRow($langIntentedEndUserRole, "meta_intendedenduserrole", $userRoles, $checkMap, $langIntentedEndUserRoleHelp);
 	  
 	  $output .= "<tr>
@@ -164,7 +165,7 @@ function metaCheckBoxRow($title, $name, $values, $checkMap, $help) {
 	$cell = "";
 	
 	foreach ($values as $value) {
-		$langElement = "lang".ucfirst(str_replace(" ", "", $value));
+		$langElement = "langMeta".ucfirst(str_replace(" ", "", $value));
 		global $$langElement;
 		
 		$check = (isset($checkMap["$name"]["$value"])) ? " checked='1' " : '';
