@@ -98,10 +98,10 @@ function metaCreateForm($metadata, $oldFilename, $real_filename) {
 				'es' => $langSpanish), 'meta_language', $metaLanguage);
 	  $output .= metaFormRow($langLanguage, $cellLang, $langLanguageHelp);
 	  
-	  $resourceTypes = array("narrative text", "photo", "image", "figure", "diagram", "graph", "table", "sound", "music", 
-	     "narration", "video", "animation", "3danimation", "slide", "presentation", "lecture", "textbook", "learningscenario",
-	     "simulation", "experiment", "microexperiment", "map", "interactivemap", "exploration", "interactivegame", 
-	     "conceptualmap", "index", "problem statement", "self assessment", "questionnaire", "quiz", "exam", "exercise");
+	  $resourceTypes = array("narrative text", "simulation", "photo", "experiment", "image", "microexperiment", "figure", 
+	     "map", "diagram", "interactivemap", "graph", "exploration", "table", "interactivegame", "sound", "conceptualmap", 
+	     "music", "index", "narration", "problem statement", "video", "self assessment", "animation", "questionnaire", 
+	     "3danimation", "quiz", "slide", "exam", "presentation", "exercise", "lecture", "learningscenario", "textbook", );
 	  $output .= metaCheckBoxRow($langLearningResourceType, "meta_learningresourcetype", $resourceTypes, $checkMap, $langLearningResourceTypeHelp, true)
 	          .  metaCommaTextAreaRow($langKeywords, "meta_keywords", $metaKeywords, $langKeywordsHelp, 2, "string")
 	          .  metaInputTextRow($langTopic, "meta_topic", $metaTopic, $langTopicHelp)
