@@ -54,9 +54,7 @@ if ($is_adminOfCourse) {
 		<td>&nbsp;</td>
 		</tr>
 		</table>";
-		$tool_content .= "<p align='right'><a href='infocours.php?course=$code_cours'>$langBack</a></p>
-		</ul>
-		</div>";
+		$tool_content .= "<p align='right'><a href='infocours.php?course=$code_cours'>$langBack</a></p>";
 	} // else
 } else  {
 	$tool_content .= "<center><p>$langForbidden</p></center>";
