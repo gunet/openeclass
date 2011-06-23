@@ -234,11 +234,10 @@ if (!isset($_GET['mailing']))
 		<td>";
 		$tool_content .= "<a href='dropbox_download.php?course=$code_cours&amp;id=".urlencode($w->id)."' target=_blank>".$w->title."</a>";
 		$fSize = ceil(($w->filesize)/1024);
-		$tool_content .= "<small>&nbsp;&nbsp;&nbsp;($fSize kB)</small><br />
-		<small>$w->description</small></td>";
-		$tool_content .= "<td>$w->author</td><td>".$w->uploadDate;
-		if ($w->uploadDate != $w->lastUploadDate)
-		{
+		$tool_content .= "<small>&nbsp;&nbsp;&nbsp;($fSize kB)</small><br />" .
+                                 "<small>".q($w->description)."</small></td>" .
+                                 "<td>$w->author</td><td>".$w->uploadDate;
+		if ($w->uploadDate != $w->lastUploadDate) {
 			$tool_content .= " (".$dropbox_lang['lastUpdated']." $w->lastUploadDate)";
 		}
 		$tool_content .= "</td>
@@ -308,18 +307,14 @@ foreach ($dropbox_person -> sentWork as $w)
 	        } else {
 	           $tool_content .= "\n       <tr class=\"odd\">";
             	}
-	$tool_content .= "<td width='16'>
-		<img src='$themeimg/outbox.png' title='$w->title' /></td>
-		<td ><a href='$ahref' target='_blank'>
-		$w->title</a>
-		<small>&nbsp;&nbsp;&nbsp;($fSize kB)</small>
-		<br />
-		<small>$w->description</small></td>";
+	$tool_content .= "<td width='16'><img src='$themeimg/outbox.png' title='".q($w->title)."' /></td>
+                          <td><a href='$ahref' target='_blank'>".q($w->title)."</a>
+                              <small>&nbsp;&nbsp;&nbsp;($fSize kB)</small><br />
+                              <small>".q($w->description)."</small></td>";
 		
 	$tool_content .= "\n<td>";
-	foreach($w -> recipients as $r)
-	{
-		$tool_content .=  $r["name"] . " <br />\n";
+	foreach($w -> recipients as $r) {
+		$tool_content .= q($r['name']) . " <br />\n";
 	}
 	$tool_content = strrev(substr(strrev($tool_content), 7));
 

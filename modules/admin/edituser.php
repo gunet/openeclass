@@ -260,7 +260,7 @@ $tool_content .= "
 						$tool_content .= $langStudent;
 						$tool_content .= "</td><td align='center'>
 						<a href='unreguser.php?u=$u&amp;c=$logs[cours_id]'>
-						<img src='$themeimg/delete.png' title='$langDelete'></img></a></td>
+						<img src='$themeimg/delete.png' title='$langDelete'></a></td>
   						</tr>\n";
 						break;
 					default:
