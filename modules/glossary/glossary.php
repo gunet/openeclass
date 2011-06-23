@@ -146,7 +146,7 @@ if ($is_adminOfCourse) {
                  <tr>
                    <th valign='top'>$langGlossaryDefinition:</th>
                    <td>\n";
-        $tool_content .= text_area('definition', 4, 60, $definition);
+        $tool_content .= text_area('definition', 4, 60, q($definition));
         $tool_content .= "\n
                    </td>
                  </tr>
@@ -167,10 +167,10 @@ if ($is_adminOfCourse) {
     
     // display form for editiong a glossary term
     if (isset($_GET['edit']))  {
-        $navigation[] = array("url" => "$_SERVER[PHP_SELF]?course=$code_cours", "name" => $langGlossary);
+        $navigation[] = array('url' => "$_SERVER[PHP_SELF]?course=$code_cours", 'name' => $langGlossary);
         $nameTools = $langEditGlossaryTerm;
         
-        $sql = db_query("SELECT term, definition, url FROM glossary WHERE id='$_GET[edit]'");
+        $sql = db_query("SELECT term, definition, url FROM glossary WHERE id = ".intval($_GET['edit']));
         $data = mysql_fetch_array($sql);
         
         $tool_content .= "
@@ -180,18 +180,18 @@ if ($is_adminOfCourse) {
                  <table class='tbl' width='100%'>
                  <tr>
                    <th width='90'>$langGlossaryTerm:</th>
-                   <td><input type='text' name='term' value='$data[term]' size='60'></td>
+                   <td><input type='text' name='term' value='".q($data['term'])."' size='60'></td>
                  </tr>
                  <tr>
                    <th valign='top'>$langGlossaryDefinition:</th>
                    <td valign='top'>\n";
-        $tool_content .= text_area('definition', 4, 60, $data['definition']);
+        $tool_content .= text_area('definition', 4, 60, q($data['definition']));
         $tool_content .= "\n
                    </td>
                  </tr>
                  <tr><th>$langGlossaryUrl:</th>
                  <td>
-                 <input type='text' name='url' value='$data[url]' size='50'>
+                 <input type='text' name='url' value='".q($data['url'])."' size='50'>
                  </td>
                  </tr>
                  <tr>
@@ -203,7 +203,7 @@ if ($is_adminOfCourse) {
                  </tr>
                  </table>
                </fieldset>
-               <br />\n";    
+               </form><br />\n";    
     }
 }
 
@@ -272,7 +272,7 @@ if (mysql_num_rows($sql) > 0) {
 	$tool_content .= "<p class='alert1'>$langNoResult</p>";
 }
 
-draw($tool_content, 2, '', $head_content);
+draw($tool_content, 2, null, $head_content);
 
 
 /*******************************************/
