@@ -330,11 +330,7 @@ if (mysql_num_rows($result) > 0) {
         $tool_content .= "</tr>";
 
 	while ($myrow = mysql_fetch_array($result)) {
-		$contenu = $myrow["contenu"];
-		$contenu = nl2br($contenu);
-		$contenu = make_clickable($contenu);
-		// display math symbols (if there are)
-	    	$contenu = mathfilter($contenu, 12, "../../courses/mathimg/");
+		$contenu = standard_text_escape($myrow['contenu']);
 		if (!$nowBarShowed) {
 			// Following order
 			if (((strtotime($myrow["day"]." ".$myrow["hour"]) > time()) && ($sens==" ASC")) ||
@@ -376,34 +372,37 @@ if (mysql_num_rows($result) > 0) {
                              }
 			}
 			$tool_content .= "\n        <tr $classvis>\n          <td valign='top'>";
-		} else {
-			if ($numLine%2 == 0) {
-			  $tool_content .= "\n        <tr class='even'>";
-			} else {
-			  $tool_content .= "\n        <tr class='odd'>";
-			}
-                        $tool_content .= "\n          <td valign='top' colspan='2'>";
-		}
+                } else {
+                        if ($numLine%2 == 0) {
+                                $tool_content .= "<tr class='even'>";
+                        } else {
+                                $tool_content .= "<tr class='odd'>";
+                        }
+                        $tool_content .= "<td valign='top' colspan='2'>";
+                }
 
-		$tool_content .= "\n<span class='day'>".ucfirst(claro_format_locale_date($dateFormatLong,strtotime($myrow["day"])))."</span> ($langHour: ".ucfirst(date("H:i",strtotime($myrow["hour"]))).")";
-		$message = "$langUnknown";
-		if ($myrow["lasting"] != "") {
-			if ($myrow["lasting"] == 1)
-				$message = $langHour;
-			else
-				$message = $langHours;
-		}
+                $tool_content .= "\n<span class='day'>".
+                        ucfirst(claro_format_locale_date($dateFormatLong, strtotime($myrow['day']))).
+                        "</span> ($langHour: ".ucfirst(date('H:i', strtotime($myrow['hour']))).")";
+		$message = $langUnknown;
+                if ($myrow['lasting'] != '') {
+                        if ($myrow['lasting'] == 1) {
+                                $message = $langHour;
+                        } else {
+                                $message = $langHours;
+                        }
+                }
 		$tool_content .=  "\n<br /><br /><div class='event'><b>";
-		if ($myrow["titre"] == "") {
-		    $tool_content .= $langAgendaNoTitle;
-		} else {
-		    $tool_content .= $myrow["titre"];
-		}
-		$tool_content .= "</b> (".$langLasting.": ".$myrow["lasting"]." ".$message.")$contenu</div></td>";
+                if ($myrow['titre'] == '') {
+                        $tool_content .= $langAgendaNoTitle;
+                } else {
+                        $tool_content .= q($myrow['titre']);
+                }
+		$tool_content .= "</b> ($langLasting: ".q($myrow['lasting'])." $message)$contenu</div></td>";
 
-	//agenda event functions
-	//added icons next to each function
-	//(evelthon, 12/05/2006)
+                //agenda event functions
+                //added icons next to each function
+                //(evelthon, 12/05/2006)
 		if ($is_adminOfCourse) {
 			$tool_content .=  "
 			<td class='right' width='70'>
@@ -427,7 +426,7 @@ if (mysql_num_rows($result) > 0) {
 		$numLine++;
 	} 	// while
 	$tool_content .= "\n        </table>";
-} else  {
+} else {
 	$tool_content .= "\n          <p class='alert1'>$langNoEvents</p>";
 }
 add_units_navigation(TRUE);
