@@ -52,9 +52,9 @@ if (isset($_GET['showQuota']) and $_GET['showQuota'] == TRUE) {
 
 
 $tool_content .="
-<div id=\"operations_container\">
-  <ul id=\"opslist\">
-    <li><a href=\"".$_SERVER['PHP_SELF']."?course=$code_cours&amp;upload=1\">".$dropbox_lang['uploadFile']."</a></li>
+<div id='operations_container'>
+  <ul id='opslist'>
+    <li><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;upload=1'>$dropbox_lang[uploadFile]</a></li>
     <li><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;showQuota=TRUE'>$langQuotaBar</a></li>
   </ul>
 </div>";
@@ -323,7 +323,7 @@ foreach ($dropbox_person -> sentWork as $w)
 
 	$tool_content .= "
 	<a href=\"dropbox_submit.php?course=$code_cours&amp;deleteSent=".urlencode($w->id)."&amp;dropbox_unid=".urlencode($dropbox_unid) ."\"
-		onClick='return confirmation(\"$w->title\");'>
+		onClick=\"return confirmation('".js_escape($w->title)."');\">
 		<img src=\"$themeimg/delete.png\" title=\"$langDelete\" /></a>";
 	$tool_content .= "</div></td></tr>";
 
