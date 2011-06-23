@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language en
-// Generated 2011-06-22 11:22:18
+// Generated 2011-06-23 11:53:32
 
 $langEclass = "Open eClass - Asynchronous Teleteaching Platform";
 $langYes = "Yes";
@@ -38,6 +38,6 @@ $langothers = "Other";
 $langpre = "Undergraduate";
 $langpost = "Postgraduate";
 $langother = "Other";
-$langInfoAbout = "The <strong>$siteName</strong> plaform is a complete Course Management System that supports Asynchronous eLearning Services via a simple web browser. Its goal is the incorporation and constructive use of the Internet and web technologies in the teaching and learning process. It supports the electronic management, storage and presentation of teaching materials, independently of the spatial and time limiting factors of conventional teaching and creating the necessary conditions for a dynamic teaching environment.<br><br> The introduction of eLearning into the traditional teaching process provides new capabilities and allows new means of interaction between $langsStudents and $langsTeachers, through a contemporary technological peak environment.";
+$langInfoAbout = "The <strong>$siteName</strong> plaform is a complete Course Management System that supports Asynchronous eLearning Services via a simple web browser. Its goal is the incorporation and constructive use of the Internet and web technologies in the teaching and learning process. It supports the electronic management, storage and presentation of teaching materials, independently of the spatial and time limiting factors of conventional teaching and creating the necessary conditions for a dynamic teaching environment.";
 $langExtrasLeft = '';
 $langExtrasRight = '&nbsp;';

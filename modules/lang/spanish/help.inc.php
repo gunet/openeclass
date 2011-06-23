@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language es
-// Generated 2011-06-22 11:22:19
+// Generated 2011-06-23 11:53:32
 
 $langWindowClose = "Cierra la ventana";
 $langHDefault = 'Ayuda no disponible';
