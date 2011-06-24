@@ -1682,7 +1682,7 @@ function standard_text_escape($text, $mathimg = '../../courses/mathimg/')
 {
         global $purifier;
 
-        $html = mathfilter($purifier->purify($text), 12, $mathimg);
+        $html = $purifier->purify(mathfilter($text, 12, $mathimg));
 
         if (!isset($_SESSION['glossary_terms_regexp'])) {
                 return $html;
