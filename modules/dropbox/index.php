@@ -64,13 +64,13 @@ $tool_content .="
 * The sessionvar sentOrder keeps preference of user to by what field to order the sent files list by
 */
 
-if (isset($_GET["sentOrder"]) && in_array($_GET["sentOrder"], array("lastDate", "firstDate", "title", "size", "author", "recipient"))) {
+if (isset($_GET['sentOrder']) && in_array($_GET['sentOrder'], array('lastDate', 'firstDate', 'title', 'size', 'author', 'recipient'))) {
 	$sentOrder = $_GET["sentOrder"];
 } else {
-	if (isset($_SESSION["sentOrder"]) && in_array($_SESSION["sentOrder"], array("lastDate", "firstDate", "title", "size", "author", "recipient"))) {
-		$sentOrder = $_SESSION["sentOrder"];
+	if (isset($_SESSION['sentOrder']) && in_array($_SESSION['sentOrder'], array('lastDate', 'firstDate', 'title', 'size', 'author', 'recipient'))) {
+		$sentOrder = $_SESSION['sentOrder'];
 	} else {
-		$sentOrder = "lastDate"; //default sortorder value if nothing is specified
+		$sentOrder = 'lastDate'; //default sortorder value if nothing is specified
 	}
 }
 $_SESSION['sentOrder'] = $sentOrder;
@@ -79,24 +79,24 @@ $_SESSION['sentOrder'] = $sentOrder;
 * get order status of received list.
 * The sessionvar receivedOrder keeps preference of user to by what field to order the received files list by
 */
-if (isset($_GET["receivedOrder"]) && in_array($_GET["receivedOrder"], array("lastDate", "firstDate", "title", "size", "author", "sender"))) {
-	$receivedOrder = $_GET["receivedOrder"];
+if (isset($_GET['receivedOrder']) && in_array($_GET['receivedOrder'], array('lastDate', 'firstDate', 'title', 'size', 'author', 'sender'))) {
+	$receivedOrder = $_GET['receivedOrder'];
 } else {
-	if (isset($_SESSION["receivedOrder"]) && in_array($_SESSION["receivedOrder"], array("lastDate", "firstDate", "title", "size", "author", "sender"))) {
-		$receivedOrder = $_SESSION["receivedOrder"];
+	if (isset($_SESSION['receivedOrder']) && in_array($_SESSION['receivedOrder'], array('lastDate', 'firstDate', 'title', 'size', 'author', 'sender'))) {
+		$receivedOrder = $_SESSION['receivedOrder'];
 	} else {
-		$receivedOrder = "lastDate"; //default sortorder value if nothing is specified
+		$receivedOrder = 'lastDate'; //default sortorder value if nothing is specified
 	}
 }
 $_SESSION['receivedOrder'] = $receivedOrder;
 
-require_once("dropbox_class.inc.php");
+require_once('dropbox_class.inc.php');
 
 $dropbox_person = new Dropbox_Person($uid, $is_adminOfCourse, $is_adminOfCourse);
-$dropbox_person->orderReceivedWork ($receivedOrder);
-$dropbox_person->orderSentWork ($sentOrder);
+$dropbox_person->orderReceivedWork($receivedOrder);
+$dropbox_person->orderSentWork($sentOrder);
 $dropbox_unid = md5(uniqid(rand(), true));	//this var is used to give a unique value to every
-//page request. This is to prevent resubmiting data
+                                                //page request. This is to prevent resubmiting data
 
 /*
  * ========================================
@@ -108,7 +108,7 @@ if(isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {
 	$tool_content .= "<form method='post' action='dropbox_submit.php?course=$code_cours' enctype='multipart/form-data' onsubmit='return checkForm(this)'>";
 	$tool_content .= "
 	<fieldset>
-	<legend>".$dropbox_lang["uploadFile"]."</legend>
+	<legend>".$dropbox_lang['uploadFile']."</legend>
 	<table width='100%' class='tbl'>
 	<tr>
 	  <th width='160'>".$dropbox_lang['file'].":</th>
@@ -119,15 +119,15 @@ if(isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {
 
 	$tool_content .= "
 	<tr>
-	  <th>".$dropbox_lang["authors"].":</th>
-	  <td>".uid_to_name($uid)."</td>
+	  <th>".$dropbox_lang['authors'].":</th>
+	  <td>".q(uid_to_name($uid))."</td>
 	</tr>
 	<tr>
-	  <th>".$dropbox_lang["description"].":</th>
+	  <th>".$dropbox_lang['description'].":</th>
 	  <td><textarea name='description' cols='37' rows='2'></textarea></td>
 	</tr>
 	<tr>
-	  <th>".$dropbox_lang["sendTo"].":</th>
+	  <th>".$dropbox_lang['sendTo'].":</th>
 	  <td>
 	<select name='recipients[]' multiple='true' class='auth_input' id='select-recipients'>";
 
@@ -176,7 +176,7 @@ if(isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {
 	</tr>
         </table>
         </fieldset>
-	<input type='hidden' name='authors' value='".uid_to_name($uid)."' />
+	<input type='hidden' name='authors' value='".q(uid_to_name($uid))."' />
         </form>
 	<p class='right smaller'>$langMaxFileSize ".ini_get('upload_max_filesize')."</p>";
 }
