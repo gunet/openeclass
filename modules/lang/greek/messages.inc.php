@@ -2250,6 +2250,7 @@ $langDisplayProfile = "Δημόσια Εμφάνιση Προφίλ";
 $langProfileInfoPrivate = 'ιδιωτικό';
 $langProfileInfoProfs = 'εμφάνιση στους καθηγητές';
 $langProfileInfoUsers = 'εμφάνιση σε όλους';
+$langEmailSettings = 'Ρυθμίσεις ηλεκτρονικού ταχυδρομείου';
 
 // user.php
 $langNewUser = "Εγγραφή Χρήστη";

@@ -64,15 +64,16 @@ if (isset($_POST["submit"])) {
 	$errorExists = false;
         foreach ($selectCourse as $key => $value) {
                 $cid = intval($value);
-                $course_info = db_query("SELECT fake_code, password FROM cours WHERE cours_id = $cid");
+                $course_info = db_query("SELECT fake_code, password, visible FROM cours WHERE cours_id = $cid");
                 if ($course_info) {
                         $row = mysql_fetch_array($course_info);
-                        if (!empty($row['password']) and $row['password'] != autounquote($_POST['pass' . $cid])) {
+                        if ($row['visible'] == 1 and !empty($row['password']) and
+                            $row['password'] != autounquote($_POST['pass' . $cid])) {
                                 $errorExists = true;
                                 $restrictedCourses[] = $row['fake_code'];
                                 continue;
                         }
-                        if (is_restricted($cid)) { //do not allow registration to restricted course
+                        if (is_restricted($cid)) { // do not allow registration to restricted course
                                 $errorExists = true;
                                 $restrictedCourses[] = $row['fake_code'];
                         } else {
@@ -84,7 +85,7 @@ if (isset($_POST["submit"])) {
 
 	if ($errorExists) {
                 $tool_content .= "<p class='caution'>$langWrongPassCourse " .
-                                 join(', ', $restrictedCourses) . "</p><br />";
+                                 q(join(', ', $restrictedCourses)) . "</p><br />";
         } else {
                 $tool_content .= "<p class='success'>$langRegDone</p>";
         }
@@ -300,13 +301,14 @@ function expanded_faculte($fac_name, $facid, $uid) {
                         } else {
                                 $retString .= "\n    <tr class='odd'>";
                         }
-                        $retString .= "\n      <td align='center'>";
-                        $requirepassword = "";
+                        $retString .= "<td align='center'>";
+                        $requirepassword = '';
                         if (isset($myCourses[$cid])) {
                                 if ($myCourses[$cid]['statut'] != 1) { // display registered courses
                                         // password needed
                                         if (!empty($password) and $mycours['visible'] == 1) {
-                                                $requirepassword = "<br />$m[code]: <input type='password' name='pass$cid' value='$password' />";
+                                                $requirepassword = "<br />$m[code]: <input type='password' name='pass$cid' value='".
+                                                        q($password)."' />";
                                         } else {
                                                 $requirepassword = '';
                                         }
