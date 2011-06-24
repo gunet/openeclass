@@ -316,5 +316,5 @@ elseif($moduleNb > 0)
 }
 $tool_content .= "\n</table>\n";
 
-draw($tool_content, 2, '', $head_content);
-?>
+draw($tool_content, 2, null, $head_content);
+

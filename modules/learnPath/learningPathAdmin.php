@@ -501,7 +501,7 @@ $result = db_query($sql);
 
 if (mysql_num_rows($result) == 0) {
 	$tool_content .= "<p class='alert1'>$langNoModule</p>";
-	draw($tool_content, 2, '', $head_content, $body_action);
+	draw($tool_content, 2, null, $head_content, $body_action);
 	exit;
 }
 

@@ -264,7 +264,7 @@ hContent;
 	$tool_content .= "$langNotAllowed<br>";
 }
 if($is_adminOfCourse) {
-	draw($tool_content, 2, '', $head_content);
+	draw($tool_content, 2, null, $head_content);
 } else {
 	draw($tool_content, 2);
 }

@@ -142,5 +142,5 @@ foreach ($usersList as $user)
 
 // foot of table
 $tool_content .= '  </table>'."\n\n";
-draw($tool_content, 2, '', $head_content);
-?>
+
+draw($tool_content, 2, null, $head_content);

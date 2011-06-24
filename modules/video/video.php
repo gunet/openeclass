@@ -177,7 +177,7 @@ if (isset($_POST['add_submit'])) {  // add
 				if ($diskUsed + @$_FILES['userFile']['size'] > $diskQuotaVideo) {
 					$tool_content .= "<p class='caution'>$langNoSpace<br />
 						<a href='$_SERVER[PHP_SELF]?course=$code_cours'>$langBack</a></p><br />";
-						draw($tool_content, 2, '', $head_content);
+						draw($tool_content, 2, null, $head_content);
 						exit;
 				} else {
 					$file_name = $_FILES['userFile']['name'];
@@ -188,7 +188,7 @@ if (isset($_POST['add_submit'])) {  // add
 					if (preg_match('/\.(ade|adp|bas|bat|chm|cmd|com|cpl|crt|exe|hlp|hta|' .'inf|ins|isp|jse|lnk|mdb|mde|msc|msi|msp|mst|pcd|pif|reg|scr|sct|shs|' .'shb|url|vbe|vbs|wsc|wsf|wsh)$/', $file_name)) {
 						$tool_content .= "<p class='caution'>$langUnwantedFiletype:  $file_name<br />";
 						$tool_content .= "<a href='$_SERVER[PHP_SELF]?course=$code_cours'>$langBack</a></p><br />";
-						draw($tool_content, 2, '', $head_content);
+						draw($tool_content, 2, null, $head_content);
 						exit;
 					}
 					$file_name = str_replace(" ", "%20", $file_name);

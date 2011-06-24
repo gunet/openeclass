@@ -76,7 +76,7 @@ $sql = "SELECT forum_name, forum_access, forum_type FROM forums
 	WHERE (forum_id = '$forum')";
 if (!$result = db_query($sql, $currentCourseID)) {
 	$tool_content .= $langErrorDataForum;
-	draw($tool_content, 2, '', $head_content);
+	draw($tool_content, 2, null, $head_content);
 	exit;
 }
 $myrow = mysql_fetch_array($result);
@@ -220,5 +220,5 @@ if (isset($_POST['submit'])) {
 	</fieldset>
 	</form>";
 }
-draw($tool_content, 2, '', $head_content);
-?>
+
+draw($tool_content, 2, null, $head_content);

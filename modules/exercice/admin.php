@@ -62,7 +62,7 @@ $TBL_REPONSES = 'reponses';
 
 if(!$is_adminOfCourse) {
 	$tool_content .= $langNotAllowed;
-	draw($tool_content, 2, '', $head_content);
+	draw($tool_content, 2, null, $head_content);
 	exit();
 }
 
@@ -128,7 +128,7 @@ if (isset($_GET['editQuestion']) || isset($_GET['newQuestion'])) {
 	    // question not found
 	    if(!$objQuestion->read($_GET['editQuestion'])) {
 		    $tool_content .= $langQuestionNotFound;
-		    draw($tool_content, 2, '', $head_content);
+		    draw($tool_content, 2, null, $head_content);
 		    exit();
 	    }
     }
@@ -145,7 +145,7 @@ if (isset($_GET['modifyQuestion']) || isset($_GET['modifyAnswers'])) {
 		$questionId=$objQuestion->selectId();
 	} else { // question not found
 		$tool_content .= $langQuestionNotFound;
-		draw($tool_content, 2, '', $head_content);
+		draw($tool_content, 2, null, $head_content);
 		exit();
 	}
 }
@@ -239,7 +239,7 @@ if(!isset($_GET['newQuestion']) && !isset($_GET['modifyQuestion']) &&
 	    include('question_list_admin.inc.php');
 	}
 }
-draw($tool_content, 2, '', $head_content);
+draw($tool_content, 2, null, $head_content);
 
 // -----------------------------------------------
 // function for displaying jscalendar

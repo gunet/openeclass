@@ -242,4 +242,4 @@ if (!extension_loaded('gd')) {
        </form>';
     }
 
-draw($tool_content, 2, '', $local_head);
+draw($tool_content, 2, null, $local_head);

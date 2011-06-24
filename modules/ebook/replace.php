@@ -48,5 +48,5 @@ if (!$is_adminOfCourse or mysql_num_rows($r) == 0) {
 }
 
 chdir($lastdir);
-draw($tool_content, 2, '', $head_content);
+draw($tool_content, 2, null, $head_content);
 

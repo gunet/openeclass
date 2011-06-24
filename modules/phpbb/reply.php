@@ -103,7 +103,7 @@ $navigation[]= array ("url"=>"viewtopic.php?course=$code_cours&amp;topic=$topic&
 
 if (!does_exists($forum, $currentCourseID, "forum") || !does_exists($topic, $currentCourseID, "topic")) {
 	$tool_content .= $langErrorTopicSelect;
-	draw($tool_content, 2, '', $head_content);
+	draw($tool_content, 2, null, $head_content);
 	exit();
 }
 
@@ -114,14 +114,14 @@ if (isset($_POST['submit'])) {
                 $tool_content .= "
                 <p class='alert1'>$langEmptyMsg</p>
                 <p class='back'>&laquo; $langClick <a href='newtopic.php?course=$code_cours&amp;forum=$forum_id'>$langHere</a> $langReturnTopic</p>";
-		draw($tool_content, 2, '', $head_content);
+                draw($tool_content, 2, null, $head_content);
 		exit();
 	}
 	// XXX: Do we need this code ?
 	if ( $uid == -1 ) {
 		if ($forum_access == 3 && $user_level < 2) {
 			$tool_content .= $langNoPost;
-			draw($tool_content, 2, '', $head_content);
+                        draw($tool_content, 2, null, $head_content);
 			exit();
 		}
 	}
@@ -129,7 +129,7 @@ if (isset($_POST['submit'])) {
 	if ($forum_type == 1) {
 		if (!check_priv_forum_auth($uid, $forum, TRUE, $currentCourseID)) {
 			$tool_content .= "$langPrivateForum $langNoPost";
-			draw($tool_content, 2, '', $head_content);
+			draw($tool_content, 2, null, $head_content);
 			exit();
 		}
 	}
@@ -173,7 +173,7 @@ if (isset($_POST['submit'])) {
 	$result = db_query($sql, $currentCourseID);
 	if (!$result) {
 		$tool_content .= $langErrorUpadatePostCount;
-		draw($tool_content, 2, '', $head_content);
+		draw($tool_content, 2, null, $head_content);
 		exit();
 	}
 	
@@ -230,7 +230,7 @@ if (isset($_POST['submit'])) {
 			</td></tr></table>
 		</fieldset>
 		</form>";
-		draw($tool_content, 2, '', $head_content);
+		draw($tool_content, 2, null, $head_content);
 		exit();
 	} else {
 		if ($forum_type == 1) {
@@ -238,7 +238,7 @@ if (isset($_POST['submit'])) {
 			// this private forum.
 			if (!check_priv_forum_auth($uid, $forum, TRUE, $currentCourseID)) {
 				$tool_content .= "$langPrivateForum $langNoPost";
-				draw($tool_content, 2, '', $head_content);
+				draw($tool_content, 2, null, $head_content);
 				exit();
 			}
 		}
@@ -272,7 +272,7 @@ if (isset($_POST['submit'])) {
 			eval("\$reply = \"$langQuoteMsg\";");
 		} else {
 			$tool_content .= $langErrorConnectForumDatabase;
-			draw($tool_content, 2, '', $head_content);
+			draw($tool_content, 2, null, $head_content);
 			exit();
 		}
 	}
@@ -298,4 +298,4 @@ if (isset($_POST['submit'])) {
         </fieldset>
 	</form>";
 }
-draw($tool_content, 2, '', $head_content);
+draw($tool_content, 2, null, $head_content);

@@ -96,7 +96,7 @@ if ($displayFull == 0)
 		."<br />"."\n"
 		."      <a href=\"module.php?course=$code_cours\">".$langBack."</a>"."\n"
 		."      </iframe>"."\n";
-	draw($tool_content, 2, '', $head_content);
+	draw($tool_content, 2, null, $head_content);
 }
 else
 {

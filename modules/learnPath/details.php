@@ -128,5 +128,4 @@ if( $learnPathName )
 	$tool_content .= '    '."\n\n".'    </table>'."\n\n";
 }
 
-draw($tool_content, 2, '', $head_content);
-?>
+draw($tool_content, 2, null, $head_content);

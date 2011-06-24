@@ -286,5 +286,5 @@ if(!$nbrExercises) {
 	$tool_content .= "</table>";
 }
 add_units_navigation(TRUE);
-draw($tool_content, 2, '', $head_content);
-?>
+draw($tool_content, 2, null, $head_content);
+

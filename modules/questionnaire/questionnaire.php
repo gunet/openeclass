@@ -69,7 +69,7 @@ if (isset($_GET['delete']) and $_GET['delete'] == 'yes')  {
 	db_query("DELETE FROM poll_question WHERE pid='$pid'");
 	db_query("DELETE FROM poll_answer_record WHERE pid='$pid'");
     $tool_content .= "<p class='success'>".$langPollDeleted."<br /><a href=\"questionnaire.php?course=$code_cours\">".$langBack."</a></p>";
-	draw($tool_content, 2, '', $head_content);
+	draw($tool_content, 2, null, $head_content);
 	exit();
 }
 
@@ -84,7 +84,7 @@ if ($is_adminOfCourse) {
 
 printPolls();
 add_units_navigation(TRUE);
-draw($tool_content, 2, '', $head_content);
+draw($tool_content, 2, null, $head_content);
 
 
 /***************************************************************************************************

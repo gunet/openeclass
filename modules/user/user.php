@@ -297,4 +297,4 @@ if ($is_adminOfCourse) {
 	$tool_content .= "</table>";
 }
 
-draw($tool_content, 2, '', $head_content);
+draw($tool_content, 2, null, $head_content);

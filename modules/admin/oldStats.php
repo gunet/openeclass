@@ -193,5 +193,5 @@ if ($chart_content) {
     </table>
     </form>';
 }
-draw($tool_content, 3, '', $local_head);
-?>
+
+draw($tool_content, 3, null, $local_head);

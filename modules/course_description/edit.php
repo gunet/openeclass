@@ -122,7 +122,7 @@ if (isset($_POST['edIdBloc'])) {
         display_add_block_form();
 }
 
-draw($tool_content, 2, '', $head_content);
+draw($tool_content, 2, null, $head_content);
 
 
 // Display form to to add a new block

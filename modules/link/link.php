@@ -338,7 +338,7 @@ if (mysql_num_rows($resultcategories) > 0) {
 }
 
 add_units_navigation(true);
-draw($tool_content, 2, '', $head_content);
+draw($tool_content, 2, null, $head_content);
 
 
 function link_form_defaults($id)

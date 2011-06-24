@@ -315,7 +315,5 @@ if ($atleastOne == false) {
       <p class=\"alert1\">".$langNoModule."</p>";
 }
 
+draw($tool_content, 2, null, $head_content, $body_action);
 
-draw($tool_content, 2, '', $head_content, $body_action);
-
-?>

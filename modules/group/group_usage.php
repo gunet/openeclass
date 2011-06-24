@@ -195,4 +195,4 @@ if ($type == 'duration') {
         user_duration_query_end();
 }
 
-draw($tool_content, 2, '', $head_content);
+draw($tool_content, 2, null, $head_content);

@@ -147,7 +147,5 @@ else
 }
 $tool_content .= '      </table>'."\n";
 
+draw($tool_content, 2, null, $head_content);
 
-draw($tool_content, 2, '', $head_content);
-
-?>

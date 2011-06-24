@@ -79,12 +79,12 @@ if ($is_adminOfCourse) { // course admin
 		$sql = "SELECT * FROM posts WHERE post_id = '$post_id'";
 		if (!$result = db_query($sql, $currentCourseID)) {
 			$tool_content .= $langErrorDataOne;
-			draw($tool_content, 2, '', $head_content);
+			draw($tool_content, 2, null, $head_content);
 			exit();
 		}
 		if (mysql_num_rows($result) <= 0) {
 			$tool_content .= $langErrorDataTwo;
-			draw($tool_content, 2, '', $head_content);
+			draw($tool_content, 2, null, $head_content);
 			exit();
 		}
 		$myrow = mysql_fetch_array($result);
@@ -123,7 +123,7 @@ if ($is_adminOfCourse) { // course admin
 			WHERE (post_id = '$post_id')";
 		if (!$result = db_query($sql, $currentCourseID)) {
 			$tool_content .= $langUnableUpadatePost;
-			draw($tool_content, 2, '', $head_content);
+			draw($tool_content, 2, null, $head_content);
 			exit();
 		}
 		if (isset($subject)) {
@@ -156,13 +156,13 @@ if ($is_adminOfCourse) { // course admin
 		
 		if (!$result = db_query($sql, $currentCourseID)) {
 			$tool_content .= $langTopicInformation;
-			draw($tool_content, 2, '', $head_content);
+			draw($tool_content, 2, null, $head_content);
 			exit();
 		}
 		
 		if (!$myrow = mysql_fetch_array($result)) {
 			$tool_content .= $langErrorTopicSelect;
-			draw($tool_content, 2, '', $head_content);
+			draw($tool_content, 2, null, $head_content);
 			exit();
 		}
 		
@@ -193,7 +193,7 @@ if ($is_adminOfCourse) { // course admin
 			</td>
 			</tr>
 			</table></form>";
-			draw($tool_content, 2, '', $head_content);
+			draw($tool_content, 2, null, $head_content);
 			exit();
 		} else {
 			if ($myrow["forum_type"] == 1) {
@@ -201,7 +201,7 @@ if ($is_adminOfCourse) { // course admin
 				// this private forum.
 				if (!check_priv_forum_auth($uid, $forum, true, $currentCourseID)) {
 					$tool_content .= "$langPrivateForum $langNoPost";
-					draw($tool_content, 2, '', $head_content);
+					draw($tool_content, 2, null, $head_content);
 					exit();
 				}
 			}
@@ -214,7 +214,7 @@ if ($is_adminOfCourse) { // course admin
 
 		if (!$result = db_query($sql, $currentCourseID)) {
 			$tool_content .= "<p>Couldn't get user and topic information from the database.</p>";
-			draw($tool_content, 2, '', $head_content);
+			draw($tool_content, 2, null, $head_content);
 			exit();
 		}
 		$myrow = mysql_fetch_array($result);
@@ -223,7 +223,7 @@ if ($is_adminOfCourse) { // course admin
 				if($user_level == 2 && !is_moderator($forum, $uid, $currentCourseID)) {
 					if($user_level < 2 && ($uid != $myrow["p.poster_id"])) {
 						$tool_content .= $langNotEdit;
-						draw($tool_content, 2, '', $head_content);
+						draw($tool_content, 2, null, $head_content);
 						exit();
 					}
 				}
@@ -268,4 +268,4 @@ if ($is_adminOfCourse) { // course admin
 } else {
 	$tool_content .= $langForbidden;
 }
-draw($tool_content, 2, '', $head_content);
+draw($tool_content, 2, null, $head_content);

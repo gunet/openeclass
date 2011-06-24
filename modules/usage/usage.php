@@ -78,4 +78,4 @@ if (isset($_POST['u_analyze']) && isset($_POST['user_id']) && $_POST['user_id'] 
     }
 }
 add_units_navigation(TRUE);
-draw($tool_content, 2, '', $local_head);
+draw($tool_content, 2, null, $local_head);

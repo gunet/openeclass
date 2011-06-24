@@ -190,7 +190,7 @@ if ($is_adminOfCourse) {
 }
 
 add_units_navigation(TRUE);
-draw($tool_content, 2, '', $head_content.$local_head);
+draw($tool_content, 2, null, $head_content.$local_head);
 
 //-------------------------------------
 // end of main program

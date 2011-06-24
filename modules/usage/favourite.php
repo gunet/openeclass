@@ -246,5 +246,6 @@ $local_head = $jscalendar->get_load_files_code();
     </fieldset>
     </form>';
 }
-draw($tool_content, 2, '', $local_head);
-?>
+
+draw($tool_content, 2, null, $local_head);
+

@@ -65,7 +65,6 @@ if ($q and mysql_num_rows($q) > 0) {
 }
 
 $tool_content = "
-
  <form method='post' action='index.php?course=$code_cours'>
  <input type='hidden' name='edIdBloc' value='-1' />
  <input type='hidden' name='edTitleBloc' value='$langDescription' />
@@ -77,5 +76,5 @@ $tool_content = "
    </fieldset>
  </form>\n";
 
-draw($tool_content, 2, '', $head_content);
+draw($tool_content, 2, null, $head_content);
 

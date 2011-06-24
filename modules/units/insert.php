@@ -36,7 +36,7 @@ $q = db_query("SELECT * FROM course_units
                WHERE id=$id AND course_id=$cours_id");
 if (!$q or mysql_num_rows($q) == 0) {
         $nameTools = $langUnitUnknown;
-        draw('', 2, '', $head_content);
+        draw('', 2, null, $head_content);
         exit;
 }
 

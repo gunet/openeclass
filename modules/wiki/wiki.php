@@ -526,5 +526,5 @@ switch ( $action )
 
     // ------------ End of display ---------------
 add_units_navigation(TRUE);
-draw($tool_content, 2, '', $head_content);
+draw($tool_content, 2, null, $head_content);
 

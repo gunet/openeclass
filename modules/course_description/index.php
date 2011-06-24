@@ -109,5 +109,5 @@ if ($q and mysql_num_rows($q) > 0) {
 	$tool_content .= "   <p class='alert1'>$langThisCourseDescriptionIsEmpty</p>";
 }
 
-add_units_navigation(TRUE);
-draw($tool_content, 2, '', $head_content);
+add_units_navigation(true);
+draw($tool_content, 2, null, $head_content);

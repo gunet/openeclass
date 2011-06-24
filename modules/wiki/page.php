@@ -154,7 +154,7 @@ $wikiStore = new WikiStore( $con, $config );
 if ( ! $wikiStore->wikiIdExists( $wikiId ) )
 {
     die ( $langWikiInvalidWikiId );
-    draw($tool_content, 2, '', $head_content);
+    draw($tool_content, 2, null, $head_content);
 }
 
 $wiki = $wikiStore->loadWiki( $wikiId );
@@ -304,7 +304,7 @@ if ( $title === '' )
     {
 	// something weird's happened
 	die("$langWrongWikiPageTitle");
-	draw($tool_content, 2, '', $head_content);
+	draw($tool_content, 2, null, $head_content);
     }
 }
 
@@ -609,7 +609,7 @@ $javascriptEnabled = is_javascript_enabled();
 if (!$is_allowedToRead)
 {
     $tool_content .= $langWikiNotAllowedToRead;
-    draw($tool_content, 2, '', $head_content);
+    draw($tool_content, 2, null, $head_content);
     die;
 }
 
@@ -1093,5 +1093,6 @@ switch( $action )
 	    );
     }
 }
-draw($tool_content, 2, '', $head_content);
-?>
+
+draw($tool_content, 2, null, $head_content);
+

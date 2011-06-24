@@ -75,4 +75,4 @@ if (mysql_num_rows($q) > 0) {
 	$tool_content .= "<p class='caution_small'>$langNoGroup</p>";
 }
 
-draw($tool_content, 2, '', $head_content);
+draw($tool_content, 2, null, $head_content);

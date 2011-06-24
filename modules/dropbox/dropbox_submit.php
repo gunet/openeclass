@@ -235,5 +235,5 @@ if (isset($_GET['deleteReceived']) || isset($_GET['deleteSent']))
 	$tool_content .= "<p class=\"success\">".$dropbox_lang["fileDeleted"]."<br />
 	<a href='index.php?course=$code_cours'>".$dropbox_lang['backList']."</a></p><br/>";
 }
-draw($tool_content, 2, '', $head_content);
-?>
+
+draw($tool_content, 2, null, $head_content);

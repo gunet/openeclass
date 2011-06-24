@@ -18,8 +18,6 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-
-
 /*
 ===========================================================================
     admin/visitsCourseStats.php
@@ -50,7 +48,6 @@ $tool_content .= "
       <li><a href='monthlyReport.php'>".$langMonthlyReport."</a></li>
     </ul>
   </div>";
-
 
 include('../../include/jscalendar/calendar.php');
 if ($language == 'greek') {
@@ -375,5 +372,4 @@ $tool_content .= '<br />';
     </form>';
 }
 
-draw($tool_content, 3, '', $local_head);
-?>
+draw($tool_content, 3, null, $local_head);

@@ -352,4 +352,4 @@ $head_content .= "<script type='text/javascript'>$(document).ready(function () {
 <link href='../../js/jquery-ui.css' rel='stylesheet' type='text/css'>
 <link href='../../js/jquery.multiselect.css' rel='stylesheet' type='text/css'>";
 
-draw($tool_content, 2, '', $head_content);
+draw($tool_content, 2, null, $head_content);

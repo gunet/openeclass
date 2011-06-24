@@ -61,15 +61,14 @@ if ($language == 'greek') {
 $jscalendar = new DHTML_Calendar($urlServer.'include/jscalendar/', $lang, 'calendar-blue2', false);
 $local_head = $jscalendar->get_load_files_code();
 
-    if (!extension_loaded('gd')) {
+if (!extension_loaded('gd')) {
         $tool_content .= "<p>$langGDRequired</p>";
-    } else {
+} else {
         $made_chart = true;
         //show chart with statistics
         require_once "statsResults.php";
         //show form for determining time period and user
         require_once "statsForm.php";
-    }
+}
 
-draw($tool_content, 3, '', $local_head);
-?>
+draw($tool_content, 3, null, $local_head);

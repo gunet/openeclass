@@ -54,7 +54,7 @@ if (isset($_GET['edit']) and isset($pid))  {
 	if (check_poll_participants($pid)) {
 		$tool_content .= "$langThereAreParticipants";
 		$tool_content .= "<br ><br /><div align='right'><a href='questionnaire.php?course=$code_cours'>$langBack</a></div>";
-		draw($tool_content, 2, '', $local_head);
+		draw($tool_content, 2, null, $local_head);
 		exit();
 	} else {
 		fill_questions($pid);
@@ -68,7 +68,7 @@ if (isset($_POST['PollCreate']))  {
 		} else {
 			createPoll($_POST['question'], $_POST['question_type']);
 		}
-		draw($tool_content, 2, '', $local_head);
+		draw($tool_content, 2, null, $local_head);
 		exit;
 	} else {
 		$tool_content .= "$langPollEmpty<br />";
@@ -76,7 +76,7 @@ if (isset($_POST['PollCreate']))  {
 }
 
 printPollCreationForm();
-draw($tool_content, 2, '', $local_head);
+draw($tool_content, 2, null, $local_head);
 
 /*****************************************************************************
 Fill the appropriate $_POST values from the database as if poll $pid was submitted

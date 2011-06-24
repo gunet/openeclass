@@ -352,7 +352,7 @@ if (isset($sortDirection) && $sortDirection)
 if($is_adminOfCourse) {
 	if (isset($dialogBox)) {
 		$tool_content .= disp_message_box($dialogBox, $style) ."<br />";
-		draw($tool_content, 2, '', $head_content);
+		draw($tool_content, 2, null, $head_content);
 		exit;
 	} else {
 		$tool_content .= "
@@ -372,7 +372,7 @@ if($is_adminOfCourse) {
 $l = db_query("SELECT * FROM `$TABLELEARNPATH`");
 if ((mysql_num_rows($l) == 0)) {
 	$tool_content .= "<p class='alert1'>$langNoLearningPath</p>";
-	draw($tool_content, 2, '', $head_content);
+	draw($tool_content, 2, null, $head_content);
 	exit;
 }
 
@@ -674,4 +674,4 @@ if (!$is_adminOfCourse && $iterator != 1 && $uid) {
 }
 $tool_content .= "\n     </table>\n";
 
-draw($tool_content, 2, '', $head_content);
+draw($tool_content, 2, null, $head_content);
