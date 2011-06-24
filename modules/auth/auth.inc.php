@@ -602,8 +602,9 @@ function process_login()
 	if (isset($_POST['submit'])) {
 		unset($_SESSION['uid']);
 		$_SESSION['user_perso_active'] = false;
-		$sqlLogin = "SELECT user_id, nom, username, password, prenom, statut, email, perso, lang
-                                    FROM user WHERE username COLLATE utf8_bin = " . quote($posted_uname);
+		$sqlLogin = "SELECT user_id, nom, username, password, prenom, statut, email, iduser is_admin, perso, lang
+                                    FROM user LEFT JOIN admin ON user.user_id = admin.iduser
+                                    WHERE username COLLATE utf8_bin = " . quote($posted_uname);
 		$result = db_query($sqlLogin);
 		// cas might have alternative authentication defined
 		$check_passwords = array('pop3', 'imap', 'ldap', 'db', 'shibboleth', 'cas');
@@ -654,13 +655,6 @@ function process_login()
 					break;
 			}
 		} else {
-			$warning = '';
-			$nom = $_SESSION['nom'];
-			$prenom = $_SESSION['prenom'];
-			$email = $_SESSION['email'];
-			$statut = $_SESSION['statut'];
-			$is_admin = $_SESSION['is_admin'];
-                        $uname = $_SESSION['uname'];
                         db_query("INSERT INTO loginout
                                          (loginout.id_user, loginout.ip, loginout.when, loginout.action)
                                          VALUES ($_SESSION[uid], '$_SERVER[REMOTE_ADDR]', NOW(), 'LOGIN')");
@@ -680,12 +674,13 @@ function login($user_info_array, $posted_uname, $pass)
         if ($posted_uname == $user_info_array['username'] and md5($pass) == $user_info_array['password']) {
                 // check if account is active
                 $is_active = check_activity($user_info_array['user_id']);
-                if ($user_info_array['user_id'] == 1) {
+                if ($user_info_array['user_id'] == 1) { // user with id=1 is always active and an admin
                         $is_active = 1;
                         $auth_allow = 1;
                         $_SESSION['is_admin'] = 1;
                 }
-                if ($is_active == 1) {
+                if ($is_active) {
+                        $_SESSION['is_admin'] = !(!($user_info_array['is_admin'])); // double 'not' to handle NULL
                         $_SESSION['uid'] = $user_info_array['user_id'];
                         $_SESSION['uname'] = $user_info_array['username'];
                         $_SESSION['nom'] = $user_info_array['nom'];
@@ -763,6 +758,7 @@ function alt_login($user_info_array, $uname, $pass)
                         $auth_allow = 2;
                 }
                 if ($auth_allow == 1) {
+                        $_SESSION['is_admin'] = !(!($user_info_array['is_admin'])); // double 'not' to handle NULL
                         $_SESSION['uid'] = $user_info_array['user_id'];
                         $_SESSION['uname'] = $user_info_array['username'];
                         $_SESSION['nom'] = $user_info_array['nom'];
@@ -822,7 +818,7 @@ function shib_login()
                                 $r2 = db_query($sqlLogin);
                                 while ($myrow2 = mysql_fetch_array($r2)) {
                                         $_SESSION['uid'] = $myrow2['user_id'];
-                                        $is_admin = $myrow2['is_admin'];
+                                        $is_admin = !(!($myrow2['is_admin'])); // double 'not' to handle NULL
                                         $userPerso = $myrow2['perso'];
                                         $nom = $myrow2['nom'];
                                         $prenom = $myrow2['prenom'];
@@ -903,7 +899,7 @@ function cas_login()
                                 $r2 = db_query($sqlLogin);
                                 while ($myrow2 = mysql_fetch_array($r2)) {
                                         $_SESSION['uid'] = $myrow2['user_id'];
-                                        $is_admin = $myrow2['is_admin'];
+                                        $is_admin = !(!($myrow2['is_admin'])); // double 'not' to handle NULL
                                         $userPerso = $myrow2['perso'];
                                         $nom = $myrow2['nom'];
                                         $prenom = $myrow2['prenom'];

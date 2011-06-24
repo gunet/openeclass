@@ -43,26 +43,15 @@ if (isset($_REQUEST['username'])) {
                 $_SESSION['prenom'] = $myrow['prenom'];
                 $_SESSION['statut'] = $myrow['statut'];
                 $_SESSION['email'] = $myrow['email'];
-                $_SESSION['is_admin'] = $myrow['is_admin'];
+                $_SESSION['is_admin'] = !(!($myrow['is_admin'])); // double 'not' to handle NULL
                 $_SESSION['uname'] = $myrow['username'];
-                $userPerso = $myrow['perso'];
-                $userLanguage = $myrow['lang'];
-	        if ($userPerso == 'yes' and isset($_SESSION['perso_is_active'])) {
+	        if ($myrow['perso'] == 'no' and isset($_SESSION['perso_is_active'])) {
         		$_SESSION['user_perso_active'] = true;
                 } else {
         		$_SESSION['user_perso_active'] = false;
                 }
-        	if ($userLanguage == "en") {
-	        	$_SESSION['langswitch'] = "english";
-	        	$langChangeLang = $_SESSION['langLinkText'] = "Ελληνικά";
-	        	$switchLangURL = $_SESSION['langLinkURL'] = "?localize=el";
-	        } elseif ($userLanguage == "el") {
-        		$_SESSION['langswitch'] = "greek";
-	        	$langChangeLang = $_SESSION['langLinkText'] = "English";
-		        $switchLangURL = $_SESSION['langLinkURL'] = "?localize=en";
-        	}
-                header('Location: ' . $urlServer);
-                exit;
+                $_SESSION['langswitch'] = langcode_to_name($myrow['lang']);
+                redirect_to_home_page();
         } else {
                 $tool_content = "<div class='caution'>" . sprintf($langChangeUserNotFound, $_POST['username']) . "</div>";
         }
