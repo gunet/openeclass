@@ -89,7 +89,7 @@ if (!isset($_POST['submit2'])) {
                 exit;
         }
 }
-
+$_SESSION['user_perso_active'] = false;
 // Make sure 'video' subdirectory exists and is writable
 if (!file_exists('../video')) {
         if (!mkdir('../video')) {
