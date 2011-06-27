@@ -69,12 +69,6 @@ if (!isset($selectResult)) {
 	include "include/not_installed.php";
 }
 
-//if platform admin allows usage of eclass personalised
-//create a session so that each user can activate it for himself.
-if (isset($persoIsActive)) {
-	$_SESSION['perso_is_active'] = $persoIsActive;
-}
-
 // if we try to login... then authenticate user.
 $warning = '';
 if (isset($_SESSION['shib_uname'])) {

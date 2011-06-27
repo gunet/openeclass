@@ -136,6 +136,11 @@ if ($extra_messages) {
         include $extra_messages;
 }
 
+// Make sure personalized profile setting is set (true or false)
+if (!isset($persoIsActive)) {
+        $persoIsActive = false;
+}
+
 // Make sure that the $uid variable isn't faked
 if (isset($_SESSION['uid'])) {
 	$uid = $_SESSION['uid'];

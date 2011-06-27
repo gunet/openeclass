@@ -56,7 +56,7 @@ if (isset($_POST['submit'])) {
         $language = $_SESSION['langswitch'] = langcode_to_name($_POST['userLanguage']);
         $langcode = langname_to_code($language);
         $old_perso_status = $_SESSION['user_perso_active'];
-        $_SESSION['user_perso_active'] = $perso_status;
+        $_SESSION['user_perso_active'] = $persoIsActive && $perso_status == 'no';
         db_query("UPDATE user SET perso = '$perso_status',
                                   lang = '$langcode'
                               WHERE user_id = $uid");
@@ -328,7 +328,7 @@ $tool_content .= selection($access_options, 'email_public', $myrow['email_public
                 selection($access_options, 'phone_public', $myrow['phone_public']) . "</td></tr>";
 
 ##[BEGIN personalisation modification]############
-if (isset($_SESSION['perso_is_active'])) {
+if (isset($persoIsActive)) {
         $tool_content .= "
         <tr>
           <th>$langPerso:</th>

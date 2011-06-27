@@ -658,7 +658,7 @@ function process_login()
                         db_query("INSERT INTO loginout
                                          (loginout.id_user, loginout.ip, loginout.when, loginout.action)
                                          VALUES ($_SESSION[uid], '$_SERVER[REMOTE_ADDR]', NOW(), 'LOGIN')");
-			if (isset($_SESSION['perso_is_active']) and $GLOBALS['userPerso'] == 'no') {
+			if ($GLOBALS['persoIsActive'] and $GLOBALS['userPerso'] == 'no') {
 				$_SESSION['user_perso_active'] = true;
 			}
 			redirect_to_home_page();	
@@ -860,7 +860,7 @@ function shib_login()
         $_SESSION['statut'] = 5;
         $_SESSION['is_admin'] = $is_admin;
         $_SESSION['shib_user'] = 1; // now we are shibboleth user
-        if (isset($_SESSION['perso_is_active']) and $userPerso == 'no') {
+        if ($GLOBALS['persoIsActive'] and $userPerso == 'no') {
                 $_SESSION['user_perso_active'] = true;
         }
 }
@@ -932,7 +932,7 @@ function cas_login()
         $_SESSION['statut'] = 5;
         $_SESSION['is_admin'] = $is_admin;
         $_SESSION['cas_user'] = 1; // now we are cas user
-        if (isset($_SESSION['perso_is_active']) and $userPerso == 'no') {
+        if ($GLOBALS['persoIsActive'] and $userPerso == 'no') {
                 $_SESSION['user_perso_active'] = true;
         }
         mysql_query("INSERT INTO loginout 

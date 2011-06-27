@@ -45,7 +45,7 @@ if (isset($_REQUEST['username'])) {
                 $_SESSION['email'] = $myrow['email'];
                 $_SESSION['is_admin'] = !(!($myrow['is_admin'])); // double 'not' to handle NULL
                 $_SESSION['uname'] = $myrow['username'];
-	        if ($myrow['perso'] == 'no' and isset($_SESSION['perso_is_active'])) {
+	        if ($myrow['perso'] == 'no' and $persoIsActive) {
         		$_SESSION['user_perso_active'] = true;
                 } else {
         		$_SESSION['user_perso_active'] = false;
