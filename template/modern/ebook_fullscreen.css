@@ -51,7 +51,7 @@ body {
         font-family: "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
         font-size: 13px;
         z-index: 1;
-        background-color: #8597A5;
+        background-color: #827C78;
         float: left;
         width: 100%;
 }
@@ -82,13 +82,13 @@ body {
 }
 
 span.glossary, a.glossary {
-        border-bottom: 1px dotted #727266;
+        border-bottom: 1px dotted #827C78;
         color: #cc3333 !important;  
         text-decoration: none !important;
         cursor: help;
 }
 
 a.glossary:hover {
-        border-bottom: 1px solid #727266;
+        border-bottom: 1px solid #827C78;
         cursor: pointer;
 }
