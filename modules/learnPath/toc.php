@@ -43,21 +43,20 @@ $TABLEASSET             = "lp_asset";
 $TABLEUSERMODULEPROGRESS= "lp_user_module_progress";
 
 mysql_select_db($currentCourseID);
-echo '<html>'."\n"
-    .'<head>'."\n"
-    .'<meta http-equiv="Content-Type" content="text/html; charset='.$charset.'">'."\n"
-    .'<link href="lp.css" rel="stylesheet" type="text/css" />'."\n"
-    .'</head>'."\n"
-    .'<body>'."\n"
-    .'<div class="menu_left">'."\n";
+echo "<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN' 'http://www.w3.org/TR/html4/loose.dtd'>
+<html>
+<head><title>-</title>
+    <meta http-equiv='Content-Type' content='text/html; charset=$charset'>
+    <link href='$urlAppend/template/$theme/lp.css' rel='stylesheet' type='text/css' />
+</head>
+<body>
+<div class='menu_left'>";
 
-if($uid)
-{
-	$uidCheckString = "AND UMP.`user_id` = ". (int)$uid;
-}
-else // anonymous
-{
-   $uidCheckString = "AND UMP.`user_id` IS NULL ";
+if ($uid) {
+        $uidCheckString = "AND UMP.`user_id` = ". (int)$uid;
+} else {
+        // anonymous
+        $uidCheckString = "AND UMP.`user_id` IS NULL ";
 }
 
 //  -------------------------- learning path list content ----------------------------
@@ -183,5 +182,5 @@ foreach ($flatElementList as $module)
 
     }
 } // end of foreach
-echo "</ul></body></html>"
-?>
+
+echo "</ul></div></body></html>";
