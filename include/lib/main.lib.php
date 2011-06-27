@@ -413,6 +413,42 @@ function list_departments($department_value)
 	}
 }
 
+
+/********************************************
+// only for http://eclass.uoa.gr
+/*************************************************************
+/*************************************************************
+Show a selection box with division of departments.
+
+The function returns a value( a formatted select box with division of departments)
+and their values as keys in the array/select box
+
+$division_value: the predefined/selected department value
+return $divisions_select : string (a formatted select box)
+****************************************************************/
+
+function list_divisions($department_value)
+{
+
+	$qry = "SELECT id, name FROM division WHERE faculte_id = $department_value ORDER BY name";
+  	$div = db_query($qry);
+  	if($div)
+  	{
+		$divisions_select = "";
+		$divisions = array();
+		while($row = mysql_fetch_array($div))
+		{
+		    	$id = $row['id'];
+	    		$name = $row['name'];
+	    		$divisions[$id] = $name;
+		}
+		$divisions_select = selection($divisions, "division");
+		return $divisions_select;
+  	} else {
+		return 0;
+	}
+}
+
 // Display links to the groups a user is member of
 function user_groups($course_id, $user_id, $format = 'html')
 {
