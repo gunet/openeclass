@@ -49,7 +49,7 @@ a img {
 	top: 0;
 	height: 80px;
 	margin: 0 auto;
-	border-bottom: 3px solid #73849b;
+	border-bottom: 3px solid #687A92;
 	background-color: #ffffff;
 	min-width: 800px;
 }
@@ -59,7 +59,7 @@ a img {
 	width: 100%;
 	font-size: 13px;
 	z-index: 1;
-	background-color: #8597A5;
+	background-color: #687A92;
 	float: left;
 }
 
