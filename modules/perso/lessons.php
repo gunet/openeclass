@@ -127,7 +127,7 @@ function htmlInterface($data, $lesson_fCode)
 		for ($i=0; $i < $data[0]; $i++) {
 			$lesson_content .= "<tr>
 			  <td align='left'><ul class='custom_list'><li>
-			  <b><a href=\"${urlServer}courses/".$data[2][$i]."/\">".q($data[1][$i])."</a> </b><span class='smaller'>(".$lesson_fCode[$i].")</span>
+			  <b><a href=\"${urlServer}courses/".$data[2][$i]."/\">".q($data[1][$i])."</a> </b><span class='smaller'>(".q($lesson_fCode[$i]).")</span>
 			  <div class='smaller'>".q($data[3][$i])."</div></li></ul></td>";
 			  $lesson_content .= "<td align='center'>";
 			if ($data[4][$i] == '5') {
