@@ -323,7 +323,9 @@ function upgrade_course_2_4($code, $lang, $extramessage = '')
                                  WHERE id = 14 AND define_var = 'MODULE_ID_COURSEINFO'");
         db_query("UPDATE accueil SET rubrique = " .
                                         quote($global_messages['langCourseDescription'][$lang]) . "
-                                 WHERE id = 20 AND define_var = 'MODULE_ID_DESCRIPTION'");
+                                        WHERE id = 20 AND define_var = 'MODULE_ID_DESCRIPTION'");
+        db_query("UPDATE accueil SET lien = REPLACE(lien, ' \"target=_blank', '')
+                                 WHERE lien LIKE '% \"target=_blank'");
 	db_query("ALTER TABLE `poll_answer_record` CHANGE `answer_text` `answer_text` TEXT", $code);
 
         // move main documents to central table and if successful drop table
