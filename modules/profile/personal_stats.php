@@ -64,7 +64,7 @@ if (!extension_loaded('gd')) {
 
 		$chart = new PieChart(600, 300);
 		$dataSet = new XYDataSet();
-		$chart_content=0;
+		$chart_content = 0;
 		foreach ($hits as $code => $count) {
 			if ($count >0 ){
 				$chart_content=5;
@@ -78,8 +78,8 @@ if (!extension_loaded('gd')) {
 			mkdir("../../courses/temp", 0777);
 		}
 		$chart_path = 'courses/temp/chart_'.md5(serialize($chart)).'.png';
-		$chart->render($webDir.$chart_path);
 		if ($chart_content) {
+			$chart->render($webDir.$chart_path);
 			$tool_content .= '<p><img src="'.$urlServer.$chart_path.'" /></p>';
 		}
 		$made_chart = true;
