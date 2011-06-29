@@ -88,8 +88,9 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
 	$userid_map = array();
         $user_file = $_POST['restoreThis'] . '/user';
         if (file_exists($user_file)) {
-                $userid_map = restore_users($course_id, unserialize(file_get_contents($user_file)));
                 $cours_user = unserialize(file_get_contents($_POST['restoreThis'] . '/cours_user'));
+                $userid_map = restore_users($course_id, unserialize(file_get_contents($user_file)),
+                                            $cours_user);
                 register_users($course_id, $userid_map, $cours_user);
         }
 
@@ -102,14 +103,11 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
                 mkdir($videodir, 0775);
         }
 	course_index($coursedir, $new_course_code);
-	$tool_content .= "<p>$langCopyFiles $coursedir</p><br /><p>";
+	$tool_content .= "<p>$langCopyFiles $coursedir</p>";
 	$action = 1;
 	// now we include the file for restoring
 	ob_start();
 	include("$restoreThis/backup.php");
-	if ($encoding != 'UTF-8') {
-		db_query('SET NAMES greek');
-        }
 
         load_global_messages();
 
@@ -238,7 +236,7 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
 	if (!file_exists($webDir."courses/garbage/tmpUnzipping"))
 		mkdir($webDir."courses/garbage/tmpUnzipping");
 	rename($webDir."courses/tmpUnzipping", $webDir."courses/garbage/tmpUnzipping/".time()."");
-	$tool_content .= "<br /><center><p><a href='../admin/index.php'>$langBack</p></center>";
+	$tool_content .= "<br /><center><p><a href='../admin/index.php'>$langBack</a></p></center>";
 }
 
 elseif (isset($_POST['do_restore'])) {
@@ -382,16 +380,23 @@ function course_units($title, $comments, $visibility, $order, $resource_units) {
 
 
 // inserting users into the main database
-function user($userid, $name, $surname, $login, $password, $email, $statut, $phone, $department, $registered_at = NULL, $expires_at = NULL, $inst_id = NULL) {
-	global $action, $new_course_code, $course_id, $userid_map, $mysqlMainDb, $course_prefix, $course_addusers, $durationAccount, $version;
-	global $langUserWith, $langAlready, $langWithUsername, $langUserisAdmin, $langUsernameSame, $langUserAlready, $langUName, $langPrevId, $langNewId, $langUserName;
+function user($userid, $name, $surname, $login, $password, $email, $statut, $phone, $department,
+              $registered_at = NULL, $expires_at = NULL, $inst_id = NULL)
+{
+        global $action, $new_course_code, $course_id, $userid_map,
+               $mysqlMainDb, $durationAccount, $version, $langUserWith, $langAlready,
+               $langWithUsername, $langUserisAdmin, $langUsernameSame,
+               $langRestoreUserExists, $langRestoreUserNew,
+               $langUsername, $langPrevId, $langNewId, $langUserName;
 
         $name = inner_unquote($name);
         $surname = inner_unquote($surname);
         $login = inner_unquote($login);
 
-	if (!$action) return;
-	if (!$course_addusers and $statut != 1)  return;
+	if (!$action or $_POST['add_users'] == 'none' or
+            ($_POST['add_users'] == 'prof' and $statut != 1)) {
+                return;
+        }
 	if (isset($userid_map[$userid])) {
 		echo "<br />$langUserWith $userid_map[$userid] $langAlready\n";
 		return;
@@ -403,24 +408,15 @@ function user($userid, $name, $surname, $login, $password, $email, $statut, $pho
 		$expires_at = time() + $durationAccount;
 	}
 
-	// add prefix only to usernames that dont use LDAP login
-	if ($course_prefix) {
-		if ($statut == 1) {
-			echo "<br />$langWithUsername $login $langUserisAdmin".
-				" - $langUsernameSame";
-		} else {
-			$login = $new_course_code.'_'.$login;
-		}
-	}
-
 	$u = mysql_query("SELECT * FROM `$mysqlMainDb`.user WHERE BINARY username=".quote($login));
-	if (mysql_num_rows($u) > 0) 	{
+	if (mysql_num_rows($u) > 0) {
 		$res = mysql_fetch_array($u);
 		$userid_map[$userid] = $res['user_id'];
-		echo "<br />";
-                echo "<b>" . q($login) . "</b>: $langUserAlready. <i>" .
-                     q("$res[1] $res[2]") . "</i>!\n";
-	} else {
+		echo sprintf($langRestoreUserExists,
+                             '<b>' . q($login) . '</b>',
+                             '<i>' . q("$res[prenom] $res[nom]") . '</i>',
+                             '<i>' . q("$name $surname") . '</i>'), '<br>';
+	} elseif (isset($_POST['create_users'])) {
 		if ($version == 1) { // if we come from a archive < 2.x encrypt user password
 			$password = md5($password);
 		}
@@ -441,16 +437,24 @@ function user($userid, $name, $surname, $login, $password, $email, $statut, $pho
 				)).
 				", '')");
 		$userid_map[$userid] = mysql_insert_id();
-	}
+		echo sprintf($langRestoreUserNew,
+                             '<b>' . q($login), '</b>',
+                             '<i>' . q("$name $surname") . '</i>'), '<br>';
+	} else {
+                return;
+        }
 
 	db_query("INSERT INTO `$mysqlMainDb`.cours_user
 		(cours_id, user_id, statut, reg_date)
 		VALUES ($course_id, $userid_map[$userid], $statut, NOW())");
-	echo "<br /> $langUserName=$login, $langPrevId=$userid, $langNewId=$userid_map[$userid]\n";
+	echo q("$langUsername=$login, $langPrevId=$userid, $langNewId=$userid_map[$userid]"),
+             "<br>\n";
 }
 
-function query($sql) {
+function query($sql)
+{
 	global $action, $new_course_code, $encoding;
+
         if (!$action) return;
         // Skip tables not used any longer
         if (preg_match('/^(CREATE TABLE|INSERT INTO) `(stat_accueil|users)`/', $sql)) {
@@ -467,8 +471,10 @@ function query($sql) {
 
 // function for inserting info about user group
 function group($userid, $team, $status, $role) {
-	global $action, $userid_map, $new_course_code, $course_addusers;
-	if (!$action or !$course_addusers or !isset($userid_map[$userid])) {
+	global $action, $userid_map, $new_course_code;
+
+	if (!$action or $_POST['add_users'] == 'none' or
+            !isset($userid_map[$userid])) {
 		return;
 	}
 	mysql_select_db($new_course_code);
@@ -486,48 +492,56 @@ function group($userid, $team, $status, $role) {
 }
 
 // functions for inserting info about dropbox
-function dropbox_file($userid, $filename, $filesize, $title, $description, $author, $uploadDate, $lastUploadDate) {
-	global $action,$userid_map, $new_course_code, $course_addusers;
-	if (!$action) return;
-	if (!$course_addusers) return;
+function dropbox_file($userid, $filename, $filesize, $title, $description, $author, $uploadDate, $lastUploadDate)
+{
+	global $action, $userid_map, $new_course_code;
+
+	if (!$action or $_POST['add_users'] == 'none' or
+            !isset($userid_map[$userid])) {
+		return;
+	}
 	mysql_select_db($new_course_code);
-	db_query("INSERT into dropbox_file
-		(uploaderId,filename,filesize,title,description,author,uploadDate,lastUploadDate)
-		VALUES (".
-		join(", ", array(
-			quote($userid_map[$userid]),
-			quote($filename),
-			quote($filesize),
-			quote($title),
-			quote($description),
-			quote($author),
-			quote($uploadDate),
-			quote($lastUploadDate))).
-			")");
+	db_query("INSERT into dropbox_file (uploaderId, filename, filesize, title, description,
+                                            author, uploadDate, lastUploadDate)
+                         VALUES (".
+                         join(', ', array($userid_map[$userid],
+                                          quote($filename),
+                                          quote($filesize),
+                                          quote($title),
+                                          quote($description),
+                                          quote($author),
+                                          quote($uploadDate),
+                                          quote($lastUploadDate))) . ')');
 }
 
-function dropbox_person($fileId, $personId) {
-	global $action, $userid_map, $new_course_code, $course_addusers;
-	if (!$action) return;
-	if (!$course_addusers) return;
+function dropbox_person($file_id, $person_id)
+{
+	global $action, $userid_map, $new_course_code;
+
+	if (!$action or $_POST['add_users'] == 'none' or
+            !isset($userid_map[$person_id])) {
+		return;
+	}
 	mysql_select_db($course_code);
-	db_query("INSERT into dropbox_person(fileId, personId)
-		VALUES (".
-		join(", ", array(
-			quote($fileId),
-			quote($userid_map[$personId]))).")");
+        $file_id = intval($file_id);
+        $new_uid = $userid_map[$person_id];
+	db_query("INSERT INTO dropbox_person (fileId, personId)
+                         VALUES ($file_id, $new_uid)");
 }
 
-function dropbox_post($fileId, $recipientId) {
+function dropbox_post($file_id, $recipient_id)
+{
 	global $action, $userid_map, $new_course_code, $course_addusers;
-	if (!$action) return;
-	if (!$course_addusers) return;
+
+	if (!$action or $_POST['add_users'] == 'none' or
+            !isset($userid_map[$recipient_id])) {
+		return;
+	}
 	mysql_select_db($new_course_code);
-	db_query("INSERT into dropbox_post (fileId, recipientId)
-		VALUES (".
-		join(", ", array(
-			quote($fileId),
-			quote($userid_map[$recipientId]))).")");
+        $file_id = intval($file_id);
+        $new_uid = $userid_map[$recipient_id];
+	db_query("INSERT INTO dropbox_post (fileId, recipientId)
+                         VALUES ($file_id, $new_uid)");
 }
 
 
@@ -538,23 +552,26 @@ function assignment_submit($userid, $assignment_id, $submission_date,
 	$grade_submission_ip)
 {
 	global $action, $userid_map, $new_course_code, $course_addusers;
-	if (!$action) return;
-	if (!$course_addusers) return;
+
+	if (!$action or $_POST['add_users'] == 'none' or
+            !isset($userid_map[$recipient_id])) {
+		return;
+	}
+
 	mysql_select_db($new_course_code);
 	$values = array();
 	foreach (array($assignment_id, $submission_date,
-		$submission_ip, $file_path, $file_name, $comments,
-		$grade, $grade_comments, $grade_submission_date,
-		$grade_submission_ip) as $v) {
+                       $submission_ip, $file_path, $file_name, $comments,
+                       $grade, $grade_comments, $grade_submission_date,
+                       $grade_submission_ip) as $v) {
 		$values[] = quote($v);
 	}
-	db_query("INSERT into assignment_submit
-		(uid, assignment_id, submission_date,
-		 submission_ip, file_path, file_name,
-		 comments, grade, grade_comments, grade_submission_date,
-		 grade_submission_ip) VALUES (".
-		 quote($userid_map[$userid]). ", ".
-		 join(", ", $values). ")");
+	db_query("INSERT INTO assignment_submit (uid, assignment_id, submission_date,
+                                                 submission_ip, file_path, file_name,
+                                                 comments, grade, grade_comments,
+                                                 grade_submission_date, grade_submission_ip)
+                         VALUES (" . quote($userid_map[$userid]). ", ".
+                                     join(', ', $values) . ')');
 }
 
 // creating course and inserting entries into the main database
@@ -570,8 +587,8 @@ function create_course($code, $lang, $title, $desc, $fac, $vis, $prof, $type) {
         }
 	db_query("INSERT into `$mysqlMainDb`.cours
 		(code, languageCourse, intitule, description, faculteid, visible, titulaires, fake_code, type)
-		VALUES (".
-		join(", ", array(
+		VALUES (" .
+		join(', ', array(
 			quote($repertoire),
 			quote($lang),
 			quote($title),
@@ -581,7 +598,7 @@ function create_course($code, $lang, $title, $desc, $fac, $vis, $prof, $type) {
 			quote($prof),
 			quote($code),
 			quote($type))).
-		")");
+                ')');
         $cid = mysql_insert_id();
 
 	if (!db_query("CREATE DATABASE `$repertoire`")) {
@@ -591,7 +608,7 @@ function create_course($code, $lang, $title, $desc, $fac, $vis, $prof, $type) {
 	return array($repertoire, $cid);
 }
 
-// creating course index.php file
+// Create course index.php file
 function course_index($dir, $code) {
 	$f = fopen("$dir/index.php", "w");
 	fputs($f, "<?php
@@ -628,8 +645,7 @@ function type_select($current)
 {
 	global $langpre, $langpost, $langother;
 
-	$ret = "";
-	$ret .= "<select name='course_type'>\n";
+	$ret = "<select name='course_type'>\n";
 	foreach (array($langpre => 'pre', $langpost => 'post', $langother => 'other') as $text => $type) {
 		if($type == $current) {
 			$ret .= "<option value='$type' selected>$text</option>\n";
@@ -645,9 +661,8 @@ return $ret;
 function faculty_select($current)
 {
 	global $mysqlMainDb;
-	$ret = "";
 
-	$ret .= "<select name='course_fac'>\n";
+	$ret = "<select name='course_fac'>\n";
 	$res = mysql_query("SELECT id, name FROM `$mysqlMainDb`.faculte ORDER BY number");
 	while ($fac = mysql_fetch_array($res)) {
 		if($fac['name'] == $current) {
@@ -675,12 +690,14 @@ function unpack_zip_show_files($zipfile)
         $retString .= "<br />$langEndFileUnzip<br /><br />$langLesFound
                        <form action='$_SERVER[PHP_SELF]' method='post'>
                          <ol>";
+        $checked = ' checked';
         foreach (find_backup_folders($destdir) as $folder) {
                 $path = q($folder['path'] . '/' . $folder['dir']);
                 $file = q($folder['dir']);
                 $course = q(preg_replace('|^.*/|', '', $folder['path']));
-                $retString .= "<li>$langLesFiles <input type='radio' name='restoreThis' value='$path' />
-                                   <b>$course</b> ($file)</li>\n";
+                $retString .= "<li>$langLesFiles <input type='radio' name='restoreThis' value='$path'$checked>
+                        <b>$course</b> ($file)</li>\n";
+                $checked = '';
 	}
         $retString .= "</ol><br /><input type='submit' name='do_restore' value='$langRestore' /></form>";
 	chdir($webDir . "modules/course_info");
@@ -803,8 +820,9 @@ function course_details_form($code, $title, $fac, $prof, $type, $lang, $vis, $de
 {
         global $langInfo1, $langInfo2, $langCourseCode, $langLanguage, $langTitle,
                $langCourseDescription, $langFaculty, $langCourseOldFac, $langCourseVis,
-               $langTeacher, $langCourseType, $langUsersWillAdd, $langUserPrefix,
-               $langOk;
+               $langTeacher, $langCourseType, $langUsersWillAdd,
+               $langOk, $langAll, $langsTeachers, $langMultiRegType, $langActivate,
+               $langNone;
 
 	// find available languages
 	$languages = array();
@@ -817,63 +835,95 @@ function course_details_form($code, $title, $fac, $prof, $type, $lang, $vis, $de
                 }
 	}
 
-        return "<form action='$_SERVER[PHP_SELF]' method='post'>
+        return "<p>$langInfo1</p>
+                <p>$langInfo2</p>
+                <form action='$_SERVER[PHP_SELF]' method='post'>
                 <table width='99%' class='tbl'><tbody>
-                   <tr><td align='justify' colspan='2'>$langInfo1</td></tr>
-                   <tr><td align='justify' colspan='2'>$langInfo2</td></tr>
                    <tr><td>&nbsp;</td></tr>
-                   <tr><td>$langCourseCode:</td>
+                   <tr><th>$langCourseCode:</th>
                        <td><input type='text' name='course_code' value='".q($code)."' /></td></tr>
-                   <tr><td>$langLanguage:</td>
+                   <tr><th>$langLanguage:</th>
                        <td>".selection($languages, 'course_lang', $lang)."</td></tr>
-                   <tr><td>$langTitle:</td>
+                   <tr><th>$langTitle:</th>
                        <td><input type='text' name='course_title' value='".q($title)."' size='50' /></td></tr>
-                   <tr><td>$langCourseDescription:</td>
+                   <tr><th>$langCourseDescription:</th>
                        <td><input type='text' name='course_desc' value='".q($desc)."' size='50' /></td></tr>
-                   <tr><td>$langFaculty:</td><td>".faculty_select($fac)."</td></tr>
-                   <tr><td>$langCourseOldFac:</td><td>$fac</td></tr>
-                   <tr><td>$langCourseVis:</td><td>".visibility_select($vis)."</td></tr>
-                   <tr><td>$langTeacher:</td>
+                   <tr><th>$langFaculty:</th><td>".faculty_select($fac)."</td></tr>
+                   <tr><th>$langCourseOldFac:</th><td>$fac</td></tr>
+                   <tr><th>$langCourseVis:</th><td>".visibility_select($vis)."</td></tr>
+                   <tr><th>$langTeacher:</th>
                        <td><input type='text' name='course_prof' value='$prof' size='50' /></td></tr>
-                   <tr><td>$langCourseType:</td><td>".type_select($type)."</td></tr>
+                   <tr><th>$langCourseType:</th><td>".type_select($type)."</td></tr>
                    <tr><td>&nbsp;</td></tr>
-                   <tr><td colspan='2'><input type='checkbox' name='course_addusers' />$langUsersWillAdd </td></tr>
-                   <tr><td colspan='2'><input type='checkbox' name='course_prefix' />$langUserPrefix</td></tr>
+                   <tr><th>$langUsersWillAdd:</th>
+                       <td><input type='radio' name='add_users' value='all' id='add_users_all'>
+                           <label for='add_users_all'>$langAll</label><br>
+                           <input type='radio' name='add_users' value='prof' id='add_users_prof' checked>
+                           <label for='add_users_prof'>$langsTeachers</label><br>
+                           <input type='radio' name='add_users' value='none' id='add_users_none'>
+                           <label for='add_users_none'>$langNone</label></td></tr>
+                   <tr><th>$langMultiRegType:</th>
+                       <td><input type='checkbox' name='create_users' value='1' id='create_users'>
+                           <label for='create_users'>$langActivate</label></td></tr>
                    <tr><td>&nbsp;</td></tr>
-                   <tr><td>
+                   <tr><td colspan='2'>
                       <input type='submit' name='create_restored_course' value='$langOk' />
                       <input type='hidden' name='restoreThis' value='$_POST[restoreThis]' /></td></tr>
                 </tbody></table>
                 </form>";
 }
 
-function restore_users($course_id, $users) {
-	global $mysqlMainDb, $course_prefix, $course_addusers, $durationAccount, $version,
-	       $langUserWith, $langAlready, $langWithUsername, $langUserisAdmin, $langUsernameSame,
-               $langUserAlready, $langUName, $tool_content;
+function restore_users($course_id, $users, $cours_user)
+{
+	global $tool_content, $mysqlMainDb, $durationAccount, $version,
+               $langUserWith, $langWithUsername, $langUserisAdmin,
+               $langUsernameSame, $langRestoreUserExists;
 
         $userid_map = array();
+        if ($_POST['add_users'] == 'none') {
+                return $userid_map;
+        }
+
+        if ($_POST['add_users'] == 'prof') {
+                $add_only_profs = true;
+                foreach ($cours_user as $cu_info) {
+                        $is_prof[$cu_info['user_id']] = ($cu_info['statut'] == 1);
+                }
+        } else {
+                $add_only_profs = false;
+        }
+
         foreach ($users as $data) {
+                if ($add_only_profs and !$is_prof[$data['user_id']]) {
+                        continue;
+                }
                 $u = mysql_query("SELECT * FROM `$mysqlMainDb`.user WHERE BINARY username=".quote($data['username']));
                 if (mysql_num_rows($u) > 0) {
                         $res = mysql_fetch_array($u);
                         $userid_map[$data['user_id']] = $res['user_id'];
-                        $tool_content .= "<p><b>" . q($data['username']) . "</b>: $langUserAlready. <i>" .
-                                         q("$res[prenom] $res[nom]") . "</i>!</p>\n";
-                } else {
-                        if ($course_addusers) {
-                                db_query("INSERT INTO `$mysqlMainDb`.user
-                                                 SET nom = ".quote($data['nom']).",
-                                                     prenom = ".quote($data['prenom']).",
-                                                     username = ".quote($data['username']).",
-                                                     password = ".quote($data['password']).",
-                                                     email = ".quote($data['email']).",
-                                                     statut = ".quote($data['statut']).",
-                                                     phone = ".quote($data['phone']).",
-                                                     department = ".quote($data['department']).",
-                                                     registered_at = ".quote($data['registered_at']));
-                                $userid_map[$userid] = mysql_insert_id();
-                        }
+                        $tool_content .= "<p>" .
+                                         sprintf($langRestoreUserExists,
+                                                 '<b>' . q($data['username']) . '</b>',
+                                                 '<i>' . q("$res[prenom] $res[nom]") . '</i>',
+                                                 '<i>' . q("$data[prenom] $data[nom]") . '</i>') .
+                                         "</p>\n";
+                } elseif (isset($_POST['create_users'])) {
+                        db_query("INSERT INTO `$mysqlMainDb`.user
+                                         SET nom = ".quote($data['nom']).",
+                                             prenom = ".quote($data['prenom']).",
+                                             username = ".quote($data['username']).",
+                                             password = ".quote($data['password']).",
+                                             email = ".quote($data['email']).",
+                                             statut = ".quote($data['statut']).",
+                                             phone = ".quote($data['phone']).",
+                                             department = ".quote($data['department']).",
+                                             registered_at = ".quote($data['registered_at']));
+                        $userid_map[$userid] = mysql_insert_id();
+                        $tool_content .= "<p>" .
+                                         sprintf($langRestoreUserNew,
+                                                 '<b>' . q($data['username']) . '</b>',
+                                                 '<i>' . q("$data[prenom] $data[nom]") . '</i>') .
+                                         "</p>\n";
                 }
 
         }
