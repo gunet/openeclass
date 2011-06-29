@@ -35,7 +35,7 @@
 
 include '../../include/baseTheme.php';
 include '../../include/sendMail.inc.php';
-$tool_content = "";	
+
 $nameTools = $langUserDetails;
 $navigation[] = array("url"=>"registration.php", "name"=> $langNewUser);
 
@@ -217,6 +217,7 @@ if (!isset($_POST['submit'])) {
 	$_SESSION['prenom'] = $prenom;
 	$_SESSION['nom'] = $nom;
 	$_SESSION['uname'] = $uname;
+	$_SESSION['user_perso_active'] = $GLOBALS['persoIsActive'];
 	// registration form
 	$tool_content .= "<p>$langDear " . q("$prenom $nom") . ",</p>" .
 			"<div class='success'>" .
