@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language en
-// Generated 2011-06-23 11:53:32
+// Generated 2011-06-29 17:35:22
 
 $langIntro = "The <b>$siteName</b> platform is a complete eCourses Management System supporting the Asynchronous eLearning Service in <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
 $langVersion = "$siteName version";
@@ -1118,7 +1118,7 @@ $langCourseCode = "Code";
 $langWelcomeStud = "Select \"Courses list\"to review the available courses.";
 $langWelcomeProf = "Select \"Create course site\"to create your on-line courses.";
 $langWelcomeSelect = "Select";
-$langWelcomeStudPerso = "<b>\"Courses list\"</b> to review the available courses.";
+$langWelcomeStudPerso = "<b>\"$langListCourses\"</b> to review the available courses.";
 $langWelcomeProfPerso = "<b>\"Create course site\"</b> to create your on-line courses.";
 $langTitleInstall = "Open eClass Install Wizard";
 $langWelcomeWizard = "Welcome to installation wizard of Open eClass!";
@@ -2813,3 +2813,51 @@ $langUserAltAuth = "Your username is authenticated with alternative method. Plea
 $langProfileInfoPrivate = 'private';
 $langProfileInfoProfs = 'available to '.$langsTeachers;
 $langProfileInfoUsers = 'available to all';
+$langMetaOther = "Other";
+$langMetaNarrativetext = "Narrative text";
+$langMetaPhoto = "Photo";
+$langMetaImage = "Image";
+$langMetaFigure = "Figure";
+$langMetaDiagram = "Diagram";
+$langMetaGraph = "Graph";
+$langMetaTable = "Table";
+$langMetaSound = "Sound";
+$langMetaMusic = "Music";
+$langMetaNarration = "Narration";
+$langMetaVideo = "Video";
+$langMetaAnimation = "Animation";
+$langMeta3danimation = "3D Animation";
+$langMetaSlide = "Slide";
+$langMetaPresentation = "Presentation";
+$langMetaLecture = "Lecture";
+$langMetaTextbook = "Textbook / Book Section";
+$langMetaLearningscenario = "Learning scenario";
+$langMetaSimulation = "Simulation";
+$langMetaExperiment = "Experiment";
+$langMetaMicroexperiment = "Micro-experiment";
+$langMetaMap = "Map";
+$langMetaInteractivemap = "Interactive map";
+$langMetaExploration = "Exploration";
+$langMetaInteractivegame = "Interactive game";
+$langMetaConceptualmap = "Conceptual map";
+$langMetaIndex = "Index";
+$langMetaProblemstatement = "Problem statement";
+$langMetaSelfassessment = "Self-assessment";
+$langMetaQuestionnaire = "Questionnaire";
+$langMetaQuiz = "Quiz / Test";
+$langMetaExam = "Exam";
+$langMetaExercise = "Exercise";
+$langMetaTeacher = "Teacher";
+$langMetaLearner = "Learner";
+$langMetaAuthor = "Author";
+$langMetaManager = "Manager";
+$langMetaNursery = "Nursery school";
+$langMetaPrimary = "Primary school";
+$langMetaSecondary = "Secondary school";
+$langMetaHighschool = "High school";
+$langMetaTechnical = "Technical - vocational education";
+$langMetaTraining = "Special education";
+$langMetaHighereducation = "Higher education";
+$langEmailSettings = 'Email Settings';
+$langRestoreUserExists = "%s: Account already exists. Current name: %s. Archive name: %s.";
+$langRestoreUserNew = "%s: Account created. Full name: %s";
