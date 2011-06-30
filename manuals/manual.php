@@ -104,11 +104,11 @@ $tool_content .= "
   </tr>
   <tr>
     <th width='16'><img src='$themeimg/pdf.png' width='16' height='16' alt='icon'></th>
-    <td> <a href='http://www.openeclass.org/guides/pdf/forum_teacher_view.pdf' target='_blank'>$langAdministratorCourse</a></td>
+    <td> <a href='http://www.openeclass.org/guides/pdf/forum_teacher_view.pdf' target='_blank'>$langAdministratorForum</a></td>
   </tr>
   <tr>
     <th width='16'><img src='$themeimg/pdf.png' width='16' height='16' alt='icon'></th>
-    <td> <a href='http://www.openeclass.org/guides/pdf/manage_groups.pdf' target='_blank'>$langAdministratorCourse</a></td>
+    <td> <a href='http://www.openeclass.org/guides/pdf/manage_groups.pdf' target='_blank'>$langAdministratorGroup</a></td>
   </tr>
 
 </table>
@@ -135,7 +135,7 @@ $tool_content .= "
   </tr>
   <tr>
     <th width='16'><img src='$themeimg/pdf.png' width='16' height='16' alt='icon'></th>
-    <td><a href='http://www.openeclass.org/guides/pdf/forum_student_view.pdf' target='_blank'>$langIntroToCourse</a>
+    <td><a href='http://www.openeclass.org/guides/pdf/forum_student_view.pdf' target='_blank'>$langForumParticipation</a>
   </tr>
 
 </table>

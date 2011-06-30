@@ -1867,7 +1867,10 @@ $langTutorials = "Οδηγοί";
 $langTut = "Οδηγός";
 $langScormVideo = "Βιντεοπαρουσίαση";
 $langIntroToCourse = "Γνωριμία με το Ηλεκτρονικό Μάθημα";
+$langForumParticipation = 'Συμμετοχή σε Περιοχές Συζητήσεων';
 $langAdministratorCourse = "Διαχείριση Ηλεκτρονικού Μαθήματος";
+$langAdministratorForum = 'Διαχείριση Περιοχών Συζητήσεων';
+$langAdministratorGroup = 'Διαχείριση Ομάδων Εκπαιδευόμενων';
 $langCreateAccount = "Δημιουργία Λογαριασμού";
 $langAllTutorials = "Γενικοί οδηγοί";
 

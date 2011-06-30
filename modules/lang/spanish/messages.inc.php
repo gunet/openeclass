@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language es
-// Generated 2011-06-29 17:35:22
+// Generated 2011-06-30 19:50:00
 
 $langIntro = "El <b>$siteName</b> platforma es un completo Sistema de Administración eCursos que soporta el Servicio Asincrónico de eAprendizaje en <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
 $langVersion = "$siteName versión";
@@ -2799,3 +2799,6 @@ $langMetaHighereducation = "Higher education";
 $langEmailSettings = 'Email Settings';
 $langRestoreUserExists = "%s: Account already exists. Current name: %s. Archive name: %s.";
 $langRestoreUserNew = "%s: Account created. Full name: %s";
+$langForumParticipation = 'Forum Participation';
+$langAdministratorForum = 'Forum Management';
+$langAdministratorGroup = 'Group Management';

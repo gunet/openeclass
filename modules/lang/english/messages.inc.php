@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language en
-// Generated 2011-06-29 17:35:22
+// Generated 2011-06-30 19:49:59
 
 $langIntro = "The <b>$siteName</b> platform is a complete eCourses Management System supporting the Asynchronous eLearning Service in <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
 $langVersion = "$siteName version";
@@ -2861,3 +2861,6 @@ $langMetaHighereducation = "Higher education";
 $langEmailSettings = 'Email Settings';
 $langRestoreUserExists = "%s: Account already exists. Current name: %s. Archive name: %s.";
 $langRestoreUserNew = "%s: Account created. Full name: %s";
+$langForumParticipation = 'Forum Participation';
+$langAdministratorForum = 'Forum Management';
+$langAdministratorGroup = 'Group Management';
