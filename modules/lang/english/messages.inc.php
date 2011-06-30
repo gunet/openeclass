@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language en
-// Generated 2011-06-30 19:49:59
+// Generated 2011-06-30 19:56:35
 
 $langIntro = "The <b>$siteName</b> platform is a complete eCourses Management System supporting the Asynchronous eLearning Service in <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
 $langVersion = "$siteName version";
@@ -1479,11 +1479,11 @@ $langPassCannotChange3 = "for more information.";
 $langIntroMan = "Here you can find useful manuals about platform $siteName.";
 $langFinalDesc = "$siteName description";
 $langShortDesc = "$siteName short description";
-$langManS = "".$langStudent."Manual";
-$langManT = "".$langTeacher."Manual";
+$langManS = "$langStudent Manual";
+$langManT = "$langTeacher Manual";
 $langOr = "or";
 $langNote = "Note";
-$langAcrobat = "In order to read PDF files, you can use Acrobat Reader";
+$langAcrobat = "In order to read PDF files, you can use %sAcrobat Reader%s or %sother free software available here%s.";
 $langWhere = "which you can find";
 $langHere = "here";
 $langSelectFac = "Select faculty";

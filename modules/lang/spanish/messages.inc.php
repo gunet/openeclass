@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language es
-// Generated 2011-06-30 19:50:00
+// Generated 2011-06-30 19:56:36
 
 $langIntro = "El <b>$siteName</b> platforma es un completo Sistema de Administración eCursos que soporta el Servicio Asincrónico de eAprendizaje en <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
 $langVersion = "$siteName versión";
