@@ -102,6 +102,15 @@ $tool_content .= "
     <th width='16'><img src='$themeimg/pdf.png' width='16' height='16' alt='icon'></th>
     <td> <a href='http://www.openeclass.org/guides/pdf/manage_course.pdf' target='_blank'>$langAdministratorCourse</a></td>
   </tr>
+  <tr>
+    <th width='16'><img src='$themeimg/pdf.png' width='16' height='16' alt='icon'></th>
+    <td> <a href='http://www.openeclass.org/guides/pdf/forum_teacher_view.pdf' target='_blank'>$langAdministratorCourse</a></td>
+  </tr>
+  <tr>
+    <th width='16'><img src='$themeimg/pdf.png' width='16' height='16' alt='icon'></th>
+    <td> <a href='http://www.openeclass.org/guides/pdf/manage_groups.pdf' target='_blank'>$langAdministratorCourse</a></td>
+  </tr>
+
 </table>
 
 
@@ -124,6 +133,11 @@ $tool_content .= "
     <th width='16'><img src='$themeimg/pdf.png' width='16' height='16' alt='icon'></th>
     <td><a href='http://www.openeclass.org/guides/pdf/view_course.pdf' target='_blank'>$langIntroToCourse</a>
   </tr>
+  <tr>
+    <th width='16'><img src='$themeimg/pdf.png' width='16' height='16' alt='icon'></th>
+    <td><a href='http://www.openeclass.org/guides/pdf/forum_student_view.pdf' target='_blank'>$langIntroToCourse</a>
+  </tr>
+
 </table>
 ";
 
