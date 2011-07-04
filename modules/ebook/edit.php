@@ -273,7 +273,8 @@ function find_html_files()
         $disk_paths = array();
         $public_paths = array();
         $file_ids = array();
-        $q = db_query("SELECT id, path, filename FROM document WHERE $group_sql AND format = 'html' OR format = 'htm'");
+        $q = db_query("SELECT id, path, filename FROM document
+                              WHERE $group_sql AND (format = 'html' OR format = 'htm')");
         while ($row = mysql_fetch_array($q)) {
                 $disk_paths[] = $row['path'];
                 $public_paths[] = public_file_path($row['path'], $row['filename']);
