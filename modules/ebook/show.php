@@ -128,7 +128,7 @@ while ($row = mysql_fetch_array($q)) {
 			$next_section_id = $display_id;
 			$next_title = $row['subsection_title'];
 		}
-	}	
+	}
 	$last_section_id = $sid;
 	$last_display_id = $display_id;
 	$last_title = $row['subsection_title'];
@@ -179,19 +179,21 @@ $ebook_head = '';
 $dom = new DOMDocument();
 @$dom->loadHTMLFile($basedir . $subsection_path[$current_sid][$current_ssid]);
 
-$xpath = new DOMXpath($dom);
-$textNodes = $xpath->query('//text()');
-foreach ($textNodes as $textNode) {
-	if (!empty($textNode->data)) {
-	        $new_contents = glossary_expand($textNode->data);
-		if ($new_contents != $textNode->data) {
-                        $newdoc = new DOMDocument();
-                        $newdoc->loadXML('<span>' . $new_contents . '</span>');
-			$newnode = $dom->importNode($newdoc->getElementsByTagName('span')->item(0), true);
-			$textNode->parentNode->replaceChild($newnode, $textNode);
+if (isset($_SESSION['glossary_terms_regexp']) and !empty($_SESSION['glossary_terms_regexp'])) {
+	$xpath = new DOMXpath($dom);
+	$textNodes = $xpath->query('//text()');
+	foreach ($textNodes as $textNode) {
+		if (!empty($textNode->data)) {
+			$new_contents = glossary_expand($textNode->data);
+			if ($new_contents != $textNode->data) {
+				$newdoc = new DOMDocument();
+				$newdoc->loadXML('<span>' . $new_contents . '</span>');
+				$newnode = $dom->importNode($newdoc->getElementsByTagName('span')->item(0), true);
+				$textNode->parentNode->replaceChild($newnode, $textNode);
+			}
 		}
 	}
-}        
+}
 
 foreach (array('link', 'style', 'script') as $tagname) {
         foreach ($dom->getElementsByTagName($tagname) as $element) {
