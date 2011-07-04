@@ -1252,7 +1252,7 @@ function video_url($table, $url, $path)
 {
 	global $code_cours;
         if ($table == 'video') {
-                return $GLOBALS['urlServer'] . 'modules/video/video.php?course='.$code_cours.'&amp;action2=download&amp;id=' . $path;
+                return $GLOBALS['urlServer'] . 'modules/video/video.php?course='.$code_cours.'&amp;action=download&amp;id=' . $path;
         } else {
                 return $url;
 
