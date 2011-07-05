@@ -133,7 +133,7 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
                         upgrade_course_2_4($new_course_code, $course_lang);
                 }
                 if ($eclass_version < '2.5') {
-                    upgrade_course_2_5($new_course_code, $course_lang);
+                    list($video_map, $videolinks_map) = upgrade_course_2_5($new_course_code, $course_lang, null, true);
                 }
 	}
         convert_description_to_units($new_course_code, $course_id);
@@ -222,10 +222,12 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
                         array('map' => array('section_id' => $ebook_section_map,
                                              'file_id' => $document_map),
                               'return_mapping' => 'id'));
-                $video_map = restore_table($restoreThis, 'video',
+                if (file_exists("$restoreThis/video"))
+                    $video_map = restore_table($restoreThis, 'video',
                         array('set' => array('course_id' => $course_id),
                               'return_mapping' => 'id'));
-                $videolinks_map  = restore_table($restoreThis, 'videolinks',
+                if (file_exists("$restoreThis/videolinks"))
+                    $videolinks_map  = restore_table($restoreThis, 'videolinks',
                         array('set' => array('course_id' => $course_id),
                               'return_mapping' => 'id'));
                 $unit_map = restore_table($restoreThis, 'course_units',

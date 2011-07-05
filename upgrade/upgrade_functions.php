@@ -307,7 +307,7 @@ function upgrade_course($code, $lang)
 	upgrade_course_2_5($code, $lang);
 }
 
-function upgrade_course_2_5($code, $lang, $extramessage = '')
+function upgrade_course_2_5($code, $lang, $extramessage = '', $return_mapping = false)
 {
     global $langUpgCourse, $mysqlMainDb, $global_messages, $webDir;
     
@@ -316,39 +316,87 @@ function upgrade_course_2_5($code, $lang, $extramessage = '')
     echo "<hr><p>$langUpgCourse <b>$code</b> (2.5) $extramessage<br>";
     flush();
     
-    // move video to central table and if successful drop table
+    $video_map = array();
+    $videolinks_map = array();
+    
+    // move video to central table and drop table
     if (mysql_table_exists($code, 'video')) {
         list($video_id) = mysql_fetch_row(db_query("SELECT MAX(id) FROM `$mysqlMainDb`.video"));
-        if (!$video_id) {
+        if (!$video_id)
             $video_id = 1;
+        
+        if ($return_mapping) {
+            $result = db_query("SELECT * FROM video ORDER by id");
+            while ($row = mysql_fetch_array($result)) {
+                $oldid = intval($row['id']);
+                $newid = intval($video_id) + $oldid;
+                $video_map[$oldid] = $newid;
+                
+                db_query("INSERT INTO `$mysqlMainDb`.video
+                                (`id`, `course_id`, `path`, `url`, `title`, `description`, `creator`, `publisher`, `date`)
+                				VALUES
+                				(".autoquote($newid) .", 
+                				 ".autoquote($course_id) .", 
+                				 ".autoquote($row['path']) .", 
+                				 ".autoquote($row['url']) .", 
+                				 ".autoquote($row['titre']) .", 
+                				 ".autoquote($row['description']) .", 
+                				 ".autoquote($row['creator']) .", 
+                				 ".autoquote($row['publisher']) .", 
+                				 ".autoquote($row['date']) .")");
+            }
+        } else {
+            db_query("INSERT INTO `$mysqlMainDb`.video
+                                (`id`, `course_id`, `path`, `url`, `title`, `description`, `creator`, `publisher`, `date`)
+                                SELECT $video_id + id, $course_id, `path`, `url`, `titre`, `description`, `creator`, 
+                                `publisher`, `date` FROM video");
         }
-        db_query("INSERT INTO `$mysqlMainDb`.video
-                            (`id`, `course_id`, `path`, `url`, `title`, `description`, `creator`, `publisher`, `date`)
-                            SELECT $video_id + id, $course_id, `path`, `url`, `titre`, `description`, `creator`, 
-                            `publisher`, `date` FROM video")
-        and
         db_query("DROP TABLE video");
         db_query("UPDATE `$mysqlMainDb`.course_units AS units, `$mysqlMainDb`.unit_resources AS res
                             SET res_id = res_id + $video_id
                             WHERE units.id = res.unit_id AND course_id = $course_id AND type = 'video'");
     }
     
-    // move videolinks to central table and if successful drop table
+    // move videolinks to central table and drop table
     if (mysql_table_exists($code, 'videolinks')) {
         list($link_id) = mysql_fetch_row(db_query("SELECT MAX(id) FROM `$mysqlMainDb`.videolinks"));
-        if (!$link_id) {
+        if (!$link_id)
             $link_id = 1;
+
+        if ($return_mapping) {
+            $result = db_query("SELECT * FROM videolinks ORDER by id");
+            while ($row = mysql_fetch_array($result)) {
+                $oldid = intval($row['id']);
+                $newid = intval($link_id) + $oldid;
+                $videolinks_map[$oldid] = $newid;
+                
+                db_query("INSERT INTO `$mysqlMainDb`.videolinks
+                                (`id`, `course_id`, `url`, `title`, `description`, `creator`, `publisher`, `date`)
+                				VALUES
+                				(".autoquote($newid) .", 
+                				 ".autoquote($course_id) .", 
+                				 ".autoquote($row['url']) .", 
+                				 ".autoquote($row['titre']) .", 
+                				 ".autoquote($row['description']) .", 
+                				 ".autoquote($row['creator']) .", 
+                				 ".autoquote($row['publisher']) .", 
+                				 ".autoquote($row['date']) .")");
+            }
+            db_query("DROP TABLE videolinks");
+        } else {
+            db_query("INSERT INTO `$mysqlMainDb`.videolinks
+        						(`id`, `course_id`, `url`, `title`, `description`, `creator`, `publisher`, `date`)
+                                SELECT $link_id + id, $course_id, `url`, `titre`, `description`, `creator`, 
+                               `publisher`, `date` FROM videolinks");
         }
-        db_query("INSERT INTO `$mysqlMainDb`.videolinks
-    						(`id`, `course_id`, `url`, `title`, `description`, `creator`, `publisher`, `date`)
-                            SELECT $link_id + id, $course_id, `url`, `titre`, `description`, `creator`, 
-                           `publisher`, `date` FROM videolinks")
-        and
         db_query("DROP TABLE videolinks");
         db_query("UPDATE `$mysqlMainDb`.course_units AS units, `$mysqlMainDb`.unit_resources AS res
                             SET res_id = res_id + $link_id
                             WHERE units.id = res.unit_id AND course_id = $course_id AND type = 'videolinks'");
     }
+    
+    if ($return_mapping)
+        return array($video_map, $videolinks_map);
 }
 
 function upgrade_course_2_4($code, $lang, $extramessage = '')
