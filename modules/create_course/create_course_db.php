@@ -491,33 +491,6 @@ mysql_query("CREATE TABLE agenda (
                PRIMARY KEY (id))
          $charset_spec");
 
-############################# VIDEO ###########################################
-    mysql_query("CREATE TABLE video (
-               id int(11) NOT NULL auto_increment,
-	       path varchar(255),
-               url varchar(200),
-               titre varchar(200),
-               description text,
-               creator varchar(200),
-               publisher varchar(200),
-               date DATETIME,
-               PRIMARY KEY (id))
-         $charset_spec");
-
-################################# VIDEO LINKS ################################
-
-        mysql_query("CREATE TABLE videolinks (
-               id int(11) NOT NULL auto_increment,
-               url varchar(200),
-               titre varchar(200),
-               description text,
-         creator varchar(200),
-         publisher varchar(200),
-         date DATETIME,
-               PRIMARY KEY (id))
-         $charset_spec");
-
-
 ############################# WORKS ###########################################
 
 db_query("CREATE TABLE `assignments` (
@@ -731,8 +704,6 @@ mysql_query("ALTER TABLE `exercices` ADD FULLTEXT `exercices` (`titre`,`descript
 mysql_query("ALTER TABLE `posts_text` ADD FULLTEXT `posts_text` (`post_text`)");
 mysql_query("ALTER TABLE `forums` ADD FULLTEXT `forums` (`forum_name`,`forum_desc`)");
 mysql_query("ALTER TABLE `liens` ADD FULLTEXT `liens` (`url` ,`titre` ,`description`)");
-mysql_query("ALTER TABLE `video` ADD FULLTEXT `video` (`url` ,`titre` ,`description`)");
-mysql_query("ALTER TABLE `videolinks` ADD FULLTEXT `videolinks` (`url` ,`titre` ,`description`)");
 
 // creation of indexes 
 mysql_query("ALTER TABLE `lp_user_module_progress` ADD INDEX `optimize` (`user_id` , `learnPath_module_id`)");

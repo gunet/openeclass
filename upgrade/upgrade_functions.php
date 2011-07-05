@@ -304,6 +304,51 @@ function upgrade_course($code, $lang)
 	upgrade_course_2_2($code, $lang);
 	upgrade_course_2_3($code);
 	upgrade_course_2_4($code, $lang);
+	upgrade_course_2_5($code, $lang);
+}
+
+function upgrade_course_2_5($code, $lang, $extramessage = '')
+{
+    global $langUpgCourse, $mysqlMainDb, $global_messages, $webDir;
+    
+    $course_id = course_code_to_id($code);
+    mysql_select_db($code);
+    echo "<hr><p>$langUpgCourse <b>$code</b> (2.5) $extramessage<br>";
+    flush();
+    
+    // move video to central table and if successful drop table
+    if (mysql_table_exists($code, 'video')) {
+        list($video_id) = mysql_fetch_row(db_query("SELECT MAX(id) FROM `$mysqlMainDb`.video"));
+        if (!$video_id) {
+            $video_id = 1;
+        }
+        db_query("INSERT INTO `$mysqlMainDb`.video
+                            (`id`, `course_id`, `path`, `url`, `title`, `description`, `creator`, `publisher`, `date`)
+                            SELECT $video_id + id, $course_id, `path`, `url`, `titre`, `description`, `creator`, 
+                            `publisher`, `date` FROM video")
+        and
+        db_query("DROP TABLE video");
+        db_query("UPDATE `$mysqlMainDb`.course_units AS units, `$mysqlMainDb`.unit_resources AS res
+                            SET res_id = res_id + $video_id
+                            WHERE units.id = res.unit_id AND course_id = $course_id AND type = 'video'");
+    }
+    
+    // move videolinks to central table and if successful drop table
+    if (mysql_table_exists($code, 'videolinks')) {
+        list($link_id) = mysql_fetch_row(db_query("SELECT MAX(id) FROM `$mysqlMainDb`.videolinks"));
+        if (!$link_id) {
+            $link_id = 1;
+        }
+        db_query("INSERT INTO `$mysqlMainDb`.videolinks
+    						(`id`, `course_id`, `url`, `title`, `description`, `creator`, `publisher`, `date`)
+                            SELECT $link_id + id, $course_id, `url`, `titre`, `description`, `creator`, 
+                           `publisher`, `date` FROM videolinks")
+        and
+        db_query("DROP TABLE videolinks");
+        db_query("UPDATE `$mysqlMainDb`.course_units AS units, `$mysqlMainDb`.unit_resources AS res
+                            SET res_id = res_id + $link_id
+                            WHERE units.id = res.unit_id AND course_id = $course_id AND type = 'videolinks'");
+    }
 }
 
 function upgrade_course_2_4($code, $lang, $extramessage = '')

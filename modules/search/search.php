@@ -261,11 +261,15 @@ function search_in_course($search_terms, $cours_id, $code_cours) {
 	if (mysql_num_rows($sql) > 0) {
 		return TRUE;
 	}
-	$sql = db_query("SELECT * FROM video WHERE MATCH (url, titre, description)".$query, $code_cours);
+	$sql = db_query("SELECT * FROM video 
+				WHERE course_id = $cours_id 
+				AND MATCH (url, title, description)".$query, $mysqlMainDb);
 	if (mysql_num_rows($sql) > 0) {
 		return TRUE;
 	}
-	$sql = db_query("SELECT * FROM videolinks WHERE MATCH (url, titre, description)".$query, $code_cours);
+	$sql = db_query("SELECT * FROM videolinks 
+				WHERE course_id = $cours_id 
+				AND MATCH (url, title, description)".$query, $mysqlMainDb);
 	if (mysql_num_rows($sql) > 0) {
 		return TRUE;
 	}
