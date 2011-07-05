@@ -19,7 +19,7 @@
  * ======================================================================== */
 
 /*
- * Announcements RSS Feed Component
+ * Announcements RSS Feed Component 
  */
 
 $path2add = 0;
