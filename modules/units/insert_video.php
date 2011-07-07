@@ -22,7 +22,7 @@
 
 function list_videos()
 {
-        global $id, $currentCourseID, $cours_id, $mysqlMainDb, $tool_content, $urlServer,
+        global $id, $currentCourseID, $tool_content, $urlServer,
                $langVideoTitle, $langDescr, $langDate, $langChoice,
                $langAddModulesButton, $langNoVideo, $code_cours,
                $themeimg; 
@@ -30,7 +30,7 @@ function list_videos()
         $table_started = false;
         $count = 0;
         foreach (array('video', 'videolinks') as $table) {
-                $result = db_query("SELECT * FROM $table WHERE course_id = $cours_id", $mysqlMainDb);
+                $result = db_query("SELECT * FROM $table", $currentCourseID);
                 $count += mysql_num_rows($result);
                 $numLine=0;
                 while ($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
@@ -47,7 +47,7 @@ function list_videos()
                         }
                         $videolink = "<a href='" .
                                 video_url($table, $row['url'], @$row['path']) .
-                                "'>" . htmlspecialchars($row['title']) . '</a>';
+                                "'>" . htmlspecialchars($row['titre']) . '</a>';
 
                           if ($numLine%2 == 0) {
                               $tool_content .= "\n  <tr class='even'>";

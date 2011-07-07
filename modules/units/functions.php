@@ -276,10 +276,10 @@ function show_lp($title, $comments, $resource_id, $lp_id)
 // display resource video
 function show_video($table, $title, $comments, $resource_id, $video_id, $visibility)
 {
-        global $is_adminOfCourse, $currentCourseID, $cours_id, $mysqlMainDb, $tool_content, $themeimg;
+        global $is_adminOfCourse, $currentCourseID, $tool_content, $themeimg;
 
-        $result = db_query("SELECT * FROM $table WHERE course_id = $cours_id AND id=$video_id",
-                           $mysqlMainDb);
+        $result = db_query("SELECT * FROM $table WHERE id=$video_id",
+                           $currentCourseID);
         if ($result and mysql_num_rows($result) > 0) {
                 $row = mysql_fetch_array($result, MYSQL_ASSOC);
                 $link = "<a href='" .

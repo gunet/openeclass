@@ -411,10 +411,8 @@ if(empty($search_terms)) {
 	// search in video and videolinks
 	if ($video)
 	{
-		$myquery = "SELECT * FROM video
-				WHERE course_id = $cours_id
-				AND MATCH (url, title, description)".$query;
-		$result = db_query($myquery, $mysqlMainDb);
+		$myquery = "SELECT * FROM video WHERE MATCH (url, titre, description)".$query;
+		$result = db_query($myquery, $currentCourseID);
 		if(mysql_num_rows($result) > 0)
 		{
 		$tool_content .= "
@@ -442,7 +440,7 @@ if(empty($search_terms)) {
 					$desc_text = "<span class='smaller'>($res[description])</span>";
 				}
 				$link_video = "${urlServer}modules/video/video.php?action=download&amp;id=$res[path]";				
-				$tool_content .= "<a href='$link_video'>".$res['title']."</a> $desc_text
+				$tool_content .= "<a href='$link_video'>".$res['titre']."</a> $desc_text
                   </td>
                 </tr>";
                 $numLine++;
@@ -451,10 +449,8 @@ if(empty($search_terms)) {
                 </table>\n\n\n";
 			$found = true;
 		}
-		$myquery = "SELECT * FROM videolinks
-				WHERE course_id = $cours_id
-				AND MATCH (url, title, description)".$query;
-		$result = db_query($myquery, $mysqlMainDb);
+		$myquery = "SELECT * FROM videolinks WHERE MATCH (url, titre, description)".$query;
+		$result = db_query($myquery, $currentCourseID);
 		if(mysql_num_rows($result) > 0)
 		{
 		  $tool_content .= "
@@ -482,7 +478,7 @@ if(empty($search_terms)) {
 			$desc_text = "<span class='smaller'>($res[description])</span>";
 		    }
 		    $link_video = $res['url'];
-		  $tool_content .= "<a href='$link_video' target=_blank>".$res['title']."</a><br /> $desc_text
+		  $tool_content .= "<a href='$link_video' target=_blank>".$res['titre']."</a><br /> $desc_text
                   </td>
                 </tr>";
                   $numLine++;

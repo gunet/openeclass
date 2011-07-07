@@ -518,31 +518,6 @@ if (!isset($_POST['submit2'])) {
 			db_query("DROP TABLE cours_faculte");	
 		}		
         }
-        if ($oldversion < '2.5') {
-            db_query('CREATE TABLE IF NOT EXISTS video (
-                            `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                            `course_id` INT(11) NOT NULL,
-                            `path` VARCHAR(255),
-                            `url` VARCHAR(200),
-                            `title` VARCHAR(200),
-                            `description` TEXT,
-                            `creator` VARCHAR(200),
-                            `publisher` VARCHAR(200),
-                            `date` DATETIME,
-                            FULLTEXT KEY `video`
-                            	(`url`, `title`, `description`))');
-            db_query('CREATE TABLE IF NOT EXISTS videolinks (
-                            `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                            `course_id` INT(11) NOT NULL,
-                            `url` VARCHAR(200),
-                            `title` VARCHAR(200),
-                            `description` TEXT,
-                            `creator` VARCHAR(200),
-                            `publisher` VARCHAR(200),
-                            `date` DATETIME,
-                            FULLTEXT KEY `video`
-                            	(`url`, `title`, `description`))');
-        }
 
         // **********************************************
         // upgrade courses databases
@@ -570,9 +545,6 @@ if (!isset($_POST['submit2'])) {
                         convert_description_to_units($code[0], $code[2]);
                         upgrade_course_index_php($code[0]);
 			upgrade_course_2_4($code[0], $lang, "($i / $total)");
-                }
-                if ($oldversion < '2.5') {
-                    upgrade_course_2_5($code[0], $lang, "($i / $total)");
                 }
                 echo "</p>\n";
                 $i++;

@@ -337,29 +337,6 @@ db_query('CREATE TABLE IF NOT EXISTS ebook_subsection (
                 `public_id` VARCHAR(11) NOT NULL,
                 `file_id` INT(11) NOT NULL,
                 `title` TEXT)');
-db_query('CREATE TABLE IF NOT EXISTS video (
-                `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                `course_id` INT(11) NOT NULL,
-                `path` VARCHAR(255),
-                `url` VARCHAR(200),
-                `title` VARCHAR(200),
-                `description` TEXT,
-                `creator` VARCHAR(200),
-                `publisher` VARCHAR(200),
-                `date` DATETIME,
-                FULLTEXT KEY `video`
-                	(`url`, `title`, `description`))');
-db_query('CREATE TABLE IF NOT EXISTS videolinks (
-                `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                `course_id` INT(11) NOT NULL,
-                `url` VARCHAR(200),
-                `title` VARCHAR(200),
-                `description` TEXT,
-                `creator` VARCHAR(200),
-                `publisher` VARCHAR(200),
-                `date` DATETIME,
-                FULLTEXT KEY `video`
-                	(`url`, `title`, `description`))');
 
 // encrypt the admin password into DB
 $password_encrypted = md5($passForm);

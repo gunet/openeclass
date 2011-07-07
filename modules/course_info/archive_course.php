@@ -76,9 +76,7 @@ if ($is_adminOfCourse) {
                        'course_units' => $sql_course,
                        'unit_resources' => "unit_id IN (SELECT id FROM course_units
                                                                WHERE course_id = $cours_id)",
-                       'forum_notify' => $sql_course,
-                       'video' => $sql_course,
-                       'videolinks' => $sql_course)
+                       'forum_notify' => $sql_course)
              as $table => $condition) {
                 backup_table($archivedir, $table, $condition);
         }
