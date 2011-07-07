@@ -168,7 +168,7 @@ if (!empty($submit)) {
 	$registration_errors = array();
         // check if there are empty fields
         if (empty($_POST['nom_form']) or empty($_POST['prenom_form']) or empty($uname)) {
-                $registration_errors[] = $langEmptyFields;
+                $registration_errors[] = $langFieldsMissing;
         } else {
                 // check if the username is already in use
                 $q2 = "SELECT username FROM `$mysqlMainDb`.user WHERE username='".escapeSimple($uname)."'";

@@ -18,8 +18,6 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-
-
 /*===========================================================================
 	auth.inc.php
 	@last update: 31-05-2006 by Stratos Karatzidis
@@ -35,7 +33,17 @@
 */
 
 // pop3 class
-require("methods/pop3.php");
+require 'methods/pop3.php';
+
+
+$auth_ids = array(1 => 'eclass',
+                  2 => 'pop3',
+                  3 => 'imap',
+                  4 => 'ldap',
+                  5 => 'db',
+                  6 => 'shibboleth',
+                  7 => 'cas');
+
 
 /****************************************************************
 find/return the id of the default authentication method
@@ -43,26 +51,18 @@ return $auth_id (a value between 1 and 7: 1-eclass,2-pop3,3-imap,4-ldap,5-db,6-s
 ****************************************************************/
 function get_auth_id()
 {
-	global $db;
-	$sql = "SELECT auth_id FROM auth WHERE auth_default=1";
-  $auth_method = mysql_query($sql,$db);
-  if($auth_method)
-  {
-		$authrow = mysql_fetch_row($auth_method);
-		if(mysql_num_rows($auth_method)==1)
-		{
-	    $auth_id = $authrow[0];
-	    return $auth_id;
-		}
-		else
-		{
-	    return 0;
-		}
-	}
-  else
-  {
-		return 0;
-	}
+        $auth_method = db_query("SELECT auth_id FROM auth WHERE auth_default = 1");
+        if ($auth_method) {
+                $authrow = mysql_fetch_row($auth_method);
+                if (mysql_num_rows($auth_method)==1) {
+                        $auth_id = $authrow[0];
+                        return $auth_id;
+                } else {
+                        return 0;
+                }
+        } else {
+                return 0;
+        }
 }
 
 /****************************************************************
@@ -71,27 +71,17 @@ return $auth_methods (array with all the values of the defined/active methods)
 ****************************************************************/
 function get_auth_active_methods()
 {
-        global $db;
-        $sql = "SELECT auth_id,auth_settings FROM auth WHERE auth_default=1";
-        $auth_method = mysql_query($sql,$db);
-        if($auth_method) {
-                $auth_methods = array();
-                while($authrow = mysql_fetch_row($auth_method)) {
-                        // get only those with valid,not empty settings
-                        if(($authrow[0]!=1) && (empty($authrow[1]))) {
-                                continue;
-                        } else {
-                                $auth_methods[] = $authrow[0];
+        $auth_methods = array();
+        $q = db_query("SELECT auth_id, auth_settings FROM auth WHERE auth_default = 1");
+        if ($q) {
+                while ($row = mysql_fetch_row($q)) {
+                        // get only those with valid, not empty settings
+                        if ($row[0] == 1 or !empty($row[1])) {
+                                $auth_methods[] = $row[0];
                         }
                 }
-                if(!empty($auth_methods)) {
-                        return $auth_methods;
-                } else {
-                        return 0;
-                }
-        } else {
-                return 0;
         }
+        return $auth_methods;
 }
 
 /****************************************************************
@@ -190,6 +180,8 @@ return $auth_row : an associative array
 ****************************************************************/
 function get_auth_settings($auth)
 {
+        global $auth_ids;
+
 	$auth = intval($auth);
 	$result = db_query("SELECT * FROM auth WHERE auth_id = " . $auth);
 	if ($result) {
@@ -238,6 +230,7 @@ function get_auth_settings($auth)
                                         'cas_logout' => str_replace('cas_logout=', '', @$cas[8])));
                                 break;
                         }
+                        $settings['auth_name'] = $auth_ids[$auth];
 			return $settings;
                 }
         }
@@ -332,10 +325,16 @@ function auth_user_login($auth, $test_username, $test_password, $settings)
 					 if (@ldap_bind($ldap, $user_dn, $test_password)) {
 						$testauth = true;
 						$userinfo = ldap_get_entries($ldap, $userinforequest);
-						if ($userinfo["count"] == 1) {
+						if ($userinfo['count'] == 1) {
+                                                        $lastname = get_ldap_attribute($userinfo, 'sn');
+                                                        $firstname = get_ldap_attribute($userinfo, 'givenname');
+                                                        if (empty($firstname)) {
+                                                                $cn = get_ldap_attribute($userinfo, 'cn');
+                                                                $firstname = trim(str_replace($lastname, '', $cn));
+                                                        }
 							$GLOBALS['auth_user_info'] = array(
-								'firstname' => get_ldap_attribute($userinfo, 'givenname'),
-								'lastname' => get_ldap_attribute($userinfo, 'sn'),
+								'firstname' => $firstname,
+								'lastname' => $lastname,
 								'email' => get_ldap_attribute($userinfo, 'mail'));
 						}
                                          } else {
@@ -587,7 +586,8 @@ function process_login()
 {
         global $warning, $nom, $prenom, $email, $statut, $is_admin, $language,
                $langInvalidId, $langAccountInactive1, $langAccountInactive2,
-               $langNoCookies, $langEnterPlatform, $urlServer, $langHere;
+               $langNoCookies, $langEnterPlatform, $urlServer, $langHere,
+               $auth_ids;
 
 	if (isset($_POST['uname'])) {
 		$posted_uname = autounquote(canonicalize_whitespace($_POST['uname']));
@@ -607,7 +607,6 @@ function process_login()
                                     WHERE username COLLATE utf8_bin = " . quote($posted_uname);
 		$result = db_query($sqlLogin);
 		// cas might have alternative authentication defined
-		$check_passwords = array('pop3', 'imap', 'ldap', 'db', 'shibboleth', 'cas');
 		$auth_allow = 0;
 		$exists = 0;
 		if (!isset($_COOKIE) or count($_COOKIE) == 0) {
@@ -620,7 +619,7 @@ function process_login()
 			while ($myrow = mysql_fetch_assoc($result)) {
 				$exists = 1;
 				if(!empty($auth)) {
-					if (in_array($myrow['password'], $check_passwords)) {
+					if (in_array($myrow['password'], $auth_ids)) {
 						// alternate methods login
 						$auth_allow = alt_login($myrow, $posted_uname, $pass);
 					} else {
@@ -706,18 +705,9 @@ Authenticate user via alternate defined methods
 ****************************************************************/
 function alt_login($user_info_array, $uname, $pass)
 {
-        global $warning;
+        global $warning, $auth_ids;
 
-        switch ($user_info_array['password']) {
-                case 'eclass': $auth = 1; break;
-                case 'pop3': $auth = 2; break;
-                case 'imap': $auth = 3; break;
-                case 'ldap': $auth = 4; break;
-                case 'db': $auth = 5; break;
-                case 'shibboleth': $auth = 6; break;
-                case 'cas': $auth = 7; break;
-                default: break;
-        }
+        $auth = array_search($user_info_array['password'], $auth_ids);
         $auth_method_settings = get_auth_settings($auth);
         $auth_allow = 1;
 

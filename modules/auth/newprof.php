@@ -108,7 +108,7 @@ $registration_errors = array();
     // check if there are empty fields
     if (empty($_POST['nom_form']) or empty($_POST['prenom_form']) or empty($_POST['userphone'])
 	 or empty($_POST['usercomment']) or empty($_POST['uname']) or (empty($_POST['email_form']))) {
-		$registration_errors[]=$langEmptyFields;
+		$registration_errors[] = $langFieldsMissing;
 	}
 	
 	if (get_config("display_captcha")) {

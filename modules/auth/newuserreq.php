@@ -52,7 +52,7 @@ if($submit) {
 // check if there are empty fields
   if (empty($nom_form) or empty($prenom_form) or empty($password)
         or empty($uname) or empty($email_form)) {
-      $tool_content .= error_screen($langEmptyFields);
+      $tool_content .= error_screen($langFieldsMissing);
       $tool_content .= end_tables();
   }
   elseif(isset($user_exist) and $uname==$user_exist) {

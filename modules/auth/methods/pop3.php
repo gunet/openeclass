@@ -546,4 +546,3 @@ class pop3_class
 	}
 };
 
-?>

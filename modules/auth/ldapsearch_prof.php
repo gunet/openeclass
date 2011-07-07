@@ -47,151 +47,96 @@ if(!isset($_POST['auth'])) {
 
 $msg = "$langReqRegProf (".(get_auth_info($auth)).")";
 $nameTools = $msg;
-$navigation[]= array ('url' => 'registration.php', 'name'=> $langNewUser);
-$navigation[]= array ('url' => "ldapnewuser.php?p=TRUE&amp;auth=$auth", 'name' => $langConfirmUser);
+$navigation[] = array ('url' => 'registration.php', 'name'=> $langNewUser);
+$navigation[] = array ('url' => "ldapnewuser.php?p=TRUE&amp;auth=$auth", 'name' => $langConfirmUser);
 
 $lang = langname_to_code($language);
 
-register_posted_variables(array('ldap_email' => true, 'ldap_passwd' => true,
+register_posted_variables(array('uname' => true, 'passwd' => true,
                                 'is_submit' => true, 'submit' => true));
 
-$lastpage = 'ldapnewuser.php?p=TRUE&amp;auth='.$auth.'&amp;ldap_email='.$ldap_email;
+$lastpage = 'ldapnewuser.php?p=TRUE&amp;auth='.$auth.'&amp;uname='.urlencode($uname);
 $errormessage = "<br/><p>$ldapback <a href='$lastpage'>$ldaplastpage</a></p>";
 $is_valid = false;
 
 if (isset($_SESSION['shib_auth']) and $_SESSION['shib_auth'] == true) { // if we are shibboleth user
-	$r = mysql_fetch_array(db_query("SELECT auth_settings FROM auth WHERE auth_id = 6"));
-	$shibsettings = $r['auth_settings'];
-	if ($shibsettings != 'shibboleth' and $shibsettings != "") {
- 	      $shibseparator = $shibsettings;
-	}
-	if (strpos($_SESSION['shib_nom'], $shibseparator)) {
-        $temp = explode($shibseparator, $_SESSION['shib_nom']);
-				$GLOBALS['auth_user_info']['firstname'] = $temp[0];
-				$GLOBALS['auth_user_info']['lastname'] = $temp[1];
-	}
-  $GLOBALS['auth_user_info']['email'] = $_SESSION['shib_email'];
-	$is_valid = true;
+        $r = mysql_fetch_array(db_query("SELECT auth_settings FROM auth WHERE auth_id = 6"));
+        $shibsettings = $r['auth_settings'];
+        if ($shibsettings != 'shibboleth' and $shibsettings != '') {
+                $shibseparator = $shibsettings;
+        }
+        if (strpos($_SESSION['shib_nom'], $shibseparator)) {
+                $temp = explode($shibseparator, $_SESSION['shib_nom']);
+                $GLOBALS['auth_user_info']['firstname'] = $temp[0];
+                $GLOBALS['auth_user_info']['lastname'] = $temp[1];
+        }
+        $GLOBALS['auth_user_info']['email'] = $_SESSION['shib_email'];
+        $is_valid = true;
 }
 
-if (!empty($is_submit) or ($auth == 7 and empty($submit))) {
-        if ($auth !=7 and $auth != 6 and
-            ($ldap_email === '' or $ldap_passwd === '')) {
-		$tool_content .= "
-		<p class='caution'>$ldapempty $errormessage</p>";
-		draw($tool_content,0);
-		exit();
-	} else {
-		// try to authenticate user
-		$auth_method_settings = get_auth_settings($auth);
-                if ($auth == 6) {
-			redirect_to_home_page('secure/index_reg.php');
-		}
-		$is_valid = auth_user_login($auth, $ldap_email, $ldap_passwd, $auth_method_settings);
-	}	
+if (!isset($_SESSION['was_validated']) or
+    $_SESSION['was_validated']['auth'] != $auth or
+    $_SESSION['was_validated']['uname'] != $_POST['uname']) {
+        $init_auth = true;
+        // If user wasn't authenticated in the previous step, try
+        // an authentication step now:
+        if ($is_submit or ($auth == 7 and !$submit)) {
+                unset($_SESSION['was_validated']);
+                if ($auth !=7 and $auth != 6 and
+                    ($uname === '' or $passwd === '')) {
+                        $tool_content .= "<p class='caution'>$ldapempty $errormessage</p>";
+                        draw($tool_content, 0);
+                        exit();
+                } else {
+                        // try to authenticate user
+                        $auth_method_settings = get_auth_settings($auth);
+                        if ($auth == 6) {
+                                redirect_to_home_page('secure/index_reg.php');
+                        }
+                        $is_valid = auth_user_login($auth, $uname, $passwd, $auth_method_settings);
+                }	
 
-	if ($auth == 7) {
-		if (phpCAS::checkAuthentication()) {
-			$ldap_email = phpCAS::getUser();
-			$cas = get_auth_settings($auth);
-			// store CAS released attributes in $GLOBALS['auth_user_info']
-			get_cas_attrs(phpCAS::getAttributes(), $cas);
-			$is_valid = true;
+                if ($auth == 7) {
+                        if (phpCAS::checkAuthentication()) {
+                                $uname = phpCAS::getUser();
+                                $cas = get_auth_settings($auth);
+                                // store CAS released attributes in $GLOBALS['auth_user_info']
+                                get_cas_attrs(phpCAS::getAttributes(), $cas);
+                                $is_valid = true;
+                        }
                 }
-	}
+        }
+
+        if ($is_valid) { // connection successful
+                $_SESSION['was_validated'] = array('auth' => $auth, 'uname' => $uname);
+                if (isset($GLOBALS['auth_user_info'])) {
+                        $_SESSION['was_validated']['auth_user_info'] = $GLOBALS['auth_user_info'];
+                }
+                user_info_form();
+        } else {
+                $tool_content .= "<p class='caution'>$langConnNo<br/>$langAuthNoValidUser</p>" .
+                                 "<p>&laquo; <a href='$lastpage'>$langBack</a></p>";
+        }
+} else {
+        $is_valid = true;
 }
 
-if ($is_valid) { // connection successful	
-        $tool_content .= "
-		<form action='$_SERVER[PHP_SELF]' method='post'>" .
-		(isset($GLOBALS['auth_user_info'])?
-		('<input type="hidden" name="prenom_form" value="' . $GLOBALS['auth_user_info']['firstname'] .
-		'" /><input type="hidden" name="nom_form" value="' . $GLOBALS['auth_user_info']['lastname'] .
-                '" /><input type="hidden" name="email" value="' . $GLOBALS['auth_user_info']['email'] . '" />'): '') .
-                "<p class='success'>$langTheUser $ldapfound </p>
-                <fieldset>
-                <legend>$langUserData</legend>
-		<table width=\"99%\" class='tbl'>
-		<tr>
-                  <th class='left'>".$langName."</th>
-		  <td>".(isset($GLOBALS['auth_user_info'])?
-		$GLOBALS['auth_user_info']['firstname']: '<input type="text" name="prenom_form" size="38" />')."</td>
-		</tr>
-		<tr>
-		  <th class='left'>".$langSurname."</th>
-		  <td>".(isset($GLOBALS['auth_user_info'])?
-		$GLOBALS['auth_user_info']['lastname']: '<input type="text" name="nom_form" size="38" />')."</td>
-		</tr>
-		<tr>
-		  <th class='left'>".$langEmail."</th>
-		  <td>".(isset($GLOBALS['auth_user_info'])?
-		$GLOBALS['auth_user_info']['email']: '<input type="text" name="email" size="38" />')."</td>
-		</tr>
-		<tr>
-		  <th class='left'>".$langPhone."</th>
-		  <td><input type='text' name='userphone' size='38' value=\"\" />&nbsp;&nbsp;(*)</td>
-		</tr>
-		<tr>
-		  <th class='left'>".$langComments."</th>
-                  <td><textarea name='usercomment' cols='32' rows='4' />".@$usercomment."</textarea>&nbsp;&nbsp;(*) $profreason</td>
-		</tr>
-		<tr>
-		  <th class='left'>".$langFaculty.":</th>
-		  <td>
-		    <select name='department'>";
-		$deps=mysql_query("SELECT name, id FROM faculte ORDER BY id",$db);
-		while ($dep = mysql_fetch_array($deps))  {
-			$tool_content .= "\n<option value='$dep[1]'>$dep[0]</option>";
-		}
-		$tool_content .= "</select></td>
-                </tr>
-		<tr>
-		  <th class='left'>$langLanguage</th>
-		  <td>";
-		$tool_content .= lang_select_options('localize');
-		$tool_content .= "</td>
-                </tr>	
-		<tr>
-		  <th class='left'>&nbsp;</th>
-		  <td><input type=\"submit\" name=\"submit\" value=\"".$langRegistration."\" />";
-			if (isset($_SESSION['shib_uname'])) {
-		  	    $tool_content .= "<input type='hidden' name='uname' value='".$_SESSION['shib_uname']."' />";
-			} else {
-		  	    $tool_content .= "<input type='hidden' name='uname' value='".$ldap_email."' />";
-			}
-		      $tool_content .= "<input type='hidden' name='password' value='".$ldap_passwd."' />
-		      <input type='hidden' name=\"auth\" value=\"".$auth."\" />
-		      </td>
-                </tr>
-                <tr>
-                  <th class='left'>&nbsp;</th>
-                  <td><div align='right'>$langRequiredFields</div></td>
-                </tr>
-                </table>
-                </fieldset>
-		</form>";
-} else {
-        $tool_content .= "<p class='caution'>$langConnNo<br/>$langAuthNoValidUser</p>" .
-                         "<p>&laquo; <a href='$lastpage'>$langBack</a></p>";
-}
 
 // -----------------------------------------
 // registration
 // -----------------------------------------
-if (isset($_POST['submit']))  {
-	$uname = $_POST['uname'];
-	$email = isset($_POST['email'])?$_POST['email']:'';
-	$prenom_form = isset($_POST['prenom_form'])?$_POST['prenom_form']:'';
-	$nom_form = isset($_POST['nom_form'])?$_POST['nom_form']:'';
-	$depid = isset($_POST['department'])? intval($_POST['department']): 0;
-	$usercomment = isset($_POST['usercomment'])?$_POST['usercomment']:'';
-	$userphone = isset($_POST['userphone'])?$_POST['userphone']:'';
-	
-	// check if there are empty fields
-	if (empty($nom_form) or empty($prenom_form) or empty($userphone)
-	or empty($usercomment) or empty($uname) or (empty($email))) {
-		$tool_content .= "<p class='caution'>";
-		$tool_content .= "$langEmptyFields <br /><a href='javascript:history.go(-1)'>$langAgain</a></p>";
+if ($is_valid and $submit)  {
+        $ok = register_posted_variables(array('uname' => true,
+                                              'email' => true,
+                                              'prenom_form' => true,
+                                              'nom_form' => true,
+                                              'department' => true,
+                                              'usercomment' => true,
+                                              'userphone' => true), 'all');
+	$depid = intval($department);
+        if (!$ok) {
+                $tool_content .= "<p class='caution'>$langFieldsMissing</p>";
+                user_info_form();
 		draw($tool_content,0);
 		exit();
 	}
@@ -247,3 +192,98 @@ if (isset($_POST['submit']))  {
 }
 
 draw($tool_content,0);
+
+function set($name)
+{
+        if (isset($GLOBALS[$name]) and
+            $GLOBALS[$name] !== '') {
+                return " value='".q($GLOBALS[$name])."'";
+        } else {
+                return '';
+        }
+}
+
+function user_info_form()
+{
+        global $tool_content, $langTheUser, $ldapfound, $langName, $langSurname, $langEmail,
+               $langPhone, $langComments, $langFaculty, $langRegistration, $langLanguage,
+               $langUserData, $langRequiredFields, $profreason, $auth_user_info, $auth,
+               $usercomment, $depid, $init_auth;
+
+        if (!isset($usercomment)) {
+                $usercomment = '';
+        }
+        if (!isset($depid)) {
+                $depid = 0;
+        }
+
+        $tool_content .= "
+  <form action='$_SERVER[PHP_SELF]' method='post'>
+    " . (isset($init_auth)? "<p class='success'>$langTheUser $ldapfound.</p>": '') . "
+    <fieldset>
+      <legend>$langUserData</legend>
+        <table width='99%' class='tbl'>
+          <tr>
+            <th class='left'>$langName</th>
+            <td>".(isset($auth_user_info)?
+                   $auth_user_info['firstname']:
+                   '<input type="text" name="prenom_form" size="38"'.set('prenom_form').'>')."
+            </td>
+          </tr>
+          <tr>
+             <th class='left'>$langSurname</th>
+             <td>".(isset($auth_user_info)?
+                    $auth_user_info['lastname']:
+                    '<input type="text" name="nom_form" size="38"'.set('nom_form').'>')."
+             </td>
+          </tr>
+          <tr>
+             <th class='left'>$langEmail</th>
+             <td>".(isset($auth_user_info)?
+                    $auth_user_info['email']:
+                    '<input type="text" name="email" size="38"'.set('email').'>&nbsp;&nbsp;(*)')."
+             </td>
+          </tr>
+          <tr>
+             <th class='left'>$langPhone</th>
+             <td><input type='text' name='userphone' size='38'".set('userphone').">&nbsp;&nbsp;(*)</td>
+          </tr>
+          <tr>
+             <th class='left'>$langComments</th>
+             <td><textarea name='usercomment' cols='32' rows='4'>".q($usercomment)."</textarea>&nbsp;&nbsp;(*) $profreason</td>
+          </tr>
+          <tr>
+             <th class='left'>$langFaculty:</th>
+             <td>
+               <select name='department'>";
+        $deps = db_query("SELECT name, id FROM faculte ORDER BY id");
+        while ($dep = mysql_fetch_array($deps)) {
+                $selected = ($depid == $dep[1])? ' selected': '';
+                $tool_content .= "\n<option value='$dep[1]'$selected>".q($dep[0])."</option>";
+        }
+        $tool_content .= "</select>
+             </td>
+           </tr>
+           <tr>
+             <th class='left'>$langLanguage</th>
+             <td>" . lang_select_options('localize') . "</td>
+           </tr>	
+           <tr>
+             <th class='left'>&nbsp;</th>
+             <td><input type='submit' name='submit' value='$langRegistration' />";
+        if (isset($_SESSION['shib_uname'])) {
+                $tool_content .= "<input type='hidden' name='uname' value='".q($_SESSION['shib_uname'])."' />";
+        } else {
+                $tool_content .= "<input type='hidden' name='uname' value='".q($_SESSION['was_validated']['uname'])."' />";
+        }
+        $tool_content .= "<input type='hidden' name='auth' value='$auth' />
+             </td>
+           </tr>
+           <tr>
+             <th class='left'>&nbsp;</th>
+             <td><div align='right'>$langRequiredFields</div></td>
+           </tr>
+         </table>
+       </fieldset>
+  </form>";
+}

@@ -36,7 +36,7 @@
 include '../../include/baseTheme.php';
 include 'auth.inc.php';
 
-$navigation[]= array ("url"=>"registration.php", "name"=> "$langNewUser");
+$navigation[] = array ('url' => 'registration.php', 'name'=> $langNewUser);
 
 if (isset($_REQUEST['auth'])) {
 	$auth = intval($_REQUEST['auth']);
@@ -47,36 +47,35 @@ if(!isset($_REQUEST['auth'])) {
 	$auth = $_SESSION['u_tmp'];
 }
 
+unset($_SESSION['was_validated']);
+
 $authmethods = get_auth_active_methods();
 
 $msg = get_auth_info($auth);
 $settings = get_auth_settings($auth);
 if(!empty($msg)) $nameTools = "$langConfirmUser ($msg)";
 
-if (isset($_GET['p']) and ($_GET['p'] == true)) {
+if (isset($_GET['p']) and $_GET['p']) {
 	$tool_content .= "<form method='post' action='ldapsearch_prof.php'>";
 } else {
 	$tool_content .= "<form method='post' action='ldapsearch.php'>";
 }
-$tool_content .= "<fieldset><legend>".$settings['auth_instructions']."</legend>
+$tool_content .= "<fieldset><legend>".q($settings['auth_instructions'])."</legend>
 <table class='tbl' width='100%'>";
 
 if (($auth != 7) and ($auth != 6)) {
-	@$tool_content .= "
-	<tr>
-	<th width='180'>$langAuthUserName</th>
-	<td><input type='text' name='ldap_email' value='$ldap_email'></td>
-	</tr>
-	<tr>
-	<th>$langAuthPassword</th>
-	<td><input type='password' name='ldap_passwd' value='$ldap_passwd'></td>
-	</tr>";
+        $set_uname = isset($_GET['uname'])? (" value='".q($_GET['uname'])."'"): '';
+        $tool_content .= "
+                <tr><th width='180'>$langAuthUserName</th>
+                    <td><input type='text' name='uname'$set_uname></td></tr>
+                <tr><th>$langAuthPassword</th>
+                    <td><input type='password' name='passwd'></td></tr>";
 }
 
 $tool_content .= "<tr>
      <td>&nbsp;</td>
      <td class='right'>
-<input type='hidden' name='auth' value='".$auth."'>";
+<input type='hidden' name='auth' value='$auth'>";
 
 if (($auth != 7) and ($auth != 6)) {
 	$tool_content .= "<input type='submit' name='is_submit' value='$langSubmit'>";

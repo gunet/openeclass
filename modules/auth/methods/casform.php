@@ -21,107 +21,103 @@
 
 #include('../../include/CAS/CAS.php');
 
-if (!method_exists('phpCAS', 'setDebug'))
-{
+if (!method_exists('phpCAS', 'setDebug')) {
     $tool_content .= "<p align='center'><font color='red'><strong>$langCASNotWork.</strong></font></p>";
-
 }
 $casdata = $auth_data;
 
 $cassettings = $casdata['auth_settings'];
-$casinstructions = $casdata['auth_instructions'];
+$auth_instructions = $casdata['auth_instructions'];
 
-if(!empty($cassettings))
-{
+if (!empty($cassettings)) {
 	// tabs
-	$cas = explode("|",$cassettings);
+	$cas = explode('|', $cassettings);
 	//cas_host
-	$cas_host = str_replace("cas_host=","",$cas[0]);
+	$cas_host = str_replace('cas_host=', '', $cas[0]);
 	//cas_port
-	$cas_port = str_replace("cas_port=","",$cas[1]);
+	$cas_port = str_replace('cas_port=', '', $cas[1]);
 	if (empty($cas_port)) {
 		$cas_port = 443;
 	}
 	//cas_context
-	$cas_context = str_replace("cas_context=","",$cas[2]);
+	$cas_context = str_replace('cas_context=', '', $cas[2]);
 	if (empty($cas_context)) {
-		$cas_context = "/cas/";
+		$cas_context = '/cas/';
 	}
 	//cas_cachain
-	$cas_cachain = str_replace("cas_cachain=","",$cas[3]);
+	$cas_cachain = str_replace('cas_cachain=', '', $cas[3]);
 	//casusermailattr
-	$casusermailattr = str_replace("casusermailattr=","",$cas[4]);
+	$casusermailattr = str_replace('casusermailattr=', '', $cas[4]);
 	//casuserfirstattr
-	$casuserfirstattr = str_replace("casuserfirstattr=","",$cas[5]);
+	$casuserfirstattr = str_replace('casuserfirstattr=', '', $cas[5]);
 	//casuserlastattr
-	$casuserlastattr = str_replace("casuserlastattr=","",$cas[6]);
+	$casuserlastattr = str_replace('casuserlastattr=', '', $cas[6]);
 	//cas_altauth
-	$cas_altauth = intval(str_replace("cas_altauth=","",$cas[7]));
+	$cas_altauth = intval(str_replace('cas_altauth=', '', $cas[7]));
 	//cas logout link
-	$cas_logout = str_replace("cas_logout=","",$cas[8]);
+	$cas_logout = str_replace('cas_logout=', '', $cas[8]);
 } else {
 	// empty host
-	$cas_host = "";
+	$cas_host = '';
 	$cas_port = 443;
-  	$cas_context = "/cas/";
-	$cas_logout = "";
-	$cas_cachain = "";
-	$casusermailattr = "mail";
+  	$cas_context = '/cas/';
+	$cas_logout = '';
+	$cas_cachain = '';
+	$casusermailattr = 'mail';
 	// givenName is the default for LDAP not givename
-	$casuserfirstattr = "givenName";
-	$casuserlastattr = "sn";
+	$casuserfirstattr = 'givenName';
+	$casuserlastattr = 'sn';
 	$cas_altauth = 0;
 }
 
 $tool_content .= "
     <tr>
-      <th class=\"left\">$langcas_host:</th>
-      <td><input class=\"FormData_InputText\" name=\"cas_host\" type=\"text\" size=\"30\" value=\"".$cas_host."\"></td>
+      <th class='left'>$langcas_host:</th>
+      <td><input class='FormData_InputText' name='cas_host' type='text' size='30' value='".q($cas_host)."'></td>
     </tr>
     <tr>
-      <th class=\"left\">$langcas_port:</th>
-      <td><input class=\"FormData_InputText\" name=\"cas_port\" type=\"text\" size=\"30\" value=\"".$cas_port."\"></td>
+      <th class='left'>$langcas_port:</th>
+      <td><input class='FormData_InputText' name='cas_port' type='text' size='30' value='".q($cas_port)."'></td>
     </tr>
     <tr>
-      <th class=\"left\">$langcas_context:</th>
-      <td><input class=\"FormData_InputText\" name=\"cas_context\" type=\"text\" size=\"30\" value=\"".$cas_context."\"></td>
+      <th class='left'>$langcas_context:</th>
+      <td><input class='FormData_InputText' name='cas_context' type='text' size='30' value='".q($cas_context)."'></td>
     </tr>
     <tr>
-      <th class=\"left\">$langcas_logout:</th>
-      <td><input class=\"FormData_InputText\" name=\"cas_logout\" type=\"text\" size=\"30\" value=\"".$cas_logout."\"></td>
+      <th class='left'>$langcas_logout:</th>
+      <td><input class='FormData_InputText' name='cas_logout' type='text' size='30' value='".q($cas_logout)."'></td>
     </tr>
     <tr>
-      <th class=\"left\">$langcas_cachain:</th>
-      <td><input class=\"FormData_InputText\" name=\"cas_cachain\" type=\"text\" size=\"40\" value=\"".$cas_cachain."\"></td>
+      <th class='left'>$langcas_cachain:</th>
+      <td><input class='FormData_InputText' name='cas_cachain' type='text' size='40' value='".q($cas_cachain)."'></td>
     </tr>
     <tr>
-      <th class=\"left\">$langcasusermailattr:</th>
-      <td><input class=\"FormData_InputText\" name=\"casusermailattr\" type=\"text\" size=\"30\" value=\"".$casusermailattr."\"></td>
+      <th class='left'>$langcasusermailattr:</th>
+      <td><input class='FormData_InputText' name='casusermailattr' type='text' size='30' value='".q($casusermailattr)."'></td>
     </tr>
     <tr>
-      <th class=\"left\">$langcasuserfirstattr:</th>
-      <td><input class=\"FormData_InputText\" name=\"casuserfirstattr\" type=\"text\" size=\"30\" value=\"".$casuserfirstattr."\"></td>
+      <th class='left'>$langcasuserfirstattr:</th>
+      <td><input class='FormData_InputText' name='casuserfirstattr' type='text' size='30' value='".q($casuserfirstattr)."'></td>
     </tr>
     <tr>
-      <th class=\"left\">$langcasuserlastattr:</th>
-      <td><input class=\"FormData_InputText\" name=\"casuserlastattr\" type=\"text\" size=\"30\" value=\"".$casuserlastattr."\"></td>
+      <th class='left'>$langcasuserlastattr:</th>
+      <td><input class='FormData_InputText' name='casuserlastattr' type='text' size='30' value='".q($casuserlastattr)."'></td>
     </tr>
     <tr>
-      <th class=\"left\">$langcas_altauth:</th>
+      <th class='left'>$langcas_altauth:</th>
       <td>";
 		
 $cas_altauth_data = array();
-$cas_altauth_data[0] = "-";
-$cas_altauth_data[1] = "eClass";
-$cas_altauth_data[2] = "POP3";
-$cas_altauth_data[3] = "IMAP";
-$cas_altauth_data[4] = "LDAP";
-$cas_altauth_data[5] = "External DB";
-$tool_content .= selection($cas_altauth_data,"cas_altauth",$cas_altauth);
+$cas_altauth_data[0] = '-';
+$cas_altauth_data[1] = 'eClass';
+$cas_altauth_data[2] = 'POP3';
+$cas_altauth_data[3] = 'IMAP';
+$cas_altauth_data[4] = 'LDAP';
+$cas_altauth_data[5] = 'External DB';
+$tool_content .= selection($cas_altauth_data, 'cas_altauth', $cas_altauth);
 $tool_content .= "    </td>
     </tr>
     <tr>
-      <th class=\"left\">$langInstructionsAuth:</th>
-      <td><textarea class=\"FormData_InputText\" name=\"casinstructions\" cols=\"30\" rows=\"10\">".$casinstructions."</textarea></td>
+      <th class='left'>$langInstructionsAuth:</th>
+      <td><textarea class='FormData_InputText' name='auth_instructions' cols='30' rows='10'>".q($auth_instructions)."</textarea></td>
     </tr>";
-?>
