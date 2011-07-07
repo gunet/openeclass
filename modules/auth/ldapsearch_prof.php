@@ -59,28 +59,27 @@ $lastpage = 'ldapnewuser.php?p=TRUE&amp;auth='.$auth.'&amp;uname='.urlencode($un
 $errormessage = "<br/><p>$ldapback <a href='$lastpage'>$ldaplastpage</a></p>";
 $is_valid = false;
 
-if (isset($_SESSION['shib_auth']) and $_SESSION['shib_auth'] == true) { // if we are shibboleth user
-        $r = mysql_fetch_array(db_query("SELECT auth_settings FROM auth WHERE auth_id = 6"));
-        $shibsettings = $r['auth_settings'];
-        if ($shibsettings != 'shibboleth' and $shibsettings != '') {
-                $shibseparator = $shibsettings;
-        }
-        if (strpos($_SESSION['shib_nom'], $shibseparator)) {
-                $temp = explode($shibseparator, $_SESSION['shib_nom']);
-                $GLOBALS['auth_user_info']['firstname'] = $temp[0];
-                $GLOBALS['auth_user_info']['lastname'] = $temp[1];
-        }
-        $GLOBALS['auth_user_info']['email'] = $_SESSION['shib_email'];
-        $is_valid = true;
-}
-
 if (!isset($_SESSION['was_validated']) or
     $_SESSION['was_validated']['auth'] != $auth or
     $_SESSION['was_validated']['uname'] != $_POST['uname']) {
         $init_auth = true;
         // If user wasn't authenticated in the previous step, try
         // an authentication step now:
-        if ($is_submit or ($auth == 7 and !$submit)) {
+        // First check for Shibboleth
+        if (isset($_SESSION['shib_auth']) and $_SESSION['shib_auth'] == true) {
+                $r = mysql_fetch_array(db_query("SELECT auth_settings FROM auth WHERE auth_id = 6"));
+                $shibsettings = $r['auth_settings'];
+                if ($shibsettings != 'shibboleth' and $shibsettings != '') {
+                        $shibseparator = $shibsettings;
+                }
+                if (strpos($_SESSION['shib_nom'], $shibseparator)) {
+                        $temp = explode($shibseparator, $_SESSION['shib_nom']);
+                        $GLOBALS['auth_user_info']['firstname'] = $temp[0];
+                        $GLOBALS['auth_user_info']['lastname'] = $temp[1];
+                }
+                $GLOBALS['auth_user_info']['email'] = $_SESSION['shib_email'];
+                $is_valid = true;
+        } elseif ($is_submit or ($auth == 7 and !$submit)) {
                 unset($_SESSION['was_validated']);
                 if ($auth !=7 and $auth != 6 and
                     ($uname === '' or $passwd === '')) {
@@ -119,21 +118,31 @@ if (!isset($_SESSION['was_validated']) or
         }
 } else {
         $is_valid = true;
+        if (isset($_SESSION['was_validated']['auth_user_info'])) {
+                $auth_user_info = $_SESSION['was_validated']['auth_user_info'];
+        }
 }
 
 
 // -----------------------------------------
 // registration
 // -----------------------------------------
-if ($is_valid and $submit)  {
+if ($is_valid and !isset($init_auth))  {
+        $ext_info = !isset($auth_user_info);
         $ok = register_posted_variables(array('uname' => true,
-                                              'email' => true,
-                                              'prenom_form' => true,
-                                              'nom_form' => true,
+                                              'email' => $ext_info,
+                                              'prenom_form' => $ext_info,
+                                              'nom_form' => $ext_info,
                                               'department' => true,
                                               'usercomment' => true,
                                               'userphone' => true), 'all');
 	$depid = intval($department);
+        if (isset($auth_user_info)) {
+                $prenom_form = $auth_user_info['firstname'];
+                $nom_form = $auth_user_info['lastname'];
+                $email = $auth_user_info['email'];
+        }
+ 
         if (!$ok) {
                 $tool_content .= "<p class='caution'>$langFieldsMissing</p>";
                 user_info_form();
@@ -142,22 +151,7 @@ if ($is_valid and $submit)  {
 	}
 
 	if($auth != 1) {
-		switch($auth) {
-			case '2': $password = 'pop3';
-				break;
-			case '3': $password = 'imap';
-				break;
-			case '4': $password = 'ldap';
-				break;
-			case '5': $password = 'db';
-				break;
-		  case '6': $password = 'shibboleth';
-				break;
-			case '7': $password = 'cas';
-				break;
-			default:  $password = '';
-				break;
-		}
+                $password = isset($auth_ids[$auth])? $auth_ids[$auth]: '';
 	}
 
         db_query('INSERT INTO user_request SET

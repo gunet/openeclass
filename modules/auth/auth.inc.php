@@ -386,37 +386,37 @@ function auth_user_login($auth, $test_username, $test_password, $settings)
 		} else {
 			$indexfile = $path.'index.php';
 			$index_regfile = $path.'index_reg.php';
-			if (!file_exists($indexfile)) {
-                                // creation of secure/index.php file
-                                $f = fopen($indexfile, 'w');
-                                $filecontents = '<?php
+
+                        // creation of secure/index.php file
+                        $f = fopen($indexfile, 'w');
+                        $filecontents = '<?php
 session_start();
-$_SESSION[\'shib_email\'] = '.autounquote($_POST['shibemail']).';
-$_SESSION[\'shib_uname\'] = '.autounquote($_POST['shibuname']).';
-$_SESSION[\'shib_nom\'] = '.autounquote($_POST['shibcn']).';
+$_SESSION[\'shib_email\'] = '.$settings['shibemail'].';
+$_SESSION[\'shib_uname\'] = '.$settings['shibuname'].';
+$_SESSION[\'shib_nom\'] = '.$settings['shibcn'].';
 header("Location: ../index.php");
 ';
-				// creation of secure/index_reg.php
-				if (fwrite($f, $filecontents)) {
-					$testauth = true;
-				}
+                        if (fwrite($f, $filecontents)) {
+                                $testauth = true;
 			}
-			if (!file_exists($index_regfile)) {
-				// creation of secure/index_reg.php
-				// used in professor request registration process via shibboleth
-				$f = fopen($index_regfile, "w");
-				$filecontents = '<?php
+                        fclose($f);
+
+                        // creation of secure/index_reg.php
+                        // used in professor request registration process via shibboleth
+                        $f = fopen($index_regfile, "w");
+                        $filecontents = '<?php
 session_start();
-$_SESSION[\'shib_email\'] = '.autounquote($_POST['shibemail']).';
-$_SESSION[\'shib_uname\'] = '.autounquote($_POST['shibuname']).';
-$_SESSION[\'shib_nom\'] = '.autounquote($_POST['shibcn']).';
+$_SESSION[\'shib_email\'] = '.$settings['shibemail'].';
+$_SESSION[\'shib_uname\'] = '.$settings['shibuname'].';
+$_SESSION[\'shib_nom\'] = '.$settings['shibcn'].';
 $_SESSION[\'shib_statut\'] = $_SERVER[\'unscoped-affiliation\'];
 $_SESSION[\'shib_auth\'] = true;
 header("Location: ../modules/auth/ldapsearch_prof.php");
-';				if (fwrite($f, $filecontents)) {
-					$testauth = true;
-				}
-			}
+';
+                        if (fwrite($f, $filecontents)) {
+                                $testauth = true;
+                        }
+                        fclose($f);
 		}
 		break;
 

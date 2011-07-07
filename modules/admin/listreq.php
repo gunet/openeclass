@@ -18,7 +18,6 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-
 $require_admin = TRUE;
 include '../../include/baseTheme.php';
 include '../../include/sendMail.inc.php';
@@ -258,28 +257,37 @@ else
 		$tool_content .= "<td align='center'>
 			<small>".nice_format(date('Y-m-d', strtotime($req['date_open'])))."</small></td>";
 		$tool_content .= "<td align='center' class='smaller'>";
-		switch($req['password']) {
-			case 'pop3': $tool_content .= "<a href='../auth/ldapnewprofadmin.php?id=$req[id]&amp;auth=2'>
-					$langElaboration<br>($langViaPop)</a></td>\n  </tr>";
-				break;
-			case 'imap': $tool_content .= "<a href='../auth/ldapnewprofadmin.php?id=$req[id]&amp;auth=3'>
-					$langElaboration<br>($langViaImap)</a></td>\n  </tr>";
-				break;
-			case 'ldap': $tool_content .= "<a href='../auth/ldapnewprofadmin.php?id=$req[id]&amp;auth=4'>
-					$langElaboration<br />($langViaLdap)</a></td>\n  </tr>";
-				break;
-			case 'db': $tool_content .= "<a href='../auth/ldapnewprofadmin.php?id=$req[id]&amp;auth=5'>
-					$langElaboration<br>($langViaDB)</a></td>\n  </tr>";
-				break;
-			case 'shibboleth': $tool_content .= "<a href='../auth/ldapnewprofadmin.php?id=$req[id]&amp;auth=6'>
-					$langElaboration<br>($langViaShibboleth)</a></td></tr>";
-			case 'cas': $tool_content .= "<a href='../auth/ldapnewprofadmin.php?id=$req[id]&amp;auth=7'>
-					$langElaboration<br>($langViaCAS)</a></td>\n  </tr>";
-				break;
-			default:  $tool_content .= "<a href='newuseradmin.php?id=$req[id]'>
-					$langElaboration</a></td>\n  </tr>";
-				break;
-		}
+                switch($req['password']) {
+                    case 'pop3':
+                        $tool_content .= "<a href='../auth/ldapnewprofadmin.php?id=$req[id]&amp;auth=2'>
+                                          $langElaboration<br>($langViaPop)</a>";
+                        break;
+                    case 'imap':
+                        $tool_content .= "<a href='../auth/ldapnewprofadmin.php?id=$req[id]&amp;auth=3'>
+                                          $langElaboration<br>($langViaImap)</a>";
+                        break;
+                    case 'ldap':
+                         $tool_content .= "<a href='../auth/ldapnewprofadmin.php?id=$req[id]&amp;auth=4'>
+                                           $langElaboration<br />($langViaLdap)</a>";
+                         break;
+                    case 'db':
+                         $tool_content .= "<a href='../auth/ldapnewprofadmin.php?id=$req[id]&amp;auth=5'>
+                                           $langElaboration<br>($langViaDB)</a>";
+                         break;
+                    case 'shibboleth':
+                         $tool_content .= "<a href='../auth/ldapnewprofadmin.php?id=$req[id]&amp;auth=6'>
+                                           $langElaboration<br>($langViaShibboleth)</a>";
+                         break;
+                    case 'cas':
+                         $tool_content .= "<a href='../auth/ldapnewprofadmin.php?id=$req[id]&amp;auth=7'>
+                                           $langElaboration<br>($langViaCAS)</a>";
+                         break;
+                    default:
+                         $tool_content .= "<a href='newuseradmin.php?id=$req[id]'>
+                                           $langElaboration</a>";
+                         break;
+                }
+                $tool_content .= "</td></tr>\n";
 		$k++;
 	}
 	$tool_content .= "\n  </table>\n";

@@ -78,7 +78,9 @@ register_posted_variables(array('imaphost' => true, 'pop3host' => true,
                                 'ldap_login_attr' => true, 'ldap_login_attr2' => true,
                                 'dbhost' => true, 'dbtype' => true, 'dbname' => true,
                                 'dbuser' => true, 'dbpass' => true, 'dbtable' => true,
-                                'dbfielduser' => true, 'dbfieldpass' => true),
+                                'dbfielduser' => true, 'dbfieldpass' => true,
+                                'shibemail' => true, 'shibuname' => true,
+                                'shibcn' => true),
                           'all', 'autounquote'); 
 
 if (empty($ldap_login_attr)) {
@@ -178,6 +180,9 @@ if ((!empty($auth_submit) and $auth_submit==1) or !empty($_SESSION['cas_do'])) {
                                 } else {
                                         $auth_settings = 'shibboleth';
                                 }
+                                $settings = array('shibemail' => $shibemail,
+                                                  'shibuname' => $shibuname,
+                                                  'shibcn' => $shibcn);
                                 break;
                         case '7':
                                 $settings = array('cas_host' => $_SESSION['cas_host'],
@@ -241,6 +246,7 @@ if ((!empty($auth_submit) and $auth_submit==1) or !empty($_SESSION['cas_do'])) {
                                         SET auth_settings = ".quote($auth_settings).",
                                             auth_instructions = ".autoquote($_POST['auth_instructions']).",
                                             auth_default = 1,
+                                            auth_name = '$auth_ids[$auth]',
                                             auth_id = ".$auth;
 			$sql2 = db_query($qry); // do the update as the default method
 			if($sql2) {
