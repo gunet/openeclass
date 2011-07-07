@@ -77,7 +77,7 @@ if (!isset($_POST['changePass'])) {
 } else {
 	$userid = intval($_POST['userid']);
 	if (empty($_POST['password_form']) || empty($_POST['password_form1'])) {
-		$tool_content .= mes($langFields, "", 'caution');
+		$tool_content .= mes($langFieldsMissing, '', 'caution');
 		draw($tool_content, 3);
 		exit();
 	}
@@ -96,6 +96,7 @@ if (!isset($_POST['changePass'])) {
 }
 
 draw($tool_content, 3);
+
 // display message
 function mes($message, $urlText, $type) {
 	global $urlServer, $langBack, $userid;

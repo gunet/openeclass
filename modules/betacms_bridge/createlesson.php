@@ -45,7 +45,7 @@ if (!isset($_POST['submit'])) {
 else {
 	if (empty($_POST[KEY_TITLE]) || empty($_POST[KEY_DESCRIPTION]) || empty($_POST[KEY_KEYWORDS]) 
 		|| empty($_POST[KEY_AUTHORS]) ) {
-		$tool_content .= "<p class=\"caution_small\">$langEmptyFields</p>
+		$tool_content .= "<p class=\"caution_small\">$langFieldsMissing</p>
 			<br/><br/><p align=\"right\"><a href='$_SERVER[PHP_SELF]'>$langAgain</a></p>";
 	}
 	else {

@@ -39,52 +39,47 @@ $require_admin = TRUE;
 include '../../include/baseTheme.php';
 include_once '../../modules/auth/auth.inc.php';
 $nameTools = $langUserAuthentication;
-$navigation[] = array("url" => "index.php", "name" => $langAdmin);
+$navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
-$auth = isset($_GET['auth'])?$_GET['auth']:"";
-$active = isset($_GET['active'])?$_GET['active']:"";
+$auth = isset($_GET['auth'])? $_GET['auth']: '';
+$active = isset($_GET['active'])? $_GET['active']: '';
 
-if((!empty($auth)) && (!empty($active))) {
+if (!empty($auth) and !empty($active)) {
 	$s = get_auth_settings($auth);
 	$settings = $s['auth_settings'];
 
-	switch($active) {
-		case 'yes': $q = empty($settings)?'0':'1';
+	switch ($active) {
+		case 'yes': $q = empty($settings)? 0: 1;
 		break;
-		case 'no': $q = '0';
+		case 'no': $q = 0;
 		break;
-		default: $q = '0';
+		default: $q = 0;
 		break;
 	}
-	$qry = "UPDATE auth SET auth_default=".$q." WHERE auth_id='".mysql_real_escape_string($auth)."'";
-	if(!empty($qry)) {
-		$sql = mysql_query($qry,$db); // do the update as the default method
-	}
+	db_query("UPDATE auth SET auth_default = $q WHERE auth_id = ".intval($auth));
 }
-$auth_methods = get_auth_active_methods();
 
+$auth_methods = get_auth_active_methods();
 
 if(empty($auth)) {
 	$tool_content .= '<p>' . $langMethods . '</p>';
-	if(!empty($auth_methods)) {
+	if ($auth_methods) {
 		$tool_content .= "<ul>";
-		foreach($auth_methods as $k=>$v) {
-			$tool_content .= "<li>".get_auth_info($v) . "</li>";
+		foreach($auth_methods as $k => $v) {
+			$tool_content .= "<li>" . get_auth_info($v) . "</li>";
 		}
 		$tool_content .= "</ul>";
 	}
 } else {
-	if(empty($settings)) {
-		$tool_content .= "<p class=\"success\">";
-		$tool_content .= "$langErrActiv $langActFailure";
-		$tool_content .= "</p>";
+	if (empty($settings)) {
+		$tool_content .= "<p class='caution'>$langErrActiv $langActFailure</p>";
 	} else {
 		if($active == 'yes') {
-			$tool_content .= "<p class=\"success\">";
+			$tool_content .= "<p class='success'>";
 			$tool_content .= "$langActSuccess" . get_auth_info($auth);
 			$tool_content .= "</p>";
 		} else {
-			$tool_content .= "<p class=\"success\">";
+			$tool_content .= "<p class='success'>";
 			$tool_content .= "$langDeactSuccess" . get_auth_info($auth);
 			$tool_content .= "</p>";
 		}
@@ -136,4 +131,3 @@ $tool_content .= "<a href=\"auth_process.php?auth=7\">$langAuthSettings</a>";
 $tool_content .= "</div></td></tr></table>";
 
 draw($tool_content, 3);
-?>

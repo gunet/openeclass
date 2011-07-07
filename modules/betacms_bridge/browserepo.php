@@ -77,7 +77,7 @@ else {
 	if (empty($_POST[BRIDGE_HOST]) || empty($_POST[BRIDGE_CONTEXT]) 
 		|| empty($_POST[BCMS_HOST]) || empty($_POST[BCMS_REPO]) 
 		|| empty($_POST[BCMS_USER]) || empty($_POST[BCMS_PASS]) ) {
-		$tool_content .= "<p class=\"caution\">$langEmptyFields</p>
+		$tool_content .= "<p class=\"caution\">$langFieldsMissing</p>
 			<br/><br/><p align=\"right\"><a href='$_SERVER[PHP_SELF]'>$langAgain</a></p>";
 	}
 	else {

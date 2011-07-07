@@ -49,7 +49,7 @@ function checkrequired(which, entry, entry2) {
 		}
 	}
 	if (!pass) {
-		alert("$langEmptyFields");
+		alert("$langFieldsMissing");
 		return false;
 	} else {
 		return true;

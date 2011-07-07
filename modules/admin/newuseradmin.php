@@ -61,7 +61,7 @@ if($submit) {
 
         // check if there are empty fields
         if (!$all_set) {
-                $tool_content .= "<p class='caution'>$langEmptyFields</p>
+                $tool_content .= "<p class='caution'>$langFieldsMissing</p>
                         <br><br><p align='right'><a href='$backlink'>$langAgain</a></p>";
         } elseif ($user_exist) {
                 $tool_content .= "<p class='caution'>$langUserFree</p>

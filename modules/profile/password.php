@@ -76,59 +76,58 @@ if(isset($_GET['msg'])) {
 	$msg = $_GET['msg'];
 	switch ($msg){
 
-		case 1: {//passwords do not match
+		case 1: { // passwords do not match
 			$message = $langPassTwo;
-			$urlText = "";
-			$type = "caution";
+			$urlText = '';
+			$type = 'caution';
 			break;
 		}
 
 		case 2: { // admin tools
-			$message = $langFields;
-			$urlText = "";
-			$type = "caution";
+			$message = $langFieldsMissing;
+			$urlText = '';
+			$type = 'caution';
 			break;
 		}
-		case 3: {//wrong old password entered
+		case 3: { // wrong old password entered
 			$message = $langPassOldWrong;
-			$urlText = "";
-			$type = "caution";
+			$urlText = '';
+			$type = 'caution';
 			break;
 		}
 
-		case 4: {//password successfully changed
+		case 4: { // password successfully changed
 			$message = $langPassChanged;
 			$urlText = $langHome;
-			$type = "success";
+			$type = 'success';
 			break;
 		}
-		default:die("invalid message id");
+		default: die('invalid message id');
 	}
-	$tool_content .=  "\n         <p class=\"$type\">$message<br /><a href=\"$urlServer\">$urlText</a></p>";
+	$tool_content .= "<p class='$type'>$message<br /><a href='$urlServer'>$urlText</a></p>";
 }
 
 if (!isset($_POST['changePass'])) {
 	$tool_content .= "
-	<form method=\"post\" action=\"$passurl\">
+	<form method='post' action='$passurl'>
         <fieldset>
         <legend>$langPassword</legend>
-	<table class=\"tbl\">
+	<table class='tbl'>
 	<tr>
 	   <th>$langOldPass</th>
-	   <td><input type=\"password\" size=\"40\" name=\"old_pass\" value=\"\"></td>
+	   <td><input type='password' size='40' name='old_pass' value=''></td>
 	</tr>
 	<tr>
 	   <th>$langNewPass1</th>
-	   <td>";
-	$tool_content .= "<input type=\"password\" size=\"40\" name=\"password_form\" value=\"\"></td>
+	   <td><input type='password' size='40' name='password_form' value=''></td>
 	</tr>
 	<tr>
 	   <th>$langNewPass2</th>
-	   <td><input type=\"password\" size=\"40\" name=\"password_form1\" value=\"\"></td>
+	   <td><input type='password' size='40' name='password_form1' value=''></td>
 	</tr>
 	<tr>
 	   <th>&nbsp;</th>
-	   <td><input type=\"submit\" name=\"submit\" value=\"$langModify\"></td>
+	   <td><input type='submit' name='submit' value='$langModify'></td>
 	</tr>
 	</table>
         </fieldset>
@@ -136,4 +135,3 @@ if (!isset($_POST['changePass'])) {
 }
 
 draw($tool_content, 1);
-?>

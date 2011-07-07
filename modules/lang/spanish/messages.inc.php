@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language es
-// Generated 2011-06-30 19:56:36
+// Generated 2011-07-06 17:36:39
 
 $langIntro = "El <b>$siteName</b> platforma es un completo Sistema de Administración eCursos que soporta el Servicio Asincrónico de eAprendizaje en <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
 $langVersion = "$siteName versión";
@@ -545,7 +545,6 @@ $langDivision = "División";
 $langTargetFac = "Esta es una categoría dónde el curso se está entregando";
 $langDoubt = "Si dudas sobre el código de tu curso, consulta, ";
 $langExFac = "Si quieres crear un curso, en otra categoría, entonces contacta con el Grupo Asynchronous eLearning";
-$langEmptyFields = "¡Has dejado algunos campos vacíos!";
 $langCreate = "Crear";
 $langCourseKeywords = "Llaves del curso:";
 $langCourseAddon = "Otra información:";
@@ -1717,7 +1716,6 @@ $langChoice = "Escoge";
 $langLessonName = "Nombre del curso";
 $langPassTwo = "Has tecleado dos contraseñas diferentes";
 $langAgain = "¡Prueba otra vez!";
-$langFields = "Has dejado algunos campos vacíos";
 $langEmailWrong = "La dirección de correo no es válida";
 $langPassChanged = "Tu contraseña ha sido modificada";
 $langPassOldWrong = "Tu contraseña actual es errónea";
@@ -1737,7 +1735,6 @@ $langModRole = "Modificar el rol de";
 $langRole = "Rol";
 $langIsNow = "es ahora";
 $langInC = "en este curso";
-$langFilled = "Has dejado algunos campos vacíos.";
 $langUserNo = "El usuario que escogiste ";
 $langTaken = "Se ha seleccionado ya. Escoge otro.";
 $langRegYou = "te has registrado en este curso";

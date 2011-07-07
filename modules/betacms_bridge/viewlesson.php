@@ -53,7 +53,7 @@ if (isset($_GET['id']) && isset($_SESSION[BETACMSREPO])) {
 	// $tool_content .= "<pre>";
 }
 else {
-	$tool_content .= "<p class=\"caution_small\">$langEmptyFields</p>
+	$tool_content .= "<p class=\"caution_small\">$langFieldsMissing</p>
 			<br/><br/><p align=\"right\"><a href='browserepo.php'>$langAgain</a></p>";
 }
 

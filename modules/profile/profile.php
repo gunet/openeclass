@@ -164,7 +164,7 @@ if (isset($_GET['msg'])) {
                 $message = $langPassTooEasy.": <strong>" . create_pass() . "</strong>";
                 break;
             case 4: // empty fields check
-                $message = $langFields;
+                $message = $langFieldsMissing;
                 break;
             case 5: //username already exists
                 $message = $langUserFree;

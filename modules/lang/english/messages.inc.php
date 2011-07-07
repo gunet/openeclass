@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language en
-// Generated 2011-06-30 19:56:35
+// Generated 2011-07-06 17:36:38
 
 $langIntro = "The <b>$siteName</b> platform is a complete eCourses Management System supporting the Asynchronous eLearning Service in <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
 $langVersion = "$siteName version";
@@ -554,7 +554,6 @@ $langDivision = "Division";
 $langTargetFac = "This is the faculty, department or school where the course is delivered";
 $langDoubt = "If you doubt on your course's code, consult, ";
 $langExFac = "If you wish to create course, in another faculty, then contact Asynchronous eLearning Group";
-$langEmptyFields = "You left some fields empty!";
 $langCreate = "Create";
 $langCourseKeywords = "Course Keywords:";
 $langCourseAddon = "Other Information:";
@@ -1778,7 +1777,6 @@ $langChoice = "Choise";
 $langLessonName = "Course Name";
 $langPassTwo = "You have typed two different passwords";
 $langAgain = "Try again!";
-$langFields = "You left some fields empty";
 $langEmailWrong = "The email address is not valid";
 $langPassChanged = "Your password has been modified";
 $langPassOldWrong = "Your current password is wrong";
@@ -1798,7 +1796,6 @@ $langModRole = "Modify the role of";
 $langRole = "Role";
 $langIsNow = "is now";
 $langInC = "in this course";
-$langFilled = "You have left some fields empty.";
 $langUserNo = "The username you choose ";
 $langTaken = "is already taken. Choose another one.";
 $langRegYou = "has registered you on this course";
@@ -1904,7 +1901,7 @@ $ldapnamesur = "Full Name:";
 $langInstitution = 'Institution:';
 $ldapuserexists = 'A user with the details you entered already exists in the system.';
 $ldapempty = "One or more fields are epmty!";
-$ldapfound = "found in LDAP server and the given info are correct";
+$ldapfound = "was authenticated successfully with the info provided";
 $ldapchoice = "Please choose the institute to which you belong!";
 $ldapnorecords = "No records found. Maybe some of the personal info given are incorrect.";
 $ldapwrongpasswd = "Password is incorrect. Please try again";
@@ -1965,7 +1962,7 @@ $langRejectRequest = "Reject";
 $langListRequest = "List Requests";
 $langTeacherRequestHasDeleted = "".$langTeacher."Request is now deleted!";
 $langRejectRequestSubject = "Reject Request for registration in the plaform of asynchronous e-learning";
-$langGoingRejectRequest = "You are going to reject the request with the provided data:";
+$langGoingRejectRequest = "You are going to reject the $langsTeacher request with the following info:";
 $langRequestSendMessage = "Send message to the user - e-mail address:";
 $langRequestDisplayMessage = "the message will also include the above comment";
 $langNoSuchRequest = "No such prof request with this ID. Cannot Proceed";

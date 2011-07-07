@@ -324,7 +324,7 @@ $tool_content .= "
   // check if there are empty fields
 	if (empty($fname) OR empty($lname) OR empty($username)) {
 		$tool_content .= "<table width='99%'><tbody><tr>
-		<td class='caution' height='60'><p>$langEmptyFields</p>
+		<td class='caution' height='60'><p>$langFieldsMissing</p>
 		<p><a href='$_SERVER[PHP_SELF]'>$langAgain</a></p></td></tr></tbody></table><br /><br />";
 		draw($tool_content, 3, ' ', $head_content);
 		  exit();
