@@ -91,7 +91,7 @@ if(isset($submitAnswers) || isset($buttonBack)) {
 			if($answerType == UNIQUE_ANSWER) {
 				$goodAnswer=($correct == $i)?1:0;
 			} else {
-				$goodAnswer=@$correct[$i];
+                                $goodAnswer=@($correct[$i])?1:0;
 			}
 			if($goodAnswer) {
 				$nbrGoodAnswers++;
