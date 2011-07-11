@@ -32,7 +32,16 @@ if (isset($_SESSION['dbname'])) {
         define('old_dbname', $_SESSION['dbname']);
 }
 
-$uri = str_replace('//', chr(1), preg_replace('/^.*file\.php\??\//', '', $_SERVER['REQUEST_URI']));
+$uri = $_SERVER['REQUEST_URI'];
+
+// If URI contains backslashes, redirect to forward slashes
+if (stripos($uri, '%5c') !== false) {
+        header('HTTP/1.1 301 Moved Permanently');
+        header('Location: ' . str_ireplace('%5c', '/', $uri));
+        exit;
+}
+
+$uri = str_replace('//', chr(1), preg_replace('/^.*file\.php\??\//', '', $uri));
 $path_components = explode('/', $uri);
 
 // temporary course change
