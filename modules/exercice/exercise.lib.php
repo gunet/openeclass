@@ -24,7 +24,7 @@ function showQuestion($questionId, $onlyAnswers = false) {
 	global $tool_content, $picturePath, $webDir;
 	global $langNoAnswer, $langColumnA, $langColumnB, $langMakeCorrespond;
 
-	// construction of the Question object
+        // construction of the Question object
 	$objQuestionTmp=new Question();
 	// reads question informations
 	if(!$objQuestionTmp->read($questionId)) {
@@ -38,17 +38,17 @@ function showQuestion($questionId, $onlyAnswers = false) {
 		$questionDescription=$objQuestionTmp->selectDescription();	
 		$questionDescription_temp = standard_text_escape($questionDescription);
 		$tool_content .= "
-  <tr class='even'>
-    <td colspan='2'>
+                  <tr class='even'>
+                    <td colspan='2'>
 		<b>$questionName</b><br />
 		$questionDescription_temp
-    </td>
-  </tr>";
+                </td>
+              </tr>";
 		if(file_exists($picturePath.'/quiz-'.$questionId)) {
 			$tool_content .= "
-  <tr class='even'>
-    <td class='center' colspan='2'><img src='".${'picturePath'}."/quiz-".${'questionId'}."'></td>
-  </tr>";
+                  <tr class='even'>
+                    <td class='center' colspan='2'><img src='".${'picturePath'}."/quiz-".${'questionId'}."'></td>
+                  </tr>";
 		}
 	}  // end if(!$onlyAnswers)
 
@@ -77,7 +77,7 @@ function showQuestion($questionId, $onlyAnswers = false) {
 
 	for($answerId=1;$answerId <= $nbrAnswers;$answerId++) {
 		$answer = $objAnswerTmp->selectAnswer($answerId);
-		$answerCorrect=$objAnswerTmp->isCorrect($answerId);
+		$answer = mathfilter($answer, 12, '../../courses/mathimg/');
 		if($answerType == FILL_IN_BLANKS) {
 			// splits text and weightings that are joined with the character '::'
 			list($answer) = explode('::',$answer);
