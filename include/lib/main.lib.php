@@ -1886,23 +1886,6 @@ function greek_to_latin($string)
 }
 
 
-// function to recurse copy directories. Taken from www.php.net (gimmicklessgpt@gmail.com)
-function recurse_copy($src, $dst, $exclude = '') {
-    $dir = opendir($src);
-    @mkdir($dst);
-    while(false !== ( $file = readdir($dir)) ) {
-        if (( $file != '.' ) && ( $file != '..' )) {
-            if ( is_dir($src . '/' . $file) ) {
-                recurse_copy($src . '/' . $file,$dst . '/' . $file);
-            }
-            else {
-                copy($src . '/' . $file,$dst . '/' . $file);
-            }
-        }
-    }
-    closedir($dir);
-}
-
 // resize an image ($source_file) of type $type to a new size ($maxheight and $maxwidth) and copies it to path $target_file
 function copy_resized_image($source_file, $type, $maxwidth, $maxheight, $target_file)
 {
