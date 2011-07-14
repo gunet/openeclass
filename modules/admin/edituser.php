@@ -46,7 +46,7 @@ if (isset($_REQUEST['u'])) {
 	$_SESSION['u_tmp'] = $u;
 }
 
-if(!isset($_REQUEST['u'])) {
+if (!isset($_REQUEST['u'])) {
 	$u = $_SESSION['u_tmp'];
 }
 
@@ -58,29 +58,73 @@ $jscalendar = new DHTML_Calendar($urlServer.'include/jscalendar/', $lang_jscalen
 $head_content .= $jscalendar->get_load_files_code();
 
 // Initialise $tool_content
-$navigation[] = array("url" => "index.php", "name" => $langAdmin);
-$navigation[] = array("url" => "listusers.php", "name" => $langListUsersActions);
+$navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
+$navigation[] = array('url' => 'listusers.php', 'name' => $langListUsersActions);
 $nameTools = $langEditUser;
-$authmethods = array("imap", "pop3", "ldap", "db", "shibboleth", "cas");
 
 $u_submitted = isset($_POST['u_submitted'])?$_POST['u_submitted']:'';
 
-if (!empty($u))	
-{
-	if(empty($u_submitted)) // if the form was not submitted
-	{
-		$sql = mysql_query("SELECT nom, prenom, username, password, email, phone, department,
-				registered_at, expires_at, statut, am
-				FROM user WHERE user_id = $u");
-		$info = mysql_fetch_array($sql);
+if ($u)	{
+        $q = db_query("SELECT nom, prenom, username, password, email, phone, department,
+                        registered_at, expires_at, statut, am
+                        FROM user WHERE user_id = $u");
+        $info = mysql_fetch_assoc($q);
+        if (isset($_POST['submit_editauth'])) {
+                $auth = intval($_POST['auth']);
+                $oldauth = array_search($info['password'], $auth_ids);
+                $tool_content .= "<p class='success'>$langQuotaSuccess.";
+                if ($auth == 1 and $oldauth != 1) {
+                        $tool_content .= " <a href='password.php?userid=$u'>$langEditAuthSetPass</a>";
+                        $newpass = '.';
+                } else {
+                        $newpass = $auth_ids[$auth];
+                }
+                $tool_content .= "</p>";
+                db_query("UPDATE user SET password = '$newpass' WHERE user_id = $u");
+                $info['password'] = $newpass;
+        }
+        if (isset($_GET['edit']) and $_GET['edit'] = 'auth') {
+                $navigation[] = array('url' => 'edituser.php?u=' . $u, 'name' => $langEditUser);
+                $nameTools = $langEditAuth;
+                $current_auth = 1;
+                $auth_names[1] = get_auth_info(1);
+                foreach (get_auth_active_methods() as $auth) {
+                        $auth_names[$auth] = get_auth_info($auth); 
+                        if ($info['password'] == $auth_ids[$auth]) {
+                                $current_auth = $auth;
+                        }
+                }
+                $tool_content .= "<form method='post' action='$_SERVER[PHP_SELF]'>
+                        <fieldset>
+                        <legend>$langEditAuth: ".q($info['username'])."</legend>
+                        <table class='tbl' width='100%'>
+                        <tr>
+                          <th width='170' class='left'>$langEditAuthMethod</th>
+                          <td>".selection($auth_names, 'auth', $current_auth)."</td>
+                        </tr>
+                        <tr>
+                          <th>&nbsp;</th>
+                          <td class='right'>
+                            <input type='hidden' name='u' value='$u'>
+                            <input type='submit' name='submit_editauth' value='$langModify'>
+                          </td>
+                        </tr>
+                        </table>
+                        </fieldset>
+                        </form>";
+                draw($tool_content, 3, null, $head_content);
+                exit;
+        }
+        if (!$u_submitted) { // if the form was not submitted
 		$tool_content .= "
     <div id='operations_container'>
      <ul id='opslist'>";
-		if(!in_array($info['password'], $authmethods)) {
+		if (!in_array($info['password'], $auth_ids)) {
 			$tool_content .= "
       <li><a href='password.php?userid=$u'>".$langChangePass."</a></li>";
-		}
-		$tool_content .= "
+                }
+                $tool_content .= "
+      <li><a href='./edituser.php?u=$u&amp;edit=auth'>$langEditAuth</a></li>
       <li><a href='./listusers.php'>$langBack</a></li>";
 		$tool_content .= "
      </ul>
@@ -88,7 +132,7 @@ if (!empty($u))
 		$tool_content .= "
     <form name='edituser' method='post' action='$_SERVER[PHP_SELF]'>
     <fieldset>
-    <legend>$langEditUser: ".q($info[2])."</legend>
+    <legend>$langEditUser: ".q($info['username'])."</legend>
     <table class='tbl' width='100%'>
     <tr>
       <th width='170' class='left'>$langSurname:</th>
@@ -99,7 +143,7 @@ if (!empty($u))
       <td><input type='text' name='fname' size='50' value='".q($info['prenom'])."' /></td>
    </tr>";
 
-		if(!in_array($info['password'], $authmethods)) {
+		if(!in_array($info['password'], $auth_ids)) {
 			$tool_content .= "
    <tr>
      <th class='left'>$langUsername:</th>
@@ -123,7 +167,7 @@ if (!empty($u))
 		$tool_content .= "
    <tr>
      <th class='left'>".$langUsername. "</th>
-     <td class='caution'>&nbsp;&nbsp;&nbsp;&nbsp;<b>".q($info['username'])."</b> [".$auth_text."] <input type='hidden' name='username' value='".q($info['username'])."' /> </td>
+     <td><b>".q($info['username'])."</b> [".$auth_text."] <input type='hidden' name='username' value='".q($info['username'])."' /> </td>
    </tr>";
 	}
 
@@ -155,7 +199,7 @@ $tool_content .= "
     <tr>
       <th class='left'>$langProperty:</th>
       <td>";
-	if ($info[9] == '10') { // if we are guest user do not display selection
+	if ($info['statut'] == '10') { // if we are guest user do not display selection
 		$tool_content .= selection(array(10 => $langGuest), 'newstatut', $info['statut']);
 	} else {
 		$tool_content .= selection(array(1 => $langTeacher, 5 => $langStudent), 'newstatut', $info['statut']);
@@ -292,7 +336,7 @@ $tool_content .= "
 				$tool_content .= $langCannotDeleteAdmin;
 			}
 		}
-	}  else { // if the form was submitted then update user
+	} else { // if the form was submitted then update user
 
 	// get the variables from the form and initialize them
 	$fname = isset($_POST['fname'])?$_POST['fname']:'';
@@ -333,7 +377,7 @@ $tool_content .= "
 	       $tool_content .= "<table width='100%'><tbody><tr>
 	       <td class='caution' height='60'><p>$langUserFree</p>
 	       <p><a href='$_SERVER[PHP_SELF]'>$langAgain</a></p></td></tr></tbody></table><br /><br />";
-	       draw($tool_content, 3, ' ', $head_content);
+	       draw($tool_content, 3, null, $head_content);
 	   exit();
 	}
 		if($registered_at>$expires_at) {
