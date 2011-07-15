@@ -153,7 +153,8 @@ $active_ui_languages = '.$string_active_ui_languages."\n";
 				     'group_quota' => true,
 				     'video_quota' => true,
                                      'dropbox_quota' => true,
-                                     'theme' => true);
+                                     'theme' => true,
+                                     'alt_auth_student_req' => true);
 
 		register_posted_variables($config_vars, 'all', 'intval');
                 $_SESSION['theme'] = $theme = $available_themes[$theme];
@@ -277,29 +278,34 @@ else {
 	}
 	$tool_content .= "
 	<tr>
-	  <th class=\"left\"><b>\$language:</b></th>
-	  <td><select name=\"formlanguage\">
-	    <option value=\"greek\" ".$grSel.">greek</option>
-	    <option value=\"english\" ".$enSel.">english</option>
+	  <th class='left'><b>\$language:</b></th>
+	  <td><select name='formlanguage'>
+	    <option value='greek' ".$grSel.">greek</option>
+	    <option value='english' ".$enSel.">english</option>
 	  </select></td>
 	</tr>";
 
-	if ($close_user_registration=="true") {
-	    $close_user_registrationSelTrue = "selected";
-	    $close_user_registrationSelFalse = "";
-	  } else {
-	    $close_user_registrationSelTrue = "";
-	    $close_user_registrationSelFalse = "selected";
-	  }
-
+        if ($close_user_registration=="true") {
+                $close_user_registrationSelTrue = "selected";
+                $close_user_registrationSelFalse = "";
+        } else {
+                $close_user_registrationSelTrue = "";
+                $close_user_registrationSelFalse = "selected";
+        }
+        $cbox_alt_auth_student_req = get_config('alt_auth_student_req')? 'checked': '';
 	$tool_content .= "
 	  <tr>
-	    <th class=\"left\"><b>\$close_user_registration:</b></th>
-	    <td><select name=\"formcloseuserregistration\">
-	      <option value=\"true\" ".$close_user_registrationSelTrue.">true</option>
-	      <option value=\"false\" ".$close_user_registrationSelFalse.">false</option>
+	    <th class='left'>\$close_user_registration:</th>
+	    <td><select name='formcloseuserregistration'>
+	      <option value='true' ".$close_user_registrationSelTrue.">true</option>
+	      <option value='false' ".$close_user_registrationSelFalse.">false</option>
 	    </select>&nbsp;&nbsp;$langViaReq</td>
-	</tr>";
+          </tr>
+          <tr>
+            <th class='left'>alt_auth_student_req</th>
+            <td><input type='checkbox' name='alt_auth_student_req' value='1'
+                       $cbox_alt_auth_student_req>&nbsp;$langAltAuthStudentReq</td>
+          </tr>";
 
         $langdirs = active_subdirs($webDir.'modules/lang', 'messages.inc.php');
         $sel = array();

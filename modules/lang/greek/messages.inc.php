@@ -184,6 +184,7 @@ $langPleaseWait = "Παρακαλώ περιμένετε";
 $langSupportedLanguages = "Υποστηριζόμενες Γλώσσες";
 $langAvailLanguages = "Διαθέσιμες";
 $langTipLangAdminAnn = "Επιλέξτε την γλώσσα στην οποία θα εμφανίζονται οι ανακοινώσεις του διαχειριστή";
+$langAltAuthStudentReq = 'Ενεργοποίηση αίτησης φοιτητή που συνδέεται με εναλλακτικό τρόπο πιστοποίησης';
 
 // listusers
 $langBegin="αρχή";

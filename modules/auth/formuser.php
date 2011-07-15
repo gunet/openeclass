@@ -28,6 +28,7 @@ $navigation[] = array('url' => 'registration.php', 'name' => $langNewUser);
 
 $prof = isset($_REQUEST['p'])? intval($_REQUEST['p']): 0;
 $nameTools = $prof? $langReqRegProf: $langUserRequest;
+$am_required = !$prof && get_config('am_required');
 $errors = array();
 
 // security - show error instead of form if user registration is open
@@ -44,7 +45,7 @@ $all_set = register_posted_variables(array(
                 'username' => true,
                 'userphone' => $prof,
                 'usermail' => true,
-                'am' => false,
+                'am' => $am_required,
                 'department' => true,
                 'captcha_code' => false));
 
@@ -148,7 +149,8 @@ if ($all_set) {
                 $tool_content .= "
           <tr>
             <th>$langAm</th>
-            <td colspan='2'><input type='text' name='am' value='" . q($am) . "' size='33' /></td>
+            <td colspan='2'><input type='text' name='am' value='" . q($am) . "' size='33' />" .
+                ($am_required? '&nbsp;&nbsp;(*)': '') . "</td>
           </tr>";
         }
         $tool_content .= "

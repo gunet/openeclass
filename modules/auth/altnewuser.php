@@ -20,7 +20,6 @@
 
 
 /*===========================================================================
-	ldapnewuser.php
 * @version $Id$
 	@authors list: Karatzidis Stratos <kstratos@uom.gr>
 		       Vagelis Pitsioygas <vagpits@uom.gr>
@@ -55,10 +54,9 @@ $msg = get_auth_info($auth);
 $settings = get_auth_settings($auth);
 if(!empty($msg)) $nameTools = "$langConfirmUser ($msg)";
 
+$tool_content .= "<form method='post' action='altsearch.php'>";
 if (isset($_GET['p']) and $_GET['p']) {
-	$tool_content .= "<form method='post' action='ldapsearch_prof.php'>";
-} else {
-	$tool_content .= "<form method='post' action='ldapsearch.php'>";
+        $tool_content .= "<input type='hidden' name='p' value='1'>";
 }
 $tool_content .= "<fieldset><legend>".q($settings['auth_instructions'])."</legend>
 <table class='tbl' width='100%'>";

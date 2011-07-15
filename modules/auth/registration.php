@@ -18,19 +18,13 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-
-
 /*===========================================================================
-  newuser_info.php
  * @version $Id$
 
  @authors list: Karatzidis Stratos <kstratos@uom.gr>
  Vagelis Pitsioygas <vagpits@uom.gr>
  ==============================================================================
  @Description: Display all the available auth methods for user registration
-
- Purpose: TDisplay all the available auth methods for user registration
-
  ==============================================================================
  */
 
@@ -69,7 +63,7 @@ if(!empty($auth)) {
                 if ($v == 6)  { // shibboleth method
                             $tool_content .= "<br />&nbsp;&nbsp;&nbsp;<img src='$themeimg/arrow.png' title='bullet' alt='bullet' />&nbsp;<a href='{$urlServer}secure/index.php'>".get_auth_info($v)."</a>";
                     } else {
-                            $tool_content .= "<br />&nbsp;&nbsp;&nbsp;<img src='$themeimg/arrow.png' title='bullet' alt='bullet' />&nbsp;<a href='ldapnewuser.php?auth=".$v."'>".get_auth_info($v)."</a>";
+                            $tool_content .= "<br />&nbsp;&nbsp;&nbsp;<img src='$themeimg/arrow.png' title='bullet' alt='bullet' />&nbsp;<a href='altnewuser.php?auth=".$v."'>".get_auth_info($v)."</a>";
                     }
             }
     }
@@ -87,7 +81,7 @@ if(!empty($auth)) {
                 if ($v == 1) {  // bypass the eclass auth method, as it has already been displayed
                         continue;
                 } else {
-                                $tool_content .= "<br />&nbsp;&nbsp;&nbsp;<img src='$themeimg/arrow.png' title='bullet' alt='bullet' />&nbsp;<a href='ldapnewuser.php?p=1&amp;auth=".$v."'>".get_auth_info($v)."</a>";
+                                $tool_content .= "<br />&nbsp;&nbsp;&nbsp;<img src='$themeimg/arrow.png' title='bullet' alt='bullet' />&nbsp;<a href='altnewuser.php?p=1&amp;auth=".$v."'>".get_auth_info($v)."</a>";
                 }
         }
 } else {

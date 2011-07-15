@@ -411,7 +411,7 @@ $_SESSION[\'shib_uname\'] = '.$settings['shibuname'].';
 $_SESSION[\'shib_nom\'] = '.$settings['shibcn'].';
 $_SESSION[\'shib_statut\'] = $_SERVER[\'unscoped-affiliation\'];
 $_SESSION[\'shib_auth\'] = true;
-header("Location: ../modules/auth/ldapsearch_prof.php");
+header("Location: ../modules/auth/altsearch.php");
 ';
                         if (fwrite($f, $filecontents)) {
                                 $testauth = true;
