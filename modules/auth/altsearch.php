@@ -44,7 +44,8 @@ if (isset($_POST['auth'])) {
 $prof = isset($_REQUEST['p'])? intval($_REQUEST['p']): 0;
 $phone_required = $prof;
 $email_required = $prof || get_config('email_required');
-$autoregister = $comment_required = $prof || get_config('alt_auth_student_req');
+$comment_required = $prof || get_config('alt_auth_student_req');
+$autoregister = !$comment_required;
 $am_required = !$prof && get_config('am_required');
 
 $nameTools = ($prof? $langReqRegProf: $langUserData) . ' ('.(get_auth_info($auth)).')';
@@ -163,6 +164,7 @@ if ($is_valid and !isset($init_auth)) {
 	}
 
         $statut = $prof? 1: 5;
+        $greeting = $prof? $langDearProf: $langDearUser;
 
         if ($autoregister) {
                 // Register a new user
@@ -221,7 +223,7 @@ if ($is_valid and !isset($init_auth)) {
                     <table width='99%' class='tbl'>
                     <tr>
                       <td class='well-done' height='60'>
-                        <p>$langDear $prenom $nom,</p>
+                        <p>$greeting,</p>
                         <p>$langPersonalSettings</p>
                       </td>
                     </tr>
@@ -259,8 +261,8 @@ if ($is_valid and !isset($init_auth)) {
                         exit();
                 }
 
-                $greeting = $prof? $langDearProf: $langDear;
-                $tool_content .= "<p class='success'>$greeting<br />$success<br />$infoprof</p><p>&laquo; <a href='$urlServer'>$langBack</a></p>";
+                $tool_content .= "<p class='success'>$greeting,<br />$success<br />$infoprof</p>
+                                  <p>&laquo; <a href='$urlServer'>$langBack</a></p>";
         }
 }
 
