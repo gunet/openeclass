@@ -632,12 +632,10 @@ function check_uid() {
 function user_exists($login) {
   global $mysqlMainDb;
 
-  $username_check = mysql_query("SELECT username FROM `$mysqlMainDb`.user
-	WHERE username='".mysql_real_escape_string($login)."'");
-  if (mysql_num_rows($username_check) > 0)
-    return TRUE;
-  else
-    return FALSE;
+  $username_check = db_query("SELECT user_id FROM `$mysqlMainDb`.user
+                                     WHERE username COLLATE utf8_bin = ".quote($login));
+        
+  return ($username_check && mysql_num_rows($username_check) > 0);
 }
 
 // Convert HTML to plain text
