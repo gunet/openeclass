@@ -262,7 +262,7 @@ function auth_user_login($auth, $test_username, $test_password, $settings)
 	    // Returns true if the username and password work and false if they don't
             $sql = "SELECT user_id FROM user
                            WHERE username COLLATE utf8_bin = ".quote($test_username)." AND
-                                 password = ".quote($test_password);
+                                 password = ".quote(md5($test_password));
 	    $result = db_query($sql);
             if (mysql_num_rows($result) == 1) {
                     $testauth = true;
@@ -426,10 +426,6 @@ header("Location: ../modules/auth/altsearch.php");
 			$testauth = true;
 		}
 		break;
-
-	default:
-                $testauth = $auth;
-                break;
     }
     return $testauth;
 }

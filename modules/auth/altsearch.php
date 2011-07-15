@@ -44,7 +44,7 @@ if (isset($_POST['auth'])) {
 $prof = isset($_REQUEST['p'])? intval($_REQUEST['p']): 0;
 $phone_required = $prof;
 $email_required = $prof || get_config('email_required');
-$comment_required = $prof || get_config('alt_auth_student_req');
+$autoregister = $comment_required = $prof || get_config('alt_auth_student_req');
 $am_required = !$prof && get_config('am_required');
 
 $nameTools = ($prof? $langReqRegProf: $langUserData) . ' ('.(get_auth_info($auth)).')';
@@ -164,45 +164,10 @@ if ($is_valid and !isset($init_auth)) {
 
         $statut = $prof? 1: 5;
 
-        if ($prof) {
-                // Record user request
-                db_query('INSERT INTO user_request SET
-                                 name = ' . autoquote($prenom_form). ',
-                                 surname = ' . autoquote($nom_form). ',
-                                 uname = ' . autoquote($uname). ",
-                                 password = '$password',
-                                 email = " . autoquote($email). ",
-                                 faculty_id = $depid,
-                                 phone = " . autoquote($userphone). ",
-                                 am = " . autoquote($am) . ",
-                                 status = 1,
-                                 statut = $statut,
-                                 date_open = NOW(),
-                                 comment = " . autoquote($usercomment). ",
-                                 lang = '$lang',
-                                 ip_address = inet_aton('$_SERVER[REMOTE_ADDR]')",
-                         $mysqlMainDb);
-
-                // send email
-                $MailMessage = $mailbody1 . $mailbody2 . "$prenom_form $nom_form\n\n" . $mailbody3
-                . $mailbody4 . $mailbody5 . "$mailbody6\n\n" . "$langFaculty: " . find_faculty_by_id($depid) . "
-                \n$langComments: $usercomment\n"
-                . "$langProfUname : $uname\n$langProfEmail : $email\n" . "$contactphone : $userphone\n\n\n$logo\n\n";
-                
-                if (!send_mail('', $emailhelpdesk, $gunet, $emailhelpdesk, $mailsubject, $MailMessage, $charset)) {
-                        $tool_content .= "<p class='alert1'>$langMailErrorMessage &nbsp; <a href='mailto:$emailhelpdesk'>$emailhelpdesk</a></p>";
-                        draw($tool_content,0);
-                        exit();
-                }
-
-                $greeting = $prof? $langDearProf: $langDear;
-                $tool_content .= "<p class='success'>$greeting<br />$success<br />$infoprof</p><p>&laquo; <a href='$urlServer'>$langBack</a></p>";
-        } else {
+        if ($autoregister) {
                 // Register a new user
+                $password = $auth_ids[$auth];
 
-                $auth_method_settings = get_auth_settings($auth);
-                $password = $auth_method_settings['auth_name'];
-	
                 $emailsubject = "$langYourReg $siteName";
                 $emailbody = "$langDestination $prenom_form $nom_form\n" .
                              "$langYouAreReg $siteName $langSettings $uname\n" .
@@ -216,7 +181,6 @@ if ($is_valid and !isset($init_auth)) {
                 $registered_at = time();
                 $expires_at = time() + $durationAccount;
                 $authmethods = array('2', '3', '4', '5');
-                $uname = escapeSimple($uname);
                 $lang = langname_to_code($language);
 
                 $q1 = "INSERT INTO `$mysqlMainDb`.user 
@@ -264,6 +228,39 @@ if ($is_valid and !isset($init_auth)) {
                     </table>
                     <br /><br />
                     <p>$langPersonalSettingsMore</p>";
+        } else {
+                // Record user request
+                db_query('INSERT INTO user_request SET
+                                 name = ' . autoquote($prenom_form). ',
+                                 surname = ' . autoquote($nom_form). ',
+                                 uname = ' . autoquote($uname). ",
+                                 password = '$password',
+                                 email = " . autoquote($email). ",
+                                 faculty_id = $depid,
+                                 phone = " . autoquote($userphone). ",
+                                 am = " . autoquote($am) . ",
+                                 status = 1,
+                                 statut = $statut,
+                                 date_open = NOW(),
+                                 comment = " . autoquote($usercomment). ",
+                                 lang = '$lang',
+                                 ip_address = inet_aton('$_SERVER[REMOTE_ADDR]')",
+                         $mysqlMainDb);
+
+                // send email
+                $MailMessage = $mailbody1 . $mailbody2 . "$prenom_form $nom_form\n\n" . $mailbody3
+                . $mailbody4 . $mailbody5 . "$mailbody6\n\n" . "$langFaculty: " . find_faculty_by_id($depid) . "
+                \n$langComments: $usercomment\n"
+                . "$langProfUname : $uname\n$langProfEmail : $email\n" . "$contactphone : $userphone\n\n\n$logo\n\n";
+                
+                if (!send_mail('', $emailhelpdesk, $gunet, $emailhelpdesk, $mailsubject, $MailMessage, $charset)) {
+                        $tool_content .= "<p class='alert1'>$langMailErrorMessage &nbsp; <a href='mailto:$emailhelpdesk'>$emailhelpdesk</a></p>";
+                        draw($tool_content,0);
+                        exit();
+                }
+
+                $greeting = $prof? $langDearProf: $langDear;
+                $tool_content .= "<p class='success'>$greeting<br />$success<br />$infoprof</p><p>&laquo; <a href='$urlServer'>$langBack</a></p>";
         }
 }
 
