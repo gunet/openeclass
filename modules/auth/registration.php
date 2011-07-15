@@ -76,7 +76,7 @@ if(!empty($auth)) {
 }
 
 $tool_content .= "</td></tr><tr><th>$langOfTeacher</th><td>";
-$tool_content .= "<img src='$themeimg/arrow.png' title='bullet'  alt='bullet' /><a href='newprof.php'>$langUserAccountInfo1</a>";
+$tool_content .= "<img src='$themeimg/arrow.png' title='bullet'  alt='bullet' /><a href='formuser.php?p=1'>$langUserAccountInfo1</a>";
 
 if (count($auth) > 1) {
    $tool_content .= "<br />&nbsp;&nbsp;&nbsp;&nbsp;$langUserAccountInfo4:";
@@ -87,7 +87,7 @@ if(!empty($auth)) {
                 if ($v == 1) {  // bypass the eclass auth method, as it has already been displayed
                         continue;
                 } else {
-                                $tool_content .= "<br />&nbsp;&nbsp;&nbsp;<img src='$themeimg/arrow.png' title='bullet' alt='bullet' />&nbsp;<a href='ldapnewuser.php?p=TRUE&amp;auth=".$v."'>".get_auth_info($v)."</a>";
+                                $tool_content .= "<br />&nbsp;&nbsp;&nbsp;<img src='$themeimg/arrow.png' title='bullet' alt='bullet' />&nbsp;<a href='ldapnewuser.php?p=1&amp;auth=".$v."'>".get_auth_info($v)."</a>";
                 }
         }
 } else {
