@@ -26,18 +26,35 @@ include '../../include/baseTheme.php';
 include '../auth/auth.inc.php';
 $require_valid_uid = TRUE;
 
-$authmethods = array('imap', 'pop3', 'ldap', 'db', 'shibboleth', 'cas');
-
 check_uid();
 $nameTools = $langModifyProfile;
 check_guest();
-list($password) = mysql_fetch_row(db_query("SELECT password FROM user WHERE user_id = $uid"));
-if (in_array($password, $authmethods)) {
+
+$result = db_query("SELECT nom, prenom, username, email, am, phone, perso,
+                           lang, department, statut, has_icon, description,
+                           email_public, phone_public, am_public, password
+                        FROM user WHERE user_id = $uid");
+$myrow = mysql_fetch_assoc($result);
+
+$password = $myrow['password'];
+$auth = array_search($password, $auth_ids);
+if (!$auth) {
+	$auth = 1;
+}
+$auth_text = get_auth_info($auth);
+
+if ($auth != 1) {
         $allow_username_change = false; 
         $allow_password_change = false;
 } else {
         $allow_username_change = !get_config('block_username_change');
         $allow_password_change = true;
+}
+
+if (in_array($password, array('shibboleth', 'cas', 'ldap'))) {
+	$allow_name_change = false;
+} else {
+	$allow_name_change = true;
 }
 
 function redirect_to_message($id) {
@@ -185,12 +202,6 @@ if (isset($_GET['msg'])) {
 	$tool_content .=  "<p class='$type'>$message$urlText</p><br/>";
 }
 
-$result = db_query("SELECT nom, prenom, username, email, am, phone, perso,
-                           lang, department, statut, has_icon, description,
-                           email_public, phone_public, am_public
-                        FROM user WHERE user_id = $uid");
-$myrow = mysql_fetch_assoc($result);
-
 $nom_form = q($myrow['nom']);
 $prenom_form = q($myrow['prenom']);
 $username_form = q($myrow['username']);
@@ -232,40 +243,27 @@ $tool_content .= "
         <tr>
           <th>$langName:</th>";
 
-if (isset($_SESSION['shib_user'])) {
-        $auth_text = "Shibboleth user";
-        $tool_content .= "
-          <td><b>$prenom_form</b> [$auth_text]
-            <input type='hidden' name='prenom_form' value='$prenom_form' />
-          </td>";
-} elseif (isset($_SESSION['cas_user'])) {
-		$auth_text = "CAS user";
-        $tool_content .= "
-          <td><b>$prenom_form</b> [$auth_text]
-            <input type='hidden' name='prenom_form' value='$prenom_form' />
-          </td>";
-} else {
+if ($allow_name_change) {
         $tool_content .= "
           <td><input type='text' size='40' name='prenom_form' value='$prenom_form' /></td>";
+} else {
+        $tool_content .= "
+          <td><b>$prenom_form</b>
+            <input type='hidden' name='prenom_form' value='$prenom_form' />
+          </td>";
 }
 
 $tool_content .= "
         </tr>
         <tr>
           <th>$langSurname:</th>";
-if (isset($_SESSION['shib_user'])) {
-        $auth_text = "Shibboleth user";
-        $tool_content .= "
-          <td><b>".$nom_form."</b> [".$auth_text."]
-            <input type='hidden' name='nom_form' value='$nom_form' /></td>";
-} elseif (isset($_SESSION['cas_user'])) {
-        $auth_text = "CAS user";
-        $tool_content .= "
-          <td><b>".$nom_form."</b> [".$auth_text."]
-            <input type='hidden' name='nom_form' value='$nom_form' /></td>";
-} else {
+if ($allow_name_change) {
         $tool_content .= "
           <td><input type='text' size='40' name='nom_form' value='$nom_form' /></td>";
+} else {
+        $tool_content .= "
+          <td><b>".$nom_form."</b>
+            <input type='hidden' name='nom_form' value='$nom_form' /></td>";
 }
 $tool_content .= "
         </tr>";
@@ -278,21 +276,6 @@ if ($allow_username_change) {
         </tr>";
 } else {
         // means that it is external auth method, so the user cannot change this password
-        switch($password) {
-                case "pop3": $auth = 2; break;
-                case "imap": $auth = 3; break;
-                case "ldap": $auth = 4; break;
-                case "db": $auth = 5; break;
-                case "cas": $auth = 7; break;
-                default: $auth = 1; break;
-        }
-        if (isset($_SESSION['shib_user'])) {
-                $auth_text = 'Shibboleth user';
-        } elseif (isset($_SESSION['cas_user'])) {
-                $auth_text = 'CAS user';
-		  } else {
-                $auth_text = get_auth_info($auth);
-        }
         $tool_content .= "
         <tr>
           <th class='left'>$langUsername:</th>
@@ -310,13 +293,13 @@ $tool_content .= "
         <tr>
           <th>$langEmail:</th>";
 
-if (isset($_SESSION['shib_user'])) {
+if ($allow_name_change) {
+        $tool_content .= "
+          <td><input type='text' size='40' name='email_form' value='$email_form' /> ";
+} else {
         $tool_content .= "
            <td><b>$email_form</b> [$auth_text]
                <input type='hidden' name='email_form' value='$email_form' /> ";
-} else { // allow user to change his e-mail
-        $tool_content .= "
-          <td><input type='text' size='40' name='email_form' value='$email_form' /> ";
 }
 $tool_content .= selection($access_options, 'email_public', $myrow['email_public']) . "</td>
         </tr>

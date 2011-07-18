@@ -31,7 +31,7 @@ Standard header included by all eClass files
 Defines standard functions and validates variables
 ---------------------------------------------------------------------
 */
-
+define('DEBUG_MYSQL', true);
 define('ECLASS_VERSION', '2.4');
 
 // resized user image 

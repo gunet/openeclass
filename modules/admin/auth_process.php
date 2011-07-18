@@ -127,7 +127,6 @@ if ((!empty($auth_submit) and $auth_submit==1) or !empty($_SESSION['cas_do'])) {
 		if (isset($cas_logout)) $_SESSION['cas_logout'] = $cas_logout;
 		
 		// cas test new settings
-		//cas_authenticate(7, true, $cas_host, $cas_port, $cas_context, $cas_cachain);
 		$cas_ret = cas_authenticate(7, true, $_SESSION['cas_host'], $_SESSION['cas_port'], $_SESSION['cas_context'], $_SESSION['cas_cachain']);
 		if (phpCAS::checkAuthentication()) {
 			$test_username = phpCAS::getUser();

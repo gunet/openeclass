@@ -43,9 +43,9 @@ if (isset($_POST['auth'])) {
 
 $prof = isset($_REQUEST['p'])? intval($_REQUEST['p']): 0;
 $phone_required = $prof;
-$email_required = $prof || get_config('email_required');
-$comment_required = $prof || ($close_user_registration && get_config('alt_auth_student_req'));
-$autoregister = !$comment_required;
+$autoregister = !($prof || ($close_user_registration && get_config('alt_auth_student_req')));
+$comment_required = !$autoregister;
+$email_required = !$autoregister || get_config('email_required');
 $am_required = !$prof && get_config('am_required');
 
 $nameTools = ($prof? $langReqRegProf: $langUserData) . ' ('.(get_auth_info($auth)).')';

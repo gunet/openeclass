@@ -73,10 +73,10 @@ if (!isset($selectResult)) {
 $warning = '';
 if (isset($_SESSION['shib_uname'])) {
         // authenticate via shibboleth
-	shib_login();
+	shib_cas_login('shibboleth');
 } elseif (isset($_SESSION['cas_uname']) && !isset($_GET['logout'])) {
         // authenticate via cas
-	cas_login();
+	shib_cas_login('cas');
 } else { // normal authentication
         process_login();
 } 

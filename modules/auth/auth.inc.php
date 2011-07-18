@@ -769,159 +769,107 @@ function alt_login($user_info_array, $uname, $pass)
 
 
 /****************************************************************
-Authenticate user via shibboleth
+Authenticate user via Shibboleth or CAS
+$type is 'shibboleth' or 'cas'
 ****************************************************************/
-function shib_login()
+function shib_cas_login($type)
 {
-        global $nom, $prenom, $email, $statut, $language, $is_admin, $langUserAltAuth;
+        global $nom, $prenom, $email, $statut, $language, $durationAccount,
+		$is_admin, $langUserAltAuth, $close_user_registration;
+
+	$autoregister = !($close_user_registration && get_config('alt_auth_student_req'));
 
         $_SESSION['user_perso_active'] = false;
-        $shib_uname = $_SESSION['shib_uname'];
-        $shib_email = $_SESSION['shib_email'];
-        $shib_nom = $_SESSION['shib_nom'];
-        list($shibsettings) = mysql_fetch_row(db_query('SELECT auth_settings FROM auth WHERE auth_id = 6'));
-        if ($shibsettings != 'shibboleth' and $shibsettings != '') {
-                $shibseparator = $shibsettings;
-        }
-        if (strpos($shib_nom, $shibseparator)) {
-                $temp = explode($shibseparator, $shib_nom);
-                $shib_prenom = $temp[0];
-                $shib_nom = $temp[1];
-        }
+	if ($type == 'shibboleth') {
+		$uname = $_SESSION['shib_uname'];
+		$email = $_SESSION['shib_email'];
+		$shib_nom = $_SESSION['shib_nom'];
+		list($shibsettings) = mysql_fetch_row(db_query('SELECT auth_settings FROM auth WHERE auth_id = 6'));
+		if ($shibsettings != 'shibboleth' and $shibsettings != '') {
+			$shibseparator = $shibsettings;
+		}
+		if (strpos($shib_nom, $shibseparator)) {
+			$temp = explode($shibseparator, $shib_nom);
+			$prenom = $temp[0];
+			$nom = $temp[1];
+		}
+	} elseif ($type == 'cas') {
+		$uname = $_SESSION['cas_uname'];
+		$nom = $_SESSION['cas_nom'];
+		$prenom = $_SESSION['cas_prenom'];
+		$email = $_SESSION['cas_email'];		
+	}
+        // user is authenticated, now let's see if he is registered also in db
         $sqlLogin= "SELECT user_id, nom, username, password, prenom, statut, email, iduser is_admin, perso, lang
                            FROM user LEFT JOIN admin ON user.user_id = admin.iduser
-                           WHERE username = ".quote($shib_uname);
+                           WHERE username COLLATE utf8_bin = " . quote($uname);
         $r = db_query($sqlLogin); 
         if (mysql_num_rows($r) > 0) {
-                // if shibboleth user found 
-                while ($myrow = mysql_fetch_array($r)) {
-                        if ($myrow['password'] == 'shibboleth') {
-                                // update user information
-                                db_query("UPDATE user SET nom = ".quote($shib_nom).",
-                                                          prenom = ".quote($shib_prenom).",
-                                                          email = ".quote($shib_email)."
-                                                 WHERE username = ".quote($shib_uname));
-                                $r2 = db_query($sqlLogin);
-                                while ($myrow2 = mysql_fetch_array($r2)) {
-                                        $_SESSION['uid'] = $myrow2['user_id'];
-                                        $is_admin = !(!($myrow2['is_admin'])); // double 'not' to handle NULL
-                                        $userPerso = $myrow2['perso'];
-                                        $nom = $myrow2['nom'];
-                                        $prenom = $myrow2['prenom'];
-                                        if (isset($_SESSION['langswitch'])) {
-                                                $language = $_SESSION['langswitch'];
-                                        } else {
-                                                $language = langcode_to_name($myrow["lang"]);
-                                        }
-                                }
-                        } else { // redirect him to home page
-                                unset($_SESSION['shib_uname']);
-                                unset($_SESSION['shib_email']);
-                                unset($_SESSION['shib_nom']);
-                                $_SESSION['errMessage'] = "<div class='caution'>$langUserAltAuth</div>";
-                                redirect_to_home_page();
+                // if user found 
+                $info = mysql_fetch_assoc($r);
+                if ($info['password'] != $type) {
+			// has different auth method - redirect to home page
+			unset($_SESSION['shib_uname']);
+		        unset($_SESSION['shib_email']);
+			unset($_SESSION['shib_nom']);
+			unset($_SESSION['cas_uname']);
+		        unset($_SESSION['cas_email']);
+			unset($_SESSION['cas_nom']);
+			unset($_SESSION['cas_prenom']);
+			$_SESSION['errMessage'] = "<div class='caution'>$langUserAltAuth</div>";
+			redirect_to_home_page();
+		} else {
+			// update user information
+			db_query("UPDATE user SET nom = ".quote($nom).",
+						  prenom = ".quote($prenom).",
+						  email = ".quote($email)."
+					 WHERE user_id = $info[user_id]");
+			$_SESSION['uid'] = $info['user_id'];
+			$is_admin = !(!($info['is_admin'])); // double 'not' to handle NULL
+			$userPerso = $info['perso'];
+			if (isset($_SESSION['langswitch'])) {
+				$language = $_SESSION['langswitch'];
+			} else {
+				$language = langcode_to_name($info["lang"]);
                         }
                 }	
-        } else { // else create him
+        } elseif ($autoregister) {
+		// else create him automatically
                 $registered_at = time();
                 $expires_at = time() + $durationAccount;  
-                db_query("INSERT INTO user SET nom = ".quote($shib_nom).",
-                                               prenom = ".quote($shib_prenom).",
-                                               password = 'shibboleth',
-                                               username = ".quote($shib_uname).",
-                                               email = ".quote($shib_email).",
+                db_query("INSERT INTO user SET nom = ".quote($nom).",
+                                               prenom = ".quote($prenom).",
+                                               password = '$type',
+                                               username = ".quote($uname).",
+                                               email = ".quote($email).",
                                                statut = 5, lang = 'el', perso = 'yes',
                                                registered_at = $registered_at,
                                                expires_at = $expires_at");
                 $_SESSION['uid'] = mysql_insert_id();
                 $userPerso = 'yes';
-                $nom = $shib_nom;
-                $prenom = $shib_prenom;
                 $language = $_SESSION['langswitch'] = langcode_to_name('el');
-        }
-        $_SESSION['uname'] = $shib_uname;
+        } else {
+		// user not registered, automatic registration disabled
+		// redirect to registration screen
+                foreach(array_keys($_SESSION) as $key)
+                        unset($_SESSION[$key]);
+                session_destroy();
+                header("Location: {$urlServer}modules/auth/registration.php");
+                exit;
+		
+	}
+        $_SESSION['uname'] = $uname;
         $_SESSION['nom'] = $nom;
         $_SESSION['prenom'] = $prenom;
-        $_SESSION['email'] = $shib_email;
+        $_SESSION['email'] = $email;
         $_SESSION['statut'] = 5;
         $_SESSION['is_admin'] = $is_admin;
         $_SESSION['shib_user'] = 1; // now we are shibboleth user
         if ($GLOBALS['persoIsActive'] and $userPerso == 'no') {
                 $_SESSION['user_perso_active'] = true;
         }
-}
-
-/****************************************************************
-Authenticate user via CAS
-****************************************************************/
-function cas_login()
-{
-        global $nom, $prenom, $email, $statut, $language, $is_admin, $langUserAltAuth;
-
-        $_SESSION['user_perso_active'] = false;
-        // user is authenticated, now let's see if he is registered also in db
-        $cas_uname = $_SESSION['cas_uname'];
-        $cas_nom = $_SESSION['cas_nom'];
-        $cas_prenom = $_SESSION['cas_prenom'];
-        $cas_email = $_SESSION['cas_email'];
-
-        $sqlLogin= "SELECT user_id, nom, username, password, prenom, statut, email, iduser is_admin, perso, lang
-                           FROM user LEFT JOIN admin ON user.user_id = admin.iduser
-                           WHERE username COLLATE utf8_bin = " . quote($cas_uname);
-
-        $r = db_query($sqlLogin); 
-        if (mysql_num_rows($r) > 0) { // if cas user found 
-                $myrow = mysql_fetch_array($r);
-                        if ($myrow['password'] == 'cas') {
-                                // update user information. set also password to cas
-                                $update_query = "UPDATE user SET nom = ".quote($cas_nom).",
-                                                                 prenom = ".quote($cas_prenom).",
-                                                                 password='cas' ";
-                                if (!empty($cas_email)) {
-                                        $update_query .= ", email = " . quote($cas_email);
-                                }
-                                $update_query .= " WHERE username = " . quote($cas_uname);
-                                db_query($update_query);
-                                $r2 = db_query($sqlLogin);
-                                while ($myrow2 = mysql_fetch_array($r2)) {
-                                        $_SESSION['uid'] = $myrow2['user_id'];
-                                        $is_admin = !(!($myrow2['is_admin'])); // double 'not' to handle NULL
-                                        $userPerso = $myrow2['perso'];
-                                        $nom = $myrow2['nom'];
-                                        $prenom = $myrow2['prenom'];
-                                        if (isset($_SESSION['langswitch'])) {
-                                                $language = $_SESSION['langswitch'];
-                                        } else {
-                                                $language = langcode_to_name($myrow['lang']);
-                                        }
-                                }
-                        } else {
-                                unset($_SESSION['cas_uname']);
-                                unset($_SESSION['cas_email']);
-                                unset($_SESSION['cas_nom']);
-                                unset($_SESSION['cas_prenom']);
-                                $_SESSION['errMessage'] = "<div class='caution'>$langUserAltAuth</div>";
-                                redirect_to_home_page();
-                        }
-        } else { // CAS auth ok but user not registered. Let's do the normal procedure
-                foreach(array_keys($_SESSION) as $key)
-                        unset($_SESSION[$key]);
-                session_destroy();
-                unset($_SESSION['uid']);
-                header("Location: {$urlServer}modules/auth/registration.php");
-                exit;
-        }
-        $_SESSION['uname'] = $cas_uname;
-        $_SESSION['nom'] = $nom;
-        $_SESSION['prenom'] = $prenom;
-        $_SESSION['email'] = $cas_email;
-        $_SESSION['statut'] = 5;
-        $_SESSION['is_admin'] = $is_admin;
-        $_SESSION['cas_user'] = 1; // now we are cas user
-        if ($GLOBALS['persoIsActive'] and $userPerso == 'no') {
-                $_SESSION['user_perso_active'] = true;
-        }
         mysql_query("INSERT INTO loginout 
                             (loginout.idLog, loginout.id_user, loginout.ip, loginout.when, loginout.action) 
                             VALUES ('', $_SESSION[uid], '$_SERVER[REMOTE_ADDR]', NOW(), 'LOGIN')");
+
 }
