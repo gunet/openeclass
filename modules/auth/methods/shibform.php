@@ -61,7 +61,7 @@ $tool_content .= "
     <td><input class='FormData_InputText' name='shibcn' type='text' size='30' value='".q($shibcn)."' /></td>
   </tr>
   <tr>
-    <td bgcolor='#F8F8F8'><input type='checkbox' name='checkseparator' $checkedshib />&nbsp;$langCharSeparator&nbsp;
+    <td bgcolor='#F8F8F8'><input type='checkbox' name='checkseparator' value='on' $checkedshib />&nbsp;$langCharSeparator&nbsp;
       <input class='FormData_InputText' name='shibseparator' type='text' size='1' maxlength='2' value='".q($shibseparator)."' /></td>
   </tr>
   <tr>

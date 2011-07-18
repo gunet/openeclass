@@ -80,7 +80,7 @@ register_posted_variables(array('imaphost' => true, 'pop3host' => true,
                                 'dbuser' => true, 'dbpass' => true, 'dbtable' => true,
                                 'dbfielduser' => true, 'dbfieldpass' => true,
                                 'shibemail' => true, 'shibuname' => true,
-                                'shibcn' => true),
+                                'shibcn' => true, 'checkseparator' => true),
                           'all', 'autounquote'); 
 
 if (empty($ldap_login_attr)) {
@@ -175,8 +175,8 @@ if ((!empty($auth_submit) and $auth_submit==1) or !empty($_SESSION['cas_do'])) {
                                                   'dbfieldpass' => $dbfieldpass);
                                 break;
                         case '6':
-                                if (isset($checkseparator) && $checkseparator == 'on') {
-                                        $auth_settings = $_POST['shibseparator'];
+                                if ($checkseparator) {
+                                        $auth_settings = unescapeSimple($_POST['shibseparator']);
                                 } else {
                                         $auth_settings = 'shibboleth';
                                 }
@@ -243,7 +243,7 @@ if ((!empty($auth_submit) and $auth_submit==1) or !empty($_SESSION['cas_do'])) {
                                 $auth_settings = pack_settings($settings);
                         }
                         $qry = "REPLACE INTO auth
-                                        SET auth_settings = ".quote($auth_settings).",
+                                        SET auth_settings = '".mysql_real_escape_string($auth_settings)."',
                                             auth_instructions = ".autoquote($_POST['auth_instructions']).",
                                             auth_default = 1,
                                             auth_name = '$auth_ids[$auth]',

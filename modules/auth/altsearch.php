@@ -44,7 +44,7 @@ if (isset($_POST['auth'])) {
 $prof = isset($_REQUEST['p'])? intval($_REQUEST['p']): 0;
 $phone_required = $prof;
 $email_required = $prof || get_config('email_required');
-$comment_required = $prof || get_config('alt_auth_student_req');
+$comment_required = $prof || ($close_user_registration && get_config('alt_auth_student_req'));
 $autoregister = !$comment_required;
 $am_required = !$prof && get_config('am_required');
 
@@ -135,7 +135,7 @@ if (!isset($_SESSION['was_validated']) or
 if ($is_valid and !isset($init_auth)) {
         $ext_info = !isset($auth_user_info);
         $ok = register_posted_variables(array('uname' => true,
-                                              'email' => $ext_info || $email_required,
+                                              'email' => $email_required && $ext_info,
                                               'prenom_form' => $ext_info,
                                               'nom_form' => $ext_info,
                                               'am' => $am_required,

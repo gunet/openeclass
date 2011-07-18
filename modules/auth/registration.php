@@ -56,17 +56,11 @@ if (count($auth) > 1) {
 }
 
 if(!empty($auth)) {
-    foreach($auth as $k => $v) {
-            if ($v == 1) {  // bypass the eclass auth method, as it has already been displayed
-                    continue;
-            } else {
-                if ($v == 6)  { // shibboleth method
-                            $tool_content .= "<br />&nbsp;&nbsp;&nbsp;<img src='$themeimg/arrow.png' title='bullet' alt='bullet' />&nbsp;<a href='{$urlServer}secure/index.php'>".get_auth_info($v)."</a>";
-                    } else {
-                            $tool_content .= "<br />&nbsp;&nbsp;&nbsp;<img src='$themeimg/arrow.png' title='bullet' alt='bullet' />&nbsp;<a href='altnewuser.php?auth=".$v."'>".get_auth_info($v)."</a>";
-                    }
-            }
-    }
+        foreach($auth as $k => $v) {
+                if ($v != 1) {  // bypass the eclass auth method, as it has already been displayed
+                        $tool_content .= "<br />&nbsp;&nbsp;&nbsp;<img src='$themeimg/arrow.png' title='bullet' alt='bullet' />&nbsp;<a href='altnewuser.php?auth=".$v."'>".get_auth_info($v)."</a>";
+                }
+        }
 }
 
 $tool_content .= "</td></tr><tr><th>$langOfTeacher</th><td>";
