@@ -173,7 +173,7 @@ if (!isset($_POST['submit'])) {
 	}
 	if (count($registration_errors) == 0) {
 		$emailsubject = "$langYourReg $siteName";
-		$uname = unescapeSimple($uname); 
+		$uname = autounquote($uname); 
 		$password = unescapeSimple($password);
 		$emailbody = "$langDestination $prenom_form $nom_form\n" .
 			"$langYouAreReg $siteName $langSettings $uname\n" .

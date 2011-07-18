@@ -215,12 +215,9 @@ function escapeSimple($str)
 
 function escapeSimpleSelect($str)
 {
-	if (get_magic_quotes_gpc())
-	{
+	if (get_magic_quotes_gpc()) {
 		return addslashes($str);
-	}
-	else
-	{
+	} else {
 		return $str;
 	}
 }
@@ -228,7 +225,6 @@ function escapeSimpleSelect($str)
 
 function unescapeSimple($str)
 {
-        $str = canonicalize_whitespace($str);
         if (get_magic_quotes_gpc()) {
                 return stripslashes($str);
         } else {
