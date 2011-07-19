@@ -91,11 +91,11 @@ if (!extension_loaded('gd')) {
 	<table width='100%'>
 	<tr>
 	  <th>$langTotalVisitsCourses:</th>
-	  <td>$totalHits:</td>
+	  <td>$totalHits</td>
 	</tr>
 	<tr>
 	  <th>$langDurationVisits:</th>
-	  <td>$totalDuration:</td>
+	  <td>$totalDuration</td>
 	</tr>
 	<tr>
 	  <th valign='top'>$langDurationVisitsPerCourse:</th>
