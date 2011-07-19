@@ -24,7 +24,7 @@ if ($casactive['auth_default'] == 1) {
 	$cas_link = "";
 }
 
-$tool_content .= "<form action='$_SERVER[PHP_SELF]' method='post'>
+$tool_content .= "<form action='$urlSecure' method='post'>
   <table class='tbl' width='300' align='center'>
   <tr>
   <th colspan='2' class='LoginHead' align='center'><b>$langUserLogin </b></th>

@@ -76,17 +76,20 @@ include ('tools.php');
  * @param string $body_action (optional) code to be added to the BODY tag
  */
 function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null, $body_action = null, $hideLeftNav = null, $perso_tool_content = null) {
-	global $langUser, $langUserHeader, $langLogout, $langLogin, $siteName, $intitule, $nameTools, $langHelp, $langAnonUser, $langActivate, $langDeactivate;
-	global $language, $helpTopic, $require_help, $langEclass, $langCopyrightFooter;
-	global $relPath, $urlServer, $urlAppend, $toolContent_ErrorExists, $statut;
-	global $page_name, $page_navi, $currentCourseID, $langHomePage, $siteName, $navigation;
-	global $homePage, $courseHome, $webDir, $extraMessage;
-	global $langChangeLang, $langUserBriefcase, $langPersonalisedBriefcase, $langAdmin, $switchLangURL;
-	global $langSearch, $langAdvancedSearch;
-	global $langMyPersoLessons, $langMyPersoDeadlines;
-	global $langMyPersoAnnouncements, $langMyPersoDocs, $langMyPersoAgenda, $langMyPersoForum;
-	global $langExtrasLeft, $langExtrasRight, $langChooseLang;
-	global $require_current_course, $is_adminOfCourse, $theme, $themeimg;
+        global $courseHome, $currentCourseID, $extraMessage, $helpTopic, 
+               $homePage, $intitule, $is_adminOfCourse, $langActivate, 
+               $langAdmin, $langAdvancedSearch, $langAnonUser, $langChangeLang, 
+               $langChooseLang, $langCopyrightFooter, $langDeactivate, 
+               $langEclass, $langExtrasLeft, $langExtrasRight, $langHelp, 
+               $langHomePage, $langLogin, $langLogout, $langMyPersoAgenda, 
+               $langMyPersoAnnouncements, $langMyPersoDeadlines, 
+               $langMyPersoDocs, $langMyPersoForum, $langMyPersoLessons, 
+               $langPersonalisedBriefcase, $langSearch, $langUser, 
+               $langUserBriefcase, $langUserHeader, $language, $nameTools, 
+               $navigation, $page_name, $page_navi, $relPath, 
+               $require_current_course, $require_help, $siteName, $siteName, 
+               $statut, $switchLangURL, $theme, $themeimg, $webDir,
+               $toolContent_ErrorExists, $urlAppend, $urlSecure, $urlServer;
 
 	//get blocks content from $toolContent array
 	if ($perso_tool_content) {
@@ -204,8 +207,10 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
                 } else {
 			if (!get_config('dont_display_login_form')) {
 				$t->set_var ('LANG_LOGOUT', $langLogin);
-				$t->set_var ('LOGOUT_LINK', $relPath . 'login_form.php');	
-			}
+				$t->set_var ('LOGOUT_LINK', $urlSecure . 'login_form.php');	
+                        } else {
+                                $t->set_var ('LOGOUT_LINK', '#');
+                        }
                 }
 		// set the text and icon on the third bar (header)
 		if ($menuTypeID == 2) {

@@ -80,7 +80,7 @@ if (mysql_num_rows($result) > 0) {
           <td width='1'><img style='border:0px;' src='$themeimg/arrow.png' alt='' /></td>
           <td>
 	    <b><a href='modules/announcements/main_ann.php?aid=$aid'>".q($announceArr[$i]['title'])."</a></b>
-	    &nbsp;<span class='smaller'>(".claro_format_locale_date($dateFormatLong, strtotime($announceArr[$i]['date'])).")</span>
+    &nbsp;<span class='smaller'>(".claro_format_locale_date($dateFormatLong, strtotime($announceArr[$i]['date'])).")</span>
 		".standard_text_escape(ellipsize($announceArr[$i]['body'], 150, "<strong>&nbsp;<a href='modules/announcements/main_ann.php?aid=$aid'>... <span class='smaller'>[$langMore]</span></a></strong>"))."
 	  </td>
 	</tr>";
@@ -107,7 +107,7 @@ if ($casactive['auth_default'] == 1) {
 
 if (!get_config('dont_display_login_form')) {
 	$tool_content .= "</div><div id='rightbar'>
-	<form action='${urlSecure}index.php' method = 'post'>
+	<form action='$urlSecure' method='post'>
 	 <table width='100%' class='tbl'>
 	 <tr>
 	   <th class='LoginHead'><b>$langUserLogin </b></th>
