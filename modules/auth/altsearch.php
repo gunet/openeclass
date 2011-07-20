@@ -61,7 +61,7 @@ $lastpage = 'altnewuser.php?' . ($prof? 'p=1&amp;': '') .
 $navigation[] = array ('url' => $lastpage, 'name' => $langConfirmUser);
 
 $errormessage = "<br/><p>$ldapback <a href='$lastpage'>$ldaplastpage</a></p>";
-$is_valid = false;
+$init_auth = $is_valid = false;
 
 if (!isset($_SESSION['was_validated']) or
     $_SESSION['was_validated']['auth'] != $auth or
@@ -78,14 +78,15 @@ if (!isset($_SESSION['was_validated']) or
                 }
                 if (strpos($_SESSION['shib_nom'], $shibseparator)) {
                         $temp = explode($shibseparator, $_SESSION['shib_nom']);
-                        $GLOBALS['auth_user_info']['firstname'] = $temp[0];
-                        $GLOBALS['auth_user_info']['lastname'] = $temp[1];
+                        $auth_user_info['firstname'] = $temp[0];
+                        $auth_user_info['lastname'] = $temp[1];
                 }
-                $GLOBALS['auth_user_info']['email'] = $_SESSION['shib_email'];
+                $auth_user_info['email'] = $_SESSION['shib_email'];
+                $uname = $_SESSION['shib_uname'];
                 $is_valid = true;
         } elseif ($is_submit or ($auth == 7 and !$submit)) {
                 unset($_SESSION['was_validated']);
-                if ($auth !=7 and $auth != 6 and
+                if ($auth != 7 and $auth != 6 and
                     ($uname === '' or $passwd === '')) {
                         $tool_content .= "<p class='caution'>$ldapempty $errormessage</p>";
                         draw($tool_content, 0);
@@ -94,7 +95,7 @@ if (!isset($_SESSION['was_validated']) or
                         // try to authenticate user
                         $auth_method_settings = get_auth_settings($auth);
                         if ($auth == 6) {
-                                redirect_to_home_page('secure/index_reg.php');
+                                redirect_to_home_page('secure/index_reg.php' . ($prof? '?p=1': ''));
                         }
                         $is_valid = auth_user_login($auth, $uname, $passwd, $auth_method_settings);
                 }	
@@ -117,7 +118,6 @@ if (!isset($_SESSION['was_validated']) or
                 if (isset($GLOBALS['auth_user_info'])) {
                         $_SESSION['was_validated']['auth_user_info'] = $GLOBALS['auth_user_info'];
                 }
-                user_info_form();
         } else {
                 $tool_content .= "<p class='caution'>$langConnNo<br/>$langAuthNoValidUser</p>" .
                                  "<p>&laquo; <a href='$lastpage'>$langBack</a></p>";
@@ -132,9 +132,10 @@ if (!isset($_SESSION['was_validated']) or
 // -----------------------------------------
 // registration
 // -----------------------------------------
-if ($is_valid and !isset($init_auth)) {
+if ($is_valid) {
         $ext_info = !isset($auth_user_info);
-        $ok = register_posted_variables(array('uname' => true,
+        $ok = register_posted_variables(array('submit' => false,
+																              'uname' => true,
                                               'email' => $email_required && $ext_info,
                                               'prenom_form' => $ext_info,
                                               'nom_form' => $ext_info,
@@ -142,26 +143,26 @@ if ($is_valid and !isset($init_auth)) {
                                               'department' => true,
                                               'usercomment' => $comment_required,
                                               'userphone' => $phone_required), 'all');
-        if (!$ok) {
+        if (!$ok and $submit) {
                 $tool_content .= "<p class='caution'>$langFieldsMissing</p>";
         }
-        $ok = $ok && !$_SESSION['was_validated']['uname_exists'];
-	$depid = intval($department);
+				$ok = $ok && !$_SESSION['was_validated']['uname_exists'];
+				$depid = intval($department);
         if (isset($auth_user_info)) {
                 $prenom_form = $auth_user_info['firstname'];
                 $nom_form = $auth_user_info['lastname'];
                 $email = $auth_user_info['email'];
         }
  
-        if (!$ok) {
-                user_info_form();
-		draw($tool_content,0);
-		exit();
-	}
+				if (!$ok) {
+								user_info_form();
+								draw($tool_content, 0);
+								exit();
+				}
 
-	if ($auth != 1) {
-                $password = isset($auth_ids[$auth])? $auth_ids[$auth]: '';
-	}
+				if ($auth != 1) {
+								$password = isset($auth_ids[$auth])? $auth_ids[$auth]: '';
+				}
 
         $statut = $prof? 1: 5;
         $greeting = $prof? $langDearProf: $langDearUser;
@@ -295,7 +296,7 @@ function user_info_form()
 
         $tool_content .= "
   <form action='$_SERVER[PHP_SELF]' method='post'>
-    " . (isset($init_auth)? "<p class='success'>$langTheUser $ldapfound.</p>": '') .
+    " . ($init_auth? "<p class='success'>$langTheUser $ldapfound.</p>": '') .
         ($_SESSION['was_validated']['uname_exists']? "<p class='caution'>$langUserFree</p>": '') . "
     <fieldset>
       <legend>$langUserData</legend>

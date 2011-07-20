@@ -411,7 +411,7 @@ $_SESSION[\'shib_uname\'] = '.$settings['shibuname'].';
 $_SESSION[\'shib_nom\'] = '.$settings['shibcn'].';
 $_SESSION[\'shib_statut\'] = $_SERVER[\'unscoped-affiliation\'];
 $_SESSION[\'shib_auth\'] = true;
-header("Location: ../modules/auth/altsearch.php");
+header("Location: ../modules/auth/altsearch.php" . (isset($_GET["p"]) && $_GET["p"]? "?p=1": ""));
 ';
                         if (fwrite($f, $filecontents)) {
                                 $testauth = true;
@@ -833,7 +833,7 @@ function shib_cas_login($type)
 				$language = langcode_to_name($info["lang"]);
                         }
                 }	
-        } elseif ($autoregister) {
+        } elseif ($autoregister and !get_config('am_required')) {
 		// else create him automatically
                 $registered_at = time();
                 $expires_at = time() + $durationAccount;  
