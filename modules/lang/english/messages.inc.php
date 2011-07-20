@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language en
-// Generated 2011-07-06 17:36:38
+// Generated 2011-07-20 15:46:58
 
 $langIntro = "The <b>$siteName</b> platform is a complete eCourses Management System supporting the Asynchronous eLearning Service in <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
 $langVersion = "$siteName version";
@@ -1882,8 +1882,8 @@ $langcsvenc2 = "unicode encoding (UTF-8)";
 $langFieldsMissing = "You left one or more required fields empty!";
 $langFillAgain = "Please fill again the";
 $langFillAgainLink = "form";
-$langReqRegProf = "".$langTeacher."Registration Application ";
-$langProfUname = "".$langTeacher."User Name";
+$langReqRegProf = "$langTeacher Registration Application";
+$langProfUname = "User Name";
 $profreason = "Describe the reasons for using the platform";
 $langProfEmail = "User E-mail";
 $reguserldap = "LDAP User Registration";
@@ -1891,7 +1891,7 @@ $langByLdap = "LDAP authentication";
 $langNewProf = "New $langsOfTeacher account details";
 $profsuccess = "".$langTeacher."new account has been created succesfully!";
 $langDearProf = "Dear ".$langTeacher."!";
-$success = "Your personal info have been sent succesfully!";
+$success = "Your personal info has been sent succesfully!";
 $click = "Click";
 $langBackPage = "to go back to home page";
 $emailprompt = "Type your e-mail address:";
@@ -2861,3 +2861,7 @@ $langRestoreUserNew = "%s: Account created. Full name: %s";
 $langForumParticipation = 'Forum Participation';
 $langAdministratorForum = 'Forum Management';
 $langAdministratorGroup = 'Group Management';
+$langAltAuthStudentReq = 'Activate new account requests for students logging in via alternative authentication methods';
+$langEditAuth = 'Change authentication method';
+$langEditAuthMethod = 'Authentication method:';
+$langEditAuthSetPass = 'You need to set a new password for the user.';

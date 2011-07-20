@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language es
-// Generated 2011-07-06 17:36:39
+// Generated 2011-07-20 15:46:58
 
 $langIntro = "El <b>$siteName</b> platforma es un completo Sistema de Administración eCursos que soporta el Servicio Asincrónico de eAprendizaje en <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
 $langVersion = "$siteName versión";
@@ -1821,8 +1821,8 @@ $langcsvenc2 = "codificación unicode (UTF-8)";
 $langFieldsMissing = "¡Has dejado un campo o más de los requeridos vacíos!";
 $langFillAgain = "Por favor rellena otra vez el";
 $langFillAgainLink = "forma";
-$langReqRegProf = "".$langTeacher."Aplicación de Registro ";
-$langProfUname = "".$langTeacher."Nombre del Usuario";
+$langReqRegProf = "$langTeacher Aplicación de Registro";
+$langProfUname = "Nombre del Usuario";
 $profreason = "Describe las razones para utilizar esta plataforma";
 $langProfEmail = "e-mail del Usuario";
 $reguserldap = "LDAP Registro del Usuario";
@@ -2799,3 +2799,7 @@ $langRestoreUserNew = "%s: Account created. Full name: %s";
 $langForumParticipation = 'Forum Participation';
 $langAdministratorForum = 'Forum Management';
 $langAdministratorGroup = 'Group Management';
+$langAltAuthStudentReq = 'Activate new account requests for students logging in via alternative authentication methods';
+$langEditAuth = 'Change authentication method';
+$langEditAuthMethod = 'Authentication method:';
+$langEditAuthSetPass = 'You need to set a new password for the user.';
