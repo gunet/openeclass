@@ -3,6 +3,16 @@ Open eClass Platform - CHANGES
 ****************************************
 
 ********************************************************************
+Open eClass 2.4.1 - Changes List
+********************************************************************
+
+-- Code reorganization and bug fixes for alternative authentication methods
+-- Add setting to select automatic registration or going through a request for
+students logging-in via alternative methods when registration is closed
+-- Option for the admin to change auth method for a user
+-- Minor bug fixes for the glossary and video modules
+
+********************************************************************
 Open eClass 2.4 - Changes List
 ********************************************************************
 
