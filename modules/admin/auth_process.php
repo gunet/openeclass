@@ -52,6 +52,7 @@ $debugCAS = true;
 
 // get the values
 $auth = isset($_REQUEST['auth'])? intval($_REQUEST['auth']): false;
+$shibboleth = false;
 if (isset($_POST['submit'])) {
 	if ($auth == 7) {
 		$_SESSION['cas_do'] = true;
@@ -63,7 +64,9 @@ if (isset($_POST['submit'])) {
                             $_SESSION[$var] = $_POST[$var];    
                         }
                 }
-	}
+	} elseif ($auth == 6) {
+                $shibboleth = true;
+        }
 } else {
 	if ($auth == 7) {
 		$_SESSION['cas_do'] = false;
@@ -105,7 +108,7 @@ if (!empty($_SESSION['cas_warn']) and $auth == 7) {
 	$tool_content .= "<p class='alert1'>$langCASnochange</p>";
 }
 
-if ((!empty($auth_submit) and $auth_submit==1) or !empty($_SESSION['cas_do'])) {
+if ($shibboleth or !empty($_SESSION['cas_do'])) {
  	if (!empty($_SESSION['cas_do']) and empty($_SESSION['cas_warn'])) {
 		// cas test new settings
 		$cas_ret = cas_authenticate(7, true, $_SESSION['cas_host'], $_SESSION['cas_port'], $_SESSION['cas_context'], $_SESSION['cas_cachain']);
