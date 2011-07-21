@@ -32,7 +32,7 @@ Defines standard functions and validates variables
 ---------------------------------------------------------------------
 */
 define('DEBUG_MYSQL', true);
-define('ECLASS_VERSION', '2.4');
+define('ECLASS_VERSION', '2.4.1');
 
 // resized user image 
 define('IMAGESIZE_LARGE', 256);
