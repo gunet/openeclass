@@ -467,24 +467,23 @@ function dumpArray($arr) {
  * @param array $arr
  */
 function print_a($TheArray) {
-	echo "<table border=1>n";
+	echo "<table border=1>\n";
 
 	$Keys = array_keys ( $TheArray );
 	foreach ( $Keys as $OneKey ) {
-		echo "<tr>n";
+		echo "<tr>\n";
 		echo "<td bgcolor='yellow'>";
 		echo "<b>" . $OneKey . "</b>";
-		echo "</td>n";
+		echo "</td>\n";
 		echo "<td bgcolor='#C4C2A6'>";
 		if (is_array ( $TheArray [$OneKey] ))
 			print_a ( $TheArray [$OneKey] );
 		else
 			echo $TheArray [$OneKey];
-		echo "</td>n";
-
-		echo "</tr>n";
+		echo "</td>\n";
+		echo "</tr>\n";
 	}
-	echo "</table>n";
+	echo "</table>\n";
 }
 
 /**

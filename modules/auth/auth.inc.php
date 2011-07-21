@@ -484,17 +484,20 @@ function cas_authenticate($auth, $new = false, $cas_host=null, $cas_port=null, $
         // SESSION does not exist if user has not been authenticated
 	$ret = array();
 
-        if ($cas = get_auth_settings($auth)) {
-                if(!$new) {
-                        $cas_host = $cas['cas_host'];
-                        $cas_port = $cas['cas_port'];
-                        $cas_context = $cas['cas_context'];
-                        $cas_cachain = $cas['cas_cachain'];
-                        $casusermailattr = $cas['casusermailattr'];
-                        $casuserfirstattr = $cas['casuserfirstattr'];
-                        $casuserlastattr = $cas['casuserlastattr'];
-                        $cas_altauth = $cas['cas_altauth'];
-                }
+	if (!$new) {
+		$cas = get_auth_settings($auth);
+		if ($cas) {
+			$cas_host = $cas['cas_host'];
+			$cas_port = $cas['cas_port'];
+			$cas_context = $cas['cas_context'];
+			$cas_cachain = $cas['cas_cachain'];
+			$casusermailattr = $cas['casusermailattr'];
+			$casuserfirstattr = $cas['casuserfirstattr'];
+			$casuserlastattr = $cas['casuserlastattr'];
+			$cas_altauth = $cas['cas_altauth'];
+		}
+	}
+        if ($new or $cas) {
                 $cas_url = 'https://'.$cas_host;
                 $cas_port = intval($cas_port);
                 if ($cas_port != '443') {

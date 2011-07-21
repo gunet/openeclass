@@ -30,37 +30,23 @@ $cassettings = $casdata['auth_settings'];
 $auth_instructions = $casdata['auth_instructions'];
 
 if (!empty($cassettings)) {
-	// tabs
 	$cas = explode('|', $cassettings);
-	//cas_host
 	$cas_host = str_replace('cas_host=', '', $cas[0]);
-	//cas_port
 	$cas_port = str_replace('cas_port=', '', $cas[1]);
 	if (empty($cas_port)) {
 		$cas_port = 443;
 	}
-	//cas_context
 	$cas_context = str_replace('cas_context=', '', $cas[2]);
-	if (empty($cas_context)) {
-		$cas_context = '/cas/';
-	}
-	//cas_cachain
 	$cas_cachain = str_replace('cas_cachain=', '', $cas[3]);
-	//casusermailattr
 	$casusermailattr = str_replace('casusermailattr=', '', $cas[4]);
-	//casuserfirstattr
 	$casuserfirstattr = str_replace('casuserfirstattr=', '', $cas[5]);
-	//casuserlastattr
 	$casuserlastattr = str_replace('casuserlastattr=', '', $cas[6]);
-	//cas_altauth
 	$cas_altauth = intval(str_replace('cas_altauth=', '', $cas[7]));
-	//cas logout link
 	$cas_logout = str_replace('cas_logout=', '', $cas[8]);
 } else {
-	// empty host
 	$cas_host = '';
 	$cas_port = 443;
-  	$cas_context = '/cas/';
+  	$cas_context = '';
 	$cas_logout = '';
 	$cas_cachain = '';
 	$casusermailattr = 'mail';

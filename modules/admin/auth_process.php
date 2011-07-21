@@ -51,17 +51,23 @@ $navigation[] = array('url' => 'auth.php', 'name' => $langUserAuthentication);
 $debugCAS = true;
 
 // get the values
-if (isset($_POST['step']) and $_POST['step'] == '1') {
-	$auth = isset($_POST['auth'])?$_POST['auth']:'';
-	$auth_submit = isset($_POST['auth_submit'])?$_POST['auth_submit']:'';
+$auth = isset($_REQUEST['auth'])? intval($_REQUEST['auth']): false;
+if (isset($_POST['submit'])) {
 	if ($auth == 7) {
 		$_SESSION['cas_do'] = true;
+                // $_POST is lost after we come back from CAS
+                foreach (array('cas_host', 'cas_port', 'cas_context', 'cas_cachain',
+                               'casusermailattr', 'casuserfirstattr', 'casuserlastattr',
+                               'cas_altauth', 'cas_logout', 'auth_instructions') as $var) {
+                        if (isset($_POST[$var])) {
+                            $_SESSION[$var] = $_POST[$var];    
+                        }
+                }
 	}
 } else {
-	$auth = isset($_GET['auth'])?$_GET['auth']:'';
 	if ($auth == 7) {
 		$_SESSION['cas_do'] = false;
-	}
+        }
 }
 
 if (isset($_GET['ticket'])) {
@@ -87,17 +93,6 @@ if (empty($ldap_login_attr)) {
         $ldap_login_attr = 'uid';
 }
 
-// set them only from _POST, otherwise they exist in _SESSION
-// _POST is lost after we come back from CAS
-if (isset($_POST['cas_host'])) $cas_host = $_POST['cas_host'];
-if (isset($_POST['cas_port'])) $cas_port = intval($_POST['cas_port']);
-if (isset($_POST['cas_context'])) $cas_context = $_POST['cas_context'];
-if (isset($_POST['cas_cachain'])) $cas_cachain = $_POST['cas_cachain'];
-if (isset($_POST['casusermailattr'])) $casusermailattr = $_POST['casusermailattr'];
-if (isset($_POST['casuserfirstattr'])) $casuserfirstattr = $_POST['casuserfirstattr'];
-if (isset($_POST['casuserlastattr'])) $casuserlastattr = $_POST['casuserlastattr'];
-if (isset($_POST['cas_altauth'])) $cas_altauth = $_POST['cas_altauth'];
-if (isset($_POST['cas_logout'])) $cas_logout = $_POST['cas_logout'];
 
 $test_username = isset($_POST['test_username'])?
         autounquote(canonicalize_whitespace($_POST['test_username'])): '';
@@ -108,24 +103,10 @@ $test_password = isset($_POST['test_password'])?
 // to change CAS settings
 if (!empty($_SESSION['cas_warn']) and $auth == 7) {
 	$tool_content .= "<p class='alert1'>$langCASnochange</p>";
-	draw($tool_content, 3);
-	exit();
 }
 
 if ((!empty($auth_submit) and $auth_submit==1) or !empty($_SESSION['cas_do'])) {
  	if (!empty($_SESSION['cas_do']) and empty($_SESSION['cas_warn'])) {
-		// save _POST to _SESSION
-		if (isset($cas_host)) $_SESSION['cas_host'] = $cas_host;
-		if (isset($cas_port)) $_SESSION['cas_port'] = $cas_port;
-		if (isset($cas_context)) $_SESSION['cas_context'] = $cas_context;
-		if (isset($cas_cachain)) $_SESSION['cas_cachain'] = $cas_cachain;
-		if (isset($_POST['auth_instructions'])) $_SESSION['casinstructions'] = $_POST['auth_instructions'];
-		if (isset($casusermailattr)) $_SESSION['casusermailattr'] = $casusermailattr;
-		if (isset($casuserfirstattr)) $_SESSION['casuserfirstattr'] = $casuserfirstattr;
-		if (isset($casuserlastattr)) $_SESSION['casuserlastattr'] = $casuserlastattr;
-		if (isset($cas_altauth)) $_SESSION['cas_altauth'] = $cas_altauth;
-		if (isset($cas_logout)) $_SESSION['cas_logout'] = $cas_logout;
-		
 		// cas test new settings
 		$cas_ret = cas_authenticate(7, true, $_SESSION['cas_host'], $_SESSION['cas_port'], $_SESSION['cas_context'], $_SESSION['cas_cachain']);
 		if (phpCAS::checkAuthentication()) {
@@ -145,6 +126,10 @@ if ((!empty($auth_submit) and $auth_submit==1) or !empty($_SESSION['cas_do'])) {
 		$tool_content .= "<br /><p>$langConnTest</p>";
 		if (($auth == 6) or (isset($cas_valid) and $cas_valid == true)) {
 			$test_username = $test_password = " ";
+		}
+                // when we come back from CAS
+		if (isset($_SESSION['cas_do']) && $_SESSION['cas_do']) {
+			$auth = 7;
 		}
                 switch ($auth) {
                         case '1':
@@ -193,7 +178,7 @@ if ((!empty($auth_submit) and $auth_submit==1) or !empty($_SESSION['cas_do'])) {
                                                   'casuserlastattr' => $_SESSION['casuserlastattr'],
                                                   'cas_altauth' => $_SESSION['cas_altauth'],
                                                   'cas_logout' => $_SESSION['cas_logout']);
-                                $auth_instructions = $_SESSION['casinstructions'];
+                                $auth_instructions = $_SESSION['auth_instructions'];
                                 break;
                         default:
                                 break;
@@ -230,11 +215,6 @@ if ((!empty($auth_submit) and $auth_submit==1) or !empty($_SESSION['cas_do'])) {
 			                  <td class='caution'>$langWrongAuth</td></tr></tbody></table><br /><br />";
 			$auth_allow = 0;
 		}
-		// when we come back from CAS
-		if (isset($_SESSION['cas_do']) && $_SESSION['cas_do'] == 7) {
-			$auth = 7;
-			// $auth_allow = 1; 
-		}
 
 		// store the values - do the updates //
 		if (!empty($auth_allow) and $auth_allow == 1) {
@@ -243,7 +223,7 @@ if ((!empty($auth_submit) and $auth_submit==1) or !empty($_SESSION['cas_do'])) {
                         }
                         $qry = "REPLACE INTO auth
                                         SET auth_settings = '".mysql_real_escape_string($auth_settings)."',
-                                            auth_instructions = ".autoquote($_POST['auth_instructions']).",
+                                            auth_instructions = ".autoquote($auth_instructions).",
                                             auth_default = 1,
                                             auth_name = '$auth_ids[$auth]',
                                             auth_id = ".$auth;
@@ -279,9 +259,7 @@ else
 	<legend>".get_auth_info($auth)."</legend>
 	<table width='100%' class='tbl'><tr>
 	<th colspan='2'>
-	  <input type='hidden' name='auth_submit' value='1' />
 	  <input type='hidden' name='auth' value='".intval($auth)."' />
-	  <input type='hidden' name='step' value='1' />
 	</th>
 	</tr>";
 	
@@ -305,8 +283,7 @@ else
 		$auth = 7;
 		$tool_content .= "<p class='alert1'>$langCASnochange</p>";
 	}
-	if ($auth != 6 && $auth !=7) { 
-		$tool_content .= "";
+	if ($auth != 6 && $auth != 7) { 
 		$tool_content .= "<tr><td colspan='2'><div class='info'>$langTestAccount</div></td></tr>
 		<tr><th width='220' class='left'>$langUsername: </th>
 		<td><input size='30' class='FormData_InputText' type='text' name='test_username' value='".$test_username."'></td></tr>
