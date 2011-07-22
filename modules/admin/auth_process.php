@@ -50,25 +50,35 @@ $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $navigation[] = array('url' => 'auth.php', 'name' => $langUserAuthentication);
 $debugCAS = true;
 
-// get the values
 $auth = isset($_REQUEST['auth'])? intval($_REQUEST['auth']): false;
-$shibboleth = false;
-if (isset($_POST['submit'])) {
-	if ($auth == 7) {
+register_posted_variables(array('imaphost' => true, 'pop3host' => true,
+                                'ldaphost' => true, 'ldap_base' => true,
+                                'ldapbind_dn' => true, 'ldapbind_pw' => true,
+                                'ldap_login_attr' => true, 'ldap_login_attr2' => true,
+                                'dbhost' => true, 'dbtype' => true, 'dbname' => true,
+                                'dbuser' => true, 'dbpass' => true, 'dbtable' => true,
+                                'dbfielduser' => true, 'dbfieldpass' => true,
+                                'shibemail' => true, 'shibuname' => true,
+                                'shibcn' => true, 'checkseparator' => true,
+                                'submit' => true, 'auth_instructions' => true,
+                                'test_username' => true),
+                          'all', 'autounquote'); 
+
+// unescapeSimple() preserves whitespace in password
+$test_password = isset($_POST['test_password'])? unescapeSimple($_POST['test_password']): '';
+
+if ($auth == 7) {
+        if ($submit) {
 		$_SESSION['cas_do'] = true;
                 // $_POST is lost after we come back from CAS
                 foreach (array('cas_host', 'cas_port', 'cas_context', 'cas_cachain',
                                'casusermailattr', 'casuserfirstattr', 'casuserlastattr',
                                'cas_altauth', 'cas_logout', 'auth_instructions') as $var) {
-                        if (isset($_POST[$var])) {
-                            $_SESSION[$var] = $_POST[$var];    
-                        }
+                       if (isset($_POST[$var])) {
+                               $_SESSION[$var] = $_POST[$var];    
+                       }
                 }
-	} elseif ($auth == 6) {
-                $shibboleth = true;
-        }
-} else {
-	if ($auth == 7) {
+        } else {
 		$_SESSION['cas_do'] = false;
         }
 }
@@ -81,26 +91,9 @@ if (!empty($_SESSION['cas_warn'])) {
 		$_SESSION['cas_do'] = false;
 }
 
-register_posted_variables(array('imaphost' => true, 'pop3host' => true,
-                                'ldaphost' => true, 'ldap_base' => true,
-                                'ldapbind_dn' => true, 'ldapbind_pw' => true,
-                                'ldap_login_attr' => true, 'ldap_login_attr2' => true,
-                                'dbhost' => true, 'dbtype' => true, 'dbname' => true,
-                                'dbuser' => true, 'dbpass' => true, 'dbtable' => true,
-                                'dbfielduser' => true, 'dbfieldpass' => true,
-                                'shibemail' => true, 'shibuname' => true,
-                                'shibcn' => true, 'checkseparator' => true),
-                          'all', 'autounquote'); 
-
 if (empty($ldap_login_attr)) {
         $ldap_login_attr = 'uid';
 }
-
-
-$test_username = isset($_POST['test_username'])?
-        autounquote(canonicalize_whitespace($_POST['test_username'])): '';
-$test_password = isset($_POST['test_password'])?
-        autounquote($_POST['test_password']): '';
 
 // You have to logout from CAS and preferably close your browser
 // to change CAS settings
@@ -108,9 +101,9 @@ if (!empty($_SESSION['cas_warn']) and $auth == 7) {
 	$tool_content .= "<p class='alert1'>$langCASnochange</p>";
 }
 
-if ($shibboleth or !empty($_SESSION['cas_do'])) {
+if ($submit or !empty($_SESSION['cas_do'])) {
  	if (!empty($_SESSION['cas_do']) and empty($_SESSION['cas_warn'])) {
-		// cas test new settings
+		// test new CAS settings
 		$cas_ret = cas_authenticate(7, true, $_SESSION['cas_host'], $_SESSION['cas_port'], $_SESSION['cas_context'], $_SESSION['cas_cachain']);
 		if (phpCAS::checkAuthentication()) {
 			$test_username = phpCAS::getUser();
@@ -125,7 +118,7 @@ if ($shibboleth or !empty($_SESSION['cas_do'])) {
 	}
 
 	// if form is submitted
-	if(isset($_POST['submit']) or $cas_valid == true) {
+	if (isset($_POST['submit']) or $cas_valid == true) {
 		$tool_content .= "<br /><p>$langConnTest</p>";
 		if (($auth == 6) or (isset($cas_valid) and $cas_valid == true)) {
 			$test_username = $test_password = " ";
@@ -248,13 +241,13 @@ else
 	// handle reloads on auth_process.php after authentication check
 	// also handles requests with empty $auth
 	// without this, a form with just username/password is displayed
-	if(empty($auth)) {
+	if (!$auth) {
 		header('Location: ../admin/auth.php');
 		exit;
 	}
 	// Display the form 
 	// we need to load auth=7 settings
-	if(isset($auth) and $auth != 6) {
+	if ( $auth != 6) {
 		$auth_data = get_auth_settings($auth);
 	}
 	$tool_content .= "<form name='authmenu' method='post' action='$_SERVER[PHP_SELF]'>
@@ -289,9 +282,9 @@ else
 	if ($auth != 6 && $auth != 7) { 
 		$tool_content .= "<tr><td colspan='2'><div class='info'>$langTestAccount</div></td></tr>
 		<tr><th width='220' class='left'>$langUsername: </th>
-		<td><input size='30' class='FormData_InputText' type='text' name='test_username' value='".$test_username."'></td></tr>
+		<td><input size='30' class='FormData_InputText' type='text' name='test_username' value='".q($test_username)."'></td></tr>
 		<tr><th class='left'>$langPass: </th>
-		<td><input size='30' class='FormData_InputText' type='password' name='test_password' value='".$test_password."'></td></tr>";
+		<td><input size='30' class='FormData_InputText' type='password' name='test_password' value='".q($test_password)."'></td></tr>";
 	}
 	$tool_content .= "<tr><th>&nbsp;</th><td class='right'><input type='submit' name='submit' value='$langModify'></td></tr>";
 	$tool_content .= "</table></fieldset></form>";
