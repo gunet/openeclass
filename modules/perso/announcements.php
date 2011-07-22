@@ -114,7 +114,6 @@ function announceHtmlInterface($data) {
 				$an_id = $data[$i][2][$j][3];
 				$assign_content .= "<tr><td><ul class='custom_list'><li><a href='$url$an_id'>" .
                                            "<b>" . q($data[$i][2][$j][0]) .
-                                           standard_text_escape($data[$i][2][$j][0]) .
                                            "</b></a><span class='smaller'><b><br />" .
                                            claro_format_locale_date($dateFormatLong, strtotime($data[$i][2][$j][2])) .
                                            "</b></span><div class='smaller'>".
