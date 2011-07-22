@@ -518,6 +518,13 @@ if (!isset($_POST['submit2'])) {
 			db_query("DROP TABLE cours_faculte");	
 		}		
         }
+	
+	mysql_index_exists('document', 'doc_path_index') or
+                db_query('CREATE INDEX `doc_path_index` ON document (course_id,subsystem,path)');			
+	mysql_index_exists('course_units', 'course_units_index') or
+                db_query('CREATE INDEX `course_units_index` ON course_units (course_id,`order`)');
+	mysql_index_exists('unit_resources', 'unit_res_index') or
+		db_query('CREATE INDEX `unit_res_index` ON unit_resources (unit_id,visibility,res_id)');			
 
         // **********************************************
         // upgrade courses databases

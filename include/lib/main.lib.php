@@ -31,7 +31,6 @@ Standard header included by all eClass files
 Defines standard functions and validates variables
 ---------------------------------------------------------------------
 */
-define('DEBUG_MYSQL', true);
 define('ECLASS_VERSION', '2.4.1');
 
 // resized user image 
@@ -65,10 +64,16 @@ function db_query($sql, $db_name = null)
 	if (isset($db_name)) {
 		mysql_select_db($db_name);
 	}
+        if (defined('DEBUG_MYSQL') and DEBUG_MYSQL === 'FULL') {
+		$f_sql = q(str_replace("\t", '        ', $sql));
+		$start_time = microtime(true);
+        }
 	$r = mysql_query($sql);
         $printed_sql = false;
         if (defined('DEBUG_MYSQL') and DEBUG_MYSQL === 'FULL') {
-                echo '<hr /><pre>', q($sql), '</pre><hr />';
+                echo '<hr /><pre>', $f_sql, '</pre><i>runtime: ',
+		     sprintf('%0.3f', 1000 * (microtime(true) - $start_time)),
+                     'ms</i><hr />';
                 $printed_sql = true;
         }
         if (mysql_errno()) {
