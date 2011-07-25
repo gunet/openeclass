@@ -95,13 +95,13 @@ if (isset($_GET['search']) && $_GET['search'] == "yes") {
 		$searchcours[] = "intitule LIKE '%".mysql_escape_string($searchtitle)."%'";
 	}
 	if(!empty($searchcode)) {
-		$searchcours[] = "code LIKE '%".mysql_escape_string($searchcode)."%'";
+		$searchcours[] = "cours.code LIKE '%".mysql_escape_string($searchcode)."%'";
 	}
 	if ($searchtype != "-1") {
 		$searchcours[] = "visible = '".mysql_escape_string($searchtype)."'";
 	}
 	if($searchfaculte != "0") {
-		$searchcours[] = "faculte = '".mysql_escape_string($searchfaculte)."'";
+		$searchcours[] = "faculte.name = '".mysql_escape_string($searchfaculte)."'";
 	}
 	$query=join(' AND ',$searchcours);
 	if (!empty($query)) {
