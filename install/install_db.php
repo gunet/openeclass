@@ -509,3 +509,8 @@ db_query("CREATE TABLE `course_units` (
 // Create full text indexes
 db_query("ALTER TABLE `annonces` ADD FULLTEXT `annonces` (`contenu`, `title`)");
 db_query("ALTER TABLE `cours` ADD FULLTEXT `cours` (`code` ,`description` ,`intitule` ,`course_keywords`, `course_addon`)");
+
+// create indexes
+db_query('CREATE INDEX `doc_path_index` ON document (course_id,subsystem,path)');			
+db_query('CREATE INDEX `course_units_index` ON course_units (course_id,`order`)');	
+db_query('CREATE INDEX `unit_res_index` ON unit_resources (unit_id,visibility,res_id)');			
