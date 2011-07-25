@@ -95,6 +95,7 @@
          */
         function parseWikiWord( $str, &$tag, &$attr, &$type )
         {
+            global $code_cours;
             $tag = 'a';
             $attr = ' href="'.$str.'"';
             if ( $this->wiki->pageExists( $str ) )
