@@ -110,8 +110,8 @@
             }
             else
             {
-                return "<a href=\"".$_SERVER['PHP_SELF']."?course='.$code_cours
-                    . '&amp;action=edit&amp;title=" . rawurlencode($str )
+                return "<a href=\"".$_SERVER['PHP_SELF']."?course=".$code_cours
+                    . "&amp;action=edit&amp;title=" . rawurlencode($str )
                     . "&amp;wikiId=" . $this->wiki->getWikiId()
                     . "\" class=\"wikiEdit\">"
                     . $str
