@@ -111,7 +111,7 @@ if (isset($_GET['search']) && $_GET['search'] == "yes") {
                                            ORDER BY faculte");
 		$caption .= "$langFound ".mysql_num_rows($sql)." $langCourses ";
 	} else {
-                $sql = db_query("SELECT faculte.name AS faculte, faculte, cours.code, intitule,titulaires, visible, cours_id
+                $sql = db_query("SELECT faculte.name AS faculte, cours.code, intitule,titulaires, visible, cours_id
                                         FROM cours, faculte
                                         WHERE faculte.id = cours.faculteid
                                         ORDER BY faculte");
