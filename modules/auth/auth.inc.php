@@ -139,29 +139,59 @@ function is_eclass_unique()
 }
 
 /****************************************************************
+count users for each authentication method
+return count of users for auth method
+****************************************************************/
+function count_auth_users($auth)
+{
+	global $auth_ids;
+	$auth = intval($auth);
+
+	if ($auth === 1) {
+		$qry = "SELECT COUNT(*) FROM user WHERE password != '{$auth_ids[1]}'";
+		for ($i = 2; $i <= count($auth_ids); $i++) {
+			$qry .= " and password != '{$auth_ids[$i]}'";
+		}
+	}
+	else {
+		$qry = "SELECT COUNT(*) FROM user WHERE password = '" . $auth_ids[$auth]."'";
+	}
+	$result = db_query($qry);
+	if ($result) {
+		return(intval(mysql_result($result, 0)));
+	}
+	return 0;
+}
+
+/****************************************************************
 find/return the string, describing in words the default authentication method
 return $m (string)
 ****************************************************************/
 function get_auth_info($auth)
 {
-	global $langViaeClass, $langViaPop, $langViaImap, $langViaLdap, $langViaDB, $langViaShibboleth, $langViaCAS;
+	global $langViaeClass, $langViaPop, $langViaImap, $langViaLdap, $langViaDB, $langViaShibboleth, $langViaCAS, $langNbUsers, $langAuthChangeUser;
 
+	$l = "";
 	if(!empty($auth)) {
+		$c = count_auth_users($auth);
+		if ($c != 0 and $auth != 1) {
+			$l = " - <a href=\"auth_change.php?auth=$auth\">$langAuthChangeUser</a>";
+		}
 		switch($auth)
 		{
-			case '1': $m = $langViaeClass;
+			case '1': $m = "$langViaeClass ($langNbUsers: $c$l)";
 				break;
-			case '2': $m = $langViaPop;
+			case '2': $m = "$langViaPop ($langNbUsers: $c$l)";
 				break;
-			case '3': $m = $langViaImap;
+			case '3': $m = "$langViaImap ($langNbUsers: $c$l)";
 				break;
-			case '4': $m = $langViaLdap;
+			case '4': $m = "$langViaLdap ($langNbUsers: $c$l)";
 				break;
-			case '5': $m = $langViaDB;
+			case '5': $m = "$langViaDB ($langNbUsers: $c$l)";
 				break;
-			case '6': $m = $langViaShibboleth;
+			case '6': $m = "$langViaShibboleth ($langNbUsers: $c$l)";
 				break;
-			case '7': $m = $langViaCAS;
+			case '7': $m = "$langViaCAS ($langNbUsers: $c$l)";
 				break;
 			default: $m = 0;
 				break;
