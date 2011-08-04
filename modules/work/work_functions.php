@@ -71,7 +71,7 @@ function table_row($title, $content, $html = false)
 // use the assignment's id instead. Also insures that secret subdir exists
 function work_secret($id)
 {
-	global $currentCourseID, $workPath, $tool_content, $coursePath;
+	global $currentCourseID, $workPath, $coursePath;
 	
 	$res = db_query("SELECT secret_directory FROM `$currentCourseID`.assignments WHERE id = '$id'", $currentCourseID);
 	if ($res) {
@@ -83,11 +83,10 @@ function work_secret($id)
 		}
 		if (!is_dir("$workPath/$s")) {
 			if (!file_exists($coursePath)) {
-				mkdir("$coursePath",0777);
+				@mkdir("$coursePath",0777);
 			}
-			mkdir("$workPath",0777);
+			@mkdir("$workPath",0777);
 			mkdir("$workPath/$s",0777);
-			$tool_content .= "$workPath/$s";
 		}
 		return $s;
 	} else {
