@@ -554,7 +554,7 @@ function assignment_submit($userid, $assignment_id, $submission_date,
 	global $action, $userid_map, $new_course_code, $course_addusers;
 
 	if (!$action or $_POST['add_users'] == 'none' or
-            !isset($userid_map[$recipient_id])) {
+            !isset($userid_map[$userid])) {
 		return;
 	}
 
