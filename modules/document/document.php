@@ -68,9 +68,7 @@ if ($subsystem == EBOOK) {
 // download directory or file
 // ---------------------------
 if (isset($_GET['download'])) {
-        // Make sure $downloadDir doesn't contain /..
-	$downloadDir = str_replace('/..', '', $_GET['download']);
-
+        $downloadDir = $_GET['download'];
         if ($downloadDir == '/') {
                 $format = '.dir';
                 $real_filename = remove_filename_unsafe_chars($langDoc . ' ' . $fake_code);
@@ -239,7 +237,7 @@ if($can_upload) {
 		
                 $moveTo = $_POST['moveTo'];
                 $source = $_POST['source'];
-                $sourceXml = $source . ".xml";
+                $sourceXml = $source . '.xml';
 		//elegxos ean source kai destintation einai to idio
 		if($basedir . $source != $basedir . $moveTo or $basedir . $source != $basedir . $moveTo) {
 			if (move($basedir . $source, $basedir . $moveTo)) {
@@ -296,10 +294,14 @@ if($can_upload) {
                          autoquote(canonicalize_whitespace($_POST['renameTo'])) .
                          " WHERE $group_sql AND path=" . autoquote($_POST['sourceFile']));
 		if (hasMetaData($_POST['sourceFile'], $basedir, $group_sql)) {
-			db_query("UPDATE document SET filename=" .
-                         autoquote(canonicalize_whitespace($_POST['renameTo'] . ".xml")) .
-                         " WHERE $group_sql AND path=" . autoquote($_POST['sourceFile'] . ".xml"));
-			metaRenameDomDocument($basedir . str_replace('/..', '', $_POST['sourceFile'] . ".xml"), $_POST['renameTo']);
+			$q = db_query("UPDATE document SET filename=" .
+                                      autoquote($_POST['renameTo'] . '.xml') .
+                                      " WHERE $group_sql AND
+                                              path = " . autoquote($_POST['sourceFile'] . '.xml'));
+                        if ($q and mysql_affected_rows()) {
+                                metaRenameDomDocument($basedir . $_POST['sourceFile'] . '.xml',
+                                                      $_POST['renameTo']);
+                        }
 		}
 		$action_message = "<p class='success'>$langElRen</p><br />";
 	}
@@ -307,11 +309,11 @@ if($can_upload) {
 	// Step 1: Show rename dialog box
         if (isset($_GET['rename'])) {
                 $result = db_query("SELECT * FROM document
-						WHERE $group_sql AND
-						      path = " . autoquote($_GET['rename']));
-		$res = mysql_fetch_array($result);
-		$fileName = $res['filename'];
-		$dialogBox .= "
+                                             WHERE $group_sql AND
+                                                   path = " . autoquote($_GET['rename']));
+                $res = mysql_fetch_array($result);
+                $fileName = $res['filename'];
+                $dialogBox .= "
             <form method='post' action='document.php?course=$code_cours'>
             <input type='hidden' name='sourceFile' value='" .
                 q($_GET['rename']) . "' />

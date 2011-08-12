@@ -421,24 +421,39 @@ function create_map_to_real_filename($downloadDir, $include_invisible) {
 	$prefix = strlen(preg_replace('|[^/]*$|', '', $downloadDir))-1;
         $encoded_filenames = $decoded_filenames = $filename = array();
 
-        $sql = db_query("SELECT path, filename, visibility FROM document
+        $hidden_dirs = array();
+        $sql = db_query("SELECT path, filename, visibility, format FROM document
                                 WHERE $group_sql AND
-                                      path LIKE '%$downloadDir%'");
+                                      path LIKE '$downloadDir%'");
         while ($files = mysql_fetch_assoc($sql)) {
                 $GLOBALS['path_visibility'][$files['path']] =
                         ($include_invisible or $files['visibility'] == 'v');
                 array_push($encoded_filenames, $files['path']);
                 array_push($filename, $files['filename']);
+                if (!$include_invisible and $files['format'] == '.dir' and $files['visibility'] != 'v') {
+                        $parentdir = preg_replace('|/[^/]+$|', '', $files['path']);
+                        // Don't need to check lower-level hidden dir if parent is there
+                        if (array_search($parentdir, $hidden_dirs) === false) {
+                                array_push($hidden_dirs, $files['path']);
+                        }
+                }
+        }
+        if (!$include_invisible) {
+                $hidden_regexp = '#^(' . implode('|', $hidden_dirs) . ')#';
         }
         $decoded_filenames = $encoded_filenames;
         foreach ($encoded_filenames as $position => $name) {
+                if (!$include_invisible and
+                    preg_match($hidden_regexp, $name)) {
+                            $GLOBALS['path_visibility'][$name] = false;
+                }
                 $last_name_component = substr(strrchr($name, "/"), 1);
                 foreach ($decoded_filenames as &$newname) {
                         $newname = str_replace($last_name_component, $filename[$position], $newname);
                 }
                 unset($newname);
         }
-	foreach($decoded_filenames as &$s) {
+	foreach ($decoded_filenames as &$s) {
 		$s = substr($s, $prefix);
 	}
 
