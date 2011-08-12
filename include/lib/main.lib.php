@@ -165,10 +165,10 @@ function quote($s) {
 }
 
 
-// Quote string for SQL query if needed (if magic quotes are on)
+// Quote string for SQL query if needed (if magic quotes are off)
 function autoquote($s) {
 	$s = canonicalize_whitespace($s);
-        if (get_magic_quotes_gpc()) {
+        if (phpversion() < '5.4' and get_magic_quotes_gpc()) {
         	return "'$s'";
         } else {
         	return "'".addslashes($s)."'";
@@ -178,7 +178,7 @@ function autoquote($s) {
 // Unquote string if needed (if magic quotes are on)
 function autounquote($s) {
         $s = canonicalize_whitespace($s);
-        if (get_magic_quotes_gpc()) {
+        if (phpversion() < '5.4' and get_magic_quotes_gpc()) {
         	return stripslashes($s);
         } else {
         	return $s;
@@ -201,18 +201,12 @@ function q($s)
 function escapeSimple($str)
 {
 	global $db;
-	if (get_magic_quotes_gpc())
-	{
+	if (phpversion() < '5.4' and get_magic_quotes_gpc()) {
 		return $str;
-	}
-	else
-	{
-		if (function_exists('mysql_real_escape_string'))
-		{
+	} else {
+		if (function_exists('mysql_real_escape_string')) {
 			return @mysql_real_escape_string($str, $db);
-		}
-		else
-		{
+		} else {
 			return @mysql_escape_string($str);
 		}
 	}
@@ -220,7 +214,7 @@ function escapeSimple($str)
 
 function escapeSimpleSelect($str)
 {
-	if (get_magic_quotes_gpc()) {
+	if (phpversion() < '5.4' and get_magic_quotes_gpc()) {
 		return addslashes($str);
 	} else {
 		return $str;
@@ -230,7 +224,7 @@ function escapeSimpleSelect($str)
 
 function unescapeSimple($str)
 {
-        if (get_magic_quotes_gpc()) {
+        if (phpversion() < '5.4' and get_magic_quotes_gpc()) {
                 return stripslashes($str);
         } else {
                 return $str;
