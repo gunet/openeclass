@@ -1531,7 +1531,8 @@ function rich_text_editor($name, $rows, $cols, $text, $extra = '')
 tinyMCE.init({
 	// General options
 		language : '$lang_editor',
-		mode : 'textareas',
+		mode : 'specific_textareas',
+                editor_deselector : 'mceNoEditor',
 		theme : 'advanced',
 		plugins : 'pagebreak,style,save,advimage,advlink,inlinepopups,media,print,contextmenu,paste,noneditable,visualchars,nonbreaking,xhtmlxtras,template,wordcount,advlist,emotions,preview',
 		entity_encoding : 'raw',
@@ -1591,7 +1592,7 @@ function text_area($name, $rows, $cols, $text, $extra = '')
 	$text = $purifier->purify(str_replace(array('<m>', '</m>', '<M>', '</M>'),
 			                      array('[m]', '[/m]', '[m]', '[/m]'),
 			                      $text));
-
+        $extra .= ' class="mceNoEditor"';
 	return "<textarea name='$name' rows='$rows' cols='$cols' $extra>" .
 	       str_replace('{','&#123;', $text) .
 	       "</textarea>\n";
