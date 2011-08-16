@@ -229,7 +229,7 @@ if ($is_adminOfCourse) {
                 $navigation[] = array('url' => "$_SERVER[PHP_SELF]?course=$code_cours",
                                       'name' => $langGlossary);
                 $html_id = $html_term = $html_url = $definition = $notes = '';
-                $category_id = null;
+                $category_id = 'none';
                 if (isset($_GET['add'])) {
                         $nameTools = $langAddGlossaryTerm;
                         $submit_value = $langSubmit;
@@ -245,6 +245,7 @@ if ($is_adminOfCourse) {
                                 $html_url = " value='" . q($data['url']) . "'";
                                 $definition = q($data['definition']);
                                 $notes = q($data['definition']);
+                                $category_id = is_null($data['category_id'])? 'none': $data['category_id'];
                         }
                         $submit_value = $langModify;
                 }
