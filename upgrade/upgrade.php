@@ -518,6 +518,17 @@ if (!isset($_POST['submit2'])) {
 			db_query("DROP TABLE cours_faculte");	
 		}		
         }
+
+        if (!mysql_field_exists($mysqlMainDb, 'glossary', 'category_id')) {
+                db_query("ALTER TABLE glossary ADD category_id INT(11) DEFAULT NULL,
+                                               ADD notes TEXT NOT NULL");
+                db_query("CREATE TABLE IF NOT EXISTS `glossary_category` (
+                                `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                                `course_id` INT(11) NOT NULL,
+                                `name` VARCHAR(255) NOT NULL,
+                                `description` TEXT NOT NULL,
+                                `order` INT(11) NOT NULL DEFAULT 0)");
+        }
 	
 	mysql_index_exists('document', 'doc_path_index') or
                 db_query('CREATE INDEX `doc_path_index` ON document (course_id,subsystem,path)');			

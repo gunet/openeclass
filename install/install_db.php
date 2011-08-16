@@ -301,7 +301,27 @@ db_query("CREATE TABLE IF NOT EXISTS `glossary` (
 	       `url` text,
                `order` INT(11) NOT NULL DEFAULT 0,
                `datestamp` DATETIME NOT NULL,
-               `course_id` INT(11) NOT NULL)");
+               `course_id` INT(11) NOT NULL,
+               `category_id` INT(11) DEFAULT NULL,
+               `notes` TEXT NOT NULL)");
+
+db_query("CREATE TABLE IF NOT EXISTS `glossary_category` (
+               `id` MEDIUMINT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+               `term` VARCHAR(255) NOT NULL,
+               `definition` text NOT NULL,
+	       `url` text,
+               `order` INT(11) NOT NULL DEFAULT 0,
+               `datestamp` DATETIME NOT NULL,
+               `course_id` INT(11) NOT NULL,
+               `category_id` INT(11) DEFAULT NULL,
+               `notes` TEXT NOT NULL)");
+
+ db_query("CREATE TABLE IF NOT EXISTS `glossary_category` (
+               `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+               `course_id` INT(11) NOT NULL,
+               `name` VARCHAR(255) NOT NULL,
+               `description` TEXT NOT NULL,
+               `order` INT(11) NOT NULL DEFAULT 0)");
 
 db_query("CREATE TABLE IF NOT EXISTS `link` (
                 `id` INT(11) NOT NULL AUTO_INCREMENT,
