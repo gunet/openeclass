@@ -244,7 +244,7 @@ if ($is_adminOfCourse) {
                                 $html_term = " value='" . q($data['term']) . "'";
                                 $html_url = " value='" . q($data['url']) . "'";
                                 $definition = q($data['definition']);
-                                $notes = q($data['definition']);
+                                $notes = q($data['notes']);
                                 $category_id = is_null($data['category_id'])? 'none': $data['category_id'];
                         }
                         $submit_value = $langModify;
