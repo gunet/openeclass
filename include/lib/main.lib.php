@@ -1738,8 +1738,10 @@ function standard_text_escape($text, $mathimg = '../../courses/mathimg/')
         }
         $base_node = $dom->getElementsByTagName('div')->item(0);
         // iframe hack
-        return preg_replace('#(<iframe [^>]+)/>#', '\\1></iframe>',
-                            $dom->saveXML($base_node));
+        return preg_replace(array('|^<div>(.*)</div>$|s',
+                                  '#(<iframe [^>]+)/>#'),
+                            array('\\1', '\\1></iframe>'),
+                            $dom->saveHTML($base_node));
 }
 
 function purify($text)
