@@ -43,7 +43,7 @@ $nameTools = $langGlossary;
 $categories = array();
 $q = db_query("SELECT id, name, description, `order`
                       FROM glossary_category WHERE course_id = $cours_id
-                      ORDER BY `order`");
+                      ORDER BY name");
 while ($cat = mysql_fetch_assoc($q)) {
         $categories[intval($cat['id'])] = $cat['name'];
 }
@@ -336,13 +336,13 @@ if ($cat_id) {
         }
         $where = "AND category_id = $cat_id";
 }
-$sql = db_query("SELECT id, term, definition, url, notes
+$sql = db_query("SELECT id, term, definition, url, notes, category_id
                         FROM glossary WHERE course_id = $cours_id $where
-                        ORDER BY category_id, `order`, term");
+                        ORDER BY term");
 if (mysql_num_rows($sql) > 0) { 
         $tool_content .= "
 	       <script type='text/javascript' src='../auth/sorttable.js'></script>
-  <table class='sortable' id='t2' width='100%'>";
+               <table class='sortable' id='t2' width='100%'>";
 	$tool_content .= "
 	       <tr>
 		 <th><div align='left'>$langGlossaryTerm</div></th>
@@ -354,7 +354,7 @@ if (mysql_num_rows($sql) > 0) {
 	$tool_content .= "
 	       </tr>";
 	$i=0;
-	while ($g = mysql_fetch_array($sql)) {
+	while ($g = mysql_fetch_assoc($sql)) {
 		if ($i%2) {
 		   $rowClass = "class='odd'";
 		} else {
@@ -366,6 +366,12 @@ if (mysql_num_rows($sql) > 0) {
 		} else {
 		    $urllink = '';
 		}
+
+                if (!empty($g['category_id'])) {
+                    $cat_descr = "<br /><span class='smaller'><b>$langCategory</b>: <a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;cat=$g[category_id]'>". q($categories[$g['category_id']]) ."</a></span>";
+                } else {
+                    $cat_descr = '';
+                }
 
                 if (!empty($g['notes'])) {
                         $urllink .= "<br />" . standard_text_escape($g['notes']);
@@ -380,7 +386,7 @@ if (mysql_num_rows($sql) > 0) {
 	    $tool_content .= "
 	       <tr $rowClass>
 		 <th width='150'>" . q($g['term']) . "</th> 
-                 <td><em>$definition_data</em>$urllink</td>";
+                 <td><em>$definition_data</em> $cat_descr $urllink</td>";
 	    if ($is_adminOfCourse) {
 		$tool_content .= "
 		 <td align='center' valign='top' width='50'><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;edit=$g[id]'>
