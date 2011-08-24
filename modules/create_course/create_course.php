@@ -70,11 +70,7 @@ if (get_config("betacms")) { // added support for betacms
 
 function escape_if_exists($name) {
         if (isset($_POST[$name])) {
-                if (get_magic_quotes_gpc()) {
-                		$tmp = stripslashes($_POST[$name]);
-                } else {
-                        $tmp = $_POST[$name];
-                }
+                $tmp = autounquote($_POST[$name]);
                 $GLOBALS[$name] = $tmp;
                 $GLOBALS[$name . '_html'] = '<input type="hidden" name="' . $name .
                        '" value="' . htmlspecialchars($tmp) . '" />';

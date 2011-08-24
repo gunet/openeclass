@@ -66,7 +66,7 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
                                         'course_fac' => true,
                                         'course_vis' => true,
                                         'course_prof' => true,
-                                        'course_type' => true));
+                                        'course_type' => true), 'all', 'autounquote');
         $r = $restoreThis . '/html';
 	list($new_course_code, $course_id) = create_course($course_code, $course_lang, $course_title,
                 $course_desc, intval($course_fac), $course_vis, $course_prof, $course_type);
@@ -852,7 +852,7 @@ function course_details_form($code, $title, $fac, $prof, $type, $lang, $vis, $de
                    <tr><th>$langCourseOldFac:</th><td>$fac</td></tr>
                    <tr><th>$langCourseVis:</th><td>".visibility_select($vis)."</td></tr>
                    <tr><th>$langTeacher:</th>
-                       <td><input type='text' name='course_prof' value='$prof' size='50' /></td></tr>
+                       <td><input type='text' name='course_prof' value='".q($prof)."' size='50' /></td></tr>
                    <tr><th>$langCourseType:</th><td>".type_select($type)."</td></tr>
                    <tr><td>&nbsp;</td></tr>
                    <tr><th>$langUsersWillAdd:</th>
