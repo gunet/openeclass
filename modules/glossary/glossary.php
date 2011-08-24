@@ -255,12 +255,14 @@ if (isset($_GET['edit'])) {
         $navigation[] = array('url' => $base_url,
                 'name' => $langGlossary);
         $where = "AND id = " . intval($_GET['id']);
+} elseif (isset($_GET['prefix'])) {
+        $where = " AND term LIKE " . autoquote($_GET['prefix'] . '%');
 }
 if ($cat_id) {
         $navigation[] = array('url' => $base_url,
                 'name' => $langGlossary);
         $nameTools = q($categories[$cat_id]);
-        $where = "AND category_id = $cat_id";
+        $where .= " AND category_id = $cat_id";
 }
 $sql = db_query("SELECT id, term, definition, url, notes, category_id
                         FROM glossary WHERE course_id = $cours_id $where
@@ -282,7 +284,7 @@ if (mysql_num_rows($sql) > 0) {
 	$i=0;
 	while ($g = mysql_fetch_assoc($sql)) {
                 if ($i == 0 and isset($_GET['id'])) {
-                        $nameTools = $g['term'];
+                        $nameTools = q($g['term']);
                 }
 		if ($i%2) {
 		   $rowClass = "class='odd'";
@@ -314,7 +316,7 @@ if (mysql_num_rows($sql) > 0) {
 
 	    $tool_content .= "
 	       <tr $rowClass>
-		 <th width='150'>" . q($g['term']) . "</th> 
+		 <th width='150'><a href='$base_url&amp;id=$g[id]'>" . q($g['term']) . "</a></th> 
                  <td><em>$definition_data</em> $cat_descr $urllink</td>";
 	    if ($is_adminOfCourse) {
 		$tool_content .= "
