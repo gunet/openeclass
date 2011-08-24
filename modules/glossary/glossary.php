@@ -77,11 +77,12 @@ if ($is_adminOfCourse) {
         }
 
         if (isset($_POST['submit'])) {
-                if ($_POST['category_id'] == 'none') {
+                if (!isset($_POST['category_id']) or $_POST['category_id'] == 'none') {
                         $category_id = 'NULL';
                 } else {
                         $category_id = intval($_POST['category_id']);
                 }
+                        
                 if (isset($_POST['id'])) {
                         $id = intval($_POST['id']);
                         $q = db_query("UPDATE glossary
@@ -250,6 +251,10 @@ if ($is_adminOfCourse) {
 $where = '';
 if (isset($_GET['edit'])) {
         $where = "AND id = $id";
+} elseif (isset($_GET['id'])) {
+        $navigation[] = array('url' => $base_url,
+                'name' => $langGlossary);
+        $where = "AND id = " . intval($_GET['id']);
 }
 if ($cat_id) {
         $navigation[] = array('url' => $base_url,
@@ -276,6 +281,9 @@ if (mysql_num_rows($sql) > 0) {
 	       </tr>";
 	$i=0;
 	while ($g = mysql_fetch_assoc($sql)) {
+                if ($i == 0 and isset($_GET['id'])) {
+                        $nameTools = $g['term'];
+                }
 		if ($i%2) {
 		   $rowClass = "class='odd'";
 		} else {
