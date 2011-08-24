@@ -25,6 +25,9 @@ $helpTopic = 'Glossary';
 
 include '../../include/baseTheme.php';
 
+$base_url = 'glossary.php?course=' . $code_cours;
+$cat_url = 'categories.php?course=' . $code_cours;
+
 /*
  * *** The following is added for statistics purposes **
  */
@@ -73,31 +76,6 @@ if ($is_adminOfCourse) {
                 $tool_content .= "<div class='success'>$langQuotaSuccess</div>";
         }
 
-        if (isset($_POST['submit_category'])) {
-                if (isset($_POST['category_id'])) {
-                        $category_id = intval($_POST['category_id']);
-                        $q = db_query("UPDATE glossary_category
-                                              SET name = " . autoquote($_POST['name']) . ",
-                                                  description = " . autoquote($_POST['description']) . "
-                                              WHERE id = $category_id AND course_id = $cours_id");
-                        $success_message = $langCategoryModded;
-                } else {
-                        db_query("SELECT @new_order := (1 + IFNULL(MAX(`order`),0))
-                                         FROM glossary_category WHERE course_id = $cours_id");
-                        $q = db_query("INSERT INTO glossary_category
-                                              SET name = " . autoquote($_POST['name']) . ",
-                                                  description = " . autoquote($_POST['description']) . ",
-                                                  course_id = $cours_id,
-                                                  `order` = @new_order");
-                        $category_id = mysql_insert_id();
-                        $success_message = $langCategoryAdded;
-                } 
-                if ($q and mysql_affected_rows()) {
-                        $categories[$category_id] = autounquote($_POST['name']);
-                        $tool_content .= "<div class='success'>$success_message</div><br />";
-                }
-        }
-
         if (isset($_POST['submit'])) {
                 if ($_POST['category_id'] == 'none') {
                         $category_id = 'NULL';
@@ -143,23 +121,24 @@ if ($is_adminOfCourse) {
 
         $tool_content .= "
        <div id='operations_container'>
-         <ul id='opslist'>
-           <li><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;add=1'>$langAddGlossaryTerm</a></li>
-           <li><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;add_category=1'>$langCategoryAdd</a></li>
-           <li><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;config=1'>$langConfig</a></li>
+         <ul id='opslist'>" .
+           ($categories? "<li><a href='categories.php?course=$code_cours'>$langCategories</a></li>": '') . "
+           <li><a href='$base_url&amp;add=1'>$langAddGlossaryTerm</a></li>
+           <li><a href='$cat_url&amp;add=1'>$langCategoryAdd</a></li>
+           <li><a href='$base_url&amp;config=1'>$langConfig</a></li>
            <li>$langGlossaryToCsv (<a href='dumpglossary.php?course=$code_cours'>UTF8</a>&nbsp;-&nbsp;<a href='dumpglossary.php?course=$code_cours&amp;enc=1253'>Windows 1253</a>)</li>  
          </ul>
        </div>";
 
         // display configuration form
         if (isset($_GET['config']))  {
-                $navigation[] = array("url" => "$_SERVER[PHP_SELF]?course=$code_cours", "name" => $langGlossary);
+                $navigation[] = array('url' => $base_url, 'name' => $langGlossary);
                 $nameTools = $langConfig;
                 list($expand) = mysql_fetch_row(db_query("SELECT expand_glossary FROM `$mysqlMainDb`.cours
                         WHERE cours_id = $cours_id"));
                 $checked = $expand? ' checked="1"': '';
                 $tool_content .= "
-              <form action='$_SERVER[PHP_SELF]?course=$code_cours' method='post'>
+              <form action='$base_url' method='post'>
                <fieldset>
                  <legend>$langConfig</legend>
                  <table class='tbl' width='100%'>
@@ -178,55 +157,9 @@ if ($is_adminOfCourse) {
               </form>\n";    
         }
 
-        // display form for adding or editing a category
-        if (isset($_GET['add_category']) or isset($_GET['edit_category'])) {
-                $navigation[] = array('url' => "$_SERVER[PHP_SELF]?course=$code_cours", 'name' => $langGlossary);
-                $html_id = $html_name = $description = '';
-                if (isset($_GET['add_category'])) {
-                        $nameTools = $langCategoryAdd;
-                        $submit_value = $langSubmit;
-                } else {
-                        $nameTools = $langCategoryMod;
-                        $cat_id = intval($_GET['edit_category']);
-                        $q = db_query("SELECT name, description
-                                              FROM glossary_category WHERE id = $cat_id");
-                        if (mysql_num_rows($q)) {
-                                $data = mysql_fetch_assoc($q);
-                                $html_name = " value='" . q($data['name']) . "'";
-                                $html_id = "<input type = 'hidden' name='category_id' value='$cat_id'>";
-                                $description = q($data['description']);
-                        }
-                        $submit_value = $langModify;
-                }
-                $tool_content .= "
-             <form action='$_SERVER[PHP_SELF]?course=$code_cours' method='post'>
-               $html_id
-               <fieldset>
-                 <legend>$nameTools</legend>
-                 <table class='tbl' width='100%'>
-                 <tr>
-                   <th>$langCategoryName:</th>
-                   <td>
-                     <input name='name' size='60'$html_name>
-                   </td>
-                 </tr>
-                 <tr>
-                   <th valign='top'>$langDescription:</th>
-                   <td valign='top'>" . rich_text_editor('description', 4, 60, $description) . "
-                   </td>
-                 </tr>
-                 <tr>
-                   <th>&nbsp;</th>
-                   <td class='right'><input type='submit' name='submit_category' value='$submit_value'></td>
-                 </tr>
-                 </table>
-               </fieldset>
-             </form>\n";    
-        }
-
         // display form for adding or editing a glossary term
         if (isset($_GET['add']) or isset($_GET['edit'])) {
-                $navigation[] = array('url' => "$_SERVER[PHP_SELF]?course=$code_cours",
+                $navigation[] = array('url' => $base_url,
                                       'name' => $langGlossary);
                 $html_id = $html_term = $html_url = $definition = $notes = '';
                 $category_id = 'none';
@@ -263,7 +196,7 @@ if ($is_adminOfCourse) {
                 }
 
                 $tool_content .= "
-             <form action='$_SERVER[PHP_SELF]?course=$code_cours' method='post'>
+             <form action='$base_url' method='post'>
                $html_id
                <fieldset>
                  <legend>$nameTools</legend>
@@ -297,43 +230,31 @@ if ($is_adminOfCourse) {
                </fieldset>
              </form>\n";    
         }
+} else {
+        // Show categories link for students if needed
+        if ($categories) {
+                $tool_content .= "
+       <div id='operations_container'>
+         <ul id='opslist'>
+           <li><a href='categories.php?course=$code_cours'>$langCategories</a></li>
+         </ul>
+       </div>";
+        }
 }
+
 
 /*************************************************
 // display glossary
 *************************************************/
-
-if ($categories) {
-        $tool_content .= "<div class='forum_category'><b>$langCategories:</b> ";
-        $cat_first = true;
-        $edit_icon = '';
-        foreach ($categories as $category_id => $category_name) {
-                $class = ($category_id == $cat_id)? 'class="today"': '';
-                if ($is_adminOfCourse) {
-                        $edit_icon = "&nbsp;<a href='$_SERVER[PHP_SELF]?course=$code_cours" .
-                                     "&amp;edit_category=$category_id' alt='$langCategoryMod' " .
-                                     "title='$langCategoryMod'>" .
-                                     "<img src='$themeimg/edit.png'></a>";
-                }
-                $tool_content .= ($cat_first? '': ', ') .
-                                 "<a $class href='$_SERVER[PHP_SELF]?course=$code_cours" .
-                                 "&amp;cat=$category_id'>" . q($category_name) . "</a>" .
-                                 $edit_icon;
-                $cat_first = false;
-        }
-        $tool_content .= "</div>\n";
-}
 
 $where = '';
 if (isset($_GET['edit'])) {
         $where = "AND id = $id";
 }
 if ($cat_id) {
-        if (!isset($_GET['edit_category'])) {
-                $navigation[] = array('url' => "$_SERVER[PHP_SELF]?course=$code_cours",
-                                      'name' => $langGlossary);
-                $nameTools = q($categories[$cat_id]);
-        }
+        $navigation[] = array('url' => $base_url,
+                'name' => $langGlossary);
+        $nameTools = q($categories[$cat_id]);
         $where = "AND category_id = $cat_id";
 }
 $sql = db_query("SELECT id, term, definition, url, notes, category_id
@@ -368,7 +289,7 @@ if (mysql_num_rows($sql) > 0) {
 		}
 
                 if (!empty($g['category_id'])) {
-                    $cat_descr = "<br /><span class='smaller'><b>$langCategory</b>: <a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;cat=$g[category_id]'>". q($categories[$g['category_id']]) ."</a></span>";
+                    $cat_descr = "<br /><span class='smaller'><b>$langCategory</b>: <a href='$base_url&amp;cat=$g[category_id]'>". q($categories[$g['category_id']]) ."</a></span>";
                 } else {
                     $cat_descr = '';
                 }
@@ -389,11 +310,11 @@ if (mysql_num_rows($sql) > 0) {
                  <td><em>$definition_data</em> $cat_descr $urllink</td>";
 	    if ($is_adminOfCourse) {
 		$tool_content .= "
-		 <td align='center' valign='top' width='50'><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;edit=$g[id]'>
+		 <td align='center' valign='top' width='50'><a href='$base_url&amp;edit=$g[id]'>
 		    <img src='$themeimg/edit.png' /></a>
-                    <a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;delete=$g[id]' onClick=\"return confirmation('" .
+                    <a href='$base_url&amp;delete=$g[id]' onClick=\"return confirmation('" .
                         js_escape($langConfirmDelete) . "');\">
-		    <img src='$themeimg/delete.png' /></a>
+		    <img src='$themeimg/delete.png'></a>
 		 </td>";
 	    }
 	    $tool_content .= "
