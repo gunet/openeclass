@@ -144,14 +144,10 @@ if ($is_adminOfCourse) {
                  <legend>$langConfig</legend>
                  <table class='tbl' width='100%'>
                  <tr>
-                   <th>$langGlossaryExpand:</th>
-                   <td>
+                   <th>$langGlossaryExpand:
                      <input type='checkbox' name='expand' value='yes'$checked>
-                   </td>
-                 </tr>
-                 <tr>
-                   <th>&nbsp;</th>
-                   <td class='right'><input type='submit' name='submit_config' value='$langSubmit'></td>
+                   </th>
+                   <td class='right' width='10'><input type='submit' name='submit_config' value='$langSubmit'></td>
                  </tr>
                  </table>
                </fieldset>
@@ -292,14 +288,14 @@ if (mysql_num_rows($sql) > 0) {
 		   $rowClass = "class='even'";
 		}
 		if (!empty($g['url'])) {
-		    $urllink = "<br /><span class='smaller'>(<a href='" . q($g['url']) .
-			       "' target='_blank'>" . q($g['url']) . "</a>)</span>";
+		    $urllink = "<div><span class='smaller'>(<a href='" . q($g['url']) .
+			       "' target='_blank'>" . q($g['url']) . "</a>)</span></div>";
 		} else {
 		    $urllink = '';
 		}
 
                 if (!empty($g['category_id'])) {
-                    $cat_descr = "<br /><span class='smaller'><b>$langCategory</b>: <a href='$base_url&amp;cat=$g[category_id]'>". q($categories[$g['category_id']]) ."</a></span>";
+                    $cat_descr = "<div><span class='smaller'>(<b>$langCategory</b>: <a href='$base_url&amp;cat=$g[category_id]'>". q($categories[$g['category_id']]) ."</a>)</span></div>";
                 } else {
                     $cat_descr = '';
                 }
@@ -317,7 +313,7 @@ if (mysql_num_rows($sql) > 0) {
 	    $tool_content .= "
 	       <tr $rowClass>
 		 <th width='150'><a href='$base_url&amp;id=$g[id]'>" . q($g['term']) . "</a></th> 
-                 <td><em>$definition_data</em> $cat_descr $urllink</td>";
+                 <td><em>$definition_data</em>$urllink $cat_descr</td>";
 	    if ($is_adminOfCourse) {
 		$tool_content .= "
 		 <td align='center' valign='top' width='50'><a href='$base_url&amp;edit=$g[id]'>

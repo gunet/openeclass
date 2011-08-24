@@ -73,6 +73,7 @@ if ($is_adminOfCourse) {
                 }
         }
 
+
         // display form for adding or editing a category
         if (isset($_GET['add']) or isset($_GET['edit'])) {
                 $html_id = $html_name = $description = '';
@@ -116,14 +117,15 @@ if ($is_adminOfCourse) {
                  </table>
                </fieldset>
              </form>\n";
-        }
-
+        }else{
         $tool_content .= "
        <div id='operations_container'>
          <ul id='opslist'>
            <li><a href='$cat_url&amp;add=1'>$langCategoryAdd</a></li>
          </ul>
        </div>";
+        }
+
 }
 
 $q = db_query("SELECT id, name, description
@@ -135,8 +137,9 @@ if ($q and mysql_num_rows($q)) {
                <script type='text/javascript' src='../auth/sorttable.js'></script>
                <table class='sortable' id='t2' width='100%'>
                <tr>
-                 <th class='left'>$langCategory</th>" .
-                 ($is_adminOfCourse? "<th width='20'>$langActions</th>": '') . "
+                 <th width='1'>&nbsp;</th>
+                 <th class='left'>$langName</th>" .
+                 ($is_adminOfCourse? "<th width='20' class='center'>$langActions</th>": '') . "
                </tr>";
         $i=0;
         while ($cat = mysql_fetch_assoc($q)) {
@@ -148,17 +151,23 @@ if ($q and mysql_num_rows($q)) {
                 }
                 if ($is_adminOfCourse) {
                         $actions = "
-                 <td><a href='$cat_url&amp;edit=$cat[id]' alt='$langCategoryMod'
+                 <td class='center'><a href='$cat_url&amp;edit=$cat[id]' alt='$langCategoryMod'
                         title='$langCategoryMod'><img src='$themeimg/edit.png'></a>&nbsp;
                      <a href='$cat_url&amp;delete=$cat[id]' onClick=\"return confirmation('" .
                         js_escape($langConfirmDelete) .
                         "');\"><img src='$themeimg/delete.png' alt='$langCategoryDel'
-                        title='$langCategoryDel'></a></td>";
+                        title='$langCategoryDel'></a>
+                 </td>";
                 } else {
                         $actions = '';
                 }
-                $tool_content .= "<tr class='$class'><td><a href='$base_url&amp;cat=$cat[id]'>" .
-                                 q($cat['name']) . "</a>$desc</td>$actions</tr>\n";
+                $tool_content .= "
+               <tr class='$class'>
+                 <td width='1' valign='top'>
+                   <img style='padding-top:3px;' src='$themeimg/arrow.png' alt=''>
+                 </td>
+                 <td><a href='$base_url&amp;cat=$cat[id]'>" . q($cat['name']) . "</a>$desc</td>$actions
+               </tr>\n";
                 $i++;
         }
         $tool_content .= "</table>";
