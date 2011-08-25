@@ -295,7 +295,7 @@ if (mysql_num_rows($sql) > 0) {
 		}
 
                 if (!empty($g['category_id'])) {
-                    $cat_descr = "<div><span class='smaller'>(<b>$langCategory</b>: <a href='$base_url&amp;cat=$g[category_id]'>". q($categories[$g['category_id']]) ."</a>)</span></div>";
+                    $cat_descr = "<span class='smaller'>$langCategory: <a href='$base_url&amp;cat=$g[category_id]'>". q($categories[$g['category_id']]) ."</a></span>";
                 } else {
                     $cat_descr = '';
                 }
@@ -312,8 +312,8 @@ if (mysql_num_rows($sql) > 0) {
 
 	    $tool_content .= "
 	       <tr $rowClass>
-		 <th width='150'><a href='$base_url&amp;id=$g[id]'>" . q($g['term']) . "</a></th> 
-                 <td><em>$definition_data</em>$urllink $cat_descr</td>";
+		 <th width='150'><a href='$base_url&amp;id=$g[id]'>" . q($g['term']) . "</a> <div class='invisible'>$cat_descr</div></th> 
+                 <td><em>$definition_data</em>$urllink</td>";
 	    if ($is_adminOfCourse) {
 		$tool_content .= "
 		 <td align='center' valign='top' width='50'><a href='$base_url&amp;edit=$g[id]'>
