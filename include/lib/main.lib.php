@@ -1792,7 +1792,7 @@ function get_glossary_terms($cours_id)
         }
 
         $q = db_query("SELECT term, definition, url FROM `$mysqlMainDb`.glossary
-                              WHERE course_id = $cours_id");
+                              WHERE course_id = $cours_id GROUP BY term");
         
         $_SESSION['glossary'] = array();
 	$_SESSION['glossary_url'] = array();

@@ -300,6 +300,7 @@ if ($cat_id) {
 }
 $sql = db_query("SELECT id, term, definition, url, notes, category_id
                         FROM glossary WHERE course_id = $cours_id $where
+                        GROUP BY term
                         ORDER BY term");
 if (mysql_num_rows($sql) > 0) { 
         $tool_content .= "
