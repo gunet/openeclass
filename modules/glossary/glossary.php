@@ -266,7 +266,7 @@ if ($glossary_index and count($prefixes) > 1) {
         $tool_content .= "<div class='alphabetic_index'>";
         $begin = true;
         foreach ($prefixes as $letter) {
-                $active = (!isset($_GET['prefix']) && $begin) ||
+                $active = (!isset($_GET['prefix']) && !$cat_id && $begin) ||
                           (isset($_GET['prefix']) and autounquote($_GET['prefix']) == $letter);
                 $tool_content .= ($begin? '': ' | ') .
                                  ($active? '<b>': "<a href='$base_url&amp;prefix=$letter'>") .
@@ -289,7 +289,7 @@ if (isset($_GET['edit'])) {
         $where = "AND id = " . intval($_GET['id']);
 } elseif (isset($_GET['prefix'])) {
         $where = " AND term LIKE " . autoquote($_GET['prefix'] . '%');
-} elseif ($glossary_index and count($prefixes) > 1) {
+} elseif ($glossary_index and !$cat_id and count($prefixes) > 1) {
         $where = " AND term LIKE " . quote($prefixes[0] . '%');
 }
 if ($cat_id) {
