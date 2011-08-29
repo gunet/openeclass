@@ -725,12 +725,12 @@ function find_faculty_by_name($name) {
 
 // Returns the name of a faculty given its code or its name
 function find_faculty_by_id($id) {
-	$req = mysql_query("SELECT name FROM faculte WHERE id = $id");
+	$req = db_query("SELECT name FROM faculte WHERE id = $id");
 	if ($req and mysql_num_rows($req)) {
 		$fac = mysql_fetch_row($req);
 		return $fac[0];
 	} else {
-		$req = mysql_query("SELECT name FROM faculte WHERE name = '" . addslashes($id) ."'");
+		$req = db_query("SELECT name FROM faculte WHERE name = '" . addslashes($id) ."'");
 		if ($req and mysql_num_rows($req)) {
 			$fac = mysql_fetch_row($req);
 			return $fac[0];
@@ -806,7 +806,7 @@ function last_login($uid)
 {
         global $mysqlMainDb;
 
-        $q = mysql_query("SELECT DATE_FORMAT(MAX(`when`), '%Y-%m-%d') FROM loginout
+        $q = db_query("SELECT DATE_FORMAT(MAX(`when`), '%Y-%m-%d') FROM loginout
                           WHERE id_user = $uid AND action = 'LOGIN'");
         list($last_login) = mysql_fetch_row($q);
         if (!$last_login) {
@@ -821,7 +821,7 @@ function check_new_announce() {
         global $uid;
 
         $lastlogin = last_login($uid);
-        $q = mysql_query("SELECT * FROM annonces, cours_user
+        $q = db_query("SELECT * FROM annonces, cours_user
                           WHERE annonces.cours_id = cours_user.cours_id AND
                                 cours_user.user_id = $uid AND
                                 annonces.temps >= '$lastlogin'
@@ -1881,6 +1881,20 @@ function greek_to_latin($string)
 		$string);
 }
 
+// Convert to uppercase and remove accent marks
+// Limited coverage for now
+function remove_accents($string)
+{
+        return strtr(mb_strtoupper($string, 'UTF-8'),
+                array('Ά' => 'Α', 'Έ' => 'Ε', 'Ί' => 'Ι', 'Ή' => 'Η', 'Ύ' => 'Υ',
+                      'Ό' => 'Ο', 'Ώ' => 'Ω', 'Ϊ' => 'Ι', 'Ϋ' => 'Υ',
+                      'À' => 'A', 'Á' => 'A', 'Â' => 'A', 'Ã' => 'A', 'Ä' => 'A',
+                      'Ç' => 'C', 'Ñ' => 'N', 'Ý' => 'Y',
+                      'È' => 'E', 'É' => 'E', 'Ê' => 'E', 'Ë' => 'E',
+                      'Ì' => 'I', 'Í' => 'I', 'Î' => 'I', 'Ï' => 'I',
+                      'Ò' => 'O', 'Ó' => 'O', 'Ô' => 'O', 'Õ' => 'O', 'Ö' => 'O',
+                      'Ù' => 'U', 'Ú' => 'U', 'Û' => 'U', 'Ü' => 'U'));
+}
 
 // resize an image ($source_file) of type $type to a new size ($maxheight and $maxwidth) and copies it to path $target_file
 function copy_resized_image($source_file, $type, $maxwidth, $maxheight, $target_file)

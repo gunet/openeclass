@@ -56,6 +56,21 @@ if (isset($_GET['cat'])) {
         $cat_id = false;
 }
 
+list($glossary_index) = mysql_fetch_row(db_query("SELECT glossary_index FROM cours WHERE cours_id = $cours_id"));
+if ($glossary_index) {
+        $prefixes = array();
+        $q = db_query("SELECT DISTINCT UPPER(LEFT(term, 1)) AS prefix
+                              FROM glossary WHERE course_id = $cours_id
+                              ORDER BY prefix");
+        while ($prefix = mysql_fetch_row($q)) {
+                $prefix = remove_accents($prefix[0]);
+                if (array_search($prefix, $prefixes) === false) {
+                        $prefixes[] = $prefix;
+                }
+        }
+}
+
+
 /********************************************
  *Actions*
 ********************************************/
@@ -71,7 +86,8 @@ if ($is_adminOfCourse) {
         }
 
         if (isset($_POST['submit_config'])) {
-                db_query("UPDATE cours SET expand_glossary = " . (isset($_POST['expand'])? 1: 0));
+                db_query("UPDATE cours SET expand_glossary = " . (isset($_POST['expand'])? 1: 0) . ",
+                                           glossary_index = " . (isset($_POST['index'])? 1: 0));
                 invalidate_glossary_cache();
                 $tool_content .= "<div class='success'>$langQuotaSuccess</div>";
         }
@@ -135,17 +151,24 @@ if ($is_adminOfCourse) {
         if (isset($_GET['config']))  {
                 $navigation[] = array('url' => $base_url, 'name' => $langGlossary);
                 $nameTools = $langConfig;
-                list($expand) = mysql_fetch_row(db_query("SELECT expand_glossary FROM `$mysqlMainDb`.cours
-                        WHERE cours_id = $cours_id"));
-                $checked = $expand? ' checked="1"': '';
+                list($expand, $index) = mysql_fetch_row(db_query("SELECT expand_glossary, glossary_index
+                                        FROM `$mysqlMainDb`.cours WHERE cours_id = $cours_id"));
+                $checked_expand = $expand? ' checked="1"': '';
+                $checked_index = $index? ' checked="1"': '';
                 $tool_content .= "
               <form action='$base_url' method='post'>
                <fieldset>
                  <legend>$langConfig</legend>
                  <table class='tbl' width='100%'>
                  <tr>
+                   <th>$langGlossaryIndex:
+                     <input type='checkbox' name='index' value='yes'$checked_index>
+                   </th>
+                   <td class='right' width='10'>&nbsp;</td>
+                 </tr>
+                 <tr>
                    <th>$langGlossaryExpand:
-                     <input type='checkbox' name='expand' value='yes'$checked>
+                     <input type='checkbox' name='expand' value='yes'$checked_expand>
                    </th>
                    <td class='right' width='10'><input type='submit' name='submit_config' value='$langSubmit'></td>
                  </tr>
@@ -239,6 +262,19 @@ if ($is_adminOfCourse) {
         }
 }
 
+if ($glossary_index and count($prefixes) > 1) {
+        $tool_content .= "<div class='center'>";
+        $begin = true;
+        foreach ($prefixes as $letter) {
+                $active = (!isset($_GET['prefix']) && $begin) ||
+                          (isset($_GET['prefix']) and autounquote($_GET['prefix']) == $letter);
+                $tool_content .= ($begin? '': ' | ') .
+                                 ($active? '<b>': "<a href='$base_url&amp;prefix=$letter'>") .
+                                 q($letter) . ($active? '</b>': '</a>');
+                $begin = false;
+        }
+        $tool_content .= "</div>";
+}
 
 /*************************************************
 // display glossary
@@ -253,6 +289,8 @@ if (isset($_GET['edit'])) {
         $where = "AND id = " . intval($_GET['id']);
 } elseif (isset($_GET['prefix'])) {
         $where = " AND term LIKE " . autoquote($_GET['prefix'] . '%');
+} elseif ($glossary_index and count($prefixes) > 1) {
+        $where = " AND term LIKE " . quote($prefixes[0] . '%');
 }
 if ($cat_id) {
         $navigation[] = array('url' => $base_url,

@@ -3219,6 +3219,7 @@ $langGlossaryUpdated = 'Η αλλαγή πραγματοποιήθηκε με ε
 $langGlossaryDeleted = 'Η διαγραφή πραγματοποιήθηκε με επιτυχία';
 $langGlossaryUrl = 'URL ορισμού';
 $langGlossaryExpand = 'Εμφάνιση ορισμών στις σελίδες του μαθήματος';
+$langGlossaryIndex = 'Αλφαβητικό ευρετήριο όρων';
 $langConfig = 'Ρυθμίσεις';
 $langGlossaryToCsv = "Όροι σε μορφή csv";
 
