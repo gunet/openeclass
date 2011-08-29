@@ -263,7 +263,7 @@ if ($is_adminOfCourse) {
 }
 
 if ($glossary_index and count($prefixes) > 1) {
-        $tool_content .= "<div class='center'>";
+        $tool_content .= "<div class='alphabetic_index'>";
         $begin = true;
         foreach ($prefixes as $letter) {
                 $active = (!isset($_GET['prefix']) && $begin) ||

@@ -1228,6 +1228,10 @@ table.Search td {
     text-decoration: none !important;
     cursor:help; }
 
+.alphabetic_index {
+    text-align: center;
+    padding-bottom: 10px;
+}
 
 /* ----- Lesson Layout ----- */
 
