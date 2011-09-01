@@ -11,7 +11,8 @@ $unit = false;
 $file_path = false;
 $full_url_found = false;
 $show_orphan_file = false;
-$uri = strstr($_SERVER['REQUEST_URI'], 'ebook/show.php');
+$uri = preg_replace('/\?[^?]*$/', '',
+                    strstr($_SERVER['REQUEST_URI'], 'ebook/show.php'));
 $path_components = explode('/', $uri);
 if (count($path_components) >= 4) {
         $_SESSION['dbname'] = $path_components[2];

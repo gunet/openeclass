@@ -18,8 +18,6 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-
-
 /*===========================================================================
 file.php
  * @version $Id$
@@ -32,7 +30,8 @@ if (isset($_SESSION['dbname'])) {
         define('old_dbname', $_SESSION['dbname']);
 }
 
-$uri = $_SERVER['REQUEST_URI'];
+$uri = preg_replace('/\?[^?]*$/', '', 
+                    $_SERVER['REQUEST_URI']);
 
 // If URI contains backslashes, redirect to forward slashes
 if (stripos($uri, '%5c') !== false) {
@@ -42,6 +41,7 @@ if (stripos($uri, '%5c') !== false) {
 }
 
 $uri = str_replace('//', chr(1), preg_replace('/^.*file\.php\??\//', '', $uri));
+die($uri);
 $path_components = explode('/', $uri);
 
 // temporary course change
