@@ -199,12 +199,12 @@ if (isset($_SESSION['glossary_terms_regexp']) and !empty($_SESSION['glossary_ter
 foreach (array('link', 'style', 'script') as $tagname) {
         foreach ($dom->getElementsByTagName($tagname) as $element) {
                 $ebook_head .= str_replace(array('<![CDATA[', ']]>'), array('', ''),
-                                           $dom->saveHTML($element));
+                                           dom_save_html($dom, $element));
         }
 }
 $body_node = $dom->getElementsByTagName('body')->item(0);
 foreach ($body_node->childNodes as $element) {
-	$ebook_body .= str_replace('&#13;', '', $dom->saveHTML($element));
+	$ebook_body .= str_replace('&#13;', '', dom_save_html($dom, $element));
 }
 unset($dom);
 $t->set_var('ebook_head', $ebook_head);

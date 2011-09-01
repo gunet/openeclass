@@ -1741,7 +1741,17 @@ function standard_text_escape($text, $mathimg = '../../courses/mathimg/')
         return preg_replace(array('|^<div>(.*)</div>$|s',
                                   '#(<iframe [^>]+)/>#'),
                             array('\\1', '\\1></iframe>'),
-                            $dom->saveHTML($base_node));
+                            dom_save_html($dom, $base_node));
+}
+
+// Workaround for $dom->saveHTML($node) not working for PHP < 5.3.6
+function dom_save_html($dom, $node)
+{
+        if (version_compare(PHP_VERSION, '5.3.6') >= 0) {
+                return $dom->saveHTML($node);
+        } else {
+                return $dom->saveXML($node);
+        }
 }
 
 function purify($text)
