@@ -187,6 +187,12 @@ $langTipLangAdminAnn = "Επιλέξτε την γλώσσα στην οποία
 $langAltAuthStudentReq = 'Ενεργοποίηση αίτησης φοιτητή που συνδέεται με εναλλακτικό τρόπο πιστοποίησης';
 $langDisableEclassStudReg = 'Απενεργοποίηση εγγραφής φοιτητή μέσω πλατφόρμας';
 $langDisableEclassProfReg = 'Απενεργοποίηση εγγραφής καθηγητή μέσω πλατφόρμας';
+$langDisableEclassStudRegType = 'Δυνατότητα Εγγραφής Φοιτητών μέσω πλατφόρμας';
+$langDisableEclassProfRegType = 'Δυνατότητα Εγγραφής Φοιτητών μέσω πλατφόρμας';
+$langDisableEclassStudRegYes = 'Οι φοιτητές δεν μπορούν να εγγραφούν μέσω πλατφόρμας';
+$langDisableEclassProfRegYes = 'Οι καθηγητές δεν μπορούν να εγγραφούν μέσω πλατφόρμας';
+$langDisableEclassStudRegNo = 'Οι φοιτητές μπορούν να εγγραφούν μέσω πλατφόρμας';
+$langDisableEclassProfRegNo = 'Οι καθηγητές μπορούν να εγγραφούν μέσω πλατφόρμας';
 
 // listusers
 $langBegin="αρχή";
