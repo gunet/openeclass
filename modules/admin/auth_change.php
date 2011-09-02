@@ -61,9 +61,10 @@ foreach ($auth_methods as $value) {
 	$auth_methods_active[$value] = $auth_ids[$value];
 }
 
+$c = count_auth_users($auth);
 $tool_content .= "<form name='authchange' method='post' action='$_SERVER[PHP_SELF]'>
 <fieldset>
-<legend>".get_auth_info($auth)."</legend>
+<legend>".get_auth_info($auth)." ($langNbUsers: $c)</legend>
 <table width='100%' class='tbl'><tr>
 <th colspan='2'>
 	<input type='hidden' name='auth' value='".intval($auth)."' />

@@ -278,6 +278,8 @@ if (!isset($_POST['submit2'])) {
 			('dropbox_quota', '100'),
 			('video_quota', '100'),
 			('group_quota', '100'),
+			('disable_eclass_stud_reg', '0'),
+			('disable_eclass_prof_reg', '0'),
                         ('secret_key', '" . generate_secret_key() . "')");
 
         if ($oldversion < '2.1.3') {

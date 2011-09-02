@@ -73,7 +73,7 @@ if ($auth == 7) {
                 // $_POST is lost after we come back from CAS
                 foreach (array('cas_host', 'cas_port', 'cas_context', 'cas_cachain',
                                'casusermailattr', 'casuserfirstattr', 'casuserlastattr',
-                               'cas_altauth', 'cas_logout', 'auth_instructions') as $var) {
+                               'cas_altauth', 'cas_logout', 'cas_ssout', 'auth_instructions') as $var) {
                        if (isset($_POST[$var])) {
                                $_SESSION[$var] = $_POST[$var];    
                        }
@@ -173,7 +173,8 @@ if ($submit or !empty($_SESSION['cas_do'])) {
                                                   'casuserfirstattr' => $_SESSION['casuserfirstattr'],
                                                   'casuserlastattr' => $_SESSION['casuserlastattr'],
                                                   'cas_altauth' => $_SESSION['cas_altauth'],
-                                                  'cas_logout' => $_SESSION['cas_logout']);
+                                                  'cas_logout' => $_SESSION['cas_logout'],
+                                                  'cas_ssout' => $_SESSION['cas_ssout']);
                                 $auth_instructions = $_SESSION['auth_instructions'];
                                 break;
                         default:

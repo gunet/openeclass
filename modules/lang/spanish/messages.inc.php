@@ -427,6 +427,12 @@ $langAuthSettings = "Ajustes de autentificación";
 $langWrongAuth = "Has tecleado un usurario/contraseña incorrectos";
 $langExplainShib = "Enter the names of the variables returned by the Shibboleth server. The variables will be written in <em>${webDir}secure/index.php</em>. Please note that if the Shibboleth Canonical Name contains the user's full name (both first and last names), you need the enter the character delimiting the first from the last name.";
 $langCharSeparator = "Delimiter character";
+// need translation
+$langAuthChangeUser = "Change Authentication Method";
+$langAuthChangeto = "Change to";
+$langAuthChangeno = "There is no other enabled authentication method";
+$langAuthChangeYes = "Successful authentication method change";
+// end of need translation
 $langConference = "Teleconferencia";
 $langWash = "Limpiado";
 $langWashFrom = "Chat libre desde";
@@ -2721,6 +2727,7 @@ $langJQNoneSelected = 'Choose recipients';
 $langJQCheckAll = 'Select all';
 $langJQUncheckAll = 'Unselect All';
 $langcas_logout = "CAS logout page";
+$langcas_ssout = "Enable CAS Single Sign Out";
 $langDocQuota = "Documents quota";
 $langVideoQuota = "Video quota";
 $langDropboxQuota = "Dropbox quota";
@@ -2800,6 +2807,10 @@ $langForumParticipation = 'Forum Participation';
 $langAdministratorForum = 'Forum Management';
 $langAdministratorGroup = 'Group Management';
 $langAltAuthStudentReq = 'Activate new account requests for students logging in via alternative authentication methods';
+// need translation
+$langDisableEclassStudReg = 'Disable student registration via Open Eclass method';
+$langDisableEclassProfReg = 'Disable professor registration via Open Eclass method';
+// end of need translation
 $langEditAuth = 'Change authentication method';
 $langEditAuthMethod = 'Authentication method:';
 $langEditAuthSetPass = 'You need to set a new password for the user.';

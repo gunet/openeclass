@@ -71,30 +71,35 @@ if (isset($_POST['submit']))  {
 	$fd=@fopen("../../config/config.php", "w");
 	if (!$fd) {
 		$tool_content .= $langFileError;
-        } else {
+   }
+	else {
 
-                if ($_POST['formcloseuserregistration'] == 'false') {
-                        $user_reg = 'FALSE';
-                } else {
-                        $user_reg = 'TRUE';
-                }
-                if (defined('UTF8')) {
-                        $utf8define = "define('UTF8', true);";
-                }
+		if ($_POST['formcloseuserregistration'] == 'false') {
+			$user_reg = 'FALSE';
+		}
+		else {
+			$user_reg = 'TRUE';
+		}
 
-                $active_lang_codes = array();
-                if (isset($_POST['av_lang'])) { 
-                        foreach ($_POST['av_lang'] as $langname => $langvalue) {
-                                $active_lang_codes[] = autoquote($langvalue);
-                        }
-                }
-                if (!count($active_lang_codes)) {
-                        $active_lang_codes = array("'el'");
-                }
-                $string_active_ui_languages = 'array(' . implode(', ', $active_lang_codes) . ');';
+		if (defined('UTF8')) {
+			$utf8define = "define('UTF8', true);";
+		}
 
-                // Prepare config.php content
-                $stringConfig='<?php
+		$active_lang_codes = array();
+		if (isset($_POST['av_lang'])) { 
+			foreach ($_POST['av_lang'] as $langname => $langvalue) {
+				$active_lang_codes[] = autoquote($langvalue);
+			}
+		}
+
+		if (!count($active_lang_codes)) {
+			$active_lang_codes = array("'el'");
+		}
+
+		$string_active_ui_languages = 'array(' . implode(', ', $active_lang_codes) . ');';
+
+		// Prepare config.php content
+		$stringConfig='<?php
 /*===========================================================================
  *   Open eClass 2.4
  *   E-learning and Course Management System
@@ -138,38 +143,42 @@ $persoIsActive = TRUE;
 $durationAccount = '.autoquote($_POST['formdurationAccount']).';
 $active_ui_languages = '.$string_active_ui_languages."\n";
 
-                // Save new config.php
-                fwrite($fd, $stringConfig);
+	// Save new config.php
+	fwrite($fd, $stringConfig);
 
-                $config_vars = array('email_required' => true,
-                                     'am_required' => true,
-                                     'dont_display_login_form' => true,
-                                     'dropbox_allow_student_to_student' => true,
-                                     'block_username_change' => true,
-                                     'display_captcha' => true,
-                                     'insert_xml_metadata' => true,
-                                     'betacms' => true,
-				     'doc_quota' => true,
-				     'group_quota' => true,
-				     'video_quota' => true,
-                                     'dropbox_quota' => true,
-                                     'theme' => true,
-                                     'alt_auth_student_req' => true);
+	$config_vars = array('email_required' => true,
+		'am_required' => true,
+		'dont_display_login_form' => true,
+		'dropbox_allow_student_to_student' => true,
+		'block_username_change' => true,
+		'display_captcha' => true,
+		'insert_xml_metadata' => true,
+		'betacms' => true,
+		'doc_quota' => true,
+		'group_quota' => true,
+		'video_quota' => true,
+		'dropbox_quota' => true,
+		'theme' => true,
+		'alt_auth_student_req' => true,
+		'disable_eclass_stud_reg' => true,
+		'disable_eclass_prof_reg' => true);
 
-		register_posted_variables($config_vars, 'all', 'intval');
-                $_SESSION['theme'] = $theme = $available_themes[$theme];
+	register_posted_variables($config_vars, 'all', 'intval');
+	$_SESSION['theme'] = $theme = $available_themes[$theme];
 
-                foreach ($config_vars as $varname => $what) {
-                        set_config($varname, $GLOBALS[$varname]);
-                }
+	foreach ($config_vars as $varname => $what) {
+		set_config($varname, $GLOBALS[$varname]);
+	}
 		
-                // Display result message
-                $tool_content .= "<p class='success'>".$langFileUpdatedSuccess."</p>";
-        }
+	// Display result message
+	$tool_content .= "<p class='success'>".$langFileUpdatedSuccess."</p>";
+} // end of else($fd)
+
 	// Display link to go back to index.php
 	$tool_content .= "<p class='right'><a href=\"index.php\">".$langBack."</a></p>";
 
-}
+} // end of if($submit)
+
 // Display config.php edit form
 else {
 	// Check if a backup file exists
@@ -285,46 +294,66 @@ else {
 	  </select></td>
 	</tr>";
 
-        if ($close_user_registration=="true") {
-                $close_user_registrationSelTrue = "selected";
-                $close_user_registrationSelFalse = "";
-        } else {
-                $close_user_registrationSelTrue = "";
-                $close_user_registrationSelFalse = "selected";
-        }
-        $cbox_alt_auth_student_req = get_config('alt_auth_student_req')? 'checked': '';
+	$cbox_disable_eclass_stud_reg = get_config('disable_eclass_stud_reg')? 'checked': '';
 	$tool_content .= "
-	  <tr>
-	    <th class='left'>\$close_user_registration:</th>
-	    <td><select name='formcloseuserregistration'>
-	      <option value='true' ".$close_user_registrationSelTrue.">true</option>
-	      <option value='false' ".$close_user_registrationSelFalse.">false</option>
-	    </select>&nbsp;&nbsp;$langViaReq</td>
-          </tr>
-          <tr>
-            <th class='left'>alt_auth_student_req</th>
-            <td><input type='checkbox' name='alt_auth_student_req' value='1'
-                       $cbox_alt_auth_student_req>&nbsp;$langAltAuthStudentReq</td>
-          </tr>";
+	<tr>
+	  <th class='left'>disable_eclass_stud_reg</th>
+	  <td><input type='checkbox' name='disable_eclass_stud_reg' value='1'
+	    $cbox_disable_eclass_stud_reg>&nbsp;$langDisableEclassStudReg</td>
+	</tr>";
 
-        $langdirs = active_subdirs($webDir.'modules/lang', 'messages.inc.php');
-        $sel = array();
-        foreach ($language_codes as $langcode => $langname) {
-                if (in_array($langname, $langdirs)) {
-                        $loclangname = $langNameOfLang[$langname];
-                        $checked = in_array($langcode, $active_ui_languages)? ' checked': '';
-                        $sel[] = "<input type='checkbox' name='av_lang[]' value='$langcode'$checked>$loclangname";
-                }
-        }
-        $tool_content .= "
-          <tr><th class='left'>$langSupportedLanguages</th>
-              <td>" . implode(' ', $sel) . "</td></tr>
+	$cbox_disable_eclass_prof_reg = get_config('disable_eclass_prof_reg')? 'checked': '';
+	$tool_content .= "
+	<tr>
+	  <th class='left'>disable_eclass_prof_reg</th>
+	  <td><input type='checkbox' name='disable_eclass_prof_reg' value='1'
+	    $cbox_disable_eclass_prof_reg>&nbsp;$langDisableEclassProfReg</td>
+	</tr>";
+
+	if ($close_user_registration=="true") {
+		$close_user_registrationSelTrue = "selected";
+		$close_user_registrationSelFalse = "";
+	}
+	else {
+		$close_user_registrationSelTrue = "";
+		$close_user_registrationSelFalse = "selected";
+	}
+
+	$cbox_alt_auth_student_req = get_config('alt_auth_student_req')? 'checked': '';
+	$tool_content .= "
+	<tr>
+	  <th class='left'>\$close_user_registration:</th>
+	  <td><select name='formcloseuserregistration'>
+	    <option value='true' ".$close_user_registrationSelTrue.">true</option>
+	    <option value='false' ".$close_user_registrationSelFalse.">false</option>
+	  </select>&nbsp;&nbsp;$langViaReq</td>
+	</tr>
+	<tr>
+	  <th class='left'>alt_auth_student_req</th>
+	  <td><input type='checkbox' name='alt_auth_student_req' value='1'
+	    $cbox_alt_auth_student_req>&nbsp;$langAltAuthStudentReq</td>
+	</tr>";
+
+	$langdirs = active_subdirs($webDir.'modules/lang', 'messages.inc.php');
+	$sel = array();
+
+	foreach ($language_codes as $langcode => $langname) {
+		if (in_array($langname, $langdirs)) {
+			$loclangname = $langNameOfLang[$langname];
+			$checked = in_array($langcode, $active_ui_languages)? ' checked': '';
+			$sel[] = "<input type='checkbox' name='av_lang[]' value='$langcode'$checked>$loclangname";
+		}
+	}
+
+	$tool_content .= "
+	  <tr><th class='left'>$langSupportedLanguages</th>
+	    <td>" . implode(' ', $sel) . "</td></tr>
 	  <tr>
 	    <th class='left'><b>\$durationAccount:</b></th>
-            <td><input type='text' name='formdurationAccount' size='15' value='$durationAccount'>&nbsp;&nbsp;$langUserDurationAccount</td></tr>
-          <tr><th class='left'><b>Theme:</b></th>
-              <td>" . selection($available_themes, 'theme',
-                                array_search($theme, $available_themes)) . "</td></tr>";
+       <td><input type='text' name='formdurationAccount' size='15' value='$durationAccount'>&nbsp;&nbsp;$langUserDurationAccount</td></tr>
+	  <tr><th class='left'><b>Theme:</b></th>
+	    <td>" . selection($available_themes, 'theme',
+		 array_search($theme, $available_themes)) . "</td></tr>";
 	
 	$cbox_email_required = get_config('email_required')?'checked':'';
 	$cbox_am_required = get_config('email_required')?'checked':'';
@@ -414,14 +443,13 @@ draw($tool_content, 3);
 // Return a list of all subdirectories of $base which contain a file named $filename
 function active_subdirs($base, $filename)
 {
-        $dir = opendir($base);
-        $out = array();
-        while (($f = readdir($dir)) !== false) {
-                if (is_dir($base . '/' . $f) and $f != '.' and $f != '..' and
-                    file_exists($base . '/' . $f . '/' . $filename)) {
-                        $out[] = $f;
-                }
-        }
-        closedir($dir);
-        return $out;
+	$dir = opendir($base);
+	$out = array();
+	while (($f = readdir($dir)) !== false) {
+		if (is_dir($base . '/' . $f) and $f != '.' and $f != '..' and file_exists($base . '/' . $f . '/' . $filename)) {
+			$out[] = $f;
+		}
+	}
+	closedir($dir);
+	return $out;
 }

@@ -43,11 +43,13 @@ if (!empty($cassettings)) {
 	$casuserlastattr = str_replace('casuserlastattr=', '', $cas[6]);
 	$cas_altauth = intval(str_replace('cas_altauth=', '', $cas[7]));
 	$cas_logout = str_replace('cas_logout=', '', $cas[8]);
+	$cas_ssout = str_replace('cas_ssout=', '', $cas[9]);
 } else {
 	$cas_host = '';
 	$cas_port = 443;
   	$cas_context = '';
 	$cas_logout = '';
+	$cas_ssout = '';
 	$cas_cachain = '';
 	$casusermailattr = 'mail';
 	// givenName is the default for LDAP not givename
@@ -72,6 +74,15 @@ $tool_content .= "
     <tr>
       <th class='left'>$langcas_logout:</th>
       <td><input class='FormData_InputText' name='cas_logout' type='text' size='30' value='".q($cas_logout)."'></td>
+    </tr>
+    <tr>
+      <th class='left'>$langcas_ssout:</th>
+      <td>";
+$cas_ssout_data = array();
+$cas_ssout_data[0] = $m['no'];
+$cas_ssout_data[1] = $m['yes'];
+$tool_content .= selection($cas_ssout_data, 'cas_ssout', $cas_ssout);
+$tool_content .= "    </td>
     </tr>
     <tr>
       <th class='left'>$langcas_cachain:</th>

@@ -185,6 +185,8 @@ $langSupportedLanguages = "Υποστηριζόμενες Γλώσσες";
 $langAvailLanguages = "Διαθέσιμες";
 $langTipLangAdminAnn = "Επιλέξτε την γλώσσα στην οποία θα εμφανίζονται οι ανακοινώσεις του διαχειριστή";
 $langAltAuthStudentReq = 'Ενεργοποίηση αίτησης φοιτητή που συνδέεται με εναλλακτικό τρόπο πιστοποίησης';
+$langDisableEclassStudReg = 'Απενεργοποίηση εγγραφής φοιτητή μέσω πλατφόρμας';
+$langDisableEclassProfReg = 'Απενεργοποίηση εγγραφής καθηγητή μέσω πλατφόρμας';
 
 // listusers
 $langBegin="αρχή";
@@ -320,6 +322,7 @@ $langcas_host = "Εξυπηρέτης CAS";
 $langcas_port = "Πόρτα λειτουργίας CAS";
 $langcas_context = "Διεύθυνση σελίδας εισόδου";
 $langcas_logout = "Διεύθυνση σελίδας εξόδου";
+$langcas_ssout = "Ενεργοποίηση CAS Single Sign Out";
 $langcas_cachain = "Αρχείο Αλυσίδας Πιστοποιητικών του εξυπηρετητή CAS";
 $langcas_altauth = "Εναλλακτικός τρόπος πιστοποίησης";
 $langcasusermailattr = "CAS SAML attribute για το E-mail";
@@ -1406,7 +1409,7 @@ $langPgTitle="Τίτλος σελίδας";
 * index.php
 ***************************************************************/
 $langHomePage = "Αρχική Σελίδα";
-$langInvalidId = "Λάθος στοιχεία.<br>Αν δεν είστε γραμμένος, συμπληρώστε τη
+$langInvalidId = "Λάθος στοιχεία.<br>Αν δεν είστε εγγεγραμμένος, συμπληρώστε τη
         <a href='modules/auth/registration.php'>φόρμα εγγραφής</a>.";
 $langEnterPlatform = "Για να μπείτε στην πλατφόρμα κάντε κλικ";
 $langInvalidGuestAccount = "Το μάθημα για το οποίο έχει δημιουργηθεί ο λογαριασμός 'χρήστη επισκέπτη' δεν υπάρχει πλέον.";

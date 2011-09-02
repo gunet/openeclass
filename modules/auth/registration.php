@@ -49,7 +49,13 @@ if (isset($close_user_registration) and $close_user_registration) {
     $user_reg_type = $langUserAccountInfo2;
 }
 
-$tool_content .= "<img src='$themeimg/arrow.png' title='bullet' alt='bullet'><a href='$newuser'>$user_reg_type</a>";
+$disable_eclass_stud_reg = get_config('disable_eclass_stud_reg');
+if ($disable_eclass_stud_reg) {
+	$tool_content .= "$user_reg_type";
+}
+else {
+	$tool_content .= "<img src='$themeimg/arrow.png' title='bullet' alt='bullet'><a href='$newuser'>$user_reg_type</a>";
+}
 
 if (count($auth) > 1) {
    $tool_content .= "<br />&nbsp;&nbsp;&nbsp;&nbsp;$langUserAccountInfo4:";
@@ -64,7 +70,14 @@ if(!empty($auth)) {
 }
 
 $tool_content .= "</td></tr><tr><th>$langOfTeacher</th><td>";
-$tool_content .= "<img src='$themeimg/arrow.png' title='bullet'  alt='bullet' /><a href='formuser.php?p=1'>$langUserAccountInfo1</a>";
+
+$disable_eclass_prof_reg = get_config('disable_eclass_prof_reg');
+if ($disable_eclass_prof_reg) {
+	$tool_content .= "$langUserAccountInfo1";
+}
+else {
+	$tool_content .= "<img src='$themeimg/arrow.png' title='bullet'  alt='bullet' /><a href='formuser.php?p=1'>$langUserAccountInfo1</a>";
+}
 
 if (count($auth) > 1) {
    $tool_content .= "<br />&nbsp;&nbsp;&nbsp;&nbsp;$langUserAccountInfo4:";

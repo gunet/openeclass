@@ -171,27 +171,22 @@ function get_auth_info($auth)
 {
 	global $langViaeClass, $langViaPop, $langViaImap, $langViaLdap, $langViaDB, $langViaShibboleth, $langViaCAS, $langNbUsers, $langAuthChangeUser;
 
-	$l = "";
 	if(!empty($auth)) {
-		$c = count_auth_users($auth);
-		if ($c != 0 and $auth != 1) {
-			$l = " - <a href=\"auth_change.php?auth=$auth\">$langAuthChangeUser</a>";
-		}
 		switch($auth)
 		{
-			case '1': $m = "$langViaeClass ($langNbUsers: $c$l)";
+			case '1': $m = $langViaeClass;
 				break;
-			case '2': $m = "$langViaPop ($langNbUsers: $c$l)";
+			case '2': $m = $langViaPop;
 				break;
-			case '3': $m = "$langViaImap ($langNbUsers: $c$l)";
+			case '3': $m = $langViaImap;
 				break;
-			case '4': $m = "$langViaLdap ($langNbUsers: $c$l)";
+			case '4': $m = $langViaLdap;
 				break;
-			case '5': $m = "$langViaDB ($langNbUsers: $c$l)";
+			case '5': $m = $langViaDB;
 				break;
-			case '6': $m = "$langViaShibboleth ($langNbUsers: $c$l)";
+			case '6': $m = $langViaShibboleth;
 				break;
-			case '7': $m = "$langViaCAS ($langNbUsers: $c$l)";
+			case '7': $m = $langViaCAS;
 				break;
 			default: $m = 0;
 				break;
@@ -257,7 +252,8 @@ function get_auth_settings($auth)
                                         'casuserfirstattr' => str_replace('casuserfirstattr=', '', @$cas[5]),
                                         'casuserlastattr' => str_replace('casuserlastattr=', '', @$cas[6]),
                                         'cas_altauth' => str_replace('cas_altauth=', '', @$cas[7]),
-                                        'cas_logout' => str_replace('cas_logout=', '', @$cas[8])));
+                                        'cas_logout' => str_replace('cas_logout=', '', @$cas[8]),
+                                        'cas_ssout' => str_replace('cas_ssout=', '', @$cas[9])));
                                 break;
                         }
                         $settings['auth_name'] = $auth_ids[$auth];

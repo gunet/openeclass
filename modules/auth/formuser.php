@@ -28,6 +28,23 @@ $navigation[] = array('url' => 'registration.php', 'name' => $langNewUser);
 
 $prof = isset($_REQUEST['p'])? intval($_REQUEST['p']): 0;
 $nameTools = $prof? $langReqRegProf: $langUserRequest;
+
+// eclass native registration method disabled for students
+$disable_eclass_stud_reg = get_config('disable_eclass_stud_reg');
+if (!$prof and $disable_eclass_stud_reg) {
+	$tool_content .= "<div class='td_main'>$langForbidden</div></td></tr></table>";
+	draw($tool_content, 0);
+	exit;
+}
+
+// eclass native registration method disabled for profs
+$disable_eclass_prof_reg = get_config('disable_eclass_prof_reg');
+if ($prof and $disable_eclass_prof_reg) {
+	$tool_content .= "<div class='td_main'>$langForbidden</div></td></tr></table>";
+	draw($tool_content, 0);
+	exit;
+}
+
 $am_required = !$prof && get_config('am_required');
 $errors = array();
 

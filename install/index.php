@@ -129,6 +129,7 @@ if (isset($_POST['welcomeScreen'])) {
         $reguser = $dbPassForm = $helpdeskmail = $faxForm = $postaddressForm = '';
 	$email_required = $am_required = $dropbox_allow_student_to_student = $dont_display_login_form = '';
 	$display_captcha = $block_username_change = $insert_xml_metadata = $betacms = '';
+	$disable_eclass_stud_reg = $disable_eclass_prof_reg = '';
 } else {
 	register_posted_variables(array(
                 'dbHostForm' => true,
@@ -160,7 +161,9 @@ if (isset($_POST['welcomeScreen'])) {
 		'block_username_change' => true,
 		'display_captcha' => true,
 		'insert_xml_metadata' => true,
-		'betacms' => true));
+		'betacms' => true,
+		'disable_eclass_stud_reg' => true,
+		'disable_eclass_prof_reg' => true));
 	
 	register_posted_variables(array(
 		'doc_quota' => true,
@@ -211,7 +214,7 @@ $all_vars = array('pathForm', 'urlAppendPath', 'dbHostForm', 'dbUsernameForm', '
 		  'doc_quota', 'video_quota', 'group_quota', 'dropbox_quota',
                   'email_required', 'am_required', 'dropbox_allow_student_to_student',
                   'dont_display_login_form', 'block_username_change', 'display_captcha',
-		  'insert_xml_metadata', 'betacms');
+		  'insert_xml_metadata', 'betacms', 'disable_eclass_stud_reg', 'disable_eclass_prof_reg');
 
 // step 2 license
 if(isset($_REQUEST['install2']) OR isset($_REQUEST['back2']))
@@ -328,10 +331,12 @@ elseif(isset($_REQUEST['install4']) OR isset($_REQUEST['back4']))
 			<td>".text_input('group_quota', 5)."&nbsp;(Mb)</td></tr>
 		<tr><th class='left'>$langDropboxQuota</th>
 			<td>".text_input('dropbox_quota', 5)."&nbsp;(Mb)</td></tr>
-                <tr>
-                <th class='left'>$langViaReq</th>
-                <td>".checkbox_input('reguser')."</td>
-	</tr>
+		<tr><th class='left'>$langViaReq</th>
+			<td>".checkbox_input('reguser')."</td></tr>
+		<tr><th class='left'>$langDisableEclassStudReg</th>
+			<td>".checkbox_input('disable_eclass_stud_reg')."</td></tr>
+		<tr><th class='left'>$langDisableEclassProfReg</th>
+			<td>".checkbox_input('disable_eclass_prof_reg')."</td></tr>
 	<tr><td colspan='2' class='right'>
 	  <input type='submit' name='back3' value='&laquo; $langPreviousStep' />
 	  <input type='submit' name='install5' value='$langNextStep &raquo;' />
@@ -404,6 +409,16 @@ elseif(isset($_REQUEST['install6']))
   	} else {
       		$mes_add = $langToReq;
   	}
+	if (!$disable_eclass_stud_reg) {
+		$disable_eclass_stud_reg_info = $langDisableEclassStudRegNo;
+	} else {
+		$disable_eclass_stud_reg_info = $langDisableEclassStudRegYes;
+	}
+	if (!$disable_eclass_prof_reg) {
+		$disable_eclass_prof_reg_info = $langDisableEclassProfRegNo;
+	} else {
+		$disable_eclass_prof_reg_info = $langDisableEclassProfRegYes;
+	}
 
 	$tool_content .= "
         <form action='$_SERVER[PHP_SELF]?alreadyVisited=1' method='post'>
@@ -480,6 +495,14 @@ elseif(isset($_REQUEST['install6']))
 	<tr>
 	<th class='left'>$langGroupStudentRegistrationType</th>
 	<td>$mes_add</td>
+	</tr>
+	<tr>
+	<th class='left'>$langDisableEclassStudRegType</th>
+	<td>$disable_eclass_stud_reg_info</td>
+	</tr>
+	<tr>
+	<th class='left'>$langDisableEclassProfRegType</th>
+	<td>$disable_eclass_prof_reg_info</td>
 	</tr>";
 	$tool_content .= "<tr><td class='right'>&nbsp;</td>
 	<td class='right'>

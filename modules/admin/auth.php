@@ -66,7 +66,14 @@ if(empty($auth)) {
 	if ($auth_methods) {
 		$tool_content .= "<ul>";
 		foreach($auth_methods as $k => $v) {
-			$tool_content .= "<li>" . get_auth_info($v) . "</li>";
+			$c = count_auth_users($v);
+			if ($c != 0 and $v != 1) {
+				$l = " - <a href='auth_change.php?auth=$v'>$langAuthChangeUser</a>";
+			}
+			else {
+				$l = "";
+			}
+			$tool_content .= "<li>" . get_auth_info($v) . " ($langNbUsers: $c$l)</li>";
 		}
 		$tool_content .= "</ul>";
 	}
