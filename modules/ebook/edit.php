@@ -289,6 +289,13 @@ function get_html_title($file)
 {
         $dom = new DOMDocument();
         @$dom->loadHTMLFile($file);
-        $title = $dom->getElementsByTagName('title')->item(0)->nodeValue;
+        if (!is_object($dom)) {
+                return '';
+        }
+        $title_elements = $dom->getElementsByTagName('title');
+        if (!is_object($title_elements) or !$title_elements->length) {
+                return '';
+        }
+        $title = $title_elements->item(0)->nodeValue;
         return html_entity_decode($title, ENT_QUOTES, 'UTF-8');
 }
