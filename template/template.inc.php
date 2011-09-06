@@ -719,7 +719,7 @@ class Template
       return false;
     }
 
-    preg_match_all("/{([^ \t\r\n}]+)}/", $this->get_var($varname), $m);
+    preg_match_all("/{%([^ \t\r\n}]+)%}/", $this->get_var($varname), $m);
     $m = $m[1];
     if (!is_array($m)) {
       return false;
@@ -762,11 +762,11 @@ class Template
       break;
 
       case "remove":
-        $str = preg_replace('/{[^ \t\r\n}]+}/', "", $str);
+        $str = preg_replace('/{%[^ \t\r\n}]+%}/', "", $str);
       break;
 
       case "comment":
-        $str = preg_replace('/{([^ \t\r\n}]+)}/', "<!-- Template variable \\1 undefined -->", $str);
+        $str = preg_replace('/{%([^ \t\r\n}]+)%}/', "<!-- Template variable \\1 undefined -->", $str);
       break;
     }
 
