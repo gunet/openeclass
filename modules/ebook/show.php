@@ -1,5 +1,9 @@
 <?php
-
+if (stripos($_SERVER['REQUEST_URI'], '%5c') !== false) {
+        header('HTTP/1.1 301 Moved Permanently');
+        header('Location: ' . str_ireplace('%5c', '/', $_SERVER['REQUEST_URI']));
+        exit;
+}
 session_start();
 
 // save current course
