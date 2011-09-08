@@ -41,7 +41,6 @@ if (stripos($uri, '%5c') !== false) {
 }
 
 $uri = str_replace('//', chr(1), preg_replace('/^.*file\.php\??\//', '', $uri));
-die($uri);
 $path_components = explode('/', $uri);
 
 // temporary course change
