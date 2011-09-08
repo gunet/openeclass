@@ -78,6 +78,7 @@ function showQuestion($questionId, $onlyAnswers = false) {
 	for($answerId=1;$answerId <= $nbrAnswers;$answerId++) {
 		$answer = $objAnswerTmp->selectAnswer($answerId);
 		$answer = mathfilter($answer, 12, '../../courses/mathimg/');
+		$answerCorrect = $objAnswerTmp->isCorrect($answerId);
 		if($answerType == FILL_IN_BLANKS) {
 			// splits text and weightings that are joined with the character '::'
 			list($answer) = explode('::',$answer);
