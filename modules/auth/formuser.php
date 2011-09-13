@@ -121,7 +121,7 @@ if ($all_set) {
                 "$langProfUname: $username\n$langProfEmail : $usermail\n" .
                 "$contactphone: $userphone\n\n\n$logo\n\n";
 
-        if (!send_mail('', $emailhelpdesk, '', $emailhelpdesk, $subject, $MailMessage, $charset)) {
+        if (!send_mail('', $usermail, '', $emailhelpdesk, $subject, $MailMessage, $charset)) {
                 $tool_content .= "
                          <p class='alert1'>$langMailErrorMessage&nbsp; <a href='mailto:$emailhelpdesk' class='mainpage'>$emailhelpdesk</a>.</p>";
         }
@@ -156,7 +156,7 @@ if ($all_set) {
             <td colspan='2'><input type='text' name='userphone' value='" . q($userphone) . "' size='33' />$phone_star</td>
           <tr>
             <th>$langUsername</th>
-            <td><input type='text' name='username' size='33' maxlength='20' value='" . q($username) . "' />&nbsp;&nbsp;<small>(*)&nbsp;$langUserNotice</small></td>
+            <td><input type='text' name='username' size='33' maxlength='32' value='" . q($username) . "' />&nbsp;&nbsp;<small>(*)&nbsp;$langUserNotice</small></td>
           </tr>
           <tr>
             <th>$langProfEmail</th>

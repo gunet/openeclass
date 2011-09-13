@@ -256,7 +256,7 @@ if ($is_valid) {
                 \n$langComments: $usercomment\n"
                 . "$langProfUname : $uname\n$langProfEmail : $email\n" . "$contactphone : $userphone\n\n\n$logo\n\n";
                 
-                if (!send_mail('', $emailhelpdesk, $gunet, $emailhelpdesk, $mailsubject, $MailMessage, $charset)) {
+                if (!send_mail('', $email, $gunet, $emailhelpdesk, $mailsubject, $MailMessage, $charset)) {
                         $tool_content .= "<p class='alert1'>$langMailErrorMessage &nbsp; <a href='mailto:$emailhelpdesk'>$emailhelpdesk</a></p>";
                         draw($tool_content,0);
                         exit();
