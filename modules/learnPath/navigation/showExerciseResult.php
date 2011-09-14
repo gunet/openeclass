@@ -19,6 +19,11 @@
  * ======================================================================== */
 
 
+// This script is a replicate from
+// exercice/exercise_result.php, but it is modified for the
+// displaying needs of the learning path tool. The core
+// application logic remains the same.
+
 // Ta objects prepei na ginoun include prin thn init
 // gia logous pou sxetizontai me to object loading 
 // apo to session

@@ -18,6 +18,12 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
+// This script is a replicate from
+// exercice/exercice_submit.php, but it is modified for the
+// displaying needs of the learning path tool. The core
+// application logic remains the same.
+// It also contains a replicate from exercice/exercise.lib.php
+
 // Ta objects prepei na ginoun include prin thn init
 // gia logous pou sxetizontai me to object loading 
 // apo to session

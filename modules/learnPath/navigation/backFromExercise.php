@@ -18,6 +18,10 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
+// This script refreshes the upper frame for the user to see
+// his updated learning path progress and prompts him
+// to click next after finishing an exercise.
+
 $require_current_course = TRUE;
 $path2add = 3;
 include("../../../include/init.php");
