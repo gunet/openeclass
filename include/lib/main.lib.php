@@ -42,8 +42,6 @@ define('ACCESS_PRIVATE', 0);
 define('ACCESS_PROFS', 1);
 define('ACCESS_USERS', 2);
 
-define('PCLZIP_TEMPORARY_DIR', $webDir.'courses/temp/');
-
 // Show query string and then do MySQL query
 function db_query2($sql, $db = FALSE)
 {

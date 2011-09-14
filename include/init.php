@@ -98,6 +98,8 @@ $purifier->config->set('Filter.Custom', array( new HTMLPurifier_Filter_MyIframe(
 // PHP Math Publisher
 include $relPathLib . 'phpmathpublisher/mathpublisher.php';
 
+define('PCLZIP_TEMPORARY_DIR', $webDir.'courses/temp/');
+
 // Set active user interface languages
 $native_language_names = array();
 foreach ($active_ui_languages as $langcode) {
@@ -120,7 +122,7 @@ if (isset($_SESSION['langswitch'])) {
 if (!$db) {
 	include 'not_installed.php';
 }
-if (mysql_version()) mysql_query("SET NAMES utf8");
+if (mysql_version()) db_query('SET NAMES utf8');
 mysql_select_db($mysqlMainDb, $db);
 
 // include_messages
