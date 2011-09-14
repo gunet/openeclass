@@ -67,13 +67,20 @@ if(empty($auth)) {
 		$tool_content .= "<ul>";
 		foreach($auth_methods as $k => $v) {
 			$c = count_auth_users($v);
-			if ($c != 0 and $v != 1) {
-				$l = " - <a href='auth_change.php?auth=$v'>$langAuthChangeUser</a>";
+			if ($c !=0) {
+				$lc = "<a href='listusers.php?auth_type=$v'>$c</a>";
+				if ($v != 1) {
+					$l = " - <a href='auth_change.php?auth=$v'>$langAuthChangeUser</a>";
+				}
+				else {
+					$l = "";
+				}
 			}
 			else {
+				$lc = 0;
 				$l = "";
 			}
-			$tool_content .= "<li>" . get_auth_info($v) . " ($langNbUsers: $c$l)</li>";
+			$tool_content .= "<li>" . get_auth_info($v) . " ($langNbUsers: $lc$l)</li>";
 		}
 		$tool_content .= "</ul>";
 	}

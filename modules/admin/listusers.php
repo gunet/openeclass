@@ -32,6 +32,7 @@
 
 $require_admin = TRUE;
 include '../../include/baseTheme.php';
+include_once '../../modules/auth/auth.inc.php';
 include 'admin.inc.php';
 
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
@@ -47,6 +48,7 @@ $user_firstname = isset($_REQUEST['user_firstname'])?$_REQUEST['user_firstname']
 $user_username = isset($_REQUEST['user_username'])?$_REQUEST['user_username']:'';
 $user_am = isset($_REQUEST['user_am'])?$_REQUEST['user_am']:'';
 $user_type = isset($_REQUEST['user_type'])?$_REQUEST['user_type']:'';
+$auth_type = isset($_REQUEST['auth_type'])?$_REQUEST['auth_type']:'';
 $user_email = isset($_REQUEST['user_email'])?$_REQUEST['user_email']:'';
 $user_registered_at_flag = isset($_REQUEST['user_registered_at_flag'])?$_REQUEST['user_registered_at_flag']:'';
 $hour = isset($_REQUEST['hour'])?$_REQUEST['hour']:'';
@@ -183,6 +185,32 @@ else
 	$user_type_qry = "";
 }
 
+// auth type search
+if(!empty($auth_type))
+{
+	if($criteria!=0)
+	{
+		$auth_type_qry = " AND";
+	}
+	else
+	{
+		$auth_type_qry = "";
+	}
+	$criteria++;
+	if($auth_type >=2) {
+		$auth_type_qry .= " password='{$auth_ids[$auth_type]}'";
+	}
+	elseif($auth_type==1) {
+		$auth_type_qry .= " password != '{$auth_ids[1]}'";
+		for ($i = 2; $i <= count($auth_ids); $i++) {
+			$auth_type_qry .= " AND password != '{$auth_ids[$i]}'";
+		}
+	}
+}
+else
+{
+	$auth_type_qry = "";
+}
 
 // email search
 if(!empty($user_email))
@@ -278,19 +306,19 @@ if($view == 3) { // users per course
 		FROM user AS a LEFT JOIN cours_user AS b ON a.user_id = b.user_id
 		WHERE b.cours_id = $c";
 		if((!empty($user_surname_qry)) || (!empty($user_firstname_qry)) || (!empty($user_username_qry)) 
-			|| (!empty($user_am_qry)) || (!empty($user_type_qry)) || (!empty($user_registered_at_qry)) 
+			|| (!empty($user_am_qry)) || (!empty($user_type_qry)) || (!empty($auth_type_qry)) || (!empty($user_registered_at_qry)) 
 			|| (!empty($user_email_qry)) || (!empty($users_active_qry)))
 		{
-			$qry .= " WHERE".$user_surname_qry.$user_firstname_qry.$user_username_qry.$user_am_qry.$user_type_qry.$user_email_qry.$user_registered_at_qry.$users_active_qry;
+			$qry .= " WHERE".$user_surname_qry.$user_firstname_qry.$user_username_qry.$user_am_qry.$user_type_qry.$auth_type_qry.$user_email_qry.$user_registered_at_qry.$users_active_qry;
 		}
 } else {
 	// Count users, with or without criteria/filters
 	$qry = "SELECT user_id,nom,prenom,username,email,statut FROM user";
 	if((!empty($user_surname_qry)) || (!empty($user_firstname_qry)) || (!empty($user_username_qry)) 
-		|| (!empty($user_am_qry)) || (!empty($user_type_qry)) || (!empty($user_registered_at_qry)) 
+		|| (!empty($user_am_qry)) || (!empty($user_type_qry)) || (!empty($auth_type_qry)) || (!empty($user_registered_at_qry)) 
 		|| (!empty($user_email_qry)) || (!empty($users_active_qry)))
 	{
-		$qry .= " WHERE".$user_surname_qry.$user_firstname_qry.$user_username_qry.$user_am_qry.$user_type_qry.$user_email_qry.$user_registered_at_qry.$users_active_qry;
+		$qry .= " WHERE".$user_surname_qry.$user_firstname_qry.$user_username_qry.$user_am_qry.$user_type_qry.$auth_type_qry.$user_email_qry.$user_registered_at_qry.$users_active_qry;
 	}
 }
 
@@ -324,7 +352,7 @@ if($sql) {
 			$caption .= " ";
 		}
 		
-		@$str = "&amp;user_surname=$user_surname&amp;user_firstname=$user_firstname&amp;user_username=$user_username&amp;user_am=$user_am&amp;user_email=$user_email&amp;user_type=$user_type&amp;user_registered_at_flag=$user_registered_at_flag";
+		@$str = "&amp;user_surname=$user_surname&amp;user_firstname=$user_firstname&amp;user_username=$user_username&amp;user_am=$user_am&amp;user_email=$user_email&amp;user_type=$user_type&amp;auth_type=$auth_type&amp;user_registered_at_flag=$user_registered_at_flag";
 
 		if ($countUser >= USERS_PER_PAGE) { // display navigation links if more than USERS_PER_PAGE
 			$tool_content .= show_paging($limit, USERS_PER_PAGE, $countUser, "$_SERVER[PHP_SELF]", "$str");
@@ -336,19 +364,19 @@ if($sql) {
 			WHERE b.cours_id=$c";
 			if((!empty($user_surname_qry)) || (!empty($user_firstname_qry))
 				|| (!empty($user_username_qry)) || (!empty($user_am_qry))
-				|| (!empty($user_type_qry)) || (!empty($user_registered_at_qry))
+				|| (!empty($user_type_qry)) || (!empty($auth_type_qry)) || (!empty($user_registered_at_qry))
 				|| (!empty($user_email_qry)) || (!empty($users_active_qry)))
 			{
-				$qry .= " WHERE".$user_surname_qry.$user_firstname_qry.$user_username_qry.$user_am_qry.$user_type_qry.$user_email_qry.$user_registered_at_qry.$users_active_qry;
+				$qry .= " WHERE".$user_surname_qry.$user_firstname_qry.$user_username_qry.$user_am_qry.$user_type_qry.$auth_type_qry.$user_email_qry.$user_registered_at_qry.$users_active_qry;
 			}
 		} else {
 			$qry = "SELECT user_id,nom,prenom,username,email,statut FROM user";
 			if((!empty($user_surname_qry)) || (!empty($user_firstname_qry))
 				|| (!empty($user_username_qry)) || (!empty($user_am_qry))
-				|| (!empty($user_type_qry)) || (!empty($user_registered_at_qry))
+				|| (!empty($user_type_qry)) || (!empty($auth_type_qry)) || (!empty($user_registered_at_qry))
 				|| (!empty($user_email_qry)) || (!empty($users_active_qry)))
 			{
-				$qry .= " WHERE".$user_surname_qry.$user_firstname_qry.$user_username_qry.$user_am_qry.$user_type_qry.$user_email_qry.$user_registered_at_qry.$users_active_qry;
+				$qry .= " WHERE".$user_surname_qry.$user_firstname_qry.$user_username_qry.$user_am_qry.$user_type_qry.$auth_type_qry.$user_email_qry.$user_registered_at_qry.$users_active_qry;
 			}
 		}
 

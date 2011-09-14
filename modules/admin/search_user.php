@@ -40,6 +40,7 @@
 //  BASETHEME, OTHER INCLUDES AND NAMETOOLS
 $require_admin = TRUE;
 include '../../include/baseTheme.php';
+include_once '../../modules/auth/auth.inc.php';
 include 'admin.inc.php';
 include '../../include/jscalendar/calendar.php';
 
@@ -55,7 +56,7 @@ $nameTools = $langSearchUser;
 $new = isset($_GET['new'])?$_GET['new']:'yes';	//variable of declaring a new search
 
 // initialize the variables
-$user_surname = $user_firstname = $user_username = $user_am = $user_type = $user_registered_at_flag = $user_registered_at = $user_email = '';
+$user_surname = $user_firstname = $user_username = $user_am = $user_type = $auth_type = $user_registered_at_flag = $user_registered_at = $user_email = '';
 
 // Display Actions Toolbar
 $tool_content .= "
@@ -97,6 +98,16 @@ $usertype_data[10] = $langGuest;
 $tool_content .= selection($usertype_data,"user_type",$usertype_data[0]);
 $tool_content .= "</td>
   </tr>
+  <tr>
+    <th class='left'>$langAuthMethod:</th>
+    <td>";
+
+// enalaktika mporoume na valoume mono tous energous tropous
+//$auth_methods = get_auth_active_methods();
+$authtype_data = $auth_ids;
+$authtype_data[0] = $langAllAuthTypes;
+$tool_content .= selection($authtype_data,"auth_type",$usertype_data[0]);
+$tool_content .= "</td>
   <tr>
     <th class='left'>$langRegistrationDate:</th>
     <td>";
