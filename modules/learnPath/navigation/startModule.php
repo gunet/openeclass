@@ -136,7 +136,7 @@ switch ($module['contentType'])
 		unset($_SESSION['objAnswer']);
 		unset($_SESSION['questionList']);
 		unset($_SESSION['exerciseResult']);
-		unset($_SESSION['exeStartTime'	]);
+		unset($_SESSION['exeStartTime']);
 
 		$moduleStartAssetPage = "showExercise.php?course=$code_cours&amp;exerciseId=".$assetPath;
 		break;

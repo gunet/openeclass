@@ -18,30 +18,6 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-
-/*===========================================================================
-	backFromExercise.php
-	@last update: 30-06-2006 by Thanos Kyritsis
-	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
-	               
-	based on Claroline version 1.7 licensed under GPL
-	      copyright (c) 2001, 2006 Universite catholique de Louvain (UCL)
-	      
-	      original file: backFromExercise.php Revision: 1.6
-	      
-	Claroline authors: Piraux Sebastien <pir@cerdecam.be>
-                      Lederer Guillaume <led@cerdecam.be>
-==============================================================================        
-    @Description: This script refreshes the upper frame for the user to see 
-                  his updated learning path progress and prompts him
-                  to click next after finishing an exercise.
-
-    @Comments:
- 
-    @todo: 
-==============================================================================
-*/
-
 $require_current_course = TRUE;
 $path2add = 3;
 include("../../../include/init.php");
@@ -51,29 +27,25 @@ $TOCurl = "../viewer_toc.php?course=$code_cours";
 <head>
  <meta http-equiv="Content-Type" content="text/html; charset=<?php echo $charset?>">
  <title>-</title>
- <link href="../../../template/<?php echo $theme ?>/tool_content.css" rel="stylesheet" type="text/css" />
- <link href="../tool.css" rel="stylesheet" type="text/css" />
+ <link href="../../../template/<?php echo $theme ?>/theme.css" rel="stylesheet" type="text/css" />
  <script type='text/javascript'>
   <!-- //
    parent.tocFrame.location.href="<?php echo $TOCurl; ?>";
   //-->
  </script>
-</head>
-<body>
- <center>
+</head> 
+<body style="margin: 0px; padding-left: 5px; height: 100%!important; height: auto; background-color: #ffffff;">
+    <div id="content">
   <br /><br /><br />
-  <p>
 <?php
-if($_GET['op'] == 'cancel')
-{
-    echo $langExerciseCancelled;
-}
-elseif($_GET['op'] == 'finish') // exercise done
-{
-    echo $langExerciseDone;
-}
+    if($_GET['op'] == 'cancel')
+    {
+        echo "<div class='alert1'>$langExerciseCancelled</div>";
+    }
+    elseif($_GET['op'] == 'finish') // exercise done
+    {
+        echo "<div class='success'>$langExerciseDone</div>";
+    }
 ?>
-   </p>
-  </center>
- </body>
+    </div>
 </html>

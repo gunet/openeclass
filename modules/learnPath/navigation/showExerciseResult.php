@@ -1,5 +1,4 @@
 <?php
-
 /* ========================================================================
  * Open eClass 2.4
  * E-learning and Course Management System
@@ -19,23 +18,6 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-
-/**===========================================================================
-	showExerciseResult.php
-	@last update: 30-06-2006 by Thanos Kyritsis
-	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
-	               Dionysios G. Synodinos <synodinos@gmail.com>
-==============================================================================
-    @Description: This script is a replicate from
-                  exercice/exercise_result.php, but it is modified for the
-                  displaying needs of the learning path tool. The core
-                  application logic remains the same.
-
-    @Comments:
-
-    @todo:
-==============================================================================
-*/
 
 // Ta objects prepei na ginoun include prin thn init
 // gia logous pou sxetizontai me to object loading 
@@ -79,52 +61,58 @@ echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www
     .'</head>'."\n"
     .'<body style="margin: 0px; padding-left: 5px; height: 100%!important; height: auto; background-color: #ffffff;">'."\n"
     .'<div id="content">';
-    
-// ypologismos tou xronou pou xreiasthke o xrhsths gia thn oloklhrwsh ths askhshs
-if (isset($_SESSION['exercise_begin_time'])) {
-   $timeToCompleteExe = time() - $_SESSION['exercise_begin_time'];
-}
 
 $nameTools = $langExercicesResult;
-if (isset($_SESSION['objExercise'])) {
-    $objExercise = $_SESSION['objExercise'];
+
+if (isset($_GET['exerciseId'])) {
+	$exerciseId = intval($_GET['exerciseId']);
+}    
+
+// ypologismos tou xronou pou xreiasthke o xrhsths gia thn oloklhrwsh ths askhshs
+if (isset($_SESSION['exercise_begin_time'][$exerciseId])) {
+   $timeToCompleteExe = time() - $_SESSION['exercise_begin_time'][$exerciseId];
+}
+
+
+if (isset($_SESSION['objExercise'][$exerciseId])) {
+    $objExercise = $_SESSION['objExercise'][$exerciseId];
 }
 
 // if the above variables are empty or incorrect, stops the script
-if(!is_array($_SESSION['exerciseResult']) || !is_array($_SESSION['questionList']) || !is_object($objExercise)) {
-	echo ($langExerciseNotFound);
+if(!is_array($_SESSION['exerciseResult'][$exerciseId]) 
+            || !is_array($_SESSION['questionList'][$exerciseId]) 
+            || !is_object($objExercise)) {
+	echo $langExerciseNotFound;
 	exit();
 }
 
 $exerciseTitle = $objExercise->selectTitle();
 $exerciseDescription = $objExercise->selectDescription();
 $exerciseDescription_temp = nl2br(make_clickable($exerciseDescription));
-$exerciseDescription_temp = mathfilter($exerciseDescription_temp, 12, "../../courses/mathimg/");
+$exerciseDescription_temp = mathfilter($exerciseDescription_temp, 12, "{$webDir}courses/mathimg/");
 $displayResults = $objExercise->selectResults();
 $displayScore = $objExercise->selectScore(); 
 
-echo ("
-  <table class=\"tbl_border\" width=\"99%\">
+echo "<table class='tbl_border' width='99%'>
   <tr class='odd'>
-    <td colspan=\"2\"><b>".stripslashes($exerciseTitle)."</b>
+    <td colspan='2'><b>".stripslashes($exerciseTitle)."</b>
     <br/>".stripslashes($exerciseDescription_temp)."
     </td>
   </tr>
-  </table>");
+  </table>";
 
 // probaloume th dikia mas forma me to diko mas action 
 // kai me to katallhlo hidden pedio
-echo "
-	<form method=\"GET\" action=\"backFromExercise.php\"><input type=\"hidden\" name=\"course\" value=\"$code_cours\">".
-	"<input type=\"hidden\" name=\"op\" value=\"finish\">";
+echo "<form method='GET' action='backFromExercise.php'><input type='hidden' name='course' value='$code_cours'>".
+	"<input type='hidden' name='op' value='finish'>";
 
-$i=$totalScore=$totalWeighting=0;
+$i = $totalScore = $totalWeighting=0;
 
 // for each question
 
-foreach($_SESSION['questionList'] as $questionId) {
+foreach($_SESSION['questionList'][$exerciseId] as $questionId) {
 	// gets the student choice for this question
-	$choice = @$_SESSION['exerciseResult'][$questionId];
+        $choice = @$_SESSION['exerciseResult'][$exerciseId][$questionId];
 	// creates a temporary Question object
 	$objQuestionTmp=new Question();
 	$objQuestionTmp->read($questionId);
@@ -134,7 +122,7 @@ foreach($_SESSION['questionList'] as $questionId) {
 	$questionDescription=$objQuestionTmp->selectDescription();
 	$questionDescription=$questionDescription;
 	$questionDescription_temp = nl2br(make_clickable($questionDescription));
-	$questionDescription_temp = mathfilter($questionDescription_temp, 12, "../../courses/mathimg/");
+	$questionDescription_temp = mathfilter($questionDescription_temp, 12, "{$webDir}courses/mathimg/");
 	$questionWeighting=$objQuestionTmp->selectWeighting();
 	$answerType=$objQuestionTmp->selectType();
 
@@ -203,8 +191,8 @@ foreach($_SESSION['questionList'] as $questionId) {
 		$answerCorrect=$objAnswerTmp->isCorrect($answerId);
 		$answerWeighting=$objAnswerTmp->selectWeighting($answerId);
 		// support for math symbols
-		$answer = mathfilter($answer, 12, "../../courses/mathimg/");
-		$answerComment = mathfilter($answerComment, 12, "../../courses/mathimg/");
+		$answer = mathfilter($answer, 12, "{$webDir}courses/mathimg/");
+		$answerComment = mathfilter($answerComment, 12, "{$webDir}courses/mathimg/");
 
 		switch($answerType)
 		{
@@ -302,9 +290,9 @@ foreach($_SESSION['questionList'] as $questionId) {
 			if($answerType != MATCHING || $answerCorrect) {
 				if($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER || $answerType == TRUE_FALSE) {
 					echo ("
-    <tr class='even'>
-      <td>
-      <div align='center'><img src='$themeimg/");
+                                            <tr class='even'>
+                                              <td>
+                                              <div align='center'><img src='$themeimg/");
 					if ($answerType == UNIQUE_ANSWER || $answerType == TRUE_FALSE) {
 						echo ("radio");
 					} else {
@@ -315,10 +303,9 @@ foreach($_SESSION['questionList'] as $questionId) {
 					} else {
 						echo ('_off');
 					}
-		
 					echo (".png' border='0' /></div>
-      </td>
-      <td><div align='center'>");
+                                              </td>
+                                              <td><div align='center'>");
 	
 					if ($answerType == UNIQUE_ANSWER || $answerType == TRUE_FALSE) {
 						echo ("<img src=\"$themeimg/radio");
@@ -331,43 +318,39 @@ foreach($_SESSION['questionList'] as $questionId) {
 						echo ("_off");	
 					}
 					echo (".png\" /></div>");	
-					echo ("
-      </td>
-      <td>${answer}</td>
-      <td>");
+					echo ("</td>
+                                              <td>${answer}</td>
+                                              <td>");
 					if ($studentChoice) {
 						echo nl2br(make_clickable($answerComment)); 
 					} else { 
 						echo ('&nbsp;');
 					} 
-					echo ("
-      </td>
-    </tr>");
+					echo ("</td></tr>");
 				} elseif($answerType == FILL_IN_BLANKS) {
 					echo ("
-    <tr class='even'>
-      <td>".nl2br($answer)."</td>
-    </tr>");
+                                        <tr class='even'>
+                                          <td>".nl2br($answer)."</td>
+                                        </tr>");
 				} else {
 					echo ("
-    <tr class='even'>
-      <td>${answer}</td>
-      <td>${choice[$answerId]} / <font color='green'><b>${matching[$answerCorrect]}</b></font></td>
-    </tr>");
+                                        <tr class='even'>
+                                          <td>${answer}</td>
+                                          <td>${choice[$answerId]} / <font color='green'><b>${matching[$answerCorrect]}</b></font></td>
+                                        </tr>");
 				}
 			} 
 		} // end of if
 	}	// end for()
 	 if ($displayScore == 1) {
 		echo ("
-    <tr class='even'>
-      <td colspan='$colspan' class='odd'><div align='right'>
-		$langQuestionScore: <b>$questionScore/$questionWeighting</b></div>
-      </td>
-    </tr>");
+                <tr class='even'>
+                  <td colspan='$colspan' class='odd'><div align='right'>
+                            $langQuestionScore: <b>$questionScore/$questionWeighting</b></div>
+                  </td>
+                </tr>");
 	}
-	echo ("
-    </table>");
+	echo ("</table>");
 	// destruction of Answer
 	unset($objAnswerTmp);
 	$i++;
