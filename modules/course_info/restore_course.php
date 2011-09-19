@@ -230,13 +230,9 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
                                                            $ebook_subsection_map)));
         }
 
-	$tool_content .= "</p>";
-	if (!file_exists($webDir."courses/garbage"))
-		mkdir($webDir."courses/garbage");
-	if (!file_exists($webDir."courses/garbage/tmpUnzipping"))
-		mkdir($webDir."courses/garbage/tmpUnzipping");
-	rename($webDir."courses/tmpUnzipping", $webDir."courses/garbage/tmpUnzipping/".time()."");
-	$tool_content .= "<br /><center><p><a href='../admin/index.php'>$langBack</a></p></center>";
+	removeDir($restoreThis);
+        $tool_content .= "</p><br />
+                          <center><p><a href='../admin/index.php'>$langBack</a></p></center>";
 }
 
 elseif (isset($_POST['do_restore'])) {
@@ -408,7 +404,7 @@ function user($userid, $name, $surname, $login, $password, $email, $statut, $pho
 		$expires_at = time() + $durationAccount;
 	}
 
-	$u = mysql_query("SELECT * FROM `$mysqlMainDb`.user WHERE BINARY username=".quote($login));
+	$u = db_query("SELECT * FROM `$mysqlMainDb`.user WHERE BINARY username=".quote($login));
 	if (mysql_num_rows($u) > 0) {
 		$res = mysql_fetch_array($u);
 		$userid_map[$userid] = $res['user_id'];
@@ -663,7 +659,7 @@ function faculty_select($current)
 	global $mysqlMainDb;
 
 	$ret = "<select name='course_fac'>\n";
-	$res = mysql_query("SELECT id, name FROM `$mysqlMainDb`.faculte ORDER BY number");
+	$res = db_query("SELECT id, name FROM `$mysqlMainDb`.faculte ORDER BY number");
 	while ($fac = mysql_fetch_array($res)) {
 		if($fac['name'] == $current) {
 			$ret .= "<option selected value='$fac[id]'>$fac[name]</option>\n";
@@ -759,8 +755,6 @@ function restore_table($basedir, $table, $options)
                         foreach ($options['map'] as $field => &$map) {
                                 if (isset($map[$data[$field]])) {
                                         $data[$field] = $map[$data[$field]];
-                                } else {
-                                        break 2;
                                 }
                         }
                 }
@@ -897,7 +891,7 @@ function restore_users($course_id, $users, $cours_user)
                 if ($add_only_profs and !$is_prof[$data['user_id']]) {
                         continue;
                 }
-                $u = mysql_query("SELECT * FROM `$mysqlMainDb`.user WHERE BINARY username=".quote($data['username']));
+                $u = db_query("SELECT * FROM `$mysqlMainDb`.user WHERE BINARY username=".quote($data['username']));
                 if (mysql_num_rows($u) > 0) {
                         $res = mysql_fetch_array($u);
                         $userid_map[$data['user_id']] = $res['user_id'];
