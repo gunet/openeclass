@@ -50,9 +50,9 @@ $sql = db_query("SELECT id, title, body, DATE_FORMAT(`date`,'%a, %d %b %Y %T +03
 
 while ($r = mysql_fetch_array($sql)) {
 	echo "<item>";
-	echo "<title>".$r['title']."</title>";
+	echo "<title>".htmlspecialchars($r['title'], ENT_NOQUOTES)."</title>";
 	echo "<link>".$urlServer."modules/announcements/main_ann.php?aid=".$r['id']."</link>";
-	echo "<description>".q(standard_text_escape($r['body']))."</description>";	
+	echo "<description>".htmlspecialchars($r['body'], ENT_NOQUOTES)."</description>";	
 	echo "<pubDate>".$r['dateformat']."</pubDate>";
 	echo "<guid isPermaLink='false'>".$r['dateformat'].$r['id']."</guid>";
 	echo "</item>";
