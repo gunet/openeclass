@@ -24,7 +24,7 @@ include '../include/baseTheme.php';
 $nameTools = $contactpoint;
 
 if (!empty($postaddress)) {
-    $message = "| ".$postaddress;
+    $message = $postaddress;
 } else {
     $message = '';
 }
