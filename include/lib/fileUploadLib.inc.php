@@ -485,7 +485,9 @@ function process_extracted_file($p_event, &$p_header) {
         global $file_comment, $file_category, $file_creator, $file_date, $file_subject,
                $file_title, $file_description, $file_author, $file_language,
                $file_copyrighted, $uploadPath, $realFileSize, $basedir, $cours_id,
-               $subsystem, $subsystem_id, $uploadPath;
+               $subsystem, $subsystem_id, $uploadPath, $group_sql;
+
+        $replace = isset($_POST['replace']);
 
         if (!isset($uploadPath)) {
                 $uploadPath = '';
@@ -504,7 +506,38 @@ function process_extracted_file($p_event, &$p_header) {
                 // no need to do anything else
                 return 0;
         } else {
+                // Check if file already exists
+                $result = db_query("SELECT path, visibility FROM document WHERE
+                        $group_sql AND
+                        path REGEXP '^$path/[^/]+$' AND
+                        filename = " . quote($filename) . " LIMIT 1");
                 $format = get_file_extension($filename);
+                if (mysql_num_rows($result)) {
+                        list($file_path, $vis) = mysql_fetch_row($result);
+                        if ($replace) {
+                                // Delete old file record when replacing file
+                                db_query("DELETE FROM document
+                                                 WHERE $group_sql AND
+                                                       path = " . quote($file_path));
+                        } else {
+                                // Rename existing file
+                                $backup_n = 1;
+                                do {
+                                        $backup = preg_replace('/\.[a-zA-Z0-9_-]+$/', '', $filename) .
+                                                  '_backup_' . $backup_n . '.' . $format;
+                                        $q = db_query("SELECT COUNT(*) FROM document
+                                                              WHERE $group_sql AND
+                                                                    path REGEXP '^$path/[^/]+$' AND
+                                                                    filename = " . quote($backup) . " LIMIT 1");
+                                        list($n) = mysql_fetch_row($q);
+                                        $backup_n++;
+                                } while ($n > 0);
+                                db_query("UPDATE document SET filename = " . quote($backup) . "
+                                                 WHERE $group_sql AND
+                                                       path = " . quote($file_path));
+                        }
+                }
+
                 $path .= '/' . safe_filename($format);
                 db_query("INSERT INTO document SET
                                  course_id = $cours_id,

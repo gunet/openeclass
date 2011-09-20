@@ -152,6 +152,11 @@ if ($can_upload) {
 	  <td>&nbsp;</td>
 	</tr>
 	<tr>
+	  <th>$langReplaceSameName</th>
+	  <td><input type='checkbox' name='replace' value='1' /> </td>
+	  <td>&nbsp;</td>
+	</tr>
+	<tr>
 	  <th>&nbsp;</th>
       <td colspan='2' class='right'><input type='submit' value='$langUpload' /></td>
 	</tr>

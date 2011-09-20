@@ -41,7 +41,7 @@ $helpTopic = 'Doc';
 // check for quotas
 $diskUsed = dir_total_space($basedir);
 $type = ($subsystem == GROUP)? 'group_quota': 'doc_quota';
-$d = mysql_fetch_row(mysql_query("SELECT $type FROM cours WHERE cours_id = $cours_id"));
+$d = mysql_fetch_row(db_query("SELECT $type FROM cours WHERE cours_id = $cours_id"));
 $diskQuotaDocument = $d[0];
 
 if (isset($_GET['showQuota'])) {
@@ -123,7 +123,7 @@ function make_clickable_path($path)
 // stripSubmitValue($_GET);
 /*****************************************************************************/
 
-if($can_upload) {
+if ($can_upload) {
 	/*********************************************************************
 	UPLOAD FILE
 
@@ -171,39 +171,46 @@ if($can_upload) {
                                 }
                                 if (!$error) {
                                         // Check if file already exists
-					$result = db_query("SELECT filename FROM document WHERE
+					$result = db_query("SELECT path, visibility FROM document WHERE
                                                                    $group_sql AND
                                                                    path REGEXP '^" . escapeSimple($uploadPath) . "/[^/]+$' AND
                                                                    filename = " . autoquote($fileName) ." LIMIT 1");
-                                        if (mysql_num_rows($result) > 0) {
-						$error = $langFileExists;
+                                        if (mysql_num_rows($result)) {
+                                                if (isset($_POST['replace'])) {
+                                                        // Delete old file record when replacing file
+                                                        list($file_path, $vis) = mysql_fetch_row($result);
+                                                        db_query("DELETE FROM document WHERE
+                                                                         $group_sql AND
+                                                                         path = " . quote($file_path));
+                                                } else {
+                                                        $error = $langFileExists;
+                                                }
+                                        } else {
+                                                // Try to add an extension to files witout extension,
+                                                // change extension of PHP files
+                                                $fileName = php2phps(add_ext_on_mime($fileName));
+                                                // File name used in file system and path field
+                                                $safe_fileName = safe_filename(get_file_extension($fileName));
+                                                if ($uploadPath == '.') {
+                                                        $file_path = '/' . $safe_fileName;
+                                                } else {
+                                                        $file_path = $uploadPath . '/' . $safe_fileName;
+                                                }
+                                                $vis = 'v';
                                         }
                                 }
                                 if (!$error) {
-                                        //to arxeio den vrethike sth vash ara mporoume na proxwrhsoume me to upload
-                                        /*** Try to add an extension to files witout extension ***/
-                                        $fileName = add_ext_on_mime($fileName);
-                                        /*** Handle PHP files ***/
-                                        $fileName = php2phps($fileName);
-                                        // to onoma afto tha xrhsimopoiei sto filesystem kai sto pedio path
-                                        $safe_fileName = safe_filename(get_file_extension($fileName));
-                                        //prosthiki eggrafhs kai metadedomenwn gia to eggrafo sth vash
-                                        if ($uploadPath == ".") {
-                                                $uploadPath2 = "/".$safe_fileName;
-                                        } else {
-                                                $uploadPath2 = $uploadPath."/".$safe_fileName;
-                                        }
-                                        // san file format vres to extension tou arxeiou
+                                        // No errors, so proceed with upload
                                         $file_format = get_file_extension($fileName);
-                                        // san date you arxeiou xrhsimopoihse thn shmerinh hm/nia
+                                        // File date is current date
                                         $file_date = date("Y\-m\-d G\:i\:s");
                                         db_query("INSERT INTO document SET
                                                         course_id = $cours_id,
 							subsystem = $subsystem,
                                                         subsystem_id = $subsystem_id,
-                                                        path = " . quote($uploadPath2) . ",
+                                                        path = " . quote($file_path) . ",
                                                         filename = " . autoquote($fileName) . ",
-                                                        visibility = 'v',
+                                                        visibility = '$vis',
                                                         comment = " . autoquote($_POST['file_comment']) . ",
                                                         category = " . intval($_POST['file_category']) . ",
                                                         title =	" . autoquote($_POST['file_title']) . ",
@@ -218,7 +225,7 @@ if($can_upload) {
                                                         copyrighted = " . intval($_POST['file_copyrighted']));
 
                                         /*** Copy the file to the desired destination ***/
-                                        copy ($userFile, $basedir.$uploadPath.'/'.$safe_fileName);
+                                        copy ($userFile, $basedir . $file_path);
                                         $action_message .= "<p class='success'>$langDownloadEnd</p><br />";
                                 } else {
                                         $action_message .= "<p class='caution'>$error</p><br />";
