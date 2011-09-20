@@ -871,7 +871,8 @@ function restore_users($course_id, $users, $cours_user)
 {
 	global $tool_content, $mysqlMainDb, $durationAccount, $version,
                $langUserWith, $langWithUsername, $langUserisAdmin,
-               $langUsernameSame, $langRestoreUserExists;
+               $langUsernameSame, $langRestoreUserExists,
+               $langRestoreUserNew;
 
         $userid_map = array();
         if ($_POST['add_users'] == 'none') {
@@ -912,7 +913,7 @@ function restore_users($course_id, $users, $cours_user)
                                              phone = ".quote($data['phone']).",
                                              department = ".quote($data['department']).",
                                              registered_at = ".quote($data['registered_at']));
-                        $userid_map[$userid] = mysql_insert_id();
+                        $userid_map[$data['userid']] = mysql_insert_id();
                         $tool_content .= "<p>" .
                                          sprintf($langRestoreUserNew,
                                                  '<b>' . q($data['username']) . '</b>',
