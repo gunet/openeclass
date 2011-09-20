@@ -29,7 +29,7 @@ include '../include/lib/fileUploadLib.inc.php';
 include '../include/lib/forcedownload.php';
 
 // set default storage engine
-mysql_query("SET storage_engine=MYISAM");
+db_query("SET storage_engine=MYISAM");
 
 include 'upgrade_functions.php';
 
@@ -357,8 +357,6 @@ if (!isset($_POST['submit2'])) {
                                 ADD `email_public` TINYINT(1) NOT NULL DEFAULT 0,
                                 ADD `phone_public` TINYINT(1) NOT NULL DEFAULT 0,
                                 ADD `am_public` TINYINT(1) NOT NULL DEFAULT 0");
-        mysql_field_exists($mysqlMainDb, 'cours', 'expand_glossary') or
-                db_query("ALTER TABLE `cours` ADD `expand_glossary` BOOL NOT NULL DEFAULT 0");
         if ($oldversion < '2.4') {
         	if (mysql_field_exists($mysqlMainDb, 'cours', 'faculte')) {
 	        	echo delete_field('cours', 'faculte');
@@ -520,6 +518,12 @@ if (!isset($_POST['submit2'])) {
 			db_query("DROP TABLE cours_faculte");	
 		}		
         }
+        mysql_field_exists($mysqlMainDb, 'cours', 'expand_glossary') or
+                db_query("ALTER TABLE `cours` ADD `expand_glossary` BOOL NOT NULL DEFAULT 0");
+        mysql_field_exists($mysqlMainDb, 'cours', 'glossary_index') or
+                db_query("ALTER TABLE `cours` ADD `glossary_index` BOOL NOT NULL DEFAULT 1");
+        mysql_field_exists($mysqlMainDb, 'ebook', 'visible') or
+                db_query("ALTER TABLE `ebook` ADD `visible` BOOL NOT NULL DEFAULT 1");
 
         if (!mysql_field_exists($mysqlMainDb, 'glossary', 'category_id')) {
                 db_query("ALTER TABLE glossary ADD category_id INT(11) DEFAULT NULL,

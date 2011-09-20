@@ -143,6 +143,7 @@ db_query("CREATE TABLE `cours` (
   `password` varchar(50) DEFAULT NULL,
   `faculteid` int(11) NOT NULL DEFAULT 0,
   `expand_glossary` BOOL NOT NULL DEFAULT 0,
+  `glossary_index` BOOL NOT NULL DEFAULT 1,
   PRIMARY KEY  (`cours_id`)) $charset_spec");
 
 
@@ -267,7 +268,7 @@ db_query("CREATE TABLE IF NOT EXISTS `document` (
                 `copyrighted` TINYINT(4) NOT NULL DEFAULT 0,
                 FULLTEXT KEY `document`
                         (`filename`, `comment`, `title`, `creator`,
-                         `subject`, `description`, `author`, `language`))");
+                         `subject`, `description`, `author`, `language`)) $charset_spec");
 
 db_query("CREATE TABLE IF NOT EXISTS `group_properties` (
                 `course_id` INT(11) NOT NULL PRIMARY KEY ,
@@ -278,7 +279,7 @@ db_query("CREATE TABLE IF NOT EXISTS `group_properties` (
                 `private_forum` TINYINT(4) NOT NULL DEFAULT 0,
                 `documents` TINYINT(4) NOT NULL DEFAULT 1,
                 `wiki` TINYINT(4) NOT NULL DEFAULT 0,
-                `agenda` TINYINT(4) NOT NULL DEFAULT 0)");
+                `agenda` TINYINT(4) NOT NULL DEFAULT 0) $charset_spec");
 db_query("CREATE TABLE IF NOT EXISTS `group` (
                 `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 `course_id` INT(11) NOT NULL DEFAULT 0,
@@ -286,13 +287,13 @@ db_query("CREATE TABLE IF NOT EXISTS `group` (
                 `description` TEXT,
                 `forum_id` int(11) NULL,
                 `max_members` int(11) NOT NULL DEFAULT 0,
-                `secret_directory` varchar(30) NOT NULL DEFAULT '0')");
+                `secret_directory` varchar(30) NOT NULL DEFAULT '0') $charset_spec");
 db_query("CREATE TABLE IF NOT EXISTS `group_members` (
                 `group_id` int(11) NOT NULL,
                 `user_id` int(11) NOT NULL,
                 `is_tutor` int(11) NOT NULL DEFAULT 0,
                 `description` TEXT,
-                PRIMARY KEY (`group_id`, `user_id`))");
+                PRIMARY KEY (`group_id`, `user_id`)) $charset_spec");
 
 db_query("CREATE TABLE IF NOT EXISTS `glossary` (
                `id` MEDIUMINT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -303,7 +304,7 @@ db_query("CREATE TABLE IF NOT EXISTS `glossary` (
                `datestamp` DATETIME NOT NULL,
                `course_id` INT(11) NOT NULL,
                `category_id` INT(11) DEFAULT NULL,
-               `notes` TEXT NOT NULL)");
+               `notes` TEXT NOT NULL) $charset_spec");
 
 db_query("CREATE TABLE IF NOT EXISTS `glossary_category` (
                `id` MEDIUMINT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -314,14 +315,14 @@ db_query("CREATE TABLE IF NOT EXISTS `glossary_category` (
                `datestamp` DATETIME NOT NULL,
                `course_id` INT(11) NOT NULL,
                `category_id` INT(11) DEFAULT NULL,
-               `notes` TEXT NOT NULL)");
+               `notes` TEXT NOT NULL) $charset_spec");
 
  db_query("CREATE TABLE IF NOT EXISTS `glossary_category` (
                `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                `course_id` INT(11) NOT NULL,
                `name` VARCHAR(255) NOT NULL,
                `description` TEXT NOT NULL,
-               `order` INT(11) NOT NULL DEFAULT 0)");
+               `order` INT(11) NOT NULL DEFAULT 0) $charset_spec");
 
 db_query("CREATE TABLE IF NOT EXISTS `link` (
                 `id` INT(11) NOT NULL AUTO_INCREMENT,
@@ -332,31 +333,32 @@ db_query("CREATE TABLE IF NOT EXISTS `link` (
                 `category` INT(6) DEFAULT NULL,
                 `order` INT(6) DEFAULT 0 NOT NULL,
                 `hits` INT(6) DEFAULT 0 NOT NULL,
-                PRIMARY KEY (`id`, `course_id`))");
+                PRIMARY KEY (`id`, `course_id`)) $charset_spec");
 db_query("CREATE TABLE IF NOT EXISTS `link_category` (
                 `id` INT(6) NOT NULL AUTO_INCREMENT,
                 `course_id` INT(11) NOT NULL,
                 `name` VARCHAR(255) NOT NULL,
                 `description` TEXT,
                 `order` INT(6) NOT NULL DEFAULT 0,
-                PRIMARY KEY (`id`, `course_id`))");
-db_query('CREATE TABLE IF NOT EXISTS ebook (
+                PRIMARY KEY (`id`, `course_id`)) $charset_spec");
+db_query("CREATE TABLE IF NOT EXISTS ebook (
                 `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 `course_id` INT(11) NOT NULL,
                 `order` INT(11) NOT NULL,
-                `title` TEXT)');
-db_query('CREATE TABLE IF NOT EXISTS ebook_section (
+                `title` TEXT,
+                `visible` BOOL NOT NULL DEFAULT 0) $charset_spec");
+db_query("CREATE TABLE IF NOT EXISTS ebook_section (
                 `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 `ebook_id` INT(11) NOT NULL,
                 `public_id` VARCHAR(11) NOT NULL,
 		`file` VARCHAR(128),
-                `title` TEXT)');
-db_query('CREATE TABLE IF NOT EXISTS ebook_subsection (
+                `title` TEXT) $charset_spec");
+db_query("CREATE TABLE IF NOT EXISTS ebook_subsection (
                 `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 `section_id` VARCHAR(11) NOT NULL,
                 `public_id` VARCHAR(11) NOT NULL,
                 `file_id` INT(11) NOT NULL,
-                `title` TEXT)');
+                `title` TEXT) $charset_spec");
 
 // encrypt the admin password into DB
 $password_encrypted = md5($passForm);

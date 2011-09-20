@@ -257,7 +257,7 @@ elseif(isset($_REQUEST['install3']) OR isset($_REQUEST['back3'])) {
 	</tr>
 	<tr>
 	<th class='left'>$langDBPassword</th>
-	<td>".text_input('dbPassForm', 25)."&nbsp;&nbsp;$langEG ".create_pass()."</td>
+	<td>".text_input('dbPassForm', 25)."</td>
 	</tr>
 	<tr>
 	<th class='left'>$langMainDB</th>
