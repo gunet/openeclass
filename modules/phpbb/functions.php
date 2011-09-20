@@ -764,7 +764,7 @@ function check_priv_forum_auth($userid, $forumid, $is_posting, $db)
 		$sql .= "AND (can_post = 1)";
 	}
 	
-	if (!$result = mysql_query($sql, $db))
+	if (!$result = db_query($sql, $db))
 	{
 		// no good..
 		return FALSE;

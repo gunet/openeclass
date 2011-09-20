@@ -55,7 +55,7 @@ if($submit) {
                     isset($rid)? ('?id=' . intval($rid)): '';
 
         // check if user name exists
-        $username_check = mysql_query("SELECT username FROM `$mysqlMainDb`.user 
+        $username_check = db_query("SELECT username FROM `$mysqlMainDb`.user 
                         WHERE username=".autoquote($uname));
         $user_exist = (mysql_num_rows($username_check) > 0);
 

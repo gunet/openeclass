@@ -37,8 +37,8 @@ if ($is_adminOfCourse) {
 	$output .=  "$crlf";
 	
 	mysql_select_db($currentCourseID);
-	$sql="SELECT DISTINCT uid FROM `exercise_user_record` WHERE eid=".intval($_GET['exerciseId']);
-	$result = mysql_query($sql);
+	$sql = "SELECT DISTINCT uid FROM `exercise_user_record` WHERE eid=".intval($_GET['exerciseId']);
+	$result = db_query($sql);
 	while ($row=mysql_fetch_array($result)) {
 		$sid = $row['uid'];
 		$StudentName = db_query("select nom, prenom from user where user_id='$sid'", $mysqlMainDb);
@@ -50,7 +50,7 @@ if ($is_adminOfCourse) {
 			RecordEndDate, TIME_TO_SEC(TIMEDIFF(RecordEndDate,RecordStartDate)) AS TimeDuration, 
 			TotalScore, TotalWeighting 
 			FROM `exercise_user_record` WHERE uid='$sid' AND eid=".intval($_GET['exerciseId']);
-		$result2 = mysql_query($sql2);
+		$result2 = db_query($sql2);
 		while ($row2=mysql_fetch_array($result2)) {
 			$output .= csv_escape($prenom) ."\t";
 			$output .= csv_escape($nom) ."\t";

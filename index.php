@@ -47,7 +47,7 @@ $tool_content = "";
 // check if we can connect to database. If not then eclass is most likely not installed
 if (isset($mysqlServer) and isset($mysqlUser) and isset($mysqlPassword)) {
 	$db = mysql_connect($mysqlServer, $mysqlUser, $mysqlPassword);
-	if (mysql_version()) mysql_query("SET NAMES utf8");
+	if (mysql_version()) db_query("SET NAMES utf8");
 }
 if (!$db) {
 	include "include/not_installed.php";
@@ -88,7 +88,7 @@ if (isset($_SESSION['uid'])) {
 }
 
 if (isset($_GET['logout']) and $uid) {
-        mysql_query("INSERT INTO loginout (loginout.id_user,
+        db_query("INSERT INTO loginout (loginout.id_user,
                 loginout.ip, loginout.when, loginout.action)
                 VALUES ($uid, '$_SERVER[REMOTE_ADDR]', NOW(), 'LOGOUT')");
 	if (isset($_SESSION['cas_uname'])) { // if we are CAS user

@@ -106,7 +106,7 @@ class Answer
 		mysql_select_db($currentCourseID);
 		$sql="SELECT reponse,correct,comment,ponderation,r_position 
 			FROM `$TBL_REPONSES` WHERE question_id='$questionId' ORDER BY r_position;";
-		$result=mysql_query($sql) or die("Error : SELECT in file ".__FILE__." at line ".__LINE__);
+		$result = db_query($sql) or die("Error : SELECT in file ".__FILE__." at line ".__LINE__);
 		$i=1;
 		// while a record is found
 		while($object=mysql_fetch_object($result))
@@ -298,8 +298,8 @@ class Answer
 				$sql.="('$i','$newQuestionId','$answer','$correct','$comment','$weighting','$position'),";
 			}
 
-			$sql=substr($sql,0,-1);
-			mysql_query($sql) or die("Error : INSERT in file ".__FILE__." at line ".__LINE__);			
+			$sql = substr($sql,0,-1);
+			db_query($sql) or die("Error : INSERT in file ".__FILE__." at line ".__LINE__);			
 		}
 	}
 }

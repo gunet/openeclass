@@ -203,7 +203,7 @@ if ($is_valid) {
 
                 $inscr_user = db_query($q1);
                 $last_id = mysql_insert_id();
-                $result = mysql_query("SELECT user_id, nom, prenom FROM `$mysqlMainDb`.user WHERE user_id = $last_id");
+                $result = db_query("SELECT user_id, nom, prenom FROM `$mysqlMainDb`.user WHERE user_id = $last_id");
                 while ($myrow = mysql_fetch_array($result)) {
                         $uid = $myrow[0];
                         $nom = $myrow[1];

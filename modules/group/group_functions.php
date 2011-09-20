@@ -27,7 +27,7 @@ function initialize_group_info($group_id = false)
                $member_count, $is_tutor, $is_member, $uid, $urlServer, $mysqlMainDb, $user_group_description, $code_cours;
 
         if (!(isset($self_reg) and isset($multi_reg) and isset($has_forum) and isset($private_forum) and isset($documents))) {
-                list($self_reg, $multi_reg, $has_forum, $private_forum, $documents) = mysql_fetch_row(mysql_query(
+                list($self_reg, $multi_reg, $has_forum, $private_forum, $documents) = mysql_fetch_row(db_query(
                         "SELECT self_registration, multiple_registration, forum, private_forum, documents
                          FROM `$mysqlMainDb`.group_properties WHERE course_id = $cours_id"));
         }

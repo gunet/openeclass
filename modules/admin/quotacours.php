@@ -63,7 +63,7 @@ if (isset($_POST['submit']))  {
         $gq = $_POST['gq'] * MB;
         $drq = $_POST['drq'] * MB;
   // Update query
-	$sql = mysql_query("UPDATE cours SET doc_quota='$dq', video_quota='$vq', group_quota='$gq', dropbox_quota='$drq'
+	$sql = db_query("UPDATE cours SET doc_quota='$dq', video_quota='$vq', group_quota='$gq', dropbox_quota='$drq'
 			WHERE code = ".autoquote($_GET['c']));
 	// Some changes occured
 	if (mysql_affected_rows() > 0) {
@@ -77,7 +77,7 @@ if (isset($_POST['submit']))  {
 }
 // Display edit form for course quota
 else {
-	$q = mysql_fetch_array(mysql_query("SELECT code, intitule, doc_quota, video_quota, group_quota, dropbox_quota
+	$q = mysql_fetch_array(db_query("SELECT code, intitule, doc_quota, video_quota, group_quota, dropbox_quota
 			FROM cours WHERE code = ".autoquote($_GET['c'])));
 	$quota_info .= $langTheCourse." <b>".q($q['intitule'])."</b> ".$langMaxQuota;
 	$dq = $q['doc_quota'] / MB;

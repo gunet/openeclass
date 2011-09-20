@@ -60,13 +60,13 @@ if (isset($_POST['submit']) && ($_POST['body_mail'] != "") && ($_POST['submit'] 
 	// Where to send the email
 	if ($_POST['sendTo'] == "0") {
 		// All users
-		$sql = mysql_query("SELECT DISTINCT email FROM user");
+		$sql = db_query("SELECT DISTINCT email FROM user");
 	} elseif ($_POST['sendTo'] == "1") {
 		// Only professors
-		$sql = mysql_query("SELECT DISTINCT email FROM user where statut='1'");
+		$sql = db_query("SELECT DISTINCT email FROM user where statut='1'");
 	}  elseif ($_POST['sendTo'] == "2") {
 		// Only students
-		$sql = mysql_query("SELECT DISTINCT email FROM user where statut='5'");
+		$sql = db_query("SELECT DISTINCT email FROM user where statut='5'");
 	} else { die(); } // invalid sendTo var
 
 	// Send email to all addresses

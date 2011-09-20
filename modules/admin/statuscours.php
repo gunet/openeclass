@@ -59,7 +59,7 @@ $tool_content = "";
 // Update course status
 if (isset($_POST['submit']))  {
   // Update query
-	$sql = mysql_query("UPDATE cours SET visible='$_POST[formvisible]'
+	$sql = db_query("UPDATE cours SET visible='$_POST[formvisible]'
 			WHERE code='".mysql_real_escape_string($_GET['c'])."'");
 	// Some changes occured
 	if (mysql_affected_rows() > 0) {
@@ -74,7 +74,7 @@ if (isset($_POST['submit']))  {
 // Display edit form for course status
 else {
 	// Get course information
-	$row = mysql_fetch_array(mysql_query("SELECT * FROM cours
+	$row = mysql_fetch_array(db_query("SELECT * FROM cours
 		WHERE code='".mysql_real_escape_string($_GET['c'])."'"));
 	$visible = $row['visible'];
 	$visibleChecked[$visible]="checked";

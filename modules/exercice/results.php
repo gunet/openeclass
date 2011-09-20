@@ -73,7 +73,7 @@ $tool_content .= "
 
 mysql_select_db($currentCourseID);
 $sql="SELECT DISTINCT uid FROM `exercise_user_record`";
-$result = mysql_query($sql);
+$result = db_query($sql);
 while($row=mysql_fetch_array($result)) {
 	$sid = $row['uid'];
 	$StudentName = db_query("SELECT nom,prenom,am FROM user WHERE user_id='$sid'", $mysqlMainDb);

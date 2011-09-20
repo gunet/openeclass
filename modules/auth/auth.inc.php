@@ -106,10 +106,9 @@ return $is_eclass_unique (integer)
 ****************************************************************/
 function is_eclass_unique()
 {
-        global $db;
         $is_eclass_unique = 0;
         $sql = "SELECT auth_id, auth_settings FROM auth WHERE auth_default=1";
-        $auth_method = mysql_query($sql,$db);
+        $auth_method = db_query($sql);
         if ($auth_method) {
                 $count_methods = 0;
                 $is_eclass = 0;
@@ -467,9 +466,8 @@ return $testauth (boolean: true-is authenticated, false-is not)
 ****************************************************************/
 function check_activity($userid)
 {
-	global $db;
 	$qry = "SELECT registered_at, expires_at FROM user WHERE user_id=".$userid;
-	$res = mysql_query($qry, $db);
+	$res = db_query($qry);
 	if ($res and mysql_num_rows($res) == 1) {
 		$row = mysql_fetch_row($res);
 		if ($row[1] > time()) {
@@ -897,7 +895,7 @@ function shib_cas_login($type)
         if ($GLOBALS['persoIsActive'] and $userPerso == 'no') {
                 $_SESSION['user_perso_active'] = true;
         }
-        mysql_query("INSERT INTO loginout 
+        db_query("INSERT INTO loginout 
                             (loginout.idLog, loginout.id_user, loginout.ip, loginout.when, loginout.action) 
                             VALUES ('', $_SESSION[uid], '$_SERVER[REMOTE_ADDR]', NOW(), 'LOGIN')");
 

@@ -69,11 +69,11 @@ class Question
 		global $TBL_QUESTIONS, $TBL_EXERCICE_QUESTION, $currentCourseID;
 		
 		mysql_select_db($currentCourseID);
-		$sql="SELECT question,description,ponderation,q_position,type FROM `$TBL_QUESTIONS` WHERE id='$id'";
-		$result=mysql_query($sql) or die("Error : SELECT in file ".__FILE__." at line ".__LINE__);
+		$sql = "SELECT question,description,ponderation,q_position,type FROM `$TBL_QUESTIONS` WHERE id='$id'";
+		$result = db_query($sql) or die("Error : SELECT in file ".__FILE__." at line ".__LINE__);
 
 		// if the question has been found
-		if($object=mysql_fetch_object($result))
+		if ($object=mysql_fetch_object($result))
 		{
 			$this->id=$id;
 			$this->question=$object->question;
@@ -82,8 +82,8 @@ class Question
 			$this->position=$object->q_position;
 			$this->type=$object->type;
 
-			$sql="SELECT exercice_id FROM `$TBL_EXERCICE_QUESTION` WHERE question_id='$id'";
-			$result=mysql_query($sql) or die("Error : SELECT in file ".__FILE__." at line ".__LINE__);
+			$sql = "SELECT exercice_id FROM `$TBL_EXERCICE_QUESTION` WHERE question_id='$id'";
+			$result = db_query($sql) or die("Error : SELECT in file ".__FILE__." at line ".__LINE__);
 			// fills the array with the exercises which this question is in
 			while($object=mysql_fetch_object($result))
 			{
@@ -250,8 +250,8 @@ class Question
 			{
 				// removes old answers
 				mysql_select_db($currentCourseID);
-				$sql="DELETE FROM `$TBL_REPONSES` WHERE question_id='".$this->id."'";
-				mysql_query($sql) or die("Error : DELETE in file ".__FILE__." at line ".__LINE__);
+				$sql = "DELETE FROM `$TBL_REPONSES` WHERE question_id='".$this->id."'";
+				db_query($sql) or die("Error : DELETE in file ".__FILE__." at line ".__LINE__);
 			}
 
 			$this->type=$type;
@@ -361,18 +361,18 @@ class Question
 		// question already exists
 		if($id)
 		{
-			$sql="UPDATE `$TBL_QUESTIONS` SET question='$question',description='$description',
+			$sql = "UPDATE `$TBL_QUESTIONS` SET question='$question',description='$description',
 					ponderation='$weighting',q_position='$position',
 					type='$type'
 					WHERE id='$id'";
-			mysql_query($sql) or die("Error : UPDATE in file ".__FILE__." at line ".__LINE__);
+			db_query($sql) or die("Error : UPDATE in file ".__FILE__." at line ".__LINE__);
 		}
 		// creates a new question
 		else
 		{
 			$sql="INSERT INTO `$TBL_QUESTIONS`(question,description,ponderation,q_position,type)
 				VALUES('$question','$description','$weighting','$position','$type')";
-			mysql_query($sql) or die("Error : INSERT in file ".__FILE__." at line ".__LINE__);
+			db_query($sql) or die("Error : INSERT in file ".__FILE__." at line ".__LINE__);
 			$this->id=mysql_insert_id();
 		}
 
@@ -401,8 +401,8 @@ class Question
 		{
 			$this->exerciseList[]=$exerciseId;
 			//echo "<br>-".$TBL_EXERCICE_QUESTION."<br>-".$id."<br>-".$exerciseId."<br>";
-			$sql="INSERT INTO `$TBL_EXERCICE_QUESTION`(question_id,exercice_id) VALUES('$id','$exerciseId')";
-			mysql_query($sql) or die("Error : INSERT in file ".__FILE__." at line ".__LINE__);
+			$sql = "INSERT INTO `$TBL_EXERCICE_QUESTION`(question_id,exercice_id) VALUES('$id','$exerciseId')";
+			db_query($sql) or die("Error : INSERT in file ".__FILE__." at line ".__LINE__);
 		}
 	}
 

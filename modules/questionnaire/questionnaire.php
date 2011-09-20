@@ -170,7 +170,7 @@ function printPolls() {
                                 $countAnswers = mysql_num_rows($answers);
                                 $thepid = $thepoll["pid"];
                                 // check if user has participated
-                                $has_participated = mysql_fetch_array(mysql_query("SELECT COUNT(*) FROM poll_answer_record
+                                $has_participated = mysql_fetch_array(db_query("SELECT COUNT(*) FROM poll_answer_record
                                         WHERE user_id = $uid AND pid = '$thepid'"));
                                 // check if poll has ended
                                 if (($temp_CurrentDate >= $temp_StartDate) && ($temp_CurrentDate < $temp_EndDate)) {

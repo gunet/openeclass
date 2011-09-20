@@ -20,16 +20,16 @@
 
 
 $charset_spec = 'DEFAULT CHARACTER SET=utf8';
-mysql_query("SET storage_engine=MYISAM");
+db_query("SET storage_engine=MYISAM");
 
-$cdb=mysql_query("CREATE DATABASE `$repertoire` $charset_spec");
-$code=$repertoire;
+$cdb = db_query("CREATE DATABASE `$repertoire` $charset_spec");
+$code = $repertoire;
 
 // select course database
   mysql_select_db($repertoire);
 
 // create phpbb 1.4 tables
-  mysql_query("CREATE TABLE catagories (
+  db_query("CREATE TABLE catagories (
         cat_id int(10) NOT NULL auto_increment,
         cat_title varchar(100),
         cat_order varchar(10),
@@ -37,9 +37,9 @@ $code=$repertoire;
          $charset_spec");
 
   // Create an example category
-  mysql_query("INSERT INTO catagories VALUES (2,'$langCatagoryMain',NULL)");
+  db_query("INSERT INTO catagories VALUES (2,'$langCatagoryMain',NULL)");
 
-  mysql_query("CREATE TABLE forums (
+  db_query("CREATE TABLE forums (
      forum_id int(10) NOT NULL auto_increment,
      forum_name varchar(150),
      forum_desc text,
@@ -54,9 +54,9 @@ $code=$repertoire;
      KEY forum_last_post_id (forum_last_post_id))
      $charset_spec");
 
-  mysql_query("INSERT INTO forums VALUES (1,'$langTestForum','$langDelAdmin',2,1,0,0,0,2,0)");
+  db_query("INSERT INTO forums VALUES (1,'$langTestForum','$langDelAdmin',2,1,0,0,0,2,0)");
 
-	mysql_query("CREATE TABLE posts (
+	db_query("CREATE TABLE posts (
       post_id int(10) NOT NULL auto_increment,
       topic_id int(10) DEFAULT '0' NOT NULL,
       forum_id int(10) DEFAULT '0' NOT NULL,
@@ -72,13 +72,13 @@ $code=$repertoire;
       KEY poster_id (poster_id))
        $charset_spec");
 
-      mysql_query("CREATE TABLE posts_text (
+      db_query("CREATE TABLE posts_text (
                 post_id int(10) DEFAULT '0' NOT NULL,
                 post_text text,
                 PRIMARY KEY (post_id))
      $charset_spec");
 
-  mysql_query("CREATE TABLE topics (
+  db_query("CREATE TABLE topics (
                topic_id int(10) NOT NULL auto_increment,
                topic_title varchar(100),
                topic_poster int(10),
@@ -97,7 +97,7 @@ $code=$repertoire;
                KEY topic_last_post_id (topic_last_post_id))
      $charset_spec");
 
-mysql_query("CREATE TABLE exercices (
+db_query("CREATE TABLE exercices (
         id tinyint(4) NOT NULL auto_increment,
         titre varchar(250) default NULL,
         description text,
@@ -113,7 +113,7 @@ mysql_query("CREATE TABLE exercices (
       PRIMARY KEY  (id))
        $charset_spec");
 
- mysql_query("CREATE TABLE exercise_user_record (
+ db_query("CREATE TABLE exercise_user_record (
       eurid int(11) NOT NULL auto_increment,
       eid tinyint(4) NOT NULL default '0',
       uid mediumint(8) NOT NULL default '0',
@@ -126,7 +126,7 @@ mysql_query("CREATE TABLE exercices (
        $charset_spec");
 
 // QUESTIONS
-mysql_query("CREATE TABLE questions (
+db_query("CREATE TABLE questions (
         id int(11) NOT NULL auto_increment,
         question text,
         description text,
@@ -137,7 +137,7 @@ mysql_query("CREATE TABLE questions (
          $charset_spec");
 
 // REPONSES
-mysql_query("CREATE TABLE reponses (
+db_query("CREATE TABLE reponses (
         id int(11) NOT NULL default '0',
         question_id int(11) NOT NULL default '0',
         reponse text,
@@ -149,7 +149,7 @@ mysql_query("CREATE TABLE reponses (
          $charset_spec");
 
 // EXERCISE_QUESTION
-mysql_query("CREATE TABLE exercice_question (
+db_query("CREATE TABLE exercice_question (
                 question_id int(11) NOT NULL default '0',
                 exercice_id int(11) NOT NULL default '0',
                 PRIMARY KEY  (question_id,exercice_id))
@@ -158,7 +158,7 @@ mysql_query("CREATE TABLE exercice_question (
 
 #######################COURSE_DESCRIPTION ################################
 
-mysql_query("CREATE TABLE `course_description`
+db_query("CREATE TABLE `course_description`
 (
     `id` TINYINT UNSIGNED DEFAULT '0' NOT NULL,
     `title` VARCHAR(255),
@@ -183,7 +183,7 @@ mysql_query("CREATE TABLE `course_description`
             }
     }
 
-mysql_query("CREATE TABLE accueil (
+db_query("CREATE TABLE accueil (
                id int(11) NOT NULL auto_increment,
                rubrique varchar(100), lien varchar(255),
                image varchar(100),
@@ -195,7 +195,7 @@ mysql_query("CREATE TABLE accueil (
          $charset_spec");
 
 // Content accueil (homepage) Table
-    mysql_query("INSERT INTO accueil VALUES (
+    db_query("INSERT INTO accueil VALUES (
                 '1',
                 '$langAgenda',
                 '../../modules/agenda/agenda.php',
@@ -205,7 +205,7 @@ mysql_query("CREATE TABLE accueil (
                 '',
                 'MODULE_ID_AGENDA')");
 
-    mysql_query("INSERT INTO accueil VALUES (
+    db_query("INSERT INTO accueil VALUES (
                '2',
                '$langLinks',
                '../../modules/link/link.php',
@@ -216,7 +216,7 @@ mysql_query("CREATE TABLE accueil (
                'MODULE_ID_LINKS'
                )");
 
-    mysql_query("INSERT INTO accueil VALUES (
+    db_query("INSERT INTO accueil VALUES (
                '3',
                '$langDoc',
                '../../modules/document/document.php',
@@ -227,7 +227,7 @@ mysql_query("CREATE TABLE accueil (
                'MODULE_ID_DOCS'
                )");
     //den yparxei akomh MODULE_ID_ gia to module VIDEO opote prepei na symplhrwthei
-    mysql_query("INSERT INTO accueil VALUES (
+    db_query("INSERT INTO accueil VALUES (
                '4',
                '$langVideo',
                '../../modules/video/video.php',
@@ -238,7 +238,7 @@ mysql_query("CREATE TABLE accueil (
                'MODULE_ID_VIDEO'
                )");
 
-mysql_query("INSERT INTO accueil VALUES (
+db_query("INSERT INTO accueil VALUES (
                '5',
                '$langWorks',
                '../../modules/work/work.php',
@@ -249,7 +249,7 @@ mysql_query("INSERT INTO accueil VALUES (
                'MODULE_ID_ASSIGN'
                )");
 
-    mysql_query("INSERT INTO accueil VALUES (
+    db_query("INSERT INTO accueil VALUES (
                '7',
                '$langAnnouncements',
                '../../modules/announcements/announcements.php',
@@ -260,7 +260,7 @@ mysql_query("INSERT INTO accueil VALUES (
                'MODULE_ID_ANNOUNCE'
                )");
 
-    mysql_query("INSERT INTO accueil VALUES (
+    db_query("INSERT INTO accueil VALUES (
                '9',
                '$langForums',
                '../../modules/phpbb/index.php',
@@ -271,7 +271,7 @@ mysql_query("INSERT INTO accueil VALUES (
                'MODULE_ID_FORUM'
                )");
 
-    mysql_query("INSERT INTO accueil VALUES (
+    db_query("INSERT INTO accueil VALUES (
                '10',
                '$langExercices',
                '../../modules/exercice/exercice.php',
@@ -282,7 +282,7 @@ mysql_query("INSERT INTO accueil VALUES (
                'MODULE_ID_EXERCISE'
                )");
 
-	mysql_query("INSERT INTO accueil VALUES (
+	db_query("INSERT INTO accueil VALUES (
         '15',
         '$langGroups',
         '../../modules/group/group.php',
@@ -293,7 +293,7 @@ mysql_query("INSERT INTO accueil VALUES (
         'MODULE_ID_GROUPS'
         )");
 
-    mysql_query("INSERT INTO accueil VALUES (
+    db_query("INSERT INTO accueil VALUES (
         '16',
         '$langDropBox',
         '../../modules/dropbox/index.php',
@@ -304,7 +304,7 @@ mysql_query("INSERT INTO accueil VALUES (
         'MODULE_ID_DROPBOX'
         )");
 
-    mysql_query("INSERT INTO accueil VALUES (
+    db_query("INSERT INTO accueil VALUES (
         '17',
         '$langGlossary',
         '../../modules/glossary/glossary.php',
@@ -315,7 +315,7 @@ mysql_query("INSERT INTO accueil VALUES (
         'MODULE_ID_GLOSSARY'
         )");
 
-    mysql_query("INSERT INTO accueil VALUES (
+    db_query("INSERT INTO accueil VALUES (
         '18',
         '$langEBook',
         '../../modules/ebook/index.php',
@@ -326,7 +326,7 @@ mysql_query("INSERT INTO accueil VALUES (
         'MODULE_ID_EBOOK'
         )");
 
-    mysql_query("INSERT INTO accueil VALUES (
+    db_query("INSERT INTO accueil VALUES (
                 '19',
                 '$langConference',
                 '../../modules/conference/conference.php',
@@ -337,7 +337,7 @@ mysql_query("INSERT INTO accueil VALUES (
                 'MODULE_ID_CHAT'
                 )");
 
-    mysql_query("INSERT INTO accueil VALUES (
+    db_query("INSERT INTO accueil VALUES (
                '20',
                '$langCourseDescription',
                '../../modules/course_description/',
@@ -348,7 +348,7 @@ mysql_query("INSERT INTO accueil VALUES (
                'MODULE_ID_DESCRIPTION'
                )");
 
-mysql_query("INSERT INTO accueil VALUES (
+db_query("INSERT INTO accueil VALUES (
                 '21',
                 '$langQuestionnaire',
                 '../../modules/questionnaire/questionnaire.php',
@@ -359,7 +359,7 @@ mysql_query("INSERT INTO accueil VALUES (
                 'MODULE_ID_QUESTIONNAIRE'
                 )");
 
-    mysql_query("INSERT INTO accueil VALUES (
+    db_query("INSERT INTO accueil VALUES (
                '23',
                '$langLearnPath',
                '../../modules/learnPath/learningPathList.php',
@@ -370,7 +370,7 @@ mysql_query("INSERT INTO accueil VALUES (
                'MODULE_ID_LP'
                )");
 
-    mysql_query("INSERT INTO accueil VALUES (
+    db_query("INSERT INTO accueil VALUES (
                25,
                '$langToolManagement',
                '../../modules/course_tools/course_tools.php',
@@ -381,7 +381,7 @@ mysql_query("INSERT INTO accueil VALUES (
                'MODULE_ID_TOOLADMIN'
                )");
 
-    mysql_query("INSERT INTO accueil VALUES (
+    db_query("INSERT INTO accueil VALUES (
                '26',
                '$langWiki',
                '../../modules/wiki/wiki.php',
@@ -392,7 +392,7 @@ mysql_query("INSERT INTO accueil VALUES (
                'MODULE_ID_WIKI'
                )");
 
-        mysql_query("INSERT INTO accueil VALUES (
+        db_query("INSERT INTO accueil VALUES (
         '8',
         '$langAdminUsers',
         '../../modules/user/user.php',
@@ -403,7 +403,7 @@ mysql_query("INSERT INTO accueil VALUES (
         'MODULE_ID_USERS'
         )");
 
-mysql_query("INSERT INTO accueil VALUES (
+db_query("INSERT INTO accueil VALUES (
                '14',
                '$langModifyInfo',
                '../../modules/course_info/infocours.php',
@@ -414,7 +414,7 @@ mysql_query("INSERT INTO accueil VALUES (
                'MODULE_ID_COURSEINFO'
                )");
 
-mysql_query("INSERT INTO accueil VALUES (
+db_query("INSERT INTO accueil VALUES (
                 '24',
                 '".$langUsage."',
                 '../../modules/usage/usage.php',
@@ -427,7 +427,7 @@ mysql_query("INSERT INTO accueil VALUES (
 // The Units subsystem is special - neither visible, nor invisible, it doesn't
 // appear in the menu, so it gets visibility = 2
 $sbsystems[27] = 2;
-mysql_query("INSERT INTO accueil VALUES (
+db_query("INSERT INTO accueil VALUES (
                 '27',
                 '".$langCourseUnits."',
                 '../../modules/units/index.php',
@@ -471,7 +471,7 @@ db_query("CREATE TABLE actions_summary (
 
 
 #################################### AGENDA ################################
-mysql_query("CREATE TABLE agenda (
+db_query("CREATE TABLE agenda (
     id int(11) NOT NULL auto_increment,
     titre varchar(200),
     contenu text,
@@ -483,7 +483,7 @@ mysql_query("CREATE TABLE agenda (
      $charset_spec");
 
 ############################# PAGES ###########################################
-    mysql_query("CREATE TABLE pages (
+    db_query("CREATE TABLE pages (
                id int(11) NOT NULL auto_increment,
                url varchar(200),
                titre varchar(200),
@@ -492,7 +492,7 @@ mysql_query("CREATE TABLE agenda (
          $charset_spec");
 
 ############################# VIDEO ###########################################
-    mysql_query("CREATE TABLE video (
+    db_query("CREATE TABLE video (
                id int(11) NOT NULL auto_increment,
 	       path varchar(255),
                url varchar(200),
@@ -506,7 +506,7 @@ mysql_query("CREATE TABLE agenda (
 
 ################################# VIDEO LINKS ################################
 
-        mysql_query("CREATE TABLE videolinks (
+        db_query("CREATE TABLE videolinks (
                id int(11) NOT NULL auto_increment,
                url varchar(200),
                titre varchar(200),
@@ -552,7 +552,7 @@ db_query("CREATE TABLE `assignment_submit` (
 
 ###################################### DROPBOX #####################################
 
-    mysql_query("CREATE TABLE dropbox_file (
+    db_query("CREATE TABLE dropbox_file (
       id int(11) unsigned NOT NULL auto_increment,
       uploaderId int(11) unsigned NOT NULL default '0',
       filename varchar(250) NOT NULL default '',
@@ -566,13 +566,13 @@ db_query("CREATE TABLE `assignment_submit` (
       UNIQUE KEY UN_filename (filename))
      $charset_spec");
 
-    mysql_query("CREATE TABLE dropbox_person (
+    db_query("CREATE TABLE dropbox_person (
       fileId int(11) unsigned NOT NULL default '0',
       personId int(11) unsigned NOT NULL default '0',
       PRIMARY KEY  (fileId,personId))
      $charset_spec");
 
-    mysql_query("CREATE TABLE dropbox_post (
+    db_query("CREATE TABLE dropbox_post (
       fileId int(11) unsigned NOT NULL default 0,
       recipientId int(11) unsigned NOT NULL default 0,
       PRIMARY KEY  (fileId,recipientId))
@@ -580,7 +580,7 @@ db_query("CREATE TABLE `assignment_submit` (
 
 #################### QUESTIONNAIRE ###############################################
 
-mysql_query("CREATE TABLE poll (
+db_query("CREATE TABLE poll (
       pid int(11) NOT NULL auto_increment,
       creator_id mediumint(8) unsigned NOT NULL default 0,
       course_id varchar(20) NOT NULL default 0,
@@ -592,7 +592,7 @@ mysql_query("CREATE TABLE poll (
       PRIMARY KEY  (pid))
      $charset_spec");
 
-    mysql_query("CREATE TABLE poll_answer_record (
+    db_query("CREATE TABLE poll_answer_record (
       arid int(11) NOT NULL auto_increment,
 	pid int(11) NOT NULL default 0,
 	qid int(11) NOT NULL default 0,
@@ -603,7 +603,7 @@ mysql_query("CREATE TABLE poll (
       PRIMARY KEY  (arid))
      $charset_spec");
 
-    mysql_query("CREATE TABLE poll_question (
+    db_query("CREATE TABLE poll_question (
       pqid bigint(12) NOT NULL AUTO_INCREMENT,
       pid int(11) NOT NULL DEFAULT 0,
       question_text varchar(250) NOT NULL default '',
@@ -611,7 +611,7 @@ mysql_query("CREATE TABLE poll (
       PRIMARY KEY  (pqid))
      $charset_spec");
 
-    mysql_query("CREATE TABLE poll_question_answer (
+    db_query("CREATE TABLE poll_question_answer (
       pqaid int(11) NOT NULL auto_increment,
       pqid int(11) NOT NULL default 0,
       answer_text TEXT NOT NULL,
@@ -621,7 +621,7 @@ mysql_query("CREATE TABLE poll (
 
 ############################# LEARNING PATH ######################################
 
-mysql_query("CREATE TABLE `lp_module` (
+db_query("CREATE TABLE `lp_module` (
               `module_id` int(11) NOT NULL auto_increment,
               `name` varchar(255) NOT NULL default '',
               `comment` text NOT NULL,
@@ -633,7 +633,7 @@ mysql_query("CREATE TABLE `lp_module` (
              )  $charset_spec");
              //COMMENT='List of available modules used in learning paths';
 
-mysql_query("CREATE TABLE `lp_learnPath` (
+db_query("CREATE TABLE `lp_learnPath` (
               `learnPath_id` int(11) NOT NULL auto_increment,
               `name` varchar(255) NOT NULL default '',
               `comment` text NOT NULL,
@@ -645,7 +645,7 @@ mysql_query("CREATE TABLE `lp_learnPath` (
             )  $charset_spec");
             //COMMENT='List of learning Paths';
 
-mysql_query("CREATE TABLE `lp_rel_learnPath_module` (
+db_query("CREATE TABLE `lp_rel_learnPath_module` (
                 `learnPath_module_id` int(11) NOT NULL AUTO_INCREMENT,
                 `learnPath_id` int(11) NOT NULL DEFAULT 0,
                 `module_id` int(11) NOT NULL DEFAULT 0,
@@ -660,7 +660,7 @@ mysql_query("CREATE TABLE `lp_rel_learnPath_module` (
               //COMMENT='This table links module to the learning path using them';
 
 
-mysql_query("CREATE TABLE `lp_asset` (
+db_query("CREATE TABLE `lp_asset` (
               `asset_id` int(11) NOT NULL auto_increment,
               `module_id` int(11) NOT NULL default '0',
               `path` varchar(255) NOT NULL default '',
@@ -669,7 +669,7 @@ mysql_query("CREATE TABLE `lp_asset` (
             )  $charset_spec");
             //COMMENT='List of resources of module of learning paths';
 
-mysql_query("CREATE TABLE `lp_user_module_progress` (
+db_query("CREATE TABLE `lp_user_module_progress` (
               `user_module_progress_id` int(22) NOT NULL auto_increment,
               `user_id` mediumint(9) NOT NULL default '0',
               `learnPath_module_id` int(11) NOT NULL default '0',
@@ -690,7 +690,7 @@ mysql_query("CREATE TABLE `lp_user_module_progress` (
 
 ############################# WIKI ######################################
 
-mysql_query("CREATE TABLE `wiki_properties` (
+db_query("CREATE TABLE `wiki_properties` (
               `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
               `title` VARCHAR(255) NOT NULL DEFAULT '',
               `description` TEXT NULL,
@@ -698,13 +698,13 @@ mysql_query("CREATE TABLE `wiki_properties` (
               PRIMARY KEY(`id`)
             )  $charset_spec");
 
-mysql_query("CREATE TABLE `wiki_acls` (
+db_query("CREATE TABLE `wiki_acls` (
               `wiki_id` INT(11) UNSIGNED NOT NULL,
               `flag` VARCHAR(255) NOT NULL,
               `value` ENUM('false','true') NOT NULL DEFAULT 'false'
             )  $charset_spec");
 
-mysql_query("CREATE TABLE `wiki_pages` (
+db_query("CREATE TABLE `wiki_pages` (
               `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
               `wiki_id` INT(11) UNSIGNED NOT NULL DEFAULT 0,
               `owner_id` INT(11) UNSIGNED NOT NULL DEFAULT 0,
@@ -715,7 +715,7 @@ mysql_query("CREATE TABLE `wiki_pages` (
               PRIMARY KEY  (`id`)
             )  $charset_spec");
 
-mysql_query("CREATE TABLE `wiki_pages_content` (
+db_query("CREATE TABLE `wiki_pages_content` (
               `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
               `pid` INT(11) UNSIGNED NOT NULL DEFAULT 0,
               `editor_id` INT(11) NOT NULL DEFAULT 0,
@@ -725,15 +725,15 @@ mysql_query("CREATE TABLE `wiki_pages_content` (
             )  $charset_spec");
 
 // dhmiourgia full text indexes gia th diadikasia ths anazhthshs
-mysql_query("ALTER TABLE `agenda` ADD FULLTEXT `agenda` (`titre` ,`contenu`)");
-mysql_query("ALTER TABLE `course_description` ADD FULLTEXT `course_description` (`title` ,`content`)");
-mysql_query("ALTER TABLE `exercices` ADD FULLTEXT `exercices` (`titre`,`description`)");
-mysql_query("ALTER TABLE `posts_text` ADD FULLTEXT `posts_text` (`post_text`)");
-mysql_query("ALTER TABLE `forums` ADD FULLTEXT `forums` (`forum_name`,`forum_desc`)");
-mysql_query("ALTER TABLE `liens` ADD FULLTEXT `liens` (`url` ,`titre` ,`description`)");
-mysql_query("ALTER TABLE `video` ADD FULLTEXT `video` (`url` ,`titre` ,`description`)");
-mysql_query("ALTER TABLE `videolinks` ADD FULLTEXT `videolinks` (`url` ,`titre` ,`description`)");
+db_query("ALTER TABLE `agenda` ADD FULLTEXT `agenda` (`titre` ,`contenu`)");
+db_query("ALTER TABLE `course_description` ADD FULLTEXT `course_description` (`title` ,`content`)");
+db_query("ALTER TABLE `exercices` ADD FULLTEXT `exercices` (`titre`,`description`)");
+db_query("ALTER TABLE `posts_text` ADD FULLTEXT `posts_text` (`post_text`)");
+db_query("ALTER TABLE `forums` ADD FULLTEXT `forums` (`forum_name`,`forum_desc`)");
+db_query("ALTER TABLE `liens` ADD FULLTEXT `liens` (`url` ,`titre` ,`description`)");
+db_query("ALTER TABLE `video` ADD FULLTEXT `video` (`url` ,`titre` ,`description`)");
+db_query("ALTER TABLE `videolinks` ADD FULLTEXT `videolinks` (`url` ,`titre` ,`description`)");
 
 // creation of indexes 
-mysql_query("ALTER TABLE `lp_user_module_progress` ADD INDEX `optimize` (`user_id` , `learnPath_module_id`)");
-mysql_query("ALTER TABLE `actions` ADD INDEX `actionsindex` (`module_id` , `date_time`)"); 
+db_query("ALTER TABLE `lp_user_module_progress` ADD INDEX `optimize` (`user_id` , `learnPath_module_id`)");
+db_query("ALTER TABLE `actions` ADD INDEX `actionsindex` (`module_id` , `date_time`)"); 

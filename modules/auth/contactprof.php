@@ -72,7 +72,7 @@ $errorExists = false;
 else
 {
 	$sql = "SELECT * FROM user WHERE user_id='".$uid."'";
-	$res = mysql_query($sql);
+	$res = db_query($sql);
 	$row = mysql_fetch_array($res);
 
 	if (!isset($_GET['fc'])) {

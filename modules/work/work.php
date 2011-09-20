@@ -1133,7 +1133,7 @@ function send_file($id)
 {
         global $tool_content, $currentCourseID, $uid, $is_adminOfCourse;
         mysql_select_db($currentCourseID);
-        $q = mysql_query("SELECT * FROM assignment_submit WHERE id = $id");
+        $q = db_query("SELECT * FROM assignment_submit WHERE id = $id");
         if (!$q or !mysql_num_rows($q)) {
                 return false;
         }

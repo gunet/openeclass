@@ -43,43 +43,38 @@ $nameTools = $langContactAdmin;
 $tool_content = "";
 
 
-// MAINa BODY
+// MAIN BODY
 
 // get the incoming values and initialize them
 $userid = isset($_GET['userid'])?$_GET['userid']:(isset($_POST['id'])?$_POST['id']:'');
 $submit = isset($_POST['submit'])?$_POST['submit']:'';
 if(!empty($userid))
 {
-	$sql=mysql_query("SELECT * FROM user WHERE user_id='".$userid."'");
-	while ($m = mysql_fetch_array($sql)) 
-	{
+	$sql = db_query("SELECT * FROM user WHERE user_id='".$userid."'");
+	while ($m = mysql_fetch_array($sql)) {
 		$sirname = $m["nom"];
 		$firstname = $m["prenom"];
 		$email = $m["email"];
 	}
 	
-	if(!empty($_POST["submit"])) 
-	{
-		$body = isset($_POST['body'])?$_POST['body']:'';
-		$tool_content .= "<table width=\"99%\"><tbody><tr><td>";
-		//$to = $email;
-		$to = $GLOBALS['emailhelpdesk'];
-		$emailsubject = "Ενεργοποίηση λογαριασμού χρήστη";
-		$emailbody = "Ο φοιτητής με τα παρακάτω στοιχεία επιθυμεί την 
-		επανενεργοποίηση του λογαριασμού του:
-		$sirname $firstname
-		Email: $email
-		Σχόλια: $body";
-		if (!send_mail('', '', '', $to,	$emailsubject, $emailbody, $charset)) 
-		{
-				$tool_content .= "<h4>'$langEmailNotSend' '$to'!</h4>";
-		}
-		else
-		{
-		$tool_content .= "<h4>$emailsuccess</h4>";
-		}
-		$tool_content .= "</td></tr><tbody></table><br />";
-	}
+        if (!empty($_POST["submit"])) {
+                $body = isset($_POST['body'])?$_POST['body']:'';
+                $tool_content .= "<table width=\"99%\"><tbody><tr><td>";
+                //$to = $email;
+                $to = $GLOBALS['emailhelpdesk'];
+                $emailsubject = "Ενεργοποίηση λογαριασμού χρήστη";
+                $emailbody = "Ο φοιτητής με τα παρακάτω στοιχεία επιθυμεί την 
+                        επανενεργοποίηση του λογαριασμού του:
+                        $sirname $firstname
+                        Email: $email
+                        Σχόλια: $body";
+                if (!send_mail('', '', '', $to,	$emailsubject, $emailbody, $charset)) {
+                        $tool_content .= "<h4>'$langEmailNotSend' '$to'!</h4>";
+                } else {
+                        $tool_content .= "<h4>$emailsuccess</h4>";
+                }
+                $tool_content .= "</td></tr><tbody></table><br />";
+        }
 	else
 	{
 		$tool_content .= "<form action=\"./contactadmin.php?userid=".$userid."\" method=\"post\">
@@ -99,6 +94,4 @@ if(!empty($userid))
 }
 
 $tool_content .= "<center><p><a href=\"../../index.php\">$langBackHome</a></p></center>";
-draw($tool_content,0);
-echo";a;a;";
-?>
+draw($tool_content, 0);

@@ -73,7 +73,7 @@ if (isset($c)) {
 		$searchurl = '&search=yes';
 	}
 	// Get information about selected course
-	$sql = mysql_query("SELECT * FROM cours WHERE code = " . quote($c));
+	$sql = db_query("SELECT * FROM cours WHERE code = " . quote($c));
 	$row = mysql_fetch_array($sql);
 	// Display course information and link to edit
         $faculte = find_faculty_by_id($row['faculteid']);
@@ -107,7 +107,7 @@ if (isset($c)) {
 	  <td colspan='2'><div class='sub_title1'>$langTheCourse " . q($row['intitule']) . " $langMaxQuota</div></td>
 	  </tr>";
 	// Get information about course quota
-	$q = mysql_fetch_array(mysql_query("SELECT code, intitule, doc_quota, video_quota, group_quota, dropbox_quota
+	$q = mysql_fetch_array(db_query("SELECT code, intitule, doc_quota, video_quota, group_quota, dropbox_quota
 			FROM cours WHERE code='".mysql_real_escape_string($c)."'"));
 	$dq = format_file_size($q['doc_quota']);
 	$vq = format_file_size($q['video_quota']);

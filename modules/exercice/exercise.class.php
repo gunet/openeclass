@@ -436,7 +436,7 @@ class Exercise
 				"StartDate='$StartDate',EndDate='$EndDate',TimeConstrain='$TimeConstrain',".
 				"AttemptsAllowed='$AttemptsAllowed', random='$random',
 				active='$active', results='$results', score='$score' WHERE id='$id'";
-			mysql_query($sql) or die("Error : UPDATE in file ".__FILE__." at line ".__LINE__);
+			db_query($sql) or die("Error : UPDATE in file ".__FILE__." at line ".__LINE__);
 		}
 		// creates a new exercise
 		else
@@ -588,10 +588,10 @@ class Exercise
 		$id=$this->id;
 
 		$sql="DELETE FROM `$TBL_EXERCICE_QUESTION` WHERE exercice_id='$id'";
-		mysql_query($sql) or die("Error : DELETE in file ".__FILE__." at line ".__LINE__);
+		db_query($sql) or die("Error : DELETE in file ".__FILE__." at line ".__LINE__);
 
 		$sql="DELETE FROM `$TBL_EXERCICES` WHERE id='$id'";
-		mysql_query($sql) or die("Error : DELETE in file ".__FILE__." at line ".__LINE__);
+		db_query($sql) or die("Error : DELETE in file ".__FILE__." at line ".__LINE__);
 	}
 }
 

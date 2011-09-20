@@ -44,7 +44,7 @@ if($submit) {
   $lang = langname_to_code($localize);	
 
       // check if user name exists
-  $username_check=mysql_query("SELECT username FROM `$mysqlMainDb`.user WHERE username='$uname'");
+  $username_check = db_query("SELECT username FROM `$mysqlMainDb`.user WHERE username='$uname'");
   while ($myusername = mysql_fetch_array($username_check)) {
     $user_exist=$myusername[0];
   }
@@ -94,9 +94,9 @@ send_mail('', '', '', $email_form, $emailsubject, $emailbody, $charset);
     $expires_at = time() + $durationAccount;
 
     $password_encrypted = md5($password);
-    $s = mysql_query("SELECT id FROM faculte WHERE name='$department'");
+    $s = db_query("SELECT id FROM faculte WHERE name='$department'");
     $dep = mysql_fetch_array($s);
-    $inscr_user=mysql_query("INSERT INTO `$mysqlMainDb`.user
+    $inscr_user = db_query("INSERT INTO `$mysqlMainDb`.user
       (user_id, nom, prenom, username, password, email, statut, department, registered_at, expires_at, lang)
       VALUES ('NULL', '$nom_form', '$prenom_form', '$uname', '$password_encrypted', '$email_form', '5', '$dep[id]', '$registered_at', '$expires_at', '$lang')");
 

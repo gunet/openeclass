@@ -117,7 +117,7 @@ $tool_content .= "
           <select name=\"formsearchfaculte\">
            <option value=\"0\">$langAllFacultes</option>\n";
 
-$resultFac=mysql_query("SELECT name FROM faculte ORDER BY number");
+$resultFac = db_query("SELECT name FROM faculte ORDER BY number");
 while ($myfac = mysql_fetch_array($resultFac)) {
 	if($myfac['name'] == @$searchfaculte)
 		$tool_content .= "

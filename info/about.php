@@ -41,10 +41,10 @@ $tool_content .= "<table class='tbl_1' width='100%'>
           
           mysql_select_db($mysqlMainDb);
           
-          $a = mysql_fetch_row(mysql_query("SELECT COUNT(*) FROM cours"));
-          $a1 = mysql_fetch_row(mysql_query("SELECT COUNT(*) FROM cours WHERE visible='2'"));
-          $a2 = mysql_fetch_row(mysql_query("SELECT COUNT(*) FROM cours WHERE visible='1'"));
-          $a3 = mysql_fetch_row(mysql_query("SELECT COUNT(*) FROM cours WHERE visible='0'"));
+          $a = mysql_fetch_row(db_query("SELECT COUNT(*) FROM cours"));
+          $a1 = mysql_fetch_row(db_query("SELECT COUNT(*) FROM cours WHERE visible='2'"));
+          $a2 = mysql_fetch_row(db_query("SELECT COUNT(*) FROM cours WHERE visible='1'"));
+          $a3 = mysql_fetch_row(db_query("SELECT COUNT(*) FROM cours WHERE visible='0'"));
           
           $tool_content .= "$langAboutCourses <b>$a[0]</b> $langCourses<br />
           <ul>
@@ -56,10 +56,10 @@ $tool_content .= "<table class='tbl_1' width='100%'>
   </tr>
       ";
 
-$e = mysql_fetch_row(mysql_query('SELECT COUNT(*) FROM user'));
-$b = mysql_fetch_row(mysql_query('SELECT COUNT(*) FROM user WHERE statut=1'));
-$c = mysql_fetch_row(mysql_query('SELECT COUNT(*) FROM user WHERE statut=5'));
-$d = mysql_fetch_row(mysql_query('SELECT COUNT(*) FROM user WHERE statut=10'));
+$e = mysql_fetch_row(db_query('SELECT COUNT(*) FROM user'));
+$b = mysql_fetch_row(db_query('SELECT COUNT(*) FROM user WHERE statut=1'));
+$c = mysql_fetch_row(db_query('SELECT COUNT(*) FROM user WHERE statut=5'));
+$d = mysql_fetch_row(db_query('SELECT COUNT(*) FROM user WHERE statut=10'));
 
 $tool_content .= "
       <tr>

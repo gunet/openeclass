@@ -137,7 +137,7 @@ if($is_adminOfCourse) {
 	} else {
 		$sql="SELECT id,titre FROM `$TBL_EXERCICES` ORDER BY id";
 	}
-	$result = mysql_query($sql);
+	$result = db_query($sql);
 	
 	// shows a list-box allowing to filter questions
 	while($row = mysql_fetch_array($result)) {
@@ -156,26 +156,26 @@ if($is_adminOfCourse) {
 	// if we have selected an exercise in the list-box 'Filter'
 	if(isset($exerciseId) && $exerciseId > 0)
 	{
-		$sql="SELECT id,question,type FROM `$TBL_EXERCICE_QUESTION`,`$TBL_QUESTIONS` 
+		$sql = "SELECT id,question,type FROM `$TBL_EXERCICE_QUESTION`,`$TBL_QUESTIONS` 
 			WHERE question_id=id AND exercice_id='$exerciseId' 
 			ORDER BY q_position LIMIT $from,".(QUESTIONS_PER_PAGE+1);
-		$result = mysql_query($sql);
+		$result = db_query($sql);
 	}
 	// if we have selected the option 'Orphan questions' in the list-box 'Filter'
 	elseif(isset($exerciseId) && $exerciseId == -1)
 	{
-		$sql="SELECT id,question,type FROM `$TBL_QUESTIONS` LEFT JOIN `$TBL_EXERCICE_QUESTION` 
+		$sql = "SELECT id,question,type FROM `$TBL_QUESTIONS` LEFT JOIN `$TBL_EXERCICE_QUESTION` 
 			ON question_id=id WHERE exercice_id IS NULL ORDER BY question 
 			LIMIT $from,".(QUESTIONS_PER_PAGE+1);
-		$result = mysql_query($sql);
+		$result = db_query($sql);
 	}
 	// if we have not selected any option in the list-box 'Filter'
 	else
 	{		
-		@$sql="SELECT id,question,type FROM `$TBL_QUESTIONS` LEFT JOIN `$TBL_EXERCICE_QUESTION` 
+		@$sql = "SELECT id,question,type FROM `$TBL_QUESTIONS` LEFT JOIN `$TBL_EXERCICE_QUESTION` 
 			ON question_id=id WHERE exercice_id IS NULL OR exercice_id<>'$fromExercise' 
 			GROUP BY id ORDER BY question LIMIT $from,".(QUESTIONS_PER_PAGE+1);
-		$result = mysql_query($sql);
+		$result = db_query($sql);
 		// forces the value to 0
 		$exerciseId = 0;
 	}
