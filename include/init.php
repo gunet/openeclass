@@ -255,7 +255,7 @@ if (isset($require_current_course) and $require_current_course) {
 		// Check for course visibility by current user
 		$statut = 0;
                 // The admin can see all courses as adminOfCourse
-                if ($uid == 1) {
+                if ($is_admin) {
                         $statut = 1;
                 } else {
                         $res2 = db_query("SELECT statut FROM cours_user
@@ -306,9 +306,8 @@ if (isset($require_current_course) and $require_current_course) {
 // multi-level admin access
 
 // actually a prof has $status 1 or 2
-
-// the system admin has uid=1
-if ($uid == 1) {
+// the system admin has rights to all courses
+if ($is_admin) {
 	$is_adminOfCourse = TRUE;
         if (isset($currentCourse)) {
                $_SESSION['status'][$currentCourse] = 1;
