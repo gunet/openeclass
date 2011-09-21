@@ -189,10 +189,12 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
                                              'user_id' => $userid_map)));
                 restore_table($restoreThis, 'forum_notify',
                         array('set' => array('course_id' => $course_id),
-                              'map' => array('user_id' => $userid_map)));
+                              'map' => array('user_id' => $userid_map),
+                              'delete' => array('id')));
                 $link_category_map = restore_table($restoreThis, 'link_category',
                         array('set' => array('course_id' => $course_id),
                               'return_mapping' => 'id'));
+                $link_category_map[0] = 0;
                 $link_map = restore_table($restoreThis, 'link',
                         array('set' => array('course_id' => $course_id),
                               'map' => array('category' => $link_category_map),
@@ -518,7 +520,7 @@ function dropbox_person($file_id, $person_id)
             !isset($userid_map[$person_id])) {
 		return;
 	}
-	mysql_select_db($course_code);
+	mysql_select_db($new_course_code);
         $file_id = intval($file_id);
         $new_uid = $userid_map[$person_id];
 	db_query("INSERT INTO dropbox_person (fileId, personId)
@@ -755,6 +757,8 @@ function restore_table($basedir, $table, $options)
                         foreach ($options['map'] as $field => &$map) {
                                 if (isset($map[$data[$field]])) {
                                         $data[$field] = $map[$data[$field]];
+                                } else { 	 
+                                        continue 2; 	 
                                 }
                         }
                 }
@@ -889,6 +893,7 @@ function restore_users($course_id, $users, $cours_user)
         }
 
         foreach ($users as $data) {
+               print_a($data);
                 if ($add_only_profs and !$is_prof[$data['user_id']]) {
                         continue;
                 }
