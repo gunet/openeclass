@@ -35,7 +35,7 @@ if (isset($_POST['submit'])) {
 	foreach (array('temp' => 2, 'garbage' => 5, 'archive' => 1, 'tmpUnzipping' => 1) as $dir => $days) {
 		$tool_content .= sprintf("<p class='success'>$langCleaningUp</p>", "<b>$days</b>",
 			($days == 1)? $langDaySing: $langDayPlur, $dir);
-		cleanup("<${webDir}courses/$dir", $days);
+		cleanup("${webDir}courses/$dir", $days);
 	}
 } else {
 	$tool_content .= "
