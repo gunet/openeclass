@@ -216,12 +216,6 @@ function backup_course_db($f, $course) {
 		fwrite($f, "query(\"$schema\");\n");
 		if ($tablename == 'assignment_submit') {
 			backup_assignment_submit($f);
-		} elseif ($tablename == 'dropbox_file') {
-			backup_dropbox_file($f);
-		} elseif ($tablename == 'dropbox_person') {
-			backup_dropbox_person($f);
-		} elseif ($tablename == 'dropbox_post') {
-			backup_dropbox_post($f);
 		} else {
 			$res = db_query("SELECT * FROM $tablename");
 			if (mysql_num_rows($res) > 0) {
