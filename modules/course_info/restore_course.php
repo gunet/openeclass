@@ -140,6 +140,26 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
         if (file_exists("$restoreThis/cours")) {
                 // New-style backup - restore intividual tables
 
+                if (file_exists("$restoreThis/config_vars")) {
+                        $config_data = unserialize(file_get_contents("$restoreThis/config_vars"));
+                        $course_data = unserialize(file_get_contents("$restoreThis/cours"));
+                        $url_prefix_map = array(
+                                $config_data['urlServer'] . 'modules/ebook/show.php/' . $course_data[0]['code'] =>
+                                        $urlServer . 'modules/ebook/show.php/' . $new_course_code,
+                                $config_data['urlAppend'] . '/modules/ebook/show.php/' . $course_data[0]['code'] =>
+                                        $urlAppend . '/modules/ebook/show.php/' . $new_course_code,
+                                $config_data['urlServer'] . 'modules/document/file.php/' . $course_data[0]['code'] =>
+                                        $urlServer . 'modules/document/file.php/' . $new_course_code,
+                                $config_data['urlAppend'] . '/modules/document/file.php/' . $course_data[0]['code'] =>
+                                        $urlAppend . '/modules/document/file.php/' . $new_course_code,
+                                $config_data['urlServer'] . 'courses/' . $course_data[0]['code'] =>
+                                        $urlServer . 'courses/' . $new_course_code,
+                                $config_data['urlAppend'] . '/courses/' . $course_data[0]['code'] =>
+                                        $urlAppend . '/courses/' . $new_course_code,
+                                $course_data[0]['code'] =>
+                                        $new_course_code);
+                }
+
                 function document_map_function(&$data, $maps) {
                         // $maps[1]: group map, $maps[2]: ebook map
                         $stype = $data['subsystem'];
@@ -728,6 +748,8 @@ function find_backup_folders($basedir)
 
 function restore_table($basedir, $table, $options)
 {
+        global $url_prefix_map;
+
         $set = get_option($options, 'set');
         $backup = unserialize(file_get_contents("$basedir/$table"));
         $i = 0;
@@ -771,7 +793,12 @@ function restore_table($basedir, $table, $options)
                         }
                 }
                 if ($do_insert) {
-                        db_query($sql_intro . field_values($data, $set));
+                        if (isset($url_prefix_map)) {
+                                db_query(strtr($sql_intro . field_values($data, $set),
+                                               $url_prefix_map));
+                        } else {
+                                db_query($sql_intro . field_values($data, $set));
+                        }
                 }
                 if ($return_mapping) {
                         $mapping[$old_id] = mysql_insert_id();
@@ -893,7 +920,6 @@ function restore_users($course_id, $users, $cours_user)
         }
 
         foreach ($users as $data) {
-               print_a($data);
                 if ($add_only_profs and !$is_prof[$data['user_id']]) {
                         continue;
                 }
