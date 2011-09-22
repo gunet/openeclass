@@ -43,6 +43,7 @@ if ($cours_id === false) {
 }
 
 list($intitule) = mysql_fetch_row(db_query("SELECT intitule FROM cours WHERE code = '$code'"));
+$intitule = htmlspecialchars($intitule, ENT_NOQUOTES); 
 
 $result = db_query("SELECT DATE_FORMAT(temps,'%a, %d %b %Y %T +0300') AS dateformat 
 		FROM annonces WHERE cours_id = $cours_id ORDER BY temps DESC", $mysqlMainDb);
