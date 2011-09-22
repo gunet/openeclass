@@ -204,40 +204,6 @@ function backup_assignment_submit($f) {
 }
 
 
-function backup_dropbox_file($f) {
-	$res = db_query("SELECT * FROM dropbox_file");
-	while ($row = mysql_fetch_array($res)) {
-		fputs ($f, "dropbox_file(".
-			inner_quote($row['uploaderId']).", ".
-			inner_quote($row['filename']).", ".
-			inner_quote($row['filesize']).", ".
-			inner_quote($row['title']).", ".
-			inner_quote($row['description']).", ".
-			inner_quote($row['author']).", ".
-			inner_quote($row['uploadDate']).", ".
-			inner_quote($row['lastUploadDate']).");\n");
-		}
-}
-
-function backup_dropbox_person($f) {
-	$res = db_query("SELECT * FROM dropbox_person");
-	while ($row = mysql_fetch_array($res)) {
-		fputs ($f, "dropbox_person(".
-			inner_quote($row['fileId']).", ".
-			inner_quote($row['personId']).");\n");
-		}
-}
-
-function backup_dropbox_post($f) {
-	$res = db_query("SELECT * FROM dropbox_post");
-	while ($row = mysql_fetch_array($res)) {
-		fputs ($f, "dropbox_post(".
-			inner_quote($row['fileId']).", ".
-			inner_quote($row['recipientId']).");\n");
-	}
-}
-
-
 function backup_course_db($f, $course) {
 	mysql_select_db($course);
 

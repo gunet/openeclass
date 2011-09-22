@@ -111,6 +111,13 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
 
         load_global_messages();
 
+        if (mysql_table_exists($new_course_code, 'dropbox_file')) {
+                mysql_select_db($new_course_code);
+                map_db_field('dropbox_file', 'uploaderId', $userid_map);
+                map_db_field('dropbox_person', 'personId', $userid_map);
+                map_db_field('dropbox_post', 'recipientId', $userid_map);
+        }
+        
         if (!isset($eclass_version)) {
                 // if we come from older versions, do all upgrades
                 upgrade_course($new_course_code, $course_lang);
@@ -136,7 +143,7 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
         convert_description_to_units($new_course_code, $course_id);
 	$tool_content .= ob_get_contents();
 	ob_end_clean();
-
+        
         if (file_exists("$restoreThis/cours")) {
                 // New-style backup - restore intividual tables
 
@@ -251,7 +258,7 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
                                                            $ebook_section_map,
                                                            $ebook_subsection_map)));
         }
-
+        
 	removeDir($restoreThis);
         $tool_content .= "</p><br />
                           <center><p><a href='../admin/index.php'>$langBack</a></p></center>";
@@ -512,8 +519,12 @@ function group($userid, $team, $status, $role) {
 // functions for inserting info about dropbox
 function dropbox_file($userid, $filename, $filesize, $title, $description, $author, $uploadDate, $lastUploadDate)
 {
-	global $action, $userid_map, $new_course_code;
+	global $action, $userid_map, $new_course_code, $langDropBoxIncompatible;
+        static $warned = false;
 
+        if (!$warned) {
+                echo "<br>$langDropBoxIncompatible";
+        }
 	if (!$action or $_POST['add_users'] == 'none' or
             !isset($userid_map[$userid])) {
 		return;
@@ -920,6 +931,7 @@ function restore_users($course_id, $users, $cours_user)
         }
 
         foreach ($users as $data) {
+
                 if ($add_only_profs and !$is_prof[$data['user_id']]) {
                         continue;
                 }
@@ -933,7 +945,7 @@ function restore_users($course_id, $users, $cours_user)
                                                  '<i>' . q("$res[prenom] $res[nom]") . '</i>',
                                                  '<i>' . q("$data[prenom] $data[nom]") . '</i>') .
                                          "</p>\n";
-                } elseif (isset($_POST['create_users'])) {
+                } elseif (isset($_POST['create_users'])) {                        
                         db_query("INSERT INTO `$mysqlMainDb`.user
                                          SET nom = ".quote($data['nom']).",
                                              prenom = ".quote($data['prenom']).",
@@ -943,7 +955,8 @@ function restore_users($course_id, $users, $cours_user)
                                              statut = ".quote($data['statut']).",
                                              phone = ".quote($data['phone']).",
                                              department = ".quote($data['department']).",
-                                             registered_at = ".quote($data['registered_at']));
+                                             registered_at = ".quote($data['registered_at']).",
+                                             expires_at = ". quote($data['registered_at']+ $durationAccount));
                         $userid_map[$data['userid']] = mysql_insert_id();
                         $tool_content .= "<p>" .
                                          sprintf($langRestoreUserNew,
@@ -1018,4 +1031,11 @@ function inner_unquote($s)
                            array('"', "\0"),
                            $s);
 
+}
+
+function map_db_field($table, $field, $mapping) {
+        foreach ($mapping as $old => $new) {
+               db_query("UPDATE `$table` SET `$field` = " . quote($new) . "
+                             WHERE `$field` = " . quote($old));
+        }
 }
