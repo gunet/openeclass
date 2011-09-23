@@ -1863,12 +1863,15 @@ function redirect_to_home_page($path = '')
 }
 
 
-function odd_even($k)
+function odd_even($k, $extra='')
 {
+        if (!empty($extra)) {
+                $extra = ' ' . $extra;
+        }
         if ($k % 2 == 0) {
-                return " class='even'";
+                return " class='even$extra'";
         } else {
-                return " class='odd'";
+                return " class='odd$extra'";
         }
 } 
 

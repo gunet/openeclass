@@ -89,10 +89,20 @@ if ($is_adminOfCourse) {
                 move_order('ebook', 'id', intval($_GET['down']), 'order', 'down', "course_id = $cours_id");
         } elseif (isset($_GET['up'])) {
                 move_order('ebook', 'id', intval($_GET['up']), 'order', 'up', "course_id = $cours_id");
+        } elseif (isset($_GET['vis'])) {
+                db_query("UPDATE ebook SET visible = NOT visible
+                                 WHERE course_id = $cours_id AND
+                                       id = " . intval($_GET['vis']));
         }
 }
 
-$q = db_query("SELECT * FROM `ebook` WHERE course_id = $cours_id ORDER BY `order`");
+if ($is_adminOfCourse) {
+        $visibility_check = '';
+} else {
+        $visibility_check = "AND visible = 1";
+}
+$q = db_query("SELECT * FROM `ebook` WHERE course_id = $cours_id
+                      $visibility_check ORDER BY `order`");
 
 if (mysql_num_rows($q) == 0) {
         $tool_content .= "\n    <p class='alert1'>$langNoEBook</p>\n";
@@ -101,22 +111,23 @@ if (mysql_num_rows($q) == 0) {
      <script type='text/javascript' src='../auth/sorttable.js'></script>
      <table width='100%' class='sortable' id='t1'>
      <tr>
-       <th colspan='2'><div align='left'>$langEBook</div></th>" .  ($is_adminOfCourse? "
-       <th width='70' colspan='2' class='center'>$langActions</th>":
-                                                     '') .  "
+       <th colspan='2'><div align='left'>$langEBook</div></th>" .
+       ($is_adminOfCourse?
+        "<th width='70' colspan='2' class='center'>$langActions</th>":
+        '') . "
      </tr>\n";
 
         $k = 0;
         $num = mysql_num_rows($q);
         while ($r = mysql_fetch_array($q)) {
+                $vis_class = $r['visible']? '': 'invisible';
                 $tool_content .= "
-     <tr" . odd_even($k) . ">
-       <td width='16' valign='top'>" .
-                                 "<img style='padding-top:3px;' src='$themeimg/arrow.png' " .
-                                 " alt='' /></td>
+     <tr" . odd_even($k, $vis_class) . ">
+       <td width='16' valign='top'>
+          <img style='padding-top:3px;' src='$themeimg/arrow.png' alt='' /></td>
        <td><a href='show.php/$currentCourseID/$r[id]/'>" .
                                  q($r['title']) . "</a>
-       </td>" . tools($r['id'], $r['title'], $k, $num) . "
+       </td>" . tools($r['id'], $r['title'], $k, $num, $r['visible']) . "
      </tr>\n";
                 $k++;
         }
@@ -126,14 +137,15 @@ if (mysql_num_rows($q) == 0) {
 
 draw($tool_content, 2, null, $head_content);
 
-function tools($id, $title, $k, $num)
+function tools($id, $title, $k, $num, $vis)
 {
         global $is_adminOfCourse, $langModify, $langDelete, $langMove, $langDown, $langUp, $langEBookDelConfirm,
-               $code_cours, $themeimg;
+               $code_cours, $themeimg, $langVisibility;
 
         if (!$is_adminOfCourse) {
                 return '';
         } else {
+                $icon_vis = $vis? 'visible.png': 'invisible.png';
                 $num--;
                 return "\n        <td width='60' class='center'>\n<form action='$_SERVER[PHP_SELF]?course=$code_cours' method='post'>\n" .
                        "<input type='hidden' name='id' value='$id' />\n<a href='edit.php?course=$code_cours&amp;id=$id'>" .
@@ -142,7 +154,9 @@ function tools($id, $title, $k, $num)
                                          alt='$langDelete' title='$langDelete' name='delete' value='$id'
                                          onclick=\"javascript:if(!confirm('".
                        js_escape(sprintf($langEBookDelConfirm, $title)) ."')) return false;\" />" .
-                       "</form></td>\n        <td class='right' width='40'>" .
+                       "<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;vis=$id'>
+                           <img src='$themeimg/$icon_vis' alt='$langVisibility' title='$langVisibility'></a>
+                        </form></td><td class='right' width='40'>" .
                        (($k < $num)? "<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;down=$id'>
                                       <img class='displayed' src='$themeimg/down.png'
                                            title='$langMove $langDown' alt='$langMove $langDown' /></a>":
@@ -150,6 +164,6 @@ function tools($id, $title, $k, $num)
                        (($k > 0)? "<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;up=$id'>
                                    <img class='displayed' src='$themeimg/up.png'
                                         title='$langMove $langUp' alt='$langMove $langUp' /></a>":
-                                  '') . '</td>';
+                                  '') . "</td>\n";
         }
 }
