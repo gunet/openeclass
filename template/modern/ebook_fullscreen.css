@@ -38,12 +38,13 @@ body {
         position: fixed;
         top: 0;
         height: 80px;
-        margin: 0 auto;
+        margin: 0 auto !important;
         width: 100%;
         border-bottom: 3px solid #827C78;
         background-color: #ffffff;
         text-align: right;
         min-width: 800px;
+        z-index: 100;
 }
 
 #eclass_ebook_header .tools {
@@ -51,7 +52,7 @@ body {
         font-family: "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
         font-size: 13px;
         z-index: 1;
-        background-color: #827C78;
+        background-color: #8597A5;
         float: left;
         width: 100%;
 }
@@ -82,13 +83,13 @@ body {
 }
 
 span.glossary, a.glossary {
-        border-bottom: 1px dotted #827C78;
+        border-bottom: 1px dotted #727266;
         color: #cc3333 !important;  
         text-decoration: none !important;
         cursor: help;
 }
 
 a.glossary:hover {
-        border-bottom: 1px solid #827C78;
+        border-bottom: 1px solid #727266;
         cursor: pointer;
 }

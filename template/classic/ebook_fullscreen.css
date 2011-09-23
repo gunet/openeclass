@@ -38,12 +38,13 @@ body {
         position: fixed;
         top: 0;
         height: 80px;
-        margin: 0 auto;
+        margin: 0 auto !important;
         width: 100%;
         border-bottom: 3px solid #827C78;
         background-color: #ffffff;
         text-align: right;
         min-width: 800px;
+        z-index: 100;
 }
 
 #eclass_ebook_header .tools {
