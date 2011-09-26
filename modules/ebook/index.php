@@ -126,14 +126,19 @@ if (mysql_num_rows($q) == 0) {
         $num = mysql_num_rows($q);
         while ($r = mysql_fetch_array($q)) {
                 $vis_class = $r['visible']? '': 'invisible';
+                if (is_null($r['sid'])) {
+                        $title_link = q($r['title']) . ' <i>(' . $langEBookNoSections . ')</i>';
+                } else {
+                        $title_link = "<a href='show.php/$currentCourseID/$r[id]/'>" .
+                                      q($r['title']) . "</a>";
+                }
                 $warning = is_null($r['sid'])? " <i>($langInactive)</i>": '';
                 $tool_content .= "
      <tr" . odd_even($k, $vis_class) . ">
        <td width='16' valign='top'>
           <img style='padding-top:3px;' src='$themeimg/arrow.png' alt='' /></td>
-       <td><a href='show.php/$currentCourseID/$r[id]/'>" .
-                                 q($r['title']) . "</a>$warning
-       </td>" . tools($r['id'], $r['title'], $k, $num, $r['visible']) . "
+       <td>$title_link</td>" .
+       tools($r['id'], $r['title'], $k, $num, $r['visible']) . "
      </tr>\n";
                 $k++;
         }

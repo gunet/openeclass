@@ -3266,6 +3266,7 @@ $langEBookTitleModified = "Η αλλαγή του τίτλου του ηλεκτ
 $langEBookSectionsModified = "Οι αλλαγές στις ενότητες του ηλεκτρονικού βιβλίου πραγματοποιήθηκαν";
 $langEBookAdmin = "Διαχείριση ηλεκτρονικού βιβλίου";
 $langFileAdmin = "Διαχείριση αρχείων";
+$langEBookNoSections = "Δεν έχουν οριστεί ενότητες";
 
 /********************************************
  Messages for jQuery tools
