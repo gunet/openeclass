@@ -1336,3 +1336,12 @@ td.section {
 td.subsection {
 	padding-left: 40px;
 }
+
+@media print {
+        #leftnav, #header, #operations_container,
+        .deactivate_module, .activate_module,
+        .title1 {
+                display: none;
+        }
+}
+

@@ -1340,3 +1340,10 @@ dt {
         font-weight: bold;
 }
 
+@media print {
+        #leftnav, #header, #operations_container,
+        .deactivate_module, .activate_module,
+        .title1 {
+                display: none;
+        }
+}

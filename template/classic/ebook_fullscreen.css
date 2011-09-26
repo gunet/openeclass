@@ -93,3 +93,12 @@ a.glossary:hover {
         border-bottom: 1px solid #727266;
         cursor: pointer;
 }
+
+@media print {
+        #eclass_ebook_header {
+                display: none;
+        }
+        #eclass_ebook_body {
+                margin-top: 0;
+        }
+}
