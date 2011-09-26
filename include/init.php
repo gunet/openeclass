@@ -170,9 +170,17 @@ if (isset($require_login) and $require_login and !$uid) {
 	$errorMessagePath = "../../";
 }
 
-if (isset($require_admin) && $require_admin) {
-	if(!check_admin()) {
+if (isset($require_admin) && $require_admin) {	
+        if(get_admin_rights($uid) != ADMIN_USER) {
 		$toolContent_ErrorExists = $langCheckAdmin;
+		$errorMessagePath = "../../";
+	}
+}
+
+if (isset($require_power_user) && $require_power_user) {
+        $admin_rights = get_admin_rights($uid);
+        if(!($admin_rights == POWER_USER or $admin_rights == ADMIN_USER)) {
+		$toolContent_ErrorExists = $langCheckPowerUser;
 		$errorMessagePath = "../../";
 	}
 }

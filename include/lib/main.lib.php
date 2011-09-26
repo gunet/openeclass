@@ -42,6 +42,10 @@ define('ACCESS_PRIVATE', 0);
 define('ACCESS_PROFS', 1);
 define('ACCESS_USERS', 2);
 
+// user admin rights
+define('ADMIN_USER', 0); // admin user can do everything
+define('POWER_USER', 1); // poweruser can admin only users and courses
+
 // Show query string and then do MySQL query
 function db_query2($sql, $db = FALSE)
 {
@@ -536,27 +540,6 @@ function selection3($entries, $name, $default = '') {
 
 	return $select_box;
 }
-
-
-// --------------------------------------------------------------------------
-// The check_admin() function is used in the very first place in all scripts in the admin
-// directory. Just checks that we are really admin users (and not fake!) to proceed...
-// ----------------------------------------------------------------------------
-function check_admin() {
-
-	global $uid;
-	// just make sure that the $uid variable isn't faked
-	if (isset($_SESSION['uid'])) $uid = $_SESSION['uid'];
-	else unset($uid);
-
-	if (isset($uid)) {
-		$res = db_query("SELECT * FROM admin WHERE idUser='$uid'");
-	}
-	if (!isset($uid) or !$res or mysql_num_rows($res) == 0) {
-		return false;
-	} else return true;
-}
-
 
 // ------------------------------------------
 // function to check if user is a guest user
@@ -1982,4 +1965,20 @@ function generate_secret_key()
                 $key .= base_convert(mt_rand(0x19A100, 0x39AA3FF), 10, 36);
         }
         return $key;
+}
+
+
+// Get user admin rights from table `admin`
+function get_admin_rights($user_id) {
+    
+    global $mysqlMainDb;
+
+    $r = db_query("SELECT privilege FROM admin 
+                    WHERE idUser = $user_id", $mysqlMainDb);
+        if ($r and mysql_num_rows($r) > 0) {
+                $row = mysql_fetch_row($r);
+                return $row[0];
+	} else {
+                return -1;
+	} 
 }

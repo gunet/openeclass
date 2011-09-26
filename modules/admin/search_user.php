@@ -38,7 +38,8 @@
 */
 
 //  BASETHEME, OTHER INCLUDES AND NAMETOOLS
-$require_admin = TRUE;
+//$require_admin = TRUE;
+$require_power_user = TRUE;
 include '../../include/baseTheme.php';
 include_once '../../modules/auth/auth.inc.php';
 include 'admin.inc.php';

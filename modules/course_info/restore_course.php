@@ -18,7 +18,7 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-$require_admin = TRUE;
+$require_power_user = true;
 include '../../include/baseTheme.php';
 include '../../upgrade/upgrade_functions.php';
 include '../../include/lib/fileUploadLib.inc.php';

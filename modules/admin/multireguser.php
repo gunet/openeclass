@@ -21,13 +21,12 @@
 
 define('SUFFIX_LEN', 4);
 
-$require_admin = TRUE;
+$require_power_user = true;
 include '../../include/baseTheme.php';
 include '../../include/sendMail.inc.php';
 
 $nameTools = $langMultiRegUser;
 $navigation[]= array ("url"=>"index.php", "name"=> $langAdmin);
-$tool_content = "";
 
 $error = '';
 $acceptable_fields = array('first', 'last', 'email', 'id', 'phone', 'username', 'password');

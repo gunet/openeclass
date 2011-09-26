@@ -343,6 +343,9 @@ function adminMenu(){
 	array_push($sideMenuText, $GLOBALS['langInfoMail']);
 	array_push($sideMenuLink, "../admin/mailtoprof.php");
 	array_push($sideMenuImg, "arrow.png");
+        array_push($sideMenuText, $GLOBALS['langAddAdmin']);
+	array_push($sideMenuLink, "../admin/addadmin.php");
+	array_push($sideMenuImg, "arrow.png");
 	array_push($sideMenuSubGroup, $sideMenuText);
 	array_push($sideMenuSubGroup, $sideMenuLink);
 	array_push($sideMenuSubGroup, $sideMenuImg);

@@ -524,6 +524,8 @@ if (!isset($_POST['submit2'])) {
                 db_query("ALTER TABLE `cours` ADD `glossary_index` BOOL NOT NULL DEFAULT 1");
         mysql_field_exists($mysqlMainDb, 'ebook', 'visible') or
                 db_query("ALTER TABLE `ebook` ADD `visible` BOOL NOT NULL DEFAULT 1");
+        mysql_field_exists($mysqlMainDb, 'admin', 'privilege') or
+            db_query("ALTER TABLE `admin` ADD `privilege` INT NOT NULL DEFAULT '0'");
 
         if (!mysql_field_exists($mysqlMainDb, 'glossary', 'category_id')) {
                 db_query("ALTER TABLE glossary ADD category_id INT(11) DEFAULT NULL,

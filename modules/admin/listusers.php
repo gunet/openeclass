@@ -22,15 +22,9 @@
 *  			Network Operations Center, University of Athens,
 *  			Panepistimiopolis Ilissia, 15784, Athens, Greece
 *  			eMail: info@openeclass.org
-* =========================================================================
+* ========================================================================*/
 
-	listusers.php
-	@last update: 27-06-2006 by Karatzidis Stratos
-	@authors list: Karatzidis Stratos <kstratos@uom.gr>
-		       Vagelis Pitsioygas <vagpits@uom.gr>
-*/
-
-$require_admin = TRUE;
+$require_power_user = true;
 include '../../include/baseTheme.php';
 include_once '../../modules/auth/auth.inc.php';
 include 'admin.inc.php';

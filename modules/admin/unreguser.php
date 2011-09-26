@@ -35,12 +35,10 @@
 ==============================================================================
 */
 
-// BASETHEME, OTHER INCLUDES AND NAMETOOLS
-$require_admin = TRUE;
+$require_power_user = true;
 include '../../include/baseTheme.php';
 $nameTools = $langUnregUser;
 $navigation[]= array ("url"=>"index.php", "name"=> $langAdmin);
-$tool_content = "";
 
 // get the incoming values and initialize them
 $u = isset($_GET['u'])? intval($_GET['u']): false;

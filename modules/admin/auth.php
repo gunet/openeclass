@@ -35,7 +35,7 @@
 ==============================================================================
 */
 
-$require_admin = TRUE;
+$require_power_user = true;
 include '../../include/baseTheme.php';
 include_once '../../modules/auth/auth.inc.php';
 $nameTools = $langUserAuthentication;

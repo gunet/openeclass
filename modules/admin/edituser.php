@@ -34,8 +34,7 @@ This script allows the admin to :
 ==============================================================================
 */
 
-// BASETHEME, OTHER INCLUDES AND NAMETOOLS
-$require_admin = TRUE;
+$require_power_user = true;
 include '../../include/baseTheme.php';
 include 'admin.inc.php';
 include '../auth/auth.inc.php';

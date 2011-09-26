@@ -41,7 +41,7 @@
 ==============================================================================
 */
 
-$require_admin = TRUE;
+$require_power_user = true;
 include '../../include/baseTheme.php';
 include '../../include/CAS/CAS.php';
 include_once '../../modules/auth/auth.inc.php';
