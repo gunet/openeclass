@@ -99,10 +99,15 @@ if ($is_adminOfCourse) {
 if ($is_adminOfCourse) {
         $visibility_check = '';
 } else {
-        $visibility_check = "AND visible = 1";
+        $visibility_check = "AND visible = 1 AND ebook_subsection.id IS NOT NULL";
 }
-$q = db_query("SELECT * FROM `ebook` WHERE course_id = $cours_id
-                      $visibility_check ORDER BY `order`");
+$q = db_query("SELECT ebook.id, ebook.title, visible, ebook_subsection.id AS sid
+                      FROM ebook LEFT JOIN ebook_section ON ebook.id = ebook_id
+                           LEFT JOIN ebook_subsection ON ebook_section.id = section_id
+                      WHERE course_id = $cours_id
+                            $visibility_check
+                      GROUP BY ebook.id
+                      ORDER BY `order`");
 
 if (mysql_num_rows($q) == 0) {
         $tool_content .= "\n    <p class='alert1'>$langNoEBook</p>\n";
@@ -121,12 +126,13 @@ if (mysql_num_rows($q) == 0) {
         $num = mysql_num_rows($q);
         while ($r = mysql_fetch_array($q)) {
                 $vis_class = $r['visible']? '': 'invisible';
+                $warning = is_null($r['sid'])? " <i>($langInactive)</i>": '';
                 $tool_content .= "
      <tr" . odd_even($k, $vis_class) . ">
        <td width='16' valign='top'>
           <img style='padding-top:3px;' src='$themeimg/arrow.png' alt='' /></td>
        <td><a href='show.php/$currentCourseID/$r[id]/'>" .
-                                 q($r['title']) . "</a>
+                                 q($r['title']) . "</a>$warning
        </td>" . tools($r['id'], $r['title'], $k, $num, $r['visible']) . "
      </tr>\n";
                 $k++;
