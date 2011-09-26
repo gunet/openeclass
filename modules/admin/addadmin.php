@@ -66,22 +66,31 @@ if(isset($_POST['submit']) and !empty($username)) {
  $tool_content .= printform($langUsername);
 
 // Display the list of admins
-$r1 = db_query("SELECT user_id, prenom, nom, username FROM user, admin 
+$r1 = db_query("SELECT user_id, prenom, nom, username, admin.privilege FROM user, admin 
                     WHERE user.user_id = admin.idUser 
                     ORDER BY user_id");
 
 $tool_content .= "<table class='tbl'>
   <tr>
     <th class='center'>ID</th>
-    <th class='center'>".$langSurname." - ".$langName."</th>
-        <th class='center'>".$langUsername."</th>
-    <th>".$langActions."</th>
+    <th class='center'>$langSurnameName</th>
+        <th class='center'>$langUsername</th>
+    <th class='center'>$langUser</th>
+    <th>$langActions</th>
   </tr>";
+
 while($row = mysql_fetch_array($r1)) {
         $tool_content .= "<tr>";
         $tool_content .= "<td>".htmlspecialchars($row['user_id'])."</td>".
         "<td>".htmlspecialchars($row['prenom'])." " .htmlspecialchars($row['nom'])."</td>".
         "<td>".htmlspecialchars($row['username'])."</td>";
+        switch ($row['privilege']) {
+            case '0': $message = $langAdministrator;
+                break;
+            case '1': $message = $langPowerUser;
+                break;
+        }
+        $tool_content .= "<td align='center'>$message</td";
         if($row['user_id'] != 1) {
                 $tool_content .= "<td align='center'>
                     <a href='$_SERVER[PHP_SELF]?delete=1&amp;aid=".$row['user_id']."'>
