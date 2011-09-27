@@ -293,14 +293,14 @@ $tool_content .= "
         <tr>
           <th>$langEmail:</th>";
 
-if ($allow_name_change) {
+//if ($allow_name_change) {
         $tool_content .= "
           <td><input type='text' size='40' name='email_form' value='$email_form' /> ";
-} else {
-        $tool_content .= "
-           <td><b>$email_form</b> [$auth_text]
-               <input type='hidden' name='email_form' value='$email_form' /> ";
-}
+//} else {
+//        $tool_content .= "
+//           <td><b>$email_form</b> [$auth_text]
+//               <input type='hidden' name='email_form' value='$email_form' /> ";
+//}
 $tool_content .= selection($access_options, 'email_public', $myrow['email_public']) . "</td>
         </tr>
         <tr><th>$langAm</th>
