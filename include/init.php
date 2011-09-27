@@ -150,10 +150,15 @@ if (isset($_SESSION['uid'])) {
 	$uid = 0;
 }
 
+// check if we are admin or power user 
 if (isset($_SESSION['is_admin']) and $_SESSION['is_admin']) {
 	$is_admin = true;
-} else {
+} elseif (isset($_SESSION['is_power_user']) and $_SESSION['is_power_user']) {
+	$is_power_user = true;              
         $is_admin = false;
+} else {
+    	$is_admin = false;
+        $is_power_user = false;              
 }
 
 if (!isset($_SESSION['theme'])) {
@@ -164,25 +169,23 @@ if (!isset($_SESSION['theme'])) {
 }
 $theme = $_SESSION['theme'];
 $themeimg = $urlAppend . '/template/' . $theme . '/img';
-
 if (isset($require_login) and $require_login and !$uid) {
 	$toolContent_ErrorExists = $langLoginRequired;
 	$errorMessagePath = "../../";
 }
 
 if (isset($require_admin) && $require_admin) {	
-        if(get_admin_rights($uid) != ADMIN_USER) {
+        if (!($is_admin)) {    
 		$toolContent_ErrorExists = $langCheckAdmin;
 		$errorMessagePath = "../../";
 	}
 }
 
-if (isset($require_power_user) && $require_power_user) {
-        $admin_rights = get_admin_rights($uid);
-        if(!($admin_rights == POWER_USER or $admin_rights == ADMIN_USER)) {
+if (isset($require_power_user) && $require_power_user) {        
+        if (!($is_admin or $is_power_user)) {
 		$toolContent_ErrorExists = $langCheckPowerUser;
 		$errorMessagePath = "../../";
-	}
+    } 
 }
 
 if (!isset($guest_allowed) || $guest_allowed!= true){

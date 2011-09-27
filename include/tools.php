@@ -155,11 +155,11 @@ function getToolsArray($cat) {
  * @return array
  */
 function loggedInMenu(){
-	global $webDir, $language, $uid, $is_admin, $urlServer, $mysqlMainDb;
+	global $webDir, $language, $uid, $is_admin, $is_power_user, $urlServer, $mysqlMainDb;
 
 	$sideMenuGroup = array();
 
-	if (isset($is_admin) and $is_admin) {
+	if ((isset($is_admin) and $is_admin) or (isset($is_power_user) and $is_power_user)) {
 		$sideMenuSubGroup = array();
 		$sideMenuText = array();
 		$sideMenuLink = array();
@@ -303,7 +303,8 @@ function loggedOutMenu(){
 function adminMenu(){
 
 	global $webDir, $urlAppend, $language, $phpSysInfoURL, $phpMyAdminURL;
-	global $siteName, $is_admin, $urlServer, $mysqlMainDb, $close_user_registration;
+	global $siteName, $urlServer, $mysqlMainDb, $close_user_registration;
+        global $is_admin, $is_power_user;
 
 	$sideMenuGroup = array();
 
@@ -334,18 +335,22 @@ function adminMenu(){
 	array_push($sideMenuText, $GLOBALS['langUserAuthentication']);
 	array_push($sideMenuLink, "../admin/auth.php");
 	array_push($sideMenuImg, "arrow.png");
-	array_push($sideMenuText, $GLOBALS['langChangeUser']);
-	array_push($sideMenuLink, "../admin/change_user.php");
-	array_push($sideMenuImg, "arrow.png");
+        if (isset($is_admin) and $is_admin) {
+            array_push($sideMenuText, $GLOBALS['langChangeUser']);
+            array_push($sideMenuLink, "../admin/change_user.php");
+            array_push($sideMenuImg, "arrow.png");    
+        }	
 	array_push($sideMenuText, $GLOBALS['langMultiRegUser']);
 	array_push($sideMenuLink, "../admin/multireguser.php");
 	array_push($sideMenuImg, "arrow.png");
 	array_push($sideMenuText, $GLOBALS['langInfoMail']);
 	array_push($sideMenuLink, "../admin/mailtoprof.php");
 	array_push($sideMenuImg, "arrow.png");
-        array_push($sideMenuText, $GLOBALS['langAddAdmin']);
-	array_push($sideMenuLink, "../admin/addadmin.php");
-	array_push($sideMenuImg, "arrow.png");
+        if (isset($is_admin) and $is_admin) {
+            array_push($sideMenuText, $GLOBALS['langAddAdmin']);
+            array_push($sideMenuLink, "../admin/addadmin.php");
+            array_push($sideMenuImg, "arrow.png");    
+        }        
 	array_push($sideMenuSubGroup, $sideMenuText);
 	array_push($sideMenuSubGroup, $sideMenuLink);
 	array_push($sideMenuSubGroup, $sideMenuImg);
@@ -390,36 +395,38 @@ function adminMenu(){
 	$sideMenuLink = array();
 	$sideMenuImg	= array();
 
-	$arrMenuType = array();
-	$arrMenuType['type'] = 'text';
-	$arrMenuType['text'] = $GLOBALS['langState'];
-	array_push($sideMenuSubGroup, $arrMenuType);
-	array_push($sideMenuText, $GLOBALS['langCleanUp']);
-  	array_push($sideMenuLink, "../admin/cleanup.php");
-  	array_push($sideMenuImg, "arrow.png");
+        if (isset($is_admin) and $is_admin) {
+            $arrMenuType = array();
+            $arrMenuType['type'] = 'text';
+            $arrMenuType['text'] = $GLOBALS['langState'];
+            array_push($sideMenuSubGroup, $arrMenuType);
+            array_push($sideMenuText, $GLOBALS['langCleanUp']);
+            array_push($sideMenuLink, "../admin/cleanup.php");
+            array_push($sideMenuImg, "arrow.png");
 
-	if (isset($phpSysInfoURL) && PHP_OS == "Linux") {
-		array_push($sideMenuText, $GLOBALS['langSysInfo']);
-		array_push($sideMenuLink, $phpSysInfoURL);
-		array_push($sideMenuImg, "arrow.png");
-	}
-	array_push($sideMenuText, $GLOBALS['langPHPInfo']);
-	array_push($sideMenuLink, "../admin/phpInfo.php?to=phpinfo");
-	array_push($sideMenuImg, "arrow.png");
+            if (isset($phpSysInfoURL) && PHP_OS == "Linux") {
+                    array_push($sideMenuText, $GLOBALS['langSysInfo']);
+                    array_push($sideMenuLink, $phpSysInfoURL);
+                    array_push($sideMenuImg, "arrow.png");
+            }
+            array_push($sideMenuText, $GLOBALS['langPHPInfo']);
+            array_push($sideMenuLink, "../admin/phpInfo.php?to=phpinfo");
+            array_push($sideMenuImg, "arrow.png");
 
-	if (isset($phpMyAdminURL)){
-		array_push($sideMenuText, $GLOBALS['langDBaseAdmin']);
-		array_push($sideMenuLink, $phpMyAdminURL);
-		array_push($sideMenuImg, "arrow.png");
-	}
-	array_push($sideMenuText, $GLOBALS['langUpgradeBase']);
-	array_push($sideMenuLink, $urlServer."upgrade/");
-	array_push($sideMenuImg, "arrow.png");
+            if (isset($phpMyAdminURL)){
+                    array_push($sideMenuText, $GLOBALS['langDBaseAdmin']);
+                    array_push($sideMenuLink, $phpMyAdminURL);
+                    array_push($sideMenuImg, "arrow.png");
+            }
+            array_push($sideMenuText, $GLOBALS['langUpgradeBase']);
+            array_push($sideMenuLink, $urlServer."upgrade/");
+            array_push($sideMenuImg, "arrow.png");
 
-	array_push($sideMenuSubGroup, $sideMenuText);
-	array_push($sideMenuSubGroup, $sideMenuLink);
-	array_push($sideMenuSubGroup, $sideMenuImg);
-	array_push($sideMenuGroup, $sideMenuSubGroup);
+            array_push($sideMenuSubGroup, $sideMenuText);
+            array_push($sideMenuSubGroup, $sideMenuLink);
+            array_push($sideMenuSubGroup, $sideMenuImg);
+            array_push($sideMenuGroup, $sideMenuSubGroup);
+        }        
 
 	//other tools
 	//reset sub-arrays so that we do not have duplicate entries
@@ -427,33 +434,34 @@ function adminMenu(){
 	$sideMenuText = array();
 	$sideMenuLink = array();
 	$sideMenuImg	= array();
+        if (isset($is_admin) and $is_admin) {
+            $arrMenuType = array();
+            $arrMenuType['type'] = 'text';
+            $arrMenuType['text'] = $GLOBALS['langGenAdmin'];
+            array_push($sideMenuSubGroup, $arrMenuType);
 
-	$arrMenuType = array();
-	$arrMenuType['type'] = 'text';
-	$arrMenuType['text'] = $GLOBALS['langGenAdmin'];
-	array_push($sideMenuSubGroup, $arrMenuType);
+            array_push($sideMenuText, $GLOBALS['langAdminAn']);
+            array_push($sideMenuLink, "../admin/adminannouncements.php");
+            array_push($sideMenuImg, "arrow.png");
+            array_push($sideMenuText, $GLOBALS['langConfigFile']);
+            array_push($sideMenuLink, "../admin/eclassconf.php");
+            array_push($sideMenuImg, "arrow.png");
+            array_push($sideMenuText, $GLOBALS['langPlatformStats']);
+            array_push($sideMenuLink, "../admin/stateclass.php");
+            array_push($sideMenuImg, "arrow.png");
+            array_push($sideMenuText, $GLOBALS['langAdminManual']);
+            if ($language == 'greek') {
+                    array_push($sideMenuLink, $urlServer . "manuals/manA/OpeneClass24_ManA_el.pdf");
+            } else {
+                    array_push($sideMenuLink, $urlServer . "manuals/manA/OpeneClass24_ManA_en.pdf");
+            }
+            array_push($sideMenuImg, "arrow.png");
 
-	array_push($sideMenuText, $GLOBALS['langAdminAn']);
-	array_push($sideMenuLink, "../admin/adminannouncements.php");
-	array_push($sideMenuImg, "arrow.png");
-	array_push($sideMenuText, $GLOBALS['langConfigFile']);
-	array_push($sideMenuLink, "../admin/eclassconf.php");
-	array_push($sideMenuImg, "arrow.png");
-	array_push($sideMenuText, $GLOBALS['langPlatformStats']);
-	array_push($sideMenuLink, "../admin/stateclass.php");
-	array_push($sideMenuImg, "arrow.png");
-	array_push($sideMenuText, $GLOBALS['langAdminManual']);
-	if ($language == 'greek') {
-		array_push($sideMenuLink, $urlServer . "manuals/manA/OpeneClass24_ManA_el.pdf");
-	} else {
-		array_push($sideMenuLink, $urlServer . "manuals/manA/OpeneClass24_ManA_en.pdf");
-	}
-	array_push($sideMenuImg, "arrow.png");
-
-	array_push($sideMenuSubGroup, $sideMenuText);
-	array_push($sideMenuSubGroup, $sideMenuLink);
-	array_push($sideMenuSubGroup, $sideMenuImg);
-	array_push($sideMenuGroup, $sideMenuSubGroup);
+            array_push($sideMenuSubGroup, $sideMenuText);
+            array_push($sideMenuSubGroup, $sideMenuLink);
+            array_push($sideMenuSubGroup, $sideMenuImg);
+            array_push($sideMenuGroup, $sideMenuSubGroup);
+        }
 
 	return $sideMenuGroup;
 }

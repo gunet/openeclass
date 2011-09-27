@@ -625,8 +625,8 @@ function process_login()
 	if (isset($_POST['submit'])) {
 		unset($_SESSION['uid']);
 		$_SESSION['user_perso_active'] = false;
-		$sqlLogin = "SELECT user_id, nom, username, password, prenom, statut, email, iduser is_admin, perso, lang
-                                    FROM user LEFT JOIN admin ON user.user_id = admin.iduser
+		$sqlLogin = "SELECT user_id, nom, username, password, prenom, statut, email, perso, lang
+                                    FROM user 
                                     WHERE username COLLATE utf8_bin = " . quote($posted_uname);
 		$result = db_query($sqlLogin);
 		// cas might have alternative authentication defined
@@ -696,13 +696,16 @@ function login($user_info_array, $posted_uname, $pass)
         if ($posted_uname == $user_info_array['username'] and md5($pass) == $user_info_array['password']) {
                 // check if account is active
                 $is_active = check_activity($user_info_array['user_id']);
-                if ($user_info_array['user_id'] == 1) { // user with id=1 is always active and an admin
-                        $is_active = 1;
-                        $auth_allow = 1;
+                // check for admin privileges
+                $admin_rights = get_admin_rights($user_info_array['user_id']);
+                if($admin_rights == ADMIN_USER) { 
+                        $is_active = 1;   // admin user is always active             
                         $_SESSION['is_admin'] = 1;
+                } elseif($admin_rights == POWER_USER) {  
+                        $_SESSION['is_power_user'] = 1;
                 }
                 if ($is_active) {
-                        $_SESSION['is_admin'] = !(!($user_info_array['is_admin'])); // double 'not' to handle NULL
+                        //$_SESSION['is_admin'] = !(!($user_info_array['is_admin'])); // double 'not' to handle NULL
                         $_SESSION['uid'] = $user_info_array['user_id'];
                         $_SESSION['uname'] = $user_info_array['username'];
                         $_SESSION['nom'] = $user_info_array['nom'];
@@ -757,10 +760,14 @@ function alt_login($user_info_array, $uname, $pass)
                 $is_valid = auth_user_login($auth, $uname, $pass, $auth_method_settings);
                 if ($is_valid) {
                         $is_active = check_activity($user_info_array['user_id']);
-                        if ($user_info_array['user_id'] == 1) {
-                                // the admin is always active
-                                $is_active = 1;
-                        }
+                         // check for admin privileges
+                        $admin_rights = get_admin_rights($user_info_array['user_id']);
+                        if($admin_rights == ADMIN_USER) { 
+                                $is_active = 1;   // admin user is always active             
+                                $_SESSION['is_admin'] = 1;
+                        } elseif($admin_rights == POWER_USER) {  
+                                $_SESSION['is_power_user'] = 1;
+                        }                                        
                         if (!empty($is_active)) {
                                 $auth_allow = 1;
                         } else {
@@ -771,7 +778,7 @@ function alt_login($user_info_array, $uname, $pass)
                         $auth_allow = 2;
                 }
                 if ($auth_allow == 1) {
-                        $_SESSION['is_admin'] = !(!($user_info_array['is_admin'])); // double 'not' to handle NULL
+                        //$_SESSION['is_admin'] = !(!($user_info_array['is_admin'])); // double 'not' to handle NULL
                         $_SESSION['uid'] = $user_info_array['user_id'];
                         $_SESSION['uname'] = $user_info_array['username'];
                         $_SESSION['nom'] = $user_info_array['nom'];
@@ -802,7 +809,7 @@ $type is 'shibboleth' or 'cas'
 function shib_cas_login($type)
 {
         global $nom, $prenom, $email, $statut, $language, $durationAccount,
-		$is_admin, $langUserAltAuth, $close_user_registration;
+		$is_admin, $is_power_user, $langUserAltAuth, $close_user_registration;
 
 	$autoregister = !($close_user_registration && get_config('alt_auth_student_req'));
 
@@ -827,10 +834,10 @@ function shib_cas_login($type)
 		$email = $_SESSION['cas_email'];		
 	}
         // user is authenticated, now let's see if he is registered also in db
-        $sqlLogin= "SELECT user_id, nom, username, password, prenom, statut, email, iduser is_admin, perso, lang
-                           FROM user LEFT JOIN admin ON user.user_id = admin.iduser
+        $sqlLogin= "SELECT user_id, nom, username, password, prenom, statut, email, perso, lang
+                           FROM user 
                            WHERE username COLLATE utf8_bin = " . quote($uname);
-        $r = db_query($sqlLogin); 
+        $r = db_query($sqlLogin);      
         if (mysql_num_rows($r) > 0) {
                 // if user found 
                 $info = mysql_fetch_assoc($r);
@@ -845,14 +852,24 @@ function shib_cas_login($type)
 			unset($_SESSION['cas_prenom']);
 			$_SESSION['errMessage'] = "<div class='caution'>$langUserAltAuth</div>";
 			redirect_to_home_page();
-		} else {
+		} else {                    
 			// update user information
 			db_query("UPDATE user SET nom = ".quote($nom).",
 						  prenom = ".quote($prenom).",
 						  email = ".quote($email)."
 					 WHERE user_id = $info[user_id]");
-			$_SESSION['uid'] = $info['user_id'];
-			$is_admin = !(!($info['is_admin'])); // double 'not' to handle NULL
+                        // check for admin privileges
+                        $admin_rights = get_admin_rights($info['user_id']);
+                        if($admin_rights == ADMIN_USER) { 
+                                $is_active = 1;   // admin user is always active             
+                                $_SESSION['is_admin'] = 1;
+                                $is_admin = 1;
+                        } elseif($admin_rights == POWER_USER) {  
+                                $_SESSION['is_power_user'] = 1;
+                                $is_power_user = 1;
+                        }                              
+			$_SESSION['uid'] = $info['user_id'];                        
+			//$is_admin = !(!($info['is_admin'])); // double 'not' to handle NULL
 			$userPerso = $info['perso'];
 			if (isset($_SESSION['langswitch'])) {
 				$language = $_SESSION['langswitch'];
@@ -885,18 +902,19 @@ function shib_cas_login($type)
                 exit;
 		
 	}
+        
         $_SESSION['uname'] = $uname;
         $_SESSION['nom'] = $nom;
         $_SESSION['prenom'] = $prenom;
         $_SESSION['email'] = $email;
         $_SESSION['statut'] = 5;
-        $_SESSION['is_admin'] = $is_admin;
+        //$_SESSION['is_admin'] = $is_admin;
         $_SESSION['shib_user'] = 1; // now we are shibboleth user
         if ($GLOBALS['persoIsActive'] and $userPerso == 'no') {
                 $_SESSION['user_perso_active'] = true;
         }
         db_query("INSERT INTO loginout 
-                            (loginout.idLog, loginout.id_user, loginout.ip, loginout.when, loginout.action) 
-                            VALUES ('', $_SESSION[uid], '$_SERVER[REMOTE_ADDR]', NOW(), 'LOGIN')");
+                            (loginout.id_user, loginout.ip, loginout.when, loginout.action) 
+                            VALUES ($_SESSION[uid], '$_SERVER[REMOTE_ADDR]', NOW(), 'LOGIN')");
 
 }
