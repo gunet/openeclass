@@ -79,7 +79,7 @@ if (!add_units_navigation(TRUE)) {
 
 
 // permissions (only for the viewmode, there is nothing to edit here )
-if ( $is_adminOfCourse )
+if ( $is_editor )
 {
     // if the fct return true it means that user is a course manager and than view mode is set to COURSE_ADMIN
     header("Location: ./learningPathAdmin.php?course=$code_cours&path_id=".$_SESSION['path_id']);

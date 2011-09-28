@@ -41,7 +41,7 @@
 require_once("../../include/lib/learnPathLib.inc.php");
 require_once("../../include/lib/fileDisplayLib.inc.php");
 $require_current_course = TRUE;
-$require_prof = TRUE;
+$require_editor = TRUE;
 
 $TABLECOURSUSER	        = "cours_user";
 $TABLEUSER              = "user";
@@ -52,8 +52,6 @@ $TABLEASSET             = "lp_asset";
 $TABLEUSERMODULEPROGRESS= "lp_user_module_progress";
 
 require_once("../../include/baseTheme.php");
-$head_content = "";
-$tool_content = "";
 
 $navigation[] = array("url"=>"learningPathList.php?course=$code_cours", "name"=> $langLearningPaths);
 $navigation[] = array("url"=>"details.php?course=$code_cours&amp;path_id=".$_REQUEST['path_id'], "name"=> $langStatsOfLearnPath);

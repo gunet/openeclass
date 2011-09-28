@@ -21,7 +21,7 @@
 session_start();
 
 $require_login = TRUE;
-$require_prof = TRUE;
+$require_course_admin = TRUE;
 $require_help = TRUE;
 $helpTopic = 'CreateCourse';
 

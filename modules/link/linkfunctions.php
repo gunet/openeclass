@@ -44,7 +44,7 @@ function getNumberOfLinks($catid){
 
 function showlinksofcategory($catid)
 {
-        global $is_adminOfCourse, $cours_id, $urlview, $tool_content, 
+        global $is_editor, $cours_id, $urlview, $tool_content, 
                $urlServer, $currentCourseID, $code_cours, $themeimg,
                $langLinkDelconfirm, $langDelete, $langUp, $langDown, 
                $langModify, $langLinks, $langCategoryDelconfirm;
@@ -67,7 +67,7 @@ function showlinksofcategory($catid)
                 $tool_content .= "
                   <td>&nbsp;</td>
                   <td width='1' valign='top'><img src='$themeimg/arrow.png' alt='' /></td>";
-                if ($is_adminOfCourse) {
+                if ($is_editor) {
                     $num_merge_cols = 1;
                 } else {
                     $num_merge_cols = 1;
@@ -80,7 +80,7 @@ function showlinksofcategory($catid)
                 }
                 $tool_content .= "</td>";
 
-                if ($is_adminOfCourse) {
+                if ($is_editor) {
                         $tool_content .=  "
                   <td width='45' valign='top' align='right'>";
                         if (isset($category)) {

@@ -22,9 +22,7 @@
 $require_current_course = TRUE;
 include '../../include/init.php';
 
-// IF PROF ONLY
-if ($is_adminOfCourse) {
-
+if ($is_editor) {
 	header("Content-disposition: filename=".$currentCourse."_".$_GET['exerciseId']."_".date("Y-m-d").".xls");
 	header("Content-type: text/csv; charset=UTF-16");
 	header("Pragma: no-cache");

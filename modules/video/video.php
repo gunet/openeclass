@@ -88,7 +88,7 @@ if (isset($_GET['action']) and $_GET['action'] == "download") {
 	}
 }
 
-if($is_adminOfCourse) {
+if($is_editor) {
         load_js('tools.js');
 
         $head_content .= <<<hContent

@@ -36,7 +36,7 @@
 require_once("../../include/lib/learnPathLib.inc.php");
 
 $require_current_course = TRUE;
-$require_prof = TRUE;
+$require_editor = TRUE;
 
 $TABLELEARNPATH         = "lp_learnPath";
 $TABLEMODULE            = "lp_module";
@@ -45,12 +45,10 @@ $TABLEASSET             = "lp_asset";
 $TABLEUSERMODULEPROGRESS= "lp_user_module_progress";
 
 require_once("../../include/baseTheme.php");
-$tool_content = "";
 
 $navigation[] = array("url"=>"learningPathList.php?course=$code_cours", "name"=> $langLearningPaths);
 $navigation[] = array("url"=>"learningPathAdmin.php?course=$code_cours", "name"=> $langAdm);
 $nameTools = $langInsertMyDescToolName;
-
 
 mysql_select_db($currentCourseID);
 

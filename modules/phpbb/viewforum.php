@@ -82,7 +82,7 @@ function confirmation()
 $forum_id = intval($_GET['forum']);
 $is_member = false;
 $group_id = init_forum_group_info($forum_id);
-if ($private_forum and !($is_member or $is_adminOfCourse)) {
+if ($private_forum and !($is_member or $is_editor)) {
 	$tool_content .= "<div class='caution'>$langPrivateForum</div>";
 	draw($tool_content, 2);
 	exit;
@@ -163,7 +163,7 @@ if ($total_topics > $topics_per_page) { // navigation
 }
 
 // delete topic
-if (($is_adminOfCourse) and isset($_GET['topicdel'])) {
+if (($is_editor) and isset($_GET['topicdel'])) {
 	if (isset($_GET['topic_id'])) {
 		$topic_id = intval($_GET['topic_id']);
 	}
@@ -285,7 +285,7 @@ if (mysql_num_rows($result) > 0) { // topics found
 			$topic_icon = toggle_icon($topic_action_notify);
 		}
 		$tool_content .= "\n<td class='center'>";
-		if ($is_adminOfCourse) {
+		if ($is_editor) {
 			$tool_content .= "
 			<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;forum=$forum_id&amp;topic_id=$myrow[topic_id]&amp;topicdel=yes' onClick='return confirmation()'>
 			<img src='$themeimg/delete.png' title='$langDelete' alt='$langDelete' />

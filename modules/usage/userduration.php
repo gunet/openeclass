@@ -34,10 +34,11 @@
 */
 
 $require_current_course = TRUE;
+$require_course_admin = TRUE;
 $require_help = true;
 $helpTopic = 'Usage';
 $require_login = true;
-$require_prof = true;
+
 include '../../include/baseTheme.php';
 include 'duration_query.php';
 include '../group/group_functions.php';

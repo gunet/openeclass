@@ -281,7 +281,7 @@ do {
 	  <br />$message<br />
 	</td>
 	<td width='40' valign='top'>";
-	if ($is_adminOfCourse) { // course admin
+	if ($is_editor) { // course admin
 		$tool_content .= "<a href=\"editpost.php?course=$code_cours&amp;post_id=".$myrow["post_id"]."&amp;topic=$topic&amp;forum=$forum\">
 		<img src='$themeimg/edit.png' title='$langModify' alt='$langModify' /></a>";
 		$tool_content .= "&nbsp;<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;post_id=".$myrow["post_id"]."&amp;topic=$topic&amp;forum=$forum&amp;delete=on' onClick='return confirmation()'>

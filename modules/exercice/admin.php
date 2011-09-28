@@ -60,7 +60,7 @@ $TBL_EXERCICES = 'exercices';
 $TBL_QUESTIONS = 'questions';
 $TBL_REPONSES = 'reponses';
 
-if(!$is_adminOfCourse) {
+if(!$is_editor) {
 	$tool_content .= $langNotAllowed;
 	draw($tool_content, 2, null, $head_content);
 	exit();

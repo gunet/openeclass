@@ -29,19 +29,13 @@ Pitsiougas Vagelis <vagpits@uom.gr>
 ==============================================================================*/
 
 $require_current_course = TRUE;
+$require_course_admin = TRUE;
 $require_login = TRUE;
-$require_prof = true;
 
 include '../../include/baseTheme.php';
 include '../../include/jscalendar/calendar.php';
 
 $nameTools = $langRefreshCourse;
-
-if (!$is_adminOfCourse)
-{
-	$tool_content .= "Error! access by non-admin.";
-	exit();
-}
 
 if(isset($_POST['submit'])) {
 	$output = array();

@@ -36,9 +36,9 @@
  */
 
 $require_current_course = TRUE;
+$require_course_admin = TRUE;
 $require_help = TRUE;
 $helpTopic = 'courseTools';
-$require_prof = true;
 $require_login = true;
 include '../../include/baseTheme.php';
 
@@ -47,340 +47,340 @@ add_units_navigation(TRUE);
 
 $head_content .= "<script type='text/javascript' src='$urlAppend/js/tools.js'></script>\n";
 
-if ($is_adminOfCourse) {
-        if (isset($_GET['action'])) {
-                $action = intval($_GET['action']);
-        } else {
-                $action = 0;
+
+if (isset($_GET['action'])) {
+        $action = intval($_GET['action']);
+} else {
+        $action = 0;
+}
+if (isset($_REQUEST['toolStatus']) ) {
+        if(isset($_POST['toolStatActive'])) $tool_stat_active = $_POST['toolStatActive'];
+
+        if (isset($tool_stat_active)) {
+                $loopCount = count($tool_stat_active);
+        } else  {
+                $loopCount = 0;
         }
-	if (isset($_REQUEST['toolStatus']) ) {
-		if(isset($_POST['toolStatActive'])) $tool_stat_active = $_POST['toolStatActive'];
+        $i =0;
+        $publicTools = array();
+        $tool_id = null;
+        while ($i< $loopCount) {
+                if (!isset($tool_id)) {
+                        $tool_id = " (`id` = " . $tool_stat_active[$i] .")" ;
+                }
+                else {
+                        $tool_id .= " OR (`id` = " . $tool_stat_active[$i] .")" ;
+                }
+                $i++;
+        }
 
-		if (isset($tool_stat_active)) {
-			$loopCount = count($tool_stat_active);
-		} else  {
-			$loopCount = 0;
-		}
-		$i =0;
-		$publicTools = array();
-		$tool_id = null;
-		while ($i< $loopCount) {
-			if (!isset($tool_id)) {
-				$tool_id = " (`id` = " . $tool_stat_active[$i] .")" ;
-			}
-			else {
-				$tool_id .= " OR (`id` = " . $tool_stat_active[$i] .")" ;
-			}
-			$i++;
-		}
+        //get the state of the agenda tool and store it in a session var. It is used to insert or delete
+        //all events of the current lesson from the agenda table in the main db, used by eclass personalised
+        //This way, if a lesson's agenda is inactive, any contents it might have are not diplayed in the
+        //personalised interface
+        $prevAgendaStateSQL = "SELECT `visible` FROM `accueil`WHERE `id` = 1";
+        $res = db_query($prevAgendaStateSQL, $dbname);
+        $prevAgendaStateRow = mysql_fetch_row($res);
 
-		//get the state of the agenda tool and store it in a session var. It is used to insert or delete
-		//all events of the current lesson from the agenda table in the main db, used by eclass personalised
-		//This way, if a lesson's agenda is inactive, any contents it might have are not diplayed in the
-		//personalised interface
-		$prevAgendaStateSQL = "SELECT `visible` FROM `accueil`WHERE `id` = 1";
-		$res = db_query($prevAgendaStateSQL, $dbname);
-		$prevAgendaStateRow = mysql_fetch_row($res);
+        //reset all tools
+        db_query("UPDATE `accueil` SET `visible` = 0", $dbname);
 
-		//reset all tools
-		db_query("UPDATE `accueil` SET `visible` = 0", $dbname);
+        //and activate the ones the professor wants active, if any
+        if ($loopCount >0) {
+                db_query("UPDATE accueil SET visible = 1 WHERE $tool_id", $dbname);
+        }
+        db_query("UPDATE `accueil` SET `visible` = 2 WHERE define_var = 'MODULE_ID_UNITS'", $dbname);
 
-		//and activate the ones the professor wants active, if any
-		if ($loopCount >0) {
-			db_query("UPDATE accueil SET visible = 1 WHERE $tool_id", $dbname);
-		}
-		db_query("UPDATE `accueil` SET `visible` = 2 WHERE define_var = 'MODULE_ID_UNITS'", $dbname);
-		
-		if (isset($tool_stat_active) && is_array($tool_stat_active)) {
-			if (in_array(1, $tool_stat_active)) {
-				//if the agenda module is set to active
-				if ($prevAgendaStateRow[0] != 1) {
-					//and the agenda module was not active before, we need to parse the events to the main agenda table (main database)
-					$sql = 'SELECT id, titre, contenu, day, hour, lasting
-						FROM  agenda WHERE CONCAT(titre,contenu) != \'\'
-						AND DATE_FORMAT(day,\'%Y %m %d\') >= \''.date("Y m d").'\'';
+        if (isset($tool_stat_active) && is_array($tool_stat_active)) {
+                if (in_array(1, $tool_stat_active)) {
+                        //if the agenda module is set to active
+                        if ($prevAgendaStateRow[0] != 1) {
+                                //and the agenda module was not active before, we need to parse the events to the main agenda table (main database)
+                                $sql = 'SELECT id, titre, contenu, day, hour, lasting
+                                        FROM  agenda WHERE CONCAT(titre,contenu) != \'\'
+                                        AND DATE_FORMAT(day,\'%Y %m %d\') >= \''.date("Y m d").'\'';
 
-					//  Get all agenda events from each table & parse them to arrays
-					$mysql_query_result = db_query($sql, $currentCourseID);
+                                //  Get all agenda events from each table & parse them to arrays
+                                $mysql_query_result = db_query($sql, $currentCourseID);
 
-					$event_counter=0;
-					while ($myAgenda = mysql_fetch_array($mysql_query_result)) {
-						$lesson_agenda[$event_counter]['id']            = $myAgenda[0];
-						$lesson_agenda[$event_counter]['title']         = $myAgenda[1];
-						$lesson_agenda[$event_counter]['content']       = $myAgenda[2];
-						$lesson_agenda[$event_counter]['date']          = $myAgenda[3];
-						$lesson_agenda[$event_counter]['time']          = $myAgenda[4];
-						$lesson_agenda[$event_counter]['duree']         = $myAgenda[5];
-						$lesson_agenda[$event_counter]['lesson_code']   = $currentCourseID;
-						$event_counter++;
-					}
-
-					for ($j=0; $j <$event_counter; $j++) {
-						db_query("INSERT INTO agenda (lesson_event_id, titre, contenu, day, hour, lasting, lesson_code)
-          						VALUES ('".$lesson_agenda[$j]['id']."',
-                  				'".$lesson_agenda[$j]['title']."',
-                  				'".$lesson_agenda[$j]['content']."',
-                  				'".$lesson_agenda[$j]['date']."',
-                  				'".$lesson_agenda[$j]['time']."',
-                  				'".$lesson_agenda[$j]['duree']."',
-                  				'".$lesson_agenda[$j]['lesson_code']."'
-                  			)", $mysqlMainDb);
-					}
-				}
-			} else {
-				//if the agenda module is set to inactive
-				if ($prevAgendaStateRow[0] != 0) {
-					//and the agenda module was active before, we need to delete this lesson's events
-					//from the main agenda table (main database)
-
-					$perso_sql= "DELETE FROM $mysqlMainDb.agenda 
-						WHERE lesson_code= '$currentCourseID'";
-					db_query($perso_sql, $mysqlMainDb);
-				}
-			}
-		}
-	}
-
-
-        if (isset($_POST['delete'])) {
-                $delete = intval($_POST['delete']);
-		$sql = "SELECT lien, define_var FROM accueil WHERE `id` = ". $delete ." ";
-		$result = db_query($sql, $dbname);
-		while ($res = mysql_fetch_row($result)){
-			if($res[1] == "HTML_PAGE") {
-				$link = explode(" ", $res[0]);
-				$path = substr($link[0], 6);
-				$file2Delete = $webDir . $path;
-				@unlink($file2Delete);
-			}
-		}
-		$sql = "DELETE FROM `accueil` WHERE `id` = " . $_POST['delete'] ." ";
-		db_query($sql, $dbname);
-		unset($sql);
-		$tool_content .= "<p class=\"success\">$langLinkDeleted</p>";
-	}
-
-        if (isset($_POST['submit'])) {
-                // Add external link
-                if ($action == 2) {
-                        $link = isset($_POST['link'])?$_POST['link']:'';
-                        $name_link = isset($_POST['name_link'])?$_POST['name_link']:'';
-                        if ((trim($link) == 'http://') or (trim($link) == 'ftp://')
-                                        or empty($link) or empty($name_link))  {
-                                $tool_content .= "<p class='caution'>$langInvalidLink<br /><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;action=2'>$langHome</a></p><br />";
-                                draw($tool_content, 2);
-                                exit();
-                        }
-
-                        $res = db_query('SELECT MAX(`id`) FROM `accueil`', $dbname);
-                        list($mID) = mysql_fetch_row($res);
-                        if ($mID < 101) $mID = 101;
-                        else $mID = $mID + 1;
-                        $link = autoquote($link);
-                        $name_link = autoquote($name_link);
-                        db_query("INSERT INTO accueil VALUES ($mID, $name_link, $link, 'external_link', 1, 0, $link, '')");
-                        $tool_content .= "<p class='success'>$langLinkAdded</p>";
-                } elseif ($action == 1) { 
-                        $updir = "$webDir/courses/$currentCourseID/page"; //path to upload directory
-                        $size = "20971520"; //file size is 20M (1024x1024x20)
-                        if (isset($_FILES['file']['name']) && is_uploaded_file($_FILES['file']['tmp_name'])
-                            && ($_FILES['file']['size'] < "$size") and (!empty($_POST['link_name']))) {
-                            
-                                $tmpfile = $_FILES['file']['tmp_name'];
-                                $file_name = $_FILES['file']['name'];
-                                @copy("$tmpfile", "$updir/$file_name")
-                                        or die("<p>$langCouldNot</p></tr>");
-
-                                $sql = 'SELECT MAX(`id`) FROM `accueil` ';
-                                $res = db_query($sql,$dbname);
-                                while ($maxID = mysql_fetch_row($res)) {
-                                        $mID = $maxID[0];
+                                $event_counter=0;
+                                while ($myAgenda = mysql_fetch_array($mysql_query_result)) {
+                                        $lesson_agenda[$event_counter]['id']            = $myAgenda[0];
+                                        $lesson_agenda[$event_counter]['title']         = $myAgenda[1];
+                                        $lesson_agenda[$event_counter]['content']       = $myAgenda[2];
+                                        $lesson_agenda[$event_counter]['date']          = $myAgenda[3];
+                                        $lesson_agenda[$event_counter]['time']          = $myAgenda[4];
+                                        $lesson_agenda[$event_counter]['duree']         = $myAgenda[5];
+                                        $lesson_agenda[$event_counter]['lesson_code']   = $currentCourseID;
+                                        $event_counter++;
                                 }
 
-                                if($mID < 101) $mID = 101;
-                                else $mID = $mID+1;
+                                for ($j=0; $j <$event_counter; $j++) {
+                                        db_query("INSERT INTO agenda (lesson_event_id, titre, contenu, day, hour, lasting, lesson_code)
+                                                VALUES ('".$lesson_agenda[$j]['id']."',
+                                        '".$lesson_agenda[$j]['title']."',
+                                        '".$lesson_agenda[$j]['content']."',
+                                        '".$lesson_agenda[$j]['date']."',
+                                        '".$lesson_agenda[$j]['time']."',
+                                        '".$lesson_agenda[$j]['duree']."',
+                                        '".$lesson_agenda[$j]['lesson_code']."'
+                                )", $mysqlMainDb);
+                                }
+                        }
+                } else {
+                        //if the agenda module is set to inactive
+                        if ($prevAgendaStateRow[0] != 0) {
+                                //and the agenda module was active before, we need to delete this lesson's events
+                                //from the main agenda table (main database)
 
-                                $link_name = quote($_POST['link_name']);
-                                $lien = quote("../../courses/$currentCourse/page/$file_name");
-                                db_query("INSERT INTO accueil VALUES (
-                                                $mID,
-                                                $link_name,
-                                                $lien,
-                                                'external_link',
-                                                '1',
-                                                '0',
-                                                '',
-                                                'HTML_PAGE'
-                                                )", $currentCourse);
-                                $tool_content .= "  <p class='success'>$langOkSent</p>\n";
-                        } else {
-                                $tool_content .= "  <p class='caution'>$langTooBig<br />\n";
-                                $tool_content .= "  <a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;action=1'>$langHome</a></p>\n  <br />\n";
-                                draw($tool_content, 2);
+                                $perso_sql= "DELETE FROM $mysqlMainDb.agenda 
+                                        WHERE lesson_code= '$currentCourseID'";
+                                db_query($perso_sql, $mysqlMainDb);
                         }
                 }
-        } elseif ($action == 1) { // upload html file
-                $nameTools = $langUploadPage;
-                $navigation[]= array ("url"=>"course_tools.php?course=$code_cours", "name"=> $langToolManagement);
-                $helpTopic = 'Import';
-
-                $tool_content .= "\n 
-                    <form method='post' action='$_SERVER[PHP_SELF]?course=$code_cours&amp;submit=yes&action=1' enctype='multipart/form-data'>
-                      <div class='info'><p>$langExplanation_0</p>
-                      <p>$langExplanation_3</p></div>
-                  
-                      <fieldset>
-                      <legend>$langExplanation_1</legend> 
-					<table class='tbl'>
-                      <tr>
-                        <th width='170'>$langSendPage</th>
-                        <td><input type='file' name='file' size='35' accept='text/html'></td>
-                        <td class='right'>&nbsp;</td>
-                      </tr>
-                      <tr>
-                        <th>$langPgTitle</th>
-                        <td><input type='Text' name='link_name' size='40'></td>
-                        <td class='right smaller'>$langExplanation_2</td>
-                      </tr>
-                      <tr>
-                        <th>&nbsp;</th>
-                        <td colspan='2' class='right'><input type='Submit' name='submit' value='$langAdd'></td>
-                      </tr>
-                      </table>
-                      </fieldset>
-
-                    </form>
-					<div class='right smaller'>$langNoticeExpl</div>'";
-                draw($tool_content, 2);
-                exit();
-        } elseif ($action == 2) { // add external link
-                $nameTools = $langAddExtLink;
-                $navigation[]= array ('url' => 'course_tools.php?course='.$code_cours, 'name' => $langToolManagement);
-                $helpTopic = 'Module';
-                $tool_content .=  "
-                  <form method='post' action='$_SERVER[PHP_SELF]?course=$code_cours&amp;action=2'>
-                    <fieldset>
-                    <legend>$langExplanation_4</legend>
-                    <table width='100%' class='tbl'>
-                    <tr>
-                      <th>$langLink:</th>
-                      <td><input type='text' name='link' size='50' value='http://'></td>
-                      <td>&nbsp;</td>
-                    </tr>
-                    <tr>
-                      <th>$langName:</th>
-                      <td><input type='Text' name='name_link' size='50'></td>
-                      <td>&nbsp;</td>
-                    </tr>
-                    <tr>
-                      <th>&nbsp;</th>
-                      <td><input type='submit' name='submit' value='$langAdd'></td>
-                      <td>&nbsp;</td>
-                    </tr>
-                    </table>
-                    </fieldset>
-                  </form>";
-                draw($tool_content, 2);
-                exit();
         }
+}
 
-	$toolArr = getSideMenu(2);
 
-	if (is_array($toolArr)) {
-		$externalLinks = array(); // array used to populate the external tools table afterwards
-		for ($i = 0; $i <= 1; $i++){
-                        $toolSelection[$i] = '';
-			$numOfTools = count($toolArr[$i][1]);
-			for ($j = 0; $j < $numOfTools; $j++) {
-                                if ($toolArr[$i][4][$j] < 100) {
-                                        $class = '';
-                                } else {
-                                        // External links that are not admin tools
-                                        $class = ' class="emphasised"';
-                                        array_push($externalLinks,
-                                                   array('text' => $toolArr[$i][1][$j],
-                                                         'id' => $toolArr[$i][4][$j]));
-                                } 
-                                $toolSelection[$i] .= "<option$class value='" . $toolArr[$i][4][$j] . "'>" .
-                                                      $toolArr[$i][1][$j] . "</option>\n";
+if (isset($_POST['delete'])) {
+        $delete = intval($_POST['delete']);
+        $sql = "SELECT lien, define_var FROM accueil WHERE `id` = ". $delete ." ";
+        $result = db_query($sql, $dbname);
+        while ($res = mysql_fetch_row($result)){
+                if($res[1] == "HTML_PAGE") {
+                        $link = explode(" ", $res[0]);
+                        $path = substr($link[0], 6);
+                        $file2Delete = $webDir . $path;
+                        @unlink($file2Delete);
+                }
+        }
+        $sql = "DELETE FROM `accueil` WHERE `id` = " . $_POST['delete'] ." ";
+        db_query($sql, $dbname);
+        unset($sql);
+        $tool_content .= "<p class=\"success\">$langLinkDeleted</p>";
+}
 
-			}
-		}
-	}
+if (isset($_POST['submit'])) {
+        // Add external link
+        if ($action == 2) {
+                $link = isset($_POST['link'])?$_POST['link']:'';
+                $name_link = isset($_POST['name_link'])?$_POST['name_link']:'';
+                if ((trim($link) == 'http://') or (trim($link) == 'ftp://')
+                                or empty($link) or empty($name_link))  {
+                        $tool_content .= "<p class='caution'>$langInvalidLink<br /><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;action=2'>$langHome</a></p><br />";
+                        draw($tool_content, 2);
+                        exit();
+                }
 
-	//output tool content
-	$tool_content .= "
-	<div id='operations_container'>
-	  <ul id='opslist'>
-	    <li><a href='course_tools.php?course=$code_cours&amp;action=1'>$langUploadPage</a></li>
-	    <li><a href='course_tools.php?course=$code_cours&amp;action=2'>$langAddExtLink</a></li>
-	  </ul>
-	</div>";
+                $res = db_query('SELECT MAX(`id`) FROM `accueil`', $dbname);
+                list($mID) = mysql_fetch_row($res);
+                if ($mID < 101) $mID = 101;
+                else $mID = $mID + 1;
+                $link = autoquote($link);
+                $name_link = autoquote($name_link);
+                db_query("INSERT INTO accueil VALUES ($mID, $name_link, $link, 'external_link', 1, 0, $link, '')");
+                $tool_content .= "<p class='success'>$langLinkAdded</p>";
+        } elseif ($action == 1) { 
+                $updir = "$webDir/courses/$currentCourseID/page"; //path to upload directory
+                $size = "20971520"; //file size is 20M (1024x1024x20)
+                if (isset($_FILES['file']['name']) && is_uploaded_file($_FILES['file']['tmp_name'])
+                    && ($_FILES['file']['size'] < "$size") and (!empty($_POST['link_name']))) {
 
-	$tool_content .= <<<tForm
+                        $tmpfile = $_FILES['file']['tmp_name'];
+                        $file_name = $_FILES['file']['name'];
+                        @copy("$tmpfile", "$updir/$file_name")
+                                or die("<p>$langCouldNot</p></tr>");
+
+                        $sql = 'SELECT MAX(`id`) FROM `accueil` ';
+                        $res = db_query($sql,$dbname);
+                        while ($maxID = mysql_fetch_row($res)) {
+                                $mID = $maxID[0];
+                        }
+
+                        if($mID < 101) $mID = 101;
+                        else $mID = $mID+1;
+
+                        $link_name = quote($_POST['link_name']);
+                        $lien = quote("../../courses/$currentCourse/page/$file_name");
+                        db_query("INSERT INTO accueil VALUES (
+                                        $mID,
+                                        $link_name,
+                                        $lien,
+                                        'external_link',
+                                        '1',
+                                        '0',
+                                        '',
+                                        'HTML_PAGE'
+                                        )", $currentCourse);
+                        $tool_content .= "  <p class='success'>$langOkSent</p>\n";
+                } else {
+                        $tool_content .= "  <p class='caution'>$langTooBig<br />\n";
+                        $tool_content .= "  <a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;action=1'>$langHome</a></p>\n  <br />\n";
+                        draw($tool_content, 2);
+                }
+        }
+} elseif ($action == 1) { // upload html file
+        $nameTools = $langUploadPage;
+        $navigation[]= array ("url"=>"course_tools.php?course=$code_cours", "name"=> $langToolManagement);
+        $helpTopic = 'Import';
+
+        $tool_content .= "\n 
+            <form method='post' action='$_SERVER[PHP_SELF]?course=$code_cours&amp;submit=yes&action=1' enctype='multipart/form-data'>
+              <div class='info'><p>$langExplanation_0</p>
+              <p>$langExplanation_3</p></div>
+
+              <fieldset>
+              <legend>$langExplanation_1</legend> 
+                                <table class='tbl'>
+              <tr>
+                <th width='170'>$langSendPage</th>
+                <td><input type='file' name='file' size='35' accept='text/html'></td>
+                <td class='right'>&nbsp;</td>
+              </tr>
+              <tr>
+                <th>$langPgTitle</th>
+                <td><input type='Text' name='link_name' size='40'></td>
+                <td class='right smaller'>$langExplanation_2</td>
+              </tr>
+              <tr>
+                <th>&nbsp;</th>
+                <td colspan='2' class='right'><input type='Submit' name='submit' value='$langAdd'></td>
+              </tr>
+              </table>
+              </fieldset>
+
+            </form>
+                                <div class='right smaller'>$langNoticeExpl</div>'";
+        draw($tool_content, 2);
+        exit();
+} elseif ($action == 2) { // add external link
+        $nameTools = $langAddExtLink;
+        $navigation[]= array ('url' => 'course_tools.php?course='.$code_cours, 'name' => $langToolManagement);
+        $helpTopic = 'Module';
+        $tool_content .=  "
+          <form method='post' action='$_SERVER[PHP_SELF]?course=$code_cours&amp;action=2'>
+            <fieldset>
+            <legend>$langExplanation_4</legend>
+            <table width='100%' class='tbl'>
+            <tr>
+              <th>$langLink:</th>
+              <td><input type='text' name='link' size='50' value='http://'></td>
+              <td>&nbsp;</td>
+            </tr>
+            <tr>
+              <th>$langName:</th>
+              <td><input type='Text' name='name_link' size='50'></td>
+              <td>&nbsp;</td>
+            </tr>
+            <tr>
+              <th>&nbsp;</th>
+              <td><input type='submit' name='submit' value='$langAdd'></td>
+              <td>&nbsp;</td>
+            </tr>
+            </table>
+            </fieldset>
+          </form>";
+        draw($tool_content, 2);
+        exit();
+}
+
+$toolArr = getSideMenu(2);
+
+if (is_array($toolArr)) {
+        $externalLinks = array(); // array used to populate the external tools table afterwards
+        for ($i = 0; $i <= 1; $i++){
+                $toolSelection[$i] = '';
+                $numOfTools = count($toolArr[$i][1]);
+                for ($j = 0; $j < $numOfTools; $j++) {
+                        if ($toolArr[$i][4][$j] < 100) {
+                                $class = '';
+                        } else {
+                                // External links that are not admin tools
+                                $class = ' class="emphasised"';
+                                array_push($externalLinks,
+                                           array('text' => $toolArr[$i][1][$j],
+                                                 'id' => $toolArr[$i][4][$j]));
+                        } 
+                        $toolSelection[$i] .= "<option$class value='" . $toolArr[$i][4][$j] . "'>" .
+                                              $toolArr[$i][1][$j] . "</option>\n";
+
+                }
+        }
+}
+
+//output tool content
+$tool_content .= "
+<div id='operations_container'>
+  <ul id='opslist'>
+    <li><a href='course_tools.php?course=$code_cours&amp;action=1'>$langUploadPage</a></li>
+    <li><a href='course_tools.php?course=$code_cours&amp;action=2'>$langAddExtLink</a></li>
+  </ul>
+</div>";
+
+$tool_content .= <<<tForm
 <form name="courseTools" action="$_SERVER[PHP_SELF]?course=$code_cours" method="post" enctype="multipart/form-data">
-  <table class="tbl_border" width="100%">
-  <tr>
-    <th width="45%" class="center">$langInactiveTools</th>
-    <th width="10%" class="center">$langMove</th>
-    <th width="45%" class="center">$langActiveTools</th>
-  </tr>
-  <tr>
-    <td class="center">
-        <select class='invisible_alt' name="toolStatInactive[]" id='inactive_box' size='17' multiple>\n$toolSelection[1]</select>
-    </td>
-    <td class="center">
-        <input type="button" onClick="move('inactive_box','active_box')" value="   >>   " /><br/>
-        <input type="button" onClick="move('active_box','inactive_box')" value="   <<   " />
-    </td>
-    <td class="center">
-        <select name="toolStatActive[]" id='active_box' size='17' multiple>\n$toolSelection[0]</select>
-    </td>
-  </tr>
-  <tr>
-    <td>&nbsp;</td>
-    <td class="center">
-        <input type=submit value="$langSubmitChanges" name="toolStatus" onClick="selectAll('active_box',true)" />
-    </td>
-    <td>&nbsp;</td>
-  </tr>
-  </table>
+<table class="tbl_border" width="100%">
+<tr>
+<th width="45%" class="center">$langInactiveTools</th>
+<th width="10%" class="center">$langMove</th>
+<th width="45%" class="center">$langActiveTools</th>
+</tr>
+<tr>
+<td class="center">
+<select class='invisible_alt' name="toolStatInactive[]" id='inactive_box' size='17' multiple>\n$toolSelection[1]</select>
+</td>
+<td class="center">
+<input type="button" onClick="move('inactive_box','active_box')" value="   >>   " /><br/>
+<input type="button" onClick="move('active_box','inactive_box')" value="   <<   " />
+</td>
+<td class="center">
+<select name="toolStatActive[]" id='active_box' size='17' multiple>\n$toolSelection[0]</select>
+</td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td class="center">
+<input type=submit value="$langSubmitChanges" name="toolStatus" onClick="selectAll('active_box',true)" />
+</td>
+<td>&nbsp;</td>
+</tr>
+</table>
 </form>
 tForm;
 
-	$extToolsCount = count($externalLinks) ;
-	if ($extToolsCount > 0)  {
-		// show table to edit/delete external links
-                $tool_content .= "
-                <br/>
-                        <table class='tbl_alt' width='100%'>
-                        <tr>
-                          <th>&nbsp;</th>
-                          <th colspan='2'>$langOperations</th>
-                        </tr>
-                        <tr>
-                          <th>&nbsp;</th>
-                          <th><div align='left'>$langTitle</div></th>
-                          <th width='20'>$langDelete</th>
-                        </tr>\n";
-		for ($i=0; $i < $extToolsCount; $i++) {
-			if ($i % 2==0) {
-				$tool_content .= "                        <tr class='even'>\n";
-			} elseif ($i % 2 == 1) {
-				$tool_content .= "                        <tr class='odd'>\n";
-			}
-			$tool_content .= "                          <th width='1'>
-                                <img src='$themeimg/external_link_on.png' title='$langTitle' /></th>
-                                <td class='left'>{$externalLinks[$i]['text']}</td>
-                                <td align='center'><form method='post' action='course_tools.php?course=$code_cours'>
-                                   <input type='hidden' name='delete' value='{$externalLinks[$i]['id']}' />
-                                   <input type='image' src='$themeimg/delete.png' name='delete_button' 
-                                          onClick=\"return confirmation('" .
-                                                    js_escape("$langDeleteLink {$externalLinks[$i]['text']}?") .
-                                               "');\" title='$langDelete' /></form></td>
-                             </tr>\n";
+$extToolsCount = count($externalLinks) ;
+if ($extToolsCount > 0)  {
+        // show table to edit/delete external links
+        $tool_content .= "
+        <br/>
+                <table class='tbl_alt' width='100%'>
+                <tr>
+                  <th>&nbsp;</th>
+                  <th colspan='2'>$langOperations</th>
+                </tr>
+                <tr>
+                  <th>&nbsp;</th>
+                  <th><div align='left'>$langTitle</div></th>
+                  <th width='20'>$langDelete</th>
+                </tr>\n";
+        for ($i=0; $i < $extToolsCount; $i++) {
+                if ($i % 2==0) {
+                        $tool_content .= "                        <tr class='even'>\n";
+                } elseif ($i % 2 == 1) {
+                        $tool_content .= "                        <tr class='odd'>\n";
                 }
-		$tool_content .= "                        </table>\n";
-	}
-        draw($tool_content, 2, null, $head_content);
+                $tool_content .= "                          <th width='1'>
+                        <img src='$themeimg/external_link_on.png' title='$langTitle' /></th>
+                        <td class='left'>{$externalLinks[$i]['text']}</td>
+                        <td align='center'><form method='post' action='course_tools.php?course=$code_cours'>
+                           <input type='hidden' name='delete' value='{$externalLinks[$i]['id']}' />
+                           <input type='image' src='$themeimg/delete.png' name='delete_button' 
+                                  onClick=\"return confirmation('" .
+                                            js_escape("$langDeleteLink {$externalLinks[$i]['text']}?") .
+                                       "');\" title='$langDelete' /></form></td>
+                     </tr>\n";
+        }
+        $tool_content .= "                        </table>\n";
 }
+draw($tool_content, 2, null, $head_content);
+

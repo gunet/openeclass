@@ -57,7 +57,7 @@ if (isset($_GET['path_id']) && !empty($_GET['path_id']))
 if (isset($_GET['module_id']) && !empty($_GET['module_id']))
 	$_SESSION['lp_module_id'] = intval($_GET['module_id']);
 
-check_LPM_validity($is_adminOfCourse, $code_cours, true);
+check_LPM_validity($is_editor, $code_cours, true);
 
 $nameTools = $langPreview;
 if (!add_units_navigation()) {

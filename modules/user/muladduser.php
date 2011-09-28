@@ -20,6 +20,7 @@
 
 
 $require_current_course = TRUE;
+$require_course_admin = TRUE;
 $require_help = TRUE;
 $helpTopic = 'User';
 
@@ -28,60 +29,55 @@ include '../../include/baseTheme.php';
 $nameTools = $langAddManyUsers;
 $navigation[] = array ("url"=>"user.php?course=$code_cours", "name"=> $langAdminUsers);
 
-$tool_content = "";
+$tool_content .= "
+<form method='post' action='".$_SERVER['PHP_SELF']."?course=$code_cours' enctype='multipart/form-data'>";
+$tool_content .= "
+<fieldset>
+<legend>$langUsersData</legend>
+<table width='100%' class='tbl'>
+<tr>
+  <th width='120' class='left'>$langAskUserFile:</th>
+  <td><input type='file' name='users_file'></td>
+  <td class='smaller'>$langAskManyUsers</td>
+</tr>
+<tr>
+  <th colspan='3' class='right'><input type='submit' value='$langAdd'></th>
+  </tr>
 
-// IF PROF ONLY
-if($is_adminOfCourse) {
-    $tool_content .= "
-    <form method='post' action='".$_SERVER['PHP_SELF']."?course=$code_cours' enctype='multipart/form-data'>";
-    $tool_content .= "
-    <fieldset>
-    <legend>$langUsersData</legend>
-    <table width='100%' class='tbl'>
-    <tr>
-      <th width='120' class='left'>$langAskUserFile:</th>
-      <td><input type='file' name='users_file'></td>
-      <td class='smaller'>$langAskManyUsers</td>
-    </tr>
-    <tr>
-      <th colspan='3' class='right'><input type='submit' value='$langAdd'></th>
-      </tr>
+</table>
 
-    </table>
+</fieldset>
+</form>
+<p class='noteit'>$langAskManyUsers1<br />$langAskManyUsers2</p>";
 
-    </fieldset>
-    </form>
-    <p class='noteit'>$langAskManyUsers1<br />$langAskManyUsers2</p>";
+mysql_select_db($mysqlMainDb);
 
-    mysql_select_db($mysqlMainDb);
-    
-    if (isset($_FILES['users_file']) && is_uploaded_file($_FILES['users_file']['tmp_name'])) {
-	$tmpusers = trim($_FILES['users_file']['tmp_name']);
-	$tool_content .= "<table width=100% class='tbl_alt'>
-	    <tr><th>$langUsers</th><th>$langResult</th>";
-	$f = fopen($tmpusers,"r");
-	while (!feof($f)) {
-	    $uname = trim(fgets($f,1024));
-	    if (!$uname) continue;
-	    if (!check_uname_line($uname)) {
-		    $tool_content .= "<tr><td colspan=\"2\"><div class='alert1'>$langFileNotAllowed</div></td></tr>\n";
-		    break;
-	    }
-	    $result = adduser($uname, $cours_id);
-	    $tool_content .= "<tr><td>$uname</td><td>";
-	    if ($result == -1) {
-		    $tool_content .= $langUserNoExist;
-	    } elseif ($result == -2) {
-		    $tool_content .= $langUserAlready;
-	    } else {
-		    $tool_content .= $langTheU.$langAdded;
-	    }
-	    $tool_content .= "</td></tr>\n";
-	}
-	$tool_content .= "</table>\n";
-	fclose($f);
+if (isset($_FILES['users_file']) && is_uploaded_file($_FILES['users_file']['tmp_name'])) {
+    $tmpusers = trim($_FILES['users_file']['tmp_name']);
+    $tool_content .= "<table width=100% class='tbl_alt'>
+        <tr><th>$langUsers</th><th>$langResult</th>";
+    $f = fopen($tmpusers,"r");
+    while (!feof($f)) {
+        $uname = trim(fgets($f,1024));
+        if (!$uname) continue;
+        if (!check_uname_line($uname)) {
+                $tool_content .= "<tr><td colspan=\"2\"><div class='alert1'>$langFileNotAllowed</div></td></tr>\n";
+                break;
+        }
+        $result = adduser($uname, $cours_id);
+        $tool_content .= "<tr><td>$uname</td><td>";
+        if ($result == -1) {
+                $tool_content .= $langUserNoExist;
+        } elseif ($result == -2) {
+                $tool_content .= $langUserAlready;
+        } else {
+                $tool_content .= $langTheU.$langAdded;
+        }
+        $tool_content .= "</td></tr>\n";
     }
-} // end
+    $tool_content .= "</table>\n";
+    fclose($f);
+}
 
 draw($tool_content, 2);
 

@@ -79,7 +79,7 @@ if ( isset($_GET['path_id']) && $_GET['path_id'] > 0 )
 }
 
 // get user out of here if he is not allowed to edit
-if ( !$is_adminOfCourse )
+if ( !$is_editor )
 {
     if ( isset($_SESSION['path_id']) )
     {
@@ -542,7 +542,7 @@ foreach ($flatElementList as $module)
     //-------------visibility-----------------------------
     if ( $module['visibility'] == 'HIDE' )
     {
-        if ($is_adminOfCourse)
+        if ($is_editor)
         {
             $style=" class=\"invisible\"";
             $image_bullet = "on";

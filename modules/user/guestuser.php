@@ -19,6 +19,7 @@
  * ======================================================================== */
 
 $require_current_course = TRUE;
+$require_course_admin = TRUE;
 $require_help = TRUE;
 $helpTopic = 'Guest';
 include '../../include/baseTheme.php';
@@ -28,65 +29,61 @@ $navigation[] = array ("url" => "user.php?course=$code_cours", "name" => $langAd
 
 $default_guest_username = $langGuestUserName . $currentCourseID;
 
-$tool_content = "";
-// IF PROF ONLY
-if ($is_adminOfCourse) {
-        if (isset($_POST['submit'])) {
-                $password = autounquote($_POST['guestpassword']);
-                createguest($default_guest_username, $cours_id, $password);
-                $tool_content .= "<p class='success'>$langGuestSuccess</p>" .
-                                 "<a href='user.php?course=$code_cours'>$langBackUser</a>";
+if (isset($_POST['submit'])) {
+        $password = autounquote($_POST['guestpassword']);
+        createguest($default_guest_username, $cours_id, $password);
+        $tool_content .= "<p class='success'>$langGuestSuccess</p>" .
+                         "<a href='user.php?course=$code_cours'>$langBackUser</a>";
+} else {
+        $guest_info = guestinfo($cours_id);
+        if ($guest_info) {
+                $tool_content .= "
+                        <p class='caution'>$langGuestExist<br />
+                        <a href='user.php?course=$code_cours'>$langBackUser</a></p>";
+                $submit_label = $langModify;
         } else {
-                $guest_info = guestinfo($cours_id);
-                if ($guest_info) {
-                        $tool_content .= "
-                                <p class='caution'>$langGuestExist<br />
-                                <a href='user.php?course=$code_cours'>$langBackUser</a></p>";
-                        $submit_label = $langModify;
-                } else {
-                        $guest_info = array('nom' => $langGuestSurname,
-                                            'prenom' => $langGuestName,
-                                            'username' => $default_guest_username);
-                        $submit_label = $langAdd;
-                }
-                $tool_content .= "<form method='post' action='$_SERVER[PHP_SELF]?course=$code_cours'>
-                    <fieldset>
-                    <legend>$langUserData</legend>
-                <table width='100%' class='tbl'>
-                <tr>
-                <th class='left'>$langName:</th>
-                <td>$guest_info[prenom]</td>
-                <td>&nbsp;</td>
-                </tr>
-                <tr>
-                <th class='left'>$langSurname:</th>
-                <td>$guest_info[nom]</td>
-                <td>&nbsp;</td>
-                </tr>
-                <tr>
-                <th class='left'>$langUsername:</th>
-                <td>$guest_info[username]</td>
-                <td>&nbsp;</td>
-                </tr>
-                <tr>
-                <th class='left'>$langPass:</th>
-                <td><input type='text' name='guestpassword' value='' class='FormData_InputText' /></td>
-                <td class='smaller'>$langAskGuest</td>
-                </tr>
-                <tr>
-                <th>&nbsp;</th>
-                <td class='right'>&nbsp;</td>
-                <td class='right'>
-                  <input type='submit' name='submit' value='$submit_label' />
-                </td>
-                </tr>
-                </table>
-                
-                </fieldset>
-                </form>";
+                $guest_info = array('nom' => $langGuestSurname,
+                                    'prenom' => $langGuestName,
+                                    'username' => $default_guest_username);
+                $submit_label = $langAdd;
         }
-        draw($tool_content, 2);
+        $tool_content .= "<form method='post' action='$_SERVER[PHP_SELF]?course=$code_cours'>
+            <fieldset>
+            <legend>$langUserData</legend>
+        <table width='100%' class='tbl'>
+        <tr>
+        <th class='left'>$langName:</th>
+        <td>$guest_info[prenom]</td>
+        <td>&nbsp;</td>
+        </tr>
+        <tr>
+        <th class='left'>$langSurname:</th>
+        <td>$guest_info[nom]</td>
+        <td>&nbsp;</td>
+        </tr>
+        <tr>
+        <th class='left'>$langUsername:</th>
+        <td>$guest_info[username]</td>
+        <td>&nbsp;</td>
+        </tr>
+        <tr>
+        <th class='left'>$langPass:</th>
+        <td><input type='text' name='guestpassword' value='' class='FormData_InputText' /></td>
+        <td class='smaller'>$langAskGuest</td>
+        </tr>
+        <tr>
+        <th>&nbsp;</th>
+        <td class='right'>&nbsp;</td>
+        <td class='right'>
+          <input type='submit' name='submit' value='$submit_label' />
+        </td>
+        </tr>
+        </table>
+        </fieldset>
+        </form>";
 }
+draw($tool_content, 2);
+
 
 // Create guest account or update password if it already exists
 function createguest($username, $cours_id, $password)

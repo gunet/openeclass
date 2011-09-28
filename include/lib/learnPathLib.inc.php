@@ -74,7 +74,7 @@ define ( 'LEARNINGPATHMODULE_', 4 );
  */
 function commentBox($type, $mode)
 {
-    global $is_adminOfCourse, $themeimg, $langModify, $langOk, $langErrorNameAlreadyExists,
+    global $is_editor, $themeimg, $langModify, $langOk, $langErrorNameAlreadyExists,
            $langAdd, $langConfirmYourChoice, $langDefaultLearningPathComment,
            $langDefaultModuleComment, $langDefaultModuleAddedComment, $langDelete, $code_cours;
 
@@ -122,7 +122,7 @@ function commentBox($type, $mode)
     // allow to chose between
     // - update and show the comment and the pencil and the delete cross (UPDATE_)
     // - update and nothing displayed after form sent (UPDATENOTSHOWN_)
-    if ( ( $mode == UPDATE_ || $mode == UPDATENOTSHOWN_ ) && $is_adminOfCourse )
+    if ( ( $mode == UPDATE_ || $mode == UPDATENOTSHOWN_ ) && $is_editor )
     {
         if ( isset($_POST['insertCommentBox']) )
         {
@@ -156,7 +156,7 @@ function commentBox($type, $mode)
     }
 
     // delete mode
-    if ( $mode == DELETE_ && $is_adminOfCourse)
+    if ( $mode == DELETE_ && $is_editor)
     {
         $sql =  "UPDATE `" . $tbl_name . "`
                  SET `" . $col_name . "` = ''
@@ -185,12 +185,12 @@ function commentBox($type, $mode)
         }
 
         // display nothing if this is default comment and not an admin
-        if ( ($currentComment == $defaultTxt) && !$is_adminOfCourse ) return $output;
+        if ( ($currentComment == $defaultTxt) && !$is_editor ) return $output;
 
         if ( empty($currentComment) )
         {
             // if no comment and user is admin : display link to add a comment
-            if ( $is_adminOfCourse )
+            if ( $is_editor )
             {
                 $output .= '' . "\n"
                 .    '<a href="' . $_SERVER['PHP_SELF'] . '?course='.$code_cours.'&amp;cmd=update' . $col_name . '">' . "\n"
@@ -203,7 +203,7 @@ function commentBox($type, $mode)
             // display comment
             $output .= $currentComment;
             // display edit and delete links if user as the right to see it
-            if ( $is_adminOfCourse )
+            if ( $is_editor )
             {
                 $output .= '&nbsp;&nbsp;&nbsp;<a href="' . $_SERVER['PHP_SELF'] . '?course='.$code_cours.'&amp;cmd=update' . $col_name . '">' . "\n"
                 .    "<img src='$themeimg/edit.png' alt='$langModify' title='$langModify' />"
@@ -235,7 +235,7 @@ function nameBox($type, $mode, $formlabel = FALSE)
     $tbl_lp_module               = "lp_module";
 
     // globals
-    global $is_adminOfCourse, $themeimg;
+    global $is_editor, $themeimg;
     global $urlAppend, $langLearningPath1;
     global $langModify, $langOk, $langErrorNameAlreadyExists, $code_cours;
 
@@ -259,7 +259,7 @@ function nameBox($type, $mode, $formlabel = FALSE)
     }
 
     // update mode
-    if ( $mode == UPDATE_ && $is_adminOfCourse)
+    if ( $mode == UPDATE_ && $is_editor)
     {
 
         if ( isset($_POST['newName']) && !empty($_POST['newName']) )
@@ -331,7 +331,7 @@ function nameBox($type, $mode, $formlabel = FALSE)
         //$output .= '<strong>'
         $output .=  $currentName;
 
-        if ($is_adminOfCourse)
+        if ($is_editor)
             $output .= '&nbsp;&nbsp;&nbsp;<a href="' . $_SERVER['PHP_SELF'] . '?course='.$code_cours.'&amp;cmd=updateName">'
             .    "<img src='$themeimg/edit.png' alt='$langModify' title='$langModify' /></a>\n";
     }
@@ -747,7 +747,7 @@ function display_my_exercises($dialogBox, $style)
 
 function display_my_documents($dialogBox, $style)
 {
-    global $is_adminOfCourse;
+    global $is_editor;
     global $courseDir;
     global $baseWorkDir;
     global $curDirName;
@@ -843,7 +843,7 @@ function display_my_documents($dialogBox, $style)
 
             if ($fileList['visibility'][$fileKey] == "i")
             {
-                if ($is_adminOfCourse)
+                if ($is_editor)
                 {
                     $style = ' class="invisible"';
                 }
@@ -1962,14 +1962,14 @@ function get_limited_list($sql, $limiter)
  * Path Module can be chosen via GET arguments, we are in danger of people 
  * accessing stuff they shouldn't by guessing ids.
  * 
- * @param boolean $is_adminOfCourse contains whether the current user is admin of the current course
+ * @param boolean $is_editor contains whether the current user is admin of the current course
  * @param string $code_cours contains the current course id
  * @param boolean $extraQuery contains whether the extra check will be made or not
  * @param boolean $extraDepth contains how far we are from the redirected location
  * @author Thanos Kyritsis <atkyritsis@upnet.gr>
  */
 
-function check_LPM_validity($is_adminOfCourse, $code_cours, $extraQuery = false, $extraDepth = false) {
+function check_LPM_validity($is_editor, $code_cours, $extraQuery = false, $extraDepth = false) {
 	
 	$depth = ($extraDepth) ? "../" : "./" ;
 	
@@ -1982,13 +1982,13 @@ function check_LPM_validity($is_adminOfCourse, $code_cours, $extraQuery = false,
 		$q = db_query("SELECT visibility FROM lp_learnPath WHERE learnPath_id = '".(int)$_SESSION['path_id']."'", $code_cours);
 		$lp = mysql_fetch_array($q);
 		
-		if ( !$is_adminOfCourse && $lp['visibility'] == "HIDE" ) {
+		if ( !$is_editor && $lp['visibility'] == "HIDE" ) {
 			// if the learning path is invisible, don't allow users in it
 			header("Location: ".$depth."learningPathList.php?course=$code_cours");
 			exit();
 		}
 		
-		if (!$is_adminOfCourse) {
+		if (!$is_editor) {
 			$lps = db_query_fetch_all("SELECT `learnPath_id`, `lock` FROM lp_learnPath ORDER BY `rank`", $code_cours);
 			if ($lps != false) {
 				$block_met = false;
@@ -2011,13 +2011,13 @@ function check_LPM_validity($is_adminOfCourse, $code_cours, $extraQuery = false,
 		
 	$q2 = db_query("SELECT visibility FROM lp_rel_learnPath_module WHERE learnPath_id = '".(int)$_SESSION['path_id']."' AND module_id = '".(int)$_SESSION['lp_module_id']."'", $code_cours);
 	$lpm = mysql_fetch_array($q2);
-	if (mysql_num_rows($q2) <= 0 || (!$is_adminOfCourse && $lpm['visibility'] == "HIDE")) {
+	if (mysql_num_rows($q2) <= 0 || (!$is_editor && $lpm['visibility'] == "HIDE")) {
 		// if the combination path/module is invalid, don't allow users in it
 		header("Location: ".$depth."learningPathList.php?course=$code_cours");
 		exit();
 	}
 	
-	if (!$is_adminOfCourse) {
+	if (!$is_editor) {
 		$lpms = db_query_fetch_all("SELECT `module_id`, `lock` FROM lp_rel_learnPath_module WHERE `learnPath_id` = '".(int)$_SESSION['path_id']."' ORDER BY `rank`", $code_cours);
 		if ($lpms != false) {
 			$block_met = false;

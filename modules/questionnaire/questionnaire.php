@@ -73,7 +73,7 @@ if (isset($_GET['delete']) and $_GET['delete'] == 'yes')  {
 	exit();
 }
 
-if ($is_adminOfCourse) {
+if ($is_editor) {
 	$tool_content .= "
         <div id=\"operations_container\">
 	  <ul id=\"opslist\">
@@ -93,7 +93,7 @@ draw($tool_content, 2, null, $head_content);
 function printPolls() {
         global $tool_content, $currentCourse, $code_cours, $langCreatePoll,
                $langPollsActive, $langTitle, $langPollCreator, $langPollCreation,
-               $langPollStart, $langPollEnd, $langPollNone, $is_adminOfCourse,
+               $langPollStart, $langPollEnd, $langPollNone, $is_editor,
                $themeimg, $mysqlMainDb, $langEdit, $langDelete, $langActions,
                $langDeactivate, $langPollsInactive, $langPollHasEnded, $langActivate, 
                $langParticipate, $langVisible, $user_id, $langHasParticipated,
@@ -122,7 +122,7 @@ function printPolls() {
 			<th width='70' class='center'>$langPollStart</th>
 			<th width='70' class='center'>$langPollEnd</th>";
 		
-                if ($is_adminOfCourse) {
+                if ($is_editor) {
                         $tool_content .= "<th width='70'>$langActions</th>";
                 } else {
                         $tool_content .= "<th>$langParticipate</th>";
@@ -134,7 +134,7 @@ function printPolls() {
                 while ($thepoll = mysql_fetch_array($active_polls)) {
                         $visibility = $thepoll["active"];
 		
-                        if (($visibility) or ($is_adminOfCourse)) {
+                        if (($visibility) or ($is_editor)) {
                                 if ($visibility) {
                                         if ($k%2 == 0) {
                                                 $visibility_css = " class=\"even\"";
@@ -178,7 +178,7 @@ function printPolls() {
                                 } else {
                                         $poll_ended = 1;
                                 }
-                                if ($is_adminOfCourse) {
+                                if ($is_editor) {
                                         $tool_content .= "
                         <td width='16'><img src='$themeimg/$arrow_png.png' title='bullet' /></td>
                         <td><a href='pollresults.php?course=$code_cours&amp;pid=$pid'>$thepoll[name]</a>";
@@ -200,7 +200,7 @@ function printPolls() {
                         <td class='center'>".nice_format(date("Y-m-d", strtotime($thepoll["start_date"])))."</td>";
                                 $tool_content .= "
                         <td class='center'>".nice_format(date("Y-m-d", strtotime($thepoll["end_date"])))."</td>";
-                                if ($is_adminOfCourse)  {
+                                if ($is_editor)  {
                                         $tool_content .= "
                         <td class='center'><a href='addpoll.php?course=$code_cours&amp;edit=yes&amp;pid=$pid'><img src='$themeimg/edit.png' title='$langEdit' border='0' /></a>&nbsp;<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;delete=yes&amp;pid=$pid' onClick=\"return confirmation('" . js_escape($langConfirmDelete) . "');\"><img src='$themeimg/delete.png' title='$langDelete' border='0' /></a>&nbsp;<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;visibility=$visibility_func&amp;pid={$pid}'><img src='$themeimg/".$visibility_gif.".png' border='0' title=\"".$langVisible."\" /></a></td>
                       </tr>";

@@ -39,7 +39,7 @@ mysql_select_db($mysqlMainDb);
 
 $nameTools = $langEBook;
 
-if ($is_adminOfCourse) {
+if ($is_editor) {
         $tool_content .= "
    <div id='operations_container'>
      <ul id='opslist'>
@@ -96,7 +96,7 @@ if ($is_adminOfCourse) {
         }
 }
 
-if ($is_adminOfCourse) {
+if ($is_editor) {
         $visibility_check = '';
 } else {
         $visibility_check = "AND visible = 1 AND ebook_subsection.id IS NOT NULL";
@@ -117,7 +117,7 @@ if (mysql_num_rows($q) == 0) {
      <table width='100%' class='sortable' id='t1'>
      <tr>
        <th colspan='2'><div align='left'>$langEBook</div></th>" .
-       ($is_adminOfCourse?
+       ($is_editor?
         "<th width='70' colspan='2' class='center'>$langActions</th>":
         '') . "
      </tr>\n";
@@ -150,10 +150,10 @@ draw($tool_content, 2, null, $head_content);
 
 function tools($id, $title, $k, $num, $vis)
 {
-        global $is_adminOfCourse, $langModify, $langDelete, $langMove, $langDown, $langUp, $langEBookDelConfirm,
+        global $is_editor, $langModify, $langDelete, $langMove, $langDown, $langUp, $langEBookDelConfirm,
                $code_cours, $themeimg, $langVisibility;
 
-        if (!$is_adminOfCourse) {
+        if (!$is_editor) {
                 return '';
         } else {
                 $icon_vis = $vis? 'visible.png': 'invisible.png';

@@ -92,7 +92,7 @@ if (isset($_GET['get'])) {
 }
 
 // Only course admins can download all assignments in a zip file
-if ($is_adminOfCourse) {
+if ($is_editor) {
   if (isset($_GET['download'])) {
 	include "../../include/pclzip/pclzip.lib.php";
 	download_assignments(intval($_GET['download']));
@@ -111,7 +111,7 @@ include '../../include/libchart/libchart.php';
 // main program
 //-------------------------------------------
 
-if ($is_adminOfCourse) {
+if ($is_editor) {
 	if (isset($_POST['grade_comments'])) {
 		$nameTools = $m['WorkView'];
 		$navigation[] = array("url"=>"$_SERVER[PHP_SELF]?course=$code_cours", "name"=> $langWorks);
@@ -618,9 +618,9 @@ function show_submission_form($id, $user_group_info)
 function assignment_details($id, $row, $message = null)
 {
 	global $tool_content, $m, $langDaysLeft, $langDays, $langWEndDeadline, $langNEndDeadLine, $langNEndDeadline, $langEndDeadline;
-	global $langDelAssign, $is_adminOfCourse, $langZipDownload, $langSaved, $code_cours, $langGraphResults;
+	global $langDelAssign, $is_editor, $langZipDownload, $langSaved, $code_cours, $langGraphResults;
 
-	if ($is_adminOfCourse) {
+	if ($is_editor) {
             $tool_content .= "
             <div id='operations_container'>
               <ul id='opslist'>
@@ -1131,7 +1131,7 @@ function submit_grades($grades_id, $grades)
 // functions for downloading
 function send_file($id)
 {
-        global $tool_content, $currentCourseID, $uid, $is_adminOfCourse;
+        global $tool_content, $currentCourseID, $uid, $is_editor;
         mysql_select_db($currentCourseID);
         $q = db_query("SELECT * FROM assignment_submit WHERE id = $id");
         if (!$q or !mysql_num_rows($q)) {
@@ -1141,7 +1141,7 @@ function send_file($id)
         if ($info['group_id']) {
                 initialize_group_info($info['group_id']);
         }
-        if (!($is_adminOfCourse or $info['uid'] == $uid or $GLOBALS['is_member'])) {
+        if (!($is_editor or $info['uid'] == $uid or $GLOBALS['is_member'])) {
                 return false;
         }
         send_file_to_client("$GLOBALS[workPath]/$info[file_path]", $info['file_name'], null, true);

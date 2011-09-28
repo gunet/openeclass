@@ -139,7 +139,7 @@ if(!isset($_SESSION['objExercise'][$exerciseId])) {
 	// construction of Exercise
 	$objExercise = new Exercise();
 	// if the specified exercise doesn't exist or is disabled
-	if(!$objExercise->read($exerciseId) && (!$is_adminOfCourse)) {
+	if(!$objExercise->read($exerciseId) && (!$is_editor)) {
 		$tool_content .= $langExerciseNotFound;
 		draw($tool_content, 2);
 		exit();

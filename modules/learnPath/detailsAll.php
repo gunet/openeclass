@@ -44,7 +44,7 @@
 
 require_once("../../include/lib/learnPathLib.inc.php");
 $require_current_course = TRUE;
-$require_prof = TRUE;
+$require_editor = TRUE;
 
 $TABLECOURSUSER	        = "cours_user";
 $TABLEUSER              = "user";
@@ -54,8 +54,6 @@ $TABLEASSET             = "lp_asset";
 $TABLEUSERMODULEPROGRESS= "lp_user_module_progress";
 
 require_once("../../include/baseTheme.php");
-$head_content = "";
-$tool_content = "";
 
 $navigation[] = array("url"=>"learningPathList.php?course=$code_cours", "name"=> $langLearningPaths);
 $nameTools = $langTrackAllPathExplanation;
@@ -69,7 +67,6 @@ $sql = "SELECT U.`nom`, U.`prenom`, U.`user_id`
 
 @$tool_content .= get_limited_page_links($sql, 30, $langPreviousPage, $langNextPage);
 $usersList = get_limited_list($sql, 30);
-
 
 $tool_content .= "
   <div id=\"operations_container\">

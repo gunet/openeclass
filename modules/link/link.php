@@ -102,7 +102,7 @@ include 'linkfunctions.php';
 
 $action = isset($_GET['action'])? $_GET['action']: '';
 
-if ($is_adminOfCourse) {
+if ($is_editor) {
         if (isset($_POST['submitLink'])) {
                 submit_link();
         }
@@ -284,7 +284,7 @@ if (mysql_num_rows($resultcategories) > 0) {
                         if (!empty($description)) {
                                 $tool_content .= "<br />$description</div></th>";
                         }
-                        if ($is_adminOfCourse) {
+                        if ($is_editor) {
                                 showcategoryadmintools($myrow["id"]);
                         } else {
                                 $tool_content .=  "
@@ -303,7 +303,7 @@ if (mysql_num_rows($resultcategories) > 0) {
                                 $tool_content .= "<br />$description</div>
                   </th>";
                         }
-			if ($is_adminOfCourse) {
+			if ($is_editor) {
 			showcategoryadmintools($myrow["id"]);
                         } else {
                                 $tool_content .=  "
@@ -328,7 +328,7 @@ if (mysql_num_rows($resultcategories) > 0) {
                 </table>";
 	} else {
                 $tool_content .= "<p class='alert1'>$langNoLinksExist</p>";
-		if ($is_adminOfCourse){
+		if ($is_editor){
 			// if the user is the course administrator instruct him/her
                         // what he can do to add links
                         $tool_content .= "<p class='center'>

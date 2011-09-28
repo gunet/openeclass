@@ -31,17 +31,14 @@
 
 
 $require_current_course = TRUE;
-$require_prof = TRUE;
+$require_editor = TRUE;
 
 require_once("../../include/baseTheme.php");
-$tool_content = "";
 
 $navigation[]= array ("url"=>"learningPathList.php?course=$code_cours", "name"=> $langLearningPaths);
 $nameTools = $langimportLearningPath;
 
 mysql_select_db($currentCourseID);
-
-
 
 if (isset($_POST) && isset($_POST['selectedDocument'])) {
 	require_once("./importLearningPathLib.php");
@@ -62,6 +59,4 @@ else {
 	$tool_content .= "Error, please try again!";
 }
 
-
 draw($tool_content, 2);
-?>

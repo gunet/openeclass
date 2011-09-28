@@ -81,7 +81,7 @@ if (isset($_POST['submit'])) {
                 'am_form' => false,
                 'desc_form' => false,
                 'phone_form' => false,
-                'email_form' => check_prof(),
+                'email_form' => true,
                 'nom_form' => true,
                 'prenom_form' => true,
                 'username_form' => true,
@@ -138,7 +138,7 @@ if (isset($_POST['submit'])) {
 	// }
 
 	// check if email is valid
-	if (!email_seems_valid($email_form) and check_prof()) {
+	if (!email_seems_valid($email_form)) {
                 redirect_to_message(6);
 	}
 

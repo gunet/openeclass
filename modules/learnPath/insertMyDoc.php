@@ -47,7 +47,8 @@ require_once '../../include/lib/fileManageLib.inc.php';
 require_once '../../include/lib/textLib.inc.php';
 
 $require_current_course = TRUE;
-$require_prof = TRUE;
+$require_editor = TRUE;
+
 $TABLELEARNPATH         = 'lp_learnPath';
 $TABLEMODULE            = 'lp_module';
 $TABLELEARNPATHMODULE   = 'lp_rel_learnPath_module';

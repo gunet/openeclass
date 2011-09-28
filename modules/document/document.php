@@ -85,7 +85,7 @@ if (isset($_GET['download'])) {
         if ($format == '.dir') {
                 $real_filename = $real_filename.'.zip';
                 $dload_filename = $webDir . 'courses/temp/'.safe_filename('zip');
-                zip_documents_directory($dload_filename, $downloadDir, $is_adminOfCourse);
+                zip_documents_directory($dload_filename, $downloadDir, $is_editor);
                 $delete = true;
         } else {
                 $dload_filename = $basedir . $downloadDir;
@@ -803,7 +803,7 @@ if($can_upload) {
 
 // check if there are documents
 list($doc_count) = mysql_fetch_row(db_query("SELECT COUNT(*) FROM document WHERE $group_sql" .
-				            ($is_adminOfCourse? '': " AND visibility='v'")));
+				            ($is_editor? '': " AND visibility='v'")));
 if ($doc_count == 0) {
 	$tool_content .= "\n    <p class='alert1'>$langNoDocuments</p>";
 } else {
@@ -877,7 +877,7 @@ if ($doc_count == 0) {
         foreach (array(true, false) as $is_dir) {
                 foreach ($fileinfo as $entry) {
                         if (($entry['is_dir'] != $is_dir) or
-                                        (!$is_adminOfCourse and !$entry['visible'])) {
+                                        (!$is_editor and !$entry['visible'])) {
                                 continue;
                         }
                         $cmdDirName = $entry['path'];
@@ -975,7 +975,7 @@ if ($doc_count == 0) {
 	                                                 "title='$langMetadata' alt='$langMetadata' /></a>&nbsp;";
                                 }
                                 /*** visibility command ***/
-                                if ($is_adminOfCourse) {
+                                if ($is_editor) {
 					if ($entry['visible']) {
 						$tool_content .= "<a href='{$base_url}mkInvisibl=$cmdDirName'>" .
 								 "<img src='$themeimg/visible.png' " .

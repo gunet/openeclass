@@ -50,7 +50,7 @@ define ('RSS', 'modules/announcements/rss.php?c='.$currentCourseID);
 $fake_code = course_id_to_fake_code($cours_id);
 $nameTools = $langAnnouncements;
 
-if ($is_adminOfCourse) {
+if ($is_editor) {
 	load_js('tools.js');
 	$head_content .= '<script type="text/javascript">var langEmptyGroupName = "' .
 			 $langEmptyAnTitle . '";</script>';
@@ -249,7 +249,7 @@ if ($is_adminOfCourse) {
 } // end: teacher only
 
     /* display announcements */
-	if ($is_adminOfCourse) {
+	if ($is_editor) {
 		if (isset($_GET['an_id'])) {
 			$result = db_query("SELECT * FROM annonces WHERE cours_id = $cours_id AND id = $_GET[an_id]", $mysqlMainDb);
 		} else {
@@ -275,7 +275,7 @@ if ($is_adminOfCourse) {
                 } else {
                     $colsNum= 2;
                 }
-		if ($is_adminOfCourse) {
+		if ($is_editor) {
 		    $tool_content .= "<th width='60' colspan='$colsNum' class='center'>$langActions</th>";
 		}
 		$tool_content .= "</tr>\n";
@@ -284,7 +284,7 @@ if ($is_adminOfCourse) {
         while ($myrow = mysql_fetch_array($result)) {
 		$content = standard_text_escape($myrow['contenu']);
 		$myrow['temps'] = claro_format_locale_date($dateFormatLong, strtotime($myrow['temps']));
-		if ($is_adminOfCourse) {
+		if ($is_editor) {
 		    if ($myrow['visibility'] == 'i') {
 			$visibility = 1;
 			$vis_icon = 'invisible.png';
@@ -317,7 +317,7 @@ if ($is_adminOfCourse) {
 		}
 		$tool_content .= "</td>";
 		
-		if ($is_adminOfCourse) {
+		if ($is_editor) {
 			$tool_content .= "
 			<td width='70' class='right'>
 			      <a href='$_SERVER[PHP_SELF]?course=".$code_cours ."&amp;modify=" . $myrow['id'] . "'>
@@ -361,7 +361,7 @@ if ($is_adminOfCourse) {
         if ($no_content) $tool_content .= "<p class='alert1'>$langNoAnnounce</p>\n";
     }
 add_units_navigation(TRUE);
-if ($is_adminOfCourse) {
+if ($is_editor) {
     draw($tool_content, 2, null, $head_content);
 } else {
     draw($tool_content, 2);

@@ -50,7 +50,7 @@ if (isset($_REQUEST['edit_submit'])) {
 
 $form = process_actions();
 
-if ($is_adminOfCourse) {
+if ($is_editor) {
 	$tool_content .= "&nbsp;<div id='operations_container'>
 		<form name='resinsert' action='{$urlServer}modules/units/insert.php' method='get'><input type='hidden' name='course' value='$code_cours'/>
 		<select name='type' onChange='document.resinsert.submit();'>
@@ -73,7 +73,7 @@ if ($is_adminOfCourse) {
 		$form; 
 }
 
-if ($is_adminOfCourse) {
+if ($is_editor) {
         $visibility_check = '';
 } else {
         $visibility_check = "AND visibility='v'";
@@ -124,7 +124,7 @@ foreach (array('previous', 'next') as $i) {
         }
 }
 
-if ($is_adminOfCourse) {
+if ($is_editor) {
         $comment_edit_link = "<td valign='top' width='20'><a href='info.php?course=$code_cours&amp;edit=$id&amp;next=1'><img src='$themeimg/edit.png' title='' alt='' /></a></td>";
         $units_class = 'tbl';
 } else {

@@ -108,7 +108,7 @@ foreach ($flatElementList as $module)
     //-------------visibility-----------------------------
     if ($module['visibility'] == 'HIDE' || $is_blocked)
     {
-        if ($is_adminOfCourse)
+        if ($is_editor)
         {
             $style = " class=\"invisible\"";
             $image_bullet = "off";

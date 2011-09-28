@@ -21,7 +21,7 @@ if (isset($_GET['id'])) {
 }
 $r = db_query("SELECT title FROM ebook WHERE course_id = $cours_id AND id = $id");
 
-if (!$is_adminOfCourse or mysql_num_rows($r) == 0) {
+if (!$is_editor or mysql_num_rows($r) == 0) {
         redirect_to_home_page();
 } elseif (isset($_FILES['file'])) {
         $basedir = $webDir . 'courses/' . $currentCourseID . '/ebook/' . $id;

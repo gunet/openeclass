@@ -42,7 +42,7 @@ if (isset($_GET['uploadPath'])) {
         $uploadPath = '';
 }
 
-$can_upload = $is_adminOfCourse;
+$can_upload = $is_editor;
 if (defined('GROUP_DOCUMENTS')) {
         include '../group/group_functions.php';
         initialize_group_id();

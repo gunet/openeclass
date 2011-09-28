@@ -194,7 +194,7 @@ if (isset($_POST["submitWork"]))
  */
 if (isset($_GET['deleteReceived']) || isset($_GET['deleteSent']))
 {
-	$dropbox_person = new Dropbox_Person( $uid, $is_adminOfCourse, $is_adminOfCourse);
+	$dropbox_person = new Dropbox_Person( $uid, $is_editor, $is_editor);
 	if (isset($_SESSION["sentOrder"]))
 	{
 		$dropbox_person->orderSentWork ($_SESSION["sentOrder"]);

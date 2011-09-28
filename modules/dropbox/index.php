@@ -92,7 +92,7 @@ $_SESSION['receivedOrder'] = $receivedOrder;
 
 require_once('dropbox_class.inc.php');
 
-$dropbox_person = new Dropbox_Person($uid, $is_adminOfCourse, $is_adminOfCourse);
+$dropbox_person = new Dropbox_Person($uid, $is_editor, $is_editor);
 $dropbox_person->orderReceivedWork($receivedOrder);
 $dropbox_person->orderSentWork($sentOrder);
 $dropbox_unid = md5(uniqid(rand(), true));	//this var is used to give a unique value to every

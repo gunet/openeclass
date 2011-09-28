@@ -50,7 +50,7 @@ mysql_select_db($mysqlMainDb);
 
 $unit_id = description_unit_id($cours_id);
 
-if ($is_adminOfCourse) {
+if ($is_editor) {
 	$tool_content .= "
 	<div id='operations_container'>
 	  <ul id='opslist'>
@@ -98,7 +98,7 @@ if ($q and mysql_num_rows($q) > 0) {
 		 actions('description', $row['id'], $row['visibility'], $row['res_id']) . "
 		</tr>
 		<tr>";
-	      if ($is_adminOfCourse) {
+	      if ($is_editor) {
 		 $tool_content .= "\n<td colspan='6'>" . standard_text_escape($row['comments']) . "</td>";
 	      } else {
 		 $tool_content .= "\n<td>" . standard_text_escape($row['comments']) . "</td>";

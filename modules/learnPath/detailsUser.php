@@ -47,7 +47,7 @@
 
 require_once("../../include/lib/learnPathLib.inc.php");
 $require_current_course = TRUE;
-$require_prof = TRUE;
+$require_editor = TRUE;
 
 $TABLECOURSUSER	        = 'cours_user';
 $TABLEUSER              = 'user';

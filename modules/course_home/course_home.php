@@ -94,7 +94,7 @@ if ($res and mysql_num_rows($res) > 0) {
                 }
         }
 }
-if ($is_adminOfCourse) {
+if ($is_editor) {
         $edit_link = "&nbsp;<a href='../../modules/course_description/editdesc.php?course=$code_cours'><img src='$themeimg/edit.png' title='$langEdit' alt='$langEdit' /></a>";
 } else {
         $edit_link = '';
@@ -119,7 +119,7 @@ $main_content .= $main_extra;
 units_set_maxorder();
 
 // other actions in course unit
-if ($is_adminOfCourse) {
+if ($is_editor) {
         if (isset($_REQUEST['edit_submit'])) {
                 $main_content .= handle_unit_info_edit();
         } elseif (isset($_REQUEST['del'])) { // delete course unit
@@ -146,14 +146,14 @@ if ($is_adminOfCourse) {
 }
 
 // add course units
-if ($is_adminOfCourse) {
+if ($is_editor) {
         $cunits_content .= "
     <p class='descr_title'>$langCourseUnits: <a href='{$urlServer}modules/units/info.php?course=$code_cours'><img src='$themeimg/add.png' width='16' height='16' title='$langAddUnit' alt='$langAddUnit' /></a></p>\n";
 
 } else {
         $cunits_content .= "\n  <p class='descr_title'>$langCourseUnits</p>";
 }
-if ($is_adminOfCourse) {
+if ($is_editor) {
         list($last_id) = mysql_fetch_row(db_query("SELECT id FROM course_units
                                                    WHERE course_id = $cours_id AND `order` >= 0
                                                    ORDER BY `order` DESC LIMIT 1"));
@@ -175,13 +175,13 @@ while ($cu = mysql_fetch_array($sql)) {
         $class1_vis = ($vis == 'i')? ' class="invisible"': '';
         $class_vis = ($vis == 'i')? 'invisible': '';
         $cunits_content .= "\n\n\n      <table ";
-        if ($is_adminOfCourse) {
+        if ($is_editor) {
             $cunits_content .= "class='tbl'";
         } else {
             $cunits_content .= "class='tbl'";
         }
         $cunits_content .= " width='770'>";
-        if ($is_adminOfCourse) {
+        if ($is_editor) {
         $cunits_content .= "\n      <tr>".
                            "\n        <th width='25' class='right'>$count_index.</th>" .
                            "\n        <th width='635'><a class=\"$class_vis\" href='${urlServer}modules/units/?course=$code_cours&amp;id=$cu[id]'>" . q($cu['title']) . "</a></th>";
@@ -191,7 +191,7 @@ while ($cu = mysql_fetch_array($sql)) {
                            "\n        <th width='729'><a class=\"$class_vis\" href='${urlServer}modules/units/?course=$code_cours&amp;id=$cu[id]'>" . q($cu['title']) . "</a></th>";
         }
 
-        if ($is_adminOfCourse) { // display actions
+        if ($is_editor) { // display actions
                 $cunits_content .= "\n        <th width='70' class='center'>".
                         "<a href='../../modules/units/info.php?course=$code_cours&amp;edit=$cu[id]'>" .
                         "<img src='$themeimg/edit.png' title='$langEdit' /></a>" .
@@ -215,7 +215,7 @@ while ($cu = mysql_fetch_array($sql)) {
                 }
         }
         $cunits_content .= "\n      </tr>\n      <tr>\n        <td ";
-        if ($is_adminOfCourse) {
+        if ($is_editor) {
             $cunits_content .= "colspan='7' $class1_vis>";
         } else {
             $cunits_content .= "colspan='2'>";
@@ -225,7 +225,7 @@ while ($cu = mysql_fetch_array($sql)) {
         $first = false;
         $count_index++;
 }
-if ($first and !$is_adminOfCourse) {
+if ($first and !$is_editor) {
         $cunits_content = '';
 }
 
@@ -252,7 +252,7 @@ $bar_content .= "\n      <ul class='custom_list'><li><b>".$langCode."</b>: ".q($
 $require_help = TRUE;
 $helpTopic = 'course_home';
 
-if ($is_adminOfCourse) {
+if ($is_editor) {
 	$sql = "SELECT COUNT(user_id) AS numUsers
 			FROM cours_user
 			WHERE cours_id = $cours_id";
@@ -282,7 +282,7 @@ if ($is_adminOfCourse) {
 	$bar_content .= "\n           <li><b>$langUsers</b>: <a href='$urlAppend/modules/user/user.php?course=$code_cours'>$numUsers $langRegistered</a></li></ul>";
 }
 
-if ($is_adminOfCourse or
+if ($is_editor or
     (isset($_SESSION['saved_statut']) and $_SESSION['saved_statut'] == 1)) {
         if (isset($_SESSION['saved_statut'])) {
                 $button_message = $langStudentViewDisable;

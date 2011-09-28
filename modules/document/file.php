@@ -72,7 +72,7 @@ if (defined('GROUP_DOCUMENTS')) {
         if (!$uid) {
                 error($langNoRead);
         }
-        if (!($is_adminOfCourse or $is_member)) {
+        if (!($is_editor or $is_member)) {
                 error($langNoRead);
         }
 } else {
@@ -80,7 +80,7 @@ if (defined('GROUP_DOCUMENTS')) {
 }
 
 $file_info = public_path_to_disk_path($path_components);
-if ($file_info['visibility'] != 'v' and !$is_adminOfCourse) {
+if ($file_info['visibility'] != 'v' and !$is_editor) {
         error($langNoRead);
 }
 

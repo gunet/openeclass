@@ -67,7 +67,7 @@ mysql_select_db($currentCourseID);
 
 //  set redirection link
 $returl = "navigation/viewModule.php?course=$currentCourseID&amp;go=" . 
-          ($is_adminOfCourse ? 'learningPathAdmin': 'learningPath');
+          ($is_editor ? 'learningPathAdmin': 'learningPath');
 
 if ($uid) {
 	$uidCheckString = "AND UMP.`user_id` = $uid";

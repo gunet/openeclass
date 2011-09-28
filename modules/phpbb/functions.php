@@ -906,7 +906,7 @@ function format_message($message)
 
 function init_forum_group_info($forum_id)
 {
-	global $mysqlMainDb, $cours_id, $group_id, $private_forum, $can_post, $is_member, $is_adminOfCourse;
+	global $mysqlMainDb, $cours_id, $group_id, $private_forum, $can_post, $is_member, $is_editor;
 
 	$q = db_query("SELECT id FROM `$mysqlMainDb`.`group`
 			WHERE course_id = $cours_id AND forum_id = $forum_id");
@@ -916,7 +916,7 @@ function init_forum_group_info($forum_id)
 	} else {
 		$group_id = $private_forum = false;
 	}
-	if (!$group_id or $is_member or $is_adminOfCourse) {
+	if (!$group_id or $is_member or $is_editor) {
 		$can_post = true;
 	} else {
 		$can_post = false;

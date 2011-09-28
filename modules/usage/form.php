@@ -19,13 +19,9 @@
  * ======================================================================== */
 
 
-
-
-// * @version $Id$
- //   @last update: 2006-12-27 by Evelthon Prodromou <eprodromou@upnet.gr>
-$require_current_course=true;
+$require_current_course = true;
+$require_course_admin = TRUE;
 $require_login = true;
-$require_prof = true;
 
 $start_cal = $jscalendar->make_input_field(
            array('showsTime'      => false,

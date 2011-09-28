@@ -52,14 +52,14 @@ if (isset($_GET['selfReg'])) {
 		exit;
 	}
 }
-if (!$is_member and !$is_adminOfCourse and (!$self_reg or $member_count >= $max_members)) {
+if (!$is_member and !$is_editor and (!$self_reg or $member_count >= $max_members)) {
         $tool_content .= $langForbidden;
         draw($tool_content, 2);
         exit;
 }
 
 $tool_content .= "<div id='operations_container'><ul id='opslist'>\n";
-if ($is_adminOfCourse or $is_tutor) {
+if ($is_editor or $is_tutor) {
         $tool_content .= "<li><a href='group_edit.php?course=$code_cours&amp;group_id=$group_id'>$langEditGroup</a></li>\n";
 } elseif ($self_reg and isset($uid) and !$is_member) {
 	if ($max_members == 0 or $member_count < $max_members) {
@@ -187,7 +187,7 @@ draw($tool_content, 2);
 
 function loadGroupTools(){
         global $self_reg, $has_forum, $forum_id, $documents, $secret_directory, $langForums,
-               $group_id, $langGroupDocumentsLink, $is_adminOfCourse, $is_tutor, $group_id, $langEmailGroup,
+               $group_id, $langGroupDocumentsLink, $is_editor, $is_tutor, $group_id, $langEmailGroup,
                $langUsage, $code_cours;
 
 	$group_tools = '';
@@ -202,7 +202,7 @@ function loadGroupTools(){
                 $group_tools .=  "<li><a href='document.php?course=$code_cours&amp;group_id=$group_id'>$langGroupDocumentsLink</a></li>";
         }
 	
-        if ($is_adminOfCourse or $is_tutor) {
+        if ($is_editor or $is_tutor) {
                 $group_tools .=  "<li><a href='group_email.php?course=$code_cours&amp;group_id=$group_id'>$langEmailGroup</a></li>
                 <li><a href='group_usage.php?course=$code_cours&amp;group_id=$group_id'>$langUsage</a></li>";
         }

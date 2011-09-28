@@ -32,7 +32,7 @@ mysql_select_db($mysqlMainDb);
 $nameTools = $langEBookEdit;
 $navigation[] = array('url' => 'index.php?course='.$code_cours, 'name' => $langEBook);
 
-if (!$is_adminOfCourse) {
+if (!$is_editor) {
         redirect_to_home_page();
 }
 

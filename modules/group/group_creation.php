@@ -30,13 +30,9 @@
 $require_current_course = TRUE;
 $require_help = TRUE;
 $helpTopic = 'Group';
-$require_prof = true;
+$require_editor = true;
 
 include '../../include/baseTheme.php';
-
-if (!$is_adminOfCourse) {
-	die("You are not professor for this lesson");
-}
 
 $nameTools = $langNewGroupCreate;
 $navigation[]= array ("url"=>"group.php?course=$code_cours", "name"=> $langGroups);

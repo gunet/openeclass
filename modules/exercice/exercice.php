@@ -68,7 +68,7 @@ if (isset($_GET['page'])) {
 $from = $page * $limitExPage;
 
 // only for administrator
-if($is_adminOfCourse) {
+if($is_editor) {
 	// delete confirmation
 	$head_content .= '
 	<script type="text/javascript">
@@ -121,7 +121,7 @@ if($is_adminOfCourse) {
 list($num_of_ex) = mysql_fetch_array($qnum);
 $nbrExercises = mysql_num_rows($result);
 
-if($is_adminOfCourse) {
+if($is_editor) {
 	$tool_content .= "
     <div align=\"left\" id=\"operations_container\">
       <ul id=\"opslist\">
@@ -154,7 +154,7 @@ if(!$nbrExercises) {
 	    <tr>";
 	
 	// shows the title bar only for the administrator
-	if($is_adminOfCourse) {
+	if($is_editor) {
 		$tool_content .= "
 	      <th colspan='2'><div class='left'>$langExerciseName</div></th>
 	      <th width='65'>${langResults}</th>
@@ -173,7 +173,7 @@ if(!$nbrExercises) {
 	// while list exercises
 	$k = 0;
 	while($row = mysql_fetch_array($result)) {
-		if($is_adminOfCourse) {
+		if($is_editor) {
 			if(!$row['active']) {
 				$tool_content .= "<tr class='invisible'>";
 			} else {
@@ -194,7 +194,7 @@ if(!$nbrExercises) {
 		$row['description'] = standard_text_escape($row['description']);
 	
 		// prof only
-		if($is_adminOfCourse) {
+		if($is_editor) {
 			if (!empty($row['description'])) {
 				$descr = "<br/>$row[description]";
 			} else {

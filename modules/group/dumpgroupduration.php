@@ -27,12 +27,12 @@ include '../usage/duration_query.php';
 $group_id = intval($_REQUEST['group_id']);
 initialize_group_info($group_id);
 
-if (!$is_adminOfCourse and !$is_tutor) {
+if (!$is_editor and !$is_tutor) {
         header('Location: group_space.php?course='.$code_cours.'&group_id=' . $group_id);
         exit;
 }
 
-if($is_adminOfCourse) {
+if($is_editor) {
 	if (isset($_GET['enc']) and $_GET['enc'] == '1253') {
 		$charset = 'Windows-1253';
 	} else {

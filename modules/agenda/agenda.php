@@ -54,7 +54,7 @@ if (isset($_GET['id'])) {
 }
 
 		
-if ($is_adminOfCourse and (isset($_GET['addEvent']) or isset($_GET['id']))) {
+if ($is_editor and (isset($_GET['addEvent']) or isset($_GET['id']))) {
 	$lang_jscalendar = langname_to_code($language);
 
 	//--if add event
@@ -95,7 +95,7 @@ $start_cal = $jscalendar->make_input_field(
                  'value' => $datetoday));
 }
 
-if ($is_adminOfCourse) {
+if ($is_editor) {
 	// modify visibility
 	if (isset($_GET['mkInvisibl']) and $_GET['mkInvisibl'] == true) {
 		db_query("UPDATE agenda SET visibility = 'i'
@@ -176,7 +176,7 @@ if ($is_adminOfCourse) {
 		unset($addEvent);
 	}
 // Make top tool links
-if ($is_adminOfCourse) {
+if ($is_editor) {
 	$head_content .= '
 	<script type="text/javascript">
 	function confirmation ()
@@ -307,7 +307,7 @@ if ($is_adminOfCourse) {
 *-------------------------------------------*/
 if (!isset($sens)) $sens =" ASC";
 
-if ($is_adminOfCourse) { 
+if ($is_editor) { 
 	$result = db_query("SELECT id, titre, contenu, day, hour, lasting, visibility FROM agenda ORDER BY day ".$sens.", hour ".$sens,$currentCourseID);
 } else {
 	$result = db_query("SELECT id, titre, contenu, day, hour, lasting, visibility FROM agenda WHERE visibility = 'v' 
@@ -322,7 +322,7 @@ if (mysql_num_rows($result) > 0) {
         <table width='100%' class='tbl_alt'>
         <tr>
           <th class='left'>$langEvents</th>";
-        if ($is_adminOfCourse) {
+        if ($is_editor) {
               $tool_content .= "<th width='50'><b>$langActions</b></th>";
         } else {
               $tool_content .= "<th width='50'>&nbsp;</th>";
@@ -352,7 +352,7 @@ if (mysql_num_rows($result) > 0) {
 			$barMonth = date("m",strtotime($myrow["day"]));
             		// month LABEL
 			$tool_content .= "\n<tr>";
-			if ($is_adminOfCourse) {
+			if ($is_editor) {
 				$tool_content .= "\n<td colspan='2' class='monthLabel'>";
 			} else {
 				$tool_content .= "\n<td colspan='2' class='monthLabel'>";
@@ -361,7 +361,7 @@ if (mysql_num_rows($result) > 0) {
 			$tool_content .= "\n</tr>";
 		}
                 $classvis = 'class="visible"';
-		if ($is_adminOfCourse) {
+		if ($is_editor) {
 			if ($myrow["visibility"] == 'i') {
 				$classvis = 'class="invisible"';
 			} else {
@@ -403,7 +403,7 @@ if (mysql_num_rows($result) > 0) {
                 //agenda event functions
                 //added icons next to each function
                 //(evelthon, 12/05/2006)
-		if ($is_adminOfCourse) {
+		if ($is_editor) {
 			$tool_content .=  "
 			<td class='right' width='70'>
 			  <a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;id=".$myrow['id']."&amp;edit=true'>

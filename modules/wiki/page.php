@@ -66,7 +66,7 @@ if ( ! isset( $_REQUEST['wikiId'] ) )
 
 // set admin mode and groupId
 
-$is_allowedToAdmin = $is_adminOfCourse;
+$is_allowedToAdmin = $is_editor;
 
 if ( $_gid && $is_groupAllowed )
 {

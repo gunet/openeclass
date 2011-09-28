@@ -87,7 +87,7 @@ $forum_id = $forum;
 
 $is_member = false;
 $group_id = init_forum_group_info($forum_id);
-if ($private_forum and !($is_member or $is_adminOfCourse)) {
+if ($private_forum and !($is_member or $is_editor)) {
 	$tool_content .= "<div class='caution'>$langPrivateForum</div>";
 	draw($tool_content, 2);
 	exit;

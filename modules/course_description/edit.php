@@ -34,18 +34,13 @@ $require_current_course = TRUE;
 $require_help = TRUE;
 $helpTopic = 'Coursedescription';
 $require_login = true;
-$require_prof = true;
+$require_editor = true;
 
 include '../../include/baseTheme.php';
 include '../../include/lib/textLib.inc.php';
 
 $nameTools = $langEditCourseProgram ;
 $navigation[] = array ('url' => 'index.php?course='.$code_cours, 'name' => $langCourseProgram);
-
-if (!$is_adminOfCourse) {
-        header('Location: ' . $urlServer);
-        exit;
-}
 
 mysql_select_db($mysqlMainDb);
 

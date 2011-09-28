@@ -24,19 +24,12 @@ if (isset($_GET['from_home']) and ($_GET['from_home'] == TRUE) and isset($_GET['
         $_SESSION['dbname'] = $_GET['cid'];
 }
 $require_current_course = TRUE;
-$require_prof = true;
+$require_course_admin = TRUE;
 $require_help = TRUE;
 $helpTopic = 'Infocours';
 include '../../include/baseTheme.php';
 
 $nameTools = $langModifInfo;
-
-// submit
-if (!$is_adminOfCourse) {
-	$tool_content .= "<p>$langForbidden</p>";
-        draw($tool_content, 2);
-        exit;
-}
 
 $lang_editor = langname_to_code($language);
 

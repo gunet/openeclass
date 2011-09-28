@@ -71,7 +71,7 @@ if ($q and mysql_num_rows($q) > 0) {
 			</tr>
 			<tr>";
 		
-		if ($is_adminOfCourse) {
+		if ($is_editor) {
 			echo "\n<td colspan='6'>" . standard_text_escape($row['comments']) . "</td>";
 		} else {
 			echo "\n<td>" . standard_text_escape($row['comments']) . "</td>";

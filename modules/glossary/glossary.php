@@ -37,7 +37,7 @@ $action->record('MODULE_ID_GLOSSARY');
 
 mysql_select_db($mysqlMainDb);
 
-if ($is_adminOfCourse) {
+if ($is_editor) {
         load_js('tools.js');
 }
 
@@ -75,7 +75,7 @@ if ($glossary_index) {
  *Actions*
 ********************************************/
 
-if ($is_adminOfCourse) {
+if ($is_editor) {
         if (isset($_POST['url'])) {
                 $url = trim($_POST['url']);
                 if (!empty($url)) {
@@ -310,7 +310,7 @@ if (mysql_num_rows($sql) > 0) {
 	       <tr>
 		 <th><div align='left'>$langGlossaryTerm</div></th>
 		 <th><div align='left'>$langGlossaryDefinition</div></th>";
-	    if ($is_adminOfCourse) {
+	    if ($is_editor) {
 		 $tool_content .= "
 		 <th width='20'>$langActions</th>";
 	    }
@@ -353,7 +353,7 @@ if (mysql_num_rows($sql) > 0) {
 	       <tr $rowClass>
 		 <th width='150'><a href='$base_url&amp;id=$g[id]'>" . q($g['term']) . "</a> <div class='invisible'>$cat_descr</div></th> 
                  <td><em>$definition_data</em>$urllink</td>";
-	    if ($is_adminOfCourse) {
+	    if ($is_editor) {
 		$tool_content .= "
 		 <td align='center' valign='top' width='50'><a href='$base_url&amp;edit=$g[id]'>
 		    <img src='$themeimg/edit.png' /></a>

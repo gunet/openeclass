@@ -18,7 +18,7 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-$require_prof = TRUE;
+$require_editor = TRUE;
 $require_current_course = TRUE;
 $require_help = TRUE;
 $helpTopic = 'Questionnaire';
@@ -415,5 +415,3 @@ function questions_exist()
 	}
 	return false;
 }
-
-?>

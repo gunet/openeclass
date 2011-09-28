@@ -559,31 +559,29 @@ function check_guest() {
 	}
 }
 
-// ---------------------------------------------------------------------
-// function to check that we are really a professor (and not fake!).
-// It is used in various scripts
-// --------------------------------------------------------------------
 
-// check if a user is professor
+// ------------------------------------------------
+// function to check if user is a course editor
+// ------------------------------------------------
 
-function check_prof()
-{
-	global $mysqlMainDb, $uid, $require_current_course, $is_adminOfCourse;
+function check_editor() {
+	
+        global $mysqlMainDb, $uid, $cours_id;
+        
 	if (isset($uid)) {
-                if (isset($require_current_course) and $is_adminOfCourse) {
-                        return true;
-                }
-		$res = db_query("SELECT statut FROM user WHERE user_id='$uid'", $mysqlMainDb);
+		$res = db_query("SELECT editor FROM cours_user 
+                            WHERE user_id = $uid
+                            AND cours_id = $cours_id", $mysqlMainDb);
 		$s = mysql_fetch_array($res);
-		if ($s['statut'] == 1)
-		return true;
-		else
-		return false;
-	}
-
+		if ($s['editor'] == 1) {
+			return TRUE;
+		} else {
+			return FALSE;
+		}
+	} else {
+            return FALSE;
+        }
 }
-
-
 // ---------------------------------------------------
 // just make sure that the $uid variable isn't faked
 // --------------------------------------------------
@@ -1276,12 +1274,12 @@ function move_order($table, $id_field, $id, $order_field, $direction, $condition
 // and is assumed that you're exiting the current unit unless $_GET['unit'] is set
 function add_units_navigation($entry_page = FALSE)
 {
-        global $navigation, $cours_id, $is_adminOfCourse, $mysqlMainDb, $code_cours;
+        global $navigation, $cours_id, $is_editor, $mysqlMainDb, $code_cours;
         if ($entry_page and !isset($_GET['unit'])) {
 		unset($_SESSION['unit']);
 		return FALSE;
 	} elseif (isset($_GET['unit']) or isset($_SESSION['unit'])) {
-                if ($is_adminOfCourse) {
+                if ($is_editor) {
                         $visibility_check = '';
                 } else {
                         $visibility_check = "AND visibility='v'";

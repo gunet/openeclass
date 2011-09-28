@@ -33,7 +33,7 @@ $cat_url = 'categories.php?course=' . $code_cours;
 $navigation[] = array('url' => $base_url, 'name' => $langGlossary);
 $nameTools = $langCategories;
 
-if ($is_adminOfCourse) {
+if ($is_editor) {
         load_js('tools.js');
         if (isset($_POST['submit_category'])) {
                 if (isset($_POST['category_id'])) {
@@ -139,7 +139,7 @@ if ($q and mysql_num_rows($q)) {
                <tr>
                  <th width='1'>&nbsp;</th>
                  <th class='left'>$langName</th>" .
-                 ($is_adminOfCourse? "<th width='20' class='center'>$langActions</th>": '') . "
+                 ($is_editor? "<th width='20' class='center'>$langActions</th>": '') . "
                </tr>";
         $i=0;
         while ($cat = mysql_fetch_assoc($q)) {
@@ -149,7 +149,7 @@ if ($q and mysql_num_rows($q)) {
                 } else {
                         $desc = '';
                 }
-                if ($is_adminOfCourse) {
+                if ($is_editor) {
                         $actions = "
                  <td class='center'><a href='$cat_url&amp;edit=$cat[id]' alt='$langCategoryMod'
                         title='$langCategoryMod'><img src='$themeimg/edit.png'></a>&nbsp;

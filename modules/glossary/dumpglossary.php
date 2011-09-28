@@ -22,8 +22,8 @@ $require_current_course = TRUE;
 
 include '../../include/init.php';
 
-// IF PROF ONLY
-if($is_adminOfCourse) {
+
+if($is_editor) {
 
 	if (isset($_GET['enc']) and $_GET['enc'] == '1253') {
 		$charset = 'Windows-1253';

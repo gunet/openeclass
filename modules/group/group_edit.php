@@ -42,7 +42,7 @@ initialize_group_info($group_id);
 $navigation[] = array ('url' => 'group.php?course='.$code_cours, 'name' => $langGroups);
 $navigation[] = array ('url' => "group_space.php?course=$code_cours&amp;group_id=$group_id", 'name' => q($group_name));
 
-if (!($is_adminOfCourse or $is_tutor)) {
+if (!($is_editor or $is_tutor)) {
         header('Location: group_space.php?course='.$code_cours.'&group_id=' . $group_id);
         exit;
 }
@@ -101,7 +101,7 @@ if (isset($_POST['modify'])) {
 
 $tool_content_group_name = q($group_name);
 
-if ($is_adminOfCourse) {
+if ($is_editor) {
         $tool_content_tutor = "<select name='tutor[]' multiple='multiple'>\n";
         $q = db_query("SELECT user.user_id, nom, prenom,
                                    user.user_id IN (SELECT user_id FROM group_members
@@ -181,7 +181,7 @@ $tool_content .= "
     <div id='operations_container'>
       <ul id='opslist'>
         <li><a href='group_space.php?course=$code_cours&amp;group_id=$group_id'>$langGroupThisSpace</a></li>" .
-                ($is_adminOfCourse? "<li><a href='../user/user.php?course=$code_cours'>$langAddTutors</a></li>": '') . "</ul></div>";
+                ($is_editor? "<li><a href='../user/user.php?course=$code_cours'>$langAddTutors</a></li>": '') . "</ul></div>";
 
 
 $tool_content .="

@@ -45,7 +45,8 @@ require_once("../../include/lib/learnPathLib.inc.php");
 require_once("../../include/lib/fileDisplayLib.inc.php");
 
 $require_current_course = TRUE;
-$require_prof = TRUE;
+$require_editor = TRUE;
+
 /*
  * DB tables definition
  */
@@ -55,13 +56,10 @@ $TABLEMODULE            = "lp_module";
 $TABLELEARNPATHMODULE   = "lp_rel_learnPath_module";
 $TABLEASSET             = "lp_asset";
 $TABLEUSERMODULEPROGRESS= "lp_user_module_progress";
-
 // exercises table name
 $TABLEEXERCISES         = "exercices";
 
 require_once("../../include/baseTheme.php");
-$head_content = "";
-$tool_content = "";
 $dialogBox = "";
 $style = "";
 $MessBox = "";
@@ -216,4 +214,3 @@ $tool_content .= display_my_exercises($dialogBox, $style);
 
 draw($tool_content, 2);
 
-?>

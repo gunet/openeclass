@@ -19,7 +19,7 @@
  * ======================================================================== */
 
 $require_current_course = TRUE;
-$require_prof = TRUE;
+$require_course_admin = TRUE;
 include '../../include/baseTheme.php';
 include '../../include/lib/fileManageLib.inc.php';
 
@@ -30,7 +30,7 @@ if (extension_loaded('zlib')) {
 	include '../../include/pclzip/pclzip.lib.php';
 }
 
-if ($is_adminOfCourse) {
+
         // Remove previous back-ups older than 10 minutes
         cleanup("${webDir}courses/archive", 600);
 
@@ -113,13 +113,6 @@ if ($is_adminOfCourse) {
                <a href='infocours.php?course=$code_cours'>$langBack</a></p>";
 
 	draw($tool_content, 2);
-}	// end of isadminOfCourse
-else
-{
-	$tool_content .= "<center><p>$langNotAllowed</p></center>";
-	draw($tool_content, 2);
-	exit;
-}
 
 // ---------------------------------------------
 // useful functions

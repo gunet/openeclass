@@ -57,7 +57,7 @@ function prepare_message() {
 }
 </script>';
 
-if ($is_adminOfCourse) {
+if ($is_editor) {
 	$tool_content .= "
    <div id=\"operations_container\">
      <ul id=\"opslist\">

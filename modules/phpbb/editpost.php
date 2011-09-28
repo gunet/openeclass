@@ -61,7 +61,7 @@ include "functions.php";
 /******************************************************************************
  * Actual code starts here
  *****************************************************************************/
-if ($is_adminOfCourse) { // course admin
+if ($is_editor) { // course admin
 	if (isset($_GET['forum'])) {
 		$forum = intval($_GET['forum']);
 	}

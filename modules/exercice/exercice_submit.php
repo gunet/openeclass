@@ -54,7 +54,7 @@ if (isset($exerciseId)) {
 	// security check 
 	$active = mysql_fetch_array(db_query("SELECT active FROM `$TBL_EXERCICES` 
 		WHERE id='$exerciseId'", $currentCourseID));
-	if (($active['active'] == 0) and (!$is_adminOfCourse)) {
+	if (($active['active'] == 0) and (!$is_editor)) {
 		header('Location: exercice.php?course='.$code_cours);
 		exit();
 	} 
@@ -145,7 +145,7 @@ if(!isset($_SESSION['objExercise'][$exerciseId])) {
 	// construction of Exercise
 	$objExercise = new Exercise();
 	// if the specified exercise doesn't exist or is disabled
-	if(!$objExercise->read($exerciseId) && (!$is_adminOfCourse)) {
+	if(!$objExercise->read($exerciseId) && (!$is_editor)) {
 		$tool_content .= $langExerciseNotFound;
 		draw($tool_content, 2);
 		exit();

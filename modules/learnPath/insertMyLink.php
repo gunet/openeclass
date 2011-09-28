@@ -37,7 +37,7 @@ require_once("../../include/lib/learnPathLib.inc.php");
 require_once("../../include/lib/fileDisplayLib.inc.php");
 
 $require_current_course = TRUE;
-$require_prof = TRUE;
+$require_editor = TRUE;
 
 $TABLELEARNPATH         = "lp_learnPath";
 $TABLEMODULE            = "lp_module";
@@ -228,10 +228,6 @@ function showlinks()
       </tr>
     </tbody>
     </table>
-    </form>
-
-    
-        
-        ";
+    </form>";
 	return $output;
 }

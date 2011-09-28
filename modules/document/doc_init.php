@@ -23,7 +23,7 @@
 define('MAIN', 0);
 define('GROUP', 1);
 define('EBOOK', 2);
-$can_upload = $is_adminOfCourse;
+$can_upload = $is_editor;
 if (defined('GROUP_DOCUMENTS')) {
         include '../group/group_functions.php';
 	$subsystem = GROUP;

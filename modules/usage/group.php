@@ -24,10 +24,10 @@
  */
 
 $require_current_course = true;
+$require_course_admin = TRUE;
 $require_help = true;
 $helpTopic = 'Usage';
 $require_login = true;
-$require_prof = true;
 
 include '../../include/baseTheme.php';
 include '../group/group_functions.php';

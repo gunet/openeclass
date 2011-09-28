@@ -36,7 +36,7 @@ include '../group/group_functions.php';
 $nameTools = $m['grades'];
 mysql_select_db($currentCourseID);
 
-if ($is_adminOfCourse and isset($_GET['assignment']) and isset($_GET['submission'])) {
+if ($is_editor and isset($_GET['assignment']) and isset($_GET['submission'])) {
 		$assign = get_assignment_details($_GET['assignment']);
 		$navigation[] = array("url"=>"work.php?course=$code_cours", "name"=>$langWorks);
 		$navigation[] = array("url"=>"work.php?course=$code_cours&amp;id=$_GET[assignment]", "name"=>$m['WorkView']);

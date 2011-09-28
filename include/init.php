@@ -311,52 +311,60 @@ if (isset($require_current_course) and $require_current_course) {
 }
 
 
-
-// We try to meet here all condition we can give access to admin of a course
-// When all script use $is_adminOfCourse, it's easier to implement
-// multi-level admin access
-
-// actually a prof has $status 1 or 2
+// actually a prof has $status 1 
 // the system admin has rights to all courses
 if ($is_admin) {
-	$is_adminOfCourse = TRUE;
+	$is_course_admin = TRUE;
         if (isset($currentCourse)) {
                $_SESSION['status'][$currentCourse] = 1;
         }
 } else {
-	$is_adminOfCourse = FALSE;
+	$is_course_admin = FALSE;
 }
+
+$is_editor = FALSE;
 if (isset($_SESSION['status'])) {
 	$status = $_SESSION['status'];
-	if (isset($currentCourse) and
-	(@$status[$currentCourse] == 1 or @$status[$currentCourse] == 2)) {
-		$is_adminOfCourse = TRUE;
+	if (isset($currentCourse)) {
+            if (check_editor()) { // chech if user is editor of course
+                $is_editor = TRUE;
+            }
+            if (@$status[$currentCourse] == 1) { // check if user is admin of course
+                $is_course_admin = TRUE;
+                $is_editor = TRUE;
+            }            	
 	}
 } else {
 	unset($status);
 }
 
-
-if (isset($require_prof) and $require_prof) {
-	if (!check_prof()) {
-		$toolContent_ErrorExists = $langCheckProf;
-		$errorMessagePath = "../../";
-	}
+if (isset($require_course_admin) and $require_course_admin) {
+    if (!$is_course_admin) {
+        $toolContent_ErrorExists = $langCheckProf;
+	$errorMessagePath = "../../";
+    }
 }
 
+if (isset($require_editor) and $require_editor) {
+    if (!$is_editor) {
+        $toolContent_ErrorExists = $langCheckProf;
+	$errorMessagePath = "../../";
+    }
+}
+
+    
 // Temporary student view
 if (isset($_SESSION['saved_statut'])) {
         $statut = 5;
-	$is_adminOfCourse = false;
+	$is_course_admin = false;
         if (isset($currentCourse)) {
                $_SESSION['status'][$currentCourse] = 5;
         }
 }
 
-
 //Security check:: Users that do not have Professor access for a course must not
 //be able to access inactive tools.
-if (isset($currentCourse) && file_exists($module_ini_dir = getcwd() . "/module.ini.php") && !$is_adminOfCourse && @$ignore_module_ini != true) {
+if (isset($currentCourse) && file_exists($module_ini_dir = getcwd() . "/module.ini.php") && !$is_course_admin && @$ignore_module_ini != true) {
 	include($module_ini_dir);
 
 	if (!check_guest()) {

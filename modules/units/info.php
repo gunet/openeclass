@@ -32,7 +32,7 @@ $nameTools = $langEditUnit;
 
 load_js('tools.js');
 
-if (!$is_adminOfCourse) { // check teacher status
+if (!$is_editor) { // check teacher status
         $tool_content .= $langNotAllowed;
         draw($tool_content, 2, null, $head_content);
         exit;

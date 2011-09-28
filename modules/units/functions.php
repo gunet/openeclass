@@ -61,9 +61,9 @@ function process_actions()
 // Return the id of the unit or false if user is not an admin 
 function check_admin_unit_resource($resource_id)
 {
-	global $cours_id, $is_adminOfCourse;
+	global $cours_id, $is_editor;
 	
-	if ($is_adminOfCourse) {
+	if ($is_editor) {
 		$q = db_query("SELECT course_units.id FROM course_units,unit_resources WHERE
 			course_units.course_id = $cours_id AND course_units.id = unit_resources.unit_id
 			AND unit_resources.id = $resource_id");
@@ -98,9 +98,9 @@ function show_resources($unit_id)
 
 function show_resource($info)
 {
-        global $tool_content, $langUnknownResType, $is_adminOfCourse;
+        global $tool_content, $langUnknownResType, $is_editor;
 	
-        if ($info['visibility'] == 'i' and !$is_adminOfCourse) {
+        if ($info['visibility'] == 'i' and !$is_editor) {
                 return;
         }
         switch ($info['type']) {
@@ -157,7 +157,7 @@ function show_resource($info)
 // display resource documents
 function show_doc($title, $comments, $resource_id, $file_id)
 {
-        global $mysqlMainDb, $is_adminOfCourse, $currentCourseID, $cours_id,
+        global $mysqlMainDb, $is_editor, $currentCourseID, $cours_id,
                $langWasDeleted, $visibility_check, $urlServer, $id,
                $code_cours, $themeimg;
 
@@ -165,7 +165,7 @@ function show_doc($title, $comments, $resource_id, $file_id)
         $r = db_query("SELECT * FROM `$mysqlMainDb`.document
 	               WHERE course_id = $cours_id AND id =" . intval($file_id) ." $visibility_check");
         if (mysql_num_rows($r) == 0) {
-                if (!$is_adminOfCourse) {
+                if (!$is_editor) {
                         return '';
                 }
                 $status = 'del';
@@ -232,7 +232,7 @@ function show_description($title, $comments, $id, $res_id, $visibility)
 // display resource learning path
 function show_lp($title, $comments, $resource_id, $lp_id)
 {
-	global $id, $tool_content, $mysqlMainDb, $urlServer, $is_adminOfCourse,
+	global $id, $tool_content, $mysqlMainDb, $urlServer, $is_editor,
                $langWasDeleted, $currentCourseID, $code_cours, $themeimg;
 
 	$comment_box = $class_vis = $imagelink = $link = '';
@@ -240,7 +240,7 @@ function show_lp($title, $comments, $resource_id, $lp_id)
 	$r = db_query("SELECT * FROM lp_learnPath WHERE learnPath_id = $lp_id",
                       $currentCourseID);
 	if (mysql_num_rows($r) == 0) { // check if lp was deleted
-		if (!$is_adminOfCourse) {
+		if (!$is_editor) {
 			return '';
 		} else {
 			$status = 'del';
@@ -254,7 +254,7 @@ function show_lp($title, $comments, $resource_id, $lp_id)
 		$imagelink = "<img src='$themeimg/lp_" .
 			($status == 'i'? 'off': 'on') . ".png' />";
 	}
-        if ($status != 'v' and !$is_adminOfCourse) {
+        if ($status != 'v' and !$is_editor) {
 			return '';
         }
 
@@ -276,7 +276,7 @@ function show_lp($title, $comments, $resource_id, $lp_id)
 // display resource video
 function show_video($table, $title, $comments, $resource_id, $video_id, $visibility)
 {
-        global $is_adminOfCourse, $currentCourseID, $tool_content, $themeimg;
+        global $is_editor, $currentCourseID, $tool_content, $themeimg;
 
         $result = db_query("SELECT * FROM $table WHERE id=$video_id",
                            $currentCourseID);
@@ -290,7 +290,7 @@ function show_video($table, $title, $comments, $resource_id, $video_id, $visibil
                              "<img src='$themeimg/videos_" .
                              ($visibility == 'i'? 'off': 'on') . ".png' /></a>";
         } else {
-                if (!$is_adminOfCourse) {
+                if (!$is_editor) {
                         return;
                 }
                 $videolink = $title;
@@ -316,7 +316,7 @@ function show_video($table, $title, $comments, $resource_id, $video_id, $visibil
 // display resource work (assignment)
 function show_work($title, $comments, $resource_id, $work_id, $visibility)
 {
-	global $id, $tool_content, $mysqlMainDb, $urlServer, $is_adminOfCourse,
+	global $id, $tool_content, $mysqlMainDb, $urlServer, $is_editor,
                $langWasDeleted, $currentCourseID, $code_cours, $themeimg;
 
 	$comment_box = $class_vis = $imagelink = $link = '';
@@ -324,7 +324,7 @@ function show_work($title, $comments, $resource_id, $work_id, $visibility)
 	$r = db_query("SELECT * FROM assignments WHERE id = $work_id",
                       $currentCourseID);
 	if (mysql_num_rows($r) == 0) { // check if it was deleted
-		if (!$is_adminOfCourse) {
+		if (!$is_editor) {
 			return '';
 		} else {
 			$status = 'del';
@@ -358,7 +358,7 @@ function show_work($title, $comments, $resource_id, $work_id, $visibility)
 // display resource exercise
 function show_exercise($title, $comments, $resource_id, $exercise_id, $visibility)
 {
-	global $id, $tool_content, $mysqlMainDb, $urlServer, $is_adminOfCourse,
+	global $id, $tool_content, $mysqlMainDb, $urlServer, $is_editor,
                $langWasDeleted, $currentCourseID, $code_cours, $themeimg;
 
 	$comment_box = $class_vis = $imagelink = $link = '';
@@ -366,7 +366,7 @@ function show_exercise($title, $comments, $resource_id, $exercise_id, $visibilit
 	$r = db_query("SELECT * FROM exercices WHERE id = $exercise_id",
                       $currentCourseID);
 	if (mysql_num_rows($r) == 0) { // check if it was deleted
-		if (!$is_adminOfCourse) {
+		if (!$is_editor) {
 			return '';
 		} else {
 			$status = 'del';
@@ -401,7 +401,7 @@ function show_exercise($title, $comments, $resource_id, $exercise_id, $visibilit
 // display resource forum
 function show_forum($type, $title, $comments, $resource_id, $ft_id, $visibility)
 {
-	global $id, $tool_content, $mysqlMainDb, $urlServer, $is_adminOfCourse,
+	global $id, $tool_content, $mysqlMainDb, $urlServer, $is_editor,
                $currentCourseID, $code_cours, $themeimg;
 
 	$comment_box = '';
@@ -439,7 +439,7 @@ function show_forum($type, $title, $comments, $resource_id, $ft_id, $visibility)
 // display resource wiki
 function show_wiki($title, $comments, $resource_id, $wiki_id, $visibility)
 {
-	global $id, $tool_content, $mysqlMainDb, $urlServer, $is_adminOfCourse,
+	global $id, $tool_content, $mysqlMainDb, $urlServer, $is_editor,
                $langWasDeleted, $currentCourseID, $code_cours, $themeimg;
 
 	$comment_box = $imagelink = $link = $class_vis = '';
@@ -448,7 +448,7 @@ function show_wiki($title, $comments, $resource_id, $wiki_id, $visibility)
 	$r = db_query("SELECT * FROM wiki_properties WHERE id = $wiki_id",
                       $currentCourseID);
 	if (mysql_num_rows($r) == 0) { // check if it was deleted
-		if (!$is_adminOfCourse) {
+		if (!$is_editor) {
 			return '';
 		} else {
 			$status = 'del';
@@ -481,14 +481,14 @@ function show_wiki($title, $comments, $resource_id, $wiki_id, $visibility)
 // display resource link
 function show_link($title, $comments, $resource_id, $link_id, $visibility)
 {
-	global $id, $tool_content, $mysqlMainDb, $urlServer, $is_adminOfCourse,
+	global $id, $tool_content, $mysqlMainDb, $urlServer, $is_editor,
                $langWasDeleted, $cours_id, $currentCourseID, $themeimg;
 
 	$comment_box = $class_vis = $imagelink = $link = '';
         $title = htmlspecialchars($title);
 	$r = db_query("SELECT * FROM `$mysqlMainDb`.link WHERE course_id = $cours_id AND id = $link_id");
 	if (mysql_num_rows($r) == 0) { // check if it was deleted
-		if (!$is_adminOfCourse) {
+		if (!$is_editor) {
 			return '';
 		} else {
 			$status = 'del';
@@ -525,7 +525,7 @@ function show_link($title, $comments, $resource_id, $link_id, $visibility)
 // display resource link category
 function show_linkcat($title, $comments, $resource_id, $linkcat_id, $visibility)
 {
-	global $id, $tool_content, $mysqlMainDb, $urlServer, $is_adminOfCourse,
+	global $id, $tool_content, $mysqlMainDb, $urlServer, $is_editor,
                $langWasDeleted, $cours_id, $currentCourseID, $themeimg;
 	
 	$content = $linkcontent = '';
@@ -533,7 +533,7 @@ function show_linkcat($title, $comments, $resource_id, $linkcat_id, $visibility)
         $title = htmlspecialchars($title);
 	$sql = db_query("SELECT * FROM `$mysqlMainDb`.link_category WHERE course_id = $cours_id AND id = $linkcat_id");
 	if (mysql_num_rows($sql) == 0) { // check if it was deleted
-		if (!$is_adminOfCourse) {
+		if (!$is_editor) {
 			return '';
 		} else {
 			$status = 'del';
@@ -571,14 +571,14 @@ function show_linkcat($title, $comments, $resource_id, $linkcat_id, $visibility)
 // display resource ebook
 function show_ebook($title, $comments, $resource_id, $ebook_id, $visibility)
 {
-	global $id, $tool_content, $mysqlMainDb, $urlServer, $is_adminOfCourse,
+	global $id, $tool_content, $mysqlMainDb, $urlServer, $is_editor,
                $langWasDeleted, $currentCourseID, $themeimg;
 
 	$comment_box = $class_vis = $imagelink = $link = '';
         $title = htmlspecialchars($title);
 	$r = db_query("SELECT * FROM ebook WHERE id = $ebook_id", $mysqlMainDb);
 	if (mysql_num_rows($r) == 0) { // check if it was deleted
-		if (!$is_adminOfCourse) {
+		if (!$is_editor) {
 			return '';
 		} else {
 			$status = 'del';
@@ -659,12 +659,12 @@ function show_ebook_subsection($title, $comments, $resource_id, $subsection_id, 
 function show_ebook_resource($title, $comments, $resource_id, $ebook_id,
 		             $display_id, $visibility, $deleted)
 {
-	global $id, $tool_content, $mysqlMainDb, $urlServer, $is_adminOfCourse,
+	global $id, $tool_content, $mysqlMainDb, $urlServer, $is_editor,
                $langWasDeleted, $currentCourseID, $cours_id, $themeimg;
 
 	$comment_box = $class_vis = $imagelink = $link = '';
 	if ($deleted) {
-		if (!$is_adminOfCourse) {
+		if (!$is_editor) {
 			return '';
 		} else {
 			$status = 'del';
@@ -696,13 +696,13 @@ function show_ebook_resource($title, $comments, $resource_id, $ebook_id,
 // resource actions
 function actions($res_type, $resource_id, $status, $res_id = false)
 {
-        global $is_adminOfCourse, $langEdit, $langDelete, $langVisibility,
+        global $is_editor, $langEdit, $langDelete, $langVisibility,
                $langAddToCourseHome, $langDown, $langUp, $mysqlMainDb,
                $langConfirmDelete, $code_cours, $themeimg;
 
         static $first = true;
 
-	if (!$is_adminOfCourse) {
+	if (!$is_editor) {
 		return '';
 	}
 

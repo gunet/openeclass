@@ -63,7 +63,7 @@ include_once("./config.php");
 include "functions.php";
 include "../group/group_functions.php";
 
-if ($is_adminOfCourse) {
+if ($is_editor) {
 	$head_content .= '
 	<script type="text/javascript">
 	function confirmation ()
@@ -77,7 +77,7 @@ if ($is_adminOfCourse) {
 	';
 }
 
-if ($is_adminOfCourse) { 	
+if ($is_editor) { 	
          $tool_content .= " 	        
 	<div id='operations_container'> 	
 	<ul id='opslist'>
@@ -152,7 +152,7 @@ if ($total_categories) {
 		$tool_content .= "<tr class='odd'>
 		<th colspan='5'><b>$title</b></th>
 		<th width='80' class='right'>";
-		if ($is_adminOfCourse) {
+		if ($is_editor) {
 			$tool_content .= "<a href='forum_admin.php?course=$code_cours&amp;forumgo=yes&amp;cat_id=$catNum'>
 			<img src='$themeimg/add.png' title='$langNewForum' alt='$langNewForum' /></a>
 			<a href='forum_admin.php?course=$code_cours&amp;forumcatedit=yes&amp;cat_id=$catNum'>
@@ -219,7 +219,7 @@ if ($total_categories) {
 					//  - forum belongs to group and group forums are enabled and
 					//     - forum is not private or
 					//     - user is member of group
-					if ($is_adminOfCourse or !$group_id or ($has_forum and (!$private_forum or $is_member))) {
+					if ($is_editor or !$group_id or ($has_forum and (!$private_forum or $is_member))) {
 						$tool_content .= "<a href='viewforum.php?course=$code_cours&amp;forum=$forum_id'><b>$forum_name</b></a><div class='smaller'>" . $member;
 					} else {
 						$tool_content .= $forum_name;
@@ -249,7 +249,7 @@ if ($total_categories) {
 						$forum_icon = toggle_icon($forum_action_notify);
 					}
 					$tool_content .= "<td class='right'>";
-					if ($is_adminOfCourse) { // admin actions
+					if ($is_editor) { // admin actions
 						$tool_content .= "<a href='forum_admin.php?course=$code_cours&amp;forumgoedit=yes&amp;forum_id=$forum_id&amp;cat_id=$catNum'>
 						<img src='$themeimg/edit.png' title='$langModify' />
 						</a>
@@ -274,7 +274,7 @@ if ($total_categories) {
 	$tool_content .= "<p class='alert1'>$langNoForums</p>";
 }
 add_units_navigation(true);
-if($is_adminOfCourse) {
+if($is_editor) {
 	draw($tool_content, 2, null, $head_content);
 } else {
 	draw($tool_content, 2);

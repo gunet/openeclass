@@ -42,7 +42,7 @@
 
 require_once("../../include/lib/learnPathLib.inc.php");
 $require_current_course = TRUE;
-$require_prof = TRUE;
+$require_editor = TRUE;
 
 $TABLECOURSUSER	        = "cours_user";
 $TABLEUSER              = "user";
@@ -53,8 +53,6 @@ $TABLEASSET             = "lp_asset";
 $TABLEUSERMODULEPROGRESS= "lp_user_module_progress";
 
 require_once("../../include/baseTheme.php");
-$head_content = "";
-$tool_content = "";
 
 $navigation[] = array("url"=>"learningPathList.php?course=$code_cours", "name"=> $langLearningPaths);
 $nameTools = $langStatsOfLearnPath;
@@ -67,7 +65,7 @@ if( empty($_REQUEST['path_id']) )
 }
 
 mysql_select_db($currentCourseID);
-$path_id = (int) $_REQUEST['path_id'];
+$path_id = intval($_REQUEST['path_id']);
 
 // get infos about the learningPath
 $sql = "SELECT `name` FROM `".$TABLELEARNPATH."` WHERE `learnPath_id` = ". (int)$path_id;

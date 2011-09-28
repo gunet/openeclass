@@ -44,12 +44,12 @@ $navigation[]= array ("url"=>"group.php?course=$code_cours", "name"=> $langGroup
 list($tutor_id) = mysql_fetch_row(db_query("SELECT is_tutor FROM group_members WHERE group_id='$group_id'", $mysqlMainDb));
 $is_tutor = ($tutor_id == 1)?TRUE:FALSE;
 
-if (!$is_adminOfCourse and !$is_tutor) {
+if (!$is_editor and !$is_tutor) {
         header('Location: group_space.php?course='.$code_cours.'&group_id=' . $group_id);
         exit;
 }
 
-if ($is_adminOfCourse or $is_tutor)  {
+if ($is_editor or $is_tutor)  {
 	if (isset($_POST['submit'])) {
                 $sender = mysql_fetch_array(db_query("SELECT email, nom, prenom FROM user
 						WHERE user_id = $uid", $mysqlMainDb));

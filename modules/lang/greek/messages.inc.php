@@ -2337,6 +2337,7 @@ $langNotifyRegUser2 = " από τον διαχειριστή του μαθήμα
 // search_user.php
 $langUserNoneMasc="-";
 $langTutor="Εκπαιδευτής";
+$langEditor = "Βοηθός";
 $langTutorDefinition="Διδάσκων (δικαίωμα να επιβλέπει τις ομάδες χρηστών)";
 $langAdminDefinition="Διαχειριστής (δικαίωμα να αλλάζει το περιεχόμενο των μαθημάτων)";
 $langDeleteUserDefinition="Διαγραφή (διαγραφή από τον κατάλογο χρηστών του <b>παρόντος</b> μαθήματος)";
@@ -2353,9 +2354,8 @@ $langUserAddExplanation="κάθε γραμμή του αρχείου που θα
         Οι χρήστες θα λάβουν ειδοποίηση μέσω email με το όνομα χρήστη / συνθηματικό.";
 $langDownloadUserList="Ανέβασμα καταλόγου";
 $langUserNumber="αριθμός";
-$langGiveAdmin="Προσθήκη δικαίωματος";
+$langGiveRight="Προσθήκη δικαίωματος";
 $langRemoveRight="Αφαίρεση δικαίωματος";
-$langGiveTutor="Προσθήκη δικαίωματος";
 $langUserOneByOneExplanation="Αυτός (αυτή) θα λάβει ειδοποίηση μέσω email με όνομα χρήστη και συνθηματικό";
 $langBackUser="Επιστροφή στη λίστα χρηστών";
 $langUserAlreadyRegistered="Ενας χρήστης με ίδιο όνομα / επίθετο είναι ήδη γραμμένος σε αυτό το μάθημα.

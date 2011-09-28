@@ -54,7 +54,7 @@ if (!isset($_GET['page'])) {
 } else {
 	$page = $_GET['page'];
 }
-if($is_adminOfCourse) {
+if($is_editor) {
 	// deletes a question from the data base and all exercises
 	if(isset($_GET['delete'])) {
 		$delete = intval($_GET['delete']);

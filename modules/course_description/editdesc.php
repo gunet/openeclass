@@ -25,7 +25,7 @@
 
 $require_current_course = TRUE;
 $require_login = true;
-$require_prof = true;
+$require_editor = true;
 
 include '../../include/baseTheme.php';
 include '../units/functions.php';
@@ -33,11 +33,6 @@ include '../units/functions.php';
 $tool_content = $head_content = "";
 $nameTools = $langEditCourseProgram ;
 $navigation[] = array ('url' => 'index.php?course='.$code_cours, 'name' => $langCourseProgram);
-
-if (!$is_adminOfCourse) {
-        header('Location: ' . $urlServer);
-        exit;
-}
 
 mysql_select_db($mysqlMainDb);
 
@@ -77,4 +72,3 @@ $tool_content = "
  </form>\n";
 
 draw($tool_content, 2, null, $head_content);
-

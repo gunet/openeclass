@@ -157,6 +157,7 @@ db_query("CREATE TABLE cours_user (
       `statut` TINYINT(4) NOT NULL DEFAULT 0,
       `team` INT(11) NOT NULL DEFAULT 0,
       `tutor` INT(11) NOT NULL DEFAULT 0,
+      `editor` INT(11) NOT NULL DEFAULT 0,
       `reg_date` DATE NOT NULL,
       `receive_mail` BOOL NOT NULL DEFAULT 1,
       PRIMARY KEY (cours_id, user_id)) $charset_spec");
@@ -214,6 +215,7 @@ db_query("CREATE TABLE user (
 
 db_query("CREATE TABLE admin (
       idUser mediumint unsigned  NOT NULL default '0',
+      `privilege` int(11) NOT NULL default '0',
       UNIQUE KEY idUser (idUser)) $charset_spec");
 
 db_query("CREATE TABLE loginout (
@@ -359,6 +361,54 @@ db_query("CREATE TABLE IF NOT EXISTS ebook_subsection (
                 `public_id` VARCHAR(11) NOT NULL,
                 `file_id` INT(11) NOT NULL,
                 `title` TEXT) $charset_spec");
+
+
+db_query("CREATE TABLE IF NOT EXISTS `forums` (
+  `forum_id` int(10) NOT NULL auto_increment,
+  `forum_name` varchar(150) default NULL,
+  `forum_desc` mediumtext,
+  `forum_access` int(10) default '1',
+  `forum_moderator` int(10) default NULL,
+  `forum_topics` int(10) NOT NULL default '0',
+  `forum_posts` int(10) NOT NULL default '0',
+  `forum_last_post_id` int(10) NOT NULL default '0',
+  `cat_id` int(10) default NULL,
+  `forum_type` int(10) default '0',
+  `course_id` int(11) NOT NULL,
+  PRIMARY KEY  (`forum_id`),
+  FULLTEXT KEY `forums` (`forum_name`,`forum_desc`))");
+
+db_query("CREATE TABLE IF NOT EXISTS `posts` (
+  `post_id` int(10) NOT NULL auto_increment,
+  `topic_id` int(10) NOT NULL default '0',
+  `forum_id` int(10) NOT NULL default '0',
+  `post_text` mediumtext,
+  `poster_id` int(10) NOT NULL default '0',
+  `post_time` varchar(20) default NULL,
+  `poster_ip` varchar(16) default NULL,
+  `course_id` int(11) NOT NULL,
+  PRIMARY KEY  (`post_id`),
+  FULLTEXT KEY `posts_text` (`post_text`))");
+
+db_query("CREATE TABLE IF NOT EXISTS `topics` (
+  `topic_id` int(10) NOT NULL auto_increment,
+  `topic_title` varchar(100) default NULL,
+  `topic_poster_id` int(10) default NULL,
+  `topic_time` varchar(20) default NULL,
+  `topic_views` int(10) NOT NULL default '0',
+  `topic_replies` int(10) NOT NULL default '0',
+  `topic_last_post_id` int(10) NOT NULL default '0',
+  `forum_id` int(10) NOT NULL default '0',
+  `topic_status` int(10) NOT NULL default '0',
+  `course_id` int(11) NOT NULL,
+  PRIMARY KEY  (`topic_id`))");
+
+db_query("CREATE TABLE IF NOT EXISTS `categories` (
+  `cat_id` int(10) NOT NULL auto_increment,
+  `cat_title` varchar(100) default NULL,
+  `cat_order` varchar(10) default NULL,
+  `course_id` int(11) NOT NULL,
+  PRIMARY KEY  (`cat_id`, `course_id`))");
 
 // encrypt the admin password into DB
 $password_encrypted = md5($passForm);

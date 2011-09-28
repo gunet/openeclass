@@ -25,7 +25,7 @@
 $require_current_course = TRUE;
 $require_help = TRUE;
 $helpTopic = 'For';
-$require_prof = true;
+$require_editor = true;
 
 include '../../include/baseTheme.php';
 include '../../include/sendMail.inc.php';
@@ -37,7 +37,6 @@ $navigation[]= array ("url"=>"index.php?course=$code_cours", "name"=> $langForum
 $forum_id = isset($_REQUEST['forum_id'])? intval($_REQUEST['forum_id']): '';
 $cat_id = isset($_REQUEST['cat_id'])? intval($_REQUEST['cat_id']): '';
 
-if ($is_adminOfCourse) {
 
 $head_content .= <<<hContent
 <script type="text/javascript">
@@ -260,11 +259,4 @@ hContent;
                 </fieldset>
                 </form>";
 	}
-} else {
-	$tool_content .= "$langNotAllowed<br>";
-}
-if($is_adminOfCourse) {
 	draw($tool_content, 2, null, $head_content);
-} else {
-	draw($tool_content, 2);
-}

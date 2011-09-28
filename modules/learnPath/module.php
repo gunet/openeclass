@@ -62,7 +62,7 @@ $body_action = '';
 $nameTools = $langLearningObject;
 if (!add_units_navigation()) {
 	$navigation[] = array('url' => "learningPathList.php?course=$code_cours", 'name'=> $langLearningPaths);
-	if ($is_adminOfCourse) {
+	if ($is_editor) {
                 $navigation[] = array('url' => "learningPathAdmin.php?course=$code_cours&amp;path_id=".(int)$_SESSION['path_id'],
                                       'name' => $langAdm);
 	}
@@ -83,17 +83,17 @@ mysql_select_db($currentCourseID);
 
 $q = db_query("SELECT name, visibility FROM $TABLELEARNPATH WHERE learnPath_id = '".(int)$_SESSION['path_id']."'");
 $lp = mysql_fetch_array($q);
-if (!add_units_navigation() && !$is_adminOfCourse) {
+if (!add_units_navigation() && !$is_editor) {
 	$navigation[] = array("url" => "learningPath.php?course=$code_cours&amp;path_id=".(int)$_SESSION['path_id'], "name" => $lp['name']);
 }
 
-if ( !$is_adminOfCourse && $lp['visibility'] == "HIDE" ) {
+if ( !$is_editor && $lp['visibility'] == "HIDE" ) {
 	// if the learning path is invisible, don't allow users in it
 	header("Location: ./learningPathList.php?course=$code_cours");
 	exit();
 }
 
-check_LPM_validity($is_adminOfCourse, $code_cours);
+check_LPM_validity($is_editor, $code_cours);
 
 // main page
 // FIRST WE SEE IF USER MUST SKIP THE PRESENTATION PAGE OR NOT
@@ -173,7 +173,7 @@ $resultBrowsed = db_query_get_single_row($sql);
         if ($module['contentType']== CTLINK_ ) { $nameTools = $langLinkAsModuleLabel; }
         if ($module['contentType']== CTCOURSE_DESCRIPTION_ ) { $nameTools = $langCourseDescriptionAsModuleLabel; }
         if ($module['contentType']== CTLABEL_ ) { $nameTools = $langModuleOfMyCourseLabel_onom; }
-        if ($is_adminOfCourse)
+        if ($is_editor)
             $nameTools = $langModify ." ". $nameTools;
         else
             $nameTools = $langTracking ." ". $nameTools;
@@ -181,7 +181,7 @@ $resultBrowsed = db_query_get_single_row($sql);
 
 
 // redirect user to the path browser if needed
-if( !$is_adminOfCourse
+if( !$is_editor
 	&& ( !is_array($resultBrowsed) || !$resultBrowsed || count($resultBrowsed) <= 0 )
 	&& $noModuleComment
 	&& $noModuleSpecificComment
@@ -421,7 +421,7 @@ $tool_content .= "
 //################################# ADMIN DISPLAY ####################################\\
 //####################################################################################\\
 /*
-if( $is_adminOfCourse ) // for teacher only
+if( $is_editor ) // for teacher only
 {
     switch ($module['contentType'])
     {
@@ -440,7 +440,7 @@ if( $is_adminOfCourse ) // for teacher only
         case CTLINK_:
        	break;
     }
-} // if ($is_adminOfCourse)
+} // if ($is_editor)
 */
 
     $tool_content .= "
@@ -449,7 +449,7 @@ if( $is_adminOfCourse ) // for teacher only
   ;
 
 //back button
-if ($is_adminOfCourse) {
+if ($is_editor) {
 	$pathBack = "./learningPathAdmin.php";
 } else {
 	$pathBack = "./learningPath.php";

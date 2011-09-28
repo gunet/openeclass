@@ -32,7 +32,7 @@ define('EBOOK_DOCUMENTS', true);
 
 mysql_select_db($mysqlMainDb);
 
-if (!$is_adminOfCourse) {
+if (!$is_editor) {
         redirect_to_home_page();
 } else {
         $title = trim(@$_POST['title']);

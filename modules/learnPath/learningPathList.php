@@ -81,7 +81,7 @@ if (!add_units_navigation(TRUE)) {
 }
 
 if (isset($_GET['cmd']) && $_GET['cmd'] == 'export'
-	&& isset($_GET['path_id']) && is_numeric($_GET['path_id']) && $is_adminOfCourse)
+	&& isset($_GET['path_id']) && is_numeric($_GET['path_id']) && $is_editor)
 {
       mysql_select_db($currentCourseID);
       require_once("include/scormExport.inc.php");
@@ -98,7 +98,7 @@ if (isset($_GET['cmd']) && $_GET['cmd'] == 'export'
 } // endif $cmd == export
 
 if ( isset($_GET['cmd']) && $_GET['cmd'] == 'export12'
-	&& isset($_GET['path_id']) && is_numeric($_GET['path_id']) && $is_adminOfCourse )
+	&& isset($_GET['path_id']) && is_numeric($_GET['path_id']) && $is_editor )
 {
       mysql_select_db($currentCourseID);
       require_once("include/scormExport12.inc.php");
@@ -116,7 +116,7 @@ if ( isset($_GET['cmd']) && $_GET['cmd'] == 'export12'
 
 mysql_select_db($currentCourseID);
 
-if ($is_adminOfCourse) {
+if ($is_editor) {
 	$head_content .= "<script type='text/javascript'>
           function confirmation (name)
           {
@@ -349,7 +349,7 @@ if (isset($sortDirection) && $sortDirection)
 }
 
 // Display links to create and import a learning path
-if($is_adminOfCourse) {
+if($is_editor) {
 	if (isset($dialogBox)) {
 		$tool_content .= disp_message_box($dialogBox, $style) ."<br />";
 		draw($tool_content, 2, null, $head_content);
@@ -383,7 +383,7 @@ $tool_content .= "
       <th colspan='2'><div align='left'>$langLearningPaths</div></th>\n";
 
 
-if($is_adminOfCourse) {
+if($is_editor) {
      // Titles for teachers
      $tool_content .= "      <th colspan='3'><div align='center'>$langAdm</div></th>\n" .
                       "      <th colspan='5'><div align='center'>$langActions</div></th>\n";
@@ -396,7 +396,7 @@ elseif($uid) {
 $tool_content .= "    </tr>\n";
 
 // display invisible learning paths only if user is courseAdmin
-if ($is_adminOfCourse) {
+if ($is_editor) {
     $visibility = "";
 }
 else {
@@ -441,7 +441,7 @@ while ($list = mysql_fetch_array($result)) // while ... learning path list
      }
 
     if ($list['visibility'] == 'HIDE') {
-        if ($is_adminOfCourse) {
+        if ($is_editor) {
             $style = " class='invisible'";
             $image_bullet = "arrow.png";
         }
@@ -517,7 +517,7 @@ while ($list = mysql_fetch_array($result)) // while ... learning path list
         if (($moduleNumber == 0)  && ($list['lock'] == 'CLOSE')) {
             //must block next path because last module of this path never tried!
             if($uid) {
-                if ( !$is_adminOfCourse ) {
+                if ( !$is_editor ) {
                     $is_blocked = true;
                 } // never blocked if allowed to edit
             }
@@ -533,7 +533,7 @@ while ($list = mysql_fetch_array($result)) // while ... learning path list
             if (($listblock2['credit']=="NO-CREDIT") && ($list['lock'] == 'CLOSE')) {
                 //must block next path because last module of this path not credited yet!
                 if($uid) {
-                    if (!$is_adminOfCourse) {
+                    if (!$is_editor) {
                         $is_blocked = true;
                     } // never blocked if allowed to edit
                 }
@@ -548,7 +548,7 @@ while ($list = mysql_fetch_array($result)) // while ... learning path list
     }
 
     // DISPLAY ADMIN LINK-----------------------------------------------------------
-    if($is_adminOfCourse) {
+    if($is_editor) {
         // 5 administration columns
 
         // LOCK link
@@ -662,7 +662,7 @@ while ($list = mysql_fetch_array($result)) // while ... learning path list
     $ind++;
 } // end while
 
-if (!$is_adminOfCourse && $iterator != 1 && $uid) {
+if (!$is_editor && $iterator != 1 && $uid) {
         // add a blank line between module progression and global progression
         $total = round($globalprog / ($iterator-1));
         $tool_content .= "

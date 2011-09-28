@@ -33,10 +33,10 @@
 */
 
 $require_current_course = TRUE;
+$require_course_admin = TRUE;
 $require_help = true;
 $helpTopic = 'Usage';
 $require_login = true;
-$require_prof = true;
 include '../../include/baseTheme.php';
 
 $tool_content .= "

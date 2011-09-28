@@ -64,7 +64,7 @@ mysql_select_db($currentCourseID);
 // check and set user access level for the tool
 
 // set admin mode and groupId
-$is_allowedToAdmin = $is_adminOfCourse;
+$is_allowedToAdmin = $is_editor;
 
 if ($_gid and $is_groupAllowed) {
         // group context

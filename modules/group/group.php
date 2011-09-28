@@ -83,7 +83,7 @@ mysql_select_db($mysqlMainDb);
 initialize_group_info();
 $user_groups = user_group_info($uid, $cours_id);
 
-if ($is_adminOfCourse) {
+if ($is_editor) {
         if (isset($_POST['creation'])) {
                 $group_quantity = intval($_POST['group_quantity']);
                 if (preg_match('/^[0-9]/', $_POST['group_max'])) {

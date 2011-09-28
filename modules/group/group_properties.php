@@ -31,7 +31,7 @@
 $require_current_course = true;
 $require_help = true;
 $helpTopic = 'Group';
-$require_prof = true;
+$require_editor = true;
 
 include '../../include/baseTheme.php';
 $nameTools = $langGroupProperties;
@@ -47,7 +47,6 @@ $checked['documents'] = $documents? ' checked="1"': '';
 $checked['private_forum_yes'] = $private_forum? ' checked="1"': '';
 $checked['private_forum_no'] = $private_forum? '': ' checked="1"';
 
-if ($is_adminOfCourse) {
 	$tool_content = "
 <form method='post' action='group.php?course=$code_cours'>
     <fieldset>
@@ -93,6 +92,3 @@ if ($is_adminOfCourse) {
     </fieldset>    
     </form>";
         draw($tool_content, 2);
-} else {
-        header("Location: $urlServer");
-}

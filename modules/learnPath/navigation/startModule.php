@@ -77,7 +77,7 @@ function directly_pass_lp_module($table, $userid, $lpmid) {
 if (isset($_GET['viewModule_id']) and !empty($_GET['viewModule_id']))
 	$_SESSION['lp_module_id'] = intval($_GET['viewModule_id']);
 
-check_LPM_validity($is_adminOfCourse, $code_cours, true, true);
+check_LPM_validity($is_editor, $code_cours, true, true);
 
 // SET USER_MODULE_PROGRESS IF NOT SET
 if($uid) // if not anonymous

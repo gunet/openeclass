@@ -64,7 +64,7 @@ if (!file_exists($fileChatName)) {
 // chat commands
 
 // reset command
-if (isset($_GET['reset']) && $is_adminOfCourse) {
+if (isset($_GET['reset']) && $is_editor) {
 	$fchat = fopen($fileChatName,'w');
 	fwrite($fchat, $timeNow." ---- ".$langWashFrom." ---- ".$nick." --------\n");
 	fclose($fchat);
@@ -72,7 +72,7 @@ if (isset($_GET['reset']) && $is_adminOfCourse) {
 }
 
 // store
-if (isset($_GET['store']) && $is_adminOfCourse) {
+if (isset($_GET['store']) && $is_editor) {
 	$saveIn = "chat.".date("Y-m-j-B").".txt";
 	$chat_filename = date("YmdGis").randomkeys("8").".txt";
 

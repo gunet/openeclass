@@ -477,7 +477,7 @@ function adminMenu(){
  * @return array
  */
 function lessonToolsMenu(){
-	global $is_admin, $is_adminOfCourse, $uid, $mysqlMainDb;
+	global $is_editor, $uid, $mysqlMainDb;
 	global $webDir, $language;
 	global $currentCourseID;
 
@@ -491,7 +491,7 @@ function lessonToolsMenu(){
         $arrMenuType = array();
         $arrMenuType['type'] = 'none';
 
-        if ($is_adminOfCourse) {
+        if ($is_editor) {
                 $tools_sections = array(array('type' => 'Public',
                                               'title' => $GLOBALS['langActiveTools'],
                                               'iconext' => '_on.png'),
