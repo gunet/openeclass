@@ -2,12 +2,23 @@
 session_start();
 $path2add = 0;
 include 'include/baseTheme.php';
-if (isset($_SESSION['statut']) and $_SESSION['statut'] == 1) {
+
+if (!isset($_SESSION['saved_editor'])) {
+    $cours_id = course_code_to_id($_GET['course']);
+    $is_editor = FALSE;
+    if (check_editor()) {
+        $is_editor = TRUE;
+    }
+}
+
+if ((isset($_SESSION['statut']) and $_SESSION['statut'] == 1) or $is_editor) {
         $_SESSION['saved_statut'] = $_SESSION['statut'];
         $_SESSION['statut'] = 5;
-} elseif (isset($_SESSION['saved_statut'])) {
+        $_SESSION['saved_editor'] = $is_editor;
+} elseif (isset($_SESSION['saved_statut'])) {    
         $_SESSION['statut'] = $_SESSION['saved_statut'];
         unset($_SESSION['saved_statut']);
+        unset($_SESSION['saved_editor']);
 }
 if (isset($_SESSION['dbname'])) {
 	$_SESSION['status'][$_SESSION['dbname']] = $_SESSION['statut'];

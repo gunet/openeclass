@@ -477,7 +477,7 @@ function adminMenu(){
  * @return array
  */
 function lessonToolsMenu(){
-	global $is_editor, $uid, $mysqlMainDb;
+	global $is_editor, $uid, $mysqlMainDb, $is_course_admin;
 	global $webDir, $language;
 	global $currentCourseID;
 
@@ -497,10 +497,13 @@ function lessonToolsMenu(){
                                               'iconext' => '_on.png'),
                                         array('type' => 'PublicButHide',
                                               'title' => $GLOBALS['langInactiveTools'],
-                                              'iconext' => '_off.png'),
-                                        array('type' => 'courseAdmin',
-                                              'title' => $GLOBALS['langAdministrationTools'],
-                                              'iconext' => '_on.png'));
+                                              'iconext' => '_off.png'));
+                if ($is_course_admin) {            
+                        array_push($tools_sections, 
+                                   array('type' => 'courseAdmin',
+                                         'title' => $GLOBALS['langAdministrationTools'],
+                                         'iconext' => '_on.png'));
+                }
         } else {
                 $tools_sections = array(array('type' => 'Public',
                                               'title' => $GLOBALS['langCourseOptions'],

@@ -351,12 +351,12 @@ if (isset($require_editor) and $require_editor) {
 	$errorMessagePath = "../../";
     }
 }
-
     
 // Temporary student view
 if (isset($_SESSION['saved_statut'])) {
         $statut = 5;
 	$is_course_admin = false;
+        $is_editor = false;
         if (isset($currentCourse)) {
                $_SESSION['status'][$currentCourse] = 5;
         }
@@ -364,20 +364,21 @@ if (isset($_SESSION['saved_statut'])) {
 
 //Security check:: Users that do not have Professor access for a course must not
 //be able to access inactive tools.
-if (isset($currentCourse) && file_exists($module_ini_dir = getcwd() . "/module.ini.php") && !$is_course_admin && @$ignore_module_ini != true) {
+if (isset($currentCourse) && file_exists($module_ini_dir = getcwd() . "/module.ini.php") 
+        && !$is_editor && @$ignore_module_ini != true) {
 	include($module_ini_dir);
 
 	if (!check_guest()) {
 		if (isset($_SESSION['uid']) and $_SESSION['uid']) {
 			$result = db_query("
-                    select `id` from accueil
-                    where visible=1
-                    ORDER BY rubrique", $currentCourse);
+                        SELECT `id` FROM accueil
+                        WHERE visible=1
+                        ORDER BY rubrique", $currentCourse);
 		} else {
 			$result = db_query("
-                    select `id` from accueil
-                    where visible=1 AND lien NOT LIKE '%/user.php'
-                    ORDER BY rubrique", $currentCourse);
+                        SELECT `id` FROM accueil
+                        WHERE visible=1 AND lien NOT LIKE '%/user.php'
+                        ORDER BY rubrique", $currentCourse);
 		}
 	} else {
 		$result = db_query("
