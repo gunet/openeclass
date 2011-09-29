@@ -340,7 +340,7 @@ if (isset($_SESSION['status'])) {
 
 if (isset($require_course_admin) and $require_course_admin) {
     if (!$is_course_admin) {
-        $toolContent_ErrorExists = $langCheckProf;
+        $toolContent_ErrorExists = $langCheckCourseAdmin;
 	$errorMessagePath = "../../";
     }
 }
