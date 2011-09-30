@@ -278,12 +278,17 @@ if ($is_editor) {
 			break;
 		}
 	}
-	$bar_content .= "\n           <li><b>$langConfidentiality</b>: $lessonStatus</li>";
-	$bar_content .= "\n           <li><b>$langUsers</b>: <a href='$urlAppend/modules/user/user.php?course=$code_cours'>$numUsers $langRegistered</a></li></ul>";
+	$bar_content .= "<li><b>$langConfidentiality</b>: $lessonStatus</li>";
+        if ($is_course_admin) {
+            $link = "<a href='$urlAppend/modules/user/user.php?course=$code_cours'>$numUsers $langRegistered</a>";
+        } else {
+            $link = "$numUsers $langRegistered";
+        }
+	$bar_content .= "<li><b>$langUsers</b>: $link</li></ul>";
 }
 
-if ($is_editor or
-    (isset($_SESSION['saved_statut']) and $_SESSION['saved_statut'] == 1)) {
+if ($is_editor or (isset($_SESSION['saved_editor']) and $_SESSION['saved_editor']) 
+        or (isset($_SESSION['saved_statut']) and $_SESSION['saved_statut'] == 1)) {
         if (isset($_SESSION['saved_statut'])) {
                 $button_message = $langStudentViewDisable;
                 $button_image = "switch_t";
