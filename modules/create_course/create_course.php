@@ -21,11 +21,14 @@
 session_start();
 
 $require_login = TRUE;
-$require_course_admin = TRUE;
 $require_help = TRUE;
 $helpTopic = 'CreateCourse';
 
 include '../../include/baseTheme.php';
+
+if (isset($_SESSION['statut']) and $_SESSION['statut'] != 1) { // if we are not teachers
+    redirect_to_home_page();
+}
 if (get_config("betacms")) { // added support for betacms
 	require_once '../betacms_bridge/include/bcms.inc.php';
 }
