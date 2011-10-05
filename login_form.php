@@ -24,8 +24,12 @@ if ($casactive['auth_default'] == 1) {
 	$cas_link = "";
 }
 
+$next = isset($_GET['next'])?
+        ("<input type='hidden' name='next' value='" . q($_GET['next']) . "'>"):
+        '';
+
 $tool_content .= "<form action='$urlSecure' method='post'>
-  <input type='hidden' name='next' value='" . q($_GET['next']) . "'>
+  $next
   <table class='tbl' width='300' align='center'>
   <tr>
   <th colspan='2' class='LoginHead' align='center'><b>$langUserLogin </b></th>
