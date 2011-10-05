@@ -90,16 +90,16 @@ while($row = mysql_fetch_array($r1)) {
             case '1': $message = $langPowerUser;
                 break;
         }
-        $tool_content .= "<td align='center'>$message</td";
+        $tool_content .= "<td align='center'>$message</td>";
         if($row['user_id'] != 1) {
-                $tool_content .= "<td align='center'>
-                    <a href='$_SERVER[PHP_SELF]?delete=1&amp;aid=".$row['user_id']."'>
-                    <img src='$themeimg/delete.png' title='$langDelete' />
-                    </a>
-                    </td>";
+                $tool_content .= "<td class='center'>
+                        <a href='$_SERVER[PHP_SELF]?delete=1&amp;aid=".$row['user_id']."'>
+                        <img src='$themeimg/delete.png' title='$langDelete' />
+                        </a>
+                        </td>";
         } else {
-                $tool_content .= "<td align='center'>---</td>";
-         }
+                $tool_content .= "<td class='center'>---</td>";
+        }
         $tool_content .= "</tr>";
 }
 $tool_content .= "</table><br />";
