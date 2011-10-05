@@ -63,39 +63,48 @@ function getUserDocuments($param)
 function docsHtmlInterface($date)
 {
 	global $urlServer, $langNoDocsExist, $uid, $currentCourseID, $cours_id;
-        global $mysqlMainDb, $maxValue, $group_sql;
+	global $mysqlMainDb, $maxValue, $group_sql;
 
-        $q = db_query("SELECT path, course_id, code, filename, title, date_modified, intitule
-                       FROM document, cours_user, cours
-                       WHERE document.course_id = cours_user.cours_id AND
+	$q = db_query("SELECT path, course_id, code, filename, title, date_modified, intitule
+                   FROM document, cours_user, cours
+                   WHERE document.course_id = cours_user.cours_id AND
                              cours_user.user_id = $uid AND
                              cours.cours_id = cours_user.cours_id AND
 			     subsystem = ".MAIN." AND
 			     visibility = 'v' AND
                              date_modified >= '$date' AND
 			     format <> '.dir'
-                       ORDER BY course_id, date_modified DESC", $mysqlMainDb);
+                       ORDER BY date_modified DESC", $mysqlMainDb);
 
-        $last_course_id = null;
-        if ($q and mysql_num_rows($q) > 0) {
-                $content = '<table width="100%">';
-                while ($row = mysql_fetch_array($q)) {
-                        if ($last_course_id != $row['course_id']) {
-                                $content .= "<tr><td class='sub_title1'>" . q($row['intitule']) . "</td></tr>";
-				$currentCourseID = $row['code'];
-				$cours_id = $row['course_id'];
+	if ($q and mysql_num_rows($q) > 0) {
+		$group_courses = array();
+                
+		$content = '<table width="100%">';
+		while ($row = mysql_fetch_array($q)) {
+                        if (isset($group_courses[$row['course_id']])) {  
+                                array_push($group_courses[$row['course_id']],$row);
                         }
-                        $last_course_id = $row['course_id'];
-			$group_sql = "course_id = $cours_id AND subsystem = ".MAIN;
-			$url = file_url($row['path']);
-                        $content .= "<tr><td class='smaller'><ul class='custom_list'><li><a href='$url'>" .
-                                    q($row['filename']) . '</a> - (' .
-                                    nice_format(date('Y-m-d', strtotime($row['date_modified']))) .
-                                    ")</li></ul></td></tr>";
-		}
-		unset($currentCourseID);
-                $content .= "</table>";
-                return $content;
+                        else $group_courses[$row['course_id']] = array($row);
+		}                
+		foreach($group_courses as $group_courses_member) {
+			$first_check = 0;
+			foreach($group_courses_member as $course_file) {
+				if($first_check == 0){
+					$content.= "<tr><td class='sub_title1'>" . q($course_file['intitule']) . "</td></tr>";
+					$first_check = 1;
+				}                               
+                                $group_sql = "course_id = ".$course_file['course_id']." AND subsystem = ".MAIN;                                
+				$url = file_url($course_file['path']);                                
+				$content .= "<tr><td class='smaller'><ul class='custom_list'><li><a href='$url'>" .
+				q($course_file['filename']) . '</a> - (' .
+				nice_format(date('Y-m-d', strtotime($course_file['date_modified']))) .
+				")</li></ul></td></tr>";
+			}
+		} 
+		unset($group_courses);
+		$content .= "</table>";
+		return $content;
+		
 	} else {
 		return "\n<p class='alert1'>$langNoDocsExist</p>\n";
 	}
