@@ -117,14 +117,10 @@ $tool_content .= "
           <select name=\"formsearchfaculte\">
            <option value=\"0\">$langAllFacultes</option>\n";
 
-$resultFac = db_query("SELECT name FROM faculte ORDER BY number");
+$resultFac = db_query("SELECT id, name FROM faculte ORDER BY number");
 while ($myfac = mysql_fetch_array($resultFac)) {
-	if($myfac['name'] == @$searchfaculte)
-		$tool_content .= "
-           <option selected>$myfac[name]</option>";
-	else
-		$tool_content .= "
-           <option>$myfac[name]</option>";
+	$selected = ($myfac['id'] == @$searchfaculte)? ' selected': '';
+        $tool_content .= "<option value='$myfac[id]'$selected>$myfac[name]</option>";
 }
 
 $tool_content .= "

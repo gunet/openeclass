@@ -77,10 +77,10 @@ if (isset($_GET['search']) && $_GET['search'] == "yes") {
 	$searchurl = "&search=yes";
 	// Search from post form
 	if (isset($_POST['search_submit'])) 	{
-		$searchtitle = $_SESSION['searchtitle'] = $_POST['formsearchtitle'];
-		$searchcode = $_SESSION['searchcode'] = $_POST['formsearchcode'];
-		$searchtype = $_SESSION['searchtype'] = $_POST['formsearchtype'];
-		$searchfaculte = $_SESSION['searchfaculte'] = $_POST['formsearchfaculte'];
+		$searchtitle = $_SESSION['searchtitle'] = autounquote($_POST['formsearchtitle']);
+		$searchcode = $_SESSION['searchcode'] = autounquote($_POST['formsearchcode']);
+		$searchtype = $_SESSION['searchtype'] = intval($_POST['formsearchtype']);
+		$searchfaculte = $_SESSION['searchfaculte'] = intval($_POST['formsearchfaculte']);
 	}
 	// Search from session
 	else {
@@ -92,16 +92,16 @@ if (isset($_GET['search']) && $_GET['search'] == "yes") {
 	// Search for courses
 	$searchcours=array();
 	if(!empty($searchtitle)) {
-		$searchcours[] = "intitule LIKE '%".mysql_escape_string($searchtitle)."%'";
+		$searchcours[] = "intitule LIKE " . quote('%' . $searchtitle . '%');
 	}
 	if(!empty($searchcode)) {
-		$searchcours[] = "cours.code LIKE '%".mysql_escape_string($searchcode)."%'";
+		$searchcours[] = "cours.code LIKE " . quote('%' . $searchcode . '%');
 	}
 	if ($searchtype != "-1") {
-		$searchcours[] = "visible = '".mysql_escape_string($searchtype)."'";
+		$searchcours[] = "visible = $searchtype";
 	}
-	if($searchfaculte != "0") {
-		$searchcours[] = "faculte.name = '".mysql_escape_string($searchfaculte)."'";
+	if ($searchfaculte) {
+		$searchcours[] = "faculteid = $searchfaculte";
 	}
 	$query=join(' AND ',$searchcours);
 	if (!empty($query)) {
