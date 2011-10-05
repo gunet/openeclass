@@ -730,7 +730,6 @@ db_query("ALTER TABLE `course_description` ADD FULLTEXT `course_description` (`t
 db_query("ALTER TABLE `exercices` ADD FULLTEXT `exercices` (`titre`,`description`)");
 db_query("ALTER TABLE `posts_text` ADD FULLTEXT `posts_text` (`post_text`)");
 db_query("ALTER TABLE `forums` ADD FULLTEXT `forums` (`forum_name`,`forum_desc`)");
-db_query("ALTER TABLE `liens` ADD FULLTEXT `liens` (`url` ,`titre` ,`description`)");
 db_query("ALTER TABLE `video` ADD FULLTEXT `video` (`url` ,`titre` ,`description`)");
 db_query("ALTER TABLE `videolinks` ADD FULLTEXT `videolinks` (`url` ,`titre` ,`description`)");
 
