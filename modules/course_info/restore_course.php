@@ -243,6 +243,7 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
                 $ebook_subsection_map = restore_table($restoreThis, 'ebook_subsection',
                         array('map' => array('section_id' => $ebook_section_map,
                                              'file_id' => $document_map),
+                              'delete' => array('file'),
                               'return_mapping' => 'id'));
                 $unit_map = restore_table($restoreThis, 'course_units',
                         array('set' => array('course_id' => $course_id),
