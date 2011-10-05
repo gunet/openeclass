@@ -683,7 +683,12 @@ function process_login()
 			if ($GLOBALS['persoIsActive'] and $GLOBALS['userPerso'] == 'no') {
 				$_SESSION['user_perso_active'] = true;
 			}
-			redirect_to_home_page();	
+                        if (isset($_POST['next'])) {
+                                $next = autounquote($_POST['next']);
+                        } else {
+                                $next = '';
+                        }
+			redirect_to_home_page($next);	
 		}                
 	}  // end of user authentication
 }

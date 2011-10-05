@@ -170,27 +170,27 @@ if (!isset($_SESSION['theme'])) {
 $theme = $_SESSION['theme'];
 $themeimg = $urlAppend . '/template/' . $theme . '/img';
 if (isset($require_login) and $require_login and !$uid) {
-	$toolContent_ErrorExists = $langLoginRequired;
+	$toolContent_ErrorExists = caution($langLoginRequired);
 	$errorMessagePath = "../../";
 }
 
 if (isset($require_admin) && $require_admin) {	
         if (!($is_admin)) {    
-		$toolContent_ErrorExists = $langCheckAdmin;
+		$toolContent_ErrorExists = caution($langCheckAdmin);
 		$errorMessagePath = "../../";
 	}
 }
 
 if (isset($require_power_user) && $require_power_user) {        
         if (!($is_admin or $is_power_user)) {
-		$toolContent_ErrorExists = $langCheckPowerUser;
+		$toolContent_ErrorExists = caution($langCheckPowerUser);
 		$errorMessagePath = "../../";
     } 
 }
 
-if (!isset($guest_allowed) || $guest_allowed!= true){
+if (!isset($guest_allowed) || $guest_allowed != true){
 	if (check_guest()){
-		$toolContent_ErrorExists = $langCheckGuest;
+		$toolContent_ErrorExists = caution($langCheckGuest);
 		$errorMessagePath = "../../";
 	}
 }
@@ -218,7 +218,7 @@ register_shutdown_function('restore_dbname_override');
 // Read properties of current course
 if (isset($require_current_course) and $require_current_course) {
 	if (!isset($_SESSION['dbname'])) {
-		$toolContent_ErrorExists = $langSessionIsLost;
+		$toolContent_ErrorExists = caution($langSessionIsLost);
 		$errorMessagePath = "../../";
 	} else {
 		$currentCourse = $dbname = $_SESSION['dbname'];
@@ -257,7 +257,7 @@ if (isset($require_current_course) and $require_current_course) {
 		}
 
 		if (!isset($code_cours) or empty($code_cours)) {
-			$toolContent_ErrorExists = $langLessonDoesNotExist;
+			$toolContent_ErrorExists = caution($langLessonDoesNotExist);
 			$errorMessagePath = "../../";
 		}
 
@@ -279,10 +279,10 @@ if (isset($require_current_course) and $require_current_course) {
 
 		if ($visible != 2) {
 			if (!$uid) {
-				$toolContent_ErrorExists = $langNoAdminAccess;
+				$toolContent_ErrorExists = caution($langNoAdminAccess);
 				$errorMessagePath = "../../";
 			} elseif ($statut == 0 and ($visible == 1 or $visible == 0)) {
-				$toolContent_ErrorExists = $langLoginRequired;
+				$toolContent_ErrorExists = caution($langLoginRequired);
 				$errorMessagePath = "../../";
 			}
 		}
@@ -340,14 +340,14 @@ if (isset($_SESSION['status'])) {
 
 if (isset($require_course_admin) and $require_course_admin) {
     if (!$is_course_admin) {
-        $toolContent_ErrorExists = $langCheckCourseAdmin;
+        $toolContent_ErrorExists = caution($langCheckCourseAdmin);
 	$errorMessagePath = "../../";
     }
 }
 
 if (isset($require_editor) and $require_editor) {
     if (!$is_editor) {
-        $toolContent_ErrorExists = $langCheckProf;
+        $toolContent_ErrorExists = caution($langCheckProf);
 	$errorMessagePath = "../../";
     }
 }
@@ -402,7 +402,7 @@ if (isset($currentCourse) && file_exists($module_ini_dir = getcwd() . "/module.i
 	}
 
 	if (!in_array($module_id, $publicModules, true)) {
-		$toolContent_ErrorExists = $langCheckPublicTools;
+		$toolContent_ErrorExists = caution($langCheckPublicTools);
 		$errorMessagePath = "../../";
 	}
 }
@@ -410,3 +410,8 @@ if (isset($currentCourse) && file_exists($module_ini_dir = getcwd() . "/module.i
 set_glossary_cache();
 
 $tool_content = $head_content = '';
+
+function caution($s)
+{
+        return '<p class="alert1"' . $s . '</p>';
+}

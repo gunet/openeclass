@@ -41,17 +41,20 @@ if ($is_editor and isset($currentCourseID) and isset($_GET['hide'])) {
 }
 
 //template path for logged out + logged in (ex., when session expires)
-$extraMessage = ""; //initialise var for security
+$extraMessage = ''; //initialise var for security
 if (isset($errorMessagePath)) {
 	$relPath = $errorMessagePath;
 }
 
 if (isset($toolContent_ErrorExists)) {
-	$toolContent = $toolContent_ErrorExists;
-
 	$_SESSION['errMessage'] = $toolContent_ErrorExists;
-	session_write_close ();
-	header("Location:" . $urlServer . "index.php");
+	session_write_close();
+        if (!$uid) {
+                $next = str_replace($urlAppend, '', $_SERVER['REQUEST_URI']);
+                header("Location:" . $urlSecure . "login_form.php?next=" . urlencode($next));
+        } else {
+                header("Location:" . $urlServer . "index.php");
+        }
 	exit();
 }
 
@@ -101,7 +104,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 		$forum_content = $perso_tool_content ['forum_content'];
 	}
 
-	$messageBox = "";
+	$messageBox = '';
 	
 	//if an error exists (ex., sessions is lost...)
 	//show the error message above the normal tool content

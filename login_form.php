@@ -25,6 +25,7 @@ if ($casactive['auth_default'] == 1) {
 }
 
 $tool_content .= "<form action='$urlSecure' method='post'>
+  <input type='hidden' name='next' value='" . q($_GET['next']) . "'>
   <table class='tbl' width='300' align='center'>
   <tr>
   <th colspan='2' class='LoginHead' align='center'><b>$langUserLogin </b></th>

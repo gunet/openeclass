@@ -21,7 +21,7 @@
 // Send a mail message, with the proper MIME headers and charset tag
 // From: address is always the platform administrator, and the
 // $from_address specified appears in the Reply-To: header
-function send_mail($from, $from_address, $to, $to_address,
+function send_mail($from, $to,
                    $subject, $body, $charset, $extra_headers = '')
 {
         if (count($to_address) > 1) {
