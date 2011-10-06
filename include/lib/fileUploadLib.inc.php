@@ -507,18 +507,21 @@ function process_extracted_file($p_event, &$p_header) {
                 return 0;
         } else {
                 // Check if file already exists
-                $result = db_query("SELECT path, visibility FROM document WHERE
-                        $group_sql AND
-                        path REGEXP '^$path/[^/]+$' AND
-                        filename = " . quote($filename) . " LIMIT 1");
+                $result = db_query("SELECT id, path, visibility FROM document
+                                           WHERE $group_sql AND
+                                                 path REGEXP '^$path/[^/]+$' AND
+                                                 filename = " . quote($filename) . " LIMIT 1");
                 $format = get_file_extension($filename);
                 if (mysql_num_rows($result)) {
-                        list($file_path, $vis) = mysql_fetch_row($result);
+                        list($old_id, $file_path, $vis) = mysql_fetch_row($result);
                         if ($replace) {
-                                // Delete old file record when replacing file
-                                db_query("DELETE FROM document
+                                // Overwrite existing file
+                                $p_header['filename'] = $basedir . $file_path;
+                                db_query("UPDATE document
+                                                 SET date_modified = " . quote($file_date) . "
                                                  WHERE $group_sql AND
-                                                       path = " . quote($file_path));
+                                                       id = $old_id");
+                                return 1;
                         } else {
                                 // Rename existing file
                                 $backup_n = 1;
