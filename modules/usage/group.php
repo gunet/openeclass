@@ -1,4 +1,4 @@
-<?
+<?php
 /* ========================================================================
  * Open eClass 2.4
  * E-learning and Course Management System
