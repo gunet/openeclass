@@ -130,10 +130,11 @@ $local_head = $jscalendar->get_load_files_code();
             $result = db_query($query, $currentCourseID);
 
             $chart = new PieChart(600, 300);
-
+            $dataSet = new XYDataSet();
             while ($row = mysql_fetch_assoc($result)) {
-                $chart->addPoint(new Point($row['name'], $row['tot_dur']));
+                $dataSet->addPoint(new Point($row['name'], $row['tot_dur']));                
                 $chart->width += 7;
+                $chart->setDataSet($dataSet);
                 $chart_content=5;
             }
 
@@ -143,15 +144,16 @@ $local_head = $jscalendar->get_load_files_code();
         break;
     }
     mysql_free_result($result);
-    $chart_path = 'courses/'.$currentCourseID.'/temp/chart_'.md5(serialize($chart)).'.png';
-
-    $chart->render($webDir.$chart_path);
+    $chart_path = 'courses/'.$currentCourseID.'/temp/chart_'.md5(serialize($chart)).'.png';    
     
-    if ($chart_content) {
-        $tool_content .= "\n  <p>$langFavouriteExpl</p>\n";
-        $tool_content .= '  <p class="center"><img src="'.$urlServer.$chart_path.'" /></p>';
-     } elseif (isset($btnUsage) and $chart_content == 0) {
-        $tool_content .='<p class="alert1">'.$langNoStatistics.'</p>';
+    if (isset($_POST['btnUsage'])) {        
+        if ($chart_content > 0) {
+            $chart->render($webDir.$chart_path);
+            $tool_content .= "\n  <p>$langFavouriteExpl</p>\n";
+            $tool_content .= '  <p class="center"><img src="'.$urlServer.$chart_path.'" /></p>';
+         } else {         
+            $tool_content .= '<p class="alert1">'.$langNoStatistics.'</p>';
+        }
     }
 
     //make form
