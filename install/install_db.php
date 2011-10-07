@@ -421,7 +421,7 @@ db_query("INSERT INTO loginout (loginout.id_user, loginout.ip, loginout.when, lo
 
 
 #add admin in list of admin
-db_query("INSERT INTO admin VALUES ('".$idOfAdmin."')");
+db_query("INSERT INTO admin VALUES ('".$idOfAdmin."', 0)");
 
 #
 # Table structure for table `user_request`
