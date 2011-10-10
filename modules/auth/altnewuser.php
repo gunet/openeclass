@@ -56,7 +56,11 @@ if(!empty($msg)) $nameTools = "$langConfirmUser ($msg)";
 
 $tool_content .= "<form method='post' action='altsearch.php'>";
 if (isset($_GET['p']) and $_GET['p']) {
-        $tool_content .= "<input type='hidden' name='p' value='1'>";
+	$_SESSION['u_prof'] = 1;
+	$tool_content .= "<input type='hidden' name='p' value='1'>";
+}
+else {
+	$_SESSION['u_prof'] = 0;
 }
 $tool_content .= "<fieldset><legend>".q($settings['auth_instructions'])."</legend>
 <table class='tbl' width='100%'>";

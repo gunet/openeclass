@@ -41,7 +41,11 @@ if (isset($_POST['auth'])) {
 	$auth = isset($_SESSION['u_tmp'])? $_SESSION['u_tmp']: 0;
 }
 
-$prof = isset($_REQUEST['p'])? intval($_REQUEST['p']): 0;
+if (isset($_SESSION['u_prof'])) {
+	$prof = intval($_SESSION['u_prof']);
+}
+
+//$prof = isset($_REQUEST['p'])? intval($_REQUEST['p']): 0;
 $phone_required = $prof;
 $autoregister = !($prof || ($close_user_registration && get_config('alt_auth_student_req')));
 $comment_required = !$autoregister;
