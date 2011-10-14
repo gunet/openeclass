@@ -332,10 +332,10 @@ function adminMenu(){
 		array_push($sideMenuImg, "arrow.png");
 	}
 	
-	array_push($sideMenuText, $GLOBALS['langUserAuthentication']);
-	array_push($sideMenuLink, "../admin/auth.php");
-	array_push($sideMenuImg, "arrow.png");
         if (isset($is_admin) and $is_admin) {
+				array_push($sideMenuText, $GLOBALS['langUserAuthentication']);
+				array_push($sideMenuLink, "../admin/auth.php");
+				array_push($sideMenuImg, "arrow.png");
             array_push($sideMenuText, $GLOBALS['langChangeUser']);
             array_push($sideMenuLink, "../admin/change_user.php");
             array_push($sideMenuImg, "arrow.png");    

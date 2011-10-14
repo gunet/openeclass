@@ -81,7 +81,7 @@ if (isset($_POST['submit'])) {
                 'am_form' => false,
                 'desc_form' => false,
                 'phone_form' => false,
-                'email_form' => true,
+                'email_form' => get_config('email_required'),
                 'nom_form' => true,
                 'prenom_form' => true,
                 'username_form' => true,
@@ -114,35 +114,36 @@ if (isset($_POST['submit'])) {
 		@unlink($image_path . '_' . IMAGESIZE_SMALL . '.jpg');
 		db_query("UPDATE user SET has_icon = 0 WHERE user_id = $uid");
 	}
-	// check if there are empty fields
-	if (!$all_ok) {
-                redirect_to_message(4);
+
+	// check if email is valid
+	if ( (get_config('email_required') | get_config('email_verification_required')) and !email_seems_valid($email_form) ) {
+		redirect_to_message(6);
 	}
 
-        if (!$allow_username_change) {
-                $username_form = $_SESSION['uname'];
-        }
+	// check if there are empty fields
+	if (!$all_ok) {
+		redirect_to_message(4);
+	}
+
+	if (!$allow_username_change) {
+		$username_form = $_SESSION['uname'];
+	}
 
 	// If changing username check if the new one is free
-        if ($username_form != $_SESSION['uname']) {
-                // check if username exists
-                $username_check = db_query('SELECT username FROM user WHERE username = ' . autoquote($username_form));
-                if (mysql_num_rows($username_check) > 0) {
-                        redirect_to_message(5);
-                }
-        }
+	if ($username_form != $_SESSION['uname']) {
+		// check if username exists
+		$username_check = db_query('SELECT username FROM user WHERE username = ' . autoquote($username_form));
+		if (mysql_num_rows($username_check) > 0) {
+			redirect_to_message(5);
+		}
+	}
 
-        // TODO: Allow admin to configure allowed username format
+  	// TODO: Allow admin to configure allowed username format
 	// if (strstr($username_form, "'") or strstr($username_form, '"') or strstr($username_form, '\\')){
 	//	redirect_to_message(10);
 	// }
 
-	// check if email is valid
-	if (!email_seems_valid($email_form)) {
-                redirect_to_message(6);
-	}
-
-	if (($_SESSION['email'] != $email_form) && get_config('email_verification_required')) {
+	if (!empty($email_form) && ($_SESSION['email'] != $email_form) && get_config('email_verification_required') && get_config('email_required')) {
 		$verified_mail = 0;
 	}
 	else {
@@ -305,7 +306,7 @@ $tool_content .= "
 
 //if ($allow_name_change) {
         $tool_content .= "
-          <td><input type='text' size='40' name='email_form' value='$email_form' /> ";
+          <td><input type='text' size='40' name='email_form' value='$email_form' />";
 //} else {
 //        $tool_content .= "
 //           <td><b>$email_form</b> [$auth_text]

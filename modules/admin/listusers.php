@@ -49,6 +49,8 @@ $user_registered_at_flag = isset($_REQUEST['user_registered_at_flag'])?$_REQUEST
 $hour = isset($_REQUEST['hour'])?$_REQUEST['hour']:'';
 $minute = isset($_REQUEST['minute'])?$_REQUEST['minute']:'';
 
+$mail_ver_required = get_config('email_verification_required');
+
 switch($c)	// get the case for each different listing
 {
 	case '': $view = 1; break; // normal listing
@@ -385,7 +387,7 @@ if($sql) {
 				$qry .= " WHERE".$user_surname_qry.$user_firstname_qry.$user_username_qry.$user_am_qry.$user_type_qry.$auth_type_qry.$user_email_qry.$user_registered_at_qry.$users_active_qry;
 			}
 		} else {
-			$qry = "SELECT user_id,nom,prenom,username,email,statut FROM user";
+			$qry = "SELECT user_id,nom,prenom,username,email,statut,verified_mail FROM user";
 			if((!empty($user_surname_qry)) || (!empty($user_firstname_qry))
 				|| (!empty($user_username_qry)) || (!empty($user_am_qry)) || (!empty($verified_mail_qry))
 				|| (!empty($user_type_qry)) || (!empty($auth_type_qry)) || (!empty($user_registered_at_qry))
@@ -424,7 +426,16 @@ if($sql) {
 					<td>".htmlspecialchars($logs['nom'])."</td>
 					<td>".htmlspecialchars($logs['prenom'])."</td>
 					<td>".htmlspecialchars($logs['username'])."</td>
-					<td>".htmlspecialchars($logs['email'])."</td>
+					<td width='200'>".htmlspecialchars($logs['email']);
+					if ($mail_ver_required) {
+						switch($logs['verified_mail']) {
+							case 0: $tool_content .= " <img src='$themeimg/outbox.png' title='$langMailVerificationPendingU' />";break;
+							case 1: $tool_content .= " <img src='$themeimg/tick_1.png' title='$langMailVerificationYesU' />";break;
+							case 2: 
+							default: $tool_content .= " <img src='$themeimg/questionnaire_on.png' title='$langMailVerificationNoU' />";break;
+						}
+					}
+					$tool_content .= "</td>
 					<td align='center'>";
 				switch ($logs['statut'])
 				{

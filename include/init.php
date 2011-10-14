@@ -197,7 +197,7 @@ if (!isset($guest_allowed) || $guest_allowed != true){
 }
 
 if (isset($_SESSION['mail_verification_required']) && !isset($mail_ver_excluded) ) {
-	header("Location:" . $urlServer .  "modules/auth/mail_verify_change.php");
+	header("Location:" . $urlServer . "modules/auth/mail_verify_change.php");
 }
 
 // Restore saved old_dbname function

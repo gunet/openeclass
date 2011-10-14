@@ -609,7 +609,7 @@ function process_login()
 {
         global $warning, $nom, $prenom, $email, $statut, $is_admin, $language,
                $langInvalidId, $langAccountInactive1, $langAccountInactive2,
-               $langNoCookies, $langEnterPlatform, $urlServer, $langHere,
+               $langNoCookies, $langEnterPlatform, $urlServer, $urlAppend, $langHere,
                $auth_ids;
 
 	if (isset($_POST['uname'])) {
@@ -685,7 +685,7 @@ function process_login()
 			}
 			if (get_config('email_verification_required') && check_mail_ver_required($_SESSION['uid'])) {
 				$_SESSION['mail_verification_required'] = 1;
-				$next = "/modules/auth/mail_verify_change.php";
+				$next = "{$urlAppend}/modules/auth/mail_verify_change.php";
 			} elseif (isset($_POST['next'])) {
 				$next = autounquote($_POST['next']);
 			} else {

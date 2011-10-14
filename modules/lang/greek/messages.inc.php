@@ -1569,7 +1569,7 @@ $langBeforeInstall1 = "Πριν προχωρήσετε στην εγκατάστ
 $langBeforeInstall2 = "Επίσης, γενικές οδηγίες για την πλατφόρμα μπορείτε να διαβάσετε ";
 $langInstallInstr = "Οδηγίες Εγκατάστασης";
 $langWithPHP = "με υποστήριξη PHP";
-$lang_email_required = "Να είναι υποχρεωτικό το email του $langOfUser κατά την εγγραφή";
+$lang_email_required = "Να είναι υποχρεωτικό το email του $langOfUser";
 $lang_email_verification_required = "Να είναι υποχρεωτική η επιβεβαίωση του e-mail του $langOfUser";
 $lang_am_required = "Να είναι υποχρεωτικός ο αριθμός μητρώου του $langsOfStudent κατά την εγγραφή";
 $lang_dropbox_allow_student_to_student = "Να επιτρέπεται η ανταλλαγή αρχείων μεταξύ $langsOfStudents στο υποσύστημα 'Ανταλλαγή αρχείων'";
@@ -2551,6 +2551,13 @@ $langMailVerificationAddrChange = "Αν η διεύθυνση είναι λάθ�
 $langMailVerificationSuccess3="Ελέγξτε οτι είναι σωστή η διεύθυνση παρακάτω και πατήστε στην «<b>$langMailVerificationNewCode</b>»";
 $langMailVerificationReq = "Είναι απαραίτητο να επιβεβαιωθεί η e-mail διεύθυνση σας προτού προχωρήσετε.<br /><br />$langMailVerificationSuccess3";
 $langMailVerificationSuccess4="Σύντομα θα λάβετε ένα e-mail από την Ομάδα Διαχείρισης της Πλατφόρμας Ασύγχρονης Τηλεκπαίδευσης $siteName, με τις απαραίτητες οδηγίες για την ολοκλήρωση της εγγραφής σας";
+$langMailVerification = "Επιβεβαιώση E-mail";
+$langMailVerificationNo = "Χρήστες που δεν έχουν επιβεβαιώσει το e-mail τους";
+$langMailVerificationYes = "Χρήστες που έχουν επιβεβαιώσει το e-mail τους";
+$langMailVerificationPending = "Χρήστες που εκρεμεί επιβεβαιώση του e-mail τους";
+$langMailVerificationNoU = "Δεν έχει επιβεβαιωθεί";
+$langMailVerificationYesU = "Έχει επιβεβαιωθεί";
+$langMailVerificationPendingU = "Εκρεμεί επιβεβαίωση";
 
 /************************************************************
 * restore_course.php
