@@ -33,6 +33,7 @@ if (get_config("betacms")) { // added support for betacms
 	require_once '../betacms_bridge/include/bcms.inc.php';
 }
 
+
 $nameTools = $langCreateCourse . " (" . $langCreateCourseStep ." 1 " .$langCreateCourseStep2 . " 3)" ;
 $lang_editor = langname_to_code($language);
 
