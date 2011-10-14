@@ -18,7 +18,6 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-
 include '../../include/baseTheme.php';
 $nameTools = $langSelectFac;
 $result = db_query("SELECT id, name, code FROM faculte ORDER BY name");

@@ -41,6 +41,7 @@ $user_surname = isset($_REQUEST['user_surname'])?$_REQUEST['user_surname']:'';
 $user_firstname = isset($_REQUEST['user_firstname'])?$_REQUEST['user_firstname']:'';
 $user_username = isset($_REQUEST['user_username'])?$_REQUEST['user_username']:'';
 $user_am = isset($_REQUEST['user_am'])?$_REQUEST['user_am']:'';
+$verified_mail = isset($_REQUEST['verified_mail'])?intval($_REQUEST['verified_mail']):3;
 $user_type = isset($_REQUEST['user_type'])?$_REQUEST['user_type']:'';
 $auth_type = isset($_REQUEST['auth_type'])?$_REQUEST['auth_type']:'';
 $user_email = isset($_REQUEST['user_email'])?$_REQUEST['user_email']:'';
@@ -140,6 +141,26 @@ else
 {
 	$user_username_qry = "";
 }
+
+// mail verified
+if($verified_mail===0 or $verified_mail===1 or $verified_mail===2)
+{
+	if($criteria!=0)
+	{
+		$verified_mail_qry = " AND";
+	}
+	else
+	{
+		$verified_mail_qry = "";
+	}
+	$criteria++;
+	$verified_mail_qry .= " verified_mail=" . autoquote($verified_mail);
+}
+else
+{
+	$verified_mail_qry = "";
+}
+
 
 //user am search
 if(!empty($user_am))
@@ -309,10 +330,10 @@ if($view == 3) { // users per course
 	// Count users, with or without criteria/filters
 	$qry = "SELECT user_id,nom,prenom,username,email,statut FROM user";
 	if((!empty($user_surname_qry)) || (!empty($user_firstname_qry)) || (!empty($user_username_qry)) 
-		|| (!empty($user_am_qry)) || (!empty($user_type_qry)) || (!empty($auth_type_qry)) || (!empty($user_registered_at_qry)) 
+		|| (!empty($user_am_qry)) || (!empty($verified_mail_qry)) || (!empty($user_type_qry)) || (!empty($auth_type_qry)) || (!empty($user_registered_at_qry)) 
 		|| (!empty($user_email_qry)) || (!empty($users_active_qry)))
 	{
-		$qry .= " WHERE".$user_surname_qry.$user_firstname_qry.$user_username_qry.$user_am_qry.$user_type_qry.$auth_type_qry.$user_email_qry.$user_registered_at_qry.$users_active_qry;
+		$qry .= " WHERE".$user_surname_qry.$user_firstname_qry.$user_username_qry.$user_am_qry.$verified_mail_qry.$user_type_qry.$auth_type_qry.$user_email_qry.$user_registered_at_qry.$users_active_qry;
 	}
 }
 
@@ -366,11 +387,11 @@ if($sql) {
 		} else {
 			$qry = "SELECT user_id,nom,prenom,username,email,statut FROM user";
 			if((!empty($user_surname_qry)) || (!empty($user_firstname_qry))
-				|| (!empty($user_username_qry)) || (!empty($user_am_qry))
+				|| (!empty($user_username_qry)) || (!empty($user_am_qry)) || (!empty($verified_mail_qry))
 				|| (!empty($user_type_qry)) || (!empty($auth_type_qry)) || (!empty($user_registered_at_qry))
 				|| (!empty($user_email_qry)) || (!empty($users_active_qry)))
 			{
-				$qry .= " WHERE".$user_surname_qry.$user_firstname_qry.$user_username_qry.$user_am_qry.$user_type_qry.$auth_type_qry.$user_email_qry.$user_registered_at_qry.$users_active_qry;
+				$qry .= " WHERE".$user_surname_qry.$user_firstname_qry.$user_username_qry.$user_am_qry.$verified_mail_qry.$user_type_qry.$auth_type_qry.$user_email_qry.$user_registered_at_qry.$users_active_qry;
 			}
 		}
 

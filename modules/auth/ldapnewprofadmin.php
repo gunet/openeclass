@@ -89,24 +89,26 @@ if ($submit)  {
 	$registered_at = time();
         $expires_at = time() + $durationAccount;
 
+	$verified_mail = isset($_REQUEST['verified_mail'])?intval($_REQUEST['verified_mail']):2;
+
 	$sql = db_query("INSERT INTO `$mysqlMainDb`.user
 			(nom, prenom, username, password, email, statut, department,
-			am, registered_at, expires_at,lang)
+			am, registered_at, expires_at, lang, verified_mail)
 			VALUES (" .
 			autoquote($ps) . ', ' .
 			autoquote($pn) . ', ' .
 			autoquote($pu) . ", '$password', " .
 			autoquote($pe) .
-			", 1, $department, " . autoquote($comment) . ", $registered_at, $expires_at, '$lang')");
+			", 1, $department, " . autoquote($comment) . ", $registered_at, $expires_at, '$lang', $verified_mail)");
 
 	// Close user request 
 	$rid = intval($_POST['rid']);
-	db_query("UPDATE user_request set status = 2, date_closed = NOW() WHERE id = $rid");
+	db_query("UPDATE user_request set status = 2, date_closed = NOW(), verified_mail=$verified_mail WHERE id = $rid");
 		$emailbody = "$langDestination $pn $ps\n" .
                                 "$langYouAreReg $siteName $langSettings $pu\n" .
                                 "$langPass: $langPassSameAuth\n$langAddress $siteName: " .
                                 "$urlServer\n$langProblem\n$langFormula" .
-                                "$administratorName $administratorSurname" .
+                                "$administratorName $administratorSurname\n" .
                                 "$langManager $siteName \n$langTel $telephone \n" .
                                 "$langEmail: $emailhelpdesk";
 
@@ -140,7 +142,7 @@ if ($submit)  {
                 $tool_content .= "
 		</ul></div>";
 		$res = mysql_fetch_array(db_query("SELECT name, surname, uname, email, 
-			faculty_id, comment, lang, date_open, phone, am FROM user_request WHERE id = $id"));
+			faculty_id, comment, lang, date_open, phone, am, verified_mail FROM user_request WHERE id = $id"));
 		$ps = $res['surname'];
 		$pn = $res['name'];
 		$pu = $res['uname'];
@@ -150,6 +152,7 @@ if ($submit)  {
 		$pam = $res['am'];
 		$pphone = $res['phone'];
 		$lang = $res['lang'];
+		$pvm = $res['verified_mail'];
 		$pdate = nice_format(date('Y-m-d', strtotime($res['date_open'])));
 	}
 	
@@ -174,6 +177,19 @@ if ($submit)  {
 	<th class='left'><b>$langEmail</b></th>
 	<td>$pe
 	<input type='hidden' name='pe' value='$pe' ></td>
+	</tr>
+	<tr>
+	<th class='left'><b>$langEmailVerified</b></th>
+	<td>";
+
+	$verified_mail_data = array();
+	$verified_mail_data[0] = $m['pending'];
+	$verified_mail_data[1] = $m['yes'];
+	$verified_mail_data[2] = $m['no'];
+
+	$tool_content .= selection($verified_mail_data,"verified_mail",intval($pvm));
+
+	$tool_content .= "</td>
 	</tr>
 	<tr>
 	<th class='left'>$langFaculty</th>

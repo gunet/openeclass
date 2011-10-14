@@ -29,6 +29,8 @@ $navigation[] = array('url' => 'registration.php', 'name' => $langNewUser);
 $prof = isset($_REQUEST['p'])? intval($_REQUEST['p']): 0;
 $nameTools = $prof? $langReqRegProf: $langUserRequest;
 
+$am = !empty($_REQUEST['am'])? intval($_REQUEST['am']): '';
+
 // eclass native registration method disabled for students
 $disable_eclass_stud_reg = get_config('disable_eclass_stud_reg');
 if (!$prof and $disable_eclass_stud_reg) {
@@ -75,6 +77,18 @@ if (!email_seems_valid($usermail)) {
         $all_set = false;
 }
 
+// check if the username is already in use
+if(user_exists(autounquote($username))) {
+	$errors[] = $langUserFree;
+	$all_set = false;
+}
+
+// check if the username has allready applied
+if(user_app_exists(autounquote($username))) {
+	$errors[] = $langUserFree3;
+	$all_set = false;
+}
+
 if (get_config("display_captcha")) {
         // captcha check
         require_once '../../include/securimage/securimage.php';
@@ -92,48 +106,92 @@ if (isset($_POST['submit'])) {
 }
 
 if ($all_set) {
-        // register user request
-        $statut = $prof? 1: 5;
-        db_query('INSERT INTO user_request SET
-                         name = ' . autoquote($name). ',
-                         surname = ' . autoquote($surname). ',
-                         uname = ' . autoquote($username). ',
-                         email = ' . autoquote($usermail). ',
-                         faculty_id = ' . intval($department). ',
-                         phone = ' . autoquote($userphone). ",
-                         status = 1,
-                         statut = $statut,
-                         date_open = NOW(),
-                         comment = " . autoquote($usercomment). ',
-                         lang = ' . quote(langname_to_code($language)). ",
-                         ip_address = inet_aton('$_SERVER[REMOTE_ADDR]')",
-                     $mysqlMainDb);
+	$email_verification_required = get_config('email_verification_required');
+	if (!$email_verification_required) {
+		$verified_mail=2;
+	}
+	else {
+		$verified_mail=0;
+	}
 
+	// register user request
+	$statut = $prof? 1: 5;
+	$res = db_query('INSERT INTO user_request SET
+			name = ' . autoquote($name). ',
+			surname = ' . autoquote($surname). ',
+			uname = ' . autoquote($username). ',
+			email = ' . autoquote($usermail). ',
+			am = ' . autoquote($am). ',
+			faculty_id = ' . intval($department). ',
+			phone = ' . autoquote($userphone). ",
+			status = 1,
+			statut = $statut,
+			verified_mail = $verified_mail,
+			date_open = NOW(),
+			comment = " . autoquote($usercomment). ',
+			lang = ' . quote(langname_to_code($language)). ",
+			ip_address = inet_aton('$_SERVER[REMOTE_ADDR]')",
+		$mysqlMainDb);
 
-        //----------------------------- Email Message --------------------------
-        $department = find_faculty_by_id($department);
-        $subject = $prof? $mailsubject: $mailsubject2;
-        $MailMessage = $mailbody1 . $mailbody2 . "$name $surname\n\n" .
-                $mailbody3 . $mailbody4 . $mailbody5 . 
-                ($prof? $mailbody6: $mailbody8) .
-                "\n\n$langFaculty: $department\n$langComments: $usercomment\n" .
-                "$langAm: $am\n" .
-                "$langProfUname: $username\n$langProfEmail : $usermail\n" .
-                "$contactphone: $userphone\n\n\n$logo\n\n";
+	if (!$res) {
+		$request_id = '';
+	}
+	else {
+		$request_id = mysql_insert_id();
+	}
 
-        if (!send_mail('', $usermail, '', $emailhelpdesk, $subject, $MailMessage, $charset)) {
-                $tool_content .= "
-                         <p class='alert1'>$langMailErrorMessage&nbsp; <a href='mailto:$emailhelpdesk' class='mainpage'>$emailhelpdesk</a>.</p>";
-        }
+	// email does not need verification -> mail helpdesk
+	if (!$email_verification_required) {
 
-        // User Message
-        $tool_content .= "<div class='success'>" .
-                         ($prof? $langDearProf: $langDearUser) .
-                         "!<br />$success</div>
-                <p>$infoprof<br /><br />$click <a href='$urlServer' class='mainpage'>$langHere</a> $langBackPage</p>";
-        draw($tool_content, 0);
-        exit();
+		//----------------------------- Email Request Message --------------------------
+		$department = find_faculty_by_id($department);
+		$subject = $prof? $mailsubject: $mailsubject2;
+		$MailMessage = $mailbody1 . $mailbody2 . "$name $surname\n\n" .
+			$mailbody3 . $mailbody4 . $mailbody5 . 
+			($prof? $mailbody6: $mailbody8) .
+			"\n\n$langFaculty: $department\n$langComments: $usercomment\n" .
+			"$langAm: $am\n" .
+			"$langProfUname: $username\n$langProfEmail : $usermail\n" .
+			"$contactphone: $userphone\n\n\n$logo\n\n";
 
+		if (!send_mail('', $usermail, '', $emailhelpdesk, $subject, $MailMessage, $charset)) {
+			$tool_content .= "
+				<p class='alert1'>$langMailErrorMessage&nbsp; <a href='mailto:$emailhelpdesk' class='mainpage'>$emailhelpdesk</a>.</p>";
+		}
+
+		// User Message
+		$tool_content .= "<div class='success'>" .
+			($prof? $langDearProf: $langDearUser) .
+			"!<br />$success</div>
+			<p>$infoprof<br /><br />$click <a href='$urlServer' class='mainpage'>$langHere</a> $langBackPage</p>";
+	}
+	// email needs verification -> mail user
+	else {
+		$code_key = get_config('code_key');
+		$hmac = hash_hmac('sha256', $username.$usermail.$request_id, base64_decode($code_key));
+		//----------------------------- Email Verification -----------------------
+		$subject = $langMailVerificationSubject;
+		$MailMessage = sprintf($mailbody1.$langMailVerificationBody1, $urlServer.'modules/auth/mail_verify.php?ver='.$hmac.'&rid='.$request_id);
+		if (!send_mail('', $emailhelpdesk, '', $usermail, $subject, $MailMessage, $charset)) {
+			$mail_ver_error = sprintf("<p class='alert1'>".$langMailVerificationError,$usermail,$urlServer."modules/auth/registration.php",
+				"<a href='mailto:$emailhelpdesk' class='mainpage'>$emailhelpdesk</a>.</p>");
+			$tool_content .= $mail_ver_error;
+				
+			draw($tool_content, 0);
+			exit;
+		}
+
+		// User Message
+		$tool_content .= "<div class='success'>" .
+			($prof? $langDearProf: $langDearUser) .
+			"!<br />$langMailVerificationSuccess: <strong>$usermail</strong></div>
+			<p>$langMailVerificationSuccess4.<br /><br />$click <a href='$urlServer' class='mainpage'>$langHere</a> $langBackPage</p>";
+	}
+
+		draw($tool_content, 0);
+		exit();
+
+// first time we visit the form or on error
 } else {
         // display the form
         $phone_star = $prof? '&nbsp;&nbsp;(*)': '';
@@ -145,28 +203,28 @@ if ($all_set) {
           <table class='tbl'>
           <tr>
             <th>$langName</th>
-            <td><input type='text' name='name' value='" . q($name) . "' size='33' />&nbsp;&nbsp;(*)</td>
+            <td><input type='text' name='name' value='" . q($name) . "' size='30' maxlength='30' />&nbsp;&nbsp;(*)</td>
           </tr>
           <tr>
             <th>$langSurname</th>
-            <td><input type='text' name='surname' value='" . q($surname) . "' size='33' />&nbsp;&nbsp;(*)</td>
+            <td><input type='text' name='surname' value='" . q($surname) . "' size='30' maxlength='30' />&nbsp;&nbsp;(*)</td>
           </tr>
           <tr>
             <th>$langPhone</th>
-            <td colspan='2'><input type='text' name='userphone' value='" . q($userphone) . "' size='33' />$phone_star</td>
+            <td colspan='2'><input type='text' name='userphone' value='" . q($userphone) . "' size='20' maxlength='20' />$phone_star</td>
           <tr>
             <th>$langUsername</th>
-            <td><input type='text' name='username' size='33' maxlength='32' value='" . q($username) . "' />&nbsp;&nbsp;<small>(*)&nbsp;$langUserNotice</small></td>
+            <td><input type='text' name='username' size='30' maxlength='30' value='" . q($username) . "' />&nbsp;&nbsp;<small>(*)&nbsp;$langUserNotice</small></td>
           </tr>
           <tr>
             <th>$langProfEmail</th>
-            <td><input type='text' name='usermail' value='" . q($usermail) . "' size='33' />&nbsp;&nbsp;(*)</td>
+            <td><input type='text' name='usermail' value='" . q($usermail) . "' size='30' maxlength='30' />&nbsp;&nbsp;(*)</td>
           </tr>";
         if (!$prof) {
                 $tool_content .= "
           <tr>
             <th>$langAm</th>
-            <td colspan='2'><input type='text' name='am' value='" . q($am) . "' size='33' />" .
+            <td colspan='2'><input type='text' name='am' value='" . q($am) . "' size='20' maxlength='20' />" .
                 ($am_required? '&nbsp;&nbsp;(*)': '') . "</td>
           </tr>";
         }

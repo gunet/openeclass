@@ -142,29 +142,39 @@ if (isset($_POST['submit'])) {
                 redirect_to_message(6);
 	}
 
+	if (($_SESSION['email'] != $email_form) && get_config('email_verification_required')) {
+		$verified_mail = 0;
+	}
+	else {
+		$verified_mail = 2;
+	}
 	// everything is ok
-        if (db_query("UPDATE user SET nom = " . autoquote($nom_form) . ",
-                                      prenom = " . autoquote($prenom_form) . ",
-                                      username = " . autoquote($username_form) . ",
-                                      email = " . autoquote($email_form) . ",
-                                      am = " . autoquote($am_form) . ",
-                                      phone = " . autoquote($phone_form) . ",
-                                      description = " . autoquote($desc_form) . ",
-                                      department = $department,
-                                      email_public = $email_public,
-                                      phone_public = $phone_public,
-                                      am_public = $am_public
-                             WHERE user_id = $_SESSION[uid]")) {
-                $_SESSION['uname'] = $username_form;
-                $_SESSION['nom'] = $nom_form;
-                $_SESSION['prenom'] = $prenom_form;
-                $_SESSION['email'] = $email_form;
+	if (db_query("UPDATE user SET nom = " . autoquote($nom_form) . ",
+						prenom = " . autoquote($prenom_form) . ",
+						username = " . autoquote($username_form) . ",
+						email = " . autoquote($email_form) . ",
+						am = " . autoquote($am_form) . ",
+						phone = " . autoquote($phone_form) . ",
+						description = " . autoquote($desc_form) . ",
+						department = $department,
+						email_public = $email_public,
+						phone_public = $phone_public,
+						verified_mail = $verified_mail,
+						am_public = $am_public
+						WHERE user_id = $_SESSION[uid]")) {
+		$_SESSION['uname'] = $username_form;
+		$_SESSION['nom'] = $nom_form;
+		$_SESSION['prenom'] = $prenom_form;
+		$_SESSION['email'] = $email_form;
 
-                redirect_to_message(1);
-        }
-        if ($old_language != $language or $old_perso_status != $perso_status) {
-                redirect_to_message(1);
-        }
+		if ($verified_mail === 0) {
+			$_SESSION['mail_verification_required'] = 1;
+		}
+		redirect_to_message(1);
+	}
+	if ($old_language != $language or $old_perso_status != $perso_status) {
+		redirect_to_message(1);
+	}
 }
 
 //Show message if exists

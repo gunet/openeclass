@@ -78,7 +78,7 @@ if (isset($_SESSION['shib_uname'])) {
         // authenticate via cas
 	shib_cas_login('cas');
 } else { // normal authentication
-        process_login();
+	process_login();
 } 
 
 if (isset($_SESSION['uid'])) { 
@@ -97,7 +97,7 @@ if (isset($_GET['logout']) and $uid) {
 	foreach(array_keys($_SESSION) as $key) {
 		unset($_SESSION[$key]);
 	}
-        session_destroy();
+	session_destroy();
 	$uid = 0;
 	if (defined('CAS')) {
 		$cas = get_auth_settings(7);

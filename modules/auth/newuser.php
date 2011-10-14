@@ -72,32 +72,32 @@ if (!isset($_POST['submit'])) {
 	<table width='100%' class='tbl'>
 	<tr>
 	<th class='left' width='180'>$langName:</th>
-	<td colspan='2'><input type='text' name='prenom_form' value='".$_GET['prenom_form']."' class='FormData_InputText' />&nbsp;&nbsp;<small>(*)</small></td>
+	<td colspan='2'><input type='text' name='prenom_form' size='30' maxlength='30' value='".$_GET['prenom_form']."' class='FormData_InputText' />&nbsp;&nbsp;<small>(*)</small></td>
 	</tr>
 	<tr>
 	<th class='left'>$langSurname:</th>
-	<td colspan='2'><input type='text' name='nom_form' value='".$_GET['nom_form']."' class='FormData_InputText' />&nbsp;&nbsp;<small>(*)</small></td>
+	<td colspan='2'><input type='text' name='nom_form' size='30' maxlength='30' value='".$_GET['nom_form']."' class='FormData_InputText' />&nbsp;&nbsp;<small>(*)</small></td>
 	</tr>
 	<tr>
 	<th class='left'>$langUsername:</th>
-	<td colspan='2'><input type='text' name='uname' value='".$_GET['uname']."' size='20' maxlength='20' class='FormData_InputText' />&nbsp;&nbsp;<small>(*) $langUserNotice</small></td>
+	<td colspan='2'><input type='text' name='uname' value='".$_GET['uname']."' size='30' maxlength='30' class='FormData_InputText' />&nbsp;&nbsp;<small>(*) $langUserNotice</small></td>
 	</tr>
 	<tr>
 	<th class='left'>$langPass:</th>
-	<td colspan='2'><input type='password' name='password1' size='20' maxlength='20' class='FormData_InputText' />&nbsp;&nbsp;<small>(*)</small></td>
+	<td colspan='2'><input type='password' name='password1' size='30' maxlength='30' class='FormData_InputText' />&nbsp;&nbsp;<small>(*) $langUserNotice</small></td>
 	</tr>
 	<tr>
 	<th class='left'>$langConfirmation:</th>
-	<td colspan='2'><input type='password' name='password' size='20' maxlength='20' class='FormData_InputText' />&nbsp;&nbsp;<small>(*) $langUserNotice</small></td>
+	<td colspan='2'><input type='password' name='password' size='30' maxlength='30' class='FormData_InputText' />&nbsp;&nbsp;<small>(*)</small></td>
 	</tr>
 	<tr>
 	<th class='left'>$langEmail:</th>
-	<td valign='top'><input type='text' name='email' value='".$_GET['email']."' class='FormData_InputText' /></td>
+	<td valign='top'><input type='text' name='email' size='30' maxlength='30' value='".$_GET['email']."' class='FormData_InputText' /></td>
 	<td><small>$email_message</small></td>
 	</tr>
 	<tr>
 	<th class='left'>$langAm:</th>
-	<td colspan='2' valign='top'><input type='text' name='am' value='".$_GET['am']."' class='FormData_InputText' />$am_message</td>
+	<td colspan='2' valign='top'><input type='text' name='am' size='20' maxlength='20' value='".$_GET['am']."' class='FormData_InputText' />$am_message</td>
 	</tr>
 	<tr>
 	<th class='left'>$langFaculty:</th>
@@ -179,58 +179,85 @@ if (!isset($_POST['submit'])) {
 		$registration_errors[] = $langPassTwice;
 	}
 	if (count($registration_errors) == 0) {
+		if (get_config('email_verification_required') && !empty($email)) {
+			$verified_mail = 0;
+			$vmail = TRUE;
+		}
+		else {
+			$verified_mail = 2;
+			$vmail = FALSE;
+		}
+
+		$registered_at = time();
+		$expires_at = time() + $durationAccount;  
+		// manage the store/encrypt process of password into database
+		$uname = escapeSimple($uname);  
+		$password = escapeSimpleSelect($password); 
+		$password_encrypted = md5($password);
+
+		$q1 = "INSERT INTO `$mysqlMainDb`.user
+			(nom, prenom, username, password, email, statut, department, am, registered_at, expires_at, lang, verified_mail)
+			VALUES (". autoquote($nom_form) .",
+				". autoquote($prenom_form) .",
+				". autoquote($uname) .",
+				'$password_encrypted',
+				". autoquote($email) .",
+				5,
+				". intval($department) .",
+				". autoquote($am) .",
+				$registered_at, $expires_at,
+				'$lang', $verified_mail)";
+		$inscr_user = db_query($q1);
+		$last_id = mysql_insert_id();
+
+		if ($vmail and !empty($email)) {
+			$code_key = get_config('code_key');
+			$hmac = hash_hmac('sha256', $uname.$email.$last_id, base64_decode($code_key));
+		}
+
 		$emailsubject = "$langYourReg $siteName";
 		$uname = autounquote($uname); 
 		$password = unescapeSimple($password);
 		$emailbody = "$langDestination $prenom_form $nom_form\n" .
 			"$langYouAreReg $siteName $langSettings $uname\n" .
 			"$langPass: $password\n$langAddress $siteName: " .
-			"$urlServer\n$langProblem\n$langFormula" .
-			"$administratorName $administratorSurname" .
+			"$urlServer\n" .
+			($vmail?"\n$langMailVerificationSuccess.\n$langMailVerificationClick\n$urlServer"."modules/auth/mail_verify.php?ver=".$hmac."&id=".$last_id."\n":"") .
+			"$langProblem\n$langFormula" .
+			"$administratorName $administratorSurname\n" .
 			"$langManager $siteName \n$langTel $telephone \n" .
 			"$langEmail: $emailhelpdesk";
-	send_mail('', '', '', $email, $emailsubject, $emailbody, $charset);
-	$registered_at = time();
-	$expires_at = time() + $durationAccount;  
-	// manage the store/encrypt process of password into database
-	$uname = escapeSimple($uname);  
-	$password = escapeSimpleSelect($password); 
-	$password_encrypted = md5($password);
+
+		if (!empty($email)) {
+			send_mail('', '', '', $email, $emailsubject, $emailbody, $charset);
+		}
 	
-	$q1 = "INSERT INTO `$mysqlMainDb`.user
-		(nom, prenom, username, password, email, statut, department, am, registered_at, expires_at, lang)
-		VALUES (". autoquote($nom_form) .",
-			". autoquote($prenom_form) .",
-			". autoquote($uname) .",
-			'$password_encrypted',
-			". autoquote($email) .",
-			5,
-			". intval($department) .",
-			". autoquote($am) .",
-			$registered_at, $expires_at,
-			'$lang')";
-	$inscr_user = db_query($q1);
-	$last_id = mysql_insert_id();
-	$result = db_query("SELECT user_id, nom, prenom FROM `$mysqlMainDb`.user WHERE user_id = $last_id");
-	while ($myrow = mysql_fetch_array($result)) {
-		$uid = $myrow[0];
-		$nom = $myrow[1];
-		$prenom = $myrow[2];
-	}
-	db_query("INSERT INTO `$mysqlMainDb`.loginout (loginout.id_user, loginout.ip, loginout.when, loginout.action)
-		VALUES ($uid, '".$_SERVER['REMOTE_ADDR']."', NOW(), 'LOGIN')");
-	$_SESSION['uid'] = $uid;
-	$_SESSION['statut'] = 5;
-	$_SESSION['prenom'] = $prenom;
-	$_SESSION['nom'] = $nom;
-	$_SESSION['uname'] = $uname;
-	$_SESSION['user_perso_active'] = $GLOBALS['persoIsActive'];
-	// registration form
-	$tool_content .= "<p>$langDear " . q("$prenom $nom") . ",</p>" .
+		if (!$vmail) {
+			$result = db_query("SELECT user_id, nom, prenom FROM `$mysqlMainDb`.user WHERE user_id = $last_id");
+			while ($myrow = mysql_fetch_array($result)) {
+				$uid = $myrow[0];
+				$nom = $myrow[1];
+				$prenom = $myrow[2];
+			}
+			db_query("INSERT INTO `$mysqlMainDb`.loginout (loginout.id_user, loginout.ip, loginout.when, loginout.action)
+				VALUES ($uid, '".$_SERVER['REMOTE_ADDR']."', NOW(), 'LOGIN')");
+			$_SESSION['uid'] = $uid;
+			$_SESSION['statut'] = 5;
+			$_SESSION['prenom'] = $prenom;
+			$_SESSION['nom'] = $nom;
+			$_SESSION['uname'] = $uname;
+			$_SESSION['user_perso_active'] = $GLOBALS['persoIsActive'];
+			$tool_content .= "<p>$langDear " . q("$prenom $nom") . ",</p>";
+		}
+		// registration form
+		$tool_content .= 
 			"<div class='success'>" .
 			"<p>$langPersonalSettings</p>" .
-			"</div>" .
-			"<p>$langPersonalSettingsMore</p>";
+			"</div>";
+		if (!$vmail) {
+			$tool_content .= 
+				"<p>$langPersonalSettingsMore</p>";
+		}
 	} else {
 		// errors exist - registration failed
 		$tool_content .= "<p class='caution'>";

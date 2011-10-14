@@ -32,7 +32,7 @@ Defines standard functions and validates variables
 ---------------------------------------------------------------------
 */
 define('ECLASS_VERSION', '2.4.1');
-
+define('DEBUG_MYSQL', true);
 // resized user image 
 define('IMAGESIZE_LARGE', 256);
 define('IMAGESIZE_SMALL', 32);
@@ -505,7 +505,7 @@ function selection($entries, $name, $default = '', $extra = '')
 	$retString = "";
 	$retString .= "\n<select name='$name' $extra>\n";
 	foreach ($entries as $value => $label) {
-		if ($value == $default) {
+		if ($value === $default) {
 			$retString .= "<option selected value='" . htmlspecialchars($value) . "'>" .
 			htmlspecialchars($label) . "</option>\n";
 		} else {
@@ -559,6 +559,23 @@ function check_guest() {
 	}
 }
 
+// -------------------------------------------------------
+// function to check if user must verify his email address
+// -------------------------------------------------------
+
+function check_mail_ver_required($uid) {
+	if (isset($uid)) {
+		$res = db_query("SELECT verified_mail FROM user WHERE user_id = '$uid'");
+		$g = mysql_fetch_row($res);
+
+		if (intval($g[0]) === 0) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	return false;
+}
 
 // ------------------------------------------------
 // function to check if user is a course editor
@@ -601,6 +618,7 @@ function check_uid() {
 	}
 
 }
+
 // -------------------------------------------------------
 // Check if a user with username $login already exists
 // ------------------------------------------------------
@@ -608,8 +626,21 @@ function check_uid() {
 function user_exists($login) {
   global $mysqlMainDb;
 
-  $username_check = db_query("SELECT user_id FROM `$mysqlMainDb`.user
-                                     WHERE username COLLATE utf8_bin = ".quote($login));
+  $qry = "SELECT user_id FROM `$mysqlMainDb`.user WHERE username COLLATE utf8_bin = ". quote($login);
+  $username_check = db_query($qry);
+        
+  return ($username_check && mysql_num_rows($username_check) > 0);
+}
+
+// ----------------------------------------------------------------
+// Check if a user with username $login already applied for account
+// ----------------------------------------------------------------
+
+function user_app_exists($login) {
+  global $mysqlMainDb;
+
+  $qry = "SELECT id FROM `$mysqlMainDb`.user_request WHERE status=1 and uname COLLATE utf8_bin = ". quote($login);
+  $username_check = db_query($qry);
         
   return ($username_check && mysql_num_rows($username_check) > 0);
 }
@@ -1959,6 +1990,7 @@ function stop_output_buffering()
 // Generate a 25-character random alphanumeric string
 function generate_secret_key()
 {
+        mt_srand(make_seed());
         $key = '';
         for ($i = 0; $i < 5; $i++) {
                 $key .= base_convert(mt_rand(0x19A100, 0x39AA3FF), 10, 36);
@@ -1966,6 +1998,47 @@ function generate_secret_key()
         return $key;
 }
 
+// Seed mt_rand
+function make_seed() {
+	list($usec, $sec) = explode(' ', microtime());
+	return (float) $sec + ((float) $usec * 100000);
+}
+
+// Generate a $len length random base64 encoded alphanumeric string
+// try first /dev/urandom but if not available generate pseudo-random string
+function generate_secret_key2($len)
+{
+	if (($key = read_urandom($len)) == NULL) {
+		// poor man's choice
+		$key = poor_rand_string($len);
+	}
+	return base64_encode($key);
+}
+
+// Generate a $len length pseudo random base64 encoded alphanumeric string from ASCII table
+function poor_rand_string($len) {
+	mt_srand(make_seed());
+
+	$c = "";
+	for ($i=0; $i<$len; $i++) {
+		$c .= chr(mt_rand(0, 127));
+	}
+
+	return $c;
+}
+
+// Read $len length random string from /dev/urandom if it's available
+function read_urandom($len) {
+	if (@is_readable('/dev/urandom')) {
+		$f=fopen('/dev/urandom', 'r');
+		$urandom=fread($f, $len);
+		fclose($f);
+		return $urandom;
+	}
+	else {
+		return NULL;
+	}
+}
 
 // Get user admin rights from table `admin`
 function get_admin_rights($user_id) {

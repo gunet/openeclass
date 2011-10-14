@@ -32,6 +32,7 @@ $all_set = register_posted_variables(array(
         'nom_form' => true,
         'prenom_form' => true,
         'email_form' => true,
+        'verified_mail_form' => false,
         'language' => true,
         'department' => true,
         'am' => false,
@@ -40,8 +41,8 @@ $all_set = register_posted_variables(array(
         'pstatut' => true,
         'rid' => false,
         'submit' => true));
-
 $submit = isset($_POST['submit'])?$_POST['submit']:'';
+
 
 if($submit) {
         // register user
@@ -50,6 +51,7 @@ if($submit) {
         if (!isset($native_language_names[$proflanguage])) {
                 $proflanguage = langname_to_code($language);
         }
+		  $verified_mail = isset($_REQUEST['verified_mail_form'])?intval($_REQUEST['verified_mail_form']):2;
 
         $backlink = $_SERVER['PHP_SELF'] .
                     isset($rid)? ('?id=' . intval($rid)): '';
@@ -74,13 +76,13 @@ if($submit) {
                 $expires_at = time() + $durationAccount;
                 $password_encrypted = md5($password);
                 $inscr_user = db_query("INSERT INTO `$mysqlMainDb`.user
-                                (nom, prenom, username, password, email, statut, phone, department, am, registered_at, expires_at, lang, description)
+                                (nom, prenom, username, password, email, statut, phone, department, am, registered_at, expires_at, lang, description, verified_mail)
                                 VALUES (" .
                                 autoquote($nom_form) . ', '.
                                 autoquote($prenom_form) . ', '.
                                 autoquote($uname) . ", '$password_encrypted', ".
                                 autoquote($email_form) .
-                                ", $pstatut, ".autoquote($phone).", $depid, ".autoquote($am).", $registered_at, $expires_at, '$proflanguage', '')");
+                                ", $pstatut, ".autoquote($phone).", $depid, ".autoquote($am).", $registered_at, $expires_at, '$proflanguage', '', $verified_mail)");
 
                 // close request if needed
                 if (!empty($rid)) {
@@ -137,11 +139,12 @@ $langEmail : $emailhelpdesk
                 $tool_content .= "
                 </ul></div>";
                 $res = mysql_fetch_array(db_query("SELECT name, surname, uname, email, faculty_id, phone, am,
-                        comment, lang, date_open, statut FROM user_request WHERE id = $id"));
+                        comment, lang, date_open, statut, verified_mail FROM user_request WHERE id = $id"));
                 $ps = $res['surname'];
                 $pn = $res['name'];
                 $pu = $res['uname'];
                 $pe = $res['email'];
+                $pv = intval($res['verified_mail']);
                 $pt = $res['faculty_id'];
                 $pam = $res['am'];
                 $pphone = $res['phone'];
@@ -178,9 +181,18 @@ $langEmail : $emailhelpdesk
             <td><input class='FormData_InputText' type='text' name='password' value='".create_pass()."' /></td></tr>
         <tr><th class='left'><b>$langEmail:</b></th>
             <td class='smaller'><input class='FormData_InputText' type='text' name='email_form' value='".q($pe)."' />&nbsp;(*)</td></tr>
+        <tr><th class='left'><b>$langEmailVerified:</b></th>
+		  		<td>";
+		  $verified_mail_data = array();
+		  $verified_mail_data[0] = $m['pending'];
+		  $verified_mail_data[1] = $m['yes'];
+		  $verified_mail_data[2] = $m['no'];
+		  $tool_content .= selection($verified_mail_data,"verified_mail_form",$pv);
+
+        $tool_content .= "</td></tr>
         <tr><th class='left'><b>$langPhone:</b></th>
             <td class='smaller'><input class='FormData_InputText' type='text' name='phone' value='".q($pphone)."' /></td></tr>
-        <tr><th class='left'>$langFaculty:</th>
+        <tr><th class='left'><b>$langFaculty:</b></th>
             <td>";
         
         $dep = array();

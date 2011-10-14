@@ -147,6 +147,7 @@ $active_ui_languages = '.$string_active_ui_languages."\n";
 	fwrite($fd, $stringConfig);
 
 	$config_vars = array('email_required' => true,
+		'email_verification_required' => true,
 		'am_required' => true,
 		'dont_display_login_form' => true,
 		'dropbox_allow_student_to_student' => true,
@@ -356,7 +357,8 @@ else {
 		 array_search($theme, $available_themes)) . "</td></tr>";
 	
 	$cbox_email_required = get_config('email_required')?'checked':'';
-	$cbox_am_required = get_config('email_required')?'checked':'';
+	$cbox_email_verification_required = get_config('email_verification_required')?'checked':'';
+	$cbox_am_required = get_config('am_required')?'checked':'';
 	$cbox_dont_display_login_form = get_config('dont_display_login_form')?'checked':'';
 	$cbox_dropbox_allow_student_to_student = get_config('dropbox_allow_student_to_student')?'checked':'';
 	$cbox_block_username_change = get_config('block_username_change')?'checked':'';
@@ -372,6 +374,10 @@ else {
 	  <tr>
 		<th class='left'><b>email_required</b></th>
 		<td><input type='checkbox' name='email_required' value='1' $cbox_email_required />&nbsp;$lang_email_required</td>
+	  </tr>
+	  <tr>
+		<th class='left'><b>email_verification_required</b></th>
+		<td><input type='checkbox' name='email_verification_required' value='1' $cbox_email_verification_required />&nbsp;$lang_email_verification_required</td>
 	  </tr>
 	  <tr>
 		<th class='left'><b>am_required</b></th>

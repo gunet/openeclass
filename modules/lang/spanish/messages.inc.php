@@ -1696,7 +1696,7 @@ $langRegistration = "Registro";
 $langSurname = "Apellido";
 $langUsername = "Nombre de usuario";
 $langConfirmation = "Confirmación";
-$langUserNotice = "(max 20 carácteres)";
+$langUserNotice = "(max 30 carácteres)";
 $langEmailNotice = "la dirección de e-mail address no se requiere, pero recuerda que si  ella, ".$langsTeacher."no puedes enviar<br>
 anuncios a tu buzón de correo, y tampoco puedes utilizar el campo 'has olvidado tu contraseña'";
 $langAm = $langStudent." ID";
@@ -2688,7 +2688,7 @@ $langBasicCfgSetting = "Basic settings";
 $langOptionalCfgSetting = "Optional Settings";
 $langWillWriteConfig = "Settings below will be written to <em>config</em> table of main database";
 $langToReqOpen = "Usera can register themselves without administration approval";
-$lang_email_required = "$langsOfStudent email address is required during registration";
+$lang_email_required = "$langOfUser email address is required during registration";
 $lang_am_required = "$langsOfStudent ID is required during registration";
 $lang_dropbox_allow_student_to_student = "Allow file uploading between $langsOfStudents in 'Dropbox'";
 $lang_dont_display_login_form = "Don't display login form in platform home page";

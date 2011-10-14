@@ -57,7 +57,7 @@ $nameTools = $langSearchUser;
 $new = isset($_GET['new'])?$_GET['new']:'yes';	//variable of declaring a new search
 
 // initialize the variables
-$user_surname = $user_firstname = $user_username = $user_am = $user_type = $auth_type = $user_registered_at_flag = $user_registered_at = $user_email = '';
+$user_surname = $user_firstname = $user_username = $user_am = $user_type = $auth_type = $user_registered_at_flag = $user_registered_at = $user_email = $verified_mail = '';
 
 // Display Actions Toolbar
 $tool_content .= "
@@ -131,12 +131,24 @@ for ($h=0; $h<=24; $h++)
 $tool_content .= "\n      <option value='$h'>$h</option>";
 $tool_content .= "</select>&nbsp;&nbsp;&nbsp;";
 @$tool_content .= "<select name='minute'>";
-for ($m=0; $m<=55; $m=$m+5)
-	$tool_content .= "<option value='$m'>$m</option>";
+for ($min=0; $min<=55; $min=$min+5)
+	$tool_content .= "<option value='$min'>$min</option>";
 $tool_content .= "</select>\n    </td>";
 $tool_content .= "\n  </tr>";
 
 $tool_content .= "
+  <tr>
+    <th class='left'>$langEmailVerified:</th>
+    <td>";
+
+$verified_mail_data = array();
+$verified_mail_data[0] = $m['pending'];
+$verified_mail_data[1] = $m['yes'];
+$verified_mail_data[2] = $m['no'];
+$verified_mail_data[3] = $langAllUsers;
+$tool_content .= selection($verified_mail_data,"verified_mail",3);
+$tool_content .= "</td>
+  </tr>
   <tr>
     <th class='left'>$langEmail:</th>
     <td><input type='text' name='user_email' size='40' value='".q($user_email)."'></td>

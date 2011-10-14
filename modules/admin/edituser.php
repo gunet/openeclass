@@ -49,6 +49,8 @@ if (!isset($_REQUEST['u'])) {
 	$u = $_SESSION['u_tmp'];
 }
 
+$verified_mail = isset($_REQUEST['verified_mail'])?intval($_REQUEST['verified_mail']):2;
+
 $tool_content = $head_content = "";
 
 $lang_editor = $lang_jscalendar = langname_to_code($language);
@@ -65,7 +67,7 @@ $u_submitted = isset($_POST['u_submitted'])?$_POST['u_submitted']:'';
 
 if ($u)	{
         $q = db_query("SELECT nom, prenom, username, password, email, phone, department,
-                        registered_at, expires_at, statut, am
+                        registered_at, expires_at, statut, am, verified_mail 
                         FROM user WHERE user_id = $u");
         $info = mysql_fetch_assoc($q);
         if (isset($_POST['submit_editauth'])) {
@@ -175,6 +177,20 @@ $tool_content .= "
      <th class='left'>e-mail: </th>
      <td><input type='text' name='email' size='50' value='".q($info['email'])."' /></td>
    </tr>
+     <tr>
+       <th>$langEmailVerified: </th>
+       <td>";
+
+$verified_mail_data = array();
+$verified_mail_data[0] = $m['pending'];
+$verified_mail_data[1] = $m['yes'];
+$verified_mail_data[2] = $m['no'];
+
+$tool_content .= selection($verified_mail_data,"verified_mail",intval($info['verified_mail']));
+$tool_content .= "
+	  </td>
+     </tr>
+     <tr>
    <tr>
      <th class='left'>$langAm: </th>
      <td><input type='text' name='am' size='50' value='".q($info['am'])."' /></td>
@@ -387,7 +403,8 @@ $tool_content .= "
                                        username = ".autoquote($username).", email = ".autoquote($email).", 
                                        statut = ".intval($newstatut).", phone=".autoquote($phone).",
                                        department = ".intval($department).", expires_at=".$expires_at.",
-                                       am = ".autoquote($am)." WHERE user_id = ".intval($u);
+                                       am = ".autoquote($am)." , verified_mail = ".intval($verified_mail) ." 
+													WHERE user_id = ".intval($u);
 			$qry = db_query($sql);
                         if (!$qry) {
                                 $tool_content .= "$langNoUpdate: $u!";

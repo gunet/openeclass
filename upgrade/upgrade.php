@@ -266,10 +266,10 @@ if (!isset($_POST['submit2'])) {
                 $oldversion = get_config('version');
         }
         db_query("INSERT IGNORE INTO `config` (`key`, `value`) VALUES
-                        ('dont_display_login_form', '0'),
-                        ('email_required', '0'),
-                        ('am_required', '0'),
-                        ('dropbox_allow_student_to_student', '0'),
+  			('dont_display_login_form', '0'),
+			('email_required', '0'),
+			('am_required', '0'),
+			('dropbox_allow_student_to_student', '0'),
 			('block_username_change', '0'),
 			('betacms', '0'),
 			('display_captcha', '0'),
@@ -278,9 +278,7 @@ if (!isset($_POST['submit2'])) {
 			('dropbox_quota', '100'),
 			('video_quota', '100'),
 			('group_quota', '100'),
-			('disable_eclass_stud_reg', '0'),
-			('disable_eclass_prof_reg', '0'),
-                        ('secret_key', '" . generate_secret_key() . "')");
+			('secret_key', '" . generate_secret_key() . "')");
 
         if ($oldversion < '2.1.3') {
         	// delete useless field
@@ -378,7 +376,7 @@ if (!isset($_POST['submit2'])) {
                 mysql_field_exists($mysqlMainDb, 'user', 'description') or
                         db_query("ALTER TABLE `user` ADD description TEXT,
                                                      ADD has_icon BOOL NOT NULL DEFAULT 0,
-                                                     ADD verified_mail BOOL NOT NULL DEFAULT 0,
+                                                     ADD verified_mail BOOL NOT NULL DEFAULT 2,
                                                      ADD receive_mail BOOL NOT NULL DEFAULT 1");
                 mysql_field_exists($mysqlMainDb, 'cours_user', 'receive_mail') or
                         db_query("ALTER TABLE `cours_user` ADD receive_mail BOOL NOT NULL DEFAULT 1");
@@ -518,6 +516,23 @@ if (!isset($_POST['submit2'])) {
 			db_query("DROP TABLE cours_faculte");	
 		}		
         }
+
+		if ($oldversion < '2.4.2') {
+
+			db_query("INSERT IGNORE INTO `config` (`key`, `value`) VALUES
+				('disable_eclass_stud_reg', '0'),
+				('disable_eclass_prof_reg', '0'),
+				('email_verification_required', '1'),
+				('code_key', '" . generate_secret_key2(32) . "')");
+
+			if (mysql_field_exists($mysqlMainDb, 'user', 'verified_mail')) {
+				db_query('ALTER TABLE `user` MODIFY `verified_mail` TINYINT(1) NOT NULL DEFAULT 2');
+				db_query('UPDATE `user` SET `verified_mail`=2');
+			}
+			mysql_field_exists($mysqlMainDb, 'user_request', 'verified_mail') or
+				db_query("ALTER TABLE `user_request` ADD `verified_mail` TINYINT(1) NOT NULL DEFAULT 2 AFTER `email`");
+		}
+
         mysql_field_exists($mysqlMainDb, 'cours', 'expand_glossary') or
                 db_query("ALTER TABLE `cours` ADD `expand_glossary` BOOL NOT NULL DEFAULT 0");
         mysql_field_exists($mysqlMainDb, 'cours', 'glossary_index') or

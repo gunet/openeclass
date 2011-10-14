@@ -92,8 +92,13 @@ $last_prof_info = "<b>".$myrow['prenom']." ".$myrow['nom']."</b> (".$myrow['emai
 // Find last stud registration
 $sql = "SELECT prenom, nom, email, registered_at FROM user WHERE statut = 5 ORDER BY user_id DESC LIMIT 0,1";
 $result = db_query($sql);
-$myrow = mysql_fetch_array($result);
-$last_stud_info = "<b>".$myrow['prenom']." ".$myrow['nom']."</b> (".$myrow['email'].", ".date("j/n/Y H:i",$myrow['registered_at']).")";
+if ( ($myrow = mysql_fetch_array($result)) != FALSE) {
+	$last_stud_info = "<b>".$myrow['prenom']." ".$myrow['nom']."</b> (".$myrow['email'].", ".date("j/n/Y H:i",$myrow['registered_at']).")";
+}
+else {
+	// no student is yet registered
+	$last_stud_info = $langLastStudNone;
+}
 
 // Find admin's last login
 $sql = "SELECT `when` FROM loginout WHERE id_user = '".$uid."' AND action = 'LOGIN' ORDER BY `when` DESC LIMIT 1,1";
@@ -139,7 +144,7 @@ $tool_content .= "
       <td>$langAfterLastLogin
         <ul class='custom_list'>
           <li><b>".$lastregisteredprofs."</b> $langTeachers</li>
-          <li><b>".$lastregisteredstuds."</b> $langUsersS </li>
+          <li><b>".$lastregisteredstuds."</b> $langStudents </li>
         </ul>
       </td>
     </tr>

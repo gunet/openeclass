@@ -35,10 +35,19 @@ if (phpCAS::checkAuthentication()) {
 	$cas = get_auth_settings($auth);
 	$attrs = get_cas_attrs(phpCAS::getAttributes(), $cas);
 	$_SESSION['cas_uname'] = phpCAS::getUser();
-	$_SESSION['uname'] = $_SESSION['cas_uname'];
-	$_SESSION['cas_nom'] = $attrs['casuserlastattr'];
-	$_SESSION['cas_prenom'] = $attrs['casuserfirstattr'];
-	$_SESSION['cas_email'] = $attrs['casusermailattr'];
+
+	if (!empty($_SESSION['cas_uname'])) {
+		$_SESSION['uname'] = $_SESSION['cas_uname'];
+	}
+	if (!empty($attrs['casuserlastattr'])) {
+		$_SESSION['cas_nom'] = $attrs['casuserlastattr'];
+	}
+	if (!empty($attrs['casuserfirstattr'])) {
+		$_SESSION['cas_prenom'] = $attrs['casuserfirstattr'];
+	}
+	if (!empty($attrs['casusermailattr'])) {
+		$_SESSION['cas_email'] = $attrs['casusermailattr'];
+	}
 }
 
 header("Location: $urlServer");

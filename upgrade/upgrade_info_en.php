@@ -199,6 +199,7 @@ Installation program asks for these settings. If you don't know what to do, leav
 You can change them later in via the admin tool. These settings are:</p>
 <ul>
  <li><em>email_required</em>: During user registration, email is required.</li>
+ <li><em>email_verification_required</em>: Email must be verified during registration and if user changes it.</li>
  <li><em>am_required</em>: During user registration student ID is required.</li>
  <li><em>dropbox_allow_student_to_student</em>: In dropbox module, users can send files to each other.</li>
  <li><em>dont_display_login_form</em>: Login form will not be visible in home page. A link to it, will be appeared.</li>

@@ -170,7 +170,8 @@ if (!isset($_SESSION['theme'])) {
 $theme = $_SESSION['theme'];
 $themeimg = $urlAppend . '/template/' . $theme . '/img';
 if (isset($require_login) and $require_login and !$uid) {
-	$toolContent_ErrorExists = caution($langLoginRequired);
+	// to langLoginRequired einai ligo akyro?
+	$toolContent_ErrorExists = caution($langSessionIsLost);
 	$errorMessagePath = "../../";
 }
 
@@ -193,6 +194,10 @@ if (!isset($guest_allowed) || $guest_allowed != true){
 		$toolContent_ErrorExists = caution($langCheckGuest);
 		$errorMessagePath = "../../";
 	}
+}
+
+if (isset($_SESSION['mail_verification_required']) && !isset($mail_ver_excluded) ) {
+	header("Location:" . $urlServer .  "modules/auth/mail_verify_change.php");
 }
 
 // Restore saved old_dbname function

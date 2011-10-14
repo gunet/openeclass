@@ -57,6 +57,7 @@ $langUsersS = "χρήστες";
 $langUser = "Χρήστης";
 $langUserHeader = "Χρήστης:";
 $langUserS = "χρήστης";
+$langOfUser = "χρήστη";
 $langSupportUser = "Υπεύθυνος Υποστήριξης:";
 $langAdminUsers = "Διαχείριση Χρηστών";
 
@@ -131,6 +132,7 @@ $langInfoAdmin  = "Ενημερωτικά Στοιχεία για τον Δια�
 $langLastLesson = "Τελευταίο μάθημα που δημιουργήθηκε:";
 $langLastProf = "Τελευταία εγγραφή ".$langsOfTeacher.":";
 $langLastStud = "Τελευταία εγγραφή ".$langsOfStudent.":";
+$langLastStudNone = "Δεν υπάρχουν εγγραφές";
 $langAfterLastLogin = "Μετά την τελευταία σας είσοδο έχουν εγγραφεί στην πλατφόρμα:";
 $langAfterLastLoginInfo = "Στοιχεία μετά την τελευταία σας είσοδο:";
 $langOtherActions = "Άλλες Ενέργειες";
@@ -1567,7 +1569,8 @@ $langBeforeInstall1 = "Πριν προχωρήσετε στην εγκατάστ
 $langBeforeInstall2 = "Επίσης, γενικές οδηγίες για την πλατφόρμα μπορείτε να διαβάσετε ";
 $langInstallInstr = "Οδηγίες Εγκατάστασης";
 $langWithPHP = "με υποστήριξη PHP";
-$lang_email_required = "Να είναι υποχρεωτικό το email του $langsOfStudent κατά την εγγραφή";
+$lang_email_required = "Να είναι υποχρεωτικό το email του $langOfUser κατά την εγγραφή";
+$lang_email_verification_required = "Να είναι υποχρεωτική η επιβεβαίωση του e-mail του $langOfUser";
 $lang_am_required = "Να είναι υποχρεωτικός ο αριθμός μητρώου του $langsOfStudent κατά την εγγραφή";
 $lang_dropbox_allow_student_to_student = "Να επιτρέπεται η ανταλλαγή αρχείων μεταξύ $langsOfStudents στο υποσύστημα 'Ανταλλαγή αρχείων'";
 $lang_dont_display_login_form = "Να μην εμφανίζεται στην αρχική σελίδα της πλατφόρμας η οθόνη σύνδεσης";
@@ -2232,14 +2235,17 @@ $langRegistration="Εγγραφή";
 $langSurname="Επώνυμο";
 $langUsername="Όνομα χρήστη (username)";
 $langConfirmation="Επιβεβαίωση συνθηματικού";
-$langUserNotice = "Μέχρι 20 χαρακτήρες";
+$langUserNotice = "Μέχρι 30 χαρακτήρες";
 $langEmailNotice = "Το e-mail δεν είναι απαραίτητο, αλλά χωρίς αυτό δε θα μπορείτε να λαμβάνετε
 ανακοινώσεις, ούτε θα μπορείτε να χρησιμοποιήσετε τη λειτουργία υπενθύμισης συνθηματικού.";
 $langAm = "Αριθμός μητρώου";
+$langEmailVerified = "Το e-mail έχει επιβεβαιωθεί";
 $langUserDetails = "Εγγραφή $langOfStudent";
 $langSubmitNew = "Υποβολή Αίτησης";
 $langPassTwice="Πληκτρολογήσατε δύο διαφορετικά συνθηματικά. Χρησιμοποιήστε το πλήκτρο «επιστροφή» του browser σας και ξαναδοκιμάστε.";
 $langUserFree="Το όνομα χρήστη που επιλέξατε χρησιμοποιείται!";
+$langUserFree2="Έχετε ήδη λογαριασμό στην πλατφόρμα!";
+$langUserFree3="Υπάρχει ήδη αίτηση εγγραφής από αυτό το όνομα χρήστη στην πλατφόρμα!";
 $langYourReg="Η εγγραφή σας στο";
 $langDear="Αγαπητέ";
 $langYouAreReg="\nΟ λογαριασμός σας στην πλατφόρμα";
@@ -2249,6 +2255,7 @@ $langProblem="\nΣτη περίπτωση που αντιμετωπίζετε π
 $langFormula="\n\nΦιλικά,\n";
 $langManager="Υπεύθυνος";
 $langPersonalSettings="Οι προσωπικές σας ρυθμίσεις έχουν καταχωρηθεί και σας στάλθηκε ένα e-mail για να θυμάστε το όνομα χρήστη και το συνθηματικό σας.</p>";
+$langPersonalSettingsLess="Οι προσωπικές σας ρυθμίσεις έχουν καταχωρηθεί.";
 $langPersonalSettingsMore= "Κάντε κλίκ <a href='../../index.php'>εδώ</a> για να εισέλθετε στο προσωπικό σας χαρτοφυλάκιο.<br>Εκεί μπορείτε:<ul><li>να περιηγηθείτε στο περιβάλλον της πλατφόρμας και τις προσωπικές σας επιλογές,</li><li>να επιλέξετε στον \"Κατάλογο Μαθημάτων\" τα μαθήματα που επιθυμείτε να παρακολουθήσετε.</li><ul>";
 $langYourRegTo="Ο κατάλογος μαθημάτων σας περιέχει";
 $langIsReg="έχει ενημερωθεί";
@@ -2390,7 +2397,7 @@ $langByLdap="Μέσω LDAP";
 $langNewProf="Εισαγωγή στοιχείων νέου λογαριασμού $langsOfTeacher";
 $profsuccess="Η δημιουργία νέου λογαριασμού $langsOfTeacher πραγματοποιήθηκε με επιτυχία!";
 $langDearProf="Αγαπητέ διδάσκοντα!";
-$success="Η αποστολή των στοιχείων σας έγινε με επιτυχία!";
+$success="Η καταγραφή των στοιχείων σας έγινε με επιτυχία!";
 $click="Κάντε κλίκ";
 $langBackPage="για να επιστρέψετε στην αρχική σελίδα.";
 $emailprompt="Δώστε την διεύθυνση e-mail σας:";
@@ -2527,6 +2534,24 @@ $langTryAgain = "Δοκιμάστε ξανά!";
 $langViaReq = "Εγγραφή χρηστών μέσω αίτησης";
 $langUserDurationAccount = "Χρονική διάρκεια λήξης λογαριασμών";
 $langHere = "εδώ";
+$langMailVerificationClick = "Παρακαλούμε πατήστε στη παρακάτω διεύθυνση:";
+$langMailVerificationSubject = "Επιβεβαίωση Αίτησης Δημιουργίας Λογαριασμού $siteName";
+$langMailChangeVerificationSubject = "Επιβεβαίωση e-mail λογαριασμού $siteName";
+$langMailVerificationSuccess = "Για να ολοκληρωθεί η διαδικασία της εγγραφής σας θα πρέπει να επιβεβαιωθεί η e-mail διεύθυνση σας";
+$langMailVerificationSuccess2="Σύντομα θα σας σταλεί στην παραπάνω διεύθυνση ένα e-mail από την Ομάδα Διαχείρισης της Πλατφόρμας Ασύγχρονης Τηλεκπαίδευσης $siteName, με τις οδηγίες για την ολοκλήρωση της εγγραφής σας";
+$langMailVerificationBody1 = "Ευχαριστούμε για την εγγραφή σας στο $siteName.\n\n$langMailVerificationSuccess.\n\n$langMailVerificationClick\n%s";
+$langMailVerificationChangeBody = "Για να ενεργοποιηθεί ο λογαριασμός σας θα πρέπει να επιβεβαιωθεί η e-mail διεύθυνση σας.\n\n$langMailVerificationClick\n%s";
+$langMailVerificationError = "Παρουσιάστηκε σφάλμα κατά την αποστολή του μηνύματος προς τη διεύθυνση %s.<br/><br/>Παρακαλούμε <a href='%s'>δοκιμάστε ξανά</a> ή επικοινωνήστε με το διαχειριστή στη διεύθυνση: %s";
+$langMailVerificationError2 = "Παρουσιάστηκε σφάλμα. Παρακαλούμε επικοινωνήστε με το διαχειριστή της πλατφόρμας.";
+$langMailVerificationToaddr = "στην διεύθυνση";
+$langMailVerificationCode = "Κωδικός επιβεβαίωσης";
+$langMailVerificationNewCode = "Αποστολή κωδικού επιβεβαίωσης";
+$langMailVerificationWrong = "Η διεύθυνση ηλεκτρονικού ταχυδρομείου δεν άλλαξε γιατί δεν είναι συμπληρωμένη ή περιέχει άκυρους χαρακτήρες";
+$langMailVerificationAddrChange = "Αν η διεύθυνση είναι λάθος παρακαλούμε εισάγετε την σωστή";
+$langMailVerificationSuccess3="Ελέγξτε οτι είναι σωστή η διεύθυνση παρακάτω και πατήστε στην «<b>$langMailVerificationNewCode</b>»";
+$langMailVerificationReq = "Είναι απαραίτητο να επιβεβαιωθεί η e-mail διεύθυνση σας προτού προχωρήσετε.<br /><br />$langMailVerificationSuccess3";
+$langMailVerificationSuccess4="Σύντομα θα λάβετε ένα e-mail από την Ομάδα Διαχείρισης της Πλατφόρμας Ασύγχρονης Τηλεκπαίδευσης $siteName, με τις απαραίτητες οδηγίες για την ολοκλήρωση της εγγραφής σας";
+
 /************************************************************
 * restore_course.php
 *************************************************************/
@@ -2742,6 +2767,8 @@ $langCheckGuest = "
         <b>Η ενέργεια που προσπαθήσατε να εκτελέσετε δεν είναι δυνατή με δικαιώματα επισκέπτη χρήστη.</b>
         <br>Για λόγους ασφάλειας η πλατφόρμα σας ανακατεύθυνε αυτόματα στην αρχική σελίδα
         για να συνδεθείτε ξανά.";
+$langCheckMailVerify = "
+        <b>$langMailVerificationSuccess</b>";
 $langCheckPublicTools = "
         <b>Προσπαθήσατε να αποκτήσετε πρόσβαση σε απενεργοποιημένο εργαλείο μαθήματος.</b>
         <br>Για λόγους ασφάλειας η πλατφόρμα σας ανακατεύθυνε αυτόματα στην αρχική σελίδα
@@ -3007,6 +3034,7 @@ $m['today'] = "σήμερα";
 $m['tomorrow'] = "αύριο";
 $m['expired'] = "έχει&nbsp;λήξει";
 $m['submitted'] = "Έχει&nbsp;αποσταλεί";
+$m['pending'] = "Προς επιβεβαίωση";
 $m['select'] = "Επιλογή";
 $m['groupsubmit'] = "Υποβλήθηκε εκ μέρους της";
 $m['ofgroup'] = "ομάδας";
@@ -3176,6 +3204,22 @@ $langAddToCourseHome = "Προσθήκη στην κεντρική σελίδα 
 $langVia = 'μέσω';
 $langStudentViewEnable = "Περιβάλλον $langsOfStudent";
 $langStudentViewDisable = "Περιβάλλον $langsOfTeacher";
+
+
+/**********************************************************************
+mail_verify.php
+***********************************************************************/
+$langMailVerify = "Επιβεβαίωση E-mail";
+$langMailVerifyCodeError = "Ο κωδικός επιβεβαίωσης είναι λάθος. Παρακαλούμε επαναλάβετε από την αρχή την διαδικασία.";
+$langMailVerifyNoCode = "Ο σύνδεσμος που ακολουθήσατε δεν ισχύει. Παρακαλούμε επαναλάβετε από την αρχή την διαδικασία.";
+$langMailVerifyNoId = "Ο σύνδεσμος που ακολουθήσατε είναι λάθος. Παρακαλούμε επαναλάβετε από την αρχή την διαδικασία.";
+$langMailVerifyDB = "Παρουσιάστηκε σφάλμα. Παρακαλούμε επικοινωνήστε με τον διαχειριστή της πλατφόρμας.";
+$langMailVerifyNoApplication = "Δεν βρέθηκε η αίτηση σας. Παρακαλούμε επαναλάβετε από την αρχή την διαδικασία.";
+$langMailVerifyNoAccount = "Δεν βρέθηκε ο λογαριασμός σας. Παρακαλούμε επαναλάβετε από την αρχή την διαδικασία ή επικοινωνήστε με τον διαχειριστή της πλατφόρμας.";
+$langMailVerifySuccess = "Το E-mail σας επιβεβαιώθηκε με επιτυχία!!";
+$langMailVerifySuccess2 = "Το E-mail σας έχει επιβεβαιωθεί με επιτυχία.";
+$langMailVerifySuccessReq = "Η αίτηση δημιουργίας λογαριασμού ανανεώθηκε.";
+$langMailVerifySuccessU = "Ο λογαριασμός σας είναι έτοιμος.";
 
 /**********************************************************************
  BetaCMS Bridge

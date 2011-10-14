@@ -53,6 +53,7 @@ $email_required = !$autoregister || get_config('email_required');
 $am_required = !$prof && get_config('am_required');
 
 $nameTools = ($prof? $langReqRegProf: $langUserData) . ' ('.(get_auth_info($auth)).')';
+$email_message = $langEmailNotice;
 $navigation[] = array ('url' => 'registration.php', 'name' => $langNewUser);
 
 $lang = langname_to_code($language);
@@ -155,8 +156,16 @@ if ($is_valid) {
         if (isset($auth_user_info)) {
                 $prenom_form = $auth_user_info['firstname'];
                 $nom_form = $auth_user_info['lastname'];
-                $email = $auth_user_info['email'];
+                $email = !empty($auth_user_info['email'])? $auth_user_info['email']: '';
+					 // user can pick his email
+		  			 if (!empty($_POST['email'])) {
+						$email = $_POST['email'];
+					 }
         }
+		  if (!empty($email) and !email_seems_valid($email)) {
+				$ok = NULL;
+				$tool_content .= "<p class='caution'>$langEmailWrong</p>";
+		  }
  
 				if (!$ok) {
 								user_info_form();
@@ -171,20 +180,32 @@ if ($is_valid) {
         $statut = $prof? 1: 5;
         $greeting = $prof? $langDearProf: $langDearUser;
 
-        if ($autoregister) {
-                // Register a new user
-                $password = $auth_ids[$auth];
+		  // user allready exists
+		  if (user_exists(autounquote($uname))) {
+				$_SESSION['uname_exists'] = 1;
+		  }
+		  elseif (isset($_SESSION['uname_exists'])) {
+				unset($_SESSION['uname_exists']);
+		  }
 
-                $emailsubject = "$langYourReg $siteName";
-                $emailbody = "$langDestination $prenom_form $nom_form\n" .
-                             "$langYouAreReg $siteName $langSettings $uname\n" .
-                             "$langPassSameAuth\n$langAddress $siteName: " .
-                             "$urlServer\n$langProblem\n$langFormula" .
-                             "$administratorName $administratorSurname" .
-                             "$langManager $siteName \n$langTel $telephone \n" .
-                             "$langEmail: $emailhelpdesk";
+		  // user allready applied for account
+		  if (user_app_exists(autounquote($uname))) {
+				$_SESSION['uname_app_exists'] = 1;
+		  }
+		  elseif (isset($_SESSION['uname_app_exists'])) {
+				unset($_SESSION['uname_app_exists']);
+		  }
 
-                send_mail('', '', '', $email, $emailsubject, $emailbody, $charset);
+        if ($autoregister and empty($_SESSION['uname_exists']) and empty($_SESSION['uname_app_exists'])) {
+					if (get_config('email_verification_required') && !empty($email)) {
+						$verified_mail = 0;
+						$vmail = TRUE;
+					}
+					else {
+						$verified_mail = 2;
+						$vmail = FALSE;
+					}
+
                 $registered_at = time();
                 $expires_at = time() + $durationAccount;
                 $authmethods = array('2', '3', '4', '5');
@@ -202,11 +223,36 @@ if ($is_valid) {
                                   registered_at = $registered_at,
                                   expires_at = $expires_at,
                                   lang = '$lang',
+                                  verified_mail = $verified_mail,
                                   perso = 'yes',
                                   description = ''";
 
                 $inscr_user = db_query($q1);
                 $last_id = mysql_insert_id();
+
+					 if ($vmail and !empty($email)) {
+							$code_key = get_config('code_key');
+							$hmac = hash_hmac('sha256', $uname.$email.$last_id, base64_decode($code_key));
+					 }
+			
+                // Register a new user
+                $password = $auth_ids[$auth];
+
+                $emailsubject = "$langYourReg $siteName";
+                $emailbody = "$langDestination $prenom_form $nom_form\n" .
+                             "$langYouAreReg $siteName $langSettings $uname\n" .
+                             "$langPassSameAuth\n$langAddress $siteName: " .
+                             "$urlServer\n" .
+									  ($vmail?"\n$langMailVerificationSuccess.\n$langMailVerificationClick\n$urlServer"."modules/auth/mail_verify.php?ver=".$hmac."&id=".$last_id."\n":"") .
+									  "$langProblem\n$langFormula" .
+                             "$administratorName $administratorSurname\n" .
+                             "$langManager $siteName \n$langTel $telephone \n" .
+                             "$langEmail: $emailhelpdesk";
+
+					 if (!empty($email)) {
+	                send_mail('', $emailhelpdesk, '', $email, $emailsubject, $emailbody, $charset);
+					 }
+
                 $result = db_query("SELECT user_id, nom, prenom FROM `$mysqlMainDb`.user WHERE user_id = $last_id");
                 while ($myrow = mysql_fetch_array($result)) {
                         $uid = $myrow[0];
@@ -214,28 +260,39 @@ if ($is_valid) {
                         $prenom = $myrow[2];
                 }
 
-                db_query("INSERT INTO loginout
-                                 SET id_user = $uid, ip = '$_SERVER[REMOTE_ADDR]',
-                                     `when` = NOW(), action = 'LOGIN'", $mysqlMainDb);
-                $_SESSION['uid'] = $uid;
-                $_SESSION['statut'] = 5;
-                $_SESSION['prenom'] = $prenom;
-                $_SESSION['nom'] = $nom;
-                $_SESSION['uname'] = $uname;
-                $_SESSION['user_perso_active'] = false;
+					if (!$vmail) {
+						db_query("INSERT INTO loginout
+							SET id_user = $uid, ip = '$_SERVER[REMOTE_ADDR]',
+							`when` = NOW(), action = 'LOGIN'", $mysqlMainDb);
+						$_SESSION['uid'] = $uid;
+						$_SESSION['statut'] = 5;
+						$_SESSION['prenom'] = $prenom;
+						$_SESSION['nom'] = $nom;
+						$_SESSION['uname'] = $uname;
+						$_SESSION['user_perso_active'] = false;
 
-                $tool_content .= "
-                    <table width='99%' class='tbl'>
-                    <tr>
-                      <td class='well-done' height='60'>
-                        <p>$greeting,</p>
-                        <p>$langPersonalSettings</p>
-                      </td>
-                    </tr>
-                    </table>
-                    <br /><br />
-                    <p>$langPersonalSettingsMore</p>";
-        } else {
+						$tool_content .= "
+							<div class='success'>
+							<p>$greeting,</p><p>";
+						$tool_content .= !empty($email)? $langPersonalSettings: $langPersonalSettingsLess;
+						$tool_content .= "</p></div>
+							<br /><br />
+							<p>$langPersonalSettingsMore</p>";
+					}
+					else {
+						$tool_content .= "<div class='success'>" .
+							($prof? $langDearProf: $langDearUser) .
+							"!<br />$langMailVerificationSuccess: <strong>$email</strong></div>
+							<p>$langMailVerificationSuccess4.<br /><br />$click <a href='$urlServer' class='mainpage'>$langHere</a> $langBackPage</p>";
+					}
+			} elseif(empty($_SESSION['uname_exists']) and empty($_SESSION['uname_app_exists'])) {
+					 $email_verification_required = get_config('email_verification_required');
+					 if (!$email_verification_required) {
+					 	$verified_mail=2;
+					 }
+					 else {
+					 	$verified_mail=0;
+					 }
                 // Record user request
                 db_query('INSERT INTO user_request SET
                                  name = ' . autoquote($prenom_form). ',
@@ -248,12 +305,17 @@ if ($is_valid) {
                                  am = " . autoquote($am) . ",
                                  status = 1,
                                  statut = $statut,
+                                 verified_mail = $verified_mail,
                                  date_open = NOW(),
                                  comment = " . autoquote($usercomment). ",
                                  lang = '$lang',
                                  ip_address = inet_aton('$_SERVER[REMOTE_ADDR]')",
                          $mysqlMainDb);
 
+					 $request_id = mysql_insert_id();
+
+				 // email does not need verification -> mail helpdesk
+				 if (!$email_verification_required) {
                 // send email
                 $MailMessage = $mailbody1 . $mailbody2 . "$prenom_form $nom_form\n\n" . $mailbody3
                 . $mailbody4 . $mailbody5 . "$mailbody6\n\n" . "$langFaculty: " . find_faculty_by_id($depid) . "
@@ -266,9 +328,38 @@ if ($is_valid) {
                         exit();
                 }
 
-                $tool_content .= "<p class='success'>$greeting,<br />$success<br />$infoprof</p>
+                $tool_content .= "<p class='success'>$greeting,<br />$success<br /></p><p>$infoprof</p><br />
                                   <p>&laquo; <a href='$urlServer'>$langBack</a></p>";
+		  		} else {
+				// email needs verification -> mail user
+					$code_key = get_config('code_key');
+					$hmac = hash_hmac('sha256', $uname.$email.$request_id, base64_decode($code_key));
+
+					$subject = $langMailVerificationSubject;
+					$MailMessage = sprintf($mailbody1.$langMailVerificationBody1, $urlServer.'modules/auth/mail_verify.php?ver='.$hmac.'&rid='.$request_id);
+					if (!send_mail('', $emailhelpdesk, '', $email, $subject, $MailMessage, $charset)) {
+						$mail_ver_error = sprintf("<p class='alert1'>".$langMailVerificationError,$email,$urlServer."modules/auth/registration.php",
+							"<a href='mailto:$emailhelpdesk' class='mainpage'>$emailhelpdesk</a>.</p>");
+						$tool_content .= $mail_ver_error;
+						draw($tool_content,0);
+						exit();
+					}
+					// User Message
+					$tool_content .= "<div class='success'>" .
+						($prof? $langDearProf: $langDearUser) .
+						"!<br />$langMailVerificationSuccess: <strong>$email</strong></div>
+						<p>$langMailVerificationSuccess4.<br /><br />$click <a href='$urlServer'
+						class='mainpage'>$langHere</a> $langBackPage</p>";
+				}
         }
+		  elseif (!empty($_SESSION['uname_exists'])) {
+	 			$tool_content .= "<p class='caution'>$langUserFree<br />$langUserFree2<br /><br />$click <a href='$urlServer'
+				                  class='mainpage'>$langHere</a> $langBackPage</p>";
+		  }
+		  elseif (!empty($_SESSION['uname_app_exists'])) {
+	 			$tool_content .= "<p class='caution'>$langUserFree3<br /><br />$click <a href='$urlServer'
+				                  class='mainpage'>$langHere</a> $langBackPage</p>";
+		  }
 }
 
 draw($tool_content, 0);
@@ -289,7 +380,7 @@ function user_info_form()
                $langPhone, $langComments, $langFaculty, $langRegistration, $langLanguage,
                $langUserData, $langRequiredFields, $langAm, $langUserFree, $profreason,
                $auth_user_info, $auth, $prof, $usercomment, $depid, $init_auth, $email_required,
-               $phone_required, $am_required, $comment_required;
+               $phone_required, $am_required, $comment_required, $langEmailNotice;
 
         if (!isset($usercomment)) {
                 $usercomment = '';
@@ -297,6 +388,12 @@ function user_info_form()
         if (!isset($depid)) {
                 $depid = 0;
         }
+		  if (!get_config("email_required")) {
+				$mail_message = $langEmailNotice;
+		  }
+		  else {
+				$mail_message = "";
+		  }
 
         $tool_content .= "
   <form action='$_SERVER[PHP_SELF]' method='post'>
@@ -307,50 +404,48 @@ function user_info_form()
         <table width='99%' class='tbl'>
           <tr>
             <th class='left'>$langName</th>
-            <td>".(isset($auth_user_info)?
+            <td colspan='2'>".(isset($auth_user_info)?
                    $auth_user_info['firstname']:
-                   '<input type="text" name="prenom_form" size="38"'.set('prenom_form').'>&nbsp;&nbsp;(*)')."
+                   '<input type="text" name="prenom_form" size="30" maxlength="30"'.set('prenom_form').'>&nbsp;&nbsp;(*)')."
             </td>
           </tr>
           <tr>
              <th class='left'>$langSurname</th>
-             <td>".(isset($auth_user_info)?
+             <td colspan='2'>".(isset($auth_user_info)?
                     $auth_user_info['lastname']:
-                    '<input type="text" name="nom_form" size="38"'.set('nom_form').'>&nbsp;&nbsp;(*)')."
+                    '<input type="text" name="nom_form" size="30" maxlength="30"'.set('nom_form').'>&nbsp;&nbsp;(*)')."
              </td>
           </tr>
           <tr>
              <th class='left'>$langEmail</th>
-             <td>".(isset($auth_user_info)?
-                    $auth_user_info['email']:
-                    '<input type="text" name="email" size="38"'.set('email').'>' .
-                        ($email_required? '&nbsp;&nbsp;(*)': '')) ."
-             </td>
+             <td><input type='text' name='email' size='30' maxlength='30'".set('email').'></td><td>' .
+                        ($email_required? "&nbsp;&nbsp;(*)": "<small>$mail_message</small>") ."
+			 	 </td>
           </tr>";
         if (!$prof) {
                 $tool_content .= "
           <tr>
-             <td>$langAm</td>
-             <td><input type='text' name='am'".set('am').">" . ($am_required? '&nbsp;&nbsp;(*)': '') . "</td>
+             <th class='left'>$langAm</th>
+             <td colspan='2'><input type='text' name='am' size='20' maxlength='20'".set('am').">" . ($am_required? '&nbsp;&nbsp;(*)': '') . "</td>
           </tr>";
         }
         $tool_content .= "
           <tr>
              <th class='left'>$langPhone</th>
-             <td><input type='text' name='userphone' size='38'".set('userphone').'>' .
+             <td colspan='2'><input type='text' name='userphone' size='20' maxlength='20'".set('userphone').'>' .
                         ($phone_required? '&nbsp;&nbsp;(*)': '') . "</td>
           </tr>";
         if ($comment_required) {
                 $tool_content .= "
           <tr>
              <th class='left'>$langComments</th>
-             <td><textarea name='usercomment' cols='32' rows='4'>".q($usercomment)."</textarea>&nbsp;&nbsp;(*) $profreason</td>
+             <td colspan='2'><textarea name='usercomment' cols='32' rows='4'>".q($usercomment)."</textarea>&nbsp;&nbsp;(*) $profreason</td>
           </tr>";
         }
         $tool_content .= "
           <tr>
              <th class='left'>$langFaculty:</th>
-             <td>
+             <td colspan='2'>
                <select name='department'>";
         $deps = db_query("SELECT name, id FROM faculte ORDER BY id");
         while ($dep = mysql_fetch_array($deps)) {
@@ -362,11 +457,11 @@ function user_info_form()
            </tr>
            <tr>
              <th class='left'>$langLanguage</th>
-             <td>" . lang_select_options('localize') . "</td>
+             <td colspan='2'>" . lang_select_options('localize') . "</td>
            </tr>	
            <tr>
              <th class='left'>&nbsp;</th>
-             <td><input type='submit' name='submit' value='$langRegistration' />
+             <td colspan='2'><input type='submit' name='submit' value='$langRegistration' />
                  <input type='hidden' name='p' value='$prof'>";
         if (isset($_SESSION['shib_uname'])) {
                 $tool_content .= "<input type='hidden' name='uname' value='".q($_SESSION['shib_uname'])."' />";
@@ -378,7 +473,7 @@ function user_info_form()
            </tr>
            <tr>
              <th class='left'>&nbsp;</th>
-             <td><div align='right'>$langRequiredFields</div></td>
+             <td colspan='2'>$langRequiredFields</td>
            </tr>
          </table>
        </fieldset>
