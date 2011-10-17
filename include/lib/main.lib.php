@@ -505,7 +505,7 @@ function selection($entries, $name, $default = '', $extra = '')
 	$retString = "";
 	$retString .= "\n<select name='$name' $extra>\n";
 	foreach ($entries as $value => $label) {
-		if ($value === $default) {
+		if (isset($default) && ($value == $default)) {
 			$retString .= "<option selected value='" . htmlspecialchars($value) . "'>" .
 			htmlspecialchars($label) . "</option>\n";
 		} else {
