@@ -145,12 +145,12 @@ $langEmail : $emailhelpdesk
                 $pu = $res['uname'];
                 $pe = $res['email'];
                 $pv = intval($res['verified_mail']);
-                $pt = $res['faculty_id'];
+                $pt = intval($res['faculty_id']);
                 $pam = $res['am'];
                 $pphone = $res['phone'];
                 $pcom = $res['comment'];
                 $lang = $res['lang'];
-                $pstatut = $res['statut'];
+                $pstatut = intval($res['statut']);
                 $pdate = nice_format(date('Y-m-d', strtotime($res['date_open'])));
         } elseif (@$_GET['type'] == 'user') {
                 $pstatut = 5;
@@ -187,7 +187,11 @@ $langEmail : $emailhelpdesk
 		  $verified_mail_data[0] = $m['pending'];
 		  $verified_mail_data[1] = $m['yes'];
 		  $verified_mail_data[2] = $m['no'];
-		  $tool_content .= selection($verified_mail_data,"verified_mail_form",$pv);
+		  if (isset($pv)) {
+			  $tool_content .= selection($verified_mail_data,"verified_mail_form",$pv);
+		  } else {
+			  $tool_content .= selection($verified_mail_data,"verified_mail_form");
+		  }
 
         $tool_content .= "</td></tr>
         <tr><th class='left'><b>$langPhone:</b></th>

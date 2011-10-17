@@ -72,12 +72,13 @@ if (!isset($selectResult)) {
 // if we try to login... then authenticate user.
 $warning = '';
 if (isset($_SESSION['shib_uname'])) {
-        // authenticate via shibboleth
+	// authenticate via shibboleth
 	shib_cas_login('shibboleth');
 } elseif (isset($_SESSION['cas_uname']) && !isset($_GET['logout'])) {
-        // authenticate via cas
+	// authenticate via cas
 	shib_cas_login('cas');
-} else { // normal authentication
+} else {
+	// normal authentication
 	process_login();
 } 
 

@@ -205,7 +205,7 @@ db_query("CREATE TABLE user (
       forum_flag DATE NOT NULL DEFAULT '0000-00-00',
       description TEXT,
       has_icon BOOL NOT NULL DEFAULT 0,
-      verified_mail BOOL NOT NULL DEFAULT 0,
+      verified_mail BOOL NOT NULL DEFAULT 1,
       receive_mail BOOL NOT NULL DEFAULT 1,
       email_public TINYINT(1) NOT NULL DEFAULT 0,
       phone_public TINYINT(1) NOT NULL DEFAULT 0,
@@ -298,17 +298,6 @@ db_query("CREATE TABLE IF NOT EXISTS `group_members` (
                 PRIMARY KEY (`group_id`, `user_id`)) $charset_spec");
 
 db_query("CREATE TABLE IF NOT EXISTS `glossary` (
-               `id` MEDIUMINT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-               `term` VARCHAR(255) NOT NULL,
-               `definition` text NOT NULL,
-	       `url` text,
-               `order` INT(11) NOT NULL DEFAULT 0,
-               `datestamp` DATETIME NOT NULL,
-               `course_id` INT(11) NOT NULL,
-               `category_id` INT(11) DEFAULT NULL,
-               `notes` TEXT NOT NULL) $charset_spec");
-
-db_query("CREATE TABLE IF NOT EXISTS `glossary_category` (
                `id` MEDIUMINT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                `term` VARCHAR(255) NOT NULL,
                `definition` text NOT NULL,
@@ -413,8 +402,8 @@ db_query("CREATE TABLE IF NOT EXISTS `categories` (
 // encrypt the admin password into DB
 $password_encrypted = md5($passForm);
 $exp_time = time() + 140000000;
-db_query("INSERT INTO `user` (`prenom`, `nom`, `username`, `password`, `email`, `statut`,`registered_at`,`expires_at`)
-	VALUES ('$nameForm', '$surnameForm', '$loginForm','$password_encrypted','$emailForm','1',".time().",".$exp_time.")");
+db_query("INSERT INTO `user` (`prenom`, `nom`, `username`, `password`, `email`, `statut`,`registered_at`,`expires_at`, `verified_mail`)
+	VALUES ('$nameForm', '$surnameForm', '$loginForm','$password_encrypted','$emailForm','1',".time().",".$exp_time.", 1)");
 $idOfAdmin = mysql_insert_id();
 db_query("INSERT INTO loginout (loginout.id_user, loginout.ip, loginout.when, loginout.action)
 	 VALUES ($idOfAdmin, '$_SERVER[REMOTE_ADDR]', NOW(), 'LOGIN')");
@@ -434,6 +423,7 @@ db_query("CREATE TABLE user_request (
                 uname varchar(255) NOT NULL DEFAULT '',
                 password varchar(255) NOT NULL DEFAULT '',
                 email varchar(255) NOT NULL DEFAULT '',
+                verified_mail tinyint(1) NOT NULL DEFAULT '2',
                 faculty_id INT(11) NOT NULL DEFAULT 0,
                 phone varchar(20) NOT NULL DEFAULT '',
 		am varchar(20) NOT NULL DEFAULT '',
@@ -524,6 +514,7 @@ db_query("INSERT INTO `auth` VALUES
 
 $dont_display_login_form = intval($dont_display_login_form);
 $email_required = intval($email_required);
+$email_verification_required = intval($email_verification_required);
 $am_required = intval($am_required);
 $dropbox_allow_student_to_student = intval($dropbox_allow_student_to_student);
 $block_username_change = intval($block_username_change);
@@ -538,13 +529,15 @@ db_query("CREATE TABLE `config`
                  `value` VARCHAR(255) NOT NULL,
                  PRIMARY KEY (`key`))");
 db_query("INSERT INTO `config` (`key`, `value`) VALUES
-                ('dont_display_login_form', $dont_display_login_form),
-                ('email_required', $email_required),
-                ('am_required', $am_required),
-                ('dropbox_allow_student_to_student', $dropbox_allow_student_to_student),
+		('dont_display_login_form', $dont_display_login_form),
+		('email_required', $email_required),
+		('email_verification_required', $email_verification_required),
+		('am_required', $am_required),
+		('dropbox_allow_student_to_student', $dropbox_allow_student_to_student),
 		('block_username_change', $block_username_change),
 		('betacms', $betacms),
-                ('secret_key', '" . generate_secret_key() . "'),
+		('secret_key', '" . generate_secret_key() . "'),
+		('code_key', '" . generate_secret_key2(32) . "'),
 		('display_captcha', $display_captcha),
 		('insert_xml_metadata', $insert_xml_metadata),
 		('doc_quota', $doc_quota),
@@ -553,7 +546,7 @@ db_query("INSERT INTO `config` (`key`, `value`) VALUES
 		('dropbox_quota', $dropbox_quota),
 		('disable_eclass_stud_reg', $disable_eclass_stud_reg),
 		('disable_eclass_prof_reg', $disable_eclass_prof_reg),
-                ('version', '" . ECLASS_VERSION ."')");
+		('version', '" . ECLASS_VERSION ."')");
 
 // Table passwd_reset (used by the password reset module)
 db_query("CREATE TABLE `passwd_reset` (

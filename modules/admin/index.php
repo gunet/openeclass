@@ -84,16 +84,16 @@ if (empty($myrow)) {
 }
 
 // Find last prof registration
-$sql = "SELECT prenom, nom, email, registered_at FROM user WHERE statut = 1 ORDER BY user_id DESC LIMIT 0,1";
+$sql = "SELECT prenom, nom, username, registered_at FROM user WHERE statut = 1 ORDER BY user_id DESC LIMIT 0,1";
 $result = db_query($sql);
 $myrow = mysql_fetch_array($result);
-$last_prof_info = "<b>".$myrow['prenom']." ".$myrow['nom']."</b> (".$myrow['email'].", ".date("j/n/Y H:i",$myrow['registered_at']).")";
+$last_prof_info = "<b>".$myrow['prenom']." ".$myrow['nom']."</b> (".$myrow['username'].", ".date("j/n/Y H:i",$myrow['registered_at']).")";
 
 // Find last stud registration
-$sql = "SELECT prenom, nom, email, registered_at FROM user WHERE statut = 5 ORDER BY user_id DESC LIMIT 0,1";
+$sql = "SELECT prenom, nom, username, registered_at FROM user WHERE statut = 5 ORDER BY user_id DESC LIMIT 0,1";
 $result = db_query($sql);
 if ( ($myrow = mysql_fetch_array($result)) != FALSE) {
-	$last_stud_info = "<b>".$myrow['prenom']." ".$myrow['nom']."</b> (".$myrow['email'].", ".date("j/n/Y H:i",$myrow['registered_at']).")";
+	$last_stud_info = "<b>".$myrow['prenom']." ".$myrow['nom']."</b> (".$myrow['username'].", ".date("j/n/Y H:i",$myrow['registered_at']).")";
 }
 else {
 	// no student is yet registered

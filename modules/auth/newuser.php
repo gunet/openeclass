@@ -84,11 +84,11 @@ if (!isset($_POST['submit'])) {
 	</tr>
 	<tr>
 	<th class='left'>$langPass:</th>
-	<td colspan='2'><input type='password' name='password1' size='30' maxlength='30' class='FormData_InputText' />&nbsp;&nbsp;<small>(*) $langUserNotice</small></td>
+	<td colspan='2'><input type='password' name='password1' size='30' maxlength='30' autocomplete='off' class='FormData_InputText' />&nbsp;&nbsp;<small>(*) $langUserNotice</small></td>
 	</tr>
 	<tr>
 	<th class='left'>$langConfirmation:</th>
-	<td colspan='2'><input type='password' name='password' size='30' maxlength='30' class='FormData_InputText' />&nbsp;&nbsp;<small>(*)</small></td>
+	<td colspan='2'><input type='password' name='password' size='30' maxlength='30' autocomplete='off' class='FormData_InputText' />&nbsp;&nbsp;<small>(*)</small></td>
 	</tr>
 	<tr>
 	<th class='left'>$langEmail:</th>
@@ -210,7 +210,7 @@ if (!isset($_POST['submit'])) {
 		$inscr_user = db_query($q1);
 		$last_id = mysql_insert_id();
 
-		if ($vmail and !empty($email)) {
+		if ($vmail) {
 			$code_key = get_config('code_key');
 			$hmac = hash_hmac('sha256', $uname.$email.$last_id, base64_decode($code_key));
 		}
@@ -227,12 +227,21 @@ if (!isset($_POST['submit'])) {
 			"$administratorName $administratorSurname\n" .
 			"$langManager $siteName \n$langTel $telephone \n" .
 			"$langEmail: $emailhelpdesk";
-
+                
+                // send email to user
 		if (!empty($email)) {
 			send_mail('', '', '', $email, $emailsubject, $emailbody, $charset);
+                        $user_msg = $langPersonalSettings;
+                   }  else {
+                       $user_msg = $langPersonalSettingsLess;
 		}
 	
-		if (!$vmail) {
+               // verification needed
+               if ($vmail) {
+                       $user_msg .= "$langMailVerificationSuccess: <strong>$email</strong>";
+               }
+               // login user
+               else {
 			$result = db_query("SELECT user_id, nom, prenom FROM `$mysqlMainDb`.user WHERE user_id = $last_id");
 			while ($myrow = mysql_fetch_array($result)) {
 				$uid = $myrow[0];
@@ -249,15 +258,23 @@ if (!isset($_POST['submit'])) {
 			$_SESSION['user_perso_active'] = $GLOBALS['persoIsActive'];
 			$tool_content .= "<p>$langDear " . q("$prenom $nom") . ",</p>";
 		}
-		// registration form
+		// user msg
 		$tool_content .= 
 			"<div class='success'>" .
-			"<p>$langPersonalSettings</p>" .
+			"<p>$user_msg</p>" .
 			"</div>";
+                
+                // footer msg
 		if (!$vmail) {
 			$tool_content .= 
 				"<p>$langPersonalSettingsMore</p>";
 		}
+                else {
+                       $tool_content .=
+                               "<p>$langMailVerificationSuccess2.
+                                <br /><br />$click <a href='$urlServer'
+                                class='mainpage'>$langHere</a> $langBackPage</p>";
+               }
 	} else {
 		// errors exist - registration failed
 		$tool_content .= "<p class='caution'>";

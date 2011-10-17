@@ -101,7 +101,7 @@ if ($u)	{
                         <table class='tbl' width='100%'>
                         <tr>
                           <th width='170' class='left'>$langEditAuthMethod</th>
-                          <td>".selection($auth_names, 'auth', $current_auth)."</td>
+                          <td>".selection($auth_names, 'auth', intval($current_auth))."</td>
                         </tr>
                         <tr>
                           <th>&nbsp;</th>
@@ -203,7 +203,7 @@ $tool_content .= "
      <th class='left'>$langFaculty:</th>
    <td>";
 	if(!empty($info['department'])) {
-		$department_select_box = list_departments($info['department']);
+		$department_select_box = list_departments(intval($info['department']));
 	} else {
 		$department_select_box = "";
 	}
@@ -215,9 +215,9 @@ $tool_content .= "
       <th class='left'>$langProperty:</th>
       <td>";
 	if ($info['statut'] == '10') { // if we are guest user do not display selection
-		$tool_content .= selection(array(10 => $langGuest), 'newstatut', $info['statut']);
+		$tool_content .= selection(array(10 => $langGuest), 'newstatut', intval($info['statut']));
 	} else {
-		$tool_content .= selection(array(1 => $langTeacher, 5 => $langStudent), 'newstatut', $info['statut']);
+		$tool_content .= selection(array(1 => $langTeacher, 5 => $langStudent), 'newstatut', intval($info['statut']));
 	}
 	$tool_content .= "</td>";
 

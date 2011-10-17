@@ -23,7 +23,7 @@
 	auth_process.php
 	@author: Kapetanakis Giannis <bilias@edu.physics.uoc.gr>
 ==============================================================================
-        @Description: User Authentication Methods Change
+	@Description: User Authentication Methods Change
 
  	The admin can: - change authentication method for users
 
@@ -91,7 +91,7 @@ else {
 		<tr>
 			<th class='left'>$langAuthChangeto: </th>
 			<td>";
-				$tool_content .= selection($auth_methods_active, 'auth_change', $langAuthChangeto);
+				$tool_content .= selection($auth_methods_active, 'auth_change');
 		$tool_content .= "</td></tr>";
 		$tool_content .= "<tr><th>&nbsp;</th><td class='left'><input type='submit' name='submit' value='$langModify'></td></tr>";
 }

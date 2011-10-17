@@ -677,9 +677,9 @@ function process_login()
 					break;
 			}
 		} else {
-                        db_query("INSERT INTO loginout
-                                         (loginout.id_user, loginout.ip, loginout.when, loginout.action)
-                                         VALUES ($_SESSION[uid], '$_SERVER[REMOTE_ADDR]', NOW(), 'LOGIN')");
+			db_query("INSERT INTO loginout
+						(loginout.id_user, loginout.ip, loginout.when, loginout.action)
+						VALUES ($_SESSION[uid], '$_SERVER[REMOTE_ADDR]', NOW(), 'LOGIN')");
 			if ($GLOBALS['persoIsActive'] and $GLOBALS['userPerso'] == 'no') {
 				$_SESSION['user_perso_active'] = true;
 			}
@@ -843,8 +843,7 @@ function shib_cas_login($type)
 	}
 	// user is authenticated, now let's see if he is registered also in db
 	$sqlLogin= "SELECT user_id, nom, username, password, prenom, statut, email, perso, lang, verified_mail
-						FROM user 
-						WHERE username COLLATE utf8_bin = " . quote($uname);
+						FROM user WHERE username COLLATE utf8_bin = " . quote($uname);
 	$r = db_query($sqlLogin);      
 
 	if (mysql_num_rows($r) > 0) {
@@ -937,11 +936,14 @@ function shib_cas_login($type)
 	if ($GLOBALS['persoIsActive'] and $userPerso == 'no') {
 		$_SESSION['user_perso_active'] = true;
 	}
-	if (get_config('email_verification_required') && check_mail_ver_required($_SESSION['uid'])) {
-		$_SESSION['mail_verification_required'] = 1;
-	}
 
 	db_query("INSERT INTO loginout 
 					(loginout.id_user, loginout.ip, loginout.when, loginout.action) 
 					VALUES ($_SESSION[uid], '$_SERVER[REMOTE_ADDR]', NOW(), 'LOGIN')");
+
+	if (get_config('email_verification_required') && check_mail_ver_required($_SESSION['uid'])) {
+		$_SESSION['mail_verification_required'] = 1;
+		// init.php is already loaded so redirect from here
+		header("Location:" . $urlServer . "modules/auth/mail_verify_change.php");
+	}
 }

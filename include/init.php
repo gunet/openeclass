@@ -39,7 +39,7 @@ if(function_exists("date_default_timezone_set")) { // only valid if PHP > 5.1
 //2: used by about, copyright, contact, manuals, upgrade
 //else: everything else (modules)
 //(Author: Evelthon Prodromou)
-if (isset($path2add) && $path2add == 0){
+if (isset($path2add) && $path2add == 0) {
 	$relPathLib = "include/";
 	$relPath = "";
 } elseif (isset($path2add) && $path2add == 1) {
@@ -80,8 +80,8 @@ $active_ui_languages = array('el', 'en', 'es');
 unset($webDir);
 @include($relPath . "config/config.php");
 if (!isset($webDir)) {
-        include 'not_installed.php';
-        die("Unable to find configuration file, please contact the system administrator");
+	include 'not_installed.php';
+	die("Unable to find configuration file, please contact the system administrator");
 }
 
 // HTML Purifier
@@ -103,13 +103,13 @@ define('PCLZIP_TEMPORARY_DIR', $webDir.'courses/temp/');
 // Set active user interface languages
 $native_language_names = array();
 foreach ($active_ui_languages as $langcode) {
-        if (isset($native_language_names_init[$langcode])) {
-                $native_language_names[$langcode] = $native_language_names_init[$langcode];
-        }
+	if (isset($native_language_names_init[$langcode])) {
+		$native_language_names[$langcode] = $native_language_names_init[$langcode];
+	}
 }
 
 if (!isset($urlSecure)) {
-        $urlSecure = $urlServer;
+	$urlSecure = $urlServer;
 }
 
 // load the correct language (Author: Evelthon Prodromou)
@@ -129,18 +129,18 @@ mysql_select_db($mysqlMainDb, $db);
 include("${webDir}modules/lang/$language/common.inc.php");
 $extra_messages = "${webDir}/config/$language.inc.php";
 if (file_exists($extra_messages)) {
-        include $extra_messages;
+	include $extra_messages;
 } else {
-        $extra_messages = false;
+	$extra_messages = false;
 }
 include("${webDir}modules/lang/$language/messages.inc.php");
 if ($extra_messages) {
-        include $extra_messages;
+	include $extra_messages;
 }
 
 // Make sure personalized profile setting is set (true or false)
 if (!isset($persoIsActive)) {
-        $persoIsActive = false;
+	$persoIsActive = false;
 }
 
 // Make sure that the $uid variable isn't faked
@@ -155,17 +155,17 @@ if (isset($_SESSION['is_admin']) and $_SESSION['is_admin']) {
 	$is_admin = true;
 } elseif (isset($_SESSION['is_power_user']) and $_SESSION['is_power_user']) {
 	$is_power_user = true;              
-        $is_admin = false;
+	$is_admin = false;
 } else {
-    	$is_admin = false;
-        $is_power_user = false;              
+	$is_admin = false;
+	$is_power_user = false;              
 }
 
 if (!isset($_SESSION['theme'])) {
-        $_SESSION['theme'] = get_config('theme');
-        if (empty($_SESSION['theme'])) {
-                $_SESSION['theme'] = 'classic';
-        }
+	$_SESSION['theme'] = get_config('theme');
+	if (empty($_SESSION['theme'])) {
+		$_SESSION['theme'] = 'classic';
+	}
 }
 $theme = $_SESSION['theme'];
 $themeimg = $urlAppend . '/template/' . $theme . '/img';
@@ -176,20 +176,20 @@ if (isset($require_login) and $require_login and !$uid) {
 }
 
 if (isset($require_admin) && $require_admin) {	
-        if (!($is_admin)) {    
+	if (!($is_admin)) {    
 		$toolContent_ErrorExists = caution($langCheckAdmin);
 		$errorMessagePath = "../../";
 	}
 }
 
 if (isset($require_power_user) && $require_power_user) {        
-        if (!($is_admin or $is_power_user)) {
+	if (!($is_admin or $is_power_user)) {
 		$toolContent_ErrorExists = caution($langCheckPowerUser);
 		$errorMessagePath = "../../";
-    } 
+	} 
 }
 
-if (!isset($guest_allowed) || $guest_allowed != true){
+if (!isset($guest_allowed) || $guest_allowed != true) {
 	if (check_guest()){
 		$toolContent_ErrorExists = caution($langCheckGuest);
 		$errorMessagePath = "../../";
@@ -197,25 +197,28 @@ if (!isset($guest_allowed) || $guest_allowed != true){
 }
 
 if (isset($_SESSION['mail_verification_required']) && !isset($mail_ver_excluded) ) {
-	header("Location:" . $urlServer . "modules/auth/mail_verify_change.php");
+	// don't redirect to mail verification on logout
+	if (!isset($_GET['logout'])) {
+		header("Location:" . $urlServer . "modules/auth/mail_verify_change.php");
+	} 
 }
 
 // Restore saved old_dbname function
 function restore_dbname_override($do_unset = false)
 {
-        if (defined('old_dbname')) {
-                $_SESSION['dbname'] = old_dbname;
-        } elseif ($do_unset) {
-                unset($_SESSION['dbname']);
-        }
+	if (defined('old_dbname')) {
+		$_SESSION['dbname'] = old_dbname;
+	} elseif ($do_unset) {
+		unset($_SESSION['dbname']);
+	}
 }
 
 // Temporary dbname override
 if (isset($_GET['course'])) {
-        if (isset($_SESSION['dbname'])) {
-                define('old_dbname', $_SESSION['dbname']);
-        }
-        $_SESSION['dbname'] = $_GET['course'];
+	if (isset($_SESSION['dbname'])) {
+		define('old_dbname', $_SESSION['dbname']);
+	}
+	$_SESSION['dbname'] = $_GET['course'];
 }
 register_shutdown_function('restore_dbname_override');
 
@@ -228,19 +231,19 @@ if (isset($require_current_course) and $require_current_course) {
 	} else {
 		$currentCourse = $dbname = $_SESSION['dbname'];
 		$result = db_query("SELECT cours_id, cours.code, fake_code, intitule, faculte.name AS faculte,
-                                           titulaires, languageCourse, departmentUrlName, departmentUrl, visible
-                                           FROM cours, faculte
-                                           WHERE cours.faculteid = faculte.id AND
-                                                 cours.code=" . autoquote($dbname));
+									titulaires, languageCourse, departmentUrlName, departmentUrl, visible
+									FROM cours, faculte
+									WHERE cours.faculteid = faculte.id AND
+									cours.code=" . autoquote($dbname));
 
-                if (!$result or mysql_num_rows($result) == 0) {
-                        restore_dbname_override(true);
-                        header('Location: ' . $urlServer);
-                        exit;
-                }
+		if (!$result or mysql_num_rows($result) == 0) {
+			restore_dbname_override(true);
+			header('Location: ' . $urlServer);
+			exit;
+		}
 
 		while ($theCourse = mysql_fetch_array($result)) {
-                        $cours_id = $theCourse['cours_id'];
+ 			$cours_id = $theCourse['cours_id'];
 			$fake_code = $theCourse['fake_code'];
 			$code_cours = $theCourse['code'];
 			$intitule = $theCourse['intitule'];
@@ -270,17 +273,17 @@ if (isset($require_current_course) and $require_current_course) {
 
 		// Check for course visibility by current user
 		$statut = 0;
-                // The admin can see all courses as adminOfCourse
-                if ($is_admin) {
-                        $statut = 1;
-                } else {
-                        $res2 = db_query("SELECT statut FROM cours_user
-                                WHERE user_id = $uid AND
-                                cours_id = $cours_id");
-                        if ($res2 and mysql_num_rows($res2) > 0) {
-                                list($statut) = mysql_fetch_row($res2);
-                        }
-                }
+		// The admin can see all courses as adminOfCourse
+		if ($is_admin) {
+			$statut = 1;
+		} else {
+			$res2 = db_query("SELECT statut FROM cours_user
+									WHERE user_id = $uid AND
+									cours_id = $cours_id");
+			if ($res2 and mysql_num_rows($res2) > 0) {
+				list($statut) = mysql_fetch_row($res2);
+			}
+		}
 
 		if ($visible != 2) {
 			if (!$uid) {
@@ -297,32 +300,31 @@ if (isset($require_current_course) and $require_current_course) {
 		$languageInterface = $currentCourseLanguage;
 		// If course language is different from global language,
 		// include more messages
-                if ($language != $languageInterface) {
-                        $language = $languageInterface;
-                        // include_messages
-                        include("${webDir}modules/lang/$language/common.inc.php");
-                        $extra_messages = "${webDir}/config/$language.inc.php";
-                        if (file_exists($extra_messages)) {
-                                include $extra_messages;
-                        } else {
-                                $extra_messages = false;
-                        }
-                        include("${webDir}modules/lang/$language/messages.inc.php");
-                        if ($extra_messages) {
-                                include $extra_messages;
-                        }
-                }
+		if ($language != $languageInterface) {
+			$language = $languageInterface;
+			// include_messages
+			include("${webDir}modules/lang/$language/common.inc.php");
+			$extra_messages = "${webDir}/config/$language.inc.php";
+			if (file_exists($extra_messages)) {
+				include $extra_messages;
+			} else {
+				$extra_messages = false;
+			}
+			include("${webDir}modules/lang/$language/messages.inc.php");
+			if ($extra_messages) {
+				include $extra_messages;
+			}
+		}
 	}
 }
-
 
 // actually a prof has $status 1 
 // the system admin has rights to all courses
 if ($is_admin) {
 	$is_course_admin = TRUE;
-        if (isset($currentCourse)) {
-               $_SESSION['status'][$currentCourse] = 1;
-        }
+	if (isset($currentCourse)) {
+		$_SESSION['status'][$currentCourse] = 1;
+	}
 } else {
 	$is_course_admin = FALSE;
 }
@@ -331,40 +333,40 @@ $is_editor = FALSE;
 if (isset($_SESSION['status'])) {
 	$status = $_SESSION['status'];
 	if (isset($currentCourse)) {
-            if (check_editor()) { // chech if user is editor of course
-                $is_editor = TRUE;
-            }
-            if (@$status[$currentCourse] == 1) { // check if user is admin of course
-                $is_course_admin = TRUE;
-                $is_editor = TRUE;
-            }            	
+		if (check_editor()) { // chech if user is editor of course
+			$is_editor = TRUE;
+		}
+		if (@$status[$currentCourse] == 1) { // check if user is admin of course
+			$is_course_admin = TRUE;
+			$is_editor = TRUE;
+		}            	
 	}
 } else {
 	unset($status);
 }
 
 if (isset($require_course_admin) and $require_course_admin) {
-    if (!$is_course_admin) {
-        $toolContent_ErrorExists = caution($langCheckCourseAdmin);
-	$errorMessagePath = "../../";
-    }
+	if (!$is_course_admin) {
+		$toolContent_ErrorExists = caution($langCheckCourseAdmin);
+		$errorMessagePath = "../../";
+	}
 }
 
 if (isset($require_editor) and $require_editor) {
-    if (!$is_editor) {
-        $toolContent_ErrorExists = caution($langCheckProf);
-	$errorMessagePath = "../../";
-    }
+	if (!$is_editor) {
+		$toolContent_ErrorExists = caution($langCheckProf);
+		$errorMessagePath = "../../";
+	}
 }
     
 // Temporary student view
 if (isset($_SESSION['saved_statut'])) {
-        $statut = 5;
+	$statut = 5;
 	$is_course_admin = false;
-        $is_editor = false;
-        if (isset($currentCourse)) {
-               $_SESSION['status'][$currentCourse] = 5;
-        }
+	$is_editor = false;
+	if (isset($currentCourse)) {
+		$_SESSION['status'][$currentCourse] = 5;
+	}
 }
 
 //Security check:: Users that do not have Professor access for a course must not
@@ -376,14 +378,14 @@ if (isset($currentCourse) && file_exists($module_ini_dir = getcwd() . "/module.i
 	if (!check_guest()) {
 		if (isset($_SESSION['uid']) and $_SESSION['uid']) {
 			$result = db_query("
-                        SELECT `id` FROM accueil
-                        WHERE visible=1
-                        ORDER BY rubrique", $currentCourse);
+								SELECT `id` FROM accueil
+								WHERE visible=1
+								ORDER BY rubrique", $currentCourse);
 		} else {
 			$result = db_query("
-                        SELECT `id` FROM accueil
-                        WHERE visible=1 AND lien NOT LIKE '%/user.php'
-                        ORDER BY rubrique", $currentCourse);
+								SELECT `id` FROM accueil
+								WHERE visible=1 AND lien NOT LIKE '%/user.php'
+								ORDER BY rubrique", $currentCourse);
 		}
 	} else {
 		$result = db_query("
@@ -418,5 +420,5 @@ $tool_content = $head_content = '';
 
 function caution($s)
 {
-        return '<p class="alert1"' . $s . '</p>';
+	return '<p class="alert1"' . $s . '</p>';
 }

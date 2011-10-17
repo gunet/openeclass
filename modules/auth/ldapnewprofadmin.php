@@ -147,12 +147,12 @@ if ($submit)  {
 		$pn = $res['name'];
 		$pu = $res['uname'];
 		$pe = $res['email'];
-		$pt = $res['faculty_id'];
+		$pt = intval($res['faculty_id']);
 		$pcom = $res['comment'];
 		$pam = $res['am'];
 		$pphone = $res['phone'];
 		$lang = $res['lang'];
-		$pvm = $res['verified_mail'];
+		$pvm = intval($res['verified_mail']);
 		$pdate = nice_format(date('Y-m-d', strtotime($res['date_open'])));
 	}
 	
@@ -187,7 +187,7 @@ if ($submit)  {
 	$verified_mail_data[1] = $m['yes'];
 	$verified_mail_data[2] = $m['no'];
 
-	$tool_content .= selection($verified_mail_data,"verified_mail",intval($pvm));
+	$tool_content .= selection($verified_mail_data,"verified_mail",$pvm);
 
 	$tool_content .= "</td>
 	</tr>
