@@ -129,7 +129,7 @@ if (isset($_POST['welcomeScreen'])) {
         $reguser = $dbPassForm = $helpdeskmail = $faxForm = $postaddressForm = '';
 	$email_required = $am_required = $dropbox_allow_student_to_student = $dont_display_login_form = '';
 	$display_captcha = $block_username_change = $insert_xml_metadata = $betacms = '';
-	$disable_eclass_stud_reg = $disable_eclass_prof_reg = '';
+	$disable_eclass_stud_reg = $disable_eclass_prof_reg = $email_verification_required = '';
 } else {
 	register_posted_variables(array(
                 'dbHostForm' => true,
@@ -155,6 +155,7 @@ if (isset($_POST['welcomeScreen'])) {
                 'institutionForm' => true,
                 'institutionUrlForm' => true,
 		'email_required' => true,
+		'email_verification_required' => true,
 		'am_required' => true,
 		'dropbox_allow_student_to_student' => true,
 		'dont_display_login_form' => true,
@@ -212,7 +213,7 @@ $all_vars = array('pathForm', 'urlAppendPath', 'dbHostForm', 'dbUsernameForm', '
                   'passForm', 'phpSysInfoURL', 'campusForm', 'helpdeskForm', 'helpdeskmail',
                   'institutionForm', 'institutionUrlForm', 'faxForm', 'postaddressForm', 'reguser',
 		  'doc_quota', 'video_quota', 'group_quota', 'dropbox_quota',
-                  'email_required', 'am_required', 'dropbox_allow_student_to_student',
+                  'email_required', 'email_verification_required', 'am_required', 'dropbox_allow_student_to_student',
                   'dont_display_login_form', 'block_username_change', 'display_captcha',
 		  'insert_xml_metadata', 'betacms', 'disable_eclass_stud_reg', 'disable_eclass_prof_reg');
 
@@ -360,6 +361,10 @@ elseif(isset($_REQUEST['install5']) OR isset($_REQUEST['back5']))
 	  <tr>
 		<th class='left' width='550'><b>$lang_email_required</b></th>
 		<td>".checkbox_input('email_required')."</td>
+	  </tr>
+	  <tr>
+		<th class='left' width='550'><b>$lang_email_verification_required</b></th>
+		<td>".checkbox_input('email_verification_required')."</td>
 	  </tr>
 	  <tr>
 		<th class='left'><b>$lang_am_required</b></th>

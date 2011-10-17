@@ -222,7 +222,7 @@ if (!isset($_POST['submit'])) {
 			"$langYouAreReg $siteName $langSettings $uname\n" .
 			"$langPass: $password\n$langAddress $siteName: " .
 			"$urlServer\n" .
-			($vmail?"\n$langMailVerificationSuccess.\n$langMailVerificationClick\n$urlServer$urlAppend"."modules/auth/mail_verify.php?ver=".$hmac."&id=".$last_id."\n":"") .
+			($vmail?"\n$langMailVerificationSuccess.\n$langMailVerificationClick\n$urlServer"."modules/auth/mail_verify.php?ver=".$hmac."&id=".$last_id."\n":"") .
 			"$langProblem\n$langFormula" .
 			"$administratorName $administratorSurname\n" .
 			"$langManager $siteName \n$langTel $telephone \n" .
