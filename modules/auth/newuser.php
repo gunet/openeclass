@@ -227,21 +227,22 @@ if (!isset($_POST['submit'])) {
 			"$administratorName $administratorSurname\n" .
 			"$langManager $siteName \n$langTel $telephone \n" .
 			"$langEmail: $emailhelpdesk";
-                
-                // send email to user
+
+		// send email to user
 		if (!empty($email)) {
 			send_mail('', '', '', $email, $emailsubject, $emailbody, $charset);
-                        $user_msg = $langPersonalSettings;
-                   }  else {
-                       $user_msg = $langPersonalSettingsLess;
+			$user_msg = $langPersonalSettings;
+		}
+		else {
+			$user_msg = $langPersonalSettingsLess;
 		}
 	
-               // verification needed
-               if ($vmail) {
-                       $user_msg .= "$langMailVerificationSuccess: <strong>$email</strong>";
-               }
-               // login user
-               else {
+		// verification needed
+		if ($vmail) {
+			$user_msg .= "$langMailVerificationSuccess: <strong>$email</strong>";
+		}
+		// login user
+		else {
 			$result = db_query("SELECT user_id, nom, prenom FROM `$mysqlMainDb`.user WHERE user_id = $last_id");
 			while ($myrow = mysql_fetch_array($result)) {
 				$uid = $myrow[0];
@@ -263,18 +264,18 @@ if (!isset($_POST['submit'])) {
 			"<div class='success'>" .
 			"<p>$user_msg</p>" .
 			"</div>";
-                
-                // footer msg
+
+		// footer msg
 		if (!$vmail) {
 			$tool_content .= 
 				"<p>$langPersonalSettingsMore</p>";
 		}
-                else {
-                       $tool_content .=
-                               "<p>$langMailVerificationSuccess2.
-                                <br /><br />$click <a href='$urlServer'
-                                class='mainpage'>$langHere</a> $langBackPage</p>";
-               }
+		else {
+			$tool_content .=
+				"<p>$langMailVerificationSuccess2.
+				 <br /><br />$click <a href='$urlServer'
+				 class='mainpage'>$langHere</a> $langBackPage</p>";
+		}
 	} else {
 		// errors exist - registration failed
 		$tool_content .= "<p class='caution'>";

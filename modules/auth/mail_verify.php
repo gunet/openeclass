@@ -32,9 +32,9 @@ include '../../include/baseTheme.php';
 include('../../include/sendMail.inc.php');
 $nameTools = $langMailVerify;
 
-$code = isset($_GET['ver'])? $_GET['ver']: NULL;
-$req_id = isset($_GET['rid'])? escapeSimple($_GET['rid']): NULL;
-$u_id = isset($_GET['id'])? escapeSimple($_GET['id']): NULL;
+$code = (isset($_GET['ver']) && ctype_xdigit($_GET['ver']))? escapeSimple($_GET['ver']): NULL;
+$req_id = (isset($_GET['rid']) && is_numeric($_GET['rid']))? escapeSimple(intval($_GET['rid'])): NULL;
+$u_id = (isset($_GET['id']) && is_numeric($_GET['id']))? escapeSimple(intval($_GET['id'])): NULL;
 
 if ( !empty($code) and (!empty($u_id) or !empty($req_id)) ) {
 	// user has applied for account
