@@ -497,7 +497,8 @@ function show_link($title, $comments, $resource_id, $link_id, $visibility)
 		}
 	} else {
                 $l = mysql_fetch_array($r, MYSQL_ASSOC);
-		$link = "<a href='${urlServer}modules/link/go.php?c=$currentCourseID&amp;id=$link_id&amp;url=$l[url]' target='_blank'>";
+                $eurl = urlencode($l['url']);
+		$link = "<a href='${urlServer}modules/link/go.php?c=$currentCourseID&amp;id=$link_id&amp;url=$eurl' target='_blank'>";
                 if ($title == '') {
                         $title = q($l['url']);
                 }
