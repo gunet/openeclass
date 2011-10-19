@@ -45,10 +45,8 @@ if (isset($_GET['edit'])) { // display form for editing course unit
         $unittitle = " value='" . htmlspecialchars($cu['title'], ENT_QUOTES) . "'";
         $unitdescr = $cu['comments'];
         $unit_id = $cu['id'];
-        $button = $langEdit;
 } else {
         $nameTools = $langAddUnit;
-        $button = $langAdd;
         $unitdescr = $unittitle = '';
 }
 
@@ -81,7 +79,7 @@ $tool_content .= "
       <td>".rich_text_editor('unitdescr', 4, 20, q($unitdescr))."</td>
     </tr>
     <tr>
-      <td class='right'><input type='submit' name='edit_submit' value='$button'></td>
+      <td class='right'><input type='submit' name='edit_submit' value='$langSubmit'></td>
     </tr>
     </table>
     </fieldset>
