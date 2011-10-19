@@ -685,7 +685,7 @@ function process_login()
 			}
 			if (get_config('email_verification_required') && check_mail_ver_required($_SESSION['uid'])) {
 				$_SESSION['mail_verification_required'] = 1;
-				$next = "{$urlAppend}/modules/auth/mail_verify_change.php";
+				$next = "modules/auth/mail_verify_change.php";
 			} elseif (isset($_POST['next'])) {
 				$next = autounquote($_POST['next']);
 			} else {
