@@ -31,6 +31,7 @@ $hot_folder_image = $newposts_image = $folder_image;
 $hot_newposts_image = "$url_images/topic_read_hot.gif";
 $posticon = "$url_images/posticon.png";
 $posticon_more = "$url_images/icon_pages.gif";
-$locked_image = "$url_images/lock.png";
 
 define('PAGINATION_CONTEXT', 3);
+
+mysql_select_db($mysqlMainDb);

@@ -21,7 +21,7 @@
 /*
  * Groups Component
  * @author Evelthon Prodromou <eprodromou@upnet.gr>
- * @version $Id$
+ * @version $Id: group_space.php,v 1.50 2011-05-16 12:36:35 adia Exp $
  * @abstract This module is responsible for the user groups of each lesson
  */
 

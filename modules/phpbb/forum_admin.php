@@ -19,7 +19,7 @@
  * ======================================================================== */
 
 
-/* @version $Id$
+/* @version $Id: forum_admin.php,v 1.10 2011-06-24 13:40:34 adia Exp $
 */
 
 $require_current_course = TRUE;
@@ -36,7 +36,6 @@ $navigation[]= array ("url"=>"index.php?course=$code_cours", "name"=> $langForum
 
 $forum_id = isset($_REQUEST['forum_id'])? intval($_REQUEST['forum_id']): '';
 $cat_id = isset($_REQUEST['cat_id'])? intval($_REQUEST['cat_id']): '';
-
 
 $head_content .= <<<hContent
 <script type="text/javascript">
@@ -60,7 +59,6 @@ function checkrequired(which, entry) {
 		return true;
 	}
 }
-
 </script>
 hContent;
 		// forum go
@@ -95,7 +93,9 @@ hContent;
 	// forum go edit
 	elseif (isset($_GET['forumgoedit'])) {
 		$result = db_query("SELECT forum_id, forum_name, forum_desc, forum_access, cat_id, forum_type
-                                           FROM forums WHERE forum_id = $forum_id", $currentCourseID);
+                                           FROM forums 
+                                            WHERE forum_id = $forum_id
+                                            AND course_id = $cours_id");
 		list($forum_id, $forum_name, $forum_desc, $forum_access, $cat_id_1, $forum_type) = mysql_fetch_row($result);
 		$tool_content .= "
 		<form action='$_SERVER[PHP_SELF]?course=$code_cours&amp;forumgosave=yes&amp;cat_id=$cat_id' method='post' onsubmit=\"return checkrequired(this,'forum_name');\">
@@ -115,7 +115,7 @@ hContent;
 		    <th>$langChangeCat</th>
 		  <td>
                   <select name='cat_id'>";
-		$result = db_query("SELECT cat_id, cat_title FROM catagories", $currentCourseID);
+		$result = db_query("SELECT cat_id, cat_title FROM categories WHERE course_id = $cours_id");
 		while(list($cat_id, $cat_title) = mysql_fetch_row($result)) {
 		if ($cat_id == $cat_id_1) {
 				$tool_content .= "\n<option value='$cat_id' selected>$cat_title</option>"; 
@@ -137,7 +137,9 @@ hContent;
 
 	// edit forum category
 	elseif (isset($_GET['forumcatedit'])) {
-		$result = db_query("select cat_id, cat_title from catagories where cat_id='$cat_id'", $currentCourseID);
+		$result = db_query("SELECT cat_id, cat_title FROM categories 
+                                    WHERE cat_id = $cat_id 
+                                    AND course_id = $cours_id");
 		list($cat_id, $cat_title) = mysql_fetch_row($result);
 		$tool_content .= "
   		<form action='$_SERVER[PHP_SELF]?course=$code_cours&amp;forumcatsave=yes' method='post' onsubmit=\"return checkrequired(this,'cat_title');\">
@@ -160,13 +162,11 @@ hContent;
 
 	// save forum category
 	elseif (isset($_GET['forumcatsave'])) {
-                db_query("UPDATE catagories SET cat_title = " . autoquote($_POST['cat_title']) . "
-                                            WHERE cat_id = $cat_id",
-                         $currentCourseID);
+                db_query("UPDATE categories SET cat_title = " . autoquote($_POST['cat_title']) . "
+                                            WHERE cat_id = $cat_id AND course_id = $cours_id");
 		$tool_content .= "<p class='success'>$langNameCatMod</p>
                                   <p>&laquo; <a href='index.php?course=$code_cours'>$langBack</a></p>";
 	}
-
 	// forum go save
 	elseif (isset($_GET['forumgosave'])) {
 		$nameTools = $langDelete;
@@ -176,16 +176,17 @@ hContent;
                                             forum_access = 2,
                                             forum_moderator = 1,
                                             cat_id = $cat_id
-                                        WHERE forum_id = $forum_id",
-                         $currentCourseID);
+                                        WHERE forum_id = $forum_id 
+                                        AND course_id = $cours_id");
 		$tool_content .= "<p class='success'>$langForumDataChanged</p>
                                   <p>&laquo; <a href='index.php?course=$code_cours'>$langBack</a></p>";
 	}
 
 	// forum add category
 	elseif (isset($_GET['forumcatadd'])) {
-                db_query("INSERT INTO catagories SET cat_title = " . autoquote($_POST['catagories']),
-                         $currentCourseID);
+                db_query("INSERT INTO categories 
+                            SET cat_title = " . autoquote($_POST['categories']) .",
+                            course_id = $cours_id");
 		$tool_content .= "<p class='success'>$langCatAdded</p>
                                   <p>&laquo; <a href='index.php?course=$code_cours'>$langBack</a></p>";
 	}
@@ -196,10 +197,10 @@ hContent;
                 $navigation[] = array('url' => "../forum_admin/forum_admin.php?course=$code_cours",
                                       'name' => $langCatForumAdmin);
 		$ctg = category_name($cat_id);
-		db_query("INSERT INTO forums (forum_name, forum_desc, forum_access, forum_moderator, cat_id)
+		db_query("INSERT INTO forums (forum_name, forum_desc, forum_access, forum_moderator, cat_id, course_id)
                                  VALUES (" . autoquote($_POST['forum_name']) . ",
                                          " . autoquote($_POST['forum_desc']) . ",
-                                         2, 1, $cat_id)", $currentCourseID);
+                                         2, 1, $cat_id, $cours_id)");
 		$forid = mysql_insert_id();
 		// --------------------------------
 		// notify users 
@@ -222,12 +223,20 @@ hContent;
 
 	// forum delete category
 	elseif (isset($_GET['forumcatdel'])) {
-		$result = db_query("SELECT forum_id FROM forums WHERE cat_id='$cat_id'", $currentCourseID);
+		$result = db_query("SELECT forum_id FROM forums 
+                                WHERE cat_id=$cat_id
+                                AND course_id = $cours_id");
 		while(list($forum_id) = mysql_fetch_row($result)) {
-			db_query("DELETE from topics where forum_id=$forum_id", $currentCourseID);
+			db_query("DELETE from topics 
+                                    WHERE forum_id = $forum_id
+                                    AND course_id = $cours_id");
 		}
-		db_query("DELETE FROM forums where cat_id=$cat_id", $currentCourseID);
-		db_query("DELETE FROM catagories where cat_id=$cat_id", $currentCourseID);
+		db_query("DELETE FROM forums 
+                            WHERE cat_id = $cat_id
+                            AND course_id = $cours_id");
+		db_query("DELETE FROM categories 
+                            WHERE cat_id = $cat_id
+                            AND course_id = $cours_id");
 		$tool_content .= "<p class='success'>$langCatForumDelete</p>
                                   <p>&laquo; <a href='index.php?course=$code_cours'>$langBack</a></p>";
 	}
@@ -236,20 +245,22 @@ hContent;
 	elseif (isset($_GET['forumgodel'])) {
 		$nameTools = $langDelete;
 		$navigation[]= array ("url"=>"../forum_admin/forum_admin.php?course=$code_cours", "name"=> $langCatForumAdmin);
-		db_query("DELETE FROM topics WHERE forum_id = $forum_id", $currentCourseID);
-		db_query("DELETE FROM forums WHERE forum_id = $forum_id", $currentCourseID);
-		db_query("UPDATE `group` SET forum_id=0 WHERE forum_id = $forum_id", $mysqlMainDb);
+		db_query("DELETE FROM topics WHERE forum_id = $forum_id AND course_id = $cours_id");
+		db_query("DELETE FROM forums WHERE forum_id = $forum_id AND course_id = $cours_id");
+		db_query("UPDATE `group` SET forum_id = 0 
+                                WHERE forum_id = $forum_id
+                                AND course_id = $cours_id");
 		$tool_content .= "<p class='success'>$langForumDelete</p>
                                   <p>&laquo; <a href='index.php?course=$code_cours'>$langBack</a></p>";
 	} else {
                 $tool_content .= "
-		<form action='$_SERVER[PHP_SELF]?course=$code_cours&amp;forumcatadd=yes' method='post' onsubmit=\"return checkrequired(this,'catagories');\">
+		<form action='$_SERVER[PHP_SELF]?course=$code_cours&amp;forumcatadd=yes' method='post' onsubmit=\"return checkrequired(this,'categories');\">
                 <fieldset>
                 <legend>$langAddCategory</legend>
 		<table class='tbl' width='100%'>
 		<tr>
 		  <th>$langCat</th>
-		  <td><input type=text name=catagories size=50></td>
+		  <td><input type=text name=categories size=50></td>
 		</tr>
 	        <tr>
                   <th>&nbsp;</th>
@@ -259,4 +270,4 @@ hContent;
                 </fieldset>
                 </form>";
 	}
-	draw($tool_content, 2, null, $head_content);
+draw($tool_content, 2, null, $head_content);

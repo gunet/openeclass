@@ -19,35 +19,6 @@
  * ======================================================================== */
 
 
-/*===========================================================================
-        phpbb/viewtopic.php
-        @last update: 2006-07-23 by Artemios G. Voyiatzis
-        @authors list: Artemios G. Voyiatzis <bogart@upnet.gr>
-
-        based on Claroline version 1.7 licensed under GPL
-              copyright (c) 2001, 2006 Universite catholique de Louvain (UCL)
-
-        Claroline authors: Piraux Sebastien <pir@cerdecam.be>
-                      Lederer Guillaume <led@cerdecam.be>
-
-	based on phpBB version 1.4.1 licensed under GPL
-		copyright (c) 2001, The phpBB Group
-==============================================================================
-    @Description: This module implements a per course forum for supporting
-	discussions between teachers and students or group of students.
-	It is a heavily modified adaptation of phpBB for (initially) Claroline
-	and (later) eclass. In the future, a new forum should be developed.
-	Currently we use only a fraction of phpBB tables and functionality
-	(viewforum, viewtopic, post_reply, newtopic); the time cost is
-	enormous for both core phpBB code upgrades and migration from an
-	existing (phpBB-based) to a new eclass forum :-(
-
-    @Comments:
-
-    @todo:
-==============================================================================
-*/
-
 $require_current_course = TRUE;
 $require_login = TRUE;
 $require_help = TRUE;
@@ -80,11 +51,13 @@ if (isset($_GET['forum'])) {
 if (isset($_GET['topic'])) {
 	$topic = intval($_GET['topic']);
 }
-$sql = "SELECT f.forum_type, f.forum_name
-	FROM forums f, topics t 
-	WHERE (f.forum_id = '$forum') AND (t.topic_id = $topic) AND (t.forum_id = f.forum_id)";
+$sql = "SELECT f.forum_type, f.forum_name FROM forums f, topics t 
+            WHERE f.forum_id = $forum
+            AND t.topic_id = $topic 
+            AND t.forum_id = f.forum_id
+            AND t.course_id = $cours_id";
 	
-$result = db_query($sql, $currentCourseID);
+$result = db_query($sql);
 	
 if (!$myrow = mysql_fetch_array($result)) {
         $tool_content .= "<p class='alert1'>$langErrorTopicSelect</p>";
@@ -94,44 +67,46 @@ if (!$myrow = mysql_fetch_array($result)) {
 $forum_name = own_stripslashes($myrow["forum_name"]);
 
 if (isset($_GET['delete'])) {
-	$post_id = $_GET['post_id'];
-	$last_post_in_thread = get_last_post($topic, $currentCourseID, "time_fix");
+	$post_id = intval($_GET['post_id']);
+	$last_post_in_thread = get_last_post($topic, "time_fix");
 	
-	$result = db_query("SELECT post_time FROM posts WHERE post_id = '$post_id'", $currentCourseID);
+	$result = db_query("SELECT post_time FROM posts 
+                            WHERE post_id = $post_id
+                            AND course_id = $cours_id");
+     
 	$myrow = mysql_fetch_array($result);
 	$this_post_time = $myrow["post_time"];
 	list($day, $time) = explode(' ', $this_post_time);
 		
-	db_query("DELETE FROM posts WHERE post_id = $post_id", $currentCourseID);
-	db_query("DELETE FROM posts_text WHERE post_id = $post_id", $currentCourseID);
-	db_query("UPDATE forums SET forum_posts = forum_posts-1 WHERE forum_id=$forum");
+	db_query("DELETE FROM posts WHERE post_id = $post_id AND course_id = $cours_id");
+	db_query("UPDATE forums SET forum_posts = forum_posts-1 
+                    WHERE forum_id = $forum AND course_id = $cours_id");
 	if ($last_post_in_thread == $this_post_time) {
 		$topic_time_fixed = $last_post_in_thread;
 		$sql = "UPDATE topics
 			SET topic_time = '$topic_time_fixed'
-			WHERE topic_id = '$topic'";
-		if (!$r = db_query($sql, $currentCourseID)) {
+			WHERE topic_id = $topic
+                        AND course_id = $cours_id";
+		if (!$r = db_query($sql)) {
 			$tool_content .= $langPostRemoved;
 			draw($tool_content, 2, null, $head_content);
 			exit();
 		}
 	}
-	$total = get_total_posts($topic, $currentCourseID, "topic");
-	if (get_total_posts($topic, $currentCourseID, "topic") == 0) {
-		db_query("DELETE FROM topics WHERE topic_id = '$topic'", $currentCourseID);
-		db_query("UPDATE forums SET forum_topics = forum_topics-1 WHERE forum_id= $forum");
+	$total = get_total_posts($topic, "topic");
+	if ($total == 0) {
+		db_query("DELETE FROM topics WHERE topic_id = $topic AND course_id = $cours_id");
+		db_query("UPDATE forums SET forum_topics = forum_topics-1 
+                            WHERE forum_id = $forum 
+                            AND course_id = $cours_id");
 		header("Location: viewforum.php?course=$code_cours&forum=$forum");
 	}
-	sync($currentCourseID, $forum, 'forum');
-	sync($currentCourseID, $topic, 'topic');	
+	sync($forum, 'forum');
+	sync($topic, 'topic');	
 	$tool_content .= "<p class='success'>$langDeletedMessage</p>";
 }
 
-$sql = "SELECT topic_title, topic_status
-	FROM topics 
-	WHERE topic_id = '$topic'";
-
-$total = get_total_posts($topic, $currentCourseID, "topic");
+$total = get_total_posts($topic, "topic");
 
 if ($paging and $total > $posts_per_page) {
 	$times = 0;
@@ -141,10 +116,12 @@ if ($paging and $total > $posts_per_page) {
 	$pages = $times;
 }
 
-$result = db_query($sql, $currentCourseID);
+$sql = "SELECT topic_title FROM topics 
+            WHERE topic_id = $topic 
+            AND course_id = $cours_id";
+$result = db_query($sql);
 $myrow = mysql_fetch_array($result);
 $topic_subject = own_stripslashes($myrow["topic_title"]);
-$lock_state = $myrow["topic_status"];
 
 if (!add_units_navigation(TRUE)) {
 	$navigation[]= array ("url"=>"index.php?course=$code_cours", "name"=> $langForums);
@@ -156,7 +133,6 @@ if (isset($_SESSION['message'])) {
 	$tool_content .= $_SESSION['message'];
 	unset($_SESSION['message']);
 }
-
 $tool_content .= "<div id='operations_container'> 	
 	<ul id='opslist'>
 	<li><a href='reply.php?course=$code_cours&amp;topic=$topic&amp;forum=$forum'>$langReply";
@@ -207,20 +183,20 @@ if ($paging and $total > $posts_per_page ) {
 		$next_page = $start + $posts_per_page;
 		$tool_content .= "\n<a href=\"$_SERVER[PHP_SELF]?course=$code_cours&amp;topic=$topic&amp;forum=$forum&amp;start=$next_page\">$langNextPage</a>&nbsp;|";
 	}
-	$tool_content .= "&nbsp;<a href=\"$_SERVER[PHP_SELF]?course=$code_cours&amp;topic=$topic&amp;forum=$forum&amp;all=true\">$langAllOfThem</a></span>
+	$tool_content .= "&nbsp;<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;topic=$topic&amp;forum=$forum&amp;all=true'>$langAllOfThem</a></span>
 	</td>
 	</tr>
 	</table>";
 } else {
 	$tool_content .= "
-        <table width=\"100%\" class='tbl'>
+        <table width='100%' class='tbl'>
 	<tr>
-	<td WIDTH=\"60%\" align=\"left\">
+	<td width='60%' align='left'>
 	<span class='row'><strong class='pagination'>&nbsp;</strong></span></td>
-	<td align=\"right\">";
+	<td align='right'>";
 	if ($total > $posts_per_page) {	
 		$tool_content .= "<span class='pages'>
-		&nbsp;<a href=\"$_SERVER[PHP_SELF]?course=$code_cours&amp;topic=$topic&amp;forum=$forum&amp;start=0\">$langPages</a>
+		&nbsp;<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;topic=$topic&amp;forum=$forum&amp;start=0'>$langPages</a>
 		</span>";
 	}
 	$tool_content .= "</td></tr></table>";
@@ -229,28 +205,32 @@ if ($paging and $total > $posts_per_page ) {
 $tool_content .= "<table width='100%' class='tbl_alt'>
     <tr>
       <th width='220'>$langAuthor</th>
-      <th>$langMessage</th>
-      <th width='60'>$langActions</th>
-    </tr>";
+      <th>$langMessage</th>";
+if ($is_editor) {
+      $tool_content .= "<th width='60'>$langActions</th>";
+}
+    $tool_content .= "</tr>";
 
 if (isset($_GET['all'])) {
-    $sql = "SELECT p.*, pt.post_text FROM posts p, posts_text pt 
-		WHERE topic_id = '$topic' 
-		AND p.post_id = pt.post_id
+    $sql = "SELECT * FROM posts 
+                WHERE topic_id = $topic 
+		AND course_id = $cours_id
 		ORDER BY post_id";
 } elseif (isset($_GET['start'])) {
 	$start = intval($_GET['start']);
-	$sql = "SELECT p.*, pt.post_text FROM posts p, posts_text pt 
-		WHERE topic_id = '$topic' 
-		AND p.post_id = pt.post_id
-		ORDER BY post_id LIMIT $start, $posts_per_page";
+	$sql = "SELECT * FROM posts
+		WHERE topic_id = $topic 
+		AND course_id = $cours_id
+		ORDER BY post_id 
+                LIMIT $start, $posts_per_page";
 } else {
-	$sql = "SELECT p.*, pt.post_text FROM posts p, posts_text pt
+	$sql = "SELECT * FROM posts
 		WHERE topic_id = '$topic'
-		AND p.post_id = pt.post_id
-		ORDER BY post_id LIMIT $posts_per_page";
+		AND course_id = $cours_id
+		ORDER BY post_id 
+                LIMIT $posts_per_page";
 }
-if (!$result = db_query($sql, $currentCourseID)) {
+if (!$result = db_query($sql)) {
 	$tool_content .= "$langErrorConnectPostDatabase. $sql";
 	draw($tool_content, 2);
 	exit();
@@ -258,7 +238,7 @@ if (!$result = db_query($sql, $currentCourseID)) {
 $myrow = mysql_fetch_array($result);
 $count = 0;
 do {
-	if ($count%2 == 1) {
+	if ($count % 2 == 1) {
 		$tool_content .= "\n<tr class='odd'>";
 	} else {
 		$tool_content .= "\n<tr class='even'>";
@@ -275,26 +255,26 @@ do {
 
 	$tool_content .= "\n<td>
 	  <div>
-	    
 	    <b>$langSent: </b>" . $myrow["post_time"] . "<br>$postTitle
 	  </div>
 	  <br />$message<br />
-	</td>
-	<td width='40' valign='top'>";
-	if ($is_editor) { // course admin
-		$tool_content .= "<a href=\"editpost.php?course=$code_cours&amp;post_id=".$myrow["post_id"]."&amp;topic=$topic&amp;forum=$forum\">
-		<img src='$themeimg/edit.png' title='$langModify' alt='$langModify' /></a>";
+	</td>";
+	if ($is_editor) { 
+		$tool_content .= "<td width='40' valign='top'>
+                    <a href=\"editpost.php?course=$code_cours&amp;post_id=".$myrow["post_id"]."&amp;topic=$topic&amp;forum=$forum\">
+                    <img src='$themeimg/edit.png' title='$langModify' alt='$langModify' /></a>";
 		$tool_content .= "&nbsp;<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;post_id=".$myrow["post_id"]."&amp;topic=$topic&amp;forum=$forum&amp;delete=on' onClick='return confirmation()'>
-		<img src='$themeimg/delete.png' title='$langDelete' /></a>";
+                    <img src='$themeimg/delete.png' title='$langDelete' /></a></td>";
 	}
-	$tool_content .= "</td>\n</tr>";
+	$tool_content .= "</tr>";
 	$count++;
 } while($myrow = mysql_fetch_array($result));
 
-$sql = "UPDATE topics SET topic_views = topic_views + 1 WHERE topic_id = '$topic'";
-db_query($sql, $currentCourseID);
+$sql = "UPDATE topics SET topic_views = topic_views + 1 
+            WHERE topic_id = $topic AND course_id = $cours_id";
+db_query($sql);
 
-$tool_content .= "\n    </table>";
+$tool_content .= "</table>";
 
 if ($paging and $total > $posts_per_page) {
 	$times = 1;
@@ -308,7 +288,7 @@ if ($paging and $total > $posts_per_page) {
 
 	for($x = 0; $x < $total; $x += $posts_per_page) {
 		if($times != 1) {
-			$tool_content .= "\n<span class=\"page-sep\">,</span>";
+			$tool_content .= "\n<span class='page-sep'>,</span>";
 		}
 		if($start && ($start == $x)) {
 			$tool_content .= "" .  $times;
@@ -334,12 +314,12 @@ if ($paging and $total > $posts_per_page) {
 	</span>
 	</td></tr></table>";
 } else {
-	$tool_content .= "<table width=\"100%\" class=\"tbl\">
+	$tool_content .= "<table width='100%' class='tbl'>
 	<tr>
-	<td width=\"60%\" align=\"left\">
+	<td width='60%' align='left'>
 	<span class='row'><strong class='pagination'>&nbsp;</strong>
 	</span></td>
-	<td align=\"right\">
+	<td align='right'>
 	<span class='pages'>";
 	if ($total > $posts_per_page) {	
 		$tool_content .= "&nbsp;<a href=\"$_SERVER[PHP_SELF]?course=$code_cours&amp;topic=$topic&amp;forum=$forum&amp;start=0\">$langPages</a>";

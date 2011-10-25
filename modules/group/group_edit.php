@@ -22,7 +22,7 @@
  * Groups Component
  *
  * @author Evelthon Prodromou <eprodromou@upnet.gr>
- * @version $Id$
+ * @version $Id: group_edit.php,v 1.44 2011-06-24 13:40:33 adia Exp $
  *
  * @abstract This module is responsible for the user groups of each lesson
  *
@@ -66,8 +66,9 @@ if (isset($_POST['modify'])) {
                                                            max_members = $maxStudent
                                                        WHERE id = $group_id");
 
-        db_query("UPDATE `$currentCourseID`.forums SET forum_name = $name WHERE forum_id =
-                        (SELECT forum_id FROM `group` WHERE id = $group_id)");
+        db_query("UPDATE forums SET forum_name = $name WHERE forum_id =
+                        (SELECT forum_id FROM `group` WHERE id = $group_id)
+                            AND course_id = $cours_id");
 
         db_query("DELETE FROM group_members WHERE group_id = $group_id AND is_tutor = 1");
         if (isset($_POST['tutor'])) {

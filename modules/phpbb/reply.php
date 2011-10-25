@@ -18,33 +18,6 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-
-/*===========================================================================
-        phpbb/reply.php
-* @version $Id$
-        @last update: 2006-07-23 by Artemios G. Voyiatzis
-        @authors list: Artemios G. Voyiatzis <bogart@upnet.gr>
-
-        based on Claroline version 1.7 licensed under GPL
-              copyright (c) 2001, 2006 Universite catholique de Louvain (UCL)
-
-        Claroline authors: Piraux Sebastien <pir@cerdecam.be>
-                      Lederer Guillaume <led@cerdecam.be>
-
-	based on phpBB version 1.4.1 licensed under GPL
-		copyright (c) 2001, The phpBB Group
-==============================================================================
-    @Description: This module implements a per course forum for supporting
-	discussions between teachers and students or group of students.
-	It is a heavily modified adaptation of phpBB for (initially) Claroline
-	and (later) eclass. In the future, a new forum should be developed.
-	Currently we use only a fraction of phpBB tables and functionality
-	(viewforum, viewtopic, post_reply, newtopic); the time cost is
-	enormous for both core phpBB code upgrades and migration from an
-	existing (phpBB-based) to a new eclass forum :-(
-==============================================================================
-*/
-
 /*
  * Open eClass 2.x standard stuff
  */
@@ -64,21 +37,14 @@ if (isset($_GET['topic'])) {
 	$topic = intval($_GET['topic']);
 }
 
-if (isset($post_id) && $post_id) {
-	// We have a post id, so include that in the checks..
-	$sql  = "SELECT f.forum_type, f.forum_name, f.forum_access, t.topic_title ";
-	$sql .= "FROM forums f, topics t, posts p ";
-	$sql .= "WHERE (f.forum_id = '$forum') AND (t.topic_id = $topic)";
-	$sql .= " AND (p.post_id = $post_id) AND (t.forum_id = f.forum_id)";
-	$sql .= " AND (p.forum_id = f.forum_id) AND (p.topic_id = t.topic_id)";
-} else {
-	// No post id, just check forum and topic.
-	$sql = "SELECT f.forum_type, f.forum_name, f.forum_access, t.topic_title ";
-	$sql .= "FROM forums f, topics t ";
-	$sql .= "WHERE (f.forum_id = '$forum') AND (t.topic_id = $topic) AND (t.forum_id = f.forum_id)";	
-}
-
-$result = db_query($sql, $currentCourseID);
+$sql = "SELECT f.forum_type, f.forum_name, f.forum_access, t.topic_title 
+            FROM forums f, topics t 
+            WHERE f.forum_id = $forum
+            AND t.topic_id = $topic 
+            AND t.forum_id = f.forum_id
+            AND f.course_id = $cours_id
+            AND t.course_id = $cours_id";	
+$result = db_query($sql);
 $myrow = mysql_fetch_array($result);
 
 $forum_name = $myrow["forum_name"];
@@ -101,7 +67,7 @@ $navigation[]= array ("url"=>"viewforum.php?course=$code_cours&amp;forum=$forum"
 $navigation[]= array ("url"=>"viewtopic.php?course=$code_cours&amp;topic=$topic&amp;forum=$forum", "name"=> $topic_title);
 
 
-if (!does_exists($forum, $currentCourseID, "forum") || !does_exists($topic, $currentCourseID, "topic")) {
+if (!does_exists($forum, "forum") || !does_exists($topic, "topic")) {
 	$tool_content .= $langErrorTopicSelect;
 	draw($tool_content, 2, null, $head_content);
 	exit();
@@ -110,6 +76,7 @@ if (!does_exists($forum, $currentCourseID, "forum") || !does_exists($topic, $cur
 if (isset($_POST['submit'])) {
 	$message = $_POST['message'];
 	$quote = $_POST['quote'];
+        $poster_ip = $_SERVER['REMOTE_ADDR'];
 	if (trim($message) == '') {
                 $tool_content .= "
                 <p class='alert1'>$langEmptyMsg</p>
@@ -117,23 +84,6 @@ if (isset($_POST['submit'])) {
                 draw($tool_content, 2, null, $head_content);
 		exit();
 	}
-	// XXX: Do we need this code ?
-	if ( $uid == -1 ) {
-		if ($forum_access == 3 && $user_level < 2) {
-			$tool_content .= $langNoPost;
-                        draw($tool_content, 2, null, $head_content);
-			exit();
-		}
-	}
-	// Check that, if this is a private forum, the current user can post here.
-	if ($forum_type == 1) {
-		if (!check_priv_forum_auth($uid, $forum, TRUE, $currentCourseID)) {
-			$tool_content .= "$langPrivateForum $langNoPost";
-			draw($tool_content, 2, null, $head_content);
-			exit();
-		}
-	}
-	$poster_ip = $_SERVER['REMOTE_ADDR'];
 	$is_html_disabled = false;
 	if ((isset($allow_html) && $allow_html == 0) || isset($html)) {
 		$message = htmlspecialchars($message);
@@ -156,21 +106,21 @@ if (isset($_POST['submit'])) {
 	if (isset($sig) && $sig) {
 		$message .= "\n[addsig]";
 	}
-	$sql = "INSERT INTO posts (topic_id, forum_id, poster_id, post_time, poster_ip, nom, prenom)
-			VALUES ('$topic', '$forum', '$uid','$time', '$poster_ip', '$nom', '$prenom')";
-	$result = db_query($sql, $currentCourseID);
+	$sql = "INSERT INTO posts (topic_id, forum_id, post_text, poster_id, post_time, poster_ip, course_id)
+			VALUES ($topic, $forum, ".autoquote($message) ." , $uid, '$time', '$poster_ip', $cours_id)";
+	$result = db_query($sql);
 	$this_post = mysql_insert_id();
-	if ($this_post) {
-		$sql = "INSERT INTO posts_text (post_id, post_text) VALUES ($this_post, " .
-                        autoquote($message) . ")";
-		$result = db_query($sql, $currentCourseID); 
-	}
-	$sql = "UPDATE topics SET topic_replies = topic_replies+1, topic_last_post_id = $this_post, topic_time = '$time' 
-		WHERE topic_id = '$topic'";
-	$result = db_query($sql, $currentCourseID);
-	$sql = "UPDATE forums SET forum_posts = forum_posts+1, forum_last_post_id = '$this_post' 
-		WHERE forum_id = '$forum'";
-	$result = db_query($sql, $currentCourseID);
+	$sql = "UPDATE topics SET topic_replies = topic_replies+1, 
+                    topic_last_post_id = $this_post, 
+                    topic_time = '$time' 
+		WHERE topic_id = $topic
+                    AND course_id = $cours_id";
+	$result = db_query($sql);
+	$sql = "UPDATE forums SET forum_posts = forum_posts+1, 
+                    forum_last_post_id = $this_post 
+		WHERE forum_id = $forum
+                    AND course_id = $cours_id";
+	$result = db_query($sql);
 	if (!$result) {
 		$tool_content .= $langErrorUpadatePostCount;
 		draw($tool_content, 2, null, $head_content);
@@ -187,7 +137,8 @@ if (isset($_POST['submit'])) {
 			WHERE (topic_id = $topic OR forum_id = $forum OR cat_id = $category_id) 
 			AND notify_sent = 1 AND course_id = $cours_id AND user_id != $uid", $mysqlMainDb);
 	$c = course_code_to_title($currentCourseID);
-	$forum_message = "-------- $langBodyMessage ($langSender: $prenom $nom)\n$message--------";
+        $name = uid_to_name($uid);
+	$forum_message = "-------- $langBodyMessage ($langSender: $name )\n$message--------";
 	$plain_forum_message = html2text($forum_message);
 	$body_topic_notify = "$langBodyTopicNotify $langInForum '$topic_title' $langOfForum '$forum_name' $langInCat '$cat_name' $langTo $langCourseS '$c'  <br /><br />$forum_message <br /><br />$gunet<br /><a href='{$urlServer}$currentCourseID'>{$urlServer}$currentCourseID</a>";
 	$plain_body_topic_notify = "$langBodyTopicNotify $langInForum '$topic_title' $langOfForum '$forum_name' $langInCat '$cat_name' $langTo $langCourseS '$c' \n\n$plain_forum_message \n\n$gunet\n<a href='{$urlServer}$currentCourseID'>{$urlServer}$currentCourseID</a>";
@@ -197,7 +148,7 @@ if (isset($_POST['submit'])) {
 	}
 	// end of notification
 	
-	$total_posts = get_total_posts($topic, $currentCourseID, "topic");
+	$total_posts = get_total_posts($topic, "topic");
 	if ($total_posts > $posts_per_page) { 
 		$page = '&start=' . ($posts_per_page * intval(($total_posts - 1) / $posts_per_page));
 	} else {
@@ -232,24 +183,14 @@ if (isset($_POST['submit'])) {
 		</form>";
 		draw($tool_content, 2, null, $head_content);
 		exit();
-	} else {
-		if ($forum_type == 1) {
-			// To get here, we have a logged-in user. So, check whether that user is allowed to view
-			// this private forum.
-			if (!check_priv_forum_auth($uid, $forum, TRUE, $currentCourseID)) {
-				$tool_content .= "$langPrivateForum $langNoPost";
-				draw($tool_content, 2, null, $head_content);
-				exit();
-			}
-		}
-	}	
+	} 	
 	// Topic review
 	$tool_content .= "
-    <div id=\"operations_container\">
-	<ul id=\"opslist\">
-          <li><a href=\"viewtopic.php?course=$code_cours&amp;topic=$topic&amp;forum=$forum\" target=\"_blank\">$langTopicReview</a></li>
-	</ul>
-    </div>";
+        <div id='operations_container'>
+            <ul id='opslist'>
+              <li><a href='viewtopic.php?course=$code_cours&amp;topic=$topic&amp;forum=$forum' target='_blank'>$langTopicReview</a></li>
+            </ul>
+        </div>";
 
 	$tool_content .= "<form action='$_SERVER[PHP_SELF]?course=$code_cours&amp;topic=$topic&forum=$forum' method='post'>
 	<fieldset>
@@ -258,10 +199,11 @@ if (isset($_POST['submit'])) {
         <tr>
         <td>$langBodyMessage:";
 	if (isset($quote) && $quote) {
-		$sql = "SELECT pt.post_text, p.post_time, u.username 
-			FROM posts p, posts_text pt 
-			WHERE p.post_id = '$post' AND pt.post_id = p.post_id";
-		if ($r = db_query($sql, $currentCourseID)) {
+		$sql = "SELECT post_text, post_time
+                            FROM posts 
+			WHERE post_id = '$post' 
+                            AND course_id = $cours_id";
+		if ($r = db_query($sql)) {
 			$m = mysql_fetch_array($r);
 			$text = $m["post_text"];
 			$text = str_replace("<BR>", "\n", $text);

@@ -402,7 +402,7 @@ function show_exercise($title, $comments, $resource_id, $exercise_id, $visibilit
 function show_forum($type, $title, $comments, $resource_id, $ft_id, $visibility)
 {
 	global $id, $tool_content, $mysqlMainDb, $urlServer, $is_editor,
-               $currentCourseID, $code_cours, $themeimg;
+               $cours_id, $code_cours, $themeimg;
 
 	$comment_box = '';
 	$class_vis = ($visibility == 'i')? ' class="invisible"': ' class="even"';
@@ -411,7 +411,9 @@ function show_forum($type, $title, $comments, $resource_id, $ft_id, $visibility)
 		$link = "<a href='${urlServer}modules/phpbb/viewforum.php?course=$code_cours&amp;forum=$ft_id&amp;unit=$id'>";
                 $forumlink = $link . "$title</a>";
 	} else {
-		$r = db_query("SELECT forum_id FROM topics WHERE topic_id = $ft_id", $currentCourseID);
+		$r = db_query("SELECT forum_id FROM topics 
+                                WHERE topic_id = $ft_id
+                                AND course_id = $cours_id", $mysqlMainDb);
 		list($forum_id) = mysql_fetch_array($r);
 		$link = "<a href='${urlServer}modules/phpbb/viewtopic.php?course=$code_cours&amp;topic=$ft_id&amp;forum=$forum_id&amp;unit=$id'>";
                 $forumlink = $link . "$title</a>";
