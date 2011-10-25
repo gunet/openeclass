@@ -427,7 +427,7 @@ if($sql) {
 					<td>".htmlspecialchars($logs['prenom'])."</td>
 					<td>".htmlspecialchars($logs['username'])."</td>
 					<td width='200'>".htmlspecialchars($logs['email']);
-					if ($mail_ver_required) {
+					if ($mail_ver_required && !empty($logs['email'])) {
 						switch($logs['verified_mail']) {
 							case 0: $tool_content .= " <img src='$themeimg/outbox.png' title='$langMailVerificationPendingU' />";break;
 							case 1: $tool_content .= " <img src='$themeimg/tick_1.png' title='$langMailVerificationYesU' />";break;

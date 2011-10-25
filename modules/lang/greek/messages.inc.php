@@ -54,6 +54,7 @@ $langOpen = "ανοικτά";
 $langSemiopen = "απαιτούν εγγραφή";
 $langUsers = "Χρήστες";
 $langUsersS = "χρήστες";
+$langUsersOf = "χρηστών";
 $langUser = "Χρήστης";
 $langUserHeader = "Χρήστης:";
 $langUserS = "χρήστης";
@@ -2551,13 +2552,22 @@ $langMailVerificationAddrChange = "Αν η διεύθυνση είναι λάθ�
 $langMailVerificationSuccess3="Ελέγξτε οτι είναι σωστή η διεύθυνση παρακάτω και πατήστε στην «<b>$langMailVerificationNewCode</b>»";
 $langMailVerificationReq = "Είναι απαραίτητο να επιβεβαιωθεί η e-mail διεύθυνση σας προτού προχωρήσετε.<br /><br />$langMailVerificationSuccess3";
 $langMailVerificationSuccess4="Σύντομα θα λάβετε ένα e-mail από την Ομάδα Διαχείρισης της Πλατφόρμας Ασύγχρονης Τηλεκπαίδευσης $siteName, με τις απαραίτητες οδηγίες για την ολοκλήρωση της εγγραφής σας";
-$langMailVerification = "Επιβεβαιώση E-mail";
+$langMailVerification = "Επιβεβαιώση E-mail $langUsersOf";
 $langMailVerificationNo = "Χρήστες που δεν έχουν επιβεβαιώσει το e-mail τους";
 $langMailVerificationYes = "Χρήστες που έχουν επιβεβαιώσει το e-mail τους";
-$langMailVerificationPending = "Χρήστες που εκρεμεί επιβεβαιώση του e-mail τους";
+$langMailVerificationPending = "Χρήστες που εκκρεμεί η επιβεβαιώση του e-mail τους";
 $langMailVerificationNoU = "Δεν έχει επιβεβαιωθεί";
 $langMailVerificationYesU = "Έχει επιβεβαιωθεί";
-$langMailVerificationPendingU = "Εκρεμεί επιβεβαίωση";
+$langMailVerificationPendingU = "Εκκρεμεί επιβεβαίωση";
+
+// mail_ver_settings.php
+$langMailVerificationSettings = 'Ρυθμίσεις επιβεβαίωσης e-mail διεύθυνσης χρηστών';
+$langMailVerificationNotice = "Εάν είναι υποχρεωτική η επιβεβαίωση του e-mail του $langOfUser και η επιβεβαίωση εκκρεμεί, τότε ισχύουν τα παρακάτω μέχρι να ολοκληρωθεί η επιβεβαίωση:<br /><lu><li>η πλατφόρμα θα παραπέμπει τον χρήστη στη σελίδα επιβεβαίωσης του e-mail</li><li>ο χρήστης δεν θα λαμβάνει e-mail με ανακοινώσεις από τα μαθήματα που παρακολουθεί</li></lu>";
+$langMailVerificationNoticeAdmin = "Δεν είναι δυνατή η αλλαγή του χρήστη admin από αυτή την σελίδα.";
+$langChangeTo = "Αλλαγή σε";
+$langMailVerificationChanged = "Έγινε αλλαγή";
+$langMailVerificationChangedNo = "Δεν επιλέξατε κάποια αλλαγή";
+$langMailVerificationChangedNoAdmin = "Μηδενικός αριθμός χρηστών ή δεν επιτρέπεται η αλλαγή του χρήστη admin";
 
 /************************************************************
 * restore_course.php
@@ -3037,6 +3047,7 @@ $m['am'] = "Αρ. Mητρώου";
 $m['yes'] = "Ναι";
 $m['no'] = "Όχι";
 $m['in'] = "σε";
+$m['from'] = "από";
 $m['today'] = "σήμερα";
 $m['tomorrow'] = "αύριο";
 $m['expired'] = "έχει&nbsp;λήξει";
