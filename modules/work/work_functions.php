@@ -113,7 +113,7 @@ function is_group_assignment($id)
 }
 
 
-// Delete submissions to exercise $id if submitted by user $uid or group $gid
+// Delete submissions to assignment $id if submitted by user $uid or group $gid
 // Doesn't delete files if they are the same with $new_filename
 function delete_submissions_by_uid($uid, $gid, $id, $new_filename = '')
 {
