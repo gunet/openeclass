@@ -292,12 +292,17 @@ function submit_work($id)
                 $secret = work_secret($id);
                 $ext = get_file_extension($_FILES['userfile']['name']);
                 $filename = "$secret/$local_name" . (empty($ext)? '': '.' . $ext);
+                $msg1 = delete_submissions_by_uid($uid, -1, $id);  
+                if ($group_sub) { 
+                        if (array_key_exists($group_id, $gids)) {
+                                $msg1 = delete_submissions_by_uid(-1, $group_id, $id);
+                        }
+                }
                 if (move_uploaded_file($_FILES['userfile']['tmp_name'], "$workPath/$filename")) {
                         @chmod("$workPath/$filename", 0644);
                         $msg2 = $langUploadSuccess;
                         if ($group_sub) {
-                            if (array_key_exists($group_id, $gids)) {
-                                    $msg1 = delete_submissions_by_uid(-1, $group_id, $id);
+                            if (array_key_exists($group_id, $gids)) {                                  
                                     db_query("INSERT INTO assignment_submit
                                         (uid, assignment_id, submission_date, submission_ip, file_path,
                                         file_name, comments, grade_comments, group_id)
@@ -306,8 +311,7 @@ function submit_work($id)
                                         " . quote($filename) . ", ". autoquote($_FILES['userfile']['name']) . ",
                                         " . autoquote($_POST['stud_comments']) . ", '', $group_id)", $currentCourseID);    
                             }
-                        } else {
-                                $msg1 = delete_submissions_by_uid($uid, -1, $id);  
+                        } else {                                
                                 db_query("INSERT INTO assignment_submit
                                         (uid, assignment_id, submission_date, submission_ip, file_path,
                                         file_name, comments, grade_comments) VALUES ($uid, $id, NOW(), " . quote($_SERVER['REMOTE_ADDR']) . ",
