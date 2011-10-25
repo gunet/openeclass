@@ -1,7 +1,7 @@
 <?php
 /*
 * ========================================================================
-* Open eClass 2.4 - E-learning and Course Management System
+* Open eClass 3.0 - E-learning and Course Management System
 * ========================================================================
  
 Copyright(c) 2003-2011  Greek Universities Network - GUnet
@@ -31,7 +31,7 @@ Standard header included by all eClass files
 Defines standard functions and validates variables
 ---------------------------------------------------------------------
 */
-define('ECLASS_VERSION', '2.4.1');
+define('ECLASS_VERSION', '2.99');
 define('DEBUG_MYSQL', true);
 // resized user image 
 define('IMAGESIZE_LARGE', 256);
