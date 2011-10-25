@@ -111,7 +111,9 @@ if (!isset($_SESSION['was_validated']) or
                                 $cas = get_auth_settings($auth);
                                 // store CAS released attributes in $GLOBALS['auth_user_info']
                                 get_cas_attrs(phpCAS::getAttributes(), $cas);
-                                $is_valid = true;
+                                if (!empty($uname)) {
+                                   $is_valid = true;
+                                }
                         }
                 }
         }

@@ -108,8 +108,12 @@ if ($submit or !empty($_SESSION['cas_do'])) {
 		$cas_ret = cas_authenticate(7, true, $_SESSION['cas_host'], $_SESSION['cas_port'], $_SESSION['cas_context'], $_SESSION['cas_cachain']);
 		if (phpCAS::checkAuthentication()) {
 			$test_username = phpCAS::getUser();
-			$cas_valid = true;
-			$_SESSION['cas_warn'] = true;
+			if (!empty($test_username)) {
+				$cas_valid = true;
+				$_SESSION['cas_warn'] = true;
+			} else {
+				$cas_valid = false;
+			}
 		} else {
 			$cas_valid = false;
 		}
