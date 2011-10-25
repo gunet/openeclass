@@ -18,36 +18,6 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-
-/*===========================================================================
-        phpbb/editpost.php
-        @last update: 2006-07-23 by Artemios G. Voyiatzis
-        @authors list: Artemios G. Voyiatzis <bogart@upnet.gr>
-
-        based on Claroline version 1.7 licensed under GPL
-              copyright (c) 2001, 2006 Universite catholique de Louvain (UCL)
-
-        Claroline authors: Piraux Sebastien <pir@cerdecam.be>
-                      Lederer Guillaume <led@cerdecam.be>
-
-	based on phpBB version 1.4.1 licensed under GPL
-		copyright (c) 2001, The phpBB Group
-==============================================================================
-    @Description: This module implements a per course forum for supporting
-	discussions between teachers and students or group of students.
-	It is a heavily modified adaptation of phpBB for (initially) Claroline
-	and (later) eclass. In the future, a new forum should be developed.
-	Currently we use only a fraction of phpBB tables and functionality
-	(viewforum, viewtopic, post_reply, newtopic); the time cost is
-	enormous for both core phpBB code upgrades and migration from an
-	existing (phpBB-based) to a new eclass forum :-(
-
-    @Comments:
-
-    @todo:
-==============================================================================
-*/
-
 /*
  * Open eClass 2.x standard stuff
  */
@@ -76,8 +46,8 @@ if ($is_editor) { // course admin
 		if (isset($_POST['subject'])) {
 			$subject = $_POST['subject'];	
 		}
-		$sql = "SELECT * FROM posts WHERE post_id = '$post_id'";
-		if (!$result = db_query($sql, $currentCourseID)) {
+		$sql = "SELECT * FROM posts WHERE post_id = $post_id AND course_id = $cours_id";
+		if (!$result = db_query($sql)) {
 			$tool_content .= $langErrorDataOne;
 			draw($tool_content, 2, null, $head_content);
 			exit();
@@ -94,9 +64,13 @@ if ($is_editor) { // course admin
 		list($day, $time) = explode(' ', $myrow["post_time"]);
 		$date = date("Y-m-d H:i");
 	
-		$row1 = mysql_fetch_row(db_query("SELECT forum_name FROM forums WHERE forum_id='$forum_id'"));
+		$row1 = mysql_fetch_row(db_query("SELECT forum_name FROM forums 
+                                    WHERE forum_id=$forum_id 
+                                        AND course_id = $cours_id"));
 		$forum_name = $row1[0];
-		$row2 = mysql_fetch_row(db_query("SELECT topic_title FROM topics WHERE topic_id='$topic_id'"));
+		$row2 = mysql_fetch_row(db_query("SELECT topic_title FROM topics 
+                                        WHERE topic_id=$topic_id
+                                            AND course_id = $cours_id"));
 		$topic_title = $row2[0];
 	
 		$nameTools = $langReply;
@@ -119,28 +93,26 @@ if ($is_editor) { // course admin
 		$forward = 1;
 		$topic = $topic_id;
 		$forum = $forum_id;
-		$sql = "UPDATE posts_text SET post_text = " . autoquote($message) . "
-			WHERE (post_id = '$post_id')";
-		if (!$result = db_query($sql, $currentCourseID)) {
-			$tool_content .= $langUnableUpadatePost;
+		$sql = "UPDATE posts SET post_text = " . autoquote($message) . "
+                            WHERE post_id = $post_id 
+                                AND course_id = $cours_id";
+		if (!$result = db_query($sql)) {
+			$tool_content .= $langUnableUpdatePost;
 			draw($tool_content, 2, null, $head_content);
 			exit();
 		}
 		if (isset($subject)) {
 			$subject = strip_tags($subject);
 		}
-		if (isset($subject) && (trim($subject) != '')) {
-			if(!isset($notify)) {
-				$notify = 0;
-			} else {
-				$notify = 1;
-			}
-			$subject = addslashes($subject);
+		if (isset($subject) && (trim($subject) != '')) {			
 			$sql = "UPDATE topics
-				SET topic_title = '$subject', topic_notify = '$notify'
-				WHERE topic_id = '$topic_id'";
-			if (!$result = db_query($sql, $currentCourseID)) {
-				$tool_content .= $langUnableUpadateTopic;
+				SET topic_title = " . autoquote($subject) . " 
+				WHERE topic_id = $topic_id
+                                    AND course_id = $cours_id";
+			if (!$result = db_query($sql)) {
+				$tool_content .= $langUnableUpdateTopic;
+                                draw($tool_content, 2, null, $head_content);
+                                exit();
 			}
 		}
 		$tool_content .= "<table width='99%'>
@@ -149,12 +121,14 @@ if ($is_editor) { // course admin
 		header("Location: {$urlServer}modules/phpbb/viewtopic.php?course=$code_cours&topic=$topic&forum=$forum" . $page);
 		exit;
 	} else {
-		// Gotta handle private forums right here. They're naturally covered on submit, but not in this part.
 		$sql = "SELECT f.forum_type, f.forum_name, t.topic_title
-			FROM forums f, topics t
-			WHERE (f.forum_id = '$forum') AND (t.topic_id = $topic) AND (t.forum_id = f.forum_id)";
+                            FROM forums f, topics t
+                                WHERE f.forum_id = $forum
+                                        AND t.topic_id = $topic
+                                        AND t.forum_id = f.forum_id
+                                        AND f.course_id = $cours_id";
 		
-		if (!$result = db_query($sql, $currentCourseID)) {
+		if (!$result = db_query($sql)) {
 			$tool_content .= $langTopicInformation;
 			draw($tool_content, 2, null, $head_content);
 			exit();
@@ -195,28 +169,13 @@ if ($is_editor) { // course admin
 			</table></form>";
 			draw($tool_content, 2, null, $head_content);
 			exit();
-		} else {
-			if ($myrow["forum_type"] == 1) {
-				// To get here, we have a logged-in user. So, check whether that user is allowed to post in
-				// this private forum.
-				if (!check_priv_forum_auth($uid, $forum, true, $currentCourseID)) {
-					$tool_content .= "$langPrivateForum $langNoPost";
-					draw($tool_content, 2, null, $head_content);
-					exit();
-				}
-			}
-		}	
-		
-		$sql = "SELECT p.*, pt.post_text, t.topic_title, t.topic_notify, 
-			       t.topic_title, t.topic_notify 
-			FROM posts p, topics t, posts_text pt 
-			WHERE (p.post_id = '$post_id') AND (pt.post_id = p.post_id) AND (p.topic_id = t.topic_id)";
-
-		if (!$result = db_query($sql, $currentCourseID)) {
-			$tool_content .= "<p>Couldn't get user and topic information from the database.</p>";
-			draw($tool_content, 2, null, $head_content);
-			exit();
-		}
+		} 			
+		$sql = "SELECT p.post_text, p.post_time, t.topic_title 
+                            FROM posts p, topics t
+                            WHERE p.post_id = $post_id 
+                                AND p.topic_id = t.topic_id
+                                AND p.course_id = $cours_id";
+                $result = db_query($sql);                ;
 		$myrow = mysql_fetch_array($result);
 		if (isset($user_logged_in) && $user_logged_in) {
 			if($user_level <= 2) {
@@ -245,11 +204,10 @@ if ($is_editor) { // course admin
 		$message = preg_replace('#</textarea>#si', '&lt;/TEXTAREA&gt;', $message);
 		list($day, $time) = explode(' ', $myrow["post_time"]);
 		$tool_content .= "<form action='$_SERVER[PHP_SELF]?course=$code_cours&amp;post_id=$post_id&amp;forum=$forum' method='post'>
-        <fieldset>
-        <legend>$langReplyEdit </legend>
- <table width='100%' class='tbl'>
-		";
-		$first_post = is_first_post($topic, $post_id, $currentCourseID);
+                        <fieldset>
+                        <legend>$langReplyEdit </legend>
+                        <table width='100%' class='tbl'>";
+		$first_post = is_first_post($topic, $post_id);
 		if($first_post) {
 			$tool_content .= "<tr><td><b>$langSubject:</b><br /><br />
 			<input type='text' name='subject' size='53' maxlength='100' value='" . stripslashes($myrow["topic_title"]) . "'  class='FormData_InputText' /></th>

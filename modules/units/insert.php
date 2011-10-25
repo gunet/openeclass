@@ -251,7 +251,7 @@ function insert_exercise($id)
 // insert forum in database
 function insert_forum($id)
 {
-	global $code_cours;
+	global $code_cours, $cours_id;
 	
 	list($order) = mysql_fetch_array(db_query("SELECT MAX(`order`) FROM unit_resources WHERE unit_id=$id"));
 	foreach ($_POST['forum'] as $for_id) {
@@ -260,14 +260,17 @@ function insert_forum($id)
 		if (count($ids) == 2) {
                         list($forum_id, $topic_id) = $ids;
 			$topic = mysql_fetch_array(db_query("SELECT * FROM topics
-				WHERE topic_id =" . intval($topic_id) ." AND forum_id =" . intval($forum_id), $GLOBALS['currentCourseID']), MYSQL_ASSOC);
+                                        WHERE topic_id =" . intval($topic_id) ." 
+                                        AND forum_id =" . intval($forum_id)  ." 
+                                        AND course_id = $cours_id", $GLOBALS['mysqlMainDb']), MYSQL_ASSOC);
 			db_query("INSERT INTO unit_resources SET unit_id=$id, type='topic', title=" .
 				quote($topic['topic_title']) .", visibility='v', `order`=$order, `date`=NOW(), res_id=$topic[topic_id]",
 			$GLOBALS['mysqlMainDb']);		
 		} else {
                         $forum_id = $ids[0];
 			$forum = mysql_fetch_array(db_query("SELECT * FROM forums
-				WHERE forum_id =" . intval($forum_id), $GLOBALS['currentCourseID']), MYSQL_ASSOC);
+                                    WHERE forum_id =" . intval($forum_id) ." 
+                                    AND course_id = $cours_id", $GLOBALS['mysqlMainDb']), MYSQL_ASSOC);
 			db_query("INSERT INTO unit_resources SET unit_id=$id, type='forum', title=" .
 				quote($forum['forum_name']) . ", comments=" . quote($forum['forum_desc']) .
 				", visibility='v', `order`=$order, `date`=NOW(), res_id=$forum[forum_id]",

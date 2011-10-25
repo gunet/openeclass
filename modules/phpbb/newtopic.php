@@ -18,35 +18,6 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-/*===========================================================================
-        phpbb/newtopic.php
-        @last update: 2006-07-23 by Artemios G. Voyiatzis
-        @authors list: Artemios G. Voyiatzis <bogart@upnet.gr>
-
-        based on Claroline version 1.7 licensed under GPL
-              copyright (c) 2001, 2006 Universite catholique de Louvain (UCL)
-
-        Claroline authors: Piraux Sebastien <pir@cerdecam.be>
-                      Lederer Guillaume <led@cerdecam.be>
-
-	based on phpBB version 1.4.1 licensed under GPL
-		copyright (c) 2001, The phpBB Group
-==============================================================================
-    @Description: This module implements a per course forum for supporting
-	discussions between teachers and students or group of students.
-	It is a heavily modified adaptation of phpBB for (initially) Claroline
-	and (later) eclass. In the future, a new forum should be developed.
-	Currently we use only a fraction of phpBB tables and functionality
-	(viewforum, viewtopic, post_reply, newtopic); the time cost is
-	enormous for both core phpBB code upgrades and migration from an
-	existing (phpBB-based) to a new eclass forum :-(
-
-    @Comments:
-
-    @todo:
-==============================================================================
-*/
-
 /*
  * Open eClass 2.x standard stuff
  */
@@ -60,9 +31,6 @@ include '../group/group_functions.php';
 include_once("./config.php");
 include("functions.php"); 
 
-/******************************************************************************
- * Actual code starts here
- *****************************************************************************/
 if (isset($_GET['forum'])) {
 	$forum = intval($_GET['forum']);
 }
@@ -73,8 +41,8 @@ if (isset($_GET['topic'])) {
 }
 
 $sql = "SELECT forum_name, forum_access, forum_type FROM forums
-	WHERE (forum_id = '$forum')";
-if (!$result = db_query($sql, $currentCourseID)) {
+            WHERE forum_id = $forum AND course_id = $cours_id";
+if (!$result = db_query($sql)) {
 	$tool_content .= $langErrorDataForum;
 	draw($tool_content, 2, null, $head_content);
 	exit;
@@ -97,7 +65,7 @@ $nameTools = $langNewTopic;
 $navigation[]= array('url' => "index.php?course=$code_cours", 'name' => $langForums);
 $navigation[]= array('url' => "viewforum.php?course=$code_cours&amp;forum=$forum_id", 'name' => $forum_name);
 
-if (!does_exists($forum, $currentCourseID, "forum")) {
+if (!does_exists($forum, "forum")) {
 	$tool_content .= "<div class='caution'>$langErrorPost</div>";
 	draw($tool_content, 2);
 	exit;
@@ -129,43 +97,38 @@ if (isset($_POST['submit'])) {
 	$message = format_message($message);
 	$poster_ip = $_SERVER['REMOTE_ADDR'];
 	$time = date("Y-m-d H:i");
-	$nom = addslashes($_SESSION['nom']);
-	$prenom = addslashes($_SESSION['prenom']);
 
 	if (isset($sig) && $sig) {
 		$message .= "\n[addsig]";
 	}
-	$sql = "INSERT INTO topics (topic_title, topic_poster, forum_id, topic_time, topic_notify, nom, prenom)
-			VALUES (" . autoquote($subject) . ", '$uid', '$forum', '$time', 1, '$nom', '$prenom')";
-	$result = db_query($sql, $currentCourseID);
+	$sql = "INSERT INTO topics (topic_title, topic_poster_id, forum_id, topic_time, course_id)
+			VALUES (" . autoquote($subject) . ", $uid, $forum, '$time', $cours_id)";
+	$result = db_query($sql);
 
 	$topic_id = mysql_insert_id();
-	$sql = "INSERT INTO posts (topic_id, forum_id, poster_id, post_time, poster_ip, nom, prenom)
-			VALUES ('$topic_id', '$forum', '$uid', '$time', '$poster_ip', '$nom', '$prenom')";
-	if (!$result = db_query($sql, $currentCourseID)) {
+	$sql = "INSERT INTO posts (topic_id, forum_id, post_text, poster_id, post_time, poster_ip, course_id)
+			VALUES ($topic_id, $forum, ".autoquote($message).", $uid, '$time', '$poster_ip', $cours_id)";
+	if (!$result = db_query($sql)) {
 		$tool_content .= $langErrorEnterPost;
 		draw($tool_content, 2, '', $head_content);
 		exit();
-	} else {
-		$post_id = mysql_insert_id();
-		if ($post_id) {
-			$sql = "INSERT INTO posts_text (post_id, post_text)
-					VALUES ($post_id, " . autoquote($message) . ")";
-			$result = db_query($sql, $currentCourseID);
-			$sql = "UPDATE topics
-				SET topic_last_post_id = $post_id
-				WHERE topic_id = '$topic_id'";
-			$result = db_query($sql, $currentCourseID);
-		}
-	}
-	$sql = "UPDATE forums
-		SET forum_posts = forum_posts+1, forum_topics = forum_topics+1, forum_last_post_id = $post_id
-		WHERE forum_id = '$forum'";
-	$result = db_query($sql, $currentCourseID);
-	
+	}        
+        $post_id = mysql_insert_id();
+        db_query("UPDATE topics
+                    SET topic_last_post_id = $post_id
+                WHERE topic_id = $topic_id 
+                    AND course_id = $cours_id");
+                        
+	db_query("UPDATE forums
+                    SET forum_posts = forum_posts+1, 
+                    forum_topics = forum_topics+1, 
+                    forum_last_post_id = $post_id
+		WHERE forum_id = $forum 
+                    AND course_id = $cours_id");
+        
 	$topic = $topic_id;
-	$total_forum = get_total_topics($forum, $currentCourseID);
-	$total_topic = get_total_posts($topic, $currentCourseID, "topic")-1;  
+	$total_forum = get_total_topics($forum);
+	$total_topic = get_total_posts($topic, "topic")-1;  
 	// subtract 1 because we want the number of replies, not the number of posts.
 	$forward = 1;
 
@@ -179,7 +142,8 @@ if (isset($_POST['submit'])) {
 			WHERE (forum_id = $forum OR cat_id = $category_id) 
 			AND notify_sent = 1 AND course_id = $cours_id AND user_id != $uid", $mysqlMainDb);
 	$c = course_code_to_title($currentCourseID);
-	$forum_message = "-------- $langBodyMessage ($langSender: $prenom $nom)\n$message--------";
+        $name = uid_to_name($uid);
+	$forum_message = "-------- $langBodyMessage ($langSender: $name)\n$message--------";
 	$plain_forum_message = html2text($forum_message);
 	$body_topic_notify = "$langBodyForumNotify $langInForums '$forum_name' $langInCat '$cat_name' $langTo $langCourseS '$c' <br /><br />$forum_message<br /><br />$gunet<br /><a href='{$urlServer}courses/$currentCourseID'>{$urlServer}courses/$currentCourseID</a>";
 	$plain_body_topic_notify = "$langBodyForumNotify $langInForums '$forum_name' $langInCat '$cat_name' $langTo $langCourseS '$c' \n\n$plain_forum_message \n\n$gunet\n<a href='{$urlServer}courses/$currentCourseID'>{$urlServer}courses/$currentCourseID</a>";

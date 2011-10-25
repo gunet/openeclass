@@ -18,32 +18,6 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-
-/*===========================================================================
-phpbb/index.php
-@last update: 2006-07-23 by Artemios G. Voyiatzis
-@authors list: Artemios G. Voyiatzis <bogart@upnet.gr>
-
-based on Claroline version 1.7 licensed under GPL
-copyright (c) 2001, 2006 Universite catholique de Louvain (UCL)
-
-Claroline authors: Piraux Sebastien <pir@cerdecam.be>
-Lederer Guillaume <led@cerdecam.be>
-
-based on phpBB version 1.4.1 licensed under GPL
-copyright (c) 2001, The phpBB Group
-==============================================================================
-@Description: This module implements a per course forum for supporting
-discussions between teachers and students or group of students.
-It is a heavily modified adaptation of phpBB for (initially) Claroline
-and (later) eclass. In the future, a new forum should be developed.
-Currently we use only a fraction of phpBB tables and functionality
-(viewforum, viewtopic, post_reply, newtopic); the time cost is
-enormous for both core phpBB code upgrades and migration from an
-existing (phpBB-based) to a new eclass forum :-(
-
-*/
-
 /*
 * Open eClass 2.x standard stuff
 */
@@ -119,20 +93,21 @@ if(isset($_GET['forumcatnotify'])) { // modify forum category notification
 /*
 * Populate data with forum categories
 */
-$sql = "SELECT c.cat_id, c.cat_title FROM catagories c ORDER BY c.cat_id";
+$sql = "SELECT cat_id, cat_title FROM categories WHERE course_id = $cours_id ORDER BY cat_id ";
 
-$result = db_query($sql, $currentCourseID); 
+$result = db_query($sql, $mysqlMainDb); 
 $total_categories = mysql_num_rows($result);
 
 if ($total_categories) {
 	while ($cat_row = mysql_fetch_array($result)) {
 		$categories[] = $cat_row;
 	}
-	$sql = "SELECT f.*, p.post_time, p.nom, p.prenom, p.topic_id
+	$sql = "SELECT f.*, p.post_time, p.topic_id, p.poster_id
 		FROM forums f LEFT JOIN posts p ON p.post_id = f.forum_last_post_id
+                AND f.course_id = $cours_id
 		ORDER BY f.cat_id, f.forum_id";
 		
-	$f_res = db_query($sql, $currentCourseID);
+	$f_res = db_query($sql);
 	while ($forum_data = mysql_fetch_array($f_res)) {
 		$forum_row[] = $forum_data;
 	}
@@ -177,7 +152,7 @@ if ($total_categories) {
 		for ($x=0; $x < count($forum_row); $x++) {
 			unset($last_post);
 			$cat_id = $categories[$i]['cat_id'];
-			$sql = db_query("SELECT * FROM forums WHERE cat_id = $cat_id", $currentCourseID);
+			$sql = db_query("SELECT * FROM forums WHERE cat_id = $cat_id AND course_id = $cours_id");
 			if (mysql_num_rows($sql) > 0) { // if category forum topics are found 
 				if ($forum_row[$x]['cat_id'] == $cat_id) { 
 					if ($forum_row[$x]["post_time"]) {
@@ -202,8 +177,7 @@ if ($total_categories) {
 						$tool_content .= "<td width='2'><img src='$folder_image' /></td>\n";
 					}
 					$forum_name = q($forum_row[$x]['forum_name']);
-					$last_post_nom = q($forum_row[$x]['nom']);
-					$last_post_prenom = q($forum_row[$x]['prenom']);
+					$last_user_post = uid_to_name($forum_row[$x]['poster_id']);
 					$last_post_topic_id = $forum_row[$x]['topic_id'];
 					$total_posts = $forum_row[$x]['forum_posts'];
 					$total_topics = $forum_row[$x]['forum_topics'];
@@ -230,7 +204,7 @@ if ($total_categories) {
 					$tool_content .= "<td width='65' class='center'>$total_posts</td>\n";
 					$tool_content .= "<td width='200' class='center'>";
 					if ($total_topics > 0 && $total_posts > 0) {
-						$tool_content .= "<span class='smaller'>$last_post_prenom $last_post_nom &nbsp;<a href='viewtopic.php?course=$code_cours&amp;topic=$last_post_topic_id&amp;forum=$forum_id'>
+						$tool_content .= "<span class='smaller'>$last_user_post &nbsp;<a href='viewtopic.php?course=$code_cours&amp;topic=$last_post_topic_id&amp;forum=$forum_id'>
 						<img src='$icon_topic_latest' />
 						</a>
 						<br />$human_last_post_time</span></td>\n";

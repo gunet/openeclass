@@ -22,7 +22,7 @@
  * Groups Component
  *
  * @author Evelthon Prodromou <eprodromou@upnet.gr>
- * @version $Id$
+ * @version $Id: group.php,v 1.84 2011-06-24 13:40:33 adia Exp $
  *
  * @abstract This module is responsible for the user groups of each lesson
  *
@@ -50,17 +50,17 @@ $head_content = <<< END
 function confirmation (name)
 {
 	if (name == "delall") {
-		if(confirm("'.$langDeleteGroupAllWarn.' ?"))
+		if(confirm("$langDeleteGroupAllWarn"))
 		{return true;}
 		else
 		{return false;}
 	} else if (name == "emptyall") {
-		if (confirm("'.$langDeleteGroupAllWarn.' ?"))
+		if (confirm("$langDeleteGroupAllWarn"))
 		{return true;}
 		else
 		{return false;}
 	} else {
-		if (confirm("'.$langDeleteGroupWarn.' ("+ name + ") ?"))
+		if (confirm("$langDeleteGroupWarn ("+ name + ") "))
         {return true;}
     	else
         {return false;}
@@ -94,12 +94,14 @@ if ($is_editor) {
                 list($group_num) = mysql_fetch_row(db_query("SELECT COUNT(*) FROM `group` WHERE course_id = $cours_id"));
 
                 // Create a hidden category for group forums
-                $req = db_query("SELECT cat_id FROM `$currentCourseID`.catagories WHERE cat_order = -1");
+                $req = db_query("SELECT cat_id FROM categories 
+                                WHERE cat_order = -1
+                                AND course_id = $cours_id");
                 if ($req and mysql_num_rows($req) > 0) {
                         list($cat_id) = mysql_fetch_row($req);
                 } else {
-                        db_query("INSERT INTO `$currentCourseID`.catagories (cat_title, cat_order)
-                                         VALUES ('$langCatagoryGroup', -1)");
+                        db_query("INSERT INTO categories (cat_title,  cat_order, course_id)
+                                         VALUES ('$langCatagoryGroup', -1, $cours_id)");
                         $cat_id = mysql_insert_id();
                 }
 
@@ -109,10 +111,10 @@ if ($is_editor) {
                                 $res = db_query("SELECT id FROM `group` WHERE name = '$langGroup $group_num'");
                         } while (mysql_num_rows($res) > 0);
 
-                        db_query("INSERT INTO `$currentCourseID`.forums (forum_name, forum_desc, forum_access,
+                        db_query("INSERT INTO forums (forum_name, forum_desc, forum_access,
                                                       forum_moderator, forum_topics, forum_posts,
-                                                      forum_last_post_id, cat_id, forum_type)
-                                  VALUES ('$langForumGroup $group_num', '', 2, 1, 0, 0, 1, $cat_id, 0)");
+                                                      forum_last_post_id, cat_id, forum_type, course_id)
+                                  VALUES ('$langForumGroup $group_num', '', 2, 1, 0, 0, 1, $cat_id, 0, $cours_id)");
                         $forum_id = mysql_insert_id();
 
                         // Create a unique path to group documents to try (!)

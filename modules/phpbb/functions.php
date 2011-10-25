@@ -17,39 +17,16 @@
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
-
-
-/*===========================================================================
-        phpbb/functions.php
-        @last update: 2006-07-23 by Artemios G. Voyiatzis
-        @authors list: Artemios G. Voyiatzis <bogart@upnet.gr>
-
-        based on Claroline version 1.7 licensed under GPL
-              copyright (c) 2001, 2006 Universite catholique de Louvain (UCL)
-
-        Claroline authors: Piraux Sebastien <pir@cerdecam.be>
-                      Lederer Guillaume <led@cerdecam.be>
-
-	based on phpBB version 1.4.1 licensed under GPL
-		copyright (c) 2001, The phpBB Group
-==============================================================================
-    @Description: This module implements a per course forum for supporting
-	discussions between teachers and students or group of students.
-	It is a heavily modified adaptation of phpBB for (initially) Claroline
-	and (later) eclass. In the future, a new forum should be developed.
-	Currently we use only a fraction of phpBB tables and functionality
-	(viewforum, viewtopic, post_reply, newtopic); the time cost is
-	enormous for both core phpBB code upgrades and migration from an
-	existing (phpBB-based) to a new eclass forum :-(
-==============================================================================
-
 /*
  * Gets the total number of topics in a form
  */
-function get_total_topics($forum_id, $thedb) {
-	global $langError;
-	$sql = "SELECT count(*) AS total FROM topics WHERE forum_id = '$forum_id'";
-	if(!$result = db_query($sql, $thedb))
+function get_total_topics($forum_id) {
+	global $langError, $cours_id;
+        
+	$sql = "SELECT count(*) AS total FROM topics 
+                WHERE forum_id = $forum_id
+                    AND course_id = $cours_id";
+	if(!$result = db_query($sql))
 		return($langError);
 	if(!$myrow = mysql_fetch_array($result))
 		return($langError);
@@ -61,50 +38,74 @@ function get_total_topics($forum_id, $thedb) {
  * Returns the total number of posts in the whole system, a forum, or a topic
  * Also can return the number of users on the system.
  */ 
-function get_total_posts($id, $thedb, $type) {
-   switch($type) {
-    case 'forum':
-      $sql = "SELECT count(*) AS total FROM posts WHERE forum_id = '$id'";
-      break;
-    case 'topic':
-      $sql = "SELECT count(*) AS total FROM posts WHERE topic_id = '$id'";
-      break;
-   }
-   if(!$result = db_query($sql, $thedb))
-     return("ERROR");
-   if(!$myrow = mysql_fetch_array($result))
-     return("0");
+function get_total_posts($id, $type) {
+    
+    global $cours_id;
+   
+    switch($type) {
+        case 'forum':
+          $sql = "SELECT count(*) AS total FROM posts 
+                    WHERE forum_id = $id AND course_id = $cours_id";
+          break;
+        case 'topic':
+          $sql = "SELECT count(*) AS total FROM posts 
+                    WHERE topic_id = $id AND course_id = $cours_id";
+          break;
+    }
+    if(!$result = db_query($sql)) {
+        return("error!");
+    }
+    if(!$myrow = mysql_fetch_array($result)) {
+        return("0");
+    }
    return($myrow["total"]);
 }
 
 /*
  * Returns the most recent post in a forum, or a topic
  */
-function get_last_post($id, $thedb, $type) {
-   global $langError, $langNoPosts, $langFrom2;
-   switch($type) {
-    case 'time_fix':
-      $sql = "SELECT p.post_time FROM posts p WHERE p.topic_id = '$id' ORDER BY post_time DESC LIMIT 1";   
-      break;
-    case 'forum':
-      $sql = "SELECT p.post_time, p.poster_id FROM posts p WHERE p.forum_id = '$id' ORDER BY post_time DESC LIMIT 1";
-      break;
-    case 'topic':
-      $sql = "SELECT p.post_time FROM posts p WHERE p.topic_id = '$id' ORDER BY post_time DESC LIMIT 1";
-      break;
-    case 'user':
-      $sql = "SELECT p.post_time FROM posts p WHERE p.poster_id = '$id' LIMIT 1";
-      break;
-   }
-   if(!$result = db_query($sql, $thedb))
-     return($langError);
-   if(!$myrow = mysql_fetch_array($result))
-     return($langNoPosts);
-   if(($type != 'user') && ($type != 'time_fix'))
-     $val = sprintf("%s <br> %s %s", $myrow["post_time"], $langFrom2, $myrow["username"]);
-   else
-     $val = $myrow["post_time"];
-   return($val);
+function get_last_post($id, $type) {
+   
+    global $langError, $langNoPosts, $langFrom2, $cours_id;
+
+    switch($type) {
+        case 'time_fix':
+          $sql = "SELECT post_time FROM posts 
+                        WHERE topic_id = '$id' 
+                        AND course_id = $cours_id 
+                            ORDER BY post_time DESC LIMIT 1";   
+          break;
+        case 'forum':
+          $sql = "SELECT post_time, poster_id FROM posts 
+                        WHERE forum_id = $id
+                        AND course_id = $cours_id 
+                            ORDER BY post_time DESC LIMIT 1";
+          break;
+        case 'topic':
+          $sql = "SELECT post_time FROM posts 
+                        WHERE topic_id = $id 
+                        AND course_id = $cours_id     
+                            ORDER BY post_time DESC LIMIT 1";
+          break;
+        case 'user':
+          $sql = "SELECT post_time FROM posts 
+                        WHERE poster_id = $id 
+                        AND course_id = $cours_id 
+                            LIMIT 1";
+          break;
+    }
+    if(!$result = db_query($sql)) {
+        return($langError);
+    }
+    if(!$myrow = mysql_fetch_array($result)) {
+        return($langNoPosts);
+    }
+    if(($type != 'user') && ($type != 'time_fix')) {
+        $val = sprintf("%s <br> %s %s", $myrow["post_time"], $langFrom2, $myrow["username"]);
+    } else {
+        $val = $myrow["post_time"];
+    }
+    return($val);
 }
 
 
@@ -112,16 +113,22 @@ function get_last_post($id, $thedb, $type) {
  * Checks if a forum or a topic exists in the database. Used to prevent
  * users from simply editing the URL to post to a non-existant forum or topic
  */
-function does_exists($id, $thedb, $type) {
+function does_exists($id, $type) {
+        
+        global $cours_id;
 	switch($type) {
 		case 'forum':
-			$sql = "SELECT forum_id FROM forums WHERE forum_id = '$id'";
+			$sql = "SELECT forum_id FROM forums 
+                                WHERE forum_id = $id 
+                                AND course_id = $cours_id";
 		break;
 		case 'topic':
-			$sql = "SELECT topic_id FROM topics WHERE topic_id = '$id'";
+			$sql = "SELECT topic_id FROM topics 
+                                WHERE topic_id = $id 
+                                AND course_id = $cours_id";
 		break;
 	}
-	if(!$result = db_query($sql, $thedb))
+	if(!$result = db_query($sql))
 		return(0);
 	if(!$myrow = mysql_fetch_array($result)) 
 		return(0);
@@ -739,93 +746,87 @@ function undo_htmlspecialchars($input) {
 /*
  * Check if this is the first post in a topic. Used in editpost.php
  */
-function is_first_post($topic_id, $post_id, $thedb) {
-   $sql = "SELECT post_id FROM posts WHERE topic_id = '$topic_id' ORDER BY post_id LIMIT 1";
-   if(!$r = db_query($sql, $thedb))
-     return(0);
-   if(!$m = mysql_fetch_array($r))
-     return(0);
-   if($m["post_id"] == $post_id)
-     return(1);
-   else
-     return(0);
+
+function is_first_post($topic_id, $post_id) {
+    
+    global $cours_id;
+    
+    $sql = "SELECT post_id FROM posts 
+                WHERE topic_id = $topic_id 
+                    AND course_id = $cours_id 
+                    ORDER BY post_id LIMIT 1";
+    if(!$r = db_query($sql)) {
+        return(0);
+    }
+    if(!$m = mysql_fetch_array($r)) {
+        return(0);
+    }
+    if($m["post_id"] == $post_id) {
+        return(1);
+    } else {
+        return(0);
+    }
 }
 
-/**
- * Checks if the given userid is allowed to log into the given (private) forumid.
- * If the "is_posting" flag is true, checks if the user is allowed to post to that forum.
- */
-function check_priv_forum_auth($userid, $forumid, $is_posting, $db)
-{
-	$sql = "SELECT count(*) AS user_count FROM forum_access WHERE (user_id = $userid) AND (forum_id = $forumid) ";
-	
-	if ($is_posting)
-	{
-		$sql .= "AND (can_post = 1)";
-	}
-	
-	if (!$result = db_query($sql, $db))
-	{
-		// no good..
-		return FALSE;
-	}
-	
-	if(!$row = mysql_fetch_array($result))
-	{
-		return FALSE;
-	}
-   
-  	if ($row[user_count] <= 0)
-  	{
-  		return FALSE;
-  	}
-  	
-  	return TRUE;
 
-}
 
 function sync($thedb, $id, $type) {
    switch($type) {
    	case 'forum':
-   		$sql = "SELECT max(post_id) AS last_post FROM posts WHERE forum_id = $id";
-   		$result = db_query($sql, $thedb);
+   		$sql = "SELECT MAX(post_id) AS last_post FROM posts 
+                            WHERE forum_id = $id
+                            AND course_id = $cours_id";
+   		$result = db_query($sql);
    		if($row = mysql_fetch_array($result)) {
    			$last_post = $row["last_post"];
    		}
-   		$sql = "SELECT count(post_id) AS total FROM posts WHERE forum_id = $id";
-   		$result = db_query($sql, $thedb);
+   		$sql = "SELECT COUNT(post_id) AS total FROM posts 
+                                WHERE forum_id = $id
+                                AND course_id = $cours_id";
+   		$result = db_query($sql);
    		if($row = mysql_fetch_array($result)) {
    			$total_posts = $row["total"];
    		}
-   		$sql = "SELECT count(topic_id) AS total FROM topics WHERE forum_id = $id";
-   		$result = db_query($sql, $thedb);
+   		$sql = "SELECT COUNT(topic_id) AS total FROM topics 
+                            WHERE forum_id = $id
+                            AND course_id = $cours_id";
+   		$result = db_query($sql);
    		if($row = mysql_fetch_array($result)) {
    			$total_topics = $row["total"];
    		}
    		$sql = "UPDATE forums
-			SET forum_last_post_id = '$last_post', forum_posts = $total_posts, forum_topics = $total_topics
-			WHERE forum_id = $id";
-   		$result = db_query($sql, $thedb);
+			SET forum_last_post_id = $last_post, 
+                            forum_posts = $total_posts, 
+                            forum_topics = $total_topics
+                        WHERE forum_id = $id
+                        AND course_id = $cours_id";
+   		$result = db_query($sql);
    	break;
 
    	case 'topic':
-   		$sql = "SELECT max(post_id) AS last_post FROM posts WHERE topic_id = $id";
-		$result = db_query($sql, $thedb);
+   		$sql = "SELECT MAX(post_id) AS last_post FROM posts 
+                            WHERE topic_id = $id
+                            AND course_id = $cours_id";
+		$result = db_query($sql);
    		if($row = mysql_fetch_array($result)) {
    			$last_post = $row["last_post"];
    		}
-   		$sql = "SELECT count(post_id) AS total FROM posts WHERE topic_id = $id";
-   		$result = db_query($sql, $thedb);
+   		$sql = "SELECT COUNT(post_id) AS total FROM posts 
+                            WHERE topic_id = $id
+                            AND course_id = $cours_id";
+   		$result = db_query($sql);
    		if($row = mysql_fetch_array($result)) {
    			$total_posts = $row["total"];
    		}
    		$total_posts -= 1;
-   		$sql = "UPDATE topics SET topic_replies = $total_posts, topic_last_post_id = $last_post
-			WHERE topic_id = $id";
-   		$result = db_query($sql, $thedb);
+   		$sql = "UPDATE topics SET topic_replies = $total_posts, 
+                            topic_last_post_id = $last_post
+			WHERE topic_id = $id
+                        AND course_id = $cours_id";
+   		$result = db_query($sql);
    	break;
    }
-   return(TRUE);
+   return;
 }
 
 /**
@@ -872,9 +873,11 @@ function toggle_icon($notify) {
 // returns a category id from a forum id
 function forum_category($id) {
 	
-	global $currentCourseID;
+	global $cours_id;
 	
-	if ($r = mysql_fetch_row(db_query("SELECT cat_id FROM forums WHERE forum_id=$id", $currentCourseID))) {
+	if ($r = mysql_fetch_row(db_query("SELECT cat_id FROM forums 
+                    WHERE forum_id = $id 
+                    AND course_id = $cours_id"))) {
 		return $r[0];
 	} else {
 		return FALSE;
@@ -884,9 +887,11 @@ function forum_category($id) {
 // returns a category name from a category id
 function category_name($id) {
 	
-	global $currentCourseID;
+	global $cours_id;
 	
-	if ($r = mysql_fetch_row(db_query("SELECT cat_title FROM catagories WHERE cat_id=$id", $currentCourseID))) {
+	if ($r = mysql_fetch_row(db_query("SELECT cat_title FROM categories 
+                    WHERE cat_id = $id
+                    AND course_id = $cours_id"))) {
 		return $r[0];
 	} else {
 		return FALSE;

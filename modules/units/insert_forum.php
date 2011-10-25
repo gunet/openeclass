@@ -22,10 +22,10 @@
 
 function list_forums()
 {
-        global $id, $currentCourseID, $tool_content, $urlServer,
+        global $id, $tool_content, $urlServer, $cours_id,
                $langComments, $langAddModulesButton, $langChoice, $langNoForums, $langForums, $code_cours;
 
-        $result = db_query("SELECT * FROM forums WHERE cat_id <> 1", $currentCourseID);
+        $result = db_query("SELECT * FROM forums WHERE course_id = $cours_id");
         $foruminfo = array();
         while($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
                 $foruminfo[] = array(
@@ -53,7 +53,9 @@ function list_forums()
 			$tool_content .= "\n    <td>$entry[comment]</td>";
 			$tool_content .= "\n    <td class='center'><input type='checkbox' name='forum[]' value='$entry[id]' /></td>";
 			$tool_content .= "\n  </tr>";
-			$r = db_query("SELECT * FROM topics WHERE forum_id = '$entry[id]'", $currentCourseID);
+			$r = db_query("SELECT * FROM topics 
+                                        WHERE forum_id = '$entry[id]' 
+                                        AND course_id = $cours_id");
 			if (mysql_num_rows($r) > 0) { // if forum topics found 
 				$topicinfo = array();
 				while($topicrow = mysql_fetch_array($r, MYSQL_ASSOC)) {

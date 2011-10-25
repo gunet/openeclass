@@ -18,38 +18,6 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-
-/*===========================================================================
-phpbb/viewforum.php
-* @version $Id$
-@last update: 2006-07-23 by Artemios G. Voyiatzis
-@authors list: Artemios G. Voyiatzis <bogart@upnet.gr>
-
-based on Claroline version 1.7 licensed under GPL
-copyright (c) 2001, 2006 Universite catholique de Louvain (UCL)
-
-Claroline authors: Piraux Sebastien <pir@cerdecam.be>
-Lederer Guillaume <led@cerdecam.be>
-
-based on phpBB version 1.4.1 licensed under GPL
-copyright (c) 2001, The phpBB Group
-==============================================================================
-@Description: This module implements a per course forum for supporting
-discussions between teachers and students or group of students.
-It is a heavily modified adaptation of phpBB for (initially) Claroline
-and (later) eclass. In the future, a new forum should be developed.
-Currently we use only a fraction of phpBB tables and functionality
-(viewforum, viewtopic, post_reply, newtopic); the time cost is
-enormous for both core phpBB code upgrades and migration from an
-existing (phpBB-based) to a new eclass forum :-(
-
-@Comments:
-
-@todo:
-==============================================================================
-*/
-
-
 $require_current_course = TRUE;
 $require_login = TRUE;
 $require_help = TRUE;
@@ -105,17 +73,19 @@ if ($can_post) {
 * Retrieve and present data from course's forum
 */
 
-$sql = "SELECT f.forum_type, f.forum_name
-	FROM forums f
-	WHERE forum_id = $forum_id";
+$sql = "SELECT f.forum_type, f.forum_name FROM forums f
+            WHERE forum_id = $forum_id 
+            AND course_id = $cours_id";
 
-$result = db_query($sql, $currentCourseID);
+$result = db_query($sql);
 $myrow = mysql_fetch_array($result);
  
 $forum_name = own_stripslashes($myrow["forum_name"]);
 $nameTools = $forum_name;
 
-$topic_count = mysql_fetch_row(db_query("SELECT COUNT(*) FROM topics WHERE forum_id = $forum_id"));
+$topic_count = mysql_fetch_row(db_query("SELECT COUNT(*) FROM topics
+                WHERE forum_id = $forum_id
+                AND course_id = $cours_id"));
 $total_topics = $topic_count[0];
 
 if ($total_topics > $topics_per_page) { 
@@ -167,19 +137,25 @@ if (($is_editor) and isset($_GET['topicdel'])) {
 	if (isset($_GET['topic_id'])) {
 		$topic_id = intval($_GET['topic_id']);
 	}
-	$number_of_posts = get_total_posts($topic_id, $currentCourseID, "topic");
-	$sql = db_query("SELECT posts_text.post_id AS post_id FROM posts_text, posts
-		WHERE posts.post_id = posts_text.post_id
-		AND posts.topic_id = $topic_id", $currentCourseID);
+	
+	$sql = db_query("SELECT post_id FROM posts
+                    WHERE topic_id = $topic_id 
+                    AND forum_id = $forum_id
+                    AND course_id = $cours_id");
+        
 	while ($r = mysql_fetch_array($sql)) {
-		db_query("DELETE FROM posts_text WHERE post_id = $r[post_id]");
+		db_query("DELETE FROM posts WHERE post_id = $r[post_id]");
 	}
-	db_query("DELETE FROM posts WHERE topic_id = $topic_id", $currentCourseID);
-	db_query("DELETE FROM topics WHERE topic_id = $topic_id", $currentCourseID);
-	db_query("UPDATE forums SET forum_topics = forum_topics-1
-		 WHERE forum_id = $forum_id", $currentCourseID);
-	db_query("UPDATE forums SET forum_posts = forum_posts-$number_of_posts
-		 WHERE forum_id = $forum_id", $currentCourseID);
+	db_query("DELETE FROM topics 
+                    WHERE topic_id = $topic_id 
+                    AND forum_id = $forum_id 
+                    AND course_id = $cours_id");
+        
+        $number_of_posts = get_total_posts($topic_id, "topic");
+	db_query("UPDATE forums SET forum_topics = forum_topics-1,
+                                forum_posts = forum_posts-$number_of_posts        
+                            WHERE forum_id = $forum_id 
+                                AND course_id = $cours_id");
 }
 
 
@@ -199,18 +175,15 @@ if(isset($_GET['topicnotify'])) {
 	}
 }
 
-$sql = "SELECT t.*, p.post_time, p.nom AS nom1, p.prenom AS prenom1
+$sql = "SELECT t.*, p.post_time, p.poster_id AS poster_id
         FROM topics t
         LEFT JOIN posts p ON t.topic_last_post_id = p.post_id
-        WHERE t.forum_id = $forum_id 
+        WHERE t.forum_id = $forum_id AND t.course_id = $cours_id
         ORDER BY topic_time DESC LIMIT $first_topic, $topics_per_page";
 
-$result = db_query($sql, $currentCourseID);
-
-
+$result = db_query($sql);
 
 if (mysql_num_rows($result) > 0) { // topics found
-	// header
 	$tool_content .= "
 	<table width='100%' class='tbl_alt'>
 	<tr>
@@ -223,10 +196,10 @@ if (mysql_num_rows($result) > 0) { // topics found
 	</tr>";
         $i=0;
 	while($myrow = mysql_fetch_array($result)) {
-                if ($i%2==1) {
-                   $tool_content .= "\n     <tr class=\"odd\">";
+                if ($i%2 == 1) {
+                   $tool_content .= "<tr class='odd'>";
                 } else {
-                   $tool_content .= "\n     <tr class=\"even\">";
+                   $tool_content .= "<tr class='even'>";
                 }
 		$replies = 1 + $myrow['topic_replies'];
                 $last_post = $myrow['post_time'];
@@ -250,11 +223,8 @@ if (mysql_num_rows($result) > 0) { // topics found
 			} else {
 				$image = $newposts_image;
 			}
-			if ($myrow["topic_status"] == 1) {
-				$image = $locked_image;
-			}
 		}
-		$tool_content .= "\n       <td width='1'><img src='$image' /></td>";
+		$tool_content .= "\n<td width='1'><img src='$image' /></td>";
 		$topic_title = own_stripslashes($myrow["topic_title"]);
                 $pagination = '';
                 $topiclink = "viewtopic.php?course=$code_cours&amp;topic=$topic_id&amp;forum=$forum_id";
@@ -272,9 +242,9 @@ if (mysql_num_rows($result) > 0) { // topics found
 		}
 		$tool_content .= "\n<td><a href='$topiclink'><b>$topic_title</b></a>$pagination</td>";
 		$tool_content .= "\n<td class='center'>$replies</td>";
-		$tool_content .= "\n<td class='center'>$myrow[prenom] $myrow[nom]</td>";
+		$tool_content .= "\n<td class='center'>".uid_to_name($myrow['poster_id'])."</td>";
 		$tool_content .= "\n<td class='center'>$myrow[topic_views]</td>";
-		$tool_content .= "\n<td class='center'>$myrow[prenom1] $myrow[nom1]<br />$last_post</td>";
+		$tool_content .= "\n<td class='center'>".uid_to_name($myrow['poster_id'])."<br />$last_post</td>";
 		list($topic_action_notify) = mysql_fetch_row(db_query("SELECT notify_sent FROM forum_notify 
 			WHERE user_id = $uid AND topic_id = $myrow[topic_id] AND course_id = $cours_id", $mysqlMainDb));
 		if (!isset($topic_action_notify)) {

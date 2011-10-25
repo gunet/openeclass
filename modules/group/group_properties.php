@@ -22,7 +22,7 @@
  * Groups Component
  * 
  * @author Evelthon Prodromou <eprodromou@upnet.gr>
- * @version $Id$
+ * @version $Id: group_properties.php,v 1.24 2011-05-16 12:36:35 adia Exp $
  * 
  * @abstract This module is responsible for the user groups of each lesson
  *
@@ -47,7 +47,7 @@ $checked['documents'] = $documents? ' checked="1"': '';
 $checked['private_forum_yes'] = $private_forum? ' checked="1"': '';
 $checked['private_forum_no'] = $private_forum? '': ' checked="1"';
 
-	$tool_content = "
+$tool_content = "
 <form method='post' action='group.php?course=$code_cours'>
     <fieldset>
     <legend>$langGroupProperties / $langTools</legend>
@@ -91,4 +91,5 @@ $checked['private_forum_no'] = $private_forum? '': ' checked="1"';
     </table>
     </fieldset>    
     </form>";
-        draw($tool_content, 2);
+    draw($tool_content, 2);
+
