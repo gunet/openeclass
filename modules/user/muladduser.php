@@ -29,87 +29,100 @@ include '../../include/baseTheme.php';
 $nameTools = $langAddManyUsers;
 $navigation[] = array ("url"=>"user.php?course=$code_cours", "name"=> $langAdminUsers);
 
-$tool_content .= "
-<form method='post' action='".$_SERVER['PHP_SELF']."?course=$code_cours' enctype='multipart/form-data'>";
-$tool_content .= "
-<fieldset>
-<legend>$langUsersData</legend>
-<table width='100%' class='tbl'>
-<tr>
-  <th width='120' class='left'>$langAskUserFile:</th>
-  <td><input type='file' name='users_file'></td>
-  <td class='smaller'>$langAskManyUsers</td>
-</tr>
-<tr>
-  <th colspan='3' class='right'><input type='submit' value='$langAdd'></th>
-  </tr>
-
-</table>
-
-</fieldset>
-</form>
-<p class='noteit'>$langAskManyUsers1<br />$langAskManyUsers2</p>";
-
 mysql_select_db($mysqlMainDb);
 
-if (isset($_FILES['users_file']) && is_uploaded_file($_FILES['users_file']['tmp_name'])) {
-    $tmpusers = trim($_FILES['users_file']['tmp_name']);
-    $tool_content .= "<table width=100% class='tbl_alt'>
-        <tr><th>$langUsers</th><th>$langResult</th>";
-    $f = fopen($tmpusers,"r");
-    while (!feof($f)) {
-        $uname = trim(fgets($f,1024));
-        if (!$uname) continue;
-        if (!check_uname_line($uname)) {
-                $tool_content .= "<tr><td colspan=\"2\"><div class='alert1'>$langFileNotAllowed</div></td></tr>\n";
-                break;
+if (isset($_POST['submit'])) {
+        $ok = array();
+        $not_found = array();
+        $existing = array();
+        $field = ($_POST['type'] == 'am')? 'am': 'username';
+        $line = strtok($_POST['user_info'], "\n");
+        while ($line !== false) {
+                $userid = finduser(canonicalize_whitespace($line), $field);
+                if (!$userid) {
+                        $not_found[] = $line;
+                } else {
+                        if (adduser($userid, $cours_id)) {
+                                $ok[] = $userid;
+                        } else {
+                                $existing[] = $userid;
+                        }
+                }
+                $line = strtok("\n");
         }
-        $result = adduser($uname, $cours_id);
-        $tool_content .= "<tr><td>$uname</td><td>";
-        if ($result == -1) {
-                $tool_content .= $langUserNoExist;
-        } elseif ($result == -2) {
-                $tool_content .= $langUserAlready;
-        } else {
-                $tool_content .= $langTheU.$langAdded;
+        
+        if (count($not_found)) {
+            $tool_content .= "<p class='alert1'>$langUsersNotExist<br>";
+            foreach ($not_found as $uname) {
+                $tool_content .= q($uname) . '<br>';
+            }
+            $tool_content .= '</p>';
         }
-        $tool_content .= "</td></tr>\n";
-    }
-    $tool_content .= "</table>\n";
-    fclose($f);
+
+        if (count($ok)) {
+            $tool_content .= "<p class='success'>$langUsersRegistered<br>";
+            foreach ($ok as $userid) {
+                $tool_content .= display_user($userid) . '<br>';
+            }
+            $tool_content .= '</p>';
+        }
+
+        if (count($existing)) {
+            $tool_content .= "<p class='noteit'>$langUsersAlreadyRegistered<br>";
+            foreach ($existing as $userid) {
+                $tool_content .= display_user($userid) . '<br>';
+            }
+            $tool_content .= '</p>';
+        }
 }
+
+$tool_content .= "<form method='post' action='$_SERVER[PHP_SELF]?course=$code_cours'>
+        <fieldset>
+           <legend>$langUsersData</legend>
+           <table width='100%' class='tbl'> 
+               <tr>
+                   <td><input type='radio' name='type' value='uname' checked>&nbsp;$langUsername<br>
+                       <input type='radio' name='type' value='am'>&nbsp;$langAm
+                   </td>
+               </tr>
+               <tr>
+                   <td>
+                       <textarea class='auth_input' name='user_info' rows='10' cols='30'></textarea>
+                   </td>
+               </tr>
+               <tr>
+                   <th class='right'>
+                       <input type='submit' name='submit' value='$langAdd'>
+                   </th>
+               </tr>
+           </table>
+        </fieldset>
+    </form>
+    <p class='noteit'>$langAskManyUsers</p>";
 
 draw($tool_content, 2);
 
-// function for adding users
-
-// returns -1 (error - user doesnt exist)
-// returns -2 (error - user is already in the course)
-// returns userid (yes  everything is ok )
-
-function adduser($user, $cid) {
-	$result = db_query("SELECT user_id FROM user WHERE username='".mysql_escape_string($user)."'");
-	if (!mysql_num_rows($result))
-	return -1;
-
+function finduser($user, $field) {
+	$result = db_query("SELECT user_id FROM user WHERE $field=".autoquote($user));
+	if (!mysql_num_rows($result)) {
+                return false;
+        }
 	list($userid) = mysql_fetch_array($result);
-
-	$result = db_query("SELECT * from cours_user WHERE user_id = $userid AND cours_id = $cid");
-	if (mysql_num_rows($result) > 0)
-	return -2;
-
-	$result = db_query("INSERT INTO cours_user (user_id, cours_id, statut, reg_date)
-			VALUES ($userid, $cid, '5', CURDATE())");
-	return $userid;
+        return $userid;
 }
 
-// function for checking file
-function check_uname_line($uname)
-{
-	if (preg_match("/[^a-zA-Z0-9.-_�-��-�-]/", $uname)) {
-		return FALSE;
-	} else {
-		return 	TRUE;
-	}
+// function for adding users
 
+// returns false (error - user is already in the course)
+// returns true (yes everything is ok )
+
+function adduser($userid, $cid) {
+	$result = db_query("SELECT * from cours_user WHERE user_id = $userid AND cours_id = $cid");
+	if (mysql_num_rows($result) > 0) {
+                return false;
+        }
+
+	$result = db_query("INSERT INTO cours_user (user_id, cours_id, statut, reg_date)
+			VALUES ($userid, $cid, 5, CURDATE())");
+	return true;
 }
