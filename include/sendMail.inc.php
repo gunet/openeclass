@@ -75,9 +75,17 @@ function send_mail_multipart($from, $from_address, $to, $to_address,
                 $bcc = 'Bcc: ' . join(', ', $to_address) . "\n";
         } else {
                 if (empty($to)) {
+                     if (is_array($to_address)) {
                         $to_header = $to_address[0];
+                     } else {
+                        $to_header = $to_address;
+                     }
                 } else {
+                     if (is_array($to_address)) {
                         $to_header = qencode($to, $charset) . " <{$to_address[0]}>";
+                     } else {
+                        $to_header = qencode($to, $charset) . " <$to_address>";
+                     }
                 }
                 $bcc = '';
         }
