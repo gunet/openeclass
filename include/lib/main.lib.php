@@ -781,17 +781,26 @@ function my_basename($path) {
 }
 
 
-// transform the date format from "date year-month-day" to "day-month-year"
-function greek_format($date) {
-
-	return implode("-",array_reverse(explode("-",$date)));
+/* transform the date format from "year-month-day" to "day-month-year"
+ * if argument time is defined then
+ * transform date time format from "year-month-day time" to "to "day-month-year time"
+ */
+function greek_format($date, $time = FALSE) {
+        
+        if ($time) {                
+        	$datetime = explode(" ", $date);                
+                $new_date = implode("-",array_reverse(explode("-",$datetime[0])));                
+                return $new_date." ".$datetime[1];
+        } else {
+                return implode("-",array_reverse(explode("-",$date)));
+        }
 }
 
 // format the date according to language
-function nice_format($date) {
-
+function nice_format($date, $time = FALSE) {
+               
 	if ($GLOBALS['language'] == 'greek')
-		return greek_format($date);
+		return greek_format($date, $time);
 	else
 		return $date;
 
@@ -1229,10 +1238,10 @@ function append_units($amount, $singular, $plural)
 	}
 }
 
-
+// Convert $sec to days, hours, minutes, seconds;
 function format_time_duration($sec)
 {
-        global $langsecond, $langseconds, $langminute, $langminutes, $langhour, $langhours;
+        global $langsecond, $langseconds, $langminute, $langminutes, $langhour, $langhours, $langDay, $langDays;
 
         if ($sec < 60) {
                 return append_units($sec, $langsecond, $langseconds);
@@ -1241,15 +1250,22 @@ function format_time_duration($sec)
         $sec = $sec % 60;
         if ($min < 2) {
                 return append_units($min, $langminute, $langminutes) .
-                       (($sec == 0)? '': (', ' . append_units($sec, $langsecond, $langseconds)));
+                       (($sec == 0)? '': (' ' . append_units($sec, $langsecond, $langseconds)));
         }
         if ($min < 60) {
                 return append_units($min, $langminute, $langminutes);
-        }
+        }        
         $hour = floor($min / 60);
         $min = $min % 60;
-        return append_units($hour, $langhour, $langhours) .
-               (($min == 0)? '': (', ' . append_units($min, $langminute, $langminutes)));
+        if ($hour < 24) {
+                append_units($hour, $langhour, $langhours) .
+               (($min == 0)? '': (' ' . append_units($min, $langminute, $langminutes)));
+        }
+        $day = floor($hour / 24);                
+        $hour = $hour % 24;
+        return (($day == 0)? '': (' ' . append_units($day, $langDay, $langDays))) .
+                (($hour == 0)? '': (' ' . append_units($hour, $langhour, $langhours))) .                 
+                (($min == 0)? '': (' ' . append_units($min, $langminute, $langminutes)));
 }
 
 // Return the URL for a video found in $table (video or videolinks)

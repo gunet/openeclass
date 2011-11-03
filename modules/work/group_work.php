@@ -70,7 +70,7 @@ function show_assignments()
 
 	$res = db_query("SELECT *, (TO_DAYS(deadline) - TO_DAYS(NOW())) AS days
 		FROM `$currentCourseID`.assignments");
-
+        
 	if (mysql_num_rows($res) == 0) {
 		$tool_content .=  $langNoAssign;
 		return;

@@ -250,10 +250,10 @@ function submit_work($id)
                 } else { //user NOT guest
                         if(isset($_SESSION['status']) && isset($_SESSION['status'][$_SESSION["dbname"]])) {
                                 //user is registered to this lesson
-                                $res = db_query("SELECT (TO_DAYS(deadline) - TO_DAYS(NOW())) AS days
-                                        FROM assignments WHERE id = '$id'");
+                                $res = db_query("SELECT CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time                                       
+                                                FROM assignments WHERE id = $id");
                                 $row = mysql_fetch_array($res);
-                                if ($row['days'] < 0) {
+                                if ($row['time'] < 0) {
                                         $submit_ok = FALSE; //after assignment deadline
                                 } else {
                                         $submit_ok = TRUE; //before deadline
@@ -375,33 +375,6 @@ function new_assignment()
   	$tool_content .= "\n      <p align='right'><a href='$_SERVER[PHP_SELF]?course=$code_cours'>$langBack</a></p>";
 }
 
-
-function date_form($day, $month, $year)
-{
-	global $tool_content, $langMonthNames;
-	$tool_content .=  "<select name='fday'>\n";
-	for ($i = 1; $i <= 31; $i++) {
-		if ($i == $day)
-		$tool_content .= "<option value='$i' selected='1'>$i</option>\n";
-		else
-		$tool_content .= "<option value='$i'>$i</option>\n";
-	}
-	$tool_content .= "</select><select name='fmonth'>\n";
-	for ($i = 1; $i <= 12; $i++) {
-		if ($i == $month)
-		$tool_content .= "<option value='$i' selected='1'>".$langMonthNames['long'][$i-1]."</option>\n";
-		else
-		$tool_content .= "<option value='$i'>".$langMonthNames['long'][$i-1]."</option>\n";
-	}
-	$tool_content .= "</select><select name='fyear'>\n";
-	for ($i = date("Y"); $i <= date("Y") + 1; $i++) {
-		if ($i == $year)
-		$tool_content .= "<option value='$i' selected='1'>$i</option>\n";
-		else
-		$tool_content .= "<option value='$i'>$i</option>\n";
-	}
-	$tool_content .= "</select>\n";
-}
 
 //form for editing
 function show_edit_assignment($id)
@@ -527,16 +500,17 @@ function show_student_assignment($id)
                $currentCourseID, $cours_id, $code_cours;
 
         $user_group_info = user_group_info($uid, $cours_id);
-
-	$res = db_query("SELECT *, (TO_DAYS(deadline) - TO_DAYS(NOW())) AS days
-                                FROM `$currentCourseID`.assignments WHERE id = '$id'");
+        $res = db_query("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time
+                                 FROM `$currentCourseID`.assignments 
+                                 WHERE id = $id");
+        	
 	$row = mysql_fetch_array($res);
 
 	$nav[] = array("url"=>"$_SERVER[PHP_SELF]", "name"=> $langWorks);
 
 	assignment_details($id, $row);
 
-	if ($row['days'] < 0) {
+	if ($row['time'] < 0) {
 		$submit_ok = FALSE;
 	} else {
 		$submit_ok = TRUE;
@@ -560,9 +534,8 @@ function show_student_assignment($id)
 	if ($submit_ok) {
 		show_submission_form($id, $user_group_info);
 	}
-	$tool_content .= "
-    <br/>
-    <p align=\"right\"><a href='$_SERVER[PHP_SELF]?course=$code_cours'>$langBack</a></p>";
+	$tool_content .= "<br/>
+            <p align='right'><a href='$_SERVER[PHP_SELF]?course=$code_cours'>$langBack</a></p>";
 }
 
 
@@ -622,7 +595,7 @@ function show_submission_form($id, $user_group_info)
 function assignment_details($id, $row, $message = null)
 {
 	global $tool_content, $m, $langDaysLeft, $langDays, $langWEndDeadline, $langNEndDeadLine, $langNEndDeadline, $langEndDeadline;
-	global $langDelAssign, $is_editor, $langZipDownload, $langSaved, $code_cours, $langGraphResults;
+	global $langDelAssign, $is_editor, $langZipDownload, $langSaved, $code_cours, $langGraphResults, $themeimg;
 
 	if ($is_editor) {
             $tool_content .= "
@@ -638,13 +611,19 @@ function assignment_details($id, $row, $message = null)
 
 	if (isset($message)) {
 		$tool_content .="
-                <p class=\"success\">$langSaved</p>
-                ";
-            }
+                <p class=\"success\">$langSaved</p>";
+        }
 	$tool_content .= "
         <fieldset>
-        <legend>".$m['WorkInfo']."</legend>
-        <table width=\"100%\" class=\"tbl\">
+        <legend>".$m['WorkInfo'];
+        if ($is_editor) {
+                $tool_content .= "&nbsp;
+                 <a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;id=$id&amp;choice=edit'>
+                 <img src='$themeimg/edit.png' alt='$m[edit]' />
+                 </a>";
+        }
+        $tool_content .= "</legend>
+        <table class='tbl'>
         <tr>
           <th width='150'>$m[title]:</th>
           <td>$row[title]</td>
@@ -656,32 +635,27 @@ function assignment_details($id, $row, $message = null)
         </tr>";
 	if (!empty($row['comments'])) {
 		$tool_content .= "
-        <tr>
-          <th class='left'>$m[comments]:</th>
-          <td>$row[comments]</td>
-        </tr>";
+                <tr>
+                  <th class='left'>$m[comments]:</th>
+                  <td>$row[comments]</td>
+                </tr>";
 	}
 	$tool_content .= "
         <tr>
           <th>$m[start_date]:</th>
-          <td>".nice_format($row['submission_date'])."</td>
+          <td>".nice_format($row['submission_date'], true)."</td>
         </tr>
         <tr>
           <th valign='top'>$m[deadline]:</th>
-          <td>".nice_format($row['deadline'])." <br />";
-	if ($row['days'] > 1) {
-		$tool_content .= "<span class=\"not_expired\">$langDaysLeft $row[days] $langDays</span></td>
-        </tr>";
-	} elseif ($row['days'] < 0) {
-		$tool_content .= "<span class=\"expired\">$langEndDeadline</span></td>
-        </tr>";
-	} elseif ($row['days'] == 1) {
-		$tool_content .= "<span class=\"expired_today\">$langWEndDeadline !</span></td>
-        </tr>";
-	} else {
-		$tool_content .= "<span class=\"expired_today\"><b>$langNEndDeadLine</b> !!!</span></td>
-        </tr>";
-	}
+          <td>".nice_format($row['deadline'], true)." <br />";        
+                
+	if ($row['time'] > 0) {
+		$tool_content .= "<span>($langDaysLeft ".format_time_duration($row['time']).")</span></td>
+                </tr>";
+	} else {                                
+		$tool_content .= "<span class='expired'>$langEndDeadline</span></td>
+                </tr>";
+	} 
 	$tool_content .= "
         <tr>
           <th>$m[group_or_user]:</th>
@@ -724,7 +698,7 @@ function sort_link($title, $opt, $attrib = '')
 
 
 // show assignment - prof view only
-// the optional message appears insted of assignment details
+// the optional message appears instead of assignment details
 function show_assignment($id, $message = false, $display_graph_results = false)
 {
         global $tool_content, $m, $langBack, $langNoSubmissions, $langSubmissions,
@@ -732,9 +706,11 @@ function show_assignment($id, $message = false, $display_graph_results = false)
                $langDays, $langDaysLeft, $langGradeOk, $currentCourseID, $webDir, $urlServer,
                $nameTools, $langGraphResults, $m, $code_cours, $themeimg;
 
-	$res = db_query("SELECT *, (TO_DAYS(deadline) - TO_DAYS(NOW())) AS days FROM assignments WHERE id = '$id'");
+        $res = db_query("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time
+                                 FROM assignments	
+                                 WHERE id = $id");
 	$row = mysql_fetch_array($res);
-
+        
 	$nav[] = array("url"=>"$_SERVER[PHP_SELF]", "name"=> $langWorks);
 	if ($message) {
 		assignment_details($id, $row, $message);
@@ -846,7 +822,7 @@ function show_assignment($id, $message = false, $display_graph_results = false)
 		    <td>${uid_2_name}</td>
 		    <td width='85'>" . q($stud_am[0]) . "</td>
 		    <td width='180'><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;get=$row[id]'>" . q($row['file_name']) . "</a></td>
-		    <td width='100'>".nice_format($row['submission_date'])."</td>
+		    <td width='100'>".nice_format($row['submission_date'], TRUE)."</td>
 		    <td width='5'>
 		       <div align='center'><input type='text' value='{$row['grade']}' maxlength='3' size='3' name='grades[{$row['id']}]'></div>
 		    </td>
@@ -918,7 +894,7 @@ function show_assignment($id, $message = false, $display_graph_results = false)
 }
 
 
-// show assignment - student view only
+// show all the assignments - student view only
 function show_student_assignments()
 {
         global $tool_content, $m, $uid, $cours_id, $currentCourseID,
@@ -926,14 +902,15 @@ function show_student_assignments()
                $code_cours, $themeimg;
 
         $gids = user_group_info($uid, $cours_id);
-
-        $result = db_query("SELECT *, (TO_DAYS(deadline) - TO_DAYS(NOW())) AS days
+        
+        
+        $result = db_query("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time                                                                 
                                    FROM `$currentCourseID`.assignments
-                                   WHERE active = '1' ORDER BY submission_date");
-
+                                           WHERE active = '1' 
+                                           ORDER BY submission_date");
+        
         if (mysql_num_rows($result)) {
-                $tool_content .= "
-                                  <table class='tbl_alt' width='100%'>
+                $tool_content .= "<table class='tbl_alt' width='100%'>
                                   <tr>
                                       <th colspan='2'>$m[title]</th>
                                       <th class='center'>$m[deadline]</th>
@@ -953,18 +930,13 @@ function show_student_assignments()
                         $tool_content .= "
                                     <td width='16'><img src='$themeimg/arrow.png' title='bullet' /></td>
                                     <td><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;id=$row[id]'>$title_temp</a></td>
-                                    <td width='150' align='center'>".nice_format($row['deadline']);
-                        if ($row['days'] > 1) {
-                                $tool_content .= " (<span class='not_expired'>$m[in]&nbsp;$row[days]&nbsp;$langDays</span>";
-                        } elseif ($row['days'] < 0) {
-                                $tool_content .= " (<span class='expired'>$m[expired]</span>)";
-                        } elseif ($row['days'] == 1) {
-                                $tool_content .= " (<span class='expired_today'>$m[tomorrow]</span>)";
+                                    <td width='150' align='center'>".nice_format($row['deadline'], TRUE);
+                        if ($row['time'] > 0) {
+                                $tool_content .= " (<span>$langDaysLeft".format_time_duration($row['time']).")</span>";
                         } else {
-                                $tool_content .= " (<span class='expired_today'><b>$m[today]</b></span>)";
+                                $tool_content .= " (<span class='expired'>$m[expired]</span>)";
                         }
-                        $tool_content .= "</td>
-                                    <td width='170' align='center'>";
+                        $tool_content .= "</td><td width='170' align='center'>";
                         
                         if ($submission = find_submissions(is_group_assignment($row['id']), $uid, $row['id'], $gids)) {
                             foreach ($submission as $sub) {
@@ -1012,25 +984,21 @@ function show_assignments($message = null)
 	}
 
 	$tool_content .="
-    <div id='operations_container'>
-      <ul id='opslist'>
-        <li><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;add=1'>$langNewAssign</a></li>
-      </ul>
-    </div>";
+            <div id='operations_container'>
+              <ul id='opslist'>
+                <li><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;add=1'>$langNewAssign</a></li>
+              </ul>
+            </div>";
 
-
-	if (mysql_num_rows($result)) {
-
-		$tool_content .= <<<cData
-
-    <table width="100%" class="tbl_alt">
-    <tr>
-      <th colspan="2">${m['title']}</th>
-      <th width="130">${m['deadline']}</th>
-      <th width="60">$langCommands</th>
-    </tr>
-cData;
-       $index = 0;
+	if (mysql_num_rows($result)) {                
+		$tool_content .= "
+                    <table width='100%' class='tbl_alt'>
+                    <tr>
+                      <th colspan='2'>$m[title]</th>
+                      <th width='130'>$m[deadline]</th>
+                      <th width='60'>$langCommands</th>
+                    </tr>";
+                $index = 0;
 		while ($row = mysql_fetch_array($result)) {
 			// Check if assignement contains submissions
 			$AssignementId = $row['id'];
@@ -1053,7 +1021,7 @@ cData;
 			$tool_content .= ">";
 			$tool_content .= $row_title = q($row['title']);
 			$tool_content .= "</a></td>
-			  <td class='center'>".nice_format($row['deadline'])."</td>
+			  <td class='center'>".nice_format($row['deadline'], true)."</td>
 			  <td class='right'><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;id=$row[id]&amp;choice=edit'>
 			  <img src='$themeimg/edit.png' alt='$m[edit]' />
 			  </a> <a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;id=$row[id]&amp;choice=do_delete' onClick='return confirmation(\"".addslashes($row_title)."\");'>
@@ -1071,7 +1039,7 @@ cData;
                 }
                 $tool_content .= '</table>';
         } else {
-                $tool_content .= "\n    <p class=\"alert1\">$langNoAssign</p>";
+                $tool_content .= "\n<p class=\"alert1\">$langNoAssign</p>";
         }
 }
 

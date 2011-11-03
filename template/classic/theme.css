@@ -1347,3 +1347,9 @@ dt {
                 display: none;
         }
 }
+
+
+/* --  Work -- */
+.expired {
+        color: red;
+}

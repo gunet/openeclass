@@ -50,13 +50,12 @@ if ($language == 'greek') {
 $jscalendar = new DHTML_Calendar($urlServer.'include/jscalendar/', $lang, 'calendar-blue2', false);
 $local_head = $jscalendar->get_load_files_code();
 
-$u_date_end = strftime('%Y-%m-%d', strtotime('now +2 month'));
-
+$u_date_end = strftime('%Y-%m-%d %H:%M', strtotime('now +2 month'));
 
 $end_cal_Work = $jscalendar->make_input_field(
-           array('showsTime'      => false,
+           array('showsTime'      => true,
                  'showOthers'     => true,
-                 'ifFormat'       => '%Y-%m-%d',
+                 'ifFormat'       => '%Y-%m-%d %H:%M',
                  'timeFormat'     => '24'),
            array('style'       => 'width: 100px; color: #840; font-weight:bold; font-size:10px; background-color: #fff; border: 1px dotted #000; text-align: center',
                  'name'        => 'WorkEnd',
@@ -66,9 +65,9 @@ function getJsDeadline($deadline) {
 	global $language, $lang, $jscalendar, $local_head;
 	
 	$end_cal_Work_db = $jscalendar->make_input_field(
-  	array('showsTime'      => false,
+  	array('showsTime'      => true,
     	'showOthers'     => true,
-      'ifFormat'       => '%Y-%m-%d',
+      'ifFormat'       => '%Y-%m-%d %H:%M',
       'timeFormat'     => '24'),
     array('style'       => 'width: 100px; color: #840; font-weight:bold; font-size:10px; background-color: #fff; border: 1px dotted #000; text-align: center',
     	'name'        => 'WorkEnd',
@@ -76,7 +75,4 @@ function getJsDeadline($deadline) {
 	
 	return $end_cal_Work_db;
 	
-}
-                 
- 
-?>
+}               
