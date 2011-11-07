@@ -304,7 +304,31 @@ function upgrade_course($code, $lang)
 	upgrade_course_2_2($code, $lang);
 	upgrade_course_2_3($code);
 	upgrade_course_2_4($code, $lang);
+        upgrade_course_2_5($code);
 }
+
+function upgrade_course_2_5($code, $extramessage = '') {
+        
+        global $langUpgCourse;
+
+	mysql_select_db($code);
+	echo "<hr><p>$langUpgCourse <b>$code</b> (2.4) $extramessage<br>";
+	flush();
+
+        db_query("ALTER TABLE `assignments` 
+                        CHANGE `deadline` `deadline` DATETIME 
+                        NOT NULL DEFAULT '0000-00-00'");
+        
+        db_query("ALTER TABLE `assignments` 
+                        CHANGE `submission_date` `submission_date` DATETIME 
+                        NOT NULL DEFAULT '0000-00-00'");
+        
+        db_query("ALTER TABLE `assignment_submit` 
+                        CHANGE `submission_date` `submission_date` DATETIME 
+                        NOT NULL DEFAULT '0000-00-00'");
+        
+}
+
 
 function upgrade_course_2_4($code, $lang, $extramessage = '')
 {
