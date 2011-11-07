@@ -208,6 +208,14 @@ if ($is_valid) {
 						$vmail = FALSE;
 					}
 
+					// check if mail address is valid
+					if (!empty($email) and !email_seems_valid($email)) {
+						$tool_content .= "<p class='caution'>$langEmailWrong</p>";
+						user_info_form();
+						draw($tool_content, 0);
+						exit();
+					}
+
                 $registered_at = time();
                 $expires_at = time() + $durationAccount;
                 $authmethods = array('2', '3', '4', '5');
@@ -295,6 +303,15 @@ if ($is_valid) {
 					 else {
 					 	$verified_mail=0;
 					 }
+
+					 // check if mail address is valid
+					 if (!empty($email) and !email_seems_valid($email)) {
+						$tool_content .= "<p class='caution'>$langEmailWrong</p>";
+						user_info_form();
+						draw($tool_content, 0);
+						exit();
+					 }
+
                 // Record user request
                 db_query('INSERT INTO user_request SET
                                  name = ' . autoquote($prenom_form). ',
