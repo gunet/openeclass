@@ -299,7 +299,8 @@ if ($can_upload) {
 	if (isset($_POST['renameTo'])) {
 		db_query("UPDATE document SET filename=" .
                          autoquote(canonicalize_whitespace($_POST['renameTo'])) .
-                         " WHERE $group_sql AND path=" . autoquote($_POST['sourceFile']));
+                         ", date_modified=NOW()
+                          WHERE $group_sql AND path=" . autoquote($_POST['sourceFile']));
 		if (hasMetaData($_POST['sourceFile'], $basedir, $group_sql)) {
 			$q = db_query("UPDATE document SET filename=" .
                                       autoquote($_POST['renameTo'] . '.xml') .
