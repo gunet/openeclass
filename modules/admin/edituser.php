@@ -399,7 +399,10 @@ $tool_content .= "
 			$tool_content .= "<center><br /><b>$langExpireBeforeRegister<br /><br /><a href='edituser.php?u=$u'>$langAgain</a></b><br />";
 		} else {
 			if ($u == 1) $department = 'NULL';
-			if (empty($email)) $verified_mail=2;
+			// email cannot be verified if there is no mail saved
+			if (empty($email) && $verified_mail==1) {
+				$verified_mail=2;
+			}
 			$sql = "UPDATE user SET nom = ".autoquote($lname).", prenom = ".autoquote($fname).",
                                        username = ".autoquote($username).", email = ".autoquote($email).", 
                                        statut = ".intval($newstatut).", phone=".autoquote($phone).",
