@@ -412,7 +412,8 @@ function get_max_upload_size($maxFilledSpace, $baseWorkDir)
 
 function showquota($quota, $used) {
 
-	global $langQuotaUsed, $langQuotaPercentage, $langQuotaTotal, $langBack, $code_cours;
+	global $langQuotaUsed, $langQuotaPercentage, $langQuotaTotal, $langBack, 
+               $code_cours, $subsystem, $group_id;
 	include 'gaugebar.php';
 
 	$retstring = "";
@@ -437,32 +438,35 @@ function showquota($quota, $used) {
 	format_bytesize($used, '0');
 	//telos diamorfwshs ths grafikh mparas kai twn arithmitikwn statistikwn stoixeiwn
 	//ektypwsh pinaka me arithmitika stoixeia + thn grafikh bara
-    $retstring .= "
-       <div id='operations_container'>
-         <ul id='opslist'>
-           <li><a href='" . $_SERVER['PHP_SELF'] .'?course=' .$code_cours . "'>" . $langBack . "</a></li>
-         </ul>
-       </div>";
+        if ($subsystem == GROUP) {
+                $link = "$_SERVER[PHP_SELF]?course=$code_cours&amp;group_id=$group_id";
+        } else {
+                $link = "$_SERVER[PHP_SELF]?course=$code_cours";
+        }
+         $retstring .= "
+               <div id='operations_container'>
+                 <ul id='opslist'>
+                   <li><a href=$link>" . $langBack . "</a></li>
+                 </ul>
+               </div>";
 
-    $retstring .= "
-<table class='tbl_alt'>
-	<tr>
-          <th>$langQuotaUsed:</th>
-      <td>$used</td>
-        </tr>
-	<tr>
-          <th>$langQuotaPercentage:</th>
-      <td align='center'>";
-            $retstring .= $oGauge->display();
-      $retstring .= "$diskUsedPercentage</td>
-	</tr>
-	<tr>
-	  <th>$langQuotaTotal:</th>
-      <td>$quota</td>
-	</tr>
-        </table>
-
-       ";
+         $retstring .= "
+                <table class='tbl_alt'>
+                <tr>
+                  <th>$langQuotaUsed:</th>
+              <td>$used</td>
+                </tr>
+                <tr>
+                  <th>$langQuotaPercentage:</th>
+              <td align='center'>";
+                    $retstring .= $oGauge->display();
+              $retstring .= "$diskUsedPercentage</td>
+                </tr>
+                <tr>
+                  <th>$langQuotaTotal:</th>
+              <td>$quota</td>
+                </tr>
+                </table>";
 	$tmp_cwd = getcwd();
 	
 	return $retstring;
