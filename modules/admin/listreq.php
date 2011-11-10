@@ -92,7 +92,7 @@ if (!empty($show) and $show == 'closed') {
  		$sql = db_query("SELECT id, name, surname, uname, email, faculty_id,
                                         phone, am, date_open, date_closed, comment
                                         FROM user_request
-                                        WHERE (status = 2 AND statut = $list_statut)");
+                                        WHERE (status = 2 AND statut = $list_statut) ORDER BY date_open DESC");
         	$k = 0;
 		while ($req = mysql_fetch_array($sql)) {
 			if ($k%2 == 0) {
@@ -131,7 +131,7 @@ if (!empty($show) and $show == 'closed') {
  		$sql = db_query("SELECT id, name, surname, uname, email,
                                         faculty_id, phone, am, date_open, date_closed, comment
                                         FROM user_request
-                                        WHERE (status = 3 AND statut = $list_statut)");
+                                        WHERE (status = 3 AND statut = $list_statut) ORDER BY date_open DESC");
         	$k = 0;
 		while ($req = mysql_fetch_array($sql)) {
 			if ($k%2==0) {

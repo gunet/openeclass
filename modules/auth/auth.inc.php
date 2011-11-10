@@ -817,9 +817,9 @@ $type is 'shibboleth' or 'cas'
 function shib_cas_login($type)
 {
 	global $nom, $prenom, $email, $statut, $language, $durationAccount, $urlServer,
-		$is_admin, $is_power_user, $langUserAltAuth, $close_user_registration;
+		$is_admin, $is_power_user, $langUserAltAuth;
 
-	$autoregister = !($close_user_registration && get_config('alt_auth_student_req'));
+	$autoregister = !(get_config('close_user_registration') && get_config('alt_auth_student_req'));
 
 	$_SESSION['user_perso_active'] = false;
 	if ($type == 'shibboleth') {

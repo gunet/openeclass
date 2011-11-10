@@ -41,7 +41,7 @@ $tool_content .= "
 $auth = get_auth_active_methods();
 
 // check for close user registration
-if (isset($close_user_registration) and $close_user_registration) {
+if (get_config('close_user_registration')) {
     $newuser = "formuser.php";
     $user_reg_type = $langUserAccountInfo1;
 } else {

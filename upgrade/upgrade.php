@@ -111,8 +111,7 @@ if (!@chdir("../config/")) {
      die ("$langConfigError4");
 }
 
-if (!isset($_POST['submit2'])) {
-        $closeregdefault = $close_user_registration? ' checked="checked"': '';
+if (!isset($_POST['submit2'])) {      
         // get old contact values
         $tool_content .= "<form action='$_SERVER[PHP_SELF]' method='post'>" .
                 "<div class='info'>" .
@@ -126,14 +125,7 @@ if (!isset($_POST['submit2'])) {
                 "<tr><th>$langUpgTel</th>" .
                 "<td><input class=auth_input_admin type='text' name='telephone' value='".@$telephone."'></td></tr>" .
                 "<tr><th>Fax:</th>" .
-                "<td><input class=auth_input_admin type='text' name='fax' value='".@$fax."'></td></tr></table></fieldset>
-				
-                <fieldset><legend>$langUpgReg</legend>
-                <table width='100%' class='tbl'>
-                <tr><th width='220'>$langViaReq:</th>
-                <td><input type='checkbox' name='reguser' $closeregdefault></td>
-                </tr>
-                </table></fieldset>
+                "<td><input class=auth_input_admin type='text' name='fax' value='".@$fax."'></td></tr></table></fieldset>				                
                 <div class='right'><input name='submit2' value='$langCont &raquo;' type='submit'></div>
                 </form>";
 } else {
@@ -184,11 +176,7 @@ if (!isset($_POST['submit2'])) {
         } else {
                 $user_reg = 'TRUE';
         }
-
-        if (!strstr($conf, '$close_user_registration')) {
-                $lines_to_add .= "\$close_user_registration = $user_reg;\n";
-        }
-
+        
         if (!strstr($conf, '$durationAccount')) {
                 $lines_to_add .= "\$durationAccount = \"126144000\";\n";
         }
@@ -205,8 +193,7 @@ if (!isset($_POST['submit2'])) {
                         array(
 				'#^.*(mainInterfaceWidth|bannerPath|userMailCanBeEmpty|colorLight|colorMedium|colorDark|table_border|color1|color2).*$#m',
                                 '#\$postaddress\b[^;]*;#sm',
-                                '#\$fax\b[^;]*;#',
-                                '#\$close_user_registration\b[^;]*;#',
+                                '#\$fax\b[^;]*;#',                                
                                 '#(\?>)?\s*$#',
                                 '#\$Institution\b[^;]*;#',
                                 '#\$telephone\b[^;]*;#',
@@ -215,8 +202,7 @@ if (!isset($_POST['submit2'])) {
                         array(
 				'',
                                 "\$postaddress = '$_POST[postaddress]';",
-                                "\$fax = '$_POST[fax]';",
-                                "\$close_user_registration = $user_reg;",
+                                "\$fax = '$_POST[fax]';",                                
                             	'',
                                 "\$Institution = '$_POST[Institution]';",
                                 "\$telephone = '$_POST[telephone]';",
@@ -523,6 +509,7 @@ if (!isset($_POST['submit2'])) {
 				('disable_eclass_stud_reg', '0'),
 				('disable_eclass_prof_reg', '0'),
 				('email_verification_required', '1'),
+                                ('close_user_registration', '0'),
 				('code_key', '" . generate_secret_key2(32) . "')");
 
 			if (mysql_field_exists($mysqlMainDb, 'user', 'verified_mail')) {

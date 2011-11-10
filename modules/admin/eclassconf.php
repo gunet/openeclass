@@ -72,15 +72,7 @@ if (isset($_POST['submit']))  {
 	if (!$fd) {
 		$tool_content .= $langFileError;
    }
-	else {
-
-		if ($_POST['formcloseuserregistration'] == 'false') {
-			$user_reg = 'FALSE';
-		}
-		else {
-			$user_reg = 'TRUE';
-		}
-
+	else {		
 		if (defined('UTF8')) {
 			$utf8define = "define('UTF8', true);";
 		}
@@ -136,7 +128,6 @@ $language = "'.$_POST['formlanguage'].'";
 $postaddress = '.autoquote($_POST['formpostaddress']).';
 $fax = '.autoquote($_POST['formfax']).';
 
-$close_user_registration = '.$user_reg.';
 $encryptedPasswd = "true";
 $persoIsActive = TRUE;
 
@@ -152,6 +143,7 @@ $active_ui_languages = '.$string_active_ui_languages."\n";
 		'dont_display_login_form' => true,
 		'dropbox_allow_student_to_student' => true,
 		'block_username_change' => true,
+                'close_user_registration' => true,
 		'display_captcha' => true,
 		'insert_xml_metadata' => true,
 		'betacms' => true,
@@ -310,26 +302,18 @@ else {
 	  <td><input type='checkbox' name='disable_eclass_prof_reg' value='1'
 	    $cbox_disable_eclass_prof_reg>&nbsp;$langDisableEclassProfReg</td>
 	</tr>";
-
-	if ($close_user_registration=="true") {
-		$close_user_registrationSelTrue = "selected";
-		$close_user_registrationSelFalse = "";
-	}
-	else {
-		$close_user_registrationSelTrue = "";
-		$close_user_registrationSelFalse = "selected";
-	}
-
-	$cbox_alt_auth_student_req = get_config('alt_auth_student_req')? 'checked': '';
+        
+        $cbox_close_user_registration = get_config('close_user_registration')? 'checked': '';	
 	$tool_content .= "
 	<tr>
-	  <th class='left'>\$close_user_registration:</th>
-	  <td><select name='formcloseuserregistration'>
-	    <option value='true' ".$close_user_registrationSelTrue.">true</option>
-	    <option value='false' ".$close_user_registrationSelFalse.">false</option>
-	  </select>&nbsp;&nbsp;$langViaReq</td>
-	</tr>
-	<tr>
+	  <th class='left'>close_user_registration:</th>
+          <td>
+	  <input type=checkbox name='close_user_registration' value='1'
+        $cbox_close_user_registration>&nbsp;$langViaReq</td>
+	</tr>";
+        
+        $cbox_alt_auth_student_req = get_config('alt_auth_student_req')? 'checked': '';
+	$tool_content .= "<tr>
 	  <th class='left'>alt_auth_student_req</th>
 	  <td><input type='checkbox' name='alt_auth_student_req' value='1'
 	    $cbox_alt_auth_student_req>&nbsp;$langAltAuthStudentReq</td>

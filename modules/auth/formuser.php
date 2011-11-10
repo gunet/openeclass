@@ -51,7 +51,7 @@ $am_required = !$prof && get_config('am_required');
 $errors = array();
 
 // security - show error instead of form if user registration is open
-if (!$prof and (!isset($close_user_registration) or $close_user_registration == false)) {
+if (!$prof and (!get_config('close_user_registration'))) {
         $tool_content .= "<div class='td_main'>$langForbidden</div></td></tr></table>";
         draw($tool_content, 0);
         exit;

@@ -126,18 +126,18 @@ if (isset($_POST['welcomeScreen'])) {
 	$video_quota = 100;
 	$group_quota = 100;
 	$dropbox_quota = 100;
-        $reguser = $dbPassForm = $helpdeskmail = $faxForm = $postaddressForm = '';
+        $dbPassForm = $helpdeskmail = $faxForm = $postaddressForm = '';
 	$email_required = $am_required = $dropbox_allow_student_to_student = $dont_display_login_form = '';
 	$display_captcha = $block_username_change = $insert_xml_metadata = $betacms = '';
 	$disable_eclass_stud_reg = $disable_eclass_prof_reg = $email_verification_required = '';
+        $close_user_registration = '';
 } else {
 	register_posted_variables(array(
                 'dbHostForm' => true,
                 'dbUsernameForm' => true,
                 'dbNameForm' => true,
                 'dbMyAdmin' => true,
-                'dbPassForm' => true,
-                'reguser' => true,
+                'dbPassForm' => true,        
                 'phpSysInfoURL' => true,
                 'urlAppendPath' => true,
                 'urlForm' => true,
@@ -164,7 +164,8 @@ if (isset($_POST['welcomeScreen'])) {
 		'insert_xml_metadata' => true,
 		'betacms' => true,
 		'disable_eclass_stud_reg' => true,
-		'disable_eclass_prof_reg' => true));
+		'disable_eclass_prof_reg' => true,
+                'close_user_registration' => true));
 	
 	register_posted_variables(array(
 		'doc_quota' => true,
@@ -211,11 +212,12 @@ function textarea_input($name, $rows, $cols)
 $all_vars = array('pathForm', 'urlAppendPath', 'dbHostForm', 'dbUsernameForm', 'dbNameForm', 'dbMyAdmin',
                   'dbPassForm', 'urlForm', 'emailForm', 'nameForm', 'surnameForm', 'loginForm',
                   'passForm', 'phpSysInfoURL', 'campusForm', 'helpdeskForm', 'helpdeskmail',
-                  'institutionForm', 'institutionUrlForm', 'faxForm', 'postaddressForm', 'reguser',
+                  'institutionForm', 'institutionUrlForm', 'faxForm', 'postaddressForm',
 		  'doc_quota', 'video_quota', 'group_quota', 'dropbox_quota',
                   'email_required', 'email_verification_required', 'am_required', 'dropbox_allow_student_to_student',
                   'dont_display_login_form', 'block_username_change', 'display_captcha',
-		  'insert_xml_metadata', 'betacms', 'disable_eclass_stud_reg', 'disable_eclass_prof_reg');
+		  'insert_xml_metadata', 'betacms', 'disable_eclass_stud_reg', 
+                  'disable_eclass_prof_reg', 'close_user_registration');
 
 // step 2 license
 if(isset($_REQUEST['install2']) OR isset($_REQUEST['back2']))
@@ -333,7 +335,7 @@ elseif(isset($_REQUEST['install4']) OR isset($_REQUEST['back4']))
 		<tr><th class='left'>$langDropboxQuota</th>
 			<td>".text_input('dropbox_quota', 5)."&nbsp;(Mb)</td></tr>
 		<tr><th class='left'>$langViaReq</th>
-			<td>".checkbox_input('reguser')."</td></tr>
+			<td>".checkbox_input('close_user_registration')."</td></tr>                
 		<tr><th class='left'>$langDisableEclassStudReg</th>
 			<td>".checkbox_input('disable_eclass_stud_reg')."</td></tr>
 		<tr><th class='left'>$langDisableEclassProfReg</th>
@@ -409,7 +411,7 @@ elseif(isset($_REQUEST['install6']))
 	$langStepTitle = $langLastCheck;
 	$langStep = $langStep6;
 	$_SESSION['step'] = 6;
-	if (!$reguser) {
+	if (!$close_user_registration) {
       		$mes_add = $langToReqOpen;
   	} else {
       		$mes_add = $langToReq;
@@ -553,8 +555,7 @@ elseif(isset($_REQUEST['install7']))
 	$fd=@fopen("../config/config.php", "w");
 	if (!$fd) {
 		$tool_content .= $langErrorConfig;
-	} else {
-		$user_registration = $reguser? 'TRUE': 'FALSE';
+	} else {		
 		$stringConfig='<?php
 /* ========================================================
  * OpeneClass 2.4 configuration file
@@ -586,14 +587,11 @@ $Institution = "'.$institutionForm.'";
 $InstitutionUrl = "'.$institutionUrlForm.'";
 $postaddress = "'.addslashes($postaddressForm).'";
 
-$have_latex = FALSE;
-$close_user_registration = '.$user_registration.';
 
 $persoIsActive = TRUE;
 $durationAccount = "126144000";
 
 define("UTF8", true);
-
 
 $encryptedPasswd = true;
 ';

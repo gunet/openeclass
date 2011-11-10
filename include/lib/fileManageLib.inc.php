@@ -343,7 +343,7 @@ function directory_list()
 
 	$dirArray = array();
 
-        $r = db_query("SELECT filename, path FROM document WHERE $group_sql AND format = '.dir' ORDER BY path");
+        $r = db_query("SELECT filename, path FROM document WHERE $group_sql AND format = '.dir' ORDER BY filename");
 	while ($row = mysql_fetch_array($r)) {
                 $dirArray[$row['path']] = $row['filename'];
 	}
