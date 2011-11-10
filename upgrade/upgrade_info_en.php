@@ -157,12 +157,12 @@ Read forward for further additional configuration options.</p>
 <br />
 <p class="title1" id="other">4th Step: Optional Further Configurations</a>
 <ul>
-<li>In the <em>config.php</em> file, the <em>close_user_registration</em> variable, which is FALSE by definition, will be defined.
+<!-- <li>In the <em>config.php</em> file, the <em>close_user_registration</em> variable, which is FALSE by definition, will be defined.
 Changing the value to <em>TRUE</em>, registration of users with 'student' rights will not be free anymore.
 Users will have to follow a process similar to the teacher account creation process,
 namely filling in a student account application form, in order to obtain a platform account.
 The application will be examined by the administrator who either approves of it and opens an account, or rejects it.  
-</li>
+</li> -->
 <li>
 <p>If you want to modify any message of platform then proceed with the following actions:
 Create a file of type .php with name <em>english.inc.php</em> (or <em>greek.inc.php</em>) and place it in directory <em>(eclass path)/config/</em>. Find the varible name which contains the message you wish to change and assing it the new message. e.g. If you want to change message <tt>$langAboutText = "The platform version is";</tt> create the file <em>english.inc.php</em> in the directory (eclass path)/config/ with the following contents:</p>

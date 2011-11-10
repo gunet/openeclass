@@ -271,9 +271,9 @@ Platform suppports English and Spanish language. If you wish to deactivate any o
 <p>By default the value of the above variable is<pre>$active_ui_languages = array('el', 'en', 'es');</pre> e.g. supports all three languages.
 </p>
 
-<div class='sub_title1'><a name="after_reg">User registration via request</a></div>
+<!--<div class='sub_title1'><a name="after_reg">User registration via request</a></div>
 <p>In the <em>config.php</em> file, the <em>close_user_registration</em> variable, which is FALSE by definition, will be defined. Changing the value to <em>TRUE</em>, registration of users with 'student' rights will not be free anymore. Users will have to follow a process similar to the teacher account creation process, namely filling in a student account application form, in order to obtain a platform account. The application will be examined by the administrator who either approves of it and opens an account, or rejects it.
-</p>
+</p> -->
 
 <div class='sub_title1'><a name="after_pma">PhpMyAdmin</a></div> 
 <p>The platform is delivered through the <em>phpMyAdmin</em> management tool. For safety and security reasons, access to phpMyAdmin is done through the browser's cookies. If you want to change it, you can refer to the config.inc.php file of phpMyAdmin.</p>

@@ -303,7 +303,7 @@ function loggedOutMenu(){
 function adminMenu(){
 
 	global $webDir, $urlAppend, $language, $phpSysInfoURL, $phpMyAdminURL;
-	global $siteName, $urlServer, $mysqlMainDb, $close_user_registration;
+	global $siteName, $urlServer, $mysqlMainDb;
         global $is_admin, $is_power_user;
 
 	$sideMenuGroup = array();
@@ -326,7 +326,7 @@ function adminMenu(){
 	array_push($sideMenuLink, "../admin/listreq.php");
 	array_push($sideMenuImg, "arrow.png");
 	// check for close user registration
-	if (isset($close_user_registration) and $close_user_registration == TRUE) {
+	if (get_config('close_user_registration')) {
 		array_push($sideMenuText, $GLOBALS['langUserOpen']);
 		array_push($sideMenuLink, "../admin/listreq.php?type=user");
 		array_push($sideMenuImg, "arrow.png");

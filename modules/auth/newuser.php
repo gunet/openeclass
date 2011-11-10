@@ -46,7 +46,7 @@ if ($disable_eclass_stud_reg) {
 	exit;
 }
 	
-if (isset($close_user_registration) and $close_user_registration == TRUE) {
+if (get_config('close_user_registration')) {
 	$tool_content .= "<div class='td_main'>$langForbidden</div>";
 	draw($tool_content,0);
 	exit;
