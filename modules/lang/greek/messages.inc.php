@@ -474,7 +474,6 @@ $langminute = 'λεπτό';
 $langminutes = 'λεπτά';
 $langhour = 'ώρα';
 $langhours = 'ώρες';
-$langLasting="Διάρκεια";
 $langDateNow = "Σημερινή ημερομηνία:";
 $langCalendar = "Ημερολόγιο";
 $langAddEvent="Προσθήκη ενός γεγονότος";

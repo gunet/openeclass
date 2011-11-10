@@ -998,8 +998,11 @@ a.unit_link_invisible:hover {
 
 /* ----- START agenda ----- */
 .today {
-    background-color:#f3f3f9;
+    background-color: #F5BCA9;
     font-weight: bold;
+    color: #687A92;
+    padding: 5px;
+    text-align: center;
 
 }
 
@@ -1160,11 +1163,6 @@ li.pagination {
 /* ----- END phpbb ----- */
 
 
-.today {
-    color: #687A92;
-    padding: 5px;
-    text-align: center;
-}
 
 /* ----- START Search ----- */
 .Results {
