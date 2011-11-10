@@ -43,7 +43,7 @@ $action = new action();
 $action->record('MODULE_ID_AGENDA');
 
 $dateNow = date("j-n-Y / H:i",time());
-$datetoday = date("Y-n-j",time());
+$datetoday = date("Y-n-j H:i",time());
 
 $nameTools = $langAgenda;
 
@@ -86,11 +86,13 @@ hContent;
 $jscalendar = new DHTML_Calendar($urlServer.'include/jscalendar/', $lang_jscalendar, 'calendar-blue2', false);
 $head_content .= $jscalendar->get_load_files_code();
 
-$start_cal = $jscalendar->make_input_field(
+$start_cal = $jscalendar->make_input_field(                         
 	array('showOthers' => true,
-	    	 'align' => 'Tl',
-                 'ifFormat' => '%Y-%m-%d'),
-	array('style' => 'width: 8em; color: #727266; background-color: #fbfbfb; border: 1px solid #C0C0C0; text-align: center',
+               'showsTime' => true,
+	        'align' => 'Tl',
+                'ifFormat' => '%Y-%m-%d %H:%M',
+                'timeFormat' => '24'),
+	array('style' => 'font-weight: bold; font-size: 10px; width: 10em; color: #727266; background-color: #fbfbfb; border: 1px solid #C0C0C0; text-align: center',
                  'name' => 'date',
                  'value' => $datetoday));
 }
@@ -111,15 +113,13 @@ if ($is_editor) {
                                         FROM agenda WHERE id = $id");
 	}
 	if (isset($_POST['submit'])) {
-        register_posted_variables(array('date' => true, 'fhour' => true, 'fminute' => true,
-                                        'titre' => true, 'contenu' => true, 'lasting' => true));
-        $titre = autoquote(canonicalize_whitespace($titre));
-        $contenu = autoquote(canonicalize_whitespace($contenu));
-        $lasting = autoquote(canonicalize_whitespace($lasting));
-        $date = autoquote(canonicalize_whitespace($date));
-        $fhour = intval($fhour);
-        $fminute = intval($fminute);
-		$hour = quote($fhour.':'.$fminute);
+                register_posted_variables(array('date' => true, 'titre' => true, 'contenu' => true, 'lasting' => true));
+                $titre = autoquote(canonicalize_whitespace($titre));
+                $contenu = autoquote(canonicalize_whitespace($contenu));
+                $lasting = autoquote(canonicalize_whitespace($lasting));        
+                $datetime = explode(' ', $date);
+                $date = autoquote($datetime[0]);      
+                $hour = autoquote($datetime[1]);        
 		if (isset($_POST['id']) and !empty($_POST['id'])) {
 			$id = intval($_POST['id']);
                         db_query("UPDATE agenda
@@ -155,7 +155,6 @@ if ($is_editor) {
                                              lasting = $lasting,
                                              lesson_code= '$currentCourseID',
                                              lesson_event_id = $id");
-
 		}
                 unset($id);
 		unset($contenu);
@@ -171,7 +170,6 @@ if ($is_editor) {
                                  WHERE lesson_code= '$currentCourseID' AND
                                        lesson_event_id = $id");
 		##[END personalisation modification]############
-
 		$tool_content .= "<p class='success'>$langDeleteOK</p><br />";
 		unset($addEvent);
 	}
@@ -194,17 +192,19 @@ if ($is_editor) {
 		$myrow = mysql_fetch_array($result);
 		$id = $myrow['id'];
 		$titre = $myrow['titre'];
-		$contenu= $myrow['contenu'];
-		$hourAncient=$myrow['hour'];
-		$dayAncient=$myrow['day'];
-		$lastingAncient=$myrow['lasting'];
+		$contenu = $myrow['contenu'];
+		$hourAncient = $myrow['hour'];
+		$dayAncient = $myrow['day']. ' '.$hourAncient;
+		$lastingAncient = $myrow['lasting'];
 		$start_cal = $jscalendar->make_input_field(
-		array('showOthers' => true,
-		      'align' => 'Tl',
-		       'ifFormat' => '%Y-%m-%d'),
-		array('style' => 'width: 8em; color: #727266; background-color: #fbfbfb; border: 1px solid #C0C0C0; text-align: center',
-		       'name' => 'date',
-		       'value' => $dayAncient));
+                        array('showsTime' => true,                           
+                               'showOthers' => true,
+                               'align' => 'Tl',
+                               'ifFormat' => '%Y-%m-%d %H:%M',
+                                'timeFormat' => '24'),
+                        array('style' => 'font-weight: bold; font-size: 10px; width: 10em; color: #727266; background-color: #fbfbfb; border: 1px solid #C0C0C0; text-align: center',
+                               'name' => 'date',
+                               'value' => $dayAncient));
 	} else {
 		$tool_content .= "\n  <div id='operations_container'>\n    <ul id='opslist'>";
 		if ((!isset($addEvent) && @$addEvent != 1) || isset($_POST['submit'])) {
@@ -214,16 +214,16 @@ if ($is_editor) {
 		$result = db_query("SELECT id FROM agenda", $currentCourseID);
 		if (mysql_num_rows($result) > 1) {
 			if (isset($_GET["sens"]) && $_GET["sens"]=="d") {
-				$tool_content .= "\n      <li><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;sens=' >$langOldToNew</a></li>";
+				$tool_content .= "<li><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;sens=' >$langOldToNew</a></li>";
 				$sens=" DESC ";
 			} else {
-				$tool_content .= "\n      <li><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;sens=d' >$langOldToNew</a></li>";
+				$tool_content .= "<li><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;sens=d' >$langOldToNew</a></li>";
 			}
 		}
-		$tool_content .= "\n    </ul>\n  </div>\n";
+		$tool_content .= "</ul></div>\n";
         }
 	if (!isset($id)) {
-		$id="";
+		$id = "";
 	}
 
 	if (isset($_GET['addEvent']) or isset($_GET['edit'])) {
@@ -235,52 +235,23 @@ if ($is_editor) {
                 <fieldset>
                   <legend>$langOptions</legend>
 		  <table class='tbl' width='100%'>";
-		$day	= date("d");
-		$hours	= date("H");
-		$minutes= date("i");
-		if (isset($hourAncient) && $hourAncient) {
-			$hourAncient = explode(":", $hourAncient);
-			$hours=$hourAncient[0];
-			$minutes=$hourAncient[1];
-		}
+		$day = date("d");		
 		if (isset($titre)) {
 			$titre_value = ' value="' . q($titre) . '"';
 		} else {
 			$titre_value = '';
-    }
+                }
 		$tool_content .= "
                   <tr>
                     <th>$langTitle:</th>
                     <td><input type='text' size='70' name='titre'$titre_value /></td>
                   </tr>
-		  <tr>
+		  <tr>  
                     <th>$langDate:</th>
                     <td> ".$start_cal."</td>
-                  </tr>
+                  </tr>                  
                   <tr>
-		    <th>$langHour:</th>
-                    <td><select name='fhour'>
-		 	<option value='$hours'>$hours</option>
-			<option value='--'>--</option>";
-			for ($h=0; $h<=24; $h++)
-			   $tool_content .= "\n                        <option value='$h'>$h</option>";
-			   $tool_content .= "\n                        </select>&nbsp;&nbsp;&nbsp;";
-			   $tool_content .= "
-                    </td>
-                  </tr>
-                  <tr>
-                    <th>$langMinute:</th>
-                    <td><select name='fminute'>
-			<option value='$minutes'>[$minutes]</option>
-			<option value='--'>--</option>";
-			for ($m=0; $m<=55; $m=$m+5)
-				$tool_content .=  "\n                        <option value='$m'>$m</option>";
-
-			$tool_content .= "\n                        </select>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th>$langLasting <small> $langInHour</small>:</td>
+                    <th>$langDuration <small> $langInHour</small>:</td>
                     <td><input type='text' name='lasting' value='".@$myrow['lasting']."' size='2' maxlength='2' /></td>
                   </tr>";
     		if (!isset($contenu)) {
@@ -383,14 +354,16 @@ if (mysql_num_rows($result) > 0) {
 
                 $tool_content .= "\n<span class='day'>".
                         ucfirst(claro_format_locale_date($dateFormatLong, strtotime($myrow['day']))).
-                        "</span> ($langHour: ".ucfirst(date('H:i', strtotime($myrow['hour']))).")";
-		$message = $langUnknown;
+                        "</span> ($langHour: ".ucfirst(date('H:i', strtotime($myrow['hour']))).")";	
                 if ($myrow['lasting'] != '') {
                         if ($myrow['lasting'] == 1) {
                                 $message = $langHour;
                         } else {
                                 $message = $langHours;
                         }
+                        $msg = "($langDuration: ".q($myrow['lasting'])." $message)";
+                } else {
+                        $msg = '';
                 }
 		$tool_content .=  "\n<br /><br /><div class='event'><b>";
                 if ($myrow['titre'] == '') {
@@ -398,36 +371,35 @@ if (mysql_num_rows($result) > 0) {
                 } else {
                         $tool_content .= q($myrow['titre']);
                 }
-		$tool_content .= "</b> ($langLasting: ".q($myrow['lasting'])." $message)$contenu</div></td>";
+		$tool_content .= "</b> $msg $contenu</div></td>";
 
                 //agenda event functions
                 //added icons next to each function
                 //(evelthon, 12/05/2006)
 		if ($is_editor) {
-			$tool_content .=  "
-			<td class='right' width='70'>
-			  <a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;id=".$myrow['id']."&amp;edit=true'>
-			  <img src='$themeimg/edit.png' border='0' title='".$langModify."'></a>&nbsp;
-			  <a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;id=".$myrow[0]."&amp;delete=yes' onClick='return confirmation();'>
-			  <img src='$themeimg/delete.png' border='0' title='".$langDelete."'></a>&nbsp;";
-				      if ($myrow["visibility"] == 'v') {
-					      $tool_content .= "
-			  <a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;id=".$myrow[0]."&amp;mkInvisibl=true'>
-			  <img src='$themeimg/visible.png' border='0' title='".$langVisible."'></a>";
-				      } else {
-					      $tool_content .= "
-			  <a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;id=".$myrow[0]."&amp;mkVisibl=true'>
-			  <img src='$themeimg/invisible.png' border='0' title='".$langVisible."'></a>";
-				      }
-				      $tool_content .= "
-			</td>";
+                        $tool_content .=  "
+                        <td class='right' width='70'>
+                        <a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;id=".$myrow['id']."&amp;edit=true'>
+                        <img src='$themeimg/edit.png' border='0' title='".$langModify."'></a>&nbsp;
+                        <a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;id=".$myrow[0]."&amp;delete=yes' onClick='return confirmation();'>
+                        <img src='$themeimg/delete.png' border='0' title='".$langDelete."'></a>&nbsp;";
+                        if ($myrow["visibility"] == 'v') {
+                                $tool_content .= "
+                                <a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;id=".$myrow[0]."&amp;mkInvisibl=true'>
+                                <img src='$themeimg/visible.png' border='0' title='".$langVisible."'></a>";
+                        } else {
+                                $tool_content .= "
+                                <a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;id=".$myrow[0]."&amp;mkVisibl=true'>
+                                <img src='$themeimg/invisible.png' border='0' title='".$langVisible."'></a>";
+                        }
+                        $tool_content .= "</td>";
 		}
-		$tool_content .= "\n        </tr>";
+		$tool_content .= "</tr>";
 		$numLine++;
 	} 	// while
-	$tool_content .= "\n        </table>";
+	$tool_content .= "</table>";
 } else {
-	$tool_content .= "\n          <p class='alert1'>$langNoEvents</p>";
+	$tool_content .= "<p class='alert1'>$langNoEvents</p>";
 }
 add_units_navigation(TRUE);
 

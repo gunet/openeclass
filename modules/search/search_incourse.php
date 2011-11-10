@@ -180,7 +180,7 @@ if(empty($search_terms)) {
 				$tool_content .= "<span class=day>".
 				ucfirst(claro_format_locale_date($dateFormatLong,strtotime($res["day"]))).
 				"</span> ($langHour: ".ucfirst(date("H:i",strtotime($res["hour"]))).")<br />"				
-				.$res['titre']." (".$langLasting.": ".$res["lasting"]." $message) ".$res['contenu']."
+				.$res['titre']." (".$langDuration.": ".$res["lasting"]." $message) ".$res['contenu']."
                     </td>
                   </tr>";
                         $numLine++;
