@@ -190,11 +190,10 @@ else {
 		$titleextra = " ($langRestoredValues)";
 		@include("../../config/config_backup.php");
 	}
-	$tool_content .= "<fieldset><legend>$langFileEdit $titleextra</legend>";
-	$tool_content .= "<form action=\"".$_SERVER['PHP_SELF']."\" method=\"post\">";
+        $tool_content .= "<form action=\"".$_SERVER['PHP_SELF']."\" method=\"post\">";
+	$tool_content .= "<fieldset><legend>$langFileEdit</legend>";	
 	$tool_content .= "
 	<table class='tbl' width=\"100%\">
-	<tbody>
 	<tr>
 	  <th width='200' class=\"left\"><b>\$urlServer:</b></th>
 	  <td><input class=\"FormData_InputText\" type='text' name=\"formurlServer\" size='40' value=\"".$urlServer."\"></td>
@@ -285,8 +284,11 @@ else {
 	    <option value='greek' ".$grSel.">greek</option>
 	    <option value='english' ".$enSel.">english</option>
 	  </select></td>
-	</tr>";
-
+	</tr></table></fieldset>";
+        
+        $tool_content .= "<fieldset>
+        <legend>$langUserAuthentication</legend>
+        <table class='tbl' width='100%'>";              
 	$cbox_disable_eclass_stud_reg = get_config('disable_eclass_stud_reg')? 'checked': '';
 	$tool_content .= "
 	<tr>
@@ -306,7 +308,7 @@ else {
         $cbox_close_user_registration = get_config('close_user_registration')? 'checked': '';	
 	$tool_content .= "
 	<tr>
-	  <th class='left'>close_user_registration:</th>
+	  <th class='left'>close_user_registration</th>
           <td>
 	  <input type=checkbox name='close_user_registration' value='1'
         $cbox_close_user_registration>&nbsp;$langViaReq</td>
@@ -317,30 +319,37 @@ else {
 	  <th class='left'>alt_auth_student_req</th>
 	  <td><input type='checkbox' name='alt_auth_student_req' value='1'
 	    $cbox_alt_auth_student_req>&nbsp;$langAltAuthStudentReq</td>
-	</tr>";
-
+	</tr>
+        <tr>
+        <td class='left'><b>\$durationAccount:</b></td>
+        <td><input type='text' name='formdurationAccount' size='15' value='$durationAccount'>&nbsp;&nbsp;$langUserDurationAccount</td></tr>
+        <tr>
+	    <th class=\"left\"><b>\$encryptedPasswd:</b></th>
+	    <td><input type=\"checkbox\" checked disabled> ".$langencryptedPasswd."</td>
+	  </tr>";
+        $tool_content .= "</table></fieldset>";
+        $tool_content .= "<fieldset>
+        <legend>$langEclassThemes</legend>
+        <table class='tbl' width='100%'>";              
 	$langdirs = active_subdirs($webDir.'modules/lang', 'messages.inc.php');
 	$sel = array();
-
 	foreach ($language_codes as $langcode => $langname) {
 		if (in_array($langname, $langdirs)) {
 			$loclangname = $langNameOfLang[$langname];
 			$checked = in_array($langcode, $active_ui_languages)? ' checked': '';
 			$sel[] = "<input type='checkbox' name='av_lang[]' value='$langcode'$checked>$loclangname";
 		}
-	}
-
+	}        
+	$tool_content .= "<tr><th class='left'>$langSupportedLanguages</th>
+	    <td>" . implode(' ', $sel) . "</td></tr>";                
+        
 	$tool_content .= "
-	  <tr><th class='left'>$langSupportedLanguages</th>
-	    <td>" . implode(' ', $sel) . "</td></tr>
-	  <tr>
-	    <th class='left'><b>\$durationAccount:</b></th>
-       <td><input type='text' name='formdurationAccount' size='15' value='$durationAccount'>&nbsp;&nbsp;$langUserDurationAccount</td></tr>
-	  <tr><th class='left'><b>Theme:</b></th>
+	  <tr><td class='left'><b>$langThemes:</b></td>
 	    <td>" . selection($available_themes, 'theme',
 		 array_search($theme, $available_themes)) . "</td></tr>";
-	
-	$cbox_email_required = get_config('email_required')?'checked':'';
+	$tool_content .= "</table></fieldset>";
+        
+        $cbox_email_required = get_config('email_required')?'checked':'';
 	$cbox_email_verification_required = get_config('email_verification_required')?'checked':'';
 	$cbox_am_required = get_config('am_required')?'checked':'';
 	$cbox_dont_display_login_form = get_config('dont_display_login_form')?'checked':'';
@@ -349,12 +358,10 @@ else {
 	$cbox_display_captcha = get_config('display_captcha')?'checked':'';
 	$cbox_insert_xml_metadata = get_config('insert_xml_metadata')?'checked':'';
 	$cbox_betacms = get_config('betacms')?'checked':'';
-	
-	$tool_content .= "
-	  <tr>
-	    <th class=\"left\"><b>\$encryptedPasswd:</b></th>
-	    <td><input type=\"checkbox\" checked disabled> ".$langencryptedPasswd."</td>
-	  </tr>
+                
+        $tool_content .= "<fieldset>
+        <legend>$langOtherOptions</legend>
+        <table class='tbl' width='100%'>	
 	  <tr>
 		<th class='left'><b>email_required</b></th>
 		<td><input type='checkbox' name='email_required' value='1' $cbox_email_required />&nbsp;$lang_email_required</td>
@@ -391,6 +398,11 @@ else {
 		<th class='left'><b>betacms</b></th>
 		<td><input type='checkbox' name='betacms' value='1' $cbox_betacms />&nbsp;$lang_betacms</td>
 	  </tr>
+        </table></fieldset>";
+        
+        $tool_content .= "<fieldset>
+        <legend>$langDefaultQuota</legend>
+        <table class='tbl' width='100%'>              
 	  <tr>
 		<th class='left'><b>$langDocQuota</b></th>
 		<td><input class='FormData_InputText' type='text' name='doc_quota' value='".get_config('doc_quota')."' size='5'/>&nbsp;(Mb)</td>
@@ -406,23 +418,26 @@ else {
 	  <tr>
 		<th class='left'><b>$langDropboxQuota</b></th>
 		<td><input class='FormData_InputText' type='text' name='dropbox_quota' value='".get_config('dropbox_quota')."' size='5' />&nbsp;(Mb)</td>
-	  </tr>
-	  <tr><td colspan='2'><hr></td></tr>
-	  <tr>
+	  </tr></table>	  
+	  </fieldset>";
+        
+        $tool_content .= "<fieldset><legend>$langCreateBackup</legend>
+          <table class='tbl' width='100%'>	
+        <tr>
 	    <th class='left'>$langReplaceBackupFile</th>
 	    <td><input type='checkbox' name='backupfile' checked></td>
 	  </tr>
 	  <tr>
-	    <th class=\"left\">&nbsp;</th>
+	    <th class='left'>&nbsp;</th>
 	    <td class='right'><input type='submit' name='submit' value='$langModify'></td>
-	  </tr>
-	  </tbody>
+	  </tr>	  
 	  </table>
-	  </form></fieldset>";
+	  </fieldset>
+        </form>";
 	// Display link to index.php
 	$tool_content .= "<p align='right'><a href='index.php'>$langBack</a></p>";
 	// After restored values have been inserted into form then bring back
-	// values from original config.php, so the rest of the page can be played correctly
+	// values from original config.php, so the rest of the page can be displayed correctly
 	if (isset($_GET['restore']) && $_GET['restore'] == "yes") {
 		@include("../../config/config.php");
 	}
