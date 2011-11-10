@@ -344,7 +344,7 @@ if (mysql_num_rows($result) > 0) {
 				}
 				$nowBarShowed = TRUE;
 				$tool_content .= "\n<tr>";
-				$tool_content .= "\n<td colspan='2' class='today'><b>$langDateNow</b> $dateNow</td>";
+				$tool_content .= "\n<td colspan='2' class='today'>$langDateNow $dateNow</td>";
 				$tool_content .= "\n</tr>";
 			}
 		}

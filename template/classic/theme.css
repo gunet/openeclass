@@ -997,9 +997,11 @@ a.unit_link_invisible:hover {
 
 /* ----- START agenda ----- */
 .today {
-    background-color:#fffbf4;
+    background-color: #F5BCA9;
     font-weight: bold;
-
+    color: #8C2A32;
+    padding: 5px;
+    text-align: center;
 }
 
 .monthLabel {
@@ -1158,12 +1160,6 @@ li.pagination {
 
 /* ----- END phpbb ----- */
 
-
-.today {
-    color: #8C2A32;
-    padding: 5px;
-    text-align: center;
-}
 
 /* ----- START Search ----- */
 .Results {
