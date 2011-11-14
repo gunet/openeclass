@@ -69,6 +69,7 @@ $langDeleteAdmin="H διαγραφή του διαχειριστή με id:";
 $langNotFeasible ="δεν είναι εφικτή";
 $langAddAdmin = "Προσθήκη διαχειριστή";
 $langAddPowerUser = "Προσθήκη βοηθού διαχειριστή";
+$langAddManageUser = "Προσθήκη διαχειριστή χρηστών";
 $langPassword = "Συνθηματικό";
 $langAdd = "Προσθήκη";
 $langNotFound = "δεν βρέθηκε";
@@ -82,6 +83,7 @@ $langAfterPage="Eπόμενη";
 $langCannotDeleteAdmin = "Ο κεντρικός διαχειριστής της πλατφόρμας δεν μπορεί να διαγραφεί!";
 $langNotAdmin = "Ο χρήστης δεν είναι πλέον διαχειριστής της πλατφόρμας";
 $langPowerUser = "Βοηθός διαχειριστή";
+
 /****************************************************
 * admin.php
 ****************************************************/
@@ -432,9 +434,9 @@ $langVideoQuota = "Όριο αποθηκευτικού χώρου μαθήματ
 $langDropboxQuota = "Όριο αποθηκευτικού χώρου μαθήματος για την «Ανταλλαγή αρχείων»";
 $langGroupQuota = "Όριο αποθηκευτικού χώρου μαθήματος για τις «Ομάδες Χρηστών»";
 $langEclassThemes = "Εμφάνιση πλατφόρμας";
-$langThemes = "Διαθέσιμα θέματα";
+$langThemes = "Επιλογή θέματος";
 $langOtherOptions = "Άλλες ρυθμίσεις";
-$langDefaultQuota = "Αποθηκευτικός χώρος καινούριων μαθημάτων";
+$langDefaultQuota = "Αποθηκευτικός χώρος νέων μαθημάτων";
 $langCreateBackup = "Δημουργία αντιγράφου ασφαλείας των ρυθμίσεων";
 
 // admin announcements
@@ -2547,7 +2549,7 @@ $langMailVerificationAddrChange = "Αν η διεύθυνση είναι λάθ�
 $langMailVerificationSuccess3="Ελέγξτε οτι είναι σωστή η διεύθυνση παρακάτω και πατήστε στην «<b>$langMailVerificationNewCode</b>»";
 $langMailVerificationReq = "Είναι απαραίτητο να επιβεβαιωθεί η e-mail διεύθυνση σας προτού προχωρήσετε.<br /><br />$langMailVerificationSuccess3";
 $langMailVerificationSuccess4="Σύντομα θα λάβετε ένα e-mail από την Ομάδα Διαχείρισης της Πλατφόρμας Ασύγχρονης Τηλεκπαίδευσης $siteName, με τις απαραίτητες οδηγίες για την ολοκλήρωση της εγγραφής σας";
-$langMailVerification = "Επιβεβαιώση E-mail $langUsersOf";
+$langMailVerification = "Επιβεβαίωση E-mail $langUsersOf";
 $langMailVerificationNo = "Χρήστες που δεν έχουν επιβεβαιώσει το e-mail τους";
 $langMailVerificationYes = "Χρήστες που έχουν επιβεβαιώσει το e-mail τους";
 $langMailVerificationPending = "Χρήστες που εκκρεμεί η επιβεβαιώση του e-mail τους";
@@ -2773,6 +2775,9 @@ $langCheckAdmin = "
         για να συνδεθείτε ξανά.</p>";
 $langCheckPowerUser = "
         <b>Η ενέργεια που προσπαθήσατε να εκτελέσετε απαιτεί δικαιώματα διαχειριστή χρηστών και μαθημάτων.</b>
+        <br>Η πλατφόρμα σας ανακατεύθυνε αυτόματα στην αρχική σελίδα
+        για να συνδεθείτε ξανά.";
+$langCheckUserManageUser = "<b>Η ενέργεια που προσπαθήσατε να εκτελέσετε απαιτεί δικαιώματα διαχειριστή χρηστών.</b>
         <br>Η πλατφόρμα σας ανακατεύθυνε αυτόματα στην αρχική σελίδα
         για να συνδεθείτε ξανά.";
 $langCheckGuest = "

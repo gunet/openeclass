@@ -18,7 +18,7 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-$require_power_user = TRUE;
+$require_usermanage_user = TRUE;
 include '../../include/baseTheme.php';
 include '../../include/sendMail.inc.php';
 include '../auth/auth.inc.php';

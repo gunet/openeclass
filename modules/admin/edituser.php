@@ -34,7 +34,7 @@ This script allows the admin to :
 ==============================================================================
 */
 
-$require_power_user = true;
+$require_usermanage_user = TRUE;
 include '../../include/baseTheme.php';
 include 'admin.inc.php';
 include '../auth/auth.inc.php';

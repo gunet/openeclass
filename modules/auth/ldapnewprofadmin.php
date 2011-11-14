@@ -29,7 +29,7 @@
 ==============================================================================
 */
 
-$require_admin = TRUE;
+$require_usermanage_user = TRUE;
 
 include '../../include/baseTheme.php';
 include '../../include/sendMail.inc.php';

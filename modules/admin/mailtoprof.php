@@ -43,7 +43,7 @@
 
 // Check if user is administrator and if yes continue
 // Othewise exit with appropriate message
-$require_power_user = true;
+$require_usermanage_user = TRUE;
 // Include baseTheme
 include '../../include/baseTheme.php';
 // Include functions needed to send email

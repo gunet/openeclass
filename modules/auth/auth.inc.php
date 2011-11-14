@@ -711,6 +711,8 @@ function login($user_info_array, $posted_uname, $pass)
                         $_SESSION['is_admin'] = 1;
                 } elseif($admin_rights == POWER_USER) {  
                         $_SESSION['is_power_user'] = 1;
+                } elseif($admin_rights == USERMANAGE_USER) {
+                        $_SESSION['is_usermanage_user'] = 1;
                 }
                 if ($is_active) {
                         //$_SESSION['is_admin'] = !(!($user_info_array['is_admin'])); // double 'not' to handle NULL
@@ -775,7 +777,9 @@ function alt_login($user_info_array, $uname, $pass)
                                 $_SESSION['is_admin'] = 1;
                         } elseif($admin_rights == POWER_USER) {  
                                 $_SESSION['is_power_user'] = 1;
-                        }                                        
+                        } elseif($admin_rights == USERMANAGE_USER) {
+                                $_SESSION['is_usermanage_user'] = 1;
+                        }
                         if (!empty($is_active)) {
                                 $auth_allow = 1;
                         } else {
@@ -817,7 +821,7 @@ $type is 'shibboleth' or 'cas'
 function shib_cas_login($type)
 {
 	global $nom, $prenom, $email, $statut, $language, $durationAccount, $urlServer,
-		$is_admin, $is_power_user, $langUserAltAuth;
+		$is_admin, $is_power_user, $is_usermanage_user, $langUserAltAuth;
 
 	$autoregister = !(get_config('close_user_registration') && get_config('alt_auth_student_req'));
 
@@ -880,7 +884,10 @@ function shib_cas_login($type)
 			} elseif($admin_rights == POWER_USER) {  
 				$_SESSION['is_power_user'] = 1;
 				$is_power_user = 1;
-			}                              
+			} elseif ($admin_rights == USERMANAGE_USER) {
+                                $_SESSION['is_usermanage_user'] = 1;
+                                $is_usermanage_user = 1;
+                        }
 			$_SESSION['uid'] = $info['user_id'];                        
 			//$is_admin = !(!($info['is_admin'])); // double 'not' to handle NULL
 			$userPerso = $info['perso'];

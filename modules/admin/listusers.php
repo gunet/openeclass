@@ -24,7 +24,7 @@
 *  			eMail: info@openeclass.org
 * ========================================================================*/
 
-$require_power_user = true;
+$require_usermanage_user = TRUE;
 include '../../include/baseTheme.php';
 include_once '../../modules/auth/auth.inc.php';
 include 'admin.inc.php';
@@ -444,20 +444,23 @@ if($sql) {
 					case 10: $tool_content .= "<img src='$themeimg/guest.png' title='$langVisitor' />";break;
 	   				default: $tool_content .= "$langOther ($logs[6])";break;
 				}
-				$tool_content .= "</td>
-					<td width='80'><a href=\"edituser.php?u=".$logs['user_id']."\">
-					<img src='$themeimg/edit.png' title='$langEdit' /></a>
-					
-					<a href='unreguser.php?u=".$logs['user_id']."'>
-					<img src='$themeimg/delete.png' title='$langDelete' />
-					</a>
-					<a href='userstats.php?u=".$logs['user_id']."'>
-					<img src='$themeimg/platform_stats.png' title='$langStat' /></a>
-					
-					<a href='change_user.php?username=".urlencode($logs['username'])."'>
+				$tool_content .= "</td>";
+                                if ($logs['user_id'] == 1) { // don't display actions for admin user
+                                        $tool_content .= "<td class='center'>&dash;&dash;&nbsp;</td>";
+                                } else {
+                                        $tool_content .= "<td width='80'><a href=\"edituser.php?u=".$logs['user_id']."\">
+                                        <img src='$themeimg/edit.png' title='$langEdit' /></a>
+                                        <a href='unreguser.php?u=".$logs['user_id']."'>
+                                        <img src='$themeimg/delete.png' title='$langDelete' />
+                                        </a>
+                                        <a href='userstats.php?u=".$logs['user_id']."'>
+                                        <img src='$themeimg/platform_stats.png' title='$langStat' /></a>
+
+                                        <a href='change_user.php?username=".urlencode($logs['username'])."'>
                                         <img src='$themeimg/log_as.png' title='$langChangeUserAs ".
                                                 q($logs['username'])."' /></a>
-					</td>\n";
+                                        </td>\n";
+                                }                                
 				$tool_content .= "</tr>";
 				$k++;
 			}

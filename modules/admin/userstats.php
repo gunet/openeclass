@@ -31,7 +31,7 @@
 */
 
 // BASETHEME, OTHER INCLUDES AND NAMETOOLS
-$require_power_user = true;
+$require_usermanage_user = TRUE;
 include '../../include/baseTheme.php';
 require_once '../../include/libchart/libchart.php';
 $nameTools = $langVersion;
