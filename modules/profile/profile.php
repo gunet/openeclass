@@ -129,6 +129,7 @@ if (isset($_POST['submit'])) {
 		$username_form = $_SESSION['uname'];
 	}
 
+	$username_form = canonicalize_whitespace($username_form);
 	// If changing username check if the new one is free
 	if ($username_form != $_SESSION['uname']) {
 		// check if username exists
@@ -150,6 +151,8 @@ if (isset($_POST['submit'])) {
 		$verified_mail = 2;
 	}
 	// everything is ok
+	$email_form = mb_strtolower(trim($email_form));
+
 	if (db_query("UPDATE user SET nom = " . autoquote($nom_form) . ",
 						prenom = " . autoquote($prenom_form) . ",
 						username = " . autoquote($username_form) . ",

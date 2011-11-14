@@ -102,8 +102,8 @@ if (isset($_GET['do']) and $_GET['do'] == 'go') {
 	</form>";
 
 } elseif (isset($_POST['do'])) {
-	$email = isset($_POST['email'])?$_POST['email']:'';
-	$userName = isset($_POST['userName'])?$_POST['userName']:'';
+	$email = isset($_POST['email'])?mb_strtolower(trim($_POST['email'])):'';
+	$userName = isset($_POST['userName'])?canonicalize_whitespace($_POST['userName']):'';
 	/***** If valid e-mail address was entered, find user and send email *****/
 	$res = db_query("SELECT user_id, nom, prenom, username, password, statut FROM user
 			WHERE email = '" . mysql_escape_string($email) . "'

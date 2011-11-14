@@ -36,9 +36,9 @@ if($submit) {
    // register user
   $nom_form = isset($_POST['nom_form'])?$_POST['nom_form']:'';
   $prenom_form = isset($_POST['prenom_form'])?$_POST['prenom_form']:'';
-  $uname = isset($_POST['uname'])?$_POST['uname']:'';
+  $uname = isset($_POST['uname'])?canonicalize_whitespace($_POST['uname']):'';
   $password = isset($_POST['password'])?$_POST['password']:'';
-  $email_form = isset($_POST['email_form'])?$_POST['email_form']:'';
+  $email_form = isset($_POST['email_form'])?mb_strtolower(trim($_POST['email_form'])):'';
   $department = isset($_POST['department'])?$_POST['department']:'';
   $localize = isset($_POST['localize'])?$_POST['localize']:'';
   $lang = langname_to_code($localize);	

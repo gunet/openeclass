@@ -168,6 +168,9 @@ if ($is_valid) {
 				$ok = NULL;
 				$tool_content .= "<p class='caution'>$langEmailWrong</p>";
 		  }
+		  else {
+				$email = mb_strtolower(trim($email));
+		  }
  
 				if (!$ok) {
 								user_info_form();
@@ -182,6 +185,7 @@ if ($is_valid) {
         $statut = $prof? 1: 5;
         $greeting = $prof? $langDearProf: $langDearUser;
 
+		  $uname = canonicalize_whitespace($uname);
 		  // user allready exists
 		  if (user_exists(autounquote($uname))) {
 				$_SESSION['uname_exists'] = 1;
@@ -214,6 +218,9 @@ if ($is_valid) {
 						user_info_form();
 						draw($tool_content, 0);
 						exit();
+					}
+					else {
+						$email = mb_strtolower(trim($email));
 					}
 
                 $registered_at = time();
@@ -278,7 +285,7 @@ if ($is_valid) {
 						$_SESSION['statut'] = 5;
 						$_SESSION['prenom'] = $prenom;
 						$_SESSION['nom'] = $nom;
-						$_SESSION['uname'] = $uname;
+						$_SESSION['uname'] = canonicalize_whitespace($uname);
 						$_SESSION['user_perso_active'] = false;
 
 						$tool_content .= "
@@ -310,6 +317,9 @@ if ($is_valid) {
 						user_info_form();
 						draw($tool_content, 0);
 						exit();
+					 }
+					 else {
+						$email = mb_strtolower(trim($email));
 					 }
 
                 // Record user request

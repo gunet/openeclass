@@ -521,6 +521,11 @@ if (!isset($_POST['submit2'])) {
 				db_query("ALTER TABLE `user_request` ADD `verified_mail` TINYINT(1) NOT NULL DEFAULT 2 AFTER `email`");
 		}
 
+		if ($oldversion < '2.5') {
+			db_query("UPDATE `user` SET `email`=LOWER(TRIM(`email`))");
+			db_query("UPDATE `user` SET `username`=TRIM(`username`)");
+		}
+
         mysql_field_exists($mysqlMainDb, 'cours', 'expand_glossary') or
                 db_query("ALTER TABLE `cours` ADD `expand_glossary` BOOL NOT NULL DEFAULT 0");
         mysql_field_exists($mysqlMainDb, 'cours', 'glossary_index') or
