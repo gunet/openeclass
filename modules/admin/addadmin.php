@@ -34,9 +34,11 @@ if(isset($_POST['submit']) and !empty($username)) {
 	if (mysql_num_rows($res) == 1) 	{                        
             list($user_id) = mysql_fetch_array($res);
             switch ($_POST['adminrights']) {
-                case 'admin': $privilege = '0'; // admin user
+                case 'admin': $privilege = '0'; // platform admin user
                     break;
                 case 'poweruser': $privilege = '1'; // power user
+                    break;                                
+                case 'manageuser': $privilege = '2'; //  manage user accounts
                     break;                                
             }  
             $sql = db_query("INSERT INTO admin VALUES($user_id, $privilege)");               
@@ -122,7 +124,7 @@ draw($tool_content,3);
 ******************************************************************************/
 function printform ($message) {
 	
-    global $langAdd, $langInsertUserInfo, $langAddAdmin, $langAddPowerUser;
+    global $langAdd, $langInsertUserInfo, $langAddAdmin, $langAddPowerUser, $langAddManageUser;
         
     $ret = "<form method='post' name='makeadmin' action='$_SERVER[PHP_SELF]'>";
     $ret .= "<table class='tbl' width='100%'>      
@@ -134,6 +136,7 @@ function printform ($message) {
             <th class='left'>&nbsp;</th>
             <td><input type='radio' name='adminrights' value='admin' checked>$langAddAdmin
                 <input type='radio' name='adminrights' value='poweruser'>$langAddPowerUser
+                <input type='radio' name='adminrights' value='manageuser'>$langAddManageUser
             </td>
         </tr>
         <tr>

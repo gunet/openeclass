@@ -155,11 +155,13 @@ function getToolsArray($cat) {
  * @return array
  */
 function loggedInMenu(){
-	global $webDir, $language, $uid, $is_admin, $is_power_user, $urlServer, $mysqlMainDb;
+	global $webDir, $language, $uid, $is_admin, $is_power_user, $is_usermanage_user, 
+                $urlServer, $mysqlMainDb;
 
 	$sideMenuGroup = array();
 
-	if ((isset($is_admin) and $is_admin) or (isset($is_power_user) and $is_power_user)) {
+	if ((isset($is_admin) and $is_admin) or (isset($is_power_user) and $is_power_user)
+                or (isset($is_usermanage_user) and ($is_usermanage_user))) {
 		$sideMenuSubGroup = array();
 		$sideMenuText = array();
 		$sideMenuLink = array();
@@ -333,15 +335,15 @@ function adminMenu(){
 	}
 	
         if (isset($is_admin) and $is_admin) {
-				array_push($sideMenuText, $GLOBALS['langUserAuthentication']);
-				array_push($sideMenuLink, "../admin/auth.php");
-				array_push($sideMenuImg, "arrow.png");
-				array_push($sideMenuText, $GLOBALS['langMailVerification']);
-				array_push($sideMenuLink, "../admin/mail_ver_settings.php");
-				array_push($sideMenuImg, "arrow.png");
-            array_push($sideMenuText, $GLOBALS['langChangeUser']);
-            array_push($sideMenuLink, "../admin/change_user.php");
-            array_push($sideMenuImg, "arrow.png");    
+                array_push($sideMenuText, $GLOBALS['langUserAuthentication']);
+                array_push($sideMenuLink, "../admin/auth.php");
+                array_push($sideMenuImg, "arrow.png");
+                array_push($sideMenuText, $GLOBALS['langMailVerification']);
+                array_push($sideMenuLink, "../admin/mail_ver_settings.php");
+                array_push($sideMenuImg, "arrow.png");
+                array_push($sideMenuText, $GLOBALS['langChangeUser']);
+                array_push($sideMenuLink, "../admin/change_user.php");
+                array_push($sideMenuImg, "arrow.png");    
         }	
 	array_push($sideMenuText, $GLOBALS['langMultiRegUser']);
 	array_push($sideMenuLink, "../admin/multireguser.php");
@@ -358,38 +360,40 @@ function adminMenu(){
 	array_push($sideMenuSubGroup, $sideMenuLink);
 	array_push($sideMenuSubGroup, $sideMenuImg);
 	array_push($sideMenuGroup, $sideMenuSubGroup);
+        
+        if (isset($is_power_user) and $is_power_user) {
+                //lesson administration
+                //reset sub-arrays so that we do not have duplicate entries
+                $sideMenuSubGroup = array();
+                $sideMenuText = array();
+                $sideMenuLink = array();
+                $sideMenuImg	= array();
 
-	//lesson administration
-	//reset sub-arrays so that we do not have duplicate entries
-	$sideMenuSubGroup = array();
-	$sideMenuText = array();
-	$sideMenuLink = array();
-	$sideMenuImg	= array();
+                $arrMenuType = array();
+                $arrMenuType['type'] = 'text';
+                $arrMenuType['text'] = $GLOBALS['langAdminCours'];
+                array_push($sideMenuSubGroup, $arrMenuType);
 
-	$arrMenuType = array();
-	$arrMenuType['type'] = 'text';
-	$arrMenuType['text'] = $GLOBALS['langAdminCours'];
-	array_push($sideMenuSubGroup, $arrMenuType);
-
-	array_push($sideMenuText, $GLOBALS['langListCours']);
-	array_push($sideMenuLink, "../admin/listcours.php");
-	array_push($sideMenuImg, "arrow.png");
-	array_push($sideMenuText, $GLOBALS['langRestoreCourse']);
-	array_push($sideMenuLink, "../course_info/restore_course.php");
-	array_push($sideMenuImg, "arrow.png");
-	array_push($sideMenuText, $GLOBALS['langListFaculte']);
-	array_push($sideMenuLink, "../admin/addfaculte.php");
-	// check if we have betacms enabled
-	if (get_config('betacms') == TRUE) {
-		array_push($sideMenuImg, "arrow.png");
-		array_push($sideMenuText, $GLOBALS['langBrowseBCMSRepo']);
-		array_push($sideMenuLink, "../betacms_bridge/browserepo.php");
-	}
-	array_push($sideMenuImg, "arrow.png");
-	array_push($sideMenuSubGroup, $sideMenuText);
-	array_push($sideMenuSubGroup, $sideMenuLink);
-	array_push($sideMenuSubGroup, $sideMenuImg);
-	array_push($sideMenuGroup, $sideMenuSubGroup);
+                array_push($sideMenuText, $GLOBALS['langListCours']);
+                array_push($sideMenuLink, "../admin/listcours.php");
+                array_push($sideMenuImg, "arrow.png");
+                array_push($sideMenuText, $GLOBALS['langRestoreCourse']);
+                array_push($sideMenuLink, "../course_info/restore_course.php");
+                array_push($sideMenuImg, "arrow.png");
+                array_push($sideMenuText, $GLOBALS['langListFaculte']);
+                array_push($sideMenuLink, "../admin/addfaculte.php");
+                // check if we have betacms enabled
+                if (get_config('betacms') == TRUE) {
+                        array_push($sideMenuImg, "arrow.png");
+                        array_push($sideMenuText, $GLOBALS['langBrowseBCMSRepo']);
+                        array_push($sideMenuLink, "../betacms_bridge/browserepo.php");
+                }
+                array_push($sideMenuImg, "arrow.png");
+                array_push($sideMenuSubGroup, $sideMenuText);
+                array_push($sideMenuSubGroup, $sideMenuLink);
+                array_push($sideMenuSubGroup, $sideMenuImg);
+                array_push($sideMenuGroup, $sideMenuSubGroup);
+        }
 
 	//server administration
 	//reset sub-arrays so that we do not have duplicate entries
@@ -399,36 +403,36 @@ function adminMenu(){
 	$sideMenuImg	= array();
 
         if (isset($is_admin) and $is_admin) {
-            $arrMenuType = array();
-            $arrMenuType['type'] = 'text';
-            $arrMenuType['text'] = $GLOBALS['langState'];
-            array_push($sideMenuSubGroup, $arrMenuType);
-            array_push($sideMenuText, $GLOBALS['langCleanUp']);
-            array_push($sideMenuLink, "../admin/cleanup.php");
-            array_push($sideMenuImg, "arrow.png");
+                $arrMenuType = array();
+                $arrMenuType['type'] = 'text';
+                $arrMenuType['text'] = $GLOBALS['langState'];
+                array_push($sideMenuSubGroup, $arrMenuType);
+                array_push($sideMenuText, $GLOBALS['langCleanUp']);
+                array_push($sideMenuLink, "../admin/cleanup.php");
+                array_push($sideMenuImg, "arrow.png");
 
-            if (isset($phpSysInfoURL) && PHP_OS == "Linux") {
+                if (isset($phpSysInfoURL) && PHP_OS == "Linux") {
                     array_push($sideMenuText, $GLOBALS['langSysInfo']);
                     array_push($sideMenuLink, $phpSysInfoURL);
                     array_push($sideMenuImg, "arrow.png");
-            }
-            array_push($sideMenuText, $GLOBALS['langPHPInfo']);
-            array_push($sideMenuLink, "../admin/phpInfo.php?to=phpinfo");
-            array_push($sideMenuImg, "arrow.png");
+                }
+                array_push($sideMenuText, $GLOBALS['langPHPInfo']);
+                array_push($sideMenuLink, "../admin/phpInfo.php?to=phpinfo");
+                array_push($sideMenuImg, "arrow.png");
 
-            if (isset($phpMyAdminURL)){
+                if (isset($phpMyAdminURL)){
                     array_push($sideMenuText, $GLOBALS['langDBaseAdmin']);
                     array_push($sideMenuLink, $phpMyAdminURL);
                     array_push($sideMenuImg, "arrow.png");
-            }
-            array_push($sideMenuText, $GLOBALS['langUpgradeBase']);
-            array_push($sideMenuLink, $urlServer."upgrade/");
-            array_push($sideMenuImg, "arrow.png");
+                }
+                array_push($sideMenuText, $GLOBALS['langUpgradeBase']);
+                array_push($sideMenuLink, $urlServer."upgrade/");
+                array_push($sideMenuImg, "arrow.png");
 
-            array_push($sideMenuSubGroup, $sideMenuText);
-            array_push($sideMenuSubGroup, $sideMenuLink);
-            array_push($sideMenuSubGroup, $sideMenuImg);
-            array_push($sideMenuGroup, $sideMenuSubGroup);
+                array_push($sideMenuSubGroup, $sideMenuText);
+                array_push($sideMenuSubGroup, $sideMenuLink);
+                array_push($sideMenuSubGroup, $sideMenuImg);
+                array_push($sideMenuGroup, $sideMenuSubGroup);
         }        
 
 	//other tools

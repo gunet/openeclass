@@ -19,8 +19,7 @@
  * ======================================================================== */
 
 
-
-$require_power_user = true;
+$require_usermanage_user = TRUE;
 include '../../include/baseTheme.php';
 include '../../include/sendMail.inc.php';
 $navigation[] = array("url" => "../admin/index.php", "name" => $langAdmin);

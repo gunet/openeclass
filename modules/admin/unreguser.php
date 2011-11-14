@@ -35,7 +35,7 @@
 ==============================================================================
 */
 
-$require_power_user = true;
+$require_usermanage_user = TRUE;
 include '../../include/baseTheme.php';
 $nameTools = $langUnregUser;
 $navigation[]= array ("url"=>"index.php", "name"=> $langAdmin);

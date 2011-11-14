@@ -150,15 +150,21 @@ if (isset($_SESSION['uid'])) {
 	$uid = 0;
 }
 
-// check if we are admin or power user 
+// check if we are admin or power user or manageuser_user
 if (isset($_SESSION['is_admin']) and $_SESSION['is_admin']) {
 	$is_admin = true;
 } elseif (isset($_SESSION['is_power_user']) and $_SESSION['is_power_user']) {
-	$is_power_user = true;              
+	$is_power_user = true;
+        $is_usermanage_user = true;
+	$is_admin = false;
+} elseif (isset($_SESSION['is_usermanage_user']) and $_SESSION['is_usermanage_user']) {
+        $is_usermanage_user = true;
+        $is_power_user = false;        
 	$is_admin = false;
 } else {
 	$is_admin = false;
 	$is_power_user = false;              
+        $is_usermanage_user = false;
 }
 
 if (!isset($_SESSION['theme'])) {
@@ -185,6 +191,13 @@ if (isset($require_admin) && $require_admin) {
 if (isset($require_power_user) && $require_power_user) {        
 	if (!($is_admin or $is_power_user)) {
 		$toolContent_ErrorExists = caution($langCheckPowerUser);
+		$errorMessagePath = "../../";
+	} 
+}
+
+if (isset($require_usermanage_user) && $require_usermanage_user) {        
+	if (!($is_admin or $is_power_user or $is_usermanage_user)) {
+		$toolContent_ErrorExists = caution($langCheckUserManageUser);
 		$errorMessagePath = "../../";
 	} 
 }
@@ -230,11 +243,12 @@ if (isset($require_current_course) and $require_current_course) {
 		$errorMessagePath = "../../";
 	} else {
 		$currentCourse = $dbname = $_SESSION['dbname'];
-		$result = db_query("SELECT cours_id, cours.code, fake_code, intitule, faculte.name AS faculte,
-									titulaires, languageCourse, departmentUrlName, departmentUrl, visible
-									FROM cours, faculte
-									WHERE cours.faculteid = faculte.id AND
-									cours.code=" . autoquote($dbname));
+		$result = db_query("SELECT cours_id, cours.code, 
+                                        fake_code, intitule, faculte.name AS faculte,
+                                        titulaires, languageCourse, departmentUrlName, departmentUrl, visible
+                                        FROM cours, faculte
+                                        WHERE cours.faculteid = faculte.id AND
+                                        cours.code=" . autoquote($dbname));
 
 		if (!$result or mysql_num_rows($result) == 0) {
 			restore_dbname_override(true);
@@ -278,8 +292,8 @@ if (isset($require_current_course) and $require_current_course) {
 			$statut = 1;
 		} else {
 			$res2 = db_query("SELECT statut FROM cours_user
-									WHERE user_id = $uid AND
-									cours_id = $cours_id");
+                                                WHERE user_id = $uid AND
+                                                cours_id = $cours_id");
 			if ($res2 and mysql_num_rows($res2) > 0) {
 				list($statut) = mysql_fetch_row($res2);
 			}
@@ -377,19 +391,16 @@ if (isset($currentCourse) && file_exists($module_ini_dir = getcwd() . "/module.i
 
 	if (!check_guest()) {
 		if (isset($_SESSION['uid']) and $_SESSION['uid']) {
-			$result = db_query("
-								SELECT `id` FROM accueil
-								WHERE visible=1
-								ORDER BY rubrique", $currentCourse);
+			$result = db_query("SELECT `id` FROM accueil
+                                        WHERE visible=1
+                                        ORDER BY rubrique", $currentCourse);
 		} else {
-			$result = db_query("
-								SELECT `id` FROM accueil
-								WHERE visible=1 AND lien NOT LIKE '%/user.php'
-								ORDER BY rubrique", $currentCourse);
+			$result = db_query("SELECT `id` FROM accueil
+                                        WHERE visible=1 AND lien NOT LIKE '%/user.php'
+                                        ORDER BY rubrique", $currentCourse);
 		}
 	} else {
-		$result = db_query("
-			SELECT `id` FROM `accueil`
+		$result = db_query("SELECT `id` FROM `accueil`
 			WHERE `visible` = 1
 			AND (
 			`id` = 1 or

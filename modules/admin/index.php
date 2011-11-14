@@ -20,7 +20,7 @@
 
 
 // Othewise exit with appropriate message
-$require_power_user = true;
+$require_usermanage_user = TRUE;
 // Include baseTheme
 include '../../include/baseTheme.php';
 // Define $nameTools
