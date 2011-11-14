@@ -168,14 +168,14 @@ if ($u)	{
 		$tool_content .= "
    <tr>
      <th class='left'>".$langUsername. "</th>
-     <td><b>".q($info['username'])."</b> [".$auth_text."] <input type='hidden' name='username' value='".q($info['username'])."' /> </td>
+     <td><b>".q(canonicalize_whitespace($info['username']))."</b> [".$auth_text."] <input type='hidden' name='username' value='".q(canonicalize_whitespace($info['username']))."' /> </td>
    </tr>";
 	}
 
 $tool_content .= "
    <tr>
      <th class='left'>e-mail: </th>
-     <td><input type='text' name='email' size='50' value='".q($info['email'])."' /></td>
+     <td><input type='text' name='email' size='50' value='".q(mb_strtolower(trim($info['email'])))."' /></td>
    </tr>
      <tr>
        <th>$langEmailVerified: </th>
@@ -357,8 +357,9 @@ $tool_content .= "
 	$fname = isset($_POST['fname'])?$_POST['fname']:'';
 	$lname = isset($_POST['lname'])?$_POST['lname']:'';
 	// trim white spaces in the end and in the beginning of the word
-	$username = preg_replace('/\ +/', ' ', trim(isset($_POST['username'])?$_POST['username']:''));
-	$email = isset($_POST['email'])?$_POST['email']:'';
+	//$username = preg_replace('/\ +/', ' ', trim(isset($_POST['username'])?$_POST['username']:''));
+	$username = isset($_POST['username'])?canonicalize_whitespace($_POST['username']):'';
+	$email = isset($_POST['email'])?mb_strtolower(trim($_POST['email'])):'';
 	$phone = isset($_POST['phone'])?$_POST['phone']:'';
 	$am = isset($_POST['am'])?$_POST['am']:'';
 	$department = isset($_POST['department'])?$_POST['department']:'NULL';

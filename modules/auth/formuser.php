@@ -69,15 +69,19 @@ $all_set = register_posted_variables(array(
                 'captcha_code' => false));
 
 if (!$all_set) {
-        $errors[] = $langFieldsMissing;
+	$errors[] = $langFieldsMissing;
 }
 
 if (!email_seems_valid($usermail)) {
-        $errors[] = $langEmailWrong;
-        $all_set = false;
+	$errors[] = $langEmailWrong;
+	$all_set = false;
+}
+else {
+	$usermail = mb_strtolower(trim($usermail));
 }
 
 // check if the username is already in use
+$username = canonicalize_whitespace($username);
 if(user_exists(autounquote($username))) {
 	$errors[] = $langUserFree;
 	$all_set = false;

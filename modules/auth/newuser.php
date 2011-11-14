@@ -156,6 +156,7 @@ if (!isset($_POST['submit'])) {
 	if (!$missing) {
 		$registration_errors[] = $langFieldsMissing;
 	} else {
+		$uname = canonicalize_whitespace($uname);
 		// check if the username is already in use
 		$q2 = "SELECT username FROM `$mysqlMainDb`.user WHERE username = ".autoquote($uname);
 		$username_check = db_query($q2);
@@ -174,6 +175,9 @@ if (!isset($_POST['submit'])) {
 	}
 	if (!empty($email) and !email_seems_valid($email)) {
 		$registration_errors[] = $langEmailWrong;
+	}
+	else {
+		$email = mb_strtolower(trim($email));
 	}
 	if ($password != $_POST['password1']) { // check if the two passwords match
 		$registration_errors[] = $langPassTwice;
