@@ -1,0 +1,4 @@
+syntax: regexp
+^courses/
+^video/
+^config/.*\.php
