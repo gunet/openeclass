@@ -202,7 +202,7 @@ function create_user($statut, $uname, $password, $nom, $prenom, $email, $depid, 
                         VALUES (" .
 				autoquote($nom) . ', ' .
 				autoquote($prenom) . ', ' .
-				autoquote(canonicalize_whitespace($uname)) . ", '$password_encrypted', " .
+				canonicalize_whitespace($uname) . ", '$password_encrypted', " .
 				autoquote(mb_strtolower(trim($email))) .
 				", $statut, $depid, " .
                                 "$registered_at, $expires_at, '$lang', " .
