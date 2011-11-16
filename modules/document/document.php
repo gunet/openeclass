@@ -298,7 +298,7 @@ if ($can_upload) {
 	// Step 2: Rename file by updating record in database
 	if (isset($_POST['renameTo'])) {
 		db_query("UPDATE document SET filename=" .
-                         autoquote(canonicalize_whitespace($_POST['renameTo'])) .
+                         autoquote($_POST['renameTo']) .
                          ", date_modified=NOW()
                           WHERE $group_sql AND path=" . autoquote($_POST['sourceFile']));
 		if (hasMetaData($_POST['sourceFile'], $basedir, $group_sql)) {
