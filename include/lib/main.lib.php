@@ -786,30 +786,30 @@ function my_basename($path) {
  * if argument time is defined then
  * transform date time format from "year-month-day time" to "to "day-month-year time"
  */
-function greek_format($date, $time = FALSE) {
-        
+function greek_format($date, $time = false)
+{
         if ($time) {                
-        	$datetime = explode(" ", $date);                
-                $new_date = implode("-",array_reverse(explode("-",$datetime[0])));                
-                return $new_date." ".$datetime[1];
+        	$datetime = explode(' ', $date);                
+                $new_date = implode('-', array_reverse(explode('-', $datetime[0])));                
+                return $new_date.' '.$datetime[1];
         } else {
-                return implode("-",array_reverse(explode("-",$date)));
+                return implode('-', array_reverse(explode('-',$date)));
         }
 }
 
 // format the date according to language
-function nice_format($date, $time = FALSE) {
-               
-	if ($GLOBALS['language'] == 'greek')
+function nice_format($date, $time = false)
+{
+	if ($GLOBALS['language'] == 'greek') {
 		return greek_format($date, $time);
-	else
-		return $date;
-
+        } else {
+                return $date;
+        }
 }
 
-// creating passwords automatically
-function create_pass() {
-
+// Create a random password
+function create_pass()
+{
 	$parts = array('a', 'ba', 'fa', 'ga', 'ka', 'la', 'ma', 'xa',
                        'e', 'be', 'fe', 'ge', 'ke', 'le', 'me', 'xe',
                        'i', 'bi', 'fi', 'gi', 'ki', 'li', 'mi', 'xi',
