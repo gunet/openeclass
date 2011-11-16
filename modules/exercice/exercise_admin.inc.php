@@ -24,7 +24,7 @@
 if(isset($_POST['submitExercise'])) {
 	$exerciseTitle = trim($exerciseTitle);
 	$exerciseDescription = trim($exerciseDescription);
-	//$randomQuestions=$randomQuestions?$questionDrawn:0;
+	@$randomQuestions = $randomQuestions ? $questionDrawn : 0;
 
 	// no title given
 	if(empty($exerciseTitle))
@@ -41,7 +41,7 @@ if(isset($_POST['submitExercise'])) {
 			$objExercise->updateEndDate($exerciseEndDate);
 			$objExercise->updateTimeConstrain($exerciseTimeConstrain);
 			$objExercise->updateAttemptsAllowed($exerciseAttemptsAllowed);
-	//		$objExercise->setRandom($randomQuestions);
+			$objExercise->setRandom($randomQuestions);
 			$objExercise->updateResults($dispresults);
 			$objExercise->updateScore($dispscore);
 			$objExercise->save();
@@ -60,7 +60,7 @@ else
 	$exerciseEndDate=$objExercise->selectEndDate();
 	$exerciseTimeConstrain=$objExercise->selectTimeConstrain();
 	$exerciseAttemptsAllowed=$objExercise->selectAttemptsAllowed();
-	//$randomQuestions=$objExercise->isRandom();
+	$randomQuestions=$objExercise->isRandom();
 	$displayResults=$objExercise->selectResults();
 	$displayScore=$objExercise->selectScore();
 }
@@ -135,6 +135,28 @@ if(isset($_GET['modifyExercise']) or isset($_GET['NewExercise']) or !isset($_POS
 	"value=\"".htmlspecialchars($exerciseAttemptsAllowed)."\">&nbsp;&nbsp;".
 	$langExerciseAttemptsAllowedUnit." &nbsp;&nbsp;&nbsp;(".$langExerciseAttemptsAllowedExplanation.")</td>
 	</tr>";
+        
+        // Random Questions
+        if($exerciseId && $nbrQuestions) {
+            $tool_content .= "<tr><th>".$langRandomQuestions.":</th>".
+                             "<td><input type=\"checkbox\" name=\"randomQuestions\" value=\"1\" "; 
+            if($randomQuestions) 
+                $tool_content .= "checked=\"checked\" ";  
+            $tool_content .= ">".$langYes.", $langTake";
+  	
+            $tool_content .= "<select name=\"questionDrawn\">";
+
+            for($i=1; $i <= $nbrQuestions; $i++) {
+                $tool_content .= "<option value=\"".$i."\"";
+                
+                if((isset($formSent) && $questionDrawn == $i) || (!isset($formSent) && ($randomQuestions == $i || ($randomQuestions <= 0 && $i == $nbrQuestions)))) 
+                    $tool_content .= 'selected="selected"'; 
+                    
+                $tool_content .=">".$i."</option>";
+            }
+            $tool_content .= "</select> ".strtolower($langQuestions)." ".$langAmong." ".$nbrQuestions." </td></tr>";
+	}
+
 
 	if (isset($displayResults) and $displayResults == 1) {
 		$extra = 'checked';
