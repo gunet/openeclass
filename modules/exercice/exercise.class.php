@@ -257,13 +257,13 @@ class Exercise
 	function selectRandomList()
 	{
 		// if the exercise is not a random exercise, or if there are not at least 2 questions
-		if(!$this->random || $this->selectNbrQuestions() < 2)
+		if(!$this->random || $this->selectNbrQuestions() < 2 || $this->random <= 0)
 		{
 			return $this->questionList;
 		}
 
 		// takes all questions
-		if($this->random == -1 || $this->random > $this->selectNbrQuestions())
+		if($this->random > $this->selectNbrQuestions())
 		{
 			$draws=$this->selectNbrQuestions();
 		}

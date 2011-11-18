@@ -24,7 +24,7 @@
 if(isset($_POST['submitExercise'])) {
 	$exerciseTitle = trim($exerciseTitle);
 	$exerciseDescription = trim($exerciseDescription);
-	@$randomQuestions = $randomQuestions ? $questionDrawn : 0;
+	$randomQuestions = (isset($_POST['questionDrawn'])) ? intval($_POST['questionDrawn']) : 0;
 
 	// no title given
 	if(empty($exerciseTitle))
@@ -137,25 +137,10 @@ if(isset($_GET['modifyExercise']) or isset($_GET['NewExercise']) or !isset($_POS
 	</tr>";
         
         // Random Questions
-        if($exerciseId && $nbrQuestions) {
-            $tool_content .= "<tr><th>".$langRandomQuestions.":</th>".
-                             "<td><input type=\"checkbox\" name=\"randomQuestions\" value=\"1\" "; 
-            if($randomQuestions) 
-                $tool_content .= "checked=\"checked\" ";  
-            $tool_content .= ">".$langYes.", $langTake";
-  	
-            $tool_content .= "<select name=\"questionDrawn\">";
-
-            for($i=1; $i <= $nbrQuestions; $i++) {
-                $tool_content .= "<option value=\"".$i."\"";
-                
-                if((isset($formSent) && $questionDrawn == $i) || (!isset($formSent) && ($randomQuestions == $i || ($randomQuestions <= 0 && $i == $nbrQuestions)))) 
-                    $tool_content .= 'selected="selected"'; 
-                    
-                $tool_content .=">".$i."</option>";
-            }
-            $tool_content .= "</select> ".strtolower($langQuestions)." ".$langAmong." ".$nbrQuestions." </td></tr>";
-	}
+        $tool_content .= "<tr><th>". $langRandomQuestions .":</th>".
+                         "<td>". $langYes .", ". $langTake ."&nbsp;".
+                         "<input type=\"text\" name=\"questionDrawn\" size=\"2\" value=\"". $randomQuestions ."\" />&nbsp;".
+                         strtolower($langQuestions) ."</td></tr>";
 
 
 	if (isset($displayResults) and $displayResults == 1) {
