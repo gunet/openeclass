@@ -61,6 +61,9 @@ $guest_allowed = true;
 include '../../include/init.php';
 include '../../include/action.php';
 
+// check user's access to cours
+check_cours_access();
+
 // record file access
 $action = new action();
 $action->record('MODULE_ID_DOCS');
@@ -90,3 +93,34 @@ if (file_exists($basedir . $file_info['path'])) {
         not_found(preg_replace('/^.*file\.php/', '', $uri));
 }
 
+function check_cours_access() {
+	global $mysqlMainDb, $currentCourse, $dbname, $statut;
+
+	// $dbname is used in filepath so we stick to this instead of $currentCourse
+	$qry = "SELECT cours_id, code, visible FROM `cours` WHERE code='$dbname'";
+	$result = db_query($qry, $mysqlMainDb);
+
+	// invalid lesson code
+	if (mysql_num_rows($result) != 1) {
+		redirect_to_home_page();
+		exit;
+	}
+
+	$cours = mysql_fetch_array($result);
+
+	switch($cours['visible']) {
+		case '2': return; 	// cours is open
+		case '1': 
+		case '0': 
+		default: 
+			// check if user has access to cours
+			if (isset($_SESSION['status'][$dbname]) && ($_SESSION['status'][$dbname] >= 1)) {
+				return;
+			}
+			else {
+				redirect_to_home_page();
+			}
+	}
+
+	exit;
+}

@@ -60,6 +60,10 @@ if (!isset($_GET['doit']) or $_GET['doit'] != "yes") {
             db_query("DELETE from cours_user
 		    WHERE cours_id = (SELECT cours_id FROM cours WHERE code = " . quote($cid) . ") AND user_id='$_GET[u]'");
                 if (mysql_affected_rows() > 0) {
+								// clear session access to lesson
+								unset($_SESSION['dbname']);
+								unset($_SESSION['cid_tmp']);
+								unset($_SESSION['status'][$cid]);
                         $tool_content .= "<p class='success_small'>$langCoursDelSuccess</p>";
                 } else {
                         $tool_content .= "<p class='caution_small'>$langCoursError</p>";

@@ -222,7 +222,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 		} elseif ($menuTypeID == 3) {
 			$t->set_var ( 'THIRD_BAR_TEXT', $langAdmin );
 			$t->set_var ( 'THIRDBAR_LEFT_ICON', 'admin_bar_icon' );
-		} elseif ($menuTypeID > 0 and $menuTypeID < 3 and !$_SESSION['user_perso_active']) {
+		} elseif ($menuTypeID > 0 and $menuTypeID < 3 and (!isset($_SESSION['user_perso_active']) or !$_SESSION['user_perso_active'])) {
 			$t->set_var ( 'THIRD_BAR_TEXT', $langUserBriefcase );
 			$t->set_var ( 'THIRDBAR_LEFT_ICON', 'briefcase_icon' );
 		} elseif ($menuTypeID > 0 and $_SESSION['user_perso_active']) {
