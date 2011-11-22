@@ -228,7 +228,7 @@ function loggedInMenu(){
 
 	if ($row = mysql_fetch_row($res2)) $statut = $row[0];
 
-	if ($statut == 1) {
+	if (isset($statut) and ($statut == 1)) {
 		array_push($sideMenuText, $GLOBALS['langCourseCreate']);
 		array_push($sideMenuLink, $urlServer . "modules/create_course/create_course.php");
 		array_push($sideMenuImg, "arrow.png");
