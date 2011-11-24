@@ -149,39 +149,45 @@ if ($is_editor) {
                             autounquote($_POST['newContent']);
             $emailSubject = "$professorMessage ($fake_code - $intitule)";
             // select students email list
-            $sqlUserOfCourse = "SELECT user.email FROM cours_user, user
-                                WHERE cours_id = $cours_id AND cours_user.user_id = user.user_id";
-            $result = db_query($sqlUserOfCourse, $mysqlMainDb);
-
-            $countEmail = mysql_num_rows($result); // number of mail recipients
+            $sqlUserOfCourse = "SELECT cours_user.user_id, user.email FROM cours_user, user
+                                WHERE cours_id = $cours_id 
+                                AND cours_user.user_id = user.user_id";
+            $result = db_query($sqlUserOfCourse, $mysqlMainDb);            
 
             $invalid = 0;
 	    $recipients = array();
-            $emailBody = html2text($emailContent);
+            $emailBody = html2text($emailContent);            
             $general_to = 'Members of course ' . $currentCourseID;
             while ($myrow = mysql_fetch_array($result)) {
                     $emailTo = $myrow["email"]; 
+                    $user_id = $myrow["user_id"];
                     // check email syntax validity
                     if (!email_seems_valid($emailTo)) {
                             $invalid++;
-                    } else {
+                    } elseif (get_user_email_notification($user_id, $cours_id)) {                                    
                             array_push($recipients, $emailTo);
                     }
+                    $linkhere = "&nbsp;<a href='${urlServer}modules/profile/emailunsubscribe.php?cid=$cours_id'>$langHere</a>.";
+                    $unsubscribe = "<br /><br />".sprintf($langLinkUnsubscribe, $intitule);            
+                    $emailContent = $emailBody.$unsubscribe.$linkhere;            
                     // send mail message per 50 recipients
                     if (count($recipients) >= 50) {
-                            send_mail_multipart("$_SESSION[prenom] $_SESSION[nom]", $_SESSION['email'],
-                                                $general_to,
-                                            $recipients, $emailSubject,
-                                            $emailBody, $emailContent, $charset);
+                            // checks if user is notified by email
+                            if (get_user_email_notification($user_id, $cours_id)) {                                    
+                                    send_mail_multipart("$_SESSION[prenom] $_SESSION[nom]", $_SESSION['email'],
+                                                        $general_to,
+                                                    $recipients, $emailSubject,
+                                                    $emailBody, $emailContent, $charset);
+                            }
                             $recipients = array();
                     }
             }
-            if (count($recipients) > 0)  {
-                    send_mail_multipart("$_SESSION[prenom] $_SESSION[nom]", $_SESSION['email'], $general_to,
-                                    $recipients, $emailSubject,
-                                    $emailBody, $emailContent, $charset);
-            }
-            $messageUnvalid = " $langOn $countEmail $langRegUser, $invalid $langUnvalid";
+            if (count($recipients) > 0)  {                    
+                send_mail_multipart("$_SESSION[prenom] $_SESSION[nom]", $_SESSION['email'], $general_to,
+                            $recipients, $emailSubject,
+                            $emailBody, $emailContent, $charset);                    
+            }                        
+            $messageUnvalid = " $langOn " .count($recipients). " $langRegUser, $invalid $langUnvalid";
             $message = "<p class='success'>$langAnnAdd $langEmailSent<br />$messageUnvalid</p>";
         } // if $emailOption==1
         else {

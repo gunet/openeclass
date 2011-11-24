@@ -529,7 +529,6 @@ $langUnvalid="έχουν άκυρη διεύθυνση email ή δεν έχου�
 $langModifAnn="Αλλαγή της ανακοίνωσης";
 $langAnnouncement = "Ανακοίνωση";
 $langMove = "Μετακίνηση";
-$langAnnEmpty="Όλες οι ανακοινώσεις διαγράφηκαν";
 $langAnnModify="η ανακοίνωση άλλαξε";
 $langAnnAdd="Η ανακοίνωση προστέθηκε";
 $langAnnDel="η ανακοίνωση διαγράφηκε";
@@ -551,6 +550,14 @@ $langAnn = "Ανακοινώθηκε την";
 $langEmptyAnTitle = "Παρακαλώ πληκτρολογήστε τον τίτλο της ανακοίνωσης";
 $langAnnouncementNoTille = "Ανακοίνωση χωρίς τίτλο";
 $langCourseAnnouncements = "Ανακοινώσεις μαθήματος";
+$langLinkUnsubscribe = "Σημείωση: Λαμβάνετε αυτό το email επειδή είστε γραμμένος στο μάθημα '%s'.<br /> 
+                Αν δεν επιθυμείτε να σας αποστέλονται άλλα emails από το συγκεκριμένο μάθημα κάντε κλικ";
+$langEmailUnsubscribe = "Ειδοποιήσεις μαθήματος";
+$langInfoUnsubscribe = "Αν δεν επιθυμείτε να σας αποστέλονται ενημερωτικά emails από το παρακάτω μάθημα τότε
+              αποεπιλέξτε το μάθημα και κάντε κλικ στο 'Ύποβολή'. <br />(Σημείωση: Δεν απεγγράφεστε από το μάθημα).";
+$langEmailUnsubSuccess = "Δεν θα λαμβάνετε πλέον emails από το μάθημα '%s'";
+$langEmailFromCourses = "Να λαμβάνω emails από τα μαθήματά μου";
+
 /*******************************************
 * archive_course.php
 *******************************************/
@@ -671,6 +678,8 @@ $langIdentity = "Ταυτότητα Μαθήματος";
 $langCourseS = "μάθημα";
 $langRSSFeed = 'Ροή RSS';
 $langAddAsBookmark = 'Προσθήκη στους σελιδοδείκτες';
+$langNoUserEmailNotification = "Δεν λαμβάνετε ειδοποιήσεις του μαθήματος μέσω email.";
+
 
 /*********************************************
 * course_info.php
@@ -1120,6 +1129,9 @@ $langAnswersNotDisp = "Απόκρυψη απαντήσεων μετά το τέ�
 $langAnswersDisp = "Εμφάνιση απαντήσεων μετά το τέλος της άσκησης";
 $langScoreNotDisp = "Απόκρυψη βαθμολογίας μετά το τέλος της άσκησης";
 $langScoreDisp = "Εμφάνιση βαθμολογίας μετά το τέλος της άσκησης";
+$langInfoGrades = "βαθμοί";
+$langInfoGrade = "βαθμός";
+$langFromRandomQuestions = "τυχαίων ερωτήσεων από το σύνολο";
 
 // admin.php
 $langExerciseManagement="Διαχείριση Άσκησης";

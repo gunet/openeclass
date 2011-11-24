@@ -2071,3 +2071,38 @@ function get_admin_rights($user_id) {
                 return -1;
 	} 
 }
+
+// checks if user is notified via email from a given course
+function get_user_email_notification($user_id, $course_id) {
+        
+        global $mysqlMainDb;
+        
+        if (!get_user_email_notification_from_courses($user_id)) {
+                return FALSE;
+        }
+        $r = db_query("SELECT receive_mail FROM cours_user 
+                        WHERE user_id = $user_id
+                        AND cours_id = $course_id", $mysqlMainDb);
+        if ($r and mysql_num_rows($r) > 0) {
+                $row = mysql_fetch_row($r);
+                return $row[0];
+	} else {
+                return -1;
+	}         
+}
+
+
+// checks if user is notified via email from courses
+function get_user_email_notification_from_courses($user_id) {
+        
+        global $mysqlMainDb;
+        
+        $r = db_query("SELECT receive_mail FROM user 
+                        WHERE user_id = $user_id", $mysqlMainDb);
+        list($result) = mysql_fetch_row($r);        
+        if ($result == 1) {
+                return TRUE;
+        } else {
+                return FALSE;
+        }                  
+}

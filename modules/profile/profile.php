@@ -69,6 +69,7 @@ if (isset($_POST['submit'])) {
 	}
 	$image_path = $webDir."courses/userimg/".$_SESSION['uid'];
         $perso_status = (isset($_POST['persoStatus']) and $_POST['persoStatus'] == 'yes')? 'yes': 'no';
+        $subscribe = (isset($_POST['subscribe']) and $_POST['subscribe'] == 'yes')? '1': '0';
         $old_language = $language;
         $language = $_SESSION['langswitch'] = langcode_to_name($_POST['userLanguage']);
         $langcode = langname_to_code($language);
@@ -77,6 +78,7 @@ if (isset($_POST['submit'])) {
         db_query("UPDATE user SET perso = '$perso_status',
                                   lang = '$langcode'
                               WHERE user_id = $uid");
+                
         $all_ok = register_posted_variables(array(
                 'am_form' => false,
                 'desc_form' => false,
@@ -162,8 +164,9 @@ if (isset($_POST['submit'])) {
 						description = " . autoquote($desc_form) . ",
 						department = $department,
 						email_public = $email_public,
-						phone_public = $phone_public,
+						phone_public = $phone_public,                
 						verified_mail = $verified_mail,
+                                                receive_mail = $subscribe,
 						am_public = $am_public
 						WHERE user_id = $_SESSION[uid]")) {
 		$_SESSION['uname'] = $username_form;
@@ -245,7 +248,7 @@ if ($allow_password_change) {
         $tool_content .= "
         <li><a href='$passurl'>$langChangePass</a></li> ";
 }
-$tool_content .= "
+$tool_content .= "<li><a href='emailunsubscribe.php'>$langEmailUnsubscribe</a></li>
         <li><a href='../unreguser/unreguser.php'>$langUnregUser</a></li>
     </ul>
   </div>\n";
@@ -335,7 +338,17 @@ if (isset($persoIsActive)) {
         </tr>";
 }
 
-
+if (get_user_email_notification_from_courses($uid)) {
+        $selectedyes = 'checked';
+        $selectedno = '';
+} else {
+        $selectedyes = '';
+        $selectedno = 'checked';
+}
+$tool_content .= "<tr><th>$langEmailFromCourses:</th>
+                  <td><input type='radio' name='subscribe' value='yes' $selectedyes />$langYes&nbsp;
+                  <input type='radio' name='subscribe' value='no' $selectedno />$langNo&nbsp;
+                  </td></tr>";
 $tool_content .= "
         <tr>
           <th>$langFaculty:</th>

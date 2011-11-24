@@ -62,17 +62,17 @@ function showQuestion($questionId, $onlyAnswers = false) {
 		$cpt2=1;
 		$Select=array();
 		$tool_content .= "
-  <tr class='even'>
-    <td colspan='2'>
-      <table class='tbl_border' width='100%'>
-      <tr>
-        <th width='200'>$langColumnA</th>
-        <th width='130'>$langMakeCorrespond</th>
-        <th width='200'>$langColumnB</th>
-      </tr>
-      </table>
-    </td>
-  </tr>";
+                  <tr class='even'>
+                    <td colspan='2'>
+                      <table class='tbl_border' width='100%'>
+                      <tr>
+                        <th width='200'>$langColumnA</th>
+                        <th width='130'>$langMakeCorrespond</th>
+                        <th width='200'>$langColumnB</th>
+                      </tr>
+                      </table>
+                    </td>
+                  </tr>";
 	}
 
 	for($answerId=1;$answerId <= $nbrAnswers;$answerId++) {
@@ -149,28 +149,28 @@ function showQuestion($questionId, $onlyAnswers = false) {
 				       $tool_content .= '&nbsp;';
 
 				$tool_content .= "
-        </td>
-      </tr>
-      </table>
-    </td>
-  </tr>";
+                                        </td>
+                                      </tr>
+                                      </table>
+                                    </td>
+                                  </tr>";
 				$cpt2++;
 				// if the left side of the "matching" has been completely shown
 				if($answerId == $nbrAnswers) {
 					// if it remains answers to shown at the right side
 					while(isset($Select[$cpt2])) 	{
 						$tool_content .= "
-      <tr class='even'>
-        <td colspan='2'>
-          <table>
-          <tr>
-            <td width='60%' colspan='2'>&nbsp;</td>
-            <td width='40%' align='right' valign='top'>".
-              "<b>".$Select[$cpt2]['Lettre'].".</b> ".$Select[$cpt2]['Reponse']."</td>
-          </tr>
-          </table>
-        </td>
-      </tr>";
+                                              <tr class='even'>
+                                                <td colspan='2'>
+                                                  <table>
+                                                  <tr>
+                                                    <td width='60%' colspan='2'>&nbsp;</td>
+                                                    <td width='40%' align='right' valign='top'>".
+                                                      "<b>".$Select[$cpt2]['Lettre'].".</b> ".$Select[$cpt2]['Reponse']."</td>
+                                                  </tr>
+                                                  </table>
+                                                </td>
+                                              </tr>";
 						$cpt2++;
 					}	// end while()
 				}  // end if()
@@ -179,20 +179,20 @@ function showQuestion($questionId, $onlyAnswers = false) {
 		}
 		elseif($answerType == TRUE_FALSE) {
 			$tool_content .= "
-  <tr class='even'>
-    <td width='1' align='center'>
-      <input type='radio' name='choice[${questionId}]' value='${answerId}' />
-    </td>
-    <td>$answer</td>
-  </tr>";
+                          <tr class='even'>
+                            <td width='1' align='center'>
+                              <input type='radio' name='choice[${questionId}]' value='${answerId}' />
+                            </td>
+                            <td>$answer</td>
+                          </tr>";
 		}
 	}	// end for()
 
 	if(!$nbrAnswers) {
 		$tool_content .= "
-  <tr>
-    <td colspan='2'><p class='caution'>$langNoAnswer</td>
-  </tr>";
+                  <tr>
+                    <td colspan='2'><p class='caution'>$langNoAnswer</td>
+                  </tr>";
 	}
 	// destruction of the Answer object
 	unset($objAnswerTmp);
@@ -200,4 +200,3 @@ function showQuestion($questionId, $onlyAnswers = false) {
 	unset($objQuestionTmp);
 	return $nbrAnswers;
 }
-?>

@@ -51,10 +51,7 @@ $tool_content .= "<b>$langFaculty:</b> " . find_faculty_by_id($userdata['departm
 if (!empty($userdata['description'])) {
         $tool_content .= standard_text_escape($userdata['description']);
 }
-$tool_content .= "
-       </td>
-     </tr>
-     </table>";
+$tool_content .= "</td></tr></table>";
 
 draw($tool_content, 1);
 

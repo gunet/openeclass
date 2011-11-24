@@ -61,12 +61,14 @@ if ($is_editor or $is_tutor)  {
 		while ($userid = mysql_fetch_array($req)) {
                         $r = db_query("SELECT email FROM user where user_id='$userid[user_id]'", $mysqlMainDb);
 			list($email) = mysql_fetch_array($r);
-			if (email_seems_valid($email) and
-                            !send_mail($sender_name, $sender_email,
-                                       '', $email,
-                                       $emailsubject, $emailbody, $charset)) {
-                                $tool_content .= "<h4>$langMailError</h4>";
-			}
+                        if (get_user_email_notification($userid[user_id], $cours_id)) {
+                                if (email_seems_valid($email) and
+                                    !send_mail($sender_name, $sender_email,
+                                               '', $email,
+                                               $emailsubject, $emailbody, $charset)) {
+                                        $tool_content .= "<h4>$langMailError</h4>";
+                                }
+                        }
 		}
 		// aldo send email to professor 
 		send_mail($sender_name, $sender_email,'', $sender_email, $emailsubject, $emailbody, $charset);

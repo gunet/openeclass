@@ -169,15 +169,15 @@ $CurrentAttempt = mysql_fetch_array(db_query("SELECT COUNT(*) FROM exercise_user
 ++$CurrentAttempt[0];
 if ($exerciseAllowedAttempts > 0 and $CurrentAttempt[0] > $exerciseAllowedAttempts) { 
 	$tool_content .= "
-  <br/>
-    <table width='100%' class='tbl'>
-    <tr>
-      <td class='alert1'>$langExerciseExpired</td>
-    </tr>
-    <tr>
-      <td><br/><br/><br/><div align='center'><a href='exercice.php?course=$code_cours'>$langBack</a></div></td>
-    </tr>
-    </table>";
+          <br/>
+            <table width='100%' class='tbl'>
+            <tr>
+              <td class='alert1'>$langExerciseExpired</td>
+            </tr>
+            <tr>
+              <td><br/><br/><br/><div align='center'><a href='exercice.php?course=$code_cours'>$langBack</a></div></td>
+            </tr>
+            </table>";
 	draw($tool_content, 2);
 	exit();
 }
@@ -232,7 +232,7 @@ $tool_content .= "
   <input type='hidden' name='RecordStartDate' value='$RecordStartDate' />";
 
 $i=0;
-foreach($questionList as $questionId) {
+foreach($questionList as $questionId) {        
 	$i++;
 	// for sequential exercises
 	if($exerciseType == 2) {
@@ -254,20 +254,33 @@ foreach($questionList as $questionId) {
 			}
 		}
 	}
-	// shows the question and its answers
-	$tool_content .= "
-  <table width=\"100%\" class=\"tbl\">
-  <tr class='sub_title1'>
-    <td colspan=\"2\">".$langQuestion.": ".$i; 
+        
+        
+        // shows the question and its answers
+        $question = new Question();
+        $question->read($questionId);
+        $questionWeight = $question->selectWeighting();        
+        $message = $langInfoGrades;             
+        if (intval($questionWeight) == $questionWeight) {        
+                $questionWeight = intval($questionWeight);
+        }
+        if ($questionWeight == 1) {
+                $message = $langInfoGrade;
+        } 
+	$tool_content .= "<table width='100%' class='tbl'>
+                <tr class='sub_title1'>
+                <td colspan='2'>".$langQuestion.": ".$i."&nbsp;($questionWeight $message)"; 
 	
 	if($exerciseType == 2) { 
 		$tool_content .= "/".$nbrQuestions;
 	}
 	$tool_content .= "</td></tr>";
+        unset($question);        	
 	showQuestion($questionId);
+        
 	$tool_content .= "
 	<tr>
-	  <td colspan=\"2\">&nbsp;</td>
+	  <td colspan='2'>&nbsp;</td>
 	</tr>
 	</table>";
 	// for sequential exercises
@@ -279,19 +292,19 @@ foreach($questionList as $questionId) {
 
 if (!$questionList) {
 	$tool_content .= "
-  <table width=\"100%\">
-  <tr>
-    <td colspan='2'>
-      <p class='caution'>$langNoAnswer</p>
-    </td>
-  </tr>
-  </table>";	 
+          <table width='100%'>
+          <tr>
+            <td colspan='2'>
+              <p class='caution'>$langNoAnswer</p>
+            </td>
+          </tr>
+          </table>";	 
 } else {
 	$tool_content .= "
-  <br/>
-  <table width=\"100%\" class=\"tbl\">
-  <tr>
-    <td><div class='right'><input type=\"submit\" value=\"";
+          <br/>
+          <table width='100%' class='tbl'>
+          <tr>
+            <td><div class='right'><input type='submit' value=\"";
 		if ($exerciseType == 1 || $nbrQuestions == $questionNum) {
 			$tool_content .= "$langCont\" />&nbsp;";
 		} else {
@@ -305,7 +318,5 @@ if (!$questionList) {
   </tr>
   </table>";
 }	
-
 $tool_content .= "</form>";
 draw($tool_content, 2);
-?>

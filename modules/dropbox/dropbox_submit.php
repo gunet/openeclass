@@ -163,10 +163,12 @@ if (isset($_POST["submitWork"]))
 			new Dropbox_SentWork($uid, $dropbox_title, $_POST['description'], $_POST['authors'], $dropbox_filename, $dropbox_filesize, $newWorkRecipients);
 			if (isset($_POST['mailing']) and $_POST['mailing']) {	// send mail to recipients of dropbox file
 				foreach($newWorkRecipients as $userid) {
-					$body_dropbox_message = "$langInCourses '$c' $dropbox_lang[mailnotify] <br /><br />$gunet<br /><a href='$urlServer'>$urlServer</a>";
-					$plain_body_dropbox_message = "$langInCourses '$c' $dropbox_lang[mailnotify] \n\n$gunet\n<a href='$urlServer'>$urlServer</a>";
-					$emailaddr = uid_to_email($userid);
-					send_mail_multipart('', '', '', $emailaddr, $subject_dropbox, $plain_body_dropbox_message, $body_dropbox_message, $charset);	
+                                        if (get_user_email_notification($userid, $cours_id)) {  
+                                                $body_dropbox_message = "$langInCourses '$c' $dropbox_lang[mailnotify] <br /><br />$gunet<br /><a href='$urlServer'>$urlServer</a>";
+                                                $plain_body_dropbox_message = "$langInCourses '$c' $dropbox_lang[mailnotify] \n\n$gunet\n<a href='$urlServer'>$urlServer</a>";
+                                                $emailaddr = uid_to_email($userid);
+                                                send_mail_multipart('', '', '', $emailaddr, $subject_dropbox, $plain_body_dropbox_message, $body_dropbox_message, $charset);	        
+                                        }                                  					
 				}
 			}
 		}
