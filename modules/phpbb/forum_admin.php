@@ -212,9 +212,11 @@ hContent;
                                               course_id = $cours_id AND
                                               user_id <> $uid", $mysqlMainDb);
 		$body_topic_notify = "$langBodyCatNotify $langInCat '$ctg' \n\n$gunet";
-		while ($r = mysql_fetch_array($sql)) {
-			$emailaddr = uid_to_email($r['user_id']);
-			send_mail('', '', '', $emailaddr, $subject_notify, $body_topic_notify, $charset);
+		while ($r = mysql_fetch_array($sql)) {			
+                        if (get_user_email_notification($r['user_id'], $cours_id)) {
+                                $emailaddr = uid_to_email($r['user_id']);
+                                send_mail('', '', '', $emailaddr, $subject_notify, $body_topic_notify, $charset);
+                        }
 		}
 		// end of notification
 		$tool_content .= "<p class='success'>$langForumCategoryAdded</p>

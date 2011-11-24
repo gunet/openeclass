@@ -303,6 +303,12 @@ if ($is_editor or (isset($_SESSION['saved_editor']) and $_SESSION['saved_editor'
         $toggle_student_view = $toggle_student_view_close = '';
 }
 
+$emailnotification = '';
+if (get_user_email_notification($uid, $cours_id) == FALSE) {        
+        $emailnotification = "<div class='alert1'>$langNoUserEmailNotification 
+        (<a href='{$urlServer}modules/profile/emailunsubscribe.php?cid=$cours_id'>$langModify</a>)</div>";
+} 
+
 $tool_content .= "
 <div id='content_course'>
 
@@ -310,7 +316,6 @@ $tool_content .= "
    <tr>
       <td valign='top'>$main_content</td>
       <td width='200' valign='top'>
-
         <table class='tbl_courseid' width='200'>
         <tr class='title1'>
           <td  class='title1'>$langIdentity</td>
@@ -319,18 +324,18 @@ $tool_content .= "
           <td class='smaller'>$bar_content</td>
         </tr>
         </table>
-    
         <br />
-
         <table class='tbl_courseid' width='200'>
         <tr class='title1'>
           <td class='title1'>$langTools</td>
           <td class='left'>$toggle_student_view
              <a href='../../modules/contact/index.php?course=$code_cours' id='email_btn'><img src='$themeimg/email.png' alt='$langContactProf' title='$langContactProf' /></a>&nbsp;&nbsp;
              <a href='$_SERVER[PHP_SELF]' title='" . q($intitule) . "' class='jqbookmark'><img src='$themeimg/bookmark.png' alt='$langAddAsBookmark' title='$langAddAsBookmark' /></a>&nbsp;&nbsp;
-             <span class='feed'><a href='${urlServer}modules/announcements/rss.php?c=$currentCourseID'><img src='$themeimg/feed.png' alt='$langRSSFeed' title='$langRSSFeed' /></a></span>&nbsp;$toggle_student_view_close</td>
-        </tr>
+            <span class='feed'><a href='${urlServer}modules/announcements/rss.php?c=$currentCourseID'><img src='$themeimg/feed.png' alt='$langRSSFeed' title='$langRSSFeed' /></a></span>&nbsp;$toggle_student_view_close           
+            </td>                     
+        </tr>        
         </table>
+        $emailnotification
         <br />\n";
 
 $tool_content .= "

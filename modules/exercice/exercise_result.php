@@ -315,6 +315,12 @@ foreach($_SESSION['questionList'][$exerciseId] as $questionId) {
 		} // end of if
 	}	// end for()
 	 if ($displayScore == 1) {
+                 if (intval($questionScore) == $questionScore) {
+                         $questionScore = intval($questionScore);
+                 }
+                 if (intval($questionWeighting) == $questionWeighting) {
+                         $questionWeighting = intval($questionWeighting);
+                 }
 		$tool_content .= "
 		<tr class='even'>
 		  <th colspan='$colspan' class='odd'><div align='right'>
@@ -364,4 +370,3 @@ $tool_content .= "
   </form><br />";
 
 draw($tool_content, 2);
-?>

@@ -69,7 +69,8 @@ class Question
 		global $TBL_QUESTIONS, $TBL_EXERCICE_QUESTION, $currentCourseID;
 		
 		mysql_select_db($currentCourseID);
-		$sql = "SELECT question,description,ponderation,q_position,type FROM `$TBL_QUESTIONS` WHERE id='$id'";
+		$sql = "SELECT question, description, ponderation, q_position, type 
+                        FROM `$TBL_QUESTIONS` WHERE id='$id'";
 		$result = db_query($sql) or die("Error : SELECT in file ".__FILE__." at line ".__LINE__);
 
 		// if the question has been found
@@ -141,6 +142,23 @@ class Question
 		return $this->weighting;
 	}
 
+        // return the total weighting of an exercise
+        function selectTotalWeighting()
+        {                               
+                mysql_select_db($currentCourseID);
+                $result = db_query("SELECT SUM(questions.ponderation)
+                                FROM questions, exercice_question
+                                WHERE questions.id = exercice_question.question_id
+                                AND exercice_question.exercice_id = $id");
+                
+                list($totalweighting) = mysql_fetch_array($result);
+                if (isset($totalweighting)) {
+                       return $this->totalweighting;
+                }
+		// total weighting not found
+		return false;
+        }
+        
 	/**
 	 * returns the question position
 	 *

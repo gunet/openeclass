@@ -131,16 +131,16 @@ if(isset($_GET['modifyExercise']) or isset($_GET['NewExercise']) or !isset($_POS
 	</tr>	
 	<tr>
 	  <th>".$langExerciseAttemptsAllowed.":</th>
-	  <td><input type=\"text\" name=\"exerciseAttemptsAllowed\" size=\"3\" maxlength=\"2\"".
+	  <td><input type='text' name='exerciseAttemptsAllowed' size='3' maxlength='2'".
 	"value=\"".htmlspecialchars($exerciseAttemptsAllowed)."\">&nbsp;&nbsp;".
 	$langExerciseAttemptsAllowedUnit." &nbsp;&nbsp;&nbsp;(".$langExerciseAttemptsAllowedExplanation.")</td>
 	</tr>";
         
         // Random Questions
         $tool_content .= "<tr><th>". $langRandomQuestions .":</th>".
-                         "<td>". $langYes .", ". $langTake ."&nbsp;".
-                         "<input type=\"text\" name=\"questionDrawn\" size=\"2\" value=\"". $randomQuestions ."\" />&nbsp;".
-                         strtolower($langQuestions) ."</td></tr>";
+                         "<td>". $langSelection ."&nbsp;".
+                         "<input type='text' name='questionDrawn' size='2' value='". $randomQuestions ."' />&nbsp;".
+                         $langFromRandomQuestions ."</td></tr>";
 
 
 	if (isset($displayResults) and $displayResults == 1) {
