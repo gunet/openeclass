@@ -564,17 +564,6 @@ function check_guest() {
 	}
 }
 
-// -------------------------------------------------------
-// function to check if user must verify his email address
-// -------------------------------------------------------
-
-function get_mail_ver_status($uid) {
-	
-        $res = db_query("SELECT verified_mail FROM user WHERE user_id = $uid");
-        $g = mysql_fetch_row($res);
-        return $g[0];        		
-}
-
 // ------------------------------------------------
 // function to check if user is a course editor
 // ------------------------------------------------
@@ -2067,6 +2056,15 @@ function get_admin_rights($user_id) {
 	} else {
                 return -1;
 	} 
+}
+
+
+// get user email verification status
+function get_mail_ver_status($uid) {
+	
+        $res = db_query("SELECT verified_mail FROM user WHERE user_id = $uid");
+        $g = mysql_fetch_row($res);
+        return $g[0];        		
 }
 
 // checks if user is notified via email from a given course

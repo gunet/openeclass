@@ -44,7 +44,7 @@ if (empty($uid)) {
 
 // user might already verified mail account or verification is no more needed
 if (!get_config('email_verification_required') or 
-     get_mail_ver_status($uid) !== EMAIL_VERIFICATION_REQUIRED) {        
+     get_mail_ver_status($uid) == EMAIL_VERIFIED) {        
 	if (isset($_SESSION['mail_verification_required'])) {
 		unset($_SESSION['mail_verification_required']);
 	}
@@ -84,25 +84,29 @@ elseif (!empty($_SESSION['mail_verification_required']) && ($_SESSION['mail_veri
 	$tool_content .= "<div class='info'>$langMailVerificationReq</div> ";
 }
 	
-	$tool_content .= "<br /><br /><form method='post' action='$_SERVER[PHP_SELF]'>
-		<fieldset>
-			<legend>$langUserData</legend>
-			<table class='tbl' with='100%'>
-			<br />
-			<tr>
-				<th class='left'>$lang_email:</th>
-				<td><input type='text' name='email' size='30' maxlength='40' value='{$_SESSION['email']}' /></td>
-				<td><small>($langMailVerificationAddrChange)</small></td>
-			</tr>
-			<tr>
-				<th class='left'>&nbsp;</th>
-				<td colspan='2'><input type='submit' name='submit' value='$langMailVerificationNewCode' /></td>
-			</tr>
-			</table>
-			<br />
-		</fieldset>
-	</form>";
+$tool_content .= "<br /><br /><form method='post' action='$_SERVER[PHP_SELF]'>
+        <fieldset>
+                <legend>$langUserData</legend>
+                <table class='tbl' with='100%'>
+                <br />
+                <tr>
+                        <th class='left'>$lang_email:</th>
+                        <td><input type='text' name='email' size='30' maxlength='40' value='{$_SESSION['email']}' /></td>
+                        <td><small>($langMailVerificationAddrChange)</small></td>
+                </tr>
+                <tr>
+                        <th class='left'>&nbsp;</th>
+                        <td colspan='2'><input type='submit' name='submit' value='$langMailVerificationNewCode' /></td>
+                </tr>
+                </table>
+                <br />
+        </fieldset>
+</form>";
 
-draw($tool_content,0);
+if (isset($_GET['from_profile'])) {
+        draw($tool_content, 1);
+} else {
+draw($tool_content, 0);        
+}
+
 exit;
-?>
