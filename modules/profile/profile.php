@@ -349,6 +349,15 @@ $tool_content .= "<tr><th>$langEmailFromCourses:</th>
                   <td><input type='radio' name='subscribe' value='yes' $selectedyes />$langYes&nbsp;
                   <input type='radio' name='subscribe' value='no' $selectedno />$langNo&nbsp;
                   </td></tr>";
+$user_email_status = get_mail_ver_status($uid);
+if ($user_email_status == EMAIL_VERIFIED) {
+        $message = "<img src='$themeimg/tick_1.png' />";                
+} elseif ($user_email_status == EMAIL_UNVERIFIED) {         
+        $link = "<a href = '../auth/mail_verify_change.php?from_profile=TRUE'>$langHere</a>.";
+        $message = "<div class='alert1'>$langMailNotVerified $link</div>";
+}
+$tool_content .= "<tr><th>$langVerifiedMail</th>
+                <td>$message</td>";
 $tool_content .= "
         <tr>
           <th>$langFaculty:</th>
