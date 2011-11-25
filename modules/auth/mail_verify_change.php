@@ -42,8 +42,9 @@ if (empty($uid)) {
 	exit;
 }
 
-// user might allready verified mail account or verification is no more needed
-if (!get_config('email_verification_required') or !check_mail_ver_required($uid)) {
+// user might already verified mail account or verification is no more needed
+if (!get_config('email_verification_required') or 
+     get_mail_ver_status($uid) !== EMAIL_VERIFICATION_REQUIRED) {        
 	if (isset($_SESSION['mail_verification_required'])) {
 		unset($_SESSION['mail_verification_required']);
 	}

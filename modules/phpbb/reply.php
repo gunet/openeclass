@@ -144,6 +144,10 @@ if (isset($_POST['submit'])) {
 	$plain_body_topic_notify = "$langBodyTopicNotify $langInForum '$topic_title' $langOfForum '$forum_name' $langInCat '$cat_name' $langTo $langCourseS '$c' \n\n$plain_forum_message \n\n$gunet\n<a href='{$urlServer}$currentCourseID'>{$urlServer}$currentCourseID</a>";
 	while ($r = mysql_fetch_array($sql)) {
                 if (get_user_email_notification($r['user_id'], $cours_id)) {
+                        $linkhere = "&nbsp;<a href='${urlServer}modules/profile/emailunsubscribe.php?cid=$cours_id'>$langHere</a>.";
+                        $unsubscribe = "<br /><br />".sprintf($langLinkUnsubscribe, $intitule);    
+                        $plain_body_topic_notify .= $unsubscribe.$linkhere;
+                        $body_topic_notify .= $unsubscribe.$linkhere;
                         $emailaddr = uid_to_email($r['user_id']);
                         send_mail_multipart('', '', '', $emailaddr, $subject_notify, $plain_body_topic_notify, $body_topic_notify, $charset);
                 }

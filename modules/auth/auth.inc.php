@@ -683,7 +683,8 @@ function process_login()
 			if ($GLOBALS['persoIsActive'] and $GLOBALS['userPerso'] == 'no') {
 				$_SESSION['user_perso_active'] = true;
 			}
-			if (get_config('email_verification_required') && check_mail_ver_required($_SESSION['uid'])) {
+			if (get_config('email_verification_required') and
+                            get_mail_ver_status($_SESSION['uid']) === EMAIL_VERIFICATION_REQUIRED) {
 				$_SESSION['mail_verification_required'] = 1;
 				$next = "modules/auth/mail_verify_change.php";
 			} elseif (isset($_POST['next'])) {
@@ -948,7 +949,8 @@ function shib_cas_login($type)
 					(loginout.id_user, loginout.ip, loginout.when, loginout.action) 
 					VALUES ($_SESSION[uid], '$_SERVER[REMOTE_ADDR]', NOW(), 'LOGIN')");
 
-	if (get_config('email_verification_required') && check_mail_ver_required($_SESSION['uid'])) {
+	if (get_config('email_verification_required') and
+            get_mail_ver_status($_SESSION['uid']) === EMAIL_VERIFICATION_REQUIRED) {
 		$_SESSION['mail_verification_required'] = 1;
 		// init.php is already loaded so redirect from here
 		header("Location:" . $urlServer . "modules/auth/mail_verify_change.php");

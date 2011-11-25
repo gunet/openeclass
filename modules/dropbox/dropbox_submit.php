@@ -164,8 +164,10 @@ if (isset($_POST["submitWork"]))
 			if (isset($_POST['mailing']) and $_POST['mailing']) {	// send mail to recipients of dropbox file
 				foreach($newWorkRecipients as $userid) {
                                         if (get_user_email_notification($userid, $cours_id)) {  
-                                                $body_dropbox_message = "$langInCourses '$c' $dropbox_lang[mailnotify] <br /><br />$gunet<br /><a href='$urlServer'>$urlServer</a>";
-                                                $plain_body_dropbox_message = "$langInCourses '$c' $dropbox_lang[mailnotify] \n\n$gunet\n<a href='$urlServer'>$urlServer</a>";
+                                                $linkhere = "&nbsp;<a href='${urlServer}modules/profile/emailunsubscribe.php?cid=$cours_id'>$langHere</a>.";
+                                                $unsubscribe = "<br /><br />".sprintf($langLinkUnsubscribe, $intitule);            
+                                                $body_dropbox_message = "$langInCourses '$c' $dropbox_lang[mailnotify] <br /><br />$gunet<br /><a href='$urlServer'>$urlServer</a> $unsubscribe$linkhere";
+                                                $plain_body_dropbox_message = "$langInCourses '$c' $dropbox_lang[mailnotify] \n\n$gunet\n<a href='$urlServer'>$urlServer</a> $unsubscribe$linkhere";
                                                 $emailaddr = uid_to_email($userid);
                                                 send_mail_multipart('', '', '', $emailaddr, $subject_dropbox, $plain_body_dropbox_message, $body_dropbox_message, $charset);	        
                                         }                                  					

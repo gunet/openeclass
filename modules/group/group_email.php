@@ -62,6 +62,9 @@ if ($is_editor or $is_tutor)  {
                         $r = db_query("SELECT email FROM user where user_id='$userid[user_id]'", $mysqlMainDb);
 			list($email) = mysql_fetch_array($r);
                         if (get_user_email_notification($userid[user_id], $cours_id)) {
+                                $linkhere = "&nbsp;<a href='${urlServer}modules/profile/emailunsubscribe.php?cid=$cours_id'>$langHere</a>.";
+                                $unsubscribe = "<br /><br />".sprintf($langLinkUnsubscribe, $intitule);            
+                                $emailbody .= $unsubscribe.$linkhere;
                                 if (email_seems_valid($email) and
                                     !send_mail($sender_name, $sender_email,
                                                '', $email,
