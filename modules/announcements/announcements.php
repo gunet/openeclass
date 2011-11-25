@@ -165,20 +165,18 @@ if ($is_editor) {
                     if (!email_seems_valid($emailTo)) {
                             $invalid++;
                     } elseif (get_user_email_notification($user_id, $cours_id)) {                                    
+                            // checks if user is notified by email
                             array_push($recipients, $emailTo);
                     }
                     $linkhere = "&nbsp;<a href='${urlServer}modules/profile/emailunsubscribe.php?cid=$cours_id'>$langHere</a>.";
                     $unsubscribe = "<br /><br />".sprintf($langLinkUnsubscribe, $intitule);            
                     $emailContent = $emailBody.$unsubscribe.$linkhere;            
                     // send mail message per 50 recipients
-                    if (count($recipients) >= 50) {
-                            // checks if user is notified by email
-                            if (get_user_email_notification($user_id, $cours_id)) {                                    
-                                    send_mail_multipart("$_SESSION[prenom] $_SESSION[nom]", $_SESSION['email'],
-                                                        $general_to,
-                                                    $recipients, $emailSubject,
-                                                    $emailBody, $emailContent, $charset);
-                            }
+                    if (count($recipients) >= 50) {                                                        
+                            send_mail_multipart("$_SESSION[prenom] $_SESSION[nom]", $_SESSION['email'],
+                                                $general_to,
+                                            $recipients, $emailSubject,
+                                            $emailBody, $emailContent, $charset);                            
                             $recipients = array();
                     }
             }
@@ -187,8 +185,8 @@ if ($is_editor) {
                             $recipients, $emailSubject,
                             $emailBody, $emailContent, $charset);                    
             }                        
-            $messageUnvalid = " $langOn " .count($recipients). " $langRegUser, $invalid $langUnvalid";
-            $message = "<p class='success'>$langAnnAdd $langEmailSent<br />$messageUnvalid</p>";
+            $messageInvalid = " $langOn " .count($recipients). " $langRegUser, $invalid $langInvalidMail";
+            $message = "<p class='success'>$langAnnAdd $langEmailSent<br />$messageInvalid</p>";
         } // if $emailOption==1
         else {
             $message = "<p class='success'>$langAnnAdd</p>";
@@ -270,7 +268,7 @@ if ($is_editor) {
 	}
         $iterator = 1;
         $bottomAnnouncement = $announcementNumber = mysql_num_rows($result);
-
+ 
 	$tool_content .= "
         <script type='text/javascript' src='../auth/sorttable.js'></script>
         <table width='100%' class='sortable' id='t1'>";

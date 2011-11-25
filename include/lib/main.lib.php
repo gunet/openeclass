@@ -47,6 +47,10 @@ define('ADMIN_USER', 0); // admin user can do everything
 define('POWER_USER', 1); // poweruser can admin only users and courses
 define('USERMANAGE_USER', 2); // usermanage user can admin only users
 
+define('EMAIL_VERIFICATION_REQUIRED', 0);  // email verification required. User cannot login.
+define('EMAIL_VERIFIED', 1); // email is verified. User can login.
+define('EMAIL_UNVERIFIED', 2); // email is unverified. User can login but cannot receive mail.
+
 // Show query string and then do MySQL query
 function db_query2($sql, $db = FALSE)
 {
@@ -564,18 +568,11 @@ function check_guest() {
 // function to check if user must verify his email address
 // -------------------------------------------------------
 
-function check_mail_ver_required($uid) {
-	if (isset($uid)) {
-		$res = db_query("SELECT verified_mail FROM user WHERE user_id = '$uid'");
-		$g = mysql_fetch_row($res);
-
-		if (intval($g[0]) === 0) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-	return false;
+function get_mail_ver_status($uid) {
+	
+        $res = db_query("SELECT verified_mail FROM user WHERE user_id = $uid");
+        $g = mysql_fetch_row($res);
+        return $g[0];        		
 }
 
 // ------------------------------------------------
@@ -2073,22 +2070,35 @@ function get_admin_rights($user_id) {
 }
 
 // checks if user is notified via email from a given course
-function get_user_email_notification($user_id, $course_id) {
-        
+function get_user_email_notification($user_id, $course_id=null) 
+{        
         global $mysqlMainDb;
         
+        // checks if user has verified his email address
+        if (get_config('email_verification_required')) {
+                $verified_mail = get_mail_ver_status($user_id);                
+                if ($verified_mail == EMAIL_VERIFICATION_REQUIRED 
+                        or $verified_mail == EMAIL_UNVERIFIED) {                
+                        return FALSE;
+                }
+        }        
+        // checks if user has choosen not to be notified by email from all courses
         if (!get_user_email_notification_from_courses($user_id)) {
                 return FALSE;
         }
-        $r = db_query("SELECT receive_mail FROM cours_user 
-                        WHERE user_id = $user_id
-                        AND cours_id = $course_id", $mysqlMainDb);
-        if ($r and mysql_num_rows($r) > 0) {
-                $row = mysql_fetch_row($r);
-                return $row[0];
-	} else {
-                return -1;
-	}         
+        if (isset($course_id)) {
+        // finally checks if user has choosen not to be notified from a specific course
+                $r = db_query("SELECT receive_mail FROM cours_user 
+                                WHERE user_id = $user_id
+                                AND cours_id = $course_id", $mysqlMainDb);
+                if ($r and mysql_num_rows($r) > 0) {
+                        $row = mysql_fetch_row($r);
+                        return $row[0];
+                } else {
+                        return FALSE;
+                }        
+        }
+        return TRUE;
 }
 
 

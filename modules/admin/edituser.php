@@ -404,7 +404,7 @@ $tool_content .= "
 				$verified_mail=2;
 			}
 			$sql = "UPDATE user SET nom = ".autoquote($lname).", prenom = ".autoquote($fname).",
-                                       username = ".autoquote($username).", email = ".autoquote($email).", 
+                                       username = $username, email = ".autoquote($email).", 
                                        statut = ".intval($newstatut).", phone=".autoquote($phone).",
                                        department = ".intval($department).", expires_at=".$expires_at.",
                                        am = ".autoquote($am)." , verified_mail = ".intval($verified_mail) ." 
