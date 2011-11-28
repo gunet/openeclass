@@ -49,7 +49,8 @@ if (isset($_GET['submit'])) {
                                 WHERE user_id = $uid AND cours_id = ". course_code_to_id($course_code));
                         }
                 }
-                $tool_content .= "<div class='success'>$langWikiEditionSucceed</div>";
+                $tool_content .= "<div class='success'>$langWikiEditionSucceed. <br />
+                                <a href='../profile/profile.php'>$langBack</a></div>";
         }        
         
 } else {
