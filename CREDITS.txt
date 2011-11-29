@@ -64,6 +64,7 @@ Also Credits to:
  Emmanuela Patiniotaki <aporoemm@hotmail.com> (University of Athens)
  George Doukas <geodoukas@upatras.gr> (University of Patras)
  Kostantinos Tsakaloglou <tsakf@yahoo.com>
+ Evaggelos Matiatos <ematiat@noc.uoa.gr>
 
 Messages translated to spanish language by: 
 Ana Serrado Bayes <ana.serrado@uca.es>
