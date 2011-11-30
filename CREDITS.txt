@@ -1,8 +1,8 @@
 /*========================================================================
-*   Open eClass 2.4
+*   Open eClass 2.5
 *   E-learning and Course Management System
 * ========================================================================
-*  Copyright(c) 2003-2010  Greek Universities Network - GUnet
+*  Copyright(c) 2003-2011  Greek Universities Network - GUnet
 *  A full copyright notice can be read in "/info/copyright.txt".
 *
 *  Developers Group:	Costas Tsibanis <k.tsibanis@noc.uoa.gr>
@@ -64,9 +64,13 @@ Also Credits to:
  Emmanuela Patiniotaki <aporoemm@hotmail.com> (University of Athens)
  George Doukas <geodoukas@upatras.gr> (University of Patras)
  Kostantinos Tsakaloglou <tsakf@yahoo.com>
+ Evaggelos Matiatos <ematiat@noc.uoa.gr>
 
 Messages translated to spanish language by: 
 Ana Serrado Bayes <ana.serrado@uca.es>
+
+Messages translated to german language by: 
+George Nikolaidis <nikolage@noc.uoa.gr>
 
 Template Engine: Copyright 1999-2000 NetUSE GmbH Kristian Koehntopp
 
