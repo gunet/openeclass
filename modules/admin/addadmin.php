@@ -91,6 +91,8 @@ while($row = mysql_fetch_array($r1)) {
                 break;
             case '1': $message = $langPowerUser;
                 break;
+            case '2': $message = $langManageUser;
+                break;
         }
         $tool_content .= "<td align='center'>$message</td>";
         if($row['user_id'] != 1) {
