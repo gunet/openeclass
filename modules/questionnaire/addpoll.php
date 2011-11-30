@@ -114,13 +114,13 @@ function fill_questions($pid)
 function jscal_html($name, $u_date = FALSE) {
 	global $jscalendar;
 	if (!$u_date) {
-		$u_date = strftime('%Y-%m-%d', strtotime('now -0 day'));
+		$u_date = strftime('%Y-%m-%d %H:%M', strtotime('now -0 day'));
 	}
 
 	$cal = $jscalendar->make_input_field(
-           array('showsTime' => false,
+           array('showsTime' => true,
                  'showOthers' => true,
-                 'ifFormat' => '%Y-%m-%d'),
+                 'ifFormat' => '%Y-%m-%d %H:%M'),
            array('style' => '',
                  'name' => $name,
                  'value' => $u_date));
@@ -148,7 +148,7 @@ function printPollCreationForm() {
 	if(isset($_POST['PollEnd'])) {
 		$PollEnd = jscal_html('PollEnd', $_POST['PollEnd']);
 	} else {
-		$PollEnd = jscal_html('PollEnd', strftime('%Y-%m-%d', strtotime('now +1 year')));
+		$PollEnd = jscal_html('PollEnd', strftime('%Y-%m-%d %H:%M', strtotime('now +1 year')));
 	}
 	if (isset($pid)) {
 		$pidvar = "<input type='hidden' name='pid' value='$pid'>";
@@ -274,7 +274,7 @@ function insertPollQuestions($pid, $questions, $question_types)
 function createPoll($questions, $question_types) {
 	global $tool_content, $code_cours, $langPollCreated, $langBack;
 
-	$CreationDate = date("Y-m-d");
+	$CreationDate = date("Y-m-d H:i");
 	$PollName = $_POST['PollName'];
 	$StartDate = $_POST['PollStart'];
 	$EndDate = $_POST['PollEnd'];

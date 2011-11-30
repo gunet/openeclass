@@ -312,7 +312,7 @@ function upgrade_course_2_5($code, $extramessage = '') {
         global $langUpgCourse;
 
 	mysql_select_db($code);
-	echo "<hr><p>$langUpgCourse <b>$code</b> (2.4) $extramessage<br>";
+	echo "<hr><p>$langUpgCourse <b>$code</b> (2.5) $extramessage<br>";
 	flush();
 
         db_query("ALTER TABLE `assignments` 
@@ -326,6 +326,22 @@ function upgrade_course_2_5($code, $extramessage = '') {
         db_query("ALTER TABLE `assignment_submit` 
                         CHANGE `submission_date` `submission_date` DATETIME 
                         NOT NULL DEFAULT '0000-00-00'");
+        
+        db_query("ALTER TABLE `poll`
+                        CHANGE `start_date` `start_date` DATETIME
+                        NOT NULL DEFAULT '0000-00-00 00:00:00'");
+        
+        db_query("ALTER TABLE `poll`
+                        CHANGE `end_date` `end_date` DATETIME
+                        NOT NULL DEFAULT '0000-00-00 00:00:00'");
+        
+        db_query("ALTER TABLE `poll`
+                        CHANGE `creation_date` `creation_date` DATETIME
+                        NOT NULL DEFAULT '0000-00-00 00:00:00'");
+        
+        db_query("ALTER TABLE `poll_answer_record`
+                        CHANGE `submit_date` `submit_date` DATETIME
+                        NOT NULL DEFAULT '0000-00-00 00:00:00'");
         
 }
 

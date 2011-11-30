@@ -45,15 +45,15 @@ if(!isset($_GET['pid']) || !is_numeric($_GET['pid'])) die();
 	</tr>
 	<tr>
 	  <th>$langPollCreation:</th>
-	  <td>".nice_format(date("Y-m-d", strtotime($thePoll["creation_date"])))."</td>
+	  <td>".nice_format(date("Y-m-d H:i", strtotime($thePoll["creation_date"])), true)."</td>
 	</tr>
 	<tr>
 	  <th>$langPollStart:</th>
-	  <td>".nice_format(date("Y-m-d", strtotime($thePoll["start_date"])))."</td>
+	  <td>".nice_format(date("Y-m-d H:i", strtotime($thePoll["start_date"])), true)."</td>
 	</tr>
 	<tr>
 	  <th>$langPollEnd:</th>
-	  <td>".nice_format(date("Y-m-d", strtotime($thePoll["end_date"])))."</td>
+	  <td>".nice_format(date("Y-m-d H:i", strtotime($thePoll["end_date"])), true)."</td>
 	</tr>
 	</table>
 	<p class=\"sub_title1\">$langAnswers</p>";
