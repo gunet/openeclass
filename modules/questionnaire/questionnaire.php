@@ -119,13 +119,13 @@ function printPolls() {
 			<th colspan='2'><div align='left'>&nbsp;$langTitle</div></th>
 			<th width='150' class='center'>$langPollCreator</th>
 			<th width='120' class='center'>$langPollCreation</th>
-			<th width='70' class='center'>$langPollStart</th>
-			<th width='70' class='center'>$langPollEnd</th>";
+			<th width='110' class='center'>$langPollStart</th>
+			<th width='110' class='center'>$langPollEnd</th>";
 		
                 if ($is_editor) {
-                        $tool_content .= "<th width='70'>$langActions</th>";
+                        $tool_content .= "<th width='70' class='center'>$langActions</th>";
                 } else {
-                        $tool_content .= "<th>$langParticipate</th>";
+                        $tool_content .= "<th class='center'>$langParticipate</th>";
                 }
                 $tool_content .= "</tr>";
                 $active_polls = db_query("SELECT * FROM poll", $currentCourse);
@@ -157,12 +157,12 @@ function printPolls() {
                                 } else {
                                         $tool_content .= "<tr $visibility_css>";
                                 }			
-                                $temp_CurrentDate = date("Y-m-d");
+                                $temp_CurrentDate = date("Y-m-d H:i");
                                 $temp_StartDate = $thepoll["start_date"];
                                 $temp_EndDate = $thepoll["end_date"];
-                                $temp_StartDate = mktime(0, 0, 0, substr($temp_StartDate, 5,2), substr($temp_StartDate, 8,2),substr($temp_StartDate, 0,4));
-                                $temp_EndDate = mktime(0, 0, 0, substr($temp_EndDate, 5,2), substr($temp_EndDate, 8,2), substr($temp_EndDate, 0,4));
-                                $temp_CurrentDate = mktime(0, 0 , 0,substr($temp_CurrentDate, 5,2), substr($temp_CurrentDate, 8,2),substr($temp_CurrentDate, 0,4));
+                                $temp_StartDate = mktime(substr($temp_StartDate, 11, 2), substr($temp_StartDate, 14, 2), 0, substr($temp_StartDate, 5, 2), substr($temp_StartDate, 8, 2), substr($temp_StartDate, 0, 4));
+                                $temp_EndDate = mktime(substr($temp_EndDate, 11, 2), substr($temp_EndDate, 14, 2), 0, substr($temp_EndDate, 5, 2), substr($temp_EndDate, 8, 2), substr($temp_EndDate, 0, 4));
+                                $temp_CurrentDate = mktime(substr($temp_CurrentDate, 11, 2), substr($temp_CurrentDate, 14, 2), 0, substr($temp_CurrentDate, 5, 2), substr($temp_CurrentDate, 8, 2), substr($temp_CurrentDate, 0, 4));
                                 $creator_id = $thepoll["creator_id"];
                                 $theCreator = uid_to_name($creator_id);
                                 $pid = $thepoll["pid"];
@@ -195,11 +195,11 @@ function printPolls() {
                                 $tool_content .= "</td>
                         <td class='center'>$theCreator</td>";
                                 $tool_content .= "
-                        <td class='center'>".nice_format(date("Y-m-d", strtotime($thepoll["creation_date"])))."</td>";
+                        <td class='center'>".nice_format(date("Y-m-d H:i", strtotime($thepoll["creation_date"])), true)."</td>";
                                 $tool_content .= "
-                        <td class='center'>".nice_format(date("Y-m-d", strtotime($thepoll["start_date"])))."</td>";
+                        <td class='center'>".nice_format(date("Y-m-d H:i", strtotime($thepoll["start_date"])), true)."</td>";
                                 $tool_content .= "
-                        <td class='center'>".nice_format(date("Y-m-d", strtotime($thepoll["end_date"])))."</td>";
+                        <td class='center'>".nice_format(date("Y-m-d H:i", strtotime($thepoll["end_date"])), true)."</td>";
                                 if ($is_editor)  {
                                         $tool_content .= "
                         <td class='center'><a href='addpoll.php?course=$code_cours&amp;edit=yes&amp;pid=$pid'><img src='$themeimg/edit.png' title='$langEdit' border='0' /></a>&nbsp;<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;delete=yes&amp;pid=$pid' onClick=\"return confirmation('" . js_escape($langConfirmDelete) . "');\"><img src='$themeimg/delete.png' title='$langDelete' border='0' /></a>&nbsp;<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;visibility=$visibility_func&amp;pid={$pid}'><img src='$themeimg/".$visibility_gif.".png' border='0' title=\"".$langVisible."\" /></a></td>

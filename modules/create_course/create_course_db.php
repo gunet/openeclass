@@ -586,8 +586,8 @@ db_query("CREATE TABLE poll (
       course_id varchar(20) NOT NULL default 0,
       name varchar(255) NOT NULL default '',
       creation_date date NOT NULL default '0000-00-00',
-      start_date date NOT NULL default '0000-00-00',
-      end_date date NOT NULL default '0000-00-00',
+      start_date datetime NOT NULL default '0000-00-00 00:00:00',
+      end_date datetime NOT NULL default '0000-00-00 00:00:00',
       active int(11) NOT NULL default 0,
       PRIMARY KEY  (pid))
      $charset_spec");

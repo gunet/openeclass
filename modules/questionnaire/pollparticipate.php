@@ -63,12 +63,12 @@ function printPollForm() {
 	$poll = db_query("SELECT * FROM poll WHERE pid='".mysql_real_escape_string($pid)."' "
 		."ORDER BY pid", $currentCourse);
 	$thePoll = mysql_fetch_array($poll);
-	$temp_CurrentDate = date("Y-m-d");
+	$temp_CurrentDate = date("Y-m-d H:i");
 	$temp_StartDate = $thePoll["start_date"];
 	$temp_EndDate = $thePoll["end_date"];
-	$temp_StartDate = mktime(0, 0, 0, substr($temp_StartDate, 5,2), substr($temp_StartDate, 8,2),substr($temp_StartDate, 0,4));
-	$temp_EndDate = mktime(0, 0, 0, substr($temp_EndDate, 5,2), substr($temp_EndDate, 8,2), substr($temp_EndDate, 0,4));
-	$temp_CurrentDate = mktime(0, 0 , 0,substr($temp_CurrentDate, 5,2), substr($temp_CurrentDate, 8,2),substr($temp_CurrentDate, 0,4));
+	$temp_StartDate = mktime(substr($temp_StartDate, 11, 2), substr($temp_StartDate, 14, 2), 0, substr($temp_StartDate, 5, 2), substr($temp_StartDate, 8, 2), substr($temp_StartDate, 0, 4));
+	$temp_EndDate = mktime(substr($temp_EndDate, 11, 2), substr($temp_EndDate, 14, 2), 0, substr($temp_EndDate, 5, 2), substr($temp_EndDate, 8, 2), substr($temp_EndDate, 0, 4));
+	$temp_CurrentDate = mktime(substr($temp_CurrentDate, 11, 2), substr($temp_CurrentDate, 14, 2), 0, substr($temp_CurrentDate, 5, 2), substr($temp_CurrentDate, 8, 2), substr($temp_CurrentDate, 0, 4));
 	
 	if (($temp_CurrentDate >= $temp_StartDate) && ($temp_CurrentDate < $temp_EndDate)) {
 		$tool_content .= "
@@ -120,7 +120,7 @@ function submitPoll() {
 	
 	// first populate poll_answer
 	$user_id = $GLOBALS['uid'];
-	$CreationDate = date("Y-m-d");
+	$CreationDate = date("Y-m-d H:i");
 	$pid = intval($_POST['pid']);
 	mysql_select_db($GLOBALS['currentCourseID']);
 	$answer = $_POST['answer'];
