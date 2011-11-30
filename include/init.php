@@ -153,6 +153,8 @@ if (isset($_SESSION['uid'])) {
 // check if we are admin or power user or manageuser_user
 if (isset($_SESSION['is_admin']) and $_SESSION['is_admin']) {
 	$is_admin = true;
+        $is_power_user = true;
+        $is_usermanage_user = true;
 } elseif (isset($_SESSION['is_power_user']) and $_SESSION['is_power_user']) {
 	$is_power_user = true;
         $is_usermanage_user = true;
