@@ -52,7 +52,7 @@ class Exercise
 		$this->exercise='';
 		$this->description='';
 		$this->type=1;
-		$this->StartDate=date("Y-m-d");
+		$this->StartDate=date("Y-m-d H:i");
 		$this->EndDate='';
 		$this->TimeConstrain=0;
 		$this->AttemptsAllowed=0;

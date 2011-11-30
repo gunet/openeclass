@@ -248,13 +248,13 @@ function jscal_html($name, $u_date) {
 	
 	global $jscalendar;
 	if (!$u_date) {
-		$u_date = strftime('%Y-%m-%d', strtotime('now -0 day'));
+		$u_date = strftime('%Y-%m-%d %H:%M', strtotime('now -0 day'));
 	}
 
 	$cal = $jscalendar->make_input_field(
- 	   array('showsTime' => false,
+ 	   array('showsTime' => true,
                  'showOthers' => true,
-                 'ifFormat' => '%Y-%m-%d'),
+                 'ifFormat' => '%Y-%m-%d %H:%M'),
        array('style' => 'width: 15em; color: #840; background-color: #fff; border: 1px dotted #000; text-align: center',
                  'name'  => $name,
                  'value' => $u_date));

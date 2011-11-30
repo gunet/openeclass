@@ -163,8 +163,8 @@ if(!$nbrExercises) {
 	} else { // student view
 		$tool_content .= "
 	      <th colspan='2'>$langExerciseName</th>
-	      <th width='70' class='center'>$langExerciseStart</th>
-	      <th width='70' class='center'>$langExerciseEnd</th>
+	      <th width='110' class='center'>$langExerciseStart</th>
+	      <th width='110' class='center'>$langExerciseEnd</th>
 	      <th width='70' class='center'>$langExerciseConstrain</th>
 	      <th width='70' class='center'>$langExerciseAttemptsAllowed</th>
 	    </tr>";
@@ -246,10 +246,10 @@ if(!$nbrExercises) {
 		}
 		// student only
 		else {
-			$CurrentDate = date("Y-m-d");
-			$temp_StartDate = mktime(0, 0, 0, substr($row['StartDate'], 5,2), substr($row['StartDate'], 8,2), substr($row['StartDate'], 0,4));
-			$temp_EndDate = mktime(0, 0, 0, substr($row['EndDate'], 5,2),substr($row['EndDate'], 8,2),substr($row['EndDate'], 0,4));
-			$CurrentDate = mktime(0, 0 , 0,substr($CurrentDate, 5,2), substr($CurrentDate, 8,2),substr($CurrentDate, 0,4));
+			$CurrentDate = date("Y-m-d H:i");
+			$temp_StartDate = mktime(substr($row['StartDate'], 11, 2), substr($row['StartDate'], 14, 2), 0, substr($row['StartDate'], 5, 2), substr($row['StartDate'], 8, 2), substr($row['StartDate'], 0, 4));
+			$temp_EndDate = mktime(substr($row['EndDate'], 11, 2), substr($row['EndDate'], 14, 2), 0, substr($row['EndDate'], 5, 2), substr($row['EndDate'], 8, 2), substr($row['EndDate'], 0, 4));
+			$CurrentDate = mktime(substr($CurrentDate, 11, 2), substr($CurrentDate, 14, 2), 0, substr($CurrentDate, 5, 2), substr($CurrentDate, 8, 2), substr($CurrentDate, 0, 4));
 			if (($CurrentDate >= $temp_StartDate) && ($CurrentDate <= $temp_EndDate)) {
 				$tool_content .= "<td width=\"16\"><img src='$themeimg/arrow.png' alt='' /></td>
 				<td><a href=\"exercice_submit.php?course=$code_cours&amp;exerciseId=".$row['id']."\">".$row['titre']."</a>";
@@ -259,8 +259,8 @@ if(!$nbrExercises) {
 					</td><td>".$row['titre']."&nbsp;&nbsp;(<font color='red'>$m[expired]</font>)";
 			}
 			$tool_content .= "<br />$row[description]</td>
-			<td align='center'>".nice_format($row['StartDate'])."</td>
-			<td align='center'>".nice_format($row['EndDate'])."</td>";
+			<td align='center'>".nice_format(date("Y-m-d H:i", strtotime($row['StartDate'])), true)."</td>
+			<td align='center'>".nice_format(date("Y-m-d H:i", strtotime($row['EndDate'])), true)."</td>";
 			// how many attempts we have.
 			$CurrentAttempt = mysql_fetch_array(db_query("SELECT COUNT(*) FROM exercise_user_record
 				WHERE eid='$row[id]' AND uid='$uid'", $currentCourseID));
