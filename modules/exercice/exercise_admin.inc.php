@@ -107,12 +107,12 @@ if(isset($_GET['modifyExercise']) or isset($_GET['NewExercise']) or !isset($_POS
 	if (isset($exerciseStartDate)) {
 		$start_cal_Excercise = jscal_html('exerciseStartDate', $exerciseStartDate);
 	} else {
-		$start_cal_Excercise = jscal_html('exerciseStartDate', strftime('%Y-%m-%d', strtotime('now -0 day')));
+		$start_cal_Excercise = jscal_html('exerciseStartDate', strftime('%Y-%m-%d %H:%M', strtotime('now -0 day')));
 	}
 	if (isset($exerciseEndDate) and $exerciseEndDate != '') {
 		$end_cal_Excercise = jscal_html('exerciseEndDate', $exerciseEndDate);
 	} else {
-		$end_cal_Excercise = jscal_html('exerciseEndDate', strftime('%Y-%m-%d', strtotime('now +1 year')));
+		$end_cal_Excercise = jscal_html('exerciseEndDate', strftime('%Y-%m-%d %H:%M', strtotime('now +1 year')));
 	}
 	$tool_content .= "
         <tr>
@@ -212,8 +212,8 @@ if(isset($_GET['modifyExercise']) or isset($_GET['NewExercise']) or !isset($_POS
 	
 	$exerciseDescription = standard_text_escape($exerciseDescription);
 	$tool_content .= $exerciseDescription;
-	$exerciseStartDate = nice_format($exerciseStartDate);
-	$exerciseEndDate = nice_format($exerciseEndDate);
+	$exerciseStartDate = nice_format(date("Y-m-d H:i", strtotime($exerciseStartDate)), true);
+	$exerciseEndDate = nice_format(date("Y-m-d H:i", strtotime($exerciseEndDate)), true);
 	$tool_content .= "</td>
 	</tr>
 	<tr>

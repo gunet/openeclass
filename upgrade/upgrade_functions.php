@@ -343,6 +343,13 @@ function upgrade_course_2_5($code, $extramessage = '') {
                         CHANGE `submit_date` `submit_date` DATETIME
                         NOT NULL DEFAULT '0000-00-00 00:00:00'");
         
+        db_query("ALTER TABLE `exercices`
+                        CHANGE `StartDate` `StartDate` DATETIME
+                        DEFAULT NULL");
+        
+        db_query("ALTER TABLE `exercices`
+                        CHANGE `EndDate` `EndDate` DATETIME
+                        DEFAULT NULL");
 }
 
 
