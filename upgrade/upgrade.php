@@ -502,29 +502,26 @@ if (!isset($_POST['submit2'])) {
 			db_query("DROP TABLE cours_faculte");	
 		}		
         }
+		
+        if ($oldversion < '2.5') {
+                db_query("INSERT IGNORE INTO `config` (`key`, `value`) VALUES
+                        ('disable_eclass_stud_reg', '0'),
+                        ('disable_eclass_prof_reg', '0'),
+                        ('email_verification_required', '1'),
+                        ('close_user_registration', '0'),
+                        ('code_key', '" . generate_secret_key2(32) . "')");
 
-		if ($oldversion < '2.4.2') {
+                // old users have their email verified
+                if (mysql_field_exists($mysqlMainDb, 'user', 'verified_mail')) {
+                        db_query('ALTER TABLE `user` MODIFY `verified_mail` TINYINT(1) NOT NULL DEFAULT 2');
+                        db_query('UPDATE `user` SET `verified_mail`= EMAIL_VERIFIED');				
+                }
+                mysql_field_exists($mysqlMainDb, 'user_request', 'verified_mail') or
+                        db_query("ALTER TABLE `user_request` ADD `verified_mail` TINYINT(1) NOT NULL DEFAULT 2 AFTER `email`");		
 
-			db_query("INSERT IGNORE INTO `config` (`key`, `value`) VALUES
-				('disable_eclass_stud_reg', '0'),
-				('disable_eclass_prof_reg', '0'),
-				('email_verification_required', '1'),
-                                ('close_user_registration', '0'),
-				('code_key', '" . generate_secret_key2(32) . "')");
-
-			if (mysql_field_exists($mysqlMainDb, 'user', 'verified_mail')) {
-				db_query('ALTER TABLE `user` MODIFY `verified_mail` TINYINT(1) NOT NULL DEFAULT 2');
-				db_query('UPDATE `user` SET `verified_mail`=2');
-				db_query('UPDATE `user` SET `verified_mail`=1 WHERE user_id=1');
-			}
-			mysql_field_exists($mysqlMainDb, 'user_request', 'verified_mail') or
-				db_query("ALTER TABLE `user_request` ADD `verified_mail` TINYINT(1) NOT NULL DEFAULT 2 AFTER `email`");
-		}
-
-		if ($oldversion < '2.5') {
-			db_query("UPDATE `user` SET `email`=LOWER(TRIM(`email`))");
-			db_query("UPDATE `user` SET `username`=TRIM(`username`)");
-		}
+                db_query("UPDATE `user` SET `email`=LOWER(TRIM(`email`))");
+                db_query("UPDATE `user` SET `username`=TRIM(`username`)");
+        }
 
         mysql_field_exists($mysqlMainDb, 'cours', 'expand_glossary') or
                 db_query("ALTER TABLE `cours` ADD `expand_glossary` BOOL NOT NULL DEFAULT 0");

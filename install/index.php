@@ -558,7 +558,7 @@ elseif(isset($_REQUEST['install7']))
 	} else {		
 		$stringConfig='<?php
 /* ========================================================
- * OpeneClass 2.4 configuration file
+ * OpeneClass 2.5 configuration file
  * Automatically created by install on '.date('Y-m-d H:i').'
  * ======================================================== */
 
@@ -586,7 +586,6 @@ $language = "greek";
 $Institution = "'.$institutionForm.'";
 $InstitutionUrl = "'.$institutionUrlForm.'";
 $postaddress = "'.addslashes($postaddressForm).'";
-
 
 $persoIsActive = TRUE;
 $durationAccount = "126144000";
@@ -724,6 +723,3 @@ function mkdir_or_error($dirname) {
                         }
                 }
         }
-
-
-
