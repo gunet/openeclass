@@ -88,9 +88,20 @@ if (isset($_GET['action']) and $_GET['action'] == "download") {
 	}
 }
 
+$shadowbox_js = <<<jsContent
+<link rel="stylesheet" type="text/css" href="$urlAppend/include/shadowbox/shadowbox.css">
+<script type="text/javascript" src="$urlAppend/include/shadowbox/shadowbox.js"></script>
+<script type="text/javascript">
+Shadowbox.init({
+    overlayOpacity: 0.8,
+    modal: true
+});
+</script>
+jsContent;
+
 if($is_editor) {
         load_js('tools.js');
-
+        $head_content .= $shadowbox_js;
         $head_content .= <<<hContent
 <script type="text/javascript">
 function checkrequired(which, entry) {
@@ -428,15 +439,18 @@ if ($count_video[0]<>0 || $count_video_links[0]<>0) {
                         switch($table){
 				case 'video':
 					if (isset($vodServer)) {
-						$videoURL = "'{$vodServer}$currentCourseID/$myrow[1]'";
+                                            $videoURL = $vodServer."$currentCourseID/".$myrow[1];
+                                            $videoPath = $videoURL;
 					} else {
-						$videoURL = "'$_SERVER[PHP_SELF]?course=$code_cours&amp;action=download&amp;id=$myrow[1]'";
+                                            $videoURL = "'$_SERVER[PHP_SELF]?course=$code_cours&amp;action=download&amp;id=$myrow[1]'";
+                                            $videoPath = $urlServer ."video/". $currentCourseID . $myrow[1];
 					}
-                                        $link_to_add = "<td><a href=$videoURL>".q($myrow[3])."</a><br>\n".
+                                        $link_to_add = "<td><a href='$videoPath' rel='shadowbox;width=700;height=350".get_video_player($myrow[1])."' title='".q($myrow[3])."'>".q($myrow[3])."</a><br>\n".
                                                 q($myrow[4]) . "</td><td>" .
                                                 q($myrow[5]) . "</td><td>" .
                                                 q($myrow[6]) . "</td><td align='center'>".
                                                 nice_format(date('Y-m-d', strtotime($myrow[7])))."</td>";
+                                        $link_to_save = "<a href=$videoURL><img src='$themeimg/save_s.png' alt='$langSave' title='$langSave'></a>&nbsp;&nbsp;";
 					break;
 				case "videolinks":
 					$videoURL = "'".q($myrow[1])."' target='_blank'";
@@ -447,6 +461,7 @@ if ($count_video[0]<>0 || $count_video_links[0]<>0) {
                                                 q($myrow[5]) . "</td><td align='center'>" .
                                                 nice_format(date('Y-m-d', strtotime($myrow[6]))) .
                                                 "</td>";
+                                        $link_to_save = "";
 					break;
 				default:
 					exit;
@@ -462,8 +477,8 @@ if ($count_video[0]<>0 || $count_video_links[0]<>0) {
                                       <img style='padding-top:3px;' src='$themeimg/arrow.png' alt=''>
                                    </td>
                                    $link_to_add
-                                   <td align='center'>
-                                      <a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;id=$myrow[0]&amp;table_edit=$table'><img src='$themeimg/edit.png' title='$langModify'></a>&nbsp;&nbsp;<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;id=$myrow[0]&amp;delete=yes&amp;table=$table' onClick=\"return confirmation('".js_escape("$langConfirmDelete $myrow[2]")."');\"><img src='$themeimg/delete.png' title='$langDelete'></a>
+                                   <td align='right'>
+                                      $link_to_save<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;id=$myrow[0]&amp;table_edit=$table'><img src='$themeimg/edit.png' title='$langModify'></a>&nbsp;&nbsp;<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;id=$myrow[0]&amp;delete=yes&amp;table=$table' onClick=\"return confirmation('".js_escape("$langConfirmDelete $myrow[2]")."');\"><img src='$themeimg/delete.png' title='$langDelete'></a>
                                    </td>
                                 </tr>";
                         $i++;
@@ -479,6 +494,9 @@ if ($count_video[0]<>0 || $count_video_links[0]<>0) {
 
 // student view
 else {
+    
+    $head_content .= $shadowbox_js;
+    
 	$results['video'] = db_query("SELECT *  FROM video ORDER BY titre", $currentCourseID);
 	$results['videolinks'] = db_query("SELECT * FROM videolinks ORDER BY titre", $currentCourseID);
 	$count_video = mysql_fetch_array(db_query("SELECT count(*) FROM video ORDER BY titre", $currentCourseID));
@@ -489,6 +507,7 @@ else {
 		<table width='100%' class='tbl_alt'>
 		<tr>
                   <th colspan='2'><div align='left'>$langDirectory $langVideo</div></th>
+                  <th width='70'>$langActions</th>
 		</tr>";
 		$i=0;
 		$count_video_presented=1;
@@ -497,19 +516,23 @@ else {
 				switch($table){
 					case 'video':
 						if (isset($vodServer)) {
-							$videoURL = $vodServer."$currentCourseID/".$myrow[1];
+                                                    $videoURL = $vodServer."$currentCourseID/".$myrow[1];
+                                                    $videoPath = $videoURL;
 						} else {
-							$videoURL = "'$_SERVER[PHP_SELF]?course=$code_cours&amp;action=download&amp;id=$myrow[1]'";
+                                                    $videoURL = "'$_SERVER[PHP_SELF]?course=$code_cours&amp;action=download&amp;id=$myrow[1]'";
+                                                    $videoPath = $urlServer ."video/". $currentCourseID . $myrow[1];
 						}
-                                                $link_to_add = "<td><a href='$videoURL'>" .
+                                                $link_to_add = "<td><a href='$videoPath' rel='shadowbox;width=700;height=350".get_video_player($myrow[1])."' title='".q($myrow[3])."'>".
                                                         q($myrow[3]) . "</a><br /><small>" .
                                                         q($myrow[4]) . "</small></td>";
+                                                $link_to_save = "<a href=$videoURL><img src='$themeimg/save_s.png' alt='$langSave' title='$langSave'></a>&nbsp;&nbsp;";
 						break;
 					case 'videolinks':
 						$videoURL= "'$myrow[1]' target='_blank'";
                                                 $link_to_add = "<td><a href=$videoURL>" .
                                                         q($myrow[2]) . "</a><br />" .
                                                         q($myrow[3]) . "</td>";
+                                                $link_to_save = "";
 						break;
 					default:
 						exit;
@@ -522,6 +545,7 @@ else {
 				$tool_content .= "<tr $rowClass>";
 				$tool_content .= "<td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' alt=''></td>";
 				$tool_content .= $link_to_add;
+                                $tool_content .= "<td align='center'>$link_to_save</td>";
 				$tool_content .= "</tr>";
 				$i++;
 				$count_video_presented++;
@@ -541,3 +565,23 @@ if (isset($head_content)) {
         draw($tool_content, 2);
 }
 
+function get_video_player($filename)
+{
+    $extension = get_file_extension($filename);
+    $ret = "";
+    
+    switch($extension)
+    {
+        case "flv":
+        case "m4v":
+            $ret = ";player=flv";
+            break;
+        case "swf":
+            $ret = ";player=swf";
+            break;
+        default:
+            break;
+    }
+    
+    return $ret;
+}
