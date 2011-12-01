@@ -247,7 +247,7 @@ function js_escape($s)
 }
 
 // Include a JavaScript file from the main js directory
-function load_js($file)
+function load_js($file, $init = '')
 {
         global $head_content, $urlAppend;
 
@@ -258,21 +258,12 @@ function load_js($file)
                 $file = 'jquery-ui-1.8.1.custom.min.js';
         } elseif ($file == 'shadowbox') {
             $head_content .= "<link rel='stylesheet' type='text/css' href='$urlAppend/js/shadowbox/shadowbox.css'>";
-            $file = 'shadowbox/shadowbox.js';
-            $shadowbox_init = true; 
+            $file = 'shadowbox/shadowbox.js'; 
         }
         $head_content .= "<script type='text/javascript' src='$urlAppend/js/$file'></script>\n";
         
-        if (isset($shadowbox_init) && $shadowbox_init == true) {
-            $head_content .= <<<hContent
-<script type="text/javascript">
-Shadowbox.init({
-    overlayOpacity: 0.8,
-    modal: true
-});
-</script>
-hContent;
-        }
+        if (strlen($init) > 0)
+            $head_content .= $init;
 }
 
 // Translate uid to username
