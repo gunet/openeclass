@@ -256,8 +256,23 @@ function load_js($file)
 		$file = 'jquery-1.6.min.js';
         } elseif ($file == 'jquery-ui') {
                 $file = 'jquery-ui-1.8.1.custom.min.js';
+        } elseif ($file == 'shadowbox') {
+            $head_content .= "<link rel='stylesheet' type='text/css' href='$urlAppend/js/shadowbox/shadowbox.css'>";
+            $file = 'shadowbox/shadowbox.js';
+            $shadowbox_init = true; 
         }
         $head_content .= "<script type='text/javascript' src='$urlAppend/js/$file'></script>\n";
+        
+        if (isset($shadowbox_init) && $shadowbox_init == true) {
+            $head_content .= <<<hContent
+<script type="text/javascript">
+Shadowbox.init({
+    overlayOpacity: 0.8,
+    modal: true
+});
+</script>
+hContent;
+        }
 }
 
 // Translate uid to username

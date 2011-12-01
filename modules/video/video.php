@@ -88,20 +88,9 @@ if (isset($_GET['action']) and $_GET['action'] == "download") {
 	}
 }
 
-$shadowbox_js = <<<jsContent
-<link rel="stylesheet" type="text/css" href="$urlAppend/include/shadowbox/shadowbox.css">
-<script type="text/javascript" src="$urlAppend/include/shadowbox/shadowbox.js"></script>
-<script type="text/javascript">
-Shadowbox.init({
-    overlayOpacity: 0.8,
-    modal: true
-});
-</script>
-jsContent;
-
 if($is_editor) {
         load_js('tools.js');
-        $head_content .= $shadowbox_js;
+        load_js('shadowbox');
         $head_content .= <<<hContent
 <script type="text/javascript">
 function checkrequired(which, entry) {
@@ -495,7 +484,7 @@ if ($count_video[0]<>0 || $count_video_links[0]<>0) {
 // student view
 else {
     
-    $head_content .= $shadowbox_js;
+    load_js('shadowbox');
     
 	$results['video'] = db_query("SELECT *  FROM video ORDER BY titre", $currentCourseID);
 	$results['videolinks'] = db_query("SELECT * FROM videolinks ORDER BY titre", $currentCourseID);
