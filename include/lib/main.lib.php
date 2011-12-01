@@ -1968,9 +1968,9 @@ function profile_image($uid, $size, $default = FALSE)
 	global $urlServer, $themeimg;
 	
 	if (!$default) {
-		return "<img src='${urlServer}courses/userimg/${uid}_$size.jpg' alt='' />";
+		return "<img src='${urlServer}courses/userimg/${uid}_$size.jpg' title='".uid_to_name($uid)."'>";
 	} else {
-		return "<img src='$themeimg/default_$size.jpg' alt='' />";
+		return "<img src='$themeimg/default_$size.jpg' title='".uid_to_name($uid)."' />";
 	}
 }
 

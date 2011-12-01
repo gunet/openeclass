@@ -137,8 +137,8 @@ $tool_content .= "
 // display number of users
 $tool_content .= "
 <div class='info'><b>$langTotal</b>: <span class='grey'><b>$countUser </b><em>$langUsers &nbsp;($teachers $langTeachers, $students $langStudents, $visitors $langVisitors)</em></span><br />
-  <b>$langDumpUser $langCsv</b>: 1. <a href='dumpuser2.php?course=$code_cours'>$langcsvenc2</a>
-       2. <a href='dumpuser2.php?course=$code_cours&amp;enc=1253'>$langcsvenc1</a>
+  <b>$langDumpUser $langCsv</b>: 1. <a href='dumpuser.php?course=$code_cours'>$langcsvenc2</a>
+       2. <a href='dumpuser.php?course=$code_cours&amp;enc=1253'>$langcsvenc1</a>
   </div>";
 
 // display and handle search form if needed
@@ -266,28 +266,39 @@ while ($myrow = mysql_fetch_array($result)) {
         $tool_content .= "</td>";
         // tutor right
         if ($myrow['tutor'] == '0') {
-                $tool_content .= "<td valign='top' align='center' class='add_user'><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;giveTutor=$myrow[user_id]$extra_link' title='$langGiveRight'>$langAdd</a></td>";
+                $tool_content .= "<td valign='top' align='center' class='add_user'>
+                                <a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;giveTutor=$myrow[user_id]$extra_link'>
+                                <img src='$themeimg/add.png' title='$langGiveRightTutor' /></a></td>";
         } else {
-                $tool_content .= "<td class='add_teacherLabel' align='center'>$langTutor<br /><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;removeTutor=$myrow[user_id]$extra_link' title='$langRemoveRight'>$langRemove</a></td>";
+                $tool_content .= "<td class='add_teacherLabel' align='center'>$langGroupTutor<br />
+                                <a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;removeTutor=$myrow[user_id]$extra_link' title='$langRemoveRight'>$langRemove</a></td>";
         }
         // editor right
         if ($myrow['editor'] == '0') {
-            $tool_content .= "<td valign='top' align='center' class='add_user'><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;giveEditor=$myrow[user_id]$extra_link' title='$langGiveRight'>$langAdd</a></td>";
+            $tool_content .= "<td valign='top' align='center' class='add_user'>
+                                <a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;giveEditor=$myrow[user_id]$extra_link'>
+                                <img src='$themeimg/add.png' title='$langGiveRightΕditor' /></a></td>";
         } else {
                 $tool_content .= "<td class='add_teacherLabel' align='center'>$langEditor<br /><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;removeEditor=$myrow[user_id]$extra_link' title='$langRemoveRight'>$langRemove</a></td>";
         }
         // admin right
         if ($myrow['user_id'] != $_SESSION["uid"]) {
                 if ($myrow['statut']=='1') {
-                        $tool_content .= "<td class='smaller' align='center'>$langAdministrator<br /><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;removeAdmin=$myrow[user_id]$extra_link' title='$langRemoveRight'>$langRemove</a></td>";
+                        $tool_content .= "<td class='smaller' align='center'><img src='$themeimg/teacher.png' title='$langTutor' /><br />
+                                        <a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;removeAdmin=$myrow[user_id]$extra_link' title='$langRemoveRight'>$langRemove</a></td>";
                 } else {
-                        $tool_content .= "<td valign='top' align='center' class='add_user'><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;giveAdmin=$myrow[user_id]$extra_link' title='$langGiveRight'>$langAdd</a></td>";
+                        $tool_content .= "<td valign='top' align='center' class='add_user'>
+                                <a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;giveAdmin=$myrow[user_id]$extra_link'>
+                                <img src='$themeimg/add.png' title='$langGiveRightAdmin' /></a></td>";
                 }
         } else {
                 if ($myrow['statut']=='1') {
-                        $tool_content .= "<td valign='top' class='add_teacherLabel' align='center' title='$langAdmR'><b>$langAdministrator</b></td>";
+                        $tool_content .= "<td valign='top' class='add_teacherLabel' align='center'>
+                                        <img src='$themeimg/teacher.png' title='$langTutor' /></td>";
                 } else {
-                        $tool_content .= "<td class='smaller' valign='top' align='center'><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;giveAdmin=$myrow[user_id]$extra_link'>$langGiveRight</a></td>";
+                        $tool_content .= "<td class='smaller' valign='top' align='center'>
+                                        <a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;giveAdmin=$myrow[user_id]$extra_link'>
+                                        <img src='$themeimg/add.png' title='$langGiveRightAdmin' /></a></td>";
                 }
         }
         $tool_content .= "<td valign='top' align='center' class='smaller'>";
@@ -299,6 +310,5 @@ while ($myrow = mysql_fetch_array($result)) {
         $i++;
 }
 $tool_content .= "</table>";
-
 
 draw($tool_content, 2, null, $head_content);
