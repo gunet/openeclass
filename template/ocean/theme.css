@@ -53,8 +53,9 @@ html {
 	background: -webkit-linear-gradient(top, #536d7a 0%,#617f90 100%) no-repeat;
 	background: -o-linear-gradient(top, #536d7a 0%,#617f90 100%) no-repeat;
 	background: -ms-linear-gradient(top, #536d7a 0%,#617f90 100%) no-repeat;
-	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#536d7a', endColorstr='#617f90',GradientType=0 ) no-repeat;
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#536d7a', endColorstr='#617f90',GradientType=0) no-repeat;
 	background: linear-gradient(top, #536d7a 0%,#617f90 100%) no-repeat;
+	background-color: #617f90;
 }
 
 body {
