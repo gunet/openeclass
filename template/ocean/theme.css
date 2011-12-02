@@ -47,14 +47,15 @@ table {
 html {
     margin-bottom: 1px;
 	height: 100% !important;
-	background: #536d7a;
-	background: -moz-linear-gradient(top, #536d7a 0%, #617f90 100%);
-	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#536d7a), color-stop(100%,#617f90));
-	background: -webkit-linear-gradient(top, #536d7a 0%,#617f90 100%);
-	background: -o-linear-gradient(top, #536d7a 0%,#617f90 100%);
-	background: -ms-linear-gradient(top, #536d7a 0%,#617f90 100%);
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#536d7a', endColorstr='#617f90',GradientType=0 );
-	background: linear-gradient(top, #536d7a 0%,#617f90 100%);
+	background: #617f90;
+	background: -moz-linear-gradient(top, #536d7a 0%, #617f90 100%) no-repeat;
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#536d7a), color-stop(100%,#617f90)) no-repeat;
+	background: -webkit-linear-gradient(top, #536d7a 0%,#617f90 100%) no-repeat;
+	background: -o-linear-gradient(top, #536d7a 0%,#617f90 100%) no-repeat;
+	background: -ms-linear-gradient(top, #536d7a 0%,#617f90 100%) no-repeat;
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#536d7a', endColorstr='#617f90',GradientType=0) no-repeat;
+	background: linear-gradient(top, #536d7a 0%,#617f90 100%) no-repeat;
+	background-color: #617f90;
 }
 
 body {

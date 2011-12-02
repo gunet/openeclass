@@ -60,6 +60,7 @@ $action->record('MODULE_ID_VIDEO');
 /**************************************/
 
 include '../../include/lib/forcedownload.php';
+require_once 'video_functions.php';
 
 $nameTools = $langVideo;
 
@@ -88,18 +89,30 @@ if (isset($_GET['action']) and $_GET['action'] == "download") {
 	}
 }
 
-$shadowbox_init = <<<hContent
-<script type="text/javascript">
-Shadowbox.init({
-    overlayOpacity: 0.8,
-    modal: true
-});
-</script>
-hContent;
+// ----------------------
+// play video
+// ----------------------
+
+if (isset($_GET['action']) and $_GET['action'] == "play")
+{
+        $id = $_GET['id'];
+        $videoPath = $urlServer ."video/". $currentCourseID . $id;
+        
+        if (strpos($videoPath, '/../') === FALSE)
+        {
+            echo video_html_object($videoPath);
+        }
+        else
+        {
+            header("Refresh: ${urlServer}modules/video/video.php?course=$code_cours");
+        }
+        exit;
+}
+
 
 if($is_editor) {
         load_js('tools.js');
-        load_js('shadowbox', $shadowbox_init);
+        load_modal_box();
         $head_content .= <<<hContent
 <script type="text/javascript">
 function checkrequired(which, entry) {
@@ -439,21 +452,21 @@ if ($count_video[0]<>0 || $count_video_links[0]<>0) {
 					if (isset($vodServer)) {
                                             $videoURL = $vodServer."$currentCourseID/".$myrow[1];
                                             $videoPath = $videoURL;
+                                            $videoPlay = $videoURL;
 					} else {
-                                            $videoURL = "'$_SERVER[PHP_SELF]?course=$code_cours&amp;action=download&amp;id=$myrow[1]'";
+                                            $videoURL = "$_SERVER[PHP_SELF]?course=$code_cours&amp;action=download&amp;id=$myrow[1]";
                                             $videoPath = $urlServer ."video/". $currentCourseID . $myrow[1];
+                                            $videoPlay = "$_SERVER[PHP_SELF]?course=$code_cours&amp;action=play&amp;id=$myrow[1]";
 					}
-                                        $link_to_add = "<td><a href='$videoPath' rel='shadowbox;width=700;height=350".get_video_player($myrow[1])."' title='".q($myrow[3])."'>".q($myrow[3])."</a><br>\n".
+                                        $link_to_add = "<td>". choose_modal_ahref($videoURL, $videoPath, $videoPlay, q($myrow[3]), $myrow[1]) ."<br>\n".
                                                 q($myrow[4]) . "</td><td>" .
                                                 q($myrow[5]) . "</td><td>" .
                                                 q($myrow[6]) . "</td><td align='center'>".
                                                 nice_format(date('Y-m-d', strtotime($myrow[7])))."</td>";
-                                        $link_to_save = "<a href=$videoURL><img src='$themeimg/save_s.png' alt='$langSave' title='$langSave'></a>&nbsp;&nbsp;";
+                                        $link_to_save = "<a href='$videoURL'><img src='$themeimg/save_s.png' alt='$langSave' title='$langSave'></a>&nbsp;&nbsp;";
 					break;
 				case "videolinks":
-					$videoURL = "'".q($myrow[1])."' target='_blank'";
-                                        $link_to_add = "<td><a href=$videoURL>" .
-                                                q($myrow[2]) . "</a><br>" .
+                                        $link_to_add = "<td>". choose_videolink_ahref(q($myrow[1]), q($myrow[2])) ."<br>" .
                                                 q($myrow[3]) . "</td><td>" .
                                                 q($myrow[4]) . "</td><td>" .
                                                 q($myrow[5]) . "</td><td align='center'>" .
@@ -493,7 +506,7 @@ if ($count_video[0]<>0 || $count_video_links[0]<>0) {
 // student view
 else {
     
-    load_js('shadowbox', $shadowbox_init);
+    load_modal_box();
     
 	$results['video'] = db_query("SELECT *  FROM video ORDER BY titre", $currentCourseID);
 	$results['videolinks'] = db_query("SELECT * FROM videolinks ORDER BY titre", $currentCourseID);
@@ -516,19 +529,18 @@ else {
 						if (isset($vodServer)) {
                                                     $videoURL = $vodServer."$currentCourseID/".$myrow[1];
                                                     $videoPath = $videoURL;
+                                                    $videoPlay = $videoURL;
 						} else {
-                                                    $videoURL = "'$_SERVER[PHP_SELF]?course=$code_cours&amp;action=download&amp;id=$myrow[1]'";
+                                                    $videoURL = "$_SERVER[PHP_SELF]?course=$code_cours&amp;action=download&amp;id=$myrow[1]";
                                                     $videoPath = $urlServer ."video/". $currentCourseID . $myrow[1];
+                                                    $videoPlay = "$_SERVER[PHP_SELF]?course=$code_cours&amp;action=play&amp;id=$myrow[1]";
 						}
-                                                $link_to_add = "<td><a href='$videoPath' rel='shadowbox;width=700;height=350".get_video_player($myrow[1])."' title='".q($myrow[3])."'>".
-                                                        q($myrow[3]) . "</a><br /><small>" .
+                                                $link_to_add = "<td>". choose_modal_ahref($videoURL, $videoPath, $videoPlay, q($myrow[3]), $myrow[1]) ."<br /><small>" .
                                                         q($myrow[4]) . "</small></td>";
-                                                $link_to_save = "<a href=$videoURL><img src='$themeimg/save_s.png' alt='$langSave' title='$langSave'></a>&nbsp;&nbsp;";
+                                                $link_to_save = "<a href='$videoURL'><img src='$themeimg/save_s.png' alt='$langSave' title='$langSave'></a>&nbsp;&nbsp;";
 						break;
 					case 'videolinks':
-						$videoURL= "'$myrow[1]' target='_blank'";
-                                                $link_to_add = "<td><a href=$videoURL>" .
-                                                        q($myrow[2]) . "</a><br />" .
+                                                $link_to_add = "<td>". choose_videolink_ahref(q($myrow[1]), q($myrow[2])) ."<br />" .
                                                         q($myrow[3]) . "</td>";
                                                 $link_to_save = "";
 						break;
@@ -561,25 +573,4 @@ if (isset($head_content)) {
 	draw($tool_content, 2, null, $head_content);
 } else {
         draw($tool_content, 2);
-}
-
-function get_video_player($filename)
-{
-    $extension = get_file_extension($filename);
-    $ret = "";
-    
-    switch($extension)
-    {
-        case "flv":
-        case "m4v":
-            $ret = ";player=flv";
-            break;
-        case "swf":
-            $ret = ";player=swf";
-            break;
-        default:
-            break;
-    }
-    
-    return $ret;
 }

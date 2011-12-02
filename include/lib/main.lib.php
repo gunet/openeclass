@@ -259,6 +259,9 @@ function load_js($file, $init = '')
         } elseif ($file == 'shadowbox') {
             $head_content .= "<link rel='stylesheet' type='text/css' href='$urlAppend/js/shadowbox/shadowbox.css'>";
             $file = 'shadowbox/shadowbox.js'; 
+        } elseif ($file == 'fancybox2') {
+            $head_content .= "<link rel='stylesheet' href='$urlAppend/js/fancybox2/jquery.fancybox.css?v=2.0.3' type='text/css' media='screen' />";
+            $file = 'fancybox2/jquery.fancybox.pack.js?v=2.0.3';
         }
         $head_content .= "<script type='text/javascript' src='$urlAppend/js/$file'></script>\n";
         
