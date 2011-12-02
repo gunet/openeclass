@@ -283,7 +283,8 @@ function get_mime_type($filename)
                 'wmz' => 'application/x-ms-wmz',
                 'wmd' => 'application/x-ms-wmd',
                 'mp4' => 'video/mp4',
-                'flv' => 'video/x-flv');
+                'flv' => 'video/x-flv',
+                'webm' => 'video/webm');
         $ext = get_file_extension($filename);
         if (isset($f[$ext])) {
                 return $f[$ext];

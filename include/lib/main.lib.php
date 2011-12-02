@@ -262,6 +262,9 @@ function load_js($file, $init = '')
         } elseif ($file == 'fancybox2') {
             $head_content .= "<link rel='stylesheet' href='$urlAppend/js/fancybox2/jquery.fancybox.css?v=2.0.3' type='text/css' media='screen' />";
             $file = 'fancybox2/jquery.fancybox.pack.js?v=2.0.3';
+        } elseif ($file == 'colorbox') {
+            $head_content .= "<link rel='stylesheet' type='text/css' href='$urlAppend/js/colorbox/colorbox.css'>";
+            $file = 'colorbox/jquery.colorbox-min.js';
         }
         $head_content .= "<script type='text/javascript' src='$urlAppend/js/$file'></script>\n";
         
