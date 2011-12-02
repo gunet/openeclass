@@ -47,8 +47,7 @@ if(isset($_POST['submit']) and !empty($username)) {
                         $langTheUser ".htmlspecialchars($username)." $langWith id=$user_id $langDone</p>";                
             }			
         } else {	
-		$tool_content .= "<p class='caution'>$langTheUser ".htmlspecialchars($username)." $langNotFound.</p>";
-		$tool_content .= printform($langUsername);	
+		$tool_content .= "<p class='caution'>$langTheUser ".htmlspecialchars($username)." $langNotFound.</p>";	
 	}
 } else if (isset($_GET['delete'])) { // delete admin users
     $aid = intval($_GET['aid']);
@@ -111,22 +110,21 @@ $tool_content .= "</table><br />";
 // Display link back to index.php
 $tool_content .= "<p class='right'><a href='index.php'>$langBack</a></p>";
 
-draw($tool_content,3);
+draw($tool_content, 3);
 
 /*****************************************************************************
-	 			function draw
+	 			function printform()
 ******************************************************************************
   This method constructs a simple form where the administrator searches for
   a user by username to give user administrator permissions
-  printform($message)
-  $tool_content: (String) The string to display for username
 
   @returns
   $ret: (String) The constructed form
 ******************************************************************************/
 function printform ($message) {
 	
-    global $langAdd, $langInsertUserInfo, $langAddAdmin, $langAddPowerUser, $langAddManageUser;
+    global $langAdd, $themeimg, $langAdministrator, $langPowerUser, $langManageUser, $langAddRole,
+            $langHelpAdministrator, $langHelpPowerUser, $langHelpManageUser;
         
     $ret = "<form method='post' name='makeadmin' action='$_SERVER[PHP_SELF]'>";
     $ret .= "<table class='tbl' width='100%'>      
@@ -134,13 +132,14 @@ function printform ($message) {
             <th class='left'>".$message."</th>
             <td><input type='text' name='username' size='30' maxlength='30'></td>
         </tr>
+        <tr><th rowspan='3'>$langAddRole</th>            
+            <td><input type='radio' name='adminrights' value='admin' checked>&nbsp;$langAdministrator&nbsp;
+        <img src='$themeimg/questionnaire.png' title='$langHelpAdministrator' /></td></tr>
         <tr>
-            <th class='left'>&nbsp;</th>
-            <td><input type='radio' name='adminrights' value='admin' checked>$langAddAdmin
-                <input type='radio' name='adminrights' value='poweruser'>$langAddPowerUser
-                <input type='radio' name='adminrights' value='manageuser'>$langAddManageUser
-            </td>
-        </tr>
+        <td><input type='radio' name='adminrights' value='poweruser'>&nbsp;$langPowerUser&nbsp;
+            <img src='$themeimg/questionnaire.png' title='$langHelpPowerUser' /></td></tr>
+        <tr><td><input type='radio' name='adminrights' value='manageuser'>&nbsp;$langManageUser&nbsp;
+            <img src='$themeimg/questionnaire.png' title='$langHelpManageUser' /></td></tr>
         <tr>
             <td colspan='2'><input type='submit' name='submit' value='$langAdd'></td>
         </tr>

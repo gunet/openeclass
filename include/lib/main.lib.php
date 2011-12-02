@@ -247,7 +247,7 @@ function js_escape($s)
 }
 
 // Include a JavaScript file from the main js directory
-function load_js($file)
+function load_js($file, $init = '')
 {
         global $head_content, $urlAppend;
 
@@ -256,8 +256,14 @@ function load_js($file)
 		$file = 'jquery-1.6.min.js';
         } elseif ($file == 'jquery-ui') {
                 $file = 'jquery-ui-1.8.1.custom.min.js';
+        } elseif ($file == 'shadowbox') {
+            $head_content .= "<link rel='stylesheet' type='text/css' href='$urlAppend/js/shadowbox/shadowbox.css'>";
+            $file = 'shadowbox/shadowbox.js'; 
         }
         $head_content .= "<script type='text/javascript' src='$urlAppend/js/$file'></script>\n";
+        
+        if (strlen($init) > 0)
+            $head_content .= $init;
 }
 
 // Translate uid to username
@@ -1968,9 +1974,9 @@ function profile_image($uid, $size, $default = FALSE)
 	global $urlServer, $themeimg;
 	
 	if (!$default) {
-		return "<img src='${urlServer}courses/userimg/${uid}_$size.jpg' alt='' />";
+		return "<img src='${urlServer}courses/userimg/${uid}_$size.jpg' title='".uid_to_name($uid)."'>";
 	} else {
-		return "<img src='$themeimg/default_$size.jpg' alt='' />";
+		return "<img src='$themeimg/default_$size.jpg' title='".uid_to_name($uid)."' />";
 	}
 }
 
