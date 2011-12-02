@@ -472,7 +472,7 @@ if ($count_video[0]<>0 || $count_video_links[0]<>0) {
                                                 q($myrow[5]) . "</td><td align='center'>" .
                                                 nice_format(date('Y-m-d', strtotime($myrow[6]))) .
                                                 "</td>";
-                                        $link_to_save = "";
+                                        $link_to_save = "<a href='".q($myrow[1])."' target='_blank'><img src='$themeimg/links_on.png' alt='$langPreview' title='$langPreview'></a>&nbsp;&nbsp;";
 					break;
 				default:
 					exit;
@@ -542,7 +542,7 @@ else {
 					case 'videolinks':
                                                 $link_to_add = "<td>". choose_videolink_ahref(q($myrow[1]), q($myrow[2])) ."<br />" .
                                                         q($myrow[3]) . "</td>";
-                                                $link_to_save = "";
+                                                $link_to_save = "<a href='".q($myrow[1])."' target='_blank'><img src='$themeimg/links_on.png' alt='$langPreview' title='$langPreview'></a>&nbsp;&nbsp;";
 						break;
 					default:
 						exit;
