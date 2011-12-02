@@ -67,7 +67,7 @@ $langAdminUsers = "Διαχείριση Χρηστών";
 *********************************************/
 $langDeleteAdmin="H διαγραφή του διαχειριστή με id:";
 $langNotFeasible ="δεν είναι εφικτή";
-$langAddAdmin = "Προσθήκη διαχειριστή";
+$langAdmins = "Διαχειριστές";
 $langAddPowerUser = "Προσθήκη βοηθού διαχειριστή";
 $langAddManageUser = "Προσθήκη διαχειριστή χρηστών";
 $langPassword = "Συνθηματικό";
@@ -2317,7 +2317,7 @@ $langNoAdmin="δεν έχει<b>δικαιώματα διαχειριστή σε
 $langAllAdmin="έχει τώρα<b>όλα τα δικαιώματα διαχειριστή σε αυτό το site</b>";
 $langModRole="Αλλαγή του ρόλου του";
 $langRole="Ρόλος";
-$langAddRole = "Προσθήκη ρόλου";
+$langAddRole = "Ανάθεση ρόλου";
 $langIsNow="είναι τώρα";
 $langInC="σε αυτό το μάθημα";
 $langUserNo="Το όνομα χρήστη που διαλέξατε";
