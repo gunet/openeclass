@@ -32,7 +32,7 @@ function load_modal_box()
     $shadowbox_init = '<script type="text/javascript">
                        Shadowbox.init({
                            overlayOpacity: 0.8,
-                           modal: true
+                           modal: false
                        });
                        </script>';
 
@@ -168,7 +168,7 @@ function video_html_object($videoPath)
             <html><head>
             <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">';
     
-    $blackdiv = '</head><body style="background-color: #000000; font-weight: bold"><div align="center">';
+    $blackdiv = '</head><body style="background-color: #000000; color: #ffffff; font-weight: bold"><div align="center">';
     $enddiv = '</div></body>';
     
     switch($extension)
