@@ -350,11 +350,23 @@ $tool_content .= "<tr><th>$langEmailFromCourses:</th>
                   <input type='radio' name='subscribe' value='no' $selectedno />$langNo&nbsp;
                   </td></tr>";
 $user_email_status = get_mail_ver_status($uid);
-if ($user_email_status == EMAIL_VERIFIED) {
-        $message = "<img src='$themeimg/tick_1.png' />";                
-} elseif ($user_email_status == EMAIL_UNVERIFIED) {         
-        $link = "<a href = '../auth/mail_verify_change.php?from_profile=TRUE'>$langHere</a>.";
-        $message = "<div class='alert1'>$langMailNotVerified $link</div>";
+switch($user_email_status) {
+	case EMAIL_VERIFICATION_REQUIRED:
+		if (get_config('email_verification_required')) {
+			$link = "<a href = '../auth/mail_verify_change.php?from_profile=TRUE'>$langHere</a>.";
+			$message = "<div class='alert1'>$langMailNotVerified $link</div>";
+		}
+		else {
+			$message = "<img src='$themeimg/pending.png' title='$langMailVerificationPendingU' />";
+		}
+		break;
+	case EMAIL_VERIFIED: 
+		$message = "<img src='$themeimg/tick_1.png' title='$langMailVerificationYesU' />";
+		break;
+	case EMAIL_UNVERIFIED:
+	default:
+		$message = "<img src='$themeimg/not_confirmed.png' title='$langMailVerificationNoU' />";
+		break;
 }
 $tool_content .= "<tr><th>$langVerifiedMail</th>
                 <td>$message</td>";
