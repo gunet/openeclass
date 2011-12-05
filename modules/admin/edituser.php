@@ -159,7 +159,7 @@ if ($u)	{
 		    case "imap": $auth=3;break;
 		    case "ldap": $auth=4;break;
 		    case "db": $auth=5;break;
-				case "shibboleth": $auth=6;break;
+		    case "shibboleth": $auth=6;break;
 		    case "cas": $auth=7;break;
 		    default: $auth=1;break;
 		  }
@@ -168,7 +168,7 @@ if ($u)	{
 		$tool_content .= "
    <tr>
      <th class='left'>".$langUsername. "</th>
-     <td><b>".autoquote($info['username'])."</b> [".$auth_text."] <input type='hidden' name='username' value='".autoquote($info['username'])."' /> </td>
+     <td><b>".autoquote($info['username'])."</b> [".$auth_text."] <input type='hidden' name='username' value=".autoquote($info['username'])." /> </td>
    </tr>";
 	}
 
