@@ -3,7 +3,7 @@
 <html>
 <head>
 <META http-equiv=Content-Type content="text/html; charset=UTF-8">
-<title>Upgrade Instructions for Open eClass 2.4</title>
+<title>Upgrade Instructions for Open eClass 2.5</title>
 <link href="../template/classic/theme.css" rel="stylesheet" type="text/css" />
 <style type="text/css">
 p {
@@ -18,10 +18,10 @@ p {
 
 <a href="http://www.openeclass.org/" title="Open eClass" class="logo"></a></div>
     
-<p class="title1">Upgrade Instructions for Open eClass 2.4</p>
+<p class="title1">Upgrade Instructions for Open eClass 2.5</p>
 
-<p>The new version of Open eClass (2.4) retains backward compatibility (with previous versions).
-For that reason, you can upgrade an already installed platform from prior versions to the current 2.4 easily and quickly,
+<p>The new version of Open eClass (2.5) retains backward compatibility (with previous versions).
+For that reason, you can upgrade an already installed platform from prior versions to the current 2.5 easily and quickly,
 following the upgrade instructions provided below.
 Keeping a safety record of the course contents and the database before beginning to upgrade is recommended.</p>
 <div class="alert1">
@@ -64,9 +64,9 @@ Then, follow the steps below.
 <p class="title1" id="unix">1st Step: Upgrading in Unix / Linux computers</p>
 <p>All operations presuppose you have the administrator's rights (root) on your computer.
 The following example presumes that the eClass platform is already installed on directory <code>/var/www/html</code>.</p>
-<p>Due to some changes introduced by the new version (2.4) you will have to delete the old and install the new one.
+<p>Due to some changes introduced by the new version (2.5) you will have to delete the old and install the new one.
 To make sure that you old configuration remain intact you must do the following actions:</p>
-<p>We consider that you have downloaded <b>openeclass-2.4.tar.gz</b> on the <code>/tmp
+<p>We consider that you have downloaded <b>openeclass-2.5.tar.gz</b> on the <code>/tmp
   </code> directory. </p>
 <ul>
   <li>Go to the directory you have installed in eClass. e.g.
@@ -80,11 +80,11 @@ To make sure that you old configuration remain intact you must do the following 
     <pre>cd /var/www/html/eclass/
 rm -rf images/ include/ info/ install/ manuals/ template/ modules/ </pre>
   </li>
-  <li>Unzip and untar openeclass-2.4.tar.gz in a temporary directory (/tmp) e.g.
-    <pre>tar xzvf /tmp/openeclass-2.4.tar.gz</pre>
+  <li>Unzip and untar openeclass-2.5.tar.gz in a temporary directory (/tmp) e.g.
+    <pre>tar xzvf /tmp/openeclass-2.5.tar.gz</pre>
 
-	Then copy from the temporary directory /tmp/openeclass-2.4 all of its contents in the installation directory e.g.
-	<pre>cp -a /tmp/openeclass-2.4/*  /var/www/html/eclass/</pre>
+	Then copy from the temporary directory /tmp/openeclass-2.5 all of its contents in the installation directory e.g.
+	<pre>cp -a /tmp/openeclass-2.5/*  /var/www/html/eclass/</pre>
 	
 	So with the above steps you have replaced directory eclass, with the new one.
   </li>
@@ -101,12 +101,12 @@ find ./ -type d -exec chmod 775 {} \;
 </li>
 </ul>
 
-<p>Having completed the previous steps, you will have installed the new eClass version (eClass 2.4) files successfully.
+<p>Having completed the previous steps, you will have installed the new eClass version (eClass 2.5) files successfully.
 Then, move on to  <a href="#dbase">the second step</a> in order to upgrade the platform databases.</p>
 <br />
 <p class="title1" id="win">1st Step: Upgrading in Ms Windows Computers</h3>
-<p>The following example presupposes that eClass has already been installed to directory <code>C:\Program Files\Apache\htdocs\</code> and that you have downloaded <b>openeclass-2.4.zip</b>.</p>  
-<p>Due to several changes included by the new version (2.4) you will have to delete the old and install the new one.
+<p>The following example presupposes that eClass has already been installed to directory <code>C:\Program Files\Apache\htdocs\</code> and that you have downloaded <b>openeclass-2.5.zip</b>.</p>  
+<p>Due to several changes included by the new version (2.5) you will have to delete the old and install the new one.
 To make sure that you old configuration remain intact you must do the following actions:</p>
 <ul>
   <li>Move to the eClass installed folder. e.g.<code>C:\Program
@@ -116,16 +116,17 @@ To make sure that you old configuration remain intact you must do the following 
     Files\Apache\htdocs\eclass\config\</tt> to <tt>C:\Documents
     and Settings\Administrator\Desktop\</tt>).</li>
   <li>Go to the <em>eclass</em> folder (e.g.<tt>C:\Program Files\Apache\htdocs\eclass\</tt>) and delete all folders except <em>courses</em>, <em>video</em> and <em>config</em>.</li>
-  <li>Unzip openeclass-2.4.zip to a temporary folder on the desktop. e.g.
-    <code>C:\Documents and Settings\Administrator\Desktop\eclass17</code>
-	After that rename the temporary folder eclass21 to eclass and copy it along with its contents (files and documents). Then, open the file that includes eClass installation, e.g. 
+  <li>Unzip openeclass-2.5.zip to a temporary folder on the desktop. e.g.
+    <code>C:\Documents and Settings\Administrator\Desktop\eclass25</code>
+	After that rename the temporary folder eclass25 to eclass and copy it along with its contents (files and documents). Then, open the file that includes eClass installation, e.g. 
  <code>C:\Program
     Files\Apache\htdocs\</code> 
 	and paste it. In that way, the eclass files is replaced by the new ones. 
   </li>
   <li>Delete the desktop temporary folder.</li>
 </ul>
-<p>As soon as the above have been completed, you will have installed the new eClass version files (eClass 2.3) successfully. Then, follow the  <a href="#dbase">second step</a> so as to upgrade the platform database.
+<p>As soon as the above have been completed, you will have installed the new eClass version files (eClass 2.5) successfully. 
+        Then, follow the  <a href="#dbase">second step</a> so as to upgrade the platform database.
 </p>
 <br />
 <p class="title1" id="dbase">2nd Step: Database Upgrade</p>
@@ -148,8 +149,8 @@ Note (if possible) the accurate error message you saw.</p>
 <br />
 <p class="title1" id="after">3rd Step: Successful Upgrade Check</p>
 <p>In order to make sure that the platform has been upgraded, login as administrator and click to "Admin tools".
-Among other things, version 2.4 has to be indicated. You can alternatively click on the "Platform Identity" link
-on the homepage. Version 2.4 of the platform will be indicated.
+Among other things, version 2.5 has to be indicated. You can alternatively click on the "Platform Identity" link
+on the homepage. Version 2.5 of the platform will be indicated.
 
 <p>You are ready! The upgrade process has been completed successfully. </p>
 <p>If you want to see the new features of the new version, go to <a href="CHANGES_en.txt">CHANGES.txt</a> text file.
@@ -157,12 +158,6 @@ Read forward for further additional configuration options.</p>
 <br />
 <p class="title1" id="other">4th Step: Optional Further Configurations</a>
 <ul>
-<!-- <li>In the <em>config.php</em> file, the <em>close_user_registration</em> variable, which is FALSE by definition, will be defined.
-Changing the value to <em>TRUE</em>, registration of users with 'student' rights will not be free anymore.
-Users will have to follow a process similar to the teacher account creation process,
-namely filling in a student account application form, in order to obtain a platform account.
-The application will be examined by the administrator who either approves of it and opens an account, or rejects it.  
-</li> -->
 <li>
 <p>If you want to modify any message of platform then proceed with the following actions:
 Create a file of type .php with name <em>english.inc.php</em> (or <em>greek.inc.php</em>) and place it in directory <em>(eclass path)/config/</em>. Find the varible name which contains the message you wish to change and assing it the new message. e.g. If you want to change message <tt>$langAboutText = "The platform version is";</tt> create the file <em>english.inc.php</em> in the directory (eclass path)/config/ with the following contents:</p>
@@ -193,10 +188,28 @@ Note the change will be visible to users after next login to platform.</p>
 </li>
 </ul>
 
-<div class='sub_title1'>Settings of table `config`</div>
-<p>During installation of eClass table <em>config</em> is created. Each row of table is a (optional) setting of platform.
-Installation program asks for these settings. If you don't know what to do, leave it as they are. All of them have a default value.
-You can change them later in via the admin tool. These settings are:</p>
+<div class='sub_title1'><a name="after_tbl_config">Basic settings</a></div>
+<p>
+   You can configure several options of platform. After logging as admin user, 
+        click in "Admin Tools" and after that, click in "Configuration File".
+        Basic options are stored in file <em>config.php</em>. 
+        Also you can change the following options below:</p>
+<ul><li><em>Theme</em>: The default theme is «classic». 
+        You can change it with something else (e.g. «modern» or «ocean»). 
+        Theme change will be visible to users in their next login.</li>
+        <li><em>Available languages</em>: Available languages are English, German and Spanish.</li>
+</ul>
+<ul><li><em>disable_eclass_stud_reg</em>: Student registration is disabled</li>
+     <li><em>disable_eclass_prof_reg</em>: Teacher registration is disabled</li>
+     <li><em>close_user_registration</em>: Registration of users with 'student' rights will not be free anymore. 
+             Users will have to follow a process similar to the teacher account creation process, 
+             namely filling in a student account application form, in order to obtain a platform account. 
+             The application will be examined by the administrator who either approves of it and opens an account, 
+             or rejects it.</li>
+     <li><em>durationAccount</em>: Duration of users account.</li>
+     <li><em>alt_auth_student_req</em>: Activation of users account request through alternative authentication methods.</li>
+</ul>
+
 <ul>
  <li><em>email_required</em>: During user registration, email is required.</li>
  <li><em>email_verification_required</em>: Email must be verified during registration and if user changes it.</li>
@@ -214,8 +227,6 @@ By default none of them is enabled.
  <li><em>dropbox_quota</em>: Defines the default quota in 'Dropbox'. 
  <li><em>group_quota</em>: Defines the default quota in 'Groups'. 
 </ul>
-Note that, administrator can modify these settings per course from the admin tool.
-</p>
 
 <p>Further information for these actions can be found in the Administrator's manual (linked from the platform Admin Tool).
 </p>
