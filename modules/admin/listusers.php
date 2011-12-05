@@ -429,9 +429,9 @@ if($sql) {
 					<td width='200'>".htmlspecialchars($logs['email']);
 					if ($mail_ver_required && !empty($logs['email'])) {
 						switch($logs['verified_mail']) {
-							case EMAIL_VERIFICATION_REQUIRED: $tool_content .= " <img align='right' src='$themeimg/pending.png' title='$langMailVerificationPendingU' />";break;
-							case EMAIL_VERIFIED: $tool_content .= " <img align='right' src='$themeimg/tick_1.png' title='$langMailVerificationYesU' />";break;
-							case EMAIL_UNVERIFIED: 
+							case 0: $tool_content .= " <img align='right' src='$themeimg/pending.png' title='$langMailVerificationPendingU' />";break;
+							case 1: $tool_content .= " <img align='right' src='$themeimg/tick_1.png' title='$langMailVerificationYesU' />";break;
+							case 2: 
 							default: $tool_content .= " <img align='right' src='$themeimg/not_confirmed.png' title='$langMailVerificationNoU' />";break;
 						}
 					}

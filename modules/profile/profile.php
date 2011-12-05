@@ -118,7 +118,8 @@ if (isset($_POST['submit'])) {
 	}
 
 	// check if email is valid
-	if ( (get_config('email_required') | get_config('email_verification_required')) and !email_seems_valid($email_form) ) {
+	if ((get_config('email_required') | get_config('email_verification_required')) 
+                        and !email_seems_valid($email_form)) {
 		redirect_to_message(6);
 	}
 
@@ -145,12 +146,11 @@ if (isset($_POST['submit'])) {
 	// if (strstr($username_form, "'") or strstr($username_form, '"') or strstr($username_form, '\\')){
 	//	redirect_to_message(10);
 	// }
-
-	if (!empty($email_form) && ($_SESSION['email'] != $email_form) && get_config('email_verification_required') && get_config('email_required')) {
-		$verified_mail = 0;
-	}
-	else {
-		$verified_mail = 2;
+	if (!empty($email_form) && ($email_form != $_SESSION['email']) 
+                && get_config('email_verification_required')) {
+		$verified_mail = EMAIL_UNVERIFIED;                	                
+	} else {
+		$verified_mail = EMAIL_VERIFIED;                
 	}
 	// everything is ok
 	$email_form = mb_strtolower(trim($email_form));
@@ -172,11 +172,8 @@ if (isset($_POST['submit'])) {
 		$_SESSION['uname'] = $username_form;
 		$_SESSION['nom'] = $nom_form;
 		$_SESSION['prenom'] = $prenom_form;
-		$_SESSION['email'] = $email_form;
-
-		if ($verified_mail === 0) {
-			$_SESSION['mail_verification_required'] = 1;
-		}
+		$_SESSION['email'] = $email_form;			
+		
 		redirect_to_message(1);
 	}
 	if ($old_language != $language or $old_perso_status != $perso_status) {
@@ -213,7 +210,7 @@ if (isset($_GET['msg'])) {
                 $message = $langInvalidCharsUsername;
                 break;
             default:
-                header('Location: ' . $urlAppend . '/modules/profile/profile.php');
+                //header('Location: ' . $urlAppend . '/modules/profile/profile.php');
                 exit;
         }
 	$tool_content .=  "<p class='$type'>$message$urlText</p><br/>";
@@ -349,27 +346,26 @@ $tool_content .= "<tr><th>$langEmailFromCourses:</th>
                   <td><input type='radio' name='subscribe' value='yes' $selectedyes />$langYes&nbsp;
                   <input type='radio' name='subscribe' value='no' $selectedno />$langNo&nbsp;
                   </td></tr>";
-$user_email_status = get_mail_ver_status($uid);
-switch($user_email_status) {
-	case EMAIL_VERIFICATION_REQUIRED:
-		if (get_config('email_verification_required')) {
-			$link = "<a href = '../auth/mail_verify_change.php?from_profile=TRUE'>$langHere</a>.";
-			$message = "<div class='alert1'>$langMailNotVerified $link</div>";
-		}
-		else {
-			$message = "<img src='$themeimg/pending.png' title='$langMailVerificationPendingU' />";
-		}
-		break;
-	case EMAIL_VERIFIED: 
-		$message = "<img src='$themeimg/tick_1.png' title='$langMailVerificationYesU' />";
-		break;
-	case EMAIL_UNVERIFIED:
-	default:
-		$message = "<img src='$themeimg/not_confirmed.png' title='$langMailVerificationNoU' />";
-		break;
+if (get_config('email_verification_required')) {        
+        $user_email_status = get_mail_ver_status($uid);
+        switch($user_email_status) {
+                case EMAIL_VERIFICATION_REQUIRED:
+                        $link = "<a href = '../auth/mail_verify_change.php?from_profile=TRUE'>$langHere</a>.";
+                        $message = "<div class='alert1'>$langMailNotVerified $link</div>";                        
+                        break;
+                case EMAIL_VERIFIED: 
+                        $message = "<img src='$themeimg/tick_1.png' title='$langMailVerificationYesU' />";
+                        break;
+                case EMAIL_UNVERIFIED:                        
+                        $link = "<a href = '../auth/mail_verify_change.php?from_profile=TRUE'>$langHere</a>.";
+                        $message = "<div class='alert1'>$langMailNotVerified $link</div>";                                                
+                default:	
+                        break;
+                
+        }
+        $tool_content .= "<tr><th>$langVerifiedMail</th><td>$message</td>";
 }
-$tool_content .= "<tr><th>$langVerifiedMail</th>
-                <td>$message</td>";
+
 $tool_content .= "
         <tr>
           <th>$langFaculty:</th>
