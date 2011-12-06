@@ -191,6 +191,7 @@ function video_html_object($videoPath, $videoURL, $bgcolor = '#000000', $color =
                             <param name="url" value="'.$videoPath.'">
                             <param name="autostart" value="1">
                             <param name="uimode" value="full">
+                            <param name="wmode" value="transparent">
                         </object>';
             else
                 $ret .= '<object width="'.get_object_width().'" height="'.get_object_height().'"
@@ -198,6 +199,7 @@ function video_html_object($videoPath, $videoURL, $bgcolor = '#000000', $color =
                             data="'.$videoPath.'">
                             <param name="autostart" value="1">
                             <param name="showcontrols" value="1">
+                            <param name="wmode" value="transparent">
                         </object>';
             $ret .= $enddiv;
             break;
@@ -222,6 +224,7 @@ function video_html_object($videoPath, $videoURL, $bgcolor = '#000000', $color =
                             <param name="scale" value="aspect">
                             <param name="controller" value="true">
                             <param name="autoplay" value="true">
+                            <param name="wmode" value="transparent">
                         </object>';
             else
                 $ret .= '<object width="'.get_object_width().'" height="'.get_object_height().'" kioskmode="true"
@@ -231,6 +234,7 @@ function video_html_object($videoPath, $videoURL, $bgcolor = '#000000', $color =
                             <param name="scale" value="aspect">
                             <param name="controller" value="true">
                             <param name="autoplay" value="true">
+                            <param name="wmode" value="transparent">
                         </object>';
             $ret .= $enddiv;
             break;
@@ -240,19 +244,22 @@ function video_html_object($videoPath, $videoURL, $bgcolor = '#000000', $color =
         case "mp3":
             $ret .= "<script type='text/javascript' src='$urlAppend/js/flowplayer/flowplayer-3.2.6.min.js'></script>";
             $ret .= $startdiv;
-            $ret .= '<div id="flowplayer" style="display:block;width:'.get_object_width().'px;height:'.get_object_height().'px;"></div>
-                    <script type="text/javascript">
-                        flowplayer("flowplayer", "'.$urlAppend.'/js/flowplayer/flowplayer-3.2.7.swf", {
-                            clip: {
-                                url: "'.$videoPath.'",
-                                scaling: "fit"
-                            },
-                            canvas: {
-                                backgroundColor: "#000000",
-                                backgroundGradient: "none"
-                            }
-                        });
-                    </script>';
+            $ret .= '<div id="flowplayer" style="display: block; width: '.get_object_width().'px; height: '.get_object_height().'px;"></div>
+                     <script type="text/javascript">
+                         flowplayer("flowplayer", {
+                             src: "'.$urlAppend.'/js/flowplayer/flowplayer-3.2.7.swf", 
+                             wmode: "transparent"
+                             }, {
+                             clip: {
+                                 url: "'.$videoPath.'",
+                                 scaling: "fit"
+                             },
+                             canvas: {
+                                 backgroundColor: "#000000",
+                                 backgroundGradient: "none"
+                             }
+                         });
+                     </script>';
             $ret .= $enddiv;
             break;
         case "swf":
@@ -263,6 +270,7 @@ function video_html_object($videoPath, $videoURL, $bgcolor = '#000000', $color =
                              <param name="movie" value="'.$videoPath.'"/>
                              <param name="bgcolor" value="#000000">
                              <param name="allowfullscreen" value="true">
+                             <param name="wmode" value="transparent">
                              <a href="http://www.adobe.com/go/getflash">
                                 <img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player"/>
                              </a>
@@ -273,6 +281,7 @@ function video_html_object($videoPath, $videoURL, $bgcolor = '#000000', $color =
                              type="application/x-shockwave-flash">
                              <param name="bgcolor" value="#000000">
                              <param name="allowfullscreen" value="true">
+                             <param name="wmode" value="transparent">
                          </object>';
             $ret .= $enddiv;
             break;
@@ -318,22 +327,31 @@ function videolink_iframe_object($videoURL, $bgcolor = '#000000', $color = '#fff
             <body style="background-color: '.$bgcolor.'; color: '.$color.'; font-weight: bold">
             <div align="center">';
     
-    $is_google = false;
-    foreach (get_google_patterns() as $pattern)
+    $need_embed = array_merge(get_google_patterns(), get_metacafe_patterns(), get_myspace_patterns());
+    
+    $got_embed = false;
+    foreach ($need_embed as $pattern)
     {
         if (preg_match($pattern, $videoURL))
         {
-            $ret .= '<embed id="VideoPlayback" 
-                         src="'.$videoURL.'" 
-                         style="width: '.get_object_width().'px; height: '.get_object_height().'px" 
-                         allowFullScreen="true" 
-                         allowScriptAccess="always" 
-                         type="application/x-shockwave-flash"></embed>';
-            $is_google = true;
+            $ret .= '<object width="'.get_object_width().'" height="'.get_object_height().'">
+                         <param name="allowFullScreen" value="true"/>
+                         <param name="wmode" value="transparent"/>
+                         <param name="movie" value="'.$videoURL.'"/>
+                         <embed flashVars="playerVars=autoPlay=yes"
+                             src="'.$videoURL.'"
+                             width="'.get_object_width().'" height="'.get_object_height().'"
+                             allowFullScreen="true"
+                             allowScriptAccess="always" 
+                             type="application/x-shockwave-flash"
+                             wmode="transparent">
+                         </embed>
+                     </object>';
+            $got_embed = true;
         }
     }
     
-    if (!$is_google)
+    if (!$got_embed)
     {
         $ret .='<iframe width="'.get_object_width().'" height="'.get_object_height().'" 
                     src="'.$videoURL.'" frameborder="0" allowfullscreen></iframe>';
@@ -418,7 +436,7 @@ function make_embeddable_videolink($videolink)
         if (preg_match($pattern, $videolink, $matches))
         {
             $sanitized = urlencode(strip_tags($matches[1]));
-            $videolink = 'http://www.youtube.com/v/'. $sanitized .'?hl=en&amp;fs=1&amp;rel=0&amp;autoplay=1';
+            $videolink = 'http://www.youtube.com/embed/'. $sanitized .'?hl=en&amp;fs=1&amp;rel=0&amp;autoplay=1&amp;wmode=transparent';
         }
     }
     
@@ -427,7 +445,7 @@ function make_embeddable_videolink($videolink)
         if (preg_match($pattern, $videolink, $matches))
         {
             $sanitized = urlencode(strip_tags($matches[1]));
-            $videolink = 'http://vimeo.com/moogaloop.swf?clip_id='. $sanitized .'&amp;color=00ADEF&amp;fullscreen=1&amp;autoplay=1';
+            $videolink = 'http://player.vimeo.com/video/'. $sanitized .'?color=00ADEF&amp;fullscreen=1&amp;autoplay=1';
         }
     }
     
@@ -444,8 +462,8 @@ function make_embeddable_videolink($videolink)
     {
         if (preg_match($pattern, $videolink, $matches))
         {
-            $sanitized = urlencode(strip_tags($matches[1]));
-            $videolink = 'http://www.metacafe.com/fplayer/'. $sanitized .'.swf?autoPlay=yes';
+            $sanitized = urlencode(strip_tags($matches[1])) ."/". urlencode(strip_tags($matches[2]));
+            $videolink = 'http://www.metacafe.com/fplayer/'. $sanitized .'.swf';
         }
     }
     
@@ -454,7 +472,7 @@ function make_embeddable_videolink($videolink)
         if (preg_match($pattern, $videolink, $matches))
         {
             $sanitized = urlencode(strip_tags($matches[1]));
-            $videolink = 'http://lads.myspace.com/videos/MSVideoPlayer.swf?m='. $sanitized .'&amp;mt=video&amp;ap=1';
+            $videolink = 'http://mediaservices.myspace.com/services/media/embed.aspx/m='. $sanitized .',t=1,mt=video,ap=1';
         }
     }
     
@@ -550,8 +568,8 @@ function get_google_patterns()
 
 function get_metacafe_patterns()
 {
-    $metacafe = array('/metacafe\.com\/watch\/([^\/]+\/[^\/]+)/i',
-                      '/metacafe\.com\/fplayer\/([^\/]+\/[^\/]+)\.swf/i');
+    $metacafe = array('/metacafe\.com\/watch\/([^\/]+)\/([^\/]+)/i',
+                      '/metacafe\.com\/fplayer\/([^\/]+)\/([^\/]+)\.swf/i');
     
     return $metacafe;
 }
