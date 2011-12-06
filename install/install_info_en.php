@@ -3,7 +3,7 @@
 <html>
 <head>
 <META http-equiv=Content-Type content="text/html; charset=UTF-8">
-<title>Installation Instructions Open eClass 2.4</title>
+<title>Installation Instructions Open eClass 3.0</title>
 <link href="../template/classic/theme.css" rel="stylesheet" type="text/css" />
 <style type="text/css">
 p {
@@ -18,11 +18,11 @@ p {
 
 <a href="http://www.openeclass.org/" title="Open eClass" alt="Open eClass" class="logo"></a></div>
 
-  <p class="title1">Installation Instructions Open eClass 2.5</p>
+  <p class="title1">Installation Instructions Open eClass 3.0</p>
 <p>The Open eClass platform is a complete Course Management System. It is the solution offered by the Greek Academic Network GUnet
 to support Asynchronous eLearning Services. It is mainly designed, developed and supported by the GUnet Asynchronous eLearning Group
 and is distributed for free as open-source software.</p>
-    <p>The Asynchronous <b>Open eClass 2.5</b> eLearning platform has been tested and operates well in: 
+    <p>The Asynchronous <b>Open eClass 3.0</b> eLearning platform has been tested and operates well in: 
     </p>
     <ul>
       <li>Ms Windows environments (<b>Windows NT</b>, <b>Windows 2000</b>, <b>Windows XP</b>, <b>Windows 2003</b>, <b>Windows Vista</b>, <b>Windows 7</b>, <b>Windows 2008</b>)
@@ -159,7 +159,7 @@ and modify it in: </p>
       Installation Process:
     </div>
     <p>
-You can decompress the <b>openeclass-2.5.tar.gz</b> file using the <code>tar xzvf openeclass-2.5.tar.gz</code> command.
+You can decompress the <b>openeclass-3.0.tar.gz</b> file using the <code>tar xzvf openeclass-2.5.tar.gz</code> command.
 The sub-directory created during decompression of the packet includes all the application files and has to be placed in an accessible point by the computer web server. 
     </p>
     <p>
@@ -198,7 +198,7 @@ To give access rights to web server you can type the following commands (e.g. if
     <div class="sub_title1">
       Installation Process
     </div>
-    <p>Decompress the openeclass-2.4.zip file in the root directory of the Apache.
+    <p>Decompress the openeclass-3.0.zip file in the root directory of the Apache.
     The subdirectory created during the decompression of the package includes all files of the application.
     This sub-directory has to be placed in an accessible path by the web server.
     </p>
