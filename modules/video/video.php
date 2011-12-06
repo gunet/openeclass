@@ -97,15 +97,28 @@ if (isset($_GET['action']) and $_GET['action'] == "play")
 {
         $id = $_GET['id'];
         $videoPath = $urlServer ."video/". $currentCourseID . $id;
+        $videoURL = "$_SERVER[PHP_SELF]?course=$code_cours&amp;action=download&amp;id=". $id;
         
         if (strpos($videoPath, '/../') === FALSE)
         {
-            echo video_html_object($videoPath);
+            echo video_html_object($videoPath, $videoURL);
         }
         else
         {
             header("Refresh: ${urlServer}modules/video/video.php?course=$code_cours");
         }
+        exit;
+}
+
+// ----------------------
+// play videolink
+// ----------------------
+
+if (isset($_GET['action']) and $_GET['action'] == "playlink")
+{
+        $id = $_GET['id'];
+        
+        echo videolink_iframe_object(html_entity_decode($id));
         exit;
 }
 

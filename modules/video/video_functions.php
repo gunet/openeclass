@@ -102,22 +102,28 @@ function choose_modal_ahref($videoURL, $videoPath, $videoPlay, $title, $filename
 /**
  * Construct a proper a href html tag for videolinks
  * 
+ * @global string $userServer
+ * @global string $code_cours
  * @param  string $videoURL
  * @param  string $title
  * @return string 
  */
 function choose_videolink_ahref($videoURL, $title)
 {
+    global $urlServer, $code_cours;
+    
     $ahref = "<a href='$videoURL' target='_blank'>". $title ."</a>";
     
     if (is_embeddable_videolink($videoURL))
     {
+        $linkPlay = $urlServer ."modules/video/video.php?course=$code_cours&amp;action=playlink&amp;id=". urlencode(make_embeddable_videolink($videoURL));
+        
         if (file_exists(get_shadowbox_dir()))
             $ahref = "<a href='".make_embeddable_videolink($videoURL)."' rel='shadowbox;width=".get_shadowbox_width().";height=".get_shadowbox_height()."' title='$title'>$title</a>";
         else if (file_exists(get_fancybox2_dir()))
-            $ahref = "<a href='".make_embeddable_videolink($videoURL)."' class='fancybox fancybox.iframe' title='$title'>$title</a>";
+            $ahref = "<a href='".$linkPlay."' class='fancybox fancybox.iframe' title='$title'>$title</a>";
         else if (file_exists(get_colorbox_dir()))
-            $ahref = "<a href='".make_embeddable_videolink($videoURL)."' class='colorbox' title='$title'>$title</a>";
+            $ahref = "<a href='".$linkPlay."' class='colorbox' title='$title'>$title</a>";
     }
     
     return $ahref;
@@ -157,9 +163,10 @@ function get_shadowbox_player($filename)
  * 
  * @global string $urlAppend
  * @param  string $videoPath
+ * @param  string $videoURL
  * @return string 
  */
-function video_html_object($videoPath)
+function video_html_object($videoPath, $videoURL, $bgcolor = '#000000', $color = '#ffffff')
 {
     global $urlAppend;
     
@@ -168,7 +175,7 @@ function video_html_object($videoPath)
             <html><head>
             <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">';
     
-    $blackdiv = '</head><body style="background-color: #000000; color: #ffffff; font-weight: bold"><div align="center">';
+    $startdiv = '</head><body style="background-color: '.$bgcolor.'; color: '.$color.'; font-weight: bold"><div align="center">';
     $enddiv = '</div></body>';
     
     switch($extension)
@@ -177,7 +184,7 @@ function video_html_object($videoPath)
         case "avi":
         case "wm":
         case "wmv":
-            $ret .= $blackdiv;
+            $ret .= $startdiv;
             if (using_ie())
                 $ret .= '<object width="'.get_object_width().'" height="'.get_object_height().'"
                             classid="clsid:6BF52A52-394A-11d3-B153-00C04F79FAA6">
@@ -206,7 +213,7 @@ function video_html_object($videoPath)
         case "m2v":
         case "aac":
         case "m4a":
-            $ret .= $blackdiv;
+            $ret .= $startdiv;
             if (using_ie())
                 $ret .= '<object width="'.get_object_width().'" height="'.get_object_height().'" kioskmode="true"
                             classid="clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B"
@@ -232,7 +239,7 @@ function video_html_object($videoPath)
         case "m4v":
         case "mp3":
             $ret .= "<script type='text/javascript' src='$urlAppend/js/flowplayer/flowplayer-3.2.6.min.js'></script>";
-            $ret .= $blackdiv;
+            $ret .= $startdiv;
             $ret .= '<div id="flowplayer" style="display:block;width:'.get_object_width().'px;height:'.get_object_height().'px;"></div>
                     <script type="text/javascript">
                         flowplayer("flowplayer", "'.$urlAppend.'/js/flowplayer/flowplayer-3.2.7.swf", {
@@ -249,34 +256,91 @@ function video_html_object($videoPath)
             $ret .= $enddiv;
             break;
         case "swf":
-            $ret .= $blackdiv;
-            $ret .= '<object width="'.get_object_width().'" height="'.get_object_height().'"
-                         data="'.$videoPath.'" 
-                         type="application/x-shockwave-flash">
-                         <param name="bgcolor" value="#000000">
-                         <param name="allowfullscreen" value="true">
-                     </object>';
+            $ret .= $startdiv;
+            if (using_ie())
+                $ret .= '<object width="'.get_object_width().'" height="'.get_object_height().'"
+                             classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000">
+                             <param name="movie" value="'.$videoPath.'"/>
+                             <param name="bgcolor" value="#000000">
+                             <param name="allowfullscreen" value="true">
+                             <a href="http://www.adobe.com/go/getflash">
+                                <img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player"/>
+                             </a>
+                         </object>';
+            else
+                $ret .= '<object width="'.get_object_width().'" height="'.get_object_height().'"
+                             data="'.$videoPath.'" 
+                             type="application/x-shockwave-flash">
+                             <param name="bgcolor" value="#000000">
+                             <param name="allowfullscreen" value="true">
+                         </object>';
             $ret .= $enddiv;
             break;
         case "webm":
         case "ogv":
         case "ogg":
-            $ret .= $blackdiv;
-            $ret .= '<video controls="" autoplay="" width="'.get_object_width().'" height="'.get_object_height().'"
-                         style="margin: auto; position: absolute; top: 0; right: 0; bottom: 0; left: 0;" 
-                         name="media" 
-                         src="'.$videoPath.'">
-                     </video>';
+            $ret .= $startdiv;
+            if (using_ie())
+                $ret .= '<a href="'.$videoURL.'">Download media</a>';
+            else
+                $ret .= '<video controls="" autoplay="" width="'.get_object_width().'" height="'.get_object_height().'"
+                             style="margin: auto; position: absolute; top: 0; right: 0; bottom: 0; left: 0;" 
+                             name="media" 
+                             src="'.$videoPath.'">
+                         </video>';
             $ret .= $enddiv;
             break;
         default:
-            $ret .= $blackdiv;
-            $ret .= '<p style="color: #ffffff">Unknown video type, please download it and play it manually.</p>';
+            $ret .= $startdiv;
+            $ret .= '<a href="'.$videoURL.'">Download media</a>';
             $ret .= $enddiv;
             break;
     }
     
     $ret .= '</html>';
+    
+    return $ret;
+}
+
+/**
+ * Construct a proper iframe html tag for each type of videolink media we want to 
+ * present.
+ * 
+ * @param  string $videoURL
+ * @return string 
+ */
+function videolink_iframe_object($videoURL, $bgcolor = '#000000', $color = '#ffffff')
+{
+    $ret = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+            <html><head>
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+            </head>
+            <body style="background-color: '.$bgcolor.'; color: '.$color.'; font-weight: bold">
+            <div align="center">';
+    
+    $is_google = false;
+    foreach (get_google_patterns() as $pattern)
+    {
+        if (preg_match($pattern, $videoURL))
+        {
+            $ret .= '<embed id="VideoPlayback" 
+                         src="'.$videoURL.'" 
+                         style="width: '.get_object_width().'px; height: '.get_object_height().'px" 
+                         allowFullScreen="true" 
+                         allowScriptAccess="always" 
+                         type="application/x-shockwave-flash"></embed>';
+            $is_google = true;
+        }
+    }
+    
+    if (!$is_google)
+    {
+        $ret .='<iframe width="'.get_object_width().'" height="'.get_object_height().'" 
+                    src="'.$videoURL.'" frameborder="0" allowfullscreen></iframe>';
+    }
+    
+    $ret .='</div></body>
+            </html>';
     
     return $ret;
 }
@@ -327,7 +391,7 @@ function is_embeddable_videolink($videolink)
 {
     $supported = array_merge(get_youtube_patterns(), get_vimeo_patterns(), 
                              get_google_patterns(), get_metacafe_patterns(),
-                             get_myspace_patterns());
+                             get_myspace_patterns(), get_dailymotion_patterns());
     $ret = false;
     
     foreach ($supported as $pattern)
@@ -391,6 +455,15 @@ function make_embeddable_videolink($videolink)
         {
             $sanitized = urlencode(strip_tags($matches[1]));
             $videolink = 'http://lads.myspace.com/videos/MSVideoPlayer.swf?m='. $sanitized .'&amp;mt=video&amp;ap=1';
+        }
+    }
+    
+    foreach (get_dailymotion_patterns() as $pattern)
+    {
+        if (preg_match($pattern, $videolink, $matches))
+        {
+            $sanitized = urlencode(strip_tags($matches[1]));
+            $videolink = 'http://www.dailymotion.com/embed/video/'. $sanitized .'?autoPlay=1';
         }
     }
     
@@ -490,4 +563,11 @@ function get_myspace_patterns()
                      '/lads\.myspace\.com\/videos\/MSVideoPlayer\.swf\?m=([0-9]+)/i');
     
     return $myspace;
+}
+
+function get_dailymotion_patterns()
+{
+    $dailymotion = array('/dailymotion\.com.*\/video\/(([^&^\?^_]+))/i');
+    
+    return $dailymotion;
 }
