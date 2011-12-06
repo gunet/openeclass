@@ -56,3 +56,6 @@ p {
         list-style-type: square;
 }
 
+img {
+        vertical-align: baseline;
+}

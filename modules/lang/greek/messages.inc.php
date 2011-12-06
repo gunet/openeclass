@@ -196,15 +196,15 @@ $langPleaseWait = "Παρακαλώ περιμένετε";
 $langSupportedLanguages = "Υποστηριζόμενες Γλώσσες";
 $langAvailLanguages = "Διαθέσιμες";
 $langTipLangAdminAnn = "Επιλέξτε την γλώσσα στην οποία θα εμφανίζονται οι ανακοινώσεις του διαχειριστή";
-$langAltAuthStudentReq = 'Ενεργοποίηση αίτησης φοιτητή που συνδέεται με εναλλακτικό τρόπο πιστοποίησης';
-$langDisableEclassStudReg = 'Απενεργοποίηση εγγραφής φοιτητή μέσω πλατφόρμας';
-$langDisableEclassProfReg = 'Απενεργοποίηση εγγραφής καθηγητή μέσω πλατφόρμας';
-$langDisableEclassStudRegType = 'Δυνατότητα Εγγραφής Φοιτητών μέσω πλατφόρμας';
-$langDisableEclassProfRegType = 'Δυνατότητα Εγγραφής Φοιτητών μέσω πλατφόρμας';
-$langDisableEclassStudRegYes = 'Οι φοιτητές δεν μπορούν να εγγραφούν μέσω πλατφόρμας';
-$langDisableEclassProfRegYes = 'Οι καθηγητές δεν μπορούν να εγγραφούν μέσω πλατφόρμας';
-$langDisableEclassStudRegNo = 'Οι φοιτητές μπορούν να εγγραφούν μέσω πλατφόρμας';
-$langDisableEclassProfRegNo = 'Οι καθηγητές μπορούν να εγγραφούν μέσω πλατφόρμας';
+$langAltAuthStudentReq = "Ενεργοποίηση αίτησης $langsOfStudent που συνδέεται με εναλλακτικό τρόπο πιστοποίησης";
+$langDisableEclassStudReg = "Απενεργοποίηση εγγραφής $langsOfStudent μέσω πλατφόρμας";
+$langDisableEclassProfReg = "Απενεργοποίηση εγγραφής $langsOfTeacher μέσω πλατφόρμας";
+$langDisableEclassStudRegType = "Δυνατότητα Εγγραφής $langsOfStudents μέσω πλατφόρμας";
+$langDisableEclassProfRegType = "Δυνατότητα Εγγραφής $langsOfTeachers μέσω πλατφόρμας";
+$langDisableEclassStudRegYes = "Οι $langsStudents δεν μπορούν να εγγραφούν μέσω πλατφόρμας";
+$langDisableEclassProfRegYes = "Οι $langsTeachers δεν μπορούν να εγγραφούν μέσω πλατφόρμας";
+$langDisableEclassStudRegNo = "Οι $langsStudents μπορούν να εγγραφούν μέσω πλατφόρμας";
+$langDisableEclassProfRegNo = "Οι $langsTeachers μπορούν να εγγραφούν μέσω πλατφόρμας";
 
 // listusers
 $langBegin="αρχή";
