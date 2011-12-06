@@ -3,7 +3,7 @@
 <html>
 <head>
 <META http-equiv=Content-Type content="text/html; charset=UTF-8">
-<title>Installation Instructions Open eClass 2.4</title>
+<title>Installation Instructions Open eClass 2.5</title>
 <link href="../template/classic/theme.css" rel="stylesheet" type="text/css" />
 <style type="text/css">
 p {
@@ -198,7 +198,7 @@ To give access rights to web server you can type the following commands (e.g. if
     <div class="sub_title1">
       Installation Process
     </div>
-    <p>Decompress the openeclass-2.4.zip file in the root directory of the Apache.
+    <p>Decompress the openeclass-2.5.zip file in the root directory of the Apache.
     The subdirectory created during the decompression of the package includes all files of the application.
     This sub-directory has to be placed in an accessible path by the web server.
     </p>
