@@ -83,8 +83,9 @@ function send_file_to_client($real_filename, $filename, $disposition = null, $se
 
         header('Content-length: ' . filesize($real_filename));
         $mtime = filemtime($real_filename);
-        $etag = md5_file($real_filename);
-        header('Last-Modified: ' . gmdate('D, d M Y H:i:s', $mtime) . ' GMT');
+        $mdate = gmdate('D, d M Y H:i:s', $mtime);
+        $etag = md5($real_filename . $mdate . $filename . filesize($real_filename));
+        header('Last-Modified: ' . $mdate . ' GMT');
         header("Etag: $etag");
 
         if ((array_key_exists('HTTP_IF_MODIFIED_SINCE', $_SERVER) and
