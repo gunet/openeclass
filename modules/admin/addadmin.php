@@ -71,7 +71,7 @@ $r1 = db_query("SELECT user_id, prenom, nom, username, admin.privilege FROM user
                     WHERE user.user_id = admin.idUser 
                     ORDER BY user_id");
 
-$tool_content .= "<table class='tbl'>
+$tool_content .= "<table class='tbl' width='100%'>
   <tr>
     <th class='center'>ID</th>
     <th class='center'>$langSurnameName</th>
@@ -134,12 +134,12 @@ function printform ($message) {
         </tr>
         <tr><th rowspan='3'>$langAddRole</th>            
             <td><input type='radio' name='adminrights' value='admin' checked>&nbsp;$langAdministrator&nbsp;
-        <img src='$themeimg/questionnaire.png' title='$langHelpAdministrator' /></td></tr>
+        <span class='smaller'>($langHelpAdministrator)</span></td></tr>
         <tr>
         <td><input type='radio' name='adminrights' value='poweruser'>&nbsp;$langPowerUser&nbsp;
-            <img src='$themeimg/questionnaire.png' title='$langHelpPowerUser' /></td></tr>
+            <span class='smaller'>($langHelpPowerUser)</span></td></tr>
         <tr><td><input type='radio' name='adminrights' value='manageuser'>&nbsp;$langManageUser&nbsp;
-            <img src='$themeimg/questionnaire.png' title='$langHelpManageUser' /></td></tr>
+            <span class='smaller'>($langHelpManageUser)</span></td></tr>
         <tr>
             <td colspan='2'><input type='submit' name='submit' value='$langAdd'></td>
         </tr>
