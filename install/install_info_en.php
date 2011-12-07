@@ -3,7 +3,7 @@
 <html>
 <head>
 <META http-equiv=Content-Type content="text/html; charset=UTF-8">
-<title>Installation Instructions Open eClass 2.4</title>
+<title>Installation Instructions Open eClass 2.5</title>
 <link href="../template/classic/theme.css" rel="stylesheet" type="text/css" />
 <style type="text/css">
 p {
@@ -18,11 +18,11 @@ p {
 
 <a href="http://www.openeclass.org/" title="Open eClass" alt="Open eClass" class="logo"></a></div>
 
-  <p class="title1">Installation Instructions Open eClass 2.4</p>
+  <p class="title1">Installation Instructions Open eClass 2.5</p>
 <p>The Open eClass platform is a complete Course Management System. It is the solution offered by the Greek Academic Network GUnet
 to support Asynchronous eLearning Services. It is mainly designed, developed and supported by the GUnet Asynchronous eLearning Group
 and is distributed for free as open-source software.</p>
-    <p>The Asynchronous <b>Open eClass 2.4</b> eLearning platform has been tested and operates well in: 
+    <p>The Asynchronous <b>Open eClass 2.5</b> eLearning platform has been tested and operates well in: 
     </p>
     <ul>
       <li>Ms Windows environments (<b>Windows NT</b>, <b>Windows 2000</b>, <b>Windows XP</b>, <b>Windows 2003</b>, <b>Windows Vista</b>, <b>Windows 7</b>, <b>Windows 2008</b>)
@@ -43,11 +43,9 @@ and is distributed for free as open-source software.</p>
 	<li><a href="#after_l">How to modify platform logo</a></li>
 	<li><a href="#after_theme">How to modify platform theme</a></li>
 	<li><a href="#after_m">How to modify messages</a></li>
-	<li><a href="#after_math">Support of math symbols</a></li>
-	<li><a href="#after_lang">Multi language support</a></li>
-	<li><a href="#after_reg">User registration via request</a></li>
+	<li><a href="#after_math">Support of math symbols</a></li>	
 	<li><a href="#after_pma">PhpMyAdmin</a></li>
-	<li><a href="#after_tbl_config">Settings of table `config`</a></li>
+	<li><a href="#after_tbl_config">Basic Settings</a></li>
 	<li><a href="#after_other">Other settings</a></li>
 	</ul>
       </li>
@@ -139,6 +137,8 @@ and modify it in: </p>
     </p>
 <p class="sub_title1"> 3. Database<a href="http://www.mysql.com" target="_blank">MySQL</a> (versions 4.1.x or 5.x) </p>
     <p>Along with the MySQL installation, a user account with database creation rights has to be created.
+    Because of the fact, that openeclass creates a new database for each course, make sure that you
+    have permissions to create databases through php scripts and not through other tools (e.g. Plesk, cPanel etc.)
     </p>
     <p class="sub_title1">
       4. Mail Servers <a href="http://www.sendmail.org" target="_blank">sendmail</a> or <a href="http://www.postfix.org"
@@ -159,7 +159,7 @@ and modify it in: </p>
       Installation Process:
     </div>
     <p>
-You can decompress the <b>openeclass-2.4.tar.gz</b> file using the <code>tar xzvf openeclass-2.4.tar.gz</code> command.
+You can decompress the <b>openeclass-2.5.tar.gz</b> file using the <code>tar xzvf openeclass-2.5.tar.gz</code> command.
 The sub-directory created during decompression of the packet includes all the application files and has to be placed in an accessible point by the computer web server. 
     </p>
     <p>
@@ -198,7 +198,7 @@ To give access rights to web server you can type the following commands (e.g. if
     <div class="sub_title1">
       Installation Process
     </div>
-    <p>Decompress the openeclass-2.4.zip file in the root directory of the Apache.
+    <p>Decompress the openeclass-2.5.zip file in the root directory of the Apache.
     The subdirectory created during the decompression of the package includes all files of the application.
     This sub-directory has to be placed in an accessible path by the web server.
     </p>
@@ -264,24 +264,31 @@ E.g. when you type
 square root of x-1 will be drawed. For syntax of all mathematical symbols, read manual in <em>http://(Open eClass url)/manuals/PhpMathPublisherHelp.pdf</em> 
 </p>
 
-<div class='sub_title1'><a name="after_lang">Multi language support</a></div>
-<p>
-Platform suppports English and Spanish language. If you wish to deactivate any of these language, just open config.php and simply add the following statement <pre>$active_ui_languages = array('el', 'en');</pre> (if you wish to deactive spanish) or
-<pre>$active_ui_languages = array('el', 'es');</pre> (if you wish to deactivate english).</p>
-<p>By default the value of the above variable is<pre>$active_ui_languages = array('el', 'en', 'es');</pre> e.g. supports all three languages.
-</p>
-
-<!--<div class='sub_title1'><a name="after_reg">User registration via request</a></div>
-<p>In the <em>config.php</em> file, the <em>close_user_registration</em> variable, which is FALSE by definition, will be defined. Changing the value to <em>TRUE</em>, registration of users with 'student' rights will not be free anymore. Users will have to follow a process similar to the teacher account creation process, namely filling in a student account application form, in order to obtain a platform account. The application will be examined by the administrator who either approves of it and opens an account, or rejects it.
-</p> -->
-
 <div class='sub_title1'><a name="after_pma">PhpMyAdmin</a></div> 
 <p>The platform is delivered through the <em>phpMyAdmin</em> management tool. For safety and security reasons, access to phpMyAdmin is done through the browser's cookies. If you want to change it, you can refer to the config.inc.php file of phpMyAdmin.</p>
 
-<div class='sub_title1'><a name="after_tbl_config">Settings of table `config`</a></div>
-<p>During installation of eClass table <em>config</em> is created. Each row of table is a (optional) setting of platform.
-Installation program asks for these settings. If you don't know what to do, leave it as they are. All of them have a default value.
-You can change them later in via the admin tool. These settings are:</p>
+<div class='sub_title1'><a name="after_tbl_config">Basic settings</a></div>
+<p>
+   You can configure several options of platform. After logging as admin user, 
+        click in "Admin Tools" and after that, click in "Configuration File".
+        Basic options are stored in file <em>config.php</em>. 
+        Also you can change the following options below:</p>
+<ul><li><em>Theme</em>: The default theme is «classic». 
+        You can change it with something else (e.g. «modern» or «ocean»). 
+        Theme change will be visible to users in their next login.</li>
+        <li><em>Available languages</em>: Available languages are English, German and Spanish.</li>
+</ul>
+<ul><li><em>disable_eclass_stud_reg</em>: Student registration is disabled</li>
+     <li><em>disable_eclass_prof_reg</em>: Teacher registration is disabled</li>
+     <li><em>close_user_registration</em>: Registration of users with 'student' rights will not be free anymore. 
+             Users will have to follow a process similar to the teacher account creation process, 
+             namely filling in a student account application form, in order to obtain a platform account. 
+             The application will be examined by the administrator who either approves of it and opens an account, 
+             or rejects it.</li>
+     <li><em>durationAccount</em>: Duration of users account.</li>
+     <li><em>alt_auth_student_req</em>: Activation of users account request through alternative authentication methods.</li>
+</ul>
+
 <ul>
  <li><em>email_required</em>: During user registration, email is required.</li>
  <li><em>email_verification_required</em>: Email must be verified during registration and if user changes it.</li>

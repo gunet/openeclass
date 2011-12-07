@@ -23,7 +23,7 @@
 $require_admin = TRUE;
 // Include baseTheme
 include '../../include/baseTheme.php';
-$nameTools = $langAddAdmin;
+$nameTools = $langAdmins;
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
 // Initialize the incoming variables
 $username = isset($_POST['username'])?$_POST['username']:'';
@@ -76,7 +76,7 @@ $tool_content .= "<table class='tbl'>
     <th class='center'>ID</th>
     <th class='center'>$langSurnameName</th>
         <th class='center'>$langUsername</th>
-    <th class='center'>$langUser</th>
+    <th class='center'>$langRole</th>
     <th>$langActions</th>
   </tr>";
 

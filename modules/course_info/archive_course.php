@@ -86,21 +86,22 @@ if (extension_loaded('zlib')) {
                                 'siteName' => $siteName)));
 
     	$htmldir = $archivedir . '/html';
-
 	$tool_content .= "<li>$langBUCourseDataOfMainBase  $currentCourseID</li>\n";
-
-	// Copy course files
-	$nbFiles = copydir("../../courses/$currentCourseID", $htmldir);
-	$nbFiles += copydir("../../video/$currentCourseID", $archivedir . '/video_files');
-        $tool_content .= "<li>$langCopyDirectoryCourse<br />
-                              (<strong>$nbFiles</strong> $langFileCopied)</li>
-                          <li>$langBackupOfDataBase $currentCourseID</li></ol></th>
-                          <td>&nbsp;</td></tr></tbody></table>";
-
+	       
         // create zip file
 	$zipCourse = new PclZip($zipfile);
         $result = $zipCourse->create($archivedir, PCLZIP_OPT_REMOVE_PATH, $webDir);
+        $result = $zipCourse->add("$webDir/courses/$currentCourseID", 
+                                PCLZIP_OPT_REMOVE_PATH, "$webDir/courses/$currentCourseID", 
+                                PCLZIP_OPT_ADD_PATH, "course/archive/$currentCourseID/$backup_date/html");
+        $result = $zipCourse->add("$webDir/video/$currentCourseID", 
+                                PCLZIP_OPT_REMOVE_PATH, "$webDir/video/$currentCourseID", 
+                                PCLZIP_OPT_ADD_PATH, "course/archive/$currentCourseID/$backup_date/video_files");        
+        
         removeDir($archivedir);
+        
+        $tool_content .= "<li>$langBackupOfDataBase $currentCourseID</li></ol></th>
+                          <td>&nbsp;</td></tr></tbody></table>";
 	if (!$result) {
 		$tool_content .= "Error: ".$zipCourse->errorInfo(true);
 		draw($tool_content, 2);

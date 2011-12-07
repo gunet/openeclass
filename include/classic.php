@@ -63,17 +63,28 @@ function cours_table_header($statut)
 
 function cours_table_end()
 {
-        $GLOBALS['tool_content'] .= "\n        </table><br />\n";
+        $GLOBALS['tool_content'] .= "\n</table><br />\n";
 }
 
-$tool_content = "";
 $status = array();
-$result2 = db_query("
-        SELECT cours.cours_id cours_id, cours.code code, cours.fake_code fake_code,
-               cours.intitule title, cours.titulaires profs, cours_user.statut statut
-	FROM cours JOIN cours_user ON cours.cours_id = cours_user.cours_id
-        WHERE cours_user.user_id = $uid
-        ORDER BY statut, cours.intitule, cours.titulaires");
+$sql = "SELECT cours.cours_id cours_id, cours.code code, cours.fake_code fake_code,
+                        cours.intitule title, cours.titulaires profs, cours_user.statut statut
+                FROM cours JOIN cours_user ON cours.cours_id = cours_user.cours_id
+                WHERE cours_user.user_id = $uid        
+                ORDER BY statut, cours.intitule, cours.titulaires";
+$sql2 = "SELECT cours.cours_id cours_id, cours.code code, cours.fake_code fake_code,
+                        cours.intitule title, cours.titulaires profs, cours_user.statut statut
+                FROM cours JOIN cours_user ON cours.cours_id = cours_user.cours_id
+                WHERE cours_user.user_id = $uid
+                AND cours.visible != ".COURSE_INACTIVE."
+                ORDER BY statut, cours.intitule, cours.titulaires";
+
+if ($_SESSION['statut'] == 1) {
+        $result2 = db_query($sql);
+}
+if ($_SESSION['statut'] == 5) {
+        $result2 = db_query($sql2);
+}
 if ($result2 and mysql_num_rows($result2) > 0) {
 	$k = 0;
         $this_statut = 0;
@@ -94,9 +105,9 @@ if ($result2 and mysql_num_rows($result2) > 0) {
                 $profs[$code] = $mycours['profs'];
                 $titles[$code] = $mycours['title'];
 		if ($k%2==0) {
-			$tool_content .= "        <tr class='even'>\n";
+			$tool_content .= "<tr class='even'>\n";
 		} else {
-			$tool_content .= "        <tr class='odd'>\n";
+			$tool_content .= "<tr class='odd'>\n";
 		}
                 if ($this_statut == 1) {
                         $manage_link = "${urlServer}modules/course_info/infocours.php?from_home=TRUE&amp;cid=$code";
@@ -107,11 +118,11 @@ if ($result2 and mysql_num_rows($result2) > 0) {
                         $manage_icon = $themeimg . '/cunregister.png';
                         $manage_title = $langUnregCourse;
                 }
-		$tool_content .="          <td width='5'><img src='$themeimg/arrow.png' alt='' /></td>";
-		$tool_content .= "\n          <td><a href='${urlServer}courses/$code'>".q($title)."</a> <span class='smaller'>(".q($mycours['fake_code']).")</span></td>";
-		$tool_content .= "\n          <td class='smaller'>".q($mycours['profs'])."</td>";
-		$tool_content .= "\n          <td align='center'><a href='$manage_link'><img src='$manage_icon' title='$manage_title' alt='$manage_title' /></a></td>";
-		$tool_content .= "\n        </tr>";
+		$tool_content .= "<td width='5'><img src='$themeimg/arrow.png' alt='' /></td>";
+		$tool_content .= "<td><a href='${urlServer}courses/$code'>".q($title)."</a> <span class='smaller'>(".q($mycours['fake_code']).")</span></td>";
+		$tool_content .= "<td class='smaller'>".q($mycours['profs'])."</td>";
+		$tool_content .= "<td align='center'><a href='$manage_link'><img src='$manage_icon' title='$manage_title' alt='$manage_title' /></a></td>";
+		$tool_content .= "</tr>";
 		$k++;
 	}
         cours_table_end();
@@ -120,7 +131,7 @@ if ($result2 and mysql_num_rows($result2) > 0) {
 	$tool_content .= "\n        <p class='success'>$langWelcomeStud</p>\n";
 }  elseif ($_SESSION['statut'] == '1') {
         // ...or as professor
-        $tool_content .= "\n        <p class='success'>$langWelcomeProf</p>\n";
+        $tool_content .= "\n<p class='success'>$langWelcomeProf</p>\n";
 }
 
 if (count($status) > 0) {
@@ -152,7 +163,7 @@ if (count($status) > 0) {
                         $la = 0;
                         while ($ann = mysql_fetch_array($result)) {
                                         $content = standard_text_escape($ann['contenu']);
-                                        if ($la%2==0) {
+                                        if ($la%2 == 0) {
                                                 $tool_content .= "<tr class='even'>\n";
                                         } else {
                                                 $tool_content .= "<tr class='odd'>\n";

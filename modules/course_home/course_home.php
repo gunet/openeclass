@@ -62,8 +62,8 @@ if (isset($_GET['from_search'])) { // if we come from home page search
 
 $res = db_query("SELECT course_keywords, faculte.name AS faculte, type, visible, titulaires, fake_code
                         FROM cours, faculte
-                        WHERE cours_id = $cours_id AND
-                              faculte.id = faculteid", $mysqlMainDb);
+                        WHERE cours_id = $cours_id 
+                        AND faculte.id = faculteid", $mysqlMainDb);
 $result = mysql_fetch_array($res);
 $keywords = q(trim($result['course_keywords']));
 $faculte = $result['faculte'];
@@ -71,7 +71,6 @@ $type = $result['type'];
 $visible = $result['visible'];
 $professor = $result['titulaires'];
 $fake_code = $result['fake_code'];
-
 $main_extra = $description = $addon = '';
 $res = db_query("SELECT res_id, title, comments FROM unit_resources WHERE unit_id =
                         (SELECT id FROM course_units WHERE course_id = $cours_id AND `order` = -1)
@@ -244,37 +243,38 @@ switch ($type){
 	}
 }
 
-$bar_content .= "\n      <ul class='custom_list'><li><b>".$langCode."</b>: ".q($fake_code)."</li>".
-                "\n          <li><b>".$langTeachers."</b>: ".q($professor)."</li>".
-                "\n          <li><b>".$langFaculty."</b>: ".q($faculte)."</li>".
-                "\n          <li> <b>".$langType."</b>: ".$lessonType."</li>";
+$bar_content .= "\n<ul class='custom_list'><li><b>".$langCode."</b>: ".q($fake_code)."</li>".
+                "\n<li><b>".$langTeachers."</b>: ".q($professor)."</li>".
+                "\n<li><b>".$langFaculty."</b>: ".q($faculte)."</li>".
+                "\n<li> <b>".$langType."</b>: ".$lessonType."</li>";
 
 $require_help = TRUE;
 $helpTopic = 'course_home';
 
-if ($is_editor) {
+if ($is_editor) {       
 	$sql = "SELECT COUNT(user_id) AS numUsers
 			FROM cours_user
 			WHERE cours_id = $cours_id";
 	$res = db_query($sql, $mysqlMainDb);
 	while($result = mysql_fetch_row($res)) {
 		$numUsers = $result[0];
-	}
-
-	//set the lang var for lessons visibility status
-	switch ($visible){
-		case 0: { //closed
+        }        
+	//set the lang var for lessons visibility status      
+	switch ($visible) {                
+		case COURSE_CLOSED: { 
 			$lessonStatus = "<span title='$langPrivate'>$langPrivateShort</span>";
 			break;
 		}
-
-		case 1: {//open with registration
+		case COURSE_REGISTRATION: {
 			$lessonStatus = "<span title='$langPrivOpen'>$langPrivOpenShort</span>";
 			break;
 		}
-
-		case 2: { //open
+		case COURSE_OPEN: { 
 			$lessonStatus = "<span title='$langPublic'>$langPublicShort</span>";
+			break;
+		}                
+                case COURSE_INACTIVE: {                                                          
+			$lessonStatus = "<span class='invisible' title='$langCourseInactive'>$langCourseInactiveShort</span>";
 			break;
 		}
 	}

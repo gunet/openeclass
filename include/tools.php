@@ -352,7 +352,7 @@ function adminMenu(){
 	array_push($sideMenuLink, "../admin/mailtoprof.php");
 	array_push($sideMenuImg, "arrow.png");
         if (isset($is_admin) and $is_admin) {
-            array_push($sideMenuText, $GLOBALS['langAddAdmin']);
+            array_push($sideMenuText, $GLOBALS['langAdmins']);
             array_push($sideMenuLink, "../admin/addadmin.php");
             array_push($sideMenuImg, "arrow.png");    
         }        

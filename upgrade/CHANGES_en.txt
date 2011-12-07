@@ -3,6 +3,20 @@ Open eClass Platform - CHANGES
 ****************************************
 
 ********************************************************************
+Open eClass 2.5 - Changes List
+********************************************************************
+-- New administrator user roles. Course and user administrator role. Users administrator role.        
+-- New course user role. Assistant professor role.
+-- User can choose to not receive mails from a course.
+-- It is possible to require from user, to verify his email address during registration.
+-- In "Assignments" teacher can define assignment with time and date deadlines.
+-- Fix some bugs in "Exercises" and "Assignments".
+-- In "Exercises" teacher can create exercises with existing random questions.
+-- In "Video", videos can appear in pop up window inside the browser.
+-- New theme added.
+
+
+********************************************************************
 Open eClass 2.4.1 - Changes List
 ********************************************************************
 

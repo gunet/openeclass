@@ -67,7 +67,7 @@ $langAdminUsers = "Διαχείριση Χρηστών";
 *********************************************/
 $langDeleteAdmin="H διαγραφή του διαχειριστή με id:";
 $langNotFeasible ="δεν είναι εφικτή";
-$langAddAdmin = "Προσθήκη διαχειριστή";
+$langAdmins = "Διαχειριστές";
 $langAddPowerUser = "Προσθήκη βοηθού διαχειριστή";
 $langAddManageUser = "Προσθήκη διαχειριστή χρηστών";
 $langPassword = "Συνθηματικό";
@@ -196,15 +196,15 @@ $langPleaseWait = "Παρακαλώ περιμένετε";
 $langSupportedLanguages = "Υποστηριζόμενες Γλώσσες";
 $langAvailLanguages = "Διαθέσιμες";
 $langTipLangAdminAnn = "Επιλέξτε την γλώσσα στην οποία θα εμφανίζονται οι ανακοινώσεις του διαχειριστή";
-$langAltAuthStudentReq = 'Ενεργοποίηση αίτησης φοιτητή που συνδέεται με εναλλακτικό τρόπο πιστοποίησης';
-$langDisableEclassStudReg = 'Απενεργοποίηση εγγραφής φοιτητή μέσω πλατφόρμας';
-$langDisableEclassProfReg = 'Απενεργοποίηση εγγραφής καθηγητή μέσω πλατφόρμας';
-$langDisableEclassStudRegType = 'Δυνατότητα Εγγραφής Φοιτητών μέσω πλατφόρμας';
-$langDisableEclassProfRegType = 'Δυνατότητα Εγγραφής Φοιτητών μέσω πλατφόρμας';
-$langDisableEclassStudRegYes = 'Οι φοιτητές δεν μπορούν να εγγραφούν μέσω πλατφόρμας';
-$langDisableEclassProfRegYes = 'Οι καθηγητές δεν μπορούν να εγγραφούν μέσω πλατφόρμας';
-$langDisableEclassStudRegNo = 'Οι φοιτητές μπορούν να εγγραφούν μέσω πλατφόρμας';
-$langDisableEclassProfRegNo = 'Οι καθηγητές μπορούν να εγγραφούν μέσω πλατφόρμας';
+$langAltAuthStudentReq = "Ενεργοποίηση αίτησης $langsOfStudent που συνδέεται με εναλλακτικό τρόπο πιστοποίησης";
+$langDisableEclassStudReg = "Απενεργοποίηση εγγραφής $langsOfStudent μέσω πλατφόρμας";
+$langDisableEclassProfReg = "Απενεργοποίηση εγγραφής $langsOfTeacher μέσω πλατφόρμας";
+$langDisableEclassStudRegType = "Δυνατότητα Εγγραφής $langsOfStudents μέσω πλατφόρμας";
+$langDisableEclassProfRegType = "Δυνατότητα Εγγραφής $langsOfTeachers μέσω πλατφόρμας";
+$langDisableEclassStudRegYes = "Οι $langsStudents δεν μπορούν να εγγραφούν μέσω πλατφόρμας";
+$langDisableEclassProfRegYes = "Οι $langsTeachers δεν μπορούν να εγγραφούν μέσω πλατφόρμας";
+$langDisableEclassStudRegNo = "Οι $langsStudents μπορούν να εγγραφούν μέσω πλατφόρμας";
+$langDisableEclassProfRegNo = "Οι $langsTeachers μπορούν να εγγραφούν μέσω πλατφόρμας";
 
 // listusers
 $langBegin="αρχή";
@@ -852,6 +852,8 @@ $langProfessorsInfo="Ονοματεπώνυμα $langsOfTeachers του μαθή
 $langPublic="Ελεύθερη Πρόσβαση (χωρίς εγγραφή) από τη αρχική σελίδα χωρίς συνθηματικό";
 $langPublicShort="Ελεύθερη (χωρίς εγγραφή)";
 $langPrivate="Πρόσβαση στο μάθημα (για εγγραφή) έχουν μόνο όσοι βρίσκονται στη Λίστα Χρηστών του μαθήματος";
+$langCourseInactive = "Πρόσβαση στο μάθημα έχουν μόνο οι $langsTeachers του μαθήματος";
+$langCourseInactiveShort = "Ανενεργό μάθημα";
 $langPrivateShort="Περιορισμένη (με Λίστα Χρηστών)";
 $langAlertTitle = "Παρακαλώ συμπληρώστε τον τίτλο του μαθήματος!";
 $langAlertProf = "Παρακαλώ συμπληρώστε τον διδάσκοντα του μαθήματος!";
@@ -1949,6 +1951,7 @@ $m['legend'] = 'Υπόμνημα';
 $m['legopen'] = 'Ανοικτό Μάθημα';
 $m['legrestricted'] = 'Απαιτείται εγγραφή';
 $m['legclosed'] = 'Κλειστό μάθημα';
+$m['linactive'] = 'Ανενεργό μάθημα';
 $m['nolessons'] = 'Δεν υπάρχουν διαθέσιμα μαθήματα!';
 $m['name']="Μάθημα";
 $m['code']="Συνθηματικό μαθήματος";
@@ -2317,7 +2320,7 @@ $langNoAdmin="δεν έχει<b>δικαιώματα διαχειριστή σε
 $langAllAdmin="έχει τώρα<b>όλα τα δικαιώματα διαχειριστή σε αυτό το site</b>";
 $langModRole="Αλλαγή του ρόλου του";
 $langRole="Ρόλος";
-$langAddRole = "Προσθήκη ρόλου";
+$langAddRole = "Ανάθεση ρόλου";
 $langIsNow="είναι τώρα";
 $langInC="σε αυτό το μάθημα";
 $langUserNo="Το όνομα χρήστη που διαλέξατε";
@@ -2767,7 +2770,7 @@ $timeNoSecFormat = '%R';
 $langNoAdminAccess = '
         <b>Η σελίδα που προσπαθείτε να μπείτε απαιτεί όνομα χρήστη και συνθηματικό.</b>
         <br>Η πλατφόρμα σας ανακατεύθυνε αυτόματα στην αρχική σελίδα
-        για να συνδεθείτε πρωτού προχωρήσετε σε άλλες ενέργειες. Πιθανόν να έληξε η σύνοδός σας.';
+        για να συνδεθείτε προτού προχωρήσετε σε άλλες ενέργειες. Πιθανόν να έληξε η σύνοδός σας.';
 $langLoginRequired = '
         <b>Δεν είστε εγγεγραμμένος στο μάθημα και επομένως δεν μπορείτε να χρησιμοποιήσετε το αντίστοιχο υποσύστημα.</b>
         <br>Η πλατφόρμα σας ανακατεύθυνε αυτόματα στην αρχική σελίδα
