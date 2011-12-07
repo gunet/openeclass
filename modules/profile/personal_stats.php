@@ -38,7 +38,9 @@ if (!extension_loaded('gd')) {
         $sql = "SELECT a.code code, a.intitule intitule
                 FROM cours AS a LEFT JOIN cours_user AS b
                      ON a.cours_id = b.cours_id
-                WHERE b.user_id = '$uid' ORDER BY a.intitule";
+                WHERE b.user_id = $uid 
+                AND a.visible != ".COURSE_INACTIVE."
+                ORDER BY a.intitule";
 	$result = db_query($sql);
 	if (mysql_num_rows($result) > 0) {  // found courses ?
 		while ($row = mysql_fetch_assoc($result)) {

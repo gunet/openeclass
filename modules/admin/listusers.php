@@ -319,7 +319,7 @@ if(!empty($ord)) {
 $caption = "";
 
 if($view == 3) { // users per course
-	$qry = "SELECT a.user_id, a.nom, a.prenom, a.username, a.email, b.statut
+	$qry = "SELECT a.user_id, a.nom, a.prenom, a.username, a.email, a.verified_mail, b.statut
 		FROM user AS a LEFT JOIN cours_user AS b ON a.user_id = b.user_id
 		WHERE b.cours_id = $c";
 		if((!empty($user_surname_qry)) || (!empty($user_firstname_qry)) || (!empty($user_username_qry)) 
@@ -376,7 +376,7 @@ if($sql) {
 		}  
 
 		if($view == 3) {
-			$qry = "SELECT a.user_id,a.nom, a.prenom, a.username, a.email, b.statut
+			$qry = "SELECT a.user_id,a.nom, a.prenom, a.username, a.email, a.verified_mail, b.statut
 			FROM user AS a LEFT JOIN cours_user AS b ON a.user_id = b.user_id
 			WHERE b.cours_id=$c";
 			if((!empty($user_surname_qry)) || (!empty($user_firstname_qry))
@@ -417,9 +417,9 @@ if($sql) {
 		for ($j = 0; $j < mysql_num_rows($sql); $j++) {
 			while($logs = mysql_fetch_array($sql, MYSQL_ASSOC)) {
 				if ($k%2 == 0) {
-		              		$tool_content .= "\n      <tr class='even'>";
+		              		$tool_content .= "<tr class='even'>";
 	            		} else {
-		                	$tool_content .= "\n      <tr class='odd'>";
+		                	$tool_content .= "<tr class='odd'>";
 	            		}
 				$tool_content .= "<td width='1'>
 					<img src='$themeimg/arrow.png' title='bullet' /></td>
@@ -429,10 +429,15 @@ if($sql) {
 					<td width='200'>".htmlspecialchars($logs['email']);
 					if ($mail_ver_required && !empty($logs['email'])) {
 						switch($logs['verified_mail']) {
-							case 0: $tool_content .= " <img align='right' src='$themeimg/pending.png' title='$langMailVerificationPendingU' />";break;
-							case 1: $tool_content .= " <img align='right' src='$themeimg/tick_1.png' title='$langMailVerificationYesU' />";break;
-							case 2: 
-							default: $tool_content .= " <img align='right' src='$themeimg/not_confirmed.png' title='$langMailVerificationNoU' />";break;
+							case EMAIL_VERIFICATION_REQUIRED: 
+                                                                $tool_content .= " <img align='right' src='$themeimg/pending.png' title='$langMailVerificationPendingU' />";
+                                                                break;
+							case EMAIL_VERIFIED: 
+                                                                $tool_content .= " <img align='right' src='$themeimg/tick_1.png' title='$langMailVerificationYesU' />";
+                                                                break;
+							case EMAIL_UNVERIFIED: 
+                                                                $tool_content .= " <img align='right' src='$themeimg/not_confirmed.png' title='$langMailVerificationNoU' />";
+                                                                break;
 						}
 					}
 					$tool_content .= "</td>

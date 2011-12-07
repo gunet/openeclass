@@ -49,7 +49,6 @@ if (!($fac = $fac[0])) {
     die("ERROR: no faculty with id $fc");
 }
 
-$tool_content = "";
 // upatras.gr patch begin, atkyritsis@upnet.gr, daskalou@upnet.gr
 // use the following array for the legend icons
 /*
@@ -101,7 +100,9 @@ if ($numoftypes > 0) {
                                    cours.visible visible,
                                    cours.titulaires t
                             FROM cours
-                            WHERE cours.faculteid = $fc AND cours.type = '$type'
+                            WHERE cours.faculteid = $fc 
+                            AND cours.type = '$type'
+                            AND cours.visible != ".COURSE_INACTIVE."
                             ORDER BY cours.intitule, cours.titulaires");
     
         if (mysql_num_rows($result) == 0) {

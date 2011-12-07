@@ -53,8 +53,6 @@ $nameTools = $langCourseStatus;
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
 $navigation[] = array("url" => "listcours.php", "name" => $langListCours);
 $navigation[] = array("url" => "editcours.php?c=".htmlspecialchars($_GET['c']), "name" => $langCourseEdit);
-// Initialise $tool_content
-$tool_content = "";
 
 // Update course status
 if (isset($_POST['submit']))  {
@@ -83,21 +81,25 @@ else {
 <fieldset>
 	<legend>".$langCourseStatusChange."</legend>
 	<table class='tbl' width='100%'>";
-	$tool_content .= "<tr><th class=\"left\" rowspan=\"3\">$langConfTip</th>
-	<td width=\"1\"><input type=\"radio\" name=\"formvisible\" value=\"2\"".@$visibleChecked[2]."></td>
+	$tool_content .= "<tr><th class='left' rowspan='4'>$langConfTip</th>
+	<td width='1'><input type='radio' name='formvisible' value='2'".@$visibleChecked[2]."></td>
 	<td>".$langPublic."</td>
 	</tr>
 	<tr>
-	<td><input type=\"radio\" name=\"formvisible\" value=\"1\"".@$visibleChecked[1]."></td>
+	<td><input type='radio' name='formvisible' value='1'".@$visibleChecked[1]."></td>
 	<td>".$langPrivOpen."</td>
 	</tr>
 	<tr>
-	<td><input type=\"radio\" name=\"formvisible\" value=\"0\"".@$visibleChecked[0]."></td>
+	<td><input type='radio' name='formvisible' value='0'".@$visibleChecked[0]."></td>
 	<td>".$langPrivate."</td>
+	</tr>
+        <tr>
+	<td><input type='radio' name='formvisible' value='3'".@$visibleChecked[3]."></td>
+	<td>".$langCourseInactive."</td>
 	</tr>
 	<tr>
 	<th>&nbsp;</th>
-	<td colspan=\"2\" class='right'><input type='submit' name='submit' value='$langModify'></td>
+	<td colspan='2' class='right'><input type='submit' name='submit' value='$langModify'></td>
 	</tr>
 	</table></fieldset>
 	</form>";
@@ -110,6 +112,5 @@ if (isset($_GET['c'])) {
 else {
 	$tool_content .= "<p align=\"right\"><a href=\"index.php\">".$langBackAdmin."</a></p>";
 }
-
 draw($tool_content, 3);
-?>
+

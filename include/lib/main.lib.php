@@ -33,20 +33,23 @@ Defines standard functions and validates variables
 */
 define('ECLASS_VERSION', '2.99');
 define('DEBUG_MYSQL', true);
+// course status
+define('COURSE_OPEN', 2);
+define('COURSE_REGISTRATION', 1);
+define('COURSE_CLOSED', 0);
+define('COURSE_INACTIVE', 3);
 // resized user image 
 define('IMAGESIZE_LARGE', 256);
 define('IMAGESIZE_SMALL', 32);
-
 // profile info access
 define('ACCESS_PRIVATE', 0);
 define('ACCESS_PROFS', 1);
 define('ACCESS_USERS', 2);
-
 // user admin rights
 define('ADMIN_USER', 0); // admin user can do everything
 define('POWER_USER', 1); // poweruser can admin only users and courses
 define('USERMANAGE_USER', 2); // usermanage user can admin only users
-
+// user email status
 define('EMAIL_VERIFICATION_REQUIRED', 0);  // email verification required. User cannot login.
 define('EMAIL_VERIFIED', 1); // email is verified. User can login.
 define('EMAIL_UNVERIFIED', 2); // email is unverified. User can login but cannot receive mail.
@@ -2070,6 +2073,19 @@ function get_admin_rights($user_id) {
 	} 
 }
 
+// checks if a course is inactive
+function check_inactive_course($course_id)
+{
+        global $mysqlMainDb;
+        
+        $res = db_query("SELECT visible FROM cours WHERE cours_id = $course_id", $mysqlMainDb);
+        $g = mysql_fetch_row($res);
+        if ($g[0] == COURSE_INACTIVE) {
+                return TRUE;
+        }
+        return FALSE;
+}
+
 
 // get user email verification status
 function get_mail_ver_status($uid) {
@@ -2084,6 +2100,12 @@ function get_user_email_notification($user_id, $course_id=null)
 {        
         global $mysqlMainDb;
         
+        // checks if a course is active or not
+        if (isset($course_id)) {
+                if (check_inactive_course($course_id) == TRUE) {
+                        return FALSE;
+                }
+        }
         // checks if user has verified his email address
         if (get_config('email_verification_required')) {
                 $verified_mail = get_mail_ver_status($user_id);                

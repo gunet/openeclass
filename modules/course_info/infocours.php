@@ -193,6 +193,11 @@ if (isset($_POST['submit'])) {
 		<td><input type='radio' name='formvisible' value='0'".@$visibleChecked[0]." /></td>
 		<td class='smaller'>$langPrivate</td>
 	    </tr>
+             <tr>
+		<th><img src='$themeimg/lock_inactive.png' alt='$m[linactive]' title='$m[linactive]' width='16' height='16' />&nbsp;$m[linactive]:</th>
+		<td><input type='radio' name='formvisible' value='3'".@$visibleChecked[3]." /></td>
+		<td class='smaller'>$langCourseInactive</td>
+	    </tr>
 	    </table>
 	</fieldset>
 

@@ -48,8 +48,6 @@ include '../../include/baseTheme.php';
 // Define $nameTools
 $nameTools = $langSearchCourse;
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
-// Initialise $tool_content
-$tool_content = "";
 
 // Destroy search varialbles from session
 if (isset($_GET['new']) && ($_GET['new'] == "yes")) {
@@ -92,6 +90,9 @@ switch (@$searchcode) {
 	case "0":
 		$typeSel[0] = "selected";
 		break;
+        case "3":
+		$typeSel[0] = "selected";
+		break;
 	default:
 		$typeSel[-1] = "selected";
 		break;
@@ -102,10 +103,11 @@ $tool_content .= "
         <th class='left'><b>$langCourseVis:</b></td>
         <td>
           <select name=\"formsearchtype\">
-           <option value=\"-1\" ".$typeSel[-1].">$langAllTypes</option>
-           <option value=\"2\" ".@$typeSel[2].">$langTypeOpen</option>
-           <option value=\"1\" ".@$typeSel[1].">$langTypeRegistration</option>
-           <option value=\"0\" ".@$typeSel[0].">$langTypeClosed</option>
+           <option value='-1' ".$typeSel[-1].">$langAllTypes</option>
+           <option value='2' ".@$typeSel[2].">$langTypeOpen</option>
+           <option value='1' ".@$typeSel[1].">$langTypeRegistration</option>
+           <option value='0' ".@$typeSel[0].">$langTypeClosed</option>
+           <option value='3' ".@$typeSel[3].">$langCourseInactiveShort</option>
           </select>
         </td>
       </tr>";
@@ -123,10 +125,7 @@ while ($myfac = mysql_fetch_array($resultFac)) {
         $tool_content .= "<option value='$myfac[id]'$selected>$myfac[name]</option>";
 }
 
-$tool_content .= "
-          </select>
-        </td>
-      </tr>";
+$tool_content .= "</select></td></tr>";
 
 $tool_content .= "
       <tr>
@@ -142,4 +141,3 @@ $tool_content .= "
 $tool_content .= "\n    <p align=\"right\"><a href=\"index.php\">".$langBack."</a></p>";
 
 draw($tool_content, 3);
-?>

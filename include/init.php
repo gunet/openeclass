@@ -300,15 +300,18 @@ if (isset($require_current_course) and $require_current_course) {
 				list($statut) = mysql_fetch_row($res2);
 			}
 		}
-
-		if ($visible != 2) {
+                
+		if ($visible != COURSE_OPEN) {                                                                        
 			if (!$uid) {
 				$toolContent_ErrorExists = caution($langNoAdminAccess);
 				$errorMessagePath = "../../";
-			} elseif ($statut == 0 and ($visible == 1 or $visible == 0)) {
+			} elseif ($statut == 0 and ($visible == COURSE_REGISTRATION or $visible == COURSE_CLOSED)) {
 				$toolContent_ErrorExists = caution($langLoginRequired);
 				$errorMessagePath = "../../";
-			}
+			} elseif ($statut == 5 and $visible == COURSE_INACTIVE) {                                
+                                $toolContent_ErrorExists = caution($langCheckProf);
+				$errorMessagePath = "../../";
+                        }
 		}
 	}
 	# force a specific interface language
