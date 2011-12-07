@@ -164,6 +164,8 @@ function get_shadowbox_player($filename)
  * @global string $urlAppend
  * @param  string $videoPath
  * @param  string $videoURL
+ * @param  string $bgcolor
+ * @param  string $color
  * @return string 
  */
 function video_html_object($videoPath, $videoURL, $bgcolor = '#000000', $color = '#ffffff')
@@ -171,6 +173,7 @@ function video_html_object($videoPath, $videoURL, $bgcolor = '#000000', $color =
     global $urlAppend;
     
     $extension = get_file_extension($videoPath);
+    
     $ret = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
             <html><head>
             <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">';
@@ -316,6 +319,8 @@ function video_html_object($videoPath, $videoURL, $bgcolor = '#000000', $color =
  * present.
  * 
  * @param  string $videoURL
+ * @param  string $bgcolor
+ * @param  string $color
  * @return string 
  */
 function videolink_iframe_object($videoURL, $bgcolor = '#000000', $color = '#ffffff')
