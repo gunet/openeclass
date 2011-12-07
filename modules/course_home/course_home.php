@@ -251,30 +251,30 @@ $bar_content .= "\n<ul class='custom_list'><li><b>".$langCode."</b>: ".q($fake_c
 $require_help = TRUE;
 $helpTopic = 'course_home';
 
-if ($is_editor) {
+if ($is_editor) {       
 	$sql = "SELECT COUNT(user_id) AS numUsers
 			FROM cours_user
 			WHERE cours_id = $cours_id";
 	$res = db_query($sql, $mysqlMainDb);
 	while($result = mysql_fetch_row($res)) {
 		$numUsers = $result[0];
-        }
+        }        
 	//set the lang var for lessons visibility status      
 	switch ($visible) {                
-		case 'COURSE_CLOSED': { 
+		case COURSE_CLOSED: { 
 			$lessonStatus = "<span title='$langPrivate'>$langPrivateShort</span>";
 			break;
 		}
-		case 'COURSE_REGISTRATION': {
+		case COURSE_REGISTRATION: {
 			$lessonStatus = "<span title='$langPrivOpen'>$langPrivOpenShort</span>";
 			break;
 		}
-		case 'COURSE_OPEN': { 
+		case COURSE_OPEN: { 
 			$lessonStatus = "<span title='$langPublic'>$langPublicShort</span>";
 			break;
 		}                
-                case 'COURSE_INACTIVE': {                                               
-			$lessonStatus = "<span title='$langCourseInactive'>$langCourseInactiveShort</span>";
+                case COURSE_INACTIVE: {                                                          
+			$lessonStatus = "<span class='invisible' title='$langCourseInactive'>$langCourseInactiveShort</span>";
 			break;
 		}
 	}
