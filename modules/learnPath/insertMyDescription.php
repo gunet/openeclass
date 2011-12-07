@@ -1,6 +1,6 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 2.5
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2011  Greek Universities Network - GUnet
@@ -47,7 +47,7 @@ $TABLEUSERMODULEPROGRESS= "lp_user_module_progress";
 require_once("../../include/baseTheme.php");
 
 $navigation[] = array("url"=>"learningPathList.php?course=$code_cours", "name"=> $langLearningPaths);
-$navigation[] = array("url"=>"learningPathAdmin.php?course=$code_cours", "name"=> $langAdm);
+$navigation[] = array("url"=>"learningPathAdmin.php?course=$code_cours&amp;path_id=".(int)$_SESSION['path_id'], "name"=> $langAdm);
 $nameTools = $langInsertMyDescToolName;
 
 mysql_select_db($currentCourseID);
@@ -141,6 +141,6 @@ $tool_content .= disp_tool_title($langLinkInsertedAsModule);
 $tool_content .= "</td></tr></table>";
 	$tool_content .= "
     <br />
-    <p align=\"right\"><a href=\"learningPathAdmin.php?course=$code_cours\">$langBackToLPAdmin</a></p>";
+    <p align=\"right\"><a href=\"learningPathAdmin.php?course=$code_cours&amp;path_id=".(int)$_SESSION['path_id']."\">$langBackToLPAdmin</a></p>";
 draw($tool_content, 2);
 ?>

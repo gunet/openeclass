@@ -1,6 +1,6 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 2.5
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2011  Greek Universities Network - GUnet
@@ -64,7 +64,7 @@ $courseDir   = "courses/".$currentCourseID."/document";
 $baseWorkDir = $webDir.$courseDir;
 $InfoBox = '';
 $navigation[] = array('url' => "learningPathList.php?course=$code_cours", 'name' => $langLearningPath);
-$navigation[] = array('url' => "learningPathAdmin.php?course=$code_cours", 'name' => $langAdm);
+$navigation[] = array('url' => "learningPathAdmin.php?course=$code_cours&amp;path_id=".(int)$_SESSION['path_id'], 'name' => $langAdm);
 $nameTools = $langInsertMyDocToolName;
 
 mysql_select_db($currentCourseID);
@@ -351,7 +351,7 @@ $tool_content .= display_my_documents($dialogBox, $style) ;
 
 	$tool_content .= "
     <br />
-    <p align=\"right\"><a href=\"learningPathAdmin.php?course=$code_cours\">$langBackToLPAdmin</a></p>";
+    <p align=\"right\"><a href=\"learningPathAdmin.php?course=$code_cours&amp;path_id=".(int)$_SESSION['path_id']."\">$langBackToLPAdmin</a></p>";
 
 //################################## MODULES LIST ####################################\\
 

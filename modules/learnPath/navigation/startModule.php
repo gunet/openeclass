@@ -1,6 +1,6 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 2.5
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2011  Greek Universities Network - GUnet
@@ -56,6 +56,7 @@ $clarolineRepositoryWeb = $urlServer."courses/".$currentCourseID;
 // lib of this tool
 require_once '../../../include/lib/fileDisplayLib.inc.php';
 require_once '../../../include/lib/learnPathLib.inc.php';
+require_once '../../video/video_functions.php';
 
 include '../../document/doc_init.php';
 
@@ -167,6 +168,38 @@ switch ($module['contentType'])
 
 		$moduleStartAssetPage = $assetPath;
 		break;
+	case CTMEDIA_ :
+                if ($uid)
+                {
+                    directly_pass_lp_module($TABLEUSERMODULEPROGRESS, (int)$uid, (int)$learnPathModuleId);
+                }
+                
+                if (is_supported_movie($assetPath))
+                {
+                    $moduleStartAssetPage = "showMedia.php?course=$code_cours&amp;id=".$assetPath;
+                }
+                else
+                {
+                    $moduleStartAssetPage = htmlspecialchars($urlServer 
+                                                            ."modules/video/video.php?course=$code_cours&action=download&id=".$assetPath
+                                                            , ENT_QUOTES);
+                }
+                break;
+	case CTMEDIALINK_ :
+                if ($uid)
+                {
+                    directly_pass_lp_module($TABLEUSERMODULEPROGRESS, (int)$uid, (int)$learnPathModuleId);
+                }
+                
+                if (is_embeddable_videolink($assetPath))
+                {
+                    $moduleStartAssetPage = "showMediaLink.php?course=$code_cours&amp;id=".urlencode(make_embeddable_videolink($assetPath));
+                }
+                else
+                {
+                    $moduleStartAssetPage = $assetPath;
+                }
+                break;
 } // end switch
 
 echo "<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Frameset//EN''http://www.w3.org/TR/html4/frameset.dtd'>

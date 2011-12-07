@@ -1,6 +1,6 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 2.5
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2011  Greek Universities Network - GUnet
@@ -55,7 +55,7 @@ $TABLEUSERMODULEPROGRESS= "lp_user_module_progress";
 require_once("../../include/baseTheme.php");
 
 $navigation[]= array ("url"=>"learningPathList.php?course=$code_cours", "name"=> $langLearningPath);
-$navigation[]= array ("url"=>"learningPathAdmin.php?course=$code_cours", "name"=> $langAdm);
+$navigation[]= array ("url"=>"learningPathAdmin.php?course=$code_cours&amp;path_id=".(int)$_SESSION['path_id'], "name"=> $langAdm);
 $nameTools = $langInsertMyModulesTitle;
 
 
@@ -186,6 +186,8 @@ while ($list=mysql_fetch_array($result))
         $moduleImg = "links_on.png";
     else if($list['contentType'] == CTCOURSE_DESCRIPTION_ )
        	$moduleImg = "description_on.png";
+    else if ($module['contentType'] == CTMEDIA_ || $module['contentType'] == CTMEDIALINK_)
+       	$moduleImg = "videos_on.png";
     else
         $moduleImg = choose_image(basename($list['path']));
 
@@ -239,7 +241,7 @@ $tool_content .= "\n".'    </table>'."\n".'    </form>';
 
 
 	$tool_content .= "
-        <p align=\"right\"><a href=\"learningPathAdmin.php?course=$code_cours\">$langBackToLPAdmin</a></p>
+        <p align=\"right\"><a href=\"learningPathAdmin.php?course=$code_cours&amp;path_id=".(int)$_SESSION['path_id']."\">$langBackToLPAdmin</a></p>
     ";
 //####################################################################################\\
 //################################## MODULES LIST ####################################\\

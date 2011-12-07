@@ -350,6 +350,10 @@ function upgrade_course_2_5($code, $extramessage = '') {
         db_query("ALTER TABLE `exercices`
                         CHANGE `EndDate` `EndDate` DATETIME
                         DEFAULT NULL");
+        
+        db_query("ALTER TABLE `lp_module`
+                        CHANGE `contentType` 
+                        `contentType` ENUM('CLARODOC','DOCUMENT','EXERCISE','HANDMADE','SCORM','SCORM_ASSET','LABEL','COURSE_DESCRIPTION','LINK','MEDIA','MEDIALINK')");
 }
 
 

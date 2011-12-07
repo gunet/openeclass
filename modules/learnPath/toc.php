@@ -1,6 +1,6 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 2.5
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2011  Greek Universities Network - GUnet
@@ -147,6 +147,8 @@ foreach ($flatElementList as $module)
         }
         else if($module['contentType'] == CTSCORM_ || $module['contentType'] == CTSCORMASSET_) // eidika otan einai scorm module, deixnoume allo eikonidio pou exei na kanei me thn proodo
         	$moduleImg = "lp_check.png";
+        else if ($module['contentType'] == CTMEDIA_ || $module['contentType'] == CTMEDIALINK_)
+        	$moduleImg = "videos_on.png";
         else
             $moduleImg = choose_image(basename($module['path']));
 
