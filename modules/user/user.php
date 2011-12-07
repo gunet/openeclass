@@ -209,13 +209,13 @@ if (isset($_GET['all'])) {
 }
 
 $tool_content .= "
-<table width='100%' class='tbl_alt'>
+<table width='100%' class='tbl_alt custom_list_order'>
 <tr>
   <th width='1'>$langID</th>
   <th><div align='left'><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;ord=s$extra_link'>$langName $langSurname</a></div></th>
-  <th class='center'>$langGroup</th>
-  <th class='center' width='10'><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;ord=rd$extra_link'>$langRegistrationDateShort</a></th>
-  <th colspan='4' class='center'>$langActions</th>          
+  <th class='center' width='160'>$langGroup</th>
+  <th class='center' width='90'><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;ord=rd$extra_link'>$langRegistrationDateShort</a></th>
+  <th colspan='3' class='center'>$langAddRole</th>          
 </tr>";
 
 
@@ -256,13 +256,18 @@ while ($myrow = mysql_fetch_array($result)) {
         <td class='smaller' valign='top' align='right'>$i.</td>\n" .
                 "<td valign='top' class='smaller'>" . display_user($myrow) . "&nbsp;&nbsp;(". mailto($myrow['email']) . ")  $am_message</td>\n";
         $tool_content .= "\n" .
-                "<td class='smaller' valign='top' align='center' width='150'>" . user_groups($cours_id, $myrow['user_id']) . "</td>\n" .
+                "<td class='smaller' valign='top' width='150'>" . user_groups($cours_id, $myrow['user_id']) . "</td>\n" .
                 "<td align='center' class='smaller'>";
         if ($myrow['reg_date'] == '0000-00-00') {
                 $tool_content .= $langUnknownDate;
         } else {
                 $tool_content .= nice_format($myrow['reg_date']);
         }
+        $alert_uname = $myrow['prenom'] . " " . $myrow['nom'];
+        $tool_content .= "&nbsp;&nbsp;<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;unregister=$myrow[user_id]$extra_link'
+                         onClick=\"return confirmation('" . js_escape($alert_uname) .
+                         "');\"><img src='$themeimg/cunregister.png' title='$langUnregCourse' /></a>";
+
         $tool_content .= "</td>";
         // tutor right
         if ($myrow['tutor'] == '0') {
@@ -301,12 +306,7 @@ while ($myrow = mysql_fetch_array($result)) {
                                         <img src='$themeimg/add.png' title='$langGiveRightAdmin' /></a></td>";
                 }
         }
-        $tool_content .= "<td valign='top' align='center' class='smaller'>";
-        $alert_uname = $myrow['prenom'] . " " . $myrow['nom'];
-        $tool_content .= "<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;unregister=$myrow[user_id]$extra_link'
-                         onClick=\"return confirmation('" . js_escape($alert_uname) .
-                         "');\"><img src='$themeimg/delete.png' title='$langDelete' /></a>";
-        $tool_content .= "</td></tr>";
+        $tool_content .= "</tr>";
         $i++;
 }
 $tool_content .= "</table>";

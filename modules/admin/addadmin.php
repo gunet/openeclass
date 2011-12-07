@@ -71,18 +71,19 @@ $r1 = db_query("SELECT user_id, prenom, nom, username, admin.privilege FROM user
                     WHERE user.user_id = admin.idUser 
                     ORDER BY user_id");
 
-$tool_content .= "<table class='tbl' width='100%'>
+$tool_content .= "
+  <table class='tbl_alt' width='100%'>
   <tr>
     <th class='center'>ID</th>
-    <th class='center'>$langSurnameName</th>
-        <th class='center'>$langUsername</th>
+    <th>$langSurnameName</th>
+    <th>$langUsername</th>
     <th class='center'>$langRole</th>
-    <th>$langActions</th>
+    <th class='center'>$langActions</th>
   </tr>";
 
 while($row = mysql_fetch_array($r1)) {
         $tool_content .= "<tr>";
-        $tool_content .= "<td>".htmlspecialchars($row['user_id'])."</td>".
+        $tool_content .= "<td align='right'>".htmlspecialchars($row['user_id']).".</td>".
         "<td>".htmlspecialchars($row['prenom'])." " .htmlspecialchars($row['nom'])."</td>".
         "<td>".htmlspecialchars($row['username'])."</td>";
         switch ($row['privilege']) {
@@ -124,10 +125,13 @@ draw($tool_content, 3);
 function printform ($message) {
 	
     global $langAdd, $themeimg, $langAdministrator, $langPowerUser, $langManageUser, $langAddRole,
-            $langHelpAdministrator, $langHelpPowerUser, $langHelpManageUser;
+            $langHelpAdministrator, $langHelpPowerUser, $langHelpManageUser, $langUserFillData;
         
     $ret = "<form method='post' name='makeadmin' action='$_SERVER[PHP_SELF]'>";
-    $ret .= "<table class='tbl' width='100%'>      
+    $ret .= "
+        <fieldset>
+        <legend>$langUserFillData</legend>
+        <table class='tbl' width='100%'>      
         <tr>
             <th class='left'>".$message."</th>
             <td><input type='text' name='username' size='30' maxlength='30'></td>
@@ -141,9 +145,10 @@ function printform ($message) {
         <tr><td><input type='radio' name='adminrights' value='manageuser'>&nbsp;$langManageUser&nbsp;
             <span class='smaller'>($langHelpManageUser)</span></td></tr>
         <tr>
-            <td colspan='2'><input type='submit' name='submit' value='$langAdd'></td>
+            <td colspan='2' class='right'><input type='submit' name='submit' value='$langAdd'></td>
         </tr>
-        </table><br />
+        </table>
+        </fieldset>
     </form>";	
     return $ret;
 }
