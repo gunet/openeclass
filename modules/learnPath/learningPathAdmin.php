@@ -1,6 +1,6 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 2.5
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2011  Greek Universities Network - GUnet
@@ -439,7 +439,12 @@ if (!isset($displayCreateLabelForm))
     <tr>
       <th rowspan=\"2\">$langLearningObjects:</th>
       <td>";
-    $tool_content .= "$langAdd: <a href=\"insertMyDoc.php?course=$code_cours\" title=\"$langDocumentAsModule\">".$langDocumentAsModuleLabel."</a> | <a href=\"insertMyExercise.php?course=$code_cours\" title=\"$langExerciseAsModule\">".$langExerciseAsModuleLabel."</a> | <a href=\"insertMyLink.php?course=$code_cours\" title=\"$langLinkAsModule\">".$langLinkAsModuleLabel."</a> | <a href=\"insertMyDescription.php?course=$code_cours\" title=\"$langCourseDescriptionAsModule\">".$langCourseDescriptionAsModuleLabel."</a>
+    $tool_content .= "$langAdd: <a href=\"insertMyDoc.php?course=$code_cours\" title=\"$langDocumentAsModule\">".
+            $langDocumentAsModuleLabel."</a> | <a href=\"insertMyExercise.php?course=$code_cours\" title=\"$langExerciseAsModule\">".
+            $langExerciseAsModuleLabel."</a> | <a href=\"insertMyLink.php?course=$code_cours\" title=\"$langLinkAsModule\">".
+            $langLinkAsModuleLabel."</a> | <a href=\"insertMyMedia.php?course=$code_cours\" title=\"$langMediaAsModule\">".
+            $langMediaAsModuleLabel."</a> | <a href=\"insertMyDescription.php?course=$code_cours\" title=\"$langCourseDescriptionAsModule\">".
+            $langCourseDescriptionAsModuleLabel."</a>
       </td>
     </tr>";
 
@@ -545,7 +550,7 @@ foreach ($flatElementList as $module)
         if ($is_editor)
         {
             $style=" class=\"invisible\"";
-            $image_bullet = "on";
+            $image_bullet = "off";
         }
         else
         {
@@ -589,6 +594,8 @@ foreach ($flatElementList as $module)
         	$moduleImg = "description_$image_bullet.png";
         else if($module['contentType'] == CTDOCUMENT_ )
         	$moduleImg = "docs_$image_bullet.png";
+        else if ($module['contentType'] == CTMEDIA_ || $module['contentType'] == CTMEDIALINK_)
+                $moduleImg = "videos_$image_bullet.png";
         else
             $moduleImg = choose_image(basename($module['path']));
 

@@ -1,6 +1,6 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 2.5
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2011  Greek Universities Network - GUnet
@@ -272,6 +272,8 @@ foreach ($flatElementList as $module)
         	$moduleImg = "links_on.png";
         else if($module['contentType'] == CTCOURSE_DESCRIPTION_ )
         	$moduleImg = "description_on.png";
+        else if ($module['contentType'] == CTMEDIA_ || $module['contentType'] == CTMEDIALINK_)
+                $moduleImg = "videos_on.png";
         else
             $moduleImg = choose_image(basename($module['path']));
 
@@ -307,8 +309,10 @@ foreach ($flatElementList as $module)
         	$moduleImg = "links_on.png";
         else if($module['contentType'] == CTCOURSE_DESCRIPTION_ )
         	$moduleImg = "description_on.png";
-       else
-            $moduleImg = choose_image(basename($module['path']));
+        else if ($module['contentType'] == CTMEDIA_ || $module['contentType'] == CTMEDIALINK_)
+                $moduleImg = "videos_on.png";
+        else
+                $moduleImg = choose_image(basename($module['path']));
 
         $tool_content .= '<span style="vertical-align: middle;"><img src="'.$themeimg.'/'.$moduleImg.'" alt="'.$contentType_alt.'" title="'.$contentType_alt.'" border="0" /></span>'." "
              .htmlspecialchars($module['name']);

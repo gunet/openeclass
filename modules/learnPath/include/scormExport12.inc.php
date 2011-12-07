@@ -1,7 +1,6 @@
 <?php
-
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 2.5
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2011  Greek Universities Network - GUnet
@@ -22,7 +21,6 @@
 
 /**===========================================================================
 	scormExport12.inc.php
-	@last update: 29-08-2009 by Thanos Kyritsis
 	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
 	               
 	based on Claroline version 1.7 licensed under GPL
@@ -59,10 +57,6 @@
                   This file is currently supposed to be included by 
                   learningPathList.php, in order to inherit some of its global 
                   variables, like some tables' names.
-
-    @Comments:
- 
-    @todo: 
 ==============================================================================
 */
 
@@ -89,11 +83,12 @@ define('UNIQUE_ANSWER',   1);
 define('MULTIPLE_ANSWER', 2);
 define('FILL_IN_BLANKS',  3);
 define('MATCHING',        4);
-define('TRUEFALSE',	 	  5);
+define('TRUEFALSE',       5);
 
 // for fill in blanks questions
 define('TEXTFIELD_FILL', 1);
 define('LISTBOX_FILL',	2);
+
 /**
  * Exports a Learning Path to a SCORM package.
  *
@@ -112,6 +107,7 @@ class ScormExport
     var $srcDirScorm;
     var $srcDirDocument;
     var $srcDirExercise;
+    var $srcDirVideo;
     
     var $manifest_itemTree;
     var $scormURL;
@@ -190,6 +186,7 @@ class ScormExport
         $this->srcDirDocument = $webDir . "courses/" . $currentCourseID . "/document";
         $this->srcDirExercise  = $webDir . "courses/" . $currentCourseID . "/exercise";
         $this->srcDirScorm    = $webDir . "courses/" . $currentCourseID . "/scormPackages/path_".$this->id;
+        $this->srcDirVideo = $webDir . "video/" . $currentCourseID;
         
         /* Now, get the complete list of modules, etc... */
         $sql = 'SELECT  LPM.`learnPath_module_id` ID, LPM.`lock`, LPM.`visibility`, LPM.`rank`, 
@@ -750,6 +747,16 @@ class ScormExport
             {
                 if ( !$this->prepareQuiz($module['path'], $module['raw_to_pass']))    return false;
             }
+            elseif ( $module['contentType'] == 'MEDIA' )
+            {
+                $documentName = basename($module['path']);
+                $destinationDir = $this->destDir . '/Documents/';
+                if ( ! is_dir($destinationDir) )
+                {
+                    claro_mkdir($destinationDir, CLARO_FILE_PERMISSIONS, true);
+                }
+                @copy($this->srcDirVideo . $module['path'], $destinationDir . $documentName);
+            }
         }
         
         // Did we find an mp3 ?
@@ -992,6 +999,7 @@ class ScormExport
             switch ( $module['contentType'] ) 
             {
                 case 'DOCUMENT': 
+                case 'MEDIA': 
                     $framefile = $this->destDir . '/frame_for_' . $module['ID'] . '.html';
                     $targetfile = 'Documents'.$module['path'];
                     
@@ -1056,6 +1064,7 @@ class ScormExport
                  	break;
                  
                  case 'LINK': 
+                 case 'MEDIALINK': 
                     $framefile = $this->destDir . '/frame_for_' . $module['ID'] . '.html';
                     $targetfile = $module['path'];
                     

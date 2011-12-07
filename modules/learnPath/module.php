@@ -1,6 +1,6 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 2.5
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2011  Greek Universities Network - GUnet
@@ -173,6 +173,7 @@ $resultBrowsed = db_query_get_single_row($sql);
         if ($module['contentType']== CTLINK_ ) { $nameTools = $langLinkAsModuleLabel; }
         if ($module['contentType']== CTCOURSE_DESCRIPTION_ ) { $nameTools = $langCourseDescriptionAsModuleLabel; }
         if ($module['contentType']== CTLABEL_ ) { $nameTools = $langModuleOfMyCourseLabel_onom; }
+        if ($module['contentType']== CTMEDIA_ || $module['contentType']== CTMEDIALINK_) { $nameTools = $langMediaAsModuleLabel; }
         if ($is_editor)
             $nameTools = $langModify ." ". $nameTools;
         else
@@ -288,6 +289,7 @@ if($module['contentType'] != CTLABEL_) //
         if ($resultBrowsed['contentType']== CTDOCUMENT_ ) { $contentDescType = $langDOCUMENTTypeDesc; }
         if ($resultBrowsed['contentType']== CTLINK_ ) { $contentDescType = $langLINKTypeDesc; }
         if ($resultBrowsed['contentType']== CTCOURSE_DESCRIPTION_ ) { $contentDescType = $langDescriptionCours; }
+        if ($resultBrowsed['contentType']== CTMEDIA_ || $resultBrowsed['contentType']== CTMEDIALINK_) { $contentDescType = $langMediaTypeDesc; }
 
 
 		$tool_content .= ''."\n\n"
@@ -340,7 +342,9 @@ if($module['contentType'] != CTLABEL_) //
         // no sens to display a score in case of a document module
         if ( ($resultBrowsed['contentType'] != CTDOCUMENT_) &&
              ($resultBrowsed['contentType'] != CTLINK_) &&
-             ($resultBrowsed['contentType'] != CTCOURSE_DESCRIPTION_)
+             ($resultBrowsed['contentType'] != CTCOURSE_DESCRIPTION_) &&
+             ($resultBrowsed['contentType'] != CTMEDIA_) &&
+             ($resultBrowsed['contentType'] != CTMEDIALINK_)
            )
         {
 		$tool_content .= '<tr>'."\n"

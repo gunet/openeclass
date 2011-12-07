@@ -1,7 +1,6 @@
 <?php
-
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 2.5
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2011  Greek Universities Network - GUnet
@@ -1225,7 +1224,7 @@ else // if method == 'post'
     <legend>$langImport</legend>
     <table width=\"100%\" class=\"tbl\">
     <tr>
-      <th width=\"120\">$langAskUserFile:</th>
+      <th width=\"120\">$langFileName:</th>
       <td>
           <input type=\"hidden\" name=\"claroFormId\" value=\"".uniqid('')."\" >
           <input type=\"file\" name=\"uploadedPackage\">

@@ -1,7 +1,6 @@
 <?php
-
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 2.5
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2011  Greek Universities Network - GUnet
@@ -21,8 +20,6 @@
 
 /*===========================================================================
 	learnPathLib.inc.php
-	@last update: 29-08-2009 by Thanos Kyritsis
-	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
 
 	based on Claroline version 1.7 licensed under GPL
 	      copyright (c) 2001, 2006 Universite catholique de Louvain (UCL)
@@ -48,6 +45,8 @@ define ( 'CTSCORMASSET_', 'SCORM_ASSET');
 define ( 'CTLABEL_', 'LABEL' );
 define ( 'CTCOURSE_DESCRIPTION_', 'COURSE_DESCRIPTION' );
 define ( 'CTLINK_', 'LINK' );
+define ( 'CTMEDIA_', 'MEDIA');
+define ( 'CTMEDIALINK_', 'MEDIALINK');
 
 /*
 * mode used by {@link commentBox($type, $mode)} and {@link nameBox($type, $mode)}
@@ -361,6 +360,8 @@ function nameBox($type, $mode, $formlabel = FALSE)
       $imgList[CTSCORMASSET_] = "scorm.png";
       $imgList[CTLINK_] = "links_on.png";
       $imgList[CTCOURSE_DESCRIPTION_] = "description_on.png";
+      $imgList[CTMEDIA_] = "videos_on.png";
+      $imgList[CTMEDIALINK_] = "videos_on.png";
 
       if (array_key_exists( $contentType , $imgList ))
       {
@@ -499,9 +500,11 @@ function display_path_content()
             if($module['contentType'] == CTEXERCISE_ )
             	$moduleImg = 'exercise_on.png';
             else if($module['contentType'] == CTLINK_ )
-        		$moduleImg = "links_on.png";
-        	else if($module['contentType'] == CTCOURSE_DESCRIPTION_ )
-        		$moduleImg = "description_on.png";
+            	$moduleImg = "links_on.png";
+            else if($module['contentType'] == CTCOURSE_DESCRIPTION_ )
+            	$moduleImg = "description_on.png";
+            else if ($module['contentType'] == CTMEDIA_ || $module['contentType'] == CTMEDIALINK_)
+            	$moduleImg = "videos_on.png";
             else
             	$moduleImg = choose_image(basename($module['path']));
 
