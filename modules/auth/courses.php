@@ -194,7 +194,8 @@ function expanded_faculte($fac_name, $facid, $uid) {
 	$usercourses = db_query("SELECT cours.code code_cours, cours.fake_code fake_code,
                                         cours.cours_id cours_id, statut
                                  FROM cours_user, cours
-                                 WHERE cours_user.cours_id = cours.cours_id AND user_id = ".$uid);
+                                 WHERE cours_user.cours_id = cours.cours_id                                  
+                                 AND user_id = ".$uid);
 	while ($row = mysql_fetch_array($usercourses)) {
 	 	$myCourses[$row['cours_id']] = $row;
 	}
@@ -249,6 +250,7 @@ function expanded_faculte($fac_name, $facid, $uid) {
                                         cours.password password
                                   FROM cours
                                   WHERE cours.faculteid = $facid
+                                  AND cours.visible != ".COURSE_INACTIVE."
 				  AND cours.type = '$type'
                                   ORDER BY cours.intitule, cours.titulaires");
 
@@ -288,9 +290,9 @@ function expanded_faculte($fac_name, $facid, $uid) {
                         $course_title = q($mycours['i']);
                         $password = q($mycours['password']);
 			// link creation
-                        if ($mycours['visible'] == 2 or $uid == 1) { //open course
+                        if ($mycours['visible'] == COURSE_OPEN or $uid == COURSE_REGISTRATION) { //open course
                                 $codelink = "<a href='../../courses/$mycours[k]/'>$course_title</a>";
-                        } elseif ($mycours['visible'] == 0) { //closed course
+                        } elseif ($mycours['visible'] == COURSE_CLOSED) { //closed course
                                 $codelink = "<a href='../contact/index.php?from_reg=true&cours_id=$cid'>$course_title</a>";
                         } else {
                                 $codelink = $course_title;

@@ -37,28 +37,34 @@ include '../../include/baseTheme.php';
 include '../../include/lib/textLib.inc.php';
 
 $nameTools = $langMyAgenda;
-$tool_content = "";
 
 $TABLECOURS     = "`$mysqlMainDb`.cours";
 $TABLECOURSUSER = "`$mysqlMainDb`.cours_user";
 
-if (isset($uid))
-{
+if (isset($uid)) {
+        $year = '';
+        $month = '';
  	$query = db_query("SELECT cours.code k, cours.fake_code fc,
-		cours.intitule i, cours.titulaires t
+                        cours.intitule i, cours.titulaires t
 	                        FROM cours, cours_user
 	                        WHERE cours.cours_id = cours_user.cours_id
+                                AND cours.visible != ".COURSE_INACTIVE."
 	                        AND cours_user.user_id = '$uid'");
-	@$year = $_GET['year'];
-	@$month = $_GET['month'];
-	if (($year==NULL)&&($month==NULL))
+	if (isset($_GET['year'])) {
+                $year = $_GET['year'];        
+        } 
+        if (isset($_GET['month'])) {
+                $month = $_GET['month'];        
+        }
+	
+	if (($year == '') && ($month == ''))
 	{
 		$today = getdate();
 		$year = $today['year'];
 		$month = $today['mon'];
 	}
 
-	@$agendaitems = get_agendaitems($query, $month, $year);
+	$agendaitems = get_agendaitems($query, $month, $year);
 	$monthName = $langMonthNames['long'][$month-1];
 	@display_monthcalendar($agendaitems, $month, $year, $langDay_of_weekNames['long'], $monthName,
 $langToday);
@@ -83,7 +89,8 @@ function get_agendaitems($query, $month, $year) {
 	// get agenda-items for every course
 	while ($mycours = mysql_fetch_array($query))
 	{
-	$result = db_query("SELECT * FROM agenda WHERE month(day)='$month' AND year(day)='$year'","$mycours[k]");
+	$result = db_query("SELECT * FROM agenda WHERE month(day)='$month' 
+                                AND year(day)='$year'","$mycours[k]");
 
 	    while ($item = mysql_fetch_array($result))
 	    {
@@ -184,6 +191,6 @@ function display_monthcalendar($agendaitems, $month, $year, $weekdaynames, $mont
     }
   	$tool_content .=  "\n  </table>\n\n";
 
-draw($tool_content, 1);
+        draw($tool_content, 1);
 }
-?>
+

@@ -144,22 +144,25 @@ if (isset($c)) {
                 <table width='100%' class='tbl'>";
 	$tool_content .= "<tr><th width='250'>".$langCurrentStatus.":</th><td>";
 	switch ($row['visible']) {
-	case 2:
-		$tool_content .= $langOpenCourse;
-		break;
-	case 1:
-		$tool_content .= $langRegCourse;
-		break;
-	case 0:
-		$tool_content .= $langClosedCourse;
-		break;
+                case COURSE_CLOSED:
+                        $tool_content .= $langClosedCourse;
+                        break;
+                case COURSE_OPEN:
+                        $tool_content .= $langOpenCourse;
+                        break;
+                case COURSE_REGISTRATION:
+                        $tool_content .= $langRegCourse;
+                        break;	
+                case COURSE_INACTIVE:
+                        $tool_content .= $langCourseInactive;
+                        break;	
 	}
 	$tool_content .= "</td></tr></table></fieldset>";
 	// Display other available choices
 	$tool_content .= "
 	<fieldset>
 	<legend>".$langOtherActions."</legend>
-<table width='100%' class='tbl'>";
+        <table width='100%' class='tbl'>";
 	// Users list
 	$tool_content .= "
 	<tr>
