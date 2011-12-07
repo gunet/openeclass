@@ -49,7 +49,7 @@ a img {
 	top: 0;
 	height: 80px;
 	margin: 0 auto;
-	border-bottom: 3px solid #827C78;
+	border-bottom: 3px solid #617F90;
 	background-color: #ffffff;
 	min-width: 800px;
 }
@@ -59,7 +59,7 @@ a img {
 	width: 100%;
 	font-size: 13px;
 	z-index: 1;
-	background-color: #827C78;
+	background-color: #617F90;
 	float: left;
 }
 
@@ -94,12 +94,12 @@ a img {
 .menu_left a {
 	font-weight: bold;
 	text-decoration: none;
-	color: #827C78;
+	color: #617F90;
 }
 
 .menu_left a:hover {
 	text-decoration: underline;
-	color: #827C78;
+	color: #617F90;
 }
 
 .menu_left ul {
@@ -116,7 +116,7 @@ a img {
 
 .menu_left li.category {
 	border-bottom: 1px dashed #DFDFDF;
-	color: #827C78;
+	color: #617F90;
 	font-size: 13px;
 	font-weight: bold;
 	line-height: 22px;
