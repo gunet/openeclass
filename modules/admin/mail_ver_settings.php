@@ -140,10 +140,9 @@ else {
 }
 
 $tool_content .= "
-	<br /><p><b>$langNote</b>:<br />$langMailVerificationNotice</p>
-	<br />";
+	<p class='noteit'><b>$langNote</b>:<br />$langMailVerificationNotice</p>";
 $tool_content .= "
-	<p>$langMailVerificationNoticeAdmin</p>";
+	<p class='info'>$langMailVerificationNoticeAdmin</p>";
 
 function list_1Result($sql) {
    global $mysqlMainDb;

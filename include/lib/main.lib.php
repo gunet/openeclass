@@ -479,19 +479,34 @@ function user_groups($course_id, $user_id, $format = 'html')
                              `group`.id = group_members.group_id AND
                              `group_members`.user_id = $user_id
                        ORDER BY `group`.name");
+	$count = mysql_num_rows($q);
+	if (!$count) {
+		if ($format == 'html') {
+			return "<div style='padding-left: 15px'>-</div>";
+		} else {
+			return '-';
+		}
+	}
         while ($r = mysql_fetch_array($q)) {
 		if ($format == 'html') {
-	                $groups .= (empty($groups)? '': ', ') .
-	                           "<a href='$urlAppend/modules/group/group_space.php?group_id=$r[id]'>" .
-	                           q($r['name']) . "</a>";
+	                $groups .= (($count > 1)? '<li>': '') .
+				   "<a href='$urlAppend/modules/group/group_space.php?group_id=$r[id]' title='" .
+				   q($r['name']) . "'>" .
+	                           q(ellipsize($r['name'], 20)) . "</a>" .
+				   (($count > 1)? '</li>': '');
 		} else {
 			$groups .= (empty($groups)? '': ', ') . $r['name'];
 		}
         }
-        if (empty($groups)) {
-                $groups = '-';
-        }
-        return $groups;
+	if ($format == 'html') {
+		if ($count > 1) {
+			return "<ol>$groups</ol>";
+		} else {
+			return "<div style='padding-left: 15px'>$groups</div>";
+		}
+	} else {
+	        return $groups;
+	}
 }
 
 

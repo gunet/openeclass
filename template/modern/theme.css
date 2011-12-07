@@ -1214,6 +1214,12 @@ table.Search td {
 	list-style-image:url(img/arrow_bullet.png);
 }
 
+.custom_list_order ol {
+    margin: 0;
+    padding: 0 15px 0 15px;
+}
+
+
 .glossary {
     border-bottom: 1px dotted #727266;
     color: #cc3333 !important;  
@@ -1323,7 +1329,6 @@ table.Search td {
     text-align: center;
     color: #627aad;
     background-color:#fff9ae;
-    padding: 1px;
     font-size: 11px;
     border: 1px solid #ddd685;
 }

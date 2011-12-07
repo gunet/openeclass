@@ -40,7 +40,7 @@ body {
         height: 80px;
         margin: 0 auto !important;
         width: 100%;
-        border-bottom: 3px solid #777777;
+        border-bottom: 3px solid #617F90;
         background-color: #ffffff;
         text-align: right;
         min-width: 800px;
@@ -52,7 +52,7 @@ body {
         font-family: "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
         font-size: 13px;
         z-index: 1;
-        background-color: #82a9d1;
+        background-color: #617F90;
         float: left;
         width: 100%;
 }
