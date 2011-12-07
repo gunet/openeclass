@@ -268,32 +268,32 @@ while ($myrow = mysql_fetch_array($result)) {
         if ($myrow['tutor'] == '0') {
                 $tool_content .= "<td valign='top' align='center' class='add_user'>
                                 <a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;giveTutor=$myrow[user_id]$extra_link'>
-                                <img src='$themeimg/add.png' title='$langGiveRightTutor' /></a></td>";
+                                <img src='$themeimg/group_manager_add.png' title='$langGiveRightTutor' /></a></td>";
         } else {
-                $tool_content .= "<td class='add_teacherLabel' align='center'>$langGroupTutor<br />
-                                <a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;removeTutor=$myrow[user_id]$extra_link' title='$langRemoveRight'>$langRemove</a></td>";
+                $tool_content .= "<td class='add_teacherLabel' align='center'  width='30'>
+                                <a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;removeTutor=$myrow[user_id]$extra_link' title='$langRemoveRight'><img src='$themeimg/group_manager_remove.png' title ='$langRemoveRight' /></a></td>";
         }
         // editor right
         if ($myrow['editor'] == '0') {
             $tool_content .= "<td valign='top' align='center' class='add_user'>
                                 <a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;giveEditor=$myrow[user_id]$extra_link'>
-                                <img src='$themeimg/add.png' title='$langGiveRightΕditor' /></a></td>";
+                                <img src='$themeimg/assistant_add.png' title='$langGiveRightΕditor' /></a></td>";
         } else {
-                $tool_content .= "<td class='add_teacherLabel' align='center'>$langEditor<br /><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;removeEditor=$myrow[user_id]$extra_link' title='$langRemoveRight'>$langRemove</a></td>";
+                $tool_content .= "<td class='add_teacherLabel' align='center' width='30'><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;removeEditor=$myrow[user_id]$extra_link' title='$langRemoveRight'><img src='$themeimg/assistant_remove.png' title ='$langRemoveRight' /></a></td>";
         }
         // admin right
         if ($myrow['user_id'] != $_SESSION["uid"]) {
                 if ($myrow['statut']=='1') {
-                        $tool_content .= "<td class='smaller' align='center'><img src='$themeimg/teacher.png' title='$langTutor' /><br />
-                                        <a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;removeAdmin=$myrow[user_id]$extra_link' title='$langRemoveRight'>$langRemove</a></td>";
+                        $tool_content .= "<td class='add_teacherLabel' align='center'  width='30'>
+                                        <a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;removeAdmin=$myrow[user_id]$extra_link' title='$langRemoveRight'><img src='$themeimg/teacher_remove.png' title ='$langRemoveRight' /></a></td>";
                 } else {
                         $tool_content .= "<td valign='top' align='center' class='add_user'>
                                 <a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;giveAdmin=$myrow[user_id]$extra_link'>
-                                <img src='$themeimg/add.png' title='$langGiveRightAdmin' /></a></td>";
+                                <img src='$themeimg/teacher_add.png' title='$langGiveRightAdmin' /></a></td>";
                 }
         } else {
                 if ($myrow['statut']=='1') {
-                        $tool_content .= "<td valign='top' class='add_teacherLabel' align='center'>
+                        $tool_content .= "<td valign='top' class='add_teacherLabel' align='center'  width='30'>
                                         <img src='$themeimg/teacher.png' title='$langTutor' /></td>";
                 } else {
                         $tool_content .= "<td class='smaller' valign='top' align='center'>
