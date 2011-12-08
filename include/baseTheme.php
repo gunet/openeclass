@@ -394,6 +394,8 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 			$t->set_var ( 'BODY_ACTION', $body_action );
 		}
 
+                $t->set_var ( 'LANG_SEARCH', $langSearch );
+
 		//if $require_help is true (set by each tool) display the help link
 		if ($require_help == true) {
 			if ((isset($require_current_course) and !$is_editor) or
@@ -402,7 +404,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 			}
 			$help_link_icon = " <a href=\"" . $relPath . "modules/help/help.php?topic=$helpTopic&amp;language=$language\"
         onClick=\"window.open('" . $relPath . "modules/help/help.php?topic=$helpTopic&amp;language=$language','MyWindow','toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=350,height=450,left=300,top=10');
-        return false;\"><img class='HelpIcon' src='$themeimg/help.png' alt='$langHelp' /></a>";
+        return false;\"><img class='HelpIcon' src='$themeimg/help.png' alt='$langHelp' title='$langHelp' /></a>";
 
 			$t->set_var ( 'HELP_LINK_ICON', $help_link_icon );
 			$t->set_var ( 'LANG_HELP', $langHelp );
