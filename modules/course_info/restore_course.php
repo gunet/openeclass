@@ -301,17 +301,17 @@ elseif (isset($_POST['do_restore'])) {
         <br />   
    <fieldset>
   <legend>$langFirstMethod</legend>   
-        <table width='100%' class='tbl'>
-
-	<tr>
+        <table width='100%' class='tbl'><tr>
           <td>$langRequest1
 	  <br /><br />
 	  <form action='".$_SERVER['PHP_SELF']."' method='post' enctype='multipart/form-data'>
 	    <input type='file' name='archiveZipped' />
 	    <input type='submit' name='send_archive' value='".$langSend."' />
-	  </form>	  </td>
-          </tr>
-	</table>
+            </form>
+            <div class='right smaller'>$langMaxFileSize ".
+                       ini_get('upload_max_filesize') . "</div>
+        </td>
+        </tr></table>
 </fieldset>
 <br />
 
