@@ -51,8 +51,6 @@ if (!isset($_REQUEST['u'])) {
 
 $verified_mail = isset($_REQUEST['verified_mail'])?intval($_REQUEST['verified_mail']):2;
 
-$tool_content = $head_content = "";
-
 $lang_editor = $lang_jscalendar = langname_to_code($language);
 
 $jscalendar = new DHTML_Calendar($urlServer.'include/jscalendar/', $lang_jscalendar, 'calendar-blue2', false);
@@ -118,78 +116,78 @@ if ($u)	{
         }
         if (!$u_submitted) { // if the form was not submitted
 		$tool_content .= "
-    <div id='operations_container'>
-     <ul id='opslist'>";
-		if (!in_array($info['password'], $auth_ids)) {
-			$tool_content .= "
-      <li><a href='password.php?userid=$u'>".$langChangePass."</a></li>";
+                    <div id='operations_container'>
+                     <ul id='opslist'>";
+                if (!in_array($info['password'], $auth_ids)) {
+                        $tool_content .= "
+                        <li><a href='password.php?userid=$u'>".$langChangePass."</a></li>";
                 }
                 $tool_content .= "
-      <li><a href='./edituser.php?u=$u&amp;edit=auth'>$langEditAuth</a></li>
-      <li><a href='./listusers.php'>$langBack</a></li>";
-		$tool_content .= "
-     </ul>
-    </div>";
-		$tool_content .= "
-    <form name='edituser' method='post' action='$_SERVER[PHP_SELF]'>
-    <fieldset>
-    <legend>$langEditUser: ".q($info['username'])."</legend>
-    <table class='tbl' width='100%'>
-    <tr>
-      <th width='170' class='left'>$langSurname:</th>
-      <td><input type='text' name='lname' size='50' value='".q($info['nom'])."' /></td>
-    </tr>
-    <tr>
-      <th class='left'>$langName:</th>
-      <td><input type='text' name='fname' size='50' value='".q($info['prenom'])."' /></td>
-   </tr>";
+              <li><a href='./edituser.php?u=$u&amp;edit=auth'>$langEditAuth</a></li>
+              <li><a href='./listusers.php'>$langBack</a></li>";
+                $tool_content .= "</ul></div>";
+                   $tool_content .= "
+                    <form name='edituser' method='post' action='$_SERVER[PHP_SELF]'>
+                    <fieldset>
+                    <legend>$langEditUser: ".q($info['username'])."</legend>
+                    <table class='tbl' width='100%'>
+                    <tr>
+                      <th width='170' class='left'>$langSurname:</th>
+                      <td><input type='text' name='lname' size='50' value='".q($info['nom'])."' /></td>
+                    </tr>
+                    <tr>
+                      <th class='left'>$langName:</th>
+                      <td><input type='text' name='fname' size='50' value='".q($info['prenom'])."' /></td>
+                   </tr>";
 
-		if(!in_array($info['password'], $auth_ids)) {
-			$tool_content .= "
-   <tr>
-     <th class='left'>$langUsername:</th>
-     <td><input type='text' name='username' size='50' value='".q($info['username'])."' /></td>
-   </tr>";
-		}
-		else    // means that it is external auth method, so the user cannot change this password
-		{
-		  switch($info['password'])
-		  {
-		    case "pop3": $auth=2;break;
-		    case "imap": $auth=3;break;
-		    case "ldap": $auth=4;break;
-		    case "db": $auth=5;break;
-		    case "shibboleth": $auth=6;break;
-		    case "cas": $auth=7;break;
-		    default: $auth=1;break;
-		  }
-		  
-		$auth_text = get_auth_info($auth);
-		$tool_content .= "
-   <tr>
-     <th class='left'>".$langUsername. "</th>
-     <td><b>".autoquote($info['username'])."</b> [".$auth_text."] <input type='hidden' name='username' value=".autoquote($info['username'])." /> </td>
-   </tr>";
-	}
+        if(!in_array($info['password'], $auth_ids)) {
+                $tool_content .= "
+                   <tr>
+                     <th class='left'>$langUsername:</th>
+                     <td><input type='text' name='username' size='50' value='".q($info['username'])."' /></td>
+                   </tr>";
+        }
+        else    // means that it is external auth method, so the user cannot change this password
+        {
+                switch($info['password'])
+                {
+                        case "pop3": $auth=2;break;
+                        case "imap": $auth=3;break;
+                        case "ldap": $auth=4;break;
+                        case "db": $auth=5;break;
+                        case "shibboleth": $auth=6;break;
+                        case "cas": $auth=7;break;
+                        default: $auth=1;break;
+                }		  
+                $auth_text = get_auth_info($auth);
+                $tool_content .= "
+                <tr>
+                <th class='left'>".$langUsername. "</th>
+                <td><b>".autoquote($info['username'])."</b> [".$auth_text."] <input type='hidden' name='username' value=".autoquote($info['username'])." /> </td>
+                </tr>";
+        }
 
 $tool_content .= "
    <tr>
      <th class='left'>e-mail: </th>
      <td><input type='text' name='email' size='50' value='".q(mb_strtolower(trim($info['email'])))."' /></td>
-   </tr>
-     <tr>
+   </tr>";
+
+if (!empty($info['email'])) {     
+        $tool_content .= "<tr>
        <th>$langEmailVerified: </th>
        <td>";
+        $verified_mail_data = array();
+        $verified_mail_data[0] = $m['pending'];
+        $verified_mail_data[1] = $m['yes'];
+        $verified_mail_data[2] = $m['no'];
 
-$verified_mail_data = array();
-$verified_mail_data[0] = $m['pending'];
-$verified_mail_data[1] = $m['yes'];
-$verified_mail_data[2] = $m['no'];
-
-$tool_content .= selection($verified_mail_data,"verified_mail",intval($info['verified_mail']));
+        $tool_content .= selection($verified_mail_data,"verified_mail",intval($info['verified_mail']));
+        $tool_content .= "
+                  </td>
+             </tr>";
+}
 $tool_content .= "
-	  </td>
-     </tr>
      <tr>
    <tr>
      <th class='left'>$langAm: </th>
@@ -208,8 +206,7 @@ $tool_content .= "
 		$department_select_box = "";
 	}
 
-	$tool_content .= $department_select_box."</td>
-    </tr>";
+	$tool_content .= $department_select_box."</td></tr>";
 	$tool_content .= "
     <tr>
       <th class='left'>$langProperty:</th>

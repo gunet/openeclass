@@ -185,7 +185,7 @@ for ($j = 0; $j < mysql_num_rows($sql); $j++) {
 			$tool_content .= "<img src='$themeimg/lock_open.png' title='$langOpenCourse' />";
 			break;				
                 case COURSE_INACTIVE:
-			$tool_content .= "<img src='$themeimg/lock_inactive.png' title='$langOpenCourse' />";
+			$tool_content .= "<img src='$themeimg/lock_inactive.png' title='$langCourseInactiveShort' />";
 			break;				
 	}
 	$tool_content .= "

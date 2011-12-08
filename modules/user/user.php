@@ -276,7 +276,8 @@ while ($myrow = mysql_fetch_array($result)) {
                                 <img src='$themeimg/group_manager_add.png' title='$langGiveRightTutor' /></a></td>";
         } else {
                 $tool_content .= "<td class='add_teacherLabel' align='center'  width='30'>
-                                <a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;removeTutor=$myrow[user_id]$extra_link' title='$langRemoveRight'><img src='$themeimg/group_manager_remove.png' title ='$langRemoveRight' /></a></td>";
+                                <a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;removeTutor=$myrow[user_id]$extra_link' title='$langRemoveRightTutor'>
+                                <img src='$themeimg/group_manager_remove.png' title ='$langRemoveRightTutor' /></a></td>";
         }
         // editor right
         if ($myrow['editor'] == '0') {
@@ -284,13 +285,15 @@ while ($myrow = mysql_fetch_array($result)) {
                                 <a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;giveEditor=$myrow[user_id]$extra_link'>
                                 <img src='$themeimg/assistant_add.png' title='$langGiveRightΕditor' /></a></td>";
         } else {
-                $tool_content .= "<td class='add_teacherLabel' align='center' width='30'><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;removeEditor=$myrow[user_id]$extra_link' title='$langRemoveRight'><img src='$themeimg/assistant_remove.png' title ='$langRemoveRight' /></a></td>";
+                $tool_content .= "<td class='add_teacherLabel' align='center' width='30'><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;removeEditor=$myrow[user_id]$extra_link' title='$langRemoveRightEditor'>
+                                <img src='$themeimg/assistant_remove.png' title ='$langRemoveRightEditor' /></a></td>";
         }
         // admin right
         if ($myrow['user_id'] != $_SESSION["uid"]) {
                 if ($myrow['statut']=='1') {
                         $tool_content .= "<td class='add_teacherLabel' align='center'  width='30'>
-                                        <a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;removeAdmin=$myrow[user_id]$extra_link' title='$langRemoveRight'><img src='$themeimg/teacher_remove.png' title ='$langRemoveRight' /></a></td>";
+                                        <a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;removeAdmin=$myrow[user_id]$extra_link' title='$langRemoveRightAdmin'>
+                                        <img src='$themeimg/teacher_remove.png' title ='$langRemoveRightAdmin' /></a></td>";
                 } else {
                         $tool_content .= "<td valign='top' align='center' class='add_user'>
                                 <a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;giveAdmin=$myrow[user_id]$extra_link'>
