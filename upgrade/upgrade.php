@@ -254,6 +254,7 @@ if (!isset($_POST['submit2'])) {
         db_query("INSERT IGNORE INTO `config` (`key`, `value`) VALUES
   			('dont_display_login_form', '0'),
 			('email_required', '0'),
+                        ('email_from', '1'),
 			('am_required', '0'),
 			('dropbox_allow_student_to_student', '0'),
 			('block_username_change', '0'),

@@ -213,6 +213,7 @@ Note the change will be visible to users after next login to platform.</p>
 <ul>
  <li><em>email_required</em>: During user registration, email is required.</li>
  <li><em>email_verification_required</em>: Email must be verified during registration and if user changes it.</li>
+ <li><em>email_from</em>: Emails will be sent with sender email address. Otherwise will be sent with platform administrator email address.</li>
  <li><em>am_required</em>: During user registration student ID is required.</li>
  <li><em>dropbox_allow_student_to_student</em>: In dropbox module, users can send files to each other.</li>
  <li><em>dont_display_login_form</em>: Login form will not be visible in home page. A link to it, will be appeared.</li>

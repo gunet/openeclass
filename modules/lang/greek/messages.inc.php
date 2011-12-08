@@ -1596,6 +1596,7 @@ $langInstallInstr = "Οδηγίες Εγκατάστασης";
 $langWithPHP = "με υποστήριξη PHP";
 $lang_email_required = "Να είναι υποχρεωτικό το email του $langOfUser";
 $lang_email_verification_required = "Να είναι υποχρεωτική η επιβεβαίωση του e-mail του $langOfUser";
+$lang_email_from = "Τα emails που στέλνονται θα έχουν την διεύθυνση του αποστολέα";
 $lang_am_required = "Να είναι υποχρεωτικός ο αριθμός μητρώου του $langsOfStudent κατά την εγγραφή";
 $lang_dropbox_allow_student_to_student = "Να επιτρέπεται η ανταλλαγή αρχείων μεταξύ $langsOfStudents στο υποσύστημα 'Ανταλλαγή αρχείων'";
 $lang_dont_display_login_form = "Να μην εμφανίζεται στην αρχική σελίδα της πλατφόρμας η οθόνη σύνδεσης";
