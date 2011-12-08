@@ -130,6 +130,7 @@ if (isset($_POST['welcomeScreen'])) {
 	$email_required = $am_required = $dropbox_allow_student_to_student = $dont_display_login_form = '';
 	$display_captcha = $block_username_change = $insert_xml_metadata = $betacms = '';
 	$disable_eclass_stud_reg = $disable_eclass_prof_reg = $email_verification_required = '';
+        $email_from = 1;
         $close_user_registration = '';
 } else {
 	register_posted_variables(array(
@@ -156,6 +157,7 @@ if (isset($_POST['welcomeScreen'])) {
                 'institutionUrlForm' => true,
 		'email_required' => true,
 		'email_verification_required' => true,
+                'email_from' => true,
 		'am_required' => true,
 		'dropbox_allow_student_to_student' => true,
 		'dont_display_login_form' => true,
@@ -214,8 +216,8 @@ $all_vars = array('pathForm', 'urlAppendPath', 'dbHostForm', 'dbUsernameForm', '
                   'passForm', 'phpSysInfoURL', 'campusForm', 'helpdeskForm', 'helpdeskmail',
                   'institutionForm', 'institutionUrlForm', 'faxForm', 'postaddressForm',
 		  'doc_quota', 'video_quota', 'group_quota', 'dropbox_quota',
-                  'email_required', 'email_verification_required', 'am_required', 'dropbox_allow_student_to_student',
-                  'dont_display_login_form', 'block_username_change', 'display_captcha',
+                  'email_required', 'email_verification_required', 'email_from', 'am_required', 
+                  'dropbox_allow_student_to_student', 'dont_display_login_form', 'block_username_change', 'display_captcha',
 		  'insert_xml_metadata', 'betacms', 'disable_eclass_stud_reg', 
                   'disable_eclass_prof_reg', 'close_user_registration');
 
@@ -367,6 +369,10 @@ elseif(isset($_REQUEST['install5']) OR isset($_REQUEST['back5']))
 	  <tr>
 		<th class='left' width='550'><b>$lang_email_verification_required</b></th>
 		<td>".checkbox_input('email_verification_required')."</td>
+	  </tr>
+          <tr>
+		<th class='left' width='550'><b>$lang_email_from</b></th>
+		<td>".checkbox_input('email_from')."</td>
 	  </tr>
 	  <tr>
 		<th class='left'><b>$lang_am_required</b></th>
