@@ -39,7 +39,6 @@ include '../../include/lib/textLib.inc.php';
 $coursePath = $webDir."courses";
 $fileChatName = $coursePath.'/'.$currentCourseID.'/chat.txt';
 $tmpArchiveFile = $coursePath.'/'.$currentCourseID.'/tmpChatArchive.txt';
-$pathToSaveChat = $coursePath.'/'.$currentCourseID.'/document/';
 
 $nick = uid_to_name($uid);
 
@@ -73,22 +72,25 @@ if (isset($_GET['reset']) && $is_editor) {
 
 // store
 if (isset($_GET['store']) && $is_editor) {
+        include '../document/doc_init.php';
 	$saveIn = "chat.".date("Y-m-j-B").".txt";
-	$chat_filename = date("YmdGis").randomkeys("8").".txt";
+	$chat_filename = '/' . safe_filename('txt');
 
 	buffer(implode('', file($fileChatName)), $tmpArchiveFile);
-	if (copy($tmpArchiveFile, $pathToSaveChat.$chat_filename)) {
-                $alert_div=$langSaveMessage;
+	if (copy($tmpArchiveFile, $basedir . $chat_filename)) {
+                $alert_div = $langSaveMessage;
+                db_query("INSERT INTO $mysqlMainDb.document SET
+                                course_id = $cours_id,
+                                subsystem = $subsystem,
+                                path = '$chat_filename',
+                                filename = '$saveIn',
+                                format='txt',
+                                date = NOW(),
+                                date_modified = NOW()");
         } else {
-                $alert_div= $langSaveErrorMessage;
+                $alert_div = $langSaveErrorMessage;
         }
-	echo $alert_div;
-	db_query("INSERT INTO $mysqlMainDb.document SET
-			course_id = $cours_id,
-			path = '/$chat_filename',
-			filename = '$saveIn',
-			date = NOW(),
-			date_modified=NOW()");
+	echo $alert_div, "</body></html>\n";
 	exit;
 }
 
