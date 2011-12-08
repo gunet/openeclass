@@ -45,11 +45,8 @@ p {
 	<ul>
 	<li><a href="#after_f">Αλλαγή δοκιμαστικών σχολών</a></li>
 	<li><a href="#after_l">Αλλαγή λογότυπου</a></li>	
-        <li><a href="#after_theme">Αλλαγή θέματος εμφάνισης</a></li>
-        <li><a href="#after_m">Αλλαγή μηνυμάτων</a></li>
-        <li><a href="#after_math">Υποστήριξη μαθηματικών συμβόλων</a></li>
-        <li><a href="#after_lang">Υποστήριξη άλλων γλωσσών</a></li>
-        <li><a href="#after_reg">Εγγραφή χρηστών μέσω αίτησης</a></li>
+	<li><a href="#after_m">Αλλαγή μηνυμάτων</a></li>
+	<li><a href="#after_math">Υποστήριξη μαθηματικών συμβόλων</a></li>		
 	<li><a href="#after_pma">PhpMyAdmin</a></li>
 	<li><a href="#after_tbl_config">Βασικές ρυθμίσεις</a></li>
 	<li><a href="#after_other">Άλλες ρυθμίσεις</a></li>
@@ -118,7 +115,7 @@ Options -Indexes
       Κατά την εγκατάσταση του eClass ελέγχεται αν πληρούνται τα
       παραπάνω.
     </p>
-<p>Θα πρέπει επίσης να ορίσετε στο αρχείο <code>php.ini</code> τις παραμέτρους: 
+<p> Θα πρέπει επίσης να ορίσετε στο αρχείο <code>php.ini</code> τις παραμέτρους: 
 </p>
 <pre>
 short_open_tag = on
