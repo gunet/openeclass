@@ -18,7 +18,7 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-
+session_start();
 
 if (!isset($_GET['language'])) {
 	$language = 'greek';
