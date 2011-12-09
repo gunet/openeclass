@@ -556,6 +556,8 @@ $langAnnouncementNoTille = "Ανακοίνωση χωρίς τίτλο";
 $langCourseAnnouncements = "Ανακοινώσεις μαθήματος";
 $langLinkUnsubscribe = "Σημείωση: Λαμβάνετε αυτό το email επειδή είστε γραμμένος στο μάθημα '%s'.<br /> 
                 Αν δεν επιθυμείτε να σας αποστέλονται άλλα emails από το συγκεκριμένο μάθημα κάντε κλικ";
+$langLinkUnsubscribeFromPlatform = "Σημείωση: Λαμβάνετε αυτό το email επειδή είστε γραμμένος στην πλατφόρμα '%s'.<br /> 
+                Αν δεν επιθυμείτε να σας αποστέλονται άλλα emails κάντε κλικ";
 $langEmailUnsubscribe = "Ειδοποιήσεις μαθήματος";
 $langInfoUnsubscribe = "Από τα παρακάτω μαθήματα που παρακολουθείτε, δέχεστε emails. Αν δεν επιθυμείτε 
         να δέχεστε emails από κάποιο μάθημα, αποεπιλέξτε το και κάντε κλικ στο 'Ύποβολή'. <br />(Σημείωση: Δεν απεγγράφεστε από το μάθημα).";
@@ -1412,8 +1414,8 @@ $mailbody7="$langFaculty:";
 $mailbody8="ως $langStudent.";
 $logo= "Πλατφόρμα Ασύγχρονης Τηλεκπαίδευσης $siteName";
 $gunet="Ομάδα Ασύγχρονης Τηλεκπαίδευσης $siteName";
-$sendinfomail="Αποστολή ενημερωτικού e-mail στους $langsTeachers του $siteName";
-$infoabouteclass="Ενημερωτικό δελτίο πλατφόρμας $siteName";
+$langSendInfoMail="Αποστολή ενημερωτικού e-mail στους $langsTeachers του $siteName";
+$langInfoAboutEclass="Ενημερωτικό δελτίο πλατφόρμας $siteName";
 
 // contact.php
 $introcontact = "Μπορείτε να επικοινωνείτε με την Ομάδα Υποστήριξης της πλατφόρμας <b>".$siteName."</b> με τους παρακάτω τρόπους:";

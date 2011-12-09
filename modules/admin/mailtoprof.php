@@ -49,7 +49,7 @@ include '../../include/baseTheme.php';
 // Include functions needed to send email
 include('../../include/sendMail.inc.php');
 // Define $nameTools
-$nameTools=$sendinfomail;
+$nameTools=$langSendInfoMail;
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
 
 /*****************************************************************************
@@ -60,19 +60,17 @@ if (isset($_POST['submit']) && ($_POST['body_mail'] != "") && ($_POST['submit'] 
 	// Where to send the email
 	if ($_POST['sendTo'] == "0") {
 		// All users
-		$sql = db_query("SELECT DISTINCT email FROM user");
+		$sql = db_query("SELECT email, user_id FROM user");
 	} elseif ($_POST['sendTo'] == "1") {
 		// Only professors
-		$sql = db_query("SELECT DISTINCT email FROM user where statut='1'");
+		$sql = db_query("SELECT email, user_id FROM user where statut='1'");
 	}  elseif ($_POST['sendTo'] == "2") {
 		// Only students
-		$sql = db_query("SELECT DISTINCT email FROM user where statut='5'");
+		$sql = db_query("SELECT email, user_id FROM user where statut='5'");
 	} else { die(); } // invalid sendTo var
-
-	// Send email to all addresses
-	while ($m = mysql_fetch_array($sql)) {
-		$to = $m[0];
-		$emailsubject = $infoabouteclass;
+        
+        $recipients = array();
+        $emailsubject = $langInfoAboutEclass;
 		$emailbody = "".$_POST['body_mail']."
 
 $langManager $siteName
@@ -80,11 +78,24 @@ $administratorName $administratorSurname
 $langTel $telephone
 $langEmail : $emailhelpdesk
 ";
-		if (!send_mail('', '', '', $to,
-			$emailsubject, $emailbody, $charset)) {
-				$tool_content .= "<p class=\"caution\">".$langEmailNotSend." ".$to."!</p>";
-		}
-	}
+	// Send email to all addresses
+	while ($m = mysql_fetch_array($sql)) {
+		$emailTo = $m["email"];
+                $user_id = $m["user_id"];
+                if (get_user_email_notification($user_id)) {
+                        // checks if user is notified by email
+                        array_push($recipients, $emailTo);
+                }
+                $linkhere = "&nbsp;<a href='${urlServer}modules/profile/profile.php'>$langHere</a>.";
+                $unsubscribe = "<br /><br />".sprintf($langLinkUnsubscribeFromPlatform, $siteName);            
+                $emailcontent = $emailbody.$unsubscribe.$linkhere;            
+                if (count($recipients) >= 50) {
+                        send_mail_multipart('', '', '', $emailTo, $emailsubject, $emailbody, $emailcontent, $charset); 
+                }
+        } 
+        if (count($recipients) > 0)  {                    
+                send_mail_multipart('', '', '', $emailTo, $emailsubject, $emailbody, $emailcontent, $charset); 
+        }
 	// Display result and close table correctly
 	$tool_content .= "<p class='success'>$emailsuccess</p>";
 } else {

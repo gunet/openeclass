@@ -1346,6 +1346,9 @@ td.subsection {
         .title1 {
                 display: none;
         }
+        * {
+                color: black;
+        }
 }
 
 /* --  Work -- */
