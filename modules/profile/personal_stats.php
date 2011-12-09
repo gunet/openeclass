@@ -21,6 +21,8 @@
 include '../../include/baseTheme.php';
 include "../auth/auth.inc.php";
 $require_valid_uid = TRUE;
+$require_help = TRUE;
+$helpTopic = 'PersonalStats';
 
 check_uid();
 
