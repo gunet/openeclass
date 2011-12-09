@@ -1346,6 +1346,9 @@ dt {
         .title1 {
                 display: none;
         }
+        * {
+                color: black;
+        }
 }
 
 
