@@ -31,8 +31,11 @@ if (isset($_SESSION['theme'])) {
 } else {
         $theme = 'classic';
 }
+$themeimg = '../../template/' . $theme . '/img';
 
 if (file_exists("../lang/$language/help.inc.php")) {
+        $siteName = '';
+	include("../lang/$language/common.inc.php");
 	include("../lang/$language/help.inc.php");
 } else {
 	die('No such help topic');

@@ -32,6 +32,8 @@
 
 $require_login = TRUE;
 $ignore_module_ini = true;
+$require_help = TRUE;
+$helpTopic = 'MyAgenda';
 
 include '../../include/baseTheme.php';
 include '../../include/lib/textLib.inc.php';
