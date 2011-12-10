@@ -45,9 +45,17 @@ function list_videos()
                                                  "\n  </tr>";
                                 $table_started = true;
                         }
-                        $videolink = "<a href='" .
-                                media_url($table, $row['url'], @$row['path']) .
-                                "'>" . htmlspecialchars($row['titre']) . '</a>';
+                        
+                        if ($table == 'video') 
+                        {
+                            list($mediaURL, $mediaPath, $mediaPlay) = media_url($row['path']);
+
+                            $videolink = choose_media_ahref($mediaURL, $mediaPath, $mediaPlay, q($row['titre']), $row['path']);
+                        }
+                        else
+                        {
+                            $videolink = choose_medialink_ahref(q($row['url']), q($row['titre']));
+                        }
 
                           if ($numLine%2 == 0) {
                               $tool_content .= "\n  <tr class='even'>";

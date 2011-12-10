@@ -31,6 +31,7 @@ include '../../include/lib/fileDisplayLib.inc.php';
 include '../../include/action.php';
 include 'functions.php';
 include '../document/doc_init.php';
+require_once '../video/video_functions.php';
 
 $action = new action();
 $action->record('MODULE_ID_UNITS');
@@ -42,6 +43,7 @@ if (isset($_REQUEST['id'])) {
 }
 $lang_editor = langname_to_code($language);
 load_js('tools.js');
+load_modal_box();
 
 if (isset($_REQUEST['edit_submit'])) {
         units_set_maxorder();

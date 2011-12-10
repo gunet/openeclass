@@ -26,6 +26,8 @@ Units module: insert new resource
 $require_current_course = true;
 include '../../include/baseTheme.php';
 include "../../include/lib/fileDisplayLib.inc.php";
+require_once '../video/video_functions.php';
+load_modal_box();
 
 $lang_editor = langname_to_code($language);
 
