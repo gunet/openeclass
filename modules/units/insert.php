@@ -1,6 +1,6 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 2.5
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2011  Greek Universities Network - GUnet
@@ -27,7 +27,7 @@ $require_current_course = true;
 include '../../include/baseTheme.php';
 include "../../include/lib/fileDisplayLib.inc.php";
 require_once '../video/video_functions.php';
-load_modal_box();
+load_modal_box(true);
 
 $lang_editor = langname_to_code($language);
 

@@ -26,14 +26,28 @@
  * The priority for choosing is:
  * 1. Shadowbox
  * 2. Fancybox2
+ * 3. Colorbox
+ * 
+ * @global string  $langColorboxCurrent
+ * @param  boolean $gallery
  */
-function load_modal_box()
+function load_modal_box($gallery = false)
 {
+    global $langColorboxCurrent;
+    
+    $shadowbox_gallery = ($gallery) ? 'gallery: "gallery"' : '';
     $shadowbox_init = '<script type="text/javascript">
                        Shadowbox.init({
-                           overlayOpacity: 0.8,
-                           modal: false
+                           overlayOpacity : 0.8,
+                           modal          : false,
+                           continuous     : true
                        });
+                       
+                       window.onload = function() {
+                           Shadowbox.setup(".shadowbox", {
+                           '.$shadowbox_gallery.'
+                           });
+                       };
                        </script>';
 
     $fancybox2_init = '<script type="text/javascript">
@@ -48,14 +62,23 @@ function load_modal_box()
                        });
                        </script>';
     
+    $colorbox_gallery = ($gallery) ? 'rel: "gallery",': '';
     $colorbox_init = '<script type="text/javascript">
                       $(document).ready(function() {
-                          $(".colorbox").colorbox({
+                          $(".colorboxframe").colorbox({
                                   innerWidth  : '.get_modal_width().',
                                   innerHeight : '.get_modal_height().',
                                   iframe      : "true",
                                   scrolling   : "false",
-                                  opacity     : 0.8
+                                  opacity     : 0.8,
+                                  current     : "'.$langColorboxCurrent.'",
+                                  '.$colorbox_gallery.'
+                         });
+                         $(".colorbox").colorbox({
+                                  scrolling   : "false",
+                                  opacity     : 0.8,
+                                  current     : "'.$langColorboxCurrent.'",
+                                  '.$colorbox_gallery.'
                          });
                       });
                       </script>';
@@ -89,11 +112,24 @@ function choose_media_ahref($mediaDL, $mediaPath, $mediaPlay, $title, $filename)
     if (is_supported_media($filename))
     {
         if (file_exists(get_shadowbox_dir()))
-            $ahref = "<a href='$mediaPath' rel='shadowbox;width=".get_shadowbox_width().";height=".get_shadowbox_height().get_shadowbox_player($filename)."' title='$title'>$title</a>";
+        {
+            $ahref = "<a href='$mediaPath' class='shadowbox' rel='shadowbox;width=".get_shadowbox_width().";height=".get_shadowbox_height().get_shadowbox_player($filename)."' title='$title'>$title</a>";
+            if (is_supported_image($filename))
+                $ahref = "<a href='$mediaPath' class='shadowbox' rel='shadowbox' title='$title'>$title</a>";
+        }
         else if (file_exists(get_fancybox2_dir()))
+        {
             $ahref = "<a href='$mediaPlay' class='fancybox fancybox.iframe' title='$title'>$title</a>";
+            if (is_supported_image($filename))
+                $ahref = "<a href='$mediaPath' class='fancybox' title='$title'>$title</a>";
+        }
         else if (file_exists(get_colorbox_dir()))
-            $ahref = "<a href='$mediaPlay' class='colorbox' title='$title'>$title</a>";
+        {
+            $ahref = "<a href='$mediaPlay' class='colorboxframe' title='$title'>$title</a>";
+            if (is_supported_image($filename))
+                $ahref = "<a href='$mediaPath' class='colorbox' title='$title'>$title</a>";
+            
+        }
     }
     
     return $ahref;
@@ -119,7 +155,7 @@ function choose_medialink_ahref($videoURL, $title)
         $linkPlay = $urlServer ."modules/video/video.php?course=$code_cours&amp;action=playlink&amp;id=". urlencode(make_embeddable_videolink($videoURL));
         
         if (file_exists(get_shadowbox_dir()))
-            $ahref = "<a href='".make_embeddable_videolink($videoURL)."' rel='shadowbox;width=".get_shadowbox_width().";height=".get_shadowbox_height()."' title='$title'>$title</a>";
+            $ahref = "<a href='".make_embeddable_videolink($videoURL)."' class='shadowbox' rel='shadowbox;width=".get_shadowbox_width().";height=".get_shadowbox_height()."' title='$title'>$title</a>";
         else if (file_exists(get_fancybox2_dir()))
             $ahref = "<a href='".$linkPlay."' class='fancybox fancybox.iframe' title='$title'>$title</a>";
         else if (file_exists(get_colorbox_dir()))
@@ -145,6 +181,7 @@ function get_shadowbox_player($filename)
     {
         case "flv":
         case "m4v":
+        case "mp3":
             $ret = ";player=flv";
             break;
         case "swf":
@@ -388,6 +425,17 @@ function using_ie()
 }
 
 /**
+ * Whether the image is supported or not
+ * 
+ * @param  string  $filename
+ * @return boolean
+ */
+function is_supported_image($filename)
+{
+    return in_array(get_file_extension($filename), get_supported_images());
+}
+
+/**
  * Whether the movie is supported or not
  * 
  * @param  string  $filename
@@ -395,11 +443,13 @@ function using_ie()
  */
 function is_supported_media($filename)
 {
-    $supported = array("asf", "avi", "wm", "wmv", "wma",
+    $medias = array("asf", "avi", "wm", "wmv", "wma",
                        "dv", "mov", "moov", "movie", "mp4", "mpg", "mpeg", 
                        "3gp", "3g2", "m2v", "aac", "m4a",
                        "flv", "f4v", "m4v", "mp3",
                        "swf", "webm", "ogv", "ogg");
+    
+    $supported = array_merge($medias, get_supported_images());
     
     return in_array(get_file_extension($filename), $supported);
 }
@@ -544,6 +594,11 @@ function get_object_width()
 function get_object_height()
 {
     return get_modal_height() - 20;
+}
+
+function get_supported_images()
+{
+    return array("jpg", "jpeg", "png", "gif", "bmp");
 }
 
 function get_youtube_patterns()

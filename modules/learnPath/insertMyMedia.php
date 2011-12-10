@@ -42,7 +42,7 @@ $navigation[] = array("url"=>"learningPathList.php?course=$code_cours", "name"=>
 $navigation[] = array("url"=>"learningPathAdmin.php?course=$code_cours&amp;path_id=".(int)$_SESSION['path_id'], "name"=> $langAdm);
 $nameTools = $langInsertMyMediaToolName;
 
-load_modal_box();
+load_modal_box(true);
 
 mysql_select_db($currentCourseID);
 $iterator = 1;

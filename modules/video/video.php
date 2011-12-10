@@ -125,7 +125,7 @@ if (isset($_GET['action']) and $_GET['action'] == "playlink")
 
 if($is_editor) {
         load_js('tools.js');
-        load_modal_box();
+        load_modal_box(true);
         $head_content .= <<<hContent
 <script type="text/javascript">
 function checkrequired(which, entry) {
@@ -517,7 +517,7 @@ if ($count_video[0]<>0 || $count_video_links[0]<>0) {
 // student view
 else {
     
-    load_modal_box();
+    load_modal_box(true);
     
 	$results['video'] = db_query("SELECT *  FROM video ORDER BY titre", $currentCourseID);
 	$results['videolinks'] = db_query("SELECT * FROM videolinks ORDER BY titre", $currentCourseID);
