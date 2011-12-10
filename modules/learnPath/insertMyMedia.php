@@ -42,7 +42,7 @@ $navigation[] = array("url"=>"learningPathList.php?course=$code_cours", "name"=>
 $navigation[] = array("url"=>"learningPathAdmin.php?course=$code_cours&amp;path_id=".(int)$_SESSION['path_id'], "name"=> $langAdm);
 $nameTools = $langInsertMyMediaToolName;
 
-load_modal_box();
+load_modal_box(true);
 
 mysql_select_db($currentCourseID);
 $iterator = 1;
@@ -179,8 +179,7 @@ draw($tool_content, 2, null, $head_content);
 
 function showmedia()
 {
-    global $langName, $langSelection, $langAddModulesButton, $code_cours, $themeimg,
-           $urlServer, $currentCourseID;
+    global $langName, $langSelection, $langAddModulesButton, $code_cours, $themeimg;
 
     $sqlMedia = "SELECT * FROM video ORDER BY titre";
     $sqlMediaLinks = "SELECT * FROM videolinks ORDER BY titre";
@@ -199,13 +198,11 @@ function showmedia()
     $i=1;
     while ($myrow = mysql_fetch_array($resultMedia))
     {
-        $videoURL = "$_SERVER[PHP_SELF]?course=$code_cours&amp;action=download&amp;id=".$myrow['path'];
-        $videoPath = $urlServer ."video/". $currentCourseID . $myrow['path'];
-        $videoPlay = "$_SERVER[PHP_SELF]?course=$code_cours&amp;action=play&amp;id=".$myrow['path'];
+        list($mediaURL, $mediaPath, $mediaPlay) = media_url($myrow['path']);
                                                     
         $output .= "<tr>
                     <td width='1' valign='top'><img src='$themeimg/arrow.png' border='0'></td>
-                    <td align='left' valign='top'>". choose_modal_ahref($videoURL, $videoPath, $videoPlay, q($myrow['titre']), $myrow['path']) ."
+                    <td align='left' valign='top'>". choose_media_ahref($mediaURL, $mediaPath, $mediaPlay, q($myrow['titre']), $myrow['path']) ."
                     <br />
                     <small class='comments'>".q($myrow['description'])."</small></td>";
         $output .= "<td><div align='center'><input type='checkbox' name='insertMedia_".$i."' id='insertMedia_".$i."' value='".$myrow['id']."' /></div></td></tr>";
@@ -217,7 +214,7 @@ function showmedia()
     {
         $output .= "<tr>
                     <td width='1' valign='top'><img src='$themeimg/arrow.png' border='0'></td>
-                    <td align='left' valign='top'>". choose_videolink_ahref(q($myrow['url']), q($myrow['titre'])) ."
+                    <td align='left' valign='top'>". choose_medialink_ahref(q($myrow['url']), q($myrow['titre'])) ."
                     <br />
                     <small class='comments'>".q($myrow['description'])."</small></td>";
         $output .= "<td><div align='center'><input type='checkbox' name='insertMediaLink_".$j."' id='insertMediaLink_".$j."' value='".$myrow['id']."' /></div></td></tr>";

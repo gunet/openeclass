@@ -125,7 +125,7 @@ if (isset($_GET['action']) and $_GET['action'] == "playlink")
 
 if($is_editor) {
         load_js('tools.js');
-        load_modal_box();
+        load_modal_box(true);
         $head_content .= <<<hContent
 <script type="text/javascript">
 function checkrequired(which, entry) {
@@ -463,23 +463,21 @@ if ($count_video[0]<>0 || $count_video_links[0]<>0) {
                         switch($table){
 				case 'video':
 					if (isset($vodServer)) {
-                                            $videoURL = $vodServer."$currentCourseID/".$myrow[1];
-                                            $videoPath = $videoURL;
-                                            $videoPlay = $videoURL;
+                                            $mediaURL = $vodServer."$currentCourseID/".$myrow[1];
+                                            $mediaPath = $mediaURL;
+                                            $mediaPlay = $mediaURL;
 					} else {
-                                            $videoURL = "$_SERVER[PHP_SELF]?course=$code_cours&amp;action=download&amp;id=$myrow[1]";
-                                            $videoPath = $urlServer ."video/". $currentCourseID . $myrow[1];
-                                            $videoPlay = "$_SERVER[PHP_SELF]?course=$code_cours&amp;action=play&amp;id=$myrow[1]";
+                                            list($mediaURL, $mediaPath, $mediaPlay) = media_url($myrow['path']);
 					}
-                                        $link_to_add = "<td>". choose_modal_ahref($videoURL, $videoPath, $videoPlay, q($myrow[3]), $myrow[1]) ."<br>\n".
+                                        $link_to_add = "<td>". choose_media_ahref($mediaURL, $mediaPath, $mediaPlay, q($myrow[3]), $myrow[1]) ."<br>\n".
                                                 q($myrow[4]) . "</td><td>" .
                                                 q($myrow[5]) . "</td><td>" .
                                                 q($myrow[6]) . "</td><td align='center'>".
                                                 nice_format(date('Y-m-d', strtotime($myrow[7])))."</td>";
-                                        $link_to_save = "<a href='$videoURL'><img src='$themeimg/save_s.png' alt='$langSave' title='$langSave'></a>&nbsp;&nbsp;";
+                                        $link_to_save = "<a href='$mediaURL'><img src='$themeimg/save_s.png' alt='$langSave' title='$langSave'></a>&nbsp;&nbsp;";
 					break;
 				case "videolinks":
-                                        $link_to_add = "<td>". choose_videolink_ahref(q($myrow[1]), q($myrow[2])) ."<br>" .
+                                        $link_to_add = "<td>". choose_medialink_ahref(q($myrow[1]), q($myrow[2])) ."<br>" .
                                                 q($myrow[3]) . "</td><td>" .
                                                 q($myrow[4]) . "</td><td>" .
                                                 q($myrow[5]) . "</td><td align='center'>" .
@@ -519,7 +517,7 @@ if ($count_video[0]<>0 || $count_video_links[0]<>0) {
 // student view
 else {
     
-    load_modal_box();
+    load_modal_box(true);
     
 	$results['video'] = db_query("SELECT *  FROM video ORDER BY titre", $currentCourseID);
 	$results['videolinks'] = db_query("SELECT * FROM videolinks ORDER BY titre", $currentCourseID);
@@ -540,20 +538,18 @@ else {
 				switch($table){
 					case 'video':
 						if (isset($vodServer)) {
-                                                    $videoURL = $vodServer."$currentCourseID/".$myrow[1];
-                                                    $videoPath = $videoURL;
-                                                    $videoPlay = $videoURL;
+                                                    $mediaURL = $vodServer."$currentCourseID/".$myrow[1];
+                                                    $mediaPath = $mediaURL;
+                                                    $mediaPlay = $mediaURL;
 						} else {
-                                                    $videoURL = "$_SERVER[PHP_SELF]?course=$code_cours&amp;action=download&amp;id=$myrow[1]";
-                                                    $videoPath = $urlServer ."video/". $currentCourseID . $myrow[1];
-                                                    $videoPlay = "$_SERVER[PHP_SELF]?course=$code_cours&amp;action=play&amp;id=$myrow[1]";
+                                                    list($mediaURL, $mediaPath, $mediaPlay) = media_url($myrow['path']);
 						}
-                                                $link_to_add = "<td>". choose_modal_ahref($videoURL, $videoPath, $videoPlay, q($myrow[3]), $myrow[1]) ."<br /><small>" .
+                                                $link_to_add = "<td>". choose_media_ahref($mediaURL, $mediaPath, $mediaPlay, q($myrow[3]), $myrow[1]) ."<br /><small>" .
                                                         q($myrow[4]) . "</small></td>";
-                                                $link_to_save = "<a href='$videoURL'><img src='$themeimg/save_s.png' alt='$langSave' title='$langSave'></a>&nbsp;&nbsp;";
+                                                $link_to_save = "<a href='$mediaURL'><img src='$themeimg/save_s.png' alt='$langSave' title='$langSave'></a>&nbsp;&nbsp;";
 						break;
 					case 'videolinks':
-                                                $link_to_add = "<td>". choose_videolink_ahref(q($myrow[1]), q($myrow[2])) ."<br />" .
+                                                $link_to_add = "<td>". choose_medialink_ahref(q($myrow[1]), q($myrow[2])) ."<br />" .
                                                         q($myrow[3]) . "</td>";
                                                 $link_to_save = "<a href='".q($myrow[1])."' target='_blank'><img src='$themeimg/links_on.png' alt='$langPreview' title='$langPreview'></a>&nbsp;&nbsp;";
 						break;

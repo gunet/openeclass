@@ -174,7 +174,7 @@ switch ($module['contentType'])
                     directly_pass_lp_module($TABLEUSERMODULEPROGRESS, (int)$uid, (int)$learnPathModuleId);
                 }
                 
-                if (is_supported_movie($assetPath))
+                if (is_supported_media($assetPath))
                 {
                     $moduleStartAssetPage = "showMedia.php?course=$code_cours&amp;id=".$assetPath;
                 }

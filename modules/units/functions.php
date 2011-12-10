@@ -282,13 +282,20 @@ function show_video($table, $title, $comments, $resource_id, $video_id, $visibil
                            $currentCourseID);
         if ($result and mysql_num_rows($result) > 0) {
                 $row = mysql_fetch_array($result, MYSQL_ASSOC);
-                $link = "<a href='" .
-                             video_url($table, $row['url'], @$row['path']) .
-                             "' target='_blank'>";
-                $videolink = $link . htmlspecialchars($title) . '</a>';
-                $imagelink = $link .
-                             "<img src='$themeimg/videos_" .
-                             ($visibility == 'i'? 'off': 'on') . ".png' /></a>";
+                
+                if ($table == 'video') 
+                {
+                    list($mediaURL, $mediaPath, $mediaPlay) = media_url($row['path']);
+                    
+                    $videolink = choose_media_ahref($mediaURL, $mediaPath, $mediaPlay, q($row['titre']), $row['path']);
+                }
+                else
+                {
+                    $videolink = choose_medialink_ahref(q($row['url']), q($row['titre']));
+                }
+                
+                $imagelink = "<img src='$themeimg/videos_" .
+                             ($visibility == 'i'? 'off': 'on') . ".png' />";
         } else {
                 if (!$is_editor) {
                         return;

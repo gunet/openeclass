@@ -1285,16 +1285,16 @@ function format_time_duration($sec)
                 (($min == 0)? '': (' ' . append_units($min, $langminute, $langminutes)));
 }
 
-// Return the URL for a video found in $table (video or videolinks)
-function video_url($table, $url, $path)
+// Return the URLs for media files 
+function media_url($path)
 {
-	global $code_cours;
-        if ($table == 'video') {
-                return $GLOBALS['urlServer'] . 'modules/video/video.php?course='.$code_cours.'&amp;action=download&amp;id=' . $path;
-        } else {
-                return $url;
-
-        }
+	global $urlServer, $code_cours, $currentCourseID;
+        
+        $mediaURL  = $urlServer .'modules/video/video.php?course='.$code_cours.'&amp;action=download&amp;id='.$path;
+        $mediaPath = $urlServer ."video/". $currentCourseID . $path;
+        $mediaPlay = $urlServer .'modules/video/video.php?course='.$code_cours.'&amp;action=play&amp;id='.$path;
+        
+        return array($mediaURL, $mediaPath, $mediaPlay);
 }
 
 // Move entry $id in $table to $direction 'up' or 'down', where
