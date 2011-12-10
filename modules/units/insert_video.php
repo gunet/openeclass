@@ -46,7 +46,7 @@ function list_videos()
                                 $table_started = true;
                         }
                         $videolink = "<a href='" .
-                                video_url($table, $row['url'], @$row['path']) .
+                                media_url($table, $row['url'], @$row['path']) .
                                 "'>" . htmlspecialchars($row['titre']) . '</a>';
 
                           if ($numLine%2 == 0) {

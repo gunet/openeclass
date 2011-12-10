@@ -75,32 +75,32 @@ function load_modal_box()
  * Construct a proper a href html tag because each modal box requires a 
  * specific calling method.
  * 
- * @param  string $videoURL
- * @param  string $videoPath
- * @param  string $videoPlay
+ * @param  string $mediaDL   - force download url
+ * @param  string $mediaPath - http full file path
+ * @param  string $mediaPlay - media playback url
  * @param  string $title
  * @param  string $filename
  * @return string 
  */
-function choose_modal_ahref($videoURL, $videoPath, $videoPlay, $title, $filename)
+function choose_media_ahref($mediaDL, $mediaPath, $mediaPlay, $title, $filename)
 {
-    $ahref = "<a href='$videoURL'>". $title ."</a>";
+    $ahref = "<a href='$mediaDL'>". $title ."</a>";
     
-    if (is_supported_movie($filename))
+    if (is_supported_media($filename))
     {
         if (file_exists(get_shadowbox_dir()))
-            $ahref = "<a href='$videoPath' rel='shadowbox;width=".get_shadowbox_width().";height=".get_shadowbox_height().get_shadowbox_player($filename)."' title='$title'>$title</a>";
+            $ahref = "<a href='$mediaPath' rel='shadowbox;width=".get_shadowbox_width().";height=".get_shadowbox_height().get_shadowbox_player($filename)."' title='$title'>$title</a>";
         else if (file_exists(get_fancybox2_dir()))
-            $ahref = "<a href='$videoPlay' class='fancybox fancybox.iframe' title='$title'>$title</a>";
+            $ahref = "<a href='$mediaPlay' class='fancybox fancybox.iframe' title='$title'>$title</a>";
         else if (file_exists(get_colorbox_dir()))
-            $ahref = "<a href='$videoPlay' class='colorbox' title='$title'>$title</a>";
+            $ahref = "<a href='$mediaPlay' class='colorbox' title='$title'>$title</a>";
     }
     
     return $ahref;
 }
 
 /**
- * Construct a proper a href html tag for videolinks
+ * Construct a proper a href html tag for medialinks
  * 
  * @global string $userServer
  * @global string $code_cours
@@ -108,7 +108,7 @@ function choose_modal_ahref($videoURL, $videoPath, $videoPlay, $title, $filename
  * @param  string $title
  * @return string 
  */
-function choose_videolink_ahref($videoURL, $title)
+function choose_medialink_ahref($videoURL, $title)
 {
     global $urlServer, $code_cours;
     
@@ -392,7 +392,7 @@ function using_ie()
  * @param  string  $filename
  * @return boolean 
  */
-function is_supported_movie($filename)
+function is_supported_media($filename)
 {
     $supported = array("asf", "avi", "wm", "wmv",
                        "dv", "mov", "moov", "movie", "mp4", "mpg", "mpeg", 

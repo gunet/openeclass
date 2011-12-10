@@ -283,7 +283,7 @@ function show_video($table, $title, $comments, $resource_id, $video_id, $visibil
         if ($result and mysql_num_rows($result) > 0) {
                 $row = mysql_fetch_array($result, MYSQL_ASSOC);
                 $link = "<a href='" .
-                             video_url($table, $row['url'], @$row['path']) .
+                             media_url($table, $row['url'], @$row['path']) .
                              "' target='_blank'>";
                 $videolink = $link . htmlspecialchars($title) . '</a>';
                 $imagelink = $link .
