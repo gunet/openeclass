@@ -187,6 +187,7 @@ function video_html_object($videoPath, $videoURL, $bgcolor = '#000000', $color =
         case "avi":
         case "wm":
         case "wmv":
+        case "wma":
             $ret .= $startdiv;
             if (using_ie())
                 $ret .= '<object width="'.get_object_width().'" height="'.get_object_height().'"
@@ -394,7 +395,7 @@ function using_ie()
  */
 function is_supported_media($filename)
 {
-    $supported = array("asf", "avi", "wm", "wmv",
+    $supported = array("asf", "avi", "wm", "wmv", "wma",
                        "dv", "mov", "moov", "movie", "mp4", "mpg", "mpeg", 
                        "3gp", "3g2", "m2v", "aac", "m4a",
                        "flv", "f4v", "m4v", "mp3",
