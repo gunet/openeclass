@@ -23,6 +23,7 @@ $require_current_course = TRUE;
 
 include '../../include/init.php';
 require_once "../../include/lib/learnPathLib.inc.php";
+include '../group/group_functions.php';
 
 // IF PROF ONLY
 if($is_editor) {
@@ -52,7 +53,7 @@ if($is_editor) {
 	{
 		echo "$crlf";
 		$sql = "SELECT LP.`learnPath_id` FROM `lp_learnPath` AS LP";
-		$learningPathList = db_query_fetch_all($sql);
+		$learningPathList = db_query_fetch_all($sql, $currentCourseID);
 		$iterator = 1;
 		$globalprog = 0;
 		
@@ -69,7 +70,7 @@ if($is_editor) {
 		$total = round($globalprog/($iterator-1));
 		echo csv_escape(uid_to_name($user['user_id'])).
 		";".csv_escape(uid_to_am($user['user_id'])).
-		";".csv_escape(gid_to_name(user_group($user['user_id']))).
+		";".csv_escape(user_groups($cours_id, $user['user_id'], 'csv')).
 		";".$total."%";
 	}
 	echo "$crlf";

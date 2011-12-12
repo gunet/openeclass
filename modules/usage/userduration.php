@@ -63,17 +63,27 @@ if (isset($_GET['format']) and $_GET['format'] == 'csv') {
 } else {
         $format = 'html';
 
+        $nameTools = $langUserDuration;
+        $navigation[] = array('url' => 'usage.php?course='.$code_cours, 'name' => $langUsage);
+        
         $tool_content .= "
-          <div id='operations_container'>
-            <ul id='opslist'>
-              <li><a href='usage.php?course=$code_cours'>".$langUsageVisits."</a></li>
-              <li><a href='favourite.php?course=$code_cours&amp;first='>".$langFavourite."</a></li>
-              <li><a href='userduration.php?course=$code_cours'>".$langUserDuration."</a></li>
-              <li>$langDumpUserDurationToFile&nbsp;(<a href='userduration.php?course=$code_cours&amp;format=csv'>$langCodeUTF</a>&nbsp;<a href='userduration.php?course=$code_cours&amp;format=csv&amp;enc=1253'>$langCodeWin</a>)</li>
-            </ul>
-          </div>\n";
+        <div id='operations_container'>
+          <ul id='opslist'>
+            <li><a href='favourite.php?course=$code_cours&amp;first='>$langFavourite</a></li>
+            <li><a href='userlogins.php?course=$code_cours&amp;first='>$langUserLogins</a></li>
+            <li><a href='userduration.php?course=$code_cours'>$langUserDuration</a></li>
+            <li><a href='../learnPath/detailsAll.php?course=$code_cours&amp;from_stats=1'>$langLearningPaths</a></li>
+            <li><a href='group.php?course=$code_cours'>$langGroupUsage</a></li>
+          </ul>
+        </div>\n";
+        
+        // display number of users
+        $tool_content .= "
+        <div class='info'>
+           <b>$langDumpUserDurationToFile: </b>1. <a href='userduration.php?course=$code_cours&amp;format=csv'>$langcsvenc2</a>
+                2. <a href='userduration.php?course=$code_cours&amp;format=csv&amp;enc=1253'>$langcsvenc1</a>          
+          </div>";
 
-        $nameTools = $langUsage;
         $local_style = '
             .month { font-weight : bold; color: #FFFFFF; background-color: #000066;
              padding-left: 15px; padding-right : 15px; }

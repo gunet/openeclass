@@ -54,9 +54,13 @@ $TABLEASSET             = "lp_asset";
 $TABLEUSERMODULEPROGRESS= "lp_user_module_progress";
 
 require_once("../../include/baseTheme.php");
-
-$navigation[] = array("url"=>"learningPathList.php?course=$code_cours", "name"=> $langLearningPaths);
-$nameTools = $langTrackAllPathExplanation;
+if (isset($_GET['from_stats']) and $_GET['from_stats'] == 1) { // if we come from statistics
+        $navigation[] = array('url' => '../usage/usage.php?course='.$code_cours, 'name' => $langUsage);
+        $nameTools = "$langLearningPaths - $langTrackAllPathExplanation";
+} else {
+        $navigation[] = array("url"=>"learningPathList.php?course=$code_cours", "name"=> $langLearningPaths);
+        $nameTools = $langTrackAllPathExplanation;
+}
 
 // display a list of user and their respective progress
 $sql = "SELECT U.`nom`, U.`prenom`, U.`user_id`
@@ -68,14 +72,31 @@ $sql = "SELECT U.`nom`, U.`prenom`, U.`user_id`
 @$tool_content .= get_limited_page_links($sql, 30, $langPreviousPage, $langNextPage);
 $usersList = get_limited_list($sql, 30);
 
-$tool_content .= "
-  <div id=\"operations_container\">
-    <ul id=\"opslist\">
-      <li>$langDumpUserDurationToFile: <a href='dumpuserlearnpathdetails.php?course=$code_cours'>$langcsvenc2</a></li>
-      <li><a href='dumpuserlearnpathdetails.php?course=$code_cours&amp;enc=1253'>$langcsvenc1</a></li>
-    </ul>
-  </div>
-";
+if (isset($_GET['from_stats']) and $_GET['from_stats'] == 1) { // if we come from statistics
+        $tool_content .= "
+        <div id='operations_container'>
+          <ul id='opslist'>
+            <li><a href='../usage/favourite.php?course=$code_cours&amp;first='>$langFavourite</a></li>
+            <li><a href='../usage/userlogins.php?course=$code_cours&amp;first='>$langUserLogins</a></li>
+            <li><a href='../usage/userduration.php?course=$code_cours'>$langUserDuration</a></li>
+            <li><a href='detailsAll.php?course=$code_cours&amp;from_stats=1'>$langLearningPaths</a></li>
+            <li><a href='../usage/group.php?course=$code_cours'>$langGroupUsage</a></li>
+          </ul>
+        </div>";        
+        $tool_content .= "
+        <div class='info'>
+           <b>$langDumpUserDurationToFile: </b>1. <a href='dumpuserlearnpathdetails.php?course=$code_cours'>$langcsvenc2</a>
+                2. <a href='dumpuserlearnpathdetails.php?course=$code_cours&amp;enc=1253'>$langcsvenc1</a>          
+          </div>";
+} else {
+        $tool_content .= "
+          <div id='operations_container'>
+            <ul id='opslist'>
+              <li>$langDumpUserDurationToFile: <a href='dumpuserlearnpathdetails.php?course=$code_cours'>$langcsvenc2</a></li>
+              <li><a href='dumpuserlearnpathdetails.php?course=$code_cours&amp;enc=1253'>$langcsvenc1</a></li>
+            </ul>
+          </div>";
+}
 
 	
 // display tab header
@@ -136,7 +157,6 @@ foreach ($usersList as $user)
 	}
 	$k++;
 }
-
 // foot of table
 $tool_content .= '  </table>'."\n\n";
 

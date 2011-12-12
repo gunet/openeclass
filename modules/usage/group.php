@@ -32,8 +32,21 @@ $require_login = true;
 include '../../include/baseTheme.php';
 include '../group/group_functions.php';
 
+$tool_content .= "
+<div id='operations_container'>
+  <ul id='opslist'>
+    <li><a href='favourite.php?course=$code_cours&amp;first='>$langFavourite</a></li>
+    <li><a href='userlogins.php?course=$code_cours&amp;first='>$langUserLogins</a></li>
+    <li><a href='userduration.php?course=$code_cours'>$langUserDuration</a></li>
+    <li><a href='../learnPath/detailsAll.php?course=$code_cours&amp;from_stats=1'>$langLearningPaths</a></li>
+    <li><a href='group.php?course=$code_cours'>$langGroupUsage</a></li>
+  </ul>
+</div>\n";
+
+
 $navigation[] = array('url' => 'usage.php?course='.$code_cours, 'name' => $langUsage);
 $nameTools = $langGroupUsage;
+
 $head_content = '<script type="text/javascript" src="../auth/sorttable.js"></script>';
 initialize_group_info();
 
