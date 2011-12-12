@@ -45,7 +45,7 @@ $tool_content .= "
     <li><a href='favourite.php?course=$code_cours&amp;first='>$langFavourite</a></li>
     <li><a href='userlogins.php?course=$code_cours&amp;first='>$langUserLogins</a></li>
     <li><a href='userduration.php?course=$code_cours'>$langUserDuration</a></li>
-    <li><a href='../learnPath/detailsAll.php?course=$code_cours'>$langLearningPaths</a></li>
+    <li><a href='../learnPath/detailsAll.php?course=$code_cours&amp;from_stats=1'>$langLearningPaths</a></li>
     <li><a href='group.php?course=$code_cours'>$langGroupUsage</a></li>
   </ul>
 </div>\n";
