@@ -101,7 +101,7 @@ if (isset($_GET['action']) and $_GET['action'] == "play")
         
         if (strpos($videoPath, '/../') === FALSE)
         {
-            echo video_html_object($videoPath, $videoURL);
+            echo media_html_object($videoPath, $videoURL);
         }
         else
         {
@@ -118,7 +118,7 @@ if (isset($_GET['action']) and $_GET['action'] == "playlink")
 {
         $id = $_GET['id'];
         
-        echo videolink_iframe_object(html_entity_decode($id));
+        echo medialink_iframe_object(html_entity_decode($id));
         exit;
 }
 

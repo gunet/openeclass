@@ -35,7 +35,7 @@ if (isset($_GET['id']))
     
     if (strpos($videoPath, '/../') === FALSE)
     {
-        echo video_html_object($videoPath, $videoURL, '#ffffff', '#000000');
+        echo media_html_object($videoPath, $videoURL, '#ffffff', '#000000');
     }
 }
 
