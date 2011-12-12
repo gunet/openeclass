@@ -34,6 +34,7 @@ $navigation[] = array("url" => "index.php", "name" => $langAdmin);
 
 $mr = get_config('email_required')? $m['yes']: $m['no'];
 $mv = get_config('email_verification_required')? $m['yes']: $m['no'];
+$mm = get_config('dont_mail_unverified_mails')? $m['yes']: $m['no'];
 
 register_posted_variables(array(
 	'submit' => true,
@@ -81,6 +82,8 @@ if (empty($submit0) && empty($submit1) && empty($submit2)) {
 			<td class='center'>$mr</td></tr>
 		<tr><td class='left' colspan='2'>$lang_email_verification_required:</td>
 			<td class='center'>$mv</td></tr>
+		<tr><td class='left' colspan='2'>$lang_dont_mail_unverified_mails:</td>
+			<td class='center'>$mm</td></tr>
 		<tr><td colspan='3'>&nbsp;</td></tr>
 		<tr><td><a href='listusers.php?search=yes&verified_mail=1'>$langMailVerificationYes</a></td>
 			<td class='center'><b>" .
