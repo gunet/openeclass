@@ -515,7 +515,7 @@ if (!isset($_POST['submit2'])) {
                 // old users have their email verified
                 if (mysql_field_exists($mysqlMainDb, 'user', 'verified_mail')) {
                         db_query('ALTER TABLE `user` MODIFY `verified_mail` TINYINT(1) NOT NULL DEFAULT 2');
-                        db_query('UPDATE `user` SET `verified_mail`= EMAIL_VERIFIED');				
+                        db_query('UPDATE `user` SET `verified_mail`= ' . EMAIL_VERIFIED);				
                 }
                 mysql_field_exists($mysqlMainDb, 'user_request', 'verified_mail') or
                         db_query("ALTER TABLE `user_request` ADD `verified_mail` TINYINT(1) NOT NULL DEFAULT 2 AFTER `email`");		
