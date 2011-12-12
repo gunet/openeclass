@@ -108,3 +108,9 @@ function add_bookmark() {
 	});
 }
 
+// Deactivate course e-mail subscription controls
+function control_deactivate() {
+        alert('ok');
+        $("div.unsubscontrols input").attr('disabled', '1');
+        $("div.unsubscontrols").addClass('inactive');
+}
