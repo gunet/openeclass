@@ -2122,7 +2122,7 @@ function get_user_email_notification($user_id, $course_id=null)
                 }
         }
         // checks if user has verified his email address
-        if (get_config('email_verification_required')) {
+        if (get_config('email_verification_required') && get_config('dont_mail_unverified_mails')) {
                 $verified_mail = get_mail_ver_status($user_id);                
                 if ($verified_mail == EMAIL_VERIFICATION_REQUIRED 
                         or $verified_mail == EMAIL_UNVERIFIED) {                

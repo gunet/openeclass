@@ -467,6 +467,7 @@ db_query("INSERT INTO `auth` VALUES
 $dont_display_login_form = intval($dont_display_login_form);
 $email_required = intval($email_required);
 $email_verification_required = intval($email_verification_required);
+$dont_mail_unverified_mails = intval($dont_mail_unverified_mails);
 $email_from = intval($email_from);
 $am_required = intval($am_required);
 $dropbox_allow_student_to_student = intval($dropbox_allow_student_to_student);
@@ -487,6 +488,7 @@ db_query("INSERT INTO `config` (`key`, `value`) VALUES
 		('email_required', $email_required),
                 ('email_from', $email_from),
 		('email_verification_required', $email_verification_required),
+		('dont_mail_unverified_mails', $dont_mail_unverified_mails),
 		('am_required', $am_required),
 		('dropbox_allow_student_to_student', $dropbox_allow_student_to_student),
 		('block_username_change', $block_username_change),

@@ -55,6 +55,15 @@ if (isset($_GET['submit'])) {
         
 } else {
         $tool_content .= "<form action='$_SERVER[PHP_SELF]'>";
+		  if (get_config('email_verification_required') && get_config('dont_mail_unverified_mails')) {
+				$user_email_status = get_mail_ver_status($uid);
+				if ( ($user_email_status == EMAIL_VERIFICATION_REQUIRED) or
+						($user_email_status == EMAIL_UNVERIFIED) ) {
+
+					$link = "<a href = '../auth/mail_verify_change.php?from_profile=TRUE'>$langHere</a>.";
+					$tool_content .= "<div class='alert1'>$langMailNotVerified $link</div>";
+				}
+		  }
         $tool_content .= "<div class='info'>$langInfoUnsubscribe</div>";
         if (isset($_GET['cid'])) { // one course only                
                 $cid = intval($_GET['cid']);

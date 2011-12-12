@@ -139,6 +139,7 @@ $active_ui_languages = '.$string_active_ui_languages."\n";
 
 	$config_vars = array('email_required' => true,
 		'email_verification_required' => true,
+		'dont_mail_unverified_mails' => true,
                 'email_from' => true,
 		'am_required' => true,
 		'dont_display_login_form' => true,
@@ -352,6 +353,7 @@ else {
         
         $cbox_email_required = get_config('email_required')?'checked':'';
 	$cbox_email_verification_required = get_config('email_verification_required')?'checked':'';
+	$cbox_dont_mail_unverified_mails = get_config('dont_mail_unverified_mails')?'checked':'';
         $cbox_email_from = get_config('email_from')?'checked':'';
 	$cbox_am_required = get_config('am_required')?'checked':'';
 	$cbox_dont_display_login_form = get_config('dont_display_login_form')?'checked':'';
@@ -371,6 +373,10 @@ else {
 	  <tr>
 		<th class='left'><b>email_verification_required</b></th>
 		<td><input type='checkbox' name='email_verification_required' value='1' $cbox_email_verification_required />&nbsp;$lang_email_verification_required</td>
+	  </tr>
+	  <tr>
+		<th class='left'><b>dont_mail_unverified_mails</b></th>
+		<td><input type='checkbox' name='dont_mail_unverified_mails' value='1' $cbox_dont_mail_unverified_mails />&nbsp;$lang_dont_mail_unverified_mails</td>
 	  </tr>
           <tr>
 		<th class='left'><b>email_from</b></th>

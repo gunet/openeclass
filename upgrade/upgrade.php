@@ -509,6 +509,7 @@ if (!isset($_POST['submit2'])) {
                         ('disable_eclass_stud_reg', '0'),
                         ('disable_eclass_prof_reg', '0'),
                         ('email_verification_required', '1'),
+                        ('dont_mail_unverified_mails', '1'),
                         ('close_user_registration', '0'),
                         ('code_key', '" . generate_secret_key2(32) . "')");
 

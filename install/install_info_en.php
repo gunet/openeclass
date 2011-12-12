@@ -292,6 +292,7 @@ square root of x-1 will be drawed. For syntax of all mathematical symbols, read 
 <ul>
  <li><em>email_required</em>: During user registration, email is required.</li>
  <li><em>email_verification_required</em>: Email must be verified during registration and if user changes it.</li>
+ <li><em>dont_mail_unverified_mails</em>: Don't send emails to users with unverified email address.</li>
  <li><em>email_from</em>: Emails will be sent with sender email address. Otherwise will be sent with platform administrator email address.</li>
  <li><em>am_required</em>: During user registration student ID is required.</li>
  <li><em>dropbox_allow_student_to_student</em>: In dropbox module, users can send files to each other.</li>
