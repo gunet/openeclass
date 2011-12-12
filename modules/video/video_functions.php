@@ -140,22 +140,22 @@ function choose_media_ahref($mediaDL, $mediaPath, $mediaPlay, $title, $filename)
  * 
  * @global string $userServer
  * @global string $code_cours
- * @param  string $videoURL
+ * @param  string $mediaURL
  * @param  string $title
  * @return string 
  */
-function choose_medialink_ahref($videoURL, $title)
+function choose_medialink_ahref($mediaURL, $title)
 {
     global $urlServer, $code_cours;
     
-    $ahref = "<a href='$videoURL' target='_blank'>". $title ."</a>";
+    $ahref = "<a href='$mediaURL' target='_blank'>". $title ."</a>";
     
-    if (is_embeddable_videolink($videoURL))
+    if (is_embeddable_medialink($mediaURL))
     {
-        $linkPlay = $urlServer ."modules/video/video.php?course=$code_cours&amp;action=playlink&amp;id=". urlencode(make_embeddable_videolink($videoURL));
+        $linkPlay = $urlServer ."modules/video/video.php?course=$code_cours&amp;action=playlink&amp;id=". urlencode(make_embeddable_medialink($mediaURL));
         
         if (file_exists(get_shadowbox_dir()))
-            $ahref = "<a href='".make_embeddable_videolink($videoURL)."' class='shadowbox' rel='shadowbox;width=".get_shadowbox_width().";height=".get_shadowbox_height()."' title='$title'>$title</a>";
+            $ahref = "<a href='".make_embeddable_medialink($mediaURL)."' class='shadowbox' rel='shadowbox;width=".get_shadowbox_width().";height=".get_shadowbox_height()."' title='$title'>$title</a>";
         else if (file_exists(get_fancybox2_dir()))
             $ahref = "<a href='".$linkPlay."' class='fancybox fancybox.iframe' title='$title'>$title</a>";
         else if (file_exists(get_colorbox_dir()))
@@ -195,21 +195,20 @@ function get_shadowbox_player($filename)
 }
 
 /**
- * Construct a proper object html tag for each type of video media we want to 
- * present.
+ * Construct a proper object html tag for each type of media
  * 
  * @global string $urlAppend
- * @param  string $videoPath
- * @param  string $videoURL
+ * @param  string $mediaPath
+ * @param  string $mediaURL
  * @param  string $bgcolor
  * @param  string $color
  * @return string 
  */
-function video_html_object($videoPath, $videoURL, $bgcolor = '#000000', $color = '#ffffff')
+function media_html_object($mediaPath, $mediaURL, $bgcolor = '#000000', $color = '#ffffff')
 {
     global $urlAppend;
     
-    $extension = get_file_extension($videoPath);
+    $extension = get_file_extension($mediaPath);
     
     $ret = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
             <html><head>
@@ -229,7 +228,7 @@ function video_html_object($videoPath, $videoURL, $bgcolor = '#000000', $color =
             if (using_ie())
                 $ret .= '<object width="'.get_object_width().'" height="'.get_object_height().'"
                             classid="clsid:6BF52A52-394A-11d3-B153-00C04F79FAA6">
-                            <param name="url" value="'.$videoPath.'">
+                            <param name="url" value="'.$mediaPath.'">
                             <param name="autostart" value="1">
                             <param name="uimode" value="full">
                             <param name="wmode" value="transparent">
@@ -237,7 +236,7 @@ function video_html_object($videoPath, $videoURL, $bgcolor = '#000000', $color =
             else
                 $ret .= '<object width="'.get_object_width().'" height="'.get_object_height().'"
                             type="video/x-ms-wmv"
-                            data="'.$videoPath.'">
+                            data="'.$mediaPath.'">
                             <param name="autostart" value="1">
                             <param name="showcontrols" value="1">
                             <param name="wmode" value="transparent">
@@ -261,7 +260,7 @@ function video_html_object($videoPath, $videoURL, $bgcolor = '#000000', $color =
                 $ret .= '<object width="'.get_object_width().'" height="'.get_object_height().'" kioskmode="true"
                             classid="clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B"
                             codebase="http://www.apple.com/qtactivex/qtplugin.cab#version=6,0,2,0">
-                            <param name="src" value="'.$videoPath.'">
+                            <param name="src" value="'.$mediaPath.'">
                             <param name="scale" value="aspect">
                             <param name="controller" value="true">
                             <param name="autoplay" value="true">
@@ -270,8 +269,8 @@ function video_html_object($videoPath, $videoURL, $bgcolor = '#000000', $color =
             else
                 $ret .= '<object width="'.get_object_width().'" height="'.get_object_height().'" kioskmode="true"
                             type="video/quicktime"
-                            data="'.$videoPath.'">
-                            <param name="src" value="'.$videoPath.'">
+                            data="'.$mediaPath.'">
+                            <param name="src" value="'.$mediaPath.'">
                             <param name="scale" value="aspect">
                             <param name="controller" value="true">
                             <param name="autoplay" value="true">
@@ -292,7 +291,7 @@ function video_html_object($videoPath, $videoURL, $bgcolor = '#000000', $color =
                              wmode: "transparent"
                              }, {
                              clip: {
-                                 url: "'.$videoPath.'",
+                                 url: "'.$mediaPath.'",
                                  scaling: "fit"
                              },
                              canvas: {
@@ -308,7 +307,7 @@ function video_html_object($videoPath, $videoURL, $bgcolor = '#000000', $color =
             if (using_ie())
                 $ret .= '<object width="'.get_object_width().'" height="'.get_object_height().'"
                              classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000">
-                             <param name="movie" value="'.$videoPath.'"/>
+                             <param name="movie" value="'.$mediaPath.'"/>
                              <param name="bgcolor" value="#000000">
                              <param name="allowfullscreen" value="true">
                              <param name="wmode" value="transparent">
@@ -318,7 +317,7 @@ function video_html_object($videoPath, $videoURL, $bgcolor = '#000000', $color =
                          </object>';
             else
                 $ret .= '<object width="'.get_object_width().'" height="'.get_object_height().'"
-                             data="'.$videoPath.'" 
+                             data="'.$mediaPath.'" 
                              type="application/x-shockwave-flash">
                              <param name="bgcolor" value="#000000">
                              <param name="allowfullscreen" value="true">
@@ -331,18 +330,18 @@ function video_html_object($videoPath, $videoURL, $bgcolor = '#000000', $color =
         case "ogg":
             $ret .= $startdiv;
             if (using_ie())
-                $ret .= '<a href="'.$videoURL.'">Download media</a>';
+                $ret .= '<a href="'.$mediaURL.'">Download media</a>';
             else
                 $ret .= '<video controls="" autoplay="" width="'.get_object_width().'" height="'.get_object_height().'"
                              style="margin: auto; position: absolute; top: 0; right: 0; bottom: 0; left: 0;" 
                              name="media" 
-                             src="'.$videoPath.'">
+                             src="'.$mediaPath.'">
                          </video>';
             $ret .= $enddiv;
             break;
         default:
             $ret .= $startdiv;
-            $ret .= '<a href="'.$videoURL.'">Download media</a>';
+            $ret .= '<a href="'.$mediaURL.'">Download media</a>';
             $ret .= $enddiv;
             break;
     }
@@ -353,15 +352,14 @@ function video_html_object($videoPath, $videoURL, $bgcolor = '#000000', $color =
 }
 
 /**
- * Construct a proper iframe html tag for each type of videolink media we want to 
- * present.
+ * Construct a proper iframe html tag for each type of medialink
  * 
- * @param  string $videoURL
+ * @param  string $mediaURL
  * @param  string $bgcolor
  * @param  string $color
  * @return string 
  */
-function videolink_iframe_object($videoURL, $bgcolor = '#000000', $color = '#ffffff')
+function medialink_iframe_object($mediaURL, $bgcolor = '#000000', $color = '#ffffff')
 {
     $ret = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
             <html><head>
@@ -375,14 +373,14 @@ function videolink_iframe_object($videoURL, $bgcolor = '#000000', $color = '#fff
     $got_embed = false;
     foreach ($need_embed as $pattern)
     {
-        if (preg_match($pattern, $videoURL))
+        if (preg_match($pattern, $mediaURL))
         {
             $ret .= '<object width="'.get_object_width().'" height="'.get_object_height().'">
                          <param name="allowFullScreen" value="true"/>
                          <param name="wmode" value="transparent"/>
-                         <param name="movie" value="'.$videoURL.'"/>
+                         <param name="movie" value="'.$mediaURL.'"/>
                          <embed flashVars="playerVars=autoPlay=yes"
-                             src="'.$videoURL.'"
+                             src="'.$mediaURL.'"
                              width="'.get_object_width().'" height="'.get_object_height().'"
                              allowFullScreen="true"
                              allowScriptAccess="always" 
@@ -397,7 +395,7 @@ function videolink_iframe_object($videoURL, $bgcolor = '#000000', $color = '#fff
     if (!$got_embed)
     {
         $ret .='<iframe width="'.get_object_width().'" height="'.get_object_height().'" 
-                    src="'.$videoURL.'" frameborder="0" allowfullscreen></iframe>';
+                    src="'.$mediaURL.'" frameborder="0" allowfullscreen></iframe>';
     }
     
     $ret .='</div></body>
@@ -456,12 +454,12 @@ function is_supported_media($filename)
 
 
 /**
- * Whether the videolink can be embedded in a modal box
+ * Whether the medialink can be embedded in a modal box
  * 
- * @param  string $videolink
+ * @param  string $medialink
  * @return boolean 
  */
-function is_embeddable_videolink($videolink)
+function is_embeddable_medialink($medialink)
 {
     $supported = array_merge(get_youtube_patterns(), get_vimeo_patterns(), 
                              get_google_patterns(), get_metacafe_patterns(),
@@ -470,7 +468,7 @@ function is_embeddable_videolink($videolink)
     
     foreach ($supported as $pattern)
     {
-        if (preg_match($pattern, $videolink))
+        if (preg_match($pattern, $medialink))
         {
             $ret = true;
         }
@@ -482,66 +480,66 @@ function is_embeddable_videolink($videolink)
 /**
  * Convert known media link types to embeddable links
  * 
- * @param  string $videolink
+ * @param  string $medialink
  * @return string 
  */
-function make_embeddable_videolink($videolink)
+function make_embeddable_medialink($medialink)
 {
     foreach (get_youtube_patterns() as $pattern)
     {
-        if (preg_match($pattern, $videolink, $matches))
+        if (preg_match($pattern, $medialink, $matches))
         {
             $sanitized = urlencode(strip_tags($matches[1]));
-            $videolink = 'http://www.youtube.com/embed/'. $sanitized .'?hl=en&amp;fs=1&amp;rel=0&amp;autoplay=1&amp;wmode=transparent';
+            $medialink = 'http://www.youtube.com/embed/'. $sanitized .'?hl=en&amp;fs=1&amp;rel=0&amp;autoplay=1&amp;wmode=transparent';
         }
     }
     
     foreach (get_vimeo_patterns() as $pattern)
     {
-        if (preg_match($pattern, $videolink, $matches))
+        if (preg_match($pattern, $medialink, $matches))
         {
             $sanitized = urlencode(strip_tags($matches[1]));
-            $videolink = 'http://player.vimeo.com/video/'. $sanitized .'?color=00ADEF&amp;fullscreen=1&amp;autoplay=1';
+            $medialink = 'http://player.vimeo.com/video/'. $sanitized .'?color=00ADEF&amp;fullscreen=1&amp;autoplay=1';
         }
     }
     
     foreach (get_google_patterns() as $pattern)
     {
-        if (preg_match($pattern, $videolink, $matches))
+        if (preg_match($pattern, $medialink, $matches))
         {
             $sanitized = urlencode(strip_tags($matches[1]));
-            $videolink = 'http://video.google.com/googleplayer.swf?docid='. $sanitized .'&amp;hl=en&amp;fs=true&amp;autoplay=true';
+            $medialink = 'http://video.google.com/googleplayer.swf?docid='. $sanitized .'&amp;hl=en&amp;fs=true&amp;autoplay=true';
         }
     }
     
     foreach (get_metacafe_patterns() as $pattern)
     {
-        if (preg_match($pattern, $videolink, $matches))
+        if (preg_match($pattern, $medialink, $matches))
         {
             $sanitized = urlencode(strip_tags($matches[1])) ."/". urlencode(strip_tags($matches[2]));
-            $videolink = 'http://www.metacafe.com/fplayer/'. $sanitized .'.swf';
+            $medialink = 'http://www.metacafe.com/fplayer/'. $sanitized .'.swf';
         }
     }
     
     foreach (get_myspace_patterns() as $pattern)
     {
-        if (preg_match($pattern, $videolink, $matches))
+        if (preg_match($pattern, $medialink, $matches))
         {
             $sanitized = urlencode(strip_tags($matches[1]));
-            $videolink = 'http://mediaservices.myspace.com/services/media/embed.aspx/m='. $sanitized .',t=1,mt=video,ap=1';
+            $medialink = 'http://mediaservices.myspace.com/services/media/embed.aspx/m='. $sanitized .',t=1,mt=video,ap=1';
         }
     }
     
     foreach (get_dailymotion_patterns() as $pattern)
     {
-        if (preg_match($pattern, $videolink, $matches))
+        if (preg_match($pattern, $medialink, $matches))
         {
             $sanitized = urlencode(strip_tags($matches[1]));
-            $videolink = 'http://www.dailymotion.com/embed/video/'. $sanitized .'?autoPlay=1';
+            $medialink = 'http://www.dailymotion.com/embed/video/'. $sanitized .'?autoPlay=1';
         }
     }
     
-    return $videolink;
+    return $medialink;
 }
 
 

@@ -31,6 +31,6 @@ if (isset($_GET['id']))
 {
     $id = $_GET['id'];
     
-    echo videolink_iframe_object(html_entity_decode($id), '#ffffff', '#000000');
+    echo medialink_iframe_object(html_entity_decode($id), '#ffffff', '#000000');
 }
 

@@ -191,9 +191,9 @@ switch ($module['contentType'])
                     directly_pass_lp_module($TABLEUSERMODULEPROGRESS, (int)$uid, (int)$learnPathModuleId);
                 }
                 
-                if (is_embeddable_videolink($assetPath))
+                if (is_embeddable_medialink($assetPath))
                 {
-                    $moduleStartAssetPage = "showMediaLink.php?course=$code_cours&amp;id=".urlencode(make_embeddable_videolink($assetPath));
+                    $moduleStartAssetPage = "showMediaLink.php?course=$code_cours&amp;id=".urlencode(make_embeddable_medialink($assetPath));
                 }
                 else
                 {
