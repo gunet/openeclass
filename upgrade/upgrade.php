@@ -264,8 +264,7 @@ if (!isset($_POST['submit2'])) {
 			('doc_quota', '200'),
 			('dropbox_quota', '100'),
 			('video_quota', '100'),
-			('group_quota', '100'),
-			('secret_key', '" . generate_secret_key() . "')");
+			('group_quota', '100')");
 
         if ($oldversion < '2.1.3') {
         	// delete useless field
@@ -511,7 +510,8 @@ if (!isset($_POST['submit2'])) {
                         ('email_verification_required', '1'),
                         ('dont_mail_unverified_mails', '1'),
                         ('close_user_registration', '0'),
-                        ('code_key', '" . generate_secret_key2(32) . "')");
+                        ('max_glossary_terms', '250'),
+                        ('code_key', '" . generate_secret_key(32) . "')");
 
                 // old users have their email verified
                 if (mysql_field_exists($mysqlMainDb, 'user', 'verified_mail')) {

@@ -541,8 +541,7 @@ db_query("INSERT INTO `config` (`key`, `value`) VALUES
 		('dropbox_allow_student_to_student', $dropbox_allow_student_to_student),
 		('block_username_change', $block_username_change),
 		('betacms', $betacms),
-		('secret_key', '" . generate_secret_key() . "'),
-		('code_key', '" . generate_secret_key2(32) . "'),
+		('code_key', '" . generate_secret_key(32) . "'),
 		('display_captcha', $display_captcha),
 		('insert_xml_metadata', $insert_xml_metadata),
 		('doc_quota', $doc_quota),
@@ -552,6 +551,7 @@ db_query("INSERT INTO `config` (`key`, `value`) VALUES
                 ('close_user_registration', $close_user_registration),
 		('disable_eclass_stud_reg', $disable_eclass_stud_reg),
 		('disable_eclass_prof_reg', $disable_eclass_prof_reg),
+                ('max_glossary_terms', '250'),
 		('version', '" . ECLASS_VERSION ."')");
 
 // Table passwd_reset (used by the password reset module)

@@ -148,9 +148,9 @@ if (isset($_POST['submit'])) {
 	// }
 	if (!empty($email_form) && ($email_form != $_SESSION['email']) 
                 && get_config('email_verification_required')) {
-		$verified_mail = EMAIL_UNVERIFIED;                	                
+		$verified_mail_sql = ", verified_mail = " . EMAIL_UNVERIFIED;                	                
 	} else {
-		$verified_mail = EMAIL_VERIFIED;                
+		$verified_mail_sql = '';
 	}
 	// everything is ok
 	$email_form = mb_strtolower(trim($email_form));
@@ -164,10 +164,10 @@ if (isset($_POST['submit'])) {
 						description = " . autoquote($desc_form) . ",
 						department = $department,
 						email_public = $email_public,
-						phone_public = $phone_public,                
-						verified_mail = $verified_mail,
+						phone_public = $phone_public,
                                                 receive_mail = $subscribe,
 						am_public = $am_public
+                                                $verified_mail_sql
 						WHERE user_id = $_SESSION[uid]")) {
 		$_SESSION['uname'] = $username_form;
 		$_SESSION['nom'] = $nom_form;
