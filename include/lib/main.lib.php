@@ -1848,7 +1848,11 @@ function get_glossary_terms($cours_id)
 
         $q = db_query("SELECT term, definition, url FROM `$mysqlMainDb`.glossary
                               WHERE course_id = $cours_id GROUP BY term");
-        
+
+        if (mysql_num_rows($q) > intval(get_config('max_glossary_terms'))) {
+                return false;
+        }
+
         $_SESSION['glossary'] = array();
 	$_SESSION['glossary_url'] = array();
         while ($row = mysql_fetch_array($q)) {

@@ -153,6 +153,7 @@ $active_ui_languages = '.$string_active_ui_languages."\n";
 		'group_quota' => true,
 		'video_quota' => true,
 		'dropbox_quota' => true,
+		'max_glossary_terms' => true,
 		'theme' => true,
 		'alt_auth_student_req' => true,
 		'disable_eclass_stud_reg' => true,
@@ -362,10 +363,15 @@ else {
 	$cbox_display_captcha = get_config('display_captcha')?'checked':'';
 	$cbox_insert_xml_metadata = get_config('insert_xml_metadata')?'checked':'';
 	$cbox_betacms = get_config('betacms')?'checked':'';
-                
+        $max_glossary_terms = get_config('max_glossary_terms');
+
         $tool_content .= "<fieldset>
         <legend>$langOtherOptions</legend>
         <table class='tbl' width='100%'>	
+	  <tr>
+		<th class='left'><b>max_glossary_terms</b></th>
+		<td><input type='text' name='max_glossary_terms' value='$max_glossary_terms' size='5' />&nbsp;$lang_max_glossary_terms</td>
+	  </tr>
 	  <tr>
 		<th class='left'><b>email_required</b></th>
 		<td><input type='checkbox' name='email_required' value='1' $cbox_email_required />&nbsp;$lang_email_required</td>

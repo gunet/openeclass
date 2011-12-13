@@ -39,6 +39,7 @@ mysql_select_db($mysqlMainDb);
 
 if ($is_editor) {
         load_js('tools.js');
+        $max_glossary_terms = get_config('max_glossary_terms');
 }
 
 $nameTools = $langGlossary;
@@ -56,7 +57,9 @@ if (isset($_GET['cat'])) {
         $cat_id = false;
 }
 
-list($glossary_index) = mysql_fetch_row(db_query("SELECT glossary_index FROM cours WHERE cours_id = $cours_id"));
+list($expand_glossary, $glossary_index) =
+        mysql_fetch_row(db_query("SELECT expand_glossary, glossary_index
+                                         FROM `$mysqlMainDb`.cours WHERE cours_id = $cours_id"));
 if ($glossary_index) {
         $prefixes = array();
         $q = db_query("SELECT DISTINCT UPPER(LEFT(term, 1)) AS prefix
@@ -86,7 +89,8 @@ if ($is_editor) {
         }
 
         if (isset($_POST['submit_config'])) {
-                db_query("UPDATE cours SET expand_glossary = " . (isset($_POST['expand'])? 1: 0) . ",
+                $expand_glossary = isset($_POST['expand'])? 1: 0;
+                db_query("UPDATE cours SET expand_glossary = $expand_glossary,
                                            glossary_index = " . (isset($_POST['index'])? 1: 0));
                 invalidate_glossary_cache();
                 $tool_content .= "<div class='success'>$langQuotaSuccess</div>";
@@ -151,10 +155,8 @@ if ($is_editor) {
         if (isset($_GET['config']))  {
                 $navigation[] = array('url' => $base_url, 'name' => $langGlossary);
                 $nameTools = $langConfig;
-                list($expand, $index) = mysql_fetch_row(db_query("SELECT expand_glossary, glossary_index
-                                        FROM `$mysqlMainDb`.cours WHERE cours_id = $cours_id"));
-                $checked_expand = $expand? ' checked="1"': '';
-                $checked_index = $index? ' checked="1"': '';
+                $checked_expand = $expand_glossary? ' checked="1"': '';
+                $checked_index = $glossary_index? ' checked="1"': '';
                 $tool_content .= "
               <form action='$base_url' method='post'>
                <fieldset>
@@ -249,6 +251,13 @@ if ($is_editor) {
                  </table>
                </fieldset>
              </form>\n";    
+        }
+        list($total_glossary_terms) =
+                mysql_fetch_row(db_query("SELECT COUNT(*) FROM glossary
+                                                          WHERE course_id = $cours_id"));
+        if ($expand_glossary and $total_glossary_terms > $max_glossary_terms) {
+                $tool_content .= sprintf("<p class='alert1'>$langGlossaryOverLimit</p>",
+                                         "<b>$max_glossary_terms</b>");
         }
 } else {
         // Show categories link for students if needed
