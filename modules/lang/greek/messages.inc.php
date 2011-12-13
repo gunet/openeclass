@@ -1597,6 +1597,7 @@ $langBeforeInstall1 = "Πριν προχωρήσετε στην εγκατάστ
 $langBeforeInstall2 = "Επίσης, γενικές οδηγίες για την πλατφόρμα μπορείτε να διαβάσετε ";
 $langInstallInstr = "Οδηγίες Εγκατάστασης";
 $langWithPHP = "με υποστήριξη PHP";
+$lang_max_glossary_terms = 'Δεν επιτρέπεται η εμφάνιση ορισμών όρων στις σελίδες μαθημάτων για μεγαλύτερο αριθμό όρων στο γλωσσάριο.';
 $lang_email_required = "Να είναι υποχρεωτικό το email του $langOfUser";
 $lang_email_verification_required = "Να είναι υποχρεωτική η επιβεβαίωση του e-mail του $langOfUser";
 $lang_dont_mail_unverified_mails = "Να μην γίνεται αποστολή e-mail σε $langUsersS που δεν έχουν επιβεβαιώσει την e-mail διεύθυνση τους";
@@ -3341,6 +3342,7 @@ $langGlossaryExpand = 'Εμφάνιση ορισμών στις σελίδες �
 $langGlossaryIndex = 'Αλφαβητικό ευρετήριο όρων';
 $langConfig = 'Ρυθμίσεις';
 $langGlossaryToCsv = "Όροι σε μορφή csv";
+$langGlossaryOverLimit = 'Το πλήθος όρων του γλωσσαρίου υπερβαίνει το όριο (%s) για εμφάνιση των ορισμών στις σελίδες του μαθήματος.';
 
 /********************************************
  Ebook

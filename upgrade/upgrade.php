@@ -112,6 +112,12 @@ if (!@chdir("../config/")) {
 }
 
 if (!isset($_POST['submit2'])) {      
+        if (ini_get('register_globals')) { // check if register globals is Off     
+                $tool_content .= "<div class='caution'>$langWarningInstall1</div>";
+        }
+        if (ini_get('short_open_tag')) { // check if short_open_tag is Off
+                $tool_content .= "<div class='caution'>$langWarningInstall2</div>";
+        }                
         // get old contact values
         $tool_content .= "<form action='$_SERVER[PHP_SELF]' method='post'>" .
                 "<div class='info'>" .
