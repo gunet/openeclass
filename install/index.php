@@ -663,7 +663,12 @@ elseif (isset($_REQUEST['install1']) || isset($_REQUEST['back1']))
 	$tool_content .= "<ul class='installBullet'>";
 	warnIfExtNotLoaded("ldap");
 	$tool_content .= "</ul>";
-
+        if (ini_get('register_globals')) { // check if register globals is Off     
+                $tool_content .= "<div class='caution'>$langWarningInstall1</div>";
+        }
+        if (ini_get('short_open_tag')) { // check if short_open_tag is Off
+                $tool_content .= "<div class='caution'>$langWarningInstall2</div>";
+        }                
 	$tool_content .= "
 	<p class='sub_title1'>$langOtherReq</p>
 	<ul class='installBullet'>
