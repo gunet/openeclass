@@ -62,17 +62,16 @@ if (isset($_POST['submit'])) {
         $tool_content .= "<form action='$_SERVER[PHP_SELF]' method='post'>";
         if (get_config('email_verification_required') && get_config('dont_mail_unverified_mails')) {
                 $user_email_status = get_mail_ver_status($uid);
-                if ( ($user_email_status == EMAIL_VERIFICATION_REQUIRED) or
-                                ($user_email_status == EMAIL_UNVERIFIED) ) {
-
+                if ($user_email_status == EMAIL_VERIFICATION_REQUIRED or
+                    $user_email_status == EMAIL_UNVERIFIED) {
                         $link = "<a href = '../auth/mail_verify_change.php?from_profile=TRUE'>$langHere</a>.";
                         $tool_content .= "<div class='alert1'>$langMailNotVerified $link</div>";
                 }
         }
         if (!get_user_email_notification_from_courses($uid)) {
-                $head_content .= '<script type="text/javascript">$(control_deactivate());</script>';
+                $head_content .= '<script type="text/javascript">$(control_deactivate);</script>';
                 $tool_content .= "<div class='info'>$langEmailUnsubscribeWarning</div>
-                                  <input type='checkbox' name='unsub' value='1'>&nbsp;$langEmailFromCourses";
+                                  <input type='checkbox' id='unsub' name='unsub' value='1'>&nbsp;$langEmailFromCourses";
         }
         $tool_content .= "<div class='info'>$langInfoUnsubscribe</div>
                           <div id='unsubscontrols'>";
