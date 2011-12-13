@@ -163,10 +163,10 @@ if(!$nbrExercises) {
 	} else { // student view
 		$tool_content .= "
 	      <th colspan='2'>$langExerciseName</th>
-	      <th width='110' class='center'>$langExerciseStart</th>
-	      <th width='110' class='center'>$langExerciseEnd</th>
+	      <th width='110' class='center'>$langExerciseStart / $langExerciseEnd</th>
 	      <th width='70' class='center'>$langExerciseConstrain</th>
 	      <th width='70' class='center'>$langExerciseAttemptsAllowed</th>
+              <th width='70' class='center'>$langResults</th>
 	    </tr>";
 	}
 	$tool_content .= "<tbody>";
@@ -261,9 +261,9 @@ if(!$nbrExercises) {
                                 <img src='$themeimg/arrow.png' alt='' />
                                 </td><td>".$row['titre']."&nbsp;&nbsp;(<font color='red'>$m[expired]</font>)";
                         }
-                        $tool_content .= "<br />$row[description]</td>
-                        <td align='center'>".nice_format(date("Y-m-d H:i", strtotime($row['StartDate'])), true)."</td>
-                        <td align='center'>".nice_format(date("Y-m-d H:i", strtotime($row['EndDate'])), true)."</td>";
+                        $tool_content .= "<br />$row[description]</td><td class='smaller' align='center'>
+                                ".nice_format(date("Y-m-d H:i", strtotime($row['StartDate'])), true)." / 
+                                ".nice_format(date("Y-m-d H:i", strtotime($row['EndDate'])), true)."</td>";
                         // how many attempts we have.
                         $CurrentAttempt = mysql_fetch_array(db_query("SELECT COUNT(*) FROM exercise_user_record
                                                                       WHERE eid='$row[id]' AND uid='$uid'", $currentCourseID));
@@ -277,6 +277,16 @@ if(!$nbrExercises) {
                                 $tool_content .= "<td align='center'>$CurrentAttempt[0]/$row[AttemptsAllowed]</td>";
                         } else {
                                 $tool_content .= "<td align='center'> - </td>";
+                        }
+                        // user last exercise score
+                        $r = mysql_fetch_array(db_query("SELECT TotalScore, TotalWeighting 
+                                FROM exercise_user_record WHERE uid=$uid 
+                                AND eid=$row[id] 
+                                ORDER BY eurid DESC LIMIT 1", $currentCourseID));
+                        if (empty($r['TotalScore'])) {
+                                $tool_content .= "<td align='center'>&dash;</td>";
+                        } else {
+                                $tool_content .= "<td align='center'>$r[TotalScore]/$r[TotalWeighting]</td>";
                         }
                         $tool_content .= "</tr>";
 		}
