@@ -2020,17 +2020,6 @@ function stop_output_buffering()
         }
 }
 
-// Generate a 25-character random alphanumeric string
-function generate_secret_key()
-{
-        mt_srand(make_seed());
-        $key = '';
-        for ($i = 0; $i < 5; $i++) {
-                $key .= base_convert(mt_rand(0x19A100, 0x39AA3FF), 10, 36);
-        }
-        return $key;
-}
-
 // Seed mt_rand
 function make_seed() {
 	list($usec, $sec) = explode(' ', microtime());
@@ -2039,7 +2028,7 @@ function make_seed() {
 
 // Generate a $len length random base64 encoded alphanumeric string
 // try first /dev/urandom but if not available generate pseudo-random string
-function generate_secret_key2($len)
+function generate_secret_key($len)
 {
 	if (($key = read_urandom($len)) == NULL) {
 		// poor man's choice
