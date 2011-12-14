@@ -284,7 +284,7 @@ if (isset($_POST['add_submit'])) {  // add
                    <span class='smaller'>$langPathUploadFile</span>
 		  </td>
 		<tr>
-		  <th>$langVideoTitle:</th>
+		  <th>$langTitle:</th>
 		  <td><input type='text' name='titre' size='55'></td>
 		</tr>
 		<tr>
@@ -327,7 +327,7 @@ if (isset($_POST['add_submit'])) {  // add
                       $langURL
                   </td>
 		<tr>
-		  <th>$langVideoTitle:</th>
+		  <th>$langTitle:</th>
 		  <td><input type='text' name='titre' size='55'></td>
 		</tr>
 		<tr>
@@ -398,7 +398,7 @@ if (isset($_GET['id']) and isset($_GET['table_edit']))  {
 		}
 		@$tool_content .= "
 		<tr>
-		  <th width='90'>$langVideoTitle:</th>
+		  <th width='90'>$langTitle:</th>
 		  <td><input type='text' name='titre' value='".q($titre)."' size='55'></td>
 		</tr>
 		<tr>
@@ -452,7 +452,7 @@ if ($count_video[0]<>0 || $count_video_links[0]<>0) {
         <table width='100%' class='tbl_alt'>
         <tr>
         
-          <th colspan='2'><div align='left'>$langDirectory $langVideo</div></th>
+          <th colspan='2'><div align='left'>$langVideoDirectory</div></th>
           <th width='150'><div align='left'>$langcreator</div></th>
           <th width='150'><div align='left'>$langpublisher</div></th>
           <th width='70'>$langdate</th>

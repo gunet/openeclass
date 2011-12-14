@@ -90,13 +90,14 @@ if (extension_loaded('zlib')) {
 	       
         // create zip file
 	$zipCourse = new PclZip($zipfile);
-        $result = $zipCourse->create($archivedir, PCLZIP_OPT_REMOVE_PATH, $webDir);
+        $result = $zipCourse->create($archivedir, 
+                                PCLZIP_OPT_REMOVE_PATH, "${webDir}courses/archive");
         $result = $zipCourse->add("$webDir/courses/$currentCourseID", 
-                                PCLZIP_OPT_REMOVE_PATH, "$webDir/courses/$currentCourseID", 
-                                PCLZIP_OPT_ADD_PATH, "course/archive/$currentCourseID/$backup_date/html");
-        $result = $zipCourse->add("$webDir/video/$currentCourseID", 
-                                PCLZIP_OPT_REMOVE_PATH, "$webDir/video/$currentCourseID", 
-                                PCLZIP_OPT_ADD_PATH, "course/archive/$currentCourseID/$backup_date/video_files");        
+                                PCLZIP_OPT_REMOVE_PATH, "${webDir}courses/$currentCourseID", 
+                                PCLZIP_OPT_ADD_PATH, "$currentCourseID/$backup_date/html");
+        $result = $zipCourse->add("${webDir}video/$currentCourseID", 
+                                PCLZIP_OPT_REMOVE_PATH, "${webDir}video/$currentCourseID", 
+                                PCLZIP_OPT_ADD_PATH, "$currentCourseID/$backup_date/video_files");        
         
         removeDir($archivedir);
         

@@ -309,12 +309,15 @@ function upgrade_course($code, $lang)
 
 function upgrade_course_2_5($code, $extramessage = '') {
         
-        global $langUpgCourse;
+        global $langUpgCourse, $langVideo;
 
 	mysql_select_db($code);
 	echo "<hr><p>$langUpgCourse <b>$code</b> (2.5) $extramessage<br>";
-	flush();
-
+	flush();        
+        
+        db_query("UPDATE `accueil` SET `rubrique` = '$langVideo' 
+                        WHERE `id` = 'MODULE_ID_VIDEO'");
+        
         db_query("ALTER TABLE `assignments` 
                         CHANGE `deadline` `deadline` DATETIME 
                         NOT NULL DEFAULT '0000-00-00'");

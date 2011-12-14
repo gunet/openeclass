@@ -327,12 +327,18 @@ function adminMenu(){
 	array_push($sideMenuText, $GLOBALS['langProfOpen']);
 	array_push($sideMenuLink, "../admin/listreq.php");
 	array_push($sideMenuImg, "arrow.png");
+        
+        
 	// check for close user registration
 	if (get_config('close_user_registration')) {
 		array_push($sideMenuText, $GLOBALS['langUserOpen']);
 		array_push($sideMenuLink, "../admin/listreq.php?type=user");
 		array_push($sideMenuImg, "arrow.png");
-	}
+	} else {
+                array_push($sideMenuText, $GLOBALS['langUserDetails']);
+                array_push($sideMenuLink, "../admin/newuseradmin.php?type=user");
+                array_push($sideMenuImg, "arrow.png");
+        }
 	
         if (isset($is_admin) and $is_admin) {
                 array_push($sideMenuText, $GLOBALS['langUserAuthentication']);
