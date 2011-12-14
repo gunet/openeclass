@@ -587,7 +587,7 @@ if (!isset($_POST['submit2'])) {
 			upgrade_course_2_4($code[0], $lang, "($i / $total)");
                 }
                 if ($oldversion < '2.5') {                        
-			upgrade_course_2_5($code[0], "($i / $total)");
+			upgrade_course_2_5($code[0], $lang, "($i / $total)");
                 }
                 echo "</p>\n";
                 $i++;
