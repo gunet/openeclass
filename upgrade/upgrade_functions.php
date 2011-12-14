@@ -304,19 +304,20 @@ function upgrade_course($code, $lang)
 	upgrade_course_2_2($code, $lang);
 	upgrade_course_2_3($code);
 	upgrade_course_2_4($code, $lang);
-        upgrade_course_2_5($code);
+        upgrade_course_2_5($code, $lang);
 }
 
-function upgrade_course_2_5($code, $extramessage = '') {
+function upgrade_course_2_5($code, $lang, $extramessage) {
         
-        global $langUpgCourse, $langVideo;
+        global $langUpgCourse, $global_messages;
 
 	mysql_select_db($code);
 	echo "<hr><p>$langUpgCourse <b>$code</b> (2.5) $extramessage<br>";
-	flush();        
-        
-        db_query("UPDATE `accueil` SET `rubrique` = '$langVideo' 
-                        WHERE `id` = 'MODULE_ID_VIDEO'");
+	flush();                
+
+        db_query("UPDATE `accueil` SET `rubrique` = " .
+                        quote($global_messages['langVideo'][$lang]) . "
+                        WHERE `define_var` = 'MODULE_ID_VIDEO'");
         
         db_query("ALTER TABLE `assignments` 
                         CHANGE `deadline` `deadline` DATETIME 
@@ -1795,6 +1796,7 @@ function load_global_messages()
                 $global_messages['langCourseUnits'][$templang] = $langCourseUnits;
                 $global_messages['langGlossary'][$templang] = $langGlossary;
                 $global_messages['langEBook'][$templang] = $langEBook;
+                $global_messages['langVideo'][$templang] = $langVideo;
         }
 }
 
