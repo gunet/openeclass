@@ -304,7 +304,7 @@ if ($is_editor or (isset($_SESSION['saved_editor']) and $_SESSION['saved_editor'
 }
 
 $emailnotification = '';
-if (get_user_email_notification($uid, $cours_id) == FALSE) {        
+if ($uid and $statut != 10 and !get_user_email_notification($uid, $cours_id)) {
         $emailnotification = "<div class='alert1'>$langNoUserEmailNotification 
         (<a href='{$urlServer}modules/profile/emailunsubscribe.php?cid=$cours_id'>$langModify</a>)</div>";
 } 

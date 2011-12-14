@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language de
-// Generated 2011-12-14 15:34:10
+// Generated 2011-12-14 17:17:50
 
 $langIntro = "Die <b>$siteName</b> Plattform ist ein vollständiges System zur Verwaltung von eKursen, welches den asynchronen eLearning Dienst unterstützt in <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
 $langVersion = "$siteName Version";
@@ -2735,14 +2735,14 @@ $langInvalidMail = "have invalid email address or there is no email address at a
 $langLinkUnsubscribe = "Note: You have received this email because you are registered  in course '%s'.<br /> 
                 If you don't wish to receive any more email messages from course click";
 $langEmailUnsubscribe = "Course notifications";
-$langInfoUnsubscribe = "You can modify email notifications from courses below. If you don't wish to receive email from a course, unchecked it and click in 'Submit'. <br />(Note: you are not being registered from course).";
+$langInfoUnsubscribe = "You can modify email notifications from courses below. If you don't wish to receive email from a course, uncheck it and click 'Submit'. <br />(Note: you won't be unregistered from the course).";
 $langEmailUnsubSuccess = "Emails from course '%s' will not be sent";
 $langEmailFromCourses = "Receive e-mails from my courses";
 $langAuthChangeUser = "Change authentication method";
 $langAuthChangeto = "Change to";
 $langAuthChangeno = "There is no other active authentication method";
 $langAuthChangeYes = "Authentication method updated";
-$langNoUserEmailNotification = "You are not being receiving email notifications from course.";
+$langNoUserEmailNotification = "You are not receiving email notifications from this course.";
 $langReplaceSameName = "Replace files with the same name";
 $langDropBoxIncompatible = "Attention! 'Dropbox' probably hasn't been restored due to compatibility reasons. Please check id of table
     'dropbox_file' in course database.";
@@ -2853,3 +2853,4 @@ $langMailNotVerified = "Your e-mail address is unconfirmed. You can't receive e-
 $langExerciseMaxAttemptsReached = "Maximum exercise attempts have been reached.";
 $lang_max_glossary_terms = 'The display of term definitions in course pages for a large number of terms in glossary is not allowed';
 $langGlossaryOverLimit = 'The number of glossary terms has exceeded the limit (%s) for displaying definitions in course pages.';
+$langVideoDirectory = "Multimedia files";

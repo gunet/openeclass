@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language en
-// Generated 2011-12-14 15:34:03
+// Generated 2011-12-14 17:17:43
 
 $langIntro = "The <b>$siteName</b> platform is a complete eCourses Management System supporting the Asynchronous eLearning Service in <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
 $langVersion = "$siteName version";
@@ -2109,7 +2109,7 @@ $langConfigError3 = "config.php was NOT modified! Please check permissions.";
 $langUpgradeSuccess = "Upgrade Database of Open eClass finished successfully!";
 $langUpgReady = "You are ready to use the new version of Open eClass!";
 $langUpgSucNotice = "If an error occured, you may encounter problems.<br><br>
-In such case, please contact us at <a href='mailto:eclass@gunet.gr'>eclass@gunet.gr</a><br><br>describing exactly the problem<br>, including (if possible) all error messages.";
+In that case, please contact us at <a href='mailto:eclass@gunet.gr'>eclass@gunet.gr</a> with a description of the problem, including (if possible) all error messages.";
 $langUpgCourse = "Upgrade of Course";
 $langUpgFileNotRead = "File couldn't be read. Please check permissions.";
 $langUpgFileNotModify = "File couldn't be modified. Please check permissions.";
@@ -2277,10 +2277,10 @@ $langFileNot = "The file could not be sent";
 $langTitleMod = "Video title modified";
 $langFAdd = "File added";
 $langDelF = "The file was deleted";
-$langAddV = "Add video ";
+$langAddV = "Add multimedia file";
 $langAddVideoLink = "Add video link";
 $langsendV = "Send audio/video";
-$langVideoTitle = "Document title";
+$langVideoTitle = "Title";
 $langDescr = "Description";
 $langDelList = "Delete whole list";
 $langVideoMod = "Video link modified";
@@ -2289,8 +2289,8 @@ $langURL = "Video Server URL";
 $langcreator = "Creator";
 $langpublisher = "Publisher";
 $langdate = "Date";
-$langNoVideo = "No available video files or links";
-$langEmptyVideoTitle = "Please type a video title";
+$langNoVideo = "No multimedia files or links available";
+$langEmptyVideoTitle = "Please enter a title";
 $langAddImage = "Include picture";
 $langAdministrator = "Administrator";
 $langChangePwdexp = "Enter new password twice to change, leave empty to keep it";
@@ -2544,7 +2544,7 @@ $langResourceUnitModified = "Resource details modified";
 $langInsertText = "text";
 $langInsertDoc = "document";
 $langInsertExercise = "exercise";
-$langInsertVideo = "video";
+$langInsertVideo = "multimedia file";
 $langInsertForum = "forum";
 $langInsertWork = 'assignment';
 $langUnknownResType = "Error: Unknown unit resource";
@@ -2891,14 +2891,14 @@ $langInvalidMail = "have invalid email address or there is no email address at a
 $langLinkUnsubscribe = "Note: You have received this email because you are registered  in course '%s'.<br /> 
                 If you don't wish to receive any more email messages from course click";
 $langEmailUnsubscribe = "Course notifications";
-$langInfoUnsubscribe = "You can modify email notifications from courses below. If you don't wish to receive email from a course, unchecked it and click in 'Submit'. <br />(Note: you are not being registered from course).";
+$langInfoUnsubscribe = "You can modify email notifications from courses below. If you don't wish to receive email from a course, uncheck it and click 'Submit'. <br />(Note: you won't be unregistered from the course).";
 $langEmailUnsubSuccess = "Emails from course '%s' will not be sent";
 $langEmailFromCourses = "Receive e-mails from my courses";
 $langAuthChangeUser = "Change authentication method";
 $langAuthChangeto = "Change to";
 $langAuthChangeno = "There is no other active authentication method";
 $langAuthChangeYes = "Authentication method updated";
-$langNoUserEmailNotification = "You are not being receiving email notifications from course.";
+$langNoUserEmailNotification = "You are not receiving email notifications from this course.";
 $langReplaceSameName = "Replace files with the same name";
 $langDropBoxIncompatible = "Attention! 'Dropbox' probably hasn't been restored due to compatibility reasons. Please check id of table
     'dropbox_file' in course database.";
@@ -3009,3 +3009,4 @@ $langMailNotVerified = "Your e-mail address is unconfirmed. You can't receive e-
 $langExerciseMaxAttemptsReached = "Maximum exercise attempts have been reached.";
 $lang_max_glossary_terms = 'The display of term definitions in course pages for a large number of terms in glossary is not allowed';
 $langGlossaryOverLimit = 'The number of glossary terms has exceeded the limit (%s) for displaying definitions in course pages.';
+$langVideoDirectory = "Multimedia files";
