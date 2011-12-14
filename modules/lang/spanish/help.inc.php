@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language es
-// Generated 2011-06-23 11:53:32
+// Generated 2011-12-14 15:34:03
 
 $langWindowClose = "Cierra la ventana";
 $langHDefault = 'Ayuda no disponible';
@@ -572,4 +572,68 @@ In order to <strong>delete</strong> an E-Book click in icon <strong>Delete</stro
 $langEBook_studentContent = "
 <h2>&nbsp;&nbsp;Browse</h2>
 <p>Click from left menu 'Ebook'. A list of ebook will be displayed. To browse an ebook just click in it.</p>
+";
+$langFor_studentContent = "
+<p>The platform allows the creation of discussion forums, where all users registered to the course, both students and educators, can participate.</p> If you want to participate in a forum just click at its title. Then choose the desired topic by clicking into it. If you want to reply to a post click in 'Reply'. Type your message and then click in 'Submit'.
+</p>
+<p>If you want to be notified by email for new posts in a specific topic or forum or forum category then click in (<img src='$themeimg/email.png' width=16 height=16>) . </p>" ;
+$langHMyAgenda = "My Agenda";
+$langMyAgendaContent = "<p>In 'My agenda' all events taken from 'Agenda' are displayed in a graphical calendar.</p>
+";
+$langCourseAccessHelp = "
+<ul>
+<li><b><img src='$themeimg/lock_open.png' width=16 height=16> Open Course</b>. The course is publicly accessible without need of user authentication or login.</li>
+<li><b><img src='$themeimg/lock_registration.png' width=16 height=16> Registration required</b>.  Users with an account in the platform can register to the course. It is possible to specify a course password to further limit access to only users who have this extra password.</li>
+<li><b><img src='$themeimg/lock_closed.png' width=16 height=16> Closed Course</b>. The course is accessible only to users already registered to it. The course administrator can add to or remove users from the course.</li>
+<li><b><img src='$themeimg/lock_inactive.png' width=16 height=16> Inactive course</b>. Course is visible and accessible <b>only</b> to its administrators, while it is not listed for other users even if they are in the course's users list.</li>
+</ul>
+";
+$langHPersonalStats = 'Personal Statistics';
+$langPersonalStatsContent = '
+<p>This module presents a number of useful information related to <b>course access statistics</b>. You can see the number of visits to each course in graph form, a table with total number and duration of visits per course, as well as a list of your logins and logouts from the platform with the date and time of each one.</p>';
+$langWikiSyntaxHelp = "<p>To create a new Wiki</p> <ul> <li>Click on the  'Create a new Wiki' link. Then enter the Wiki properties:</li> <br>
+<li><b>Wiki Title</b>: choose a title for the Wiki</li> <li><b>Wiki Description</b>: choose a description for the Wiki</li> <li><b>Access control management</b>: set the Wiki access control by checking/uncheking the box (see below)</li> </ul> <p>To enter a Wiki click on the Wiki title from the list.</p> <p>To change the properties of a Wiki click on the icon <img src='../../template/classic/img/edit.gif' align='absmiddle' border='0'>.</p>  <p>To delete a Wiki click on the icon <img src='../../template/classic/img/delete.gif' align='absmiddle' border='0'></p>  <p>To get the list of the last modified pages click on the link 'Recent changes'.</p>
+
+<h4>Basic syntax</h4>
+<p>Creating wiki pages and links between them</p>
+<p><strong>Wiki words</strong>: Wiki words are words written like <em>WikiWord</em>. To create a wiki page or to create a link to a wiki page, edit an existing one and add the title of the page in WikiWord syntax, for example <em>MyPage</em>, then save the page. Automatically the Wiki Word <em>MyPage</em> will be replaced with a link to the Wiki page <em>MyPage</em>&nbsp;;</p>
+<p><strong>Wiki links</strong> : Wiki links are like Hyperlinks (see below) except that they do not contain any protocol scheme (like <em>http://</em> or <em>ftp://</em>) and are automatically recognized as links to Wiki pages. To create a new page or create a link to an existing one using Wiki links, edit a page and add <code>[page title]</code> or <code>[name of link|title of page]</code> to its content. You can also use this syntax to change the text of a WikiWord link : <code>[name of link|WikiWord]</code>.</p>
+<ul>Hyperlinks
+<li><code>[url]</code>, <code>[name|url]</code>, <code>[name|url|language]</code> or <code>[name|url|language|title]</code>.&nbsp;;</li></ul>
+<ul>Image inclusion
+<li><code>((url|alternate text))</code>, <code>((url|alternate text|position))</code> or <code>((url|alternate text|position|long description))</code>. <br />The position argument can take the following values: L (left), R (right) or C (center). &nbsp;
+You can use the syntax as Hyperlinks. For example <code>[title|image.gif]</code>. This syntax is deprecated, consider to use the preceding one &nbsp;</li></ul>
+<ul>Link to an image
+<li>same as Hyperlinks but put a 1 in fifth argument to avoid image recognition and get an hyperlink to an image. For example <code>[image|image.gif||0]</code> will display a link to image.gif instead of display the image itself</li></ul>
+<p>Layout</p>
+<ul>
+<li><strong>Italic</strong>: surround your text with two single quotes <code>\'\'text\'\'</code>&nbsp;</li>
+<li><strong>Bold</strong>: surround your text with three single quotes underscores <code>\'\'\'text\'\'\'</code>&nbsp;</li>
+<li><strong>Underline</strong>: surround your text with two underscores <code>__text__</code>&nbsp;</li>
+<li><strong>Stroke</strong>: surround your text with two minus symbols <code>--text--</code>&nbsp;</li>
+<li><strong>Title</strong>: <code>!!!</code>, <code>!!</code>, <code>!</code> respectively for titles, sub-titles and sub-sub-titles&nbsp;</li>
+<li>List</li>
+line starting with <code>*</code> (unordered list) or <code>#</code> (ordered list). You can mix lists (<code>*#*</code>) to create multi-level lists&nbsp;
+<li>Paragraph</li>
+Separate paragraphs with one or more new lines&nbsp;
+</ul>
+
+<h4>Advanced syntax</h4>
+<ul>
+<li>Footnote</li>
+<code>$$ footnote text$$</code>&nbsp;
+<li>Preformated text</li>
+begin each line of preformated text with a blank space&nbsp;
+<li>Cite block</li>
+<code>&gt;</code> or <code>;:</code> before each line&nbsp;
+<li>Horizontal line</li>
+<code>----</code>&nbsp;
+<li>Forced line break</li>
+<code>%%%</code>&nbsp;
+<li>Acronym</li>
+<code>??acronym??</code> or <code>??acronym|definition??</code>&nbsp;
+<li>Inline cite</li>
+<code>{{cite}}</code>, <code>{{cite|language}}</code> or <code>{{cite|language|url}}</code>&nbsp;
+</ul>
+</ul>
 ";

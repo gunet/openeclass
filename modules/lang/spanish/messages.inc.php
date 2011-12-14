@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language es
-// Generated 2011-07-20 15:46:58
+// Generated 2011-12-14 15:34:03
 
 $langIntro = "El <b>$siteName</b> platforma es un completo Sistema de Administración eCursos que soporta el Servicio Asincrónico de eAprendizaje en <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
 $langVersion = "$siteName versión";
@@ -427,12 +427,6 @@ $langAuthSettings = "Ajustes de autentificación";
 $langWrongAuth = "Has tecleado un usurario/contraseña incorrectos";
 $langExplainShib = "Enter the names of the variables returned by the Shibboleth server. The variables will be written in <em>${webDir}secure/index.php</em>. Please note that if the Shibboleth Canonical Name contains the user's full name (both first and last names), you need the enter the character delimiting the first from the last name.";
 $langCharSeparator = "Delimiter character";
-// need translation
-$langAuthChangeUser = "Change Authentication Method";
-$langAuthChangeto = "Change to";
-$langAuthChangeno = "There is no other enabled authentication method";
-$langAuthChangeYes = "Successful authentication method change";
-// end of need translation
 $langConference = "Teleconferencia";
 $langWash = "Limpiado";
 $langWashFrom = "Chat libre desde";
@@ -1696,7 +1690,7 @@ $langRegistration = "Registro";
 $langSurname = "Apellido";
 $langUsername = "Nombre de usuario";
 $langConfirmation = "Confirmación";
-$langUserNotice = "(max 30 carácteres)";
+$langUserNotice = "(max 20 carácteres)";
 $langEmailNotice = "la dirección de e-mail address no se requiere, pero recuerda que si  ella, ".$langsTeacher."no puedes enviar<br>
 anuncios a tu buzón de correo, y tampoco puedes utilizar el campo 'has olvidado tu contraseña'";
 $langAm = $langStudent." ID";
@@ -2688,7 +2682,7 @@ $langBasicCfgSetting = "Basic settings";
 $langOptionalCfgSetting = "Optional Settings";
 $langWillWriteConfig = "Settings below will be written to <em>config</em> table of main database";
 $langToReqOpen = "Usera can register themselves without administration approval";
-$lang_email_required = "$langOfUser email address is required";
+$lang_email_required = "$langsOfStudent email address is required during registration";
 $lang_am_required = "$langsOfStudent ID is required during registration";
 $lang_dropbox_allow_student_to_student = "Allow file uploading between $langsOfStudents in 'Dropbox'";
 $lang_dont_display_login_form = "Don't display login form in platform home page";
@@ -2727,7 +2721,6 @@ $langJQNoneSelected = 'Choose recipients';
 $langJQCheckAll = 'Select all';
 $langJQUncheckAll = 'Unselect All';
 $langcas_logout = "CAS logout page";
-$langcas_ssout = "Enable CAS Single Sign Out";
 $langDocQuota = "Documents quota";
 $langVideoQuota = "Video quota";
 $langDropboxQuota = "Dropbox quota";
@@ -2807,10 +2800,150 @@ $langForumParticipation = 'Forum Participation';
 $langAdministratorForum = 'Forum Management';
 $langAdministratorGroup = 'Group Management';
 $langAltAuthStudentReq = 'Activate new account requests for students logging in via alternative authentication methods';
-// need translation
-$langDisableEclassStudReg = 'Disable student registration via Open Eclass method';
-$langDisableEclassProfReg = 'Disable professor registration via Open Eclass method';
-// end of need translation
 $langEditAuth = 'Change authentication method';
 $langEditAuthMethod = 'Authentication method:';
 $langEditAuthSetPass = 'You need to set a new password for the user.';
+$langUsersOf = "users'";
+$langOfUser = "user's";
+$langAddAdmin = "Add Admin";
+$langAddPowerUser = "Add co-administrator";
+$langAddManageUser = "Add user administrator";
+$langNotAdmin = "User is not administrator anymore";
+$langPowerUser = "Co-administrator";
+$langLastStudNone = "No registrations";
+$langDisableEclassStudReg = "Disable registration of $langsOfStudent via platform";
+$langDisableEclassProfReg = "Disable registration of $langsOfTeacher via platform";
+$langDisableEclassStudRegType = "Registration of $langsOfStudents via platform";
+$langDisableEclassProfRegType = "Registration of $langsOfTeachers via platform";
+$langDisableEclassStudRegYes = "$langStudents cannot being registered via platform";
+$langDisableEclassProfRegYes = "$langsTeachers cannon registered via platform";
+$langDisableEclassStudRegNo = "$langsStudents are being registered via platform";
+$langDisableEclassProfRegNo = "$langsTeachers are being registered via platform";
+$langcas_ssout = "CAS Single Sign Out Activation";
+$langEclassThemes = "Platform Theme";
+$langThemes = "Theme Selection";
+$langOtherOptions = "Other Options";
+$langDefaultQuota = "Default Quota for New Courses";
+$langCreateBackup = "Create configuration backup";
+$langInvalidMail = "have invalid email address or there is no email address at all";
+$langLinkUnsubscribe = "Note: You have received this email because you are registered  in course '%s'.<br /> 
+                If you don't wish to receive any more email messages from course click";
+$langEmailUnsubscribe = "Course notifications";
+$langInfoUnsubscribe = "You can modify email notifications from courses below. If you don't wish to receive email from a course, unchecked it and click in 'Submit'. <br />(Note: you are not being registered from course).";
+$langEmailUnsubSuccess = "Emails from course '%s' will not be sent";
+$langEmailFromCourses = "Receive e-mails from my courses";
+$langAuthChangeUser = "Change authentication method";
+$langAuthChangeto = "Change to";
+$langAuthChangeno = "There is no other active authentication method";
+$langAuthChangeYes = "Authentication method updated";
+$langNoUserEmailNotification = "You are not being receiving email notifications from course.";
+$langReplaceSameName = "Replace files with the same name";
+$langDropBoxIncompatible = "Attention! 'Dropbox' probably hasn't been restored due to compatibility reasons. Please check id of table
+    'dropbox_file' in course database.";
+$langInfoGrades = "grades";
+$langInfoGrade = "grade";
+$langFromRandomQuestions = "random questions from";
+$lang_email_verification_required = "Email verification of $langOfUser is required";
+$langCategoryDeletedGlossary = "Category has been deleted. The corresponding terms don't belong to category.";
+$langEmailVerified = "email has been verified";
+$langUserFree2 = "You have already been registered in platform!";
+$langUserFree3 = "There is already a request with this username!";
+$langPersonalSettingsLess = "Your personal settings have been saved.";
+$langUsersNotExist = "Users have not been found:";
+$langUsersAlreadyRegistered = "The following users are already registered in your course:";
+$langUsersRegistered = "The following users have been registered in your course:";
+$langEditor = "Course Editor";
+$langGiveRight = "Add Right";
+$langMailVerificationClick = "Please click in the link below:";
+$langMailVerificationSubject = "Confirmation of request registration account $siteName";
+$langMailChangeVerificationSubject = "Verification of email address $siteName";
+$langMailVerificationSuccess = "In order to complete your registration email address must be verified";
+$langMailVerificationSuccess2 = "Soon an email will be sent to you by $siteName with instructions for completing your registration";
+$langMailVerificationBody1 = "Thank you for your registration in $siteName.\n\n$langMailVerificationSuccess.\n\n$langMailVerificationClick\n%s";
+$langMailVerificationChangeBody = "In order to activate your account, email address must be verified.\n\n$langMailVerificationClick\n%s";
+$langMailVerificationError = "An error occured during sending email to address %s.<br/><br/>Please <a href='%s'>try again</a> or contact with administrator at: %s";
+$langMailVerificationError2 = "An error occured. Please contact with platform administrator.";
+$langMailVerificationToaddr = "to email address";
+$langMailVerificationCode = "Verification Code";
+$langMailVerificationNewCode = "Send verification code";
+$langMailVerificationWrong = "email address hasn't changed because is not completed or is invalid";
+$langMailVerificationAddrChange = "If email address is wrong, please enter a correcto one";
+$langMailVerificationSuccess3 = "Check that email address is correct and click in '<b>$langMailVerificationNewCode</b>'";
+$langMailVerificationReq = "email address must be verified before proceeding.<br /><br />$langMailVerificationSuccess3";
+$langMailVerificationSuccess4 = "Soon an email will be sent to you by $siteName with instructions for completing your registration";
+$langMailVerification = "$langUser e-mail Verification";
+$langMailVerificationNo = "Users who haven't verified their email";
+$langMailVerificationYes = "Users with email adress verified";
+$langMailVerificationPending = "Users with pending email address verification";
+$langMailVerificationNoU = "email has not been verified";
+$langMailVerificationYesU = "email has been verified";
+$langMailVerificationPendingU = "email verification is pending";
+$langMailVerificationSettings = 'email address verifications settings';
+$langMailVerificationNotice = "If email verification of $langOfUser is required and email verification is pending, then:<br /><lu><li>platform will redirect user to email verification page</li><li>user will not receive email from registered courses</li></lu>";
+$langMailVerificationNoticeAdmin = "Admin user cannot been modified";
+$langChangeTo = "Change to";
+$langMailVerificationChanged = "Has changed";
+$langMailVerificationChangedNo = "You haven't choose some change";
+$langMailVerificationChangedNoAdmin = "No users or admin email address is not allowed";
+$langCheckCourseAdmin = "
+        <b>Action requires course administrator rights.</b>
+        <br>You have been redirected to home page for logging in again.";
+$langCheckPowerUser = "
+        <b>Action requires course and user administration rights.</b>
+        <br>You have been redirected to home page for logging in again.";
+$langCheckUserManageUser = "<b>Action requires user administration rights.</b>
+        <br>You have been redirected to home page for logging in again.";
+$langCheckMailVerify = "
+        <b>$langMailVerificationSuccess</b>";
+$langAllAuthTypes = "All authentication methods";
+$m['from'] = "from";
+$m['pending'] = "email address verification pending";
+$langUnableUpdatePost = "Problem with updating posts in database";
+$langUnableUpdateTopic = "Problem with updating topics in database";
+$langMailVerify = "Verify e-mail";
+$langMailVerifyCodeError = "Verification code is wrong. Please repeat the process.";
+$langMailVerifyNoCode = "Link has expired. Please repeat the process from beginning.";
+$langMailVerifyNoId = "The link is not valid. Please repeat the process.";
+$langMailVerifyDB = "An error occured. Please contact with database administrator.";
+$langMailVerifyNoApplication = "Your application has not been found. Please repeat the process from beginning.";
+$langMailVerifyNoAccount = "Your account hasn't been found. Plase repeat the process from beginning or contact with platform administrator.";
+$langMailVerifySuccess = "Your email address verified with success.";
+$langMailVerifySuccess2 = "Your e-mail address was verified successfully.";
+$langMailVerifySuccessReq = "Creating account request has been renewed.";
+$langMailVerifySuccessU = "Your account has been enabled.";
+$langGlossaryIndex = 'Glossary Index';
+$langEBookNoSections = "Ebook sections have not defined";
+$langAdmins = "Administrators";
+$langManageUser = "Users administrator";
+$langHelpAdministrator = "Administrator can administrate platform";
+$langHelpPowerUser = "Co-administrator can administrate users and courses";
+$langHelpManageUser = "Users administrator can administrate only users";
+$langLinkUnsubscribeFromPlatform = "Note: You are receiving this message because you are registered in platform '%s'.<br /> 
+                If you don't wish to receive any more email messages click";
+$langEmailUnsubscribeWarning = "You have deactivated email messages from platform. You cannot modify course email setting before re-activation.";
+$langCourseInactive = "Course access is allowed only to $langsTeachers of course";
+$langCourseInactiveShort = "Inactive Course";
+$langSendInfoMail = "Send informative email to $langsTeachers of $siteName";
+$langInfoAboutEclass = "Info about $siteName";
+$lang_dont_mail_unverified_mails = "Don't send e-mail to $langUsersS with unverified e-mail addresses";
+$lang_email_from = "emails will be sent with sender email address";
+$langInsertMyMediaToolName = "Insert Multimedia";
+$langMediaAlreadyUsed = "This media file is already used in this learning path";
+$langMediaAsModule = "Use Media File";
+$langMediaAsModuleLabel = "Multimedia";
+$langMediaInsertedAsModule = "Has added as course units of learning path";
+$langMediaTypeDesc = "Multimedia";
+$m['linactive'] = 'Inactive Course';
+$langAddRole = "Add Role";
+$langGiveRightTutor = "Add group tutor right";
+$langGiveRightΕditor = "Add co-admin right";
+$langGiveRightAdmin = "Add admin right";
+$langRemoveRightTutor = "Remove tutor group right";
+$langRemoveRightEditor = "Remove co-admin right";
+$langRemoveRightAdmin = "Remove admin right";
+$langColorboxCurrent = "media file {current} of {total}";
+$langVerifiedMail = "Verified e-mail address";
+$langMailNotVerified = "Your e-mail address is unconfirmed. You can't receive e-mail notifications from courses until you verify it. To do so, please click";
+$langExerciseMaxAttemptsReached = "Maximum exercise attempts have been reached.";
+$lang_max_glossary_terms = 'The display of term definitions in course pages for a large number of terms in glossary is not allowed';
+$langGlossaryOverLimit = 'The number of glossary terms has exceeded the limit (%s) for displaying definitions in course pages.';
