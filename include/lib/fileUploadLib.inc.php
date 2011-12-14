@@ -438,7 +438,7 @@ function showquota($quota, $used) {
 	format_bytesize($used, '0');
 	//telos diamorfwshs ths grafikh mparas kai twn arithmitikwn statistikwn stoixeiwn
 	//ektypwsh pinaka me arithmitika stoixeia + thn grafikh bara
-        if ($subsystem == GROUP) {
+        if ($subsystem == 'GROUP') {
                 $link = "$_SERVER[PHP_SELF]?course=$code_cours&amp;group_id=$group_id";
         } else {
                 $link = "$_SERVER[PHP_SELF]?course=$code_cours";

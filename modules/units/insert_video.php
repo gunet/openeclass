@@ -23,7 +23,7 @@
 function list_videos()
 {
         global $id, $currentCourseID, $tool_content, $urlServer,
-               $langVideoTitle, $langDescr, $langDate, $langChoice,
+               $langTitle, $langDescr, $langDate, $langChoice,
                $langAddModulesButton, $langNoVideo, $code_cours,
                $themeimg; 
 
@@ -38,7 +38,7 @@ function list_videos()
                                 $tool_content .= "\n  <form action='insert.php?course=$code_cours' method='post'><input type='hidden' name='id' value='$id' />";
                                 $tool_content .= "\n  <table class='tbl_alt' width='99%'>";
                         	$tool_content .= "\n  <tr>" .
-                                                 "\n    <th><div align='left'>&nbsp;$langVideoTitle</div></th>" .
+                                                 "\n    <th><div align='left'>&nbsp;$langTitle</div></th>" .
                                                  "\n    <th><div align='left'>$langDescr</div></th>" .
                                                  "\n    <th width='100'>$langDate</th>" .
                                                  "\n    <th width='80'>$langChoice</th>" .

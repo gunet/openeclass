@@ -227,7 +227,7 @@ $langQuotaSuccess = "Η αλλαγή έγινε με επιτυχία";
 $langQuotaFail = "Η αλλαγή δεν έγινε!";
 $langMaxQuota = "έχει μέγιστο επιτρεπτό αποθηκευτικό χώρο";
 $langLegend = "Για το υποσύστημα";
-$langVideo = "Βίντεο";
+$langVideo = "Πολυμέσα";
 
 // Added by vagpits
 // General
@@ -2943,10 +2943,10 @@ $langFileNot="Το αρχείο δεν στάλθηκε";
 $langTitleMod="Ο τίτλος του εγγράφου τροποποιήθηκε";
 $langFAdd="Το αρχείο προστέθηκε";
 $langDelF="Το αρχείο διαγράφηκε";
-$langAddV="Προσθήκη βίντεο";
+$langAddV="Προσθήκη πολυμεσικού αρχείου";
 $langAddVideoLink="Προσθήκη συνδέσμου βίντεο";
 $langsendV="Αποστολή αρχείου ήχου ή βίντεο";
-$langVideoTitle="Τίτλος βίντεο";
+$langVideoTitle="Τίτλος";
 $langDescr="Περιγραφή";
 $langDelList="Διαγραφή όλων";
 $langVideoMod = "Τα στοιχεία του συνδέσμου τροποποιήθηκαν";
@@ -2955,9 +2955,10 @@ $langURL="Εξωτερικός σύνδεσμος προς τον εξυπηρε
 $langcreator="Δημιουργός";
 $langpublisher="Εκδότης";
 $langdate="Ημερομηνία";
-$langNoVideo = "Δεν υπάρχουν διαθέσιμα βίντεο για το μάθημα";
-$langEmptyVideoTitle = "Παρακαλώ πληκτρολογήστε ένα τίτλο για το βίντεο σας";
+$langNoVideo = "Δεν υπάρχουν διαθέσιμα πολυμεσικά αρχεία";
+$langEmptyVideoTitle = "Παρακαλώ πληκτρολογήστε ένα τίτλο για το αρχείο σας";
 $langColorboxCurrent = "πολυμέσο {current} από {total}";
+$langVideoDirectory = "Πολυμεσικά αρχεία";
 
 /*************************************************************
 * wiki.php
@@ -3248,7 +3249,7 @@ $langResourceUnitModified = "Τα στοιχεία του πόρου της εν
 $langInsertText = "κειμένου";
 $langInsertDoc = "εγγράφου";
 $langInsertExercise = "άσκησης";
-$langInsertVideo = "βίντεο";
+$langInsertVideo = "πολυμεσικού αρχείου";
 $langInsertForum = "περιοχής συζητήσεων";
 $langInsertWork = 'εργασίας';
 $langInsertWiki = 'wiki';
