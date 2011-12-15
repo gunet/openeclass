@@ -1204,7 +1204,7 @@ $langGetExistingQuestion="Ερώτηση από άλλη άσκηση";
 
 // question_pool.php
 $langQuestionPool="Διαθέσιμες Ερωτήσεις";
-$langOrphanQuestions="Ερωτήσεις χωρίς απάντηση";
+$langOrphanQuestions="Ορφανές Ερωτήσεις";
 $langNoQuestion="Δεν έχουν ορισθεί ερωτήσεις για τη συγκεκριμένη άσκηση";
 $langAllExercises="Όλες οι ερωτήσεις";
 $langFilter="Φιλτράρισμα";
