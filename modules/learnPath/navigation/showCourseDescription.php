@@ -52,7 +52,7 @@ $unit_id = description_unit_id($cours_id);
   <link href="../../../template/<?php echo $theme ?>/theme.css" rel="stylesheet" type="text/css" />
   <title><?php echo $langCourseProgram ?></title>
 </head>
-<body style="margin: 0px; padding-left: 5px; height: 100%!important; height: auto; background-color: #ffffff;">
+<body style="margin: 0px; padding-left: 0px; height: 100%!important; height: auto; background-color: #ffffff;">
 <div id="content">
 
 <?php
