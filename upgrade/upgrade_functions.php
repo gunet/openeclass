@@ -307,7 +307,7 @@ function upgrade_course($code, $lang)
         upgrade_course_2_5($code, $lang);
 }
 
-function upgrade_course_2_5($code, $lang, $extramessage) {
+function upgrade_course_2_5($code, $lang, $extramessage = '') {
         
         global $langUpgCourse, $global_messages;
 
