@@ -101,7 +101,7 @@ if ($is_editor) {
 } else {
         $visibility_check = "AND visible = 1 AND ebook_subsection.id IS NOT NULL";
 }
-$q = db_query("SELECT ebook.id, ebook.title, visible, ebook_subsection.id AS sid
+$q = db_query("SELECT ebook.id, ebook.title, visible, MAX(ebook_subsection.id) AS sid
                       FROM ebook LEFT JOIN ebook_section ON ebook.id = ebook_id
                            LEFT JOIN ebook_subsection ON ebook_section.id = section_id
                       WHERE course_id = $cours_id
