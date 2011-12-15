@@ -164,14 +164,24 @@ $temp_StartDate = mktime(substr($temp_StartDate, 11, 2), substr($temp_StartDate,
 $temp_EndDate = mktime(substr($temp_EndDate, 11, 2), substr($temp_EndDate, 14, 2), 0, substr($temp_EndDate, 5, 2), substr($temp_EndDate, 8, 2), substr($temp_EndDate, 0, 4));
 $temp_CurrentDate = mktime(substr($temp_CurrentDate, 11, 2), substr($temp_CurrentDate, 14, 2), 0, substr($temp_CurrentDate, 5, 2), substr($temp_CurrentDate, 8, 2), substr($temp_CurrentDate, 0, 4));
 
-// check if exercise has expired 
-$CurrentAttempt = mysql_fetch_array(db_query("SELECT COUNT(*) FROM exercise_user_record 
-		WHERE eid='$eid_temp' AND uid='$uid'", $currentCourseID));
-++$CurrentAttempt[0];
-if (($exerciseAllowedAttempts > 0 and $CurrentAttempt[0] > $exerciseAllowedAttempts) || 
-        (($temp_CurrentDate < $temp_StartDate) || ($temp_CurrentDate >= $temp_EndDate))) { 
-	echo "<br/><div class='alert1'>$langExerciseExpired</div>";
-	exit();
+if (!$is_editor) {
+    $error = FALSE;
+    // check if exercise has expired or is active
+    $CurrentAttempt = mysql_fetch_array(db_query("SELECT COUNT(*) FROM exercise_user_record 
+                    WHERE eid='$eid_temp' AND uid='$uid'", $currentCourseID));
+    ++$CurrentAttempt[0];
+    if ($exerciseAllowedAttempts > 0 and $CurrentAttempt[0] > $exerciseAllowedAttempts) {
+        $message = $langExerciseMaxAttemptsReached;
+        $error = TRUE;
+    }
+    if (($temp_CurrentDate < $temp_StartDate) || ($temp_CurrentDate >= $temp_EndDate)) {
+        $message = $langExerciseExpired;
+        $error = TRUE;
+    }
+    if ($error == TRUE) {
+        echo "<br/><td class='alert1'>$message</td>";
+        exit();
+    }
 }
 
 if (isset($_SESSION['questionList'][$exerciseId])) {
