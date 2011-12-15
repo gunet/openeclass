@@ -64,7 +64,7 @@ echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www
     .'<link href="../../../template/'.$theme.'/theme.css" rel="stylesheet" type="text/css" />'."\n"
     .'<title>'.$langExercicesResult.'</title>'."\n"
     .'</head>'."\n"
-    .'<body style="margin: 0px; padding-left: 5px; height: 100%!important; height: auto; background-color: #ffffff;">'."\n"
+    .'<body style="margin: 0px; padding-left: 0px; height: 100%!important; height: auto; background-color: #ffffff;">'."\n"
     .'<div id="content">';
 
 $nameTools = $langExercicesResult;

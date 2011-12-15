@@ -38,7 +38,7 @@ $TOCurl = "../viewer_toc.php?course=$code_cours";
   //-->
  </script>
 </head> 
-<body style="margin: 0px; padding-left: 5px; height: 100%!important; height: auto; background-color: #ffffff;">
+<body style="margin: 0px; padding-left: 0px; height: 100%!important; height: auto; background-color: #ffffff;">
     <div id="content">
   <br /><br /><br />
 <?php
