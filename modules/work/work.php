@@ -482,11 +482,8 @@ function delete_assignment($id) {
 	$secret = work_secret($id);
 	db_query("DELETE FROM assignments WHERE id='$id'");
 	db_query("DELETE FROM assignment_submit WHERE assignment_id='$id'");
-	@mkdir("$webDir/courses/garbage");
-	@mkdir("$webDir/courses/garbage/$currentCourseID",0777);
-	@mkdir("$webDir/courses/garbage/$currentCourseID/work",0777);
 	move_dir("$workPath/$secret",
-	"$webDir/courses/garbage/$currentCourseID/work/${id}_$secret");
+	"$webDir/courses/garbage/${currentCourseID}_work_${id}_$secret");
 
 	$tool_content .="\n  <p class=\"success\">$langDeleted<br /><a href=\"$_SERVER[PHP_SELF]?course=$code_cours\">".$langBack."</a></p>";
 }
