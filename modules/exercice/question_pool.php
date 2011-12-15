@@ -110,7 +110,7 @@ if($is_editor) {
 	
 	$tool_content .= "</li></ul></div>";
 
-	$tool_content .= "<form method='get' action='$_SERVER[PHP_SELF]'><input type='hidden' name='course' value='$code_cours'>";
+	$tool_content .= "<form name='qfilter' method='get' action='$_SERVER[PHP_SELF]'><input type='hidden' name='course' value='$code_cours'>";
 	if (isset($fromExercise)) {
 		$tool_content .= "<input type='hidden' name='fromExercise' value='$fromExercise'>";
 	}
@@ -122,7 +122,7 @@ if($is_editor) {
 		$tool_content .= "<td colspan='4'>";
 	}
         $tool_content .= "<div align='right'><b>".$langFilter."</b>:
-	   <select name='exerciseId' class='FormData_InputText'>"."
+	   <select onChange='document.qfilter.submit();' name='exerciseId' class='FormData_InputText'>"."
 	     <option value=\"0\">-- ".$langAllExercises." --</option>"."
 	     <option value=\"-1\" ";
 		
@@ -148,8 +148,7 @@ if($is_editor) {
 		}
 		$tool_content .= ">".$row['titre']."</option>\n";
 	}
-	$tool_content .= "</select>
-	<input type='submit' value='$langQuestionView'></div></td></tr>\n";
+	$tool_content .= "</select></div></td></tr>\n";
 
 	$from = $page * QUESTIONS_PER_PAGE;
 	
