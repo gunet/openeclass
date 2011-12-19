@@ -205,7 +205,7 @@ db_query("CREATE TABLE user (
       forum_flag DATE NOT NULL DEFAULT '0000-00-00',
       description TEXT,
       has_icon BOOL NOT NULL DEFAULT 0,
-      verified_mail BOOL NOT NULL DEFAULT 1,
+      verified_mail BOOL NOT NULL DEFAULT ".EMAIL_UNVERIFIED.",
       receive_mail BOOL NOT NULL DEFAULT 1,
       email_public TINYINT(1) NOT NULL DEFAULT 0,
       phone_public TINYINT(1) NOT NULL DEFAULT 0,
