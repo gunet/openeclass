@@ -585,7 +585,7 @@ db_query("CREATE TABLE poll (
       creator_id mediumint(8) unsigned NOT NULL default 0,
       course_id varchar(20) NOT NULL default 0,
       name varchar(255) NOT NULL default '',
-      creation_date date NOT NULL default '0000-00-00',
+      creation_date datetime NOT NULL default '0000-00-00 00:00:00',
       start_date datetime NOT NULL default '0000-00-00 00:00:00',
       end_date datetime NOT NULL default '0000-00-00 00:00:00',
       active int(11) NOT NULL default 0,
@@ -599,7 +599,7 @@ db_query("CREATE TABLE poll (
       	aid int(11) NOT NULL default 0,
 	answer_text TEXT NOT NULL,
 	user_id int(11) NOT NULL default 0,
-      submit_date date NOT NULL default '0000-00-00',
+      submit_date datetime NOT NULL default '0000-00-00 00:00:00',
       PRIMARY KEY  (arid))
      $charset_spec");
 
@@ -627,7 +627,7 @@ db_query("CREATE TABLE `lp_module` (
               `comment` text NOT NULL,
               `accessibility` enum('PRIVATE','PUBLIC') NOT NULL default 'PRIVATE',
               `startAsset_id` int(11) NOT NULL default 0,
-              `contentType` enum('CLARODOC','DOCUMENT','EXERCISE','HANDMADE','SCORM','SCORM_ASSET','LABEL','COURSE_DESCRIPTION','LINK') NOT NULL,
+              `contentType` enum('CLARODOC','DOCUMENT','EXERCISE','HANDMADE','SCORM','SCORM_ASSET','LABEL','COURSE_DESCRIPTION','LINK','MEDIA','MEDIALINK') NOT NULL,
               `launch_data` text NOT NULL,
               PRIMARY KEY  (`module_id`)
              )  $charset_spec");
