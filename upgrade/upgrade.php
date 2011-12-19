@@ -367,8 +367,9 @@ if (!isset($_POST['submit2'])) {
                         db_query("ALTER TABLE `annonces` ADD `visibility` CHAR(1) NOT NULL DEFAULT 'v'");
                 mysql_field_exists($mysqlMainDb, 'user', 'description') or
                         db_query("ALTER TABLE `user` ADD description TEXT,
-                                                     ADD has_icon BOOL NOT NULL DEFAULT 0,
-                                                     ADD verified_mail BOOL NOT NULL DEFAULT 2,
+                                                     ADD has_icon BOOL NOT NULL DEFAULT 0");
+                mysql_field_exists($mysqlMainDb, 'user', 'verified_mail') or
+                        db_query("ALTER TABLE `user` ADD verified_mail BOOL NOT NULL DEFAULT ".EMAIL_UNVERIFIED.",
                                                      ADD receive_mail BOOL NOT NULL DEFAULT 1");
                 mysql_field_exists($mysqlMainDb, 'cours_user', 'receive_mail') or
                         db_query("ALTER TABLE `cours_user` ADD receive_mail BOOL NOT NULL DEFAULT 1");
