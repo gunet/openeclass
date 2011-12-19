@@ -526,7 +526,7 @@ if (!isset($_POST['submit2'])) {
                         db_query('UPDATE `user` SET `verified_mail`= ' . EMAIL_VERIFIED);				
                 }
                 mysql_field_exists($mysqlMainDb, 'user_request', 'verified_mail') or
-                        db_query("ALTER TABLE `user_request` ADD `verified_mail` TINYINT(1) NOT NULL DEFAULT 2 AFTER `email`");		
+                        db_query("ALTER TABLE `user_request` ADD `verified_mail` TINYINT(1) NOT NULL DEFAULT ".EMAIL_UNVERIFIED." AFTER `email`");		
 
                 db_query("UPDATE `user` SET `email`=LOWER(TRIM(`email`))");
                 db_query("UPDATE `user` SET `username`=TRIM(`username`)");

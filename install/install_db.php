@@ -375,7 +375,7 @@ db_query("CREATE TABLE user_request (
                 uname varchar(255) NOT NULL DEFAULT '',
                 password varchar(255) NOT NULL DEFAULT '',
                 email varchar(255) NOT NULL DEFAULT '',
-                verified_mail tinyint(1) NOT NULL DEFAULT '2',
+                verified_mail tinyint(1) NOT NULL DEFAULT ".EMAIL_UNVERIFIED.",
                 faculty_id INT(11) NOT NULL DEFAULT 0,
                 phone varchar(20) NOT NULL DEFAULT '',
 		am varchar(20) NOT NULL DEFAULT '',
