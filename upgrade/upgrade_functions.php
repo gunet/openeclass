@@ -321,15 +321,15 @@ function upgrade_course_2_5($code, $lang, $extramessage = '') {
         
         db_query("ALTER TABLE `assignments` 
                         CHANGE `deadline` `deadline` DATETIME 
-                        NOT NULL DEFAULT '0000-00-00'");
+                        NOT NULL DEFAULT '0000-00-00 00:00:00'");
         
         db_query("ALTER TABLE `assignments` 
                         CHANGE `submission_date` `submission_date` DATETIME 
-                        NOT NULL DEFAULT '0000-00-00'");
+                        NOT NULL DEFAULT '0000-00-00 00:00:00'");
         
         db_query("ALTER TABLE `assignment_submit` 
                         CHANGE `submission_date` `submission_date` DATETIME 
-                        NOT NULL DEFAULT '0000-00-00'");
+                        NOT NULL DEFAULT '0000-00-00 00:00:00'");
         
         db_query("ALTER TABLE `poll`
                         CHANGE `start_date` `start_date` DATETIME
