@@ -135,8 +135,7 @@ if ($multi_reg) {
                         WHERE cu.cours_id = $cours_id AND
                               cu.user_id = u.user_id AND
                               u.user_id NOT IN (SELECT user_id FROM group_members WHERE group_id = $group_id) AND
-                              cu.statut = 5 AND
-                              cu.tutor = 0
+                              cu.statut = 5
                         GROUP BY u.user_id
                         ORDER BY u.nom, u.prenom";
 } else {
@@ -146,7 +145,6 @@ if ($multi_reg) {
                         WHERE cu.cours_id = $cours_id AND
                               cu.user_id = u.user_id AND
                               cu.statut = 5 AND
-                              cu.tutor = 0 AND
                               u.user_id NOT IN (SELECT user_id FROM group_members, `group`
                                                                WHERE `group`.id = group_members.group_id AND
                                                                `group`.course_id = $cours_id)
