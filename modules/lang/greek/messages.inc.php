@@ -3295,6 +3295,6 @@ $langEBookNoSections = "Δεν έχουν οριστεί ενότητες";
  *******************************************/
 
 $langJQSelectNum = 'Επιλέχτηκαν # από #';
-$langJQNoneSelected = 'Επιλέξτε παραλήπτες';
+$langJQNoneSelected = 'Επιλέξτε';
 $langJQCheckAll = 'Επιλογή όλων';
 $langJQUncheckAll = 'Αφαίρεση όλων';
