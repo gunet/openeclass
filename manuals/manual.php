@@ -63,19 +63,19 @@ if (isset($language) and $language == 'greek') {
 $tool_content .= "<table width='100%' class='tbl_alt'>
   <tr>
     <th width='16'><img src='$themeimg/pdf.png' width='16' height='16' alt='icon'></th>
-    <td>". manlink('OpeneClass24', $ext, $langFinalDesc) ."</td>
+    <td>". manlink('OpeneClass25', $ext, $langFinalDesc) ."</td>
   </tr>
   <tr>
     <th width='16'><img src='$themeimg/pdf.png' width='16' height='16' alt='icon'></th>
-    <td> ". manlink('OpeneClass24_short', $ext, $langShortDesc) ."</td>
+    <td> ". manlink('OpeneClass25_short', $ext, $langShortDesc) ."</td>
   </tr>
   <tr>
     <th width='16'><img src='$themeimg/pdf.png' width='16' height='16' alt='icon'></th>
-    <td>". manlink('manT/OpeneClass24_ManT', $ext, $langManT) ."</td>
+    <td>". manlink('manT/OpeneClass25_ManT', $ext, $langManT) ."</td>
   </tr>
   <tr>
     <th width='16'><img src='$themeimg/pdf.png' width='16' height='16' alt='icon'></th>
-    <td> ". manlink('manS/OpeneClass24_ManS', $ext, $langManS) ."</td>
+    <td> ". manlink('manS/OpeneClass25_ManS', $ext, $langManS) ."</td>
   </tr>
 </table>
 ";

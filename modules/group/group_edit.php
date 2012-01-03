@@ -42,6 +42,20 @@ initialize_group_info($group_id);
 $navigation[] = array ('url' => 'group.php?course='.$code_cours, 'name' => $langGroups);
 $navigation[] = array ('url' => "group_space.php?course=$code_cours&amp;group_id=$group_id", 'name' => q($group_name));
 
+load_js('jquery');
+load_js('jquery-ui');
+load_js('jquery.multiselect.min.js');
+$head_content .= "<script type='text/javascript'>$(document).ready(function () {
+        $('#select-tutor').multiselect({
+                selectedText: '$langJQSelectNum',
+                noneSelectedText: '$langJQNoneSelected',
+                checkAllText: '$langJQCheckAll',
+                uncheckAllText: '$langJQUncheckAll'
+        });
+});</script>
+<link href='../../js/jquery-ui.css' rel='stylesheet' type='text/css'>
+<link href='../../js/jquery.multiselect.css' rel='stylesheet' type='text/css'>";
+
 if (!($is_editor or $is_tutor)) {
         header('Location: group_space.php?course='.$code_cours.'&group_id=' . $group_id);
         exit;
@@ -103,7 +117,7 @@ if (isset($_POST['modify'])) {
 $tool_content_group_name = q($group_name);
 
 if ($is_editor) {
-        $tool_content_tutor = "<select name='tutor[]' multiple='multiple'>\n";
+        $tool_content_tutor = "<select name='tutor[]' multiple='multiple' id='select-tutor'>\n";
         $q = db_query("SELECT user.user_id, nom, prenom,
                                    user.user_id IN (SELECT user_id FROM group_members
                                                                    WHERE group_id = $group_id AND
@@ -193,18 +207,18 @@ $tool_content .="
       <td><input type=text name='name' size=40 value='$tool_content_group_name' /></td>
     </tr>
     <tr>
-      <th class='left'>$langGroupTutor:</th>
-      <td>
-         $tool_content_tutor
-      </td>
+      <th class='left'>$langDescription $langUncompulsory:</th>
+      <td><textarea name='description' rows='2' cols='60'>$tool_content_group_description</textarea></td>
     </tr>
     <tr>
       <th class='left'>$langMax $langGroupPlacesThis:</th>
       <td><input type=text name='maxStudent' size=2 value='$tool_content_max_student' /></td>
     </tr>
     <tr>
-      <th class='left'>$langDescription $langUncompulsory:</th>
-      <td><textarea name='description' rows='2' cols='60'>$tool_content_group_description</textarea></td>
+      <th class='left'>$langGroupTutor:</th>
+      <td>
+         $tool_content_tutor
+      </td>
     </tr>
     <tr>
       <th class='left' valign='top'>$langGroupMembers :</th>
