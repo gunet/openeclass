@@ -12,8 +12,10 @@ Open eClass 2.5 - Changes List
 -- In "Assignments" teacher can define assignment with time and date deadlines.
 -- Fix some bugs in "Exercises" and "Assignments".
 -- In "Exercises" teacher can create exercises with existing random questions.
--- In "Video", videos can appear in pop up window inside the browser.
--- New theme added.
+-- In "Video", videos can appear in pop up window inside the browser. 
+-- New theme added (ocean).
+-- Added German translation.
+-- Improved online help. 
 
 
 ********************************************************************
