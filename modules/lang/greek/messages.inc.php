@@ -3181,6 +3181,7 @@ $langAddToCourseHome = "Προσθήκη στην κεντρική σελίδα 
 $langVia = 'μέσω';
 $langStudentViewEnable = "Περιβάλλον $langsOfStudent";
 $langStudentViewDisable = "Περιβάλλον $langsOfTeacher";
+$langInactiveModule = "ανενεργό υποσύστημα";
 
 
 /**********************************************************************
