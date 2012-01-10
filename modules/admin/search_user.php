@@ -63,7 +63,7 @@ $tool_content .= "
   <div id='operations_container'>
     <ul id='opslist'>
       <li><a href='listusers.php?search=yes'>$langAllUsers</a></li>
-      <li><a href='listusers.php?c=inactive'>$langInactiveUsers</a></li>
+      <li><a href='listusers.php?search=inactive'>$langInactiveUsers</a></li>
     </ul>
   </div>";
 
@@ -158,8 +158,7 @@ $tool_content .= "</td>
   </tr>
   <tr>
     <th>&nbsp;</th>
-    <td colspan='2' class='right'>
-      <input type='hidden' name='c' value='searchlist'>
+    <td colspan='2' class='right'>     
       <input type='submit' name='search_submit' value='$langSearch'>
     </td>
   </tr>
