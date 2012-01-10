@@ -410,6 +410,10 @@ function show_forum($type, $title, $comments, $resource_id, $ft_id, $visibility)
 {
 	global $id, $tool_content, $mysqlMainDb, $urlServer, $is_editor,
                $cours_id, $code_cours, $themeimg;
+    $module_visible = visible_module(9); // checks module visibility
+    if (!$module_visible and !$is_editor) {
+               return '';
+    }
 
 	$comment_box = '';
 	$class_vis = ($visibility == 'i')? ' class="invisible"': ' class="even"';
@@ -424,6 +428,9 @@ function show_forum($type, $title, $comments, $resource_id, $ft_id, $visibility)
 		list($forum_id) = mysql_fetch_array($r);
 		$link = "<a href='${urlServer}modules/phpbb/viewtopic.php?course=$code_cours&amp;topic=$ft_id&amp;forum=$forum_id&amp;unit=$id'>";
                 $forumlink = $link . "$title</a>";
+                if (!$module_visible) {
+                        $forumlink .= "<i>($langInactiveModule)</i>";
+                }
 	}
 
 	$imagelink = $link . "<img src='$themeimg/forum_" .
@@ -449,10 +456,17 @@ function show_forum($type, $title, $comments, $resource_id, $ft_id, $visibility)
 function show_wiki($title, $comments, $resource_id, $wiki_id, $visibility)
 {
 	global $id, $tool_content, $mysqlMainDb, $urlServer, $is_editor,
-               $langWasDeleted, $currentCourseID, $code_cours, $themeimg;
-
+               $langWasDeleted, $langInactiveModule, $currentCourseID, $code_cours, $themeimg;
+      
+        $module_visible = visible_module(26); // checks module visibility
+        
+        if (!$module_visible and !$is_editor) {
+                       return '';
+        }        
+        
 	$comment_box = $imagelink = $link = $class_vis = '';
-	$class_vis = ($visibility == 'i')? ' class="invisible"': ' class="even"';
+	$class_vis = ($visibility == 'i' or !$module_visible)?
+                     ' class="invisible"': ' class="even"';
         $title = htmlspecialchars($title);
 	$r = db_query("SELECT * FROM wiki_properties WHERE id = $wiki_id",
                       $currentCourseID);
@@ -462,12 +476,15 @@ function show_wiki($title, $comments, $resource_id, $wiki_id, $visibility)
 		} else {
 			$status = 'del';
 			$imagelink = "<img src='$themeimg/delete.png' />";
-			$exlink = "<span class='invisible'>$title ($langWasDeleted)</span>";
+			$wikilink = "<span class='invisible'>$title ($langWasDeleted)</span>";
 		}
 	} else {
                 $wiki = mysql_fetch_array($r, MYSQL_ASSOC);
 		$link = "<a href='${urlServer}modules/wiki/page.php?course=$code_cours&amp;wikiId=$wiki_id&amp;action=show&amp;unit=$id'>";
                 $wikilink = $link . "$title</a>";
+                if (!$module_visible) {
+			$wikilink .= " <i>($langInactiveModule)</i>";
+                }
 		$imagelink = $link .
                         "<img src='$themeimg/wiki_" .
 			($visibility == 'i'? 'off': 'on') . ".png' /></a>";

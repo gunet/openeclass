@@ -3181,6 +3181,7 @@ $langAddToCourseHome = "Προσθήκη στην κεντρική σελίδα 
 $langVia = 'μέσω';
 $langStudentViewEnable = "Περιβάλλον $langsOfStudent";
 $langStudentViewDisable = "Περιβάλλον $langsOfTeacher";
+$langInactiveModule = "ανενεργό υποσύστημα";
 
 
 /**********************************************************************
@@ -3295,6 +3296,6 @@ $langEBookNoSections = "Δεν έχουν οριστεί ενότητες";
  *******************************************/
 
 $langJQSelectNum = 'Επιλέχτηκαν # από #';
-$langJQNoneSelected = 'Επιλέξτε παραλήπτες';
+$langJQNoneSelected = 'Επιλέξτε';
 $langJQCheckAll = 'Επιλογή όλων';
 $langJQUncheckAll = 'Αφαίρεση όλων';

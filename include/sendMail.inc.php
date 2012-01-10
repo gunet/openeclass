@@ -119,7 +119,7 @@ function from($from, $from_address)
 {     
         global $langVia, $siteName, $emailAdministrator, $charset;
 
-        if (empty($from) or !get_config('email_from')) {                
+        if (empty($from_address) or !get_config('email_from')) {                
                 return "From: " . qencode($siteName, $charset) .
                        " <$emailAdministrator>\n";                
         } else {                
@@ -135,9 +135,7 @@ function reply_to($from, $from_address)
 {
         global $siteName, $emailAdministrator, $emailAnnounce, $charset;
 
-        if (empty($from_address) or !get_config('email_from')) {
-                return '';
-        } elseif ($from <> $siteName or $emailAdministrator <> $from_address) {
+        if (!get_config('email_from') and $emailAdministrator <> $from_address) {
                 if (empty($from)) {
                         return "\nReply-To: $from_address";
                 } else {

@@ -439,11 +439,15 @@ function create_map_to_real_filename($downloadDir, $include_invisible) {
                 }
         }
         if (!$include_invisible) {
-                $hidden_regexp = '#^(' . implode('|', $hidden_dirs) . ')#';
+                if (count($hidden_dirs)) {
+                        $hidden_regexp = '#^(' . implode('|', $hidden_dirs) . ')#';
+                } else {
+                        $hidden_regexp = false;
+                }
         }
         $decoded_filenames = $encoded_filenames;
         foreach ($encoded_filenames as $position => $name) {
-                if (!$include_invisible and
+                if (!$include_invisible and $hidden_regexp and
                     preg_match($hidden_regexp, $name)) {
                             $GLOBALS['path_visibility'][$name] = false;
                 }
@@ -467,7 +471,6 @@ function convert_to_real_filename($p_event, &$p_header)
         global $map_filenames, $path_visibility, $basedir_length;
 
         $filename = substr($p_header['filename'], $basedir_length);
-
         if (!isset($path_visibility[$filename]) or
             !$path_visibility[$filename] or
             !isset($map_filenames[$filename])) {

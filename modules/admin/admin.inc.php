@@ -99,7 +99,6 @@ Parameters: limit - the current limit
 return String (the constructed table)
 ***************************************************************/
 function show_paging($limit, $listsize, $fulllistsize, $page, $extra_page = '', $displayAll = FALSE) {
-
 	global $langNextPage, $langBeforePage, $langAllUsers;
 
 	$retString = $link_all = "";

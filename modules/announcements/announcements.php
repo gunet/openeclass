@@ -154,6 +154,8 @@ if ($is_editor) {
                                 AND cours_user.user_id = user.user_id";
             $result = db_query($sqlUserOfCourse, $mysqlMainDb);            
 
+            $countEmail = mysql_num_rows($result); // number of mail recipients
+            
             $invalid = 0;
 	    $recipients = array();
             $emailBody = html2text($emailContent);            
@@ -185,7 +187,7 @@ if ($is_editor) {
                             $recipients, $emailSubject,
                             $emailBody, $emailContent, $charset);                    
             }                        
-            $messageInvalid = " $langOn " .count($recipients). " $langRegUser, $invalid $langInvalidMail";
+            $messageInvalid = " $langOn $countEmail $langRegUser, $invalid $langInvalidMail";                
             $message = "<p class='success'>$langAnnAdd $langEmailSent<br />$messageInvalid</p>";
         } // if $emailOption==1
         else {
