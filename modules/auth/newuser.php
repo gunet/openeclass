@@ -72,11 +72,11 @@ if (!isset($_POST['submit'])) {
 	<table width='100%' class='tbl'>
 	<tr>
 	<th class='left' width='180'>$langName:</th>
-	<td colspan='2'><input type='text' name='prenom_form' size='30' maxlength='30' value='".$_GET['prenom_form']."' class='FormData_InputText' />&nbsp;&nbsp;<small>(*)</small></td>
+	<td colspan='2'><input type='text' name='prenom_form' size='30' maxlength='50' value='".$_GET['prenom_form']."' class='FormData_InputText' />&nbsp;&nbsp;<small>(*)</small></td>
 	</tr>
 	<tr>
 	<th class='left'>$langSurname:</th>
-	<td colspan='2'><input type='text' name='nom_form' size='30' maxlength='30' value='".$_GET['nom_form']."' class='FormData_InputText' />&nbsp;&nbsp;<small>(*)</small></td>
+	<td colspan='2'><input type='text' name='nom_form' size='30' maxlength='100' value='".$_GET['nom_form']."' class='FormData_InputText' />&nbsp;&nbsp;<small>(*)</small></td>
 	</tr>
 	<tr>
 	<th class='left'>$langUsername:</th>
@@ -92,7 +92,7 @@ if (!isset($_POST['submit'])) {
 	</tr>
 	<tr>
 	<th class='left'>$langEmail:</th>
-	<td valign='top'><input type='text' name='email' size='30' maxlength='30' value='".$_GET['email']."' class='FormData_InputText' /></td>
+	<td valign='top'><input type='text' name='email' size='30' maxlength='100' value='".$_GET['email']."' class='FormData_InputText' /></td>
 	<td><small>$email_message</small></td>
 	</tr>
 	<tr>
