@@ -131,6 +131,7 @@ $tool_content .= "
     <li><a href='guestuser.php?course=$code_cours'>$langGUser</a>&nbsp;</li>
     <li><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;search=1'>$langSearchUser</a></li>
     <li><a href='../group/group.php?course=$code_cours'>$langGroupUserManagement</a></li>
+    <li><a href='../course_info/refresh_course.php?course=$code_cours'>$langDelUsers</a></li>
   </ul>
 </div>";
 

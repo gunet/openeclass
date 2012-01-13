@@ -90,10 +90,11 @@ function docsHtmlInterface($date)
 			$first_check = 0;
 			foreach($group_courses_member as $course_file) {
 				if($first_check == 0){
-					$content.= "<tr><td class='sub_title1'>" . q($course_file['intitule']) . "</td></tr>";
+					$content.= "<tr><td class='sub_title1'>" . q($course_file['intitule']) . "</td></tr>";                                        
 					$first_check = 1;
 				}                               
-                                $group_sql = "course_id = ".$course_file['course_id']." AND subsystem = ".MAIN;                                
+                                $group_sql = "course_id = ".$course_file['course_id']." AND subsystem = ".MAIN;                                                              
+                                $currentCourseID = $course_file['code'];
 				$url = file_url($course_file['path']);                                
 				$content .= "<tr><td class='smaller'><ul class='custom_list'><li><a href='$url'>" .
 				q($course_file['filename']) . '</a> - (' .

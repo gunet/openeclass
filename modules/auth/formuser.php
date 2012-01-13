@@ -207,11 +207,11 @@ if ($all_set) {
           <table class='tbl'>
           <tr>
             <th>$langName</th>
-            <td><input type='text' name='name' value='" . q($name) . "' size='30' maxlength='30' />&nbsp;&nbsp;(*)</td>
+            <td><input type='text' name='name' value='" . q($name) . "' size='30' maxlength='50' />&nbsp;&nbsp;(*)</td>
           </tr>
           <tr>
             <th>$langSurname</th>
-            <td><input type='text' name='surname' value='" . q($surname) . "' size='30' maxlength='30' />&nbsp;&nbsp;(*)</td>
+            <td><input type='text' name='surname' value='" . q($surname) . "' size='30' maxlength='100' />&nbsp;&nbsp;(*)</td>
           </tr>
           <tr>
             <th>$langPhone</th>
@@ -222,7 +222,7 @@ if ($all_set) {
           </tr>
           <tr>
             <th>$langProfEmail</th>
-            <td><input type='text' name='usermail' value='" . q($usermail) . "' size='30' maxlength='30' />&nbsp;&nbsp;(*)</td>
+            <td><input type='text' name='usermail' value='" . q($usermail) . "' size='30' maxlength='100' />&nbsp;&nbsp;(*)</td>
           </tr>";
         if (!$prof) {
                 $tool_content .= "

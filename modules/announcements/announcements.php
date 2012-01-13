@@ -159,6 +159,9 @@ if ($is_editor) {
             $invalid = 0;
 	    $recipients = array();
             $emailBody = html2text($emailContent);            
+            $linkhere = "&nbsp;<a href='${urlServer}modules/profile/emailunsubscribe.php?cid=$cours_id'>$langHere</a>.";
+            $unsubscribe = "<br /><br />".sprintf($langLinkUnsubscribe, $intitule);            
+            $emailContent .= $unsubscribe.$linkhere;            
             $general_to = 'Members of course ' . $currentCourseID;
             while ($myrow = mysql_fetch_array($result)) {
                     $emailTo = $myrow["email"]; 
@@ -169,10 +172,7 @@ if ($is_editor) {
                     } elseif (get_user_email_notification($user_id, $cours_id)) {                                    
                             // checks if user is notified by email
                             array_push($recipients, $emailTo);
-                    }
-                    $linkhere = "&nbsp;<a href='${urlServer}modules/profile/emailunsubscribe.php?cid=$cours_id'>$langHere</a>.";
-                    $unsubscribe = "<br /><br />".sprintf($langLinkUnsubscribe, $intitule);            
-                    $emailContent = $emailBody.$unsubscribe.$linkhere;            
+                    }                    
                     // send mail message per 50 recipients
                     if (count($recipients) >= 50) {                                                        
                             send_mail_multipart("$_SESSION[prenom] $_SESSION[nom]", $_SESSION['email'],

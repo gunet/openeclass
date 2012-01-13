@@ -857,7 +857,7 @@ if ($doc_count == 0) {
         $tool_content .= "</div></td>
     </tr>
     </table>
-    <table width='100%' class='tbl_alt'>
+    <table width='100%' class='tbl'>
     <tr>";
         $tool_content .= "\n      <th width='50' class='center'><b>" . headlink($langType, 'type') . '</b></th>';
         $tool_content .= "\n      <th><div align='left'>" . headlink($langName, 'name') . '</div></th>';
