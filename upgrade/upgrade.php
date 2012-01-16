@@ -175,13 +175,7 @@ if (!isset($_POST['submit2'])) {
         }
         if (!strstr($conf, '$fax')) {
                 $lines_to_add .= "\$fax = '$_POST[fax]';\n";
-        }
-
-        if (@(!$_POST['reguser'])) {
-                $user_reg = 'FALSE';
-        } else {
-                $user_reg = 'TRUE';
-        }
+        }        
         
         if (!strstr($conf, '$durationAccount')) {
                 $lines_to_add .= "\$durationAccount = \"126144000\";\n";
@@ -191,8 +185,7 @@ if (!isset($_POST['submit2'])) {
         }
         if (!strstr($conf, '$encryptedPasswd')) {
                 $lines_to_add .= "\$encryptedPasswd = true;\n";
-        }
-
+        }        
         $new_copyright = file_get_contents('../info/license/header.txt');
 
         $new_conf = preg_replace(
@@ -215,7 +208,6 @@ if (!isset($_POST['submit2'])) {
                                 $new_copyright,
                                 ''),
                         $conf) . "\n" . $lines_to_add;
-
         $fp = @fopen("config.php","w");
         if (!$fp)
                 die ("$langConfigError3");
