@@ -285,7 +285,7 @@ square root of x-1 will be drawed. For syntax of all mathematical symbols, read 
              namely filling in a student account application form, in order to obtain a platform account. 
              The application will be examined by the administrator who either approves of it and opens an account, 
              or rejects it.</li>
-     <li><em>durationAccount</em>: Duration of users account.</li>
+     <li><em>durationAccount</em>: Duration of user accounts.</li>
      <li><em>alt_auth_student_req</em>: Activation of users account request through alternative authentication methods.</li>
 </ul>
 
@@ -293,12 +293,12 @@ square root of x-1 will be drawed. For syntax of all mathematical symbols, read 
  <li><em>email_required</em>: During user registration, email is required.</li>
  <li><em>email_verification_required</em>: Email must be verified during registration and if user changes it.</li>
  <li><em>dont_mail_unverified_mails</em>: Don't send emails to users with unverified email address.</li>
- <li><em>email_from</em>: Emails will be sent with sender email address. Otherwise will be sent with platform administrator email address.</li>
- <li><em>am_required</em>: During user registration student ID is required.</li>
- <li><em>dropbox_allow_student_to_student</em>: In dropbox module, users can send files to each other.</li>
+ <li><em>email_from</em>: Outgoing messages will originate from the sender's email address. Otherwise, they will come from the platform administrator's email address.</li>
+ <li><em>am_required</em>: Student ID is a required field during registration.</li>
+ <li><em>dropbox_allow_student_to_student</em>: Users can send files to each other using the dropbox module.</li>
  <li><em>dont_display_login_form</em>: Login form will not be visible in home page. A link to it, will be appeared.</li>
- <li><em>block_username_change</em>: Users will not be able to change their usernames.</li>
- <li><em>display_captcha</em>: Display a `captcha` code during users registration.</li>
+ <li><em>block_username_change</em>: Users will not be able to change their username.</li>
+ <li><em>display_captcha</em>: Display a 'CAPTCHA' code during user registration.</li>
  <li><em>insert_xml_metadata</em>: Allow teachers to upload metadata in files in 'Documents'.</li>
 </ul>
 By default none of them is enabled.

@@ -416,34 +416,29 @@ function showquota($quota, $used) {
                $code_cours, $subsystem, $group_id;
 	include 'gaugebar.php';
 
-	$retstring = "";
+	$retstring = '';
 	
-	//diamorfwsh ths grafikhs mparas xrhsimopoioumenou kai eleftherou xwrou (me vash ta quotas) + ypologismos statistikwn stoixeiwn
-	$oGauge = new myGauge(); //vrisketai sto arxeio 'gaugebar.php' & ginetai include parapanw
-	// apodosh timwn gia thn mpara
-	$fc = "#E6E6E6"; //foreground color
-	$bc = "#4F76A3"; //background color
-	$wi = 125; //width pixel
-	$hi = 10; //width pixel
-	$mi = 0;  //minimum value
-	$ma = $quota; //maximum value
-	$cu = $used; //current value
-	$oGauge->setValues($fc, $bc, $wi, $hi, $mi, $ma, $cu);
-	//pososto xrhsimopoioumenou xorou se %
+        // diamorfwsh ths grafikhs mparas xrhsimopoioumenou kai eleftherou xwrou (me vash ta quotas) 
+        // kai ypologismos statistikwn stoixeiwn
+        $oGauge = new myGauge();
+	$oGauge->MaxVal = $quota; //maximum value
+	$oGauge->CurVal = $used; //current value
+
+	// pososto xrhsimopoioumenou xorou se %
 	$diskUsedPercentage = round(($used / $quota) * 100)."%";
-	//morfopoihsh tou synolikou diathesimou megethous tou quota
+	// morfopoihsh tou synolikou diathesimou megethous tou quota
 	$quota = format_bytesize($quota / 1024);
-	//morfopoihsh tou synolikou megethous pou xrhsimopoieitai
+	// morfopoihsh tou synolikou megethous pou xrhsimopoieitai
 	$used = format_bytesize($used / 1024);
-	format_bytesize($used, '0');
-	//telos diamorfwshs ths grafikh mparas kai twn arithmitikwn statistikwn stoixeiwn
-	//ektypwsh pinaka me arithmitika stoixeia + thn grafikh bara
+
+	// telos diamorfwshs ths grafikh mparas kai twn arithmitikwn statistikwn stoixeiwn
+	// ektypwsh pinaka me arithmitika stoixeia + thn grafikh bara
         if ($subsystem == 'GROUP') {
                 $link = "$_SERVER[PHP_SELF]?course=$code_cours&amp;group_id=$group_id";
         } else {
                 $link = "$_SERVER[PHP_SELF]?course=$code_cours";
         }
-         $retstring .= "
+        $retstring .= "
                <div id='operations_container'>
                  <ul id='opslist'>
                    <li><a href=$link>" . $langBack . "</a></li>
@@ -451,7 +446,7 @@ function showquota($quota, $used) {
                </div>";
 
          $retstring .= "
-                <table class='tbl_alt'>
+                <table class='tbl_border'>
                 <tr>
                   <th>$langQuotaUsed:</th>
               <td>$used</td>
