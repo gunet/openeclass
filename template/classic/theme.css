@@ -1356,3 +1356,12 @@ dt {
 .expired {
         color: red;
 }
+
+/* -- Gauge bar colors -- */
+.gaugebar_bg {
+        background-color: #E6E6E6;
+}
+.gaugebar_fg {
+        background-color: #4F76A3;
+}
+

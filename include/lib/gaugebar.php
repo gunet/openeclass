@@ -20,7 +20,6 @@
 
 /*===========================================================================
 	gaugebar.php
-	@last update: 18-07-2006 by Sakis Agorastos
 	@authors list: Agorastos Sakis <th_agorastos@hotmail.com>
 ==============================================================================        
     @Description: The script contains a class which function returns HTML code
@@ -30,39 +29,21 @@
     Main
 
 	$oGauge = new myGauge();
-	
-	
-	// Use method setValues to set datamembers, like:
-	$fc = "#FFFFFF";
-	$bc = "#990000";
-	$wi = 125;
-	$hi = 10;
-	$mi = 0;
-	$ma = 100;
-	$cu = 47;
-	$oGauge->setValues($fc, $bc, $wi, $hi, $mi, $ma, $cu);
-	
 ==============================================================================*/
 
 class myGauge {
 
-   // Default Color
-   var $BgColor = "#FFFFFF", $FgColor = "#990000";
-   // Default Dimensions.
-   var $Width = 125, $Height = 10;
-   // Default Values.
-   var $MinVal = 0, $MaxVal = 100, $CurVal = 77;
+   // Default color
+   public $BgColor = null, $FgColor = null;
 
-   // Set values
-   function setValues($fgc, $bgc, $wid, $hei, $min, $max, $cur) {
-       $this->BgColor = $fgc;
-       $this->FgColor = $bgc;
-       $this->Width   = $wid;
-       $this->Height  = $hei;
-       $this->MinVal  = $min;
-       $this->MaxVal  = $max;
-       $this->CurVal  = $cur;
-   }
+   // CSS classes for background and foreground
+   public $BgClass = 'gaugebar_bg', $FgClass = 'gaugebar_fg';
+
+   // Default dimensions
+   public $Width = 125, $Height = 10;
+
+   // Default values
+   public $MinVal = 0, $MaxVal = 100, $CurVal = 77;
 
    // Render this into HTML as a table.
    function display() {
@@ -91,12 +72,16 @@ class myGauge {
 
        $RenderHtml = "<table class='tbl' cellspacing=0 cellpadding=0 width=" . $this->Width . "><tr>";
        if ($fg_width > 0) {
-           $RenderHtml = $RenderHtml . "<td width=" . $fg_width . " height=" . $this->Height . " bgcolor=" . $this->FgColor .
-               "><img src=\"$themeimg/shim.gif\"></td>";
+               $RenderHtml = $RenderHtml . "<td width=" . $fg_width . " height=" . $this->Height .
+                       ($this->FgColor? (" bgcolor='" . $this->FgColor . "'"): '') .
+                       ($this->FgClass? (" class='" . $this->FgClass . "'"): '') .
+               "><img src='$themeimg/shim.gif'></td>";
        }
        if ($bg_width > 0) {
-           $RenderHtml = $RenderHtml . "<td width=" . $bg_width . " height=" .
-           $this->Height . " bgcolor=" . $this->BgColor . "><img src=\"$themeimg/shim.gif\"></td>";
+               $RenderHtml = $RenderHtml . "<td width=" . $bg_width . " height=" . $this->Height .
+                       ($this->BgColor? (" bgcolor='" . $this->BgColor . "'"): '') .
+                       ($this->BgClass? (" class='" . $this->BgClass . "'"): '') .
+                       "><img src='$themeimg/shim.gif'></td>";
        }
        $RenderHtml = $RenderHtml . "</tr></table>";
        return $RenderHtml;
