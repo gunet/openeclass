@@ -47,14 +47,14 @@ $user_type = isset($_REQUEST['user_type'])?$_REQUEST['user_type']:'';
 $auth_type = isset($_REQUEST['auth_type'])?$_REQUEST['auth_type']:'';
 $user_email = isset($_REQUEST['user_email'])?mb_strtolower(trim($_REQUEST['user_email'])):'';
 $user_registered_at_flag = isset($_REQUEST['user_registered_at_flag'])?$_REQUEST['user_registered_at_flag']:'';
-$hour = isset($_REQUEST['hour'])?$_REQUEST['hour']:'';
-$minute = isset($_REQUEST['minute'])?$_REQUEST['minute']:'';
+$hour = isset($_REQUEST['hour'])?$_REQUEST['hour']:0;
+$minute = isset($_REQUEST['minute'])?$_REQUEST['minute']:0;
 $ord = isset($_GET['ord'])?$_GET['ord']:'';
 $limit = isset($_GET['limit'])?$_GET['limit']:0;
 $mail_ver_required = get_config('email_verification_required');
 
 if($search == 'yes')	{ // coming from search_user.php (search with criteria)	
-        $date = explode('-',  $_POST['date']);
+        @$date = explode('-',  $_POST['date']);
         if (array_key_exists(1, $date)) {
                 $day = $date[0];
                 $month = $date[1];
