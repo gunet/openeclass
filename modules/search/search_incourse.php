@@ -237,10 +237,11 @@ if(empty($search_terms)) {
 
 	// search in exercises	
 	if ($exercises) {
-		$myquery = "SELECT * FROM exercices
-				WHERE active = '1'
-				AND MATCH (titre, description)".$query;
-		$result = db_query($myquery, $currentCourseID);
+		$myquery = "SELECT * FROM exercise
+				WHERE course_id = $cours_id
+				AND active = '1'
+				AND MATCH (title, description)".$query;
+		$result = db_query($myquery, $mysqlMainDb);
 		if(mysql_num_rows($result) > 0) {
 			$tool_content .= "
                 <script type='text/javascript' src='../auth/sorttable.js'></script>
@@ -266,8 +267,8 @@ if(empty($search_terms)) {
 				} else { 
 					$desc_text = "<br /> <span class='smaller'>$res[description]</span>";
 				}
-				$link_exercise =" ${urlServer}/modules/exercice/exercice_submit.php?exerciseId=$res[id]";
-				$tool_content .= "<a href='$link_exercise'>".$res['titre']."</a>$desc_text
+				$link_exercise =" ${urlServer}/modules/exercice/exercice_submit.php?course=$code_cours&amp;exerciseId=$res[id]";
+				$tool_content .= "<a href='$link_exercise'>".$res['title']."</a>$desc_text
                   </td>
                 </tr>";
                 $numLine++;

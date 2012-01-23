@@ -34,34 +34,38 @@ if ($is_editor) {
 	$output =  "$bom$langSurname\t$langName\t$langExerciseStart\t$langExerciseDuration\t$langYourTotalScore2$crlf";
 	$output .=  "$crlf";
 	
-	mysql_select_db($currentCourseID);
-	$sql = "SELECT DISTINCT uid FROM `exercise_user_record` WHERE eid=".intval($_GET['exerciseId']);
+	mysql_select_db($mysqlMainDb);
+	$sql = "SELECT DISTINCT uid FROM `exercise_user_record` WHERE eid = ".intval($_GET['exerciseId']);
 	$result = db_query($sql);
-	while ($row=mysql_fetch_array($result)) {
-		$sid = $row['uid'];
-		$StudentName = db_query("select nom, prenom from user where user_id='$sid'", $mysqlMainDb);
-		$theStudent = mysql_fetch_array($StudentName);	
-		$nom = $theStudent["nom"];
-		$prenom = $theStudent["prenom"];	
-		mysql_select_db($currentCourseID);
-		$sql2="SELECT DATE_FORMAT(RecordStartDate, '%Y-%m-%d / %H:%i') AS RecordStartDate, 
-			RecordEndDate, TIME_TO_SEC(TIMEDIFF(RecordEndDate,RecordStartDate)) AS TimeDuration, 
-			TotalScore, TotalWeighting 
-			FROM `exercise_user_record` WHERE uid='$sid' AND eid=".intval($_GET['exerciseId']);
+	
+	while ($row = mysql_fetch_array($result)) 
+	{
+		$sid         = $row['uid'];
+		$studentName = db_query("select nom, prenom from user where user_id = '$sid'");
+		$theStudent  = mysql_fetch_array($studentName);	
+		$nom         = $theStudent["nom"];
+		$prenom      = $theStudent["prenom"];	
+
+		$sql2 = "SELECT DATE_FORMAT(record_start_date, '%Y-%m-%d / %H:%i') AS record_start_date, 
+			record_end_date, TIME_TO_SEC(TIMEDIFF(record_end_date, record_start_date)) AS time_duration, 
+			total_score, total_weighting 
+			FROM `exercise_user_record` WHERE uid = '$sid' AND eid = ".intval($_GET['exerciseId']);
 		$result2 = db_query($sql2);
-		while ($row2=mysql_fetch_array($result2)) {
+		
+		while ($row2 = mysql_fetch_array($result2)) 
+		{
 			$output .= csv_escape($prenom) ."\t";
 			$output .= csv_escape($nom) ."\t";
-			$RecordStartDate = $row2['RecordStartDate'];
-			$output .= csv_escape($RecordStartDate) ."\t";
-			if ($row2['TimeDuration'] == '00:00:00' or empty($row2['TimeDuration'])) { // for compatibility 
+			$recordStartDate = $row2['record_start_date'];
+			$output .= csv_escape($recordStartDate) ."\t";
+			if ($row2['time_duration'] == '00:00:00' or empty($row2['time_duration'])) { // for compatibility 
 				$output .= csv_escape($langNotRecorded) ."\t";
 			} else {
-				$output .= csv_escape(format_time_duration($row2['TimeDuration']))."\t";
+				$output .= csv_escape(format_time_duration($row2['time_duration']))."\t";
 			}		
-			$TotalScore = $row2['TotalScore'];
-			$TotalWeighting = $row2['TotalWeighting'];
-			$output .= csv_escape("( $TotalScore/$TotalWeighting )"). "\t";
+			$totalScore = $row2['total_score'];
+			$totalWeighting = $row2['total_weighting'];
+			$output .= csv_escape("( $totalScore/$totalWeighting )"). "\t";
 			$output .=  "$crlf";
 		}
 	}

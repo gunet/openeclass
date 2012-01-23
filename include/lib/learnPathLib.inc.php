@@ -632,14 +632,14 @@ function get_learnPath_progress($lpid, $lpUid)
  */
 function display_my_exercises($dialogBox, $style)
 {
-    $tbl_quiz_test = "exercices";
+    $tbl_quiz_test = "exercise";
 
     global $langAddModule;
     global $langAddModulesButton;
     global $langExercise;
     global $langNoEx;
     global $langAddOneModuleButton;
-    global $themeimg, $langComment, $langSelection, $code_cours;
+    global $themeimg, $langComment, $langSelection, $code_cours, $mysqlMainDb, $cours_id;
     $output = "";
 
     $output .= '<!-- display_my_exercises output -->' . "\n\n";
@@ -665,10 +665,12 @@ function display_my_exercises($dialogBox, $style)
 
     // Display available modules
     $atleastOne = FALSE;
-    $sql = "SELECT `id`, `titre` AS `title`, `description`
+    $sql = "SELECT `id`, `title`, `description`
             FROM `" . $tbl_quiz_test . "`
-            ORDER BY  `titre`, `id`";
-    $exercises = db_query_fetch_all($sql, $code_cours);
+            WHERE course_id = $cours_id
+            AND active = 1
+            ORDER BY  `title`, `id`";
+    $exercises = db_query_fetch_all($sql, $mysqlMainDb);
 
     if( is_array($exercises) && !empty($exercises) )
     {

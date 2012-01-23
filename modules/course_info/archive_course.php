@@ -97,7 +97,12 @@ if (extension_loaded('zlib')) {
                        'poll_question_answer' => "pqid IN (SELECT pqid FROM poll_question WHERE pid IN (SELECT pid FROM poll WHERE course_id = $cours_id))",
                        'assignments' => $sql_course,
                        'assignment_submit' => "assignment_id IN (SELECT id FROM assignments WHERE course_id = $cours_id)",
-                       'agenda' => $sql_course)
+                       'agenda' => $sql_course,
+                       'exercise' => $sql_course,
+                       'exercise_user_record' => "eid IN (SELECT id FROM exercise WHERE course_id = $cours_id)",
+                       'question' => $sql_course,
+                       'answer' => "question_id IN (SELECT id FROM question WHERE course_id = $cours_id)",
+                       'exercise_question' => "question_id IN (SELECT id FROM question WHERE course_id = $cours_id) OR exercise_id IN (SELECT id FROM exercise WHERE course_id = $cours_id)")
              as $table => $condition) {
                 backup_table($archivedir, $table, $condition);
         }

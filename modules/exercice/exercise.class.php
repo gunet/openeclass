@@ -33,12 +33,14 @@ class Exercise
 	var $exercise;
 	var $description;
 	var $type;
-	var $StartDate;
-	var $EndDate;	
-	var $TimeConstrain;
-	var $AttemptsAllowed;
+	var $startDate;
+	var $endDate;	
+	var $timeConstraint;
+	var $attemptsAllowed;
 	var $random;
 	var $active;
+        var $results;
+        var $score;
 	var $questionList;  // array with the list of this exercise's questions
 
 	/**
@@ -48,19 +50,19 @@ class Exercise
 	 */
 	function Exercise()
 	{
-		$this->id=0;
+		$this->id = 0;
 		$this->exercise='';
 		$this->description='';
 		$this->type=1;
-		$this->StartDate=date("Y-m-d H:i");
-		$this->EndDate='';
-		$this->TimeConstrain=0;
-		$this->AttemptsAllowed=0;
-		$this->random=0;
-		$this->active=1;
-		$this->results=1;
-		$this->score=1;
-		$this->questionList=array();
+		$this->startDate=date("Y-m-d H:i");
+		$this->endDate='';
+		$this->timeConstraint = 0;
+		$this->attemptsAllowed = 0;
+		$this->random = 0;
+		$this->active = 1;
+		$this->results = 1;
+		$this->score = 1;
+		$this->questionList = array();
 	}
 
 	/**
@@ -72,35 +74,36 @@ class Exercise
 	 */
 	function read($id)
 	{
-		global $TBL_EXERCICES, $TBL_EXERCICE_QUESTION, $TBL_QUESTIONS, $currentCourseID;
-		mysql_select_db($currentCourseID);
-		$sql="SELECT titre, description, type, StartDate, EndDate, TimeConstrain, 
-			AttemptsAllowed, random, active, results, score 
-			FROM `$TBL_EXERCICES` WHERE id='$id'";
-		$result=db_query($sql);
+		global $TBL_EXERCISE, $TBL_EXERCISE_QUESTION, $TBL_QUESTION, $mysqlMainDb, $cours_id;
+		
+		mysql_select_db($mysqlMainDb);
+		$sql = "SELECT title, description, type, start_date, end_date, time_constraint, 
+			attempts_allowed, random, active, results, score 
+			FROM `$TBL_EXERCISE` WHERE course_id = $cours_id AND id = '$id'";
+		$result = db_query($sql);
 		// if the exercise has been found
-		if($object=mysql_fetch_object($result))
+		if($object = mysql_fetch_object($result))
 		{
-			$this->id=$id;
-			$this->exercise=$object->titre;
-			$this->description=$object->description;
-			$this->type=$object->type;
-			$this->StartDate=$object->StartDate;
-			$this->EndDate=$object->EndDate;
-			$this->TimeConstrain=$object->TimeConstrain;
-			$this->AttemptsAllowed=$object->AttemptsAllowed;
-			$this->random=$object->random;
-			$this->active=$object->active;
-			$this->results=$object->results;
-			$this->score=$object->score;
+			$this->id              = $id;
+			$this->exercise        = $object->title;
+			$this->description     = $object->description;
+			$this->type            = $object->type;
+			$this->startDate       = $object->start_date;
+			$this->endDate         = $object->end_date;
+			$this->timeConstraint  = $object->time_constraint;
+			$this->attemptsAllowed = $object->attempts_allowed;
+			$this->random          = $object->random;
+			$this->active          = $object->active;
+			$this->results         = $object->results;
+			$this->score           = $object->score;
 
-			$sql="SELECT question_id,q_position FROM `$TBL_EXERCICE_QUESTION`,`$TBL_QUESTIONS` 
-				WHERE question_id=id AND exercice_id='$id' ORDER BY q_position";
-			$result=db_query($sql);
+			$sql = "SELECT question_id, q_position FROM `$TBL_EXERCISE_QUESTION`, `$TBL_QUESTION` 
+				WHERE course_id = $cours_id AND question_id = id AND exercise_id = '$id' ORDER BY q_position";
+			$result = db_query($sql);
 
 			// fills the array with the question ID for this exercise
 			// the key of the array is the question position
-			while($object=mysql_fetch_object($result)) {
+			while($object = mysql_fetch_object($result)) {
 				// makes sure that the question position is unique
 				while(isset($this->questionList[$object->q_position]))
 				{
@@ -181,19 +184,19 @@ class Exercise
 	}
 	function selectStartDate()
 	{
-		return $this->StartDate;
+		return $this->startDate;
 	}
 	function selectEndDate()
 	{
-		return $this->EndDate;
+		return $this->endDate;
 	}
-	function selectTimeConstrain()
+	function selectTimeConstraint()
 	{
-		return $this->TimeConstrain;
+		return $this->timeConstraint;
 	}
 	function selectAttemptsAllowed()
 	{
-		return $this->AttemptsAllowed;
+		return $this->attemptsAllowed;
 	}
 	function selectResults()
 	{
@@ -324,7 +327,7 @@ class Exercise
 	 */
 	function updateTitle($title)
 	{
-		$this->exercise=$title;
+		$this->exercise = $title;
 	}
 
 	/**
@@ -335,7 +338,7 @@ class Exercise
 	 */
 	function updateDescription($description)
 	{
-		$this->description=$description;
+		$this->description = $description;
 	}
 
 	/**
@@ -346,32 +349,32 @@ class Exercise
 	 */
 	function updateType($type)
 	{
-		$this->type=$type;
+		$this->type = $type;
 	}
 	
-	function updateStartDate($StartDate)
+	function updateStartDate($startDate)
 	{
-		$this->StartDate=$StartDate;
+		$this->startDate = $startDate;
 	}
-	function updateEndDate($EndDate)
+	function updateEndDate($endDate)
 	{
-		$this->EndDate=$EndDate;
+		$this->endDate = $endDate;
 	}
-	function updateTimeConstrain($TimeConstrain)
+	function updateTimeConstraint($timeConstraint)
 	{
-		$this->TimeConstrain=$TimeConstrain;
+		$this->timeConstraint = $timeConstraint;
 	}
-	function updateAttemptsAllowed($AttemptsAllowed)
+	function updateAttemptsAllowed($attemptsAllowed)
 	{
-		$this->AttemptsAllowed=$AttemptsAllowed;
+		$this->attemptsAllowed = $attemptsAllowed;
 	}
 	function updateResults($results)
 	{
-		$this->results=$results;
+		$this->results = $results;
 	}
 	function updateScore($score)
 	{
-		$this->score=$score;
+		$this->score = $score;
 	}
 	/**
 	 * sets to 0 if questions are not selected randomly
@@ -382,7 +385,7 @@ class Exercise
 	 */
 	function setRandom($random)
 	{
-		$this->random=$random;
+		$this->random = $random;
 	}
 
 	/**
@@ -392,7 +395,7 @@ class Exercise
 	 */
 	function enable()
 	{
-		$this->active=1;
+		$this->active = 1;
 	}
 
 	/**
@@ -402,7 +405,7 @@ class Exercise
 	 */
 	function disable()
 	{
-		$this->active=0;
+		$this->active = 0;
 	}
 
 	/**
@@ -412,46 +415,46 @@ class Exercise
 	 */
 	function save()
 	{
-		global $TBL_EXERCICES, $TBL_QUESTIONS, $currentCourseID;
+		global $TBL_EXERCISE, $TBL_QUESTION, $mysqlMainDb, $cours_id;
 
-		$id=$this->id;
-		$exercise=addslashes($this->exercise);
-		$description=addslashes($this->description);
-		$type=$this->type;
-		$StartDate=$this->StartDate;
-		$EndDate=$this->EndDate;
-		$TimeConstrain=$this->TimeConstrain;
-		$AttemptsAllowed=$this->AttemptsAllowed;
-		$random=$this->random;
-		$active=$this->active;
-		$results=$this->results;
-		$score=$this->score;
+		$id              = $this->id;
+		$exercise        = addslashes($this->exercise);
+		$description     = addslashes($this->description);
+		$type            = $this->type;
+		$startDate       = $this->startDate;
+		$endDate         = $this->endDate;
+		$timeConstraint  = $this->timeConstraint;
+		$attemptsAllowed = $this->attemptsAllowed;
+		$random          = $this->random;
+		$active          = $this->active;
+		$results         = $this->results;
+		$score           = $this->score;
+		
+		mysql_select_db($mysqlMainDb);
 
 		// exercise already exists
 		if($id)
 		{
-			mysql_select_db($currentCourseID);
-			$sql="UPDATE `$TBL_EXERCICES` 
-				SET titre='$exercise',description='$description',type='$type',".
-				"StartDate='$StartDate',EndDate='$EndDate',TimeConstrain='$TimeConstrain',".
-				"AttemptsAllowed='$AttemptsAllowed', random='$random',
-				active='$active', results='$results', score='$score' WHERE id='$id'";
+			$sql = "UPDATE `$TBL_EXERCISE` 
+				SET title = '$exercise', description = '$description', type = '$type',".
+				"start_date = '$startDate', end_date = '$endDate', time_constraint = '$timeConstraint',".
+				"attempts_allowed = '$attemptsAllowed', random = '$random',
+				active = '$active', results = '$results', score = '$score' WHERE course_id = $cours_id AND id = '$id'";
 			db_query($sql) or die("Error : UPDATE in file ".__FILE__." at line ".__LINE__);
 		}
 		// creates a new exercise
 		else
 		{
-			mysql_select_db($currentCourseID);
-			$sql="INSERT INTO `$TBL_EXERCICES`
-				VALUES (NULL, '$exercise','$description',$type,'$StartDate','$EndDate',
-					$TimeConstrain, $AttemptsAllowed, $random, $active, $results, $score)";
+			$sql="INSERT INTO `$TBL_EXERCISE`
+				VALUES (NULL, $cours_id, '$exercise', '$description', $type, '$startDate', '$endDate',
+					$timeConstraint, $attemptsAllowed, $random, $active, $results, $score)";
 			db_query($sql);
-			$this->id=mysql_insert_id();
+			$this->id = mysql_insert_id();
 		}
 		// updates the question position
-		foreach($this->questionList as $position=>$questionId)
+		foreach($this->questionList as $position => $questionId)
 		{
-			$sql="UPDATE `$TBL_QUESTIONS` SET q_position='$position' WHERE id='$questionId'";
+			$sql = "UPDATE `$TBL_QUESTION` SET q_position = '$position' WHERE course_id = $cours_id AND id='$questionId'";
 			db_query($sql);
 		}
 	}
@@ -469,7 +472,7 @@ class Exercise
 	       $tool_content .= $langExerciseNoTitle;
 	       return false;
 	   } /*else {
-	       if(!is_null($this->EndDate) && $this->EndDate <= $this->StartDate) {
+	       if(!is_null($this->endDate) && $this->endDate <= $this->startDate) {
 			$tool_content .= $langExerciseWrongDates;
 			return false;
 	       }
@@ -485,10 +488,10 @@ class Exercise
 	 */
 	function moveUp($id)
 	{
-		global $currentCourseID;
+		global $TBL_QUESTION, $mysqlMainDb, $cours_id;
 		
-		list($pos) = mysql_fetch_array(db_query("SELECT q_position FROM questions 
-							WHERE id='$id'", $currentCourseID));
+		list($pos) = mysql_fetch_array(db_query("SELECT q_position FROM `$TBL_QUESTION` 
+							WHERE course_id = $cours_id AND id = '$id'", $mysqlMainDb));
 	
 		if ($pos > 1) {
 			$temp = $this->questionList[$pos-1];
@@ -506,10 +509,10 @@ class Exercise
 	 */
 	function moveDown($id)
 	{
-		global $currentCourseID;
+		global $TBL_QUESTION, $mysqlMainDb, $cours_id;
 		
-		list($pos) = mysql_fetch_array(db_query("SELECT q_position FROM questions 
-							WHERE id='$id'", $currentCourseID));
+		list($pos) = mysql_fetch_array(db_query("SELECT q_position FROM `$TBL_QUESTION` 
+							WHERE course_id = $cours_id AND id = '$id'", $mysqlMainDb));
 		
 		if ($pos < count($this->questionList)) {
 			$temp = $this->questionList[$pos+1];
@@ -583,14 +586,14 @@ class Exercise
 	 */
 	function delete()
 	{
-		global $TBL_EXERCICE_QUESTION, $TBL_EXERCICES;
+		global $TBL_EXERCISE_QUESTION, $TBL_EXERCISE, $cours_id;
 
-		$id=$this->id;
+		$id = $this->id;
 
-		$sql="DELETE FROM `$TBL_EXERCICE_QUESTION` WHERE exercice_id='$id'";
+		$sql = "DELETE FROM `$TBL_EXERCISE_QUESTION` WHERE exercise_id = '$id'";
 		db_query($sql) or die("Error : DELETE in file ".__FILE__." at line ".__LINE__);
 
-		$sql="DELETE FROM `$TBL_EXERCICES` WHERE id='$id'";
+		$sql = "DELETE FROM `$TBL_EXERCISE` WHERE course_id = $cours_id AND id = '$id'";
 		db_query($sql) or die("Error : DELETE in file ".__FILE__." at line ".__LINE__);
 	}
 }

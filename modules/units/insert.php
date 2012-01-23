@@ -229,20 +229,20 @@ function insert_work($id)
 // insert exercise in database
 function insert_exercise($id)
 {
-	global $code_cours;
+	global $code_cours, $cours_id;
 	
 	list($order) = mysql_fetch_array(db_query("SELECT MAX(`order`) FROM unit_resources WHERE unit_id=$id"));
 	foreach ($_POST['exercise'] as $exercise_id) {
 		$order++;
-		$exercise = mysql_fetch_array(db_query("SELECT * FROM exercices
-			WHERE id =" . intval($exercise_id), $GLOBALS['currentCourseID']), MYSQL_ASSOC);
+		$exercise = mysql_fetch_array(db_query("SELECT * FROM exercise
+			WHERE course = $cours_id AND id = ". intval($exercise_id), $GLOBALS['mysqlMainDb']), MYSQL_ASSOC);
 		if ($exercise['active'] == '0') {
 			 $visibility = 'i';
 		} else {
 			$visibility = 'v';
 		}
 		db_query("INSERT INTO unit_resources SET unit_id=$id, type='exercise', title=" .
-			quote($exercise['titre']) . ", comments=" . quote($exercise['description']) .
+			quote($exercise['title']) . ", comments=" . quote($exercise['description']) .
 			", visibility='$visibility', `order`=$order, `date`=NOW(), res_id=$exercise[id]",
 			$GLOBALS['mysqlMainDb']); 
 	}

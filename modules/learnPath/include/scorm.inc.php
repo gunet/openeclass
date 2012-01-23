@@ -21,7 +21,6 @@
 
 /**===========================================================================
 	scorm.inc.php
-	@last update: 30-06-2006 by Thanos Kyritsis
 	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
 	               
 	based on Claroline version 1.7 licensed under GPL
@@ -31,12 +30,6 @@
 	      
 	Claroline authors: Piraux Sebastien <pir@cerdecam.be>
                       Lederer Guillaume <led@cerdecam.be>
-==============================================================================        
-    @Description:
-
-    @Comments:
- 
-    @todo: 
 ==============================================================================
 */
 

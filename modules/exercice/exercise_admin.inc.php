@@ -22,47 +22,47 @@
 
 // the exercise form has been submitted
 if(isset($_POST['submitExercise'])) {
-	$exerciseTitle = trim($exerciseTitle);
+	$exerciseTitle       = trim($exerciseTitle);
 	$exerciseDescription = trim($exerciseDescription);
-	$randomQuestions = (isset($_POST['questionDrawn'])) ? intval($_POST['questionDrawn']) : 0;
+	$randomQuestions     = (isset($_POST['questionDrawn'])) ? intval($_POST['questionDrawn']) : 0;
 
 	// no title given
 	if(empty($exerciseTitle))
 	{
-		$msgErr=$langGiveExerciseName;
+		$msgErr = $langGiveExerciseName;
 	} else {
-		if ((!is_numeric($exerciseTimeConstrain))||(!is_numeric($exerciseAttemptsAllowed))) {
-			$msgErr=$langGiveExerciseInts;
+		if ((!is_numeric($exerciseTimeConstraint))||(!is_numeric($exerciseAttemptsAllowed))) {
+			$msgErr = $langGiveExerciseInts;
 		} else {
 			$objExercise->updateTitle($exerciseTitle);
 			$objExercise->updateDescription($exerciseDescription);
 			$objExercise->updateType($exerciseType);
 			$objExercise->updateStartDate($exerciseStartDate);
 			$objExercise->updateEndDate($exerciseEndDate);
-			$objExercise->updateTimeConstrain($exerciseTimeConstrain);
+			$objExercise->updateTimeConstraint($exerciseTimeConstraint);
 			$objExercise->updateAttemptsAllowed($exerciseAttemptsAllowed);
 			$objExercise->setRandom($randomQuestions);
 			$objExercise->updateResults($dispresults);
 			$objExercise->updateScore($dispscore);
 			$objExercise->save();
 			// reads the exercise ID (only usefull for a new exercise)
-			$exerciseId=$objExercise->selectId();
+			$exerciseId = $objExercise->selectId();
 			unset($_GET['modifyExercise']);
 		}
 	}
 }
 else
 {
-	$exerciseTitle=$objExercise->selectTitle();
-	$exerciseDescription=$objExercise->selectDescription();
-	$exerciseType=$objExercise->selectType();
-	$exerciseStartDate=$objExercise->selectStartDate();
-	$exerciseEndDate=$objExercise->selectEndDate();
-	$exerciseTimeConstrain=$objExercise->selectTimeConstrain();
-	$exerciseAttemptsAllowed=$objExercise->selectAttemptsAllowed();
-	$randomQuestions=$objExercise->isRandom();
-	$displayResults=$objExercise->selectResults();
-	$displayScore=$objExercise->selectScore();
+        $exerciseTitle           = $objExercise->selectTitle();
+        $exerciseDescription     = $objExercise->selectDescription();
+        $exerciseType            = $objExercise->selectType();
+        $exerciseStartDate       = $objExercise->selectStartDate();
+        $exerciseEndDate         = $objExercise->selectEndDate();
+        $exerciseTimeConstraint  = $objExercise->selectTimeConstraint();
+        $exerciseAttemptsAllowed = $objExercise->selectAttemptsAllowed();
+        $randomQuestions         = $objExercise->isRandom();
+        $displayResults          = $objExercise->selectResults();
+        $displayScore            = $objExercise->selectScore();
 }
 
 // shows the form to modify the exercise
@@ -125,8 +125,8 @@ if(isset($_GET['modifyExercise']) or isset($_GET['NewExercise']) or !isset($_POS
 	</tr>	
 	<tr>
 	  <th>".$langExerciseConstrain.":</th>
-	  <td><input type=\"text\" name=\"exerciseTimeConstrain\" size=\"3\" maxlength=\"3\" ".
-	  "value=\"".htmlspecialchars($exerciseTimeConstrain)."\">&nbsp;&nbsp;".
+	  <td><input type=\"text\" name=\"exerciseTimeConstraint\" size=\"3\" maxlength=\"3\" ".
+	  "value=\"".htmlspecialchars($exerciseTimeConstraint)."\">&nbsp;&nbsp;".
 	  $langExerciseConstrainUnit." &nbsp;&nbsp;&nbsp;&nbsp;(".$langExerciseConstrainExplanation.")</td>
 	</tr>	
 	<tr>
@@ -211,10 +211,10 @@ if(isset($_GET['modifyExercise']) or isset($_GET['NewExercise']) or !isset($_POS
 	  <td>";
 	
 	$exerciseDescription = standard_text_escape($exerciseDescription);
-	$tool_content .= $exerciseDescription;
-	$exerciseStartDate = nice_format(date("Y-m-d H:i", strtotime($exerciseStartDate)), true);
-	$exerciseEndDate = nice_format(date("Y-m-d H:i", strtotime($exerciseEndDate)), true);
-	$tool_content .= "</td>
+        $tool_content       .= $exerciseDescription;
+        $exerciseStartDate   = nice_format(date("Y-m-d H:i", strtotime($exerciseStartDate)), true);
+        $exerciseEndDate     = nice_format(date("Y-m-d H:i", strtotime($exerciseEndDate)), true);
+        $tool_content       .= "</td>
 	</tr>
 	<tr>
 	  <th>$langExerciseStart:</th>
@@ -226,7 +226,7 @@ if(isset($_GET['modifyExercise']) or isset($_GET['NewExercise']) or !isset($_POS
 	</tr>
 	<tr>
 	  <th>$langExerciseConstrain:</th>
-	  <td>$exerciseTimeConstrain $langExerciseConstrainUnit</td>
+	  <td>$exerciseTimeConstraint $langExerciseConstrainUnit</td>
 	</tr>
 	<tr>
 	  <th>$langExerciseAttemptsAllowed:</th>

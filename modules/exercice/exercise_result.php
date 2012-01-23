@@ -25,10 +25,10 @@ define('FILL_IN_BLANKS', 3);
 define('MATCHING', 4);
 define('TRUE_FALSE', 5);
 
-$TBL_EXERCICE_QUESTION='exercice_question';
-$TBL_EXERCICES='exercices';
-$TBL_QUESTIONS='questions';
-$TBL_REPONSES='reponses';
+$TBL_EXERCISE_QUESTION = 'exercise_question';
+$TBL_EXERCISE = 'exercise';
+$TBL_QUESTION = 'question';
+$TBL_ANSWER = 'answer';
 
 include('exercise.class.php');
 include('question.class.php');
@@ -57,12 +57,12 @@ if(!is_array($_SESSION['exerciseResult'][$exerciseId]) || !is_array($_SESSION['q
 	exit();
 }
 
-$exerciseTitle = $objExercise->selectTitle();
-$exerciseDescription = $objExercise->selectDescription();
+$exerciseTitle            = $objExercise->selectTitle();
+$exerciseDescription      = $objExercise->selectDescription();
 $exerciseDescription_temp = nl2br(make_clickable($exerciseDescription));
 $exerciseDescription_temp = mathfilter($exerciseDescription_temp, 12, "../../courses/mathimg/");
-$displayResults = $objExercise->selectResults();
-$displayScore = $objExercise->selectScore(); 
+$displayResults           = $objExercise->selectResults();
+$displayScore             = $objExercise->selectScore(); 
 
 $tool_content .= "
   <table class=\"tbl_border\" width=\"99%\">
@@ -84,17 +84,17 @@ foreach($_SESSION['questionList'][$exerciseId] as $questionId) {
 	// gets the student choice for this question
 	$choice = @$_SESSION['exerciseResult'][$exerciseId][$questionId];
 	// creates a temporary Question object
-	$objQuestionTmp=new Question();
+	$objQuestionTmp = new Question();
 	$objQuestionTmp->read($questionId);
 
-	$questionName=$objQuestionTmp->selectTitle();
-	$questionName=$questionName;
-	$questionDescription=$objQuestionTmp->selectDescription();
-	$questionDescription=$questionDescription;
+	$questionName             = $objQuestionTmp->selectTitle();
+	$questionName             = $questionName;
+	$questionDescription      = $objQuestionTmp->selectDescription();
+	$questionDescription      = $questionDescription;
 	$questionDescription_temp = nl2br(make_clickable($questionDescription));
 	$questionDescription_temp = mathfilter($questionDescription_temp, 12, "../../courses/mathimg/");
-	$questionWeighting=$objQuestionTmp->selectWeighting();
-	$answerType=$objQuestionTmp->selectType();
+	$questionWeighting        = $objQuestionTmp->selectWeighting();
+	$answerType               = $objQuestionTmp->selectType();
 
 	// destruction of the Question object
 	unset($objQuestionTmp);
@@ -152,14 +152,14 @@ foreach($_SESSION['questionList'][$exerciseId] as $questionId) {
 		}
 	}
 	// construction of the Answer object
-	$objAnswerTmp=new Answer($questionId);
-	$nbrAnswers=$objAnswerTmp->selectNbrAnswers();
+	$objAnswerTmp = new Answer($questionId);
+	$nbrAnswers   = $objAnswerTmp->selectNbrAnswers();
 	
-	for($answerId=1;$answerId <= $nbrAnswers;$answerId++) {
-		$answer=$objAnswerTmp->selectAnswer($answerId);
-		$answerComment=$objAnswerTmp->selectComment($answerId);
-		$answerCorrect=$objAnswerTmp->isCorrect($answerId);
-		$answerWeighting=$objAnswerTmp->selectWeighting($answerId);
+	for($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
+		$answer          = $objAnswerTmp->selectAnswer($answerId);
+		$answerComment   = $objAnswerTmp->selectComment($answerId);
+		$answerCorrect   = $objAnswerTmp->isCorrect($answerId);
+		$answerWeighting = $objAnswerTmp->selectWeighting($answerId);
 		// support for math symbols
 		$answer = mathfilter($answer, 12, "../../courses/mathimg/");
 		$answerComment = mathfilter($answerComment, 12, "../../courses/mathimg/");
@@ -234,25 +234,25 @@ foreach($_SESSION['questionList'][$exerciseId] as $questionId) {
 			// for matching
 			case MATCHING :	if($answerCorrect) {
 						if($answerCorrect == $choice[$answerId]) {
-							$questionScore+=$answerWeighting;
-							$totalScore+=$answerWeighting;
-							$choice[$answerId]=$matching[$choice[$answerId]];
+							$questionScore += $answerWeighting;
+							$totalScore    += $answerWeighting;
+							$choice[$answerId] = $matching[$choice[$answerId]];
 						}
 						elseif(!$choice[$answerId]) {
-							$choice[$answerId]='&nbsp;&nbsp;&nbsp;';
+							$choice[$answerId] = '&nbsp;&nbsp;&nbsp;';
 						} else {
-							$choice[$answerId]='<font color="red">
+							$choice[$answerId] = '<font color="red">
 							<s>'.$matching[$choice[$answerId]].'</s>
 							</font>';
 						}
 					} else {
-						$matching[$answerId]=$answer;
+						$matching[$answerId] = $answer;
 					}
 				break;
-			case TRUE_FALSE : $studentChoice=($choice == $answerId)?1:0;
+			case TRUE_FALSE : $studentChoice = ($choice == $answerId) ? 1 : 0;
 					if($studentChoice) {
-						$questionScore+=$answerWeighting;
-						$totalScore+=$answerWeighting;
+						$questionScore += $answerWeighting;
+						$totalScore += $answerWeighting;
 					}
 				break;
 		}	// end switch()
@@ -336,22 +336,22 @@ foreach($_SESSION['questionList'][$exerciseId] as $questionId) {
 }	// end foreach()
 
 // update db with results
-$eid=$objExercise->selectId();
-mysql_select_db($currentCourseID);
+$eid = $objExercise->selectId();
+mysql_select_db($mysqlMainDb);
 
-$sql="SELECT RecordStartDate FROM `exercise_user_record` WHERE eid='$eid' AND uid='$uid'";
-$result=db_query($sql);
+$sql = "SELECT record_start_date FROM `exercise_user_record` WHERE eid = '$eid' AND uid = '$uid'";
+$result = db_query($sql);
 $attempt = count($result);
 
-$sql="SELECT MAX(eurid) FROM `exercise_user_record` WHERE eid='$eid' AND uid='$uid'";
+$sql = "SELECT MAX(eurid) FROM `exercise_user_record` WHERE eid = '$eid' AND uid = '$uid'";
 $result = db_query($sql);
-$row= mysql_fetch_row($result);
+$row = mysql_fetch_row($result);
 $eurid = $row[0];
 
 // record results of exercise
-$sql="UPDATE exercise_user_record SET TotalScore='$totalScore', TotalWeighting='$totalWeighting',
-	attempt='$attempt' WHERE eurid='$eurid'";
-db_query($sql, $currentCourseID);
+$sql="UPDATE exercise_user_record SET total_score = '$totalScore', total_weighting = '$totalWeighting',
+	attempt = '$attempt' WHERE eurid = '$eurid'";
+db_query($sql);
 
 if ($displayScore == 1) {
 	$tool_content .= "

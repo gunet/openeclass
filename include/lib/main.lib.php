@@ -1496,6 +1496,12 @@ function delete_course($cid)
 	db_query("DELETE FROM poll WHERE course_id = $cid");
 	db_query("DELETE FROM assignment_submit WHERE assignment_id IN (SELECT id FROM assignments WHERE course_id = $cid)");
 	db_query("DELETE FROM assignments WHERE course_id = $cid");
+	db_query("DELETE FROM exercise_question WHERE question_id IN (SELECT id FROM question WHERE course_id = $cid)");
+	db_query("DELETE FROM exercise_question WHERE exercise_id IN (SELECT id FROM exercise WHERE course_id = $cid)");
+	db_query("DELETE FROM answer WHERE question_id IN (SELECT id FROM question WHERE course_id = $cid)");
+	db_query("DELETE FROM question WHERE course_id = $cid");
+	db_query("DELETE FROM exercise_user_record WHERE eid IN (SELECT id FROM exercise WHERE course_id = $cid)");
+	db_query("DELETE FROM exercise WHERE course_id = $cid");
 
         $garbage = "${webDir}courses/garbage";
         if (!is_dir($garbage)) {

@@ -18,10 +18,8 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-
 /*===========================================================================
 	insertMyExercise.php
-	@last update: 30-06-2006 by Thanos Kyritsis
 	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
 
 	based on Claroline version 1.7 licensed under GPL
@@ -34,12 +32,7 @@
 ==============================================================================
     @Description: This script lists all available exercises and the course
                   admin can add them to a learning path
-
-    @Comments:
-
-    @todo:
-==============================================================================
-*/
+============================================================================== */
 
 require_once("../../include/lib/learnPathLib.inc.php");
 require_once("../../include/lib/fileDisplayLib.inc.php");
@@ -47,40 +40,32 @@ require_once("../../include/lib/fileDisplayLib.inc.php");
 $require_current_course = TRUE;
 $require_editor = TRUE;
 
-/*
- * DB tables definition
- */
-
-$TABLELEARNPATH         = "lp_learnPath";
-$TABLEMODULE            = "lp_module";
-$TABLELEARNPATHMODULE   = "lp_rel_learnPath_module";
-$TABLEASSET             = "lp_asset";
-$TABLEUSERMODULEPROGRESS= "lp_user_module_progress";
+// DB tables definition
+$TABLELEARNPATH          = "lp_learnPath";
+$TABLEMODULE             = "lp_module";
+$TABLELEARNPATHMODULE    = "lp_rel_learnPath_module";
+$TABLEASSET              = "lp_asset";
+$TABLEUSERMODULEPROGRESS = "lp_user_module_progress";
 // exercises table name
-$TABLEEXERCISES         = "exercices";
+$TABLEEXERCISE           = "exercise";
 
 require_once("../../include/baseTheme.php");
-$dialogBox = "";
-$style = "";
-$MessBox = "";
+$messBox = "";
 
 $navigation[] = array("url"=>"learningPathList.php?course=$code_cours", "name"=> $langLearningPath);
 $navigation[] = array("url"=>"learningPathAdmin.php?course=$code_cours&amp;path_id=".(int)$_SESSION['path_id'], "name"=> $langAdm);
 $nameTools = $langInsertMyExerciseToolName;
 
-
 mysql_select_db($mysqlMainDb);
 
 // see checked exercises to add
 
-$sql = "SELECT * FROM `".$TABLEEXERCISES;
-$resultex = db_query($sql, $currentCourseID);
+$sql = "SELECT * FROM `".$TABLEEXERCISE."` WHERE course_id = $cours_id AND active = 1";
+$resultex = db_query($sql);
 
 // for each exercise checked, try to add it to the learning path.
-
 while ($listex = mysql_fetch_array($resultex) )
 {
-
     if (isset($_REQUEST['insertExercise']) && isset($_REQUEST['check_'.$listex['id']]) )  //add
     {
         $insertedExercise = $listex['id'];
@@ -92,15 +77,15 @@ while ($listex = mysql_fetch_array($resultex) )
                   AND M.`contentType` = \"".CTEXERCISE_."\"
                   AND M.`course_id` = $cours_id";
 
-        $query = db_query($sql, $mysqlMainDb);
+        $query = db_query($sql);
         $num = mysql_numrows($query);
 
         if($num == 0)
         {
             // select infos about added exercise
-            $sql = "SELECT * FROM `".$TABLEEXERCISES."` WHERE `id` = ". (int)$insertedExercise;
+            $sql = "SELECT * FROM `".$TABLEEXERCISE."` WHERE `course_id` = $cours_id AND `id` = ". (int)$insertedExercise;
 
-            $result = db_query($sql, $currentCourseID);
+            $result = db_query($sql);
             $exercise = mysql_fetch_array($result);
 
             if( !empty($exercise['description']) ) {
@@ -113,38 +98,33 @@ while ($listex = mysql_fetch_array($resultex) )
             // create new module
             $sql = "INSERT INTO `".$TABLEMODULE."`
                     (`course_id`, `name` , `comment`, `contentType`, `launch_data`)
-                    VALUES ($cours_id, '".addslashes($exercise['titre'])."' , '".addslashes($comment)."', '".CTEXERCISE_."','')";
-            $query = db_query($sql, $mysqlMainDb);
+                    VALUES ($cours_id, '".addslashes($exercise['title'])."' , '".addslashes($comment)."', '".CTEXERCISE_."','')";
+            $query = db_query($sql);
             $insertedExercice_id = mysql_insert_id();
 
             // create new asset
             $sql = "INSERT INTO `".$TABLEASSET."`
                     (`path` , `module_id` , `comment`)
                     VALUES ('". (int)$insertedExercise."', ". (int)$insertedExercice_id ." , '')";
-            $query = db_query($sql, $mysqlMainDb);
+            $query = db_query($sql);
             $insertedAsset_id = mysql_insert_id();
             $sql = "UPDATE `".$TABLEMODULE."`
                        SET `startAsset_id` = ". (int)$insertedAsset_id."
                      WHERE `module_id` = ". (int)$insertedExercice_id ."
                      AND `course_id` = $cours_id";
-            $query = db_query($sql, $mysqlMainDb);
+            $query = db_query($sql);
 
             // determine the default order of this Learning path
-            $result = db_query("SELECT MAX(`rank`) FROM `".$TABLELEARNPATHMODULE."` WHERE `learnPath_id` = ". (int)$_SESSION['path_id'], $mysqlMainDb);
+            $result = db_query("SELECT MAX(`rank`) FROM `".$TABLELEARNPATHMODULE."` WHERE `learnPath_id` = ". (int)$_SESSION['path_id']);
             list($orderMax) = mysql_fetch_row($result);
             $order = $orderMax + 1;
             // finally : insert in learning path
             $sql = "INSERT INTO `".$TABLELEARNPATHMODULE."`
                     (`learnPath_id`, `module_id`, `specificComment`, `rank`, `lock`)
                     VALUES ('". (int)$_SESSION['path_id']."', '".(int)$insertedExercice_id."','".addslashes($langDefaultModuleAddedComment)."', ".$order.",'OPEN')";
-            $query = db_query($sql, $mysqlMainDb);
+            $query = db_query($sql);
 
-            $MessBox .= $exercise['titre'] ." :  ".$langExInsertedAsModule."<br>";
-            $style = "success";
-            $tool_content .= "<table width=\"100%\" class=\"tbl\"><tr>";
-            $tool_content .= disp_message_box($MessBox, $style);
-            $tool_content .= "</td></tr></table>";
-            $tool_content .= "<br />";
+            $messBox .= "<tr>". disp_message_box($exercise['title'] ." :  ".$langExInsertedAsModule."<br>", "success") . "</td></tr>";
         }
         else    // exercise is already used as a module in another learning path , so reuse its reference
         {
@@ -159,7 +139,7 @@ while ($listex = mysql_fetch_array($resultex) )
                        AND LPM.`learnPath_id` = ". (int)$_SESSION['path_id'] ."
                        AND M.`course_id` = $cours_id";
 
-            $query2 = db_query($sql, $mysqlMainDb);
+            $query2 = db_query($sql);
             $num = mysql_numrows($query2);
 
             if ($num == 0)     // used in another LP but not in this one, so reuse the module id reference instead of creating a new one
@@ -167,7 +147,7 @@ while ($listex = mysql_fetch_array($resultex) )
                 $thisExerciseModule = mysql_fetch_array($query);
                 // determine the default order of this Learning path
                 $sql = "SELECT MAX(`rank`) FROM `".$TABLELEARNPATHMODULE."` WHERE `learnPath_id` = ". (int)$_SESSION['path_id'];
-                $result = db_query($sql, $mysqlMainDb);
+                $result = db_query($sql);
 
                 list($orderMax) = mysql_fetch_row($result);
                 $order = $orderMax + 1;
@@ -175,35 +155,28 @@ while ($listex = mysql_fetch_array($resultex) )
                 $sql = "INSERT INTO `".$TABLELEARNPATHMODULE."`
                         (`learnPath_id`, `module_id`, `specificComment`, `rank`, `lock`)
                         VALUES (".(int)$_SESSION['path_id'].", ".(int)$thisExerciseModule['module_id'].",'".addslashes($langDefaultModuleAddedComment)."', ".$order.", 'OPEN')";
-                $query = db_query($sql, $mysqlMainDb);
+                $query = db_query($sql);
 
                 // select infos about added exercise
-                $sql = "SELECT * FROM `".$TABLEEXERCISES."` WHERE `id` = ". (int)$insertedExercise;
+                $sql = "SELECT * FROM `".$TABLEEXERCISE."` WHERE `course_id` = $cours_id AND `id` = ". (int)$insertedExercise;
 
-                $result = db_query($sql, $currentCourseID);
+                $result = db_query($sql);
                 $exercise = mysql_fetch_array($result);
-                $MessBox .= $exercise['titre']." : ".$langExInsertedAsModule."<br>";
-                $style = "success";
-                $tool_content .= "<table width=\"100%\" class=\"tbl_alt\"><tr>";
-                $tool_content .= disp_message_box($MessBox, $style);
-                $tool_content .= "</td></tr></table>";
-                $tool_content .= "<br />";
+                $messBox .= "<tr>". disp_message_box($exercise['title']." : ".$langExInsertedAsModule."<br>", "success") ."</td></tr>";
             }
-            else
-            {
-                $MessBox .= $listex['titre']." : ".$langExAlreadyUsed."<br>";
-                $style = "caution";
-                $tool_content .= "<table width=\"100%\" class=\"tbl_alt\"><tr>";
-                $tool_content .= disp_message_box($MessBox, $style);
-                $tool_content .= "</td></tr></table>";
-                $tool_content .= "<br />";
+            else {
+                $messBox .= "<tr>". disp_message_box($listex['title']." : ".$langExAlreadyUsed."<br>", "caution") ."</td></tr>";
             }
         }
-    }
+    } // end if request
 } //end while
 
+$tool_content .= "<table width=\"100%\" class=\"tbl_alt\">";
+$tool_content .= $messBox;
+$tool_content .= "</table><br />";
+
 //STEP ONE : display form to add an exercise
-$tool_content .= display_my_exercises($dialogBox, $style);
+$tool_content .= display_my_exercises("", "");
 
 //STEP TWO : display learning path content
 //$tool_content .= disp_tool_title($langPathContentTitle);

@@ -22,16 +22,16 @@
 
 function list_exercises()
 {
-        global $id, $currentCourseID, $tool_content, $urlServer,
+        global $id, $mysqlMainDb, $cours_id, $tool_content, $urlServer,
                $langComments, $langAddModulesButton, $langChoice, $langNoExercises, $langExercices, $code_cours;
 
 
-        $result = db_query("SELECT * FROM exercices", $currentCourseID);
+        $result = db_query("SELECT * FROM exercise WHERE course_id = $cours_id", $mysqlMainDb);
         $quizinfo = array();
         while($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
                 $quizinfo[] = array(
 			'id' => $row['id'],
-		        'name' => $row['titre'],
+		        'name' => $row['title'],
                         'comment' => $row['description'],
                         'visibility' => $row['active']);
         }

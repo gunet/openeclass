@@ -34,8 +34,6 @@
     @Description: This script provides information on the progress of a
                   learning path module and then launches navigation for it.
                   It also displays some extra option for the teacher.
-
-    @Comments:
 ==============================================================================
 */
 
@@ -52,7 +50,7 @@ $TABLELEARNPATHMODULE   = "lp_rel_learnPath_module";
 $TABLEASSET             = "lp_asset";
 $TABLEUSERMODULEPROGRESS= "lp_user_module_progress";
 
-$TABLEQUIZTEST          = "exercices";
+$TABLEQUIZTEST          = "exercise";
 $dbTable                = $TABLEASSET; // for old functions of document tool
 
 require_once("../../include/baseTheme.php");

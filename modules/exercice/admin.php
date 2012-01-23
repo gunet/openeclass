@@ -21,11 +21,11 @@
 
 
 // answer types
-define('UNIQUE_ANSWER',	1);
+define('UNIQUE_ANSWER',   1);
 define('MULTIPLE_ANSWER', 2);
-define('FILL_IN_BLANKS', 3);
-define('MATCHING', 4);
-define('TRUE_FALSE', 5);
+define('FILL_IN_BLANKS',  3);
+define('MATCHING',        4);
+define('TRUE_FALSE',      5);
 
 include('exercise.class.php');
 include('question.class.php');
@@ -55,10 +55,10 @@ $picturePath='../../courses/'.$currentCourseID.'/image';
 $aType = array($langUniqueSelect, $langMultipleSelect, $langFillBlanks, $langMatching, $langTrueFalse);
 
 // tables used in the exercise tool
-$TBL_EXERCICE_QUESTION = 'exercice_question';
-$TBL_EXERCICES = 'exercices';
-$TBL_QUESTIONS = 'questions';
-$TBL_REPONSES = 'reponses';
+$TBL_EXERCISE_QUESTION = 'exercise_question';
+$TBL_EXERCISE = 'exercise';
+$TBL_QUESTION = 'question';
+$TBL_ANSWER = 'answer';
 
 if(!$is_editor) {
 	$tool_content .= $langNotAllowed;

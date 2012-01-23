@@ -19,10 +19,10 @@
  * ======================================================================== */
 
 
-$TBL_EXERCICE_QUESTION='exercice_question';
-$TBL_EXERCICES='exercices';
-$TBL_QUESTIONS='questions';
-$TBL_REPONSES='reponses'; 
+$TBL_EXERCISE_QUESTION = 'exercise_question';
+$TBL_EXERCISE = 'exercise';
+$TBL_QUESTION = 'question';
+$TBL_ANSWER = 'answer'; 
 
 
 $require_current_course = TRUE;
@@ -71,18 +71,17 @@ $tool_content .= "
     </table>
     <br/>";
 
-mysql_select_db($currentCourseID);
-$sql="SELECT DISTINCT uid FROM `exercise_user_record`";
+mysql_select_db($mysqlMainDb);
+$sql = "SELECT DISTINCT uid FROM `exercise_user_record` WHERE eid in (SELECT id FROM exercise WHERE course_id = $cours_id)";
 $result = db_query($sql);
 while($row=mysql_fetch_array($result)) {
 	$sid = $row['uid'];
-	$StudentName = db_query("SELECT nom,prenom,am FROM user WHERE user_id='$sid'", $mysqlMainDb);
+	$StudentName = db_query("SELECT nom,prenom,am FROM user WHERE user_id='$sid'");
 	$theStudent = mysql_fetch_array($StudentName);
 	
-	mysql_select_db($currentCourseID);
-	$sql2="SELECT DATE_FORMAT(RecordStartDate, '%Y-%m-%d / %H:%i') AS RecordStartDate, RecordEndDate,
-		TIME_TO_SEC(TIMEDIFF(RecordEndDate,RecordStartDate))
-		AS TimeDuration, TotalScore, TotalWeighting 
+	$sql2="SELECT DATE_FORMAT(record_start_date, '%Y-%m-%d / %H:%i') AS record_start_date, record_end_date,
+		TIME_TO_SEC(TIMEDIFF(record_end_date, record_start_date))
+		AS time_duration, total_score, total_weighting 
 		FROM `exercise_user_record` WHERE uid='$sid' AND eid='$exerciseId'";
 	$result2 = db_query($sql2);
 	if (mysql_num_rows($result2) > 0) { // if users found
@@ -115,16 +114,16 @@ while($row=mysql_fetch_array($result)) {
         }
 
 			$tool_content .= "
-      <td class='center'>$row2[RecordStartDate]</td>";
-			if ($row2['TimeDuration'] == '00:00:00' or empty($row2['TimeDuration'])) { // for compatibility 
+      <td class='center'>$row2[record_start_date]</td>";
+			if ($row2['time_duration'] == '00:00:00' or empty($row2['time_duration'])) { // for compatibility 
 				$tool_content .= "
       <td class='center'>$langNotRecorded</td>";
 			} else {
 				$tool_content .= "
-      <td class='center'>".format_time_duration($row2['TimeDuration'])."</td>";
+      <td class='center'>".format_time_duration($row2['time_duration'])."</td>";
 			}
 			$tool_content .= "
-      <td class='center'>".$row2['TotalScore']. "/".$row2['TotalWeighting']."</td>
+      <td class='center'>".$row2['total_score']. "/".$row2['total_weighting']."</td>
     </tr>";
     $k++;
 		}

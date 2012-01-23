@@ -990,8 +990,164 @@ function upgrade_course_3_0($code, $lang, $extramessage = '', $return_mapping = 
             
     }
     
+    $exercise_map = array();
+    // move exercises to central db and drop tables
+    if (mysql_table_exists($code, 'exercices') &&
+        mysql_table_exists($code, 'exercise_user_record') &&
+        mysql_table_exists($code, 'questions') &&
+        mysql_table_exists($code, 'reponses') &&
+        mysql_table_exists($code, 'exercice_question') ) {
+    
+        $dropflag = true;
+        $question_map = array();
+    
+        // ----- exercices DB Table ----- //
+        list($exercise_id) = mysql_fetch_row(db_query("SELECT max(id) FROM `$mysqlMainDb`.exercise"));
+        if (!$exercise_id)
+            $exercise_id = 0;
+    
+        $result = db_query("SELECT * FROM exercices ORDER by id");
+    
+        while ($row = mysql_fetch_array($result)) {
+            $oldid = intval($row['id']);
+            $newid = intval($exercise_id) + $oldid;
+            
+            $exercise_map[$oldid] = $newid;
+    
+            $r = db_query("INSERT INTO `$mysqlMainDb`.exercise
+                                        (`id`, `course_id`, `title`, `description`, `type`, `start_date`, `end_date`, 
+                                         `time_constraint`, `attempts_allowed`, `random`, `active`, `results`, `score`)
+                        				VALUES
+                        				(".$newid .", 
+                        				 ".$course_id .", 
+                        				 ".autoquote($row['titre']) .", 
+                        				 ".autoquote($row['description']) .",
+                        				 ".autoquote($row['type']) .", 
+                        				 ".autoquote($row['StartDate']) .", 
+                        				 ".autoquote($row['EndDate']) .",
+                        				 ".autoquote($row['TimeConstrain']) .",
+                        				 ".autoquote($row['AttemptsAllowed']) .",
+                        				 ".autoquote($row['random']) .",
+                        				 ".autoquote($row['active']) .",
+                        				 ".autoquote($row['results']) .",
+                        				 ".autoquote($row['score']) .")");
+            if (false === $r)
+                $dropflag = false;
+        }
+        
+        // ----- exercise_user_record DB Table ----- //
+        list($eur_id) = mysql_fetch_row(db_query("SELECT max(eurid) FROM `$mysqlMainDb`.exercise_user_record"));
+        if (!$eur_id)
+            $eur_id = 0;
+        
+        $result = db_query("SELECT * FROM exercise_user_record ORDER by eurid");
+        
+        while ($row = mysql_fetch_array($result)) {
+            $oldid = intval($row['eurid']);
+            $newid = intval($eur_id) + $oldid;
+        
+            if (isset($exercise_map[$row['eid']])) {
+                $r = db_query("INSERT INTO `$mysqlMainDb`.exercise_user_record
+                                            (`eurid`, `eid`, `uid`, `record_start_date`, `record_end_date`, `total_score`, 
+                                            `total_weighting`, `attempt`)
+                        				VALUES
+                        				(".$newid .", 
+                        				 ".$exercise_map[$row['eid']] .", 
+                        				 ".autoquote($row['uid']) .",
+                        				 ".autoquote($row['RecordStartDate']) .", 
+                        				 ".autoquote($row['RecordEndDate']) .", 
+                        				 ".autoquote($row['TotalScore']) .",
+                        				 ".autoquote($row['TotalWeighting']) .",
+                        				 ".autoquote($row['attempt']) .")");
+            }
+            
+            if (false === $r)
+                $dropflag = false;
+        }
+        
+        // ----- questions DB Table ----- //
+        list($question_id) = mysql_fetch_row(db_query("SELECT max(id) FROM `$mysqlMainDb`.question"));
+        if (!$question_id)
+            $question_id = 0;
+        
+        $result = db_query("SELECT * FROM questions ORDER by id");
+        
+        while ($row = mysql_fetch_array($result)) {
+            $oldid = intval($row['id']);
+            $newid = intval($question_id) + $oldid;
+        
+            $question_map[$oldid] = $newid;
+        
+            $r = db_query("INSERT INTO `$mysqlMainDb`.question
+                                        (`id`, `course_id`, `question`, `description`, `weight`, `q_position`, `type`)
+                        				VALUES
+                        				(".$newid .", 
+                        				 ".$course_id .", 
+                        				 ".autoquote($row['question']) .", 
+                        				 ".autoquote($row['description']) .",
+                        				 ".autoquote($row['ponderation']) .", 
+                        				 ".autoquote($row['q_position']) .", 
+                        				 ".autoquote($row['type']) .")");
+            if (false === $r)
+                $dropflag = false;
+        }
+        
+        // ----- reponses DB Table ----- //
+        list($answer_id) = mysql_fetch_row(db_query("SELECT max(id) FROM `$mysqlMainDb`.answer"));
+        if (!$answer_id)
+            $answer_id = 0;
+        
+        $result = db_query("SELECT * FROM reponses ORDER by id");
+        
+        while ($row = mysql_fetch_array($result)) {
+            $oldid = intval($row['id']);
+            $newid = intval($answer_id) + $oldid;
+        
+            $r = db_query("INSERT INTO `$mysqlMainDb`.answer
+                                        (`id`, `question_id`, `answer`, `correct`, `comment`, `weight`, `r_position`)
+                        				VALUES
+                        				(".$newid .", 
+                        				 ".$question_map[$row['question_id']] .", 
+                        				 ".autoquote($row['reponse']) .",
+                        				 ".autoquote($row['correct']) .", 
+                        				 ".autoquote($row['comment']) .", 
+                        				 ".autoquote($row['ponderation']) .",
+                        				 ".autoquote($row['r_position']) .")");
+            if (false === $r)
+                $dropflag = false;
+        }
+        
+        // ----- exercice_question DB Table ----- //
+        $result = db_query("SELECT * FROM exercice_question");
+        
+        while ($row = mysql_fetch_array($result)) {
+            $r = db_query("INSERT INTO `$mysqlMainDb`.exercise_question
+                                        (`question_id`, `exercise_id`)
+                        				VALUES
+                        				(".$question_map[$row['question_id']] .", 
+                        				 ".$exercise_map[$row['exercice_id']] .")");
+            if (false === $r)
+                $dropflag = false;
+        }
+    
+        if (true === $dropflag) {
+            db_query("DROP TABLE exercices");
+            db_query("DROP TABLE exercise_user_record");
+            db_query("DROP TABLE questions");
+            db_query("DROP TABLE reponses");
+            db_query("DROP TABLE exercice_question");
+        }
+        
+        db_query("UPDATE `$mysqlMainDb`.course_units AS units, `$mysqlMainDb`.unit_resources AS res
+                            SET res_id = res_id + $exercise_id
+                            WHERE units.id = res.unit_id AND course_id = $course_id AND type = 'exercise'");
+        db_query("UPDATE `$mysqlMainDb`.lp_module AS module, `$mysqlMainDb`.lp_asset AS asset
+        					SET path = path + $exercise_id
+        					WHERE module.startAsset_id = asset.asset_id AND course_id = $course_id AND contentType = 'EXERCISE'");
+    }
+    
     if ($return_mapping)
-        return array($video_map, $videolinks_map, $lp_map, $wiki_map, $assignments_map);
+        return array($video_map, $videolinks_map, $lp_map, $wiki_map, $assignments_map, $exercise_map);
 }
 
 function upgrade_course_2_5($code, $lang, $extramessage = '') {

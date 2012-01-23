@@ -22,7 +22,6 @@
 
 /**===========================================================================
 	exercise.php
-	@last update: 30-06-2006 by Thanos Kyritsis
 	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
 	               
 	based on Claroline version 1.7 licensed under GPL
@@ -32,12 +31,6 @@
 	      
 	Claroline authors: Piraux Sebastien <pir@cerdecam.be>
                       Lederer Guillaume <led@cerdecam.be>
-==============================================================================        
-    @Description:
-
-    @Comments:
- 
-    @todo: 
 ==============================================================================
 */
 
@@ -92,7 +85,7 @@ if( isset($learningPath_module['lock'])
 $sql = "SELECT `E`.`id` AS `exerciseId`, `M`.`name`
         FROM `$mysqlMainDb`.`".$TABLEMODULE."` AS `M`,
              `$mysqlMainDb`.`".$TABLEASSET."`  AS `A`,
-             `$code_cours`.`".$TABLEQUIZTEST."` AS `E`
+             `$mysqlMainDb`.`".$TABLEQUIZTEST."` AS `E`
        WHERE `A`.`module_id` = M.`module_id`
          AND `M`.`module_id` = ". (int) $_SESSION['lp_module_id']."
          AND `M`.`course_id` = $cours_id

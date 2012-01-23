@@ -35,9 +35,6 @@
                   a module in the browser. We define here the frameset
                   containing the launcher module (SCO if it is a SCORM
                   conformant one) and a frame to update the user's progress.
-
-
-    @Comments:
 ==============================================================================
 */
 
@@ -45,11 +42,11 @@ $require_current_course = TRUE;
 $path2add = 3;
 include("../../../include/init.php");
 
-$TABLELEARNPATH         = "lp_learnPath";
-$TABLEMODULE            = "lp_module";
-$TABLELEARNPATHMODULE   = "lp_rel_learnPath_module";
-$TABLEASSET             = "lp_asset";
-$TABLEUSERMODULEPROGRESS= "lp_user_module_progress";
+$TABLELEARNPATH          = "lp_learnPath";
+$TABLEMODULE             = "lp_module";
+$TABLELEARNPATHMODULE    = "lp_rel_learnPath_module";
+$TABLEASSET              = "lp_asset";
+$TABLEUSERMODULEPROGRESS = "lp_user_module_progress";
 
 $clarolineRepositoryWeb = $urlServer."courses/".$currentCourseID;
 

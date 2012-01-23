@@ -49,10 +49,10 @@ define('TRUE_FALSE', 5);
 $nameTools = $langExercice;
 $picturePath='../../'.$currentCourseID.'/image';
 
-$TBL_EXERCICE_QUESTION='exercice_question';
-$TBL_EXERCICES='exercices';
-$TBL_QUESTIONS='questions';
-$TBL_REPONSES='reponses';
+$TBL_EXERCISE_QUESTION = 'exercise_question';
+$TBL_EXERCISE          = 'exercise';
+$TBL_QUESTION          = 'question';
+$TBL_ANSWER            = 'answer';
 
 if (isset($_GET['course'])) {
 	$course = intval($_GET['course']);       
@@ -76,32 +76,33 @@ if (!isset($_SESSION['exercise_begin_time'][$exerciseId])) {
 
 // if the user has submitted the form
 if (isset($_POST['formSent'])) {
-	$exerciseType = isset($_POST['exerciseType'])?intval($_POST['exerciseType']):'';
-        $exerciseId = isset($_POST['exerciseId'])?intval($_POST['exerciseId']):'';
-	$questionNum  = isset($_POST['questionNum'])?$_POST['questionNum']:'';
-	$nbrQuestions = isset($_POST['nbrQuestions'])?$_POST['nbrQuestions']:'';
-	$exerciseTimeConstrain = isset($_POST['exerciseTimeConstrain'])?$_POST['exerciseTimeConstrain']:'';
-	$eid_temp = isset($_POST['eid_temp'])?$_POST['eid_temp']:'';
-	$RecordStartDate = isset($_POST['RecordStartDate'])?$_POST['RecordStartDate']:'';
-	$choice = isset($_POST['choice'])?$_POST['choice']:'';
-        if (isset($_SESSION['exerciseResult'][$exerciseId])) {
+    $exerciseId   = isset($_POST['exerciseId'])   ? intval($_POST['exerciseId']) : '';
+    $exerciseType = isset($_POST['exerciseType']) ? $_POST['exerciseType'] : '';
+    $questionNum  = isset($_POST['questionNum'])  ? $_POST['questionNum']  : '';
+    $nbrQuestions = isset($_POST['nbrQuestions']) ? $_POST['nbrQuestions'] : '';
+    $exerciseTimeConstraint = isset($_POST['exerciseTimeConstraint']) ? $_POST['exerciseTimeConstraint'] : '';
+    $eid_temp        = isset($_POST['eid_temp'])          ? $_POST['eid_temp']          : '';
+    $recordStartDate = isset($_POST['record_start_date']) ? $_POST['record_start_date'] : '';
+    $choice          = isset($_POST['choice'])            ? $_POST['choice']            : '';
+    if (isset($_SESSION['exerciseResult'][$exerciseId])) {
 		$exerciseResult = $_SESSION['exerciseResult'][$exerciseId];
 	} else {
 		$exerciseResult = array();
 	}
 	
-	if (isset($exerciseTimeConstrain) and $exerciseTimeConstrain != 0) { 
-		$exerciseTimeConstrain = $exerciseTimeConstrain*60;
-		$exerciseTimeConstrainSecs = time() - $exerciseTimeConstrain;		
-                $_SESSION['exercise_end_time'][$exerciseId] = $exerciseTimeConstrainSecs;
-                if ($_SESSION['exercise_end_time'][$exerciseId] - $_SESSION['exercise_begin_time'][$exerciseId] > $exerciseTimeConstrain) {
+    if (isset($exerciseTimeConstraint) and $exerciseTimeConstraint != 0) {
+        $exerciseTimeConstraint = $exerciseTimeConstraint * 60;
+        $exerciseTimeConstraintSecs = time() - $exerciseTimeConstraint;
+        $_SESSION['exercise_end_time'][$exerciseId] = $exerciseTimeConstraintSecs;
+        
+        if ($_SESSION['exercise_end_time'][$exerciseId] - $_SESSION['exercise_begin_time'][$exerciseId] > $exerciseTimeConstraint) {
 			unset($_SESSION['exercise_begin_time']);
 			unset($_SESSION['exercise_end_time']);
-                        header('Location: ../../exercice/exercise_redirect.php?course='.$code_cours.'&exerciseId='.$exerciseId);
+            header('Location: ../../exercice/exercise_redirect.php?course='.$code_cours.'&exerciseId='.$exerciseId);
 			exit();
 		} 
 	}
-	$RecordEndDate = date("Y-m-d H:i:s", time());
+    $recordEndDate = date("Y-m-d H:i:s", time());
 	
 	// if the user has answered at least one question
 	if(is_array($choice)) {
@@ -125,7 +126,7 @@ if (isset($_POST['formSent'])) {
 	// if it is the last question (only for a sequential exercise)
 	if($exerciseType == 1 || $questionNum >= $nbrQuestions) {
 		// goes to the script that will show the result of the exercise
-		header("Location: showExerciseResult.php?course=$code_cours&exerciseId=$exerciseId");
+		header('Location: showExerciseResult.php?course='.$code_cours.'&exerciseId='.$exerciseId);
 		exit();
 	}
 } // end of submit
@@ -148,14 +149,14 @@ if(!isset($_SESSION['objExercise'][$exerciseId])) {
 	$_SESSION['objExercise'][$exerciseId] = $objExercise;
 }
 
-$exerciseTitle = $objExercise->selectTitle();
-$exerciseDescription = $objExercise->selectDescription();
-$randomQuestions=$objExercise->isRandom();
-$exerciseType = $objExercise->selectType();
-$exerciseTimeConstrain = $objExercise->selectTimeConstrain();
+$exerciseTitle           = $objExercise->selectTitle();
+$exerciseDescription     = $objExercise->selectDescription();
+$randomQuestions         = $objExercise->isRandom();
+$exerciseType            = $objExercise->selectType();
+$exerciseTimeConstraint  = $objExercise->selectTimeConstraint();
 $exerciseAllowedAttempts = $objExercise->selectAttemptsAllowed();
-$eid_temp = $objExercise->selectId();
-$RecordStartDate = date("Y-m-d H:i:s", time());
+$eid_temp                = $objExercise->selectId();
+$recordStartDate         = date("Y-m-d H:i:s", time());
 
 $temp_CurrentDate = date("Y-m-d H:i");
 $temp_StartDate = $objExercise->selectStartDate();
@@ -167,10 +168,10 @@ $temp_CurrentDate = mktime(substr($temp_CurrentDate, 11, 2), substr($temp_Curren
 if (!$is_editor) {
     $error = FALSE;
     // check if exercise has expired or is active
-    $CurrentAttempt = mysql_fetch_array(db_query("SELECT COUNT(*) FROM exercise_user_record 
-                    WHERE eid='$eid_temp' AND uid='$uid'", $currentCourseID));
-    ++$CurrentAttempt[0];
-    if ($exerciseAllowedAttempts > 0 and $CurrentAttempt[0] > $exerciseAllowedAttempts) {
+    $currentAttempt = mysql_fetch_array(db_query("SELECT COUNT(*) FROM exercise_user_record 
+                                                  WHERE eid='$eid_temp' AND uid='$uid'", $currentCourseID));
+    ++$currentAttempt[0];
+    if ($exerciseAllowedAttempts > 0 and $currentAttempt[0] > $exerciseAllowedAttempts) {
         $message = $langExerciseMaxAttemptsReached;
         $error = TRUE;
     }
@@ -192,7 +193,7 @@ if (!isset($_SESSION['questionList'][$exerciseId])) {
 	// selects the list of question ID
 	$questionList = $randomQuestions ? $objExercise->selectRandomList() : $objExercise->selectQuestionList();
 	// saves the question list into the session
-        $_SESSION['questionList'][$exerciseId] = $questionList;
+    $_SESSION['questionList'][$exerciseId] = $questionList;
 }
 
 $nbrQuestions = sizeof($questionList);
@@ -224,11 +225,12 @@ echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Frameset//EN"   "http://www.w
     .'<div id="content">';
 
 echo ("
-  <table width='99%' class='tbl_border'>
+  <table width='100%' class='tbl_border'>
   <tr class='odd'>
-    <td colspan=\"2\"><b>$exerciseTitle</b>
-    <br/>
-    $exerciseDescription_temp</td>
+    <th colspan=\"2\">$exerciseTitle</th>
+  </tr>
+  <tr class='even'>
+    <td colspan=\"2\">$exerciseDescription_temp</td>
   </tr>
   </table>
   <br />
@@ -239,9 +241,9 @@ echo ("
   <input type='hidden' name='exerciseType' value='$exerciseType' />	
   <input type='hidden' name='questionNum' value='$questionNum' />
   <input type='hidden' name='nbrQuestions' value='$nbrQuestions' />
-  <input type='hidden' name='exerciseTimeConstrain' value='$exerciseTimeConstrain' />
+  <input type='hidden' name='exerciseTimeConstraint' value='$exerciseTimeConstraint' />
   <input type='hidden' name='eid_temp' value='$eid_temp' />
-  <input type='hidden' name='RecordStartDate' value='$RecordStartDate' />");
+  <input type='hidden' name='record_start_date' value='$recordStartDate' />");
 
     $i=0;
     foreach($questionList as $questionId) {
@@ -267,16 +269,16 @@ echo ("
                     }
             }
             // shows the question and its answers
-            echo ("<table width=\"99%\" class=\"tbl\">
-          <tr class='odd'>
-            <td colspan=\"2\"><b><u>".$langQuestion."</u>: ".$i);
+            echo ("<table width=\"100%\" class=\"tbl\">
+          <tr class='sub_title1'>
+            <td colspan=\"2\">".$langQuestion.": ".$i);
 
             if($exerciseType == 2) { 
                     echo ("/".$nbrQuestions);
             }
-            echo ("</b></td></tr>");
+            echo ("</td></tr>");
             showQuestion($questionId);
-            echo  "<tr><td class='even' colspan=\"2\">&nbsp;</td></tr></table>";
+            echo  "<tr><td colspan=\"2\">&nbsp;</td></tr></table>";
             // for sequential exercises
             if($exerciseType == 2) {
                     // quits the loop
@@ -286,16 +288,16 @@ echo ("
 
     if (!$questionList) {
             echo ("
-      <table width=\"99%\" class=\"tbl\">
-      <tr class='odd'>
+      <table width=\"100%\">
+      <tr>
         <td colspan='2'>
-          <p class='caution'>'$langNoAnswer</p>
+          <p class='caution'>$langNoAnswer</p>
         </td>
       </tr>
       </table>");	 
     } else {
-	echo "<br/><table width='99%' class='tbl'><tr>
-               <td><div align='center'><input type='submit' value=\"";
+	echo "<br/><table width='100%' class='tbl'><tr>
+               <td><div class='right'><input type='submit' value=\"";
                 if ($exerciseType == 1 || $nbrQuestions == $questionNum) {
                         echo "$langCont\" />&nbsp;";
                 } else {
@@ -356,15 +358,15 @@ function showQuestion($questionId, $onlyAnswers = false) {
 	if($answerType == MATCHING) {
 		$cpt1='A';
 		$cpt2=1;
-		$Select=array();
+		$select=array();
 		echo "
               <tr class='even'>
                 <td colspan='2'>
-                  <table class='tbl'>
+                  <table class='tbl_border' width='100%'>
                   <tr>
-                    <td width='200'><b>$langColumnA</b></td>
-                    <td width='130'><b>$langMakeCorrespond</b></td>
-                    <td width='200'><b>$langColumnB</b></td>
+                    <th width='200'>$langColumnA</th>
+                    <th width='130'>$langMakeCorrespond</th>
+                    <th width='200'>$langColumnB</th>
                   </tr>
                   </table>
                 </td>
@@ -372,11 +374,12 @@ function showQuestion($questionId, $onlyAnswers = false) {
 	}
 
 	for($answerId=1;$answerId <= $nbrAnswers;$answerId++) {
-		$answer = standard_text_escape($objAnswerTmp->selectAnswer($answerId));
+		$answer = $objAnswerTmp->selectAnswer($answerId);
+		$answer = mathfilter($answer, 12, '../../courses/mathimg/');
 		$answerCorrect=$objAnswerTmp->isCorrect($answerId);
 		if($answerType == FILL_IN_BLANKS) {
 			// splits text and weightings that are joined with the character '::'
-			list($answer)=explode('::',$answer);
+			list($answer) = explode('::', $answer);
 			// replaces [blank] by an input field
                         $answer = preg_replace('/\[[^]]+\]/', 
                                     '<input type="text" name="choice['.$questionId.'][]" size="10" />', 
@@ -413,9 +416,9 @@ function showQuestion($questionId, $onlyAnswers = false) {
 		elseif($answerType == MATCHING) { 
 			if(!$answerCorrect) {
 				// options (A, B, C, ...) that will be put into the list-box
-				$Select[$answerId]['Lettre']=$cpt1++;
+				$select[$answerId]['Lettre']=$cpt1++;
 				// answers that will be shown at the right side
-				$Select[$answerId]['Reponse']=$answer;
+				$select[$answerId]['Reponse']=$answer;
 			}
 			else
 			{
@@ -430,7 +433,7 @@ function showQuestion($questionId, $onlyAnswers = false) {
                                        <option value='0'>--</option>");
 
 				// fills the list-box
-				 foreach($Select as $key=>$val) {
+				 foreach($select as $key=>$val) {
 					 echo ("
                                             <option value=\"${key}\">${val['Lettre']}</option>");
 				 }
@@ -438,8 +441,8 @@ function showQuestion($questionId, $onlyAnswers = false) {
                                      </select></div>
                                     </td>
                                     <td width='200'>");
-				 if(isset($Select[$cpt2]))
-				       echo ('<b>'.$Select[$cpt2]['Lettre'].'.</b> '.$Select[$cpt2]['Reponse']);
+				 if(isset($select[$cpt2]))
+				       echo ('<b>'.$select[$cpt2]['Lettre'].'.</b> '.$select[$cpt2]['Reponse']);
 				 else
 				       echo ('&nbsp;');
 
@@ -448,7 +451,7 @@ function showQuestion($questionId, $onlyAnswers = false) {
 				// if the left side of the "matching" has been completely shown
 				if($answerId == $nbrAnswers) {
 					// if it remains answers to shown at the right side
-					while(isset($Select[$cpt2])) 	{
+					while(isset($select[$cpt2])) 	{
 						echo ("
                                               <tr class='even'>
                                                 <td colspan='2'>
@@ -456,7 +459,7 @@ function showQuestion($questionId, $onlyAnswers = false) {
                                                   <tr>
                                                     <td width='60%' colspan='2'>&nbsp;</td>
                                                     <td width='40%' align='right' valign='top'>".
-                                                      "<b>".$Select[$cpt2]['Lettre'].".</b> ".$Select[$cpt2]['Reponse']."</td>
+                                                      "<b>".$select[$cpt2]['Lettre'].".</b> ".$select[$cpt2]['Reponse']."</td>
                                                   </tr>
                                                   </table>
                                                 </td>

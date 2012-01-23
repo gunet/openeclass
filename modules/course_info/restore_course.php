@@ -143,7 +143,7 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
                         upgrade_course_2_5($new_course_code, $course_lang);
                 }
                 if ($eclass_version < '3.0') {
-                    list($video_map, $videolinks_map, $lp_learnPath_map, $wiki_map, $assignments_map) = upgrade_course_3_0($new_course_code, $course_lang, null, true);
+                    list($video_map, $videolinks_map, $lp_learnPath_map, $wiki_map, $assignments_map, $exercise_map) = upgrade_course_3_0($new_course_code, $course_lang, null, true);
                 }
 	}
         convert_description_to_units($new_course_code, $course_id);
@@ -188,7 +188,7 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
                 }
 
                 function unit_map_function(&$data, $maps) {
-                        list($document_map, $link_category_map, $link_map, $ebook_map, $section_map, $subsection_map, $video_map, $videolinks_map, $lp_learnPath_map, $wiki_map, $assignments_map) = $maps;
+                        list($document_map, $link_category_map, $link_map, $ebook_map, $section_map, $subsection_map, $video_map, $videolinks_map, $lp_learnPath_map, $wiki_map, $assignments_map, $exercise_map) = $maps;
                         $type = $data['type'];
                         if ($type == 'doc') {
                                 $data['res_id'] = $document_map[$data['res_id']];
@@ -214,8 +214,18 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
                                 $data['res_id'] = $wiki_map[$data['res_id']];
                         } elseif ($type == 'work') {
                                 $data['res_id'] = $assignments_map[$data['res_id']];
+                        } elseif ($type == 'exercise') {
+                                $data['res_id'] = $exercise_map[$data['res_id']];
                         }
                         return true;
+                }
+
+                function offset_map_function(&$data, $maps) {
+                    list($key, $offset) = $maps;
+                    if (isset($data[$key])) {
+                        $data[$key] += $offset;
+                    }
+                    return true;
                 }
 
                 mysql_select_db($mysqlMainDb);
@@ -383,6 +393,45 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
                         array('delete' => array('id'),
                               'set' => array('course_id' => $course_id)));
                 }
+                if (file_exists("$restoreThis/exercise") &&
+                    file_exists("$restoreThis/exercise_user_record") &&
+                    file_exists("$restoreThis/question") &&
+                    file_exists("$restoreThis/answer") &&
+                    file_exists("$restoreThis/exercise_question"))
+                {
+                    $exercise_map = restore_table($restoreThis, 'exercise',
+                        array('set' => array('course_id' => $course_id),
+                              'return_mapping' => 'id'));
+                    restore_table($restoreThis, 'exercise_user_record',
+                        array('delete' => array('eurid'),
+                              'map' => array('eid' => $exercise_map,
+                                             'uid' => $userid_map)));
+                    $question_map = restore_table($restoreThis, 'question',
+                        array('set' => array('course_id' => $course_id),
+                              'return_mapping' => 'id'));
+                    
+                    list($answer_offset) = mysql_fetch_row(db_query("SELECT max(id) FROM `$mysqlMainDb`.answer"));
+                    if (!$answer_offset)
+                        $answer_offset = 0;
+                    
+                    restore_table($restoreThis, 'answer',
+                        array('map_function' => 'offset_map_function',
+                              'map_function_data' => array('id', $answer_offset),
+                              'map' => array('question_id' => $question_map)));
+                    restore_table($restoreThis, 'exercise_question',
+                        array('map' => array('question_id' => $question_map,
+                                             'exercise_id' => $exercise_map)));
+                    
+                    $sql = "SELECT asset.asset_id, asset.path FROM `lp_module` AS module, `lp_asset` AS asset
+                                WHERE module.startAsset_id = asset.asset_id 
+                                AND course_id = $course_id AND contentType = 'EXERCISE'";
+                    $result = db_query($sql, $mysqlMainDb);
+                    
+                    while($row = mysql_fetch_array($result)) 
+                    {
+                        db_query("UPDATE `lp_asset` SET path = ". $exercise_map[$row['path']] ." WHERE asset_id = ". $row['asset_id'], $mysqlMainDb);
+                    }
+                }
                 $unit_map = restore_table($restoreThis, 'course_units',
                         array('set' => array('course_id' => $course_id),
                               'return_mapping' => 'id'));
@@ -400,7 +449,8 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
                                                            $videolinks_map,
                                                            $lp_learnPath_map,
                                                            $wiki_map,
-                                                           $assignments_map)));
+                                                           $assignments_map,
+                                                           $exercise_map)));
         }
         
 	removeDir($restoreThis);

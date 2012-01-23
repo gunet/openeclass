@@ -390,8 +390,8 @@ function show_work($title, $comments, $resource_id, $work_id, $visibility)
 // display resource exercise
 function show_exercise($title, $comments, $resource_id, $exercise_id, $visibility)
 {
-	global $id, $tool_content, $mysqlMainDb, $urlServer, $is_editor,
-               $langWasDeleted, $currentCourseID, $code_cours, $themeimg, $langInactiveModule;
+	global $id, $mysqlMainDb, $urlServer, $is_editor,
+               $langWasDeleted, $cours_id, $code_cours, $themeimg, $langInactiveModule;
 
         $module_visible = visible_module(10); // checks module visibility
         if (!$module_visible and !$is_editor) {
@@ -402,8 +402,7 @@ function show_exercise($title, $comments, $resource_id, $exercise_id, $visibilit
                      ' class="invisible"': ' class="even"';        
 	
         $title = htmlspecialchars($title);
-	$r = db_query("SELECT * FROM exercices WHERE id = $exercise_id",
-                      $currentCourseID);
+	$r = db_query("SELECT * FROM exercise WHERE course_id = $cours_id AND id = $exercise_id", $mysqlMainDb);
 	if (mysql_num_rows($r) == 0) { // check if it was deleted
 		if (!$is_editor) {
 			return '';

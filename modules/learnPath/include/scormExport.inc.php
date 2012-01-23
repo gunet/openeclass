@@ -66,12 +66,10 @@ require_once("../../include/lib/fileUploadLib.inc.php");
 require_once("../../include/pclzip/pclzip.lib.php");
 require_once('../../include/lib/textLib.inc.php');
 
-
-$TBL_EXERCICES              = 'exercices';
-$TBL_EXERCICE_QUESTION      = 'exercice_question';
-$TBL_QUESTIONS              = 'questions';
-$TBL_REPONSES               = 'reponses';
-
+$TBL_EXERCISE           = 'exercise';
+$TBL_EXERCISE_QUESTION  = 'exercise_question';
+$TBL_QUESTION           = 'question';
+$TBL_ANSWER             = 'answer';
 
 require_once('../exercice/exercise.class.php');
 require_once('../exercice/question.class.php');

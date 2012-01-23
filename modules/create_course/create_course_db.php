@@ -97,64 +97,6 @@ $code = $repertoire;
                KEY topic_last_post_id (topic_last_post_id))
      $charset_spec");
 
-db_query("CREATE TABLE exercices (
-        id tinyint(4) NOT NULL auto_increment,
-        titre varchar(250) default NULL,
-        description text,
-      type tinyint(4) unsigned NOT NULL default '1',
-      StartDate datetime default NULL,
-      EndDate datetime default NULL,
-      TimeConstrain int(11) default '0',
-      AttemptsAllowed int(11) default '0',
-      random smallint(6) NOT NULL default '0',
-      active tinyint(4) default NULL,
-      results TINYINT(1) NOT NULL DEFAULT '1',
-      score TINYINT(1) NOT NULL DEFAULT '1',
-      PRIMARY KEY  (id))
-       $charset_spec");
-
- db_query("CREATE TABLE exercise_user_record (
-      eurid int(11) NOT NULL auto_increment,
-      eid tinyint(4) NOT NULL default '0',
-      uid mediumint(8) NOT NULL default '0',
-      RecordStartDate datetime NOT NULL default '0000-00-00',
-      RecordEndDate datetime NOT NULL default '0000-00-00',
-      TotalScore int(11) NOT NULL default '0',
-      TotalWeighting int(11) default '0',
-      attempt int(11) NOT NULL default '0',
-      PRIMARY KEY  (eurid))
-       $charset_spec");
-
-// QUESTIONS
-db_query("CREATE TABLE questions (
-        id int(11) NOT NULL auto_increment,
-        question text,
-        description text,
-        ponderation float(11,2) default NULL,
-        q_position int(11) default 1,
-        type int(11) default 1,
-        PRIMARY KEY  (id))
-         $charset_spec");
-
-// REPONSES
-db_query("CREATE TABLE reponses (
-        id int(11) NOT NULL default '0',
-        question_id int(11) NOT NULL default '0',
-        reponse text,
-        correct int(11) default NULL,
-        comment text,
-	ponderation float(5,2),
-	r_position int(11) default NULL,
-        PRIMARY KEY  (id, question_id))
-         $charset_spec");
-
-// EXERCISE_QUESTION
-db_query("CREATE TABLE exercice_question (
-                question_id int(11) NOT NULL default '0',
-                exercice_id int(11) NOT NULL default '0',
-                PRIMARY KEY  (question_id,exercice_id))
-         $charset_spec");
-
 
 #######################COURSE_DESCRIPTION ################################
 
@@ -482,7 +424,6 @@ db_query("CREATE TABLE actions_summary (
 
 // dhmiourgia full text indexes gia th diadikasia ths anazhthshs
 db_query("ALTER TABLE `course_description` ADD FULLTEXT `course_description` (`title` ,`content`)");
-db_query("ALTER TABLE `exercices` ADD FULLTEXT `exercices` (`titre`,`description`)");
 db_query("ALTER TABLE `posts_text` ADD FULLTEXT `posts_text` (`post_text`)");
 db_query("ALTER TABLE `forums` ADD FULLTEXT `forums` (`forum_name`,`forum_desc`)");
 

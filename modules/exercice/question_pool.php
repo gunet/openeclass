@@ -28,10 +28,10 @@ $require_current_course = TRUE;
 
 include '../../include/baseTheme.php';
 
-$TBL_EXERCICE_QUESTION='exercice_question';
-$TBL_EXERCICES='exercices';
-$TBL_QUESTIONS='questions';
-$TBL_REPONSES='reponses';
+$TBL_EXERCISE_QUESTION = 'exercise_question';
+$TBL_EXERCISE = 'exercise';
+$TBL_QUESTION = 'question';
+$TBL_ANSWER = 'answer';
 
 $nameTools = $langQuestionPool;
 $navigation[]=array("url" => "exercice.php?course=$code_cours","name" => $langExercices);
@@ -89,16 +89,16 @@ if($is_editor) {
 	// get the number of available question (used for pagination)
 	if (isset($exerciseId) and $exerciseId != 0) {
 		if ($exerciseId > 0) {
-			$sql="SELECT * FROM `$TBL_EXERCICE_QUESTION`,`$TBL_QUESTIONS` 
-				WHERE question_id=id AND exercice_id='$exerciseId'";
+			$sql = "SELECT * FROM `$TBL_EXERCISE_QUESTION`, `$TBL_QUESTION` 
+				WHERE course_id = $cours_id AND question_id = id AND exercise_id = '$exerciseId'";
 		} elseif($exerciseId == -1) {
-			$sql="SELECT * FROM `$TBL_QUESTIONS` LEFT JOIN `$TBL_EXERCICE_QUESTION` 
-				ON question_id=id WHERE exercice_id IS NULL";
+			$sql = "SELECT * FROM `$TBL_QUESTION` LEFT JOIN `$TBL_EXERCISE_QUESTION` 
+				ON question_id = id WHERE course_id = $cours_id AND exercise_id IS NULL";
 		}
 	} else {
-		$sql = "SELECT * from`$TBL_QUESTIONS`";
+		$sql = "SELECT * from`$TBL_QUESTION` WHERE course_id = $cours_id";
 	}
-	$result = db_query($sql, $currentCourseID);
+	$result = db_query($sql, $mysqlMainDb);
 	$num_of_questions = mysql_num_rows($result);	
 
 	$tool_content .= "<div id=\"operations_container\"><ul id=\"opslist\"><li>";
@@ -131,11 +131,11 @@ if($is_editor) {
 	}
 	$tool_content .= ">-- ".$langOrphanQuestions." --</option>\n";
 	
-	mysql_select_db($currentCourseID);
+	mysql_select_db($mysqlMainDb);
 	if (isset($fromExercise)) {
-		$sql="SELECT id,titre FROM `$TBL_EXERCICES` WHERE id <> '$fromExercise' ORDER BY id";
+		$sql = "SELECT id, title FROM `$TBL_EXERCISE` WHERE course_id = $cours_id AND id <> '$fromExercise' ORDER BY id";
 	} else {
-		$sql="SELECT id,titre FROM `$TBL_EXERCICES` ORDER BY id";
+		$sql = "SELECT id, title FROM `$TBL_EXERCISE` WHERE course_id = $cours_id ORDER BY id";
 	}
 	$result = db_query($sql);
 	
@@ -146,7 +146,7 @@ if($is_editor) {
 		if(isset($exerciseId) && $exerciseId == $row['id']) {
 			$tool_content .= "selected=\"selected\"";
 		}
-		$tool_content .= ">".$row['titre']."</option>\n";
+		$tool_content .= ">".$row['title']."</option>\n";
 	}
 	$tool_content .= "</select></div></td></tr>\n";
 
@@ -155,24 +155,24 @@ if($is_editor) {
 	// if we have selected an exercise in the list-box 'Filter'
 	if(isset($exerciseId) && $exerciseId > 0)
 	{
-		$sql = "SELECT id,question,type FROM `$TBL_EXERCICE_QUESTION`,`$TBL_QUESTIONS` 
-			WHERE question_id=id AND exercice_id='$exerciseId' 
+		$sql = "SELECT id, question, type FROM `$TBL_EXERCISE_QUESTION`, `$TBL_QUESTION` 
+			WHERE course_id = $cours_id AND question_id = id AND exercise_id = '$exerciseId' 
 			ORDER BY q_position LIMIT $from,".(QUESTIONS_PER_PAGE+1);
 		$result = db_query($sql);
 	}
 	// if we have selected the option 'Orphan questions' in the list-box 'Filter'
 	elseif(isset($exerciseId) && $exerciseId == -1)
 	{
-		$sql = "SELECT id,question,type FROM `$TBL_QUESTIONS` LEFT JOIN `$TBL_EXERCICE_QUESTION` 
-			ON question_id=id WHERE exercice_id IS NULL ORDER BY question 
+		$sql = "SELECT id, question, type FROM `$TBL_QUESTION` LEFT JOIN `$TBL_EXERCISE_QUESTION` 
+			ON question_id = id WHERE course_id = $cours_id AND exercise_id IS NULL ORDER BY question 
 			LIMIT $from,".(QUESTIONS_PER_PAGE+1);
 		$result = db_query($sql);
 	}
 	// if we have not selected any option in the list-box 'Filter'
 	else
 	{		
-		@$sql = "SELECT id,question,type FROM `$TBL_QUESTIONS` LEFT JOIN `$TBL_EXERCICE_QUESTION` 
-			ON question_id=id WHERE exercice_id IS NULL OR exercice_id<>'$fromExercise' 
+		@$sql = "SELECT id, question, type FROM `$TBL_QUESTION` LEFT JOIN `$TBL_EXERCISE_QUESTION` 
+			ON question_id = id WHERE course_id = $cours_id AND (exercise_id IS NULL OR exercise_id <> '$fromExercise')  
 			GROUP BY id ORDER BY question LIMIT $from,".(QUESTIONS_PER_PAGE+1);
 		$result = db_query($sql);
 		// forces the value to 0

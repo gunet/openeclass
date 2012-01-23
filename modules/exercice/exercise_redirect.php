@@ -36,10 +36,10 @@ include('../../include/lib/textLib.inc.php');
 
 $picturePath='../../courses/'.$currentCourseID.'/image';
 
-$TBL_EXERCICE_QUESTION='exercice_question';
-$TBL_EXERCICES='exercices';
-$TBL_QUESTIONS='questions';
-$TBL_REPONSES='reponses';
+$TBL_EXERCISE_QUESTION = 'exercise_question';
+$TBL_EXERCISE ='exercise';
+$TBL_QUESTION ='question';
+$TBL_ANSWER = 'answer';
 
 $navigation[]=array("url" => "exercice.php?course=$code_cours","name" => $langExercices);
 
@@ -53,7 +53,7 @@ if (isset($_SESSION['objExercise'][$exerciseId])) {
 // if the object is not in the session
 if(!isset($_SESSION['objExercise'][$exerciseId])) {
 	// construction of Exercise
-	$objExercise=new Exercise();
+	$objExercise = new Exercise();
 	// if the specified exercise doesn't exist or is disabled
 	if(@(!$objExercise->read($exerciseId) && (!$is_editor))) {
 		$tool_content .= $langExerciseNotFound;
@@ -64,8 +64,8 @@ if(!isset($_SESSION['objExercise'][$exerciseId])) {
 	$_SESSION['objExercise'][$exerciseId] = $objExercise;
 }
 
-$exerciseTitle = $objExercise->selectTitle();
-$exerciseDescription = $objExercise->selectDescription();
+$exerciseTitle            = $objExercise->selectTitle();
+$exerciseDescription      = $objExercise->selectDescription();
 $exerciseDescription_temp = nl2br(make_clickable($exerciseDescription));
 
 $tool_content .= "<table class='Exercise' width='99%'>

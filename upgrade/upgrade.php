@@ -713,6 +713,52 @@ if (!isset($_POST['submit2'])) {
                             `lasting` VARCHAR(20),
                             `visibility` CHAR(1) NOT NULL DEFAULT 'v',
                             FULLTEXT KEY `agenda` (`title` ,`content`))");
+            
+            db_query("CREATE TABLE IF NOT EXISTS `exercise` (
+                            `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                            `course_id` INT(11) NOT NULL,
+                            `title` VARCHAR(250) DEFAULT NULL,
+                            `description` TEXT,
+                            `type` TINYINT(4) UNSIGNED NOT NULL DEFAULT '1',
+                            `start_date` DATETIME DEFAULT NULL,
+                            `end_date` DATETIME DEFAULT NULL,
+                            `time_constraint` INT(11) DEFAULT '0',
+                            `attempts_allowed` INT(11) DEFAULT '0',
+                            `random` SMALLINT(6) NOT NULL DEFAULT '0',
+                            `active` TINYINT(4) DEFAULT NULL,
+                            `results` TINYINT(1) NOT NULL DEFAULT '1',
+                            `score` TINYINT(1) NOT NULL DEFAULT '1',
+                            FULLTEXT KEY `exercise` (`title`, `description`))");
+            db_query("CREATE TABLE IF NOT EXISTS `exercise_user_record` (
+                            `eurid` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                            `eid` INT(11) NOT NULL DEFAULT '0',
+                            `uid` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT '0',
+                            `record_start_date` DATETIME NOT NULL DEFAULT '0000-00-00',
+                            `record_end_date` DATETIME NOT NULL DEFAULT '0000-00-00',
+                            `total_score` INT(11) NOT NULL DEFAULT '0',
+                            `total_weighting` INT(11) DEFAULT '0',
+                            `attempt` INT(11) NOT NULL DEFAULT '0' )");
+            db_query("CREATE TABLE IF NOT EXISTS `question` (
+                            `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                            `course_id` INT(11) NOT NULL,
+                            `question` TEXT,
+                            `description` TEXT,
+                            `weight` FLOAT(11,2) DEFAULT NULL,
+                            `q_position` INT(11) DEFAULT 1,
+                            `type` INT(11) DEFAULT 1 )");
+            db_query("CREATE TABLE IF NOT EXISTS `answer` (
+                            `id` INT(11) NOT NULL DEFAULT '0',
+                            `question_id` INT(11) NOT NULL DEFAULT '0',
+                            `answer` TEXT,
+                            `correct` INT(11) DEFAULT NULL,
+                            `comment` TEXT,
+                            `weight` FLOAT(5,2),
+                            `r_position` INT(11) DEFAULT NULL,
+                            PRIMARY KEY (id, question_id) )");
+            db_query("CREATE TABLE IF NOT EXISTS `exercise_question` (
+                            `question_id` INT(11) NOT NULL DEFAULT '0',
+                            `exercise_id` INT(11) NOT NULL DEFAULT '0',
+                            PRIMARY KEY (question_id, exercise_id) )");
         }
 
         mysql_field_exists($mysqlMainDb, 'cours', 'expand_glossary') or

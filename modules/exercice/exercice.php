@@ -47,15 +47,15 @@ $nameTools = $langExercices;
 /*******************************/
 /* Clears the exercise session */
 /*******************************/
-if (isset($_SESSION['objExercise']))  { unset($_SESSION['objExercise']); }
-if (isset($_SESSION['objQuestion']))  { unset($_SESSION['objQuestion']); }
-if (isset($_SESSION['objAnswer']))  { unset($_SESSION['objAnswer']); }
-if (isset($_SESSION['questionList']))  { unset($_SESSION['questionList']); }
-if (isset($_SESSION['exerciseResult']))  { unset($_SESSION['exerciseResult']); }
+if (isset($_SESSION['objExercise']))    { unset($_SESSION['objExercise']); }
+if (isset($_SESSION['objQuestion']))    { unset($_SESSION['objQuestion']); }
+if (isset($_SESSION['objAnswer']))      { unset($_SESSION['objAnswer']); }
+if (isset($_SESSION['questionList']))   { unset($_SESSION['questionList']); }
+if (isset($_SESSION['exerciseResult'])) { unset($_SESSION['exerciseResult']); }
 
-$TBL_EXERCICE_QUESTION='exercice_question';
-$TBL_EXERCICES='exercices';
-$TBL_QUESTIONS='questions';
+$TBL_EXERCISE_QUESTION = 'exercise_question';
+$TBL_EXERCISE = 'exercise';
+$TBL_QUESTION = 'question';
 
 // maximum number of exercises on a same page
 $limitExPage = 15;
@@ -86,7 +86,7 @@ if($is_editor) {
 	}
 	if(!empty($_GET['choice'])) {
 		// construction of Exercise
-		$objExerciseTmp=new Exercise();
+		$objExerciseTmp = new Exercise();
 		if($objExerciseTmp->read($exerciseId))
 		{
 			switch($_GET['choice'])
@@ -107,15 +107,15 @@ if($is_editor) {
 		// destruction of Exercise
 		unset($objExerciseTmp);
 	}
-	$sql="SELECT id, titre, description, type, active FROM `$TBL_EXERCICES` ORDER BY id LIMIT $from, $limitExPage";
-	$result = db_query($sql,$currentCourseID);
-	$qnum = db_query("SELECT count(*) FROM `$TBL_EXERCICES`");
+	$sql = "SELECT id, title, description, type, active FROM `$TBL_EXERCISE` WHERE course_id = $cours_id ORDER BY id LIMIT $from, $limitExPage";
+	$result = db_query($sql, $mysqlMainDb);
+	$qnum = db_query("SELECT count(*) FROM `$TBL_EXERCISE` WHERE course_id = $cours_id");
 } else {
-        // only for students
-	$sql = "SELECT id, titre, description, type, StartDate, EndDate, TimeConstrain, AttemptsAllowed ".
-		"FROM `$TBL_EXERCICES` WHERE active='1' ORDER BY id LIMIT $from, $limitExPage";
-	$result = db_query($sql);
-	$qnum = db_query("SELECT count(*) FROM `$TBL_EXERCICES` WHERE active = 1");
+    // only for students
+	$sql = "SELECT id, title, description, type, start_date, end_date, time_constraint, attempts_allowed ".
+		"FROM `$TBL_EXERCISE` WHERE course_id = $cours_id AND active = '1' ORDER BY id LIMIT $from, $limitExPage";
+	$result = db_query($sql, $mysqlMainDb);
+	$qnum = db_query("SELECT count(*) FROM `$TBL_EXERCISE` WHERE course_id = $cours_id AND active = 1");
 }
 
 list($num_of_ex) = mysql_fetch_array($qnum);
@@ -202,10 +202,10 @@ if(!$nbrExercises) {
 			}
 			$tool_content .= "<td width='16'>
 				<img src='$themeimg/arrow.png' alt='' /></td>
-				<td><a href=\"exercice_submit.php?course=$code_cours&amp;exerciseId=${row['id']}\">".q($row['titre'])."</a>$descr</td>";
+				<td><a href=\"exercice_submit.php?course=$code_cours&amp;exerciseId=${row['id']}\">".q($row['title'])."</a>$descr</td>";
 			$eid = $row['id'];
 			$NumOfResults = mysql_fetch_array(db_query("SELECT COUNT(*) FROM exercise_user_record 
-				WHERE eid='$eid'", $currentCourseID));
+				WHERE eid = '$eid'", $mysqlMainDb));
 	
 			if ($NumOfResults[0]) {
 				$tool_content .= "<td align='center'><a href=\"results.php?course=$code_cours&amp;exerciseId=".$row['id']."\">".
@@ -246,35 +246,35 @@ if(!$nbrExercises) {
 		}
 		// student only
 		else {
-                        $CurrentDate = date("Y-m-d H:i");
-                        $temp_StartDate = mktime(substr($row['StartDate'], 11, 2), substr($row['StartDate'], 14, 2), 0, substr($row['StartDate'], 5, 2), substr($row['StartDate'], 8, 2), substr($row['StartDate'], 0, 4));
-                        $temp_EndDate = mktime(substr($row['EndDate'], 11, 2), substr($row['EndDate'], 14, 2), 0, substr($row['EndDate'], 5, 2), substr($row['EndDate'], 8, 2), substr($row['EndDate'], 0, 4));
-                        $CurrentDate = mktime(substr($CurrentDate, 11, 2), substr($CurrentDate, 14, 2), 0, substr($CurrentDate, 5, 2), substr($CurrentDate, 8, 2), substr($CurrentDate, 0, 4));
-                        if (($CurrentDate >= $temp_StartDate) && ($CurrentDate <= $temp_EndDate)) { // exercise is ok
+                        $currentDate = date("Y-m-d H:i");
+                        $temp_StartDate = mktime(substr($row['start_date'], 11, 2), substr($row['start_date'], 14, 2), 0, substr($row['start_date'], 5,2), substr($row['start_date'], 8,2), substr($row['start_date'], 0,4));
+                        $temp_EndDate   = mktime(substr($row['end_date'], 11, 2), substr($row['end_date'], 14, 2), 0, substr($row['end_date'], 5,2),   substr($row['end_date'], 8,2),   substr($row['end_date'], 0,4));
+                        $currentDate    = mktime(substr($currentDate, 11, 2), substr($currentDate, 14, 2), 0, substr($currentDate, 5,2),       substr($currentDate, 8,2),       substr($currentDate, 0,4));
+                        if (($currentDate >= $temp_StartDate) && ($currentDate <= $temp_EndDate)) {
                                 $tool_content .= "<td width='16'><img src='$themeimg/arrow.png' alt='' /></td>
-                                        <td><a href=\"exercice_submit.php?course=$code_cours&amp;exerciseId=".$row['id']."\">".$row['titre']."</a>";
+                                        <td><a href=\"exercice_submit.php?course=$code_cours&amp;exerciseId=".$row['id']."\">".$row['title']."</a>";
                         } elseif ($CurrentDate <= $temp_StartDate) { // exercise has not yet started
                                 $tool_content .= "<td width='16'><img src='$themeimg/arrow.png' alt='' /></td>
                                         <td class='invisible'>".$row['titre']."&nbsp;&nbsp;";
                         } else { // exercise has expired
                                 $tool_content .= "<td width='16'>
                                 <img src='$themeimg/arrow.png' alt='' />
-                                </td><td>".$row['titre']."&nbsp;&nbsp;(<font color='red'>$m[expired]</font>)";
+                                </td><td>".$row['title']."&nbsp;&nbsp;(<font color='red'>$m[expired]</font>)";
                         }
                         $tool_content .= "<br />$row[description]</td><td class='smaller' align='center'>
-                                ".nice_format(date("Y-m-d H:i", strtotime($row['StartDate'])), true)." / 
-                                ".nice_format(date("Y-m-d H:i", strtotime($row['EndDate'])), true)."</td>";
+                                ".nice_format(date("Y-m-d H:i", strtotime($row['start_date'])), true)." / 
+                                ".nice_format(date("Y-m-d H:i", strtotime($row['end_date'])), true)."</td>";
                         // how many attempts we have.
-                        $CurrentAttempt = mysql_fetch_array(db_query("SELECT COUNT(*) FROM exercise_user_record
-                                                                      WHERE eid='$row[id]' AND uid='$uid'", $currentCourseID));
-                        if ($row['TimeConstrain'] > 0) {
+                        $currentAttempt = mysql_fetch_array(db_query("SELECT COUNT(*) FROM exercise_user_record
+                                                                      WHERE eid = '$row[id]' AND uid = '$uid'", $mysqlMainDb));
+                        if ($row['time_constraint'] > 0) {
                                 $tool_content .= "<td align='center'>
-                                $row[TimeConstrain] $langExerciseConstrainUnit</td>";
+                                $row[time_constraint] $langExerciseConstrainUnit</td>";
                         } else {
                                 $tool_content .= "<td align='center'> - </td>";
                         }
-                        if ($row['AttemptsAllowed'] > 0) {
-                                $tool_content .= "<td align='center'>$CurrentAttempt[0]/$row[AttemptsAllowed]</td>";
+                        if ($row['attempts_allowed'] > 0) {
+                                $tool_content .= "<td align='center'>$currentAttempt[0]/$row[attempts_allowed]</td>";
                         } else {
                                 $tool_content .= "<td align='center'> - </td>";
                         }

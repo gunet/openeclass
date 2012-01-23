@@ -66,29 +66,29 @@ class Question
 	 */
 	function read($id)
 	{
-		global $TBL_QUESTIONS, $TBL_EXERCICE_QUESTION, $currentCourseID;
+		global $TBL_QUESTION, $TBL_EXERCISE_QUESTION, $mysqlMainDb, $cours_id;
 		
-		mysql_select_db($currentCourseID);
-		$sql = "SELECT question, description, ponderation, q_position, type 
-                        FROM `$TBL_QUESTIONS` WHERE id='$id'";
+		mysql_select_db($mysqlMainDb);
+		$sql = "SELECT question, description, weight, q_position, type 
+                        FROM `$TBL_QUESTION` WHERE course_id = $cours_id AND id = '$id'";
 		$result = db_query($sql) or die("Error : SELECT in file ".__FILE__." at line ".__LINE__);
 
 		// if the question has been found
-		if ($object=mysql_fetch_object($result))
+		if ($object = mysql_fetch_object($result))
 		{
-			$this->id=$id;
-			$this->question=$object->question;
-			$this->description=$object->description;
-			$this->weighting=$object->ponderation;
-			$this->position=$object->q_position;
-			$this->type=$object->type;
+                        $this->id = $id;
+                        $this->question = $object->question;
+                        $this->description = $object->description;
+                        $this->weighting = $object->weight;
+                        $this->position = $object->q_position;
+                        $this->type = $object->type;
 
-			$sql = "SELECT exercice_id FROM `$TBL_EXERCICE_QUESTION` WHERE question_id='$id'";
+			$sql = "SELECT exercise_id FROM `$TBL_EXERCISE_QUESTION` WHERE question_id = '$id'";
 			$result = db_query($sql) or die("Error : SELECT in file ".__FILE__." at line ".__LINE__);
 			// fills the array with the exercises which this question is in
-			while($object=mysql_fetch_object($result))
+			while($object = mysql_fetch_object($result))
 			{
-				$this->exerciseList[]=$object->exercice_id;
+				$this->exerciseList[]=$object->exercise_id;
 			}
 
 			return true;
@@ -213,7 +213,7 @@ class Question
 	 */
 	function updateTitle($title)
 	{
-		$this->question=$title;
+		$this->question = $title;
 	}
 
 	/**
@@ -224,7 +224,7 @@ class Question
 	 */
 	function updateDescription($description)
 	{
-		$this->description=$description;
+		$this->description = $description;
 	}
 
 	/**
@@ -235,7 +235,7 @@ class Question
 	 */
 	function updateWeighting($weighting)
 	{
-		$this->weighting=$weighting;
+		$this->weighting = $weighting;
 	}
 
 	/**
@@ -246,7 +246,7 @@ class Question
 	 */
 	function updatePosition($position)
 	{
-		$this->position=$position;
+		$this->position = $position;
 	}
 
 	/**
@@ -258,7 +258,7 @@ class Question
 	 */
 	function updateType($type)
 	{
-		global $TBL_REPONSES, $currentCourseID;
+		global $TBL_ANSWER, $mysqlMainDb;
 
 		// if we really change the type
 		if($type != $this->type)
@@ -267,12 +267,12 @@ class Question
 			if(!in_array($this->type,array(UNIQUE_ANSWER,MULTIPLE_ANSWER)) || !in_array($type,array(UNIQUE_ANSWER,MULTIPLE_ANSWER)))
 			{
 				// removes old answers
-				mysql_select_db($currentCourseID);
-				$sql = "DELETE FROM `$TBL_REPONSES` WHERE question_id='".$this->id."'";
+				mysql_select_db($mysqlMainDb);
+				$sql = "DELETE FROM `$TBL_ANSWER` WHERE question_id='".$this->id."'";
 				db_query($sql) or die("Error : DELETE in file ".__FILE__." at line ".__LINE__);
 			}
 
-			$this->type=$type;
+			$this->type = $type;
 		}
 	}
 
@@ -365,33 +365,33 @@ class Question
 	 */
 	function save($exerciseId=0)
 	{
-		global $TBL_QUESTIONS, $currentCourseID;
+		global $TBL_QUESTION, $mysqlMainDb, $cours_id;
 		
-		mysql_select_db($currentCourseID);
+		mysql_select_db($mysqlMainDb);
 
-		$id=$this->id;
-		$question=addslashes($this->question);
-		$description=addslashes($this->description);
-		$weighting=$this->weighting;
-		$position=$this->position;
-		$type=$this->type;
+		$id = $this->id;
+		$question = addslashes($this->question);
+		$description = addslashes($this->description);
+		$weighting = $this->weighting;
+		$position = $this->position;
+		$type = $this->type;
 
 		// question already exists
 		if($id)
 		{
-			$sql = "UPDATE `$TBL_QUESTIONS` SET question='$question',description='$description',
-					ponderation='$weighting',q_position='$position',
+			$sql = "UPDATE `$TBL_QUESTION` SET question = '$question', description = '$description',
+					weight = '$weighting', q_position='$position',
 					type='$type'
-					WHERE id='$id'";
+					WHERE course_id = $cours_id AND id='$id'";
 			db_query($sql) or die("Error : UPDATE in file ".__FILE__." at line ".__LINE__);
 		}
 		// creates a new question
 		else
 		{
-			$sql="INSERT INTO `$TBL_QUESTIONS`(question,description,ponderation,q_position,type)
-				VALUES('$question','$description','$weighting','$position','$type')";
+			$sql="INSERT INTO `$TBL_QUESTION` (course_id, question, description, weight, q_position, type)
+				VALUES ($cours_id, '$question', '$description', '$weighting', '$position', '$type')";
 			db_query($sql) or die("Error : INSERT in file ".__FILE__." at line ".__LINE__);
-			$this->id=mysql_insert_id();
+			$this->id = mysql_insert_id();
 		}
 
 		// if the question is created in an exercise
@@ -410,16 +410,16 @@ class Question
 	 */
 	function addToList($exerciseId)
 	{
-		global $TBL_EXERCICE_QUESTION;
+		global $TBL_EXERCISE_QUESTION;
 
-		$id=$this->id;
+		$id = $this->id;
 
 		// checks if the exercise ID is not in the list
-		if(!in_array($exerciseId,$this->exerciseList))
+		if(!in_array($exerciseId, $this->exerciseList))
 		{
-			$this->exerciseList[]=$exerciseId;
-			//echo "<br>-".$TBL_EXERCICE_QUESTION."<br>-".$id."<br>-".$exerciseId."<br>";
-			$sql = "INSERT INTO `$TBL_EXERCICE_QUESTION`(question_id,exercice_id) VALUES('$id','$exerciseId')";
+			$this->exerciseList[] = $exerciseId;
+			//echo "<br>-".$TBL_EXERCISE_QUESTION."<br>-".$id."<br>-".$exerciseId."<br>";
+			$sql = "INSERT INTO `$TBL_EXERCISE_QUESTION` (question_id, exercise_id) VALUES ('$id', '$exerciseId')";
 			db_query($sql) or die("Error : INSERT in file ".__FILE__." at line ".__LINE__);
 		}
 	}
@@ -433,12 +433,12 @@ class Question
 	 */
 	function removeFromList($exerciseId)
 	{
-		global $TBL_EXERCICE_QUESTION;
+		global $TBL_EXERCISE_QUESTION;
 
-		$id=$this->id;
+		$id = $this->id;
 
 		// searches the position of the exercise ID in the list
-		$pos=array_search($exerciseId,$this->exerciseList);
+		$pos = array_search($exerciseId, $this->exerciseList);
 
 		// exercise not found
 		if($pos === false)
@@ -450,7 +450,7 @@ class Question
 			// deletes the position in the array containing the wanted exercise ID
 			unset($this->exerciseList[$pos]);
 
-			$sql="DELETE FROM `$TBL_EXERCICE_QUESTION` WHERE question_id='$id' AND exercice_id='$exerciseId'";
+			$sql="DELETE FROM `$TBL_EXERCISE_QUESTION` WHERE question_id = '$id' AND exercise_id = '$exerciseId'";
 			db_query($sql); 
 			return true;
 		}
@@ -466,19 +466,19 @@ class Question
 	 */
 	function delete($deleteFromEx=0)
 	{
-		global $TBL_EXERCICE_QUESTION, $TBL_QUESTIONS, $TBL_REPONSES;
+		global $TBL_EXERCISE_QUESTION, $TBL_QUESTION, $TBL_ANSWER, $cours_id;
 
-		$id=$this->id;
+		$id = $this->id;
 		
 	// if the question must be removed from all exercises
 		//if($deleteFromEx === 0)
 		if(!$deleteFromEx)
 		{
-			$sql="DELETE FROM `$TBL_EXERCICE_QUESTION` WHERE question_id='$id'";
+			$sql = "DELETE FROM `$TBL_EXERCISE_QUESTION` WHERE question_id = '$id'";
 			db_query($sql); 
-			$sql="DELETE FROM `$TBL_QUESTIONS` WHERE id='$id'";
+			$sql = "DELETE FROM `$TBL_QUESTION` WHERE course_id = $cours_id AND id = '$id'";
 			db_query($sql); 
-			$sql="DELETE FROM `$TBL_REPONSES` WHERE question_id='$id'";
+			$sql = "DELETE FROM `$TBL_ANSWER` WHERE question_id = '$id'";
 			db_query($sql);
 			$this->removePicture();
 			// resets the object
@@ -499,19 +499,19 @@ class Question
 	 */
 	function duplicate()
 	{
-		global $TBL_QUESTIONS, $picturePath, $currentCourseID;
+		global $TBL_QUESTION, $picturePath, $mysqlMainDb, $cours_id;
 
-		$question=addslashes($this->question);
-		$description=addslashes($this->description);
-		$weighting=$this->weighting;
-		$position=$this->position;
-		$type=$this->type;
+		$question = addslashes($this->question);
+		$description = addslashes($this->description);
+		$weighting = $this->weighting;
+		$position = $this->position;
+		$type = $this->type;
 
-		$sql="INSERT INTO `$TBL_QUESTIONS`(question,description,ponderation,q_position,type) 
-						VALUES('$question','$description','$weighting','$position','$type')";
-		db_query($sql,$currentCourseID);
+		$sql = "INSERT INTO `$TBL_QUESTION` (course_id, question, description, weight, q_position, type) 
+						VALUES ($cours_id, '$question', '$description', '$weighting', '$position', '$type')";
+		db_query($sql, $mysqlMainDb);
 
-		$id=mysql_insert_id();
+		$id = mysql_insert_id();
 		// duplicates the picture
 		$this->exportPicture($id);
 

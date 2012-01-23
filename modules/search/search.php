@@ -232,9 +232,10 @@ function search_in_course($search_terms, $cours_id, $code_cours) {
 	if (mysql_num_rows($sql) > 0) {
 		return TRUE;
 	}
-	$sql = db_query("SELECT * FROM exercices
-				WHERE active = '1'
-				AND MATCH (titre, description)".$query, $code_cours);
+	$sql = db_query("SELECT * FROM exercise
+				WHERE course_id = $cours_id
+				AND active = '1'
+				AND MATCH (title, description)".$query, $mysqlMainDb);
 	if (mysql_num_rows($sql) > 0) {
 		return TRUE;
 	}

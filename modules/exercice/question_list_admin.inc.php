@@ -73,7 +73,7 @@ if($nbrQuestions) {
 	    <table width='100%' class='tbl_alt'>
 	    <tr>
 	      <th colspan='2' class='left'>$langQuestionList</th>
-	      <th colspan='4' class='right'>$langActions</th>
+	      <th colspan='4' class='center'>$langActions</th>
 	    </tr>";
 	    
 	foreach($questionList as $id) {
