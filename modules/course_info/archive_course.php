@@ -96,7 +96,8 @@ if (extension_loaded('zlib')) {
                        'poll_answer_record' => "pid IN (SELECT pid FROM poll WHERE course_id = $cours_id)",
                        'poll_question_answer' => "pqid IN (SELECT pqid FROM poll_question WHERE pid IN (SELECT pid FROM poll WHERE course_id = $cours_id))",
                        'assignments' => $sql_course,
-                       'assignment_submit' => "assignment_id IN (SELECT id FROM assignments WHERE course_id = $cours_id)")
+                       'assignment_submit' => "assignment_id IN (SELECT id FROM assignments WHERE course_id = $cours_id)",
+                       'agenda' => $sql_course)
              as $table => $condition) {
                 backup_table($archivedir, $table, $condition);
         }

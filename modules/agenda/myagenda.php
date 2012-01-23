@@ -47,7 +47,7 @@ if (isset($uid)) {
         $year = '';
         $month = '';
  	$query = db_query("SELECT cours.code k, cours.fake_code fc,
-                        cours.intitule i, cours.titulaires t
+                        cours.intitule i, cours.titulaires t, cours.cours_id id
 	                        FROM cours, cours_user
 	                        WHERE cours.cours_id = cours_user.cours_id
                                 AND cours.visible != ".COURSE_INACTIVE."
@@ -85,14 +85,18 @@ $langToday);
  * @return array of agenda items
  */
 function get_agendaitems($query, $month, $year) {
-	global $urlServer;
+	global $urlServer, $mysqlMainDb;
 	$items = array();
 
 	// get agenda-items for every course
 	while ($mycours = mysql_fetch_array($query))
 	{
-	$result = db_query("SELECT * FROM agenda WHERE month(day)='$month' 
-                                AND year(day)='$year'","$mycours[k]");
+           // exclude courses with disabled agenda modules
+           $row = mysql_fetch_array(db_query("SELECT visible FROM accueil WHERE define_var = 'MODULE_ID_AGENDA'", $mycours['k']));
+           if ($row['visible'] == 0)
+               continue;
+           
+           $result = db_query("SELECT * FROM agenda WHERE course_id = ". $mycours['id'] ." AND month(day)='$month' AND year(day)='$year' AND visibility = 'v'", $mysqlMainDb);
 
 	    while ($item = mysql_fetch_array($result))
 	    {
@@ -100,8 +104,8 @@ function get_agendaitems($query, $month, $year) {
 			$agendaday = intval($agendadate[2]);
 			$agendatime = explode(":", $item['hour']);
 			$time = $agendatime[0].":".$agendatime[1];
-		        $URL = $urlServer."courses/".$mycours[k];
-	    	$items[$agendaday][$item['hour']] .= "<br /><small>($agendatime[0]:$agendatime[1]) <a href=\"$URL\" title=\"$mycours[i]\">$mycours[fc]</a> $item[titre]<small>";
+		        $URL = $urlServer."modules/agenda/agenda.php?course=".$mycours[k];
+	    	$items[$agendaday][$item['hour']] .= "<br /><small>($agendatime[0]:$agendatime[1]) <a href=\"$URL\" title=\"$mycours[i] ($mycours[fc])\">$mycours[i]</a> $item[title]<small>";
 		}
 	}
 

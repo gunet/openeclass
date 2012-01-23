@@ -701,6 +701,18 @@ if (!isset($_POST['submit2'])) {
                             `grade_submission_date` DATE NOT NULL DEFAULT '0000-00-00',
                             `grade_submission_ip` VARCHAR(16) NOT NULL DEFAULT '',
                             `group_id` INT( 11 ) DEFAULT NULL )");
+            
+            db_query("DROP TABLE IF EXISTS agenda");
+            db_query("CREATE TABLE IF NOT EXISTS `agenda` (
+                            `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                            `course_id` INT(11) NOT NULL,
+                            `title` VARCHAR(200) NOT NULL,
+                            `content` TEXT,
+                            `day` DATE NOT NULL DEFAULT '0000-00-00',
+                            `hour` TIME NOT NULL DEFAULT '00:00:00',
+                            `lasting` VARCHAR(20),
+                            `visibility` CHAR(1) NOT NULL DEFAULT 'v',
+                            FULLTEXT KEY `agenda` (`title` ,`content`))");
         }
 
         mysql_field_exists($mysqlMainDb, 'cours', 'expand_glossary') or

@@ -147,10 +147,11 @@ if(empty($search_terms)) {
 	}
 	// search in agenda
 	if ($agenda) {
-		$myquery = "SELECT titre, contenu, day, hour, lasting FROM agenda
-				WHERE visibility = 'v'
-				AND MATCH (titre, contenu)".$query;
-		$result = db_query($myquery, $currentCourseID);	
+		$myquery = "SELECT title, content, day, hour, lasting FROM agenda
+				WHERE course_id = $cours_id
+				AND visibility = 'v'
+				AND MATCH (title, content)".$query;
+		$result = db_query($myquery, $mysqlMainDb);	
 		if(mysql_num_rows($result) > 0) {
 			$tool_content .= "
                   <script type='text/javascript' src='../auth/sorttable.js'></script>
@@ -180,7 +181,7 @@ if(empty($search_terms)) {
 				$tool_content .= "<span class=day>".
 				ucfirst(claro_format_locale_date($dateFormatLong,strtotime($res["day"]))).
 				"</span> ($langHour: ".ucfirst(date("H:i",strtotime($res["hour"]))).")<br />"				
-				.$res['titre']." (".$langDuration.": ".$res["lasting"]." $message) ".$res['contenu']."
+				.$res['title']." (".$langDuration.": ".$res["lasting"]." $message) ".$res['contenu']."
                     </td>
                   </tr>";
                         $numLine++;

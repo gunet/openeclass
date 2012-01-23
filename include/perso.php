@@ -134,7 +134,8 @@ if ($user_lesson_info[0][0] > 0) {
 	'lesson_code'	=> $user_lesson_info[0][2],
 	'lesson_professor'	=> $user_lesson_info[0][3],
 	'lesson_statut'		=> $user_lesson_info[0][4],
-	'usr_lst_login'		=> $_user["lastLogin"]
+	'usr_lst_login'		=> $_user["lastLogin"],
+	'lesson_id'         => $user_lesson_info[0][8]
 	);
 	$user_agenda = getUserAgenda($param, "html");
 

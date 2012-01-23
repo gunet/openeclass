@@ -91,15 +91,15 @@ db_query("CREATE TABLE admin_announcements (
 #
 
 db_query("CREATE TABLE `agenda` (
-	`id` int(11) NOT NULL auto_increment,
-	`lesson_event_id` int(11) NOT NULL default '0',
-	`titre` varchar(200) NOT NULL default '',
-	`contenu` text NOT NULL,
-	`day` date NOT NULL default '0000-00-00',
-	`hour` time NOT NULL default '00:00:00',
-	`lasting` varchar(20) NOT NULL default '',
-	`lesson_code` varchar(50) NOT NULL default '',
-	PRIMARY KEY  (`id`)) $charset_spec");
+	`id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	`course_id` INT(11) NOT NULL,
+	`title` VARCHAR(200) NOT NULL,
+	`content` TEXT,
+	`day` DATE NOT NULL DEFAULT '0000-00-00',
+	`hour` TIME NOT NULL DEFAULT '00:00:00',
+	`lasting` VARCHAR(20),
+	`visibility` CHAR(1) NOT NULL DEFAULT 'v',
+	FULLTEXT KEY `agenda` (`title` ,`content`)) $charset_spec");
 
 #
 # table `forum_notify`

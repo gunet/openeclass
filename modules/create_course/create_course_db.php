@@ -470,18 +470,6 @@ db_query("CREATE TABLE actions_summary (
             PRIMARY KEY (id))");
 
 
-#################################### AGENDA ################################
-db_query("CREATE TABLE agenda (
-    id int(11) NOT NULL auto_increment,
-    titre varchar(200),
-    contenu text,
-    day date NOT NULL default '0000-00-00',
-    hour time NOT NULL default '00:00:00',
-    lasting varchar(20),
-    visibility CHAR(1) NOT NULL DEFAULT 'v',
-    PRIMARY KEY (id))
-     $charset_spec");
-
 ############################# PAGES ###########################################
     db_query("CREATE TABLE pages (
                id int(11) NOT NULL auto_increment,
@@ -493,7 +481,6 @@ db_query("CREATE TABLE agenda (
 
 
 // dhmiourgia full text indexes gia th diadikasia ths anazhthshs
-db_query("ALTER TABLE `agenda` ADD FULLTEXT `agenda` (`titre` ,`contenu`)");
 db_query("ALTER TABLE `course_description` ADD FULLTEXT `course_description` (`title` ,`content`)");
 db_query("ALTER TABLE `exercices` ADD FULLTEXT `exercices` (`titre`,`description`)");
 db_query("ALTER TABLE `posts_text` ADD FULLTEXT `posts_text` (`post_text`)");

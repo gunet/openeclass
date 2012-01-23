@@ -1470,7 +1470,7 @@ function delete_course($cid)
 	db_query("DELETE FROM group_properties WHERE course_id = $cid");
 	db_query("DELETE FROM link WHERE course_id = $cid");
 	db_query("DELETE FROM link_category WHERE course_id = $cid");
-	db_query("DELETE FROM agenda WHERE lesson_code = '$course_code'");
+	db_query("DELETE FROM agenda WHERE course_id = $cid");
         db_query("DELETE FROM unit_resources WHERE unit_id IN
                          (SELECT id FROM course_units WHERE course_id = $cid)");
         db_query("DELETE FROM course_units WHERE course_id = $cid");

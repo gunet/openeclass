@@ -74,14 +74,6 @@ if (isset($_REQUEST['toolStatus']) ) {
                 $i++;
         }
 
-        //get the state of the agenda tool and store it in a session var. It is used to insert or delete
-        //all events of the current lesson from the agenda table in the main db, used by eclass personalised
-        //This way, if a lesson's agenda is inactive, any contents it might have are not diplayed in the
-        //personalised interface
-        $prevAgendaStateSQL = "SELECT `visible` FROM `accueil`WHERE `id` = 1";
-        $res = db_query($prevAgendaStateSQL, $dbname);
-        $prevAgendaStateRow = mysql_fetch_row($res);
-
         //reset all tools
         db_query("UPDATE `accueil` SET `visible` = 0", $dbname);
 
@@ -90,55 +82,6 @@ if (isset($_REQUEST['toolStatus']) ) {
                 db_query("UPDATE accueil SET visible = 1 WHERE $tool_id", $dbname);
         }
         db_query("UPDATE `accueil` SET `visible` = 2 WHERE define_var = 'MODULE_ID_UNITS'", $dbname);
-
-        if (isset($tool_stat_active) && is_array($tool_stat_active)) {
-                if (in_array(1, $tool_stat_active)) {
-                        //if the agenda module is set to active
-                        if ($prevAgendaStateRow[0] != 1) {
-                                //and the agenda module was not active before, we need to parse the events to the main agenda table (main database)
-                                $sql = 'SELECT id, titre, contenu, day, hour, lasting
-                                        FROM  agenda WHERE CONCAT(titre,contenu) != \'\'
-                                        AND DATE_FORMAT(day,\'%Y %m %d\') >= \''.date("Y m d").'\'';
-
-                                //  Get all agenda events from each table & parse them to arrays
-                                $mysql_query_result = db_query($sql, $currentCourseID);
-
-                                $event_counter=0;
-                                while ($myAgenda = mysql_fetch_array($mysql_query_result)) {
-                                        $lesson_agenda[$event_counter]['id']            = $myAgenda[0];
-                                        $lesson_agenda[$event_counter]['title']         = $myAgenda[1];
-                                        $lesson_agenda[$event_counter]['content']       = $myAgenda[2];
-                                        $lesson_agenda[$event_counter]['date']          = $myAgenda[3];
-                                        $lesson_agenda[$event_counter]['time']          = $myAgenda[4];
-                                        $lesson_agenda[$event_counter]['duree']         = $myAgenda[5];
-                                        $lesson_agenda[$event_counter]['lesson_code']   = $currentCourseID;
-                                        $event_counter++;
-                                }
-
-                                for ($j=0; $j <$event_counter; $j++) {
-                                        db_query("INSERT INTO agenda (lesson_event_id, titre, contenu, day, hour, lasting, lesson_code)
-                                                VALUES ('".$lesson_agenda[$j]['id']."',
-                                        '".$lesson_agenda[$j]['title']."',
-                                        '".$lesson_agenda[$j]['content']."',
-                                        '".$lesson_agenda[$j]['date']."',
-                                        '".$lesson_agenda[$j]['time']."',
-                                        '".$lesson_agenda[$j]['duree']."',
-                                        '".$lesson_agenda[$j]['lesson_code']."'
-                                )", $mysqlMainDb);
-                                }
-                        }
-                } else {
-                        //if the agenda module is set to inactive
-                        if ($prevAgendaStateRow[0] != 0) {
-                                //and the agenda module was active before, we need to delete this lesson's events
-                                //from the main agenda table (main database)
-
-                                $perso_sql= "DELETE FROM $mysqlMainDb.agenda 
-                                        WHERE lesson_code= '$currentCourseID'";
-                                db_query($perso_sql, $mysqlMainDb);
-                        }
-                }
-        }
 }
 
 

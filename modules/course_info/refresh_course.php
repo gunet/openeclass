@@ -142,26 +142,23 @@ function delete_announcements() {
 }
 
 function delete_agenda() {
-	global $langAgendaDeleted, $currentCourseID, $mysqlMainDb;
+	global $langAgendaDeleted, $cours_id;
 
-	db_query("DELETE FROM agenda");
-	##[BEGIN personalisation modification]############
-	db_query("DELETE FROM ".$mysqlMainDb.".agenda WHERE lesson_code='$currentCourseID'");
-	##[END personalisation modification]############
+	db_query("DELETE FROM agenda WHERE course_id = $cours_id");
 	return "<p>$langAgendaDeleted</p>";
 }
 
 function hide_doc()  {
-	global $langDocsDeleted;
+	global $langDocsDeleted, $cours_id;
 
-	db_query("UPDATE document SET visibility='i'");
+	db_query("UPDATE document SET visibility='i' WHERE course_id = $cours_id");
 	return "<p>$langDocsDeleted</p>";
 }
 
 function hide_work()  {
-	global $langWorksDeleted;
+	global $langWorksDeleted, $cours_id;
 
-	db_query("UPDATE assignments SET active=0");
+	db_query("UPDATE assignments SET active=0 WHERE course_id = $cours_id");
 	return "<p>$langWorksDeleted</p>";
 }
 

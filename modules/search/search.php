@@ -217,9 +217,10 @@ function search_in_course($search_terms, $cours_id, $code_cours) {
 	if (mysql_num_rows($sql) > 0) {
 		return TRUE;
 	}
-	$sql = db_query("SELECT titre, contenu, day, hour, lasting FROM agenda
-				WHERE visibility = 'v'
-				AND MATCH (titre, contenu)".$query, $code_cours);
+	$sql = db_query("SELECT title, content, day, hour, lasting FROM agenda
+				WHERE course_id = $cours_id
+				AND visibility = 'v'
+				AND MATCH (title, content)".$query, $mysqlMainDb);
 	if (mysql_num_rows($sql) > 0) {
 		return TRUE;
 	}

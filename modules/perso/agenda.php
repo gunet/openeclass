@@ -43,37 +43,39 @@
  */
 function getUserAgenda($param, $type)
 {
-
 	//number of unique dates to collect data for
 	$uniqueDates = 5;
 	global $mysqlMainDb, $uid, $dbname, $currentCourseID;
 	$uid			= $param['uid'];
-	$lesson_code		= $param['lesson_code'];
-	$max_repeat_val		= $param['max_repeat_val'];
-	$tbl_lesson_codes = array();
+	$lesson_code    = $param['lesson_code'];
+	$course_id      = $param['lesson_id'];
+	$max_repeat_val = $param['max_repeat_val'];
+	$tbl_course_ids = array();
 	
+	// exclude courses with disabled agenda modules
 	for($i=0; $i < $max_repeat_val; $i++) {
-		array_push($tbl_lesson_codes, $lesson_code[$i]);
+	    $row = mysql_fetch_array(db_query("SELECT visible FROM accueil WHERE define_var = 'MODULE_ID_AGENDA'", $lesson_code[$i]));
+	    if ($row['visible'] == 1)
+		    array_push($tbl_course_ids, $course_id[$i]);
 	}
-	array_walk($tbl_lesson_codes, 'wrap_each');
-	$tbl_lesson_codes = implode(",", $tbl_lesson_codes);
+	array_walk($tbl_course_ids, 'wrap_each');
+	$tbl_course_ids = implode(",", $tbl_course_ids);
 
 	//mysql version 4.x query
-	$sql_4 = "SELECT agenda.titre, agenda.contenu, agenda.day, agenda.hour, agenda.lasting, 
-			agenda.lesson_code, cours.intitule
-		FROM agenda, cours WHERE agenda.lesson_code IN ($tbl_lesson_codes)
-		AND agenda.lesson_code = cours.code
-		GROUP BY day
+	$sql_4 = "SELECT agenda.title, agenda.content, agenda.day, agenda.hour, agenda.lasting, cours.code, cours.intitule
+		FROM agenda, cours WHERE agenda.course_id IN ($tbl_course_ids)
+		AND agenda.course_id = cours.cours_id
+		AND agenda.visibility = 'v'
 		HAVING (TO_DAYS(day) - TO_DAYS(NOW())) >= '0'
 		ORDER BY day, hour DESC
 		LIMIT $uniqueDates";
 
 	//mysql version 5.x query
-	$sql_5 = "SELECT agenda.titre, agenda.contenu, agenda.day, DATE_FORMAT(agenda.hour, '%H:%i'), 
-		agenda.lasting, agenda.lesson_code, cours.intitule
-		FROM agenda, cours WHERE agenda.lesson_code IN ($tbl_lesson_codes) 
-		AND agenda.lesson_code = cours.code
-		GROUP BY day
+	$sql_5 = "SELECT agenda.title, agenda.content, agenda.day, DATE_FORMAT(agenda.hour, '%H:%i'), 
+		agenda.lasting, cours.code, cours.intitule
+		FROM agenda, cours WHERE agenda.course_id IN ($tbl_course_ids) 
+		AND agenda.course_id = cours.cours_id
+		AND agenda.visibility = 'v'
 		HAVING (TO_DAYS(day) - TO_DAYS(NOW())) >= '0'
 		ORDER BY day, hour DESC
 		LIMIT $uniqueDates"; 
@@ -157,7 +159,7 @@ function agendaHtmlInterface($data)
         $data[$i][$j][1] = ellipsize($data[$i][$j][1], 150, "... <a href=\"$url\">[$langMore]</a>");
         $data[$i][$j][6] = ellipsize($data[$i][$j][6], 60);
 
-				$agenda_content .= "<tr><td><ul class='custom_list'><li><a href=\"$url\"><b>".q($data[$i][$j][0])."</b></a><br /><b>".q($data[$i][$j][6])."</b><div class='smaller'>".$langExerciseStart.":<b>".$data[$i][$j][3]."</b> | $langDuration:<b>".$data[$i][$j][4]."</b><br />".$data[$i][$j][1].standard_text_escape($data[$i][$j][1])."</div></li></ul></td></tr>";
+				$agenda_content .= "<tr><td><ul class='custom_list'><li><a href=\"$url\"><b>".q($data[$i][$j][0])."</b></a><br /><b>".q($data[$i][$j][6])."</b><div class='smaller'>".$langExerciseStart.":<b>".$data[$i][$j][3]."</b> | $langDuration:<b>".$data[$i][$j][4]."</b><br />".standard_text_escape($data[$i][$j][1])."</div></li></ul></td></tr>";
 			}
 		}
 		$agenda_content .= "</table>";

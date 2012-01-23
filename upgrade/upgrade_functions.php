@@ -954,6 +954,42 @@ function upgrade_course_3_0($code, $lang, $extramessage = '', $return_mapping = 
                             WHERE units.id = res.unit_id AND course_id = $course_id AND type = 'work'");
     }
     
+    // move agenda to central db and drop table
+    if (mysql_table_exists($code, 'agenda')) {
+    
+        $dropflag = true;
+    
+        // ----- agenda DB Table ----- //
+        list($agenda_id) = mysql_fetch_row(db_query("SELECT max(id) FROM `$mysqlMainDb`.agenda"));
+        if (!$agenda_id)
+            $agenda_id = 0;
+    
+        $result = db_query("SELECT * FROM agenda ORDER by id");
+    
+        while ($row = mysql_fetch_array($result)) {
+            $oldid = intval($row['id']);
+            $newid = intval($agenda_id) + $oldid;
+    
+            $r = db_query("INSERT INTO `$mysqlMainDb`.agenda
+                                        (`id`, `course_id`, `title`, `content`, `day`, `hour`, `lasting`, `visibility`)
+                        				VALUES
+                        				(".$newid .", 
+                        				 ".$course_id .", 
+                        				 ".autoquote($row['titre']) .", 
+                        				 ".autoquote($row['contenu']) .",
+                        				 ".autoquote($row['day']) .", 
+                        				 ".autoquote($row['hour']) .", 
+                        				 ".autoquote($row['lasting']) .",  
+                        				 ".autoquote($row['visibility']) .")");
+            if (false === $r)
+                $dropflag = false;
+        }
+        
+        if (true === $dropflag)
+            db_query("DROP TABLE agenda");
+            
+    }
+    
     if ($return_mapping)
         return array($video_map, $videolinks_map, $lp_map, $wiki_map, $assignments_map);
 }

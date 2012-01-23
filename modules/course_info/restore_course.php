@@ -377,6 +377,12 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
                                              'assignment_id' => $assignments_map,
                                              'group_id' => $group_map)));
                 }
+                if (file_exists("$restoreThis/agenda")) 
+                {
+                    restore_table($restoreThis, 'agenda',
+                        array('delete' => array('id'),
+                              'set' => array('course_id' => $course_id)));
+                }
                 $unit_map = restore_table($restoreThis, 'course_units',
                         array('set' => array('course_id' => $course_id),
                               'return_mapping' => 'id'));
