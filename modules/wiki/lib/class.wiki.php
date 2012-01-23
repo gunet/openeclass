@@ -211,6 +211,7 @@
          */
         function loadProperties( $wikiId )
         {
+            global $cours_id;
             if ( ! $this->con->isConnected() )
             {
                 $this->con->connect();
@@ -219,6 +220,7 @@
             $sql = "SELECT `id`, `title`, `description`, `group_id` "
                 . "FROM `".$this->config['tbl_wiki_properties']."` "
                 . "WHERE `id` = ".$wikiId
+                ." AND `course_id` = $cours_id"
                 ;
                 
             $result = $this->con->getRowFromQuery( $sql );
@@ -346,6 +348,7 @@
          */
         function saveProperties()
         {
+            global $cours_id;
             // reconnect if needed
             if ( ! $this->con->isConnected() )
             {
@@ -359,9 +362,10 @@
                 $sql = "INSERT INTO `"
                     . $this->config['tbl_wiki_properties']
                     . "`("
-                    . "`title`,`description`,`group_id`"
+                    . "`course_id`, `title`,`description`,`group_id`"
                     . ") "
                     . "VALUES("
+                    . "'". $cours_id ."', "
                     . "'". addslashes( $this->getTitle() ) ."', "
                     . "'" . addslashes( $this->getDescription() ) . "', "
                     . "'" . $this->getGroupId() . "'"
@@ -387,6 +391,7 @@
                     . "`description`='".addslashes($this->getDescription())."', "
                     . "`group_id`='".$this->getGroupId()."' "
                     . "WHERE `id`=" . $this->getWikiId()
+                    ." AND `course_id` = $cours_id"
                     ;
                     
                 $this->con->executeQuery( $sql );
@@ -424,6 +429,7 @@
          */
         function wikiExists( $title )
         {
+            global $cours_id;
             // reconnect if needed
             if ( ! $this->con->isConnected() )
             {
@@ -432,7 +438,8 @@
 
             $sql = "SELECT `id` "
                 . "FROM `".$this->config['tbl_wiki_properties']."` "
-                . "WHERE `title` = '".addslashes($title)."'"
+                . "WHERE `title` = '".addslashes($title)."' "
+                . "AND `course_id` = $cours_id"
                 ;
 
             return $this->con->queryReturnsResult( $sql );
@@ -445,6 +452,7 @@
          */
         function wikiIdExists( $id )
         {
+            global $cours_id;
             // reconnect if needed
             if ( ! $this->con->isConnected() )
             {
@@ -453,7 +461,8 @@
 
             $sql = "SELECT `id` "
                 . "FROM `".$this->config['tbl_wiki_properties']."` "
-                . "WHERE `id` = '".$id."'"
+                . "WHERE `id` = '".$id."' "
+                . "AND `course_id` = $cours_id"
                 ;
 
             return $this->con->queryReturnsResult( $sql );

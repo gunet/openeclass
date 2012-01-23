@@ -57,7 +57,7 @@ $_gid = null;
 
 $nameTools = $langWiki;
 
-mysql_select_db($currentCourseID);
+mysql_select_db($mysqlMainDb);
 
 // display mode
 

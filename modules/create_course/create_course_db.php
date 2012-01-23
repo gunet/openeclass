@@ -564,42 +564,6 @@ db_query("CREATE TABLE poll (
      $charset_spec");
 
 
-############################# WIKI ######################################
-
-db_query("CREATE TABLE `wiki_properties` (
-              `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
-              `title` VARCHAR(255) NOT NULL DEFAULT '',
-              `description` TEXT NULL,
-              `group_id` INT(11) NOT NULL DEFAULT 0,
-              PRIMARY KEY(`id`)
-            )  $charset_spec");
-
-db_query("CREATE TABLE `wiki_acls` (
-              `wiki_id` INT(11) UNSIGNED NOT NULL,
-              `flag` VARCHAR(255) NOT NULL,
-              `value` ENUM('false','true') NOT NULL DEFAULT 'false'
-            )  $charset_spec");
-
-db_query("CREATE TABLE `wiki_pages` (
-              `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
-              `wiki_id` INT(11) UNSIGNED NOT NULL DEFAULT 0,
-              `owner_id` INT(11) UNSIGNED NOT NULL DEFAULT 0,
-              `title` VARCHAR(255) NOT NULL DEFAULT '',
-              `ctime` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
-              `last_version` INT(11) UNSIGNED NOT NULL DEFAULT 0,
-              `last_mtime` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
-              PRIMARY KEY  (`id`)
-            )  $charset_spec");
-
-db_query("CREATE TABLE `wiki_pages_content` (
-              `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
-              `pid` INT(11) UNSIGNED NOT NULL DEFAULT 0,
-              `editor_id` INT(11) NOT NULL DEFAULT 0,
-              `mtime` DATETIME NOT NULL default '0000-00-00 00:00:00',
-              `content` TEXT NOT NULL,
-              PRIMARY KEY  (`id`)
-            )  $charset_spec");
-
 // dhmiourgia full text indexes gia th diadikasia ths anazhthshs
 db_query("ALTER TABLE `agenda` ADD FULLTEXT `agenda` (`titre` ,`contenu`)");
 db_query("ALTER TABLE `course_description` ADD FULLTEXT `course_description` (`title` ,`content`)");

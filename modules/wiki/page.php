@@ -55,7 +55,7 @@ else {
 	$is_courseMember = false;
 }
 $nameTools = $langWiki;
-mysql_select_db($currentCourseID);
+mysql_select_db($mysqlMainDb);
 
 // check and set user access level for the tool
 if ( ! isset( $_REQUEST['wikiId'] ) )
@@ -114,6 +114,7 @@ if ( isset( $_REQUEST['wikiId'] ) )
     $sql = "SELECT `group_id` "
 	. "FROM `" . $tblList[ "wiki_properties" ] . "` "
 	. "WHERE `id` = " . $wikiId
+	." AND `course_id` = $cours_id"
 	;
 
     $result = $con->getRowFromQuery( $sql );
@@ -510,7 +511,7 @@ $head_content .= "<script type=\"text/javascript\">"
 	    $navigation[]= array ( 'url' => 'wiki.php?course='.$code_cours, 'name' => $langWiki);
 	    $navigation[]= array ( 'url' => 'page.php?course='.$code_cours.'&amp;wikiId='.$wikiId.'&amp;action=show', 'name' => $wiki->getTitle());
     }
-    mysql_select_db($currentCourseID);
+    mysql_select_db($mysqlMainDb);
 
 switch( $action )
 {
@@ -774,7 +775,7 @@ switch( $action )
 		    ;
 
 	$userInfo = user_get_data( $oldEditor );
-	mysql_select_db($currentCourseID);
+	mysql_select_db($mysqlMainDb);
 	$oldEditorStr = $userInfo['firstname'] . "&nbsp;" . $userInfo['lastname'];
 
 	$newTime = claro_format_locale_date( $dateTimeFormatLong
@@ -782,7 +783,7 @@ switch( $action )
 		    ;
 
 	$userInfo = user_get_data( $newEditor );
-	mysql_select_db($currentCourseID);
+	mysql_select_db($mysqlMainDb);
 	$newEditorStr = $userInfo['firstname'] . "&nbsp;" . $userInfo['lastname'];
 
 	$versionInfo = '('
@@ -841,7 +842,7 @@ switch( $action )
 		    ;
 
 		$userInfo = user_get_data( $recentChange['editor_id'] );
-		mysql_select_db($currentCourseID);
+		mysql_select_db($mysqlMainDb);
 
 		$userStr = $userInfo['firstname'] . "&nbsp;" . $userInfo['lastname'];
 		$userUrl = $userStr;
@@ -955,7 +956,7 @@ switch( $action )
 	    if ( $versionId != 0 )
 	    {
 		$editorInfo = user_get_data( $wikiPage->getEditorId() );
-		mysql_select_db($currentCourseID);
+		mysql_select_db($mysqlMainDb);
 
 		$editorStr = $editorInfo['firstname'] . "&nbsp;" . $editorInfo['lastname'];
 
@@ -1057,7 +1058,7 @@ switch( $action )
 		    ;
 
 		$userInfo = user_get_data( $version['editor_id'] );
-		mysql_select_db($currentCourseID);
+		mysql_select_db($mysqlMainDb);
 
 		$userStr = $userInfo['firstname'] . "&nbsp;" . $userInfo['lastname'];
 

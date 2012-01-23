@@ -86,7 +86,11 @@ if (extension_loaded('zlib')) {
                        'lp_module' => $sql_course,
                        'lp_asset' => "module_id IN (SELECT module_id FROM lp_module WHERE course_id = $cours_id)",
                        'lp_rel_learnPath_module' => "learnPath_id IN (SELECT learnPath_id FROM lp_learnPath WHERE course_id = $cours_id)",
-                       'lp_user_module_progress' => "learnPath_id IN (SELECT learnPath_id FROM lp_learnPath WHERE course_id = $cours_id)")
+                       'lp_user_module_progress' => "learnPath_id IN (SELECT learnPath_id FROM lp_learnPath WHERE course_id = $cours_id)",
+                       'wiki_properties' => $sql_course,
+                       'wiki_acls' => "wiki_id IN (SELECT id FROM wiki_properties WHERE course_id = $cours_id)",
+                       'wiki_pages' => "wiki_id IN (SELECT id FROM wiki_properties WHERE course_id = $cours_id)",
+                       'wiki_pages_content' => "pid IN (SELECT id FROM wiki_pages WHERE wiki_id IN (SELECT id FROM wiki_properties WHERE course_id = $cours_id))")
              as $table => $condition) {
                 backup_table($archivedir, $table, $condition);
         }

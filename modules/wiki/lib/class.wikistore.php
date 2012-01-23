@@ -138,6 +138,7 @@
          */
         function wikiIdExists( $wikiId )
         {
+            global $cours_id;
             // reconnect if needed
             if ( ! $this->con->isConnected() )
             {
@@ -146,7 +147,8 @@
 
             $sql = "SELECT `id` "
                 . "FROM `".$this->config['tbl_wiki_properties']."` "
-                . "WHERE `id` = '".$wikiId."'"
+                . "WHERE `id` = '".$wikiId."' "
+                . "AND `course_id` = $cours_id"
                 ;
 
             return $this->con->queryReturnsResult( $sql );
@@ -161,6 +163,7 @@
          */
         function getWikiListByGroup( $groupId )
         {
+            global $cours_id;
             if ( ! $this->con->isConnected() )
             {
                 $this->con->connect();
@@ -169,6 +172,7 @@
             $sql = "SELECT `id`, `title`, `description` "
                 . "FROM `".$this->config['tbl_wiki_properties']."` "
                 . "WHERE `group_id` = ".$groupId . " "
+                . "AND `course_id` = $cours_id "
                 . "ORDER BY `id` ASC"
                 ;
                 
@@ -191,6 +195,7 @@
          */
         function getGroupWikiList()
         {
+            global $cours_id;
             if ( ! $this->con->isConnected() )
             {
                 $this->con->connect();
@@ -199,6 +204,7 @@
             $sql = "SELECT `id`, `title`, `description` "
                 . "FROM `".$this->config['tbl_wiki_properties']."` "
                 . "WHERE `group_id` != 0 "
+                . "AND `course_id` = $cours_id "
                 . "ORDER BY `group_id` ASC"
                 ;
                 
@@ -237,6 +243,7 @@
          */
         function deleteWiki( $wikiId )
         {
+            global $cours_id;
             if ( ! $this->con->isConnected() )
             {
                 $this->con->connect();
@@ -247,6 +254,7 @@
                 // delete properties
                 $sql = "DELETE FROM `".$this->config['tbl_wiki_properties']."` "
                     . "WHERE `id` = " . $wikiId
+                    ." AND `course_id` = $cours_id"
                     ;
                     
                 $numrows = $this->con->executeQuery( $sql );

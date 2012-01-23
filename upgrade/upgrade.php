@@ -623,6 +623,31 @@ if (!isset($_POST['submit2'])) {
                             //COMMENT='Record the last known status of the user in the course';
             mysql_index_exists('lp_user_module_progress', 'optimize') or
                         db_query('CREATE INDEX `optimize` ON lp_user_module_progress (user_id, learnPath_module_id)');
+            
+            db_query("CREATE TABLE IF NOT EXISTS `wiki_properties` (
+                            `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                            `course_id` INT(11) NOT NULL,
+                            `title` VARCHAR(255) NOT NULL DEFAULT '',
+                            `description` TEXT NULL,
+                            `group_id` INT(11) NOT NULL DEFAULT 0 )");
+            db_query("CREATE TABLE IF NOT EXISTS `wiki_acls` (
+                            `wiki_id` INT(11) UNSIGNED NOT NULL,
+                            `flag` VARCHAR(255) NOT NULL,
+                            `value` ENUM('false','true') NOT NULL DEFAULT 'false' )");
+            db_query("CREATE TABLE IF NOT EXISTS `wiki_pages` (
+                            `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                            `wiki_id` INT(11) UNSIGNED NOT NULL DEFAULT 0,
+                            `owner_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
+                            `title` VARCHAR(255) NOT NULL DEFAULT '',
+                            `ctime` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
+                            `last_version` INT(11) UNSIGNED NOT NULL DEFAULT 0,
+                            `last_mtime` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00' )");
+            db_query("CREATE TABLE IF NOT EXISTS `wiki_pages_content` (
+                            `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                            `pid` INT(11) UNSIGNED NOT NULL DEFAULT 0,
+                            `editor_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
+                            `mtime` DATETIME NOT NULL default '0000-00-00 00:00:00',
+                            `content` TEXT NOT NULL )");
         }
 
         mysql_field_exists($mysqlMainDb, 'cours', 'expand_glossary') or

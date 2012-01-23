@@ -287,13 +287,13 @@ function insert_forum($id)
 // insert wiki in database
 function insert_wiki($id)
 {
-	global $code_cours;
+	global $code_cours, $cours_id, $mysqlMainDb;
 	
 	list($order) = mysql_fetch_array(db_query("SELECT MAX(`order`) FROM unit_resources WHERE unit_id=$id"));
 	foreach ($_POST['wiki'] as $wiki_id) {
 		$order++;
 		$wiki = mysql_fetch_array(db_query("SELECT * FROM wiki_properties
-			WHERE id =" . intval($wiki_id), $GLOBALS['currentCourseID']), MYSQL_ASSOC);
+			WHERE course_id = $cours_id AND id =" . intval($wiki_id), $mysqlMainDb), MYSQL_ASSOC);
 		db_query("INSERT INTO unit_resources SET unit_id=$id, type='wiki', title=" .
 			quote($wiki['title']) . ", comments=" . quote($wiki['description']) .
 			", visibility='v', `order`=$order, `date`=NOW(), res_id=$wiki[id]",

@@ -320,11 +320,11 @@ function upgrade_course_3_0($code, $lang, $extramessage = '', $return_mapping = 
     $video_map = array();
     $videolinks_map = array();
     
-    // move video to central table and drop table
+    // move video to central db and drop table
     if (mysql_table_exists($code, 'video')) {
         list($video_id) = mysql_fetch_row(db_query("SELECT MAX(id) FROM `$mysqlMainDb`.video"));
         if (!$video_id)
-            $video_id = 1;
+            $video_id = 0;
         
         $dropflag = true;
         $result = db_query("SELECT * FROM video ORDER by id");
@@ -361,11 +361,11 @@ function upgrade_course_3_0($code, $lang, $extramessage = '', $return_mapping = 
                             WHERE units.id = res.unit_id AND course_id = $course_id AND type = 'video'");
     }
     
-    // move videolinks to central table and drop table
+    // move videolinks to central db and drop table
     if (mysql_table_exists($code, 'videolinks')) {
         list($link_id) = mysql_fetch_row(db_query("SELECT MAX(id) FROM `$mysqlMainDb`.videolinks"));
         if (!$link_id)
-            $link_id = 1;
+            $link_id = 0;
 
         $dropflag = true;
         $result = db_query("SELECT * FROM videolinks ORDER by id");
@@ -393,7 +393,7 @@ function upgrade_course_3_0($code, $lang, $extramessage = '', $return_mapping = 
                 $dropflag = false;
         }
         
-        if (true === $dropflag) 
+        if (true === $dropflag)
             db_query("DROP TABLE videolinks");
         
         db_query("UPDATE `$mysqlMainDb`.course_units AS units, `$mysqlMainDb`.unit_resources AS res
@@ -401,7 +401,7 @@ function upgrade_course_3_0($code, $lang, $extramessage = '', $return_mapping = 
                             WHERE units.id = res.unit_id AND course_id = $course_id AND type = 'videolinks'");
     }
     
-    // move dropbox to central table and drop table
+    // move dropbox to central db and drop tables
     if (mysql_table_exists($code, 'dropbox_file') && mysql_table_exists($code, 'dropbox_person') && 
         mysql_table_exists($code, 'dropbox_post')) {
         list($file_id) = mysql_fetch_row(db_query("SELECT max(id) FROM `$mysqlMainDb`.dropbox_file"));
@@ -462,13 +462,13 @@ function upgrade_course_3_0($code, $lang, $extramessage = '', $return_mapping = 
         }
     }
     
-    // move learn path to central table and drop table
+    $lp_map = array();
+    // move learn path to central db and drop tables
     if (mysql_table_exists($code, 'lp_learnPath') && mysql_table_exists($code, 'lp_module') &&
         mysql_table_exists($code, 'lp_asset') && mysql_table_exists($code, 'lp_rel_learnPath_module') &&
         mysql_table_exists($code, 'lp_user_module_progress') ) {
         
         $dropflag = true;
-        $lp_map = array();
         $module_map = array();
         $asset_map = array();
         $rel_map = array();
@@ -640,10 +640,122 @@ function upgrade_course_3_0($code, $lang, $extramessage = '', $return_mapping = 
             db_query("DROP TABLE lp_rel_learnPath_module");
             db_query("DROP TABLE lp_user_module_progress");
         }
+        
+        db_query("UPDATE `$mysqlMainDb`.course_units AS units, `$mysqlMainDb`.unit_resources AS res
+                            SET res_id = res_id + $lp_id
+                            WHERE units.id = res.unit_id AND course_id = $course_id AND type = 'lp'");
+    }
+    
+    $wiki_map = array();
+    // move wiki to central db and drop tables
+    if (mysql_table_exists($code, 'wiki_properties') && mysql_table_exists($code, 'wiki_acls') &&
+        mysql_table_exists($code, 'wiki_pages') && mysql_table_exists($code, 'wiki_pages_content') ) {
+        
+        $dropflag = true;
+        $wiki_page_map = array();
+        
+        // ----- wiki_properties and wiki_acls DB Tables ----- //
+        list($wiki_id) = mysql_fetch_row(db_query("SELECT max(id) FROM `$mysqlMainDb`.wiki_properties"));
+        if (!$wiki_id)
+            $wiki_id = 0;
+        
+        $result = db_query("SELECT * FROM wiki_properties ORDER by id");
+        
+        while ($row = mysql_fetch_array($result)) {
+            $oldid = intval($row['id']);
+            $newid = intval($wiki_id) + $oldid;
+        
+            $wiki_map[$oldid] = $newid;
+        
+            $r = db_query("INSERT INTO `$mysqlMainDb`.wiki_properties
+                                        (`id`, `course_id`, `title`, `description`, `group_id`)
+                        				VALUES
+                        				(".$newid .", 
+                        				 ".$course_id .", 
+                        				 ".autoquote($row['title']) .", 
+                        				 ".autoquote($row['description']) .", 
+                        				 ".autoquote($row['group_id']) .")");
+            
+            $r_acls = db_query("SELECT * FROM wiki_acls WHERE wiki_id = $oldid");
+            while ($d_acls = mysql_fetch_array($r_acls)) {
+                $r = db_query("INSERT INTO `$mysqlMainDb`.wiki_acls
+                                                    (`wiki_id`, `flag`, `value`)
+                                    				VALUES
+                                    				(".$newid .", 
+                                    				 ".autoquote($d_acls['flag']) .",
+                                    				 ".autoquote($d_acls['value']) .")");
+                if (false === $r)
+                    $dropflag = false;
+            }
+            
+            if (false === $r)
+                $dropflag = false;
+        }
+        
+        // ----- wiki_pages DB Table ----- //
+        list($wiki_page_id) = mysql_fetch_row(db_query("SELECT max(id) FROM `$mysqlMainDb`.wiki_pages"));
+        if (!$wiki_page_id)
+            $wiki_page_id = 0;
+        
+        $result = db_query("SELECT * FROM wiki_pages ORDER by id");
+        
+        while ($row = mysql_fetch_array($result)) {
+            $oldid = intval($row['id']);
+            $newid = intval($wiki_page_id) + $oldid;
+        
+            $wiki_page_map[$oldid] = $newid;
+        
+            $r = db_query("INSERT INTO `$mysqlMainDb`.wiki_pages
+                                        (`id`, `wiki_id`, `owner_id`, `title`, `ctime`, `last_version`, `last_mtime`)
+                        				VALUES
+                        				(".$newid .", 
+                        				 ".$wiki_map[$row['wiki_id']] .", 
+                        				 ".autoquote($row['owner_id']) .", 
+                        				 ".autoquote($row['title']) .", 
+                        				 ".autoquote($row['ctime']) .",
+                        				 ".autoquote($row['last_version']) .",
+                        				 ".autoquote($row['last_mtime']) .")");
+            if (false === $r)
+                $dropflag = false;
+        }
+        
+        // ----- wiki_pages_content DB Table ----- //
+        list($wiki_page_content_id) = mysql_fetch_row(db_query("SELECT max(id) FROM `$mysqlMainDb`.wiki_pages_content"));
+        if (!$wiki_page_content_id)
+            $wiki_page_content_id = 0;
+        
+        $result = db_query("SELECT * FROM wiki_pages_content ORDER by id");
+        
+        while ($row = mysql_fetch_array($result)) {
+            $oldid = intval($row['id']);
+            $newid = intval($wiki_page_content_id) + $oldid;
+        
+            $r = db_query("INSERT INTO `$mysqlMainDb`.wiki_pages_content
+                                        (`id`, `pid`, `editor_id`, `mtime`, `content`)
+                        				VALUES
+                        				(".$newid .", 
+                        				 ".$wiki_page_map[$row['pid']] .", 
+                        				 ".autoquote($row['editor_id']) .", 
+                        				 ".autoquote($row['mtime']) .", 
+                        				 ".autoquote($row['content']) .")");
+            if (false === $r)
+                $dropflag = false;
+        }
+        
+        if (true === $dropflag) {
+            db_query("DROP TABLE wiki_properties");
+            db_query("DROP TABLE wiki_acls");
+            db_query("DROP TABLE wiki_pages");
+            db_query("DROP TABLE wiki_pages_content");
+        }
+        
+        db_query("UPDATE `$mysqlMainDb`.course_units AS units, `$mysqlMainDb`.unit_resources AS res
+                            SET res_id = res_id + $wiki_id
+                            WHERE units.id = res.unit_id AND course_id = $course_id AND type = 'wiki'");
     }
     
     if ($return_mapping)
-        return array($video_map, $videolinks_map, $lp_map);
+        return array($video_map, $videolinks_map, $lp_map, $wiki_map);
 }
 
 function upgrade_course_2_5($code, $lang, $extramessage = '') {

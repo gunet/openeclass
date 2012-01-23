@@ -47,12 +47,10 @@
      */
     function init_wiki_tables( &$con, $drop_tables = false )
     {
-        // get claro db names using claro_get_course_tbl_name()
-        $tblList = claro_sql_get_course_tbl();
-        $tblWikiProperties = $tblList[ 'wiki_properties' ];
-        $tblWikiPages = $tblList[ 'wiki_pages' ];
-        $tblWikiPagesContent = $tblList[ 'wiki_pages_content' ];
-        $tblWikiAcls = $tblList[ 'wiki_acls' ];
+        $tblWikiProperties = 'wiki_properties';
+        $tblWikiPages = 'wiki_pages';
+        $tblWikiPagesContent = 'wiki_pages_content';
+        $tblWikiAcls = 'wiki_acls';
         
         $con->connect();
 
@@ -106,6 +104,7 @@
 
         $sql = "CREATE TABLE IF NOT EXISTS `$tblWikiProperties`(
             `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+            `course_id` INT(11) NOT NULL,
             `title` VARCHAR(255) NOT NULL DEFAULT '',
             `description` TEXT NULL,
             `group_id` INT(11) NOT NULL DEFAULT 0,
@@ -135,14 +134,11 @@
     {
         global $langWikiMainPageContent;
         
-        $tblList = claro_sql_get_course_tbl();
-
         $mainPageContent = sprintf( $langWikiMainPageContent, $wikiTitle = '' );
         
         $config = array();
-        // use claro functions
-        $config["tbl_wiki_pages"] = $tblList[ "wiki_pages" ];
-        $config["tbl_wiki_pages_content"] = $tblList[ "wiki_pages_content" ];
+        $config["tbl_wiki_pages"] = "wiki_pages";
+        $config["tbl_wiki_pages_content"] = "wiki_pages_content";
         
         $wikiPage = new WikiPage( $con, $config, $wikiId );
         

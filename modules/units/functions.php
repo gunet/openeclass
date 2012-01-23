@@ -489,8 +489,8 @@ function show_forum($type, $title, $comments, $resource_id, $ft_id, $visibility)
 // display resource wiki
 function show_wiki($title, $comments, $resource_id, $wiki_id, $visibility)
 {
-	global $id, $tool_content, $mysqlMainDb, $urlServer, $is_editor,
-               $langWasDeleted, $langInactiveModule, $currentCourseID, $code_cours, $themeimg;
+	global $id, $mysqlMainDb, $urlServer, $is_editor,
+               $langWasDeleted, $langInactiveModule, $cours_id, $code_cours, $themeimg;
       
         $module_visible = visible_module(26); // checks module visibility
         
@@ -502,8 +502,7 @@ function show_wiki($title, $comments, $resource_id, $wiki_id, $visibility)
 	$class_vis = ($visibility == 'i' or !$module_visible)?
                      ' class="invisible"': ' class="even"';
         $title = htmlspecialchars($title);
-	$r = db_query("SELECT * FROM wiki_properties WHERE id = $wiki_id",
-                      $currentCourseID);
+	$r = db_query("SELECT * FROM wiki_properties WHERE course_id = $cours_id AND id = $wiki_id", $mysqlMainDb);
 	if (mysql_num_rows($r) == 0) { // check if it was deleted
 		if (!$is_editor) {
 			return '';

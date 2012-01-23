@@ -143,7 +143,7 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
                         upgrade_course_2_5($new_course_code, $course_lang);
                 }
                 if ($eclass_version < '3.0') {
-                    list($video_map, $videolinks_map, $lp_learnPath_map) = upgrade_course_3_0($new_course_code, $course_lang, null, true);
+                    list($video_map, $videolinks_map, $lp_learnPath_map, $wiki_map) = upgrade_course_3_0($new_course_code, $course_lang, null, true);
                 }
 	}
         convert_description_to_units($new_course_code, $course_id);
@@ -188,7 +188,7 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
                 }
 
                 function unit_map_function(&$data, $maps) {
-                        list($document_map, $link_category_map, $link_map, $ebook_map, $section_map, $subsection_map, $video_map, $videolinks_map, $lp_learnPath_map) = $maps;
+                        list($document_map, $link_category_map, $link_map, $ebook_map, $section_map, $subsection_map, $video_map, $videolinks_map, $lp_learnPath_map, $wiki_map) = $maps;
                         $type = $data['type'];
                         if ($type == 'doc') {
                                 $data['res_id'] = $document_map[$data['res_id']];
@@ -210,6 +210,8 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
                                 $data['res_id'] = $videolinks_map[$data['res_id']];
                         } elseif ($type == 'lp') {
                                 $data['res_id'] = $lp_learnPath_map[$data['res_id']];
+                        } elseif ($type == 'wiki') {
+                                $data['res_id'] = $wiki_map[$data['res_id']];
                         }
                         return true;
                 }
@@ -316,6 +318,25 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
                                              'learnPath_module_id' => $lp_rel_learnPath_module_map,
                                              'learnPath_id' => $lp_learnPath_map)));
                 }
+                if (file_exists("$restoreThis/wiki_properties") &&
+                    file_exists("$restoreThis/wiki_acls") &&
+                    file_exists("$restoreThis/wiki_pages") &&
+                    file_exists("$restoreThis/wiki_pages_content"))
+                {
+                    $wiki_map = restore_table($restoreThis, 'wiki_properties',
+                        array('set' => array('course_id' => $course_id),
+                              'return_mapping' => 'id'));
+                    restore_table($restoreThis, 'wiki_acls',
+                        array('map' => array('wiki_id' => $wiki_map)));
+                    $wiki_pages_map = restore_table($restoreThis, 'wiki_pages',
+                        array('map' => array('wiki_id' => $wiki_map,
+                                             'owner_id' => $userid_map),
+                              'return_mapping' => 'id'));
+                    restore_table($restoreThis, 'wiki_pages_content',
+                        array('delete' => array('id'),
+                              'map' => array('pid' => $wiki_pages_map,
+                                             'editor_id' => $userid_map)));
+                }
                 $unit_map = restore_table($restoreThis, 'course_units',
                         array('set' => array('course_id' => $course_id),
                               'return_mapping' => 'id'));
@@ -331,7 +352,8 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
                                                            $ebook_subsection_map,
                                                            $video_map,
                                                            $videolinks_map,
-                                                           $lp_learnPath_map)));
+                                                           $lp_learnPath_map,
+                                                           $wiki_map)));
         }
         
 	removeDir($restoreThis);
