@@ -524,6 +524,32 @@ if (!isset($_POST['submit2'])) {
                 db_query("UPDATE `user` SET `username`=TRIM(`username`)");
         }
 
+        if ($oldversion < '3.0') {
+            db_query('CREATE TABLE IF NOT EXISTS video (
+                            `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                            `course_id` INT(11) NOT NULL,
+                            `path` VARCHAR(255),
+                            `url` VARCHAR(200),
+                            `title` VARCHAR(200),
+                            `description` TEXT,
+                            `creator` VARCHAR(200),
+                            `publisher` VARCHAR(200),
+                            `date` DATETIME,
+                            FULLTEXT KEY `video`
+                               (`url`, `title`, `description`))');
+            db_query('CREATE TABLE IF NOT EXISTS videolinks (
+                            `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                            `course_id` INT(11) NOT NULL,
+                            `url` VARCHAR(200),
+                            `title` VARCHAR(200),
+                            `description` TEXT,
+                            `creator` VARCHAR(200),
+                            `publisher` VARCHAR(200),
+                            `date` DATETIME,
+                            FULLTEXT KEY `video`
+                               (`url`, `title`, `description`))');
+        }
+
         mysql_field_exists($mysqlMainDb, 'cours', 'expand_glossary') or
                 db_query("ALTER TABLE `cours` ADD `expand_glossary` BOOL NOT NULL DEFAULT 0");
         mysql_field_exists($mysqlMainDb, 'cours', 'glossary_index') or
@@ -581,6 +607,9 @@ if (!isset($_POST['submit2'])) {
                 }
                 if ($oldversion < '2.5') {                        
 			upgrade_course_2_5($code[0], $lang, "($i / $total)");
+                }
+                if ($oldversion < '3.0') {
+                    upgrade_course_3_0($code[0], $lang, "($i / $total)");
                 }
                 echo "</p>\n";
                 $i++;

@@ -1476,6 +1476,8 @@ function delete_course($cid)
         db_query("DELETE FROM course_units WHERE course_id = $cid");
 	db_query("DELETE FROM cours_user WHERE cours_id = $cid");
 	db_query("DELETE FROM cours WHERE cours_id = $cid");
+	db_query("DELETE FROM video WHERE course_id = $cid");
+	db_query("DELETE FROM videolinks WHERE course_id = $cid");
 
         $garbage = "${webDir}courses/garbage";
         if (!is_dir($garbage)) {

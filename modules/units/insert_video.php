@@ -25,12 +25,12 @@ function list_videos()
         global $id, $currentCourseID, $tool_content, $urlServer,
                $langTitle, $langDescr, $langDate, $langChoice,
                $langAddModulesButton, $langNoVideo, $code_cours,
-               $themeimg; 
+               $themeimg, $cours_id, $mysqlMainDb; 
 
         $table_started = false;
         $count = 0;
         foreach (array('video', 'videolinks') as $table) {
-                $result = db_query("SELECT * FROM $table", $currentCourseID);
+                $result = db_query("SELECT * FROM $table WHERE course_id = $cours_id", $mysqlMainDb);
                 $count += mysql_num_rows($result);
                 $numLine=0;
                 while ($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
@@ -50,11 +50,11 @@ function list_videos()
                         {
                             list($mediaURL, $mediaPath, $mediaPlay) = media_url($row['path']);
 
-                            $videolink = choose_media_ahref($mediaURL, $mediaPath, $mediaPlay, q($row['titre']), $row['path']);
+                            $videolink = choose_media_ahref($mediaURL, $mediaPath, $mediaPlay, q($row['title']), $row['path']);
                         }
                         else
                         {
-                            $videolink = choose_medialink_ahref(q($row['url']), q($row['titre']));
+                            $videolink = choose_medialink_ahref(q($row['url']), q($row['title']));
                         }
 
                           if ($numLine%2 == 0) {

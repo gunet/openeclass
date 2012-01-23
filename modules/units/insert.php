@@ -179,7 +179,7 @@ function insert_lp($id)
 // insert video in database
 function insert_video($id)
 {
-	global $code_cours;
+	global $code_cours, $cours_id, $mysqlMainDb;
 	
 	list($order) = mysql_fetch_array(db_query("SELECT MAX(`order`) FROM unit_resources WHERE unit_id=$id"));
 	foreach ($_POST['video'] as $video_id) {
@@ -188,8 +188,8 @@ function insert_video($id)
                 $res_id = intval($res_id);
                 $table = ($table == 'video')? 'video': 'videolinks';
 		$row = mysql_fetch_array(db_query("SELECT * FROM $table
-			WHERE id = $res_id", $GLOBALS['currentCourseID']), MYSQL_ASSOC);
-                db_query("INSERT INTO unit_resources SET unit_id=$id, type='$table', title=" . quote($row['titre']) . ", comments=" . quote($row['description']) . ", visibility='v', `order`=$order, `date`=NOW(), res_id=$res_id", $GLOBALS['mysqlMainDb']);
+			WHERE course_id = $cours_id AND id = $res_id", $mysqlMainDb), MYSQL_ASSOC);
+                db_query("INSERT INTO unit_resources SET unit_id=$id, type='$table', title=" . quote($row['title']) . ", comments=" . quote($row['description']) . ", visibility='v', `order`=$order, `date`=NOW(), res_id=$res_id", $GLOBALS['mysqlMainDb']);
 	}
 	header('Location: index.php?course='.$code_cours.'&id=' . $id);
 	exit;

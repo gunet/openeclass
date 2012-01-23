@@ -305,6 +305,104 @@ function upgrade_course($code, $lang)
 	upgrade_course_2_3($code);
 	upgrade_course_2_4($code, $lang);
         upgrade_course_2_5($code, $lang);
+        upgrade_course_3_0($code, $lang);
+}
+
+function upgrade_course_3_0($code, $lang, $extramessage = '', $return_mapping = false)
+{
+    global $langUpgCourse, $mysqlMainDb, $global_messages, $webDir;
+    
+    $course_id = course_code_to_id($code);
+    mysql_select_db($code);
+    echo "<hr><p>$langUpgCourse <b>$code</b> (3.0) $extramessage<br>";
+    flush();
+    
+    $video_map = array();
+    $videolinks_map = array();
+    
+    // move video to central table and drop table
+    if (mysql_table_exists($code, 'video')) {
+        list($video_id) = mysql_fetch_row(db_query("SELECT MAX(id) FROM `$mysqlMainDb`.video"));
+        if (!$video_id)
+            $video_id = 1;
+        
+        $dropflag = true;
+        $result = db_query("SELECT * FROM video ORDER by id");
+        
+        while ($row = mysql_fetch_array($result)) {
+            $oldid = intval($row['id']);
+            $newid = intval($video_id) + $oldid;
+            
+            if ($return_mapping)
+                $video_map[$oldid] = $newid;
+            
+            $r = db_query("INSERT INTO `$mysqlMainDb`.video
+                            (`id`, `course_id`, `path`, `url`, `title`, `description`, `creator`, `publisher`, `date`)
+                                       VALUES
+                                       (".$newid .", 
+                                        ".$course_id .", 
+                                        ".autoquote($row['path']) .", 
+                                        ".autoquote($row['url']) .", 
+                                        ".autoquote($row['titre']) .", 
+                                        ".autoquote($row['description']) .", 
+                                        ".autoquote($row['creator']) .", 
+                                        ".autoquote($row['publisher']) .", 
+                                        ".autoquote($row['date']) .")");
+            
+            if (false === $r)
+                $dropflag = false;
+        }
+        
+        if (true === $dropflag)
+            db_query("DROP TABLE video");
+        
+        db_query("UPDATE `$mysqlMainDb`.course_units AS units, `$mysqlMainDb`.unit_resources AS res
+                            SET res_id = res_id + $video_id
+                            WHERE units.id = res.unit_id AND course_id = $course_id AND type = 'video'");
+    }
+    
+    // move videolinks to central table and drop table
+    if (mysql_table_exists($code, 'videolinks')) {
+        list($link_id) = mysql_fetch_row(db_query("SELECT MAX(id) FROM `$mysqlMainDb`.videolinks"));
+        if (!$link_id)
+            $link_id = 1;
+
+        $dropflag = true;
+        $result = db_query("SELECT * FROM videolinks ORDER by id");
+        
+        while ($row = mysql_fetch_array($result)) {
+            $oldid = intval($row['id']);
+            $newid = intval($link_id) + $oldid;
+            
+            if ($return_mapping)
+                $videolinks_map[$oldid] = $newid;
+            
+            $r = db_query("INSERT INTO `$mysqlMainDb`.videolinks
+                            (`id`, `course_id`, `url`, `title`, `description`, `creator`, `publisher`, `date`)
+                                       VALUES
+                                       (".$newid .", 
+                                        ".$course_id .", 
+                                        ".autoquote($row['url']) .", 
+                                        ".autoquote($row['titre']) .", 
+                                        ".autoquote($row['description']) .", 
+                                        ".autoquote($row['creator']) .", 
+                                        ".autoquote($row['publisher']) .", 
+                                        ".autoquote($row['date']) .")");
+            
+            if (false === $r)
+                $dropflag = false;
+        }
+        
+        if (true === $dropflag) 
+            db_query("DROP TABLE videolinks");
+        
+        db_query("UPDATE `$mysqlMainDb`.course_units AS units, `$mysqlMainDb`.unit_resources AS res
+                            SET res_id = res_id + $link_id
+                            WHERE units.id = res.unit_id AND course_id = $course_id AND type = 'videolinks'");
+    }
+    
+    if ($return_mapping)
+        return array($video_map, $videolinks_map);
 }
 
 function upgrade_course_2_5($code, $lang, $extramessage = '') {

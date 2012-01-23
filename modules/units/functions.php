@@ -285,7 +285,7 @@ function show_lp($title, $comments, $resource_id, $lp_id)
 // display resource video
 function show_video($table, $title, $comments, $resource_id, $video_id, $visibility)
 {
-        global $is_editor, $currentCourseID, $tool_content, $themeimg, $langInactiveModule;
+        global $is_editor, $cours_id, $mysqlMainDb, $tool_content, $themeimg, $langInactiveModule;
 
         $module_visible = visible_module(4); // checks module visibility
         if (!$module_visible and !$is_editor) {
@@ -295,8 +295,8 @@ function show_video($table, $title, $comments, $resource_id, $video_id, $visibil
         $class_vis = ($visibility == 'i' or !$module_visible)?
                      ' class="invisible"': ' class="even"';        
         
-        $result = db_query("SELECT * FROM $table WHERE id=$video_id",
-                           $currentCourseID);
+        $result = db_query("SELECT * FROM $table WHERE course_id = $cours_id AND id=$video_id",
+                            $mysqlMainDb);
         if ($result and mysql_num_rows($result) > 0) {
                 $row = mysql_fetch_array($result, MYSQL_ASSOC);
                 
