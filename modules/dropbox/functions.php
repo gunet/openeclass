@@ -96,20 +96,20 @@ $diskUsed = dir_total_space($basedir);
 */
 function removeUnusedFiles()
 {
-    global $dropbox_cnf, $dropbox_lang, $currentCourseID;
+    global $dropbox_cnf, $dropbox_lang, $cours_id, $mysqlMainDb;
     // select all files that aren't referenced anymore
     $sql = "SELECT DISTINCT f.id, f.filename
 			FROM `" . $dropbox_cnf["fileTbl"] . "` f
 			LEFT JOIN `" . $dropbox_cnf["personTbl"] . "` p ON f.id = p.fileId
-			WHERE p.personId IS NULL";
-    $result = db_query($sql, $currentCourseID);
+			WHERE f.course_id = $cours_id AND p.personId IS NULL";
+    $result = db_query($sql, $mysqlMainDb);
     while ($res = mysql_fetch_array($result))
     {
 	//delete the selected files from the post and file tables
 	$sql = "DELETE FROM `" . $dropbox_cnf["postTbl"] . "` WHERE fileId='" . $res['id'] . "'";
-        $result1 = db_query($sql, $currentCourseID);
+        $result1 = db_query($sql, $mysqlMainDb);
         $sql = "DELETE FROM `" . $dropbox_cnf["fileTbl"] . "` WHERE id='" . $res['id'] . "'";
-        $result1 = db_query($sql, $currentCourseID);
+        $result1 = db_query($sql, $mysqlMainDb);
 
 		//delete file from server
         unlink($dropbox_cnf["sysPath"] . "/" . $res["filename"]);

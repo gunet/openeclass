@@ -1478,6 +1478,9 @@ function delete_course($cid)
 	db_query("DELETE FROM cours WHERE cours_id = $cid");
 	db_query("DELETE FROM video WHERE course_id = $cid");
 	db_query("DELETE FROM videolinks WHERE course_id = $cid");
+	db_query("DELETE FROM dropbox_person WHERE fileId IN (SELECT id FROM dropbox_file WHERE course_id = $cid)");
+	db_query("DELETE FROM dropbox_post WHERE fileId IN (SELECT id FROM dropbox_file WHERE course_id = $cid)");
+	db_query("DELETE FROM dropbox_file WHERE course_id = $cid");
 
         $garbage = "${webDir}courses/garbage";
         if (!is_dir($garbage)) {

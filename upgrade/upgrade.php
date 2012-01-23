@@ -548,6 +548,26 @@ if (!isset($_POST['submit2'])) {
                             `date` DATETIME,
                             FULLTEXT KEY `video`
                                (`url`, `title`, `description`))');
+            
+            db_query("CREATE TABLE IF NOT EXISTS dropbox_file (
+                            `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                            `course_id` INT(11) NOT NULL,
+                            `uploaderId` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT '0',
+                            `filename` VARCHAR(250) NOT NULL DEFAULT '',
+                            `filesize` INT(11) UNSIGNED NOT NULL DEFAULT '0',
+                            `title` VARCHAR(250) DEFAULT '',
+                            `description` VARCHAR(250) DEFAULT '',
+                            `author` VARCHAR(250) DEFAULT '',
+                            `uploadDate` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
+                            `lastUploadDate` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00')");
+            db_query("CREATE TABLE IF NOT EXISTS dropbox_person (
+                            `fileId` INT(11) UNSIGNED NOT NULL DEFAULT '0',
+                            `personId` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT '0',
+                            PRIMARY KEY (fileId, personId))");
+            db_query("CREATE TABLE IF NOT EXISTS dropbox_post (
+                            `fileId` INT(11) UNSIGNED NOT NULL DEFAULT 0,
+                            `recipientId` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
+                            PRIMARY KEY (fileId, recipientId))");
         }
 
         mysql_field_exists($mysqlMainDb, 'cours', 'expand_glossary') or

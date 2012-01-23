@@ -79,7 +79,7 @@ class Dropbox_Work {
 		/*
 		* private function creating a new work object
 		*/
-		global $dropbox_cnf, $dropbox_lang, $currentCourseID;
+		global $dropbox_cnf, $dropbox_lang, $cours_id, $mysqlMainDb;
 		
 		/*
 		* Do some sanity checks
@@ -106,13 +106,13 @@ class Dropbox_Work {
 		if ($GLOBALS['language'] == 'greek') {
 			$sql="SELECT id, DATE_FORMAT(uploadDate, '%d-%m-%Y / %H:%i')
 				FROM `".$dropbox_cnf["fileTbl"]."` 
-				WHERE filename = '".addslashes($this->filename)."'";
+				WHERE course_id = $cours_id AND filename = '".addslashes($this->filename)."'";
 		} else {
 			$sql="SELECT id, DATE_FORMAT(uploadDate, '%Y-%m-d% / %H:%i')
 				FROM `".$dropbox_cnf["fileTbl"]."` 
-				WHERE filename = '".addslashes($this->filename)."'";
+				WHERE course_id = $cours_id AND filename = '".addslashes($this->filename)."'";
 		}
-        	$result = db_query($sql,$currentCourseID);
+		$result = db_query($sql, $mysqlMainDb);
 		$res = mysql_fetch_array($result);
 		if ($res != FALSE) $this->isOldWork = TRUE;
 		
@@ -129,12 +129,13 @@ class Dropbox_Work {
 					, author = '".addslashes($this->author)."'
 					, lastUploadDate = '".addslashes($this->lastUploadDate)."'
 					WHERE id='".addslashes($this->id)."'";
-			$result = db_query($sql);
+			$result = db_query($sql, $mysqlMainDb);
 		} else {
 			$this->uploadDate = $this->lastUploadDate;
 			$sql="INSERT INTO `".$dropbox_cnf["fileTbl"]."` 
-				(uploaderId, filename, filesize, title, description, author, uploadDate, lastUploadDate)
-				VALUES ('".addslashes($this->uploaderId)."'
+				(course_id, uploaderId, filename, filesize, title, description, author, uploadDate, lastUploadDate)
+				VALUES ('".addslashes($cours_id)."'
+						, '".addslashes($this->uploaderId)."'
 						, '".addslashes($this->filename)."'
 						, '".addslashes($this->filesize)."'
 						, '".addslashes($this->title)."'
@@ -144,7 +145,7 @@ class Dropbox_Work {
 						, '".addslashes($this->lastUploadDate)."'
 						)";
 
-        	$result = db_query($sql);		
+        	$result = db_query($sql, $mysqlMainDb);		
 			$this->id = mysql_insert_id(); //get automatically inserted id
 		}
 		
@@ -157,14 +158,14 @@ class Dropbox_Work {
 				VALUES ('".addslashes($this->id)."'
 						, '".addslashes($this->uploaderId)."'
 						)";
-        $result = db_query($sql);	//if work already exists no error is generated
+        $result = db_query($sql, $mysqlMainDb);	//if work already exists no error is generated
 	}
 	
 	function _createExistingWork ($id) {
 		/*
 		* private function creating existing object by retreiving info from db
 		*/
-		global $dropbox_cnf, $dropbox_lang, $currentCourseID;
+		global $dropbox_cnf, $dropbox_lang, $mysqlMainDb;
 		
 		/*
 		* Do some sanity checks
@@ -187,7 +188,7 @@ class Dropbox_Work {
 			FROM `".$dropbox_cnf["fileTbl"]."`
 			WHERE id='".addslashes($id)."'";
 	}
-	        $result = db_query($sql, $currentCourseID);
+	        $result = db_query($sql, $mysqlMainDb);
 		$res = mysql_fetch_array($result);;
 		
 		/*
@@ -240,7 +241,7 @@ class Dropbox_SentWork extends Dropbox_Work {
 		*
 		* RH: Mailing: $recipientIds is integer instead of array (mailing zip)
 		*/
-		global $dropbox_cnf, $dropbox_lang, $currentCourseID;
+		global $dropbox_cnf, $dropbox_lang, $mysqlMainDb;
 
 		/*
 		* Call constructor of Dropbox_Work object
@@ -275,13 +276,13 @@ class Dropbox_SentWork extends Dropbox_Work {
 			$sql="INSERT INTO `".$dropbox_cnf["postTbl"]."` 
 				(fileId, recipientId)
 				VALUES ('".addslashes($this->id)."', '".addslashes($rec["id"])."')";
-	        $result = db_query($sql,$currentCourseID);	//if work already exists no error is generated
+	        $result = db_query($sql, $mysqlMainDb);	//if work already exists no error is generated
 						
 			//insert entries into person table
 			$sql="INSERT INTO `".$dropbox_cnf["personTbl"]."` (fileId, personId)
 				VALUES ('".addslashes($this->id)."', '".addslashes($rec["id"])."')";
         	// RH: do not add recipient in person table if mailing zip or just upload
-			if (!$justSubmit) $result = db_query($sql);	//if work already exists no error is generated
+			if (!$justSubmit) $result = db_query($sql, $mysqlMainDb);	//if work already exists no error is generated
 		}
 	}
 	
@@ -289,7 +290,7 @@ class Dropbox_SentWork extends Dropbox_Work {
 		/*
 		* private function creating existing object by retreiving info from db
 		*/
-		global $dropbox_cnf, $dropbox_lang, $currentCourseID;
+		global $dropbox_cnf, $dropbox_lang, $mysqlMainDb;
 
 		/*
 		* Call constructor of Dropbox_Work object
@@ -309,7 +310,7 @@ class Dropbox_SentWork extends Dropbox_Work {
 		$sql="SELECT recipientId
 				FROM `".$dropbox_cnf["postTbl"]."`
 				WHERE fileId='".addslashes($id)."'";
-	        $result = db_query($sql,$currentCourseID);
+	        $result = db_query($sql, $mysqlMainDb);
 		while ($res = mysql_fetch_array($result)) {
 			/*
 			* check for deleted users
@@ -338,7 +339,7 @@ class Dropbox_Person {
 		/*
 		* Constructor for recreating the Dropbox_Person object
 		*/
-		global $dropbox_cnf, $dropbox_lang, $currentCourseID;
+		global $dropbox_cnf, $dropbox_lang, $cours_id, $mysqlMainDb;
 		
 		/*
 		* Fill in properties
@@ -357,10 +358,13 @@ class Dropbox_Person {
 		$sql = "SELECT r.fileId FROM 
 				`".$dropbox_cnf["postTbl"]."` r
 				, `".$dropbox_cnf["personTbl"]."` p
+				, `".$dropbox_cnf["fileTbl"]."` f
 				WHERE r.recipientId = '".addslashes($this->userId)."' 
 					AND r.recipientId = p.personId
-					AND r.fileId = p.fileId";
-        	$result = db_query($sql, $currentCourseID);
+					AND r.fileId = p.fileId
+					AND r.fileId = f.id
+					AND f.course_id = $cours_id";
+        	$result = db_query($sql, $mysqlMainDb);
 		while ($res = mysql_fetch_array($result)) {
 			$this->receivedWork[] = new Dropbox_Work($res["fileId"]);
 		}
@@ -369,10 +373,11 @@ class Dropbox_Person {
 		* find all entries where this person is the sender/uploader
 		*/
 		$sql = "SELECT f.id FROM `".$dropbox_cnf["fileTbl"]."` f, `".$dropbox_cnf["personTbl"]."` p 
-				WHERE f.uploaderId = '".addslashes($this->userId)."'
+				WHERE f.course_id = $cours_id 
+				AND f.uploaderId = '".addslashes($this->userId)."'
 				AND f.uploaderId = p.personId
 				AND f.id = p.fileId";
-        $result = db_query($sql, $currentCourseID);
+        $result = db_query($sql, $mysqlMainDb);
 		while ($res = mysql_fetch_array($result)) {
 			$this->sentWork[] = new Dropbox_SentWork($res["id"]);
 		}
@@ -469,12 +474,12 @@ class Dropbox_Person {
 		/*
 		* Deletes all the received work of this person
 		*/
-		global $dropbox_cnf, $dropbox_lang, $currentCourseID;
+		global $dropbox_cnf, $dropbox_lang, $mysqlMainDb;
 	
 		//delete entries in person table concerning received works
 		foreach ($this->receivedWork as $w) {
 			db_query("DELETE FROM `".$dropbox_cnf["personTbl"]."` 
-				WHERE personId='".$this->userId."' AND fileId='".$w->id."'", $currentCourseID);
+				WHERE personId='".$this->userId."' AND fileId='".$w->id."'", $mysqlMainDb);
 		}
 		removeUnusedFiles();	//check for unused files
 
@@ -484,7 +489,7 @@ class Dropbox_Person {
 		/*
 		* Deletes a received work of this person with id=$id
 		*/
-		global $dropbox_cnf, $dropbox_lang, $currentCourseID;
+		global $dropbox_cnf, $dropbox_lang, $mysqlMainDb;
 
 		//id check
 		$found = false;
@@ -497,7 +502,7 @@ class Dropbox_Person {
 		
 		//delete entries in person table concerning received works
 		db_query("DELETE FROM `".$dropbox_cnf["personTbl"]."` 
-			WHERE personId='".$this->userId."' AND fileId='".$id."'", $currentCourseID);
+			WHERE personId='".$this->userId."' AND fileId='".$id."'", $mysqlMainDb);
 		
 		removeUnusedFiles();	//check for unused files
 	}
@@ -506,12 +511,12 @@ class Dropbox_Person {
 		/*
 		* Deletes all the sent work of this person
 		*/
-		global $dropbox_cnf, $dropbox_lang, $currentCourseID;
+		global $dropbox_cnf, $dropbox_lang, $mysqlMainDb;
 	
 		//delete entries in person table concerning sent works
 		foreach ($this->sentWork as $w) {
 			db_query("DELETE FROM `".$dropbox_cnf["personTbl"]."` 
-				WHERE personId='".$this->userId."' AND fileId='".$w->id."'", $currentCourseID);
+				WHERE personId='".$this->userId."' AND fileId='".$w->id."'", $mysqlMainDb);
 		}		
 		removeUnusedFiles();	//check for unused files
 
@@ -521,7 +526,7 @@ class Dropbox_Person {
 		/*
 		* Deletes a sent work of this person with id=$id
 		*/
-		global $dropbox_cnf, $dropbox_lang, $currentCourseID;
+		global $dropbox_cnf, $dropbox_lang, $mysqlMainDb;
 
 		//index check
 		$found = false;
@@ -534,7 +539,7 @@ class Dropbox_Person {
 		
 		//delete entries in person table concerning sent works
 		db_query("DELETE FROM `".$dropbox_cnf["personTbl"]."` 
-				WHERE personId='".$this->userId."' AND fileId='".$id."'", $currentCourseID);
+				WHERE personId='".$this->userId."' AND fileId='".$id."'", $mysqlMainDb);
 		removeUnusedFiles();	//check for unused files
 	}
 }

@@ -523,34 +523,6 @@ db_query("CREATE TABLE `assignment_submit` (
     UNIQUE KEY `id` (`id`))
      $charset_spec");
 
-###################################### DROPBOX #####################################
-
-    db_query("CREATE TABLE dropbox_file (
-      id int(11) unsigned NOT NULL auto_increment,
-      uploaderId int(11) unsigned NOT NULL default '0',
-      filename varchar(250) NOT NULL default '',
-      filesize int(11) unsigned NOT NULL default '0',
-      title varchar(250) default '',
-      description varchar(250) default '',
-      author varchar(250) default '',
-      uploadDate datetime NOT NULL default '0000-00-00 00:00:00',
-      lastUploadDate datetime NOT NULL default '0000-00-00 00:00:00',
-      PRIMARY KEY  (id),
-      UNIQUE KEY UN_filename (filename))
-     $charset_spec");
-
-    db_query("CREATE TABLE dropbox_person (
-      fileId int(11) unsigned NOT NULL default '0',
-      personId int(11) unsigned NOT NULL default '0',
-      PRIMARY KEY  (fileId,personId))
-     $charset_spec");
-
-    db_query("CREATE TABLE dropbox_post (
-      fileId int(11) unsigned NOT NULL default 0,
-      recipientId int(11) unsigned NOT NULL default 0,
-      PRIMARY KEY  (fileId,recipientId))
-     $charset_spec");
-
 #################### QUESTIONNAIRE ###############################################
 
 db_query("CREATE TABLE poll (

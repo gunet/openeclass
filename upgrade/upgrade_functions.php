@@ -401,6 +401,67 @@ function upgrade_course_3_0($code, $lang, $extramessage = '', $return_mapping = 
                             WHERE units.id = res.unit_id AND course_id = $course_id AND type = 'videolinks'");
     }
     
+    // move dropbox to central table and drop table
+    if (mysql_table_exists($code, 'dropbox_file') && mysql_table_exists($code, 'dropbox_person') && 
+        mysql_table_exists($code, 'dropbox_post')) {
+        list($file_id) = mysql_fetch_row(db_query("SELECT max(id) FROM `$mysqlMainDb`.dropbox_file"));
+        if (!$file_id)
+            $file_id = 0;
+        
+        $dropflag = true;
+        $result = db_query("SELECT * FROM dropbox_file ORDER by id");
+        
+        while ($row = mysql_fetch_array($result)) {
+            $oldid = intval($row['id']);
+            $newid = intval($file_id) + $oldid;
+            
+            $r = db_query("INSERT INTO `$mysqlMainDb`.dropbox_file
+                                        (`id`, `course_id`, `uploaderId`, `filename`, `filesize`, `title`,  
+                        				 `description`, `author`, `uploadDate`, `lastUploadDate`)
+                        				VALUES
+                        				(".$newid .", 
+                        				 ".$course_id .", 
+                        				 ".$row['uploaderId'] .", 
+                        				 ".autoquote($row['filename']) .", 
+                        				 ".autoquote($row['filesize']) .", 
+                        				 ".autoquote($row['title']) .", 
+                        				 ".autoquote($row['description']) .", 
+                        				 ".autoquote($row['author']) .",
+                        				 ".autoquote($row['uploadDate']) .",
+                        				 ".autoquote($row['lastUploadDate']) .")");
+            if (false === $r)
+                $dropflag = false;
+            
+            $r_dperson = db_query("SELECT * FROM dropbox_person WHERE fileId = $oldid");
+            while ($dperson = mysql_fetch_array($r_dperson)) {
+                $r = db_query("INSERT INTO `$mysqlMainDb`.dropbox_person
+                                        (`fileId`, `personId`)
+                        				VALUES
+                        				(".$newid .", 
+                        				 ".$dperson['personId'] .")");
+                if (false === $r)
+                    $dropflag = false;
+            }
+            
+            $r_dpost = db_query("SELECT * FROM dropbox_post WHERE fileId = $oldid");
+            while($dpost = mysql_fetch_array($r_dpost)) {
+                $r = db_query("INSERT INTO `$mysqlMainDb`.dropbox_post
+                                        (`fileId`, `recipientId`)
+                        				VALUES
+                        				(".$newid .", 
+                        				 ".$dpost['recipientId'] .")");
+                if (false === $r)
+                    $dropflag = false;
+            }
+        }
+        
+        if (true === $dropflag) {
+            db_query("DROP TABLE dropbox_file");
+            db_query("DROP TABLE dropbox_person");
+            db_query("DROP TABLE dropbox_post");
+        }
+    }
+    
     if ($return_mapping)
         return array($video_map, $videolinks_map);
 }

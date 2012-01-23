@@ -263,6 +263,21 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
                     $videolinks_map  = restore_table($restoreThis, 'videolinks',
                         array('set' => array('course_id' => $course_id),
                               'return_mapping' => 'id'));
+                if (file_exists("$restoreThis/dropbox_file") && 
+                    file_exists("$restoreThis/dropbox_person") && 
+                    file_exists("$restoreThis/dropbox_post"))
+                {
+                    $dropbox_map = restore_table($restoreThis, 'dropbox_file',
+                        array('set' => array('course_id' => $course_id),
+                              'map' => array('uploaderId' => $userid_map),
+                              'return_mapping' => 'id'));
+                    restore_table($restoreThis, 'dropbox_person',
+                        array('map' => array('fileId' => $dropbox_map,
+                                             'personId' => $userid_map)));
+                    restore_table($restoreThis, 'dropbox_post',
+                        array('map' => array('fileId' => $dropbox_map,
+                                             'recipientId' => $userid_map)));
+                }
                 $unit_map = restore_table($restoreThis, 'course_units',
                         array('set' => array('course_id' => $course_id),
                               'return_mapping' => 'id'));

@@ -78,7 +78,10 @@ if (extension_loaded('zlib')) {
                                                                WHERE course_id = $cours_id)",
                        'forum_notify' => $sql_course,
                        'video' => $sql_course,
-                       'videolinks' => $sql_course)
+                       'videolinks' => $sql_course,
+                       'dropbox_file' => $sql_course,
+                       'dropbox_person' => "fileId IN (SELECT id from dropbox_file WHERE course_id = $cours_id)",
+                       'dropbox_post' => "fileId IN (SELECT id from dropbox_file WHERE course_id = $cours_id)")
              as $table => $condition) {
                 backup_table($archivedir, $table, $condition);
         }
