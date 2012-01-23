@@ -1494,6 +1494,8 @@ function delete_course($cid)
 	db_query("DELETE FROM poll_answer_record WHERE pid IN (SELECT pid FROM poll WHERE course_id = $cid)");
 	db_query("DELETE FROM poll_question WHERE pid IN (SELECT pid FROM poll WHERE course_id = $cid)");
 	db_query("DELETE FROM poll WHERE course_id = $cid");
+	db_query("DELETE FROM assignment_submit WHERE assignment_id IN (SELECT id FROM assignments WHERE course_id = $cid)");
+	db_query("DELETE FROM assignments WHERE course_id = $cid");
 
         $garbage = "${webDir}courses/garbage";
         if (!is_dir($garbage)) {

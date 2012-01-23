@@ -100,7 +100,7 @@ if ($is_editor) {
 }
 
 $nameTools = $langWorks;
-mysql_select_db($currentCourseID);
+mysql_select_db($mysqlMainDb);
 
 include '../../include/lib/fileUploadLib.inc.php';
 include '../../include/lib/fileManageLib.inc.php';
@@ -134,10 +134,10 @@ if ($is_editor) {
 		if (isset($_REQUEST['choice'])) {
                         $choice = $_REQUEST['choice'];
 			if ($choice == 'disable') {
-				db_query("UPDATE assignments SET active = '0' WHERE id = '$id'");
+				db_query("UPDATE assignments SET active = '0' WHERE course_id = $cours_id AND id = '$id'");
 				show_assignments($langAssignmentDeactivated);
 			} elseif ($choice == 'enable') {
-				db_query("UPDATE assignments SET active = '1' WHERE id = '$id'");
+				db_query("UPDATE assignments SET active = '1' WHERE course_id = $cours_id AND id = '$id'");
 				show_assignments($langAssignmentActivated);
 			} elseif ($choice == 'delete') {
 				die("invalid option");
@@ -224,13 +224,13 @@ function show_submission($sid)
 // insert the assignment into the database
 function add_assignment($title, $desc, $deadline, $group_submissions)
 {
-	global $tool_content, $workPath;
+	global $tool_content, $workPath, $cours_id;
 
 	$secret = uniqid("");
 	db_query("INSERT INTO assignments
-		(title, description, comments, deadline, submission_date, secret_directory,
+		(course_id, title, description, comments, deadline, submission_date, secret_directory,
 			group_submissions) VALUES
-		(".autoquote(trim($title)).", ".autoquote(trim($desc)).", ' ', ".autoquote($deadline).", NOW(), '$secret',
+		($cours_id, ".autoquote(trim($title)).", ".autoquote(trim($desc)).", ' ', ".autoquote($deadline).", NOW(), '$secret',
 			".autoquote($group_submissions).")");
 	mkdir("$workPath/$secret",0777);
 }
@@ -240,7 +240,7 @@ function add_assignment($title, $desc, $deadline, $group_submissions)
 function submit_work($id)
 {
         global $tool_content, $workPath, $uid, $cours_id,
-                $langUploadSuccess, $langBack, $langWorks, $langUploadError, $currentCourseID,
+                $langUploadSuccess, $langBack, $langWorks, $langUploadError, $mysqlMainDb,
                 $langExerciseNotPermit, $langUnwantedFiletype, $code_cours;
 
         $submit_ok = FALSE; //Default do not allow submission
@@ -251,7 +251,7 @@ function submit_work($id)
                         if(isset($_SESSION['status']) && isset($_SESSION['status'][$_SESSION["dbname"]])) {
                                 //user is registered to this lesson
                                 $res = db_query("SELECT CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time                                       
-                                                FROM assignments WHERE id = $id");
+                                                FROM assignments WHERE course_id = $cours_id AND id = '$id'");
                                 $row = mysql_fetch_array($res);
                                 if ($row['time'] < 0) {
                                         $submit_ok = FALSE; //after assignment deadline
@@ -265,7 +265,7 @@ function submit_work($id)
                 }
         } //checks for submission validity end here
 
-        $res = db_query("SELECT title, group_submissions FROM assignments WHERE id = '$id'");
+        $res = db_query("SELECT title, group_submissions FROM assignments WHERE course_id = $cours_id AND id = '$id'");
         $row = mysql_fetch_array($res);
         $group_sub = $row['group_submissions'];
         $nav[] = array('url' => $_SERVER['PHP_SELF'], 'name' => $langWorks);
@@ -309,14 +309,14 @@ function submit_work($id)
                                         VALUES
                                         ($uid, $id, NOW(), " . quote($_SERVER['REMOTE_ADDR']) . ",
                                         " . quote($filename) . ", ". autoquote($_FILES['userfile']['name']) . ",
-                                        " . autoquote($_POST['stud_comments']) . ", '', $group_id)", $currentCourseID);    
+                                        " . autoquote($_POST['stud_comments']) . ", '', $group_id)", $mysqlMainDb);    
                             }
                         } else {                                
                                 db_query("INSERT INTO assignment_submit
                                         (uid, assignment_id, submission_date, submission_ip, file_path,
                                         file_name, comments, grade_comments) VALUES ($uid, $id, NOW(), " . quote($_SERVER['REMOTE_ADDR']) . ",
                                         " . quote($filename) . ", " . autoquote($_FILES['userfile']['name']) . ",
-                                        " . autoquote($_POST['stud_comments']) . ", '')", $currentCourseID);
+                                        " . autoquote($_POST['stud_comments']) . ", '')", $mysqlMainDb);
                         }
                         $tool_content .= "<p class='success'>$msg2<br />$msg1<br /><a href='$_SERVER[PHP_SELF]?course=$code_cours'>$langBack</a></p><br />";
                 } else {
@@ -379,11 +379,11 @@ function new_assignment()
 //form for editing
 function show_edit_assignment($id)
 {
-	global $tool_content, $m, $langEdit, $langWorks, $langBack, $code_cours;
+	global $tool_content, $m, $langEdit, $langWorks, $langBack, $code_cours, $cours_id;
 	global $urlAppend;
 	global $end_cal_Work_db;
 
-	$res = db_query("SELECT * FROM assignments WHERE id = '$id'");
+	$res = db_query("SELECT * FROM assignments WHERE course_id = $cours_id AND id = '$id'");
 	$row = mysql_fetch_array($res);
 
 	$nav[] = array("url"=>"$_SERVER[PHP_SELF]", "name"=> $langWorks);
@@ -452,7 +452,7 @@ cData;
 function edit_assignment($id)
 {
 
-	global $tool_content, $langBackAssignment, $langEditSuccess, $langEditError, $langWorks, $langEdit, $code_cours;
+	global $tool_content, $langBackAssignment, $langEditSuccess, $langEditError, $langWorks, $langEdit, $code_cours, $cours_id;
 
 	$nav[] = array("url"=>"$_SERVER[PHP_SELF]", "name"=> $langWorks);
 	$nav[] = array("url"=>"$_SERVER[PHP_SELF]?id=$id", "name"=> $_POST['title']);
@@ -464,7 +464,7 @@ function edit_assignment($id)
         }
 	if (db_query("UPDATE assignments SET title=".autoquote(trim($_POST['title'])).",
 		description=".autoquote(trim($_POST['desc'])).", group_submissions=".autoquote($_POST['group_submissions']).",
-		comments=$comments, deadline=".autoquote($_POST['WorkEnd'])." WHERE id='$id'")) {
+		comments=$comments, deadline=".autoquote($_POST['WorkEnd'])." WHERE course_id = $cours_id AND id='$id'")) {
 
         $title = autounquote($_POST['title']);
 	$tool_content .="\n  <p class='success'>$langEditSuccess<br /><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;id=$id'>$langBackAssignment '$title'</a></p><br />";
@@ -477,10 +477,10 @@ function edit_assignment($id)
 //delete assignment
 function delete_assignment($id) {
 
-	global $tool_content, $workPath, $currentCourseID, $webDir, $langBack, $langDeleted, $code_cours;
+	global $tool_content, $workPath, $currentCourseID, $webDir, $langBack, $langDeleted, $code_cours, $cours_id;
 
 	$secret = work_secret($id);
-	db_query("DELETE FROM assignments WHERE id='$id'");
+	db_query("DELETE FROM assignments WHERE course_id = $cours_id AND id='$id'");
 	db_query("DELETE FROM assignment_submit WHERE assignment_id='$id'");
 	move_dir("$workPath/$secret",
 	"$webDir/courses/garbage/${currentCourseID}_work_${id}_$secret");
@@ -494,12 +494,11 @@ function show_student_assignment($id)
 {
 	global $tool_content, $m, $uid, $langSubmitted, $langSubmittedAndGraded, $langNotice3,
                $langWorks, $langUserOnly, $langBack, $langWorkGrade, $langGradeComments,
-               $currentCourseID, $cours_id, $code_cours;
+               $mysqlMainDb, $cours_id, $code_cours;
 
         $user_group_info = user_group_info($uid, $cours_id);
         $res = db_query("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time
-                                 FROM `$currentCourseID`.assignments 
-                                 WHERE id = $id");
+                                 FROM `$mysqlMainDb`.assignments WHERE course_id = $cours_id AND id = '$id'");
         	
 	$row = mysql_fetch_array($res);
 
@@ -701,11 +700,11 @@ function show_assignment($id, $message = false, $display_graph_results = false)
         global $tool_content, $m, $langBack, $langNoSubmissions, $langSubmissions,
                $mysqlMainDb, $langWorks, $langEndDeadline, $langWEndDeadline, $langNEndDeadline,
                $langDays, $langDaysLeft, $langGradeOk, $currentCourseID, $webDir, $urlServer,
-               $nameTools, $langGraphResults, $m, $code_cours, $themeimg;
+               $nameTools, $langGraphResults, $m, $code_cours, $cours_id, $themeimg;
 
         $res = db_query("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time
                                  FROM assignments	
-                                 WHERE id = $id");
+                                 WHERE course_id = $cours_id AND id = '$id'");
 	$row = mysql_fetch_array($res);
         
 	$nav[] = array("url"=>"$_SERVER[PHP_SELF]", "name"=> $langWorks);
@@ -733,7 +732,7 @@ function show_assignment($id, $message = false, $display_graph_results = false)
 	}
 
 	$result = db_query("SELECT *
-		FROM `$GLOBALS[code_cours]`.assignment_submit AS assign,
+		FROM `$GLOBALS[mysqlMainDb]`.assignment_submit AS assign,
 		`$mysqlMainDb`.user AS user
 		WHERE assign.assignment_id='$id' AND user.user_id = assign.uid
 		ORDER BY $order $rev");
@@ -741,7 +740,7 @@ function show_assignment($id, $message = false, $display_graph_results = false)
 	/*  The query is changed (AND assign.grade<>'' is appended) in order to constract the chart of 
 	 * grades distribution according to the graded works only (works that are not graded are omitted). */
 	$numOfResults = db_query("SELECT *
-		FROM `$GLOBALS[code_cours]`.assignment_submit AS assign,
+		FROM `$GLOBALS[mysqlMainDb]`.assignment_submit AS assign,
 		`$mysqlMainDb`.user AS user
 		WHERE assign.assignment_id='$id' AND user.user_id = assign.uid AND assign.grade<>''
 		ORDER BY $order $rev");
@@ -772,7 +771,7 @@ function show_assignment($id, $message = false, $display_graph_results = false)
 		}
 	      if (!$display_graph_results) {
 		  $result = db_query("SELECT *
-				  FROM `$GLOBALS[code_cours]`.assignment_submit AS assign,
+				  FROM `$GLOBALS[mysqlMainDb]`.assignment_submit AS assign,
 				  `$mysqlMainDb`.user AS user
 				  WHERE assign.assignment_id='$id' AND user.user_id = assign.uid
 				  ORDER BY $order $rev");
@@ -894,7 +893,7 @@ function show_assignment($id, $message = false, $display_graph_results = false)
 // show all the assignments - student view only
 function show_student_assignments()
 {
-        global $tool_content, $m, $uid, $cours_id, $currentCourseID,
+        global $tool_content, $m, $uid, $cours_id, $mysqlMainDb,
                $langDaysLeft, $langDays, $langNoAssign, $urlServer,
                $code_cours, $themeimg;
 
@@ -902,8 +901,8 @@ function show_student_assignments()
         
         
         $result = db_query("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time                                                                 
-                                   FROM `$currentCourseID`.assignments
-                                           WHERE active = '1' 
+                                   FROM `$mysqlMainDb`.assignments
+                                           WHERE course_id = $cours_id AND active = '1' 
                                            ORDER BY submission_date");
         
         if (mysql_num_rows($result)) {
@@ -972,9 +971,9 @@ function show_student_assignments()
 function show_assignments($message = null)
 {
         global $tool_content, $m, $langNoAssign, $langNewAssign, $langCommands,
-               $code_cours, $themeimg;
+               $code_cours, $cours_id, $themeimg;
 
-	$result = db_query("SELECT * FROM assignments ORDER BY id");
+	$result = db_query("SELECT * FROM assignments WHERE course_id = $cours_id ORDER BY id");
 
 	if (isset($message)) {
 		$tool_content .="<p class='success'>$message</p><br />";
@@ -1100,8 +1099,8 @@ function submit_grades($grades_id, $grades)
 // functions for downloading
 function send_file($id)
 {
-        global $tool_content, $currentCourseID, $uid, $is_editor;
-        mysql_select_db($currentCourseID);
+        global $tool_content, $mysqlMainDb, $uid, $is_editor;
+        mysql_select_db($mysqlMainDb);
         $q = db_query("SELECT * FROM assignment_submit WHERE id = $id");
         if (!$q or !mysql_num_rows($q)) {
                 return false;

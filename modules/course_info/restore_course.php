@@ -143,7 +143,7 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
                         upgrade_course_2_5($new_course_code, $course_lang);
                 }
                 if ($eclass_version < '3.0') {
-                    list($video_map, $videolinks_map, $lp_learnPath_map, $wiki_map) = upgrade_course_3_0($new_course_code, $course_lang, null, true);
+                    list($video_map, $videolinks_map, $lp_learnPath_map, $wiki_map, $assignments_map) = upgrade_course_3_0($new_course_code, $course_lang, null, true);
                 }
 	}
         convert_description_to_units($new_course_code, $course_id);
@@ -188,7 +188,7 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
                 }
 
                 function unit_map_function(&$data, $maps) {
-                        list($document_map, $link_category_map, $link_map, $ebook_map, $section_map, $subsection_map, $video_map, $videolinks_map, $lp_learnPath_map, $wiki_map) = $maps;
+                        list($document_map, $link_category_map, $link_map, $ebook_map, $section_map, $subsection_map, $video_map, $videolinks_map, $lp_learnPath_map, $wiki_map, $assignments_map) = $maps;
                         $type = $data['type'];
                         if ($type == 'doc') {
                                 $data['res_id'] = $document_map[$data['res_id']];
@@ -212,6 +212,8 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
                                 $data['res_id'] = $lp_learnPath_map[$data['res_id']];
                         } elseif ($type == 'wiki') {
                                 $data['res_id'] = $wiki_map[$data['res_id']];
+                        } elseif ($type == 'work') {
+                                $data['res_id'] = $assignments_map[$data['res_id']];
                         }
                         return true;
                 }
@@ -359,6 +361,22 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
                                              'aid' => $poll_answer_map,
                                              'user_id' => $userid_map)));
                 }
+                if (file_exists("$restoreThis/assignments") &&
+                    file_exists("$restoreThis/assignment_submit"))
+                {
+                    if (!isset($group_map[0]))
+                    {
+                        $group_map[0] = 0;
+                    }
+                    $assignments_map = restore_table($restoreThis, 'assignments',
+                        array('set' => array('course_id' => $course_id),
+                              'return_mapping' => 'id'));
+                    restore_table($restoreThis, 'assignment_submit',
+                        array('delete' => array('id'),
+                              'map' => array('uid' => $userid_map,
+                                             'assignment_id' => $assignments_map,
+                                             'group_id' => $group_map)));
+                }
                 $unit_map = restore_table($restoreThis, 'course_units',
                         array('set' => array('course_id' => $course_id),
                               'return_mapping' => 'id'));
@@ -375,7 +393,8 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
                                                            $video_map,
                                                            $videolinks_map,
                                                            $lp_learnPath_map,
-                                                           $wiki_map)));
+                                                           $wiki_map,
+                                                           $assignments_map)));
         }
         
 	removeDir($restoreThis);

@@ -198,13 +198,13 @@ function insert_video($id)
 // insert work (assignment) in database
 function insert_work($id)
 {
-	global $code_cours;
+	global $code_cours, $cours_id;
 	
 	list($order) = mysql_fetch_array(db_query("SELECT MAX(`order`) FROM unit_resources WHERE unit_id=$id"));
 	foreach ($_POST['work'] as $work_id) {
 		$order++;
 		$work = mysql_fetch_array(db_query("SELECT * FROM assignments
-			WHERE id =" . intval($work_id), $GLOBALS['currentCourseID']), MYSQL_ASSOC);
+			WHERE course_id = $cours_id AND id =" . intval($work_id), $GLOBALS['mysqlMainDb']), MYSQL_ASSOC);
 		if ($work['active'] == '0') {
 			 $visibility = 'i';
 		} else {

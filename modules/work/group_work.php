@@ -35,7 +35,7 @@ include '../../include/pclzip/pclzip.lib.php';
 include '../../include/lib/fileManageLib.inc.php';
 include '../../include/lib/forcedownload.php';
 
-mysql_select_db($currentCourseID);
+mysql_select_db($mysqlMainDb);
 
 define('GROUP_DOCUMENTS', true);
 $group_id = intval($_REQUEST['group_id']);
@@ -66,10 +66,10 @@ if (isset($_GET['submit'])) {
 function show_assignments()
 {
         global $m, $uid, $group_id, $langSubmit, $langDays, $langNoAssign, $tool_content,
-               $langWorks, $currentCourseID, $code_cours, $themeimg;
+               $langWorks, $mysqlMainDb, $cours_id, $code_cours, $themeimg;
 
 	$res = db_query("SELECT *, (TO_DAYS(deadline) - TO_DAYS(NOW())) AS days
-		FROM `$currentCourseID`.assignments");
+		 FROM `$mysqlMainDb`.assignments WHERE course_id = $cours_id");
         
 	if (mysql_num_rows($res) == 0) {
 		$tool_content .=  $langNoAssign;
@@ -149,7 +149,7 @@ function show_assignments()
 // Insert a group work submitted by user uid to assignment id
 function submit_work($uid, $group_id, $id, $file) {
 	global $groupPath, $langUploadError, $langUploadSuccess,
-                $langBack, $m, $currentCourseID, $tool_content, $workPath,
+                $langBack, $m, $tool_content, $workPath,
                 $group_sql, $mysqlMainDb, $webDir, $code_cours;
 
         $ext = get_file_extension($file);
@@ -171,12 +171,12 @@ function submit_work($uid, $group_id, $id, $file) {
                 $source = $zip_filename;
         }
         if (copy($source, "$workPath/$destination")) {
-                db_query("INSERT INTO `$currentCourseID`.assignment_submit (uid, assignment_id, submission_date,
+                db_query("INSERT INTO `$mysqlMainDb`.assignment_submit (uid, assignment_id, submission_date,
                                      submission_ip, file_path, file_name, comments, group_id, grade_comments)
                                  VALUES ('$uid','$id', NOW(), '$_SERVER[REMOTE_ADDR]', '$destination'," .
                                          quote($original_filename) . ', ' .
                                          autoquote($_POST['comments']) . ", $group_id, '')",
-                        $currentCourseID);
+                        $mysqlMainDb);
 
 		$tool_content .="<p class=\"success\">$langUploadSuccess
 			<br />$m[the_file] \"$original_filename\" $m[was_submitted]<br />

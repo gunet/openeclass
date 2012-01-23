@@ -491,38 +491,6 @@ db_query("CREATE TABLE agenda (
                PRIMARY KEY (id))
          $charset_spec");
 
-############################# WORKS ###########################################
-
-db_query("CREATE TABLE `assignments` (
-    `id` int(11) NOT NULL auto_increment,
-    `title` varchar(200) NOT NULL default '',
-    `description` text NOT NULL,
-    `comments` text NOT NULL,
-    `deadline` datetime NOT NULL default '0000-00-00 00:00:00',
-    `submission_date` datetime NOT NULL default '0000-00-00 00:00:00',
-    `active` char(1) NOT NULL default '1',
-    `secret_directory` varchar(30) NOT NULL,
-    `group_submissions` CHAR(1) DEFAULT '0' NOT NULL,
-    UNIQUE KEY `id` (`id`))
-     $charset_spec");
-
-db_query("CREATE TABLE `assignment_submit` (
-    `id` int(11) NOT NULL auto_increment,
-    `uid` int(11) NOT NULL default '0',
-    `assignment_id` int(11) NOT NULL default '0',
-    `submission_date` datetime NOT NULL default '0000-00-00 00:00:00',
-    `submission_ip` varchar(16) NOT NULL default '',
-    `file_path` varchar(200) NOT NULL default '',
-    `file_name` varchar(200) NOT NULL default '',
-    `comments` text NOT NULL,
-    `grade` varchar(50) NOT NULL default '',
-    `grade_comments` text NOT NULL,
-    `grade_submission_date` date NOT NULL default '0000-00-00',
-    `grade_submission_ip` varchar(16) NOT NULL default '',
-    `group_id` INT( 11 ) DEFAULT NULL,
-    UNIQUE KEY `id` (`id`))
-     $charset_spec");
-
 
 // dhmiourgia full text indexes gia th diadikasia ths anazhthshs
 db_query("ALTER TABLE `agenda` ADD FULLTEXT `agenda` (`titre` ,`contenu`)");

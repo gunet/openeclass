@@ -22,12 +22,12 @@
 
 function list_assignments()
 {
-        global $id, $tool_content, $currentCourseID, $langTitle, $langChoice, $m,
+        global $id, $tool_content, $mysqlMainDb, $langTitle, $langChoice, $m,
                $langAddModulesButton, $langNoAssign, $langActive, $langInactive,
-               $langVisible, $code_cours, $themeimg;
+               $langVisible, $cours_id, $code_cours, $themeimg;
 
 
-        $result = db_query("SELECT * FROM assignments ORDER BY active, title", $currentCourseID);
+        $result = db_query("SELECT * FROM assignments WHERE course_id = $cours_id ORDER BY active, title", $mysqlMainDb);
         if (mysql_num_rows($result) == 0) {
                 $tool_content .= "\n  <p class='alert1'>$langNoAssign</p>";
         } else {

@@ -55,7 +55,7 @@ function getUserAssignments($param, $type)
 		$assignments_query[$i] = "SELECT DISTINCT assignments.id, assignments.title,
 		assignments.description, assignments.deadline,
 		cours.intitule,(TO_DAYS(assignments.deadline) - TO_DAYS(NOW())) AS days_left
-		FROM `".$lesson_code[$i]."`.assignments, ".$mysqlMainDb.".cours, `".$lesson_code[$i]."`.accueil
+		FROM `".$mysqlMainDb."`.assignments, ".$mysqlMainDb.".cours, `".$lesson_code[$i]."`.accueil
 		WHERE (TO_DAYS(deadline) - TO_DAYS(NOW())) >= '0'
 		AND assignments.active = 1 AND cours.code = '".$lesson_code[$i]."'
 		AND `".$lesson_code[$i]."`.accueil.visible =1
@@ -76,7 +76,7 @@ function getUserAssignments($param, $type)
 		$assignments_repeat_val=0;
 		while($myAssignments = mysql_fetch_row($mysql_query_result)){
 			if ($myAssignments) {
-				if (submitted($uid, $myAssignments[0], $lesson_code[$i], $lesson_id[$i])) {
+				if (submitted($uid, $myAssignments[0], $lesson_id[$i])) {
 					$lesson_assign[$i][$assignments_repeat_val]['delivered'] = 1; //delivered
 					array_push($myAssignments, 1);
 				} else {
@@ -189,11 +189,11 @@ function columnSort($unsorted, $column) {
  *
  *  returns whether the use has submitted an assignment
  */
-function submitted($uid, $assignment_id, $lesson_db, $lesson_id)
+function submitted($uid, $assignment_id, $lesson_id)
 {
 	global $mysqlMainDb;
 	
-	$res = db_query("SELECT * FROM `$lesson_db`.assignment_submit
+	$res = db_query("SELECT * FROM `$mysqlMainDb`.assignment_submit
 		WHERE assignment_id = $assignment_id
 		AND (uid = $uid OR
 		     group_id IN (SELECT group_id FROM `$mysqlMainDb`.`group` AS grp,
@@ -215,9 +215,11 @@ function submitted($uid, $assignment_id, $lesson_db, $lesson_id)
  * @param string $lesson_db
  * @return boolean
  */
-function isGroupAssignment($id, $lesson_db)
+function isGroupAssignment($id)
 {
-	$res = db_query("SELECT group_submissions FROM `$lesson_db`.assignments WHERE id = '$id'", $lesson_db);
+    global $mysqlMainDb;
+    
+	$res = db_query("SELECT group_submissions FROM `$mysqlMainDb`.assignments WHERE id = '$id'", $mysqlMainDb);
 	if ($res) {
 		$row = mysql_fetch_row($res);
 		if ($row[0] == 0) {

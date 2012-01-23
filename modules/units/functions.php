@@ -340,8 +340,8 @@ function show_video($table, $title, $comments, $resource_id, $video_id, $visibil
 // display resource work (assignment)
 function show_work($title, $comments, $resource_id, $work_id, $visibility)
 {
-	global $id, $tool_content, $mysqlMainDb, $urlServer, $is_editor,
-               $langWasDeleted, $currentCourseID, $code_cours, $themeimg, $langInactiveModule;
+	global $id, $mysqlMainDb, $urlServer, $is_editor,
+               $langWasDeleted, $cours_id, $code_cours, $themeimg, $langInactiveModule;
 
         $module_visible = visible_module(5); // checks module visibility
         if (!$module_visible and !$is_editor) {
@@ -352,8 +352,7 @@ function show_work($title, $comments, $resource_id, $work_id, $visibility)
                      ' class="invisible"': ' class="even"';        
 	
         $title = htmlspecialchars($title);
-	$r = db_query("SELECT * FROM assignments WHERE id = $work_id",
-                      $currentCourseID);
+	$r = db_query("SELECT * FROM assignments WHERE course_id = $cours_id AND id = $work_id", $mysqlMainDb);
 	if (mysql_num_rows($r) == 0) { // check if it was deleted
 		if (!$is_editor) {
 			return '';

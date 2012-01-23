@@ -675,6 +675,32 @@ if (!isset($_POST['submit2'])) {
                             `pqaid` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                             `pqid` INT(11) NOT NULL DEFAULT 0,
                             `answer_text` TEXT NOT NULL )");
+            
+            db_query("CREATE TABLE IF NOT EXISTS `assignments` (
+                            `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                            `course_id` INT(11) NOT NULL,
+                            `title` VARCHAR(200) NOT NULL DEFAULT '',
+                            `description` TEXT NOT NULL,
+                            `comments` TEXT NOT NULL,
+                            `deadline` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
+                            `submission_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
+                            `active` CHAR(1) NOT NULL DEFAULT '1',
+                            `secret_directory` VARCHAR(30) NOT NULL,
+                            `group_submissions` CHAR(1) DEFAULT '0' NOT NULL )");
+            db_query("CREATE TABLE IF NOT EXISTS `assignment_submit` (
+                            `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                            `uid` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT '0',
+                            `assignment_id` INT(11) NOT NULL DEFAULT '0',
+                            `submission_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
+                            `submission_ip` VARCHAR(16) NOT NULL DEFAULT '',
+                            `file_path` VARCHAR(200) NOT NULL DEFAULT '',
+                            `file_name` VARCHAR(200) NOT NULL DEFAULT '',
+                            `comments` TEXT NOT NULL,
+                            `grade` VARCHAR(50) NOT NULL DEFAULT '',
+                            `grade_comments` TEXT NOT NULL,
+                            `grade_submission_date` DATE NOT NULL DEFAULT '0000-00-00',
+                            `grade_submission_ip` VARCHAR(16) NOT NULL DEFAULT '',
+                            `group_id` INT( 11 ) DEFAULT NULL )");
         }
 
         mysql_field_exists($mysqlMainDb, 'cours', 'expand_glossary') or

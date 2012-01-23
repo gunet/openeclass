@@ -34,7 +34,7 @@ include 'work_functions.php';
 include '../group/group_functions.php';
 
 $nameTools = $m['grades'];
-mysql_select_db($currentCourseID);
+mysql_select_db($mysqlMainDb);
 
 if ($is_editor and isset($_GET['assignment']) and isset($_GET['submission'])) {
 		$assign = get_assignment_details($_GET['assignment']);
@@ -50,7 +50,8 @@ if ($is_editor and isset($_GET['assignment']) and isset($_GET['submission'])) {
 // Returns an array of the details of assignment $id
 function get_assignment_details($id)
 {
-	return mysql_fetch_array(db_query("SELECT * FROM assignments WHERE id = '$id'"));
+    global $cours_id;
+	return mysql_fetch_array(db_query("SELECT * FROM assignments WHERE course_id = $cours_id AND id = '$id'"));
 }
 
 

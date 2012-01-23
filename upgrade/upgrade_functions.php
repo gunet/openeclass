@@ -874,8 +874,88 @@ function upgrade_course_3_0($code, $lang, $extramessage = '', $return_mapping = 
         }
     }
     
+    $assignments_map = array();
+    // move assignments to central db and drop tables
+    if (mysql_table_exists($code, 'assignments') && mysql_table_exists($code, 'assignment_submit') ) {
+    
+        $dropflag = true;
+    
+        // ----- assigments DB Table ----- //
+        list($assignment_id) = mysql_fetch_row(db_query("SELECT max(id) FROM `$mysqlMainDb`.assignments"));
+        if (!$assignment_id)
+            $assignment_id = 0;
+    
+        $result = db_query("SELECT * FROM assignments ORDER by id");
+    
+        while ($row = mysql_fetch_array($result)) {
+            $oldid = intval($row['id']);
+            $newid = intval($assignment_id) + $oldid;
+    
+            $assignments_map[$oldid] = $newid;
+    
+            $r = db_query("INSERT INTO `$mysqlMainDb`.assignments
+                                        (`id`, `course_id`, `title`, `description`, `comments`, `deadline`, `submission_date`, 
+                                         `active`, `secret_directory`, `group_submissions`)
+                        				VALUES
+                        				(".$newid .", 
+                        				 ".$course_id .", 
+                        				 ".autoquote($row['title']) .", 
+                        				 ".autoquote($row['description']) .",
+                        				 ".autoquote($row['comments']) .", 
+                        				 ".autoquote($row['deadline']) .", 
+                        				 ".autoquote($row['submission_date']) .",  
+                        				 ".autoquote($row['active']) .",
+                        				 ".autoquote($row['secret_directory']) .",
+                        				 ".autoquote($row['group_submissions']) .")");
+            if (false === $r)
+                $dropflag = false;
+        }
+        
+        // ----- assigments DB Table ----- //
+        list($assignment_submit_id) = mysql_fetch_row(db_query("SELECT max(id) FROM `$mysqlMainDb`.assignment_submit"));
+        if (!$assignment_submit_id)
+            $assignment_submit_id = 0;
+        
+        $result = db_query("SELECT * FROM assignment_submit ORDER by id");
+        
+        while ($row = mysql_fetch_array($result)) {
+            $oldid = intval($row['id']);
+            $newid = intval($assignment_submit_id) + $oldid;
+        
+            $r = db_query("INSERT INTO `$mysqlMainDb`.assignment_submit
+                                        (`id`, `uid`, `assignment_id`, `submission_date`, `submission_ip`, `file_path`, `file_name`, 
+                                         `comments`, `grade`, `grade_comments`, `grade_submission_date`, `grade_submission_ip`, 
+                                         `group_id`)
+                        				VALUES
+                        				(".$newid .", 
+                        				 ".autoquote($row['uid']) .",  
+                        				 ".$assignments_map[$row['assignment_id']] .", 
+                        				 ".autoquote($row['submission_date']) .",
+                        				 ".autoquote($row['submission_ip']) .", 
+                        				 ".autoquote($row['file_path']) .", 
+                        				 ".autoquote($row['file_name']) .",  
+                        				 ".autoquote($row['comments']) .",
+                        				 ".autoquote($row['grade']) .",
+                        				 ".autoquote($row['grade_comments']) .",
+                        				 ".autoquote($row['grade_submission_date']) .",
+                        				 ".autoquote($row['grade_submission_ip']) .",
+                        				 ".autoquote($row['group_id']) .")");
+            if (false === $r)
+                $dropflag = false;
+        }
+        
+        if (true === $dropflag) {
+            db_query("DROP TABLE assignments");
+            db_query("DROP TABLE assignment_submit");
+        }
+        
+        db_query("UPDATE `$mysqlMainDb`.course_units AS units, `$mysqlMainDb`.unit_resources AS res
+                            SET res_id = res_id + $assignment_id
+                            WHERE units.id = res.unit_id AND course_id = $course_id AND type = 'work'");
+    }
+    
     if ($return_mapping)
-        return array($video_map, $videolinks_map, $lp_map, $wiki_map);
+        return array($video_map, $videolinks_map, $lp_map, $wiki_map, $assignments_map);
 }
 
 function upgrade_course_2_5($code, $lang, $extramessage = '') {
