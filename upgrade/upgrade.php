@@ -568,6 +568,61 @@ if (!isset($_POST['submit2'])) {
                             `fileId` INT(11) UNSIGNED NOT NULL DEFAULT 0,
                             `recipientId` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
                             PRIMARY KEY (fileId, recipientId))");
+            
+            db_query("CREATE TABLE IF NOT EXISTS `lp_module` (
+                            `module_id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                            `course_id` INT(11) NOT NULL,
+                            `name` VARCHAR(255) NOT NULL DEFAULT '',
+                            `comment` TEXT NOT NULL,
+                            `accessibility` enum('PRIVATE','PUBLIC') NOT NULL DEFAULT 'PRIVATE',
+                            `startAsset_id` INT(11) NOT NULL DEFAULT 0,
+                            `contentType` enum('CLARODOC','DOCUMENT','EXERCISE','HANDMADE','SCORM','SCORM_ASSET','LABEL','COURSE_DESCRIPTION','LINK','MEDIA','MEDIALINK') NOT NULL,
+                            `launch_data` TEXT NOT NULL)");
+                            //COMMENT='List of available modules used in learning paths';
+            db_query("CREATE TABLE IF NOT EXISTS `lp_learnPath` (
+                            `learnPath_id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                            `course_id` INT(11) NOT NULL,
+                            `name` VARCHAR(255) NOT NULL DEFAULT '',
+                            `comment` TEXT NOT NULL,
+                            `lock` enum('OPEN','CLOSE') NOT NULL DEFAULT 'OPEN',
+                            `visibility` enum('HIDE','SHOW') NOT NULL DEFAULT 'SHOW',
+                            `rank` INT(11) NOT NULL DEFAULT 0)");
+                            //COMMENT='List of learning Paths';
+            db_query("CREATE TABLE IF NOT EXISTS `lp_rel_learnPath_module` (
+                            `learnPath_module_id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                            `learnPath_id` INT(11) NOT NULL DEFAULT 0,
+                            `module_id` INT(11) NOT NULL DEFAULT 0,
+                            `lock` enum('OPEN','CLOSE') NOT NULL DEFAULT 'OPEN',
+                            `visibility` enum('HIDE','SHOW') NOT NULL DEFAULT 'SHOW',
+                            `specificComment` TEXT NOT NULL,
+                            `rank` INT(11) NOT NULL DEFAULT '0',
+                            `parent` INT(11) NOT NULL DEFAULT '0',
+                            `raw_to_pass` TINYINT(4) NOT NULL DEFAULT '50')");
+                            //COMMENT='This table links module to the learning path using them';
+            db_query("CREATE TABLE IF NOT EXISTS `lp_asset` (
+                            `asset_id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                            `module_id` INT(11) NOT NULL DEFAULT '0',
+                            `path` VARCHAR(255) NOT NULL DEFAULT '',
+                            `comment` VARCHAR(255) default NULL)");
+                            //COMMENT='List of resources of module of learning paths';
+            db_query("CREATE TABLE IF NOT EXISTS `lp_user_module_progress` (
+                            `user_module_progress_id` INT(22) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                            `user_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT '0',
+                            `learnPath_module_id` INT(11) NOT NULL DEFAULT '0',
+                            `learnPath_id` INT(11) NOT NULL DEFAULT '0',
+                            `lesson_location` VARCHAR(255) NOT NULL DEFAULT '',
+                            `lesson_status` enum('NOT ATTEMPTED','PASSED','FAILED','COMPLETED','BROWSED','INCOMPLETE','UNKNOWN') NOT NULL default 'NOT ATTEMPTED',
+                            `entry` enum('AB-INITIO','RESUME','') NOT NULL DEFAULT 'AB-INITIO',
+                            `raw` TINYINT(4) NOT NULL DEFAULT '-1',
+                            `scoreMin` TINYINT(4) NOT NULL DEFAULT '-1',
+                            `scoreMax` TINYINT(4) NOT NULL DEFAULT '-1',
+                            `total_time` VARCHAR(13) NOT NULL DEFAULT '0000:00:00.00',
+                            `session_time` VARCHAR(13) NOT NULL DEFAULT '0000:00:00.00',
+                            `suspend_data` TEXT NOT NULL,
+                            `credit` enum('CREDIT','NO-CREDIT') NOT NULL DEFAULT 'NO-CREDIT')");
+                            //COMMENT='Record the last known status of the user in the course';
+            mysql_index_exists('lp_user_module_progress', 'optimize') or
+                        db_query('CREATE INDEX `optimize` ON lp_user_module_progress (user_id, learnPath_module_id)');
         }
 
         mysql_field_exists($mysqlMainDb, 'cours', 'expand_glossary') or

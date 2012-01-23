@@ -1481,6 +1481,11 @@ function delete_course($cid)
 	db_query("DELETE FROM dropbox_person WHERE fileId IN (SELECT id FROM dropbox_file WHERE course_id = $cid)");
 	db_query("DELETE FROM dropbox_post WHERE fileId IN (SELECT id FROM dropbox_file WHERE course_id = $cid)");
 	db_query("DELETE FROM dropbox_file WHERE course_id = $cid");
+	db_query("DELETE FROM lp_asset WHERE module_id IN (SELECT module_id FROM lp_module WHERE course_id = $cid)");
+	db_query("DELETE FROM lp_rel_learnPath_module WHERE learnPath_id IN (SELECT learnPath_id FROM lp_learnPath WHERE course_id = $cid)");
+	db_query("DELETE FROM lp_user_module_progress WHERE learnPath_id IN (SELECT learnPath_id FROM lp_learnPath WHERE course_id = $cid)");
+	db_query("DELETE FROM lp_module WHERE course_id = $cid");
+	db_query("DELETE FROM lp_learnPath WHERE course_id = $cid");
 
         $garbage = "${webDir}courses/garbage";
         if (!is_dir($garbage)) {

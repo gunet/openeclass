@@ -564,75 +564,6 @@ db_query("CREATE TABLE poll (
      $charset_spec");
 
 
-############################# LEARNING PATH ######################################
-
-db_query("CREATE TABLE `lp_module` (
-              `module_id` int(11) NOT NULL auto_increment,
-              `name` varchar(255) NOT NULL default '',
-              `comment` text NOT NULL,
-              `accessibility` enum('PRIVATE','PUBLIC') NOT NULL default 'PRIVATE',
-              `startAsset_id` int(11) NOT NULL default 0,
-              `contentType` enum('CLARODOC','DOCUMENT','EXERCISE','HANDMADE','SCORM','SCORM_ASSET','LABEL','COURSE_DESCRIPTION','LINK','MEDIA','MEDIALINK') NOT NULL,
-              `launch_data` text NOT NULL,
-              PRIMARY KEY  (`module_id`)
-             )  $charset_spec");
-             //COMMENT='List of available modules used in learning paths';
-
-db_query("CREATE TABLE `lp_learnPath` (
-              `learnPath_id` int(11) NOT NULL auto_increment,
-              `name` varchar(255) NOT NULL default '',
-              `comment` text NOT NULL,
-              `lock` enum('OPEN','CLOSE') NOT NULL default 'OPEN',
-              `visibility` enum('HIDE','SHOW') NOT NULL default 'SHOW',
-              `rank` int(11) NOT NULL default 0,
-              PRIMARY KEY  (`learnPath_id`),
-              UNIQUE KEY rank (`rank`)
-            )  $charset_spec");
-            //COMMENT='List of learning Paths';
-
-db_query("CREATE TABLE `lp_rel_learnPath_module` (
-                `learnPath_module_id` int(11) NOT NULL AUTO_INCREMENT,
-                `learnPath_id` int(11) NOT NULL DEFAULT 0,
-                `module_id` int(11) NOT NULL DEFAULT 0,
-                `lock` enum('OPEN','CLOSE') NOT NULL DEFAULT 'OPEN',
-                `visibility` enum('HIDE','SHOW') NOT NULL DEFAULT 'SHOW',
-                `specificComment` TEXT NOT NULL,
-                `rank` int(11) NOT NULL default '0',
-                `parent` int(11) NOT NULL default '0',
-                `raw_to_pass` tinyint(4) NOT NULL default '50',
-                PRIMARY KEY  (`learnPath_module_id`)
-              )  $charset_spec");
-              //COMMENT='This table links module to the learning path using them';
-
-
-db_query("CREATE TABLE `lp_asset` (
-              `asset_id` int(11) NOT NULL auto_increment,
-              `module_id` int(11) NOT NULL default '0',
-              `path` varchar(255) NOT NULL default '',
-              `comment` varchar(255) default NULL,
-              PRIMARY KEY  (`asset_id`)
-            )  $charset_spec");
-            //COMMENT='List of resources of module of learning paths';
-
-db_query("CREATE TABLE `lp_user_module_progress` (
-              `user_module_progress_id` int(22) NOT NULL auto_increment,
-              `user_id` mediumint(9) NOT NULL default '0',
-              `learnPath_module_id` int(11) NOT NULL default '0',
-              `learnPath_id` int(11) NOT NULL default '0',
-              `lesson_location` varchar(255) NOT NULL default '',
-              `lesson_status` enum('NOT ATTEMPTED','PASSED','FAILED','COMPLETED','BROWSED','INCOMPLETE','UNKNOWN') NOT NULL default 'NOT ATTEMPTED',
-              `entry` enum('AB-INITIO','RESUME','') NOT NULL default 'AB-INITIO',
-              `raw` tinyint(4) NOT NULL default '-1',
-              `scoreMin` tinyint(4) NOT NULL default '-1',
-              `scoreMax` tinyint(4) NOT NULL default '-1',
-              `total_time` varchar(13) NOT NULL default '0000:00:00.00',
-              `session_time` varchar(13) NOT NULL default '0000:00:00.00',
-              `suspend_data` text NOT NULL,
-              `credit` enum('CREDIT','NO-CREDIT') NOT NULL default 'NO-CREDIT',
-              PRIMARY KEY  (`user_module_progress_id`)
-            )  $charset_spec");
-            //COMMENT='Record the last known status of the user in the course';
-
 ############################# WIKI ######################################
 
 db_query("CREATE TABLE `wiki_properties` (
@@ -677,5 +608,4 @@ db_query("ALTER TABLE `posts_text` ADD FULLTEXT `posts_text` (`post_text`)");
 db_query("ALTER TABLE `forums` ADD FULLTEXT `forums` (`forum_name`,`forum_desc`)");
 
 // creation of indexes 
-db_query("ALTER TABLE `lp_user_module_progress` ADD INDEX `optimize` (`user_id` , `learnPath_module_id`)");
 db_query("ALTER TABLE `actions` ADD INDEX `actionsindex` (`module_id` , `date_time`)"); 

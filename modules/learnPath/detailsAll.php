@@ -110,14 +110,14 @@ $tool_content .= "
     <th colspan='2'>$langProgress&nbsp;&nbsp;</th>
   </tr>\n";
 
-mysql_select_db($currentCourseID);
+mysql_select_db($mysqlMainDb);
 
 // display tab content
 $k=0;
 foreach ($usersList as $user)
 {
 	// list available learning paths
-	$sql = "SELECT LP.`learnPath_id` FROM `$currentCourseID`.lp_learnPath AS LP";
+	$sql = "SELECT LP.`learnPath_id` FROM `$mysqlMainDb`.lp_learnPath AS LP WHERE LP.`course_id` = $cours_id";
 
 	$learningPathList = db_query_fetch_all($sql);
 

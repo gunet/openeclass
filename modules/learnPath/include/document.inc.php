@@ -64,12 +64,12 @@ $TABLEDOCUMENT = "document";
 $sql = "SELECT `path`
          FROM `".$TABLEASSET."`
         WHERE `module_id` = ". (int)$_SESSION['lp_module_id'];
-$assetPath = db_query_get_single_value($sql);
+$assetPath = db_query_get_single_value($sql, $mysqlMainDb);
 
 $sql = "SELECT `filename`
          FROM `".$TABLEDOCUMENT."`
         WHERE `path` LIKE \"" .addslashes($assetPath) ."\"";
-$fileName = db_query_get_single_value($sql);
+$fileName = db_query_get_single_value($sql, $mysqlMainDb);
 
 $baseServDir = $webDir;
 $courseDir = "courses/".$currentCourseID."/document";

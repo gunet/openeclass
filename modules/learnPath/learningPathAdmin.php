@@ -92,7 +92,7 @@ if ( !$is_editor )
     exit();
 }
 
-mysql_select_db($currentCourseID);
+mysql_select_db($mysqlMainDb);
 
 load_js('tools.js');
 
@@ -107,6 +107,7 @@ switch($cmd)
                 FROM `".$TABLEMODULE."` AS M, `".$TABLELEARNPATHMODULE."` AS LPM
                 WHERE M.`module_id` = LPM.`module_id`
                 AND LPM.`learnPath_id` = ". (int)$_SESSION['path_id']."
+                AND M.`course_id` = $cours_id
                 ORDER BY LPM.`rank` ASC";
         $result = db_query($sql);
 
@@ -134,6 +135,7 @@ switch($cmd)
                 FROM `".$TABLEMODULE."` AS M, `".$TABLELEARNPATHMODULE."` AS LPM
                 WHERE M.`module_id` = LPM.`module_id`
                 AND LPM.`learnPath_id` = ". (int)$_SESSION['path_id'] ."
+                AND M.`course_id` = $cours_id
                 ORDER BY LPM.`rank` ASC";
         $result = db_query($sql);
 
@@ -186,7 +188,8 @@ switch($cmd)
                 // get the max rank of the children of the new parent of this module
                 $sql = "SELECT MAX(`rank`)
                         FROM `".$TABLELEARNPATHMODULE."`
-                        WHERE `parent` = ". (int)$_POST['newPos'];
+                        WHERE `parent` = ". (int)$_POST['newPos'] ."
+                        AND `learnPath_id` = ". (int)$_SESSION['path_id'];
 
                 $result = db_query($sql);
 
@@ -197,7 +200,8 @@ switch($cmd)
                 $sql = "UPDATE `".$TABLELEARNPATHMODULE."`
                         SET `parent` = ". (int)$_POST['newPos'].",
                             `rank` = " . (int)$order . "
-                        WHERE `learnPath_module_id` = ". (int)$_REQUEST['cmdid'];
+                        WHERE `learnPath_module_id` = ". (int)$_REQUEST['cmdid'] ."
+                        AND `learnPath_id` = ". (int)$_SESSION['path_id'];
                 $query = db_query($sql);
                 $dialogBox .= "<p class=\"success\">$langModuleMoved</p>";
             }
@@ -211,6 +215,7 @@ switch($cmd)
                     WHERE M.`module_id` = LPM.`module_id`
                       AND LPM.`learnPath_id` = ". (int)$_SESSION['path_id']."
                       AND M.`contentType` = \"".CTLABEL_."\"
+                      AND M.`course_id` = $cours_id
                     ORDER BY LPM.`rank` ASC";
             $result = db_query($sql);
             $i=0;
@@ -237,7 +242,8 @@ switch($cmd)
                     FROM `".$TABLELEARNPATHMODULE."` AS LPM,
                          `".$TABLEMODULE."` AS M
                     WHERE LPM.`module_id` = M.`module_id`
-                      AND LPM.`learnPath_module_id` = ". (int)$_REQUEST['cmdid'];
+                      AND LPM.`learnPath_module_id` = ". (int)$_REQUEST['cmdid'] ."
+                      AND M.`course_id` = $cours_id";
             $temp = db_query_fetch_all($sql);
             $moduleInfos = $temp[0];
 
@@ -262,7 +268,8 @@ switch($cmd)
             // determine the default order of this Learning path ( a new label is a root child)
             $sql = "SELECT MAX(`rank`)
                     FROM `".$TABLELEARNPATHMODULE."`
-                    WHERE `parent` = 0";
+                    WHERE `parent` = 0
+                    AND `learnPath_id` = ". (int)$_SESSION['path_id'];
             $result = db_query($sql);
 
             list($orderMax) = mysql_fetch_row($result);
@@ -270,8 +277,8 @@ switch($cmd)
 
             // create new module
             $sql = "INSERT INTO `".$TABLEMODULE."`
-                   (`name`, `comment`, `contentType`, `launch_data`)
-                   VALUES ('". addslashes($_POST['newLabel']) ."','', '".CTLABEL_."','')";
+                   (`course_id`, `name`, `comment`, `contentType`, `launch_data`)
+                   VALUES ($cours_id, '". addslashes($_POST['newLabel']) ."','', '".CTLABEL_."','')";
             $query = db_query($sql);
 
             // request ID of the last inserted row (module_id in $TABLEMODULE) to add it in $TABLELEARNPATHMODULE
@@ -307,6 +314,7 @@ if (isset($sortDirection) && $sortDirection)
             WHERE LPM2.`learnPath_module_id` = ". (int)$thisLPMId."
               AND LPM.`learnPath_id` = LP.`learnPath_id`
               AND LP.`learnPath_id` = ". (int)$_SESSION['path_id']."
+              AND LP.`course_id` = $cours_id
             ORDER BY LPM.`rank` $sortDirection";
 
     $listModules  = db_query_fetch_all($sql);
@@ -325,12 +333,14 @@ if (isset($sortDirection) && $sortDirection)
 
             $sql = "UPDATE `".$TABLELEARNPATHMODULE."`
                     SET `rank` = \"" . (int)$nextLPMOrder . "\"
-                    WHERE `learnPath_module_id` =  \"" . (int)$thisLPMId . "\"";
+                    WHERE `learnPath_module_id` =  \"" . (int)$thisLPMId . "\"
+                    AND `learnPath_id` = ". (int)$_SESSION['path_id'];
             db_query($sql);
 
             $sql = "UPDATE `".$TABLELEARNPATHMODULE."`
                     SET `rank` = \"" . (int)$thisLPMOrder . "\"
-                    WHERE `learnPath_module_id` =  \"" . (int)$nextLPMId . "\"";
+                    WHERE `learnPath_module_id` =  \"" . (int)$nextLPMId . "\"
+                    AND `learnPath_id` = ". (int)$_SESSION['path_id'];
             db_query($sql);
 
             break;
@@ -348,7 +358,8 @@ if (isset($sortDirection) && $sortDirection)
 
 $sql = "SELECT *
         FROM `".$TABLELEARNPATH."`
-        WHERE `learnPath_id` = ". (int)$_SESSION['path_id'];
+        WHERE `learnPath_id` = ". (int)$_SESSION['path_id'] ."
+        AND `course_id` = $cours_id";
 $query = db_query($sql);
 $LPDetails = mysql_fetch_array($query);
 
@@ -500,6 +511,7 @@ $sql = "SELECT M.*, LPM.*, A.`path`
         LEFT JOIN `".$TABLEASSET."` AS A ON M.`startAsset_id` = A.`asset_id`
         WHERE M.`module_id` = LPM.`module_id`
           AND LPM.`learnPath_id` = ". (int)$_SESSION['path_id']."
+          AND M.`course_id` = $cours_id
         ORDER BY LPM.`rank` ASC";
 
 $result = db_query($sql);

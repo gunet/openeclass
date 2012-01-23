@@ -70,7 +70,7 @@ function confirmation(name) {
 
 $navigation[] = array('url' => "learningPathList.php?course=$code_cours", 'name'=> $langLearningPaths);
 $nameTools = $langLearningObjectsInUse;
-mysql_select_db($currentCourseID);
+mysql_select_db($mysqlMainDb);
 
 // display use explication text
 $tool_content .= "<p>$langUseOfPool</p><br />";
@@ -105,7 +105,8 @@ switch( $cmd )
 
 			// delete the module in modules table
 			$sql = "DELETE FROM `".$TABLEMODULE."`
-				WHERE `module_id` = ". (int)$_GET['cmdid'];
+				WHERE `module_id` = ". (int)$_GET['cmdid'] ."
+				AND `course_id` = $cours_id";
 			db_query($sql);
 
 			//delete all user progression concerning this module
@@ -129,7 +130,8 @@ switch( $cmd )
     	if (isset($_GET['module_id']) && is_numeric($_GET['module_id']) ) {
 			//get current name from DB
 			$query= "SELECT `name` FROM `".$TABLEMODULE."`
-				WHERE `module_id` = '". (int)$_GET['module_id']."'";
+				WHERE `module_id` = '". (int)$_GET['module_id']."'
+				AND `course_id` = $cours_id";
 			$result = db_query($query);
 			$list = mysql_fetch_array($result);
 
@@ -162,7 +164,8 @@ switch( $cmd )
             $sql="SELECT `name`
                   FROM `".$TABLEMODULE."`
                   WHERE `name` = '". mysql_real_escape_string($_POST['newName'])."'
-                    AND `module_id` != '". (int)$_POST['module_id']."'";
+                    AND `module_id` != '". (int)$_POST['module_id']."'
+                    AND `course_id` = $cours_id";
 
             $query = db_query($sql);
             $num = mysql_numrows($query);
@@ -171,7 +174,8 @@ switch( $cmd )
                 // if no error occurred, update module's name in the database
                 $query="UPDATE `".$TABLEMODULE."`
                         SET `name`= '". mysql_real_escape_string($_POST['newName'])."'
-                        WHERE `module_id` = '". (int)$_POST['module_id']."'";
+                        WHERE `module_id` = '". (int)$_POST['module_id']."'
+                        AND `course_id` = $cours_id";
 
                 $result = db_query($query);
             }
@@ -195,7 +199,8 @@ switch( $cmd )
             //get current comment from DB
             $query="SELECT `comment`
                     FROM `".$TABLEMODULE."`
-                    WHERE `module_id` = '". (int)$_GET['module_id']."'";
+                    WHERE `module_id` = '". (int)$_GET['module_id']."'
+                    AND `course_id` = $cours_id";
             $result = db_query($query);
             $comment = mysql_fetch_array($result);
 
@@ -240,7 +245,8 @@ switch( $cmd )
         {
             $sql = "UPDATE `".$TABLEMODULE."`
                     SET `comment` = \"". mysql_real_escape_string($_POST['comment']) ."\"
-                    WHERE `module_id` = '". (int)$_POST['module_id']."'";
+                    WHERE `module_id` = '". (int)$_POST['module_id']."'
+                    AND `course_id` = $cours_id";
             db_query($sql);
         }
         break;
@@ -255,6 +261,7 @@ $sql = "SELECT M.*, count(M.`module_id`) AS timesUsed
         WHERE M.`contentType` != \"".CTSCORM_."\"
           AND M.`contentType` != \"".CTSCORMASSET_."\"
           AND M.`contentType` != \"".CTLABEL_."\"
+          AND M.`course_id` = $cours_id
         GROUP BY M.`module_id`
         ORDER BY M.`name` ASC, M.`contentType`ASC, M.`accessibility` ASC";
 

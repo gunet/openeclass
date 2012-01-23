@@ -79,9 +79,9 @@ if ( isset($_GET['module_id']) && $_GET['module_id'] != '')
     $_SESSION['lp_module_id'] = intval($_GET['module_id']);
 }
 
-mysql_select_db($currentCourseID);
+mysql_select_db($mysqlMainDb);
 
-$q = db_query("SELECT name, visibility FROM $TABLELEARNPATH WHERE learnPath_id = '".(int)$_SESSION['path_id']."'");
+$q = db_query("SELECT name, visibility FROM $TABLELEARNPATH WHERE learnPath_id = '".(int)$_SESSION['path_id']."' AND `course_id` = $cours_id");
 $lp = mysql_fetch_array($q);
 if (!add_units_navigation() && !$is_editor) {
 	$navigation[] = array("url" => "learningPath.php?course=$code_cours&amp;path_id=".(int)$_SESSION['path_id'], "name" => $lp['name']);
@@ -108,7 +108,8 @@ check_LPM_validity($is_editor, $code_cours);
 
 $sql = "SELECT `comment`, `startAsset_id`, `contentType`
         FROM `".$TABLEMODULE."`
-        WHERE `module_id` = ". (int)$_SESSION['lp_module_id'];
+        WHERE `module_id` = ". (int)$_SESSION['lp_module_id'] ."
+        AND `course_id` = $cours_id";
 
 $module = db_query_get_single_row($sql);
 
@@ -135,7 +136,8 @@ else
 // check if there is a specific comment for this module in this path
 $sql = "SELECT `specificComment`
         FROM `".$TABLELEARNPATHMODULE."`
-        WHERE `module_id` = ". (int)$_SESSION['lp_module_id'];
+        WHERE `module_id` = ". (int)$_SESSION['lp_module_id'] ."
+        AND `learnPath_id` = '".(int)$_SESSION['path_id']."'";
 
 $learnpath_module = db_query_get_single_row($sql);
 
@@ -164,6 +166,7 @@ $sql = "SELECT `contentType`,
           AND LPM.`learnPath_id` = ".(int)$_SESSION['path_id']."
           AND LPM.`module_id` = ". (int)$_SESSION['lp_module_id']."
           AND LPM.`module_id` = M.`module_id`
+          AND M.`course_id` = $cours_id
              ";
 $resultBrowsed = db_query_get_single_row($sql);
 

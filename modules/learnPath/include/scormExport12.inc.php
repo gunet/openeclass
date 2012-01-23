@@ -153,15 +153,16 @@ class ScormExport
      */
     function fetch()
     {
-        global $TABLELEARNPATH, $TABLELEARNPATHMODULE, $TABLEMODULE, $TABLEASSET, $webDir, $currentCourseID;
-        global $langLearningPathNotFound, $langLearningPathEmpty;
+        global $TABLELEARNPATH, $TABLELEARNPATHMODULE, $TABLEMODULE, $TABLEASSET, $webDir, $currentCourseID, 
+               $mysqlMainDb, $cours_id, $langLearningPathNotFound, $langLearningPathEmpty;
     
         /* Get general infos about the learning path */
         $sql = 'SELECT `name`, `comment`
                 FROM `'.$TABLELEARNPATH.'`
-                WHERE `learnPath_id` = '. $this->id;
+                WHERE `learnPath_id` = '. $this->id .'
+        		AND `course_id` = '. $cours_id;
                 
-        $result = db_query($sql);
+        $result = db_query($sql, $mysqlMainDb);
         if ( empty($result) )
         {
             $this->error[] = $langLearningPathNotFound;
@@ -198,10 +199,11 @@ class ScormExport
                 LEFT JOIN `'.$TABLEASSET.'` AS A
                        ON M.`startAsset_id` = A.`asset_id`
                 WHERE LPM.`learnPath_id` = '. $this->id.'
+                AND M.`course_id` = '. $cours_id .'
                 ORDER BY LPM.`parent`, LPM.`rank`
                ';
 
-        $result = db_query($sql);
+        $result = db_query($sql, $mysqlMainDb);
         if ( empty($result) )
         {
             $this->error = $langLearningPathEmpty;

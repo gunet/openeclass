@@ -422,7 +422,7 @@ if($uid)
 			AND LPM.`module_id` = '".(int)$_SESSION['lp_module_id']."'
 			AND LPM.`learnPath_module_id` = UMP.`learnPath_module_id`
 			AND UMP.`user_id` = ".(int)$uid;
-	$query = db_query($sql);
+	$query = db_query($sql, $mysqlMainDb);
 	$row = mysql_fetch_array($query);
 
 	$scormSessionTime = seconds_to_scorm_time($timeToCompleteExe);
@@ -453,7 +453,7 @@ if($uid)
 				`session_time`	= '".$scormSessionTime."'
 				WHERE `learnPath_module_id` = ". (int)$row['learnPath_module_id']."
 				AND `user_id` = " . (int)$uid . "";
-	db_query($sql);
+	db_query($sql, $mysqlMainDb);
 	}
 
 echo "</div></body></html>"."\n";

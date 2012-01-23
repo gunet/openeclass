@@ -22,7 +22,7 @@
 
 function list_videos()
 {
-        global $id, $currentCourseID, $tool_content, $urlServer,
+        global $id, $tool_content, $urlServer,
                $langTitle, $langDescr, $langDate, $langChoice,
                $langAddModulesButton, $langNoVideo, $code_cours,
                $themeimg, $cours_id, $mysqlMainDb; 

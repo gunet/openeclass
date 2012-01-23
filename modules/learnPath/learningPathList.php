@@ -83,7 +83,7 @@ if (!add_units_navigation(TRUE)) {
 if (isset($_GET['cmd']) && $_GET['cmd'] == 'export'
 	&& isset($_GET['path_id']) && is_numeric($_GET['path_id']) && $is_editor)
 {
-      mysql_select_db($currentCourseID);
+      mysql_select_db($mysqlMainDb);
       require_once("include/scormExport.inc.php");
       $scorm = new ScormExport((int)$_GET['path_id']);
       if (!$scorm->export())
@@ -100,7 +100,7 @@ if (isset($_GET['cmd']) && $_GET['cmd'] == 'export'
 if ( isset($_GET['cmd']) && $_GET['cmd'] == 'export12'
 	&& isset($_GET['path_id']) && is_numeric($_GET['path_id']) && $is_editor )
 {
-      mysql_select_db($currentCourseID);
+      mysql_select_db($mysqlMainDb);
       require_once("include/scormExport12.inc.php");
       $scorm = new ScormExport((int)$_GET['path_id']);
       if (!$scorm->export())
@@ -114,7 +114,7 @@ if ( isset($_GET['cmd']) && $_GET['cmd'] == 'export12'
       }
 } // endif $cmd == export12
 
-mysql_select_db($currentCourseID);
+mysql_select_db($mysqlMainDb);
 
 if ($is_editor) {
 	$head_content .= "<script type='text/javascript'>
@@ -147,7 +147,8 @@ if ($is_editor) {
 						FROM  `".$TABLELEARNPATHMODULE."` AS LPM, `".$TABLEMODULE."` AS M
 						WHERE LPM.`learnPath_id` = ". (int)$_GET['del_path_id']."
 						AND ( M.`contentType` = '".CTSCORM_."' OR M.`contentType` = '".CTSCORMASSET_."' OR M.`contentType` = '".CTLABEL_."')
-						AND LPM.`module_id` = M.`module_id`";
+						AND LPM.`module_id` = M.`module_id`
+						AND M.`course_id` = $cours_id";
 					$findResult = db_query($findsql);
 
 					// Delete the startAssets
@@ -169,7 +170,7 @@ if ($is_editor) {
 					}
 					while ($delList = mysql_fetch_array($findResult))
 					{
-						$delModuleSql .= " OR `module_id`=". (int)$delList['module_id'];
+						$delModuleSql .= " OR (`module_id`=". (int)$delList['module_id'] ." AND `course_id` = $cours_id )";
 					}
 					$delModuleSql .= ")";
 					db_query($delModuleSql);
@@ -186,14 +187,15 @@ if ($is_editor) {
 						`".$TABLEMODULE."` AS M
 						WHERE LPM.`learnPath_id` = ". (int)$_GET['del_path_id']."
 						AND M.`contentType` = '".CTLABEL_."'
-						AND LPM.`module_id` = M.`module_id`";
+						AND LPM.`module_id` = M.`module_id`
+						AND M.`course_id` = $cours_id";
 					$findResult = db_query($findsql);
 					// delete labels of non scorm learning path
 					$delLabelModuleSql = "DELETE FROM `".$TABLEMODULE."` WHERE 1=0";
 
 					while ($delList = mysql_fetch_array($findResult))
 					{
-						$delLabelModuleSql .= " OR `module_id`=". (int)$delList['module_id'];
+						$delLabelModuleSql .= " OR (`module_id`=". (int)$delList['module_id'] ." AND `course_id` = $cours_id )";
 					}
 					$query = db_query($delLabelModuleSql);
 				}
@@ -211,7 +213,7 @@ if ($is_editor) {
 				$query = db_query($sql2);
 
 				// delete the learning path
-				$sql3 = "DELETE FROM `".$TABLELEARNPATH."` WHERE `learnPath_id` = ". (int)$_GET['del_path_id'] ;
+				$sql3 = "DELETE FROM `".$TABLELEARNPATH."` WHERE `learnPath_id` = ". (int)$_GET['del_path_id'] ." AND `course_id` = $cours_id";
 
 				$query = db_query($sql3);
 
@@ -222,7 +224,8 @@ if ($is_editor) {
 				$_REQUEST['cmd'] == "mkBlock" ? $blocking = 'CLOSE' : $blocking = 'OPEN';
 				$sql = "UPDATE `".$TABLELEARNPATH."` SET `lock` = '$blocking'
 					WHERE `learnPath_id` = ". (int)$_GET['cmdid']."
-					AND `lock` != '$blocking'";
+					AND `lock` != '$blocking'
+					AND `course_id` = $cours_id";
 				$query = db_query ($sql);
 				break;
 			// VISIBILITY COMMAND
@@ -232,7 +235,8 @@ if ($is_editor) {
 				$sql = "UPDATE `".$TABLELEARNPATH."`
 					SET `visibility` = '$visibility'
 					WHERE `learnPath_id` = ". (int)$_GET['visibility_path_id']."
-					AND `visibility` != '$visibility'";
+					AND `visibility` != '$visibility'
+					AND `course_id` = $cours_id";
 				$query = db_query ($sql);
 				break;
 			// ORDER COMMAND
@@ -250,17 +254,18 @@ if ($is_editor) {
 				if( isset($_POST["newPathName"]) && $_POST["newPathName"] != "") {
 					// check if name already exists
 					$sql = "SELECT `name` FROM `".$TABLELEARNPATH."`
-						WHERE `name` = '". mysql_real_escape_string($_POST['newPathName']) ."'";
+						WHERE `name` = '". mysql_real_escape_string($_POST['newPathName']) ."'
+						AND `course_id` = $cours_id";
 					$query = db_query($sql);
 					$num = mysql_num_rows($query);
 					if($num == 0) { // "name" doesn't already exist
 						// determine the default order of this Learning path
-						$result = db_query("SELECT MAX(`rank`) FROM `".$TABLELEARNPATH."`");
+						$result = db_query("SELECT MAX(`rank`) FROM `".$TABLELEARNPATH."` WHERE `course_id` = $cours_id");
 						list($orderMax) = mysql_fetch_row($result);
 						$order = $orderMax + 1;
 						// create new learning path
-						$sql = "INSERT INTO `".$TABLELEARNPATH."` (`name`, `comment`, `rank`)
-							VALUES ('". mysql_real_escape_string($_POST['newPathName']) ."','" . mysql_real_escape_string(trim($_POST['newComment']))."',".(int)$order.")";
+						$sql = "INSERT INTO `".$TABLELEARNPATH."` (`course_id`, `name`, `comment`, `rank`)
+							VALUES ($cours_id, '". mysql_real_escape_string($_POST['newPathName']) ."','" . mysql_real_escape_string(trim($_POST['newComment']))."',".(int)$order.")";
 						$lp_id = db_query($sql);
 					} else {
 						// display error message
@@ -305,6 +310,7 @@ if (isset($sortDirection) && $sortDirection)
 {
     $sql = "SELECT `learnPath_id`, `rank`
             FROM `".$TABLELEARNPATH."`
+            WHERE `course_id` = $cours_id
             ORDER BY `rank` $sortDirection";
     $result = db_query($sql);
 
@@ -322,19 +328,22 @@ if (isset($sortDirection) && $sortDirection)
             // move 1 to a temporary rank
             $sql = "UPDATE `$TABLELEARNPATH`
                     SET `rank` = '-1337'
-                    WHERE `learnPath_id` = " . intval($thisLearningPathId);
+                    WHERE `learnPath_id` = " . intval($thisLearningPathId) ."
+                    AND `course_id` = $cours_id";
             db_query($sql);
 
              // move 2 to the previous rank of 1
              $sql = "UPDATE `$TABLELEARNPATH`
                      SET `rank` = " . intval($thisLPOrder) . "
-                     WHERE `learnPath_id` = " . intval($nextLPId);
+                     WHERE `learnPath_id` = " . intval($nextLPId) ."
+                     AND `course_id` = $cours_id";
              db_query($sql);
 
              // move 1 to previous rank of 2
              $sql = "UPDATE `$TABLELEARNPATH`
                      SET `rank` = " . intval($nextLPOrder) . "
-                     WHERE `learnPath_id` = " . intval($thisLearningPathId);
+                     WHERE `learnPath_id` = " . intval($thisLearningPathId) ."
+                     AND `course_id` = $cours_id";
              db_query($sql);
              break;
          }
@@ -369,7 +378,7 @@ if($is_editor) {
 }
 
 // check if there are learning paths available
-$l = db_query("SELECT * FROM `$TABLELEARNPATH`");
+$l = db_query("SELECT * FROM `$TABLELEARNPATH` WHERE `course_id` = $cours_id");
 if ((mysql_num_rows($l) == 0)) {
 	$tool_content .= "<p class='alert1'>$langNoLearningPath</p>";
 	draw($tool_content, 2, null, $head_content);
@@ -420,6 +429,7 @@ $sql = "SELECT LP.* , MIN(UMP.`raw`) AS minRaw, LP.`lock`
             $uidCheckString
          WHERE 1=1
              $visibility
+         AND LP.`course_id` = $cours_id
       GROUP BY LP.`learnPath_id`
       ORDER BY LP.`rank`";
 
@@ -470,6 +480,7 @@ while ($list = mysql_fetch_array($result)) // while ... learning path list
                 WHERE M.`module_id` = LPM.`module_id`
                   AND LPM.`learnPath_id` = ". intval($list['learnPath_id'])."
                   AND M.`contentType` <> \"LABEL\"
+                  AND M.`course_id` = $cours_id
                 ORDER BY LPM.`rank` ASC";
         $resultmodules = db_query($modulessql);
         
@@ -505,6 +516,7 @@ while ($list = mysql_fetch_array($result)) // while ... learning path list
             $blocksql2 = "SELECT `credit`
                           FROM `$TABLEUSERMODULEPROGRESS`
                           WHERE `learnPath_module_id`= " . intval($listblock['learnPath_module_id']) . "
+                          AND `learnPath_id` = " . intval($list['learnPath_id']) . "
                           AND `user_id` =" . intval($uid);
             $resultblock2 = db_query($blocksql2);
             $moduleNumber = mysql_num_rows($resultblock2);

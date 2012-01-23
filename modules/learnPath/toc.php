@@ -42,7 +42,7 @@ $TABLELEARNPATHMODULE   = "lp_rel_learnPath_module";
 $TABLEASSET             = "lp_asset";
 $TABLEUSERMODULEPROGRESS= "lp_user_module_progress";
 
-mysql_select_db($currentCourseID);
+mysql_select_db($mysqlMainDb);
 echo "<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN' 'http://www.w3.org/TR/html4/loose.dtd'>
 <html>
 <head><title>-</title>
@@ -69,6 +69,7 @@ $sql = "SELECT M.*, LPM.*, A.`path`, UMP.`lesson_status`, UMP.`credit`
            ".$uidCheckString."
         WHERE M.`module_id` = LPM.`module_id`
           AND LPM.`learnPath_id` = ". (int)$_SESSION['path_id']."
+          AND M.`course_id` = $cours_id
         ORDER BY LPM.`rank` ASC";
 
 $result = db_query($sql);

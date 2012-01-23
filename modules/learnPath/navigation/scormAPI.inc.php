@@ -63,7 +63,6 @@ if($uid)
              WHERE U.`user_id` = ". (int)$uid;
     $userDetails = db_query_get_single_row($sql);
     
-    mysql_select_db($currentCourseID);
     // Get general information to generate the right API inmplementation
     $sql = "SELECT *
               FROM `".$TABLEUSERMODULEPROGRESS."` AS UMP,
@@ -73,7 +72,8 @@ if($uid)
                AND UMP.`learnPath_module_id` = LPM.`learnPath_module_id`
                AND M.`module_id` = LPM.`module_id`
                AND LPM.`learnPath_id` = ". (int)$_SESSION['path_id']."
-               AND LPM.`module_id` = ". (int)$_SESSION['lp_module_id'];
+               AND LPM.`module_id` = ". (int)$_SESSION['lp_module_id']."
+               AND M.`course_id` = $cours_id";
     $userProgressionDetails = db_query_get_single_row($sql);
     $userProgressionDetails['nom'] = $userDetails['nom'];
     $userProgressionDetails['prenom'] = $userDetails['prenom'];

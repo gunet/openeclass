@@ -59,7 +59,7 @@ $navigation[]= array ("url"=>"learningPathAdmin.php?course=$code_cours&amp;path_
 $nameTools = $langInsertMyModulesTitle;
 
 
-mysql_select_db($currentCourseID);
+mysql_select_db($mysqlMainDb);
 
 // FUNCTION NEEDED TO BUILD THE QUERY TO SELECT THE MODULES THAT MUST BE AVAILABLE
 
@@ -71,7 +71,7 @@ function buildRequestModules()
 
  global $TABLELEARNPATHMODULE;
  global $TABLEMODULE;
- global $TABLEASSET, $langLearningModule, $langSelection, $langComments;
+ global $TABLEASSET, $langLearningModule, $langSelection, $langComments, $cours_id;
 
  $firstSql = "SELECT LPM.`module_id`
               FROM `".$TABLELEARNPATHMODULE."` AS LPM
@@ -86,7 +86,8 @@ function buildRequestModules()
            LEFT JOIN `".$TABLEASSET."` AS A ON M.`startAsset_id` = A.`asset_id`
          WHERE M.`contentType` != \"SCORM\"
            AND M.`contentType` != \"SCORM_ASSET\"
-           AND M.`contentType` != \"LABEL\"";
+           AND M.`contentType` != \"LABEL\"
+           AND M.`course_id` = $cours_id";
 
  while ($list=mysql_fetch_array($firstResult))
  {

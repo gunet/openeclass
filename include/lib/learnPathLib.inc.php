@@ -75,7 +75,8 @@ function commentBox($type, $mode)
 {
     global $is_editor, $themeimg, $langModify, $langOk, $langErrorNameAlreadyExists,
            $langAdd, $langConfirmYourChoice, $langDefaultLearningPathComment,
-           $langDefaultModuleComment, $langDefaultModuleAddedComment, $langDelete, $code_cours;
+           $langDefaultModuleComment, $langDefaultModuleAddedComment, $langDelete, $code_cours,
+           $mysqlMainDb, $cours_id;
 
     $tbl_lp_learnPath            = 'lp_learnPath';
     $tbl_lp_rel_learnPath_module = 'lp_rel_learnPath_module';
@@ -100,13 +101,13 @@ function commentBox($type, $mode)
             {
                 $module_id = $_SESSION['lp_module_id'];
             }
-            $where_cond = "`module_id` = " . (int) $module_id;  // use backticks ( ` ) for col names and simple quote ( ' ) for string
+            $where_cond = "`module_id` = " . (int) $module_id ." AND `course_id` = $cours_id";  // use backticks ( ` ) for col names and simple quote ( ' ) for string
             break;
         case LEARNINGPATH_ :
             $defaultTxt = $langDefaultLearningPathComment;
             $col_name = 'comment';
             $tbl_name = $tbl_lp_learnPath;
-            $where_cond = '`learnPath_id` = '. (int) $_SESSION['path_id'];  // use backticks ( ` ) for col names and simple quote ( ' ) for string
+            $where_cond = '`learnPath_id` = '. (int) $_SESSION['path_id'] ." AND `course_id` = $cours_id";  // use backticks ( ` ) for col names and simple quote ( ' ) for string
             break;
         case LEARNINGPATHMODULE_ :
             $defaultTxt = $langDefaultModuleAddedComment;
@@ -128,7 +129,7 @@ function commentBox($type, $mode)
             $sql = "UPDATE `" . $tbl_name . "`
                            SET `" . $col_name . "` = \"". addslashes($_POST['insertCommentBox'])."\"
                          WHERE " . $where_cond;
-            db_query($sql);
+            db_query($sql, $mysqlMainDb);
 
             if($mode == UPDATE_)
             	$dsp = true;
@@ -141,7 +142,7 @@ function commentBox($type, $mode)
             $sql = "SELECT `".$col_name."`
                        FROM `" . $tbl_name . "`
                       WHERE " . $where_cond;
-            $oldComment = db_query_get_single_value($sql);
+            $oldComment = db_query_get_single_value($sql, $mysqlMainDb);
 
             $output .= '
       <form method="POST" action="'.$_SERVER['PHP_SELF'].'?course='.$code_cours.'">' . "\n"
@@ -160,7 +161,7 @@ function commentBox($type, $mode)
         $sql =  "UPDATE `" . $tbl_name . "`
                  SET `" . $col_name . "` = ''
                  WHERE " . $where_cond;
-        db_query($sql);
+        db_query($sql, $mysqlMainDb);
         $dsp = TRUE;
     }
 
@@ -171,7 +172,7 @@ function commentBox($type, $mode)
                 FROM `" . $tbl_name . "`
                 WHERE " . $where_cond;
 
-        $result = db_query($sql);
+        $result = db_query($sql, $mysqlMainDb);
         if($result)
         {
            list($value) = mysql_fetch_row($result);
@@ -234,9 +235,9 @@ function nameBox($type, $mode, $formlabel = FALSE)
     $tbl_lp_module               = "lp_module";
 
     // globals
-    global $is_editor, $themeimg;
-    global $urlAppend, $langLearningPath1;
-    global $langModify, $langOk, $langErrorNameAlreadyExists, $code_cours;
+    global $is_editor, $themeimg, $urlAppend, $langLearningPath1, 
+           $langModify, $langOk, $langErrorNameAlreadyExists, $code_cours, 
+           $mysqlMainDb, $cours_id;
 
     // $dsp will be set 'true' if the comment has to be displayed
     $dsp = FALSE;
@@ -267,17 +268,17 @@ function nameBox($type, $mode, $formlabel = FALSE)
             $sql = "SELECT COUNT(`" . $col_name . "`)
                                  FROM `" . $tbl_name . "`
                                 WHERE `" . $col_name . "` = '" . addslashes($_POST['newName']) . "'
-                                  AND !(" . $where_cond . ")";
-            $num = db_query_get_single_value($sql);
+                                  AND !(" . $where_cond . ") AND `course_id` = $cours_id";
+            $num = db_query_get_single_value($sql, $mysqlMainDb);
 
             if ($num == 0)  // name doesn't already exists
             {
 
                 $sql = "UPDATE `" . $tbl_name . "`
                             SET `" . $col_name . "` = '" . addslashes($_POST['newName']) ."'
-                            WHERE " . $where_cond;
+                            WHERE " . $where_cond ." AND `course_id` = $cours_id";
 
-                db_query($sql);
+                db_query($sql, $mysqlMainDb);
                 $dsp = TRUE;
             }
             else
@@ -290,9 +291,9 @@ function nameBox($type, $mode, $formlabel = FALSE)
         {
             $sql = "SELECT `name`
                     FROM `" . $tbl_name . "`
-                    WHERE " . $where_cond;
+                    WHERE " . $where_cond ." AND `course_id` = $cours_id";
 
-            $oldName = db_query_get_single_value($sql);
+            $oldName = db_query_get_single_value($sql, $mysqlMainDb);
 
             $output .= '
       <form method="POST" action="' . $_SERVER['PHP_SELF'].'?course='.$code_cours.'">' . "\n";
@@ -313,9 +314,9 @@ function nameBox($type, $mode, $formlabel = FALSE)
     {
         $sql = "SELECT `name`
                 FROM `" . $tbl_name . "`
-                WHERE " . $where_cond;
+                WHERE " . $where_cond ." AND `course_id` = $cours_id";
 
-        $result = db_query($sql);
+        $result = db_query($sql, $mysqlMainDb);
         if($result)
         {
            list($value) = mysql_fetch_row($result);
@@ -437,7 +438,7 @@ function display_path_content()
     $tbl_lp_module               = 'lp_module';
     $tbl_lp_asset                = 'lp_asset';
 
-    global $_cid, $langModule, $themeimg;
+    global $_cid, $langModule, $themeimg, $mysqlMainDb, $cours_id;
 
     $style = '';
     $output = '';
@@ -453,8 +454,9 @@ function display_path_content()
             WHERE LP.`learnPath_id` = " .  (int) $_SESSION['path_id'] . "
               AND LP.`learnPath_id` = LPM.`learnPath_id`
               AND LPM.`module_id` = M.`module_id`
+              AND LP.`course_id` = $cours_id
             ORDER BY LPM.`rank`";
-    $moduleList = db_query_fetch_all($sql);
+    $moduleList = db_query_fetch_all($sql, $mysqlMainDb);
 
     $extendedList = array();
     foreach( $moduleList as $module)
@@ -532,24 +534,25 @@ function display_path_content()
  */
 function get_learnPath_progress($lpid, $lpUid)
 {
-    global $currentCourseID;
+    global $mysqlMainDb, $cours_id;
 
     // find progression for this user in each module of the path
 
     $sql = "SELECT UMP.`raw` AS R, UMP.`scoreMax` AS SMax, M.`contentType` AS CTYPE, UMP.`lesson_status` AS STATUS
-             FROM `$currentCourseID`.`lp_learnPath` AS LP,
-                  `$currentCourseID`.`lp_rel_learnPath_module` AS LPM,
-                  `$currentCourseID`.`lp_user_module_progress` AS UMP,
-                  `$currentCourseID`.`lp_module` AS M
+             FROM `$mysqlMainDb`.`lp_learnPath` AS LP,
+                  `$mysqlMainDb`.`lp_rel_learnPath_module` AS LPM,
+                  `$mysqlMainDb`.`lp_user_module_progress` AS UMP,
+                  `$mysqlMainDb`.`lp_module` AS M
             WHERE LP.`learnPath_id` = LPM.`learnPath_id`
               AND LPM.`learnPath_module_id` = UMP.`learnPath_module_id`
               AND UMP.`user_id` = " . (int) $lpUid . "
               AND LP.`learnPath_id` = " . (int) $lpid . "
+              AND LP.`course_id` = $cours_id
               AND LPM.`visibility` = 'SHOW'
               AND M.`module_id` = LPM.`module_id`
               AND M.`contentType` != '" . CTLABEL_ . "'";
 
-    $result = db_query($sql);
+    $result = db_query($sql, $mysqlMainDb);
 	$modules = array();
 
     while( $row = mysql_fetch_array($result) )
@@ -589,14 +592,15 @@ function get_learnPath_progress($lpid, $lpUid)
         }
         // find number of visible modules in this path
         $sqlnum = "SELECT COUNT(M.`module_id`)
-                    FROM `$currentCourseID`.`lp_rel_learnPath_module` AS LPM,
-                         `$currentCourseID`.`lp_module` AS M
+                    FROM `$mysqlMainDb`.`lp_rel_learnPath_module` AS LPM,
+                         `$mysqlMainDb`.`lp_module` AS M
                     WHERE LPM.`learnPath_id` = " . (int) $lpid . "
                     AND LPM.`visibility` = 'SHOW'
                     AND M.`contentType` != '" . CTLABEL_ . "'
                     AND M.`module_id` = LPM.`module_id`
+                    AND M.`course_id` = $cours_id
                     ";
-        $result = db_query($sqlnum);
+        $result = db_query($sqlnum, $mysqlMainDb);
         if($result) {
             list($value) = mysql_fetch_row($result);
             mysql_free_result($result);
@@ -664,7 +668,7 @@ function display_my_exercises($dialogBox, $style)
     $sql = "SELECT `id`, `titre` AS `title`, `description`
             FROM `" . $tbl_quiz_test . "`
             ORDER BY  `titre`, `id`";
-    $exercises = db_query_fetch_all($sql);
+    $exercises = db_query_fetch_all($sql, $code_cours);
 
     if( is_array($exercises) && !empty($exercises) )
     {
@@ -1971,9 +1975,9 @@ function get_limited_list($sql, $limiter)
  * @param boolean $extraDepth contains how far we are from the redirected location
  * @author Thanos Kyritsis <atkyritsis@upnet.gr>
  */
-
-function check_LPM_validity($is_editor, $code_cours, $extraQuery = false, $extraDepth = false) {
-	
+function check_LPM_validity($is_editor, $code_cours, $extraQuery = false, $extraDepth = false)
+{
+	global $mysqlMainDb, $cours_id;
 	$depth = ($extraDepth) ? "../" : "./" ;
 	
 	if (!isset($_SESSION['path_id']) || !isset($_SESSION['lp_module_id']) || empty($_SESSION['path_id']) || empty($_SESSION['lp_module_id']) ) {
@@ -1982,7 +1986,7 @@ function check_LPM_validity($is_editor, $code_cours, $extraQuery = false, $extra
 	}
 	
 	if ($extraQuery) {
-		$q = db_query("SELECT visibility FROM lp_learnPath WHERE learnPath_id = '".(int)$_SESSION['path_id']."'", $code_cours);
+		$q = db_query("SELECT visibility FROM lp_learnPath WHERE learnPath_id = '".(int)$_SESSION['path_id']."' AND `course_id` = $cours_id", $mysqlMainDb);
 		$lp = mysql_fetch_array($q);
 		
 		if ( !$is_editor && $lp['visibility'] == "HIDE" ) {
@@ -1992,7 +1996,7 @@ function check_LPM_validity($is_editor, $code_cours, $extraQuery = false, $extra
 		}
 		
 		if (!$is_editor) {
-			$lps = db_query_fetch_all("SELECT `learnPath_id`, `lock` FROM lp_learnPath ORDER BY `rank`", $code_cours);
+			$lps = db_query_fetch_all("SELECT `learnPath_id`, `lock` FROM lp_learnPath WHERE `course_id` = $cours_id ORDER BY `rank`", $mysqlMainDb);
 			if ($lps != false) {
 				$block_met = false;
 				foreach ($lps as $lp) {
@@ -2012,7 +2016,7 @@ function check_LPM_validity($is_editor, $code_cours, $extraQuery = false, $extra
 		}
 	}
 		
-	$q2 = db_query("SELECT visibility FROM lp_rel_learnPath_module WHERE learnPath_id = '".(int)$_SESSION['path_id']."' AND module_id = '".(int)$_SESSION['lp_module_id']."'", $code_cours);
+	$q2 = db_query("SELECT visibility FROM lp_rel_learnPath_module WHERE learnPath_id = '".(int)$_SESSION['path_id']."' AND module_id = '".(int)$_SESSION['lp_module_id']."'", $mysqlMainDb);
 	$lpm = mysql_fetch_array($q2);
 	if (mysql_num_rows($q2) <= 0 || (!$is_editor && $lpm['visibility'] == "HIDE")) {
 		// if the combination path/module is invalid, don't allow users in it
@@ -2021,7 +2025,7 @@ function check_LPM_validity($is_editor, $code_cours, $extraQuery = false, $extra
 	}
 	
 	if (!$is_editor) {
-		$lpms = db_query_fetch_all("SELECT `module_id`, `lock` FROM lp_rel_learnPath_module WHERE `learnPath_id` = '".(int)$_SESSION['path_id']."' ORDER BY `rank`", $code_cours);
+		$lpms = db_query_fetch_all("SELECT `module_id`, `lock` FROM lp_rel_learnPath_module WHERE `learnPath_id` = '".(int)$_SESSION['path_id']."' ORDER BY `rank`", $mysqlMainDb);
 		if ($lpms != false) {
 			$block_met = false;
 			foreach ($lpms as $lpm) {

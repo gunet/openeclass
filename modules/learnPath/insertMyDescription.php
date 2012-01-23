@@ -50,7 +50,7 @@ $navigation[] = array("url"=>"learningPathList.php?course=$code_cours", "name"=>
 $navigation[] = array("url"=>"learningPathAdmin.php?course=$code_cours&amp;path_id=".(int)$_SESSION['path_id'], "name"=> $langAdm);
 $nameTools = $langInsertMyDescToolName;
 
-mysql_select_db($currentCourseID);
+mysql_select_db($mysqlMainDb);
 
 /*======================================*/
 
@@ -60,7 +60,9 @@ mysql_select_db($currentCourseID);
 // SQL Checks
 // check if a module of this course already used the same document
 $sql = "SELECT * FROM `".$TABLEMODULE."` AS M, `".$TABLEASSET."` AS A
-	WHERE A.`module_id` = M.`module_id` AND M.`contentType` = \"".CTCOURSE_DESCRIPTION_."\"";
+	WHERE A.`module_id` = M.`module_id` 
+	AND M.`course_id` = $cours_id
+	AND M.`contentType` = \"".CTCOURSE_DESCRIPTION_."\"";
 $query = db_query($sql);
 $num = mysql_numrows($query);
 
@@ -69,8 +71,8 @@ if ($num == 0)
 	// create new module
 	// TODO: name goes from langWhatever
 	$sql = "INSERT INTO `".$TABLEMODULE."`
-		(`name`, `contentType`)
-		VALUES ('".$langCourseDescription."', '".CTCOURSE_DESCRIPTION_."' )";
+		(`course_id`, `name`, `contentType`)
+		VALUES ($cours_id, '".$langCourseDescription."', '".CTCOURSE_DESCRIPTION_."' )";
 	$query = db_query($sql);
 
 	$insertedModule_id = mysql_insert_id();
@@ -85,12 +87,14 @@ if ($num == 0)
 
 	$sql = "UPDATE `".$TABLEMODULE."`
 	SET `startAsset_id` = " . (int)$insertedAsset_id . "
-	WHERE `module_id` = " . (int)$insertedModule_id . "";
+	WHERE `module_id` = " . (int)$insertedModule_id . "
+	AND `course_id` = $cours_id";
 	$query = db_query($sql);
 
 	// determine the default order of this Learning path
 	$sql = "SELECT MAX(`rank`)
-		FROM `".$TABLELEARNPATHMODULE."`";
+		FROM `".$TABLELEARNPATHMODULE."`
+		WHERE `learnPath_id` = ". (int)$_SESSION['path_id'];
 	$result = db_query($sql);
 
 	list($orderMax) = mysql_fetch_row($result);
@@ -111,6 +115,7 @@ else
 		`".$TABLEASSET."` AS A
 		WHERE M.`module_id` =  LPM.`module_id`
 		AND M.`startAsset_id` = A.`asset_id`
+		AND M.`course_id` = $cours_id
 		AND LPM.`learnPath_id` = ". (int)$_SESSION['path_id'] ."
 		AND M.`contentType` = \"".CTCOURSE_DESCRIPTION_."\"";
 	$query2 = db_query($sql);
@@ -120,7 +125,8 @@ else
 		$thisDocumentModule = mysql_fetch_array($query);
 		// determine the default order of this Learning path
 		$sql = "SELECT MAX(`rank`)
-			FROM `".$TABLELEARNPATHMODULE."`";
+			FROM `".$TABLELEARNPATHMODULE."`
+			WHERE `learnPath_id` = ". (int)$_SESSION['path_id'];
 		$result = db_query($sql);
 
 		list($orderMax) = mysql_fetch_row($result);

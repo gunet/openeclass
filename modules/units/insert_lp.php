@@ -22,12 +22,12 @@
 
 function list_lps()
 {
-        global $id, $currentCourseID, $tool_content, $urlServer, $langComments,
+        global $id, $cours_id, $mysqlMainDb, $tool_content, $urlServer, $langComments,
                $langAddModulesButton, $langChoice, $langNoLearningPath,
                $langLearningPaths, $code_cours, $themeimg;
 
 
-        $result = db_query("SELECT * FROM lp_learnPath ORDER BY name", $currentCourseID);
+        $result = db_query("SELECT * FROM lp_learnPath WHERE course_id = $cours_id ORDER BY name", $mysqlMainDb);
         $lpinfo = array();
         while($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
                 $lpinfo[] = array(

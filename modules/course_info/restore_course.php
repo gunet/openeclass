@@ -143,7 +143,7 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
                         upgrade_course_2_5($new_course_code, $course_lang);
                 }
                 if ($eclass_version < '3.0') {
-                    list($video_map, $videolinks_map) = upgrade_course_3_0($new_course_code, $course_lang, null, true);
+                    list($video_map, $videolinks_map, $lp_learnPath_map) = upgrade_course_3_0($new_course_code, $course_lang, null, true);
                 }
 	}
         convert_description_to_units($new_course_code, $course_id);
@@ -188,7 +188,7 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
                 }
 
                 function unit_map_function(&$data, $maps) {
-                        list($document_map, $link_category_map, $link_map, $ebook_map, $section_map, $subsection_map, $video_map, $videolinks_map) = $maps;
+                        list($document_map, $link_category_map, $link_map, $ebook_map, $section_map, $subsection_map, $video_map, $videolinks_map, $lp_learnPath_map) = $maps;
                         $type = $data['type'];
                         if ($type == 'doc') {
                                 $data['res_id'] = $document_map[$data['res_id']];
@@ -208,6 +208,8 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
                                 $data['res_id'] = $video_map[$data['res_id']];
                         } elseif ($type == 'videolinks') {
                                 $data['res_id'] = $videolinks_map[$data['res_id']];
+                        } elseif ($type == 'lp') {
+                                $data['res_id'] = $lp_learnPath_map[$data['res_id']];
                         }
                         return true;
                 }
@@ -278,6 +280,42 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
                         array('map' => array('fileId' => $dropbox_map,
                                              'recipientId' => $userid_map)));
                 }
+                if (file_exists("$restoreThis/lp_learnPath") &&
+                    file_exists("$restoreThis/lp_module") &&
+                    file_exists("$restoreThis/lp_asset") &&
+                    file_exists("$restoreThis/lp_rel_learnPath_module") &&
+                    file_exists("$restoreThis/lp_user_module_progress"))
+                {
+                    $lp_learnPath_map = restore_table($restoreThis, 'lp_learnPath',
+                        array('set' => array('course_id' => $course_id),
+                              'return_mapping' => 'learnPath_id'));
+                    $lp_module_map = restore_table($restoreThis, 'lp_module',
+                        array('set' => array('course_id' => $course_id),
+                              'return_mapping' => 'module_id'));
+                    $lp_asset_map = restore_table($restoreThis, 'lp_asset',
+                        array('map' => array('module_id' => $lp_module_map),
+                              'return_mapping' => 'asset_id'));
+                    // update lp_module startAsset_id with new asset_id from map
+                    foreach ($lp_asset_map as $key => $value) {
+                        $result = db_query("UPDATE `$mysqlMainDb`.lp_module SET `startAsset_id` = $value
+                                					WHERE `course_id` = $course_id AND `startAsset_id` = $key");
+                    }
+                    $lp_rel_learnPath_module_map = restore_table($restoreThis, 'lp_rel_learnPath_module',
+                        array('map' => array('learnPath_id' => $lp_learnPath_map,
+                                             'module_id' => $lp_module_map),
+                              'return_mapping' => 'learnPath_module_id'));
+                    // update parent
+                    foreach ($lp_rel_learnPath_module_map as $key => $value) {
+                        $result = db_query("UPDATE `$mysqlMainDb`.lp_rel_learnPath_module SET `parent` = $value
+                                					WHERE `learnPath_id` IN (SELECT learnPath_id FROM `$mysqlMainDb`.lp_learnPath WHERE course_id = $course_id) 
+                                					AND `parent` = $key");
+                    }
+                    restore_table($restoreThis, 'lp_user_module_progress',
+                        array('delete' => array('user_module_progress_id'),
+                              'map' => array('user_id' => $userid_map,
+                                             'learnPath_module_id' => $lp_rel_learnPath_module_map,
+                                             'learnPath_id' => $lp_learnPath_map)));
+                }
                 $unit_map = restore_table($restoreThis, 'course_units',
                         array('set' => array('course_id' => $course_id),
                               'return_mapping' => 'id'));
@@ -292,7 +330,8 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
                                                            $ebook_section_map,
                                                            $ebook_subsection_map,
                                                            $video_map,
-                                                           $videolinks_map)));
+                                                           $videolinks_map,
+                                                           $lp_learnPath_map)));
         }
         
 	removeDir($restoreThis);

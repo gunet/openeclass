@@ -48,12 +48,12 @@ if($is_editor) {
 		AND CU.`cours_id` = $cours_id
 		ORDER BY U.`nom` ASC";
 	$usersList = get_limited_list($sql, 500000);
-	mysql_select_db($currentCourseID);
+	mysql_select_db($mysqlMainDb);
 	foreach ($usersList as $user)
 	{
 		echo "$crlf";
-		$sql = "SELECT LP.`learnPath_id` FROM `lp_learnPath` AS LP";
-		$learningPathList = db_query_fetch_all($sql, $currentCourseID);
+		$sql = "SELECT LP.`learnPath_id` FROM `lp_learnPath` AS LP WHERE LP.`course_id` = $cours_id";
+		$learningPathList = db_query_fetch_all($sql);
 		$iterator = 1;
 		$globalprog = 0;
 		

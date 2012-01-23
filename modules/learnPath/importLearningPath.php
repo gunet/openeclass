@@ -535,15 +535,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST) )
     // we need a new path_id for this learning path so we prepare a line in DB
     // this line will be removed if an error occurs
     $sql = "SELECT MAX(`rank`)
-            FROM `".$TABLELEARNPATH."`";
-    $result = db_query($sql);
+            FROM `".$TABLELEARNPATH."` WHERE `course_id` = $cours_id";
+    $result = db_query($sql, $mysqlMainDb);
 
     list($rankMax) = mysql_fetch_row($result);
 
     $sql = "INSERT INTO `".$TABLELEARNPATH."`
-            (`name`,`visibility`,`rank`,`comment`)
-            VALUES ('". addslashes($lpName) ."','HIDE',".($rankMax+1).",'')";
-    db_query($sql);
+            (`course_id`, `name`,`visibility`,`rank`,`comment`)
+            VALUES ($cours_id, '". addslashes($lpName) ."','HIDE',".($rankMax+1).",'')";
+    db_query($sql, $mysqlMainDb);
 
 
     $tempPathId = mysql_insert_id();
@@ -893,10 +893,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST) )
                     $chapterTitle = $item['title'];
 
                     $sql = "INSERT INTO `".$TABLEMODULE."`
-                            (`name` , `comment`, `contentType`, `launch_data`)
-                            VALUES ('".addslashes($chapterTitle)."' , '', '".CTLABEL_."','')";
+                            (`course_id`, `name`, `comment`, `contentType`, `launch_data`)
+                            VALUES ($cours_id, '".addslashes($chapterTitle)."' , '', '".CTLABEL_."','')";
 
-                    $query = db_query($sql);
+                    $query = db_query($sql, $mysqlMainDb);
 
                     if ( mysql_error() )
                     {
@@ -921,7 +921,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST) )
                     $sql = "INSERT INTO `".$TABLELEARNPATHMODULE."`
                             (`learnPath_id`, `module_id`,`rank`, `visibility`, `parent`)
                             VALUES ('".$tempPathId."', '".$insertedModule_id[$i]."', ".$rank.", '".$visibility."', ".$parent.")";
-                    $query = db_query($sql);
+                    $query = db_query($sql, $mysqlMainDb);
 
                     // get the inserted id of the learnPath_module rel to allow 'parent' link in next inserts
                     $insertedLPMid[$item['itemIdentifier']]['LPMid'] = mysql_insert_id();
@@ -985,9 +985,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST) )
                 	$contentType = CTSCORM_;
 
                 $sql = "INSERT INTO `".$TABLEMODULE."`
-                        (`name` , `comment`, `contentType`, `launch_data`)
-                        VALUES ('".addslashes($moduleName)."' , '".addslashes($description)."', '".$contentType."', '".addslashes($item['datafromlms'])."')";
-                $query = db_query($sql);
+                        (`course_id`, `name`, `comment`, `contentType`, `launch_data`)
+                        VALUES ($cours_id, '".addslashes($moduleName)."' , '".addslashes($description)."', '".$contentType."', '".addslashes($item['datafromlms'])."')";
+                $query = db_query($sql, $mysqlMainDb);
 
                 if ( mysql_error() )
                 {
@@ -1030,7 +1030,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST) )
                         (`path` , `module_id` , `comment`)
                         VALUES ('". addslashes($assetPath) ."', ".$insertedModule_id[$i]." , '')";
 
-                $query = db_query($sql);
+                $query = db_query($sql, $mysqlMainDb);
                 if ( mysql_error() )
                 {
                     $errorFound = true;
@@ -1043,8 +1043,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST) )
                 // update of module with correct start asset id
                 $sql = "UPDATE `".$TABLEMODULE."`
                         SET `startAsset_id` = ". (int)$insertedAsset_id[$i]."
-                        WHERE `module_id` = ". (int)$insertedModule_id[$i];
-                $query = db_query($sql);
+                        WHERE `module_id` = ". (int)$insertedModule_id[$i] ."
+                        AND `course_id` = $cours_id";
+                $query = db_query($sql, $mysqlMainDb);
 
                 if ( mysql_error() )
                 {
@@ -1067,7 +1068,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST) )
                 $sql = "INSERT INTO `".$TABLELEARNPATHMODULE."`
                         (`learnPath_id`, `module_id`, `specificComment`, `rank`, `visibility`, `lock`, `parent`)
                         VALUES ('".$tempPathId."', '".$insertedModule_id[$i]."','".addslashes($langDefaultModuleAddedComment)."', ".$rank.", '".$visibility."', 'OPEN', ".$parent.")";
-                $query = db_query($sql);
+                $query = db_query($sql, $mysqlMainDb);
 
                 // get the inserted id of the learnPath_module rel to allow 'parent' link in next inserts
                 $insertedLPMid[$item['itemIdentifier']]['LPMid']  = mysql_insert_id();
@@ -1121,26 +1122,27 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST) )
         {
             $sqlDelAssets .= " OR `asset_id` = ". (int)$insertedAsset;
         }
-        db_query($sqlDelAssets);
+        db_query($sqlDelAssets, $mysqlMainDb);
 
         // delete modules
         $sqlDelModules = "DELETE FROM `".$TABLEMODULE."`
                           WHERE 1 = 0";
         foreach ( $insertedModule_id as $insertedModule )
         {
-             $sqlDelModules .= " OR `module_id` = ". (int)$insertedModule;
+             $sqlDelModules .= " OR ( `module_id` = ". (int)$insertedModule ." AND `course_id` = $cours_id )";
         }
-        db_query($sqlDelModules);
+        db_query($sqlDelModules, $mysqlMainDb);
 
         // delete learningPath_module
         $sqlDelLPM = "DELETE FROM `".$TABLELEARNPATHMODULE."`
                       WHERE `learnPath_id` = ". (int)$tempPathId;
-        db_query($sqlDelLPM);
+        db_query($sqlDelLPM, $mysqlMainDb);
 
         // delete learning path
         $sqlDelLP = "DELETE FROM `".$TABLELEARNPATH."`
-                     WHERE `learnPath_id` = ". (int)$tempPathId;
-        db_query($sqlDelLP);
+                     WHERE `learnPath_id` = ". (int)$tempPathId ."
+                     AND `course_id` = $cours_id";
+        db_query($sqlDelLP, $mysqlMainDb);
 
         // delete the directory (and files) of this learning path and all its content
         claro_delete_file($baseWorkDir);
@@ -1150,8 +1152,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST) )
     {
         // finalize insertion : update the empty learning path insert that was made to find its id
         $sql = "SELECT MAX(`rank`)
-                FROM `".$TABLELEARNPATH."`";
-        $result = db_query($sql);
+                FROM `".$TABLELEARNPATH."`
+                WHERE `course_id` = $cours_id";
+        $result = db_query($sql, $mysqlMainDb);
 
         list($rankMax) = mysql_fetch_row($result);
 
@@ -1179,8 +1182,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST) )
                     `name` = '".addslashes($lpName)."',
                     `comment` = '".addslashes($lpComment)."',
                     `visibility` = 'SHOW'
-                WHERE `learnPath_id` = ". (int)$tempPathId;
-        db_query($sql);
+                WHERE `learnPath_id` = ". (int)$tempPathId ."
+                AND `course_id` = $cours_id";
+        db_query($sql, $mysqlMainDb);
 
     }
 

@@ -46,7 +46,7 @@ $require_current_course = TRUE;
 $path2add = 3;
 include("../../../include/init.php");
 require_once("../../../include/lib/learnPathLib.inc.php");
-mysql_select_db($currentCourseID);
+mysql_select_db($mysqlMainDb);
 
 $TABLELEARNPATH         = "lp_learnPath";
 $TABLEMODULE            = "lp_module";

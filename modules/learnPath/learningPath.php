@@ -70,7 +70,7 @@ if (isset($_GET['path_id'])) {
     exit();
 }
 
-$q = db_query("SELECT name, visibility FROM $TABLELEARNPATH WHERE learnPath_id = '".(int)$_SESSION['path_id']."'", $currentCourseID);
+$q = db_query("SELECT name, visibility FROM $TABLELEARNPATH WHERE learnPath_id = '".(int)$_SESSION['path_id']."' AND `course_id` = $cours_id");
 $lp = mysql_fetch_array($q);
 $nameTools = $lp['name'];
 if (!add_units_navigation(TRUE)) {
@@ -92,7 +92,7 @@ else {
 		exit();
 	}
 	
-	$lps = db_query_fetch_all("SELECT `learnPath_id`, `lock` FROM $TABLELEARNPATH ORDER BY `rank`", $currentCourseID);
+	$lps = db_query_fetch_all("SELECT `learnPath_id`, `lock` FROM $TABLELEARNPATH WHERE `course_id` = $cours_id ORDER BY `rank`");
 	if ($lps != false) {
 		$block_met = false;
 		foreach ($lps as $lp) {
@@ -111,7 +111,7 @@ else {
 	}
 }
 
-mysql_select_db($currentCourseID);
+mysql_select_db($mysqlMainDb);
 
 // main page
 if ($uid) {
@@ -138,6 +138,7 @@ $sql = "SELECT LPM.`learnPath_module_id`, LPM.`parent`,
             AND LPM.`learnPath_id` = ". (int)$_SESSION['path_id']."
             AND LPM.`visibility` = 'SHOW'
             AND LPM.`module_id` = M.`module_id`
+            AND M.`course_id` = $cours_id
        GROUP BY LPM.`module_id`
        ORDER BY LPM.`rank`";
 

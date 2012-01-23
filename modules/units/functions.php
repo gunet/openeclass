@@ -232,8 +232,8 @@ function show_description($title, $comments, $id, $res_id, $visibility)
 // display resource learning path
 function show_lp($title, $comments, $resource_id, $lp_id)
 {
-	global $id, $tool_content, $mysqlMainDb, $urlServer, $is_editor,
-               $langWasDeleted, $currentCourseID, $code_cours, $themeimg, $langInactiveModule;
+	global $id, $mysqlMainDb, $urlServer, $cours_id, $is_editor,
+               $langWasDeleted, $code_cours, $themeimg, $langInactiveModule;
 
         $module_visible = visible_module(23); // checks module visibility
         if (!$module_visible and !$is_editor) {
@@ -244,8 +244,7 @@ function show_lp($title, $comments, $resource_id, $lp_id)
                      ' class="invisible"': ' class="even"';                
 	
         $title = htmlspecialchars($title);
-	$r = db_query("SELECT * FROM lp_learnPath WHERE learnPath_id = $lp_id",
-                      $currentCourseID);
+	$r = db_query("SELECT * FROM lp_learnPath WHERE course_id = $cours_id AND learnPath_id = $lp_id", $mysqlMainDb);
 	if (mysql_num_rows($r) == 0) { // check if lp was deleted
 		if (!$is_editor) {
 			return '';

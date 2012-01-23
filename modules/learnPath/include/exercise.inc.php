@@ -50,7 +50,7 @@ if( isset($cmd) && $cmd = "raw" )
 				SET `raw_to_pass` = ". (int)$_POST['newRaw']."
 				WHERE `module_id` = ". (int)$_SESSION['lp_module_id']."
 				AND `learnPath_id` = ". (int)$_SESSION['path_id'];
-		db_query($sql);
+		db_query($sql, $mysqlMainDb);
 
 		$dialogBox = $langRawHasBeenChanged;
 	}
@@ -73,7 +73,7 @@ $sql = "SELECT `lock`, `raw_to_pass`
        WHERE LPM.`module_id` = ". (int)$_SESSION['lp_module_id']."
          AND LPM.`learnPath_id` = ". (int)$_SESSION['path_id'];
 
-$learningPath_module = db_query_get_single_row($sql);
+$learningPath_module = db_query_get_single_row($sql, $mysqlMainDb);
 
 // if this module blocks the user if he doesn't complete
 if( isset($learningPath_module['lock'])
@@ -90,11 +90,12 @@ if( isset($learningPath_module['lock'])
 
 // display current exercise info and change comment link
 $sql = "SELECT `E`.`id` AS `exerciseId`, `M`.`name`
-        FROM `".$TABLEMODULE."` AS `M`,
-             `".$TABLEASSET."`  AS `A`,
-             `".$TABLEQUIZTEST."` AS `E`
+        FROM `$mysqlMainDb`.`".$TABLEMODULE."` AS `M`,
+             `$mysqlMainDb`.`".$TABLEASSET."`  AS `A`,
+             `$code_cours`.`".$TABLEQUIZTEST."` AS `E`
        WHERE `A`.`module_id` = M.`module_id`
          AND `M`.`module_id` = ". (int) $_SESSION['lp_module_id']."
+         AND `M`.`course_id` = $cours_id
          AND `E`.`id` = `A`.`path`";
 
 $module = db_query_get_single_row($sql);

@@ -69,12 +69,12 @@ $navigation[] = array("url"=>"learningPathAdmin.php?course=$code_cours&amp;path_
 $nameTools = $langInsertMyExerciseToolName;
 
 
-mysql_select_db($currentCourseID);
+mysql_select_db($mysqlMainDb);
 
 // see checked exercises to add
 
 $sql = "SELECT * FROM `".$TABLEEXERCISES;
-$resultex = db_query($sql);
+$resultex = db_query($sql, $currentCourseID);
 
 // for each exercise checked, try to add it to the learning path.
 
@@ -89,9 +89,10 @@ while ($listex = mysql_fetch_array($resultex) )
         $sql = "SELECT * FROM `".$TABLEMODULE."` AS M, `".$TABLEASSET."` AS A
                 WHERE A.`module_id` = M.`module_id`
                   AND A.`path` LIKE \"". (int)$insertedExercise."\"
-                  AND M.`contentType` = \"".CTEXERCISE_."\"";
+                  AND M.`contentType` = \"".CTEXERCISE_."\"
+                  AND M.`course_id` = $cours_id";
 
-        $query = db_query($sql);
+        $query = db_query($sql, $mysqlMainDb);
         $num = mysql_numrows($query);
 
         if($num == 0)
@@ -99,7 +100,7 @@ while ($listex = mysql_fetch_array($resultex) )
             // select infos about added exercise
             $sql = "SELECT * FROM `".$TABLEEXERCISES."` WHERE `id` = ". (int)$insertedExercise;
 
-            $result = db_query($sql);
+            $result = db_query($sql, $currentCourseID);
             $exercise = mysql_fetch_array($result);
 
             if( !empty($exercise['description']) ) {
@@ -111,31 +112,32 @@ while ($listex = mysql_fetch_array($resultex) )
 
             // create new module
             $sql = "INSERT INTO `".$TABLEMODULE."`
-                    (`name` , `comment`, `contentType`, `launch_data`)
-                    VALUES ('".addslashes($exercise['titre'])."' , '".addslashes($comment)."', '".CTEXERCISE_."','')";
-            $query = db_query($sql);
+                    (`course_id`, `name` , `comment`, `contentType`, `launch_data`)
+                    VALUES ($cours_id, '".addslashes($exercise['titre'])."' , '".addslashes($comment)."', '".CTEXERCISE_."','')";
+            $query = db_query($sql, $mysqlMainDb);
             $insertedExercice_id = mysql_insert_id();
 
             // create new asset
             $sql = "INSERT INTO `".$TABLEASSET."`
                     (`path` , `module_id` , `comment`)
                     VALUES ('". (int)$insertedExercise."', ". (int)$insertedExercice_id ." , '')";
-            $query = db_query($sql);
+            $query = db_query($sql, $mysqlMainDb);
             $insertedAsset_id = mysql_insert_id();
             $sql = "UPDATE `".$TABLEMODULE."`
                        SET `startAsset_id` = ". (int)$insertedAsset_id."
-                     WHERE `module_id` = ". (int)$insertedExercice_id;
-            $query = db_query($sql);
+                     WHERE `module_id` = ". (int)$insertedExercice_id ."
+                     AND `course_id` = $cours_id";
+            $query = db_query($sql, $mysqlMainDb);
 
             // determine the default order of this Learning path
-            $result = db_query("SELECT MAX(`rank`) FROM `".$TABLELEARNPATHMODULE."`");
+            $result = db_query("SELECT MAX(`rank`) FROM `".$TABLELEARNPATHMODULE."` WHERE `learnPath_id` = ". (int)$_SESSION['path_id'], $mysqlMainDb);
             list($orderMax) = mysql_fetch_row($result);
             $order = $orderMax + 1;
             // finally : insert in learning path
             $sql = "INSERT INTO `".$TABLELEARNPATHMODULE."`
                     (`learnPath_id`, `module_id`, `specificComment`, `rank`, `lock`)
                     VALUES ('". (int)$_SESSION['path_id']."', '".(int)$insertedExercice_id."','".addslashes($langDefaultModuleAddedComment)."', ".$order.",'OPEN')";
-            $query = db_query($sql);
+            $query = db_query($sql, $mysqlMainDb);
 
             $MessBox .= $exercise['titre'] ." :  ".$langExInsertedAsModule."<br>";
             $style = "success";
@@ -154,17 +156,18 @@ while ($listex = mysql_fetch_array($resultex) )
                      WHERE M.`module_id` =  LPM.`module_id`
                        AND M.`startAsset_id` = A.`asset_id`
                        AND A.`path` = ". (int)$insertedExercise."
-                       AND LPM.`learnPath_id` = ". (int)$_SESSION['path_id'];
+                       AND LPM.`learnPath_id` = ". (int)$_SESSION['path_id'] ."
+                       AND M.`course_id` = $cours_id";
 
-            $query2 = db_query($sql);
+            $query2 = db_query($sql, $mysqlMainDb);
             $num = mysql_numrows($query2);
 
             if ($num == 0)     // used in another LP but not in this one, so reuse the module id reference instead of creating a new one
             {
                 $thisExerciseModule = mysql_fetch_array($query);
                 // determine the default order of this Learning path
-                $sql = "SELECT MAX(`rank`) FROM `".$TABLELEARNPATHMODULE."`";
-                $result = db_query($sql);
+                $sql = "SELECT MAX(`rank`) FROM `".$TABLELEARNPATHMODULE."` WHERE `learnPath_id` = ". (int)$_SESSION['path_id'];
+                $result = db_query($sql, $mysqlMainDb);
 
                 list($orderMax) = mysql_fetch_row($result);
                 $order = $orderMax + 1;
@@ -172,12 +175,12 @@ while ($listex = mysql_fetch_array($resultex) )
                 $sql = "INSERT INTO `".$TABLELEARNPATHMODULE."`
                         (`learnPath_id`, `module_id`, `specificComment`, `rank`, `lock`)
                         VALUES (".(int)$_SESSION['path_id'].", ".(int)$thisExerciseModule['module_id'].",'".addslashes($langDefaultModuleAddedComment)."', ".$order.", 'OPEN')";
-                $query = db_query($sql);
+                $query = db_query($sql, $mysqlMainDb);
 
                 // select infos about added exercise
                 $sql = "SELECT * FROM `".$TABLEEXERCISES."` WHERE `id` = ". (int)$insertedExercise;
 
-                $result = db_query($sql);
+                $result = db_query($sql, $currentCourseID);
                 $exercise = mysql_fetch_array($result);
                 $MessBox .= $exercise['titre']." : ".$langExInsertedAsModule."<br>";
                 $style = "success";

@@ -64,11 +64,11 @@ if( empty($_REQUEST['path_id']) )
 	exit();
 }
 
-mysql_select_db($currentCourseID);
+mysql_select_db($mysqlMainDb);
 $path_id = intval($_REQUEST['path_id']);
 
 // get infos about the learningPath
-$sql = "SELECT `name` FROM `".$TABLELEARNPATH."` WHERE `learnPath_id` = ". (int)$path_id;
+$sql = "SELECT `name` FROM `".$TABLELEARNPATH."` WHERE `learnPath_id` = ". (int)$path_id ." AND `course_id` = ". $cours_id;
 $learnPathName = db_query_get_single_value($sql);
 
 if( $learnPathName )

@@ -63,7 +63,7 @@ require_once("../../include/lib/learnPathLib.inc.php");
 //lib of document tool
 require_once("../../include/lib/fileDisplayLib.inc.php");
 
-mysql_select_db($currentCourseID);
+mysql_select_db($mysqlMainDb);
 
 //  set redirection link
 $returl = "navigation/viewModule.php?course=$currentCourseID&amp;go=" . 
@@ -96,6 +96,7 @@ $sql = "SELECT LPM.`learnPath_module_id` ,
           AND LPM.`learnPath_id` = '" . (int)$_SESSION['path_id'] ."'
           AND LPM.`visibility` = 'SHOW'
           AND LPM.`module_id` = M.`module_id`
+          AND M.`course_id` = $cours_id
      GROUP BY LPM.`module_id`
      ORDER BY LPM.`rank`";
 
@@ -112,7 +113,8 @@ $moduleNb = 0;
 // get the name of the learning path
 $sql = "SELECT `name`
       FROM `".$TABLELEARNPATH."`
-      WHERE `learnPath_id` = '". (int)$_SESSION['path_id']."'";
+      WHERE `learnPath_id` = '". (int)$_SESSION['path_id']."'
+      AND `course_id` = $cours_id";
 
 $lpName = db_query_get_single_value($sql);
 

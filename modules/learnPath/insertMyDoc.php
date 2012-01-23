@@ -67,7 +67,7 @@ $navigation[] = array('url' => "learningPathList.php?course=$code_cours", 'name'
 $navigation[] = array('url' => "learningPathAdmin.php?course=$code_cours&amp;path_id=".(int)$_SESSION['path_id'], 'name' => $langAdm);
 $nameTools = $langInsertMyDocToolName;
 
-mysql_select_db($currentCourseID);
+mysql_select_db($mysqlMainDb);
 
 // FUNCTION NEEDED TO BUILD THE QUERY TO SELECT THE MODULES THAT MUST BE AVAILABLE
 
@@ -78,6 +78,7 @@ function buildRequestModules() {
 
  global $TABLELEARNPATHMODULE;
  global $TABLEMODULE;
+ global $cours_id;
 
  $firstSql = "SELECT `module_id` FROM `".$TABLELEARNPATHMODULE."` AS LPM
               WHERE LPM.`learnPath_id` = ". (int)$_SESSION['path_id'];
@@ -86,7 +87,7 @@ function buildRequestModules() {
  // 2) We build the request to get the modules we need
  $sql = "SELECT M.*
          FROM `".$TABLEMODULE."` AS M
-         WHERE 1 = 1";
+         WHERE 1 = 1 AND M.`course_id` = $cours_id ";
 
  while ($list=mysql_fetch_array($firstResult))
  {
@@ -121,7 +122,8 @@ while ($iterator <= $_REQUEST['maxDocForm'])
                     FROM `$TABLEMODULE` AS M, `$TABLEASSET` AS A
                     WHERE A.`module_id` = M.`module_id`
                       AND A.`path` LIKE ".autoquote($insertDocument)."
-                      AND M.`contentType` = '".CTDOCUMENT_."'";
+                      AND M.`contentType` = '".CTDOCUMENT_."'
+                      AND M.`course_id` = $cours_id";
             $query = db_query($sql);
             $num = mysql_numrows($query);
             $basename = substr($insertDocument, strrpos($insertDocument, '/') + 1);
@@ -130,8 +132,8 @@ while ($iterator <= $_REQUEST['maxDocForm'])
             {
                 // create new module
                 $sql = "INSERT INTO `$TABLEMODULE`
-                        (`name` , `comment`, `contentType`, `launch_data`)
-                        VALUES (".autoquote($filenameDocument).", '". addslashes($langDefaultModuleComment) . "', '".CTDOCUMENT_."','')";
+                        (`course_id`, `name` , `comment`, `contentType`, `launch_data`)
+                        VALUES ($cours_id, ".autoquote($filenameDocument).", '". addslashes($langDefaultModuleComment) . "', '".CTDOCUMENT_."','')";
                 $query = db_query($sql);
                 $insertedModule_id = mysql_insert_id();
 
@@ -144,12 +146,14 @@ while ($iterator <= $_REQUEST['maxDocForm'])
 
                 $sql = "UPDATE `".$TABLEMODULE."`
                         SET `startAsset_id` = " . (int)$insertedAsset_id . "
-                        WHERE `module_id` = " . (int)$insertedModule_id . "";
+                        WHERE `module_id` = " . (int)$insertedModule_id . "
+                        AND `course_id` = $cours_id";
                 $query = db_query($sql);
 
                 // determine the default order of this Learning path
                 $sql = "SELECT MAX(`rank`)
-                        FROM `".$TABLELEARNPATHMODULE."`";
+                        FROM `".$TABLELEARNPATHMODULE."`
+                        WHERE `learnPath_id` = ". (int)$_SESSION['path_id'];
                 $result = db_query($sql);
                 list($orderMax) = mysql_fetch_row($result);
                 $order = $orderMax + 1;
@@ -176,7 +180,8 @@ while ($iterator <= $_REQUEST['maxDocForm'])
                         WHERE M.`module_id` =  LPM.`module_id`
                           AND M.`startAsset_id` = A.`asset_id`
                           AND A.`path` = '". addslashes($insertDocument)."'
-                          AND LPM.`learnPath_id` = ". (int)$_SESSION['path_id'];
+                          AND LPM.`learnPath_id` = ". (int)$_SESSION['path_id'] ."
+                          AND M.`course_id` = $cours_id";
                 $query2 = db_query($sql);
                 $num = mysql_numrows($query2);
                 if ($num == 0)     // used in another LP but not in this one, so reuse the module id reference instead of creating a new one
@@ -184,7 +189,8 @@ while ($iterator <= $_REQUEST['maxDocForm'])
                     $thisDocumentModule = mysql_fetch_array($query);
                     // determine the default order of this Learning path
                     $sql = "SELECT MAX(`rank`)
-                            FROM `".$TABLELEARNPATHMODULE."`";
+                            FROM `".$TABLELEARNPATHMODULE."`
+                            WHERE `learnPath_id` = ". (int)$_SESSION['path_id'];
                     $result = db_query($sql);
 
                     list($orderMax) = mysql_fetch_row($result);

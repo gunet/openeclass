@@ -81,7 +81,12 @@ if (extension_loaded('zlib')) {
                        'videolinks' => $sql_course,
                        'dropbox_file' => $sql_course,
                        'dropbox_person' => "fileId IN (SELECT id from dropbox_file WHERE course_id = $cours_id)",
-                       'dropbox_post' => "fileId IN (SELECT id from dropbox_file WHERE course_id = $cours_id)")
+                       'dropbox_post' => "fileId IN (SELECT id from dropbox_file WHERE course_id = $cours_id)",
+                       'lp_learnPath' => $sql_course,
+                       'lp_module' => $sql_course,
+                       'lp_asset' => "module_id IN (SELECT module_id FROM lp_module WHERE course_id = $cours_id)",
+                       'lp_rel_learnPath_module' => "learnPath_id IN (SELECT learnPath_id FROM lp_learnPath WHERE course_id = $cours_id)",
+                       'lp_user_module_progress' => "learnPath_id IN (SELECT learnPath_id FROM lp_learnPath WHERE course_id = $cours_id)")
              as $table => $condition) {
                 backup_table($archivedir, $table, $condition);
         }

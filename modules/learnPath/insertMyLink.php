@@ -53,7 +53,7 @@ $navigation[] = array("url"=>"learningPathList.php?course=$code_cours", "name"=>
 $navigation[] = array("url"=>"learningPathAdmin.php?course=$code_cours&amp;path_id=".(int)$_SESSION['path_id'], "name"=> $langAdm);
 $nameTools = $langInsertMyLinkToolName;
 
-mysql_select_db($currentCourseID);
+mysql_select_db($mysqlMainDb);
 $iterator = 1;
 
 if (!isset($_POST['maxLinkForm'])) $_POST['maxLinkForm'] = 0;
@@ -72,15 +72,16 @@ while ($iterator <= $_POST['maxLinkForm']) {
         		AND M.`name` LIKE \"" .addslashes($row['title']) ."\"
         		AND M.`comment` LIKE \"" .addslashes($row['description']) ."\"
         		AND A.`path` LIKE \"" .addslashes($row['url']) ."\"
-        		AND M.`contentType` = \"".CTLINK_."\"";
+        		AND M.`contentType` = \"".CTLINK_."\"
+        		AND M.`course_id` = $cours_id";
 		$query0 = db_query($sql);
         $num = mysql_numrows($query0);
 
         if ($num == 0) {
 			// create new module
 			$sql = "INSERT INTO `".$TABLEMODULE."`
-					(`name` , `comment`, `contentType`, `launch_data`)
-					VALUES ('". addslashes($row['title']) ."' , '"
+					(`course_id`, `name` , `comment`, `contentType`, `launch_data`)
+					VALUES ($cours_id, '". addslashes($row['title']) ."' , '"
 					.addslashes($row['description']) . "', '".CTLINK_."','')";
 			$query = db_query($sql);
 
@@ -97,11 +98,12 @@ while ($iterator <= $_POST['maxLinkForm']) {
 
 			$sql = "UPDATE `".$TABLEMODULE."`
 				SET `startAsset_id` = " . (int)$insertedAsset_id . "
-				WHERE `module_id` = " . (int)$insertedModule_id . "";
+				WHERE `module_id` = " . (int)$insertedModule_id . "
+				AND `course_id` = $cours_id";
 			$query = db_query($sql);
 
 			// determine the default order of this Learning path
-			$sql = "SELECT MAX(`rank`) FROM `".$TABLELEARNPATHMODULE."`";
+			$sql = "SELECT MAX(`rank`) FROM `".$TABLELEARNPATHMODULE."` WHERE `learnPath_id` = ". (int)$_SESSION['path_id'];
 			$result = db_query($sql);
 
 			list($orderMax) = mysql_fetch_row($result);
@@ -125,7 +127,8 @@ while ($iterator <= $_POST['maxLinkForm']) {
 				WHERE M.`module_id` =  LPM.`module_id`
 				AND M.`startAsset_id` = A.`asset_id`
 				AND A.`path` = '". addslashes($row['url'])."'
-				AND LPM.`learnPath_id` = ". (int)$_SESSION['path_id'];
+				AND LPM.`learnPath_id` = ". (int)$_SESSION['path_id'] ."
+				AND M.`course_id` = $cours_id";
 			$query2 = db_query($sql);
 			$num = mysql_numrows($query2);
 
@@ -134,7 +137,8 @@ while ($iterator <= $_POST['maxLinkForm']) {
 				$thisLinkModule = mysql_fetch_array($query0);
 				// determine the default order of this Learning path
 				$sql = "SELECT MAX(`rank`)
-					FROM `".$TABLELEARNPATHMODULE."`";
+					FROM `".$TABLELEARNPATHMODULE."`
+					WHERE `learnPath_id` = ". (int)$_SESSION['path_id'];
 				$result = db_query($sql);
 
 				list($orderMax) = mysql_fetch_row($result);

@@ -443,6 +443,59 @@ db_query("CREATE TABLE IF NOT EXISTS dropbox_post (
                 `recipientId` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
                 PRIMARY KEY (fileId, recipientId)) $charset_spec");
 
+db_query("CREATE TABLE IF NOT EXISTS `lp_module` (
+                `module_id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                `course_id` INT(11) NOT NULL,
+                `name` VARCHAR(255) NOT NULL DEFAULT '',
+                `comment` TEXT NOT NULL,
+                `accessibility` enum('PRIVATE','PUBLIC') NOT NULL DEFAULT 'PRIVATE',
+                `startAsset_id` INT(11) NOT NULL DEFAULT 0,
+                `contentType` enum('CLARODOC','DOCUMENT','EXERCISE','HANDMADE','SCORM','SCORM_ASSET','LABEL','COURSE_DESCRIPTION','LINK','MEDIA','MEDIALINK') NOT NULL,
+                `launch_data` TEXT NOT NULL)  $charset_spec");
+                //COMMENT='List of available modules used in learning paths';
+db_query("CREATE TABLE IF NOT EXISTS `lp_learnPath` (
+                `learnPath_id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                `course_id` INT(11) NOT NULL,
+                `name` VARCHAR(255) NOT NULL DEFAULT '',
+                `comment` TEXT NOT NULL,
+                `lock` enum('OPEN','CLOSE') NOT NULL DEFAULT 'OPEN',
+                `visibility` enum('HIDE','SHOW') NOT NULL DEFAULT 'SHOW',
+                `rank` INT(11) NOT NULL DEFAULT 0)  $charset_spec");
+                //COMMENT='List of learning Paths';
+db_query("CREATE TABLE IF NOT EXISTS `lp_rel_learnPath_module` (
+                `learnPath_module_id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                `learnPath_id` INT(11) NOT NULL DEFAULT 0,
+                `module_id` INT(11) NOT NULL DEFAULT 0,
+                `lock` enum('OPEN','CLOSE') NOT NULL DEFAULT 'OPEN',
+                `visibility` enum('HIDE','SHOW') NOT NULL DEFAULT 'SHOW',
+                `specificComment` TEXT NOT NULL,
+                `rank` INT(11) NOT NULL DEFAULT '0',
+                `parent` INT(11) NOT NULL DEFAULT '0',
+                `raw_to_pass` TINYINT(4) NOT NULL DEFAULT '50')  $charset_spec");
+                //COMMENT='This table links module to the learning path using them';
+db_query("CREATE TABLE IF NOT EXISTS `lp_asset` (
+                `asset_id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                `module_id` INT(11) NOT NULL DEFAULT '0',
+                `path` VARCHAR(255) NOT NULL DEFAULT '',
+                `comment` VARCHAR(255) default NULL)  $charset_spec");
+                //COMMENT='List of resources of module of learning paths';
+db_query("CREATE TABLE IF NOT EXISTS `lp_user_module_progress` (
+                `user_module_progress_id` INT(22) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                `user_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT '0',
+                `learnPath_module_id` INT(11) NOT NULL DEFAULT '0',
+                `learnPath_id` INT(11) NOT NULL DEFAULT '0',
+                `lesson_location` VARCHAR(255) NOT NULL DEFAULT '',
+                `lesson_status` enum('NOT ATTEMPTED','PASSED','FAILED','COMPLETED','BROWSED','INCOMPLETE','UNKNOWN') NOT NULL default 'NOT ATTEMPTED',
+                `entry` enum('AB-INITIO','RESUME','') NOT NULL DEFAULT 'AB-INITIO',
+                `raw` TINYINT(4) NOT NULL DEFAULT '-1',
+                `scoreMin` TINYINT(4) NOT NULL DEFAULT '-1',
+                `scoreMax` TINYINT(4) NOT NULL DEFAULT '-1',
+                `total_time` VARCHAR(13) NOT NULL DEFAULT '0000:00:00.00',
+                `session_time` VARCHAR(13) NOT NULL DEFAULT '0000:00:00.00',
+                `suspend_data` TEXT NOT NULL,
+                `credit` enum('CREDIT','NO-CREDIT') NOT NULL DEFAULT 'NO-CREDIT')  $charset_spec");
+                //COMMENT='Record the last known status of the user in the course';
+
 // encrypt the admin password into DB
 $password_encrypted = md5($passForm);
 $exp_time = time() + 140000000;
@@ -633,3 +686,4 @@ db_query("ALTER TABLE `cours` ADD FULLTEXT `cours` (`code` ,`description` ,`inti
 db_query('CREATE INDEX `doc_path_index` ON document (course_id,subsystem,path)');			
 db_query('CREATE INDEX `course_units_index` ON course_units (course_id,`order`)');	
 db_query('CREATE INDEX `unit_res_index` ON unit_resources (unit_id,visibility,res_id)');			
+db_query("CREATE INDEX `optimize` ON lp_user_module_progress (user_id, learnPath_module_id)");

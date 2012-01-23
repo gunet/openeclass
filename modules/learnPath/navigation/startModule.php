@@ -60,7 +60,7 @@ require_once '../../video/video_functions.php';
 
 include '../../document/doc_init.php';
 
-mysql_select_db($currentCourseID);
+mysql_select_db($mysqlMainDb);
 
 function directly_pass_lp_module($table, $userid, $lpmid) {
 	// if credit was already set this query changes nothing else it update the query made at the beginning of this script
@@ -111,7 +111,8 @@ if($uid) // if not anonymous
 // Get info about launched module
 $sql = "SELECT `contentType`,`startAsset_id`
           FROM `".$TABLEMODULE."`
-         WHERE `module_id` = ". (int)$_SESSION['lp_module_id'];
+         WHERE `module_id` = ". (int)$_SESSION['lp_module_id'] ."
+         AND `course_id` = $cours_id";
 
 $module = db_query_get_single_row($sql);
 

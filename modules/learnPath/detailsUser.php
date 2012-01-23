@@ -100,11 +100,12 @@ $tool_content .= '</li>'."\n"
 	.'</ul>'."\n"
 	.'</p>'."\n";
 */
-mysql_select_db($currentCourseID);
+mysql_select_db($mysqlMainDb);
 // get list of learning paths of this course
 // list available learning paths
 $sql = "SELECT LP.`name`, LP.`learnPath_id`
 			FROM `".$TABLELEARNPATH."` AS LP
+			WHERE LP.`course_id` = $cours_id
 			ORDER BY LP.`rank`";
 
 $lpList = db_query_fetch_all($sql);

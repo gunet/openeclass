@@ -155,13 +155,13 @@ function insert_text($id)
 // insert lp in database
 function insert_lp($id)
 {
-	global $code_cours;
+	global $code_cours, $cours_id;
 	
 	list($order) = mysql_fetch_array(db_query("SELECT MAX(`order`) FROM unit_resources WHERE unit_id=$id"));
 	foreach ($_POST['lp'] as $lp_id) {
 		$order++;
 		$lp = mysql_fetch_array(db_query("SELECT * FROM lp_learnPath
-			WHERE learnPath_id =" . intval($lp_id), $GLOBALS['currentCourseID']), MYSQL_ASSOC);
+			WHERE course_id = $cours_id AND learnPath_id =" . intval($lp_id), $GLOBALS['mysqlMainDb']), MYSQL_ASSOC);
 		if ($lp['visibility'] == 'HIDE') {
 			 $visibility = 'i';
 		} else {

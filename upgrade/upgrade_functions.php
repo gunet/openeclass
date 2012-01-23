@@ -462,8 +462,188 @@ function upgrade_course_3_0($code, $lang, $extramessage = '', $return_mapping = 
         }
     }
     
+    // move learn path to central table and drop table
+    if (mysql_table_exists($code, 'lp_learnPath') && mysql_table_exists($code, 'lp_module') &&
+        mysql_table_exists($code, 'lp_asset') && mysql_table_exists($code, 'lp_rel_learnPath_module') &&
+        mysql_table_exists($code, 'lp_user_module_progress') ) {
+        
+        $dropflag = true;
+        $lp_map = array();
+        $module_map = array();
+        $asset_map = array();
+        $rel_map = array();
+        $rel_map[0] = 0;
+        
+        // ----- lp_learnPath DB Table ----- // 
+        list($lp_id) = mysql_fetch_row(db_query("SELECT max(learnPath_id) FROM `$mysqlMainDb`.lp_learnPath"));
+        if (!$lp_id)
+            $lp_id = 0;
+        
+        $result = db_query("SELECT * FROM lp_learnPath ORDER by learnPath_id");
+        
+        while ($row = mysql_fetch_array($result)) {
+            $oldid = intval($row['learnPath_id']);
+            $newid = intval($lp_id) + $oldid;
+            
+            $lp_map[$oldid] = $newid;
+            
+            $r = db_query("INSERT INTO `$mysqlMainDb`.lp_learnPath
+                                        (`learnPath_id`, `course_id`, `name`, `comment`, `lock`, `visibility`, `rank`)
+                        				VALUES
+                        				(".$newid .", 
+                        				 ".$course_id .", 
+                        				 ".autoquote($row['name']) .", 
+                        				 ".autoquote($row['comment']) .", 
+                        				 ".autoquote($row['lock']) .", 
+                        				 ".autoquote($row['visibility']) .", 
+                        				 ".autoquote($row['rank']) .")");
+            if (false === $r)
+                $dropflag = false;
+        }
+        
+        // ----- lp_module DB Table ----- //
+        list($module_id) = mysql_fetch_row(db_query("SELECT max(module_id) FROM `$mysqlMainDb`.lp_module"));
+        if (!$module_id)
+            $module_id = 0;
+        
+        $result = db_query("SELECT * FROM lp_module ORDER by module_id");
+        
+        while ($row = mysql_fetch_array($result)) {
+            $oldid = intval($row['module_id']);
+            $newid = intval($module_id) + $oldid;
+        
+            $module_map[$oldid] = $newid;
+        
+            $r = db_query("INSERT INTO `$mysqlMainDb`.lp_module
+                                        (`module_id`, `course_id`, `name`, `comment`, `accessibility`, `startAsset_id`, 
+                                         `contentType`, `launch_data`)
+                        				VALUES
+                        				(".$newid .", 
+                        				 ".$course_id .", 
+                        				 ".autoquote($row['name']) .", 
+                        				 ".autoquote($row['comment']) .", 
+                        				 ".autoquote($row['accessibility']) .", 
+                        				 ".autoquote($row['startAsset_id']) .", 
+                        				 ".autoquote($row['contentType']) .",
+                        				 ".autoquote($row['launch_data']) .")");
+            if (false === $r)
+                $dropflag = false;
+        }
+        
+        // ----- lp_asset DB Table ----- //
+        list($asset_id) = mysql_fetch_row(db_query("SELECT max(asset_id) FROM `$mysqlMainDb`.lp_asset"));
+        if (!$asset_id)
+            $asset_id = 0;
+        
+        $result = db_query("SELECT * FROM lp_asset ORDER by asset_id");
+        
+        while ($row = mysql_fetch_array($result)) {
+            $oldid = intval($row['asset_id']);
+            $newid = intval($asset_id) + $oldid;
+        
+            $asset_map[$oldid] = $newid;
+        
+            $r = db_query("INSERT INTO `$mysqlMainDb`.lp_asset
+                                        (`asset_id`, `module_id`, `path`, `comment`)
+                        				VALUES
+                        				(".$newid .", 
+                        				 ".$module_map[$row['module_id']] .", 
+                        				 ".autoquote($row['path']) .", 
+                        				 ".autoquote($row['comment']) .")");
+            if (false === $r)
+                $dropflag = false;
+        }
+        
+        foreach ($asset_map as $key => $value) {
+            $result = db_query("UPDATE `$mysqlMainDb`.lp_module SET `startAsset_id` = $value 
+            					WHERE `course_id` = $course_id AND `startAsset_id` = $key");
+            if (false === $result) 
+                $dropflag = false;
+        }
+        
+        // ----- lp_rel_learnPath_module DB Table ----- //
+        list($rel_id) = mysql_fetch_row(db_query("SELECT max(learnPath_module_id) FROM `$mysqlMainDb`.lp_rel_learnPath_module"));
+        if (!$rel_id)
+            $rel_id = 0;
+        
+        $result = db_query("SELECT * FROM lp_rel_learnPath_module ORDER by learnPath_module_id");
+        
+        while ($row = mysql_fetch_array($result)) {
+            $oldid = intval($row['learnPath_module_id']);
+            $newid = intval($rel_id) + $oldid;
+        
+            $rel_map[$oldid] = $newid;
+        
+            $r = db_query("INSERT INTO `$mysqlMainDb`.lp_rel_learnPath_module
+                                        (`learnPath_module_id`, `learnPath_id`, `module_id`, `lock`, `visibility`, `specificComment`,
+                                         `rank`, `parent`, `raw_to_pass`)
+                        				VALUES
+                        				(".$newid .", 
+                        				 ".$lp_map[$row['learnPath_id']] .",
+                        				 ".$module_map[$row['module_id']] .",  
+                        				 ".autoquote($row['lock']) .", 
+                        				 ".autoquote($row['visibility']) .",
+                        				 ".autoquote($row['specificComment']) .",
+                        				 ".autoquote($row['rank']) .",
+                        				 ".autoquote($row['parent']) .",
+                        				 ".autoquote($row['raw_to_pass']) .")");
+            if (false === $r)
+                $dropflag = false;
+        }
+        
+        foreach ($rel_map as $key => $value) {
+            $result = db_query("UPDATE `$mysqlMainDb`.lp_rel_learnPath_module SET `parent` = $value 
+            					WHERE `learnPath_id` IN (SELECT learnPath_id FROM `$mysqlMainDb`.lp_learnPath WHERE course_id = $course_id) 
+            					AND `parent` = $key");
+            if (false === $result)
+                $dropflag = false;
+        }
+        
+        // ----- lp_user_module_progress DB Table ----- //
+        list($lum_id) = mysql_fetch_row(db_query("SELECT max(user_module_progress_id) FROM `$mysqlMainDb`.lp_user_module_progress"));
+        if (!$lum_id)
+            $lum_id = 0;
+        
+        $result = db_query("SELECT * FROM lp_user_module_progress ORDER by user_module_progress_id");
+        
+        while ($row = mysql_fetch_array($result)) {
+            $oldid = intval($row['user_module_progress_id']);
+            $newid = intval($lum_id) + $oldid;
+        
+            $r = db_query("INSERT INTO `$mysqlMainDb`.lp_user_module_progress
+                                        (`user_module_progress_id`, `user_id`, `learnPath_module_id`, `learnPath_id`, 
+                                         `lesson_location`, `lesson_status`, `entry`, `raw`, `scoreMin`, `scoreMax`,
+                                         `total_time`, `session_time`, `suspend_data`, `credit`)
+                        				VALUES
+                        				(".$newid .",
+                        				 ".$row['user_id'] .",  
+                        				 ".$rel_map[$row['learnPath_module_id']] .",
+                        				 ".$lp_map[$row['learnPath_id']] .",  
+                        				 ".autoquote($row['lesson_location']) .", 
+                        				 ".autoquote($row['lesson_status']) .",
+                        				 ".autoquote($row['entry']) .",
+                        				 ".autoquote($row['raw']) .",
+                        				 ".autoquote($row['scoreMin']) .",
+                        				 ".autoquote($row['scoreMax']) .",
+                        				 ".autoquote($row['total_time']) .",
+                        				 ".autoquote($row['session_time']) .",
+                        				 ".autoquote($row['suspend_data']) .",
+                        				 ".autoquote($row['credit']) .")");
+            if (false === $r)
+                $dropflag = false;
+        }
+        
+        if (true === $dropflag) {
+            db_query("DROP TABLE lp_learnPath");
+            db_query("DROP TABLE lp_module");
+            db_query("DROP TABLE lp_asset");
+            db_query("DROP TABLE lp_rel_learnPath_module");
+            db_query("DROP TABLE lp_user_module_progress");
+        }
+    }
+    
     if ($return_mapping)
-        return array($video_map, $videolinks_map);
+        return array($video_map, $videolinks_map, $lp_map);
 }
 
 function upgrade_course_2_5($code, $lang, $extramessage = '') {
