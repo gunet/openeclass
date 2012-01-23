@@ -337,6 +337,28 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
                               'map' => array('pid' => $wiki_pages_map,
                                              'editor_id' => $userid_map)));
                 }
+                if (file_exists("$restoreThis/poll") &&
+                    file_exists("$restoreThis/poll_question") &&
+                    file_exists("$restoreThis/poll_question_answer") &&
+                    file_exists("$restoreThis/poll_answer_record"))
+                {
+                    $poll_map = restore_table($restoreThis, 'poll',
+                        array('set' => array('course_id' => $course_id),
+                              'map' => array('creator_id' => $userid_map),
+                              'return_mapping' => 'pid'));
+                    $poll_question_map = restore_table($restoreThis, 'poll_question',
+                        array('map' => array('pid' => $poll_map),
+                              'return_mapping' => 'pqid'));
+                    $poll_answer_map = restore_table($restoreThis, 'poll_question_answer',
+                        array('map' => array('pqid' => $poll_question_map),
+                              'return_mapping' => 'pqaid'));
+                    restore_table($restoreThis, 'poll_answer_record',
+                        array('delete' => array('arid'),
+                              'map' => array('pid' => $poll_map,
+                                             'qid' => $poll_question_map,
+                                             'aid' => $poll_answer_map,
+                                             'user_id' => $userid_map)));
+                }
                 $unit_map = restore_table($restoreThis, 'course_units',
                         array('set' => array('course_id' => $course_id),
                               'return_mapping' => 'id'));

@@ -47,13 +47,13 @@ load_js('tools.js');
 if (isset($_GET['visibility'])) {
 		switch ($_GET['visibility']) {
 		case 'activate':
-			$sql = "UPDATE poll SET active='1' WHERE pid='".mysql_real_escape_string($_GET['pid'])."'";
-			$result = db_query($sql,$currentCourseID);
+			$sql = "UPDATE poll SET active='1' WHERE course_id = $cours_id AND pid='".mysql_real_escape_string($_GET['pid'])."'";
+			$result = db_query($sql, $mysqlMainDb);
 			$GLOBALS["tool_content"] .= "".$GLOBALS["langPollActivated"]."<br>";
 			break;
 		case 'deactivate':
-			$sql = "UPDATE poll SET active='0' WHERE pid='".mysql_real_escape_string($_GET['pid'])."'";
-			$result = db_query($sql, $currentCourseID);
+			$sql = "UPDATE poll SET active='0' WHERE course_id = $cours_id AND pid='".mysql_real_escape_string($_GET['pid'])."'";
+			$result = db_query($sql, $mysqlMainDb);
 			$GLOBALS["tool_content"] .= "".$GLOBALS["langPollDeactivated"]."<br>";
 			break;
 		}
@@ -64,10 +64,10 @@ if (isset($_GET['visibility'])) {
 if (isset($_GET['delete']) and $_GET['delete'] == 'yes')  {
 	$pid = intval($_GET['pid']);
 	db_query("DELETE FROM poll_question_answer WHERE pqid IN
-		(SELECT pqid FROM poll_question WHERE pid=$pid)");
-	db_query("DELETE FROM poll WHERE pid=$pid");
-	db_query("DELETE FROM poll_question WHERE pid='$pid'");
-	db_query("DELETE FROM poll_answer_record WHERE pid='$pid'");
+		(SELECT pqid FROM poll_question WHERE pid=$pid)", $mysqlMainDb);
+	db_query("DELETE FROM poll WHERE course_id = $cours_id AND pid=$pid", $mysqlMainDb);
+	db_query("DELETE FROM poll_question WHERE pid='$pid'", $mysqlMainDb);
+	db_query("DELETE FROM poll_answer_record WHERE pid='$pid'", $mysqlMainDb);
     $tool_content .= "<p class='success'>".$langPollDeleted."<br /><a href=\"questionnaire.php?course=$code_cours\">".$langBack."</a></p>";
 	draw($tool_content, 2, null, $head_content);
 	exit();
@@ -91,7 +91,7 @@ draw($tool_content, 2, null, $head_content);
  * printPolls()
  ****************************************************************************************************/
 function printPolls() {
-        global $tool_content, $currentCourse, $code_cours, $langCreatePoll,
+        global $tool_content, $cours_id, $code_cours, $langCreatePoll,
                $langPollsActive, $langTitle, $langPollCreator, $langPollCreation,
                $langPollStart, $langPollEnd, $langPollNone, $is_editor,
                $themeimg, $mysqlMainDb, $langEdit, $langDelete, $langActions,
@@ -100,15 +100,10 @@ function printPolls() {
                $langHasNotParticipated, $uid, $langConfirmDelete;
 
         $poll_check = 0;
-        $result = db_query("SHOW TABLES FROM `$currentCourse`", $currentCourse);
-        while ($row = mysql_fetch_row($result)) {
-                if ($row[0] == 'poll') {
-                        $result = db_query("SELECT * FROM poll", $currentCourse);
-                        $num_rows = mysql_num_rows($result);
-                        if ($num_rows > 0)
-                                ++$poll_check;
-                }
-        }
+        $result = db_query("SELECT * FROM poll WHERE course_id = $cours_id", $mysqlMainDb);
+        $num_rows = mysql_num_rows($result);
+        if ($num_rows > 0)
+            ++$poll_check;
         if (!$poll_check) {
                 $tool_content .= "\n    <p class='alert1'>".$langPollNone . "</p><br>";
         } else {
@@ -128,7 +123,7 @@ function printPolls() {
                         $tool_content .= "<th class='center'>$langParticipate</th>";
                 }
                 $tool_content .= "</tr>";
-                $active_polls = db_query("SELECT * FROM poll", $currentCourse);
+                $active_polls = db_query("SELECT * FROM poll WHERE course_id = $cours_id", $mysqlMainDb);
                 $index_aa = 1;
                 $k =0;
                 while ($thepoll = mysql_fetch_array($active_polls)) {
@@ -166,7 +161,7 @@ function printPolls() {
                                 $creator_id = $thepoll["creator_id"];
                                 $theCreator = uid_to_name($creator_id);
                                 $pid = $thepoll["pid"];
-                                $answers = db_query("SELECT * FROM poll_answer_record WHERE pid='$pid'", $currentCourse);
+                                $answers = db_query("SELECT * FROM poll_answer_record WHERE pid='$pid'", $mysqlMainDb);
                                 $countAnswers = mysql_num_rows($answers);
                                 $thepid = $thepoll["pid"];
                                 // check if user has participated

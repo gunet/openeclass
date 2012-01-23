@@ -648,6 +648,33 @@ if (!isset($_POST['submit2'])) {
                             `editor_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
                             `mtime` DATETIME NOT NULL default '0000-00-00 00:00:00',
                             `content` TEXT NOT NULL )");
+            
+            db_query("CREATE TABLE IF NOT EXISTS `poll` (
+                            `pid` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                            `course_id` INT(11) NOT NULL,
+                            `creator_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
+                            `name` VARCHAR(255) NOT NULL DEFAULT '',
+                            `creation_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
+                            `start_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
+                            `end_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
+                            `active` INT(11) NOT NULL DEFAULT 0 )");
+            db_query("CREATE TABLE IF NOT EXISTS `poll_answer_record` (
+                            `arid` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                            `pid` INT(11) NOT NULL DEFAULT 0,
+                            `qid` INT(11) NOT NULL DEFAULT 0,
+                            `aid` INT(11) NOT NULL DEFAULT 0,
+                            `answer_text` TEXT NOT NULL,
+                            `user_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
+                            `submit_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00' )");
+            db_query("CREATE TABLE IF NOT EXISTS `poll_question` (
+                            `pqid` BIGINT(12) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                            `pid` INT(11) NOT NULL DEFAULT 0,
+                            `question_text` VARCHAR(250) NOT NULL DEFAULT '',
+                            `qtype` ENUM('multiple', 'fill') NOT NULL )");
+            db_query("CREATE TABLE IF NOT EXISTS `poll_question_answer` (
+                            `pqaid` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                            `pqid` INT(11) NOT NULL DEFAULT 0,
+                            `answer_text` TEXT NOT NULL )");
         }
 
         mysql_field_exists($mysqlMainDb, 'cours', 'expand_glossary') or

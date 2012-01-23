@@ -90,7 +90,11 @@ if (extension_loaded('zlib')) {
                        'wiki_properties' => $sql_course,
                        'wiki_acls' => "wiki_id IN (SELECT id FROM wiki_properties WHERE course_id = $cours_id)",
                        'wiki_pages' => "wiki_id IN (SELECT id FROM wiki_properties WHERE course_id = $cours_id)",
-                       'wiki_pages_content' => "pid IN (SELECT id FROM wiki_pages WHERE wiki_id IN (SELECT id FROM wiki_properties WHERE course_id = $cours_id))")
+                       'wiki_pages_content' => "pid IN (SELECT id FROM wiki_pages WHERE wiki_id IN (SELECT id FROM wiki_properties WHERE course_id = $cours_id))",
+                       'poll' => $sql_course,
+                       'poll_question' => "pid IN (SELECT pid FROM poll WHERE course_id = $cours_id)",
+                       'poll_answer_record' => "pid IN (SELECT pid FROM poll WHERE course_id = $cours_id)",
+                       'poll_question_answer' => "pqid IN (SELECT pqid FROM poll_question WHERE pid IN (SELECT pid FROM poll WHERE course_id = $cours_id))")
              as $table => $condition) {
                 backup_table($archivedir, $table, $condition);
         }

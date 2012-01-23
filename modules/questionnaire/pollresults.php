@@ -33,7 +33,7 @@ $questions = array();
 
 if(!isset($_GET['pid']) || !is_numeric($_GET['pid'])) die();
 	$pid = intval($_GET['pid']);
-	$current_poll = db_query("SELECT * FROM poll WHERE pid='$pid' ORDER BY pid", $currentCourse);
+	$current_poll = db_query("SELECT * FROM poll WHERE course_id = $cours_id AND pid='$pid' ORDER BY pid", $mysqlMainDb);
 	$thePoll = mysql_fetch_array($current_poll);
 
 	$tool_content .= "
@@ -74,7 +74,7 @@ if(!isset($_GET['pid']) || !is_numeric($_GET['pid'])) die();
 			$answers = db_query("SELECT COUNT(aid) AS count, aid, poll_question_answer.answer_text AS answer
 				FROM poll_answer_record LEFT JOIN poll_question_answer
 				ON poll_answer_record.aid = poll_question_answer.pqaid
-				WHERE qid = $theQuestion[pqid] GROUP BY aid", $currentCourseID);
+				WHERE qid = $theQuestion[pqid] GROUP BY aid", $mysqlMainDb);
 			$answer_counts = array();
 			$answer_text = array();
 			$answer_total = 0;
@@ -102,7 +102,7 @@ if(!isset($_GET['pid']) || !is_numeric($_GET['pid'])) die();
 			$tool_content .= '<img src="'.$urlServer.$chart_path.'" /><br />';
 		} else {
 			$answers = db_query("SELECT answer_text, user_id FROM poll_answer_record
-					WHERE qid = $theQuestion[pqid]", $currentCourseID);
+					WHERE qid = $theQuestion[pqid]", $mysqlMainDb);
 			$tool_content .= '<dl>';
 			while ($theAnswer = mysql_fetch_array($answers)) {
 				$tool_content .= "<dt><u>$langUser</u>: <dd>" . uid_to_name($theAnswer['user_id']) . "</dd></dt> <dt><u>$langAnswer</u>: <dd>$theAnswer[answer_text]</dd></dt>";

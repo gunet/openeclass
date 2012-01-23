@@ -754,6 +754,126 @@ function upgrade_course_3_0($code, $lang, $extramessage = '', $return_mapping = 
                             WHERE units.id = res.unit_id AND course_id = $course_id AND type = 'wiki'");
     }
     
+    
+    // move polls to central db and drop tables
+    if (mysql_table_exists($code, 'poll') && mysql_table_exists($code, 'poll_answer_record') &&
+        mysql_table_exists($code, 'poll_question') && mysql_table_exists($code, 'poll_question_answer') ) {
+    
+        $dropflag = true;
+        $poll_map = array();
+        $poll_question_map = array();
+        $poll_answer_map = array();
+        $poll_answer_map[0] = 0;
+        $poll_answer_map[-1] = -1;
+        
+        // ----- poll DB Table ----- //
+        list($poll_id) = mysql_fetch_row(db_query("SELECT max(pid) FROM `$mysqlMainDb`.poll"));
+        if (!$poll_id)
+            $poll_id = 0;
+        
+        $result = db_query("SELECT * FROM poll ORDER by pid");
+        
+        while ($row = mysql_fetch_array($result)) {
+            $oldid = intval($row['pid']);
+            $newid = intval($poll_id) + $oldid;
+        
+            $poll_map[$oldid] = $newid;
+        
+            $r = db_query("INSERT INTO `$mysqlMainDb`.poll
+                                        (`pid`, `course_id`, `creator_id`, `name`, `creation_date`, `start_date`, `end_date`, `active`)
+                        				VALUES
+                        				(".$newid .", 
+                        				 ".$course_id .", 
+                        				 ".autoquote($row['creator_id']) .", 
+                        				 ".autoquote($row['name']) .",
+                        				 ".autoquote($row['creation_date']) .", 
+                        				 ".autoquote($row['start_date']) .", 
+                        				 ".autoquote($row['end_date']) .",  
+                        				 ".autoquote($row['active']) .")");
+            if (false === $r)
+                $dropflag = false;
+        }
+        
+        // ----- poll_question DB Table ----- //
+        list($poll_question_id) = mysql_fetch_row(db_query("SELECT max(pqid) FROM `$mysqlMainDb`.poll_question"));
+        if (!$poll_question_id)
+            $poll_question_id = 0;
+        
+        $result = db_query("SELECT * FROM poll_question ORDER by pqid");
+        
+        while ($row = mysql_fetch_array($result)) {
+            $oldid = intval($row['pqid']);
+            $newid = intval($poll_question_id) + $oldid;
+        
+            $poll_question_map[$oldid] = $newid;
+        
+            $r = db_query("INSERT INTO `$mysqlMainDb`.poll_question
+                                        (`pqid`, `pid`, `question_text`, `qtype`)
+                        				VALUES
+                        				(".$newid .", 
+                        				 ".$poll_map[$row['pid']] .", 
+                        				 ".autoquote($row['question_text']) .", 
+                        				 ".autoquote($row['qtype']) .")");
+            if (false === $r)
+                $dropflag = false;
+        }
+        
+        // ----- poll_question_answer DB Table ----- //
+        list($poll_answer_id) = mysql_fetch_row(db_query("SELECT max(pqaid) FROM `$mysqlMainDb`.poll_question_answer"));
+        if (!$poll_answer_id)
+            $poll_answer_id = 0;
+        
+        $result = db_query("SELECT * FROM poll_question_answer ORDER by pqaid");
+        
+        while ($row = mysql_fetch_array($result)) {
+            $oldid = intval($row['pqaid']);
+            $newid = intval($poll_answer_id) + $oldid;
+        
+            $poll_answer_map[$oldid] = $newid;
+        
+            $r = db_query("INSERT INTO `$mysqlMainDb`.poll_question_answer
+                                        (`pqaid`, `pqid`, `answer_text`)
+                        				VALUES
+                        				(".$newid .", 
+                        				 ".$poll_question_map[$row['pqid']] .", 
+                        				 ".autoquote($row['answer_text']) .")");
+            if (false === $r)
+                $dropflag = false;
+        }
+        
+        // ----- poll_answer_record DB Table ----- //
+        list($poll_record_id) = mysql_fetch_row(db_query("SELECT max(arid) FROM `$mysqlMainDb`.poll_answer_record"));
+        if (!$poll_record_id)
+            $poll_record_id = 0;
+        
+        $result = db_query("SELECT * FROM poll_answer_record ORDER by arid");
+        
+        while ($row = mysql_fetch_array($result)) {
+            $oldid = intval($row['arid']);
+            $newid = intval($poll_record_id) + $oldid;
+        
+            $r = db_query("INSERT INTO `$mysqlMainDb`.poll_answer_record
+                                        (`arid`, `pid`, `qid`, `aid`, `answer_text`, `user_id`, `submit_date`)
+                        				VALUES
+                        				(".$newid .", 
+                        				 ".$poll_map[$row['pid']] .", 
+                        				 ".$poll_question_map[$row['qid']] .", 
+                        				 ".$poll_answer_map[$row['aid']] .", 
+                        				 ".autoquote($row['answer_text']) .", 
+                        				 ".autoquote($row['user_id']) .", 
+                        				 ".autoquote($row['submit_date']) .")");
+            if (false === $r)
+                $dropflag = false;
+        }
+        
+        if (true === $dropflag) {
+            db_query("DROP TABLE poll");
+            db_query("DROP TABLE poll_answer_record");
+            db_query("DROP TABLE poll_question");
+            db_query("DROP TABLE poll_question_answer");
+        }
+    }
+    
     if ($return_mapping)
         return array($video_map, $videolinks_map, $lp_map, $wiki_map);
 }

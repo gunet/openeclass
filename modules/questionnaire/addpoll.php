@@ -83,7 +83,8 @@ Fill the appropriate $_POST values from the database as if poll $pid was submitt
 ******************************************************************************/
 function fill_questions($pid)
 {
-	$poll = mysql_fetch_array(db_query("SELECT * FROM poll WHERE pid=$pid"));
+    global $cours_id;
+	$poll = mysql_fetch_array(db_query("SELECT * FROM poll WHERE course_id = $cours_id AND pid=$pid"));
 	$_POST['PollName'] = $poll['name'];
 	$_POST['PollStart'] = $poll['start_date'];
 	$_POST['PollEnd'] = $poll['end_date'];
@@ -280,12 +281,12 @@ function createPoll($questions, $question_types) {
 	$EndDate = $_POST['PollEnd'];
 	$PollActive = 1;
 
-	mysql_select_db($GLOBALS['currentCourseID']);
+	mysql_select_db($GLOBALS['mysqlMainDb']);
 	$result = db_query("INSERT INTO poll
-		(creator_id, course_id, name, creation_date, start_date, end_date, active)
+		(course_id, creator_id, name, creation_date, start_date, end_date, active)
 		VALUES ('".
+		$GLOBALS['cours_id'] . "','".
 		$GLOBALS['uid']. "','".
-		$GLOBALS['currentCourseID'] . "','".
 		mysql_real_escape_string($PollName) . "','".
 		mysql_real_escape_string($CreationDate) . "','".
 		mysql_real_escape_string($StartDate) . "','".
@@ -301,15 +302,15 @@ function createPoll($questions, $question_types) {
 // Modify existing Poll
 // ----------------------------------------
 function editPoll($pid, $questions, $question_types) {
-	global $pid, $tool_content, $code_cours, $langPollEdited, $langBack;
+	global $pid, $tool_content, $cours_id, $code_cours, $langPollEdited, $langBack;
 	
 	$PollName = $_POST['PollName'];
 	$StartDate = $_POST['PollStart'];
 	$EndDate = $_POST['PollEnd'];
 
-	mysql_select_db($GLOBALS['currentCourseID']);
+	mysql_select_db($GLOBALS['mysqlMainDb']);
 	$result = db_query("UPDATE poll SET name = '$PollName',
-		start_date = '$StartDate', end_date = '$EndDate' WHERE pid='$pid'");
+		start_date = '$StartDate', end_date = '$EndDate' WHERE course_id = $cours_id AND pid='$pid'");
 	db_query("DELETE FROM poll_question_answer WHERE pqid IN
 		(SELECT pqid FROM poll_question WHERE pid='$pid')");
 	db_query("DELETE FROM poll_question WHERE pid='$pid'");
@@ -392,9 +393,9 @@ function add_fill_text_question($i, $text)
 *********************************************************/
 function check_poll_participants($pid)
 {
-	global $currentCourseID;
+	global $mysqlMainDb;
 
-	$sql = db_query("SELECT * FROM poll_answer_record WHERE pid='$pid'", $currentCourseID);
+	$sql = db_query("SELECT * FROM poll_answer_record WHERE pid='$pid'", $mysqlMainDb);
 	if (mysql_num_rows($sql) > 0)
 		return true;
 	else

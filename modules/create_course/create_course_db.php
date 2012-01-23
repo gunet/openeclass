@@ -523,46 +523,6 @@ db_query("CREATE TABLE `assignment_submit` (
     UNIQUE KEY `id` (`id`))
      $charset_spec");
 
-#################### QUESTIONNAIRE ###############################################
-
-db_query("CREATE TABLE poll (
-      pid int(11) NOT NULL auto_increment,
-      creator_id mediumint(8) unsigned NOT NULL default 0,
-      course_id varchar(20) NOT NULL default 0,
-      name varchar(255) NOT NULL default '',
-      creation_date datetime NOT NULL default '0000-00-00 00:00:00',
-      start_date datetime NOT NULL default '0000-00-00 00:00:00',
-      end_date datetime NOT NULL default '0000-00-00 00:00:00',
-      active int(11) NOT NULL default 0,
-      PRIMARY KEY  (pid))
-     $charset_spec");
-
-    db_query("CREATE TABLE poll_answer_record (
-      arid int(11) NOT NULL auto_increment,
-	pid int(11) NOT NULL default 0,
-	qid int(11) NOT NULL default 0,
-      	aid int(11) NOT NULL default 0,
-	answer_text TEXT NOT NULL,
-	user_id int(11) NOT NULL default 0,
-      submit_date datetime NOT NULL default '0000-00-00 00:00:00',
-      PRIMARY KEY  (arid))
-     $charset_spec");
-
-    db_query("CREATE TABLE poll_question (
-      pqid bigint(12) NOT NULL AUTO_INCREMENT,
-      pid int(11) NOT NULL DEFAULT 0,
-      question_text varchar(250) NOT NULL default '',
-      qtype ENUM('multiple', 'fill') NOT NULL,
-      PRIMARY KEY  (pqid))
-     $charset_spec");
-
-    db_query("CREATE TABLE poll_question_answer (
-      pqaid int(11) NOT NULL auto_increment,
-      pqid int(11) NOT NULL default 0,
-      answer_text TEXT NOT NULL,
-      PRIMARY KEY  (pqaid))
-     $charset_spec");
-
 
 // dhmiourgia full text indexes gia th diadikasia ths anazhthshs
 db_query("ALTER TABLE `agenda` ADD FULLTEXT `agenda` (`titre` ,`contenu`)");

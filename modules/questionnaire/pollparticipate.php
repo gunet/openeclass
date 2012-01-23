@@ -51,7 +51,7 @@ default:
 draw($tool_content, 2); 
 
 function printPollForm() {
-	global $currentCourse, $code_cours, $tool_content, $langPollStart, 
+	global $mysqlMainDb, $cours_id, $code_cours, $tool_content, $langPollStart, 
 	$langPollEnd, $langSubmit, $langPollInactive, $langPollUnknown;
 	
 	$pid = intval($_REQUEST['pid']);
@@ -60,8 +60,8 @@ function printPollForm() {
 	//		Get poll data
 	//******************************************************************************/
 
-	$poll = db_query("SELECT * FROM poll WHERE pid='".mysql_real_escape_string($pid)."' "
-		."ORDER BY pid", $currentCourse);
+	$poll = db_query("SELECT * FROM poll WHERE course_id = $cours_id AND pid='".mysql_real_escape_string($pid)."' "
+		."ORDER BY pid", $mysqlMainDb);
 	$thePoll = mysql_fetch_array($poll);
 	$temp_CurrentDate = date("Y-m-d H:i");
 	$temp_StartDate = $thePoll["start_date"];
@@ -82,7 +82,7 @@ function printPollForm() {
 		//		Get answers + questions
 		//******************************************************************************/
 		$questions = db_query("SELECT * FROM poll_question 
-			WHERE pid=" . intval($pid) . " ORDER BY pqid", $currentCourse);
+			WHERE pid=" . intval($pid) . " ORDER BY pqid", $mysqlMainDb);
 		while ($theQuestion = mysql_fetch_array($questions)) {
 			$pqid = $theQuestion["pqid"];
 			$qtype = $theQuestion["qtype"];
@@ -92,7 +92,7 @@ function printPollForm() {
 	<input type='hidden' name='question[$pqid]' value='$qtype' />";
 			if ($qtype == 'multiple') {
 				$answers = db_query("SELECT * FROM poll_question_answer 
-					WHERE pqid=$pqid ORDER BY pqaid", $currentCourse);
+					WHERE pqid=$pqid ORDER BY pqaid", $mysqlMainDb);
 				while ($theAnswer = mysql_fetch_array($answers)) {
 					$tool_content .= "
         <label><input type='radio' name='answer[$pqid]' value='$theAnswer[pqaid]' />$theAnswer[answer_text] </label><br />\n";
@@ -122,7 +122,7 @@ function submitPoll() {
 	$user_id = $GLOBALS['uid'];
 	$CreationDate = date("Y-m-d H:i");
 	$pid = intval($_POST['pid']);
-	mysql_select_db($GLOBALS['currentCourseID']);
+	mysql_select_db($GLOBALS['mysqlMainDb']);
 	$answer = $_POST['answer'];
 	foreach ($_POST['question'] as $pqid => $qtype) {
 		$pqid = intval($pqid);

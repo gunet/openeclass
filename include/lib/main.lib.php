@@ -1490,6 +1490,10 @@ function delete_course($cid)
 	db_query("DELETE FROM wiki_pages WHERE wiki_id IN (SELECT id FROM wiki_properties WHERE course_id = $cid)");
 	db_query("DELETE FROM wiki_acls WHERE wiki_id IN (SELECT id FROM wiki_properties WHERE course_id = $cid)");
 	db_query("DELETE FROM wiki_properties WHERE course_id = $cid");
+	db_query("DELETE FROM poll_question_answer WHERE pqid IN (SELECT pqid FROM poll_question WHERE pid IN (SELECT pid FROM poll WHERE course_id = $cid))");
+	db_query("DELETE FROM poll_answer_record WHERE pid IN (SELECT pid FROM poll WHERE course_id = $cid)");
+	db_query("DELETE FROM poll_question WHERE pid IN (SELECT pid FROM poll WHERE course_id = $cid)");
+	db_query("DELETE FROM poll WHERE course_id = $cid");
 
         $garbage = "${webDir}courses/garbage";
         if (!is_dir($garbage)) {
