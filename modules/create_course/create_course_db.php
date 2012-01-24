@@ -28,76 +28,6 @@ $code = $repertoire;
 // select course database
   mysql_select_db($repertoire);
 
-// create phpbb 1.4 tables
-  db_query("CREATE TABLE catagories (
-        cat_id int(10) NOT NULL auto_increment,
-        cat_title varchar(100),
-        cat_order varchar(10),
-        PRIMARY KEY (cat_id))
-         $charset_spec");
-
-  // Create an example category
-  db_query("INSERT INTO catagories VALUES (2,'$langCatagoryMain',NULL)");
-
-  db_query("CREATE TABLE forums (
-     forum_id int(10) NOT NULL auto_increment,
-     forum_name varchar(150),
-     forum_desc text,
-     forum_access int(10) DEFAULT '1',
-     forum_moderator int(10),
-     forum_topics int(10) DEFAULT '0' NOT NULL,
-     forum_posts int(10) DEFAULT '0' NOT NULL,
-     forum_last_post_id int(10) DEFAULT '0' NOT NULL,
-     cat_id int(10),
-     forum_type int(10) DEFAULT '0',
-     PRIMARY KEY (forum_id),
-     KEY forum_last_post_id (forum_last_post_id))
-     $charset_spec");
-
-  db_query("INSERT INTO forums VALUES (1,'$langTestForum','$langDelAdmin',2,1,0,0,0,2,0)");
-
-	db_query("CREATE TABLE posts (
-      post_id int(10) NOT NULL auto_increment,
-      topic_id int(10) DEFAULT '0' NOT NULL,
-      forum_id int(10) DEFAULT '0' NOT NULL,
-      poster_id int(10) DEFAULT '0' NOT NULL,
-      post_time varchar(20),
-      poster_ip varchar(16),
-      nom varchar(30),
-      prenom varchar(30),
-      PRIMARY KEY (post_id),
-      KEY post_id (post_id),
-      KEY forum_id (forum_id),
-      KEY topic_id (topic_id),
-      KEY poster_id (poster_id))
-       $charset_spec");
-
-      db_query("CREATE TABLE posts_text (
-                post_id int(10) DEFAULT '0' NOT NULL,
-                post_text text,
-                PRIMARY KEY (post_id))
-     $charset_spec");
-
-  db_query("CREATE TABLE topics (
-               topic_id int(10) NOT NULL auto_increment,
-               topic_title varchar(100),
-               topic_poster int(10),
-               topic_time varchar(20),
-               topic_views int(10) DEFAULT '0' NOT NULL,
-               topic_replies int(10) DEFAULT '0' NOT NULL,
-               topic_last_post_id int(10) DEFAULT '0' NOT NULL,
-               forum_id int(10) DEFAULT '0' NOT NULL,
-               topic_status int(10) DEFAULT '0' NOT NULL,
-               topic_notify int(2) DEFAULT '0',
-      nom varchar(30),
-      prenom varchar(30),
-               PRIMARY KEY (topic_id),
-               KEY topic_id (topic_id),
-               KEY forum_id (forum_id),
-               KEY topic_last_post_id (topic_last_post_id))
-     $charset_spec");
-
-
 #######################COURSE_DESCRIPTION ################################
 
 db_query("CREATE TABLE `course_description`
@@ -424,8 +354,6 @@ db_query("CREATE TABLE actions_summary (
 
 // dhmiourgia full text indexes gia th diadikasia ths anazhthshs
 db_query("ALTER TABLE `course_description` ADD FULLTEXT `course_description` (`title` ,`content`)");
-db_query("ALTER TABLE `posts_text` ADD FULLTEXT `posts_text` (`post_text`)");
-db_query("ALTER TABLE `forums` ADD FULLTEXT `forums` (`forum_name`,`forum_desc`)");
 
 // creation of indexes 
 db_query("ALTER TABLE `actions` ADD INDEX `actionsindex` (`module_id` , `date_time`)"); 

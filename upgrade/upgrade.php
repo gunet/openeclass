@@ -525,6 +525,64 @@ if (!isset($_POST['submit2'])) {
         }
 
         if ($oldversion < '3.0') {
+            // create forum tables
+            db_query("CREATE TABLE categories (
+                cat_id int(10) NOT NULL auto_increment,
+                cat_title varchar(100),
+                cat_order varchar(10),
+                course_id int(11),
+                PRIMARY KEY (cat_id))");                    
+
+            db_query("CREATE TABLE forums (
+                     forum_id int(10) NOT NULL auto_increment,
+                     forum_name varchar(150),
+                     forum_desc text,
+                     forum_access int(10) DEFAULT 1,
+                     forum_moderator int(10),
+                     forum_topics int(10) DEFAULT 0 NOT NULL,
+                     forum_posts int(10) DEFAULT 0 NOT NULL,
+                     forum_last_post_id int(10) DEFAULT 0 NOT NULL,
+                     cat_id int(10),
+                     forum_type int(10) DEFAULT '0',
+                     course_id int(11),
+                     PRIMARY KEY (forum_id),
+                     KEY forum_last_post_id (forum_last_post_id))");
+          
+             db_query("CREATE TABLE posts (
+                      post_id int(10) NOT NULL auto_increment,
+                      topic_id int(10) DEFAULT 0 NOT NULL,
+                      forum_id int(10) DEFAULT 0 NOT NULL,
+                      post_text mediumtext,
+                      poster_id int(10) DEFAULT 0 NOT NULL,
+                      post_time varchar(20),
+                      poster_ip varchar(16),
+                      course_id int(11),
+                      PRIMARY KEY (post_id),
+                      KEY post_id (post_id),
+                      KEY forum_id (forum_id),
+                      KEY topic_id (topic_id),
+                      KEY poster_id (poster_id))");              
+
+              db_query("CREATE TABLE topics (
+                       topic_id int(10) NOT NULL auto_increment,
+                       topic_title varchar(100),
+                       topic_poster_id int(10),
+                       topic_time varchar(20),
+                       topic_views int(10) DEFAULT '0' NOT NULL,
+                       topic_replies int(10) DEFAULT '0' NOT NULL,
+                       topic_last_post_id int(10) DEFAULT '0' NOT NULL,
+                       forum_id int(10) DEFAULT '0' NOT NULL,
+                       topic_status int(10) DEFAULT '0' NOT NULL,                                              
+                       course_id int(11),
+                       PRIMARY KEY (topic_id),
+                       KEY topic_id (topic_id),
+                       KEY forum_id (forum_id),
+                       KEY topic_last_post_id (topic_last_post_id))");    
+               
+              db_query("ALTER TABLE `posts` ADD FULLTEXT `posts` (`post_text`)");
+              db_query("ALTER TABLE `forums` ADD FULLTEXT `forums` (`forum_name`,`forum_desc`)");
+   
+             // create video tables 
             db_query('CREATE TABLE IF NOT EXISTS video (
                             `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                             `course_id` INT(11) NOT NULL,
@@ -689,8 +747,8 @@ if (!isset($_POST['submit2'])) {
                             `group_submissions` CHAR(1) DEFAULT '0' NOT NULL )");
             db_query("CREATE TABLE IF NOT EXISTS `assignment_submit` (
                             `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                            `uid` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT '0',
-                            `assignment_id` INT(11) NOT NULL DEFAULT '0',
+                            `uid` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
+                            `assignment_id` INT(11) NOT NULL DEFAULT 0,
                             `submission_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
                             `submission_ip` VARCHAR(16) NOT NULL DEFAULT '',
                             `file_path` VARCHAR(200) NOT NULL DEFAULT '',
@@ -700,7 +758,7 @@ if (!isset($_POST['submit2'])) {
                             `grade_comments` TEXT NOT NULL,
                             `grade_submission_date` DATE NOT NULL DEFAULT '0000-00-00',
                             `grade_submission_ip` VARCHAR(16) NOT NULL DEFAULT '',
-                            `group_id` INT( 11 ) DEFAULT NULL )");
+                            `group_id` INT( 11 ) NOT NULL DEFAULT 0)");
             
             db_query("DROP TABLE IF EXISTS agenda");
             db_query("CREATE TABLE IF NOT EXISTS `agenda` (
@@ -722,12 +780,12 @@ if (!isset($_POST['submit2'])) {
                             `type` TINYINT(4) UNSIGNED NOT NULL DEFAULT '1',
                             `start_date` DATETIME DEFAULT NULL,
                             `end_date` DATETIME DEFAULT NULL,
-                            `time_constraint` INT(11) DEFAULT '0',
-                            `attempts_allowed` INT(11) DEFAULT '0',
-                            `random` SMALLINT(6) NOT NULL DEFAULT '0',
-                            `active` TINYINT(4) DEFAULT NULL,
-                            `results` TINYINT(1) NOT NULL DEFAULT '1',
-                            `score` TINYINT(1) NOT NULL DEFAULT '1',
+                            `time_constraint` INT(11) DEFAULT 0,
+                            `attempts_allowed` INT(11) DEFAULT 0,
+                            `random` SMALLINT(6) NOT NULL DEFAULT 0,
+                            `active` TINYINT(4) NOT NULL DEFAULT 1,
+                            `results` TINYINT(1) NOT NULL DEFAULT 1,
+                            `score` TINYINT(1) NOT NULL DEFAULT 1,
                             FULLTEXT KEY `exercise` (`title`, `description`))");
             db_query("CREATE TABLE IF NOT EXISTS `exercise_user_record` (
                             `eurid` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
