@@ -317,8 +317,6 @@ function upgrade_course_3_0($code, $lang, $extramessage = '', $return_mapping = 
     echo "<hr><p>$langUpgCourse <b>$code</b> (3.0) $extramessage<br>";
     flush();
     
-    $video_map = array();
-    $videolinks_map = array();
     
 // move forums to central db and drop table
    if (mysql_table_exists($code, 'catagories')) {
@@ -369,143 +367,100 @@ function upgrade_course_3_0($code, $lang, $extramessage = '', $return_mapping = 
                 db_query("DROP TABLE topics");                
         }
    }
-   
+
+    $video_map = array();
     // move video to central db and drop table
     if (mysql_table_exists($code, 'video')) {
-        list($video_id) = mysql_fetch_row(db_query("SELECT MAX(id) FROM `$mysqlMainDb`.video"));
-        if (!$video_id)
-            $video_id = 0;
         
-        $dropflag = true;
-        $result = db_query("SELECT * FROM video ORDER by id");
+        list($videoid_offset) = mysql_fetch_row(db_query("SELECT MAX(id) FROM `$mysqlMainDb`.video"));
+        $videoid_offset = (!$videoid_offset) ? 0 : intval($videoid_offset);
         
-        while ($row = mysql_fetch_array($result)) {
-            $oldid = intval($row['id']);
-            $newid = intval($video_id) + $oldid;
-            
-            if ($return_mapping)
+        if ($return_mapping) {
+            $result = db_query("SELECT * FROM video ORDER by id");
+            while ($row = mysql_fetch_array($result)) {
+                $oldid = intval($row['id']);
+                $newid = $oldid + $videoid_offset;
                 $video_map[$oldid] = $newid;
-            
-            $r = db_query("INSERT INTO `$mysqlMainDb`.video
-                            (`id`, `course_id`, `path`, `url`, `title`, `description`, `creator`, `publisher`, `date`)
-                                       VALUES
-                                       (".$newid .", 
-                                        ".$course_id .", 
-                                        ".autoquote($row['path']) .", 
-                                        ".autoquote($row['url']) .", 
-                                        ".autoquote($row['titre']) .", 
-                                        ".autoquote($row['description']) .", 
-                                        ".autoquote($row['creator']) .", 
-                                        ".autoquote($row['publisher']) .", 
-                                        ".autoquote($row['date']) .")");
-            
-            if (false === $r)
-                $dropflag = false;
+            }
         }
         
-        if (true === $dropflag)
+        $ok = db_query("INSERT INTO `$mysqlMainDb`.video
+                        (`id`, `course_id`, `path`, `url`, `title`, `description`, `creator`, `publisher`, `date`)
+                        SELECT `id` + $videoid_offset, $course_id, `path`, `url`, `titre`, `description`, 
+                               `creator`, `publisher`, `date` FROM video ORDER by id");
+        
+        if (false !== $ok)
             db_query("DROP TABLE video");
         
         db_query("UPDATE `$mysqlMainDb`.course_units AS units, `$mysqlMainDb`.unit_resources AS res
-                            SET res_id = res_id + $video_id
+                            SET res_id = res_id + $videoid_offset
                             WHERE units.id = res.unit_id AND course_id = $course_id AND type = 'video'");
     }
     
+    $videolinks_map = array();
     // move videolinks to central db and drop table
     if (mysql_table_exists($code, 'videolinks')) {
-        list($link_id) = mysql_fetch_row(db_query("SELECT MAX(id) FROM `$mysqlMainDb`.videolinks"));
-        if (!$link_id)
-            $link_id = 0;
-
-        $dropflag = true;
-        $result = db_query("SELECT * FROM videolinks ORDER by id");
         
-        while ($row = mysql_fetch_array($result)) {
-            $oldid = intval($row['id']);
-            $newid = intval($link_id) + $oldid;
-            
-            if ($return_mapping)
+        list($linkid_offset) = mysql_fetch_row(db_query("SELECT MAX(id) FROM `$mysqlMainDb`.videolinks"));
+        $linkid_offset = (!$linkid_offset) ? 0 : intval($linkid_offset);
+
+        if ($return_mapping) {
+            $result = db_query("SELECT * FROM videolinks ORDER by id");
+            while ($row = mysql_fetch_array($result)) {
+                $oldid = intval($row['id']);
+                $newid = $oldid + $linkid_offset;
                 $videolinks_map[$oldid] = $newid;
-            
-            $r = db_query("INSERT INTO `$mysqlMainDb`.videolinks
-                            (`id`, `course_id`, `url`, `title`, `description`, `creator`, `publisher`, `date`)
-                                       VALUES
-                                       (".$newid .", 
-                                        ".$course_id .", 
-                                        ".autoquote($row['url']) .", 
-                                        ".autoquote($row['titre']) .", 
-                                        ".autoquote($row['description']) .", 
-                                        ".autoquote($row['creator']) .", 
-                                        ".autoquote($row['publisher']) .", 
-                                        ".autoquote($row['date']) .")");
-            
-            if (false === $r)
-                $dropflag = false;
+            }
         }
         
-        if (true === $dropflag)
+        $ok = db_query("INSERT INTO `$mysqlMainDb`.videolinks
+                        (`id`, `course_id`, `url`, `title`, `description`, `creator`, `publisher`, `date`)
+                        SELECT `id` + $linkid_offset, $course_id, `url`, `titre`, `description`, `creator`,
+                               `publisher`, `date` FROM videolinks ORDER by id");
+        
+        if (false !== $ok)
             db_query("DROP TABLE videolinks");
         
         db_query("UPDATE `$mysqlMainDb`.course_units AS units, `$mysqlMainDb`.unit_resources AS res
-                            SET res_id = res_id + $link_id
+                            SET res_id = res_id + $linkid_offset
                             WHERE units.id = res.unit_id AND course_id = $course_id AND type = 'videolinks'");
     }
     
     // move dropbox to central db and drop tables
     if (mysql_table_exists($code, 'dropbox_file') && mysql_table_exists($code, 'dropbox_person') && 
         mysql_table_exists($code, 'dropbox_post')) {
-        list($file_id) = mysql_fetch_row(db_query("SELECT max(id) FROM `$mysqlMainDb`.dropbox_file"));
-        if (!$file_id)
-            $file_id = 0;
         
-        $dropflag = true;
-        $result = db_query("SELECT * FROM dropbox_file ORDER by id");
+        list($fileid_offset) = mysql_fetch_row(db_query("SELECT max(id) FROM `$mysqlMainDb`.dropbox_file"));
+        $fileid_offset = (!$fileid_offset) ? 0 : intval($fileid_offset);
         
-        while ($row = mysql_fetch_array($result)) {
-            $oldid = intval($row['id']);
-            $newid = intval($file_id) + $oldid;
-            
-            $r = db_query("INSERT INTO `$mysqlMainDb`.dropbox_file
-                                        (`id`, `course_id`, `uploaderId`, `filename`, `filesize`, `title`,  
-                        				 `description`, `author`, `uploadDate`, `lastUploadDate`)
-                        				VALUES
-                        				(".$newid .", 
-                        				 ".$course_id .", 
-                        				 ".$row['uploaderId'] .", 
-                        				 ".autoquote($row['filename']) .", 
-                        				 ".autoquote($row['filesize']) .", 
-                        				 ".autoquote($row['title']) .", 
-                        				 ".autoquote($row['description']) .", 
-                        				 ".autoquote($row['author']) .",
-                        				 ".autoquote($row['uploadDate']) .",
-                        				 ".autoquote($row['lastUploadDate']) .")");
-            if (false === $r)
-                $dropflag = false;
-            
-            $r_dperson = db_query("SELECT * FROM dropbox_person WHERE fileId = $oldid");
-            while ($dperson = mysql_fetch_array($r_dperson)) {
-                $r = db_query("INSERT INTO `$mysqlMainDb`.dropbox_person
-                                        (`fileId`, `personId`)
-                        				VALUES
-                        				(".$newid .", 
-                        				 ".$dperson['personId'] .")");
-                if (false === $r)
-                    $dropflag = false;
-            }
-            
-            $r_dpost = db_query("SELECT * FROM dropbox_post WHERE fileId = $oldid");
-            while($dpost = mysql_fetch_array($r_dpost)) {
-                $r = db_query("INSERT INTO `$mysqlMainDb`.dropbox_post
-                                        (`fileId`, `recipientId`)
-                        				VALUES
-                        				(".$newid .", 
-                        				 ".$dpost['recipientId'] .")");
-                if (false === $r)
-                    $dropflag = false;
-            }
-        }
+        db_query("CREATE TEMPORARY TABLE dropbox_map AS
+                   SELECT old.id AS old_id, old.id + $fileid_offset AS new_id
+                     FROM dropbox_file AS old ORDER by id");
         
-        if (true === $dropflag) {
+        $ok = db_query("INSERT INTO `$mysqlMainDb`.dropbox_file
+                        (`id`, `course_id`, `uploaderId`, `filename`, `filesize`, `title`,  
+                         `description`, `author`, `uploadDate`, `lastUploadDate`)
+                        SELECT `id` + $fileid_offset, $course_id, `uploaderId`, `filename`,
+                               `filesize`, `title`, `description`, `author`, `uploadDate`, 
+                               `lastUploadDate` FROM dropbox_file ORDER BY id") && $ok;
+        
+        $ok = db_query("INSERT INTO `$mysqlMainDb`.dropbox_person
+                         (`fileId`, `personId`)
+                         SELECT DISTINCT dropbox_map.new_id, dropbox_person.personId
+                           FROM dropbox_person, dropbox_map
+                          WHERE dropbox_person.fileId = dropbox_map.old_id
+                          ORDER BY dropbox_person.fileId") && $ok;
+        
+        $ok = db_query("INSERT INTO `$mysqlMainDb`.dropbox_post
+                         (`fileId`, `recipientId`)
+                         SELECT DISTINCT dropbox_map.new_id, dropbox_post.recipientId
+                           FROM dropbox_post, dropbox_map
+                          WHERE dropbox_post.fileId = dropbox_map.old_id
+                          ORDER BY dropbox_post.fileId") && $ok;
+        
+        db_query("DROP TEMPORARY TABLE dropbox_map");
+        
+        if (false !== $ok) {
             db_query("DROP TABLE dropbox_file");
             db_query("DROP TABLE dropbox_person");
             db_query("DROP TABLE dropbox_post");
@@ -518,172 +473,138 @@ function upgrade_course_3_0($code, $lang, $extramessage = '', $return_mapping = 
         mysql_table_exists($code, 'lp_asset') && mysql_table_exists($code, 'lp_rel_learnPath_module') &&
         mysql_table_exists($code, 'lp_user_module_progress') ) {
         
-        $dropflag = true;
-        $module_map = array();
         $asset_map = array();
         $rel_map = array();
         $rel_map[0] = 0;
         
         // ----- lp_learnPath DB Table ----- // 
-        list($lp_id) = mysql_fetch_row(db_query("SELECT max(learnPath_id) FROM `$mysqlMainDb`.lp_learnPath"));
-        if (!$lp_id)
-            $lp_id = 0;
+        list($lpid_offset) = mysql_fetch_row(db_query("SELECT max(learnPath_id) FROM `$mysqlMainDb`.lp_learnPath"));
+        $lpid_offset = (!$lpid_offset) ? 0 : intval($lpid_offset);
         
-        $result = db_query("SELECT * FROM lp_learnPath ORDER by learnPath_id");
-        
-        while ($row = mysql_fetch_array($result)) {
-            $oldid = intval($row['learnPath_id']);
-            $newid = intval($lp_id) + $oldid;
-            
-            $lp_map[$oldid] = $newid;
-            
-            $r = db_query("INSERT INTO `$mysqlMainDb`.lp_learnPath
-                                        (`learnPath_id`, `course_id`, `name`, `comment`, `lock`, `visibility`, `rank`)
-                        				VALUES
-                        				(".$newid .", 
-                        				 ".$course_id .", 
-                        				 ".autoquote($row['name']) .", 
-                        				 ".autoquote($row['comment']) .", 
-                        				 ".autoquote($row['lock']) .", 
-                        				 ".autoquote($row['visibility']) .", 
-                        				 ".autoquote($row['rank']) .")");
-            if (false === $r)
-                $dropflag = false;
+        if ($return_mapping) {
+            $result = db_query("SELECT * FROM lp_learnPath ORDER by learnPath_id");
+            while ($row = mysql_fetch_array($result)) {
+                $oldid = intval($row['learnPath_id']);
+                $newid = $oldid + $lpid_offset;
+                $lp_map[$oldid] = $newid;
+            }
         }
+        
+        db_query("CREATE TEMPORARY TABLE lp_map AS
+                   SELECT old.learnPath_id AS old_id, old.learnPath_id + $lpid_offset AS new_id
+                     FROM lp_learnPath AS old ORDER by learnPath_id");
+        
+        $ok = db_query("INSERT INTO `$mysqlMainDb`.lp_learnPath
+                         (`learnPath_id`, `course_id`, `name`, `comment`, `lock`, `visibility`, `rank`)
+                         SELECT `learnPath_id` + $lpid_offset, $course_id, `name`, `comment`, `lock`, 
+                         `visibility`, `rank` FROM lp_learnPath ORDER BY learnPath_id");
         
         // ----- lp_module DB Table ----- //
-        list($module_id) = mysql_fetch_row(db_query("SELECT max(module_id) FROM `$mysqlMainDb`.lp_module"));
-        if (!$module_id)
-            $module_id = 0;
+        list($moduleid_offset) = mysql_fetch_row(db_query("SELECT max(module_id) FROM `$mysqlMainDb`.lp_module"));
+        $moduleid_offset = (!$moduleid_offset) ? 0 : intval($moduleid_offset);
         
-        $result = db_query("SELECT * FROM lp_module ORDER by module_id");
+        db_query("CREATE TEMPORARY TABLE module_map AS
+                   SELECT old.module_id AS old_id, old.module_id + $moduleid_offset AS new_id
+                     FROM lp_module AS old ORDER by module_id");
         
-        while ($row = mysql_fetch_array($result)) {
-            $oldid = intval($row['module_id']);
-            $newid = intval($module_id) + $oldid;
-        
-            $module_map[$oldid] = $newid;
-        
-            $r = db_query("INSERT INTO `$mysqlMainDb`.lp_module
-                                        (`module_id`, `course_id`, `name`, `comment`, `accessibility`, `startAsset_id`, 
-                                         `contentType`, `launch_data`)
-                        				VALUES
-                        				(".$newid .", 
-                        				 ".$course_id .", 
-                        				 ".autoquote($row['name']) .", 
-                        				 ".autoquote($row['comment']) .", 
-                        				 ".autoquote($row['accessibility']) .", 
-                        				 ".autoquote($row['startAsset_id']) .", 
-                        				 ".autoquote($row['contentType']) .",
-                        				 ".autoquote($row['launch_data']) .")");
-            if (false === $r)
-                $dropflag = false;
-        }
+        $ok = db_query("INSERT INTO `$mysqlMainDb`.lp_module
+                         (`module_id`, `course_id`, `name`, `comment`, `accessibility`, `startAsset_id`, 
+                          `contentType`, `launch_data`)
+                         SELECT `module_id` + $moduleid_offset, $course_id, `name`, `comment`, 
+                                `accessibility`, `startAsset_id`, `contentType`, `launch_data`
+                           FROM lp_module ORDER by module_id") && $ok;
         
         // ----- lp_asset DB Table ----- //
-        list($asset_id) = mysql_fetch_row(db_query("SELECT max(asset_id) FROM `$mysqlMainDb`.lp_asset"));
-        if (!$asset_id)
-            $asset_id = 0;
+        list($assetid_offset) = mysql_fetch_row(db_query("SELECT max(asset_id) FROM `$mysqlMainDb`.lp_asset"));
+        $assetid_offset = (!$assetid_offset) ? 0 : intval($assetid_offset);
         
         $result = db_query("SELECT * FROM lp_asset ORDER by asset_id");
         
         while ($row = mysql_fetch_array($result)) {
             $oldid = intval($row['asset_id']);
-            $newid = intval($asset_id) + $oldid;
-        
+            $newid = $oldid + $assetid_offset;
             $asset_map[$oldid] = $newid;
-        
-            $r = db_query("INSERT INTO `$mysqlMainDb`.lp_asset
-                                        (`asset_id`, `module_id`, `path`, `comment`)
-                        				VALUES
-                        				(".$newid .", 
-                        				 ".$module_map[$row['module_id']] .", 
-                        				 ".autoquote($row['path']) .", 
-                        				 ".autoquote($row['comment']) .")");
-            if (false === $r)
-                $dropflag = false;
         }
         
+        $ok = db_query("INSERT INTO `$mysqlMainDb`.lp_asset
+                         (`asset_id`, `module_id`, `path`, `comment`)
+                         SELECT DISTINCT lp_asset.asset_id + $assetid_offset, module_map.new_id,
+                                lp_asset.path, lp_asset.comment
+                           FROM lp_asset, module_map
+                          WHERE lp_asset.module_id = module_map.old_id
+                           ORDER BY lp_asset.asset_id") && $ok;
+        
         foreach ($asset_map as $key => $value) {
-            $result = db_query("UPDATE `$mysqlMainDb`.lp_module SET `startAsset_id` = $value 
-            					WHERE `course_id` = $course_id AND `startAsset_id` = $key");
-            if (false === $result) 
-                $dropflag = false;
+            $ok = db_query("UPDATE `$mysqlMainDb`.lp_module SET `startAsset_id` = $value 
+                             WHERE `course_id` = $course_id AND `startAsset_id` = $key") && $ok;
         }
         
         // ----- lp_rel_learnPath_module DB Table ----- //
-        list($rel_id) = mysql_fetch_row(db_query("SELECT max(learnPath_module_id) FROM `$mysqlMainDb`.lp_rel_learnPath_module"));
-        if (!$rel_id)
-            $rel_id = 0;
+        list($relid_offset) = mysql_fetch_row(db_query("SELECT max(learnPath_module_id) FROM `$mysqlMainDb`.lp_rel_learnPath_module"));
+        $relid_offset = (!$relid_offset) ? 0 : intval($relid_offset);
         
         $result = db_query("SELECT * FROM lp_rel_learnPath_module ORDER by learnPath_module_id");
         
         while ($row = mysql_fetch_array($result)) {
             $oldid = intval($row['learnPath_module_id']);
-            $newid = intval($rel_id) + $oldid;
-        
+            $newid = $oldid + $relid_offset;
             $rel_map[$oldid] = $newid;
-        
-            $r = db_query("INSERT INTO `$mysqlMainDb`.lp_rel_learnPath_module
-                                        (`learnPath_module_id`, `learnPath_id`, `module_id`, `lock`, `visibility`, `specificComment`,
-                                         `rank`, `parent`, `raw_to_pass`)
-                        				VALUES
-                        				(".$newid .", 
-                        				 ".$lp_map[$row['learnPath_id']] .",
-                        				 ".$module_map[$row['module_id']] .",  
-                        				 ".autoquote($row['lock']) .", 
-                        				 ".autoquote($row['visibility']) .",
-                        				 ".autoquote($row['specificComment']) .",
-                        				 ".autoquote($row['rank']) .",
-                        				 ".autoquote($row['parent']) .",
-                        				 ".autoquote($row['raw_to_pass']) .")");
-            if (false === $r)
-                $dropflag = false;
         }
         
+        db_query("CREATE TEMPORARY TABLE rel_map AS
+                   SELECT old.learnPath_module_id AS old_id, old.learnPath_module_id + $relid_offset AS new_id
+                     FROM lp_rel_learnPath_module AS old ORDER by learnPath_module_id");
+        db_query("INSERT INTO rel_map (old_id, new_id) VALUES (0, 0)");
+        
+        $ok = db_query("INSERT INTO `$mysqlMainDb`.lp_rel_learnPath_module
+                         (`learnPath_module_id`, `learnPath_id`, `module_id`, `lock`, `visibility`, `specificComment`,
+                          `rank`, `parent`, `raw_to_pass`)
+                         SELECT DISTINCT lp_rel_learnPath_module.learnPath_module_id + $relid_offset,
+                                lp_map.new_id, module_map.new_id, lp_rel_learnPath_module.lock,
+                                lp_rel_learnPath_module.visibility, lp_rel_learnPath_module.specificComment,
+                                lp_rel_learnPath_module.rank, lp_rel_learnPath_module.parent,
+                                lp_rel_learnPath_module.raw_to_pass
+                           FROM lp_rel_learnPath_module, lp_map, module_map 
+                          WHERE lp_rel_learnPath_module.learnPath_id = lp_map.old_id
+                            AND lp_rel_learnPath_module.module_id = module_map.old_id
+                          ORDER BY lp_rel_learnPath_module.learnPath_module_id") && $ok;
+        
         foreach ($rel_map as $key => $value) {
-            $result = db_query("UPDATE `$mysqlMainDb`.lp_rel_learnPath_module SET `parent` = $value 
-            					WHERE `learnPath_id` IN (SELECT learnPath_id FROM `$mysqlMainDb`.lp_learnPath WHERE course_id = $course_id) 
-            					AND `parent` = $key");
-            if (false === $result)
-                $dropflag = false;
+            $ok = db_query("UPDATE `$mysqlMainDb`.lp_rel_learnPath_module SET `parent` = $value 
+                             WHERE `learnPath_id` IN (SELECT learnPath_id FROM `$mysqlMainDb`.lp_learnPath WHERE course_id = $course_id) 
+                               AND `parent` = $key") && $ok;
         }
         
         // ----- lp_user_module_progress DB Table ----- //
-        list($lum_id) = mysql_fetch_row(db_query("SELECT max(user_module_progress_id) FROM `$mysqlMainDb`.lp_user_module_progress"));
-        if (!$lum_id)
-            $lum_id = 0;
+        list($lumid_offset) = mysql_fetch_row(db_query("SELECT max(user_module_progress_id) FROM `$mysqlMainDb`.lp_user_module_progress"));
+        $lumid_offset = (!$lumid_offset) ? 0 : intval($lumid_offset);
         
-        $result = db_query("SELECT * FROM lp_user_module_progress ORDER by user_module_progress_id");
+        $ok = db_query("INSERT INTO `$mysqlMainDb`.lp_user_module_progress
+                         (`user_module_progress_id`, `user_id`, `learnPath_module_id`, `learnPath_id`, 
+                          `lesson_location`, `lesson_status`, `entry`, `raw`, `scoreMin`, `scoreMax`,
+                          `total_time`, `session_time`, `suspend_data`, `credit`)
+                         SELECT DISTINCT lp_user_module_progress.user_module_progress_id + $lumid_offset,
+                                lp_user_module_progress.user_id, rel_map.new_id, lp_map.new_id,
+                                lp_user_module_progress.lesson_location,
+                                lp_user_module_progress.lesson_status,
+                                lp_user_module_progress.entry,
+                                lp_user_module_progress.raw,
+                                lp_user_module_progress.scoreMin,
+                                lp_user_module_progress.scoreMax,
+                                lp_user_module_progress.total_time,
+                                lp_user_module_progress.session_time,
+                                lp_user_module_progress.suspend_data,
+                                lp_user_module_progress.credit
+                           FROM lp_user_module_progress, rel_map, lp_map
+                          WHERE lp_user_module_progress.learnPath_module_id = rel_map.old_id
+                            AND lp_user_module_progress.learnPath_id = lp_map.old_id
+                          ORDER BY lp_user_module_progress.user_module_progress_id") && $ok;
         
-        while ($row = mysql_fetch_array($result)) {
-            $oldid = intval($row['user_module_progress_id']);
-            $newid = intval($lum_id) + $oldid;
+        db_query("DROP TEMPORARY TABLE lp_map");
+        db_query("DROP TEMPORARY TABLE module_map");
+        db_query("DROP TEMPORARY TABLE rel_map");
         
-            $r = db_query("INSERT INTO `$mysqlMainDb`.lp_user_module_progress
-                                        (`user_module_progress_id`, `user_id`, `learnPath_module_id`, `learnPath_id`, 
-                                         `lesson_location`, `lesson_status`, `entry`, `raw`, `scoreMin`, `scoreMax`,
-                                         `total_time`, `session_time`, `suspend_data`, `credit`)
-                        				VALUES
-                        				(".$newid .",
-                        				 ".$row['user_id'] .",  
-                        				 ".$rel_map[$row['learnPath_module_id']] .",
-                        				 ".$lp_map[$row['learnPath_id']] .",  
-                        				 ".autoquote($row['lesson_location']) .", 
-                        				 ".autoquote($row['lesson_status']) .",
-                        				 ".autoquote($row['entry']) .",
-                        				 ".autoquote($row['raw']) .",
-                        				 ".autoquote($row['scoreMin']) .",
-                        				 ".autoquote($row['scoreMax']) .",
-                        				 ".autoquote($row['total_time']) .",
-                        				 ".autoquote($row['session_time']) .",
-                        				 ".autoquote($row['suspend_data']) .",
-                        				 ".autoquote($row['credit']) .")");
-            if (false === $r)
-                $dropflag = false;
-        }
-        
-        if (true === $dropflag) {
+        if (false !== $ok) {
             db_query("DROP TABLE lp_learnPath");
             db_query("DROP TABLE lp_module");
             db_query("DROP TABLE lp_asset");
@@ -692,7 +613,7 @@ function upgrade_course_3_0($code, $lang, $extramessage = '', $return_mapping = 
         }
         
         db_query("UPDATE `$mysqlMainDb`.course_units AS units, `$mysqlMainDb`.unit_resources AS res
-                            SET res_id = res_id + $lp_id
+                            SET res_id = res_id + $lpid_offset
                             WHERE units.id = res.unit_id AND course_id = $course_id AND type = 'lp'");
     }
     
@@ -701,98 +622,77 @@ function upgrade_course_3_0($code, $lang, $extramessage = '', $return_mapping = 
     if (mysql_table_exists($code, 'wiki_properties') && mysql_table_exists($code, 'wiki_acls') &&
         mysql_table_exists($code, 'wiki_pages') && mysql_table_exists($code, 'wiki_pages_content') ) {
         
-        $dropflag = true;
-        $wiki_page_map = array();
-        
         // ----- wiki_properties and wiki_acls DB Tables ----- //
-        list($wiki_id) = mysql_fetch_row(db_query("SELECT max(id) FROM `$mysqlMainDb`.wiki_properties"));
-        if (!$wiki_id)
-            $wiki_id = 0;
+        list($wikiid_offset) = mysql_fetch_row(db_query("SELECT max(id) FROM `$mysqlMainDb`.wiki_properties"));
+        $wikiid_offset = (!$wikiid_offset) ? 0 : intval($wikiid_offset);
         
-        $result = db_query("SELECT * FROM wiki_properties ORDER by id");
-        
-        while ($row = mysql_fetch_array($result)) {
-            $oldid = intval($row['id']);
-            $newid = intval($wiki_id) + $oldid;
-        
-            $wiki_map[$oldid] = $newid;
-        
-            $r = db_query("INSERT INTO `$mysqlMainDb`.wiki_properties
-                                        (`id`, `course_id`, `title`, `description`, `group_id`)
-                        				VALUES
-                        				(".$newid .", 
-                        				 ".$course_id .", 
-                        				 ".autoquote($row['title']) .", 
-                        				 ".autoquote($row['description']) .", 
-                        				 ".autoquote($row['group_id']) .")");
-            
-            $r_acls = db_query("SELECT * FROM wiki_acls WHERE wiki_id = $oldid");
-            while ($d_acls = mysql_fetch_array($r_acls)) {
-                $r = db_query("INSERT INTO `$mysqlMainDb`.wiki_acls
-                                                    (`wiki_id`, `flag`, `value`)
-                                    				VALUES
-                                    				(".$newid .", 
-                                    				 ".autoquote($d_acls['flag']) .",
-                                    				 ".autoquote($d_acls['value']) .")");
-                if (false === $r)
-                    $dropflag = false;
+        if ($return_mapping) {
+            $result = db_query("SELECT * FROM wiki_properties ORDER by id");
+            while ($row = mysql_fetch_array($result)) {
+                $oldid = intval($row['id']);
+                $newid = $oldid + $wikiid_offset;
+                $wiki_map[$oldid] = $newid;
             }
-            
-            if (false === $r)
-                $dropflag = false;
         }
+        
+        db_query("CREATE TEMPORARY TABLE wiki_map AS
+                   SELECT old.id AS old_id, old.id + $wikiid_offset AS new_id
+                     FROM wiki_properties AS old ORDER by id");
+        
+        $ok = db_query("INSERT INTO `$mysqlMainDb`.wiki_properties
+                         (`id`, `course_id`, `title`, `description`, `group_id`)
+                         SELECT `id` + $wikiid_offset, $course_id, `title`, `description`, `group_id`
+                           FROM wiki_properties ORDER BY id");
+        
+        $ok = db_query("INSERT INTO `$mysqlMainDb`.wiki_acls
+                         (`wiki_id`, `flag`, `value`)
+                         SELECT DISTINCT wiki_map.new_id, wiki_acls.flag, wiki_acls.value
+                           FROM wiki_acls, wiki_map
+                          WHERE wiki_acls.wiki_id = wiki_map.old_id
+                          ORDER BY wiki_acls.wiki_id") && $ok;
         
         // ----- wiki_pages DB Table ----- //
-        list($wiki_page_id) = mysql_fetch_row(db_query("SELECT max(id) FROM `$mysqlMainDb`.wiki_pages"));
-        if (!$wiki_page_id)
-            $wiki_page_id = 0;
+        list($wikipageid_offset) = mysql_fetch_row(db_query("SELECT max(id) FROM `$mysqlMainDb`.wiki_pages"));
+        $wikipageid_offset = (!$wikipageid_offset) ? 0 : intval($wikipageid_offset);
         
         $result = db_query("SELECT * FROM wiki_pages ORDER by id");
-        
+        $wiki_page_map = array();
         while ($row = mysql_fetch_array($result)) {
             $oldid = intval($row['id']);
-            $newid = intval($wiki_page_id) + $oldid;
-        
+            $newid = $oldid + $wikipageid_offset;
             $wiki_page_map[$oldid] = $newid;
-        
-            $r = db_query("INSERT INTO `$mysqlMainDb`.wiki_pages
-                                        (`id`, `wiki_id`, `owner_id`, `title`, `ctime`, `last_version`, `last_mtime`)
-                        				VALUES
-                        				(".$newid .", 
-                        				 ".$wiki_map[$row['wiki_id']] .", 
-                        				 ".autoquote($row['owner_id']) .", 
-                        				 ".autoquote($row['title']) .", 
-                        				 ".autoquote($row['ctime']) .",
-                        				 ".autoquote($row['last_version']) .",
-                        				 ".autoquote($row['last_mtime']) .")");
-            if (false === $r)
-                $dropflag = false;
         }
+        
+        db_query("CREATE TEMPORARY TABLE wikipage_map AS
+                   SELECT old.id AS old_id, old.id + $wikipageid_offset AS new_id
+                     FROM wiki_pages AS old ORDER by id");
+        
+        $ok = db_query("INSERT INTO `$mysqlMainDb`.wiki_pages
+                         (`id`, `wiki_id`, `owner_id`, `title`, `ctime`, `last_version`, `last_mtime`)
+                         SELECT DISTINCT wiki_pages.id + $wikipageid_offset, wiki_map.new_id, 
+                                wiki_pages.owner_id, wiki_pages.title, wiki_pages.ctime, 
+                                wiki_pages.last_version, wiki_pages.last_mtime
+                           FROM wiki_pages, wiki_map
+                          WHERE wiki_pages.wiki_id = wiki_map.old_id
+                          ORDER BY wiki_pages.id") && $ok;
         
         // ----- wiki_pages_content DB Table ----- //
-        list($wiki_page_content_id) = mysql_fetch_row(db_query("SELECT max(id) FROM `$mysqlMainDb`.wiki_pages_content"));
-        if (!$wiki_page_content_id)
-            $wiki_page_content_id = 0;
+        list($wikipagecontentid_offset) = mysql_fetch_row(db_query("SELECT max(id) FROM `$mysqlMainDb`.wiki_pages_content"));
+        $wikipagecontentid_offset = (!$wikipagecontentid_offset) ? 0 : intval($wikipagecontentid_offset);
         
-        $result = db_query("SELECT * FROM wiki_pages_content ORDER by id");
+        $ok = db_query("INSERT INTO `$mysqlMainDb`.wiki_pages_content
+                         (`id`, `pid`, `editor_id`, `mtime`, `content`)
+                         SELECT DISTINCT wiki_pages_content.id + $wikipagecontentid_offset,
+                                wikipage_map.new_id, wiki_pages_content.editor_id,
+                                wiki_pages_content.mtime, wiki_pages_content.content
+                           FROM wiki_pages_content, wikipage_map
+                          WHERE wiki_pages_content.pid = wikipage_map.old_id
+                          ORDER BY wiki_pages_content.id") && $ok;
         
-        while ($row = mysql_fetch_array($result)) {
-            $oldid = intval($row['id']);
-            $newid = intval($wiki_page_content_id) + $oldid;
+        db_query("DROP TEMPORARY TABLE wiki_map");
+        db_query("DROP TEMPORARY TABLE wikipage_map");
         
-            $r = db_query("INSERT INTO `$mysqlMainDb`.wiki_pages_content
-                                        (`id`, `pid`, `editor_id`, `mtime`, `content`)
-                        				VALUES
-                        				(".$newid .", 
-                        				 ".$wiki_page_map[$row['pid']] .", 
-                        				 ".autoquote($row['editor_id']) .", 
-                        				 ".autoquote($row['mtime']) .", 
-                        				 ".autoquote($row['content']) .")");
-            if (false === $r)
-                $dropflag = false;
-        }
-        
-        if (true === $dropflag) {
+        if (false !== $ok) {
             db_query("DROP TABLE wiki_properties");
             db_query("DROP TABLE wiki_acls");
             db_query("DROP TABLE wiki_pages");
@@ -800,7 +700,7 @@ function upgrade_course_3_0($code, $lang, $extramessage = '', $return_mapping = 
         }
         
         db_query("UPDATE `$mysqlMainDb`.course_units AS units, `$mysqlMainDb`.unit_resources AS res
-                            SET res_id = res_id + $wiki_id
+                            SET res_id = res_id + $wikiid_offset
                             WHERE units.id = res.unit_id AND course_id = $course_id AND type = 'wiki'");
     }
     
@@ -809,114 +709,75 @@ function upgrade_course_3_0($code, $lang, $extramessage = '', $return_mapping = 
     if (mysql_table_exists($code, 'poll') && mysql_table_exists($code, 'poll_answer_record') &&
         mysql_table_exists($code, 'poll_question') && mysql_table_exists($code, 'poll_question_answer') ) {
     
-        $dropflag = true;
-        $poll_map = array();
-        $poll_question_map = array();
-        $poll_answer_map = array();
-        $poll_answer_map[0] = 0;
-        $poll_answer_map[-1] = -1;
-        
         // ----- poll DB Table ----- //
-        list($poll_id) = mysql_fetch_row(db_query("SELECT max(pid) FROM `$mysqlMainDb`.poll"));
-        if (!$poll_id)
-            $poll_id = 0;
+        list($pollid_offset) = mysql_fetch_row(db_query("SELECT max(pid) FROM `$mysqlMainDb`.poll"));
+        $pollid_offset = (!$pollid_offset) ? 0 : intval($pollid_offset);
         
-        $result = db_query("SELECT * FROM poll ORDER by pid");
+        db_query("CREATE TEMPORARY TABLE poll_map AS
+                   SELECT old.pid AS old_id, old.pid + $pollid_offset AS new_id
+                     FROM poll AS old ORDER by pid");
         
-        while ($row = mysql_fetch_array($result)) {
-            $oldid = intval($row['pid']);
-            $newid = intval($poll_id) + $oldid;
-        
-            $poll_map[$oldid] = $newid;
-        
-            $r = db_query("INSERT INTO `$mysqlMainDb`.poll
-                                        (`pid`, `course_id`, `creator_id`, `name`, `creation_date`, `start_date`, `end_date`, `active`)
-                        				VALUES
-                        				(".$newid .", 
-                        				 ".$course_id .", 
-                        				 ".autoquote($row['creator_id']) .", 
-                        				 ".autoquote($row['name']) .",
-                        				 ".autoquote($row['creation_date']) .", 
-                        				 ".autoquote($row['start_date']) .", 
-                        				 ".autoquote($row['end_date']) .",  
-                        				 ".autoquote($row['active']) .")");
-            if (false === $r)
-                $dropflag = false;
-        }
+        $ok = db_query("INSERT INTO `$mysqlMainDb`.poll
+                         (`pid`, `course_id`, `creator_id`, `name`, `creation_date`, `start_date`, `end_date`, `active`)
+                         SELECT `pid` + $pollid_offset, $course_id, `creator_id`, `name`, `creation_date`, `start_date`,
+                                `end_date`, `active` 
+                           FROM poll ORDER BY pid");
         
         // ----- poll_question DB Table ----- //
-        list($poll_question_id) = mysql_fetch_row(db_query("SELECT max(pqid) FROM `$mysqlMainDb`.poll_question"));
-        if (!$poll_question_id)
-            $poll_question_id = 0;
+        list($pollquestionid_offset) = mysql_fetch_row(db_query("SELECT max(pqid) FROM `$mysqlMainDb`.poll_question"));
+        $pollquestionid_offset = (!$pollquestionid_offset) ? 0 : intval($pollquestionid_offset);
         
-        $result = db_query("SELECT * FROM poll_question ORDER by pqid");
+        db_query("CREATE TEMPORARY TABLE pollquestion_map AS
+                   SELECT old.pqid AS old_id, old.pqid + $pollquestionid_offset AS new_id
+                     FROM poll_question AS old ORDER by pqid");
         
-        while ($row = mysql_fetch_array($result)) {
-            $oldid = intval($row['pqid']);
-            $newid = intval($poll_question_id) + $oldid;
-        
-            $poll_question_map[$oldid] = $newid;
-        
-            $r = db_query("INSERT INTO `$mysqlMainDb`.poll_question
-                                        (`pqid`, `pid`, `question_text`, `qtype`)
-                        				VALUES
-                        				(".$newid .", 
-                        				 ".$poll_map[$row['pid']] .", 
-                        				 ".autoquote($row['question_text']) .", 
-                        				 ".autoquote($row['qtype']) .")");
-            if (false === $r)
-                $dropflag = false;
-        }
+        $ok = db_query("INSERT INTO `$mysqlMainDb`.poll_question
+                         (`pqid`, `pid`, `question_text`, `qtype`)
+                         SELECT DISTINCT poll_question.pqid + $pollquestionid_offset, poll_map.new_id,
+                                poll_question.question_text, poll_question.qtype
+                           FROM poll_question, poll_map
+                          WHERE poll_question.pid = poll_map.old_id
+                          ORDER BY poll_question.pqid") && $ok;
         
         // ----- poll_question_answer DB Table ----- //
-        list($poll_answer_id) = mysql_fetch_row(db_query("SELECT max(pqaid) FROM `$mysqlMainDb`.poll_question_answer"));
-        if (!$poll_answer_id)
-            $poll_answer_id = 0;
+        list($pollanswerid_offset) = mysql_fetch_row(db_query("SELECT max(pqaid) FROM `$mysqlMainDb`.poll_question_answer"));
+        $pollanswerid_offset = (!$pollanswerid_offset) ? 0 : intval($pollanswerid_offset);
         
-        $result = db_query("SELECT * FROM poll_question_answer ORDER by pqaid");
+        db_query("CREATE TEMPORARY TABLE pollanswer_map AS
+                   SELECT old.pqaid AS old_id, old.pqaid + $pollanswerid_offset AS new_id
+                     FROM poll_question_answer AS old ORDER by pqaid");
+        db_query("INSERT INTO pollanswer_map (`old_id`, `new_id`) VALUES (0, 0)");
+        db_query("INSERT INTO pollanswer_map (`old_id`, `new_id`) VALUES (-1, -1)");
         
-        while ($row = mysql_fetch_array($result)) {
-            $oldid = intval($row['pqaid']);
-            $newid = intval($poll_answer_id) + $oldid;
-        
-            $poll_answer_map[$oldid] = $newid;
-        
-            $r = db_query("INSERT INTO `$mysqlMainDb`.poll_question_answer
-                                        (`pqaid`, `pqid`, `answer_text`)
-                        				VALUES
-                        				(".$newid .", 
-                        				 ".$poll_question_map[$row['pqid']] .", 
-                        				 ".autoquote($row['answer_text']) .")");
-            if (false === $r)
-                $dropflag = false;
-        }
+        $ok = db_query("INSERT INTO `$mysqlMainDb`.poll_question_answer
+                         (`pqaid`, `pqid`, `answer_text`)
+                         SELECT DISTINCT poll_question_answer.pqaid + $pollanswerid_offset, 
+                                pollquestion_map.new_id, poll_question_answer.answer_text
+                           FROM poll_question_answer, pollquestion_map
+                          WHERE poll_question_answer.pqid = pollquestion_map.old_id
+                          ORDER BY poll_question_answer.pqaid") && $ok;
         
         // ----- poll_answer_record DB Table ----- //
-        list($poll_record_id) = mysql_fetch_row(db_query("SELECT max(arid) FROM `$mysqlMainDb`.poll_answer_record"));
-        if (!$poll_record_id)
-            $poll_record_id = 0;
+        list($pollrecordid_offset) = mysql_fetch_row(db_query("SELECT max(arid) FROM `$mysqlMainDb`.poll_answer_record"));
+        $pollrecordid_offset = (!$pollrecordid_offset) ? 0 : intval($pollrecordid_offset);
         
-        $result = db_query("SELECT * FROM poll_answer_record ORDER by arid");
+        $ok = db_query("INSERT INTO `$mysqlMainDb`.poll_answer_record
+                         (`arid`, `pid`, `qid`, `aid`, `answer_text`, `user_id`, `submit_date`)
+                         SELECT DISTINCT poll_answer_record.arid + $pollrecordid_offset,
+                                poll_map.new_id, pollquestion_map.new_id, pollanswer_map.new_id,
+                                poll_answer_record.answer_text, poll_answer_record.user_id,
+                                poll_answer_record.submit_date
+                           FROM poll_answer_record, poll_map, pollquestion_map, pollanswer_map
+                          WHERE poll_answer_record.pid = poll_map.old_id
+                            AND poll_answer_record.qid = pollquestion_map.old_id
+                            AND poll_answer_record.aid = pollanswer_map.old_id
+                          ORDER BY poll_answer_record.arid") && $ok;
         
-        while ($row = mysql_fetch_array($result)) {
-            $oldid = intval($row['arid']);
-            $newid = intval($poll_record_id) + $oldid;
+        db_query("DROP TEMPORARY TABLE poll_map");
+        db_query("DROP TEMPORARY TABLE pollquestion_map");
+        db_query("DROP TEMPORARY TABLE pollanswer_map");
         
-            $r = db_query("INSERT INTO `$mysqlMainDb`.poll_answer_record
-                                        (`arid`, `pid`, `qid`, `aid`, `answer_text`, `user_id`, `submit_date`)
-                        				VALUES
-                        				(".$newid .", 
-                        				 ".$poll_map[$row['pid']] .", 
-                        				 ".$poll_question_map[$row['qid']] .", 
-                        				 ".$poll_answer_map[$row['aid']] .", 
-                        				 ".autoquote($row['answer_text']) .", 
-                        				 ".autoquote($row['user_id']) .", 
-                        				 ".autoquote($row['submit_date']) .")");
-            if (false === $r)
-                $dropflag = false;
-        }
-        
-        if (true === $dropflag) {
+        if (false !== $ok) {
             db_query("DROP TABLE poll");
             db_query("DROP TABLE poll_answer_record");
             db_query("DROP TABLE poll_question");
@@ -928,119 +789,80 @@ function upgrade_course_3_0($code, $lang, $extramessage = '', $return_mapping = 
     // move assignments to central db and drop tables
     if (mysql_table_exists($code, 'assignments') && mysql_table_exists($code, 'assignment_submit') ) {
     
-        $dropflag = true;
-    
         // ----- assigments DB Table ----- //
-        list($assignment_id) = mysql_fetch_row(db_query("SELECT max(id) FROM `$mysqlMainDb`.assignments"));
-        if (!$assignment_id)
-            $assignment_id = 0;
-    
-        $result = db_query("SELECT * FROM assignments ORDER by id");
-    
-        while ($row = mysql_fetch_array($result)) {
-            $oldid = intval($row['id']);
-            $newid = intval($assignment_id) + $oldid;
-    
-            $assignments_map[$oldid] = $newid;
-    
-            $r = db_query("INSERT INTO `$mysqlMainDb`.assignments
-                                        (`id`, `course_id`, `title`, `description`, `comments`, `deadline`, `submission_date`, 
-                                         `active`, `secret_directory`, `group_submissions`)
-                        				VALUES
-                        				(".$newid .", 
-                        				 ".$course_id .", 
-                        				 ".autoquote($row['title']) .", 
-                        				 ".autoquote($row['description']) .",
-                        				 ".autoquote($row['comments']) .", 
-                        				 ".autoquote($row['deadline']) .", 
-                        				 ".autoquote($row['submission_date']) .",  
-                        				 ".autoquote($row['active']) .",
-                        				 ".autoquote($row['secret_directory']) .",
-                        				 ".autoquote($row['group_submissions']) .")");
-            if (false === $r)
-                $dropflag = false;
+        list($assignmentid_offset) = mysql_fetch_row(db_query("SELECT max(id) FROM `$mysqlMainDb`.assignments"));
+        $assignmentid_offset = (!$assignmentid_offset) ? 0 : intval($assignmentid_offset);
+        
+        if ($return_mapping) {
+            $result = db_query("SELECT * FROM assignments ORDER by id");
+            while ($row = mysql_fetch_array($result)) {
+                $oldid = intval($row['id']);
+                $newid = $oldid + $assignmentid_offset;
+                $assignments_map[$oldid] = $newid;
+            }
         }
         
+        db_query("CREATE TEMPORARY TABLE assignments_map AS
+                   SELECT old.id AS old_id, old.id + $assignmentid_offset AS new_id
+                     FROM assignments AS old ORDER by id");
+        
+        $ok = db_query("INSERT INTO `$mysqlMainDb`.assignments
+                         (`id`, `course_id`, `title`, `description`, `comments`, `deadline`, `submission_date`, 
+                          `active`, `secret_directory`, `group_submissions`)
+                         SELECT `id` + $assignmentid_offset, $course_id, `title`, `description`, `comments`,
+                                `deadline`, `submission_date`, `active`, `secret_directory`, `group_submissions`
+                           FROM assignments ORDER BY id");
+    
         // ----- assigments DB Table ----- //
-        list($assignment_submit_id) = mysql_fetch_row(db_query("SELECT max(id) FROM `$mysqlMainDb`.assignment_submit"));
-        if (!$assignment_submit_id)
-            $assignment_submit_id = 0;
+        list($assignmentsubmitid_offset) = mysql_fetch_row(db_query("SELECT max(id) FROM `$mysqlMainDb`.assignment_submit"));
+        $assignmentsubmitid_offset = (!$assignmentsubmitid_offset) ? 0 : intval($assignmentsubmitid_offset);
         
-        $result = db_query("SELECT * FROM assignment_submit ORDER by id");
+        $ok = db_query("INSERT INTO `$mysqlMainDb`.assignment_submit
+                         (`id`, `uid`, `assignment_id`, `submission_date`, `submission_ip`, `file_path`, `file_name`, 
+                          `comments`, `grade`, `grade_comments`, `grade_submission_date`, `grade_submission_ip`, 
+                          `group_id`)
+                         SELECT DISTINCT assignment_submit.id + $assignmentsubmitid_offset, 
+                                assignment_submit.uid, assignments_map.new_id, 
+                                assignment_submit.submission_date, assignment_submit.submission_ip,
+                                assignment_submit.file_path, assignment_submit.file_name, 
+                                assignment_submit.comments, assignment_submit.grade, assignment_submit.grade_comments,
+                                assignment_submit.grade_submission_date, assignment_submit.grade_submission_ip,
+                                assignment_submit.group_id
+                           FROM assignment_submit, assignments_map
+                          WHERE assignment_submit.assignment_id = assignments_map.old_id
+                          ORDER BY assignment_submit.id") && $ok;
         
-        while ($row = mysql_fetch_array($result)) {
-            $oldid = intval($row['id']);
-            $newid = intval($assignment_submit_id) + $oldid;
+        db_query("DROP TEMPORARY TABLE assignments_map");
         
-            $r = db_query("INSERT INTO `$mysqlMainDb`.assignment_submit
-                                        (`id`, `uid`, `assignment_id`, `submission_date`, `submission_ip`, `file_path`, `file_name`, 
-                                         `comments`, `grade`, `grade_comments`, `grade_submission_date`, `grade_submission_ip`, 
-                                         `group_id`)
-                        				VALUES
-                        				(".$newid .", 
-                        				 ".autoquote($row['uid']) .",  
-                        				 ".$assignments_map[$row['assignment_id']] .", 
-                        				 ".autoquote($row['submission_date']) .",
-                        				 ".autoquote($row['submission_ip']) .", 
-                        				 ".autoquote($row['file_path']) .", 
-                        				 ".autoquote($row['file_name']) .",  
-                        				 ".autoquote($row['comments']) .",
-                        				 ".autoquote($row['grade']) .",
-                        				 ".autoquote($row['grade_comments']) .",
-                        				 ".autoquote($row['grade_submission_date']) .",
-                        				 ".autoquote($row['grade_submission_ip']) .",
-                        				 ".autoquote($row['group_id']) .")");
-            if (false === $r)
-                $dropflag = false;
-        }
-        
-        if (true === $dropflag) {
+        if (false !== $ok) {
             db_query("DROP TABLE assignments");
             db_query("DROP TABLE assignment_submit");
         }
         
         db_query("UPDATE `$mysqlMainDb`.course_units AS units, `$mysqlMainDb`.unit_resources AS res
-                            SET res_id = res_id + $assignment_id
+                            SET res_id = res_id + $assignmentid_offset
                             WHERE units.id = res.unit_id AND course_id = $course_id AND type = 'work'");
     }
     
     // move agenda to central db and drop table
     if (mysql_table_exists($code, 'agenda')) {
     
-        $dropflag = true;
-    
         // ----- agenda DB Table ----- //
-        list($agenda_id) = mysql_fetch_row(db_query("SELECT max(id) FROM `$mysqlMainDb`.agenda"));
-        if (!$agenda_id)
-            $agenda_id = 0;
-    
-        $result = db_query("SELECT * FROM agenda ORDER by id");
-    
-        while ($row = mysql_fetch_array($result)) {
-            $oldid = intval($row['id']);
-            $newid = intval($agenda_id) + $oldid;
-    
-            $r = db_query("INSERT INTO `$mysqlMainDb`.agenda
-                                        (`id`, `course_id`, `title`, `content`, `day`, `hour`, `lasting`, `visibility`)
-                        				VALUES
-                        				(".$newid .", 
-                        				 ".$course_id .", 
-                        				 ".autoquote($row['titre']) .", 
-                        				 ".autoquote($row['contenu']) .",
-                        				 ".autoquote($row['day']) .", 
-                        				 ".autoquote($row['hour']) .", 
-                        				 ".autoquote($row['lasting']) .",  
-                        				 ".autoquote($row['visibility']) .")");
-            if (false === $r)
-                $dropflag = false;
-        }
+        list($agendaid_offset) = mysql_fetch_row(db_query("SELECT max(id) FROM `$mysqlMainDb`.agenda"));
+        $agendaid_offset = (!$agendaid_offset) ? 0 : intval($agendaid_offset);
         
-        if (true === $dropflag)
+        $ok = db_query("INSERT INTO `$mysqlMainDb`.agenda
+                         (`id`, `course_id`, `title`, `content`, `day`, `hour`, `lasting`, `visibility`)
+                         SELECT `id` + $agendaid_offset, $course_id, `titre`, `contenu`, `day`, `hour`, `lasting`, 
+                                `visibility` FROM agenda ORDER BY id");
+    
+        if (false !== $ok)
             db_query("DROP TABLE agenda");
             
     }
     
     $exercise_map = array();
+    $exercise_map[0] = 0;
     // move exercises to central db and drop tables
     if (mysql_table_exists($code, 'exercices') &&
         mysql_table_exists($code, 'exercise_user_record') &&
@@ -1048,139 +870,85 @@ function upgrade_course_3_0($code, $lang, $extramessage = '', $return_mapping = 
         mysql_table_exists($code, 'reponses') &&
         mysql_table_exists($code, 'exercice_question') ) {
     
-        $dropflag = true;
-        $question_map = array();
-    
         // ----- exercices DB Table ----- //
-        list($exercise_id) = mysql_fetch_row(db_query("SELECT max(id) FROM `$mysqlMainDb`.exercise"));
-        if (!$exercise_id)
-            $exercise_id = 0;
+        list($exerciseid_offset) = mysql_fetch_row(db_query("SELECT max(id) FROM `$mysqlMainDb`.exercise"));
+        $exerciseid_offset = (!$exerciseid_offset) ? 0 : intval($exerciseid_offset);
     
-        $result = db_query("SELECT * FROM exercices ORDER by id");
-    
-        while ($row = mysql_fetch_array($result)) {
-            $oldid = intval($row['id']);
-            $newid = intval($exercise_id) + $oldid;
-            
-            $exercise_map[$oldid] = $newid;
-    
-            $r = db_query("INSERT INTO `$mysqlMainDb`.exercise
-                                        (`id`, `course_id`, `title`, `description`, `type`, `start_date`, `end_date`, 
-                                         `time_constraint`, `attempts_allowed`, `random`, `active`, `results`, `score`)
-                        				VALUES
-                        				(".$newid .", 
-                        				 ".$course_id .", 
-                        				 ".autoquote($row['titre']) .", 
-                        				 ".autoquote($row['description']) .",
-                        				 ".autoquote($row['type']) .", 
-                        				 ".autoquote($row['StartDate']) .", 
-                        				 ".autoquote($row['EndDate']) .",
-                        				 ".autoquote($row['TimeConstrain']) .",
-                        				 ".autoquote($row['AttemptsAllowed']) .",
-                        				 ".autoquote($row['random']) .",
-                        				 ".autoquote($row['active']) .",
-                        				 ".autoquote($row['results']) .",
-                        				 ".autoquote($row['score']) .")");
-            if (false === $r)
-                $dropflag = false;
-        }
-        
-        // ----- exercise_user_record DB Table ----- //
-        list($eur_id) = mysql_fetch_row(db_query("SELECT max(eurid) FROM `$mysqlMainDb`.exercise_user_record"));
-        if (!$eur_id)
-            $eur_id = 0;
-        
-        $result = db_query("SELECT * FROM exercise_user_record ORDER by eurid");
-        
-        while ($row = mysql_fetch_array($result)) {
-            $oldid = intval($row['eurid']);
-            $newid = intval($eur_id) + $oldid;
-        
-            if (isset($exercise_map[$row['eid']])) {
-                $r = db_query("INSERT INTO `$mysqlMainDb`.exercise_user_record
-                                            (`eurid`, `eid`, `uid`, `record_start_date`, `record_end_date`, `total_score`, 
-                                            `total_weighting`, `attempt`)
-                        				VALUES
-                        				(".$newid .", 
-                        				 ".$exercise_map[$row['eid']] .", 
-                        				 ".autoquote($row['uid']) .",
-                        				 ".autoquote($row['RecordStartDate']) .", 
-                        				 ".autoquote($row['RecordEndDate']) .", 
-                        				 ".autoquote($row['TotalScore']) .",
-                        				 ".autoquote($row['TotalWeighting']) .",
-                        				 ".autoquote($row['attempt']) .")");
+        if ($return_mapping) {
+            $result = db_query("SELECT * FROM exercices ORDER by id");
+            while ($row = mysql_fetch_array($result)) {
+                $oldid = intval($row['id']);
+                $newid = $oldid + $exerciseid_offset;
+                $exercise_map[$oldid] = $newid;
             }
-            
-            if (false === $r)
-                $dropflag = false;
         }
+        
+        db_query("CREATE TEMPORARY TABLE exercise_map AS
+                   SELECT old.id AS old_id, old.id + $exerciseid_offset AS new_id
+                     FROM exercices AS old ORDER by id");
+        db_query("INSERT INTO exercise_map (`old_id`, `new_id`) VALUES (0, 0)");
+        
+        $ok = db_query("INSERT INTO `$mysqlMainDb`.exercise
+                         (`id`, `course_id`, `title`, `description`, `type`, `start_date`, `end_date`, 
+                          `time_constraint`, `attempts_allowed`, `random`, `active`, `results`, `score`)
+                         SELECT `id` + $exerciseid_offset, $course_id, `titre`, `description`, `type`, 
+                                `StartDate`, `EndDate`, `TimeConstrain`, `AttemptsAllowed`, `random`,
+                                `active`, `results`, `score`
+                           FROM exercices ORDER BY id");
+    
+        // ----- exercise_user_record DB Table ----- //
+        list($eurid_offset) = mysql_fetch_row(db_query("SELECT max(eurid) FROM `$mysqlMainDb`.exercise_user_record"));
+        $eurid_offset = (!$eurid_offset) ? 0 : intval($eurid_offset);
+        
+        $ok = db_query("INSERT INTO `$mysqlMainDb`.exercise_user_record
+                         (`eurid`, `eid`, `uid`, `record_start_date`, `record_end_date`, `total_score`, 
+                          `total_weighting`, `attempt`)
+                         SELECT DISTINCT exercise_user_record.eurid + $eurid_offset, exercise_map.new_id,
+                                exercise_user_record.uid, exercise_user_record.RecordStartDate,
+                                exercise_user_record.RecordEndDate, exercise_user_record.TotalScore,
+                                exercise_user_record.TotalWeighting, exercise_user_record.attempt
+                           FROM exercise_user_record, exercise_map
+                          WHERE exercise_user_record.eid = exercise_map.old_id
+                          ORDER BY exercise_user_record.eurid") && $ok;
         
         // ----- questions DB Table ----- //
-        list($question_id) = mysql_fetch_row(db_query("SELECT max(id) FROM `$mysqlMainDb`.question"));
-        if (!$question_id)
-            $question_id = 0;
+        list($questionid_offset) = mysql_fetch_row(db_query("SELECT max(id) FROM `$mysqlMainDb`.question"));
+        $questionid_offset = (!$questionid_offset) ? 0 : intval($questionid_offset);
         
-        $result = db_query("SELECT * FROM questions ORDER by id");
+        db_query("CREATE TEMPORARY TABLE question_map AS
+                   SELECT old.id AS old_id, old.id + $questionid_offset AS new_id
+                     FROM questions AS old ORDER by id");
         
-        while ($row = mysql_fetch_array($result)) {
-            $oldid = intval($row['id']);
-            $newid = intval($question_id) + $oldid;
-        
-            $question_map[$oldid] = $newid;
-        
-            $r = db_query("INSERT INTO `$mysqlMainDb`.question
-                                        (`id`, `course_id`, `question`, `description`, `weight`, `q_position`, `type`)
-                        				VALUES
-                        				(".$newid .", 
-                        				 ".$course_id .", 
-                        				 ".autoquote($row['question']) .", 
-                        				 ".autoquote($row['description']) .",
-                        				 ".autoquote($row['ponderation']) .", 
-                        				 ".autoquote($row['q_position']) .", 
-                        				 ".autoquote($row['type']) .")");
-            if (false === $r)
-                $dropflag = false;
-        }
+        $ok = db_query("INSERT INTO `$mysqlMainDb`.question
+                         (`id`, `course_id`, `question`, `description`, `weight`, `q_position`, `type`)
+                         SELECT `id` + $questionid_offset, $course_id, `question`, `description`, `ponderation`,
+                                `q_position`, `type`
+                           FROM questions ORDER BY id") && $ok;
         
         // ----- reponses DB Table ----- //
-        list($answer_id) = mysql_fetch_row(db_query("SELECT max(id) FROM `$mysqlMainDb`.answer"));
-        if (!$answer_id)
-            $answer_id = 0;
+        list($answerid_offset) = mysql_fetch_row(db_query("SELECT max(id) FROM `$mysqlMainDb`.answer"));
+        $answerid_offset = (!$answerid_offset) ? 0 : intval($answerid_offset);
         
-        $result = db_query("SELECT * FROM reponses ORDER by id");
+        $ok = db_query("INSERT INTO `$mysqlMainDb`.answer
+                         (`id`, `question_id`, `answer`, `correct`, `comment`, `weight`, `r_position`)
+                         SELECT DISTINCT reponses.id + $answerid_offset, question_map.new_id,
+                                reponses.reponse, reponses.correct, reponses.comment, reponses.ponderation,
+                                reponses.r_position
+                           FROM reponses, question_map
+                          WHERE reponses.question_id = question_map.old_id
+                          ORDER BY reponses.id") && $ok;
         
-        while ($row = mysql_fetch_array($result)) {
-            $oldid = intval($row['id']);
-            $newid = intval($answer_id) + $oldid;
+        $ok = db_query("INSERT INTO `$mysqlMainDb`.exercise_question
+                         (`question_id`, `exercise_id`)
+                         SELECT DISTINCT question_map.new_id, exercise_map.new_id
+                           FROM exercice_question, exercise_map, question_map
+                          WHERE exercice_question.exercice_id = exercise_map.old_id
+                            AND exercice_question.question_id = question_map.old_id") && $ok;
         
-            $r = db_query("INSERT INTO `$mysqlMainDb`.answer
-                                        (`id`, `question_id`, `answer`, `correct`, `comment`, `weight`, `r_position`)
-                        				VALUES
-                        				(".$newid .", 
-                        				 ".$question_map[$row['question_id']] .", 
-                        				 ".autoquote($row['reponse']) .",
-                        				 ".autoquote($row['correct']) .", 
-                        				 ".autoquote($row['comment']) .", 
-                        				 ".autoquote($row['ponderation']) .",
-                        				 ".autoquote($row['r_position']) .")");
-            if (false === $r)
-                $dropflag = false;
-        }
-        
-        // ----- exercice_question DB Table ----- //
-        $result = db_query("SELECT * FROM exercice_question");
-        
-        while ($row = mysql_fetch_array($result)) {
-            $r = db_query("INSERT INTO `$mysqlMainDb`.exercise_question
-                                        (`question_id`, `exercise_id`)
-                        				VALUES
-                        				(".$question_map[$row['question_id']] .", 
-                        				 ".$exercise_map[$row['exercice_id']] .")");
-            if (false === $r)
-                $dropflag = false;
-        }
+        db_query("DROP TEMPORARY TABLE exercise_map");
+        db_query("DROP TEMPORARY TABLE question_map");
     
-        if (true === $dropflag) {
+        if (false !== $ok) {
             db_query("DROP TABLE exercices");
             db_query("DROP TABLE exercise_user_record");
             db_query("DROP TABLE questions");
@@ -1189,11 +957,11 @@ function upgrade_course_3_0($code, $lang, $extramessage = '', $return_mapping = 
         }
         
         db_query("UPDATE `$mysqlMainDb`.course_units AS units, `$mysqlMainDb`.unit_resources AS res
-                            SET res_id = res_id + $exercise_id
-                            WHERE units.id = res.unit_id AND course_id = $course_id AND type = 'exercise'");
+                     SET res_id = res_id + $exerciseid_offset
+                   WHERE units.id = res.unit_id AND course_id = $course_id AND type = 'exercise'");
         db_query("UPDATE `$mysqlMainDb`.lp_module AS module, `$mysqlMainDb`.lp_asset AS asset
-        					SET path = path + $exercise_id
-        					WHERE module.startAsset_id = asset.asset_id AND course_id = $course_id AND contentType = 'EXERCISE'");
+                     SET path = path + $exerciseid_offset
+                   WHERE module.startAsset_id = asset.asset_id AND course_id = $course_id AND contentType = 'EXERCISE'");
     }
     
     if ($return_mapping)
