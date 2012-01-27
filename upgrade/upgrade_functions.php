@@ -605,6 +605,23 @@ function upgrade_course_3_0($code, $lang, $extramessage = '', $return_mapping = 
         db_query("DROP TEMPORARY TABLE rel_map");
         
         if (false !== $ok) {
+            $scormPkgDir = $webDir .'courses/'. $code .'/scormPackages';
+            $pathTkn = 'path_';
+            $pathids = array();
+
+            if (file_exists($scormPkgDir) && is_dir($scormPkgDir)) {
+                if (($handle = opendir($scormPkgDir))) {
+                    while (false !== ($entry = readdir($handle))) {
+                        if ($entry != "." && $entry != ".." && substr($entry, 0, strlen($pathTkn)) === $pathTkn && is_dir($scormPkgDir.'/'.$entry))
+                            $pathids[] = substr($entry, strlen($pathTkn), strlen($entry)); 
+                    }
+                    rsort($pathids);
+                    foreach ($pathids as $pathid)
+                        rename($scormPkgDir.'/'.$pathTkn.$pathid, $scormPkgDir.'/'.$pathTkn. ($pathid + $lpid_offset));
+                    closedir($handle);
+                }
+            }
+            
             db_query("DROP TABLE lp_learnPath");
             db_query("DROP TABLE lp_module");
             db_query("DROP TABLE lp_asset");
