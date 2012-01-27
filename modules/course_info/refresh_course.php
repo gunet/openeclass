@@ -137,7 +137,7 @@ function delete_users($date = '') {
 function delete_announcements() {
 	global $cours_id, $langAnnDeleted;
 
-	db_query("DELETE FROM annonces WHERE cours_id = $cours_id");
+	db_query("DELETE FROM announcements WHERE course_id = $cours_id");
 	return "<p>$langAnnDeleted</p>";
 }
 

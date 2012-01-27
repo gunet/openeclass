@@ -108,10 +108,10 @@ if(empty($search_terms)) {
 	// search in announcements
 	if ($announcements) 
 	{
-		$myquery = "SELECT title, contenu, temps FROM annonces
-				WHERE cours_id = $cours_id
+		$myquery = "SELECT title, content, `date` FROM announcements
+				WHERE course_id = $cours_id
 				AND visibility = 'v'
-				AND MATCH (title, contenu)".$query;
+				AND MATCH (title, content)".$query;
 		$result = db_query($myquery, $mysqlMainDb);
 		if(mysql_num_rows($result) > 0) {
 		$tool_content .= "
@@ -135,7 +135,7 @@ if(empty($search_terms)) {
                     <td><b>" . q($res['title']) ."</b>&nbsp;&nbsp;";	    
 				$tool_content .= "<small>("
 				.nice_format(claro_format_locale_date($dateFormatLong, strtotime($res['temps']))).
-				")</small><br />$res[contenu]
+				")</small><br />$res[content]
                     </td>
                   </tr>";
                         $numLine++;
@@ -181,7 +181,7 @@ if(empty($search_terms)) {
 				$tool_content .= "<span class=day>".
 				ucfirst(claro_format_locale_date($dateFormatLong,strtotime($res["day"]))).
 				"</span> ($langHour: ".ucfirst(date("H:i",strtotime($res["hour"]))).")<br />"				
-				.$res['title']." (".$langDuration.": ".$res["lasting"]." $message) ".$res['contenu']."
+				.$res['title']." (".$langDuration.": ".$res["lasting"]." $message) ".$res['content']."
                     </td>
                   </tr>";
                         $numLine++;

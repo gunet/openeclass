@@ -210,10 +210,10 @@ function search_in_course($search_terms, $cours_id, $code_cours) {
 	$query = " AGAINST ('".$search_terms."";
 	$query .= "' IN BOOLEAN MODE)";
 	
-	$sql = db_query("SELECT title, contenu, temps FROM annonces
-				WHERE cours_id = $cours_id
+	$sql = db_query("SELECT title, content, `date` FROM announcements
+				WHERE course_id = $cours_id
 				AND visibility = 'v'
-				AND MATCH (title, contenu)".$query, $mysqlMainDb);
+				AND MATCH (title, content)".$query, $mysqlMainDb);
 	if (mysql_num_rows($sql) > 0) {
 		return TRUE;
 	}

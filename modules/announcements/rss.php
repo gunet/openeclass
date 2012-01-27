@@ -45,8 +45,9 @@ if ($cours_id === false) {
 list($intitule) = mysql_fetch_row(db_query("SELECT intitule FROM cours WHERE code = '$code'"));
 $intitule = htmlspecialchars($intitule, ENT_NOQUOTES); 
 
-$result = db_query("SELECT DATE_FORMAT(temps,'%a, %d %b %Y %T +0300') AS dateformat 
-		FROM annonces WHERE cours_id = $cours_id ORDER BY temps DESC", $mysqlMainDb);
+$result = db_query("SELECT DATE_FORMAT(`date`,'%a, %d %b %Y %T +0300') AS dateformat 
+		FROM announcements WHERE course_id = $cours_id 
+                ORDER BY `order` DESC", $mysqlMainDb);
 list($lastbuilddate) = mysql_fetch_row($result);
 
 header ("Content-Type: application/xml;");
@@ -60,14 +61,14 @@ echo "<description>$langAnnouncements</description>";
 echo "<lastBuildDate>$lastbuilddate</lastBuildDate>";
 echo "<language>el</language>";
 
-$sql = db_query("SELECT id, title, contenu, DATE_FORMAT(temps,'%a, %d %b %Y %T +0300') AS dateformat 
-		FROM annonces WHERE cours_id = $cours_id ORDER BY temps DESC", $mysqlMainDb);
+$sql = db_query("SELECT id, title, content, DATE_FORMAT(`date`,'%a, %d %b %Y %T +0300') AS dateformat 
+		FROM announcements WHERE course_id = $cours_id ORDER BY `order` DESC", $mysqlMainDb);
 
 while ($r = mysql_fetch_array($sql)) {
 	echo "<item>";
 	echo "<title>".htmlspecialchars($r['title'], ENT_NOQUOTES)."</title>";
 	echo "<link>".$urlServer."modules/announcements/announcements.php?an_id=".$r['id']."&amp;c=".$code."</link>";
-	echo "<description>".htmlspecialchars($r['contenu'], ENT_NOQUOTES)."</description>";	
+	echo "<description>".htmlspecialchars($r['content'], ENT_NOQUOTES)."</description>";	
 	echo "<pubDate>".$r['dateformat']."</pubDate>";
 	echo "<guid isPermaLink='false'>".$r['dateformat'].$r['id']."</guid>";
 	echo "</item>";

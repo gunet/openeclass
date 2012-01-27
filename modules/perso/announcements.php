@@ -159,14 +159,14 @@ function createQueries($queryParam){
 			$dateVar = $date;
 		}
 
-		$announce_query[$i] = "SELECT title, contenu, temps, annonces.id
-                        FROM `$mysqlMainDb`.annonces, `$lesson_code[$i]`.accueil
-                        WHERE cours_id = $lesson_id[$i]
+		$announce_query[$i] = "SELECT title, content, `date`, announcements.id
+                        FROM `$mysqlMainDb`.announcements, `$lesson_code[$i]`.accueil
+                        WHERE course_id = $lesson_id[$i]
 				AND visibility = 'v'
-                                AND DATE_FORMAT(temps,'%Y %m %d') >='$dateVar'
+                                AND DATE_FORMAT(`date`,'%Y %m %d') >='$dateVar'
                                 AND `$lesson_code[$i]`.accueil.visible = 1
                                 AND `$lesson_code[$i]`.accueil.id = 7
-                        ORDER BY temps DESC";
+                        ORDER BY `date` DESC";
 	}
 	return $announce_query;
 }

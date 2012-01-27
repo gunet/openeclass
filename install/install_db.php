@@ -59,16 +59,16 @@ $charset_spec = 'DEFAULT CHARACTER SET=utf8';
 // create tables
 
 #
-# table `annonces`
+# table `announcements`
 #
 
-db_query("CREATE TABLE annonces (
+db_query("CREATE TABLE announcements (
 	`id` MEDIUMINT(11) NOT NULL auto_increment,
 	`title` VARCHAR(255) DEFAULT NULL,
-	`contenu` TEXT,
-	`temps` DATE DEFAULT NULL,
-	`cours_id` INT(11) NOT NULL default '0',
-	`ordre` MEDIUMINT(11) NOT NULL,
+	`content` TEXT,
+	`date` DATE DEFAULT NULL,
+	`course_id` INT(11) NOT NULL default '0',
+	`order` MEDIUMINT(11) NOT NULL,
 	`visibility` CHAR(1) NOT NULL DEFAULT 'v',
 	PRIMARY KEY (id)) $charset_spec");
 
@@ -803,7 +803,7 @@ db_query("CREATE TABLE `course_units` (
 	`date` DATETIME NOT NULL DEFAULT '0000-00-00') $charset_spec");
  
 // Create full text indexes
-db_query("ALTER TABLE `annonces` ADD FULLTEXT `annonces` (`contenu`, `title`)");
+db_query("ALTER TABLE `announcements` ADD FULLTEXT `announcements` (`content`, `title`)");
 db_query("ALTER TABLE `cours` ADD FULLTEXT `cours` (`code` ,`description` ,`intitule` ,`course_keywords`, `course_addon`)");
 
 // create indexes

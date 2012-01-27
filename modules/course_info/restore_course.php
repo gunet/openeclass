@@ -229,8 +229,8 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
                 }
 
                 mysql_select_db($mysqlMainDb);
-                restore_table($restoreThis, 'annonces',
-                        array('set' => array('cours_id' => $course_id),
+                restore_table($restoreThis, 'announcements',
+                        array('set' => array('course_id' => $course_id),
                               'delete' => array('id')));
                 restore_table($restoreThis, 'group_properties',
                         array('set' => array('course_id' => $course_id)));
@@ -562,8 +562,8 @@ function course_details($code, $lang, $title, $desc, $fac, $vis, $prof, $type) {
 function announcement($text, $date, $order, $title = '') {
 	global $action, $course_id, $mysqlMainDb;
 	if (!$action) return;
-	db_query("INSERT INTO `$mysqlMainDb`.annonces
-		(title, contenu, temps, cours_id, ordre)
+	db_query("INSERT INTO `$mysqlMainDb`.announcements
+		(title, content, `date`, course_id, `order`)
 		VALUES (".
 		join(", ", array(
 			quote(inner_unquote($title)),

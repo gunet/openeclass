@@ -202,7 +202,7 @@ if (isset($_GET['stats'])) {
 			</tr>
 			<tr>
 			<td class='left'>$langNbAnnoucement</td>
-			<td class='right'><b>".list_1Result("SELECT count(*) FROM annonces;")."</b></td>
+			<td class='right'><b>".list_1Result("SELECT count(*) FROM announcements;")."</b></td>
 			</tr>
 			</table>";
 		break;

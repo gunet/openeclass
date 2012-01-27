@@ -146,14 +146,14 @@ if (count($status) > 0) {
         $table_begin = true;
         foreach ($status as $code => $code_statut) {
                 $cid = $cours_id_map[$code];
-                $result = db_query("SELECT annonces.id, contenu, temps, title
-                                FROM `$mysqlMainDb`.annonces, `$code`.accueil
-                                WHERE cours_id = $cid
-				AND `$mysqlMainDb`.annonces.visibility = 'v'
-                                AND temps > DATE_SUB('$logindate', INTERVAL 10 DAY)
+                $result = db_query("SELECT announcements.id, content, `date`, title
+                                FROM `$mysqlMainDb`.announcements, `$code`.accueil
+                                WHERE course_id = $cid
+				AND `$mysqlMainDb`.announcements.visibility = 'v'
+                                AND `date` > DATE_SUB('$logindate', INTERVAL 10 DAY)
                                 AND `$code`.accueil.visible = 1
                                 AND `$code`.accueil.id = 7
-                                ORDER BY temps DESC", $mysqlMainDb);
+                                ORDER BY `date` DESC", $mysqlMainDb);
 
                 if ($result and mysql_num_rows($result) > 0) {
                         if ($table_begin) {

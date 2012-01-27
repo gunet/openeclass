@@ -55,7 +55,7 @@ if ($is_editor) {
 	$head_content .= '<script type="text/javascript">var langEmptyGroupName = "' .
 			 $langEmptyAnTitle . '";</script>';
 	
-	$result = db_query("SELECT count(*) FROM annonces WHERE cours_id = $cours_id", $mysqlMainDb);
+	$result = db_query("SELECT count(*) FROM announcements WHERE course_id = $cours_id", $mysqlMainDb);
 	
 	list($announcementNumber) = mysql_fetch_row($result);
 	mysql_free_result($result);
@@ -72,14 +72,14 @@ if ($is_editor) {
 	}
 
 	if (isset($thisAnnouncementId) && $thisAnnouncementId && isset($sortDirection) && $sortDirection) {
-	    $result = db_query("SELECT id, ordre FROM annonces WHERE cours_id = $cours_id
-		ORDER BY ordre $sortDirection", $mysqlMainDb);
+	    $result = db_query("SELECT id, `order` FROM announcements WHERE course_id = $cours_id
+                        ORDER BY `order` $sortDirection", $mysqlMainDb);
 		while (list ($announcementId, $announcementOrder) = mysql_fetch_row($result)) {
 			if (isset($thisAnnouncementOrderFound) && $thisAnnouncementOrderFound == true) {
 			    $nextAnnouncementId = $announcementId;
 			    $nextAnnouncementOrder = $announcementOrder;
-			    db_query("UPDATE annonces SET ordre = '$nextAnnouncementOrder' WHERE id = '$thisAnnouncementId'", $mysqlMainDb);
-			    db_query("UPDATE annonces SET ordre = '$thisAnnouncementOrder' WHERE id = '$nextAnnouncementId'", $mysqlMainDb);
+			    db_query("UPDATE announcements SET `order` = '$nextAnnouncementOrder' WHERE id = '$thisAnnouncementId'", $mysqlMainDb);
+			    db_query("UPDATE announcements SET `order` = '$thisAnnouncementOrder' WHERE id = '$nextAnnouncementId'", $mysqlMainDb);
 			    break;
 			}
 			// find the order
@@ -94,27 +94,27 @@ if ($is_editor) {
     if (isset($_GET['mkvis'])) {
 	$mkvis = intval($_GET['mkvis']);
 	if ($_GET['vis'] == 1) {
-	    $result = db_query("UPDATE annonces SET visibility = 'v' WHERE id = '$mkvis'", $mysqlMainDb);
+	    $result = db_query("UPDATE announcements SET visibility = 'v' WHERE id = '$mkvis'", $mysqlMainDb);
 	}
 	if ($_GET['vis'] == 0) {
-	    $result = db_query("UPDATE annonces SET visibility = 'i' WHERE id = '$mkvis'", $mysqlMainDb);
+	    $result = db_query("UPDATE announcements SET visibility = 'i' WHERE id = '$mkvis'", $mysqlMainDb);
 	}
     }
     /* delete */
     if (isset($_GET['delete'])) {
 	$delete = intval($_GET['delete']);
-        $result = db_query("DELETE FROM annonces WHERE id='$delete'", $mysqlMainDb);
+        $result = db_query("DELETE FROM announcements WHERE id='$delete'", $mysqlMainDb);
         $message = "<p class='success'>$langAnnDel</p>";
     }
 
     /* modify */
     if (isset($_GET['modify'])) {
         $modify = intval($_GET['modify']);
-        $result = db_query("SELECT * FROM annonces WHERE id='$modify'", $mysqlMainDb);
+        $result = db_query("SELECT * FROM announcements WHERE id='$modify'", $mysqlMainDb);
         $myrow = mysql_fetch_array($result);
         if ($myrow) {
             $AnnouncementToModify = $myrow['id'];
-	    $contentToModify = $myrow['contenu'];
+	    $contentToModify = $myrow['content'];
             $titleToModify = q($myrow['title']);
         }
     }
@@ -126,19 +126,19 @@ if ($is_editor) {
         $newContent = autoquote($_POST['newContent']);
         if (!empty($_POST['id'])) {
             $id = intval($_POST['id']);
-            db_query("UPDATE annonces SET contenu = $newContent,
-			title = $antitle, temps = NOW()
+            db_query("UPDATE announcements SET content = $newContent,
+			title = $antitle, `date` = NOW()
 			WHERE id = $id", $mysqlMainDb);
             $message = "<p class='success'>$langAnnModify</p>";
         } else { // add new announcement
-            $result = db_query("SELECT MAX(ordre) FROM annonces
-				WHERE cours_id = $cours_id", $mysqlMainDb);
+            $result = db_query("SELECT MAX(`order`) FROM announcements
+				WHERE course_id = $cours_id", $mysqlMainDb);
             list($orderMax) = mysql_fetch_row($result);
             $order = $orderMax + 1;
             // insert
-            db_query("INSERT INTO annonces SET contenu = $newContent,
-                            title = $antitle, temps = NOW(),
-                            cours_id = $cours_id, ordre = $order,
+            db_query("INSERT INTO announcements SET content = $newContent,
+                            title = $antitle, `date` = NOW(),
+                            course_id = $cours_id, `order` = $order,
                             visibility = 'v'");
         }
 
@@ -257,15 +257,25 @@ if ($is_editor) {
     /* display announcements */
 	if ($is_editor) {
 		if (isset($_GET['an_id'])) {
-			$result = db_query("SELECT * FROM annonces WHERE cours_id = $cours_id AND id = $_GET[an_id]", $mysqlMainDb);
+			$result = db_query("SELECT * FROM announcements 
+                                                WHERE course_id = $cours_id AND 
+                                                id = $_GET[an_id]", $mysqlMainDb);
 		} else {
-			$result = db_query("SELECT * FROM annonces WHERE cours_id = $cours_id ORDER BY ordre DESC", $mysqlMainDb);
+			$result = db_query("SELECT * FROM announcements 
+                                                WHERE course_id = $cours_id 
+                                                ORDER BY `order` DESC", $mysqlMainDb);
 		}
 	} else {
 		if (isset($_GET['an_id'])) {
-			$result = db_query("SELECT * FROM annonces WHERE cours_id = $cours_id AND id = $_GET[an_id] AND visibility = 'v'", $mysqlMainDb);
+			$result = db_query("SELECT * FROM announcements 
+                                                WHERE course_id = $cours_id AND 
+                                                id = $_GET[an_id] 
+                                                AND visibility = 'v'", $mysqlMainDb);
 		} else {
-			$result = db_query("SELECT * FROM annonces WHERE cours_id = $cours_id AND visibility = 'v' ORDER BY ordre DESC", $mysqlMainDb);
+			$result = db_query("SELECT * FROM announcements 
+                                                WHERE course_id = $cours_id AND 
+                                                visibility = 'v' 
+                                                ORDER BY `order` DESC", $mysqlMainDb);
 		}
 	}
         $iterator = 1;
@@ -288,8 +298,8 @@ if ($is_editor) {
 	}
 	$k = 0;
         while ($myrow = mysql_fetch_array($result)) {
-		$content = standard_text_escape($myrow['contenu']);
-		$myrow['temps'] = claro_format_locale_date($dateFormatLong, strtotime($myrow['temps']));
+		$content = standard_text_escape($myrow['content']);
+		$myrow['date'] = claro_format_locale_date($dateFormatLong, strtotime($myrow['date']));
 		if ($is_editor) {
 		    if ($myrow['visibility'] == 'i') {
 			$visibility = 1;
@@ -313,7 +323,7 @@ if ($is_editor) {
 		} else {
 		    $tool_content .= "<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;an_id=$myrow[id]'>".q($myrow['title'])."</a>";
 		}
-		$tool_content .= "</b><div class='smaller'>" . nice_format($myrow["temps"]). "</div>";
+		$tool_content .= "</b><div class='smaller'>" . nice_format($myrow["date"]). "</div>";
 		if (isset($_GET['an_id'])) {
 			$navigation[] = array("url" => "announcements.php?course=$code_cours", "name" => $langAnnouncements);
 			$nameTools = q($myrow['title']);

@@ -855,24 +855,6 @@ function last_login($uid)
 }
 
 
-// check for new announcements
-function check_new_announce() {
-        global $uid;
-
-        $lastlogin = last_login($uid);
-        $q = db_query("SELECT * FROM annonces, cours_user
-                          WHERE annonces.cours_id = cours_user.cours_id AND
-                                cours_user.user_id = $uid AND
-                                annonces.temps >= '$lastlogin'
-                          ORDER BY temps DESC LIMIT 1");
-        if ($q and mysql_num_rows($q) > 0) {
-                return true;
-        } else {
-                return false;
-        }
-}
-
-
 // Create a JavaScript-escaped mailto: link
 function mailto($address, $alternative='(e-mail address hidden)')
 {
@@ -1453,7 +1435,7 @@ function delete_course($cid)
 	db_query("DROP DATABASE `$course_code`");
 
         mysql_select_db($mysqlMainDb);
-	db_query("DELETE FROM annonces WHERE cours_id = $cid");
+	db_query("DELETE FROM announcements WHERE course_id = $cid");
 	db_query("DELETE FROM document WHERE course_id = $cid");
         db_query("DELETE FROM ebook_subsection WHERE section_id IN
                          (SELECT ebook_section.id FROM ebook_section, ebook

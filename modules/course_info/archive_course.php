@@ -58,7 +58,7 @@ if (extension_loaded('zlib')) {
                        'user' => "user_id IN (SELECT user_id FROM cours_user
                                                              WHERE cours_id = $cours_id)",
                        'cours_user' => "cours_id = $cours_id",
-                       'annonces' => "cours_id = $cours_id",
+                       'announcements' => "course_id = $cours_id",
                        'group_properties' => $sql_course,
                        'group' => $sql_course,
                        'group_members' => "group_id IN (SELECT id FROM `group`

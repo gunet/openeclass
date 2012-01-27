@@ -308,6 +308,9 @@ function upgrade_course($code, $lang)
         upgrade_course_3_0($code, $lang);
 }
 
+// ----------------------------------
+// Upgrade queries for 3.0
+// ----------------------------------
 function upgrade_course_3_0($code, $lang, $extramessage = '', $return_mapping = false)
 {
     global $langUpgCourse, $mysqlMainDb, $global_messages, $webDir;
@@ -317,6 +320,16 @@ function upgrade_course_3_0($code, $lang, $extramessage = '', $return_mapping = 
     echo "<hr><p>$langUpgCourse <b>$code</b> (3.0) $extramessage<br>";
     flush();
     
+    // Rename table `annonces` to `announcements`
+    // rename table fiels `contenu`, `temps`, `cours_id`, `ordre`,  to
+    // `content`, `date`,`order`,`course_id`,  correspondingly
+    
+    db_query("RENAME TABLE annonces TO announcements");
+    db_query("ALTER TABLE `announcements` CHANGE `contenu` `content` MEDIUMTEXT");
+    db_query("ALTER TABLE `announcements` CHANGE `temps` `date` DATE");
+    db_query("ALTER TABLE `announcements` CHANGE `cours_id` `course_id` INT(11)");
+    db_query("ALTER TABLE `announcements` CHANGE `ordre` `order` MEDIUMINT(11)");
+        
     
 // move forums to central db and drop table
    if (mysql_table_exists($code, 'catagories')) {
