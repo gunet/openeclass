@@ -52,19 +52,17 @@ if (isset($uid)) {
 	                        WHERE cours.cours_id = cours_user.cours_id
                                 AND cours.visible != ".COURSE_INACTIVE."
 	                        AND cours_user.user_id = '$uid'");
-	if (isset($_GET['year'])) {
-                $year = $_GET['year'];        
-        } 
-        if (isset($_GET['month'])) {
-                $month = $_GET['month'];        
+        $today = getdate();
+        if (isset($_GET['year'])) {
+                $year = intval($_GET['year']);
+        } else {
+                $year = $today['year'];
         }
-	
-	if (($year == '') && ($month == ''))
-	{
-		$today = getdate();
-		$year = $today['year'];
-		$month = $today['mon'];
-	}
+        if (isset($_GET['month'])) {
+                $month = intval($_GET['month']);
+        } else {
+                $month = $today['mon'];
+        }
 
 	$agendaitems = get_agendaitems($query, $month, $year);
 	$monthName = $langMonthNames['long'][$month-1];
