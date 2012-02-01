@@ -147,9 +147,9 @@ class Question
         {                               
                 mysql_select_db($currentCourseID);
                 $result = db_query("SELECT SUM(questions.ponderation)
-                                FROM questions, exercice_question
-                                WHERE questions.id = exercice_question.question_id
-                                AND exercice_question.exercice_id = $id");
+                                FROM questions, exercise_question
+                                WHERE questions.id = exercise_question.question_id
+                                AND exercise_question.exercise_id = $id");
                 
                 list($totalweighting) = mysql_fetch_array($result);
                 if (isset($totalweighting)) {

@@ -267,7 +267,7 @@ if(empty($search_terms)) {
 				} else { 
 					$desc_text = "<br /> <span class='smaller'>$res[description]</span>";
 				}
-				$link_exercise =" ${urlServer}/modules/exercice/exercice_submit.php?course=$code_cours&amp;exerciseId=$res[id]";
+				$link_exercise =" ${urlServer}/modules/exercise/exercise_submit.php?course=$code_cours&amp;exerciseId=$res[id]";
 				$tool_content .= "<a href='$link_exercise'>".$res['title']."</a>$desc_text
                   </td>
                 </tr>";

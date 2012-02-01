@@ -39,7 +39,7 @@ $guest_allowed = true;
 include '../../include/baseTheme.php';
 
 $nameTools = $langExercicesResult;
-$navigation[] = array ("url"=>"exercice.php?course=$code_cours", "name"=> $langExercices);
+$navigation[] = array ("url"=>"exercise.php?course=$code_cours", "name"=> $langExercices);
 
 include('../../include/lib/textLib.inc.php');
 if (isset($_GET['exerciseId'])) {
@@ -74,7 +74,7 @@ $tool_content .= "
   </table>";
 
 $tool_content .= "
-  <form method='GET' action='exercice.php'><input type='hidden' name='course' value='$code_cours'/>";
+  <form method='GET' action='exercise.php'><input type='hidden' name='course' value='$code_cours'/>";
 
 $i=$totalScore=$totalWeighting=0;
 

@@ -413,7 +413,7 @@ function show_exercise($title, $comments, $resource_id, $exercise_id, $visibilit
 		}
 	} else {
                 $exercise = mysql_fetch_array($r, MYSQL_ASSOC);
-		$link = "<a href='${urlServer}modules/exercice/exercice_submit.php?course=$code_cours&amp;exerciseId=$exercise_id&amp;unit=$id'>";
+		$link = "<a href='${urlServer}modules/exercise/exercise_submit.php?course=$code_cours&amp;exerciseId=$exercise_id&amp;unit=$id'>";
                 $exlink = $link . "$title</a>";
                 if (!$module_visible) {
 			$exlink .= " <i>($langInactiveModule)</i>";

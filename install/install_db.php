@@ -41,7 +41,7 @@ mysql_select_db ($mysqlMainDb);
 db_query("DROP TABLE IF EXISTS admin");
 db_query("DROP TABLE IF EXISTS admin_announcements");
 db_query("DROP TABLE IF EXISTS agenda");
-db_query("DROP TABLE IF EXISTS annonces");
+db_query("DROP TABLE IF EXISTS announcements");
 db_query("DROP TABLE IF EXISTS auth");
 db_query("DROP TABLE IF EXISTS cours");
 db_query("DROP TABLE IF EXISTS cours_user");
@@ -59,9 +59,20 @@ $charset_spec = 'DEFAULT CHARACTER SET=utf8';
 // create tables
 
 #
+# table `modules`
+#
+db_query("CREATE TABLE IF NOT EXISTS `module` (
+  `id` int(11) NOT NULL auto_increment,
+  `module_id` int(11) NOT NULL,
+  `visible` tinyint(4) NOT NULL,
+  `course_id` int(11) NOT NULL,
+  PRIMARY KEY  (`id`),
+  UNIQUE KEY `module_course` (`module_id`,`course_id`)) $charset_spec");
+
+
+#
 # table `announcements`
 #
-
 db_query("CREATE TABLE announcements (
 	`id` MEDIUMINT(11) NOT NULL auto_increment,
 	`title` VARCHAR(255) DEFAULT NULL,

@@ -46,7 +46,7 @@ $jscalendar = new DHTML_Calendar($urlServer.'include/jscalendar/', $lang, 'calen
 $head_content = $jscalendar->get_load_files_code();
 
 $nameTools = $langExercices;
-$navigation[] = array ('url' => "exercice.php?course=$code_cours", 'name' => $langExercices);
+$navigation[] = array ('url' => "exercise.php?course=$code_cours", 'name' => $langExercices);
 
 // picture path
 $picturePath='../../courses/'.$currentCourseID.'/image';
@@ -157,7 +157,7 @@ if(isset($_POST['cancelExercise'])) {
 		unset($_GET['modifyExercise']);
 	} else {
 		// goes back to the exercise list
-		header('Location: exercice.php?course='.$code_cours);
+		header('Location: exercise.php?course='.$code_cours);
 		exit();
 	}
 }

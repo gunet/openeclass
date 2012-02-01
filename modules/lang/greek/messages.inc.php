@@ -1082,7 +1082,7 @@ $langDropBoxIncompatible = "Προσοχή! Το υποσύστημα 'Αντα�
     να μην έχει ανακτηθεί σωστά λόγω ασυμβατότητας. Ελέγξτε τα id του πίνακα
     dropbox_file στη βάση του μαθήματος.";
 /**********************************************************
-* exercice.php
+* exercise.php
 **********************************************************/
 $langExercicesView="Προβολή Άσκησης";
 $langExercicesResult="Αποτελέσματα Άσκησης";
@@ -1220,7 +1220,7 @@ $langCorrespondsTo="Αντιστοιχεί σε";
 $langExpectedChoice="Αναμενόμενη Απάντηση";
 $langYourTotalScore="Συνολική βαθμολογία άσκησης";
 
-// exercice_submit.php
+// exercise_submit.php
 $langDoAnEx="Κάντε μια άσκηση";
 $langCorrect="Σωστό";
 $langExerciseNotFound="Η απάντηση δεν βρέθηκε";

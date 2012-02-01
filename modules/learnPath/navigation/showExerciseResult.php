@@ -20,16 +20,16 @@
 
 
 // This script is a replicate from
-// exercice/exercise_result.php, but it is modified for the
+// exercise/exercise_result.php, but it is modified for the
 // displaying needs of the learning path tool. The core
 // application logic remains the same.
 
 // Ta objects prepei na ginoun include prin thn init
 // gia logous pou sxetizontai me to object loading 
 // apo to session
-require_once('../../exercice/exercise.class.php');
-require_once('../../exercice/question.class.php');
-require_once('../../exercice/answer.class.php');
+require_once('../../exercise/exercise.class.php');
+require_once('../../exercise/question.class.php');
+require_once('../../exercise/answer.class.php');
 
 $require_current_course = TRUE;
 $path2add = 3;
@@ -401,7 +401,7 @@ echo ("
 // update raw in DB to keep the best one, so update only if new raw is better  AND if user NOT anonymous
 if($uid)
 {
-	// exercices can have a negative score, we don't accept that in LP
+	// exercises can have a negative score, we don't accept that in LP
 	// so if totalScore is negative use 0 as result
 	$totalScore = max($totalScore, 0);
 	if ( $totalWeighting != 0 )

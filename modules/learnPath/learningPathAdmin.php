@@ -39,7 +39,7 @@
                   - links to
                     - create empty module
                     - use document as module
-                    - use exercice as module
+                    - use exercise as module
                     - use link as module
                     - use course description as module
                     - re-use a module of the same course

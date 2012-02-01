@@ -146,7 +146,7 @@ db_query("INSERT INTO accueil VALUES (
     db_query("INSERT INTO accueil VALUES (
                '10',
                '$langExercices',
-               '../../modules/exercice/exercice.php',
+               '../../modules/exercice/exercise.php',
                'exercise',
                '".$sbsystems[10]."',
                '0',

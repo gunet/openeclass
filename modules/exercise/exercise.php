@@ -202,7 +202,7 @@ if(!$nbrExercises) {
 			}
 			$tool_content .= "<td width='16'>
 				<img src='$themeimg/arrow.png' alt='' /></td>
-				<td><a href=\"exercice_submit.php?course=$code_cours&amp;exerciseId=${row['id']}\">".q($row['title'])."</a>$descr</td>";
+				<td><a href=\"exercise_submit.php?course=$code_cours&amp;exerciseId=${row['id']}\">".q($row['title'])."</a>$descr</td>";
 			$eid = $row['id'];
 			$NumOfResults = mysql_fetch_array(db_query("SELECT COUNT(*) FROM exercise_user_record 
 				WHERE eid = '$eid'", $mysqlMainDb));
@@ -252,7 +252,7 @@ if(!$nbrExercises) {
                         $currentDate    = mktime(substr($currentDate, 11, 2), substr($currentDate, 14, 2), 0, substr($currentDate, 5,2),       substr($currentDate, 8,2),       substr($currentDate, 0,4));
                         if (($currentDate >= $temp_StartDate) && ($currentDate <= $temp_EndDate)) {
                                 $tool_content .= "<td width='16'><img src='$themeimg/arrow.png' alt='' /></td>
-                                        <td><a href=\"exercice_submit.php?course=$code_cours&amp;exerciseId=".$row['id']."\">".$row['title']."</a>";
+                                        <td><a href=\"exercise_submit.php?course=$code_cours&amp;exerciseId=".$row['id']."\">".$row['title']."</a>";
                         } elseif ($CurrentDate <= $temp_StartDate) { // exercise has not yet started
                                 $tool_content .= "<td width='16'><img src='$themeimg/arrow.png' alt='' /></td>
                                         <td class='invisible'>".$row['titre']."&nbsp;&nbsp;";

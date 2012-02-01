@@ -19,17 +19,17 @@
  * ======================================================================== */
 
 // This script is a replicate from
-// exercice/exercice_submit.php, but it is modified for the
+// exercise/exercise_submit.php, but it is modified for the
 // displaying needs of the learning path tool. The core
 // application logic remains the same.
-// It also contains a replicate from exercice/exercise.lib.php
+// It also contains a replicate from exercise/exercise.lib.php
 
 // Ta objects prepei na ginoun include prin thn init
 // gia logous pou sxetizontai me to object loading 
 // apo to session
-require_once('../../exercice/exercise.class.php');
-require_once('../../exercice/question.class.php');
-require_once('../../exercice/answer.class.php');
+require_once('../../exercise/exercise.class.php');
+require_once('../../exercise/question.class.php');
+require_once('../../exercise/answer.class.php');
 
 $require_current_course = TRUE;
 
@@ -37,7 +37,7 @@ $path2add = 3;
 include("../../../include/init.php");
 
 // Genikws o kwdikas apo edw kai katw kanei akribws o,ti kai to
-// exercice_submit.php. Oi mones diafores einai xrhsh twn echo
+// exercise_submit.php. Oi mones diafores einai xrhsh twn echo
 // anti gia to tool_content kai kapoies mikrodiafores opou xreiazetai 
 require_once('../../../include/lib/textLib.inc.php');
 // answer types
@@ -98,7 +98,7 @@ if (isset($_POST['formSent'])) {
         if ($_SESSION['exercise_end_time'][$exerciseId] - $_SESSION['exercise_begin_time'][$exerciseId] > $exerciseTimeConstraint) {
 			unset($_SESSION['exercise_begin_time']);
 			unset($_SESSION['exercise_end_time']);
-            header('Location: ../../exercice/exercise_redirect.php?course='.$code_cours.'&exerciseId='.$exerciseId);
+            header('Location: ../../exercise/exercise_redirect.php?course='.$code_cours.'&exerciseId='.$exerciseId);
 			exit();
 		} 
 	}

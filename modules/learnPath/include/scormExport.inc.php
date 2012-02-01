@@ -71,10 +71,10 @@ $TBL_EXERCISE_QUESTION  = 'exercise_question';
 $TBL_QUESTION           = 'question';
 $TBL_ANSWER             = 'answer';
 
-require_once('../exercice/exercise.class.php');
-require_once('../exercice/question.class.php');
-require_once('../exercice/answer.class.php');
-require_once('../exercice/exercise.lib.php');
+require_once('../exercise/exercise.class.php');
+require_once('../exercise/question.class.php');
+require_once('../exercise/answer.class.php');
+require_once('../exercise/exercise.lib.php');
 
 define('UNIQUE_ANSWER',   1);
 define('MULTIPLE_ANSWER', 2);
@@ -797,9 +797,9 @@ class ScormExport
         // Did we find an mp3 ?
         /*if ( $this->mp3Found)
         {        
-            if ( !claro_copy_file($clarolineRepositorySys . '/exercice/claroPlayer.swf', $this->destDir) )
+            if ( !claro_copy_file($clarolineRepositorySys . '/exercise/claroPlayer.swf', $this->destDir) )
             {
-                $this->error[] = $langErrorCopyAttachedFile . $clarolineRepositorySys . '/exercice/claroPlayer.swf'; 
+                $this->error[] = $langErrorCopyAttachedFile . $clarolineRepositorySys . '/exercise/claroPlayer.swf'; 
                 
                 // This is *NOT* a fatal error.
                 // Do *NOT* return false.

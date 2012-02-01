@@ -34,7 +34,7 @@ include('exercise.class.php');
 include('../../include/lib/textLib.inc.php');
 
 $nameTools = $langResults;
-$navigation[]=array("url" => "exercice.php?course=$code_cours","name" => $langExercices);
+$navigation[]=array("url" => "exercise.php?course=$code_cours","name" => $langExercices);
 
 if (isset($_GET['exerciseId'])) {
 	$exerciseId = $_GET['exerciseId'];

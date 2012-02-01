@@ -98,7 +98,7 @@ if( $module )
 		.'<p>'."\n"
 		.htmlspecialchars($module['name'])
 		.'&nbsp;'."\n"
-		.'<a href="../exercice/admin.php?course='.$code_cours.'&amp;exerciseId='.$module['exerciseId'].'">'
+		.'<a href="../exercise/admin.php?course='.$code_cours.'&amp;exerciseId='.$module['exerciseId'].'">'
 		.'<img src="'.$imgRepositoryWeb.'edit.png" border="0" alt="'.$langModify.'" title="'.$langModify.'" />'
 		.'</a>'."\n"
 		.'</p>'."\n";

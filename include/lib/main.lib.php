@@ -55,6 +55,58 @@ define('EMAIL_VERIFICATION_REQUIRED', 0);  // email verification required. User 
 define('EMAIL_VERIFIED', 1); // email is verified. User can login.
 define('EMAIL_UNVERIFIED', 2); // email is unverified. User can login but cannot receive mail.
 
+
+// definitions for course modules
+define('MODULE_ID_AGENDA', 1);
+define('MODULE_ID_LINKS', 2);
+define('MODULE_ID_DOCS', 3);
+define('MODULE_ID_VIDEO', 4);
+define('MODULE_ID_ASSIGN', 5);
+define('MODULE_ID_ANNOUNCE', 7);
+define('MODULE_ID_USERS', 8);
+define('MODULE_ID_FORUM', 9);
+define('MODULE_ID_EXERCISE', 10);
+define('MODULE_ID_COURSEINFO', 14);
+define('MODULE_ID_GROUPS', 15);
+define('MODULE_ID_DROPBOX', 16);
+define('MODULE_ID_GLOSSARY', 17);
+define('MODULE_ID_EBOOK', 18);
+define('MODULE_ID_CHAT', 19);
+define('MODULE_ID_DESCRIPTION', 20);
+define('MODULE_ID_QUESTIONNAIRE', 21);
+define('MODULE_ID_LP', 23);
+define('MODULE_ID_USAGE', 24);
+define('MODULE_ID_TOOLADMIN', 25);
+define('MODULE_ID_WIKI', 26);
+define('MODULE_ID_UNITS', 27);
+
+$modules = array(
+    MODULE_ID_AGENDA => array("title" => $langAgenda, "link" => "agenda/agenda.php", "image" => "agenda"),   
+    MODULE_ID_LINKS => array("title" => $langLinks, "link" => "link/link.php", "image" => "links"),
+    MODULE_ID_DOCS => array("title" => $langDoc, "link" => "document/document.php", "image" => "docs"),
+    MODULE_ID_VIDEO => array("title" => $langVideo, "link" => "video/video.php", "image" => "videos"),
+    MODULE_ID_ASSIGN => array("title" => $langWork, "link" => "work/work.php", "image" => "assignments"),
+    MODULE_ID_ANNOUNCE => array("title" => $langAnnouncements, "link" => "announcements/announcements.php", "image" => "announcements"),
+    MODULE_ID_USERS => array("title" => $langUsers, "link" => "user/user.php", "image" => "users"),
+    MODULE_ID_FORUM => array("title" => $langForums, "link" => "phpbb/index.php", "image" => "forum"),
+    MODULE_ID_EXERCISE => array("title" => $langExercises, "link" => "exercise/exercise.php", "image" => "exercise"),
+    MODULE_ID_COURSEINFO => array("title" => $langCourseInfo, "link" => "course_info/infocours.php", "image" => "course_info"),
+    MODULE_ID_GROUPS => array("title" => $langGroups, "link" => "group/group.php", "image" => "groups"),
+    MODULE_ID_DROPBOX => array("title" => $langDropbox, "link" => "dropbox/index.php", "image" => "dropbox"),
+    MODULE_ID_GLOSSARY => array("title" => $langGlossary, "link" => "glossary/glossary.php", "image" => "glossary"),
+    MODULE_ID_EBOOK => array("title" => $langEBook, "link" => "ebook/index.php", "image" => "ebook"),
+    MODULE_ID_CHAT => array("title" => $langChat, "link" => "conference/conference.php", "image" => "conference"),
+    MODULE_ID_DESCRIPTION => array("title" => $langDescription, "link" => "course_description/index.php", "image" => "description"),
+    MODULE_ID_QUESTIONNAIRE => array("title" => $langQuestionnaire, "link" => "questionnaire/questionnaire.php", "image" => "questionnaire"),
+    MODULE_ID_LP => array("title" => $langLearnPath, "link" => "learnPath/learningPathList.php", "image" => "lp"),
+    MODULE_ID_USAGE => array("title" => $langUsage, "link" => "usage/usage.php", "image" => "usage"),
+    MODULE_ID_TOOLADMIN => array("title" => $langToolManagement, "link" => "course_tools/course_tools.php", "image" => "tooladmin"),
+    MODULE_ID_WIKI => array("title" => $langWiki, "link" => "wiki/wiki.php", "image" => "wiki"),
+    MODULE_ID_UNITS => array("title" => $langCourseUnits, "link" => "units/index.php", "image" => "description")
+);
+    
+
+
 // Show query string and then do MySQL query
 function db_query2($sql, $db = FALSE)
 {

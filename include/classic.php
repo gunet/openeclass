@@ -162,7 +162,7 @@ if (count($status) > 0) {
                         }
                         $la = 0;
                         while ($ann = mysql_fetch_array($result)) {
-                                        $content = standard_text_escape($ann['contenu']);
+                                        $content = standard_text_escape($ann['content']);
                                         if ($la%2 == 0) {
                                                 $tool_content .= "<tr class='even'>\n";
                                         } else {
@@ -173,7 +173,7 @@ if (count($status) > 0) {
 					    <img src='$themeimg/arrow.png' alt='' /></td><td>
 						<b><a href='modules/announcements/announcements.php?course=$code&amp;an_id=$ann[id]'>".q($ann['title'])."</a></b>
 						<br>" . "<span class='smaller'>" .
-					    claro_format_locale_date($dateFormatLong, strtotime($ann['temps'])) .
+					    claro_format_locale_date($dateFormatLong, strtotime($ann['date'])) .
 					    "&nbsp;($langCourse: <b>" . q($titles[$code]) . "</b>, $langTutor: <b>" .
 					    q($profs[$code]) . "</b></span>)<br />".
 					    standard_text_escape(ellipsize($content, 250, "<strong>&nbsp;...<a href='modules/announcements/announcements.php?course=$code&amp;an_id=$ann[id]'>
