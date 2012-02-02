@@ -83,63 +83,57 @@ function getSideMenu($menuTypeID){
 function getToolsArray($cat) {
 	global $currentCourse, $currentCourseID;
 	$currentCourse = $currentCourseID;
-
+        $cid = course_code_to_id($currentCourse);
+        
 	switch ($cat) {
 		case 'Public':
 			if (!check_guest()) {
 				if (isset($_SESSION['uid']) and $_SESSION['uid']) {
-					$result = db_query("
-                    SELECT * FROM accueil
-                    WHERE visible=1
-                    ORDER BY rubrique", $currentCourse);
+					$result = db_query("SELECT * FROM modules
+                                                        WHERE visible = 1 AND
+                                                        course_id = $cid
+                                                        ORDER BY module_id");
 				} else {
-					$result = db_query("
-                    SELECT * FROM accueil
-                    WHERE visible=1 AND lien NOT LIKE '%/user.php'
-                    AND lien NOT LIKE '%/conference/conference.php'
-                    AND lien NOT LIKE '%/work/work.php'
-			AND lien NOT LIKE '%/dropbox/index.php'
-			AND lien NOT LIKE '%/questionnaire/questionnaire.php'
-			AND lien NOT LIKE '%/phpbb/index.php'
-			AND lien NOT LIKE '%/learnPath/learningPathList.php'
-                    ORDER BY rubrique", $currentCourse);
+					$result = db_query("SELECT * FROM modules
+                                                    WHERE visible = 1 AND
+                                                    course_id = $cid AND
+                                                    module_id NOT IN (".MODULE_ID_CHAT.",
+                                                                        ".MODULE_ID_ASSIGN.",
+                                                                        ".MODULE_ID_DROPBOX.",
+                                                                        ".MODULE_ID_QUESTIONNAIRE.",
+                                                                        ".MODULE_ID_FORUM.",
+                                                                        ".MODULE_ID_LP.")
+                                                    ORDER BY module_id");                 
 				}
 			} else {
-				$result = db_query("
-				SELECT * FROM `accueil`
-				WHERE `visible` = 1
-				AND (
-				`id` = 1 or
-				`id` = 2 or
-				`id` = 3 or
-				`id` = 4 or
-				`id` = 7 or
-				`id` = 10 or
-				`id` = 20)
-				ORDER BY rubrique
-				", $currentCourse);
+				$result = db_query("SELECT * FROM modules
+                                                WHERE `visible` = 1 AND
+                                                course_id = $cid AND
+                                                module_id IN (".MODULE_ID_AGENDA.",
+                                                        ".MODULE_ID_LINKS.",
+                                                        ".MODULE_ID_DOCS.",
+                                                        ".MODULE_ID_VIDEO.",
+                                                        ".MODULE_ID_ANNOUNCE.",
+                                                        ".MODULE_ID_EXERCISE.",
+                                                        ".MODULE_ID_DESCRIPTION.")
+                                                ORDER BY module_id");
 			}
 			break;
 		case 'PublicButHide':
-
-			$result = db_query("
-                    select *
-                    from accueil
-                    where visible=0
-                    and admin=0
-                    ORDER BY rubrique", $currentCourse);
+			$result = db_query("SELECT * FROM modules
+                                         WHERE visible = 0 AND
+                                         course_id = $cid
+                                         ORDER BY module_id");                    
 			break;
 		case 'courseAdmin':
-			$result = db_query("
+			/*$result = db_query("
                     select *
                     from accueil
                     where admin=1
-                    ORDER BY rubrique", $currentCourse);
+                    ORDER BY rubrique", $currentCourse); */
 			break;
 	}
-
 	return $result;
-
 }
 
 
@@ -493,6 +487,7 @@ function lessonToolsMenu(){
 	global $is_editor, $uid, $mysqlMainDb, $is_course_admin;
 	global $webDir, $language;
 	global $currentCourseID;
+        global $modules, $urlServer;
 
 	$sideMenuGroup = array();
 	$sideMenuSubGroup = array();
@@ -511,7 +506,7 @@ function lessonToolsMenu(){
                                         array('type' => 'PublicButHide',
                                               'title' => $GLOBALS['langInactiveTools'],
                                               'iconext' => '_off.png'));
-                if ($is_course_admin) {            
+                if ($is_course_admin) {
                         array_push($tools_sections, 
                                    array('type' => 'courseAdmin',
                                          'title' => $GLOBALS['langAdministrationTools'],
@@ -535,29 +530,21 @@ function lessonToolsMenu(){
                 $arrMenuType = array('type' => 'text',
                                      'text' => $section['title']);
                 array_push($sideMenuSubGroup, $arrMenuType);
-
+                //print_a($modules);
                 while ($toolsRow = mysql_fetch_array($result)) {
-                        if(!defined($toolsRow['define_var'])) {
-                                define($toolsRow['define_var'], $toolsRow['id']);
-                        }
-
-                        // Add course code only to internal links
-                        if (!empty($toolsRow['define_var'])) {
-                                $toolsRow['lien'] .= "?course=".$currentCourseID;
-                        }
-
-                        array_push($sideMenuText, q($toolsRow['rubrique']));
-                        array_push($sideMenuLink, q($toolsRow['lien']));
-                        array_push($sideMenuImg, $toolsRow['image'].$section['iconext']);
-                        array_push($sideMenuID, $toolsRow['id']);
-                }
-
-                array_push($sideMenuSubGroup, $sideMenuText);
-                array_push($sideMenuSubGroup, $sideMenuLink);
-                array_push($sideMenuSubGroup, $sideMenuImg);
-                array_push($sideMenuSubGroup, $sideMenuID);
-                array_push($sideMenuGroup, $sideMenuSubGroup);
-        }
+                        $mid = $toolsRow['module_id'];                                   
+                        $modules[$mid]['link'] .= "?course=".$currentCourseID;
+                        array_push($sideMenuText, q($modules[$mid]['title']));
+                        array_push($sideMenuLink, "{$urlServer}modules/".q($modules[$mid]['link']));
+                        array_push($sideMenuImg, $modules[$mid]['image'].$section['iconext']);
+                        array_push($sideMenuID, $mid);                        
+                }                
+         }
+        array_push($sideMenuSubGroup, $sideMenuText);
+        array_push($sideMenuSubGroup, $sideMenuLink);
+        array_push($sideMenuSubGroup, $sideMenuImg);
+        array_push($sideMenuSubGroup, $sideMenuID);
+        array_push($sideMenuGroup, $sideMenuSubGroup);        
 
 	return $sideMenuGroup;
 }

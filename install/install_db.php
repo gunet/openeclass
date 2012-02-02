@@ -61,7 +61,7 @@ $charset_spec = 'DEFAULT CHARACTER SET=utf8';
 #
 # table `modules`
 #
-db_query("CREATE TABLE IF NOT EXISTS `module` (
+db_query("CREATE TABLE IF NOT EXISTS `modules` (
   `id` int(11) NOT NULL auto_increment,
   `module_id` int(11) NOT NULL,
   `visible` tinyint(4) NOT NULL,
