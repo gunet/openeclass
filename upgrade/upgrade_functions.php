@@ -994,8 +994,33 @@ function upgrade_course_3_0($code, $lang, $extramessage = '', $return_mapping = 
                    WHERE module.startAsset_id = asset.asset_id AND course_id = $course_id AND contentType = 'EXERCISE'");
     }
     
-    if ($return_mapping)
+    if ($return_mapping) {
         return array($video_map, $videolinks_map, $lp_map, $wiki_map, $assignments_map, $exercise_map);
+    }
+    
+    // -------------------------------------------------------
+    // Move table `accueil` to table `modules` in mail DB
+    // -------------------------------------------------------
+    
+    // external links are moved to table `links` with category = -1
+        $q1 = db_query("INSERT INTO $mysqlMainDb. link
+                        (course_id, url, title, category) 
+                SELECT $course_id, lien, rubrique, -1 FROM accueil
+                        WHERE define_var = 'HTML_PAGE'", $code);
+        
+        $q2 = db_query("INSERT INTO $mysqlMainDb. modules
+                        (module_id, visible, course_id) 
+                SELECT id, visible, $course_id FROM accueil
+                WHERE define_var NOT IN ('MODULE_ID_TOOLADMIN',
+                                         'MODULE_ID_COURSEINFO', 
+                                         'MODULE_ID_USERS', 
+                                         'MODULE_ID_USAGE',
+                                         'HTML_PAGE')", $code);
+
+        if ($q1 and $q2) { // if everything ok drop course db
+                echo "Done...";
+                //db_query("DROP DATABASE $code");
+        }
 }
 
 function upgrade_course_2_5($code, $lang, $extramessage = '') {
