@@ -1038,29 +1038,28 @@ function mkpath($path)  {
 }
 
 
-// checks if a module is visible
+// check if we can display activationlink (e.g. module_id is one of our modules)
 function display_activation_link($module_id) {
-
-	global $currentCourseID;
-
-	$v = mysql_fetch_array(db_query("SELECT lien FROM accueil
-		WHERE id ='$module_id'", $currentCourseID));
-	$newlien = str_replace("../..","","$v[lien]");
-
-	if (strpos($_SERVER['PHP_SELF'],$newlien) === FALSE) {
-		return FALSE;
+	
+        global $modules;       
+        
+        if (array_key_exists($module_id, $modules)) {        
+        	return TRUE;
 	} else {
-		return TRUE;
-	}
+		return FALSE;
+	}        
 }
 
 // checks if a module is visible
 function visible_module($module_id) {
-
-	global $currentCourseID;
-
-	$v = mysql_fetch_array(db_query("SELECT visible FROM accueil
-		WHERE id ='$module_id'", $currentCourseID));
+        
+        global $currentCourseID;
+        
+        $cid = course_code_to_id($currentCourseID);
+	
+	$v = mysql_fetch_array(db_query("SELECT visible FROM modules
+                                WHERE module_id = $module_id AND 
+                                course_id = $cid"));        
 
 	if ($v['visible'] == 1) {
 		return TRUE;
