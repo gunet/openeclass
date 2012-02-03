@@ -82,6 +82,7 @@ function getSideMenu($menuTypeID){
  */
 function getToolsArray($cat) {
 	global $currentCourse, $currentCourseID;
+        
 	$currentCourse = $currentCourseID;
         $cid = course_code_to_id($currentCourse);
         
@@ -124,15 +125,8 @@ function getToolsArray($cat) {
                                          WHERE visible = 0 AND
                                          course_id = $cid
                                          ORDER BY module_id");                    
-			break;
-		case 'courseAdmin':
-			/*$result = db_query("
-                    select *
-                    from accueil
-                    where admin=1
-                    ORDER BY rubrique", $currentCourse); */
-			break;
-	}
+			break;		
+                }
 	return $result;
 }
 
@@ -149,7 +143,7 @@ function getToolsArray($cat) {
  * @return array
  */
 function loggedInMenu(){
-	global $webDir, $language, $uid, $is_admin, $is_power_user, $is_usermanage_user, 
+	global $uid, $is_admin, $is_power_user, $is_usermanage_user, 
                 $urlServer, $mysqlMainDb;
 
 	$sideMenuGroup = array();
@@ -258,7 +252,7 @@ function loggedInMenu(){
  */
 function loggedOutMenu(){
 
-	global $webDir, $language, $urlServer, $is_eclass_unique, $mysqlMainDb;
+	global $urlServer;
 
 	$sideMenuGroup = array();
 
@@ -298,8 +292,8 @@ function loggedOutMenu(){
 
 function adminMenu(){
 
-	global $webDir, $urlAppend, $language, $phpSysInfoURL, $phpMyAdminURL;
-	global $siteName, $urlServer, $mysqlMainDb;
+	global $urlAppend, $language, $phpSysInfoURL, $phpMyAdminURL;
+	global $siteName, $urlServer;
         global $is_admin, $is_power_user;
 
 	$sideMenuGroup = array();
@@ -307,7 +301,7 @@ function adminMenu(){
 	$sideMenuSubGroup = array();
 	$sideMenuText = array();
 	$sideMenuLink = array();
-	$sideMenuImg	= array();
+	$sideMenuImg = array();
 
 	//user administration
 	$arrMenuType = array();
@@ -367,7 +361,7 @@ function adminMenu(){
                 $sideMenuSubGroup = array();
                 $sideMenuText = array();
                 $sideMenuLink = array();
-                $sideMenuImg	= array();
+                $sideMenuImg = array();
 
                 $arrMenuType = array();
                 $arrMenuType['type'] = 'text';
@@ -483,11 +477,10 @@ function adminMenu(){
  *
  * @return array
  */
-function lessonToolsMenu(){
-	global $is_editor, $uid, $mysqlMainDb, $is_course_admin;
-	global $webDir, $language;
-	global $currentCourseID;
-        global $modules, $urlServer;
+function lessonToolsMenu() {
+	global $is_editor, $uid, $is_course_admin;	
+	global $currentCourseID, $langAdministrationTools;
+        global $modules, $admin_modules, $urlServer;
 
 	$sideMenuGroup = array();
 	$sideMenuSubGroup = array();
@@ -505,13 +498,7 @@ function lessonToolsMenu(){
                                               'iconext' => '_on.png'),
                                         array('type' => 'PublicButHide',
                                               'title' => $GLOBALS['langInactiveTools'],
-                                              'iconext' => '_off.png'));
-                if ($is_course_admin) {
-                        array_push($tools_sections, 
-                                   array('type' => 'courseAdmin',
-                                         'title' => $GLOBALS['langAdministrationTools'],
-                                         'iconext' => '_on.png'));
-                }
+                                              'iconext' => '_off.png'));                                
         } else {
                 $tools_sections = array(array('type' => 'Public',
                                               'title' => $GLOBALS['langCourseOptions'],
@@ -529,22 +516,40 @@ function lessonToolsMenu(){
 
                 $arrMenuType = array('type' => 'text',
                                      'text' => $section['title']);
-                array_push($sideMenuSubGroup, $arrMenuType);
-                //print_a($modules);
+                array_push($sideMenuSubGroup, $arrMenuType);          
                 while ($toolsRow = mysql_fetch_array($result)) {
                         $mid = $toolsRow['module_id'];                                   
                         $modules[$mid]['link'] .= "?course=".$currentCourseID;
                         array_push($sideMenuText, q($modules[$mid]['title']));
-                        array_push($sideMenuLink, "{$urlServer}modules/".q($modules[$mid]['link']));
+                        array_push($sideMenuLink, $urlServer."modules/".q($modules[$mid]['link']));
                         array_push($sideMenuImg, $modules[$mid]['image'].$section['iconext']);
                         array_push($sideMenuID, $mid);                        
                 }                
-         }
-        array_push($sideMenuSubGroup, $sideMenuText);
-        array_push($sideMenuSubGroup, $sideMenuLink);
-        array_push($sideMenuSubGroup, $sideMenuImg);
-        array_push($sideMenuSubGroup, $sideMenuID);
-        array_push($sideMenuGroup, $sideMenuSubGroup);        
-
+                array_push($sideMenuSubGroup, $sideMenuText);
+                array_push($sideMenuSubGroup, $sideMenuLink);
+                array_push($sideMenuSubGroup, $sideMenuImg);
+                array_push($sideMenuSubGroup, $sideMenuID);
+                array_push($sideMenuGroup, $sideMenuSubGroup);
+         }                  
+         if ($is_course_admin) {                     
+                $sideMenuSubGroup = array();
+                $sideMenuText = array();
+                $sideMenuLink = array();
+                $sideMenuImg = array();
+                $sideMenuID = array();
+                $arrMenuType = array('type' => 'text',
+                                     'text' => $langAdministrationTools);                
+                array_push($sideMenuSubGroup, $arrMenuType);                 
+                foreach ($admin_modules as $adm_mod) {                        
+                        array_push($sideMenuText, $adm_mod['title']);
+                        array_push($sideMenuLink, $urlServer."modules/".q($adm_mod['link']));
+                        array_push($sideMenuImg, $adm_mod['image'].$section['iconext']);                        
+                }                                
+                array_push($sideMenuSubGroup, $sideMenuText);
+                array_push($sideMenuSubGroup, $sideMenuLink);
+                array_push($sideMenuSubGroup, $sideMenuImg);
+                array_push($sideMenuSubGroup, $sideMenuID);
+                array_push($sideMenuGroup, $sideMenuSubGroup);                
+         }         
 	return $sideMenuGroup;
 }
