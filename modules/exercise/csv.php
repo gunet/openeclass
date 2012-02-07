@@ -54,8 +54,8 @@ if ($is_editor) {
 		
 		while ($row2 = mysql_fetch_array($result2)) 
 		{
-			$output .= csv_escape($prenom) ."\t";
 			$output .= csv_escape($nom) ."\t";
+			$output .= csv_escape($prenom) ."\t";
 			$recordStartDate = $row2['record_start_date'];
 			$output .= csv_escape($recordStartDate) ."\t";
 			if ($row2['time_duration'] == '00:00:00' or empty($row2['time_duration'])) { // for compatibility 

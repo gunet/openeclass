@@ -131,6 +131,21 @@ function getToolsArray($cat) {
 }
 
 
+function getExternalLinks() {
+        
+        global $currentCourseID;
+        
+        $cid = course_code_to_id($currentCourseID);
+        $result2 = db_query("SELECT url, title FROM link
+                                WHERE category = -1 AND
+                                course_id = $cid");
+        if (mysql_num_rows($result2) > 0) {
+                return $result2;
+        } else {
+                return FALSE;
+        }        
+}
+
 /**
  * Function loggedInMenu
  *
@@ -479,7 +494,7 @@ function adminMenu(){
  */
 function lessonToolsMenu() {
 	global $is_editor, $uid, $is_course_admin;	
-	global $currentCourseID, $langAdministrationTools;
+	global $currentCourseID, $langAdministrationTools, $langExternalLinks;
         global $modules, $admin_modules, $urlServer;
 
 	$sideMenuGroup = array();
@@ -530,8 +545,27 @@ function lessonToolsMenu() {
                 array_push($sideMenuSubGroup, $sideMenuImg);
                 array_push($sideMenuSubGroup, $sideMenuID);
                 array_push($sideMenuGroup, $sideMenuSubGroup);
-         }                  
-         if ($is_course_admin) {                     
+         }
+         $result2 = getExternalLinks();
+         if ($result2) { // display external link (if any)                 
+                $sideMenuSubGroup = array();
+                $sideMenuText = array();
+                $sideMenuLink = array();
+                $sideMenuImg = array();
+                $arrMenuType = array('type' => 'text',
+                                     'text' => $langExternalLinks);
+                array_push($sideMenuSubGroup, $arrMenuType);          
+                while ($ex_link = mysql_fetch_array($result2)) {
+                         array_push($sideMenuText, $ex_link['title']);
+                         array_push($sideMenuLink, q($ex_link['url']));
+                         array_push($sideMenuImg, "external_link".$section['iconext']);                 
+                 }
+                 array_push($sideMenuSubGroup, $sideMenuText);
+                 array_push($sideMenuSubGroup, $sideMenuLink);
+                 array_push($sideMenuSubGroup, $sideMenuImg);
+                 array_push($sideMenuGroup, $sideMenuSubGroup);
+         }
+         if ($is_course_admin) {  // display course admin tools     
                 $sideMenuSubGroup = array();
                 $sideMenuText = array();
                 $sideMenuLink = array();

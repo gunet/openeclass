@@ -47,47 +47,45 @@ add_units_navigation(TRUE);
 
 $head_content .= "<script type='text/javascript' src='$urlAppend/js/tools.js'></script>\n";
 
-
 if (isset($_GET['action'])) {
         $action = intval($_GET['action']);
 } else {
         $action = 0;
 }
 if (isset($_REQUEST['toolStatus']) ) {
-        if(isset($_POST['toolStatActive'])) $tool_stat_active = $_POST['toolStatActive'];
-
+        if (isset($_POST['toolStatActive'])) {
+                $tool_stat_active = $_POST['toolStatActive'];
+        }
         if (isset($tool_stat_active)) {
                 $loopCount = count($tool_stat_active);
-        } else  {
+        } else {
                 $loopCount = 0;
         }
-        $i =0;
+        $i = 0;
         $publicTools = array();
         $tool_id = null;
         while ($i< $loopCount) {
                 if (!isset($tool_id)) {
-                        $tool_id = " (`id` = " . $tool_stat_active[$i] .")" ;
-                }
-                else {
-                        $tool_id .= " OR (`id` = " . $tool_stat_active[$i] .")" ;
+                        $tool_id = " (`module_id` = " . $tool_stat_active[$i] .")" ;
+                } else {
+                        $tool_id .= " OR (`module_id` = " . $tool_stat_active[$i] .")" ;
                 }
                 $i++;
         }
 
         //reset all tools
-        db_query("UPDATE `accueil` SET `visible` = 0", $dbname);
-
+        db_query("UPDATE modules SET `visible` = 0 WHERE course_id = ". course_code_to_id($currentCourseID));
         //and activate the ones the professor wants active, if any
-        if ($loopCount >0) {
-                db_query("UPDATE accueil SET visible = 1 WHERE $tool_id", $dbname);
-        }
-        db_query("UPDATE `accueil` SET `visible` = 2 WHERE define_var = 'MODULE_ID_UNITS'", $dbname);
+        if ($loopCount > 0) {
+                db_query("UPDATE modules SET visible = 1 WHERE $tool_id AND
+                                course_id = ". course_code_to_id($currentCourseID));
+        }        
 }
 
 
 if (isset($_POST['delete'])) {
         $delete = intval($_POST['delete']);
-        $sql = "SELECT lien, define_var FROM accueil WHERE `id` = ". $delete ." ";
+        /*$sql = "SELECT lien, define_var FROM accueil WHERE `id` = ". $delete ." ";
         $result = db_query($sql, $dbname);
         while ($res = mysql_fetch_row($result)){
                 if($res[1] == "HTML_PAGE") {
@@ -96,11 +94,11 @@ if (isset($_POST['delete'])) {
                         $file2Delete = $webDir . $path;
                         @unlink($file2Delete);
                 }
-        }
-        $sql = "DELETE FROM `accueil` WHERE `id` = " . $_POST['delete'] ." ";
-        db_query($sql, $dbname);
+        }*/
+        $sql = "DELETE FROM link WHERE `id` = " . $_POST['delete'] ." ";
+        db_query($sql);
         unset($sql);
-        $tool_content .= "<p class=\"success\">$langLinkDeleted</p>";
+        $tool_content .= "<p class='success'>$langLinkDeleted</p>";
 }
 
 if (isset($_POST['submit'])) {
@@ -114,14 +112,11 @@ if (isset($_POST['submit'])) {
                         draw($tool_content, 2);
                         exit();
                 }
-
-                $res = db_query('SELECT MAX(`id`) FROM `accueil`', $dbname);
-                list($mID) = mysql_fetch_row($res);
-                if ($mID < 101) $mID = 101;
-                else $mID = $mID + 1;
                 $link = autoquote($link);
-                $name_link = autoquote($name_link);
-                db_query("INSERT INTO accueil VALUES ($mID, $name_link, $link, 'external_link', 1, 0, $link, '')");
+                $name_link = autoquote($name_link);                
+                db_query("INSERT INTO link (course_id, url, title, category) 
+                                    VALUES (".course_code_to_id($currentCourseID).", 
+                                                $link, $name_link, -1)");
                 $tool_content .= "<p class='success'>$langLinkAdded</p>";
         } elseif ($action == 1) { 
                 $updir = "$webDir/courses/$currentCourseID/page"; //path to upload directory
@@ -171,7 +166,6 @@ if (isset($_POST['submit'])) {
             <form method='post' action='$_SERVER[PHP_SELF]?course=$code_cours&amp;submit=yes&action=1' enctype='multipart/form-data'>
               <div class='info'><p>$langExplanation_0</p>
               <p>$langExplanation_3</p></div>
-
               <fieldset>
               <legend>$langExplanation_1</legend> 
                                 <table class='tbl'>
@@ -191,9 +185,8 @@ if (isset($_POST['submit'])) {
               </tr>
               </table>
               </fieldset>
-
             </form>
-                                <div class='right smaller'>$langNoticeExpl</div>'";
+            <div class='right smaller'>$langNoticeExpl</div>'";
         draw($tool_content, 2);
         exit();
 } elseif ($action == 2) { // add external link
@@ -229,34 +222,22 @@ if (isset($_POST['submit'])) {
 
 $toolArr = getSideMenu(2);
 
-if (is_array($toolArr)) {
-        $externalLinks = array(); // array used to populate the external tools table afterwards
+if (is_array($toolArr)) {        
         for ($i = 0; $i <= 1; $i++){
                 $toolSelection[$i] = '';
                 $numOfTools = count($toolArr[$i][1]);
-                for ($j = 0; $j < $numOfTools; $j++) {
-                        if ($toolArr[$i][4][$j] < 100) {
-                                $class = '';
-                        } else {
-                                // External links that are not admin tools
-                                $class = ' class="emphasised"';
-                                array_push($externalLinks,
-                                           array('text' => $toolArr[$i][1][$j],
-                                                 'id' => $toolArr[$i][4][$j]));
-                        } 
-                        $toolSelection[$i] .= "<option$class value='" . $toolArr[$i][4][$j] . "'>" .
+                for ($j = 0; $j < $numOfTools; $j++) {                        
+                        $toolSelection[$i] .= "<option value='" . $toolArr[$i][4][$j] . "'>" .
                                               $toolArr[$i][1][$j] . "</option>\n";
-
                 }
         }
 }
 
-//output tool content
 $tool_content .= "
 <div id='operations_container'>
   <ul id='opslist'>
-    <li><a href='course_tools.php?course=$code_cours&amp;action=1'>$langUploadPage</a></li>
-    <li><a href='course_tools.php?course=$code_cours&amp;action=2'>$langAddExtLink</a></li>
+    <li><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;action=1'>$langUploadPage</a></li>
+    <li><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;action=2'>$langAddExtLink</a></li>
   </ul>
 </div>";
 
@@ -290,40 +271,42 @@ $tool_content .= <<<tForm
 </table>
 </form>
 tForm;
-
-$extToolsCount = count($externalLinks) ;
-if ($extToolsCount > 0)  {
-        // show table to edit/delete external links
-        $tool_content .= "
-        <br/>
-                <table class='tbl_alt' width='100%'>
-                <tr>
-                  <th>&nbsp;</th>
-                  <th colspan='2'>$langOperations</th>
-                </tr>
-                <tr>
-                  <th>&nbsp;</th>
-                  <th><div align='left'>$langTitle</div></th>
-                  <th width='20'>$langDelete</th>
-                </tr>\n";
-        for ($i=0; $i < $extToolsCount; $i++) {
-                if ($i % 2==0) {
-                        $tool_content .= "                        <tr class='even'>\n";
-                } elseif ($i % 2 == 1) {
-                        $tool_content .= "                        <tr class='odd'>\n";
-                }
-                $tool_content .= "                          <th width='1'>
-                        <img src='$themeimg/external_link_on.png' title='$langTitle' /></th>
-                        <td class='left'>{$externalLinks[$i]['text']}</td>
-                        <td align='center'><form method='post' action='course_tools.php?course=$code_cours'>
-                           <input type='hidden' name='delete' value='{$externalLinks[$i]['id']}' />
-                           <input type='image' src='$themeimg/delete.png' name='delete_button' 
-                                  onClick=\"return confirmation('" .
-                                            js_escape("$langDeleteLink {$externalLinks[$i]['text']}?") .
-                                       "');\" title='$langDelete' /></form></td>
-                     </tr>\n";
+// ------------------------------------------------
+// display table to edit/delete external links
+// ------------------------------------------------
+$sql = db_query("SELECT id, title FROM link 
+                        WHERE category = -1 AND 
+                        course_id = ".course_code_to_id($currentCourseID));        
+$tool_content .= "<br/>
+<table class='tbl_alt' width='100%'>
+<tr>
+  <th>&nbsp;</th>
+  <th colspan='2'>$langOperations</th>
+</tr>
+<tr>
+  <th>&nbsp;</th>
+  <th><div align='left'>$langTitle</div></th>
+  <th width='20'>$langDelete</th>
+</tr>\n";
+$i = 0;
+while ($externalLinks = mysql_fetch_array($sql)) {  
+        if ($i % 2==0) {
+                $tool_content .= "<tr class='even'>\n";
+        } else {
+                $tool_content .= "<tr class='odd'>\n";
         }
-        $tool_content .= "                        </table>\n";
+        $tool_content .= "<th width='1'>
+        <img src='$themeimg/external_link_on.png' title='$langTitle' /></th>
+        <td class='left'>$externalLinks[title]</td>
+        <td align='center'><form method='post' action='$_SERVER[PHP_SELF]?course=$code_cours'>
+           <input type='hidden' name='delete' value='$externalLinks[id]' />
+           <input type='image' src='$themeimg/delete.png' name='delete_button' 
+                  onClick=\"return confirmation('" .
+                            js_escape("$langDeleteLink {$externalLinks['title']}?") .
+                       "');\" title='$langDelete' /></form></td>
+     </tr>\n";                                            
+        $i++;
 }
-draw($tool_content, 2, null, $head_content);
+$tool_content .= "</table>\n";
 
+draw($tool_content, 2, null, $head_content);

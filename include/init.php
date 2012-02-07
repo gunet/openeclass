@@ -424,36 +424,31 @@ if (isset($_SESSION['saved_statut'])) {
 //be able to access inactive tools.
 if (isset($currentCourse) && file_exists($module_ini_dir = getcwd() . "/module.ini.php") 
         && !$is_editor && @$ignore_module_ini != true) {
+        $cid = course_code_to_id($currentCourse);
 	include($module_ini_dir);
 
 	if (!check_guest()) {
 		if (isset($_SESSION['uid']) and $_SESSION['uid']) {
-			$result = db_query("SELECT `id` FROM accueil
-                                        WHERE visible=1
-                                        ORDER BY rubrique", $currentCourse);
-		} else {
-			$result = db_query("SELECT `id` FROM accueil
-                                        WHERE visible=1 AND lien NOT LIKE '%/user.php'
-                                        ORDER BY rubrique", $currentCourse);
+			$result = db_query("SELECT `module_id` FROM modules 
+                                        WHERE visible=1 AND 
+                                        course_id = $cid");
 		}
 	} else {
-		$result = db_query("SELECT `id` FROM `accueil`
-			WHERE `visible` = 1
-			AND (
-			`id` = 1 or
-			`id` = 2 or
-			`id` = 3 or
-			`id` = 4 or
-			`id` = 7 or
-			`id` = 10 or
-			`id` = 20)
-			ORDER BY rubrique
-			", $currentCourse);
+		$result = db_query("SELECT * FROM modules
+                                        WHERE `visible` = 1 AND
+                                        course_id = $cid AND
+                                        module_id IN (".MODULE_ID_AGENDA.",
+                                                ".MODULE_ID_LINKS.",
+                                                ".MODULE_ID_DOCS.",
+                                                ".MODULE_ID_VIDEO.",
+                                                ".MODULE_ID_ANNOUNCE.",
+                                                ".MODULE_ID_EXERCISE.",
+                                                ".MODULE_ID_DESCRIPTION.")");
 	}
 
 	$publicModules = array();
 	while ($moduleIDs = mysql_fetch_array($result)) {
-		array_push($publicModules, (int)$moduleIDs["id"]);
+		array_push($publicModules, $moduleIDs["module_id"]);
 	}
 
 	if (!in_array($module_id, $publicModules, true)) {
