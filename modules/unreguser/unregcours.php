@@ -24,10 +24,6 @@ include '../../include/baseTheme.php';
 
 $nameTools = $langUnregCourse;
 
-$local_style = 'h3 { font-size: 10pt;} li { font-size: 10pt;} ';
-
-$tool_content = "";
-
 if (isset($_GET['cid'])) {
   $cid = $_GET['cid'];
   $_SESSION['cid_tmp']=$cid;
@@ -56,9 +52,17 @@ if (!isset($_GET['doit']) or $_GET['doit'] != "yes") {
     </table>";
 
 } else {
-  if (isset($_SESSION['uid']) and $_GET['u'] == $_SESSION['uid']) {
-            db_query("DELETE from cours_user
-		    WHERE cours_id = (SELECT cours_id FROM cours WHERE code = " . quote($cid) . ") AND user_id='$_GET[u]'");
+        if (isset($_SESSION['uid']) and $_GET['u'] == $_SESSION['uid']) {
+                list($course_id) = mysql_fetch_row(db_query(
+                        "SELECT cours_id FROM cours
+                                WHERE code = " . quote($cid)));
+                db_query("DELETE FROM group_members
+                                 WHERE group_id IN ( SELECT id FROM `group`
+                                                            WHERE course_id = $course_id ) AND
+                                       user_id = $_SESSION[uid]");
+                db_query("DELETE FROM cours_user
+                                 WHERE cours_id = $course_id AND
+                                       user_id = $_SESSION[uid]");
                 if (mysql_affected_rows() > 0) {
                         // clear session access to lesson
                         unset($_SESSION['dbname']);
@@ -68,7 +72,7 @@ if (!isset($_GET['doit']) or $_GET['doit'] != "yes") {
                 } else {
                         $tool_content .= "<p class='caution_small'>$langCoursError</p>";
                 }
-         }
+        }
         $tool_content .= "<br><br><div align=right><a href='../../index.php' class=mainpage>$langBack</a></div>";
 }
 
@@ -77,4 +81,3 @@ if (isset($_SESSION['uid'])) {
 } else {
         draw($tool_content, 0);
 }
-?>
