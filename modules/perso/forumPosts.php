@@ -52,8 +52,7 @@ function getUserForumPosts($param, $type)
 	$lesson_code		= $param['lesson_code'];
 	$lesson_professor	= $param['lesson_professor'];
 
-	$last_month = strftime('%Y %m %d', strtotime('now -1 month'));
-	//$forum_query_new = createForumQueries($last_month, $lesson_code[$i]);
+	$last_month = strftime('%Y %m %d', strtotime('now -1 month'));	
 
 	$forumPosts = array();
 	
@@ -140,7 +139,7 @@ function forumHtmlInterface($data)
  */
 function createForumQueries($dateVar, $code) {
 
-        $cours_id = course_code_to_id($code);
+        $course_id = course_code_to_id($code);
         
         $forum_query = 'SELECT forums.forum_id,
                                forums.forum_name,
@@ -153,15 +152,16 @@ function createForumQueries($dateVar, $code) {
                         FROM   forums,
                                topics,
                                posts,
-                               '.$code.'.accueil
+                               modules
                         WHERE CONCAT(topics.topic_title, posts.post_text) != \'\'
                                AND forums.forum_id = topics.forum_id
                                AND posts.forum_id = forums.forum_id
                                AND posts.topic_id = topics.topic_id
-                               AND forums.course_id = '.$cours_id.'
+                               AND forums.course_id = '.$course_id.'
                                AND DATE_FORMAT(posts.post_time, \'%Y %m %d\') >= "'.$dateVar.'"
-                               AND '.$code.'.accueil.visible = 1
-                               AND '.$code.'.accueil.id = 9
+                               AND modules.visible = 1
+                               AND modules.module_id = '.MODULE_ID_ASSIGN.'
+                               AND modules.course_id = '.$course_id.'     
                         ORDER BY posts.post_time LIMIT 15';
 
 	return $forum_query;

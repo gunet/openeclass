@@ -41,7 +41,7 @@
  */
 function getUserAnnouncements($param = null, $type) {
 
-	global $mysqlMainDb, $uid, $dbname, $currentCourseID;
+	global $mysqlMainDb, $uid, $dbname;
 
 	$uid			= $param['uid'];
 	$lesson_id		= $param['lesson_id'];
@@ -61,7 +61,7 @@ function getUserAnnouncements($param = null, $type) {
 
 	$announceSubGroup = array();
 	for ($i=0; $i<$max_repeat_val; $i++) { //each iteration refers to one lesson
-		$mysql_query_result = db_query($announce_query_new[$i]);
+		$mysql_query_result = db_query($announce_query_new[$i], $mysqlMainDb);
 		if ($num_rows = mysql_num_rows($mysql_query_result) > 0) {
 			$announceLessonData = array();
 			$announceData = array();
@@ -145,7 +145,7 @@ function announceHtmlInterface($data) {
  */
 function createQueries($queryParam){
 
-	global $mysqlMainDb, $maxValue;
+	global $maxValue;
 
 	$lesson_id = $queryParam['lesson_id'];
 	$lesson_code = $queryParam['lesson_code'];
@@ -160,13 +160,14 @@ function createQueries($queryParam){
 		}
 
 		$announce_query[$i] = "SELECT title, content, `date`, announcements.id
-                        FROM `$mysqlMainDb`.announcements, `$lesson_code[$i]`.accueil
-                        WHERE course_id = $lesson_id[$i]
-				AND visibility = 'v'
+                        FROM announcements, modules
+                        WHERE announcements.course_id = $lesson_id[$i]
+				AND announcements.visibility = 'v'
                                 AND DATE_FORMAT(`date`,'%Y %m %d') >='$dateVar'
-                                AND `$lesson_code[$i]`.accueil.visible = 1
-                                AND `$lesson_code[$i]`.accueil.id = 7
-                        ORDER BY `date` DESC";
+                                AND modules.module_id = ".MODULE_ID_ANNOUNCE."
+                                AND modules.visible = 1
+                                AND modules.course_id = $lesson_id[$i]                                
+                        ORDER BY announcements.`date` DESC";
 	}
 	return $announce_query;
 }

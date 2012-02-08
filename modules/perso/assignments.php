@@ -44,6 +44,7 @@
 function getUserAssignments($param, $type)
 {
 	global $mysqlMainDb;
+        
 	$uid	= $param['uid'];
 	$lesson_code	= $param['lesson_code'];
 	$lesson_id = $param['lesson_id'];
@@ -53,19 +54,22 @@ function getUserAssignments($param, $type)
 
 	for ($i=0;$i<$max_repeat_val;$i++) {
 		$assignments_query[$i] = "SELECT DISTINCT assignments.id, assignments.title,
-		assignments.description, assignments.deadline,
-		cours.intitule,(TO_DAYS(assignments.deadline) - TO_DAYS(NOW())) AS days_left
-		FROM `".$mysqlMainDb."`.assignments, ".$mysqlMainDb.".cours, `".$lesson_code[$i]."`.accueil
-		WHERE (TO_DAYS(deadline) - TO_DAYS(NOW())) >= '0'
-		AND assignments.active = 1 AND cours.code = '".$lesson_code[$i]."'
-		AND `".$lesson_code[$i]."`.accueil.visible =1
-		AND `".$lesson_code[$i]."`.accueil.id =5 ORDER BY deadline";
+                        assignments.description, assignments.deadline,
+                        cours.intitule,(TO_DAYS(assignments.deadline) - TO_DAYS(NOW())) AS days_left
+                        FROM assignments, cours, modules
+                        WHERE (TO_DAYS(deadline) - TO_DAYS(NOW())) >= '0'
+                        AND assignments.active = 1
+                        AND assignments.course_id = $lesson_id[$i]
+                        AND cours.cours_id = $lesson_id[$i]
+                        AND modules.course_id = cours.cours_id
+                        AND modules.visible = 1 AND modules.module_id = ".MODULE_ID_ASSIGN."                        
+                        ORDER BY assignments.deadline";
 	}
 
 	//initialise array to store all assignments from all lessons
 	$assignSubGroup = array();
 	for ($i=0;$i<$max_repeat_val;$i++) {//each iteration refers to one lesson
-		$mysql_query_result = db_query($assignments_query[$i], $lesson_code[$i]);
+		$mysql_query_result = db_query($assignments_query[$i], $mysqlMainDb);
 		if ($num_rows = mysql_num_rows($mysql_query_result) > 0) {
 			$assignmentLessonData = array();
 			$assignmentData = array();

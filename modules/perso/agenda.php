@@ -43,20 +43,25 @@
  */
 function getUserAgenda($param, $type)
 {
+        global $mysqlMainDb, $uid;
+        
 	//number of unique dates to collect data for
-	$uniqueDates = 5;
-	global $mysqlMainDb, $uid, $dbname, $currentCourseID;
+	$uniqueDates = 5;	        
 	$uid			= $param['uid'];
 	$lesson_code    = $param['lesson_code'];
 	$course_id      = $param['lesson_id'];
+        
 	$max_repeat_val = $param['max_repeat_val'];
 	$tbl_course_ids = array();
 	
 	// exclude courses with disabled agenda modules
-	for($i=0; $i < $max_repeat_val; $i++) {
-	    $row = mysql_fetch_array(db_query("SELECT visible FROM accueil WHERE define_var = 'MODULE_ID_AGENDA'", $lesson_code[$i]));
-	    if ($row['visible'] == 1)
+	for($i=0; $i < $max_repeat_val; $i++) {               
+	    $row = mysql_fetch_array(db_query("SELECT visible FROM modules WHERE 
+                                                module_id = ".MODULE_ID_AGENDA." AND
+                                                course_id = ".$course_id[$i], $mysqlMainDb));
+	    if ($row['visible'] == 1) {
 		    array_push($tbl_course_ids, $course_id[$i]);
+            }
 	}
 	array_walk($tbl_course_ids, 'wrap_each');
 	$tbl_course_ids = implode(",", $tbl_course_ids);

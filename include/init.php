@@ -428,7 +428,7 @@ if (isset($currentCourse) && file_exists($module_ini_dir = getcwd() . "/module.i
 	include($module_ini_dir);
 
 	if (!check_guest()) {
-		if (isset($_SESSION['uid']) and $_SESSION['uid']) {
+		if (isset($_SESSION['uid']) and $_SESSION['uid']) {                        
 			$result = db_query("SELECT `module_id` FROM modules 
                                         WHERE visible=1 AND 
                                         course_id = $cid");
@@ -449,9 +449,9 @@ if (isset($currentCourse) && file_exists($module_ini_dir = getcwd() . "/module.i
 	$publicModules = array();
 	while ($moduleIDs = mysql_fetch_array($result)) {
 		array_push($publicModules, $moduleIDs["module_id"]);
-	}
-
-	if (!in_array($module_id, $publicModules, true)) {
+	}        
+	
+        if (!in_array($module_id, $publicModules)) {
 		$toolContent_ErrorExists = caution($langCheckPublicTools);
 		$errorMessagePath = "../../";
 	}
