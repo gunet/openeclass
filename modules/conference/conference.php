@@ -32,7 +32,7 @@ if (!isset($MCU)) {
 /**** The following is added for statistics purposes ***/
 include('../../include/action.php');
 $action = new action();
-$action->record('MODULE_ID_CHAT');
+$action->record(MODULE_ID_CHAT);
 /**************************************/
 
 $nameTools = $langConference;

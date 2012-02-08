@@ -66,7 +66,7 @@ check_cours_access();
 
 // record file access
 $action = new action();
-$action->record('MODULE_ID_DOCS');
+$action->record(MODULE_ID_DOCS);
 
 include 'doc_init.php';
 include '../../include/lib/forcedownload.php';

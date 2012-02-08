@@ -54,7 +54,7 @@ $TABLEUSERMODULEPROGRESS= "lp_user_module_progress";
 /**** The following is added for statistics purposes ***/
 include('../../include/action.php');
 $action = new action();
-$action->record('MODULE_ID_LP');
+$action->record(MODULE_ID_LP);
 /**************************************/
 
 // lib of this tool

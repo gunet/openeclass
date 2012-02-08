@@ -33,7 +33,7 @@ $cat_url = 'categories.php?course=' . $code_cours;
  */
 include('../../include/action.php');
 $action = new action();
-$action->record('MODULE_ID_GLOSSARY');
+$action->record(MODULE_ID_GLOSSARY);
 
 mysql_select_db($mysqlMainDb);
 

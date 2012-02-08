@@ -75,33 +75,7 @@ if (isset($_POST['submit'])) {
                               password = " . autoquote($_POST['password']) . ",
                               faculteid = $department
                           WHERE cours_id = $cours_id");
-
-                // update Home Page Menu Titles for new language
-                mysql_select_db($currentCourseID, $db);
-                db_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langAgenda' WHERE define_var='MODULE_ID_AGENDA'");
-                db_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langLinks' WHERE define_var='MODULE_ID_LINKS'");
-                db_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langDoc' WHERE define_var='MODULE_ID_DOCS'");
-                db_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langVideo' WHERE define_var='MODULE_ID_VIDEO'");
-                db_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langWorks' WHERE define_var='MODULE_ID_ASSIGN'");
-                db_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langAnnouncements' WHERE define_var='MODULE_ID_ANNOUNCE'");
-                db_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langAdminUsers' WHERE define_var='MODULE_ID_USERS'");
-                db_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langForums' WHERE define_var='MODULE_ID_FORUM'");
-                db_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langExercices' WHERE define_var='MODULE_ID_EXERCISE'");
-                db_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langModifyInfo' WHERE define_var='MODULE_ID_COURSEINFO'");
-                db_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langGroups' WHERE define_var='MODULE_ID_GROUPS'");
-                db_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langDropBox' WHERE define_var='MODULE_ID_DROPBOX'");
-		db_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langGlossary' WHERE define_var='MODULE_ID_GLOSSARY'");
-                db_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langConference' WHERE define_var='MODULE_ID_CHAT'");
-                db_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langCourseDescription' WHERE define_var='MODULE_ID_DESCRIPTION'");
-                db_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langQuestionnaire' WHERE define_var='MODULE_ID_QUESTIONNAIRE'");
-                db_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langLearnPath' WHERE define_var='MODULE_ID_LP'");
-                db_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langUsage' WHERE define_var='MODULE_ID_USAGE'");
-                db_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langToolManagement' WHERE define_var='MODULE_ID_TOOLADMIN'");
-                db_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langWiki' WHERE define_var='MODULE_ID_WIKI'");
-                db_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langCourseUnits' WHERE define_var='MODULE_ID_UNITS'");
-                db_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langGlossary' WHERE define_var='MODULE_ID_GLOSSARY'");
-                db_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langEBook' WHERE define_var='MODULE_ID_EBOOK'");
-
+                
                 $tool_content .= "<p class='success'>$langModifDone</p>
                         <p>&laquo; <a href='".$_SERVER['PHP_SELF']."?course=$code_cours'>$langBack</a></p>
                         <p>&laquo; <a href='{$urlServer}courses/$currentCourseID/index.php'>$langBackCourse</a></p>";

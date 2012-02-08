@@ -77,7 +77,7 @@ include 'jscalendar.inc.php';
 /**** The following is added for statistics purposes ***/
 include('../../include/action.php');
 $action = new action();
-$action->record('MODULE_ID_ASSIGN');
+$action->record(MODULE_ID_ASSIGN);
 /**************************************/
 
 include('work_functions.php');

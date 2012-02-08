@@ -9,11 +9,10 @@ class action {
 
         if (!isset($currentCourseID)) {
                 return;
-        }
+        }      
         $action_type = new action_type();
         $action_type_id = $action_type->get_action_type_id($action_name);
-        $exit = $action_type->get_action_type_id('exit');
-        $module_id = $this->get_module_id($module_name);
+        $exit = $action_type->get_action_type_id('exit');        
 
         ###ophelia -28-08-2006 : add duration to previous
         $sql = "SELECT id, TIME_TO_SEC(TIMEDIFF(NOW(), date_time)) AS diff, action_type_id
@@ -38,8 +37,9 @@ class action {
         } else {
                 $duration = DEFAULT_MAX_DURATION;
         }
+        
         $sql = "INSERT INTO actions SET
-                    module_id = $module_id,
+                    module_id = $module_name,
                     user_id = $uid,
                     action_type_id = $action_type_id,
                     date_time = NOW(),
@@ -116,21 +116,6 @@ class action {
 	    $start_date = date('Y-m-01 00:00:00', $stmp);
         }
     }
-
-
-    function get_module_id($module_name) {
-        global $currentCourseID;
-        $sql = "SELECT id FROM accueil WHERE define_var = '$module_name'";
-        $result = db_query($sql, $currentCourseID);
-        if ($result and mysql_num_rows($result) > 0) {
-                list($id) = mysql_fetch_row($result);
-                mysql_free_result($result);
-                return $id;
-        } else {
-                return 0;
-        }
-    }
-
 }
 
 class action_type {

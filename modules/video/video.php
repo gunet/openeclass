@@ -56,7 +56,7 @@ include_once "../../include/lib/fileUploadLib.inc.php";
 /**** The following is added for statistics purposes ***/
 include('../../include/action.php');
 $action = new action();
-$action->record('MODULE_ID_VIDEO');
+$action->record(MODULE_ID_VIDEO);
 /**************************************/
 
 include '../../include/lib/forcedownload.php';

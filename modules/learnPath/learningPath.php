@@ -54,7 +54,7 @@ require_once '../../include/baseTheme.php';
 /**** The following is added for statistics purposes ***/
 include '../../include/action.php';
 $action = new action();
-$action->record('MODULE_ID_LP');
+$action->record(MODULE_ID_LP);
 /**************************************/
 
 if (isset($_GET['unit'])) {

@@ -136,7 +136,7 @@ if (isset($_POST['back1']) or !isset($_POST['visit'])) {
 	$tool_content .= "</td>
           <td>&nbsp;</td>
         </tr>";
-	unset($repertoire);
+	unset($code);
 	$tool_content .= "
         <tr>
 	  <th>$langTeachers:</th>
@@ -164,9 +164,6 @@ if (isset($_POST['back1']) or !isset($_POST['visit'])) {
         </table>
               </fieldset>
         <div align='right' class='smaller'>(*) &nbsp;$langFieldsRequ</div>
-
-
-
       <br />";
 }
 
@@ -346,8 +343,8 @@ if (isset($_POST['create_course'])) {
         $facname = find_faculty_by_id($facid);
 
         // create new course code: uppercase, no spaces allowed
-        $repertoire = strtoupper(new_code($facid));
-        $repertoire = str_replace (' ', '', $repertoire);
+        $code = strtoupper(new_code($facid));
+        $code = str_replace (' ', '', $code);
 
         $language = langcode_to_name($_POST['languageCourse']);
         // include_messages
@@ -365,24 +362,20 @@ if (isset($_POST['create_course'])) {
 
         // create directories
         umask(0);
-        if (!(mkdir("../../courses/$repertoire", 0777) and
-              mkdir("../../courses/$repertoire/image", 0777) and
-              mkdir("../../courses/$repertoire/document", 0777) and
-              mkdir("../../courses/$repertoire/dropbox", 0777) and
-              mkdir("../../courses/$repertoire/page", 0777) and
-              mkdir("../../courses/$repertoire/work", 0777) and
-              mkdir("../../courses/$repertoire/group", 0777) and
-              mkdir("../../courses/$repertoire/temp", 0777) and
-              mkdir("../../courses/$repertoire/scormPackages", 0777) and
-              mkdir("../../video/$repertoire", 0777))) {
+        if (!(mkdir("../../courses/$code", 0777) and
+              mkdir("../../courses/$code/image", 0777) and
+              mkdir("../../courses/$code/document", 0777) and
+              mkdir("../../courses/$code/dropbox", 0777) and
+              mkdir("../../courses/$code/page", 0777) and
+              mkdir("../../courses/$code/work", 0777) and
+              mkdir("../../courses/$code/group", 0777) and
+              mkdir("../../courses/$code/temp", 0777) and
+              mkdir("../../courses/$code/scormPackages", 0777) and
+              mkdir("../../video/$code", 0777))) {
                 $tool_content .= "<div class='caution'>$langErrorDir</div>";
                 draw($tool_content, 1, null, $head_content);
                 exit;
-        }
-        // ---------------------------------------------------------
-        //  all the course db queries are inside the following script
-        // ---------------------------------------------------------
-        require "create_course_db.php";
+        }        
 
         // ------------- update main Db------------
         mysql_select_db("$mysqlMainDb");
@@ -394,7 +387,7 @@ if (isset($_POST['create_course'])) {
         $dropbox_quota = get_config('dropbox_quota');
         
         db_query("INSERT INTO cours SET
-                        code = '$code',
+                        code = ".quote($code) . ",
                         languageCourse =" . quote($language) . ",
                         intitule = " . quote($intitule) . ",
                         course_keywords = " . quote($course_keywords) . ",
@@ -409,15 +402,31 @@ if (isset($_POST['create_course'])) {
                         password = " . quote($password) . ",
                         faculteid = $facid,
                         first_create = NOW()");
-        $new_cours_id = mysql_insert_id();
+        $new_course_id = mysql_insert_id();
+        
+        
+        // arxikopoihsh tou array gia ta checkboxes
+        for ($i = 0; $i <= 50; $i++) {
+                $sbsystems[$i] = 0;
+        }
+
+        // allagh timwn sto array analoga me to poio checkbox exei epilegei
+        if (isset($_POST['subsystems'])) {
+            foreach ($_POST['subsystems'] as $sb) {
+                    $sbsystems[$sb] = 1;
+            }
+        }
+        // create entries in table `modules`
+        create_modules($new_course_id, $sbsystems);
+        
         db_query("INSERT INTO cours_user SET
-                        cours_id = $new_cours_id,
+                        cours_id = $new_course_id,
                         user_id = '$uid',
                         statut = '1',
                         tutor='1',
                         reg_date = CURDATE()");
         db_query("INSERT INTO group_properties SET
-                        course_id = $new_cours_id,
+                        course_id = $new_course_id,
                         self_registration = 1,
                         multiple_registration = 0,
                         forum = 1,
@@ -427,32 +436,63 @@ if (isset($_POST['create_course'])) {
                         agenda = 0");
 
         $description = trim(autounquote($description));
-        $unit_id = description_unit_id($new_cours_id);
+        $unit_id = description_unit_id($new_course_id);
         if (!empty($description)) {
                 add_unit_resource($unit_id, 'description', -1, $langDescription, trim(autounquote($description)));
         }
-
+        // create full text indexes for search
+        db_query("ALTER TABLE `course_description` ADD FULLTEXT `course_description` (`title` ,`content`)", $mysqlMainDb);
+        // ---------------------------------------------------------
+        //  all the course db queries are inside the following script
+        // ---------------------------------------------------------
+        require "create_course_db.php";
+        
         // ----------- main course index.php -----------
 
-        $fd = fopen("../../courses/$repertoire/index.php", "w");
+        $fd = fopen("../../courses/$code/index.php", "w");
         fwrite($fd, "<?php\nsession_start();\n" .
-                    "\$_SESSION['dbname']='$repertoire';\n" .
+                    "\$_SESSION['dbname']='$code';\n" .
                     "include '../../modules/course_home/course_home.php';\n");
         fclose($fd);
-        $status[$repertoire] = 1;
+        $status[$code] = 1;
         $_SESSION['status'] = $status;
 
         // ----------- Import from BetaCMS Bridge -----------
 	if (get_config("betacms")) {
-	        $tool_content .= doImportFromBetaCMSAfterCourseCreation($repertoire, $mysqlMainDb, $webDir);
+	        $tool_content .= doImportFromBetaCMSAfterCourseCreation($code, $mysqlMainDb, $webDir);
 	}
         // --------------------------------------------------
         $tool_content .= "
                 <p class='success'><b>$langJustCreated:</b> $intitule<br>
                 <span class='smaller'>$langEnterMetadata</span></p>
-                <p class='eclass_button'><a href='../../courses/$repertoire/index.php'>$langEnter</a></p>";
+                <p class='eclass_button'><a href='../../courses/$code/index.php'>$langEnter</a></p>";
 } // end of submit
 
 $tool_content .= "</form>";
 
 draw($tool_content, 1, null, $head_content);
+
+// ---------------------------------------------
+// create entries in table `module`
+// ---------------------------------------------
+
+function create_modules($cid, $sbsystems) {
+
+        db_query("INSERT INTO modules (module_id, visible, course_id) VALUES (".MODULE_ID_AGENDA.", $sbsystems[1], $cid)");               
+        db_query("INSERT INTO modules (module_id, visible, course_id) VALUES (".MODULE_ID_LINKS.",$sbsystems[2], $cid)");
+        db_query("INSERT INTO modules (module_id, visible, course_id) VALUES (".MODULE_ID_DOCS.",$sbsystems[3], $cid)");
+        db_query("INSERT INTO modules (module_id, visible, course_id) VALUES (".MODULE_ID_VIDEO.",$sbsystems[4], $cid)");
+        db_query("INSERT INTO modules (module_id, visible, course_id) VALUES (".MODULE_ID_ASSIGN.",$sbsystems[5], $cid)");
+        db_query("INSERT INTO modules (module_id, visible, course_id) VALUES (".MODULE_ID_ANNOUNCE.",$sbsystems[7], $cid)");
+        db_query("INSERT INTO modules (module_id, visible, course_id) VALUES (".MODULE_ID_FORUM.",$sbsystems[9], $cid)");
+        db_query("INSERT INTO modules (module_id, visible, course_id) VALUES (".MODULE_ID_EXERCISE.",$sbsystems[10], $cid)");
+        db_query("INSERT INTO modules (module_id, visible, course_id) VALUES (".MODULE_ID_GROUPS.",$sbsystems[15], $cid)");
+        db_query("INSERT INTO modules (module_id, visible, course_id) VALUES (".MODULE_ID_DROPBOX.",$sbsystems[16], $cid)");
+        db_query("INSERT INTO modules (module_id, visible, course_id) VALUES (".MODULE_ID_GLOSSARY.",$sbsystems[17], $cid)");
+        db_query("INSERT INTO modules (module_id, visible, course_id) VALUES (".MODULE_ID_EBOOK.",$sbsystems[18], $cid)");
+        db_query("INSERT INTO modules (module_id, visible, course_id) VALUES (".MODULE_ID_CHAT.",$sbsystems[19], $cid)");
+        db_query("INSERT INTO modules (module_id, visible, course_id) VALUES (".MODULE_ID_DESCRIPTION.",$sbsystems[20], $cid)");
+        db_query("INSERT INTO modules (module_id, visible, course_id) VALUES (".MODULE_ID_QUESTIONNAIRE.",$sbsystems[21], $cid)");
+        db_query("INSERT INTO modules (module_id, visible, course_id) VALUES (".MODULE_ID_LINKS.",$sbsystems[23], $cid)");
+        db_query("INSERT INTO modules (module_id, visible, course_id) VALUES (".MODULE_ID_WIKI.",$sbsystems[26], $cid)");        
+}

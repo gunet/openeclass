@@ -69,12 +69,12 @@ require_once("../../include/baseTheme.php");
 /**** The following is added for statistics purposes ***/
 include('../../include/action.php');
 $action = new action();
-$action->record('MODULE_ID_LP');
+$action->record(MODULE_ID_LP);
 /**************************************/
 
 $head_content = "";
 $tool_content = "";
-$style= "";
+$style = "";
 
 if (!add_units_navigation(TRUE)) {
 	$nameTools = $langLearningPaths;

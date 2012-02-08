@@ -44,7 +44,7 @@ include '../../include/sendMail.inc.php';
 // The following is added for statistics purposes
 include('../../include/action.php');
 $action = new action();
-$action->record('MODULE_ID_ANNOUNCE');
+$action->record(MODULE_ID_ANNOUNCE);
 
 define ('RSS', 'modules/announcements/rss.php?c='.$currentCourseID);
 $fake_code = course_id_to_fake_code($cours_id);

@@ -47,7 +47,7 @@ $dbname = $_SESSION['dbname'];
 /**** The following is added for statistics purposes ***/
 include('../../include/action.php');
 $action_stats = new action();
-$action_stats->record('MODULE_ID_LINKS');
+$action_stats->record(MODULE_ID_LINKS);
 /**************************************/
 
 mysql_select_db($mysqlMainDb);

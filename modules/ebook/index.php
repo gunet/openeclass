@@ -32,7 +32,7 @@ include '../../include/lib/fileManageLib.inc.php';
 /**** The following is added for statistics purposes ***/
 include('../../include/action.php');
 $action_stats = new action();
-$action_stats->record('MODULE_ID_EBOOK');
+$action_stats->record(MODULE_ID_EBOOK);
 /**************************************/
 
 mysql_select_db($mysqlMainDb);

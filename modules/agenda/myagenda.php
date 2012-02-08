@@ -40,18 +40,18 @@ include '../../include/lib/textLib.inc.php';
 
 $nameTools = $langMyAgenda;
 
-$TABLECOURS     = "`$mysqlMainDb`.cours";
-$TABLECOURSUSER = "`$mysqlMainDb`.cours_user";
-
 if (isset($uid)) {
         $year = '';
         $month = '';
  	$query = db_query("SELECT cours.code k, cours.fake_code fc,
-                        cours.intitule i, cours.titulaires t, cours.cours_id id
-	                        FROM cours, cours_user
+                             cours.intitule i, cours.titulaires t, cours.cours_id id
+	                        FROM cours, cours_user, modules
 	                        WHERE cours.cours_id = cours_user.cours_id
                                 AND cours.visible != ".COURSE_INACTIVE."
-	                        AND cours_user.user_id = '$uid'");
+	                        AND cours_user.user_id = $uid
+                                AND modules.module_id  = ".MODULE_ID_AGENDA."
+                                AND modules.visible = 1
+                                AND modules.course_id = cours.cours_id");
         $today = getdate();
         if (isset($_GET['year'])) {
                 $year = intval($_GET['year']);
@@ -66,8 +66,7 @@ if (isset($uid)) {
 
 	$agendaitems = get_agendaitems($query, $month, $year);
 	$monthName = $langMonthNames['long'][$month-1];
-	@display_monthcalendar($agendaitems, $month, $year, $langDay_of_weekNames['long'], $monthName,
-$langToday);
+	display_monthcalendar($agendaitems, $month, $year, $langDay_of_weekNames['long'], $monthName, $langToday);
 }
 
 // -----------------------
@@ -84,40 +83,34 @@ $langToday);
  */
 function get_agendaitems($query, $month, $year) {
 	global $urlServer, $mysqlMainDb;
-	$items = array();
-
+	
+        $items = array();
 	// get agenda-items for every course
-	while ($mycours = mysql_fetch_array($query))
-	{
-           // exclude courses with disabled agenda modules
-           $row = mysql_fetch_array(db_query("SELECT visible FROM accueil WHERE define_var = 'MODULE_ID_AGENDA'", $mycours['k']));
-           if ($row['visible'] == 0)
-               continue;
-           
-           $result = db_query("SELECT * FROM agenda WHERE course_id = ". $mycours['id'] ." AND month(day)='$month' AND year(day)='$year' AND visibility = 'v'", $mysqlMainDb);
+	while ($mycours = mysql_fetch_array($query)) {                      
+                $result = db_query("SELECT * FROM agenda WHERE course_id = ". $mycours['id'] ." 
+                                        AND MONTH(DAY)='$month' 
+                                        AND YEAR(DAY)='$year' 
+                                        AND visibility = 'v'", $mysqlMainDb);
 
-	    while ($item = mysql_fetch_array($result))
-	    {
-			$agendadate = explode("-", $item['day']);
-			$agendaday = intval($agendadate[2]);
-			$agendatime = explode(":", $item['hour']);
-			$time = $agendatime[0].":".$agendatime[1];
-		        $URL = $urlServer."modules/agenda/agenda.php?course=".$mycours[k];
-	    	$items[$agendaday][$item['hour']] .= "<br /><small>($agendatime[0]:$agendatime[1]) <a href=\"$URL\" title=\"$mycours[i] ($mycours[fc])\">$mycours[i]</a> $item[title]<small>";
-		}
-	}
+                while ($item = mysql_fetch_array($result)) {
+                        $URL = $urlServer."modules/agenda/agenda.php?course=".$mycours['k'];
+                        $agendadate = explode("-", $item['day']);                            
+                        $agendatime = explode(":", $item['hour']);
+                        $time = $agendatime[0].":".$agendatime[1];
+                        $agendaday = intval($agendadate[2]);                                                
+                        $items[$agendaday][$item['hour']] = "<br /><small>($time) <a href='$URL' title='$mycours[i] ($mycours[fc])'>$mycours[i]</a> $item[title]</small>";
+                }
+	}        
 
 	// sorting by hour for every day
-	$agendaitems = array();
-	while (list($agendaday, $tmpitems) = each($items))
-	{
+	$agendaitems = array();        
+	while (list($agendaday, $tmpitems) = each($items)) {
 		sort($tmpitems);
-		while (list($key,$val) = each($tmpitems))
-		{
-			$agendaitems[$agendaday].=$val;
+                $agendaitems[$agendaday] = '';
+		while (list($key,$val) = each($tmpitems)) {                        
+			$agendaitems[$agendaday] .= $val;
 		}
-	}
-
+	} 
 	return $agendaitems;
 }
 
@@ -134,9 +127,13 @@ function get_agendaitems($query, $month, $year) {
  * @param string $langToday
  */
 function display_monthcalendar($agendaitems, $month, $year, $weekdaynames, $monthName, $langToday) {
+        global $tool_content;
+        
 	//Handle leap year
 	$numberofdays = array(0,31,28,31,30,31,30,31,31,30,31,30,31);
-	if (($year%400 == 0) or ($year%4==0 and $year%100<>0)) $numberofdays[2] = 29;
+	if (($year%400 == 0) or ($year%4 == 0 and $year%100 <> 0)) {
+                $numberofdays[2] = 29;
+        }
 
 	//Get the first day of the month
 	$dayone = getdate(mktime(0,0,0,$month,1,$year));
@@ -146,55 +143,48 @@ function display_monthcalendar($agendaitems, $month, $year, $weekdaynames, $mont
 	$backwardsURL = "$_SERVER[PHP_SELF]?month=".($month==1 ? 12 : $month-1)."&amp;year=".($month==1 ? $year-1 : $year);
 	$forewardsURL = "$_SERVER[PHP_SELF]?month=".($month==12 ? 1 : $month+1)."&amp;year=".($month==12 ? $year+1 : $year);
 
-	$tool_content .=  "\n  <table width=100% class=\"title1\">\n";
-  	$tool_content .=  "\n  <tr>";
-	$tool_content .=  "\n    <td width='250'><a href=$backwardsURL>&laquo;</a></td>";
-	$tool_content .=  "\n    <td class='center'><b>$monthName $year</b></td>";
-	$tool_content .=  "\n    <td width='250' class='right'><a href=$forewardsURL>&raquo;</a></td>";
-	$tool_content .=  "\n  </tr>";
-	$tool_content .=  "\n  </table>\n  <br />\n\n";
-
-	$tool_content .=  "\n  <table width=100% class=\"tbl_1\">\n  <tr>";
-	for ($ii=1;$ii<8; $ii++)
-	{
-    	$tool_content .=  "\n    <th class='center'>".$weekdaynames[$ii%7]."</th>";
-	    }
-	$tool_content .=  "\n  </tr>\n";
+	$tool_content .= "<table width=100% class=\"title1\">\n";
+  	$tool_content .= "<tr>";
+	$tool_content .= "<td width='250'><a href=$backwardsURL>&laquo;</a></td>";
+	$tool_content .= "<td class='center'><b>$monthName $year</b></td>";
+	$tool_content .= "<td width='250' class='right'><a href=$forewardsURL>&raquo;</a></td>";
+	$tool_content .= "</tr>";
+	$tool_content .= "</table><br />";
+	$tool_content .= "<table width=100% class='tbl_1'><tr>";
+	for ($ii=1; $ii<8; $ii++) {
+                $tool_content .=  "<th class='center'>".$weekdaynames[$ii%7]."</th>";
+	}
+	$tool_content .= "</tr>";
 	$curday = -1;
 	$today = getdate();
-	while ($curday <=$numberofdays[$month])
-  	{
-  		$tool_content .=  "\n  <tr>";
-      	for ($ii=0; $ii<7; $ii++)
-	  	{
-	  		if (($curday == -1)&&($ii==$startdayofweek))
-			{
-	    		$curday = 1;
+    
+	while ($curday <= $numberofdays[$month]) {
+  		$tool_content .= "<tr>";
+                
+                for ($ii=0; $ii<7; $ii++) {
+	  		if (($curday == -1) && ($ii==$startdayofweek)) {
+                                $curday = 1;
 			}
-			if (($curday>0)&&($curday<=$numberofdays[$month]))
-			{
-				$bgcolor = $ii<5 ? "class=\"cautionk\"" : "class=\"odd\"";
+			if (($curday>0) && ($curday<=$numberofdays[$month])) {
+				$bgcolor = $ii<5 ? "class='cautionk'" : "class='odd'";
 				$dayheader = "$curday";
 				$class_style = "class=odd";
-		  		if (($curday==$today['mday'])&&($year ==$today['year'])&&($month == $today['mon']))
+		  		if (($curday==$today['mday']) && ($year ==$today['year']) && ($month == $today['mon']))
 				{
 		  			$dayheader = "<b>$curday</b> <small>($langToday)</small>";
-		  			$class_style = "class=\"today\"";
-		  			//$class_style = "";
+		  			$class_style = "class='today'";		  			
 				}
-	      		$tool_content .=  "\n    <td height=50 width=14% valign=top $class_style><b>$dayheader</b>";
-				$tool_content .=  "$agendaitems[$curday]</td>";
-	      		$curday++;
-	    	}
-	  		else
-	    	{
-	    		$tool_content .=  "\n    <td width=14%>&nbsp;</td>";
-	    	}
+                                $tool_content .= "<td height=50 width=14% valign=top $class_style><b>$dayheader</b>";
+                                if (!empty($agendaitems[$curday])) {
+                                        $tool_content .= "$agendaitems[$curday]</td>";
+                                }
+                                $curday++;
+                        } else {
+                                $tool_content .= "<td width=14%>&nbsp;</td>";
+                        }
 		}
-    	$tool_content .=  "\n  </tr>";
-    }
-  	$tool_content .=  "\n  </table>\n\n";
-
+                $tool_content .= "</tr>";
+        }
+  	$tool_content .= "</table>";
         draw($tool_content, 1);
 }
-

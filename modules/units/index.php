@@ -34,7 +34,7 @@ include '../document/doc_init.php';
 require_once '../video/video_functions.php';
 
 $action = new action();
-$action->record('MODULE_ID_UNITS');
+$action->record(MODULE_ID_UNITS);
 
 mysql_select_db($mysqlMainDb);
 

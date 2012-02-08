@@ -39,7 +39,7 @@ $diskUsed = dir_total_space($basedir);
 /**** The following is added for statistics purposes ***/
 include('../../include/action.php');
 $action = new action();
-$action->record('MODULE_ID_DROPBOX');
+$action->record(MODULE_ID_DROPBOX);
 /**************************************/
 
 if (isset($_GET['showQuota']) and $_GET['showQuota'] == TRUE) {
