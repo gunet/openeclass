@@ -45,15 +45,15 @@ foreach ($usage_defaults as $key => $val) {
 }
 
 if ($u_module_id != -1) {
-    $mod_where = " (module_id = '$u_module_id') ";
+    $mod_where = " (modules.module_id = '$u_module_id') ";
 } else {
     $mod_where = " (1) ";
 }
 
-//$date_fmt = '%Y-%m-%d';
+
 $date_fmt = '%d-%m-%Y';
-$date_where = "(date_time BETWEEN '$u_date_start 00:00:00' AND '$u_date_end 23:59:59') ";
-$date_what  = "DATE_FORMAT(MIN(date_time), '$date_fmt') AS date_start, DATE_FORMAT(MAX(date_time), '$date_fmt') AS date_end ";
+$date_where = "(`date_time` BETWEEN '$u_date_start 00:00:00' AND '$u_date_end 23:59:59') ";
+$date_what  = "DATE_FORMAT(MIN(`date_time`), '$date_fmt') AS date_start, DATE_FORMAT(MAX(`date_time`), '$date_fmt') AS date_end ";
 
 switch ($u_interval) {
     case "summary":
@@ -61,21 +61,21 @@ switch ($u_interval) {
         $date_what ='1';
     break;
     case "daily":
-        $date_what .= ", DATE_FORMAT(date_time, '$date_fmt') AS date ";
-        $date_group = " DATE(date_time) ";
+        $date_what .= ", DATE_FORMAT(`date_time`, '$date_fmt') AS `date` ";
+        $date_group = " DATE(`date_time`) ";
     break;
     case "weekly":
-        $date_what .= ", DATE_FORMAT(date_time - INTERVAL WEEKDAY(date_time) DAY, '$date_fmt') AS week_start ".
-                      ", DATE_FORMAT(date_time + INTERVAL (6 - WEEKDAY(date_time)) DAY, '$date_fmt') AS week_end ";
-        $date_group = " WEEK(date_time)";
+        $date_what .= ", DATE_FORMAT(`date_time` - INTERVAL WEEKDAY(`date_time`) DAY, '$date_fmt') AS week_start ".
+                      ", DATE_FORMAT(`date_time` + INTERVAL (6 - WEEKDAY(`date_time`)) DAY, '$date_fmt') AS week_end ";
+        $date_group = " WEEK(`date_time`)";
     break;
     case "monthly":
-        $date_what .= ", MONTH(date_time) AS month ";
-        $date_group = " MONTH(date_time)";
+        $date_what .= ", MONTH(`date_time`) AS `month` ";
+        $date_group = " MONTH(`date_time`)";
     break;
     case "yearly":
-        $date_what .= ", YEAR(date_time) AS year ";
-        $date_group = " YEAR(date_time) ";
+        $date_what .= ", YEAR(`date_time`) AS `year` ";
+        $date_group = " YEAR(`date_time`) ";
     break;
 }
 
@@ -89,7 +89,7 @@ switch ($u_stats_value) {
         $chart = new VerticalBarChart(300, 300);
         $dataSet = new XYDataSet();
         $query = "SELECT ".$date_what.", COUNT(*) AS cnt FROM actions
-                         WHERE $date_where AND $mod_where GROUP BY $date_group ORDER BY date_time ASC";
+                         WHERE $date_where AND $mod_where GROUP BY $date_group ORDER BY `date_time` ASC";
         $result = db_query($query, $currentCourseID);
 
         switch ($u_interval) {
@@ -134,10 +134,10 @@ switch ($u_stats_value) {
         $chart->setTitle("$langVisits");
 
     break;
-    case "duration":
-        $query = "SELECT ".$date_what." , SUM(duration) AS tot_dur, ".
-            " accueil.rubrique AS name FROM actions LEFT JOIN accueil ON actions.module_id = accueil.id ".
-            " WHERE $date_where AND $mod_where GROUP BY ".$date_group." ORDER BY date_time ASC";
+    case "duration":        
+            $query = "SELECT ".$date_what." , SUM(duration) AS tot_dur
+                FROM $currentCourseID.actions, $mysqlMainDb.modules WHERE actions.module_id = modules.module_id
+                AND $date_where AND $mod_where GROUP BY ".$date_group." ORDER BY date_time ASC";
 
         $result = db_query($query, $currentCourseID);
         $chart = new VerticalBarChart(200, 300);

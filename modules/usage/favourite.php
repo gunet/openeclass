@@ -111,15 +111,15 @@ $local_head = $jscalendar->get_load_files_code();
 
     switch ($u_stats_value) {
         case "visits":
-            $query = "SELECT module_id, COUNT(*) AS cnt, accueil.rubrique AS name FROM actions ".
-            " LEFT JOIN accueil ON actions.module_id = accueil.id
-		WHERE $date_where AND $user_where GROUP BY module_id";
+            $query = "SELECT module_id, COUNT(*) AS cnt FROM actions
+                        WHERE $date_where AND $user_where GROUP BY module_id";
 
             $result = db_query($query, $currentCourseID);
             $chart = new PieChart(600, 300);
             $dataSet = new XYDataSet();
             while ($row = mysql_fetch_assoc($result)) {
-                $dataSet->addPoint(new Point($row['name'], $row['cnt']));
+                $mid = $row['module_id'];
+                $dataSet->addPoint(new Point($modules[$mid]['title'], $row['cnt']));
                 $chart->width += 7;
                 $chart->setDataSet($dataSet);
                 $chart_content = 5;
@@ -129,16 +129,16 @@ $local_head = $jscalendar->get_load_files_code();
         break;
 
         case "duration":
-            $query = "SELECT module_id, SUM(duration) AS tot_dur, accueil.rubrique AS name FROM actions ".
-            " LEFT JOIN accueil ON actions.module_id = accueil.id
-		WHERE $date_where AND $user_where GROUP BY module_id";
+            $query = "SELECT module_id, SUM(duration) AS tot_dur FROM actions                     
+                        WHERE $date_where AND $user_where GROUP BY module_id";
 
             $result = db_query($query, $currentCourseID);
 
             $chart = new PieChart(600, 300);
             $dataSet = new XYDataSet();
             while ($row = mysql_fetch_assoc($result)) {
-                $dataSet->addPoint(new Point($row['name'], $row['tot_dur']));                
+                $mid = $row['module_id'];
+                $dataSet->addPoint(new Point($modules[$mid]['title'], $row['tot_dur']));                
                 $chart->width += 7;
                 $chart->setDataSet($dataSet);
                 $chart_content=5;
@@ -155,8 +155,8 @@ $local_head = $jscalendar->get_load_files_code();
     if (isset($_POST['btnUsage'])) {        
         if ($chart_content > 0) {
             $chart->render($webDir.$chart_path);
-            $tool_content .= "\n  <p>$langFavouriteExpl</p>\n";
-            $tool_content .= '  <p class="center"><img src="'.$urlServer.$chart_path.'" /></p>';
+            $tool_content .= "<p>$langFavouriteExpl</p>\n";
+            $tool_content .= '<p class="center"><img src="'.$urlServer.$chart_path.'" /></p>';
          } else {         
             $tool_content .= '<p class="alert1">'.$langNoStatistics.'</p>';
         }

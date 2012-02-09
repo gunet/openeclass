@@ -28,7 +28,7 @@
                     Ophelia Neofytou ophelia@ucnet.uoc.gr
 ==============================================================================
     @Description: Shows logins made by a user or all users of a course, during a specific period.
-    Takes data from table 'logins' (and also from table 'stat_accueil' if still exists).
+    Takes data from table 'logins'
 
 ==============================================================================
 */
@@ -41,7 +41,6 @@ $require_login = true;
 
 include '../../include/baseTheme.php';
 include('../../include/action.php');
-
 
 $tool_content .= "
 <div id='operations_container'>
@@ -105,17 +104,6 @@ $sql_2 = "SELECT a.user_id as user_id, a.nom as nom, a.prenom as prenom, a.usern
                  FROM user AS a LEFT JOIN cours_user AS b ON a.user_id = b.user_id
                  WHERE b.cours_id = $cours_id AND ".$user_where;
 
-$sql_3 = "SHOW TABLES FROM `$currentCourseID` LIKE 'stat_accueil'";
-$result_3 = db_query($sql_3, $currentCourseID);
-$exist_stat_accueil=0;
-if (mysql_fetch_assoc($result_3)) {
-    $exist_stat_accueil=1;
-}
-
-$sql_4 = "SELECT host, address, `date` FROM stat_accueil
-                 WHERE `date` BETWEEN '$u_date_start 00:00:00' AND '$u_date_end 23:59:59'
-                 ORDER BY `date` DESC";
-
 // Take data from logins
 $result_2= db_query($sql_2, $mysqlMainDb);
 
@@ -164,59 +152,28 @@ while ($row = mysql_fetch_assoc($result)) {
         $k++;
 }
 
-//Take data from stat_accueil
-$table2_cont = '';
-if ($exist_stat_accueil){
-    $result_4= db_query($sql_4, $currentCourseID);
-    $k1=0;
-    while ($row = mysql_fetch_assoc($result_4)) {
-	if ($k%2==0) {
-            $table2_cont .= "<tr class='even'>";
-	} else {
-            $table2_cont .= "<tr class='odd'>";
-	}
-        $table2_cont .= "
-        <td width='1'><img src='$themeimg/arrow.png' alt=''></td>
-        <td>".$row['host']."</td>
-        <td align='center'>".$row['address']."</td>
-        <td align='center'>".$row['date']."</td>
-        </tr>";
-        $k1++;
-    }
-}
 //Records exist?
 if (count($unknown_users) > 0) {
         $tool_content .= "<p>$langAnonymousExplain</p>\n";
 }
 
 if ($table_cont) {
-  $tool_content .= "
-  <table width='99%' class='tbl_alt'>
-  <tr>
-    <th colspan='4'>$langUserLogins</th>
-  </tr>
-  <tr>
-    <th colspan='2' class='left'>".$langUser."</th>
-    <th>".$langAddress."</th>
-    <th>".$langLoginDate."</th>
-  </tr>";
-  $tool_content .= "".$table_cont."";
-  $tool_content .= "
-  </table>";
+        $tool_content .= "
+        <table width='99%' class='tbl_alt'>
+        <tr>
+        <th colspan='4'>$langUserLogins</th>
+        </tr>
+        <tr>
+        <th colspan='2' class='left'>".$langUser."</th>
+        <th>".$langAddress."</th>
+        <th>".$langLoginDate."</th>
+        </tr>";
+        $tool_content .= "".$table_cont."";
+        $tool_content .= "
+        </table>";
 }
 
-if ($table2_cont) {
-        $tool_content .= "
-          <p>$langStatAccueil</p>
-          <table width='99%' class='tbl_alt'>
-             <tr><th colspan='4'>$langUserLogins</th></tr>
-             <tr><th colspan='2'>$langHost</th>
-                 <th>$langAddress</th>
-                 <th>$langLoginDate</th></tr>
-             $table2_cont
-          </table>";
-}
-if (!($table_cont || $table2_cont)) {
+if (!($table_cont)) {
         $tool_content .= '<p class="alert1">'.$langNoLogins.'</p>';
 }
 
@@ -272,7 +229,7 @@ $start_cal = $jscalendar->make_input_field(
         $user_opts .= '<option '.$selected.' value="'.$row["user_id"].'">'.$row['prenom'].' '.$row['nom']."</option>\n";
     }
 
-    $tool_content .= '
+$tool_content .= '
 <form method="post" action="'.$_SERVER['PHP_SELF'].'?course='.$code_cours.'">
 <fieldset>
   <legend>'.$langUserLogins.'</legend>

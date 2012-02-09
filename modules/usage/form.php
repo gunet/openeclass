@@ -42,12 +42,16 @@ $end_cal = $jscalendar->make_input_field(
                  'value' => $u_date_end));
 
 
-$qry = "SELECT id, rubrique AS name FROM accueil WHERE define_var != '' AND visible <> 0 ORDER BY name ";
-$mod_opts = '<option value="-1">'.$langAllModules."</option>\n";
-$result = db_query($qry, $currentCourseID);
+$qry = "SELECT module_id FROM modules WHERE visible = 1 AND course_id = ".course_code_to_id($currentCourseID);        
+$mod_opts = '<option value="-1">'.$langAllModules."</option>";
+$result = db_query($qry);
 while ($row = mysql_fetch_assoc($result)) {
-    if ($u_module_id == $row['id']) { $selected = 'selected'; } else { $selected = ''; }
-    $mod_opts .= '<option '.$selected.' value="'.$row["id"].'">'.$row['name']."</option>\n";
+        $mid = $row['module_id'];   
+        $extra = '';
+        if ($u_module_id == $mid) {
+                $extra = 'selected';
+        }
+        $mod_opts .= "<option value=".$mid." $extra>".$modules[$mid]['title']."</option>";            
 }
 
 $statsValueOptions =

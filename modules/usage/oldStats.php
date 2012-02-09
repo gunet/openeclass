@@ -43,8 +43,8 @@ include '../../include/baseTheme.php';
 include('../../include/action.php');
 
 $tool_content .= "
-  <div id=\"operations_container\">
-    <ul id=\"opslist\">
+  <div id='operations_container'>
+    <ul id='opslist'>
       <li><a href='usage.php?course=$code_cours'>".$langUsageVisits."</a></li>
       <li><a href='favourite.php?course=$code_cours&amp;first='>".$langFavourite."</a></li>
       <li><a href='userlogins.php?course=$code_cours&amp;first='>".$langUserLogins."</a></li>
@@ -98,7 +98,6 @@ if (!extension_loaded('gd')) {
        $tool_content .= "<p>$langGDRequired</p>";
 } else {
        $made_chart = true;
-
        //make chart
        require_once '../../include/libchart/libchart.php';
        $usage_defaults = array (
@@ -193,19 +192,23 @@ if (!extension_loaded('gd')) {
 	  array('style'  => 'width: 10em; color: #727266; background-color: #fbfbfb; border: 1px solid #CAC3B5; text-align: center',
 		'name'   => 'u_date_end',
 		'value' => $u_date_end));
-
-   $qry = "SELECT id, rubrique AS name FROM accueil WHERE define_var != '' AND visible = 1 ORDER BY name ";
+   
+   $qry = "SELECT module_id FROM modules WHERE visible = 1 AND course_id = ".course_code_to_id($currentCourseID);        
 
    $mod_opts = '<option value="-1">'.$langAllModules."</option>\n";
-   $result = db_query($qry, $currentCourseID);
+   $result = db_query($qry);
    while ($row = mysql_fetch_assoc($result)) {
-       if ($u_module_id == $row['id']) { $selected = 'selected'; } else { $selected = ''; }
-       $mod_opts .= '<option '.$selected.' value="'.$row["id"].'">'.$row['name']."</option>\n";
+           $mid = $row['module_id'];   
+           $extra = '';
+        if ($u_module_id == $mid) {
+                $extra = 'selected';
+        }
+        $mod_opts .= "<option value=".$mid." $extra>".$modules[$mid]['title']."</option>";                          
    }
-   @mysql_free_result($qry);
+   mysql_free_result($result);
 
    $statsValueOptions =
-       '<option value="visits" '.	 (($u_stats_value=='visits')?('selected'):(''))	  .'>'.$langVisits."</option>\n".
+       '<option value="visits" '. (($u_stats_value=='visits')?('selected'):('')).'>'.$langVisits."</option>\n".
        '<option value="duration" '.(($u_stats_value=='duration')?('selected'):('')) .'>'.$langDuration."</option>\n";
 
    $tool_content .= '
@@ -241,5 +244,4 @@ if (!extension_loaded('gd')) {
        </fieldset>
        </form>';
     }
-
 draw($tool_content, 2, null, $local_head);

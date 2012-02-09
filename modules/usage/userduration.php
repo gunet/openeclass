@@ -28,7 +28,7 @@
                     Ophelia Neofytou ophelia@ucnet.uoc.gr
 ==============================================================================
     @Description: Shows logins made by a user or all users of a course, during a specific period.
-    Takes data from table 'logins' (and also from table 'stat_accueil' if still exists).
+    Takes data from table 'logins'
 
 ==============================================================================
 */
