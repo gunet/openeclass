@@ -114,9 +114,11 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 	if (strlen ($extraMessage) > 0) {
 		$messageBox = $extraMessage;
 	}
+        
+        $is_mobile = (isset($_SESSION['mobile']) && $_SESSION['mobile'] == true) ? true : false;
 
 	//get the left side menu from tools.php
-	$toolArr = getSideMenu ( $menuTypeID );
+        $toolArr = ($is_mobile) ? array() : getSideMenu ( $menuTypeID );
 	$numOfToolGroups = count ( $toolArr );
 
 	$t = new Template($relPath . 'template/' . $theme);
@@ -382,6 +384,11 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 
 		$t->set_var ( 'PAGE_TITLE', q($pageTitle) );
 
+                //Add the optional mobile-specific css if necessarry
+                if (isset($_SESSION['mobile']) && $_SESSION['mobile'] == true) {
+                    $t->set_var('EXTRA_CSS', "<link href=\"${urlAppend}/template/${theme}${tool_css}/theme_mobile.css\" rel=\"stylesheet\" type=\"text/css\" >");
+                }
+                
 		//Add the optional tool-specific css of the tool, if it's set
 		if (isset ( $tool_css )) {
 			$t->set_var ( 'TOOL_CSS', "<link href=\"{%TOOL_PATH%}modules/$tool_css/tool.css\" rel=\"stylesheet\" type=\"text/css\" >" );
