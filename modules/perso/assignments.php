@@ -121,7 +121,7 @@ function getUserAssignments($param, $type)
 
 function assignHtmlInterface($data)
 {
-	global  $langCourse, $langAssignment, $langDeadline, $langNoAssignmentsExist, $langGroupWorkSubmitted1, $langGroupWorkDeadline_of_Submission, $langGroupWorkSubmitted, $langExerciseEnd, $urlServer;
+	global  $langCourse, $langAssignment, $langDeadline, $langNoAssignmentsExist, $langGroupWorkSubmitted1, $langGroupWorkDeadline_of_Submission, $langGroupWorkSubmitted, $langExerciseEnd, $urlServer, $urlAppend;
 
 	$assign_content = "";
 	$assign_content= <<<aCont
@@ -135,8 +135,9 @@ aCont;
 		if ($iterator > 0) {
 			$assignmentsExist = true;
 			for ($j=0; $j < $iterator; $j++) {
-                                $url = $urlServer . "index.php?perso=1&amp;c=" .
-                                       $data[$i][1] . "&amp;i=" . $data[$i][2][$j][0];
+                                /*$url = $urlServer . "index.php?perso=1&amp;c=" .
+                                       $data[$i][1] . "&amp;i=" . $data[$i][2][$j][0];*/
+                                $url = $urlAppend . "/modules/work/work.php?course=".$data[$i][1]."&amp;id=". $data[$i][2][$j][0];
 
 				if($data[$i][2][$j][6] == 1) {
 					$submit_status = "".$langGroupWorkSubmitted."";
@@ -149,7 +150,7 @@ aCont;
                                 $assign_content .= "<tr><td><ul class='custom_list'><li><a href='$url'><b>" .
                                         q($data[$i][2][$j][1]) .
                                         "</b></a><div class='smaller'>$langGroupWorkDeadline_of_Submission: <b>" .
-                                        nice_format($data[$i][2][$j][3]) . "</b><div class='grey'>" .
+                                        nice_format($data[$i][2][$j][3], true) . "</b><div class='grey'>" .
                                         $submit_status . "</div></div></li></ul></td></tr>";
 			}
 			//if ($i+1 <$max_repeat_val) $assign_content .= "<br>";
@@ -195,16 +196,21 @@ function columnSort($unsorted, $column) {
  */
 function submitted($uid, $assignment_id, $lesson_id)
 {
-	global $mysqlMainDb;
-	
-	$res = db_query("SELECT * FROM `$mysqlMainDb`.assignment_submit
-		WHERE assignment_id = $assignment_id
-		AND (uid = $uid OR
-		     group_id IN (SELECT group_id FROM `$mysqlMainDb`.`group` AS grp,
-						       `$mysqlMainDb`.group_members AS members
-					 WHERE grp.id = members.group_id AND
-					       user_id = $uid AND course_id = $lesson_id))");
+    // find prefix
+    $prefix = './modules';
+    if (!file_exists($prefix) && file_exists('../group') && file_exists('../work'))
+        $prefix = '..';
+    
+    require_once($prefix.'/group/group_functions.php');
+    require_once($prefix.'/work/work_functions.php');
 
+    $gids = user_group_info($uid, $lesson_id);
+    $GLOBALS['cours_id'] = $lesson_id;
+
+    if ($submission = find_submissions(is_group_assignment($assignment_id), $uid, $assignment_id, $gids))
+        return true;
+    else
+        return false;
 }
 
 
