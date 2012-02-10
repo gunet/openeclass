@@ -85,18 +85,14 @@ if (isset($_REQUEST['toolStatus']) ) {
 
 if (isset($_POST['delete'])) {
         $delete = intval($_POST['delete']);
-        /*$sql = "SELECT lien, define_var FROM accueil WHERE `id` = ". $delete ." ";
-        $result = db_query($sql, $dbname);
-        while ($res = mysql_fetch_row($result)){
-                if($res[1] == "HTML_PAGE") {
-                        $link = explode(" ", $res[0]);
-                        $path = substr($link[0], 6);
-                        $file2Delete = $webDir . $path;
-                        @unlink($file2Delete);
-                }
-        }*/
-        $sql = "DELETE FROM link WHERE `id` = " . $_POST['delete'] ." ";
-        db_query($sql);
+        $r = mysql_fetch_array(db_query("SELECT url, category FROM link WHERE `id` = $delete"));
+        if($r['category'] == -2) { // if we want to delete html page also delete file
+                $link = explode(" ", $r['url']);
+                $path = substr($link[0], 6);
+                $file2Delete = $webDir . $path;
+                unlink($file2Delete);
+        }                
+        db_query("DELETE FROM link WHERE `id` = $delete");
         unset($sql);
         $tool_content .= "<p class='success'>$langLinkDeleted</p>";
 }
@@ -127,33 +123,18 @@ if (isset($_POST['submit'])) {
                         $tmpfile = $_FILES['file']['tmp_name'];
                         $file_name = $_FILES['file']['name'];
                         @copy("$tmpfile", "$updir/$file_name")
-                                or die("<p>$langCouldNot</p></tr>");
+                                or die("<p>$langCouldNot</p></tr>");                                                
 
-                        $sql = 'SELECT MAX(`id`) FROM `accueil` ';
-                        $res = db_query($sql,$dbname);
-                        while ($maxID = mysql_fetch_row($res)) {
-                                $mID = $maxID[0];
-                        }
-
-                        if($mID < 101) $mID = 101;
-                        else $mID = $mID+1;
-
-                        $link_name = quote($_POST['link_name']);
-                        $lien = quote("../../courses/$currentCourse/page/$file_name");
-                        db_query("INSERT INTO accueil VALUES (
-                                        $mID,
-                                        $link_name,
-                                        $lien,
-                                        'external_link',
-                                        '1',
-                                        '0',
-                                        '',
-                                        'HTML_PAGE'
-                                        )", $currentCourse);
-                        $tool_content .= "  <p class='success'>$langOkSent</p>\n";
+                        $link_name = autoquote($_POST['link_name']);
+                        $link = quote("../../courses/$currentCourse/page/$file_name");
+                        
+                        db_query("INSERT INTO link (course_id, url, title, category) 
+                                    VALUES (".course_code_to_id($currentCourseID).", 
+                                                $link, $link_name, -2)");                                                
+                        $tool_content .= "<p class='success'>$langOkSent</p>\n";
                 } else {
-                        $tool_content .= "  <p class='caution'>$langTooBig<br />\n";
-                        $tool_content .= "  <a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;action=1'>$langHome</a></p>\n  <br />\n";
+                        $tool_content .= "<p class='caution'>$langTooBig<br />\n";
+                        $tool_content .= "<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;action=1'>$langHome</a></p><br />";
                         draw($tool_content, 2);
                 }
         }
@@ -168,7 +149,7 @@ if (isset($_POST['submit'])) {
               <p>$langExplanation_3</p></div>
               <fieldset>
               <legend>$langExplanation_1</legend> 
-                                <table class='tbl'>
+              <table class='tbl'>
               <tr>
                 <th width='170'>$langSendPage</th>
                 <td><input type='file' name='file' size='35' accept='text/html'></td>
@@ -275,7 +256,7 @@ tForm;
 // display table to edit/delete external links
 // ------------------------------------------------
 $sql = db_query("SELECT id, title FROM link 
-                        WHERE category = -1 AND 
+                        WHERE category IN(-1,-2) AND 
                         course_id = ".course_code_to_id($currentCourseID));        
 $tool_content .= "<br/>
 <table class='tbl_alt' width='100%'>
@@ -305,7 +286,7 @@ while ($externalLinks = mysql_fetch_array($sql)) {
                             js_escape("$langDeleteLink {$externalLinks['title']}?") .
                        "');\" title='$langDelete' /></form></td>
      </tr>\n";                                            
-        $i++;
+     $i++;
 }
 $tool_content .= "</table>\n";
 

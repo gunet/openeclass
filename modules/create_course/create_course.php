@@ -440,8 +440,7 @@ if (isset($_POST['create_course'])) {
         if (!empty($description)) {
                 add_unit_resource($unit_id, 'description', -1, $langDescription, trim(autounquote($description)));
         }
-        // create full text indexes for search
-        db_query("ALTER TABLE `course_description` ADD FULLTEXT `course_description` (`title` ,`content`)", $mysqlMainDb);
+        
         // ---------------------------------------------------------
         //  all the course db queries are inside the following script
         // ---------------------------------------------------------
@@ -478,7 +477,7 @@ draw($tool_content, 1, null, $head_content);
 
 function create_modules($cid, $sbsystems) {
 
-        db_query("INSERT INTO modules (module_id, visible, course_id) VALUES (".MODULE_ID_AGENDA.", $sbsystems[1], $cid)");               
+        db_query("INSERT INTO modules (module_id, visible, course_id) VALUES (".MODULE_ID_AGENDA.", $sbsystems[1], $cid)");
         db_query("INSERT INTO modules (module_id, visible, course_id) VALUES (".MODULE_ID_LINKS.",$sbsystems[2], $cid)");
         db_query("INSERT INTO modules (module_id, visible, course_id) VALUES (".MODULE_ID_DOCS.",$sbsystems[3], $cid)");
         db_query("INSERT INTO modules (module_id, visible, course_id) VALUES (".MODULE_ID_VIDEO.",$sbsystems[4], $cid)");

@@ -157,8 +157,7 @@ $modules = array(
     MODULE_ID_DESCRIPTION => array("title" => $langDescription, "link" => "course_description/index.php", "image" => "description"),
     MODULE_ID_QUESTIONNAIRE => array("title" => $langQuestionnaire, "link" => "questionnaire/questionnaire.php", "image" => "questionnaire"),
     MODULE_ID_LP => array("title" => $langLearnPath, "link" => "learnPath/learningPathList.php", "image" => "lp"),    
-    MODULE_ID_WIKI => array("title" => $langWiki, "link" => "wiki/wiki.php", "image" => "wiki"),
-    MODULE_ID_UNITS => array("title" => $langCourseUnits, "link" => "units/index.php", "image" => "description")
+    MODULE_ID_WIKI => array("title" => $langWiki, "link" => "wiki/wiki.php", "image" => "wiki"),    
 );
 // ----------------------------------------
 // course admin modules

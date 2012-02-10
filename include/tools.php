@@ -137,7 +137,7 @@ function getExternalLinks() {
         
         $cid = course_code_to_id($currentCourseID);
         $result2 = db_query("SELECT url, title FROM link
-                                WHERE category = -1 AND
+                                WHERE category IN(-1,-2) AND
                                 course_id = $cid");
         if (mysql_num_rows($result2) > 0) {
                 return $result2;

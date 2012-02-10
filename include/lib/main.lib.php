@@ -1508,6 +1508,7 @@ function delete_course($cid)
 	db_query("DELETE FROM question WHERE course_id = $cid");
 	db_query("DELETE FROM exercise_user_record WHERE eid IN (SELECT id FROM exercise WHERE course_id = $cid)");
 	db_query("DELETE FROM exercise WHERE course_id = $cid");
+        db_query("DELETE FROM modules WHERE course_id = $cid");
 
         $garbage = "${webDir}courses/garbage";
         if (!is_dir($garbage)) {
