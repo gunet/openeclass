@@ -24,6 +24,11 @@ define('RESPONSE_FAILED', 'FAILED');
 define('RESPONSE_EXPIRED', 'EXPIRED');
 
 
+if (isset($require_noerrors) && $require_noerrors) {
+    if (ini_get('display_errors'))
+        ini_set('display_errors', 0);
+}
+
 if (isset($require_mlogin) && $require_mlogin) {
     
     if (!isset($_REQUEST['token'])) {
