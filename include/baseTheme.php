@@ -123,7 +123,10 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 
 	$t = new Template($relPath . 'template/' . $theme);
 
-	$t->set_file('fh', 'theme.html');
+        if ($is_mobile)
+            $t->set_file('fh', 'mtheme.html');
+        else
+            $t->set_file('fh', 'theme.html');
 
 	$t->set_block('fh', 'mainBlock', 'main');
 
@@ -385,7 +388,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 		$t->set_var ( 'PAGE_TITLE', q($pageTitle) );
 
                 //Add the optional mobile-specific css if necessarry
-                if (isset($_SESSION['mobile']) && $_SESSION['mobile'] == true) {
+                if ($is_mobile) {
                     $t->set_var('EXTRA_CSS', "<link href=\"${urlAppend}/template/${theme}${tool_css}/theme_mobile.css\" rel=\"stylesheet\" type=\"text/css\" >");
                 }
                 
