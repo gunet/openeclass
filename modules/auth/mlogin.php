@@ -89,13 +89,44 @@ if (isset($_REQUEST['uname']) && isset($_REQUEST['pass']))
         db_query("INSERT INTO loginout (loginout.id_user, loginout.ip, loginout.when, loginout.action)
                                 VALUES ($_SESSION[uid], '$_SERVER[REMOTE_ADDR]', NOW(), 'LOGIN')");
         
-        if ($GLOBALS['persoIsActive'] and $GLOBALS['userPerso'] == 'no')
-            $_SESSION['user_perso_active'] = true;
-        $_SESSION['mobile'] = true;
-
+        set_session_mvars();
         echo session_id();
     } else
         echo RESPONSE_FAILED;
 
     exit();
+}
+
+
+function set_session_mvars()
+{
+    $status = array();
+    
+    $sql = "SELECT cours.cours_id cours_id, cours.code code, cours.fake_code fake_code,
+                   cours.intitule title, cours.titulaires profs, cours_user.statut statut
+              FROM cours JOIN cours_user ON cours.cours_id = cours_user.cours_id
+             WHERE cours_user.user_id = ". $_SESSION['uid'] ."
+          ORDER BY statut, cours.intitule, cours.titulaires";
+    $sql2 = "SELECT cours.cours_id cours_id, cours.code code, cours.fake_code fake_code,
+                    cours.intitule title, cours.titulaires profs, cours_user.statut statut
+               FROM cours JOIN cours_user ON cours.cours_id = cours_user.cours_id
+              WHERE cours_user.user_id = ". $_SESSION['uid'] ."
+                AND cours.visible != ".COURSE_INACTIVE."
+           ORDER BY statut, cours.intitule, cours.titulaires";
+
+    if ($_SESSION['statut'] == 1)
+        $result = db_query($sql);
+
+    if ($_SESSION['statut'] == 5)
+        $result = db_query($sql2);
+
+    if ($result and mysql_num_rows($result) > 0)
+        while ($mycours = mysql_fetch_array($result))
+            $status[$mycours['code']] = $mycours['statut'];
+
+    $_SESSION['status'] = $status;
+    $_SESSION['mobile'] = true;
+    
+    if ($GLOBALS['persoIsActive'] and $GLOBALS['userPerso'] == 'no')
+        $_SESSION['user_perso_active'] = true;
 }
