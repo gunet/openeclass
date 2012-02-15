@@ -64,17 +64,28 @@ if ($result and mysql_num_rows($result) > 0)
         $courses[] = $course;
 
 
-echo createDom($courses);
-exit();
+list($coursesDom, $coursesDomRoot) = createCoursesDom($courses);
+
+if (!defined('M_NOTERMINATE')) {
+    echo $coursesDom->saveXML();
+    exit();
+}
 
 //////////////////////////////////////////////////////////////////////////////////////
 
-function createDom($coursesArr) {
+function createCoursesDom($coursesArr) {
     global $langMyCoursesProf, $langMyCoursesUser;
     
     $dom = new DomDocument('1.0', 'utf-8');
-
-    $root = $dom->appendChild($dom->createElement('courses'));
+    
+    if (defined('M_ROOT')) {
+        $root0 = $dom->appendChild($dom->createElement(M_ROOT));
+        $root = $root0->appendChild($dom->createElement('courses'));
+        $retroot = $root0;
+    } else {
+        $root = $dom->appendChild($dom->createElement('courses'));
+        $retroot = $root;
+    }
 
     if (isset($coursesArr) && count($coursesArr) > 0) {
 
@@ -89,28 +100,27 @@ function createDom($coursesArr) {
             if ($k == 0 || ($old_statut != $this_statut)) {
                 $cg = $root->appendChild($dom->createElement('coursegroup'));
                 $gname = ($this_statut == 1) ? $langMyCoursesProf : $langMyCoursesUser;
-                $cgn = $cg->appendChild(new DOMAttr('name', $gname));
+                $cg->appendChild(new DOMAttr('name', $gname));
             }
 
             $c = $cg->appendChild($dom->createElement('course'));
 
             $titleStr = ($course->code === $course->fake_code) ? $course->intitule : $course->intitule .' - '. $course->fake_code ;
 
-            $code = $c->appendChild(new DOMAttr('code', $course->code));
-            $title = $c->appendChild(new DOMAttr('title', $titleStr));
-            $descr = $c->appendChild(new DOMAttr('description', $course->description));
+            $c->appendChild(new DOMAttr('code', $course->code));
+            $c->appendChild(new DOMAttr('title', $titleStr));
+            $c->appendChild(new DOMAttr('description', $course->description));
             
-            //$teach = $c->appendChild(new DOMAttr('teacher', $course->titulaires));
-            //$visib = $c->appendChild(new DOMAttr('visible', $course->visible));
-            //$visin = $c->appendChild(new DOMAttr('visibleName', getVisibleName($course->visible)));
+            //$c->appendChild(new DOMAttr('teacher', $course->titulaires));
+            //$c->appendChild(new DOMAttr('visible', $course->visible));
+            //$c->appendChild(new DOMAttr('visibleName', getVisibleName($course->visible)));
 
             $k++;
         }
     }
 
     $dom->formatOutput = true;
-    $ret = $dom->saveXML();
-    return $ret;
+    return array($dom, $retroot);
 }
 
 function getVisibleName($value) {
