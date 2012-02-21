@@ -320,30 +320,19 @@ function upgrade_course_3_0($code, $lang, $extramessage = '', $return_mapping = 
     echo "<hr><p>$langUpgCourse <b>$code</b> (3.0) $extramessage<br>";
     flush();
     
-    // Rename table `annonces` to `announcements`
-    // rename table fiels `contenu`, `temps`, `cours_id`, `ordre`,  to
-    // `content`, `date`,`order`,`course_id`,  correspondingly
-    
-    db_query("RENAME TABLE annonces TO announcements");
-    db_query("ALTER TABLE `announcements` CHANGE `contenu` `content` MEDIUMTEXT");
-    db_query("ALTER TABLE `announcements` CHANGE `temps` `date` DATE");
-    db_query("ALTER TABLE `announcements` CHANGE `cours_id` `course_id` INT(11)");
-    db_query("ALTER TABLE `announcements` CHANGE `ordre` `order` MEDIUMINT(11)");
-        
-    
-// move forums to central db and drop table
-   if (mysql_table_exists($code, 'catagories')) {
-        $ok = db_query("INSERT INTO `$mysqlMainDb`.`categories`
-                        (`cat_id`, `cat_title`, `cat_order`, `course_id`)
-                        SELECT `cat_id`, `cat_title`,
-                                `cat_order`, $course_id FROM catagories");
-        if ($ok) {
-                db_query("DROP TABLE catagories");
-        }
-   }      
-       
-   if (mysql_table_exists($code, 'forums')) {
-        $ok = db_query("INSERT INTO `$mysqlMainDb`.`forums`
+    // move forums to central db and drop table
+    if (mysql_table_exists($code, 'catagories')) {
+            $ok = db_query("INSERT INTO `$mysqlMainDb`.`categories`
+                    (`cat_id`, `cat_title`, `cat_order`, `course_id`)
+                    SELECT `cat_id`, `cat_title`,
+                    `cat_order`, $course_id FROM catagories");
+            if ($ok) {
+                    db_query("DROP TABLE catagories");
+            }
+    }      
+
+    if (mysql_table_exists($code, 'forums')) {
+            $ok = db_query("INSERT INTO `$mysqlMainDb`.`forums`
                         (`forum_id`, `forum_name`, `forum_desc`, `forum_access`,
                         `forum_moderator`, `forum_topics`, `forum_posts`, `forum_last_post_id`, 
                         `cat_id`, `forum_type`, `course_id`)
@@ -1003,12 +992,12 @@ function upgrade_course_3_0($code, $lang, $extramessage = '', $return_mapping = 
     // -------------------------------------------------------
     
     // external links are moved to table `links` with category = -1
-        $q1 = db_query("INSERT INTO $mysqlMainDb. link
+        $q1 = db_query("INSERT INTO `$mysqlMainDb`.link
                         (course_id, url, title, category) 
                 SELECT $course_id, lien, rubrique, -1 FROM accueil
                         WHERE define_var = 'HTML_PAGE'", $code);
         
-        $q2 = db_query("INSERT INTO $mysqlMainDb. modules
+        $q2 = db_query("INSERT INTO `$mysqlMainDb`.modules
                         (module_id, visible, course_id) 
                 SELECT id, visible, $course_id FROM accueil
                 WHERE define_var NOT IN ('MODULE_ID_TOOLADMIN',
