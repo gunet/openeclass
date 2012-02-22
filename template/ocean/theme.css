@@ -746,8 +746,12 @@ fieldset table.th {
     border: none;
 }
 
-.tbl_alt_bordless tr{
+.tbl_alt_bordless tr {
     border-bottom: 1px dotted #dfdfdf; 
+}
+
+.tbl_alt_bordless tr.nobrd {
+    border-bottom: none;
 }
 
 .tbl_alt_bordless th {

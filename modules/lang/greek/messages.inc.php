@@ -1795,10 +1795,11 @@ $langQuitViewer = "Επιστροφή στη λίστα";
 $langRawHasBeenChanged = "Ο ελάχιστος βαθμός για προαγωγή έχει αλλαχθεί";
 $langSCORMTypeDesc = "SCORM προσαρμοσμένο περιεχόμενο";
 $langScormIntroTextForDummies = "Τα εισαγόμενα πακέτα πρέπει να αποτελούνται από ένα αρχείο zip και να είναι συμβατά με:
-   <ul>
+   <ul class='right smaller'>
      <li> το SCORM 2004 ή</li>
      <li> το SCORM 1.2.</li>
    </ul>";
+$langScormEmptyDocsList = "Ανεβάστε πακέτα SCORM στα έγγραφα του μαθήματος ώστε να σας εμφανιστεί η αντίστοιχη επιλογή εισαγωγής τους";
 $langSecondShort = "δευτ.";
 $langStartModule = "Έναρξη ενότητας";
 $langStatsOfLearnPath = "Παρακολούθηση γραμμής μάθησης";
