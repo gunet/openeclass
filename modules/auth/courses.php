@@ -73,7 +73,7 @@ if (isset($_POST["submit"])) {
                                 $restrictedCourses[] = $row['fake_code'];
                                 continue;
                         }
-                        if (is_restricted($cid)) { // do not allow registration to restricted course
+                        if (is_restricted($cid) and !in_array($cid, $selectCourse)) { // do not allow registration to restricted course
                                 $errorExists = true;
                                 $restrictedCourses[] = $row['fake_code'];
                         } else {
@@ -108,14 +108,11 @@ if (isset($_POST["submit"])) {
 			$k = 0;
 			while ($fac = mysql_fetch_array($result)) {
 				if ($k%2==0) {
-					$tool_content .= "
-                          <tr class='even'>";
+					$tool_content .= "<tr class='even'>";
 				} else {
-					$tool_content .= "
-                          <tr class='odd'>";
+					$tool_content .= "<tr class='odd'>";
 				}
-				$tool_content .= "
-                            <td>&nbsp;<img src='$themeimg/arrow.png' />&nbsp;
+				$tool_content .= "<td>&nbsp;<img src='$themeimg/arrow.png' />&nbsp;
 				<a href='$_SERVER[PHP_SELF]?fc=$fac[id]'>" . htmlspecialchars($fac['name']) . "</a>&nbsp;
 				<span class='smaller'>($fac[code])</span>";
 				$n = db_query("SELECT COUNT(*) FROM cours
@@ -123,12 +120,11 @@ if (isset($_POST["submit"])) {
 				$r = mysql_fetch_array($n);
 				$tool_content .= " 
                                 <span class='smaller'>&nbsp;($r[0]  ". ($r[0] == 1? $langAvCours: $langAvCourses) . ") </span>
-                            </td>
-                          </tr>";
-			$k++;
+                                </td>
+                                </tr>";
+                                $k++;
 			}
-			$tool_content .= "
-                          </table>";
+			$tool_content .= "</table>";
 		}
 		$tool_content .= "<br /><br />\n";
 	} else {
@@ -346,10 +342,10 @@ function expanded_faculte($fac_name, $facid, $uid) {
                                         $retString .= $image;
                                 }
                         }
-                        $retString .= "</td>\n    </tr>";
+                        $retString .= "</td></tr>";
                         $k++;
                 } // END of while
-                $retString .= "\n    </table>";
+                $retString .= "</table>";
         } // end of foreach
         return $retString;
 }

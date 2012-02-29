@@ -119,7 +119,11 @@ $local_head = $jscalendar->get_load_files_code();
             $dataSet = new XYDataSet();
             while ($row = mysql_fetch_assoc($result)) {
                 $mid = $row['module_id'];
-                $dataSet->addPoint(new Point($modules[$mid]['title'], $row['cnt']));
+                if ($mid == MODULE_ID_UNITS) { // course units
+                        $dataSet->addPoint(new Point($langCourseUnits, $row['cnt']));
+                } else { // other modules
+                        $dataSet->addPoint(new Point($modules[$mid]['title'], $row['cnt']));
+                }                
                 $chart->width += 7;
                 $chart->setDataSet($dataSet);
                 $chart_content = 5;
@@ -138,7 +142,11 @@ $local_head = $jscalendar->get_load_files_code();
             $dataSet = new XYDataSet();
             while ($row = mysql_fetch_assoc($result)) {
                 $mid = $row['module_id'];
-                $dataSet->addPoint(new Point($modules[$mid]['title'], $row['tot_dur']));                
+                if ($mid == MODULE_ID_UNITS) { // course inits
+                        $dataSet->addPoint(new Point($langCourseUnits, $row['tot_dur']));
+                } else { // other modules
+                        $dataSet->addPoint(new Point($modules[$mid]['title'], $row['tot_dur']));
+                }                                
                 $chart->width += 7;
                 $chart->setDataSet($dataSet);
                 $chart_content=5;
