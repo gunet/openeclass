@@ -73,7 +73,7 @@ if (isset($_POST["submit"])) {
                                 $restrictedCourses[] = $row['fake_code'];
                                 continue;
                         }
-                        if (is_restricted($cid)) { // do not allow registration to restricted course
+                        if (is_restricted($cid) and !in_array($cid, $selectCourse)) { // do not allow registration to restricted course
                                 $errorExists = true;
                                 $restrictedCourses[] = $row['fake_code'];
                         } else {
