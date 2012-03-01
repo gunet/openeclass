@@ -1065,7 +1065,7 @@ function visible_module($module_id) {
 // Returns true if a string is invalid UTF-8
 function invalid_utf8($s)
 {
-        return !@iconv('UTF-8', 'UTF-32', $s);
+        return !mb_detect_encoding($s, 'UTF-8', true);
 }
 
 
