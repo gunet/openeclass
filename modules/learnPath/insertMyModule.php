@@ -54,6 +54,21 @@ $TABLEUSERMODULEPROGRESS= "lp_user_module_progress";
 
 require_once("../../include/baseTheme.php");
 
+load_js('jquery');
+$head_content .= <<<EOF
+<script type='text/javascript'>
+$(document).ready(function() {
+
+    $('tr').click(function(event) {
+        if (event.target.type !== 'checkbox') {
+            $(':checkbox', this).trigger('click');
+        }
+    });
+
+});
+</script>
+EOF;
+
 $navigation[]= array ("url"=>"learningPathList.php?course=$code_cours", "name"=> $langLearningPath);
 $navigation[]= array ("url"=>"learningPathAdmin.php?course=$code_cours&amp;path_id=".(int)$_SESSION['path_id'], "name"=> $langAdm);
 $nameTools = $langInsertMyModulesTitle;
@@ -187,7 +202,7 @@ while ($list=mysql_fetch_array($result))
         $moduleImg = "links_on.png";
     else if($list['contentType'] == CTCOURSE_DESCRIPTION_ )
        	$moduleImg = "description_on.png";
-    else if ($module['contentType'] == CTMEDIA_ || $module['contentType'] == CTMEDIALINK_)
+    else if ($list['contentType'] == CTMEDIA_ || $list['contentType'] == CTMEDIALINK_)
        	$moduleImg = "videos_on.png";
     else
         $moduleImg = choose_image(basename($list['path']));
@@ -255,5 +270,5 @@ $tool_content .= "\n".'    </table>'."\n".'    </form>';
 // display list of modules used by this learning path
 //$tool_content .= display_path_content();
 
-draw($tool_content, 2);
+draw($tool_content, 2, null, $head_content);
 ?>

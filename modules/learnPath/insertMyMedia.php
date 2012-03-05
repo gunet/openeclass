@@ -43,8 +43,21 @@ $navigation[] = array("url"=>"learningPathAdmin.php?course=$code_cours&amp;path_
 $nameTools = $langInsertMyMediaToolName;
 
 load_modal_box(true);
+$head_content .= <<<EOF
+<script type='text/javascript'>
+$(document).ready(function() {
 
-mysql_select_db($currentCourseID);
+    $('tr').click(function(event) {
+        if (event.target.type !== 'checkbox') {
+            $(':checkbox', this).trigger('click');
+        }
+    });
+
+});
+</script>
+EOF;
+
+mysql_select_db($mysqlMainDb);
 $iterator = 1;
 
 if (!isset($_POST['maxMediaForm'])) $_POST['maxMediaForm'] = 0;
@@ -60,7 +73,7 @@ while ($iterator <= $_POST['maxMediaForm'])
         // check if this media is already a module
         $sql = "SELECT * FROM `".$TABLEMODULE."` AS M, `".$TABLEASSET."` AS A
                          WHERE A.`module_id` = M.`module_id`
-                           AND M.`name` LIKE \"" .addslashes($row['titre']) ."\"
+                           AND M.`name` LIKE \"" .addslashes($row['title']) ."\"
                            AND M.`comment` LIKE \"" .addslashes($row['description']) ."\"
                            AND A.`path` LIKE \"" .addslashes($row['path']) ."\"
                            AND M.`contentType` = \"".CTMEDIA_."\"";
@@ -69,9 +82,9 @@ while ($iterator <= $_POST['maxMediaForm'])
 
         if ($num == 0)
         {
-            create_new_module($row['titre'], $row['description'], $row['path'], CTMEDIA_);
+            create_new_module($row['title'], $row['description'], $row['path'], CTMEDIA_);
 
-            $dialogBox .= q($row['titre'])." : ".$langMediaInsertedAsModule."<br />";
+            $dialogBox .= q($row['title'])." : ".$langMediaInsertedAsModule."<br />";
             $style = "success";
         }
         else 
@@ -93,12 +106,12 @@ while ($iterator <= $_POST['maxMediaForm'])
                     
                     reuse_module($thisLinkModule['module_id']);
                     
-                    $dialogBox .= q($row['titre'])." : ".$langMediaInsertedAsModule."<br />";
+                    $dialogBox .= q($row['title'])." : ".$langMediaInsertedAsModule."<br />";
                     $style = "success";
             }
             else 
             {
-                $dialogBox .= q($row['titre'])." : ".$langMediaAlreadyUsed."<br />";
+                $dialogBox .= q($row['title'])." : ".$langMediaAlreadyUsed."<br />";
                 $style = "caution";
             }
         }
@@ -113,7 +126,7 @@ while ($iterator <= $_POST['maxMediaForm'])
         // check if this medialink is already a module
         $sql = "SELECT * FROM `".$TABLEMODULE."` AS M, `".$TABLEASSET."` AS A
                          WHERE A.`module_id` = M.`module_id`
-                           AND M.`name` LIKE \"" .addslashes($row['titre']) ."\"
+                           AND M.`name` LIKE \"" .addslashes($row['title']) ."\"
                            AND M.`comment` LIKE \"" .addslashes($row['description']) ."\"
                            AND A.`path` LIKE \"" .addslashes($row['url']) ."\"
                            AND M.`contentType` = \"".CTMEDIALINK_."\"";
@@ -122,9 +135,9 @@ while ($iterator <= $_POST['maxMediaForm'])
 
         if ($num == 0)
         {
-            create_new_module($row['titre'], $row['description'], $row['url'], CTMEDIALINK_);
+            create_new_module($row['title'], $row['description'], $row['url'], CTMEDIALINK_);
 
-            $dialogBox .= q($row['titre'])." : ".$langMediaInsertedAsModule."<br />";
+            $dialogBox .= q($row['title'])." : ".$langMediaInsertedAsModule."<br />";
             $style = "success";
         }
         else 
@@ -146,12 +159,12 @@ while ($iterator <= $_POST['maxMediaForm'])
                     
                     reuse_module($thisLinkModule['module_id']);
                     
-                    $dialogBox .= q($row['titre'])." : ".$langMediaInsertedAsModule."<br />";
+                    $dialogBox .= q($row['title'])." : ".$langMediaInsertedAsModule."<br />";
                     $style = "success";
             }
             else 
             {
-                $dialogBox .= q($row['titre'])." : ".$langMediaAlreadyUsed."<br />";
+                $dialogBox .= q($row['title'])." : ".$langMediaAlreadyUsed."<br />";
                 $style = "caution";
             }
         }
@@ -181,8 +194,8 @@ function showmedia()
 {
     global $langName, $langSelection, $langAddModulesButton, $code_cours, $themeimg;
 
-    $sqlMedia = "SELECT * FROM video ORDER BY titre";
-    $sqlMediaLinks = "SELECT * FROM videolinks ORDER BY titre";
+    $sqlMedia = "SELECT * FROM video ORDER BY title";
+    $sqlMediaLinks = "SELECT * FROM videolinks ORDER BY title";
     
     $resultMedia = db_query($sqlMedia);
     $resultMediaLinks = db_query($sqlMediaLinks);
@@ -202,7 +215,7 @@ function showmedia()
                                                     
         $output .= "<tr>
                     <td width='1' valign='top'><img src='$themeimg/arrow.png' border='0'></td>
-                    <td align='left' valign='top'>". choose_media_ahref($mediaURL, $mediaPath, $mediaPlay, q($myrow['titre']), $myrow['path']) ."
+                    <td align='left' valign='top'>". choose_media_ahref($mediaURL, $mediaPath, $mediaPlay, q($myrow['title']), $myrow['path']) ."
                     <br />
                     <small class='comments'>".q($myrow['description'])."</small></td>";
         $output .= "<td><div align='center'><input type='checkbox' name='insertMedia_".$i."' id='insertMedia_".$i."' value='".$myrow['id']."' /></div></td></tr>";
@@ -214,7 +227,7 @@ function showmedia()
     {
         $output .= "<tr>
                     <td width='1' valign='top'><img src='$themeimg/arrow.png' border='0'></td>
-                    <td align='left' valign='top'>". choose_medialink_ahref(q($myrow['url']), q($myrow['titre'])) ."
+                    <td align='left' valign='top'>". choose_medialink_ahref(q($myrow['url']), q($myrow['title'])) ."
                     <br />
                     <small class='comments'>".q($myrow['description'])."</small></td>";
         $output .= "<td><div align='center'><input type='checkbox' name='insertMediaLink_".$j."' id='insertMediaLink_".$j."' value='".$myrow['id']."' /></div></td></tr>";
@@ -236,12 +249,12 @@ function showmedia()
 
 function create_new_module($title, $description, $path, $contentType)
 {
-    global $TABLEMODULE, $TABLEASSET, $TABLELEARNPATHMODULE;
+    global $TABLEMODULE, $TABLEASSET, $TABLELEARNPATHMODULE, $cours_id;
     
     // create new module
     $sql = "INSERT INTO `".$TABLEMODULE."`
-                    (`name` , `comment`, `contentType`, `launch_data`)
-                    VALUES ('". addslashes($title) ."' , '"
+                    (`course_id`, `name` , `comment`, `contentType`, `launch_data`)
+                    VALUES ($cours_id, '". addslashes($title) ."' , '"
                     .addslashes($description) . "', '".$contentType."','')";
     $query = db_query($sql);
 

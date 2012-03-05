@@ -461,7 +461,7 @@ if (!isset($displayCreateLabelForm))
 
     $tool_content .="
     <tr>
-      <td>$langReuse: <a href=\"insertMyModule.php?course=$code_cours\" title=\"$langModuleOfMyCourse\">".$langModuleOfMyCourseLabel."</a>
+      <td>$langReuse: <a href=\"insertMyModule.php?course=$code_cours\" title=\"$langModuleOfMyCourse\">".$langModuleOfMyCourse."</a>
       </td>
     </tr>";
 

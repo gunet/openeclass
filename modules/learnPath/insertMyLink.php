@@ -47,6 +47,21 @@ $TABLEUSERMODULEPROGRESS= "lp_user_module_progress";
 
 require_once("../../include/baseTheme.php");
 
+load_js('jquery');
+$head_content .= <<<EOF
+<script type='text/javascript'>
+$(document).ready(function() {
+
+    $('tr').click(function(event) {
+        if (event.target.type !== 'checkbox') {
+            $(':checkbox', this).trigger('click');
+        }
+    });
+
+});
+</script>
+EOF;
+
 $dialogBox = "";
 
 $navigation[] = array("url"=>"learningPathList.php?course=$code_cours", "name"=> $langLearningPath);
@@ -183,7 +198,7 @@ $tool_content .= showlinks();
 	$tool_content .= "
     <br />
     <p align=\"right\"><a href=\"learningPathAdmin.php?course=$code_cours&amp;path_id=".(int)$_SESSION['path_id']."\">$langBackToLPAdmin</a>";
-draw($tool_content, 2);
+draw($tool_content, 2, null, $head_content);
 
 
 function showlinks()
