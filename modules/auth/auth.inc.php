@@ -844,7 +844,7 @@ function shib_cas_login($type)
 		$uname = $_SESSION['cas_uname'];
 		$nom = $_SESSION['cas_nom'];
 		$prenom = $_SESSION['cas_prenom'];
-		$email = $_SESSION['cas_email'];		
+		$email = isset($_SESSION['cas_email'])? $_SESSION['cas_email']: '';
 	}
 	// user is authenticated, now let's see if he is registered also in db
 	$sqlLogin= "SELECT user_id, nom, username, password, prenom, statut, email, perso, lang, verified_mail
@@ -870,6 +870,9 @@ function shib_cas_login($type)
 			// user might prefer a different one
 			if (!empty($info['email'])) {
 				$email = $info['email'];
+			}
+			if (!empty($info['statut'])) {
+				$statut = $info['statut'];
 			}
 			// update user information
 			db_query("UPDATE user SET nom = ".quote($nom).",
@@ -938,7 +941,7 @@ function shib_cas_login($type)
 	$_SESSION['nom'] = $nom;
 	$_SESSION['prenom'] = $prenom;
 	$_SESSION['email'] = $email;
-	$_SESSION['statut'] = 5;
+	$_SESSION['statut'] = $statut;
 	//$_SESSION['is_admin'] = $is_admin;
 	$_SESSION['shib_user'] = 1; // now we are shibboleth user
 	if ($GLOBALS['persoIsActive'] and $userPerso == 'no') {
