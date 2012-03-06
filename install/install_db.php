@@ -669,61 +669,6 @@ db_query("CREATE TABLE user_request (
                 PRIMARY KEY (id)) $charset_spec");
 
 
-###############PHPMyAdminTables##################
-
-db_query("CREATE TABLE `pma_bookmark` (
-                id int(11) NOT NULL auto_increment,
-                dbase varchar(255) NOT NULL,
-                user varchar(255) NOT NULL,
-                label varchar(255) NOT NULL,
-                query text NOT NULL,
-                PRIMARY KEY (id)) $charset_spec");
-
-db_query("CREATE TABLE `pma_relation` (
-               `master_db` varchar(64) NOT NULL default '',
-               `master_table` varchar(64) NOT NULL default '',
-               `master_field` varchar(64) NOT NULL default '',
-               `foreign_db` varchar(64) NOT NULL default '',
-               `foreign_table` varchar(64) NOT NULL default '',
-               `foreign_field` varchar(64) NOT NULL default '',
-               PRIMARY KEY (`master_db`, `master_table`, `master_field`),
-               KEY foreign_field (foreign_db, foreign_table))
-               $charset_spec");
-
-
-db_query("CREATE TABLE `pma_table_info` (
-               `db_name` varchar(64) NOT NULL default '',
-               `table_name` varchar(64) NOT NULL default '',
-               `display_field` varchar(64) NOT NULL default '',
-               PRIMARY KEY (`db_name`, `table_name`)) $charset_spec");
-
-db_query("CREATE TABLE `pma_table_coords` (
-               `db_name` varchar(64) NOT NULL default '',
-               `table_name` varchar(64) NOT NULL default '',
-               `pdf_page_number` int NOT NULL default '0',
-               `x` float unsigned NOT NULL default '0',
-               `y` float unsigned NOT NULL default '0',
-               PRIMARY KEY (`db_name`, `table_name`, `pdf_page_number`))
-               $charset_spec");
-
-db_query("CREATE TABLE `pma_pdf_pages` (
-               `db_name` varchar(64) NOT NULL default '',
-               `page_nr` int(10) unsigned NOT NULL auto_increment,
-               `page_descr` varchar(50) NOT NULL default '',
-               PRIMARY KEY (page_nr),
-               KEY (db_name))
-               $charset_spec");
-
-db_query("CREATE TABLE `pma_column_comments` (
-               id int(5) unsigned NOT NULL auto_increment,
-               db_name varchar(64) NOT NULL default '',
-               table_name varchar(64) NOT NULL default '',
-               column_name varchar(64) NOT NULL default '',
-               comment varchar(255) NOT NULL default '',
-               PRIMARY KEY (id),
-               UNIQUE KEY db_name (db_name, table_name, column_name))
-               $charset_spec");
-
 // New table auth for authentication methods
 // added by kstratos
 db_query("CREATE TABLE `auth` (

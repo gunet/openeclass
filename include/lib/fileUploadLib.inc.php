@@ -492,10 +492,10 @@ function process_extracted_file($p_event, &$p_header) {
                 $uploadPath = '';
         }
         $realFileSize += $p_header['size'];
-        $stored_filename = $p_header['stored_filename'];
-        if (invalid_utf8($stored_filename)) {
+        $stored_filename = $p_header['stored_filename'];        
+        if (invalid_utf8($stored_filename)) {                                    
                 $stored_filename = cp737_to_utf8($stored_filename);
-        }
+        }       
         $path_components = explode('/', $stored_filename);
         $filename = array_pop($path_components);
         $file_date = date("Y\-m\-d G\:i\:s", $p_header['mtime']);
