@@ -46,6 +46,9 @@ include '../../include/lib/textLib.inc.php';
 $nameTools = $langExercicesView;
 $picturePath='../../courses/'.$currentCourseID.'/image';
 
+require_once '../video/video_functions.php';
+load_modal_box();
+
 if (isset($_GET['exerciseId'])) {
 	$exerciseId = intval($_GET['exerciseId']);
 }
@@ -336,4 +339,4 @@ if (!$questionList) {
   </table>";
 }	
 $tool_content .= "</form>";
-draw($tool_content, 2);
+draw($tool_content, 2, null, $head_content);

@@ -96,8 +96,10 @@ function docsHtmlInterface($date)
                                 $group_sql = "course_id = ".$course_file['course_id']." AND subsystem = ".MAIN;                                                              
                                 $currentCourseID = $course_file['code'];
 				$url = file_url($course_file['path']);                                
-				$content .= "<tr><td class='smaller'><ul class='custom_list'><li><a href='$url'>" .
-				q($course_file['filename']) . '</a> - (' .
+				$play_url = file_playurl($course_file['path']);
+				$href = choose_media_ahref($url, $url, $play_url, q($course_file['filename']), q($course_file['filename']));
+				$content .= "<tr><td class='smaller'><ul class='custom_list'><li>" .
+				$href .' - (' .
 				nice_format(date('Y-m-d', strtotime($course_file['date_modified']))) .
 				")</li></ul></td></tr>";
 			}

@@ -35,6 +35,7 @@ include('exercise.lib.php');
 $require_current_course = TRUE;
 include '../../include/baseTheme.php';
 include '../../include/jscalendar/calendar.php';
+require_once '../video/video_functions.php';
 
 if ($language == 'greek') {
     $lang = 'el';
@@ -44,6 +45,7 @@ if ($language == 'greek') {
 
 $jscalendar = new DHTML_Calendar($urlServer.'include/jscalendar/', $lang, 'calendar-blue2', false);
 $head_content = $jscalendar->get_load_files_code();
+load_modal_box();
 
 $nameTools = $langExercices;
 $navigation[] = array ('url' => "exercice.php?course=$code_cours", 'name' => $langExercices);

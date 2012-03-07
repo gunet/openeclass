@@ -57,8 +57,9 @@ $TABLEUSERMODULEPROGRESS= 'lp_user_module_progress';
 
 require_once '../../include/baseTheme.php';
 require_once '../document/doc_init.php';
+require_once '../video/video_functions.php';
 
-load_js('jquery');
+load_modal_box(true);
 $head_content .= <<<EOF
 <script type='text/javascript'>
 $(document).ready(function() {
@@ -336,6 +337,7 @@ while ($file = readdir($handle))
         $fileList['comment'   ][] = $attribute['comment'   ][$keyAttribute];
         $fileList['visibility'][] = $attribute['visibility'][$keyAttribute];
         $fileList['filename'  ][] = $attribute['filename'  ][$keyAttribute];
+        $fileList['path'      ][] = $attribute['path'      ][$keyAttribute];
     }
     else
     {

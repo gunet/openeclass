@@ -89,7 +89,7 @@ if (isset($id) and $id !== false) {
 if (!$q or mysql_num_rows($q) == 0) {
         $nameTools = $langUnitUnknown;
 	$tool_content .= "<p class='caution'>$langUnknownResType</p>";
-        draw($tool_content, 2);
+        draw($tool_content, 2, null, $head_content);
         exit;
 }
 $info = mysql_fetch_array($q);

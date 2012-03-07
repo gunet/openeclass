@@ -44,6 +44,9 @@ $guest_allowed = true;
 include '../../include/baseTheme.php';
 $dbname = $_SESSION['dbname'];
 
+require_once '../video/video_functions.php';
+load_modal_box();
+
 /**** The following is added for statistics purposes ***/
 include('../../include/action.php');
 $action_stats = new action();

@@ -33,6 +33,9 @@ include '../../include/baseTheme.php';
 include('exercise.class.php');
 include('../../include/lib/textLib.inc.php');
 
+require_once '../video/video_functions.php';
+load_modal_box();
+
 $nameTools = $langResults;
 $navigation[]=array("url" => "exercice.php?course=$code_cours","name" => $langExercices);
 
@@ -133,5 +136,5 @@ while($row=mysql_fetch_array($result)) {
     <br/>";
 	}
 }
-draw($tool_content, 2);
+draw($tool_content, 2, null, $head_content);
 ?>	

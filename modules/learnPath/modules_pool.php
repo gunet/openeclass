@@ -56,6 +56,9 @@ $TABLEUSERMODULEPROGRESS= 'lp_user_module_progress';
 
 require_once '../../include/baseTheme.php';
 
+require_once '../video/video_functions.php';
+load_modal_box();
+
 $body_action = '';
 $head_content .= "
 <script type='text/javascript'>

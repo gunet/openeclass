@@ -64,6 +64,22 @@ $dialogBox = "";
 $style = "";
 $MessBox = "";
 
+require_once '../video/video_functions.php';
+load_modal_box();
+$head_content .= <<<EOF
+<script type='text/javascript'>
+$(document).ready(function() {
+
+    $('tr').click(function(event) {
+        if (event.target.type !== 'checkbox') {
+            $(':checkbox', this).trigger('click');
+        }
+    });
+
+});
+</script>
+EOF;
+
 $navigation[] = array("url"=>"learningPathList.php?course=$code_cours", "name"=> $langLearningPath);
 $navigation[] = array("url"=>"learningPathAdmin.php?course=$code_cours&amp;path_id=".(int)$_SESSION['path_id'], "name"=> $langAdm);
 $nameTools = $langInsertMyExerciseToolName;
@@ -212,5 +228,5 @@ $tool_content .= display_my_exercises($dialogBox, $style);
 	$tool_content .= "
     <p align=\"right\"><a href=\"learningPathAdmin.php?course=$code_cours&amp;path_id=".(int)$_SESSION['path_id']."\">$langBackToLPAdmin</p>";
 
-draw($tool_content, 2);
+draw($tool_content, 2, null, $head_content);
 

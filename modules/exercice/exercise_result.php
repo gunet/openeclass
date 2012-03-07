@@ -41,6 +41,9 @@ include '../../include/baseTheme.php';
 $nameTools = $langExercicesResult;
 $navigation[] = array ("url"=>"exercice.php?course=$code_cours", "name"=> $langExercices);
 
+require_once '../video/video_functions.php';
+load_modal_box();
+
 include('../../include/lib/textLib.inc.php');
 if (isset($_GET['exerciseId'])) {
 	$exerciseId = intval($_GET['exerciseId']);
@@ -369,4 +372,4 @@ $tool_content .= "
   <br />
   </form><br />";
 
-draw($tool_content, 2);
+draw($tool_content, 2, null, $head_content);

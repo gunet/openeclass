@@ -25,6 +25,9 @@ $helpTopic = 'Glossary';
 
 include '../../include/baseTheme.php';
 
+require_once '../video/video_functions.php';
+load_modal_box();
+
 $base_url = 'glossary.php?course=' . $code_cours;
 $cat_url = 'categories.php?course=' . $code_cours;
 

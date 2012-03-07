@@ -40,6 +40,7 @@ $guest_allowed = true;
 include '../../include/baseTheme.php';
 include '../../include/lib/textLib.inc.php';
 include '../../include/sendMail.inc.php';
+require_once '../video/video_functions.php';
 
 // The following is added for statistics purposes
 include('../../include/action.php');
@@ -50,6 +51,7 @@ define ('RSS', 'modules/announcements/rss.php?c='.$currentCourseID);
 $fake_code = course_id_to_fake_code($cours_id);
 $nameTools = $langAnnouncements;
 
+load_modal_box();
 if ($is_editor) {
 	load_js('tools.js');
 	$head_content .= '<script type="text/javascript">var langEmptyGroupName = "' .
@@ -367,8 +369,4 @@ if ($is_editor) {
         if ($no_content) $tool_content .= "<p class='alert1'>$langNoAnnounce</p>\n";
     }
 add_units_navigation(TRUE);
-if ($is_editor) {
-    draw($tool_content, 2, null, $head_content);
-} else {
-    draw($tool_content, 2);
-}
+draw($tool_content, 2, null, $head_content);

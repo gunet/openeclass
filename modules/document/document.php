@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -32,8 +32,10 @@ include '../../include/lib/fileDisplayLib.inc.php';
 include '../../include/lib/fileManageLib.inc.php';
 include '../../include/lib/fileUploadLib.inc.php';
 include '../../include/pclzip/pclzip.lib.php' ;
+require_once '../video/video_functions.php';
 
 load_js('tools.js');
+load_modal_box(true);
 
 $require_help = TRUE;
 $helpTopic = 'Doc';
@@ -788,8 +790,6 @@ if (isset($_GET['rev'])) {
 $filter = '';
 if (isset($_REQUEST['docsfilter'])) {
     
-    require_once '../video/video_functions.php';
-    
     switch ($_REQUEST['docsfilter']) {
         case 'image':
             $ors = '';
@@ -799,11 +799,11 @@ if (isset($_REQUEST['docsfilter'])) {
             break;
         case 'media':
             $ors = '';
-            foreach (get_supported_multimedia() as $mediafmt)
+            foreach (get_supported_media() as $mediafmt)
                 $ors .= " OR format LIKE '$mediafmt'";
             $filter = "AND (format LIKE '.dir' $ors)";
             break;
-        case 'scorm':
+        case 'zip':
             $filter = "AND (format LIKE '.dir' OR FORMAT LIKE 'zip')";
             break;
         case 'file':
@@ -965,32 +965,35 @@ if ($doc_count == 0) {
                         } else {
                                 $style = ' class="invisible"';
                         }
-                        $copyright_icon = '';
                         if ($is_dir) {
                                 $image = $themeimg.'/folder.png';
                                 $file_url = $base_url . "openDir=$cmdDirName";
-                                $link_extra = '';
-				$link_text = $entry['filename'];
+				$link_title = $entry['filename'];
                                 $dload_msg = $langDownloadDir;
+                                $img_href = "<a href='$file_url'$style><img src='$image' /></a>";
+                                $link_href = "<a href='$file_url'>$link_title</a>";
                         } else {
                                 $image = $urlAppend . '/modules/document/img/' . choose_image('.' . $entry['format']);
                                 $file_url = file_url($cmdDirName, $entry['filename']);
+                                $play_url = file_playurl($cmdDirName, $entry['filename']);
                                 $link_extra = " id='fileURL' title='$langSave' target='_blank'";
-                                if (empty($entry['title'])) {
-                                        $link_text = $entry['filename'];
-                                } else {
-                                        $link_text = q($entry['title']);
-                                }
-                                if ($entry['copyrighted']) {
-                                        $link_text .= " <img src='$urlAppend/modules/document/img/copyrighted.png' />";
-                                }
+                                $link_title = (empty($entry['title'])) ? $entry['filename'] : q($entry['title']);
+                                $link_title_extra = ($entry['copyrighted']) ? " <img src='$urlAppend/modules/document/img/copyrighted.png' />" : '';
                                 $dload_msg = $langSave;
+                                if ($is_in_tinymce) {
+                                    $furl = (is_supported_media($entry['filename'], true)) ? $play_url : $file_url;
+                                    $img_href = "<a href='$furl'$style$link_extra><img src='$image' /></a>";
+                                    $link_href = "<a href='$furl'$link_extra>".$link_title.$link_title_extra."</a>";
+                                } else {
+                                    $img_href = choose_media_ahref($file_url, $file_url, $play_url, $link_title, $entry['filename'], "<img src='$image' />", $style.$link_extra);
+                                    $link_href = choose_media_ahref($file_url, $file_url, $play_url, $link_title, $entry['filename'], $link_title.$link_title_extra, $link_extra);
+                                }
                         }
                         $download_url = $base_url . "download=$cmdDirName";
                         $download_icon = "<a href='$download_url'><img src='$themeimg/save_s.png' width='16' height='16' align='middle' alt='$dload_msg' title='$dload_msg'></a>";
                         $tool_content .= "\n<tr $style>";
-                        $tool_content .= "\n<td class='center' valign='top'><a href='$file_url'$style$link_extra><img src='$image' /></a></td>";
-                        $tool_content .= "\n<td><a href='$file_url'$link_extra>$link_text</a>";
+                        $tool_content .= "\n<td class='center' valign='top'>".$img_href."</td>";
+                        $tool_content .= "\n<td>". $link_href;
 			
                         /*** comments ***/
                         if (!empty($entry['comment'])) {

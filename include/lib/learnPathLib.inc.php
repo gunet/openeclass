@@ -848,7 +848,7 @@ function display_my_documents($dialogBox, $style)
             {
                 if ($is_editor)
                 {
-                    $style = ' class="invisible"';
+                    $style = 'class="invisible"';
                 }
                 else
                 {
@@ -856,31 +856,30 @@ function display_my_documents($dialogBox, $style)
                     continue; // skip the display of this file
                 }
             }
-            else
-            {
-                $style="";
-            }
 
             if ($fileList['type'][$fileKey] == A_FILE)
             {
                 $image       = choose_image($fileName);
                 $size        = format_file_size($fileList['size'][$fileKey]);
                 $date        = format_date($fileList['date'][$fileKey]);
-                $doc_url = $cmdFileName;
-                $urlFileName = "../../".$courseDir.$doc_url;
+                //$doc_url = $cmdFileName;
+                //$urlFileName = "../../".$courseDir.$doc_url;
+                $file_url = file_url($fileList['path'][$fileKey], $dspFileName);
+                $play_url = file_playurl($fileList['path'][$fileKey], $dspFileName);
+                $urlFileName = choose_media_ahref($file_url, $file_url, $play_url, $dspFileName, $dspFileName);
             }
             elseif ($fileList['type'][$fileKey] == A_DIRECTORY)
             {
                 $image       = 'folder.png';
                 $size        = '&nbsp;';
                 $date        = '&nbsp;';
-                $urlFileName = $_SERVER['PHP_SELF'] . '?course='.$code_cours.'&amp;openDir=' . $cmdFileName;
+                $urlFileName = '<a href="'. $_SERVER['PHP_SELF'] . '?course='.$code_cours.'&amp;openDir=' . $cmdFileName .'">'.$dspFileName.'</a>';
             }
 
             $output .= '
-    <tr class="even">
+    <tr '.$style.'>
       <td class="center" width="1"><img src="'.$themeimg.'/'.$image.'" hspace="5" /></td>
-      <td align="left"><a href="' . $urlFileName . '" ' . $style . '>'.$dspFileName.'</a></td>
+      <td align="left">'. $urlFileName .'</td>
       <td width="80" class="center">' . $size . '</td>
       <td width="80" class="center">' . $date . '</td>';
 

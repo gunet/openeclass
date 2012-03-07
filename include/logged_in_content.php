@@ -31,7 +31,7 @@
 if (!defined('INDEX_START')) {
 	die('Action not allowed!');
 }
-load_js('jquery');
+// jquery is already loaded via index.php and modal box
 $head_content .= "<script type='text/javascript'>
 jQuery(document).ready(function() {
   jQuery('.panel_content').hide();

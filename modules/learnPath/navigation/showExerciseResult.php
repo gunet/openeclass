@@ -56,6 +56,9 @@ $TABLEUSERMODULEPROGRESS= "lp_user_module_progress";
 require_once('../../../include/lib/learnPathLib.inc.php');
 require_once('../../../include/lib/textLib.inc.php');
 
+require_once '../../video/video_functions.php';
+load_modal_box();
+
 // Ksekiname to diko mas html output giati probaloume mesa se iframe
 echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">'
     ."\n<html>\n"
@@ -63,6 +66,7 @@ echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www
     .'<meta http-equiv="Content-Type" content="text/html; charset='.$charset.'">'."\n"
     .'<link href="../../../template/'.$theme.'/theme.css" rel="stylesheet" type="text/css" />'."\n"
     .'<title>'.$langExercicesResult.'</title>'."\n"
+    .$head_content
     .'</head>'."\n"
     .'<body style="margin: 0px; padding-left: 0px; height: 100%!important; height: auto; background-color: #ffffff;">'."\n"
     .'<div id="content">';

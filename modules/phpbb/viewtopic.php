@@ -55,8 +55,10 @@ $helpTopic = 'For';
 include '../../include/baseTheme.php';
 include_once "config.php";
 include "functions.php"; 
+require_once '../video/video_functions.php';
 
-$local_head = '
+load_modal_box();
+$head_content .= '
 <script type="text/javascript">
 function confirmation()
 {
@@ -348,4 +350,4 @@ if ($paging and $total > $posts_per_page) {
         }
 	$tool_content .= "</span></td></tr></table>";
 }
-draw($tool_content, 2, null, $local_head);
+draw($tool_content, 2, null, $head_content);

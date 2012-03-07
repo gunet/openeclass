@@ -109,7 +109,7 @@ if($uid) // if not anonymous
 }  // else anonymous : record nothing !
 
 // Get info about launched module
-$sql = "SELECT `contentType`,`startAsset_id`
+$sql = "SELECT `contentType`, `startAsset_id`, `name`
           FROM `".$TABLEMODULE."`
          WHERE `module_id` = ". (int)$_SESSION['lp_module_id'];
 
@@ -125,9 +125,18 @@ switch ($module['contentType'])
 {
 	case CTDOCUMENT_ :
 		if($uid) { // Directly pass this module
-			directly_pass_lp_module($TABLEUSERMODULEPROGRESS, (int)$uid, (int)$learnPathModuleId);
+                    directly_pass_lp_module($TABLEUSERMODULEPROGRESS, (int)$uid, (int)$learnPathModuleId);
 		} // else anonymous : record nothing
-                $moduleStartAssetPage = file_url($assetPath);
+                $file_url = file_url($assetPath);
+                $play_url = file_playurl($assetPath);
+                
+                $furl = $file_url;
+                if (is_supported_media($module['name'], true)) {
+                    $furl = $play_url;
+                    $_SESSION['FILE_PHP__LIGHT_STYLE'] = true;
+                }
+                
+                $moduleStartAssetPage = $furl;
 		break;
 
 	case CTEXERCISE_ :

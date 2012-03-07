@@ -254,3 +254,23 @@ function file_url($path, $filename = null)
 	}
 }
 
+
+function file_playurl($path, $filename = null)
+{
+    global $currentCourseID, $urlServer, $group_id, $ebook_id;
+
+    if (defined('EBOOK_DOCUMENTS')) {
+        return htmlspecialchars($urlServer .
+                                        "modules/ebook/play.php/$currentCourseID/$ebook_id/_" .
+                                        public_file_path($path, $filename),
+                                ENT_QUOTES);
+    } else {
+        $gid = defined('GROUP_DOCUMENTS') ? ",$group_id" : '';
+
+        return htmlspecialchars($urlServer .
+                                        "modules/document/play.php/$currentCourseID$gid" .
+                                        public_file_path($path, $filename),
+                                ENT_QUOTES);
+    }
+}
+

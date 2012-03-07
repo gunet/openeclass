@@ -38,6 +38,7 @@ $guest_allowed = true;
 include '../../include/baseTheme.php';
 include '../../include/lib/textLib.inc.php';
 include '../units/functions.php';
+require_once '../video/video_functions.php';
 
 /**** The following is added for statistics purposes ***/
 include('../../include/action.php');
@@ -50,6 +51,7 @@ mysql_select_db($mysqlMainDb);
 
 $unit_id = description_unit_id($cours_id);
 
+load_modal_box();
 if ($is_editor) {
 	$tool_content .= "
 	<div id='operations_container'>
