@@ -58,6 +58,21 @@ $TABLEUSERMODULEPROGRESS= 'lp_user_module_progress';
 require_once '../../include/baseTheme.php';
 require_once '../document/doc_init.php';
 
+load_js('jquery');
+$head_content .= <<<EOF
+<script type='text/javascript'>
+$(document).ready(function() {
+
+    $('tr').click(function(event) {
+        if (event.target.type !== 'checkbox') {
+            $(':checkbox', this).trigger('click');
+        }
+    });
+
+});
+</script>
+EOF;
+
 $pwd = getcwd();
 
 $courseDir   = "courses/".$currentCourseID."/document";
@@ -362,4 +377,4 @@ $tool_content .= display_my_documents($dialogBox, $style) ;
 // display list of modules used by this learning path
 //$tool_content .= display_path_content();
 chdir($pwd);
-draw($tool_content, 2);
+draw($tool_content, 2, null, $head_content);

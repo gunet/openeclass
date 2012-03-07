@@ -43,6 +43,19 @@ $navigation[] = array("url"=>"learningPathAdmin.php?course=$code_cours&amp;path_
 $nameTools = $langInsertMyMediaToolName;
 
 load_modal_box(true);
+$head_content .= <<<EOF
+<script type='text/javascript'>
+$(document).ready(function() {
+
+    $('tr').click(function(event) {
+        if (event.target.type !== 'checkbox') {
+            $(':checkbox', this).trigger('click');
+        }
+    });
+
+});
+</script>
+EOF;
 
 mysql_select_db($currentCourseID);
 $iterator = 1;
