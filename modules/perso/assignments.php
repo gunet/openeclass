@@ -187,7 +187,7 @@ function columnSort($unsorted, $column) {
 
 /**
  *
- *  returns whether the use has submitted an assignment
+ *  returns whether the user has submitted an assignment
  */
 function submitted($uid, $assignment_id, $lesson_db, $lesson_id)
 {
@@ -195,12 +195,13 @@ function submitted($uid, $assignment_id, $lesson_db, $lesson_id)
 	
 	$res = db_query("SELECT * FROM `$lesson_db`.assignment_submit
 		WHERE assignment_id = $assignment_id
-		AND (uid = $uid OR
-		     group_id IN (SELECT group_id FROM `$mysqlMainDb`.`group` AS grp,
+		AND ((uid = $uid) OR
+		     (group_id IN (SELECT group_id FROM `$mysqlMainDb`.`group` AS grp,
 						       `$mysqlMainDb`.group_members AS members
 					 WHERE grp.id = members.group_id AND
-					       user_id = $uid AND course_id = $lesson_id))");
-
+					       user_id = $uid AND course_id = $lesson_id)))");
+    if(mysql_fetch_assoc($res)) return true;
+    return false;
 }
 
 
