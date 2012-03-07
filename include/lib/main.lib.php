@@ -1566,8 +1566,12 @@ function register_posted_variables($var_array, $what = 'all', $callback = null)
 // Apply automatically various fixes for the text to be edited
 function rich_text_editor($name, $rows, $cols, $text, $extra = '')
 {
-	global $head_content, $language, $purifier;
+	global $head_content, $language, $purifier, $urlAppend, $code_cours;
 	
+        $filebrowser = '';
+        if (isset($code_cours) && !empty($code_cours))
+            $filebrowser = "file_browser_callback : 'openDocsPicker',";
+        
 	$lang_editor = langname_to_code($language);
 	
 	load_js('tinymce/jscripts/tiny_mce/tiny_mce.js');
@@ -1582,6 +1586,7 @@ tinyMCE.init({
 		plugins : 'pagebreak,style,save,advimage,advlink,inlinepopups,media,print,contextmenu,paste,noneditable,visualchars,nonbreaking,xhtmlxtras,template,wordcount,advlist,emotions,preview',
 		entity_encoding : 'raw',
                 relative_urls : false,
+                $filebrowser
 	
 		// Theme options
 		theme_advanced_buttons1 : 'bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,styleselect,formatselect,fontsizeselect,forecolor,backcolor,removeformat,hr',
@@ -1615,6 +1620,23 @@ tinyMCE.init({
 			staffid : '991234'
 		}
 });
+
+function openDocsPicker(field_name, url, type, win) {
+    tinyMCE.activeEditor.windowManager.open({
+        file: '$urlAppend/modules/document/document.php?course=$code_cours&embedtype=tinymce&docsfilter=' + type,
+        title: 'Resources Browser',
+        width: 700,
+        height: 500,
+        resizable: 'yes',
+        inline: 'yes',
+        close_previous: 'no',
+        popup_css: false
+    }, {
+        window: win,
+        input: field_name
+    });
+    return false;
+}
 </script>";
 	
 	$text = $purifier->purify(str_replace(array('<m>', '</m>', '<M>', '</M>'),

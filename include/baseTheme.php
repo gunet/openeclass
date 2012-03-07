@@ -111,14 +111,20 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 	if (strlen ($extraMessage) > 0) {
 		$messageBox = $extraMessage;
 	}
+        
+	$is_embedonce = (isset($_SESSION['embedonce']) && $_SESSION['embedonce'] == true) ? true : false;
+	unset($_SESSION['embedonce']);
 
 	//get the left side menu from tools.php
-	$toolArr = getSideMenu ( $menuTypeID );
+	$toolArr = ($is_embedonce) ? array() : getSideMenu ( $menuTypeID );
 	$numOfToolGroups = count ( $toolArr );
 
 	$t = new Template($relPath . 'template/' . $theme);
 
-	$t->set_file('fh', 'theme.html');
+        if ($is_embedonce)
+            $t->set_file('fh', 'dtheme.html');
+        else
+            $t->set_file('fh', 'theme.html');
 
 	$t->set_block('fh', 'mainBlock', 'main');
 
@@ -378,8 +384,13 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 
 
 		$t->set_var ( 'PAGE_TITLE', q($pageTitle) );
+                
+                // Add the optional embed-specific css if necessarry
+                if ($is_embedonce) {
+                    $t->set_var('EXTRA_CSS', "<link href=\"${urlAppend}/template/${theme}${tool_css}/theme_embed.css\" rel=\"stylesheet\" type=\"text/css\" >");
+                }
 
-		//Add the optional tool-specific css of the tool, if it's set
+		// Add the optional tool-specific css of the tool, if it's set
 		if (isset ( $tool_css )) {
 			$t->set_var ( 'TOOL_CSS', "<link href=\"{%TOOL_PATH%}modules/$tool_css/tool.css\" rel=\"stylesheet\" type=\"text/css\" >" );
 		}

@@ -38,6 +38,48 @@ load_js('tools.js');
 $require_help = TRUE;
 $helpTopic = 'Doc';
 
+$is_in_tinymce = (isset($_REQUEST['embedtype']) && $_REQUEST['embedtype'] == 'tinymce') ? true : false;
+
+if ($is_in_tinymce) {
+    
+    $_SESSION['embedonce'] = true; // necessary for baseTheme
+    $docsfilter = (isset($_REQUEST['docsfilter'])) ? 'docsfilter='. $_REQUEST['docsfilter'] .'&amp;' : '';
+    $base_url .= 'embedtype=tinymce&amp;'. $docsfilter;
+    
+    load_js('jquery');
+    load_js('tinymce/jscripts/tiny_mce/tiny_mce_popup.js');
+    
+    $head_content .= <<<EOF
+<script type='text/javascript'>
+$(document).ready(function() {
+
+    $("a#fileURL").click(function() { 
+        var URL = $(this).attr('href');
+        var win = tinyMCEPopup.getWindowArg("window");
+
+        // insert information now
+        win.document.getElementById(tinyMCEPopup.getWindowArg("input")).value = URL;
+
+        // are we an image browser
+        if (typeof(win.ImageDialog) != "undefined") {
+            // we are, so update image dimensions...
+            if (win.ImageDialog.getImageData)
+                win.ImageDialog.getImageData();
+
+            // ... and preview if necessary
+            if (win.ImageDialog.showPreviewImage)
+                win.ImageDialog.showPreviewImage(URL);
+        }
+
+        // close popup window
+        tinyMCEPopup.close();
+        return false;
+    });
+});
+</script>
+EOF;
+}
+
 // check for quotas
 $diskUsed = dir_total_space($basedir);
 $type = ($subsystem == GROUP)? 'group_quota': 'doc_quota';
@@ -743,11 +785,38 @@ if (isset($_GET['rev'])) {
         $reverse = true;
 }
 
+$filter = '';
+if (isset($_REQUEST['docsfilter'])) {
+    
+    require_once '../video/video_functions.php';
+    
+    switch ($_REQUEST['docsfilter']) {
+        case 'image':
+            $ors = '';
+            foreach (get_supported_images() as $imgfmt)
+                $ors .= " OR format LIKE '$imgfmt'";
+            $filter = "AND (format LIKE '.dir' $ors)";
+            break;
+        case 'media':
+            $ors = '';
+            foreach (get_supported_multimedia() as $mediafmt)
+                $ors .= " OR format LIKE '$mediafmt'";
+            $filter = "AND (format LIKE '.dir' $ors)";
+            break;
+        case 'scorm':
+            $filter = "AND (format LIKE '.dir' OR FORMAT LIKE 'zip')";
+            break;
+        case 'file':
+        default:
+            break;
+    }
+}
+
 /*** Retrieve file info for current directory from database and disk ***/
 $result = db_query("SELECT * FROM document
 			WHERE $group_sql AND
 				path LIKE '$curDirPath/%' AND
-				path NOT LIKE '$curDirPath/%/%' $order");
+				path NOT LIKE '$curDirPath/%/%' $filter $order");
 
 $fileinfo = array();
 while($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
@@ -781,19 +850,21 @@ if($can_upload) {
 		$tool_content .= "\n" . $action_message . "\n";
 	}
 
-	/*----------------------------------------------------------------
-	UPLOAD SECTION (ektypwnei th forma me ta stoixeia gia upload eggrafou + ola ta pedia
-	gia ta metadata symfwna me Dublin Core)
-	------------------------------------------------------------------*/
-	$tool_content .= "\n  <div id='operations_container'>\n    <ul id='opslist'>";
-	$tool_content .= "\n  <li><a href='upload.php?course=$code_cours&amp;{$groupset}uploadPath=$curDirPath'>$langDownloadFile</a></li>";
-	/*----------------------------------------
-	Create new folder
-	--------------------------------------*/
-	$tool_content .= "\n      <li><a href='{$base_url}createDir=$cmdCurDirPath'>$langCreateDir</a></li>";
-	$diskQuotaDocument = $diskQuotaDocument * 1024 / 1024;
-	$tool_content .= "\n      <li><a href='{$base_url}showQuota=true'>$langQuotaBar</a></li>";
-	$tool_content .= "\n    </ul>\n  </div>\n";
+        if (!$is_in_tinymce) {
+            /*----------------------------------------------------------------
+            UPLOAD SECTION (ektypwnei th forma me ta stoixeia gia upload eggrafou + ola ta pedia
+            gia ta metadata symfwna me Dublin Core)
+            ------------------------------------------------------------------*/
+            $tool_content .= "\n  <div id='operations_container'>\n    <ul id='opslist'>";
+            $tool_content .= "\n  <li><a href='upload.php?course=$code_cours&amp;{$groupset}uploadPath=$curDirPath'>$langDownloadFile</a></li>";
+            /*----------------------------------------
+            Create new folder
+            --------------------------------------*/
+            $tool_content .= "\n      <li><a href='{$base_url}createDir=$cmdCurDirPath'>$langCreateDir</a></li>";
+            $diskQuotaDocument = $diskQuotaDocument * 1024 / 1024;
+            $tool_content .= "\n      <li><a href='{$base_url}showQuota=true'>$langQuotaBar</a></li>";
+            $tool_content .= "\n    </ul>\n  </div>\n";
+        }
 
 	// Dialog Box
 	if (!empty($dialogBox))
@@ -819,10 +890,11 @@ if ($doc_count == 0) {
         }
 
         $download_path = empty($curDirPath)? '/': $curDirPath;
+        $download_dir = ($is_in_tinymce) ? '' : "<a href='{$base_url}download=$download_path'><img src='$themeimg/save_s.png' width='16' height='16' align='middle' alt='$langDownloadDir' title='$langDownloadDir'></a>";
 	$tool_content .= "
     <tr>
       <td colspan='$cols'><div class='sub_title1'><b>$langDirectory:</b> " . make_clickable_path($curDirPath) .
-      "&nbsp;<a href='{$base_url}download=$download_path'><img src='$themeimg/save_s.png' width='16' height='16' align='middle' alt='$langDownloadDir' title='$langDownloadDir'></a><br></div></td>
+      "&nbsp;$download_dir<br></div></td>
       <td><div align='right'>";
 
         // Link for sortable table headings
@@ -863,12 +935,14 @@ if ($doc_count == 0) {
         $tool_content .= "\n      <th><div align='left'>" . headlink($langName, 'name') . '</div></th>';
         $tool_content .= "\n      <th width='60' class='center'><b>$langSize</b></th>";
         $tool_content .= "\n      <th width='80' class='center'><b>" . headlink($langDate, 'date') . '</b></th>';
-	if($can_upload) {
+        if (!$is_in_tinymce) {
+            if($can_upload) {
 		$width = (get_config("insert_xml_metadata")) ? 175 : 135;
 		$tool_content .= "\n      <th width='$width' class='center'><b>$langCommands</b></th>";
-	} else {
+            } else {
 		$tool_content .= "\n      <th width='50' class='center'><b>$langCommands</b></th>";
-	}
+            }
+        }
 	$tool_content .= "\n    </tr>";
 
         // -------------------------------------
@@ -901,7 +975,7 @@ if ($doc_count == 0) {
                         } else {
                                 $image = $urlAppend . '/modules/document/img/' . choose_image('.' . $entry['format']);
                                 $file_url = file_url($cmdDirName, $entry['filename']);
-                                $link_extra = " title='$langSave' target='_blank'";
+                                $link_extra = " id='fileURL' title='$langSave' target='_blank'";
                                 if (empty($entry['title'])) {
                                         $link_text = $entry['filename'];
                                 } else {
@@ -942,7 +1016,8 @@ if ($doc_count == 0) {
                                 $date = format_date($entry['date']);
                                 $tool_content .= "\n<td class='center'>$size</td>\n<td class='center'>$date</td>";
                         }
-                        if ($can_upload) {
+                        if (!$is_in_tinymce) {
+                            if ($can_upload) {
                                 $tool_content .= "\n<td class='right' valign='top'><form action='document.php?course=$code_cours' method='post'>" . $group_hidden_input .
                                                  "<input type='hidden' name='filePath' value='$cmdDirName' />" .
                                                  $download_icon . $padding;
@@ -995,14 +1070,15 @@ if ($doc_count == 0) {
 				}
                                 $tool_content .= "</form></td>";
                                 $tool_content .= "\n    </tr>";
-                        } else { // only for students
+                            } else { // only for students
                                 $tool_content .= "<td>$download_icon</td>";
-			}
+                            }
+                        }
                         $counter++;
                 }
         }
         $tool_content .=  "\n    </table>\n";
-	if ($can_upload) {
+	if ($can_upload && !$is_in_tinymce) {
 		$tool_content .= "\n    <br><div class='right smaller'>$langMaxFileSize " . ini_get('upload_max_filesize') . "</div>\n";
 	}
         $tool_content .= "\n    <br />";

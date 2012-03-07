@@ -441,13 +441,7 @@ function is_supported_image($filename)
  */
 function is_supported_media($filename)
 {
-    $medias = array("asf", "avi", "wm", "wmv", "wma",
-                       "dv", "mov", "moov", "movie", "mp4", "mpg", "mpeg", 
-                       "3gp", "3g2", "m2v", "aac", "m4a",
-                       "flv", "f4v", "m4v", "mp3",
-                       "swf", "webm", "ogv", "ogg");
-    
-    $supported = array_merge($medias, get_supported_images());
+    $supported = array_merge(get_supported_multimedia(), get_supported_images());
     
     return in_array(get_file_extension($filename), $supported);
 }
@@ -592,6 +586,15 @@ function get_object_width()
 function get_object_height()
 {
     return get_modal_height() - 20;
+}
+
+function get_supported_multimedia()
+{
+    return array("asf", "avi", "wm", "wmv", "wma",
+                       "dv", "mov", "moov", "movie", "mp4", "mpg", "mpeg", 
+                       "3gp", "3g2", "m2v", "aac", "m4a",
+                       "flv", "f4v", "m4v", "mp3",
+                       "swf", "webm", "ogv", "ogg");
 }
 
 function get_supported_images()
