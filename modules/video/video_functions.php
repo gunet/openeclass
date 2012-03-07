@@ -103,32 +103,34 @@ function load_modal_box($gallery = false)
  * @param  string $mediaPlay - media playback url
  * @param  string $title
  * @param  string $filename
+ * @param  string $title_extra
+ * @param  string $link_extra
  * @return string 
  */
-function choose_media_ahref($mediaDL, $mediaPath, $mediaPlay, $title, $filename)
+function choose_media_ahref($mediaDL, $mediaPath, $mediaPlay, $title, $filename, $title_extra = '', $link_extra = '')
 {
-    $ahref = "<a href='$mediaDL'>". $title ."</a>";
+    if (empty($title_extra)) $title_extra = $title;
+    $ahref = "<a href='$mediaDL' $link_extra>". $title_extra ."</a>";
     
     if (is_supported_media($filename))
     {
         if (file_exists(get_shadowbox_dir()))
         {
-            $ahref = "<a href='$mediaPath' class='shadowbox' rel='shadowbox;width=".get_shadowbox_width().";height=".get_shadowbox_height().get_shadowbox_player($filename)."' title='$title'>$title</a>";
+            $ahref = "<a href='$mediaPath' class='shadowbox' rel='shadowbox;width=".get_shadowbox_width().";height=".get_shadowbox_height().get_shadowbox_player($filename)."' title='$title'>".$title_extra."</a>";
             if (is_supported_image($filename))
-                $ahref = "<a href='$mediaPath' class='shadowbox' rel='shadowbox' title='$title'>$title</a>";
+                $ahref = "<a href='$mediaPath' class='shadowbox' rel='shadowbox' title='$title'>".$title_extra."</a>";
         }
         else if (file_exists(get_fancybox2_dir()))
         {
-            $ahref = "<a href='$mediaPlay' class='fancybox fancybox.iframe' title='$title'>$title</a>";
+            $ahref = "<a href='$mediaPlay' class='fancybox fancybox.iframe' title='$title'>".$title_extra."</a>";
             if (is_supported_image($filename))
-                $ahref = "<a href='$mediaPath' class='fancybox' title='$title'>$title</a>";
+                $ahref = "<a href='$mediaPath' class='fancybox' title='$title'>".$title_extra."</a>";
         }
         else if (file_exists(get_colorbox_dir()))
         {
-            $ahref = "<a href='$mediaPlay' class='colorboxframe' title='$title'>$title</a>";
+            $ahref = "<a href='$mediaPlay' class='colorboxframe' title='$title'>".$title_extra."</a>";
             if (is_supported_image($filename))
-                $ahref = "<a href='$mediaPath' class='colorbox' title='$title'>$title</a>";
-            
+                $ahref = "<a href='$mediaPath' class='colorbox' title='$title'>".$title_extra."</a>";
         }
     }
     
@@ -437,11 +439,12 @@ function is_supported_image($filename)
  * Whether the movie is supported or not
  * 
  * @param  string  $filename
+ * @param  boolean $no_images
  * @return boolean 
  */
-function is_supported_media($filename)
+function is_supported_media($filename, $no_images = false)
 {
-    $supported = array_merge(get_supported_multimedia(), get_supported_images());
+    $supported = ($no_images) ? get_supported_media() : array_merge(get_supported_media(), get_supported_images());
     
     return in_array(get_file_extension($filename), $supported);
 }
@@ -588,7 +591,7 @@ function get_object_height()
     return get_modal_height() - 20;
 }
 
-function get_supported_multimedia()
+function get_supported_media()
 {
     return array("asf", "avi", "wm", "wmv", "wma",
                        "dv", "mov", "moov", "movie", "mp4", "mpg", "mpeg", 

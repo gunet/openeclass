@@ -39,6 +39,9 @@ include '../../include/lib/textLib.inc.php';
 include '../../include/action.php';
 include '../../include/jscalendar/calendar.php';
 
+require_once '../video/video_functions.php';
+load_modal_box();
+
 $action = new action();
 $action->record('MODULE_ID_AGENDA');
 
@@ -58,7 +61,7 @@ if ($is_editor and (isset($_GET['addEvent']) or isset($_GET['id']))) {
 	$lang_jscalendar = langname_to_code($language);
 
 	//--if add event
-$head_content = <<<hContent
+$head_content .= <<<hContent
 <script type="text/javascript">
 function checkrequired(which, entry) {
 	var pass=true;

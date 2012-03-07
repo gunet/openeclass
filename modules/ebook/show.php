@@ -1,4 +1,10 @@
 <?php
+
+// playmode is used in order to re-use this script's logic via play.php
+$is_in_playmode = false;
+if (defined('SHOW_PHP__PLAY_MODE'))
+    $is_in_playmode = true;
+
 if (stripos($_SERVER['REQUEST_URI'], '%5c') !== false) {
         header('HTTP/1.1 301 Moved Permanently');
         header('Location: ' . str_ireplace('%5c', '/', $_SERVER['REQUEST_URI']));
@@ -15,8 +21,10 @@ $unit = false;
 $file_path = false;
 $full_url_found = false;
 $show_orphan_file = false;
-$uri = preg_replace('/\?[^?]*$/', '',
-                    strstr($_SERVER['REQUEST_URI'], 'ebook/show.php'));
+$uri = (!$is_in_playmode) ? preg_replace('/\?[^?]*$/', '',
+                    strstr($_SERVER['REQUEST_URI'], 'ebook/show.php')) : 
+                            preg_replace('/\?[^?]*$/', '',
+                    strstr($_SERVER['REQUEST_URI'], 'ebook/play.php'));
 $path_components = explode('/', $uri);
 if (count($path_components) >= 4) {
         $_SESSION['dbname'] = $path_components[2];
@@ -65,7 +73,20 @@ mysql_select_db($mysqlMainDb);
 $ebook_url_base = "{$urlServer}modules/ebook/show.php/$currentCourseID/$ebook_id/";
 
 if ($show_orphan_file and $file_path) {
+    if (!$is_in_playmode)
         send_file_by_url_file_path($file_path);
+    else {
+        require_once ('../video/video_functions.php');
+        
+        $path_components = explode('/', str_replace('//', chr(1), $file_path));
+        $file_info = public_path_to_disk_path($path_components, '');
+        
+        $mediaPath = file_url($file_info['path'], $file_info['filename']);
+        $mediaURL = $urlServer .'modules/ebook/document.php?course='. $code_cours .'&amp;ebook_id='.$ebook_id.'&amp;download='. $file_info['path'];
+        
+        echo media_html_object($mediaPath, $mediaURL);
+        exit();
+    }
 }
 
 $nameTools = $langEBook;

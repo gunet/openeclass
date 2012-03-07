@@ -40,6 +40,8 @@ $path2add = 0;
 include "include/baseTheme.php";
 include "include/CAS/CAS.php";
 include "modules/auth/auth.inc.php";
+require_once 'modules/video/video_functions.php';
+load_modal_box();
 //$homePage is used by baseTheme.php to parse correctly the breadcrumb
 $homePage = true;
 $tool_content = "";
@@ -159,7 +161,7 @@ if ($uid AND !isset($_GET['logout'])) {
 	} else {
 		// load classic view
 		include "include/classic.php";
-		draw($tool_content, 1);
+		draw($tool_content, 1, null, $head_content);
 	}
 } else {
 	$require_help = true;

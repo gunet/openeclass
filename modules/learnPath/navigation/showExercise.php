@@ -40,6 +40,10 @@ include("../../../include/init.php");
 // exercise_submit.php. Oi mones diafores einai xrhsh twn echo
 // anti gia to tool_content kai kapoies mikrodiafores opou xreiazetai 
 require_once('../../../include/lib/textLib.inc.php');
+
+require_once '../../video/video_functions.php';
+load_modal_box();
+
 // answer types
 define('UNIQUE_ANSWER', 1);
 define('MULTIPLE_ANSWER', 2);
@@ -220,6 +224,7 @@ echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Frameset//EN"   "http://www.w
     .'<meta http-equiv="Content-Type" content="text/html; charset='.$charset.'">'."\n"
     .'<link href="../../../template/'.$theme.'/theme.css" rel="stylesheet" type="text/css" />'."\n"
     .'<title>'.$langExercice.'</title>'."\n"
+    .$head_content
     .'</head>'."\n"
     .'<body style="margin: 0px; padding-left: 0px; height: 100%!important; height: auto; background-color: #ffffff;">'."\n"
     .'<div id="content">';

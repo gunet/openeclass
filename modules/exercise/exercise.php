@@ -37,6 +37,9 @@ $guest_allowed = true;
 
 include '../../include/baseTheme.php';
 
+require_once '../video/video_functions.php';
+load_modal_box();
+
 /**** The following is added for statistics purposes ***/
 include('../../include/action.php');
 $action = new action();

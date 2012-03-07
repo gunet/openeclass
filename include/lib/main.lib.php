@@ -1600,7 +1600,7 @@ function register_posted_variables($var_array, $what = 'all', $callback = null)
 // Apply automatically various fixes for the text to be edited
 function rich_text_editor($name, $rows, $cols, $text, $extra = '')
 {
-	global $head_content, $language, $purifier, $urlAppend, $code_cours;
+	global $head_content, $language, $purifier, $urlAppend, $code_cours, $langPopUp, $langPopUpFrame;
 	
         $filebrowser = '';
         if (isset($code_cours) && !empty($code_cours))
@@ -1617,25 +1617,20 @@ tinyMCE.init({
 		mode : 'specific_textareas',
                 editor_deselector : 'mceNoEditor',
 		theme : 'advanced',
-		plugins : 'pagebreak,style,save,advimage,advlink,inlinepopups,media,print,contextmenu,paste,noneditable,visualchars,nonbreaking,xhtmlxtras,template,wordcount,advlist,emotions,preview',
+		plugins : 'pagebreak,style,save,advimage,advlink,inlinepopups,eclmedia,print,contextmenu,paste,noneditable,visualchars,nonbreaking,xhtmlxtras,template,wordcount,advlist,emotions,preview',
 		entity_encoding : 'raw',
                 relative_urls : false,
+                advlink_styles : '$langPopUp=colorbox;$langPopUpFrame=colorboxframe',
                 $filebrowser
 	
 		// Theme options
 		theme_advanced_buttons1 : 'bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,styleselect,formatselect,fontsizeselect,forecolor,backcolor,removeformat,hr',
-		theme_advanced_buttons2 : 'pasteword,|,bullist,numlist,|indent,blockquote,|,sub,sup,|,undo,redo,|,link,unlink,|,charmap,media,emotions,image,|,preview,cleanup,code',
+		theme_advanced_buttons2 : 'pasteword,|,bullist,numlist,|indent,blockquote,|,sub,sup,|,undo,redo,|,link,unlink,|,charmap,eclmedia,emotions,image,|,preview,cleanup,code',
 		theme_advanced_buttons3 : '',
 		theme_advanced_toolbar_location : 'top',
 		theme_advanced_toolbar_align : 'left',
 		theme_advanced_statusbar_location : 'bottom',
 		theme_advanced_resizing : true,
-
-		// Drop lists for link/image/media/template dialogs
-		template_external_list_url : 'lists/template_list.js',
-		external_link_list_url : 'lists/link_list.js',
-		external_image_list_url : 'lists/image_list.js',
-		media_external_list_url : 'lists/media_list.js',
 
 		// Style formats
 		style_formats : [

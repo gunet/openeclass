@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -23,7 +23,18 @@ file.php
  * @version $Id$
 */
 
+// playmode is used in order to re-use this script's logic via play.php
+$is_in_playmode = false;
+$is_in_lightstyle = false;
+if (defined('FILE_PHP__PLAY_MODE'))
+    $is_in_playmode = true;
+
 session_start();
+
+if (isset($_SESSION['FILE_PHP__LIGHT_STYLE'])) {
+    $is_in_lightstyle = true;
+    unset($_SESSION['FILE_PHP__LIGHT_STYLE']);
+}
 
 // save current course
 if (isset($_SESSION['dbname'])) {
@@ -40,7 +51,7 @@ if (stripos($uri, '%5c') !== false) {
         exit;
 }
 
-$uri = str_replace('//', chr(1), preg_replace('/^.*file\.php\??\//', '', $uri));
+$uri = (!$is_in_playmode) ? str_replace('//', chr(1), preg_replace('/^.*file\.php\??\//', '', $uri)) : str_replace('//', chr(1), preg_replace('/^.*play\.php\??\//', '', $uri));
 $path_components = explode('/', $uri);
 
 // temporary course change
@@ -88,13 +99,27 @@ if ($file_info['visibility'] != 'v' and !$is_editor) {
 }
 
 if (file_exists($basedir . $file_info['path'])) {
+    if (!$is_in_playmode)
         send_file_to_client($basedir . $file_info['path'], $file_info['filename']);
+    else {
+        require_once ('../video/video_functions.php');
+        require_once '../../include/lib/fileDisplayLib.inc.php';
+        
+        $mediaPath = file_url($file_info['path'], $file_info['filename']);
+        $mediaURL = $urlServer .'modules/document/document.php?course='. $code_cours .'&amp;download='. $file_info['path'];
+        if (defined('GROUP_DOCUMENTS'))
+            $mediaURL = $urlServer .'modules/group/document.php?course='. $code_cours .'&amp;group_id='.$group_id.'&amp;download='. $file_info['path'];
+        
+        $htmlout = (!$is_in_lightstyle) ? media_html_object($mediaPath, $mediaURL) : media_html_object($mediaPath, $mediaURL, '#ffffff', '#000000');
+        echo $htmlout;
+        exit();
+    }
 } else {
         not_found(preg_replace('/^.*file\.php/', '', $uri));
 }
 
 function check_cours_access() {
-	global $mysqlMainDb, $currentCourse, $dbname, $statut;
+	global $mysqlMainDb, $dbname;
 
 	// $dbname is used in filepath so we stick to this instead of $currentCourse
 	$qry = "SELECT cours_id, code, visible FROM `cours` WHERE code='$dbname'";

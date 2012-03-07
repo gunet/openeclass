@@ -54,7 +54,8 @@ $TABLEUSERMODULEPROGRESS= "lp_user_module_progress";
 
 require_once("../../include/baseTheme.php");
 
-load_js('jquery');
+require_once '../video/video_functions.php';
+load_modal_box();
 $head_content .= <<<EOF
 <script type='text/javascript'>
 $(document).ready(function() {

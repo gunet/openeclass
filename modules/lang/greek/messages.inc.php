@@ -3301,3 +3301,5 @@ $langJQSelectNum = 'Επιλέχτηκαν # από #';
 $langJQNoneSelected = 'Επιλέξτε';
 $langJQCheckAll = 'Επιλογή όλων';
 $langJQUncheckAll = 'Αφαίρεση όλων';
+$langPopUp = 'Αναδυόμενο για εικόνες';
+$langPopUpFrame = 'Αναδυόμενο για πολυμέσα';
