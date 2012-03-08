@@ -314,6 +314,9 @@ Note that, administrator can modify these settings per course from the admin too
 <p> 
 If you want to use the platform with a Web server which has the SSL support activated (e.g. https://eclass.gunet.gr), you can do it by defining the <em>urlSecure</em> variable on <em>config.php</em>. e.g.<code>$urlSecure = "https://eclass.gunet.gr"</code> 
 </p>
+<p> If you have SSL support activated and you want to enforce it between the platform and native mobile clients for increased security, 
+you can do it by defining the <em>urlMobile</em> variable on <em>config.php</em>. e.g.<code>$urlMobile = "https://eclass.gunet.gr"</code>
+</p>
 
 <p>
   Finally, it should be noted to the users of the platform that they need to have javascript activated on their browser.

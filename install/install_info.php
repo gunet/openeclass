@@ -403,6 +403,10 @@ $langAboutText = "Τρέχουσα έκδοση της πλατφόρμας";
 (π.χ. https://eclass.gunet.gr) μπορείτε να το κάνετε δηλώνοντας στο <em>config.php</em> την μεταβλητή
 <em>urlSecure</em>. π.χ. <code>$urlSecure = "https://eclass.gunet.gr"</code>.
 </p>
+<p> Αν έχετε ενεργοποιημένη την υποστήριξη SSL και θέλετε να την επιβάλετε στη διεπικοινωνία μεταξύ της πλατφόρμας και των mobile clients, 
+για περισσότερη ασφάλεια, μπορείτε να το κάνετε δηλώνοντας στο <em>config.php</em> την μεταβλητή
+<em>urlMobile</em>. π.χ. <code>$urlMobile = "https://eclass.gunet.gr"</code>.
+</p>
   <p>Σημειώστε, ότι οι χρήστες της πλατφόρμας θα πρέπει να έχουν την javascript ενεργοποιημένη στον browser τους.</p> 
     <ul>
       <li>Για τους χρήστες του Internet Explorer, από τα μενού επιλέξτε διαδοχικά 
