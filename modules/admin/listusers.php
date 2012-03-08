@@ -74,8 +74,9 @@ if($search == 'yes')	{ // coming from search_user.php (search with criteria)
 $tool_content .= "
   <div id='operations_container'>
     <ul id='opslist'>
+      <li><a href='$_SERVER[PHP_SELF]?search=yes'>$langAllUsers</a></li>
       <li><a href='search_user.php'>$langSearchUser</a></li>
-      <li><a href='listusers.php?search=inactive'>$langInactiveUsers</a></li>
+      <li><a href='$_SERVER[PHP_SELF]?search=inactive'>$langInactiveUsers</a></li>
     </ul>
   </div>";
 
@@ -343,7 +344,7 @@ if($countUser > 0) {
                 FROM user AS a LEFT JOIN cours_user AS b ON a.user_id = b.user_id
                 WHERE b.cours_id=$c";
         } else { // search with criteria
-                $header_link = $pagination_link = "&amp;user_surname=$user_surname&amp;user_firstname=$user_firstname&amp;user_username=$user_username&amp;user_am=$user_am&amp;user_email=$user_email&amp;user_type=$user_type&amp;auth_type=$auth_type&amp;user_registered_at_flag=$user_registered_at_flag";
+                $header_link = $pagination_link = "&amp;user_surname=$user_surname&amp;user_firstname=$user_firstname&amp;user_username=$user_username&amp;user_am=$user_am&amp;user_email=$user_email&amp;user_type=$user_type&amp;auth_type=$auth_type&amp;user_registered_at_flag=$user_registered_at_flag&amp;verified_mail=$verified_mail";
 
                 $qry = "SELECT user_id, nom, prenom, username, email, statut, verified_mail FROM user";
                 if((!empty($user_surname_qry)) 
@@ -417,7 +418,7 @@ if($countUser > 0) {
                         }
                         $tool_content .= "</td>";
                         if ($logs['user_id'] == 1) { // don't display actions for admin user
-                                $tool_content .= "<td class='center'>&dash;&dash;&nbsp;</td>";
+                                $tool_content .= "<td class='center'>&mdash;&nbsp;</td>";
                         } else {
                                 $tool_content .= "<td width='80'><a href=\"edituser.php?u=".$logs['user_id']."\">
                                 <img src='$themeimg/edit.png' title='$langEdit' /></a>

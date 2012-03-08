@@ -148,11 +148,11 @@ $tool_content .= "
       </td>
     </tr>
     <tr>
-     <th scope=\"col\" width='1' class=\"odd\">&nbsp;</th>
-     <th scope=\"col\" class=\"odd\"><div align=\"left\">".$langCourseCode."</div></th>
-     <th scope=\"col\" width=\"1\" class=\"odd\">".$langGroupAccess."</th>
-     <th scope=\"col\" width=\"280\" class=\"odd\"><div align=\"left\">".$langFaculty."</div></th>
-     <th scope=\"col\" width=\"40\" colspan='2' class=\"odd\">".$langActions."</th>
+     <th scope='col' width='1' class='odd'>&nbsp;</th>
+     <th scope='col' class='odd'><div align='left'>".$langCourseCode."</div></th>
+     <th scope='col' width='1' class='odd'>".$langGroupAccess."</th>
+     <th scope='col' width='280' class='odd'><div align='left'>".$langFaculty."</div></th>
+     <th scope='col' width='40' class='odd'>".$langActions."</th>
     </tr>";
 
 $k = 0;

@@ -192,7 +192,7 @@ function columnSort($unsorted, $column) {
 
 /**
  *
- *  returns whether the use has submitted an assignment
+ *  returns whether the user has submitted an assignment
  */
 function submitted($uid, $assignment_id, $lesson_id)
 {
@@ -241,4 +241,3 @@ function isGroupAssignment($id)
 		die("Error: assignment $id doesn't exist");
 	}
 }
-
