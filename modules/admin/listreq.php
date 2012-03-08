@@ -237,60 +237,66 @@ $langEmail: $emailhelpdesk";
 // -----------------------------------
 else
 {
-	$tool_content .= "<table class='tbl_alt' width='100%'>";
-	$tool_content .= table_header();
-	// show username as well (usefull)
+	
+	// show username as well (useful)
  	$sql = db_query("SELECT id, name, surname, uname, faculty_id, date_open, comment, password FROM user_request
                                 WHERE (status = 1 AND statut = $list_statut)");
-    	$k = 0;
-	while ($req = mysql_fetch_array($sql)) {
-		if ($k%2 == 0) {
-	              $tool_content .= "\n<tr class='even'>";
-	        } else {
-	              $tool_content .= "\n<tr class='odd'>";
-	        }
-	    	$tool_content .= "<td align='right' width='1'>
-		<img src='$themeimg/arrow.png' title='bullet'></td>";
-	     	$tool_content .= "<td>".q($req['name'])."&nbsp;".q($req['surname'])."</td>";
-		$tool_content .= "<td>".q($req['uname'])."</td>";
-		$tool_content .= "<td>".q(find_faculty_by_id($req['faculty_id']))."</td>";
-		$tool_content .= "<td align='center'>
-			<small>".nice_format(date('Y-m-d', strtotime($req['date_open'])))."</small></td>";
-		$tool_content .= "<td align='center' class='smaller'>";
-                switch($req['password']) {
-                    case 'pop3':
-                        $tool_content .= "<a href='../auth/ldapnewprofadmin.php?id=$req[id]&amp;auth=2'>
-                                          $langElaboration<br>($langViaPop)</a>";
-                        break;
-                    case 'imap':
-                        $tool_content .= "<a href='../auth/ldapnewprofadmin.php?id=$req[id]&amp;auth=3'>
-                                          $langElaboration<br>($langViaImap)</a>";
-                        break;
-                    case 'ldap':
-                         $tool_content .= "<a href='../auth/ldapnewprofadmin.php?id=$req[id]&amp;auth=4'>
-                                           $langElaboration<br />($langViaLdap)</a>";
-                         break;
-                    case 'db':
-                         $tool_content .= "<a href='../auth/ldapnewprofadmin.php?id=$req[id]&amp;auth=5'>
-                                           $langElaboration<br>($langViaDB)</a>";
-                         break;
-                    case 'shibboleth':
-                         $tool_content .= "<a href='../auth/ldapnewprofadmin.php?id=$req[id]&amp;auth=6'>
-                                           $langElaboration<br>($langViaShibboleth)</a>";
-                         break;
-                    case 'cas':
-                         $tool_content .= "<a href='../auth/ldapnewprofadmin.php?id=$req[id]&amp;auth=7'>
-                                           $langElaboration<br>($langViaCAS)</a>";
-                         break;
-                    default:
-                         $tool_content .= "<a href='newuseradmin.php?id=$req[id]'>
-                                           $langElaboration</a>";
-                         break;
+        if (mysql_num_rows($sql) > 0) {
+                $tool_content .= "<table class='tbl_alt' width='100%'>";
+                $tool_content .= table_header();
+                $k = 0;
+                while ($req = mysql_fetch_array($sql)) {
+                        if ($k%2 == 0) {
+                              $tool_content .= "\n<tr class='even'>";
+                        } else {
+                              $tool_content .= "\n<tr class='odd'>";
+                        }
+                        $tool_content .= "<td align='right' width='1'>
+                        <img src='$themeimg/arrow.png' title='bullet'></td>";
+                        $tool_content .= "<td>".q($req['name'])."&nbsp;".q($req['surname'])."</td>";
+                        $tool_content .= "<td>".q($req['uname'])."</td>";
+                        $tool_content .= "<td>".q(find_faculty_by_id($req['faculty_id']))."</td>";
+                        $tool_content .= "<td align='center'>
+                                <small>".nice_format(date('Y-m-d', strtotime($req['date_open'])))."</small></td>";
+                        $tool_content .= "<td align='center' class='smaller'>";
+                        switch($req['password']) {
+                            case 'pop3':
+                                $tool_content .= "<a href='../auth/ldapnewprofadmin.php?id=$req[id]&amp;auth=2'>
+                                                  $langElaboration<br>($langViaPop)</a>";
+                                break;
+                            case 'imap':
+                                $tool_content .= "<a href='../auth/ldapnewprofadmin.php?id=$req[id]&amp;auth=3'>
+                                                  $langElaboration<br>($langViaImap)</a>";
+                                break;
+                            case 'ldap':
+                                 $tool_content .= "<a href='../auth/ldapnewprofadmin.php?id=$req[id]&amp;auth=4'>
+                                                   $langElaboration<br />($langViaLdap)</a>";
+                                 break;
+                            case 'db':
+                                 $tool_content .= "<a href='../auth/ldapnewprofadmin.php?id=$req[id]&amp;auth=5'>
+                                                   $langElaboration<br>($langViaDB)</a>";
+                                 break;
+                            case 'shibboleth':
+                                 $tool_content .= "<a href='../auth/ldapnewprofadmin.php?id=$req[id]&amp;auth=6'>
+                                                   $langElaboration<br>($langViaShibboleth)</a>";
+                                 break;
+                            case 'cas':
+                                 $tool_content .= "<a href='../auth/ldapnewprofadmin.php?id=$req[id]&amp;auth=7'>
+                                                   $langElaboration<br>($langViaCAS)</a>";
+                                 break;
+                            default:
+                                 $tool_content .= "<a href='newuseradmin.php?id=$req[id]'>
+                                                   $langElaboration</a>";
+                                 break;
+                        }
+                        $tool_content .= "</td></tr>\n";
+                        $k++;
                 }
-                $tool_content .= "</td></tr>\n";
-		$k++;
-	}
-	$tool_content .= "\n  </table>\n";
+                $tool_content .= "\n  </table>\n";
+        } else {
+                $tool_content .= "<p class='alert1'>$langUserNoRequests</p>";
+        }       
+	
 }
 
 // If show is set then we return to listreq, else return to admin index.php
