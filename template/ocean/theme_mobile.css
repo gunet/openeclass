@@ -1,0 +1,7 @@
+#leftnav, #header, #bread {
+    display: none;
+}
+
+#content_main {
+    width: 980px;
+}
