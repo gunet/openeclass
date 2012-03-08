@@ -111,6 +111,10 @@ if (!isset($urlSecure)) {
 	$urlSecure = $urlServer;
 }
 
+if (!isset($urlMobile)) {
+    $urlMobile = $urlServer;
+}
+
 // load the correct language (Author: Evelthon Prodromou)
 if (isset($_SESSION['langswitch'])) {
 	$language = $_SESSION['langswitch'];
@@ -284,9 +288,14 @@ if (isset($require_current_course) and $require_current_course) {
                                         cours.code=" . autoquote($dbname));
 
 		if (!$result or mysql_num_rows($result) == 0) {
-			restore_dbname_override(true);
-			header('Location: ' . $urlServer);
-			exit;
+                    if (defined('M_INIT')) {
+                        echo RESPONSE_FAILED;
+                        exit();
+                    } else {
+                        restore_dbname_override(true);
+                        header('Location: ' . $urlServer);
+                        exit();
+                    }
 		}
 
 		while ($theCourse = mysql_fetch_array($result)) {

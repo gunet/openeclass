@@ -23,12 +23,12 @@ if (isset($_REQUEST['token']))
 {
     $require_mlogin = true;
     $require_noerrors = true;
-    require_once ('../../include/minit.php');
+    require_once ('minit.php');
     
     if (isset($_REQUEST['logout']))
     {
         require_once ('../../include/CAS/CAS.php');
-        require_once ('../../modules/auth/auth.inc.php');
+        require_once ('../auth/auth.inc.php');
 
         if (isset($_SESSION['uid']))
             db_query("INSERT INTO loginout (loginout.id_user, loginout.ip, loginout.when, loginout.action)
@@ -68,9 +68,9 @@ if (isset($_REQUEST['token']))
 if (isset($_REQUEST['uname']) && isset($_REQUEST['pass']))
 {
     $require_noerrors = true;
-    require_once ('../../include/minit.php');
+    require_once ('minit.php');
     require_once ('../../include/CAS/CAS.php');
-    require_once ('../../modules/auth/auth.inc.php');
+    require_once ('../auth/auth.inc.php');
     
     $uname = autounquote(canonicalize_whitespace($_REQUEST['uname']));
     $pass = autounquote($_REQUEST['pass']);

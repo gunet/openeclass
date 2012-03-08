@@ -21,7 +21,7 @@
 
 $require_mlogin = true;
 $require_noerrors = true;
-require_once('../../include/minit.php');
+require_once('minit.php');
 
 
 $courses = array();

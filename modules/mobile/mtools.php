@@ -22,7 +22,7 @@
 $require_mlogin = true;
 $require_mcourse = true;
 $require_noerrors = true;
-require_once('../../include/minit.php');
+require_once('minit.php');
 require_once('../../include/tools.php');
 
 
@@ -31,13 +31,44 @@ $toolArr = getSideMenu(2);
 $groupsArr = array();
 $toolsArr = array();
 
+$group = new stdClass();
+$group->id = 0;
+$group->name = $langIdentity;
+$groupsArr[] = $group;
+
+$tool = new stdClass();
+$tool->id = 0;
+$tool->name = $langCourseProgram;
+$tool->link = $urlMobile .'courses/'. $currentCourse;
+$tool->img = 'coursedescription';
+$tool->type = 'coursedescription';
+$tool->active = true;
+$toolsArr[0][] = $tool;
+
+list($first_unit_id) = mysql_fetch_row(db_query("SELECT id FROM course_units
+                                                  WHERE course_id = $cours_id AND `order` >= 0
+                                               ORDER BY `order` ASC LIMIT 1"));
+
+$tool = new stdClass();
+$tool->id = 1;
+$tool->name = $langCourseUnits;
+$tool->link = $urlMobile .'modules/units/index.php?course='. $currentCourse .'&amp;id='. $first_unit_id;
+$tool->img = 'courseunits';
+$tool->type = 'courseunits';
+$tool->active = true;
+$toolsArr[0][] = $tool;
+
+$offset = 1;
+
 if (is_array($toolArr)) {
     $numOfToolGroups = count($toolArr);
     
     for ($i = 0; $i < $numOfToolGroups; $i++) {
+        $id = $i + $offset;
+        
         if ($toolArr[$i][0]['type'] == 'text') {
             $group = new stdClass();
-            $group->id = $i;
+            $group->id = $id;
             $group->name = $toolArr[$i][0]['text'];
             $groupsArr[] = $group;
             
@@ -50,7 +81,7 @@ if (is_array($toolArr)) {
                 $tool->img = $toolArr[$i][3][$j];
                 $tool->type = getTypeFromImage($toolArr[$i][3][$j]);
                 $tool->active = getActiveFromImage($toolArr[$i][3][$j]);
-                $toolsArr[$i][] = $tool;
+                $toolsArr[$id][] = $tool;
             }
         }
     }
@@ -92,18 +123,18 @@ function createDom($groupsArr, $toolsArr) {
 }
 
 function correctLink($value) {
-    global $urlServer;
+    global $urlMobile;
     
     $containsRelPath = (substr($value, 0, strlen("../..")) === "../..") ? true : false;
     
     $ret = $value;
     if ($containsRelPath)
-        $ret = $urlServer . substr($value, strlen("../../"), strlen($value));
+        $ret = $urlMobile . substr($value, strlen("../../"), strlen($value));
     
     $profile = (isset($_SESSION['profile'])) ? '&profile='.$_SESSION['profile'] : '' ;
     $redirect = '&redirect='. urlencode($ret);
     
-    $ret = $urlServer .'modules/auth/mlogin.php?token='. session_id() . $profile . $redirect;
+    $ret = $urlMobile .'modules/mobile/mlogin.php?token='. session_id() . $profile . $redirect;
         
     return $ret;
 }

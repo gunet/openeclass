@@ -21,7 +21,7 @@
 
 $require_mlogin = true;
 $require_noerrors = true;
-require_once('../../include/minit.php');
+require_once('minit.php');
 
 define('M_NOTERMINATE', 1);
 define('M_ROOT', 'portfolio');
@@ -58,37 +58,37 @@ function appendToolsDom($dom, $domRoot, $toolsArr) {
 }
 
 function populateTools() {
-    global $urlServer, $langMyAnnouncements, $langMyPersoDeadlines, $langModifyProfile, $langRegCourses;
+    global $urlMobile, $langMyAnnouncements, $langMyPersoDeadlines, $langModifyProfile, $langRegCourses;
     
     $profile = (isset($_SESSION['profile'])) ? '&profile='.$_SESSION['profile'] : '' ;
-    $baseurl = $urlServer .'modules/auth/mlogin.php?token='. session_id() . $profile .'&redirect=';
+    $baseurl = $urlMobile .'modules/mobile/mlogin.php?token='. session_id() . $profile .'&redirect=';
     
     $toolsArr = array();
     
     $tool = new stdClass();
     $tool->name = $langMyAnnouncements;
-    $tool->link = $baseurl . urlencode($urlServer .'modules/announcements/myannouncements.php');
+    $tool->link = $baseurl . urlencode($urlMobile .'modules/announcements/myannouncements.php');
     $tool->type = 'myannouncements';
     $tool->active = "true";
     $toolsArr[] = $tool;
     
     $tool = new stdClass();
     $tool->name = $langMyPersoDeadlines;
-    $tool->link = $baseurl . urlencode($urlServer .'modules/work/mydeadlines.php');
+    $tool->link = $baseurl . urlencode($urlMobile .'modules/work/mydeadlines.php');
     $tool->type = 'mydeadlines';
     $tool->active = "true";
     $toolsArr[] = $tool;
     
     $tool = new stdClass();
     $tool->name = $langModifyProfile;
-    $tool->link = $baseurl . urlencode($urlServer .'modules/profile/profile.php');
+    $tool->link = $baseurl . urlencode($urlMobile .'modules/profile/profile.php');
     $tool->type = 'myprofile';
     $tool->active = "true";
     $toolsArr[] = $tool;
     
     $tool = new stdClass();
     $tool->name = $langRegCourses;
-    $tool->link = $baseurl . urlencode($urlServer .'modules/auth/courses.php');
+    $tool->link = $baseurl . urlencode($urlMobile .'modules/auth/courses.php');
     $tool->type = 'coursesubscribe';
     $tool->active = "true";
     $toolsArr[] = $tool;
