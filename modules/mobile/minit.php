@@ -43,6 +43,7 @@ if (isset($require_mlogin) && $require_mlogin) {
 
     if (!isset($_SESSION['uid'])) {
         echo RESPONSE_EXPIRED;
+        session_regenerate_id();
         exit();
     }
 }
