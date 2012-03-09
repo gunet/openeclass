@@ -60,7 +60,7 @@ if (isset($_REQUEST['token']))
         exit();
     }
     
-    echo $ret = (isset($_SESSION['uid'])) ? RESPONSE_OK : RESPONSE_EXPIRED;
+    echo RESPONSE_OK;
     exit();
 }
 
