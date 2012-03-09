@@ -38,7 +38,7 @@ include 'group_functions.php';
 /**** The following is added for statistics purposes ***/
 include('../../include/action.php');
 $action = new action();
-$action->record('MODULE_ID_GROUPS');
+$action->record(MODULE_ID_GROUPS);
 /**************************************/
 
 $nameTools = $langGroups;
@@ -50,17 +50,17 @@ $head_content = <<< END
 function confirmation (name)
 {
 	if (name == "delall") {
-		if(confirm("'.$langDeleteGroupAllWarn.' ?"))
+		if(confirm("$langDeleteGroupAllWarn"))
 		{return true;}
 		else
 		{return false;}
 	} else if (name == "emptyall") {
-		if (confirm("'.$langDeleteGroupAllWarn.' ?"))
+		if (confirm("$langDeleteGroupAllWarn"))
 		{return true;}
 		else
 		{return false;}
 	} else {
-		if (confirm("'.$langDeleteGroupWarn.' ("+ name + ") ?"))
+		if (confirm("$langDeleteGroupWarn ("+ name + ") "))
         {return true;}
     	else
         {return false;}
@@ -415,12 +415,9 @@ if ($is_editor) {
                 <table width='100%' align='left' class='tbl_alt'>
                 <tr>
                   <th colspan='2'><div align='left'>$langGroupName</div></th>
-                  <th width='250'>$langGroupTutor</th>";
-		// If self-registration allowed by admin
-		if ($self_reg) {
-			$tool_content .= "
-                  <th width='50'>$langRegistration</th>";
-		}
+                  <th width='250'>$langGroupTutor</th>";		
+                $tool_content .= "<th width='50'>$langRegistration</th>";
+		
 		$tool_content .= "
                   <th width='50'>$langRegistered</th>
                   <th width='50'>$langMax</th>
@@ -429,15 +426,12 @@ if ($is_editor) {
                 while ($row = mysql_fetch_row($q)) {
                         initialize_group_info($row[0]);
                         if ($k % 2 == 0) {
-                                $tool_content .= "
-                <tr class='even'>";
+                                $tool_content .= "<tr class='even'>";
                         } else {
-                                $tool_content .= "
-                <tr class='odd'>";
+                                $tool_content .= "<tr class='odd'>";
                         }
-                        $tool_content .= "
-                  <td width='2'><img src='$themeimg/arrow.png' alt='' /></td>
-                  <td class='left'>";
+                        $tool_content .= "<td width='2'><img src='$themeimg/arrow.png' alt='' /></td>
+                          <td class='left'>";
                         // Allow student to enter group only if member
                         if ($is_member) {
                                 $tool_content .= "<a href='group_space.php?course=$code_cours&amp;group_id=$row[0]'>" . q($group_name) .
@@ -455,12 +449,10 @@ if ($is_editor) {
 				$tool_content .= "<br /><a href='group_description.php?course=$code_cours&amp;group_id=$row[0]'><i>$langAddDescription</i></a>";
 			}
                         $tool_content .= "</td>";
-                        $tool_content .= "
-                  <td class='center'>" . display_user($tutors) . "</td>";
+                        $tool_content .= "<td class='center'>" . display_user($tutors) . "</td>";
 			
                         // If self-registration and multi registration allowed by admin and group is not full
-                        $tool_content .= "
-                  <td class='center'>";
+                        $tool_content .= "<td class='center'>";
 			if ($uid and
 			    $self_reg and
 			    (!$user_groups or $multi_reg) and
