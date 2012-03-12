@@ -173,7 +173,6 @@ $tool_content .= "
      <td><input type='text' name='email' size='50' value='".q(mb_strtolower(trim($info['email'])))."' /></td>
    </tr>";
 
-if (!empty($info['email'])) {     
         $tool_content .= "<tr>
        <th>$langEmailVerified: </th>
        <td>";
@@ -186,7 +185,7 @@ if (!empty($info['email'])) {
         $tool_content .= "
                   </td>
              </tr>";
-}
+
 $tool_content .= "
      <tr>
    <tr>
