@@ -394,7 +394,7 @@ if($countUser > 0) {
                         <td>".htmlspecialchars($logs['prenom'])."</td>
                         <td>".htmlspecialchars($logs['username'])."</td>
                         <td width='200'>".htmlspecialchars($logs['email']);
-                        if ($mail_ver_required && !empty($logs['email'])) {
+                        if ($mail_ver_required) {
                                 switch($logs['verified_mail']) {
                                         case EMAIL_VERIFICATION_REQUIRED: 
                                                 $tool_content .= " <img align='right' src='$themeimg/pending.png' title='$langMailVerificationPendingU' />";
