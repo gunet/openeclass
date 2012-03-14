@@ -1578,7 +1578,7 @@ function rich_text_editor($name, $rows, $cols, $text, $extra = '')
 	$head_content .= "
 <script type='text/javascript'>
 tinyMCE_GZ.init({
-        plugins : 'pagebreak,style,save,advimage,advlink,inlinepopups,eclmedia,print,contextmenu,paste,noneditable,visualchars,nonbreaking,xhtmlxtras,template,wordcount,advlist,emotions,preview',
+        plugins : 'pagebreak,style,save,advimage,advlink,inlinepopups,eclmedia,print,contextmenu,paste,noneditable,visualchars,nonbreaking,xhtmlxtras,template,wordcount,advlist,emotions,preview,searchreplace,table,insertdatetime',
         themes : 'advanced',
         languages : '$lang_editor',
         disk_cache : true,
@@ -1591,16 +1591,16 @@ tinyMCE.init({
 		mode : 'specific_textareas',
                 editor_deselector : 'mceNoEditor',
 		theme : 'advanced',
-		plugins : 'pagebreak,style,save,advimage,advlink,inlinepopups,eclmedia,print,contextmenu,paste,noneditable,visualchars,nonbreaking,xhtmlxtras,template,wordcount,advlist,emotions,preview',
+		plugins : 'pagebreak,style,save,advimage,advlink,inlinepopups,eclmedia,print,contextmenu,paste,noneditable,visualchars,nonbreaking,xhtmlxtras,template,wordcount,advlist,emotions,preview,searchreplace,table,insertdatetime',
 		entity_encoding : 'raw',
                 relative_urls : false,
                 advlink_styles : '$langPopUp=colorbox;$langPopUpFrame=colorboxframe',
                 $filebrowser
 	
 		// Theme options
-		theme_advanced_buttons1 : 'bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,styleselect,formatselect,fontsizeselect,forecolor,backcolor,removeformat,hr',
-		theme_advanced_buttons2 : 'pasteword,|,bullist,numlist,|indent,blockquote,|,sub,sup,|,undo,redo,|,link,unlink,|,charmap,eclmedia,emotions,image,|,preview,cleanup,code',
-		theme_advanced_buttons3 : '',
+		theme_advanced_buttons1 : 'bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,styleselect,formatselect,fontselect,fontsizeselect,|,forecolor,backcolor',
+		theme_advanced_buttons2 : 'cut,copy,paste,pastetext,pasteword,|,search,replace,|,bullist,numlist,|,outdent,indent,blockquote,|,undo,redo,|,link,unlink,image,eclmedia,emotions,charmap,|,insertdate,inserttime',
+		theme_advanced_buttons3 : 'tablecontrols,|,hr,removeformat,visualaid,|,sub,sup,|,preview,cleanup,code,|,print',
 		theme_advanced_toolbar_location : 'top',
 		theme_advanced_toolbar_align : 'left',
 		theme_advanced_statusbar_location : 'bottom',
