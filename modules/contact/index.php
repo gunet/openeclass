@@ -110,21 +110,21 @@ return $ret;
 // send email
 function email_profs($cours_id, $content, $from_name, $from_address)
 {
-        global $themeimg;
+        global $themeimg, $langSendingMessage, $langHeaderMessage, $langContactIntro;
 
         $q = db_query("SELECT fake_code FROM cours WHERE cours_id = $cours_id");
         list($fake_code) = mysql_fetch_row($q);
 
-	$ret = "<p>$GLOBALS[langSendingMessage]</p>";
+	$ret = "<p>$langSendingMessage</p><br />";
 
 	$profs = db_query("SELECT user.email AS email, user.nom AS nom,
 		user.prenom AS prenom
 		FROM cours_user JOIN user ON user.user_id = cours_user.user_id
 		WHERE cours_id = $cours_id AND cours_user.statut=1");
 
-	$message = sprintf($GLOBALS['langContactIntro'],
+	$message = sprintf($langContactIntro,
 		$from_name, $from_address, $content);
-	$subject = "$GLOBALS[langHeaderMessage] ($fake_code - $GLOBALS[intitule])";
+	$subject = "$langHeaderMessage ($fake_code - $GLOBALS[intitule])";
 
 	while ($prof = mysql_fetch_array($profs)) {
 		$to_name = $prof['prenom'].' '.$prof['nom'];

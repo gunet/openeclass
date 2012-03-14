@@ -56,7 +56,7 @@ $sql_log = "INSERT INTO logins SET user_id='$uid', ip='$_SERVER[REMOTE_ADDR]', d
 db_query($sql_log, $currentCourse);
 include '../../include/action.php';
 $action = new action();
-$action->record('MODULE_ID_UNITS');
+$action->record(MODULE_ID_UNITS);
 
 if (isset($_GET['from_search'])) { // if we come from home page search
         header("Location: {$urlServer}modules/search/search_incourse.php?all=true&search_terms=$_GET[from_search]");
@@ -183,11 +183,11 @@ while ($cu = mysql_fetch_array($sql)) {
         }
         $cunits_content .= " width='770'>";
         if ($is_editor) {
-        $cunits_content .= "\n      <tr>".
+                $cunits_content .= "\n      <tr>".
                            "\n        <th width='25' class='right'>$count_index.</th>" .
                            "\n        <th width='635'><a class=\"$class_vis\" href='${urlServer}modules/units/?course=$code_cours&amp;id=$cu[id]'>" . q($cu['title']) . "</a></th>";
         } else {
-        $cunits_content .= "\n      <tr>".
+                $cunits_content .= "\n      <tr>".
                            "\n        <th width='25' class='right'>$count_index.</th>".
                            "\n        <th width='729'><a class=\"$class_vis\" href='${urlServer}modules/units/?course=$code_cours&amp;id=$cu[id]'>" . q($cu['title']) . "</a></th>";
         }
@@ -253,41 +253,40 @@ $bar_content .= "\n<ul class='custom_list'><li><b>".$langCode."</b>: ".q($fake_c
 $require_help = TRUE;
 $helpTopic = 'course_home';
 
-if ($is_editor) {       
-	$sql = "SELECT COUNT(user_id) AS numUsers
-			FROM cours_user
-			WHERE cours_id = $cours_id";
-	$res = db_query($sql, $mysqlMainDb);
-	while($result = mysql_fetch_row($res)) {
-		$numUsers = $result[0];
-        }        
-	//set the lang var for lessons visibility status      
-	switch ($visible) {                
-		case COURSE_CLOSED: { 
-			$lessonStatus = "<span title='$langPrivate'>$langPrivateShort</span>";
-			break;
-		}
-		case COURSE_REGISTRATION: {
-			$lessonStatus = "<span title='$langPrivOpen'>$langPrivOpenShort</span>";
-			break;
-		}
-		case COURSE_OPEN: { 
-			$lessonStatus = "<span title='$langPublic'>$langPublicShort</span>";
-			break;
-		}                
-                case COURSE_INACTIVE: {                                                          
-			$lessonStatus = "<span class='invisible' title='$langCourseInactive'>$langCourseInactiveShort</span>";
-			break;
-		}
-	}
-	$bar_content .= "<li><b>$langConfidentiality</b>: $lessonStatus</li>";
-        if ($is_course_admin) {
-            $link = "<a href='$urlAppend/modules/user/user.php?course=$code_cours'>$numUsers $langRegistered</a>";
-        } else {
-            $link = "$numUsers $langRegistered";
+$sql = "SELECT COUNT(user_id) AS numUsers
+                FROM cours_user
+                WHERE cours_id = $cours_id";
+$res = db_query($sql, $mysqlMainDb);
+while($result = mysql_fetch_row($res)) {
+        $numUsers = $result[0];
+}        
+//set the lang var for lessons visibility status      
+switch ($visible) {                
+        case COURSE_CLOSED: { 
+                $lessonStatus = "<span title='$langPrivate'>$langPrivateShort</span>";
+                break;
         }
-	$bar_content .= "<li><b>$langUsers</b>: $link</li></ul>";
+        case COURSE_REGISTRATION: {
+                $lessonStatus = "<span title='$langPrivOpen'>$langPrivOpenShort</span>";
+                break;
+        }
+        case COURSE_OPEN: { 
+                $lessonStatus = "<span title='$langPublic'>$langPublicShort</span>";
+                break;
+        }                
+        case COURSE_INACTIVE: {                                                          
+                $lessonStatus = "<span class='invisible' title='$langCourseInactive'>$langCourseInactiveShort</span>";
+                break;
+        }
 }
+$bar_content .= "<li><b>$langConfidentiality</b>: $lessonStatus</li>";
+if ($is_course_admin) {
+    $link = "<a href='$urlAppend/modules/user/user.php?course=$code_cours'>$numUsers $langRegistered</a>";
+} else {
+    $link = "$numUsers $langRegistered";
+}
+$bar_content .= "<li><b>$langUsers</b>: $link</li></ul>";
+
 
 if ($is_editor or (isset($_SESSION['saved_editor']) and $_SESSION['saved_editor']) 
         or (isset($_SESSION['saved_statut']) and $_SESSION['saved_statut'] == 1)) {
