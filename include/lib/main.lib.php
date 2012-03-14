@@ -1574,9 +1574,17 @@ function rich_text_editor($name, $rows, $cols, $text, $extra = '')
         
 	$lang_editor = langname_to_code($language);
 	
-	load_js('tinymce/jscripts/tiny_mce/tiny_mce.js');
+	load_js('tinymce/jscripts/tiny_mce/tiny_mce_gzip.js');
 	$head_content .= "
 <script type='text/javascript'>
+tinyMCE_GZ.init({
+        plugins : 'pagebreak,style,save,advimage,advlink,inlinepopups,eclmedia,print,contextmenu,paste,noneditable,visualchars,nonbreaking,xhtmlxtras,template,wordcount,advlist,emotions,preview',
+        themes : 'advanced',
+        languages : '$lang_editor',
+        disk_cache : true,
+        debug : false
+});
+
 tinyMCE.init({
 	// General options
 		language : '$lang_editor',
