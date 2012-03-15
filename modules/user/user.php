@@ -162,13 +162,7 @@ if (isset($_GET['search'])) {
                 $search_sql .= " AND user.username LIKE " . autoquote(mysql_escape_string($_REQUEST['search_uname']).'%');
                 $search_params .= "&amp;search_uname=" . urlencode($_REQUEST['search_uname']);
         }
-
-        $q = db_query("SELECT COUNT(*) FROM cours_user, user
-                              WHERE cours_user.cours_id = $cours_id AND
-                                    cours_user.user_id = user.user_id
-                                    $search_sql");
-        list($countUser) = mysql_fetch_row($q);
-
+        
         $tool_content .= "<form method='post' action='$_SERVER[PHP_SELF]?course=$code_cours&amp;search=1'>
         <fieldset>
         <legend>$langUserData</legend>
@@ -233,7 +227,7 @@ switch ($ord) {
                 break;
         case 'rd': $order_sql = 'ORDER BY cours_user.reg_date DESC';
                 break;
-        default: $order_sql = 'ORDER BY nom, prenom';
+        default: $order_sql = 'ORDER BY statut, editor DESC, tutor DESC, nom, prenom';
                 break;
 }
 $result = db_query("SELECT user.user_id, user.nom, user.prenom, user.email,

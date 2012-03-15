@@ -14,7 +14,7 @@ Alexandros Diamantidis <adia@noc.uoa.gr>
 For a full list of contributors, see "credits.txt".
 
 This program is a free software under the terms of the GNU
-(General Public License) as published by the Free Software
+(General Public License) as publishemad by the Free Software
 Foundation. See the GNU License for more details.
 The full license can be read in "license.txt".
 
@@ -1811,11 +1811,17 @@ function handle_unit_info_edit()
         }
 }
 
+function math_unescape($matches)
+{
+        return html_entity_decode($matches[0]);
+}
+
 // Standard function to prepare some HTML text, possibly with math escapes, for display
 function standard_text_escape($text, $mathimg = '../../courses/mathimg/')
 {
         global $purifier;
 
+        $text = preg_replace_callback('/\[m\].*?\[\/m\]/s', 'math_unescape', $text);
         $html = $purifier->purify(mathfilter($text, 12, $mathimg));
 
         if (!isset($_SESSION['glossary_terms_regexp'])) {
