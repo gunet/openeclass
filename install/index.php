@@ -583,20 +583,20 @@ $mysqlPassword = '.autoquote($dbPassForm).';
 $mysqlMainDb = "'.$mysqlMainDb.'";
 $phpMyAdminURL = "'.$dbMyAdmin.'";
 $phpSysInfoURL = "'.$phpSysInfoURL.'";
-$emailAdministrator = "'.$emailForm.'";
-$administratorName = "'.$nameForm.'";
-$administratorSurname = "'.$surnameForm.'";
-$siteName = "'.$campusForm.'";
+$emailAdministrator = '.autoquote($emailForm).';
+$administratorName = '.autoquote($nameForm).';
+$administratorSurname = '.autoquote($surnameForm).';
+$siteName = '.autoquote($campusForm).';
 
-$telephone = "'.$helpdeskForm.'";
-$fax = "'.$faxForm.'";
-$emailhelpdesk = "'.$helpdeskmail.'";
+$telephone = '.autoquote($helpdeskForm).';
+$fax = '.autoquote($faxForm).';
+$emailhelpdesk = '.autoquote($helpdeskmail).';
 
 $language = "greek";
 
-$Institution = "'.$institutionForm.'";
-$InstitutionUrl = "'.$institutionUrlForm.'";
-$postaddress = "'.addslashes($postaddressForm).'";
+$Institution = '.autoquote($institutionForm).';
+$InstitutionUrl = '.autoquote($institutionUrlForm).';
+$postaddress = '.autoquote($postaddressForm).';
 
 $persoIsActive = TRUE;
 $durationAccount = "126144000";

@@ -23,17 +23,17 @@ if (!defined('ECLASS_VERSION')) {
         exit;
 }
 
-db_query("DROP DATABASE IF EXISTS ".$mysqlMainDb);
+db_query("DROP DATABASE IF EXISTS `$mysqlMainDb`");
 if (mysql_version()) db_query("SET NAMES utf8");
 
 // set default storage engine
 mysql_query("SET storage_engine=MYISAM");
 
 if (mysql_version()) {
-        $cdb=db_query("CREATE DATABASE $mysqlMainDb CHARACTER SET utf8");
+        $cdb=db_query("CREATE DATABASE `$mysqlMainDb` CHARACTER SET utf8");
 
 } else {
-        $cdb=db_query("CREATE DATABASE $mysqlMainDb");
+        $cdb=db_query("CREATE DATABASE `$mysqlMainDb`");
 }
 mysql_select_db ($mysqlMainDb);
 
@@ -189,8 +189,6 @@ db_query("CREATE TABLE faculte (
 db_query("INSERT INTO faculte VALUES (1, 'TMA', 'Τμήμα 1', 10, 100)");
 db_query("INSERT INTO faculte VALUES (2, 'TMB', 'Τμήμα 2', 20, 100)");
 db_query("INSERT INTO faculte VALUES (3, 'TMC', 'Τμήμα 3', 30, 100)");
-db_query("INSERT INTO faculte VALUES (4, 'TMD', 'Τμήμα 4', 40, 100)");
-db_query("INSERT INTO faculte VALUES (5, 'TME', 'Τμήμα 5', 50, 100)");
 
 #
 # Table `user`
@@ -635,14 +633,13 @@ db_query("CREATE TABLE IF NOT EXISTS `exercise_question` (
 $password_encrypted = md5($passForm);
 $exp_time = time() + 140000000;
 db_query("INSERT INTO `user` (`prenom`, `nom`, `username`, `password`, `email`, `statut`,`registered_at`,`expires_at`, `verified_mail`)
-	VALUES ('$nameForm', '$surnameForm', '$loginForm','$password_encrypted','$emailForm','1',".time().",".$exp_time.", 1)");
-$idOfAdmin = mysql_insert_id();
+                 VALUES (" . autoquote($nameForm) . ', ' . autoquote($surnameForm) . ', ' .
+                             autoquote($loginForm) . ", '$password_encrypted', " .
+                             autoquote($emailForm) . ", 1, " . time() . ", $exp_time, 1)");
+$admin_uid = mysql_insert_id();
 db_query("INSERT INTO loginout (loginout.id_user, loginout.ip, loginout.when, loginout.action)
-	 VALUES ($idOfAdmin, '$_SERVER[REMOTE_ADDR]', NOW(), 'LOGIN')");
-
-
-#add admin in list of admin
-db_query("INSERT INTO admin VALUES ('".$idOfAdmin."', 0)");
+                 VALUES ($admin_uid, '$_SERVER[REMOTE_ADDR]', NOW(), 'LOGIN')");
+db_query("INSERT INTO admin VALUES ($admin_uid, 0)");
 
 #
 # Table structure for table `user_request`
