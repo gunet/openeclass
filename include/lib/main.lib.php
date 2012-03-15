@@ -1777,11 +1777,17 @@ function handle_unit_info_edit()
         }
 }
 
+function math_unescape($matches)
+{
+        return html_entity_decode($matches[0]);
+}
+
 // Standard function to prepare some HTML text, possibly with math escapes, for display
 function standard_text_escape($text, $mathimg = '../../courses/mathimg/')
 {
         global $purifier;
 
+        $text = preg_replace_callback('/\[m\].*?\[\/m\]/s', 'math_unescape', $text);
         $html = $purifier->purify(mathfilter($text, 12, $mathimg));
 
         if (!isset($_SESSION['glossary_terms_regexp'])) {
