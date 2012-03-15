@@ -14,7 +14,7 @@ Alexandros Diamantidis <adia@noc.uoa.gr>
 For a full list of contributors, see "credits.txt".
 
 This program is a free software under the terms of the GNU
-(General Public License) as publishemad by the Free Software
+(General Public License) as published by the Free Software
 Foundation. See the GNU License for more details.
 The full license can be read in "license.txt".
 
@@ -39,22 +39,25 @@ define('COURSE_OPEN', 2);
 define('COURSE_REGISTRATION', 1);
 define('COURSE_CLOSED', 0);
 define('COURSE_INACTIVE', 3);
+
 // resized user image 
 define('IMAGESIZE_LARGE', 256);
 define('IMAGESIZE_SMALL', 32);
+
 // profile info access
 define('ACCESS_PRIVATE', 0);
 define('ACCESS_PROFS', 1);
 define('ACCESS_USERS', 2);
+
 // user admin rights
 define('ADMIN_USER', 0); // admin user can do everything
 define('POWER_USER', 1); // poweruser can admin only users and courses
 define('USERMANAGE_USER', 2); // usermanage user can admin only users
+
 // user email status
 define('EMAIL_VERIFICATION_REQUIRED', 0);  // email verification required. User cannot login.
 define('EMAIL_VERIFIED', 1); // email is verified. User can login.
 define('EMAIL_UNVERIFIED', 2); // email is unverified. User can login but cannot receive mail.
-
 
 // definitions for course modules
 define('MODULE_ID_AGENDA', 1);
