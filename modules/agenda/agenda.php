@@ -43,7 +43,7 @@ require_once '../video/video_functions.php';
 load_modal_box();
 
 $action = new action();
-$action->record('MODULE_ID_AGENDA');
+$action->record(MODULE_ID_AGENDA);
 
 $dateNow = date("j-n-Y / H:i",time());
 $datetoday = date("Y-n-j H:i",time());

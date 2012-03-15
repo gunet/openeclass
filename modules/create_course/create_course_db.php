@@ -29,11 +29,6 @@ $cdb = db_query("CREATE DATABASE `$code` $charset_spec");
 
  
 #################################### USAGE ################################
-db_query("CREATE TABLE action_types (
-            id int(11) NOT NULL auto_increment,
-            name varchar(200),
-            PRIMARY KEY (id))");
-db_query("INSERT INTO action_types VALUES (1, 'access'), (2, 'exit')");
 db_query("CREATE TABLE actions (
             id int(11) NOT NULL auto_increment,
             user_id int(11) NOT NULL,

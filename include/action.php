@@ -4,7 +4,7 @@ define('DEFAULT_MAX_DURATION', 900);
 
 class action {
 
-    function record($module_name, $action_name = "access") {
+    function record($module_id, $action_name = 'access') {
         global $uid, $currentCourseID;
 
         if (!isset($currentCourseID)) {
@@ -37,9 +37,8 @@ class action {
         } else {
                 $duration = DEFAULT_MAX_DURATION;
         }
-        
         $sql = "INSERT INTO actions SET
-                    module_id = $module_name,
+                    module_id = $module_id,
                     user_id = $uid,
                     action_type_id = $action_type_id,
                     date_time = NOW(),
@@ -120,15 +119,13 @@ class action {
 
 class action_type {
     function get_action_type_id($action_name) {
-        global $currentCourseID;
-        $sql = "SELECT id FROM action_types WHERE name = '$action_name'";
-        $result = db_query($sql, $currentCourseID);
-        if ($result and mysql_num_rows($result) > 0) {
-                list($id) = mysql_fetch_row($result);
-                mysql_free_result($result);
-                return $id;
-        } else {
-                return false;
+        switch ($action_name) {
+            case 'access':
+                    return 1;
+            case 'exit':
+                    return 2;
+            default:
+                    return false;
         }
     }
 }

@@ -1223,8 +1223,6 @@ function upgrade_course_2_2($code, $lang, $extramessage = '')
 	echo "<hr><p>$langUpgCourse <b>$code</b> (2.2) $extramessage<br>";
 	flush();
 
-        db_query("INSERT IGNORE INTO action_types SET id=2, name='exit'");
-	
 	// upgrade exercises
  	db_query("ALTER TABLE `exercise_user_record`
 		CHANGE `RecordStartDate` `RecordStartDate` DATETIME NOT NULL DEFAULT '0000-00-00'", $code);
@@ -1758,13 +1756,6 @@ function upgrade_course_old($code, $lang, $extramessage = '')
                            PRIMARY KEY (id))", $code);
         }
 
-        if (!mysql_table_exists($code, 'action_types')) {
-                db_query("CREATE TABLE action_types (
-                        id int(11) NOT NULL auto_increment,
-                           name varchar(200),
-                           PRIMARY KEY (id))", $code);
-                db_query("INSERT INTO action_types VALUES ('1', 'access')", $code);
-        }
         if (!mysql_table_exists($code, 'actions_summary')) {
                 db_query("CREATE TABLE actions_summary (
                         id int(11) NOT NULL auto_increment,

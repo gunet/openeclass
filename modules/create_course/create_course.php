@@ -492,6 +492,6 @@ function create_modules($cid, $sbsystems) {
         db_query("INSERT INTO modules (module_id, visible, course_id) VALUES (".MODULE_ID_CHAT.",$sbsystems[19], $cid)");
         db_query("INSERT INTO modules (module_id, visible, course_id) VALUES (".MODULE_ID_DESCRIPTION.",$sbsystems[20], $cid)");
         db_query("INSERT INTO modules (module_id, visible, course_id) VALUES (".MODULE_ID_QUESTIONNAIRE.",$sbsystems[21], $cid)");
-        db_query("INSERT INTO modules (module_id, visible, course_id) VALUES (".MODULE_ID_LINKS.",$sbsystems[23], $cid)");
+        db_query("INSERT INTO modules (module_id, visible, course_id) VALUES (".MODULE_ID_LP.",$sbsystems[23], $cid)");
         db_query("INSERT INTO modules (module_id, visible, course_id) VALUES (".MODULE_ID_WIKI.",$sbsystems[26], $cid)");        
 }
