@@ -1773,7 +1773,7 @@ You can also:<ul><li>navigate the platform and your personal selections,</li><li
 $langYourRegTo = "Your are registered to";
 $langIsReg = "Your modifications have been registered";
 $langCanEnter = "Enter the classroom";
-$langChoice = "Choise";
+$langChoice = "Choice";
 $langLessonName = "Course Name";
 $langPassTwo = "You have typed two different passwords";
 $langAgain = "Try again!";
