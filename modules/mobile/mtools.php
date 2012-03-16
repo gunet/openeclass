@@ -131,10 +131,10 @@ function correctLink($value) {
     if ($containsRelPath)
         $ret = $urlMobile . substr($value, strlen("../../"), strlen($value));
     
-    $profile = (isset($_SESSION['profile'])) ? '&profile='.$_SESSION['profile'] : '' ;
-    $redirect = '&redirect='. urlencode($ret);
+    $profile = (isset($_SESSION['profile'])) ? '?profile='.$_SESSION['profile'].'&' : '?' ;
+    $redirect = 'redirect='. urlencode($ret);
     
-    $ret = $urlMobile .'modules/mobile/mlogin.php?token='. session_id() . $profile . $redirect;
+    $ret = $urlMobile .'modules/mobile/mlogin.php'. $profile . $redirect;
         
     return $ret;
 }

@@ -58,10 +58,10 @@ function appendToolsDom($dom, $domRoot, $toolsArr) {
 }
 
 function populateTools() {
-    global $urlMobile, $langMyAnnouncements, $langMyPersoDeadlines, $langModifyProfile, $langRegCourses;
+    global $urlMobile, $langMyAnnouncements, $langMyPersoDeadlines, $langModifyProfile, $langRegCourses, $langMyAgenda;
     
-    $profile = (isset($_SESSION['profile'])) ? '&profile='.$_SESSION['profile'] : '' ;
-    $baseurl = $urlMobile .'modules/mobile/mlogin.php?token='. session_id() . $profile .'&redirect=';
+    $profile = (isset($_SESSION['profile'])) ? '?profile='.$_SESSION['profile'].'&' : '?' ;
+    $baseurl = $urlMobile .'modules/mobile/mlogin.php'. $profile .'redirect=';
     
     $toolsArr = array();
     
@@ -76,6 +76,13 @@ function populateTools() {
     $tool->name = $langMyPersoDeadlines;
     $tool->link = $baseurl . urlencode($urlMobile .'modules/work/mydeadlines.php');
     $tool->type = 'mydeadlines';
+    $tool->active = "true";
+    $toolsArr[] = $tool;
+    
+    $tool = new stdClass();
+    $tool->name = $langMyAgenda;
+    $tool->link = $baseurl . urlencode($urlMobile .'modules/agenda/myagenda.php');
+    $tool->type = 'myagenda';
     $tool->active = "true";
     $toolsArr[] = $tool;
     
