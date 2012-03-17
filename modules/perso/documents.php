@@ -62,7 +62,7 @@ function getUserDocuments($param)
  */
 function docsHtmlInterface($date)
 {
-	global $urlServer, $langNoDocsExist, $uid, $currentCourseID, $cours_id;
+	global $urlServer, $langNoDocsExist, $uid, $cours_id;
 	global $mysqlMainDb, $maxValue, $group_sql;
 
 	$q = db_query("SELECT path, course_id, code, filename, title, date_modified, intitule
@@ -94,9 +94,8 @@ function docsHtmlInterface($date)
 					$first_check = 1;
 				}                               
                                 $group_sql = "course_id = ".$course_file['course_id']." AND subsystem = ".MAIN;                                                              
-                                $currentCourseID = $course_file['code'];
-				$url = file_url($course_file['path']);                                
-				$play_url = file_playurl($course_file['path']);
+				$url = file_url($course_file['path'], null, $course_file['code']);
+				$play_url = file_playurl($course_file['path'], null, $course_file['code']);
 				$href = choose_media_ahref($url, $url, $play_url, q($course_file['filename']), q($course_file['filename']));
 				$content .= "<tr><td class='smaller'><ul class='custom_list'><li>" .
 				$href .' - (' .

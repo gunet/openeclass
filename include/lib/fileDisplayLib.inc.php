@@ -235,40 +235,42 @@ function public_file_path($disk_path, $filename = null)
 }
 
 
-function file_url($path, $filename = null)
+function file_url($path, $filename = null, $courseCode = null)
 {
 	global $currentCourseID, $urlServer, $group_id, $ebook_id;
-
+        $courseCode = ($courseCode == null) ? $currentCourseID : $courseCode;
+        
 	if (defined('EBOOK_DOCUMENTS')) {
 		return htmlspecialchars($urlServer .
-						"modules/ebook/show.php/$currentCourseID/$ebook_id/_" .
+						"modules/ebook/show.php/$courseCode/$ebook_id/_" .
 						public_file_path($path, $filename),
 					ENT_QUOTES);
 	} else {
 		$gid = defined('GROUP_DOCUMENTS')? ",$group_id": '';
 		
 		return htmlspecialchars($urlServer .
-						"modules/document/file.php/$currentCourseID$gid" .
+						"modules/document/file.php/$courseCode$gid" .
 	                                        public_file_path($path, $filename),
 	                                ENT_QUOTES);
 	}
 }
 
 
-function file_playurl($path, $filename = null)
+function file_playurl($path, $filename = null, $courseCode = null)
 {
     global $currentCourseID, $urlServer, $group_id, $ebook_id;
+    $courseCode = ($courseCode == null) ? $currentCourseID : $courseCode;
 
     if (defined('EBOOK_DOCUMENTS')) {
         return htmlspecialchars($urlServer .
-                                        "modules/ebook/play.php/$currentCourseID/$ebook_id/_" .
+                                        "modules/ebook/play.php/$courseCode/$ebook_id/_" .
                                         public_file_path($path, $filename),
                                 ENT_QUOTES);
     } else {
         $gid = defined('GROUP_DOCUMENTS') ? ",$group_id" : '';
 
         return htmlspecialchars($urlServer .
-                                        "modules/document/play.php/$currentCourseID$gid" .
+                                        "modules/document/play.php/$courseCode$gid" .
                                         public_file_path($path, $filename),
                                 ENT_QUOTES);
     }
