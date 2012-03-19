@@ -199,7 +199,8 @@ if ($all_set) {
 } else {
         // display the form
         $phone_star = $prof? '&nbsp;&nbsp;(*)': '';
-        $tool_content .= "<p>$langInfoStudReq</p><br />
+	$tool_content .= "<p>" .
+                ($prof? $langInfoProfReq: $langInfoStudReq) . "</p><br />
         <form action='$_SERVER[PHP_SELF]' method='post'>
          <input type='hidden' name='p' value='$prof'>
          <fieldset>
