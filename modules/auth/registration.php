@@ -32,12 +32,6 @@ include '../../include/baseTheme.php';
 include 'auth.inc.php';
 
 $nameTools = $langNewUser;
-$tool_content .= "
-<table class='tbl_1' width='100%'>
-<tr>
-<th width='160'>$langOfStudent</th>
-<td>";
-
 $auth = get_auth_active_methods();
 
 // check for close user registration
@@ -49,51 +43,55 @@ if (get_config('close_user_registration')) {
     $user_reg_type = $langUserAccountInfo2;
 }
 
+$disable_eclass_prof_reg = get_config('disable_eclass_prof_reg');
 $disable_eclass_stud_reg = get_config('disable_eclass_stud_reg');
-if ($disable_eclass_stud_reg) {
-	$tool_content .= "$user_reg_type";
-}
-else {
-	$tool_content .= "<img src='$themeimg/arrow.png' title='bullet' alt='bullet'><a href='$newuser'>$user_reg_type</a>";
+
+if ($disable_eclass_stud_reg and $disable_eclass_prof_reg) {
+        $tool_content .= "<div class='info'>$langCannotRegister</div>";               
+        draw($tool_content, 0);
+        exit;        
 }
 
-if (count($auth) > 1) {
-   $tool_content .= "<br />&nbsp;&nbsp;&nbsp;&nbsp;$langUserAccountInfo4:";
-}
+$tool_content .= "<table class='tbl_1' width='100%'>";
 
-if(!empty($auth)) {
+if (!$disable_eclass_stud_reg) { // if we allow user registration
+        $tool_content .= "<tr><th width='160'>$langOfStudent</th><td>";
+	$tool_content .= "<img src='$themeimg/arrow.png' title='bullet' alt='bullet'>
+                                <a href='$newuser'>$user_reg_type</a>";
+        if (count($auth) > 1) {
+           $tool_content .= "<br />&nbsp;&nbsp;&nbsp;&nbsp;$langUserAccountInfo4:";
+        }        
         foreach($auth as $k => $v) {
                 if ($v != 1) {  // bypass the eclass auth method, as it has already been displayed
-                        $tool_content .= "<br />&nbsp;&nbsp;&nbsp;<img src='$themeimg/arrow.png' title='bullet' alt='bullet' />&nbsp;<a href='altnewuser.php?auth=".$v."'>".get_auth_info($v)."</a>";
+                        $tool_content .= "<br />&nbsp;&nbsp;&nbsp;
+                                        <img src='$themeimg/arrow.png' title='bullet' alt='bullet' />&nbsp;
+                                        <a href='altnewuser.php?auth=".$v."'>".get_auth_info($v)."</a>";
                 }
-        }
-}
-
-$tool_content .= "</td></tr><tr><th>$langOfTeacher</th><td>";
-
-$disable_eclass_prof_reg = get_config('disable_eclass_prof_reg');
-if ($disable_eclass_prof_reg) {
-	$tool_content .= "$langUserAccountInfo1";
-}
-else {
-	$tool_content .= "<img src='$themeimg/arrow.png' title='bullet'  alt='bullet' /><a href='formuser.php?p=1'>$langUserAccountInfo1</a>";
-}
-
-if (count($auth) > 1) {
-   $tool_content .= "<br />&nbsp;&nbsp;&nbsp;&nbsp;$langUserAccountInfo4:";
-}
-
-if(!empty($auth)) {
-        foreach($auth as $k=>$v) {
-                if ($v == 1) {  // bypass the eclass auth method, as it has already been displayed
-                        continue;
-                } else {
-                                $tool_content .= "<br />&nbsp;&nbsp;&nbsp;<img src='$themeimg/arrow.png' title='bullet' alt='bullet' />&nbsp;<a href='altnewuser.php?p=1&amp;auth=".$v."'>".get_auth_info($v)."</a>";
-                }
-        }
+        }        
+        $tool_content .= "</td></tr>";
 } else {
-        $tool_content .= "<p>$langCannotUseAuthMethods </p>";
+        $tool_content .= "<div class='info'>$langStudentCannotRegister</div>";
 }
 
-$tool_content .= "</td></tr></table>";
+
+if (!$disable_eclass_prof_reg) { // if we allow teacher registration
+        $tool_content .= "<tr><th>$langOfTeacher</th><td>";
+	$tool_content .= "<img src='$themeimg/arrow.png' title='bullet' alt='bullet' />
+                                <a href='formuser.php?p=1'>$langUserAccountInfo1</a>";
+        if (count($auth) > 1) {
+                $tool_content .= "<br />&nbsp;&nbsp;&nbsp;&nbsp;$langUserAccountInfo4:";
+        }
+        foreach($auth as $k=>$v) {
+                if ($v != 1) {  // bypass the eclass auth method, as it has already been displayed
+                        $tool_content .= "<br />&nbsp;&nbsp;&nbsp;
+                                <img src='$themeimg/arrow.png' title='bullet' alt='bullet' />&nbsp;
+                                <a href='altnewuser.php?p=1&amp;auth=".$v."'>".get_auth_info($v)."</a>";
+                }
+        }        
+        $tool_content .= "</td></tr>";
+} else {
+        $tool_content .= "<div class='info'>$langTeacherCannotRegister</div>";
+}
+
+$tool_content .= "</table>";
 draw($tool_content, 0);
