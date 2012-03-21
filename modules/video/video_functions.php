@@ -75,6 +75,8 @@ function load_modal_box($gallery = false)
                                   '.$colorbox_gallery.'
                          });
                          $(".colorbox").colorbox({
+                                  minWidth    : 300,
+                                  minHeight   : 200,
                                   scrolling   : "false",
                                   opacity     : 0.8,
                                   current     : "'.$langColorboxCurrent.'",
