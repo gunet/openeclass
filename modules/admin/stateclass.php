@@ -170,6 +170,11 @@ if (isset($_GET['stats'])) {
                                     <td class='right'><b>" .
                                         list_1Result("SELECT count(*) FROM user;") .
                                         "</b></td></tr>
+                                <tr><th class='left' colspan='2'>$langUserNotLogin</th></tr>
+				<tr><td><img src='$themeimg/arrow.png' alt=''><a href='listusers.php?search=no_login'>$langFrom ".list_1Result("SELECT loginout.when FROM loginout ORDER BY loginout.when LIMIT 1")."</a></td>
+                                    <td class='right'><b>" .
+					list_1Result("SELECT count(*) FROM `user` LEFT JOIN `loginout` ON `user`.`user_id` = `loginout`.`id_user` WHERE `loginout`.`id_user` IS NULL;") .
+                                        "</b></td></tr>
                             </table>";
 		break;
 		case 'cours':
@@ -286,7 +291,7 @@ if (isset($_GET['stats'])) {
 		break;
 		case 'vmusers':
 			$tool_content .= "<table width='100%' class='tbl_1' style='margin-top: 20px;'>
-                                <tr><td class='left' colspan='2'>$langUsers</td></tr>
+                                <tr><th class='left' colspan='2'>$langUsers</th></tr>
                                 <tr><td><img src='$themeimg/arrow.png' alt=''><a href='listusers.php?search=yes&verified_mail=1'>$langMailVerificationYes</a></td>
                                     <td class='right' width='200'><b>" .
                                         list_1Result("SELECT count(*) FROM user WHERE verified_mail = 1;") .

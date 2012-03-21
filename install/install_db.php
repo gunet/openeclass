@@ -233,7 +233,7 @@ db_query("CREATE TABLE loginout (
       ip char(39) NOT NULL default '0.0.0.0',
       loginout.when datetime NOT NULL default '0000-00-00 00:00:00',
       loginout.action enum('LOGIN','LOGOUT') NOT NULL default 'LOGIN',
-      PRIMARY KEY (idLog)) $charset_spec");
+      PRIMARY KEY (idLog), KEY `id_user` (`id_user`)) $charset_spec");
 
 // haniotak:
 // table for loginout rollups

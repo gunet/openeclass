@@ -525,6 +525,9 @@ if (!isset($_POST['submit2'])) {
         }
 
         if ($oldversion < '3.0') {
+		// add index on `loginout`.`id_user` for performace
+		db_query("ALTER TABLE `loginout` ADD INDEX (`id_user`)");
+
                 // Rename table `annonces` to `announcements`
 	        if (!mysql_table_exists($mysqlMainDb, 'announcements')) {
                         db_query("RENAME TABLE annonces TO announcements");
