@@ -32,11 +32,11 @@ if (isset($require_noerrors) && $require_noerrors) {
 
 if (isset($require_mlogin) && $require_mlogin) {
     
-    if (!isset($_REQUEST['token'])) {
+    if (!isset($_POST['token'])) {
         echo RESPONSE_FAILED;
         exit();
     } else {
-        session_id($_REQUEST['token']);
+        session_id($_POST['token']);
         session_start();
         $_SESSION['mobile'] = true;
     }

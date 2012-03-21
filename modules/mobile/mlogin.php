@@ -19,7 +19,7 @@
  * ======================================================================== */
 
 
-if (isset($_REQUEST['token']))
+if (isset($_POST['token']))
 {
     $require_mlogin = true;
     $require_noerrors = true;
@@ -65,15 +65,15 @@ if (isset($_REQUEST['token']))
 }
 
 
-if (isset($_REQUEST['uname']) && isset($_REQUEST['pass']))
+if (isset($_POST['uname']) && isset($_POST['pass']))
 {
     $require_noerrors = true;
     require_once ('minit.php');
     require_once ('../../include/CAS/CAS.php');
     require_once ('../auth/auth.inc.php');
     
-    $uname = autounquote(canonicalize_whitespace($_REQUEST['uname']));
-    $pass = autounquote($_REQUEST['pass']);
+    $uname = autounquote(canonicalize_whitespace($_POST['uname']));
+    $pass = autounquote($_POST['pass']);
     
     foreach(array_keys($_SESSION) as $key)
         unset($_SESSION[$key]);
