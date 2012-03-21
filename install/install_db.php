@@ -23,17 +23,17 @@ if (!defined('ECLASS_VERSION')) {
         exit;
 }
 
-db_query("DROP DATABASE IF EXISTS ".$mysqlMainDb);
+db_query("DROP DATABASE IF EXISTS `$mysqlMainDb`");
 if (mysql_version()) db_query("SET NAMES utf8");
 
 // set default storage engine
 mysql_query("SET storage_engine=MYISAM");
 
 if (mysql_version()) {
-        $cdb=db_query("CREATE DATABASE $mysqlMainDb CHARACTER SET utf8");
+        $cdb=db_query("CREATE DATABASE `$mysqlMainDb` CHARACTER SET utf8");
 
 } else {
-        $cdb=db_query("CREATE DATABASE $mysqlMainDb");
+        $cdb=db_query("CREATE DATABASE `$mysqlMainDb`");
 }
 mysql_select_db ($mysqlMainDb);
 
@@ -224,7 +224,7 @@ db_query("CREATE TABLE loginout (
       ip char(39) NOT NULL default '0.0.0.0',
       loginout.when datetime NOT NULL default '0000-00-00 00:00:00',
       loginout.action enum('LOGIN','LOGOUT') NOT NULL default 'LOGIN',
-      PRIMARY KEY (idLog)) $charset_spec");
+      PRIMARY KEY (idLog), KEY `id_user` (`id_user`)) $charset_spec");
 
 // haniotak:
 // table for loginout rollups

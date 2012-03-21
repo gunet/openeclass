@@ -111,13 +111,13 @@ if (!@chdir("../config/")) {
      die ("$langConfigError4");
 }
 
-if (!isset($_POST['submit2'])) {      
-        if (ini_get('register_globals')) { // check if register globals is Off     
+if (!isset($_POST['submit2'])) {
+        if (ini_get('register_globals')) { // check if register globals is Off
                 $tool_content .= "<div class='caution'>$langWarningInstall1</div>";
         }
         if (ini_get('short_open_tag')) { // check if short_open_tag is Off
                 $tool_content .= "<div class='caution'>$langWarningInstall2</div>";
-        }                
+        }
         // get old contact values
         $tool_content .= "<form action='$_SERVER[PHP_SELF]' method='post'>" .
                 "<div class='info'>" .
@@ -131,7 +131,7 @@ if (!isset($_POST['submit2'])) {
                 "<tr><th>$langUpgTel</th>" .
                 "<td><input class=auth_input_admin type='text' name='telephone' value='".@$telephone."'></td></tr>" .
                 "<tr><th>Fax:</th>" .
-                "<td><input class=auth_input_admin type='text' name='fax' value='".@$fax."'></td></tr></table></fieldset>				                
+                "<td><input class=auth_input_admin type='text' name='fax' value='".@$fax."'></td></tr></table></fieldset>
                 <div class='right'><input name='submit2' value='$langCont &raquo;' type='submit'></div>
                 </form>";
 } else {
@@ -145,7 +145,7 @@ if (!isset($_POST['submit2'])) {
 </head>
 <body class='upgrade-main'>
   <div id="container" style="padding: 30px;">
-  <div id="header"> 
+  <div id="header">
 
 <a href="<?php echo $urlAppend ?>" title="<?php echo q($siteName) ?>" class="logo"></a></div>
 <?php
@@ -175,8 +175,8 @@ if (!isset($_POST['submit2'])) {
         }
         if (!strstr($conf, '$fax')) {
                 $lines_to_add .= "\$fax = '$_POST[fax]';\n";
-        }        
-        
+        }
+
         if (!strstr($conf, '$durationAccount')) {
                 $lines_to_add .= "\$durationAccount = \"126144000\";\n";
         }
@@ -185,14 +185,14 @@ if (!isset($_POST['submit2'])) {
         }
         if (!strstr($conf, '$encryptedPasswd')) {
                 $lines_to_add .= "\$encryptedPasswd = true;\n";
-        }        
+        }
         $new_copyright = file_get_contents('../info/license/header.txt');
 
         $new_conf = preg_replace(
                         array(
 				'#^.*(mainInterfaceWidth|bannerPath|userMailCanBeEmpty|colorLight|colorMedium|colorDark|table_border|color1|color2).*$#m',
                                 '#\$postaddress\b[^;]*;#sm',
-                                '#\$fax\b[^;]*;#',                                
+                                '#\$fax\b[^;]*;#',
                                 '#(\?>)?\s*$#',
                                 '#\$Institution\b[^;]*;#',
                                 '#\$telephone\b[^;]*;#',
@@ -201,7 +201,7 @@ if (!isset($_POST['submit2'])) {
                         array(
 				'',
                                 "\$postaddress = '$_POST[postaddress]';",
-                                "\$fax = '$_POST[fax]';",                                
+                                "\$fax = '$_POST[fax]';",
                             	'',
                                 "\$Institution = '$_POST[Institution]';",
                                 "\$telephone = '$_POST[telephone]';",
@@ -297,9 +297,9 @@ if (!isset($_POST['submit2'])) {
 	}
 
         if ($oldversion < '2.2.1') {
-                db_query("ALTER TABLE `cours` CHANGE `doc_quota` `doc_quota` FLOAT NOT NULL DEFAULT '104857600'"); 
+                db_query("ALTER TABLE `cours` CHANGE `doc_quota` `doc_quota` FLOAT NOT NULL DEFAULT '104857600'");
                 db_query("ALTER TABLE `cours` CHANGE `video_quota` `video_quota` FLOAT NOT NULL DEFAULT '104857600'");
-                db_query("ALTER TABLE `cours` CHANGE `group_quota` `group_quota` FLOAT NOT NULL DEFAULT '104857600'"); 
+                db_query("ALTER TABLE `cours` CHANGE `group_quota` `group_quota` FLOAT NOT NULL DEFAULT '104857600'");
                 db_query("ALTER TABLE `cours` CHANGE `dropbox_quota` `dropbox_quota` FLOAT NOT NULL DEFAULT '104857600'");
                 db_query("CREATE TABLE IF NOT EXISTS `forum_notify` (
                         `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
@@ -309,7 +309,7 @@ if (!isset($_POST['submit2'])) {
                         `topic_id` INT NULL ,
                         `notify_sent` BOOL NOT NULL DEFAULT '0',
                         `course_id` INT NOT NULL DEFAULT '0')");
-                
+
         	if (!mysql_field_exists($mysqlMainDb, 'cours_user', 'cours_id')) {
 	        	db_query('ALTER TABLE cours_user ADD cours_id int(11) DEFAULT 0 NOT NULL FIRST');
                         db_query('UPDATE cours_user SET cours_id =
@@ -369,7 +369,7 @@ if (!isset($_POST['submit2'])) {
                 db_query("CREATE TABLE IF NOT EXISTS `document` (
                                 `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                                 `course_id` INT(11) NOT NULL,
-				`subsystem` TINYINT(4) NOT NULL,	
+				`subsystem` TINYINT(4) NOT NULL,
 				`subsystem_id` INT(11) DEFAULT NULL,
                                 `path` VARCHAR(255) NOT NULL,
                                 `filename` VARCHAR(255) NOT NULL,
@@ -485,23 +485,23 @@ if (!isset($_POST['submit2'])) {
                                         `lang` VARCHAR(10) NOT NULL DEFAULT 'el',
                                         `ordre` MEDIUMINT(11) NOT NULL DEFAULT 0,
                                         PRIMARY KEY (`id`))");
-                        
+
                         $aq = db_query("INSERT INTO admin_announcements (title, body, `date`, visible, lang)
                                         SELECT gr_title AS title, CONCAT_WS('  ', gr_body, gr_comment) AS body, `date`, visible, 'el'
-                                        FROM admin_announcements_old WHERE gr_title <> '' OR gr_body <> ''");     
+                                        FROM admin_announcements_old WHERE gr_title <> '' OR gr_body <> ''");
                         $adm = db_query("INSERT INTO admin_announcements (title, body, `date`, visible, lang)
                                          SELECT en_title AS title, CONCAT_WS('  ', en_body, en_comment) AS body, `date`, visible, 'en'
-                                         FROM admin_announcements_old WHERE en_title <> '' OR en_body <> ''");     
+                                         FROM admin_announcements_old WHERE en_title <> '' OR en_body <> ''");
                         db_query("DROP TABLE admin_announcements_old");
                 }
                 mysql_field_exists($mysqlMainDb, 'admin_announcements', 'ordre') or
                         db_query("ALTER TABLE `admin_announcements` ADD `ordre` MEDIUMINT(11) NOT NULL DEFAULT 0 AFTER `lang`");
 		// not needed anymore
 		if (mysql_table_exists($mysqlMainDb, 'cours_faculte')) {
-			db_query("DROP TABLE cours_faculte");	
-		}		
+			db_query("DROP TABLE cours_faculte");
+		}
         }
-		
+
         if ($oldversion < '2.5') {
                 db_query("INSERT IGNORE INTO `config` (`key`, `value`) VALUES
                         ('disable_eclass_stud_reg', '0'),
@@ -515,10 +515,10 @@ if (!isset($_POST['submit2'])) {
                 // old users have their email verified
                 if (mysql_field_exists($mysqlMainDb, 'user', 'verified_mail')) {
                         db_query('ALTER TABLE `user` MODIFY `verified_mail` TINYINT(1) NOT NULL DEFAULT '.EMAIL_UNVERIFIED);
-                        db_query('UPDATE `user` SET `verified_mail`= ' . EMAIL_VERIFIED);				
+                        db_query('UPDATE `user` SET `verified_mail`= ' . EMAIL_VERIFIED);
                 }
                 mysql_field_exists($mysqlMainDb, 'user_request', 'verified_mail') or
-                        db_query("ALTER TABLE `user_request` ADD `verified_mail` TINYINT(1) NOT NULL DEFAULT ".EMAIL_UNVERIFIED." AFTER `email`");		
+                        db_query("ALTER TABLE `user_request` ADD `verified_mail` TINYINT(1) NOT NULL DEFAULT ".EMAIL_UNVERIFIED." AFTER `email`");
 
                 db_query("UPDATE `user` SET `email`=LOWER(TRIM(`email`))");
                 db_query("UPDATE `user` SET `username`=TRIM(`username`)");
@@ -531,9 +531,9 @@ if (!isset($_POST['submit2'])) {
         mysql_field_exists($mysqlMainDb, 'ebook', 'visible') or
                 db_query("ALTER TABLE `ebook` ADD `visible` BOOL NOT NULL DEFAULT 1");
         mysql_field_exists($mysqlMainDb, 'admin', 'privilege') or
-            db_query("ALTER TABLE `admin` ADD `privilege` INT NOT NULL DEFAULT '0'");
+                db_query("ALTER TABLE `admin` ADD `privilege` INT NOT NULL DEFAULT '0'");
         mysql_field_exists($mysqlMainDb, 'cours_user', 'editor') or
-            db_query("ALTER TABLE `cours_user` ADD `editor` INT NOT NULL DEFAULT '0' AFTER `tutor`"); 
+                db_query("ALTER TABLE `cours_user` ADD `editor` INT NOT NULL DEFAULT '0' AFTER `tutor`");
         if (!mysql_field_exists($mysqlMainDb, 'glossary', 'category_id')) {
                 db_query("ALTER TABLE glossary ADD category_id INT(11) DEFAULT NULL,
                                                ADD notes TEXT NOT NULL");
@@ -544,13 +544,13 @@ if (!isset($_POST['submit2'])) {
                                 `description` TEXT NOT NULL,
                                 `order` INT(11) NOT NULL DEFAULT 0)");
         }
-	
+
 	mysql_index_exists('document', 'doc_path_index') or
-                db_query('CREATE INDEX `doc_path_index` ON document (course_id,subsystem,path)');			
+                db_query('CREATE INDEX `doc_path_index` ON document (course_id,subsystem,path)');
 	mysql_index_exists('course_units', 'course_units_index') or
                 db_query('CREATE INDEX `course_units_index` ON course_units (course_id,`order`)');
 	mysql_index_exists('unit_resources', 'unit_res_index') or
-		db_query('CREATE INDEX `unit_res_index` ON unit_resources (unit_id,visibility,res_id)');			
+		db_query('CREATE INDEX `unit_res_index` ON unit_resources (unit_id,visibility,res_id)');
 
         // **********************************************
         // upgrade courses databases
@@ -579,14 +579,14 @@ if (!isset($_POST['submit2'])) {
                         upgrade_course_index_php($code[0]);
 			upgrade_course_2_4($code[0], $lang, "($i / $total)");
                 }
-                if ($oldversion < '2.5') {                        
+                if ($oldversion < '2.5') {
 			upgrade_course_2_5($code[0], $lang, "($i / $total)");
                 }
                 echo "</p>\n";
                 $i++;
         }
 	echo "<hr>";
-	
+
         if ($oldversion < '2.1.3') {
 	        echo "<p>$langChangeDBCharset <b>$mysqlMainDb</b> $langToUTF</p><br>";
                 convert_db_utf8($mysqlMainDb);

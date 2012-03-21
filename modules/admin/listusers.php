@@ -277,6 +277,11 @@ else
 
 if($search == 'inactive') { // search for inactive users	
 	$users_active_qry = " expires_at<".time()." AND user_id<>1";
+} elseif ($search == 'no_login') {      
+	$no_login_qry = "SELECT `user_id`, `nom`, `prenom`, `username`, `email`, `verified_mail`, `statut` 
+                                FROM `user` LEFT JOIN `loginout` 
+                                ON `user`.`user_id` = `loginout`.`id_user` 
+                                WHERE `loginout`.`id_user` IS NULL";
 }
 
 if(!empty($ord)) { // if we want to order results
@@ -298,7 +303,9 @@ if (!empty($c)) { // users per course
 } elseif (!empty($users_active_qry)) { // inactive users
          $qry = "SELECT user_id, nom, prenom, username, email, verified_mail, statut 
                  FROM user WHERE $users_active_qry";         
-} else {         
+} elseif (!empty($no_login_qry)) { // users who have never logged in        
+         $qry = $no_login_qry;
+} else {
 	// Count users, with or without criteria/filters
 	$qry = "SELECT user_id, nom, prenom, username, email, statut FROM user";
 	if((!empty($user_surname_qry)) 
@@ -338,8 +345,11 @@ if($countUser > 0) {
                 $caption .= "&nbsp;$langAsInactive<br />";
                 $caption .= "<a href='updatetheinactive.php?activate=1'>".$langAddSixMonths."</a><br />";
                 $header_link = $pagination_link = '';
+        } elseif ($search == 'no_login') {      
+                $qry = $no_login_qry;
+                $header_link = $pagination_link = "&amp;search=no_login";
         } elseif (!empty($c)) { //users per course
-                $header_link = $pagination_link = "&amp;c=$c";                 
+                $header_link = $pagination_link = "&amp;c=$c";
                 $qry = "SELECT a.user_id,a.nom, a.prenom, a.username, a.email, a.verified_mail, b.statut
                 FROM user AS a LEFT JOIN cours_user AS b ON a.user_id = b.user_id
                 WHERE b.cours_id=$c";

@@ -205,6 +205,7 @@ $langDisableEclassStudRegYes = "Οι $langsStudents δεν μπορούν να �
 $langDisableEclassProfRegYes = "Οι $langsTeachers δεν μπορούν να εγγραφούν μέσω πλατφόρμας";
 $langDisableEclassStudRegNo = "Οι $langsStudents μπορούν να εγγραφούν μέσω πλατφόρμας";
 $langDisableEclassProfRegNo = "Οι $langsTeachers μπορούν να εγγραφούν μέσω πλατφόρμας";
+$langUserNotLogin = "Χρήστες που δεν έχουν εισέλθει";
 
 // listusers
 $langBegin="αρχή";
