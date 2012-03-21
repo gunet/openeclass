@@ -970,7 +970,6 @@ if ($doc_count == 0) {
                                 $file_url = $base_url . "openDir=$cmdDirName";
 				$link_title = $entry['filename'];
                                 $dload_msg = $langDownloadDir;
-                                $img_href = "<a href='$file_url'$style><img src='$image' /></a>";
                                 $link_href = "<a href='$file_url'>$link_title</a>";
                         } else {
                                 $image = $urlAppend . '/modules/document/img/' . choose_image('.' . $entry['format']);
@@ -982,13 +981,12 @@ if ($doc_count == 0) {
                                 $dload_msg = $langSave;
                                 if ($is_in_tinymce) {
                                     $furl = (is_supported_media($entry['filename'], true)) ? $play_url : $file_url;
-                                    $img_href = "<a href='$furl'$style$link_extra><img src='$image' /></a>";
                                     $link_href = "<a href='$furl'$link_extra>".$link_title.$link_title_extra."</a>";
                                 } else {
-                                    $img_href = choose_media_ahref($file_url, $file_url, $play_url, $link_title, $entry['filename'], "<img src='$image' />", $style.$link_extra);
                                     $link_href = choose_media_ahref($file_url, $file_url, $play_url, $link_title, $entry['filename'], $link_title.$link_title_extra, $link_extra);
                                 }
                         }
+                        $img_href = "<img src='$image' />";
                         $download_url = $base_url . "download=$cmdDirName";
                         $download_icon = "<a href='$download_url'><img src='$themeimg/save_s.png' width='16' height='16' align='middle' alt='$dload_msg' title='$dload_msg'></a>";
                         $tool_content .= "\n<tr $style>";
