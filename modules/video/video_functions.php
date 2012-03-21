@@ -79,6 +79,7 @@ function load_modal_box($gallery = false)
                                   minHeight   : 200,
                                   scrolling   : "false",
                                   opacity     : 0.8,
+                                  photo       : "true",
                                   current     : "'.$langColorboxCurrent.'",
                                   '.$colorbox_gallery.'
                          });
