@@ -980,10 +980,10 @@ if ($doc_count == 0) {
                                 $link_title_extra = ($entry['copyrighted']) ? " <img src='$urlAppend/modules/document/img/copyrighted.png' />" : '';
                                 $dload_msg = $langSave;
                                 if ($is_in_tinymce) {
-                                    $furl = (is_supported_media($entry['filename'], true)) ? $play_url : $file_url;
+                                    $furl = (is_supported_media($entry['path'], true)) ? $play_url : $file_url;
                                     $link_href = "<a href='$furl'$link_extra>".$link_title.$link_title_extra."</a>";
                                 } else {
-                                    $link_href = choose_media_ahref($file_url, $file_url, $play_url, $link_title, $entry['filename'], $link_title.$link_title_extra, $link_extra);
+                                    $link_href = choose_media_ahref($file_url, $file_url, $play_url, $link_title, $entry['path'], $link_title.$link_title_extra, $link_extra);
                                 }
                         }
                         $img_href = "<img src='$image' />";
