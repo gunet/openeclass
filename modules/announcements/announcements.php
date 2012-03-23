@@ -146,10 +146,11 @@ if ($is_editor) {
 
         // send email 
         if (isset($_POST['emailOption']) and $_POST['emailOption']) {
-            $emailContent = autounquote($_POST['antitle']) .
-                            "<br><br>" .
+            $emailContent = "$professorMessage: $_SESSION[prenom] $_SESSION[nom]<br>\n<br>\n".
+			     autounquote($_POST['antitle']) .
+                            "<br>\n<br>\n" .
                             autounquote($_POST['newContent']);
-            $emailSubject = "$professorMessage ($fake_code - $intitule)";
+            $emailSubject = "$intitule ($fake_code)";
             // select students email list
             $sqlUserOfCourse = "SELECT cours_user.user_id, user.email FROM cours_user, user
                                 WHERE cours_id = $cours_id 
