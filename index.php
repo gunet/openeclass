@@ -57,8 +57,7 @@ if (!$db) {
 
 // unset system that records visitor only once by course for statistics
 include('include/action.php');
-if (isset($dbname)) {
-        mysql_select_db($dbname);
+if (isset($dbname)) {        
         $action = new action();
         $action->record('MODULE_ID_UNITS', 'exit');
 }

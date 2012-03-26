@@ -41,7 +41,7 @@
  */
 function getUserAnnouncements($param = null, $type) {
 
-	global $mysqlMainDb, $uid, $dbname;
+	global $mysqlMainDb, $uid;
 
 	$uid			= $param['uid'];
 	$lesson_id		= $param['lesson_id'];

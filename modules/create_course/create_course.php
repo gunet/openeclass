@@ -440,12 +440,7 @@ if (isset($_POST['create_course'])) {
         if (!empty($description)) {
                 add_unit_resource($unit_id, 'description', -1, $langDescription, trim(autounquote($description)));
         }
-        
-        // ---------------------------------------------------------
-        //  all the course db queries are inside the following script
-        // ---------------------------------------------------------
-        require "create_course_db.php";
-        
+                        
         // ----------- main course index.php -----------
 
         $fd = fopen("../../courses/$code/index.php", "w");
