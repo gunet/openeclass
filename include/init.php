@@ -73,7 +73,7 @@ if (isset($_REQUEST['localize'])) {
 	$_SESSION['langswitch'] = $language = langcode_to_name($_REQUEST['localize']);
 }
 
-$active_ui_languages = array('el', 'en', 'es');
+$active_ui_languages = array('el', 'en', 'es', 'de');
 
 // Get configuration variables
 //path for course_home

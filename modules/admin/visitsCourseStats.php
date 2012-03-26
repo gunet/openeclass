@@ -100,16 +100,16 @@ if (!extension_loaded('gd')) {
             break;
             case "daily":
                 $date_what .= ", DATE_FORMAT(date_time, '$date_fmt') AS date, ";
-                $date_group = " GROUP BY DATE(date_time) ";
+                $date_group = "GROUP BY DATE(date_time) ";
             break;
             case "weekly":
                 $date_what .= ", DATE_FORMAT(date_time - INTERVAL WEEKDAY(date_time) DAY, '$date_fmt') AS week_start ".
                       ", DATE_FORMAT(date_time + INTERVAL (6 - WEEKDAY(date_time)) DAY, '$date_fmt') AS week_end, ";
-                $date_group = " GROUP BY WEEK(date_time)";
+                $date_group = "GROUP BY WEEK(date_time)";
             break;
             case "monthly":
                 $date_what .= ", MONTH(date_time) AS month, ";
-                $date_group = " GROUP BY MONTH(date_time)";
+                $date_group = "GROUP BY MONTH(date_time)";
             break;
             case "yearly":
                 $date_what .= ", YEAR(date_time) AS year, ";
@@ -120,25 +120,25 @@ if (!extension_loaded('gd')) {
 
     if ($u_course_id == -1) {
      //show chart for all courses
-           $qry1 = "SELECT DISTINCT(code) as code from cours";
+           $qry1 = "SELECT cours_id FROM cours";
            $res1 = db_query($qry1, $mysqlMainDb);
 
            $point = array();
            while ($row1 = mysql_fetch_assoc($res1)) {
-                $cours = $row1['code'];
+                $cid = $row1['cours_id'];
 
-                $query = "SELECT ".$date_what." COUNT(*) AS cnt FROM actions ".
-                    " WHERE $date_where  $date_group ORDER BY date_time ASC";
-                $result = db_query($query, $cours);
+                $query = "SELECT ".$date_what." COUNT(*) AS cnt FROM actions
+                        WHERE course_id = $cid AND $date_where $date_group
+                        ORDER BY date_time ASC";
+                $result = db_query($query);
 
                 switch ($u_interval) {
                     case "summary":
                         while ($row = mysql_fetch_assoc($result)) {
-                               if (array_key_exists('summary', $point)) {
-                                $point['summary'] += $row['cnt'];
-                              }
-                            else {
-                                 $point['summary'] = $row['cnt'];
+                               if (array_key_exists($langSummary, $point)) {
+                                $point[$langSummary] += $row['cnt'];
+                              } else {
+                                 $point[$langSummary] = $row['cnt'];
                               }
                         }
                     break;
@@ -146,8 +146,7 @@ if (!extension_loaded('gd')) {
                         while ($row = mysql_fetch_assoc($result)) {
                             if (array_key_exists($row['date'], $point)) {
                                 $point[$row['date']] += $row['cnt'];
-                              }
-                            else {
+                              } else {
                                  $point[$row['date']] = $row['cnt'];
                               }
                         }
@@ -157,8 +156,7 @@ if (!extension_loaded('gd')) {
                             $week = $row['week_start'].' - '.$row['week_end'];
                             if (array_key_exists($week, $point)) {
                                 $point[$week] += $row['cnt'];
-                              }
-                            else {
+                              } else {
                                  $point[$week] = $row['cnt'];
                               }
                         }
@@ -168,8 +166,7 @@ if (!extension_loaded('gd')) {
                             $month = $langMonths[$row['month']];
                             if (array_key_exists($month, $point)) {
                                 $point[$month] += $row['cnt'];
-                              }
-                            else {
+                              } else {
                                  $point[$month] = $row['cnt'];
                               }
                         }
@@ -196,20 +193,22 @@ if (!extension_loaded('gd')) {
         mysql_free_result($res1);
         
 } else {    //show chart for a specific course
-        $query = "SELECT ".$date_what." COUNT(*) AS cnt FROM actions ".
-            " WHERE $date_where $date_group ORDER BY date_time ASC";
-        $result = db_query($query, $u_course_id);
+        $cid = course_code_to_id($u_course_id);
+        $query = "SELECT ".$date_what." COUNT(*) AS cnt FROM actions
+                WHERE course_id = $cid AND $date_where $date_group ORDER BY date_time ASC";        
+        echo "<br />";
+        $result = db_query($query);
 
         $chart = new VerticalBarChart();
         $dataSet = new XYDataSet();
 
         switch ($u_interval) {
             case "summary":
-                while ($row = mysql_fetch_assoc($result)) {
+                while ($row = mysql_fetch_assoc($result)) {                                            
                         $dataSet->addPoint(new Point($langSummary, $row['cnt']));
                         $chart->width += 25;
                         $chart->setDataSet($dataSet);
-                        $chart_content=1;
+                        $chart_content=1;                        
                 }
             break;
             case "daily":
@@ -236,7 +235,7 @@ if (!extension_loaded('gd')) {
                     $chart_content=1;
                 }
             break;
-            case "yearly":
+            case "yearly":                    
                 while ($row = mysql_fetch_assoc($result)) {
                     $dataSet->addPoint(new Point($row['year'], $row['cnt']));
                     $chart->width += 25;
@@ -267,8 +266,7 @@ if ($chart_content) {
       <td valign="top"><img src="'.$urlServer.$chart_path.'" /></td>
     </tr>
     </tbody>
-    </table>';
-    $tool_content .= '';
+    </table>';    
 } elseif (isset($btnUsage) and $chart_content == 0) {
     $tool_content .= '
     <table class="FormData" width="99%" align="left">
@@ -326,7 +324,11 @@ $tool_content .= '<br />';
     $cours_opts = '<option value="-1">'.$langAllCourses."</option>\n";
     $result = db_query($qry, $mysqlMainDb);
     while ($row = mysql_fetch_assoc($result)) {
-        if ($u_course_id == $row['code']) { $selected = 'selected'; } else { $selected = ''; }
+        if ($u_course_id == $row['code']) { 
+                $selected = 'selected';                
+        } else { 
+                $selected = ''; 
+        }
         $cours_opts .= '<option '.$selected.' value="'.$row["code"].'">'.$row['intitule']."</option>\n";
     }
 

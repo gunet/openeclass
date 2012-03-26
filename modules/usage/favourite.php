@@ -76,7 +76,7 @@ $jscalendar = new DHTML_Calendar($urlServer.'include/jscalendar/', $lang, 'calen
 $local_head = $jscalendar->get_load_files_code();
 
     if (!extension_loaded('gd')) {
-        $tool_content .= "<p class=\"caution_small\">$langGDRequired</p>";
+        $tool_content .= "<p class='caution_small'>$langGDRequired</p>";
     } else {
         $made_chart = true;
         //make chart
@@ -112,9 +112,11 @@ $local_head = $jscalendar->get_load_files_code();
     switch ($u_stats_value) {
         case "visits":
             $query = "SELECT module_id, COUNT(*) AS cnt FROM actions
-                        WHERE $date_where AND $user_where GROUP BY module_id";
+                        WHERE $date_where
+                        AND course_id = $cours_id
+                        AND $user_where GROUP BY module_id";
 
-            $result = db_query($query, $currentCourseID);
+            $result = db_query($query);
             $chart = new PieChart(600, 300);
             $dataSet = new XYDataSet();
             while ($row = mysql_fetch_assoc($result)) {
@@ -134,9 +136,11 @@ $local_head = $jscalendar->get_load_files_code();
 
         case "duration":
             $query = "SELECT module_id, SUM(duration) AS tot_dur FROM actions                     
-                        WHERE $date_where AND $user_where GROUP BY module_id";
+                        WHERE $date_where
+                        AND course_id = $cours_id
+                        AND $user_where GROUP BY module_id";
 
-            $result = db_query($query, $currentCourseID);
+            $result = db_query($query);
 
             $chart = new PieChart(600, 300);
             $dataSet = new XYDataSet();
@@ -264,4 +268,3 @@ $local_head = $jscalendar->get_load_files_code();
 }
 
 draw($tool_content, 2, null, $local_head);
-

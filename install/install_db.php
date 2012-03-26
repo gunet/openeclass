@@ -755,6 +755,35 @@ db_query("CREATE TABLE `course_units` (
 	`order` INT(11) NOT NULL DEFAULT 0,
 	`date` DATETIME NOT NULL DEFAULT '0000-00-00') $charset_spec");
  
+ db_query("CREATE TABLE IF NOT EXISTS `actions` (
+          `id` int(11) NOT NULL auto_increment,
+          `user_id` int(11) NOT NULL,
+          `module_id` int(11) NOT NULL,
+          `action_type_id` int(11) NOT NULL,
+          `date_time` datetime NOT NULL default '0000-00-00 00:00:00',
+          `duration` int(11) NOT NULL default '900',
+          `course_id` INT(11) NOT NULL,
+          PRIMARY KEY  (`id`),
+          KEY `actionsindex` (`module_id`,`date_time`))");
+                
+db_query("CREATE TABLE IF NOT EXISTS `actions_summary` (
+          `id` int(11) NOT NULL auto_increment,
+          `module_id` int(11) NOT NULL,
+          `visits` int(11) NOT NULL,
+          `start_date` datetime NOT NULL default '0000-00-00 00:00:00',
+          `end_date` datetime NOT NULL default '0000-00-00 00:00:00',
+          `duration` int(11) NOT NULL,
+          `course_id` INT(11) NOT NULL,
+          PRIMARY KEY  (`id`))");
+
+db_query("CREATE TABLE IF NOT EXISTS `logins` (
+          `id` int(11) NOT NULL auto_increment,
+          `user_id` int(11) NOT NULL,
+          `ip` char(16) NOT NULL default '0.0.0.0',
+          `date_time` datetime NOT NULL default '0000-00-00 00:00:00',
+          `course_id` INT(11) NOT NULL,
+          PRIMARY KEY  (`id`))");
+ 
 // Create full text indexes
 db_query("ALTER TABLE `announcements` ADD FULLTEXT `announcements` (`content`, `title`)");
 db_query("ALTER TABLE `cours` ADD FULLTEXT `cours` (`code` ,`description` ,`intitule` ,`course_keywords`, `course_addon`)");

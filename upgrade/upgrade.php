@@ -829,7 +829,43 @@ if (!isset($_POST['submit2'])) {
                             `question_id` INT(11) NOT NULL DEFAULT '0',
                             `exercise_id` INT(11) NOT NULL DEFAULT '0',
                             PRIMARY KEY (question_id, exercise_id) )");
-        }
+                
+                db_query("CREATE TABLE IF NOT EXISTS `modules` (
+                        `id` int(11) NOT NULL auto_increment,
+                        `module_id` int(11) NOT NULL,
+                        `visible` tinyint(4) NOT NULL,
+                        `course_id` int(11) NOT NULL,
+                         PRIMARY KEY (`id`))");
+                
+                db_query("CREATE TABLE IF NOT EXISTS `actions` (
+                          `id` int(11) NOT NULL auto_increment,
+                          `user_id` int(11) NOT NULL,
+                          `module_id` int(11) NOT NULL,
+                          `action_type_id` int(11) NOT NULL,
+                          `date_time` datetime NOT NULL default '0000-00-00 00:00:00',
+                          `duration` int(11) NOT NULL default '900',
+                          `course_id` INT(11) NOT NULL,
+                          PRIMARY KEY  (`id`),
+                          KEY `actionsindex` (`module_id`,`date_time`))");
+                
+                db_query("CREATE TABLE IF NOT EXISTS `actions_summary` (
+                          `id` int(11) NOT NULL auto_increment,
+                          `module_id` int(11) NOT NULL,
+                          `visits` int(11) NOT NULL,
+                          `start_date` datetime NOT NULL default '0000-00-00 00:00:00',
+                          `end_date` datetime NOT NULL default '0000-00-00 00:00:00',
+                          `duration` int(11) NOT NULL,
+                          `course_id` INT(11) NOT NULL,
+                          PRIMARY KEY  (`id`))");
+                
+                db_query("CREATE TABLE IF NOT EXISTS `logins` (
+                          `id` int(11) NOT NULL auto_increment,
+                          `user_id` int(11) NOT NULL,
+                          `ip` char(16) NOT NULL default '0.0.0.0',
+                          `date_time` datetime NOT NULL default '0000-00-00 00:00:00',
+                          `course_id` INT(11) NOT NULL,
+                          PRIMARY KEY  (`id`))");
+         }
 
         mysql_field_exists($mysqlMainDb, 'cours', 'expand_glossary') or
                 db_query("ALTER TABLE `cours` ADD `expand_glossary` BOOL NOT NULL DEFAULT 0");

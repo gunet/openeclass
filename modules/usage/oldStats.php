@@ -50,9 +50,8 @@ $tool_content .= "
       <li><a href='userlogins.php?course=$code_cours&amp;first='>".$langUserLogins."</a></li>
     </ul>
   </div>";
-
-$query = "SELECT MIN(date_time) as min_time FROM actions";
-$result = db_query($query, $currentCourseID);
+$query = "SELECT MIN(date_time) as min_time FROM actions WHERE course_id = $cours_id";
+$result = db_query($query);
 while ($row = mysql_fetch_assoc($result)) {
 	if (!empty($row['min_time'])) {
 	        $min_time = strtotime($row['min_time']);
@@ -65,8 +64,8 @@ mysql_free_result($result);
     $action->summarize();     #move data to action_summary
 }
 
-$query = "SELECT MIN(date_time) as min_time FROM actions";
-$result = db_query($query, $currentCourseID);
+$query = "SELECT MIN(date_time) as min_time FROM actions WHERE course_id = $cours_id";
+$result = db_query($query);
 while ($row = mysql_fetch_assoc($result)) {
 	if (!empty($row['min_time'])) {
 		    $min_time = strtotime($row['min_time']);
@@ -129,10 +128,16 @@ if (!extension_loaded('gd')) {
    $chart_content = 0;
    switch ($u_stats_value) {
        case "visits":
-	       $query = "SELECT module_id, MONTH(start_date) AS month, YEAR(start_date) AS year, SUM(visits) AS visits FROM actions_summary ".
-	       " WHERE $date_where AND $mod_where GROUP BY MONTH(start_date)";
+	       $query = "SELECT module_id, MONTH(start_date) AS month, 
+                        YEAR(start_date) AS year, 
+                        SUM(visits) AS visits
+                        FROM actions_summary 
+                        WHERE $date_where
+                        AND $mod_where
+                        AND course_id = $cours_id
+                        GROUP BY MONTH(start_date)";
 	       
-	       $result = db_query($query, $currentCourseID);
+	       $result = db_query($query);
 	       $chart = new PieChart(600, 300);
 	       $dataSet = new XYDataSet();
 	   while ($row = mysql_fetch_assoc($result)) {
@@ -146,11 +151,15 @@ if (!extension_loaded('gd')) {
        break;
 
        case "duration":
-	   $query = "SELECT module_id, MONTH(start_date) AS month, YEAR(start_date) AS year, ".
-		    " SUM(duration) AS tot_dur FROM actions_summary ".
-		    " WHERE $date_where AND $mod_where GROUP BY MONTH(start_date)";
+	   $query = "SELECT module_id, MONTH(start_date) AS month, 
+                        YEAR(start_date) AS year,
+                        SUM(duration) AS tot_dur FROM actions_summary
+		    WHERE $date_where 
+                    AND $mod_where
+                    AND course_id = $cours_id
+                    GROUP BY MONTH(start_date)";
 
-	   $result = db_query($query, $currentCourseID);
+	   $result = db_query($query);
 	       $chart = new PieChart(600, 300);
 	       $dataSet = new XYDataSet();
 	   while ($row = mysql_fetch_assoc($result)) {
@@ -193,7 +202,7 @@ if (!extension_loaded('gd')) {
 		'name'   => 'u_date_end',
 		'value' => $u_date_end));
    
-   $qry = "SELECT module_id FROM modules WHERE visible = 1 AND course_id = ".course_code_to_id($currentCourseID);        
+   $qry = "SELECT module_id FROM modules WHERE visible = 1 AND course_id = $cours_id";
 
    $mod_opts = '<option value="-1">'.$langAllModules."</option>\n";
    $result = db_query($qry);

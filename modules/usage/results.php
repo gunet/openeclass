@@ -89,8 +89,11 @@ switch ($u_stats_value) {
         $chart = new VerticalBarChart(300, 300);
         $dataSet = new XYDataSet();
         $query = "SELECT ".$date_what.", COUNT(*) AS cnt FROM actions
-                         WHERE $date_where AND $mod_where GROUP BY $date_group ORDER BY `date_time` ASC";
-        $result = db_query($query, $currentCourseID);
+                         WHERE $date_where 
+                         AND $mod_where 
+                         AND course_id = $cours_id
+                        GROUP BY $date_group ORDER BY `date_time` ASC";
+        $result = db_query($query);
 
         switch ($u_interval) {
             case "summary":
@@ -136,10 +139,13 @@ switch ($u_stats_value) {
     break;
     case "duration":        
             $query = "SELECT ".$date_what." , SUM(duration) AS tot_dur
-                FROM $currentCourseID.actions, $mysqlMainDb.modules WHERE actions.module_id = modules.module_id
-                AND $date_where AND $mod_where GROUP BY ".$date_group." ORDER BY date_time ASC";
+                FROM actions, modules WHERE actions.module_id = modules.module_id
+                AND $date_where 
+                AND $mod_where
+                AND actions.course_id = $cours_id
+                GROUP BY ".$date_group." ORDER BY date_time ASC";
 
-        $result = db_query($query, $currentCourseID);
+        $result = db_query($query);
         $chart = new VerticalBarChart(200, 300);
         $dataSet = new XYDataSet();
 	switch ($u_interval) {

@@ -26,34 +26,3 @@ $cdb = db_query("CREATE DATABASE `$code` $charset_spec");
 
 // select course database
   mysql_select_db($code);
-
- 
-#################################### USAGE ################################
-db_query("CREATE TABLE actions (
-            id int(11) NOT NULL auto_increment,
-            user_id int(11) NOT NULL,
-            module_id int(11) NOT NULL,
-            action_type_id int(11) NOT NULL,
-            date_time DATETIME NOT NULL default '0000-00-00 00:00:00',
-            duration int(11) NOT NULL default 900,
-            PRIMARY KEY (id))");
-
-db_query("CREATE TABLE logins (
-          id int(11) NOT NULL auto_increment,
-            user_id int(11) NOT NULL,
-      ip char(16) NOT NULL default '0.0.0.0',
-            date_time DATETIME NOT NULL default '0000-00-00 00:00:00',
-          PRIMARY KEY (id))");
-
-db_query("CREATE TABLE actions_summary (
-            id int(11) NOT NULL auto_increment,
-            module_id int(11) NOT NULL,
-            visits int(11) NOT NULL,
-            start_date DATETIME NOT NULL default '0000-00-00 00:00:00',
-            end_date DATETIME NOT NULL default '0000-00-00 00:00:00',
-            duration int(11) NOT NULL,
-            PRIMARY KEY (id))");
-
-
-// creation of indexes 
-db_query("ALTER TABLE `actions` ADD INDEX `actionsindex` (`module_id` , `date_time`)"); 

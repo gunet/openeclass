@@ -987,8 +987,25 @@ function upgrade_course_3_0($code, $lang, $extramessage = '', $return_mapping = 
         return array($video_map, $videolinks_map, $lp_map, $wiki_map, $assignments_map, $exercise_map);
     }
     
+    // move table `actions`, `actions_summary`, `login` in main DB
+        db_query("INSERT INTO $mysqlMainDb.actions
+                        (user_id, module_id, action_type_id, date_time, duration, course_id) 
+                        SELECT user_id, module_id, action_type_id, date_time, duration, $course_id  
+                        FROM actions", $code);
+
+        db_query("INSERT INTO $mysqlMainDb.actions_summary
+                (module_id, visits, start_date, end_date, duration, course_id) 
+                SELECT module_id, visits, start_date, end_date, duration, $course_id  
+                FROM actions_summary", $code);
+
+        db_query("INSERT INTO $mysqlMainDb.logins
+                (user_id, ip, date_time, course_id) 
+                SELECT user_id, ip, date_time, $course_id  
+                FROM logins", $code);
+
+    
     // -------------------------------------------------------
-    // Move table `accueil` to table `modules` in mail DB
+    // Move table `accueil` to table `modules` in main DB
     // -------------------------------------------------------
     
     // external links are moved to table `links` with category = -1
@@ -1005,7 +1022,8 @@ function upgrade_course_3_0($code, $lang, $extramessage = '', $return_mapping = 
                                          'MODULE_ID_USERS', 
                                          'MODULE_ID_USAGE',
                                          'HTML_PAGE')", $code);
-
+        
+        
         if ($q1 and $q2) { // if everything ok drop course db
                 echo "Done...";
                 //db_query("DROP DATABASE $code");

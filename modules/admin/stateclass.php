@@ -96,15 +96,18 @@ if (isset($_GET['stats'])) {
 			$totalHits = 0;
 		
 			foreach ($course_codes as $course_code) {
-				$sql = "SELECT COUNT(*) AS cnt FROM actions";
-				$result = db_query($sql, $course_code);
+				$sql = "SELECT COUNT(*) AS cnt FROM actions
+                                        WHERE course_id = ". course_code_to_id($course_code);
+				$result = db_query($sql);
 				while ($row = mysql_fetch_assoc($result)) {
 					$totalHits += $row['cnt'];
 				}
 				mysql_free_result($result);
 				
-				$sql = "SELECT UNIX_TIMESTAMP(MIN(date_time)) AS first FROM actions";
-				$result = db_query($sql, $course_code);
+				$sql = "SELECT UNIX_TIMESTAMP(MIN(date_time)) AS first 
+                                        FROM actions
+                                        WHERE course_id = ". course_code_to_id($course_code);
+				$result = db_query($sql);
 				while ($row = mysql_fetch_assoc($result)) {
 					$tmp = $row['first'];
 					if (!empty($tmp)) {

@@ -52,8 +52,8 @@ load_modal_box();
 $head_content .= "<script type='text/javascript'>$(document).ready(add_bookmark);</script>";
 
 //For statistics: record login
-$sql_log = "INSERT INTO logins SET user_id='$uid', ip='$_SERVER[REMOTE_ADDR]', date_time=NOW()";
-db_query($sql_log, $currentCourse);
+$sql_log = "INSERT INTO logins SET user_id=$uid, course_id = $cours_id, ip='$_SERVER[REMOTE_ADDR]', date_time=NOW()";
+db_query($sql_log);
 include '../../include/action.php';
 $action = new action();
 $action->record(MODULE_ID_UNITS);

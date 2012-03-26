@@ -51,16 +51,20 @@ if (!extension_loaded('gd')) {
 		}
 		mysql_free_result($result);
 		foreach ($course_codes as $course_code) {
-			$sql = "SELECT COUNT(*) AS cnt FROM actions WHERE user_id = '$uid'";
-			$result = db_query($sql, $course_code);
-			while ($row = mysql_fetch_assoc($result)) {
-				
+                        $cid = course_code_to_id($course_code);
+			$sql = "SELECT COUNT(*) AS cnt FROM actions 
+                                WHERE user_id = $uid 
+                                AND course_id = $cid";
+			$result = db_query($sql);
+			while ($row = mysql_fetch_assoc($result)) {				
 				$totalHits += $row['cnt'];
 				$hits[$course_code] = $row['cnt'];
 			}
 			mysql_free_result($result);
-			$sql = "SELECT SUM(duration) FROM actions WHERE user_id = '$uid'";
-			$result = db_query($sql, $course_code);
+			$sql = "SELECT SUM(duration) FROM actions 
+                                        WHERE user_id = $uid
+                                        AND course_id = $cid";
+			$result = db_query($sql);
 			list($duration[$course_code]) = mysql_fetch_row($result);
                         $totalDuration += $duration[$course_code];
 			mysql_free_result($result);
@@ -88,97 +92,75 @@ if (!extension_loaded('gd')) {
 		}
 		$made_chart = true;
 
-    $totalDuration = format_time_duration(0 + $totalDuration);
-    $tool_content .= "
-        <fieldset>
-	<legend>$langPlatformGenStats</legend>
-	<table width='100%'>
-	<tr>
-	  <th>$langTotalVisitsCourses:</th>
-	  <td>$totalHits</td>
-	</tr>
-	<tr>
-	  <th>$langDurationVisits:</th>
-	  <td>$totalDuration</td>
-	</tr>
-	<tr>
-	  <th valign='top'>$langDurationVisitsPerCourse:</th>
-	  <td>
-            <table class='tbl_alt' width='550'>
-            <tr>
-              <th colspan='2'>$langCourseTitle</th>
-              <th width='160'>$langDuration</th>
-            </tr>";
+                $totalDuration = format_time_duration(0 + $totalDuration);
+                $tool_content .= "
+                <fieldset>
+                <legend>$langPlatformGenStats</legend>
+                <table width='100%'>
+                <tr>
+                <th>$langTotalVisitsCourses:</th>
+                <td>$totalHits</td>
+                </tr>
+                <tr>
+                <th>$langDurationVisits:</th>
+                <td>$totalDuration</td>
+                </tr>
+                <tr>
+                <th valign='top'>$langDurationVisitsPerCourse:</th>
+                <td>
+                <table class='tbl_alt' width='550'>
+                <tr>
+                <th colspan='2'>$langCourseTitle</th>
+                <th width='160'>$langDuration</th>
+                </tr>";
                 $i = 0;
                 foreach ($duration as $code => $time) {
-                        if ($i%2==0) {
-                                $tool_content .= "
-            <tr class='even'>";
+                        if ($i%2 == 0) {
+                                $tool_content .= "<tr class='even'>";
                         } else {
-                                $tool_content .= "
-            <tr class='odd'>";
+                                $tool_content .= "<tr class='odd'>";
                         }
                         $i++;
                         $tool_content .= "
-	      <td width='16'><img src='$themeimg/arrow.png' alt=''></td>
-	      <td>" . q(course_code_to_title($code)) . "</td>
-	      <td width='140'>" . format_time_duration(0 + $time) . "</td>
-            </tr>";
+                        <td width='16'><img src='$themeimg/arrow.png' alt=''></td>
+                        <td>" . q(course_code_to_title($code)) . "</td>
+                        <td width='140'>" . format_time_duration(0 + $time) . "</td>
+                        </tr>";
                 }
-        $tool_content .= "
-            </table>
-	  </td>
-	</tr>";
+                $tool_content .= "</table></td></tr>";
 	}
 }
 // End of chart display; chart unlinked at end of script.
-
 
 $sql = "SELECT * FROM loginout
     WHERE id_user = '".$_SESSION["uid"]."' ORDER by idLog DESC LIMIT 10";
 
 $leResultat = db_query($sql, $mysqlMainDb);
-
-    $tool_content .= "
-	<tr>
-          <th valign=\"top\">$langLastVisits:</th>
-          <td>";
-
-    $tool_content .= "
-            <table class=\"tbl_alt\" width='550'>
+$tool_content .= "<tr><th valign='top'>$langLastVisits:</th><td>";
+$tool_content .= "<table class='tbl_alt' width='550'>
             <tr>
               <th colspan='2'>$langDate</th>
               <th width='140'>$langAction</th>
             </tr>";
-    $i = 0;
-
-    $nomAction["LOGIN"] = "<font color=\"#008000\">$langLogIn</font>";
-    $nomAction["LOGOUT"] = "<font color=\"#FF0000\">$langLogout</font>";
-    $i=0;
-    while ($leRecord = mysql_fetch_array($leResultat)) {
-	   $when = $leRecord["when"];
-	   $action = $leRecord["action"];
-	   if ($i%2==0) {
-		$tool_content .= "
-            <tr class=\"even\">";
-	   } else {
-		$tool_content .= "
-            <tr class=\"odd\">";
-	   }
-	   $tool_content .= "
-              <td width=\"16\"><img src='$themeimg/arrow.png' alt=''></td>
-              <td>".strftime("%d/%m/%Y (%H:%M:%S) ", strtotime($when))."</td>
-              <td>".$nomAction[$action]."</td>
-	    </tr>";
-	$i++;
-    }
-
-$tool_content .= "
-            </table>\n";
-$tool_content .= "
-          </td>
-        </tr>
-        </table>
-        </fieldset>";
+$nomAction["LOGIN"] = "<font color=\"#008000\">$langLogIn</font>";
+$nomAction["LOGOUT"] = "<font color=\"#FF0000\">$langLogout</font>";
+$i=0;
+while ($leRecord = mysql_fetch_array($leResultat)) {
+        $when = $leRecord["when"];
+        $action = $leRecord["action"];
+        if ($i%2 == 0) {
+                $tool_content .= "<tr class='even'>";
+        } else {
+                $tool_content .= "<tr class='odd'>";
+        }
+        $tool_content .= "
+        <td width=\"16\"><img src='$themeimg/arrow.png' alt=''></td>
+        <td>".strftime("%d/%m/%Y (%H:%M:%S) ", strtotime($when))."</td>
+        <td>".$nomAction[$action]."</td>
+        </tr>";
+        $i++;
+}
+$tool_content .= "</table>";
+$tool_content .= "</td></tr></table></fieldset>";
    
 draw($tool_content, 1);

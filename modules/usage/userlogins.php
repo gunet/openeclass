@@ -96,9 +96,11 @@ if ($u_user_id != -1) {
     $user_where = " (1) ";
 }
 
-
 $sql_1 = "SELECT user_id, ip, date_time FROM logins AS a
-                 WHERE ".$date_where." AND ".$user_where." ORDER BY date_time DESC";
+                 WHERE ".$date_where." 
+                 AND ".$user_where." 
+                 AND course_id = $cours_id 
+                 ORDER BY date_time DESC";
 
 $sql_2 = "SELECT a.user_id as user_id, a.nom as nom, a.prenom as prenom, a.username
                  FROM user AS a LEFT JOIN cours_user AS b ON a.user_id = b.user_id
@@ -112,7 +114,7 @@ while ($row = mysql_fetch_assoc($result_2)) {
     $users[$row['user_id']] = $row['nom'].' '.$row['prenom'];
 }
 
-$result = db_query($sql_1, $currentCourseID);
+$result = db_query($sql_1);
 $table_cont = '';
 $unknown_users = array();
 
@@ -136,8 +138,7 @@ while ($row = mysql_fetch_assoc($result)) {
         } else {
                 $table_cont .= "<tr class='odd'>";
         }
-        $table_cont .= "
-                <td width=\"1\"><img src='$themeimg/arrow.png' title='bullet'></td>
+        $table_cont .= "<td width='1'><img src='$themeimg/arrow.png' title='bullet'></td>
                 <td>";
         if ($known) {
                 $table_cont .= $user;
@@ -195,7 +196,6 @@ $start_cal = $jscalendar->make_input_field(
            array('style'       => 'width: 10em; color: #727266; background-color: #fbfbfb; border: 1px solid #CAC3B5; text-align: center',
                  'name'        => 'u_date_end',
                  'value'       => $u_date_end));
-
 
 
     $qry = "SELECT LEFT(a.nom, 1) AS first_letter
