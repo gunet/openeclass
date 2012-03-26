@@ -71,8 +71,8 @@ function load_modal_box($gallery = false)
                                   iframe      : "true",
                                   scrolling   : "false",
                                   opacity     : 0.8,
-                                  current     : "'.$langColorboxCurrent.'",
                                   '.$colorbox_gallery.'
+                                  current     : "'.$langColorboxCurrent.'"
                          });
                          $(".colorbox").colorbox({
                                   minWidth    : 300,
@@ -80,8 +80,8 @@ function load_modal_box($gallery = false)
                                   scrolling   : "false",
                                   opacity     : 0.8,
                                   photo       : "true",
-                                  current     : "'.$langColorboxCurrent.'",
                                   '.$colorbox_gallery.'
+                                  current     : "'.$langColorboxCurrent.'"
                          });
                       });
                       </script>';
@@ -164,7 +164,7 @@ function choose_medialink_ahref($mediaURL, $title)
         else if (file_exists(get_fancybox2_dir()))
             $ahref = "<a href='".$linkPlay."' class='fancybox fancybox.iframe' title='$title'>$title</a>";
         else if (file_exists(get_colorbox_dir()))
-            $ahref = "<a href='".$linkPlay."' class='colorbox' title='$title'>$title</a>";
+            $ahref = "<a href='".$linkPlay."' class='colorboxframe' title='$title'>$title</a>";
     }
     
     return $ahref;
