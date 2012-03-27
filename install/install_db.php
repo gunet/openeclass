@@ -475,6 +475,7 @@ $block_username_change = intval($block_username_change);
 $display_captcha = intval($display_captcha);
 $insert_xml_metadata = intval($insert_xml_metadata);
 $betacms = intval($betacms);
+$enable_mobileapi = intval($enable_mobileapi);
 $close_user_registration = intval($close_user_registration);
 $disable_eclass_stud_reg = intval($disable_eclass_stud_reg);
 $disable_eclass_prof_reg = intval($disable_eclass_prof_reg);
@@ -493,6 +494,7 @@ db_query("INSERT INTO `config` (`key`, `value`) VALUES
 		('dropbox_allow_student_to_student', $dropbox_allow_student_to_student),
 		('block_username_change', $block_username_change),
 		('betacms', $betacms),
+		('enable_mobileapi', $enable_mobileapi),
 		('code_key', '" . generate_secret_key(32) . "'),
 		('display_captcha', $display_captcha),
 		('insert_xml_metadata', $insert_xml_metadata),
