@@ -62,3 +62,5 @@ require_once ('../../include/init.php');
 if (isset($_REQUEST['profile']))
     $_SESSION['profile'] = $_REQUEST['profile'];
 
+if (!get_config('enable_mobileapi'))
+    exit();

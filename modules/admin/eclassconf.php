@@ -1,6 +1,6 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 2.5
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2011  Greek Universities Network - GUnet
@@ -149,6 +149,7 @@ $active_ui_languages = '.$string_active_ui_languages."\n";
 		'display_captcha' => true,
 		'insert_xml_metadata' => true,
 		'betacms' => true,
+		'enable_mobileapi' => true,
 		'doc_quota' => true,
 		'group_quota' => true,
 		'video_quota' => true,
@@ -363,6 +364,7 @@ else {
 	$cbox_display_captcha = get_config('display_captcha')?'checked':'';
 	$cbox_insert_xml_metadata = get_config('insert_xml_metadata')?'checked':'';
 	$cbox_betacms = get_config('betacms')?'checked':'';
+	$cbox_enable_mobileapi = get_config('enable_mobileapi')?'checked':'';
         $max_glossary_terms = get_config('max_glossary_terms');
 
         $tool_content .= "<fieldset>
@@ -415,6 +417,10 @@ else {
 	  <tr>
 		<th class='left'><b>betacms</b></th>
 		<td><input type='checkbox' name='betacms' value='1' $cbox_betacms />&nbsp;$lang_betacms</td>
+	  </tr>
+	  <tr>
+		<th class='left'><b>enable_mobileapi</b></th>
+		<td><input type='checkbox' name='enable_mobileapi' value='1' $cbox_enable_mobileapi />&nbsp;$lang_enable_mobileapi</td>
 	  </tr>
         </table></fieldset>";
         

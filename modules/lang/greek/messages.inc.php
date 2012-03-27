@@ -1609,6 +1609,7 @@ $lang_block_username_change = "Να μην επιτρέπεται να αλλά�
 $lang_display_captcha = "Να εμφανίζεται κωδικός ασφάλειας κατά την εγγραφή των χρηστών";
 $lang_insert_xml_metadata = "Μετασχολιασμός αρχείων υποσυστήματος «Έγγραφα» σύμφωνα με το πρότυπο LOM";
 $lang_betacms = "Να γίνεται σύνδεση της πλατφόρμας με το αποθετήριο BetaCMS";
+$lang_enable_mobileapi = "Να επιτρέπεται η επικοινωνία με κινητές συσκευές (smartphones/tables)";
 $langPossibleReasons = 'Πιθανοί λόγοι';
 $langTroubleshooting = 'Αντιμετώπιση';
 $langDefaultAdminName = 'Διαχειριστής';

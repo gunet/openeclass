@@ -128,7 +128,7 @@ if (isset($_POST['welcomeScreen'])) {
 	$dropbox_quota = 100;
         $dbPassForm = $helpdeskmail = $faxForm = $postaddressForm = '';
 	$email_required = $am_required = $dropbox_allow_student_to_student = $dont_display_login_form = '';
-	$display_captcha = $block_username_change = $insert_xml_metadata = $betacms = '';
+	$display_captcha = $block_username_change = $insert_xml_metadata = $betacms = $enable_mobileapi = '';
 	$disable_eclass_stud_reg = $disable_eclass_prof_reg = $email_verification_required = $dont_mail_unverified_mails = '';
         $email_from = 1;
         $close_user_registration = '';
@@ -166,6 +166,7 @@ if (isset($_POST['welcomeScreen'])) {
 		'display_captcha' => true,
 		'insert_xml_metadata' => true,
 		'betacms' => true,
+		'enable_mobileapi' => true,
 		'disable_eclass_stud_reg' => true,
 		'disable_eclass_prof_reg' => true,
                 'close_user_registration' => true));
@@ -219,7 +220,7 @@ $all_vars = array('pathForm', 'urlAppendPath', 'dbHostForm', 'dbUsernameForm', '
 		  'doc_quota', 'video_quota', 'group_quota', 'dropbox_quota',
                   'email_required', 'email_verification_required', 'dont_mail_unverified_mails', 'email_from', 'am_required', 
                   'dropbox_allow_student_to_student', 'dont_display_login_form', 'block_username_change', 'display_captcha',
-		  'insert_xml_metadata', 'betacms', 'disable_eclass_stud_reg', 
+		  'insert_xml_metadata', 'betacms', 'enable_mobileapi', 'disable_eclass_stud_reg', 
                   'disable_eclass_prof_reg', 'close_user_registration');
 
 // step 2 license
@@ -406,6 +407,10 @@ elseif(isset($_REQUEST['install5']) OR isset($_REQUEST['back5']))
 	  <tr>
 		<th class='left'><b>$lang_betacms</b></th>
 		<td>".checkbox_input('betacms')."</td>
+	  </tr>
+	  <tr>
+		<th class='left'><b>$lang_enable_mobileapi</b></th>
+		<td>".checkbox_input('enable_mobileapi')."</td>
 	  </tr>
 	  <tr><td colspan='2' class='right'>
 	  <input type='submit' name='back4' value='&laquo; $langPreviousStep' />
