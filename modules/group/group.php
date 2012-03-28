@@ -38,7 +38,7 @@ include 'group_functions.php';
 /**** The following is added for statistics purposes ***/
 include('../../include/action.php');
 $action = new action();
-$action->record(MODULE_ID_GROUPS);
+$action->record('MODULE_ID_GROUPS');
 /**************************************/
 
 $nameTools = $langGroups;
