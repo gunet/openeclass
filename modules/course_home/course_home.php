@@ -56,7 +56,7 @@ $sql_log = "INSERT INTO logins SET user_id='$uid', ip='$_SERVER[REMOTE_ADDR]', d
 db_query($sql_log, $currentCourse);
 include '../../include/action.php';
 $action = new action();
-$action->record(MODULE_ID_UNITS);
+$action->record('MODULE_ID_UNITS');
 
 if (isset($_GET['from_search'])) { // if we come from home page search
         header("Location: {$urlServer}modules/search/search_incourse.php?all=true&search_terms=$_GET[from_search]");
