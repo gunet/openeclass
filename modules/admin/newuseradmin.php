@@ -22,6 +22,13 @@
 $require_usermanage_user = TRUE;
 include '../../include/baseTheme.php';
 include '../../include/sendMail.inc.php';
+
+require_once('../../include/lib/user.class.php');
+require_once('../../include/lib/hierarchy.class.php');
+
+$tree = new hierarchy();
+$userObj = new user();
+
 $navigation[] = array("url" => "../admin/index.php", "name" => $langAdmin);
 
 $reqtype = '';
@@ -75,13 +82,15 @@ if($submit) {
                 $expires_at = time() + $durationAccount;
                 $password_encrypted = md5($password);
                 $inscr_user = db_query("INSERT INTO `$mysqlMainDb`.user
-                                (nom, prenom, username, password, email, statut, phone, department, am, registered_at, expires_at, lang, description, verified_mail)
+                                (nom, prenom, username, password, email, statut, phone, am, registered_at, expires_at, lang, description, verified_mail)
                                 VALUES (" .
                                 autoquote($nom_form) . ', '.
                                 autoquote($prenom_form) . ', '.
                                 autoquote($uname) . ", '$password_encrypted', ".
                                 autoquote($email_form) .
-                                ", $pstatut, ".autoquote($phone).", $depid, ".autoquote($am).", $registered_at, $expires_at, '$proflanguage', '', $verified_mail)");
+                                ", $pstatut, ".autoquote($phone).", ".autoquote($am).", $registered_at, $expires_at, '$proflanguage', '', $verified_mail)");
+                $uid = mysql_insert_id();
+                $userObj->refresh($uid, array(intval($depid)));
 
                 // close request if needed
                 if (!empty($rid)) {
@@ -197,17 +206,8 @@ $langEmail : $emailhelpdesk
             <td class='smaller'><input class='FormData_InputText' type='text' name='phone' value='".q($pphone)."' /></td></tr>
         <tr><th class='left'><b>$langFaculty:</b></th>
             <td>";
-        
-        $dep = array();
-        $deps = db_query("SELECT id, name FROM faculte order by id");
-        while ($n = mysql_fetch_array($deps)) {
-                $dep[$n['id']] = $n['name'];
-        }
-        if (isset($pt)) {
-                $tool_content .= selection($dep, 'department', $pt);
-        } else {
-                $tool_content .= selection($dep, 'department');
-        }
+        $depid = (isset($pt)) ? $pt : null;
+        $tool_content .= $tree->buildHtmlSelect('name="department"', $depid, null, array(), "id", "AND node.allow_user = true");
         $tool_content .= "</td></tr>
         <tr><th class='left'><b>$langAm:</b></th>
             <td><input class='FormData_InputText' type='text' name='am' value='".q($pam)."' />&nbsp;</td></tr>

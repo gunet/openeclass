@@ -26,14 +26,20 @@ include '../../include/baseTheme.php';
 include '../auth/auth.inc.php';
 $require_valid_uid = TRUE;
 
+require_once('../../include/lib/user.class.php');
+require_once('../../include/lib/hierarchy.class.php');
+
+$tree = new hierarchy();
+$userObj = new user();
+
 check_uid();
 $nameTools = $langModifyProfile;
 check_guest();
 
-$result = db_query("SELECT nom, prenom, username, email, am, phone, perso,
-                           lang, department, statut, has_icon, description,
-                           email_public, phone_public, am_public, password
-                        FROM user WHERE user_id = $uid");
+$result = db_query("SELECT user.nom, user.prenom, user.username, user.email, user.am, user.phone, user.perso,
+                           user.lang, user.statut, user.has_icon, user.description,
+                           user.email_public, user.phone_public, user.am_public, user.password
+                        FROM user WHERE user.user_id = $uid");
 $myrow = mysql_fetch_assoc($result);
 
 $password = $myrow['password'];
@@ -78,7 +84,7 @@ if (isset($_POST['submit'])) {
         db_query("UPDATE user SET perso = '$perso_status',
                                   lang = '$langcode'
                               WHERE user_id = $uid");
-                
+
         $all_ok = register_posted_variables(array(
                 'am_form' => false,
                 'desc_form' => false,
@@ -87,10 +93,15 @@ if (isset($_POST['submit'])) {
                 'nom_form' => true,
                 'prenom_form' => true,
                 'username_form' => true,
-                'department' => true,
                 'email_public' => false, 
                 'phone_public' => false, 
                 'am_public' => false), 'all');
+        
+        if (!isset($_POST['department'])) {
+            $all_ok = false;
+            $departments = array();
+        } else
+            $departments = $_POST['department'];
 
         $email_public = valid_access($email_public);
         $phone_public = valid_access($phone_public);
@@ -162,13 +173,13 @@ if (isset($_POST['submit'])) {
 						am = " . autoquote($am_form) . ",
 						phone = " . autoquote($phone_form) . ",
 						description = " . autoquote($desc_form) . ",
-						department = $department,
 						email_public = $email_public,
 						phone_public = $phone_public,
                                                 receive_mail = $subscribe,
 						am_public = $am_public
                                                 $verified_mail_sql
 						WHERE user_id = $_SESSION[uid]")) {
+                $userObj->refresh($uid, $departments);
 		$_SESSION['uname'] = $username_form;
 		$_SESSION['nom'] = $nom_form;
 		$_SESSION['prenom'] = $prenom_form;
@@ -370,7 +381,7 @@ $tool_content .= "
         <tr>
           <th>$langFaculty:</th>
           <td>";
-$tool_content .= list_departments($myrow['department']);
+$tool_content .= $tree->buildUserHtmlSelect('name="department[]"', $userObj->getDepartmentIds($uid));
 $tool_content .= "</td>
         </tr>";
 

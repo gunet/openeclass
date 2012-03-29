@@ -112,10 +112,11 @@ $langPleaseWait</div>
         $sql = "SELECT cours.intitule AS name,
                        cours.visible AS visible,
                        cours.type AS type,
-                       faculte.name AS dept,
+                       hierarchy.name AS dept,
                        cours.titulaires AS proff,
                        count(user_id) AS cnt
-                FROM cours JOIN faculte ON cours.faculteid = faculte.id
+                FROM cours JOIN course_department ON cours.cours_id = course_department.course
+                           JOIN hierarchy ON hierarchy.id = course_department.department
                            LEFT JOIN cours_user ON cours.cours_id = cours_user.cours_id
                 GROUP BY cours.cours_id ";
         $result = db_query($sql, $mysqlMainDb);

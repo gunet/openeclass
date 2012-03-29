@@ -21,6 +21,9 @@
 
 include '../../include/baseTheme.php';
 include '../../include/sendMail.inc.php';
+require_once('../../include/lib/hierarchy.class.php');
+
+$tree = new hierarchy();
 
 $lang = langname_to_code($language);
 
@@ -148,12 +151,12 @@ if ($all_set) {
 	if (!$email_verification_required) {
 
 		//----------------------------- Email Request Message --------------------------
-		$department = find_faculty_by_id($department);
+		$dep_body = $tree->getFullPath($department);
 		$subject = $prof? $mailsubject: $mailsubject2;
 		$MailMessage = $mailbody1 . $mailbody2 . "$name $surname\n\n" .
 			$mailbody3 . $mailbody4 . $mailbody5 . 
 			($prof? $mailbody6: $mailbody8) .
-			"\n\n$langFaculty: $department\n$langComments: $usercomment\n" .
+			"\n\n$langFaculty: $dep_body\n$langComments: $usercomment\n" .
 			"$langAm: $am\n" .
 			"$langProfUname: $username\n$langProfEmail : $usermail\n" .
 			"$contactphone: $userphone\n\n\n$logo\n\n";
@@ -240,19 +243,9 @@ if ($all_set) {
           </tr>
           <tr>
             <th>$langFaculty&nbsp;</th>
-            <td><select name='department'>";
-        $deps = db_query("SELECT id, name FROM faculte order by name");
-        while ($dep = mysql_fetch_array($deps)) {
-                if ($dep['id'] == $department) {
-                        $selected = ' selected="1"';
-                } else {
-                        $selected = '';
-                }
-                $tool_content .= "\n<option value='$dep[id]'$selected>" . q($dep['name']) . "</option>\n";
-        }
-
-	 $tool_content .= "\n</select>
-        </td>
+            <td>";
+        $tool_content .= $tree->buildHtmlSelect('name="department"', $department, null, array(), "id", "AND node.allow_user = true");
+        $tool_content .= "\n</td>
         </tr>
         <tr>
         <th>$langLanguage</th>

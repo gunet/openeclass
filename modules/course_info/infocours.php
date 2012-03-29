@@ -29,6 +29,12 @@ $require_help = TRUE;
 $helpTopic = 'Infocours';
 include '../../include/baseTheme.php';
 
+require_once('../../include/lib/course.class.php');
+require_once('../../include/lib/hierarchy.class.php');
+
+$course = new course();
+$tree = new hierarchy();
+
 $nameTools = $langModifInfo;
 
 $lang_editor = langname_to_code($language);
@@ -61,9 +67,8 @@ if (isset($_POST['submit'])) {
                         $password = "";
                 }
 
-                $department = intval($_POST['department']);
+                $departments = isset($_POST['department']) ? $_POST['department'] : array();
 		
-		$facname = find_faculty_by_id($department);
                 db_query("UPDATE `$mysqlMainDb`.cours
                           SET intitule = " . autoquote($_POST['title']) .",
                               fake_code = " . autoquote($_POST['fcode']) .",
@@ -71,10 +76,9 @@ if (isset($_POST['submit'])) {
                               visible = " . intval($_POST['formvisible']) . ",
                               titulaires = " . autoquote($_POST['titulary']) . ",
                               languageCourse = '$newlang',
-                              type = " . autoquote($_POST['type']) . ",
-                              password = " . autoquote($_POST['password']) . ",
-                              faculteid = $department
+                              password = " . autoquote($_POST['password']) . "
                           WHERE cours_id = $cours_id");
+                $course->refresh($cours_id, array($_POST['type']), $departments);
                 
                 $tool_content .= "<p class='success'>$langModifDone</p>
                         <p>&laquo; <a href='".$_SERVER['PHP_SELF']."?course=$code_cours'>$langBack</a></p>
@@ -91,13 +95,14 @@ if (isset($_POST['submit'])) {
 	</div>";
 
 	$sql = "SELECT cours.intitule, cours.course_keywords, cours.visible,
-		       cours.fake_code, cours.titulaires, cours.languageCourse, cours.type,
-		       cours.password, cours.faculteid
-		FROM `$mysqlMainDb`.cours WHERE cours.code = '$currentCourseID'";
+		       cours.fake_code, cours.titulaires, cours.languageCourse, course_is_type.course_type AS type,
+		       cours.password, cours.cours_id
+		FROM `$mysqlMainDb`.cours 
+           LEFT JOIN `$mysqlMainDb`.course_is_type on cours.cours_id = course_is_type.course
+		WHERE cours.code = '$currentCourseID'";
 	$result = db_query($sql);
 	$c = mysql_fetch_array($result);
 	$title = q($c['intitule']);
-	$department = $c['faculteid'];
 	$type = $c['type'];
 	$visible = $c['visible'];
 	$visibleChecked[$visible] = " checked='1'";
@@ -127,14 +132,14 @@ if (isset($_POST['submit'])) {
 	    <tr>
                 <th>$langFaculty:</th>
                 <td>";
-	$tool_content .= list_departments($department);
+        $tool_content .= $tree->buildCourseHtmlSelect('name="department[]"', $course->getDepartmentIds($c['cours_id']));
 	$tool_content .= "
                 </td>
             </tr>
 	    <tr>
 	        <th>$langType:</th>
 	        <td>";
-	$tool_content .= selection(array('pre' => $langpre, 'post' => $langpost, 'other' => $langother), 'type', $type);
+	$tool_content .= selection($course->buildTypes(), 'type', $type);
 	$tool_content .= "
                 </td>
 	    </tr>

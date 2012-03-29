@@ -158,7 +158,9 @@ $active_ui_languages = '.$string_active_ui_languages."\n";
 		'theme' => true,
 		'alt_auth_student_req' => true,
 		'disable_eclass_stud_reg' => true,
-		'disable_eclass_prof_reg' => true);
+		'disable_eclass_prof_reg' => true,
+		'course_multidep' => true,
+		'user_multidep' => true);
 
 	register_posted_variables($config_vars, 'all', 'intval');
 	$_SESSION['theme'] = $theme = $available_themes[$theme];
@@ -366,6 +368,8 @@ else {
 	$cbox_betacms = get_config('betacms')?'checked':'';
 	$cbox_enable_mobileapi = get_config('enable_mobileapi')?'checked':'';
         $max_glossary_terms = get_config('max_glossary_terms');
+        $cbox_course_multidep = get_config('course_multidep')?'checked':'';
+        $cbox_user_multidep = get_config('user_multidep')?'checked':'';
 
         $tool_content .= "<fieldset>
         <legend>$langOtherOptions</legend>
@@ -421,6 +425,14 @@ else {
 	  <tr>
 		<th class='left'><b>enable_mobileapi</b></th>
 		<td><input type='checkbox' name='enable_mobileapi' value='1' $cbox_enable_mobileapi />&nbsp;$lang_enable_mobileapi</td>
+	  </tr>
+	  <tr>
+		<th class='left'><b>course_multidep</b></th>
+		<td><input type='checkbox' name='course_multidep' value='1' $cbox_course_multidep />&nbsp;$lang_course_multidep</td>
+	  </tr>
+	  <tr>
+		<th class='left'><b>user_multidep</b></th>
+		<td><input type='checkbox' name='user_multidep' value='1' $cbox_user_multidep />&nbsp;$lang_user_multidep</td>
 	  </tr>
         </table></fieldset>";
         

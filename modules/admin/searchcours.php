@@ -45,6 +45,10 @@
 $require_admin = TRUE;
 // Include baseTheme
 include '../../include/baseTheme.php';
+require_once('../../include/lib/hierarchy.class.php');
+
+$tree = new hierarchy();
+
 // Define $nameTools
 $nameTools = $langSearchCourse;
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
@@ -112,20 +116,9 @@ $tool_content .= "
         </td>
       </tr>";
 
-$tool_content .= "
-      <tr>
-        <th class='left'><b>".$langFaculty.":</b></th>
-        <td>
-          <select name=\"formsearchfaculte\">
-           <option value=\"0\">$langAllFacultes</option>\n";
-
-$resultFac = db_query("SELECT id, name FROM faculte ORDER BY number");
-while ($myfac = mysql_fetch_array($resultFac)) {
-	$selected = ($myfac['id'] == @$searchfaculte)? ' selected': '';
-        $tool_content .= "<option value='$myfac[id]'$selected>$myfac[name]</option>";
-}
-
-$tool_content .= "</select></td></tr>";
+$tool_content .= "<tr><th class='left'><b>".$langFaculty.":</b></th><td>";
+$tool_content .= $tree->buildHtmlSelect('name="formsearchfaculte"', null, null, array('0' => $langAllFacultes), "id", "AND node.allow_course = true");
+$tool_content .= "</td></tr>";
 
 $tool_content .= "
       <tr>

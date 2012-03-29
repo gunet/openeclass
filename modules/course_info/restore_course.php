@@ -1,6 +1,6 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2011  Greek Universities Network - GUnet
@@ -25,6 +25,12 @@ include '../../include/lib/fileUploadLib.inc.php';
 include '../../include/lib/fileManageLib.inc.php';
 include '../../include/lib/forcedownload.php';
 include '../../include/pclzip/pclzip.lib.php';
+
+require_once('../../include/lib/course.class.php');
+require_once('../../include/lib/hierarchy.class.php');
+
+$treeObj = new hierarchy();
+$courseObj = new course();
 
 $nameTools = $langRestoreCourse;
 $navigation[] = array('url' => '../admin/index.php', 'name' => $langAdmin);
@@ -63,13 +69,15 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
                                         'course_lang' => true,
                                         'course_title' => true,
                                         'course_desc' => true,
-                                        'course_fac' => true,
                                         'course_vis' => true,
                                         'course_prof' => true,
                                         'course_type' => true), 'all', 'autounquote');
+        
+        $departments = isset($_POST['department']) ? $_POST['department'] : array();
+        
         $r = $restoreThis . '/html';
 	list($new_course_code, $course_id) = create_course($course_code, $course_lang, $course_title,
-                $course_desc, intval($course_fac), $course_vis, $course_prof, $course_type);
+                $course_desc, $departments, $course_vis, $course_prof, $course_type);
 
         $cours_file = $_POST['restoreThis'] . '/cours';
         if (file_exists($cours_file)) {
@@ -469,11 +477,8 @@ elseif (isset($_POST['do_restore'])) {
                 // New-style backup
                 $data = unserialize(file_get_contents($cours_file));
                 $data = $data[0];
-                $faculte_data = unserialize(file_get_contents($_POST['restoreThis'] . '/faculte'));
-                $old_faculte = $faculte_data[0]['name'];
                 $tool_content = course_details_form($data['fake_code'], $data['intitule'],
-                                                    $old_faculte, $data['titulaires'],
-                                                    $data['type'], $data['languageCourse'],
+                                                    $data['titulaires'], $data['languageCourse'],
                                                     $data['visible'], $data['description']);
         } else {
                 // Old-style backup
@@ -529,7 +534,7 @@ mysql_select_db($mysqlMainDb);
 draw($tool_content, 3);
 
 // Functions restoring
-function course_details($code, $lang, $title, $desc, $fac, $vis, $prof, $type) {
+function course_details($code, $lang, $title, $desc, $vis, $prof) {
 
 	global $action, $langNameOfLang, $version;
 	global $siteName, $InstitutionUrl, $Institution;
@@ -550,11 +555,10 @@ function course_details($code, $lang, $title, $desc, $fac, $vis, $prof, $type) {
         $title = inner_unquote($title);
         $desc = inner_unquote($desc);
         $prof = inner_unquote($prof);
-        $fac = inner_unquote($fac);
 
         // display the restoring form
 	if (!$action) {
-                echo course_details_form($code, $title, $fac, $prof, $type, $lang, $vis, $desc);
+                echo course_details_form($code, $title, $prof, $lang, $vis, $desc);
 	}
 }
 
@@ -798,31 +802,29 @@ function assignment_submit($userid, $assignment_id, $submission_date,
 }
 
 // creating course and inserting entries into the main database
-function create_course($code, $lang, $title, $desc, $fac, $vis, $prof, $type) {
-	global $mysqlMainDb;
+function create_course($code, $lang, $title, $desc, $departments, $vis, $prof, $type) {
+	global $mysqlMainDb, $courseObj;
 
-        $fac = intval($fac);
-	$repertoire = new_code($fac);
+	$repertoire = new_code($departments[0]);
 
 	if (mysql_select_db($repertoire)) {
 		echo $langCourseExists;
 		exit;
         }
 	db_query("INSERT into `$mysqlMainDb`.cours
-		(code, languageCourse, intitule, description, faculteid, visible, titulaires, fake_code, type)
+		(code, languageCourse, intitule, description, visible, titulaires, fake_code)
 		VALUES (" .
 		join(', ', array(
 			quote($repertoire),
 			quote($lang),
 			quote($title),
 			quote($desc),
-			$fac,
 			quote($vis),
 			quote($prof),
-			quote($code),
-			quote($type))).
+			quote($code))).
                 ')');
         $cid = mysql_insert_id();
+        $courseObj->refresh($cid, array($type), $departments);
 
 	if (!db_query("CREATE DATABASE `$repertoire`")) {
 		echo "Database $repertoire creation failure ";
@@ -861,41 +863,6 @@ function visibility_select($current)
 	}
 	$ret .= "</select>\n";
 return $ret;
-}
-
-// form select about type
-function type_select($current)
-{
-	global $langpre, $langpost, $langother;
-
-	$ret = "<select name='course_type'>\n";
-	foreach (array($langpre => 'pre', $langpost => 'post', $langother => 'other') as $text => $type) {
-		if($type == $current) {
-			$ret .= "<option value='$type' selected>$text</option>\n";
-		} else {
-			$ret .= "<option value='$type'>$text</option>\n";
-		}
-	}
-	$ret .= "</select>\n";
-return $ret;
-}
-
-// form select about faculty
-function faculty_select($current)
-{
-	global $mysqlMainDb;
-
-	$ret = "<select name='course_fac'>\n";
-	$res = db_query("SELECT id, name FROM `$mysqlMainDb`.faculte ORDER BY number");
-	while ($fac = mysql_fetch_array($res)) {
-		if($fac['name'] == $current) {
-			$ret .= "<option selected value='$fac[id]'>$fac[name]</option>\n";
-		} else {
-			$ret .= "<option value='$fac[id]'>$fac[name]</option>\n";
-		}
-	}
-	$ret .= "</select>\n";
-	return $ret;
 }
 
 // Unzip backup file
@@ -1046,13 +1013,13 @@ function get_option($options, $name)
         }
 }
 
-function course_details_form($code, $title, $fac, $prof, $type, $lang, $vis, $desc)
+function course_details_form($code, $title, $prof, $lang, $vis, $desc)
 {
         global $langInfo1, $langInfo2, $langCourseCode, $langLanguage, $langTitle,
-               $langCourseDescription, $langFaculty, $langCourseOldFac, $langCourseVis,
+               $langCourseDescription, $langFaculty, $langCourseVis,
                $langTeacher, $langCourseType, $langUsersWillAdd,
                $langOk, $langAll, $langsTeachers, $langMultiRegType, $langActivate,
-               $langNone;
+               $langNone, $courseObj, $treeObj;
 
 	// find available languages
 	$languages = array();
@@ -1078,12 +1045,13 @@ function course_details_form($code, $title, $fac, $prof, $type, $lang, $vis, $de
                        <td><input type='text' name='course_title' value='".q($title)."' size='50' /></td></tr>
                    <tr><th>$langCourseDescription:</th>
                        <td><input type='text' name='course_desc' value='".q($desc)."' size='50' /></td></tr>
-                   <tr><th>$langFaculty:</th><td>".faculty_select($fac)."</td></tr>
-                   <tr><th>$langCourseOldFac:</th><td>$fac</td></tr>
+                   <tr><th>$langFaculty:</th><td>". 
+                   $treeObj->buildCourseHtmlSelect('name="department[]"') ."
+                   </td></tr>
                    <tr><th>$langCourseVis:</th><td>".visibility_select($vis)."</td></tr>
                    <tr><th>$langTeacher:</th>
                        <td><input type='text' name='course_prof' value='".q($prof)."' size='50' /></td></tr>
-                   <tr><th>$langCourseType:</th><td>".type_select($type)."</td></tr>
+                   <tr><th>$langCourseType:</th><td>". selection($courseObj->buildTypes(), 'course_type') ."</td></tr>
                    <tr><td>&nbsp;</td></tr>
                    <tr><th>$langUsersWillAdd:</th>
                        <td><input type='radio' name='add_users' value='all' id='add_users_all'>

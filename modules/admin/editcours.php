@@ -48,6 +48,11 @@ $require_power_user = true;
 
 include '../../include/baseTheme.php';
 include '../../include/lib/fileDisplayLib.inc.php';
+require_once('../../include/lib/hierarchy.class.php');
+require_once('../../include/lib/course.class.php');
+
+$tree = new hierarchy();
+$course = new course();
 
 if (isset($_GET['c'])) {
 	$c = $_GET['c'];
@@ -73,19 +78,30 @@ if (isset($c)) {
 		$searchurl = '&search=yes';
 	}
 	// Get information about selected course
-	$sql = db_query("SELECT * FROM cours WHERE code = " . quote($c));
-	$row = mysql_fetch_array($sql);
+        $sql = "SELECT cours.code, cours.intitule, cours.titulaires, cours.visible
+		  FROM cours
+		 WHERE cours.code = '".mysql_real_escape_string($_GET['c'])."'";
+	$result = db_query($sql);
+	$row = mysql_fetch_array($result);
 	// Display course information and link to edit
-        $faculte = find_faculty_by_id($row['faculteid']);
 	$tool_content .= "<fieldset>
 	<legend>".$langCourseInfo." <a href=\"infocours.php?c=".htmlspecialchars($c)."".$searchurl."\"><img src='$themeimg/edit.png' alt='' border='0' title='".$langModify."'></a></legend>
 	<table class='tbl' width='100%'>";
-	$tool_content .= "
-	<tr>
-	  <th width='250'>$langFaculty:</th>
-	  <td>".q($faculte)."</td>
-	</tr>
-	<tr>
+        
+        $departments = $course->getDepartmentIds(course_code_to_id($_GET['c']));
+        $i = 1;
+        foreach ($departments as $dep) {
+            $thtitle = ($i == 1) ? $langFaculty .':' : '';
+            $tool_content .= "
+            <tr>
+                <th width='250'>$thtitle</th>
+                <td>". $tree->getFullPath($dep) ."</td>
+            </tr>";
+            $i++;
+        }
+	
+        $tool_content .= "
+        <tr>
 	  <th>$langCode:</th>
 	  <td>".q($row['code'])."</td>
 	</tr>

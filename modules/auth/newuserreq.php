@@ -22,6 +22,12 @@ $require_admin = TRUE;
 include '../../include/baseTheme.php';
 include '../../include/sendMail.inc.php';
 
+require_once('../../include/lib/user.class.php');
+require_once('../../include/lib/hierarchy.class.php');
+
+$tree = new hierarchy();
+$userObj = new user();
+
 $nameTools = $langNewUser;
 $navigation[] = array ('url' => '../admin/', 'name' => $langAdmin);
 
@@ -39,7 +45,7 @@ if($submit) {
   $uname = isset($_POST['uname'])?canonicalize_whitespace($_POST['uname']):'';
   $password = isset($_POST['password'])?$_POST['password']:'';
   $email_form = isset($_POST['email_form'])?mb_strtolower(trim($_POST['email_form'])):'';
-  $department = isset($_POST['department'])?$_POST['department']:'';
+  $departments = isset($_POST['department']) ? $_POST['department'] : array();
   $localize = isset($_POST['localize'])?$_POST['localize']:'';
   $lang = langname_to_code($localize);	
 
@@ -94,11 +100,11 @@ send_mail('', '', '', $email_form, $emailsubject, $emailbody, $charset);
     $expires_at = time() + $durationAccount;
 
     $password_encrypted = md5($password);
-    $s = db_query("SELECT id FROM faculte WHERE name='$department'");
-    $dep = mysql_fetch_array($s);
     $inscr_user = db_query("INSERT INTO `$mysqlMainDb`.user
-      (user_id, nom, prenom, username, password, email, statut, department, registered_at, expires_at, lang)
-      VALUES ('NULL', '$nom_form', '$prenom_form', '$uname', '$password_encrypted', '$email_form', '5', '$dep[id]', '$registered_at', '$expires_at', '$lang')");
+      (user_id, nom, prenom, username, password, email, statut, registered_at, expires_at, lang)
+      VALUES ('NULL', '$nom_form', '$prenom_form', '$uname', '$password_encrypted', '$email_form', '5', '$registered_at', '$expires_at', '$lang')");
+    $uid = mysql_insert_id();
+    $userObj->refresh($uid, $departments);
 
     // close request
         $rid = intval($_POST['rid']);
@@ -153,17 +159,8 @@ $tool_content .= "<table width=\"99%\"><tbody>
 	  <tr>
 	  <th class='left'>$langFaculty &nbsp;
 		</span></th><td>";
-
-	$dep = array();
-        $deps=db_query("SELECT name FROM faculte order by id");
-			while ($n = mysql_fetch_array($deps))
-				$dep[$n[0]] = $n['name'];  
-
-		if (isset($pt))
-			$tool_content .= selection ($dep, 'department', $pt);
-		else 
-			$tool_content .= selection ($dep, 'department');
- 
+        $tool_content .= $tree->buildUserHtmlSelect('name="department[]"');
+        $tool_content .= "</td>";
 	$tool_content .= "<tr><th class='left'>$langLanguage</th><td>";
 	$tool_content .= lang_select_options('localize');
 	$tool_content .= "</td></tr>";

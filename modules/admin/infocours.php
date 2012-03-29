@@ -46,6 +46,13 @@ $require_power_user = true;
 // Include baseTheme
 include '../../include/baseTheme.php';
 if(!isset($_GET['c'])) { die(); }
+
+require_once('../../include/lib/course.class.php');
+require_once('../../include/lib/hierarchy.class.php');
+
+$course = new course();
+$tree = new hierarchy();
+
 // Define $nameTools
 $nameTools = $langCourseInfo;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
@@ -56,26 +63,28 @@ $tool_content = "";
 
 // Update cours basic information
 if (isset($_POST['submit']))  {
-	$department = intval($_POST['department']);
-	$facname = find_faculty_by_id($department);
+        $departments = isset($_POST['department']) ? $_POST['department'] : array();
 	// Update query
 	db_query("UPDATE cours SET titulaires = ".autoquote($_POST['titulaires']).",
-                                   intitule = ".autoquote($_POST['intitule']).",
-                                   faculteid = $department
+                                   intitule = ".autoquote($_POST['intitule'])."
                                WHERE code = ".autoquote($_GET['c']));
+        $course->refresh(course_code_to_id($_GET['c']), null, $departments);
 	
 	$tool_content .= "<p class='success'>$langModifDone</p>
                 <p>&laquo; <a href='editcours.php?c=$_GET[c]'>$langBack</a></p>";
 }
 // Display edit form for course basic information
 else {
-	$row = mysql_fetch_array(db_query("SELECT * FROM cours WHERE code='".mysql_real_escape_string($_GET['c'])."'"));
+        $sql = "SELECT cours.code, cours.intitule, cours.titulaires, cours.cours_id
+		  FROM cours
+		 WHERE cours.code = '".mysql_real_escape_string($_GET['c'])."'";
+        $row = mysql_fetch_array(db_query($sql));
 	$tool_content .= "
 	<form action=".$_SERVER['PHP_SELF']."?c=".htmlspecialchars($_GET['c'])." method='post'>
 	<fieldset>
 	<legend>".$langCourseInfoEdit."</legend>
 <table width='100%' class='tbl'><tr><th>$langFaculty</th><td>";
-	$tool_content .= list_departments($row['faculteid']);
+        $tool_content .= $tree->buildCourseHtmlSelect('name="department[]"', $course->getDepartmentIds($row['cours_id']));
 	$tool_content .= "</td></tr>
 	<tr>
 	  <th width='150'>".$langCourseCode.":</th>

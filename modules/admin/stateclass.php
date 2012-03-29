@@ -195,8 +195,10 @@ if (isset($_GET['stats'])) {
 				FROM cours GROUP BY visible "))."
 			<tr>
 			<th class='left' colspan='2'><b>$langNumEachCourse</b></th>
-			</tr>".tablize(list_ManyResult("SELECT DISTINCT faculte.name AS faculte, count(*) 
-				FROM cours, faculte WHERE cours.faculteid = faculte.id GROUP BY faculteid"))."
+			</tr>".tablize(list_ManyResult("SELECT DISTINCT hierarchy.name AS faculte, count(*) 
+				FROM cours, course_department, hierarchy 
+                                WHERE cours.cours_id = course_department.course
+                                  AND hierarchy.id = course_department.department GROUP BY hierarchy.id"))."
 			<tr>
 			<th class='left' colspan='2'><b>$langNumEachLang</b></th>
 			</tr>".tablize(list_ManyResult("SELECT DISTINCT languageCourse, count(*) FROM cours 

@@ -300,6 +300,8 @@ square root of x-1 will be drawed. For syntax of all mathematical symbols, read 
  <li><em>block_username_change</em>: Users will not be able to change their username.</li>
  <li><em>display_captcha</em>: Display a 'CAPTCHA' code during user registration.</li>
  <li><em>insert_xml_metadata</em>: Allow teachers to upload metadata in files in 'Documents'.</li>
+ <li><em>course_multidep</em>: Allow courses to belong to multiple departments.</li>
+ <li><em>user_multidep</em>: Allow users to belong to multiple departments.</li>
 </ul>
 By default none of them is enabled.
 <ul>

@@ -35,6 +35,12 @@ include '../../include/baseTheme.php';
 include '../../include/sendMail.inc.php';
 require_once 'auth.inc.php';
 
+require_once('../../include/lib/user.class.php');
+require_once('../../include/lib/hierarchy.class.php');
+
+$tree = new hierarchy();
+$userObj = new user();
+
 $auth = isset($_REQUEST['auth'])?$_REQUEST['auth']:'';
 
 $msg = "$langProfReg (".(get_auth_info($auth)).")";
@@ -92,14 +98,16 @@ if ($submit)  {
 	$verified_mail = isset($_REQUEST['verified_mail'])?intval($_REQUEST['verified_mail']):2;
 
 	$sql = db_query("INSERT INTO `$mysqlMainDb`.user
-			(nom, prenom, username, password, email, statut, department,
+			(nom, prenom, username, password, email, statut,
 			am, registered_at, expires_at, lang, verified_mail)
 			VALUES (" .
 			autoquote($ps) . ', ' .
 			autoquote($pn) . ', ' .
 			autoquote($pu) . ", '$password', " .
 			autoquote($pe) .
-			", 1, $department, " . autoquote($comment) . ", $registered_at, $expires_at, '$lang', $verified_mail)");
+			", 1, " . autoquote($comment) . ", $registered_at, $expires_at, '$lang', $verified_mail)");
+        $last_id = mysql_insert_id();
+        $userObj->refresh($last_id, array(intval($department)));
 
 	// Close user request 
 	$rid = intval($_POST['rid']);
@@ -194,12 +202,8 @@ if ($submit)  {
 	<tr>
 	<th class='left'>$langFaculty</th>
 	<td>";
-        $result = db_query("SELECT id, name FROM faculte ORDER BY id");
-        while ($facs = mysql_fetch_array($result)) {
-                $faculte_names[$facs['id']] = $facs['name'];
-        }
-        $tool_content .= selection($faculte_names, 'department', $pt) .
-                         "</td></tr>";
+        $tool_content .= $tree->buildHtmlSelect('name="department"', $pt, null, array(), "id", "AND node.allow_user = true");
+        $tool_content .= "</td></tr>";
 	$tool_content .= "<tr>
 	<th class='left'>$langLanguage</th>
 	<td>";

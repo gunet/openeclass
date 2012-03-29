@@ -53,8 +53,6 @@ if (extension_loaded('zlib')) {
         mysql_select_db($mysqlMainDb);
         $sql_course = "course_id = $cours_id";
         foreach (array('cours' => "cours_id = $cours_id",
-                       'faculte' => "id = (SELECT faculteid FROM cours
-                                                            WHERE cours_id = $cours_id)",
                        'user' => "user_id IN (SELECT user_id FROM cours_user
                                                              WHERE cours_id = $cours_id)",
                        'cours_user' => "cours_id = $cours_id",

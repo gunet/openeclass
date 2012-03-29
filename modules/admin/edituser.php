@@ -40,6 +40,12 @@ include 'admin.inc.php';
 include '../auth/auth.inc.php';
 include '../../include/jscalendar/calendar.php';
 
+require_once('../../include/lib/user.class.php');
+require_once('../../include/lib/hierarchy.class.php');
+
+$tree = new hierarchy();
+$userObj = new user();
+
 if (isset($_REQUEST['u'])) {
 	$u = intval($_REQUEST['u']);
 	$_SESSION['u_tmp'] = $u;
@@ -64,9 +70,9 @@ $nameTools = $langEditUser;
 $u_submitted = isset($_POST['u_submitted'])?$_POST['u_submitted']:'';
 
 if ($u)	{
-        $q = db_query("SELECT nom, prenom, username, password, email, phone, department,
-                        registered_at, expires_at, statut, am, verified_mail 
-                        FROM user WHERE user_id = $u");
+        $q = db_query("SELECT user.nom, user.prenom, user.username, user.password, user.email, user.phone, 
+                        user.registered_at, user.expires_at, user.statut, user.am, verified_mail 
+                        FROM user WHERE user.user_id = $u");
         $info = mysql_fetch_assoc($q);
         if (isset($_POST['submit_editauth'])) {
                 $auth = intval($_POST['auth']);
@@ -199,13 +205,7 @@ $tool_content .= "
    <tr>
      <th class='left'>$langFaculty:</th>
    <td>";
-	if(!empty($info['department'])) {
-		$department_select_box = list_departments(intval($info['department']));
-	} else {
-		$department_select_box = "";
-	}
-
-	$tool_content .= $department_select_box."</td></tr>";
+	$tool_content .= $tree->buildUserHtmlSelect('name="department[]"', $userObj->getDepartmentIds($u))."</td></tr>";
 	$tool_content .= "
     <tr>
       <th class='left'>$langProperty:</th>
@@ -270,9 +270,11 @@ $tool_content .= "
      </form>";
 
 	$sql = db_query("SELECT a.code, a.intitule, b.reg_date, b.statut, a.cours_id
-                                FROM cours AS a JOIN faculte ON a.faculteid = faculte.id
-                                     LEFT JOIN cours_user AS b ON a.cours_id = b.cours_id
-                                WHERE b.user_id = $u ORDER BY b.statut, faculte.name");
+                                FROM cours AS a 
+                                JOIN course_department ON a.cours_id = course_department.course
+                                JOIN hierarchy ON course_department.department = hierarchy.id
+                                LEFT JOIN cours_user AS b ON a.cours_id = b.cours_id
+                                WHERE b.user_id = $u ORDER BY b.statut, hierarchy.name");
 
 		// αν ο χρήστης συμμετέχει σε μαθήματα τότε παρουσίασε τη λίστα
 		if (mysql_num_rows($sql) > 0) {
@@ -357,7 +359,7 @@ $tool_content .= "
 	$email = isset($_POST['email'])?mb_strtolower(trim($_POST['email'])):'';
 	$phone = isset($_POST['phone'])?$_POST['phone']:'';
 	$am = isset($_POST['am'])?$_POST['am']:'';
-	$department = isset($_POST['department'])?$_POST['department']:'NULL';
+	$departments = isset($_POST['department'])?$_POST['department']:'NULL';
 	$newstatut = isset($_POST['newstatut'])?$_POST['newstatut']:'NULL';
 	$registered_at = isset($_POST['registered_at'])?$_POST['registered_at']:'';
 	$date = isset($_POST['date'])?$_POST['date']:'';
@@ -394,7 +396,7 @@ $tool_content .= "
 		if($registered_at>$expires_at) {
 			$tool_content .= "<center><br /><b>$langExpireBeforeRegister<br /><br /><a href='edituser.php?u=$u'>$langAgain</a></b><br />";
 		} else {
-			if ($u == 1) $department = 'NULL';
+			if ($u == 1) $departments = array();
 			// email cannot be verified if there is no mail saved
 			if (empty($email) && $verified_mail==1) {
 				$verified_mail=2;
@@ -402,10 +404,11 @@ $tool_content .= "
 			$sql = "UPDATE user SET nom = ".autoquote($lname).", prenom = ".autoquote($fname).",
                                        username = $username, email = ".autoquote($email).", 
                                        statut = ".intval($newstatut).", phone=".autoquote($phone).",
-                                       department = ".intval($department).", expires_at=".$expires_at.",
+                                       expires_at=".$expires_at.",
                                        am = ".autoquote($am)." , verified_mail = ".intval($verified_mail) ." 
 													WHERE user_id = ".intval($u);
 			$qry = db_query($sql);
+                        $userObj->refresh(intval($u), $departments);
                         if (!$qry) {
                                 $tool_content .= "$langNoUpdate: $u!";
                         } else {

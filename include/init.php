@@ -281,10 +281,11 @@ if (isset($require_current_course) and $require_current_course) {
 	} else {
 		$currentCourse = $dbname = $_SESSION['dbname'];
 		$result = db_query("SELECT cours_id, cours.code, 
-                                        fake_code, intitule, faculte.name AS faculte,
+                                        fake_code, intitule, hierarchy.name AS faculte,
                                         titulaires, languageCourse, departmentUrlName, departmentUrl, visible
-                                        FROM cours, faculte
-                                        WHERE cours.faculteid = faculte.id AND
+                                        FROM cours, course_department, hierarchy
+                                        WHERE cours.cours_id = course_department.course AND
+                                        hierarchy.id = course_department.department AND
                                         cours.code=" . autoquote($dbname));
 
 		if (!$result or mysql_num_rows($result) == 0) {

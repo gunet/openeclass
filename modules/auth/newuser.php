@@ -36,6 +36,12 @@
 include '../../include/baseTheme.php';
 include '../../include/sendMail.inc.php';
 
+require_once('../../include/lib/user.class.php');
+require_once('../../include/lib/hierarchy.class.php');
+
+$tree = new hierarchy();
+$userObj = new user();
+
 $nameTools = $langUserDetails;
 $navigation[] = array("url"=>"registration.php", "name"=> $langNewUser);
 
@@ -101,13 +107,9 @@ if (!isset($_POST['submit'])) {
 	</tr>
 	<tr>
 	<th class='left'>$langFaculty:</th>
-		<td colspan='2'><select name='department'>";
-	$deps = db_query("SELECT name, id FROM faculte ORDER BY id");
-	while ($dep = mysql_fetch_array($deps)) {
-		$tool_content .= "\n<option value='".$dep[1]."'>".$dep[0]."</option>";
-	}
-	$tool_content .= "\n</select>
-	</td></tr>
+		<td colspan='2'>";
+        $tool_content .= $tree->buildUserHtmlSelect('name="department[]"');
+	$tool_content .= "\n</td></tr>
 	<tr>
 	<th class='left'>$langLanguage:</th>
 	<td width='1'>";
@@ -149,8 +151,14 @@ if (!isset($_POST['submit'])) {
 					'password' => true,
 					'password1' => true,
 					'email' => $email_arr_value,
-					'department' => true,
-					'am' => $am_arr_value));	
+					'am' => $am_arr_value));
+        
+        if (!isset($_POST['department'])) {
+            $departments = array();
+            $missing = false;
+        } else
+            $departments = $_POST['department'];
+        
 	$registration_errors = array();
 	// check if there are empty fields
 	if (!$missing) {
@@ -200,19 +208,19 @@ if (!isset($_POST['submit'])) {
 		$password_encrypted = md5($password);
 
 		$q1 = "INSERT INTO `$mysqlMainDb`.user
-			(nom, prenom, username, password, email, statut, department, am, registered_at, expires_at, lang, verified_mail)
+			(nom, prenom, username, password, email, statut, am, registered_at, expires_at, lang, verified_mail)
 			VALUES (". autoquote($nom_form) .",
 				". autoquote($prenom_form) .",
 				". autoquote($uname) .",
 				'$password_encrypted',
 				". autoquote($email) .",
 				5,
-				". intval($department) .",
 				". autoquote($am) .",
 				$registered_at, $expires_at,
 				'$lang', $verified_mail)";
 		$inscr_user = db_query($q1);
 		$last_id = mysql_insert_id();
+                $userObj->refresh($last_id, $departments);
 
 		if ($vmail) {
 			$code_key = get_config('code_key');

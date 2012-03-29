@@ -61,6 +61,7 @@ if (!isset($_GET['doit']) or $_GET['doit'] != "yes") {
 		 db_query("DELETE from user WHERE user_id = $uid");
               
 		if (mysql_affected_rows() > 0) {
+                        db_query("DELETE FROM user_department WHERE user = '$uid'");
 			$tool_content .=  "<div class=\"success\"><b>$langDelSuccess</b><br />\n";
 			$tool_content .=  "$langThanks\n";
 			$tool_content .=  "<br /><a href='../../index.php?logout=yes'>$langLogout</a></div>";

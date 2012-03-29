@@ -23,6 +23,12 @@ $require_login = true;
 include '../../include/baseTheme.php';
 $require_valid_uid = TRUE;
 
+require_once('../../include/lib/hierarchy.class.php');
+require_once('../../include/lib/user.class.php');
+
+$tree = new hierarchy();
+$user = new user();
+
 $nameTools = $langUserProfile;
 
 $userdata = array();
@@ -33,7 +39,11 @@ if (isset($_GET['id'])) {
         $navigation[] = array('url' => 'profile.php', 'name' => $langModifyProfile);
         $id = $uid;
 }
-$userdata = db_query_get_single_row("SELECT nom, prenom, email, phone, am, department, has_icon, description, email_public, phone_public, am_public FROM user WHERE user_id = $id");
+$userdata = db_query_get_single_row("SELECT user.nom, user.prenom, user.email, user.phone, user.am, 
+                                            user.has_icon, user.description, 
+                                            user.email_public, user.phone_public, user.am_public 
+                                        FROM user 
+                                        WHERE user.user_id = $id ");
 $tool_content .= "<table class='tbl'>
         <tr>
             <td>" . profile_image($id, IMAGESIZE_LARGE, !$userdata['has_icon']) . "</td>
@@ -47,7 +57,17 @@ if (!empty($userdata['am']) and allow_access($userdata['am_public'])) {
 if (!empty($userdata['phone']) and allow_access($userdata['phone_public'])) {
         $tool_content .= "<b>$langPhone:</b> " . q($userdata['phone']) . "<br>";
 }
-$tool_content .= "<b>$langFaculty:</b> " . find_faculty_by_id($userdata['department']) . "<br>";
+$tool_content .= "<b>$langFaculty:</b> "; 
+
+$departments = $user->getDepartmentIds($id);
+$i = 1;
+foreach ($departments as $dep) {
+    $br = ($i < count($departments)) ? '<br/>' : '';
+    $tool_content .= $tree->getFullPath($dep) . $br;
+    $i++;
+}
+
+$tool_content .= "<br>";
 if (!empty($userdata['description'])) {
         $tool_content .= standard_text_escape($userdata['description']);
 }

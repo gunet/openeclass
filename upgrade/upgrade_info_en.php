@@ -226,6 +226,8 @@ Note the change will be visible to users after next login to platform.</p>
  <li><em>block_username_change</em>: Users will not be able to change their usernames.</li>
  <li><em>display_captcha</em>: Display a `captcha` code during users registration.</li>
  <li><em>insert_xml_metadata</em>: Allow teachers to upload metadata in files in 'Documents'.</li>
+ <li><em>course_multidep</em>: Allow courses to belong to multiple departments.</li>
+ <li><em>user_multidep</em>: Allow users to belong to multiple departments.</li>
 </ul>
 By default none of them is enabled.
 <ul>

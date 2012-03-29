@@ -263,7 +263,9 @@ if (!isset($_POST['submit2'])) {
 			('doc_quota', '200'),
 			('dropbox_quota', '100'),
 			('video_quota', '100'),
-			('group_quota', '100')");
+			('group_quota', '100'),
+			('course_multidep', '0'),
+			('user_multidep', '0')");
 
         if ($oldversion < '2.1.3') {
         	// delete useless field
@@ -866,6 +868,315 @@ if (!isset($_POST['submit2'])) {
                           `date_time` datetime NOT NULL default '0000-00-00 00:00:00',
                           `course_id` INT(11) NOT NULL,
                           PRIMARY KEY  (`id`))");
+                
+            // hierarchy tables
+            $n = db_query("SHOW TABLES LIKE 'faculte'");
+            $rebuildHierarchy = (mysql_num_rows($n) == 1) ? true : false;
+            // Whatever code $rebuildHierarchy wraps, can only be executed once.
+            // Everything else can be executed several times.
+            
+            if ($rebuildHierarchy) {
+                db_query("DROP TABLE IF EXISTS `hierarchy`");
+                db_query("DROP TABLE IF EXISTS `course_type`");
+                db_query("DROP TABLE IF EXISTS `course_is_type`");
+                db_query("DROP TABLE IF EXISTS `course_department`");
+                db_query("DROP TABLE IF EXISTS `user_department`");
+            }
+            
+            db_query("CREATE TABLE IF NOT EXISTS `hierarchy` (
+                            `id` int(11) NOT NULL auto_increment PRIMARY KEY,
+                            `code` varchar(10) NOT NULL,
+                            `name` varchar(100) NOT NULL,
+                            `number` int(11) NOT NULL default 1000,
+                            `generator` int(11) NOT NULL default 100,
+                            `lft` int(11) NOT NULL,
+                            `rgt` int(11) NOT NULL,
+                            `allow_course` boolean not null default false,
+                            `allow_user` boolean NOT NULL default false )");
+            
+            if ($rebuildHierarchy) {
+                // copy faculties into the tree
+                $n = db_query("SELECT * FROM `faculte`");
+                $i = 0;
+                while ($r = mysql_fetch_assoc($n)) {
+                    $i++;
+                    $lft = $i * 2;
+                    $rgt = $lft + 1;
+                    db_query("INSERT INTO `hierarchy` (id, code, name, number, generator, lft, rgt, allow_course, allow_user) 
+                        VALUES ('". $r['id'] ."',
+                                '". $r['code'] ."', 
+                                '". $r['name'] ."', 
+                                '". $r['number'] ."', 
+                                '". $r['generator'] ."', 
+                                '". $lft ."', 
+                                '". $rgt ."', true, true)");
+                }
+
+                $n = db_query("SELECT COUNT(*) FROM `faculte`");
+                $r = mysql_fetch_array($n);
+                $root_rgt = intval($r[0])*2 + 2;
+                db_query("INSERT INTO `hierarchy` (code, name, lft, rgt) 
+                    VALUES ('', '". $_POST['Institution'] ."', '1', '". $root_rgt ."')");
+            }
+            
+            db_query("CREATE TABLE IF NOT EXISTS `course_type` (
+                            `id` int(11) NOT NULL auto_increment PRIMARY KEY,
+                            `name` varchar(255) NOT NULL )");
+            
+            if ($rebuildHierarchy)
+                db_query("INSERT INTO `course_type` (id, name) VALUES ('1', 'langpre'), ('2', 'langpost'), ('3', 'langother')");
+            
+            db_query("CREATE TABLE IF NOT EXISTS `course_is_type` (
+                            `id` int(11) NOT NULL auto_increment PRIMARY KEY,
+                            `course` int(11) NOT NULL references course(id),
+                            `course_type` int(11) NOT NULL references course_type(id) )");
+            
+            if ($rebuildHierarchy) {
+                $n = db_query("SELECT cours_id, type FROM `cours`");
+                while ($r = mysql_fetch_assoc($n)) {
+                    $type = 1;
+                    if ($r['type'] == 'post')
+                        $type = 2;
+                    elseif ($r['type'] == 'other')
+                        $type = 3;
+
+                    db_query("INSERT INTO `course_is_type` (course, course_type) 
+                        VALUES ('". $r['cours_id'] ."', '". $type ."')");
+                }
+            }
+
+            db_query("CREATE TABLE IF NOT EXISTS `course_department` (
+                            `id` int(11) NOT NULL auto_increment PRIMARY KEY,
+                            `course` int(11) NOT NULL references course(id),
+                            `department` int(11) NOT NULL references hierarchy(id) )");
+            
+            if ($rebuildHierarchy) {
+                $n = db_query("SELECT cours_id, faculteid FROM `cours`");
+                while ($r = mysql_fetch_assoc($n)) {
+                    db_query("INSERT INTO `course_department` (course, department) 
+                        VALUES ('". $r['cours_id'] ."', '". $r['faculteid'] ."')");
+                }
+            }
+            
+            db_query("CREATE TABLE IF NOT EXISTS `user_department` (
+                            `id` int(11) NOT NULL auto_increment PRIMARY KEY,
+                            `user` mediumint(8) unsigned NOT NULL references user(user_id),
+                            `department` int(11) NOT NULL references hierarchy(id) )");
+            
+            if ($rebuildHierarchy) {
+                $n = db_query("SELECT user_id, department FROM `user` WHERE department IS NOT NULL");
+                while ($r = mysql_fetch_assoc($n)) {
+                    db_query("INSERT INTO `user_department` (user, department) 
+                        VALUES('". $r['user_id'] ."', '". $r['department'] ."')");
+                }
+            }
+            
+            if ($rebuildHierarchy) {
+                // drop old way of referencing course type and course faculty
+                db_query("ALTER TABLE `cours` DROP COLUMN type");
+                db_query("ALTER TABLE `cours` DROP COLUMN faculteid");
+                db_query("ALTER TABLE `user` DROP COLUMN department");
+                db_query("DROP TABLE IF EXISTS `faculte`");
+            }
+            
+            // hierarchy stored procedures
+            if (version_compare(mysql_get_server_info(), '5.0') >= 0) {
+                db_query("DROP VIEW IF EXISTS `hierarchy_depth`");
+                db_query("CREATE VIEW `hierarchy_depth` AS
+                                SELECT node.id, node.code, node.name, node.number, node.generator, 
+                                       node.lft, node.rgt, node.allow_course, node.allow_user, 
+                                       COUNT(parent.id) - 1 AS depth
+                                FROM hierarchy AS node,
+                                     hierarchy AS parent
+                                WHERE node.lft BETWEEN parent.lft AND parent.rgt
+                                GROUP BY node.id
+                                ORDER BY node.lft");
+            
+                db_query("DROP PROCEDURE IF EXISTS `add_node`");
+                db_query("CREATE PROCEDURE `add_node` (IN name VARCHAR(255), IN parentlft INT(11), 
+                                    IN p_code VARCHAR(10), IN p_allow_course BOOLEAN, IN p_allow_user BOOLEAN)
+                                LANGUAGE SQL
+                                BEGIN
+                                    DECLARE lft, rgt INT(11);
+
+                                    SET lft = parentlft + 1;
+                                    SET rgt = parentlft + 2;
+
+                                    CALL shift_right(parentlft, 2, 0);
+
+                                    INSERT INTO `hierarchy` (name, lft, rgt, code, allow_course, allow_user) VALUES (name, lft, rgt, p_code, p_allow_course, p_allow_user);
+                                END");
+                
+                db_query("DROP PROCEDURE IF EXISTS `add_node_ext`");
+                db_query("CREATE PROCEDURE `add_node_ext` (IN name VARCHAR(255), IN parentlft INT(11), 
+                                    IN p_code VARCHAR(10), IN p_number INT(11), IN p_generator INT(11), 
+                                    IN p_allow_course BOOLEAN, IN p_allow_user BOOLEAN)
+                                LANGUAGE SQL
+                                BEGIN
+                                    DECLARE lft, rgt INT(11);
+
+                                    SET lft = parentlft + 1;
+                                    SET rgt = parentlft + 2;
+
+                                    CALL shift_right(parentlft, 2, 0);
+
+                                    INSERT INTO `hierarchy` (name, lft, rgt, code, number, generator, allow_course, allow_user) VALUES (name, lft, rgt, p_code, p_number, p_generator, p_allow_course, p_allow_user);
+                                END");
+
+                db_query("DROP PROCEDURE IF EXISTS `update_node`");
+                db_query("CREATE PROCEDURE `update_node` (IN p_id INT(11), IN p_name VARCHAR(255), 
+                                    IN nodelft INT(11), IN p_lft INT(11), IN p_rgt INT(11), IN parentlft INT(11), 
+                                    IN p_code VARCHAR(10), IN p_allow_course BOOLEAN, IN p_allow_user BOOLEAN)
+                                LANGUAGE SQL  
+                                BEGIN
+                                    UPDATE `hierarchy` SET name = p_name, lft = p_lft, rgt = p_rgt, 
+                                        code = p_code, allow_course = p_allow_course, allow_user = p_allow_user WHERE id = p_id;
+
+                                    IF nodelft <> parentlft THEN
+                                        CALL move_nodes(nodelft, p_lft, p_rgt);
+                                    END IF;
+                                END");
+
+                db_query("DROP PROCEDURE IF EXISTS `delete_node`");
+                db_query("CREATE PROCEDURE `delete_node` (IN p_id INT(11))
+                                LANGUAGE SQL  
+                                BEGIN  
+                                    DECLARE p_lft, p_rgt INT(11);
+
+                                    SELECT lft, rgt INTO p_lft, p_rgt FROM `hierarchy` WHERE id = p_id;
+                                    DELETE FROM `hierarchy` WHERE id = p_id;
+
+                                    CALL delete_nodes(p_lft, p_rgt);
+                                END");
+
+                db_query("DROP PROCEDURE IF EXISTS `shift_right`");
+                db_query("CREATE PROCEDURE `shift_right` (IN node INT(11), IN shift INT(11), IN maxrgt INT(11))
+                                LANGUAGE SQL
+                                BEGIN
+                                    IF maxrgt > 0 THEN
+                                        UPDATE `hierarchy` SET rgt = rgt + shift WHERE rgt > node AND rgt <= maxrgt;
+                                    ELSE
+                                        UPDATE `hierarchy` SET rgt = rgt + shift WHERE rgt > node;
+                                    END IF;
+
+                                    IF maxrgt > 0 THEN
+                                        UPDATE `hierarchy` SET lft = lft + shift WHERE lft > node AND lft <= maxrgt;
+                                    ELSE
+                                        UPDATE `hierarchy` SET lft = lft + shift WHERE lft > node;
+                                    END IF;
+                                END");
+
+                db_query("DROP PROCEDURE IF EXISTS `shift_left`");
+                db_query("CREATE PROCEDURE `shift_left` (IN node INT(11), IN shift INT(11), IN maxrgt INT(11))
+                                LANGUAGE SQL
+                                BEGIN
+                                    IF maxrgt > 0 THEN
+                                        UPDATE `hierarchy` SET rgt = rgt - shift WHERE rgt > node AND rgt <= maxrgt;
+                                    ELSE
+                                        UPDATE `hierarchy` SET rgt = rgt - shift WHERE rgt > node;
+                                    END IF;
+
+                                    IF maxrgt > 0 THEN
+                                        UPDATE `hierarchy` SET lft = lft - shift WHERE lft > node AND lft <= maxrgt;
+                                    ELSE
+                                        UPDATE `hierarchy` SET lft = lft - shift WHERE lft > node;
+                                    END IF;
+                                END");
+
+                db_query("DROP PROCEDURE IF EXISTS `shift_end`");
+                db_query("CREATE PROCEDURE `shift_end` (IN p_lft INT(11), IN p_rgt INT(11), IN maxrgt INT(11))
+                                LANGUAGE SQL
+                                BEGIN
+                                    UPDATE `hierarchy` 
+                                    SET lft = (lft - (p_lft - 1)) + maxrgt, 
+                                        rgt = (rgt - (p_lft - 1)) + maxrgt WHERE lft BETWEEN p_lft AND p_rgt;
+                                END");
+
+                db_query("DROP PROCEDURE IF EXISTS `get_maxrgt`");
+                db_query("CREATE PROCEDURE `get_maxrgt` (OUT maxrgt INT(11))
+                                LANGUAGE SQL
+                                BEGIN
+                                    SELECT rgt INTO maxrgt FROM `hierarchy` ORDER BY rgt DESC LIMIT 1;
+                                END");
+
+                db_query("DROP PROCEDURE IF EXISTS `get_parent`");
+                db_query("CREATE PROCEDURE `get_parent` (IN p_lft INT(11), IN p_rgt INT(11))
+                                LANGUAGE SQL
+                                BEGIN
+                                    SELECT * FROM `hierarchy` WHERE lft < p_lft AND rgt > p_rgt ORDER BY lft DESC LIMIT 1;
+                                END");
+
+                db_query("DROP PROCEDURE IF EXISTS `delete_nodes`");
+                db_query("CREATE PROCEDURE `delete_nodes` (IN p_lft INT(11), IN p_rgt INT(11))
+                                LANGUAGE SQL
+                                BEGIN
+                                    DECLARE node_width INT(11);
+                                    SET node_width = p_rgt - p_lft + 1;
+
+                                    DELETE FROM `hierarchy` WHERE lft BETWEEN p_lft AND p_rgt;
+                                    UPDATE `hierarchy` SET rgt = rgt - node_width WHERE rgt > p_rgt;
+                                    UPDATE `hierarchy` SET lft = lft - node_width WHERE lft > p_lft;
+                                END");
+
+                db_query("DROP PROCEDURE IF EXISTS `move_nodes`");
+                db_query("CREATE PROCEDURE `move_nodes` (INOUT nodelft INT(11), IN p_lft INT(11), IN p_rgt INT(11))
+                                LANGUAGE SQL
+                                BEGIN
+                                    DECLARE node_width, maxrgt INT(11);
+
+                                    SET node_width = p_rgt - p_lft + 1;
+                                    CALL get_maxrgt(maxrgt);
+
+                                    CALL shift_end(p_lft, p_rgt, maxrgt);
+
+                                    IF nodelft = 0 THEN
+                                        CALL shift_left(p_rgt, node_width, 0);
+                                    ELSE
+                                        CALL shift_left(p_rgt, node_width, maxrgt);
+
+                                        IF p_lft < nodelft THEN
+                                            SET nodelft = nodelft - node_width;
+                                        END IF;
+
+                                        CALL shift_right(nodelft, node_width, maxrgt);
+
+                                        UPDATE `hierarchy` SET rgt = (rgt - maxrgt) + nodelft WHERE rgt > maxrgt;
+                                        UPDATE `hierarchy` SET lft = (lft - maxrgt) + nodelft WHERE lft > maxrgt;
+                                    END IF;
+                                END");
+            }
+            
+            
+            if ($rebuildHierarchy) {
+                // pros8hkh Programmatwn spoudwn kai eksamhnwn sto dentro
+                require_once('../include/lib/hierarchy.class.php');
+                $tree = new hierarchy();
+                
+                $n = db_query("SELECT * FROM `hierarchy` WHERE lft > 1");
+                $deps = array();
+                
+                while ($r = mysql_fetch_assoc($n))
+                    $deps[] = $r;
+                
+                foreach ($deps as $dep) {
+                    $dlft = $tree->getNodeLft($dep['id']);
+                    $ppsid = $tree->addNodeExt('Προπτυχιακό Πρόγραμμα Σπουδών', $dlft, $dep['code'].'PRE', $dep['number'], $dep['generator'], 1, 1);
+                    $ppslft = $tree->getNodeLft($ppsid);
+                    
+                    $tree->addNodeExt('1ο εξάμηνο', $ppslft, $dep['code'].'1', $dep['number'], $dep['generator'], 1, 1);
+                    $tree->addNodeExt('2ο εξάμηνο', $ppslft, $dep['code'].'2', $dep['number'], $dep['generator'], 1, 1);
+                    $tree->addNodeExt('3ο εξάμηνο', $ppslft, $dep['code'].'3', $dep['number'], $dep['generator'], 1, 1);
+                    $tree->addNodeExt('4ο εξάμηνο', $ppslft, $dep['code'].'4', $dep['number'], $dep['generator'], 1, 1);
+                    $tree->addNodeExt('5ο εξάμηνο', $ppslft, $dep['code'].'5', $dep['number'], $dep['generator'], 1, 1);
+                    $tree->addNodeExt('6ο εξάμηνο', $ppslft, $dep['code'].'6', $dep['number'], $dep['generator'], 1, 1);
+                    $tree->addNodeExt('7ο εξάμηνο', $ppslft, $dep['code'].'7', $dep['number'], $dep['generator'], 1, 1);
+                    $tree->addNodeExt('8ο εξάμηνο', $ppslft, $dep['code'].'8', $dep['number'], $dep['generator'], 1, 1);
+                    
+                    $tree->addNodeExt('Μεταπτυχιακό Πρόγραμμα Σπουδών', $dlft, $dep['code'].'POST', $dep['number'], $dep['generator'], 1, 1);
+                }
+            }
+
+
          }
 
         mysql_field_exists($mysqlMainDb, 'cours', 'expand_glossary') or

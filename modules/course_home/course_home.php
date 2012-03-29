@@ -40,6 +40,11 @@ define('HIDE_TOOL_TITLE', 1);
 $path2add = 1;
 include '../../include/baseTheme.php';
 require_once '../../modules/video/video_functions.php';
+require_once('../../include/lib/hierarchy.class.php');
+require_once('../../include/lib/course.class.php');
+
+$tree = new hierarchy();
+$course = new course();
 
 $nameTools = $langIdentity;
 $main_content = $cunits_content = $bar_content = "";
@@ -62,14 +67,16 @@ if (isset($_GET['from_search'])) { // if we come from home page search
         header("Location: {$urlServer}modules/search/search_incourse.php?all=true&search_terms=$_GET[from_search]");
 }
 
-$res = db_query("SELECT course_keywords, faculte.name AS faculte, type, visible, titulaires, fake_code
-                        FROM cours, faculte
-                        WHERE cours_id = $cours_id 
-                        AND faculte.id = faculteid", $mysqlMainDb);
+$res = db_query("SELECT course_keywords, course_type.name AS type, visible, titulaires, fake_code
+                  FROM cours
+             LEFT JOIN course_is_type on course_is_type.course = cours.cours_id
+             LEFT JOIN course_type on course_type.id = course_is_type.course_type
+                 WHERE cours_id = $cours_id", $mysqlMainDb);
 $result = mysql_fetch_array($res);
+
 $keywords = q(trim($result['course_keywords']));
-$faculte = $result['faculte'];
 $type = $result['type'];
+$containslang = (substr($type, 0, strlen("lang")) === "lang") ? true : false;
 $visible = $result['visible'];
 $professor = $result['titulaires'];
 $fake_code = $result['fake_code'];
@@ -230,24 +237,21 @@ if ($first and !$is_editor) {
         $cunits_content = '';
 }
 
-switch ($type){
-	case 'pre': { //pre
-		$lessonType = $langpre;
-		break;
-	}
-	case 'post': {//post
-		$lessonType = $langpost;
-		break;
-	}
-	case 'other': { //other
-		$lessonType = $langother;
-		break;
-	}
-}
+$lessonType = ($containslang) ? $$type : $type;
 
 $bar_content .= "\n<ul class='custom_list'><li><b>".$langCode."</b>: ".q($fake_code)."</li>".
                 "\n<li><b>".$langTeachers."</b>: ".q($professor)."</li>".
-                "\n<li><b>".$langFaculty."</b>: ".q($faculte)."</li>".
+                "\n<li><b>".$langFaculty."</b>: ";
+
+$departments = $course->getDepartmentIds($cours_id);
+$i = 1;
+foreach ($departments as $dep) {
+    $br = ($i < count($departments)) ? '<br/>' : '';
+    $bar_content .= $tree->getFullPath($dep) . $br;
+    $i++;
+}
+        
+$bar_content .= "</li>".
                 "\n<li> <b>".$langType."</b>: ".$lessonType."</li>";
 
 $require_help = TRUE;

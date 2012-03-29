@@ -48,6 +48,11 @@
 $require_power_user = true;
 include '../../include/baseTheme.php';
 include 'admin.inc.php';
+require_once('../../include/lib/hierarchy.class.php');
+require_once('../../include/lib/course.class.php');
+
+$tree = new hierarchy();
+$course = new course();
 
 $nameTools = $langListCours;
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
@@ -101,20 +106,22 @@ if (isset($_GET['search']) && $_GET['search'] == "yes") {
 		$searchcours[] = "visible = $searchtype";
 	}
 	if ($searchfaculte) {
-		$searchcours[] = "faculteid = $searchfaculte";
+		$searchcours[] = "hierarchy.id = $searchfaculte";
 	}
 	$query=join(' AND ',$searchcours);
 	if (!empty($query)) {
-                $sql = db_query("SELECT faculte.name AS faculte, cours.code, intitule, titulaires, visible, cours_id
-                                           FROM cours, faculte
-                                           WHERE faculte.id = cours.faculteid AND $query
-                                           ORDER BY faculte");
+                $sql = db_query("SELECT DISTINCT cours.code, intitule, titulaires, visible, cours_id
+                                   FROM cours, course_department, hierarchy
+                                  WHERE cours.cours_id = course_department.course
+                                    AND hierarchy.id = course_department.department AND $query
+                               ORDER BY code");
 		$caption .= "$langFound ".mysql_num_rows($sql)." $langCourses ";
 	} else {
-                $sql = db_query("SELECT faculte.name AS faculte, cours.code, intitule,titulaires, visible, cours_id
-                                        FROM cours, faculte
-                                        WHERE faculte.id = cours.faculteid
-                                        ORDER BY faculte");
+                $sql = db_query("SELECT DISTINCT cours.code, intitule, titulaires, visible, cours_id
+                                   FROM cours, course_department, hierarchy
+                                  WHERE cours.cours_id = course_department.course
+                                    AND hierarchy.id = course_department.department
+                               ORDER BY code");
 		$caption .= "$langFound ".mysql_num_rows($sql)." $langCourses ";
 	}
 }
@@ -122,10 +129,9 @@ if (isset($_GET['search']) && $_GET['search'] == "yes") {
 else {
 	$a = mysql_fetch_array(db_query("SELECT COUNT(*) FROM cours"));
 	$caption .= $langManyExist.": <b>".$a[0]." $langCourses</b>";
-        $sql = db_query("SELECT faculte.name AS faculte, cours.code, intitule, titulaires, visible, cours_id
-                                FROM cours, faculte
-                                WHERE faculte.id = cours.faculteid
-                                ORDER BY faculte,code LIMIT $limit, " . COURSES_PER_PAGE);
+        $sql = db_query("SELECT cours.code, intitule, titulaires, visible, cours_id
+                           FROM cours
+                       ORDER BY code LIMIT $limit, " . COURSES_PER_PAGE);
         
         //$tool_content .= "<p class='success'>".$caption."</p>";
 	if ($fulllistsize > COURSES_PER_PAGE ) {
@@ -169,12 +175,12 @@ for ($j = 0; $j < mysql_num_rows($sql); $j++) {
 	$tool_content .= "
       <td width='1'>
 	<img style='margin-top:4px;' src='$themeimg/arrow.png' title='bullet' /></td>
-      <td><a href='{$urlServer}courses/$logs[code]/'><b>".q($logs[2])."</b>
-	</a> (".q($logs[1]).")<br /><i>".q($logs[3])."</i>
+      <td><a href='{$urlServer}courses/".$logs['code']."/'><b>".q($logs['intitule'])."</b>
+	</a> (".q($logs['code']).")<br /><i>".q($logs['titulaires'])."</i>
       </td>
       <td align='center'>";
 	// Define course type
-	switch ($logs[4]) {
+	switch ($logs['visible']) {
                 case COURSE_CLOSED:
 			$tool_content .= "<img src='$themeimg/lock_closed.png' title='$langClosedCourse' />";
 			break;
@@ -190,13 +196,23 @@ for ($j = 0; $j < mysql_num_rows($sql); $j++) {
 	}
 	$tool_content .= "
       </td>
-      <td class='smaller'>".htmlspecialchars($logs[0])."</td>";
+      <td class='smaller'>";
+        
+        $departments = $course->getDepartmentIds($logs['cours_id']);
+        $i = 1;
+        foreach ($departments as $dep) {
+            $br = ($i < count($departments)) ? '<br/>' : '';
+            $tool_content .= $tree->getFullPath($dep) . $br;
+            $i++;
+        }
+        
+        $tool_content .= "</td>";
 	// Add links to course users, delete course and course edit
 	$tool_content .= "
       <td align='center' width='40'>
-        <a href='listusers.php?c=$logs[cours_id]'><img src='$themeimg/user_list.png' title='$langUsers' /></a>&nbsp;
-        <a href='editcours.php?c=$logs[1]$searchurl'><img src='$themeimg/edit.png' title='$langEdit'></a>
-        <a href='delcours.php?c=$logs[cours_id]'><img src='$themeimg/delete.png' title='$langDelete'></a>
+        <a href='listusers.php?c=".$logs['cours_id']."'><img src='$themeimg/user_list.png' title='$langUsers' /></a>&nbsp;
+        <a href='editcours.php?c=".$logs['code'].$searchurl."'><img src='$themeimg/edit.png' title='$langEdit'></a>
+        <a href='delcours.php?c=".$logs['cours_id']."'><img src='$themeimg/delete.png' title='$langDelete'></a>
       </td>";
 	$k++;
 }

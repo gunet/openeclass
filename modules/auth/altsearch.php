@@ -34,6 +34,12 @@ include '../../include/sendMail.inc.php';
 include('../../include/CAS/CAS.php');
 require_once 'auth.inc.php';
 
+require_once('../../include/lib/user.class.php');
+require_once('../../include/lib/hierarchy.class.php');
+
+$tree = new hierarchy();
+$userObj = new user();
+
 if (isset($_POST['auth'])) {
 	$auth = intval($_POST['auth']);
 	$_SESSION['u_tmp'] = $auth;
@@ -233,7 +239,6 @@ if ($is_valid) {
                           password = '$password',
                           email = " . autoquote($email) . ",
                           statut = 5,
-                          department = $department,
                           am = " . autoquote($am) . ",
                           registered_at = $registered_at,
                           expires_at = $expires_at,
@@ -244,6 +249,7 @@ if ($is_valid) {
 
         $inscr_user = db_query($q1);
         $last_id = mysql_insert_id();
+        $userObj->refresh($last_id, array(intval($depid)));
 
                                  if ($vmail and !empty($email)) {
                                                 $code_key = get_config('code_key');
@@ -345,7 +351,7 @@ if ($is_valid) {
                          if (!$email_verification_required) {
         // send email
         $MailMessage = $mailbody1 . $mailbody2 . "$prenom_form $nom_form\n\n" . $mailbody3
-        . $mailbody4 . $mailbody5 . "$mailbody6\n\n" . "$langFaculty: " . find_faculty_by_id($depid) . "
+        . $mailbody4 . $mailbody5 . "$mailbody6\n\n" . "$langFaculty: " . $tree->getFullPath($depid) . "
         \n$langComments: $usercomment\n"
         . "$langProfUname : $uname\n$langProfEmail : $email\n" . "$contactphone : $userphone\n\n\n$logo\n\n";
 
@@ -410,7 +416,7 @@ function user_info_form()
                $langPhone, $langComments, $langFaculty, $langRegistration, $langLanguage,
                $langUserData, $langRequiredFields, $langAm, $langUserFree, $profreason,
                $auth_user_info, $auth, $prof, $usercomment, $depid, $init_auth, $email_required,
-               $phone_required, $am_required, $comment_required, $langEmailNotice;
+               $phone_required, $am_required, $comment_required, $langEmailNotice, $tree;
 
         if (!isset($usercomment)) {
                 $usercomment = '';
@@ -475,15 +481,9 @@ function user_info_form()
         $tool_content .= "
           <tr>
              <th class='left'>$langFaculty:</th>
-             <td colspan='2'>
-               <select name='department'>";
-        $deps = db_query("SELECT name, id FROM faculte ORDER BY id");
-        while ($dep = mysql_fetch_array($deps)) {
-                $selected = ($depid == $dep[1])? ' selected': '';
-                $tool_content .= "\n<option value='$dep[1]'$selected>".q($dep[0])."</option>";
-        }
-        $tool_content .= "</select>
-             </td>
+             <td colspan='2'>";
+        $tool_content .= $tree->buildHtmlSelect('name="department"', $depid, null, array(), "id", "AND node.allow_user = true");
+        $tool_content .= "</td>
            </tr>
            <tr>
              <th class='left'>$langLanguage</th>

@@ -442,7 +442,7 @@ return $departments_select : string (a formatted select box)
 ****************************************************************/
 function list_departments($department_value)
 {
-	$qry = "SELECT id, name FROM faculte ORDER BY name";
+	$qry = "SELECT id, name FROM hierarchy WHERE allow_course = true ORDER BY name";
   	$dep = db_query($qry);
   	if($dep)
   	{
@@ -772,7 +772,7 @@ function parse_tex($textext)
 
 // Returns the code of a faculty given its name
 function find_faculty_by_name($name) {
-	$code = mysql_fetch_row(db_query("SELECT code FROM faculte
+	$code = mysql_fetch_row(db_query("SELECT code FROM hierarchy
 		WHERE name = '$name'"));
 	if (!$code) {
 		return FALSE;
@@ -783,12 +783,12 @@ function find_faculty_by_name($name) {
 
 // Returns the name of a faculty given its code or its name
 function find_faculty_by_id($id) {
-	$req = db_query("SELECT name FROM faculte WHERE id = $id");
+	$req = db_query("SELECT name FROM hierarchy WHERE id = $id");
 	if ($req and mysql_num_rows($req)) {
 		$fac = mysql_fetch_row($req);
 		return $fac[0];
 	} else {
-		$req = db_query("SELECT name FROM faculte WHERE name = '" . addslashes($id) ."'");
+		$req = db_query("SELECT name FROM hierarchy WHERE name = '" . addslashes($id) ."'");
 		if ($req and mysql_num_rows($req)) {
 			$fac = mysql_fetch_row($req);
 			return $fac[0];
@@ -803,11 +803,11 @@ function new_code($fac) {
 
 	mysql_select_db($mysqlMainDb);
 	$gencode = mysql_fetch_row(db_query("SELECT code, generator
-		FROM faculte WHERE id = $fac"));
+		FROM hierarchy WHERE id = $fac"));
 	do {
 		$code = $gencode[0].$gencode[1];
 		$gencode[1] += 1;
-		db_query("UPDATE faculte SET generator = $gencode[1]
+		db_query("UPDATE hierarchy SET generator = $gencode[1]
                                  WHERE id = $fac");
 	} while (mysql_select_db($code));
 	mysql_select_db($mysqlMainDb);
@@ -1484,6 +1484,8 @@ function delete_course($cid)
                          (SELECT id FROM course_units WHERE course_id = $cid)");
         db_query("DELETE FROM course_units WHERE course_id = $cid");
 	db_query("DELETE FROM cours_user WHERE cours_id = $cid");
+        db_query("DELETE FROM course_is_type WHERE course = $cid");
+        db_query("DELETE FROM course_department WHERE course = $cid");
 	db_query("DELETE FROM cours WHERE cours_id = $cid");
 	db_query("DELETE FROM video WHERE course_id = $cid");
 	db_query("DELETE FROM videolinks WHERE course_id = $cid");

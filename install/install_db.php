@@ -146,13 +146,11 @@ db_query("CREATE TABLE `cours` (
   `lastEdit` datetime NOT NULL default '0000-00-00 00:00:00',
   `expirationDate` datetime NOT NULL default '0000-00-00 00:00:00',
   `first_create` datetime NOT NULL default '0000-00-00 00:00:00',
-  `type` ENUM( 'pre', 'post', 'other' ) DEFAULT 'pre' NOT NULL,
   `doc_quota` float NOT NULL default '104857600',
   `video_quota` float NOT NULL default '104857600',
   `group_quota` float NOT NULL default '104857600',
   `dropbox_quota` float NOT NULL default '104857600',
   `password` varchar(50) DEFAULT NULL,
-  `faculteid` int(11) NOT NULL DEFAULT 0,
   `expand_glossary` BOOL NOT NULL DEFAULT 0,
   `glossary_index` BOOL NOT NULL DEFAULT 1,
   PRIMARY KEY  (`cours_id`)) $charset_spec");
@@ -174,23 +172,6 @@ db_query("CREATE TABLE cours_user (
       PRIMARY KEY (cours_id, user_id)) $charset_spec");
 
 #
-# Table `faculte`
-#
-
-db_query("CREATE TABLE faculte (
-      id int(11) NOT NULL auto_increment,
-      code varchar(10) NOT NULL,
-      name varchar(100) NOT NULL,
-      number int(11) NOT NULL default 0,
-      generator int(11) NOT NULL default 0,
-      PRIMARY KEY (id)) $charset_spec");
-
-
-db_query("INSERT INTO faculte VALUES (1, 'TMA', 'Τμήμα 1', 10, 100)");
-db_query("INSERT INTO faculte VALUES (2, 'TMB', 'Τμήμα 2', 20, 100)");
-db_query("INSERT INTO faculte VALUES (3, 'TMC', 'Τμήμα 3', 30, 100)");
-
-#
 # Table `user`
 #
 
@@ -203,7 +184,6 @@ db_query("CREATE TABLE user (
       email VARCHAR(100) DEFAULT NULL,
       statut TINYINT(4) DEFAULT NULL,
       phone VARCHAR(20) DEFAULT NULL,
-      department INT(10) DEFAULT NULL,
       am VARCHAR(20) DEFAULT NULL,
       registered_at INT(10) NOT NULL default '0',
       expires_at INT(10) NOT NULL default '0',
@@ -629,6 +609,278 @@ db_query("CREATE TABLE IF NOT EXISTS `exercise_question` (
                 `exercise_id` INT(11) NOT NULL DEFAULT '0',
                 PRIMARY KEY (question_id, exercise_id) ) $charset_spec");
 
+// hierarchy tables
+db_query("CREATE TABLE IF NOT EXISTS `hierarchy` (
+                `id` int(11) NOT NULL auto_increment PRIMARY KEY,
+                `code` varchar(10) NOT NULL,
+                `name` varchar(100) NOT NULL,
+                `number` int(11) NOT NULL default 1000,
+                `generator` int(11) NOT NULL default 100,
+                `lft` int(11) NOT NULL,
+                `rgt` int(11) NOT NULL,
+                `allow_course` boolean not null default false,
+                `allow_user` boolean NOT NULL default false )");
+
+db_query("INSERT INTO `hierarchy` (code, name, lft, rgt) 
+    VALUES ('', '". $institutionForm ."', '1', '68')");
+
+db_query("INSERT INTO `hierarchy` (code, name, number, generator, lft, rgt, allow_course, allow_user) 
+    VALUES ('TMA', 'Τμήμα 1', '10', '100', '2', '23', true, true)");
+db_query("INSERT INTO `hierarchy` (code, name, number, generator, lft, rgt, allow_course, allow_user) 
+    VALUES ('TMAPRE', 'Προπτυχιακό Πρόγραμμα Σπουδών', '10', '100', '3', '20', true, true)");
+db_query("INSERT INTO `hierarchy` (code, name, number, generator, lft, rgt, allow_course, allow_user) 
+    VALUES ('TMA1', '1ο εξάμηνο', '10', '100', '4', '5', true, true)");
+db_query("INSERT INTO `hierarchy` (code, name, number, generator, lft, rgt, allow_course, allow_user) 
+    VALUES ('TMA2', '2ο εξάμηνο', '10', '100', '6', '7', true, true)");
+db_query("INSERT INTO `hierarchy` (code, name, number, generator, lft, rgt, allow_course, allow_user) 
+    VALUES ('TMA3', '3ο εξάμηνο', '10', '100', '8', '9', true, true)");
+db_query("INSERT INTO `hierarchy` (code, name, number, generator, lft, rgt, allow_course, allow_user) 
+    VALUES ('TMA4', '4ο εξάμηνο', '10', '100', '10', '11', true, true)");
+db_query("INSERT INTO `hierarchy` (code, name, number, generator, lft, rgt, allow_course, allow_user) 
+    VALUES ('TMA5', '5ο εξάμηνο', '10', '100', '12', '13', true, true)");
+db_query("INSERT INTO `hierarchy` (code, name, number, generator, lft, rgt, allow_course, allow_user) 
+    VALUES ('TMA6', '6ο εξάμηνο', '10', '100', '14', '15', true, true)");
+db_query("INSERT INTO `hierarchy` (code, name, number, generator, lft, rgt, allow_course, allow_user) 
+    VALUES ('TMA7', '7ο εξάμηνο', '10', '100', '16', '17', true, true)");
+db_query("INSERT INTO `hierarchy` (code, name, number, generator, lft, rgt, allow_course, allow_user) 
+    VALUES ('TMA8', '8ο εξάμηνο', '10', '100', '18', '19', true, true)");
+db_query("INSERT INTO `hierarchy` (code, name, number, generator, lft, rgt, allow_course, allow_user) 
+    VALUES ('TMAPOST', 'Μεταπτυχιακό Πρόγραμμα Σπουδών', '10', '100', '21', '22', true, true)");
+
+
+db_query("INSERT INTO `hierarchy` (code, name, number, generator, lft, rgt, allow_course, allow_user) 
+    VALUES ('TMB', 'Τμήμα 2', '20', '100', '24', '45', true, true)");
+db_query("INSERT INTO `hierarchy` (code, name, number, generator, lft, rgt, allow_course, allow_user) 
+    VALUES ('TMBPRE', 'Προπτυχιακό Πρόγραμμα Σπουδών', '20', '100', '25', '42', true, true)");
+db_query("INSERT INTO `hierarchy` (code, name, number, generator, lft, rgt, allow_course, allow_user) 
+    VALUES ('TMB1', '1ο εξάμηνο', '20', '100', '26', '27', true, true)");
+db_query("INSERT INTO `hierarchy` (code, name, number, generator, lft, rgt, allow_course, allow_user) 
+    VALUES ('TMB2', '2ο εξάμηνο', '20', '100', '28', '29', true, true)");
+db_query("INSERT INTO `hierarchy` (code, name, number, generator, lft, rgt, allow_course, allow_user) 
+    VALUES ('TMB3', '3ο εξάμηνο', '20', '100', '30', '31', true, true)");
+db_query("INSERT INTO `hierarchy` (code, name, number, generator, lft, rgt, allow_course, allow_user) 
+    VALUES ('TMB4', '4ο εξάμηνο', '20', '100', '32', '33', true, true)");
+db_query("INSERT INTO `hierarchy` (code, name, number, generator, lft, rgt, allow_course, allow_user) 
+    VALUES ('TMB5', '5ο εξάμηνο', '20', '100', '34', '35', true, true)");
+db_query("INSERT INTO `hierarchy` (code, name, number, generator, lft, rgt, allow_course, allow_user) 
+    VALUES ('TMB6', '6ο εξάμηνο', '20', '100', '36', '37', true, true)");
+db_query("INSERT INTO `hierarchy` (code, name, number, generator, lft, rgt, allow_course, allow_user) 
+    VALUES ('TMB7', '7ο εξάμηνο', '20', '100', '38', '39', true, true)");
+db_query("INSERT INTO `hierarchy` (code, name, number, generator, lft, rgt, allow_course, allow_user) 
+    VALUES ('TMB8', '8ο εξάμηνο', '20', '100', '40', '41', true, true)");
+db_query("INSERT INTO `hierarchy` (code, name, number, generator, lft, rgt, allow_course, allow_user) 
+    VALUES ('TMBPOST', 'Μεταπτυχιακό Πρόγραμμα Σπουδών', '20', '100', '43', '44', true, true)");
+
+db_query("INSERT INTO `hierarchy` (code, name, number, generator, lft, rgt, allow_course, allow_user) 
+    VALUES ('TMC', 'Τμήμα 3', '30', '100', '46', '67', true, true)");
+db_query("INSERT INTO `hierarchy` (code, name, number, generator, lft, rgt, allow_course, allow_user) 
+    VALUES ('TMCPRE', 'Προπτυχιακό Πρόγραμμα Σπουδών', '30', '100', '47', '64', true, true)");
+db_query("INSERT INTO `hierarchy` (code, name, number, generator, lft, rgt, allow_course, allow_user) 
+    VALUES ('TMC1', '1ο εξάμηνο', '30', '100', '48', '49', true, true)");
+db_query("INSERT INTO `hierarchy` (code, name, number, generator, lft, rgt, allow_course, allow_user) 
+    VALUES ('TMC2', '2ο εξάμηνο', '30', '100', '50', '51', true, true)");
+db_query("INSERT INTO `hierarchy` (code, name, number, generator, lft, rgt, allow_course, allow_user) 
+    VALUES ('TMC3', '3ο εξάμηνο', '30', '100', '52', '53', true, true)");
+db_query("INSERT INTO `hierarchy` (code, name, number, generator, lft, rgt, allow_course, allow_user) 
+    VALUES ('TMC4', '4ο εξάμηνο', '30', '100', '54', '55', true, true)");
+db_query("INSERT INTO `hierarchy` (code, name, number, generator, lft, rgt, allow_course, allow_user) 
+    VALUES ('TMC5', '5ο εξάμηνο', '30', '100', '56', '57', true, true)");
+db_query("INSERT INTO `hierarchy` (code, name, number, generator, lft, rgt, allow_course, allow_user) 
+    VALUES ('TMC6', '6ο εξάμηνο', '30', '100', '58', '59', true, true)");
+db_query("INSERT INTO `hierarchy` (code, name, number, generator, lft, rgt, allow_course, allow_user) 
+    VALUES ('TMC7', '7ο εξάμηνο', '30', '100', '60', '61', true, true)");
+db_query("INSERT INTO `hierarchy` (code, name, number, generator, lft, rgt, allow_course, allow_user) 
+    VALUES ('TMC8', '8ο εξάμηνο', '30', '100', '62', '63', true, true)");
+db_query("INSERT INTO `hierarchy` (code, name, number, generator, lft, rgt, allow_course, allow_user) 
+    VALUES ('TMCPOST', 'Μεταπτυχιακό Πρόγραμμα Σπουδών', '30', '100', '65', '66', true, true)");
+
+db_query("CREATE TABLE IF NOT EXISTS `course_type` (
+                `id` int(11) NOT NULL auto_increment PRIMARY KEY,
+                `name` varchar(255) NOT NULL )");
+db_query("INSERT INTO `course_type` (id, name) VALUES ('1', 'langpre'), ('2', 'langpost'), ('3', 'langother')");
+
+db_query("CREATE TABLE IF NOT EXISTS `course_is_type` (
+                `id` int(11) NOT NULL auto_increment PRIMARY KEY,
+                `course` int(11) NOT NULL references course(id),
+                `course_type` int(11) NOT NULL references course_type(id) )");
+
+db_query("CREATE TABLE IF NOT EXISTS `course_department` (
+                `id` int(11) NOT NULL auto_increment PRIMARY KEY,
+                `course` int(11) NOT NULL references course(id),
+                `department` int(11) NOT NULL references hierarchy(id) )");
+
+db_query("CREATE TABLE IF NOT EXISTS `user_department` (
+                `id` int(11) NOT NULL auto_increment PRIMARY KEY,
+                `user` mediumint(8) unsigned NOT NULL references user(user_id),
+                `department` int(11) NOT NULL references hierarchy(id) )");
+
+// hierarchy stored procedures
+if (version_compare(mysql_get_server_info(), '5.0') >= 0) {
+    db_query("DROP VIEW IF EXISTS `hierarchy_depth`");
+    db_query("CREATE VIEW `hierarchy_depth` AS
+                    SELECT node.id, node.code, node.name, node.number, node.generator, 
+                           node.lft, node.rgt, node.allow_course, node.allow_user, 
+                           COUNT(parent.id) - 1 AS depth
+                    FROM hierarchy AS node,
+                         hierarchy AS parent
+                    WHERE node.lft BETWEEN parent.lft AND parent.rgt
+                    GROUP BY node.id
+                    ORDER BY node.lft");
+
+    db_query("DROP PROCEDURE IF EXISTS `add_node`");
+    db_query("CREATE PROCEDURE `add_node` (IN name VARCHAR(255), IN parentlft INT(11), 
+                        IN p_code VARCHAR(10), IN p_allow_course BOOLEAN, IN p_allow_user BOOLEAN)
+                    LANGUAGE SQL
+                    BEGIN
+                        DECLARE lft, rgt INT(11);
+
+                        SET lft = parentlft + 1;
+                        SET rgt = parentlft + 2;
+
+                        CALL shift_right(parentlft, 2, 0);
+
+                        INSERT INTO `hierarchy` (name, lft, rgt, code, allow_course, allow_user) VALUES (name, lft, rgt, p_code, p_allow_course, p_allow_user);
+                    END");
+    
+    db_query("DROP PROCEDURE IF EXISTS `add_node_ext`");
+    db_query("CREATE PROCEDURE `add_node_ext` (IN name VARCHAR(255), IN parentlft INT(11), 
+                        IN p_code VARCHAR(10), IN p_number INT(11), IN p_generator INT(11), 
+                        IN p_allow_course BOOLEAN, IN p_allow_user BOOLEAN)
+                    LANGUAGE SQL
+                    BEGIN
+                        DECLARE lft, rgt INT(11);
+
+                        SET lft = parentlft + 1;
+                        SET rgt = parentlft + 2;
+
+                        CALL shift_right(parentlft, 2, 0);
+
+                        INSERT INTO `hierarchy` (name, lft, rgt, code, number, generator, allow_course, allow_user) VALUES (name, lft, rgt, p_code, p_number, p_generator, p_allow_course, p_allow_user);
+                    END");
+
+    db_query("DROP PROCEDURE IF EXISTS `update_node`");
+    db_query("CREATE PROCEDURE `update_node` (IN p_id INT(11), IN p_name VARCHAR(255), 
+                        IN nodelft INT(11), IN p_lft INT(11), IN p_rgt INT(11), IN parentlft INT(11), 
+                        IN p_code VARCHAR(10), IN p_allow_course BOOLEAN, IN p_allow_user BOOLEAN)
+                    LANGUAGE SQL  
+                    BEGIN
+                        UPDATE `hierarchy` SET name = p_name, lft = p_lft, rgt = p_rgt, 
+                            code = p_code, allow_course = p_allow_course, allow_user = p_allow_user WHERE id = p_id;
+
+                        IF nodelft <> parentlft THEN
+                            CALL move_nodes(nodelft, p_lft, p_rgt);
+                        END IF;
+                    END");
+
+    db_query("DROP PROCEDURE IF EXISTS `delete_node`");
+    db_query("CREATE PROCEDURE `delete_node` (IN p_id INT(11))
+                    LANGUAGE SQL  
+                    BEGIN  
+                        DECLARE p_lft, p_rgt INT(11);
+
+                        SELECT lft, rgt INTO p_lft, p_rgt FROM `hierarchy` WHERE id = p_id;
+                        DELETE FROM `hierarchy` WHERE id = p_id;
+
+                        CALL delete_nodes(p_lft, p_rgt);
+                    END");
+
+    db_query("DROP PROCEDURE IF EXISTS `shift_right`");
+    db_query("CREATE PROCEDURE `shift_right` (IN node INT(11), IN shift INT(11), IN maxrgt INT(11))
+                    LANGUAGE SQL
+                    BEGIN
+                        IF maxrgt > 0 THEN
+                            UPDATE `hierarchy` SET rgt = rgt + shift WHERE rgt > node AND rgt <= maxrgt;
+                        ELSE
+                            UPDATE `hierarchy` SET rgt = rgt + shift WHERE rgt > node;
+                        END IF;
+
+                        IF maxrgt > 0 THEN
+                            UPDATE `hierarchy` SET lft = lft + shift WHERE lft > node AND lft <= maxrgt;
+                        ELSE
+                            UPDATE `hierarchy` SET lft = lft + shift WHERE lft > node;
+                        END IF;
+                    END");
+
+    db_query("DROP PROCEDURE IF EXISTS `shift_left`");
+    db_query("CREATE PROCEDURE `shift_left` (IN node INT(11), IN shift INT(11), IN maxrgt INT(11))
+                    LANGUAGE SQL
+                    BEGIN
+                        IF maxrgt > 0 THEN
+                            UPDATE `hierarchy` SET rgt = rgt - shift WHERE rgt > node AND rgt <= maxrgt;
+                        ELSE
+                            UPDATE `hierarchy` SET rgt = rgt - shift WHERE rgt > node;
+                        END IF;
+
+                        IF maxrgt > 0 THEN
+                            UPDATE `hierarchy` SET lft = lft - shift WHERE lft > node AND lft <= maxrgt;
+                        ELSE
+                            UPDATE `hierarchy` SET lft = lft - shift WHERE lft > node;
+                        END IF;
+                    END");
+
+    db_query("DROP PROCEDURE IF EXISTS `shift_end`");
+    db_query("CREATE PROCEDURE `shift_end` (IN p_lft INT(11), IN p_rgt INT(11), IN maxrgt INT(11))
+                    LANGUAGE SQL
+                    BEGIN
+                        UPDATE `hierarchy` 
+                        SET lft = (lft - (p_lft - 1)) + maxrgt, 
+                            rgt = (rgt - (p_lft - 1)) + maxrgt WHERE lft BETWEEN p_lft AND p_rgt;
+                    END");
+
+    db_query("DROP PROCEDURE IF EXISTS `get_maxrgt`");
+    db_query("CREATE PROCEDURE `get_maxrgt` (OUT maxrgt INT(11))
+                    LANGUAGE SQL
+                    BEGIN
+                        SELECT rgt INTO maxrgt FROM `hierarchy` ORDER BY rgt DESC LIMIT 1;
+                    END");
+
+    db_query("DROP PROCEDURE IF EXISTS `get_parent`");
+    db_query("CREATE PROCEDURE `get_parent` (IN p_lft INT(11), IN p_rgt INT(11))
+                    LANGUAGE SQL
+                    BEGIN
+                        SELECT * FROM `hierarchy` WHERE lft < p_lft AND rgt > p_rgt ORDER BY lft DESC LIMIT 1;
+                    END");
+
+    db_query("DROP PROCEDURE IF EXISTS `delete_nodes`");
+    db_query("CREATE PROCEDURE `delete_nodes` (IN p_lft INT(11), IN p_rgt INT(11))
+                    LANGUAGE SQL
+                    BEGIN
+                        DECLARE node_width INT(11);
+                        SET node_width = p_rgt - p_lft + 1;
+
+                        DELETE FROM `hierarchy` WHERE lft BETWEEN p_lft AND p_rgt;
+                        UPDATE `hierarchy` SET rgt = rgt - node_width WHERE rgt > p_rgt;
+                        UPDATE `hierarchy` SET lft = lft - node_width WHERE lft > p_lft;
+                    END");
+
+    db_query("DROP PROCEDURE IF EXISTS `move_nodes`");
+    db_query("CREATE PROCEDURE `move_nodes` (INOUT nodelft INT(11), IN p_lft INT(11), IN p_rgt INT(11))
+                    LANGUAGE SQL
+                    BEGIN
+                        DECLARE node_width, maxrgt INT(11);
+
+                        SET node_width = p_rgt - p_lft + 1;
+                        CALL get_maxrgt(maxrgt);
+
+                        CALL shift_end(p_lft, p_rgt, maxrgt);
+
+                        IF nodelft = 0 THEN
+                            CALL shift_left(p_rgt, node_width, 0);
+                        ELSE
+                            CALL shift_left(p_rgt, node_width, maxrgt);
+
+                            IF p_lft < nodelft THEN
+                                SET nodelft = nodelft - node_width;
+                            END IF;
+
+                            CALL shift_right(nodelft, node_width, maxrgt);
+
+                            UPDATE `hierarchy` SET rgt = (rgt - maxrgt) + nodelft WHERE rgt > maxrgt;
+                            UPDATE `hierarchy` SET lft = (lft - maxrgt) + nodelft WHERE lft > maxrgt;
+                        END IF;
+                    END");
+}
+
 // encrypt the admin password into DB
 $password_encrypted = md5($passForm);
 $exp_time = time() + 140000000;
@@ -701,6 +953,8 @@ $enable_mobileapi = intval($enable_mobileapi);
 $close_user_registration = intval($close_user_registration);
 $disable_eclass_stud_reg = intval($disable_eclass_stud_reg);
 $disable_eclass_prof_reg = intval($disable_eclass_prof_reg);
+$course_multidep = intval($course_multidep);
+$user_multidep = intval($user_multidep);
 
 db_query("CREATE TABLE `config`
                 (`key` VARCHAR(32) NOT NULL,
@@ -727,6 +981,8 @@ db_query("INSERT INTO `config` (`key`, `value`) VALUES
                 ('close_user_registration', $close_user_registration),
 		('disable_eclass_stud_reg', $disable_eclass_stud_reg),
 		('disable_eclass_prof_reg', $disable_eclass_prof_reg),
+		('course_multidep', $course_multidep),
+		('user_multidep', $user_multidep),
                 ('max_glossary_terms', '250'),
 		('version', '" . ECLASS_VERSION ."')");
 

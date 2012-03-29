@@ -19,9 +19,27 @@
  * ======================================================================== */
 
 include '../../include/baseTheme.php';
+
+$TBL_HIERARCHY = 'hierarchy';
+
 $nameTools = $langSelectFac;
-$result = db_query("SELECT id, name, code FROM faculte ORDER BY name");
-$numrows = mysql_num_rows($result);
+
+$query = "SELECT node.id, node.lft AS lft, node.code as code, node.name,
+                 COUNT(parent.id) - 1 AS depth
+            FROM ". $TBL_HIERARCHY ." AS node, ". $TBL_HIERARCHY ." AS parent 
+           WHERE node.lft BETWEEN parent.lft AND parent.rgt 
+             AND node.allow_course = true
+        GROUP BY node.id 
+        ORDER BY node.lft";
+$result = db_query($query);
+
+
+$query = "SELECT max(depth) FROM (SELECT  COUNT(parent.id) - 1 AS depth
+            FROM $TBL_HIERARCHY AS node, $TBL_HIERARCHY AS parent 
+           WHERE node.lft BETWEEN parent.lft AND parent.rgt 
+        GROUP BY node.id 
+        ORDER BY node.lft) AS hierarchydepth";
+$maxdepth = mysql_fetch_array(db_query($query));
 
 if (isset($result))  {
 	$tool_content .= "<script type='text/javascript' src='sorttable.js'></script>
@@ -35,10 +53,16 @@ if (isset($result))  {
 		        $tool_content .= "\n  <tr class='odd'>";
 		}
 		$tool_content .= "<th width='16'>
-		<img src='$themeimg/arrow.png' alt='arrow'></th>
-		<td><a href='opencourses.php?fc=$fac[id]'>$fac[name]</a>&nbsp;&nbsp;<small>
+		<img src='$themeimg/arrow.png' alt='arrow'></th>";
+                
+                for ($i = 1; $i <= $fac['depth']-1; $i++) // extra -1 because we do not display root
+                    $tool_content .= "<td width='5'>&nbsp;</td>";
+                $colspan = $maxdepth[0] - $fac['depth'] + 1;
+                
+		$tool_content .= "<td colspan='$colspan'><a href='opencourses.php?fc=$fac[id]'>$fac[name]</a>&nbsp;&nbsp;<small>
 		($fac[code])";
-		$n = db_query("SELECT COUNT(*) FROM cours WHERE faculteid = $fac[id]");
+		$n = db_query("SELECT COUNT(*) FROM cours, course_department 
+                        WHERE cours.cours_id = course_department.course AND course_department.department = $fac[id]");
 		$r = mysql_fetch_array($n);
 		$tool_content .= "&nbsp;&nbsp;-&nbsp;&nbsp;$r[0]&nbsp;".  ($r[0] == 1? $langAvCours: $langAvCourses) . "</small></td>
 		</tr>";

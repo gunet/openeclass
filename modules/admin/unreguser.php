@@ -88,10 +88,12 @@ if (!$doit) {
                                                 //display list
                                                 $tool_content .= "$langUnregFirst <br/ ><br />";
                                                 $sql = db_query("SELECT a.code, a.intitule, b.statut, a.cours_id
-                                                                        FROM cours AS a JOIN faculte ON a.faculteid = faculte.id
-                                                                             LEFT JOIN cours_user AS b ON a.cours_id = b.cours_id
-                                                                             WHERE b.user_id = $u AND b.tutor = 0
-                                                                        ORDER BY b.statut, faculte.name");
+                                                                        FROM cours AS a 
+                                                                        JOIN course_department ON a.cours_id = course_department.course
+                                                                        JOIN hierarchy ON course_department.department = hierarchy.id
+                                                                        LEFT JOIN cours_user AS b ON a.cours_id = b.cours_id
+                                                                        WHERE b.user_id = $u AND b.tutor = 0
+                                                                        ORDER BY b.statut, hierarchy.name");
                                                 // αν ο χρήστης συμμετέχει σε μαθήματα τότε παρουσίασε τη λίστα
                                                 if (mysql_num_rows($sql) > 0) {
                                                         $tool_content .= "<h4>$langStudentParticipation</h4>\n".
@@ -122,10 +124,12 @@ if (!$doit) {
                                         } else {
                                                 $tool_content .= "$langUnregTeacher<br />";
                                                 $sql = db_query("SELECT a.code, a.intitule, b.statut, a.cours_id
-                                                                        FROM cours AS a JOIN faculte ON a.faculteid = faculte.id
-                                                                             LEFT JOIN cours_user AS b ON a.cours_id = b.cours_id
-                                                                             WHERE b.user_id = $u AND b.statut = 1
-                                                                        ORDER BY b.statut, faculte.name");
+                                                                        FROM cours AS a 
+                                                                        JOIN course_department ON a.cours_id = course_department.course
+                                                                        JOIN hierarchy ON course_department.department = hierarchy.id
+                                                                        LEFT JOIN cours_user AS b ON a.cours_id = b.cours_id
+                                                                        WHERE b.user_id = $u AND b.statut = 1
+                                                                        ORDER BY b.statut, hierarchy.name");
                                                 // αν ο χρήστης συμμετέχει σε μαθήματα τότε παρουσίασε τη λίστα
                                                 if (mysql_num_rows($sql) > 0) {
                                                         $tool_content .= "<h4>$langStudentParticipation</h4>\n".
@@ -146,10 +150,12 @@ if (!$doit) {
                                         // display list
                                         $tool_content .= "$langUnregFirst <br /><br />";
                                         $sql = db_query("SELECT a.code, a.intitule, b.statut, a.cours_id
-                                                                FROM cours AS a JOIN faculte ON a.faculteid = faculte.id
-                                                                     LEFT JOIN cours_user AS b ON a.cours_id = b.cours_id
-                                                                     WHERE b.user_id = $u
-                                                                ORDER BY b.statut, faculte.name");
+                                                                FROM cours AS a 
+                                                                JOIN course_department ON a.cours_id = course_department.course
+                                                                JOIN hierarchy ON course_department.department = hierarchy.id
+                                                                LEFT JOIN cours_user AS b ON a.cours_id = b.cours_id
+                                                                WHERE b.user_id = $u
+                                                                ORDER BY b.statut, hierarchy.name");
                                         // αν ο χρήστης συμμετέχει σε μαθήματα τότε παρουσίασε τη λίστα
                                         if (mysql_num_rows($sql) > 0) {
                                                 $tool_content .= "<h4>$langStudentParticipation</h4>\n".
@@ -182,6 +188,7 @@ if (!$doit) {
                                 $q = db_query("DELETE from user WHERE user_id = " . intval($u));
                                 if ($q and mysql_affected_rows() > 0) {
                                         $t = 2;
+                                        db_query("DELETE FROM user_department WHERE user = ". intval($u));
                                 } else {
                                         $t = 3;
                                 }

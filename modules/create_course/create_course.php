@@ -1,6 +1,6 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2011  Greek Universities Network - GUnet
@@ -32,6 +32,16 @@ if (isset($_SESSION['statut']) and $_SESSION['statut'] != 1) { // if we are not 
 if (get_config("betacms")) { // added support for betacms
 	require_once '../betacms_bridge/include/bcms.inc.php';
 }
+
+$TBL_USER_DEPARTMENT   = 'user_department';
+
+require_once('../../include/lib/course.class.php');
+require_once('../../include/lib/user.class.php');
+require_once('../../include/lib/hierarchy.class.php');
+
+$tree = new hierarchy();
+$course = new course();
+$user = new user();
 
 $nameTools = $langCreateCourse . " (" . $langCreateCourseStep ." 1 " .$langCreateCourseStep2 . " 3)" ;
 $lang_editor = langname_to_code($language);
@@ -82,7 +92,6 @@ function escape_if_exists($name) {
         }
 }
 escape_if_exists('intitule');
-escape_if_exists('faculte');
 escape_if_exists('titulaires');
 escape_if_exists('type');
 escape_if_exists('languageCourse');
@@ -92,10 +101,11 @@ escape_if_exists('visit');
 escape_if_exists('password');
 escape_if_exists('formvisible');
 
-if (empty($faculte)) {
-        list($homefac) = mysql_fetch_row(db_query("SELECT department FROM user WHERE user_id=$uid"));
-} else {
-        $homefac = intval($faculte);
+$departments = isset($_POST['department']) ? $_POST['department'] : array();
+$faculte_html = "";
+
+foreach ($departments as $dep) {
+    $faculte_html .= '<input type="hidden" name="department[]" value="'. $dep .'" />';
 }
 
 if (empty($titulaires)) {
@@ -128,11 +138,7 @@ if (isset($_POST['back1']) or !isset($_POST['visit'])) {
 	<tr>
 	  <th>$langFaculty:</th>
 	  <td>";
-	$facs = db_query("SELECT id, name FROM faculte order by id");
-	while ($n = mysql_fetch_array($facs)) {
-		$fac[$n['id']] = $n['name'];
-	}
-	$tool_content .= selection($fac, 'faculte', $homefac);
+        $tool_content .= $tree->buildCourseHtmlSelect('name="department[]"', $user->getDepartmentIds($uid));
 	$tool_content .= "</td>
           <td>&nbsp;</td>
         </tr>";
@@ -145,7 +151,7 @@ if (isset($_POST['back1']) or !isset($_POST['visit'])) {
         </tr>
 	<tr>
 	  <th class='left'>$langType:</th>
-	  <td>" .  selection(array('pre' => $langpre, 'post' => $langpost, 'other' => $langother), 'type', $type) . "</td>
+	  <td>" . selection($course->buildTypes(), 'type', $type) . "</td>
 	  <td>&nbsp;</td>
         </tr>
 	<tr>
@@ -339,11 +345,9 @@ if (isset($_POST['back1']) or !isset($_POST['visit'])) {
 if (isset($_POST['create_course'])) {
 
         $nameTools = $langCourseCreate;
-        $facid = intval($faculte);
-        $facname = find_faculty_by_id($facid);
 
         // create new course code: uppercase, no spaces allowed
-        $code = strtoupper(new_code($facid));
+        $code = strtoupper(new_code($departments[0]));
         $code = str_replace (' ', '', $code);
 
         $language = langcode_to_name($_POST['languageCourse']);
@@ -394,13 +398,11 @@ if (isset($_POST['create_course'])) {
                         visible = " . quote($formvisible) . ",
                         titulaires = " . quote($titulaires) . ",
                         fake_code = " . quote($code) . ",
-                        type = " . quote($type) . ",
                         doc_quota = $doc_quota*1024*1024,
                         video_quota = $video_quota*1024*1024,
                         group_quota = $group_quota*1024*1024,
                         dropbox_quota = $dropbox_quota*1024*1024,
                         password = " . quote($password) . ",
-                        faculteid = $facid,
                         first_create = NOW()");
         $new_course_id = mysql_insert_id();
         
@@ -434,6 +436,7 @@ if (isset($_POST['create_course'])) {
                         documents = 1,
                         wiki = 0,
                         agenda = 0");
+        $course->refresh($new_course_id, array($type), $departments);
 
         $description = trim(autounquote($description));
         $unit_id = description_unit_id($new_course_id);

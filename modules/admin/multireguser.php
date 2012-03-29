@@ -25,6 +25,12 @@ $require_usermanage_user = TRUE;
 include '../../include/baseTheme.php';
 include '../../include/sendMail.inc.php';
 
+require_once('../../include/lib/user.class.php');
+require_once('../../include/lib/hierarchy.class.php');
+
+$tree = new hierarchy();
+$userObj = new user();
+
 $nameTools = $langMultiRegUser;
 $navigation[]= array ("url"=>"index.php", "name"=> $langAdmin);
 
@@ -36,7 +42,7 @@ if (isset($_POST['submit'])) {
         $unparsed_lines = '';
         $new_users_info = array();
         $newstatut = ($_POST['type'] == 'prof')? 1: 5;
-        $facid = intval($_POST['facid']);
+        $departments = isset($_POST['facid']) ? $_POST['facid'] : array();;
         $am = $_POST['am'];
         $fields = preg_split('/[ \t,]+/', $_POST['fields'], -1, PREG_SPLIT_NO_EMPTY);
         foreach ($fields as $field) {
@@ -73,7 +79,7 @@ if (isset($_POST['submit'])) {
 
                                 if (!isset($info['username'])) {
                                         $info['username'] = create_username($newstatut,
-                                                                            $facid,
+                                                                            $departments,
                                                                             $nom,
                                                                             $prenom,
                                                                             $_POST['prefix']);
@@ -87,7 +93,7 @@ if (isset($_POST['submit'])) {
                                                    @$info['last'],
                                                    @$info['first'],
                                                    @$info['email'],
-                                                   $facid,
+                                                   $departments,
                                                    @$info['id'],
                                                    @$info['phone'],
                                                    $_POST['lang'],
@@ -122,7 +128,7 @@ if (isset($_POST['submit'])) {
         }
         $tool_content .= "</table>\n";
 } else {
-        $req = db_query("SELECT id, name FROM faculte order by id");
+        $req = db_query("SELECT id, name FROM hierarchy WHERE allow_course = true ORDER BY name");
         while ($n = mysql_fetch_array($req)) {
                 $facs[$n['id']] = $n['name'];
         }
@@ -145,7 +151,9 @@ if (isset($_POST['submit'])) {
     <td><input type='text' name='prefix' size='10' value='user' /></td>
 </tr>
 <tr><th>$langFaculty:</th>
-    <td>" . selection($facs, 'facid') . "</td>
+    <td>" . 
+          $tree->buildUserHtmlSelect('name="facid[]"')
+          ."</td>
 </tr>
 <tr><th>$langAm:</th>
     <td><input type='text' name='am' size='10' /></td>
@@ -168,7 +176,7 @@ if (isset($_POST['submit'])) {
 draw($tool_content,3,'admin');
 
 
-function create_user($statut, $uname, $password, $nom, $prenom, $email, $depid, $am, $phone, $lang, $send_mail)
+function create_user($statut, $uname, $password, $nom, $prenom, $email, $departments, $am, $phone, $lang, $send_mail)
 {
         global $charset, $mysqlMainDb, $langAsUser, $langAsProf,
                $langYourReg, $siteName, $langDestination, $langYouAreReg,
@@ -176,7 +184,7 @@ function create_user($statut, $uname, $password, $nom, $prenom, $email, $depid, 
                $langProblem, $administratorName, $administratorSurname,
                $langManager, $langTel, $telephone, $langEmail,
                $emailAdministrator, $emailhelpdesk, $profsuccess, $usersuccess,
-               $durationAccount;
+               $durationAccount, $userObj;
 
         if ($statut == 1) {
                 $message = $profsuccess;
@@ -198,17 +206,18 @@ function create_user($statut, $uname, $password, $nom, $prenom, $email, $depid, 
         $password_encrypted = md5($password);
 
         $req = db_query("INSERT INTO user
-                                (nom, prenom, username, password, email, statut, department, registered_at, expires_at, lang, am, phone)
+                                (nom, prenom, username, password, email, statut, registered_at, expires_at, lang, am, phone)
                         VALUES (" .
 				autoquote($nom) . ', ' .
 				autoquote($prenom) . ', ' .
 				autoquote($uname) . ", '$password_encrypted', " .
 				autoquote(mb_strtolower(trim($email))) .
-				", $statut, $depid, " .
+				", $statut, " .
                                 "$registered_at, $expires_at, '$lang', " .
                                 autoquote($am) . ', ' .
                                 autoquote($phone) . ')');
         $id = mysql_insert_id();
+        $userObj->refresh($id, $departments);
 
         $emailsubject = "$langYourReg $siteName $type_message";
         $emailbody = "
@@ -231,7 +240,7 @@ $langEmail : $emailhelpdesk
         return array($id, $nom, $prenom, $email, $phone, $am, $uname, $password);
 }
 
-function create_username($statut, $depid, $nom, $prenom, $prefix)
+function create_username($statut, $departments, $nom, $prenom, $prefix)
 {
         $wildcard = str_pad('', SUFFIX_LEN, '_');
         $req = db_query("SELECT username FROM user
